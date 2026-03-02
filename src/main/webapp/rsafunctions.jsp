@@ -68,15 +68,15 @@
     </style>
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="RSA Encryption & Decryption Online - Key Generator & Tool" />
-        <jsp:param name="toolDescription" value="RSA encrypt and decrypt online free. Generate 2048 or 4096-bit key pairs. PKCS1 and OAEP SHA-256 modes. Try RSA in Python. No data stored." />
+        <jsp:param name="toolName" value="RSA Encrypt, Sign & Verify Online - Key Generator" />
+        <jsp:param name="toolDescription" value="RSA encrypt, decrypt, sign and verify online free. Generate 2048 or 4096-bit key pairs. PKCS1, OAEP SHA-256, SHA256withRSA. Digital signatures. No data stored." />
         <jsp:param name="toolCategory" value="Cryptography" />
         <jsp:param name="toolUrl" value="rsafunctions.jsp" />
-        <jsp:param name="toolKeywords" value="rsa encryption online, rsa decryption online, rsa key generator, rsa encrypt decrypt, rsa public key encryption, rsa private key decryption, RSA/ECB/PKCS1Padding, RSA OAEP, rsa key pair generator, rsa 2048, rsa 4096, rsa python, rsa tool online" />
+        <jsp:param name="toolKeywords" value="rsa encryption online, rsa decryption online, rsa key generator, rsa encrypt decrypt, rsa public key encryption, rsa private key decryption, RSA/ECB/PKCS1Padding, RSA OAEP, rsa key pair generator, rsa 2048, rsa 4096, rsa python, rsa tool online, rsa sign online, rsa verify signature, SHA256withRSA, rsa digital signature" />
         <jsp:param name="toolImage" value="rsa.png" />
-        <jsp:param name="toolFeatures" value="Generate RSA key pairs (512 1024 2048 4096-bit),RSA encryption with public key,RSA decryption with private key,Multiple cipher modes: PKCS1Padding and OAEP,OAEP SHA-256 padding support,PEM format key output,Base64 encoded output,Built-in Python compiler for RSA code,Share encrypted results via URL,No data retention - in-memory processing" />
+        <jsp:param name="toolFeatures" value="Generate RSA key pairs (512 1024 2048 4096-bit),RSA encryption with public key,RSA decryption with private key,RSA digital signatures (Sign and Verify),Multiple cipher modes: PKCS1Padding and OAEP,SHA256withRSA SHA512withRSA signature algorithms,OAEP SHA-256 padding support,Live message byte counter,PEM format key output,Base64 encoded output,Built-in Python compiler for RSA code,Share encrypted results via URL,No data retention - in-memory processing" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="howToSteps" value="Select RSA key size|Choose 2048-bit or 4096-bit RSA key size and generate a new key pair,Enter your message|Type or paste the plaintext message you want to encrypt in the message field,Choose cipher mode|Select a cipher mode such as RSA/ECB/PKCS1Padding or RSA/ECB/OAEPWithSHA-256AndMGF1Padding,Click Process|Click the Process button to encrypt or decrypt using the selected RSA key and mode,Copy or share result|Copy the Base64-encoded ciphertext or share via URL for collaboration" />
+        <jsp:param name="howToSteps" value="Select RSA key size|Choose 2048-bit or 4096-bit RSA key size and generate a new key pair,Choose operation|Select Encrypt Decrypt Sign or Verify mode from the operation toggle,Enter your message|Type or paste the plaintext message you want to process in the message field,Choose algorithm|Select a cipher mode for encryption or a signature algorithm like SHA256withRSA for signing,Click Process|Click the button to encrypt decrypt sign or verify using the selected RSA key and algorithm,Copy or share result|Copy the Base64-encoded result or use the signature for verification" />
         <jsp:param name="faq1q" value="What is RSA encryption and how does it work?" />
         <jsp:param name="faq1a" value="RSA is an asymmetric cryptography algorithm using two keys: a public key for encryption and a private key for decryption. Security is based on the difficulty of factoring large prime numbers. Named after inventors Rivest, Shamir, and Adleman." />
         <jsp:param name="faq2q" value="What RSA cipher modes are supported?" />
@@ -89,6 +89,10 @@
         <jsp:param name="faq5a" value="No, RSA decryption requires the private key. The public key encrypts, the private key decrypts. This asymmetric property enables secure communication without pre-shared secrets." />
         <jsp:param name="faq6q" value="How do I encrypt with RSA in Python?" />
         <jsp:param name="faq6a" value="Use the cryptography or pycryptodome library. This tool includes a built-in Python compiler with RSA templates. Click Try It Live to run RSA encryption code directly in your browser." />
+        <jsp:param name="faq7q" value="How does RSA digital signing work?" />
+        <jsp:param name="faq7a" value="RSA signing uses the private key to create a digital signature of a message hash. The signer hashes the message with SHA-256 or SHA-512, then encrypts the hash with their private key. Anyone with the public key can verify the signature, confirming authenticity and integrity." />
+        <jsp:param name="faq8q" value="What signature algorithms are supported?" />
+        <jsp:param name="faq8a" value="SHA256withRSA (recommended), SHA512withRSA, SHA384withRSA, SHA1withRSA, SHA1WithRSA/PSS, SHA224WithRSA/PSS, SHA384WithRSA/PSS, and MD5withRSA (deprecated). SHA256withRSA is the most widely used for digital signatures." />
     </jsp:include>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
@@ -114,10 +118,10 @@
 
     <style>
         /* RSA Tool - Compact input, spacious output */
-        .tool-page-container { grid-template-columns: minmax(280px, 320px) 1fr 300px; }
-        @media (max-width: 1024px) { .tool-page-container { grid-template-columns: minmax(270px, 310px) 1fr; } }
+        .tool-page-container { grid-template-columns: minmax(310px, 360px) 1fr 300px; }
+        @media (max-width: 1024px) { .tool-page-container { grid-template-columns: minmax(300px, 350px) 1fr; } }
 
-        .rsa-form-section { padding: 0.875rem; }
+        .rsa-form-section { padding: 1rem; }
 
         .rsa-section-label {
             display: flex; align-items: center; gap: 0.375rem;
@@ -146,22 +150,32 @@
         .rsa-chip.selected { border-color: var(--primary); background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); color: #fff; }
         [data-theme="dark"] .rsa-chip { background: var(--bg-primary); color: var(--text-primary); border-color: var(--border); }
 
-        /* Operation toggle */
-        .rsa-op-toggle { display: flex; gap: 0; margin-top: 0.25rem; border-radius: 0.5rem; overflow: hidden; border: 1.5px solid var(--border); }
-        .rsa-op-btn {
-            flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.375rem;
-            padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.8125rem; font-weight: 600;
-            color: var(--text-secondary); background: var(--bg-primary); transition: all 0.2s; border: none;
-            position: relative;
+        /* Operation toggle — 2x2 grid so all 4 buttons always fit */
+        .rsa-op-toggle {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+            margin-top: 0.25rem; border-radius: 0.5rem; overflow: hidden; border: 1.5px solid var(--border);
         }
+        .rsa-op-btn {
+            display: flex; align-items: center; justify-content: center; gap: 0.25rem;
+            padding: 0.4375rem 0.375rem; cursor: pointer; font-size: 0.75rem; font-weight: 600;
+            color: var(--text-secondary); background: var(--bg-primary); transition: all 0.2s; border: none;
+            position: relative; white-space: nowrap;
+        }
+        .rsa-op-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
         .rsa-op-btn input { display: none; }
-        .rsa-op-btn:first-child { border-right: 1px solid var(--border); }
         .rsa-op-btn:hover { background: rgba(102,126,234,0.05); }
-        .rsa-op-btn.active[data-op="encrypt"] { background: #059669; color: #fff; border-color: #059669; }
-        .rsa-op-btn.active[data-op="decrypt"] { background: #d97706; color: #fff; border-color: #d97706; }
+        .rsa-op-btn.active[data-op="encrypt"] { background: #059669; color: #fff; }
+        .rsa-op-btn.active[data-op="decrypt"] { background: #d97706; color: #fff; }
+        .rsa-op-btn.active[data-op="sign"] { background: #2563eb; color: #fff; }
+        .rsa-op-btn.active[data-op="verify"] { background: #7c3aed; color: #fff; }
+        /* Grid borders: right edge on left col, bottom edge on top row */
+        .rsa-op-btn:nth-child(odd) { border-right: 1px solid var(--border); }
+        .rsa-op-btn:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
         [data-theme="dark"] .rsa-op-btn { background: var(--bg-primary); color: var(--text-secondary); }
         [data-theme="dark"] .rsa-op-btn.active[data-op="encrypt"] { background: #059669; color: #fff; }
         [data-theme="dark"] .rsa-op-btn.active[data-op="decrypt"] { background: #d97706; color: #fff; }
+        [data-theme="dark"] .rsa-op-btn.active[data-op="sign"] { background: #2563eb; color: #fff; }
+        [data-theme="dark"] .rsa-op-btn.active[data-op="verify"] { background: #7c3aed; color: #fff; }
 
         .rsa-badge-rec { background: #dcfce7; color: #166534; padding: 0 0.3125rem; border-radius: 0.5rem; font-size: 0.5625rem; font-weight: 700; text-transform: uppercase; }
         .rsa-badge-weak { background: #fee2e2; color: #991b1b; padding: 0 0.3125rem; border-radius: 0.5rem; font-size: 0.5625rem; font-weight: 700; text-transform: uppercase; }
@@ -212,11 +226,11 @@
         /* Sticky actions */
         .rsa-sticky-actions {
             position: sticky; bottom: 0; background: var(--bg-primary);
-            padding: 0.75rem 0.875rem; border-top: 1px solid var(--border);
-            margin: 0 -0.875rem -0.875rem; border-radius: 0 0 0.75rem 0.75rem;
-            display: flex; gap: 0.375rem; z-index: 5;
+            padding: 0.75rem 1rem; border-top: 1px solid var(--border);
+            margin: 0 -1rem -1rem; border-radius: 0 0 0.75rem 0.75rem;
+            display: flex; gap: 0.5rem; z-index: 5;
         }
-        .rsa-sticky-actions .tool-action-btn { flex: 1; padding: 0.625rem 0.5rem; font-size: 0.8125rem; }
+        .rsa-sticky-actions .tool-action-btn { flex: 1; padding: 0.625rem 0.75rem; font-size: 0.8125rem; white-space: nowrap; min-width: 0; }
 
         /* Output */
         .tool-result-card { display: flex; flex-direction: column; height: 100%; }
@@ -257,6 +271,24 @@
         [data-theme="dark"] .tool-alert-error { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); color: #fca5a5; }
         [data-theme="dark"] .tool-alert-info { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3); color: #93c5fd; }
 
+        /* Byte counter */
+        .rsa-byte-counter {
+            font-size: 0.6875rem; font-family: 'JetBrains Mono', monospace;
+            text-align: right; margin-top: 0.25rem; color: var(--text-secondary);
+        }
+        .rsa-byte-counter.warn { color: #d97706; }
+        .rsa-byte-counter.over { color: #dc2626; font-weight: 600; }
+
+        /* Verify result cards */
+        .rsa-result-valid { background: var(--bg-primary); border: 2px solid #10b981; border-radius: 0.75rem; overflow: hidden; }
+        .rsa-result-valid-header { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 0.875rem; background: rgba(16,185,129,0.08); border-bottom: 1px solid rgba(16,185,129,0.2); font-size: 0.8125rem; font-weight: 600; color: #059669; }
+        .rsa-result-invalid { background: var(--bg-primary); border: 2px solid #ef4444; border-radius: 0.75rem; overflow: hidden; }
+        .rsa-result-invalid-header { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 0.875rem; background: rgba(239,68,68,0.08); border-bottom: 1px solid rgba(239,68,68,0.2); font-size: 0.8125rem; font-weight: 600; color: #dc2626; }
+        [data-theme="dark"] .rsa-result-valid { border-color: rgba(16,185,129,0.4); }
+        [data-theme="dark"] .rsa-result-valid-header { background: rgba(16,185,129,0.1); color: #6ee7b7; }
+        [data-theme="dark"] .rsa-result-invalid { border-color: rgba(239,68,68,0.4); }
+        [data-theme="dark"] .rsa-result-invalid-header { background: rgba(239,68,68,0.1); color: #fca5a5; }
+
         /* Success result card */
         .rsa-result-success { background: var(--bg-primary); border: 2px solid #10b981; border-radius: 0.75rem; overflow: hidden; }
         .rsa-result-success-header { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 0.875rem; background: rgba(16,185,129,0.08); border-bottom: 1px solid rgba(16,185,129,0.2); font-size: 0.8125rem; font-weight: 600; color: #059669; }
@@ -292,7 +324,8 @@
         /* Responsive */
         @media (max-width: 900px) {
             .tool-page-container { grid-template-columns: 1fr; }
-            .rsa-sticky-actions { position: static; margin: 0.5rem 0 0; border-top: none; padding: 0; }
+            .rsa-sticky-actions { position: static; margin: 0.5rem 0 0; border-top: none; padding: 0; gap: 0.5rem; }
+            .rsa-sticky-actions .tool-action-btn { padding: 0.75rem 1rem; font-size: 0.875rem; }
         }
 
         /* ========== RSA Animation (empty state) ========== */
@@ -371,9 +404,51 @@
         .rsa-anim-slide { opacity: 0; animation: rsaSlide 0.35s ease forwards; }
         .rsa-anim-pop { opacity: 0; animation: rsaPop 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 
+        /* Key generation spinner & overlay */
+        @keyframes rsaSpin { to { transform: rotate(360deg); } }
+        @keyframes rsaKeyFlash {
+            0% { border-color: var(--border); background: var(--bg-secondary); }
+            40% { border-color: #10b981; background: rgba(16,185,129,0.08); }
+            100% { border-color: var(--border); background: var(--bg-secondary); }
+        }
+        .rsa-spinner {
+            display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff; border-radius: 50%; animation: rsaSpin 0.6s linear infinite; vertical-align: -2px;
+        }
+        .rsa-keys-generating { position: relative; pointer-events: none; }
+        .rsa-keys-generating::after {
+            content: ''; position: absolute; inset: 0; background: rgba(248,250,252,0.7);
+            border-radius: 0.375rem; z-index: 2;
+        }
+        [data-theme="dark"] .rsa-keys-generating::after { background: rgba(15,23,42,0.6); }
+        .rsa-key-textarea.rsa-key-fresh { animation: rsaKeyFlash 0.8s ease; }
+        .rsa-keygen-status {
+            display: flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.625rem;
+            font-size: 0.6875rem; font-weight: 600; border-radius: 0.375rem; margin-top: 0.375rem;
+            transition: opacity 0.3s, max-height 0.3s; overflow: hidden;
+        }
+        .rsa-keygen-status.loading {
+            background: rgba(102,126,234,0.08); border: 1px solid rgba(102,126,234,0.2);
+            color: var(--primary); max-height: 40px; opacity: 1;
+        }
+        .rsa-keygen-status.success {
+            background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2);
+            color: #059669; max-height: 40px; opacity: 1;
+        }
+        .rsa-keygen-status.error {
+            background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+            color: #dc2626; max-height: 40px; opacity: 1;
+        }
+        .rsa-keygen-status.hidden { max-height: 0; opacity: 0; padding: 0 0.625rem; margin-top: 0; border: none; }
+        [data-theme="dark"] .rsa-keygen-status.loading { background: rgba(102,126,234,0.12); color: #93bbfd; }
+        [data-theme="dark"] .rsa-keygen-status.success { background: rgba(16,185,129,0.12); color: #6ee7b7; }
+        [data-theme="dark"] .rsa-keygen-status.error { background: rgba(239,68,68,0.12); color: #fca5a5; }
+
         /* Respect reduced motion */
         @media (prefers-reduced-motion: reduce) {
             .rsa-anim-fade, .rsa-anim-slide, .rsa-anim-pop { animation: none; opacity: 1; transform: none; }
+            .rsa-spinner { animation: none; border-top-color: rgba(255,255,255,0.6); }
+            .rsa-key-textarea.rsa-key-fresh { animation: none; }
         }
 
         /* Responsive: stack vertically on very small */
@@ -389,7 +464,7 @@
     <header class="tool-page-header">
         <div class="tool-page-header-inner">
             <div>
-                <h1 class="tool-page-title">RSA Encryption & Decryption</h1>
+                <h1 class="tool-page-title">RSA Encryption, Signing & Key Generator</h1>
                 <nav class="tool-breadcrumbs">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                     <a href="<%=request.getContextPath()%>/index.jsp#cryptography">Cryptography</a> /
@@ -399,6 +474,7 @@
             <div class="tool-page-badges">
                 <span class="tool-badge">RSA 512-4096 bit</span>
                 <span class="tool-badge">OAEP + PKCS1</span>
+                <span class="tool-badge">Sign & Verify</span>
                 <span class="tool-badge">Python Compiler</span>
                 <span class="tool-badge">No Data Stored</span>
             </div>
@@ -408,7 +484,7 @@
     <section class="tool-description-section">
         <div class="tool-description-inner">
             <div class="tool-description-content">
-                <p>RSA encryption and decryption tool with key pair generation. Choose key sizes from 512 to 4096-bit, multiple cipher modes including OAEP SHA-256, and run RSA Python code in your browser. No data stored.</p>
+                <p>RSA encryption, decryption, signing and verification tool with key pair generation. Choose key sizes from 512 to 4096-bit, multiple cipher modes including OAEP SHA-256, digital signatures with SHA256withRSA, and run RSA Python code in your browser. No data stored.</p>
             </div>
         </div>
     </section>
@@ -417,15 +493,8 @@
         <!-- ========== INPUT COLUMN (Compact) ========== -->
         <div class="tool-input-column">
             <div class="tool-card">
-                <!-- Key Size Form (full page reload) -->
-                <form id="keySizeForm" method="GET" action="RSAFunctionality" style="display:none;">
-                    <input type="hidden" name="q" value="setNeKey">
-                    <input type="hidden" name="keysize" id="keySizeHidden" value="<%= checkedKey %>">
-                </form>
-
                 <!-- RSA Form (AJAX) -->
                 <form id="rsaForm">
-                    <input type="hidden" name="methodName" value="CALCULATE_RSA">
 
                     <div class="rsa-form-section">
                         <!-- Key Size -->
@@ -455,14 +524,24 @@
                         <div class="rsa-section-label">&#128274; Operation</div>
                         <div class="rsa-op-toggle" id="opToggle">
                             <label class="rsa-op-btn active" data-op="encrypt">
-                                <input type="radio" name="encryptdecryptparameter" value="encrypt" checked>
+                                <input type="radio" name="op_mode" value="encrypt" checked>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                                 Encrypt
                             </label>
                             <label class="rsa-op-btn" data-op="decrypt">
-                                <input type="radio" name="encryptdecryptparameter" value="decryprt">
+                                <input type="radio" name="op_mode" value="decrypt">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 019.9-1"/></svg>
                                 Decrypt
+                            </label>
+                            <label class="rsa-op-btn" data-op="sign">
+                                <input type="radio" name="op_mode" value="sign">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                Sign
+                            </label>
+                            <label class="rsa-op-btn" data-op="verify">
+                                <input type="radio" name="op_mode" value="verify">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Verify
                             </label>
                         </div>
 
@@ -483,7 +562,15 @@
                         <div class="rsa-form-group">
                             <label class="tool-label">Message</label>
                             <textarea class="rsa-textarea" id="message" name="message" placeholder="Enter message to encrypt or decrypt..."></textarea>
-                            <div class="tool-hint" style="margin-top:0.25rem;">Max: 117B (1024-bit), 245B (2048-bit)</div>
+                            <div class="rsa-byte-counter" id="byteCounter">
+                                <span id="byteCount">0</span> / <span id="byteMax">245</span> bytes
+                            </div>
+                        </div>
+
+                        <!-- Signature (Verify mode only) -->
+                        <div class="rsa-form-group" id="signatureGroup" style="display:none">
+                            <label class="tool-label">Signature (Base64)</label>
+                            <textarea class="rsa-textarea" id="signatureInput" name="signature" placeholder="Paste Base64-encoded signature to verify..."></textarea>
                         </div>
 
                         <!-- Keys (collapsible) -->
@@ -505,6 +592,7 @@
                                 <button type="button" class="rsa-key-btn" id="copyBothKeys">&#128203; Copy Both</button>
                             </div>
                         </div>
+                        <div class="rsa-keygen-status hidden" id="keygenStatus"></div>
                     </div>
 
                     <!-- Sticky Actions -->
@@ -597,14 +685,17 @@
                             </div>
 
                             <!-- Hint -->
-                            <div class="rsa-anim-hint rsa-anim-fade" style="animation-delay:3.2s">
-                                Enter a message and click <strong>Encrypt</strong> or <strong>Decrypt</strong> to try it.
+                            <div class="rsa-anim-hint rsa-anim-fade" id="animHint" style="animation-delay:3.2s">
+                                Enter a message and click <strong>Encrypt</strong>, <strong>Decrypt</strong>, <strong>Sign</strong>, or <strong>Verify</strong> to try it.
                             </div>
                         </div>
                     </div>
                     <div class="tool-result-actions" id="resultActions">
                         <button type="button" class="tool-action-btn" id="swapResult">
                             &#128260; Swap
+                        </button>
+                        <button type="button" class="tool-action-btn tool-action-btn-secondary" id="useForVerify" style="display:none">
+                            &#9989; Use for Verify
                         </button>
                         <button type="button" class="tool-action-btn tool-action-btn-secondary" id="shareUrl">
                             &#128279; Share
@@ -732,6 +823,14 @@
                 <button class="faq-question" onclick="toggleFaq(this)">How do I encrypt with RSA in Python?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
                 <div class="faq-answer">Use the <code style="background:var(--bg-secondary);padding:0.15rem 0.35rem;border-radius:0.25rem;font-size:0.85em;">cryptography</code> or <code style="background:var(--bg-secondary);padding:0.15rem 0.35rem;border-radius:0.25rem;font-size:0.85em;">pycryptodome</code> library. Click <strong>Try It Live</strong> above to run RSA code directly in your browser.</div>
             </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">How does RSA digital signing work?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">RSA signing uses the private key to create a digital signature of a message hash. The signer hashes the message (e.g., with SHA-256), then encrypts the hash with their private key. Anyone with the public key can verify the signature, confirming both authenticity and integrity of the message.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">What RSA signature algorithms are supported?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">SHA256withRSA (recommended), SHA512withRSA, SHA384withRSA, SHA1withRSA, SHA1WithRSA/PSS, SHA224WithRSA/PSS, SHA384WithRSA/PSS, and MD5withRSA (deprecated). SHA256withRSA is the most widely used standard for digital signatures.</div>
+            </div>
         </div>
     </section>
 
@@ -775,28 +874,124 @@
     $(document).ready(function() {
         var TOOL_NAME = 'RSA Encryption Tool';
         var lastResponse = null;
+        var currentMode = 'encrypt'; // encrypt | decrypt | sign | verify
 
-        // ========== KEY SIZE CHIP SELECTION ==========
-        $('#keySizeChips .rsa-chip').on('click', function() {
-            $('#keySizeChips .rsa-chip').removeClass('selected');
-            $(this).addClass('selected');
-        });
+        // Cipher algorithm sets
+        var encryptAlgorithms = [
+            { value: 'RSA', label: 'RSA' },
+            { value: 'RSA/ECB/PKCS1Padding', label: 'RSA/ECB/PKCS1Padding' },
+            { value: 'RSA/None/PKCS1Padding', label: 'RSA/None/PKCS1Padding' },
+            { value: 'RSA/NONE/OAEPWithSHA1AndMGF1Padding', label: 'OAEP SHA-1' },
+            { value: 'RSA/ECB/OAEPWithSHA-1AndMGF1Padding', label: 'ECB/OAEP SHA-1' },
+            { value: 'RSA/ECB/OAEPWithSHA-256AndMGF1Padding', label: 'ECB/OAEP SHA-256' }
+        ];
+        var signAlgorithms = [
+            { value: 'SHA256withRSA', label: 'SHA256withRSA (Recommended)' },
+            { value: 'SHA512withRSA', label: 'SHA512withRSA' },
+            { value: 'SHA384withRSA', label: 'SHA384withRSA' },
+            { value: 'SHA1withRSA', label: 'SHA1withRSA' },
+            { value: 'SHA1WithRSA/PSS', label: 'SHA1WithRSA/PSS' },
+            { value: 'SHA224WithRSA/PSS', label: 'SHA224WithRSA/PSS' },
+            { value: 'SHA384WithRSA/PSS', label: 'SHA384WithRSA/PSS' },
+            { value: 'MD5withRSA', label: 'MD5withRSA (Deprecated)' }
+        ];
+
+        // Byte counter max sizes: keyBytes - paddingOverhead
+        var paddingOverhead = {
+            'RSA': 11, 'RSA/ECB/PKCS1Padding': 11, 'RSA/None/PKCS1Padding': 11,
+            'RSA/NONE/OAEPWithSHA1AndMGF1Padding': 42, 'RSA/ECB/OAEPWithSHA-1AndMGF1Padding': 42,
+            'RSA/ECB/OAEPWithSHA-256AndMGF1Padding': 66
+        };
+
+        function getKeySize() {
+            return parseInt($('input[name="keysize_ui"]:checked').val() || '<%= checkedKey %>');
+        }
+
+        function getMaxBytes() {
+            var algo = $('#cipherSelect').val();
+            var overhead = paddingOverhead[algo];
+            if (overhead === undefined) return -1; // sign/verify algorithms, no limit
+            var keyBytes = getKeySize() / 8;
+            return keyBytes - overhead;
+        }
 
         // ========== OPERATION TOGGLE ==========
         function syncOperationUI() {
-            var isEncrypt = $('input[name="encryptdecryptparameter"]:checked').val() === 'encrypt';
+            currentMode = $('input[name="op_mode"]:checked').val();
             var btn = $('#processBtn');
             var msg = $('#message');
-            if (isEncrypt) {
-                btn.html('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Encrypt');
-                btn.css('background', '#059669');
-                msg.attr('placeholder', 'Enter plaintext message to encrypt...');
+            var isSignVerify = (currentMode === 'sign' || currentMode === 'verify');
+
+            // Update cipher dropdown
+            var $select = $('#cipherSelect');
+            var algos = isSignVerify ? signAlgorithms : encryptAlgorithms;
+            $select.empty();
+            algos.forEach(function(a) {
+                $select.append($('<option>').val(a.value).text(a.label));
+            });
+
+            // Update cipher label
+            $select.closest('.rsa-form-group').find('.tool-label').text(isSignVerify ? 'Signature Algorithm' : 'Cipher Mode');
+
+            // Signature group
+            $('#signatureGroup').toggle(currentMode === 'verify');
+
+            // Byte counter
+            if (isSignVerify) {
+                $('#byteCounter').hide();
             } else {
-                btn.html('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 019.9-1"/></svg> Decrypt');
-                btn.css('background', '#d97706');
-                msg.attr('placeholder', 'Enter Base64-encoded ciphertext to decrypt...');
+                $('#byteCounter').show();
+                updateByteCounter();
+            }
+
+            // Process button
+            switch (currentMode) {
+                case 'encrypt':
+                    btn.html('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Encrypt');
+                    btn.css('background', '#059669');
+                    msg.attr('placeholder', 'Enter plaintext message to encrypt...');
+                    break;
+                case 'decrypt':
+                    btn.html('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 019.9-1"/></svg> Decrypt');
+                    btn.css('background', '#d97706');
+                    msg.attr('placeholder', 'Enter Base64-encoded ciphertext to decrypt...');
+                    break;
+                case 'sign':
+                    btn.html('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg> Sign');
+                    btn.css('background', '#2563eb');
+                    msg.attr('placeholder', 'Enter message to sign with private key...');
+                    break;
+                case 'verify':
+                    btn.html('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Verify');
+                    btn.css('background', '#7c3aed');
+                    msg.attr('placeholder', 'Enter original message to verify signature...');
+                    break;
             }
         }
+
+        // ========== BYTE COUNTER ==========
+        function updateByteCounter() {
+            if (currentMode === 'sign' || currentMode === 'verify') return;
+            var text = $('#message').val() || '';
+            var byteLen = new Blob([text]).size;
+            var max = getMaxBytes();
+            $('#byteCount').text(byteLen);
+            $('#byteMax').text(max > 0 ? max : '?');
+            var $counter = $('#byteCounter');
+            $counter.removeClass('warn over');
+            if (max > 0) {
+                var pct = byteLen / max;
+                if (pct > 0.9) $counter.addClass('over');
+                else if (pct > 0.7) $counter.addClass('warn');
+            }
+        }
+
+        $('#message').on('input', function() {
+            $(this).removeClass('rsa-field-invalid');
+            updateByteCounter();
+        });
+
+        $('#cipherSelect').on('change', function() { updateByteCounter(); });
 
         $('.rsa-op-btn').on('click', function() {
             $('.rsa-op-btn').removeClass('active');
@@ -807,17 +1002,106 @@
 
         syncOperationUI();
 
-        // ========== KEY SIZE - Generate New Keys ==========
-        $('#keySizeChips .rsa-chip').on('click', function() {
-            var size = $(this).data('size');
-            $('#keySizeHidden').val(size);
-            $('#keySizeForm').submit();
+        // ========== KEY SIZE - Generate New Keys (AJAX) ==========
+        var keygenStatusTimer = null;
+
+        function showKeygenStatus(type, msg) {
+            var el = document.getElementById('keygenStatus');
+            el.className = 'rsa-keygen-status ' + type;
+            el.innerHTML = msg;
+            // Auto-hide success/error after a delay
+            clearTimeout(keygenStatusTimer);
+            if (type === 'success' || type === 'error') {
+                keygenStatusTimer = setTimeout(function() {
+                    el.className = 'rsa-keygen-status hidden';
+                }, 4000);
+            }
+        }
+
+        function generateNewKeys(size) {
+            var newKeysBtn = document.getElementById('newKeysBtn');
+            var keysPanel = document.getElementById('keysPanel');
+            var pubTextarea = document.getElementById('publickeyparam');
+            var privTextarea = document.getElementById('privatekeyparam');
+
+            // Update chip selection immediately
+            document.querySelectorAll('#keySizeChips .rsa-chip').forEach(function(c) { c.classList.remove('selected'); });
+            var target = document.querySelector('#keySizeChips .rsa-chip[data-size="' + size + '"]');
+            if (target) target.classList.add('selected');
+            var radio = document.querySelector('input[name="keysize_ui"][value="' + size + '"]');
+            if (radio) radio.checked = true;
+
+            // Show loading state: button spinner + keys overlay + status message
+            newKeysBtn.disabled = true;
+            newKeysBtn.innerHTML = '<span class="rsa-spinner"></span> Generating\u2026';
+            keysPanel.classList.add('rsa-keys-generating');
+            showKeygenStatus('loading', '<span class="rsa-spinner" style="border-color:rgba(102,126,234,0.3);border-top-color:var(--primary);width:12px;height:12px;"></span> Generating ' + size + '-bit RSA key pair\u2026');
+
+            // Auto-expand keys panel so user sees the progress
+            var keysToggle = document.getElementById('keysToggle');
+            if (!keysToggle.classList.contains('open')) {
+                keysToggle.classList.add('open');
+                keysPanel.classList.add('open');
+            }
+
+            var params = new URLSearchParams({ methodName: 'GENERATE_RSA_KEYS', keysize: size });
+
+            fetch('RSAFunctionality', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: params.toString()
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(resp) {
+                if (resp.success) {
+                    pubTextarea.value = resp.publicKey;
+                    privTextarea.value = resp.privateKey;
+
+                    // Flash highlight on key textareas
+                    pubTextarea.classList.remove('rsa-key-fresh');
+                    privTextarea.classList.remove('rsa-key-fresh');
+                    void pubTextarea.offsetWidth; // force reflow
+                    pubTextarea.classList.add('rsa-key-fresh');
+                    privTextarea.classList.add('rsa-key-fresh');
+
+                    // Update key size label
+                    document.querySelector('.rsa-section-label').innerHTML = '&#128207; RSA Key Size (' + resp.keySize + '-bit active)';
+                    updateByteCounter();
+
+                    showKeygenStatus('success', '&#9989; ' + resp.keySize + '-bit keys generated successfully');
+                    if (typeof ToolUtils !== 'undefined') {
+                        ToolUtils.showToast(resp.keySize + '-bit keys generated!', 2000, 'success');
+                    }
+                } else {
+                    showKeygenStatus('error', '&#10060; ' + (resp.errorMessage || 'Key generation failed'));
+                    if (typeof ToolUtils !== 'undefined') {
+                        ToolUtils.showToast('Key generation failed: ' + (resp.errorMessage || 'Unknown error'), 3000, 'error');
+                    }
+                }
+            })
+            .catch(function() {
+                showKeygenStatus('error', '&#10060; Connection error - please try again');
+                if (typeof ToolUtils !== 'undefined') {
+                    ToolUtils.showToast('Key generation failed - check connection', 3000, 'error');
+                }
+            })
+            .finally(function() {
+                newKeysBtn.disabled = false;
+                newKeysBtn.innerHTML = '&#128260; New Keys';
+                keysPanel.classList.remove('rsa-keys-generating');
+            });
+        }
+
+        document.querySelectorAll('#keySizeChips .rsa-chip').forEach(function(chip) {
+            chip.addEventListener('click', function() {
+                generateNewKeys(this.dataset.size);
+            });
         });
 
-        $('#newKeysBtn').on('click', function() {
-            var size = $('input[name="keysize_ui"]:checked').val() || '<%= checkedKey %>';
-            $('#keySizeHidden').val(size);
-            $('#keySizeForm').submit();
+        document.getElementById('newKeysBtn').addEventListener('click', function() {
+            var checked = document.querySelector('input[name="keysize_ui"]:checked');
+            var size = checked ? checked.value : '<%= checkedKey %>';
+            generateNewKeys(size);
         });
 
         // ========== KEYS TOGGLE ==========
@@ -847,32 +1131,72 @@
             e.preventDefault();
 
             var msg = $('#message').val().trim();
-            var currentOp = $('input[name="encryptdecryptparameter"]:checked').val() === 'encrypt' ? 'Encrypting' : 'Decrypting';
             $('#message').removeClass('rsa-field-invalid');
+            $('#signatureInput').removeClass('rsa-field-invalid');
 
-            if (!msg) {
-                $('#message').addClass('rsa-field-invalid');
-                if (typeof ToolUtils !== 'undefined') {
-                    ToolUtils.showError('Message Required', '#output', ['Enter a message to ' + currentOp.toLowerCase().replace('ing','') + '']);
-                }
-                $('#message').focus();
-                return;
+            // Validation per mode
+            var opLabel, loadingMsg, methodName, encryptdecryptVal;
+            var extraData = {};
+
+            switch (currentMode) {
+                case 'encrypt':
+                    opLabel = 'Encrypt'; loadingMsg = 'Encrypting with RSA...';
+                    methodName = 'CALCULATE_RSA'; encryptdecryptVal = 'encrypt';
+                    if (!msg) { showFieldError('#message', 'Enter a message to encrypt'); return; }
+                    break;
+                case 'decrypt':
+                    opLabel = 'Decrypt'; loadingMsg = 'Decrypting with RSA...';
+                    methodName = 'CALCULATE_RSA'; encryptdecryptVal = 'decryprt';
+                    if (!msg) { showFieldError('#message', 'Enter ciphertext to decrypt'); return; }
+                    break;
+                case 'sign':
+                    opLabel = 'Sign'; loadingMsg = 'Signing with RSA...';
+                    methodName = 'RSA_SIGN_VERIFY_MESSAGEE'; encryptdecryptVal = 'decryprt';
+                    if (!msg) { showFieldError('#message', 'Enter a message to sign'); return; }
+                    if (!$('#privatekeyparam').val().trim()) {
+                        if (typeof ToolUtils !== 'undefined') ToolUtils.showError('Private Key Required', '#output', ['A private key is needed for signing']);
+                        return;
+                    }
+                    break;
+                case 'verify':
+                    opLabel = 'Verify'; loadingMsg = 'Verifying RSA signature...';
+                    methodName = 'RSA_SIGN_VERIFY_MESSAGEE'; encryptdecryptVal = 'encrypt';
+                    if (!msg) { showFieldError('#message', 'Enter the original message'); return; }
+                    var sig = $('#signatureInput').val().trim();
+                    if (!sig) { showFieldError('#signatureInput', 'Paste the Base64 signature to verify'); return; }
+                    extraData.signature = sig;
+                    if (!$('#publickeyparam').val().trim()) {
+                        if (typeof ToolUtils !== 'undefined') ToolUtils.showError('Public Key Required', '#output', ['A public key is needed for verification']);
+                        return;
+                    }
+                    break;
             }
 
             if (typeof ToolUtils !== 'undefined') {
-                ToolUtils.showLoading(currentOp + ' with RSA...', '#output');
+                ToolUtils.showLoading(loadingMsg, '#output');
             } else {
-                $('#output').html('<div style="text-align:center;padding:2rem;">' + currentOp + '...</div>');
+                $('#output').html('<div style="text-align:center;padding:2rem;">' + loadingMsg + '</div>');
             }
             $('#resultActions').removeClass('visible');
+
+            var postData = {
+                methodName: methodName,
+                encryptdecryptparameter: encryptdecryptVal,
+                message: msg,
+                cipherparameter: $('#cipherSelect').val(),
+                publickeyparam: $('#publickeyparam').val(),
+                privatekeyparam: $('#privatekeyparam').val()
+            };
+            $.extend(postData, extraData);
 
             $.ajax({
                 type: 'POST',
                 url: 'RSAFunctionality',
-                data: $(this).serialize(),
+                data: postData,
                 dataType: 'json',
                 success: function(response) {
                     lastResponse = response;
+                    lastResponse._mode = currentMode;
                     renderOutput(response);
                 },
                 error: function(xhr, status, error) {
@@ -886,51 +1210,133 @@
             });
         });
 
-        $('#message').on('input', function() { $(this).removeClass('rsa-field-invalid'); });
+        function showFieldError(selector, message) {
+            $(selector).addClass('rsa-field-invalid');
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.showError('Input Required', '#output', [message]);
+            }
+            $(selector).focus();
+        }
 
         // ========== RENDER OUTPUT ==========
         function renderOutput(response) {
+            var mode = response._mode || (response.operation === 'encrypt' ? 'encrypt' : 'decrypt');
+
             if (response.success) {
-                var isEncrypt = response.operation === 'encrypt';
-                var result = isEncrypt ? response.base64Encoded : response.message;
-
-                var html = '<div class="rsa-result-success">';
-                html += '<div class="rsa-result-success-header">&#9989; ' + (isEncrypt ? 'Encryption' : 'Decryption') + ' Successful</div>';
-                html += '<div class="rsa-result-body">';
-                html += '<div class="rsa-result-meta"><div><strong>Operation:</strong> ' + response.operation.toUpperCase() + '</div><div><strong>Algorithm:</strong> ' + response.algorithm + '</div></div>';
-
-                if (response.originalMessage) {
-                    html += '<div style="margin-bottom:0.75rem;"><label class="tool-label">Original</label>';
-                    html += '<div style="padding:0.5rem;background:var(--bg-secondary);border-radius:0.375rem;font-family:JetBrains Mono,monospace;font-size:0.75rem;word-break:break-all;">' + escapeHtml(response.originalMessage) + '</div></div>';
-                }
-
-                html += '<label class="tool-label">Result</label>';
-                html += '<textarea id="resultText" readonly style="width:100%;min-height:100px;padding:0.625rem;border:2px solid var(--border);border-radius:0.5rem;font-family:JetBrains Mono,monospace;font-size:0.75rem;background:var(--bg-secondary);color:var(--text-primary);resize:vertical;">' + escapeHtml(result) + '</textarea>';
-                html += '</div></div>';
-
-                $('#output').html(html);
-                $('#resultActions').addClass('visible');
-
-                if (typeof ToolUtils !== 'undefined') {
-                    ToolUtils.showToast(isEncrypt ? 'Encrypted!' : 'Decrypted!', 2000, 'success');
+                if (mode === 'sign') {
+                    renderSignOutput(response);
+                } else if (mode === 'verify') {
+                    renderVerifyOutput(response);
+                } else {
+                    renderEncryptDecryptOutput(response);
                 }
             } else {
-                var errMsg = response.errorMessage || 'Unknown error';
-                var shortMsg = errMsg.length > 120 ? errMsg.substring(0, 120) + '...' : errMsg;
-                var opLabel = response.operation ? response.operation.charAt(0).toUpperCase() + response.operation.slice(1) : '';
-
-                var errHtml = '<div class="tool-alert tool-alert-error" style="margin:0;">';
-                errHtml += '<strong>' + (opLabel ? opLabel + ' Failed' : 'Failed') + '</strong>';
-                if (response.algorithm) errHtml += ' <span style="opacity:0.7;font-size:0.75rem;">(' + escapeHtml(response.algorithm) + ')</span>';
-                errHtml += '<div style="margin-top:0.375rem;">' + escapeHtml(shortMsg) + '</div>';
-                if (errMsg.length > 120) {
-                    errHtml += '<details style="margin-top:0.375rem;"><summary style="cursor:pointer;font-size:0.75rem;opacity:0.8;">Show full error</summary>';
-                    errHtml += '<div style="margin-top:0.25rem;font-size:0.6875rem;font-family:JetBrains Mono,monospace;white-space:pre-wrap;word-break:break-all;max-height:120px;overflow-y:auto;padding:0.375rem;background:rgba(0,0,0,0.05);border-radius:0.25rem;">' + escapeHtml(errMsg) + '</div></details>';
-                }
-                errHtml += '</div>';
-                $('#output').html(errHtml);
-                $('#resultActions').removeClass('visible');
+                renderErrorOutput(response, mode);
             }
+        }
+
+        function renderEncryptDecryptOutput(response) {
+            var isEncrypt = response.operation === 'encrypt';
+            var result = isEncrypt ? response.base64Encoded : response.message;
+
+            var html = '<div class="rsa-result-success">';
+            html += '<div class="rsa-result-success-header">&#9989; ' + (isEncrypt ? 'Encryption' : 'Decryption') + ' Successful</div>';
+            html += '<div class="rsa-result-body">';
+            html += '<div class="rsa-result-meta"><div><strong>Operation:</strong> ' + response.operation.toUpperCase() + '</div><div><strong>Algorithm:</strong> ' + escapeHtml(response.algorithm) + '</div></div>';
+
+            if (response.originalMessage) {
+                html += '<div style="margin-bottom:0.75rem;"><label class="tool-label">Original</label>';
+                html += '<div style="padding:0.5rem;background:var(--bg-secondary);border-radius:0.375rem;font-family:JetBrains Mono,monospace;font-size:0.75rem;word-break:break-all;">' + escapeHtml(response.originalMessage) + '</div></div>';
+            }
+
+            html += '<label class="tool-label">Result</label>';
+            html += '<textarea id="resultText" readonly style="width:100%;min-height:100px;padding:0.625rem;border:2px solid var(--border);border-radius:0.5rem;font-family:JetBrains Mono,monospace;font-size:0.75rem;background:var(--bg-secondary);color:var(--text-primary);resize:vertical;">' + escapeHtml(result) + '</textarea>';
+            html += '</div></div>';
+
+            $('#output').html(html);
+            $('#resultActions').addClass('visible');
+            $('#useForVerify').hide();
+            $('#swapResult').show();
+
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.showToast(isEncrypt ? 'Encrypted!' : 'Decrypted!', 2000, 'success');
+            }
+        }
+
+        function renderSignOutput(response) {
+            // Sign result: the server returns base64Encoded or message with the signature
+            var signature = response.base64Encoded || response.message || '';
+
+            var html = '<div class="rsa-result-success">';
+            html += '<div class="rsa-result-success-header">&#9989; Signed Successfully</div>';
+            html += '<div class="rsa-result-body">';
+            html += '<div class="rsa-result-meta"><div><strong>Operation:</strong> SIGN</div><div><strong>Algorithm:</strong> ' + escapeHtml(response.algorithm || $('#cipherSelect').val()) + '</div></div>';
+
+            if (response.originalMessage) {
+                html += '<div style="margin-bottom:0.75rem;"><label class="tool-label">Original Message</label>';
+                html += '<div style="padding:0.5rem;background:var(--bg-secondary);border-radius:0.375rem;font-family:JetBrains Mono,monospace;font-size:0.75rem;word-break:break-all;">' + escapeHtml(response.originalMessage) + '</div></div>';
+            }
+
+            html += '<label class="tool-label">Signature (Base64)</label>';
+            html += '<textarea id="resultText" readonly style="width:100%;min-height:100px;padding:0.625rem;border:2px solid var(--border);border-radius:0.5rem;font-family:JetBrains Mono,monospace;font-size:0.75rem;background:var(--bg-secondary);color:var(--text-primary);resize:vertical;">' + escapeHtml(signature) + '</textarea>';
+            html += '</div></div>';
+
+            $('#output').html(html);
+            $('#resultActions').addClass('visible');
+            $('#useForVerify').show();
+            $('#swapResult').hide();
+
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.showToast('Message signed!', 2000, 'success');
+            }
+        }
+
+        function renderVerifyOutput(response) {
+            // Servlet sets message="VALID"/"INVALID" — use that as the authoritative signal
+            // base64Encoded holds the raw API text (e.g. "Signature Verification Passed")
+            var isValid = response.message === 'VALID';
+            var resultText = response.base64Encoded || response.message || '';
+
+            var html;
+            if (isValid) {
+                html = '<div class="rsa-result-valid">';
+                html += '<div class="rsa-result-valid-header">&#9989; Signature Valid</div>';
+            } else {
+                html = '<div class="rsa-result-invalid">';
+                html += '<div class="rsa-result-invalid-header">&#10060; Signature Invalid</div>';
+            }
+            html += '<div class="rsa-result-body">';
+            html += '<div class="rsa-result-meta"><div><strong>Operation:</strong> VERIFY</div><div><strong>Algorithm:</strong> ' + escapeHtml(response.algorithm || $('#cipherSelect').val()) + '</div></div>';
+            html += '<div style="margin-top:0.5rem;font-size:0.8125rem;color:var(--text-secondary);">' + escapeHtml(resultText) + '</div>';
+            html += '</div></div>';
+
+            $('#output').html(html);
+            $('#resultActions').addClass('visible');
+            $('#useForVerify').hide();
+            $('#swapResult').hide();
+
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.showToast(isValid ? 'Signature verified!' : 'Signature invalid!', 2000, isValid ? 'success' : 'error');
+            }
+        }
+
+        function renderErrorOutput(response, mode) {
+            var errMsg = response.errorMessage || 'Unknown error';
+            var shortMsg = errMsg.length > 120 ? errMsg.substring(0, 120) + '...' : errMsg;
+            var modeLabels = { encrypt: 'Encryption', decrypt: 'Decryption', sign: 'Signing', verify: 'Verification' };
+            var opLabel = modeLabels[mode] || (response.operation ? response.operation.charAt(0).toUpperCase() + response.operation.slice(1) : '');
+
+            var errHtml = '<div class="tool-alert tool-alert-error" style="margin:0;">';
+            errHtml += '<strong>' + (opLabel ? opLabel + ' Failed' : 'Failed') + '</strong>';
+            if (response.algorithm) errHtml += ' <span style="opacity:0.7;font-size:0.75rem;">(' + escapeHtml(response.algorithm) + ')</span>';
+            errHtml += '<div style="margin-top:0.375rem;">' + escapeHtml(shortMsg) + '</div>';
+            if (errMsg.length > 120) {
+                errHtml += '<details style="margin-top:0.375rem;"><summary style="cursor:pointer;font-size:0.75rem;opacity:0.8;">Show full error</summary>';
+                errHtml += '<div style="margin-top:0.25rem;font-size:0.6875rem;font-family:JetBrains Mono,monospace;white-space:pre-wrap;word-break:break-all;max-height:120px;overflow-y:auto;padding:0.375rem;background:rgba(0,0,0,0.05);border-radius:0.25rem;">' + escapeHtml(errMsg) + '</div></details>';
+            }
+            errHtml += '</div>';
+            $('#output').html(errHtml);
+            $('#resultActions').removeClass('visible');
         }
 
         function escapeHtml(str) {
@@ -949,19 +1355,40 @@
             if (!text) return;
             $('#message').val(text);
 
-            // Toggle operation
+            // Toggle encrypt/decrypt
             $('.rsa-op-btn').removeClass('active');
             if (lastResponse && lastResponse.operation === 'encrypt') {
-                $('input[value="decryprt"]').prop('checked', true);
+                $('input[name="op_mode"][value="decrypt"]').prop('checked', true);
                 $('.rsa-op-btn[data-op="decrypt"]').addClass('active');
             } else {
-                $('input[value="encrypt"]').prop('checked', true);
+                $('input[name="op_mode"][value="encrypt"]').prop('checked', true);
                 $('.rsa-op-btn[data-op="encrypt"]').addClass('active');
             }
             syncOperationUI();
 
             if (typeof ToolUtils !== 'undefined') {
                 ToolUtils.showToast('Result swapped to input!', 2000, 'info');
+            }
+        });
+
+        // ========== USE FOR VERIFY ==========
+        $('#useForVerify').on('click', function() {
+            var signature = $('#resultText').val();
+            if (!signature) return;
+
+            // Switch to verify mode
+            $('.rsa-op-btn').removeClass('active');
+            $('input[name="op_mode"][value="verify"]').prop('checked', true);
+            $('.rsa-op-btn[data-op="verify"]').addClass('active');
+            syncOperationUI();
+
+            // Populate signature field with the sign result
+            $('#signatureInput').val(signature);
+
+            // Keep the original message (it's already in the message field)
+
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.showToast('Switched to Verify mode - signature populated!', 3000, 'info');
             }
         });
 
@@ -976,8 +1403,8 @@
 
             var params = new URLSearchParams({
                 msg: text,
-                op: lastResponse.operation === 'encrypt' ? 'decrypt' : 'encrypt',
-                algo: lastResponse.algorithm
+                op: lastResponse && lastResponse.operation === 'encrypt' ? 'decrypt' : 'encrypt',
+                algo: lastResponse ? lastResponse.algorithm : ''
             });
             if (publicKey && publicKey.trim()) params.append('pubkey', publicKey);
             if (privateKey && privateKey.trim()) params.append('privkey', privateKey);
@@ -1008,7 +1435,7 @@
             $('#message').val(urlParams.get('msg'));
 
             if (urlParams.get('op') === 'decrypt') {
-                $('input[value="decryprt"]').prop('checked', true);
+                $('input[name="op_mode"][value="decrypt"]').prop('checked', true);
                 $('.rsa-op-btn').removeClass('active');
                 $('.rsa-op-btn[data-op="decrypt"]').addClass('active');
                 syncOperationUI();

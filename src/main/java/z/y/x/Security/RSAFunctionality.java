@@ -33,6 +33,7 @@ public class RSAFunctionality extends HttpServlet {
 
     private static final String METHOD_CALCULATERSA = "CALCULATE_RSA";
     private static final String METHOD_SIGN_VERIFY_TERSA = "RSA_SIGN_VERIFY_MESSAGEE";
+    private static final String METHOD_GENERATE_KEYS = "GENERATE_RSA_KEYS";
 
 
 
@@ -152,6 +153,35 @@ public class RSAFunctionality extends HttpServlet {
 //
 //        System.out.println("signature " + signature);
 
+
+        if (METHOD_GENERATE_KEYS.equalsIgnoreCase(methodName)) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            try {
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "rsa/" + keysize;
+                HttpGet getRequest = new HttpGet(url1);
+                getRequest.addHeader("accept", "application/json");
+                HttpResponse response1 = httpClient.execute(getRequest);
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(response1.getEntity().getContent()));
+                StringBuilder content = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) { content.append(line); }
+
+                pgppojo keys = gson.fromJson(content.toString(), pgppojo.class);
+                request.getSession().setAttribute("pubkey", keys.getPubliceKey());
+                request.getSession().setAttribute("privKey", keys.getPrivateKey());
+                request.getSession().setAttribute("keysize", keysize);
+
+                out.println("{\"success\":true,\"publicKey\":" + gson.toJson(keys.getPubliceKey())
+                    + ",\"privateKey\":" + gson.toJson(keys.getPrivateKey())
+                    + ",\"keySize\":" + gson.toJson(keysize) + "}");
+            } catch (Exception ex) {
+                out.println("{\"success\":false,\"errorMessage\":" + gson.toJson(ex.getMessage()) + "}");
+            }
+            return;
+        }
 
         if (METHOD_SIGN_VERIFY_TERSA.equalsIgnoreCase(methodName)) {
 
