@@ -38,16 +38,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <style>
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html{scroll-behavior:smooth}
-        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0f;color:#e2e8f0;margin:0;min-height:100vh}
         :root{
-            --ctf-green:#00ff41;--ctf-green-dim:#00cc33;--ctf-cyan:#00d4ff;--ctf-purple:#a855f7;
-            --ctf-red:#ef4444;--ctf-bg:#0a0a0f;--ctf-surface:#111827;--ctf-surface-2:#1f2937;
-            --ctf-border:#1e293b;--ctf-text:#e2e8f0;--ctf-text-dim:#94a3b8;
-            --ctf-glow:0 0 20px rgba(0,255,65,0.15);--ctf-font-mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+            --ctf-green:#00cc33;--ctf-green-dim:#059669;--ctf-cyan:#0ea5e9;--ctf-purple:#a855f7;
+            --ctf-red:#ef4444;--ctf-bg:var(--bg-primary,#fff);--ctf-surface:var(--bg-secondary,#f8fafc);--ctf-surface-2:var(--bg-tertiary,#f1f5f9);
+            --ctf-border:var(--border,#e2e8f0);--ctf-text:var(--text-primary,#0f172a);--ctf-text-dim:var(--text-secondary,#475569);
+            --ctf-glow:0 0 20px rgba(0,204,51,0.1);--ctf-font-mono:'JetBrains Mono','Fira Code',Consolas,monospace;
             --tool-primary:#00cc33;--tool-primary-dark:#059669;
             --tool-gradient:linear-gradient(135deg,#00cc33 0%,#059669 100%);
+            --tool-light:rgba(0,204,51,0.08);
+        }
+        [data-theme="dark"]{
+            --ctf-green:#00ff41;--ctf-green-dim:#00cc33;--ctf-cyan:#00d4ff;
+            --ctf-glow:0 0 20px rgba(0,255,65,0.15);
             --tool-light:rgba(0,255,65,0.08);
         }
     </style>
@@ -57,25 +59,18 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
 
     <%@ include file="../modern/ads/ad-init.jsp" %>
 
     <style>
-        .sg-header{padding:2.5rem 1.5rem 1.5rem;max-width:1200px;margin:0 auto}
-        .sg-breadcrumbs{font-size:0.8125rem;color:var(--ctf-text-dim);margin-bottom:1rem;font-family:var(--ctf-font-mono)}
-        .sg-breadcrumbs a{color:var(--ctf-green-dim);text-decoration:none}
-        .sg-breadcrumbs a:hover{text-decoration:underline}
-        .sg-header h1{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;color:#fff;margin-bottom:0.5rem}
-        .sg-header h1 span{color:var(--ctf-green)}
-        .sg-header p{color:var(--ctf-text-dim);font-size:0.9375rem;line-height:1.6;max-width:700px}
 
 
         .sg-card{background:var(--ctf-surface);border:1px solid var(--ctf-border);border-radius:0.75rem;overflow:hidden}
-        .sg-card-header{padding:1rem 1.25rem;border-bottom:1px solid var(--ctf-border);display:flex;align-items:center;gap:0.5rem;font-weight:600;color:#fff;font-size:0.9375rem}
+        .sg-card-header{padding:1rem 1.25rem;border-bottom:1px solid var(--ctf-border);display:flex;align-items:center;gap:0.5rem;font-weight:600;color:var(--ctf-text);font-size:0.9375rem}
         .sg-card-header svg{color:var(--ctf-green);flex-shrink:0}
         .sg-card-body{padding:1.25rem}
 
@@ -157,7 +152,7 @@
 
         .sg-faq{max-width:1200px;margin:2rem auto;padding:0 1.5rem}
         .sg-faq-card{background:var(--ctf-surface);border:1px solid var(--ctf-border);border-radius:0.75rem;padding:1.5rem 2rem}
-        .sg-faq-title{font-size:1.125rem;font-weight:700;color:#fff;margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem}
+        .sg-faq-title{font-size:1.125rem;font-weight:700;color:var(--ctf-text);margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem}
         .sg-faq-title svg{color:var(--ctf-green)}
         .sg-faq-list{display:grid;gap:0.5rem}
         .sg-faq-item{border:1px solid var(--ctf-border);border-radius:0.5rem;overflow:hidden}
@@ -169,17 +164,25 @@
         .sg-faq-item.open .sg-faq-a{display:block}
     </style>
 </head>
-<body data-theme="dark">
+<body>
     <%@ include file="../modern/components/nav-header.jsp" %>
 
-    <header class="sg-header">
-        <nav class="sg-breadcrumbs">
-            <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-            <a href="<%=request.getContextPath()%>/ctf/index.jsp">CTF Generators</a> /
-            Steganography CTF
-        </nav>
-        <h1>Steganography <span>CTF</span> Generator</h1>
-        <p>Generate steganography challenges with 34 encoding steps across 7 difficulty levels. Outputs a downloadable file, full JSON solution, and progressive hints for solvers.</p>
+    <header class="tool-page-header">
+        <div class="tool-page-header-inner">
+            <div>
+                <h1 class="tool-page-title">Steganography <span style="color:var(--ctf-green)">CTF</span> Generator</h1>
+                <nav class="tool-breadcrumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                    <a href="<%=request.getContextPath()%>/ctf/index.jsp">CTF Generators</a> /
+                    Steganography CTF
+                </nav>
+            </div>
+            <div class="tool-page-badges">
+                <span class="tool-badge">34 Steps</span>
+                <span class="tool-badge">7 Levels</span>
+                <span class="tool-badge">Client-Side</span>
+            </div>
+        </div>
     </header>
 
     <div class="tool-description-section">
@@ -642,6 +645,7 @@
             });
         }).then(function(bundle) {
             clearInterval(phaseInterval);
+            bundle.note = 'Generated by 8gwifi.org Steganography CTF Generator \u2014 https://8gwifi.org/ctf/stego-ctf-generator.jsp';
             currentBundle = bundle;
             renderChallenge(bundle);
             setStatus('Challenge generated successfully.', 'var(--ctf-green)');
@@ -715,10 +719,17 @@
             audio.src = 'data:' + (bundle.challenge.mimeType || 'audio/wav') + ';base64,' + bundle.challenge.data;
             previewEl.appendChild(audio);
         } else {
-            var note = document.createElement('p');
-            note.style.cssText = 'color:var(--ctf-text-dim);font-size:0.875rem';
-            note.textContent = 'Challenge file ready (' + (bundle.challenge.format || 'file') + '). Click Download.';
-            previewEl.appendChild(note);
+            var fallback = document.createElement('p');
+            fallback.style.cssText = 'color:var(--ctf-text-dim);font-size:0.875rem';
+            fallback.textContent = 'Challenge file ready (' + (bundle.challenge.format || 'file') + '). Click Download.';
+            previewEl.appendChild(fallback);
+        }
+
+        if (bundle.challenge.note) {
+            var noteEl = document.createElement('p');
+            noteEl.style.cssText = 'color:var(--ctf-cyan);font-size:0.8125rem;margin-top:0.75rem;font-style:italic;font-family:var(--ctf-font-mono)';
+            noteEl.textContent = bundle.challenge.note;
+            previewEl.appendChild(noteEl);
         }
 
         var solEl = document.getElementById('solutionResult');
@@ -838,6 +849,8 @@
     }
     </script>
     <%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
     <%@ include file="../modern/components/analytics.jsp" %>
 </body>
 </html>
