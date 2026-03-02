@@ -62,11 +62,17 @@
             --ctf-red:#ef4444;--ctf-bg:#0a0a0f;--ctf-surface:#111827;--ctf-surface-2:#1f2937;
             --ctf-border:#1e293b;--ctf-text:#e2e8f0;--ctf-text-dim:#94a3b8;
             --ctf-glow:0 0 20px rgba(0,255,65,0.15);--ctf-font-mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+            --tool-primary:#00cc33;--tool-primary-dark:#059669;
+            --tool-gradient:linear-gradient(135deg,#00cc33 0%,#059669 100%);
+            --tool-light:rgba(0,255,65,0.08);
         }
     </style>
 
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -83,12 +89,6 @@
         .sg-header h1 span{color:var(--ctf-green)}
         .sg-header p{color:var(--ctf-text-dim);font-size:0.9375rem;line-height:1.6;max-width:700px}
 
-        .sg-desc-ad{display:grid;grid-template-columns:1fr minmax(300px,728px);gap:1.5rem;max-width:1200px;margin:0 auto 1.5rem;padding:0 1.5rem;align-items:start}
-        .sg-desc-ad>div:first-child{min-width:0}
-        @media(max-width:1100px){.sg-desc-ad{grid-template-columns:1fr}.sg-desc-ad>div:last-child{justify-self:center}}
-
-        .sg-main{max-width:1200px;margin:0 auto;padding:0 1.5rem 3rem;display:grid;grid-template-columns:minmax(320px,380px) minmax(0,1fr) minmax(280px,300px);gap:1.5rem}
-        @media(max-width:1024px){.sg-main{grid-template-columns:1fr}.sg-ads-col{display:none}}
 
         .sg-card{background:var(--ctf-surface);border:1px solid var(--ctf-border);border-radius:0.75rem;overflow:hidden}
         .sg-card-header{padding:1rem 1.25rem;border-bottom:1px solid var(--ctf-border);display:flex;align-items:center;gap:0.5rem;font-weight:600;color:#fff;font-size:0.9375rem}
@@ -140,8 +140,6 @@
 
         .sg-preview-img{max-width:100%;border-radius:0.5rem;border:1px solid var(--ctf-border);background:var(--ctf-bg)}
 
-        .sg-mobile-ad{display:none;margin:1.5rem 0}
-        @media(max-width:1024px){.sg-mobile-ad{display:block}}
         @media(max-width:640px){.sg-actions{flex-direction:column}.sg-btn-sm{width:100%}}
 
         .sg-upload-zone{border:2px dashed var(--ctf-border);border-radius:0.5rem;padding:1rem;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;display:flex;flex-direction:column;align-items:center;gap:0.25rem}
@@ -200,14 +198,20 @@
         <p>Generate steganography challenges with 34 encoding steps across 7 difficulty levels. Outputs a downloadable file, full JSON solution, and progressive hints for solvers.</p>
     </header>
 
-    <div class="sg-desc-ad">
-        <div><p style="color:var(--ctf-text-dim);font-size:0.875rem;line-height:1.7">Enter a flag, pick a difficulty, and hit Generate. The engine selects a random pipeline of transforms (ciphers, encodings, container wrapping) and embeds the result into an image or audio file. The solution tab shows the full pipeline so you can verify or share it.</p></div>
-        <div><%@ include file="../modern/ads/ad-in-content-top.jsp" %></div>
+    <div class="tool-description-section">
+        <div class="tool-description-inner">
+            <div class="tool-description-content">
+                <p>Enter a flag, pick a difficulty, and hit Generate. The engine selects a random pipeline of transforms (ciphers, encodings, container wrapping) and embeds the result into an image or audio file. The solution tab shows the full pipeline so you can verify or share it.</p>
+            </div>
+            <div class="tool-description-ad">
+                <%@ include file="../modern/ads/ad-in-content-top.jsp" %>
+            </div>
+        </div>
     </div>
 
-    <main class="sg-main">
+    <main class="tool-page-container">
         <!-- INPUT COLUMN -->
-        <div>
+        <div class="tool-input-column">
             <div class="sg-card">
                 <div class="sg-card-header">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -283,7 +287,7 @@
         </div>
 
         <!-- OUTPUT COLUMN -->
-        <div>
+        <div class="tool-output-column">
             <div class="sg-card sg-output">
                 <div class="sg-output-tabs">
                     <button class="sg-output-tab active" onclick="switchTab('challenge',this)">Challenge</button>
@@ -387,12 +391,12 @@
         </div>
 
         <!-- ADS COLUMN -->
-        <div class="sg-ads-col">
+        <div class="tool-ads-column">
             <%@ include file="../modern/ads/ad-three-column.jsp" %>
         </div>
     </main>
 
-    <div class="sg-mobile-ad" style="max-width:1200px;margin:0 auto;padding:0 1.5rem">
+    <div class="tool-mobile-ad-container">
         <%@ include file="../modern/ads/ad-in-content-mid.jsp" %>
     </div>
 
