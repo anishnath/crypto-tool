@@ -10,45 +10,43 @@
     <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <jsp:include page="../modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Steganography CTF Generator - Create Stego Challenges Online Free" />
-        <jsp:param name="toolDescription" value="Free steganography CTF challenge generator. Hide flags in images and audio with 34 encoding steps, 7 difficulty levels, classical ciphers, zip/tar wrapping, scatter keys, and spectrogram encoding. Exports JSON with full solution and hints." />
+        <jsp:param name="toolName" value="Free Steganography CTF Generator - 34 Steps, 7 Levels" />
+        <jsp:param name="toolDescription" value="Generate stego CTF challenges: hide flags in images and audio with 34 steps across 7 levels. LSB, ciphers, tar/zip. Free JSON export with solutions and hints." />
         <jsp:param name="toolCategory" value="CTF & Challenges" />
         <jsp:param name="toolUrl" value="ctf/stego-ctf-generator.jsp" />
-        <jsp:param name="toolKeywords" value="steganography CTF generator, stego challenge maker, CTF image steganography, hide flag in image, LSB steganography CTF, audio steganography challenge, CTF puzzle generator free, capture the flag steganography, stego CTF online, image CTF generator, forensic CTF stego, CTF challenge creator, steganography practice, CTF training steganography, stego pipeline generator, base64 hex cipher CTF, caesar vigenere CTF" />
+        <jsp:param name="toolKeywords" value="steganography CTF generator, stego challenge maker, CTF image steganography, hide flag in image online, LSB steganography CTF, audio steganography challenge, CTF puzzle generator free, capture the flag steganography, stego CTF online free, image CTF generator tool, forensic CTF stego, CTF challenge creator online, steganography practice tool, CTF training steganography, stego pipeline builder, create steganography challenge, CTF flag hider image, WAV steganography CTF" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="34 encoding and cipher steps,7 difficulty levels with 50+ pipeline combos,LSB image steganography with variable bit depth,Audio WAV steganography embedding,Classical ciphers: caesar vigenere atbash morse bacon,Container wrapping: tar zip,Key-based scatter LSB placement,Spectrogram frequency encoding,JSON challenge export with full solution,Progressive solver hints,SHA-256 flag verification,100% client-side processing" />
+        <jsp:param name="toolFeatures" value="34 encoding and cipher steps,7 difficulty levels with 50+ pipeline combos,Upload your own cover image or WAV,LSB image steganography with variable bit depth,Audio WAV steganography embedding,Classical ciphers: Caesar Vigenere Atbash Morse Bacon,Container wrapping: TAR ZIP,Key-based scatter LSB placement,Spectrogram frequency encoding,JSON challenge export with full solution,Progressive solver hints with reveal gates,SHA-256 flag verification,100% client-side - no upload to server" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="faq1q" value="How does the steganography CTF generator work?" />
-        <jsp:param name="faq1a" value="You enter a flag message and choose a difficulty. The engine selects a random pipeline of encoding steps (like base64, caesar cipher, tar wrapping) then embeds the transformed payload into an image or audio file using LSB steganography. You get a downloadable challenge file plus a JSON bundle with the full solution and progressive hints." />
-        <jsp:param name="faq2q" value="What difficulty levels are available?" />
-        <jsp:param name="faq2a" value="Seven levels: Easy (plain LSB embed), Medium (single encoding + embed), Hard (multi-step ciphers and containers), Pro (encryption + compression + multiple layers), Forensic (file-format tricks like EOF append and PNG metadata), plus audio variants. Each level has multiple random pipeline variations." />
-        <jsp:param name="faq3q" value="What encoding and cipher steps are supported?" />
-        <jsp:param name="faq3a" value="34 steps including: base64, base32, hex, octal, decimal, binary, morse, rot13, rot47, atbash, caesar, vigenere, rail fence, bacon, polybius, columnar transposition, substitution, XOR, reverse, compress, AES encrypt, Reed-Solomon, tar wrap, zip wrap, strings hide, decoy, inner embed (image-in-image), and scatter embed (key-based random pixel placement)." />
+        <jsp:param name="faq1q" value="How do I create a steganography CTF challenge?" />
+        <jsp:param name="faq1a" value="Enter your flag, choose a difficulty level, optionally upload a cover image, and click Generate. The engine picks a random pipeline of encoding steps (base64, Caesar cipher, tar wrapping, etc.) then embeds the transformed payload into an image or audio file using LSB steganography. You get a downloadable challenge file plus a JSON bundle with the complete solution, decryption keys, and progressive hints." />
+        <jsp:param name="faq2q" value="What are the 7 difficulty levels for stego CTF?" />
+        <jsp:param name="faq2a" value="Easy (plain LSB embed), Medium (single encoding plus embed), Hard (multi-step ciphers and containers), Pro (AES encryption plus compression plus multiple layers), Forensic (file-format tricks like EOF append and PNG tEXt metadata), Easy Audio (WAV LSB), and Medium Audio (encoding plus WAV embed). Each level has multiple random pipeline variations so challenges are never identical." />
+        <jsp:param name="faq3q" value="Is this steganography CTF tool free and private?" />
+        <jsp:param name="faq3a" value="Yes, 100% free with no signup required. All encoding, encryption, embedding, and challenge generation runs entirely in your browser using JavaScript and the Web Crypto API. No data is ever uploaded to a server. You can use it offline once the page loads." />
+        <jsp:param name="faq4q" value="What encoding and cipher steps are supported?" />
+        <jsp:param name="faq4a" value="34 steps including: base64, base32, hex, octal, decimal, binary, morse, rot13, rot47, atbash, Caesar, Vigenere, rail fence, Bacon, Polybius, columnar transposition, substitution, XOR, reverse, compress, AES encrypt, Reed-Solomon, tar wrap, zip wrap, strings hide, decoy, inner embed (image-in-image), and scatter embed (key-based random pixel placement)." />
+        <jsp:param name="faq5q" value="Can I use my own image as the cover?" />
+        <jsp:param name="faq5a" value="Yes. Upload any PNG, JPEG, BMP, or WebP image as the cover, or a WAV audio file for audio-based challenges. If you don't upload a cover, the engine auto-generates a synthetic image. Using your own image makes challenges more realistic and harder to identify as stego." />
+        <jsp:param name="faq6q" value="How do the progressive hints work?" />
+        <jsp:param name="faq6a" value="The engine generates 3-7 hints (configurable) based on the pipeline. Each hint reveals a little more about the encoding chain, starting from vague clues and progressively revealing specific steps. Hints are included in the JSON bundle and can be shared with solvers one at a time." />
     </jsp:include>
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Steganography CTF Challenge Generator",
-      "description": "Generate steganography CTF challenges with 34 encoding steps, 7 difficulty levels, classical ciphers, container wrapping, scatter keys, and auto-generated solutions with progressive hints.",
-      "url": "https://8gwifi.org/ctf/stego-ctf-generator.jsp",
-      "applicationCategory": "SecurityApplication",
-      "operatingSystem": "Web Browser",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "featureList": [
-        "34 encoding and cipher steps",
-        "7 difficulty levels",
-        "LSB image and audio steganography",
-        "Classical ciphers: Caesar, Vigenere, Atbash, Morse, Bacon, Rail Fence",
-        "Container wrapping: TAR, ZIP",
-        "Key-based scatter LSB embedding",
-        "Spectrogram frequency encoding",
-        "JSON challenge export with solution and hints",
-        "SHA-256 flag verification"
-      ],
-      "author": { "@type": "Person", "name": "Anish Nath", "url": "https://8gwifi.org" },
-      "publisher": { "@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org" }
+      "@type": "HowTo",
+      "name": "How to Create a Steganography CTF Challenge",
+      "description": "Step-by-step guide to generating a steganography capture-the-flag challenge with hidden flags in images or audio.",
+      "totalTime": "PT1M",
+      "tool": { "@type": "HowToTool", "name": "8gwifi.org Steganography CTF Generator" },
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Enter your flag", "text": "Type the flag message (e.g. flag{hidden_in_plain_sight}) that solvers must find." },
+        { "@type": "HowToStep", "position": 2, "name": "Choose difficulty", "text": "Select from 7 levels: Easy, Medium, Hard, Pro, Forensic, Easy Audio, or Medium Audio." },
+        { "@type": "HowToStep", "position": 3, "name": "Upload a cover (optional)", "text": "Upload your own PNG, JPEG, or WAV file, or let the engine auto-generate a cover image." },
+        { "@type": "HowToStep", "position": 4, "name": "Generate the challenge", "text": "Click Generate. The engine applies a random pipeline of encoding steps and embeds the payload using LSB steganography." },
+        { "@type": "HowToStep", "position": 5, "name": "Download and share", "text": "Download the challenge file and JSON bundle containing the full solution, keys, and progressive hints for solvers." }
+      ]
     }
     </script>
 
@@ -175,6 +173,19 @@
 
         .sg-mid-ad{max-width:1200px;margin:1.5rem auto;padding:0 1.5rem}
         .sg-leaderboard-ad{max-width:1200px;margin:0 auto 1rem;padding:0 1.5rem;text-align:center}
+
+        .sg-faq{max-width:1200px;margin:2rem auto;padding:0 1.5rem}
+        .sg-faq-card{background:var(--ctf-surface);border:1px solid var(--ctf-border);border-radius:0.75rem;padding:1.5rem 2rem}
+        .sg-faq-title{font-size:1.125rem;font-weight:700;color:#fff;margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem}
+        .sg-faq-title svg{color:var(--ctf-green)}
+        .sg-faq-list{display:grid;gap:0.5rem}
+        .sg-faq-item{border:1px solid var(--ctf-border);border-radius:0.5rem;overflow:hidden}
+        .sg-faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;border:none;background:var(--ctf-surface-2);color:var(--ctf-text);font-size:0.875rem;font-weight:500;cursor:pointer;text-align:left;font-family:inherit;transition:color 0.2s}
+        .sg-faq-q:hover{color:var(--ctf-green)}
+        .sg-faq-chevron{transition:transform 0.2s;flex-shrink:0;margin-left:0.5rem;color:var(--ctf-text-dim)}
+        .sg-faq-item.open .sg-faq-chevron{transform:rotate(180deg);color:var(--ctf-green)}
+        .sg-faq-a{display:none;padding:0 1rem 0.875rem;font-size:0.8125rem;line-height:1.7;color:var(--ctf-text-dim)}
+        .sg-faq-item.open .sg-faq-a{display:block}
     </style>
 </head>
 <body data-theme="dark">
@@ -391,6 +402,59 @@
     </div>
 
     <div class="sg-mid-ad"><%@ include file="../modern/ads/ad-hero-banner.jsp" %></div>
+
+    <section class="sg-faq">
+        <div class="sg-faq-card">
+            <h2 class="sg-faq-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Frequently Asked Questions
+            </h2>
+            <div class="sg-faq-list">
+                <div class="sg-faq-item">
+                    <button class="sg-faq-q" onclick="this.parentElement.classList.toggle('open')">
+                        How do I create a steganography CTF challenge?
+                        <svg class="sg-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="sg-faq-a">Enter your flag, choose a difficulty level, optionally upload a cover image, and click Generate. The engine picks a random pipeline of encoding steps (base64, Caesar cipher, tar wrapping, etc.) then embeds the transformed payload into an image or audio file using LSB steganography. You get a downloadable challenge file plus a JSON bundle with the complete solution, decryption keys, and progressive hints.</div>
+                </div>
+                <div class="sg-faq-item">
+                    <button class="sg-faq-q" onclick="this.parentElement.classList.toggle('open')">
+                        What are the 7 difficulty levels for stego CTF?
+                        <svg class="sg-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="sg-faq-a">Easy (plain LSB embed), Medium (single encoding plus embed), Hard (multi-step ciphers and containers), Pro (AES encryption plus compression plus multiple layers), Forensic (file-format tricks like EOF append and PNG tEXt metadata), Easy Audio (WAV LSB), and Medium Audio (encoding plus WAV embed). Each level has multiple random pipeline variations so challenges are never identical.</div>
+                </div>
+                <div class="sg-faq-item">
+                    <button class="sg-faq-q" onclick="this.parentElement.classList.toggle('open')">
+                        Is this steganography CTF tool free and private?
+                        <svg class="sg-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="sg-faq-a">Yes, 100% free with no signup required. All encoding, encryption, embedding, and challenge generation runs entirely in your browser using JavaScript and the Web Crypto API. No data is ever uploaded to a server. You can use it offline once the page loads.</div>
+                </div>
+                <div class="sg-faq-item">
+                    <button class="sg-faq-q" onclick="this.parentElement.classList.toggle('open')">
+                        What encoding and cipher steps are supported?
+                        <svg class="sg-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="sg-faq-a">34 steps including: base64, base32, hex, octal, decimal, binary, morse, rot13, rot47, atbash, Caesar, Vigenere, rail fence, Bacon, Polybius, columnar transposition, substitution, XOR, reverse, compress, AES encrypt, Reed-Solomon, tar wrap, zip wrap, strings hide, decoy, inner embed (image-in-image), and scatter embed (key-based random pixel placement).</div>
+                </div>
+                <div class="sg-faq-item">
+                    <button class="sg-faq-q" onclick="this.parentElement.classList.toggle('open')">
+                        Can I use my own image as the cover?
+                        <svg class="sg-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="sg-faq-a">Yes. Upload any PNG, JPEG, BMP, or WebP image as the cover, or a WAV audio file for audio-based challenges. If you don't upload a cover, the engine auto-generates a synthetic image. Using your own image makes challenges more realistic and harder to identify as stego.</div>
+                </div>
+                <div class="sg-faq-item">
+                    <button class="sg-faq-q" onclick="this.parentElement.classList.toggle('open')">
+                        How do the progressive hints work?
+                        <svg class="sg-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="sg-faq-a">The engine generates 3-7 hints (configurable) based on the pipeline. Each hint reveals a little more about the encoding chain, starting from vague clues like "The file contains hidden data" and progressively revealing specific steps like "Try base64 decoding the extracted payload." Hints are included in the JSON bundle and can be shared with solvers one at a time.</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <jsp:include page="../modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="ctf/stego-ctf-generator.jsp"/>

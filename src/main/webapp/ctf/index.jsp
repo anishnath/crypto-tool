@@ -10,48 +10,50 @@
     <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <jsp:include page="../modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="CTF Challenge Generator - Free Online Capture The Flag Tools" />
-        <jsp:param name="toolDescription" value="Free online CTF challenge generator suite. Create steganography, cryptography, forensic, and web CTF challenges with auto-generated solutions, progressive hints, and SHA-256 flag verification. 100% client-side." />
+        <jsp:param name="toolName" value="Free CTF Challenge Generator - Stego, Crypto & Forensic" />
+        <jsp:param name="toolDescription" value="Create CTF challenges instantly: stego, crypto and forensic puzzles with solutions, hints, and SHA-256 flag verification. 100% free, client-side. No signup." />
         <jsp:param name="toolCategory" value="CTF & Challenges" />
         <jsp:param name="toolUrl" value="ctf/index.jsp" />
-        <jsp:param name="toolKeywords" value="CTF challenge generator, capture the flag tools, CTF maker online, steganography CTF, crypto CTF generator, forensic CTF, CTF puzzle creator, CTF flag generator, CTF practice, CTF training tools, free CTF generator, online CTF maker, CTF challenge builder, CTF solution generator, CTF hints, jeopardy CTF, CTF competition tools" />
+        <jsp:param name="toolKeywords" value="CTF challenge generator free, capture the flag maker online, create CTF challenges, steganography CTF generator, crypto CTF tool, forensic CTF creator, CTF puzzle generator, CTF flag maker, CTF practice online, CTF training tool free, online CTF builder, CTF competition generator, jeopardy CTF maker, CTF for beginners, cybersecurity CTF tool, CTF with solutions, CTF hints generator" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Steganography CTF generator,Cryptography challenges,Forensic analysis puzzles,Auto-generated solutions,Progressive solver hints,SHA-256 flag verification,34 encoding and cipher steps,Multiple difficulty levels,Client-side generation,JSON challenge export" />
-        <jsp:param name="faq1q" value="What is a CTF challenge generator?" />
-        <jsp:param name="faq1a" value="A CTF (Capture The Flag) challenge generator creates cybersecurity puzzles where participants must find hidden flags using techniques like steganography, cryptanalysis, and forensic analysis. This tool automates challenge creation with configurable difficulty, auto-generated solutions, and progressive hints." />
-        <jsp:param name="faq2q" value="Can I use these CTF tools for competitions?" />
-        <jsp:param name="faq2a" value="Yes. The generator produces complete challenge bundles with downloadable files, full solutions, and SHA-256 flag hashes for verification. Ideal for CTF competitions, cybersecurity training, university courses, and self-practice." />
-        <jsp:param name="faq3q" value="Is everything processed client-side?" />
-        <jsp:param name="faq3a" value="Yes, 100% client-side. No data is uploaded to any server. All encoding, encryption, embedding, and challenge generation happens in your browser using JavaScript and the Web Crypto API." />
+        <jsp:param name="toolFeatures" value="6 CTF categories: stego crypto forensic web RE OSINT,34 encoding and cipher steps,7 difficulty levels per category,Auto-generated solutions with full pipeline,Progressive solver hints,SHA-256 flag verification,Upload your own cover images,JSON challenge bundle export,100% client-side and free,No signup or registration" />
+        <jsp:param name="faq1q" value="What is a CTF challenge generator and who uses it?" />
+        <jsp:param name="faq1a" value="A CTF (Capture The Flag) challenge generator creates cybersecurity puzzles where players find hidden flags using steganography, cryptanalysis, or forensic analysis. Used by CTF competition organizers, cybersecurity instructors, university courses, and anyone practicing offensive security skills." />
+        <jsp:param name="faq2q" value="Can I use this to create challenges for CTF competitions?" />
+        <jsp:param name="faq2a" value="Yes. Each generated challenge includes a downloadable file, complete solution with decryption keys, pipeline details, SHA-256 flag hash for automated verification, and progressive hints you can share with participants. Export everything as a single JSON bundle." />
+        <jsp:param name="faq3q" value="Is the CTF generator free and does it require signup?" />
+        <jsp:param name="faq3a" value="Completely free with zero signup. All encoding, encryption, steganography embedding, and challenge generation runs 100% in your browser using JavaScript and the Web Crypto API. Nothing is uploaded to any server. Works offline once loaded." />
     </jsp:include>
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": "CTF Challenge Generator Suite",
-      "description": "Free online suite of Capture The Flag challenge generators for cybersecurity training and competitions.",
+      "name": "Free CTF Challenge Generator Suite",
       "url": "https://8gwifi.org/ctf/index.jsp",
       "mainEntity": {
         "@type": "ItemList",
+        "numberOfItems": 6,
         "itemListElement": [
           {
             "@type": "ListItem",
             "position": 1,
             "item": {
-              "@type": "SoftwareApplication",
+              "@type": "WebApplication",
               "name": "Steganography CTF Generator",
               "url": "https://8gwifi.org/ctf/stego-ctf-generator.jsp",
-              "description": "Generate steganography CTF challenges with LSB embedding, audio stego, classical ciphers, container wrapping, and more.",
+              "description": "Hide flags in images and audio — 34 encoding steps, 7 difficulty levels, LSB stego, classical ciphers, tar/zip wrapping.",
               "applicationCategory": "SecurityApplication",
-              "operatingSystem": "Web Browser",
               "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
             }
-          }
+          },
+          { "@type": "ListItem", "position": 2, "name": "Cryptography CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#crypto" },
+          { "@type": "ListItem", "position": 3, "name": "Forensic CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#forensic" },
+          { "@type": "ListItem", "position": 4, "name": "Web Exploitation CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#web" },
+          { "@type": "ListItem", "position": 5, "name": "Reverse Engineering CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#re" },
+          { "@type": "ListItem", "position": 6, "name": "OSINT CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#osint" }
         ]
-      },
-      "author": { "@type": "Person", "name": "Anish Nath", "url": "https://8gwifi.org" },
-      "publisher": { "@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org" }
+      }
     }
     </script>
 

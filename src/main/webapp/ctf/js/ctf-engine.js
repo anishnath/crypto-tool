@@ -1010,6 +1010,13 @@ function generateChallenge(message, difficulty, cover, options) {
                 var hints = generateHints(pipeline, { count: options.hintCount || 5, includeKeys: false });
 
                 return {
+                    meta: {
+                        generator: '8gwifi.org CTF Challenge Generator',
+                        version: '1.0',
+                        url: 'https://8gwifi.org/ctf/stego-ctf-generator.jsp',
+                        created: new Date().toISOString(),
+                        difficulty: difficulty
+                    },
                     challenge: {
                         format: format,
                         data: challengeData ? challengeData.data : null,
@@ -1021,8 +1028,7 @@ function generateChallenge(message, difficulty, cover, options) {
                         flag: message,
                         pipeline: pipeline,
                         keys: Object.keys(keys).length > 0 ? keys : undefined,
-                        hash: hash,
-                        verify: 'Use CTFEngine.checkFlag(candidate, "' + hash + '") to verify.'
+                        hash: hash
                     },
                     hints: hints
                 };
