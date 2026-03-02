@@ -87,8 +87,8 @@
         .sg-desc-ad>div:first-child{min-width:0}
         @media(max-width:1100px){.sg-desc-ad{grid-template-columns:1fr}.sg-desc-ad>div:last-child{justify-self:center}}
 
-        .sg-main{max-width:1200px;margin:0 auto;padding:0 1.5rem 3rem;display:grid;grid-template-columns:380px 1fr 300px;gap:1.5rem}
-        @media(max-width:1200px){.sg-main{grid-template-columns:1fr;}.sg-ads-col{display:none}}
+        .sg-main{max-width:1200px;margin:0 auto;padding:0 1.5rem 3rem;display:grid;grid-template-columns:minmax(320px,380px) minmax(0,1fr) minmax(280px,300px);gap:1.5rem}
+        @media(max-width:1024px){.sg-main{grid-template-columns:1fr}.sg-ads-col{display:none}}
 
         .sg-card{background:var(--ctf-surface);border:1px solid var(--ctf-border);border-radius:0.75rem;overflow:hidden}
         .sg-card-header{padding:1rem 1.25rem;border-bottom:1px solid var(--ctf-border);display:flex;align-items:center;gap:0.5rem;font-weight:600;color:#fff;font-size:0.9375rem}
@@ -141,7 +141,7 @@
         .sg-preview-img{max-width:100%;border-radius:0.5rem;border:1px solid var(--ctf-border);background:var(--ctf-bg)}
 
         .sg-mobile-ad{display:none;margin:1.5rem 0}
-        @media(max-width:1200px){.sg-mobile-ad{display:block}}
+        @media(max-width:1024px){.sg-mobile-ad{display:block}}
         @media(max-width:640px){.sg-actions{flex-direction:column}.sg-btn-sm{width:100%}}
 
         .sg-upload-zone{border:2px dashed var(--ctf-border);border-radius:0.5rem;padding:1rem;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;display:flex;flex-direction:column;align-items:center;gap:0.25rem}
