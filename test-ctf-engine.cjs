@@ -82,9 +82,11 @@ require('./src/main/webapp/js/stego-rs.js');
 require('./src/main/webapp/js/stego-imagegen.js');
 require('./src/main/webapp/ctf/js/ctf-steps.js');
 require('./src/main/webapp/ctf/js/ctf-engine.js');
+require('./src/main/webapp/ctf/js/ctf-crypto-engine.js');
 
 var Steps = global.CTFSteps;
 var Engine = global.CTFEngine;
+var CryptoEngine = global.CTFCryptoEngine;
 
 /* ===== Test harness ===== */
 var passed = 0;
@@ -551,11 +553,271 @@ function runMultiLayerTests() {
         return Engine.checkFlag('wrong_flag', check.hash);
     }).then(function(check) {
         assert(check.correct === false, 'checkFlag incorrect mismatch');
+        return runCryptoTests();
     }).catch(function(e) {
         assert(false, 'Multi-layer pipeline test', e.message);
     }).then(function() {
         console.log('\n=== Summary ===');
         console.log('Passed: ' + passed + ', Failed: ' + failed);
         process.exit(failed > 0 ? 1 : 0);
+    });
+}
+
+function runCryptoTests() {
+    console.log('\n=== New cipher steps (Phase 1) ===');
+
+    assert(Steps.a1z26.decode(Steps.a1z26.encode('HELLO', {}), {}) === 'HELLO', 'a1z26 roundtrip');
+    assert(Steps.a1z26.encode('ABC', {}) === '1-2-3', 'a1z26 encode ABC');
+    assert(Steps.affine.decode(Steps.affine.encode('HELLO', { a: 5, b: 8 }), { a: 5, b: 8 }) === 'HELLO', 'affine roundtrip');
+    assert(Steps.affine.encode('A', { a: 5, b: 8 }) === 'I', 'affine encode A (5*0+8=8 → I)');
+    assert(Steps.ascii85.decode(Steps.ascii85.encode('Hello', {}), {}) === 'Hello', 'ascii85 roundtrip');
+    assert(Steps.ascii85.encode('Hello').indexOf('<~') === 0, 'ascii85 starts with <~');
+    assert(Steps.nato.decode(Steps.nato.encode('AB', {}), {}) === 'AB', 'nato roundtrip');
+    assert(Steps.nato.encode('A', {}) === 'Alpha', 'nato A→Alpha');
+    assert(Steps.phoneKeypad.decode(Steps.phoneKeypad.encode('HI', {}), {}) === 'HI', 'phoneKeypad roundtrip');
+    assert(Steps.tapCode.decode(Steps.tapCode.encode('HELLO', {}), {}) === 'HELLO', 'tapCode roundtrip');
+    assert(Steps.tapCode.encode('A', {}) === '1.1', 'tapCode A→1.1');
+    assert(Steps.urlEncode.decode(Steps.urlEncode.encode('hello world!', {}), {}) === 'hello world!', 'urlEncode roundtrip');
+    assert(Steps.urlEncode.encode(' ', {}) === '%20', 'urlEncode space→%20');
+
+    console.log('\n=== New cipher steps (Phase 2) ===');
+
+    assert(Steps.playfair.decode(Steps.playfair.encode('HELLO', { key: 'MONARCHY' }), { key: 'MONARCHY' }).indexOf('HE') === 0, 'playfair roundtrip (digraph)');
+    assert(Steps.beaufort.decode(Steps.beaufort.encode('HELLO', { key: 'SECRET' }), { key: 'SECRET' }) === 'HELLO', 'beaufort roundtrip');
+    assert(Steps.autokey.decode(Steps.autokey.encode('HELLO', { key: 'KEY' }), { key: 'KEY' }) === 'HELLO', 'autokey roundtrip');
+    assert(Steps.bifid.decode(Steps.bifid.encode('HELLO', {}), {}) === 'HELLO', 'bifid roundtrip');
+    assert(Steps.otp.decode(Steps.otp.encode('hello', { key: 'xyzab' }), { key: 'xyzab' }) === 'hello', 'otp roundtrip');
+
+    console.log('\n=== New cipher steps (Phase 3) ===');
+
+    assert(Steps.rc4.decode(Steps.rc4.encode('flag{rc4}', { key: 'mykey' }), { key: 'mykey' }) === 'flag{rc4}', 'rc4 roundtrip');
+    assert(Steps.hillCipher.decode(Steps.hillCipher.encode('HELLO', { matrix: [3,3,2,5] }), { matrix: [3,3,2,5] }).indexOf('HE') === 0, 'hillCipher roundtrip');
+    assert(Steps.rsaTextbook.decode(Steps.rsaTextbook.encode('Hi', { p: 61, q: 53, e: 17 }), { p: 61, q: 53, e: 17 }) === 'Hi', 'rsaTextbook roundtrip');
+    assert(Steps.adfgvx.decode(Steps.adfgvx.encode('HELLO', { key: 'CIPHER' }), { key: 'CIPHER' }) === 'HELLO', 'adfgvx roundtrip');
+    assert(Steps.nihilist.decode(Steps.nihilist.encode('HELLO', { key: 'KEY' }), { key: 'KEY' }) === 'HELLO', 'nihilist roundtrip');
+
+    console.log('\n=== Crypto Engine (output terminal) ===');
+
+    var outPipe = [{ id: 'base64', params: {} }, { id: 'output', params: {} }];
+    var cryptoPipe = [
+        { id: 'hex', params: {} },
+        { id: 'base64', params: {} },
+        { id: 'output', params: {} }
+    ];
+    var xorPipe = [
+        { id: 'xor', params: { key: 'secret' } },
+        { id: 'base64', params: {} },
+        { id: 'output', params: {} }
+    ];
+
+    return Engine.encode(outPipe, 'flag{output_test}', null, {}).then(function(result) {
+        assert(typeof result === 'string', 'output pipeline returns string');
+        assert(result === Steps.base64.encode('flag{output_test}', {}), 'output pipeline returns transformed payload');
+        return Engine.decode(outPipe, result, {});
+    }).then(function(decoded) {
+        assert(decoded === 'flag{output_test}', 'Engine.decode output pipeline roundtrip');
+        return Engine.encode(cryptoPipe, 'flag{multi}', null, {});
+    }).then(function(ciphertext) {
+        assert(typeof ciphertext === 'string' && ciphertext.length > 0, 'multi-step output returns string');
+        return Engine.decode(cryptoPipe, ciphertext, {});
+    }).then(function(decoded) {
+        assert(decoded === 'flag{multi}', 'Engine.decode multi-step output roundtrip');
+        return Engine.encode(xorPipe, 'flag{xor_crypto}', null, { key: 'secret' });
+    }).then(function(ciphertext) {
+        return Engine.decode(xorPipe, ciphertext, { key: 'secret' });
+    }).then(function(decoded) {
+        assert(decoded === 'flag{xor_crypto}', 'Engine.decode xor+output roundtrip');
+
+        console.log('\n=== CTFCryptoEngine: generateCryptoChallenge ===');
+        return CryptoEngine.generateCryptoChallenge('flag{crypto_challenge}', 'easy', { seed: 777 });
+    }).then(function(bundle) {
+        assert(bundle && bundle.meta && bundle.meta.type === 'crypto', 'generateCryptoChallenge meta.type');
+        assert(bundle.challenge && bundle.challenge.format === 'text', 'challenge.format is text');
+        assert(typeof bundle.challenge.ciphertext === 'string', 'challenge.ciphertext is string');
+        assert(bundle.solution && bundle.solution.flag === 'flag{crypto_challenge}', 'solution.flag correct');
+        assert(bundle.solution.pipeline && bundle.solution.pipeline.length >= 1, 'solution.pipeline exists');
+        var lastStep = bundle.solution.pipeline[bundle.solution.pipeline.length - 1];
+        assert(lastStep.id === 'output', 'pipeline ends with output');
+        return Engine.decode(bundle.solution.pipeline, bundle.challenge.ciphertext, bundle.solution.keys || {});
+    }).then(function(decoded) {
+        assert(decoded === 'flag{crypto_challenge}', 'generateCryptoChallenge decode roundtrip');
+
+        var cryptoPool = CryptoEngine.CRYPTO_PIPELINE_POOL;
+        assert(cryptoPool && cryptoPool.easy && cryptoPool.medium && cryptoPool.hard && cryptoPool.pro, 'CRYPTO_PIPELINE_POOL exists');
+        assert(cryptoPool.easy.length >= 12, 'CRYPTO_PIPELINE_POOL.easy has new steps');
+        var pipe1 = CryptoEngine.getRandomCryptoPipeline('medium', { seed: 100 });
+        var pipe2 = CryptoEngine.getRandomCryptoPipeline('medium', { seed: 100 });
+        assert(JSON.stringify(pipe1) === JSON.stringify(pipe2), 'getRandomCryptoPipeline deterministic with seed');
+        assert(pipe1.length >= 2 && pipe1[pipe1.length - 1].id === 'output', 'getRandomCryptoPipeline ends with output');
+
+        return CryptoEngine.generateCryptoChallenge('FLAGMEDIUMCRYPTO', 'medium', { seed: 555 });
+    }).then(function(bundle) {
+        return Engine.decode(bundle.solution.pipeline, bundle.challenge.ciphertext, bundle.solution.keys || {});
+    }).then(function(decoded) {
+        assert(decoded === 'FLAGMEDIUMCRYPTO', 'generateCryptoChallenge medium roundtrip');
+
+        console.log('\n=== CTFCryptoEngine: multiPart challenge ===');
+        return CryptoEngine.generateMultiPartChallenge('flag{split_into_parts}', 'easy', { seed: 300, parts: 3 });
+    }).then(function(bundle) {
+        assert(bundle.meta.type === 'multiPart', 'multiPart meta.type');
+        assert(bundle.challenge.parts && bundle.challenge.parts.length === 3, 'multiPart has 3 parts');
+        assert(bundle.solution.flag === 'flag{split_into_parts}', 'multiPart solution.flag');
+        assert(bundle.solution.parts.length === 3, 'multiPart solution has 3 part solutions');
+
+        console.log('\n=== CTFCryptoEngine: hashCrack challenge ===');
+        return CryptoEngine.generateHashCrackChallenge('cipher', { seed: 400 });
+    }).then(function(bundle) {
+        assert(bundle.meta.type === 'hashCrack', 'hashCrack meta.type');
+        assert(bundle.challenge.hash && bundle.challenge.hash.length === 64, 'hashCrack hash is sha256');
+        assert(bundle.challenge.algorithm === 'SHA-256', 'hashCrack algorithm');
+        assert(Array.isArray(bundle.challenge.wordlist), 'hashCrack has wordlist');
+        assert(bundle.challenge.wordlist.indexOf('cipher') >= 0, 'hashCrack wordlist contains flag');
+        return Engine.checkFlag('cipher', bundle.solution.hash);
+    }).then(function(check) {
+        assert(check.correct === true, 'hashCrack flag verifies');
+
+        console.log('\n=== CTFCryptoEngine: cipherIdentify challenge ===');
+        return CryptoEngine.generateCipherIdentifyChallenge('HELLO', { seed: 500 });
+    }).then(function(bundle) {
+        assert(bundle.meta.type === 'cipherIdentify', 'cipherIdentify meta.type');
+        assert(bundle.challenge.format === 'multipleChoice', 'cipherIdentify is multipleChoice');
+        assert(Array.isArray(bundle.challenge.choices) && bundle.challenge.choices.length === 4, 'cipherIdentify 4 choices');
+        assert(bundle.challenge.choices.some(function(c) { return c.id === bundle.solution.cipherId; }), 'correct answer in choices');
+        assert(typeof bundle.challenge.ciphertext === 'string' && bundle.challenge.ciphertext.length > 0, 'cipherIdentify has ciphertext');
+
+        console.log('\n=== CTFCryptoEngine: cribDrag challenge ===');
+        return CryptoEngine.generateCribDragChallenge('flag{crib}', { seed: 600 });
+    }).then(function(bundle) {
+        assert(bundle.meta.type === 'cribDrag', 'cribDrag meta.type');
+        assert(typeof bundle.challenge.ciphertext1 === 'string', 'cribDrag has ciphertext1');
+        assert(typeof bundle.challenge.ciphertext2 === 'string', 'cribDrag has ciphertext2');
+        assert(bundle.solution.flag === 'flag{crib}', 'cribDrag solution.flag');
+
+        console.log('\n=== CTFCryptoEngine: keyReuse challenge ===');
+        return CryptoEngine.generateKeyReuseChallenge('FLAGSECRET', { seed: 700, cipherType: 'vigenere' });
+    }).then(function(bundle) {
+        assert(bundle.meta.type === 'keyReuse', 'keyReuse meta.type');
+        assert(typeof bundle.challenge.ciphertext1 === 'string', 'keyReuse has ciphertext1');
+        assert(typeof bundle.challenge.ciphertext2 === 'string', 'keyReuse has ciphertext2');
+        assert(typeof bundle.challenge.knownPlaintext === 'string', 'keyReuse has knownPlaintext');
+        assert(bundle.solution.key, 'keyReuse solution has key');
+        var impl = Steps[bundle.solution.cipherType];
+        var decrypted = impl.decode(bundle.challenge.ciphertext1, { key: bundle.solution.key });
+        assert(decrypted === 'FLAGSECRET', 'keyReuse: decrypt ciphertext1 with recovered key');
+
+        console.log('\n=== CTFCryptoEngine: new pipelines ===');
+        var affinePipe = [{ id: 'affine', params: { a: 7, b: 3 } }, { id: 'base64', params: {} }, { id: 'output', params: {} }];
+        return Engine.encode(affinePipe, 'AFFINETEST', null, {});
+    }).then(function(ct) {
+        return Engine.decode([{ id: 'affine', params: { a: 7, b: 3 } }, { id: 'base64', params: {} }, { id: 'output', params: {} }], ct, {});
+    }).then(function(decoded) {
+        assert(decoded === 'AFFINETEST', 'affine+base64+output roundtrip');
+
+        var rc4Pipe = [{ id: 'rc4', params: { key: 'test' } }, { id: 'hex', params: {} }, { id: 'output', params: {} }];
+        return Engine.encode(rc4Pipe, 'flag{rc4pipe}', null, { key: 'test' });
+    }).then(function(ct) {
+        return Engine.decode([{ id: 'rc4', params: { key: 'test' } }, { id: 'hex', params: {} }, { id: 'output', params: {} }], ct, { key: 'test' });
+    }).then(function(decoded) {
+        assert(decoded === 'flag{rc4pipe}', 'rc4+hex+output roundtrip');
+        return runComposerTests();
+    }).catch(function(e) {
+        assert(false, 'Crypto CTF tests', e.message + '\n' + e.stack);
+    });
+}
+
+function runComposerTests() {
+    console.log('\n=== Dynamic Pipeline Composer ===');
+
+    // composePipeline returns valid pipelines
+    var easyPipe = CryptoEngine.composePipeline('easy', { seed: 1 });
+    assert(easyPipe.length >= 2, 'compose easy: at least 2 steps (1 + output)');
+    assert(easyPipe[easyPipe.length - 1].id === 'output', 'compose easy: ends with output');
+
+    var medPipe = CryptoEngine.composePipeline('medium', { seed: 2 });
+    assert(medPipe.length >= 3, 'compose medium: at least 3 steps (2 + output)');
+    assert(medPipe[medPipe.length - 1].id === 'output', 'compose medium: ends with output');
+
+    var hardPipe = CryptoEngine.composePipeline('hard', { seed: 3 });
+    assert(hardPipe.length >= 3, 'compose hard: at least 3 steps');
+    assert(hardPipe[hardPipe.length - 1].id === 'output', 'compose hard: ends with output');
+
+    var proPipe = CryptoEngine.composePipeline('pro', { seed: 4 });
+    assert(proPipe.length >= 3, 'compose pro: at least 3 steps');
+    assert(proPipe[proPipe.length - 1].id === 'output', 'compose pro: ends with output');
+
+    // deterministic with same seed
+    var p1 = CryptoEngine.composePipeline('hard', { seed: 42 });
+    var p2 = CryptoEngine.composePipeline('hard', { seed: 42 });
+    assert(JSON.stringify(p1) === JSON.stringify(p2), 'compose: deterministic with seed');
+
+    // different seeds produce different pipelines
+    var p3 = CryptoEngine.composePipeline('hard', { seed: 43 });
+    assert(JSON.stringify(p1) !== JSON.stringify(p3), 'compose: different seeds → different pipelines');
+
+    // variety: 20 composed medium pipelines should have many unique combos
+    var uniqueIds = {};
+    for (var i = 0; i < 20; i++) {
+        var pipe = CryptoEngine.composePipeline('medium', { seed: i * 13 });
+        var key = pipe.map(function(s) { return s.id; }).join(',');
+        uniqueIds[key] = true;
+    }
+    var uniqueCount = Object.keys(uniqueIds).length;
+    assert(uniqueCount >= 8, 'compose medium: 20 seeds produce ' + uniqueCount + ' unique combos (>=8)');
+
+    // variety: 20 composed hard pipelines
+    var uniqueHard = {};
+    for (var j = 0; j < 20; j++) {
+        var pipe2 = CryptoEngine.composePipeline('hard', { seed: j * 17 });
+        var key2 = pipe2.map(function(s) { return s.id; }).join(',');
+        uniqueHard[key2] = true;
+    }
+    assert(Object.keys(uniqueHard).length >= 8, 'compose hard: 20 seeds produce ' + Object.keys(uniqueHard).length + ' unique combos (>=8)');
+
+    console.log('\n=== Param Randomization (xor, encrypt get keys) ===');
+
+    // xor should get random key from CRYPTO_PARAM_RANGES
+    var xorPipe = CryptoEngine.randomizeCryptoParams(
+        [{ id: 'xor', params: {} }, { id: 'base64', params: {} }, { id: 'output', params: {} }],
+        { seed: 99 }
+    );
+    assert(xorPipe[0].params.key && xorPipe[0].params.key.length > 0, 'xor gets random key: ' + xorPipe[0].params.key);
+
+    // encrypt should get random password
+    var encPipe = CryptoEngine.randomizeCryptoParams(
+        [{ id: 'encrypt', params: {} }, { id: 'base64', params: {} }, { id: 'output', params: {} }],
+        { seed: 88 }
+    );
+    assert(encPipe[0].params.password && encPipe[0].params.password.length > 0, 'encrypt gets random password: ' + encPipe[0].params.password);
+
+    // different seeds → different keys
+    var xorPipe2 = CryptoEngine.randomizeCryptoParams(
+        [{ id: 'xor', params: {} }, { id: 'output', params: {} }],
+        { seed: 100 }
+    );
+    var xorPipe3 = CryptoEngine.randomizeCryptoParams(
+        [{ id: 'xor', params: {} }, { id: 'output', params: {} }],
+        { seed: 200 }
+    );
+    assert(xorPipe2[0].params.key !== xorPipe3[0].params.key, 'xor: different seeds → different keys');
+
+    console.log('\n=== compose + generate roundtrip ===');
+
+    // Generate with compose=true and verify decode roundtrip
+    return CryptoEngine.generateCryptoChallenge('COMPOSEDTEST', 'easy', { seed: 900, compose: true }).then(function(bundle) {
+        assert(bundle.meta.type === 'crypto', 'compose+generate: meta.type');
+        assert(bundle.solution.pipeline.length >= 2, 'compose+generate: has pipeline');
+        return Engine.decode(bundle.solution.pipeline, bundle.challenge.ciphertext, bundle.solution.keys || {});
+    }).then(function(decoded) {
+        assert(decoded === 'COMPOSEDTEST', 'compose+generate: easy roundtrip');
+        return CryptoEngine.generateCryptoChallenge('HARDCOMPOSED', 'hard', { seed: 901, compose: true });
+    }).then(function(bundle) {
+        return Engine.decode(bundle.solution.pipeline, bundle.challenge.ciphertext, bundle.solution.keys || {});
+    }).then(function(decoded) {
+        assert(decoded === 'HARDCOMPOSED', 'compose+generate: hard roundtrip');
+        return CryptoEngine.generateCryptoChallenge('PROCOMPOSED', 'pro', { seed: 902, compose: true });
+    }).then(function(bundle) {
+        return Engine.decode(bundle.solution.pipeline, bundle.challenge.ciphertext, bundle.solution.keys || {});
+    }).then(function(decoded) {
+        assert(decoded === 'PROCOMPOSED', 'compose+generate: pro roundtrip');
     });
 }
