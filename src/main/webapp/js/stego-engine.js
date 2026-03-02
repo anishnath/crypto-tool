@@ -920,6 +920,75 @@ function hasNativeCompression() {
 }
 
 /**
+ * LSB encoding in a single channel only (Stegsolve-style plane exploration).
+ * channel: 0=R, 1=G, 2=B. plane/depth: 0-7.
+ */
+function encodeLSBChannel(imageData, message, channel, plane) {
+    channel = channel || 0;
+    plane = (plane != null) ? plane : 0;
+    var data = new Uint8ClampedArray(imageData.data);
+    var encoded = new TextEncoder().encode(message);
+    var msgLength = encoded.length;
+    var pixelCount = imageData.width * imageData.height;
+    var maxCapacity = Math.floor(pixelCount / 8) - 4;
+    if (msgLength > maxCapacity) {
+        throw new Error('Message too large: ' + msgLength + ' bytes exceeds channel capacity of ' + maxCapacity + ' bytes');
+    }
+    var header = [(msgLength >>> 24) & 0xFF, (msgLength >>> 16) & 0xFF, (msgLength >>> 8) & 0xFF, msgLength & 0xFF];
+    var fullMessage = [];
+    var i, bit, byte, bitValue, pixelIndex, bitIndex;
+    for (i = 0; i < header.length; i++) fullMessage.push(header[i]);
+    for (i = 0; i < encoded.length; i++) fullMessage.push(encoded[i]);
+    var mask = ~(1 << plane) & 0xFF;
+    bitIndex = 0;
+    for (i = 0; i < fullMessage.length; i++) {
+        byte = fullMessage[i];
+        for (bit = 7; bit >= 0; bit--) {
+            bitValue = (byte >> bit) & 1;
+            pixelIndex = Math.floor(bitIndex) * 4 + channel;
+            if (pixelIndex < data.length) {
+                data[pixelIndex] = (data[pixelIndex] & mask) | (bitValue << plane);
+            }
+            bitIndex++;
+        }
+    }
+    return new ImageData(data, imageData.width, imageData.height);
+}
+
+/**
+ * LSB decoding from single channel.
+ */
+function decodeLSBChannel(imageData, channel, plane) {
+    channel = channel || 0;
+    plane = (plane != null) ? plane : 0;
+    var data = imageData.data;
+    var pixelCount = imageData.width * imageData.height;
+    var bitIndex = 0;
+
+    function readByte() {
+        var byte = 0;
+        for (var b = 7; b >= 0; b--) {
+            var pi = Math.floor(bitIndex) * 4 + channel;
+            if (pi >= data.length) throw new Error('Data truncated');
+            byte = (byte << 1) | ((data[pi] >> plane) & 1);
+            bitIndex++;
+        }
+        return byte;
+    }
+
+    var headerBytes = [];
+    for (var i = 0; i < 4; i++) headerBytes.push(readByte());
+    var msgLength = ((headerBytes[0] << 24) | (headerBytes[1] << 16) | (headerBytes[2] << 8) | headerBytes[3]) >>> 0;
+    var maxCapacity = Math.floor(pixelCount / 8) - 4;
+    if (msgLength === 0 || msgLength > maxCapacity || msgLength > 500000) {
+        throw new Error('Invalid length: ' + msgLength);
+    }
+    var bytes = [];
+    for (var j = 0; j < msgLength; j++) bytes.push(readByte());
+    return new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(bytes));
+}
+
+/**
  * Calculate required dimensions to hold a payload of given byte size.
  * Returns {width, height} maintaining original aspect ratio.
  * If the current dimensions already have enough capacity, returns them unchanged.
@@ -969,6 +1038,8 @@ window.StegoEngine = {
     encodeLSBFileWithDepth: encodeLSBFileWithDepth,
     decodeLSBPayloadAtDepth: decodeLSBPayloadAtDepth,
     decodeLSBPayloadWithDepth: decodeLSBPayloadWithDepth,
+    encodeLSBChannel: encodeLSBChannel,
+    decodeLSBChannel: decodeLSBChannel,
     // Batch 2: Compression
     compressDeflate: compressDeflate,
     decompressDeflate: decompressDeflate,

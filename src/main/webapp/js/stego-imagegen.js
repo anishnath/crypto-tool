@@ -1,6 +1,7 @@
 /**
  * Steganography Tool - Image Generator Module
  * Auto-generate cover images via Canvas 2D for LSB steganography
+ * Supports optional opts.rng or opts.seed for reproducible generation.
  */
 (function() {
 'use strict';
@@ -12,32 +13,42 @@ var TYPES = [
     { id: 'waves', name: 'Abstract Waves', icon: 'waves' }
 ];
 
+function mulberry32(seed) {
+    return function() {
+        var t = seed += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+}
+
 /**
  * Generate a random color as [r, g, b].
  */
-function randColor() {
+function randColor(rng) {
+    rng = rng || Math.random;
     return [
-        Math.floor(Math.random() * 256),
-        Math.floor(Math.random() * 256),
-        Math.floor(Math.random() * 256)
+        Math.floor(rng() * 256),
+        Math.floor(rng() * 256),
+        Math.floor(rng() * 256)
     ];
 }
 
 /**
  * Generate gradient mesh: 5-8 overlapping radial gradients.
  */
-function generateGradient(ctx, w, h) {
-    // Base fill
-    var base = randColor();
+function generateGradient(ctx, w, h, rng) {
+    rng = rng || Math.random;
+    var base = randColor(rng);
     ctx.fillStyle = 'rgb(' + base[0] + ',' + base[1] + ',' + base[2] + ')';
     ctx.fillRect(0, 0, w, h);
 
-    var count = 5 + Math.floor(Math.random() * 4);
+    var count = 5 + Math.floor(rng() * 4);
     for (var i = 0; i < count; i++) {
-        var cx = Math.random() * w;
-        var cy = Math.random() * h;
-        var radius = Math.max(w, h) * (0.2 + Math.random() * 0.5);
-        var c = randColor();
+        var cx = rng() * w;
+        var cy = rng() * h;
+        var radius = Math.max(w, h) * (0.2 + rng() * 0.5);
+        var c = randColor(rng);
         var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
         grad.addColorStop(0, 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',0.7)');
         grad.addColorStop(1, 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',0)');
@@ -49,44 +60,41 @@ function generateGradient(ctx, w, h) {
 /**
  * Generate geometric shapes: circles, rectangles, lines on gradient bg.
  */
-function generateGeometric(ctx, w, h) {
-    // Gradient background
-    var bg1 = randColor();
-    var bg2 = randColor();
+function generateGeometric(ctx, w, h, rng) {
+    rng = rng || Math.random;
+    var bg1 = randColor(rng);
+    var bg2 = randColor(rng);
     var bgGrad = ctx.createLinearGradient(0, 0, w, h);
     bgGrad.addColorStop(0, 'rgb(' + bg1[0] + ',' + bg1[1] + ',' + bg1[2] + ')');
     bgGrad.addColorStop(1, 'rgb(' + bg2[0] + ',' + bg2[1] + ',' + bg2[2] + ')');
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, w, h);
 
-    var shapes = 30 + Math.floor(Math.random() * 40);
+    var shapes = 30 + Math.floor(rng() * 40);
     for (var i = 0; i < shapes; i++) {
-        var c = randColor();
-        var alpha = 0.1 + Math.random() * 0.5;
+        var c = randColor(rng);
+        var alpha = 0.1 + rng() * 0.5;
         ctx.fillStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + alpha + ')';
         ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + (alpha + 0.2) + ')';
-        ctx.lineWidth = 1 + Math.random() * 3;
+        ctx.lineWidth = 1 + rng() * 3;
 
-        var type = Math.floor(Math.random() * 3);
+        var type = Math.floor(rng() * 3);
         if (type === 0) {
-            // Circle
             ctx.beginPath();
-            ctx.arc(Math.random() * w, Math.random() * h, 10 + Math.random() * 80, 0, Math.PI * 2);
-            Math.random() > 0.5 ? ctx.fill() : ctx.stroke();
+            ctx.arc(rng() * w, rng() * h, 10 + rng() * 80, 0, Math.PI * 2);
+            rng() > 0.5 ? ctx.fill() : ctx.stroke();
         } else if (type === 1) {
-            // Rectangle
-            var rw = 20 + Math.random() * 120;
-            var rh = 20 + Math.random() * 80;
+            var rw = 20 + rng() * 120;
+            var rh = 20 + rng() * 80;
             ctx.save();
-            ctx.translate(Math.random() * w, Math.random() * h);
-            ctx.rotate(Math.random() * Math.PI);
-            Math.random() > 0.5 ? ctx.fillRect(-rw/2, -rh/2, rw, rh) : ctx.strokeRect(-rw/2, -rh/2, rw, rh);
+            ctx.translate(rng() * w, rng() * h);
+            ctx.rotate(rng() * Math.PI);
+            rng() > 0.5 ? ctx.fillRect(-rw/2, -rh/2, rw, rh) : ctx.strokeRect(-rw/2, -rh/2, rw, rh);
             ctx.restore();
         } else {
-            // Line
             ctx.beginPath();
-            ctx.moveTo(Math.random() * w, Math.random() * h);
-            ctx.lineTo(Math.random() * w, Math.random() * h);
+            ctx.moveTo(rng() * w, rng() * h);
+            ctx.lineTo(rng() * w, rng() * h);
             ctx.stroke();
         }
     }
@@ -105,16 +113,16 @@ function hash(x, y, seed) {
 /**
  * Generate value noise pattern mapped to color gradient.
  */
-function generateNoise(ctx, w, h) {
+function generateNoise(ctx, w, h, rng) {
+    rng = rng || Math.random;
     var imageData = ctx.createImageData(w, h);
     var d = imageData.data;
-    var seed = Math.floor(Math.random() * 100000);
-    var scale = 4 + Math.floor(Math.random() * 8);
+    var seed = Math.floor(rng() * 100000);
+    var scale = 4 + Math.floor(rng() * 8);
 
-    // Random color palette (3 colors for gradient mapping)
-    var c1 = randColor();
-    var c2 = randColor();
-    var c3 = randColor();
+    var c1 = randColor(rng);
+    var c2 = randColor(rng);
+    var c3 = randColor(rng);
 
     for (var y = 0; y < h; y++) {
         for (var x = 0; x < w; x++) {
@@ -162,24 +170,24 @@ function generateNoise(ctx, w, h) {
 /**
  * Generate abstract waves: layered sine waves with color fills.
  */
-function generateWaves(ctx, w, h) {
-    // Background
-    var bg = randColor();
+function generateWaves(ctx, w, h, rng) {
+    rng = rng || Math.random;
+    var bg = randColor(rng);
     ctx.fillStyle = 'rgb(' + bg[0] + ',' + bg[1] + ',' + bg[2] + ')';
     ctx.fillRect(0, 0, w, h);
 
-    var layers = 5 + Math.floor(Math.random() * 4);
+    var layers = 5 + Math.floor(rng() * 4);
     for (var l = 0; l < layers; l++) {
-        var c = randColor();
-        var alpha = 0.15 + Math.random() * 0.35;
+        var c = randColor(rng);
+        var alpha = 0.15 + rng() * 0.35;
         ctx.fillStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + alpha + ')';
 
-        var freq = 0.005 + Math.random() * 0.02;
-        var amp = 30 + Math.random() * 80;
-        var phase = Math.random() * Math.PI * 2;
+        var freq = 0.005 + rng() * 0.02;
+        var amp = 30 + rng() * 80;
+        var phase = rng() * Math.PI * 2;
         var yOffset = (l / layers) * h * 0.7 + h * 0.15;
-        var freq2 = 0.002 + Math.random() * 0.01;
-        var amp2 = 10 + Math.random() * 30;
+        var freq2 = 0.002 + rng() * 0.01;
+        var amp2 = 10 + rng() * 30;
 
         ctx.beginPath();
         ctx.moveTo(0, h);
@@ -195,11 +203,14 @@ function generateWaves(ctx, w, h) {
 
 /**
  * Generate a cover image of the specified type and size.
+ * opts: { seed?: number, rng?: () => number } for reproducible generation.
  * Returns { canvas, imageData, dataUrl }
  */
-function generate(type, width, height) {
+function generate(type, width, height, opts) {
     width = width || 800;
     height = height || 600;
+    var rng = (opts && opts.rng) || ((opts && opts.seed != null) ? mulberry32(opts.seed) : null);
+    rng = rng || Math.random;
 
     var canvas = document.createElement('canvas');
     canvas.width = width;
@@ -208,19 +219,19 @@ function generate(type, width, height) {
 
     switch (type) {
         case 'gradient':
-            generateGradient(ctx, width, height);
+            generateGradient(ctx, width, height, rng);
             break;
         case 'geometric':
-            generateGeometric(ctx, width, height);
+            generateGeometric(ctx, width, height, rng);
             break;
         case 'noise':
-            generateNoise(ctx, width, height);
+            generateNoise(ctx, width, height, rng);
             break;
         case 'waves':
-            generateWaves(ctx, width, height);
+            generateWaves(ctx, width, height, rng);
             break;
         default:
-            generateGradient(ctx, width, height);
+            generateGradient(ctx, width, height, rng);
     }
 
     var imageData = ctx.getImageData(0, 0, width, height);
