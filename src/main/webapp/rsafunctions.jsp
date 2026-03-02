@@ -68,31 +68,31 @@
     </style>
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="RSA Encrypt, Sign & Verify Online - Key Generator" />
-        <jsp:param name="toolDescription" value="RSA encrypt, decrypt, sign and verify online free. Generate 2048 or 4096-bit key pairs. PKCS1, OAEP SHA-256, SHA256withRSA. Digital signatures. No data stored." />
+        <jsp:param name="toolName" value="RSA Encryption Decryption Online - Key Generator & Sign" />
+        <jsp:param name="toolDescription" value="Free online RSA encryption and decryption tool. Generate 2048 or 4096-bit key pairs instantly, encrypt with OAEP SHA-256, sign and verify with SHA256withRSA. Instant key generation, one-click encrypt-decrypt swap, built-in Python compiler. No signup, no data stored." />
         <jsp:param name="toolCategory" value="Cryptography" />
         <jsp:param name="toolUrl" value="rsafunctions.jsp" />
-        <jsp:param name="toolKeywords" value="rsa encryption online, rsa decryption online, rsa key generator, rsa encrypt decrypt, rsa public key encryption, rsa private key decryption, RSA/ECB/PKCS1Padding, RSA OAEP, rsa key pair generator, rsa 2048, rsa 4096, rsa python, rsa tool online, rsa sign online, rsa verify signature, SHA256withRSA, rsa digital signature" />
+        <jsp:param name="toolKeywords" value="rsa encryption online, rsa decryption online, rsa key generator online, rsa encrypt decrypt tool, rsa public key encryption, rsa private key decryption, RSA/ECB/PKCS1Padding, RSA/ECB/OAEPWithSHA-256AndMGF1Padding, rsa oaep sha256, rsa key pair generator 2048, rsa 4096 key generator, rsa encrypt python, rsa decrypt python, rsa tool online free, rsa sign message online, rsa verify signature online, SHA256withRSA, SHA512withRSA, rsa digital signature tool, rsa encryption calculator, rsa encrypt text online, rsa decrypt base64, rsa pem key generator, asymmetric encryption online" />
         <jsp:param name="toolImage" value="rsa.png" />
-        <jsp:param name="toolFeatures" value="Generate RSA key pairs (512 1024 2048 4096-bit),RSA encryption with public key,RSA decryption with private key,RSA digital signatures (Sign and Verify),Multiple cipher modes: PKCS1Padding and OAEP,SHA256withRSA SHA512withRSA signature algorithms,OAEP SHA-256 padding support,Live message byte counter,PEM format key output,Base64 encoded output,Built-in Python compiler for RSA code,Share encrypted results via URL,No data retention - in-memory processing" />
+        <jsp:param name="toolFeatures" value="Instant RSA key pair generation (512 1024 2048 4096-bit) without page reload,RSA encryption with public key using PKCS1 or OAEP padding,RSA decryption with private key,One-click encrypt-to-decrypt swap workflow,RSA digital signatures - Sign and Verify in one tool,OAEP SHA-256 padding (recommended for production),SHA256withRSA SHA512withRSA signature verification,Live message byte counter with key-size limits,Instant key regeneration with loading spinner,PEM format key output with one-click copy,Share encrypted results via URL,Built-in Python compiler with RSA code templates,No data stored - all processing in-memory,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="howToSteps" value="Select RSA key size|Choose 2048-bit or 4096-bit RSA key size and generate a new key pair,Choose operation|Select Encrypt Decrypt Sign or Verify mode from the operation toggle,Enter your message|Type or paste the plaintext message you want to process in the message field,Choose algorithm|Select a cipher mode for encryption or a signature algorithm like SHA256withRSA for signing,Click Process|Click the button to encrypt decrypt sign or verify using the selected RSA key and algorithm,Copy or share result|Copy the Base64-encoded result or use the signature for verification" />
-        <jsp:param name="faq1q" value="What is RSA encryption and how does it work?" />
-        <jsp:param name="faq1a" value="RSA is an asymmetric cryptography algorithm using two keys: a public key for encryption and a private key for decryption. Security is based on the difficulty of factoring large prime numbers. Named after inventors Rivest, Shamir, and Adleman." />
-        <jsp:param name="faq2q" value="What RSA cipher modes are supported?" />
-        <jsp:param name="faq2a" value="RSA, RSA/ECB/PKCS1Padding, RSA/None/PKCS1Padding, RSA/NONE/OAEPWithSHA1AndMGF1Padding, RSA/ECB/OAEPWithSHA-1AndMGF1Padding, and RSA/ECB/OAEPWithSHA-256AndMGF1Padding. OAEP with SHA-256 is recommended for new applications." />
+        <jsp:param name="howToSteps" value="Generate RSA key pair|Click a key size chip (2048-bit recommended) to instantly generate a new RSA public and private key pair - no page reload needed,Choose your operation|Select Encrypt or Decrypt or Sign or Verify from the operation grid,Enter your message|Type or paste the plaintext message into the message field - a live byte counter shows remaining capacity for your key size,Select cipher or signature algorithm|Choose OAEP SHA-256 for encryption or SHA256withRSA for signing from the dropdown,Click the action button|Click Encrypt or Sign to process your message instantly via AJAX - results appear without page reload,Swap or verify results|Click Swap to instantly decrypt your ciphertext or Use for Verify to validate a signature - copy or share the result via URL" />
+        <jsp:param name="faq1q" value="How do I encrypt a message with RSA online?" />
+        <jsp:param name="faq1a" value="Select a key size (2048-bit recommended), choose Encrypt mode, type your message, select a cipher like OAEP SHA-256, and click Encrypt. The tool generates keys instantly without page reload and outputs Base64-encoded ciphertext you can copy or share." />
+        <jsp:param name="faq2q" value="What RSA key size should I use - 2048 or 4096 bit?" />
+        <jsp:param name="faq2a" value="Use 2048-bit for most applications - it is the industry standard recommended by NIST until 2030. Use 4096-bit for high-security scenarios like certificate authorities or long-lived keys. 512-bit and 1024-bit are insecure and should only be used for testing." />
         <jsp:param name="faq3q" value="What is the maximum message size for RSA encryption?" />
-        <jsp:param name="faq3a" value="Depends on key size and padding. 1024-bit with PKCS1: 117 bytes. 2048-bit: 245 bytes. 4096-bit: ~501 bytes. For larger messages, use hybrid encryption (RSA for key exchange, AES for data)." />
-        <jsp:param name="faq4q" value="Is this RSA tool secure?" />
-        <jsp:param name="faq4a" value="All operations are performed without storing keys or messages. Use 2048-bit or 4096-bit keys for production. For highly sensitive data, generate keys offline. Built on Java Cryptography Architecture (JCA)." />
-        <jsp:param name="faq5q" value="Can I decrypt with the public key?" />
-        <jsp:param name="faq5a" value="No, RSA decryption requires the private key. The public key encrypts, the private key decrypts. This asymmetric property enables secure communication without pre-shared secrets." />
+        <jsp:param name="faq3a" value="RSA message size depends on key size minus padding overhead. 1024-bit PKCS1: 117 bytes. 2048-bit PKCS1: 245 bytes. 2048-bit OAEP SHA-256: 190 bytes. 4096-bit PKCS1: 501 bytes. This tool shows a live byte counter. For larger data, use hybrid encryption (RSA + AES)." />
+        <jsp:param name="faq4q" value="What is the difference between PKCS1 and OAEP padding?" />
+        <jsp:param name="faq4a" value="PKCS1 v1.5 is the legacy RSA padding scheme, vulnerable to Bleichenbacher padding oracle attacks. OAEP (Optimal Asymmetric Encryption Padding) with SHA-256 is the modern recommended standard, providing provable security against chosen-ciphertext attacks. Always use OAEP SHA-256 for new applications." />
+        <jsp:param name="faq5q" value="How do I sign and verify a message with RSA?" />
+        <jsp:param name="faq5a" value="Select Sign mode, enter your message, choose SHA256withRSA algorithm, and click Sign. The tool creates a digital signature using your private key. To verify, click Use for Verify - the signature auto-populates. Click Verify to confirm authenticity using the public key." />
         <jsp:param name="faq6q" value="How do I encrypt with RSA in Python?" />
-        <jsp:param name="faq6a" value="Use the cryptography or pycryptodome library. This tool includes a built-in Python compiler with RSA templates. Click Try It Live to run RSA encryption code directly in your browser." />
-        <jsp:param name="faq7q" value="How does RSA digital signing work?" />
-        <jsp:param name="faq7a" value="RSA signing uses the private key to create a digital signature of a message hash. The signer hashes the message with SHA-256 or SHA-512, then encrypts the hash with their private key. Anyone with the public key can verify the signature, confirming authenticity and integrity." />
-        <jsp:param name="faq8q" value="What signature algorithms are supported?" />
-        <jsp:param name="faq8a" value="SHA256withRSA (recommended), SHA512withRSA, SHA384withRSA, SHA1withRSA, SHA1WithRSA/PSS, SHA224WithRSA/PSS, SHA384WithRSA/PSS, and MD5withRSA (deprecated). SHA256withRSA is the most widely used for digital signatures." />
+        <jsp:param name="faq6a" value="Use the pycryptodome library: from Crypto.PublicKey import RSA and from Crypto.Cipher import PKCS1_OAEP. This tool has a built-in Python compiler with ready-to-run RSA encryption, key generation, OAEP, and signing templates. Click Try It Live to run code in your browser." />
+        <jsp:param name="faq7q" value="Is this RSA tool secure? Is my data stored?" />
+        <jsp:param name="faq7a" value="No data is permanently stored. Keys and messages are processed in-memory during your session only. The tool uses Java Cryptography Architecture (JCA) with standard RSA implementations. For production secrets, generate keys offline. All connections use HTTPS with TLS 1.2+." />
+        <jsp:param name="faq8q" value="Can I decrypt RSA ciphertext with the public key?" />
+        <jsp:param name="faq8a" value="No. RSA is asymmetric - the public key encrypts, only the matching private key can decrypt. This is what makes RSA secure for communication: anyone can encrypt with your public key, but only you can decrypt with your private key. For signing, the roles reverse: the private key signs, the public key verifies." />
     </jsp:include>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
@@ -464,18 +464,19 @@
     <header class="tool-page-header">
         <div class="tool-page-header-inner">
             <div>
-                <h1 class="tool-page-title">RSA Encryption, Signing & Key Generator</h1>
+                <h1 class="tool-page-title">RSA Encryption & Decryption Online - Key Generator, Sign & Verify</h1>
                 <nav class="tool-breadcrumbs">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                     <a href="<%=request.getContextPath()%>/index.jsp#cryptography">Cryptography</a> /
-                    RSA Tool
+                    RSA Encryption Tool
                 </nav>
             </div>
             <div class="tool-page-badges">
-                <span class="tool-badge">RSA 512-4096 bit</span>
-                <span class="tool-badge">OAEP + PKCS1</span>
+                <span class="tool-badge">2048 & 4096-bit Keys</span>
+                <span class="tool-badge">OAEP SHA-256</span>
                 <span class="tool-badge">Sign & Verify</span>
-                <span class="tool-badge">Python Compiler</span>
+                <span class="tool-badge">Instant Key Gen</span>
+                <span class="tool-badge">Try It Live (Python)</span>
                 <span class="tool-badge">No Data Stored</span>
             </div>
         </div>
@@ -484,7 +485,7 @@
     <section class="tool-description-section">
         <div class="tool-description-inner">
             <div class="tool-description-content">
-                <p>RSA encryption, decryption, signing and verification tool with key pair generation. Choose key sizes from 512 to 4096-bit, multiple cipher modes including OAEP SHA-256, digital signatures with SHA256withRSA, and run RSA Python code in your browser. No data stored.</p>
+                <p>Encrypt, decrypt, sign and verify with RSA online. Generate 2048 or 4096-bit key pairs instantly (no page reload), encrypt with OAEP SHA-256 or PKCS1, create digital signatures with SHA256withRSA, and swap between encrypt/decrypt in one click. Includes a built-in Python compiler with RSA code templates. Free, no signup, no data stored.</p>
             </div>
         </div>
     </section>
@@ -750,23 +751,23 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
                 <div>
                     <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">RSA Key Generation</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;">RSA keys are generated by selecting two large primes and computing their product (modulus). The public key consists of the modulus and public exponent (65537), while the private key includes the private exponent derived from the primes.</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;">RSA keys are generated by selecting two large primes (p, q) and computing their product n = p &times; q. The public key is (n, e) where e is typically 65537. The private key contains the private exponent d derived via the extended Euclidean algorithm. This tool generates key pairs instantly via AJAX &mdash; no page reload required.</p>
                     <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
-                        <li><strong>512-bit:</strong> Weak, testing only</li>
-                        <li><strong>1024-bit:</strong> Deprecated, avoid for production</li>
-                        <li><strong>2048-bit:</strong> Recommended minimum</li>
-                        <li><strong>4096-bit:</strong> High security, slower performance</li>
+                        <li><strong>512-bit:</strong> Insecure &mdash; testing and education only</li>
+                        <li><strong>1024-bit:</strong> Deprecated by NIST &mdash; avoid for production</li>
+                        <li><strong>2048-bit:</strong> Recommended minimum (NIST standard until 2030)</li>
+                        <li><strong>4096-bit:</strong> High security for CAs and long-lived keys</li>
                     </ul>
                 </div>
                 <div>
-                    <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Padding Schemes</h3>
+                    <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Padding Schemes Explained</h3>
                     <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
-                        <li><strong>PKCS1Padding:</strong> Classic scheme, vulnerable to padding oracle attacks. Legacy only.</li>
-                        <li><strong>OAEP SHA-1:</strong> More secure than PKCS1, but SHA-1 is deprecated.</li>
-                        <li><strong>OAEP SHA-256:</strong> Recommended modern padding. Best security against chosen-ciphertext attacks.</li>
+                        <li><strong>PKCS1 v1.5:</strong> Legacy scheme. Vulnerable to Bleichenbacher padding oracle attacks (CVE-1998-XXXX). Use only for backwards compatibility.</li>
+                        <li><strong>OAEP SHA-1:</strong> Improved security over PKCS1, but SHA-1 is deprecated since 2011.</li>
+                        <li><strong>OAEP SHA-256:</strong> Modern recommended padding. Provable CCA2 security. Use <code style="background:var(--bg-secondary);padding:0.1rem 0.3rem;border-radius:0.25rem;font-size:0.85em;">RSA/ECB/OAEPWithSHA-256AndMGF1Padding</code> for all new applications.</li>
                     </ul>
                     <div class="tool-alert tool-alert-info" style="margin-top: 0.75rem; font-size: 0.8125rem;">
-                        <strong>Message Size Limits:</strong> RSA can only encrypt data smaller than the key size minus padding overhead. For larger data, use hybrid encryption (RSA + AES).
+                        <strong>Message Size Limits:</strong> RSA encrypts at most (keyBits/8 &minus; paddingOverhead) bytes. 2048-bit OAEP SHA-256 = 190 bytes max. For larger data, use hybrid encryption: encrypt data with AES-256-GCM, encrypt the AES key with RSA.
                     </div>
                 </div>
             </div>
@@ -776,18 +777,18 @@
                     <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Authorship & Expertise</h3>
                     <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
                         <li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener" style="color: var(--primary);">Anish Nath</a></li>
-                        <li><strong>Background:</strong> Security engineer, cryptographic implementations</li>
-                        <li><strong>Library:</strong> Java Cryptography Architecture (JCA)</li>
-                        <li><strong>Active since:</strong> 2017</li>
+                        <li><strong>Background:</strong> Security engineer specializing in cryptographic implementations</li>
+                        <li><strong>Library:</strong> Java Cryptography Architecture (JCA) &mdash; standard RSA provider</li>
+                        <li><strong>Active since:</strong> 2017 &mdash; continuously updated</li>
                     </ul>
                 </div>
                 <div>
                     <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Trust & Privacy</h3>
                     <ul style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
-                        <li><strong>No Data Retention:</strong> In-session processing only</li>
-                        <li><strong>HTTPS Only:</strong> TLS 1.2+ encryption</li>
-                        <li><strong>Open Standards:</strong> Standard JCA RSA implementations</li>
-                        <li><strong>Use Case:</strong> Testing, learning, and development</li>
+                        <li><strong>Zero Data Retention:</strong> Keys and messages exist in-memory during your session only</li>
+                        <li><strong>HTTPS Only:</strong> All connections encrypted with TLS 1.2+</li>
+                        <li><strong>Open Standards:</strong> Standard JCA/JCE RSA, no proprietary algorithms</li>
+                        <li><strong>No Signup Required:</strong> Free, instant access for testing, learning, and development</li>
                     </ul>
                 </div>
             </div>
@@ -800,36 +801,36 @@
             <h2 style="font-size: 1.25rem; margin-bottom: 1rem;" id="faqs">Frequently Asked Questions</h2>
 
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">What is RSA encryption and how does it work?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
-                <div class="faq-answer">RSA is an asymmetric cryptography algorithm using two keys: a public key for encryption and a private key for decryption. Named after Rivest, Shamir, and Adleman, security is based on the difficulty of factoring large prime numbers. Widely used for secure data transmission and digital signatures.</div>
+                <button class="faq-question" onclick="toggleFaq(this)">How do I encrypt a message with RSA online?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">Select a key size (2048-bit recommended), choose <strong>Encrypt</strong> mode, type your message, select a cipher like OAEP SHA-256, and click Encrypt. The tool generates keys instantly without page reload and outputs Base64-encoded ciphertext you can copy or share via URL.</div>
             </div>
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">What RSA cipher modes are supported?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
-                <div class="faq-answer">RSA (default), RSA/ECB/PKCS1Padding, RSA/None/PKCS1Padding, OAEP with SHA-1, ECB/OAEP with SHA-1, and ECB/OAEP with SHA-256. OAEP with SHA-256 is recommended for new applications as it provides the best security.</div>
+                <button class="faq-question" onclick="toggleFaq(this)">What RSA key size should I use &mdash; 2048 or 4096 bit?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">Use <strong>2048-bit</strong> for most applications &mdash; it is the industry standard recommended by NIST until 2030. Use <strong>4096-bit</strong> for high-security scenarios like certificate authorities or long-lived keys. 512-bit and 1024-bit are insecure and should only be used for testing.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">What is the maximum message size for RSA encryption?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
-                <div class="faq-answer">Depends on key size and padding. 1024-bit PKCS1: 117 bytes. 2048-bit: 245 bytes. 4096-bit: ~501 bytes. For larger messages, use hybrid encryption: encrypt data with AES, encrypt the AES key with RSA.</div>
+                <div class="faq-answer">It depends on key size minus padding overhead. <strong>1024-bit PKCS1:</strong> 117 bytes. <strong>2048-bit PKCS1:</strong> 245 bytes. <strong>2048-bit OAEP SHA-256:</strong> 190 bytes. <strong>4096-bit PKCS1:</strong> ~501 bytes. This tool shows a live byte counter as you type. For larger data, use hybrid encryption (RSA + AES).</div>
             </div>
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">Is this RSA tool secure?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
-                <div class="faq-answer">All operations are performed without permanently storing keys or messages. Use 2048-bit+ keys for production. Built on standard Java Cryptography Architecture. For highly sensitive data, generate keys offline.</div>
+                <button class="faq-question" onclick="toggleFaq(this)">What is the difference between PKCS1 and OAEP padding?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer"><strong>PKCS1 v1.5</strong> is the legacy RSA padding scheme, vulnerable to Bleichenbacher padding oracle attacks. <strong>OAEP</strong> (Optimal Asymmetric Encryption Padding) with SHA-256 is the modern recommended standard, providing provable security against chosen-ciphertext attacks. Always use <code style="background:var(--bg-secondary);padding:0.15rem 0.35rem;border-radius:0.25rem;font-size:0.85em;">RSA/ECB/OAEPWithSHA-256AndMGF1Padding</code> for new applications.</div>
             </div>
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">Can I decrypt with the public key?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
-                <div class="faq-answer">No. RSA decryption requires the private key. Public key encrypts, private key decrypts. This asymmetric property enables secure communication without pre-shared secrets.</div>
+                <button class="faq-question" onclick="toggleFaq(this)">How do I sign and verify a message with RSA?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">Select <strong>Sign</strong> mode, enter your message, choose SHA256withRSA, and click Sign. The tool creates a Base64 digital signature using your private key. To verify, click <strong>Use for Verify</strong> &mdash; the signature auto-populates and the tool switches to Verify mode. Click Verify to confirm authenticity using the public key.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">How do I encrypt with RSA in Python?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
-                <div class="faq-answer">Use the <code style="background:var(--bg-secondary);padding:0.15rem 0.35rem;border-radius:0.25rem;font-size:0.85em;">cryptography</code> or <code style="background:var(--bg-secondary);padding:0.15rem 0.35rem;border-radius:0.25rem;font-size:0.85em;">pycryptodome</code> library. Click <strong>Try It Live</strong> above to run RSA code directly in your browser.</div>
+                <div class="faq-answer">Use the <code style="background:var(--bg-secondary);padding:0.15rem 0.35rem;border-radius:0.25rem;font-size:0.85em;">pycryptodome</code> library: <code style="background:var(--bg-secondary);padding:0.15rem 0.35rem;border-radius:0.25rem;font-size:0.85em;">from Crypto.PublicKey import RSA</code> and <code style="background:var(--bg-secondary);padding:0.15rem 0.35rem;border-radius:0.25rem;font-size:0.85em;">from Crypto.Cipher import PKCS1_OAEP</code>. This tool includes a built-in Python compiler with ready-to-run templates for RSA encryption, key generation, OAEP, and signing. Click <strong>Try It Live</strong> to run code directly in your browser.</div>
             </div>
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">How does RSA digital signing work?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
-                <div class="faq-answer">RSA signing uses the private key to create a digital signature of a message hash. The signer hashes the message (e.g., with SHA-256), then encrypts the hash with their private key. Anyone with the public key can verify the signature, confirming both authenticity and integrity of the message.</div>
+                <button class="faq-question" onclick="toggleFaq(this)">Is this RSA tool secure? Is my data stored?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">No data is permanently stored. Keys and messages are processed in-memory during your session only. The tool uses standard Java Cryptography Architecture (JCA) RSA implementations. For production secrets, generate keys offline. All connections use HTTPS with TLS 1.2+.</div>
             </div>
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">What RSA signature algorithms are supported?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
-                <div class="faq-answer">SHA256withRSA (recommended), SHA512withRSA, SHA384withRSA, SHA1withRSA, SHA1WithRSA/PSS, SHA224WithRSA/PSS, SHA384WithRSA/PSS, and MD5withRSA (deprecated). SHA256withRSA is the most widely used standard for digital signatures.</div>
+                <button class="faq-question" onclick="toggleFaq(this)">Can I decrypt RSA ciphertext with the public key?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="faq-answer">No. RSA is asymmetric &mdash; the public key encrypts, only the matching private key can decrypt. This is what makes RSA secure: anyone can encrypt with your public key, but only you hold the private key to decrypt. For digital signing the roles reverse: the private key signs, the public key verifies.</div>
             </div>
         </div>
     </section>
