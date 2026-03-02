@@ -16,7 +16,7 @@
         <jsp:param name="toolUrl" value="ctf/index.jsp" />
         <jsp:param name="toolKeywords" value="CTF challenge generator free, capture the flag maker online, create CTF challenges, steganography CTF generator, crypto CTF tool, forensic CTF creator, CTF puzzle generator, CTF flag maker, CTF practice online, CTF training tool free, online CTF builder, CTF competition generator, jeopardy CTF maker, CTF for beginners, cybersecurity CTF tool, CTF with solutions, CTF hints generator" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="6 CTF categories: stego crypto forensic web RE OSINT,34 encoding and cipher steps,7 difficulty levels per category,Auto-generated solutions with full pipeline,Progressive solver hints,SHA-256 flag verification,Upload your own cover images,JSON challenge bundle export,100% client-side and free,No signup or registration" />
+        <jsp:param name="toolFeatures" value="6 CTF categories: stego crypto forensic web RE OSINT,39+ encoding and cipher steps,11 difficulty levels across generators,6 crypto challenge types,Dynamic pipeline composition,Auto-generated solutions with full pipeline,Progressive solver hints,SHA-256 flag verification,Upload your own cover images,JSON challenge bundle export,100% client-side and free,No signup or registration" />
         <jsp:param name="faq1q" value="What is a CTF challenge generator and who uses it?" />
         <jsp:param name="faq1a" value="A CTF (Capture The Flag) challenge generator creates cybersecurity puzzles where players find hidden flags using steganography, cryptanalysis, or forensic analysis. Used by CTF competition organizers, cybersecurity instructors, university courses, and anyone practicing offensive security skills." />
         <jsp:param name="faq2q" value="Can I use this to create challenges for CTF competitions?" />
@@ -47,7 +47,18 @@
               "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
             }
           },
-          { "@type": "ListItem", "position": 2, "name": "Cryptography CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#crypto" },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@type": "WebApplication",
+              "name": "Cryptography CTF Generator",
+              "url": "https://8gwifi.org/ctf/crypto-ctf-generator.jsp",
+              "description": "39 ciphers and encodings, 6 challenge types, dynamic pipeline composition — all client-side.",
+              "applicationCategory": "SecurityApplication",
+              "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+            }
+          },
           { "@type": "ListItem", "position": 3, "name": "Forensic CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#forensic" },
           { "@type": "ListItem", "position": 4, "name": "Web Exploitation CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#web" },
           { "@type": "ListItem", "position": 5, "name": "Reverse Engineering CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#re" },
@@ -145,9 +156,9 @@
         <h1>Capture The <span>Flag</span> Generator</h1>
         <p>Create, solve, and practice cybersecurity challenges. Generate steganography, crypto, forensic, and web puzzles with auto-generated solutions and progressive hints.</p>
         <div class="ctf-hero-stats">
-            <div class="ctf-stat"><div class="ctf-stat-num">34+</div><div class="ctf-stat-label">Cipher & Encoding Steps</div></div>
-            <div class="ctf-stat"><div class="ctf-stat-num">7</div><div class="ctf-stat-label">Difficulty Levels</div></div>
-            <div class="ctf-stat"><div class="ctf-stat-num">50+</div><div class="ctf-stat-label">Pipeline Combos</div></div>
+            <div class="ctf-stat"><div class="ctf-stat-num">39+</div><div class="ctf-stat-label">Cipher & Encoding Steps</div></div>
+            <div class="ctf-stat"><div class="ctf-stat-num">11</div><div class="ctf-stat-label">Difficulty Levels</div></div>
+            <div class="ctf-stat"><div class="ctf-stat-num">100+</div><div class="ctf-stat-label">Pipeline Combos</div></div>
             <div class="ctf-stat"><div class="ctf-stat-num">100%</div><div class="ctf-stat-label">Client-Side</div></div>
         </div>
     </section>
@@ -182,20 +193,21 @@
                 </div>
             </a>
 
-            <div class="ctf-card coming-soon">
-                <span class="ctf-card-badge soon">Coming Soon</span>
+            <a href="<%=request.getContextPath()%>/ctf/crypto-ctf-generator.jsp" class="ctf-card">
+                <span class="ctf-card-badge live">Live</span>
                 <div class="ctf-card-icon" style="background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 </div>
                 <h3>Cryptography CTF</h3>
-                <p>RSA, DH, AES, padding oracles, hash collisions, and classical cipher challenges. Multiple attack vectors from beginner to advanced.</p>
+                <p>39 ciphers and encodings across 4 difficulty levels with 6 challenge types. Dynamic pipeline composition, crib dragging, hash cracking, cipher identification, and key-reuse attacks.</p>
                 <div class="ctf-card-tags">
-                    <span class="ctf-tag">RSA</span>
                     <span class="ctf-tag">AES</span>
-                    <span class="ctf-tag">Hash</span>
+                    <span class="ctf-tag">RSA</span>
+                    <span class="ctf-tag">XOR</span>
                     <span class="ctf-tag">Classical</span>
+                    <span class="ctf-tag">6 Types</span>
                 </div>
-            </div>
+            </a>
 
             <div class="ctf-card coming-soon">
                 <span class="ctf-card-badge soon">Coming Soon</span>

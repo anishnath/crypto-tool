@@ -1293,6 +1293,743 @@ steps.scatterEmbed = {
     }
 };
 
+/* ========== output - text terminal for crypto-only pipelines ========== */
+steps.output = {
+    encode: function(payload, cover, params) {
+        if (typeof payload !== 'string') payload = new TextDecoder().decode(payload);
+        return payload;
+    }
+};
+
+/* ================================================================
+ *  CRYPTO CTF STEPS — Phase 1: Common CTF encodings/ciphers
+ * ================================================================ */
+
+/* ========== a1z26 (A=1, B=2, ..., Z=26) ========== */
+steps.a1z26 = {
+    encode: function(input, params) {
+        var sep = (params && params.separator) || '-';
+        var parts = [];
+        for (var i = 0; i < input.length; i++) {
+            var c = input.charCodeAt(i);
+            if (c >= 65 && c <= 90) parts.push(c - 64);
+            else if (c >= 97 && c <= 122) parts.push(c - 96);
+            else if (c === 32) parts.push(0);
+            else parts.push(input[i]);
+        }
+        return parts.join(sep);
+    },
+    decode: function(input, params) {
+        var sep = (params && params.separator) || '-';
+        var parts = input.split(sep);
+        var out = '';
+        for (var i = 0; i < parts.length; i++) {
+            var n = parseInt(parts[i], 10);
+            if (n === 0) out += ' ';
+            else if (n >= 1 && n <= 26) out += String.fromCharCode(64 + n);
+            else out += parts[i];
+        }
+        return out;
+    }
+};
+
+/* ========== affine cipher (E(x) = (ax + b) mod 26) ========== */
+steps.affine = {
+    _COPRIMES: [1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25],
+    _modInverse: function(a, m) {
+        a = ((a % m) + m) % m;
+        for (var x = 1; x < m; x++) {
+            if ((a * x) % m === 1) return x;
+        }
+        return 1;
+    },
+    encode: function(input, params) {
+        var a = (params && params.a) || 5;
+        var b = (params && params.b != null) ? params.b : 8;
+        var out = '';
+        for (var i = 0; i < input.length; i++) {
+            var c = input.charCodeAt(i);
+            if (c >= 65 && c <= 90) out += String.fromCharCode(((a * (c - 65) + b) % 26) + 65);
+            else if (c >= 97 && c <= 122) out += String.fromCharCode(((a * (c - 97) + b) % 26) + 97);
+            else out += input[i];
+        }
+        return out;
+    },
+    decode: function(input, params) {
+        var a = (params && params.a) || 5;
+        var b = (params && params.b != null) ? params.b : 8;
+        var aInv = this._modInverse(a, 26);
+        var out = '';
+        for (var i = 0; i < input.length; i++) {
+            var c = input.charCodeAt(i);
+            if (c >= 65 && c <= 90) out += String.fromCharCode((((aInv * ((c - 65) - b + 260)) % 26) + 26) % 26 + 65);
+            else if (c >= 97 && c <= 122) out += String.fromCharCode((((aInv * ((c - 97) - b + 260)) % 26) + 26) % 26 + 97);
+            else out += input[i];
+        }
+        return out;
+    }
+};
+
+/* ========== ascii85 (Base85) ========== */
+steps.ascii85 = {
+    _CHARS: '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstu',
+    encode: function(input, params) {
+        var bytes = new TextEncoder().encode(input);
+        var pad = (4 - (bytes.length % 4)) % 4;
+        var padded = new Uint8Array(bytes.length + pad);
+        padded.set(bytes);
+        var chars = this._CHARS;
+        var out = '<~';
+        for (var i = 0; i < padded.length; i += 4) {
+            var val = ((padded[i] << 24) | (padded[i+1] << 16) | (padded[i+2] << 8) | padded[i+3]) >>> 0;
+            if (val === 0 && i + 4 <= bytes.length) { out += 'z'; continue; }
+            var block = '';
+            for (var j = 4; j >= 0; j--) {
+                block = chars[val % 85] + block;
+                val = Math.floor(val / 85);
+            }
+            out += block;
+        }
+        if (pad > 0) out = out.slice(0, -(pad));
+        return out + '~>';
+    },
+    decode: function(input, params) {
+        var s = input.replace(/^<~/, '').replace(/~>$/, '').replace(/\s/g, '');
+        var chars = this._CHARS;
+        var bytes = [];
+        var i = 0;
+        while (i < s.length) {
+            if (s[i] === 'z') { bytes.push(0, 0, 0, 0); i++; continue; }
+            var chunk = s.slice(i, i + 5);
+            var pad = 5 - chunk.length;
+            while (chunk.length < 5) chunk += 'u';
+            var val = 0;
+            for (var j = 0; j < 5; j++) {
+                val = val * 85 + chars.indexOf(chunk[j]);
+            }
+            bytes.push((val >>> 24) & 0xFF, (val >>> 16) & 0xFF, (val >>> 8) & 0xFF, val & 0xFF);
+            if (pad > 0) bytes.splice(bytes.length - pad, pad);
+            i += 5 - pad;
+        }
+        return new TextDecoder().decode(new Uint8Array(bytes));
+    }
+};
+
+/* ========== nato phonetic alphabet ========== */
+steps.nato = {
+    _MAP: {
+        A:'Alpha',B:'Bravo',C:'Charlie',D:'Delta',E:'Echo',F:'Foxtrot',G:'Golf',
+        H:'Hotel',I:'India',J:'Juliet',K:'Kilo',L:'Lima',M:'Mike',N:'November',
+        O:'Oscar',P:'Papa',Q:'Quebec',R:'Romeo',S:'Sierra',T:'Tango',U:'Uniform',
+        V:'Victor',W:'Whiskey',X:'Xray',Y:'Yankee',Z:'Zulu',
+        '0':'Zero','1':'One','2':'Two','3':'Three','4':'Four',
+        '5':'Five','6':'Six','7':'Seven','8':'Eight','9':'Nine'
+    },
+    _REV: null,
+    _buildRev: function() {
+        if (this._REV) return this._REV;
+        this._REV = {};
+        for (var k in this._MAP) this._REV[this._MAP[k].toUpperCase()] = k;
+        return this._REV;
+    },
+    encode: function(input, params) {
+        var map = this._MAP;
+        var words = [];
+        for (var i = 0; i < input.length; i++) {
+            var c = input[i].toUpperCase();
+            if (map[c]) words.push(map[c]);
+            else if (c === ' ') words.push('/');
+            else words.push(c);
+        }
+        return words.join(' ');
+    },
+    decode: function(input, params) {
+        var rev = this._buildRev();
+        var tokens = input.split(/\s+/);
+        var out = '';
+        for (var i = 0; i < tokens.length; i++) {
+            var t = tokens[i].toUpperCase();
+            if (t === '/') out += ' ';
+            else if (rev[t]) out += rev[t];
+            else out += tokens[i];
+        }
+        return out;
+    }
+};
+
+/* ========== phone/T9 keypad multi-tap ========== */
+steps.phoneKeypad = {
+    _KEYS: {
+        A:'2',B:'22',C:'222',D:'3',E:'33',F:'333',G:'4',H:'44',I:'444',
+        J:'5',K:'55',L:'555',M:'6',N:'66',O:'666',P:'7',Q:'77',R:'777',S:'7777',
+        T:'8',U:'88',V:'888',W:'9',X:'99',Y:'999',Z:'9999',
+        '0':'0','1':'1',' ':' '
+    },
+    _REV: null,
+    _buildRev: function() {
+        if (this._REV) return this._REV;
+        this._REV = {};
+        for (var k in this._KEYS) this._REV[this._KEYS[k]] = k;
+        return this._REV;
+    },
+    encode: function(input, params) {
+        var keys = this._KEYS;
+        var parts = [];
+        for (var i = 0; i < input.length; i++) {
+            var c = input[i].toUpperCase();
+            parts.push(keys[c] || c);
+        }
+        return parts.join('-');
+    },
+    decode: function(input, params) {
+        var rev = this._buildRev();
+        var parts = input.split('-');
+        var out = '';
+        for (var i = 0; i < parts.length; i++) {
+            out += rev[parts[i]] || parts[i];
+        }
+        return out;
+    }
+};
+
+/* ========== tap code (5x5 grid, K=C) ========== */
+steps.tapCode = {
+    _GRID: 'ABCDEFGHILMNOPQRSTUVWXYZ',
+    encode: function(input, params) {
+        var grid = this._GRID;
+        var parts = [];
+        for (var i = 0; i < input.length; i++) {
+            var c = input[i].toUpperCase();
+            if (c === 'K') c = 'C';
+            if (c === ' ') { parts.push('/'); continue; }
+            var idx = grid.indexOf(c);
+            if (idx < 0) { parts.push(c); continue; }
+            var row = Math.floor(idx / 5) + 1;
+            var col = (idx % 5) + 1;
+            parts.push(row + '.' + col);
+        }
+        return parts.join(' ');
+    },
+    decode: function(input, params) {
+        var grid = this._GRID;
+        var tokens = input.split(/\s+/);
+        var out = '';
+        for (var i = 0; i < tokens.length; i++) {
+            if (tokens[i] === '/') { out += ' '; continue; }
+            var m = tokens[i].match(/^(\d)\.(\d)$/);
+            if (m) {
+                var idx = (parseInt(m[1], 10) - 1) * 5 + (parseInt(m[2], 10) - 1);
+                out += (idx >= 0 && idx < grid.length) ? grid[idx] : tokens[i];
+            } else {
+                out += tokens[i];
+            }
+        }
+        return out;
+    }
+};
+
+/* ========== URL encoding ========== */
+steps.urlEncode = {
+    encode: function(input, params) {
+        return encodeURIComponent(input);
+    },
+    decode: function(input, params) {
+        return decodeURIComponent(input);
+    }
+};
+
+/* ================================================================
+ *  CRYPTO CTF STEPS — Phase 2: Classical ciphers
+ * ================================================================ */
+
+/* ========== playfair cipher ========== */
+steps.playfair = {
+    _buildGrid: function(key) {
+        key = (key || 'PLAYFAIR').toUpperCase().replace(/J/g, 'I');
+        var seen = {};
+        var grid = '';
+        var src = key + 'ABCDEFGHIKLMNOPQRSTUVWXYZ';
+        for (var i = 0; i < src.length; i++) {
+            var c = src[i];
+            if (c >= 'A' && c <= 'Z' && !seen[c]) { grid += c; seen[c] = true; }
+        }
+        return grid;
+    },
+    _findPos: function(grid, c) {
+        var idx = grid.indexOf(c);
+        return [Math.floor(idx / 5), idx % 5];
+    },
+    encode: function(input, params) {
+        var grid = this._buildGrid(params && params.key);
+        var text = input.toUpperCase().replace(/J/g, 'I').replace(/[^A-Z]/g, '');
+        var pairs = [];
+        var i = 0;
+        while (i < text.length) {
+            var a = text[i];
+            var b = (i + 1 < text.length && text[i + 1] !== a) ? text[++i] : 'X';
+            i++;
+            pairs.push([a, b]);
+        }
+        var out = '';
+        for (var p = 0; p < pairs.length; p++) {
+            var pa = this._findPos(grid, pairs[p][0]);
+            var pb = this._findPos(grid, pairs[p][1]);
+            if (pa[0] === pb[0]) {
+                out += grid[pa[0] * 5 + (pa[1] + 1) % 5];
+                out += grid[pb[0] * 5 + (pb[1] + 1) % 5];
+            } else if (pa[1] === pb[1]) {
+                out += grid[((pa[0] + 1) % 5) * 5 + pa[1]];
+                out += grid[((pb[0] + 1) % 5) * 5 + pb[1]];
+            } else {
+                out += grid[pa[0] * 5 + pb[1]];
+                out += grid[pb[0] * 5 + pa[1]];
+            }
+        }
+        return out;
+    },
+    decode: function(input, params) {
+        var grid = this._buildGrid(params && params.key);
+        var text = input.toUpperCase().replace(/[^A-Z]/g, '');
+        var out = '';
+        for (var i = 0; i < text.length; i += 2) {
+            var pa = this._findPos(grid, text[i]);
+            var pb = this._findPos(grid, text[i + 1]);
+            if (pa[0] === pb[0]) {
+                out += grid[pa[0] * 5 + (pa[1] + 4) % 5];
+                out += grid[pb[0] * 5 + (pb[1] + 4) % 5];
+            } else if (pa[1] === pb[1]) {
+                out += grid[((pa[0] + 4) % 5) * 5 + pa[1]];
+                out += grid[((pb[0] + 4) % 5) * 5 + pb[1]];
+            } else {
+                out += grid[pa[0] * 5 + pb[1]];
+                out += grid[pb[0] * 5 + pa[1]];
+            }
+        }
+        return out;
+    }
+};
+
+/* ========== beaufort cipher (variant of Vigenère: Ci = (Ki - Pi) mod 26) ========== */
+steps.beaufort = {
+    encode: function(input, params) {
+        var key = ((params && params.key) || 'SECRET').toUpperCase();
+        var out = '';
+        var ki = 0;
+        for (var i = 0; i < input.length; i++) {
+            var c = input.charCodeAt(i);
+            if (c >= 65 && c <= 90) {
+                out += String.fromCharCode(((key.charCodeAt(ki % key.length) - 65 - (c - 65) + 26) % 26) + 65);
+                ki++;
+            } else if (c >= 97 && c <= 122) {
+                out += String.fromCharCode(((key.charCodeAt(ki % key.length) - 65 - (c - 97) + 26) % 26) + 97);
+                ki++;
+            } else {
+                out += input[i];
+            }
+        }
+        return out;
+    },
+    decode: function(input, params) {
+        return this.encode(input, params);
+    }
+};
+
+/* ========== autokey cipher (Vigenère variant: key extends with plaintext) ========== */
+steps.autokey = {
+    encode: function(input, params) {
+        var key = ((params && params.key) || 'KEY').toUpperCase();
+        var out = '';
+        var fullKey = key;
+        var ki = 0;
+        for (var i = 0; i < input.length; i++) {
+            var c = input.charCodeAt(i);
+            if (c >= 65 && c <= 90) {
+                var k = fullKey.charCodeAt(ki) - 65;
+                out += String.fromCharCode(((c - 65 + k) % 26) + 65);
+                fullKey += String.fromCharCode(c);
+                ki++;
+            } else if (c >= 97 && c <= 122) {
+                var k2 = fullKey.charCodeAt(ki) - 65;
+                out += String.fromCharCode(((c - 97 + k2) % 26) + 97);
+                fullKey += String.fromCharCode(c - 32);
+                ki++;
+            } else {
+                out += input[i];
+            }
+        }
+        return out;
+    },
+    decode: function(input, params) {
+        var key = ((params && params.key) || 'KEY').toUpperCase();
+        var out = '';
+        var fullKey = key;
+        var ki = 0;
+        for (var i = 0; i < input.length; i++) {
+            var c = input.charCodeAt(i);
+            if (c >= 65 && c <= 90) {
+                var k = fullKey.charCodeAt(ki) - 65;
+                var plain = ((c - 65 - k + 26) % 26) + 65;
+                out += String.fromCharCode(plain);
+                fullKey += String.fromCharCode(plain);
+                ki++;
+            } else if (c >= 97 && c <= 122) {
+                var k2 = fullKey.charCodeAt(ki) - 65;
+                var plain2 = ((c - 97 - k2 + 26) % 26) + 97;
+                out += String.fromCharCode(plain2);
+                fullKey += String.fromCharCode(plain2 - 32);
+                ki++;
+            } else {
+                out += input[i];
+            }
+        }
+        return out;
+    }
+};
+
+/* ========== bifid cipher (Polybius + transposition) ========== */
+steps.bifid = {
+    _GRID: 'ABCDEFGHIKLMNOPQRSTUVWXYZ',
+    encode: function(input, params) {
+        var grid = this._GRID;
+        var text = input.toUpperCase().replace(/J/g, 'I').replace(/[^A-Z]/g, '');
+        var rows = [], cols = [];
+        for (var i = 0; i < text.length; i++) {
+            var idx = grid.indexOf(text[i]);
+            rows.push(Math.floor(idx / 5));
+            cols.push(idx % 5);
+        }
+        var combined = rows.concat(cols);
+        var out = '';
+        for (var j = 0; j < combined.length; j += 2) {
+            out += grid[combined[j] * 5 + combined[j + 1]];
+        }
+        return out;
+    },
+    decode: function(input, params) {
+        var grid = this._GRID;
+        var text = input.toUpperCase().replace(/[^A-Z]/g, '');
+        var coords = [];
+        for (var i = 0; i < text.length; i++) {
+            var idx = grid.indexOf(text[i]);
+            coords.push(Math.floor(idx / 5));
+            coords.push(idx % 5);
+        }
+        var half = coords.length / 2;
+        var rows = coords.slice(0, half);
+        var cols = coords.slice(half);
+        var out = '';
+        for (var j = 0; j < rows.length; j++) {
+            out += grid[rows[j] * 5 + cols[j]];
+        }
+        return out;
+    }
+};
+
+/* ========== one-time pad (XOR with key matching message length) ========== */
+steps.otp = {
+    encode: function(input, params) {
+        var key = (params && params.key) || '';
+        if (!key) return input;
+        var bytes = new TextEncoder().encode(input);
+        var keyBytes = new TextEncoder().encode(key);
+        var out = new Uint8Array(bytes.length);
+        for (var i = 0; i < bytes.length; i++) {
+            out[i] = bytes[i] ^ keyBytes[i % keyBytes.length];
+        }
+        var binary = '';
+        for (var j = 0; j < out.length; j++) binary += String.fromCharCode(out[j]);
+        return btoa(binary);
+    },
+    decode: function(input, params) {
+        var key = (params && params.key) || '';
+        if (!key) return input;
+        var binary = atob(input);
+        var bytes = new Uint8Array(binary.length);
+        for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        var keyBytes = new TextEncoder().encode(key);
+        var out = new Uint8Array(bytes.length);
+        for (var j = 0; j < bytes.length; j++) {
+            out[j] = bytes[j] ^ keyBytes[j % keyBytes.length];
+        }
+        return new TextDecoder().decode(out);
+    }
+};
+
+/* ================================================================
+ *  CRYPTO CTF STEPS — Phase 3: Modern / advanced
+ * ================================================================ */
+
+/* ========== RC4 stream cipher ========== */
+steps.rc4 = {
+    _ksa: function(key) {
+        var S = new Uint8Array(256);
+        for (var i = 0; i < 256; i++) S[i] = i;
+        var j = 0;
+        for (var i2 = 0; i2 < 256; i2++) {
+            j = (j + S[i2] + key[i2 % key.length]) & 0xFF;
+            var t = S[i2]; S[i2] = S[j]; S[j] = t;
+        }
+        return S;
+    },
+    _prga: function(S, len) {
+        var i = 0, j = 0;
+        var out = new Uint8Array(len);
+        for (var n = 0; n < len; n++) {
+            i = (i + 1) & 0xFF;
+            j = (j + S[i]) & 0xFF;
+            var t = S[i]; S[i] = S[j]; S[j] = t;
+            out[n] = S[(S[i] + S[j]) & 0xFF];
+        }
+        return out;
+    },
+    encode: function(input, params) {
+        var key = (params && params.key) || 'rc4key';
+        var keyBytes = new TextEncoder().encode(key);
+        var plainBytes = new TextEncoder().encode(input);
+        var S = this._ksa(keyBytes);
+        var keystream = this._prga(S, plainBytes.length);
+        var cipher = new Uint8Array(plainBytes.length);
+        for (var i = 0; i < plainBytes.length; i++) cipher[i] = plainBytes[i] ^ keystream[i];
+        var binary = '';
+        for (var j = 0; j < cipher.length; j++) binary += String.fromCharCode(cipher[j]);
+        return btoa(binary);
+    },
+    decode: function(input, params) {
+        var key = (params && params.key) || 'rc4key';
+        var keyBytes = new TextEncoder().encode(key);
+        var binary = atob(input);
+        var cipherBytes = new Uint8Array(binary.length);
+        for (var i = 0; i < binary.length; i++) cipherBytes[i] = binary.charCodeAt(i);
+        var S = this._ksa(keyBytes);
+        var keystream = this._prga(S, cipherBytes.length);
+        var plain = new Uint8Array(cipherBytes.length);
+        for (var j = 0; j < cipherBytes.length; j++) plain[j] = cipherBytes[j] ^ keystream[j];
+        return new TextDecoder().decode(plain);
+    }
+};
+
+/* ========== Hill cipher (2x2 matrix mod 26) ========== */
+steps.hillCipher = {
+    _modInverse: function(a, m) {
+        a = ((a % m) + m) % m;
+        for (var x = 1; x < m; x++) {
+            if ((a * x) % m === 1) return x;
+        }
+        return -1;
+    },
+    encode: function(input, params) {
+        var matrix = (params && params.matrix) || [3, 3, 2, 5];
+        var text = input.toUpperCase().replace(/[^A-Z]/g, '');
+        if (text.length % 2 !== 0) text += 'X';
+        var out = '';
+        for (var i = 0; i < text.length; i += 2) {
+            var p0 = text.charCodeAt(i) - 65;
+            var p1 = text.charCodeAt(i + 1) - 65;
+            out += String.fromCharCode(((matrix[0] * p0 + matrix[1] * p1) % 26 + 26) % 26 + 65);
+            out += String.fromCharCode(((matrix[2] * p0 + matrix[3] * p1) % 26 + 26) % 26 + 65);
+        }
+        return out;
+    },
+    decode: function(input, params) {
+        var matrix = (params && params.matrix) || [3, 3, 2, 5];
+        var det = (matrix[0] * matrix[3] - matrix[1] * matrix[2]) % 26;
+        det = ((det % 26) + 26) % 26;
+        var detInv = this._modInverse(det, 26);
+        if (detInv < 0) return input;
+        var inv = [
+            ((matrix[3] * detInv) % 26 + 26) % 26,
+            ((-matrix[1] * detInv) % 26 + 26) % 26,
+            ((-matrix[2] * detInv) % 26 + 26) % 26,
+            ((matrix[0] * detInv) % 26 + 26) % 26
+        ];
+        var text = input.toUpperCase().replace(/[^A-Z]/g, '');
+        var out = '';
+        for (var i = 0; i < text.length; i += 2) {
+            var c0 = text.charCodeAt(i) - 65;
+            var c1 = text.charCodeAt(i + 1) - 65;
+            out += String.fromCharCode(((inv[0] * c0 + inv[1] * c1) % 26 + 26) % 26 + 65);
+            out += String.fromCharCode(((inv[2] * c0 + inv[3] * c1) % 26 + 26) % 26 + 65);
+        }
+        return out;
+    }
+};
+
+/* ========== RSA textbook (small primes, educational) ========== */
+steps.rsaTextbook = {
+    _modPow: function(base, exp, mod) {
+        var result = 1n;
+        base = base % mod;
+        while (exp > 0n) {
+            if (exp % 2n === 1n) result = (result * base) % mod;
+            exp = exp / 2n;
+            base = (base * base) % mod;
+        }
+        return result;
+    },
+    _modInverse: function(e, phi) {
+        var a = e, b = phi, x0 = 0n, x1 = 1n;
+        while (a > 1n) {
+            var q = a / b;
+            var t = b;
+            b = a % b;
+            a = t;
+            t = x0;
+            x0 = x1 - q * x0;
+            x1 = t;
+        }
+        return x1 < 0n ? x1 + phi : x1;
+    },
+    encode: function(input, params) {
+        var p = BigInt((params && params.p) || 61);
+        var q = BigInt((params && params.q) || 53);
+        var e = BigInt((params && params.e) || 17);
+        var n = p * q;
+        var self = this;
+        var bytes = new TextEncoder().encode(input);
+        var parts = [];
+        for (var i = 0; i < bytes.length; i++) {
+            parts.push(self._modPow(BigInt(bytes[i]), e, n).toString());
+        }
+        return parts.join(',') + '|' + n.toString() + '|' + e.toString();
+    },
+    decode: function(input, params) {
+        var mainParts = input.split('|');
+        var cipherParts = mainParts[0].split(',');
+        var n = BigInt(mainParts[1]);
+        var e = BigInt(mainParts[2]);
+        var p = BigInt((params && params.p) || 61);
+        var q = BigInt((params && params.q) || 53);
+        var phi = (p - 1n) * (q - 1n);
+        var d = this._modInverse(e, phi);
+        var self = this;
+        var bytes = new Uint8Array(cipherParts.length);
+        for (var i = 0; i < cipherParts.length; i++) {
+            bytes[i] = Number(self._modPow(BigInt(cipherParts[i]), d, n));
+        }
+        return new TextDecoder().decode(bytes);
+    }
+};
+
+/* ========== ADFGVX cipher (WW1 fractionation) ========== */
+steps.adfgvx = {
+    _LABELS: ['A', 'D', 'F', 'G', 'V', 'X'],
+    _GRID: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    _buildGrid: function(key) {
+        key = (key || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+        var seen = {};
+        var grid = '';
+        var src = key + this._GRID;
+        for (var i = 0; i < src.length; i++) {
+            if (!seen[src[i]]) { grid += src[i]; seen[src[i]] = true; }
+        }
+        return grid;
+    },
+    encode: function(input, params) {
+        var grid = this._buildGrid(params && params.gridKey);
+        var transKey = ((params && params.key) || 'CIPHER').toUpperCase();
+        var labels = this._LABELS;
+        var text = input.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        var fractionated = '';
+        for (var i = 0; i < text.length; i++) {
+            var idx = grid.indexOf(text[i]);
+            if (idx < 0) continue;
+            fractionated += labels[Math.floor(idx / 6)] + labels[idx % 6];
+        }
+        var cols = transKey.length;
+        var rows = Math.ceil(fractionated.length / cols);
+        var order = [];
+        for (var c = 0; c < cols; c++) order.push({ ch: transKey[c], idx: c });
+        order.sort(function(a, b) { return a.ch < b.ch ? -1 : a.ch > b.ch ? 1 : a.idx - b.idx; });
+        var out = '';
+        for (var k = 0; k < order.length; k++) {
+            var col = order[k].idx;
+            for (var r = 0; r < rows; r++) {
+                var pos = r * cols + col;
+                out += pos < fractionated.length ? fractionated[pos] : '';
+            }
+            out += ' ';
+        }
+        return out.trim();
+    },
+    decode: function(input, params) {
+        var grid = this._buildGrid(params && params.gridKey);
+        var transKey = ((params && params.key) || 'CIPHER').toUpperCase();
+        var labels = this._LABELS;
+        var cipherChars = input.replace(/\s+/g, '').split('');
+        var cols = transKey.length;
+        var totalLen = cipherChars.length;
+        var rows = Math.ceil(totalLen / cols);
+        var remainder = totalLen % cols || cols;
+        var order = [];
+        for (var c = 0; c < cols; c++) order.push({ ch: transKey[c], idx: c });
+        order.sort(function(a, b) { return a.ch < b.ch ? -1 : a.ch > b.ch ? 1 : a.idx - b.idx; });
+        var table = [];
+        for (var r = 0; r < rows; r++) { table.push(new Array(cols).fill('')); }
+        var pos = 0;
+        for (var k = 0; k < order.length; k++) {
+            var col = order[k].idx;
+            var colLen = col < remainder ? rows : rows - 1;
+            for (var r2 = 0; r2 < colLen && pos < totalLen; r2++) {
+                table[r2][col] = cipherChars[pos++];
+            }
+        }
+        var fractionated = '';
+        for (var r3 = 0; r3 < rows; r3++) {
+            for (var c2 = 0; c2 < cols; c2++) fractionated += table[r3][c2];
+        }
+        var out = '';
+        for (var i = 0; i < fractionated.length; i += 2) {
+            var ri = labels.indexOf(fractionated[i]);
+            var ci = labels.indexOf(fractionated[i + 1]);
+            if (ri >= 0 && ci >= 0) out += grid[ri * 6 + ci];
+        }
+        return out;
+    }
+};
+
+/* ========== Nihilist cipher (Polybius + modular addition) ========== */
+steps.nihilist = {
+    _GRID: 'ABCDEFGHIKLMNOPQRSTUVWXYZ',
+    _toNum: function(grid, c) {
+        c = c.toUpperCase();
+        if (c === 'J') c = 'I';
+        var idx = grid.indexOf(c);
+        if (idx < 0) return -1;
+        return (Math.floor(idx / 5) + 1) * 10 + (idx % 5) + 1;
+    },
+    _fromNum: function(grid, n) {
+        var row = Math.floor(n / 10) - 1;
+        var col = (n % 10) - 1;
+        if (row < 0 || row > 4 || col < 0 || col > 4) return '';
+        return grid[row * 5 + col];
+    },
+    encode: function(input, params) {
+        var grid = this._GRID;
+        var key = ((params && params.key) || 'KEY').toUpperCase();
+        var text = input.toUpperCase().replace(/J/g, 'I').replace(/[^A-Z]/g, '');
+        var keyNums = [];
+        for (var k = 0; k < key.length; k++) keyNums.push(this._toNum(grid, key[k]));
+        var parts = [];
+        for (var i = 0; i < text.length; i++) {
+            parts.push(this._toNum(grid, text[i]) + keyNums[i % keyNums.length]);
+        }
+        return parts.join(' ');
+    },
+    decode: function(input, params) {
+        var grid = this._GRID;
+        var key = ((params && params.key) || 'KEY').toUpperCase();
+        var keyNums = [];
+        for (var k = 0; k < key.length; k++) keyNums.push(this._toNum(grid, key[k]));
+        var parts = input.trim().split(/\s+/);
+        var out = '';
+        for (var i = 0; i < parts.length; i++) {
+            var val = parseInt(parts[i], 10) - keyNums[i % keyNums.length];
+            out += this._fromNum(grid, val);
+        }
+        return out;
+    }
+};
+
 global.CTFSteps = steps;
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));

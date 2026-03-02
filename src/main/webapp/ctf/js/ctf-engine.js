@@ -9,7 +9,7 @@
 
 var steps = global.CTFSteps || {};
 
-var TERMINAL_IDS = ['embed', 'appendEof', 'embedSpectrogram', 'embedOverlay', 'embedPngText', 'snow', 'scatterEmbed'];
+var TERMINAL_IDS = ['embed', 'appendEof', 'embedSpectrogram', 'embedOverlay', 'embedPngText', 'snow', 'scatterEmbed', 'output'];
 
 function isTerminalStep(id) {
     return TERMINAL_IDS.indexOf(id) >= 0;
@@ -732,6 +732,7 @@ var PIPELINE_POOL = {
     ]
 };
 
+
 /**
  * Get a random pipeline for a difficulty. Optionally randomize params.
  * @param {string} difficulty - easy, medium, hard, pro, easy_audio, etc.
@@ -755,6 +756,8 @@ function getRandomPipeline(difficulty, options) {
     }
     return pipeline;
 }
+
+
 
 /**
  * Encode with random pipeline. Convenience for challenge generation.
@@ -1036,6 +1039,7 @@ function generateChallenge(message, difficulty, cover, options) {
         });
     });
 }
+
 
 global.CTFEngine = {
     encode: encode,

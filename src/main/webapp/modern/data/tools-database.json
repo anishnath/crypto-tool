@@ -279,6 +279,13 @@
       "description": "Steganography CTF Generator - Create stego CTF challenges online free"
     },
     {
+      "name": "Cryptography CTF Generator",
+      "url": "ctf/crypto-ctf-generator.jsp",
+      "category": "CTF & Challenges",
+      "keywords": "cryptography CTF generator crypto cipher challenge maker AES RSA XOR Vigenere crib drag hash crack cipher identify key reuse classical modern",
+      "description": "Cryptography CTF Generator - 39 ciphers, 6 challenge types, dynamic pipeline composition"
+    },
+    {
       "name": "TOTP/HOTP Generator",
       "url": "totp-hotp.jsp",
       "category": "Cryptography",
