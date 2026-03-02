@@ -120,6 +120,9 @@
         .ctf-feature h4{font-size:0.9375rem;font-weight:600;color:#fff;margin-bottom:0.25rem}
         .ctf-feature p{font-size:0.8125rem;color:var(--ctf-text-dim);line-height:1.5}
 
+        .ctf-desc-ad-grid{display:grid;grid-template-columns:1fr minmax(300px,728px);gap:1.5rem;align-items:start}
+        .ctf-desc-ad-content{min-width:0}
+        @media(max-width:1100px){.ctf-desc-ad-grid{grid-template-columns:1fr}.ctf-desc-ad-slot{justify-self:center}}
         .ctf-ad-section{margin:2.5rem 0;max-width:1200px}
         .ctf-mobile-ad{display:none}
         @media(max-width:768px){
@@ -150,11 +153,11 @@
     </section>
 
     <section class="tool-description-section" style="max-width:1200px;margin:0 auto;padding:0 1.5rem">
-        <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap">
-            <div style="flex:1;min-width:300px">
+        <div class="ctf-desc-ad-grid">
+            <div class="ctf-desc-ad-content">
                 <p style="color:var(--ctf-text-dim);line-height:1.7;font-size:0.9375rem">Build jeopardy-style CTF challenges for competitions, university courses, or self-practice. Each generator outputs a downloadable challenge file, complete solution JSON with pipeline details, and progressive hints for solvers. All processing is 100% client-side.</p>
             </div>
-            <div style="flex-shrink:0;min-width:300px">
+            <div class="ctf-desc-ad-slot">
                 <%@ include file="../modern/ads/ad-in-content-top.jsp" %>
             </div>
         </div>

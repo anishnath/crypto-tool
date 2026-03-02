@@ -83,9 +83,9 @@
         .sg-header h1 span{color:var(--ctf-green)}
         .sg-header p{color:var(--ctf-text-dim);font-size:0.9375rem;line-height:1.6;max-width:700px}
 
-        .sg-desc-ad{display:flex;gap:1.5rem;flex-wrap:wrap;max-width:1200px;margin:0 auto 1.5rem;padding:0 1.5rem}
-        .sg-desc-ad>div:first-child{flex:1;min-width:300px}
-        .sg-desc-ad>div:last-child{flex-shrink:0;min-width:300px}
+        .sg-desc-ad{display:grid;grid-template-columns:1fr minmax(300px,728px);gap:1.5rem;max-width:1200px;margin:0 auto 1.5rem;padding:0 1.5rem;align-items:start}
+        .sg-desc-ad>div:first-child{min-width:0}
+        @media(max-width:1100px){.sg-desc-ad{grid-template-columns:1fr}.sg-desc-ad>div:last-child{justify-self:center}}
 
         .sg-main{max-width:1200px;margin:0 auto;padding:0 1.5rem 3rem;display:grid;grid-template-columns:380px 1fr 300px;gap:1.5rem}
         @media(max-width:1200px){.sg-main{grid-template-columns:1fr;}.sg-ads-col{display:none}}
