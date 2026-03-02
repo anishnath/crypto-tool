@@ -469,7 +469,6 @@
         </div>
     </footer>
 
-    <%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
 
     <script src="<%=request.getContextPath()%>/js/stego-engine.js?v=<%=cacheVersion%>"></script>
     <script src="<%=request.getContextPath()%>/js/stego-rs.js?v=<%=cacheVersion%>"></script>
@@ -850,7 +849,7 @@
         }, 1000);
     }
     </script>
-
+    <%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
     <%@ include file="../modern/components/analytics.jsp" %>
 </body>
 </html>
