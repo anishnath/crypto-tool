@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d4f4f"/>
+      <stop offset="100%" stop-color="#0d9488"/>
+    </linearGradient>
+    <linearGradient id="img" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#ccfbf1" stop-opacity="0.9"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#042f2e" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <rect x="16" y="16" width="480" height="480" rx="80" ry="80" fill="url(#bg)"/>
+
+  <!-- Pixel grid pattern -->
+  <g opacity="0.06">
+    <rect x="80" y="80" width="40" height="40" fill="#fff"/><rect x="160" y="80" width="40" height="40" fill="#fff"/>
+    <rect x="240" y="80" width="40" height="40" fill="#fff"/><rect x="320" y="80" width="40" height="40" fill="#fff"/>
+    <rect x="400" y="80" width="40" height="40" fill="#fff"/>
+    <rect x="120" y="120" width="40" height="40" fill="#fff"/><rect x="200" y="120" width="40" height="40" fill="#fff"/>
+    <rect x="280" y="120" width="40" height="40" fill="#fff"/><rect x="360" y="120" width="40" height="40" fill="#fff"/>
+  </g>
+
+  <!-- Image frame -->
+  <rect x="112" y="120" width="288" height="230" rx="16" ry="16" fill="url(#img)" filter="url(#shadow)" stroke="#99f6e4" stroke-width="2"/>
+
+  <!-- Mountain landscape in image -->
+  <polygon points="140,310 200,210 260,280 300,200 370,310" fill="#5eead4" opacity="0.5"/>
+  <polygon points="180,310 240,230 320,310" fill="#2dd4bf" opacity="0.6"/>
+
+  <!-- Sun -->
+  <circle cx="340" cy="170" r="24" fill="#fbbf24" opacity="0.8"/>
+
+  <!-- LSB bits overlay -->
+  <g font-family="monospace" font-size="11" fill="#00ff41" opacity="0.7">
+    <text x="130" y="155">01101</text>
+    <text x="310" y="155">10010</text>
+    <text x="130" y="300">11010</text>
+    <text x="310" y="300">01101</text>
+  </g>
+
+  <!-- Eye/hidden icon -->
+  <g transform="translate(256,390)" filter="url(#shadow)">
+    <path d="M-50,0 C-50,0 -25,-28 0,-28 25,-28 50,0 50,0 50,0 25,28 0,28 -25,28 -50,0 -50,0Z" fill="#fff" opacity="0.9" stroke="#14b8a6" stroke-width="2.5"/>
+    <circle cx="0" cy="0" r="12" fill="#0d9488"/>
+    <circle cx="0" cy="0" r="5" fill="#042f2e"/>
+    <circle cx="3" cy="-3" r="2" fill="#fff" opacity="0.7"/>
+  </g>
+
+  <!-- Flag tag -->
+  <g transform="translate(370,370)" opacity="0.85">
+    <rect x="0" y="0" width="60" height="28" rx="6" fill="#00ff41" opacity="0.2" stroke="#00ff41" stroke-width="1.5"/>
+    <text x="30" y="19" text-anchor="middle" font-family="monospace" font-weight="700" font-size="13" fill="#00ff41">FLAG</text>
+  </g>
+
+  <!-- CTF text -->
+  <text x="256" y="465" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="36" fill="#fff" opacity="0.15" letter-spacing="12">STEGO</text>
+</svg>

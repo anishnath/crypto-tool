@@ -15,9 +15,11 @@
         <jsp:param name="toolCategory" value="CTF & Challenges" />
         <jsp:param name="toolUrl" value="ctf/crypto-ctf-generator.jsp" />
         <jsp:param name="toolKeywords" value="cryptography CTF generator, cipher challenge maker, CTF crypto puzzle, crypto CTF online free, cipher CTF generator tool, capture the flag cryptography, CTF challenge creator, cryptanalysis practice tool, CTF training crypto, crypto pipeline builder, create cipher challenge, classical cipher CTF, RSA CTF challenge, AES CTF challenge, Vigenere CTF, Caesar cipher CTF, XOR CTF, crib dragging CTF, frequency analysis CTF" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="images/crypto-ctf-icon.svg" />
         <jsp:param name="toolFeatures" value="39 cipher and encoding steps,4 difficulty levels with dynamic pipeline composition,6 challenge types: standard multi-part crib-drag hash-crack cipher-identify key-reuse,Classical ciphers: Caesar Vigenere Playfair Beaufort Autokey Hill Bifid ADFGVX,Modern crypto: AES RC4 RSA XOR OTP,Encodings: Base64 Base32 Hex Morse Binary ASCII85 NATO Tap-code,Dynamic composer: hundreds of unique pipeline combinations,JSON challenge export with full solution,Progressive solver hints with reveal gates,SHA-256 flag verification,100% client-side - no upload to server" />
         <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Enter your flag|Type the flag message that solvers must recover,Choose difficulty and type|Select from 4 difficulty levels and 6 challenge types: Standard Multi-Part Crib-Drag Hash-Crack Cipher-Identify Key-Reuse,Generate the challenge|Click Generate - the engine applies a random pipeline of cipher and encoding steps to produce ciphertext,Download and share|Download the challenge text and JSON bundle containing the full solution keys and progressive hints for solvers" />
+        <jsp:param name="breadcrumbCategoryUrl" value="ctf/index.jsp" />
         <jsp:param name="faq1q" value="How do I create a cryptography CTF challenge?" />
         <jsp:param name="faq1a" value="Enter your flag, choose a difficulty level and challenge type, then click Generate. The engine selects a random pipeline of encoding and cipher steps, applies them to your flag, and produces a ciphertext. You get a downloadable challenge text plus a JSON bundle with the complete solution, decryption keys, and progressive hints." />
         <jsp:param name="faq2q" value="What are the 6 challenge types?" />
@@ -31,23 +33,6 @@
         <jsp:param name="faq6q" value="How do the progressive hints work?" />
         <jsp:param name="faq6a" value="The engine generates 3-7 hints based on the pipeline. Each hint reveals progressively more about the encoding chain. Hints are included in the JSON bundle and can be shared with solvers one at a time." />
     </jsp:include>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "HowTo",
-      "name": "How to Create a Cryptography CTF Challenge",
-      "description": "Step-by-step guide to generating a cryptography capture-the-flag challenge with encoded ciphertext.",
-      "totalTime": "PT1M",
-      "tool": { "@type": "HowToTool", "name": "8gwifi.org Cryptography CTF Generator" },
-      "step": [
-        { "@type": "HowToStep", "position": 1, "name": "Enter your flag", "text": "Type the flag message (e.g. flag{crypto_master}) that solvers must recover." },
-        { "@type": "HowToStep", "position": 2, "name": "Choose difficulty and type", "text": "Select from 4 difficulty levels (Easy, Medium, Hard, Pro) and 6 challenge types (Standard, Multi-Part, Crib Drag, Hash Crack, Cipher Identify, Key Reuse)." },
-        { "@type": "HowToStep", "position": 3, "name": "Generate the challenge", "text": "Click Generate. The engine applies a random pipeline of cipher and encoding steps to produce ciphertext." },
-        { "@type": "HowToStep", "position": 4, "name": "Download and share", "text": "Download the challenge text and JSON bundle containing the full solution, keys, and progressive hints for solvers." }
-      ]
-    }
-    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

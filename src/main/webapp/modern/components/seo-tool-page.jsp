@@ -34,6 +34,7 @@
     String toolKeywords = request.getParameter("toolKeywords") != null ? request.getParameter("toolKeywords") : toolName.toLowerCase();
     String toolImage = request.getParameter("toolImage") != null ? request.getParameter("toolImage") : "logo.png";
     String toolFeatures = request.getParameter("toolFeatures"); // Optional: comma-separated features
+    String breadcrumbCategoryUrl = request.getParameter("breadcrumbCategoryUrl"); // Optional: override category breadcrumb URL
     
     String baseUrl = "https://8gwifi.org";
     String fullUrl = baseUrl + (toolUrl.startsWith("/") ? toolUrl : "/" + toolUrl);
@@ -243,7 +244,7 @@
       "@type": "ListItem",
       "position": 2,
       "name": "<%= escapeJson(toolCategory) %>",
-      "item": "<%= baseUrl %>/<%= toolCategory.toLowerCase().contains("math") ? "math/" : "#" + toolCategory.toLowerCase().replace(" ", "-") %>"
+      "item": "<%= breadcrumbCategoryUrl != null ? (breadcrumbCategoryUrl.startsWith("http") ? breadcrumbCategoryUrl : baseUrl + "/" + breadcrumbCategoryUrl) : (baseUrl + "/" + (toolCategory.toLowerCase().contains("math") ? "math/" : "#" + toolCategory.toLowerCase().replace(" ", "-"))) %>"
     },
     {
       "@type": "ListItem",

@@ -15,9 +15,11 @@
         <jsp:param name="toolCategory" value="CTF & Challenges" />
         <jsp:param name="toolUrl" value="ctf/stego-ctf-generator.jsp" />
         <jsp:param name="toolKeywords" value="steganography CTF generator, stego challenge maker, CTF image steganography, hide flag in image online, LSB steganography CTF, audio steganography challenge, CTF puzzle generator free, capture the flag steganography, stego CTF online free, image CTF generator tool, forensic CTF stego, CTF challenge creator online, steganography practice tool, CTF training steganography, stego pipeline builder, create steganography challenge, CTF flag hider image, WAV steganography CTF" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="images/stego-ctf-icon.svg" />
         <jsp:param name="toolFeatures" value="34 encoding and cipher steps,7 difficulty levels with 50+ pipeline combos,Upload your own cover image or WAV,LSB image steganography with variable bit depth,Audio WAV steganography embedding,Classical ciphers: Caesar Vigenere Atbash Morse Bacon,Container wrapping: TAR ZIP,Key-based scatter LSB placement,Spectrogram frequency encoding,JSON challenge export with full solution,Progressive solver hints with reveal gates,SHA-256 flag verification,100% client-side - no upload to server" />
         <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Enter your flag|Type the flag message that solvers must find,Choose difficulty|Select from 7 levels: Easy Medium Hard Pro Forensic Easy-Audio or Medium-Audio,Upload a cover (optional)|Upload your own PNG JPEG or WAV file or let the engine auto-generate a cover image,Generate the challenge|Click Generate - the engine applies a random pipeline of encoding steps and embeds the payload using LSB steganography,Download and share|Download the challenge file and JSON bundle containing the full solution keys and progressive hints for solvers" />
+        <jsp:param name="breadcrumbCategoryUrl" value="ctf/index.jsp" />
         <jsp:param name="faq1q" value="How do I create a steganography CTF challenge?" />
         <jsp:param name="faq1a" value="Enter your flag, choose a difficulty level, optionally upload a cover image, and click Generate. The engine picks a random pipeline of encoding steps (base64, Caesar cipher, tar wrapping, etc.) then embeds the transformed payload into an image or audio file using LSB steganography. You get a downloadable challenge file plus a JSON bundle with the complete solution, decryption keys, and progressive hints." />
         <jsp:param name="faq2q" value="What are the 7 difficulty levels for stego CTF?" />
@@ -31,24 +33,6 @@
         <jsp:param name="faq6q" value="How do the progressive hints work?" />
         <jsp:param name="faq6a" value="The engine generates 3-7 hints (configurable) based on the pipeline. Each hint reveals a little more about the encoding chain, starting from vague clues and progressively revealing specific steps. Hints are included in the JSON bundle and can be shared with solvers one at a time." />
     </jsp:include>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "HowTo",
-      "name": "How to Create a Steganography CTF Challenge",
-      "description": "Step-by-step guide to generating a steganography capture-the-flag challenge with hidden flags in images or audio.",
-      "totalTime": "PT1M",
-      "tool": { "@type": "HowToTool", "name": "8gwifi.org Steganography CTF Generator" },
-      "step": [
-        { "@type": "HowToStep", "position": 1, "name": "Enter your flag", "text": "Type the flag message (e.g. flag{hidden_in_plain_sight}) that solvers must find." },
-        { "@type": "HowToStep", "position": 2, "name": "Choose difficulty", "text": "Select from 7 levels: Easy, Medium, Hard, Pro, Forensic, Easy Audio, or Medium Audio." },
-        { "@type": "HowToStep", "position": 3, "name": "Upload a cover (optional)", "text": "Upload your own PNG, JPEG, or WAV file, or let the engine auto-generate a cover image." },
-        { "@type": "HowToStep", "position": 4, "name": "Generate the challenge", "text": "Click Generate. The engine applies a random pipeline of encoding steps and embeds the payload using LSB steganography." },
-        { "@type": "HowToStep", "position": 5, "name": "Download and share", "text": "Download the challenge file and JSON bundle containing the full solution, keys, and progressive hints for solvers." }
-      ]
-    }
-    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
