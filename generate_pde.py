@@ -194,45 +194,67 @@ def generate_pde_questions(num_questions):
             elif q_type == "linearity_check":
                 a, b = abs(c1), abs(c2)
                 cases = [
-                    (f"u_t = {a} u_{{xx}}", True, "coefficients don't depend on $u$"),
-                    (f"u_t = u \\cdot u_{{xx}}", False, "$u$ multiplies $u_{{xx}}$"),
-                    (f"u_t = u_{{xx}} + u^{random.choice([2,3,4])}", False, "contains $u^n$ nonlinear term"),
-                    (f"u_{{tt}} = {a} u_{{xx}}", True, "constant coefficient wave equation"),
-                    (f"u_t = {a} u_{{xx}} + {b}\\sin(x)", True, "source depends only on $x$"),
-                    (f"u_t = (u_x)^2", False, "square of first derivative"),
-                    (f"u_t = {a} u_{{xx}} + {b} u", True, "linear reaction-diffusion"),
-                    (f"u_t = u_{{xx}} + u \\cdot u_x", False, "$u$ multiplies $u_x$ (Burgers-type)"),
-                    (f"{a} u_{{xx}} + {b} u_{{yy}} = 0", True, "Laplace/Helmholtz type"),
-                    (f"u_t = {a} u_{{xx}} - {b} u^3", False, "cubic reaction term"),
-                    (f"u_{{tt}} + {a} u_t = {b} u_{{xx}}", True, "damped wave equation"),
-                    (f"u_t = \\nabla \\cdot (u \\nabla u)", False, "diffusion coefficient depends on $u$"),
-                    (f"u_{{xx}} + u_{{yy}} + {a} u = 0", True, "Helmholtz equation, linear"),
-                    (f"u_t = {a} u_{{xx}} + e^u", False, "exponential nonlinearity in $u$"),
+                    (f"u_t = {a} u_{{xx}}", True,
+                     r"\text{coefficients don't depend on } u", "coefficients don't depend on u"),
+                    (f"u_t = u \\cdot u_{{xx}}", False,
+                     r"u \text{ multiplies } u_{xx}", "u multiplies u_xx"),
+                    (f"u_t = u_{{xx}} + u^{random.choice([2,3,4])}", False,
+                     r"\text{contains } u^n \text{ nonlinear term}", "contains u^n nonlinear term"),
+                    (f"u_{{tt}} = {a} u_{{xx}}", True,
+                     r"\text{constant coefficient wave equation}", "constant coefficient wave equation"),
+                    (f"u_t = {a} u_{{xx}} + {b}\\sin(x)", True,
+                     r"\text{source depends only on } x", "source depends only on x"),
+                    (f"u_t = (u_x)^2", False,
+                     r"\text{square of first derivative}", "square of first derivative"),
+                    (f"u_t = {a} u_{{xx}} + {b} u", True,
+                     r"\text{linear reaction-diffusion}", "linear reaction-diffusion"),
+                    (f"u_t = u_{{xx}} + u \\cdot u_x", False,
+                     r"u \text{ multiplies } u_x \text{ (Burgers-type)}", "u multiplies u_x (Burgers-type)"),
+                    (f"{a} u_{{xx}} + {b} u_{{yy}} = 0", True,
+                     r"\text{Laplace/Helmholtz type}", "Laplace/Helmholtz type"),
+                    (f"u_t = {a} u_{{xx}} - {b} u^3", False,
+                     r"\text{cubic reaction term}", "cubic reaction term"),
+                    (f"u_{{tt}} + {a} u_t = {b} u_{{xx}}", True,
+                     r"\text{damped wave equation}", "damped wave equation"),
+                    (f"u_t = \\nabla \\cdot (u \\nabla u)", False,
+                     r"\text{diffusion coefficient depends on } u", "diffusion coefficient depends on u"),
+                    (f"u_{{xx}} + u_{{yy}} + {a} u = 0", True,
+                     r"\text{Helmholtz equation, linear}", "Helmholtz equation, linear"),
+                    (f"u_t = {a} u_{{xx}} + e^u", False,
+                     r"\text{exponential nonlinearity in } u", "exponential nonlinearity in u"),
                 ]
                 case = random.choice(cases)
                 linear_str = "Linear" if case[1] else "Nonlinear"
                 q_text = (
                     f"Is the PDE \\( {case[0]} \\) linear or nonlinear? Justify."
                 )
-                ans_latex = f"\\textbf{{{linear_str}.}} \\; {case[2]}"
-                ans_plain = f"{linear_str}: {case[2]}"
+                ans_latex = f"\\textbf{{{linear_str}.}} \\quad {case[2]}"
+                ans_plain = f"{linear_str}: {case[3]}"
 
             elif q_type == "order_identify":
+                # Tuples: (pde_str, order_num, order_name, hint_latex, hint_plain)
                 cases = [
-                    (f"u_t = {abs(c1)} u_{{xx}}", 2, "second-order", "highest derivative is $u_{xx}$"),
-                    (f"u_t + {abs(c1)} u_x = 0", 1, "first-order", "highest derivative is $u_x$ or $u_t$"),
-                    (f"u_{{tt}} = {abs(c1)} u_{{xx}}", 2, "second-order", "$u_{tt}$ and $u_{xx}$ both order 2"),
-                    (f"u_{{xxx}} + u_t = 0", 3, "third-order", "highest derivative is $u_{xxx}$ (KdV-type)"),
-                    (f"\\nabla^4 u = 0", 4, "fourth-order", "biharmonic equation"),
-                    (f"u_{{xxxx}} + u_{{tt}} = 0", 4, "fourth-order", "beam/plate equation"),
-                    (f"u_{{xxy}} + u_{{yy}} = 0", 3, "third-order", "mixed partial $u_{xxy}$ is order 3"),
+                    (f"u_t = {abs(c1)} u_{{xx}}", 2, "second-order",
+                     r"\text{highest derivative is } u_{xx}", "highest derivative is u_xx"),
+                    (f"u_t + {abs(c1)} u_x = 0", 1, "first-order",
+                     r"\text{highest derivative is } u_x \text{ or } u_t", "highest derivative is u_x or u_t"),
+                    (f"u_{{tt}} = {abs(c1)} u_{{xx}}", 2, "second-order",
+                     r"u_{tt} \text{ and } u_{xx} \text{ both order 2}", "u_tt and u_xx both order 2"),
+                    (f"u_{{xxx}} + u_t = 0", 3, "third-order",
+                     r"\text{highest derivative is } u_{xxx} \text{ (KdV-type)}", "highest derivative is u_xxx (KdV-type)"),
+                    (f"\\nabla^4 u = 0", 4, "fourth-order",
+                     r"\text{biharmonic equation}", "biharmonic equation"),
+                    (f"u_{{xxxx}} + u_{{tt}} = 0", 4, "fourth-order",
+                     r"\text{beam/plate equation}", "beam/plate equation"),
+                    (f"u_{{xxy}} + u_{{yy}} = 0", 3, "third-order",
+                     r"\text{mixed partial } u_{xxy} \text{ is order 3}", "mixed partial u_xxy is order 3"),
                 ]
                 case = random.choice(cases)
                 q_text = (
                     f"What is the order of the PDE \\( {case[0]} \\)? Explain."
                 )
-                ans_latex = f"\\text{{Order {case[1]}: {case[2]}}} \\quad ({case[3]})"
-                ans_plain = f"Order {case[1]}: {case[2]} ({case[3]})"
+                ans_latex = f"\\textbf{{Order {case[1]}:}} \\; \\text{{{case[2]}}} \\quad {case[3]}"
+                ans_plain = f"Order {case[1]}: {case[2]} ({case[4]})"
 
             elif q_type == "homogeneous_check":
                 a, b = abs(c1), abs(c2)

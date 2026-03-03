@@ -40,6 +40,8 @@ import math
 import random
 import os
 import sys
+import multiprocessing
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 # Figure generation (optional — gracefully degrades if matplotlib unavailable)
 _fig_gen_available = False
@@ -2448,16 +2450,23 @@ def call_generator(q_type):
     return rec
 
 # ===========================================================================
-# Main generation loop
+# Parallel worker  (module-level so ProcessPoolExecutor can pickle it)
 # ===========================================================================
 
-def generate_integral_questions(num_questions: int):
-    questions = []
-    seen: set = set()
-    attempts = 0
-    max_attempts = num_questions * 20
+def _worker_batch(args):
+    """Generate a batch of raw question records in a separate process.
 
-    while len(questions) < num_questions and attempts < max_attempts:
+    Returns a list of (difficulty, q_type, rec) triples.
+    Figure generation is intentionally skipped here — done in the main
+    process after deduplication so figure IDs are stable.
+    """
+    seed, target = args
+    random.seed(seed)
+    results = []
+    attempts = 0
+    max_attempts = target * 20
+
+    while len(results) < target and attempts < max_attempts:
         attempts += 1
         rv = random.random()
         if   rv < 0.25: difficulty = "basic"
@@ -2466,20 +2475,74 @@ def generate_integral_questions(num_questions: int):
         else:           difficulty = "scholar"
 
         q_type = rc(DIFFICULTY_TYPES[difficulty])
-
         try:
             rec = call_generator(q_type)
-            if rec is None: continue
+            if rec is not None:
+                results.append((difficulty, q_type, rec))
+        except Exception:
+            pass
 
-            q_text    = rec["q_text"]
-            expr      = rec["integrand_expr"]
-            ans_latex = rec["ans_latex"]
-            ans_plain = rec["ans_plain"]
-            is_def    = rec["is_definite"]
-            lo        = rec["lo"]
-            hi        = rec["hi"]
+    return results
 
-            # Deduplication key
+
+# ===========================================================================
+# Main generation loop  (parallel)
+# ===========================================================================
+
+def generate_integral_questions(num_questions: int):
+    # ── How many worker processes? ──────────────────────────────────────────
+    cpu_count  = multiprocessing.cpu_count()
+    num_workers = max(2, min(cpu_count, 8))
+
+    # Each worker overshoots so cross-worker duplicates still leave enough.
+    # Target per worker  = (total_needed / workers) * 2.5
+    per_worker = max(100, int(num_questions / num_workers * 2.5))
+
+    # Seeds: spread across a large range so workers produce different combos
+    seeds = [i * 0x9E3779B9 & 0xFFFFFFFF for i in range(1, num_workers + 1)]
+
+    print(f"  Launching {num_workers} workers (target {per_worker} each) …")
+
+    raw_results = []  # list of (difficulty, q_type, rec)
+    completed   = 0
+
+    with ProcessPoolExecutor(max_workers=num_workers) as executor:
+        futures = {
+            executor.submit(_worker_batch, (seed, per_worker)): seed
+            for seed in seeds
+        }
+        for future in as_completed(futures):
+            try:
+                batch = future.result()
+                raw_results.extend(batch)
+                completed += 1
+                print(f"  Worker {completed}/{num_workers} done "
+                      f"— {len(batch)} candidates collected "
+                      f"(total so far: {len(raw_results)})")
+            except Exception as exc:
+                print(f"  Worker error: {exc}")
+
+    # ── Shuffle so difficulty/type mix is uniform across workers ────────────
+    random.shuffle(raw_results)
+
+    # ── Deduplicate and build final entries ─────────────────────────────────
+    seen: set = set()
+    questions = []
+
+    for difficulty, q_type, rec in raw_results:
+        if len(questions) >= num_questions:
+            break
+
+        q_text    = rec["q_text"]
+        expr      = rec["integrand_expr"]
+        ans_latex = rec["ans_latex"]
+        ans_plain = rec["ans_plain"]
+        is_def    = rec["is_definite"]
+        lo        = rec["lo"]
+        hi        = rec["hi"]
+
+        # Deduplication key
+        try:
             if expr is not None:
                 sig = (sp.srepr(expr),
                        sp.srepr(lo) if lo is not None else "_",
@@ -2487,43 +2550,88 @@ def generate_integral_questions(num_questions: int):
                        q_type)
             else:
                 sig = (q_text[:120], q_type)
-            if sig in seen: continue
-            seen.add(sig)
-
-            entry = {
-                "id":              len(questions) + 1,
-                "type":            q_type,
-                "difficulty":      difficulty,
-                "is_definite":     is_def,
-                "integrand_latex": sp.latex(expr) if expr is not None else "",
-                "question_text":   q_text,
-                "answer_latex":    ans_latex,
-                "answer_plain":    ans_plain,
-            }
-            if is_def and lo is not None:
-                try:
-                    entry["lower_bound"] = sp.latex(lo)
-                    entry["upper_bound"] = sp.latex(hi)
-                except Exception:
-                    entry["lower_bound"] = str(lo)
-                    entry["upper_bound"] = str(hi)
-
-            # Generate SVG figure if applicable
-            if _fig_gen_available and q_type in _FIGURE_TYPES_INTEGRALS:
-                try:
-                    fig_path = _fig_gen.generate_figure_for_integral(
-                        q_type, rec, entry["id"], _figures_dir_integrals)
-                    if fig_path:
-                        entry["figure_svg"] = fig_path
-                except Exception:
-                    pass
-
-            questions.append(entry)
-            if len(questions) % 200 == 0:
-                print(f"  Generated {len(questions)} integral questions…")
-
         except Exception:
-            pass
+            sig = (q_text[:120], q_type)
+
+        if sig in seen:
+            continue
+        seen.add(sig)
+
+        entry = {
+            "id":            len(questions) + 1,
+            "type":          q_type,
+            "difficulty":    difficulty,
+            "is_definite":   is_def,
+            "question_text": q_text,
+            "answer_latex":  ans_latex,
+            "answer_plain":  ans_plain,
+        }
+        if is_def and lo is not None:
+            try:
+                entry["lower_bound"] = sp.latex(lo)
+                entry["upper_bound"] = sp.latex(hi)
+            except Exception:
+                entry["lower_bound"] = str(lo)
+                entry["upper_bound"] = str(hi)
+
+        # Figure generation (sequential here — IDs are now stable)
+        if _fig_gen_available and q_type in _FIGURE_TYPES_INTEGRALS:
+            try:
+                fig_path = _fig_gen.generate_figure_for_integral(
+                    q_type, rec, entry["id"], _figures_dir_integrals)
+                if fig_path:
+                    entry["figure_svg"] = fig_path
+            except Exception:
+                pass
+
+        questions.append(entry)
+        if len(questions) % 200 == 0:
+            print(f"  Kept {len(questions)} unique questions…")
+
+    # ── Fallback: if parallel didn't yield enough, top up sequentially ──────
+    if len(questions) < num_questions:
+        shortfall = num_questions - len(questions)
+        print(f"  Parallel pass short by {shortfall} — topping up sequentially…")
+        attempts = 0
+        while len(questions) < num_questions and attempts < shortfall * 30:
+            attempts += 1
+            rv = random.random()
+            if   rv < 0.25: difficulty = "basic"
+            elif rv < 0.55: difficulty = "medium"
+            elif rv < 0.85: difficulty = "hard"
+            else:           difficulty = "scholar"
+            q_type = rc(DIFFICULTY_TYPES[difficulty])
+            try:
+                rec = call_generator(q_type)
+                if rec is None: continue
+                expr = rec["integrand_expr"]
+                lo   = rec["lo"]
+                hi   = rec["hi"]
+                try:
+                    sig = ((sp.srepr(expr), sp.srepr(lo) if lo is not None else "_",
+                            sp.srepr(hi) if hi is not None else "_", q_type)
+                           if expr is not None else (rec["q_text"][:120], q_type))
+                except Exception:
+                    sig = (rec["q_text"][:120], q_type)
+                if sig in seen: continue
+                seen.add(sig)
+                entry = {
+                    "id": len(questions) + 1, "type": q_type,
+                    "difficulty": difficulty, "is_definite": rec["is_definite"],
+                    "question_text": rec["q_text"],
+                    "answer_latex":  rec["ans_latex"],
+                    "answer_plain":  rec["ans_plain"],
+                }
+                if rec["is_definite"] and rec["lo"] is not None:
+                    try:
+                        entry["lower_bound"] = sp.latex(rec["lo"])
+                        entry["upper_bound"] = sp.latex(rec["hi"])
+                    except Exception:
+                        entry["lower_bound"] = str(rec["lo"])
+                        entry["upper_bound"] = str(rec["hi"])
+                questions.append(entry)
+            except Exception:
+                pass
 
     return questions
 

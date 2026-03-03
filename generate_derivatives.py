@@ -1483,7 +1483,6 @@ def generate_derivative_questions(num_questions):
                 "id":              len(questions) + 1,
                 "type":            q_type,
                 "difficulty":      difficulty,
-                "function_latex":  sp.latex(f),
                 "point_latex":     sp.latex(a_val) if a_val is not None else "",
                 "question_text":   q_text,
                 "answer_latex":    ans_latex,
