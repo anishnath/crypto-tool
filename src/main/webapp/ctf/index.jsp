@@ -33,7 +33,7 @@
       "url": "https://8gwifi.org/ctf/index.jsp",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 6,
+        "numberOfItems": 7,
         "itemListElement": [
           {
             "@type": "ListItem",
@@ -59,10 +59,22 @@
               "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
             }
           },
-          { "@type": "ListItem", "position": 3, "name": "Forensic CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#forensic" },
-          { "@type": "ListItem", "position": 4, "name": "Web Exploitation CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#web" },
-          { "@type": "ListItem", "position": 5, "name": "Reverse Engineering CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#re" },
-          { "@type": "ListItem", "position": 6, "name": "OSINT CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#osint" }
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "WebApplication",
+              "name": "RSA CTF Generator",
+              "url": "https://8gwifi.org/ctf/rsa-ctf-generator.jsp",
+              "description": "20 RSA vulnerability types: Wiener, Hastad, Fermat, Pollard p-1, cube root, common modulus, twin primes, dp leak, Rabin, padding oracle, and more.",
+              "applicationCategory": "SecurityApplication",
+              "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+            }
+          },
+          { "@type": "ListItem", "position": 4, "item": { "@type": "WebApplication", "name": "Forensic CTF Generator", "url": "https://8gwifi.org/ctf/forensic-ctf-generator.jsp", "description": "25 forensic challenge types: polyglot, PCAP, metadata, static assets (Volatility, NTFS, firmware).", "applicationCategory": "SecurityApplication", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } } },
+          { "@type": "ListItem", "position": 5, "name": "Web Exploitation CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#web" },
+          { "@type": "ListItem", "position": 6, "name": "Reverse Engineering CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#re" },
+          { "@type": "ListItem", "position": 7, "name": "OSINT CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#osint" }
         ]
       }
     }
@@ -156,8 +168,8 @@
         <h1>Capture The <span>Flag</span> Generator</h1>
         <p>Create, solve, and practice cybersecurity challenges. Generate steganography, crypto, forensic, and web puzzles with auto-generated solutions and progressive hints.</p>
         <div class="ctf-hero-stats">
-            <div class="ctf-stat"><div class="ctf-stat-num">39+</div><div class="ctf-stat-label">Cipher & Encoding Steps</div></div>
-            <div class="ctf-stat"><div class="ctf-stat-num">11</div><div class="ctf-stat-label">Difficulty Levels</div></div>
+            <div class="ctf-stat"><div class="ctf-stat-num">59+</div><div class="ctf-stat-label">Challenge Types</div></div>
+            <div class="ctf-stat"><div class="ctf-stat-num">20</div><div class="ctf-stat-label">RSA Attacks</div></div>
             <div class="ctf-stat"><div class="ctf-stat-num">100+</div><div class="ctf-stat-label">Pipeline Combos</div></div>
             <div class="ctf-stat"><div class="ctf-stat-num">100%</div><div class="ctf-stat-label">Client-Side</div></div>
         </div>
@@ -209,8 +221,24 @@
                 </div>
             </a>
 
-            <div class="ctf-card coming-soon">
-                <span class="ctf-card-badge soon">Coming Soon</span>
+            <a href="<%=request.getContextPath()%>/ctf/rsa-ctf-generator.jsp" class="ctf-card">
+                <span class="ctf-card-badge live">Live</span>
+                <div class="ctf-card-icon" style="background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                </div>
+                <h3>RSA CTF</h3>
+                <p>20 real-world RSA vulnerabilities: Wiener attack, Hastad broadcast, Fermat, Pollard p-1, cube root, common modulus, twin primes, dp leak, Rabin, batch GCD, padding oracle, and more.</p>
+                <div class="ctf-card-tags">
+                    <span class="ctf-tag">Wiener</span>
+                    <span class="ctf-tag">Hastad</span>
+                    <span class="ctf-tag">Fermat</span>
+                    <span class="ctf-tag">Batch GCD</span>
+                    <span class="ctf-tag">20 Types</span>
+                </div>
+            </a>
+
+            <a href="<%=request.getContextPath()%>/ctf/forensic-ctf-generator.jsp" class="ctf-card">
+                <span class="ctf-card-badge live">Live</span>
                 <div class="ctf-card-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 </div>
@@ -222,7 +250,7 @@
                     <span class="ctf-tag">PCAP</span>
                     <span class="ctf-tag">Carving</span>
                 </div>
-            </div>
+            </a>
 
             <div class="ctf-card coming-soon">
                 <span class="ctf-card-badge soon">Coming Soon</span>

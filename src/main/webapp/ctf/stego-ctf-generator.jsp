@@ -296,15 +296,15 @@
                         </div>
                         <div id="challengePreview" style="margin-bottom:1rem"></div>
                         <div class="sg-actions">
-                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="downloadChallenge()">
+                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="downloadChallenge(event)">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                 Download File
                             </button>
-                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="downloadJSON()">
+                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="downloadJSON(event)">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                 Download JSON
                             </button>
-                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="copyJSON()">
+                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="copyJSON(event)">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                                 Copy JSON
                             </button>
@@ -769,9 +769,9 @@
 
     function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-    function downloadChallenge() {
+    function downloadChallenge(ev) {
         if (!currentBundle || !currentBundle.challenge.data) return;
-        var btn = event && event.currentTarget;
+        var btn = ev && ev.currentTarget;
         if (btn && btn.disabled) return;
         if (btn) btn.disabled = true;
         setStatus('Preparing download...', 'var(--ctf-cyan)', true);
@@ -796,9 +796,9 @@
         }, 1500);
     }
 
-    function downloadJSON() {
+    function downloadJSON(ev) {
         if (!currentBundle) return;
-        var btn = event && event.currentTarget;
+        var btn = ev && ev.currentTarget;
         if (btn && btn.disabled) return;
         if (btn) btn.disabled = true;
         setStatus('Preparing JSON...', 'var(--ctf-cyan)', true);
@@ -821,8 +821,11 @@
         }, 1500);
     }
 
-    function copyJSON() {
+    function copyJSON(ev) {
         if (!currentBundle) return;
+        var btn = ev && ev.currentTarget;
+        if (btn && btn.disabled) return;
+        if (btn) btn.disabled = true;
         setStatus('Copying...', 'var(--ctf-cyan)', true);
         setTimeout(function() {
             var text = JSON.stringify(currentBundle, null, 2);
@@ -845,6 +848,7 @@
                     setStatus('JSON copied to clipboard!', 'var(--ctf-green)');
                 }
             }
+            if (btn) setTimeout(function() { btn.disabled = false; }, 2000);
         }, 1000);
     }
     </script>
