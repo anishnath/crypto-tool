@@ -1,0 +1,54 @@
+{
+  "version": "1.0",
+  "generator": "8gwifi.org Forensic CTF Static Assets",
+  "assets": {
+    "mem-dump-1": {
+      "flag": "flag{volatility_master}",
+      "tool": "strings, volatility (conceptual)"
+    },
+    "mem-dump-2": {
+      "flag": "flag{memory_carve_dump}",
+      "tool": "strings, volatility (conceptual)"
+    },
+    "mem-dump-3": {
+      "flag": "flag{volatility_cmd_inject}",
+      "tool": "strings, volatility (conceptual)"
+    },
+    "ntfs-mft-1": {
+      "flag": "flag{ntfs_forensic_master}",
+      "tool": "sleuthkit, analyzeMFT, or manual parse"
+    },
+    "ntfs-mft-2": {
+      "flag": "flag{mft_record_carve}",
+      "tool": "sleuthkit, analyzeMFT, or manual parse"
+    },
+    "ntfs-mft-3": {
+      "flag": "flag{deleted_ntfs_recover}",
+      "tool": "sleuthkit, analyzeMFT, or manual parse"
+    },
+    "firmware-router-1": {
+      "flag": "flag{firmware_carve_master}",
+      "tool": "binwalk -e, unzip carved ZIP"
+    },
+    "firmware-router-2": {
+      "flag": "flag{hidden_squashfs_partition}",
+      "tool": "binwalk -e, unzip carved ZIP"
+    },
+    "recycle-bin-1": {
+      "flag": "flag{recycle_bin_master}",
+      "tool": "Parse $I/$R format, read $R content"
+    },
+    "recycle-bin-2": {
+      "flag": "flag{trash_forensics}",
+      "tool": "Parse $I/$R format, read $R content"
+    },
+    "wpa-handshake-1": {
+      "flag": "flag{wpa_crack_master}",
+      "tool": "Wireshark: packet contains hint with flag"
+    },
+    "wpa-handshake-2": {
+      "flag": "flag{aircrack_pwned}",
+      "tool": "Wireshark: packet contains hint with flag"
+    }
+  }
+}
