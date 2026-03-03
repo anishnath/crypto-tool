@@ -20,7 +20,12 @@
         <jsp:param name="breadcrumbCategoryUrl" value="ctf/index.jsp" />
     </jsp:include>
 
-    <style>:root{--ctf-purple:#8b5cf6;--ctf-purple-dim:#7c3aed;--ctf-bg:var(--bg-primary,#fff);--ctf-surface:var(--bg-secondary,#f8fafc);--ctf-border:var(--border,#e2e8f0);--ctf-text:var(--text-primary,#0f172a);--ctf-text-dim:var(--text-secondary,#475569);--ctf-font-mono:'JetBrains Mono',monospace;--tool-primary:#8b5cf6}[data-theme="dark"]{--ctf-purple:#a78bfa}</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        :root{--ctf-purple:#8b5cf6;--ctf-purple-dim:#7c3aed;--ctf-bg:var(--bg-primary,#fff);--ctf-surface:var(--bg-secondary,#f8fafc);--ctf-surface-2:var(--bg-tertiary,#f1f5f9);--ctf-border:var(--border,#e2e8f0);--ctf-text:var(--text-primary,#0f172a);--ctf-text-dim:var(--text-secondary,#475569);--ctf-font-mono:'JetBrains Mono',monospace;--tool-primary:#8b5cf6}
+        [data-theme="dark"]{--ctf-purple:#a78bfa}
+    </style>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
@@ -28,32 +33,42 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
     <%@ include file="../modern/ads/ad-init.jsp" %>
     <style>
         .sg-card{background:var(--ctf-surface);border:1px solid var(--ctf-border);border-radius:0.75rem;overflow:hidden}
+        .sg-card-header{padding:1rem 1.25rem;border-bottom:1px solid var(--ctf-border);display:flex;align-items:center;gap:0.5rem;font-weight:600;color:var(--ctf-text);font-size:0.9375rem}
+        .sg-card-body{padding:1rem 1.25rem}
         .sg-form-group{margin-bottom:1.25rem}
         .sg-label{display:block;font-size:0.8125rem;font-weight:600;color:var(--ctf-text);margin-bottom:0.375rem}
-        .sg-input,.sg-select{width:100%;padding:0.625rem 0.875rem;background:var(--bg-tertiary,#f1f5f9);border:1px solid var(--ctf-border);border-radius:0.5rem;font-size:0.875rem;font-family:inherit}
+        .sg-input,.sg-select{width:100%;padding:0.625rem 0.875rem;background:var(--ctf-surface-2);border:1px solid var(--ctf-border);border-radius:0.5rem;color:var(--ctf-text);font-size:0.875rem;font-family:inherit}
+        .sg-select{cursor:pointer;appearance:none}
         .sg-btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.75rem 1.5rem;border:none;border-radius:0.5rem;font-size:0.875rem;font-weight:600;cursor:pointer;font-family:inherit;width:100%}
         .sg-btn-primary{background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff}
         .sg-btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(139,92,246,0.3)}
         .sg-btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-        .sg-btn-secondary{background:var(--ctf-surface);color:var(--ctf-text);border:1px solid var(--ctf-border);width:auto}
+        .sg-btn-secondary{background:var(--ctf-surface-2);color:var(--ctf-text);border:1px solid var(--ctf-border);width:auto}
         .sg-btn-secondary:hover{border-color:var(--ctf-purple);color:var(--ctf-purple)}
         .sg-btn-sm{padding:0.5rem 1rem;font-size:0.8125rem}
         .sg-actions{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem}
         .sg-output-tabs{display:flex;border-bottom:1px solid var(--ctf-border);overflow-x:auto}
-        .sg-output-tab{padding:0.75rem 1rem;font-size:0.8125rem;font-weight:500;color:var(--ctf-text-dim);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent}
+        .sg-output-tab{padding:0.75rem 1rem;font-size:0.8125rem;font-weight:500;color:var(--ctf-text-dim);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
         .sg-output-tab.active{color:var(--ctf-purple);border-bottom-color:var(--ctf-purple)}
         .sg-tab-content{display:none;padding:1.25rem}.sg-tab-content.active{display:block}
         .sg-empty{text-align:center;padding:3rem 1rem;color:var(--ctf-text-dim)}
+        .sg-empty h3{font-size:1rem;color:var(--ctf-text);margin-bottom:0.5rem}
         .sg-json-pre,.sg-code-block{background:var(--ctf-bg);border:1px solid var(--ctf-border);border-radius:0.5rem;padding:1rem;font-family:var(--ctf-font-mono);font-size:0.75rem;overflow:auto;max-height:400px;white-space:pre-wrap;word-break:break-all;color:var(--ctf-purple)}
         .sg-hints-list{list-style:none;padding:0}
-        .sg-hints-list li{padding:0.75rem;margin-bottom:0.5rem;background:var(--ctf-surface);border:1px solid var(--ctf-border);border-radius:0.5rem;font-size:0.8125rem}
+        .sg-hints-list li{padding:0.75rem;margin-bottom:0.5rem;background:var(--ctf-surface-2);border:1px solid var(--ctf-border);border-radius:0.5rem;font-size:0.8125rem;line-height:1.5}
         .sg-cooldown-bar{height:3px;background:var(--ctf-purple);border-radius:2px;margin-top:0.5rem;transition:width linear;width:0}
-        .sg-gate,.sg-gate-spinner{text-align:center;padding:2.5rem 1.5rem}
-        .sg-gate-spinner{display:none;flex-direction:column;align-items:center;gap:0.75rem}
+        .sg-gate{text-align:center;padding:2.5rem 1.5rem}
+        .sg-gate .sg-btn{width:auto;display:inline-flex}
+        .sg-gate h3{font-size:0.9375rem;color:var(--ctf-text);margin-bottom:0.25rem}
+        .sg-gate p{font-size:0.8125rem;color:var(--ctf-text-dim);margin-bottom:1rem}
+        .sg-gate-spinner{display:none;flex-direction:column;align-items:center;gap:0.75rem;padding:2.5rem 1.5rem;text-align:center}
         .sg-gate-spinner.active{display:flex}
+        .sg-gate-spinner .sg-spinner{width:28px;height:28px;border-width:3px}
+        .sg-gate-spinner p{font-size:0.8125rem;color:var(--ctf-text-dim);font-family:var(--ctf-font-mono)}
         .sg-spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.2);border-top-color:var(--ctf-purple);border-radius:50%;animation:sg-spin 0.6s linear infinite}
         @keyframes sg-spin{to{transform:rotate(360deg)}}
     </style>
