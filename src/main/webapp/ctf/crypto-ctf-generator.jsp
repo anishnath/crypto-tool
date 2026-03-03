@@ -291,15 +291,15 @@
                         </div>
                         <div id="challengePreview" style="margin-bottom:1rem"></div>
                         <div class="sg-actions">
-                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="downloadChallenge()">
+                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="downloadChallenge(event)">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                 Download Text
                             </button>
-                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="downloadJSON()">
+                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="downloadJSON(event)">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                 Download JSON
                             </button>
-                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="copyCiphertext()">
+                            <button class="sg-btn sg-btn-secondary sg-btn-sm" onclick="copyCiphertext(event)">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                                 Copy Ciphertext
                             </button>
@@ -726,45 +726,66 @@
         return JSON.stringify(c, null, 2);
     }
 
-    function downloadChallenge() {
+    function downloadChallenge(ev) {
         if (!currentBundle) return;
-        var text = getChallengeText();
-        var blob = new Blob([text], { type: 'text/plain' });
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'challenge.txt';
-        a.click();
-        URL.revokeObjectURL(a.href);
-        setStatus('Download started.', 'var(--ctf-green)');
-        if (window.ToolUtils) ToolUtils.showToast('Downloaded challenge.txt', 2000, 'success');
-    }
-
-    function downloadJSON() {
-        if (!currentBundle) return;
-        if (window.ToolUtils) {
-            ToolUtils.downloadAsFile(JSON.stringify(currentBundle, null, 2), 'crypto-challenge-bundle.json', {
-                mimeType: 'application/json', toolName: 'Cryptography CTF Generator'
-            });
-        } else {
-            var blob = new Blob([JSON.stringify(currentBundle, null, 2)], { type: 'application/json' });
+        var btn = ev && ev.currentTarget;
+        if (btn && btn.disabled) return;
+        if (btn) btn.disabled = true;
+        setStatus('Preparing download...', 'var(--ctf-cyan)', true);
+        setTimeout(function() {
+            var text = getChallengeText();
+            var blob = new Blob([text], { type: 'text/plain' });
             var a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'crypto-challenge-bundle.json';
+            a.download = 'challenge.txt';
             a.click();
             URL.revokeObjectURL(a.href);
-        }
-        setStatus('JSON download started.', 'var(--ctf-green)');
+            setStatus('Download started.', 'var(--ctf-green)');
+            if (window.ToolUtils) ToolUtils.showToast('Downloaded challenge.txt', 2000, 'success');
+            if (btn) setTimeout(function() { btn.disabled = false; }, 2000);
+        }, 1500);
     }
 
-    function copyCiphertext() {
+    function downloadJSON(ev) {
         if (!currentBundle) return;
-        var text = getChallengeText();
-        if (window.ToolUtils) {
-            ToolUtils.copyToClipboard(text, { toastMessage: 'Ciphertext copied!', toolName: 'Cryptography CTF Generator' });
-        } else if (navigator.clipboard) {
-            navigator.clipboard.writeText(text);
-        }
-        setStatus('Ciphertext copied to clipboard!', 'var(--ctf-green)');
+        var btn = ev && ev.currentTarget;
+        if (btn && btn.disabled) return;
+        if (btn) btn.disabled = true;
+        setStatus('Preparing JSON...', 'var(--ctf-cyan)', true);
+        setTimeout(function() {
+            if (window.ToolUtils) {
+                ToolUtils.downloadAsFile(JSON.stringify(currentBundle, null, 2), 'crypto-challenge-bundle.json', {
+                    mimeType: 'application/json', toolName: 'Cryptography CTF Generator'
+                });
+            } else {
+                var blob = new Blob([JSON.stringify(currentBundle, null, 2)], { type: 'application/json' });
+                var a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'crypto-challenge-bundle.json';
+                a.click();
+                URL.revokeObjectURL(a.href);
+            }
+            setStatus('JSON download started.', 'var(--ctf-green)');
+            if (btn) setTimeout(function() { btn.disabled = false; }, 2000);
+        }, 1500);
+    }
+
+    function copyCiphertext(ev) {
+        if (!currentBundle) return;
+        var btn = ev && ev.currentTarget;
+        if (btn && btn.disabled) return;
+        if (btn) btn.disabled = true;
+        setStatus('Copying...', 'var(--ctf-cyan)', true);
+        setTimeout(function() {
+            var text = getChallengeText();
+            if (window.ToolUtils) {
+                ToolUtils.copyToClipboard(text, { toastMessage: 'Ciphertext copied!', toolName: 'Cryptography CTF Generator' });
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(text);
+            }
+            setStatus('Ciphertext copied to clipboard!', 'var(--ctf-green)');
+            if (btn) setTimeout(function() { btn.disabled = false; }, 2000);
+        }, 1000);
     }
     </script>
     <%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
