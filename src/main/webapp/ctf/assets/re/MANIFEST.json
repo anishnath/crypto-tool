@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "generator": "8gwifi.org RE CTF Native Binaries",
+  "assets": {
+    "native-elf-1": {
+      "flag": "flag{elf_strings_master}",
+      "tool": "strings"
+    },
+    "native-elf-2": {
+      "flag": "flag{readelf_dynsym}",
+      "tool": "readelf -s, objdump -t"
+    }
+  }
+}

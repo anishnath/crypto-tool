@@ -73,7 +73,7 @@
           },
           { "@type": "ListItem", "position": 4, "item": { "@type": "WebApplication", "name": "Forensic CTF Generator", "url": "https://8gwifi.org/ctf/forensic-ctf-generator.jsp", "description": "25 forensic challenge types: polyglot, PCAP, metadata, static assets (Volatility, NTFS, firmware).", "applicationCategory": "SecurityApplication", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } } },
           { "@type": "ListItem", "position": 5, "name": "Web Exploitation CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#web" },
-          { "@type": "ListItem", "position": 6, "name": "Reverse Engineering CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#re" },
+          { "@type": "ListItem", "position": 6, "item": { "@type": "WebApplication", "name": "Reverse Engineering CTF Generator", "url": "https://8gwifi.org/ctf/re-ctf-generator.jsp", "description": "11 RE types: obfuscated code, logic gates, FSM, XOR chain, hex dump, struct parse. Native ELF via Docker.", "applicationCategory": "SecurityApplication", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } } },
           { "@type": "ListItem", "position": 7, "name": "OSINT CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#osint" }
         ]
       }
@@ -267,8 +267,8 @@
                 </div>
             </div>
 
-            <div class="ctf-card coming-soon">
-                <span class="ctf-card-badge soon">Coming Soon</span>
+            <a href="<%=request.getContextPath()%>/ctf/re-ctf-generator.jsp" class="ctf-card">
+                <span class="ctf-card-badge live">Live</span>
                 <div class="ctf-card-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);color:#fff">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                 </div>
@@ -279,7 +279,7 @@
                     <span class="ctf-tag">Binary</span>
                     <span class="ctf-tag">Logic</span>
                 </div>
-            </div>
+            </a>
 
             <div class="ctf-card coming-soon">
                 <span class="ctf-card-badge soon">Coming Soon</span>
