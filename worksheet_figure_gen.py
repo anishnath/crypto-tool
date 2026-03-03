@@ -602,6 +602,10 @@ FIGURE_TYPES_DERIVATIVES = {
     'tangent_line_eq', 'critical_points',
 }
 
+FIGURE_TYPES_LOGARITHMS = {
+    'graph_log_function'
+}
+
 
 def generate_figure_for_limit(q_type, rec, entry_id, out_dir):
     """
@@ -756,6 +760,72 @@ def generate_figure_for_derivative(q_type, rec, entry_id, out_dir):
             return fig_critical_points(expr, var, out_dir, entry_id)
 
     except Exception:
+        return None
+
+    return None
+
+def fig_log_graph(expr, var, asy, direction, out_dir, qid):
+    """
+    Draw a logarithmic graph f(x) with its vertical asymptote marked.
+    """
+    fig, ax = _create_fig()
+
+    asy_num = float(asy)
+    pad = 8
+    
+    if direction == "+": # domain is x > asy
+        lo = asy_num + 0.05
+        hi = asy_num + pad
+        xs = np.linspace(lo, hi, N_POINTS)
+    else: # domain is x < asy
+        lo = asy_num - pad
+        hi = asy_num - 0.05
+        xs = np.linspace(lo, hi, N_POINTS)
+
+    ys = _safe_eval(expr, var, xs)
+    
+    all_y = ys[np.isfinite(ys)]
+    if len(all_y) > 0:
+        ylim = _auto_ylim(all_y, margin=0.6)
+    else:
+        ylim = (-10, 10)
+        
+    ax.set_ylim(ylim)
+    ax.plot(xs, ys, color=C_CURVE, linewidth=1.8, label='f(x)')
+
+    # Asymptote line
+    ax.axvline(asy_num, color=C_ASYMPTOTE, linewidth=1.5, linestyle=':', alpha=0.8)
+    ax.annotate(f'x = {asy_num:.4g}', (asy_num, ylim[1] * 0.85),
+                fontsize=7, color=C_ASYMPTOTE, ha='left' if direction=='+' else 'right',
+                xytext=(4 if direction=='+' else -4, 0), textcoords="offset points")
+
+    ax.set_xlabel('x', fontsize=7, color=C_AXIS)
+    ax.set_ylabel('f(x)', fontsize=7, color=C_AXIS)
+
+    fname = f'log_graph_{qid:04d}.svg'
+    return save_svg(fig, out_dir, fname)
+
+def generate_figure_for_logarithm(q_type, rec, entry_id, out_dir):
+    """
+    Generate a figure for an algebra logarithm question if applicable.
+    Returns the relative SVG path, or None.
+    """
+    if q_type not in FIGURE_TYPES_LOGARITHMS:
+        return None
+
+    var = sp.Symbol('x')
+    expr = rec.get("f")
+    asy = rec.get("asy")
+    direction = rec.get("dir", "+")
+    
+    if expr is None or asy is None:
+        return None
+
+    try:
+        if q_type == 'graph_log_function':
+            return fig_log_graph(expr, var, asy, direction, out_dir, entry_id)
+    except Exception as e:
+        print(f"Error generating log graph: {e}")
         return None
 
     return None

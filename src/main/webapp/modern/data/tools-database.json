@@ -286,6 +286,13 @@
       "description": "Cryptography CTF Generator - 39 ciphers, 6 challenge types, dynamic pipeline composition"
     },
     {
+      "name": "RSA CTF Generator",
+      "url": "ctf/rsa-ctf-generator.jsp",
+      "category": "CTF & Challenges",
+      "keywords": "RSA CTF generator RSA challenge Wiener attack Hastad broadcast Pollard p-1 common factor batch GCD padding oracle partial key leak ROCA multi-prime Franklin-Reiter side-channel",
+      "description": "RSA CTF Generator - 14 real-world RSA vulnerability types with solutions and hints"
+    },
+    {
       "name": "TOTP/HOTP Generator",
       "url": "totp-hotp.jsp",
       "category": "Cryptography",

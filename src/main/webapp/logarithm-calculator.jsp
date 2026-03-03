@@ -13,14 +13,16 @@
     <meta name="author" content="Anish Nath">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Logarithm Calculator with Steps - Solve Log Equations Free" />
-        <jsp:param name="toolDescription" value="Free logarithm calculator with step-by-step solutions. Solve, simplify, expand, and condense log equations. Supports ln, log base 2, log base 10, any base. Interactive graph, LaTeX export, Python compiler. No signup." />
+        <jsp:param name="toolName" value="Logarithm Calculator with Steps &amp; Worksheet Generator" />
+        <jsp:param name="toolDescription" value="Free logarithm calculator with step-by-step solutions and 2,000+ practice worksheet problems. Solve, simplify, expand, and condense log equations. Supports ln, log base 2, log base 10, any base. Generate printable log worksheets with answer keys for exam prep. No signup." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="logarithm-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="logarithm calculator, logarithm calculator with steps, log equation solver, solve logarithmic equations, simplify logarithms, expand logarithms, condense logarithms, log calculator, ln calculator, natural log calculator, log base 2 calculator, log base 10 calculator, logarithm rules, change of base formula, log solver step by step free" />
+        <jsp:param name="toolKeywords" value="logarithm calculator, logarithm calculator with steps, log equation solver, solve logarithmic equations, simplify logarithms, expand logarithms, condense logarithms, log calculator, ln calculator, natural log calculator, log base 2 calculator, log base 10 calculator, logarithm rules, change of base formula, log solver step by step free, logarithm worksheet, log worksheet with answers, logarithm practice problems, log worksheet generator, logarithm worksheet pdf, logarithm practice worksheet, log equations worksheet, condense logarithms worksheet, expand logarithms worksheet, natural log worksheet, log equations with answers, logarithm quiz generator" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Solve log equations step by step,Expand and condense using log rules,Simplify and evaluate expressions,Interactive Plotly graph,Built-in Python SymPy compiler,AI-powered fallback for complex problems,ln log log2 log10 any base,Copy LaTeX and share results,Live KaTeX preview,Dark mode support" />
+        <jsp:param name="toolFeatures" value="Solve log equations step by step,Expand and condense using log rules,Simplify and evaluate expressions,2000+ practice worksheet problems,Printable worksheet with answer key,31 question types,4 difficulty levels,Interactive Plotly graph,Built-in Python SymPy compiler,AI-powered fallback for complex problems,ln log log2 log10 any base,Copy LaTeX and share results,Live KaTeX preview,Dark mode support,Free with no signup" />
         <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="educationalLevel" value="High School, AP Precalculus, College Algebra, University" />
+        <jsp:param name="teaches" value="Logarithms, Log Equations, Natural Logarithm, Change of Base, Logarithm Rules, Expand Logarithms, Condense Logarithms, Log Derivatives, Log Integrals" />
         <jsp:param name="faq1q" value="What types of logarithm problems can this calculator solve?" />
         <jsp:param name="faq1a" value="This calculator solves logarithmic equations (log2(x) = 5), simplifies expressions (log(e^2) = 2), expands logarithms using product/quotient/power rules, condenses multiple logs into one, and evaluates to decimal values. It supports natural log (ln), common log (log10), binary log (log2), and any custom base." />
         <jsp:param name="faq2q" value="What is the difference between Solve, Expand, Condense, Simplify, and Evaluate?" />
@@ -31,6 +33,10 @@
         <jsp:param name="faq4a" value="ln (natural logarithm) is log base e (approximately 2.71828). log typically means log base 10 in everyday use. This calculator accepts both: type ln(x) or log(x) for natural log, and log10(x) for common log base 10. Use log2(x) for binary log or logb(x, base) for any custom base." />
         <jsp:param name="faq5q" value="Is this logarithm calculator free?" />
         <jsp:param name="faq5a" value="This logarithm calculator is completely free with no signup required. You get formula-based solving, AI step-by-step solutions, interactive graphs, a Python SymPy compiler, LaTeX export, and shareable URLs. Most computation runs in your browser for instant results." />
+        <jsp:param name="faq6q" value="Does this logarithm calculator include practice worksheets?" />
+        <jsp:param name="faq6a" value="Yes. This calculator includes a built-in worksheet generator with over 2,000 logarithm practice problems. You can filter by 31 question types (solve equations, expand, condense, change of base, log derivatives, log integrals, word problems, inequalities, and more) and 4 difficulty levels (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key, perfect for exam prep, homework review, or classroom quizzes." />
+        <jsp:param name="faq7q" value="What types of logarithm problems are in the worksheet?" />
+        <jsp:param name="faq7a" value="The worksheet covers 31 problem types: evaluate basic logs, solve single and multi-log equations, expand and condense logs (simple and complex), rewrite between log and exponential form, change of base, log inequalities, logarithmic differentiation, log derivatives and integrals, inverse properties, system of log equations, log limits, graphing log functions, domain of logs, and word problems. Problems range from basic textbook to scholar-level exam difficulty." />
     </jsp:include>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -148,7 +154,7 @@
 <section class="tool-description-section">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Solve logarithm problems using <strong>formula-based methods</strong> when possible, with <strong>AI fallback</strong> for complex cases. Supports <code>ln(x)</code>, <code>log(x)</code>, <code>log2(x)</code>, <code>log3(x)</code>, <code>log10(x)</code>, and <code>logb(x,base)</code> for any base. Solve equations, simplify, expand, condense, or evaluate. Live KaTeX preview.</p>
+            <p>Free online <strong>logarithm calculator</strong> with <strong>step-by-step solutions</strong> and a <strong>worksheet generator with 2,000+ practice problems</strong> and answer keys. Solve, simplify, expand, condense, or evaluate. Supports <code>ln(x)</code>, <code>log(x)</code>, <code>log2(x)</code>, <code>log10(x)</code>, and <code>logb(x,base)</code>. Formula-based solver with <strong>AI fallback</strong> for complex equations. Generate printable <strong>log worksheets</strong> filtered by 31 question types and 4 difficulty levels. Free, instant, no signup.</p>
         </div>
     </div>
 </section>
@@ -246,6 +252,18 @@
                         <button type="button" class="lc-example-chip" data-expr="log(e^2)">ln(e²)</button>
                         <button type="button" class="lc-example-chip" data-expr="log3(x+2)-log3(x)=2">log₃(x+2)-log₃(x)=2</button>
                     </div>
+                </div>
+
+                <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
+
+                <div class="tool-form-group">
+                    <label class="tool-form-label">Worksheet Generator</label>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin:0 0 0.5rem;">
+                        Generate a printable practice worksheet with random logarithm problems and answer key.
+                    </p>
+                    <button type="button" id="log-worksheet-btn" style="padding:0.5rem 1rem;font-size:0.8125rem;font-weight:600;border:1.5px solid var(--log-tool);border-radius:0.5rem;background:transparent;color:var(--log-tool);cursor:pointer;transition:all 0.15s;font-family:var(--font-sans);width:100%;" onmouseover="this.style.background='var(--log-tool)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--log-tool)'">
+                        &#128196; Print Worksheet
+                    </button>
                 </div>
 
                 <div class="tool-form-group">
@@ -1268,6 +1286,31 @@ window.toggleFaq = function(btn) {
         </div>
     </div>
 
+    <!-- Worksheet Generator Section -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:1rem;color:var(--text-primary);">Logarithm Worksheet Generator</h2>
+        <p style="color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;">This calculator includes a <strong>built-in worksheet generator</strong> with over <strong>2,000 logarithm practice problems</strong> and full answer keys. Click the <strong>Print Worksheet</strong> button in the sidebar (or the button below) to generate a randomly shuffled practice set filtered by question type and difficulty level &mdash; perfect for exam prep, homework review, or classroom quizzes.</p>
+        <div class="lc-edu-grid" style="margin-bottom:1.25rem;">
+            <div class="lc-edu-card" style="border-left:3px solid var(--log-tool);text-align:center;">
+                <h4>31 Question Types</h4>
+                <p>Evaluate, solve, expand, condense, change of base, log derivatives, integrals, inequalities, word problems, graphing, and more.</p>
+            </div>
+            <div class="lc-edu-card" style="border-left:3px solid #14b8a6;text-align:center;">
+                <h4>4 Difficulty Levels</h4>
+                <p>Basic, medium, hard, and scholar. Filter to match your course level &mdash; from introductory algebra to advanced exam practice.</p>
+            </div>
+            <div class="lc-edu-card" style="border-left:3px solid #2dd4bf;text-align:center;">
+                <h4>Full Answer Key</h4>
+                <p>Every worksheet comes with a complete answer key rendered in clean math notation. Toggle it on or off before generating.</p>
+            </div>
+            <div class="lc-edu-card" style="border-left:3px solid #99f6e4;text-align:center;">
+                <h4>Randomised Every Time</h4>
+                <p>Each worksheet is randomly shuffled from the 2,000+ question bank, so you get fresh practice every time you generate.</p>
+            </div>
+        </div>
+        <button type="button" id="log-worksheet-btn-below" style="padding:0.75rem 2rem;font-size:0.9375rem;font-weight:600;border:none;border-radius:0.5rem;background:var(--log-gradient);color:#fff;cursor:pointer;font-family:var(--font-sans);">&#128196; Generate Logarithm Worksheet</button>
+    </div>
+
     <!-- FAQ Section -->
     <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
         <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
@@ -1286,6 +1329,22 @@ window.toggleFaq = function(btn) {
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="faq-answer"><strong>Solve</strong> finds the variable value in a log equation (log&#x2082;(x) = 3 &rarr; x = 8). <strong>Expand</strong> breaks a single log into multiple logs using rules (log(x&sup2;y) &rarr; 2log(x) + log(y)). <strong>Condense</strong> combines multiple logs into one (2log(x) + log(y) &rarr; log(x&sup2;y)). <strong>Simplify</strong> reduces to the simplest form (log(e&sup2;) &rarr; 2). <strong>Evaluate</strong> computes a decimal result (log&#x2082;(10) &rarr; 3.32193).</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Does this logarithm calculator include practice worksheets?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Yes. This calculator includes a built-in worksheet generator with over 2,000 logarithm practice problems. You can filter by 31 question types (solve equations, expand, condense, change of base, log derivatives, log integrals, word problems, inequalities, and more) and 4 difficulty levels (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key, perfect for exam prep, self-study, or classroom quizzes.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What types of logarithm problems are in the worksheet?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The worksheet covers 31 problem types: evaluate basic logs, solve single and multi-log equations, expand and condense logs, rewrite between log and exponential form, change of base, log inequalities, logarithmic differentiation, log derivatives and integrals, inverse properties, system of log equations, log limits, graphing log functions, domain of logs, and word problems. Problems range from basic textbook style to scholar-level exam questions.</div>
         </div>
 
         <div class="faq-item">
@@ -1309,7 +1368,7 @@ window.toggleFaq = function(btn) {
                 Is this calculator free? Do I need to sign up?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">This logarithm calculator is completely free with no signup, no account, and no limits. You get formula-based solving, AI-powered step-by-step solutions, an interactive Plotly graph, Python SymPy compiler, LaTeX copy, and shareable URLs. Most computation runs in your browser for instant results.</div>
+            <div class="faq-answer">This logarithm calculator is completely free with no signup, no account, and no limits. You get formula-based solving, AI-powered step-by-step solutions, an interactive Plotly graph, Python SymPy compiler, LaTeX copy, shareable URLs, and a printable worksheet generator. Most computation runs in your browser for instant results.</div>
         </div>
     </div>
 </section>
@@ -1364,6 +1423,26 @@ window.toggleFaq = function(btn) {
 <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
+<script>
+(function() {
+    function openLogWorksheet() {
+        if (typeof WorksheetEngine !== 'undefined') {
+            WorksheetEngine.open({
+                jsonUrl: '<%=request.getContextPath()%>/worksheet/math/algebra/logarithms.json',
+                title: 'Logarithms',
+                accentColor: '#0d9488',
+                branding: '8gwifi.org',
+                defaultCount: 20
+            });
+        }
+    }
+    var btn = document.getElementById('log-worksheet-btn');
+    if (btn) btn.addEventListener('click', openLogWorksheet);
+    var btn2 = document.getElementById('log-worksheet-btn-below');
+    if (btn2) btn2.addEventListener('click', openLogWorksheet);
+})();
+</script>
 <%@ include file="modern/components/analytics.jsp" %>
 </body>
 </html>
