@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="doc" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#422006" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect x="16" y="16" width="480" height="480" rx="80" ry="80" fill="url(#bg)"/>
+
+  <!-- Binary/hex background -->
+  <g font-family="monospace" font-size="12" fill="#fff" opacity="0.05">
+    <text x="50" y="90">0x89 0x50 0x4E 0x47</text><text x="280" y="90">FILE PK</text>
+    <text x="60" y="420">PCAP ETHERNET</text><text x="300" y="420">tEXt</text>
+    <text x="50" y="450">0x46 0x49 0x4C 0x45</text><text x="310" y="450">IEND</text>
+  </g>
+
+  <!-- Document stack -->
+  <rect x="140" y="140" width="120" height="160" rx="8" ry="8" fill="url(#doc)" filter="url(#shadow)" stroke="#fcd34d" stroke-width="2"/>
+  <rect x="168" y="168" width="120" height="160" rx="8" ry="8" fill="url(#doc)" filter="url(#shadow)" stroke="#fcd34d" stroke-width="2" opacity="0.9"/>
+  <rect x="252" y="196" width="120" height="160" rx="8" ry="8" fill="url(#doc)" filter="url(#shadow)" stroke="#fcd34d" stroke-width="2" opacity="0.95"/>
+
+  <!-- Magnifying glass / forensic analysis -->
+  <g transform="translate(330,270)" filter="url(#shadow)">
+    <circle cx="40" cy="30" r="35" fill="none" stroke="#f59e0b" stroke-width="6" opacity="0.9"/>
+    <line x1="62" y1="52" x2="95" y2="85" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <!-- Flag tag -->
+  <g transform="translate(140,340)" opacity="0.9">
+    <rect x="0" y="0" width="70" height="28" rx="6" fill="#00ff41" opacity="0.2" stroke="#00ff41" stroke-width="1.5"/>
+    <text x="35" y="19" text-anchor="middle" font-family="monospace" font-weight="700" font-size="12" fill="#00ff41">FLAG</text>
+  </g>
+
+  <!-- CTF text -->
+  <text x="256" y="465" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="32" fill="#fff" opacity="0.15" letter-spacing="10">FORENSIC</text>
+</svg>
