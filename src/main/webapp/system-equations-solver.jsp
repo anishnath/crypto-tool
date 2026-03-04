@@ -285,6 +285,8 @@
     </div>
 </header>
 
+<%@ include file="modern/ads/ad-in-content-top.jsp" %>
+
 <main class="tool-page-container">
     <!-- ==================== INPUT COLUMN ==================== -->
     <div class="tool-input-column">
@@ -623,19 +625,19 @@ function toggleFaq(btn) {
 </script>
 
 <!-- Core Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/systems-solver-render.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/systems-solver-graph.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/systems-solver-export.js?v=<%=cacheVersion%>"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
+<script defer src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+<script defer src="<%=request.getContextPath()%>/js/systems-solver-render.js?v=<%=cacheVersion%>"></script>
+<script defer src="<%=request.getContextPath()%>/js/systems-solver-graph.js?v=<%=cacheVersion%>"></script>
+<script defer src="<%=request.getContextPath()%>/js/systems-solver-export.js?v=<%=cacheVersion%>"></script>
 <!-- Nerdamer CAS: symbolic parsing, linearity detection, nonlinear solving -->
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.min.js"></script>
 <script>window.SYSTEMS_SOLVER_CTX = "<%=request.getContextPath()%>";</script>
-<script src="<%=request.getContextPath()%>/js/systems-solver-core.js?v=<%=cacheVersion%>"></script>
+<script defer src="<%=request.getContextPath()%>/js/systems-solver-core.js?v=<%=cacheVersion%>"></script>
 
 <%@ include file="modern/components/analytics.jsp" %>
 </body>
