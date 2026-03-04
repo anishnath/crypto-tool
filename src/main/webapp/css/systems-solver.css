@@ -1,0 +1,645 @@
+/* Systems of Equations Solver - Component Styles */
+
+:root {
+    --sy-tool: #10b981;
+    --sy-tool-dark: #059669;
+    --sy-gradient: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    --sy-light: #d1fae5;
+}
+[data-theme="dark"] {
+    --sy-light: rgba(16, 185, 129, 0.15);
+}
+
+/* ===== Size Toggle (2×2 / 3×3) ===== */
+.sy-mode-toggle {
+    display: flex;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+.sy-mode-btn {
+    flex: 1;
+    padding: 0.5rem 0.25rem;
+    font-weight: 600;
+    font-size: 0.65rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.sy-mode-btn.active {
+    background: var(--sy-gradient);
+    color: #fff;
+}
+.sy-mode-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .sy-mode-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .sy-mode-btn.active { background: var(--sy-gradient); color: #fff; }
+
+/* ===== Method Selector Buttons ===== */
+.sy-method-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 1rem;
+}
+.sy-method-btn {
+    flex: 1;
+    min-width: 5rem;
+    padding: 0.4375rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+    white-space: nowrap;
+}
+.sy-method-btn.active {
+    background: var(--sy-gradient);
+    color: #fff;
+    border-color: transparent;
+}
+.sy-method-btn:hover:not(.active) {
+    background: var(--sy-light);
+    color: var(--sy-tool);
+    border-color: var(--sy-tool);
+}
+[data-theme="dark"] .sy-method-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .sy-method-btn.active { background: var(--sy-gradient); color: #fff; border-color: transparent; }
+[data-theme="dark"] .sy-method-btn:hover:not(.active) {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--sy-tool);
+    border-color: var(--sy-tool);
+}
+
+/* ===== Equation Input Grid ===== */
+.sy-eq-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.sy-eq-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr));
+    gap: 0.375rem;
+    align-items: center;
+}
+.sy-eq-row-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--sy-tool-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-width: 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+.sy-eq-cell {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.sy-eq-cell-label {
+    display: block;
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.2rem;
+    text-align: center;
+}
+.sy-eq-sign {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding-top: 1.1rem; /* align with inputs */
+    min-width: 1rem;
+    flex-shrink: 0;
+}
+.sy-eq-equals {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    padding-top: 1.1rem;
+    flex-shrink: 0;
+}
+.sy-input {
+    width: 100%;
+    padding: 0.4375rem 0.375rem;
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    text-align: center;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+}
+.sy-input:focus {
+    outline: none;
+    border-color: var(--sy-tool);
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.12);
+}
+.sy-input.sy-const {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: var(--sy-light);
+}
+[data-theme="dark"] .sy-input.sy-const {
+    background: rgba(16, 185, 129, 0.08);
+}
+.sy-input.sy-const:focus {
+    border-color: var(--sy-tool);
+}
+
+/* ===== Live Equation Preview ===== */
+.sy-eq-preview {
+    min-height: 2.25rem;
+    padding: 0.5rem 0.75rem;
+    border: 1.5px dashed var(--border);
+    border-radius: 0.5rem;
+    background: var(--bg-secondary);
+    font-size: 0.9375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    margin-bottom: 0.75rem;
+}
+.sy-eq-preview .katex { font-size: 1em; }
+.sy-eq-preview-sep {
+    width: 1.5px;
+    height: 1.25rem;
+    background: var(--border);
+    flex-shrink: 0;
+}
+
+/* ===== Mode Forms ===== */
+.sy-mode-form { display: none; }
+.sy-mode-form.active { display: block; }
+
+/* ===== Step Display ===== */
+.sy-step {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--sy-tool);
+    transition: background 0.15s;
+}
+.sy-step:hover { background: var(--bg-tertiary); }
+.sy-step-number {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--sy-gradient);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+.sy-step-content { flex: 1; min-width: 0; }
+.sy-step-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.3125rem;
+}
+.sy-step-plain {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.3125rem;
+    font-family: var(--font-mono);
+}
+.sy-step-math {
+    overflow-x: auto;
+    padding: 0.25rem 0;
+}
+.sy-step-math .katex { font-size: 0.9em; }
+.sy-step-math .katex-display { margin: 0; overflow-x: auto; overflow-y: hidden; }
+
+/* ===== Matrix Box ===== */
+.sy-matrix-box {
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    background: var(--sy-light);
+    border-radius: 0.375rem;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    overflow-x: auto;
+    margin: 0.25rem 0;
+}
+[data-theme="dark"] .sy-matrix-box {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+.sy-matrix-box .katex { font-size: 0.875em; }
+.sy-matrix-box .katex-display { margin: 0; }
+
+/* ===== Row Operation Label ===== */
+.sy-row-op {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--sy-tool-dark);
+    background: var(--sy-light);
+    border-radius: 0.25rem;
+    padding: 0.125rem 0.4rem;
+    margin-bottom: 0.25rem;
+}
+[data-theme="dark"] .sy-row-op {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+/* ===== Solution Badge ===== */
+.sy-solution-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.3125rem 0.875rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    margin-bottom: 0.75rem;
+}
+.sy-badge-unique {
+    background: #d1fae5;
+    color: #065f46;
+}
+.sy-badge-infinite {
+    background: #fef3c7;
+    color: #92400e;
+}
+.sy-badge-none {
+    background: #fee2e2;
+    color: #991b1b;
+}
+[data-theme="dark"] .sy-badge-unique {
+    background: rgba(16, 185, 129, 0.2);
+    color: #6ee7b7;
+}
+[data-theme="dark"] .sy-badge-infinite {
+    background: rgba(217, 119, 6, 0.2);
+    color: #fcd34d;
+}
+[data-theme="dark"] .sy-badge-none {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+.sy-badge-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.sy-badge-unique .sy-badge-dot { background: #10b981; }
+.sy-badge-infinite .sy-badge-dot { background: #d97706; }
+.sy-badge-none .sy-badge-dot { background: #ef4444; }
+
+/* ===== Solution Display ===== */
+.sy-solution-section {
+    padding: 0.875rem 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border: 1.5px solid var(--border);
+    margin-bottom: 0.75rem;
+}
+.sy-solution-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 0.375rem;
+}
+.sy-solution-math {
+    overflow-x: auto;
+    padding: 0.25rem 0;
+}
+.sy-solution-math .katex { font-size: 1em; }
+.sy-solution-math .katex-display { margin: 0.25rem 0; }
+.sy-solution-detail {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+}
+.sy-solution-vals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+.sy-solution-val {
+    padding: 0.25rem 0.625rem;
+    background: var(--sy-light);
+    border-radius: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--sy-tool-dark);
+}
+[data-theme="dark"] .sy-solution-val {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+}
+
+/* ===== KaTeX Matrix Display Block ===== */
+.sy-katex-display-block {
+    overflow-x: auto;
+    padding: 0.5rem 0;
+    text-align: center;
+}
+.sy-katex-display-block .katex { font-size: 0.9375em; }
+.sy-katex-display-block .katex-display { margin: 0.25rem 0; overflow-x: auto; overflow-y: hidden; }
+
+/* ===== Verification Card ===== */
+.sy-verify-card {
+    padding: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border: 1.5px solid var(--border);
+    margin-top: 0.5rem;
+}
+.sy-verify-card.sy-verify-pass {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: var(--sy-light);
+}
+[data-theme="dark"] .sy-verify-card.sy-verify-pass {
+    background: rgba(16, 185, 129, 0.08);
+}
+.sy-verify-card.sy-verify-warn {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: #fee2e2;
+}
+[data-theme="dark"] .sy-verify-card.sy-verify-warn {
+    background: rgba(239, 68, 68, 0.08);
+}
+.sy-verify-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--sy-tool-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+.sy-verify-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    padding: 0.1875rem 0;
+    font-family: var(--font-mono);
+}
+.sy-verify-row strong { color: var(--text-primary); }
+.sy-verify-check {
+    color: #10b981;
+    font-weight: 700;
+}
+.sy-verify-fail {
+    color: #ef4444;
+    font-weight: 700;
+}
+
+/* ===== Summary All-Methods Grid ===== */
+.sy-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.625rem;
+    margin-top: 0.5rem;
+}
+.sy-summary-card {
+    padding: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border: 1.5px solid var(--border);
+    transition: border-color 0.15s;
+}
+.sy-summary-card:hover { border-color: var(--sy-tool); }
+.sy-summary-card-title {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--sy-tool);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.375rem;
+}
+.sy-summary-result {
+    font-size: 0.8125rem;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+
+/* ===== Output Tabs ===== */
+.sy-output-tabs {
+    display: flex;
+    border-bottom: 1.5px solid var(--border);
+    background: var(--bg-secondary);
+    border-radius: 0.75rem 0.75rem 0 0;
+    overflow: hidden;
+}
+.sy-output-tab {
+    flex: 1;
+    padding: 0.625rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+    position: relative;
+}
+.sy-output-tab.active {
+    color: var(--sy-tool);
+    background: var(--bg-primary);
+}
+.sy-output-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--sy-tool);
+}
+.sy-output-tab:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+
+/* ===== Panels ===== */
+.sy-panel { display: none; }
+.sy-panel.active { display: block; }
+
+/* ===== Method Badge ===== */
+.sy-method-badge {
+    display: inline-block;
+    background: var(--sy-gradient);
+    color: #fff;
+    padding: 0.2rem 0.625rem;
+    border-radius: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+/* ===== Quick Examples ===== */
+.sy-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.sy-example-chip {
+    padding: 0.3rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    border-radius: 2rem;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-mono);
+}
+.sy-example-chip:hover {
+    background: var(--sy-light);
+    color: var(--sy-tool);
+    border-color: var(--sy-tool);
+}
+
+/* ===== Callouts ===== */
+.sy-callout {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+}
+.sy-callout-icon { font-size: 1.25rem; flex-shrink: 0; }
+.sy-callout-text { font-size: 0.8125rem; line-height: 1.6; color: var(--text-secondary); }
+.sy-callout-tip { background: #ecfdf5; border-left: 3px solid #10b981; }
+.sy-callout-info { background: #eff6ff; border-left: 3px solid #3b82f6; }
+[data-theme="dark"] .sy-callout-tip { background: rgba(16, 185, 129, 0.1); }
+[data-theme="dark"] .sy-callout-info { background: rgba(59, 130, 246, 0.1); }
+
+/* ===== Worksheet Button ===== */
+.sy-worksheet-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 1.5px solid var(--sy-tool);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--sy-tool);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+}
+.sy-worksheet-btn:hover {
+    background: var(--sy-tool);
+    color: #fff;
+}
+
+/* ===== Educational Content ===== */
+.sy-edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+.sy-edu-card {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+}
+.sy-edu-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.375rem;
+}
+.sy-edu-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+.sy-law-card {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--sy-tool);
+}
+.sy-law-card h4 {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.375rem;
+}
+.sy-law-formula {
+    padding: 0.375rem 0.5rem;
+    background: var(--sy-light);
+    border-radius: 0.375rem;
+    margin-bottom: 0.375rem;
+    overflow-x: auto;
+}
+.sy-law-formula .katex { font-size: 0.85em; }
+
+/* ===== Animations ===== */
+.sy-anim {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.sy-anim.sy-visible { opacity: 1; transform: translateY(0); }
+.sy-anim-d1 { transition-delay: 0.1s; }
+.sy-anim-d2 { transition-delay: 0.2s; }
+.sy-anim-d3 { transition-delay: 0.3s; }
+.sy-anim-d4 { transition-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .sy-anim { opacity: 1; transform: none; transition: none; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+    .sy-eq-row { grid-template-columns: repeat(3, 1fr); gap: 0.25rem; }
+    .sy-method-toggle { gap: 0.25rem; }
+    .sy-method-btn { min-width: 4rem; font-size: 0.625rem; }
+    .sy-summary-grid { grid-template-columns: 1fr 1fr; }
+    .sy-edu-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 400px) {
+    .sy-summary-grid { grid-template-columns: 1fr; }
+}
