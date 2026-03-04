@@ -393,9 +393,7 @@
     </div>
 
     <!-- ==================== ADS COLUMN ==================== -->
-    <div class="tool-ads-column">
-        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
-    </div>
+    <div class="tool-ads-column"><%@ include file="modern/ads/ad-three-column.jsp" %></div>
 </main>
 
 <!-- Mobile Ad Fallback -->
