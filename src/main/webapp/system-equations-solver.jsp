@@ -21,7 +21,7 @@
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="system-equations-solver.jsp" />
         <jsp:param name="toolKeywords" value="system of equations solver, solve system of equations, simultaneous equations solver, 2x2 system solver, 3x3 system solver, systems of equations step by step, cramer's rule calculator, gaussian elimination calculator, substitution method calculator, nonlinear system solver, linear system solver, solve simultaneous equations online, systems of equations calculator, algebra solver" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="system-equations-solver.svg" />
         <jsp:param name="toolFeatures" value="Linear and nonlinear system solving,Step-by-step Cramer's rule with determinants,Gaussian elimination with row operation trace,Substitution method with full algebraic steps,Matrix inversion A-inverse times B,All-methods comparison mode,Interactive graph of intersection curves,500+ printable practice worksheets with answer keys" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="educationalLevel" value="High School, College, AP Precalculus, Linear Algebra" />
