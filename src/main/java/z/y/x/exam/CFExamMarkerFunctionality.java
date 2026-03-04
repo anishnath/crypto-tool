@@ -6,6 +6,11 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.JsonElement;
 
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.ConsumptionProbe;
+import io.github.bucket4j.Refill;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,12 +23,14 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 /**
@@ -37,8 +44,37 @@ import java.util.regex.Pattern;
  */
 public class CFExamMarkerFunctionality extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
+
     private final Gson gson = new Gson();
+
+    // ── TikZ AI rate limiting (costs real money per call) ──
+    // 5 generations per hour sustained, burst of 2 per 5 minutes
+    private static final int TIKZ_PER_HOUR   = 5;
+    private static final int TIKZ_BURST      = 2;
+    private static final int MAX_TIKZ_BUCKETS = 10_000;
+    private static final Map<String, Bucket> tikzBuckets = new ConcurrentHashMap<>();
+
+    private Bucket resolveTikzBucket(String ip) {
+        if (tikzBuckets.size() > MAX_TIKZ_BUCKETS) tikzBuckets.clear();
+        return tikzBuckets.computeIfAbsent(ip, k -> {
+            Bandwidth sustained = Bandwidth.classic(TIKZ_PER_HOUR,
+                    Refill.greedy(TIKZ_PER_HOUR, Duration.ofHours(1)));
+            Bandwidth burst = Bandwidth.classic(TIKZ_BURST,
+                    Refill.intervally(TIKZ_BURST, Duration.ofMinutes(5)));
+            return Bucket.builder().addLimit(sustained).addLimit(burst).build();
+        });
+    }
+
+    private String getClientIp(HttpServletRequest req) {
+        String xff = req.getHeader("X-Forwarded-For");
+        if (xff != null && !xff.isEmpty()) {
+            String ip = xff.split(",")[0].trim();
+            if (!ip.isEmpty()) return ip;
+        }
+        String realIp = req.getHeader("X-Real-IP");
+        if (realIp != null && !realIp.isEmpty()) return realIp.trim();
+        return req.getRemoteAddr();
+    }
     
     /**
      * Get API base URL from environment variable
@@ -79,7 +115,8 @@ public class CFExamMarkerFunctionality extends HttpServlet {
                path.contains("/api/mark") ||
                path.contains("/api/mark-batch") ||
                path.contains("/api/mark-exam") ||
-               path.contains("/api/math-steps");
+               path.contains("/api/math-steps") ||
+               path.contains("/api/tikz-generate");
     }
     
     @Override
@@ -184,6 +221,9 @@ public class CFExamMarkerFunctionality extends HttpServlet {
                     break;
                 case "math_steps":
                     handleMathSteps(request, response);
+                    break;
+                case "tikz_generate":
+                    handleTikzGenerate(request, response);
                     break;
                 case "upsert_user":
                     handleUpsertUser(request, response);
@@ -616,6 +656,56 @@ public class CFExamMarkerFunctionality extends HttpServlet {
         errorMap.put("error", error);
         errorMap.put("message", message);
         out.println(gson.toJson(errorMap));
+    }
+
+    // Max description length for TikZ generation
+    private static final int MAX_TIKZ_DESC_LENGTH = 500;
+
+    /**
+     * Generate TikZ code from natural language description.
+     * POST /CFExamMarkerFunctionality?action=tikz_generate
+     * Body: { "description": "..." }
+     */
+    private void handleTikzGenerate(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Rate limit: 5/hour sustained, burst 2/5 min per IP
+        String clientIp = getClientIp(request);
+        Bucket bucket = resolveTikzBucket(clientIp);
+        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+        if (!probe.isConsumed()) {
+            long waitSeconds = Math.max(1, probe.getNanosToWaitForRefill() / 1_000_000_000);
+            response.setStatus(429);
+            response.setHeader("Retry-After", String.valueOf(waitSeconds));
+            sendError(response, 429, "rate_limit_exceeded",
+                    "AI generation limit reached. Try again in " + waitSeconds + "s (limit: " + TIKZ_PER_HOUR + " per hour)");
+            return;
+        }
+        response.setHeader("X-RateLimit-Remaining", String.valueOf(probe.getRemainingTokens()));
+
+        String requestBody = readRequestBody(request);
+
+        JsonObject payload;
+        try {
+            JsonElement parsed = new JsonParser().parse(requestBody);
+            payload = parsed.getAsJsonObject();
+        } catch (JsonSyntaxException | IllegalStateException e) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_json", "Request body must be valid JSON");
+            return;
+        }
+
+        String description = getJsonString(payload, "description");
+        if (description == null || description.length() < 3) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "missing_field", "description is required (min 3 chars)");
+            return;
+        }
+        if (description.length() > MAX_TIKZ_DESC_LENGTH) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field",
+                    "description too long (max " + MAX_TIKZ_DESC_LENGTH + " chars)");
+            return;
+        }
+
+        makeApiRequest(getApiBaseUrl() + "/api/tikz-generate", "POST", requestBody, response, true);
     }
 
     /**

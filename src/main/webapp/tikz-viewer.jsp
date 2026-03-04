@@ -152,6 +152,43 @@
         }
 
         /* Zoom Controls */
+        /* AI Generator Panel */
+        .tikz-ai-panel {
+            padding: 0.625rem 0.875rem 0.5rem;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            background: linear-gradient(135deg, #f5f3ff 0%, #eff6ff 100%);
+        }
+        [data-theme="dark"] .tikz-ai-panel {
+            background: linear-gradient(135deg, #1e1b4b22 0%, #1e3a5f22 100%);
+        }
+        .tikz-ai-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .tikz-ai-input {
+            flex: 1;
+            min-width: 0;
+            padding: 0.4rem 0.65rem;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.375rem;
+            font-size: 0.82rem;
+            background: var(--bg-primary, #fff);
+            color: var(--text-primary, #0f172a);
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .tikz-ai-input:focus { border-color: var(--primary, #6366f1); }
+        .tikz-ai-btn { white-space: nowrap; font-size: 0.82rem; }
+        .tikz-ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .tikz-ai-hint {
+            font-size: 0.75rem;
+            color: var(--text-secondary, #475569);
+            margin-top: 0.35rem;
+            padding-left: 1.5rem;
+        }
+        .tikz-ai-hint.error { color: #dc2626; }
+
         .tikz-zoom-controls {
             position: absolute;
             bottom: 1rem;
@@ -599,6 +636,20 @@
                     TikZ Editor
                 </div>
 
+                <!-- AI Generator -->
+                <div class="tikz-ai-panel">
+                    <div class="tikz-ai-row">
+                        <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="flex-shrink:0;color:var(--primary)"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062Zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a24.767 24.767 0 0 1-1.873-.183.25.25 0 0 0-.114.484c.4.187.048.54.396.54.306 0 .567-.211.636-.507l.893-.87.918.887a.25.25 0 1 0 .348-.357l-.918-.888.92-.899a.25.25 0 0 0-.07-.375Z"/><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z"/></svg>
+                        <input type="text" id="tikz-ai-input" class="tikz-ai-input"
+                               placeholder="Describe your diagram… e.g. binary tree with 7 nodes"
+                               maxlength="500" autocomplete="off" />
+                        <button id="tikz-ai-btn" class="tool-btn tool-btn-primary tikz-ai-btn" type="button">
+                            Generate
+                        </button>
+                    </div>
+                    <div id="tikz-ai-hint" class="tikz-ai-hint" style="display:none;"></div>
+                </div>
+
                 <!-- Toolbar -->
                 <div class="tool-actions-bar">
                     <button id="btn-render" class="tool-btn tool-btn-primary" aria-label="Render TikZ diagram">
@@ -882,6 +933,122 @@
 
     <!-- TikZ Viewer JS -->
     <script src="<%=request.getContextPath()%>/js/tikz-viewer.js"></script>
+
+    <!-- AI Generate: Describe → TikZ -->
+    <script>
+    (function() {
+        const btn = document.getElementById('tikz-ai-btn');
+        const input = document.getElementById('tikz-ai-input');
+        const hint = document.getElementById('tikz-ai-hint');
+
+        function formatTikz(code) {
+            // Normalize line endings and collapse all whitespace runs into single spaces
+            code = code.replace(/\r\n|\r/g, '\n').replace(/[ \t]+/g, ' ').trim();
+
+            // Ensure each TikZ command starts on its own line.
+            // Split on semicolons (statement terminators) and on \begin / \end boundaries.
+            // Also split before \node, \draw, \fill, \filldraw, \path, \clip, \coordinate,
+            // \foreach, \pgf*, child, edge, and comment lines (%).
+            const BREAK_BEFORE = /(?=\\(?:begin|end|node|draw|fill(?:draw)?|path|clip|coordinate|foreach|pgf\w*|tikzset|usetikzlibrary)|(?<=;)\s*(?=\S)|^\s*%)/gm;
+
+            // Step 1: put a newline after every semicolon
+            code = code.replace(/;\s*/g, ';\n');
+
+            // Step 2: put a newline before key command words (not inside brackets)
+            const CMDS = /(?<![\[,])\s*(\\(?:node|draw|fill(?:draw)?|path|clip|coordinate|foreach|tikzset))\b/g;
+            code = code.replace(CMDS, '\n$1');
+
+            // Step 3: newline before \begin and \end
+            code = code.replace(/\s*(\\begin\{)/g, '\n$1');
+            code = code.replace(/\s*(\\end\{)/g, '\n$1');
+
+            // Step 4: split lines and indent
+            const lines = code.split('\n');
+            let depth = 0;
+            const INDENT = '  ';
+            const result = [];
+
+            for (let raw of lines) {
+                const line = raw.trim();
+                if (!line) continue;
+
+                // Decrease indent before \end
+                if (/^\\end\{/.test(line)) depth = Math.max(0, depth - 1);
+
+                result.push(INDENT.repeat(depth) + line);
+
+                // Increase indent after \begin
+                if (/^\\begin\{/.test(line)) depth++;
+            }
+
+            return result.join('\n');
+        }
+
+        function showHint(msg, isError) {
+            hint.textContent = msg;
+            hint.className = 'tikz-ai-hint' + (isError ? ' error' : '');
+            hint.style.display = msg ? 'block' : 'none';
+        }
+
+        async function generate() {
+            const desc = input.value.trim();
+            if (!desc) { input.focus(); return; }
+
+            btn.disabled = true;
+            btn.textContent = 'Generating…';
+            showHint('', false);
+
+            try {
+                const resp = await fetch('<%=request.getContextPath()%>/CFExamMarkerFunctionality?action=tikz_generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ description: desc })
+                });
+                const data = await resp.json();
+
+                if (resp.status === 429) {
+                    const wait = resp.headers.get('Retry-After') || '60';
+                    showHint('\u26a0\ufe0f Rate limit reached (5 per hour). Try again in ' + wait + 's.', true);
+                    return;
+                }
+                if (!resp.ok || data.error) {
+                    showHint(data.message || data.error || 'Generation failed', true);
+                    return;
+                }
+
+                // Build preamble from libraries
+                let preamble = '';
+                if (data.libraries && data.libraries.length > 0) {
+                    preamble = '\\usetikzlibrary{' + data.libraries.join(',') + '}';
+                }
+
+                // Format and load code + preamble into editor and auto-render
+                const formatted = formatTikz(data.code || '');
+                if (window.tikzLoadCode) {
+                    window.tikzLoadCode(formatted, preamble);
+                } else {
+                    const ta = document.getElementById('tikzInput');
+                    if (ta) ta.value = (preamble ? preamble + '\n\n' : '') + formatted;
+                    const renderBtn = document.getElementById('btn-render');
+                    if (renderBtn) renderBtn.click();
+                }
+
+                showHint((data.title ? '\u2728 ' + data.title + ' — ' : '\u2728 ') + (data.hint || 'Diagram generated'), false);
+
+            } catch (e) {
+                showHint('Network error: ' + e.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Generate';
+            }
+        }
+
+        btn.addEventListener('click', generate);
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') generate();
+        });
+    })();
+    </script>
 
 </body>
 </html>

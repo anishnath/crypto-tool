@@ -693,6 +693,9 @@ ${bodyTikz}
     render();
   }
 
+  // Expose for AI generate panel
+  window.tikzLoadCode = loadExample;
+
   function populateExamples() {
     const menu = $('examples-menu');
     Object.keys(EXAMPLES).forEach(category => {
@@ -827,6 +830,9 @@ ${bodyTikz}
         'Cmd-Enter': render
       }
     });
+
+    // Expose editor globally for AI generate panel
+    window.tikzEditor = editor;
 
     // Auto-render on change if enabled (skip when setValue programmatically)
     editor.on('change', () => {
