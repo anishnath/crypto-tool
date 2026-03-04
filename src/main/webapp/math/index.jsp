@@ -40,7 +40,8 @@
           {"@type": "ListItem", "position": 4, "name": "Significant Figures Calculator", "url": "https://8gwifi.org/significant-figures-calculator.jsp"},
           {"@type": "ListItem", "position": 5, "name": "Quadratic Equation Solver", "url": "https://8gwifi.org/quadratic-solver.jsp"},
           {"@type": "ListItem", "position": 6, "name": "System of Equations Solver", "url": "https://8gwifi.org/linear-equations-solver.jsp"},
-          {"@type": "ListItem", "position": 7, "name": "Inequality Solver", "url": "https://8gwifi.org/inequality-solver.jsp"},
+          {"@type": "ListItem", "position": 7, "name": "Systems of Equations Solver — Step-by-Step", "url": "https://8gwifi.org/system-equations-solver.jsp"},
+          {"@type": "ListItem", "position": 8, "name": "Inequality Solver", "url": "https://8gwifi.org/inequality-solver.jsp"},
           {"@type": "ListItem", "position": 8, "name": "24 Game Solver", "url": "https://8gwifi.org/24-game-solver.jsp"},
           {"@type": "ListItem", "position": 9, "name": "Taylor & Maclaurin Series Calculator", "url": "https://8gwifi.org/series-calculator.jsp"},
           {"@type": "ListItem", "position": 10, "name": "Derivative Calculator", "url": "https://8gwifi.org/derivative-calculator.jsp"},
@@ -406,6 +407,22 @@
                     <div class="tool-badges">
                         <span class="badge badge-steps">Steps</span>
                         <span class="badge badge-python">Python</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/system-equations-solver.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #10b981;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #10b981, #0d9488);">f(x,y)</div>
+                        <div>
+                            <h3>Systems of Equations Solver</h3>
+                            <div class="tool-formula">Linear &amp; nonlinear, 2&times;2 &amp; 3&times;3</div>
+                        </div>
+                    </div>
+                    <p>Solve linear and nonlinear systems step-by-step using Cramer's rule, Gaussian elimination, substitution, or matrix inversion. Plots intersection curves.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                        <span class="badge badge-new">New</span>
                     </div>
                 </a>
 
