@@ -6,6 +6,7 @@ import { buildLinearSystemPrompt } from './linear-system.js';
 import { buildPolynomialPrompt } from './polynomial.js';
 import { buildVectorPrompt } from './vector.js';
 import { buildTrigonometryPrompt } from './trigonometry.js';
+import { buildTikzPrompt } from './tikz.js';
 
 const ALLOWED_ORIGINS = new Set([
   'http://localhost:8080',
@@ -1713,6 +1714,49 @@ async function handleGetUserAttempts(userId, request, env) {
   });
 }
 
+/**
+ * POST /api/tikz-generate
+ * Body: { description: string }
+ * Generates TikZ code from a natural language description using GPT.
+ */
+async function handleTikzGenerate(request, env) {
+  let payload;
+  try {
+    payload = await request.json();
+  } catch {
+    return jsonResponse({ error: 'Invalid JSON body' }, { status: 400 });
+  }
+
+  const { description } = payload;
+  if (!description || description.trim().length < 3) {
+    return jsonResponse({ error: 'Missing or too short: description' }, { status: 400 });
+  }
+  if (description.length > 500) {
+    return jsonResponse({ error: 'Description too long (max 500 chars)' }, { status: 400 });
+  }
+
+  try {
+    const prompt = buildTikzPrompt(description.trim());
+    const result = await callOpenAI(prompt, env, {
+      model: 'gpt-4o-mini',
+      temperature: 0.2,
+      maxTokens: 1200,
+      systemMessage: 'You are an expert TikZ programmer. Always respond with valid JSON only, no markdown, no explanation outside the JSON object.'
+    });
+
+    return jsonResponse({
+      success: true,
+      title: result.title || '',
+      libraries: result.libraries || [],
+      code: result.code || '',
+      hint: result.hint || ''
+    });
+  } catch (e) {
+    console.error('TikZ generate error:', e);
+    return jsonResponse({ error: e.message || 'Failed to generate TikZ code' }, { status: 500 });
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -1846,6 +1890,16 @@ export default {
           return withCors(authError, reqOrigin);
         }
         const r = await handleMathSteps(request, env, ctx);
+        return withCors(r, reqOrigin);
+      }
+
+      // POST /api/tikz-generate - Natural language → TikZ code
+      if (pathname === '/api/tikz-generate' && request.method === 'POST') {
+        const authError = requireApiKey(request, env);
+        if (authError) {
+          return withCors(authError, reqOrigin);
+        }
+        const r = await handleTikzGenerate(request, env);
         return withCors(r, reqOrigin);
       }
 

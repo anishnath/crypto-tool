@@ -541,11 +541,31 @@ Response:
 
 ---
 
+## Math Steps Cache (D1)
+
+The `/api/math-steps` endpoint caches AI-generated step-by-step solutions in `math_steps_cache`. After changes to expression normalization (e.g. `sin3x` → `sin(3*x)`) in integral/derivative/limit calculators, the cache may serve incorrect or stale steps.
+
+### Inspect remote D1
+```bash
+./scripts/inspect-d1-math-cache.sh
+```
+
+### Rebuild (clear) cache
+```bash
+./scripts/rebuild-math-steps-cache.sh
+```
+
+Both scripts load `.dev.vars` if present. Add `CLOUDFLARE_API_TOKEN=…` to `.dev.vars` for remote D1 access (create at [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens)). The cache will repopulate as users request steps.
+
+---
+
 ## Database Schema
 
 ### Tables
 | Table | Description |
 |-------|-------------|
+| `math_steps_cache` | Caches AI math step solutions (integrate, differentiate, etc.) |
+| `math_steps_requests` | Request log for analytics |
 | `chapters` | Course chapters by subject (e.g., CBSE Class 10 Math chapters) |
 | `topics` | Topics within chapters |
 | `exam_sets` | Practice question sets (full, chapter, topic tests) |

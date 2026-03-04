@@ -1,0 +1,11 @@
+{
+  "name": "cf-exam-marker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "seed-math-cache": "node scripts/seed-math-cache.js"
+  },
+  "dependencies": {
+    "nerdamer": "1.1.13"
+  }
+}
