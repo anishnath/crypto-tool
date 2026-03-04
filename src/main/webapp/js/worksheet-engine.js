@@ -743,17 +743,24 @@ function showWorksheet(questions, opts, showAnswers) {
         qText.innerHTML = renderInlineLatex(q.question_text);
         qDiv.appendChild(qText);
 
-        // The actual math expression — field name varies by generator:
-        //   logarithm.py  → expression_latex
-        //   derivatives.py → function_latex
-        //   integrals.py  → integrand_latex
-        //   limits / series / vector → math already embedded in question_text via \(...\)
+        // Separate expression block — shown when the expression isn't already embedded in
+        // question_text. Strategy: normalize whitespace in both strings and check if
+        // expression_latex content appears inside question_text.
+        //   • Integrals/Derivatives: q_text = "Evaluate: \( \int 3x^2\,dx \)" — the
+        //     integrand "3x^2" IS inside q_text → skip (would be redundant).
+        //   • Logarithms "Find the exact solution for \( x \).": expression
+        //     "\log_2(4x-3)=3" is NOT in q_text → show the expression block.
         var exprLatex = q.expression_latex || q.function_latex || q.integrand_latex || '';
         if (exprLatex) {
-            var exprEl = document.createElement('div');
-            exprEl.className = 'we-ws-q-expr';
-            exprEl.setAttribute('data-katex-display', exprLatex);
-            qDiv.appendChild(exprEl);
+            var normExpr = exprLatex.replace(/\s+/g, '');
+            var normQ    = (q.question_text || '').replace(/\s+/g, '');
+            var alreadyInQ = normExpr.length > 0 && normQ.indexOf(normExpr) !== -1;
+            if (!alreadyInQ) {
+                var exprEl = document.createElement('div');
+                exprEl.className = 'we-ws-q-expr';
+                exprEl.setAttribute('data-katex-display', exprLatex);
+                qDiv.appendChild(exprEl);
+            }
         }
 
         if (q.figure_svg) {

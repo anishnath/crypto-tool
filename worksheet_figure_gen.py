@@ -606,6 +606,10 @@ FIGURE_TYPES_LOGARITHMS = {
     'graph_log_function'
 }
 
+FIGURE_TYPES_SYSTEMS = {
+    'solve_by_graphing'
+}
+
 
 def generate_figure_for_limit(q_type, rec, entry_id, out_dir):
     """
@@ -826,6 +830,75 @@ def generate_figure_for_logarithm(q_type, rec, entry_id, out_dir):
             return fig_log_graph(expr, var, asy, direction, out_dir, entry_id)
     except Exception as e:
         print(f"Error generating log graph: {e}")
+        return None
+
+    return None
+
+def fig_system_intersection(eq1_lhs, eq1_rhs, eq2_lhs, eq2_rhs, var_x, var_y, ans_x, ans_y, out_dir, qid):
+    """
+    Draw a system of equations graph with two intersecting lines.
+    """
+    fig, ax = _create_fig()
+
+    xs = np.linspace(-10, 10, N_POINTS)
+    
+    # eq1: A*x + B*y = C  => y = (C - A*x) / B
+    # To get explicit form, we solve for y
+    try:
+        y1_expr = sp.solve(sp.Eq(eq1_lhs, eq1_rhs), var_y)[0]
+        y1s = _safe_eval(y1_expr, var_x, xs)
+        ax.plot(xs, y1s, color=C_CURVE, linewidth=1.8, label='Eq 1')
+    except Exception:
+        pass
+        
+    try:
+        y2_expr = sp.solve(sp.Eq(eq2_lhs, eq2_rhs), var_y)[0]
+        y2s = _safe_eval(y2_expr, var_x, xs)
+        ax.plot(xs, y2s, color=C_TANGENT, linewidth=1.8, label='Eq 2')
+    except Exception:
+        pass
+
+    # Intersection point
+    if ans_x is not None and ans_y is not None:
+        ax.plot(ans_x, ans_y, 'o', color=C_POINT, markersize=5, zorder=5)
+        ax.annotate(f'({ans_x:.2g}, {ans_y:.2g})', (ans_x, ans_y),
+                    textcoords="offset points", xytext=(5, 8),
+                    fontsize=6.5, color=C_POINT, fontweight='bold')
+        
+        # dynamic window
+        ax.set_xlim(-10 if abs(ans_x) < 8 else ans_x - 5, 10 if abs(ans_x) < 8 else ans_x + 5)
+        ax.set_ylim(-10 if abs(ans_y) < 8 else ans_y - 5, 10 if abs(ans_y) < 8 else ans_y + 5)
+    else:
+        ax.set_xlim(-10, 10)
+        ax.set_ylim(-10, 10)
+
+    ax.set_xlabel('x', fontsize=7, color=C_AXIS)
+    ax.set_ylabel('y', fontsize=7, color=C_AXIS)
+
+    fname = f'system_graph_{qid:04d}.svg'
+    return save_svg(fig, out_dir, fname)
+
+def generate_figure_for_system_equations(q_type, rec, entry_id, out_dir):
+    """
+    Generate a figure for a system of equations if applicable.
+    """
+    if q_type not in FIGURE_TYPES_SYSTEMS:
+        return None
+
+    try:
+        if q_type == 'solve_by_graphing':
+            eq1_lhs = rec.get("eq1_lhs")
+            eq1_rhs = rec.get("eq1_rhs")
+            eq2_lhs = rec.get("eq2_lhs")
+            eq2_rhs = rec.get("eq2_rhs")
+            var_x = rec.get("var_x")
+            var_y = rec.get("var_y")
+            ans_x = rec.get("ans_x")
+            ans_y = rec.get("ans_y")
+            
+            return fig_system_intersection(eq1_lhs, eq1_rhs, eq2_lhs, eq2_rhs, var_x, var_y, ans_x, ans_y, out_dir, entry_id)
+    except Exception as e:
+        print(f"Error generating system graph: {e}")
         return None
 
     return None
