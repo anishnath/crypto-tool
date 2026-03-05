@@ -1764,4 +1764,67 @@
         };
     });
 
+    // ---- Steiner Funnel Preview ----
+    VisualMath.register('steiner-preview', function (p, container) {
+        var W, H, t = 0;
+
+        // 5 concentric circuits: radius fraction, N elements, isA direction
+        var circuits = [
+            { rf: 0.88, N: 4, isA: true  },
+            { rf: 0.67, N: 6, isA: false },
+            { rf: 0.48, N: 8, isA: true  },
+            { rf: 0.31, N: 5, isA: false },
+            { rf: 0.17, N: 3, isA: true  }
+        ];
+
+        p.setup = function () {
+            W = container.clientWidth; H = container.clientHeight || 180;
+            p.createCanvas(W, H);
+        };
+
+        p.draw = function () {
+            var C = VisualMath.palette();
+            p.background(C.bg);
+            t += 0.014;
+
+            var cx = W / 2, cy = H / 2;
+            var maxR = Math.min(W, H) * 0.43;
+
+            for (var ci = 0; ci < circuits.length; ci++) {
+                var c   = circuits[ci];
+                var r   = c.rf * maxR;
+                var dir = c.isA ? 1 : -1;
+
+                // faint guide ring
+                p.noFill();
+                p.stroke(C.grid); p.strokeWeight(0.7);
+                p.ellipse(cx, cy, r * 2, r * 2);
+
+                // helix trail: draw arc segments connecting successive elements
+                p.noFill();
+                p.stroke(c.isA ? C.sin : C.cos); p.strokeWeight(1.4);
+                p.beginShape();
+                for (var step = 0; step <= 60; step++) {
+                    var frac  = step / 60;
+                    var theta = dir * 2 * Math.PI * frac + t * dir * 0.6;
+                    p.vertex(cx + Math.cos(theta) * r, cy + Math.sin(theta) * r);
+                }
+                p.endShape();
+
+                // sample dots at θ = 2π·n/(N+1)
+                for (var n = 1; n <= c.N; n++) {
+                    var theta = dir * 2 * Math.PI * n / (c.N + 1) + t * dir * 0.6;
+                    var dx = Math.cos(theta) * r;
+                    var dy = Math.sin(theta) * r;
+                    p.fill(c.isA ? C.sin : C.cos); p.noStroke();
+                    p.ellipse(cx + dx, cy + dy, 5, 5);
+                }
+            }
+
+            // centre point
+            p.fill(C.accent); p.noStroke();
+            p.ellipse(cx, cy, 5, 5);
+        };
+    });
+
 })();

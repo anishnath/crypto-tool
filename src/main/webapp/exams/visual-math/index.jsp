@@ -457,6 +457,17 @@
                             </div>
                         </a>
 
+                        <!-- 36. Steiner Funnel - ACTIVE -->
+                        <a href="<%=request.getContextPath()%>/exams/visual-math/steiner-funnel.jsp" class="vm-card"
+                            data-category="geometry">
+                            <div class="vm-card-preview" id="preview-steiner"></div>
+                            <div class="vm-card-body">
+                                <span class="vm-card-tag geometry">Geometry</span>
+                                <h3>Steiner Funnel</h3>
+                                <p class="vm-card-desc">Watch A(x,n) and B(x,n) circuits trace 3-D helices forming a tapering funnel. A spirals CCW, B spirals CW. Drag to rotate.</p>
+                            </div>
+                        </a>
+
                     </div>
             </div>
 
@@ -778,6 +789,7 @@
                         VisualMath.preview('preview-matrix-calc', 'matrix-calc-preview');
                         VisualMath.preview('preview-integration', 'integration-preview');
                         VisualMath.preview('preview-combinatorics', 'combinatorics-preview');
+                        VisualMath.preview('preview-steiner', 'steiner-preview');
 
                         // Filter chips
                         var chips = document.querySelectorAll('.vm-chip');
