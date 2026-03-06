@@ -397,9 +397,120 @@
         setRange(-5, 5, 0, 0.5);
         break;
 
+      // ============ CALCULUS — INTEGRALS & LIMITS ============
+      case 'antiderivative_poly':
+        gcSetExpr(firstId, 'cartesian', 'x^2', '#3b82f6');
+        (function(){
+          var cb = document.getElementById('show-antiderivative-'+firstId);
+          if (cb){ cb.checked = true; toggleAntiderivative(firstId); }
+          var cd = document.getElementById('show-derivative-'+firstId);
+          if (cd){ cd.checked = true; toggleDerivative(firstId); }
+        })();
+        setRange(-4, 4, -5, 10);
+        break;
+      case 'antiderivative_trig':
+        gcSetExpr(firstId, 'cartesian', 'sin(x)', '#ef4444');
+        (function(){
+          var cb = document.getElementById('show-antiderivative-'+firstId);
+          if (cb){ cb.checked = true; toggleAntiderivative(firstId); }
+        })();
+        gcAdd('cartesian', 'cos(x)', '#22c55e');
+        (function(){
+          var items = document.querySelectorAll('[id^=expr-item-]');
+          var lastId = parseInt(items[items.length-1].id.replace('expr-item-',''));
+          var cb2 = document.getElementById('show-antiderivative-'+lastId);
+          if (cb2){ cb2.checked = true; toggleAntiderivative(lastId); }
+        })();
+        setRange(-8, 8, -3, 3);
+        break;
+      case 'antiderivative_exp':
+        gcSetExpr(firstId, 'cartesian', 'exp(x)', '#a855f7');
+        (function(){
+          var cb = document.getElementById('show-antiderivative-'+firstId);
+          if (cb){ cb.checked = true; toggleAntiderivative(firstId); }
+          var cd = document.getElementById('show-derivative-'+firstId);
+          if (cd){ cd.checked = true; toggleDerivative(firstId); }
+        })();
+        setRange(-3, 3, -1, 10);
+        break;
+      case 'limit_sinx_x':
+        gcSetExpr(firstId, 'limit', 'sin(x)/x', '#3b82f6');
+        (function(){
+          var v = document.getElementById('limit-val-'+firstId);
+          if (v){ v.value = '0'; }
+          updateLimitExpression(firstId);
+        })();
+        setRange(-10, 10, -0.5, 1.5);
+        break;
+      case 'limit_exp_minus1':
+        gcSetExpr(firstId, 'limit', '(exp(x)-1)/x', '#ef4444');
+        (function(){
+          var v = document.getElementById('limit-val-'+firstId);
+          if (v){ v.value = '0'; }
+          updateLimitExpression(firstId);
+        })();
+        setRange(-5, 5, -2, 4);
+        break;
+      case 'limit_rational':
+        gcSetExpr(firstId, 'limit', '(x^2-1)/(x-1)', '#22c55e');
+        (function(){
+          var v = document.getElementById('limit-val-'+firstId);
+          if (v){ v.value = '1'; }
+          updateLimitExpression(firstId);
+        })();
+        setRange(-3, 5, -1, 5);
+        break;
+      case 'ftc_demo':
+        gcSetExpr(firstId, 'cartesian', 'x^2', '#3b82f6');
+        (function(){
+          var ci = document.getElementById('show-integration-'+firstId);
+          if (ci){ ci.checked = true; toggleIntegration(firstId); }
+          var a = document.getElementById('integration-a-'+firstId);
+          var b = document.getElementById('integration-b-'+firstId);
+          if (a && b){ a.value = 0; b.value = 2; updateIntegrationBounds(firstId); }
+          var ca = document.getElementById('show-antiderivative-'+firstId);
+          if (ca){ ca.checked = true; toggleAntiderivative(firstId); }
+        })();
+        setRange(-3, 4, -2, 10);
+        break;
+
+      // ============ SYSTEMS OF EQUATIONS ============
+      case 'linear_system':
+        gcSetExpr(firstId, 'equation', '2x + 3y = 8', '#3b82f6');
+        gcAdd('equation', '4x - y = 2', '#ef4444');
+        setRange(-2, 6, -2, 6);
+        break;
+      case 'circle_line_system':
+        gcSetExpr(firstId, 'equation', 'x^2 + y^2 = 25', '#3b82f6');
+        gcAdd('equation', 'x + y = 7', '#ef4444');
+        setRange(-7, 7, -7, 7);
+        break;
+      case 'two_circles':
+        gcSetExpr(firstId, 'equation', 'x^2 + y^2 = 16', '#3b82f6');
+        gcAdd('equation', '(x-3)^2 + y^2 = 9', '#ef4444');
+        setRange(-6, 8, -6, 6);
+        break;
+      case 'parabola_line':
+        gcSetExpr(firstId, 'equation', 'y = x^2', '#3b82f6');
+        gcAdd('equation', 'y = 2*x + 3', '#ef4444');
+        setRange(-4, 6, -2, 12);
+        break;
+      case 'ellipse_line':
+        gcSetExpr(firstId, 'equation', 'x^2/9 + y^2/4 = 1', '#3b82f6');
+        gcAdd('equation', 'y = x + 1', '#ef4444');
+        setRange(-5, 5, -4, 4);
+        break;
+      case 'hyperbola_line':
+        gcSetExpr(firstId, 'equation', 'x*y = 4', '#3b82f6');
+        gcAdd('equation', 'x + y = 5', '#ef4444');
+        setRange(-2, 8, -2, 8);
+        break;
+
       default:
         gcQuickSample('cartesian');
     }
+    // Animate the draw-on effect for preset loads
+    if (typeof engine !== 'undefined' && engine) engine._animateNext = true;
     if (typeof updateGraph==='function') updateGraph();
   };
 })();

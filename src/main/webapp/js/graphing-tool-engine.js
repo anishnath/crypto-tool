@@ -50,6 +50,38 @@ class GraphingEngine {
     }
 
     /**
+     * Normalize common user-input patterns into valid math.js syntax.
+     *  - ** → ^ (Python-style exponent)
+     *  - ln( → log( (natural log alias)
+     *  - Strip leading "y =" / "y=" from Cartesian input
+     */
+    normalizeExpression(expr) {
+        if (!expr || typeof expr !== 'string') return expr;
+        let s = expr.trim();
+        // Python-style exponent
+        s = s.replace(/\*\*/g, '^');
+        // ln → log  (math.js log is natural log)
+        s = s.replace(/\bln\s*\(/g, 'log(');
+        // Implicit multiplication between adjacent single-letter variables:
+        //   xy → x*y,  6xy → 6x*y,  3xy+2x → 3x*y+2x
+        // Lookbehind ensures we don't split inside function names (sin, cos, …)
+        // Lookahead ensures the second letter isn't part of a longer word or function call
+        s = s.replace(/(?<![a-zA-Z])([a-zA-Z])([a-zA-Z])(?![a-zA-Z(])/g, (m, a, b) => {
+            if ((a + b).toLowerCase() === 'pi') return m;
+            return a + '*' + b;
+        });
+        return s;
+    }
+
+    /**
+     * Strip "y = " prefix that users often type for Cartesian input.
+     */
+    stripCartesianPrefix(expr) {
+        if (!expr || typeof expr !== 'string') return expr;
+        return expr.replace(/^\s*y\s*=\s*/i, '');
+    }
+
+    /**
      * Generate data for Cartesian plot (y = f(x))
      */
     generateCartesian(expression, xMin = -10, xMax = 10, numPoints = 500) {
@@ -59,12 +91,15 @@ class GraphingEngine {
                 return null;
             }
 
+            let expr = this.normalizeExpression(expression);
+            expr = this.stripCartesianPrefix(expr);
+
             const x = [];
             const y = [];
             const step = (xMax - xMin) / numPoints;
 
             // Compile expression once
-            const compiledExpr = math.compile(expression);
+            const compiledExpr = math.compile(expr);
 
             for (let i = 0; i <= numPoints; i++) {
                 const xVal = xMin + i * step;
@@ -101,7 +136,7 @@ class GraphingEngine {
                 return null;
             }
 
-            const compiledExpr = math.compile(expression);
+            const compiledExpr = math.compile(this.normalizeExpression(this.stripCartesianPrefix(expression)));
             const step = (xMax - xMin) / numPoints;
             let area = 0;
 
@@ -161,7 +196,7 @@ class GraphingEngine {
             const step = (xMax - xMin) / numPoints;
             const h = 0.001; // Small step for numerical derivative
 
-            const compiledExpr = math.compile(expression);
+            const compiledExpr = math.compile(this.normalizeExpression(this.stripCartesianPrefix(expression)));
 
             for (let i = 0; i <= numPoints; i++) {
                 const xVal = xMin + i * step;
@@ -193,11 +228,65 @@ class GraphingEngine {
     }
 
     /**
+     * Generate symbolic antiderivative F(x) using Nerdamer
+     */
+    generateAntiderivative(expression, xMin = -10, xMax = 10, numPoints = 500) {
+        try {
+            if (typeof nerdamer === 'undefined') return null;
+            if (!expression || typeof expression !== 'string' || expression.trim() === '') return null;
+
+            const expr = this.stripCartesianPrefix(this.normalizeExpression(expression));
+            const antideriv = nerdamer('integrate(' + expr + ', x)');
+            const antiText = antideriv.text();
+            if (!antiText) return null;
+
+            const x = [], y = [];
+            const step = (xMax - xMin) / numPoints;
+
+            for (let i = 0; i <= numPoints; i++) {
+                const xVal = xMin + i * step;
+                try {
+                    nerdamer.setVar('x', String(xVal));
+                    const yVal = parseFloat(nerdamer(antiText).evaluate().text());
+                    nerdamer.clearVars();
+                    if (isFinite(yVal)) { x.push(xVal); y.push(yVal); }
+                    else { x.push(xVal); y.push(null); }
+                } catch (_) {
+                    nerdamer.clearVars();
+                    x.push(xVal); y.push(null);
+                }
+            }
+
+            return { x, y, symbolic: antiText };
+        } catch (error) {
+            console.error('Error generating antiderivative:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Evaluate a limit using Nerdamer: limit(expr, variable, value)
+     */
+    evaluateLimit(expression, variable, value) {
+        try {
+            if (typeof nerdamer === 'undefined') return null;
+            const expr = this.normalizeExpression(expression);
+            const result = nerdamer('limit(' + expr + ', ' + variable + ', ' + value + ')');
+            const text = result.text();
+            const numVal = parseFloat(nerdamer(text).evaluate().text());
+            return { symbolic: text, numeric: isFinite(numVal) ? numVal : null };
+        } catch (error) {
+            console.error('Error evaluating limit:', error);
+            return null;
+        }
+    }
+
+    /**
      * Calculate tangent line at specific point
      */
     calculateTangent(expression, xPoint, xMin = -10, xMax = 10) {
         try {
-            const compiledExpr = math.compile(expression);
+            const compiledExpr = math.compile(this.normalizeExpression(this.stripCartesianPrefix(expression)));
             const h = 0.001;
 
             // Calculate y value at point
@@ -233,8 +322,8 @@ class GraphingEngine {
                 return null;
             }
 
-            const xCompiled = math.compile(xExpr.trim());
-            const yCompiled = math.compile(yExpr.trim());
+            const xCompiled = math.compile(this.normalizeExpression(xExpr.trim()));
+            const yCompiled = math.compile(this.normalizeExpression(yExpr.trim()));
 
             const x = [];
             const y = [];
@@ -273,7 +362,7 @@ class GraphingEngine {
                 return null;
             }
 
-            const compiledExpr = math.compile(expression);
+            const compiledExpr = math.compile(this.normalizeExpression(expression));
 
             const x = [];
             const y = [];
@@ -307,9 +396,9 @@ class GraphingEngine {
     /**
      * Generate data for Implicit Functions (e.g., x^2 + y^2 = 25)
      */
-    generateImplicit(expression, xMin = -10, xMax = 10, yMin = -10, yMax = 10, resolution = 200) {
+    generateImplicit(expression, xMin = -10, xMax = 10, yMin = -10, yMax = 10, resolution = 300) {
         try {
-            // Parse expression like "x^2 + y^2 = 25" into left and right parts
+            // Parse expression like "x^2 + y^2 = 25" into left - right = 0
             let leftExpr, rightExpr;
 
             if (expression.includes('=')) {
@@ -317,52 +406,66 @@ class GraphingEngine {
                 leftExpr = parts[0].trim();
                 rightExpr = parts[1].trim();
             } else {
-                // Assume it equals 0
                 leftExpr = expression.trim();
                 rightExpr = '0';
             }
 
-            const leftCompiled = math.compile(leftExpr);
-            const rightCompiled = math.compile(rightExpr);
-
-            const x = [];
-            const y = [];
-            const z = [];
+            const leftCompiled = math.compile(this.normalizeExpression(leftExpr));
+            const rightCompiled = math.compile(this.normalizeExpression(rightExpr));
 
             const xStep = (xMax - xMin) / resolution;
             const yStep = (yMax - yMin) / resolution;
 
+            // Evaluate f(x,y) = left - right on the grid
+            const grid = [];
             for (let i = 0; i <= resolution; i++) {
-                const xRow = [];
-                const yRow = [];
-                const zRow = [];
-
+                const row = [];
                 for (let j = 0; j <= resolution; j++) {
                     const xVal = xMin + j * xStep;
                     const yVal = yMin + i * yStep;
-                    const scope = { x: xVal, y: yVal };
-
                     try {
-                        const leftVal = leftCompiled.evaluate(scope);
-                        const rightVal = rightCompiled.evaluate(scope);
-                        const diff = leftVal - rightVal;
-
-                        xRow.push(xVal);
-                        yRow.push(yVal);
-                        zRow.push(diff);
-                    } catch (e) {
-                        xRow.push(xVal);
-                        yRow.push(yVal);
-                        zRow.push(NaN);
+                        const scope = { x: xVal, y: yVal };
+                        const diff = leftCompiled.evaluate(scope) - rightCompiled.evaluate(scope);
+                        row.push(isFinite(diff) ? diff : NaN);
+                    } catch (_) {
+                        row.push(NaN);
                     }
                 }
-
-                x.push(xRow);
-                y.push(yRow);
-                z.push(zRow);
+                grid.push(row);
             }
 
-            return { x, y, z };
+            // Marching squares: extract zero-crossing points as scatter data
+            const xs = [], ys = [];
+            for (let i = 0; i < resolution; i++) {
+                for (let j = 0; j < resolution; j++) {
+                    const z00 = grid[i][j], z10 = grid[i][j+1];
+                    const z01 = grid[i+1][j], z11 = grid[i+1][j+1];
+                    if (isNaN(z00) || isNaN(z10) || isNaN(z01) || isNaN(z11)) continue;
+
+                    const x0 = xMin + j * xStep, x1 = x0 + xStep;
+                    const y0 = yMin + i * yStep, y1 = y0 + yStep;
+
+                    // Check each edge for a sign change (zero crossing)
+                    if (z00 * z10 < 0) { // bottom edge
+                        const t = z00 / (z00 - z10);
+                        xs.push(x0 + t * xStep); ys.push(y0);
+                    }
+                    if (z00 * z01 < 0) { // left edge
+                        const t = z00 / (z00 - z01);
+                        xs.push(x0); ys.push(y0 + t * yStep);
+                    }
+                    if (z10 * z11 < 0) { // right edge
+                        const t = z10 / (z10 - z11);
+                        xs.push(x1); ys.push(y0 + t * yStep);
+                    }
+                    if (z01 * z11 < 0) { // top edge
+                        const t = z01 / (z01 - z11);
+                        xs.push(x0 + t * xStep); ys.push(y1);
+                    }
+                }
+            }
+
+            return xs.length > 0 ? { x: xs, y: ys } : null;
         } catch (error) {
             console.error('Error generating implicit function:', error);
             return null;
@@ -395,7 +498,7 @@ class GraphingEngine {
                         const conditionMet = this.evaluateCondition(xVal, condition);
 
                         if (conditionMet) {
-                            const compiled = math.compile(expression);
+                            const compiled = math.compile(this.normalizeExpression(expression));
                             yVal = compiled.evaluate({ x: xVal });
                             break;
                         }
@@ -429,8 +532,8 @@ class GraphingEngine {
                 return true; // Default condition
             }
 
-            // Replace 'and' with '&&' and 'or' with '||'
-            let cond = condition.replace(/\band\b/g, '&&').replace(/\bor\b/g, '||');
+            // Math.js supports 'and' / 'or' natively; convert '&&' / '||' to those
+            let cond = condition.replace(/&&/g, ' and ').replace(/\|\|/g, ' or ');
 
             // Create a safe evaluation context
             const scope = { x: xVal };
@@ -454,8 +557,8 @@ class GraphingEngine {
                 return null;
             }
 
-            const leftCompiled = math.compile(leftExpr.trim());
-            const rightCompiled = math.compile(rightExpr.trim());
+            const leftCompiled = math.compile(this.normalizeExpression(leftExpr.trim()));
+            const rightCompiled = math.compile(this.normalizeExpression(rightExpr.trim()));
 
             const x = [];
             const y = [];
@@ -724,8 +827,8 @@ class GraphingEngine {
      */
     findIntersections(expr1, expr2, xMin = -10, xMax = 10, tolerance = 0.01) {
         try {
-            const compiled1 = math.compile(expr1);
-            const compiled2 = math.compile(expr2);
+            const compiled1 = math.compile(this.normalizeExpression(this.stripCartesianPrefix(expr1)));
+            const compiled2 = math.compile(this.normalizeExpression(this.stripCartesianPrefix(expr2)));
             const intersections = [];
             const numSamples = 1000;
             const step = (xMax - xMin) / numSamples;
@@ -925,6 +1028,11 @@ class GraphingEngine {
 
         let trace = null;
 
+        // Normalize the expression before dispatching
+        if (expr.expression && typeof expr.expression === 'string') {
+            expr.expression = this.normalizeExpression(expr.expression);
+        }
+
         switch (expr.type) {
             case 'cartesian': {
                 // Substitute parameters if they exist
@@ -936,6 +1044,21 @@ class GraphingEngine {
                     });
                 }
 
+                // Detect "x = <constant>" vertical line pattern
+                const vertMatch = expression.match(/^\s*x\s*=\s*([+-]?\d+\.?\d*)\s*$/);
+                if (vertMatch) {
+                    const xConst = parseFloat(vertMatch[1]);
+                    trace = [{
+                        x: [xConst, xConst],
+                        y: [yMin, yMax],
+                        type: 'scatter',
+                        mode: 'lines',
+                        name: expr.expression,
+                        line: { color: expr.color, width: 2, dash: 'dash' }
+                    }];
+                    break;
+                }
+
                 const data = this.generateCartesian(expression, xMin, xMax);
                 if (data) {
                     trace = [{
@@ -945,7 +1068,8 @@ class GraphingEngine {
                         mode: 'lines',
                         name: expr.expression,
                         line: { color: expr.color, width: 2 },
-                        connectgaps: false
+                        connectgaps: false,
+                        hovertemplate: 'x = %{x:.4f}<br>y = %{y:.4f}<extra>%{fullData.name}</extra>'
                     }];
 
                     // Add derivative if enabled
@@ -959,6 +1083,22 @@ class GraphingEngine {
                                 mode: 'lines',
                                 name: `f'(${expr.expression})`,
                                 line: { color: expr.color, width: 2, dash: 'dash' },
+                                connectgaps: false
+                            });
+                        }
+                    }
+
+                    // Add antiderivative F(x) if enabled
+                    if (expr.showAntiderivative) {
+                        const antiData = this.generateAntiderivative(expression, xMin, xMax);
+                        if (antiData) {
+                            trace.push({
+                                x: antiData.x,
+                                y: antiData.y,
+                                type: 'scatter',
+                                mode: 'lines',
+                                name: `F(x) = ∫${expr.expression} dx`,
+                                line: { color: expr.color, width: 2, dash: 'dot' },
                                 connectgaps: false
                             });
                         }
@@ -1027,21 +1167,11 @@ class GraphingEngine {
                     trace = {
                         x: data.x,
                         y: data.y,
-                        z: data.z,
-                        type: 'contour',
+                        type: 'scatter',
+                        mode: 'markers',
                         name: expr.expression,
-                        colorscale: [[0, expr.color], [0.5, 'white'], [1, expr.color]],
-                        showscale: false,
-                        contours: {
-                            start: 0,
-                            end: 0,
-                            size: 0.1,
-                            coloring: 'lines'
-                        },
-                        line: {
-                            width: 3,
-                            color: expr.color
-                        }
+                        marker: { color: expr.color, size: 1.5 },
+                        hovertemplate: 'x = %{x:.4f}<br>y = %{y:.4f}<extra>%{fullData.name}</extra>'
                     };
                 }
                 break;
@@ -1082,7 +1212,8 @@ class GraphingEngine {
             }
 
             case 'polar': {
-                const data = this.generatePolar(expr.expression);
+                const thetaMax = expr.thetaMax || 2 * Math.PI;
+                const data = this.generatePolar(expr.expression, 0, thetaMax);
                 if (data) {
                     trace = {
                         x: data.x,
@@ -1106,20 +1237,24 @@ class GraphingEngine {
                         xMin, xMax, yMin, yMax
                     );
                     if (data) {
+                        // Extract satisfied points from the grid
+                        const ixs = [], iys = [];
+                        for (let i = 0; i < data.z.length; i++) {
+                            for (let j = 0; j < data.z[i].length; j++) {
+                                if (data.z[i][j] === 1) {
+                                    ixs.push(data.x[i][j]);
+                                    iys.push(data.y[i][j]);
+                                }
+                            }
+                        }
                         trace = {
-                            x: data.x,
-                            y: data.y,
-                            z: data.z,
-                            type: 'contour',
+                            x: ixs,
+                            y: iys,
+                            type: 'scatter',
+                            mode: 'markers',
                             name: expr.expression,
-                            colorscale: [[0, 'rgba(0,0,0,0)'], [1, expr.color]],
-                            showscale: false,
-                            contours: {
-                                start: 0.5,
-                                end: 1,
-                                size: 0.5
-                            },
-                            opacity: 0.3
+                            marker: { color: expr.color, size: 3, opacity: 0.25 },
+                            hoverinfo: 'name'
                         };
                     }
                 }
@@ -1199,9 +1334,158 @@ class GraphingEngine {
                 }
                 break;
             }
+
+            case 'equation': {
+                // Use Nerdamer to solve an equation for y, then plot each branch
+                if (typeof nerdamer === 'undefined') {
+                    // Fallback to implicit contour if Nerdamer not loaded
+                    const implData = this.generateImplicit(expr.expression, xMin, xMax, yMin, yMax);
+                    if (implData) {
+                        trace = {
+                            x: implData.x, y: implData.y,
+                            type: 'scatter', mode: 'markers',
+                            name: expr.expression,
+                            marker: { color: expr.color, size: 1.5 },
+                            hovertemplate: 'x = %{x:.4f}<br>y = %{y:.4f}<extra>%{fullData.name}</extra>'
+                        };
+                    }
+                    break;
+                }
+                trace = this.solveAndPlot(expr.expression, expr.color, xMin, xMax);
+                break;
+            }
+
+            case 'limit': {
+                // Plot f(x) and annotate the limit point
+                const limitExpr = expr.limitExpr || expr.expression;
+                if (!limitExpr) break;
+                const limitVar = expr.limitVar || 'x';
+                const limitVal = expr.limitVal != null ? expr.limitVal : 0;
+
+                // Plot the function
+                const normExpr = this.normalizeExpression(limitExpr);
+                try {
+                    const compiled = math.compile(normExpr);
+                    const xs = [], ys = [];
+                    const step = (xMax - xMin) / 500;
+                    for (let i = 0; i <= 500; i++) {
+                        const xv = xMin + i * step;
+                        try {
+                            const yv = compiled.evaluate({ x: xv });
+                            if (typeof yv === 'number' && isFinite(yv)) { xs.push(xv); ys.push(yv); }
+                            else { xs.push(xv); ys.push(null); }
+                        } catch (_) { xs.push(xv); ys.push(null); }
+                    }
+
+                    trace = [{
+                        x: xs, y: ys, type: 'scatter', mode: 'lines',
+                        name: 'f(x) = ' + limitExpr,
+                        line: { color: expr.color, width: 2 },
+                        connectgaps: false
+                    }];
+
+                    // Evaluate the limit using Nerdamer
+                    const limitResult = this.evaluateLimit(limitExpr, limitVar, limitVal);
+                    if (limitResult && limitResult.numeric != null) {
+                        const lx = parseFloat(limitVal);
+                        const ly = limitResult.numeric;
+                        // Add marker at the limit point
+                        trace.push({
+                            x: [lx], y: [ly], type: 'scatter', mode: 'markers+text',
+                            name: `lim → ${limitResult.symbolic}`,
+                            marker: { color: expr.color, size: 12, symbol: 'circle-open', line: { width: 3, color: expr.color } },
+                            text: [`L = ${limitResult.symbolic}`],
+                            textposition: 'top center',
+                            textfont: { size: 13, color: expr.color },
+                            showlegend: true
+                        });
+                        // Dashed horizontal line at y = L
+                        trace.push({
+                            x: [xMin, xMax], y: [ly, ly], type: 'scatter', mode: 'lines',
+                            name: `y = ${limitResult.symbolic}`,
+                            line: { color: expr.color, width: 1, dash: 'dash' },
+                            showlegend: false
+                        });
+                        // Dashed vertical line at x = a
+                        trace.push({
+                            x: [lx, lx], y: [yMin, yMax], type: 'scatter', mode: 'lines',
+                            name: `x = ${limitVal}`,
+                            line: { color: '#94a3b8', width: 1, dash: 'dot' },
+                            showlegend: false
+                        });
+                    }
+                } catch (e) {
+                    console.error('Limit plot error:', e);
+                }
+                break;
+            }
         }
 
         return trace;
+    }
+
+    /**
+     * Solve an equation for y using Nerdamer, return Plotly traces for each branch.
+     */
+    solveAndPlot(equation, color, xMin, xMax, numPoints = 400) {
+        try {
+            const parts = equation.split('=');
+            if (parts.length !== 2) return null;
+            const expr = '(' + parts[0].trim() + ')-(' + parts[1].trim() + ')';
+
+            const ySolved = nerdamer.solve(expr, 'y');
+            const yText = ySolved.text().replace(/^\[|\]$/g, '');
+            if (!yText) return null;
+
+            const yExprs = yText.split(',').map(s => s.trim()).filter(Boolean);
+            const traces = [];
+
+            for (let ve = 0; ve < yExprs.length; ve++) {
+                const yExpr = yExprs[ve];
+                const xs = [], ys = [];
+
+                // Try Math.js first (100x faster than Nerdamer per-point)
+                let compiled = null;
+                try {
+                    compiled = math.compile(this.normalizeExpression(yExpr));
+                } catch (_) {
+                    // Math.js can't parse — fall back to Nerdamer per-point
+                }
+
+                for (let j = 0; j <= numPoints; j++) {
+                    const xv = xMin + (xMax - xMin) * j / numPoints;
+                    try {
+                        let yv;
+                        if (compiled) {
+                            yv = compiled.evaluate({ x: xv });
+                        } else {
+                            nerdamer.setVar('x', String(xv));
+                            yv = parseFloat(nerdamer(yExpr).evaluate().text());
+                            nerdamer.clearVars();
+                        }
+                        if (typeof yv === 'number' && isFinite(yv)) { xs.push(xv); ys.push(yv); }
+                        else              { xs.push(null); ys.push(null); }
+                    } catch (_) {
+                        if (!compiled) nerdamer.clearVars();
+                        xs.push(null); ys.push(null);
+                    }
+                }
+
+                const branchSuffix = yExprs.length > 1 ? ` (branch ${ve + 1})` : '';
+                traces.push({
+                    x: xs, y: ys,
+                    type: 'scatter', mode: 'lines',
+                    name: equation + branchSuffix,
+                    line: { color, width: 2 },
+                    connectgaps: false
+                });
+            }
+
+            return traces.length > 0 ? traces : null;
+        } catch (e) {
+            console.error('Nerdamer solve failed for:', equation, e);
+            return null;
+        }
     }
 
     /**
@@ -1235,9 +1519,8 @@ class GraphingEngine {
 
         const dark = !!(typeof window !== 'undefined' && window.GC_DARK);
         const layout = {
-            title: '',
+            margin: { t: 8, r: 16, b: 32, l: 40 },
             xaxis: {
-                title: 'x',
                 range: [xMin, xMax],
                 zeroline: true,
                 showgrid: showGrid,
@@ -1245,7 +1528,6 @@ class GraphingEngine {
                 color: dark ? '#e5e7eb' : '#111827'
             },
             yaxis: {
-                title: 'y',
                 range: [yMin, yMax],
                 zeroline: true,
                 showgrid: showGrid,
@@ -1258,7 +1540,8 @@ class GraphingEngine {
                 x: 1,
                 xanchor: 'right',
                 y: 1,
-                font: { color: dark ? '#e5e7eb' : '#111827' }
+                bgcolor: 'rgba(0,0,0,0)',
+                font: { size: 11, color: dark ? '#e5e7eb' : '#111827' }
             },
             hovermode: 'closest',
             plot_bgcolor: dark ? '#0b1220' : '#fafafa',
@@ -1273,7 +1556,78 @@ class GraphingEngine {
             displaylogo: false
         };
 
-        Plotly.newPlot(this.containerId, traces, layout, config);
+        const graphDiv = document.getElementById(this.containerId);
+        if (graphDiv && graphDiv.data) {
+            Plotly.react(this.containerId, traces, layout, config);
+        } else {
+            Plotly.newPlot(this.containerId, traces, layout, config);
+        }
+
+        // Trigger draw-on animation for line traces
+        if (this._animateNext) {
+            this._animateNext = false;
+            this._animateTraces(traces, layout, config);
+        }
+    }
+
+    /**
+     * Animate traces drawing on progressively (curve draw-on effect)
+     */
+    _animateTraces(fullTraces, layout, config) {
+        const lineTraces = [];
+        const staticTraces = [];
+
+        fullTraces.forEach((t, i) => {
+            if ((t.mode === 'lines' || t.mode === 'markers') && t.x && t.x.length > 10) {
+                lineTraces.push({ index: i, trace: t });
+            } else {
+                staticTraces.push({ index: i, trace: t });
+            }
+        });
+
+        if (lineTraces.length === 0) return;
+
+        const totalFrames = 60;
+        let frame = 0;
+        const containerId = this.containerId;
+
+        // Start with empty line traces + all static traces
+        const initialTraces = fullTraces.map((t, i) => {
+            const lt = lineTraces.find(l => l.index === i);
+            if (lt) {
+                return Object.assign({}, t, { x: [], y: [] });
+            }
+            return t;
+        });
+
+        Plotly.react(containerId, initialTraces, layout, config);
+
+        const step = () => {
+            frame++;
+            const progress = frame / totalFrames;
+            // Ease-out cubic for smooth deceleration
+            const eased = 1 - Math.pow(1 - progress, 3);
+
+            const updatedTraces = fullTraces.map((t, i) => {
+                const lt = lineTraces.find(l => l.index === i);
+                if (lt) {
+                    const len = Math.floor(eased * t.x.length);
+                    return Object.assign({}, t, {
+                        x: t.x.slice(0, len),
+                        y: t.y.slice(0, len)
+                    });
+                }
+                return t;
+            });
+
+            Plotly.react(containerId, updatedTraces, layout, config);
+
+            if (frame < totalFrames) {
+                requestAnimationFrame(step);
+            }
+        };
+
+        requestAnimationFrame(step);
     }
 }
 
@@ -1306,6 +1660,16 @@ function initGraph() {
 
     engine = new GraphingEngine('graph');
 
+    // Prevent sample chip buttons from stealing focus (fixes :focus-within timing)
+    const exprList = document.getElementById('expressions-list');
+    if (exprList) {
+        exprList.addEventListener('mousedown', function(e) {
+            if (e.target.closest('.gc-sample-chips')) {
+                e.preventDefault();
+            }
+        });
+    }
+
     // Try to load from URL first
     loadFromURL();
 
@@ -1316,6 +1680,10 @@ function initGraph() {
 
     // Update graph
     updateGraph();
+
+    // Auto-focus the first expression input
+    const firstInput = document.querySelector('.expression-input');
+    if (firstInput) firstInput.focus();
 }
 
 /**
@@ -1341,46 +1709,52 @@ function createExpressionElement(expr) {
             <i class="fas fa-times"></i>
         </button>
 
-        <select class="plot-type-select" id="type-${expr.id}" onchange="updateExpressionType(${expr.id})">
-            <option value="cartesian">Cartesian (y = f(x))</option>
-            <option value="parametric">Parametric (x(t), y(t))</option>
-            <option value="polar">Polar (r(θ))</option>
-            <option value="implicit">Implicit (x²+y²=25)</option>
-            <option value="piecewise">Piecewise Function</option>
-            <option value="inequality">Inequality</option>
-            <option value="table">Table Data</option>
-            <option value="statistics">Regression Analysis</option>
-            <option value="distribution">Statistical Distribution</option>
-        </select>
+        <div id="input-container-${expr.id}"></div>
 
-        <div class="controls">
+        <div class="gc-expr-toolbar">
             <input type="color" class="color-picker" id="color-${expr.id}"
                    value="${expr.color}" onchange="updateExpressionColor(${expr.id})">
-            <div class="form-check form-check-inline ms-2">
-                <input class="form-check-input" type="checkbox" id="show-derivative-${expr.id}" onchange="toggleDerivative(${expr.id})">
-                <label class="form-check-label" for="show-derivative-${expr.id}" style="font-size: 12px;">Show f'(x)</label>
-            </div>
-            <div class="form-check form-check-inline ms-2">
-                <input class="form-check-input" type="checkbox" id="show-integration-${expr.id}" onchange="toggleIntegration(${expr.id})">
-                <label class="form-check-label" for="show-integration-${expr.id}" style="font-size: 12px;">Show ∫ Area</label>
+            <select class="plot-type-select" id="type-${expr.id}" onchange="updateExpressionType(${expr.id})">
+                <option value="cartesian">y = f(x)</option>
+                <option value="equation">Equation</option>
+                <option value="parametric">Parametric</option>
+                <option value="polar">Polar</option>
+                <option value="inequality">Inequality</option>
+                <option value="limit">Limit</option>
+                <option value="piecewise">Piecewise</option>
+                <option value="implicit">Implicit</option>
+                <option value="table">Table</option>
+                <option value="statistics">Regression</option>
+                <option value="distribution">Distribution</option>
+            </select>
+            <span id="calculus-toggles-${expr.id}" class="gc-calculus-toggles">
+                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-derivative-${expr.id}" onchange="toggleDerivative(${expr.id})"> f'(x)</label>
+                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-integration-${expr.id}" onchange="toggleIntegration(${expr.id})"> ∫</label>
+                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-antiderivative-${expr.id}" onchange="toggleAntiderivative(${expr.id})"> F(x)</label>
+            </span>
+        </div>
+        <div id="integration-controls-${expr.id}" style="display: none;" class="mt-1">
+            <div class="d-flex gap-2 align-items-center">
+                <small class="text-muted">∫ from</small>
+                <input type="number" class="form-control form-control-sm" id="integration-a-${expr.id}" placeholder="a" value="-2" step="0.5" style="width:60px;" oninput="updateIntegrationBounds(${expr.id})">
+                <small class="text-muted">to</small>
+                <input type="number" class="form-control form-control-sm" id="integration-b-${expr.id}" placeholder="b" value="2" step="0.5" style="width:60px;" oninput="updateIntegrationBounds(${expr.id})">
             </div>
         </div>
-        <div id="integration-controls-${expr.id}" style="display: none;" class="mt-2">
-            <small class="text-muted">Integration bounds:</small>
-            <div class="d-flex gap-2">
-                <input type="number" class="form-control form-control-sm" id="integration-a-${expr.id}" placeholder="a" value="-2" step="0.5" oninput="updateIntegrationBounds(${expr.id})">
-                <input type="number" class="form-control form-control-sm" id="integration-b-${expr.id}" placeholder="b" value="2" step="0.5" oninput="updateIntegrationBounds(${expr.id})">
-            </div>
-        </div>
-
-        <div id="input-container-${expr.id}"></div>
         <div id="sliders-container-${expr.id}"></div>
     `;
 
     container.appendChild(div);
     expressionElements[expr.id] = div;
 
-    createInputForType(expr.id, 'cartesian');
+    const exprType = expr.type || 'cartesian';
+    createInputForType(expr.id, exprType);
+
+    // Hide calculus toggles for non-cartesian types
+    if (exprType !== 'cartesian') {
+        const calcToggles = document.getElementById(`calculus-toggles-${expr.id}`);
+        if (calcToggles) calcToggles.style.display = 'none';
+    }
 }
 
 /**
@@ -1399,32 +1773,62 @@ function createInputForType(id, type) {
         case 'cartesian':
             container.innerHTML = `
                 <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., x^2 or sin(x)" value="${currentValue}"
+                       placeholder="Type expression: x^2, sin(x), 2x+3y=8 ..." value="${currentValue}"
                        oninput="updateExpressionValue(${id})"
                        onchange="updateExpressionValue(${id})">
-                <div class="preview-label">Preview:</div>
                 <div class="math-preview" id="math-preview-${id}"></div>
-                <div class="mt-2">
-                    <small class="text-muted">Trigonometric:</small><br>
-                    <button class="btn btn-sm btn-outline-secondary mt-1" onclick="loadSample(${id}, 'sin(x)')">sin(x)</button>
-                    <button class="btn btn-sm btn-outline-secondary mt-1 ms-1" onclick="loadSample(${id}, 'cos(x)')">cos(x)</button>
-                    <button class="btn btn-sm btn-outline-secondary mt-1 ms-1" onclick="loadSample(${id}, 'tan(x)')">tan(x)</button>
-                    <button class="btn btn-sm btn-outline-secondary mt-1 ms-1" onclick="loadSample(${id}, 'cos(x)*sin(x)')">cos·sin</button>
+                <div class="gc-sample-chips gc-on-focus">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sin(x)')">sin</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'cos(x)')">cos</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2')">x²</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^3 - 3*x^2 + 2*x')">cubic</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'exp(x)')">eˣ</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'log(x)')">ln</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sqrt(x)')">√x</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '1/(1+exp(-x))')">sigmoid</button>
                 </div>
-                <div class="mt-2">
-                    <small class="text-muted">Polynomials:</small><br>
-                    <button class="btn btn-sm btn-outline-secondary mt-1" onclick="loadSample(${id}, 'x^2')">x²</button>
-                    <button class="btn btn-sm btn-outline-secondary mt-1 ms-1" onclick="loadSample(${id}, 'x^3')">x³</button>
-                    <button class="btn btn-sm btn-outline-secondary mt-1 ms-1" onclick="loadSample(${id}, 'x^3 - 3*x^2 + 2*x')">Cubic</button>
-                    <button class="btn btn-sm btn-outline-secondary mt-1 ms-1" onclick="loadSample(${id}, 'x^4 - 5*x^2 + 4')">x⁴</button>
+            `;
+            break;
+
+        case 'equation':
+            container.innerHTML = `
+                <input type="text" class="expression-input" id="expr-${id}"
+                       placeholder="e.g., 2x + 3y = 8 or x^2 + y^2 = 25" value="${currentValue}"
+                       oninput="updateExpressionValue(${id})"
+                       onchange="updateExpressionValue(${id})">
+                <small class="text-muted">Any equation — solved symbolically</small>
+                <div class="gc-sample-chips gc-on-focus">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '2x + 3y = 8')">2x+3y=8</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2 + y^2 = 25')">Circle</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2/4 + y^2/9 = 1')">Ellipse</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2 - y^2 = 1')">Hyperbola</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x*y = 4')">xy=4</button>
                 </div>
-                <div class="mt-2">
-                    <small class="text-muted">Other:</small><br>
-                    <button class="btn btn-sm btn-outline-secondary mt-1" onclick="loadSample(${id}, 'sqrt(x)')">√x</button>
-                    <button class="btn btn-sm btn-outline-secondary mt-1 ms-1" onclick="loadSample(${id}, 'abs(x)')">|x|</button>
-                    <button class="btn btn-sm btn-outline-secondary mt-1 ms-1" onclick="loadSample(${id}, '1/x')">1/x</button>
-                    <button class="btn btn-sm btn-outline-secondary mt-1 ms-1" onclick="loadSample(${id}, 'exp(x)')">eˣ</button>
-                    <button class="btn btn-sm btn-outline-secondary mt-1 ms-1" onclick="loadSample(${id}, 'log(x)')">ln(x)</button>
+            `;
+            break;
+
+        case 'limit':
+            container.innerHTML = `
+                <input type="text" class="expression-input" id="expr-${id}"
+                       placeholder="e.g., sin(x)/x" value="${currentValue}"
+                       oninput="updateLimitExpression(${id})"
+                       onchange="updateLimitExpression(${id})">
+                <div class="d-flex gap-2 mt-1 align-items-center" style="font-size:0.8rem;">
+                    <span style="color:var(--gc-tool);font-weight:600;">lim</span>
+                    <span class="text-muted">x →</span>
+                    <input type="text" class="form-control form-control-sm" id="limit-val-${id}"
+                           placeholder="0" value="0" style="width: 60px; text-align:center;"
+                           oninput="updateLimitExpression(${id})"
+                           onchange="updateLimitExpression(${id})">
+                    <span style="color:var(--gc-tool);font-weight:600;">=</span>
+                    <span id="limit-result-${id}" style="color:var(--gc-tool);font-weight:700;">?</span>
+                </div>
+                <div class="gc-sample-chips gc-on-focus">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, 'sin(x)/x', '0')">sin(x)/x</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(exp(x)-1)/x', '0')">(eˣ-1)/x</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(1+1/x)^x', 'Infinity')">(1+1/x)ˣ→∞</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(x^2-1)/(x-1)', '1')">(x²-1)/(x-1)</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, 'tan(x)/x', '0')">tan(x)/x</button>
                 </div>
             `;
             break;
@@ -1810,6 +2214,12 @@ function updateExpressionType(id) {
     const type = document.getElementById(`type-${id}`).value;
     engine.updateExpression(id, { type });
     createInputForType(id, type);
+    // Show calculus toggles only for cartesian type
+    const calcToggles = document.getElementById(`calculus-toggles-${id}`);
+    if (calcToggles) calcToggles.style.display = (type === 'cartesian') ? '' : 'none';
+    // Show/hide integration controls
+    const intControls = document.getElementById(`integration-controls-${id}`);
+    if (intControls && type !== 'cartesian') intControls.style.display = 'none';
     updateGraph();
 }
 
@@ -1870,19 +2280,53 @@ function renderMathPreview(id, expression) {
     }
 
     if (!expression || expression.trim() === '') {
-        previewElement.innerHTML = '<span style="color: #999;">Type an expression...</span>';
+        previewElement.innerHTML = '';
         return;
     }
 
     try {
         const latex = convertToLaTeX(expression);
-        katex.render('y = ' + latex, previewElement, {
+        // Only prepend "y = " for simple f(x) expressions (no = sign already)
+        const prefix = expression.includes('=') ? '' : 'y = ';
+        katex.render(prefix + latex, previewElement, {
             throwOnError: false,
-            displayMode: true  // Changed to true for better fraction display
+            displayMode: true
         });
     } catch (error) {
         previewElement.innerHTML = `<span style="color: #666;">${expression}</span>`;
     }
+}
+
+/**
+ * Auto-detect whether an expression should be cartesian, implicit, or inequality.
+ * Returns null if the current type should not be changed.
+ */
+function autoDetectType(value, currentType) {
+    if (!value || typeof value !== 'string') return null;
+    const s = value.trim();
+    if (!s) return null;
+
+    // Only auto-switch from cartesian (the default type)
+    if (currentType !== 'cartesian') return null;
+
+    // Inequality operators (but not <=, >=, != inside other contexts)
+    if (/[^<>=!](>=|<=|>(?!=)|<(?!=))[^<>=]/.test(' ' + s + ' ')) return 'inequality';
+
+    // "y = <expr>" where the RHS is a function of x only → stay cartesian
+    if (/^\s*y\s*=\s*/i.test(s)) {
+        const rhs = s.replace(/^\s*y\s*=\s*/i, '');
+        // If RHS contains y, it's an equation needing CAS; otherwise cartesian
+        if (/(?<![a-zA-Z])y(?![a-zA-Z])/.test(rhs)) return 'equation';
+        return null; // stay cartesian
+    }
+
+    // Has "=" AND contains y → equation (Nerdamer solves for y)
+    // e.g. "2x + 3y = 8", "x^2 + y^2 = 25"
+    if (s.includes('=') && /(?<![a-zA-Z])y(?![a-zA-Z])/.test(s)) return 'equation';
+
+    // Contains y but no "=" → could be mid-typing, stay cartesian
+
+    return null;
 }
 
 /**
@@ -1899,8 +2343,26 @@ function updateExpressionValue(id) {
     const value = element.value;
     engine.updateExpression(id, { expression: value });
 
-    // Render math preview for cartesian expressions
+    // Auto-detect and switch type if needed
     const expr = engine.expressions.find(e => e.id === id);
+    if (expr) {
+        const detected = autoDetectType(value, expr.type);
+        if (detected && detected !== expr.type) {
+            expr.type = detected;
+            const typeSel = document.getElementById(`type-${id}`);
+            if (typeSel) typeSel.value = detected;
+            // Show/hide calculus toggles based on new type
+            const calcToggles = document.getElementById(`calculus-toggles-${id}`);
+            if (calcToggles) calcToggles.style.display = (detected === 'cartesian') ? '' : 'none';
+            // Rebuild the input UI for the new type (but preserve the expression text)
+            createInputForType(id, detected);
+            // Restore the expression value in the new input
+            const newInput = document.getElementById(`expr-${id}`);
+            if (newInput && newInput.value !== value) newInput.value = value;
+        }
+    }
+
+    // Render math preview for cartesian expressions
     if (expr && expr.type === 'cartesian') {
         renderMathPreview(id, value);
         // Detect and create sliders for parameters
@@ -1980,15 +2442,119 @@ function resetView() {
     updateGraph();
 }
 
-// Initialize when page loads
-window.addEventListener('DOMContentLoaded', initGraph);
-
-// Add event listeners for range changes
-['xMin', 'xMax', 'yMin', 'yMax'].forEach(id => {
-    window.addEventListener('DOMContentLoaded', () => {
-        document.getElementById(id).addEventListener('change', updateGraph);
+// Initialize: DOM may already be ready if script was loaded async after DOMContentLoaded
+function _gcBoot() {
+    initGraph();
+    ['xMin', 'xMax', 'yMin', 'yMax'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('change', updateGraph);
     });
-});
+
+    // Start auto-demo if user hasn't typed anything (idle showcase)
+    _startAutoDemo();
+}
+if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', _gcBoot);
+} else {
+    _gcBoot();
+}
+
+// ============================================
+// Auto-Demo Carousel — showcases presets on idle
+// Stops permanently on any user interaction
+// ============================================
+var _autoDemoTimer = null;
+var _autoDemoRunning = false;
+var _autoDemoIndex = 0;
+var _autoDemoCycleTimer = null;
+
+var _autoDemoPresets = [
+    'heart', 'butterfly', 'spirograph', 'lissajous',
+    'polar_flowers', 'rose_curves', 'golden_spiral', 'deltoid'
+];
+
+function _startAutoDemo() {
+    // Don't start in embed mode, if URL has shared state, or user already typed something
+    if (window.EMBED_MODE) return;
+    if (window.location.hash || window.location.search) return;
+    var firstInput = document.querySelector('.expression-input');
+    if (firstInput && firstInput.value && firstInput.value.trim() !== '') return;
+
+    _autoDemoRunning = true;
+
+    // Show demo badge
+    _showDemoBadge();
+
+    // First demo fires after 8 seconds of idle
+    _autoDemoTimer = setTimeout(function() {
+        if (!_autoDemoRunning) return;
+        _runNextDemo();
+        // Then cycle every 6 seconds
+        _autoDemoCycleTimer = setInterval(function() {
+            if (!_autoDemoRunning) { clearInterval(_autoDemoCycleTimer); return; }
+            _runNextDemo();
+        }, 6000);
+    }, 8000);
+
+    // Stop on any user interaction
+    var stopEvents = ['keydown', 'mousedown', 'touchstart', 'pointerdown'];
+    function stopDemo() {
+        _stopAutoDemo();
+        stopEvents.forEach(function(ev) { document.removeEventListener(ev, stopDemo, true); });
+    }
+    stopEvents.forEach(function(ev) { document.addEventListener(ev, stopDemo, true); });
+}
+
+function _runNextDemo() {
+    if (!_autoDemoRunning || !engine) return;
+    var preset = _autoDemoPresets[_autoDemoIndex % _autoDemoPresets.length];
+    _autoDemoIndex++;
+
+    // Enable animation for this render
+    engine._animateNext = true;
+
+    if (typeof gcQuickPreset === 'function') {
+        gcQuickPreset(preset);
+    }
+}
+
+function _stopAutoDemo() {
+    var wasRunning = _autoDemoRunning;
+    _autoDemoRunning = false;
+    if (_autoDemoTimer) { clearTimeout(_autoDemoTimer); _autoDemoTimer = null; }
+    if (_autoDemoCycleTimer) { clearInterval(_autoDemoCycleTimer); _autoDemoCycleTimer = null; }
+    _hideDemoBadge();
+
+    // If demo was cycling, reset to clean state so user starts fresh
+    if (wasRunning && _autoDemoIndex > 0 && typeof gcClearAll === 'function') {
+        gcClearAll();
+    }
+}
+
+function _showDemoBadge() {
+    var existing = document.getElementById('gc-demo-badge');
+    if (existing) return;
+    var badge = document.createElement('div');
+    badge.id = 'gc-demo-badge';
+    badge.textContent = 'Auto-Demo — click anywhere to start graphing';
+    badge.style.cssText = 'position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:10;' +
+        'background:rgba(37,99,235,0.9);color:#fff;padding:6px 16px;border-radius:20px;' +
+        'font-size:13px;font-weight:500;pointer-events:none;opacity:0;transition:opacity 0.5s;';
+    var graphDiv = document.getElementById('graph');
+    if (graphDiv && graphDiv.parentElement) {
+        graphDiv.parentElement.style.position = 'relative';
+        graphDiv.parentElement.appendChild(badge);
+        requestAnimationFrame(function() { badge.style.opacity = '1'; });
+    }
+}
+
+function _hideDemoBadge() {
+    var badge = document.getElementById('gc-demo-badge');
+    if (badge) {
+        badge.style.opacity = '0';
+        setTimeout(function() { if (badge.parentElement) badge.parentElement.removeChild(badge); }, 500);
+    }
+}
 
 /**
  * Toggle derivative display for an expression
@@ -2040,6 +2606,62 @@ function updateIntegrationBounds(id) {
         expr.integrationBounds = { a, b };
         updateGraph();
     }
+}
+
+/**
+ * Toggle antiderivative F(x) display for an expression
+ */
+function toggleAntiderivative(id) {
+    const checkbox = document.getElementById(`show-antiderivative-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+
+    if (expr) {
+        expr.showAntiderivative = checkbox.checked;
+        updateGraph();
+    }
+}
+
+/**
+ * Update limit expression parameters
+ */
+function updateLimitExpression(id) {
+    const input = document.getElementById(`expr-${id}`);
+    const valInput = document.getElementById(`limit-val-${id}`);
+    const resultSpan = document.getElementById(`limit-result-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+
+    if (!expr || !input) return;
+
+    const limitExpr = input.value.trim();
+    const limitVal = valInput ? valInput.value.trim() : '0';
+
+    expr.expression = limitExpr;
+    expr.limitExpr = limitExpr;
+    expr.limitVar = 'x';
+    expr.limitVal = limitVal;
+
+    // Evaluate limit and show result
+    if (limitExpr && typeof nerdamer !== 'undefined') {
+        const result = engine.evaluateLimit(limitExpr, 'x', limitVal);
+        if (result && resultSpan) {
+            resultSpan.textContent = result.symbolic + (result.numeric != null ? ' ≈ ' + result.numeric.toFixed(6) : '');
+        } else if (resultSpan) {
+            resultSpan.textContent = '?';
+        }
+    }
+
+    updateGraph();
+}
+
+/**
+ * Load a limit sample (expression + approach value)
+ */
+function loadLimitSample(id, expression, value) {
+    const input = document.getElementById(`expr-${id}`);
+    const valInput = document.getElementById(`limit-val-${id}`);
+    if (input) input.value = expression;
+    if (valInput) valInput.value = value;
+    updateLimitExpression(id);
 }
 
 /**
@@ -2560,16 +3182,19 @@ function stopAnimation() {
 function toggleTraceMode() {
     traceModeActive = !traceModeActive;
     const button = document.querySelector('[onclick="toggleTraceMode()"]');
+    if (!button) return;
 
     if (traceModeActive) {
-        button.classList.remove('btn-secondary');
-        button.classList.add('btn-success');
-        button.innerHTML = '<i class="fas fa-crosshairs"></i> Trace Mode: ON';
+        button.style.background = 'var(--gc-light)';
+        button.style.borderColor = 'var(--gc-tool)';
+        button.style.color = 'var(--gc-tool)';
+        button.title = 'Trace Mode: ON';
         enableTraceMode();
     } else {
-        button.classList.remove('btn-success');
-        button.classList.add('btn-secondary');
-        button.innerHTML = '<i class="fas fa-crosshairs"></i> Trace Mode';
+        button.style.background = '';
+        button.style.borderColor = '';
+        button.style.color = '';
+        button.title = 'Trace Mode';
         disableTraceMode();
     }
 }
@@ -2595,7 +3220,7 @@ function enableTraceMode() {
 
         if (expr && expr.type === 'cartesian') {
             try {
-                const compiledExpr = math.compile(expr.expression);
+                const compiledExpr = math.compile(engine.normalizeExpression(engine.stripCartesianPrefix(expr.expression)));
                 const h = 0.001;
                 const yPlus = compiledExpr.evaluate({ x: x + h });
                 const yMinus = compiledExpr.evaluate({ x: x - h });
@@ -2730,7 +3355,7 @@ function solveEquation() {
  */
 function findSolutions(expression, targetY, xMin, xMax, tolerance = 0.001) {
     try {
-        const compiled = math.compile(expression);
+        const compiled = math.compile(engine.normalizeExpression(engine.stripCartesianPrefix(expression)));
         const solutions = [];
         const numSamples = 1000;
         const step = (xMax - xMin) / numSamples;
@@ -2869,6 +3494,10 @@ function saveExpressionSet() {
             color: expr.color,
             visible: expr.visible,
             showDerivative: expr.showDerivative,
+            showAntiderivative: expr.showAntiderivative,
+            limitExpr: expr.limitExpr,
+            limitVar: expr.limitVar,
+            limitVal: expr.limitVal,
             parameters: expr.parameters,
             distParams: expr.distParams
         })),
@@ -2932,6 +3561,10 @@ function loadExpressionSet() {
         );
         expr.visible = exprData.visible;
         expr.showDerivative = exprData.showDerivative;
+        expr.showAntiderivative = exprData.showAntiderivative;
+        expr.limitExpr = exprData.limitExpr;
+        expr.limitVar = exprData.limitVar;
+        expr.limitVal = exprData.limitVal;
         expr.parameters = exprData.parameters;
         expr.distParams = exprData.distParams;
 
@@ -3017,6 +3650,10 @@ function generateShareableLink() {
             type: expr.type,
             color: expr.color,
             showDerivative: expr.showDerivative,
+            showAntiderivative: expr.showAntiderivative,
+            limitExpr: expr.limitExpr,
+            limitVar: expr.limitVar,
+            limitVal: expr.limitVal,
             parameters: expr.parameters,
             distParams: expr.distParams
         })),
@@ -3028,9 +3665,9 @@ function generateShareableLink() {
         }
     };
 
-    // Encode data to base64
+    // Encode data to base64 (handle Unicode via encodeURIComponent)
     const jsonString = JSON.stringify(data);
-    const base64 = btoa(jsonString);
+    const base64 = btoa(unescape(encodeURIComponent(jsonString)));
 
     // Create URL
     const url = window.location.origin + window.location.pathname + '?data=' + encodeURIComponent(base64);
@@ -3054,7 +3691,7 @@ function loadFromURL() {
     if (!dataParam) return;
 
     try {
-        const jsonString = atob(decodeURIComponent(dataParam));
+        const jsonString = decodeURIComponent(escape(atob(decodeURIComponent(dataParam))));
         const data = JSON.parse(jsonString);
 
         // Clear current expressions
@@ -3070,6 +3707,10 @@ function loadFromURL() {
                 exprData.color
             );
             expr.showDerivative = exprData.showDerivative;
+            expr.showAntiderivative = exprData.showAntiderivative;
+            expr.limitExpr = exprData.limitExpr;
+            expr.limitVar = exprData.limitVar;
+            expr.limitVal = exprData.limitVal;
             expr.parameters = exprData.parameters;
             expr.distParams = exprData.distParams;
 
@@ -3099,5 +3740,96 @@ function loadFromURL() {
         updateGraph();
     } catch (error) {
         console.error('Error loading from URL:', error);
+    }
+}
+
+// ============================================
+// Embed Code Generator
+// ============================================
+
+/**
+ * Show the embed code modal with current graph state
+ */
+function showEmbedCode() {
+    var modal = document.getElementById('gc-embed-modal');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    updateEmbedPreview();
+}
+
+/**
+ * Build embed iframe code from current expressions and options
+ */
+function updateEmbedPreview() {
+    var output = document.getElementById('embed-code-output');
+    if (!output) return;
+
+    var width = document.getElementById('embed-width').value || '800';
+    var height = document.getElementById('embed-height').value || '500';
+    var showInputs = document.getElementById('embed-opt-inputs').checked;
+    var showGrid = document.getElementById('embed-opt-grid').checked;
+    var showLegend = document.getElementById('embed-opt-legend').checked;
+    var darkTheme = document.getElementById('embed-opt-dark').checked;
+
+    // Build params from current graph state
+    var params = [];
+
+    if (engine && engine.expressions && engine.expressions.length > 0) {
+        var exprs = [], types = [], colors = [];
+        engine.expressions.forEach(function(e) {
+            if (e.expression) {
+                exprs.push(e.expression);
+                types.push(e.type || 'cartesian');
+                colors.push(e.color || '#2563eb');
+            }
+        });
+        if (exprs.length > 0) {
+            params.push('expr=' + encodeURIComponent(exprs.join('|')));
+            params.push('type=' + encodeURIComponent(types.join('|')));
+            params.push('color=' + encodeURIComponent(colors.join('|')));
+        }
+    }
+
+    // Range
+    var xMin = document.getElementById('xMin').value;
+    var xMax = document.getElementById('xMax').value;
+    var yMin = document.getElementById('yMin').value;
+    var yMax = document.getElementById('yMax').value;
+    if (xMin !== '-10') params.push('xmin=' + xMin);
+    if (xMax !== '10') params.push('xmax=' + xMax);
+    if (yMin !== '-10') params.push('ymin=' + yMin);
+    if (yMax !== '10') params.push('ymax=' + yMax);
+
+    // Options
+    if (!showInputs) params.push('inputs=0');
+    if (!showGrid) params.push('grid=0');
+    if (!showLegend) params.push('legend=0');
+    if (darkTheme) params.push('theme=dark');
+
+    var cp = (document.querySelector('meta[name="context-path"]') || {}).content || '';
+    var baseUrl = window.location.origin + cp + '/graphing-calculator-embed.jsp';
+    var url = baseUrl + (params.length > 0 ? '?' + params.join('&') : '');
+
+    var iframe = '<iframe src="' + url + '" width="' + width + '" height="' + height + '" ' +
+        'style="border:1px solid #e5e7eb;border-radius:8px;" ' +
+        'allowfullscreen loading="lazy" ' +
+        'title="Graphing Calculator - 8gwifi.org"></iframe>';
+
+    output.value = iframe;
+}
+
+/**
+ * Copy embed code to clipboard
+ */
+function copyEmbedCode() {
+    var output = document.getElementById('embed-code-output');
+    if (!output) return;
+    output.select();
+    document.execCommand('copy');
+    var btn = output.parentElement.nextElementSibling.querySelector('button');
+    if (btn) {
+        var orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(function() { btn.innerHTML = orig; }, 2000);
     }
 }

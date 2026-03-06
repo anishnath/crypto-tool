@@ -11,15 +11,13 @@
     --gc-light: rgba(139, 92, 246, 0.15);
 }
 
-/* ===== Grid Override: Graph-Centric Layout ===== */
+/* ===== Grid Override: Two-Column Layout (input + graph) ===== */
 .gc-page-container.tool-page-container {
-    grid-template-columns: minmax(260px, 320px) 1fr 300px;
+    grid-template-columns: minmax(260px, 320px) 1fr;
     gap: 1rem;
-}
-@media (max-width: 1024px) {
-    .gc-page-container.tool-page-container {
-        grid-template-columns: minmax(260px, 310px) 1fr;
-    }
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
 }
 @media (max-width: 900px) {
     .gc-page-container.tool-page-container {
@@ -166,62 +164,77 @@
 }
 
 /* ========================================
-   UX FIX: Hide engine's verbose sample buttons
-   The engine creates .mt-2 divs with tons of buttons
-   like "sin(x) cos(x) tan(x) x² x³ ..." etc.
-   Show them only when the expression is focused.
+   Sample chips: hidden by default, show on focus
    ======================================== */
-.gc-page-container #input-container-1 > .mt-2,
-.gc-page-container [id^="input-container-"] > .mt-2 {
+.gc-page-container .gc-sample-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+    margin-top: 0.25rem;
+}
+.gc-page-container .gc-sample-chips .btn {
+    padding: 0.1rem 0.35rem;
+    font-size: 0.5625rem;
+    margin: 0 !important;
+}
+/* Hide samples until input is focused */
+.gc-page-container .gc-on-focus {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    transition: max-height 0.25s ease, opacity 0.2s ease, margin 0.2s ease;
-    margin-top: 0 !important;
+    margin: 0;
+    transition: max-height 0.2s ease, opacity 0.15s ease, margin 0.15s ease;
 }
-/* Show when expression item is hovered or focused-within */
-.gc-page-container .expression-item:focus-within > [id^="input-container-"] > .mt-2,
-.gc-page-container .expression-item.gc-expanded > [id^="input-container-"] > .mt-2 {
-    max-height: 200px;
-    overflow-y: auto;
+.gc-page-container .expression-item:focus-within .gc-on-focus {
+    max-height: 60px;
     opacity: 1;
-    margin-top: 0.375rem !important;
+    margin-top: 0.25rem;
 }
 
 /* ========================================
-   UX FIX: Compact the math preview
+   Math preview: hide when empty, compact
    ======================================== */
-.gc-page-container .preview-label {
-    font-size: 0.5625rem;
-    color: var(--text-muted, #94a3b8);
-    margin: 0.25rem 0 0;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+.gc-page-container .math-preview:empty,
+.gc-page-container .math-preview:not(:has(.katex)) {
+    display: none;
 }
-.gc-page-container .math-preview {
-    background: var(--bg-primary, white);
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    margin-top: 0.125rem;
-    border: 1px solid var(--border, #e0e0e0);
-    min-height: 1.5rem;
-    display: flex;
-    align-items: center;
-    font-size: 0.8125rem;
-}
-.gc-page-container .math-preview .katex { font-size: 0.85em; }
 
 /* ========================================
-   UX FIX: Compact controls row
+   Expression toolbar: type, color, toggles
    ======================================== */
-.gc-page-container .controls {
+.gc-page-container .gc-expr-toolbar {
     display: flex;
-    gap: 0.375rem;
     align-items: center;
+    gap: 0.35rem;
     margin-top: 0.375rem;
     flex-wrap: wrap;
 }
+.gc-page-container .gc-calculus-toggles {
+    display: contents;
+}
+.gc-page-container .gc-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    font-size: 0.5625rem;
+    color: var(--text-secondary, #64748b);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+/* ========================================
+   Math preview: compact, no label
+   ======================================== */
+.gc-page-container .math-preview {
+    background: var(--bg-primary, white);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    margin-top: 0.25rem;
+    border: 1px solid var(--border, #e0e0e0);
+    font-size: 0.8125rem;
+}
+.gc-page-container .math-preview .katex { font-size: 0.85em; }
 .gc-page-container .color-picker {
     width: 24px;
     height: 24px;
@@ -259,29 +272,15 @@
 }
 
 /* ========================================
-   UX FIX: Compact derivative/integral toggles
+   Compact form check inputs
    ======================================== */
-.gc-page-container .form-check {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    min-height: auto;
-    margin-bottom: 0;
-}
 .gc-page-container .form-check-input {
-    width: 0.8rem;
-    height: 0.8rem;
+    width: 0.75rem;
+    height: 0.75rem;
     accent-color: var(--gc-tool);
     margin: 0;
     cursor: pointer;
     flex-shrink: 0;
-}
-.gc-page-container .form-check-label {
-    font-size: 0.625rem;
-    color: var(--text-secondary, #64748b);
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
 }
 
 /* Integration controls - compact */
