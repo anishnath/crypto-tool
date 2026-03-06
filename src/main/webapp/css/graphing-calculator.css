@@ -1004,3 +1004,38 @@
     color: #c4b5fd;
     border-color: #a78bfa;
 }
+
+/* ========================================
+   Expression Error Feedback
+   ======================================== */
+.gc-page-container .gc-expr-error {
+    font-size: 0.75rem;
+    color: #ef4444;
+    padding: 0.2rem 0.4rem;
+    margin-top: 0.25rem;
+    border-left: 2px solid #ef4444;
+    background: rgba(239, 68, 68, 0.05);
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+[data-theme="dark"] .gc-page-container .gc-expr-error {
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.1);
+    border-left-color: #f87171;
+}
+.gc-page-container .gc-input-error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25);
+}
+[data-theme="dark"] .gc-page-container .gc-input-error {
+    border-color: #f87171 !important;
+    box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.25);
+}
+
+/* ========================================
+   Calculus toggles: wrap nicely on mobile
+   ======================================== */
+.gc-page-container .gc-calculus-toggles {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.125rem 0.25rem;
+}

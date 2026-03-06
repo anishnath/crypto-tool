@@ -518,6 +518,109 @@ assert(engineSrc.includes('riemannN'), 'Expression state tracks riemannN');
 assert(engineSrc.includes('Riemann (n='), 'Legend shows Riemann label with n');
 
 // ============================================================
+console.log('\n=== 16. Second derivative, critical points, inflection points ===');
+// ============================================================
+
+assert(engineSrc.includes('generateSecondDerivative'), 'Engine has generateSecondDerivative method');
+assert(engineSrc.includes('findCriticalPoints'), 'Engine has findCriticalPoints method');
+assert(engineSrc.includes('findInflectionPoints'), 'Engine has findInflectionPoints method');
+assert(engineSrc.includes('show-second-derivative-'), 'UI has second derivative toggle');
+assert(engineSrc.includes('show-critical-points-'), 'UI has critical points toggle');
+assert(engineSrc.includes('show-inflection-points-'), 'UI has inflection points toggle');
+assert(engineSrc.includes('toggleSecondDerivative'), 'Has toggleSecondDerivative function');
+assert(engineSrc.includes('toggleCriticalPoints'), 'Has toggleCriticalPoints function');
+assert(engineSrc.includes('toggleInflectionPoints'), 'Has toggleInflectionPoints function');
+assert(engineSrc.includes('showSecondDerivative'), 'Expression state tracks showSecondDerivative');
+assert(engineSrc.includes('showCriticalPoints'), 'Expression state tracks showCriticalPoints');
+assert(engineSrc.includes('showInflectionPoints'), 'Expression state tracks showInflectionPoints');
+assert(engineSrc.includes("f''("), 'Second derivative label uses f\'\'');
+assert(engineSrc.includes("'min'") && engineSrc.includes("'max'"), 'Critical points classified as min/max');
+assert(engineSrc.includes('Local Min') && engineSrc.includes('Local Max'), 'UI shows Local Min/Max markers');
+assert(engineSrc.includes('Inflection Points'), 'UI shows Inflection Points markers');
+
+// ============================================================
+console.log('\n=== 17. Horizontal/oblique asymptotes ===');
+// ============================================================
+
+assert(engineSrc.includes('findHorizontalAsymptotes'), 'Engine has findHorizontalAsymptotes method');
+assert(engineSrc.includes("type: 'horizontal'"), 'Detects horizontal asymptotes');
+assert(engineSrc.includes("type: 'oblique'"), 'Detects oblique asymptotes');
+
+// ============================================================
+console.log('\n=== 18. Expression caching ===');
+// ============================================================
+
+assert(engineSrc.includes('_compiledCache'), 'Has compiled expression cache');
+assert(engineSrc.includes('_compile('), 'Has _compile method');
+
+// ============================================================
+console.log('\n=== 19. Inequality fix (heatmap) ===');
+// ============================================================
+
+assert(engineSrc.includes("type: 'heatmap'"), 'Inequality uses heatmap instead of scatter points');
+assert(engineSrc.includes('showscale: false'), 'Heatmap hides color scale');
+
+// ============================================================
+console.log('\n=== 20. Error feedback ===');
+// ============================================================
+
+assert(engineSrc.includes('gc-expr-error'), 'Has error feedback element');
+assert(engineSrc.includes('gc-input-error'), 'Has input error class');
+assert(engineSrc.includes('math.parse('), 'Validates expressions with math.parse');
+
+// ============================================================
+console.log('\n=== 21. Extended regression ===');
+// ============================================================
+
+assert(engineSrc.includes('generateRegressionExtended'), 'Engine has generateRegressionExtended method');
+assert(engineSrc.includes("'quadratic'"), 'Supports quadratic regression');
+assert(engineSrc.includes("'cubic'"), 'Supports cubic regression');
+assert(engineSrc.includes("'exponential'"), 'Supports exponential regression');
+assert(engineSrc.includes("'logarithmic'"), 'Supports logarithmic regression');
+assert(engineSrc.includes("'power'"), 'Supports power regression');
+assert(engineSrc.includes('regression-type-'), 'UI has regression type dropdown');
+assert(engineSrc.includes('updateRegressionType'), 'Has updateRegressionType function');
+assert(engineSrc.includes('R²='), 'Shows R² in regression legend');
+assert(engineSrc.includes("Auto (Best R²)"), 'Has auto-best regression option');
+
+// ============================================================
+console.log('\n=== 22. Area between curves ===');
+// ============================================================
+
+assert(engineSrc.includes('areaBetweenCurves'), 'Engine has areaBetweenCurves method');
+assert(engineSrc.includes('function areaBetweenCurves()'), 'Has areaBetweenCurves UI function');
+assert(engineSrc.includes('_areaBetween'), 'Stores area-between data on expression');
+assert(engineSrc.includes('areaBetweenCurves()'), 'UI calls areaBetweenCurves function');
+assert(engineSrc.includes('shadeX') && engineSrc.includes('shadeY'), 'Generates shading polygon');
+
+// ============================================================
+console.log('\n=== 23. Table of values ===');
+// ============================================================
+
+assert(engineSrc.includes('generateTableOfValues'), 'Engine has generateTableOfValues method');
+assert(engineSrc.includes('toggleTableOfValues'), 'Has toggleTableOfValues UI function');
+assert(engineSrc.includes('gc-table-panel'), 'Creates table panel element');
+
+// ============================================================
+console.log('\n=== 24. Enhanced trace mode (snap-to-curve + crosshair) ===');
+// ============================================================
+
+assert(engineSrc.includes('plotly_click'), 'Trace mode handles click events');
+assert(engineSrc.includes('shapes'), 'Draws crosshair shapes on hover');
+assert(engineSrc.includes('annotations'), 'Adds annotation on click');
+assert(engineSrc.includes('dy/dx'), 'Shows slope as dy/dx');
+assert(engineSrc.includes('removeListener') || engineSrc.includes('removeAllListeners'), 'Properly cleans up listeners on disable');
+
+// ============================================================
+console.log('\n=== 25. Domain restrictions ===');
+// ============================================================
+
+assert(engineSrc.includes('parseDomainRestriction'), 'Engine has parseDomainRestriction method');
+assert(engineSrc.includes('evaluateDomainRestriction'), 'Engine has evaluateDomainRestriction method');
+assert(engineSrc.includes("restriction && !this.evaluateDomainRestriction"), 'Cartesian generation applies domain restriction');
+assert(engineSrc.includes('and'), 'Domain restriction supports compound "and" conditions');
+
+// ============================================================
 // Summary
 // ============================================================
 console.log('\n' + '='.repeat(50));

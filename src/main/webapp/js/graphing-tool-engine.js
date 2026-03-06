@@ -3,6 +3,12 @@
  * Reusable JavaScript library using Math.js and Plotly.js
  */
 
+/** Escape a string for safe insertion into HTML attributes/content */
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 class GraphingEngine {
     constructor(containerId) {
         this.containerId = containerId;
@@ -14,6 +20,71 @@ class GraphingEngine {
         ];
         this.colorIndex = 0;
         this._sympyPending = 0; // track in-flight SymPy requests
+        this._compiledCache = {}; // expression → compiled math.js node
+    }
+
+    /** Compile a math.js expression with caching */
+    _compile(expr) {
+        if (!this._compiledCache[expr]) {
+            this._compiledCache[expr] = math.compile(expr);
+        }
+        return this._compiledCache[expr];
+    }
+
+    /**
+     * Generate trace for sum(var, start, end, body) or prod(var, start, end, body)
+     * where body can contain x — creates a plot of the sum/product as function of x.
+     */
+    _generateSumProductTrace(expression, type, xMin, xMax, expr) {
+        const pattern = type === 'sum'
+            ? /^\s*sum\s*\(\s*([a-zA-Z])\s*,\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+)\s*\)\s*$/
+            : /^\s*prod\s*\(\s*([a-zA-Z])\s*,\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+)\s*\)\s*$/;
+        const m = expression.match(pattern);
+        if (!m) return null;
+
+        const [, varName, startExpr, endExpr, bodyExpr] = m;
+        try {
+            const start = Math.round(math.evaluate(startExpr));
+            const end = Math.round(math.evaluate(endExpr));
+            if (end - start > 10000) return null; // safety limit
+            const compiled = math.compile(bodyExpr);
+
+            const numPoints = 500;
+            const xs = [];
+            const ys = [];
+            const step = (xMax - xMin) / numPoints;
+            const containsX = /(?<![a-zA-Z])x(?![a-zA-Z])/.test(bodyExpr);
+
+            for (let i = 0; i <= numPoints; i++) {
+                const x = xMin + i * step;
+                let result = type === 'sum' ? 0 : 1;
+                let valid = true;
+                for (let n = start; n <= end; n++) {
+                    const scope = {};
+                    scope[varName] = n;
+                    if (containsX) scope.x = x;
+                    try {
+                        const val = compiled.evaluate(scope);
+                        if (type === 'sum') result += val;
+                        else result *= val;
+                        if (!isFinite(result)) { valid = false; break; }
+                    } catch (_) { valid = false; break; }
+                }
+                xs.push(x);
+                ys.push(valid ? result : NaN);
+            }
+
+            // If body doesn't contain x, it's a constant — still plot as horizontal line
+            return [{
+                x: xs, y: ys,
+                type: 'scatter', mode: 'lines',
+                name: expr.expression,
+                line: { color: expr.color, width: 2 },
+                connectgaps: false
+            }];
+        } catch (e) {
+            return null;
+        }
     }
 
     // ==================== SymPy Fallback Helpers ====================
@@ -102,6 +173,12 @@ class GraphingEngine {
     updateExpression(id, updates) {
         const expr = this.expressions.find(e => e.id === id);
         if (expr) {
+            // Clear stale computed data when expression changes
+            if (updates.expression && updates.expression !== expr.expression) {
+                delete expr._areaBetween;
+                delete expr._tableXValues;
+                delete expr._tablePoints;
+            }
             Object.assign(expr, updates);
         }
     }
@@ -181,6 +258,245 @@ class GraphingEngine {
     }
 
     /**
+     * Strip domain restriction from expression: "x^2 {x > 0}" → ["x^2", condition]
+     * Supports: {x > 0}, {-2 < x < 5}, {x >= 0 and x <= 10}
+     */
+    parseDomainRestriction(expression) {
+        if (!expression || typeof expression !== 'string') return { expr: expression, restriction: null };
+        const m = expression.match(/^(.*?)\s*\{([^}]+)\}\s*$/);
+        if (!m) return { expr: expression, restriction: null };
+        return { expr: m[1].trim(), restriction: m[2].trim() };
+    }
+
+    /**
+     * Evaluate a domain restriction string for a given x value.
+     * e.g., "x > 0", "-2 < x < 5", "x >= 0 and x <= 10"
+     */
+    evaluateDomainRestriction(restriction, xVal) {
+        if (!restriction) return true;
+        try {
+            // Handle compound: "x > 0 and x < 5"
+            const parts = restriction.split(/\s+and\s+/i);
+            for (const part of parts) {
+                const p = part.trim();
+                // Double inequality: -2 < x < 5
+                const dbl = p.match(/^([+-]?\d+\.?\d*)\s*(<=?)\s*x\s*(<=?)\s*([+-]?\d+\.?\d*)$/);
+                if (dbl) {
+                    const lo = parseFloat(dbl[1]), hi = parseFloat(dbl[4]);
+                    const loStrict = dbl[2] === '<', hiStrict = dbl[3] === '<';
+                    if (loStrict ? xVal <= lo : xVal < lo) return false;
+                    if (hiStrict ? xVal >= hi : xVal > hi) return false;
+                    continue;
+                }
+                // Single inequality: x > 0, x <= 5, 3 < x
+                const sng = p.match(/^(x|[+-]?\d+\.?\d*)\s*(>=?|<=?|!=)\s*(x|[+-]?\d+\.?\d*)$/);
+                if (sng) {
+                    const left = sng[1] === 'x' ? xVal : parseFloat(sng[1]);
+                    const right = sng[3] === 'x' ? xVal : parseFloat(sng[3]);
+                    const op = sng[2];
+                    if (op === '>' && !(left > right)) return false;
+                    if (op === '>=' && !(left >= right)) return false;
+                    if (op === '<' && !(left < right)) return false;
+                    if (op === '<=' && !(left <= right)) return false;
+                    if (op === '!=' && !(left !== right)) return false;
+                    continue;
+                }
+                // If can't parse, ignore (allow all)
+            }
+            return true;
+        } catch (_) {
+            return true;
+        }
+    }
+
+    /**
+     * Compute area between two curves f(x) and g(x)
+     */
+    areaBetweenCurves(expr1, expr2, xMin, xMax, numPoints = 1000) {
+        try {
+            if (!expr1 || !expr2) return null;
+            const p1 = this.parseDomainRestriction(expr1);
+            const p2 = this.parseDomainRestriction(expr2);
+            const c1 = this._compile(this.normalizeExpression(this.stripCartesianPrefix(p1.expr)));
+            const c2 = this._compile(this.normalizeExpression(this.stripCartesianPrefix(p2.expr)));
+            const step = (xMax - xMin) / numPoints;
+            let area = 0;
+            const xTop = [], yTop = [], xBot = [], yBot = [];
+
+            for (let i = 0; i <= numPoints; i++) {
+                const x = xMin + i * step;
+                try {
+                    if (p1.restriction && !this.evaluateDomainRestriction(p1.restriction, x)) continue;
+                    if (p2.restriction && !this.evaluateDomainRestriction(p2.restriction, x)) continue;
+                    const y1 = c1.evaluate({ x });
+                    const y2 = c2.evaluate({ x });
+                    if (isFinite(y1) && isFinite(y2)) {
+                        const top = Math.max(y1, y2);
+                        const bot = Math.min(y1, y2);
+                        xTop.push(x); yTop.push(top);
+                        xBot.push(x); yBot.push(bot);
+                        if (i > 0) area += Math.abs(y1 - y2) * step;
+                    }
+                } catch (_) {}
+            }
+
+            // Build closed polygon for shading: top curve forward, bottom curve backward
+            const shadeX = [...xTop, ...xBot.slice().reverse()];
+            const shadeY = [...yTop, ...yBot.slice().reverse()];
+
+            return { area, shadeX, shadeY };
+        } catch (error) {
+            console.error('Error computing area between curves:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Generate a table of values for an expression object.
+     * Supports cartesian, equation, polar, parametric types with parameter substitution.
+     * @param {object} exprObj - Full expression object (with .expression, .type, .parameters, etc.)
+     * @param {number} xMin
+     * @param {number} xMax
+     * @param {number} numPoints
+     * @returns {Array<{x:number|string, y:number|string, y2?:number|string}>|null}
+     */
+    generateTableOfValues(exprObj, xMin = -10, xMax = 10, numPoints = 21) {
+        try {
+            // Support legacy call: generateTableOfValues("x^2", -10, 10)
+            const isLegacy = typeof exprObj === 'string';
+            const expression = isLegacy ? exprObj : exprObj.expression;
+            const type = isLegacy ? 'cartesian' : (exprObj.type || 'cartesian');
+            const parameters = isLegacy ? null : exprObj.parameters;
+
+            if (!expression || typeof expression !== 'string' || expression.trim() === '') return null;
+
+            // Substitute parameters
+            let substituted = this.normalizeExpression(expression);
+            if (parameters) {
+                Object.keys(parameters).forEach(param => {
+                    const re = new RegExp(`\\b${param}\\b`, 'g');
+                    substituted = substituted.replace(re, String(parameters[param]));
+                });
+            }
+
+            const { expr: cleanExpr, restriction } = this.parseDomainRestriction(substituted);
+            const step = (xMax - xMin) / (numPoints - 1);
+            const rows = [];
+
+            if (type === 'parametric') {
+                // Parametric: table of t, x(t), y(t)
+                const parts = cleanExpr.split(',').map(s => s.trim());
+                if (parts.length < 2) return null;
+                const tMin = exprObj.tMin != null ? exprObj.tMin : 0;
+                const tMax = exprObj.tMax != null ? exprObj.tMax : 2 * Math.PI;
+                const tStep = (tMax - tMin) / (numPoints - 1);
+                const cx = this._compile(this.normalizeExpression(parts[0]));
+                const cy = this._compile(this.normalizeExpression(parts[1]));
+                for (let i = 0; i < numPoints; i++) {
+                    const t = tMin + i * tStep;
+                    try {
+                        const xv = cx.evaluate({ t });
+                        const yv = cy.evaluate({ t });
+                        rows.push({
+                            x: isFinite(xv) ? +xv.toFixed(4) : 'undef',
+                            y: isFinite(yv) ? +yv.toFixed(4) : 'undef',
+                            t: +t.toFixed(4)
+                        });
+                    } catch (_) {
+                        rows.push({ t: +t.toFixed(4), x: 'undef', y: 'undef' });
+                    }
+                }
+                return rows;
+            }
+
+            if (type === 'polar') {
+                // Polar: table of θ, r, (x, y)
+                const thetaMin = exprObj.thetaMin != null ? exprObj.thetaMin : 0;
+                const thetaMax = exprObj.thetaMax != null ? exprObj.thetaMax : 2 * Math.PI;
+                const tStep = (thetaMax - thetaMin) / (numPoints - 1);
+                const stripped = cleanExpr.replace(/^\s*r\s*=\s*/i, '');
+                const compiled = this._compile(this.normalizeExpression(stripped));
+                for (let i = 0; i < numPoints; i++) {
+                    const theta = thetaMin + i * tStep;
+                    try {
+                        const r = compiled.evaluate({ theta });
+                        if (typeof r === 'number' && isFinite(r)) {
+                            rows.push({
+                                theta: +theta.toFixed(4),
+                                r: +r.toFixed(4),
+                                x: +(r * Math.cos(theta)).toFixed(4),
+                                y: +(r * Math.sin(theta)).toFixed(4)
+                            });
+                        } else {
+                            rows.push({ theta: +theta.toFixed(4), r: 'undef', x: 'undef', y: 'undef' });
+                        }
+                    } catch (_) {
+                        rows.push({ theta: +theta.toFixed(4), r: 'undef', x: 'undef', y: 'undef' });
+                    }
+                }
+                return rows;
+            }
+
+            if (type === 'equation' || type === 'implicit') {
+                // Equation: solve for y branches, show x, y₁, y₂, ...
+                if (typeof nerdamer !== 'undefined' && cleanExpr.includes('=')) {
+                    try {
+                        const parts = cleanExpr.split('=');
+                        const eqExpr = '(' + parts[0].trim() + ')-(' + parts[1].trim() + ')';
+                        const ySolved = nerdamer.solve(eqExpr, 'y');
+                        const yText = ySolved.text().replace(/^\[|\]$/g, '');
+                        if (yText) {
+                            const yExprs = yText.split(',').map(s => s.trim()).filter(Boolean);
+                            const compiled = yExprs.map(ye => {
+                                try { return math.compile(this.normalizeExpression(ye)); } catch(_) { return null; }
+                            });
+                            for (let i = 0; i < numPoints; i++) {
+                                const x = xMin + i * step;
+                                if (restriction && !this.evaluateDomainRestriction(restriction, x)) continue;
+                                const row = { x: +x.toFixed(4) };
+                                compiled.forEach((c, bi) => {
+                                    const key = compiled.length === 1 ? 'y' : `y${bi + 1}`;
+                                    if (!c) { row[key] = 'undef'; return; }
+                                    try {
+                                        const v = c.evaluate({ x });
+                                        row[key] = (typeof v === 'number' && isFinite(v)) ? +v.toFixed(4) : 'undef';
+                                    } catch (_) { row[key] = 'undef'; }
+                                });
+                                rows.push(row);
+                            }
+                            return rows;
+                        }
+                    } catch (_) { /* fall through to implicit grid */ }
+                }
+                // Implicit fallback: can't easily generate a simple table
+                return null;
+            }
+
+            // Default: cartesian y = f(x)
+            const stripped = this.stripCartesianPrefix(cleanExpr);
+            const compiled = this._compile(this.normalizeExpression(stripped));
+            for (let i = 0; i < numPoints; i++) {
+                const x = xMin + i * step;
+                if (restriction && !this.evaluateDomainRestriction(restriction, x)) continue;
+                try {
+                    const y = compiled.evaluate({ x });
+                    if (typeof y === 'number' && isFinite(y)) {
+                        rows.push({ x: +x.toFixed(4), y: +y.toFixed(4) });
+                    } else {
+                        rows.push({ x: +x.toFixed(4), y: 'undef' });
+                    }
+                } catch (_) {
+                    rows.push({ x: +x.toFixed(4), y: 'undef' });
+                }
+            }
+            return rows;
+        } catch (error) {
+            console.error('Error generating table of values:', error);
+            return null;
+        }
+    }
+
+    /**
      * Generate data for Cartesian plot (y = f(x))
      */
     generateCartesian(expression, xMin = -10, xMax = 10, numPoints = 500) {
@@ -190,7 +506,10 @@ class GraphingEngine {
                 return null;
             }
 
-            let expr = this.normalizeExpression(expression);
+            // Parse domain restriction if present: "x^2 {x > 0}"
+            const { expr: rawExpr, restriction } = this.parseDomainRestriction(expression);
+
+            let expr = this.normalizeExpression(rawExpr);
             expr = this.stripCartesianPrefix(expr);
 
             const x = [];
@@ -198,10 +517,17 @@ class GraphingEngine {
             const step = (xMax - xMin) / numPoints;
 
             // Compile expression once
-            const compiledExpr = math.compile(expr);
+            const compiledExpr = this._compile(expr);
 
             for (let i = 0; i <= numPoints; i++) {
                 const xVal = xMin + i * step;
+
+                // Apply domain restriction
+                if (restriction && !this.evaluateDomainRestriction(restriction, xVal)) {
+                    x.push(xVal);
+                    y.push(null);
+                    continue;
+                }
 
                 try {
                     const yVal = compiledExpr.evaluate({ x: xVal });
@@ -257,7 +583,7 @@ class GraphingEngine {
 
             // Ensure even number of intervals for Simpson's rule
             if (numPoints % 2 !== 0) numPoints++;
-            const compiledExpr = math.compile(this.normalizeExpression(this.stripCartesianPrefix(expression)));
+            const compiledExpr = this._compile(this.normalizeExpression(this.stripCartesianPrefix(expression)));
             const step = (xMax - xMin) / numPoints;
             let area = 0;
 
@@ -317,7 +643,7 @@ class GraphingEngine {
     generateRiemannSum(expression, a, b, n, method) {
         try {
             if (!expression || typeof expression !== 'string' || expression.trim() === '') return null;
-            const compiled = math.compile(this.normalizeExpression(this.stripCartesianPrefix(expression)));
+            const compiled = this._compile(this.normalizeExpression(this.stripCartesianPrefix(expression)));
             const dx = (b - a) / n;
             const shapes = []; // each shape: {x: [...], y: [...]}
             let area = 0;
@@ -364,18 +690,22 @@ class GraphingEngine {
                 return null;
             }
 
+            const { expr: rawExpr, restriction } = this.parseDomainRestriction(expression);
             const x = [];
             const y = [];
             const step = (xMax - xMin) / numPoints;
-            const h = 0.001; // Small step for numerical derivative
+            const h = 0.001;
 
-            const compiledExpr = math.compile(this.normalizeExpression(this.stripCartesianPrefix(expression)));
+            const compiledExpr = this._compile(this.normalizeExpression(this.stripCartesianPrefix(rawExpr)));
 
             for (let i = 0; i <= numPoints; i++) {
                 const xVal = xMin + i * step;
 
+                if (restriction && !this.evaluateDomainRestriction(restriction, xVal)) {
+                    x.push(xVal); y.push(null); continue;
+                }
+
                 try {
-                    // Numerical derivative using central difference: f'(x) ≈ (f(x+h) - f(x-h)) / (2h)
                     const yPlus = compiledExpr.evaluate({ x: xVal + h });
                     const yMinus = compiledExpr.evaluate({ x: xVal - h });
                     const derivative = (yPlus - yMinus) / (2 * h);
@@ -396,6 +726,363 @@ class GraphingEngine {
             return { x, y };
         } catch (error) {
             console.error('Error generating derivative:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Generate second derivative f''(x) using numerical differentiation
+     */
+    generateSecondDerivative(expression, xMin = -10, xMax = 10, numPoints = 500) {
+        try {
+            if (!expression || typeof expression !== 'string' || expression.trim() === '') return null;
+            const { expr: rawExpr, restriction } = this.parseDomainRestriction(expression);
+            const x = [];
+            const y = [];
+            const step = (xMax - xMin) / numPoints;
+            const h = 0.001;
+            const compiledExpr = this._compile(this.normalizeExpression(this.stripCartesianPrefix(rawExpr)));
+
+            for (let i = 0; i <= numPoints; i++) {
+                const xVal = xMin + i * step;
+                if (restriction && !this.evaluateDomainRestriction(restriction, xVal)) {
+                    x.push(xVal); y.push(null); continue;
+                }
+                try {
+                    // f''(x) ≈ (f(x+h) - 2f(x) + f(x-h)) / h²
+                    const yPlus = compiledExpr.evaluate({ x: xVal + h });
+                    const yCenter = compiledExpr.evaluate({ x: xVal });
+                    const yMinus = compiledExpr.evaluate({ x: xVal - h });
+                    const d2 = (yPlus - 2 * yCenter + yMinus) / (h * h);
+                    if (isFinite(d2)) { x.push(xVal); y.push(d2); }
+                    else { x.push(xVal); y.push(null); }
+                } catch (e) { x.push(xVal); y.push(null); }
+            }
+            return { x, y };
+        } catch (error) {
+            console.error('Error generating second derivative:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Find critical points where f'(x) ≈ 0 and classify as local min/max
+     */
+    findCriticalPoints(expression, xMin = -10, xMax = 10, numPoints = 1000) {
+        try {
+            if (!expression || typeof expression !== 'string' || expression.trim() === '') return [];
+            const { expr: rawExpr, restriction } = this.parseDomainRestriction(expression);
+            const compiledExpr = this._compile(this.normalizeExpression(this.stripCartesianPrefix(rawExpr)));
+            const h = 0.0001;
+            const step = (xMax - xMin) / numPoints;
+            const points = [];
+
+            const f = (xv) => { try { const v = compiledExpr.evaluate({ x: xv }); return isFinite(v) ? v : null; } catch (_) { return null; } };
+            const fp = (xv) => { const a = f(xv + h), b = f(xv - h); return (a !== null && b !== null) ? (a - b) / (2 * h) : null; };
+            const fpp = (xv) => { const a = f(xv + h), c = f(xv), b = f(xv - h); return (a !== null && c !== null && b !== null) ? (a - 2 * c + b) / (h * h) : null; };
+
+            let prevDeriv = fp(xMin);
+            for (let i = 1; i <= numPoints; i++) {
+                const xVal = xMin + i * step;
+                const curDeriv = fp(xVal);
+                if (prevDeriv !== null && curDeriv !== null) {
+                    // Detect critical point: sign change OR derivative ≈ 0 at grid point
+                    const signChange = prevDeriv * curDeriv < 0;
+                    const nearZero = Math.abs(curDeriv) < 1e-6 && (prevDeriv !== 0 || i === numPoints);
+                    if (signChange || nearZero) {
+                        let cx;
+                        if (signChange) {
+                            // Bisect to find precise zero
+                            let lo = xVal - step, hi = xVal;
+                            for (let j = 0; j < 50; j++) {
+                                const mid = (lo + hi) / 2;
+                                const midD = fp(mid);
+                                if (midD === null) break;
+                                if (midD * fp(lo) < 0) hi = mid; else lo = mid;
+                            }
+                            cx = (lo + hi) / 2;
+                        } else {
+                            cx = xVal; // already at/near zero
+                        }
+                        // Check domain restriction
+                        if (restriction && !this.evaluateDomainRestriction(restriction, cx)) continue;
+                        const cy = f(cx);
+                        if (cy !== null && Math.abs(cy) < 1e8) {
+                            const d2 = fpp(cx);
+                            let type = 'critical';
+                            if (d2 !== null && Math.abs(d2) < 1e8) {
+                                if (d2 > 0.01) type = 'min';
+                                else if (d2 < -0.01) type = 'max';
+                            }
+                            // Verify it's a real critical point: f'(cx) should be near zero
+                            const fpAtCx = fp(cx);
+                            if (fpAtCx !== null && Math.abs(fpAtCx) < 0.1) {
+                                // Avoid duplicates
+                                if (!points.some(p => Math.abs(p.x - cx) < step * 2)) {
+                                    points.push({ x: cx, y: cy, type });
+                                }
+                            }
+                        }
+                    }
+                }
+                prevDeriv = curDeriv;
+            }
+            return points;
+        } catch (error) {
+            console.error('Error finding critical points:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Find inflection points where f''(x) changes sign
+     */
+    findInflectionPoints(expression, xMin = -10, xMax = 10, numPoints = 1000) {
+        try {
+            if (!expression || typeof expression !== 'string' || expression.trim() === '') return [];
+            const { expr: rawExpr, restriction } = this.parseDomainRestriction(expression);
+            const compiledExpr = this._compile(this.normalizeExpression(this.stripCartesianPrefix(rawExpr)));
+            const h = 0.0001;
+            const step = (xMax - xMin) / numPoints;
+            const points = [];
+
+            const f = (xv) => { try { const v = compiledExpr.evaluate({ x: xv }); return isFinite(v) ? v : null; } catch (_) { return null; } };
+            const fpp = (xv) => { const a = f(xv + h), c = f(xv), b = f(xv - h); return (a !== null && c !== null && b !== null) ? (a - 2 * c + b) / (h * h) : null; };
+
+            let prevD2 = fpp(xMin);
+            for (let i = 1; i <= numPoints; i++) {
+                const xVal = xMin + i * step;
+                const curD2 = fpp(xVal);
+                if (prevD2 !== null && curD2 !== null && prevD2 * curD2 < 0) {
+                    // Bisect
+                    let lo = xVal - step, hi = xVal;
+                    for (let j = 0; j < 50; j++) {
+                        const mid = (lo + hi) / 2;
+                        const midD2 = fpp(mid);
+                        if (midD2 === null) break;
+                        if (midD2 * fpp(lo) < 0) hi = mid; else lo = mid;
+                    }
+                    const ix = (lo + hi) / 2;
+                    const iy = f(ix);
+                    if (iy !== null && (!restriction || this.evaluateDomainRestriction(restriction, ix)) && !points.some(p => Math.abs(p.x - ix) < step * 2)) {
+                        points.push({ x: ix, y: iy });
+                    }
+                }
+                prevD2 = curD2;
+            }
+            return points;
+        } catch (error) {
+            console.error('Error finding inflection points:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Detect horizontal and oblique asymptotes by evaluating limits at large |x|
+     */
+    findHorizontalAsymptotes(expression, xMin = -10, xMax = 10) {
+        try {
+            if (!expression || typeof expression !== 'string' || expression.trim() === '') return [];
+            const { expr: rawExpr, restriction } = this.parseDomainRestriction(expression);
+            const compiledExpr = this._compile(this.normalizeExpression(this.stripCartesianPrefix(rawExpr)));
+            const asymptotes = [];
+
+            const f = (xv) => {
+                try {
+                    if (restriction && !this.evaluateDomainRestriction(restriction, xv)) return null;
+                    const v = compiledExpr.evaluate({ x: xv });
+                    return isFinite(v) ? v : null;
+                } catch (_) { return null; }
+            };
+
+            // Check limits at +∞ and -∞ using large x values
+            for (const sign of [1, -1]) {
+                const vals = [1000, 5000, 10000, 50000].map(v => f(sign * v));
+                if (vals.every(v => v !== null)) {
+                    // Check if converging to a constant (horizontal asymptote)
+                    const spread = Math.abs(vals[3] - vals[0]);
+                    if (spread < 0.01) {
+                        const yAsym = vals[3];
+                        // Avoid duplicate
+                        if (!asymptotes.some(a => a.type === 'horizontal' && Math.abs(a.y - yAsym) < 0.01)) {
+                            asymptotes.push({ type: 'horizontal', y: yAsym, direction: sign > 0 ? '+∞' : '-∞' });
+                        }
+                    } else {
+                        // Check for oblique: y/x converging (slope m = lim f(x)/x)
+                        const slopes = [1000, 5000, 10000, 50000].map((v, i) => vals[i] / (sign * v));
+                        const slopeSpread = Math.abs(slopes[3] - slopes[0]);
+                        if (slopeSpread < 0.001 && Math.abs(slopes[3]) > 0.001) {
+                            const m = slopes[3];
+                            // Intercept: lim (f(x) - mx) as x→±∞
+                            const intercepts = [1000, 5000, 10000, 50000].map((v, i) => vals[i] - m * (sign * v));
+                            const intSpread = Math.abs(intercepts[3] - intercepts[0]);
+                            if (intSpread < 0.1) {
+                                const b = intercepts[3];
+                                if (!asymptotes.some(a => a.type === 'oblique' && Math.abs(a.m - m) < 0.01 && Math.abs(a.b - b) < 0.1)) {
+                                    asymptotes.push({ type: 'oblique', m, b, direction: sign > 0 ? '+∞' : '-∞' });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return asymptotes;
+        } catch (error) {
+            console.error('Error finding horizontal asymptotes:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Find vertical asymptotes by detecting where |f(x)| → ∞ (sign change in 1/f or f jumps).
+     */
+    findVerticalAsymptotes(expression, xMin = -10, xMax = 10, numPoints = 2000) {
+        try {
+            if (!expression || typeof expression !== 'string' || expression.trim() === '') return [];
+            const { expr: rawExpr, restriction } = this.parseDomainRestriction(expression);
+            const compiled = this._compile(this.normalizeExpression(this.stripCartesianPrefix(rawExpr)));
+            const asymptotes = [];
+            const step = (xMax - xMin) / numPoints;
+
+            let prevY = null;
+            let prevX = null;
+            for (let i = 0; i <= numPoints; i++) {
+                const x = xMin + i * step;
+                if (restriction && !this.evaluateDomainRestriction(restriction, x)) { prevY = null; continue; }
+                try {
+                    const y = compiled.evaluate({ x });
+                    if (prevY !== null && isFinite(prevY)) {
+                        // Detect large jump (potential vertical asymptote):
+                        // 1. y is non-finite (Infinity/NaN)
+                        // 2. Sign change with large values on both sides
+                        // 3. Sudden jump where |y - prevY| >> |prevY| (catches 1/x at x=0)
+                        const bigJump = isFinite(y) && Math.abs(prevY) > 0.01 && Math.abs(y / prevY) > 1000 && Math.sign(y) !== Math.sign(prevY);
+                        if (!isFinite(y) || bigJump || (Math.abs(y) > 1e6 && Math.abs(prevY) > 1e6 && Math.sign(y) !== Math.sign(prevY))) {
+                            // Bisect to refine the x location
+                            let lo = prevX, hi = x;
+                            for (let b = 0; b < 30; b++) {
+                                const mid = (lo + hi) / 2;
+                                try {
+                                    const ym = compiled.evaluate({ x: mid });
+                                    if (!isFinite(ym) || Math.abs(ym) > 1e10) { hi = mid; }
+                                    else if (Math.abs(ym) > Math.abs(prevY) * 2) { lo = mid; }
+                                    else { lo = mid; }
+                                } catch (_) { hi = mid; }
+                            }
+                            const xAsym = +((lo + hi) / 2).toFixed(6);
+                            // Avoid duplicates
+                            if (!asymptotes.some(a => Math.abs(a.x - xAsym) < step * 2)) {
+                                asymptotes.push({ x: xAsym });
+                            }
+                        }
+                    }
+                    prevY = y;
+                    prevX = x;
+                } catch (_) {
+                    // Evaluation error often means asymptote (e.g., division by zero)
+                    if (prevY !== null && isFinite(prevY)) {
+                        const xAsym = +((prevX + x) / 2).toFixed(6);
+                        if (!asymptotes.some(a => Math.abs(a.x - xAsym) < step * 2)) {
+                            asymptotes.push({ x: xAsym });
+                        }
+                    }
+                    prevY = null;
+                    prevX = x;
+                }
+            }
+            return asymptotes;
+        } catch (error) {
+            console.error('Error finding vertical asymptotes:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Find roots (x-intercepts) of f(x) = 0 using sign-change detection + bisection.
+     */
+    findRoots(expression, xMin = -10, xMax = 10, numPoints = 1000) {
+        try {
+            if (!expression || typeof expression !== 'string' || expression.trim() === '') return [];
+            const { expr: rawExpr, restriction } = this.parseDomainRestriction(expression);
+            const compiled = this._compile(this.normalizeExpression(this.stripCartesianPrefix(rawExpr)));
+            const roots = [];
+            const step = (xMax - xMin) / numPoints;
+
+            const f = (xv) => {
+                if (restriction && !this.evaluateDomainRestriction(restriction, xv)) return null;
+                try { const v = compiled.evaluate({ x: xv }); return isFinite(v) ? v : null; } catch (_) { return null; }
+            };
+
+            let prevVal = f(xMin);
+            for (let i = 1; i <= numPoints; i++) {
+                const x = xMin + i * step;
+                const val = f(x);
+                if (val === null) { prevVal = null; continue; }
+
+                // Near-zero detection
+                if (Math.abs(val) < 1e-10) {
+                    if (!roots.some(r => Math.abs(r.x - x) < step * 2)) {
+                        roots.push({ x: +x.toFixed(6), y: 0 });
+                    }
+                    prevVal = val; continue;
+                }
+
+                // Sign change → bisect
+                if (prevVal !== null && prevVal * val < 0) {
+                    let lo = x - step, hi = x;
+                    for (let b = 0; b < 50; b++) {
+                        const mid = (lo + hi) / 2;
+                        const fm = f(mid);
+                        if (fm === null) break;
+                        if (Math.abs(fm) < 1e-12) { lo = hi = mid; break; }
+                        if (fm * f(lo) < 0) hi = mid; else lo = mid;
+                    }
+                    const rx = +((lo + hi) / 2).toFixed(6);
+                    if (!roots.some(r => Math.abs(r.x - rx) < step * 2)) {
+                        roots.push({ x: rx, y: 0 });
+                    }
+                }
+                prevVal = val;
+            }
+            return roots;
+        } catch (error) {
+            console.error('Error finding roots:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Compute tangent line at a given x-value: y = f'(a)(x - a) + f(a)
+     * Returns { slope, intercept, x0, y0, equation }
+     */
+    tangentLineAt(expression, x0, xMin = -10, xMax = 10) {
+        try {
+            if (!expression || typeof expression !== 'string') return null;
+            const { expr: rawExpr, restriction } = this.parseDomainRestriction(expression);
+            const compiled = this._compile(this.normalizeExpression(this.stripCartesianPrefix(rawExpr)));
+
+            if (restriction && !this.evaluateDomainRestriction(restriction, x0)) return null;
+
+            const y0 = compiled.evaluate({ x: x0 });
+            if (!isFinite(y0)) return null;
+
+            // Central difference for derivative
+            const h = 1e-7;
+            const yp = compiled.evaluate({ x: x0 + h });
+            const ym = compiled.evaluate({ x: x0 - h });
+            if (!isFinite(yp) || !isFinite(ym)) return null;
+            const slope = (yp - ym) / (2 * h);
+
+            const intercept = y0 - slope * x0;
+            const eq = `y = ${slope.toFixed(4)}(x - ${x0.toFixed(4)}) + ${y0.toFixed(4)}`;
+
+            // Generate line points across the range
+            const lineX = [xMin, xMax];
+            const lineY = [slope * xMin + intercept, slope * xMax + intercept];
+
+            return { slope, intercept, x0, y0: +y0.toFixed(6), equation: eq, lineX, lineY };
+        } catch (error) {
+            console.error('Error computing tangent line:', error);
             return null;
         }
     }
@@ -1318,6 +2005,185 @@ class GraphingEngine {
     }
 
     /**
+     * Generate multiple regression types and return the best fit.
+     * @param {number[]} x - data x values
+     * @param {number[]} y - data y values
+     * @param {string} regressionType - 'auto'|'linear'|'quadratic'|'cubic'|'exponential'|'logarithmic'|'power'
+     * @returns {{x: number[], y: number[], equation: string, r2: number, type: string}|null}
+     */
+    generateRegressionExtended(x, y, regressionType = 'auto') {
+        if (!x || !y || x.length < 2 || x.length !== y.length) return null;
+
+        const minX = Math.min(...x), maxX = Math.max(...x);
+        const numPts = 200;
+        const step = (maxX - minX) / numPts;
+        const xPlot = [];
+        for (let i = 0; i <= numPts; i++) xPlot.push(minX + i * step);
+
+        // Helper: calculate R² for a model
+        const calcR2 = (predicted) => {
+            const meanY = y.reduce((s, v) => s + v, 0) / y.length;
+            const ssTot = y.reduce((s, v) => s + (v - meanY) ** 2, 0);
+            const ssRes = y.reduce((s, v, i) => s + (v - predicted[i]) ** 2, 0);
+            return ssTot > 0 ? 1 - ssRes / ssTot : 0;
+        };
+
+        // Polynomial regression using normal equations (least squares)
+        const polyFit = (degree) => {
+            const n = x.length;
+            // Build Vandermonde matrix
+            const X = x.map(xi => { const row = []; for (let d = 0; d <= degree; d++) row.push(xi ** d); return row; });
+            // X^T * X
+            const XtX = Array.from({ length: degree + 1 }, (_, i) =>
+                Array.from({ length: degree + 1 }, (_, j) =>
+                    X.reduce((s, row) => s + row[i] * row[j], 0)));
+            // X^T * y
+            const Xty = Array.from({ length: degree + 1 }, (_, i) =>
+                X.reduce((s, row, k) => s + row[i] * y[k], 0));
+            // Solve via Gaussian elimination
+            const aug = XtX.map((row, i) => [...row, Xty[i]]);
+            const m = degree + 1;
+            for (let col = 0; col < m; col++) {
+                let maxRow = col;
+                for (let row = col + 1; row < m; row++) if (Math.abs(aug[row][col]) > Math.abs(aug[maxRow][col])) maxRow = row;
+                [aug[col], aug[maxRow]] = [aug[maxRow], aug[col]];
+                if (Math.abs(aug[col][col]) < 1e-12) return null;
+                for (let row = col + 1; row < m; row++) {
+                    const f = aug[row][col] / aug[col][col];
+                    for (let j = col; j <= m; j++) aug[row][j] -= f * aug[col][j];
+                }
+            }
+            const coeffs = new Array(m);
+            for (let i = m - 1; i >= 0; i--) {
+                coeffs[i] = aug[i][m];
+                for (let j = i + 1; j < m; j++) coeffs[i] -= aug[i][j] * coeffs[j];
+                coeffs[i] /= aug[i][i];
+            }
+            const evalPoly = (xv) => coeffs.reduce((s, c, d) => s + c * xv ** d, 0);
+            const predicted = x.map(evalPoly);
+            const yPlot = xPlot.map(evalPoly);
+            return { coeffs, predicted, yPlot, evalPoly };
+        };
+
+        const fits = [];
+
+        // Linear (degree 1)
+        if (regressionType === 'auto' || regressionType === 'linear') {
+            const p = polyFit(1);
+            if (p) {
+                const r2 = calcR2(p.predicted);
+                const eq = `y = ${p.coeffs[1].toFixed(4)}x + ${p.coeffs[0].toFixed(4)}`;
+                fits.push({ x: xPlot, y: p.yPlot, equation: eq, r2, type: 'linear' });
+            }
+        }
+
+        // Quadratic (degree 2)
+        if (regressionType === 'auto' || regressionType === 'quadratic') {
+            const p = polyFit(2);
+            if (p) {
+                const r2 = calcR2(p.predicted);
+                const eq = `y = ${p.coeffs[2].toFixed(4)}x² + ${p.coeffs[1].toFixed(4)}x + ${p.coeffs[0].toFixed(4)}`;
+                fits.push({ x: xPlot, y: p.yPlot, equation: eq, r2, type: 'quadratic' });
+            }
+        }
+
+        // Cubic (degree 3)
+        if (regressionType === 'auto' || regressionType === 'cubic') {
+            if (x.length >= 4) {
+                const p = polyFit(3);
+                if (p) {
+                    const r2 = calcR2(p.predicted);
+                    const eq = `y = ${p.coeffs[3].toFixed(4)}x³ + ${p.coeffs[2].toFixed(4)}x² + ${p.coeffs[1].toFixed(4)}x + ${p.coeffs[0].toFixed(4)}`;
+                    fits.push({ x: xPlot, y: p.yPlot, equation: eq, r2, type: 'cubic' });
+                }
+            }
+        }
+
+        // Exponential: y = a * e^(bx) — linearize via ln(y) = ln(a) + bx
+        if (regressionType === 'auto' || regressionType === 'exponential') {
+            const posY = y.every(v => v > 0);
+            if (posY) {
+                const lnY = y.map(v => Math.log(v));
+                const n = x.length;
+                const sumX = x.reduce((s, v) => s + v, 0);
+                const sumLnY = lnY.reduce((s, v) => s + v, 0);
+                const sumXLnY = x.reduce((s, v, i) => s + v * lnY[i], 0);
+                const sumX2 = x.reduce((s, v) => s + v * v, 0);
+                const denom = n * sumX2 - sumX * sumX;
+                if (Math.abs(denom) > 1e-12) {
+                    const b = (n * sumXLnY - sumX * sumLnY) / denom;
+                    const lnA = (sumLnY - b * sumX) / n;
+                    const a = Math.exp(lnA);
+                    const predicted = x.map(xv => a * Math.exp(b * xv));
+                    const r2 = calcR2(predicted);
+                    const yPlot = xPlot.map(xv => a * Math.exp(b * xv));
+                    const eq = `y = ${a.toFixed(4)}e^(${b.toFixed(4)}x)`;
+                    fits.push({ x: xPlot, y: yPlot, equation: eq, r2, type: 'exponential' });
+                }
+            }
+        }
+
+        // Logarithmic: y = a + b*ln(x)
+        if (regressionType === 'auto' || regressionType === 'logarithmic') {
+            const posX = x.every(v => v > 0);
+            if (posX) {
+                const lnX = x.map(v => Math.log(v));
+                const n = x.length;
+                const sumLnX = lnX.reduce((s, v) => s + v, 0);
+                const sumY = y.reduce((s, v) => s + v, 0);
+                const sumLnXY = lnX.reduce((s, v, i) => s + v * y[i], 0);
+                const sumLnX2 = lnX.reduce((s, v) => s + v * v, 0);
+                const denom = n * sumLnX2 - sumLnX * sumLnX;
+                if (Math.abs(denom) > 1e-12) {
+                    const b = (n * sumLnXY - sumLnX * sumY) / denom;
+                    const a = (sumY - b * sumLnX) / n;
+                    const predicted = x.map(xv => a + b * Math.log(xv));
+                    const r2 = calcR2(predicted);
+                    const posPlot = xPlot.filter(v => v > 0);
+                    const yPlot = posPlot.map(xv => a + b * Math.log(xv));
+                    const eq = `y = ${a.toFixed(4)} + ${b.toFixed(4)}ln(x)`;
+                    fits.push({ x: posPlot, y: yPlot, equation: eq, r2, type: 'logarithmic' });
+                }
+            }
+        }
+
+        // Power: y = a * x^b — linearize via ln(y) = ln(a) + b*ln(x)
+        if (regressionType === 'auto' || regressionType === 'power') {
+            const posXY = x.every(v => v > 0) && y.every(v => v > 0);
+            if (posXY) {
+                const lnX = x.map(v => Math.log(v));
+                const lnY = y.map(v => Math.log(v));
+                const n = x.length;
+                const sumLnX = lnX.reduce((s, v) => s + v, 0);
+                const sumLnY = lnY.reduce((s, v) => s + v, 0);
+                const sumLnXLnY = lnX.reduce((s, v, i) => s + v * lnY[i], 0);
+                const sumLnX2 = lnX.reduce((s, v) => s + v * v, 0);
+                const denom = n * sumLnX2 - sumLnX * sumLnX;
+                if (Math.abs(denom) > 1e-12) {
+                    const b = (n * sumLnXLnY - sumLnX * sumLnY) / denom;
+                    const lnA = (sumLnY - b * sumLnX) / n;
+                    const a = Math.exp(lnA);
+                    const predicted = x.map(xv => a * xv ** b);
+                    const r2 = calcR2(predicted);
+                    const posPlot = xPlot.filter(v => v > 0);
+                    const yPlot = posPlot.map(xv => a * xv ** b);
+                    const eq = `y = ${a.toFixed(4)}x^${b.toFixed(4)}`;
+                    fits.push({ x: posPlot, y: yPlot, equation: eq, r2, type: 'power' });
+                }
+            }
+        }
+
+        if (fits.length === 0) return null;
+
+        // For 'auto', return best R²
+        if (regressionType === 'auto') {
+            fits.sort((a, b) => b.r2 - a.r2);
+            return fits[0];
+        }
+        return fits[0];
+    }
+
+    /**
      * Create Plotly trace for an expression
      */
     createTrace(expr, settings = {}) {
@@ -1325,22 +2191,61 @@ class GraphingEngine {
 
         let trace = null;
 
+        // Work with raw expression first for special forms (before normalization mangles function names)
+        let rawExprStr = expr.expression;
+        if (rawExprStr && typeof rawExprStr === 'string') {
+            // Substitute parameters into raw expression for special forms
+            let rawSubstituted = rawExprStr;
+            if (expr.parameters) {
+                Object.keys(expr.parameters).forEach(param => {
+                    const regex = new RegExp(`\\b${param}\\b`, 'g');
+                    rawSubstituted = rawSubstituted.replace(regex, expr.parameters[param]);
+                });
+            }
+
+            // Handle Fourier series: fourier(expr, N) — must match before normalizeExpression
+            const fourierMatch = rawSubstituted.match(/^\s*fourier\s*\(\s*(.+?)\s*,\s*(\d+)\s*\)\s*$/i);
+            if (fourierMatch) {
+                const bodyExpr = fourierMatch[1];
+                const nTerms = parseInt(fourierMatch[2]);
+                trace = generateFourierTrace(bodyExpr, nTerms, xMin, xMax, expr.color);
+                if (trace) return trace;
+            }
+
+            // Handle sum/prod — must match before normalizeExpression
+            if (/^\s*sum\s*\(/i.test(rawSubstituted)) {
+                const sumTrace = this._generateSumProductTrace(rawSubstituted, 'sum', xMin, xMax, expr);
+                if (sumTrace) { trace = sumTrace; return trace; }
+            }
+            if (/^\s*prod\s*\(/i.test(rawSubstituted)) {
+                const prodTrace = this._generateSumProductTrace(rawSubstituted, 'prod', xMin, xMax, expr);
+                if (prodTrace) { trace = prodTrace; return trace; }
+            }
+        }
+
         // Normalize the expression into a local variable (don't mutate expr.expression)
         let normalizedExpr = expr.expression;
         if (normalizedExpr && typeof normalizedExpr === 'string') {
+            // Resolve function composition (f(f(x)), g(f(x)), etc.)
+            // But skip if this expression IS a function definition (e.g. f(x)=x^2)
+            const isFuncDef = /^\s*[a-zA-Z]\s*\(\s*x\s*\)\s*=/.test(normalizedExpr);
+            if (!isFuncDef) {
+                normalizedExpr = resolveFunctionComposition(normalizedExpr);
+            }
             normalizedExpr = this.normalizeExpression(normalizedExpr);
+        }
+
+        // Substitute parameters (sliders) for all expression types
+        if (expr.parameters && normalizedExpr && typeof normalizedExpr === 'string') {
+            Object.keys(expr.parameters).forEach(param => {
+                const regex = new RegExp(`\\b${param}\\b`, 'g');
+                normalizedExpr = normalizedExpr.replace(regex, expr.parameters[param]);
+            });
         }
 
         switch (expr.type) {
             case 'cartesian': {
-                // Substitute parameters if they exist
                 let expression = normalizedExpr;
-                if (expr.parameters) {
-                    Object.keys(expr.parameters).forEach(param => {
-                        const regex = new RegExp(`\\b${param}\\b`, 'g');
-                        expression = expression.replace(regex, expr.parameters[param]);
-                    });
-                }
 
                 // Detect "x = <constant>" vertical line pattern
                 const vertMatch = expression.match(/^\s*x\s*=\s*([+-]?\d+\.?\d*)\s*$/);
@@ -1394,6 +2299,161 @@ class GraphingEngine {
                                 name: `f'(${expr.expression})`,
                                 line: { color: expr.color, width: 2, dash: 'dash' },
                                 connectgaps: false
+                            });
+                        }
+                    }
+
+                    // Add second derivative if enabled
+                    if (expr.showSecondDerivative) {
+                        const d2Data = this.generateSecondDerivative(expression, xMin, xMax);
+                        if (d2Data) {
+                            trace.push({
+                                x: d2Data.x,
+                                y: d2Data.y,
+                                type: 'scatter',
+                                mode: 'lines',
+                                name: `f''(${expr.expression})`,
+                                line: { color: expr.color, width: 2, dash: 'dashdot' },
+                                connectgaps: false
+                            });
+                        }
+                    }
+
+                    // Add critical points (local min/max) if enabled
+                    if (expr.showCriticalPoints) {
+                        const cps = this.findCriticalPoints(expression, xMin, xMax);
+                        if (cps.length > 0) {
+                            const minPts = cps.filter(p => p.type === 'min');
+                            const maxPts = cps.filter(p => p.type === 'max');
+                            const otherPts = cps.filter(p => p.type === 'critical');
+                            if (minPts.length > 0) {
+                                trace.push({
+                                    x: minPts.map(p => p.x), y: minPts.map(p => p.y),
+                                    type: 'scatter', mode: 'markers+text',
+                                    name: 'Local Min',
+                                    marker: { color: '#22c55e', size: 10, symbol: 'triangle-up' },
+                                    text: minPts.map(p => `min(${p.x.toFixed(2)}, ${p.y.toFixed(2)})`),
+                                    textposition: 'bottom center', textfont: { size: 10 },
+                                    showlegend: true
+                                });
+                            }
+                            if (maxPts.length > 0) {
+                                trace.push({
+                                    x: maxPts.map(p => p.x), y: maxPts.map(p => p.y),
+                                    type: 'scatter', mode: 'markers+text',
+                                    name: 'Local Max',
+                                    marker: { color: '#ef4444', size: 10, symbol: 'triangle-down' },
+                                    text: maxPts.map(p => `max(${p.x.toFixed(2)}, ${p.y.toFixed(2)})`),
+                                    textposition: 'top center', textfont: { size: 10 },
+                                    showlegend: true
+                                });
+                            }
+                            if (otherPts.length > 0) {
+                                trace.push({
+                                    x: otherPts.map(p => p.x), y: otherPts.map(p => p.y),
+                                    type: 'scatter', mode: 'markers',
+                                    name: 'Critical Points',
+                                    marker: { color: '#f59e0b', size: 8, symbol: 'diamond' },
+                                    showlegend: true
+                                });
+                            }
+                        }
+                    }
+
+                    // Add inflection points if enabled
+                    if (expr.showInflectionPoints) {
+                        const ips = this.findInflectionPoints(expression, xMin, xMax);
+                        if (ips.length > 0) {
+                            trace.push({
+                                x: ips.map(p => p.x), y: ips.map(p => p.y),
+                                type: 'scatter', mode: 'markers+text',
+                                name: 'Inflection Points',
+                                marker: { color: '#8b5cf6', size: 10, symbol: 'square' },
+                                text: ips.map(p => `(${p.x.toFixed(2)}, ${p.y.toFixed(2)})`),
+                                textposition: 'top center', textfont: { size: 10 },
+                                showlegend: true
+                            });
+                        }
+                    }
+
+                    // Add horizontal/oblique asymptotes
+                    {
+                        const hAsym = this.findHorizontalAsymptotes(expression, xMin, xMax);
+                        for (const a of hAsym) {
+                            if (a.type === 'horizontal') {
+                                trace.push({
+                                    x: [xMin, xMax], y: [a.y, a.y],
+                                    type: 'scatter', mode: 'lines',
+                                    line: { color: '#f59e0b', width: 1, dash: 'dash' },
+                                    name: `y = ${a.y.toFixed(2)}`,
+                                    showlegend: false, hoverinfo: 'name'
+                                });
+                            } else if (a.type === 'oblique') {
+                                trace.push({
+                                    x: [xMin, xMax], y: [a.m * xMin + a.b, a.m * xMax + a.b],
+                                    type: 'scatter', mode: 'lines',
+                                    line: { color: '#f59e0b', width: 1, dash: 'dash' },
+                                    name: `y = ${a.m.toFixed(2)}x + ${a.b.toFixed(2)}`,
+                                    showlegend: false, hoverinfo: 'name'
+                                });
+                            }
+                        }
+                    }
+
+                    // Add roots (x-intercepts) if enabled
+                    if (expr.showRoots) {
+                        const roots = this.findRoots(expression, xMin, xMax);
+                        if (roots.length > 0) {
+                            trace.push({
+                                x: roots.map(r => r.x),
+                                y: roots.map(() => 0),
+                                type: 'scatter', mode: 'markers+text',
+                                marker: { color: '#10b981', size: 9, symbol: 'x', line: { width: 2 } },
+                                text: roots.map(r => `(${r.x}, 0)`),
+                                textposition: 'top center',
+                                textfont: { size: 10, color: '#10b981' },
+                                name: 'Zeros', showlegend: false,
+                                hovertemplate: 'Root: x = %{x:.6f}<extra></extra>'
+                            });
+                        }
+                    }
+
+                    // Add vertical asymptotes if enabled
+                    if (expr.showVerticalAsymptotes) {
+                        const vAsym = this.findVerticalAsymptotes(expression, xMin, xMax);
+                        for (const a of vAsym) {
+                            trace.push({
+                                x: [a.x, a.x], y: [yMin, yMax],
+                                type: 'scatter', mode: 'lines',
+                                line: { color: '#ef4444', width: 1.5, dash: 'dashdot' },
+                                name: `x = ${a.x}`,
+                                showlegend: false,
+                                hovertemplate: `Vertical asymptote: x = ${a.x}<extra></extra>`
+                            });
+                        }
+                    }
+
+                    // Add tangent line if enabled
+                    if (expr.showTangent && expr.tangentX != null) {
+                        const tg = this.tangentLineAt(expression, expr.tangentX, xMin, xMax);
+                        if (tg) {
+                            // Tangent line
+                            trace.push({
+                                x: tg.lineX, y: tg.lineY,
+                                type: 'scatter', mode: 'lines',
+                                line: { color: '#f59e0b', width: 2, dash: 'dash' },
+                                name: `Tangent: slope=${tg.slope.toFixed(4)}`,
+                                showlegend: false,
+                                hovertemplate: tg.equation + '<extra></extra>'
+                            });
+                            // Point of tangency
+                            trace.push({
+                                x: [tg.x0], y: [tg.y0],
+                                type: 'scatter', mode: 'markers',
+                                marker: { color: '#f59e0b', size: 10, symbol: 'circle' },
+                                name: `(${tg.x0.toFixed(4)}, ${tg.y0})`,
+                                showlegend: false,
+                                hovertemplate: `Tangent at (${tg.x0.toFixed(4)}, ${tg.y0})<br>Slope: ${tg.slope.toFixed(4)}<extra></extra>`
                             });
                         }
                     }
@@ -1492,6 +2552,22 @@ class GraphingEngine {
                                 });
                             });
                         }
+                    }
+
+                    // Render area between curves shading if computed
+                    if (expr._areaBetween) {
+                        const ab = expr._areaBetween;
+                        trace.push({
+                            x: ab.shadeX,
+                            y: ab.shadeY,
+                            type: 'scatter',
+                            fill: 'toself',
+                            fillcolor: expr.color + '25',
+                            line: { width: 0 },
+                            name: `Area ≈ ${ab.area.toFixed(4)}`,
+                            showlegend: true,
+                            hoverinfo: 'skip'
+                        });
                     }
                 }
                 break;
@@ -1601,23 +2677,23 @@ class GraphingEngine {
                         xMin, xMax, yMin, yMax
                     );
                     if (data) {
-                        // Extract satisfied points from the grid
-                        const ixs = [], iys = [];
-                        for (let i = 0; i < data.z.length; i++) {
-                            for (let j = 0; j < data.z[i].length; j++) {
-                                if (data.z[i][j] === 1) {
-                                    ixs.push(data.x[i][j]);
-                                    iys.push(data.y[i][j]);
-                                }
-                            }
-                        }
+                        // Use heatmap for continuous shaded region instead of point cloud
+                        const xFlat = data.x[0]; // all rows share same x values
+                        const yFlat = data.y.map(row => row[0]); // each row has same y
+                        // Convert hex color to rgba for the colorscale
+                        const c = expr.color;
+                        const r = parseInt(c.slice(1,3), 16), g = parseInt(c.slice(3,5), 16), b = parseInt(c.slice(5,7), 16);
                         trace = {
-                            x: ixs,
-                            y: iys,
-                            type: 'scatter',
-                            mode: 'markers',
+                            x: xFlat,
+                            y: yFlat,
+                            z: data.z,
+                            type: 'heatmap',
+                            colorscale: [
+                                [0, 'rgba(0,0,0,0)'],
+                                [1, `rgba(${r},${g},${b},0.3)`]
+                            ],
+                            showscale: false,
                             name: expr.expression,
-                            marker: { color: expr.color, size: 3, opacity: 0.25 },
                             hoverinfo: 'name'
                         };
                     }
@@ -1643,8 +2719,6 @@ class GraphingEngine {
             case 'statistics': {
                 const data = this.parseTableData(normalizedExpr);
                 if (data) {
-                    const regression = this.generateRegression(data.x, data.y);
-
                     trace = [{
                         x: data.x,
                         y: data.y,
@@ -1654,19 +2728,172 @@ class GraphingEngine {
                         marker: { color: expr.color, size: 8 }
                     }];
 
-                    if (regression) {
+                    // Use extended regression (respects user-selected type or auto-best)
+                    const regType = expr.regressionType || 'auto';
+                    const extReg = this.generateRegressionExtended(data.x, data.y, regType);
+                    if (extReg) {
                         trace.push({
-                            x: regression.x,
-                            y: regression.y,
+                            x: extReg.x,
+                            y: extReg.y,
                             type: 'scatter',
                             mode: 'lines',
-                            name: 'Regression Line',
+                            name: `${extReg.type} (R²=${extReg.r2.toFixed(4)})`,
                             line: { color: expr.color, width: 2, dash: 'dash' }
                         });
+                        // Store extended info for stats display
+                        expr._regressionResult = extReg;
                     }
 
                     // Store stats for display
                     expr.stats = this.calculateStatistics(data.x, data.y);
+                    if (extReg) {
+                        expr.stats.regressionEquation = extReg.equation;
+                        expr.stats.regressionType = extReg.type;
+                        expr.stats.r2 = extReg.r2.toFixed(4);
+                    }
+                }
+                break;
+            }
+
+            case 'point': {
+                // Parse points: "(2,3)" or "[(1,2),(3,4),(5,6)]" or "(2,3), (4,5)"
+                const pointRegex = /\(\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*\)/g;
+                const px = [], py = [], labels = [];
+                let pm;
+                while ((pm = pointRegex.exec(normalizedExpr)) !== null) {
+                    const xv = parseFloat(pm[1]), yv = parseFloat(pm[2]);
+                    if (isFinite(xv) && isFinite(yv)) {
+                        px.push(xv); py.push(yv);
+                        labels.push(`(${pm[1]}, ${pm[2]})`);
+                    }
+                }
+                if (px.length > 0) {
+                    trace = {
+                        x: px, y: py,
+                        type: 'scatter', mode: 'markers+text',
+                        marker: { color: expr.color, size: 10, symbol: 'circle', line: { color: '#fff', width: 1.5 } },
+                        text: labels,
+                        textposition: 'top center',
+                        textfont: { size: 10, color: expr.color },
+                        name: expr.expression,
+                        hovertemplate: '(%{x}, %{y})<extra></extra>'
+                    };
+                }
+                break;
+            }
+
+            case 'vector': {
+                // Parse vectors: <2,3> or <2,3> @ (1,1) or [<1,2>, <3,4>]
+                // Each vector is an arrow from origin (default 0,0) in direction <dx,dy>
+                const vecRegex = /<\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*>/g;
+                const originRegex = /@\s*\(\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*\)/;
+                const vectors = [];
+                let vm;
+                const rawStr = normalizedExpr || '';
+                while ((vm = vecRegex.exec(rawStr)) !== null) {
+                    vectors.push({ dx: parseFloat(vm[1]), dy: parseFloat(vm[2]) });
+                }
+                // Check for origin specification
+                const om = rawStr.match(originRegex);
+                const defaultOx = om ? parseFloat(om[1]) : 0;
+                const defaultOy = om ? parseFloat(om[2]) : 0;
+
+                if (vectors.length > 0) {
+                    trace = [];
+                    vectors.forEach((v, idx) => {
+                        const ox = defaultOx + (idx > 0 && !om ? 0 : 0);
+                        const oy = defaultOy;
+                        // Arrow line
+                        trace.push({
+                            x: [ox, ox + v.dx], y: [oy, oy + v.dy],
+                            type: 'scatter', mode: 'lines',
+                            line: { color: expr.color, width: 2.5 },
+                            showlegend: idx === 0,
+                            name: expr.expression,
+                            hovertemplate: `⟨${v.dx}, ${v.dy}⟩<extra></extra>`
+                        });
+                        // Arrowhead (triangle at tip)
+                        const len = Math.sqrt(v.dx * v.dx + v.dy * v.dy);
+                        if (len > 0) {
+                            const ux = v.dx / len, uy = v.dy / len;
+                            const headLen = Math.min(0.3, len * 0.2);
+                            const tipX = ox + v.dx, tipY = oy + v.dy;
+                            const baseX = tipX - headLen * ux, baseY = tipY - headLen * uy;
+                            const perpX = -uy * headLen * 0.4, perpY = ux * headLen * 0.4;
+                            trace.push({
+                                x: [baseX + perpX, tipX, baseX - perpX, baseX + perpX],
+                                y: [baseY + perpY, tipY, baseY - perpY, baseY + perpY],
+                                type: 'scatter', mode: 'lines', fill: 'toself',
+                                fillcolor: expr.color, line: { color: expr.color, width: 1 },
+                                showlegend: false, hoverinfo: 'skip'
+                            });
+                        }
+                        // Origin dot
+                        trace.push({
+                            x: [ox], y: [oy],
+                            type: 'scatter', mode: 'markers',
+                            marker: { color: expr.color, size: 5 },
+                            showlegend: false, hoverinfo: 'skip'
+                        });
+                    });
+                }
+                break;
+            }
+
+            case 'vectorfield': {
+                // Parse vector field: <expr_x, expr_y> or F(x,y) = <expr_x, expr_y>
+                let fieldStr = normalizedExpr || '';
+                // Strip F(x,y) = prefix
+                fieldStr = fieldStr.replace(/^\s*\w+\s*\(\s*x\s*,\s*y\s*\)\s*=\s*/, '');
+                const fieldMatch = fieldStr.match(/<\s*(.+?)\s*,\s*(.+?)\s*>/);
+                if (fieldMatch) {
+                    try {
+                        const fxExpr = math.compile(this.normalizeExpression(fieldMatch[1]));
+                        const fyExpr = math.compile(this.normalizeExpression(fieldMatch[2]));
+                        const gridN = 15; // 15x15 grid of arrows
+                        const xStep = (xMax - xMin) / gridN;
+                        const yStep = (yMax - yMin) / gridN;
+                        const scale = Math.min(xStep, yStep) * 0.8;
+
+                        trace = [];
+                        for (let i = 0; i <= gridN; i++) {
+                            for (let j = 0; j <= gridN; j++) {
+                                const gx = xMin + i * xStep;
+                                const gy = yMin + j * yStep;
+                                try {
+                                    let dx = fxExpr.evaluate({ x: gx, y: gy });
+                                    let dy = fyExpr.evaluate({ x: gx, y: gy });
+                                    if (!isFinite(dx) || !isFinite(dy)) continue;
+                                    // Normalize and scale
+                                    const mag = Math.sqrt(dx * dx + dy * dy);
+                                    if (mag === 0) continue;
+                                    const nDx = (dx / mag) * scale;
+                                    const nDy = (dy / mag) * scale;
+                                    // Arrow shaft
+                                    trace.push({
+                                        x: [gx, gx + nDx], y: [gy, gy + nDy],
+                                        type: 'scatter', mode: 'lines',
+                                        line: { color: expr.color, width: 1.2 },
+                                        showlegend: false, hoverinfo: 'skip'
+                                    });
+                                    // Small arrowhead
+                                    const ux = nDx / scale, uy = nDy / scale;
+                                    const hl = scale * 0.25;
+                                    const tipX = gx + nDx, tipY = gy + nDy;
+                                    trace.push({
+                                        x: [tipX - hl * ux + hl * 0.3 * uy, tipX, tipX - hl * ux - hl * 0.3 * uy],
+                                        y: [tipY - hl * uy - hl * 0.3 * ux, tipY, tipY - hl * uy + hl * 0.3 * ux],
+                                        type: 'scatter', mode: 'lines',
+                                        line: { color: expr.color, width: 1.2 },
+                                        showlegend: false, hoverinfo: 'skip'
+                                    });
+                                } catch (_) { /* skip this grid point */ }
+                            }
+                        }
+                        if (trace.length === 0) trace = null;
+                    } catch (_) {
+                        trace = null;
+                    }
                 }
                 break;
             }
@@ -1807,6 +3034,27 @@ class GraphingEngine {
                     console.error('Limit plot error:', e);
                 }
                 break;
+            }
+        }
+
+        // Render table points as scatter dots if the table is active for this expression
+        if (expr._tablePoints && expr._tablePoints.x.length > 0) {
+            const dotTrace = {
+                x: expr._tablePoints.x,
+                y: expr._tablePoints.y,
+                type: 'scatter',
+                mode: 'markers',
+                marker: { color: expr.color, size: 8, line: { color: '#fff', width: 1.5 } },
+                name: 'Table points',
+                showlegend: false,
+                hovertemplate: '(%{x:.4f}, %{y:.4f})<extra></extra>'
+            };
+            if (Array.isArray(trace)) {
+                trace.push(dotTrace);
+            } else if (trace) {
+                trace = [trace, dotTrace];
+            } else {
+                trace = [dotTrace];
             }
         }
 
@@ -2307,6 +3555,153 @@ let animationState = {
 };
 let traceModeActive = false;
 
+// Undo/redo state
+const undoStack = [];
+const redoStack = [];
+const MAX_UNDO = 50;
+
+/**
+ * Save current expression state for undo
+ */
+function saveUndoState() {
+    const state = engine.expressions.map(e => ({
+        id: e.id, expression: e.expression, type: e.type,
+        color: e.color, visible: e.visible,
+        parameters: e.parameters ? Object.assign({}, e.parameters) : undefined,
+        _sliderRanges: e._sliderRanges ? JSON.parse(JSON.stringify(e._sliderRanges)) : undefined,
+        showDerivative: e.showDerivative || false,
+        showRoots: e.showRoots || false,
+        showVerticalAsymptotes: e.showVerticalAsymptotes || false,
+        showTangent: e.showTangent || false,
+        tangentX: e.tangentX,
+        showIntegration: e.showIntegration || false,
+        integrationBounds: e.integrationBounds,
+        showAntiderivative: e.showAntiderivative || false
+    }));
+    undoStack.push(JSON.stringify(state));
+    if (undoStack.length > MAX_UNDO) undoStack.shift();
+    redoStack.length = 0; // clear redo on new action
+}
+
+/**
+ * Undo last expression change
+ */
+function undo() {
+    if (undoStack.length === 0) return;
+    // Save current state to redo
+    const currentState = engine.expressions.map(e => ({
+        id: e.id, expression: e.expression, type: e.type,
+        color: e.color, visible: e.visible,
+        parameters: e.parameters ? Object.assign({}, e.parameters) : undefined
+    }));
+    redoStack.push(JSON.stringify(currentState));
+
+    const prevState = JSON.parse(undoStack.pop());
+    restoreState(prevState);
+}
+
+/**
+ * Redo last undone change
+ */
+function redo() {
+    if (redoStack.length === 0) return;
+    // Save current state to undo
+    const currentState = engine.expressions.map(e => ({
+        id: e.id, expression: e.expression, type: e.type,
+        color: e.color, visible: e.visible,
+        parameters: e.parameters ? Object.assign({}, e.parameters) : undefined
+    }));
+    undoStack.push(JSON.stringify(currentState));
+
+    const nextState = JSON.parse(redoStack.pop());
+    restoreState(nextState);
+}
+
+/**
+ * Restore expressions from saved state
+ */
+function restoreState(state) {
+    // Clear existing UI
+    const container = document.getElementById('expressions-list');
+    if (container) container.innerHTML = '';
+    expressionElements = {};
+
+    // Stop any running animation
+    if (animationState.isPlaying) stopAnimation();
+
+    // Restore expressions
+    engine.expressions = [];
+    engine.nextId = 1;
+    state.forEach(s => {
+        const expr = engine.addExpression(s.expression || '', s.type || 'cartesian');
+        expr.color = s.color || expr.color;
+        expr.visible = s.visible !== false;
+        if (s.parameters) expr.parameters = s.parameters;
+        if (s._sliderRanges) expr._sliderRanges = s._sliderRanges;
+        if (s.showDerivative) expr.showDerivative = true;
+        if (s.showRoots) expr.showRoots = true;
+        if (s.showVerticalAsymptotes) expr.showVerticalAsymptotes = true;
+        if (s.showTangent) { expr.showTangent = true; expr.tangentX = s.tangentX; }
+        if (s.showIntegration) { expr.showIntegration = true; expr.integrationBounds = s.integrationBounds; }
+        if (s.showAntiderivative) expr.showAntiderivative = true;
+        createExpressionElement(expr);
+        // Set type dropdown
+        const typeSel = document.getElementById(`type-${expr.id}`);
+        if (typeSel) typeSel.value = expr.type;
+        // Set expression input
+        const input = document.getElementById(`expr-${expr.id}`);
+        if (input) input.value = expr.expression || '';
+        // Set color
+        const colorPicker = document.getElementById(`color-${expr.id}`);
+        if (colorPicker) colorPicker.value = expr.color;
+        // Restore checkbox states
+        if (s.showRoots) { const cb = document.getElementById(`show-roots-${expr.id}`); if (cb) cb.checked = true; }
+        if (s.showVerticalAsymptotes) { const cb = document.getElementById(`show-vasym-${expr.id}`); if (cb) cb.checked = true; }
+        if (s.showTangent) { const cb = document.getElementById(`show-tangent-${expr.id}`); if (cb) cb.checked = true; }
+        if (s.showDerivative) { const cb = document.getElementById(`show-derivative-${expr.id}`); if (cb) cb.checked = true; }
+        if (s.showIntegration) { const cb = document.getElementById(`show-integration-${expr.id}`); if (cb) cb.checked = true; }
+        if (s.showAntiderivative) { const cb = document.getElementById(`show-antiderivative-${expr.id}`); if (cb) cb.checked = true; }
+    });
+    updateGraph();
+}
+
+/**
+ * Initialize keyboard shortcuts
+ */
+function initKeyboardShortcuts() {
+    document.addEventListener('keydown', function(e) {
+        // Let browser handle native undo/redo inside text inputs and textareas
+        const active = document.activeElement;
+        const inInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+
+        // Ctrl/Cmd + Z = Undo (only when not in a text input)
+        if (!inInput && (e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'z') {
+            e.preventDefault();
+            undo();
+            return;
+        }
+        // Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y = Redo (only when not in a text input)
+        if (!inInput && (e.ctrlKey || e.metaKey) && ((e.shiftKey && e.key === 'z') || e.key === 'y')) {
+            e.preventDefault();
+            redo();
+            return;
+        }
+        // Ctrl/Cmd + Enter = Add new expression (works everywhere)
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            addExpression();
+            return;
+        }
+        // Escape = Close any open panel / deactivate trace mode
+        if (e.key === 'Escape') {
+            if (traceModeActive) {
+                toggleTraceMode();
+            }
+            return;
+        }
+    });
+}
+
 /**
  * Initialize the graphing engine
  */
@@ -2347,28 +3742,122 @@ function initGraph() {
     // Auto-focus the first expression input
     const firstInput = document.querySelector('.expression-input');
     if (firstInput) firstInput.focus();
+
+    // Initialize keyboard shortcuts (Ctrl+Z undo, Ctrl+Shift+Z redo, Ctrl+Enter add expr)
+    initKeyboardShortcuts();
 }
 
 /**
  * Add a new expression input
  */
 function addExpression() {
+    saveUndoState();
     const expr = engine.addExpression('', 'cartesian');
     createExpressionElement(expr);
 }
 
 /**
- * Create UI element for an expression
+ * Add a collapsible folder/group for organizing expressions
+ */
+let _folderIdCounter = 0;
+function addFolder() {
+    _folderIdCounter++;
+    const folderId = _folderIdCounter;
+    const container = document.getElementById('expressions-list');
+    if (!container) return;
+
+    const div = document.createElement('div');
+    div.className = 'gc-folder';
+    div.id = `folder-${folderId}`;
+    div.style.cssText = 'border:1px solid #ddd;border-radius:6px;margin:6px 0;background:#fafafa;';
+
+    div.innerHTML = `
+        <div class="d-flex align-items-center gap-2 p-2" style="cursor:pointer;background:#f0f0f0;border-radius:6px 6px 0 0;" onclick="toggleFolder(${folderId})">
+            <i class="fas fa-chevron-down" id="folder-icon-${folderId}" style="font-size:10px;transition:transform 0.2s;"></i>
+            <input type="text" class="form-control form-control-sm" value="Group ${folderId}" id="folder-name-${folderId}"
+                   style="border:none;background:transparent;font-weight:600;font-size:12px;width:auto;flex:1;" onclick="event.stopPropagation()">
+            <button class="btn btn-sm" style="font-size:10px;padding:0 4px;color:#888;" onclick="event.stopPropagation();addExprToFolder(${folderId})" title="Add expression to folder">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button class="btn btn-sm" style="font-size:10px;padding:0 4px;color:#c00;" onclick="event.stopPropagation();removeFolder(${folderId})" title="Remove folder">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="folder-content-${folderId}" class="p-1" style=""></div>
+    `;
+    container.appendChild(div);
+}
+
+function toggleFolder(folderId) {
+    const content = document.getElementById(`folder-content-${folderId}`);
+    const icon = document.getElementById(`folder-icon-${folderId}`);
+    if (!content) return;
+    const isHidden = content.style.display === 'none';
+    content.style.display = isHidden ? '' : 'none';
+    if (icon) icon.style.transform = isHidden ? '' : 'rotate(-90deg)';
+}
+
+function addExprToFolder(folderId) {
+    const folderContent = document.getElementById(`folder-content-${folderId}`);
+    if (!folderContent) return;
+
+    const expr = engine.addExpression('', 'cartesian');
+    // Create the element in the folder instead of the main list
+    const div = document.createElement('div');
+    div.className = 'expression-item';
+    div.id = `expr-item-${expr.id}`;
+    div.setAttribute('role', 'group');
+    div.setAttribute('aria-label', `Expression ${expr.id}`);
+    expressionElements[expr.id] = div;
+    folderContent.appendChild(div);
+
+    // Reuse createExpressionElement logic for the content
+    _populateExpressionDiv(div, expr);
+}
+
+function removeFolder(folderId) {
+    saveUndoState();
+    const folder = document.getElementById(`folder-${folderId}`);
+    if (!folder) return;
+    // Delete all expressions in the folder
+    const items = folder.querySelectorAll('.expression-item');
+    items.forEach(item => {
+        const idMatch = item.id.match(/expr-item-(\d+)/);
+        if (idMatch) {
+            const exprId = parseInt(idMatch[1]);
+            if (_tableExprId === exprId) _closeTable();
+            engine.removeExpression(exprId);
+            delete expressionElements[exprId];
+        }
+    });
+    folder.remove();
+    updateGraph();
+}
+
+/**
+ * Create UI element for an expression (appends to main expressions-list)
  */
 function createExpressionElement(expr) {
     const container = document.getElementById('expressions-list');
 
     const div = document.createElement('div');
     div.className = 'expression-item';
-    div.id = `expr-item-${expr.id}`;  // Changed to avoid ID conflict
+    div.id = `expr-item-${expr.id}`;
+
+    container.appendChild(div);
+    expressionElements[expr.id] = div;
+    _populateExpressionDiv(div, expr);
+}
+
+/**
+ * Populate an expression div with all UI controls (shared by main list and folders)
+ */
+function _populateExpressionDiv(div, expr) {
+    div.setAttribute('role', 'group');
+    div.setAttribute('aria-label', `Expression ${expr.id}`);
 
     div.innerHTML = `
-        <button class="delete-btn" onclick="deleteExpression(${expr.id})">
+        <button class="delete-btn" onclick="deleteExpression(${expr.id})" aria-label="Delete expression ${expr.id}" title="Delete expression">
             <i class="fas fa-times"></i>
         </button>
 
@@ -2376,8 +3865,8 @@ function createExpressionElement(expr) {
 
         <div class="gc-expr-toolbar">
             <input type="color" class="color-picker" id="color-${expr.id}"
-                   value="${expr.color}" onchange="updateExpressionColor(${expr.id})">
-            <select class="plot-type-select" id="type-${expr.id}" onchange="updateExpressionType(${expr.id})">
+                   value="${expr.color}" onchange="updateExpressionColor(${expr.id})" aria-label="Line color for expression ${expr.id}">
+            <select class="plot-type-select" id="type-${expr.id}" onchange="updateExpressionType(${expr.id})" aria-label="Expression type">
                 <option value="cartesian">y = f(x)</option>
                 <option value="equation">Equation</option>
                 <option value="parametric">Parametric</option>
@@ -2387,14 +3876,25 @@ function createExpressionElement(expr) {
                 <option value="piecewise">Piecewise</option>
                 <option value="implicit">Implicit</option>
                 <option value="surface">3D Surface</option>
+                <option value="point">Point(s)</option>
                 <option value="table">Table</option>
                 <option value="statistics">Regression</option>
                 <option value="distribution">Distribution</option>
+                <option value="vector">Vector(s)</option>
+                <option value="vectorfield">Vector Field</option>
             </select>
             <span id="calculus-toggles-${expr.id}" class="gc-calculus-toggles">
                 <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-derivative-${expr.id}" onchange="toggleDerivative(${expr.id})"> f'(x)</label>
+                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-second-derivative-${expr.id}" onchange="toggleSecondDerivative(${expr.id})"> f''(x)</label>
+                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-critical-points-${expr.id}" onchange="toggleCriticalPoints(${expr.id})"> Min/Max</label>
+                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-inflection-points-${expr.id}" onchange="toggleInflectionPoints(${expr.id})"> Inflect</label>
                 <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-integration-${expr.id}" onchange="toggleIntegration(${expr.id})"> ∫</label>
                 <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-antiderivative-${expr.id}" onchange="toggleAntiderivative(${expr.id})"> F(x)</label>
+                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-table-${expr.id}" onchange="toggleTableForExpr(${expr.id})"> Table</label>
+                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-roots-${expr.id}" onchange="toggleRoots(${expr.id})"> Zeros</label>
+                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-vasym-${expr.id}" onchange="toggleVerticalAsymptotes(${expr.id})"> V.Asym</label>
+                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-tangent-${expr.id}" onchange="toggleTangentLine(${expr.id})"> Tangent</label>
+                <button class="btn btn-sm btn-outline-secondary gc-toggle-label" style="font-size:10px;padding:1px 4px;border:1px solid #ccc;" onclick="copyAsLaTeX(${expr.id})" title="Copy as LaTeX">LaTeX</button>
             </span>
         </div>
         <div id="integration-controls-${expr.id}" style="display: none;" class="mt-1">
@@ -2417,11 +3917,10 @@ function createExpressionElement(expr) {
                 <input type="number" class="form-control form-control-sm" id="riemann-n-${expr.id}" value="10" min="1" max="500" step="1" style="width:60px;" oninput="updateRiemannN(${expr.id})">
             </div>
         </div>
+        <div id="tangent-controls-${expr.id}"></div>
         <div id="sliders-container-${expr.id}"></div>
+        <div id="expr-error-${expr.id}" class="gc-expr-error" style="display:none;"></div>
     `;
-
-    container.appendChild(div);
-    expressionElements[expr.id] = div;
 
     const exprType = expr.type || 'cartesian';
     createInputForType(expr.id, exprType);
@@ -2449,7 +3948,7 @@ function createInputForType(id, type) {
         case 'cartesian':
             container.innerHTML = `
                 <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="Type expression: x^2, sin(x), 2x+3y=8 ..." value="${currentValue}"
+                       placeholder="Type expression: x^2, sin(x), 2x+3y=8 ..." value="${escapeHtml(currentValue)}"
                        oninput="updateExpressionValue(${id})"
                        onchange="updateExpressionValue(${id})">
                 <div class="math-preview" id="math-preview-${id}"></div>
@@ -2462,6 +3961,8 @@ function createInputForType(id, type) {
                     <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'log(x)')">ln</button>
                     <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sqrt(x)')">√x</button>
                     <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '1/(1+exp(-x))')">sigmoid</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sum(n, 1, 10, x^n/factorial(n))')">Σ</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'fourier(x, 5)')">fourier</button>
                 </div>
             `;
             break;
@@ -2469,7 +3970,7 @@ function createInputForType(id, type) {
         case 'equation':
             container.innerHTML = `
                 <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., 2x + 3y = 8 or x^2 + y^2 = 25" value="${currentValue}"
+                       placeholder="e.g., 2x + 3y = 8 or x^2 + y^2 = 25" value="${escapeHtml(currentValue)}"
                        oninput="updateExpressionValue(${id})"
                        onchange="updateExpressionValue(${id})">
                 <small class="text-muted">Any equation — solved symbolically</small>
@@ -2486,7 +3987,7 @@ function createInputForType(id, type) {
         case 'limit':
             container.innerHTML = `
                 <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., sin(x)/x" value="${currentValue}"
+                       placeholder="e.g., sin(x)/x" value="${escapeHtml(currentValue)}"
                        oninput="updateLimitExpression(${id})"
                        onchange="updateLimitExpression(${id})">
                 <div class="d-flex gap-2 mt-1 align-items-center" style="font-size:0.8rem;">
@@ -2512,7 +4013,7 @@ function createInputForType(id, type) {
         case 'parametric':
             container.innerHTML = `
                 <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., cos(t), sin(t)" value="${currentValue}"
+                       placeholder="e.g., cos(t), sin(t)" value="${escapeHtml(currentValue)}"
                        oninput="updateExpressionValue(${id})"
                        onchange="updateExpressionValue(${id})">
                 <small class="text-muted">Format: x(t), y(t)</small>
@@ -2532,10 +4033,55 @@ function createInputForType(id, type) {
             `;
             break;
 
+        case 'point':
+            container.innerHTML = `
+                <input type="text" class="expression-input" id="expr-${id}"
+                       placeholder="e.g., (2, 3) or [(1,2),(3,4)]" value="${escapeHtml(currentValue)}"
+                       oninput="updateExpressionValue(${id})"
+                       onchange="updateExpressionValue(${id})">
+                <small class="text-muted">Plot points: (x,y) or [(x₁,y₁),(x₂,y₂),...]</small>
+                <div class="gc-sample-chips gc-on-focus">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '(0, 0)')">(0,0)</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '(1,1), (2,4), (3,9)')">Points</button>
+                </div>
+            `;
+            break;
+
+        case 'vector':
+            container.innerHTML = `
+                <input type="text" class="expression-input" id="expr-${id}"
+                       placeholder="e.g., &lt;3, 4&gt; or &lt;2,3&gt; @ (1,1)" value="${escapeHtml(currentValue)}"
+                       oninput="updateExpressionValue(${id})"
+                       onchange="updateExpressionValue(${id})">
+                <small class="text-muted">Vectors: &lt;dx,dy&gt; or &lt;dx,dy&gt; @ (ox,oy)</small>
+                <div class="gc-sample-chips gc-on-focus">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '&lt;3, 4&gt;')">⟨3,4⟩</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '&lt;2,3&gt; @ (1,1)')">with origin</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '&lt;1,0&gt;, &lt;0,1&gt;, &lt;1,1&gt;')">basis</button>
+                </div>
+            `;
+            break;
+
+        case 'vectorfield':
+            container.innerHTML = `
+                <input type="text" class="expression-input" id="expr-${id}"
+                       placeholder="e.g., &lt;-y, x&gt; or F(x,y) = &lt;x^2, -x*y&gt;" value="${escapeHtml(currentValue)}"
+                       oninput="updateExpressionValue(${id})"
+                       onchange="updateExpressionValue(${id})">
+                <small class="text-muted">Vector field: &lt;P(x,y), Q(x,y)&gt;</small>
+                <div class="gc-sample-chips gc-on-focus">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '&lt;-y, x&gt;')">rotation</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '&lt;x, y&gt;')">radial</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '&lt;-y/(x^2+y^2), x/(x^2+y^2)&gt;')">vortex</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '&lt;sin(y), cos(x)&gt;')">wave</button>
+                </div>
+            `;
+            break;
+
         case 'polar':
             container.innerHTML = `
                 <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., 2 + 2*cos(theta)" value="${currentValue}"
+                       placeholder="e.g., 2 + 2*cos(theta)" value="${escapeHtml(currentValue)}"
                        oninput="updateExpressionValue(${id})"
                        onchange="updateExpressionValue(${id})">
                 <small class="text-muted">Use theta or θ</small>
@@ -2558,7 +4104,7 @@ function createInputForType(id, type) {
         case 'implicit':
             container.innerHTML = `
                 <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., x^2 + y^2 = 25" value="${currentValue}"
+                       placeholder="e.g., x^2 + y^2 = 25" value="${escapeHtml(currentValue)}"
                        oninput="updateExpressionValue(${id})"
                        onchange="updateExpressionValue(${id})">
                 <small class="text-muted">Implicit equation in x and y</small>
@@ -2574,7 +4120,7 @@ function createInputForType(id, type) {
         case 'surface':
             container.innerHTML = `
                 <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., sin(sqrt(x^2 + y^2))" value="${currentValue}"
+                       placeholder="e.g., sin(sqrt(x^2 + y^2))" value="${escapeHtml(currentValue)}"
                        oninput="updateExpressionValue(${id})"
                        onchange="updateExpressionValue(${id})">
                 <small class="text-muted">z = f(x, y) — 3D surface plot</small>
@@ -2621,7 +4167,7 @@ function createInputForType(id, type) {
         case 'inequality':
             container.innerHTML = `
                 <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., y > x^2" value="${currentValue}"
+                       placeholder="e.g., y > x^2" value="${escapeHtml(currentValue)}"
                        oninput="updateExpressionValue(${id})"
                        onchange="updateExpressionValue(${id})">
                 <div class="mt-2">
@@ -2650,9 +4196,19 @@ function createInputForType(id, type) {
                           placeholder="Enter x,y pairs for regression:&#10;1, 2&#10;2, 4&#10;3, 9"
                           oninput="updateExpressionValue(${id})"
                           onchange="updateExpressionValue(${id})">${currentValue}</textarea>
-                <div class="mt-2">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadTableSample(${id}, 'regression')">Sample Data</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadTableSample(${id}, 'exponential')">Exponential</button>
+                <div class="mt-2 d-flex gap-2 align-items-center flex-wrap">
+                    <small class="text-muted">Fit:</small>
+                    <select class="form-select form-select-sm" id="regression-type-${id}" style="width:auto;" onchange="updateRegressionType(${id})">
+                        <option value="auto">Auto (Best R²)</option>
+                        <option value="linear">Linear</option>
+                        <option value="quadratic">Quadratic</option>
+                        <option value="cubic">Cubic</option>
+                        <option value="exponential">Exponential</option>
+                        <option value="logarithmic">Logarithmic</option>
+                        <option value="power">Power</option>
+                    </select>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadTableSample(${id}, 'regression')">Sample</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadTableSample(${id}, 'exponential')">Exp Data</button>
                 </div>
                 <div id="stats-${id}" class="stats-output" style="display:none;"></div>
             `;
@@ -3092,6 +4648,19 @@ function autoDetectType(value, currentType) {
     // Only auto-switch from cartesian (the default type)
     if (currentType !== 'cartesian') return null;
 
+    // Point(s): (2,3) or [(1,2),(3,4)] or (1,2),(3,4) — detect before other checks
+    if (/^\s*\(?\s*-?\d+\.?\d*\s*,\s*-?\d+\.?\d*\s*\)?\s*$/.test(s)) return 'point';
+    // Multi-point without brackets: (1,2), (3,4), ...
+    if (/^\s*(\(\s*-?[\d.]+\s*,\s*-?[\d.]+\s*\)\s*,?\s*){2,}$/.test(s)) return 'point';
+    if (/^\s*\[?\s*\(\s*-?\d/.test(s) && s.includes(')') && !(/(?<![a-zA-Z])t(?![a-zA-Z])/.test(s))) return 'point';
+
+    // Vector: <3,4> or <2,3> @ (1,1)
+    if (/^\s*<\s*-?[\d.]+\s*,\s*-?[\d.]+\s*>/.test(s)) return 'vector';
+    // Vector field: <expr, expr> containing x or y (but not just numbers)
+    if (/^\s*(?:\w+\s*\(\s*x\s*,\s*y\s*\)\s*=\s*)?<\s*.+,\s*.+>/.test(s) &&
+        (/(?<![a-zA-Z])x(?![a-zA-Z])/.test(s) || /(?<![a-zA-Z])y(?![a-zA-Z])/.test(s)) &&
+        s.includes('<') && s.includes('>')) return 'vectorfield';
+
     // Inequality operators (but not <=, >=, != inside other contexts)
     if (/[^<>=!](>=|<=|>(?!=)|<(?!=))[^<>=]/.test(' ' + s + ' ')) return 'inequality';
 
@@ -3131,6 +4700,7 @@ function autoDetectType(value, currentType) {
 /**
  * Update expression value
  */
+let _undoSaveTimer = null;
 function updateExpressionValue(id) {
     const element = document.getElementById(`expr-${id}`);
 
@@ -3139,10 +4709,15 @@ function updateExpressionValue(id) {
         return;
     }
 
+    // Debounced undo save — captures state 500ms after last keystroke
+    if (_undoSaveTimer) clearTimeout(_undoSaveTimer);
+    else saveUndoState(); // save before first change in this burst
+    _undoSaveTimer = setTimeout(() => { _undoSaveTimer = null; }, 500);
+
     const value = element.value;
     engine.updateExpression(id, { expression: value });
 
-    // Auto-detect and switch type if needed
+    // Auto-detect and switch type FIRST (before validation, so we validate the right type)
     const expr = engine.expressions.find(e => e.id === id);
     if (expr) {
         const detected = autoDetectType(value, expr.type);
@@ -3166,10 +4741,51 @@ function updateExpressionValue(id) {
         }
     }
 
+    // Validate expression and show error feedback
+    const errorDiv = document.getElementById(`expr-error-${id}`);
+    const exprObj = engine.expressions.find(e => e.id === id);
+    // Only validate types where math.parse can handle the syntax
+    // equation/implicit/inequality/polar/parametric have their own parsers
+    const validatableTypes = ['cartesian', 'limit'];
+    // Skip validation for special expression types that math.parse can't handle
+    const isSpecialExpr = value.trim() && (/^\s*(sum|prod|fourier)\s*\(/i.test(value.trim()));
+    if (errorDiv && value.trim() && exprObj && validatableTypes.includes(exprObj.type) && !isSpecialExpr) {
+        try {
+            // Strip domain restriction before parsing: "x^2 {x > 0}" → "x^2"
+            const { expr: cleanExpr } = engine.parseDomainRestriction(value);
+            // Resolve function composition before validation
+            let resolved = resolveFunctionComposition(cleanExpr);
+            let normalized = engine.normalizeExpression(resolved);
+            let stripped = engine.stripCartesianPrefix(normalized);
+            // Substitute parameters so "4ax" with slider a=1 parses as "4*1*x"
+            if (exprObj.parameters) {
+                Object.keys(exprObj.parameters).forEach(param => {
+                    const re = new RegExp(`\\b${param}\\b`, 'g');
+                    stripped = stripped.replace(re, String(exprObj.parameters[param]));
+                });
+            }
+            math.parse(stripped);
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+            element.classList.remove('gc-input-error');
+        } catch (parseErr) {
+            const msg = (parseErr.message || 'Invalid expression').replace(/^.*?Error:\s*/, '');
+            errorDiv.textContent = msg;
+            errorDiv.style.display = 'block';
+            element.classList.add('gc-input-error');
+        }
+    } else if (errorDiv) {
+        errorDiv.style.display = 'none';
+        if (element) element.classList.remove('gc-input-error');
+    }
+
     // Render math preview for cartesian expressions
     if (expr && expr.type === 'cartesian') {
         renderMathPreview(id, value);
-        // Detect and create sliders for parameters
+    }
+
+    // Detect and create sliders for parameters (all plottable types)
+    if (expr && ['cartesian', 'equation', 'implicit', 'polar', 'parametric', 'inequality'].includes(expr.type)) {
         detectAndCreateSliders(id, value);
     }
 
@@ -3194,6 +4810,11 @@ function updateExpressionColor(id) {
  * Delete expression
  */
 function deleteExpression(id) {
+    saveUndoState();
+    // Stop animation if it's running for this expression
+    if (animationState.isPlaying && animationState.exprId === id) stopAnimation();
+    // Close table if it's showing this expression
+    if (_tableExprId === id) _closeTable();
     engine.removeExpression(id);
     const element = expressionElements[id];
     if (element) {
@@ -3204,20 +4825,36 @@ function deleteExpression(id) {
 }
 
 /**
+ * Update regression type for statistics expression
+ */
+function updateRegressionType(id) {
+    const select = document.getElementById(`regression-type-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr && select) {
+        expr.regressionType = select.value;
+        updateGraph();
+        // Re-display stats after re-render
+        if (expr.stats) displayStatistics(id, expr.stats);
+    }
+}
+
+/**
  * Display statistics
  */
 function displayStatistics(id, stats) {
     const statsDiv = document.getElementById(`stats-${id}`);
     if (statsDiv && stats) {
         statsDiv.style.display = 'block';
-        statsDiv.innerHTML = `
+        let html = `
             <strong>Statistics:</strong><br>
             n = ${stats.n}<br>
             Mean: (${stats.meanX}, ${stats.meanY})<br>
             Std Dev: (${stats.stdX}, ${stats.stdY})<br>
             Correlation: ${stats.correlation}<br>
-            ${stats.regressionEquation}
-        `;
+            ${stats.regressionEquation}`;
+        if (stats.r2) html += `<br>R² = ${stats.r2}`;
+        if (stats.regressionType) html += ` <small>(${stats.regressionType})</small>`;
+        statsDiv.innerHTML = html;
     }
 }
 
@@ -3233,6 +4870,9 @@ function updateGraph() {
     const showLegend = document.getElementById('showLegend').checked;
 
     engine.plot({ xMin, xMax, yMin, yMax, showGrid, showLegend });
+
+    // Auto-refresh table of values if visible
+    if (typeof _refreshTable === 'function') _refreshTable();
 }
 
 /**
@@ -3383,6 +5023,105 @@ function toggleDerivative(id) {
 
     if (expr) {
         expr.showDerivative = checkbox.checked;
+        updateGraph();
+    }
+}
+
+/**
+ * Toggle second derivative display
+ */
+function toggleSecondDerivative(id) {
+    const checkbox = document.getElementById(`show-second-derivative-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) {
+        expr.showSecondDerivative = checkbox.checked;
+        updateGraph();
+    }
+}
+
+/**
+ * Toggle critical points (local min/max) display
+ */
+function toggleCriticalPoints(id) {
+    const checkbox = document.getElementById(`show-critical-points-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) {
+        expr.showCriticalPoints = checkbox.checked;
+        updateGraph();
+    }
+}
+
+/**
+ * Toggle inflection points display
+ */
+function toggleInflectionPoints(id) {
+    const checkbox = document.getElementById(`show-inflection-points-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) {
+        expr.showInflectionPoints = checkbox.checked;
+        updateGraph();
+    }
+}
+
+/**
+ * Toggle roots (x-intercepts) display
+ */
+function toggleRoots(id) {
+    const checkbox = document.getElementById(`show-roots-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) {
+        expr.showRoots = checkbox.checked;
+        updateGraph();
+    }
+}
+
+/**
+ * Toggle vertical asymptotes display
+ */
+function toggleVerticalAsymptotes(id) {
+    const checkbox = document.getElementById(`show-vasym-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) {
+        expr.showVerticalAsymptotes = checkbox.checked;
+        updateGraph();
+    }
+}
+
+/**
+ * Toggle tangent line display — shows input for x-value
+ */
+function toggleTangentLine(id) {
+    const checkbox = document.getElementById(`show-tangent-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+    if (!expr) return;
+    expr.showTangent = checkbox.checked;
+
+    // Use the dedicated mount point
+    const mount = document.getElementById(`tangent-controls-${id}`);
+    if (checkbox.checked) {
+        if (mount) {
+            mount.innerHTML = `
+                <div class="d-flex gap-2 align-items-center flex-wrap mt-1">
+                    <small class="text-muted">Tangent at x =</small>
+                    <input type="number" class="form-control form-control-sm" id="tangent-x-${id}"
+                           value="${expr.tangentX != null ? expr.tangentX : 0}" step="0.5" style="width:80px;"
+                           oninput="updateTangentX(${id})">
+                    <small class="text-muted" id="tangent-info-${id}"></small>
+                </div>`;
+        }
+        if (expr.tangentX == null) expr.tangentX = 0;
+    } else {
+        if (mount) mount.innerHTML = '';
+        delete expr.tangentX;
+    }
+    updateGraph();
+}
+
+function updateTangentX(id) {
+    const expr = engine.expressions.find(e => e.id === id);
+    const input = document.getElementById(`tangent-x-${id}`);
+    if (expr && input) {
+        expr.tangentX = parseFloat(input.value) || 0;
         updateGraph();
     }
 }
@@ -3865,6 +5604,538 @@ function findIntersections() {
 }
 
 /**
+ * Compute and display area between two curves
+ */
+function areaBetweenCurves() {
+    const cartExprs = engine.expressions.filter(e => e.type === 'cartesian' && e.expression && e.visible);
+    if (cartExprs.length < 2) {
+        alert('Need at least 2 visible Cartesian expressions to compute area between curves.');
+        return;
+    }
+
+    // Use first two cartesian expressions
+    const e1 = cartExprs[0], e2 = cartExprs[1];
+    const xMin = parseFloat(document.getElementById('xMin').value);
+    const xMax = parseFloat(document.getElementById('xMax').value);
+
+    // Ask user for bounds (default to current x range)
+    const boundsStr = prompt(`Area between: "${e1.expression}" and "${e2.expression}"\n\nEnter bounds (a, b):`, `${xMin}, ${xMax}`);
+    if (!boundsStr) return;
+    const [aStr, bStr] = boundsStr.split(',').map(s => s.trim());
+    const a = parseFloat(aStr), b = parseFloat(bStr);
+    if (isNaN(a) || isNaN(b) || a >= b) { alert('Invalid bounds.'); return; }
+
+    const result = engine.areaBetweenCurves(e1.expression, e2.expression, a, b);
+    if (!result) { alert('Could not compute area between curves.'); return; }
+
+    // Store shading on the first expression for rendering
+    e1._areaBetween = {
+        shadeX: result.shadeX,
+        shadeY: result.shadeY,
+        area: result.area,
+        otherExpr: e2.expression,
+        a, b
+    };
+
+    updateGraph();
+    alert(`Area between curves from x=${a} to x=${b}:\n≈ ${result.area.toFixed(6)}`);
+}
+
+/**
+ * Show/hide table of values panel for the first cartesian expression
+ */
+// Track which expression the table is showing (for auto-refresh)
+var _tableExprId = null;
+
+/**
+ * Toggle table for a specific expression (from the per-expression checkbox).
+ */
+function toggleTableForExpr(id) {
+    const checkbox = document.getElementById(`show-table-${id}`);
+    const isOn = checkbox && checkbox.checked;
+
+    if (isOn) {
+        const exprObj = engine.expressions.find(e => e.id === id);
+        if (!exprObj || !exprObj.expression) return;
+        _tableExprId = id;
+        _renderTableForExpr(exprObj);
+    } else {
+        _closeTable();
+    }
+}
+
+/**
+ * Toggle table from the sidebar button (picks expression automatically or prompts).
+ */
+function toggleTableOfValues() {
+    let panel = document.getElementById('gc-table-panel');
+    if (panel && panel.style.display !== 'none') {
+        _closeTable();
+        return;
+    }
+
+    // Find all visible expressions that can produce a table
+    const tableable = engine.expressions.filter(e =>
+        e.expression && e.visible &&
+        ['cartesian', 'equation', 'implicit', 'polar', 'parametric'].includes(e.type)
+    );
+    if (tableable.length === 0) {
+        alert('No visible expression to generate a table.');
+        return;
+    }
+
+    // If multiple expressions, let user pick
+    let chosen;
+    if (tableable.length === 1) {
+        chosen = tableable[0];
+    } else {
+        const options = tableable.map((e, i) => `${i + 1}. ${e.expression} (${e.type})`).join('\n');
+        const pick = prompt('Choose expression:\n' + options, '1');
+        if (!pick) return;
+        const idx = parseInt(pick, 10) - 1;
+        if (idx < 0 || idx >= tableable.length) return;
+        chosen = tableable[idx];
+    }
+
+    _tableExprId = chosen.id;
+    // Sync checkbox
+    const cb = document.getElementById(`show-table-${chosen.id}`);
+    if (cb) cb.checked = true;
+    _renderTableForExpr(chosen);
+}
+
+/**
+ * Render an editable Desmos-style table for a given expression.
+ * User can type custom x-values; y is auto-computed. Points appear as dots on the graph.
+ */
+function _renderTableForExpr(exprObj) {
+    if (!exprObj || !exprObj.expression) return;
+
+    // Initialize custom x-values array on the expression if not present
+    if (!exprObj._tableXValues) {
+        // Seed with some default values from the current range
+        const xMin = parseFloat(document.getElementById('xMin').value) || -10;
+        const xMax = parseFloat(document.getElementById('xMax').value) || 10;
+        const step = (xMax - xMin) / 10;
+        exprObj._tableXValues = [];
+        for (let i = 0; i <= 10; i++) {
+            exprObj._tableXValues.push(+(xMin + i * step).toFixed(2));
+        }
+    }
+
+    let panel = document.getElementById('gc-table-panel');
+    if (!panel) {
+        panel = document.createElement('div');
+        panel.id = 'gc-table-panel';
+        const graphCard = document.querySelector('.gc-graph-card');
+        if (graphCard) graphCard.parentElement.appendChild(panel);
+        else {
+            const col = document.querySelector('.tool-output-column');
+            if (col) col.appendChild(panel);
+            else document.body.appendChild(panel);
+        }
+    }
+
+    const dark = !!(window.GC_DARK);
+    const borderColor = dark ? '#2d3a4d' : '#e5e7eb';
+    const headerBg = dark ? '#1a2436' : '#f3f4f6';
+    const accentColor = dark ? '#a78bfa' : '#7c3aed';
+    const textColor = dark ? '#e5e7eb' : '#111827';
+    const inputBg = dark ? '#1e293b' : '#fff';
+    const rowBgEven = dark ? '#111827' : '#fafafa';
+    const rowBgOdd = dark ? '#151d2b' : '#fff';
+
+    panel.style.cssText = `
+        margin-top:0.5rem; max-height:350px; overflow-y:auto;
+        border:1px solid ${borderColor};
+        border-radius:8px; background:${dark ? '#151d2b' : '#fff'};
+        font-size:0.8125rem;
+    `;
+
+    // Compute y-values for each x
+    const computedRows = _computeTableRows(exprObj);
+
+    // Determine columns dynamically from computed data
+    const allCols = computedRows.length > 0 ? Object.keys(computedRows[0]) : ['x', 'y'];
+    const colLabels = { x: 'x', y: 'f(x)', y1: 'y₁', y2: 'y₂', y3: 'y₃', y4: 'y₄', t: 't', theta: 'θ', r: 'r' };
+    // The first column is the editable input (x, t, or theta)
+    const inputCol = allCols[0];
+    const outputCols = allCols.slice(1);
+
+    const thStyle = `padding:0.375rem 0.5rem;text-align:center;border-bottom:2px solid ${borderColor};color:${accentColor};font-weight:600;`;
+    const inputStyle = `width:100%;border:none;background:transparent;text-align:right;font-family:monospace;font-size:0.8125rem;color:${textColor};outline:none;padding:0.25rem 0.375rem;`;
+
+    const inputPlaceholder = colLabels[inputCol] || inputCol;
+    let html = `<table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="position:sticky;top:0;background:${headerBg};z-index:1;">
+            <th style="${thStyle}width:35%;">${colLabels[inputCol] || inputCol}</th>`;
+    for (const col of outputCols) {
+        html += `<th style="${thStyle}">${colLabels[col] || col}</th>`;
+    }
+    html += `<th style="${thStyle}width:28px;"></th></tr></thead><tbody>`;
+
+    computedRows.forEach((r, i) => {
+        const bg = i % 2 === 0 ? rowBgEven : rowBgOdd;
+        const inputVal = r[inputCol];
+        html += `<tr style="background:${bg};">`;
+        // Editable input cell (x, t, or theta)
+        html += `<td style="padding:0;border-bottom:1px solid ${borderColor};">
+            <input type="text" value="${inputVal !== '' && inputVal != null ? inputVal : ''}"
+                   style="${inputStyle}"
+                   placeholder="${inputPlaceholder}"
+                   data-row="${i}"
+                   onfocus="this.select()"
+                   oninput="_tableXInput(${exprObj.id}, ${i}, this.value)"
+                   onkeydown="_tableKeyDown(event, ${exprObj.id}, ${i})">
+        </td>`;
+        // Computed output cells (read-only)
+        for (const col of outputCols) {
+            const val = r[col];
+            const isUndef = val === 'undef' || val === '';
+            const color = isUndef ? '#ef4444' : textColor;
+            html += `<td style="padding:0.25rem 0.375rem;text-align:right;font-family:monospace;color:${color};border-bottom:1px solid ${borderColor};">${val != null && val !== '' ? val : ''}</td>`;
+        }
+        // Delete button
+        html += `<td style="padding:0;text-align:center;border-bottom:1px solid ${borderColor};">
+            <button onclick="_tableDeleteRow(${exprObj.id}, ${i})" title="Remove row"
+                    style="background:none;border:none;cursor:pointer;color:#9ca3af;font-size:0.75rem;padding:0 2px;">&times;</button>
+        </td>`;
+        html += `</tr>`;
+    });
+
+    // Empty row at bottom for adding new values (like Desmos)
+    const newIdx = computedRows.length;
+    const emptyBg = newIdx % 2 === 0 ? rowBgEven : rowBgOdd;
+    html += `<tr style="background:${emptyBg};">
+        <td style="padding:0;border-bottom:1px solid ${borderColor};">
+            <input type="text" value="" style="${inputStyle}" placeholder="add ${inputPlaceholder}..."
+                   data-row="${newIdx}"
+                   oninput="_tableXInput(${exprObj.id}, ${newIdx}, this.value)"
+                   onkeydown="_tableKeyDown(event, ${exprObj.id}, ${newIdx})">
+        </td>`;
+    for (const col of outputCols) {
+        html += `<td style="padding:0.25rem 0.375rem;text-align:right;font-family:monospace;color:#9ca3af;border-bottom:1px solid ${borderColor};"></td>`;
+    }
+    html += `<td style="border-bottom:1px solid ${borderColor};"></td></tr>`;
+
+    html += `</tbody></table>`;
+
+    const typeLabel = exprObj.type !== 'cartesian' ? ` (${exprObj.type})` : '';
+    const pointCount = computedRows.filter(r => {
+        const firstKey = Object.keys(r)[0];
+        if (r[firstKey] === '' || r[firstKey] === null) return false;
+        const yKeys = Object.keys(r).filter(k => k.startsWith('y') || k === 'r');
+        return yKeys.some(k => r[k] !== 'undef' && r[k] !== '');
+    }).length;
+    panel.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.375rem 0.75rem;border-bottom:2px solid ${borderColor};background:${headerBg};border-radius:8px 8px 0 0;">
+        <strong style="font-size:0.8125rem;color:${accentColor};">Table: ${exprObj.expression}${typeLabel}</strong>
+        <div style="display:flex;gap:0.25rem;align-items:center;">
+            <span style="font-size:0.7rem;color:#9ca3af;">${pointCount} pts</span>
+            <button onclick="_tableAutoFill(${exprObj.id})" title="Auto-fill with even spacing" style="background:none;border:none;cursor:pointer;color:${dark ? '#9ca3af' : '#6b7280'};font-size:0.8rem;">⟳</button>
+            <button onclick="_tableAddRow(${exprObj.id})" title="Add row" style="background:none;border:none;cursor:pointer;color:${dark ? '#9ca3af' : '#6b7280'};font-size:1rem;">+</button>
+            <button onclick="_closeTable()" title="Close" style="background:none;border:none;cursor:pointer;color:${dark ? '#9ca3af' : '#6b7280'};font-size:1rem;">&times;</button>
+        </div>
+    </div>` + html;
+    panel.style.display = 'block';
+
+    // Update table points on the graph
+    _updateTablePoints(exprObj);
+}
+
+/**
+ * Compute y-values for each x in the expression's _tableXValues.
+ */
+function _computeTableRows(exprObj) {
+    const xValues = exprObj._tableXValues || [];
+    const rows = [];
+
+    // Prepare the expression with parameter substitution
+    let substituted = engine.normalizeExpression(exprObj.expression);
+    if (exprObj.parameters) {
+        Object.keys(exprObj.parameters).forEach(param => {
+            const re = new RegExp(`\\b${param}\\b`, 'g');
+            substituted = substituted.replace(re, String(exprObj.parameters[param]));
+        });
+    }
+    const { expr: cleanExpr, restriction } = engine.parseDomainRestriction(substituted);
+
+    if (exprObj.type === 'polar') {
+        // Polar: values are theta → r, x, y
+        const stripped = cleanExpr.replace(/^\s*r\s*=\s*/i, '');
+        let compiled;
+        try { compiled = engine._compile(engine.normalizeExpression(stripped)); } catch(_) { return rows; }
+        for (const tv of xValues) {
+            if (tv === '' || tv === null || tv === undefined || isNaN(tv)) { rows.push({ theta: '', r: '', x: '', y: '' }); continue; }
+            const theta = parseFloat(tv);
+            try {
+                const r = compiled.evaluate({ theta });
+                if (typeof r === 'number' && isFinite(r)) {
+                    rows.push({ theta: tv, r: +r.toFixed(4), x: +(r * Math.cos(theta)).toFixed(4), y: +(r * Math.sin(theta)).toFixed(4) });
+                } else {
+                    rows.push({ theta: tv, r: 'undef', x: 'undef', y: 'undef' });
+                }
+            } catch (_) { rows.push({ theta: tv, r: 'undef', x: 'undef', y: 'undef' }); }
+        }
+        return rows;
+    }
+
+    if (exprObj.type === 'parametric') {
+        // Parametric: values are t → x(t), y(t)
+        const parts = cleanExpr.split(',').map(s => s.trim());
+        if (parts.length < 2) return rows;
+        let cx, cy;
+        try { cx = engine._compile(engine.normalizeExpression(parts[0])); } catch(_) { return rows; }
+        try { cy = engine._compile(engine.normalizeExpression(parts[1])); } catch(_) { return rows; }
+        for (const tv of xValues) {
+            if (tv === '' || tv === null || tv === undefined || isNaN(tv)) { rows.push({ t: '', x: '', y: '' }); continue; }
+            const t = parseFloat(tv);
+            try {
+                const xv = cx.evaluate({ t });
+                const yv = cy.evaluate({ t });
+                rows.push({
+                    t: tv,
+                    x: (typeof xv === 'number' && isFinite(xv)) ? +xv.toFixed(4) : 'undef',
+                    y: (typeof yv === 'number' && isFinite(yv)) ? +yv.toFixed(4) : 'undef'
+                });
+            } catch (_) { rows.push({ t: tv, x: 'undef', y: 'undef' }); }
+        }
+        return rows;
+    }
+
+    if ((exprObj.type === 'equation' || exprObj.type === 'implicit') && typeof nerdamer !== 'undefined' && cleanExpr.includes('=')) {
+        // Equation: solve for y branches
+        try {
+            const parts = cleanExpr.split('=');
+            const eqExpr = '(' + parts[0].trim() + ')-(' + parts[1].trim() + ')';
+            const ySolved = nerdamer.solve(eqExpr, 'y');
+            const yText = ySolved.text().replace(/^\[|\]$/g, '');
+            const yExprs = yText ? yText.split(',').map(s => s.trim()).filter(Boolean) : [];
+            const compiled = yExprs.map(ye => { try { return math.compile(engine.normalizeExpression(ye)); } catch(_) { return null; } });
+
+            for (const xv of xValues) {
+                if (xv === '' || xv === null || xv === undefined || isNaN(xv)) { rows.push({ x: '' }); continue; }
+                const row = { x: xv };
+                compiled.forEach((c, bi) => {
+                    const key = compiled.length === 1 ? 'y' : `y${bi + 1}`;
+                    if (!c) { row[key] = 'undef'; return; }
+                    try {
+                        const v = c.evaluate({ x: parseFloat(xv) });
+                        row[key] = (typeof v === 'number' && isFinite(v)) ? +v.toFixed(4) : 'undef';
+                    } catch (_) { row[key] = 'undef'; }
+                });
+                rows.push(row);
+            }
+            return rows;
+        } catch (_) { /* fall through to cartesian */ }
+    }
+
+    // Cartesian: y = f(x)
+    const stripped = engine.stripCartesianPrefix(cleanExpr);
+    let compiled;
+    try { compiled = engine._compile(engine.normalizeExpression(stripped)); } catch(_) { return rows; }
+
+    for (const xv of xValues) {
+        if (xv === '' || xv === null || xv === undefined || isNaN(xv)) { rows.push({ x: '', y: '' }); continue; }
+        const x = parseFloat(xv);
+        if (restriction && !engine.evaluateDomainRestriction(restriction, x)) {
+            rows.push({ x: xv, y: 'undef' });
+            continue;
+        }
+        try {
+            const y = compiled.evaluate({ x });
+            rows.push({ x: xv, y: (typeof y === 'number' && isFinite(y)) ? +y.toFixed(4) : 'undef' });
+        } catch (_) {
+            rows.push({ x: xv, y: 'undef' });
+        }
+    }
+    return rows;
+}
+
+/**
+ * Handle x-value input in the table.
+ */
+function _tableXInput(exprId, rowIdx, value) {
+    const exprObj = engine.expressions.find(e => e.id === exprId);
+    if (!exprObj) return;
+    if (!exprObj._tableXValues) exprObj._tableXValues = [];
+
+    const num = value.trim() === '' ? '' : parseFloat(value);
+    if (rowIdx >= exprObj._tableXValues.length) {
+        // Adding to the empty row at bottom
+        if (value.trim() !== '' && !isNaN(num)) {
+            exprObj._tableXValues.push(num);
+            _renderTableForExpr(exprObj);
+            // Focus the next empty row
+            setTimeout(() => {
+                const inputs = document.querySelectorAll('#gc-table-panel input[data-row]');
+                const last = inputs[inputs.length - 1];
+                if (last) last.focus();
+            }, 50);
+        }
+    } else {
+        if (value.trim() === '') {
+            exprObj._tableXValues[rowIdx] = '';
+        } else if (!isNaN(num)) {
+            exprObj._tableXValues[rowIdx] = num;
+        }
+        // Debounce: recompute after a short pause
+        clearTimeout(exprObj._tableDebounce);
+        exprObj._tableDebounce = setTimeout(() => {
+            _renderTableForExpr(exprObj);
+            // Restore focus
+            const input = document.querySelector(`#gc-table-panel input[data-row="${rowIdx}"]`);
+            if (input) { input.focus(); input.selectionStart = input.selectionEnd = input.value.length; }
+        }, 300);
+    }
+}
+
+/**
+ * Handle keyboard navigation in the table (Enter → next row, Tab → next col).
+ */
+function _tableKeyDown(event, exprId, rowIdx) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const exprObj = engine.expressions.find(e => e.id === exprId);
+        if (!exprObj) return;
+        // Move to next row
+        const nextInput = document.querySelector(`#gc-table-panel input[data-row="${rowIdx + 1}"]`);
+        if (nextInput) nextInput.focus();
+    }
+}
+
+/**
+ * Delete a row from the table.
+ */
+function _tableDeleteRow(exprId, rowIdx) {
+    const exprObj = engine.expressions.find(e => e.id === exprId);
+    if (!exprObj || !exprObj._tableXValues) return;
+    exprObj._tableXValues.splice(rowIdx, 1);
+    _renderTableForExpr(exprObj);
+}
+
+/**
+ * Add an empty row at the end.
+ */
+function _tableAddRow(exprId) {
+    const exprObj = engine.expressions.find(e => e.id === exprId);
+    if (!exprObj) return;
+    if (!exprObj._tableXValues) exprObj._tableXValues = [];
+    // Add next logical value (increment from last)
+    const last = exprObj._tableXValues.filter(v => v !== '' && !isNaN(v));
+    let next;
+    if (last.length >= 2) {
+        next = +(last[last.length - 1] + (last[last.length - 1] - last[last.length - 2])).toFixed(2);
+    } else if (last.length === 1) {
+        next = +(last[0] + 1).toFixed(2);
+    } else {
+        const xMin = parseFloat(document.getElementById('xMin').value) || -10;
+        next = xMin;
+    }
+    exprObj._tableXValues.push(next);
+    _renderTableForExpr(exprObj);
+    // Focus the new row
+    setTimeout(() => {
+        const idx = exprObj._tableXValues.length - 1;
+        const input = document.querySelector(`#gc-table-panel input[data-row="${idx}"]`);
+        if (input) { input.focus(); input.select(); }
+    }, 50);
+}
+
+/**
+ * Auto-fill the table with evenly-spaced x values from the current range.
+ */
+function _tableAutoFill(exprId) {
+    const exprObj = engine.expressions.find(e => e.id === exprId);
+    if (!exprObj) return;
+    const xMin = parseFloat(document.getElementById('xMin').value) || -10;
+    const xMax = parseFloat(document.getElementById('xMax').value) || 10;
+    const step = (xMax - xMin) / 10;
+    exprObj._tableXValues = [];
+    for (let i = 0; i <= 10; i++) {
+        exprObj._tableXValues.push(+(xMin + i * step).toFixed(2));
+    }
+    _renderTableForExpr(exprObj);
+}
+
+/**
+ * Close the table panel.
+ */
+function _closeTable() {
+    const panel = document.getElementById('gc-table-panel');
+    if (panel) panel.style.display = 'none';
+    // Uncheck checkbox and clear table points from graph
+    if (_tableExprId) {
+        const cb = document.getElementById(`show-table-${_tableExprId}`);
+        if (cb) cb.checked = false;
+        const exprObj = engine.expressions.find(e => e.id === _tableExprId);
+        if (exprObj) {
+            delete exprObj._tablePoints;
+            updateGraph();
+        }
+    }
+    _tableExprId = null;
+}
+
+/**
+ * Update the table points scatter trace on the graph.
+ * Stores points on exprObj._tablePoints for createTrace to render.
+ */
+function _updateTablePoints(exprObj) {
+    if (!exprObj) return;
+    if (!exprObj._tableXValues) {
+        delete exprObj._tablePoints;
+        return;
+    }
+    const rows = _computeTableRows(exprObj);
+    const points = { x: [], y: [] };
+    for (const r of rows) {
+        // All row types have an 'x' key (cartesian, equation, polar, parametric)
+        // For polar/parametric, x and y are the Cartesian coordinates
+        const xv = r.x;
+        const yv = r.y;
+        if (xv === '' || xv === null || xv === undefined || xv === 'undef') continue;
+        // For equations with branches (y1, y2, ...), plot all y-values at this x
+        const yKeys = Object.keys(r).filter(k => k === 'y' || /^y\d+$/.test(k));
+        if (yKeys.length > 0) {
+            for (const yk of yKeys) {
+                const val = r[yk];
+                if (val !== 'undef' && val !== '' && val != null && !isNaN(val)) {
+                    points.x.push(parseFloat(xv));
+                    points.y.push(parseFloat(val));
+                }
+            }
+        }
+    }
+    exprObj._tablePoints = points.x.length > 0 ? points : null;
+    // Only trigger graph update if not already in a refresh cycle
+    if (!_tableRefreshing) updateGraph();
+}
+
+/**
+ * Refresh the table if it's currently visible (called from updateGraph).
+ */
+var _tableRefreshing = false;
+function _refreshTable() {
+    if (!_tableExprId || _tableRefreshing) return;
+    const panel = document.getElementById('gc-table-panel');
+    if (!panel || panel.style.display === 'none') return;
+    const exprObj = engine.expressions.find(e => e.id === _tableExprId);
+    if (!exprObj || !exprObj.expression || !exprObj.visible) {
+        panel.style.display = 'none';
+        const cb = document.getElementById(`show-table-${_tableExprId}`);
+        if (cb) cb.checked = false;
+        _tableExprId = null;
+        return;
+    }
+    _tableRefreshing = true;
+    try {
+        _renderTableForExpr(exprObj);
+    } finally {
+        _tableRefreshing = false;
+    }
+}
+
+/**
  * Detect parameters in expression (like a, b, c) and create sliders
  */
 function detectAndCreateSliders(id, expression) {
@@ -3875,11 +6146,14 @@ function detectAndCreateSliders(id, expression) {
     }
 
     // Find parameters (single letters except x, y, t, e, pi)
+    // Normalize first so implicit multiplication is explicit (4ax → 4*a*x)
+    // This ensures \b word boundaries work correctly for parameter detection
+    const normalizedForDetect = engine.normalizeExpression(expression) || expression;
     const params = new Set();
     const regex = /\b([a-df-zA-Z])\b/g;
     let match;
 
-    while ((match = regex.exec(expression)) !== null) {
+    while ((match = regex.exec(normalizedForDetect)) !== null) {
         const param = match[1];
         // Exclude common variables and constants
         if (param !== 'x' && param !== 'y' && param !== 't' && param !== 'e' && param !== 'pi') {
@@ -3896,14 +6170,32 @@ function detectAndCreateSliders(id, expression) {
     let slidersHTML = '<div class="mt-2"><small class="text-muted">Parameters:</small></div>';
 
     params.forEach(param => {
+        // Restore previous range settings if they exist
+        const exprObj = engine.expressions.find(e => e.id === id);
+        const prevRange = exprObj && exprObj._sliderRanges && exprObj._sliderRanges[param];
+        const sMin = prevRange ? prevRange.min : -10;
+        const sMax = prevRange ? prevRange.max : 10;
+        const sStep = prevRange ? prevRange.step : 0.1;
+        const sVal = (exprObj && exprObj.parameters && exprObj.parameters[param] != null) ? exprObj.parameters[param] : 1;
         slidersHTML += `
             <div class="mb-2">
-                <label class="form-label" style="font-size: 12px;">
-                    ${param} = <span id="param-value-${param}-${id}">1</span>
-                </label>
+                <div class="d-flex align-items-center gap-1">
+                    <label class="form-label mb-0" style="font-size: 12px;">
+                        ${param} = <span id="param-value-${param}-${id}">${parseFloat(sVal).toFixed(1)}</span>
+                    </label>
+                    <button class="btn btn-sm" style="font-size:9px;padding:0 3px;color:#888;" onclick="toggleSliderRange(${id},'${param}')" title="Customize range">⚙</button>
+                </div>
                 <input type="range" class="form-range" id="param-${param}-${id}"
-                       min="-10" max="10" step="0.1" value="1"
+                       min="${sMin}" max="${sMax}" step="${sStep}" value="${sVal}"
+                       aria-label="Parameter ${param} slider"
                        oninput="updateParameter(${id}, '${param}', this.value)">
+                <div id="slider-range-${param}-${id}" style="display:none;" class="d-flex gap-1 align-items-center mt-1">
+                    <input type="number" class="form-control form-control-sm" style="width:55px;font-size:10px;" value="${sMin}" id="slider-min-${param}-${id}" onchange="updateSliderRange(${id},'${param}')" placeholder="min">
+                    <span style="font-size:10px;">to</span>
+                    <input type="number" class="form-control form-control-sm" style="width:55px;font-size:10px;" value="${sMax}" id="slider-max-${param}-${id}" onchange="updateSliderRange(${id},'${param}')" placeholder="max">
+                    <span style="font-size:10px;">step</span>
+                    <input type="number" class="form-control form-control-sm" style="width:55px;font-size:10px;" value="${sStep}" id="slider-step-${param}-${id}" onchange="updateSliderRange(${id},'${param}')" placeholder="step" min="0.001" step="0.01">
+                </div>
             </div>
         `;
     });
@@ -3989,7 +6281,8 @@ function toggleAnimation(id, param) {
         animationState.isPlaying = true;
         animationState.exprId = id;
         animationState.paramName = param;
-        animationState.currentValue = -10;
+        const startSlider = document.getElementById(`param-${param}-${id}`);
+        animationState.currentValue = startSlider ? parseFloat(startSlider.min) : -10;
         animationState.speed = parseFloat(speedSelect.value);
         icon.className = 'fas fa-pause';
 
@@ -4005,12 +6298,21 @@ function animate() {
 
     const { exprId, paramName, speed } = animationState;
 
+    // Stop if expression was deleted
+    if (!engine.expressions.find(e => e.id === exprId)) {
+        stopAnimation();
+        return;
+    }
+
     // Update parameter value
     animationState.currentValue += speed;
 
-    // Loop back to start
-    if (animationState.currentValue > 10) {
-        animationState.currentValue = -10;
+    // Loop back to start using slider range
+    const animSlider = document.getElementById(`param-${paramName}-${exprId}`);
+    const animMin = animSlider ? parseFloat(animSlider.min) : -10;
+    const animMax = animSlider ? parseFloat(animSlider.max) : 10;
+    if (animationState.currentValue > animMax) {
+        animationState.currentValue = animMin;
     }
 
     // Update slider and parameter
@@ -4036,6 +6338,319 @@ function stopAnimation() {
 }
 
 /**
+ * Toggle slider range editor visibility
+ */
+function toggleSliderRange(id, param) {
+    const rangeDiv = document.getElementById(`slider-range-${param}-${id}`);
+    if (rangeDiv) rangeDiv.style.display = rangeDiv.style.display === 'none' ? 'flex' : 'none';
+}
+
+/**
+ * Update slider min/max/step from range inputs
+ */
+function updateSliderRange(id, param) {
+    const minEl = document.getElementById(`slider-min-${param}-${id}`);
+    const maxEl = document.getElementById(`slider-max-${param}-${id}`);
+    const stepEl = document.getElementById(`slider-step-${param}-${id}`);
+    const slider = document.getElementById(`param-${param}-${id}`);
+    if (!minEl || !maxEl || !stepEl || !slider) return;
+
+    const sMin = parseFloat(minEl.value) || -10;
+    const sMax = parseFloat(maxEl.value) || 10;
+    const sStep = parseFloat(stepEl.value) || 0.1;
+
+    slider.min = sMin;
+    slider.max = sMax;
+    slider.step = sStep;
+
+    // Clamp current value to new range
+    let val = parseFloat(slider.value);
+    if (val < sMin) val = sMin;
+    if (val > sMax) val = sMax;
+    slider.value = val;
+    updateParameter(id, param, val);
+
+    // Persist range on expression object
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) {
+        if (!expr._sliderRanges) expr._sliderRanges = {};
+        expr._sliderRanges[param] = { min: sMin, max: sMax, step: sStep };
+    }
+}
+
+/**
+ * Copy expression as LaTeX to clipboard
+ */
+function copyAsLaTeX(id) {
+    const expr = engine.expressions.find(e => e.id === id);
+    if (!expr || !expr.expression) return;
+
+    const latex = expressionToLaTeX(expr.expression);
+
+    function showFeedback(success) {
+        const btn = document.querySelector(`[onclick="copyAsLaTeX(${id})"]`);
+        if (btn) {
+            const orig = btn.textContent;
+            btn.textContent = success ? '✓' : '✗';
+            setTimeout(() => { btn.textContent = orig; }, 1500);
+        }
+    }
+
+    function fallbackCopy() {
+        try {
+            const ta = document.createElement('textarea');
+            ta.value = latex;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showFeedback(true);
+        } catch (_) {
+            showFeedback(false);
+        }
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(latex)
+            .then(() => showFeedback(true))
+            .catch(() => fallbackCopy());
+    } else {
+        fallbackCopy();
+    }
+}
+
+/**
+ * Convert expression string to LaTeX notation
+ */
+function expressionToLaTeX(expr) {
+    if (!expr || typeof expr !== 'string') return expr;
+    let s = expr.trim();
+
+    // Replace common functions with LaTeX equivalents
+    s = s.replace(/\bsqrt\(([^)]+)\)/g, '\\sqrt{$1}');
+    s = s.replace(/\babs\(([^)]+)\)/g, '\\left|$1\\right|');
+    s = s.replace(/\bsin\(/g, '\\sin(');
+    s = s.replace(/\bcos\(/g, '\\cos(');
+    s = s.replace(/\btan\(/g, '\\tan(');
+    s = s.replace(/\basin\(/g, '\\arcsin(');
+    s = s.replace(/\bacos\(/g, '\\arccos(');
+    s = s.replace(/\batan\(/g, '\\arctan(');
+    s = s.replace(/\bsinh\(/g, '\\sinh(');
+    s = s.replace(/\bcosh\(/g, '\\cosh(');
+    s = s.replace(/\btanh\(/g, '\\tanh(');
+    s = s.replace(/\blog\(/g, '\\ln(');
+    s = s.replace(/\bexp\(([^)]+)\)/g, 'e^{$1}');
+    s = s.replace(/\bpi\b/g, '\\pi');
+    s = s.replace(/\btheta\b/g, '\\theta');
+    s = s.replace(/\binf\b/gi, '\\infty');
+
+    // x^2 → x^{2}, x^(2+n) → x^{2+n}
+    s = s.replace(/\^(\d+)/g, '^{$1}');
+    s = s.replace(/\^\(([^)]+)\)/g, '^{$1}');
+
+    // Fractions: a/b → \frac{a}{b} for simple cases
+    s = s.replace(/(\w+)\/(\w+)/g, '\\frac{$1}{$2}');
+
+    // *  → \cdot (optional, for display)
+    s = s.replace(/\*/g, ' \\cdot ');
+
+    return s;
+}
+
+/**
+ * Resolve function composition across expressions.
+ * Scans all expressions for named functions like "f(x) = ..." or "g(x) = ..."
+ * and substitutes them into the given expression string.
+ * e.g., if expr1 is "f(x)=x^2" and we get "f(f(x))", returns "((x^2))^2"
+ */
+function resolveFunctionComposition(expression) {
+    if (!expression || typeof expression !== 'string') return expression;
+
+    // Build a map of named functions from all expressions
+    const funcDefs = {};
+    engine.expressions.forEach(e => {
+        if (!e.expression || typeof e.expression !== 'string') return;
+        // Match f(x) = ..., g(x) = ..., h(x) = ...
+        const m = e.expression.match(/^\s*([a-zA-Z])\s*\(\s*x\s*\)\s*=\s*(.+)$/);
+        if (m) {
+            const fname = m[1];
+            const fbody = m[2].trim();
+            // Skip self-referential definitions (e.g. f(x) = f(x) + 1) to prevent infinite loops
+            const selfRefPattern = new RegExp(`(?<![a-zA-Z])${fname}\\s*\\(`);
+            if (!selfRefPattern.test(fbody)) {
+                funcDefs[fname] = fbody;
+            }
+        }
+    });
+
+    if (Object.keys(funcDefs).length === 0) return expression;
+
+    // Iteratively substitute function calls (up to 10 iterations for nested composition)
+    let result = expression;
+    for (let iter = 0; iter < 10; iter++) {
+        let changed = false;
+        for (const [fname, fbody] of Object.entries(funcDefs)) {
+            // Match fname(...) — need to handle nested parens
+            const pattern = new RegExp(`(?<![a-zA-Z])${fname}\\(`, 'g');
+            let match;
+            const newResult = [];
+            let lastIdx = 0;
+            const str = result;
+            pattern.lastIndex = 0;
+            while ((match = pattern.exec(str)) !== null) {
+                const start = match.index;
+                const argStart = start + match[0].length;
+                // Find matching closing paren
+                let depth = 1;
+                let i = argStart;
+                while (i < str.length && depth > 0) {
+                    if (str[i] === '(') depth++;
+                    else if (str[i] === ')') depth--;
+                    i++;
+                }
+                if (depth !== 0) continue; // unbalanced
+                const arg = str.substring(argStart, i - 1);
+                // Substitute: replace x in fbody with (arg)
+                const substituted = fbody.replace(/(?<![a-zA-Z])x(?![a-zA-Z])/g, `(${arg})`);
+                newResult.push(str.substring(lastIdx, start));
+                newResult.push(`(${substituted})`);
+                lastIdx = i;
+                changed = true;
+            }
+            if (changed) {
+                newResult.push(str.substring(lastIdx));
+                result = newResult.join('');
+            }
+        }
+        if (!changed) break;
+    }
+    return result;
+}
+
+/**
+ * Evaluate summation: sum(var, start, end, body)
+ * e.g. sum(n, 1, 10, 1/n^2)
+ */
+function evaluateSum(expr, scope) {
+    const m = expr.match(/\bsum\s*\(\s*([a-zA-Z])\s*,\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+)\s*\)$/);
+    if (!m) return null;
+    const [, varName, startExpr, endExpr, bodyExpr] = m;
+    try {
+        const start = Math.round(math.evaluate(startExpr, scope));
+        const end = Math.round(math.evaluate(endExpr, scope));
+        const compiled = math.compile(bodyExpr);
+        let total = 0;
+        for (let i = start; i <= end; i++) {
+            const s = Object.assign({}, scope);
+            s[varName] = i;
+            total += compiled.evaluate(s);
+        }
+        return total;
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Evaluate product: prod(var, start, end, body)
+ * e.g. prod(n, 1, 5, n)
+ */
+function evaluateProduct(expr, scope) {
+    const m = expr.match(/\bprod\s*\(\s*([a-zA-Z])\s*,\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+)\s*\)$/);
+    if (!m) return null;
+    const [, varName, startExpr, endExpr, bodyExpr] = m;
+    try {
+        const start = Math.round(math.evaluate(startExpr, scope));
+        const end = Math.round(math.evaluate(endExpr, scope));
+        const compiled = math.compile(bodyExpr);
+        let total = 1;
+        for (let i = start; i <= end; i++) {
+            const s = Object.assign({}, scope);
+            s[varName] = i;
+            total *= compiled.evaluate(s);
+        }
+        return total;
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Compute Fourier series approximation: fourier(f(x), N)
+ * Computes the first N terms of the Fourier series of f(x) on [-pi, pi].
+ * Returns a function string.
+ */
+function computeFourierCoefficients(bodyExpr, nTerms, period) {
+    const L = period / 2;
+    const numPoints = 200;
+    const dx = period / numPoints;
+
+    try {
+        const compiled = math.compile(bodyExpr);
+
+        // a0
+        let a0 = 0;
+        for (let i = 0; i < numPoints; i++) {
+            const x = -L + (i + 0.5) * dx;
+            a0 += compiled.evaluate({ x });
+        }
+        a0 = a0 * dx / L;
+
+        const an = [];
+        const bn = [];
+        for (let n = 1; n <= nTerms; n++) {
+            let aSum = 0, bSum = 0;
+            for (let i = 0; i < numPoints; i++) {
+                const x = -L + (i + 0.5) * dx;
+                const fx = compiled.evaluate({ x });
+                aSum += fx * Math.cos(n * Math.PI * x / L);
+                bSum += fx * Math.sin(n * Math.PI * x / L);
+            }
+            an.push(aSum * dx / L);
+            bn.push(bSum * dx / L);
+        }
+        return { a0, an, bn, L };
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Generate Fourier series data for plotting
+ */
+function generateFourierTrace(bodyExpr, nTerms, xMin, xMax, color) {
+    const period = 2 * Math.PI;
+    const coeffs = computeFourierCoefficients(bodyExpr, nTerms, period);
+    if (!coeffs) return null;
+
+    const { a0, an, bn, L } = coeffs;
+    const numPoints = 500;
+    const xs = [];
+    const ys = [];
+    const step = (xMax - xMin) / numPoints;
+
+    for (let i = 0; i <= numPoints; i++) {
+        const x = xMin + i * step;
+        let y = a0 / 2;
+        for (let n = 0; n < an.length; n++) {
+            y += an[n] * Math.cos((n + 1) * Math.PI * x / L);
+            y += bn[n] * Math.sin((n + 1) * Math.PI * x / L);
+        }
+        xs.push(x);
+        ys.push(y);
+    }
+
+    return [{
+        x: xs, y: ys,
+        type: 'scatter', mode: 'lines',
+        name: `Fourier(${nTerms} terms)`,
+        line: { color: color || '#e74c3c', width: 2 }
+    }];
+}
+
+/**
  * Toggle trace mode
  */
 function toggleTraceMode() {
@@ -4058,60 +6673,16 @@ function toggleTraceMode() {
     }
 }
 
+// Store trace mode handlers for proper cleanup
+var _traceHandlers = { hover: null, unhover: null, click: null };
+// Store pinned annotations so they survive re-plots
+var _tracePinnedAnnotations = [];
+
 /**
- * Enable trace mode with cursor tracking
+ * Enable trace mode with snap-to-curve, crosshair, slope display
  */
 function enableTraceMode() {
     const graphDiv = document.getElementById('graph');
-
-    graphDiv.on('plotly_hover', function(data) {
-        if (!traceModeActive) return;
-
-        const point = data.points[0];
-        if (!point) return;
-
-        const x = point.x;
-        const y = point.y;
-
-        // Calculate derivative if it's a function
-        let slopeText = '';
-        const expr = engine.expressions.find(e => e.expression === point.data.name);
-
-        if (expr && expr.type === 'cartesian') {
-            try {
-                const compiledExpr = math.compile(engine.normalizeExpression(engine.stripCartesianPrefix(expr.expression)));
-                const h = 0.001;
-                const yPlus = compiledExpr.evaluate({ x: x + h });
-                const yMinus = compiledExpr.evaluate({ x: x - h });
-                const slope = (yPlus - yMinus) / (2 * h);
-
-                if (isFinite(slope)) {
-                    slopeText = `<br>Slope: ${slope.toFixed(4)}`;
-                }
-            } catch (e) {
-                // Ignore errors
-            }
-        }
-
-        // Show tooltip with coordinates and slope
-        const tooltip = document.getElementById('trace-tooltip');
-        if (tooltip) {
-            tooltip.innerHTML = `
-                <strong>${point.data.name}</strong><br>
-                x: ${x.toFixed(4)}<br>
-                y: ${y.toFixed(4)}
-                ${slopeText}
-            `;
-            tooltip.style.display = 'block';
-        }
-    });
-
-    graphDiv.on('plotly_unhover', function() {
-        const tooltip = document.getElementById('trace-tooltip');
-        if (tooltip) {
-            tooltip.style.display = 'none';
-        }
-    });
 
     // Create tooltip element if it doesn't exist
     if (!document.getElementById('trace-tooltip')) {
@@ -4121,18 +6692,120 @@ function enableTraceMode() {
             position: fixed;
             top: 100px;
             right: 30px;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9);
             color: white;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 12px 16px;
+            border-radius: 8px;
             font-family: 'Courier New', monospace;
             font-size: 13px;
             z-index: 1000;
             display: none;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            line-height: 1.5;
+            min-width: 180px;
         `;
         document.body.appendChild(tooltip);
     }
+
+    // Remove old handlers if any (prevent stacking)
+    if (_traceHandlers.hover) graphDiv.removeListener('plotly_hover', _traceHandlers.hover);
+    if (_traceHandlers.unhover) graphDiv.removeListener('plotly_unhover', _traceHandlers.unhover);
+    if (_traceHandlers.click) graphDiv.removeListener('plotly_click', _traceHandlers.click);
+
+    // Enhanced hover: snap to nearest curve and show crosshair
+    _traceHandlers.hover = function(data) {
+        if (!traceModeActive || !data || !data.points || !data.points[0]) return;
+        const point = data.points[0];
+
+        let x = point.x, y = point.y;
+        let slopeText = '', curveName = point.data.name || '';
+
+        // Try to snap: find the cartesian expression and evaluate at exact x
+        const expr = engine.expressions.find(e =>
+            e.expression === point.data.name ||
+            e.visible && e.type === 'cartesian' && point.data.name && point.data.name.includes(e.expression)
+        );
+        if (expr && expr.type === 'cartesian') {
+            try {
+                const { expr: cleanExpr } = engine.parseDomainRestriction(expr.expression);
+                const compiled = engine._compile(engine.normalizeExpression(engine.stripCartesianPrefix(cleanExpr)));
+                const yExact = compiled.evaluate({ x });
+                if (typeof yExact === 'number' && isFinite(yExact)) {
+                    y = yExact; // snap to curve
+                }
+                const h = 0.001;
+                const slope = (compiled.evaluate({ x: x + h }) - compiled.evaluate({ x: x - h })) / (2 * h);
+                if (isFinite(slope)) {
+                    slopeText = `dy/dx: ${slope.toFixed(4)}`;
+                    const angle = Math.atan(slope) * 180 / Math.PI;
+                    slopeText += ` (${angle.toFixed(1)}°)`;
+                }
+            } catch (_) {}
+        }
+
+        // Draw crosshair lines
+        if (graphDiv.layout && graphDiv.layout.xaxis && graphDiv.layout.yaxis) {
+            const xRange = graphDiv.layout.xaxis.range;
+            const yRange = graphDiv.layout.yaxis.range;
+            Plotly.relayout(graphDiv, {
+                shapes: [
+                    { type: 'line', x0: x, x1: x, y0: yRange[0], y1: yRange[1], line: { color: '#a78bfa', width: 1, dash: 'dot' } },
+                    { type: 'line', x0: xRange[0], x1: xRange[1], y0: y, y1: y, line: { color: '#a78bfa', width: 1, dash: 'dot' } }
+                ]
+            });
+        }
+
+        const tooltip = document.getElementById('trace-tooltip');
+        if (tooltip) {
+            tooltip.innerHTML = `
+                <div style="color:#a78bfa;font-weight:bold;margin-bottom:4px;">${curveName}</div>
+                <div>x = ${x.toFixed(6)}</div>
+                <div>y = ${y.toFixed(6)}</div>
+                ${slopeText ? '<div style="margin-top:4px;color:#93c5fd;">' + slopeText + '</div>' : ''}
+            `;
+            tooltip.style.display = 'block';
+        }
+    };
+
+    _traceHandlers.unhover = function() {
+        const tooltip = document.getElementById('trace-tooltip');
+        if (tooltip) tooltip.style.display = 'none';
+        // Remove crosshair but keep pinned annotations
+        Plotly.relayout(graphDiv, { shapes: [], annotations: _tracePinnedAnnotations.slice() });
+    };
+
+    // Click to place a persistent marker
+    _traceHandlers.click = function(data) {
+        if (!traceModeActive || !data || !data.points || !data.points[0]) return;
+        const pt = data.points[0];
+        let x = pt.x, y = pt.y;
+
+        // Snap to curve
+        const expr = engine.expressions.find(e => e.expression === pt.data.name);
+        if (expr && expr.type === 'cartesian') {
+            try {
+                const { expr: cleanExpr } = engine.parseDomainRestriction(expr.expression);
+                const compiled = engine._compile(engine.normalizeExpression(engine.stripCartesianPrefix(cleanExpr)));
+                const yExact = compiled.evaluate({ x });
+                if (typeof yExact === 'number' && isFinite(yExact)) y = yExact;
+            } catch (_) {}
+        }
+
+        // Store annotation persistently
+        _tracePinnedAnnotations.push({
+            x, y,
+            text: `(${x.toFixed(3)}, ${y.toFixed(3)})`,
+            showarrow: true, arrowhead: 2, arrowsize: 1, arrowcolor: '#a78bfa',
+            font: { size: 11, color: '#a78bfa' },
+            bgcolor: 'rgba(0,0,0,0.7)',
+            borderpad: 4
+        });
+        Plotly.relayout(graphDiv, { annotations: _tracePinnedAnnotations.slice() });
+    };
+
+    graphDiv.on('plotly_hover', _traceHandlers.hover);
+    graphDiv.on('plotly_unhover', _traceHandlers.unhover);
+    graphDiv.on('plotly_click', _traceHandlers.click);
 }
 
 /**
@@ -4140,8 +6813,17 @@ function enableTraceMode() {
  */
 function disableTraceMode() {
     const tooltip = document.getElementById('trace-tooltip');
-    if (tooltip) {
-        tooltip.style.display = 'none';
+    if (tooltip) tooltip.style.display = 'none';
+    const graphDiv = document.getElementById('graph');
+    if (graphDiv) {
+        // Remove handlers properly
+        if (_traceHandlers.hover) graphDiv.removeListener('plotly_hover', _traceHandlers.hover);
+        if (_traceHandlers.unhover) graphDiv.removeListener('plotly_unhover', _traceHandlers.unhover);
+        if (_traceHandlers.click) graphDiv.removeListener('plotly_click', _traceHandlers.click);
+        _traceHandlers = { hover: null, unhover: null, click: null };
+        // Clear visuals
+        _tracePinnedAnnotations = [];
+        Plotly.relayout(graphDiv, { shapes: [], annotations: [] });
     }
 }
 
@@ -4353,7 +7035,11 @@ function saveExpressionSet() {
             color: expr.color,
             visible: expr.visible,
             showDerivative: expr.showDerivative,
+            showSecondDerivative: expr.showSecondDerivative,
+            showCriticalPoints: expr.showCriticalPoints,
+            showInflectionPoints: expr.showInflectionPoints,
             showAntiderivative: expr.showAntiderivative,
+            regressionType: expr.regressionType,
             limitExpr: expr.limitExpr,
             limitVar: expr.limitVar,
             limitVal: expr.limitVal,
@@ -4420,7 +7106,11 @@ function loadExpressionSet() {
         );
         expr.visible = exprData.visible;
         expr.showDerivative = exprData.showDerivative;
+        expr.showSecondDerivative = exprData.showSecondDerivative;
+        expr.showCriticalPoints = exprData.showCriticalPoints;
+        expr.showInflectionPoints = exprData.showInflectionPoints;
         expr.showAntiderivative = exprData.showAntiderivative;
+        expr.regressionType = exprData.regressionType;
         expr.limitExpr = exprData.limitExpr;
         expr.limitVar = exprData.limitVar;
         expr.limitVal = exprData.limitVal;
@@ -4435,10 +7125,26 @@ function loadExpressionSet() {
             inputElement.value = exprData.expression || '';
         }
 
-        // Restore checkbox
+        // Restore checkboxes
         if (exprData.showDerivative) {
-            const checkbox = document.getElementById(`show-derivative-${expr.id}`);
-            if (checkbox) checkbox.checked = true;
+            const cb = document.getElementById(`show-derivative-${expr.id}`);
+            if (cb) cb.checked = true;
+        }
+        if (exprData.showSecondDerivative) {
+            const cb = document.getElementById(`show-second-derivative-${expr.id}`);
+            if (cb) cb.checked = true;
+        }
+        if (exprData.showCriticalPoints) {
+            const cb = document.getElementById(`show-critical-points-${expr.id}`);
+            if (cb) cb.checked = true;
+        }
+        if (exprData.showInflectionPoints) {
+            const cb = document.getElementById(`show-inflection-points-${expr.id}`);
+            if (cb) cb.checked = true;
+        }
+        if (exprData.regressionType) {
+            const sel = document.getElementById(`regression-type-${expr.id}`);
+            if (sel) sel.value = exprData.regressionType;
         }
     });
 
@@ -4509,11 +7215,15 @@ function generateShareableLink() {
             type: expr.type,
             color: expr.color,
             showDerivative: expr.showDerivative,
+            showSecondDerivative: expr.showSecondDerivative,
+            showCriticalPoints: expr.showCriticalPoints,
+            showInflectionPoints: expr.showInflectionPoints,
             showAntiderivative: expr.showAntiderivative,
             showIntegration: expr.showIntegration,
             integrationBounds: expr.integrationBounds,
             riemannMethod: expr.riemannMethod,
             riemannN: expr.riemannN,
+            regressionType: expr.regressionType,
             limitExpr: expr.limitExpr,
             limitVar: expr.limitVar,
             limitVal: expr.limitVal,
@@ -4570,7 +7280,11 @@ function loadFromURL() {
                 exprData.color
             );
             expr.showDerivative = exprData.showDerivative;
+            expr.showSecondDerivative = exprData.showSecondDerivative;
+            expr.showCriticalPoints = exprData.showCriticalPoints;
+            expr.showInflectionPoints = exprData.showInflectionPoints;
             expr.showAntiderivative = exprData.showAntiderivative;
+            expr.regressionType = exprData.regressionType;
             expr.limitExpr = exprData.limitExpr;
             expr.limitVar = exprData.limitVar;
             expr.limitVal = exprData.limitVal;
@@ -4585,10 +7299,26 @@ function loadFromURL() {
                 inputElement.value = exprData.expression || '';
             }
 
-            // Restore checkbox
+            // Restore checkboxes
             if (exprData.showDerivative) {
                 const checkbox = document.getElementById(`show-derivative-${expr.id}`);
                 if (checkbox) checkbox.checked = true;
+            }
+            if (exprData.showSecondDerivative) {
+                const cb = document.getElementById(`show-second-derivative-${expr.id}`);
+                if (cb) cb.checked = true;
+            }
+            if (exprData.showCriticalPoints) {
+                const cb = document.getElementById(`show-critical-points-${expr.id}`);
+                if (cb) cb.checked = true;
+            }
+            if (exprData.showInflectionPoints) {
+                const cb = document.getElementById(`show-inflection-points-${expr.id}`);
+                if (cb) cb.checked = true;
+            }
+            if (exprData.regressionType) {
+                const sel = document.getElementById(`regression-type-${expr.id}`);
+                if (sel) sel.value = exprData.regressionType;
             }
         });
 

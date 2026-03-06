@@ -297,9 +297,14 @@
             <div class="tool-card-header" style="background:var(--gc-gradient);"><i class="fas fa-chart-line" style="margin-right:0.375rem;"></i> Expressions</div>
             <div class="tool-card-body">
                 <div id="expressions-list"></div>
-                <button class="gc-btn-add" onclick="addExpression()">
-                    <i class="fas fa-plus"></i> Add Expression
-                </button>
+                <div class="d-flex gap-2 flex-wrap">
+                    <button class="gc-btn-add" onclick="addExpression()">
+                        <i class="fas fa-plus"></i> Add Expression
+                    </button>
+                    <button class="gc-btn-add" onclick="addFolder()" style="background:#f0f0f0;color:#555;border:1px dashed #ccc;" title="Group expressions into a collapsible folder">
+                        <i class="fas fa-folder-plus"></i> Folder
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -465,7 +470,9 @@
                 </div>
                 <div class="gc-sidebar-actions" style="margin-top:0.5rem;">
                     <button class="gc-action-btn" onclick="findIntersections()"><i class="fas fa-project-diagram"></i> Intersections</button>
+                    <button class="gc-action-btn" onclick="areaBetweenCurves()"><i class="fas fa-fill-drip"></i> Area Between</button>
                     <button class="gc-action-btn" onclick="solveEquation()"><i class="fas fa-calculator"></i> Solve f(x)=0</button>
+                    <button class="gc-action-btn" onclick="toggleTableOfValues()"><i class="fas fa-table"></i> Table</button>
                     <button class="gc-action-btn" onclick="textToGraph()"><i class="fas fa-font"></i> Text to Graph</button>
                     <button class="gc-action-btn" onclick="updateGraph()"><i class="fas fa-refresh"></i> Apply Range</button>
                 </div>
@@ -521,9 +528,10 @@
                     Inequality: y &gt; x^2<br><br>
                     <strong>Smart Input:</strong><br>
                     Type any equation &mdash; auto-detects type<br>
-                    f'(x) / ∫ Area / F(x) toggles for calculus<br>
+                    f'(x) / f''(x) / Min/Max / Inflect toggles<br>
+                    Domain restrict: x^2 {x &gt; 0}<br>
                     Use a,b,c for auto parameter sliders<br>
-                    Trace Mode: hover for slope &amp; coords<br><br>
+                    Trace Mode: click for pinned coordinates<br><br>
                     <strong>Functions:</strong><br>
                     Trig: sin, cos, tan, asin, acos, atan<br>
                     Logs: log (ln), log10, exp<br>
@@ -629,6 +637,230 @@ window.addEventListener('message', (e) => {
     <jsp:param name="keyword" value="math"/>
     <jsp:param name="limit" value="6"/>
 </jsp:include>
+
+<!-- ==================== FEATURES & HOW TO USE ==================== -->
+<section class="tool-expertise-section" style="max-width:1200px;margin:0.75rem auto;padding:0 0.5rem;" id="features">
+    <div class="tool-card" style="padding:0.75rem;margin-bottom:0;">
+        <h2 style="font-size:1.1rem;margin-bottom:0.75rem;">All Features &amp; How to Use</h2>
+
+        <!-- ── Expression Types ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Expression Types</h3>
+        <p style="font-size:0.82rem;line-height:1.5;margin-bottom:0.5rem;">Type any expression and the calculator <strong>auto-detects</strong> the type. You can also pick the type manually from the dropdown.</p>
+        <table style="width:100%;font-size:0.8rem;border-collapse:collapse;margin-bottom:0.75rem;">
+            <thead><tr style="background:#f8f9fa;text-align:left;">
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Type</th>
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Example Input</th>
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">What It Does</th>
+            </tr></thead>
+            <tbody>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Cartesian</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>x^2</code>, <code>sin(x)</code>, <code>y = 2x+1</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Plots y = f(x) curves. Supports domain restrictions like <code>x^2 {x &gt; 0}</code></td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Equation</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>x^2+y^2=25</code>, <code>y^2=4ax</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Solves symbolically via CAS &mdash; circles, ellipses, parabolas, any implicit curve</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Parametric</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>cos(t), sin(t)</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Plots x(t) and y(t) as a curve. Uses variable <code>t</code></td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Polar</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>2+2*cos(theta)</code>, <code>sin(3*&theta;)</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Plots r = f(&theta;). Type <code>theta</code> or use &theta;</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Inequality</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>y &gt; x^2</code>, <code>x+y &lt;= 5</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Shades the region satisfying the inequality</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Piecewise</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>x&lt;0: -x, x&gt;=0: x^2</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Define different formulas for different domains</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Limit</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>sin(x)/x</code> at x&rarr;0</td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Computes the limit symbolically and annotates it on the graph</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>3D Surface</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>sin(x)*cos(y)</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Auto-detected when both x and y appear. Interactive WebGL 3D plot</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Point(s)</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>(2, 3)</code>, <code>[(1,2),(3,4)]</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Plot labeled scatter points. Also accepts <code>(1,2), (3,4)</code> without brackets</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Vector(s)</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>&lt;3, 4&gt;</code>, <code>&lt;2,3&gt; @ (1,1)</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Draw arrows from an origin. Use <code>@ (ox,oy)</code> to set the starting point</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Vector Field</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>&lt;-y, x&gt;</code>, <code>F(x,y) = &lt;x, -y&gt;</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Grid of arrows showing a 2D vector field. Presets: rotation, radial, vortex, wave</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Table</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">CSV data: <code>1,2 &bsol;n 3,4</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Plot raw x,y data from a table</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Regression</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">CSV data + type dropdown</td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Fit linear, quadratic, exponential, log, or power curves to your data</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;"><strong>Distribution</strong></td>
+                <td style="padding:0.3rem 0.5rem;">Normal, Poisson, Binomial&hellip;</td>
+                <td style="padding:0.3rem 0.5rem;">Plot probability distributions with adjustable parameters</td></tr>
+            </tbody>
+        </table>
+
+        <!-- ── Calculus Toggles ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Calculus Toggles (Cartesian expressions)</h3>
+        <p style="font-size:0.82rem;line-height:1.5;margin-bottom:0.4rem;">Each Cartesian expression has toggle checkboxes in its toolbar. Click any to enable:</p>
+        <table style="width:100%;font-size:0.8rem;border-collapse:collapse;margin-bottom:0.75rem;">
+            <thead><tr style="background:#f8f9fa;text-align:left;">
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Toggle</th>
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">What It Shows</th>
+            </tr></thead>
+            <tbody>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>f&apos;(x)</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">First derivative curve overlaid in a dashed line</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>f&apos;&apos;(x)</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Second derivative curve overlaid in a dotted line</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Min/Max</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Critical points (local minima and maxima) marked on the graph</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Inflect</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Inflection points where concavity changes</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>&int;</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Definite integral with shaded area. Set bounds <em>a</em> and <em>b</em>, choose Riemann sum method (left, midpoint, right, trapezoidal) and number of rectangles</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>F(x)</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Symbolic antiderivative computed by the CAS engine and plotted as a separate curve</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Table</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Editable table of values (Desmos-style). Type custom x-values, see computed y-values, and plot the points on the graph. Works for all expression types including polar and parametric</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Zeros</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Finds and marks the roots (x-intercepts) of the function as green markers with coordinates</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>V.Asym</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Detects vertical asymptotes (where f(x) &rarr; &pm;&infin;) and draws red dashed lines</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>Tangent</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Draws a tangent line at a specified x-value. Enter the x-coordinate and see the tangent line, slope, and point of tangency</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;"><strong>LaTeX</strong></td>
+                <td style="padding:0.3rem 0.5rem;">Copies the expression as LaTeX notation to your clipboard (e.g., <code>\sin(x)</code>, <code>\frac{x}{2}</code>)</td></tr>
+            </tbody>
+        </table>
+
+        <!-- ── Parameter Sliders ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Parameter Sliders &amp; Animation</h3>
+        <ul style="font-size:0.82rem;line-height:1.6;margin:0 0 0.5rem 1.25rem;">
+            <li>Type any single letter (except x, y, t, e) in your expression and a <strong>slider appears automatically</strong>. Example: <code>a*sin(b*x)</code> creates sliders for <code>a</code> and <code>b</code>.</li>
+            <li>Click the <strong>&#9881; gear icon</strong> next to any slider to customize its <strong>min, max, and step</strong> values (default: &minus;10 to 10, step 0.1).</li>
+            <li>Press the <strong>&#9654; play button</strong> to animate the first parameter. Choose speed: Slow, Normal, or Fast. The animation respects your custom slider range.</li>
+            <li>Sliders work for <strong>all expression types</strong>: Cartesian, polar, parametric, equation, and even vector fields.</li>
+        </ul>
+
+        <!-- ── Function Composition ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Function Composition</h3>
+        <p style="font-size:0.82rem;line-height:1.5;margin-bottom:0.4rem;">Define named functions and compose them across expressions:</p>
+        <ol style="font-size:0.82rem;line-height:1.6;margin:0 0 0.5rem 1.25rem;">
+            <li>In expression 1, type: <code>f(x) = x^2</code> &mdash; this defines f and plots x&sup2;</li>
+            <li>In expression 2, type: <code>f(f(x))</code> &mdash; this auto-resolves to x&#8308; and plots it</li>
+            <li>You can also define <code>g(x) = sin(x)</code> and then use <code>f(g(x))</code> to get sin&sup2;(x)</li>
+        </ol>
+        <p style="font-size:0.8rem;color:#6b7280;">Tip: the function definition both defines the name and plots the RHS. Composition works up to 10 nesting levels.</p>
+
+        <!-- ── Summation, Product, Fourier ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Summation, Product &amp; Fourier Series</h3>
+        <table style="width:100%;font-size:0.8rem;border-collapse:collapse;margin-bottom:0.75rem;">
+            <thead><tr style="background:#f8f9fa;text-align:left;">
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Syntax</th>
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Example</th>
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Description</th>
+            </tr></thead>
+            <tbody>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>sum(var, start, end, body)</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>sum(n, 1, 10, x^n/factorial(n))</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">&Sigma; summation. Body can contain both the loop variable and x (plotted as a function of x)</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><strong>prod(var, start, end, body)</strong></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>prod(k, 1, 5, 1-x/k)</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">&Pi; product notation. Same rules as sum</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;"><strong>fourier(f(x), N)</strong></td>
+                <td style="padding:0.3rem 0.5rem;"><code>fourier(x, 5)</code></td>
+                <td style="padding:0.3rem 0.5rem;">Computes and plots the first N terms of the Fourier series approximation of f(x) on [&minus;&pi;, &pi;]</td></tr>
+            </tbody>
+        </table>
+
+        <!-- ── Vectors ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Vectors &amp; Vector Fields</h3>
+        <table style="width:100%;font-size:0.8rem;border-collapse:collapse;margin-bottom:0.75rem;">
+            <thead><tr style="background:#f8f9fa;text-align:left;">
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Input</th>
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Result</th>
+            </tr></thead>
+            <tbody>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>&lt;3, 4&gt;</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Arrow from origin (0,0) with direction (3,4), with arrowhead</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>&lt;2, 3&gt; @ (1, 1)</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Arrow starting from point (1,1) instead of origin</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>&lt;1,0&gt;, &lt;0,1&gt;, &lt;1,1&gt;</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Multiple vectors drawn from the same origin</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>&lt;-y, x&gt;</code></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Vector field: 15&times;15 grid of arrows showing the rotation field</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;"><code>F(x,y) = &lt;x^2, -x*y&gt;</code></td>
+                <td style="padding:0.3rem 0.5rem;">Named vector field with explicit F(x,y) prefix</td></tr>
+            </tbody>
+        </table>
+
+        <!-- ── Trace Mode ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Trace Mode &amp; Annotations</h3>
+        <ul style="font-size:0.82rem;line-height:1.6;margin:0 0 0.5rem 1.25rem;">
+            <li>Click the <strong>crosshair icon</strong> in the graph toolbar to enable Trace Mode.</li>
+            <li>Hover over any curve to see <strong>exact coordinates and slope (dy/dx)</strong> with a crosshair.</li>
+            <li>Click on a point to <strong>pin an annotation</strong> that stays on the graph.</li>
+            <li>Press <strong>Escape</strong> to exit trace mode.</li>
+        </ul>
+
+        <!-- ── Keyboard Shortcuts ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Keyboard Shortcuts</h3>
+        <table style="width:100%;font-size:0.8rem;border-collapse:collapse;margin-bottom:0.75rem;">
+            <thead><tr style="background:#f8f9fa;text-align:left;">
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Shortcut</th>
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Action</th>
+            </tr></thead>
+            <tbody>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><kbd style="background:#f3f4f6;padding:0.1rem 0.3rem;border-radius:3px;border:1px solid #d1d5db;font-size:0.75rem;">Ctrl+Z</kbd> / <kbd style="background:#f3f4f6;padding:0.1rem 0.3rem;border-radius:3px;border:1px solid #d1d5db;font-size:0.75rem;">&#8984;Z</kbd></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Undo last expression add/delete/change (when not typing in an input)</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><kbd style="background:#f3f4f6;padding:0.1rem 0.3rem;border-radius:3px;border:1px solid #d1d5db;font-size:0.75rem;">Ctrl+Shift+Z</kbd> / <kbd style="background:#f3f4f6;padding:0.1rem 0.3rem;border-radius:3px;border:1px solid #d1d5db;font-size:0.75rem;">&#8984;Y</kbd></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Redo</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><kbd style="background:#f3f4f6;padding:0.1rem 0.3rem;border-radius:3px;border:1px solid #d1d5db;font-size:0.75rem;">Ctrl+Enter</kbd> / <kbd style="background:#f3f4f6;padding:0.1rem 0.3rem;border-radius:3px;border:1px solid #d1d5db;font-size:0.75rem;">&#8984;Enter</kbd></td>
+                <td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Add a new expression</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;"><kbd style="background:#f3f4f6;padding:0.1rem 0.3rem;border-radius:3px;border:1px solid #d1d5db;font-size:0.75rem;">Escape</kbd></td>
+                <td style="padding:0.3rem 0.5rem;">Exit trace mode</td></tr>
+            </tbody>
+        </table>
+
+        <!-- ── Expression Folders ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Expression Folders</h3>
+        <ul style="font-size:0.82rem;line-height:1.6;margin:0 0 0.5rem 1.25rem;">
+            <li>Click the <strong>Folder</strong> button to create a collapsible group for organizing related expressions.</li>
+            <li>Each folder has a <strong>custom name</strong> (click the name to edit), a <strong>+</strong> button to add expressions inside, and a toggle to collapse/expand.</li>
+            <li>Removing a folder deletes all expressions inside it. This action is undoable with <kbd style="background:#f3f4f6;padding:0.1rem 0.3rem;border-radius:3px;border:1px solid #d1d5db;font-size:0.75rem;">Ctrl+Z</kbd>.</li>
+        </ul>
+
+        <!-- ── Export & Sharing ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Export &amp; Sharing</h3>
+        <ul style="font-size:0.82rem;line-height:1.6;margin:0 0 0.5rem 1.25rem;">
+            <li><strong>PNG / SVG export</strong> &mdash; download the graph as an image via the Plotly toolbar (camera icon).</li>
+            <li><strong>Share URL</strong> &mdash; click &ldquo;Share&rdquo; to generate a link that encodes all expressions, colors, and axis settings in the URL.</li>
+            <li><strong>Embed</strong> &mdash; generate an iframe embed code for embedding the graph in a website or blog.</li>
+            <li><strong>Copy as LaTeX</strong> &mdash; click the &ldquo;LaTeX&rdquo; button on any expression to copy it as LaTeX notation to your clipboard.</li>
+        </ul>
+
+        <!-- ── Math Input Tips ── -->
+        <h3 style="font-size:0.95rem;margin:0.75rem 0 0.4rem;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;">Math Input Tips</h3>
+        <table style="width:100%;font-size:0.8rem;border-collapse:collapse;margin-bottom:0.5rem;">
+            <thead><tr style="background:#f8f9fa;text-align:left;">
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">You Type</th>
+                <th style="padding:0.35rem 0.5rem;border-bottom:2px solid #e5e7eb;">Interpreted As</th>
+            </tr></thead>
+            <tbody>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>2x</code></td><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">2*x (implicit multiplication)</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>xy</code></td><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">x*y</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>2(x+1)</code></td><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">2*(x+1)</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>2sin(x)</code></td><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">2*sin(x)</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>e^x</code></td><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">exp(x)</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>ln(x)</code></td><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">log(x) (natural log)</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>|x|</code></td><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">abs(x)</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>&pi;</code> or <code>pi</code></td><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">&pi; &asymp; 3.14159</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;"><code>&theta;</code> or <code>theta</code></td><td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;">Polar angle variable</td></tr>
+            <tr><td style="padding:0.3rem 0.5rem;"><code>x^2 {x &gt; 0}</code></td><td style="padding:0.3rem 0.5rem;">Domain restriction: plot only where x &gt; 0</td></tr>
+            </tbody>
+        </table>
+        <p style="font-size:0.8rem;color:#6b7280;margin:0;">A live <strong>KaTeX math preview</strong> renders below each input as you type, so you can verify the expression is parsed correctly.</p>
+    </div>
+</section>
 
 <!-- ==================== VISIBLE FAQ SECTION ==================== -->
 <section class="tool-expertise-section gc-faq-section" style="max-width:1200px;margin:0.75rem auto;padding:0 0.5rem;">
