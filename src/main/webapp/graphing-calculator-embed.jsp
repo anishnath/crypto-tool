@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
-    // Allow embedding in iframes
-    response.setHeader("X-Frame-Options", "ALLOWALL");
-    response.setHeader("Content-Security-Policy", "frame-ancestors *");
+    // Allow embedding in iframes from any origin
+    // X-Frame-Options is legacy; CSP frame-ancestors is the modern standard
+    // Remove X-Frame-Options entirely so it doesn't conflict with CSP
+    response.setHeader("Content-Security-Policy", "frame-ancestors https: http: *");
 
     String cacheVersion = String.valueOf(System.currentTimeMillis());
 
