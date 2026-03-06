@@ -3,7 +3,7 @@
     // Allow embedding in iframes from any origin
     // X-Frame-Options is legacy; CSP frame-ancestors is the modern standard
     // Remove X-Frame-Options entirely so it doesn't conflict with CSP
-    response.setHeader("Content-Security-Policy", "frame-ancestors https: http: *");
+//    response.setHeader("Content-Security-Policy", "frame-ancestors https: http: *");
 
     String cacheVersion = String.valueOf(System.currentTimeMillis());
 
