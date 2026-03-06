@@ -2389,13 +2389,13 @@ function createExpressionElement(expr) {
         <div id="integration-controls-${expr.id}" style="display: none;" class="mt-1">
             <div class="d-flex gap-2 align-items-center flex-wrap">
                 <small class="text-muted">∫ from</small>
-                <input type="number" class="form-control form-control-sm" id="integration-a-${expr.id}" placeholder="a" value="-2" step="0.5" style="width:60px;" oninput="updateIntegrationBounds(${expr.id})">
+                <input type="number" class="form-control form-control-sm" id="integration-a-${expr.id}" placeholder="a" value="-2" step="0.5" style="width:65px;" oninput="updateIntegrationBounds(${expr.id})">
                 <small class="text-muted">to</small>
-                <input type="number" class="form-control form-control-sm" id="integration-b-${expr.id}" placeholder="b" value="2" step="0.5" style="width:60px;" oninput="updateIntegrationBounds(${expr.id})">
+                <input type="number" class="form-control form-control-sm" id="integration-b-${expr.id}" placeholder="b" value="2" step="0.5" style="width:65px;" oninput="updateIntegrationBounds(${expr.id})">
             </div>
             <div class="d-flex gap-2 align-items-center flex-wrap mt-1">
                 <small class="text-muted">Riemann</small>
-                <select class="form-select form-select-sm" id="riemann-method-${expr.id}" style="width:auto;font-size:0.75rem;padding:0.15rem 0.4rem;" onchange="updateRiemannMethod(${expr.id})">
+                <select class="form-select form-select-sm" id="riemann-method-${expr.id}" style="width:auto;" onchange="updateRiemannMethod(${expr.id})">
                     <option value="none">None</option>
                     <option value="left">Left</option>
                     <option value="midpoint">Midpoint</option>
@@ -2403,7 +2403,7 @@ function createExpressionElement(expr) {
                     <option value="trapezoidal">Trapezoidal</option>
                 </select>
                 <small class="text-muted">n=</small>
-                <input type="number" class="form-control form-control-sm" id="riemann-n-${expr.id}" value="10" min="1" max="500" step="1" style="width:55px;" oninput="updateRiemannN(${expr.id})">
+                <input type="number" class="form-control form-control-sm" id="riemann-n-${expr.id}" value="10" min="1" max="500" step="1" style="width:60px;" oninput="updateRiemannN(${expr.id})">
             </div>
         </div>
         <div id="sliders-container-${expr.id}"></div>
