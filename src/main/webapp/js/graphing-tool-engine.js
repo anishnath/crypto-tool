@@ -306,6 +306,56 @@ class GraphingEngine {
     }
 
     /**
+     * Generate Riemann sum rectangles (or trapezoids) for visualisation.
+     * @param {string} expression - math expression in x
+     * @param {number} a - left bound
+     * @param {number} b - right bound
+     * @param {number} n - number of subdivisions
+     * @param {'left'|'right'|'midpoint'|'trapezoidal'} method
+     * @returns {{shapes: Array, area: number}|null}
+     */
+    generateRiemannSum(expression, a, b, n, method) {
+        try {
+            if (!expression || typeof expression !== 'string' || expression.trim() === '') return null;
+            const compiled = math.compile(this.normalizeExpression(this.stripCartesianPrefix(expression)));
+            const dx = (b - a) / n;
+            const shapes = []; // each shape: {x: [...], y: [...]}
+            let area = 0;
+
+            const f = (xv) => {
+                try {
+                    const v = compiled.evaluate({ x: xv });
+                    return isFinite(v) ? v : 0;
+                } catch (_) { return 0; }
+            };
+
+            for (let i = 0; i < n; i++) {
+                const xi = a + i * dx;
+                const xi1 = xi + dx;
+
+                if (method === 'trapezoidal') {
+                    const yL = f(xi);
+                    const yR = f(xi1);
+                    shapes.push({ x: [xi, xi, xi1, xi1, xi], y: [0, yL, yR, 0, 0] });
+                    area += (yL + yR) * dx / 2;
+                } else {
+                    let sampleX;
+                    if (method === 'left') sampleX = xi;
+                    else if (method === 'right') sampleX = xi1;
+                    else /* midpoint */ sampleX = xi + dx / 2;
+                    const h = f(sampleX);
+                    shapes.push({ x: [xi, xi, xi1, xi1, xi], y: [0, h, h, 0, 0] });
+                    area += h * dx;
+                }
+            }
+            return { shapes, area };
+        } catch (error) {
+            console.error('Error generating Riemann sum:', error);
+            return null;
+        }
+    }
+
+    /**
      * Calculate derivative of expression using numerical differentiation
      */
     generateDerivative(expression, xMin = -10, xMax = 10, numPoints = 500) {
@@ -1420,6 +1470,29 @@ class GraphingEngine {
                             });
                         }
                     }
+
+                    // Add Riemann sum rectangles/trapezoids if enabled
+                    if (expr.showIntegration && expr.integrationBounds && expr.riemannMethod && expr.riemannMethod !== 'none') {
+                        const { a, b } = expr.integrationBounds;
+                        const rN = expr.riemannN || 10;
+                        const riemannData = this.generateRiemannSum(expression, a, b, rN, expr.riemannMethod);
+                        if (riemannData) {
+                            const methodLabels = { left: 'Left', right: 'Right', midpoint: 'Midpoint', trapezoidal: 'Trap' };
+                            riemannData.shapes.forEach((shape, idx) => {
+                                trace.push({
+                                    x: shape.x,
+                                    y: shape.y,
+                                    type: 'scatter',
+                                    fill: 'toself',
+                                    fillcolor: expr.color + '22',
+                                    line: { color: expr.color, width: 1 },
+                                    showlegend: idx === 0,
+                                    name: idx === 0 ? `${methodLabels[expr.riemannMethod]} Riemann (n=${rN}) ≈ ${riemannData.area.toFixed(4)}` : '',
+                                    hoverinfo: 'skip'
+                                });
+                            });
+                        }
+                    }
                 }
                 break;
             }
@@ -2314,11 +2387,23 @@ function createExpressionElement(expr) {
             </span>
         </div>
         <div id="integration-controls-${expr.id}" style="display: none;" class="mt-1">
-            <div class="d-flex gap-2 align-items-center">
+            <div class="d-flex gap-2 align-items-center flex-wrap">
                 <small class="text-muted">∫ from</small>
                 <input type="number" class="form-control form-control-sm" id="integration-a-${expr.id}" placeholder="a" value="-2" step="0.5" style="width:60px;" oninput="updateIntegrationBounds(${expr.id})">
                 <small class="text-muted">to</small>
                 <input type="number" class="form-control form-control-sm" id="integration-b-${expr.id}" placeholder="b" value="2" step="0.5" style="width:60px;" oninput="updateIntegrationBounds(${expr.id})">
+            </div>
+            <div class="d-flex gap-2 align-items-center flex-wrap mt-1">
+                <small class="text-muted">Riemann</small>
+                <select class="form-select form-select-sm" id="riemann-method-${expr.id}" style="width:auto;font-size:0.75rem;padding:0.15rem 0.4rem;" onchange="updateRiemannMethod(${expr.id})">
+                    <option value="none">None</option>
+                    <option value="left">Left</option>
+                    <option value="midpoint">Midpoint</option>
+                    <option value="right">Right</option>
+                    <option value="trapezoidal">Trapezoidal</option>
+                </select>
+                <small class="text-muted">n=</small>
+                <input type="number" class="form-control form-control-sm" id="riemann-n-${expr.id}" value="10" min="1" max="500" step="1" style="width:55px;" oninput="updateRiemannN(${expr.id})">
             </div>
         </div>
         <div id="sliders-container-${expr.id}"></div>
@@ -3313,6 +3398,33 @@ function updateIntegrationBounds(id) {
     if (expr && !isNaN(a) && !isNaN(b)) {
         expr.integrationBounds = { a, b };
         updateGraph();
+    }
+}
+
+/**
+ * Update Riemann sum method for an expression
+ */
+function updateRiemannMethod(id) {
+    const select = document.getElementById(`riemann-method-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr && select) {
+        expr.riemannMethod = select.value;
+        updateGraph();
+    }
+}
+
+/**
+ * Update Riemann sum subdivision count
+ */
+function updateRiemannN(id) {
+    const input = document.getElementById(`riemann-n-${id}`);
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr && input) {
+        const n = parseInt(input.value, 10);
+        if (n > 0 && n <= 500) {
+            expr.riemannN = n;
+            updateGraph();
+        }
     }
 }
 
@@ -4373,6 +4485,10 @@ function generateShareableLink() {
             color: expr.color,
             showDerivative: expr.showDerivative,
             showAntiderivative: expr.showAntiderivative,
+            showIntegration: expr.showIntegration,
+            integrationBounds: expr.integrationBounds,
+            riemannMethod: expr.riemannMethod,
+            riemannN: expr.riemannN,
             limitExpr: expr.limitExpr,
             limitVar: expr.limitVar,
             limitVal: expr.limitVal,
