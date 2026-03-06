@@ -10,13 +10,13 @@
     <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Free Graphing Calculator Online - Derivatives, Integrals & Limits" />
-        <jsp:param name="toolDescription" value="Free online graphing calculator with built-in calculus: plot derivatives f'(x), antiderivatives F(x), definite integrals, and limits. Graph equations, polar, parametric, systems of equations, and inequalities. 50+ presets, sliders, animation. No signup." />
+        <jsp:param name="toolName" value="Free Online Graphing Calculator - 2D, 3D, Calculus (2026)" />
+        <jsp:param name="toolDescription" value="Free graphing calculator online: plot functions, 3D surfaces, derivatives f'(x), integrals, limits, polar, parametric, and equations. Auto-detect input type, 50+ presets, sliders, animation. No signup. Desmos alternative with built-in CAS." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="graphing-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="graphing calculator, online graphing calculator free, graphing calculator with derivatives, graph antiderivative online, plot integral calculator, limit calculator graph, graph systems of equations, desmos alternative free, parametric graphing calculator, polar graph plotter, graph inequalities online, implicit equation grapher, function plotter with calculus, derivative graph online, F(x) antiderivative plot, lim sin(x)/x graph, plot parabola circle ellipse, piecewise function grapher, interactive math graph tool, calculus graphing calculator" />
+        <jsp:param name="toolKeywords" value="graphing calculator, online graphing calculator free, graphing calculator online, free graphing calculator, 3D graphing calculator, graph functions online, desmos alternative, graphing calculator with derivatives, calculus graphing calculator, plot functions online free, graph equations online, parametric graphing calculator, polar graph plotter, 3D surface plot calculator, graph inequalities online, function plotter, limit calculator graph, systems of equations grapher, interactive math graph tool, TI-84 graphing calculator online" />
         <jsp:param name="toolImage" value="graphing-calculator.svg" />
-        <jsp:param name="toolFeatures" value="Derivative overlay f'(x) for any function,Symbolic antiderivative F(x) plotting via CAS,Definite integral shading with adjustable bounds,Limit evaluation and visualization with annotations,Systems of equations with intersection solving,Implicit equation solver (circles ellipses hyperbolas),Cartesian parametric polar and piecewise plotting,Auto-detect expression type from input,50+ built-in presets including calculus physics and ML,Parameter sliders with real-time animation,Trace mode showing coordinates and slope,KaTeX live math preview as you type,Export as PNG or SVG,Shareable graph URLs,Regression and statistical distributions" />
+        <jsp:param name="toolFeatures" value="3D surface plotting for z=f(x y) expressions,Derivative overlay f'(x) for any function,Symbolic antiderivative F(x) plotting via CAS,Definite integral shading with adjustable bounds,Limit evaluation and visualization with annotations,Auto-detect expression type (cartesian polar parametric surface equation inequality),Systems of equations with intersection solving,Implicit equation solver (circles ellipses hyperbolas),50+ built-in presets including calculus physics and ML,Parameter sliders with real-time animation,Trace mode showing coordinates and slope,KaTeX live math preview as you type,Export as PNG or SVG,Shareable graph URLs,Unicode math input support (π θ √ ² ³)" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Type an expression|Enter any math expression like sin(x) or x^2+y^2=25 and the calculator auto-detects the graph type,Enable calculus overlays|Toggle f'(x) for derivatives or F(x) for antiderivatives or shade definite integrals with adjustable bounds,Evaluate limits|Switch to Limit type and enter the approach value to see the limit computed symbolically and annotated on the graph,Add more expressions|Click Add Expression to overlay multiple functions with different colors and compare them visually,Export or share|Export your graph as PNG or SVG or generate a shareable link to send to classmates or colleagues" />
         <jsp:param name="teaches" value="Calculus derivatives and integrals, limits, graphing functions, systems of equations, polar and parametric curves" />
@@ -35,8 +35,8 @@
         <jsp:param name="faq6a" value="Presets include Quick Start (sin, parametric, polar), Calculus (antiderivative of x^2, FTC demo, limit sin(x)/x), Systems of Equations (linear, circle+line, parabola+line), Creative Curves (spirograph, lissajous, butterfly, cardioid), Physics (damped oscillation, projectile, wave interference), Machine Learning (activation functions, loss functions, gradient descent), and Classic curves (Witch of Agnesi, folium, cissoid)." />
         <jsp:param name="faq7q" value="Is this graphing calculator really free? What are the limits?" />
         <jsp:param name="faq7a" value="100 percent free with no signup, no ads blocking the graph, and no usage limits. All computation runs entirely in your browser using Math.js, Plotly.js, Nerdamer CAS, and KaTeX. Export graphs as PNG or SVG, save expression sets to local storage, or generate shareable URLs. Works on desktop, tablet, and mobile browsers." />
-        <jsp:param name="faq8q" value="How does auto-detect work for expression types?" />
-        <jsp:param name="faq8a" value="The calculator analyzes your input as you type. If you enter an equation with y and an equals sign like 2x+3y=8, it automatically switches to Equation mode and solves symbolically. If you type an inequality like y > x^2, it switches to Inequality mode with shaded regions. Plain expressions like sin(x) stay in Cartesian y=f(x) mode. You can always override by selecting the type manually from the dropdown." />
+        <jsp:param name="faq8q" value="Can I plot 3D surfaces like z = sin(x)*cos(y)?" />
+        <jsp:param name="faq8a" value="Yes. Type any expression with both x and y like sin(x)*cos(y) or x^2+y^2 and the calculator auto-detects it as a 3D surface. It loads a full WebGL renderer and displays an interactive surface you can rotate and zoom. Presets include Ripple, Saddle, Gaussian, and Waves. You can also type z=f(x,y) with a z= prefix." />
     </jsp:include>
 
     <!-- Preconnect to CDN origins (high priority) -->
@@ -54,8 +54,8 @@
     <!-- Critical CSS: only layout + above-the-fold (render-blocking, small) -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/graphing-calculator.css?v=<%=cacheVersion%>">
 
     <!-- Non-critical CSS: load async (ads, dark mode, footer, search) -->
@@ -88,16 +88,178 @@
     <style>
         .tool-action-btn { background: var(--gc-gradient) !important; }
         .tool-badge { background: var(--gc-light); color: var(--gc-tool); }
+        /* Collapse ad containers until they actually load content */
+        .ad-container:not(.ad-loaded) { min-height: 0 !important; padding: 0 !important; margin: 0 !important; border: none !important; box-shadow: none !important; overflow: hidden !important; }
+        .ad-container:not(.ad-loaded) .ad-label { display: none !important; }
+        /* ===== TABLET: compact padding ===== */
+        @media (max-width: 1024px) {
+            body .tool-page-header { padding: 0.75rem 1rem !important; }
+            body .tool-page-title { font-size: 1.35rem !important; margin: 0 !important; }
+            body .tool-badge { padding: 0.15rem 0.5rem !important; font-size: 0.65rem !important; }
+            body .tool-description-section { padding: 0.5rem 1rem !important; }
+            body .tool-page-container { min-height: auto !important; }
+            body .related-tools-section { margin-top: 1rem !important; }
+            body .related-tools-card { padding: 1rem !important; }
+            body .support-section-modern { margin: 1rem 0 !important; }
+            body .support-card { padding: 1.25rem !important; }
+            body .page-footer { padding: 1rem !important; }
+        }
+        /* ===== MOBILE COMPACT — all !important to beat any external CSS ===== */
+        @media (max-width: 900px) {
+            /* Header */
+            body .tool-page-header { padding: 0.5rem 0.75rem !important; margin-top: 64px !important; }
+            body .tool-page-header-inner { gap: 0.25rem !important; flex-wrap: wrap !important; }
+            body .tool-page-title { font-size: 1.15rem !important; font-weight: 700 !important; margin: 0 !important; margin-bottom: 0 !important; }
+            body .tool-breadcrumbs { margin-top: 0.125rem !important; font-size: 0.7rem !important; }
+            body .tool-page-badges { gap: 0.25rem !important; }
+            body .tool-badge { padding: 0.125rem 0.4rem !important; font-size: 0.6rem !important; border-radius: 12px !important; }
+            /* Description */
+            body .tool-description-section { padding: 0.375rem 0.75rem !important; }
+            body .tool-description-inner { gap: 0.25rem !important; }
+            body .tool-description-content p { font-size: 0.78rem !important; line-height: 1.35 !important; margin: 0 !important; }
+            /* Main container */
+            body .tool-page-container { padding: 0.375rem !important; gap: 0.375rem !important; min-height: auto !important; max-width: 100% !important; display: flex !important; flex-direction: column !important; }
+            body .gc-page-container.tool-page-container { padding: 0.375rem !important; gap: 0.375rem !important; min-height: auto !important; max-width: 100% !important; }
+            /* Columns: full width on mobile */
+            body .tool-input-column { width: 100% !important; max-width: 100% !important; max-height: none !important; overflow-y: visible !important; position: relative !important; top: auto !important; }
+            body .tool-output-column { width: 100% !important; max-width: 100% !important; min-height: 250px !important; position: relative !important; top: auto !important; }
+            /* Cards */
+            body .gc-page-container .tool-card { margin-bottom: 0 !important; }
+            body .gc-page-container .tool-card-body { padding: 0.5rem !important; }
+            body .gc-page-container .tool-card-header { padding: 0.4rem 0.625rem !important; font-size: 0.8rem !important; }
+            body .gc-page-container .tool-section-content { padding: 0.375rem !important; }
+            body .gc-page-container .tool-section-header { padding: 0.4rem 0.5rem !important; font-size: 0.75rem !important; }
+            body .gc-page-container .tool-card + .tool-card { margin-top: 0.375rem !important; }
+            /* Graph card */
+            body .gc-graph-card { border-radius: 8px !important; }
+            body .gc-graph-toolbar { padding: 0.3rem 0.5rem !important; }
+            /* Related tools */
+            body .related-tools-section { margin-top: 0.5rem !important; padding: 0 0.375rem !important; }
+            body .related-tools-card { padding: 0.625rem !important; }
+            body .related-tools-header { margin-bottom: 0.375rem !important; padding-bottom: 0.25rem !important; }
+            body .related-tools-header h3 { font-size: 0.9rem !important; }
+            body .related-tools-grid { gap: 0.375rem !important; }
+            body .related-tool-item { padding: 0.5rem !important; }
+            /* FAQ */
+            body .tool-expertise-section { margin: 0.5rem auto !important; padding: 0 0.375rem !important; }
+            body .tool-expertise-section > .tool-card { padding: 0.625rem !important; margin-bottom: 0 !important; }
+            body .tool-expertise-section h2 { font-size: 0.95rem !important; margin-bottom: 0.25rem !important; }
+            body .faq-question { padding: 0.5rem 0.25rem !important; font-size: 0.8rem !important; }
+            body .faq-answer { padding: 0 0.25rem 0.5rem !important; font-size: 0.78rem !important; line-height: 1.4 !important; }
+            /* Support */
+            body .support-section-modern { margin: 0.5rem 0 !important; padding: 0 0.375rem !important; }
+            body .support-card { padding: 0.625rem !important; }
+            body .support-header { margin-bottom: 0.375rem !important; gap: 0.375rem !important; }
+            body .support-title { font-size: 0.9rem !important; }
+            body .support-message { font-size: 0.78rem !important; margin-bottom: 0.375rem !important; }
+            body .support-stats { margin-bottom: 0.375rem !important; gap: 0.25rem !important; }
+            body .stat-badge { padding: 0.15rem 0.4rem !important; font-size: 0.65rem !important; }
+            body .support-actions { gap: 0.375rem !important; }
+            body .support-btn { padding: 0.4rem 0.625rem !important; gap: 0.375rem !important; }
+            body .btn-icon { font-size: 1.1rem !important; }
+            body .btn-text { font-size: 0.75rem !important; }
+            body .btn-label { font-size: 0.55rem !important; }
+            body .security-guarantee { padding: 0.25rem 0.5rem !important; margin-top: 0.375rem !important; }
+            body .security-text { font-size: 0.65rem !important; }
+            /* Footer */
+            body .page-footer { padding: 0.5rem !important; }
+            body .footer-content { padding: 0.25rem !important; }
+            body .footer-text { font-size: 0.7rem !important; margin: 0 !important; }
+            body .footer-links { gap: 0.5rem !important; }
+            body .footer-link { font-size: 0.7rem !important; }
+            /* Ad containers */
+            body .tool-mobile-ad-container { padding: 0.375rem !important; }
+            body .ad-container { margin: 0.25rem auto !important; }
+        }
+        @media (max-width: 480px) {
+            body .tool-page-header { padding: 0.375rem 0.5rem !important; }
+            body .tool-page-title { font-size: 1rem !important; }
+            body .tool-page-badges { display: none !important; }
+            body .tool-description-section { padding: 0.25rem 0.5rem !important; }
+            body .tool-description-content p { font-size: 0.75rem !important; }
+            body .tool-page-container { padding: 0.25rem !important; gap: 0.25rem !important; }
+            body .gc-page-container.tool-page-container { padding: 0.25rem !important; gap: 0.25rem !important; }
+            body .gc-page-container .tool-card-body { padding: 0.375rem !important; }
+            body .gc-page-container .tool-section-content { padding: 0.25rem !important; }
+            body .gc-preset-chips { gap: 0.25rem !important; }
+            body .gc-preset-chip { padding: 0.2rem 0.4rem !important; font-size: 0.65rem !important; }
+            body .gc-preset-category-label { font-size: 0.65rem !important; margin-bottom: 0.125rem !important; }
+        }
     </style>
 </head>
 <body>
+<script>
+/* Mobile compact: inject inline styles that beat any CSS. Runs before paint. */
+(function(){
+  if(window.innerWidth > 900) return;
+  var s = document.createElement('style');
+  s.textContent = [
+    /* --- nuclear mobile overrides via :where(body) + inline-level specificity --- */
+    '.tool-page-header{padding:0.5rem 0.75rem!important;margin-top:64px!important}',
+    '.tool-page-header-inner{gap:0.25rem!important;flex-wrap:wrap!important}',
+    '.tool-page-title{font-size:1.15rem!important;margin:0!important}',
+    '.tool-breadcrumbs{margin-top:0.125rem!important;font-size:0.7rem!important}',
+    '.tool-page-badges{gap:0.25rem!important}',
+    '.tool-badge{padding:0.125rem 0.4rem!important;font-size:0.6rem!important}',
+    '.tool-description-section{padding:0.375rem 0.75rem!important}',
+    '.tool-description-inner{gap:0.25rem!important}',
+    '.tool-description-content p{font-size:0.78rem!important;line-height:1.35!important;margin:0!important}',
+    '.tool-page-container,.gc-page-container.tool-page-container{padding:0.375rem!important;gap:0.375rem!important;min-height:auto!important;max-width:100%!important;display:flex!important;flex-direction:column!important}',
+    '.tool-input-column{width:100%!important;max-width:100%!important;max-height:none!important;overflow-y:visible!important;position:relative!important;top:auto!important}',
+    '.tool-output-column{width:100%!important;max-width:100%!important;min-height:250px!important;position:relative!important;top:auto!important}',
+    '.gc-page-container .tool-card{margin-bottom:0!important}',
+    '.gc-page-container .tool-card-body{padding:0.5rem!important}',
+    '.gc-page-container .tool-card-header{padding:0.4rem 0.625rem!important;font-size:0.8rem!important}',
+    '.gc-page-container .tool-section-content{padding:0.375rem!important}',
+    '.gc-page-container .tool-section-header{padding:0.4rem 0.5rem!important;font-size:0.75rem!important}',
+    '.gc-graph-card{border-radius:8px!important}',
+    '.gc-graph-toolbar{padding:0.3rem 0.5rem!important}',
+    '.related-tools-section{margin-top:0.5rem!important;padding:0 0.375rem!important}',
+    '.related-tools-card{padding:0.625rem!important}',
+    '.related-tools-header{margin-bottom:0.375rem!important;padding-bottom:0.25rem!important}',
+    '.related-tools-header h3{font-size:0.9rem!important}',
+    '.related-tools-grid{gap:0.375rem!important}',
+    '.related-tool-item{padding:0.5rem!important}',
+    '.tool-expertise-section{margin:0.5rem auto!important;padding:0 0.375rem!important}',
+    '.tool-expertise-section>.tool-card{padding:0.625rem!important;margin-bottom:0!important}',
+    '.tool-expertise-section h2{font-size:0.95rem!important;margin-bottom:0.25rem!important}',
+    '.faq-question{padding:0.5rem 0.25rem!important;font-size:0.8rem!important}',
+    '.faq-answer{padding:0 0.25rem 0.5rem!important;font-size:0.78rem!important;line-height:1.4!important}',
+    '.support-section-modern{margin:0.5rem 0!important;padding:0 0.375rem!important}',
+    '.support-card{padding:0.625rem!important}',
+    '.support-header{margin-bottom:0.375rem!important;gap:0.375rem!important}',
+    '.support-title{font-size:0.9rem!important}',
+    '.support-message{font-size:0.78rem!important;margin-bottom:0.375rem!important}',
+    '.support-stats{margin-bottom:0.375rem!important;gap:0.25rem!important}',
+    '.stat-badge{padding:0.15rem 0.4rem!important;font-size:0.65rem!important}',
+    '.support-actions{gap:0.375rem!important}',
+    '.support-btn{padding:0.4rem 0.625rem!important;gap:0.375rem!important}',
+    '.btn-icon{font-size:1.1rem!important}',
+    '.btn-text{font-size:0.75rem!important}',
+    '.btn-label{font-size:0.55rem!important}',
+    '.security-guarantee{padding:0.25rem 0.5rem!important;margin-top:0.375rem!important}',
+    '.security-text{font-size:0.65rem!important}',
+    '.page-footer{padding:0.5rem!important}',
+    '.footer-content{padding:0.25rem!important}',
+    '.footer-text{font-size:0.7rem!important;margin:0!important}',
+    '.footer-links{gap:0.5rem!important}',
+    '.footer-link{font-size:0.7rem!important}',
+    '.ad-container:not(.ad-loaded){min-height:0!important;padding:0!important;margin:0!important;border:none!important;box-shadow:none!important;overflow:hidden!important}',
+    '.ad-container:not(.ad-loaded) .ad-label{display:none!important}',
+    '.tool-mobile-ad-container{padding:0.375rem!important}',
+    '.support-icon-wrapper{width:32px!important;height:32px!important}',
+    '.support-icon{font-size:1rem!important}'
+  ].join('');
+  document.head.appendChild(s);
+})();
+</script>
 <%@ include file="modern/components/nav-header.jsp" %>
 
 <!-- ==================== PAGE HEADER ==================== -->
 <header class="tool-page-header">
     <div class="tool-page-header-inner">
         <div>
-            <h1 class="tool-page-title">Graphing Calculator</h1>
+            <h1 class="tool-page-title">Graphing Calculator Online</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                 <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
@@ -113,13 +275,13 @@
 </header>
 
 <!-- ==================== HERO / DESCRIPTION + AD ==================== -->
-<section class="tool-description-section" style="background:var(--gc-light);">
-    <div class="tool-description-inner">
+<section class="tool-description-section gc-desc-section" style="background:var(--gc-light);">
+    <div class="tool-description-inner" style="gap:0.375rem;">
         <div class="tool-description-content">
-            <p>Free <strong>online graphing calculator</strong> with built-in <strong>calculus</strong>: plot <strong>derivatives f&apos;(x)</strong>, <strong>antiderivatives F(x)</strong>, shade <strong>definite integrals</strong>, and evaluate <strong>limits</strong> symbolically. Graph equations, systems, polar, parametric, and inequalities. 50+ presets, sliders, animation &mdash; no signup.</p>
+            <p style="margin:0;">Free <strong>online graphing calculator</strong> &mdash; plot functions, <strong>3D surfaces</strong>, <strong>derivatives</strong>, <strong>integrals</strong>, <strong>limits</strong>, polar, parametric, equations, and inequalities. Auto-detects your input type. Built-in CAS for symbolic calculus, 50+ presets, sliders, animation. A powerful <strong>Desmos alternative</strong> &mdash; no signup, works on any device.</p>
         </div>
     </div>
-    <div style="max-width:1400px;margin:0.5rem auto 0;padding:0 1rem;">
+    <div style="max-width:1400px;margin:0.25rem auto 0;padding:0 0.5rem;">
         <%@ include file="modern/ads/ad-hero-banner.jsp" %>
     </div>
 </section>
@@ -142,7 +304,7 @@
         </div>
 
         <!-- Presets Card (collapsible, open by default) -->
-        <div class="tool-card" style="margin-top:0.75rem;">
+        <div class="tool-card" style="margin-top:0.5rem;">
             <div class="tool-section-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');" style="color:var(--gc-tool);">
                 <span><i class="fas fa-wand-magic-sparkles" style="margin-right:0.375rem;"></i> Presets &amp; Examples</span>
                 <span class="chevron">&#9660;</span>
@@ -273,7 +435,7 @@
         </div>
 
         <!-- Graph Settings Card (collapsible, collapsed by default) -->
-        <div class="tool-card" style="margin-top:0.75rem;">
+        <div class="tool-card" style="margin-top:0.5rem;">
             <div class="tool-section-header collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');" style="color:var(--gc-tool);">
                 <span><i class="fas fa-cog" style="margin-right:0.375rem;"></i> Graph Settings</span>
                 <span class="chevron">&#9660;</span>
@@ -311,7 +473,7 @@
         </div>
 
         <!-- Share & Export Card (collapsible, collapsed by default) -->
-        <div class="tool-card" style="margin-top:0.75rem;">
+        <div class="tool-card" style="margin-top:0.5rem;">
             <div class="tool-section-header collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');" style="color:var(--gc-tool);">
                 <span><i class="fas fa-share-nodes" style="margin-right:0.375rem;"></i> Share &amp; Export</span>
                 <span class="chevron">&#9660;</span>
@@ -327,7 +489,7 @@
         </div>
 
         <!-- My Graphs Card (collapsible, collapsed by default) -->
-        <div class="tool-card" style="margin-top:0.75rem;">
+        <div class="tool-card" style="margin-top:0.5rem;">
             <div class="tool-section-header collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');" style="color:var(--gc-tool);">
                 <span><i class="fas fa-folder-open" style="margin-right:0.375rem;"></i> My Graphs</span>
                 <span class="chevron">&#9660;</span>
@@ -343,7 +505,7 @@
         </div>
 
         <!-- Quick Guide Card (collapsible, collapsed by default) -->
-        <div class="tool-card" style="margin-top:0.75rem;">
+        <div class="tool-card" style="margin-top:0.5rem;">
             <div class="tool-section-header collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden');" style="color:var(--gc-tool);">
                 <span><i class="fas fa-info-circle" style="margin-right:0.375rem;"></i> Quick Guide</span>
                 <span class="chevron">&#9660;</span>
@@ -469,9 +631,9 @@ window.addEventListener('message', (e) => {
 </jsp:include>
 
 <!-- ==================== VISIBLE FAQ SECTION ==================== -->
-<section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
+<section class="tool-expertise-section gc-faq-section" style="max-width:1200px;margin:0.75rem auto;padding:0 0.5rem;">
+    <div class="tool-card gc-faq-card" style="padding:0.75rem;margin-bottom:0;">
+        <h2 style="font-size:1rem;margin-bottom:0.5rem;" id="faqs">Frequently Asked Questions</h2>
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">

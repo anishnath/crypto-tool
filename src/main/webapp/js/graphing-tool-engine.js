@@ -13,6 +13,70 @@ class GraphingEngine {
             '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'
         ];
         this.colorIndex = 0;
+        this._sympyPending = 0; // track in-flight SymPy requests
+    }
+
+    // ==================== SymPy Fallback Helpers ====================
+
+    /** Convert math expression to Python/SymPy syntax */
+    static _toPython(s) {
+        if (!s) return '';
+        s = s.trim();
+        s = s.replace(/\^/g, '**');
+        s = s.replace(/(\d)([a-zA-Z])/g, '$1*$2');
+        s = s.replace(/\)\s*\(/g, ')*(');
+        s = s.replace(/\)\s*([a-zA-Z\d])/g, ')*$1');
+        return s;
+    }
+
+    /** Execute Python code via OneCompilerFunctionality and return stdout */
+    _sympyExec(code) {
+        const ctx = (document.querySelector('meta[name="context-path"]') || {}).content || '';
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+        return fetch(ctx + '/OneCompilerFunctionality?action=execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ language: 'python', version: '3.10', code }),
+            signal: controller.signal
+        })
+        .then(r => r.json())
+        .then(data => {
+            clearTimeout(timeoutId);
+            return (data.Stdout || data.stdout || '').trim();
+        })
+        .catch(err => {
+            clearTimeout(timeoutId);
+            console.error('SymPy exec failed:', err);
+            return '';
+        });
+    }
+
+    /** Show/hide SymPy computing indicator */
+    _showSympyIndicator(msg) {
+        let el = document.getElementById('gc-sympy-indicator');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'gc-sympy-indicator';
+            el.style.cssText = 'position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:100;' +
+                'background:rgba(99,102,241,0.95);color:#fff;padding:6px 16px;border-radius:20px;font-size:13px;' +
+                'font-weight:500;pointer-events:none;transition:opacity 0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.2);';
+            const graphDiv = document.getElementById(this.containerId);
+            if (graphDiv && graphDiv.parentElement) {
+                graphDiv.parentElement.style.position = 'relative';
+                graphDiv.parentElement.appendChild(el);
+            }
+        }
+        el.textContent = msg || 'Solving...';
+        el.style.opacity = '1';
+    }
+
+    _hideSympyIndicator() {
+        const el = document.getElementById('gc-sympy-indicator');
+        if (el) {
+            el.style.opacity = '0';
+            setTimeout(() => el.remove(), 300);
+        }
     }
 
     /**
@@ -58,18 +122,52 @@ class GraphingEngine {
     normalizeExpression(expr) {
         if (!expr || typeof expr !== 'string') return expr;
         let s = expr.trim();
+        // Unicode math symbols → ASCII equivalents
+        s = s.replace(/π/g, 'pi');
+        s = s.replace(/√\s*/g, 'sqrt');
+        s = s.replace(/²/g, '^2');
+        s = s.replace(/³/g, '^3');
+        s = s.replace(/⁴/g, '^4');
+        s = s.replace(/θ/g, 'theta');
+        // |x| absolute value bars → abs(x)
+        s = s.replace(/\|([^|]+)\|/g, 'abs($1)');
         // Python-style exponent
         s = s.replace(/\*\*/g, '^');
+        // e^(...) → exp(...) when 'e' is Euler's number (not part of a word)
+        s = s.replace(/(?<![a-zA-Z])e\^(\()/g, 'exp$1');
+        s = s.replace(/(?<![a-zA-Z])e\^([a-zA-Z0-9])/g, 'exp($1)');
         // ln → log  (math.js log is natural log)
         s = s.replace(/\bln\s*\(/g, 'log(');
+        // arcsin/arccos/arctan → asin/acos/atan
+        s = s.replace(/\barcsin\s*\(/gi, 'asin(');
+        s = s.replace(/\barccos\s*\(/gi, 'acos(');
+        s = s.replace(/\barctan\s*\(/gi, 'atan(');
+        // log10(x) → log(x)/log(10)
+        s = s.replace(/\blog10\s*\(([^)]+)\)/gi, '(log($1)/log(10))');
+        // digit × opening paren: 2(x+1) → 2*(x+1)
+        s = s.replace(/(\d)\s*\(/g, '$1*(');
+        // closing paren × opening paren: )(  → )*(
+        s = s.replace(/\)\s*\(/g, ')*(');
+        // closing paren × digit or letter: )2 → )*2, )x → )*x
+        s = s.replace(/\)\s*(\w)/g, ')*$1');
+        // digit × known function name: 2sin(x) → 2*sin(x), 3cos(x) → 3*cos(x)
+        s = s.replace(/(\d)\s*(sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|sec|csc|cot|log|exp|sqrt|abs|ceil|floor|sign|round)\s*\(/gi,
+            '$1*$2(');
+        // negative coefficient × letter: -2x → -2*x (handles leading minus)
+        s = s.replace(/(^|[+\-*/^(,])\s*(-?\d+\.?\d*)([a-zA-Z])/g, (m, pre, num, letter) => {
+            if (/[a-zA-Z]/.test(pre)) return m; // Don't break function names
+            return pre + num + '*' + letter;
+        });
+        // digit × single letter (not part of function): 2x → 2*x, 3y → 3*y
+        s = s.replace(/(\d)([a-zA-Z])/g, '$1*$2');
         // Implicit multiplication between adjacent single-letter variables:
-        //   xy → x*y,  6xy → 6x*y,  3xy+2x → 3x*y+2x
-        // Lookbehind ensures we don't split inside function names (sin, cos, …)
-        // Lookahead ensures the second letter isn't part of a longer word or function call
+        //   xy → x*y,  but not "sin", "cos", "pi", etc.
         s = s.replace(/(?<![a-zA-Z])([a-zA-Z])([a-zA-Z])(?![a-zA-Z(])/g, (m, a, b) => {
             if ((a + b).toLowerCase() === 'pi') return m;
             return a + '*' + b;
         });
+        // Function juxtaposition: sin(x)cos(x) → sin(x)*cos(x)
+        s = s.replace(/\)\s*(sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|sec|csc|cot|log|exp|sqrt|abs)\s*\(/gi, ')*$1(');
         return s;
     }
 
@@ -78,7 +176,8 @@ class GraphingEngine {
      */
     stripCartesianPrefix(expr) {
         if (!expr || typeof expr !== 'string') return expr;
-        return expr.replace(/^\s*y\s*=\s*/i, '');
+        // Strip "y = ", "f(x) = ", "g(x) = " prefixes
+        return expr.replace(/^\s*(?:y|f\s*\(\s*x\s*\)|g\s*\(\s*x\s*\))\s*=\s*/i, '');
     }
 
     /**
@@ -110,7 +209,6 @@ class GraphingEngine {
                         x.push(xVal);
                         y.push(yVal);
                     } else {
-                        // Add discontinuity
                         x.push(xVal);
                         y.push(null);
                     }
@@ -120,7 +218,28 @@ class GraphingEngine {
                 }
             }
 
-            return { x, y };
+            // Asymptote detection: large jumps with sign change → insert null gap
+            const asymptotes = [];
+            const yValid = y.filter(v => v !== null && isFinite(v));
+            let yRangeMax = -Infinity, yRangeMin = Infinity;
+            for (let i = 0; i < yValid.length; i++) {
+                if (yValid[i] > yRangeMax) yRangeMax = yValid[i];
+                if (yValid[i] < yRangeMin) yRangeMin = yValid[i];
+            }
+            const yRange = (yValid.length > 0 ? yRangeMax - yRangeMin : 0) || 20;
+            const jumpThreshold = yRange * 0.5;
+            for (let i = 1; i < y.length; i++) {
+                if (y[i] !== null && y[i-1] !== null) {
+                    const dy = Math.abs(y[i] - y[i-1]);
+                    // Large jump with sign change = likely asymptote
+                    if (dy > jumpThreshold && y[i] * y[i-1] < 0) {
+                        asymptotes.push((x[i] + x[i-1]) / 2);
+                        y[i-1] = null; // break the line
+                    }
+                }
+            }
+
+            return { x, y, asymptotes };
         } catch (error) {
             console.error('Error generating Cartesian plot:', error);
             return null;
@@ -136,11 +255,13 @@ class GraphingEngine {
                 return null;
             }
 
+            // Ensure even number of intervals for Simpson's rule
+            if (numPoints % 2 !== 0) numPoints++;
             const compiledExpr = math.compile(this.normalizeExpression(this.stripCartesianPrefix(expression)));
             const step = (xMax - xMin) / numPoints;
             let area = 0;
 
-            // Trapezoidal rule: Area = h/2 * (y0 + 2*y1 + 2*y2 + ... + 2*yn-1 + yn)
+            // Composite Simpson's 1/3 rule: ∫ ≈ h/3 [f(x0) + 4f(x1) + 2f(x2) + 4f(x3) + ... + f(xn)]
             for (let i = 0; i <= numPoints; i++) {
                 const x = xMin + i * step;
                 try {
@@ -148,6 +269,8 @@ class GraphingEngine {
                     if (isFinite(y)) {
                         if (i === 0 || i === numPoints) {
                             area += y;
+                        } else if (i % 2 === 1) {
+                            area += 4 * y;
                         } else {
                             area += 2 * y;
                         }
@@ -157,7 +280,7 @@ class GraphingEngine {
                 }
             }
 
-            area = (area * step) / 2;
+            area = (area * step) / 3;
 
             // Generate points for shading
             const x = [];
@@ -265,6 +388,40 @@ class GraphingEngine {
     }
 
     /**
+     * SymPy fallback for antiderivative when Nerdamer fails.
+     * Returns a Promise that resolves to { x, y, symbolic } or null.
+     */
+    generateAntiderivativeSymPy(expression, xMin = -10, xMax = 10, numPoints = 500) {
+        const pyExpr = GraphingEngine._toPython(this.stripCartesianPrefix(this.normalizeExpression(expression)));
+        const code =
+            'from sympy import *\n' +
+            'import json\n' +
+            'x = symbols("x")\n' +
+            'try:\n' +
+            '    expr = ' + pyExpr + '\n' +
+            '    F = integrate(expr, x)\n' +
+            '    sym = str(F)\n' +
+            '    xs = [' + xMin + ' + i*' + ((xMax - xMin) / numPoints) + ' for i in range(' + (numPoints + 1) + ')]\n' +
+            '    ys = []\n' +
+            '    for xv in xs:\n' +
+            '        try:\n' +
+            '            yv = float(F.subs(x, xv))\n' +
+            '            ys.append(yv if abs(yv) < 1e15 else None)\n' +
+            '        except: ys.append(None)\n' +
+            '    print("ANTI:" + json.dumps({"symbolic": sym, "x": xs, "y": ys}))\n' +
+            'except Exception as e:\n' +
+            '    print("ERROR:" + str(e))';
+        return this._sympyExec(code).then(stdout => {
+            const m = stdout.match(/ANTI:([\s\S]*)/);
+            if (!m) return null;
+            try {
+                const data = JSON.parse(m[1].trim());
+                return { x: data.x, y: data.y, symbolic: data.symbolic };
+            } catch (e) { return null; }
+        });
+    }
+
+    /**
      * Evaluate a limit using Nerdamer: limit(expr, variable, value)
      */
     evaluateLimit(expression, variable, value) {
@@ -279,6 +436,39 @@ class GraphingEngine {
             console.error('Error evaluating limit:', error);
             return null;
         }
+    }
+
+    /**
+     * SymPy fallback for limit evaluation.
+     * Returns a Promise that resolves to { symbolic, numeric } or null.
+     */
+    evaluateLimitSymPy(expression, variable, value) {
+        const pyExpr = GraphingEngine._toPython(this.normalizeExpression(expression));
+        // Handle ±infinity
+        let pyVal = String(value).trim();
+        if (pyVal === 'Infinity' || pyVal === 'inf' || pyVal === '∞') pyVal = 'oo';
+        else if (pyVal === '-Infinity' || pyVal === '-inf' || pyVal === '-∞') pyVal = '-oo';
+        const code =
+            'from sympy import *\n' +
+            'import json\n' +
+            variable + ' = symbols("' + variable + '")\n' +
+            'try:\n' +
+            '    expr = ' + pyExpr + '\n' +
+            '    L = limit(expr, ' + variable + ', ' + pyVal + ')\n' +
+            '    sym = str(L)\n' +
+            '    try: num = float(L)\n' +
+            '    except: num = None\n' +
+            '    print("LIMIT:" + json.dumps({"symbolic": sym, "numeric": num}))\n' +
+            'except Exception as e:\n' +
+            '    print("ERROR:" + str(e))';
+        return this._sympyExec(code).then(stdout => {
+            const m = stdout.match(/LIMIT:([\s\S]*)/);
+            if (!m) return null;
+            try {
+                const data = JSON.parse(m[1].trim());
+                return { symbolic: data.symbolic, numeric: data.numeric };
+            } catch (e) { return null; }
+        });
     }
 
     /**
@@ -361,8 +551,9 @@ class GraphingEngine {
             if (!expression || typeof expression !== 'string' || expression.trim() === '') {
                 return null;
             }
-
-            const compiledExpr = math.compile(this.normalizeExpression(expression));
+            // Strip "r = " prefix if present
+            let cleaned = expression.replace(/^\s*r\s*=\s*/i, '');
+            const compiledExpr = math.compile(this.normalizeExpression(cleaned));
 
             const x = [];
             const y = [];
@@ -396,7 +587,7 @@ class GraphingEngine {
     /**
      * Generate data for Implicit Functions (e.g., x^2 + y^2 = 25)
      */
-    generateImplicit(expression, xMin = -10, xMax = 10, yMin = -10, yMax = 10, resolution = 300) {
+    generateImplicit(expression, xMin = -10, xMax = 10, yMin = -10, yMax = 10, resolution = 400) {
         try {
             // Parse expression like "x^2 + y^2 = 25" into left - right = 0
             let leftExpr, rightExpr;
@@ -434,8 +625,12 @@ class GraphingEngine {
                 grid.push(row);
             }
 
-            // Marching squares: extract zero-crossing points as scatter data
+            // Marching squares with line segments — produces connected contour lines.
+            // Each cell with a sign change yields one or two line segments.
+            // Edge interpolation points (indexed 0-3: bottom, right, top, left):
             const xs = [], ys = [];
+            const interp = (v1, v2, p1, p2) => p1 + (p2 - p1) * v1 / (v1 - v2);
+
             for (let i = 0; i < resolution; i++) {
                 for (let j = 0; j < resolution; j++) {
                     const z00 = grid[i][j], z10 = grid[i][j+1];
@@ -445,27 +640,39 @@ class GraphingEngine {
                     const x0 = xMin + j * xStep, x1 = x0 + xStep;
                     const y0 = yMin + i * yStep, y1 = y0 + yStep;
 
-                    // Check each edge for a sign change (zero crossing)
-                    if (z00 * z10 < 0) { // bottom edge
-                        const t = z00 / (z00 - z10);
-                        xs.push(x0 + t * xStep); ys.push(y0);
+                    // Classify corners: 0 = negative, 1 = positive
+                    const config = (z00 > 0 ? 1 : 0) | (z10 > 0 ? 2 : 0) |
+                                   (z11 > 0 ? 4 : 0) | (z01 > 0 ? 8 : 0);
+                    if (config === 0 || config === 15) continue;
+
+                    // Interpolated edge points
+                    const bottom = [interp(z00, z10, x0, x1), y0];
+                    const right  = [x1, interp(z10, z11, y0, y1)];
+                    const top    = [interp(z01, z11, x0, x1), y1];
+                    const left   = [x0, interp(z00, z01, y0, y1)];
+
+                    // Marching squares lookup — each config yields 1 or 2 segments
+                    const segments = [];
+                    switch (config) {
+                        case 1: case 14: segments.push([bottom, left]); break;
+                        case 2: case 13: segments.push([bottom, right]); break;
+                        case 3: case 12: segments.push([left, right]); break;
+                        case 4: case 11: segments.push([right, top]); break;
+                        case 5: segments.push([bottom, right], [left, top]); break;
+                        case 6: case 9:  segments.push([bottom, top]); break;
+                        case 7: case 8:  segments.push([left, top]); break;
+                        case 10: segments.push([bottom, left], [right, top]); break;
                     }
-                    if (z00 * z01 < 0) { // left edge
-                        const t = z00 / (z00 - z01);
-                        xs.push(x0); ys.push(y0 + t * yStep);
-                    }
-                    if (z10 * z11 < 0) { // right edge
-                        const t = z10 / (z10 - z11);
-                        xs.push(x1); ys.push(y0 + t * yStep);
-                    }
-                    if (z01 * z11 < 0) { // top edge
-                        const t = z01 / (z01 - z11);
-                        xs.push(x0 + t * xStep); ys.push(y1);
+
+                    // Add segments separated by null (gap) for Plotly disconnected lines
+                    for (const seg of segments) {
+                        xs.push(seg[0][0], seg[1][0], null);
+                        ys.push(seg[0][1], seg[1][1], null);
                     }
                 }
             }
 
-            return xs.length > 0 ? { x: xs, y: ys } : null;
+            return xs.length > 0 ? { x: xs, y: ys, mode: 'lines' } : null;
         } catch (error) {
             console.error('Error generating implicit function:', error);
             return null;
@@ -761,6 +968,46 @@ class GraphingEngine {
     }
 
     /**
+     * Generate 3D surface data for z = f(x,y)
+     */
+    generateSurface(expression, xMin = -5, xMax = 5, yMin = -5, yMax = 5, resolution = 60) {
+        try {
+            if (!expression || typeof expression !== 'string') return null;
+            let expr = expression.trim().replace(/^\s*z\s*=\s*/i, '');
+            const compiled = math.compile(this.normalizeExpression(expr));
+
+            const xArr = [], yArr = [], zGrid = [];
+            const xStep = (xMax - xMin) / resolution;
+            const yStep = (yMax - yMin) / resolution;
+
+            for (let i = 0; i <= resolution; i++) {
+                xArr.push(xMin + i * xStep);
+            }
+            for (let j = 0; j <= resolution; j++) {
+                yArr.push(yMin + j * yStep);
+            }
+
+            for (let j = 0; j <= resolution; j++) {
+                const row = [];
+                for (let i = 0; i <= resolution; i++) {
+                    try {
+                        const zVal = compiled.evaluate({ x: xArr[i], y: yArr[j] });
+                        row.push(typeof zVal === 'number' && isFinite(zVal) ? zVal : null);
+                    } catch (_) {
+                        row.push(null);
+                    }
+                }
+                zGrid.push(row);
+            }
+
+            return { x: xArr, y: yArr, z: zGrid };
+        } catch (error) {
+            console.error('Error generating surface:', error);
+            return null;
+        }
+    }
+
+    /**
      * Generate distribution data
      */
     generateDistribution(type, params, xMin, xMax, numPoints = 500) {
@@ -1028,15 +1275,16 @@ class GraphingEngine {
 
         let trace = null;
 
-        // Normalize the expression before dispatching
-        if (expr.expression && typeof expr.expression === 'string') {
-            expr.expression = this.normalizeExpression(expr.expression);
+        // Normalize the expression into a local variable (don't mutate expr.expression)
+        let normalizedExpr = expr.expression;
+        if (normalizedExpr && typeof normalizedExpr === 'string') {
+            normalizedExpr = this.normalizeExpression(normalizedExpr);
         }
 
         switch (expr.type) {
             case 'cartesian': {
                 // Substitute parameters if they exist
-                let expression = expr.expression;
+                let expression = normalizedExpr;
                 if (expr.parameters) {
                     Object.keys(expr.parameters).forEach(param => {
                         const regex = new RegExp(`\\b${param}\\b`, 'g');
@@ -1072,6 +1320,18 @@ class GraphingEngine {
                         hovertemplate: 'x = %{x:.4f}<br>y = %{y:.4f}<extra>%{fullData.name}</extra>'
                     }];
 
+                    // Add vertical asymptote lines
+                    if (data.asymptotes && data.asymptotes.length > 0) {
+                        for (const ax of data.asymptotes) {
+                            trace.push({
+                                x: [ax, ax], y: [yMin, yMax],
+                                type: 'scatter', mode: 'lines',
+                                line: { color: '#94a3b8', width: 1, dash: 'dot' },
+                                showlegend: false, hoverinfo: 'skip'
+                            });
+                        }
+                    }
+
                     // Add derivative if enabled
                     if (expr.showDerivative) {
                         const derivData = this.generateDerivative(expression, xMin, xMax);
@@ -1101,6 +1361,9 @@ class GraphingEngine {
                                 line: { color: expr.color, width: 2, dash: 'dot' },
                                 connectgaps: false
                             });
+                        } else if (!expr._sympyAntiResolved) {
+                            // Queue SymPy fallback for antiderivative
+                            expr._sympyAntiNeeded = { expression, xMin, xMax };
                         }
                     }
 
@@ -1162,15 +1425,16 @@ class GraphingEngine {
             }
 
             case 'implicit': {
-                const data = this.generateImplicit(expr.expression, xMin, xMax, yMin, yMax);
+                const data = this.generateImplicit(normalizedExpr, xMin, xMax, yMin, yMax);
                 if (data) {
                     trace = {
                         x: data.x,
                         y: data.y,
                         type: 'scatter',
-                        mode: 'markers',
+                        mode: data.mode || 'lines',
                         name: expr.expression,
-                        marker: { color: expr.color, size: 1.5 },
+                        line: { color: expr.color, width: 2 },
+                        connectgaps: false,
                         hovertemplate: 'x = %{x:.4f}<br>y = %{y:.4f}<extra>%{fullData.name}</extra>'
                     };
                 }
@@ -1195,9 +1459,34 @@ class GraphingEngine {
                 break;
             }
 
+            case 'surface': {
+                if (!_fullPlotlyLoaded) {
+                    // Full Plotly not yet loaded — trigger load and re-plot when ready
+                    _ensureFullPlotly(function() { updateGraph(); });
+                    break;
+                }
+                const surfData = this.generateSurface(normalizedExpr, xMin, xMax, yMin, yMax);
+                if (surfData) {
+                    trace = {
+                        x: surfData.x, y: surfData.y, z: surfData.z,
+                        type: 'surface',
+                        name: expr.expression,
+                        colorscale: 'Viridis',
+                        showscale: true
+                    };
+                }
+                break;
+            }
+
             case 'parametric': {
-                const [xExpr, yExpr] = expr.expression.split(',').map(e => e.trim());
-                const data = this.generateParametric(xExpr, yExpr);
+                // Strip optional "x(t) = " and "y(t) = " prefixes; also support semicolon separator
+                const paramParts = normalizedExpr.replace(/;/g, ',').split(',').map(e =>
+                    e.trim().replace(/^\s*[xy]\s*\(\s*t\s*\)\s*=\s*/i, '')
+                );
+                const [xExpr, yExpr] = paramParts;
+                const tMin = expr.tMin != null ? expr.tMin : 0;
+                const tMax = expr.tMax != null ? expr.tMax : 2 * Math.PI;
+                const data = this.generateParametric(xExpr, yExpr, tMin, tMax);
                 if (data) {
                     trace = {
                         x: data.x,
@@ -1212,8 +1501,10 @@ class GraphingEngine {
             }
 
             case 'polar': {
-                const thetaMax = expr.thetaMax || 2 * Math.PI;
-                const data = this.generatePolar(expr.expression, 0, thetaMax);
+                const thetaMin = expr.thetaMin != null ? expr.thetaMin : 0;
+                const thetaMax = expr.thetaMax != null ? expr.thetaMax : 2 * Math.PI;
+                const numPts = thetaMax - thetaMin > 4 * Math.PI ? 2000 : 500;
+                const data = this.generatePolar(normalizedExpr, thetaMin, thetaMax, numPts);
                 if (data) {
                     trace = {
                         x: data.x,
@@ -1228,7 +1519,7 @@ class GraphingEngine {
             }
 
             case 'inequality': {
-                const match = expr.expression.match(/(.+?)(>=|<=|>|<|=)(.+)/);
+                const match = normalizedExpr.match(/(.+?)(>=|<=|>|<|=)(.+)/);
                 if (match) {
                     const data = this.generateInequality(
                         match[1].trim(),
@@ -1277,7 +1568,7 @@ class GraphingEngine {
             }
 
             case 'statistics': {
-                const data = this.parseTableData(expr.expression);
+                const data = this.parseTableData(normalizedExpr);
                 if (data) {
                     const regression = this.generateRegression(data.x, data.y);
 
@@ -1339,19 +1630,36 @@ class GraphingEngine {
                 // Use Nerdamer to solve an equation for y, then plot each branch
                 if (typeof nerdamer === 'undefined') {
                     // Fallback to implicit contour if Nerdamer not loaded
-                    const implData = this.generateImplicit(expr.expression, xMin, xMax, yMin, yMax);
+                    const implData = this.generateImplicit(normalizedExpr, xMin, xMax, yMin, yMax);
                     if (implData) {
                         trace = {
                             x: implData.x, y: implData.y,
-                            type: 'scatter', mode: 'markers',
+                            type: 'scatter', mode: implData.mode || 'lines',
                             name: expr.expression,
-                            marker: { color: expr.color, size: 1.5 },
+                            line: { color: expr.color, width: 2 },
+                            connectgaps: false,
                             hovertemplate: 'x = %{x:.4f}<br>y = %{y:.4f}<extra>%{fullData.name}</extra>'
                         };
                     }
                     break;
                 }
-                trace = this.solveAndPlot(expr.expression, expr.color, xMin, xMax);
+                trace = this.solveAndPlot(normalizedExpr, expr.color, xMin, xMax);
+                // If Nerdamer failed, fall back to implicit contour (no auto SymPy — implicit is sufficient)
+                if (!trace) {
+                    const implData = this.generateImplicit(normalizedExpr, xMin, xMax, yMin, yMax);
+                    if (implData) {
+                        trace = {
+                            x: implData.x, y: implData.y,
+                            type: 'scatter', mode: implData.mode || 'lines',
+                            name: expr.expression,
+                            line: { color: expr.color, width: 2 },
+                            connectgaps: false,
+                            hovertemplate: 'x = %{x:.4f}<br>y = %{y:.4f}<extra>%{fullData.name}</extra>'
+                        };
+                    }
+                    // Don't auto-fire SymPy — the implicit plot is visually correct.
+                    // SymPy equation solving only triggers via explicit user action (Solve button).
+                }
                 break;
             }
 
@@ -1384,8 +1692,16 @@ class GraphingEngine {
                         connectgaps: false
                     }];
 
-                    // Evaluate the limit using Nerdamer
-                    const limitResult = this.evaluateLimit(limitExpr, limitVar, limitVal);
+                    // Evaluate the limit using Nerdamer (with SymPy fallback)
+                    let limitResult = this.evaluateLimit(limitExpr, limitVar, limitVal);
+                    if (!limitResult && !expr._sympyLimitResolved) {
+                        expr._sympyLimitNeeded = { limitExpr, limitVar, limitVal, xMin, xMax, yMin, yMax };
+                    }
+                    // Use SymPy result if available
+                    if (!limitResult && expr._sympyLimitResult) {
+                        limitResult = expr._sympyLimitResult;
+                        // Keep _sympyLimitResult so it persists across re-plots (pan/zoom)
+                    }
                     if (limitResult && limitResult.numeric != null) {
                         const lx = parseFloat(limitVal);
                         const ly = limitResult.numeric;
@@ -1489,6 +1805,93 @@ class GraphingEngine {
     }
 
     /**
+     * SymPy fallback for equation solving — solves for y and returns plot data.
+     * Returns a Promise that resolves to array of Plotly traces or null.
+     */
+    solveAndPlotSymPy(equation, color, xMin, xMax, numPoints = 400) {
+        const parts = equation.split('=');
+        if (parts.length !== 2) return Promise.resolve(null);
+        const lhs = GraphingEngine._toPython(parts[0].trim());
+        const rhs = GraphingEngine._toPython(parts[1].trim());
+        const step = (xMax - xMin) / numPoints;
+        const code =
+            'from sympy import *\n' +
+            'import json, math\n' +
+            'x, y = symbols("x y")\n' +
+            'try:\n' +
+            '    eq = (' + lhs + ')-(' + rhs + ')\n' +
+            '    sols = solve(eq, y)\n' +
+            '    if not sols:\n' +
+            '        print("NOSOL")\n' +
+            '    else:\n' +
+            '        branches = []\n' +
+            '        for s in sols:\n' +
+            '            xs, ys = [], []\n' +
+            '            for i in range(' + (numPoints + 1) + '):\n' +
+            '                xv = ' + xMin + ' + i*' + step + '\n' +
+            '                try:\n' +
+            '                    yv = complex(s.subs(x, xv))\n' +
+            '                    if abs(yv.imag) < 1e-10 and abs(yv.real) < 1e15:\n' +
+            '                        xs.append(xv); ys.append(yv.real)\n' +
+            '                    else:\n' +
+            '                        xs.append(xv); ys.append(None)\n' +
+            '                except:\n' +
+            '                    xs.append(xv); ys.append(None)\n' +
+            '            branches.append({"expr": str(s), "x": xs, "y": ys})\n' +
+            '        print("EQSOL:" + json.dumps(branches))\n' +
+            'except Exception as e:\n' +
+            '    print("ERROR:" + str(e))';
+        return this._sympyExec(code).then(stdout => {
+            const m = stdout.match(/EQSOL:([\s\S]*)/);
+            if (!m) return null;
+            try {
+                const branches = JSON.parse(m[1].trim());
+                return branches.map((b, i) => ({
+                    x: b.x, y: b.y,
+                    type: 'scatter', mode: 'lines',
+                    name: equation + (branches.length > 1 ? ` (branch ${i + 1})` : ''),
+                    line: { color, width: 2 },
+                    connectgaps: false
+                }));
+            } catch (e) { return null; }
+        });
+    }
+
+    /**
+     * SymPy fallback for symbolic derivative.
+     * Returns a Promise that resolves to { x, y, symbolic } or null.
+     */
+    generateDerivativeSymPy(expression, xMin = -10, xMax = 10, numPoints = 500) {
+        const pyExpr = GraphingEngine._toPython(this.stripCartesianPrefix(this.normalizeExpression(expression)));
+        const code =
+            'from sympy import *\n' +
+            'import json\n' +
+            'x = symbols("x")\n' +
+            'try:\n' +
+            '    expr = ' + pyExpr + '\n' +
+            '    d = diff(expr, x)\n' +
+            '    sym = str(d)\n' +
+            '    xs = [' + xMin + ' + i*' + ((xMax - xMin) / numPoints) + ' for i in range(' + (numPoints + 1) + ')]\n' +
+            '    ys = []\n' +
+            '    for xv in xs:\n' +
+            '        try:\n' +
+            '            yv = float(d.subs(x, xv))\n' +
+            '            ys.append(yv if abs(yv) < 1e15 else None)\n' +
+            '        except: ys.append(None)\n' +
+            '    print("DERIV:" + json.dumps({"symbolic": sym, "x": xs, "y": ys}))\n' +
+            'except Exception as e:\n' +
+            '    print("ERROR:" + str(e))';
+        return this._sympyExec(code).then(stdout => {
+            const m = stdout.match(/DERIV:([\s\S]*)/);
+            if (!m) return null;
+            try {
+                const data = JSON.parse(m[1].trim());
+                return { x: data.x, y: data.y, symbolic: data.symbolic };
+            } catch (e) { return null; }
+        });
+    }
+
+    /**
      * Plot all expressions
      */
     plot(settings = {}) {
@@ -1504,57 +1907,99 @@ class GraphingEngine {
         const traces = [];
 
         for (const expr of this.expressions) {
-            if (expr.visible) {
-                const trace = this.createTrace(expr, { xMin, xMax, yMin, yMax });
+            if (!expr.visible) continue;
 
-                if (trace) {
-                    if (Array.isArray(trace)) {
-                        traces.push(...trace);
-                    } else {
-                        traces.push(trace);
-                    }
+            // Use cached SymPy equation traces if already resolved
+            if (expr._sympyResolved && expr._sympyTraces) {
+                traces.push(...expr._sympyTraces);
+                continue;
+            }
+
+            const trace = this.createTrace(expr, { xMin, xMax, yMin, yMax });
+
+            if (trace) {
+                if (Array.isArray(trace)) {
+                    traces.push(...trace);
+                } else {
+                    traces.push(trace);
                 }
+            }
+
+            // Inject cached SymPy antiderivative if resolved
+            if (expr._sympyAntiResolved && expr._sympyAntiData) {
+                const ad = expr._sympyAntiData;
+                traces.push({
+                    x: ad.x, y: ad.y,
+                    type: 'scatter', mode: 'lines',
+                    name: `F(x) = ∫${expr.expression} dx`,
+                    line: { color: expr.color, width: 2, dash: 'dot' },
+                    connectgaps: false
+                });
             }
         }
 
         const dark = !!(typeof window !== 'undefined' && window.GC_DARK);
-        const layout = {
-            margin: { t: 8, r: 16, b: 32, l: 40 },
-            xaxis: {
-                range: [xMin, xMax],
-                zeroline: true,
-                showgrid: showGrid,
-                gridcolor: dark ? '#374151' : '#e0e0e0',
-                color: dark ? '#e5e7eb' : '#111827'
-            },
-            yaxis: {
-                range: [yMin, yMax],
-                zeroline: true,
-                showgrid: showGrid,
-                gridcolor: dark ? '#374151' : '#e0e0e0',
-                color: dark ? '#e5e7eb' : '#111827',
-                scaleanchor: 'x'
-            },
-            showlegend: showLegend,
-            legend: {
-                x: 1,
-                xanchor: 'right',
-                y: 1,
-                bgcolor: 'rgba(0,0,0,0)',
-                font: { size: 11, color: dark ? '#e5e7eb' : '#111827' }
-            },
-            hovermode: 'closest',
-            plot_bgcolor: dark ? '#0b1220' : '#fafafa',
-            paper_bgcolor: dark ? '#0b0f14' : 'white',
-            font: { color: dark ? '#e5e7eb' : '#111827' }
-        };
+        const is3D = traces.some(t => t.type === 'surface');
+
+        let layout;
+        if (is3D) {
+            layout = {
+                margin: { t: 8, r: 8, b: 8, l: 8 },
+                scene: {
+                    xaxis: { title: 'x', showgrid: showGrid, gridcolor: dark ? '#374151' : '#e0e0e0', color: dark ? '#e5e7eb' : '#111827' },
+                    yaxis: { title: 'y', showgrid: showGrid, gridcolor: dark ? '#374151' : '#e0e0e0', color: dark ? '#e5e7eb' : '#111827' },
+                    zaxis: { title: 'z', showgrid: showGrid, gridcolor: dark ? '#374151' : '#e0e0e0', color: dark ? '#e5e7eb' : '#111827' },
+                    bgcolor: dark ? '#0b1220' : '#fafafa'
+                },
+                showlegend: showLegend,
+                paper_bgcolor: dark ? '#0b0f14' : 'white',
+                font: { color: dark ? '#e5e7eb' : '#111827' }
+            };
+        } else {
+            layout = {
+                margin: { t: 8, r: 16, b: 32, l: 40 },
+                xaxis: {
+                    range: [xMin, xMax],
+                    zeroline: true,
+                    showgrid: showGrid,
+                    gridcolor: dark ? '#374151' : '#e0e0e0',
+                    color: dark ? '#e5e7eb' : '#111827'
+                },
+                yaxis: {
+                    range: [yMin, yMax],
+                    zeroline: true,
+                    showgrid: showGrid,
+                    gridcolor: dark ? '#374151' : '#e0e0e0',
+                    color: dark ? '#e5e7eb' : '#111827',
+                    scaleanchor: 'x'
+                },
+                showlegend: showLegend,
+                legend: {
+                    x: 1,
+                    xanchor: 'right',
+                    y: 1,
+                    bgcolor: 'rgba(0,0,0,0)',
+                    font: { size: 11, color: dark ? '#e5e7eb' : '#111827' }
+                },
+                hovermode: 'closest',
+                plot_bgcolor: dark ? '#0b1220' : '#fafafa',
+                paper_bgcolor: dark ? '#0b0f14' : 'white',
+                font: { color: dark ? '#e5e7eb' : '#111827' }
+            };
+        }
 
         const config = {
             responsive: true,
             displayModeBar: true,
-            modeBarButtonsToRemove: ['lasso2d', 'select2d'],
+            modeBarButtonsToRemove: is3D ? [] : ['lasso2d', 'select2d'],
             displaylogo: false
         };
+
+        // 3D surface needs full Plotly (not plotly-basic). Lazy-load if needed.
+        if (is3D && typeof Plotly.newPlot === 'function' && !Plotly.register) {
+            // plotly-basic doesn't have surface — check if it's available
+            console.warn('3D surface requires full Plotly. Attempting to load...');
+        }
 
         const graphDiv = document.getElementById(this.containerId);
         if (graphDiv && graphDiv.data) {
@@ -1568,6 +2013,140 @@ class GraphingEngine {
             this._animateNext = false;
             this._animateTraces(traces, layout, config);
         }
+
+        // SymPy async fallback for expressions that Nerdamer couldn't handle
+        this._runSympyFallbacks(settings);
+    }
+
+    /**
+     * Run SymPy fallbacks for any expressions flagged with _sympyNeeded.
+     * Each fallback resolves async, then re-triggers a plot to update traces.
+     */
+    _runSympyFallbacks(settings) {
+        const { xMin = -10, xMax = 10, yMin = -10, yMax = 10 } = settings;
+        const promises = [];
+        let count = 0;
+
+        for (const expr of this.expressions) {
+            if (!expr.visible) continue;
+
+            // Equation solving fallback
+            if (expr._sympyNeeded === 'equation' && !expr._sympyInFlight) {
+                delete expr._sympyNeeded;
+                expr._sympyInFlight = true;
+                count++;
+                const eqExpr = expr;
+                promises.push(this.solveAndPlotSymPy(expr.expression, expr.color, xMin, xMax).then(traces => {
+                    eqExpr._sympyInFlight = false;
+                    if (traces && traces.length > 0) {
+                        eqExpr._sympyTraces = traces;
+                        eqExpr._sympyResolved = true;
+                    }
+                }));
+            }
+
+            // Antiderivative fallback
+            if (expr._sympyAntiNeeded && !expr._sympyAntiInFlight) {
+                const { expression, xMin: aMin, xMax: aMax } = expr._sympyAntiNeeded;
+                delete expr._sympyAntiNeeded;
+                expr._sympyAntiInFlight = true;
+                count++;
+                const antiExpr = expr;
+                promises.push(this.generateAntiderivativeSymPy(expression, aMin, aMax).then(data => {
+                    antiExpr._sympyAntiInFlight = false;
+                    if (data) {
+                        antiExpr._sympyAntiData = data;
+                        antiExpr._sympyAntiResolved = true;
+                    }
+                }));
+            }
+
+            // Limit fallback
+            if (expr._sympyLimitNeeded && !expr._sympyLimitInFlight) {
+                const { limitExpr, limitVar, limitVal } = expr._sympyLimitNeeded;
+                delete expr._sympyLimitNeeded;
+                expr._sympyLimitInFlight = true;
+                count++;
+                const limExpr = expr;
+                promises.push(this.evaluateLimitSymPy(limitExpr, limitVar, limitVal).then(result => {
+                    limExpr._sympyLimitInFlight = false;
+                    if (result) {
+                        limExpr._sympyLimitResult = result;
+                        limExpr._sympyLimitResolved = true;
+                    }
+                }));
+            }
+        }
+
+        if (count === 0) return;
+        this._sympyPending += count;
+        this._showSympyIndicator('Solving...');
+
+        Promise.all(promises).then(() => {
+            this._sympyPending -= count;
+            if (this._sympyPending <= 0) {
+                this._sympyPending = 0;
+                this._hideSympyIndicator();
+            }
+            // Re-plot with SymPy results
+            const hasResults = this.expressions.some(e => e._sympyResolved || e._sympyAntiResolved || e._sympyLimitResolved);
+            if (hasResults) {
+                this._replotWithSymPy(settings);
+            }
+        });
+    }
+
+    /**
+     * Re-plot incorporating SymPy-resolved traces.
+     * For equation types, replaces the whole trace set.
+     * For antiderivative/limit, adds to the existing createTrace output.
+     */
+    _replotWithSymPy(settings) {
+        const { xMin = -10, xMax = 10, yMin = -10, yMax = 10, showGrid = true, showLegend = true } = settings;
+        const traces = [];
+
+        for (const expr of this.expressions) {
+            if (!expr.visible) continue;
+
+            // Use SymPy-resolved equation traces (keep data for future re-plots)
+            if (expr._sympyResolved && expr._sympyTraces) {
+                traces.push(...expr._sympyTraces);
+                continue;
+            }
+
+            const trace = this.createTrace(expr, { xMin, xMax, yMin, yMax });
+            if (trace) {
+                if (Array.isArray(trace)) traces.push(...trace);
+                else traces.push(trace);
+            }
+
+            // Inject SymPy antiderivative data as additional trace (keep data for future re-plots)
+            if (expr._sympyAntiResolved && expr._sympyAntiData) {
+                const ad = expr._sympyAntiData;
+                traces.push({
+                    x: ad.x, y: ad.y,
+                    type: 'scatter', mode: 'lines',
+                    name: `F(x) = ∫${expr.expression} dx`,
+                    line: { color: expr.color, width: 2, dash: 'dot' },
+                    connectgaps: false
+                });
+            }
+        }
+
+        const dark = !!(typeof window !== 'undefined' && window.GC_DARK);
+        const layout = {
+            margin: { t: 8, r: 16, b: 32, l: 40 },
+            xaxis: { range: [xMin, xMax], zeroline: true, showgrid: showGrid, gridcolor: dark ? '#374151' : '#e0e0e0', color: dark ? '#e5e7eb' : '#111827' },
+            yaxis: { range: [yMin, yMax], zeroline: true, showgrid: showGrid, gridcolor: dark ? '#374151' : '#e0e0e0', color: dark ? '#e5e7eb' : '#111827', scaleanchor: 'x' },
+            showlegend: showLegend,
+            legend: { x: 1, xanchor: 'right', y: 1, bgcolor: 'rgba(0,0,0,0)', font: { size: 11, color: dark ? '#e5e7eb' : '#111827' } },
+            hovermode: 'closest',
+            plot_bgcolor: dark ? '#0b1220' : '#fafafa',
+            paper_bgcolor: dark ? '#0b0f14' : 'white',
+            font: { color: dark ? '#e5e7eb' : '#111827' }
+        };
+        const config = { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'], displaylogo: false };
+        Plotly.react(this.containerId, traces, layout, config);
     }
 
     /**
@@ -1723,6 +2302,7 @@ function createExpressionElement(expr) {
                 <option value="limit">Limit</option>
                 <option value="piecewise">Piecewise</option>
                 <option value="implicit">Implicit</option>
+                <option value="surface">3D Surface</option>
                 <option value="table">Table</option>
                 <option value="statistics">Regression</option>
                 <option value="distribution">Distribution</option>
@@ -1840,9 +2420,18 @@ function createInputForType(id, type) {
                        oninput="updateExpressionValue(${id})"
                        onchange="updateExpressionValue(${id})">
                 <small class="text-muted">Format: x(t), y(t)</small>
+                <div class="d-flex align-items-center gap-2 mt-2">
+                    <small class="text-muted">t:</small>
+                    <input type="number" class="form-control form-control-sm" id="tmin-${id}" value="0" step="0.1"
+                           style="width:70px" onchange="updateParamRange(${id})">
+                    <small class="text-muted">to</small>
+                    <input type="number" class="form-control form-control-sm" id="tmax-${id}" value="${(2*Math.PI).toFixed(4)}" step="0.1"
+                           style="width:70px" onchange="updateParamRange(${id})">
+                </div>
                 <div class="mt-2">
                     <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'cos(t), sin(t)')">Circle</button>
                     <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 't*cos(t), t*sin(t)')">Spiral</button>
+                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadParamSample(${id}, 't, t^2', -5, 5)">Parabola</button>
                 </div>
             `;
             break;
@@ -1854,10 +2443,18 @@ function createInputForType(id, type) {
                        oninput="updateExpressionValue(${id})"
                        onchange="updateExpressionValue(${id})">
                 <small class="text-muted">Use theta or θ</small>
+                <div class="d-flex align-items-center gap-2 mt-2">
+                    <small class="text-muted">θ:</small>
+                    <input type="number" class="form-control form-control-sm" id="thetamin-${id}" value="0" step="0.1"
+                           style="width:70px" onchange="updatePolarRange(${id})">
+                    <small class="text-muted">to</small>
+                    <input type="number" class="form-control form-control-sm" id="thetamax-${id}" value="${(2*Math.PI).toFixed(4)}" step="0.1"
+                           style="width:70px" onchange="updatePolarRange(${id})">
+                </div>
                 <div class="mt-2">
                     <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '2 + 2*cos(theta)')">Heart</button>
                     <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, '1 + cos(theta)')">Cardioid</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'theta')">Spiral</button>
+                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadPolarSample(${id}, 'theta', 0, 25.13)">Spiral 4π</button>
                 </div>
             `;
             break;
@@ -1874,6 +2471,22 @@ function createInputForType(id, type) {
                     <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'x^2/16 + y^2/9 = 1')">Ellipse</button>
                     <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, '(x^2 + y^2 - 1)^3 = x^2*y^3')">Heart</button>
                     <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'x^2 - y^2 = 1')">Hyperbola</button>
+                </div>
+            `;
+            break;
+
+        case 'surface':
+            container.innerHTML = `
+                <input type="text" class="expression-input" id="expr-${id}"
+                       placeholder="e.g., sin(sqrt(x^2 + y^2))" value="${currentValue}"
+                       oninput="updateExpressionValue(${id})"
+                       onchange="updateExpressionValue(${id})">
+                <small class="text-muted">z = f(x, y) — 3D surface plot</small>
+                <div class="mt-2">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sin(sqrt(x^2 + y^2))')">Ripple</button>
+                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'x^2 - y^2')">Saddle</button>
+                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'cos(x) * sin(y)')">Waves</button>
+                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'exp(-(x^2 + y^2))')">Gaussian</button>
                 </div>
             `;
             break;
@@ -2153,6 +2766,54 @@ function loadSample(id, value) {
     }
 }
 
+/** Update parametric t range from UI inputs */
+function updateParamRange(id) {
+    const expr = engine.expressions.find(e => e.id === id);
+    if (!expr) return;
+    const tMinEl = document.getElementById(`tmin-${id}`);
+    const tMaxEl = document.getElementById(`tmax-${id}`);
+    if (tMinEl) expr.tMin = parseFloat(tMinEl.value);
+    if (tMaxEl) expr.tMax = parseFloat(tMaxEl.value);
+    updateGraph();
+}
+
+/** Update polar θ range from UI inputs */
+function updatePolarRange(id) {
+    const expr = engine.expressions.find(e => e.id === id);
+    if (!expr) return;
+    const tMinEl = document.getElementById(`thetamin-${id}`);
+    const tMaxEl = document.getElementById(`thetamax-${id}`);
+    if (tMinEl) expr.thetaMin = parseFloat(tMinEl.value);
+    if (tMaxEl) expr.thetaMax = parseFloat(tMaxEl.value);
+    updateGraph();
+}
+
+/** Load parametric sample with custom t range */
+function loadParamSample(id, value, tMin, tMax) {
+    const element = document.getElementById(`expr-${id}`);
+    if (element) element.value = value;
+    const tMinEl = document.getElementById(`tmin-${id}`);
+    const tMaxEl = document.getElementById(`tmax-${id}`);
+    if (tMinEl) tMinEl.value = tMin;
+    if (tMaxEl) tMaxEl.value = tMax;
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) { expr.tMin = tMin; expr.tMax = tMax; }
+    updateExpressionValue(id);
+}
+
+/** Load polar sample with custom θ range */
+function loadPolarSample(id, value, thetaMin, thetaMax) {
+    const element = document.getElementById(`expr-${id}`);
+    if (element) element.value = value;
+    const tMinEl = document.getElementById(`thetamin-${id}`);
+    const tMaxEl = document.getElementById(`thetamax-${id}`);
+    if (tMinEl) tMinEl.value = thetaMin;
+    if (tMaxEl) tMaxEl.value = thetaMax;
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) { expr.thetaMin = thetaMin; expr.thetaMax = thetaMax; }
+    updateExpressionValue(id);
+}
+
 /**
  * Load sample table data
  */
@@ -2220,7 +2881,33 @@ function updateExpressionType(id) {
     // Show/hide integration controls
     const intControls = document.getElementById(`integration-controls-${id}`);
     if (intControls && type !== 'cartesian') intControls.style.display = 'none';
-    updateGraph();
+    // Lazy-load full Plotly for 3D surface
+    if (type === 'surface') _ensureFullPlotly(updateGraph);
+    else updateGraph();
+}
+
+/** Lazy-load full Plotly.js (with gl3d) when 3D surface is needed */
+var _fullPlotlyLoaded = false;
+function _ensureFullPlotly(cb) {
+    if (_fullPlotlyLoaded) { if (cb) cb(); return; }
+    // Check if current Plotly already supports surface (full bundle)
+    if (typeof Plotly !== 'undefined' && Plotly.PlotSchema && Plotly.PlotSchema.get) {
+        try {
+            const schema = Plotly.PlotSchema.get();
+            if (schema.traces && schema.traces.surface) {
+                _fullPlotlyLoaded = true; if (cb) cb(); return;
+            }
+        } catch(_) {}
+    }
+    // Load full Plotly
+    const script = document.createElement('script');
+    script.src = 'https://cdn.plot.ly/plotly-2.27.0.min.js';
+    script.onload = function() { _fullPlotlyLoaded = true; if (cb) cb(); };
+    script.onerror = function() {
+        console.error('Failed to load full Plotly for 3D');
+        if (cb) cb();
+    };
+    document.head.appendChild(script);
 }
 
 /**
@@ -2324,7 +3011,23 @@ function autoDetectType(value, currentType) {
     // e.g. "2x + 3y = 8", "x^2 + y^2 = 25"
     if (s.includes('=') && /(?<![a-zA-Z])y(?![a-zA-Z])/.test(s)) return 'equation';
 
-    // Contains y but no "=" → could be mid-typing, stay cartesian
+    // Polar: contains "theta" or "θ" (and no comma — not parametric)
+    // e.g. "2*cos(theta)", "1 + sin(θ)", "r = 2cos(theta)"
+    if (!s.includes(',') && (/(?<![a-zA-Z])theta(?![a-zA-Z])/.test(s) || s.includes('θ'))) {
+        return 'polar';
+    }
+
+    // Parametric: comma-separated with "t" variable
+    // e.g. "cos(t), sin(t)", "t^2, t^3"
+    if (s.includes(',') && /(?<![a-zA-Z])t(?![a-zA-Z])/.test(s)) {
+        return 'parametric';
+    }
+
+    // Contains both x and y but no "=" → surface z = f(x, y)
+    // e.g. "sin(x)*cos(y)", "x^2 + y^2", "exp(-(x^2+y^2)/2)"
+    if (/(?<![a-zA-Z])x(?![a-zA-Z])/.test(s) && /(?<![a-zA-Z])y(?![a-zA-Z])/.test(s)) {
+        return 'surface';
+    }
 
     return null;
 }
@@ -2359,6 +3062,11 @@ function updateExpressionValue(id) {
             // Restore the expression value in the new input
             const newInput = document.getElementById(`expr-${id}`);
             if (newInput && newInput.value !== value) newInput.value = value;
+            // Lazy-load full Plotly for 3D surface
+            if (detected === 'surface') {
+                _ensureFullPlotly(updateGraph);
+                return; // updateGraph will be called by _ensureFullPlotly callback
+            }
         }
     }
 
@@ -2640,13 +3348,27 @@ function updateLimitExpression(id) {
     expr.limitVar = 'x';
     expr.limitVal = limitVal;
 
-    // Evaluate limit and show result
-    if (limitExpr && typeof nerdamer !== 'undefined') {
-        const result = engine.evaluateLimit(limitExpr, 'x', limitVal);
+    // Evaluate limit and show result (Nerdamer first, then SymPy fallback)
+    if (limitExpr) {
+        let result = null;
+        if (typeof nerdamer !== 'undefined') {
+            result = engine.evaluateLimit(limitExpr, 'x', limitVal);
+        }
         if (result && resultSpan) {
             resultSpan.textContent = result.symbolic + (result.numeric != null ? ' ≈ ' + result.numeric.toFixed(6) : '');
         } else if (resultSpan) {
-            resultSpan.textContent = '?';
+            resultSpan.textContent = 'evaluating...';
+            engine.evaluateLimitSymPy(limitExpr, 'x', limitVal).then(sympyResult => {
+                if (sympyResult && resultSpan) {
+                    resultSpan.textContent = sympyResult.symbolic + (sympyResult.numeric != null ? ' ≈ ' + sympyResult.numeric.toFixed(6) : '');
+                    // Store for the plot
+                    expr._sympyLimitResult = sympyResult;
+                    expr._sympyLimitResolved = true;
+                    updateGraph();
+                } else if (resultSpan) {
+                    resultSpan.textContent = '?';
+                }
+            });
         }
     }
 
