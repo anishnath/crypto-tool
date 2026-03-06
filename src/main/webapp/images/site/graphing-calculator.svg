@@ -1,0 +1,263 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f0a1a"/>
+      <stop offset="100%" stop-color="#1a1028"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="rose" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fda4af"/>
+      <stop offset="100%" stop-color="#f43f5e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.04" stroke="#a78bfa" stroke-width="0.5">
+    <line x1="100" y1="0" x2="100" y2="570"/><line x1="200" y1="0" x2="200" y2="570"/>
+    <line x1="300" y1="0" x2="300" y2="570"/><line x1="400" y1="0" x2="400" y2="570"/>
+    <line x1="500" y1="0" x2="500" y2="570"/><line x1="600" y1="0" x2="600" y2="570"/>
+    <line x1="700" y1="0" x2="700" y2="570"/><line x1="800" y1="0" x2="800" y2="570"/>
+    <line x1="900" y1="0" x2="900" y2="570"/><line x1="1000" y1="0" x2="1000" y2="570"/>
+    <line x1="1100" y1="0" x2="1100" y2="570"/>
+    <line x1="0" y1="57" x2="1200" y2="57"/><line x1="0" y1="114" x2="1200" y2="114"/>
+    <line x1="0" y1="171" x2="1200" y2="171"/><line x1="0" y1="228" x2="1200" y2="228"/>
+    <line x1="0" y1="285" x2="1200" y2="285"/><line x1="0" y1="342" x2="1200" y2="342"/>
+    <line x1="0" y1="399" x2="1200" y2="399"/><line x1="0" y1="456" x2="1200" y2="456"/>
+    <line x1="0" y1="513" x2="1200" y2="513"/>
+  </g>
+
+  <!-- ========== Graph area (right side) ========== -->
+  <g transform="translate(420, 40)">
+    <!-- Graph frame -->
+    <rect width="740" height="490" rx="12" fill="#111827" stroke="#1f2937" stroke-width="1.5"/>
+
+    <!-- Graph axes -->
+    <line x1="60" y1="245" x2="700" y2="245" stroke="#374151" stroke-width="1.2"/>
+    <line x1="380" y1="30" x2="380" y2="460" stroke="#374151" stroke-width="1.2"/>
+
+    <!-- Axis ticks and labels -->
+    <g fill="#6b7280" font-family="'Inter', sans-serif" font-size="10">
+      <text x="60" y="260" text-anchor="middle">-10</text>
+      <text x="140" y="260" text-anchor="middle">-7.5</text>
+      <text x="220" y="260" text-anchor="middle">-5</text>
+      <text x="300" y="260" text-anchor="middle">-2.5</text>
+      <text x="380" y="260" text-anchor="middle">0</text>
+      <text x="460" y="260" text-anchor="middle">2.5</text>
+      <text x="540" y="260" text-anchor="middle">5</text>
+      <text x="620" y="260" text-anchor="middle">7.5</text>
+      <text x="700" y="260" text-anchor="middle">10</text>
+
+      <text x="52" y="245" text-anchor="end">0</text>
+      <text x="52" y="137" text-anchor="end">5</text>
+      <text x="52" y="30" text-anchor="end">10</text>
+      <text x="52" y="353" text-anchor="end">-5</text>
+      <text x="52" y="460" text-anchor="end">-10</text>
+    </g>
+
+    <!-- Minor grid -->
+    <g stroke="#1f2937" stroke-width="0.5" opacity="0.5">
+      <line x1="60" y1="137" x2="700" y2="137"/>
+      <line x1="60" y1="353" x2="700" y2="353"/>
+      <line x1="60" y1="30" x2="700" y2="30"/>
+      <line x1="60" y1="460" x2="700" y2="460"/>
+      <line x1="220" y1="30" x2="220" y2="460"/>
+      <line x1="540" y1="30" x2="540" y2="460"/>
+    </g>
+
+    <!-- ===== Curve 1: sin(x) — blue ===== -->
+    <!-- y = sin(x), x from -10 to 10, mapped to graph coords -->
+    <!-- x: 60..700 maps to -10..10, y: 30..460 maps to 10..-10 -->
+    <!-- sin wave: amplitude ~21.5px per unit, period ~40.2px -->
+    <path d="M 60,256.7 C 72,264 84,268 96,266 C 108,262 120,252 132,241
+             C 144,230 156,224 168,224 C 180,226 192,236 204,247
+             C 216,258 228,266 240,268 C 252,264 264,254 276,242
+             C 288,230 300,222 312,222 C 324,226 336,236 348,248
+             C 360,260 368,266 380,267 C 392,264 404,254 416,242
+             C 428,230 440,222 452,222 C 464,226 476,236 488,248
+             C 500,258 512,266 524,268 C 536,264 548,254 560,242
+             C 572,230 584,222 596,222 C 608,226 620,236 632,248
+             C 644,258 656,266 668,268 C 680,264 692,256 700,250"
+          stroke="#3b82f6" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+    <!-- ===== Curve 2: x^2/10 parabola — green ===== -->
+    <path d="M 60,30 C 100,120 140,178 180,210
+             C 220,233 260,243 300,245
+             C 340,245 360,245 380,245
+             C 400,245 440,245 460,243
+             C 500,233 540,210 580,178
+             C 620,120 660,60 700,30"
+          stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+    <!-- ===== Curve 3: derivative 2x/10 — green dashed ===== -->
+    <path d="M 60,288 L 380,245 L 700,202"
+          stroke="#10b981" stroke-width="1.5" fill="none" stroke-dasharray="6,4" opacity="0.7"/>
+
+    <!-- ===== Curve 4: cos(x) — rose ===== -->
+    <path d="M 60,250 C 72,258 84,264 96,264 C 108,260 120,250 132,240
+             C 144,228 156,222 168,222 C 180,228 192,238 204,250
+             C 216,260 228,266 240,266 C 252,260 264,250 276,238
+             C 288,226 300,222 312,224 C 324,230 336,242 348,254
+             C 360,264 368,266 380,264 C 392,258 404,246 416,234
+             C 428,224 440,222 452,224 C 464,232 476,244 488,256
+             C 500,264 512,266 524,264 C 536,256 548,244 560,232
+             C 572,224 584,222 596,226 C 608,234 620,246 632,258
+             C 644,264 656,266 668,262 C 680,254 692,244 700,237"
+          stroke="#f43f5e" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.85"/>
+
+    <!-- ===== Integration shading (under sin curve from 0 to pi) ===== -->
+    <path d="M 380,245 C 392,242 404,234 416,226 C 428,220 440,222 452,230
+             C 464,240 476,248 480,245 L 480,245 L 380,245 Z"
+          fill="#3b82f6" opacity="0.12"/>
+
+    <!-- Trace point indicator -->
+    <circle cx="452" cy="222" r="6" fill="#3b82f6" opacity="0.3"/>
+    <circle cx="452" cy="222" r="3" fill="#3b82f6"/>
+
+    <!-- Trace tooltip -->
+    <rect x="460" y="200" width="120" height="32" rx="6" fill="#1f2937" stroke="#374151"/>
+    <text x="470" y="213" fill="#9ca3af" font-family="'JetBrains Mono', monospace" font-size="9">x = 2.24</text>
+    <text x="470" y="226" fill="#60a5fa" font-family="'JetBrains Mono', monospace" font-size="9">y = 0.803</text>
+
+    <!-- Legend -->
+    <g transform="translate(580, 42)">
+      <rect width="110" height="76" rx="6" fill="#111827" stroke="#1f2937" opacity="0.95"/>
+      <line x1="10" y1="18" x2="30" y2="18" stroke="#3b82f6" stroke-width="2"/>
+      <text x="36" y="22" fill="#d1d5db" font-family="'Inter', sans-serif" font-size="10">sin(x)</text>
+      <line x1="10" y1="36" x2="30" y2="36" stroke="#f43f5e" stroke-width="2"/>
+      <text x="36" y="40" fill="#d1d5db" font-family="'Inter', sans-serif" font-size="10">cos(x)</text>
+      <line x1="10" y1="54" x2="30" y2="54" stroke="#10b981" stroke-width="2"/>
+      <text x="36" y="58" fill="#d1d5db" font-family="'Inter', sans-serif" font-size="10">x²/10</text>
+      <line x1="10" y1="68" x2="30" y2="68" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="36" y="72" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="9">f'(x)</text>
+    </g>
+  </g>
+
+  <!-- ========== Sidebar mockup (left side) ========== -->
+  <g transform="translate(40, 40)">
+    <!-- Sidebar frame -->
+    <rect width="350" height="490" rx="12" fill="#14151f" stroke="#1f2937" stroke-width="1.5"/>
+
+    <!-- Header bar -->
+    <rect width="350" height="38" rx="12" fill="url(#accent)"/>
+    <rect y="26" width="350" height="12" fill="#8b5cf6"/>
+    <text x="20" y="24" fill="white" font-family="'Inter', sans-serif" font-size="13" font-weight="600">Expressions</text>
+
+    <!-- Expression 1 -->
+    <g transform="translate(12, 50)">
+      <rect width="326" height="50" rx="8" fill="#1a1c2a" stroke="#2d3148" stroke-width="1"/>
+      <circle cx="18" cy="25" r="8" fill="#3b82f6"/>
+      <text x="18" y="29" text-anchor="middle" fill="white" font-family="monospace" font-size="9" font-weight="bold">1</text>
+      <text x="36" y="22" fill="#d1d5db" font-family="'JetBrains Mono', monospace" font-size="12">sin(x)</text>
+      <text x="36" y="38" fill="#6b7280" font-family="'Inter', sans-serif" font-size="9">Cartesian</text>
+      <!-- Calculus toggles -->
+      <rect x="210" y="8" width="36" height="16" rx="4" fill="#1e293b" stroke="#374151"/>
+      <text x="228" y="19" text-anchor="middle" fill="#60a5fa" font-family="'Inter', sans-serif" font-size="8" font-weight="600">f'(x)</text>
+      <rect x="250" y="8" width="26" height="16" rx="4" fill="#1e293b" stroke="#374151"/>
+      <text x="263" y="20" text-anchor="middle" fill="#6b7280" font-family="'Inter', sans-serif" font-size="10">&#8747;</text>
+      <rect x="280" y="8" width="36" height="16" rx="4" fill="#1e293b" stroke="#374151"/>
+      <text x="298" y="19" text-anchor="middle" fill="#6b7280" font-family="'Inter', sans-serif" font-size="8">F(x)</text>
+    </g>
+
+    <!-- Expression 2 -->
+    <g transform="translate(12, 108)">
+      <rect width="326" height="50" rx="8" fill="#1a1c2a" stroke="#2d3148" stroke-width="1"/>
+      <circle cx="18" cy="25" r="8" fill="#f43f5e"/>
+      <text x="18" y="29" text-anchor="middle" fill="white" font-family="monospace" font-size="9" font-weight="bold">2</text>
+      <text x="36" y="22" fill="#d1d5db" font-family="'JetBrains Mono', monospace" font-size="12">cos(x)</text>
+      <text x="36" y="38" fill="#6b7280" font-family="'Inter', sans-serif" font-size="9">Cartesian</text>
+    </g>
+
+    <!-- Expression 3 -->
+    <g transform="translate(12, 166)">
+      <rect width="326" height="50" rx="8" fill="#1a1c2a" stroke="#2d3148" stroke-width="1"/>
+      <circle cx="18" cy="25" r="8" fill="#10b981"/>
+      <text x="18" y="29" text-anchor="middle" fill="white" font-family="monospace" font-size="9" font-weight="bold">3</text>
+      <text x="36" y="22" fill="#d1d5db" font-family="'JetBrains Mono', monospace" font-size="12">x^2 / 10</text>
+      <text x="36" y="38" fill="#6b7280" font-family="'Inter', sans-serif" font-size="9">Cartesian</text>
+    </g>
+
+    <!-- Add Expression button -->
+    <g transform="translate(12, 228)">
+      <rect width="326" height="30" rx="6" fill="none" stroke="#374151" stroke-dasharray="4,3"/>
+      <text x="163" y="20" text-anchor="middle" fill="#6b7280" font-family="'Inter', sans-serif" font-size="11">+ Add Expression</text>
+    </g>
+
+    <!-- Presets section -->
+    <g transform="translate(12, 274)">
+      <text x="6" y="14" fill="#a78bfa" font-family="'Inter', sans-serif" font-size="11" font-weight="600">Presets</text>
+      <g transform="translate(0, 24)">
+        <rect width="64" height="24" rx="12" fill="#1e1b34" stroke="#4c1d95"/>
+        <text x="32" y="16" text-anchor="middle" fill="#c4b5fd" font-family="'Inter', sans-serif" font-size="9">sin(x)</text>
+
+        <rect x="70" width="80" height="24" rx="12" fill="#1e1b34" stroke="#4c1d95"/>
+        <text x="110" y="16" text-anchor="middle" fill="#c4b5fd" font-family="'Inter', sans-serif" font-size="9">Parametric</text>
+
+        <rect x="156" width="54" height="24" rx="12" fill="#1e1b34" stroke="#4c1d95"/>
+        <text x="183" y="16" text-anchor="middle" fill="#c4b5fd" font-family="'Inter', sans-serif" font-size="9">Polar</text>
+
+        <rect x="216" width="54" height="24" rx="12" fill="#1e1b34" stroke="#4c1d95"/>
+        <text x="243" y="16" text-anchor="middle" fill="#c4b5fd" font-family="'Inter', sans-serif" font-size="9">Heart</text>
+      </g>
+      <g transform="translate(0, 56)">
+        <rect width="72" height="24" rx="12" fill="#1e1b34" stroke="#4c1d95"/>
+        <text x="36" y="16" text-anchor="middle" fill="#c4b5fd" font-family="'Inter', sans-serif" font-size="9">&#8747; x&#178; dx</text>
+
+        <rect x="78" width="74" height="24" rx="12" fill="#1e1b34" stroke="#4c1d95"/>
+        <text x="115" y="16" text-anchor="middle" fill="#c4b5fd" font-family="'Inter', sans-serif" font-size="9">FTC Demo</text>
+
+        <rect x="158" width="100" height="24" rx="12" fill="#1e1b34" stroke="#4c1d95"/>
+        <text x="208" y="16" text-anchor="middle" fill="#c4b5fd" font-family="'Inter', sans-serif" font-size="9">lim sin(x)/x</text>
+      </g>
+    </g>
+
+    <!-- KaTeX preview -->
+    <g transform="translate(12, 400)">
+      <rect width="326" height="36" rx="6" fill="#0f172a" stroke="#1e293b"/>
+      <text x="10" y="14" fill="#6b7280" font-family="'Inter', sans-serif" font-size="8">Preview</text>
+      <text x="10" y="30" fill="#e2e8f0" font-family="'Times New Roman', serif" font-size="14" font-style="italic">y = sin(x)</text>
+    </g>
+
+    <!-- Share bar at bottom -->
+    <g transform="translate(12, 448)">
+      <rect width="104" height="28" rx="6" fill="#8b5cf6"/>
+      <text x="52" y="19" text-anchor="middle" fill="white" font-family="'Inter', sans-serif" font-size="10" font-weight="600">Share Link</text>
+
+      <rect x="110" width="64" height="28" rx="6" fill="#1e293b" stroke="#374151"/>
+      <text x="142" y="19" text-anchor="middle" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="10">PNG</text>
+
+      <rect x="180" width="72" height="28" rx="6" fill="#1e293b" stroke="#374151"/>
+      <text x="216" y="19" text-anchor="middle" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="10">Embed</text>
+
+      <rect x="258" width="68" height="28" rx="6" fill="#1e293b" stroke="#374151"/>
+      <text x="292" y="19" text-anchor="middle" fill="#9ca3af" font-family="'Inter', sans-serif" font-size="10">SVG</text>
+    </g>
+  </g>
+
+  <!-- ========== Bottom branding bar ========== -->
+  <rect y="570" width="1200" height="60" fill="#0a0812"/>
+
+  <!-- Tool name -->
+  <text x="80" y="605" fill="#a78bfa" font-family="'Inter', sans-serif" font-size="20" font-weight="800">Graphing Calculator</text>
+  <text x="312" y="605" fill="#4a3870" font-family="sans-serif" font-size="14">|</text>
+  <text x="330" y="605" fill="#8b8fa8" font-family="'Inter', sans-serif" font-size="14">Derivatives, Integrals, Limits, Systems of Equations</text>
+
+  <!-- 8gwifi.org logo -->
+  <text x="1120" y="605" text-anchor="end" fill="#4a3870" font-family="'Inter', sans-serif" font-size="16" font-weight="700">8gwifi.org</text>
+
+  <!-- Top accent line -->
+  <rect y="0" width="1200" height="3" fill="url(#accent)"/>
+</svg>
