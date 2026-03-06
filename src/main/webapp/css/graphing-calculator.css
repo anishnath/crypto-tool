@@ -18,6 +18,16 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: 1rem;
+    align-items: start;
+}
+/* Remove any inherited padding/gap on the output column; make it the sticky element */
+.gc-page-container .tool-output-column {
+    gap: 0;
+    padding: 0;
+    margin: 0;
+    position: sticky;
+    top: 90px;
+    height: fit-content;
 }
 @media (max-width: 900px) {
     .gc-page-container.tool-page-container {
@@ -25,7 +35,11 @@
         display: flex;
         flex-direction: column;
     }
-    .gc-page-container .tool-output-column { order: 1; }
+    .gc-page-container .tool-output-column {
+        order: 1;
+        position: relative;
+        top: auto;
+    }
     .gc-page-container .tool-input-column { order: 2; }
 }
 
@@ -43,8 +57,6 @@
     flex-direction: column;
     height: calc(100vh - 200px);
     min-height: 480px;
-    position: sticky;
-    top: 90px;
 }
 .gc-graph-card #graph {
     flex: 1;
