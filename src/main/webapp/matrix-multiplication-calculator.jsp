@@ -65,8 +65,6 @@
     .matrix-dim-row{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
     .matrix-dim-row input{flex:1;min-width:60px}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
-    .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
-    .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
     .tool-checkbox-wrap{display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.875rem;color:var(--text-secondary)}
     .tool-checkbox-wrap input{width:1.125rem;height:1.125rem;accent-color:var(--tool-primary)}
   </style>
@@ -437,25 +435,13 @@
   function generateRandomA() {
     const m = parseInt(rowsA.value);
     const n = parseInt(colsA.value);
-    const rows = [];
-    for(let i = 0; i < m; i++) {
-      const row = [];
-      for(let j = 0; j < n; j++) row.push(Math.floor(Math.random() * 21 - 10));
-      rows.push(row.join(' '));
-    }
-    matrixA.value = rows.join('\n');
+    matrixA.value = MatrixUtils.generateRandomMatrixText(m, n, { minVal: -10, maxVal: 10, fractionProbability: 0.4 });
   }
 
   function generateRandomB() {
     const p = parseInt(rowsB.value);
     const q = parseInt(colsB.value);
-    const rows = [];
-    for(let i = 0; i < p; i++) {
-      const row = [];
-      for(let j = 0; j < q; j++) row.push(Math.floor(Math.random() * 21 - 10));
-      rows.push(row.join(' '));
-    }
-    matrixB.value = rows.join('\n');
+    matrixB.value = MatrixUtils.generateRandomMatrixText(p, q, { minVal: -10, maxVal: 10, fractionProbability: 0.4 });
   }
 
   function loadExample(type) {

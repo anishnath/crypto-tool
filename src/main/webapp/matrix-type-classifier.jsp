@@ -573,6 +573,34 @@
 
   const EPS = 1e-9;
 
+  function parseRealNumberToken(token){
+    const value = String(token || '').trim();
+    const numberPattern = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i;
+
+    if(value.includes('/')){
+      const parts = value.split('/');
+      if(parts.length !== 2 || !numberPattern.test(parts[0]) || !numberPattern.test(parts[1])){
+        throw new Error('Invalid fraction: ' + token);
+      }
+      const numerator = Number(parts[0]);
+      const denominator = Number(parts[1]);
+      if(!Number.isFinite(numerator) || !Number.isFinite(denominator) || Math.abs(denominator) < EPS){
+        throw new Error('Invalid fraction: ' + token);
+      }
+      return numerator / denominator;
+    }
+
+    if(!numberPattern.test(value)){
+      throw new Error('Invalid number: ' + token);
+    }
+
+    const parsed = Number(value);
+    if(!Number.isFinite(parsed)){
+      throw new Error('Invalid number: ' + token);
+    }
+    return parsed;
+  }
+
   function parseMatrix(text, rows, cols, allowComplexNumbers){
     const cleaned = text.trim();
     if(!cleaned){
@@ -595,11 +623,11 @@
         if(allowComplexNumbers){
           row.push(parseComplex(value));
         } else {
-          const num = parseFloat(value);
-          if(!isFinite(num)){
+          try {
+            row.push(parseRealNumberToken(value));
+          } catch (err) {
             throw new Error('Entry ('+(r+1)+','+(c+1)+') is not a valid number: '+value);
           }
-          row.push(num);
         }
       }
       matrix.push(row);
@@ -1587,8 +1615,11 @@
 
   function parseFloatSafe(str){
     if(!str) return 0;
-    const num = parseFloat(str.replace(/,/g,''));
-    return isFinite(num) ? num : 0;
+    try {
+      return parseRealNumberToken(str.replace(/,/g,''));
+    } catch(err) {
+      return 0;
+    }
   }
 
   function parseComplexSafe(str){
@@ -1645,7 +1676,8 @@
   function handleRandom(){
     const rows = Math.floor(Math.random()*5) + 2; // 2 - 6
     const cols = Math.floor(Math.random()*5) + 2; // 2 - 6
-    const matrix = randomMatrix(rows, cols);
+    const text = MatrixUtils.generateRandomMatrixText(rows, cols, { minVal: -5, maxVal: 5, fractionProbability: 0.35 });
+    const matrix = parseMatrix(text, rows, cols, false);
     setMatrixInputs(matrix);
     handleAnalyse();
   }

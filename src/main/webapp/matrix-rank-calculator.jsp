@@ -58,8 +58,6 @@
     .rank-calc .info-badge{display:inline-block;background:#e0e7ff;color:#4338ca;padding:0.4rem 0.8rem;border-radius:8px;font-weight:600;margin:0.25rem;font-size:0.9rem}
     .rank-calc .pivot-indicator{color:#7c3aed;font-weight:700}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
-    .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
-    .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
     @media (max-width: 767px) { .rank-calc .rank-value{font-size:2rem} }
   </style>
 </head>
@@ -426,15 +424,7 @@
       return;
     }
 
-    const rowsArray = [];
-    for(let i = 0; i < rows; i++) {
-      const row = [];
-      for(let j = 0; j < cols; j++) {
-        row.push(Math.floor(Math.random() * 21 - 10));
-      }
-      rowsArray.push(row.join(' '));
-    }
-    matrixInput.value = rowsArray.join('\n');
+    matrixInput.value = MatrixUtils.generateRandomMatrixText(rows, cols, { minVal: -10, maxVal: 10, fractionProbability: 0.4 });
     setTimeout(() => calculate(), 100);
   }
 

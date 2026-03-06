@@ -23,8 +23,16 @@
     }
 
     function smartFmt(n) {
+        if (typeof n === 'string') return n;
         if (Number.isInteger(n)) return String(n);
         return parseFloat(n.toFixed(2)).toString();
+    }
+
+    function exactFmt(n) {
+        if (window.MatrixUtils && typeof window.MatrixUtils.formatExactNumber === 'function') {
+            return window.MatrixUtils.formatExactNumber(n);
+        }
+        return smartFmt(n);
     }
 
     function matToStr(m) {
@@ -42,6 +50,36 @@
         }
         h += '</table>';
         return h;
+    }
+
+    function randFractionEntry(min, max, minDen, maxDen) {
+        var den = randInt(minDen || 2, maxDen || 11);
+        var num = randInt(min * den, max * den);
+        if (num === 0) num = den;
+        return { value: num / den, text: num + '/' + den };
+    }
+
+    function randMatrixWithFractions(rows, cols, min, max, fractionProbability) {
+        var numeric = [];
+        var display = [];
+        for (var i = 0; i < rows; i++) {
+            var nRow = [];
+            var dRow = [];
+            for (var j = 0; j < cols; j++) {
+                if (Math.random() < (fractionProbability == null ? 0.45 : fractionProbability)) {
+                    var entry = randFractionEntry(min, max, 2, 11);
+                    nRow.push(entry.value);
+                    dRow.push(entry.text);
+                } else {
+                    var iv = randInt(min, max);
+                    nRow.push(iv);
+                    dRow.push(String(iv));
+                }
+            }
+            numeric.push(nRow);
+            display.push(dRow);
+        }
+        return { numeric: numeric, display: display };
     }
 
     // ── Matrix operations ────────────────────────────────────────────────
@@ -295,30 +333,40 @@
         for (var i = 0; i < count; i++) {
             var p;
             if (difficulty === 'easy') {
-                var m = randMatrix(2, 2, -9, 9);
-                var d = det2x2(m);
+                var useFraction = Math.random() < 0.45;
+                var m = useFraction ? randMatrixWithFractions(2, 2, -9, 9, 0.6) : { numeric: randMatrix(2, 2, -9, 9), display: null };
+                var d = det2x2(m.numeric);
                 p = {
-                    prompt: 'Find det(A):<br>' + matToHtml(m),
+                    prompt: 'Find det(A):<br>' + matToHtml(m.display || m.numeric),
                     hint: 'det = ad − bc for [[a,b],[c,d]]',
-                    fields: [{ id: 'det', label: 'det(A)', answer: String(d) }]
+                    fields: [{ id: 'det', label: 'det(A)', answer: exactFmt(d) }]
                 };
             } else if (difficulty === 'medium') {
-                var m = randMatrix(3, 3, -5, 5);
-                var d = det3x3(m);
+                var useFraction = Math.random() < 0.35;
+                var m = useFraction ? randMatrixWithFractions(3, 3, -5, 5, 0.45) : { numeric: randMatrix(3, 3, -5, 5), display: null };
+                var d = det3x3(m.numeric);
                 p = {
-                    prompt: 'Find det(A):<br>' + matToHtml(m),
+                    prompt: 'Find det(A):<br>' + matToHtml(m.display || m.numeric),
                     hint: 'Expand along the first row using cofactors',
-                    fields: [{ id: 'det', label: 'det(A)', answer: String(d) }]
+                    fields: [{ id: 'det', label: 'det(A)', answer: exactFmt(d) }]
                 };
             } else {
-                var variant = pick(['det4', 'singular']);
+                var variant = pick(['det4', 'singular', 'det4_fraction']);
                 if (variant === 'det4') {
                     var m = randMatrix(4, 4, -3, 3);
                     var d = detNxN(m);
                     p = {
                         prompt: 'Find det(A) for this 4×4 matrix:<br>' + matToHtml(m),
                         hint: 'Expand by cofactors along a row with zeros, or row-reduce',
-                        fields: [{ id: 'det', label: 'det(A)', answer: String(d) }]
+                        fields: [{ id: 'det', label: 'det(A)', answer: exactFmt(d) }]
+                    };
+                } else if (variant === 'det4_fraction') {
+                    var m = randMatrixWithFractions(4, 4, -3, 3, 0.4);
+                    var d = detNxN(m.numeric);
+                    p = {
+                        prompt: 'Find det(A) for this 4×4 matrix with fractions:<br>' + matToHtml(m.display),
+                        hint: 'Use row-reduction/LU carefully with fraction arithmetic',
+                        fields: [{ id: 'det', label: 'det(A)', answer: exactFmt(d) }]
                     };
                 } else {
                     // make singular: row3 = row1 + row2
@@ -328,7 +376,7 @@
                         prompt: 'Is this matrix singular? Find det(A):<br>' + matToHtml(m),
                         hint: 'Look at the relationship between rows',
                         fields: [
-                            { id: 'det', label: 'det(A)', answer: '0' },
+                            { id: 'det', label: 'det(A)', answer: exactFmt(0) },
                             { id: 'singular', label: 'Singular? (yes/no)', answer: 'yes' }
                         ]
                     };

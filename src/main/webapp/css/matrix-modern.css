@@ -10,6 +10,111 @@
   --mc-success-muted: rgba(16, 185, 129, 0.12);
 }
 
+/* ── Unified Matrix Theme (all matrix-*.jsp) ── */
+.tool-page-container {
+  min-height: auto;
+  align-items: start;
+}
+
+.tool-input-column {
+  position: relative;
+  top: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+.tool-output-column,
+.tool-output-column .tool-card,
+#resultArea,
+#stepsArea {
+  overflow: visible;
+  max-height: none;
+}
+
+.matrix-calc .tool-card {
+  border-radius: 0.75rem;
+}
+
+.matrix-calc .tool-card-header {
+  padding: 0.75rem 0.9rem;
+  font-size: 0.86rem;
+}
+
+.matrix-calc .tool-card-body {
+  padding: 0.85rem;
+}
+
+.matrix-calc .tool-form-group {
+  margin-bottom: 0.65rem;
+}
+
+.matrix-calc .tool-form-label {
+  font-size: 0.78rem;
+  margin-bottom: 0.3rem;
+}
+
+.matrix-calc .tool-input,
+.matrix-calc .tool-select,
+.matrix-calc .tool-textarea {
+  font-size: 0.82rem;
+  padding: 0.45rem 0.65rem;
+}
+
+.matrix-calc .tool-form-hint {
+  font-size: 0.7rem;
+}
+
+.matrix-calc .tool-btn-outline {
+  padding: 0.34rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.matrix-calc .tool-action-btn {
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.55rem;
+  font-size: 0.8rem;
+}
+
+.matrix-calc .matrix-display {
+  margin: 0.55rem 0;
+  padding: 0.6rem;
+}
+
+.matrix-calc .result-card {
+  margin: 0.55rem 0;
+  padding: 1rem;
+}
+
+.matrix-calc .step-card {
+  padding: 0.7rem 0.9rem;
+  margin: 0.45rem 0;
+}
+
+.matrix-calc .step-number {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.74rem;
+}
+
+.matrix-calc .step-description {
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.matrix-calc .matrix-example-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.matrix-calc .matrix-example-btn {
+  border-radius: 999px;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.74rem;
+  line-height: 1.2;
+}
+
 /* ── Result card – clean, prominent ── */
 .matrix-calc .result-card {
   background: var(--bg-secondary, #f8fafc);

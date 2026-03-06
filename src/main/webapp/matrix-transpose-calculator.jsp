@@ -65,8 +65,6 @@
     .property-badge.false{background:#fee2e2;color:#991b1b}
     .matrix-dim-row{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
-    .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
-    .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
     .tool-checkbox-wrap{display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.875rem;color:var(--text-secondary);margin-bottom:0.5rem}
     .tool-checkbox-wrap input{width:1.125rem;height:1.125rem;accent-color:var(--tool-primary)}
   </style>
@@ -409,15 +407,7 @@
   function generateRandom() {
     const m = parseInt(rows.value);
     const n = parseInt(cols.value);
-    const rowsData = [];
-    for(let i = 0; i < m; i++) {
-      const row = [];
-      for(let j = 0; j < n; j++) {
-        row.push(Math.floor(Math.random() * 21 - 10));
-      }
-      rowsData.push(row.join(' '));
-    }
-    matrixInput.value = rowsData.join('\n');
+    matrixInput.value = MatrixUtils.generateRandomMatrixText(m, n, { minVal: -10, maxVal: 10, fractionProbability: 0.4 });
     setTimeout(() => calculate(), 100);
   }
 

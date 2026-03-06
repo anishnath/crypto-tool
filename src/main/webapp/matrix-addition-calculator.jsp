@@ -66,9 +66,6 @@
     .matrix-dim-row{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
     .matrix-dim-row input{flex:1;min-width:60px}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
-    .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
-    .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
-    [data-theme="dark"] .matrix-example-btn{background:var(--bg-secondary);border-color:var(--border)}
     .tool-checkbox-wrap{display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.875rem;color:var(--text-secondary)}
     .tool-checkbox-wrap input{width:1.125rem;height:1.125rem;accent-color:var(--tool-primary)}
   </style>
@@ -335,6 +332,7 @@
   const EPS = MatrixUtils.EPS;
   const smartFormat = MatrixUtils.smartFormat;
   const parseMatrix = MatrixUtils.parseMatrix;
+  const parseNumericToken = MatrixUtils.parseNumericToken;
   const formatMatrix = MatrixUtils.formatMatrix;
 
   function formatPartialMatrix(C, currentRow, currentCol) {
@@ -484,15 +482,13 @@
         ({ result, steps } = subtractMatrices(A, B, showSteps.checked));
         opLabel = 'A - B';
       } else if(op === 'scalar') {
-        const c = parseFloat(scalarValue.value);
-        if(isNaN(c)) throw new Error('Invalid scalar value');
+        const c = parseNumericToken(scalarValue.value);
         ({ result, steps } = scalarMultiply(c, A, showSteps.checked));
         opLabel = `${smartFormat(c)}A`;
       } else if(op === 'linear') {
         const B = parseMatrix(matrixB.value, m, n);
-        const a = parseFloat(scalarA.value);
-        const b = parseFloat(scalarB.value);
-        if(isNaN(a) || isNaN(b)) throw new Error('Invalid scalar values');
+        const a = parseNumericToken(scalarA.value);
+        const b = parseNumericToken(scalarB.value);
         ({ result, steps } = linearCombination(a, A, b, B, showSteps.checked));
         opLabel = `${smartFormat(a)}A + ${smartFormat(b)}B`;
       }
@@ -532,25 +528,13 @@
   function generateRandomA() {
     const m = parseInt(rows.value);
     const n = parseInt(cols.value);
-    const rowsData = [];
-    for(let i = 0; i < m; i++) {
-      const row = [];
-      for(let j = 0; j < n; j++) row.push(Math.floor(Math.random() * 21 - 10));
-      rowsData.push(row.join(' '));
-    }
-    matrixA.value = rowsData.join('\n');
+    matrixA.value = MatrixUtils.generateRandomMatrixText(m, n, { minVal: -10, maxVal: 10, fractionProbability: 0.4 });
   }
 
   function generateRandomB() {
     const m = parseInt(rows.value);
     const n = parseInt(cols.value);
-    const rowsData = [];
-    for(let i = 0; i < m; i++) {
-      const row = [];
-      for(let j = 0; j < n; j++) row.push(Math.floor(Math.random() * 21 - 10));
-      rowsData.push(row.join(' '));
-    }
-    matrixB.value = rowsData.join('\n');
+    matrixB.value = MatrixUtils.generateRandomMatrixText(m, n, { minVal: -10, maxVal: 10, fractionProbability: 0.4 });
   }
 
   function loadExample(type) {

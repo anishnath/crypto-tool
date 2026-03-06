@@ -58,8 +58,6 @@
     .eigen-calc .eigenvector-card{border-left:4px solid #3b82f6;background:#eff6ff;border-radius:6px;padding:1rem;margin:0.75rem 0}
     .eigen-calc .eigenvalue-badge{background:#fef3c7;color:#92400e;padding:0.25rem 0.6rem;border-radius:12px;font-weight:600;margin:0.25rem;display:inline-block}
     .matrix-example-grid{display:flex;flex-direction:column;gap:0.5rem}
-    .matrix-example-btn{text-align:left;padding:0.5rem 0.75rem;font-size:0.8125rem;border:1px solid var(--border);border-radius:0.5rem;background:var(--bg-primary);color:var(--text-primary);cursor:pointer;transition:all .15s}
-    .matrix-example-btn:hover{border-color:var(--tool-primary);background:var(--tool-light);color:var(--tool-primary)}
     .tool-checkbox-wrap{display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.875rem;color:var(--text-secondary)}
     .tool-checkbox-wrap input{width:1.125rem;height:1.125rem;accent-color:var(--tool-primary)}
   </style>
@@ -530,15 +528,7 @@
       return;
     }
 
-    const rows = [];
-    for(let i = 0; i < n; i++) {
-      const row = [];
-      for(let j = 0; j < n; j++) {
-        row.push(Math.floor(Math.random() * 21 - 10));
-      }
-      rows.push(row.join(' '));
-    }
-    matrixInput.value = rows.join('\n');
+    matrixInput.value = MatrixUtils.generateRandomMatrixText(n, n, { minVal: -10, maxVal: 10, fractionProbability: 0.4 });
     setTimeout(() => calculate(), 100);
   }
 

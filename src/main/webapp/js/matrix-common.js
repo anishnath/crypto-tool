@@ -35,6 +35,101 @@
   }
 
   /* ── Matrix parsing ── */
+  function parseNumericToken(token) {
+    var value = (token || '').trim();
+    var numberPattern = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i;
+
+    if (value.indexOf('/') !== -1) {
+      var parts = value.split('/');
+      if (parts.length !== 2 || !numberPattern.test(parts[0]) || !numberPattern.test(parts[1])) {
+        throw new Error('Invalid fraction: ' + token);
+      }
+      var numerator = Number(parts[0]);
+      var denominator = Number(parts[1]);
+      if (!isFinite(numerator) || !isFinite(denominator) || Math.abs(denominator) < EPS) {
+        throw new Error('Invalid fraction: ' + token);
+      }
+      return numerator / denominator;
+    }
+
+    if (!numberPattern.test(value)) {
+      throw new Error('Invalid number: ' + token);
+    }
+
+    var num = Number(value);
+    if (!isFinite(num)) {
+      throw new Error('Invalid number: ' + token);
+    }
+    return num;
+  }
+
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function randomNonZeroInt(min, max) {
+    var value = 0;
+    while (value === 0) {
+      value = randomInt(min, max);
+    }
+    return value;
+  }
+
+  function generateRandomNumericToken(options) {
+    options = options || {};
+    var minVal = options.minVal == null ? -10 : options.minVal;
+    var maxVal = options.maxVal == null ? 10 : options.maxVal;
+    var minDen = options.minDenominator == null ? 2 : options.minDenominator;
+    var maxDen = options.maxDenominator == null ? 12 : options.maxDenominator;
+    var fractionProbability = options.fractionProbability == null ? 0.35 : options.fractionProbability;
+    var forceFraction = !!options.forceFraction;
+
+    var useFraction = forceFraction || Math.random() < fractionProbability;
+    if (!useFraction) {
+      return String(randomInt(minVal, maxVal));
+    }
+
+    var denominator = randomNonZeroInt(minDen, maxDen);
+    var numerator = randomInt(minVal * denominator, maxVal * denominator);
+    if (numerator === 0) {
+      numerator = randomNonZeroInt(minVal * denominator, maxVal * denominator);
+    }
+    return String(numerator) + '/' + String(denominator);
+  }
+
+  function generateRandomMatrixText(rows, cols, options) {
+    options = options || {};
+    var guaranteeMixed = options.guaranteeMixed == null ? true : !!options.guaranteeMixed;
+    var total = rows * cols;
+    var forceFractionIndex = -1;
+    var forcePlainIndex = -1;
+
+    if (guaranteeMixed && total >= 2) {
+      forceFractionIndex = randomInt(0, total - 1);
+      forcePlainIndex = randomInt(0, total - 1);
+      while (forcePlainIndex === forceFractionIndex) {
+        forcePlainIndex = randomInt(0, total - 1);
+      }
+    }
+
+    var lines = [];
+    for (var i = 0; i < rows; i++) {
+      var row = [];
+      for (var j = 0; j < cols; j++) {
+        var index = i * cols + j;
+        if (index === forceFractionIndex) {
+          row.push(generateRandomNumericToken(Object.assign({}, options, { forceFraction: true })));
+        } else if (index === forcePlainIndex) {
+          row.push(String(randomInt(options.minVal == null ? -10 : options.minVal, options.maxVal == null ? 10 : options.maxVal)));
+        } else {
+          row.push(generateRandomNumericToken(options));
+        }
+      }
+      lines.push(row.join(' '));
+    }
+    return lines.join('\n');
+  }
+
   function parseMatrix(text, rows, cols) {
     var lines = text.trim().split('\n').filter(function (r) { return r.trim(); });
     if (lines.length !== rows) {
@@ -48,8 +143,7 @@
       }
       var row = [];
       for (var j = 0; j < cols; j++) {
-        var num = parseFloat(entries[j]);
-        if (!isFinite(num)) throw new Error('Invalid number: ' + entries[j]);
+        var num = parseNumericToken(entries[j]);
         row.push(num);
       }
       matrix.push(row);
@@ -67,6 +161,45 @@
     if (Math.abs(num) < EPS) return '0';
     if (Math.abs(num - Math.round(num)) < EPS) return Math.round(num).toString();
     return parseFloat(num.toFixed(3)).toString();
+  }
+
+  function formatExactNumber(value, options) {
+    options = options || {};
+    var maxDenominator = options.maxDenominator == null ? 200 : options.maxDenominator;
+    var tolerance = options.tolerance == null ? 1e-9 : options.tolerance;
+    var num = Number(value);
+
+    if (!isFinite(num)) return String(value);
+    if (Math.abs(num) < EPS) return '0';
+    if (Math.abs(num - Math.round(num)) < tolerance) return String(Math.round(num));
+
+    var sign = num < 0 ? -1 : 1;
+    var x = Math.abs(num);
+    var h1 = 1, h2 = 0, k1 = 0, k2 = 1;
+    var b = x;
+
+    while (true) {
+      var a = Math.floor(b);
+      var h = a * h1 + h2;
+      var k = a * k1 + k2;
+
+      if (k > maxDenominator) break;
+
+      var approx = h / k;
+      if (Math.abs(approx - x) < tolerance) {
+        var numerator = sign * h;
+        return numerator + '/' + k;
+      }
+
+      h2 = h1; h1 = h;
+      k2 = k1; k1 = k;
+
+      var frac = b - a;
+      if (Math.abs(frac) < tolerance) break;
+      b = 1 / frac;
+    }
+
+    return smartFormat(num);
   }
 
   /* ── Basic LaTeX bmatrix ── */
@@ -125,15 +258,28 @@
     return mat;
   }
 
+  function generateRandomFractionMatrix(rows, cols, minVal, maxVal, fractionProbability) {
+    var text = generateRandomMatrixText(rows, cols, {
+      minVal: minVal == null ? -5 : minVal,
+      maxVal: maxVal == null ? 5 : maxVal,
+      fractionProbability: fractionProbability == null ? 0.45 : fractionProbability,
+      guaranteeMixed: true
+    });
+    return parseMatrix(text, rows, cols);
+  }
+
   /* ── Matrix to HTML table for print ── */
-  function matrixToPrintTable(mat, label) {
+  function matrixToPrintTable(mat, label, options) {
+    options = options || {};
+    var exact = !!options.exact;
     var html = '';
     if (label) html += '<div style="font-weight:600;margin-bottom:0.25rem;font-size:0.9rem">' + label + '</div>';
     html += '<table class="print-matrix-grid" style="border-collapse:collapse;margin-bottom:0.75rem"><tbody>';
     for (var i = 0; i < mat.length; i++) {
       html += '<tr>';
       for (var j = 0; j < mat[i].length; j++) {
-        html += '<td style="border:1px solid #333;padding:0.35rem 0.6rem;text-align:center;font-family:monospace;min-width:2em">' + mat[i][j] + '</td>';
+        var displayValue = exact ? formatExactNumber(mat[i][j]) : mat[i][j];
+        html += '<td style="border:1px solid #333;padding:0.35rem 0.6rem;text-align:center;font-family:monospace;min-width:2em">' + displayValue + '</td>';
       }
       html += '</tr>';
     }
@@ -551,14 +697,79 @@
       function() { var A=generateRandomMatrix(4,2,-2,2),B=generateRandomMatrix(2,4,-2,2); return { difficulty:'Hard', question:'Find A × B. A is 4×2, B is 2×4.'+matrixToPrintTable(A,'A =')+matrixToPrintTable(B,'B ='), answer:matrixToPrintTable(multiply(A,B),'A × B = (4×4)') }; }
     ],
     determinant: [
-      function() { var M=generateRandomMatrix(2,2,-5,5); var d=determinant(M); return { difficulty:'Easy', question:'Find det(A) for this 2×2 matrix'+matrixToPrintTable(M,'A ='), answer:'<span>det(A) = <strong>'+smartFormat(d)+'</strong></span>' }; },
-      function() { var M=generateRandomMatrix(2,2,-8,8); var d=determinant(M); return { difficulty:'Easy', question:'Find det(A)'+matrixToPrintTable(M,'A ='), answer:'<span>det(A) = <strong>'+smartFormat(d)+'</strong>'+(Math.abs(d)<EPS?' (singular)':' (non-singular)')+'</span>' }; },
-      function() { var M=generateRandomMatrix(2,2,-5,5); var d=determinant(M); return { difficulty:'Easy', question:'Compute |A| and state if A is invertible'+matrixToPrintTable(M,'A ='), answer:'<span>|A| = <strong>'+smartFormat(d)+'</strong> → '+(Math.abs(d)<EPS?'Not invertible':'Invertible')+'</span>' }; },
-      function() { var M=generateRandomMatrix(3,3,-3,3); var d=determinant(M); return { difficulty:'Medium', question:'Find det(A) for this 3×3 matrix using cofactor expansion'+matrixToPrintTable(M,'A ='), answer:'<span>det(A) = <strong>'+smartFormat(d)+'</strong></span>' }; },
-      function() { var M=generateRandomMatrix(3,3,-4,4); var d=determinant(M); return { difficulty:'Medium', question:'Find det(A) (3×3)'+matrixToPrintTable(M,'A ='), answer:'<span>det(A) = <strong>'+smartFormat(d)+'</strong>'+(Math.abs(d)<EPS?' (singular)':' (non-singular)')+'</span>' }; },
-      function() { var M=generateRandomMatrix(3,3,-3,3); var d=determinant(M); var c=2+Math.floor(Math.random()*3); return { difficulty:'Medium', question:'If det(A) = ?, what is det('+c+'A)? (A is 3×3)'+matrixToPrintTable(M,'A ='), answer:'<span>det(A) = <strong>'+smartFormat(d)+'</strong>, det('+c+'A) = '+c+'³ × det(A) = <strong>'+smartFormat(c*c*c*d)+'</strong></span>' }; },
-      function() { var M=generateRandomMatrix(4,4,-2,2); var d=determinant(M); return { difficulty:'Hard', question:'Find det(A) for this 4×4 matrix'+matrixToPrintTable(M,'A ='), answer:'<span>det(A) = <strong>'+smartFormat(d)+'</strong></span>' }; },
-      function() { var M=generateRandomMatrix(4,4,-3,3); var d=determinant(M); return { difficulty:'Hard', question:'Find det(A) (4×4). Is A singular?'+matrixToPrintTable(M,'A ='), answer:'<span>det(A) = <strong>'+smartFormat(d)+'</strong> → '+(Math.abs(d)<EPS?'Singular':'Non-singular')+'</span>' }; }
+      function() {
+        var M = generateRandomMatrix(2,2,-5,5);
+        var d = determinant(M);
+        return {
+          difficulty:'Easy',
+          question:'Find det(A) for this 2×2 matrix' + matrixToPrintTable(M, 'A ='),
+          answer:'<span>det(A) = <strong>' + formatExactNumber(d) + '</strong></span>'
+        };
+      },
+      function() {
+        var M = generateRandomFractionMatrix(2,2,-8,8,0.65);
+        var d = determinant(M);
+        return {
+          difficulty:'Easy',
+          question:'Find det(A) with fraction entries' + matrixToPrintTable(M, 'A =', { exact: true }),
+          answer:'<span>det(A) = <strong>' + formatExactNumber(d) + '</strong>' + (Math.abs(d)<EPS ? ' (singular)' : ' (non-singular)') + '</span>'
+        };
+      },
+      function() {
+        var M = generateRandomFractionMatrix(2,2,-5,5,0.55);
+        var d = determinant(M);
+        return {
+          difficulty:'Easy',
+          question:'Compute |A| and state if A is invertible' + matrixToPrintTable(M, 'A =', { exact: true }),
+          answer:'<span>|A| = <strong>' + formatExactNumber(d) + '</strong> → ' + (Math.abs(d)<EPS?'Not invertible':'Invertible') + '</span>'
+        };
+      },
+      function() {
+        var M = generateRandomMatrix(3,3,-3,3);
+        var d = determinant(M);
+        return {
+          difficulty:'Medium',
+          question:'Find det(A) for this 3×3 matrix using cofactor expansion' + matrixToPrintTable(M, 'A ='),
+          answer:'<span>det(A) = <strong>' + formatExactNumber(d) + '</strong></span>'
+        };
+      },
+      function() {
+        var M = generateRandomFractionMatrix(3,3,-4,4,0.45);
+        var d = determinant(M);
+        return {
+          difficulty:'Medium',
+          question:'Find det(A) (3×3) with fractions' + matrixToPrintTable(M, 'A =', { exact: true }),
+          answer:'<span>det(A) = <strong>' + formatExactNumber(d) + '</strong>' + (Math.abs(d)<EPS?' (singular)':' (non-singular)') + '</span>'
+        };
+      },
+      function() {
+        var M = generateRandomFractionMatrix(3,3,-3,3,0.4);
+        var d = determinant(M);
+        var c = 2 + Math.floor(Math.random()*3);
+        return {
+          difficulty:'Medium',
+          question:'If det(A) = ?, what is det(' + c + 'A)? (A is 3×3)' + matrixToPrintTable(M, 'A =', { exact: true }),
+          answer:'<span>det(A) = <strong>' + formatExactNumber(d) + '</strong>, det(' + c + 'A) = ' + c + '³ × det(A) = <strong>' + formatExactNumber(c*c*c*d) + '</strong></span>'
+        };
+      },
+      function() {
+        var M = generateRandomFractionMatrix(4,4,-2,2,0.4);
+        var d = determinant(M);
+        return {
+          difficulty:'Hard',
+          question:'Find det(A) for this 4×4 matrix' + matrixToPrintTable(M, 'A =', { exact: true }),
+          answer:'<span>det(A) = <strong>' + formatExactNumber(d) + '</strong></span>'
+        };
+      },
+      function() {
+        var M = generateRandomFractionMatrix(4,4,-3,3,0.4);
+        var d = determinant(M);
+        return {
+          difficulty:'Hard',
+          question:'Find det(A) (4×4). Is A singular?' + matrixToPrintTable(M, 'A =', { exact: true }),
+          answer:'<span>det(A) = <strong>' + formatExactNumber(d) + '</strong> → ' + (Math.abs(d)<EPS?'Singular':'Non-singular') + '</span>'
+        };
+      }
     ],
     inverse: [
       function() { var M=generateInvertibleMatrix(2,-4,4); var inv=inverse2x2(M); var disp=inv.map(function(r){return r.map(function(v){return smartFormat(v);});}); return { difficulty:'Easy', question:'Find A⁻¹'+matrixToPrintTable(M,'A ='), answer:matrixToPrintTable(disp,'A⁻¹ =') }; },
@@ -882,22 +1093,428 @@
     }
   }
 
+  /* ── Step Engine (reusable structured pedagogy flow) ── */
+  function createStepEngine(options) {
+    options = options || {};
+    var steps = [];
+
+    function _push(kind, title, payload) {
+      steps.push({
+        kind: kind,
+        title: title || '',
+        text: payload && payload.text ? payload.text : '',
+        html: payload && payload.html ? payload.html : '',
+        latex: payload && payload.latex ? payload.latex : '',
+        level: payload && payload.level ? payload.level : ''
+      });
+    }
+
+    return {
+      note: function (title, text, level) {
+        _push('note', title, { text: text, level: level || 'info' });
+      },
+      operation: function (title, text) {
+        _push('operation', title || 'Operation', { text: text, level: 'info' });
+      },
+      matrix: function (title, latex, text) {
+        _push('matrix', title || 'Matrix', { latex: latex, text: text });
+      },
+      equation: function (title, latex, text) {
+        _push('equation', title || 'Equation', { latex: latex, text: text });
+      },
+      result: function (title, text, latex) {
+        _push('result', title || 'Result', { text: text, latex: latex, level: 'success' });
+      },
+      rawHtml: function (title, html) {
+        _push('html', title || 'Detail', { html: html });
+      },
+      all: function () {
+        return steps.slice();
+      },
+      count: function () {
+        return steps.length;
+      }
+    };
+  }
+
+  function _stepPreviewText(step) {
+    var raw = (step && (step.text || step.html || step.title || '')) || '';
+    return String(raw)
+      .replace(/<div class="matrix-display"[\s\S]*?<\/div>/g, 'Matrix updated.')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function _buildStepCheckpoints(steps) {
+    if (!steps || !steps.length) return [];
+    var first = steps[0];
+    var middle = steps[Math.floor((steps.length - 1) / 2)];
+    var last = steps[steps.length - 1];
+    return [
+      { title: 'Start', body: _stepPreviewText(first) || 'Initialization.' },
+      { title: 'Middle', body: _stepPreviewText(middle) || 'Main transformations.' },
+      { title: 'Finish', body: _stepPreviewText(last) || 'Final result extracted.' }
+    ];
+  }
+
+  function renderStepEngine(steps, options) {
+    options = options || {};
+    if (!steps || !steps.length) {
+      return '<div style="color:var(--text-muted)">No detailed steps generated.</div>';
+    }
+
+    var classNames = {
+      layout: options.layoutClass || 'teacher-layout',
+      stream: options.streamClass || 'teacher-step-stream',
+      step: options.stepClass || 'teacher-step',
+      stepHead: options.stepHeadClass || 'teacher-step-head',
+      stepBody: options.stepBodyClass || 'teacher-step-body',
+      checkpoint: options.checkpointClass || 'teacher-checkpoint',
+      checkpointTitle: options.checkpointTitleClass || 'teacher-checkpoint-title',
+      checkpointBody: options.checkpointBodyClass || 'teacher-checkpoint-body',
+      matrixWrap: options.matrixClass || 'matrix-display',
+      player: options.playerClass || 'matrix-step-player',
+      playerHeader: options.playerHeaderClass || 'matrix-step-player-header',
+      playerMeta: options.playerMetaClass || 'matrix-step-player-meta',
+      playerProgress: options.playerProgressClass || 'matrix-step-progress',
+      playerBar: options.playerBarClass || 'matrix-step-progress-bar',
+      playerViewport: options.playerViewportClass || 'matrix-step-viewport',
+      playerSlide: options.playerSlideClass || 'matrix-step-slide',
+      playerControls: options.playerControlsClass || 'matrix-step-controls'
+    };
+
+    var stepHtml = steps.map(function (step, idx) {
+      var title = step.title || ('Step ' + (idx + 1));
+      var parts = [];
+      if (step.text) parts.push('<div>' + step.text + '</div>');
+      if (step.html) parts.push(step.html);
+      if (step.latex) parts.push('<div class="' + classNames.matrixWrap + '">$$' + step.latex + '$$</div>');
+      if (!parts.length) parts.push('<div>' + _stepPreviewText(step) + '</div>');
+
+      return '<div class="' + classNames.step + '">' +
+        '<div class="' + classNames.stepHead + '">Step ' + (idx + 1) + ' · ' + title + '</div>' +
+        '<div class="' + classNames.stepBody + '">' + parts.join('') + '</div>' +
+      '</div>';
+    }).join('');
+
+    var checkpointHtml = _buildStepCheckpoints(steps).map(function (item) {
+      return '<div class="' + classNames.checkpoint + '">' +
+        '<div class="' + classNames.checkpointTitle + '">' + item.title + '</div>' +
+        '<div class="' + classNames.checkpointBody + '">' + item.body + '</div>' +
+      '</div>';
+    }).join('');
+
+    if (options.mode === 'player') {
+      var slideHtml = steps.map(function (step, idx) {
+        var title = step.title || ('Step ' + (idx + 1));
+        var parts = [];
+        if (step.text) parts.push('<div>' + step.text + '</div>');
+        if (step.html) parts.push(step.html);
+        if (step.latex) parts.push('<div class="' + classNames.matrixWrap + '">$$' + step.latex + '$$</div>');
+        if (!parts.length) parts.push('<div>' + _stepPreviewText(step) + '</div>');
+
+        return '<article class="' + classNames.playerSlide + (idx === 0 ? ' is-active' : '') + '" data-step-index="' + idx + '">' +
+          '<div class="' + classNames.stepHead + '">Step ' + (idx + 1) + ' · ' + title + '</div>' +
+          '<div class="' + classNames.stepBody + '">' + parts.join('') + '</div>' +
+        '</article>';
+      }).join('');
+
+      return '<div class="' + classNames.layout + '">' +
+        '<div class="' + classNames.player + '" data-step-player data-step-count="' + steps.length + '">' +
+          '<div class="' + classNames.playerHeader + '">' +
+            '<div class="' + classNames.playerMeta + '"><strong data-step-current>1</strong> / <span data-step-total>' + steps.length + '</span></div>' +
+            '<div class="' + classNames.playerProgress + '"><div class="' + classNames.playerBar + '" data-step-progress style="width:' + (100 / steps.length) + '%"></div></div>' +
+          '</div>' +
+          '<div class="' + classNames.playerViewport + '">' + slideHtml + '</div>' +
+          '<div class="' + classNames.playerControls + '">' +
+            '<button type="button" class="tool-btn-outline" data-step-action="prev">Previous</button>' +
+            '<button type="button" class="tool-action-btn" data-step-action="next">Next Step</button>' +
+          '</div>' +
+        '</div>' +
+        '<div>' + checkpointHtml + '</div>' +
+      '</div>';
+    }
+
+    return '<div class="' + classNames.layout + '">' +
+      '<div class="' + classNames.stream + '">' + stepHtml + '</div>' +
+      '<div>' + checkpointHtml + '</div>' +
+    '</div>';
+  }
+
+  function createMatrixAnimationEngine(options) {
+    options = options || {};
+    var frames = [];
+    var previous = null;
+
+    function _computeChanged(prev, next) {
+      var changed = [];
+      if (!prev || !next) return changed;
+      for (var i = 0; i < next.length; i++) {
+        for (var j = 0; j < next[i].length; j++) {
+          if (Math.abs((next[i][j] || 0) - (prev[i][j] || 0)) > EPS) {
+            changed.push(i + ':' + j);
+          }
+        }
+      }
+      return changed;
+    }
+
+    return {
+      addFrame: function (title, matrix, note, meta) {
+        var snapshot = cloneMatrix(matrix);
+        var changed = _computeChanged(previous, snapshot);
+        frames.push({
+          title: title || 'Frame',
+          note: note || '',
+          matrix: snapshot,
+          changed: changed,
+          meta: meta || null
+        });
+        previous = snapshot;
+      },
+      all: function () {
+        return frames.slice();
+      },
+      count: function () {
+        return frames.length;
+      }
+    };
+  }
+
+  function renderMatrixAnimation(frames, options) {
+    options = options || {};
+    if (!frames || !frames.length) {
+      return '';
+    }
+
+    var title = options.title || 'Matrix Animation';
+    var playerId = 'matrix-anim-' + Date.now() + '-' + Math.floor(Math.random() * 1000000);
+    window.__matrixAnimStore = window.__matrixAnimStore || {};
+    window.__matrixAnimStore[playerId] = frames;
+
+    return '<div class="matrix-anim-player" data-matrix-anim-player data-matrix-anim-id="' + playerId + '">' +
+      '<div class="matrix-anim-header">' +
+        '<div class="matrix-anim-title">' + title + '</div>' +
+        '<div class="matrix-anim-meta"><strong data-matrix-anim-current>1</strong>/<span data-matrix-anim-total>' + frames.length + '</span></div>' +
+      '</div>' +
+      '<div class="matrix-anim-progress"><div class="matrix-anim-progress-bar" data-matrix-anim-progress style="width:' + (100 / frames.length) + '%"></div></div>' +
+      '<div class="matrix-anim-stage">' +
+        '<div class="matrix-anim-frame-title" data-matrix-anim-frame-title></div>' +
+        '<div class="matrix-anim-grid-wrap" data-matrix-anim-grid></div>' +
+        '<div class="matrix-anim-note" data-matrix-anim-note></div>' +
+      '</div>' +
+      '<div class="matrix-anim-controls">' +
+        '<button type="button" class="tool-btn-outline" data-matrix-anim-action="prev">Previous</button>' +
+        '<button type="button" class="tool-action-btn" data-matrix-anim-action="next">Next</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function initMatrixAnimation(root) {
+    if (!root) return;
+    var players = root.querySelectorAll('[data-matrix-anim-player]');
+    players.forEach(function (player) {
+      if (player.__matrixAnimReady) return;
+      player.__matrixAnimReady = true;
+
+      var playerId = player.getAttribute('data-matrix-anim-id');
+      var frames = window.__matrixAnimStore && window.__matrixAnimStore[playerId];
+      if (!frames || !frames.length) return;
+
+      var index = 0;
+      var gridEl = player.querySelector('[data-matrix-anim-grid]');
+      var titleEl = player.querySelector('[data-matrix-anim-frame-title]');
+      var noteEl = player.querySelector('[data-matrix-anim-note]');
+      var currentEl = player.querySelector('[data-matrix-anim-current]');
+      var progressEl = player.querySelector('[data-matrix-anim-progress]');
+      var prevBtn = player.querySelector('[data-matrix-anim-action="prev"]');
+      var nextBtn = player.querySelector('[data-matrix-anim-action="next"]');
+
+      function buildGrid(frame) {
+        var changedSet = {};
+        (frame.changed || []).forEach(function (key) { changedSet[key] = true; });
+
+        var html = '<table class="matrix-anim-grid"><tbody>';
+        for (var r = 0; r < frame.matrix.length; r++) {
+          html += '<tr data-matrix-anim-row="' + r + '">';
+          for (var c = 0; c < frame.matrix[r].length; c++) {
+            var key = r + ':' + c;
+            var cls = changedSet[key] ? ' class="cell-changed"' : '';
+            html += '<td' + cls + '>' + formatExactNumber(frame.matrix[r][c]) + '</td>';
+          }
+          html += '</tr>';
+        }
+        html += '</tbody></table>';
+        return html;
+      }
+
+      function animateMotion(frame) {
+        if (!frame || !frame.meta || !gridEl) return;
+
+        if (frame.meta.type === 'swap' && frame.meta.rows && frame.meta.rows.length === 2) {
+          var rowA = frame.meta.rows[0];
+          var rowB = frame.meta.rows[1];
+          var rowEls = gridEl.querySelectorAll('[data-matrix-anim-row]');
+          var aEl = rowEls[rowA];
+          var bEl = rowEls[rowB];
+          if (!aEl || !bEl) return;
+
+          var aRect = aEl.getBoundingClientRect();
+          var bRect = bEl.getBoundingClientRect();
+          var shift = bRect.top - aRect.top;
+
+          try {
+            aEl.animate([
+              { transform: 'translateY(' + shift + 'px)', background: 'rgba(59,130,246,0.18)' },
+              { transform: 'translateY(0)', background: 'transparent' }
+            ], { duration: 420, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+
+            bEl.animate([
+              { transform: 'translateY(' + (-shift) + 'px)', background: 'rgba(59,130,246,0.18)' },
+              { transform: 'translateY(0)', background: 'transparent' }
+            ], { duration: 420, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+          } catch (err) {
+            // no-op fallback for browsers without WAAPI
+          }
+          return;
+        }
+
+        if (frame.meta.type === 'eliminate' && frame.meta.targetRows && frame.meta.targetRows.length) {
+          var allRows = gridEl.querySelectorAll('[data-matrix-anim-row]');
+          frame.meta.targetRows.forEach(function (rowIndex, index) {
+            var rowEl = allRows[rowIndex];
+            if (!rowEl) return;
+            try {
+              rowEl.animate([
+                { transform: 'translateX(12px)', background: 'rgba(16,185,129,0.16)' },
+                { transform: 'translateX(0)', background: 'transparent' }
+              ], { duration: 320 + (index * 60), easing: 'ease-out' });
+            } catch (err) {
+              // no-op fallback
+            }
+          });
+        }
+      }
+
+      function render() {
+        var frame = frames[index];
+        if (!frame) return;
+
+        if (titleEl) titleEl.textContent = frame.title || ('Step ' + (index + 1));
+        if (noteEl) noteEl.textContent = frame.note || '';
+        if (currentEl) currentEl.textContent = String(index + 1);
+        if (progressEl) progressEl.style.width = (((index + 1) / frames.length) * 100) + '%';
+
+        if (gridEl) {
+          gridEl.classList.remove('frame-enter');
+          void gridEl.offsetWidth;
+          gridEl.innerHTML = buildGrid(frame);
+          gridEl.classList.add('frame-enter');
+          animateMotion(frame);
+        }
+
+        if (prevBtn) prevBtn.disabled = index === 0;
+        if (nextBtn) nextBtn.textContent = index >= frames.length - 1 ? 'Replay' : 'Next';
+      }
+
+      function goNext() {
+        if (index >= frames.length - 1) {
+          index = 0;
+        } else {
+          index += 1;
+        }
+        render();
+      }
+
+      function goPrev() {
+        index = Math.max(0, index - 1);
+        render();
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', goPrev);
+      if (nextBtn) nextBtn.addEventListener('click', goNext);
+      render();
+    });
+  }
+
+  function initStepPlayer(root) {
+    if (!root) return;
+    var players = root.querySelectorAll('[data-step-player]');
+    players.forEach(function (player) {
+      if (player.__stepPlayerReady) return;
+      player.__stepPlayerReady = true;
+
+      var slides = Array.prototype.slice.call(player.querySelectorAll('[data-step-index]'));
+      if (!slides.length) return;
+
+      var current = 0;
+      var total = slides.length;
+      var currentEl = player.querySelector('[data-step-current]');
+      var progressEl = player.querySelector('[data-step-progress]');
+      var prevBtn = player.querySelector('[data-step-action="prev"]');
+      var nextBtn = player.querySelector('[data-step-action="next"]');
+
+      function render() {
+        slides.forEach(function (slide, idx) {
+          slide.classList.toggle('is-active', idx === current);
+          slide.classList.toggle('is-past', idx < current);
+        });
+
+        if (currentEl) currentEl.textContent = String(current + 1);
+        if (progressEl) progressEl.style.width = (((current + 1) / total) * 100) + '%';
+        if (prevBtn) prevBtn.disabled = current === 0;
+        if (nextBtn) {
+          nextBtn.textContent = current >= total - 1 ? 'Replay' : 'Next Step';
+        }
+      }
+
+      function next() {
+        if (current >= total - 1) {
+          current = 0;
+        } else {
+          current += 1;
+        }
+        render();
+      }
+
+      function prev() {
+        current = Math.max(0, current - 1);
+        render();
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', prev);
+      if (nextBtn) nextBtn.addEventListener('click', next);
+      render();
+    });
+  }
+
   /* ── Public API ── */
   window.MatrixUtils = {
     EPS: EPS,
     initMathJax: initMathJax,
     rerender: rerender,
     parseMatrix: parseMatrix,
+    parseNumericToken: parseNumericToken,
     cloneMatrix: cloneMatrix,
     smartFormat: smartFormat,
+    formatExactNumber: formatExactNumber,
     formatMatrix: formatMatrix,
     createIdentity: createIdentity,
     multiply: multiply,
     transpose: transpose,
     shareURL: shareURL,
+    generateRandomNumericToken: generateRandomNumericToken,
+    generateRandomMatrixText: generateRandomMatrixText,
     downloadImage: downloadImage,
     loadFromURL: loadFromURL,
     printWorksheet: printWorksheet,
-    makeStepsCollapsible: makeStepsCollapsible
+    makeStepsCollapsible: makeStepsCollapsible,
+    createStepEngine: createStepEngine,
+    renderStepEngine: renderStepEngine,
+    initStepPlayer: initStepPlayer,
+    createMatrixAnimationEngine: createMatrixAnimationEngine,
+    renderMatrixAnimation: renderMatrixAnimation,
+    initMatrixAnimation: initMatrixAnimation
   };
 })();
