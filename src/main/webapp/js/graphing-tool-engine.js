@@ -2014,6 +2014,17 @@ class GraphingEngine {
         const dark = !!(typeof window !== 'undefined' && window.GC_DARK);
         const is3D = traces.some(t => t.type === 'surface');
 
+        // Preserve user zoom/pan: read current axis range from Plotly if available
+        const graphDiv = document.getElementById(this.containerId);
+        let effectiveXRange = [xMin, xMax];
+        let effectiveYRange = [yMin, yMax];
+        if (graphDiv && graphDiv.layout && !settings._forceRange) {
+            const curX = graphDiv.layout.xaxis && graphDiv.layout.xaxis.range;
+            const curY = graphDiv.layout.yaxis && graphDiv.layout.yaxis.range;
+            if (curX && curX.length === 2) effectiveXRange = curX;
+            if (curY && curY.length === 2) effectiveYRange = curY;
+        }
+
         let layout;
         if (is3D) {
             layout = {
@@ -2032,14 +2043,14 @@ class GraphingEngine {
             layout = {
                 margin: { t: 8, r: 16, b: 32, l: 40 },
                 xaxis: {
-                    range: [xMin, xMax],
+                    range: effectiveXRange,
                     zeroline: true,
                     showgrid: showGrid,
                     gridcolor: dark ? '#374151' : '#e0e0e0',
                     color: dark ? '#e5e7eb' : '#111827'
                 },
                 yaxis: {
-                    range: [yMin, yMax],
+                    range: effectiveYRange,
                     zeroline: true,
                     showgrid: showGrid,
                     gridcolor: dark ? '#374151' : '#e0e0e0',
@@ -2063,6 +2074,7 @@ class GraphingEngine {
 
         const config = {
             responsive: true,
+            scrollZoom: true,
             displayModeBar: true,
             modeBarButtonsToRemove: is3D ? [] : ['lasso2d', 'select2d'],
             displaylogo: false
@@ -2074,7 +2086,6 @@ class GraphingEngine {
             console.warn('3D surface requires full Plotly. Attempting to load...');
         }
 
-        const graphDiv = document.getElementById(this.containerId);
         if (graphDiv && graphDiv.data) {
             Plotly.react(this.containerId, traces, layout, config);
         } else {
@@ -2218,7 +2229,7 @@ class GraphingEngine {
             paper_bgcolor: dark ? '#0b0f14' : 'white',
             font: { color: dark ? '#e5e7eb' : '#111827' }
         };
-        const config = { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'], displaylogo: false };
+        const config = { responsive: true, scrollZoom: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'], displaylogo: false };
         Plotly.react(this.containerId, traces, layout, config);
     }
 
@@ -3232,7 +3243,21 @@ function resetView() {
     document.getElementById('xMax').value = 10;
     document.getElementById('yMin').value = -10;
     document.getElementById('yMax').value = 10;
-    updateGraph();
+    updateGraphForceRange();
+}
+
+/**
+ * Re-plot with forced range from input fields (ignores Plotly zoom state)
+ */
+function updateGraphForceRange() {
+    const xMin = parseFloat(document.getElementById('xMin').value);
+    const xMax = parseFloat(document.getElementById('xMax').value);
+    const yMin = parseFloat(document.getElementById('yMin').value);
+    const yMax = parseFloat(document.getElementById('yMax').value);
+    const showGrid = document.getElementById('showGrid').checked;
+    const showLegend = document.getElementById('showLegend').checked;
+
+    engine.plot({ xMin, xMax, yMin, yMax, showGrid, showLegend, _forceRange: true });
 }
 
 // Initialize: DOM may already be ready if script was loaded async after DOMContentLoaded
@@ -3240,7 +3265,7 @@ function _gcBoot() {
     initGraph();
     ['xMin', 'xMax', 'yMin', 'yMax'].forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.addEventListener('change', updateGraph);
+        if (el) el.addEventListener('change', updateGraphForceRange);
     });
 
     // Start auto-demo if user hasn't typed anything (idle showcase)
