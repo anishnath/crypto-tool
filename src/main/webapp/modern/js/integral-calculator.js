@@ -243,6 +243,8 @@
                 .replace(/e\^(\([^)]+\))/g, 'exp$1')
                 .replace(/e\^([a-zA-Z0-9_]+)/g, 'exp($1)')
                 .replace(/\^/g, '**')
+                // Convert integer fractions in exponents to Rational: **(3/2) → **(Rational(3,2))
+                .replace(/\*\*\((\d+)\/(\d+)\)/g, '**(Rational($1,$2))')
                 // Insert * between digit and variable: 3x → 3*x, 2pi → 2*pi
                 .replace(/(\d)([a-zA-Z])/g, '$1*$2')
                 // Insert * between closing paren and opening paren or variable: )(  )x
@@ -253,7 +255,7 @@
 
         /** Extract symbols in pyExpr that are not the integration variable. */
         function getExtraSymbols(pyExpr, v) {
-            var KNOWN = ['exp','log','sin','cos','tan','sec','csc','cot','sinh','cosh','tanh','sqrt','asin','acos','atan','pi'];
+            var KNOWN = ['exp','log','sin','cos','tan','sec','csc','cot','sinh','cosh','tanh','coth','csch','sech','sqrt','asin','acos','atan','pi'];
             var seen = {};
             var re = /\b([a-z][a-z]*)\b/g;
             var m;
@@ -467,6 +469,63 @@
                 .replace(/\bpi\b/gi, '\\pi');
         }
 
+        // ========== Precomputed Integrals (bypass nerdamer + SymPy for unsupported / slow cases) ==========
+        var PRECOMPUTED_INTEGRALS = {
+            'coth(x)': {
+                resultTeX: 'x - \\log{\\left(\\tanh{\\left(x \\right)} + 1 \\right)} + \\log{\\left(\\tanh{\\left(x \\right)} \\right)}',
+                resultText: 'x - log(tanh(x) + 1) + log(tanh(x))',
+                method: 'Rewrite + u-Substitution',
+                rulesStr: 'RewriteRule(integrand=coth(x), variable=x, rewritten=cosh(x)/sinh(x), substep=URule)',
+                exprTeX: '\\coth{\\left(x \\right)}',
+                steps: [
+                    { title: 'Rewrite coth(x)', latex: '\\coth(x) = \\frac{\\cosh(x)}{\\sinh(x)}' },
+                    { title: 'Substitute u = sinh(x), du = cosh(x) dx', latex: '\\int \\frac{\\cosh(x)}{\\sinh(x)} \\, dx = \\int \\frac{1}{u} \\, du = \\ln|u| + C' },
+                    { title: 'Back-substitute', latex: '= \\ln|\\sinh(x)| + C' }
+                ]
+            },
+            'csch(x)': {
+                resultTeX: '\\log{\\left(\\tanh{\\left(\\frac{x}{2} \\right)} \\right)}',
+                resultText: 'log(tanh(x/2))',
+                method: 'Rewrite + u-Substitution',
+                rulesStr: 'RewriteRule(integrand=csch(x), variable=x, rewritten=(1 - tanh(x/2)**2)/(2*tanh(x/2)), substep=URule)',
+                exprTeX: '\\operatorname{csch}{\\left(x \\right)}',
+                steps: [
+                    { title: 'Rewrite using half-angle', latex: '\\operatorname{csch}(x) = \\frac{1 - \\tanh^2(x/2)}{2\\tanh(x/2)}' },
+                    { title: 'Substitute u = tanh(x/2)', latex: '\\int \\frac{1}{u} \\, du = \\ln|u| + C' },
+                    { title: 'Back-substitute', latex: '= \\ln|\\tanh(x/2)| + C' }
+                ]
+            },
+            'sech(x)': {
+                resultTeX: '2 \\operatorname{atan}{\\left(\\tanh{\\left(\\frac{x}{2} \\right)} \\right)}',
+                resultText: '2*atan(tanh(x/2))',
+                method: 'Rewrite + u-Substitution',
+                rulesStr: 'RewriteRule(integrand=sech(x), variable=x, rewritten=(1 - tanh(x/2)**2)/(tanh(x/2)**2 + 1), substep=URule)',
+                exprTeX: '\\operatorname{sech}{\\left(x \\right)}',
+                steps: [
+                    { title: 'Rewrite using half-angle', latex: '\\operatorname{sech}(x) = \\frac{1 - \\tanh^2(x/2)}{\\tanh^2(x/2) + 1}' },
+                    { title: 'Substitute u = tanh(x/2)', latex: '\\int \\frac{2}{u^2 + 1} \\, du = 2\\arctan(u) + C' },
+                    { title: 'Back-substitute', latex: '= 2\\arctan(\\tanh(x/2)) + C' }
+                ]
+            }
+        };
+
+        /**
+         * Look up a precomputed integral. Returns null if not found.
+         * Normalizes the variable: coth(t) matches the coth(x) entry.
+         */
+        function lookupPrecomputed(expr, v) {
+            var key = expr.replace(new RegExp('\\b' + v + '\\b', 'g'), 'x');
+            return PRECOMPUTED_INTEGRALS[key] || null;
+        }
+
+        /**
+         * Substitute the actual variable back into precomputed LaTeX / text.
+         */
+        function substituteVar(s, v) {
+            if (v === 'x') return s;
+            return s.replace(/\bx\b/g, v).replace(/\\left\(x/g, '\\left(' + v);
+        }
+
         // ========== Integration ==========
         integrateBtn.addEventListener('click', doIntegrate);
         exprInput.addEventListener('keydown', function(e) {
@@ -500,6 +559,29 @@
             }
             if (!rawExpr) {
                 if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Please enter a function.', 2000, 'warning');
+                return;
+            }
+
+            // Check precomputed integrals first (instant results for coth, csch, sech etc.)
+            var precomp = lookupPrecomputed(expr, v);
+            if (precomp) {
+                var pMethod = precomp.method;
+                var pResultTeX = substituteVar(precomp.resultTeX, v);
+                var pResultText = substituteVar(precomp.resultText, v);
+                var pStepsCache = { paths: [{ name: 'Solution', steps: precomp.steps.map(function(s) {
+                    return { title: s.title, latex: substituteVar(s.latex, v) };
+                }), rules: (precomp.rulesStr.match(/\w+Rule/g) || []) }] };
+
+                if (!useDefinite) {
+                    showIndefiniteResult(expr, v, pResultTeX, pResultText, pMethod, pStepsCache);
+                    resultActions.classList.add('visible');
+                    if (emptyState) emptyState.style.display = 'none';
+                    try { prepareGraph(expr, v, nerdamerToPython(expr), 'indefinite', null, null); } catch(e) {}
+                } else {
+                    // For definite integrals of precomputed functions, fall through to SymPy
+                    // since we need numeric evaluation at the specific bounds
+                    sympyFallback(expr, v);
+                }
                 return;
             }
 
@@ -592,6 +674,7 @@
         function identifyMethod(expr) {
             if (/\*/.test(expr) && /(sin|cos|e\^|exp)/.test(expr)) return 'Integration by Parts';
             if (/\/.*\(/.test(expr) || /\/\(/.test(expr)) return 'Partial Fractions / Substitution';
+            if (/sinh|cosh|tanh|coth|csch|sech/.test(expr)) return 'Hyperbolic Integration';
             if (/sin|cos|tan|sec|csc|cot/.test(expr)) return 'Trigonometric Integration';
             if (/e\^|exp\(/.test(expr)) return 'Exponential Integration';
             if (/log\(|ln\(/.test(expr)) return 'Logarithmic Integration';
@@ -720,24 +803,47 @@
             var code;
             if (isDefinite) {
                 code = 'from sympy import *\n' +
-                    'from sympy.integrals.manualintegrate import integral_steps\n' +
+                    'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
                     'import json\n' +
                     symDecl + '\n' +
-                    'expr = ' + pyExpr + '\n' +
+                    'expr = simplify(' + pyExpr + ')\n' +
                     'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
-                    'result = integrate(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
-                    'antideriv = integrate(expr, ' + v + ')\n' +
-                    'print(\'LATEX:\' + latex(result))\n' +
-                    'print(\'TEXT:\' + str(result))\n' +
-                    'print(\'EXPR:\' + latex(expr))\n' +
-                    'print(\'RULES:\' + (str(steps) if steps else ""))\n' +
-                    'print(\'ANTIDERIV:\' + (latex(antideriv) if antideriv and not isinstance(antideriv, Integral) else ""))\n' +
-                    'try:\n' +
-                    '    print(\'NUMERIC:\' + str(float(result)))\n' +
-                    'except:\n' +
-                    '    print(\'NUMERIC:NaN\')\n' +
-                    'try:\n' +
-                    '    if antideriv and not isinstance(antideriv, Integral):\n' +
+                    '# If integral_steps says DontKnowRule, skip slow integrate() and go straight to N()\n' +
+                    'if steps and isinstance(steps, DontKnowRule):\n' +
+                    '    antideriv = Integral(expr, ' + v + ')\n' +
+                    'else:\n' +
+                    '    antideriv = integrate(expr, ' + v + ')\n' +
+                    'if isinstance(antideriv, Integral):\n' +
+                    '    # No closed-form antiderivative — fast numeric evaluation\n' +
+                    '    result = Integral(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
+                    '    print(\'LATEX:\' + latex(result))\n' +
+                    '    print(\'TEXT:\' + str(result))\n' +
+                    '    print(\'EXPR:\' + latex(expr))\n' +
+                    '    print(\'RULES:\' + (str(steps) if steps else ""))\n' +
+                    '    print(\'ANTIDERIV:\')\n' +
+                    '    try:\n' +
+                    '        from scipy.integrate import quad as _quad\n' +
+                    '        from math import isfinite as _isf, inf as _inf\n' +
+                    '        _f = lambdify(' + v + ', expr, "numpy")\n' +
+                    '        _val, _err = _quad(_f, float(' + a + '), float(' + b + '), limit=100)\n' +
+                    '        if not _isf(_val) or (abs(_val) > 1e-10 and abs(_err/_val) > 0.01):\n' +
+                    '            raise ValueError("divergent or unreliable")\n' +
+                    '        print(\'NUMERIC:\' + str(_val))\n' +
+                    '    except:\n' +
+                    '        print(\'NUMERIC:NaN\')\n' +
+                    'else:\n' +
+                    '    # Has closed-form antiderivative — evaluate at bounds\n' +
+                    '    result = integrate(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
+                    '    print(\'LATEX:\' + latex(result))\n' +
+                    '    print(\'TEXT:\' + str(result))\n' +
+                    '    print(\'EXPR:\' + latex(expr))\n' +
+                    '    print(\'RULES:\' + (str(steps) if steps else ""))\n' +
+                    '    print(\'ANTIDERIV:\' + latex(antideriv))\n' +
+                    '    try:\n' +
+                    '        print(\'NUMERIC:\' + str(float(result)))\n' +
+                    '    except:\n' +
+                    '        print(\'NUMERIC:NaN\')\n' +
+                    '    try:\n' +
                     '        var_sym = ' + v + '\n' +
                     '        a_s = sympify("' + a.replace(/"/g, '\\"') + '")\n' +
                     '        b_s = sympify("' + b.replace(/"/g, '\\"') + '")\n' +
@@ -750,14 +856,18 @@
                     '        b_tex = "\\\\infty" if b_s == oo else ("-\\\\infty" if b_s == -oo else latex(b_s))\n' +
                     '        ev_latex = r"\\left[ " + latex(antideriv) + r" \\right]_{" + a_tex + "}^{" + b_tex + "} = " + latex(v_u) + " - (" + latex(v_l) + ") = " + latex(result)\n' +
                     '        print("EVAL_STEP:" + json.dumps({"title":"Evaluate at bounds","latex":ev_latex}))\n' +
-                    'except: pass';
+                    '    except: pass';
             } else {
                 code = 'from sympy import *\n' +
-                    'from sympy.integrals.manualintegrate import integral_steps\n' +
+                    'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
                     symDecl + '\n' +
-                    'expr = ' + pyExpr + '\n' +
+                    'expr = simplify(' + pyExpr + ')\n' +
                     'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
-                    'result = integrate(expr, ' + v + ')\n' +
+                    '# Skip slow integrate() when integral_steps already says DontKnowRule\n' +
+                    'if steps and isinstance(steps, DontKnowRule):\n' +
+                    '    result = Integral(expr, ' + v + ')\n' +
+                    'else:\n' +
+                    '    result = integrate(expr, ' + v + ')\n' +
                     'print(\'LATEX:\' + latex(result))\n' +
                     'print(\'TEXT:\' + str(result))\n' +
                     'print(\'EXPR:\' + latex(expr))\n' +
@@ -765,7 +875,7 @@
             }
 
             var controller = new AbortController();
-            var timeoutId = setTimeout(function() { controller.abort(); }, 90000);
+            var timeoutId = setTimeout(function() { controller.abort(); }, 180000);
 
             fetch((window.INTEGRAL_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
                 method: 'POST',
@@ -780,7 +890,9 @@
                     var stderr = (data.Stderr || data.stderr || '').trim();
 
                     // Only fail on real errors (not SymPy warnings); require no stdout
-                    if ((!stdout && stderr) || (!stdout && !stderr) || stdout.indexOf('Integral(') !== -1) {
+                    // For definite integrals, allow unevaluated Integral if NUMERIC value exists
+                    var hasNumeric = /NUMERIC:(?!NaN)[\d.\-]/.test(stdout);
+                    if ((!stdout && stderr) || (!stdout && !stderr) || (stdout.indexOf('Integral(') !== -1 && !(isDefinite && hasNumeric))) {
                         showError(expr, stderr || 'Could not solve this integral');
                         return;
                     }
@@ -1125,7 +1237,7 @@
             }
 
             var controller = new AbortController();
-            var timeoutId = setTimeout(function() { controller.abort(); }, 90000);
+            var timeoutId = setTimeout(function() { controller.abort(); }, 180000);
 
             fetch((window.INTEGRAL_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
                 method: 'POST',

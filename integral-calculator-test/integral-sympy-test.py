@@ -91,6 +91,11 @@ INTEGRANDS = [
     ("exp(-p)", "p"),
     ("q**2", "q"),
     ("cosh(q)", "q"),
+    # Hyperbolic: coth, csch, sech
+    ("coth(x)", "x"),
+    ("csch(x)", "x"),
+    ("sech(x)", "x"),
+    ("coth(log(x**Rational(3,2)))", "x"),  # coth composed with ln — SymPy may not resolve
 ]
 
 

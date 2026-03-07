@@ -3,9 +3,27 @@
 Test definite integrals: SymPy integrate with bounds + steps from integral_steps.
 Outputs: DEFinite:json for each case. Run: python integral-definite-test.py
 """
-import json
+import json, signal
 from sympy import *
 from sympy.integrals.manualintegrate import integral_steps, DontKnowRule
+
+class TimeoutError(Exception):
+    pass
+
+def _timeout_handler(signum, frame):
+    raise TimeoutError("integration timed out")
+
+def integrate_with_timeout(expr, bounds, timeout_sec=30):
+    """Call integrate() with a timeout to avoid hanging on hard integrals."""
+    old = signal.signal(signal.SIGALRM, _timeout_handler)
+    signal.alarm(timeout_sec)
+    try:
+        return integrate(expr, bounds)
+    except TimeoutError:
+        return None
+    finally:
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, old)
 
 # (expr, v, a, b, expected_approx) — extra symbols (e.g. n) must be declared
 DEFINITE_CASES = [
@@ -15,12 +33,16 @@ DEFINITE_CASES = [
     ("1/x", "x", 1, "E", 1),
     ("x**2", "x", 1, 0, -1/3),  # reversed bounds
     ("x**(n-1)*exp(-x)", "x", 0, "oo", None),  # gamma(n) — symbolic result
+    ("coth(log(x**Rational(3,2)))", "x", 2, 3, None),  # coth(ln(x^(3/2))) — SymPy returns unevaluated Integral
+    ("coth(x)", "x", 1, 2, None),  # hyperbolic cotangent definite integral
+    ("csch(x)", "x", 1, 2, None),  # hyperbolic cosecant definite integral
+    ("sech(x)", "x", 0, 1, None),  # hyperbolic secant definite integral
 ]
 
 def get_extra_symbols(expr_str, v):
     """Match JSP getExtraSymbols: ids not in KNOWN and not v."""
     import re
-    KNOWN = ['exp', 'log', 'sin', 'cos', 'tan', 'sec', 'csc', 'cot', 'sinh', 'cosh', 'tanh', 'sqrt', 'asin', 'acos', 'atan', 'pi']
+    KNOWN = ['exp', 'log', 'sin', 'cos', 'tan', 'sec', 'csc', 'cot', 'sinh', 'cosh', 'tanh', 'coth', 'csch', 'sech', 'sqrt', 'asin', 'acos', 'atan', 'pi']
     seen = set()
     for m in re.finditer(r'\b([a-z][a-z]*)\b', expr_str):
         w = m.group(1)
@@ -39,10 +61,15 @@ if __name__ == "__main__":
         a_sym = sympify(str(a))
         b_sym = sympify(str(b))
         steps_rule = integral_steps(expr, v_sym)
-        result = integrate(expr, (v_sym, a_sym, b_sym))
-        antideriv = integrate(expr, v_sym) if steps_rule else None
+        result = integrate_with_timeout(expr, (v_sym, a_sym, b_sym))
+        antideriv = integrate_with_timeout(expr, v_sym) if steps_rule else None
         try:
-            numeric = float(result) if result.is_number else (float(result.evalf()) if result else None)
+            if result is None:
+                numeric = None
+            elif result.is_number:
+                numeric = float(result)
+            else:
+                numeric = float(result.evalf()) if result else None
         except (TypeError, ValueError):
             numeric = None  # e.g. gamma(n) stays symbolic
         has_steps = steps_rule is not None and not isinstance(steps_rule, DontKnowRule)

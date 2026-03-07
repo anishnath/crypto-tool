@@ -220,7 +220,7 @@
                         x^2 &nbsp;&nbsp; sin(x) &nbsp;&nbsp; cos(x) &nbsp;&nbsp; tan(x)<br>
                         e^x &nbsp;&nbsp; log(x)=ln(x) &nbsp;&nbsp; sqrt(x)<br>
                         sec(x) &nbsp;&nbsp; csc(x) &nbsp;&nbsp; cot(x)<br>
-                        sinh(x) &nbsp;&nbsp; cosh(x) &nbsp;&nbsp; tanh(x)<br>
+                        sinh(x) &nbsp;&nbsp; cosh(x) &nbsp;&nbsp; tanh(x) &nbsp;&nbsp; coth(x) &nbsp;&nbsp; csch(x) &nbsp;&nbsp; sech(x)<br>
                         asin(x) &nbsp;&nbsp; acos(x) &nbsp;&nbsp; atan(x)<br>
                         pi &nbsp;&nbsp; e &nbsp;&nbsp; abs(x) &nbsp;&nbsp; 1/x
                     </div>
