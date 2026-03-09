@@ -37,6 +37,8 @@ function latexToMathJS(latex) {
 
     // ── INTEGRAL / SUM / PROD — before exponents & subscripts ──
     s = s.replace(/\\[,;!]\s*d([a-zA-Z])/g, ' d$1');
+    s = s.replace(/\\[,;!]\s*d\\([a-zA-Z]+)/g, ' dx');
+    s = s.replace(/d\\(theta|alpha|beta|gamma|delta|phi|omega|tau|sigma|rho|lambda|mu|nu|xi|eta|epsilon|zeta|iota|kappa|chi|psi|pi|upsilon)\b\s*$/g, 'dx');
     // Normalize mixed braces: \int_0^{10} → \int_{0}^{10}
     s = s.replace(/(\\(?:int|sum|prod)\s*)_([^{\s\\])(\^)/g, '$1_{$2}$3');
     // Both braced
@@ -56,6 +58,10 @@ function latexToMathJS(latex) {
     s = s.replace(/\\int\s*_\{([^{}]+)\}\^([^{}\s])$/g, 'int(x, $1, $2)');
     s = s.replace(/\\int\s*(.+?)\s*d([a-zA-Z])\s*$/g, '$1');
 
+    // Limit: \lim_{x\to a} expr → lim(expr, x, a)
+    s = s.replace(/\\lim\s*_\{([a-zA-Z])\s*(?:\\to|\\rightarrow)\s*([^}]+)\}\s*(.+)$/g, 'lim($3, $1, $2)');
+    s = s.replace(/\\lim\s*_\{([a-zA-Z])\s*(?:\\to|\\rightarrow)\s*\}\s*(.+)$/g, '$2');
+
     s = s.replace(/\\sum_\{([a-zA-Z])=([^}]+)\}\^\{([^}]+)\}\s*(.+)$/g, 'sum($1, $2, $3, $4)');
     s = s.replace(/\\sum_([a-zA-Z])=(\d+)\^(\d+)\s*(.+)$/g, 'sum($1, $2, $3, $4)');
     s = s.replace(/\\prod_\{([a-zA-Z])=([^}]+)\}\^\{([^}]+)\}\s*(.+)$/g, 'prod($1, $2, $3, $4)');
@@ -69,21 +75,47 @@ function latexToMathJS(latex) {
     // Abs
     s = s.replace(/\\left\|([^|]*?)\\right\|/g, 'abs($1)');
     s = s.replace(/\|([^|]+)\|/g, 'abs($1)');
-    // Greek
-    s = s.replace(/\\pi/g, 'pi');
-    s = s.replace(/\\theta/g, 'theta');
-    s = s.replace(/\\infty/g, 'Infinity');
-    // Trig / log
-    s = s.replace(/\\(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|sinh|cosh|tanh|ln|log|exp|abs|min|max|floor|ceil|sign|round)\b/g, '$1');
     // Parens
     s = s.replace(/\\left\s*([(\[{|])/g, '$1');
     s = s.replace(/\\right\s*([)\]}|])/g, '$1');
     s = s.replace(/\\left\s*\./g, '');
     s = s.replace(/\\right\s*\./g, '');
-    // Operators
-    s = s.replace(/\\cdot/g, '*');
+    // Operators — BEFORE Greek (so \cdot\gamma doesn't merge)
+    s = s.replace(/\\cdot(?![a-z])/g, '*');
     s = s.replace(/\\times/g, '*');
-    s = s.replace(/\\div/g, '/');
+    s = s.replace(/\\div(?![a-z])/g, '/');
+    s = s.replace(/\\pm/g, '+');
+    s = s.replace(/\\mp/g, '-');
+    s = s.replace(/\\leq/g, '<=');
+    s = s.replace(/\\geq/g, '>=');
+    s = s.replace(/\\le(?![a-z])/g, '<=');
+    s = s.replace(/\\ge(?![a-z])/g, '>=');
+    s = s.replace(/\\neq/g, '!=');
+    s = s.replace(/\\ne(?![a-z])/g, '!=');
+    s = s.replace(/\\lt(?![a-z])/g, '<');
+    s = s.replace(/\\gt(?![a-z])/g, '>');
+    s = s.replace(/\\approx/g, '≈');
+    s = s.replace(/\\partial/g, 'd');
+    // Arrows (strip)
+    s = s.replace(/\\(?:to|rightarrow|Rightarrow|leftarrow|Leftarrow|leftrightarrow|Leftrightarrow|mapsto|uparrow|downarrow|longrightarrow|longleftarrow)\b/g, '');
+    // Floor/ceiling brackets
+    s = s.replace(/\\lfloor\s*/g, 'floor(');
+    s = s.replace(/\\rfloor/g, ')');
+    s = s.replace(/\\lceil\s*/g, 'ceil(');
+    s = s.replace(/\\rceil/g, ')');
+    s = s.replace(/\\langle/g, '(');
+    s = s.replace(/\\rangle/g, ')');
+    // Dots
+    s = s.replace(/\\(?:ldots|cdots|ddots|vdots)/g, '...');
+    // Greek (lowercase) — AFTER operators
+    s = s.replace(/\\(alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|pi|rho|sigma|tau|chi|psi|phi|omega|varepsilon|varphi|varsigma|vartheta|varpi|varrho|upsilon|digamma)\b/g, '$1');
+    // Greek (uppercase)
+    s = s.replace(/\\(Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Phi|Psi|Omega|Upsilon)\b/g, '$1');
+    s = s.replace(/\\infty/g, 'Infinity');
+    s = s.replace(/\\infin/g, 'Infinity');
+    // Trig / log / math functions
+    s = s.replace(/\\(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|sinh|cosh|tanh|coth|sech|csch|ln|log|exp|abs|min|max|floor|ceil|sign|round|mod|gcd|lcm|det|dim|ker|arg|hom|deg)\b/g, '$1');
+    s = s.replace(/\\(lim|limsup|liminf|sup|inf)\b/g, '$1');
     // Braces
     s = s.replace(/\{/g, '(');
     s = s.replace(/\}/g, ')');
@@ -96,9 +128,12 @@ function latexToMathJS(latex) {
     s = s.replace(/\\,/g, '');
     s = s.replace(/\\;/g, '');
     s = s.replace(/\\!/g, '');
+    s = s.replace(/\\quad/g, ' ');
+    s = s.replace(/\\qquad/g, ' ');
     s = s.replace(/\\text\{([^}]*)\}/g, '$1');
     s = s.replace(/\\mathrm\{([^}]*)\}/g, '$1');
     s = s.replace(/\\operatorname\{([^}]*)\}/g, '$1');
+    s = s.replace(/\\mathbb\{([A-Z])\}/g, '$1');
     s = s.replace(/\\[a-zA-Z]+/g, '');
     s = s.replace(/\s+/g, ' ').trim();
     return s;
@@ -121,6 +156,14 @@ function mathJSToLatex(expr) {
         var pBody = mathJSToLatex(prodMatch[4].trim());
         return '\\prod_{' + prodMatch[1] + '=' + prodMatch[2].trim() + '}^{' + prodMatch[3].trim() + '}' + pBody;
     }
+    // lim(expr, var, value) → \lim_{var\to value} expr
+    var limMatch = expr.match(/^\s*lim\s*\(\s*(.+?)\s*,\s*([a-zA-Z])\s*,\s*(.+?)\s*\)\s*$/i);
+    if (limMatch) {
+        var lBody = mathJSToLatex(limMatch[1].trim());
+        var lVal = limMatch[3].trim();
+        lVal = lVal.replace(/^Infinity$/i, '\\infty').replace(/^-Infinity$/i, '-\\infty');
+        return '\\lim_{' + limMatch[2] + '\\to ' + lVal + '}' + lBody;
+    }
     return expr; // fallback
 }
 
@@ -135,6 +178,8 @@ function handlerMatch(value) {
     if (prodMatch) return { type: 'prod', v: prodMatch[1], start: prodMatch[2].trim(), end: prodMatch[3].trim(), body: prodMatch[4].trim() };
     var derivMatch = s.match(/^\s*deriv\s*\(\s*(.+?)\s*,\s*(.+?)\s*\)\s*$/i);
     if (derivMatch) return { type: 'deriv', expr: derivMatch[1].trim(), x0: derivMatch[2].trim() };
+    var limMatch = s.match(/^\s*lim\s*\(\s*(.+?)\s*,\s*([a-zA-Z])\s*,\s*(.+?)\s*\)\s*$/i);
+    if (limMatch) return { type: 'lim', expr: limMatch[1].trim(), v: limMatch[2], val: limMatch[3].trim() };
     return null;
 }
 
@@ -194,6 +239,18 @@ assert(latexToMathJS('\\sum_{k=0}^{100}k') === 'sum(k, 0, 100, k)', 'sum k=0..10
 // Product
 assert(latexToMathJS('\\prod_{n=1}^{5}n') === 'prod(n, 1, 5, n)', 'prod n=1..5 n (factorial)');
 
+// Limits
+assert(latexToMathJS('\\lim_{x\\to 0}\\frac{\\sin x}{x}') === 'lim(((sin x)/(x)), x, 0)', 'lim x→0 sin(x)/x');
+assert(latexToMathJS('\\lim_{x\\to\\infty}\\frac{1}{x}') === 'lim(((1)/(x)), x, Infinity)', 'lim x→∞ 1/x');
+assert(latexToMathJS('\\lim_{x\\to 1}\\frac{x^{2}-1}{x-1}') === 'lim(((x^(2)-1)/(x-1)), x, 1)', 'lim x→1 (x^2-1)/(x-1)');
+assert(latexToMathJS('\\lim_{x\\to 0}\\frac{e^{x}-1}{x}') === 'lim(((exp(x)-1)/(x)), x, 0)', 'lim x→0 (e^x-1)/x');
+assert(latexToMathJS('\\lim_{x\\to\\infty}\\left(1+\\frac{1}{x}\\right)^{x}') === 'lim((1+((1)/(x)))^(x), x, Infinity)', 'lim x→∞ (1+1/x)^x');
+assert(latexToMathJS('\\lim_{t\\to 0}\\frac{\\sin t}{t}') === 'lim(((sin t)/(t)), t, 0)', 'lim t→0 (variable t)');
+// Negative approach value
+assert(latexToMathJS('\\lim_{x\\to -1}x^{2}') === 'lim(x^(2), x, -1)', 'lim x→-1 x^2');
+// MathQuill with \rightarrow instead of \to
+assert(latexToMathJS('\\lim_{x\\rightarrow 0}\\frac{\\sin x}{x}') === 'lim(((sin x)/(x)), x, 0)', 'lim \\rightarrow variant');
+
 // Normal expressions (should NOT produce int/sum/prod)
 assert(latexToMathJS('2+3') === '2+3', 'normal: 2+3');
 assert(latexToMathJS('x^{2}') === 'x^(2)', 'normal: x^2');
@@ -219,6 +276,11 @@ assert(mathJSToLatex('int(x^2, 0, 10)') === '\\int_{0}^{10}x^2\\,dx', 'int(x^2,0
 assert(mathJSToLatex('sum(n, 1, 10, n^2)') === '\\sum_{n=1}^{10}n^2', 'sum → LaTeX');
 assert(mathJSToLatex('prod(n, 1, 5, n)') === '\\prod_{n=1}^{5}n', 'prod → LaTeX');
 assert(mathJSToLatex('x^2') === 'x^2', 'normal expr passthrough');
+// Limits
+assert(mathJSToLatex('lim(sin(x)/x, x, 0)') === '\\lim_{x\\to 0}sin(x)/x', 'lim(sin(x)/x,x,0) → LaTeX');
+assert(mathJSToLatex('lim(1/x, x, Infinity)') === '\\lim_{x\\to \\infty}1/x', 'lim Infinity → \\infty');
+assert(mathJSToLatex('lim(x^2, x, -1)') === '\\lim_{x\\to -1}x^2', 'lim negative approach');
+assert(mathJSToLatex('lim((1+1/x)^x, x, Infinity)') === '\\lim_{x\\to \\infty}(1+1/x)^x', 'lim (1+1/x)^x');
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TEST 3: Handler matching (_handleSpecialSyntaxFromInput)
@@ -267,6 +329,16 @@ assert(h && h.type === 'deriv' && h.expr === 'x^2' && h.x0 === '3', 'plain: deri
 
 h = handlerMatch('deriv(x^(2), 3)');
 assert(h && h.type === 'deriv' && h.expr === 'x^(2)' && h.x0 === '3', 'MQ: deriv(x^(2), 3)');
+
+// Limits
+h = handlerMatch('lim(sin(x)/x, x, 0)');
+assert(h && h.type === 'lim' && h.expr === 'sin(x)/x' && h.v === 'x' && h.val === '0', 'plain: lim(sin(x)/x, x, 0)');
+h = handlerMatch('lim(1/x, x, Infinity)');
+assert(h && h.type === 'lim' && h.expr === '1/x' && h.val === 'Infinity', 'plain: lim(1/x, x, Infinity)');
+h = handlerMatch('lim(x^2, x, -1)');
+assert(h && h.type === 'lim' && h.expr === 'x^2' && h.val === '-1', 'plain: lim(x^2, x, -1)');
+h = handlerMatch('lim((exp(x)-1)/x, x, 0)');
+assert(h && h.type === 'lim' && h.val === '0', 'plain: lim((e^x-1)/x, x, 0)');
 
 // Non-matching (normal expressions)
 assert(handlerMatch('x^2') === null, 'x^2 → no match');
@@ -330,6 +402,23 @@ rtt('sum(n, 1, 10, n^2)', 'sum basic');
 rtt('sum(k, 0, 100, k)', 'sum k 0..100');
 rtt('prod(n, 1, 5, n)', 'prod basic');
 
+// Limits RTT
+function rttLim(plain, desc) {
+    const latex = mathJSToLatex(plain);
+    const back = latexToMathJS(latex);
+    const h1 = handlerMatch(plain);
+    const h2 = handlerMatch(back);
+    const typeMatch = h1 && h2 && h1.type === h2.type;
+    const valMatch = !h1 || !h2 || h1.val === h2.val;
+    assert(typeMatch && valMatch, `RTT ${desc}: "${plain}" → "${latex}" → "${back}" → handler ${h2 ? h2.type : 'null'}`);
+    if (!typeMatch) console.log(`    Type: ${h1 ? h1.type : null} → ${h2 ? h2.type : null}`);
+    if (!valMatch) console.log(`    Val: ${h1 ? h1.val : '?'} → ${h2 ? h2.val : '?'}`);
+}
+rttLim('lim(sin(x)/x, x, 0)', 'lim sin(x)/x');
+rttLim('lim(1/x, x, Infinity)', 'lim 1/x at ∞');
+rttLim('lim(x^2, x, -1)', 'lim x^2 at -1');
+rttLim('lim((1+1/x)^x, x, Infinity)', 'lim Euler');
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // TEST 6: MathQuill → MathJS → handler (simulating actual MQ output)
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -362,6 +451,23 @@ mqTest('\\int_{0}^{\\pi}\\sin x\\,dx', 'int', null, '0', 'pi', 'int 0..pi sin');
 mqTest('\\sum_{n=1}^{10}n^{2}', 'sum', null, null, null, 'sum n=1..10');
 mqTest('\\prod_{n=1}^{5}n', 'prod', null, null, null, 'prod n=1..5');
 
+// Limits from MathQuill
+function mqLimTest(mqLatex, expectedVal, desc) {
+    const mathJS = latexToMathJS(mqLatex);
+    const h = handlerMatch(mathJS);
+    const ok = h && h.type === 'lim';
+    const valOk = !expectedVal || (h && h.val === expectedVal);
+    assert(ok && valOk, `MQ lim ${desc}: "${mqLatex}" → "${mathJS}"`);
+    if (!ok) console.log(`    Handler: ${JSON.stringify(h)}`);
+    if (!valOk && h) console.log(`    Val: expected "${expectedVal}", got "${h.val}"`);
+}
+mqLimTest('\\lim_{x\\to 0}\\frac{\\sin x}{x}', '0', 'sin(x)/x → 0');
+mqLimTest('\\lim_{x\\to\\infty}\\frac{1}{x}', 'Infinity', '1/x → ∞');
+mqLimTest('\\lim_{x\\to 1}\\frac{x^{2}-1}{x-1}', '1', '(x^2-1)/(x-1) → 1');
+mqLimTest('\\lim_{x\\to 0}\\frac{e^{x}-1}{x}', '0', '(e^x-1)/x → 0');
+mqLimTest('\\lim_{x\\to -1}x^{2}', '-1', 'x^2 → -1');
+mqLimTest('\\lim_{x\\to\\infty}\\left(1+\\frac{1}{x}\\right)^{x}', 'Infinity', '(1+1/x)^x → ∞');
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // TEST 7: Mid-entry states (should not produce unhandled int() strings)
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -388,6 +494,11 @@ midEntryTest('\\int_{}^{}', '\\int_{empty}^{empty}');
 midEntryTest('\\int_{}^{10}x^{2}', '\\int_{empty}^{10}x^{2}');
 midEntryTest('\\sum_{n=}^{}', '\\sum partial');
 midEntryTest('\\sum_{n=1}^{}', '\\sum partial 2');
+
+// Limit mid-entry
+midEntryTest('\\lim', 'just \\lim');
+midEntryTest('\\lim_{x\\to}', '\\lim_{x\\to} (no value yet)');
+midEntryTest('\\lim_{}', '\\lim_{} (empty subscript)');
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TEST 8: Complex Expressions — fractions, nested trig, expression bounds, etc.
@@ -642,6 +753,8 @@ assert(handlerMatch('   ') === null, 'handler whitespace');
 assert(handlerMatch('interpret(x)') === null, 'not int: interpret(x)');
 assert(handlerMatch('integer(5)') === null, 'not int: integer(5)');
 assert(handlerMatch('interval(0,1)') === null, 'not int: interval(0,1)');
+assert(handlerMatch('limit(x)') === null, 'not lim: limit(x)');
+assert(handlerMatch('limestone') === null, 'not lim: limestone');
 
 // Mixed-brace mid-entry with complex partial
 midEntryTest('\\int_0^{}', 'MQ mixed empty upper');
@@ -693,6 +806,142 @@ doubleRTT('\\int_{0}^{1}e^{x}dx', 'e^x integrand');
 doubleRTT('\\int_{-1}^{1}\\left|x\\right|dx', 'abs integrand');
 doubleRTT('\\sum_{n=1}^{10}n^{2}', 'sum basic');
 doubleRTT('\\prod_{n=1}^{5}n', 'prod basic');
+
+// Limit double RTT
+function doubleRTTLim(mqLatex, desc) {
+    const mathJS1 = latexToMathJS(mqLatex);
+    const h1 = handlerMatch(mathJS1);
+    if (!h1 || h1.type !== 'lim') {
+        assert(false, `dRTT lim ${desc}: first conversion failed → "${mathJS1}"`);
+        return;
+    }
+    const latex2 = mathJSToLatex(mathJS1);
+    const mathJS2 = latexToMathJS(latex2);
+    const h2 = handlerMatch(mathJS2);
+    const typeOk = h2 && h2.type === 'lim';
+    const valOk = typeOk && h1.val === h2.val;
+    assert(typeOk && valOk, `dRTT lim ${desc}: "${mqLatex}" → "${mathJS1}" → "${latex2}" → "${mathJS2}"`);
+    if (!typeOk) console.log(`    Type: ${h1.type} → ${h2 ? h2.type : 'null'}`);
+    if (!valOk && h2) console.log(`    Val: ${h1.val} → ${h2.val}`);
+}
+doubleRTTLim('\\lim_{x\\to 0}\\frac{\\sin x}{x}', 'sin(x)/x');
+doubleRTTLim('\\lim_{x\\to\\infty}\\frac{1}{x}', '1/x at ∞');
+doubleRTTLim('\\lim_{x\\to 1}\\frac{x^{2}-1}{x-1}', '(x^2-1)/(x-1)');
+doubleRTTLim('\\lim_{x\\to -1}x^{2}', 'x^2 at -1');
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TEST 13: Expanded MathQuill Symbols — Greek, operators, relations, floor/ceil
+// ═══════════════════════════════════════════════════════════════════════════════
+console.log('\n╔══════════════════════════════════════════════════════════╗');
+console.log('║  TEST 13: MathQuill Symbol Expansion                    ║');
+console.log('╚══════════════════════════════════════════════════════════╝\n');
+
+// --- 13a: Greek letters (lowercase) ---
+assert(latexToMathJS('\\alpha') === 'alpha', 'Greek: \\alpha');
+assert(latexToMathJS('\\beta') === 'beta', 'Greek: \\beta');
+assert(latexToMathJS('\\gamma') === 'gamma', 'Greek: \\gamma');
+assert(latexToMathJS('\\delta') === 'delta', 'Greek: \\delta');
+assert(latexToMathJS('\\epsilon') === 'epsilon', 'Greek: \\epsilon');
+assert(latexToMathJS('\\zeta') === 'zeta', 'Greek: \\zeta');
+assert(latexToMathJS('\\eta') === 'eta', 'Greek: \\eta');
+assert(latexToMathJS('\\theta') === 'theta', 'Greek: \\theta');
+assert(latexToMathJS('\\iota') === 'iota', 'Greek: \\iota');
+assert(latexToMathJS('\\kappa') === 'kappa', 'Greek: \\kappa');
+assert(latexToMathJS('\\lambda') === 'lambda', 'Greek: \\lambda');
+assert(latexToMathJS('\\mu') === 'mu', 'Greek: \\mu');
+assert(latexToMathJS('\\nu') === 'nu', 'Greek: \\nu');
+assert(latexToMathJS('\\xi') === 'xi', 'Greek: \\xi');
+assert(latexToMathJS('\\pi') === 'pi', 'Greek: \\pi');
+assert(latexToMathJS('\\rho') === 'rho', 'Greek: \\rho');
+assert(latexToMathJS('\\sigma') === 'sigma', 'Greek: \\sigma');
+assert(latexToMathJS('\\tau') === 'tau', 'Greek: \\tau');
+assert(latexToMathJS('\\chi') === 'chi', 'Greek: \\chi');
+assert(latexToMathJS('\\psi') === 'psi', 'Greek: \\psi');
+assert(latexToMathJS('\\phi') === 'phi', 'Greek: \\phi');
+assert(latexToMathJS('\\omega') === 'omega', 'Greek: \\omega');
+
+// --- 13b: Greek variant forms ---
+assert(latexToMathJS('\\varepsilon') === 'varepsilon', 'Greek: \\varepsilon');
+assert(latexToMathJS('\\varphi') === 'varphi', 'Greek: \\varphi');
+assert(latexToMathJS('\\vartheta') === 'vartheta', 'Greek: \\vartheta');
+
+// --- 13c: Greek uppercase ---
+assert(latexToMathJS('\\Gamma') === 'Gamma', 'Greek: \\Gamma');
+assert(latexToMathJS('\\Delta') === 'Delta', 'Greek: \\Delta');
+assert(latexToMathJS('\\Theta') === 'Theta', 'Greek: \\Theta');
+assert(latexToMathJS('\\Lambda') === 'Lambda', 'Greek: \\Lambda');
+assert(latexToMathJS('\\Xi') === 'Xi', 'Greek: \\Xi');
+assert(latexToMathJS('\\Pi') === 'Pi', 'Greek: \\Pi');
+assert(latexToMathJS('\\Sigma') === 'Sigma', 'Greek: \\Sigma');
+assert(latexToMathJS('\\Phi') === 'Phi', 'Greek: \\Phi');
+assert(latexToMathJS('\\Psi') === 'Psi', 'Greek: \\Psi');
+assert(latexToMathJS('\\Omega') === 'Omega', 'Greek: \\Omega');
+
+// --- 13d: Infinity variants ---
+assert(latexToMathJS('\\infty') === 'Infinity', 'infty → Infinity');
+assert(latexToMathJS('\\infin') === 'Infinity', 'infin → Infinity');
+
+// --- 13e: Operators ---
+assert(latexToMathJS('a\\cdot b') === 'a* b', 'cdot → *');
+assert(latexToMathJS('a\\times b') === 'a* b', 'times → *');
+assert(latexToMathJS('a\\div b') === 'a/ b', 'div → /');
+assert(latexToMathJS('a\\pm b') === 'a+ b', 'pm → +');
+assert(latexToMathJS('a\\mp b') === 'a- b', 'mp → -');
+
+// --- 13f: Comparisons ---
+assert(latexToMathJS('x\\leq 5') === 'x<= 5', 'leq → <=');
+assert(latexToMathJS('x\\geq 5') === 'x>= 5', 'geq → >=');
+assert(latexToMathJS('x\\neq 0') === 'x!= 0', 'neq → !=');
+assert(latexToMathJS('x\\lt 5') === 'x< 5', 'lt → <');
+assert(latexToMathJS('x\\gt 5') === 'x> 5', 'gt → >');
+
+// --- 13g: Floor / Ceiling brackets ---
+assert(latexToMathJS('\\lfloor x\\rfloor') === 'floor(x)', 'floor brackets');
+assert(latexToMathJS('\\lceil x\\rceil') === 'ceil(x)', 'ceil brackets');
+assert(latexToMathJS('\\langle x\\rangle') === '( x)', 'angle brackets');
+
+// --- 13h: Additional trig / math functions ---
+assert(latexToMathJS('\\coth x') === 'coth x', 'coth');
+assert(latexToMathJS('\\sech x') === 'sech x', 'sech');
+assert(latexToMathJS('\\csch x') === 'csch x', 'csch');
+assert(latexToMathJS('\\gcd(12, 8)') === 'gcd(12, 8)', 'gcd');
+assert(latexToMathJS('\\lcm(4, 6)') === 'lcm(4, 6)', 'lcm');
+assert(latexToMathJS('\\mod') === 'mod', 'mod');
+assert(latexToMathJS('\\det A') === 'det A', 'det');
+
+// --- 13i: Partial derivative ---
+assert(latexToMathJS('\\partial x') === 'd x', 'partial → d');
+
+// --- 13j: Dots ---
+assert(latexToMathJS('1\\ldots n') === '1... n', 'ldots');
+assert(latexToMathJS('1\\cdots n') === '1... n', 'cdots');
+
+// --- 13k: Arrows (should be stripped cleanly) ---
+assert(latexToMathJS('x\\to y') === 'x y', 'to stripped');
+assert(latexToMathJS('x\\rightarrow y') === 'x y', 'rightarrow stripped');
+assert(latexToMathJS('x\\Rightarrow y') === 'x y', 'Rightarrow stripped');
+assert(latexToMathJS('x\\leftarrow y') === 'x y', 'leftarrow stripped');
+assert(latexToMathJS('x\\mapsto y') === 'x y', 'mapsto stripped');
+
+// --- 13l: Spacing commands ---
+assert(latexToMathJS('x\\quad y') === 'x y', 'quad → space');
+assert(latexToMathJS('x\\qquad y') === 'x y', 'qquad → space');
+
+// --- 13m: Mixed Greek in expressions ---
+assert(latexToMathJS('\\alpha+\\beta\\cdot\\gamma') === 'alpha+beta*gamma', 'Greek expression');
+assert(latexToMathJS('\\sin(\\omega t+\\phi)') === 'sin(omega t+phi)', 'wave: sin(omega*t+phi)');
+assert(latexToMathJS('e^{-\\lambda x}') === 'exp(-lambda x)', 'decay: e^{-lambda*x}');
+assert(latexToMathJS('\\frac{\\Delta y}{\\Delta x}') === '((Delta y)/(Delta x))', 'difference quotient');
+
+// --- 13n: Compound — Greek bounds in integrals ---
+assert(
+    latexToMathJS('\\int_{-\\pi}^{\\pi}\\cos(\\omega x)dx') === 'int(cos(omega x), -pi, pi)',
+    'int with Greek: cos(omega*x) from -pi to pi'
+);
+assert(
+    latexToMathJS('\\int_{0}^{2\\pi}\\sin(\\theta)d\\theta') === 'int(sin(theta), 0, 2pi)',
+    'int d-theta: sin(theta) from 0 to 2pi'
+);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // SUMMARY

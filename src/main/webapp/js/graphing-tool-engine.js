@@ -52,8 +52,11 @@ function latexToMathJS(latex) {
     // ── Definite integral: \int_{a}^{b} expr dx → int(expr, a, b) ──
     // MUST happen BEFORE exponent/subscript processing — MathQuill produces \int_{0}^{1}x^{2}dx
     // and the subscript stripper would destroy _{0} if we don't extract it first.
-    // Strip \, \; \! thin spaces near dx to avoid breaking the match
+    // Strip \, \; \! thin spaces near dx/d\theta to avoid breaking the match
     s = s.replace(/\\[,;!]\s*d([a-zA-Z])/g, ' d$1');
+    s = s.replace(/\\[,;!]\s*d\\([a-zA-Z]+)/g, ' dx');
+    // Normalize d\theta, d\alpha etc. → dx (treat as single-char variable for integral matching)
+    s = s.replace(/d\\(theta|alpha|beta|gamma|delta|phi|omega|tau|sigma|rho|lambda|mu|nu|xi|eta|epsilon|zeta|iota|kappa|chi|psi|pi|upsilon)\b\s*$/g, 'dx');
     // Normalize MathQuill mixed-brace bounds on \int, \sum, \prod
     // MQ omits braces for single-char bounds: \int_0^{10} → \int_{0}^{10}
     s = s.replace(/(\\(?:int|sum|prod)\s*)_([^{\s\\])(\^)/g, '$1_{$2}$3');
@@ -76,6 +79,15 @@ function latexToMathJS(latex) {
     // Indefinite integral: \int expr dx → just the expression (antiderivative handled by engine)
     s = s.replace(/\\int\s*(.+?)\s*d([a-zA-Z])\s*$/g, '$1');
 
+    // ── Limit: \lim_{x\to a} expr → lim(expr, x, a) ──
+    // MathQuill produces: \lim_{x\to 0}\frac{\sin x}{x} or \lim_{x\to\infty}(1+1/x)^x
+    // Braced subscript with \to or \rightarrow
+    s = s.replace(/\\lim\s*_\{([a-zA-Z])\s*(?:\\to|\\rightarrow)\s*([^}]+)\}\s*(.+)$/g, 'lim($3, $1, $2)');
+    // Unbraced single-char approach value: \lim_{x\to 0} expr (MQ mixed-brace)
+    s = s.replace(/\\lim\s*_\{([a-zA-Z])\s*(?:\\to|\\rightarrow)\s*\}\s*(.+)$/g, '$2');
+    // Plain text \lim without subscript → pass through as expression
+    // (don't strip \lim if no subscript — let the cleanup handle it)
+
     // ── Summation: \sum_{n=1}^{10} body → sum(n, 1, 10, body) ──
     // MUST happen BEFORE subscript stripping
     s = s.replace(/\\sum_\{([a-zA-Z])=([^}]+)\}\^\{([^}]+)\}\s*(.+)$/g, 'sum($1, $2, $3, $4)');
@@ -96,40 +108,75 @@ function latexToMathJS(latex) {
     s = s.replace(/\\left\|([^|]*?)\\right\|/g, 'abs($1)');
     s = s.replace(/\|([^|]+)\|/g, 'abs($1)');
 
-    // ── Greek letters ──
-    s = s.replace(/\\pi/g, 'pi');
-    s = s.replace(/\\theta/g, 'theta');
-    s = s.replace(/\\alpha/g, 'alpha');
-    s = s.replace(/\\beta/g, 'beta');
-    s = s.replace(/\\gamma/g, 'gamma');
-    s = s.replace(/\\phi/g, 'phi');
-    s = s.replace(/\\lambda/g, 'lambda');
-    s = s.replace(/\\mu/g, 'mu');
-    s = s.replace(/\\sigma/g, 'sigma');
-    s = s.replace(/\\omega/g, 'omega');
-    s = s.replace(/\\infty/g, 'Infinity');
-
-    // ── Trig / log functions: \sin → sin, \cos → cos, etc. ──
-    s = s.replace(/\\(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|sinh|cosh|tanh|ln|log|exp|abs|min|max|floor|ceil|sign|round)\b/g, '$1');
-
-    // ── Parentheses: \left( \right) → ( ) — MUST come before \le/\ge matching ──
+    // ── Parentheses: \left( \right) → ( ) ──
     s = s.replace(/\\left\s*([(\[{|])/g, '$1');
     s = s.replace(/\\right\s*([)\]}|])/g, '$1');
-    s = s.replace(/\\left\s*\./g, '');  // \left. invisible delimiter
+    s = s.replace(/\\left\s*\./g, '');
     s = s.replace(/\\right\s*\./g, '');
 
-    // ── Special LaTeX commands ──
-    s = s.replace(/\\cdot/g, '*');
+    // ── Operators — MUST come before Greek letters (so \cdot\gamma doesn't merge) ──
+    s = s.replace(/\\cdot(?![a-z])/g, '*');
     s = s.replace(/\\times/g, '*');
-    s = s.replace(/\\div/g, '/');
-    s = s.replace(/\\pm/g, '+');  // default to +
+    s = s.replace(/\\div(?![a-z])/g, '/');
+    s = s.replace(/\\pm/g, '+');
+    s = s.replace(/\\mp/g, '-');
+    // ── Comparisons / relations ──
     s = s.replace(/\\leq/g, '<=');
     s = s.replace(/\\geq/g, '>=');
     s = s.replace(/\\le(?![a-z])/g, '<=');
     s = s.replace(/\\ge(?![a-z])/g, '>=');
     s = s.replace(/\\neq/g, '!=');
+    s = s.replace(/\\ne(?![a-z])/g, '!=');
     s = s.replace(/\\lt(?![a-z])/g, '<');
     s = s.replace(/\\gt(?![a-z])/g, '>');
+    s = s.replace(/\\approx/g, '≈');
+    s = s.replace(/\\sim/g, '~');
+    // ── Calculus symbols ──
+    s = s.replace(/\\partial/g, 'd');
+    s = s.replace(/\\nabla/g, 'nabla');
+    // ── Logic ──
+    s = s.replace(/\\neg/g, 'not ');
+    s = s.replace(/\\wedge/g, ' and ');
+    s = s.replace(/\\vee/g, ' or ');
+    // ── Set notation ──
+    s = s.replace(/\\cup/g, ' union ');
+    s = s.replace(/\\cap/g, ' intersect ');
+    s = s.replace(/\\setminus/g, ' \\ ');
+    s = s.replace(/\\emptyset/g, '{}');
+    s = s.replace(/\\subseteq/g, ' subseteq ');
+    s = s.replace(/\\supseteq/g, ' supseteq ');
+    s = s.replace(/\\subset/g, ' subset ');
+    s = s.replace(/\\supset/g, ' supset ');
+    s = s.replace(/\\notin/g, ' notin ');
+    s = s.replace(/\\in(?![a-z])/g, ' in ');
+    s = s.replace(/\\forall/g, 'forall ');
+    s = s.replace(/\\exists/g, 'exists ');
+    // ── Arrows (strip) ──
+    s = s.replace(/\\(?:to|rightarrow|Rightarrow|leftarrow|Leftarrow|leftrightarrow|Leftrightarrow|mapsto|uparrow|downarrow|longrightarrow|longleftarrow)\b/g, '');
+    // ── Floor / ceiling brackets ──
+    s = s.replace(/\\lfloor\s*/g, 'floor(');
+    s = s.replace(/\\rfloor/g, ')');
+    s = s.replace(/\\lceil\s*/g, 'ceil(');
+    s = s.replace(/\\rceil/g, ')');
+    s = s.replace(/\\langle/g, '(');
+    s = s.replace(/\\rangle/g, ')');
+    // ── Dots ──
+    s = s.replace(/\\(?:ldots|cdots|ddots|vdots)/g, '...');
+    // ── Number sets ──
+    s = s.replace(/\\mathbb\{([A-Z])\}/g, '$1');
+
+    // ── Greek letters (lowercase) — AFTER operators so \cdot\gamma works ──
+    s = s.replace(/\\(alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|pi|rho|sigma|tau|chi|psi|phi|omega|varepsilon|varphi|varsigma|vartheta|varpi|varrho|upsilon|digamma)\b/g, '$1');
+    // ── Greek letters (uppercase) ──
+    s = s.replace(/\\(Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Phi|Psi|Omega|Upsilon)\b/g, '$1');
+    // ── Special constants ──
+    s = s.replace(/\\infty/g, 'Infinity');
+    s = s.replace(/\\infin/g, 'Infinity');
+
+    // ── Trig / log / math functions ──
+    s = s.replace(/\\(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|sinh|cosh|tanh|coth|sech|csch|ln|log|exp|abs|min|max|floor|ceil|sign|round|mod|gcd|lcm|det|dim|ker|arg|hom|deg)\b/g, '$1');
+    // ── Limit operator names ──
+    s = s.replace(/\\(lim|limsup|liminf|sup|inf)\b/g, '$1');
 
     // ── Braces cleanup ──
     s = s.replace(/\{/g, '(');
@@ -185,6 +232,16 @@ function mathJSToLatex(expr) {
     if (prodMatch) {
         var pBody = mathJSToLatex(prodMatch[4].trim());
         return '\\prod_{' + prodMatch[1] + '=' + prodMatch[2].trim() + '}^{' + prodMatch[3].trim() + '}' + pBody;
+    }
+
+    // lim(expr, var, value) → \lim_{var\to value} expr
+    var limMatch = expr.match(/^\s*lim\s*\(\s*(.+?)\s*,\s*([a-zA-Z])\s*,\s*(.+?)\s*\)\s*$/i);
+    if (limMatch) {
+        var lBody = mathJSToLatex(limMatch[1].trim());
+        var lVal = limMatch[3].trim();
+        // Convert Infinity → \infty for LaTeX
+        lVal = lVal.replace(/^Infinity$/i, '\\infty').replace(/^-Infinity$/i, '-\\infty');
+        return '\\lim_{' + limMatch[2] + '\\to ' + lVal + '}' + lBody;
     }
 
     // For comma-separated expressions (parametric like "cos(t), sin(t)"),
@@ -251,8 +308,28 @@ function _initMathQuillField(id) {
         leftRightIntoCmdGoes: 'up',
         restrictMismatchedBrackets: true,
         supSubsRequireOperand: true,
-        autoCommands: 'pi theta sqrt int sum prod alpha beta gamma phi lambda mu sigma omega infty',
-        autoOperatorNames: 'sin cos tan sec csc cot arcsin arccos arctan sinh cosh tanh ln log exp abs floor ceil sign round min max nthRoot factorial deriv',
+        autoCommands: 'pi theta sqrt int sum prod coprod oint'
+            + ' alpha beta gamma delta epsilon zeta eta iota kappa lambda mu nu xi rho sigma tau chi psi phi omega'
+            + ' varepsilon varphi varsigma vartheta varpi varrho'
+            + ' Gamma Delta Theta Lambda Xi Pi Sigma Phi Psi Omega Upsilon'
+            + ' infty pm mp times div cdot le leq ge geq neq approx sim simeq cong equiv'
+            + ' subset supset subseteq supseteq in notin cup cap setminus emptyset'
+            + ' forall exists nexists neg wedge vee oplus otimes'
+            + ' to rightarrow Rightarrow leftarrow Leftarrow leftrightarrow Leftrightarrow'
+            + ' uparrow downarrow mapsto'
+            + ' partial nabla infin aleph'
+            + ' lfloor rfloor lceil rceil langle rangle'
+            + ' ldots cdots ddots vdots'
+            + ' star diamond triangle square circ bullet angle perp parallel'
+            + ' quad qquad',
+        autoOperatorNames: 'sin cos tan sec csc cot'
+            + ' arcsin arccos arctan'
+            + ' sinh cosh tanh coth sech csch'
+            + ' ln log exp'
+            + ' abs floor ceil sign round min max mod gcd lcm'
+            + ' det dim ker lim limsup liminf sup inf'
+            + ' arg deg hom'
+            + ' nthRoot factorial deriv',
         handlers: {
             edit: function() {
                 _onMathQuillEdit(id);
@@ -379,7 +456,7 @@ function _onMathQuillEdit(id) {
 
     // For limit type, trigger limit evaluation (reads from MQ via updateLimitExpression)
     if (expr && expr.type === 'limit') {
-        updateLimitExpression(id);
+        try { updateLimitExpression(id); } catch (_) {}
         return; // updateLimitExpression calls updateGraph internally
     }
 
@@ -2700,7 +2777,7 @@ class GraphingEngine {
             // Handle int()/deriv() — _handleSpecialSyntaxFromInput should have stripped these,
             // but during mid-entry in MathQuill the expression may still be int(...)/deriv(...).
             // Skip plotting to avoid Math.js compile errors.
-            if (/^\s*(int|deriv)\s*\(/i.test(rawSubstituted)) {
+            if (/^\s*(int|deriv|lim)\s*\(/i.test(rawSubstituted)) {
                 return null;
             }
 
@@ -4973,6 +5050,19 @@ function _evaluateNumeric(id, exprStr) {
         return;
     }
 
+    // lim(expr, var, value) → limit at a point
+    var limMatch = s.match(/^\s*lim\s*\(\s*(.+?)\s*,\s*([a-zA-Z])\s*,\s*(.+?)\s*\)\s*$/i);
+    if (limMatch) {
+        var limResult = _numericLimit(limMatch[1], limMatch[2], limMatch[3]);
+        if (limResult !== null && isFinite(limResult)) {
+            resultEl.textContent = 'lim ≈ ' + parseFloat(limResult.toPrecision(10));
+            resultEl.style.display = '';
+        } else {
+            resultEl.style.display = 'none';
+        }
+        return;
+    }
+
     // deriv(expr, x0) or d/dx(expr) at x=x0 → derivative at a point
     var derivMatch = s.match(/^\s*deriv\s*\(\s*(.+?)\s*,\s*(.+?)\s*\)\s*$/i);
     if (derivMatch) {
@@ -6279,6 +6369,7 @@ function _parseBound(s) {
  *   sum(n, a, b, body) → if body has x: plot as function; else show numeric result
  *   prod(n, a, b, body)→ same
  *   deriv(expr, x0)    → plot expr, show tangent at x0, show f'(x0) ≈ value
+ *   lim(expr, var, val) → show numeric + symbolic limit result
  */
 function _handleSpecialSyntaxFromInput(id, value) {
     var expr = engine.expressions.find(function(e) { return e.id === id; });
@@ -6348,6 +6439,35 @@ function _handleSpecialSyntaxFromInput(id, value) {
             }
             resultEl2.style.display = 'block';
         }
+        return true;
+    }
+
+    // ── lim(expression, variable, value) ──
+    var limMatch = s.match(/^\s*lim\s*\(\s*(.+?)\s*,\s*([a-zA-Z])\s*,\s*(.+?)\s*\)\s*$/i);
+    if (limMatch) {
+        var limExpr = limMatch[1].trim();
+        var limVar = limMatch[2];
+        var limValStr = limMatch[3].trim();
+
+        // Store full form for MathQuill round-tripping
+        expr._originalInput = s;
+
+        // Switch to limit type and set limit-specific fields
+        expr.type = 'limit';
+        expr.expression = limExpr;
+        expr.limitExpr = limExpr;
+        expr.limitVar = limVar;
+        expr.limitVal = limValStr;
+        engine.updateExpression(id, { expression: limExpr });
+
+        // Update type badge
+        var typeSel = document.getElementById('type-' + id);
+        if (typeSel) typeSel.value = 'limit';
+        var badge = document.getElementById('type-badge-' + id);
+        if (badge) badge.textContent = 'LIM';
+
+        // Evaluate limit numerically and show result
+        _showLimitResult(id, limExpr, limVar, limValStr);
         return true;
     }
 
@@ -6437,6 +6557,85 @@ function _showIntegrationResult(id, expression, a, b) {
     } else {
         resultEl.style.display = 'none';
     }
+}
+
+/**
+ * Evaluate a limit and show the result in the numeric result panel.
+ * Uses numerical approach (evaluate near the point) with Nerdamer symbolic fallback.
+ */
+function _showLimitResult(id, expression, variable, value) {
+    var resultEl = document.getElementById('numeric-result-' + id);
+    if (!resultEl) return;
+
+    var parts = [];
+
+    // Numerical limit via successive approach
+    var numericLimit = _numericLimit(expression, variable, value);
+    if (numericLimit !== null && isFinite(numericLimit)) {
+        var limStr = Number.isInteger(numericLimit) ? String(numericLimit) : parseFloat(numericLimit.toPrecision(10)).toString();
+        parts.push('lim(' + variable + '→' + value + ') ≈ ' + limStr);
+    }
+
+    // Symbolic via Nerdamer
+    try {
+        if (typeof nerdamer !== 'undefined' && expression) {
+            var normExpr = engine.stripCartesianPrefix(engine.normalizeExpression(expression));
+            var result = nerdamer('limit(' + normExpr + ', ' + variable + ', ' + value + ')');
+            var sym = result.text();
+            if (sym) {
+                parts.push('L = ' + sym);
+            }
+        }
+    } catch (_) { /* Nerdamer can't evaluate — that's fine */ }
+
+    if (parts.length > 0) {
+        resultEl.innerHTML = parts.join('<br>');
+        resultEl.style.display = 'block';
+    } else {
+        resultEl.style.display = 'none';
+    }
+}
+
+/**
+ * Numerically evaluate a limit by approaching the point from both sides.
+ * Returns the averaged value if both sides converge, or null.
+ */
+function _numericLimit(expression, variable, value) {
+    try {
+        var a = _parseBound(value);
+        var normExpr = engine ? engine.normalizeExpression(expression) : expression;
+        var node = math.parse(normExpr);
+
+        // Handle infinity: approach from large values
+        if (!isFinite(a)) {
+            var sign = a > 0 ? 1 : -1;
+            var vals = [1e2, 1e4, 1e6, 1e8].map(function(n) {
+                var scope = {}; scope[variable] = sign * n;
+                try { return node.evaluate(scope); } catch (_) { return NaN; }
+            });
+            var last = vals[vals.length - 1];
+            if (isFinite(last)) return last;
+            return null;
+        }
+
+        // Approach from left and right
+        var deltas = [0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001];
+        var leftVals = [], rightVals = [];
+        for (var i = 0; i < deltas.length; i++) {
+            var scopeL = {}; scopeL[variable] = a - deltas[i];
+            var scopeR = {}; scopeR[variable] = a + deltas[i];
+            try { leftVals.push(node.evaluate(scopeL)); } catch (_) { leftVals.push(NaN); }
+            try { rightVals.push(node.evaluate(scopeR)); } catch (_) { rightVals.push(NaN); }
+        }
+        var lLast = leftVals[leftVals.length - 1];
+        var rLast = rightVals[rightVals.length - 1];
+        if (isFinite(lLast) && isFinite(rLast) && Math.abs(lLast - rLast) < 1e-4) {
+            return (lLast + rLast) / 2;
+        }
+        if (isFinite(lLast)) return lLast;
+        if (isFinite(rLast)) return rLast;
+        return null;
+    } catch (_) { return null; }
 }
 
 // ==================== Variable Assignment Handler ====================
