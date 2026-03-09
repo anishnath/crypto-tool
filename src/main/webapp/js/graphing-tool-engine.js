@@ -49,6 +49,42 @@ function latexToMathJS(latex) {
     s = s.replace(/\\sqrt\[([^\]]+)\]\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, 'nthRoot($2, $1)');
     s = s.replace(/\\sqrt\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, 'sqrt($1)');
 
+    // ── Definite integral: \int_{a}^{b} expr dx → int(expr, a, b) ──
+    // MUST happen BEFORE exponent/subscript processing — MathQuill produces \int_{0}^{1}x^{2}dx
+    // and the subscript stripper would destroy _{0} if we don't extract it first.
+    // Strip \, \; \! thin spaces near dx to avoid breaking the match
+    s = s.replace(/\\[,;!]\s*d([a-zA-Z])/g, ' d$1');
+    // Normalize MathQuill mixed-brace bounds on \int, \sum, \prod
+    // MQ omits braces for single-char bounds: \int_0^{10} → \int_{0}^{10}
+    s = s.replace(/(\\(?:int|sum|prod)\s*)_([^{\s\\])(\^)/g, '$1_{$2}$3');
+    // Match with braces: \int_{0}^{10} x^2 dx → int(x^2, 0, 10)
+    s = s.replace(/\\int\s*_\{([^{}]*)\}\^\{([^{}]*)\}\s*(.+?)\s+d([a-zA-Z])\s*$/g, 'int($3, $1, $2)');
+    // Without space before dx: \int_{0}^{10}x^2dx
+    s = s.replace(/\\int\s*_\{([^{}]*)\}\^\{([^{}]*)\}\s*(.+?)d([a-zA-Z])\s*$/g, 'int($3, $1, $2)');
+    // Mixed: braced lower, unbraced single-char upper: \int_{0}^1x^2dx
+    s = s.replace(/\\int\s*_\{([^{}]*)\}\^([^{}\s])\s*(.+?)\s+d([a-zA-Z])\s*$/g, 'int($3, $1, $2)');
+    s = s.replace(/\\int\s*_\{([^{}]*)\}\^([^{}\s])\s*(.+?)d([a-zA-Z])\s*$/g, 'int($3, $1, $2)');
+    // Without braces (plain text): \int_0^1 x^2 dx
+    s = s.replace(/\\int\s*_([^{}\s])\^([^{}\s])\s*(.+?)\s+d([a-zA-Z])\s*$/g, 'int($3, $1, $2)');
+    s = s.replace(/\\int\s*_([^{}\s])\^([^{}\s])\s*(.+?)d([a-zA-Z])\s*$/g, 'int($3, $1, $2)');
+    // MathQuill no-dx: \int_{0}^{10} expr → int(expr, 0, 10)
+    s = s.replace(/\\int\s*_\{([^{}]+)\}\^\{([^{}]+)\}\s*(.+)$/g, 'int($3, $1, $2)');
+    s = s.replace(/\\int\s*_\{([^{}]+)\}\^\{([^{}]+)\}$/g, 'int(x, $1, $2)');
+    // No-dx mixed: \int_{0}^1 expr or \int_{0}^1
+    s = s.replace(/\\int\s*_\{([^{}]+)\}\^([^{}\s])\s*(.+)$/g, 'int($3, $1, $2)');
+    s = s.replace(/\\int\s*_\{([^{}]+)\}\^([^{}\s])$/g, 'int(x, $1, $2)');
+    // Indefinite integral: \int expr dx → just the expression (antiderivative handled by engine)
+    s = s.replace(/\\int\s*(.+?)\s*d([a-zA-Z])\s*$/g, '$1');
+
+    // ── Summation: \sum_{n=1}^{10} body → sum(n, 1, 10, body) ──
+    // MUST happen BEFORE subscript stripping
+    s = s.replace(/\\sum_\{([a-zA-Z])=([^}]+)\}\^\{([^}]+)\}\s*(.+)$/g, 'sum($1, $2, $3, $4)');
+    s = s.replace(/\\sum_([a-zA-Z])=(\d+)\^(\d+)\s*(.+)$/g, 'sum($1, $2, $3, $4)');
+
+    // ── Product: \prod_{n=1}^{10} body → prod(n, 1, 10, body) ──
+    s = s.replace(/\\prod_\{([a-zA-Z])=([^}]+)\}\^\{([^}]+)\}\s*(.+)$/g, 'prod($1, $2, $3, $4)');
+    s = s.replace(/\\prod_([a-zA-Z])=(\d+)\^(\d+)\s*(.+)$/g, 'prod($1, $2, $3, $4)');
+
     // ── Exponents: x^{...} → x^(...), handle single char x^2 already fine ──
     s = s.replace(/\^\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, '^($1)');
 
@@ -134,6 +170,23 @@ function latexToMathJS(latex) {
 function mathJSToLatex(expr) {
     if (!expr || typeof expr !== 'string') return '';
 
+    // ── Special forms: int/sum/prod/deriv → LaTeX before general processing ──
+    var intMatch = expr.match(/^\s*int\s*\(\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+?)\s*\)\s*$/i);
+    if (intMatch) {
+        var body = mathJSToLatex(intMatch[1].trim());
+        return '\\int_{' + intMatch[2].trim() + '}^{' + intMatch[3].trim() + '}' + body + '\\,dx';
+    }
+    var sumMatch = expr.match(/^\s*sum\s*\(\s*([a-zA-Z])\s*,\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+)\s*\)\s*$/i);
+    if (sumMatch) {
+        var sBody = mathJSToLatex(sumMatch[4].trim());
+        return '\\sum_{' + sumMatch[1] + '=' + sumMatch[2].trim() + '}^{' + sumMatch[3].trim() + '}' + sBody;
+    }
+    var prodMatch = expr.match(/^\s*prod\s*\(\s*([a-zA-Z])\s*,\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+)\s*\)\s*$/i);
+    if (prodMatch) {
+        var pBody = mathJSToLatex(prodMatch[4].trim());
+        return '\\prod_{' + prodMatch[1] + '=' + prodMatch[2].trim() + '}^{' + prodMatch[3].trim() + '}' + pBody;
+    }
+
     // For comma-separated expressions (parametric like "cos(t), sin(t)"),
     // convert each part separately and rejoin
     if (expr.includes(',') && !expr.includes('(') || (expr.match(/,/g) || []).length > (expr.match(/\(/g) || []).length) {
@@ -198,8 +251,8 @@ function _initMathQuillField(id) {
         leftRightIntoCmdGoes: 'up',
         restrictMismatchedBrackets: true,
         supSubsRequireOperand: true,
-        autoCommands: 'pi theta sqrt alpha beta gamma phi lambda mu sigma omega infty',
-        autoOperatorNames: 'sin cos tan sec csc cot arcsin arccos arctan sinh cosh tanh ln log exp abs floor ceil sign round min max nthRoot factorial sum prod',
+        autoCommands: 'pi theta sqrt int sum prod alpha beta gamma phi lambda mu sigma omega infty',
+        autoOperatorNames: 'sin cos tan sec csc cot arcsin arccos arctan sinh cosh tanh ln log exp abs floor ceil sign round min max nthRoot factorial deriv',
         handlers: {
             edit: function() {
                 _onMathQuillEdit(id);
@@ -211,12 +264,16 @@ function _initMathQuillField(id) {
 
     // Set initial content if expression already has a value
     const expr = engine.expressions.find(e => e.id === id);
-    if (expr && expr.expression && expr.expression.trim()) {
-        const latex = mathJSToLatex(expr.expression);
-        if (latex) {
-            _mqInitializing = true;
-            mq.latex(latex);
-            _mqInitializing = false;
+    if (expr) {
+        // Prefer _originalInput for round-tripping int/sum/prod/deriv through MathQuill
+        const sourceExpr = (expr._originalInput && expr._originalInput.trim()) || expr.expression;
+        if (sourceExpr && sourceExpr.trim()) {
+            const latex = mathJSToLatex(sourceExpr);
+            if (latex) {
+                _mqInitializing = true;
+                mq.latex(latex);
+                _mqInitializing = false;
+            }
         }
     }
 
@@ -304,6 +361,15 @@ function _onMathQuillEdit(id) {
         _handleListExpression(id, mathExpr);
         try { updateGraph(); } catch (_) {}
         return;
+    }
+
+    // Handle inline int/sum/prod/deriv from MathQuill — connect to graph + numeric result
+    if (expr && expr.type === 'cartesian') {
+        var handled = _handleSpecialSyntaxFromInput(id, mathExpr);
+        if (handled) {
+            try { updateGraph(); } catch (_) {}
+            return;
+        }
     }
 
     // Detect and create sliders for parameters (a, b, c, etc.)
@@ -2631,6 +2697,13 @@ class GraphingEngine {
                 if (trace) return trace;
             }
 
+            // Handle int()/deriv() — _handleSpecialSyntaxFromInput should have stripped these,
+            // but during mid-entry in MathQuill the expression may still be int(...)/deriv(...).
+            // Skip plotting to avoid Math.js compile errors.
+            if (/^\s*(int|deriv)\s*\(/i.test(rawSubstituted)) {
+                return null;
+            }
+
             // Handle sum/prod — must match before normalizeExpression
             if (/^\s*sum\s*\(/i.test(rawSubstituted)) {
                 const sumTrace = this._generateSumProductTrace(rawSubstituted, 'sum', xMin, xMax, expr);
@@ -2734,6 +2807,9 @@ class GraphingEngine {
                                 line: { color: expr.color, width: 2, dash: 'dash' },
                                 connectgaps: false
                             });
+                        } else if (!expr._sympyDerivResolved) {
+                            // Queue SymPy fallback for derivative
+                            expr._sympyDerivNeeded = { expression, xMin, xMax };
                         }
                     }
 
@@ -2896,15 +2972,24 @@ class GraphingEngine {
                     if (expr.showAntiderivative) {
                         const antiData = this.generateAntiderivative(expression, xMin, xMax);
                         if (antiData) {
+                            const legendName = antiData.symbolic
+                                ? `F(x) = ${antiData.symbolic} + C`
+                                : `F(x) = ∫${expr.expression} dx`;
                             trace.push({
                                 x: antiData.x,
                                 y: antiData.y,
                                 type: 'scatter',
                                 mode: 'lines',
-                                name: `F(x) = ∫${expr.expression} dx`,
+                                name: legendName,
                                 line: { color: expr.color, width: 2, dash: 'dot' },
                                 connectgaps: false
                             });
+                            // Show symbolic antiderivative in numeric result panel
+                            const resultEl = document.getElementById('numeric-result-' + expr.id);
+                            if (resultEl && antiData.symbolic && !expr.showIntegration) {
+                                resultEl.innerHTML = 'F(x) = ' + antiData.symbolic + ' + C';
+                                resultEl.style.display = 'block';
+                            }
                         } else if (!expr._sympyAntiResolved) {
                             // Queue SymPy fallback for antiderivative
                             expr._sympyAntiNeeded = { expression, xMin, xMax };
@@ -3683,11 +3768,26 @@ class GraphingEngine {
             // Inject cached SymPy antiderivative if resolved
             if (expr._sympyAntiResolved && expr._sympyAntiData) {
                 const ad = expr._sympyAntiData;
+                const adName = ad.symbolic
+                    ? `F(x) = ${ad.symbolic} + C`
+                    : `F(x) = ∫${expr.expression} dx`;
                 traces.push({
                     x: ad.x, y: ad.y,
                     type: 'scatter', mode: 'lines',
-                    name: `F(x) = ∫${expr.expression} dx`,
+                    name: adName,
                     line: { color: expr.color, width: 2, dash: 'dot' },
+                    connectgaps: false
+                });
+            }
+
+            // Inject cached SymPy derivative if resolved
+            if (expr._sympyDerivResolved && expr._sympyDerivData) {
+                const dd = expr._sympyDerivData;
+                traces.push({
+                    x: dd.x, y: dd.y,
+                    type: 'scatter', mode: 'lines',
+                    name: `f'(${expr.expression})`,
+                    line: { color: expr.color, width: 2, dash: 'dash' },
                     connectgaps: false
                 });
             }
@@ -3827,6 +3927,22 @@ class GraphingEngine {
                 }));
             }
 
+            // Derivative fallback
+            if (expr._sympyDerivNeeded && !expr._sympyDerivInFlight) {
+                const { expression: dExpr, xMin: dMin, xMax: dMax } = expr._sympyDerivNeeded;
+                delete expr._sympyDerivNeeded;
+                expr._sympyDerivInFlight = true;
+                count++;
+                const derivExpr = expr;
+                promises.push(this.generateDerivativeSymPy(dExpr, dMin, dMax).then(data => {
+                    derivExpr._sympyDerivInFlight = false;
+                    if (data) {
+                        derivExpr._sympyDerivData = data;
+                        derivExpr._sympyDerivResolved = true;
+                    }
+                }));
+            }
+
             // Limit fallback
             if (expr._sympyLimitNeeded && !expr._sympyLimitInFlight) {
                 const { limitExpr, limitVar, limitVal } = expr._sympyLimitNeeded;
@@ -3889,11 +4005,26 @@ class GraphingEngine {
             // Inject SymPy antiderivative data as additional trace (keep data for future re-plots)
             if (expr._sympyAntiResolved && expr._sympyAntiData) {
                 const ad = expr._sympyAntiData;
+                const adName = ad.symbolic
+                    ? `F(x) = ${ad.symbolic} + C`
+                    : `F(x) = ∫${expr.expression} dx`;
                 traces.push({
                     x: ad.x, y: ad.y,
                     type: 'scatter', mode: 'lines',
-                    name: `F(x) = ∫${expr.expression} dx`,
+                    name: adName,
                     line: { color: expr.color, width: 2, dash: 'dot' },
+                    connectgaps: false
+                });
+            }
+
+            // Inject SymPy derivative data as additional trace
+            if (expr._sympyDerivResolved && expr._sympyDerivData) {
+                const dd = expr._sympyDerivData;
+                traces.push({
+                    x: dd.x, y: dd.y,
+                    type: 'scatter', mode: 'lines',
+                    name: `f'(${expr.expression})`,
+                    line: { color: expr.color, width: 2, dash: 'dash' },
                     connectgaps: false
                 });
             }
@@ -4018,7 +4149,8 @@ function _serializeExpressions() {
             tangentX: e.tangentX,
             showIntegration: e.showIntegration || false,
             integrationBounds: e.integrationBounds,
-            showAntiderivative: e.showAntiderivative || false
+            showAntiderivative: e.showAntiderivative || false,
+            _originalInput: e._originalInput || undefined
         };
     });
 }
@@ -4084,6 +4216,7 @@ function restoreState(state) {
         if (s.showTangent) { expr.showTangent = true; expr.tangentX = s.tangentX; }
         if (s.showIntegration) { expr.showIntegration = true; expr.integrationBounds = s.integrationBounds; }
         if (s.showAntiderivative) expr.showAntiderivative = true;
+        if (s._originalInput) expr._originalInput = s._originalInput;
         createExpressionElement(expr);
         // Set type dropdown
         const typeSel = document.getElementById(`type-${expr.id}`);
@@ -4624,11 +4757,143 @@ function _syncExpressionOrder() {
 
 /* =========================================================================
    Numeric Evaluation (Desmos-style: type "2+3" → shows "= 5")
+   Handles special forms: int(), sum(), prod(), deriv(), nCr(), nPr()
    ========================================================================= */
+
+/** Format a numeric result for display */
+function _formatNumericResult(val) {
+    if (typeof val !== 'number' || !isFinite(val)) return null;
+    if (Number.isInteger(val)) return '= ' + val;
+    return '= ' + parseFloat(val.toPrecision(10));
+}
+
+/** Show a numeric result (number or complex) in the result element */
+function _showNumericResult(resultEl, result) {
+    if (typeof result === 'number' && isFinite(result)) {
+        resultEl.textContent = _formatNumericResult(result);
+        resultEl.style.display = '';
+        return true;
+    }
+    if (typeof result === 'object' && result && typeof result.re === 'number') {
+        var re = parseFloat(result.re.toPrecision(8));
+        var im = parseFloat(result.im.toPrecision(8));
+        if (im === 0) resultEl.textContent = '= ' + re;
+        else if (re === 0) resultEl.textContent = '= ' + im + 'i';
+        else resultEl.textContent = '= ' + re + (im > 0 ? ' + ' : ' - ') + Math.abs(im) + 'i';
+        resultEl.style.display = '';
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Numerically integrate f(x) from a to b using composite Simpson's rule (1000 intervals)
+ */
+function _numericIntegrate(exprStr, a, b) {
+    try {
+        var normalized = engine.normalizeExpression(exprStr);
+        // Substitute global scope
+        if (engine.globalScope) {
+            Object.keys(engine.globalScope).forEach(function(v) {
+                if (typeof engine.globalScope[v] === 'number') {
+                    normalized = normalized.replace(new RegExp('\\b' + v + '\\b', 'g'), '(' + engine.globalScope[v] + ')');
+                }
+            });
+        }
+        var compiled = math.compile(normalized);
+        var n = 1000;
+        var h = (b - a) / n;
+        var sum = compiled.evaluate({ x: a }) + compiled.evaluate({ x: b });
+        for (var i = 1; i < n; i++) {
+            var xi = a + i * h;
+            sum += (i % 2 === 0 ? 2 : 4) * compiled.evaluate({ x: xi });
+        }
+        return (h / 3) * sum;
+    } catch (_) {
+        return null;
+    }
+}
+
+/**
+ * Numerically evaluate sum(varName, start, end, body)
+ */
+function _numericSum(varName, start, end, bodyExpr) {
+    try {
+        var normalized = engine.normalizeExpression(bodyExpr);
+        if (engine.globalScope) {
+            Object.keys(engine.globalScope).forEach(function(v) {
+                if (typeof engine.globalScope[v] === 'number') {
+                    normalized = normalized.replace(new RegExp('\\b' + v + '\\b', 'g'), '(' + engine.globalScope[v] + ')');
+                }
+            });
+        }
+        var compiled = math.compile(normalized);
+        var total = 0;
+        for (var i = start; i <= end; i++) {
+            var scope = {};
+            scope[varName] = i;
+            total += compiled.evaluate(scope);
+        }
+        return total;
+    } catch (_) {
+        return null;
+    }
+}
+
+/**
+ * Numerically evaluate prod(varName, start, end, body)
+ */
+function _numericProd(varName, start, end, bodyExpr) {
+    try {
+        var normalized = engine.normalizeExpression(bodyExpr);
+        if (engine.globalScope) {
+            Object.keys(engine.globalScope).forEach(function(v) {
+                if (typeof engine.globalScope[v] === 'number') {
+                    normalized = normalized.replace(new RegExp('\\b' + v + '\\b', 'g'), '(' + engine.globalScope[v] + ')');
+                }
+            });
+        }
+        var compiled = math.compile(normalized);
+        var total = 1;
+        for (var i = start; i <= end; i++) {
+            var scope = {};
+            scope[varName] = i;
+            total *= compiled.evaluate(scope);
+        }
+        return total;
+    } catch (_) {
+        return null;
+    }
+}
+
+/**
+ * Numerical derivative of f(x) at x=x0 using central difference
+ */
+function _numericDeriv(exprStr, x0) {
+    try {
+        var normalized = engine.normalizeExpression(exprStr);
+        if (engine.globalScope) {
+            Object.keys(engine.globalScope).forEach(function(v) {
+                if (typeof engine.globalScope[v] === 'number') {
+                    normalized = normalized.replace(new RegExp('\\b' + v + '\\b', 'g'), '(' + engine.globalScope[v] + ')');
+                }
+            });
+        }
+        var compiled = math.compile(normalized);
+        var h = 0.0001;
+        var fPlus = compiled.evaluate({ x: x0 + h });
+        var fMinus = compiled.evaluate({ x: x0 - h });
+        return (fPlus - fMinus) / (2 * h);
+    } catch (_) {
+        return null;
+    }
+}
+
 function _evaluateNumeric(id, exprStr) {
-    const resultEl = document.getElementById(`numeric-result-${id}`);
+    var resultEl = document.getElementById('numeric-result-' + id);
     if (!resultEl) return;
-    // Only evaluate for types where a pure numeric result makes sense
+
+    // Only evaluate for types where a numeric result makes sense
     var exprObjCheck = engine.expressions.find(function(e) { return e.id === id; });
     if (exprObjCheck && !['cartesian', 'limit'].includes(exprObjCheck.type)) {
         resultEl.style.display = 'none';
@@ -4640,34 +4905,143 @@ function _evaluateNumeric(id, exprStr) {
         resultEl.textContent = '';
         return;
     }
-    // Check if expression has free variables (x, y, t, theta etc.)
-    // If it does, it's a function — no numeric result
-    const freeVars = ['x', 'y', 't', 'theta', 'r'];
-    // Strip known function names and global scope variable names before checking
+
+    var s = exprStr.trim();
+
+    // ── Special forms: evaluate BEFORE free-variable check ──
+
+    // int(expr, a, b) → definite integral (bounds can be expressions like pi, 2*pi, e)
+    var intMatch = s.match(/^\s*int\s*\(\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+?)\s*\)\s*$/i);
+    if (intMatch) {
+        var intA = _parseBound(intMatch[2]);
+        var intB = _parseBound(intMatch[3]);
+        if (!isNaN(intA) && !isNaN(intB)) {
+            var area = _numericIntegrate(intMatch[1], intA, intB);
+            if (area !== null && isFinite(area)) {
+                resultEl.textContent = '∫ ≈ ' + parseFloat(area.toPrecision(10));
+                resultEl.style.display = '';
+            } else {
+                resultEl.style.display = 'none';
+            }
+        } else {
+            resultEl.style.display = 'none';
+        }
+        return;
+    }
+
+    // sum(var, start, end, body) — evaluate when body has no x
+    var sumMatch = s.match(/^\s*sum\s*\(\s*([a-zA-Z])\s*,\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+)\s*\)\s*$/i);
+    if (sumMatch) {
+        var sumVar = sumMatch[1];
+        var bodyHasX = /(?<![a-zA-Z])x(?![a-zA-Z])/.test(sumMatch[4]);
+        if (!bodyHasX) {
+            try {
+                var start = Math.round(math.evaluate(sumMatch[2]));
+                var end = Math.round(math.evaluate(sumMatch[3]));
+                if (end - start <= 100000) {
+                    var total = _numericSum(sumVar, start, end, sumMatch[4]);
+                    if (total !== null && isFinite(total)) {
+                        _showNumericResult(resultEl, total);
+                        return;
+                    }
+                }
+            } catch (_) {}
+        }
+        resultEl.style.display = 'none';
+        return;
+    }
+
+    // prod(var, start, end, body) — evaluate when body has no x
+    var prodMatch = s.match(/^\s*prod\s*\(\s*([a-zA-Z])\s*,\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+)\s*\)\s*$/i);
+    if (prodMatch) {
+        var prodVar = prodMatch[1];
+        var prodBodyHasX = /(?<![a-zA-Z])x(?![a-zA-Z])/.test(prodMatch[4]);
+        if (!prodBodyHasX) {
+            try {
+                var pStart = Math.round(math.evaluate(prodMatch[2]));
+                var pEnd = Math.round(math.evaluate(prodMatch[3]));
+                if (pEnd - pStart <= 100000) {
+                    var pTotal = _numericProd(prodVar, pStart, pEnd, prodMatch[4]);
+                    if (pTotal !== null && isFinite(pTotal)) {
+                        _showNumericResult(resultEl, pTotal);
+                        return;
+                    }
+                }
+            } catch (_) {}
+        }
+        resultEl.style.display = 'none';
+        return;
+    }
+
+    // deriv(expr, x0) or d/dx(expr) at x=x0 → derivative at a point
+    var derivMatch = s.match(/^\s*deriv\s*\(\s*(.+?)\s*,\s*(.+?)\s*\)\s*$/i);
+    if (derivMatch) {
+        var x0 = _parseBound(derivMatch[2]);
+        if (!isNaN(x0)) {
+            var dResult = _numericDeriv(derivMatch[1], x0);
+            if (dResult !== null && isFinite(dResult)) {
+                resultEl.textContent = "f'(" + x0 + ') ≈ ' + parseFloat(dResult.toPrecision(10));
+                resultEl.style.display = '';
+            } else {
+                resultEl.style.display = 'none';
+            }
+        } else {
+            resultEl.style.display = 'none';
+        }
+        return;
+    }
+
+    // nCr(n, r) → combinations
+    var nCrMatch = s.match(/^\s*nCr\s*\(\s*(\d+)\s*,\s*(\d+)\s*\)\s*$/i);
+    if (nCrMatch) {
+        try {
+            var nVal = parseInt(nCrMatch[1]), rVal = parseInt(nCrMatch[2]);
+            var comb = math.evaluate('combinations(' + nVal + ',' + rVal + ')');
+            _showNumericResult(resultEl, comb);
+        } catch (_) { resultEl.style.display = 'none'; }
+        return;
+    }
+
+    // nPr(n, r) → permutations
+    var nPrMatch = s.match(/^\s*nPr\s*\(\s*(\d+)\s*,\s*(\d+)\s*\)\s*$/i);
+    if (nPrMatch) {
+        try {
+            var nP = parseInt(nPrMatch[1]), rP = parseInt(nPrMatch[2]);
+            var perm = math.evaluate('permutations(' + nP + ',' + rP + ')');
+            _showNumericResult(resultEl, perm);
+        } catch (_) { resultEl.style.display = 'none'; }
+        return;
+    }
+
+    // ── Standard numeric evaluation (no special forms) ──
+
+    // Check for free variables (x, y, t, theta, r)
+    var freeVars = ['x', 'y', 't', 'theta', 'r'];
     var stripPattern = '\\b(sin|cos|tan|log|ln|exp|sqrt|abs|floor|ceil|sign|round|min|max|asin|acos|atan|sinh|cosh|tanh|factorial|nthRoot|cbrt|sec|csc|cot|arcsin|arccos|arctan|pi|e';
     if (engine.globalScope) {
         Object.keys(engine.globalScope).forEach(function(v) { stripPattern += '|' + v; });
     }
     stripPattern += ')\\b';
-    const normalized = exprStr.replace(new RegExp(stripPattern, 'gi'), '');
-    const hasFreeVar = freeVars.some(v => {
-        const re = new RegExp('\\b' + v + '\\b', 'i');
-        return re.test(normalized);
+    var normalized = exprStr.replace(new RegExp(stripPattern, 'gi'), '');
+    var hasFreeVar = freeVars.some(function(v) {
+        return new RegExp('\\b' + v + '\\b', 'i').test(normalized);
     });
     if (hasFreeVar) {
         resultEl.style.display = 'none';
         resultEl.textContent = '';
         return;
     }
-    // Skip equations/inequalities (e.g., y=x^2, x>3)
+
+    // Skip equations/inequalities
     if (/[<>=!]/.test(exprStr)) {
         resultEl.style.display = 'none';
         resultEl.textContent = '';
         return;
     }
+
     try {
-        // Substitute global scope variables first, then slider parameters
-        let evalExpr = exprStr;
+        // Substitute global scope variables, then slider parameters
+        var evalExpr = exprStr;
         if (engine.globalScope) {
             Object.keys(engine.globalScope).forEach(function(varName) {
                 if (typeof engine.globalScope[varName] === 'number') {
@@ -4675,36 +5049,14 @@ function _evaluateNumeric(id, exprStr) {
                 }
             });
         }
-        const exprObj = engine.expressions.find(e => e.id === id);
+        var exprObj = engine.expressions.find(function(e) { return e.id === id; });
         if (exprObj && exprObj.parameters) {
-            Object.keys(exprObj.parameters).forEach(param => {
+            Object.keys(exprObj.parameters).forEach(function(param) {
                 evalExpr = evalExpr.replace(new RegExp('\\b' + param + '\\b', 'g'), String(exprObj.parameters[param]));
             });
         }
-        const result = math.evaluate(evalExpr);
-        if (typeof result === 'number' && isFinite(result)) {
-            // Format: show exact if integer or simple fraction, otherwise ≈
-            if (Number.isInteger(result)) {
-                resultEl.textContent = '= ' + result;
-            } else {
-                // Try to show a cleaner form
-                const rounded = parseFloat(result.toPrecision(10));
-                resultEl.textContent = '= ' + rounded;
-            }
-            resultEl.style.display = '';
-        } else if (typeof result === 'object' && result && typeof result.re === 'number') {
-            // Complex number
-            const re = parseFloat(result.re.toPrecision(8));
-            const im = parseFloat(result.im.toPrecision(8));
-            if (im === 0) {
-                resultEl.textContent = '= ' + re;
-            } else if (re === 0) {
-                resultEl.textContent = '= ' + im + 'i';
-            } else {
-                resultEl.textContent = '= ' + re + (im > 0 ? ' + ' : ' - ') + Math.abs(im) + 'i';
-            }
-            resultEl.style.display = '';
-        } else {
+        var result = math.evaluate(evalExpr);
+        if (!_showNumericResult(resultEl, result)) {
             resultEl.style.display = 'none';
         }
     } catch (_) {
@@ -4881,6 +5233,7 @@ function createInputForType(id, type) {
                         <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, '1/(1+exp(-x))', '\\\\frac{1}{1+e^{-x}}')">sigmoid</button>
                         <button class="btn btn-sm btn-outline-secondary" onclick="toggleInputMode(${id}); loadSample(${id}, 'sum(n, 1, 10, x^n/factorial(n))')">Σ</button>
                         <button class="btn btn-sm btn-outline-secondary" onclick="toggleInputMode(${id}); loadSample(${id}, 'fourier(x, 5)')">fourier</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="toggleInputMode(${id}); loadSample(${id}, 'int(x^2, 0, 1)')">∫</button>
                     </div>
                 `;
                 _initMathQuillField(id);
@@ -4905,6 +5258,7 @@ function createInputForType(id, type) {
                         <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '1/(1+exp(-x))')">sigmoid</button>
                         <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sum(n, 1, 10, x^n/factorial(n))')">Σ</button>
                         <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'fourier(x, 5)')">fourier</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'int(x^2, 0, 1)')">∫</button>
                     </div>
                 `;
             }
@@ -5904,6 +6258,187 @@ function autoDetectType(value, currentType) {
     return null;
 }
 
+// ==================== Special Calculus Syntax Handler ====================
+
+/**
+ * Parse a bound value that may be a number or a math expression (e.g. "pi", "2*pi", "e")
+ */
+function _parseBound(s) {
+    if (!s) return NaN;
+    s = s.trim();
+    try { return math.evaluate(s); } catch (_) { return NaN; }
+}
+
+/**
+ * Handle special calculus syntax typed in an expression input.
+ * Shared by both MathQuill and plain-text input paths.
+ * Returns true if handled (caller should updateGraph and return).
+ *
+ * Supported:
+ *   int(expr, a, b)    → plot expr with shaded definite integral, show ≈ area
+ *   sum(n, a, b, body) → if body has x: plot as function; else show numeric result
+ *   prod(n, a, b, body)→ same
+ *   deriv(expr, x0)    → plot expr, show tangent at x0, show f'(x0) ≈ value
+ */
+function _handleSpecialSyntaxFromInput(id, value) {
+    var expr = engine.expressions.find(function(e) { return e.id === id; });
+    if (!expr) return false;
+    var s = value.trim();
+
+    // ── int(expression, a, b) ──
+    var intMatch = s.match(/^\s*int\s*\(\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+?)\s*\)\s*$/i);
+    if (intMatch) {
+        var intExpr = intMatch[1].trim();
+        var intA = _parseBound(intMatch[2]);
+        var intB = _parseBound(intMatch[3]);
+        if (isNaN(intA) || isNaN(intB)) return false; // can't parse bounds
+
+        // Store full form for MathQuill round-tripping, but set expression to just integrand for plotting
+        expr._originalInput = s;
+        expr.expression = intExpr;
+        engine.updateExpression(id, { expression: intExpr });
+        expr.showIntegration = true;
+        expr.integrationBounds = { a: intA, b: intB };
+
+        // Open calc drawer and sync UI
+        _openCalcDrawerForExpr(id);
+        var intCb = document.getElementById('show-integration-' + id);
+        if (intCb) intCb.checked = true;
+        var intControls = document.getElementById('integration-controls-' + id);
+        if (intControls) intControls.style.display = 'block';
+        var intAInput = document.getElementById('integration-a-' + id);
+        var intBInput = document.getElementById('integration-b-' + id);
+        if (intAInput) intAInput.value = intA;
+        if (intBInput) intBInput.value = intB;
+
+        // Compute and show numeric integral result + symbolic antiderivative
+        _showIntegrationResult(id, intExpr, intA, intB);
+        return true;
+    }
+
+    // ── deriv(expression, x0) ──
+    var derivMatch = s.match(/^\s*deriv\s*\(\s*(.+?)\s*,\s*(.+?)\s*\)\s*$/i);
+    if (derivMatch) {
+        var derivExpr = derivMatch[1].trim();
+        var x0 = _parseBound(derivMatch[2]);
+        if (isNaN(x0)) return false;
+
+        // Set underlying expression to the function, enable tangent at x0
+        expr.expression = derivExpr;
+        engine.updateExpression(id, { expression: derivExpr });
+        expr.showTangent = true;
+        expr.tangentX = x0;
+        expr.showDerivative = true;
+
+        // Open calc drawer and sync UI
+        _openCalcDrawerForExpr(id);
+        var tangCb = document.getElementById('show-tangent-' + id);
+        if (tangCb) tangCb.checked = true;
+        var derivCb = document.getElementById('show-derivative-' + id);
+        if (derivCb) derivCb.checked = true;
+
+        // Show numeric derivative result
+        var resultEl2 = document.getElementById('numeric-result-' + id);
+        if (resultEl2) {
+            var dVal = _numericDeriv(derivExpr, x0);
+            if (dVal !== null && isFinite(dVal)) {
+                resultEl2.textContent = "f'(" + x0 + ') ≈ ' + parseFloat(dVal.toPrecision(10));
+            } else {
+                resultEl2.textContent = "f'(" + x0 + ')';
+            }
+            resultEl2.style.display = 'block';
+        }
+        return true;
+    }
+
+    // ── sum(var, start, end, body) — only intercept if body has NO x (pure numeric sum) ──
+    // If body has x, let the engine's _generateSumProductTrace handle it as a plotted function
+    var sumMatch = s.match(/^\s*sum\s*\(\s*([a-zA-Z])\s*,\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+)\s*\)\s*$/i);
+    if (sumMatch && !/(?<![a-zA-Z])x(?![a-zA-Z])/.test(sumMatch[4])) {
+        // Pure numeric sum — show result inline
+        try {
+            var start = Math.round(_parseBound(sumMatch[2]));
+            var end = Math.round(_parseBound(sumMatch[3]));
+            if (!isNaN(start) && !isNaN(end) && end - start <= 100000) {
+                var total = _numericSum(sumMatch[1], start, end, sumMatch[4]);
+                var resultEl3 = document.getElementById('numeric-result-' + id);
+                if (resultEl3 && total !== null && isFinite(total)) {
+                    _showNumericResult(resultEl3, total);
+                    return true;
+                }
+            }
+        } catch (_) {}
+        return false; // fall through to normal handling
+    }
+
+    // ── prod(var, start, end, body) — same logic ──
+    var prodMatch = s.match(/^\s*prod\s*\(\s*([a-zA-Z])\s*,\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+)\s*\)\s*$/i);
+    if (prodMatch && !/(?<![a-zA-Z])x(?![a-zA-Z])/.test(prodMatch[4])) {
+        try {
+            var pStart = Math.round(_parseBound(prodMatch[2]));
+            var pEnd = Math.round(_parseBound(prodMatch[3]));
+            if (!isNaN(pStart) && !isNaN(pEnd) && pEnd - pStart <= 100000) {
+                var pTotal = _numericProd(prodMatch[1], pStart, pEnd, prodMatch[4]);
+                var resultEl4 = document.getElementById('numeric-result-' + id);
+                if (resultEl4 && pTotal !== null && isFinite(pTotal)) {
+                    _showNumericResult(resultEl4, pTotal);
+                    return true;
+                }
+            }
+        } catch (_) {}
+        return false;
+    }
+
+    return false;
+}
+
+/**
+ * Open the calc drawer for an expression and sync the button state
+ */
+function _openCalcDrawerForExpr(id) {
+    var item = document.getElementById('expr-item-' + id);
+    if (item && !item.classList.contains('gc-calc-open')) {
+        item.classList.add('gc-calc-open');
+        var calcBtn = item.querySelector('.gc-calc-toggle-btn');
+        if (calcBtn) {
+            calcBtn.setAttribute('aria-expanded', 'true');
+            calcBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Calc';
+        }
+    }
+}
+
+/**
+ * Show integration area result (and optional symbolic antiderivative) in the numeric result panel.
+ * Called when toggling ∫ checkbox or changing bounds in the Calc drawer.
+ */
+function _showIntegrationResult(id, expression, a, b) {
+    var resultEl = document.getElementById('numeric-result-' + id);
+    if (!resultEl) return;
+    var area = _numericIntegrate(expression, a, b);
+    var parts = [];
+    if (area !== null && isFinite(area)) {
+        var areaStr = Number.isInteger(area) ? String(area) : parseFloat(area.toPrecision(10)).toString();
+        parts.push('∫ [' + a + ', ' + b + '] ≈ ' + areaStr);
+    }
+    // Try symbolic antiderivative via Nerdamer
+    try {
+        if (typeof nerdamer !== 'undefined' && expression) {
+            var normExpr = engine.stripCartesianPrefix(engine.normalizeExpression(expression));
+            var antideriv = nerdamer('integrate(' + normExpr + ', x)');
+            var sym = antideriv.text();
+            if (sym) {
+                parts.push('F(x) = ' + sym + ' + C');
+            }
+        }
+    } catch (_) { /* Nerdamer can't integrate — that's fine */ }
+    if (parts.length > 0) {
+        resultEl.innerHTML = parts.join('<br>');
+        resultEl.style.display = 'block';
+    } else {
+        resultEl.style.display = 'none';
+    }
+}
+
 // ==================== Variable Assignment Handler ====================
 
 /**
@@ -6272,6 +6807,12 @@ function updateExpressionValue(id) {
         _handleListExpression(id, value);
         updateGraph();
         return;
+    }
+
+    // Handle special calculus syntax: int(), sum(), prod(), deriv()
+    if (expr && expr.type === 'cartesian') {
+        var handled = _handleSpecialSyntaxFromInput(id, value);
+        if (handled) { updateGraph(); return; }
     }
 
     // Validate expression and show error feedback
@@ -6699,8 +7240,13 @@ function toggleIntegration(id) {
             const a = parseFloat(document.getElementById(`integration-a-${id}`).value);
             const b = parseFloat(document.getElementById(`integration-b-${id}`).value);
             expr.integrationBounds = { a, b };
+            // Show area value in numeric result panel
+            _showIntegrationResult(id, expr.expression, a, b);
         } else {
             controls.style.display = 'none';
+            // Clear integration result from numeric panel
+            var resultEl = document.getElementById('numeric-result-' + id);
+            if (resultEl) { resultEl.style.display = 'none'; resultEl.textContent = ''; }
         }
 
         updateGraph();
@@ -6717,6 +7263,10 @@ function updateIntegrationBounds(id) {
 
     if (expr && !isNaN(a) && !isNaN(b)) {
         expr.integrationBounds = { a, b };
+        // Update area value in numeric result panel
+        if (expr.showIntegration) {
+            _showIntegrationResult(id, expr.expression, a, b);
+        }
         updateGraph();
     }
 }
