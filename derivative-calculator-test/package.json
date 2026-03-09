@@ -1,0 +1,1 @@
+{"name":"derivative-calculator-test","version":"1.0.0","description":"Test suite for derivative-calculator.jsp","private":true,"scripts":{"test":"node derivative-test.js"},"dependencies":{"nerdamer":"1.1.13"}}
