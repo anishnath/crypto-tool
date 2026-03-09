@@ -190,8 +190,46 @@
         return _cfg.difficulties[0].id;
     }
 
+    function _parseNumericToken(token) {
+        var t = String(token || '').trim();
+        var numPattern = /^[+-]?(?:\d+\.?\d*|\.\d+)$/;
+        if (!t) return null;
+
+        if (t.indexOf('/') !== -1) {
+            var parts = t.split('/');
+            if (parts.length !== 2 || !numPattern.test(parts[0]) || !numPattern.test(parts[1])) return null;
+            var numerator = Number(parts[0]);
+            var denominator = Number(parts[1]);
+            if (!isFinite(numerator) || !isFinite(denominator) || Math.abs(denominator) < 1e-12) return null;
+            return numerator / denominator;
+        }
+
+        if (!numPattern.test(t)) return null;
+        var n = Number(t);
+        return isFinite(n) ? n : null;
+    }
+
+    function _canonicalNumberString(num) {
+        if (!isFinite(num)) return String(num);
+        if (Math.abs(num) < 1e-12) return '0';
+        if (Math.abs(num - Math.round(num)) < 1e-9) return String(Math.round(num));
+        return String(parseFloat(num.toFixed(10)));
+    }
+
     function _normalise(s) {
-        return String(s).trim().toLowerCase().replace(/\s+/g, ' ');
+        var text = String(s)
+            .trim()
+            .toLowerCase()
+            .replace(/[−–]/g, '-')
+            .replace(/\s*;\s*/g, ';')
+            .replace(/\s*,\s*/g, ',')
+            .replace(/\s+/g, ' ');
+
+        return text.replace(/[+-]?(?:\d+\.?\d*|\.\d+)(?:\/[+-]?(?:\d+\.?\d*|\.\d+))?/g, function (match) {
+            var numeric = _parseNumericToken(match);
+            if (numeric === null) return match;
+            return _canonicalNumberString(numeric);
+        });
     }
 
     // --------------- render shell ---------------

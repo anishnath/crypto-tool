@@ -710,6 +710,33 @@
             katex.render(resultTeX + ' + C', document.getElementById('ic-r-result'), { displayMode: true, throwOnError: false });
         }
 
+        // ========== Result Display: Non-Elementary ==========
+        function showNonElementaryResult(expr, v, exprLatex, method, sympyStepsCache) {
+            var exprTeX = exprToLatex(expr);
+            lastResultLatex = '\\text{No elementary closed form}';
+            lastResultText = 'No elementary closed form';
+
+            lastIntegrationContext = { expr: expr, v: v, resultTeX: '', resultText: '', method: method, mode: 'indefinite', a: null, b: null, sympyStepsCache: sympyStepsCache || null };
+
+            var html = '<div class="ic-result-math">';
+            html += '<div class="ic-result-label">Integral</div>';
+            html += '<div id="ic-r-integral"></div>';
+            html += '<div class="ic-result-label" style="margin-top:1rem;">Result</div>';
+            html += '<div class="ic-result-main" id="ic-r-result" style="color:#e67e22;font-size:0.95rem;padding:0.75rem 0;">This integral cannot be expressed in terms of elementary functions.<br>Use definite mode with bounds for a numerical result.</div>';
+            html += '<div class="ic-result-detail">';
+            html += '<span class="ic-method-badge">Non-Elementary (Elliptic)</span>';
+            html += '</div>';
+            html += '<button type="button" class="ic-steps-btn" id="ic-steps-btn">&#128221; Show Analysis</button>';
+            html += '<div id="ic-steps-area"></div>';
+            html += '</div>';
+            resultContent.innerHTML = html;
+
+            var stepsBtn = document.getElementById('ic-steps-btn');
+            if (stepsBtn) stepsBtn.addEventListener('click', function() { window.showSteps && window.showSteps(); });
+
+            katex.render('\\int ' + exprTeX + ' \\, d' + v, document.getElementById('ic-r-integral'), { displayMode: true, throwOnError: false });
+        }
+
         // ========== Result Display: Definite ==========
         function showDefiniteResult(expr, v, a, b, resultTeX, resultText, exactText, numericVal, method, sympyStepsCache) {
             var exprTeX = exprToLatex(expr);
@@ -803,7 +830,7 @@
             var code;
             if (isDefinite) {
                 code = 'from sympy import *\n' +
-                    'from sympy.integrals.manualintegrate import integral_steps\n' +
+                    'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
                     'import json\n' +
                     symDecl + '\n' +
                     'expr = simplify(' + pyExpr + ')\n' +
@@ -864,7 +891,7 @@
                     '    except: pass';
             } else {
                 code = 'from sympy import *\n' +
-                    'from sympy.integrals.manualintegrate import integral_steps\n' +
+                    'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
                     symDecl + '\n' +
                     'expr = simplify(' + pyExpr + ')\n' +
                     'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
@@ -883,7 +910,7 @@
                     'print(\'EXPR:\' + latex(expr))\n' +
                     '# When integral_steps gives DontKnowRule but integrate() succeeded,\n' +
                     '# build synthetic steps by decomposing the result into terms\n' +
-                    'if steps and isinstance(steps, DontKnowRule) and not isinstance(result, Integral):\n' +
+                    'if steps and isinstance(steps, DontKnowRule) and not isinstance(result, Integral) and not result.has(Integral):\n' +
                     '    _terms = result.as_ordered_terms()\n' +
                     '    _sub = []\n' +
                     '    for _t in _terms:\n' +
@@ -893,6 +920,59 @@
                     '        _sub.append(_rule)\n' +
                     '    steps_str = "AddRule(substeps=[" + ", ".join(_sub) + "])"\n' +
                     '    print(\'RULES:\' + steps_str)\n' +
+                    'elif steps and isinstance(steps, DontKnowRule) and (isinstance(result, Integral) or result.has(Integral)):\n' +
+                    '    # Non-elementary integral: generate decomposition steps\n' +
+                    '    import json as _json\n' +
+                    '    _st = []\n' +
+                    '    numer, denom = expr.as_numer_denom()\n' +
+                    '    denom_factored = factor(denom)\n' +
+                    '    denom_factors = Mul.make_args(denom_factored)\n' +
+                    '    rat_f = []; irr_f = []; sqrt_inner = None\n' +
+                    '    for _f in denom_factors:\n' +
+                    '        _hi = False; _atoms = _f.atoms(Pow) if not isinstance(_f, Pow) else {_f}\n' +
+                    '        for _a in _atoms:\n' +
+                    '            if isinstance(_a, Pow) and not _a.exp.is_integer:\n' +
+                    '                _hi = True\n' +
+                    '                if _a.exp == Rational(1,2): sqrt_inner = _a.base\n' +
+                    '                break\n' +
+                    '        if _hi: irr_f.append(_f)\n' +
+                    '        else: rat_f.append(_f)\n' +
+                    '    rat_d = Mul(*rat_f) if rat_f else S.One\n' +
+                    '    irr_p = Mul(*irr_f) if irr_f else S.One\n' +
+                    '    _st.append({"title":"Identify the integral","latex":r"\\int "+latex(expr)+r" \\,d' + v + '"})\n' +
+                    '    if rat_d != S.One:\n' +
+                    '        uf = expand(rat_d); ff = factor(rat_d)\n' +
+                    '        if len(Mul.make_args(ff)) > 1 and ff != uf:\n' +
+                    '            _st.append({"title":"Factor the polynomial part of denominator","latex":latex(uf)+" = "+latex(ff)})\n' +
+                    '    if sqrt_inner is not None:\n' +
+                    '        try:\n' +
+                    '            _p = Poly(sqrt_inner, ' + v + ')\n' +
+                    '            if _p.degree() == 2:\n' +
+                    '                _a,_b,_c = _p.all_coeffs()\n' +
+                    '                if _b != 0:\n' +
+                    '                    _h = Rational(_b, 2*_a); _k = _c - _b**2/(4*_a)\n' +
+                    '                    _comp = _a*(' + v + '+_h)**2+_k\n' +
+                    '                    _st.append({"title":"Complete the square under the radical","latex":r"\\sqrt{"+latex(sqrt_inner)+r"} = \\sqrt{"+latex(_comp)+"}"})\n' +
+                    '        except: pass\n' +
+                    '    if rat_d != S.One:\n' +
+                    '        _re = numer/rat_d\n' +
+                    '        try: _pf = apart(_re, ' + v + ')\n' +
+                    '        except: _pf = _re\n' +
+                    '        if _pf != _re:\n' +
+                    '            _st.append({"title":"Partial fraction decomposition","latex":latex(_re)+" = "+latex(_pf)})\n' +
+                    '            _terms = Add.make_args(_pf)\n' +
+                    '            _ti = [simplify(_t/irr_p) for _t in _terms]\n' +
+                    '            _sl = " + ".join([r"\\int "+latex(_t)+r" \\,d' + v + '" for _t in _ti])\n' +
+                    '            _st.append({"title":"Split the integral","latex":r"\\int "+latex(expr)+r" \\,d' + v + ' = "+_sl})\n' +
+                    '            for _t in _ti:\n' +
+                    '                _tr = integrate(_t, ' + v + ')\n' +
+                    '                if _tr and not isinstance(_tr, Integral) and not _tr.has(Integral):\n' +
+                    '                    _st.append({"title":"Integrate term","latex":r"\\int "+latex(_t)+r" \\,d' + v + ' = "+latex(_tr)})\n' +
+                    '                else:\n' +
+                    '                    _st.append({"title":"Non-elementary sub-integral","latex":r"\\int "+latex(_t)+r" \\,d' + v + ' \\\\text{ has no elementary closed form}"})\n' +
+                    '    _st.append({"title":"Conclusion","latex":r"\\text{This integral cannot be expressed using elementary functions. For definite integrals, numerical methods give the exact value.}"})\n' +
+                    '    print("NON_ELEMENTARY_STEPS:" + _json.dumps(_st, separators=(",",":")))\n' +
+                    '    print(\'RULES:DontKnowRule\')\n' +
                     'else:\n' +
                     '    print(\'RULES:\' + (str(steps) if steps else ""))';
             }
@@ -914,8 +994,10 @@
 
                     // Only fail on real errors (not SymPy warnings); require no stdout
                     // For definite integrals, allow unevaluated Integral if NUMERIC value exists
+                    // For non-elementary integrals, allow through if decomposition steps exist
                     var hasNumeric = /NUMERIC:(?!NaN)[\d.\-]/.test(stdout);
-                    if ((!stdout && stderr) || (!stdout && !stderr) || (stdout.indexOf('Integral(') !== -1 && !(isDefinite && hasNumeric))) {
+                    var hasNonElemSteps = stdout.indexOf('NON_ELEMENTARY_STEPS:') !== -1;
+                    if ((!stdout && stderr) || (!stdout && !stderr) || (stdout.indexOf('Integral(') !== -1 && !(isDefinite && hasNumeric) && !hasNonElemSteps)) {
                         showError(expr, stderr || 'Could not solve this integral');
                         return;
                     }
@@ -948,7 +1030,23 @@
                         sympyStepsCache = (stepResultLatex && rulesStr) ? parseSympyOutput(expr, v, stepResultLatex, rulesStr, exprLatex) : null;
                     }
 
-                    if (isDefinite) {
+                    // Handle non-elementary integrals with decomposition steps
+                    if (hasNonElemSteps) {
+                        var neMatch = stdout.match(/NON_ELEMENTARY_STEPS:(\[[\s\S]*?\])(?=\n|$)/);
+                        var neSteps = [];
+                        try { neSteps = JSON.parse(neMatch[1]); } catch(e) {}
+                        var neStepsCache = { paths: [{ name: 'Solution', steps: neSteps, rules: [] }] };
+                        if (isDefinite) {
+                            var numericMatch = stdout.match(/NUMERIC:([^\n]*)/);
+                            var numericStr = numericMatch ? numericMatch[1].trim() : 'NaN';
+                            var numericVal = parseFloat(numericStr);
+                            showDefiniteResult(expr, v, a, b, resultTeX, resultText, resultText, numericVal, method, neStepsCache);
+                        } else {
+                            showNonElementaryResult(expr, v, exprLatex, method, neStepsCache);
+                        }
+                        resultActions.classList.add('visible');
+                        try { prepareGraph(expr, v, pyExpr, isDefinite ? 'definite' : 'indefinite', isDefinite ? a : null, isDefinite ? b : null); } catch(e) {}
+                    } else if (isDefinite) {
                         var numericMatch = stdout.match(/NUMERIC:([^\n]*)/);
                         var numericStr = numericMatch ? numericMatch[1].trim() : 'NaN';
                         var numericVal = parseFloat(numericStr);
@@ -1193,6 +1291,54 @@
                     '            st.append({"title":"Combine","latex":"= "+latex(antideriv)})\n' +
                     '        else:\n' +
                     '            st = [{"title":"Antiderivative","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = "+latex(antideriv)}]\n' +
+                    'if not st and (not antideriv or isinstance(antideriv, Integral) or antideriv.has(Integral)):\n' +
+                    '    numer, denom = expr.as_numer_denom()\n' +
+                    '    denom_factored = factor(denom)\n' +
+                    '    denom_factors = Mul.make_args(denom_factored)\n' +
+                    '    rat_f = []; irr_f = []; sqrt_inner = None\n' +
+                    '    for _f in denom_factors:\n' +
+                    '        _hi = False; _atoms = _f.atoms(Pow) if not isinstance(_f, Pow) else {_f}\n' +
+                    '        for _a in _atoms:\n' +
+                    '            if isinstance(_a, Pow) and not _a.exp.is_integer:\n' +
+                    '                _hi = True\n' +
+                    '                if _a.exp == Rational(1,2): sqrt_inner = _a.base\n' +
+                    '                break\n' +
+                    '        if _hi: irr_f.append(_f)\n' +
+                    '        else: rat_f.append(_f)\n' +
+                    '    rat_d = Mul(*rat_f) if rat_f else S.One\n' +
+                    '    irr_p = Mul(*irr_f) if irr_f else S.One\n' +
+                    '    st.append({"title":"Identify the integral","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + '"})\n' +
+                    '    if rat_d != S.One:\n' +
+                    '        uf = expand(rat_d); ff = factor(rat_d)\n' +
+                    '        if len(Mul.make_args(ff)) > 1 and ff != uf:\n' +
+                    '            st.append({"title":"Factor the polynomial part of denominator","latex":latex(uf)+" = "+latex(ff)})\n' +
+                    '    if sqrt_inner is not None:\n' +
+                    '        try:\n' +
+                    '            _p = Poly(sqrt_inner, ' + v + ')\n' +
+                    '            if _p.degree() == 2:\n' +
+                    '                _a,_b,_c = _p.all_coeffs()\n' +
+                    '                if _b != 0:\n' +
+                    '                    _h = Rational(_b, 2*_a); _k = _c - _b**2/(4*_a)\n' +
+                    '                    _comp = _a*(' + v + '+_h)**2+_k\n' +
+                    '                    st.append({"title":"Complete the square under the radical","latex":r"\\\\sqrt{"+latex(sqrt_inner)+r"} = \\\\sqrt{"+latex(_comp)+"}"})\n' +
+                    '        except: pass\n' +
+                    '    if rat_d != S.One:\n' +
+                    '        _re = numer/rat_d\n' +
+                    '        try: _pf = apart(_re, ' + v + ')\n' +
+                    '        except: _pf = _re\n' +
+                    '        if _pf != _re:\n' +
+                    '            st.append({"title":"Partial fraction decomposition","latex":latex(_re)+" = "+latex(_pf)})\n' +
+                    '            _terms = Add.make_args(_pf)\n' +
+                    '            _ti = [simplify(_t/irr_p) for _t in _terms]\n' +
+                    '            _sl = " + ".join([r"\\\\int "+latex(_t)+r" \\\\,d' + v + '" for _t in _ti])\n' +
+                    '            st.append({"title":"Split the integral","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = "+_sl})\n' +
+                    '            for _t in _ti:\n' +
+                    '                _tr = integrate(_t, ' + v + ')\n' +
+                    '                if _tr and not isinstance(_tr, Integral) and not _tr.has(Integral):\n' +
+                    '                    st.append({"title":"Integrate term","latex":r"\\\\int "+latex(_t)+r" \\\\,d' + v + ' = "+latex(_tr)})\n' +
+                    '                else:\n' +
+                    '                    st.append({"title":"Non-elementary sub-integral","latex":r"\\\\int "+latex(_t)+r" \\\\,d' + v + ' \\\\\\\\text{ has no elementary closed form}"})\n' +
+                    '    st.append({"title":"Conclusion","latex":r"\\\\text{This integral cannot be expressed using elementary functions. For definite integrals, numerical methods give the exact value.}"})\n' +
                     'try:\n' +
                     '    if antideriv and not isinstance(antideriv, Integral):\n' +
                     '        def _ev(bnd):\n' +
@@ -1322,6 +1468,53 @@
                 '                    st.append({"title":"Antiderivative","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = "+latex(result)+r" + C"})\n' +
                 '        elif not result or isinstance(result, Integral) or result.has(Integral):\n' +
                 '            result = None\n' +
+                '            numer, denom = expr.as_numer_denom()\n' +
+                '            denom_factored = factor(denom)\n' +
+                '            denom_factors = Mul.make_args(denom_factored)\n' +
+                '            rat_f = []; irr_f = []; sqrt_inner = None\n' +
+                '            for _f in denom_factors:\n' +
+                '                _hi = False; _atoms = _f.atoms(Pow) if not isinstance(_f, Pow) else {_f}\n' +
+                '                for _a in _atoms:\n' +
+                '                    if isinstance(_a, Pow) and not _a.exp.is_integer:\n' +
+                '                        _hi = True\n' +
+                '                        if _a.exp == Rational(1,2): sqrt_inner = _a.base\n' +
+                '                        break\n' +
+                '                if _hi: irr_f.append(_f)\n' +
+                '                else: rat_f.append(_f)\n' +
+                '            rat_d = Mul(*rat_f) if rat_f else S.One\n' +
+                '            irr_p = Mul(*irr_f) if irr_f else S.One\n' +
+                '            st.append({"title":"Identify the integral","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + '"})\n' +
+                '            if rat_d != S.One:\n' +
+                '                uf = expand(rat_d); ff = factor(rat_d)\n' +
+                '                if len(Mul.make_args(ff)) > 1 and ff != uf:\n' +
+                '                    st.append({"title":"Factor the polynomial part of denominator","latex":latex(uf)+" = "+latex(ff)})\n' +
+                '            if sqrt_inner is not None:\n' +
+                '                try:\n' +
+                '                    _p = Poly(sqrt_inner, ' + v + ')\n' +
+                '                    if _p.degree() == 2:\n' +
+                '                        _a,_b,_c = _p.all_coeffs()\n' +
+                '                        if _b != 0:\n' +
+                '                            _h = Rational(_b, 2*_a); _k = _c - _b**2/(4*_a)\n' +
+                '                            _comp = _a*(' + v + '+_h)**2+_k\n' +
+                '                            st.append({"title":"Complete the square under the radical","latex":r"\\\\sqrt{"+latex(sqrt_inner)+r"} = \\\\sqrt{"+latex(_comp)+"}"})\n' +
+                '                except: pass\n' +
+                '            if rat_d != S.One:\n' +
+                '                _re = numer/rat_d\n' +
+                '                try: _pf = apart(_re, ' + v + ')\n' +
+                '                except: _pf = _re\n' +
+                '                if _pf != _re:\n' +
+                '                    st.append({"title":"Partial fraction decomposition","latex":latex(_re)+" = "+latex(_pf)})\n' +
+                '                    _terms = Add.make_args(_pf)\n' +
+                '                    _ti = [simplify(_t/irr_p) for _t in _terms]\n' +
+                '                    _sl = " + ".join([r"\\\\int "+latex(_t)+r" \\\\,d' + v + '" for _t in _ti])\n' +
+                '                    st.append({"title":"Split the integral","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = "+_sl})\n' +
+                '                    for _t in _ti:\n' +
+                '                        _tr = integrate(_t, ' + v + ')\n' +
+                '                        if _tr and not isinstance(_tr, Integral) and not _tr.has(Integral):\n' +
+                '                            st.append({"title":"Integrate term","latex":r"\\\\int "+latex(_t)+r" \\\\,d' + v + ' = "+latex(_tr)})\n' +
+                '                        else:\n' +
+                '                            st.append({"title":"Non-elementary sub-integral","latex":r"\\\\int "+latex(_t)+r" \\\\,d' + v + ' \\\\\\\\text{ has no elementary closed form}"})\n' +
+                '            st.append({"title":"Conclusion","latex":r"\\\\text{This integral cannot be expressed using elementary functions. For definite integrals, numerical methods give the exact value.}"})\n' +
                 '    print("STEPS:" + (json.dumps(st, separators=(",",":")) if st else "[]"))\n' +
                 '    print("RESULT=" + (latex(result) if result else ""))\n' +
                 '    print("EXPR=" + latex(expr))\n' +

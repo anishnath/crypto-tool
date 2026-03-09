@@ -285,6 +285,27 @@ function _onMathQuillEdit(id) {
         }
     }
 
+    // Handle variable assignment from MQ (switches to plain text since variable type isn't MQ-supported)
+    if (expr && expr.type === 'variable') {
+        _handleVariableExpression(id, mathExpr);
+        try { updateGraph(); } catch (_) {}
+        return;
+    }
+
+    // Handle piecewise brace syntax from MQ
+    if (expr && expr.type === 'piecewise' && /\{[^}]*:[^}]+\}/.test(mathExpr)) {
+        _parsePiecewiseBraceSyntax(id, mathExpr);
+        try { updateGraph(); } catch (_) {}
+        return;
+    }
+
+    // Handle list type from MQ (switches to plain text)
+    if (expr && expr.type === 'list') {
+        _handleListExpression(id, mathExpr);
+        try { updateGraph(); } catch (_) {}
+        return;
+    }
+
     // Detect and create sliders for parameters (a, b, c, etc.)
     if (expr && ['cartesian', 'equation', 'implicit', 'polar', 'parametric', 'surface', 'inequality'].includes(expr.type)) {
         detectAndCreateSliders(id, mathExpr);
@@ -377,6 +398,24 @@ class GraphingEngine {
         this.colorIndex = 0;
         this._sympyPending = 0; // track in-flight SymPy requests
         this._compiledCache = {}; // expression → compiled math.js node
+        this.globalScope = {}; // shared variable assignments: { a: 3, b: 5 }
+    }
+
+    /**
+     * Rebuild globalScope from all variable-type expressions.
+     * Called whenever a variable expression changes or is deleted.
+     */
+    rebuildGlobalScope() {
+        this.globalScope = {};
+        for (var i = 0; i < this.expressions.length; i++) {
+            var e = this.expressions[i];
+            if (e.type === 'variable' && e._varName && e._varValue != null) {
+                this.globalScope[e._varName] = e._varValue;
+            }
+            if (e.type === 'list' && e._listName && e._listValues) {
+                this.globalScope[e._listName] = e._listValues;
+            }
+        }
     }
 
     /** Compile a math.js expression with caching */
@@ -1781,6 +1820,22 @@ class GraphingEngine {
                 return null;
             }
 
+            // Substitute global scope variables into piece expressions and conditions
+            var resolvedPieces = pieces;
+            if (this.globalScope && Object.keys(this.globalScope).length > 0) {
+                resolvedPieces = pieces.map(p => {
+                    var expr = p.expression, cond = p.condition;
+                    Object.keys(this.globalScope).forEach(v => {
+                        if (typeof this.globalScope[v] === 'number') {
+                            var re = new RegExp('\\b' + v + '\\b', 'g');
+                            expr = expr.replace(re, '(' + this.globalScope[v] + ')');
+                            if (cond) cond = cond.replace(re, '(' + this.globalScope[v] + ')');
+                        }
+                    });
+                    return { expression: expr, condition: cond };
+                });
+            }
+
             const x = [];
             const y = [];
             const step = (xMax - xMin) / numPoints;
@@ -1790,7 +1845,7 @@ class GraphingEngine {
                 let yVal = null;
 
                 // Find which piece applies to this x value
-                for (const piece of pieces) {
+                for (const piece of resolvedPieces) {
                     const { expression, condition } = piece;
 
                     try {
@@ -2550,8 +2605,16 @@ class GraphingEngine {
         // Work with raw expression first for special forms (before normalization mangles function names)
         let rawExprStr = expr.expression;
         if (rawExprStr && typeof rawExprStr === 'string') {
-            // Substitute parameters into raw expression for special forms
+            // Substitute global scope + per-expression parameters into raw expression for special forms
             let rawSubstituted = rawExprStr;
+            if (this.globalScope) {
+                Object.keys(this.globalScope).forEach(varName => {
+                    if (typeof this.globalScope[varName] === 'number') {
+                        const regex = new RegExp(`\\b${varName}\\b`, 'g');
+                        rawSubstituted = rawSubstituted.replace(regex, '(' + this.globalScope[varName] + ')');
+                    }
+                });
+            }
             if (expr.parameters) {
                 Object.keys(expr.parameters).forEach(param => {
                     const regex = new RegExp(`\\b${param}\\b`, 'g');
@@ -2591,12 +2654,27 @@ class GraphingEngine {
             normalizedExpr = this.normalizeExpression(normalizedExpr);
         }
 
+        // Substitute global scope variables first (shared across expressions)
+        if (this.globalScope && normalizedExpr && typeof normalizedExpr === 'string') {
+            Object.keys(this.globalScope).forEach(varName => {
+                if (typeof this.globalScope[varName] === 'number') {
+                    const regex = new RegExp(`\\b${varName}\\b`, 'g');
+                    normalizedExpr = normalizedExpr.replace(regex, '(' + this.globalScope[varName] + ')');
+                }
+            });
+        }
+
         // Substitute parameters (sliders) for all expression types
         if (expr.parameters && normalizedExpr && typeof normalizedExpr === 'string') {
             Object.keys(expr.parameters).forEach(param => {
                 const regex = new RegExp(`\\b${param}\\b`, 'g');
                 normalizedExpr = normalizedExpr.replace(regex, expr.parameters[param]);
             });
+        }
+
+        // Skip plotting for variable and list types — they don't produce traces
+        if (expr.type === 'variable' || expr.type === 'list') {
+            return null;
         }
 
         switch (expr.type) {
@@ -3919,21 +3997,34 @@ const MAX_UNDO = 50;
 /**
  * Save current expression state for undo
  */
+/** Serialize current expression state (shared by undo/redo/save) */
+function _serializeExpressions() {
+    return engine.expressions.map(function(e) {
+        return {
+            id: e.id, expression: e.expression, type: e.type,
+            color: e.color, visible: e.visible,
+            parameters: e.parameters ? Object.assign({}, e.parameters) : undefined,
+            _sliderRanges: e._sliderRanges ? JSON.parse(JSON.stringify(e._sliderRanges)) : undefined,
+            _varName: e._varName, _varValue: e._varValue,
+            _listValues: e._listValues, _listName: e._listName,
+            pieces: e.pieces ? JSON.parse(JSON.stringify(e.pieces)) : undefined,
+            showDerivative: e.showDerivative || false,
+            showSecondDerivative: e.showSecondDerivative || false,
+            showCriticalPoints: e.showCriticalPoints || false,
+            showInflectionPoints: e.showInflectionPoints || false,
+            showRoots: e.showRoots || false,
+            showVerticalAsymptotes: e.showVerticalAsymptotes || false,
+            showTangent: e.showTangent || false,
+            tangentX: e.tangentX,
+            showIntegration: e.showIntegration || false,
+            integrationBounds: e.integrationBounds,
+            showAntiderivative: e.showAntiderivative || false
+        };
+    });
+}
+
 function saveUndoState() {
-    const state = engine.expressions.map(e => ({
-        id: e.id, expression: e.expression, type: e.type,
-        color: e.color, visible: e.visible,
-        parameters: e.parameters ? Object.assign({}, e.parameters) : undefined,
-        _sliderRanges: e._sliderRanges ? JSON.parse(JSON.stringify(e._sliderRanges)) : undefined,
-        showDerivative: e.showDerivative || false,
-        showRoots: e.showRoots || false,
-        showVerticalAsymptotes: e.showVerticalAsymptotes || false,
-        showTangent: e.showTangent || false,
-        tangentX: e.tangentX,
-        showIntegration: e.showIntegration || false,
-        integrationBounds: e.integrationBounds,
-        showAntiderivative: e.showAntiderivative || false
-    }));
+    const state = _serializeExpressions();
     undoStack.push(JSON.stringify(state));
     if (undoStack.length > MAX_UNDO) undoStack.shift();
     redoStack.length = 0; // clear redo on new action
@@ -3944,14 +4035,7 @@ function saveUndoState() {
  */
 function undo() {
     if (undoStack.length === 0) return;
-    // Save current state to redo
-    const currentState = engine.expressions.map(e => ({
-        id: e.id, expression: e.expression, type: e.type,
-        color: e.color, visible: e.visible,
-        parameters: e.parameters ? Object.assign({}, e.parameters) : undefined
-    }));
-    redoStack.push(JSON.stringify(currentState));
-
+    redoStack.push(JSON.stringify(_serializeExpressions()));
     const prevState = JSON.parse(undoStack.pop());
     restoreState(prevState);
 }
@@ -3961,14 +4045,7 @@ function undo() {
  */
 function redo() {
     if (redoStack.length === 0) return;
-    // Save current state to undo
-    const currentState = engine.expressions.map(e => ({
-        id: e.id, expression: e.expression, type: e.type,
-        color: e.color, visible: e.visible,
-        parameters: e.parameters ? Object.assign({}, e.parameters) : undefined
-    }));
-    undoStack.push(JSON.stringify(currentState));
-
+    undoStack.push(JSON.stringify(_serializeExpressions()));
     const nextState = JSON.parse(redoStack.pop());
     restoreState(nextState);
 }
@@ -3998,6 +4075,9 @@ function restoreState(state) {
         expr.visible = s.visible !== false;
         if (s.parameters) expr.parameters = s.parameters;
         if (s._sliderRanges) expr._sliderRanges = s._sliderRanges;
+        if (s._varName) { expr._varName = s._varName; expr._varValue = s._varValue; }
+        if (s._listValues) { expr._listValues = s._listValues; expr._listName = s._listName; }
+        if (s.pieces) expr.pieces = s.pieces;
         if (s.showDerivative) expr.showDerivative = true;
         if (s.showRoots) expr.showRoots = true;
         if (s.showVerticalAsymptotes) expr.showVerticalAsymptotes = true;
@@ -4036,6 +4116,13 @@ function restoreState(state) {
             }
         }
     });
+    // Rebuild global scope from any restored variable/list expressions
+    engine.rebuildGlobalScope();
+    // Re-process variable and list expressions to populate their UI
+    engine.expressions.forEach(function(ex) {
+        if (ex.type === 'variable' && ex.expression) _handleVariableExpression(ex.id, ex.expression);
+        if (ex.type === 'list' && ex.expression) _handleListExpression(ex.id, ex.expression);
+    });
     updateGraph();
 }
 
@@ -4044,36 +4131,227 @@ function restoreState(state) {
  */
 function initKeyboardShortcuts() {
     document.addEventListener('keydown', function(e) {
-        // Let browser handle native undo/redo inside text inputs and textareas
-        const active = document.activeElement;
-        const inInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+        var active = document.activeElement;
+        var inInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+        var mod = e.ctrlKey || e.metaKey;
 
-        // Ctrl/Cmd + Z = Undo (only when not in a text input)
-        if (!inInput && (e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'z') {
-            e.preventDefault();
-            undo();
-            return;
-        }
-        // Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y = Redo (only when not in a text input)
-        if (!inInput && (e.ctrlKey || e.metaKey) && ((e.shiftKey && e.key === 'z') || e.key === 'y')) {
-            e.preventDefault();
-            redo();
-            return;
-        }
-        // Ctrl/Cmd + Enter = Add new expression (works everywhere)
-        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        // ---- Global shortcuts (work everywhere) ----
+
+        // Ctrl/Cmd + Enter = Add new expression
+        if (mod && e.key === 'Enter') {
             e.preventDefault();
             addExpression();
+            // Focus the new expression's input
+            setTimeout(function() {
+                var exprs = engine.expressions;
+                if (exprs.length > 0) {
+                    var lastId = exprs[exprs.length - 1].id;
+                    var inp = document.getElementById('expr-' + lastId);
+                    if (inp) inp.focus();
+                    else if (_mqFields[lastId]) _mqFields[lastId].focus();
+                }
+            }, 50);
             return;
         }
-        // Escape = Close any open panel / deactivate trace mode
+
+        // Escape = Close calc drawer, close trace mode, blur active input
         if (e.key === 'Escape') {
-            if (traceModeActive) {
-                toggleTraceMode();
+            // Close any open calc drawer first
+            var openDrawer = document.querySelector('.gc-calc-open');
+            if (openDrawer) {
+                var drawerId = openDrawer.id.replace('expr-item-', '');
+                if (drawerId) toggleCalcDrawer(parseInt(drawerId));
+                return;
+            }
+            if (traceModeActive) { toggleTraceMode(); return; }
+            if (inInput && active) { active.blur(); return; }
+            return;
+        }
+
+        // Ctrl/Cmd + S = Save to localStorage (prevent browser save dialog)
+        if (mod && e.key === 's') {
+            e.preventDefault();
+            if (typeof saveState === 'function') {
+                var name = prompt('Save name:');
+                if (name) saveState(name);
             }
             return;
         }
+
+        // Ctrl/Cmd + E = Export PNG
+        if (mod && !e.shiftKey && e.key === 'e') {
+            e.preventDefault();
+            if (typeof exportGraph === 'function') exportGraph('png');
+            return;
+        }
+
+        // Ctrl/Cmd + Shift + E = Export SVG
+        if (mod && e.shiftKey && e.key === 'E') {
+            e.preventDefault();
+            if (typeof exportGraph === 'function') exportGraph('svg');
+            return;
+        }
+
+        // ---- Non-input shortcuts (only when not in a text field) ----
+        if (!inInput) {
+            // Ctrl/Cmd + Z = Undo
+            if (mod && !e.shiftKey && e.key === 'z') {
+                e.preventDefault(); undo(); return;
+            }
+            // Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y = Redo
+            if (mod && ((e.shiftKey && (e.key === 'z' || e.key === 'Z')) || e.key === 'y')) {
+                e.preventDefault(); redo(); return;
+            }
+            // T = Toggle trace mode
+            if (e.key === 't' || e.key === 'T') {
+                e.preventDefault();
+                if (typeof toggleTraceMode === 'function') toggleTraceMode();
+                return;
+            }
+            // D = Toggle dark mode
+            if (e.key === 'd' || e.key === 'D') {
+                e.preventDefault();
+                if (typeof toggleDarkMode === 'function') toggleDarkMode();
+                return;
+            }
+            // G = Toggle grid
+            if (e.key === 'g' || e.key === 'G') {
+                e.preventDefault();
+                var gridCb = document.getElementById('showGrid');
+                if (gridCb) { gridCb.checked = !gridCb.checked; updateGraph(); }
+                return;
+            }
+            // F = Fit/reset zoom
+            if (e.key === 'f' || e.key === 'F') {
+                e.preventDefault();
+                if (typeof resetZoom === 'function') resetZoom();
+                return;
+            }
+            // / (slash) = Focus search / first expression input
+            if (e.key === '/') {
+                e.preventDefault();
+                if (engine.expressions.length > 0) {
+                    var firstId = engine.expressions[0].id;
+                    var firstInput = document.getElementById('expr-' + firstId);
+                    if (firstInput) firstInput.focus();
+                    else if (_mqFields[firstId]) _mqFields[firstId].focus();
+                }
+                return;
+            }
+            // ? = Show keyboard shortcuts help
+            if (e.key === '?') {
+                e.preventDefault();
+                _showKeyboardShortcutsHelp();
+                return;
+            }
+        }
+
+        // ---- Expression input shortcuts (when inside an expression field) ----
+        if (inInput) {
+            // Find which expression we're in
+            var exprItem = active.closest ? active.closest('.expression-item') : null;
+            var exprId = exprItem ? parseInt(exprItem.id.replace('expr-item-', '')) : null;
+
+            // Alt + Up / Alt + Down = Navigate between expressions
+            if (e.altKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+                e.preventDefault();
+                var ids = engine.expressions.map(function(ex) { return ex.id; });
+                var idx = ids.indexOf(exprId);
+                if (idx === -1) return;
+                var nextIdx = e.key === 'ArrowUp' ? idx - 1 : idx + 1;
+                if (nextIdx < 0 || nextIdx >= ids.length) return;
+                var nextId = ids[nextIdx];
+                var nextInput = document.getElementById('expr-' + nextId);
+                if (nextInput) nextInput.focus();
+                else if (_mqFields[nextId]) _mqFields[nextId].focus();
+                return;
+            }
+
+            // Alt + Backspace / Alt + Delete = Delete current expression
+            if (e.altKey && (e.key === 'Backspace' || e.key === 'Delete') && exprId !== null) {
+                e.preventDefault();
+                // Focus next expression before deleting
+                var ids2 = engine.expressions.map(function(ex) { return ex.id; });
+                var idx2 = ids2.indexOf(exprId);
+                var focusId = idx2 < ids2.length - 1 ? ids2[idx2 + 1] : (idx2 > 0 ? ids2[idx2 - 1] : null);
+                deleteExpression(exprId);
+                if (focusId !== null) {
+                    var focusInput = document.getElementById('expr-' + focusId);
+                    if (focusInput) focusInput.focus();
+                    else if (_mqFields[focusId]) _mqFields[focusId].focus();
+                }
+                return;
+            }
+
+            // Alt + H = Toggle visibility of current expression
+            if (e.altKey && (e.key === 'h' || e.key === 'H') && exprId !== null) {
+                e.preventDefault();
+                var eObj = engine.expressions.find(function(ex) { return ex.id === exprId; });
+                if (eObj) {
+                    eObj.visible = !eObj.visible;
+                    updateGraph();
+                }
+                return;
+            }
+
+            // Alt + C = Open calculus drawer for current expression
+            if (e.altKey && (e.key === 'c' || e.key === 'C') && exprId !== null) {
+                e.preventDefault();
+                toggleCalcDrawer(exprId);
+                return;
+            }
+        }
     });
+}
+
+/**
+ * Show a modal/toast with keyboard shortcuts
+ */
+function _showKeyboardShortcutsHelp() {
+    var existing = document.getElementById('gc-shortcuts-modal');
+    if (existing) { existing.remove(); return; }
+
+    var overlay = document.createElement('div');
+    overlay.id = 'gc-shortcuts-modal';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);';
+    overlay.onclick = function(ev) { if (ev.target === overlay) overlay.remove(); };
+
+    var isDark = typeof GC_DARK !== 'undefined' && GC_DARK;
+    var bg = isDark ? '#1e1e2e' : '#fff';
+    var fg = isDark ? '#cdd6f4' : '#333';
+    var kbd = isDark ? '#313244' : '#eee';
+
+    overlay.innerHTML = '<div style="background:' + bg + ';color:' + fg + ';border-radius:12px;padding:24px 32px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.3);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
+        '<h3 style="margin:0;font-size:16px;">Keyboard Shortcuts</h3>' +
+        '<button onclick="this.closest(\'#gc-shortcuts-modal\').remove()" style="border:none;background:none;font-size:18px;cursor:pointer;color:' + fg + ';">&times;</button></div>' +
+        '<table style="width:100%;font-size:13px;border-collapse:collapse;">' +
+        _shortcutRow('Ctrl+Enter', 'Add new expression', kbd) +
+        _shortcutRow('Escape', 'Close drawer / blur input', kbd) +
+        _shortcutRow('Ctrl+Z', 'Undo', kbd) +
+        _shortcutRow('Ctrl+Shift+Z', 'Redo', kbd) +
+        _shortcutRow('Ctrl+S', 'Save state', kbd) +
+        _shortcutRow('Ctrl+E', 'Export PNG', kbd) +
+        _shortcutRow('Ctrl+Shift+E', 'Export SVG', kbd) +
+        '<tr><td colspan="2" style="padding:8px 0 4px;font-weight:600;border-top:1px solid ' + kbd + ';">When not in input</td></tr>' +
+        _shortcutRow('T', 'Toggle trace mode', kbd) +
+        _shortcutRow('D', 'Toggle dark mode', kbd) +
+        _shortcutRow('G', 'Toggle grid', kbd) +
+        _shortcutRow('F', 'Reset zoom / fit', kbd) +
+        _shortcutRow('/', 'Focus first expression', kbd) +
+        _shortcutRow('?', 'Show this help', kbd) +
+        '<tr><td colspan="2" style="padding:8px 0 4px;font-weight:600;border-top:1px solid ' + kbd + ';">When in expression input</td></tr>' +
+        _shortcutRow('Alt+Up/Down', 'Navigate expressions', kbd) +
+        _shortcutRow('Alt+Backspace', 'Delete expression', kbd) +
+        _shortcutRow('Alt+H', 'Toggle visibility', kbd) +
+        _shortcutRow('Alt+C', 'Toggle calculus drawer', kbd) +
+        '</table></div>';
+
+    document.body.appendChild(overlay);
+}
+
+function _shortcutRow(key, desc, kbdColor) {
+    return '<tr><td style="padding:4px 8px 4px 0;"><kbd style="background:' + kbdColor + ';padding:2px 6px;border-radius:3px;font-size:11px;font-family:monospace;">' + key + '</kbd></td><td style="padding:4px 0;">' + desc + '</td></tr>';
 }
 
 /**
@@ -4216,7 +4494,8 @@ function _getTypeBadgeLabel(type) {
         cartesian: 'y=f', equation: 'EQ', parametric: 'PAR', polar: 'POL',
         inequality: 'INQ', limit: 'LIM', piecewise: 'PCW', implicit: 'IMP',
         surface: '3D', point: 'PT', table: 'TBL', statistics: 'REG',
-        distribution: 'DST', vector: 'VEC', vectorfield: 'VFD'
+        distribution: 'DST', vector: 'VEC', vectorfield: 'VFD',
+        variable: 'VAR', list: 'LST'
     };
     return labels[type] || type;
 }
@@ -4364,7 +4643,13 @@ function _evaluateNumeric(id, exprStr) {
     // Check if expression has free variables (x, y, t, theta etc.)
     // If it does, it's a function — no numeric result
     const freeVars = ['x', 'y', 't', 'theta', 'r'];
-    const normalized = exprStr.replace(/\b(sin|cos|tan|log|ln|exp|sqrt|abs|floor|ceil|sign|round|min|max|asin|acos|atan|sinh|cosh|tanh|factorial|nthRoot|cbrt|sec|csc|cot|arcsin|arccos|arctan|pi|e)\b/gi, '');
+    // Strip known function names and global scope variable names before checking
+    var stripPattern = '\\b(sin|cos|tan|log|ln|exp|sqrt|abs|floor|ceil|sign|round|min|max|asin|acos|atan|sinh|cosh|tanh|factorial|nthRoot|cbrt|sec|csc|cot|arcsin|arccos|arctan|pi|e';
+    if (engine.globalScope) {
+        Object.keys(engine.globalScope).forEach(function(v) { stripPattern += '|' + v; });
+    }
+    stripPattern += ')\\b';
+    const normalized = exprStr.replace(new RegExp(stripPattern, 'gi'), '');
     const hasFreeVar = freeVars.some(v => {
         const re = new RegExp('\\b' + v + '\\b', 'i');
         return re.test(normalized);
@@ -4381,8 +4666,15 @@ function _evaluateNumeric(id, exprStr) {
         return;
     }
     try {
-        // Substitute slider parameters if they exist (e.g., a=2 → "3*a" → "3*2")
+        // Substitute global scope variables first, then slider parameters
         let evalExpr = exprStr;
+        if (engine.globalScope) {
+            Object.keys(engine.globalScope).forEach(function(varName) {
+                if (typeof engine.globalScope[varName] === 'number') {
+                    evalExpr = evalExpr.replace(new RegExp('\\b' + varName + '\\b', 'g'), '(' + engine.globalScope[varName] + ')');
+                }
+            });
+        }
         const exprObj = engine.expressions.find(e => e.id === id);
         if (exprObj && exprObj.parameters) {
             Object.keys(exprObj.parameters).forEach(param => {
@@ -4481,6 +4773,8 @@ function _populateExpressionDiv(div, expr) {
                     <option value="distribution">Distribution</option>
                     <option value="vector">Vector(s)</option>
                     <option value="vectorfield">Vector Field</option>
+                    <option value="variable">Variable (a=3)</option>
+                    <option value="list">List [1,2,3]</option>
                 </select></span>
                 ${isCartesian ? `<button class="gc-calc-toggle-btn" onclick="toggleCalcDrawer(${expr.id})" aria-expanded="false" title="Calculus options"><i class="fas fa-sliders"></i> Calc</button>` : ''}
                 <button class="gc-latex-copy-btn" onclick="copyAsLaTeX(${expr.id})" title="Copy as LaTeX">LaTeX</button>
@@ -4928,34 +5222,54 @@ function createInputForType(id, type) {
             break;
 
         case 'piecewise':
-            container.innerHTML = `
-                <div id="piecewise-pieces-${id}">
-                    <div class="mb-2 p-2" style="background: #f8f9fa; border-radius: 4px;">
-                        <small class="text-muted"><strong>Piece 1:</strong></small>
-                        <input type="text" class="form-control form-control-sm mb-1" id="piece-expr-${id}-0"
-                               placeholder="Expression (e.g., x^2)" value="x^2" oninput="updatePiecewise(${id})">
-                        <input type="text" class="form-control form-control-sm" id="piece-cond-${id}-0"
-                               placeholder="Condition (e.g., x < 0)" value="x < 0" oninput="updatePiecewise(${id})">
+            // Check if using inline brace syntax
+            if (currentValue && /\{[^}]*:[^}]+\}/.test(currentValue)) {
+                container.innerHTML = `
+                    <input type="text" class="expression-input" id="expr-${id}"
+                           placeholder="e.g., {x<0: -x, x>=0: x}" value="${escapeHtml(currentValue)}"
+                           oninput="updateExpressionValue(${id})"
+                           onchange="updateExpressionValue(${id})">
+                    <small class="text-muted">Inline piecewise: {condition: expr, condition: expr}</small>
+                    <div class="gc-sample-chips gc-on-focus">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '{x<0: -x, x>=0: x}')">|x|</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '{x<0: 0, x>=0: 1}')">step</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '{x<-1: -1, x>=-1: x, x>1: 1}')">clamp</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="_switchToPiecewiseUI(${id})">piece UI</button>
                     </div>
-                    <div class="mb-2 p-2" style="background: #f8f9fa; border-radius: 4px;">
-                        <small class="text-muted"><strong>Piece 2:</strong></small>
-                        <input type="text" class="form-control form-control-sm mb-1" id="piece-expr-${id}-1"
-                               placeholder="Expression (e.g., sin(x))" value="sin(x)" oninput="updatePiecewise(${id})">
-                        <input type="text" class="form-control form-control-sm" id="piece-cond-${id}-1"
-                               placeholder="Condition (e.g., x >= 0)" value="x >= 0" oninput="updatePiecewise(${id})">
+                `;
+                // Parse the brace syntax
+                _parsePiecewiseBraceSyntax(id, currentValue);
+            } else {
+                container.innerHTML = `
+                    <div id="piecewise-pieces-${id}">
+                        <div class="mb-2 p-2" style="background: #f8f9fa; border-radius: 4px;">
+                            <small class="text-muted"><strong>Piece 1:</strong></small>
+                            <input type="text" class="form-control form-control-sm mb-1" id="piece-expr-${id}-0"
+                                   placeholder="Expression (e.g., x^2)" value="x^2" oninput="updatePiecewise(${id})">
+                            <input type="text" class="form-control form-control-sm" id="piece-cond-${id}-0"
+                                   placeholder="Condition (e.g., x < 0)" value="x < 0" oninput="updatePiecewise(${id})">
+                        </div>
+                        <div class="mb-2 p-2" style="background: #f8f9fa; border-radius: 4px;">
+                            <small class="text-muted"><strong>Piece 2:</strong></small>
+                            <input type="text" class="form-control form-control-sm mb-1" id="piece-expr-${id}-1"
+                                   placeholder="Expression (e.g., sin(x))" value="sin(x)" oninput="updatePiecewise(${id})">
+                            <input type="text" class="form-control form-control-sm" id="piece-cond-${id}-1"
+                                   placeholder="Condition (e.g., x >= 0)" value="x >= 0" oninput="updatePiecewise(${id})">
+                        </div>
                     </div>
-                </div>
-                <button class="btn btn-sm btn-outline-primary mt-1" onclick="addPiecewisePiece(${id})">
-                    <i class="fas fa-plus"></i> Add Piece
-                </button>
-                <div class="mt-2">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadPiecewiseSample(${id}, 'abs')">|x|</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadPiecewiseSample(${id}, 'step')">Step</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadPiecewiseSample(${id}, 'sawtooth')">Sawtooth</button>
-                </div>
-            `;
-            // Initialize piecewise data
-            updatePiecewise(id);
+                    <button class="btn btn-sm btn-outline-primary mt-1" onclick="addPiecewisePiece(${id})">
+                        <i class="fas fa-plus"></i> Add Piece
+                    </button>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadPiecewiseSample(${id}, 'abs')">|x|</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadPiecewiseSample(${id}, 'step')">Step</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadPiecewiseSample(${id}, 'sawtooth')">Sawtooth</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="_switchToBraceSyntax(${id})">{...}</button>
+                    </div>
+                `;
+                // Initialize piecewise data
+                updatePiecewise(id);
+            }
             break;
 
         case 'inequality':
@@ -5041,6 +5355,37 @@ function createInputForType(id, type) {
                 <div id="dist-params-${id}"></div>
             `;
             updateDistributionType(id);
+            break;
+
+        case 'variable':
+            container.innerHTML = `
+                <input type="text" class="expression-input" id="expr-${id}"
+                       placeholder="e.g., a = 3 (creates global slider)" value="${escapeHtml(currentValue)}"
+                       oninput="updateExpressionValue(${id})"
+                       onchange="updateExpressionValue(${id})"
+                       style="font-weight:600;">
+                <small class="text-muted" style="color:var(--gc-tool);">Global variable — usable in all expressions</small>
+                <div class="gc-sample-chips gc-on-focus">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'a = 3')">a = 3</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'k = 1')">k = 1</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'n = 5')">n = 5</button>
+                </div>
+            `;
+            break;
+
+        case 'list':
+            container.innerHTML = `
+                <input type="text" class="expression-input" id="expr-${id}"
+                       placeholder="e.g., [1, 2, 3, 4, 5] or [1...10]" value="${escapeHtml(currentValue)}"
+                       oninput="updateExpressionValue(${id})"
+                       onchange="updateExpressionValue(${id})">
+                <small class="text-muted">List of values. Named: L = [1,2,3]. Range: [1...10]</small>
+                <div class="gc-sample-chips gc-on-focus">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '[1, 4, 9, 16, 25]')">squares</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '[1...10]')">1..10</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'L = [2, 3, 5, 7, 11, 13]')">primes</button>
+                </div>
+            `;
             break;
     }
 }
@@ -5487,7 +5832,27 @@ function autoDetectType(value, currentType) {
     const s = value.trim();
     if (!s) return null;
 
-    // Only auto-switch from cartesian (the default type)
+    // Variable assignment: "a = 3", "k = -2.5" — detect from any type
+    // Must be single letter (not x/y/t/e/X/Y/T/E/r/R) = numeric value
+    if (/^\s*([a-df-wA-DF-W])\s*=\s*([+-]?\d+\.?\d*)\s*$/.test(s)) {
+        return 'variable';
+    }
+
+    // List literal: [1, 2, 3] or [1, 2, 3, 4, 5]
+    if (/^\s*\[[\d\s,.\-+]+\]\s*$/.test(s)) {
+        return 'list';
+    }
+    // List range: [1...10] or [1..10]
+    if (/^\s*\[\s*-?\d+\.?\d*\s*\.{2,3}\s*-?\d+\.?\d*\s*\]\s*$/.test(s)) {
+        return 'list';
+    }
+
+    // Piecewise brace syntax: {x<0: -x, x>=0: x} — detect the colon-separated condition:expr pattern
+    if (/\{[^}]*:[^}]+\}/.test(s) && !(/^\s*[a-zA-Z]\s*=/).test(s)) {
+        return 'piecewise';
+    }
+
+    // Only auto-switch from cartesian (the default type) for other patterns
     if (currentType !== 'cartesian') return null;
 
     // Point(s): (2,3) or [(1,2),(3,4)] or (1,2),(3,4) — detect before other checks
@@ -5539,6 +5904,308 @@ function autoDetectType(value, currentType) {
     return null;
 }
 
+// ==================== Variable Assignment Handler ====================
+
+/**
+ * Handle variable-type expression: "a = 3" → global slider
+ */
+function _handleVariableExpression(id, value) {
+    var expr = engine.expressions.find(function(e) { return e.id === id; });
+    if (!expr) return;
+
+    var m = value.trim().match(/^\s*([a-df-wA-DF-W])\s*=\s*([+-]?\d+\.?\d*)\s*$/);
+    if (!m) {
+        // Not a valid assignment — clear variable state
+        delete expr._varName;
+        delete expr._varValue;
+        engine.rebuildGlobalScope();
+        var errorDiv = document.getElementById('expr-error-' + id);
+        if (errorDiv) {
+            errorDiv.textContent = 'Expected: letter = number (e.g. a = 3)';
+            errorDiv.style.display = 'block';
+        }
+        return;
+    }
+
+    var varName = m[1];
+    var varValue = parseFloat(m[2]);
+    expr._varName = varName;
+    expr._varValue = varValue;
+    engine.rebuildGlobalScope();
+
+    // Clear error
+    var errorDiv = document.getElementById('expr-error-' + id);
+    if (errorDiv) { errorDiv.style.display = 'none'; errorDiv.textContent = ''; }
+
+    // Show numeric result
+    var resultEl = document.getElementById('numeric-result-' + id);
+    if (resultEl) {
+        resultEl.textContent = '= ' + varValue;
+        resultEl.style.display = 'block';
+    }
+
+    // Build a global slider for this variable
+    var slidersContainer = document.getElementById('sliders-container-' + id);
+    if (slidersContainer) {
+        var prevRange = expr._sliderRanges && expr._sliderRanges[varName];
+        var sMin = prevRange ? prevRange.min : -10;
+        var sMax = prevRange ? prevRange.max : 10;
+        var sStep = prevRange ? prevRange.step : 0.1;
+        slidersContainer.innerHTML = '<div class="mt-2"><small class="text-muted" style="color:var(--gc-tool);font-weight:600;">Global variable</small></div>' +
+            '<div class="mb-2">' +
+            '<div class="d-flex align-items-center gap-1">' +
+            '<label class="form-label mb-0" style="font-size:12px;">' + varName + ' = <span id="param-value-' + varName + '-' + id + '">' + varValue.toFixed(1) + '</span></label>' +
+            '<button class="btn btn-sm" style="font-size:9px;padding:0 3px;color:#888;" onclick="toggleSliderRange(' + id + ',\'' + varName + '\')" title="Customize range">&#9881;</button>' +
+            '</div>' +
+            '<input type="range" class="form-range" id="param-' + varName + '-' + id + '"' +
+            ' min="' + sMin + '" max="' + sMax + '" step="' + sStep + '" value="' + varValue + '"' +
+            ' aria-label="Variable ' + varName + ' slider"' +
+            ' oninput="_updateGlobalVariable(' + id + ',\'' + varName + '\',this.value)">' +
+            '<div id="slider-range-' + varName + '-' + id + '" style="display:none;" class="d-flex gap-1 align-items-center mt-1">' +
+            '<input type="number" class="form-control form-control-sm" style="width:55px;font-size:10px;" value="' + sMin + '" id="slider-min-' + varName + '-' + id + '" onchange="updateSliderRange(' + id + ',\'' + varName + '\')" placeholder="min">' +
+            '<span style="font-size:10px;">to</span>' +
+            '<input type="number" class="form-control form-control-sm" style="width:55px;font-size:10px;" value="' + sMax + '" id="slider-max-' + varName + '-' + id + '" onchange="updateSliderRange(' + id + ',\'' + varName + '\')" placeholder="max">' +
+            '<span style="font-size:10px;">step</span>' +
+            '<input type="number" class="form-control form-control-sm" style="width:55px;font-size:10px;" value="' + sStep + '" id="slider-step-' + varName + '-' + id + '" onchange="updateSliderRange(' + id + ',\'' + varName + '\')" placeholder="step" min="0.001" step="0.01">' +
+            '</div>' +
+            '</div>';
+    }
+}
+
+/**
+ * Update a global variable value from its slider
+ */
+function _updateGlobalVariable(id, varName, value) {
+    var numVal = parseFloat(value);
+    var expr = engine.expressions.find(function(e) { return e.id === id; });
+    if (expr) {
+        expr._varValue = numVal;
+        expr.expression = varName + ' = ' + numVal;
+        engine.rebuildGlobalScope();
+    }
+    // Update display
+    var valSpan = document.getElementById('param-value-' + varName + '-' + id);
+    if (valSpan) valSpan.textContent = numVal.toFixed(1);
+    var inputEl = document.getElementById('expr-' + id);
+    if (inputEl) inputEl.value = varName + ' = ' + numVal;
+    var resultEl = document.getElementById('numeric-result-' + id);
+    if (resultEl) { resultEl.textContent = '= ' + numVal; resultEl.style.display = 'block'; }
+    updateGraph();
+}
+
+// ==================== Piecewise Brace Syntax Parser ====================
+
+/**
+ * Parse Desmos-style piecewise brace syntax: "{x<0: -x, x>=0: x}" or "y = {x<0: x^2, x>=0: sin(x)}"
+ * Converts to expr.pieces array used by generatePiecewise.
+ */
+function _parsePiecewiseBraceSyntax(id, value) {
+    var expr = engine.expressions.find(function(e) { return e.id === id; });
+    if (!expr) return;
+
+    // Strip optional "y =" or "f(x) =" prefix
+    var s = value.trim().replace(/^\s*(?:y\s*=\s*|[a-zA-Z]\s*\(\s*x\s*\)\s*=\s*)/, '');
+
+    // Extract content inside outermost braces (balanced extraction)
+    var braceStart = s.indexOf('{');
+    if (braceStart === -1) return;
+    var braceDepth = 0, braceEnd = -1;
+    for (var bi = braceStart; bi < s.length; bi++) {
+        if (s[bi] === '{') braceDepth++;
+        else if (s[bi] === '}') { braceDepth--; if (braceDepth === 0) { braceEnd = bi; break; } }
+    }
+    if (braceEnd === -1) return;
+    var inner = s.substring(braceStart + 1, braceEnd).trim();
+    if (!inner) return;
+
+    // Split on comma that separates pieces — but not commas inside function calls
+    // Strategy: split on ", " followed by a condition pattern (letter or digit then comparison op)
+    var pieces = [];
+    var segments = _splitPiecewiseSegments(inner);
+
+    for (var i = 0; i < segments.length; i++) {
+        var seg = segments[i].trim();
+        if (!seg) continue;
+        // Each segment is "condition: expression" or just "expression" (else clause)
+        var colonIdx = seg.indexOf(':');
+        if (colonIdx > 0) {
+            var cond = seg.substring(0, colonIdx).trim();
+            var exprStr = seg.substring(colonIdx + 1).trim();
+            pieces.push({ condition: cond, expression: exprStr });
+        } else {
+            // No colon — treat as else/default clause
+            pieces.push({ condition: 'true', expression: seg });
+        }
+    }
+
+    if (pieces.length > 0) {
+        expr.pieces = pieces;
+        // Clear error
+        var errorDiv = document.getElementById('expr-error-' + id);
+        if (errorDiv) { errorDiv.style.display = 'none'; errorDiv.textContent = ''; }
+        // Show piece count in numeric result
+        var resultEl = document.getElementById('numeric-result-' + id);
+        if (resultEl) {
+            resultEl.textContent = pieces.length + ' piece' + (pieces.length > 1 ? 's' : '');
+            resultEl.style.display = 'block';
+        }
+    }
+}
+
+/**
+ * Split piecewise segments on commas that separate condition:expr pairs.
+ * Respects parentheses nesting so "sin(x,y)" commas are not split.
+ */
+function _splitPiecewiseSegments(s) {
+    var segments = [];
+    var depth = 0;
+    var current = '';
+    for (var i = 0; i < s.length; i++) {
+        var ch = s[i];
+        if (ch === '(' || ch === '[') depth++;
+        else if (ch === ')' || ch === ']') depth--;
+        else if (ch === ',' && depth === 0) {
+            segments.push(current);
+            current = '';
+            continue;
+        }
+        current += ch;
+    }
+    if (current.trim()) segments.push(current);
+    return segments;
+}
+
+/**
+ * Switch from inline brace syntax to multi-piece piecewise UI
+ */
+function _switchToPiecewiseUI(id) {
+    var expr = engine.expressions.find(function(e) { return e.id === id; });
+    if (!expr) return;
+    // Clear the inline syntax so createInputForType renders the piece UI
+    expr.expression = '';
+    createInputForType(id, 'piecewise');
+}
+
+/**
+ * Switch from multi-piece UI to inline brace syntax
+ */
+function _switchToBraceSyntax(id) {
+    var expr = engine.expressions.find(function(e) { return e.id === id; });
+    if (!expr) return;
+    // Build brace syntax from existing pieces
+    var braceSyntax = '{';
+    if (expr.pieces && expr.pieces.length > 0) {
+        for (var i = 0; i < expr.pieces.length; i++) {
+            if (i > 0) braceSyntax += ', ';
+            var cond = expr.pieces[i].condition || 'true';
+            braceSyntax += cond + ': ' + (expr.pieces[i].expression || '0');
+        }
+    } else {
+        braceSyntax += 'x<0: -x, x>=0: x';
+    }
+    braceSyntax += '}';
+    expr.expression = braceSyntax;
+    createInputForType(id, 'piecewise');
+    var input = document.getElementById('expr-' + id);
+    if (input) input.value = braceSyntax;
+    _parsePiecewiseBraceSyntax(id, braceSyntax);
+    updateGraph();
+}
+
+// ==================== List Expression Handler ====================
+
+/**
+ * Handle list-type expression: "[1, 2, 3]" or "[1...10]"
+ * Stores parsed list in engine.globalScope as a named list or in expr._listValues.
+ */
+function _handleListExpression(id, value) {
+    var expr = engine.expressions.find(function(e) { return e.id === id; });
+    if (!expr) return;
+
+    var s = value.trim();
+    var listValues = null;
+
+    // Check for named list: "L = [1,2,3]" or "L1 = [1,2,3]"
+    var namedMatch = s.match(/^\s*([a-zA-Z]\w*)\s*=\s*\[(.+)\]\s*$/);
+    var listName = null;
+    var innerStr = null;
+
+    if (namedMatch) {
+        listName = namedMatch[1];
+        innerStr = namedMatch[2];
+    } else {
+        // Anonymous list: "[1,2,3]"
+        var anonMatch = s.match(/^\s*\[(.+)\]\s*$/);
+        if (anonMatch) innerStr = anonMatch[1];
+    }
+
+    if (innerStr !== null) {
+        // Check for range syntax: "1...10" or "1..10"
+        var rangeMatch = innerStr.match(/^\s*(-?\d+\.?\d*)\s*\.{2,3}\s*(-?\d+\.?\d*)\s*$/);
+        if (rangeMatch) {
+            var start = parseFloat(rangeMatch[1]);
+            var end = parseFloat(rangeMatch[2]);
+            listValues = [];
+            var step = start <= end ? 1 : -1;
+            for (var v = start; step > 0 ? v <= end : v >= end; v += step) {
+                listValues.push(v);
+                if (listValues.length > 10000) break; // safety
+            }
+        } else {
+            // Parse comma-separated values
+            var parts = innerStr.split(',');
+            listValues = [];
+            for (var i = 0; i < parts.length; i++) {
+                var p = parts[i].trim();
+                if (p === '') continue;
+                try {
+                    var val = math.evaluate(p);
+                    if (typeof val === 'number' && isFinite(val)) listValues.push(val);
+                } catch (_) {
+                    // skip non-numeric
+                }
+            }
+        }
+    }
+
+    expr._listValues = listValues;
+    expr._listName = listName;
+
+    // Store in globalScope if named
+    if (listName && listValues) {
+        engine.globalScope[listName] = listValues;
+    }
+
+    // Show list info
+    var resultEl = document.getElementById('numeric-result-' + id);
+    if (resultEl && listValues) {
+        var preview = '[' + (listValues.length <= 8 ? listValues.join(', ') : listValues.slice(0, 6).join(', ') + ', ... ' + listValues[listValues.length - 1]) + ']';
+        resultEl.textContent = preview + '  (' + listValues.length + ' items)';
+        resultEl.style.display = 'block';
+    }
+
+    // Show basic stats
+    if (listValues && listValues.length > 0) {
+        var sum = 0, min = listValues[0], max = listValues[0];
+        for (var j = 0; j < listValues.length; j++) {
+            sum += listValues[j];
+            if (listValues[j] < min) min = listValues[j];
+            if (listValues[j] > max) max = listValues[j];
+        }
+        var mean = sum / listValues.length;
+        var slidersContainer = document.getElementById('sliders-container-' + id);
+        if (slidersContainer) {
+            slidersContainer.innerHTML = '<div class="mt-2" style="font-size:11px;color:var(--text-muted,#888);">' +
+                '<strong>Stats:</strong> mean=' + mean.toFixed(2) + ', min=' + min + ', max=' + max + ', n=' + listValues.length +
+                '</div>';
+        }
+    }
+
+    // Clear error
+    var errorDiv = document.getElementById('expr-error-' + id);
+    if (errorDiv) { errorDiv.style.display = 'none'; errorDiv.textContent = ''; }
+}
+
 /**
  * Update expression value
  */
@@ -5586,6 +6253,27 @@ function updateExpressionValue(id) {
         }
     }
 
+    // Handle variable assignment type: "a = 3" → store in globalScope, show slider
+    if (expr && expr.type === 'variable') {
+        _handleVariableExpression(id, value);
+        updateGraph();
+        return;
+    }
+
+    // Handle inline piecewise brace syntax: "{x<0: -x, x>=0: x}"
+    if (expr && expr.type === 'piecewise' && /\{[^}]*:[^}]+\}/.test(value)) {
+        _parsePiecewiseBraceSyntax(id, value);
+        updateGraph();
+        return;
+    }
+
+    // Handle list type: "[1, 2, 3]" or "[1...10]"
+    if (expr && expr.type === 'list') {
+        _handleListExpression(id, value);
+        updateGraph();
+        return;
+    }
+
     // Validate expression and show error feedback
     const errorDiv = document.getElementById(`expr-error-${id}`);
     const exprObj = engine.expressions.find(e => e.id === id);
@@ -5602,6 +6290,15 @@ function updateExpressionValue(id) {
             let resolved = resolveFunctionComposition(cleanExpr);
             let normalized = engine.normalizeExpression(resolved);
             let stripped = engine.stripCartesianPrefix(normalized);
+            // Substitute global scope variables for validation
+            if (engine.globalScope) {
+                Object.keys(engine.globalScope).forEach(varName => {
+                    if (typeof engine.globalScope[varName] === 'number') {
+                        const re = new RegExp(`\\b${varName}\\b`, 'g');
+                        stripped = stripped.replace(re, String(engine.globalScope[varName]));
+                    }
+                });
+            }
             // Substitute parameters so "4ax" with slider a=1 parses as "4*1*x"
             if (exprObj.parameters) {
                 Object.keys(exprObj.parameters).forEach(param => {
@@ -5669,7 +6366,12 @@ function deleteExpression(id) {
     // Cleanup MathQuill field
     if (_mqFields[id]) delete _mqFields[id];
     if (_mqInputMode[id]) delete _mqInputMode[id];
+    // Check if this is a variable or list expression — rebuild global scope after removal
+    var wasGlobal = false;
+    var delExpr = engine.expressions.find(function(e) { return e.id === id; });
+    if (delExpr && (delExpr.type === 'variable' || delExpr.type === 'list')) wasGlobal = true;
     engine.removeExpression(id);
+    if (wasGlobal) engine.rebuildGlobalScope();
     const element = expressionElements[id];
     if (element) {
         element.remove();
@@ -7029,8 +7731,9 @@ function detectAndCreateSliders(id, expression) {
 
     while ((match = regex.exec(normalizedForDetect)) !== null) {
         const param = match[1];
-        // Exclude common variables and constants
-        if (param !== 'x' && param !== 'y' && param !== 't' && param !== 'e' && param !== 'pi') {
+        // Exclude common variables, constants, and global scope variables
+        if (param !== 'x' && param !== 'y' && param !== 't' && param !== 'e' && param !== 'pi'
+            && !(engine.globalScope && param in engine.globalScope)) {
             params.add(param);
         }
     }
