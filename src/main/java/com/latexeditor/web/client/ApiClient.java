@@ -185,6 +185,59 @@ public class ApiClient {
         }
     }
 
+    /**
+     * POST /api/latex/tikz/compile
+     * Sends TikZ code (raw mode) and returns a CompileResponse with jobId.
+     */
+    public CompileResponse compileTikz(String rawTikz) throws ApiException, IOException {
+        String url = baseUrl + "/api/latex/tikz/compile";
+        String jsonBody = "{\"raw\":" + JsonUtil.toJson(rawTikz) + "}";
+
+        CloseableHttpClient client = HttpClients.createDefault();
+        try {
+            HttpPost post = new HttpPost(url);
+            post.setConfig(defaultConfig());
+            post.setHeader("Content-Type", "application/json");
+            post.setHeader("Accept", "application/json");
+            post.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
+
+            HttpResponse response = executeWithErrorHandling(client, post);
+            int status = response.getStatusLine().getStatusCode();
+            String body = readBody(response);
+
+            if (status >= 400) {
+                throw new ApiException(status >= 500 ? 502 : status, body);
+            }
+
+            return JsonUtil.fromJson(body, CompileResponse.class);
+        } finally {
+            client.close();
+        }
+    }
+
+    /**
+     * GET /api/latex/jobs/{jobId}/svg
+     * Returns raw HttpResponse for SVG streaming — caller must close.
+     */
+    public HttpResponse getSVGResponse(String jobId) throws ApiException, IOException {
+        String url = baseUrl + "/api/latex/jobs/" + jobId + "/svg";
+
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpGet get = new HttpGet(url);
+        get.setConfig(defaultConfig());
+
+        HttpResponse response = executeWithErrorHandling(client, get);
+        int status = response.getStatusLine().getStatusCode();
+
+        if (status >= 400) {
+            String body = readBody(response);
+            client.close();
+            throw new ApiException(status >= 500 ? 502 : status, body);
+        }
+
+        return response;
+    }
+
     private HttpResponse executeWithErrorHandling(CloseableHttpClient client, org.apache.http.client.methods.HttpUriRequest request)
             throws ApiException, IOException {
         try {
