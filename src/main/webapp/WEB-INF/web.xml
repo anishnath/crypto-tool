@@ -626,6 +626,24 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>TikzCompileServlet</servlet-name>
+        <servlet-class>com.latexeditor.web.servlets.TikzCompileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TikzCompileServlet</servlet-name>
+        <url-pattern>/tikz-compile</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SVGProxyServlet</servlet-name>
+        <servlet-class>com.latexeditor.web.servlets.SVGProxyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SVGProxyServlet</servlet-name>
+        <url-pattern>/svg/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>JobStatusServlet</servlet-name>
         <servlet-class>com.latexeditor.web.servlets.JobStatusServlet</servlet-class>
     </servlet>
