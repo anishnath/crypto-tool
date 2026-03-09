@@ -75,6 +75,9 @@
     <!-- KaTeX CSS: non-blocking (math preview is below the fold on mobile) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" media="print" onload="this.media='all'">
 
+    <!-- MathQuill CSS: WYSIWYG math input -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathquill@0.10.1/build/mathquill.css" media="print" onload="this.media='all'">
+
     <%@ include file="modern/ads/ad-init.jsp" %>
 
     <!-- LCP placeholder: inline style for graph area so it paints immediately -->
@@ -991,10 +994,24 @@ window.addEventListener('message', (e) => {
         }
       });
     });
-    // Stage 3: KaTeX only (deferred — just for math preview rendering)
+    // Stage 3: KaTeX + MathQuill (deferred — needed on user interaction only)
     loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js', function(){
       loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js');
     });
+    // MathQuill needs jQuery
+    if (!window.jQuery) {
+      loadScript('https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js', function(){
+        loadScript('https://cdn.jsdelivr.net/npm/mathquill@0.10.1/build/mathquill.min.js', function(){
+          window.MQ = MathQuill.getInterface(2);
+          if (typeof _initMathQuillFields === 'function') _initMathQuillFields();
+        });
+      });
+    } else {
+      loadScript('https://cdn.jsdelivr.net/npm/mathquill@0.10.1/build/mathquill.min.js', function(){
+        window.MQ = MathQuill.getInterface(2);
+        if (typeof _initMathQuillFields === 'function') _initMathQuillFields();
+      });
+    }
   }
 
   function loadScript(src, cb) {

@@ -194,8 +194,10 @@
 
     /* Expression items */
     .gc-page-container .expression-item {
-        padding: 0.375rem;
         margin-bottom: 0.25rem;
+    }
+    .gc-page-container .gc-expr-body {
+        padding: 0.3rem 0.4rem;
     }
     .gc-page-container .expression-input {
         font-size: 0.9375rem;
@@ -203,10 +205,13 @@
         border-width: 1.5px;
         box-shadow: none;
     }
-    .gc-page-container .gc-expr-toolbar { gap: 0.375rem; margin-top: 0.375rem; }
-    .gc-page-container .gc-toggle-label { font-size: 0.75rem; }
-    .gc-page-container .plot-type-select { font-size: 0.75rem; padding: 0.2rem 1.5rem 0.2rem 0.375rem; }
-    .gc-page-container .color-picker { width: 22px; height: 22px; }
+    .gc-page-container .gc-toggle-label { font-size: 0.7rem; }
+    .gc-page-container .gc-calc-drawer-row { gap: 0.1rem 0.2rem; }
+    .gc-page-container .gc-color-swatch { min-height: 24px; }
+    .gc-page-container .gc-expr-left-rail { width: 18px; }
+    .gc-page-container .gc-drag-handle { height: 12px; font-size: 0.4rem; }
+    .gc-page-container .gc-delete-btn { padding: 0.2rem; font-size: 0.6rem; }
+    .gc-page-container .gc-numeric-result { font-size: 0.7rem; }
 
     /* Preset chips */
     .gc-preset-chip { padding: 0.2rem 0.4rem; font-size: 0.6875rem; }
@@ -220,15 +225,123 @@
 }
 
 /* ========================================
-   EXPRESSION ITEMS: Compact by default
+   EXPRESSION ITEMS: Desmos-style compact
    ======================================== */
 .gc-page-container .expression-item {
     background: var(--bg-secondary, #f8f9fa);
-    border-left: 3px solid var(--gc-tool);
-    padding: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    padding: 0;
     margin-bottom: 0.5rem;
     border-radius: 0.375rem;
+    /* NO overflow:hidden — clips MathQuill popups, same as gc-graph-card */
     position: relative;
+}
+
+/* Zone 1: Color rail (left strip) + drag handle */
+.gc-page-container .gc-expr-left-rail {
+    width: 24px;
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    border-radius: 0.375rem 0 0 0.375rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.gc-page-container .gc-drag-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 16px;
+    cursor: grab;
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.03);
+    border-radius: 0.375rem 0 0 0;
+}
+.gc-page-container .expression-item:hover .gc-drag-handle { opacity: 1; }
+.gc-page-container .gc-drag-handle:active { cursor: grabbing; }
+.gc-page-container .gc-color-swatch {
+    display: block;
+    width: 100%;
+    flex: 1;
+    min-height: 28px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 0 0 0 0.375rem;
+    transition: filter 0.15s;
+}
+.gc-page-container .gc-color-swatch:hover { filter: brightness(1.15); }
+.gc-page-container .gc-color-swatch input[type="color"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+/* Drag states */
+.gc-page-container .expression-item.gc-dragging {
+    opacity: 0.4;
+    box-shadow: 0 2px 12px rgba(139, 92, 246, 0.3);
+}
+.gc-page-container .gc-drag-placeholder {
+    height: 4px;
+    background: var(--gc-tool);
+    border-radius: 2px;
+    margin: 0.25rem 0;
+    transition: height 0.15s;
+}
+
+/* Zone 2: Main body */
+.gc-page-container .gc-expr-body {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0.4rem 0.5rem;
+}
+/* Top row: input + delete button side by side */
+.gc-page-container .gc-expr-top-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+.gc-page-container .gc-expr-input-wrap {
+    flex: 1;
+    min-width: 0;
+}
+/* Always-visible delete button */
+.gc-page-container .gc-delete-btn {
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-muted, #c4c4c4);
+    padding: 0.3rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.7rem;
+    line-height: 1;
+    transition: color 0.15s, background 0.15s;
+    margin-top: 0.15rem;
+}
+.gc-page-container .gc-delete-btn:hover {
+    background: #fef2f2;
+    color: #dc3545;
+}
+
+/* Numeric result (Desmos-style: "= 5") */
+.gc-page-container .gc-numeric-result {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--gc-tool);
+    padding: 0.15rem 0;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 /* Expression input — MUST stand out as the primary interaction target */
@@ -267,6 +380,117 @@
 }
 
 /* ========================================
+   MathQuill rich input field
+   ======================================== */
+.gc-page-container .gc-mq-wrapper {
+    position: relative;
+}
+.gc-page-container .gc-mq-field {
+    width: 100%;
+    min-height: 2.25rem;
+    font-size: 1.05rem;
+    padding: 0.4rem 0.75rem;
+    border: 2px solid var(--gc-tool);
+    border-radius: 0.375rem;
+    background: #faf8ff;
+    color: var(--text-primary, #0f172a);
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+    cursor: text;
+}
+/* Override MathQuill internal border/padding */
+.gc-page-container .gc-mq-field .mq-editable-field {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    min-height: unset !important;
+}
+.gc-page-container .gc-mq-field .mq-editable-field .mq-root-block {
+    padding: 0;
+}
+.gc-page-container .gc-mq-field:focus-within {
+    outline: none;
+    border-color: var(--gc-tool-dark);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18), 0 2px 8px rgba(139, 92, 246, 0.1);
+}
+/* Placeholder text for empty MathQuill field */
+.gc-page-container .gc-mq-field .mq-editable-field.mq-empty::after {
+    content: attr(data-mq-placeholder);
+    color: #a78bfa;
+    font-style: italic;
+    font-weight: 400;
+    opacity: 0.7;
+    pointer-events: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+}
+/* Toggle between MathQuill and plain text */
+.gc-page-container .gc-input-mode-toggle {
+    position: absolute;
+    top: 0.35rem;
+    right: 0.4rem;
+    font-size: 0.65rem;
+    padding: 0.1rem 0.35rem;
+    border: 1px solid #d4d4d8;
+    border-radius: 0.25rem;
+    background: #f4f4f5;
+    color: #71717a;
+    cursor: pointer;
+    z-index: 2;
+    line-height: 1.3;
+    transition: background 0.15s, color 0.15s;
+}
+.gc-page-container .gc-input-mode-toggle:hover {
+    background: #e4e4e7;
+    color: #3f3f46;
+}
+/* Dark mode MathQuill */
+[data-theme="dark"] .gc-page-container .gc-mq-field {
+    background: #1a1432;
+    border-color: #6d5ca0;
+    color: var(--text-primary, #e5e7eb);
+    box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.1);
+}
+[data-theme="dark"] .gc-page-container .gc-mq-field:focus-within {
+    border-color: #c4b5fd;
+    background: #1e1538;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2), 0 2px 8px rgba(167, 139, 250, 0.12);
+}
+[data-theme="dark"] .gc-page-container .gc-mq-field .mq-editable-field.mq-empty::after {
+    color: #7c6cb0;
+}
+[data-theme="dark"] .gc-page-container .gc-input-mode-toggle {
+    background: #2a2040;
+    border-color: #4a3d6a;
+    color: #a78bfa;
+}
+[data-theme="dark"] .gc-page-container .gc-input-mode-toggle:hover {
+    background: #352960;
+    color: #c4b5fd;
+}
+/* MathQuill cursor and selection colors */
+.gc-page-container .gc-mq-field .mq-cursor {
+    border-color: var(--gc-tool, #8b5cf6);
+}
+.gc-page-container .gc-mq-field .mq-selection .mq-matrixed {
+    background: rgba(139, 92, 246, 0.2);
+}
+.gc-page-container .gc-mq-field .mq-selection .mq-matrixed-container {
+    filter: none;
+}
+/* Dark mode: fraction bar, sqrt bar, and other borders visible */
+[data-theme="dark"] .gc-page-container .gc-mq-field .mq-fraction .mq-fraction-inner {
+    border-top-color: var(--text-primary, #e5e7eb);
+}
+[data-theme="dark"] .gc-page-container .gc-mq-field .mq-sqrt-prefix {
+    color: var(--text-primary, #e5e7eb);
+}
+[data-theme="dark"] .gc-page-container .gc-mq-field .mq-sqrt-stem {
+    border-color: var(--text-primary, #e5e7eb);
+}
+
+/* ========================================
    Sample chips: hidden by default, show on focus
    ======================================== */
 .gc-page-container .gc-sample-chips {
@@ -289,7 +513,7 @@
     transition: max-height 0.2s ease, opacity 0.15s ease, margin 0.15s ease;
 }
 .gc-page-container .expression-item:focus-within .gc-on-focus {
-    max-height: 60px;
+    max-height: 120px;
     opacity: 1;
     margin-top: 0.25rem;
 }
@@ -303,28 +527,139 @@
 }
 
 /* ========================================
-   Expression toolbar: type, color, toggles
+   Expression meta row: type badge, calc toggle, delete
+   (hidden by default, revealed on focus or drawer open)
    ======================================== */
-.gc-page-container .gc-expr-toolbar {
+.gc-page-container .gc-expr-meta {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    gap: 0.375rem;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin: 0;
+    transition: max-height 0.18s ease, opacity 0.15s ease, margin 0.12s ease;
+}
+.gc-page-container .expression-item:focus-within .gc-expr-meta,
+.gc-page-container .expression-item.gc-calc-open .gc-expr-meta,
+.gc-page-container .expression-item:hover .gc-expr-meta {
+    max-height: 32px;
+    opacity: 1;
+    margin-top: 0.3rem;
+}
+
+/* Type badge */
+.gc-page-container .gc-type-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.2rem;
+    border: 1px solid var(--border, #e2e8f0);
+    background: transparent;
+    color: var(--gc-tool);
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    transition: all 0.15s;
+}
+.gc-page-container .gc-type-badge:hover {
+    background: var(--gc-light);
+    border-color: var(--gc-tool);
+}
+
+/* Type badge is a positioned parent for the hidden select overlay */
+.gc-page-container .gc-type-badge {
+    position: relative;
+}
+/* Hidden type select overlays the badge so showPicker/click work natively */
+.gc-page-container .gc-type-select-hidden {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+/* Calculus drawer toggle button */
+.gc-page-container .gc-calc-toggle-btn {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.3rem;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--text-secondary, #64748b);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.gc-page-container .gc-calc-toggle-btn:hover {
+    color: var(--gc-tool);
+    border-color: var(--gc-tool);
+    background: var(--gc-light);
+}
+.gc-page-container .gc-calc-open .gc-calc-toggle-btn {
+    color: var(--gc-tool);
+    background: var(--gc-light);
+    border-color: var(--gc-tool);
+}
+
+/* LaTeX copy btn in meta row */
+.gc-page-container .gc-latex-copy-btn {
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 0.1rem 0.3rem;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 0.2rem;
+    background: transparent;
+    color: var(--text-muted, #94a3b8);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.gc-page-container .gc-latex-copy-btn:hover {
+    color: var(--gc-tool);
+    border-color: var(--gc-tool);
+}
+
+/* ========================================
+   Calculus drawer: hidden by default
+   ======================================== */
+.gc-page-container .gc-calc-drawer {
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.22s ease, opacity 0.18s ease, padding 0.18s ease;
+    padding: 0 0.5rem;
+}
+.gc-page-container .gc-calc-open .gc-calc-drawer {
+    max-height: 250px;
+    opacity: 1;
+    padding: 0.375rem 0.5rem;
+    border-top: 1px solid var(--border, #e2e8f0);
+}
+.gc-page-container .gc-calc-drawer-row {
+    display: flex;
     flex-wrap: wrap;
+    gap: 0.125rem 0.3rem;
+    padding: 0.15rem 0;
 }
-.gc-page-container .gc-calculus-toggles {
-    display: contents;
-}
+
+/* Toggle labels (shared by calc drawer rows) */
 .gc-page-container .gc-toggle-label {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    font-size: 0.8125rem;
+    gap: 0.2rem;
+    font-size: 0.75rem;
     color: var(--text-secondary, #64748b);
     cursor: pointer;
     user-select: none;
     white-space: nowrap;
-    padding: 0.15rem 0.25rem;
+    padding: 0.1rem 0.2rem;
     border-radius: 0.25rem;
     transition: background 0.15s, color 0.15s;
 }
@@ -353,24 +688,6 @@
     cursor: pointer;
     padding: 0;
     flex-shrink: 0;
-}
-.gc-page-container .delete-btn {
-    position: absolute;
-    right: 4px;
-    top: 4px;
-    border: none;
-    background: transparent;
-    color: var(--text-muted, #94a3b8);
-    padding: 0.2rem 0.35rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-size: 0.75rem;
-    line-height: 1;
-    transition: color 0.15s, background 0.15s;
-}
-.gc-page-container .delete-btn:hover {
-    background: #fef2f2;
-    color: #dc3545;
 }
 .gc-page-container .plot-type-select {
     font-size: 0.8125rem;
@@ -521,10 +838,10 @@
    ======================================== */
 .gc-btn-add {
     width: 100%;
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    font-weight: 600;
-    font-size: 0.875rem;
+    margin-top: 0.375rem;
+    padding: 0.3rem 0.5rem;
+    font-weight: 500;
+    font-size: 0.8rem;
     border: none;
     border-radius: 0.375rem;
     cursor: pointer;
@@ -817,9 +1134,54 @@
 /* --- Expression items: inset darker than card-body --- */
 [data-theme="dark"] .gc-page-container .expression-item {
     background: #0d1320;
-    border-left-color: #a78bfa;
     border: 1px solid #1f2937;
-    border-left: 3px solid #a78bfa;
+}
+/* Dark: new layout elements */
+[data-theme="dark"] .gc-page-container .gc-type-badge {
+    border-color: #475569;
+    color: #a78bfa;
+}
+[data-theme="dark"] .gc-page-container .gc-type-badge:hover {
+    background: rgba(139, 92, 246, 0.12);
+    border-color: #a78bfa;
+}
+[data-theme="dark"] .gc-page-container .gc-calc-toggle-btn {
+    border-color: #475569;
+    color: #94a3b8;
+}
+[data-theme="dark"] .gc-page-container .gc-calc-toggle-btn:hover,
+[data-theme="dark"] .gc-page-container .gc-calc-open .gc-calc-toggle-btn {
+    color: #c4b5fd;
+    background: rgba(139, 92, 246, 0.15);
+    border-color: #a78bfa;
+}
+[data-theme="dark"] .gc-page-container .gc-drag-handle {
+    color: #64748b;
+    background: rgba(255,255,255,0.03);
+}
+[data-theme="dark"] .gc-page-container .gc-delete-btn {
+    color: #64748b;
+}
+[data-theme="dark"] .gc-page-container .gc-delete-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+}
+[data-theme="dark"] .gc-page-container .gc-numeric-result {
+    color: #a78bfa;
+}
+[data-theme="dark"] .gc-page-container .gc-drag-placeholder {
+    background: #a78bfa;
+}
+[data-theme="dark"] .gc-page-container .gc-latex-copy-btn {
+    color: #94a3b8;
+    border-color: #475569;
+}
+[data-theme="dark"] .gc-page-container .gc-latex-copy-btn:hover {
+    color: #c4b5fd;
+    border-color: #a78bfa;
+}
+[data-theme="dark"] .gc-page-container .gc-calc-open .gc-calc-drawer {
+    border-top-color: #2d3a4d;
 }
 [data-theme="dark"] .gc-page-container .expression-input {
     background: #1a1432;
@@ -950,15 +1312,6 @@
     box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.18);
 }
 
-/* Dark: delete button hover */
-[data-theme="dark"] .gc-page-container .delete-btn {
-    color: var(--text-muted, #64748b);
-}
-[data-theme="dark"] .gc-page-container .delete-btn:hover {
-    background: rgba(239, 68, 68, 0.15);
-    color: #fca5a5;
-}
-
 /* Dark: toggle label hover */
 [data-theme="dark"] .gc-page-container .gc-toggle-label {
     color: var(--text-secondary, #94a3b8);
@@ -1035,7 +1388,5 @@
    Calculus toggles: wrap nicely on mobile
    ======================================== */
 .gc-page-container .gc-calculus-toggles {
-    display: inline-flex;
-    flex-wrap: wrap;
-    gap: 0.125rem 0.25rem;
+    display: contents;
 }

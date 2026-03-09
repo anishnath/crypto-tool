@@ -9,6 +9,362 @@ function escapeHtml(str) {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+/* =========================================================================
+   MathQuill ↔ Math.js bridge
+   ========================================================================= */
+
+/** Registry of active MathQuill field instances keyed by expression id */
+var _mqFields = {};
+
+/** Per-expression input mode: 'math' (MathQuill) or 'text' (plain input) */
+var _mqInputMode = {};
+
+/** Types that support MathQuill rich input */
+var _mqSupportedTypes = ['cartesian', 'equation', 'inequality', 'polar', 'implicit', 'parametric', 'surface', 'limit'];
+
+/** Guard flag: true while _initMathQuillField is setting initial content (suppress edit handler) */
+var _mqInitializing = false;
+
+/** Debounce timer for undo saves — declared here so MathQuill edit handler can access it */
+var _undoSaveTimer = null;
+
+/**
+ * Convert MathQuill LaTeX output → Math.js-compatible plain-text expression.
+ * This is the critical bridge: MathQuill produces LaTeX; the engine needs plain math.
+ */
+function latexToMathJS(latex) {
+    if (!latex || typeof latex !== 'string') return '';
+    let s = latex.trim();
+    if (!s) return '';
+
+    // ── Fractions: \frac{a}{b} → (a)/(b) ──
+    // Handle nested fractions by iterating
+    for (let i = 0; i < 10; i++) {
+        const prev = s;
+        s = s.replace(/\\frac\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, '(($1)/($2))');
+        if (s === prev) break;
+    }
+
+    // ── Square root: \sqrt{...} → sqrt(...), \sqrt[n]{...} → nthRoot(..., n) ──
+    s = s.replace(/\\sqrt\[([^\]]+)\]\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, 'nthRoot($2, $1)');
+    s = s.replace(/\\sqrt\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, 'sqrt($1)');
+
+    // ── Exponents: x^{...} → x^(...), handle single char x^2 already fine ──
+    s = s.replace(/\^\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, '^($1)');
+
+    // ── Subscripts: remove them (common in variable names, not math) ──
+    s = s.replace(/_\{[^{}]*\}/g, '');
+    s = s.replace(/_[a-zA-Z0-9]/g, '');
+
+    // ── Absolute value: \left|...\right| → abs(...) ──
+    s = s.replace(/\\left\|([^|]*?)\\right\|/g, 'abs($1)');
+    s = s.replace(/\|([^|]+)\|/g, 'abs($1)');
+
+    // ── Greek letters ──
+    s = s.replace(/\\pi/g, 'pi');
+    s = s.replace(/\\theta/g, 'theta');
+    s = s.replace(/\\alpha/g, 'alpha');
+    s = s.replace(/\\beta/g, 'beta');
+    s = s.replace(/\\gamma/g, 'gamma');
+    s = s.replace(/\\phi/g, 'phi');
+    s = s.replace(/\\lambda/g, 'lambda');
+    s = s.replace(/\\mu/g, 'mu');
+    s = s.replace(/\\sigma/g, 'sigma');
+    s = s.replace(/\\omega/g, 'omega');
+    s = s.replace(/\\infty/g, 'Infinity');
+
+    // ── Trig / log functions: \sin → sin, \cos → cos, etc. ──
+    s = s.replace(/\\(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|sinh|cosh|tanh|ln|log|exp|abs|min|max|floor|ceil|sign|round)\b/g, '$1');
+
+    // ── Parentheses: \left( \right) → ( ) — MUST come before \le/\ge matching ──
+    s = s.replace(/\\left\s*([(\[{|])/g, '$1');
+    s = s.replace(/\\right\s*([)\]}|])/g, '$1');
+    s = s.replace(/\\left\s*\./g, '');  // \left. invisible delimiter
+    s = s.replace(/\\right\s*\./g, '');
+
+    // ── Special LaTeX commands ──
+    s = s.replace(/\\cdot/g, '*');
+    s = s.replace(/\\times/g, '*');
+    s = s.replace(/\\div/g, '/');
+    s = s.replace(/\\pm/g, '+');  // default to +
+    s = s.replace(/\\leq/g, '<=');
+    s = s.replace(/\\geq/g, '>=');
+    s = s.replace(/\\le(?![a-z])/g, '<=');
+    s = s.replace(/\\ge(?![a-z])/g, '>=');
+    s = s.replace(/\\neq/g, '!=');
+    s = s.replace(/\\lt(?![a-z])/g, '<');
+    s = s.replace(/\\gt(?![a-z])/g, '>');
+
+    // ── Braces cleanup ──
+    s = s.replace(/\{/g, '(');
+    s = s.replace(/\}/g, ')');
+
+    // ── Collapse empty parens from mid-entry states like \frac{}{} ──
+    s = s.replace(/\(\s*\)/g, '');
+
+    // ── e^{...} → exp(...) when 'e' is Euler's number ──
+    s = s.replace(/(?<![a-zA-Z])e\^\(([^)]+)\)/g, 'exp($1)');
+    s = s.replace(/(?<![a-zA-Z])e\^([a-zA-Z0-9])/g, 'exp($1)');
+
+    // ── Cleanup LaTeX artifacts ──
+    s = s.replace(/\\ /g, ' ');       // escaped spaces
+    s = s.replace(/\\,/g, '');        // thin space
+    s = s.replace(/\\;/g, '');        // medium space
+    s = s.replace(/\\!/g, '');        // negative thin space
+    s = s.replace(/\\quad/g, ' ');
+    s = s.replace(/\\qquad/g, ' ');
+    s = s.replace(/~/g, ' ');         // non-breaking space
+    s = s.replace(/\\text\{([^}]*)\}/g, '$1');  // \text{...}
+    s = s.replace(/\\mathrm\{([^}]*)\}/g, '$1');
+    s = s.replace(/\\operatorname\{([^}]*)\}/g, '$1');
+
+    // ── Remove any remaining backslash commands we don't recognize ──
+    s = s.replace(/\\[a-zA-Z]+/g, '');
+
+    // ── Whitespace cleanup ──
+    s = s.replace(/\s+/g, ' ').trim();
+
+    return s;
+}
+
+/**
+ * Convert Math.js plain-text expression → LaTeX for writing into MathQuill.
+ * This is the reverse direction: when loading a sample or restoring state.
+ */
+function mathJSToLatex(expr) {
+    if (!expr || typeof expr !== 'string') return '';
+
+    // For comma-separated expressions (parametric like "cos(t), sin(t)"),
+    // convert each part separately and rejoin
+    if (expr.includes(',') && !expr.includes('(') || (expr.match(/,/g) || []).length > (expr.match(/\(/g) || []).length) {
+        // Count commas outside of parentheses
+        let depth = 0, topCommas = [];
+        for (let i = 0; i < expr.length; i++) {
+            if (expr[i] === '(') depth++;
+            else if (expr[i] === ')') depth--;
+            else if (expr[i] === ',' && depth === 0) topCommas.push(i);
+        }
+        if (topCommas.length > 0) {
+            const parts = [];
+            let start = 0;
+            for (const ci of topCommas) {
+                parts.push(expr.substring(start, ci).trim());
+                start = ci + 1;
+            }
+            parts.push(expr.substring(start).trim());
+            return parts.map(p => mathJSToLatex(p)).join(', ');
+        }
+    }
+
+    try {
+        // Use Math.js built-in toTex for most expressions
+        const node = math.parse(expr);
+        let tex = node.toTex();
+        // Fix common issues with Math.js LaTeX output
+        tex = tex.replace(/\\mathrm\{pi\}/g, '\\pi');
+        tex = tex.replace(/\\mathrm\{theta\}/g, '\\theta');
+        tex = tex.replace(/\\mathrm\{e\}/g, 'e');
+        tex = tex.replace(/~\\cdot~/g, '\\cdot ');
+        return tex;
+    } catch (_) {
+        // Fallback: basic regex conversion
+        let s = expr;
+        s = s.replace(/\bpi\b/g, '\\pi');
+        s = s.replace(/\btheta\b/g, '\\theta');
+        s = s.replace(/\bsqrt\(([^)]+)\)/g, '\\sqrt{$1}');
+        s = s.replace(/\b(sin|cos|tan|log|ln|exp|sec|csc|cot)\b/g, '\\$1');
+        return s;
+    }
+}
+
+/**
+ * Check if MathQuill is loaded and ready
+ */
+function isMathQuillReady() {
+    return typeof window.MQ !== 'undefined' && window.MQ && typeof window.MQ.MathField === 'function';
+}
+
+/**
+ * Initialize MathQuill field for a given expression id.
+ * Called after innerHTML is set and the mount div exists in DOM.
+ */
+function _initMathQuillField(id) {
+    if (!isMathQuillReady()) return;
+    const mountEl = document.getElementById(`mq-field-${id}`);
+    if (!mountEl) return;
+
+    const mq = window.MQ.MathField(mountEl, {
+        spaceBehavesLikeTab: true,
+        leftRightIntoCmdGoes: 'up',
+        restrictMismatchedBrackets: true,
+        supSubsRequireOperand: true,
+        autoCommands: 'pi theta sqrt alpha beta gamma phi lambda mu sigma omega infty',
+        autoOperatorNames: 'sin cos tan sec csc cot arcsin arccos arctan sinh cosh tanh ln log exp abs floor ceil sign round min max nthRoot factorial sum prod',
+        handlers: {
+            edit: function() {
+                _onMathQuillEdit(id);
+            }
+        }
+    });
+
+    _mqFields[id] = mq;
+
+    // Set initial content if expression already has a value
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr && expr.expression && expr.expression.trim()) {
+        const latex = mathJSToLatex(expr.expression);
+        if (latex) {
+            _mqInitializing = true;
+            mq.latex(latex);
+            _mqInitializing = false;
+        }
+    }
+
+    // Set placeholder via data attribute
+    const editableEl = mountEl.querySelector('.mq-editable-field');
+    if (editableEl) {
+        editableEl.setAttribute('data-mq-placeholder', 'Type math: x², sin(x), fractions...');
+    }
+}
+
+/**
+ * Called on every MathQuill edit event.
+ * Converts LaTeX → Math.js and feeds into the existing engine pipeline.
+ */
+function _onMathQuillEdit(id) {
+    if (_mqInitializing) return; // suppress during _initMathQuillField setup
+    const mq = _mqFields[id];
+    if (!mq) return;
+
+    const latex = mq.latex();
+    const mathExpr = latexToMathJS(latex);
+
+    // Skip empty/whitespace-only expressions (mid-entry states)
+    if (!mathExpr || !mathExpr.trim()) {
+        engine.updateExpression(id, { expression: '' });
+        try { updateGraph(); } catch (_) {}
+        return;
+    }
+
+    // Store the plain-text expression in the engine
+    engine.updateExpression(id, { expression: mathExpr });
+
+    // Debounced undo save
+    if (_undoSaveTimer) clearTimeout(_undoSaveTimer);
+    else saveUndoState();
+    _undoSaveTimer = setTimeout(() => { _undoSaveTimer = null; }, 500);
+
+    // Auto-detect type change
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) {
+        const detected = autoDetectType(mathExpr, expr.type);
+        if (detected && detected !== expr.type && !_mqSupportedTypes.includes(detected)) {
+            // Switch to plain text mode if detected type doesn't support MathQuill
+            expr.type = detected;
+            const typeSel = document.getElementById(`type-${id}`);
+            if (typeSel) typeSel.value = detected;
+            const badge = document.getElementById(`type-badge-${id}`);
+            if (badge) badge.textContent = _getTypeBadgeLabel(detected);
+            _mqInputMode[id] = 'text';
+            createInputForType(id, detected);
+            const newInput = document.getElementById(`expr-${id}`);
+            if (newInput) newInput.value = mathExpr;
+            const calcToggles = document.getElementById(`calculus-toggles-${id}`);
+            if (calcToggles) calcToggles.style.display = (detected === 'cartesian') ? '' : 'none';
+            try { updateGraph(); } catch (_) {}
+            return;
+        }
+        if (detected && detected !== expr.type) {
+            expr.type = detected;
+            const typeSel = document.getElementById(`type-${id}`);
+            if (typeSel) typeSel.value = detected;
+            const badge2 = document.getElementById(`type-badge-${id}`);
+            if (badge2) badge2.textContent = _getTypeBadgeLabel(detected);
+            const calcToggles = document.getElementById(`calculus-toggles-${id}`);
+            if (calcToggles) calcToggles.style.display = (detected === 'cartesian') ? '' : 'none';
+        }
+    }
+
+    // Detect and create sliders for parameters (a, b, c, etc.)
+    if (expr && ['cartesian', 'equation', 'implicit', 'polar', 'parametric', 'surface', 'inequality'].includes(expr.type)) {
+        detectAndCreateSliders(id, mathExpr);
+    }
+
+    // For limit type, trigger limit evaluation (reads from MQ via updateLimitExpression)
+    if (expr && expr.type === 'limit') {
+        updateLimitExpression(id);
+        return; // updateLimitExpression calls updateGraph internally
+    }
+
+    // Numeric evaluation (Desmos-style: "2+3" → "= 5")
+    _evaluateNumeric(id, mathExpr);
+
+    // Update the graph — no separate preview needed, MathQuill IS the preview
+    try { updateGraph(); } catch (_) {}
+}
+
+/**
+ * Initialize all pending MathQuill fields (called when MathQuill finishes loading).
+ * Rebuilds the input DOM for expressions that were created before MQ was ready.
+ */
+function _initMathQuillFields() {
+    if (!isMathQuillReady()) return;
+    engine.expressions.forEach(expr => {
+        if (_mqSupportedTypes.includes(expr.type) && _mqInputMode[expr.id] !== 'text') {
+            if (!_mqFields[expr.id]) {
+                // Rebuild the input DOM — it was rendered as plain text because MQ wasn't ready.
+                // createInputForType will now detect MQ is ready, render the mq-field div,
+                // and call _initMathQuillField internally.
+                createInputForType(expr.id, expr.type);
+            }
+        }
+    });
+}
+
+/**
+ * Toggle between MathQuill (rich) and plain text input modes.
+ */
+function toggleInputMode(id) {
+    const expr = engine.expressions.find(e => e.id === id);
+    if (!expr) return;
+
+    const currentMode = _mqInputMode[id] || 'math';
+    if (currentMode === 'math') {
+        // Switch to plain text
+        _mqInputMode[id] = 'text';
+        // Destroy MathQuill field
+        if (_mqFields[id]) {
+            delete _mqFields[id];
+        }
+        createInputForType(id, expr.type);
+        const input = document.getElementById(`expr-${id}`);
+        if (input) input.value = expr.expression || '';
+    } else {
+        // Switch to MathQuill
+        _mqInputMode[id] = 'math';
+        if (isMathQuillReady() && _mqSupportedTypes.includes(expr.type)) {
+            createInputForType(id, expr.type);
+        }
+    }
+}
+
+/**
+ * Load a sample expression into MathQuill field or plain input.
+ * sampleLatex: optional LaTeX version for MathQuill; if omitted, converts from plain.
+ */
+function loadSampleMQ(id, plainExpr, sampleLatex) {
+    const mq = _mqFields[id];
+    if (mq && _mqInputMode[id] !== 'text') {
+        // Write LaTeX into MathQuill
+        const latex = sampleLatex || mathJSToLatex(plainExpr);
+        mq.latex(latex);
+        // MathQuill edit handler will fire automatically
+    } else {
+        // Fallback to plain text
+        loadSample(id, plainExpr);
+    }
+}
+
 class GraphingEngine {
     constructor(containerId) {
         this.containerId = containerId;
@@ -3626,6 +3982,10 @@ function restoreState(state) {
     if (container) container.innerHTML = '';
     expressionElements = {};
 
+    // Cleanup all MathQuill fields and input mode flags
+    Object.keys(_mqFields).forEach(k => delete _mqFields[k]);
+    Object.keys(_mqInputMode).forEach(k => delete _mqInputMode[k]);
+
     // Stop any running animation
     if (animationState.isPlaying) stopAnimation();
 
@@ -3648,9 +4008,11 @@ function restoreState(state) {
         // Set type dropdown
         const typeSel = document.getElementById(`type-${expr.id}`);
         if (typeSel) typeSel.value = expr.type;
-        // Set expression input
-        const input = document.getElementById(`expr-${expr.id}`);
-        if (input) input.value = expr.expression || '';
+        // Set expression input (plain text fallback — MQ fields are populated by _initMathQuillField)
+        if (!_mqFields[expr.id]) {
+            const input = document.getElementById(`expr-${expr.id}`);
+            if (input) input.value = expr.expression || '';
+        }
         // Set color
         const colorPicker = document.getElementById(`color-${expr.id}`);
         if (colorPicker) colorPicker.value = expr.color;
@@ -3661,6 +4023,18 @@ function restoreState(state) {
         if (s.showDerivative) { const cb = document.getElementById(`show-derivative-${expr.id}`); if (cb) cb.checked = true; }
         if (s.showIntegration) { const cb = document.getElementById(`show-integration-${expr.id}`); if (cb) cb.checked = true; }
         if (s.showAntiderivative) { const cb = document.getElementById(`show-antiderivative-${expr.id}`); if (cb) cb.checked = true; }
+        // Auto-open calc drawer if any calculus feature is active
+        if (s.showDerivative || s.showIntegration || s.showAntiderivative || s.showRoots || s.showVerticalAsymptotes || s.showTangent) {
+            const item = document.getElementById(`expr-item-${expr.id}`);
+            if (item) {
+                item.classList.add('gc-calc-open');
+                const calcBtn = item.querySelector('.gc-calc-toggle-btn');
+                if (calcBtn) {
+                    calcBtn.setAttribute('aria-expanded', 'true');
+                    calcBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Calc';
+                }
+            }
+        }
     });
     updateGraph();
 }
@@ -3835,6 +4209,219 @@ function removeFolder(folderId) {
 }
 
 /**
+ * Short label for expression type badge
+ */
+function _getTypeBadgeLabel(type) {
+    const labels = {
+        cartesian: 'y=f', equation: 'EQ', parametric: 'PAR', polar: 'POL',
+        inequality: 'INQ', limit: 'LIM', piecewise: 'PCW', implicit: 'IMP',
+        surface: '3D', point: 'PT', table: 'TBL', statistics: 'REG',
+        distribution: 'DST', vector: 'VEC', vectorfield: 'VFD'
+    };
+    return labels[type] || type;
+}
+
+/**
+ * Toggle calculus drawer open/closed
+ */
+function toggleCalcDrawer(id) {
+    const item = document.getElementById(`expr-item-${id}`);
+    if (!item) return;
+    item.classList.toggle('gc-calc-open');
+    const btn = item.querySelector('.gc-calc-toggle-btn');
+    if (btn) {
+        const isOpen = item.classList.contains('gc-calc-open');
+        btn.setAttribute('aria-expanded', isOpen);
+        btn.innerHTML = isOpen
+            ? '<i class="fas fa-chevron-up"></i> Calc'
+            : '<i class="fas fa-sliders"></i> Calc';
+    }
+}
+
+/**
+ * Open the type select dropdown via the type badge click
+ */
+function openTypeSelect(id) {
+    const sel = document.getElementById(`type-${id}`);
+    if (!sel) return;
+    // showPicker() is modern; fallback to focus+click
+    if (typeof sel.showPicker === 'function') {
+        try { sel.showPicker(); return; } catch (_) {}
+    }
+    sel.focus();
+    sel.click();
+}
+
+/* =========================================================================
+   Drag & Drop Reorder
+   ========================================================================= */
+var _dragState = { draggedId: null, placeholder: null };
+
+function _initDragHandlers(div, exprId) {
+    div.setAttribute('draggable', 'false'); // only drag handle initiates
+    const handle = div.querySelector('.gc-drag-handle');
+    if (!handle) return;
+
+    handle.addEventListener('mousedown', function() { div.setAttribute('draggable', 'true'); });
+    handle.addEventListener('touchstart', function() { div.setAttribute('draggable', 'true'); }, { passive: true });
+
+    div.addEventListener('dragstart', function(e) {
+        _dragState.draggedId = exprId;
+        div.classList.add('gc-dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', String(exprId));
+        // Create placeholder
+        const ph = document.createElement('div');
+        ph.className = 'gc-drag-placeholder';
+        _dragState.placeholder = ph;
+    });
+
+    div.addEventListener('dragend', function() {
+        div.setAttribute('draggable', 'false');
+        div.classList.remove('gc-dragging');
+        if (_dragState.placeholder && _dragState.placeholder.parentNode) {
+            _dragState.placeholder.remove();
+        }
+        _dragState.draggedId = null;
+        _dragState.placeholder = null;
+    });
+
+    div.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        if (_dragState.draggedId == null || _dragState.draggedId === exprId) return;
+        const rect = div.getBoundingClientRect();
+        const midY = rect.top + rect.height / 2;
+        const container = div.parentNode;
+        if (_dragState.placeholder && _dragState.placeholder.parentNode) {
+            _dragState.placeholder.remove();
+        }
+        if (e.clientY < midY) {
+            container.insertBefore(_dragState.placeholder, div);
+        } else {
+            container.insertBefore(_dragState.placeholder, div.nextSibling);
+        }
+    });
+
+    div.addEventListener('drop', function(e) {
+        e.preventDefault();
+        const fromId = _dragState.draggedId;
+        if (fromId == null || fromId === exprId) return;
+        const fromDiv = document.getElementById(`expr-item-${fromId}`);
+        if (!fromDiv || !_dragState.placeholder) return;
+
+        // Insert dragged element at placeholder position (works in folders too)
+        const targetContainer = _dragState.placeholder.parentNode;
+        if (targetContainer) {
+            targetContainer.insertBefore(fromDiv, _dragState.placeholder);
+            _dragState.placeholder.remove();
+        }
+
+        // Reorder engine.expressions to match DOM order
+        _syncExpressionOrder();
+        updateGraph();
+    });
+}
+
+function _syncExpressionOrder() {
+    const container = document.getElementById('expressions-list');
+    if (!container) return;
+    const items = container.querySelectorAll('.expression-item');
+    const newOrder = [];
+    items.forEach(item => {
+        const match = item.id.match(/expr-item-(\d+)/);
+        if (match) {
+            const id = parseInt(match[1]);
+            const expr = engine.expressions.find(e => e.id === id);
+            if (expr) newOrder.push(expr);
+        }
+    });
+    // Preserve any expressions not in the DOM (e.g., in folders)
+    engine.expressions.forEach(e => {
+        if (!newOrder.find(n => n.id === e.id)) newOrder.push(e);
+    });
+    engine.expressions = newOrder;
+}
+
+/* =========================================================================
+   Numeric Evaluation (Desmos-style: type "2+3" → shows "= 5")
+   ========================================================================= */
+function _evaluateNumeric(id, exprStr) {
+    const resultEl = document.getElementById(`numeric-result-${id}`);
+    if (!resultEl) return;
+    // Only evaluate for types where a pure numeric result makes sense
+    var exprObjCheck = engine.expressions.find(function(e) { return e.id === id; });
+    if (exprObjCheck && !['cartesian', 'limit'].includes(exprObjCheck.type)) {
+        resultEl.style.display = 'none';
+        resultEl.textContent = '';
+        return;
+    }
+    if (!exprStr || !exprStr.trim()) {
+        resultEl.style.display = 'none';
+        resultEl.textContent = '';
+        return;
+    }
+    // Check if expression has free variables (x, y, t, theta etc.)
+    // If it does, it's a function — no numeric result
+    const freeVars = ['x', 'y', 't', 'theta', 'r'];
+    const normalized = exprStr.replace(/\b(sin|cos|tan|log|ln|exp|sqrt|abs|floor|ceil|sign|round|min|max|asin|acos|atan|sinh|cosh|tanh|factorial|nthRoot|cbrt|sec|csc|cot|arcsin|arccos|arctan|pi|e)\b/gi, '');
+    const hasFreeVar = freeVars.some(v => {
+        const re = new RegExp('\\b' + v + '\\b', 'i');
+        return re.test(normalized);
+    });
+    if (hasFreeVar) {
+        resultEl.style.display = 'none';
+        resultEl.textContent = '';
+        return;
+    }
+    // Skip equations/inequalities (e.g., y=x^2, x>3)
+    if (/[<>=!]/.test(exprStr)) {
+        resultEl.style.display = 'none';
+        resultEl.textContent = '';
+        return;
+    }
+    try {
+        // Substitute slider parameters if they exist (e.g., a=2 → "3*a" → "3*2")
+        let evalExpr = exprStr;
+        const exprObj = engine.expressions.find(e => e.id === id);
+        if (exprObj && exprObj.parameters) {
+            Object.keys(exprObj.parameters).forEach(param => {
+                evalExpr = evalExpr.replace(new RegExp('\\b' + param + '\\b', 'g'), String(exprObj.parameters[param]));
+            });
+        }
+        const result = math.evaluate(evalExpr);
+        if (typeof result === 'number' && isFinite(result)) {
+            // Format: show exact if integer or simple fraction, otherwise ≈
+            if (Number.isInteger(result)) {
+                resultEl.textContent = '= ' + result;
+            } else {
+                // Try to show a cleaner form
+                const rounded = parseFloat(result.toPrecision(10));
+                resultEl.textContent = '= ' + rounded;
+            }
+            resultEl.style.display = '';
+        } else if (typeof result === 'object' && result && typeof result.re === 'number') {
+            // Complex number
+            const re = parseFloat(result.re.toPrecision(8));
+            const im = parseFloat(result.im.toPrecision(8));
+            if (im === 0) {
+                resultEl.textContent = '= ' + re;
+            } else if (re === 0) {
+                resultEl.textContent = '= ' + im + 'i';
+            } else {
+                resultEl.textContent = '= ' + re + (im > 0 ? ' + ' : ' - ') + Math.abs(im) + 'i';
+            }
+            resultEl.style.display = '';
+        } else {
+            resultEl.style.display = 'none';
+        }
+    } catch (_) {
+        resultEl.style.display = 'none';
+        resultEl.textContent = '';
+    }
+}
+
+/**
  * Create UI element for an expression (appends to main expressions-list)
  */
 function createExpressionElement(expr) {
@@ -3851,85 +4438,114 @@ function createExpressionElement(expr) {
 
 /**
  * Populate an expression div with all UI controls (shared by main list and folders)
+ * Three-zone layout: color rail | body (input + meta) | calc drawer
  */
 function _populateExpressionDiv(div, expr) {
     div.setAttribute('role', 'group');
     div.setAttribute('aria-label', `Expression ${expr.id}`);
 
+    const exprType = expr.type || 'cartesian';
+    const isCartesian = (exprType === 'cartesian');
+    const badgeLabel = _getTypeBadgeLabel(exprType);
+
     div.innerHTML = `
-        <button class="delete-btn" onclick="deleteExpression(${expr.id})" aria-label="Delete expression ${expr.id}" title="Delete expression">
-            <i class="fas fa-times"></i>
-        </button>
-
-        <div id="input-container-${expr.id}"></div>
-
-        <div class="gc-expr-toolbar">
-            <input type="color" class="color-picker" id="color-${expr.id}"
-                   value="${expr.color}" onchange="updateExpressionColor(${expr.id})" aria-label="Line color for expression ${expr.id}">
-            <select class="plot-type-select" id="type-${expr.id}" onchange="updateExpressionType(${expr.id})" aria-label="Expression type">
-                <option value="cartesian">y = f(x)</option>
-                <option value="equation">Equation</option>
-                <option value="parametric">Parametric</option>
-                <option value="polar">Polar</option>
-                <option value="inequality">Inequality</option>
-                <option value="limit">Limit</option>
-                <option value="piecewise">Piecewise</option>
-                <option value="implicit">Implicit</option>
-                <option value="surface">3D Surface</option>
-                <option value="point">Point(s)</option>
-                <option value="table">Table</option>
-                <option value="statistics">Regression</option>
-                <option value="distribution">Distribution</option>
-                <option value="vector">Vector(s)</option>
-                <option value="vectorfield">Vector Field</option>
-            </select>
+        <div class="gc-expr-left-rail">
+            <span class="gc-drag-handle" title="Drag to reorder"><i class="fas fa-grip-vertical"></i></span>
+            <button class="gc-color-swatch" style="background:${expr.color}" title="Change color" aria-label="Expression color"
+                    onclick="document.getElementById('color-${expr.id}').click()">
+                <input type="color" id="color-${expr.id}" value="${expr.color}"
+                       onchange="updateExpressionColor(${expr.id})" aria-label="Line color">
+            </button>
+        </div>
+        <div class="gc-expr-body">
+            <div class="gc-expr-top-row">
+                <div class="gc-expr-input-wrap" id="input-container-${expr.id}"></div>
+                <button class="gc-delete-btn" onclick="deleteExpression(${expr.id})" aria-label="Delete expression" title="Delete"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="gc-numeric-result" id="numeric-result-${expr.id}" style="display:none;"></div>
+            <div class="gc-expr-meta">
+                <span class="gc-type-badge" id="type-badge-${expr.id}" title="Change type">${badgeLabel}
+                    <select class="gc-type-select-hidden plot-type-select" id="type-${expr.id}" onchange="updateExpressionType(${expr.id})" aria-label="Expression type">
+                    <option value="cartesian">y = f(x)</option>
+                    <option value="equation">Equation</option>
+                    <option value="parametric">Parametric</option>
+                    <option value="polar">Polar</option>
+                    <option value="inequality">Inequality</option>
+                    <option value="limit">Limit</option>
+                    <option value="piecewise">Piecewise</option>
+                    <option value="implicit">Implicit</option>
+                    <option value="surface">3D Surface</option>
+                    <option value="point">Point(s)</option>
+                    <option value="table">Table</option>
+                    <option value="statistics">Regression</option>
+                    <option value="distribution">Distribution</option>
+                    <option value="vector">Vector(s)</option>
+                    <option value="vectorfield">Vector Field</option>
+                </select></span>
+                ${isCartesian ? `<button class="gc-calc-toggle-btn" onclick="toggleCalcDrawer(${expr.id})" aria-expanded="false" title="Calculus options"><i class="fas fa-sliders"></i> Calc</button>` : ''}
+                <button class="gc-latex-copy-btn" onclick="copyAsLaTeX(${expr.id})" title="Copy as LaTeX">LaTeX</button>
+            </div>
+            <div id="sliders-container-${expr.id}"></div>
+            <div id="expr-error-${expr.id}" class="gc-expr-error" style="display:none;"></div>
+        </div>
+        <div class="gc-calc-drawer" id="calc-drawer-${expr.id}">
             <span id="calculus-toggles-${expr.id}" class="gc-calculus-toggles">
-                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-derivative-${expr.id}" onchange="toggleDerivative(${expr.id})"> f'(x)</label>
-                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-second-derivative-${expr.id}" onchange="toggleSecondDerivative(${expr.id})"> f''(x)</label>
-                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-critical-points-${expr.id}" onchange="toggleCriticalPoints(${expr.id})"> Min/Max</label>
-                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-inflection-points-${expr.id}" onchange="toggleInflectionPoints(${expr.id})"> Inflect</label>
-                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-integration-${expr.id}" onchange="toggleIntegration(${expr.id})"> ∫</label>
-                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-antiderivative-${expr.id}" onchange="toggleAntiderivative(${expr.id})"> F(x)</label>
-                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-table-${expr.id}" onchange="toggleTableForExpr(${expr.id})"> Table</label>
-                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-roots-${expr.id}" onchange="toggleRoots(${expr.id})"> Zeros</label>
-                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-vasym-${expr.id}" onchange="toggleVerticalAsymptotes(${expr.id})"> V.Asym</label>
-                <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-tangent-${expr.id}" onchange="toggleTangentLine(${expr.id})"> Tangent</label>
-                <button class="btn btn-sm btn-outline-secondary gc-toggle-label" style="font-size:10px;padding:1px 4px;border:1px solid #ccc;" onclick="copyAsLaTeX(${expr.id})" title="Copy as LaTeX">LaTeX</button>
+                <div class="gc-calc-drawer-row">
+                    <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-derivative-${expr.id}" onchange="toggleDerivative(${expr.id})"> f'(x)</label>
+                    <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-second-derivative-${expr.id}" onchange="toggleSecondDerivative(${expr.id})"> f''(x)</label>
+                    <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-critical-points-${expr.id}" onchange="toggleCriticalPoints(${expr.id})"> Min/Max</label>
+                    <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-inflection-points-${expr.id}" onchange="toggleInflectionPoints(${expr.id})"> Inflect</label>
+                    <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-roots-${expr.id}" onchange="toggleRoots(${expr.id})"> Zeros</label>
+                    <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-vasym-${expr.id}" onchange="toggleVerticalAsymptotes(${expr.id})"> V.Asym</label>
+                </div>
+                <div class="gc-calc-drawer-row">
+                    <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-integration-${expr.id}" onchange="toggleIntegration(${expr.id})"> ∫</label>
+                    <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-antiderivative-${expr.id}" onchange="toggleAntiderivative(${expr.id})"> F(x)</label>
+                    <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-table-${expr.id}" onchange="toggleTableForExpr(${expr.id})"> Table</label>
+                    <label class="gc-toggle-label"><input class="form-check-input" type="checkbox" id="show-tangent-${expr.id}" onchange="toggleTangentLine(${expr.id})"> Tangent</label>
+                </div>
             </span>
-        </div>
-        <div id="integration-controls-${expr.id}" style="display: none;" class="mt-1">
-            <div class="d-flex gap-2 align-items-center flex-wrap">
-                <small class="text-muted">∫ from</small>
-                <input type="number" class="form-control form-control-sm" id="integration-a-${expr.id}" placeholder="a" value="-2" step="0.5" style="width:65px;" oninput="updateIntegrationBounds(${expr.id})">
-                <small class="text-muted">to</small>
-                <input type="number" class="form-control form-control-sm" id="integration-b-${expr.id}" placeholder="b" value="2" step="0.5" style="width:65px;" oninput="updateIntegrationBounds(${expr.id})">
+            <div id="integration-controls-${expr.id}" style="display: none;" class="mt-1">
+                <div class="d-flex gap-2 align-items-center flex-wrap">
+                    <small class="text-muted">∫ from</small>
+                    <input type="number" class="form-control form-control-sm" id="integration-a-${expr.id}" placeholder="a" value="-2" step="0.5" style="width:65px;" oninput="updateIntegrationBounds(${expr.id})">
+                    <small class="text-muted">to</small>
+                    <input type="number" class="form-control form-control-sm" id="integration-b-${expr.id}" placeholder="b" value="2" step="0.5" style="width:65px;" oninput="updateIntegrationBounds(${expr.id})">
+                </div>
+                <div class="d-flex gap-2 align-items-center flex-wrap mt-1">
+                    <small class="text-muted">Riemann</small>
+                    <select class="form-select form-select-sm" id="riemann-method-${expr.id}" style="width:auto;" onchange="updateRiemannMethod(${expr.id})">
+                        <option value="none">None</option>
+                        <option value="left">Left</option>
+                        <option value="midpoint">Midpoint</option>
+                        <option value="right">Right</option>
+                        <option value="trapezoidal">Trapezoidal</option>
+                    </select>
+                    <small class="text-muted">n=</small>
+                    <input type="number" class="form-control form-control-sm" id="riemann-n-${expr.id}" value="10" min="1" max="500" step="1" style="width:60px;" oninput="updateRiemannN(${expr.id})">
+                </div>
             </div>
-            <div class="d-flex gap-2 align-items-center flex-wrap mt-1">
-                <small class="text-muted">Riemann</small>
-                <select class="form-select form-select-sm" id="riemann-method-${expr.id}" style="width:auto;" onchange="updateRiemannMethod(${expr.id})">
-                    <option value="none">None</option>
-                    <option value="left">Left</option>
-                    <option value="midpoint">Midpoint</option>
-                    <option value="right">Right</option>
-                    <option value="trapezoidal">Trapezoidal</option>
-                </select>
-                <small class="text-muted">n=</small>
-                <input type="number" class="form-control form-control-sm" id="riemann-n-${expr.id}" value="10" min="1" max="500" step="1" style="width:60px;" oninput="updateRiemannN(${expr.id})">
-            </div>
+            <div id="tangent-controls-${expr.id}"></div>
         </div>
-        <div id="tangent-controls-${expr.id}"></div>
-        <div id="sliders-container-${expr.id}"></div>
-        <div id="expr-error-${expr.id}" class="gc-expr-error" style="display:none;"></div>
     `;
 
-    const exprType = expr.type || 'cartesian';
     createInputForType(expr.id, exprType);
 
     // Hide calculus toggles for non-cartesian types
-    if (exprType !== 'cartesian') {
+    if (!isCartesian) {
         const calcToggles = document.getElementById(`calculus-toggles-${expr.id}`);
         if (calcToggles) calcToggles.style.display = 'none';
     }
+
+    // Set the type select to match
+    const typeSel = document.getElementById(`type-${expr.id}`);
+    if (typeSel) typeSel.value = exprType;
+
+    // Init drag-and-drop reorder
+    _initDragHandlers(div, expr.id);
+
+    // Initial numeric evaluation
+    if (expr.expression) _evaluateNumeric(expr.id, expr.expression);
 }
 
 /**
@@ -3942,95 +4558,206 @@ function createInputForType(id, type) {
     const expr = engine.expressions.find(e => e.id === id);
     const currentValue = expr && expr.expression ? expr.expression : '';
 
+    // Cleanup old MathQuill field if switching away
+    if (_mqFields[id]) {
+        delete _mqFields[id];
+    }
+
     container.innerHTML = '';
+
+    // Determine input mode: use MathQuill for supported types when MQ is loaded
+    const useMQ = isMathQuillReady() && _mqSupportedTypes.includes(type) && _mqInputMode[id] !== 'text';
 
     switch (type) {
         case 'cartesian':
-            container.innerHTML = `
-                <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="Type expression: x^2, sin(x), 2x+3y=8 ..." value="${escapeHtml(currentValue)}"
-                       oninput="updateExpressionValue(${id})"
-                       onchange="updateExpressionValue(${id})">
-                <div class="math-preview" id="math-preview-${id}"></div>
-                <div class="gc-sample-chips gc-on-focus">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sin(x)')">sin</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'cos(x)')">cos</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2')">x²</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^3 - 3*x^2 + 2*x')">cubic</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'exp(x)')">eˣ</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'log(x)')">ln</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sqrt(x)')">√x</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '1/(1+exp(-x))')">sigmoid</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sum(n, 1, 10, x^n/factorial(n))')">Σ</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'fourier(x, 5)')">fourier</button>
-                </div>
-            `;
+            if (useMQ) {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <div class="gc-mq-field" id="mq-field-${id}"></div>
+                        <button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to plain text input">abc</button>
+                    </div>
+                    <div class="gc-sample-chips gc-on-focus">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'sin(x)', '\\\\sin\\\\left(x\\\\right)')">sin</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'cos(x)', '\\\\cos\\\\left(x\\\\right)')">cos</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'x^2', 'x^2')">x²</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'x^3 - 3*x^2 + 2*x', 'x^3-3x^2+2x')">cubic</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'exp(x)', 'e^x')">eˣ</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'log(x)', '\\\\ln\\\\left(x\\\\right)')">ln</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'sqrt(x)', '\\\\sqrt{x}')">√x</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, '1/(1+exp(-x))', '\\\\frac{1}{1+e^{-x}}')">sigmoid</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="toggleInputMode(${id}); loadSample(${id}, 'sum(n, 1, 10, x^n/factorial(n))')">Σ</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="toggleInputMode(${id}); loadSample(${id}, 'fourier(x, 5)')">fourier</button>
+                    </div>
+                `;
+                _initMathQuillField(id);
+            } else {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <input type="text" class="expression-input" id="expr-${id}"
+                               placeholder="Type expression: x^2, sin(x), 2x+3y=8 ..." value="${escapeHtml(currentValue)}"
+                               oninput="updateExpressionValue(${id})"
+                               onchange="updateExpressionValue(${id})">
+                        ${isMathQuillReady() && _mqSupportedTypes.includes(type) ? `<button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to rich math input">f(x)</button>` : ''}
+                    </div>
+                    <div class="math-preview" id="math-preview-${id}"></div>
+                    <div class="gc-sample-chips gc-on-focus">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sin(x)')">sin</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'cos(x)')">cos</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2')">x²</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^3 - 3*x^2 + 2*x')">cubic</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'exp(x)')">eˣ</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'log(x)')">ln</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sqrt(x)')">√x</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '1/(1+exp(-x))')">sigmoid</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sum(n, 1, 10, x^n/factorial(n))')">Σ</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'fourier(x, 5)')">fourier</button>
+                    </div>
+                `;
+            }
             break;
 
         case 'equation':
-            container.innerHTML = `
-                <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., 2x + 3y = 8 or x^2 + y^2 = 25" value="${escapeHtml(currentValue)}"
-                       oninput="updateExpressionValue(${id})"
-                       onchange="updateExpressionValue(${id})">
-                <small class="text-muted">Any equation — solved symbolically</small>
-                <div class="gc-sample-chips gc-on-focus">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '2x + 3y = 8')">2x+3y=8</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2 + y^2 = 25')">Circle</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2/4 + y^2/9 = 1')">Ellipse</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2 - y^2 = 1')">Hyperbola</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x*y = 4')">xy=4</button>
-                </div>
-            `;
+            if (useMQ) {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <div class="gc-mq-field" id="mq-field-${id}"></div>
+                        <button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to plain text input">abc</button>
+                    </div>
+                    <small class="text-muted">Any equation — solved symbolically</small>
+                    <div class="gc-sample-chips gc-on-focus">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, '2x + 3y = 8', '2x+3y=8')">2x+3y=8</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'x^2 + y^2 = 25', 'x^2+y^2=25')">Circle</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'x^2/4 + y^2/9 = 1', '\\\\frac{x^2}{4}+\\\\frac{y^2}{9}=1')">Ellipse</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'x^2 - y^2 = 1', 'x^2-y^2=1')">Hyperbola</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'x*y = 4', 'xy=4')">xy=4</button>
+                    </div>
+                `;
+                _initMathQuillField(id);
+            } else {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <input type="text" class="expression-input" id="expr-${id}"
+                               placeholder="e.g., 2x + 3y = 8 or x^2 + y^2 = 25" value="${escapeHtml(currentValue)}"
+                               oninput="updateExpressionValue(${id})"
+                               onchange="updateExpressionValue(${id})">
+                        ${isMathQuillReady() ? `<button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to rich math input">f(x)</button>` : ''}
+                    </div>
+                    <small class="text-muted">Any equation — solved symbolically</small>
+                    <div class="gc-sample-chips gc-on-focus">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '2x + 3y = 8')">2x+3y=8</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2 + y^2 = 25')">Circle</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2/4 + y^2/9 = 1')">Ellipse</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2 - y^2 = 1')">Hyperbola</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x*y = 4')">xy=4</button>
+                    </div>
+                `;
+            }
             break;
 
         case 'limit':
-            container.innerHTML = `
-                <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., sin(x)/x" value="${escapeHtml(currentValue)}"
-                       oninput="updateLimitExpression(${id})"
-                       onchange="updateLimitExpression(${id})">
-                <div class="d-flex gap-2 mt-1 align-items-center" style="font-size:0.8rem;">
-                    <span style="color:var(--gc-tool);font-weight:600;">lim</span>
-                    <span class="text-muted">x →</span>
-                    <input type="text" class="form-control form-control-sm" id="limit-val-${id}"
-                           placeholder="0" value="0" style="width: 60px; text-align:center;"
-                           oninput="updateLimitExpression(${id})"
-                           onchange="updateLimitExpression(${id})">
-                    <span style="color:var(--gc-tool);font-weight:600;">=</span>
-                    <span id="limit-result-${id}" style="color:var(--gc-tool);font-weight:700;">?</span>
-                </div>
-                <div class="gc-sample-chips gc-on-focus">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, 'sin(x)/x', '0')">sin(x)/x</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(exp(x)-1)/x', '0')">(eˣ-1)/x</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(1+1/x)^x', 'Infinity')">(1+1/x)ˣ→∞</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(x^2-1)/(x-1)', '1')">(x²-1)/(x-1)</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, 'tan(x)/x', '0')">tan(x)/x</button>
-                </div>
-            `;
+            if (useMQ) {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <div class="gc-mq-field" id="mq-field-${id}"></div>
+                        <button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to plain text input">abc</button>
+                    </div>
+                    <div class="d-flex gap-2 mt-1 align-items-center" style="font-size:0.8rem;">
+                        <span style="color:var(--gc-tool);font-weight:600;">lim</span>
+                        <span class="text-muted">x →</span>
+                        <input type="text" class="form-control form-control-sm" id="limit-val-${id}"
+                               placeholder="0" value="0" style="width: 60px; text-align:center;"
+                               oninput="updateLimitExpression(${id})"
+                               onchange="updateLimitExpression(${id})">
+                        <span style="color:var(--gc-tool);font-weight:600;">=</span>
+                        <span id="limit-result-${id}" style="color:var(--gc-tool);font-weight:700;">?</span>
+                    </div>
+                    <div class="gc-sample-chips gc-on-focus">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, 'sin(x)/x', '0')">sin(x)/x</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(exp(x)-1)/x', '0')">(eˣ-1)/x</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(1+1/x)^x', 'Infinity')">(1+1/x)ˣ→∞</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(x^2-1)/(x-1)', '1')">(x²-1)/(x-1)</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, 'tan(x)/x', '0')">tan(x)/x</button>
+                    </div>
+                `;
+                _initMathQuillField(id);
+            } else {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <input type="text" class="expression-input" id="expr-${id}"
+                               placeholder="e.g., sin(x)/x" value="${escapeHtml(currentValue)}"
+                               oninput="updateLimitExpression(${id})"
+                               onchange="updateLimitExpression(${id})">
+                        ${isMathQuillReady() ? `<button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to rich math input">f(x)</button>` : ''}
+                    </div>
+                    <div class="d-flex gap-2 mt-1 align-items-center" style="font-size:0.8rem;">
+                        <span style="color:var(--gc-tool);font-weight:600;">lim</span>
+                        <span class="text-muted">x →</span>
+                        <input type="text" class="form-control form-control-sm" id="limit-val-${id}"
+                               placeholder="0" value="0" style="width: 60px; text-align:center;"
+                               oninput="updateLimitExpression(${id})"
+                               onchange="updateLimitExpression(${id})">
+                        <span style="color:var(--gc-tool);font-weight:600;">=</span>
+                        <span id="limit-result-${id}" style="color:var(--gc-tool);font-weight:700;">?</span>
+                    </div>
+                    <div class="gc-sample-chips gc-on-focus">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, 'sin(x)/x', '0')">sin(x)/x</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(exp(x)-1)/x', '0')">(eˣ-1)/x</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(1+1/x)^x', 'Infinity')">(1+1/x)ˣ→∞</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, '(x^2-1)/(x-1)', '1')">(x²-1)/(x-1)</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadLimitSample(${id}, 'tan(x)/x', '0')">tan(x)/x</button>
+                    </div>
+                `;
+            }
             break;
 
         case 'parametric':
-            container.innerHTML = `
-                <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., cos(t), sin(t)" value="${escapeHtml(currentValue)}"
-                       oninput="updateExpressionValue(${id})"
-                       onchange="updateExpressionValue(${id})">
-                <small class="text-muted">Format: x(t), y(t)</small>
-                <div class="d-flex align-items-center gap-2 mt-2">
-                    <small class="text-muted">t:</small>
-                    <input type="number" class="form-control form-control-sm" id="tmin-${id}" value="0" step="0.1"
-                           style="width:70px" onchange="updateParamRange(${id})">
-                    <small class="text-muted">to</small>
-                    <input type="number" class="form-control form-control-sm" id="tmax-${id}" value="${(2*Math.PI).toFixed(4)}" step="0.1"
-                           style="width:70px" onchange="updateParamRange(${id})">
-                </div>
-                <div class="mt-2">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'cos(t), sin(t)')">Circle</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 't*cos(t), t*sin(t)')">Spiral</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadParamSample(${id}, 't, t^2', -5, 5)">Parabola</button>
-                </div>
-            `;
+            if (useMQ) {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <div class="gc-mq-field" id="mq-field-${id}"></div>
+                        <button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to plain text input">abc</button>
+                    </div>
+                    <small class="text-muted">Format: x(t), y(t)</small>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <small class="text-muted">t:</small>
+                        <input type="number" class="form-control form-control-sm" id="tmin-${id}" value="0" step="0.1"
+                               style="width:70px" onchange="updateParamRange(${id})">
+                        <small class="text-muted">to</small>
+                        <input type="number" class="form-control form-control-sm" id="tmax-${id}" value="${(2*Math.PI).toFixed(4)}" step="0.1"
+                               style="width:70px" onchange="updateParamRange(${id})">
+                    </div>
+                    <div class="gc-sample-chips gc-on-focus">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'cos(t), sin(t)')">Circle</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 't*cos(t), t*sin(t)')">Spiral</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadParamSample(${id}, 't, t^2', -5, 5)">Parabola</button>
+                    </div>
+                `;
+                _initMathQuillField(id);
+            } else {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <input type="text" class="expression-input" id="expr-${id}"
+                               placeholder="e.g., cos(t), sin(t)" value="${escapeHtml(currentValue)}"
+                               oninput="updateExpressionValue(${id})"
+                               onchange="updateExpressionValue(${id})">
+                        ${isMathQuillReady() ? `<button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to rich math input">f(x)</button>` : ''}
+                    </div>
+                    <small class="text-muted">Format: x(t), y(t)</small>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <small class="text-muted">t:</small>
+                        <input type="number" class="form-control form-control-sm" id="tmin-${id}" value="0" step="0.1"
+                               style="width:70px" onchange="updateParamRange(${id})">
+                        <small class="text-muted">to</small>
+                        <input type="number" class="form-control form-control-sm" id="tmax-${id}" value="${(2*Math.PI).toFixed(4)}" step="0.1"
+                               style="width:70px" onchange="updateParamRange(${id})">
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'cos(t), sin(t)')">Circle</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 't*cos(t), t*sin(t)')">Spiral</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadParamSample(${id}, 't, t^2', -5, 5)">Parabola</button>
+                    </div>
+                `;
+            }
             break;
 
         case 'point':
@@ -4079,58 +4806,125 @@ function createInputForType(id, type) {
             break;
 
         case 'polar':
-            container.innerHTML = `
-                <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., 2 + 2*cos(theta)" value="${escapeHtml(currentValue)}"
-                       oninput="updateExpressionValue(${id})"
-                       onchange="updateExpressionValue(${id})">
-                <small class="text-muted">Use theta or θ</small>
-                <div class="d-flex align-items-center gap-2 mt-2">
-                    <small class="text-muted">θ:</small>
-                    <input type="number" class="form-control form-control-sm" id="thetamin-${id}" value="0" step="0.1"
-                           style="width:70px" onchange="updatePolarRange(${id})">
-                    <small class="text-muted">to</small>
-                    <input type="number" class="form-control form-control-sm" id="thetamax-${id}" value="${(2*Math.PI).toFixed(4)}" step="0.1"
-                           style="width:70px" onchange="updatePolarRange(${id})">
-                </div>
-                <div class="mt-2">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '2 + 2*cos(theta)')">Heart</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, '1 + cos(theta)')">Cardioid</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadPolarSample(${id}, 'theta', 0, 25.13)">Spiral 4π</button>
-                </div>
-            `;
+            if (useMQ) {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <div class="gc-mq-field" id="mq-field-${id}"></div>
+                        <button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to plain text input">abc</button>
+                    </div>
+                    <small class="text-muted">Use theta or θ</small>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <small class="text-muted">θ:</small>
+                        <input type="number" class="form-control form-control-sm" id="thetamin-${id}" value="0" step="0.1"
+                               style="width:70px" onchange="updatePolarRange(${id})">
+                        <small class="text-muted">to</small>
+                        <input type="number" class="form-control form-control-sm" id="thetamax-${id}" value="${(2*Math.PI).toFixed(4)}" step="0.1"
+                               style="width:70px" onchange="updatePolarRange(${id})">
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, '2 + 2*cos(theta)', '2+2\\\\cos\\\\left(\\\\theta\\\\right)')">Heart</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSampleMQ(${id}, '1 + cos(theta)', '1+\\\\cos\\\\left(\\\\theta\\\\right)')">Cardioid</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="toggleInputMode(${id}); loadPolarSample(${id}, 'theta', 0, 25.13)">Spiral 4π</button>
+                    </div>
+                `;
+                _initMathQuillField(id);
+            } else {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <input type="text" class="expression-input" id="expr-${id}"
+                               placeholder="e.g., 2 + 2*cos(theta)" value="${escapeHtml(currentValue)}"
+                               oninput="updateExpressionValue(${id})"
+                               onchange="updateExpressionValue(${id})">
+                        ${isMathQuillReady() ? `<button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to rich math input">f(x)</button>` : ''}
+                    </div>
+                    <small class="text-muted">Use theta or θ</small>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <small class="text-muted">θ:</small>
+                        <input type="number" class="form-control form-control-sm" id="thetamin-${id}" value="0" step="0.1"
+                               style="width:70px" onchange="updatePolarRange(${id})">
+                        <small class="text-muted">to</small>
+                        <input type="number" class="form-control form-control-sm" id="thetamax-${id}" value="${(2*Math.PI).toFixed(4)}" step="0.1"
+                               style="width:70px" onchange="updatePolarRange(${id})">
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, '2 + 2*cos(theta)')">Heart</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, '1 + cos(theta)')">Cardioid</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadPolarSample(${id}, 'theta', 0, 25.13)">Spiral 4π</button>
+                    </div>
+                `;
+            }
             break;
 
         case 'implicit':
-            container.innerHTML = `
-                <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., x^2 + y^2 = 25" value="${escapeHtml(currentValue)}"
-                       oninput="updateExpressionValue(${id})"
-                       onchange="updateExpressionValue(${id})">
-                <small class="text-muted">Implicit equation in x and y</small>
-                <div class="mt-2">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2 + y^2 = 25')">Circle</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'x^2/16 + y^2/9 = 1')">Ellipse</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, '(x^2 + y^2 - 1)^3 = x^2*y^3')">Heart</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'x^2 - y^2 = 1')">Hyperbola</button>
-                </div>
-            `;
+            if (useMQ) {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <div class="gc-mq-field" id="mq-field-${id}"></div>
+                        <button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to plain text input">abc</button>
+                    </div>
+                    <small class="text-muted">Implicit equation in x and y</small>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'x^2 + y^2 = 25', 'x^2+y^2=25')">Circle</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSampleMQ(${id}, 'x^2/16 + y^2/9 = 1', '\\\\frac{x^2}{16}+\\\\frac{y^2}{9}=1')">Ellipse</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSampleMQ(${id}, '(x^2 + y^2 - 1)^3 = x^2*y^3', '\\\\left(x^2+y^2-1\\\\right)^3=x^2y^3')">Heart</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSampleMQ(${id}, 'x^2 - y^2 = 1', 'x^2-y^2=1')">Hyperbola</button>
+                    </div>
+                `;
+                _initMathQuillField(id);
+            } else {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <input type="text" class="expression-input" id="expr-${id}"
+                               placeholder="e.g., x^2 + y^2 = 25" value="${escapeHtml(currentValue)}"
+                               oninput="updateExpressionValue(${id})"
+                               onchange="updateExpressionValue(${id})">
+                        ${isMathQuillReady() ? `<button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to rich math input">f(x)</button>` : ''}
+                    </div>
+                    <small class="text-muted">Implicit equation in x and y</small>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'x^2 + y^2 = 25')">Circle</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'x^2/16 + y^2/9 = 1')">Ellipse</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, '(x^2 + y^2 - 1)^3 = x^2*y^3')">Heart</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'x^2 - y^2 = 1')">Hyperbola</button>
+                    </div>
+                `;
+            }
             break;
 
         case 'surface':
-            container.innerHTML = `
-                <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., sin(sqrt(x^2 + y^2))" value="${escapeHtml(currentValue)}"
-                       oninput="updateExpressionValue(${id})"
-                       onchange="updateExpressionValue(${id})">
-                <small class="text-muted">z = f(x, y) — 3D surface plot</small>
-                <div class="mt-2">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sin(sqrt(x^2 + y^2))')">Ripple</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'x^2 - y^2')">Saddle</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'cos(x) * sin(y)')">Waves</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'exp(-(x^2 + y^2))')">Gaussian</button>
-                </div>
-            `;
+            if (useMQ) {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <div class="gc-mq-field" id="mq-field-${id}"></div>
+                        <button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to plain text input">abc</button>
+                    </div>
+                    <small class="text-muted">z = f(x, y) — 3D surface plot</small>
+                    <div class="gc-sample-chips gc-on-focus">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sin(sqrt(x^2 + y^2))')">Ripple</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'x^2 - y^2')">Saddle</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'cos(x) * sin(y)')">Waves</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'exp(-(x^2 + y^2))')">Gaussian</button>
+                    </div>
+                `;
+                _initMathQuillField(id);
+            } else {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <input type="text" class="expression-input" id="expr-${id}"
+                               placeholder="e.g., sin(sqrt(x^2 + y^2))" value="${escapeHtml(currentValue)}"
+                               oninput="updateExpressionValue(${id})"
+                               onchange="updateExpressionValue(${id})">
+                        ${isMathQuillReady() ? `<button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to rich math input">f(x)</button>` : ''}
+                    </div>
+                    <small class="text-muted">z = f(x, y) — 3D surface plot</small>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'sin(sqrt(x^2 + y^2))')">Ripple</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'x^2 - y^2')">Saddle</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'cos(x) * sin(y)')">Waves</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'exp(-(x^2 + y^2))')">Gaussian</button>
+                    </div>
+                `;
+            }
             break;
 
         case 'piecewise':
@@ -4165,16 +4959,33 @@ function createInputForType(id, type) {
             break;
 
         case 'inequality':
-            container.innerHTML = `
-                <input type="text" class="expression-input" id="expr-${id}"
-                       placeholder="e.g., y > x^2" value="${escapeHtml(currentValue)}"
-                       oninput="updateExpressionValue(${id})"
-                       onchange="updateExpressionValue(${id})">
-                <div class="mt-2">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'y > x^2')">Parabola</button>
-                    <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'y < sin(x)')">Sine Wave</button>
-                </div>
-            `;
+            if (useMQ) {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <div class="gc-mq-field" id="mq-field-${id}"></div>
+                        <button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to plain text input">abc</button>
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSampleMQ(${id}, 'y > x^2', 'y>x^2')">Parabola</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSampleMQ(${id}, 'y < sin(x)', 'y<\\\\sin\\\\left(x\\\\right)')">Sine Wave</button>
+                    </div>
+                `;
+                _initMathQuillField(id);
+            } else {
+                container.innerHTML = `
+                    <div class="gc-mq-wrapper">
+                        <input type="text" class="expression-input" id="expr-${id}"
+                               placeholder="e.g., y > x^2" value="${escapeHtml(currentValue)}"
+                               oninput="updateExpressionValue(${id})"
+                               onchange="updateExpressionValue(${id})">
+                        ${isMathQuillReady() ? `<button class="gc-input-mode-toggle" onclick="toggleInputMode(${id})" title="Switch to rich math input">f(x)</button>` : ''}
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="loadSample(${id}, 'y > x^2')">Parabola</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadSample(${id}, 'y < sin(x)')">Sine Wave</button>
+                    </div>
+                `;
+            }
             break;
 
         case 'table':
@@ -4411,10 +5222,23 @@ function updateDistributionParams(id) {
  * Load sample data/expression
  */
 function loadSample(id, value) {
-    const element = document.getElementById(`expr-${id}`);
-    if (element) {
-        element.value = value;
-        updateExpressionValue(id);
+    // MQ-aware: write into MathQuill field if active, otherwise plain input
+    const mq = _mqFields[id];
+    if (mq && _mqInputMode[id] !== 'text') {
+        engine.updateExpression(id, { expression: value });
+        const latex = mathJSToLatex(value);
+        _mqInitializing = true;
+        mq.latex(latex || value);
+        _mqInitializing = false;
+        detectAndCreateSliders(id, value);
+        _evaluateNumeric(id, value);
+        updateGraph();
+    } else {
+        const element = document.getElementById(`expr-${id}`);
+        if (element) {
+            element.value = value;
+            updateExpressionValue(id); // already calls _evaluateNumeric
+        }
     }
 }
 
@@ -4442,28 +5266,24 @@ function updatePolarRange(id) {
 
 /** Load parametric sample with custom t range */
 function loadParamSample(id, value, tMin, tMax) {
-    const element = document.getElementById(`expr-${id}`);
-    if (element) element.value = value;
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) { expr.tMin = tMin; expr.tMax = tMax; }
     const tMinEl = document.getElementById(`tmin-${id}`);
     const tMaxEl = document.getElementById(`tmax-${id}`);
     if (tMinEl) tMinEl.value = tMin;
     if (tMaxEl) tMaxEl.value = tMax;
-    const expr = engine.expressions.find(e => e.id === id);
-    if (expr) { expr.tMin = tMin; expr.tMax = tMax; }
-    updateExpressionValue(id);
+    loadSample(id, value);
 }
 
 /** Load polar sample with custom θ range */
 function loadPolarSample(id, value, thetaMin, thetaMax) {
-    const element = document.getElementById(`expr-${id}`);
-    if (element) element.value = value;
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) { expr.thetaMin = thetaMin; expr.thetaMax = thetaMax; }
     const tMinEl = document.getElementById(`thetamin-${id}`);
     const tMaxEl = document.getElementById(`thetamax-${id}`);
     if (tMinEl) tMinEl.value = thetaMin;
     if (tMaxEl) tMaxEl.value = thetaMax;
-    const expr = engine.expressions.find(e => e.id === id);
-    if (expr) { expr.thetaMin = thetaMin; expr.thetaMax = thetaMax; }
-    updateExpressionValue(id);
+    loadSample(id, value);
 }
 
 /**
@@ -4527,6 +5347,28 @@ function updateExpressionType(id) {
     const type = document.getElementById(`type-${id}`).value;
     engine.updateExpression(id, { type });
     createInputForType(id, type);
+    // Sync type badge label
+    const badge = document.getElementById(`type-badge-${id}`);
+    if (badge) badge.textContent = _getTypeBadgeLabel(type);
+    // Show/hide calc toggle button (only for cartesian)
+    const item = document.getElementById(`expr-item-${id}`);
+    const calcBtn = item ? item.querySelector('.gc-calc-toggle-btn') : null;
+    if (type === 'cartesian' && !calcBtn && item) {
+        // Inject calc button into meta row if switching to cartesian
+        const metaRow = item.querySelector('.gc-expr-meta');
+        if (metaRow) {
+            const btn = document.createElement('button');
+            btn.className = 'gc-calc-toggle-btn';
+            btn.setAttribute('aria-expanded', 'false');
+            btn.title = 'Calculus options';
+            btn.onclick = function() { toggleCalcDrawer(id); };
+            btn.innerHTML = '<i class="fas fa-sliders"></i> Calc';
+            metaRow.insertBefore(btn, metaRow.querySelector('.gc-latex-copy-btn'));
+        }
+    } else if (type !== 'cartesian' && calcBtn) {
+        calcBtn.remove();
+        if (item) item.classList.remove('gc-calc-open');
+    }
     // Show calculus toggles only for cartesian type
     const calcToggles = document.getElementById(`calculus-toggles-${id}`);
     if (calcToggles) calcToggles.style.display = (type === 'cartesian') ? '' : 'none';
@@ -4700,7 +5542,6 @@ function autoDetectType(value, currentType) {
 /**
  * Update expression value
  */
-let _undoSaveTimer = null;
 function updateExpressionValue(id) {
     const element = document.getElementById(`expr-${id}`);
 
@@ -4725,14 +5566,18 @@ function updateExpressionValue(id) {
             expr.type = detected;
             const typeSel = document.getElementById(`type-${id}`);
             if (typeSel) typeSel.value = detected;
+            const badge = document.getElementById(`type-badge-${id}`);
+            if (badge) badge.textContent = _getTypeBadgeLabel(detected);
             // Show/hide calculus toggles based on new type
             const calcToggles = document.getElementById(`calculus-toggles-${id}`);
             if (calcToggles) calcToggles.style.display = (detected === 'cartesian') ? '' : 'none';
             // Rebuild the input UI for the new type (but preserve the expression text)
             createInputForType(id, detected);
-            // Restore the expression value in the new input
-            const newInput = document.getElementById(`expr-${id}`);
-            if (newInput && newInput.value !== value) newInput.value = value;
+            // Restore the expression value in the new input (plain text fallback — MQ populated by _initMathQuillField)
+            if (!_mqFields[id]) {
+                const newInput = document.getElementById(`expr-${id}`);
+                if (newInput && newInput.value !== value) newInput.value = value;
+            }
             // Lazy-load full Plotly for 3D surface
             if (detected === 'surface') {
                 _ensureFullPlotly(updateGraph);
@@ -4779,8 +5624,8 @@ function updateExpressionValue(id) {
         if (element) element.classList.remove('gc-input-error');
     }
 
-    // Render math preview for cartesian expressions
-    if (expr && expr.type === 'cartesian') {
+    // Render math preview for cartesian expressions (skip when MathQuill is active — it IS the preview)
+    if (expr && expr.type === 'cartesian' && _mqInputMode[id] !== 'math' && !_mqFields[id]) {
         renderMathPreview(id, value);
     }
 
@@ -4794,6 +5639,9 @@ function updateExpressionValue(id) {
         displayStatistics(id, expr.stats);
     }
 
+    // Numeric evaluation (Desmos-style)
+    _evaluateNumeric(id, value);
+
     updateGraph();
 }
 
@@ -4803,6 +5651,9 @@ function updateExpressionValue(id) {
 function updateExpressionColor(id) {
     const color = document.getElementById(`color-${id}`).value;
     engine.updateExpression(id, { color });
+    // Sync the color swatch in the left rail
+    const swatch = document.querySelector(`#expr-item-${id} .gc-color-swatch`);
+    if (swatch) swatch.style.background = color;
     updateGraph();
 }
 
@@ -4815,6 +5666,9 @@ function deleteExpression(id) {
     if (animationState.isPlaying && animationState.exprId === id) stopAnimation();
     // Close table if it's showing this expression
     if (_tableExprId === id) _closeTable();
+    // Cleanup MathQuill field
+    if (_mqFields[id]) delete _mqFields[id];
+    if (_mqInputMode[id]) delete _mqInputMode[id];
     engine.removeExpression(id);
     const element = expressionElements[id];
     if (element) {
@@ -5214,9 +6068,18 @@ function updateLimitExpression(id) {
     const resultSpan = document.getElementById(`limit-result-${id}`);
     const expr = engine.expressions.find(e => e.id === id);
 
-    if (!expr || !input) return;
+    if (!expr) return;
 
-    const limitExpr = input.value.trim();
+    // Read expression from MathQuill or plain input
+    let limitExpr;
+    const mq = _mqFields[id];
+    if (mq && _mqInputMode[id] !== 'text') {
+        limitExpr = latexToMathJS(mq.latex()).trim();
+    } else if (input) {
+        limitExpr = input.value.trim();
+    } else {
+        return;
+    }
     const limitVal = valInput ? valInput.value.trim() : '0';
 
     expr.expression = limitExpr;
@@ -5255,10 +6118,17 @@ function updateLimitExpression(id) {
  * Load a limit sample (expression + approach value)
  */
 function loadLimitSample(id, expression, value) {
-    const input = document.getElementById(`expr-${id}`);
     const valInput = document.getElementById(`limit-val-${id}`);
-    if (input) input.value = expression;
     if (valInput) valInput.value = value;
+    // Set expression via MQ-aware loadSample, then trigger limit evaluation
+    loadSample(id, expression);
+    // Also update limit-specific state
+    const expr = engine.expressions.find(e => e.id === id);
+    if (expr) {
+        expr.limitExpr = expression;
+        expr.limitVar = 'x';
+        expr.limitVal = value;
+    }
     updateLimitExpression(id);
 }
 
@@ -5504,9 +6374,11 @@ function addCartesian(expression, condition = null) {
     } else {
         const expr = engine.addExpression(expression, 'cartesian');
         createExpressionElement(expr);
-
-        const inputElement = document.getElementById(`expr-${expr.id}`);
-        if (inputElement) inputElement.value = expression;
+        // Plain text fallback — MQ fields populated by _initMathQuillField via createExpressionElement
+        if (!_mqFields[expr.id]) {
+            const inputElement = document.getElementById(`expr-${expr.id}`);
+            if (inputElement) inputElement.value = expression;
+        }
     }
 }
 
@@ -5518,9 +6390,11 @@ function addImplicit(expression) {
     createExpressionElement(expr);
 
     setTimeout(() => {
-        const inputElement = document.getElementById(`expr-${expr.id}`);
-        if (inputElement) inputElement.value = expression;
-
+        // Plain text fallback — MQ fields populated by _initMathQuillField
+        if (!_mqFields[expr.id]) {
+            const inputElement = document.getElementById(`expr-${expr.id}`);
+            if (inputElement) inputElement.value = expression;
+        }
         const typeElem = document.getElementById(`type-${expr.id}`);
         if (typeElem) typeElem.value = 'implicit';
         updateExpressionType(expr.id);
@@ -7092,8 +7966,10 @@ function loadExpressionSet() {
 
     const data = saved[index];
 
-    // Clear current expressions
+    // Clear current expressions and MQ state
     engine.expressions = [];
+    Object.keys(_mqFields).forEach(k => delete _mqFields[k]);
+    Object.keys(_mqInputMode).forEach(k => delete _mqInputMode[k]);
     document.getElementById('expressions-list').innerHTML = '';
     expressionElements = {};
 
@@ -7119,10 +7995,10 @@ function loadExpressionSet() {
 
         createExpressionElement(expr);
 
-        // Restore input value
-        const inputElement = document.getElementById(`expr-${expr.id}`);
-        if (inputElement) {
-            inputElement.value = exprData.expression || '';
+        // Restore input value (plain text fallback — MQ fields populated by _initMathQuillField)
+        if (!_mqFields[expr.id]) {
+            const inputElement = document.getElementById(`expr-${expr.id}`);
+            if (inputElement) inputElement.value = exprData.expression || '';
         }
 
         // Restore checkboxes
@@ -7267,8 +8143,10 @@ function loadFromURL() {
         const jsonString = decodeURIComponent(escape(atob(decodeURIComponent(dataParam))));
         const data = JSON.parse(jsonString);
 
-        // Clear current expressions
+        // Clear current expressions and MQ state
         engine.expressions = [];
+        Object.keys(_mqFields).forEach(k => delete _mqFields[k]);
+        Object.keys(_mqInputMode).forEach(k => delete _mqInputMode[k]);
         document.getElementById('expressions-list').innerHTML = '';
         expressionElements = {};
 
@@ -7293,10 +8171,10 @@ function loadFromURL() {
 
             createExpressionElement(expr);
 
-            // Restore input value
-            const inputElement = document.getElementById(`expr-${expr.id}`);
-            if (inputElement) {
-                inputElement.value = exprData.expression || '';
+            // Restore input value (plain text fallback — MQ fields populated by _initMathQuillField)
+            if (!_mqFields[expr.id]) {
+                const inputElement = document.getElementById(`expr-${expr.id}`);
+                if (inputElement) inputElement.value = exprData.expression || '';
             }
 
             // Restore checkboxes

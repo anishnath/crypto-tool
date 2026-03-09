@@ -13,8 +13,13 @@
   function gcSetExpr(id, type, value, color){
     var typeSel = document.getElementById('type-'+id);
     if (typeSel){ typeSel.value = type; updateExpressionType(id); }
-    var input = document.getElementById('expr-'+id);
-    if (input){ input.value = value; updateExpressionValue(id); }
+    // MQ-aware value setter: use loadSample which handles both MathQuill and plain input
+    if (typeof loadSample === 'function') {
+      loadSample(id, value);
+    } else {
+      var input = document.getElementById('expr-'+id);
+      if (input){ input.value = value; updateExpressionValue(id); }
+    }
     if (color){ var c = document.getElementById('color-'+id); if (c){ c.value = color; updateExpressionColor(id); } }
   }
 
@@ -33,6 +38,9 @@
   window.gcClearAll = function(){
     try{
       engine.expressions = [];
+      // Clear stale MathQuill state
+      if (typeof _mqFields !== 'undefined') Object.keys(_mqFields).forEach(function(k){ delete _mqFields[k]; });
+      if (typeof _mqInputMode !== 'undefined') Object.keys(_mqInputMode).forEach(function(k){ delete _mqInputMode[k]; });
       var list = document.getElementById('expressions-list'); if (list) list.innerHTML='';
       window.expressionElements = {};
       if (typeof addExpression === 'function') addExpression();
@@ -51,19 +59,19 @@
     switch(kind){
       case 'cartesian':
         if (typeSel){ typeSel.value='cartesian'; updateExpressionType(id); }
-        var input = document.getElementById('expr-'+id); if (input){ input.value='sin(x)'; updateExpressionValue(id); }
+        loadSample(id, 'sin(x)');
         break;
       case 'parametric':
         if (typeSel){ typeSel.value='parametric'; updateExpressionType(id); }
-        var input2 = document.getElementById('expr-'+id); if (input2){ input2.value='cos(t), sin(t)'; updateExpressionValue(id); }
+        loadSample(id, 'cos(t), sin(t)');
         break;
       case 'polar':
         if (typeSel){ typeSel.value='polar'; updateExpressionType(id); }
-        var input3 = document.getElementById('expr-'+id); if (input3){ input3.value='theta'; updateExpressionValue(id); }
+        loadSample(id, 'theta');
         break;
       case 'implicit':
         if (typeSel){ typeSel.value='implicit'; updateExpressionType(id); }
-        var input4 = document.getElementById('expr-'+id); if (input4){ input4.value='x^2 + y^2 = 9'; updateExpressionValue(id); }
+        loadSample(id, 'x^2 + y^2 = 9');
         break;
     }
   };
