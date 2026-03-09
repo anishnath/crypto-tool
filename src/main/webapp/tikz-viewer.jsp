@@ -143,12 +143,35 @@
         }
         [data-theme="dark"] .tikz-editor-wrapper .CodeMirror .CodeMirror-linenumber { color: #64748b; }
 
-        /* Viewer iframe - always white background for TikZ diagrams (black on transparent) */
+        /* Hidden iframe — used only as TikZJax rendering engine */
         .tikz-viewer-frame {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: none;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Inline SVG output — svg-pan-zoom needs explicit dimensions */
+        #svg-output {
             width: 100%;
             height: 450px;
-            border: none;
-            background: #ffffff !important;
+            overflow: hidden;
+            position: relative;
+            background: #ffffff;
+        }
+        #svg-output:empty::after {
+            content: 'Output will appear here';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-secondary, #94a3b8);
+            font-size: 0.875rem;
+        }
+        [data-theme="dark"] #svg-output {
+            background: #ffffff;
         }
 
         /* Zoom Controls */
@@ -317,10 +340,10 @@
             color: #fca5a5;
         }
 
-        /* Viewer container - always white background for TikZ diagrams */
+        /* Viewer container */
         .tikz-viewer-container {
             position: relative;
-            min-height: 450px;
+            min-height: 350px;
             background: #ffffff;
             border-radius: 0 0 0.75rem 0.75rem;
         }
@@ -782,7 +805,10 @@
                             <div class="tikz-spinner" role="status" aria-hidden="true"></div>
                             <span class="tikz-loading-text">Rendering TikZ diagram...</span>
                         </div>
-                        <iframe id="viewer" class="tikz-viewer-frame" title="TikZ Output"></iframe>
+                        <!-- Hidden iframe: TikZJax rendering engine only -->
+                        <iframe id="viewer" class="tikz-viewer-frame" title="TikZ rendering engine"></iframe>
+                        <!-- Visible SVG output -->
+                        <div id="svg-output"></div>
                         <div class="tikz-zoom-controls">
                             <button id="btn-zoom-out" aria-label="Zoom out">-</button>
                             <span class="tikz-zoom-level" id="zoom-level">100%</span>
@@ -929,6 +955,9 @@
 
     <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- SVG Pan Zoom -->
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
 
     <!-- Tool Utilities -->
     <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>

@@ -28,6 +28,8 @@
   let serverAbortController = null;
   // true when render was triggered by auto-render (not explicit button click)
   let isAutoRender = false;
+  // Raw SVG markup stored before svg-pan-zoom modifies it — used for exports
+  let rawSvgMarkup = '';
 
   // Example gallery organized by category
   const EXAMPLES = {
@@ -369,9 +371,6 @@
     }
   }
 
-  // Persistent iframe: load TikZJax once, re-render by swapping content
-  let tikzIframeReady = false;
-
   function prepareTikzBody(tikz) {
     const hasEnv = /\\begin\{tikzpicture\}[\s\S]*\\end\{tikzpicture\}/.test(tikz);
     const hasTikzCmd = /\\tikz[\s\[{]/.test(tikz);
@@ -411,35 +410,6 @@ ${bodyTikz}
 </html>`;
   }
 
-  // Fast re-render: reuse loaded TikZJax, just swap the tikz script content
-  function rerenderInIframe(iframe, tikz) {
-    try {
-      const doc = iframe.contentDocument;
-      if (!doc || !doc.body) { tikzIframeReady = false; return false; }
-
-      // Remove old SVG output and tikz script
-      var oldSvgs = doc.querySelectorAll('svg');
-      oldSvgs.forEach(function(s) { s.remove(); });
-      var oldScript = doc.querySelector('script[type="text/tikz"]');
-      if (oldScript) oldScript.remove();
-
-      // Insert new tikz script
-      var bodyTikz = prepareTikzBody(tikz);
-      var newScript = doc.createElement('script');
-      newScript.type = 'text/tikz';
-      newScript.textContent = bodyTikz;
-      doc.body.appendChild(newScript);
-
-      // Re-trigger TikZJax processing
-      if (iframe.contentWindow && iframe.contentWindow.dispatchEvent) {
-        iframe.contentWindow.dispatchEvent(new Event('DOMContentLoaded'));
-      }
-      return true;
-    } catch (e) {
-      tikzIframeReady = false;
-      return false;
-    }
-  }
 
   // Strip LaTeX document wrapper only; keep all TikZ-specific code untouched
   function sanitizeTikzInput(code) {
@@ -491,19 +461,13 @@ ${bodyTikz}
     showLoading(true);
     const iframe = $('viewer');
 
-    // Fast path: TikZJax already loaded in iframe, just swap content
-    if (tikzIframeReady && rerenderInIframe(iframe, input)) {
-      waitForTikzRender(iframe, 50, 10000);
-    } else {
-      // Cold start: full iframe reload (first render or after server-side fallback)
-      tikzIframeReady = false;
-      const html = buildIframeHtml(input);
-      iframe.srcdoc = html;
-      iframe.onload = function() {
-        tikzIframeReady = true;
-        waitForTikzRender(iframe, 50, 10000);
-      };
-    }
+    // Always reload iframe — TikZJax doesn't support re-triggering
+    // Browser caches the script so this only costs parse time, not download
+    const html = buildIframeHtml(input);
+    iframe.srcdoc = html;
+    iframe.onload = function() {
+      waitForTikzRender(iframe, 50, 20000);
+    };
   }
 
   // Poll for SVG element to appear (TikZJax renders asynchronously)
@@ -518,22 +482,34 @@ ${bodyTikz}
         const svg = doc && doc.querySelector('svg');
 
         if (svg) {
-          // SVG found - rendering complete
+          // SVG found — extract from iframe and display inline
+          var svgMarkup = new XMLSerializer().serializeToString(svg);
+          displaySVG(svgMarkup);
           showLoading(false);
           updateRenderBadge(false);
           return;
         }
 
-        // Check for error message in iframe
-        const errorText = doc && doc.body && doc.body.textContent;
-        if (errorText && errorText.toLowerCase().includes('error')) {
-          // TikZJax errored — try server-side
-          serverSideFallback();
-          return;
+        var elapsed = Date.now() - startTime;
+
+        // Only check for TikZJax errors after giving it time to load (5s+)
+        // and look for specific error indicators, not just the word "error"
+        if (elapsed > 5000) {
+          const doc_body = doc && doc.body;
+          if (doc_body) {
+            // TikZJax shows errors in a visible element, not in script source
+            var errEl = doc_body.querySelector('.tikzjax-error, .error, [data-error]');
+            var bodyText = doc_body.textContent || '';
+            // Check for explicit LaTeX/TeX error patterns
+            if (errEl || /^!\s/.test(bodyText.trim()) || /Undefined control sequence/.test(bodyText) || /Missing .* inserted/.test(bodyText)) {
+              serverSideFallback();
+              return;
+            }
+          }
         }
 
         // Timeout check
-        if (Date.now() - startTime > timeout) {
+        if (elapsed > timeout) {
           // TikZJax timed out — try server-side
           serverSideFallback();
           return;
@@ -649,9 +625,7 @@ ${bodyTikz}
       })
       .then(function(svgText) {
         lastRenderWasServer = true;
-        tikzIframeReady = false; // iframe no longer has TikZJax loaded
-        var iframe = $('viewer');
-        iframe.srcdoc = '<!DOCTYPE html><html><head><style>body{margin:0;padding:20px;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,sans-serif;}svg{display:block;margin:auto;max-width:100%;height:auto;}</style></head><body>' + svgText + '</body></html>';
+        displaySVG(svgText);
         showLoading(false);
         updateRenderBadge(true);
         if (warning) {
@@ -699,14 +673,19 @@ ${bodyTikz}
       $('tikzInput').value = '';
     }
     showError('');
-    $('viewer').srcdoc = buildIframeHtml('');
+    // Clear SVG output
+    if (panZoomInstance) {
+      try { panZoomInstance.destroy(); } catch(_) {}
+      panZoomInstance = null;
+    }
+    $('svg-output').innerHTML = '';
+    rawSvgMarkup = '';
+    updateRenderBadge(false);
   }
 
   function exportSVG() {
-    const doc = $('viewer').contentDocument;
-    if (!doc) { alert('Please render first.'); return; }
-    const svg = doc.querySelector('svg');
-    if (!svg) { alert('No SVG found. Check TikZ syntax.'); return; }
+    const svg = getExportSVG();
+    if (!svg) { alert('No SVG found. Please render first.'); return; }
     const data = new XMLSerializer().serializeToString(svg);
     const blob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -725,10 +704,8 @@ ${bodyTikz}
   }
 
   function exportPNG() {
-    const doc = $('viewer').contentDocument;
-    if (!doc) { alert('Please render first.'); return; }
-    const svg = doc.querySelector('svg');
-    if (!svg) { alert('No SVG found. Check TikZ syntax.'); return; }
+    const svg = getExportSVG();
+    if (!svg) { alert('No SVG found. Please render first.'); return; }
 
     const data = new XMLSerializer().serializeToString(svg);
     const blob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
@@ -766,10 +743,8 @@ ${bodyTikz}
   }
 
   function exportPDF() {
-    const doc = $('viewer').contentDocument;
-    if (!doc) { alert('Please render first.'); return; }
-    const svg = doc.querySelector('svg');
-    if (!svg) { alert('No SVG found. Check TikZ syntax.'); return; }
+    const svg = getExportSVG();
+    if (!svg) { alert('No SVG found. Please render first.'); return; }
 
     const data = new XMLSerializer().serializeToString(svg);
     const blob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
@@ -841,16 +816,61 @@ ${bodyTikz}
     }
   }
 
-  // Zoom functionality
-  let currentZoom = 1.0;
-  const ZOOM_STEP = 0.1;
-  const MIN_ZOOM = 0.5;
-  const MAX_ZOOM = 3.0;
+  // ── Inline SVG display + svg-pan-zoom ──
+  let panZoomInstance = null;
 
-  function updateZoom() {
-    const viewer = $('viewer');
-    viewer.style.transform = `scale(${currentZoom})`;
-    $('zoom-level').textContent = Math.round(currentZoom * 100) + '%';
+  // Display SVG markup in the output div and initialize pan/zoom
+  function displaySVG(svgMarkup) {
+    var output = $('svg-output');
+    // Destroy previous pan/zoom instance
+    if (panZoomInstance) {
+      try { panZoomInstance.destroy(); } catch(_) {}
+      panZoomInstance = null;
+    }
+    // Store raw markup before svg-pan-zoom modifies it
+    rawSvgMarkup = svgMarkup;
+
+    output.innerHTML = svgMarkup;
+    var svg = output.querySelector('svg');
+    if (!svg) return;
+
+    // svg-pan-zoom needs the SVG to fill its container
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.style.display = 'block';
+
+    // Initialize svg-pan-zoom — fit ensures diagram uses full space
+    panZoomInstance = svgPanZoom(svg, {
+      zoomEnabled: true,
+      panEnabled: true,
+      controlIconsEnabled: false,
+      contain: false,
+      fit: true,
+      center: true,
+      minZoom: 0.3,
+      maxZoom: 10,
+      zoomScaleSensitivity: 0.3,
+      onZoom: function() { updateZoomLabel(); }
+    });
+    updateZoomLabel();
+  }
+
+  // Get the current SVG from the output div
+  function getOutputSVG() {
+    return $('svg-output') ? $('svg-output').querySelector('svg') : null;
+  }
+
+  // Get clean SVG for export — uses stored raw markup, untouched by svg-pan-zoom
+  function getExportSVG() {
+    if (!rawSvgMarkup) return null;
+    var tmp = document.createElement('div');
+    tmp.innerHTML = rawSvgMarkup;
+    return tmp.querySelector('svg') || null;
+  }
+
+  function updateZoomLabel() {
+    var zoom = panZoomInstance ? panZoomInstance.getZoom() : 1;
+    $('zoom-level').textContent = Math.round(zoom * 100) + '%';
   }
 
   // Expand viewer to full width toggle
@@ -874,25 +894,22 @@ ${bodyTikz}
       btn.textContent = 'Expand';
     }
     try { localStorage.setItem('tikz_expanded', expanded ? '1' : '0'); } catch(_) {}
+    // Resize svg-pan-zoom after layout change
+    if (panZoomInstance) {
+      setTimeout(function() { panZoomInstance.resize(); panZoomInstance.fit(); panZoomInstance.center(); }, 100);
+    }
   }
 
   function zoomIn() {
-    if (currentZoom < MAX_ZOOM) {
-      currentZoom = Math.min(currentZoom + ZOOM_STEP, MAX_ZOOM);
-      updateZoom();
-    }
+    if (panZoomInstance) { panZoomInstance.zoomIn(); updateZoomLabel(); }
   }
 
   function zoomOut() {
-    if (currentZoom > MIN_ZOOM) {
-      currentZoom = Math.max(currentZoom - ZOOM_STEP, MIN_ZOOM);
-      updateZoom();
-    }
+    if (panZoomInstance) { panZoomInstance.zoomOut(); updateZoomLabel(); }
   }
 
   function zoomReset() {
-    currentZoom = 1.0;
-    updateZoom();
+    if (panZoomInstance) { panZoomInstance.resetZoom(); panZoomInstance.fit(); panZoomInstance.center(); updateZoomLabel(); }
   }
 
   function loadExample(code, preamble = '') {
@@ -1111,11 +1128,6 @@ ${bodyTikz}
 
     // Load from URL if present
     loadFromURL();
-
-    // Initial blank render if no URL params
-    if (!window.location.search) {
-      $('viewer').srcdoc = buildIframeHtml('');
-    }
 
     // Restore expand preference
     try { expanded = (localStorage.getItem('tikz_expanded') === '1'); } catch(_) { expanded = false; }
