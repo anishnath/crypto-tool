@@ -803,16 +803,21 @@
             var code;
             if (isDefinite) {
                 code = 'from sympy import *\n' +
-                    'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
+                    'from sympy.integrals.manualintegrate import integral_steps\n' +
                     'import json\n' +
                     symDecl + '\n' +
                     'expr = simplify(' + pyExpr + ')\n' +
                     'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
-                    '# If integral_steps says DontKnowRule, skip slow integrate() and go straight to N()\n' +
-                    'if steps and isinstance(steps, DontKnowRule):\n' +
-                    '    antideriv = Integral(expr, ' + v + ')\n' +
-                    'else:\n' +
+                    'import signal\n' +
+                    'def _timeout(s, f): raise TimeoutError\n' +
+                    'signal.signal(signal.SIGALRM, _timeout)\n' +
+                    'signal.alarm(10)\n' +
+                    'try:\n' +
                     '    antideriv = integrate(expr, ' + v + ')\n' +
+                    'except (TimeoutError, Exception):\n' +
+                    '    antideriv = Integral(expr, ' + v + ')\n' +
+                    'finally:\n' +
+                    '    signal.alarm(0)\n' +
                     'if isinstance(antideriv, Integral):\n' +
                     '    # No closed-form antiderivative — fast numeric evaluation\n' +
                     '    result = Integral(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
@@ -859,19 +864,37 @@
                     '    except: pass';
             } else {
                 code = 'from sympy import *\n' +
-                    'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
+                    'from sympy.integrals.manualintegrate import integral_steps\n' +
                     symDecl + '\n' +
                     'expr = simplify(' + pyExpr + ')\n' +
                     'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
-                    '# Skip slow integrate() when integral_steps already says DontKnowRule\n' +
-                    'if steps and isinstance(steps, DontKnowRule):\n' +
-                    '    result = Integral(expr, ' + v + ')\n' +
-                    'else:\n' +
+                    'import signal\n' +
+                    'def _timeout(s, f): raise TimeoutError\n' +
+                    'signal.signal(signal.SIGALRM, _timeout)\n' +
+                    'signal.alarm(10)\n' +
+                    'try:\n' +
                     '    result = integrate(expr, ' + v + ')\n' +
+                    'except (TimeoutError, Exception):\n' +
+                    '    result = Integral(expr, ' + v + ')\n' +
+                    'finally:\n' +
+                    '    signal.alarm(0)\n' +
                     'print(\'LATEX:\' + latex(result))\n' +
                     'print(\'TEXT:\' + str(result))\n' +
                     'print(\'EXPR:\' + latex(expr))\n' +
-                    'print(\'RULES:\' + (str(steps) if steps else ""))';
+                    '# When integral_steps gives DontKnowRule but integrate() succeeded,\n' +
+                    '# build synthetic steps by decomposing the result into terms\n' +
+                    'if steps and isinstance(steps, DontKnowRule) and not isinstance(result, Integral):\n' +
+                    '    _terms = result.as_ordered_terms()\n' +
+                    '    _sub = []\n' +
+                    '    for _t in _terms:\n' +
+                    '        _d = diff(_t, ' + v + ')\n' +
+                    '        _s = integral_steps(_d, ' + v + ')\n' +
+                    '        _rule = type(_s).__name__ if _s and not isinstance(_s, DontKnowRule) else "Direct"\n' +
+                    '        _sub.append(_rule)\n' +
+                    '    steps_str = "AddRule(substeps=[" + ", ".join(_sub) + "])"\n' +
+                    '    print(\'RULES:\' + steps_str)\n' +
+                    'else:\n' +
+                    '    print(\'RULES:\' + (str(steps) if steps else ""))';
             }
 
             var controller = new AbortController();
@@ -1141,7 +1164,34 @@
                     '        st = r2s(steps, ' + v + ')\n' +
                     'except: pass\n' +
                     'if not st and antideriv and not isinstance(antideriv, Integral):\n' +
-                    '    st = [{"title":"Antiderivative","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = "+latex(antideriv)}]\n' +
+                    '    pf = apart(expr, ' + v + ')\n' +
+                    '    did_decompose = False\n' +
+                    '    if pf != expr:\n' +
+                    '        st.append({"title":"Partial fraction decomposition","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = \\\\\\\\int "+latex(pf)+r" \\\\,d' + v + '"})\n' +
+                    '        terms = Add.make_args(pf)\n' +
+                    '        for t in terms:\n' +
+                    '            t_steps = integral_steps(t, ' + v + ')\n' +
+                    '            t_int = integrate(t, ' + v + ')\n' +
+                    '            if t_steps and not isinstance(t_steps, DontKnowRule):\n' +
+                    '                r2s(t_steps, ' + v + ', st)\n' +
+                    '            elif t_int and not isinstance(t_int, Integral):\n' +
+                    '                st.append({"title":"Integrate term","latex":r"\\\\int "+latex(t)+r" \\\\,d' + v + ' = "+latex(t_int)})\n' +
+                    '        st.append({"title":"Combine","latex":"= "+latex(antideriv)})\n' +
+                    '        did_decompose = True\n' +
+                    '    if not did_decompose:\n' +
+                    '        r_terms = Add.make_args(antideriv)\n' +
+                    '        if len(r_terms) > 1:\n' +
+                    '            st.append({"title":"Decompose result","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = "+latex(antideriv)})\n' +
+                    '            for rt in r_terms:\n' +
+                    '                d_rt = diff(rt, ' + v + ')\n' +
+                    '                t_steps = integral_steps(d_rt, ' + v + ')\n' +
+                    '                if t_steps and not isinstance(t_steps, DontKnowRule):\n' +
+                    '                    r2s(t_steps, ' + v + ', st)\n' +
+                    '                else:\n' +
+                    '                    st.append({"title":"Integrate term","latex":r"\\\\int "+latex(d_rt)+r" \\\\,d' + v + ' = "+latex(rt)})\n' +
+                    '            st.append({"title":"Combine","latex":"= "+latex(antideriv)})\n' +
+                    '        else:\n' +
+                    '            st = [{"title":"Antiderivative","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = "+latex(antideriv)}]\n' +
                     'try:\n' +
                     '    if antideriv and not isinstance(antideriv, Integral):\n' +
                     '        def _ev(bnd):\n' +
@@ -1223,9 +1273,53 @@
                 '    ' + buildSympySymbolsDecl(v, pyExpr) + '\n' +
                 '    expr = ' + pyExpr + '\n' +
                 '    steps = integral_steps(expr, ' + v + ')\n' +
-                '    result = integrate(expr, ' + v + ') if steps and not isinstance(steps, DontKnowRule) else None\n' +
-                '    st = r2s(steps, ' + v + ') if steps else []\n' +
-                '    if not st and result: st = [{"title":"Result","latex":r"\\\\int "+latex(expr)+" \\\\,d"+str(' + v + ')+" = "+latex(result)+r" + C"}]\n' +
+                '    st = []\n' +
+                '    if steps and not isinstance(steps, DontKnowRule):\n' +
+                '        result = integrate(expr, ' + v + ')\n' +
+                '        st = r2s(steps, ' + v + ')\n' +
+                '        if not st and result: st = [{"title":"Result","latex":r"\\\\int "+latex(expr)+" \\\\,d"+str(' + v + ')+" = "+latex(result)+r" + C"}]\n' +
+                '    else:\n' +
+                '        import signal\n' +
+                '        class _TO(Exception): pass\n' +
+                '        def _th(s,f): raise _TO()\n' +
+                '        old_h = signal.signal(signal.SIGALRM, _th)\n' +
+                '        signal.alarm(10)\n' +
+                '        try: result = integrate(expr, ' + v + ')\n' +
+                '        except _TO: result = None\n' +
+                '        finally:\n' +
+                '            signal.alarm(0)\n' +
+                '            signal.signal(signal.SIGALRM, old_h)\n' +
+                '        if result and not isinstance(result, Integral):\n' +
+                '            pf = apart(expr, ' + v + ')\n' +
+                '            did_decompose = False\n' +
+                '            if pf != expr:\n' +
+                '                st.append({"title":"Partial fraction decomposition","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = \\\\\\\\int "+latex(pf)+r" \\\\,d' + v + '"})\n' +
+                '                terms = Add.make_args(pf)\n' +
+                '                for t in terms:\n' +
+                '                    t_steps = integral_steps(t, ' + v + ')\n' +
+                '                    t_int = integrate(t, ' + v + ')\n' +
+                '                    if t_steps and not isinstance(t_steps, DontKnowRule):\n' +
+                '                        r2s(t_steps, ' + v + ', st)\n' +
+                '                    elif t_int and not isinstance(t_int, Integral):\n' +
+                '                        st.append({"title":"Integrate term","latex":r"\\\\int "+latex(t)+r" \\\\,d' + v + ' = "+latex(t_int)+r" + C"})\n' +
+                '                st.append({"title":"Combine","latex":"= "+latex(result)+r" + C"})\n' +
+                '                did_decompose = True\n' +
+                '            if not did_decompose:\n' +
+                '                r_terms = Add.make_args(result)\n' +
+                '                if len(r_terms) > 1:\n' +
+                '                    st.append({"title":"Decompose result","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = "+latex(result)+r" + C"})\n' +
+                '                    for rt in r_terms:\n' +
+                '                        d_rt = diff(rt, ' + v + ')\n' +
+                '                        t_steps = integral_steps(d_rt, ' + v + ')\n' +
+                '                        if t_steps and not isinstance(t_steps, DontKnowRule):\n' +
+                '                            r2s(t_steps, ' + v + ', st)\n' +
+                '                        else:\n' +
+                '                            st.append({"title":"Integrate term","latex":r"\\\\int "+latex(d_rt)+r" \\\\,d' + v + ' = "+latex(rt)+r" + C"})\n' +
+                '                    st.append({"title":"Combine","latex":"= "+latex(result)+r" + C"})\n' +
+                '                else:\n' +
+                '                    st.append({"title":"Antiderivative","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = "+latex(result)+r" + C"})\n' +
+                '        elif not result or isinstance(result, Integral):\n' +
+                '            result = None\n' +
                 '    print("STEPS:" + (json.dumps(st, separators=(",",":")) if st else "[]"))\n' +
                 '    print("RESULT=" + (latex(result) if result else ""))\n' +
                 '    print("EXPR=" + latex(expr))\n' +
