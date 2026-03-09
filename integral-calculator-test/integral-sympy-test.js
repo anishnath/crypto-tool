@@ -65,7 +65,7 @@ async function main() {
         const hasExpr = p.exprLatex.length > 0;
         const hasRules = p.rulesStr.length > 0 && p.rulesStr !== 'None';
         // Known no-result cases (DontKnowRule — no closed-form antiderivative)
-        var knownNoResult = /coth\(log/.test(exprLabel);
+        var knownNoResult = /coth\(log/.test(exprLabel) || /sqrt\(x\*\*2 \+ x \+ 1\)/.test(exprLabel);
         if (hasResult && hasExpr && hasRules) {
             passed++;
             if (total <= 5 || total % 15 === 0) {

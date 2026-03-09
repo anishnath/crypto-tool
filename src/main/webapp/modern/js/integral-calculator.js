@@ -1163,8 +1163,9 @@
                     '    if steps and not isinstance(steps, DontKnowRule):\n' +
                     '        st = r2s(steps, ' + v + ')\n' +
                     'except: pass\n' +
-                    'if not st and antideriv and not isinstance(antideriv, Integral):\n' +
-                    '    pf = apart(expr, ' + v + ')\n' +
+                    'if not st and antideriv and not isinstance(antideriv, Integral) and not antideriv.has(Integral):\n' +
+                    '    try: pf = apart(expr, ' + v + ')\n' +
+                    '    except: pf = expr\n' +
                     '    did_decompose = False\n' +
                     '    if pf != expr:\n' +
                     '        st.append({"title":"Partial fraction decomposition","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = \\\\\\\\int "+latex(pf)+r" \\\\,d' + v + '"})\n' +
@@ -1289,8 +1290,9 @@
                 '        finally:\n' +
                 '            signal.alarm(0)\n' +
                 '            signal.signal(signal.SIGALRM, old_h)\n' +
-                '        if result and not isinstance(result, Integral):\n' +
-                '            pf = apart(expr, ' + v + ')\n' +
+                '        if result and not isinstance(result, Integral) and not result.has(Integral):\n' +
+                '            try: pf = apart(expr, ' + v + ')\n' +
+                '            except: pf = expr\n' +
                 '            did_decompose = False\n' +
                 '            if pf != expr:\n' +
                 '                st.append({"title":"Partial fraction decomposition","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = \\\\\\\\int "+latex(pf)+r" \\\\,d' + v + '"})\n' +
@@ -1318,7 +1320,7 @@
                 '                    st.append({"title":"Combine","latex":"= "+latex(result)+r" + C"})\n' +
                 '                else:\n' +
                 '                    st.append({"title":"Antiderivative","latex":r"\\\\int "+latex(expr)+r" \\\\,d' + v + ' = "+latex(result)+r" + C"})\n' +
-                '        elif not result or isinstance(result, Integral):\n' +
+                '        elif not result or isinstance(result, Integral) or result.has(Integral):\n' +
                 '            result = None\n' +
                 '    print("STEPS:" + (json.dumps(st, separators=(",",":")) if st else "[]"))\n' +
                 '    print("RESULT=" + (latex(result) if result else ""))\n' +

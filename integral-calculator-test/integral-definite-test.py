@@ -37,6 +37,8 @@ DEFINITE_CASES = [
     ("coth(x)", "x", 1, 2, None),  # hyperbolic cotangent definite integral
     ("csch(x)", "x", 1, 2, None),  # hyperbolic cosecant definite integral
     ("sech(x)", "x", 0, 1, None),  # hyperbolic secant definite integral
+    ("1/(1+x**4)", "x", 0, 1, None),  # DontKnowRule but integrate() solves
+    ("x/((x**3 + 1)*sqrt(x**2 + x + 1))", "x", 0, 1, 0.2672385245),  # elliptic-type, no symbolic — numeric only via scipy
 ]
 
 def get_extra_symbols(expr_str, v):

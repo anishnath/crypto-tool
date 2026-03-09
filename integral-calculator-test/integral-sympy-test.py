@@ -96,15 +96,34 @@ INTEGRANDS = [
     ("csch(x)", "x"),
     ("sech(x)", "x"),
     ("coth(log(x**Rational(3,2)))", "x"),  # coth composed with ln — SymPy may not resolve
+    ("1/(1+x**4)", "x"),  # DontKnowRule but integrate() solves — tests apart() fallback
+    ("x/((x**3 + 1)*sqrt(x**2 + x + 1))", "x"),  # elliptic-type, no elementary form, apart() crashes on sqrt
 ]
 
 
 def run_integral(expr_str, v="x"):
     """Same logic as integral-calculator.jsp sends to OneCompiler."""
+    import signal
     v_sym = symbols(v)
     expr = sympify(expr_str)
     steps = integral_steps(expr, v_sym)
-    result = integrate(expr, v_sym) if steps and not isinstance(steps, DontKnowRule) else None
+    if steps and not isinstance(steps, DontKnowRule):
+        result = integrate(expr, v_sym)
+    else:
+        # DontKnowRule fallback: try integrate() with timeout (matches JS code)
+        class _TO(Exception): pass
+        def _th(s, f): raise _TO()
+        old = signal.signal(signal.SIGALRM, _th)
+        signal.alarm(10)
+        try:
+            result = integrate(expr, v_sym)
+        except _TO:
+            result = None
+        finally:
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, old)
+        if result and (isinstance(result, Integral) or result.has(Integral)):
+            result = None
     print("RESULT=" + (latex(result) if result else ""))
     print("EXPR=" + latex(expr))
     print("RULES=" + (str(steps) if steps else ""))
