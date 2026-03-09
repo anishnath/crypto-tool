@@ -743,6 +743,10 @@
                 <div class="tool-card-header">
                     <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/></svg>
                     Rendered Output
+                    <span id="server-render-badge" style="display:none;margin-left:8px;align-items:center;gap:4px;font-size:11px;font-weight:500;color:#f59e0b;background:rgba(245,158,11,0.1);padding:2px 8px;border-radius:4px;" title="Client-side rendering failed; rendered on server via pdflatex + dvisvgm">
+                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2zm1 0v12h8V2H4z"/><path d="M5 6h6v1H5V6zm0 2h6v1H5V8zm0 2h4v1H5v-1z"/></svg>
+                        Server rendered
+                    </span>
                     <div class="tool-live-indicator" style="margin-left:auto;">
                         <span class="tool-live-dot"></span> Ready
                     </div>
@@ -932,6 +936,7 @@
     <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
 
     <!-- TikZ Viewer JS -->
+    <script>window.TIKZ_CTX = '<%=request.getContextPath()%>';</script>
     <script src="<%=request.getContextPath()%>/js/tikz-viewer.js"></script>
 
     <!-- AI Generate: Describe → TikZ -->

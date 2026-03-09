@@ -5,12 +5,29 @@
   function $(id) { return document.getElementById(id); }
 
   const TIKZJAX_SRC = "https://tikzjax.com/v1/tikzjax.js"; // public CDN
+  const CTX = (window.TIKZ_CTX || '');
+  const TIKZ_COMPILE_URL = CTX + "/tikz-compile";
+  const JOB_STATUS_URL = CTX + "/jobs/";
+  const SVG_URL = CTX + "/svg/";
 
   let editor = null;
   let autoRenderTimeout = null;
-  const AUTO_RENDER_DELAY = 1500; // ms
+  const AUTO_RENDER_DELAY = 3000; // ms — wait for user to stop typing
   // Prevent auto-render loops when we update the editor programmatically
   let suppressAuto = false;
+  // Track whether last render used server-side fallback
+  let lastRenderWasServer = false;
+  // Original (unsanitized) input for server-side fallback
+  let originalInput = '';
+  // Dedup: skip render if code unchanged
+  let lastRenderedCode = '';
+  // Server-side throttling
+  const SERVER_COOLDOWN_MS = 10000; // 10s between auto server compiles
+  let lastServerCompileTime = 0;
+  let serverCompileInFlight = false;
+  let serverAbortController = null;
+  // true when render was triggered by auto-render (not explicit button click)
+  let isAutoRender = false;
 
   // Example gallery organized by category
   const EXAMPLES = {
@@ -348,15 +365,22 @@
       overlay.classList.add('show');
     } else {
       overlay.classList.remove('show');
+      showLoadingText('Rendering TikZ diagram...');
     }
   }
 
-  function buildIframeHtml(tikz) {
-    // Ensure it's wrapped in a tikzpicture environment if user pasted only contents
-    const hasEnv = /\\begin\{tikzpicture\}[\s\S]*\\end\{tikzpicture\}/.test(tikz);
-    const bodyTikz = hasEnv ? tikz : ("\\begin{tikzpicture}\n" + tikz + "\n\\end{tikzpicture}");
+  // Persistent iframe: load TikZJax once, re-render by swapping content
+  let tikzIframeReady = false;
 
-    // Minimal HTML that TikZJax will process on load
+  function prepareTikzBody(tikz) {
+    const hasEnv = /\\begin\{tikzpicture\}[\s\S]*\\end\{tikzpicture\}/.test(tikz);
+    const hasTikzCmd = /\\tikz[\s\[{]/.test(tikz);
+    return (hasEnv || hasTikzCmd) ? tikz : ("\\begin{tikzpicture}\n" + tikz + "\n\\end{tikzpicture}");
+  }
+
+  // Full HTML only used for initial iframe load
+  function buildIframeHtml(tikz) {
+    const bodyTikz = prepareTikzBody(tikz);
     return `<!DOCTYPE html>
 <html>
   <head>
@@ -387,30 +411,55 @@ ${bodyTikz}
 </html>`;
   }
 
-  // Strip full LaTeX preamble and keep only tikzpicture; keep \usetikzlibrary lines before it
+  // Fast re-render: reuse loaded TikZJax, just swap the tikz script content
+  function rerenderInIframe(iframe, tikz) {
+    try {
+      const doc = iframe.contentDocument;
+      if (!doc || !doc.body) { tikzIframeReady = false; return false; }
+
+      // Remove old SVG output and tikz script
+      var oldSvgs = doc.querySelectorAll('svg');
+      oldSvgs.forEach(function(s) { s.remove(); });
+      var oldScript = doc.querySelector('script[type="text/tikz"]');
+      if (oldScript) oldScript.remove();
+
+      // Insert new tikz script
+      var bodyTikz = prepareTikzBody(tikz);
+      var newScript = doc.createElement('script');
+      newScript.type = 'text/tikz';
+      newScript.textContent = bodyTikz;
+      doc.body.appendChild(newScript);
+
+      // Re-trigger TikZJax processing
+      if (iframe.contentWindow && iframe.contentWindow.dispatchEvent) {
+        iframe.contentWindow.dispatchEvent(new Event('DOMContentLoaded'));
+      }
+      return true;
+    } catch (e) {
+      tikzIframeReady = false;
+      return false;
+    }
+  }
+
+  // Strip LaTeX document wrapper only; keep all TikZ-specific code untouched
   function sanitizeTikzInput(code) {
     let modified = false;
     let c = code || '';
 
-    // Collect \usetikzlibrary lines
-    const libRegex = /^\s*\\usetikzlibrary\{[^}]+\}\s*$/gm;
-    const libs = c.match(libRegex);
-    if (libs && libs.length) {
-      c = c.replace(libRegex, '');
-      modified = true;
-    }
+    // Remove only LaTeX document structure — NOT TikZ commands
+    const dropPatterns = [
+      /^\s*\\documentclass[^\n]*$/gm,
+      /^\s*\\usepackage[^\n]*$/gm,
+      /^\s*\\begin\{document\}\s*$/gm,
+      /^\s*\\end\{document\}\s*$/gm
+    ];
+    dropPatterns.forEach(rx => {
+      if (rx.test(c)) { c = c.replace(rx, ''); modified = true; }
+    });
 
-    // Remove documentclass, usepackage, begin/end{document}
-    const dropPatterns = [/^\s*\\documentclass[^\n]*$/gm, /^\s*\\usepackage[^\n]*$/gm, /\\begin\{document\}/g, /\\end\{document\}/g];
-    dropPatterns.forEach(rx => { if (rx.test(c)) { c = c.replace(rx, ''); modified = true; } });
-
-    // Extract first tikzpicture environment if present
-    const envMatch = c.match(/\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\}/);
-    if (envMatch) {
-      const tikzBlock = envMatch[0].trim();
-      const libsJoined = libs && libs.length ? libs.join('\n') + '\n\n' : '';
-      c = libsJoined + tikzBlock;
-      modified = true;
+    // Collapse excess blank lines left by removal
+    if (modified) {
+      c = c.replace(/\n{3,}/g, '\n\n');
     }
 
     return { code: c.trim(), modified };
@@ -418,30 +467,50 @@ ${bodyTikz}
 
   function render() {
     let input = editor ? editor.getValue() : $('tikzInput').value;
+    // Save original input before sanitization for server-side fallback
+    originalInput = input;
+    // Track for dedup
+    lastRenderedCode = input;
+    // Cancel any in-flight server compile if user re-renders
+    if (serverAbortController) {
+      serverAbortController.abort();
+      serverAbortController = null;
+      serverCompileInFlight = false;
+    }
     // Auto-sanitize input: keep tikzpicture and \usetikzlibrary in code
     const san = sanitizeTikzInput(input);
     if (san.modified) {
       input = san.code;
       if (editor) { suppressAuto = true; editor.setValue(input); suppressAuto = false; }
       else $('tikzInput').value = input;
+      lastRenderedCode = input;
     }
     // Clear any previous error/info banner
     showError('');
 
     showLoading(true);
-    const html = buildIframeHtml(input);
     const iframe = $('viewer');
-    iframe.srcdoc = html;
 
-    // Wait for iframe to load, then poll for SVG (TikZJax renders async)
-    iframe.onload = function() {
-      waitForTikzRender(iframe, 50, 10000); // Check every 50ms, timeout after 10s
-    };
+    // Fast path: TikZJax already loaded in iframe, just swap content
+    if (tikzIframeReady && rerenderInIframe(iframe, input)) {
+      waitForTikzRender(iframe, 50, 10000);
+    } else {
+      // Cold start: full iframe reload (first render or after server-side fallback)
+      tikzIframeReady = false;
+      const html = buildIframeHtml(input);
+      iframe.srcdoc = html;
+      iframe.onload = function() {
+        tikzIframeReady = true;
+        waitForTikzRender(iframe, 50, 10000);
+      };
+    }
   }
 
   // Poll for SVG element to appear (TikZJax renders asynchronously)
+  // Falls back to server-side rendering if client-side TikZJax fails
   function waitForTikzRender(iframe, interval, timeout) {
     const startTime = Date.now();
+    lastRenderWasServer = false;
 
     function checkSvg() {
       try {
@@ -451,27 +520,30 @@ ${bodyTikz}
         if (svg) {
           // SVG found - rendering complete
           showLoading(false);
+          updateRenderBadge(false);
           return;
         }
 
         // Check for error message in iframe
         const errorText = doc && doc.body && doc.body.textContent;
         if (errorText && errorText.toLowerCase().includes('error')) {
-          showLoading(false);
+          // TikZJax errored — try server-side
+          serverSideFallback();
           return;
         }
 
         // Timeout check
         if (Date.now() - startTime > timeout) {
-          showLoading(false);
+          // TikZJax timed out — try server-side
+          serverSideFallback();
           return;
         }
 
         // Keep polling
         setTimeout(checkSvg, interval);
       } catch (e) {
-        // Cross-origin or other error - hide loading
-        showLoading(false);
+        // Cross-origin or other error — try server-side
+        serverSideFallback();
       }
     }
 
@@ -479,10 +551,146 @@ ${bodyTikz}
     setTimeout(checkSvg, 200);
   }
 
+  // Server-side TikZ compilation fallback
+  function serverSideFallback() {
+    // Already a server compile running — skip
+    if (serverCompileInFlight) {
+      showLoading(false);
+      return;
+    }
+
+    // Auto-render: enforce cooldown between server compiles
+    if (isAutoRender) {
+      var elapsed = Date.now() - lastServerCompileTime;
+      if (elapsed < SERVER_COOLDOWN_MS) {
+        showLoading(false);
+        return;
+      }
+    }
+
+    const input = editor ? editor.getValue() : $('tikzInput').value;
+    if (!input || !input.trim()) {
+      showLoading(false);
+      return;
+    }
+
+    showLoadingText('Server-side rendering...');
+    serverCompileInFlight = true;
+    lastServerCompileTime = Date.now();
+    serverAbortController = new AbortController();
+
+    fetch(TIKZ_COMPILE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ raw: input }),
+      signal: serverAbortController.signal
+    })
+    .then(function(resp) {
+      if (!resp.ok) return resp.json().then(function(e) { throw new Error(e.error || 'Compile failed'); });
+      return resp.json();
+    })
+    .then(function(data) {
+      if (!data.jobId) throw new Error('No jobId returned');
+      pollJobStatus(data.jobId);
+    })
+    .catch(function(err) {
+      serverCompileInFlight = false;
+      serverAbortController = null;
+      if (err.name === 'AbortError') return; // cancelled by new render, ignore
+      showLoading(false);
+      showError('Server render failed: ' + err.message);
+    });
+  }
+
+  // Poll job status until done or error
+  function pollJobStatus(jobId) {
+    var pollCount = 0;
+    var maxPolls = 40; // ~60s at 1.5s intervals
+
+    function poll() {
+      fetch(JOB_STATUS_URL + jobId + '/status')
+        .then(function(resp) { return resp.json(); })
+        .then(function(data) {
+          if (data.status === 'done') {
+            serverCompileInFlight = false;
+            serverAbortController = null;
+            displayServerSVG(jobId, data.warning);
+          } else if (data.status === 'error') {
+            serverCompileInFlight = false;
+            serverAbortController = null;
+            showLoading(false);
+            showError('Server compile error: ' + (data.message || data.warning || 'Unknown error'));
+          } else if (++pollCount >= maxPolls) {
+            serverCompileInFlight = false;
+            serverAbortController = null;
+            showLoading(false);
+            showError('Server compile timed out');
+          } else {
+            setTimeout(poll, 1500);
+          }
+        })
+        .catch(function(err) {
+          serverCompileInFlight = false;
+          serverAbortController = null;
+          showLoading(false);
+          showError('Status check failed: ' + err.message);
+        });
+    }
+
+    poll();
+  }
+
+  // Fetch and display the server-rendered SVG
+  function displayServerSVG(jobId, warning) {
+    fetch(SVG_URL + jobId)
+      .then(function(resp) {
+        if (!resp.ok) throw new Error('SVG fetch failed');
+        return resp.text();
+      })
+      .then(function(svgText) {
+        lastRenderWasServer = true;
+        tikzIframeReady = false; // iframe no longer has TikZJax loaded
+        var iframe = $('viewer');
+        iframe.srcdoc = '<!DOCTYPE html><html><head><style>body{margin:0;padding:20px;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,sans-serif;}svg{display:block;margin:auto;max-width:100%;height:auto;}</style></head><body>' + svgText + '</body></html>';
+        showLoading(false);
+        updateRenderBadge(true);
+        if (warning) {
+          showError('Compiled with warnings: ' + warning);
+        }
+      })
+      .catch(function(err) {
+        showLoading(false);
+        showError('SVG fetch failed: ' + err.message);
+      });
+  }
+
+  // Show/hide "Server rendered" badge on the preview panel
+  function updateRenderBadge(isServer) {
+    var badge = $('server-render-badge');
+    if (badge) {
+      badge.style.display = isServer ? 'inline-flex' : 'none';
+    }
+  }
+
+  // Update loading overlay text
+  function showLoadingText(text) {
+    var el = document.querySelector('.tikz-loading-text');
+    if (el) el.textContent = text || 'Rendering TikZ diagram...';
+  }
+
+  // Auto-render: debounced, with dedup and server throttling
   function debouncedRender() {
     if (autoRenderTimeout) clearTimeout(autoRenderTimeout);
-    autoRenderTimeout = setTimeout(render, AUTO_RENDER_DELAY);
+    autoRenderTimeout = setTimeout(function() {
+      var code = editor ? editor.getValue() : $('tikzInput').value;
+      // Skip if code hasn't changed since last render
+      if (code === lastRenderedCode) return;
+      isAutoRender = true;
+      render();
+    }, AUTO_RENDER_DELAY);
   }
+
+
 
   function clearInput() {
     if (editor) {
@@ -826,15 +1034,15 @@ ${bodyTikz}
       tabSize: 2,
       lineWrapping: true,
       extraKeys: {
-        'Ctrl-Enter': render,
-        'Cmd-Enter': render
+        'Ctrl-Enter': function() { isAutoRender = false; render(); },
+        'Cmd-Enter': function() { isAutoRender = false; render(); }
       }
     });
 
     // Expose editor globally for AI generate panel
     window.tikzEditor = editor;
 
-    // Auto-render on change if enabled (skip when setValue programmatically)
+    // Auto-render on change if enabled (skip programmatic setValue)
     editor.on('change', () => {
       if (suppressAuto) return;
       if ($('auto-render') && $('auto-render').checked) {
@@ -859,7 +1067,7 @@ ${bodyTikz}
     populateExamples();
 
     // Event listeners
-    $('btn-render').addEventListener('click', render);
+    $('btn-render').addEventListener('click', function() { isAutoRender = false; render(); });
     $('btn-clear').addEventListener('click', clearInput);
     $('btn-svg').addEventListener('click', exportSVG);
     $('btn-png').addEventListener('click', exportPNG);
@@ -881,11 +1089,13 @@ ${bodyTikz}
     $('btn-zoom-reset').addEventListener('click', zoomReset);
 
     // Auto-render toggle
-    $('auto-render').addEventListener('change', (e) => {
-      if (e.target.checked) {
-        debouncedRender();
-      }
-    });
+    if ($('auto-render')) {
+      $('auto-render').addEventListener('change', (e) => {
+        if (e.target.checked) {
+          debouncedRender();
+        }
+      });
+    }
 
     // Dark theme toggle
     const themeToggle = $('cmThemeToggle');
