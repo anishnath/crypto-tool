@@ -214,3 +214,21 @@ CREATE TABLE IF NOT EXISTS purchases (
 CREATE INDEX IF NOT EXISTS idx_purchases_user ON purchases(user_id);
 CREATE INDEX IF NOT EXISTS idx_purchases_set ON purchases(set_id);
 CREATE INDEX IF NOT EXISTS idx_purchases_status ON purchases(status);
+
+-- =============================================
+-- 10. TIKZ REQUESTS - TikZ generation logs
+-- =============================================
+CREATE TABLE IF NOT EXISTS tikz_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    description TEXT NOT NULL,
+    prompt TEXT,
+    response_json TEXT,
+    success INTEGER NOT NULL DEFAULT 1,
+    error_message TEXT,
+    model TEXT DEFAULT 'gpt-4o-mini',
+    response_time_ms INTEGER,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_tikz_requests_created ON tikz_requests(created_at);
+CREATE INDEX IF NOT EXISTS idx_tikz_requests_success ON tikz_requests(success);

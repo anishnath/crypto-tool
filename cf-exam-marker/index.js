@@ -664,6 +664,29 @@ async function logMathStepsRequest(env, expression, operation, variable, bounds,
 }
 
 /**
+ * Log a TikZ generation request and response
+ */
+async function logTikzRequest(env, { description, prompt, response, success, errorMessage, model, responseTimeMs }) {
+  if (!env.DB) return;
+  try {
+    await env.DB.prepare(
+      `INSERT INTO tikz_requests (description, prompt, response_json, success, error_message, model, response_time_ms)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      description,
+      prompt,
+      response ? JSON.stringify(response) : null,
+      success ? 1 : 0,
+      errorMessage || null,
+      model || 'gpt-4o-mini',
+      responseTimeMs
+    ).run();
+  } catch (e) {
+    console.error('Failed to log tikz request:', e);
+  }
+}
+
+/**
  * Handle math step-by-step solution requests
  * POST /api/math-steps
  * Body: { operation, expression, variable, answer, bounds?: {lower, upper} }
@@ -1720,6 +1743,8 @@ async function handleGetUserAttempts(userId, request, env) {
  * Generates TikZ code from a natural language description using GPT.
  */
 async function handleTikzGenerate(request, env) {
+  const startTime = Date.now();
+  const model = 'gpt-4o-mini';
   let payload;
   try {
     payload = await request.json();
@@ -1735,24 +1760,48 @@ async function handleTikzGenerate(request, env) {
     return jsonResponse({ error: 'Description too long (max 500 chars)' }, { status: 400 });
   }
 
+  const trimmedDescription = description.trim();
+
   try {
-    const prompt = buildTikzPrompt(description.trim());
+    const prompt = buildTikzPrompt(trimmedDescription);
     const result = await callOpenAI(prompt, env, {
-      model: 'gpt-4o-mini',
+      model,
       temperature: 0.2,
       maxTokens: 1200,
       systemMessage: 'You are an expert TikZ programmer. Always respond with valid JSON only, no markdown, no explanation outside the JSON object.'
     });
 
-    return jsonResponse({
+    const responsePayload = {
       success: true,
       title: result.title || '',
       libraries: result.libraries || [],
       code: result.code || '',
       hint: result.hint || ''
+    };
+
+    const elapsed = Date.now() - startTime;
+    await logTikzRequest(env, {
+      description: trimmedDescription,
+      prompt,
+      response: responsePayload,
+      success: true,
+      model,
+      responseTimeMs: elapsed
     });
+
+    return jsonResponse(responsePayload);
   } catch (e) {
     console.error('TikZ generate error:', e);
+    const elapsed = Date.now() - startTime;
+    await logTikzRequest(env, {
+      description: trimmedDescription,
+      prompt: buildTikzPrompt(trimmedDescription),
+      response: null,
+      success: false,
+      errorMessage: e.message || 'Failed to generate TikZ code',
+      model,
+      responseTimeMs: elapsed
+    });
     return jsonResponse({ error: e.message || 'Failed to generate TikZ code' }, { status: 500 });
   }
 }

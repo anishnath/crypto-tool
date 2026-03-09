@@ -559,6 +559,18 @@ Both scripts load `.dev.vars` if present. Add `CLOUDFLARE_API_TOKEN=…` to `.de
 
 ---
 
+## TikZ Request Logs (D1)
+
+The `/api/tikz-generate` endpoint stores each request and response in `tikz_requests` for debugging and analytics.
+
+### Enable on an existing database
+```bash
+wrangler d1 execute exam-marker-db --file=tikz-requests.sql --local
+wrangler d1 execute exam-marker-db --file=tikz-requests.sql --remote
+```
+
+---
+
 ## Database Schema
 
 ### Tables
@@ -566,6 +578,7 @@ Both scripts load `.dev.vars` if present. Add `CLOUDFLARE_API_TOKEN=…` to `.de
 |-------|-------------|
 | `math_steps_cache` | Caches AI math step solutions (integrate, differentiate, etc.) |
 | `math_steps_requests` | Request log for analytics |
+| `tikz_requests` | TikZ generation request/response logs |
 | `chapters` | Course chapters by subject (e.g., CBSE Class 10 Math chapters) |
 | `topics` | Topics within chapters |
 | `exam_sets` | Practice question sets (full, chapter, topic tests) |
