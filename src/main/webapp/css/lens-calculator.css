@@ -1,0 +1,443 @@
+/* Lens Calculator - Component Styles (Lens Maker + Combined + Double Lens) */
+
+:root {
+    --lc-tool: #6366f1;
+    --lc-tool-dark: #4f46e5;
+    --lc-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --lc-light: #eef2ff;
+}
+[data-theme="dark"] {
+    --lc-light: rgba(99, 102, 241, 0.15);
+}
+
+/* ===== Layout Override: narrow input, wide output ===== */
+.lc-layout.tool-page-container {
+    grid-template-columns: minmax(250px, 300px) 1fr 300px;
+}
+@media (max-width: 1024px) {
+    .lc-layout.tool-page-container {
+        grid-template-columns: minmax(240px, 290px) 1fr;
+    }
+}
+@media (max-width: 900px) {
+    .lc-layout.tool-page-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Mode Toggle ===== */
+.lc-mode-toggle {
+    display: flex;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+.lc-mode-btn {
+    flex: 1;
+    padding: 0.5rem 0.25rem;
+    font-weight: 600;
+    font-size: 0.65rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.lc-mode-btn.active {
+    background: var(--lc-gradient);
+    color: #fff;
+}
+.lc-mode-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .lc-mode-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .lc-mode-btn.active { background: var(--lc-gradient); color: #fff; }
+
+/* ===== Input Groups ===== */
+.lc-input-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+.lc-input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    text-align: center;
+    transition: border-color 0.15s;
+}
+.lc-input:focus {
+    outline: none;
+    border-color: var(--lc-tool);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+.lc-select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.8125rem;
+    font-family: var(--font-sans);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: border-color 0.15s;
+}
+.lc-select:focus {
+    outline: none;
+    border-color: var(--lc-tool);
+}
+
+/* ===== Slider ===== */
+.lc-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.lc-slider-row .lc-input {
+    width: 80px;
+    flex-shrink: 0;
+}
+.lc-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+}
+.lc-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--lc-tool);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.lc-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--lc-tool);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* ===== 2-Column Input Row ===== */
+.lc-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+@media (max-width: 400px) {
+    .lc-2col { grid-template-columns: 1fr; }
+}
+
+/* ===== Toggle Row ===== */
+.lc-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+}
+.lc-toggle-row input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--lc-tool);
+    cursor: pointer;
+}
+
+/* ===== Compact input column ===== */
+.lc-layout .tool-card-body {
+    padding: 0.75rem;
+}
+.lc-layout .tool-card-header {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8125rem;
+}
+
+/* ===== Hint text ===== */
+.lc-hint {
+    font-size: 0.625rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+}
+
+/* ===== Material Chips ===== */
+.lc-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.35rem;
+}
+.lc-chip {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.6rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    border-radius: 1rem;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+}
+.lc-chip:hover {
+    border-color: var(--lc-tool);
+    color: var(--lc-tool);
+    background: var(--lc-light);
+}
+
+/* ===== Shape Chips ===== */
+.lc-shape-chip {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border: 1.5px solid var(--border);
+    border-radius: 1rem;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+}
+.lc-shape-chip:hover, .lc-shape-chip.active {
+    border-color: var(--lc-tool);
+    color: var(--lc-tool);
+    background: var(--lc-light);
+}
+
+/* ===== Canvas Diagram Container ===== */
+.lc-diagram-wrap {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: relative;
+}
+.lc-diagram-wrap canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ===== Result Cards ===== */
+.lc-results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.lc-result-card {
+    padding: 0.625rem 0.75rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--lc-tool);
+}
+.lc-result-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.15rem;
+}
+.lc-result-value {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* ===== Image Badges ===== */
+.lc-badges {
+    display: flex;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+.lc-badge {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border-radius: 1rem;
+    background: var(--lc-light);
+    color: var(--lc-tool);
+}
+.lc-badge-converging { background: #dbeafe; color: #1e40af; }
+.lc-badge-diverging { background: #fef3c7; color: #92400e; }
+.lc-badge-contact { background: #d1fae5; color: #065f46; }
+.lc-badge-separated { background: #fce7f3; color: #9d174d; }
+
+/* ===== Steps ===== */
+.lc-step {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+.lc-step:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.lc-step-number {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--lc-gradient);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+.lc-step-content {
+    flex: 1;
+    min-width: 0;
+}
+.lc-step-desc {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+.lc-step-math {
+    font-size: 1rem;
+    overflow-x: auto;
+}
+
+/* ===== Educational Content ===== */
+.lc-edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.75rem;
+}
+.lc-edu-card {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+}
+.lc-edu-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.375rem;
+}
+.lc-edu-card p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.lc-callout {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+}
+.lc-callout-insight {
+    background: var(--lc-light);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+.lc-callout-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+.lc-callout-text {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+/* ===== Quick Examples ===== */
+.lc-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.lc-example-chip {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    border-radius: 1rem;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+}
+.lc-example-chip:hover {
+    border-color: var(--lc-tool);
+    color: var(--lc-tool);
+    background: var(--lc-light);
+}
+
+/* ===== Error Alert ===== */
+.lc-error {
+    padding: 0.75rem 1rem;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 0.5rem;
+    color: #991b1b;
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+[data-theme="dark"] .lc-error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}
+
+/* ===== Scroll Animations ===== */
+.lc-anim {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s, transform 0.5s;
+}
+.lc-anim.lc-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.lc-anim-d1 { transition-delay: 0.1s; }
+.lc-anim-d2 { transition-delay: 0.2s; }
+.lc-anim-d3 { transition-delay: 0.3s; }
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+    .lc-results-grid {
+        grid-template-columns: 1fr;
+    }
+    .lc-edu-grid {
+        grid-template-columns: 1fr;
+    }
+    .lc-shape-grid {
+        grid-template-columns: 1fr;
+    }
+}

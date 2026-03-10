@@ -1,936 +1,1156 @@
-// Lens Calculator - Thin Lens, Lens Maker, Combined Lenses
-// 1/f = 1/v - 1/u, m = v/u, P = 1/f
+/**
+ * Lens Calculator - Lens Maker + Combined Lenses + Double Lens System
+ * ES5-compatible IIFE, Canvas diagrams with dark-mode support
+ */
+(function() {
+'use strict';
 
-let currentMode = 'thinlens';
-let lensType = 'converging';
-let solveFor = 'v';
-let stepsExpanded = false;
-let canvas, ctx;
+// ==================== Helpers ====================
 
-// Unit conversions to cm
-const lengthConv = { 'cm': 1, 'm': 100, 'mm': 0.1 };
+function $(id) { return document.getElementById(id); }
 
-document.addEventListener('DOMContentLoaded', () => {
-    canvas = document.getElementById('ray-canvas');
-    ctx = canvas.getContext('2d');
-    setupCanvas();
-    calculate();
-
-    document.querySelectorAll('.number-input').forEach(input => {
-        input.addEventListener('input', calculate);
-    });
-
-    window.addEventListener('resize', () => { setupCanvas(); calculate(); });
-});
-
-function setupCanvas() {
-    const container = document.getElementById('ray-container');
-    canvas.width = container.offsetWidth;
-    canvas.height = container.offsetHeight;
+function val(id, fallback) {
+    var el = $(id);
+    if (!el) return fallback || 0;
+    return parseFloat(el.value) || fallback || 0;
 }
 
-function setMode(mode) {
-    currentMode = mode;
-
-    document.querySelectorAll('.mode-tab').forEach(tab => {
-        tab.classList.toggle('active', tab.dataset.mode === mode);
-    });
-
-    document.getElementById('thinlens-inputs').style.display = mode === 'thinlens' ? 'block' : 'none';
-    document.getElementById('lensmaker-inputs').style.display = mode === 'lensmaker' ? 'block' : 'none';
-    document.getElementById('combined-inputs').style.display = mode === 'combined' ? 'block' : 'none';
-
-    calculate();
+function setInput(id, v) {
+    var el = $(id);
+    if (el) el.value = v;
 }
 
-function setLensType(type) {
-    lensType = type;
+function isDark() {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+}
 
-    document.querySelectorAll('.lens-type-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.type === type);
-    });
+function themeColor(light, dark) {
+    return isDark() ? dark : light;
+}
 
-    // Update focal length sign for diverging lens
-    if (currentMode === 'thinlens') {
-        const focalInput = document.getElementById('focal-length');
-        const currentValue = Math.abs(parseFloat(focalInput.value) || 10);
-        focalInput.value = type === 'diverging' ? -currentValue : currentValue;
+// ==================== State ====================
+
+var state = {
+    mode: 'lensmaker',   // lensmaker | combined | doublelens
+    lastResult: null
+};
+
+// ==================== Calculation: Lens Maker ====================
+
+function calcLensMaker() {
+    var mu = val('lc-mu', 1.5);
+    var muMedium = val('lc-medium-mu', 1);
+    var R1 = val('lc-r1', 20);
+    var R2 = val('lc-r2', -20);
+    var thickToggle = $('lc-thick-toggle');
+    var isThick = thickToggle && thickToggle.checked;
+    var t = isThick ? val('lc-thickness', 1) : 0;
+
+    var result = {};
+
+    if (Math.abs(muMedium) < 0.01) {
+        result.error = 'Medium refractive index cannot be zero';
+        return result;
     }
 
-    calculate();
+    var muRel = mu / muMedium;
+
+    // Handle plano surfaces (R = infinity → 1/R = 0)
+    var invR1 = (Math.abs(R1) > 90000) ? 0 : 1 / R1;
+    var invR2 = (Math.abs(R2) > 90000) ? 0 : 1 / R2;
+
+    var oneOverF;
+    if (isThick && t > 0 && Math.abs(R1) < 90000 && Math.abs(R2) < 90000) {
+        // Thick lens: 1/f = (μ-1)[1/R1 - 1/R2 + (μ-1)t/(μ·R1·R2)]
+        oneOverF = (muRel - 1) * (invR1 - invR2 + (muRel - 1) * t / (muRel * R1 * R2));
+    } else {
+        oneOverF = (muRel - 1) * (invR1 - invR2);
+    }
+
+    if (Math.abs(oneOverF) < 0.00001) {
+        result.error = 'Focal length approaches infinity (flat glass or invalid radii)';
+        return result;
+    }
+
+    var f = 1 / oneOverF;
+    var P = 100 / f;  // f in cm → P in diopters
+
+    result.mode = 'lensmaker';
+    result.mu = mu;
+    result.muMedium = muMedium;
+    result.muRel = muRel;
+    result.R1 = R1;
+    result.R2 = R2;
+    result.invR1 = invR1;
+    result.invR2 = invR2;
+    result.f = f;
+    result.P = P;
+    result.isConverging = f > 0;
+    result.oneOverF = oneOverF;
+    result.isThick = isThick;
+    result.t = t;
+
+    return result;
 }
 
-function setSolveFor(variable) {
-    solveFor = variable;
+// ==================== Calculation: Combined Lenses ====================
 
-    document.querySelectorAll('.solve-btn[data-var]').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.var === variable);
-    });
+function calcCombined() {
+    var f1 = val('lc-f1', 10);
+    var f2 = val('lc-f2', 15);
+    var d = val('lc-separation', 0);
 
-    // Show/hide appropriate input sections
-    document.getElementById('focal-section').style.display = variable === 'f' ? 'none' : 'block';
-    document.getElementById('object-section').style.display = variable === 'u' ? 'none' : 'block';
-    document.getElementById('image-section').style.display = variable === 'v' ? 'none' : 'block';
+    var result = {};
 
-    calculate();
+    if (Math.abs(f1) < 0.001 || Math.abs(f2) < 0.001) {
+        result.error = 'Focal lengths cannot be zero';
+        return result;
+    }
+
+    var oneOverF;
+    if (d === 0) {
+        oneOverF = 1/f1 + 1/f2;
+    } else {
+        oneOverF = 1/f1 + 1/f2 - d/(f1 * f2);
+    }
+
+    if (Math.abs(oneOverF) < 0.00001) {
+        result.error = 'Equivalent focal length approaches infinity';
+        return result;
+    }
+
+    var F = 1 / oneOverF;
+    var P1 = 100 / f1;
+    var P2 = 100 / f2;
+    var P = 100 / F;
+
+    // Back Focal Distance (BFD) and Front Focal Distance (FFD) for separated lenses
+    var BFD = 0, FFD = 0;
+    if (d > 0) {
+        // BFD = F * (1 - d/f1)  measured from lens 2
+        BFD = F * (1 - d / f1);
+        // FFD = F * (1 - d/f2)  measured from lens 1
+        FFD = F * (1 - d / f2);
+    } else {
+        BFD = F;
+        FFD = F;
+    }
+
+    result.mode = 'combined';
+    result.f1 = f1;
+    result.f2 = f2;
+    result.d = d;
+    result.F = F;
+    result.P1 = P1;
+    result.P2 = P2;
+    result.P = P;
+    result.oneOverF = oneOverF;
+    result.isConverging = F > 0;
+    result.inContact = d === 0;
+    result.BFD = BFD;
+    result.FFD = FFD;
+
+    return result;
 }
 
-function setRefractiveIndex(n) {
-    document.getElementById('refractive-index').value = n;
-    calculate();
+// ==================== Calculation: Double Lens System ====================
+
+function calcDoubleLens() {
+    var f1 = val('lc-dl-f1', 10);
+    var f2 = val('lc-dl-f2', 15);
+    var d = val('lc-dl-d', 25);
+    var u1 = val('lc-dl-u', 25);
+    var h = val('lc-dl-h', 5);
+
+    var result = {};
+
+    if (Math.abs(f1) < 0.001 || Math.abs(f2) < 0.001) {
+        result.error = 'Focal lengths cannot be zero';
+        return result;
+    }
+    if (Math.abs(u1) < 0.001) {
+        result.error = 'Object distance cannot be zero';
+        return result;
+    }
+
+    // Lens 1: 1/v1 = 1/f1 - 1/u1 (sign: u1 negative in New Cartesian)
+    // Using Real-is-Positive: 1/v1 = 1/f1 + 1/u1 ... actually no.
+    // Let's use New Cartesian consistently: u is negative, 1/f = 1/v + 1/u
+    // So 1/v = 1/f - 1/u ... wait. 1/f = 1/v + 1/u → 1/v = 1/f - 1/u
+    // With u negative: 1/v = 1/f - 1/(-|u|) = 1/f + 1/|u|
+    // That gives positive v for real image beyond lens.
+
+    // Using convention: u1 is entered as positive, internally we treat as -u1
+    var u1_signed = -Math.abs(u1); // object on left, negative
+    var inv_v1 = (1/f1) - (1/u1_signed); // 1/v1 = 1/f1 - 1/u1
+    // = 1/f1 + 1/|u1|
+
+    if (Math.abs(inv_v1) < 0.00001) {
+        result.error = 'Image from Lens 1 at infinity (object at focal point)';
+        return result;
+    }
+
+    var v1 = 1 / inv_v1;
+    var m1 = v1 / u1_signed;
+
+    // Object for Lens 2
+    // v1 is measured from Lens 1. Lens 2 is at distance d from Lens 1.
+    // u2 = -(d - v1) if v1 < d → real object for L2
+    // u2 = -(d - v1) if v1 > d → this gives positive u2 = virtual object
+    var u2 = -(d - v1);
+
+    if (Math.abs(u2) < 0.001) {
+        result.error = 'Intermediate image forms exactly at Lens 2';
+        return result;
+    }
+
+    var inv_v2 = (1/f2) - (1/u2);
+
+    if (Math.abs(inv_v2) < 0.00001) {
+        result.error = 'Final image at infinity';
+        return result;
+    }
+
+    var v2 = 1 / inv_v2;
+    var m2 = v2 / u2;
+    var mTotal = m1 * m2;
+    var hPrime = mTotal * h;
+
+    // Intermediate image height
+    var h1 = m1 * h;
+
+    result.mode = 'doublelens';
+    result.f1 = f1;
+    result.f2 = f2;
+    result.d = d;
+    result.u1 = u1;
+    result.u1_signed = u1_signed;
+    result.v1 = v1;
+    result.m1 = m1;
+    result.u2 = u2;
+    result.v2 = v2;
+    result.m2 = m2;
+    result.mTotal = mTotal;
+    result.h = h;
+    result.h1 = h1;
+    result.hPrime = hPrime;
+    result.img1Real = v1 > 0;
+    result.img2Real = v2 > 0;
+    result.img1Inverted = m1 < 0;
+    result.img2Inverted = mTotal < 0;
+    result.isMagnified = Math.abs(mTotal) > 1;
+
+    return result;
 }
+
+// ==================== Main Calculate ====================
 
 function calculate() {
-    if (currentMode === 'thinlens') {
-        calculateThinLens();
-    } else if (currentMode === 'lensmaker') {
-        calculateLensMaker();
+    var result;
+    if (state.mode === 'lensmaker') {
+        result = calcLensMaker();
+    } else if (state.mode === 'combined') {
+        result = calcCombined();
     } else {
-        calculateCombined();
+        result = calcDoubleLens();
+    }
+
+    state.lastResult = result;
+    showOutput(result);
+}
+
+// ==================== Show Output ====================
+
+function showOutput(result) {
+    var empty = $('lc-empty-state');
+    if (empty) empty.style.display = 'none';
+
+    var canvas = $('lc-diagram');
+    if (canvas) drawDiagram(canvas, result);
+
+    renderResults($('lc-results-container'), result);
+    renderSteps($('lc-steps-container'), result);
+}
+
+// ==================== Render Results ====================
+
+function renderResults(container, result) {
+    if (!container) return;
+    if (result.error) {
+        container.innerHTML = '<div class="lc-error">' + result.error + '</div>';
+        return;
+    }
+
+    var html = '';
+
+    if (result.mode === 'lensmaker') {
+        html += '<div class="lc-badges">';
+        html += '<span class="lc-badge ' + (result.isConverging ? 'lc-badge-converging' : 'lc-badge-diverging') + '">' + (result.isConverging ? 'Converging' : 'Diverging') + '</span>';
+        html += '<span class="lc-badge">&mu; = ' + result.mu.toFixed(2) + '</span>';
+        if (result.muMedium !== 1) html += '<span class="lc-badge">Medium &mu; = ' + result.muMedium.toFixed(2) + '</span>';
+        if (result.isThick) html += '<span class="lc-badge">Thick Lens (t=' + result.t + ' cm)</span>';
+        html += '</div>';
+
+        html += '<div class="lc-results-grid">';
+        html += resultCard('Focal Length', fmtLen(result.f));
+        html += resultCard('Power', fmtPower(result.P));
+        html += resultCard('R\u2081', fmtRadius(result.R1));
+        html += resultCard('R\u2082', fmtRadius(result.R2));
+        if (result.isThick) html += resultCard('Thickness', result.t + ' cm');
+        html += resultCard('\u03BC (relative)', result.muRel.toFixed(4));
+        html += '</div>';
+    }
+
+    else if (result.mode === 'combined') {
+        html += '<div class="lc-badges">';
+        html += '<span class="lc-badge ' + (result.isConverging ? 'lc-badge-converging' : 'lc-badge-diverging') + '">' + (result.isConverging ? 'Converging' : 'Diverging') + ' System</span>';
+        html += '<span class="lc-badge ' + (result.inContact ? 'lc-badge-contact' : 'lc-badge-separated') + '">' + (result.inContact ? 'In Contact' : 'Separated d=' + result.d + ' cm') + '</span>';
+        html += '</div>';
+
+        html += '<div class="lc-results-grid">';
+        html += resultCard('Equivalent f', fmtLen(result.F));
+        html += resultCard('Total Power', fmtPower(result.P));
+        html += resultCard('f\u2081', fmtLen(result.f1));
+        html += resultCard('f\u2082', fmtLen(result.f2));
+        if (!result.inContact) {
+            html += resultCard('Back Focal Dist', fmtLen(result.BFD));
+            html += resultCard('Front Focal Dist', fmtLen(result.FFD));
+        }
+        html += resultCard('P\u2081', fmtPower(result.P1));
+        html += resultCard('P\u2082', fmtPower(result.P2));
+        html += '</div>';
+    }
+
+    else if (result.mode === 'doublelens') {
+        html += '<div class="lc-badges">';
+        html += '<span class="lc-badge ' + (result.img2Real ? 'lc-badge-converging' : 'lc-badge-diverging') + '">Final: ' + (result.img2Real ? 'Real' : 'Virtual') + '</span>';
+        html += '<span class="lc-badge">' + (result.img2Inverted ? 'Inverted' : 'Upright') + '</span>';
+        html += '<span class="lc-badge">' + (result.isMagnified ? 'Magnified' : 'Diminished') + '</span>';
+        html += '<span class="lc-badge ' + (result.img1Real ? 'lc-badge-converging' : 'lc-badge-diverging') + '">Intermediate: ' + (result.img1Real ? 'Real' : 'Virtual') + '</span>';
+        html += '</div>';
+
+        html += '<div class="lc-results-grid">';
+        html += resultCard('v\u2081 (Lens 1)', fmtLen(result.v1));
+        html += resultCard('v\u2082 (Lens 2)', fmtLen(result.v2));
+        html += resultCard('m\u2081', fmtMag(result.m1));
+        html += resultCard('m\u2082', fmtMag(result.m2));
+        html += resultCard('Total m', fmtMag(result.mTotal));
+        html += resultCard('Final Height', fmtLen(result.hPrime));
+        html += resultCard('u\u2082 (for L2)', fmtLen(result.u2));
+        html += resultCard('Intermediate h\u2032', fmtLen(result.h1));
+        html += '</div>';
+    }
+
+    container.innerHTML = html;
+}
+
+function resultCard(label, value) {
+    return '<div class="lc-result-card"><div class="lc-result-label">' + label + '</div><div class="lc-result-value">' + value + '</div></div>';
+}
+
+// ==================== Format Helpers ====================
+
+function fmtLen(v) {
+    if (!isFinite(v)) return '\u221E';
+    return v.toFixed(2) + ' cm';
+}
+
+function fmtRadius(v) {
+    if (Math.abs(v) > 90000) return '\u221E (flat)';
+    return v.toFixed(2) + ' cm';
+}
+
+function fmtPower(P) {
+    if (!isFinite(P)) return '\u221E D';
+    return (P >= 0 ? '+' : '') + P.toFixed(2) + ' D';
+}
+
+function fmtMag(m) {
+    if (!isFinite(m)) return '\u221E';
+    return (m >= 0 ? '+' : '') + m.toFixed(3) + '\u00D7';
+}
+
+// ==================== Render Steps ====================
+
+function renderSteps(container, result) {
+    if (!container) return;
+    if (result.error) { container.innerHTML = ''; return; }
+
+    var html = '';
+    var n = 1;
+
+    if (result.mode === 'lensmaker') {
+        html += step(n++, 'Given Values',
+            'Refractive index of lens: <strong>\u03BC\u2081 = ' + result.mu + '</strong><br>' +
+            'Refractive index of medium: <strong>\u03BC\u2082 = ' + result.muMedium + '</strong><br>' +
+            'Radius R\u2081 = <strong>' + fmtRadius(result.R1) + '</strong><br>' +
+            'Radius R\u2082 = <strong>' + fmtRadius(result.R2) + '</strong>');
+
+        if (result.muMedium !== 1) {
+            html += step(n++, 'Relative Refractive Index',
+                '\u03BC_rel = \u03BC\u2081 / \u03BC\u2082 = ' + result.mu + ' / ' + result.muMedium + '<br>' +
+                '<strong>\u03BC_rel = ' + result.muRel.toFixed(4) + '</strong>');
+        }
+
+        if (result.isThick) {
+            html += step(n++, 'Apply Thick Lens Maker\u2019s Formula',
+                '<div class="lc-step-math" id="lc-katex-lm"></div>' +
+                '1/f = (\u03BC\u22121)[1/R\u2081 \u2212 1/R\u2082 + (\u03BC\u22121)t/(\u03BC\u00B7R\u2081\u00B7R\u2082)]<br>' +
+                'Thickness correction: (\u03BC\u22121)t/(\u03BC\u00B7R\u2081\u00B7R\u2082) = ' +
+                ((result.muRel - 1) * result.t / (result.muRel * result.R1 * result.R2)).toFixed(6) + '<br>' +
+                '1/f = ' + (result.muRel - 1).toFixed(4) + ' \u00D7 [' + result.invR1.toFixed(6) + ' \u2212 ' + result.invR2.toFixed(6) + ' + ' +
+                ((result.muRel - 1) * result.t / (result.muRel * result.R1 * result.R2)).toFixed(6) + ']<br>' +
+                '1/f = <strong>' + result.oneOverF.toFixed(6) + '</strong>');
+        } else {
+            html += step(n++, 'Apply Lens Maker\u2019s Formula',
+                '<div class="lc-step-math" id="lc-katex-lm"></div>' +
+                '1/f = (\u03BC - 1)(1/R\u2081 \u2212 1/R\u2082)<br>' +
+                '1/f = (' + result.muRel.toFixed(4) + ' \u2212 1)(' + result.invR1.toFixed(6) + ' \u2212 ' + result.invR2.toFixed(6) + ')<br>' +
+                '1/f = ' + (result.muRel - 1).toFixed(4) + ' \u00D7 ' + (result.invR1 - result.invR2).toFixed(6) + '<br>' +
+                '1/f = <strong>' + result.oneOverF.toFixed(6) + '</strong>');
+        }
+
+        html += step(n++, 'Focal Length',
+            'f = 1 / ' + result.oneOverF.toFixed(6) + '<br>' +
+            '<strong>f = ' + fmtLen(result.f) + '</strong>');
+
+        html += step(n++, 'Power in Diopters',
+            'P = 100 / f (cm) = 100 / ' + result.f.toFixed(2) + '<br>' +
+            '<strong>P = ' + fmtPower(result.P) + '</strong>');
+
+        html += step(n++, 'Lens Classification',
+            result.isConverging
+                ? '<strong style="color:#1e40af;">Converging Lens (f &gt; 0)</strong><br>Brings parallel rays to a real focus.'
+                : '<strong style="color:#92400e;">Diverging Lens (f &lt; 0)</strong><br>Spreads parallel rays; virtual focus.');
+    }
+
+    else if (result.mode === 'combined') {
+        html += step(n++, 'Given Values',
+            'f\u2081 = <strong>' + fmtLen(result.f1) + '</strong> (P\u2081 = ' + fmtPower(result.P1) + ')<br>' +
+            'f\u2082 = <strong>' + fmtLen(result.f2) + '</strong> (P\u2082 = ' + fmtPower(result.P2) + ')<br>' +
+            'Separation d = <strong>' + result.d + ' cm</strong>' + (result.inContact ? ' (in contact)' : ''));
+
+        if (result.inContact) {
+            html += step(n++, 'Lenses in Contact Formula',
+                '1/F = 1/f\u2081 + 1/f\u2082<br>' +
+                '1/F = 1/' + result.f1 + ' + 1/' + result.f2 + '<br>' +
+                '1/F = ' + (1/result.f1).toFixed(6) + ' + ' + (1/result.f2).toFixed(6) + '<br>' +
+                '1/F = <strong>' + result.oneOverF.toFixed(6) + '</strong>');
+
+            html += step(n++, 'Equivalent Power',
+                'P = P\u2081 + P\u2082<br>' +
+                'P = ' + fmtPower(result.P1) + ' + ' + fmtPower(result.P2) + '<br>' +
+                '<strong>P = ' + fmtPower(result.P) + '</strong>');
+        } else {
+            html += step(n++, 'Separated Lenses Formula',
+                '1/F = 1/f\u2081 + 1/f\u2082 \u2212 d/(f\u2081\u00B7f\u2082)<br>' +
+                '1/F = 1/' + result.f1 + ' + 1/' + result.f2 + ' \u2212 ' + result.d + '/(' + result.f1 + '\u00D7' + result.f2 + ')<br>' +
+                '1/F = ' + (1/result.f1).toFixed(6) + ' + ' + (1/result.f2).toFixed(6) + ' \u2212 ' + (result.d/(result.f1*result.f2)).toFixed(6) + '<br>' +
+                '1/F = <strong>' + result.oneOverF.toFixed(6) + '</strong>');
+
+            html += step(n++, 'Equivalent Power',
+                'P = P\u2081 + P\u2082 \u2212 d\u00B7P\u2081\u00B7P\u2082/100<br>' +
+                'P = ' + result.P1.toFixed(2) + ' + ' + result.P2.toFixed(2) + ' \u2212 ' + (result.d * result.P1 * result.P2 / 100).toFixed(4) + '<br>' +
+                '<strong>P = ' + fmtPower(result.P) + '</strong>');
+        }
+
+        html += step(n++, 'Equivalent Focal Length',
+            'F = 1 / ' + result.oneOverF.toFixed(6) + '<br>' +
+            '<strong>F = ' + fmtLen(result.F) + '</strong>');
+
+        if (!result.inContact) {
+            html += step(n++, 'Back & Front Focal Distance',
+                'BFD = F(1 \u2212 d/f\u2081) = ' + result.F.toFixed(2) + '(1 \u2212 ' + result.d + '/' + result.f1 + ')<br>' +
+                '<strong>BFD = ' + fmtLen(result.BFD) + '</strong> (from Lens 2)<br><br>' +
+                'FFD = F(1 \u2212 d/f\u2082) = ' + result.F.toFixed(2) + '(1 \u2212 ' + result.d + '/' + result.f2 + ')<br>' +
+                '<strong>FFD = ' + fmtLen(result.FFD) + '</strong> (from Lens 1)');
+        }
+
+        html += step(n++, 'System Classification',
+            'The combination acts as a <strong>' + (result.isConverging ? 'converging' : 'diverging') + '</strong> lens system.');
+    }
+
+    else if (result.mode === 'doublelens') {
+        html += step(n++, 'Given Values',
+            'Lens 1: f\u2081 = <strong>' + fmtLen(result.f1) + '</strong><br>' +
+            'Lens 2: f\u2082 = <strong>' + fmtLen(result.f2) + '</strong><br>' +
+            'Separation: d = <strong>' + result.d + ' cm</strong><br>' +
+            'Object distance: u\u2081 = <strong>' + result.u1 + ' cm</strong> (from Lens 1)<br>' +
+            'Object height: h = <strong>' + result.h + ' cm</strong>');
+
+        html += step(n++, 'Image from Lens 1',
+            'Using 1/f = 1/v + 1/u (New Cartesian, u = ' + result.u1_signed + ' cm):<br>' +
+            '1/v\u2081 = 1/f\u2081 \u2212 1/u\u2081<br>' +
+            '1/v\u2081 = 1/' + result.f1 + ' \u2212 1/(' + result.u1_signed.toFixed(2) + ')<br>' +
+            '1/v\u2081 = ' + (1/result.f1).toFixed(6) + ' + ' + (1/result.u1).toFixed(6) + '<br>' +
+            'v\u2081 = <strong>' + fmtLen(result.v1) + '</strong> (' + (result.img1Real ? 'Real' : 'Virtual') + ')<br>' +
+            'm\u2081 = v\u2081/u\u2081 = ' + result.v1.toFixed(2) + '/' + result.u1_signed.toFixed(2) + ' = <strong>' + fmtMag(result.m1) + '</strong>');
+
+        html += step(n++, 'Object for Lens 2',
+            'u\u2082 = \u2212(d \u2212 v\u2081) = \u2212(' + result.d + ' \u2212 ' + result.v1.toFixed(2) + ')<br>' +
+            'u\u2082 = <strong>' + fmtLen(result.u2) + '</strong><br>' +
+            (result.u2 < 0 ? 'Negative \u2192 real object for Lens 2' : 'Positive \u2192 virtual object for Lens 2'));
+
+        html += step(n++, 'Image from Lens 2',
+            '1/v\u2082 = 1/f\u2082 \u2212 1/u\u2082<br>' +
+            '1/v\u2082 = 1/' + result.f2 + ' \u2212 1/(' + result.u2.toFixed(2) + ')<br>' +
+            'v\u2082 = <strong>' + fmtLen(result.v2) + '</strong> (' + (result.img2Real ? 'Real' : 'Virtual') + ')<br>' +
+            'm\u2082 = v\u2082/u\u2082 = ' + result.v2.toFixed(2) + '/' + result.u2.toFixed(2) + ' = <strong>' + fmtMag(result.m2) + '</strong>');
+
+        html += step(n++, 'Total Magnification',
+            'm_total = m\u2081 \u00D7 m\u2082 = ' + result.m1.toFixed(4) + ' \u00D7 ' + result.m2.toFixed(4) + '<br>' +
+            '<strong>m_total = ' + fmtMag(result.mTotal) + '</strong><br><br>' +
+            'Final image height: h\u2032 = m \u00D7 h = ' + result.mTotal.toFixed(4) + ' \u00D7 ' + result.h + '<br>' +
+            '<strong>h\u2032 = ' + fmtLen(result.hPrime) + '</strong>');
+
+        html += step(n++, 'Image Properties',
+            '<strong>Nature:</strong> ' + (result.img2Real ? 'Real (can be projected)' : 'Virtual (cannot be projected)') + '<br>' +
+            '<strong>Orientation:</strong> ' + (result.img2Inverted ? 'Inverted' : 'Upright') + '<br>' +
+            '<strong>Size:</strong> ' + (Math.abs(Math.abs(result.mTotal) - 1) < 0.01 ? 'Same size' : (result.isMagnified ? 'Magnified (|m| > 1)' : 'Diminished (|m| < 1)')));
+    }
+
+    container.innerHTML = html;
+
+    // Render KaTeX if available
+    if (result.mode === 'lensmaker' && window.katex) {
+        var katexEl = $('lc-katex-lm');
+        if (katexEl) {
+            try {
+                var formula = result.isThick
+                    ? '\\frac{1}{f} = (\\mu-1)\\left[\\frac{1}{R_1} - \\frac{1}{R_2} + \\frac{(\\mu-1)\\,t}{\\mu\\,R_1\\,R_2}\\right]'
+                    : '\\frac{1}{f} = \\left(\\frac{\\mu_1}{\\mu_2} - 1\\right)\\left(\\frac{1}{R_1} - \\frac{1}{R_2}\\right)';
+                window.katex.render(formula, katexEl, { displayMode: true });
+            } catch(e) { /* ignore */ }
+        }
     }
 }
 
-function calculateThinLens() {
-    let f = parseFloat(document.getElementById('focal-length').value) * lengthConv[document.getElementById('focal-unit').value];
-    let u = parseFloat(document.getElementById('object-dist').value) * lengthConv[document.getElementById('object-unit').value];
-    let v = parseFloat(document.getElementById('image-dist').value) * lengthConv[document.getElementById('image-unit').value];
-    const h_o = parseFloat(document.getElementById('object-height').value) || 5;
-
-    // Apply sign convention for diverging lens
-    if (lensType === 'diverging' && f > 0) {
-        f = -Math.abs(f);
-    } else if (lensType === 'converging' && f < 0) {
-        f = Math.abs(f);
-    }
-
-    // Solve for the unknown variable using 1/f = 1/v - 1/u (or 1/v = 1/f + 1/u)
-    if (solveFor === 'v') {
-        // 1/v = 1/f + 1/u
-        if (f !== 0 && u !== 0) {
-            v = 1 / (1/f + 1/u);
-        }
-    } else if (solveFor === 'u') {
-        // 1/u = 1/v - 1/f
-        if (f !== 0 && v !== 0) {
-            u = 1 / (1/v - 1/f);
-        }
-    } else if (solveFor === 'f') {
-        // 1/f = 1/v - 1/u
-        if (u !== 0 && v !== 0) {
-            f = 1 / (1/v - 1/u);
-        }
-    }
-
-    // Calculate magnification and image height
-    const m = -v / u;  // Lateral magnification (negative sign for real image inversion)
-    const h_i = m * h_o;
-    const power = 100 / f; // Power in diopters (f in cm, so 100/f = 1/(f/100) = 1/f_meters)
-
-    // Determine image characteristics
-    const isReal = v > 0;
-    const isInverted = m < 0;
-    const isMagnified = Math.abs(m) > 1;
-
-    // Update results
-    document.getElementById('result-image').textContent = formatLength(v);
-    document.getElementById('result-image-note').textContent = isReal ? 'Real image' : 'Virtual image';
-    document.getElementById('result-mag').textContent = formatMag(m);
-    document.getElementById('result-height').textContent = formatLength(h_i);
-    document.getElementById('result-power').textContent = (power >= 0 ? '+' : '') + power.toFixed(1) + ' D';
-
-    // Update info pills
-    document.getElementById('info-u').textContent = 'u = ' + formatLength(u);
-    document.getElementById('info-v').textContent = 'v = ' + formatLength(v);
-    document.getElementById('info-f').textContent = 'f = ' + formatLength(f);
-
-    // Update image property badges
-    updatePropertyBadges(isReal, isInverted, isMagnified, Math.abs(m));
-
-    // Draw ray diagram
-    drawRayDiagram(f, u, v, h_o, h_i, m);
-
-    // Generate steps
-    generateThinLensSteps(f, u, v, m, h_o, h_i, power, isReal, isInverted, isMagnified);
+function step(num, title, body) {
+    return '<div class="lc-step">' +
+        '<div class="lc-step-number">' + num + '</div>' +
+        '<div class="lc-step-content">' +
+            '<div class="lc-step-desc"><strong>' + title + '</strong></div>' +
+            '<div style="font-size:0.8125rem;color:var(--text-secondary);line-height:1.7;">' + body + '</div>' +
+        '</div></div>';
 }
 
-function calculateLensMaker() {
-    const mu = parseFloat(document.getElementById('refractive-index').value) || 1.5;
-    const R1 = parseFloat(document.getElementById('radius1').value) || 20;
-    const R2 = parseFloat(document.getElementById('radius2').value) || -20;
+// ==================== Drawing ====================
 
-    // Lens maker formula: 1/f = (μ - 1)(1/R₁ - 1/R₂)
-    const oneOverF = (mu - 1) * (1/R1 - 1/R2);
-    const f = 1 / oneOverF;
-    const power = 100 / f;
+function drawDiagram(canvas, result) {
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width;
+    var H = canvas.height;
 
-    // Update focal length input for thin lens calculations
-    document.getElementById('focal-length').value = f.toFixed(2);
+    // Background
+    var bg = themeColor('#fafbff', '#0c1220');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
 
-    // Update results
-    document.getElementById('result-image').textContent = formatLength(f);
-    document.getElementById('result-image-note').textContent = f > 0 ? 'Converging lens' : 'Diverging lens';
+    // Grid
+    drawGrid(ctx, W, H);
 
-    document.querySelector('#results-grid .result-card.highlight .result-label').textContent = 'Focal Length';
+    if (result.error) {
+        ctx.font = '14px Inter, sans-serif';
+        ctx.fillStyle = themeColor('#991b1b', '#fca5a5');
+        ctx.textAlign = 'center';
+        ctx.fillText(result.error, W/2, H/2);
+        return;
+    }
 
-    document.getElementById('result-mag').textContent = 'μ = ' + mu.toFixed(2);
-    document.getElementById('result-height').textContent = 'R₁ = ' + R1 + ' cm';
-    document.getElementById('result-power').textContent = (power >= 0 ? '+' : '') + power.toFixed(2) + ' D';
-
-    // Update labels
-    document.querySelector('#results-grid .result-card:nth-child(2) .result-label').textContent = 'Refractive Index';
-    document.querySelector('#results-grid .result-card:nth-child(3) .result-label').textContent = 'Radius R₁';
-
-    document.getElementById('info-u').textContent = 'μ = ' + mu.toFixed(2);
-    document.getElementById('info-v').textContent = 'R₁ = ' + R1 + ' cm';
-    document.getElementById('info-f').textContent = 'f = ' + formatLength(f);
-
-    // Update property badges for lens type
-    const propReal = document.getElementById('prop-real');
-    const propOrientation = document.getElementById('prop-orientation');
-    const propSize = document.getElementById('prop-size');
-
-    propReal.textContent = f > 0 ? 'Converging' : 'Diverging';
-    propReal.className = 'property-badge ' + (f > 0 ? 'real' : 'virtual');
-    propOrientation.textContent = 'R₂ = ' + R2 + ' cm';
-    propOrientation.className = 'property-badge erect';
-    propSize.textContent = 'P = ' + power.toFixed(2) + ' D';
-    propSize.className = 'property-badge magnified';
-
-    drawLensMakerDiagram(f, R1, R2, mu);
-    generateLensMakerSteps(mu, R1, R2, f, power);
-}
-
-function calculateCombined() {
-    const f1 = parseFloat(document.getElementById('f1').value) || 10;
-    const f2 = parseFloat(document.getElementById('f2').value) || 15;
-    const d = parseFloat(document.getElementById('separation').value) || 0;
-
-    let F, formula;
-
-    if (d === 0) {
-        // Lenses in contact: 1/F = 1/f₁ + 1/f₂
-        F = 1 / (1/f1 + 1/f2);
-        formula = 'contact';
+    if (result.mode === 'lensmaker') {
+        drawLensMakerDiagram(ctx, W, H, result);
+    } else if (result.mode === 'combined') {
+        drawCombinedDiagram(ctx, W, H, result);
     } else {
-        // Separated lenses: 1/F = 1/f₁ + 1/f₂ - d/(f₁f₂)
-        F = 1 / (1/f1 + 1/f2 - d/(f1*f2));
-        formula = 'separated';
-    }
-
-    const P = 100 / F;
-    const P1 = 100 / f1;
-    const P2 = 100 / f2;
-
-    // Update results
-    document.getElementById('result-image').textContent = formatLength(F);
-    document.getElementById('result-image-note').textContent = F > 0 ? 'Equivalent converging' : 'Equivalent diverging';
-
-    document.querySelector('#results-grid .result-card.highlight .result-label').textContent = 'Equivalent Focal Length';
-
-    document.getElementById('result-mag').textContent = 'P₁ = ' + P1.toFixed(1) + ' D';
-    document.getElementById('result-height').textContent = 'P₂ = ' + P2.toFixed(1) + ' D';
-    document.getElementById('result-power').textContent = (P >= 0 ? '+' : '') + P.toFixed(2) + ' D';
-
-    document.querySelector('#results-grid .result-card:nth-child(2) .result-label').textContent = 'Power of Lens 1';
-    document.querySelector('#results-grid .result-card:nth-child(3) .result-label').textContent = 'Power of Lens 2';
-
-    document.getElementById('info-u').textContent = 'f₁ = ' + f1 + ' cm';
-    document.getElementById('info-v').textContent = 'f₂ = ' + f2 + ' cm';
-    document.getElementById('info-f').textContent = 'F = ' + formatLength(F);
-
-    // Update badges
-    const propReal = document.getElementById('prop-real');
-    const propOrientation = document.getElementById('prop-orientation');
-    const propSize = document.getElementById('prop-size');
-
-    propReal.textContent = d === 0 ? 'In Contact' : 'd = ' + d + ' cm';
-    propReal.className = 'property-badge erect';
-    propOrientation.textContent = 'P_total = ' + P.toFixed(2) + ' D';
-    propOrientation.className = 'property-badge magnified';
-    propSize.textContent = F > 0 ? 'Converging' : 'Diverging';
-    propSize.className = 'property-badge ' + (F > 0 ? 'real' : 'virtual');
-
-    drawCombinedDiagram(f1, f2, d, F);
-    generateCombinedSteps(f1, f2, d, F, P, P1, P2, formula);
-}
-
-function updatePropertyBadges(isReal, isInverted, isMagnified, absMag) {
-    const propReal = document.getElementById('prop-real');
-    const propOrientation = document.getElementById('prop-orientation');
-    const propSize = document.getElementById('prop-size');
-
-    propReal.textContent = isReal ? 'Real Image' : 'Virtual Image';
-    propReal.className = 'property-badge ' + (isReal ? 'real' : 'virtual');
-
-    propOrientation.textContent = isInverted ? 'Inverted' : 'Erect';
-    propOrientation.className = 'property-badge ' + (isInverted ? 'inverted' : 'erect');
-
-    if (Math.abs(absMag - 1) < 0.01) {
-        propSize.textContent = 'Same Size';
-        propSize.className = 'property-badge erect';
-    } else {
-        propSize.textContent = isMagnified ? 'Magnified' : 'Diminished';
-        propSize.className = 'property-badge ' + (isMagnified ? 'magnified' : 'diminished');
+        drawDoubleLensDiagram(ctx, W, H, result);
     }
 }
 
-function drawRayDiagram(f, u, v, h_o, h_i, m) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function drawGrid(ctx, W, H) {
+    ctx.strokeStyle = themeColor('rgba(0,0,0,0.04)', 'rgba(255,255,255,0.04)');
+    ctx.lineWidth = 1;
+    var step = 30;
+    for (var x = step; x < W; x += step) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for (var y = step; y < H; y += step) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+}
 
-    const width = canvas.width;
-    const height = canvas.height;
-    const padding = 50; // Padding from edges
-    const cy = height / 2; // Optical axis
-
-    // Calculate the extents we need to show
-    const leftExtent = Math.abs(u); // Object is to the left
-    const rightExtent = Math.max(Math.abs(v), Math.abs(f) * 1.5); // Image or focal point
-    const totalExtent = leftExtent + rightExtent;
-
-    // Calculate scale to fit everything within the canvas
-    const availableWidth = width - padding * 2;
-    const scale = Math.min(availableWidth / totalExtent, 4); // Cap scale at 4 for very small values
-
-    // Position lens so everything fits
-    // Lens X position based on proportional space for object and image
-    const lensX = padding + (leftExtent / totalExtent) * availableWidth;
-
-    // Ensure lens is roughly centered if scale allows
-    const cx = Math.max(padding + 60, Math.min(width - padding - 60, lensX));
-
-    // Draw optical axis
-    ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+function drawAxis(ctx, W, H) {
+    var cy = H / 2;
+    ctx.strokeStyle = themeColor('rgba(0,0,0,0.15)', 'rgba(255,255,255,0.15)');
     ctx.lineWidth = 1;
     ctx.setLineDash([5, 5]);
     ctx.beginPath();
     ctx.moveTo(10, cy);
-    ctx.lineTo(width - 10, cy);
+    ctx.lineTo(W - 10, cy);
     ctx.stroke();
     ctx.setLineDash([]);
-
-    // Draw lens (scale height based on canvas)
-    const lensHeight = Math.min(height - 60, 120);
-    ctx.strokeStyle = '#4f46e5';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-
-    if (lensType === 'converging' || f > 0) {
-        // Converging lens (convex)
-        ctx.moveTo(cx - 5, cy - lensHeight/2);
-        ctx.quadraticCurveTo(cx + 15, cy, cx - 5, cy + lensHeight/2);
-        ctx.moveTo(cx + 5, cy - lensHeight/2);
-        ctx.quadraticCurveTo(cx - 15, cy, cx + 5, cy + lensHeight/2);
-    } else {
-        // Diverging lens (concave)
-        ctx.moveTo(cx - 5, cy - lensHeight/2);
-        ctx.quadraticCurveTo(cx - 20, cy, cx - 5, cy + lensHeight/2);
-        ctx.moveTo(cx + 5, cy - lensHeight/2);
-        ctx.quadraticCurveTo(cx + 20, cy, cx + 5, cy + lensHeight/2);
-    }
-    ctx.stroke();
-
-    // Draw arrows at lens tips
-    ctx.beginPath();
-    ctx.moveTo(cx, cy - lensHeight/2 - 8);
-    ctx.lineTo(cx - 5, cy - lensHeight/2);
-    ctx.lineTo(cx + 5, cy - lensHeight/2);
-    ctx.closePath();
-    ctx.fillStyle = '#4f46e5';
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(cx, cy + lensHeight/2 + 8);
-    ctx.lineTo(cx - 5, cy + lensHeight/2);
-    ctx.lineTo(cx + 5, cy + lensHeight/2);
-    ctx.closePath();
-    ctx.fill();
-
-    // Draw focal points (constrained to visible area)
-    const focalDist = Math.abs(f) * scale;
-    const focalX1 = Math.max(padding - 20, cx - focalDist);
-    const focalX2 = Math.min(width - padding + 20, cx + focalDist);
-
-    ctx.fillStyle = '#dc2626';
-    ctx.beginPath();
-    ctx.arc(focalX1, cy, 4, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(focalX2, cy, 4, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.font = 'bold 10px Inter';
-    ctx.fillStyle = '#dc2626';
-    ctx.textAlign = 'center';
-    ctx.fillText('F', focalX1, cy + 15);
-    ctx.fillText("F'", focalX2, cy + 15);
-
-    // Draw object (constrained to visible area)
-    const objXRaw = cx - u * scale;
-    const objX = Math.max(padding - 10, Math.min(width - padding + 10, objXRaw));
-    const maxObjHeight = (height / 2) - 40; // Leave room for labels
-    const objHeight = Math.min(h_o * scale * 2, maxObjHeight, 50);
-
-    ctx.strokeStyle = '#2563eb';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(objX, cy);
-    ctx.lineTo(objX, cy - objHeight);
-    ctx.stroke();
-
-    // Object arrow
-    ctx.beginPath();
-    ctx.moveTo(objX, cy - objHeight - 6);
-    ctx.lineTo(objX - 4, cy - objHeight);
-    ctx.lineTo(objX + 4, cy - objHeight);
-    ctx.closePath();
-    ctx.fillStyle = '#2563eb';
-    ctx.fill();
-
-    ctx.font = '10px Inter';
-    ctx.fillText('Object', objX, cy + 20);
-
-    // Draw image (if valid)
-    if (isFinite(v) && Math.abs(v) < 10000) {
-        const imgXRaw = cx + v * scale;
-        const imgX = Math.max(padding - 10, Math.min(width - padding + 10, imgXRaw));
-
-        // Scale image height proportionally but cap it
-        const imgHeightRaw = Math.abs(m) * objHeight;
-        const imgHeight = Math.min(imgHeightRaw, maxObjHeight, 60);
-        const imgDirection = m < 0 ? 1 : -1;  // Inverted if m < 0
-
-        // Use dashed line for virtual image
-        if (v < 0) {
-            ctx.setLineDash([4, 3]);
-        }
-
-        ctx.strokeStyle = '#059669';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(imgX, cy);
-        ctx.lineTo(imgX, cy - imgHeight * imgDirection);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Image arrow
-        ctx.beginPath();
-        const arrowY = cy - imgHeight * imgDirection;
-        ctx.moveTo(imgX, arrowY + (imgDirection > 0 ? -6 : 6));
-        ctx.lineTo(imgX - 4, arrowY);
-        ctx.lineTo(imgX + 4, arrowY);
-        ctx.closePath();
-        ctx.fillStyle = '#059669';
-        ctx.fill();
-
-        ctx.fillText(v > 0 ? 'Image' : 'Virtual', imgX, cy + 20);
-
-        // Draw rays (only if both object and image are visible)
-        if (objX > padding - 20 && imgX < width - padding + 20) {
-            drawRays(cx, cy, objX, cy - objHeight, imgX, cy - imgHeight * imgDirection, focalX1, focalX2, v < 0, width);
-        }
-    }
-
-    // Draw scale indicator
-    drawScaleIndicator(scale, width, height);
 }
 
-function drawScaleIndicator(scale, width, height) {
-    const indicatorY = height - 15;
-
-    ctx.font = '9px Inter';
-    ctx.fillStyle = '#94a3b8';
-    ctx.textAlign = 'right';
-
-    // Show scale info
-    const cmPerPixel = 1 / scale;
-    if (cmPerPixel >= 10) {
-        ctx.fillText(`Scale: 1px = ${cmPerPixel.toFixed(0)}cm`, width - 10, indicatorY);
-    } else if (cmPerPixel >= 1) {
-        ctx.fillText(`Scale: 1px = ${cmPerPixel.toFixed(1)}cm`, width - 10, indicatorY);
-    } else {
-        ctx.fillText(`Scale: ${scale.toFixed(1)}px = 1cm`, width - 10, indicatorY);
-    }
-}
-
-function drawRays(lensX, axisY, objX, objTopY, imgX, imgTopY, f1X, f2X, isVirtual, canvasWidth) {
-    ctx.lineWidth = 1.5;
-    const rayExtend = Math.min(80, canvasWidth - lensX - 20); // Don't extend beyond canvas
-
-    // Ray 1: Parallel to axis, then through focus
-    ctx.strokeStyle = 'rgba(220, 38, 38, 0.7)';
-    ctx.beginPath();
-    ctx.moveTo(objX, objTopY);
-    ctx.lineTo(lensX, objTopY);
-    if (isVirtual) {
-        ctx.setLineDash([4, 3]);
-        ctx.lineTo(imgX, imgTopY);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.beginPath();
-        ctx.moveTo(lensX, objTopY);
-        const slope = (axisY - objTopY) / (f2X - lensX);
-        ctx.lineTo(lensX + rayExtend, objTopY + slope * rayExtend);
-    } else {
-        ctx.lineTo(imgX, imgTopY);
-    }
-    ctx.stroke();
-
-    // Ray 2: Through optical center (undeviated)
-    ctx.strokeStyle = 'rgba(5, 150, 105, 0.7)';
-    ctx.beginPath();
-    ctx.moveTo(objX, objTopY);
-    if (isVirtual) {
-        ctx.setLineDash([4, 3]);
-        ctx.lineTo(imgX, imgTopY);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.beginPath();
-        ctx.moveTo(objX, objTopY);
-        const slope = (objTopY - axisY) / (lensX - objX);
-        ctx.lineTo(lensX + rayExtend, axisY + slope * (lensX + rayExtend - objX));
-    } else {
-        ctx.lineTo(imgX, imgTopY);
-    }
-    ctx.stroke();
-
-    // Ray 3: Through focus, then parallel (only if f1X is valid)
-    if (Math.abs(objX - f1X) > 5) { // Avoid division by zero
-        ctx.strokeStyle = 'rgba(124, 58, 237, 0.7)';
-        const ray3LensY = axisY + (objTopY - axisY) * (lensX - f1X) / (objX - f1X);
-
-        // Only draw if ray3LensY is within reasonable bounds
-        if (Math.abs(ray3LensY - axisY) < canvas.height / 2) {
-            ctx.beginPath();
-            ctx.moveTo(objX, objTopY);
-            ctx.lineTo(lensX, ray3LensY);
-            if (isVirtual) {
-                ctx.setLineDash([4, 3]);
-                ctx.lineTo(imgX, imgTopY);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                ctx.beginPath();
-                ctx.moveTo(lensX, ray3LensY);
-                ctx.lineTo(lensX + rayExtend, ray3LensY);
-            } else {
-                ctx.lineTo(imgX, imgTopY);
-            }
-            ctx.stroke();
-        }
-    }
-}
-
-function drawLensMakerDiagram(f, R1, R2, mu) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const width = canvas.width;
-    const height = canvas.height;
-    const cx = width / 2;
-    const cy = height / 2;
-
-    // Scale lens height to fit container
-    const lensH = Math.min(height - 80, 120);
-    const lensW = Math.min(width / 6, 25);
-
-    // Draw lens shape based on radii
-    ctx.fillStyle = 'rgba(79, 70, 229, 0.15)';
-    ctx.strokeStyle = '#4f46e5';
+function drawLensShape(ctx, cx, cy, lh, f, isConverging) {
+    var lw = 12;
+    ctx.strokeStyle = themeColor('#6366f1', '#818cf8');
     ctx.lineWidth = 3;
+    ctx.fillStyle = themeColor('rgba(99,102,241,0.1)', 'rgba(99,102,241,0.15)');
 
     ctx.beginPath();
-    if (R1 > 0 && R2 < 0) {
+    if (isConverging) {
         // Biconvex
-        ctx.ellipse(cx, cy, lensW, lensH/2, 0, 0, Math.PI * 2);
-    } else if (R1 < 0 && R2 > 0) {
-        // Biconcave
-        ctx.moveTo(cx - lensW * 0.7, cy - lensH/2);
-        ctx.quadraticCurveTo(cx + lensW * 0.5, cy, cx - lensW * 0.7, cy + lensH/2);
-        ctx.lineTo(cx + lensW * 0.7, cy + lensH/2);
-        ctx.quadraticCurveTo(cx - lensW * 0.5, cy, cx + lensW * 0.7, cy - lensH/2);
-        ctx.closePath();
-    } else if (R1 > 0 && R2 > 0) {
-        // Convex-concave (meniscus converging)
-        ctx.moveTo(cx - lensW * 0.5, cy - lensH/2);
-        ctx.quadraticCurveTo(cx + lensW, cy, cx - lensW * 0.5, cy + lensH/2);
-        ctx.lineTo(cx + lensW * 0.5, cy + lensH/2);
-        ctx.quadraticCurveTo(cx + lensW * 0.3, cy, cx + lensW * 0.5, cy - lensH/2);
-        ctx.closePath();
+        ctx.moveTo(cx - 3, cy - lh/2);
+        ctx.quadraticCurveTo(cx + lw, cy, cx - 3, cy + lh/2);
+        ctx.quadraticCurveTo(cx - lw, cy, cx - 3, cy - lh/2);
     } else {
-        // Other shapes - default ellipse
-        ctx.ellipse(cx, cy, lensW * 0.8, lensH/2, 0, 0, Math.PI * 2);
+        // Biconcave
+        ctx.moveTo(cx - lw * 0.7, cy - lh/2);
+        ctx.quadraticCurveTo(cx + lw * 0.3, cy, cx - lw * 0.7, cy + lh/2);
+        ctx.lineTo(cx + lw * 0.7, cy + lh/2);
+        ctx.quadraticCurveTo(cx - lw * 0.3, cy, cx + lw * 0.7, cy - lh/2);
+        ctx.closePath();
     }
     ctx.fill();
     ctx.stroke();
 
-    // Draw optical axis
-    ctx.strokeStyle = 'rgba(0,0,0,0.15)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 4]);
+    // Arrows at tips
+    ctx.fillStyle = themeColor('#6366f1', '#818cf8');
     ctx.beginPath();
-    ctx.moveTo(30, cy);
-    ctx.lineTo(width - 30, cy);
+    ctx.moveTo(cx, cy - lh/2 - 6);
+    ctx.lineTo(cx - 4, cy - lh/2);
+    ctx.lineTo(cx + 4, cy - lh/2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + lh/2 + 6);
+    ctx.lineTo(cx - 4, cy + lh/2);
+    ctx.lineTo(cx + 4, cy + lh/2);
+    ctx.closePath();
+    ctx.fill();
+}
+
+// ===== Lens Maker Diagram =====
+function drawLensMakerDiagram(ctx, W, H, result) {
+    drawAxis(ctx, W, H);
+    var cx = W / 2;
+    var cy = H / 2;
+    var lh = Math.min(H - 80, 160);
+
+    // Draw lens based on R1, R2
+    var R1 = result.R1;
+    var R2 = result.R2;
+    var isPlano1 = Math.abs(R1) > 90000;
+    var isPlano2 = Math.abs(R2) > 90000;
+    var lw = 18;
+
+    ctx.fillStyle = themeColor('rgba(99,102,241,0.12)', 'rgba(99,102,241,0.2)');
+    ctx.strokeStyle = themeColor('#6366f1', '#818cf8');
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+    // Left surface
+    if (isPlano1) {
+        ctx.moveTo(cx - lw/2, cy - lh/2);
+        ctx.lineTo(cx - lw/2, cy + lh/2);
+    } else if (R1 > 0) {
+        ctx.moveTo(cx - lw/2, cy - lh/2);
+        ctx.quadraticCurveTo(cx + lw * 0.8, cy, cx - lw/2, cy + lh/2);
+    } else {
+        ctx.moveTo(cx - lw/2, cy - lh/2);
+        ctx.quadraticCurveTo(cx - lw * 1.5, cy, cx - lw/2, cy + lh/2);
+    }
+    // Right surface
+    if (isPlano2) {
+        ctx.lineTo(cx + lw/2, cy + lh/2);
+        ctx.lineTo(cx + lw/2, cy - lh/2);
+    } else if (R2 < 0) {
+        ctx.lineTo(cx + lw/2, cy + lh/2);
+        ctx.quadraticCurveTo(cx + lw * 1.5, cy, cx + lw/2, cy - lh/2);
+    } else {
+        ctx.lineTo(cx + lw/2, cy + lh/2);
+        ctx.quadraticCurveTo(cx - lw * 0.8, cy, cx + lw/2, cy - lh/2);
+    }
+    ctx.closePath();
+    ctx.fill();
     ctx.stroke();
-    ctx.setLineDash([]);
 
-    // Labels - positioned relative to container size
-    const labelOffset = Math.min(width / 4, 80);
-
-    ctx.font = 'bold 13px Inter';
-    ctx.fillStyle = '#4f46e5';
+    // Mu label inside lens
+    ctx.font = 'bold 14px Inter, sans-serif';
+    ctx.fillStyle = themeColor('#6366f1', '#a5b4fc');
     ctx.textAlign = 'center';
-    ctx.fillText('μ = ' + mu.toFixed(2), cx, cy + 5);
+    ctx.fillText('\u03BC = ' + result.mu.toFixed(2), cx, cy + 5);
 
-    ctx.font = '11px Inter';
-    ctx.fillStyle = '#64748b';
-    ctx.fillText('R₁ = ' + R1 + ' cm', cx - labelOffset, cy - lensH/3);
-    ctx.fillText('R₂ = ' + R2 + ' cm', cx + labelOffset, cy + lensH/3);
+    // R1, R2 labels
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillStyle = themeColor('#64748b', '#94a3b8');
+    var lbl1 = 'R\u2081 = ' + fmtRadius(result.R1);
+    var lbl2 = 'R\u2082 = ' + fmtRadius(result.R2);
+    ctx.textAlign = 'right';
+    ctx.fillText(lbl1, cx - lw - 15, cy - lh/3);
+    ctx.textAlign = 'left';
+    ctx.fillText(lbl2, cx + lw + 15, cy + lh/3);
 
-    // Draw curvature indicators
-    ctx.strokeStyle = '#94a3b8';
+    // Leader lines
+    ctx.strokeStyle = themeColor('#94a3b8', '#64748b');
     ctx.lineWidth = 1;
-
-    // R1 indicator (left side)
     ctx.beginPath();
-    ctx.moveTo(cx - lensW - 5, cy - lensH/4);
-    ctx.lineTo(cx - labelOffset + 20, cy - lensH/3);
+    ctx.moveTo(cx - lw/2, cy - lh/4);
+    ctx.lineTo(cx - lw - 12, cy - lh/3);
     ctx.stroke();
-
-    // R2 indicator (right side)
     ctx.beginPath();
-    ctx.moveTo(cx + lensW + 5, cy + lensH/4);
-    ctx.lineTo(cx + labelOffset - 20, cy + lensH/3);
+    ctx.moveTo(cx + lw/2, cy + lh/4);
+    ctx.lineTo(cx + lw + 12, cy + lh/3);
     ctx.stroke();
 
     // Focal length result
-    ctx.font = 'bold 14px Inter';
-    ctx.fillStyle = f > 0 ? '#059669' : '#ea580c';
-    ctx.fillText('f = ' + f.toFixed(2) + ' cm', cx, height - 20);
+    ctx.font = 'bold 14px Inter, sans-serif';
+    ctx.fillStyle = result.isConverging ? themeColor('#059669', '#34d399') : themeColor('#ea580c', '#fb923c');
+    ctx.textAlign = 'center';
+    ctx.fillText('f = ' + result.f.toFixed(2) + ' cm', cx, H - 30);
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillStyle = themeColor('#64748b', '#94a3b8');
+    ctx.fillText(result.isConverging ? '(Converging)' : '(Diverging)', cx, H - 14);
 
-    // Lens type indicator
-    ctx.font = '11px Inter';
-    ctx.fillStyle = '#64748b';
-    ctx.fillText(f > 0 ? '(Converging)' : '(Diverging)', cx, height - 5);
+    // Draw focal point markers if finite
+    if (isFinite(result.f) && Math.abs(result.f) < 500) {
+        var scale = Math.min((W - 100) / (Math.abs(result.f) * 2.5), 3);
+        var fx = Math.abs(result.f) * scale;
+        var f1x = Math.max(30, cx - fx);
+        var f2x = Math.min(W - 30, cx + fx);
+
+        ctx.fillStyle = themeColor('#dc2626', '#f87171');
+        ctx.beginPath(); ctx.arc(f1x, cy, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(f2x, cy, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.font = 'bold 10px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('F', f1x, cy + 16);
+        ctx.fillText("F'", f2x, cy + 16);
+    }
 }
 
-function drawCombinedDiagram(f1, f2, d, F) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+// ===== Combined Lenses Diagram =====
+function drawCombinedDiagram(ctx, W, H, result) {
+    drawAxis(ctx, W, H);
+    var cy = H / 2;
+    var lh = Math.min(H - 100, 120);
 
-    const width = canvas.width;
-    const height = canvas.height;
-    const cy = height / 2;
-    const padding = 60;
-
-    // Calculate lens positions to fit in container
-    const availableWidth = width - padding * 2;
-    const separation = d === 0 ? 30 : Math.min(d * 2, availableWidth * 0.4);
-
-    const lens1X = padding + (availableWidth - separation) / 2;
-    const lens2X = lens1X + separation;
-
-    // Draw optical axis
-    ctx.strokeStyle = 'rgba(0,0,0,0.15)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 4]);
-    ctx.beginPath();
-    ctx.moveTo(20, cy);
-    ctx.lineTo(width - 20, cy);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Scale lens height to container
-    const lensHeight = Math.min(height - 100, 80);
+    var separation = result.d === 0 ? 30 : Math.min(result.d * 2, (W - 160) * 0.4);
+    var cx1 = W / 2 - separation / 2;
+    var cx2 = W / 2 + separation / 2;
 
     // Draw lens 1
-    drawSimpleLens(lens1X, cy, f1 > 0, '#3b82f6', lensHeight);
-    ctx.font = 'bold 11px Inter';
-    ctx.fillStyle = '#3b82f6';
-    ctx.textAlign = 'center';
-    ctx.fillText('f₁ = ' + f1 + ' cm', lens1X, cy + lensHeight/2 + 20);
-
+    drawLensShape(ctx, cx1, cy, lh, result.f1, result.f1 > 0);
     // Draw lens 2
-    drawSimpleLens(lens2X, cy, f2 > 0, '#f59e0b', lensHeight);
-    ctx.fillStyle = '#f59e0b';
-    ctx.fillText('f₂ = ' + f2 + ' cm', lens2X, cy + lensHeight/2 + 20);
+    ctx.save();
+    var oldStroke = ctx.strokeStyle;
+    drawLensShape(ctx, cx2, cy, lh, result.f2, result.f2 > 0);
+    ctx.restore();
 
-    // Draw separation indicator
-    if (d > 0) {
-        const sepY = cy + lensHeight/2 + 35;
-        ctx.strokeStyle = '#64748b';
+    // Color-code lens 2 differently
+    ctx.strokeStyle = themeColor('#f59e0b', '#fbbf24');
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx2, cy - lh/2 - 6, 0.1, 0, 0); // tiny invisible arc to reset path
+    ctx.stroke();
+
+    // Labels
+    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = themeColor('#6366f1', '#818cf8');
+    ctx.fillText('f\u2081 = ' + result.f1 + ' cm', cx1, cy + lh/2 + 22);
+    ctx.fillStyle = themeColor('#f59e0b', '#fbbf24');
+    ctx.fillText('f\u2082 = ' + result.f2 + ' cm', cx2, cy + lh/2 + 22);
+
+    // Separation indicator
+    if (result.d > 0) {
+        var sepY = cy + lh/2 + 38;
+        ctx.strokeStyle = themeColor('#64748b', '#94a3b8');
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(lens1X, sepY);
-        ctx.lineTo(lens2X, sepY);
-        ctx.stroke();
-
-        // Arrow heads
-        ctx.beginPath();
-        ctx.moveTo(lens1X + 5, sepY - 3);
-        ctx.lineTo(lens1X, sepY);
-        ctx.lineTo(lens1X + 5, sepY + 3);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(lens2X - 5, sepY - 3);
-        ctx.lineTo(lens2X, sepY);
-        ctx.lineTo(lens2X - 5, sepY + 3);
-        ctx.stroke();
-
-        ctx.fillStyle = '#64748b';
-        ctx.font = '10px Inter';
-        ctx.fillText('d = ' + d + ' cm', (lens1X + lens2X) / 2, sepY + 12);
+        ctx.moveTo(cx1, sepY); ctx.lineTo(cx2, sepY); ctx.stroke();
+        // Arrowheads
+        ctx.beginPath(); ctx.moveTo(cx1+5, sepY-3); ctx.lineTo(cx1, sepY); ctx.lineTo(cx1+5, sepY+3); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx2-5, sepY-3); ctx.lineTo(cx2, sepY); ctx.lineTo(cx2-5, sepY+3); ctx.stroke();
+        ctx.font = '10px Inter, sans-serif';
+        ctx.fillStyle = themeColor('#64748b', '#94a3b8');
+        ctx.fillText('d = ' + result.d + ' cm', (cx1+cx2)/2, sepY + 14);
     } else {
-        ctx.fillStyle = '#64748b';
-        ctx.font = '10px Inter';
-        ctx.fillText('(in contact)', (lens1X + lens2X) / 2, cy + lensHeight/2 + 40);
+        ctx.font = '10px Inter, sans-serif';
+        ctx.fillStyle = themeColor('#64748b', '#94a3b8');
+        ctx.fillText('(in contact)', (cx1+cx2)/2, cy + lh/2 + 38);
     }
 
     // Result at top
-    ctx.font = 'bold 14px Inter';
-    ctx.fillStyle = F > 0 ? '#059669' : '#ea580c';
-    ctx.fillText('Equivalent: F = ' + F.toFixed(2) + ' cm', width / 2, 25);
-
-    ctx.font = '11px Inter';
-    ctx.fillStyle = '#64748b';
-    ctx.fillText(F > 0 ? '(Converging system)' : '(Diverging system)', width / 2, 42);
+    ctx.font = 'bold 14px Inter, sans-serif';
+    ctx.fillStyle = result.isConverging ? themeColor('#059669', '#34d399') : themeColor('#ea580c', '#fb923c');
+    ctx.fillText('F = ' + result.F.toFixed(2) + ' cm  |  P = ' + fmtPower(result.P), W/2, 28);
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillStyle = themeColor('#64748b', '#94a3b8');
+    ctx.fillText(result.isConverging ? '(Converging system)' : '(Diverging system)', W/2, 44);
 }
 
-function drawSimpleLens(x, y, isConverging, color, h = 80) {
-    ctx.strokeStyle = color;
+// ===== Double Lens System Diagram =====
+function drawDoubleLensDiagram(ctx, W, H, result) {
+    drawAxis(ctx, W, H);
+    var cy = H / 2;
+    var padding = 60;
+    var lh = Math.min(H - 100, 100);
+
+    // Layout: [obj] ---- [L1] ---- d ---- [L2] ---- [img]
+    var absU1 = Math.abs(result.u1);
+    var absV1 = Math.abs(result.v1);
+    var absV2 = Math.abs(result.v2);
+    var d = result.d;
+
+    // Total horizontal span: u1 + d + |v2| (or more if v2 is behind L2)
+    var leftSpan = absU1;
+    var rightSpan = d + Math.max(absV2, 0);
+    var totalSpan = leftSpan + rightSpan;
+
+    if (totalSpan < 1) totalSpan = 100;
+
+    var availW = W - padding * 2;
+    var scale = Math.min(availW / totalSpan, 4);
+    scale = Math.max(scale, 0.5);
+
+    var L1x = padding + leftSpan * scale;
+    L1x = Math.max(padding + 40, Math.min(W - padding - 80, L1x));
+    var L2x = L1x + d * scale;
+    L2x = Math.max(L1x + 30, Math.min(W - padding - 40, L2x));
+
+    // Object
+    var objX = Math.max(padding, L1x - absU1 * scale);
+    var maxArrowH = (H / 2) - 30;
+    var objH = Math.min(Math.abs(result.h) * scale * 1.5, maxArrowH, 50);
+
+    // Draw lenses
+    drawLensShape(ctx, L1x, cy, lh, result.f1, result.f1 > 0);
+
+    // Save and draw L2 with different color
+    var saveStroke = themeColor('#6366f1', '#818cf8');
+    drawLensShape(ctx, L2x, cy, lh, result.f2, result.f2 > 0);
+
+    // Labels for lenses
+    ctx.font = '9px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = themeColor('#6366f1', '#a5b4fc');
+    ctx.fillText('L\u2081 (f=' + result.f1 + ')', L1x, cy + lh/2 + 16);
+    ctx.fillText('L\u2082 (f=' + result.f2 + ')', L2x, cy + lh/2 + 16);
+
+    // Draw object arrow
+    ctx.strokeStyle = themeColor('#2563eb', '#60a5fa');
     ctx.lineWidth = 2.5;
     ctx.beginPath();
+    ctx.moveTo(objX, cy);
+    ctx.lineTo(objX, cy - objH);
+    ctx.stroke();
+    ctx.fillStyle = themeColor('#2563eb', '#60a5fa');
+    ctx.beginPath();
+    ctx.moveTo(objX, cy - objH - 5);
+    ctx.lineTo(objX - 4, cy - objH);
+    ctx.lineTo(objX + 4, cy - objH);
+    ctx.closePath();
+    ctx.fill();
+    ctx.font = '9px Inter, sans-serif';
+    ctx.fillText('Object', objX, cy + 12);
 
-    const curve = Math.min(h / 6, 12);
-    if (isConverging) {
-        ctx.moveTo(x - 4, y - h/2);
-        ctx.quadraticCurveTo(x + curve, y, x - 4, y + h/2);
-        ctx.moveTo(x + 4, y - h/2);
-        ctx.quadraticCurveTo(x - curve, y, x + 4, y + h/2);
+    // Intermediate image
+    var img1H = Math.min(Math.abs(result.m1) * objH, maxArrowH, 50);
+    var img1Dir = result.m1 < 0 ? 1 : -1; // inverted goes below axis
+    var img1X;
+    if (result.v1 > 0) {
+        img1X = L1x + result.v1 * scale;
     } else {
-        ctx.moveTo(x - 4, y - h/2);
-        ctx.quadraticCurveTo(x - curve, y, x - 4, y + h/2);
-        ctx.moveTo(x + 4, y - h/2);
-        ctx.quadraticCurveTo(x + curve, y, x + 4, y + h/2);
+        img1X = L1x + result.v1 * scale; // virtual: left of L1
     }
+    img1X = Math.max(padding, Math.min(W - padding, img1X));
+
+    // Draw intermediate image (dashed if virtual)
+    if (!result.img1Real) ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = themeColor('#f59e0b', '#fbbf24');
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(img1X, cy);
+    ctx.lineTo(img1X, cy - img1H * img1Dir);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = themeColor('#f59e0b', '#fbbf24');
+    ctx.font = '8px Inter, sans-serif';
+    ctx.fillText('I\u2081', img1X, cy + 12);
+
+    // Final image
+    var img2H = Math.min(Math.abs(result.mTotal) * objH, maxArrowH, 60);
+    var img2Dir = result.mTotal < 0 ? 1 : -1;
+    var img2X;
+    if (result.v2 > 0) {
+        img2X = L2x + result.v2 * scale;
+    } else {
+        img2X = L2x + result.v2 * scale;
+    }
+    img2X = Math.max(padding, Math.min(W - padding, img2X));
+
+    if (!result.img2Real) ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = themeColor('#059669', '#34d399');
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(img2X, cy);
+    ctx.lineTo(img2X, cy - img2H * img2Dir);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = themeColor('#059669', '#34d399');
+    ctx.beginPath();
+    var tip2Y = cy - img2H * img2Dir;
+    ctx.moveTo(img2X, tip2Y + (img2Dir > 0 ? -5 : 5));
+    ctx.lineTo(img2X - 4, tip2Y);
+    ctx.lineTo(img2X + 4, tip2Y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.font = '9px Inter, sans-serif';
+    ctx.fillText(result.img2Real ? 'Final Image' : 'Final (Virtual)', img2X, cy + 12);
+
+    // Draw rays through system (simplified: 2 rays)
+    ctx.lineWidth = 1.2;
+
+    // Ray 1: parallel from object → through F1 of L1 → continues to L2 → refracted
+    ctx.strokeStyle = themeColor('rgba(220,38,38,0.6)', 'rgba(248,113,113,0.6)');
+    ctx.beginPath();
+    ctx.moveTo(objX, cy - objH);
+    ctx.lineTo(L1x, cy - objH);
+    ctx.lineTo(img1X, cy - img1H * img1Dir);
     ctx.stroke();
 
-    // Draw small arrows at tips to indicate lens type
-    ctx.fillStyle = color;
-    if (isConverging) {
-        // Arrows pointing inward
-        ctx.beginPath();
-        ctx.moveTo(x, y - h/2 - 6);
-        ctx.lineTo(x - 4, y - h/2);
-        ctx.lineTo(x + 4, y - h/2);
-        ctx.closePath();
-        ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(x, y + h/2 + 6);
-        ctx.lineTo(x - 4, y + h/2);
-        ctx.lineTo(x + 4, y + h/2);
-        ctx.closePath();
-        ctx.fill();
+    // Ray 2: through center of L1 → undeviated → to L2
+    ctx.strokeStyle = themeColor('rgba(5,150,105,0.6)', 'rgba(52,211,153,0.6)');
+    ctx.beginPath();
+    ctx.moveTo(objX, cy - objH);
+    ctx.lineTo(L1x, cy - objH + (objH) * (L1x - objX) / (img1X - objX + 0.001));
+    ctx.lineTo(img1X, cy - img1H * img1Dir);
+    ctx.stroke();
+
+    // Separation label
+    if (d > 0) {
+        ctx.font = '9px Inter, sans-serif';
+        ctx.fillStyle = themeColor('#64748b', '#94a3b8');
+        ctx.fillText('d=' + d + 'cm', (L1x + L2x) / 2, cy - lh/2 - 8);
     }
+
+    // Title
+    ctx.font = 'bold 12px Inter, sans-serif';
+    ctx.fillStyle = themeColor('#1e293b', '#f1f5f9');
+    ctx.textAlign = 'center';
+    ctx.fillText('Double Lens System — m_total = ' + result.mTotal.toFixed(3) + '\u00D7', W/2, 18);
 }
 
-function formatLength(val) {
-    if (!isFinite(val)) return '∞';
-    if (Math.abs(val) >= 100) return (val / 100).toFixed(2) + ' m';
-    return val.toFixed(2) + ' cm';
+// ==================== Mode Switching ====================
+
+function switchMode(mode) {
+    state.mode = mode;
+
+    var btns = document.querySelectorAll('.lc-mode-btn');
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].classList.toggle('active', btns[i].getAttribute('data-mode') === mode);
+    }
+
+    var lm = $('lc-lensmaker-inputs');
+    var cb = $('lc-combined-inputs');
+    var dl = $('lc-doublelens-inputs');
+
+    if (lm) lm.style.display = mode === 'lensmaker' ? '' : 'none';
+    if (cb) cb.style.display = mode === 'combined' ? '' : 'none';
+    if (dl) dl.style.display = mode === 'doublelens' ? '' : 'none';
+
+    // Toggle example groups
+    var exLm = $('lc-ex-lensmaker');
+    var exCb = $('lc-ex-combined');
+    var exDl = $('lc-ex-doublelens');
+    if (exLm) exLm.style.display = mode === 'lensmaker' ? '' : 'none';
+    if (exCb) exCb.style.display = mode === 'combined' ? '' : 'none';
+    if (exDl) exDl.style.display = mode === 'doublelens' ? '' : 'none';
+
+    calculate();
 }
 
-function formatMag(m) {
-    if (!isFinite(m)) return '∞';
-    return (m >= 0 ? '+' : '') + m.toFixed(2) + '×';
+// ==================== Presets ====================
+
+function applyMaterial(mu) {
+    setInput('lc-mu', mu);
+    calculate();
 }
 
-function toggleSteps() {
-    stepsExpanded = !stepsExpanded;
-    document.getElementById('steps-body').classList.toggle('collapsed', !stepsExpanded);
-    document.getElementById('steps-toggle').textContent = stepsExpanded ? '▲ Hide' : '▼ Show';
+function applyShape(R1, R2) {
+    setInput('lc-r1', R1);
+    setInput('lc-r2', R2);
+    setInput('lc-r1-slider', R1);
+    setInput('lc-r2-slider', R2);
+    calculate();
 }
 
-function generateThinLensSteps(f, u, v, m, h_o, h_i, power, isReal, isInverted, isMagnified) {
-    const html = `
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">1</span>Given Values</div>
-            <div class="step-calc">
-                Focal length: <span class="highlight">f = ${formatLength(f)}</span> (${f > 0 ? 'Converging' : 'Diverging'})<br>
-                Object distance: <span class="highlight">u = ${formatLength(u)}</span><br>
-                Object height: <span class="highlight">hₒ = ${h_o} cm</span>
-            </div>
-        </div>
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">2</span>Apply Thin Lens Formula</div>
-            <div class="step-formula">1/f = 1/v - 1/u → 1/v = 1/f + 1/u</div>
-            <div class="step-calc">
-                1/v = 1/${f.toFixed(2)} + 1/${u.toFixed(2)}<br>
-                1/v = ${(1/f).toFixed(4)} + ${(1/u).toFixed(4)}<br>
-                1/v = ${(1/f + 1/u).toFixed(4)}<br>
-                v = <span class="highlight">${formatLength(v)}</span>
-            </div>
-            <div class="step-result">
-                <div class="step-result-label">Image Distance</div>
-                <div class="step-result-value">${formatLength(v)} (${isReal ? 'Real' : 'Virtual'})</div>
-            </div>
-        </div>
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">3</span>Calculate Magnification</div>
-            <div class="step-formula">m = -v/u = hᵢ/hₒ</div>
-            <div class="step-calc">
-                m = -${v.toFixed(2)} / ${u.toFixed(2)}<br>
-                m = <span class="highlight">${formatMag(m)}</span><br><br>
-                Image height: hᵢ = m × hₒ = ${m.toFixed(2)} × ${h_o}<br>
-                hᵢ = <span class="highlight">${h_i.toFixed(2)} cm</span>
-            </div>
-        </div>
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">4</span>Calculate Power</div>
-            <div class="step-formula">P = 1/f (in meters) = 100/f (f in cm)</div>
-            <div class="step-calc">
-                P = 100 / ${f.toFixed(2)}<br>
-                P = <span class="highlight">${power >= 0 ? '+' : ''}${power.toFixed(2)} Diopters</span>
-            </div>
-        </div>
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">5</span>Image Characteristics</div>
-            <div class="step-calc">
-                <strong>Nature:</strong> ${isReal ? 'Real (can be projected)' : 'Virtual (cannot be projected)'}<br>
-                <strong>Orientation:</strong> ${isInverted ? 'Inverted (m < 0)' : 'Erect (m > 0)'}<br>
-                <strong>Size:</strong> ${Math.abs(Math.abs(m) - 1) < 0.01 ? 'Same size' : (isMagnified ? 'Magnified (|m| > 1)' : 'Diminished (|m| < 1)')}
-            </div>
-        </div>
-    `;
-    document.getElementById('steps-body').innerHTML = html;
-}
-
-function generateLensMakerSteps(mu, R1, R2, f, power) {
-    const html = `
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">1</span>Given Values</div>
-            <div class="step-calc">
-                Refractive index: <span class="highlight">μ = ${mu}</span><br>
-                Radius of curvature R₁: <span class="highlight">${R1} cm</span><br>
-                Radius of curvature R₂: <span class="highlight">${R2} cm</span>
-            </div>
-        </div>
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">2</span>Apply Lens Maker's Formula</div>
-            <div class="step-formula">1/f = (μ - 1)(1/R₁ - 1/R₂)</div>
-            <div class="step-calc">
-                1/f = (${mu} - 1)(1/${R1} - 1/${R2})<br>
-                1/f = ${(mu - 1).toFixed(2)} × (${(1/R1).toFixed(4)} - ${(1/R2).toFixed(4)})<br>
-                1/f = ${(mu - 1).toFixed(2)} × ${(1/R1 - 1/R2).toFixed(4)}<br>
-                1/f = ${((mu - 1) * (1/R1 - 1/R2)).toFixed(4)}<br>
-                f = <span class="highlight">${f.toFixed(2)} cm</span>
-            </div>
-            <div class="step-result">
-                <div class="step-result-label">Focal Length</div>
-                <div class="step-result-value">${f.toFixed(2)} cm</div>
-            </div>
-        </div>
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">3</span>Calculate Power</div>
-            <div class="step-formula">P = 100/f (Diopters)</div>
-            <div class="step-calc">
-                P = 100 / ${f.toFixed(2)}<br>
-                P = <span class="highlight">${power >= 0 ? '+' : ''}${power.toFixed(2)} D</span>
-            </div>
-        </div>
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">4</span>Lens Type</div>
-            <div class="step-calc">
-                ${f > 0 ? '<strong style="color: #059669;">Converging Lens (f > 0)</strong><br>This lens brings parallel rays to a focus.' : '<strong style="color: #ea580c;">Diverging Lens (f < 0)</strong><br>This lens spreads parallel rays apart.'}
-            </div>
-        </div>
-    `;
-    document.getElementById('steps-body').innerHTML = html;
-}
-
-function generateCombinedSteps(f1, f2, d, F, P, P1, P2, formula) {
-    const html = `
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">1</span>Given Values</div>
-            <div class="step-calc">
-                Focal length f₁: <span class="highlight">${f1} cm</span> (P₁ = ${P1.toFixed(2)} D)<br>
-                Focal length f₂: <span class="highlight">${f2} cm</span> (P₂ = ${P2.toFixed(2)} D)<br>
-                Separation: <span class="highlight">d = ${d} cm</span> ${d === 0 ? '(in contact)' : ''}
-            </div>
-        </div>
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">2</span>Apply ${d === 0 ? 'Contact' : 'Separated'} Lens Formula</div>
-            <div class="step-formula">${d === 0 ? '1/F = 1/f₁ + 1/f₂' : '1/F = 1/f₁ + 1/f₂ - d/(f₁f₂)'}</div>
-            <div class="step-calc">
-                ${d === 0 ? `
-                    1/F = 1/${f1} + 1/${f2}<br>
-                    1/F = ${(1/f1).toFixed(4)} + ${(1/f2).toFixed(4)}<br>
-                    1/F = ${(1/f1 + 1/f2).toFixed(4)}
-                ` : `
-                    1/F = 1/${f1} + 1/${f2} - ${d}/(${f1} × ${f2})<br>
-                    1/F = ${(1/f1).toFixed(4)} + ${(1/f2).toFixed(4)} - ${(d/(f1*f2)).toFixed(4)}<br>
-                    1/F = ${(1/f1 + 1/f2 - d/(f1*f2)).toFixed(4)}
-                `}<br>
-                F = <span class="highlight">${F.toFixed(2)} cm</span>
-            </div>
-            <div class="step-result">
-                <div class="step-result-label">Equivalent Focal Length</div>
-                <div class="step-result-value">${F.toFixed(2)} cm</div>
-            </div>
-        </div>
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">3</span>Calculate Equivalent Power</div>
-            <div class="step-formula">${d === 0 ? 'P = P₁ + P₂' : 'P = P₁ + P₂ - d×P₁×P₂/100'}</div>
-            <div class="step-calc">
-                ${d === 0 ? `
-                    P = ${P1.toFixed(2)} + ${P2.toFixed(2)}
-                ` : `
-                    P = ${P1.toFixed(2)} + ${P2.toFixed(2)} - ${d}×${P1.toFixed(2)}×${P2.toFixed(2)}/100<br>
-                    P = ${P1.toFixed(2)} + ${P2.toFixed(2)} - ${(d*P1*P2/100).toFixed(2)}
-                `}<br>
-                P = <span class="highlight">${P >= 0 ? '+' : ''}${P.toFixed(2)} D</span>
-            </div>
-        </div>
-        <div class="step-item">
-            <div class="step-title"><span class="step-number">4</span>Result</div>
-            <div class="step-calc">
-                The combination acts as a <strong>${F > 0 ? 'converging' : 'diverging'}</strong> lens system<br>
-                with equivalent focal length <span class="highlight">${F.toFixed(2)} cm</span><br>
-                and power <span class="highlight">${P >= 0 ? '+' : ''}${P.toFixed(2)} D</span>
-            </div>
-        </div>
-    `;
-    document.getElementById('steps-body').innerHTML = html;
-}
-
-function loadExample(num) {
-    const examples = {
-        1: { mode: 'thinlens', type: 'converging', f: 2, u: 2.5, h: 0.5 }, // Microscope
-        2: { mode: 'thinlens', type: 'converging', f: 5, u: 200, h: 100 }, // Camera (50mm = 5cm, 2m = 200cm)
-        3: { mode: 'thinlens', type: 'converging', f: 40, u: 25, h: 1 },   // Reading glasses (+2.5D = 40cm)
-        4: { mode: 'combined', f1: 100, f2: 5, d: 0 }                       // Telescope
+function applyExample(preset) {
+    var presets = {
+        'crown-biconvex':    { mode: 'lensmaker', mu: 1.52, muM: 1, R1: 20, R2: -20 },
+        'flint-biconcave':   { mode: 'lensmaker', mu: 1.62, muM: 1, R1: -15, R2: 15 },
+        'bk7-planoconvex':   { mode: 'lensmaker', mu: 1.5168, muM: 1, R1: 99999, R2: -25 },
+        'diamond':           { mode: 'lensmaker', mu: 2.42, muM: 1, R1: 10, R2: -10 },
+        'water-lens':        { mode: 'lensmaker', mu: 1.5, muM: 1.33, R1: 20, R2: -20 },
+        'meniscus':          { mode: 'lensmaker', mu: 1.52, muM: 1, R1: 20, R2: 40 },
+        'contact-conv':      { mode: 'combined', f1: 10, f2: 20, d: 0 },
+        'contact-achro':     { mode: 'combined', f1: 15, f2: -30, d: 0 },
+        'separated':         { mode: 'combined', f1: 10, f2: 15, d: 5 },
+        'telescope':         { mode: 'combined', f1: 100, f2: 5, d: 105 },
+        'microscope':        { mode: 'doublelens', f1: 1, f2: 5, d: 20, u: 1.2, h: 0.1 },
+        'projector':         { mode: 'doublelens', f1: 10, f2: 20, d: 40, u: 12, h: 2 },
+        'relay':             { mode: 'doublelens', f1: 15, f2: 15, d: 30, u: 30, h: 5 },
+        'telephoto':         { mode: 'doublelens', f1: 50, f2: -20, d: 35, u: 500, h: 50 }
     };
 
-    const ex = examples[num];
+    var p = presets[preset];
+    if (!p) return;
 
-    if (ex.mode === 'thinlens') {
-        setMode('thinlens');
-        setLensType(ex.type);
-        setSolveFor('v');
-        document.getElementById('focal-length').value = ex.f;
-        document.getElementById('object-dist').value = ex.u;
-        document.getElementById('object-height').value = ex.h;
-    } else if (ex.mode === 'combined') {
-        setMode('combined');
-        document.getElementById('f1').value = ex.f1;
-        document.getElementById('f2').value = ex.f2;
-        document.getElementById('separation').value = ex.d;
+    switchMode(p.mode);
+
+    if (p.mode === 'lensmaker') {
+        setInput('lc-mu', p.mu);
+        setInput('lc-medium-mu', p.muM);
+        setInput('lc-r1', p.R1);
+        setInput('lc-r2', p.R2);
+        setInput('lc-r1-slider', p.R1);
+        setInput('lc-r2-slider', p.R2);
+    } else if (p.mode === 'combined') {
+        setInput('lc-f1', p.f1);
+        setInput('lc-f2', p.f2);
+        setInput('lc-separation', p.d);
+    } else {
+        setInput('lc-dl-f1', p.f1);
+        setInput('lc-dl-f2', p.f2);
+        setInput('lc-dl-d', p.d);
+        setInput('lc-dl-u', p.u);
+        setInput('lc-dl-h', p.h);
     }
 
     calculate();
 }
 
-// Expose functions globally
-window.setMode = setMode;
-window.setLensType = setLensType;
-window.setSolveFor = setSolveFor;
-window.setRefractiveIndex = setRefractiveIndex;
-window.calculate = calculate;
-window.toggleSteps = toggleSteps;
-window.loadExample = loadExample;
+// ==================== Slider Sync ====================
+
+function syncSlider(inputId, sliderId) {
+    var input = $(inputId);
+    var slider = $(sliderId);
+    if (!input || !slider) return;
+
+    input.addEventListener('input', function() {
+        slider.value = input.value;
+    });
+    slider.addEventListener('input', function() {
+        input.value = slider.value;
+        calculate();
+    });
+}
+
+// ==================== Events ====================
+
+function bindEvents() {
+    // Mode buttons
+    var modeBtns = document.querySelectorAll('.lc-mode-btn');
+    for (var i = 0; i < modeBtns.length; i++) {
+        (function(btn) {
+            btn.addEventListener('click', function() {
+                switchMode(btn.getAttribute('data-mode'));
+            });
+        })(modeBtns[i]);
+    }
+
+    // Calculate button
+    var solveBtn = $('lc-solve-btn');
+    if (solveBtn) solveBtn.addEventListener('click', calculate);
+
+    // Auto-calculate on any input change
+    var allInputs = document.querySelectorAll('.lc-input, .lc-select');
+    for (var ai = 0; ai < allInputs.length; ai++) {
+        allInputs[ai].addEventListener('input', calculate);
+        allInputs[ai].addEventListener('change', calculate);
+    }
+
+    // Slider sync
+    syncSlider('lc-r1', 'lc-r1-slider');
+    syncSlider('lc-r2', 'lc-r2-slider');
+
+    // Medium dropdown → hidden input sync
+    var mediumSelect = $('lc-medium-select');
+    var mediumInput = $('lc-medium-mu');
+    if (mediumSelect && mediumInput) {
+        mediumSelect.addEventListener('change', function() {
+            if (mediumSelect.value === 'custom') {
+                mediumInput.style.display = '';
+                mediumInput.focus();
+            } else {
+                mediumInput.style.display = 'none';
+                mediumInput.value = mediumSelect.value;
+                calculate();
+            }
+        });
+    }
+
+    // Thick lens toggle
+    var thickToggle = $('lc-thick-toggle');
+    var thickSection = $('lc-thick-section');
+    if (thickToggle && thickSection) {
+        thickToggle.addEventListener('change', function() {
+            thickSection.style.display = thickToggle.checked ? '' : 'none';
+            calculate();
+        });
+    }
+
+    // Material chips
+    var matChips = document.querySelectorAll('.lc-mat-chip');
+    for (var j = 0; j < matChips.length; j++) {
+        (function(chip) {
+            chip.addEventListener('click', function(e) {
+                e.preventDefault();
+                applyMaterial(parseFloat(chip.getAttribute('data-mu')));
+            });
+        })(matChips[j]);
+    }
+
+    // Shape chips
+    var shapeChips = document.querySelectorAll('.lc-shape-chip');
+    for (var k = 0; k < shapeChips.length; k++) {
+        (function(chip) {
+            chip.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Highlight active shape
+                var all = document.querySelectorAll('.lc-shape-chip');
+                for (var s = 0; s < all.length; s++) all[s].classList.remove('active');
+                chip.classList.add('active');
+                var r1 = parseFloat(chip.getAttribute('data-r1'));
+                var r2 = parseFloat(chip.getAttribute('data-r2'));
+                applyShape(r1, r2);
+            });
+        })(shapeChips[k]);
+    }
+
+    // Example chips
+    var exChips = document.querySelectorAll('.lc-example-chip');
+    for (var m = 0; m < exChips.length; m++) {
+        (function(chip) {
+            chip.addEventListener('click', function(e) {
+                e.preventDefault();
+                applyExample(chip.getAttribute('data-example'));
+            });
+        })(exChips[m]);
+    }
+}
+
+// ==================== Init ====================
+
+function init() {
+    bindEvents();
+    calculate();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+
+})();
