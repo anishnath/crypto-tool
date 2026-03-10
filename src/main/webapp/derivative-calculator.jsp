@@ -251,7 +251,7 @@
                 <h1 class="tool-page-title">Derivative Calculator - Find Derivatives with Steps</h1>
                 <nav class="tool-breadcrumbs">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                    <a href="<%=request.getContextPath()%>/math/index.jsp">Math Tools</a> /
+                    <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
                     Derivative Calculator
                 </nav>
             </div>

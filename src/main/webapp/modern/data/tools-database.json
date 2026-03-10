@@ -266,7 +266,7 @@
     },
     {
       "name": "CTF Challenge Generator",
-      "url": "ctf/index.jsp",
+      "url": "ctf/",
       "category": "CTF & Challenges",
       "keywords": "CTF challenge generator capture the flag tools CTF maker stego crypto forensic",
       "description": "CTF Challenge Generator - Free online capture the flag challenge suite"
@@ -2839,7 +2839,7 @@
     },
     {
       "name": "Physics Calculators",
-      "url": "physics/index.jsp",
+      "url": "physics/",
       "category": "Physics",
       "keywords": "physics calculators, physics tools, mechanics, optics, waves, thermodynamics, electromagnetism, modern physics",
       "description": "Physics Calculators - 42 free physics calculators with step-by-step solutions"

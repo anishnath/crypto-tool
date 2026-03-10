@@ -428,7 +428,7 @@
         "@type": "ListItem",
         "position": 45,
         "name": "Exams and Practice",
-        "url": "<%= baseUrl %>/exams/index.jsp"
+        "url": "<%= baseUrl %>/exams/"
       }
     ]
   },

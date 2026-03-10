@@ -94,7 +94,7 @@
             <h1 class="tool-page-title">Integral Calculator with Steps</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/math/index.jsp">Math Tools</a> /
+                <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
                 Integral Calculator
             </nav>
         </div>

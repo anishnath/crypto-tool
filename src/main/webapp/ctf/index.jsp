@@ -13,7 +13,7 @@
         <jsp:param name="toolName" value="Free CTF Challenge Generator - Stego, Crypto & Forensic" />
         <jsp:param name="toolDescription" value="Create CTF challenges instantly: stego, crypto and forensic puzzles with solutions, hints, and SHA-256 flag verification. 100% free, client-side. No signup." />
         <jsp:param name="toolCategory" value="CTF & Challenges" />
-        <jsp:param name="toolUrl" value="ctf/index.jsp" />
+        <jsp:param name="toolUrl" value="ctf/" />
         <jsp:param name="toolKeywords" value="CTF challenge generator free, capture the flag maker online, create CTF challenges, steganography CTF generator, crypto CTF tool, forensic CTF creator, CTF puzzle generator, CTF flag maker, CTF practice online, CTF training tool free, online CTF builder, CTF competition generator, jeopardy CTF maker, CTF for beginners, cybersecurity CTF tool, CTF with solutions, CTF hints generator" />
         <jsp:param name="toolImage" value="logo.png" />
         <jsp:param name="toolFeatures" value="6 CTF categories: stego crypto forensic web RE OSINT,39+ encoding and cipher steps,11 difficulty levels across generators,6 crypto challenge types,Dynamic pipeline composition,Auto-generated solutions with full pipeline,Progressive solver hints,SHA-256 flag verification,Upload your own cover images,JSON challenge bundle export,100% client-side and free,No signup or registration" />
@@ -30,7 +30,7 @@
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "name": "Free CTF Challenge Generator Suite",
-      "url": "https://8gwifi.org/ctf/index.jsp",
+      "url": "https://8gwifi.org/ctf/",
       "mainEntity": {
         "@type": "ItemList",
         "numberOfItems": 7,
@@ -72,9 +72,9 @@
             }
           },
           { "@type": "ListItem", "position": 4, "item": { "@type": "WebApplication", "name": "Forensic CTF Generator", "url": "https://8gwifi.org/ctf/forensic-ctf-generator.jsp", "description": "25 forensic challenge types: polyglot, PCAP, metadata, static assets (Volatility, NTFS, firmware).", "applicationCategory": "SecurityApplication", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } } },
-          { "@type": "ListItem", "position": 5, "name": "Web Exploitation CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#web" },
+          { "@type": "ListItem", "position": 5, "name": "Web Exploitation CTF Generator", "url": "https://8gwifi.org/ctf/#web" },
           { "@type": "ListItem", "position": 6, "item": { "@type": "WebApplication", "name": "Reverse Engineering CTF Generator", "url": "https://8gwifi.org/ctf/re-ctf-generator.jsp", "description": "11 RE types: obfuscated code, logic gates, FSM, XOR chain, hex dump, struct parse. Native ELF via Docker.", "applicationCategory": "SecurityApplication", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } } },
-          { "@type": "ListItem", "position": 7, "name": "OSINT CTF Generator", "url": "https://8gwifi.org/ctf/index.jsp#osint" }
+          { "@type": "ListItem", "position": 7, "name": "OSINT CTF Generator", "url": "https://8gwifi.org/ctf/#osint" }
         ]
       }
     }

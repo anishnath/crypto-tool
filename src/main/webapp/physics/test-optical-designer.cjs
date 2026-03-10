@@ -534,6 +534,121 @@ var pmmaEdge = pmma.getN(0.3); // below tabulated range
 assert(isFinite(pmmaEdge) && pmmaEdge > 1.4, 'PMMA n at 300nm (edge): ' + pmmaEdge.toFixed(5));
 
 /* ================================================================
+ *  15. FINITE CONJUGATE (OBJECT DISTANCE)
+ * ================================================================ */
+section('Finite Conjugate');
+
+// Default objectDistance is Infinity
+var defDesign = new M.Design();
+assert(defDesign.objectDistance === Infinity, 'Default objectDistance = Infinity');
+
+// Set finite object distance
+var pcxFinite = M.PRESETS['Plano-Convex Singlet']();
+pcxFinite.objectDistance = 200;
+
+// generateBeamRays2D should produce diverging rays (non-zero slopes)
+var finiteRays = T.generateBeamRays2D(pcxFinite, 0);
+assert(finiteRays.length === pcxFinite.raysPerBeam, 'Finite: correct ray count');
+
+// On-axis, top ray should have positive slope (diverging downward from object above lens)
+var topRay = finiteRays[finiteRays.length - 1]; // h > 0
+var botRay = finiteRays[0]; // h < 0
+assert(topRay.slope > 0, 'Finite on-axis: top ray slope > 0: ' + topRay.slope.toFixed(6));
+assert(botRay.slope < 0, 'Finite on-axis: bottom ray slope < 0: ' + botRay.slope.toFixed(6));
+
+// Central ray (h=0) should have slope = 0 for on-axis object
+var midIdx = Math.floor(finiteRays.length / 2);
+assert(approx(finiteRays[midIdx].slope, 0, 0.001),
+  'Finite on-axis: central ray slope ≈ 0: ' + finiteRays[midIdx].slope.toFixed(6));
+
+// Slopes should be = h / objDist for on-axis object (objHeight = 0)
+assert(approx(topRay.slope, topRay.height / 200, 0.001),
+  'Finite: slope = h/d = ' + topRay.slope.toFixed(6) + ' ≈ ' + (topRay.height / 200).toFixed(6));
+
+// Collimated rays should have zero slope for on-axis
+var pcxInf = M.PRESETS['Plano-Convex Singlet']();
+var infRays = T.generateBeamRays2D(pcxInf, 0);
+assert(approx(infRays[0].slope, 0, 0.001), 'Infinite: on-axis slope = 0');
+
+// 2D trace with finite conjugate should succeed
+var finiteTrace = T.traceRay2D(pcxFinite, 5, 5/200, 0.55, false);
+assert(finiteTrace !== null, 'Finite: 2D trace succeeds');
+assert(finiteTrace.length > 0, 'Finite: 2D trace has segments');
+
+// traceAllBeams2D should work with finite conjugate
+var finiteBeams = T.traceAllBeams2D(pcxFinite, 0.55);
+assert(finiteBeams.length >= 1, 'Finite: traceAllBeams2D returns beams');
+assert(finiteBeams[0].raySegments.length > 0, 'Finite: beams have ray segments');
+assert(finiteBeams[0].inputSlopes !== undefined, 'Finite: beams include inputSlopes');
+assert(finiteBeams[0].inputSlopes.length === finiteBeams[0].raySegments.length,
+  'Finite: inputSlopes count matches raySegments count');
+
+// 3D rays should also diverge for finite conjugate
+var finite3D = T.generateBeamRays3D(pcxFinite, 0, 50);
+assert(finite3D.length > 0, 'Finite 3D: rays generated');
+// Check that ray directions are NOT all the same (diverging)
+var dirs = finite3D.map(function (r) { return r.dir[1]; });
+var allSame = dirs.every(function (d) { return approx(d, dirs[0], 0.0001); });
+assert(!allSame, 'Finite 3D: ray directions differ (diverging, not collimated)');
+
+// Spot diagram with finite conjugate
+var finiteSpots = T.computeSpotDiagram(pcxFinite, 0, 0.55, 50);
+assert(finiteSpots.length > 0, 'Finite: spot diagram has spots: ' + finiteSpots.length);
+
+// Metrics should include magnification for finite conjugate
+var finiteMetrics = T.computeMetrics(pcxFinite);
+assert(finiteMetrics.magnification !== null, 'Finite: magnification computed');
+assert(finiteMetrics.magnification < 0, 'Finite: magnification is negative (inverted image): ' + finiteMetrics.magnification.toFixed(4));
+
+// Metrics for infinite conjugate should have null magnification
+var infMetrics = T.computeMetrics(pcxInf);
+assert(infMetrics.magnification === null, 'Infinite: magnification is null');
+
+// Serialization round-trip preserves objectDistance
+var finiteJson = pcxFinite.toJSON();
+var finiteRestored = M.Design.fromJSON(finiteJson);
+assert(finiteRestored.objectDistance === 200, 'Round-trip preserves finite objectDistance: ' + finiteRestored.objectDistance);
+
+var infJson = pcxInf.toJSON();
+var infRestored = M.Design.fromJSON(infJson);
+assert(infRestored.objectDistance === Infinity, 'Round-trip preserves Infinity objectDistance');
+
+// Off-axis finite conjugate: object at height
+var pcxFiniteOffAxis = M.PRESETS['Plano-Convex Singlet']();
+pcxFiniteOffAxis.objectDistance = 200;
+pcxFiniteOffAxis.fovAngle = 5; // 5 degrees
+var offAxisRays = T.generateBeamRays2D(pcxFiniteOffAxis, 2.5); // 2.5 deg half-field
+assert(offAxisRays.length > 0, 'Finite off-axis: rays generated');
+// Object height = tan(2.5°) * 200 ≈ 8.73mm
+var expectedObjH = Math.tan(2.5 * Math.PI / 180) * 200;
+// Central ray (through pupil center h=0) should have slope = -objH / objDist
+var midRayOA = offAxisRays[Math.floor(offAxisRays.length / 2)];
+var expectedSlope = (0 - expectedObjH) / 200;
+assert(approx(midRayOA.slope, expectedSlope, 0.001),
+  'Finite off-axis: central slope = ' + midRayOA.slope.toFixed(6) + ' ≈ ' + expectedSlope.toFixed(6));
+
+// Ray aberration with finite conjugate
+var finiteAber = T.computeRayAberration(pcxFinite, 0, 0.55, 20);
+assert(finiteAber.length > 0, 'Finite: ray aberration computed: ' + finiteAber.length + ' points');
+
+// Autofocus should shift image plane for finite conjugate
+var pcxAF = M.PRESETS['Plano-Convex Singlet']();
+pcxAF.applyAutofocus(); // infinite conjugate first
+var bfdInf = pcxAF.surfaces[pcxAF.surfaces.length - 1].thickness;
+pcxAF.objectDistance = 200;
+pcxAF.applyAutofocus(); // finite conjugate
+var bfdFinite = pcxAF.surfaces[pcxAF.surfaces.length - 1].thickness;
+assert(bfdFinite > bfdInf, 'Finite AF: BFD shifts further (' + bfdFinite.toFixed(2) + ' > ' + bfdInf.toFixed(2) + ')');
+// For f≈100, objDist=200: 1/v = 1/100 - 1/200 = 1/200, v=200. BFD should be ~200 (vs ~96 for inf)
+assert(bfdFinite > 150, 'Finite AF: BFD ≈ 200mm (got ' + bfdFinite.toFixed(2) + ')');
+
+// Switching back to infinite should restore original BFD
+pcxAF.objectDistance = Infinity;
+pcxAF.applyAutofocus();
+var bfdBack = pcxAF.surfaces[pcxAF.surfaces.length - 1].thickness;
+assert(approx(bfdBack, bfdInf, 0.01), 'Back to Inf: BFD restores (' + bfdBack.toFixed(2) + ' ≈ ' + bfdInf.toFixed(2) + ')');
+
+/* ================================================================
  *  SUMMARY
  * ================================================================ */
 console.log('\n\x1b[1m===================================\x1b[0m');

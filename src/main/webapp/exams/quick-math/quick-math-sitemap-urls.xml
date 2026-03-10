@@ -4,7 +4,7 @@
 
   <!-- Quick Math Main Pages -->
   <url>
-    <loc>https://8gwifi.org/exams/quick-math/index.jsp</loc>
+    <loc>https://8gwifi.org/exams/quick-math/</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -945,4 +945,3 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
