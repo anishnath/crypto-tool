@@ -462,5 +462,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+
+<%@ include file="../modern/components/analytics.jsp" %>
 </body>
 </html>
