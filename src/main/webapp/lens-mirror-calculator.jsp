@@ -1,1082 +1,494 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
-<div lang="en">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FREE Lens Equation Calculator & Mirror Formula Calculator - Interactive Ray Diagram Tool</title>
-  <meta name="description" content="Free online lens equation calculator with interactive ray diagram. Calculate focal length, object distance, image distance, and magnification for converging/diverging lenses and concave/convex mirrors. Features: thin lens equation solver (1/f = 1/u + 1/v), real-time ray tracing visualization, lens power in diopters, combined lens calculator, sign convention guide, step-by-step solutions. Perfect for physics students, optometry, optical engineering.">
-  <meta name="keywords" content="lens equation calculator, mirror equation calculator, thin lens calculator, focal length calculator, lens formula calculator, magnification calculator, converging lens calculator, diverging lens calculator, concave mirror calculator, convex mirror calculator, lens power calculator, diopter calculator, optical calculator, ray diagram generator, optics calculator, physics lens calculator, image distance calculator, object distance calculator, real image virtual image calculator, optical physics tool, lens magnification, combined lens calculator, optometry calculator, optical engineering tools">
-  <link rel="canonical" href="https://8gwifi.org/lens-mirror-calculator.jsp">
-  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
-  <meta name="author" content="8gwifi.org">
-  <meta property="og:title" content="FREE Lens Equation Calculator & Interactive Ray Diagram Tool">
-  <meta property="og:description" content="Calculate focal length, magnification, image distance with interactive ray diagrams. Free tool for converging/diverging lenses and mirrors. Perfect for physics students.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://8gwifi.org/lens-mirror-calculator.jsp">
-  <meta property="og:image" content="https://8gwifi.org/images/lens-calculator.png">
-  <meta property="og:site_name" content="8gwifi.org - Free Online Tools">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="FREE Lens Equation Calculator - Interactive Ray Diagrams">
-  <meta name="twitter:description" content="Calculate lens focal length, magnification with real-time ray tracing. Free physics optics tool.">
-  <meta name="twitter:image" content="https://8gwifi.org/images/lens-calculator.png">
-  <%@ include file="header-script.jsp"%>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"SoftwareApplication",
-    "name":"Lens Equation Calculator & Mirror Formula Calculator",
-    "alternateName":"Thin Lens Calculator",
-    "url":"https://8gwifi.org/lens-mirror-calculator.jsp",
-    "applicationCategory":"EducationalApplication",
-    "applicationSubCategory":"Physics Simulation Tool",
-    "operatingSystem":"Web Browser (All Platforms)",
-    "browserRequirements":"Requires JavaScript. HTML5 Canvas Support.",
-    "softwareVersion":"1.0",
-    "description":"Professional lens equation calculator with interactive ray diagram visualization. Calculate focal length, object distance, image distance, and magnification using the thin lens equation (1/f = 1/u + 1/v). Features real-time ray tracing for converging lenses, diverging lenses, concave mirrors, and convex mirrors. Includes lens power calculator (diopters), combined lens system analyzer, and comprehensive sign convention guide. Perfect for physics students, optometry students, optical engineers, and educators.",
-    "featureList":[
-      "Thin lens equation calculator (1/f = 1/u + 1/v)",
-      "Interactive ray diagram with real-time visualization",
-      "Magnification calculator (m = v/u = h'/h)",
-      "Converging lens (convex) calculator",
-      "Diverging lens (concave) calculator",
-      "Concave mirror calculator",
-      "Convex mirror calculator",
-      "Lens power calculator (diopters: P = 1/f)",
-      "Combined lens system calculator",
-      "Real vs virtual image detection",
-      "Upright vs inverted image indication",
-      "Sign convention guide (New Cartesian)",
-      "Step-by-step calculation breakdown",
-      "Principal ray tracing (3 rays)",
-      "Object/image height visualization",
-      "Focal points marked clearly",
-      "Export ray diagrams as PNG",
-      "Share URL for configurations",
-      "Preset examples for learning"
-    ],
-    "offers":{
-      "@type":"Offer",
-      "price":"0",
-      "priceCurrency":"USD",
-      "availability":"https://schema.org/InStock",
-      "priceValidUntil":"2099-12-31"
-    },
-    "provider":{
-      "@type":"Organization",
-      "name":"8gwifi.org",
-      "url":"https://8gwifi.org"
-    },
-    "inLanguage":"en-US",
-    "isAccessibleForFree":true,
-    "educationalUse":["Learning","Teaching","Research","Homework","Problem Solving"],
-    "educationalLevel":["High School","Undergraduate","Graduate"],
-    "audience":{
-      "@type":"EducationalAudience",
-      "educationalRole":"Student, Teacher, Optometrist, Optical Engineer"
-    },
-    "learningResourceType":"Interactive Simulation Tool",
-    "interactivityType":"active",
-    "teaches":["Lens Equation","Mirror Formula","Ray Optics","Geometric Optics","Magnification","Focal Length","Image Formation"],
-    "keywords":"lens equation calculator, mirror formula, thin lens, focal length, magnification, ray diagram, optics calculator, converging lens, diverging lens, concave mirror, convex mirror",
-    "aggregateRating":{
-      "@type":"AggregateRating",
-      "ratingValue":"4.9",
-      "ratingCount":"1842",
-      "bestRating":"5",
-      "worstRating":"1"
-    }
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"FAQPage",
-    "mainEntity":[
-      {
-        "@type":"Question",
-        "name":"What is the thin lens equation?",
-        "acceptedAnswer":{
-          "@type":"Answer",
-          "text":"The thin lens equation is 1/f = 1/u + 1/v, where f is the focal length of the lens, u is the object distance from the lens, and v is the image distance from the lens. This fundamental equation in geometric optics relates the positions of an object and its image formed by a thin lens. For converging (convex) lenses, f is positive, while for diverging (concave) lenses, f is negative. The equation works for both lenses and mirrors using the New Cartesian sign convention."
-        }
-      },
-      {
-        "@type":"Question",
-        "name":"How do you calculate magnification from the lens equation?",
-        "acceptedAnswer":{
-          "@type":"Answer",
-          "text":"Magnification (m) is calculated using two equivalent formulas: m = v/u (ratio of image distance to object distance) or m = h'/h (ratio of image height to object height). If magnification is negative (m < 0), the image is inverted (upside down). If magnification is positive (m > 0), the image is upright. If |m| > 1, the image is magnified (larger than object). If |m| < 1, the image is diminished (smaller than object). For example, m = -2 means the image is inverted and twice the object's size."
-        }
-      },
-      {
-        "@type":"Question",
-        "name":"What is the difference between converging and diverging lenses?",
-        "acceptedAnswer":{
-          "@type":"Answer",
-          "text":"Converging lenses (convex lenses) are thicker in the middle than at the edges and bring parallel light rays to a focus at the focal point. They have positive focal lengths and can form both real (inverted) and virtual (upright) images depending on object position. Diverging lenses (concave lenses) are thinner in the middle and spread out parallel light rays as if they came from a focal point behind the lens. They have negative focal lengths and always produce virtual, upright, and diminished images. Converging lenses are used in magnifying glasses, cameras, and eyeglasses for farsightedness, while diverging lenses correct nearsightedness."
-        }
-      },
-      {
-        "@type":"Question",
-        "name":"How do concave and convex mirrors differ?",
-        "acceptedAnswer":{
-          "@type":"Answer",
-          "text":"Concave mirrors curve inward (like a cave) and can form both real and virtual images depending on object position. They have positive focal lengths (f = R/2, where R is radius of curvature). When the object is beyond the focal point, concave mirrors produce real, inverted images (used in telescopes, shaving mirrors at close range). Convex mirrors curve outward and always produce virtual, upright, and diminished images with negative focal lengths. Convex mirrors provide a wide field of view and are used in vehicle side mirrors, security mirrors, and blind-spot mirrors. The same lens equation (1/f = 1/u + 1/v) applies to both mirror types."
-        }
-      },
-      {
-        "@type":"Question",
-        "name":"What is lens power and how is it measured in diopters?",
-        "acceptedAnswer":{
-          "@type":"Answer",
-          "text":"Lens power (P) is the reciprocal of focal length in meters: P = 1/f (measured in diopters, D). A converging lens with focal length 0.5m has power +2D, while a diverging lens with focal length -0.25m has power -4D. Positive diopters indicate converging lenses (for farsightedness correction), and negative diopters indicate diverging lenses (for nearsightedness correction). Optometrists prescribe eyeglass lenses in diopters. For combined lenses in contact, total power is the sum: P_total = P₁ + P₂. For example, combining a +3D and +2D lens gives +5D total power. Higher absolute diopter values mean stronger lens power and shorter focal length."
-        }
-      },
-      {
-        "@type":"Question",
-        "name":"What are the sign conventions for lens and mirror equations?",
-        "acceptedAnswer":{
-          "@type":"Answer",
-          "text":"The New Cartesian sign convention is standard: (1) Distances measured from the lens/mirror center. (2) Distances measured in the direction of incident light are positive; opposite direction is negative. (3) Object distance (u) is usually negative (object on left side). (4) Real image distance (v) is positive (right side); virtual image distance is negative (left side). (5) Converging lens/concave mirror focal length is positive; diverging lens/convex mirror focal length is negative. (6) Heights measured upward from principal axis are positive; downward are negative. Following these conventions ensures the lens equation and magnification formulas work correctly. Different sign conventions exist, so always verify which system is being used."
-        }
-      }
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
-      {"@type":"ListItem","position":2,"name":"Physics Tools","item":"https://8gwifi.org/physics-tools.jsp"},
-      {"@type":"ListItem","position":3,"name":"Lens Equation Calculator","item":"https://8gwifi.org/lens-mirror-calculator.jsp"}
-    ]
-  }
-  </script>
-  <style>
-    .lens-calc .card-header{padding:.6rem .9rem;font-weight:600}
-    .lens-calc .card-body{padding:.7rem .9rem}
-    .lens-calc .form-group{margin-bottom:.55rem}
-    #lensCanvas{width:100%;height:400px;border:1px solid #e5e7eb;border-radius:6px;background:#f8fafc}
-    .badge-info{background:#dbeafe;color:#1e40af;font-size:0.85rem;padding:0.25rem 0.5rem}
-    .result-card{background:#f0f9ff;border-left:4px solid #3b82f6;padding:0.75rem;margin-bottom:0.5rem;border-radius:4px}
-    .result-label{font-weight:600;color:#1e40af;margin-right:0.5rem}
-    .result-value{font-family:monospace;font-size:1.1rem;color:#1e3a8a}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <meta name="resource-type" content="document">
+    <meta name="language" content="en">
+    <meta name="author" content="Anish Nath">
+    <meta name="context-path" content="<%=request.getContextPath()%>">
+
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Lens Equation Calculator - Ray Diagram & Mirror Formula" />
+        <jsp:param name="toolDescription" value="Free lens equation calculator with ray diagrams. Solve 1/f = 1/u + 1/v for 7 optical types: biconvex, plano-convex, concave mirror &amp; more. Step-by-step solutions, magnification, diopters." />
+        <jsp:param name="toolCategory" value="Physics Tools" />
+        <jsp:param name="toolUrl" value="lens-mirror-calculator.jsp" />
+        <jsp:param name="breadcrumbCategoryUrl" value="physics" />
+        <jsp:param name="toolKeywords" value="lens equation calculator, thin lens equation solver, mirror formula calculator, ray diagram generator, focal length calculator, magnification calculator, converging lens, diverging lens, plano-convex lens, plano-concave lens, concave mirror, convex mirror, plane mirror, radius of curvature, lens power diopters, image distance calculator, optics calculator" />
+        <jsp:param name="toolImage" value="lens-mirror-calculator.svg" />
+        <jsp:param name="toolFeatures" value="Thin lens equation solver (1/f = 1/u + 1/v),Interactive canvas ray diagram with 3 principal rays and glow effects,7 optical elements: biconvex biconcave plano-convex plano-concave concave mirror convex mirror plane mirror,Radius of curvature R = 2f for curved mirrors,Magnification and image height calculation,Lens power in diopters,Real vs virtual image detection with badges,Step-by-step KaTeX math solutions,10 preset examples for instant learning,PNG ray diagram export and shareable URLs,Dark mode support" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Select optical element|Choose from 7 types: biconvex lens biconcave lens plano-convex plano-concave concave mirror convex mirror or plane mirror,Enter known values|Input focal length (f) object distance (u) and object height (h) in centimeters. Use sliders for quick adjustment,Choose what to solve|Select Find Image (v) Find Object (u) or Find Focal Length (f) using the mode toggle,Click Calculate|Press Calculate to see the ray diagram step-by-step solution magnification and image properties,Export or share|Save the ray diagram as PNG or copy a shareable URL to send to classmates" />
+        <jsp:param name="educationalLevel" value="High School, Undergraduate" />
+        <jsp:param name="teaches" value="Geometric optics, thin lens equation, mirror formula, ray diagrams, magnification, image formation" />
+        <jsp:param name="faq1q" value="What is the thin lens equation and how does it work?" />
+        <jsp:param name="faq1a" value="The thin lens equation is 1/f = 1/u + 1/v, where f is the focal length, u is the object distance, and v is the image distance. It predicts where an image forms for any thin lens or spherical mirror. Converging elements (biconvex lens, plano-convex lens, concave mirror) have positive f. Diverging elements (biconcave lens, plano-concave lens, convex mirror) have negative f. A plane mirror has f = infinity." />
+        <jsp:param name="faq2q" value="How do you calculate magnification from the lens equation?" />
+        <jsp:param name="faq2a" value="Magnification m = v/u, which also equals image height divided by object height (h'/h). When m is negative the image is inverted; when positive it is upright. If |m| > 1 the image is magnified; if |m| < 1 it is diminished. For example, m = -2 means an inverted image twice the object's size. A plane mirror always gives m = 1." />
+        <jsp:param name="faq3q" value="What is the difference between real and virtual images?" />
+        <jsp:param name="faq3a" value="Real images form where light rays actually converge and can be projected onto a screen (v is positive in our sign convention). Virtual images form where rays only appear to diverge from and cannot be projected (v is negative). Converging lenses and concave mirrors can form both types. Diverging lenses, convex mirrors, and plane mirrors always form virtual images." />
+        <jsp:param name="faq4q" value="How is radius of curvature related to focal length?" />
+        <jsp:param name="faq4a" value="For spherical mirrors, the radius of curvature R equals twice the focal length: R = 2f. A concave mirror with f = 15 cm has R = 30 cm. This relationship comes from the geometry of reflection at a curved surface. Lenses use a more complex relation involving both surface radii and refractive index (lensmaker's equation)." />
+        <jsp:param name="faq5q" value="What is lens power and how is it measured in diopters?" />
+        <jsp:param name="faq5a" value="Lens power P is the reciprocal of focal length in meters: P = 1/f(m), measured in diopters (D). A converging lens with f = 50 cm has power +2D. Positive diopters mean converging, negative mean diverging. Optometrists prescribe eyeglasses in diopters. For lenses in contact, total power is P_total = P1 + P2." />
+        <jsp:param name="faq6q" value="What happens when the object is at the focal point?" />
+        <jsp:param name="faq6a" value="When the object is placed exactly at the focal point (u = -f), the image forms at infinity. The light rays emerge parallel after passing through the lens or reflecting off the mirror. This principle is used in searchlights and collimators. Our calculator shows an error message for this special case since v approaches infinity." />
+        <jsp:param name="faq7q" value="What are plano-convex and plano-concave lenses?" />
+        <jsp:param name="faq7a" value="Plano-convex lenses have one flat surface and one curved outward surface. They converge light (positive f) and are common in laser optics and condensers. Plano-concave lenses have one flat and one inward-curved surface, diverging light (negative f). Both follow the same thin lens equation as biconvex and biconcave lenses." />
+    </jsp:include>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/lens-mirror-calculator.css?v=<%=cacheVersion%>">
+
+    <%@ include file="modern/ads/ad-init.jsp" %>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+    <style>
+        .tool-action-btn { background: var(--lm-gradient) !important; }
+        .tool-badge { background: var(--lm-light); color: var(--lm-tool); }
+    </style>
 </head>
-<%@ include file="body-script.jsp"%>
-<div class="container mt-4 lens-calc">
-  <h1 class="mb-2">Lens Equation Calculator & Mirror Formula Calculator</h1>
-  <p class="text-muted mb-3">Calculate focal length, image distance, magnification with interactive ray diagram visualization. Supports converging/diverging lenses and concave/convex mirrors.</p>
+<body>
+<%@ include file="modern/components/nav-header.jsp" %>
 
-  <div class="row">
-    <div class="col-lg-4">
-      <div class="card mb-3">
-        <h5 class="card-header d-flex justify-content-between align-items-center">
-          Inputs
-          <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="presetBtn" data-toggle="dropdown">Examples</button>
-            <div class="dropdown-menu" aria-labelledby="presetBtn">
-              <h6 class="dropdown-header">Converging Lens</h6>
-              <a class="dropdown-item" href="#" data-preset="conv-real">Real Image (beyond f)</a>
-              <a class="dropdown-item" href="#" data-preset="conv-virtual">Virtual Image (within f)</a>
-              <a class="dropdown-item" href="#" data-preset="magnifying">Magnifying Glass</a>
-              <div class="dropdown-divider"></div>
-              <h6 class="dropdown-header">Diverging Lens</h6>
-              <a class="dropdown-item" href="#" data-preset="div-basic">Basic Diverging</a>
-              <a class="dropdown-item" href="#" data-preset="eyeglasses">Eyeglasses (-2D)</a>
-              <div class="dropdown-divider"></div>
-              <h6 class="dropdown-header">Mirrors</h6>
-              <a class="dropdown-item" href="#" data-preset="concave-mirror">Concave Mirror</a>
-              <a class="dropdown-item" href="#" data-preset="convex-mirror">Convex Mirror</a>
-            </div>
-          </div>
-        </h5>
-        <div class="card-body">
-          <div class="form-group">
-            <label for="opticalType">Type</label>
-            <select id="opticalType" class="form-control">
-              <option value="converging" selected>Converging Lens (Convex)</option>
-              <option value="diverging">Diverging Lens (Concave)</option>
-              <option value="concave-mirror">Concave Mirror</option>
-              <option value="convex-mirror">Convex Mirror</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="calcMode">Calculate</label>
-            <select id="calcMode" class="form-control">
-              <option value="find-v">Image Distance (v) from f and u</option>
-              <option value="find-u">Object Distance (u) from f and v</option>
-              <option value="find-f">Focal Length (f) from u and v</option>
-            </select>
-          </div>
-
-          <div id="inputF" class="form-group">
-            <label for="focalLength">Focal Length (f) <span class="text-muted">cm</span></label>
-            <div class="d-flex align-items-center">
-              <input id="focalLength" type="number" step="0.1" class="form-control d-inline-block" style="max-width:100px" value="10">
-              <input id="fSlider" type="range" min="-50" max="50" step="0.5" value="10" class="custom-range d-inline-block ml-2" style="width:200px;vertical-align:middle">
-            </div>
-            <small class="text-muted d-block">Positive for converging, negative for diverging</small>
-          </div>
-
-          <div id="inputU" class="form-group">
-            <label for="objectDist">Object Distance (u) <span class="text-muted">cm</span></label>
-            <div class="d-flex align-items-center">
-              <input id="objectDist" type="number" step="0.1" class="form-control d-inline-block" style="max-width:100px" value="-20">
-              <input id="uSlider" type="range" min="-100" max="-1" step="0.5" value="-20" class="custom-range d-inline-block ml-2" style="width:200px;vertical-align:middle">
-            </div>
-            <small class="text-muted d-block">Negative as per sign convention (object on left)</small>
-          </div>
-
-          <div id="inputV" class="form-group" style="display:none">
-            <label for="imageDist">Image Distance (v) <span class="text-muted">cm</span></label>
-            <div class="d-flex align-items-center">
-              <input id="imageDist" type="number" step="0.1" class="form-control d-inline-block" style="max-width:100px" value="20">
-              <input id="vSlider" type="range" min="-100" max="100" step="0.5" value="20" class="custom-range d-inline-block ml-2" style="width:200px;vertical-align:middle">
-            </div>
-            <small class="text-muted d-block">Positive for real image, negative for virtual</small>
-          </div>
-
-          <div class="form-group">
-            <label for="objectHeight">Object Height (h) <span class="text-muted">cm</span></label>
-            <div class="d-flex align-items-center">
-              <input id="objectHeight" type="number" step="0.1" class="form-control d-inline-block" style="max-width:100px" value="5">
-              <input id="hSlider" type="range" min="1" max="20" step="0.5" value="5" class="custom-range d-inline-block ml-2" style="width:200px;vertical-align:middle">
-            </div>
-          </div>
-
-          <div class="d-flex align-items-center">
-            <button id="btnCalculate" class="btn btn-primary btn-sm mr-2">Calculate</button>
-            <button id="btnSave" class="btn btn-outline-secondary btn-sm mr-2">Save PNG</button>
-            <button id="btnShare" class="btn btn-outline-secondary btn-sm">Share URL</button>
-          </div>
+<header class="tool-page-header">
+    <div class="tool-page-header-inner">
+        <div>
+            <h1 class="tool-page-title">Lens & Mirror Calculator</h1>
+            <nav class="tool-breadcrumbs">
+                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+                <a href="<%=request.getContextPath()%>/physics">Physics Tools</a> /
+                Lens & Mirror Calculator
+            </nav>
         </div>
-      </div>
+        <div class="tool-page-badges">
+            <span class="tool-badge">Free Online</span>
+            <span class="tool-badge">7 Optical Elements</span>
+            <span class="tool-badge">Ray Diagrams</span>
+            <span class="tool-badge">Step-by-Step</span>
+        </div>
+    </div>
+</header>
 
-        <div class="card mb-3" id="cardSteps">
-            <h5 class="card-header">Step-by-Step Calculation</h5>
-            <div class="card-body small">
-                <div id="stepsContent" style="line-height:1.8"></div>
+<section class="tool-description-section" style="background:var(--lm-light);">
+    <div class="tool-description-inner">
+        <div class="tool-description-content">
+            <p>Free <strong>lens equation calculator</strong> with <strong>interactive ray diagrams</strong>. Supports <strong>7 optical elements</strong> &mdash; biconvex, biconcave, plano-convex, plano-concave lenses, concave, convex, and plane mirrors. Solve <strong>1/f = 1/u + 1/v</strong> with step-by-step solutions, magnification, diopters, and <strong>radius of curvature</strong>.</p>
+        </div>
+        <%@ include file="modern/ads/ad-hero-banner.jsp" %>
+    </div>
+</section>
+
+<main class="tool-page-container lm-layout">
+    <!-- ==================== INPUT COLUMN ==================== -->
+    <div class="tool-input-column">
+        <div class="tool-card">
+            <div class="tool-card-header" style="background:var(--lm-gradient);">Lens & Mirror Calculator</div>
+            <div class="tool-card-body">
+
+                <!-- Optical Type -->
+                <div class="tool-form-group" style="margin-bottom:0.75rem;">
+                    <label class="lm-input-label" for="lm-type">Optical Element</label>
+                    <select class="lm-select" id="lm-type">
+                        <option value="converging" selected>Biconvex Lens (Converging)</option>
+                        <option value="diverging">Biconcave Lens (Diverging)</option>
+                        <option value="plano-convex">Plano-Convex Lens</option>
+                        <option value="plano-concave">Plano-Concave Lens</option>
+                        <option value="concave-mirror">Concave Mirror</option>
+                        <option value="convex-mirror">Convex Mirror</option>
+                        <option value="plane-mirror">Plane Mirror</option>
+                    </select>
+                </div>
+
+                <!-- Calc Mode Toggle -->
+                <div class="tool-form-group" style="margin-bottom:0.75rem;">
+                    <label class="lm-input-label">Solve For</label>
+                    <div class="lm-mode-toggle">
+                        <button type="button" class="lm-mode-btn active" data-mode="find-v">Image (v)</button>
+                        <button type="button" class="lm-mode-btn" data-mode="find-u">Object (u)</button>
+                        <button type="button" class="lm-mode-btn" data-mode="find-f">Focal (f)</button>
+                    </div>
+                </div>
+
+                <!-- Focal Length -->
+                <div class="tool-form-group" id="lm-group-f" style="margin-bottom:0.75rem;">
+                    <label class="lm-input-label" for="lm-focal">Focal Length (f) &mdash; cm</label>
+                    <div class="lm-slider-row">
+                        <input type="number" class="lm-input" id="lm-focal" value="10" step="0.1">
+                        <input type="range" class="lm-slider" id="lm-f-slider" min="-50" max="50" step="0.5" value="10">
+                    </div>
+                    <div class="lm-hint">Positive = converging, Negative = diverging</div>
+                </div>
+
+                <!-- Object Distance -->
+                <div class="tool-form-group" id="lm-group-u" style="margin-bottom:0.75rem;">
+                    <label class="lm-input-label" for="lm-obj-dist">Object Distance (u) &mdash; cm</label>
+                    <div class="lm-slider-row">
+                        <input type="number" class="lm-input" id="lm-obj-dist" value="-20" step="0.1">
+                        <input type="range" class="lm-slider" id="lm-u-slider" min="-100" max="-1" step="0.5" value="-20">
+                    </div>
+                    <div class="lm-hint">Negative (object on left, sign convention)</div>
+                </div>
+
+                <!-- Image Distance -->
+                <div class="tool-form-group" id="lm-group-v" style="display:none;margin-bottom:0.75rem;">
+                    <label class="lm-input-label" for="lm-img-dist">Image Distance (v) &mdash; cm</label>
+                    <div class="lm-slider-row">
+                        <input type="number" class="lm-input" id="lm-img-dist" value="20" step="0.1">
+                        <input type="range" class="lm-slider" id="lm-v-slider" min="-100" max="100" step="0.5" value="20">
+                    </div>
+                    <div class="lm-hint">Positive = real image, Negative = virtual</div>
+                </div>
+
+                <!-- Object Height -->
+                <div class="tool-form-group" style="margin-bottom:0.75rem;">
+                    <label class="lm-input-label" for="lm-obj-height">Object Height (h) &mdash; cm</label>
+                    <div class="lm-slider-row">
+                        <input type="number" class="lm-input" id="lm-obj-height" value="5" step="0.1">
+                        <input type="range" class="lm-slider" id="lm-h-slider" min="1" max="20" step="0.5" value="5">
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display:flex;gap:0.5rem;">
+                    <button type="button" class="tool-action-btn" id="lm-solve-btn" style="flex:1">Calculate</button>
+                </div>
+
+                <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
+
+                <!-- Quick Examples -->
+                <div class="tool-form-group">
+                    <label class="lm-input-label">Quick Examples</label>
+                    <div class="lm-examples">
+                        <button type="button" class="lm-example-chip" data-example="conv-real">Real Image</button>
+                        <button type="button" class="lm-example-chip" data-example="conv-virtual">Virtual Image</button>
+                        <button type="button" class="lm-example-chip" data-example="magnifying">Magnifier</button>
+                        <button type="button" class="lm-example-chip" data-example="div-basic">Diverging</button>
+                        <button type="button" class="lm-example-chip" data-example="eyeglasses">Eyeglasses</button>
+                        <button type="button" class="lm-example-chip" data-example="plano-convex">Plano-Convex</button>
+                        <button type="button" class="lm-example-chip" data-example="plano-concave">Plano-Concave</button>
+                        <button type="button" class="lm-example-chip" data-example="concave-mirror">Concave Mirror</button>
+                        <button type="button" class="lm-example-chip" data-example="convex-mirror">Convex Mirror</button>
+                        <button type="button" class="lm-example-chip" data-example="plane-mirror">Plane Mirror</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-8">
-      <div class="card mb-3">
-        <h5 class="card-header">Ray Diagram</h5>
-        <div class="card-body">
-          <canvas id="lensCanvas" height="400"></canvas>
+    <!-- ==================== OUTPUT COLUMN ==================== -->
+    <div class="tool-output-column">
+        <!-- Ray Diagram -->
+        <div class="tool-card" style="margin-bottom:1rem;">
+            <div class="tool-result-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--lm-tool);">
+                    <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                <h4>Ray Diagram</h4>
+            </div>
+            <div class="lm-diagram-wrap">
+                <canvas id="lm-diagram" width="900" height="500"></canvas>
+            </div>
         </div>
 
-          <div class="card mb-3">
-              <h5 class="card-header d-flex justify-content-between align-items-center">
-                  Results
-                  <button id="btnCopy" class="btn btn-outline-primary btn-sm"><i class="fas fa-copy"></i> Copy</button>
-              </h5>
-              <div class="card-body">
-                  <div id="results"></div>
-              </div>
-          </div>
-
-
-      </div>
-
-      <div class="card mb-3">
-        <h5 class="card-header">About Lens & Mirror Equations</h5>
-        <div class="card-body small">
-          <div><strong>Thin Lens Equation:</strong> 1/f = 1/u + 1/v relates focal length (f), object distance (u), and image distance (v). This equation applies to both thin lenses and spherical mirrors.</div>
-          <div class="mt-2"><strong>Magnification:</strong> m = v/u = h'/h where h' is image height and h is object height. Negative magnification indicates inverted image; |m| > 1 means enlarged image.</div>
-          <div class="mt-2"><strong>Lens Power:</strong> P = 1/f (in diopters when f is in meters). Used in optometry for prescribing corrective lenses. Positive power converges light (farsightedness correction); negative power diverges light (nearsightedness correction).</div>
-          <div class="mt-2"><strong>Real vs Virtual Images:</strong> Real images form where light rays actually converge (can be projected on screen), with positive v. Virtual images form where rays appear to diverge from (cannot be projected), with negative v.</div>
-          <div class="mt-2"><strong>Sign Convention (New Cartesian):</strong> Distances measured from lens/mirror center. Direction of incident light is positive. Object distance usually negative (left side). Real image v is positive (right side); virtual image v is negative (left side).</div>
-          <div class="mt-2"><strong>Applications:</strong> Cameras, telescopes, microscopes, eyeglasses, contact lenses, magnifying glasses, projectors, binoculars, and all optical instruments rely on lens equations for design and analysis.</div>
+        <!-- Results -->
+        <div class="tool-card" style="margin-bottom:1rem;">
+            <div class="tool-result-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--lm-tool);">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+                <h4>Results</h4>
+            </div>
+            <div class="tool-result-content" id="lm-result-content">
+                <div class="tool-empty-state" id="lm-empty-state">
+                    <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">1/f = 1/u + 1/v</div>
+                    <h3>Enter values to calculate</h3>
+                    <p>Solve lens and mirror equations with interactive ray diagrams.</p>
+                </div>
+                <div id="lm-results-container"></div>
+            </div>
+            <div class="tool-result-actions" id="lm-result-actions" style="display:none;gap:0.5rem;padding:0.75rem 1rem;border-top:1px solid var(--border)">
+                <button type="button" class="tool-action-btn" id="lm-share-btn" style="flex:1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                    Share Link
+                </button>
+                <button type="button" class="tool-action-btn" id="lm-save-png-btn" style="flex:1;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Save PNG
+                </button>
+            </div>
         </div>
-      </div>
 
-      <div class="card mb-3">
-        <h5 class="card-header">Related Physics Tools</h5>
-        <div class="card-body small">
-          <div class="mb-2">
-            <a href="snells-law-prism.jsp" class="btn btn-sm btn-outline-primary mr-2">
-              <i class="fas fa-prism"></i> Snell's Law & Prism Refraction Calculator
-            </a>
-          </div>
-          <div class="text-muted">
-            Explore light refraction, critical angles, and prism deviation. Complements lens calculations by understanding how light bends through different media before entering optical systems.
-          </div>
+        <!-- Steps -->
+        <div class="tool-card">
+            <div class="tool-result-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--lm-tool);">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                <h4>Step-by-Step Solution</h4>
+            </div>
+            <div class="tool-result-content" style="padding:1rem;">
+                <div id="lm-steps-container"></div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+
+    <!-- ==================== ADS COLUMN ==================== -->
+    <div class="tool-ads-column">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+    </div>
+</main>
+
+<!-- Mobile Ad Fallback -->
+<div class="tool-mobile-ad-container">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
 </div>
 
+<!-- Related Tools -->
+<jsp:include page="modern/components/related-tools.jsp">
+    <jsp:param name="currentToolUrl" value="lens-mirror-calculator.jsp"/>
+    <jsp:param name="keyword" value="physics"/>
+    <jsp:param name="limit" value="6"/>
+</jsp:include>
+
+<!-- In-Content Ad -->
+<div style="max-width:1200px;margin:1.5rem auto;padding:0 1rem;">
+    <%@ include file="modern/ads/ad-in-content-top.jsp" %>
+</div>
+
+<!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
+<section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+
+    <!-- 1. What is the Thin Lens Equation? -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">What is the Thin Lens Equation?</h2>
+        <p class="lm-anim" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
+            The <strong>thin lens equation</strong> 1/f = 1/u + 1/v relates the <strong>focal length</strong> (f), <strong>object distance</strong> (u), and <strong>image distance</strong> (v) for any thin lens or spherical mirror. It is the foundation of geometric optics, used to predict where images form and whether they are real or virtual.
+        </p>
+        <div class="lm-callout lm-callout-insight lm-anim lm-anim-d2">
+            <span class="lm-callout-icon">&#128161;</span>
+            <div class="lm-callout-text">
+                <strong>Key Insight:</strong> The same equation works for lenses and mirrors &mdash; only the sign conventions differ. Converging elements have positive focal lengths; diverging elements have negative focal lengths.
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Types of Optical Elements -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Types of Optical Elements</h2>
+        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
+            Understanding the seven optical elements supported by this calculator.
+        </p>
+        <div class="lm-edu-grid">
+            <div class="lm-edu-card lm-anim lm-anim-d1" style="border-left:3px solid #e11d48;">
+                <h4>Biconvex Lens (Converging)</h4>
+                <p>Both surfaces curve outward. Positive f. Forms real or virtual images. Used in cameras, magnifying glasses, and farsightedness correction.</p>
+            </div>
+            <div class="lm-edu-card lm-anim lm-anim-d1" style="border-left:3px solid #f43f5e;">
+                <h4>Biconcave Lens (Diverging)</h4>
+                <p>Both surfaces curve inward. Negative f. Always forms virtual, upright, diminished images. Used in nearsightedness correction and peepholes.</p>
+            </div>
+            <div class="lm-edu-card lm-anim lm-anim-d1" style="border-left:3px solid #ec4899;">
+                <h4>Plano-Convex Lens</h4>
+                <p>One flat surface, one convex. Positive f. Behaves like a converging lens. Common in laser optics, condensers, and imaging systems.</p>
+            </div>
+            <div class="lm-edu-card lm-anim lm-anim-d2" style="border-left:3px solid #f97316;">
+                <h4>Plano-Concave Lens</h4>
+                <p>One flat surface, one concave. Negative f. Behaves like a diverging lens. Used in beam expanders and to correct spherical aberration.</p>
+            </div>
+            <div class="lm-edu-card lm-anim lm-anim-d2" style="border-left:3px solid #3b82f6;">
+                <h4>Concave Mirror</h4>
+                <p>Curves inward (R = 2f). Positive f. Forms real or virtual images. Used in telescopes, headlights, and shaving mirrors.</p>
+            </div>
+            <div class="lm-edu-card lm-anim lm-anim-d2" style="border-left:3px solid #f59e0b;">
+                <h4>Convex Mirror</h4>
+                <p>Curves outward (R = 2f). Negative f. Always forms virtual, upright, diminished images. Used in vehicle side mirrors and security mirrors.</p>
+            </div>
+            <div class="lm-edu-card lm-anim lm-anim-d3" style="border-left:3px solid #8b5cf6;">
+                <h4>Plane Mirror</h4>
+                <p>Flat reflecting surface. f = &infin;, P = 0 D. Always forms virtual, upright, same-size images at equal distance behind the mirror. The simplest optical element.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Real-World Applications -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Real-World Applications</h2>
+        <div class="lm-edu-grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+            <div class="lm-edu-card lm-anim lm-anim-d1" style="border-left:3px solid #e11d48;">
+                <h4>Eyeglasses &amp; Contact Lenses</h4>
+                <p>Optometrists prescribe lenses in diopters (P = 1/f). Positive diopters correct farsightedness; negative correct nearsightedness.</p>
+            </div>
+            <div class="lm-edu-card lm-anim lm-anim-d2" style="border-left:3px solid #3b82f6;">
+                <h4>Cameras &amp; Telescopes</h4>
+                <p>Camera lenses use the thin lens equation to focus light on the sensor. Telescopes combine converging lenses/mirrors for magnification.</p>
+            </div>
+            <div class="lm-edu-card lm-anim lm-anim-d3" style="border-left:3px solid #10b981;">
+                <h4>Microscopes &amp; Projectors</h4>
+                <p>Compound microscopes use two converging lenses for extreme magnification. Projectors create enlarged real images on screens.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+        <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is the thin lens equation and how does it work?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">The thin lens equation is 1/f = 1/u + 1/v, where f is the focal length, u is the object distance, and v is the image distance. It predicts where an image forms for any thin lens or spherical mirror. Converging elements (biconvex lens, plano-convex lens, concave mirror) have positive f. Diverging elements (biconcave lens, plano-concave lens, convex mirror) have negative f. A plane mirror has f = infinity.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                How do you calculate magnification from the lens equation?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Magnification m = v/u, which also equals image height divided by object height (h'/h). When m is negative the image is inverted; when positive it is upright. If |m| > 1 the image is magnified; if |m| < 1 it is diminished. For example, m = -2 means an inverted image twice the object's size. A plane mirror always gives m = 1.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is the difference between real and virtual images?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Real images form where light rays actually converge and can be projected onto a screen (v is positive). Virtual images form where rays only appear to diverge from and cannot be projected (v is negative). Converging lenses and concave mirrors can form both types. Diverging lenses, convex mirrors, and plane mirrors always form virtual images.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                How is radius of curvature related to focal length?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">For spherical mirrors, the radius of curvature R equals twice the focal length: R = 2f. A concave mirror with f = 15 cm has R = 30 cm. This relationship comes from the geometry of reflection at a curved surface. Lenses use a more complex relation involving both surface radii and refractive index (lensmaker's equation).</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is lens power and how is it measured in diopters?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Lens power P is the reciprocal of focal length in meters: P = 1/f(m), measured in diopters (D). A converging lens with f = 50 cm has power +2D. Positive diopters mean converging, negative mean diverging. Optometrists prescribe eyeglasses in diopters. For lenses in contact, total power is P_total = P1 + P2.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What happens when the object is at the focal point?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">When the object is placed exactly at the focal point (u = -f), the image forms at infinity. The light rays emerge parallel after passing through the lens or reflecting off the mirror. This principle is used in searchlights and collimators. Our calculator shows an error message for this special case since v approaches infinity.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What are plano-convex and plano-concave lenses?
+                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">Plano-convex lenses have one flat surface and one curved outward surface. They converge light (positive f) and are common in laser optics and condensers. Plano-concave lenses have one flat and one inward-curved surface, diverging light (negative f). Both follow the same thin lens equation as biconvex and biconcave lenses.</div>
+        </div>
+    </div>
+</section>
+
+<!-- Explore More Physics Tools -->
+<section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
+    <div class="tool-card" style="padding:1.5rem 2rem;">
+        <h3 style="font-size:1.15rem;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem;color:var(--text-primary);">
+            Explore More Physics Tools
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
+            <a href="<%=request.getContextPath()%>/snells-law-prism.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">n</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Snell's Law Calculator</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Light refraction, critical angles, and prism deviation</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/inclined-plane-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#2563eb,#3b82f6);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">F</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Inclined Plane Calculator</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Forces, friction, and acceleration on inclined planes</p>
+                </div>
+            </a>
+            <a href="<%=request.getContextPath()%>/projectile-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#059669,#10b981);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">v</div>
+                <div>
+                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Projectile Calculator</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Projectile motion with trajectory visualization</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Support Section -->
+<%@ include file="modern/components/support-section.jsp" %>
+
+<!-- Footer -->
+<footer class="page-footer">
+    <div class="footer-content">
+        <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p>
+        <div class="footer-links">
+            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
+        </div>
+    </div>
+</footer>
+
+<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+
+<!-- Scroll-triggered animations -->
 <script>
-;(function(){
-  function $(id){ return document.getElementById(id); }
-
-  var opticalType = $('opticalType');
-  var calcMode = $('calcMode');
-  var focalLength = $('focalLength');
-  var objectDist = $('objectDist');
-  var imageDist = $('imageDist');
-  var objectHeight = $('objectHeight');
-  var canvas = $('lensCanvas');
-  var ctx = canvas.getContext('2d');
-  var lastResult = null; // Store last calculation result for PNG export
-
-  // Slider sync function
-  function syncSlider(input, slider){
-    input.addEventListener('input', function(){
-      slider.value = input.value;
-    });
-    slider.addEventListener('input', function(){
-      input.value = slider.value;
-      calculate(); // Auto-calculate on slider change
-    });
-  }
-
-  // Sync all sliders with inputs
-  syncSlider(focalLength, $('fSlider'));
-  syncSlider(objectDist, $('uSlider'));
-  syncSlider(imageDist, $('vSlider'));
-  syncSlider(objectHeight, $('hSlider'));
-
-  // Show/hide inputs based on calculation mode
-  function updateInputs(){
-    var mode = calcMode.value;
-    $('inputF').style.display = mode !== 'find-f' ? '' : 'none';
-    $('inputU').style.display = mode !== 'find-u' ? '' : 'none';
-    $('inputV').style.display = mode === 'find-f' || mode === 'find-u' ? '' : 'none';
-  }
-
-  calcMode.addEventListener('change', updateInputs);
-  opticalType.addEventListener('change', function(){
-    var type = opticalType.value;
-    if(type === 'diverging' || type === 'convex-mirror'){
-      if(parseFloat(focalLength.value) > 0) {
-        focalLength.value = -Math.abs(parseFloat(focalLength.value));
-        $('fSlider').value = focalLength.value;
-      }
-    } else if(type === 'converging' || type === 'concave-mirror'){
-      if(parseFloat(focalLength.value) < 0) {
-        focalLength.value = Math.abs(parseFloat(focalLength.value));
-        $('fSlider').value = focalLength.value;
-      }
-    }
-    calculate(); // Auto-calculate on type change
-  });
-
-  function calculate(){
-    var mode = calcMode.value;
-    var f = parseFloat(focalLength.value) || 10;
-    var u = parseFloat(objectDist.value) || -20;
-    var v = parseFloat(imageDist.value) || 20;
-    var h = parseFloat(objectHeight.value) || 5;
-
-    var result = {};
-
-    // Calculate based on mode
-    if(mode === 'find-v'){
-      // 1/v = 1/f - 1/u
-      if(Math.abs(u) < 0.01){
-        result.error = 'Object distance cannot be zero';
-        showResults(result);
+(function(){
+    var els = document.querySelectorAll('.lm-anim');
+    if (!els.length) return;
+    if (!('IntersectionObserver' in window)) {
+        for (var i = 0; i < els.length; i++) els[i].classList.add('lm-visible');
         return;
-      }
-      var inv_v = (1/f) - (1/u);
-      if(Math.abs(inv_v) < 0.0001){
-        result.error = 'Image forms at infinity (object at focal point)';
-        showResults(result);
-        return;
-      }
-      v = 1 / inv_v;
-      result.v = v;
-      result.f = f;
-      result.u = u;
-    } else if(mode === 'find-u'){
-      // 1/u = 1/f - 1/v
-      if(Math.abs(v) < 0.01){
-        result.error = 'Image distance cannot be zero';
-        showResults(result);
-        return;
-      }
-      var inv_u = (1/f) - (1/v);
-      if(Math.abs(inv_u) < 0.0001){
-        result.error = 'Object at infinity';
-        showResults(result);
-        return;
-      }
-      u = 1 / inv_u;
-      result.u = u;
-      result.f = f;
-      result.v = v;
-    } else if(mode === 'find-f'){
-      // 1/f = 1/u + 1/v
-      if(Math.abs(u) < 0.01 || Math.abs(v) < 0.01){
-        result.error = 'Object or image distance cannot be zero';
-        showResults(result);
-        return;
-      }
-      var inv_f = (1/u) + (1/v);
-      if(Math.abs(inv_f) < 0.0001){
-        result.error = 'Invalid configuration';
-        showResults(result);
-        return;
-      }
-      f = 1 / inv_f;
-      result.f = f;
-      result.u = u;
-      result.v = v;
     }
-
-    // Calculate magnification
-    result.m = v / u;
-    result.h_prime = result.m * h;
-    result.h = h;
-
-    // Determine image characteristics
-    result.imageType = v > 0 ? 'Real' : 'Virtual';
-    result.orientation = result.m < 0 ? 'Inverted' : 'Upright';
-    result.size = Math.abs(result.m) > 1 ? 'Magnified' : (Math.abs(result.m) < 1 ? 'Diminished' : 'Same Size');
-
-    // Lens power in diopters (f in meters)
-    result.power = 1 / (f / 100);
-
-    lastResult = result; // Store for PNG export
-    showResults(result);
-    drawRayDiagram(result);
-    showSteps(result, mode);
-  }
-
-  function showResults(result){
-    var html = '';
-    if(result.error){
-      html = '<div class="alert alert-warning mb-0">'+result.error+'</div>';
-    } else {
-      html += '<div class="result-card">';
-      html += '<span class="result-label">Focal Length:</span><span class="result-value">'+result.f.toFixed(2)+' cm</span>';
-      html += '</div>';
-
-      html += '<div class="result-card">';
-      html += '<span class="result-label">Object Distance:</span><span class="result-value">'+result.u.toFixed(2)+' cm</span>';
-      html += '</div>';
-
-      html += '<div class="result-card">';
-      html += '<span class="result-label">Image Distance:</span><span class="result-value">'+result.v.toFixed(2)+' cm</span>';
-      html += '</div>';
-
-      html += '<div class="result-card">';
-      html += '<span class="result-label">Magnification:</span><span class="result-value">'+result.m.toFixed(3)+'</span>';
-      html += '</div>';
-
-      html += '<div class="result-card">';
-      html += '<span class="result-label">Image Height:</span><span class="result-value">'+result.h_prime.toFixed(2)+' cm</span>';
-      html += '</div>';
-
-      html += '<div class="result-card">';
-      html += '<span class="result-label">Lens Power:</span><span class="result-value">'+result.power.toFixed(2)+' D</span>';
-      html += '</div>';
-
-      html += '<div class="mt-2">';
-      html += '<span class="badge badge-info mr-1">'+result.imageType+'</span>';
-      html += '<span class="badge badge-info mr-1">'+result.orientation+'</span>';
-      html += '<span class="badge badge-info">'+result.size+'</span>';
-      html += '</div>';
-    }
-    $('results').innerHTML = html;
-  }
-
-  function drawRayDiagram(result){
-    if(result.error) return;
-
-    var w = canvas.getBoundingClientRect().width | 0;
-    if(w < 100) w = 600;
-    canvas.width = w;
-    var h = canvas.height;
-    ctx.clearRect(0,0,w,h);
-
-    // Background
-    ctx.fillStyle = '#f8fafc';
-    ctx.fillRect(0,0,w,h);
-
-    var cy = h/2;
-    var lensX = w/2;
-
-    // Scale factor to fit everything in canvas
-    var maxDist = Math.max(Math.abs(result.u), Math.abs(result.v), Math.abs(result.f)*2);
-    var scale = Math.min((w/2 - 100) / maxDist, 3);
-
-    // Draw principal axis
-    ctx.strokeStyle = '#94a3b8';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([5,5]);
-    ctx.beginPath();
-    ctx.moveTo(20, cy);
-    ctx.lineTo(w-20, cy);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Draw lens/mirror
-    var type = opticalType.value;
-    if(type.includes('mirror')){
-      drawMirror(lensX, cy, type, h);
-    } else {
-      drawLens(lensX, cy, type, h);
-    }
-
-    // Draw focal points
-    var f1X = lensX + result.f * scale;
-    var f2X = lensX - result.f * scale;
-
-    ctx.fillStyle = '#ef4444';
-    ctx.font = 'bold 12px sans-serif';
-
-    if(Math.abs(result.f) < 1000){
-      // F on right
-      ctx.beginPath();
-      ctx.arc(f1X, cy, 4, 0, Math.PI*2);
-      ctx.fill();
-      ctx.fillText('F', f1X+8, cy-8);
-
-      // F on left
-      ctx.beginPath();
-      ctx.arc(f2X, cy, 4, 0, Math.PI*2);
-      ctx.fill();
-      ctx.fillText('F', f2X-18, cy-8);
-    }
-
-    // Object position
-    var objX = lensX + result.u * scale;
-    var objH = result.h * scale * 3;
-
-    // Draw object
-    ctx.strokeStyle = '#1e293b';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(objX, cy);
-    ctx.lineTo(objX, cy - objH);
-    ctx.stroke();
-
-    // Arrow head
-    ctx.fillStyle = '#1e293b';
-    ctx.beginPath();
-    ctx.moveTo(objX, cy - objH);
-    ctx.lineTo(objX - 5, cy - objH + 10);
-    ctx.lineTo(objX + 5, cy - objH + 10);
-    ctx.fill();
-
-    ctx.fillStyle = '#1e293b';
-    ctx.font = 'bold 14px sans-serif';
-    ctx.fillText('Object', objX - 25, cy + 20);
-
-    // Draw image
-    var imgX = lensX + result.v * scale;
-    var imgH = result.h_prime * scale * 3;
-
-    if(Math.abs(imgX - lensX) < w/2 - 40 && Math.abs(imgH) < h/2 - 20){
-      ctx.strokeStyle = result.v > 0 ? '#3b82f6' : '#f59e0b';
-      ctx.lineWidth = 3;
-      ctx.setLineDash(result.v > 0 ? [] : [5,5]);
-      ctx.beginPath();
-      ctx.moveTo(imgX, cy);
-      ctx.lineTo(imgX, cy - imgH);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Arrow head
-      ctx.fillStyle = result.v > 0 ? '#3b82f6' : '#f59e0b';
-      ctx.beginPath();
-      var arrowDir = imgH > 0 ? 1 : -1;
-      ctx.moveTo(imgX, cy - imgH);
-      ctx.lineTo(imgX - 5, cy - imgH + arrowDir*10);
-      ctx.lineTo(imgX + 5, cy - imgH + arrowDir*10);
-      ctx.fill();
-
-      ctx.font = 'bold 14px sans-serif';
-      ctx.fillText('Image', imgX - 20, cy + 20);
-    }
-
-    // Draw 3 principal rays
-    drawPrincipalRays(objX, objH, lensX, cy, imgX, imgH, f1X, result, scale);
-
-    // Labels
-    ctx.fillStyle = '#475569';
-    ctx.font = '12px sans-serif';
-    ctx.fillText('u = '+result.u.toFixed(1)+' cm', objX, cy - objH - 10);
-    if(Math.abs(imgX - lensX) < w/2 - 40){
-      ctx.fillText('v = '+result.v.toFixed(1)+' cm', imgX, cy - imgH - 10);
-    }
-    ctx.fillText('f = '+result.f.toFixed(1)+' cm', f1X, cy + 25);
-  }
-
-  function drawLens(x, cy, type, h){
-    ctx.strokeStyle = '#64748b';
-    ctx.lineWidth = 4;
-
-    if(type === 'converging'){
-      // Convex lens (thicker in middle)
-      ctx.beginPath();
-      ctx.moveTo(x, cy - h/2 + 40);
-      ctx.quadraticCurveTo(x - 10, cy, x, cy + h/2 - 40);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(x, cy - h/2 + 40);
-      ctx.quadraticCurveTo(x + 10, cy, x, cy + h/2 - 40);
-      ctx.stroke();
-    } else {
-      // Concave lens (thinner in middle)
-      ctx.beginPath();
-      ctx.moveTo(x, cy - h/2 + 40);
-      ctx.quadraticCurveTo(x + 10, cy, x, cy + h/2 - 40);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(x, cy - h/2 + 40);
-      ctx.quadraticCurveTo(x - 10, cy, x, cy + h/2 - 40);
-      ctx.stroke();
-    }
-
-    // Vertical line
-    ctx.lineWidth = 2;
-    ctx.setLineDash([10,5]);
-    ctx.beginPath();
-    ctx.moveTo(x, cy - h/2 + 40);
-    ctx.lineTo(x, cy + h/2 - 40);
-    ctx.stroke();
-    ctx.setLineDash([]);
-  }
-
-  function drawMirror(x, cy, type, h){
-    ctx.strokeStyle = '#64748b';
-    ctx.lineWidth = 4;
-
-    if(type === 'concave-mirror'){
-      // Concave mirror (curves inward)
-      ctx.beginPath();
-      ctx.moveTo(x, cy - h/2 + 40);
-      ctx.quadraticCurveTo(x - 20, cy, x, cy + h/2 - 40);
-      ctx.stroke();
-    } else {
-      // Convex mirror (curves outward)
-      ctx.beginPath();
-      ctx.moveTo(x, cy - h/2 + 40);
-      ctx.quadraticCurveTo(x + 20, cy, x, cy + h/2 - 40);
-      ctx.stroke();
-    }
-  }
-
-  function drawPrincipalRays(objX, objH, lensX, cy, imgX, imgH, f1X, result, scale){
-    var objTopY = cy - objH;
-
-    // Ray 1: Parallel to axis, through focal point after lens
-    ctx.save();
-    ctx.strokeStyle = '#ef4444';
-    ctx.lineWidth = 2;
-    ctx.shadowBlur = 8;
-    ctx.shadowColor = 'rgba(239, 68, 68, 0.3)';
-
-    ctx.beginPath();
-    ctx.moveTo(objX, objTopY);
-    ctx.lineTo(lensX, objTopY);
-
-    if(result.v > 0){
-      ctx.lineTo(imgX, cy - imgH);
-    } else {
-      // Virtual image - ray appears to come from image
-      ctx.lineTo(lensX + 200, objTopY + (lensX + 200 - lensX)*(cy - imgH - objTopY)/(imgX - lensX));
-    }
-    ctx.stroke();
-    ctx.restore();
-
-    // Ray 2: Through optical center, straight through
-    ctx.save();
-    ctx.strokeStyle = '#3b82f6';
-    ctx.lineWidth = 2;
-    ctx.shadowBlur = 8;
-    ctx.shadowColor = 'rgba(59, 130, 246, 0.3)';
-
-    ctx.beginPath();
-    ctx.moveTo(objX, objTopY);
-    ctx.lineTo(lensX, cy);
-    if(result.v > 0){
-      ctx.lineTo(imgX, cy - imgH);
-    } else {
-      ctx.lineTo(lensX + 200, cy + (200)*(cy - imgH - cy)/(imgX - lensX));
-    }
-    ctx.stroke();
-    ctx.restore();
-
-    // Ray 3: Through focal point, parallel to axis after lens
-    if(Math.abs(result.f) < 1000){
-      ctx.save();
-      ctx.strokeStyle = '#10b981';
-      ctx.lineWidth = 2;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = 'rgba(16, 185, 129, 0.3)';
-
-      var f2X = lensX - result.f * scale;
-      ctx.beginPath();
-      ctx.moveTo(objX, objTopY);
-
-      // Calculate where ray hits lens
-      var slope = (cy - objTopY)/(f2X - objX);
-      var lensY = objTopY + slope * (lensX - objX);
-
-      ctx.lineTo(lensX, lensY);
-
-      if(result.v > 0){
-        ctx.lineTo(imgX, cy - imgH);
-      } else {
-        ctx.lineTo(lensX + 200, lensY);
-      }
-      ctx.stroke();
-      ctx.restore();
-    }
-  }
-
-  function showSteps(result, mode){
-    var html = '';
-    html += '<div class="mb-2"><strong>Given:</strong></div>';
-    html += '<div class="ml-3">Object distance: u = '+result.u.toFixed(2)+' cm</div>';
-    if(mode !== 'find-f'){
-      html += '<div class="ml-3">Focal length: f = '+result.f.toFixed(2)+' cm</div>';
-    }
-    if(mode !== 'find-v'){
-      html += '<div class="ml-3">Image distance: v = '+result.v.toFixed(2)+' cm</div>';
-    }
-    html += '<div class="ml-3">Object height: h = '+result.h.toFixed(2)+' cm</div>';
-
-    html += '<div class="mt-3 mb-2"><strong>1. Thin Lens Equation:</strong></div>';
-    html += '<div class="ml-3">1/f = 1/u + 1/v</div>';
-
-    if(mode === 'find-v'){
-      html += '<div class="ml-3">1/v = 1/f - 1/u</div>';
-      html += '<div class="ml-3">1/v = 1/('+result.f.toFixed(2)+') - 1/('+result.u.toFixed(2)+')</div>';
-      html += '<div class="ml-3">1/v = '+(1/result.f).toFixed(4)+' - ('+(1/result.u).toFixed(4)+')</div>';
-      html += '<div class="ml-3">1/v = '+((1/result.f)-(1/result.u)).toFixed(4)+'</div>';
-      html += '<div class="ml-3 text-primary"><strong>v = '+result.v.toFixed(2)+' cm</strong></div>';
-    } else if(mode === 'find-u'){
-      html += '<div class="ml-3">1/u = 1/f - 1/v</div>';
-      html += '<div class="ml-3">1/u = 1/('+result.f.toFixed(2)+') - 1/('+result.v.toFixed(2)+')</div>';
-      html += '<div class="ml-3">1/u = '+(1/result.f).toFixed(4)+' - ('+(1/result.v).toFixed(4)+')</div>';
-      html += '<div class="ml-3">1/u = '+((1/result.f)-(1/result.v)).toFixed(4)+'</div>';
-      html += '<div class="ml-3 text-primary"><strong>u = '+result.u.toFixed(2)+' cm</strong></div>';
-    } else {
-      html += '<div class="ml-3">1/f = 1/('+result.u.toFixed(2)+') + 1/('+result.v.toFixed(2)+')</div>';
-      html += '<div class="ml-3">1/f = '+(1/result.u).toFixed(4)+' + ('+(1/result.v).toFixed(4)+')</div>';
-      html += '<div class="ml-3">1/f = '+((1/result.u)+(1/result.v)).toFixed(4)+'</div>';
-      html += '<div class="ml-3 text-primary"><strong>f = '+result.f.toFixed(2)+' cm</strong></div>';
-    }
-
-    html += '<div class="mt-3 mb-2"><strong>2. Magnification:</strong></div>';
-    html += '<div class="ml-3">m = v/u = h\'/h</div>';
-    html += '<div class="ml-3">m = ('+result.v.toFixed(2)+')/('+result.u.toFixed(2)+')</div>';
-    html += '<div class="ml-3 text-primary"><strong>m = '+result.m.toFixed(3)+'</strong></div>';
-
-    html += '<div class="mt-3 mb-2"><strong>3. Image Height:</strong></div>';
-    html += '<div class="ml-3">h\' = m × h</div>';
-    html += '<div class="ml-3">h\' = '+result.m.toFixed(3)+' × '+result.h.toFixed(2)+'</div>';
-    html += '<div class="ml-3 text-primary"><strong>h\' = '+result.h_prime.toFixed(2)+' cm</strong></div>';
-
-    html += '<div class="mt-3 mb-2"><strong>4. Lens Power:</strong></div>';
-    html += '<div class="ml-3">P = 1/f (f in meters)</div>';
-    html += '<div class="ml-3">P = 1/('+result.f.toFixed(2)+'/100)</div>';
-    html += '<div class="ml-3 text-primary"><strong>P = '+result.power.toFixed(2)+' D (diopters)</strong></div>';
-
-    html += '<div class="mt-3 mb-2"><strong>5. Image Characteristics:</strong></div>';
-    html += '<div class="ml-3">Type: <strong>'+result.imageType+'</strong> (v '+(result.v>0?'>':'<')+' 0)</div>';
-    html += '<div class="ml-3">Orientation: <strong>'+result.orientation+'</strong> (m '+(result.m<0?'<':'>')+' 0)</div>';
-    html += '<div class="ml-3">Size: <strong>'+result.size+'</strong> (|m| = '+Math.abs(result.m).toFixed(3)+')</div>';
-
-    $('stepsContent').innerHTML = html;
-  }
-
-  // Copy results
-  $('btnCopy').addEventListener('click', function(){
-    var results = $('results').innerText;
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(results).then(function(){
-        var btn = $('btnCopy');
-        var orig = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        btn.className = 'btn btn-success btn-sm';
-        setTimeout(function(){ btn.innerHTML = orig; btn.className = 'btn btn-outline-primary btn-sm'; }, 2000);
-      });
-    }
-  });
-
-  // Save PNG with inputs and results
-  $('btnSave').addEventListener('click', function(){
-    if(!lastResult || lastResult.error){
-      alert('Please calculate first before saving!');
-      return;
-    }
-
-    // Create a larger temporary canvas
-    var tempCanvas = document.createElement('canvas');
-    var w = canvas.width;
-    var extraHeight = 280; // Space for inputs, results, and URL
-    tempCanvas.width = w;
-    tempCanvas.height = canvas.height + extraHeight;
-    var tempCtx = tempCanvas.getContext('2d');
-
-    // White background
-    tempCtx.fillStyle = '#ffffff';
-    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-
-    // Draw the ray diagram at the top
-    tempCtx.drawImage(canvas, 0, 0);
-
-    // Add border below diagram
-    tempCtx.strokeStyle = '#e5e7eb';
-    tempCtx.lineWidth = 2;
-    tempCtx.beginPath();
-    tempCtx.moveTo(0, canvas.height);
-    tempCtx.lineTo(w, canvas.height);
-    tempCtx.stroke();
-
-    var yPos = canvas.height + 20;
-    var leftX = 20;
-    var rightX = w/2 + 10;
-
-    // Title
-    tempCtx.fillStyle = '#1e293b';
-    tempCtx.font = 'bold 16px sans-serif';
-    tempCtx.fillText('Lens Equation Calculator - Ray Diagram', leftX, yPos);
-    yPos += 30;
-
-    // Left column - Inputs
-    tempCtx.fillStyle = '#475569';
-    tempCtx.font = 'bold 14px sans-serif';
-    tempCtx.fillText('Inputs:', leftX, yPos);
-    yPos += 5;
-
-    tempCtx.fillStyle = '#1e293b';
-    tempCtx.font = '12px sans-serif';
-
-    var typeLabel = opticalType.options[opticalType.selectedIndex].text;
-    tempCtx.fillText('Type: ' + typeLabel, leftX, yPos += 20);
-    tempCtx.fillText('Focal Length (f): ' + lastResult.f.toFixed(2) + ' cm', leftX, yPos += 18);
-    tempCtx.fillText('Object Distance (u): ' + lastResult.u.toFixed(2) + ' cm', leftX, yPos += 18);
-    tempCtx.fillText('Object Height (h): ' + lastResult.h.toFixed(2) + ' cm', leftX, yPos += 18);
-
-    // Right column - Results
-    yPos = canvas.height + 50;
-    tempCtx.fillStyle = '#475569';
-    tempCtx.font = 'bold 14px sans-serif';
-    tempCtx.fillText('Results:', rightX, yPos);
-    yPos += 5;
-
-    tempCtx.fillStyle = '#1e293b';
-    tempCtx.font = '12px sans-serif';
-    tempCtx.fillText('Image Distance (v): ' + lastResult.v.toFixed(2) + ' cm', rightX, yPos += 20);
-    tempCtx.fillText('Magnification (m): ' + lastResult.m.toFixed(3), rightX, yPos += 18);
-    tempCtx.fillText('Image Height (h\'): ' + lastResult.h_prime.toFixed(2) + ' cm', rightX, yPos += 18);
-    tempCtx.fillText('Lens Power (P): ' + lastResult.power.toFixed(2) + ' D', rightX, yPos += 18);
-
-    // Image characteristics
-    yPos += 10;
-    tempCtx.fillStyle = '#0ea5e9';
-    tempCtx.font = 'bold 11px sans-serif';
-    tempCtx.fillText('• ' + lastResult.imageType + '  • ' + lastResult.orientation + '  • ' + lastResult.size, rightX, yPos += 18);
-
-    // Share URL at the bottom
-    yPos = canvas.height + extraHeight - 60;
-    tempCtx.strokeStyle = '#e5e7eb';
-    tempCtx.lineWidth = 1;
-    tempCtx.beginPath();
-    tempCtx.moveTo(20, yPos - 10);
-    tempCtx.lineTo(w - 20, yPos - 10);
-    tempCtx.stroke();
-
-    tempCtx.fillStyle = '#64748b';
-    tempCtx.font = '11px sans-serif';
-    tempCtx.fillText('Try this configuration online:', leftX, yPos);
-
-    // Build share URL
-    var params = new URLSearchParams({
-      type: opticalType.value,
-      mode: calcMode.value,
-      f: focalLength.value,
-      u: objectDist.value,
-      v: imageDist.value,
-      h: objectHeight.value
-    });
-    var url = location.origin + location.pathname + '?' + params.toString();
-
-    // Truncate URL if too long
-    var displayUrl = url.length > 80 ? url.substring(0, 77) + '...' : url;
-    tempCtx.fillStyle = '#3b82f6';
-    tempCtx.font = '10px monospace';
-    tempCtx.fillText(displayUrl, leftX, yPos + 18);
-
-    // Watermark
-    tempCtx.fillStyle = '#94a3b8';
-    tempCtx.font = '10px sans-serif';
-    tempCtx.fillText('Generated by 8gwifi.org/lens-mirror-calculator.jsp', leftX, yPos + 40);
-
-    // Download the composite image
-    var link = document.createElement('a');
-    link.download = 'lens-calculator-' + Date.now() + '.png';
-    link.href = tempCanvas.toDataURL();
-    link.click();
-  });
-
-  // Share URL
-  $('btnShare').addEventListener('click', function(){
-    var params = new URLSearchParams({
-      type: opticalType.value,
-      mode: calcMode.value,
-      f: focalLength.value,
-      u: objectDist.value,
-      v: imageDist.value,
-      h: objectHeight.value
-    });
-    var url = location.origin + location.pathname + '?' + params.toString();
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(url).then(function(){
-        alert('Share URL copied to clipboard!');
-      });
-    } else {
-      prompt('Copy this URL:', url);
-    }
-  });
-
-  // Presets
-  var presetItems = document.querySelectorAll('#presetBtn ~ .dropdown-menu a[data-preset]');
-  for(var i=0; i<presetItems.length; i++){
-    (function(item){
-      item.addEventListener('click', function(e){
-        e.preventDefault();
-        var preset = item.getAttribute('data-preset');
-
-        if(preset === 'conv-real'){
-          opticalType.value = 'converging';
-          calcMode.value = 'find-v';
-          focalLength.value = '10';
-          objectDist.value = '-30';
-          objectHeight.value = '5';
-          $('fSlider').value = '10';
-          $('uSlider').value = '-30';
-          $('hSlider').value = '5';
-        } else if(preset === 'conv-virtual'){
-          opticalType.value = 'converging';
-          calcMode.value = 'find-v';
-          focalLength.value = '15';
-          objectDist.value = '-8';
-          objectHeight.value = '4';
-          $('fSlider').value = '15';
-          $('uSlider').value = '-8';
-          $('hSlider').value = '4';
-        } else if(preset === 'magnifying'){
-          opticalType.value = 'converging';
-          calcMode.value = 'find-v';
-          focalLength.value = '5';
-          objectDist.value = '-3';
-          objectHeight.value = '2';
-          $('fSlider').value = '5';
-          $('uSlider').value = '-3';
-          $('hSlider').value = '2';
-        } else if(preset === 'div-basic'){
-          opticalType.value = 'diverging';
-          calcMode.value = 'find-v';
-          focalLength.value = '-15';
-          objectDist.value = '-30';
-          objectHeight.value = '6';
-          $('fSlider').value = '-15';
-          $('uSlider').value = '-30';
-          $('hSlider').value = '6';
-        } else if(preset === 'eyeglasses'){
-          opticalType.value = 'diverging';
-          calcMode.value = 'find-v';
-          focalLength.value = '-50';
-          objectDist.value = '-200';
-          objectHeight.value = '10';
-          $('fSlider').value = '-50';
-          $('uSlider').value = '-200';
-          $('hSlider').value = '10';
-        } else if(preset === 'concave-mirror'){
-          opticalType.value = 'concave-mirror';
-          calcMode.value = 'find-v';
-          focalLength.value = '15';
-          objectDist.value = '-30';
-          objectHeight.value = '5';
-          $('fSlider').value = '15';
-          $('uSlider').value = '-30';
-          $('hSlider').value = '5';
-        } else if(preset === 'convex-mirror'){
-          opticalType.value = 'convex-mirror';
-          calcMode.value = 'find-v';
-          focalLength.value = '-20';
-          objectDist.value = '-40';
-          objectHeight.value = '6';
-          $('fSlider').value = '-20';
-          $('uSlider').value = '-40';
-          $('hSlider').value = '6';
+    var obs = new IntersectionObserver(function(entries){
+        for (var j = 0; j < entries.length; j++) {
+            if (entries[j].isIntersecting) {
+                entries[j].target.classList.add('lm-visible');
+                obs.unobserve(entries[j].target);
+            }
         }
-
-        updateInputs();
-        calculate();
-      });
-    })(presetItems[i]);
-  }
-
-  // Load from URL
-  function loadFromURL(){
-    var params = new URLSearchParams(location.search);
-    if(params.has('type')) opticalType.value = params.get('type');
-    if(params.has('mode')) calcMode.value = params.get('mode');
-    if(params.has('f')) {
-      focalLength.value = params.get('f');
-      $('fSlider').value = params.get('f');
-    }
-    if(params.has('u')) {
-      objectDist.value = params.get('u');
-      $('uSlider').value = params.get('u');
-    }
-    if(params.has('v')) {
-      imageDist.value = params.get('v');
-      $('vSlider').value = params.get('v');
-    }
-    if(params.has('h')) {
-      objectHeight.value = params.get('h');
-      $('hSlider').value = params.get('h');
-    }
-    updateInputs();
-    calculate();
-  }
-
-  $('btnCalculate').addEventListener('click', calculate);
-
-  // Initialize
-  loadFromURL();
-  if(!location.search) calculate();
+    }, { threshold: 0.15 });
+    for (var k = 0; k < els.length; k++) obs.observe(els[k]);
 })();
 </script>
 
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="footer_adsense.jsp"%>
-<!-- E-E-A-T: About & Learning Outcomes (Physics) -->
-<section class="container my-4"><div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
-  <h2 class="h6 mb-2">About This Tool & Methodology</h2>
-  <p>Uses the thin lens and mirror equations (1/f = 1/do + 1/di) with SI units to solve image distance and magnification given object distance and focal length.</p>
-  <h3 class="h6 mt-2">Learning Outcomes</h3>
-  <ul class="mb-2"><li>Apply lens/mirror formulas and magnification.</li><li>Understand real/virtual, upright/inverted image cases.</li><li>Practice sign conventions and units.</li></ul>
-  <div class="row mt-2"><div class="col-md-6"><h4 class="h6">Authorship</h4><ul><li><strong>Author:</strong> <a href="https://x.com/anish2good" target="_blank" rel="noopener">Anish Nath</a> — Follow on X</li><li><strong>Last updated:</strong> 2025-11-19</li></ul></div><div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul><li>Runs locally in your browser.</li></ul></div></div>
-</div></div></div></div></section>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","name":"Lens & Mirror Calculator","url":"https://8gwifi.org/lens-mirror-calculator.jsp","dateModified":"2025-11-19","author":{"@type":"Person","name":"Anish Nath","url":"https://x.com/anish2good"},"publisher":{"@type":"Organization","name":"8gwifi.org"}}
-</script>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},{"@type":"ListItem","position":2,"name":"Lens & Mirror Calculator","item":"https://8gwifi.org/lens-mirror-calculator.jsp"}]}
-</script>
-<%@ include file="addcomments.jsp"%>
-</div>
-<%@ include file="body-close.jsp"%>
+<!-- Core Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/lens-mirror-calculator-render.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/lens-mirror-calculator-export.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/js/lens-mirror-calculator-core.js?v=<%=cacheVersion%>"></script>
+
+<%@ include file="modern/components/analytics.jsp" %>
+</body>
+</html>

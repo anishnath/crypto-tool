@@ -16032,6 +16032,7 @@
     <url><loc>https://8gwifi.org/exams/visual-math/matrix-calculator.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
     <url><loc>https://8gwifi.org/exams/visual-math/integration-explorer.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
     <url><loc>https://8gwifi.org/exams/visual-math/permutations-combinations.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://8gwifi.org/exams/visual-math/steiner-funnel.jsp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
     
     <url>
         <loc>https://8gwifi.org/exams/visual-physics/</loc>

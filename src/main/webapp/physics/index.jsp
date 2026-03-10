@@ -6,13 +6,13 @@
     <jsp:include page="../modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Physics Calculators - Free Online Physics Tools" />
         <jsp:param name="toolCategory" value="Physics" />
-        <jsp:param name="toolDescription" value="42 free physics calculators with step-by-step solutions. Calculate velocity, acceleration, force, energy, momentum, optics, waves, AC circuits, and more. Interactive visualizations for better understanding." />
+        <jsp:param name="toolDescription" value="43 free physics calculators with step-by-step solutions. Calculate velocity, acceleration, force, energy, momentum, optics, waves, AC circuits, and more. Interactive visualizations for better understanding." />
         <jsp:param name="toolUrl" value="physics/" />
         <jsp:param name="toolKeywords" value="physics calculator, online physics tools, velocity calculator, acceleration calculator, force calculator, energy calculator, momentum calculator, kinematics solver, projectile motion, optics calculator, wave calculator, thermodynamics, electromagnetism, AC circuits, electromagnetic waves, modern physics" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="42 physics calculators,Step-by-step solutions,Interactive visualizations,Unit conversions,Free and instant results,No registration required,Mobile friendly,Works offline" />
+        <jsp:param name="toolFeatures" value="43 physics calculators,Step-by-step solutions,Interactive visualizations,Unit conversions,Free and instant results,No registration required,Mobile friendly,Works offline" />
         <jsp:param name="faq1q" value="Are these physics calculators free to use?" />
-        <jsp:param name="faq1a" value="Yes, all 42 physics calculators are completely free. No registration, no payment, no limits. Use them as many times as you need for homework, exams, or professional work." />
+        <jsp:param name="faq1a" value="Yes, all 43 physics calculators are completely free. No registration, no payment, no limits. Use them as many times as you need for homework, exams, or professional work." />
         <jsp:param name="faq2q" value="Do the calculators show step-by-step solutions?" />
         <jsp:param name="faq2a" value="Yes, every calculator shows detailed step-by-step solutions explaining each formula and calculation. This helps you understand the physics concepts, not just get answers." />
         <jsp:param name="faq3q" value="What physics topics are covered?" />
@@ -26,11 +26,11 @@
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "name": "Physics Calculators",
-      "description": "42 free physics calculators with step-by-step solutions covering mechanics, optics, waves, thermodynamics, electromagnetism, and modern physics.",
+      "description": "43 free physics calculators with step-by-step solutions covering mechanics, optics, waves, thermodynamics, electromagnetism, and modern physics.",
       "url": "https://8gwifi.org/physics/",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 42,
+        "numberOfItems": 43,
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Velocity Calculator", "url": "https://8gwifi.org/physics/velocity-calculator.jsp"},
           {"@type": "ListItem", "position": 2, "name": "Acceleration Calculator", "url": "https://8gwifi.org/physics/acceleration-calculator.jsp"},
@@ -358,7 +358,7 @@
             <p>Free tools with step-by-step solutions and interactive visualizations</p>
             <div class="hero-stats">
                 <div class="hero-stat">
-                    <span class="hero-stat-value">42</span>
+                    <span class="hero-stat-value">43</span>
                     <span class="hero-stat-label">Calculators</span>
                 </div>
                 <div class="hero-stat">
@@ -697,9 +697,24 @@
             <div class="category-header">
                 <span class="category-icon">🔬</span>
                 <h2>Optics</h2>
-                <span class="category-count">6 tools</span>
+                <span class="category-count">7 tools</span>
             </div>
             <div class="tools-grid">
+                <a href="<%=request.getContextPath()%>/lens-mirror-calculator.jsp" class="tool-card" style="--card-accent: #e11d48;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">🔍</div>
+                        <div>
+                            <h3>Lens & Mirror Calculator</h3>
+                            <div class="tool-formula">1/f = 1/v + 1/u, m = v/u, R = 2f</div>
+                        </div>
+                    </div>
+                    <p>7 optical elements — converging, diverging, plano-convex, plano-concave, concave mirror, convex mirror, plane mirror. Canvas ray diagrams with step-by-step solutions.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-diagrams">Ray Diagrams</span>
+                        <span class="badge badge-new">7 Elements</span>
+                    </div>
+                </a>
+
                 <a href="<%=request.getContextPath()%>/physics/refraction.jsp" class="tool-card" style="--card-accent: #0891b2;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #0891b2, #0d9488);">💧</div>
