@@ -1,910 +1,1949 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+    String cacheVersion = String.valueOf(System.currentTimeMillis());
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Pastebin Online – Public or Encrypted (Free) | 8gwifi.org</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://8gwifi.org/pastebin.jsp">
-    <link rel="alternate" href="https://8gwifi.org/pastebin.jsp" hreflang="en">
-    <meta name="description" content="Free online pastebin: share text publicly or encrypt with a password. No sign‑up, runs in your browser. Get a shareable link (and password if encrypted).">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow" />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="8gwifi.org">
-    <meta property="og:title" content="Pastebin Online | Encrypted or Public Text Share (Free)">
-    <meta property="og:description" content="Share text online. Optional encryption with password. Free, browser‑only.">
-    <meta property="og:url" content="https://8gwifi.org/pastebin.jsp">
-    <meta property="og:image" content="https://8gwifi.org/images/site/pastebin.png">
-    <meta property="og:locale" content="en_US">
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@anish2good">
-    <meta name="twitter:title" content="Pastebin Online | Encrypted or Public Text Share (Free)">
-    <meta name="twitter:description" content="Free browser‑only pastebin with optional encryption.">
-    <meta name="twitter:image" content="https://8gwifi.org/images/site/pastebin.png">
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "WebApplication",
-            "name": "Pastebin – Encrypted or Public Text Sharing",
-            "description": "Free online pastebin to share text publicly or with end-to-end AES-256-GCM encryption in your browser. No registration required, 24-hour expiry, zero-knowledge architecture.",
-            "url": "https://8gwifi.org/pastebin.jsp",
-            "image": "https://8gwifi.org/images/site/pastebin.png",
-            "applicationCategory": "UtilityApplication",
-            "operatingSystem": "Any (Web-based)",
-            "browserRequirements": "Requires JavaScript and Web Crypto API",
-            "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "USD"
-            },
-            "featureList": [
-                "AES-256-GCM client-side encryption (optional)",
-                "Public or password-protected text sharing",
-                "Zero-knowledge architecture",
-                "24-hour automatic expiry",
-                "No registration or sign-up required",
-                "Browser-only processing",
-                "Anonymous sharing",
-                "Separate password generation",
-                "Multiple views within 24 hours",
-                "Optional email notification (link only)",
-                "Real-time character counting",
-                "Copy and share utilities"
-            ],
-            "author": {
-                "@type": "Person",
-                "name": "Anish Nath",
-                "url": "https://8gwifi.org",
-                "jobTitle": "Security Engineer & Cryptography Specialist",
-                "sameAs": "https://twitter.com/anish2good",
-                "knowsAbout": ["Cryptography", "Web Security", "AES Encryption", "Zero-Knowledge Architecture", "Privacy Engineering"]
-            },
-            "provider": {
-                "@type": "Organization",
-                "name": "8gwifi.org",
-                "url": "https://8gwifi.org",
-                "logo": "https://8gwifi.org/images/logo.png",
-                "description": "Free online cryptography, networking, and security tools for developers and security professionals.",
-                "founder": {
-                    "@type": "Person",
-                    "name": "Anish Nath"
-                },
-                "contactPoint": {
-                    "@type": "ContactPoint",
-                    "contactType": "Technical Support",
-                    "url": "https://8gwifi.org"
-                }
-            }
-        }
-    </script>
+    <!-- SEO -->
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="Free Online Pastebin - Paste &amp; Share Code Securely" />
+        <jsp:param name="toolDescription" value="Paste and share text or code online. Supports passphrase encryption, burn-after-read, syntax highlighting, file uploads, and auto-expiry. No sign-up needed." />
+        <jsp:param name="toolCategory" value="Sharing" />
+        <jsp:param name="toolUrl" value="pastebin.jsp" />
+        <jsp:param name="toolKeywords" value="pastebin, paste code online, share code snippet, encrypted paste, burn after read, anonymous paste, code sharing tool, paste text online, temporary paste, syntax highlighting paste" />
+        <jsp:param name="toolImage" value="pastebin.svg" />
+        <jsp:param name="toolFeatures" value="Paste text or upload files,Passphrase-encrypted private pastes,Burn-after-read self-destructing pastes,Auto-detect syntax highlighting,80+ built-in transform tools (encode decode hash),Configurable expiry (1h to never),Public unlisted and private visibility,No sign-up required" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Paste your content|Type or paste text into the editor or switch to File mode to upload a file,Set options|Choose expiry (1h to never) and visibility (public or unlisted or private with passphrase),Apply transforms (optional)|Use the built-in Tools panel to encode decode hash or format your content before sharing,Create paste|Click Create Paste to get a shareable URL and save the delete token to manage it later,Share the URL|Send the paste URL to your recipient and share the passphrase separately for private pastes" />
+        <jsp:param name="faq1q" value="How do I share code online using this pastebin?" />
+        <jsp:param name="faq1a" value="Paste or type your code, optionally set a title and syntax language, then click Create Paste. You get a shareable URL instantly. No account required." />
+        <jsp:param name="faq2q" value="How does encrypted paste work?" />
+        <jsp:param name="faq2a" value="Set visibility to Private and enter a passphrase. The server encrypts your paste with the passphrase. Anyone viewing it must enter the same passphrase to decrypt and read the content." />
+        <jsp:param name="faq3q" value="What is burn-after-read?" />
+        <jsp:param name="faq3a" value="A burn-after-read paste is permanently deleted from the server after it is viewed once. Ideal for sharing passwords, API keys, or other secrets that should not persist." />
+        <jsp:param name="faq4q" value="Can I upload files to this pastebin?" />
+        <jsp:param name="faq4a" value="Yes. Switch to File mode, drag and drop or browse to select a file. The file is stored on the server and recipients can download it via the raw URL." />
+        <jsp:param name="faq5q" value="Does this pastebin support syntax highlighting?" />
+        <jsp:param name="faq5a" value="Yes. The pastebin auto-detects the language of your code using highlight.js. You can also manually select from 16 languages including JavaScript, Python, Java, Go, Rust, SQL, and more." />
+        <jsp:param name="faq6q" value="What built-in tools does this pastebin have?" />
+        <jsp:param name="faq6a" value="Over 80 built-in transforms: Base64/URL/Hex encode and decode, MD5/SHA-256/SHA-512 hashing, JSON/YAML/CSV formatting, AES-256 encryption, ROT13, JWT decode, regex replace, extract URLs/emails/IPs, UUID generation, and more." />
+        <jsp:param name="faq7q" value="How long do pastes last?" />
+        <jsp:param name="faq7a" value="You choose the expiry: 1 hour, 24 hours, 7 days, 30 days, or never. After expiry the paste is automatically deleted and cannot be recovered." />
+        <jsp:param name="faq8q" value="Is this pastebin free to use?" />
+        <jsp:param name="faq8a" value="Completely free with no registration, no ads on paste view pages, and no limits on the number of pastes you can create." />
+    </jsp:include>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+
+    <!-- Critical CSS -->
     <style>
-        .min-h-result { min-height: 180px; }
-        @media (min-width: 992px) { .min-h-result { min-height: 240px; } }
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#f8fafc;margin:0}
+        :root{--primary:#6366f1;--primary-dark:#4f46e5;--bg-primary:#fff;--bg-secondary:#f8fafc;--text-primary:#0f172a;--text-secondary:#475569;--border:#e2e8f0}
     </style>
-    <%@ include file="header-script.jsp"%>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    </noscript>
+
+    <%@ include file="modern/ads/ad-init.jsp" %>
+
+    <!-- Highlight.js (language auto-detection + syntax highlighting) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <style>
+        /* Pastebin Theme */
+        :root {
+            --tool-primary: #10b981;
+            --tool-primary-dark: #059669;
+            --tool-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --tool-light: #ecfdf5;
+        }
+
+        [data-theme="dark"] {
+            --tool-gradient: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+            --tool-light: rgba(16, 185, 129, 0.12);
+        }
+
+        /* Compact header overrides */
+        .tool-page-header { padding: 0.625rem 1.5rem; }
+        .tool-page-title { font-size: 1.125rem; font-weight: 700; }
+        .tool-breadcrumbs { margin-top: 0.125rem; font-size: 0.75rem; }
+        .tool-badge { padding: 0.15rem 0.5rem; font-size: 0.625rem; }
+        .tool-description-section { padding: 0.5rem 1.5rem; }
+        .tool-description-content p { font-size: 0.8125rem; line-height: 1.4; }
+
+        /* Two-column layout: wide content + ad sidebar */
+        .pb-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 1.5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .pb-layout {
+                grid-template-columns: 1fr;
+            }
+            .pb-ads-col { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .pb-layout { padding: 0.75rem; }
+        }
+
+        /* Main content column */
+        .pb-main-col {
+            min-width: 0;
+        }
+
+        /* Ads column */
+        .pb-ads-col {
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+        }
+
+        /* Tabs */
+        .pb-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border, #e2e8f0);
+            margin-bottom: 0;
+        }
+
+        .pb-tab {
+            padding: 0.5rem 1rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary, #475569);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .pb-tab:hover { color: var(--tool-primary); }
+
+        .pb-tab.active {
+            color: var(--tool-primary);
+        }
+
+        .pb-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--tool-primary);
+        }
+
+        /* Tab panels */
+        .pb-panel { display: none; }
+        .pb-panel.active { display: block; }
+
+        /* Create form card */
+        .pb-card {
+            background: var(--bg-primary, #fff);
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0 0 0.75rem 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .pb-card-top {
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--border, #e2e8f0);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* Title input — flush, no wrapping div needed */
+        .pb-title-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: none;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            font-size: 0.8125rem;
+            background: var(--bg-primary, #fff);
+            color: var(--text-primary, #0f172a);
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .pb-title-input:focus { border-bottom-color: var(--tool-primary); }
+
+        .pb-title-input::placeholder { color: var(--text-secondary, #94a3b8); }
+
+        /* Textarea — no extra wrap padding */
+        .pb-textarea {
+            width: 100%;
+            min-height: 280px;
+            padding: 0.625rem 0.75rem;
+            border: none;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            resize: vertical;
+            background: var(--bg-primary, #fff);
+            color: var(--text-primary, #0f172a);
+            outline: none;
+        }
+
+        .pb-textarea:focus {
+            box-shadow: inset 0 -2px 0 var(--tool-primary);
+        }
+
+        .pb-textarea::placeholder { color: #94a3b8; }
+
+        [data-theme="dark"] .pb-textarea {
+            background: #1e293b;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-title-input {
+            background: #1e293b;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        /* File upload drop zone */
+        .pb-dropzone {
+            display: none;
+            margin: 0.75rem 1rem;
+            padding: 2.5rem 1rem;
+            border: 2px dashed var(--border, #e2e8f0);
+            border-radius: 0.5rem;
+            text-align: center;
+            color: var(--text-secondary, #475569);
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .pb-dropzone.active { display: block; }
+
+        .pb-dropzone:hover,
+        .pb-dropzone.dragover {
+            border-color: var(--tool-primary);
+            background: var(--tool-light);
+        }
+
+        .pb-dropzone-icon {
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .pb-dropzone-text {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .pb-dropzone-hint {
+            font-size: 0.75rem;
+            color: var(--text-secondary, #94a3b8);
+            margin-top: 0.25rem;
+        }
+
+        .pb-file-selected {
+            display: none;
+            margin: 0 1rem 0.75rem;
+            padding: 0.625rem 0.875rem;
+            background: var(--tool-light);
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pb-file-selected.show {
+            display: flex;
+        }
+
+        .pb-file-name {
+            flex: 1;
+            font-weight: 500;
+            color: var(--tool-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pb-file-size {
+            color: var(--text-secondary, #475569);
+            font-size: 0.75rem;
+        }
+
+        .pb-file-remove {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            padding: 0.125rem;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        /* Compact options row — inline selects */
+        .pb-options {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .pb-opt-group {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .pb-opt-group label {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--text-secondary, #475569);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .pb-opt-group select {
+            padding: 0.25rem 0.4rem;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            background: var(--bg-primary, #fff);
+            color: var(--text-primary, #0f172a);
+            outline: none;
+        }
+
+        .pb-opt-group select:focus { border-color: var(--tool-primary); }
+
+        [data-theme="dark"] .pb-opt-group select {
+            background: #1e293b;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        .pb-opt-sep {
+            width: 1px;
+            height: 16px;
+            background: var(--border, #e2e8f0);
+            flex-shrink: 0;
+        }
+
+        /* Burn checkbox — inline with options */
+        .pb-check {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: var(--text-primary, #0f172a);
+            white-space: nowrap;
+        }
+
+        .pb-check input {
+            accent-color: var(--tool-primary);
+            width: 0.85rem;
+            height: 0.85rem;
+        }
+
+        /* Passphrase field (shown conditionally) */
+        .pb-passphrase-wrap {
+            display: none;
+            padding: 0.35rem 0.75rem;
+            background: rgba(239, 68, 68, 0.04);
+            border-top: 1px solid var(--border, #e2e8f0);
+        }
+
+        .pb-passphrase-wrap.show {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pb-passphrase-input {
+            flex: 1;
+            max-width: 260px;
+            padding: 0.3rem 0.5rem;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            background: var(--bg-primary, #fff);
+            color: var(--text-primary, #0f172a);
+            outline: none;
+        }
+
+        .pb-passphrase-input:focus { border-color: var(--tool-primary); }
+
+        .pb-passphrase-hint {
+            font-size: 0.65rem;
+            color: var(--text-secondary, #94a3b8);
+        }
+
+        .pb-spacer { flex: 1; }
+
+        /* Bottom bar: char count + mode + submit */
+        .pb-bottom-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.75rem;
+            background: var(--bg-secondary, #f8fafc);
+            border-top: 1px solid var(--border, #e2e8f0);
+        }
+
+        .pb-char-count {
+            font-size: 0.7rem;
+            color: var(--text-secondary, #94a3b8);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .pb-mode-toggle {
+            display: inline-flex;
+            background: var(--border, #e2e8f0);
+            border-radius: 4px;
+            padding: 1px;
+        }
+
+        .pb-mode-btn {
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary, #475569);
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.15s;
+        }
+
+        .pb-mode-btn.active {
+            background: var(--bg-primary, #fff);
+            color: var(--tool-primary);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        }
+
+        .pb-submit-btn {
+            padding: 0.35rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--tool-gradient);
+            color: white;
+            transition: opacity 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .pb-submit-btn:hover { opacity: 0.9; }
+
+        .pb-submit-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        [data-theme="dark"] .pb-bottom-bar {
+            background: #0f172a;
+            border-top-color: #334155;
+        }
+
+        [data-theme="dark"] .pb-mode-toggle { background: #334155; }
+
+        [data-theme="dark"] .pb-mode-btn.active { background: #1e293b; }
+
+        [data-theme="dark"] .pb-passphrase-wrap {
+            background: rgba(239, 68, 68, 0.06);
+            border-top-color: #334155;
+        }
+
+        /* Success result banner */
+        .pb-result {
+            display: none;
+            margin-top: 1rem;
+            background: var(--bg-primary, #fff);
+            border: 1px solid #86efac;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            animation: pbSlideIn 0.3s ease;
+        }
+
+        .pb-result.show { display: block; }
+
+        @keyframes pbSlideIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pb-result-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #065f46;
+        }
+
+        [data-theme="dark"] .pb-result-header {
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+        }
+
+        [data-theme="dark"] .pb-result {
+            background: var(--bg-secondary, #1e293b);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .pb-result-body {
+            padding: 1rem;
+        }
+
+        .pb-result-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+        }
+
+        .pb-result-row + .pb-result-row {
+            border-top: 1px solid var(--border, #e2e8f0);
+        }
+
+        .pb-result-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary, #475569);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            min-width: 90px;
+            flex-shrink: 0;
+        }
+
+        .pb-result-value {
+            flex: 1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            color: var(--text-primary, #0f172a);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pb-result-value a {
+            color: var(--tool-primary);
+            text-decoration: none;
+        }
+
+        .pb-result-value a:hover { text-decoration: underline; }
+
+        .pb-copy-btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.25rem;
+            background: var(--bg-primary, #fff);
+            color: var(--text-secondary, #475569);
+            cursor: pointer;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .pb-copy-btn:hover {
+            border-color: var(--tool-primary);
+            color: var(--tool-primary);
+        }
+
+        .pb-copy-btn.copied {
+            border-color: var(--tool-primary);
+            color: var(--tool-primary);
+            background: var(--tool-light);
+        }
+
+        .pb-result-warn {
+            margin-top: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            color: #92400e;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        [data-theme="dark"] .pb-result-warn {
+            background: rgba(251, 191, 36, 0.12);
+            border-color: rgba(251, 191, 36, 0.3);
+            color: #fcd34d;
+        }
+
+        .pb-result-expire {
+            font-size: 0.75rem;
+            color: var(--text-secondary, #94a3b8);
+            margin-top: 0.5rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* View paste panel */
+        .pb-view-card {
+            background: var(--bg-primary, #fff);
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        [data-theme="dark"] .pb-view-card {
+            background: var(--bg-secondary, #1e293b);
+            border-color: #334155;
+        }
+
+        .pb-view-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            background: var(--tool-gradient);
+            color: white;
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+
+        .pb-view-meta {
+            display: flex;
+            gap: 1rem;
+            padding: 0.625rem 1rem;
+            background: var(--bg-secondary, #f8fafc);
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            font-size: 0.75rem;
+            color: var(--text-secondary, #475569);
+            flex-wrap: wrap;
+        }
+
+        [data-theme="dark"] .pb-view-meta {
+            background: #0f172a;
+            border-color: #334155;
+        }
+
+        .pb-view-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .pb-view-content {
+            padding: 0;
+            margin: 0;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.65;
+            overflow: auto;
+            max-height: 600px;
+            color: var(--text-primary, #0f172a);
+            background: var(--bg-primary, #fff);
+        }
+
+        .pb-view-content code {
+            display: block;
+            padding: 1rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* Override hljs background to match our theme */
+        .pb-view-content code.hljs {
+            background: var(--bg-primary, #fff);
+        }
+
+        [data-theme="dark"] .pb-view-content {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-view-content code.hljs {
+            background: #1e293b;
+        }
+
+        .pb-view-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--border, #e2e8f0);
+            background: var(--bg-secondary, #f8fafc);
+            flex-wrap: wrap;
+        }
+
+        [data-theme="dark"] .pb-view-actions {
+            background: #0f172a;
+            border-top-color: #334155;
+        }
+
+        /* Passphrase prompt overlay */
+        .pb-passphrase-prompt {
+            display: none;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .pb-passphrase-prompt.show { display: block; }
+
+        .pb-passphrase-prompt h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary, #0f172a);
+            margin-bottom: 0.5rem;
+        }
+
+        .pb-passphrase-prompt p {
+            font-size: 0.875rem;
+            color: var(--text-secondary, #475569);
+            margin-bottom: 1.25rem;
+        }
+
+        .pb-passphrase-prompt input {
+            width: 100%;
+            max-width: 300px;
+            padding: 0.625rem 0.875rem;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            outline: none;
+            text-align: center;
+            background: var(--bg-primary, #fff);
+            color: var(--text-primary, #0f172a);
+        }
+
+        .pb-passphrase-prompt input:focus { border-color: var(--tool-primary); }
+
+        .pb-passphrase-prompt button {
+            margin-top: 0.75rem;
+            padding: 0.5rem 1.5rem;
+            background: var(--tool-gradient);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Burn warning */
+        .pb-burn-warning {
+            display: none;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+
+        .pb-burn-warning.show { display: block; }
+
+        .pb-burn-warning-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            color: #f59e0b;
+        }
+
+        .pb-burn-warning h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary, #0f172a);
+            margin-bottom: 0.5rem;
+        }
+
+        .pb-burn-warning p {
+            font-size: 0.875rem;
+            color: var(--text-secondary, #475569);
+            margin-bottom: 1.25rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pb-burn-warning button {
+            padding: 0.625rem 1.5rem;
+            background: #f59e0b;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* My pastes panel */
+        .pb-my-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+        }
+
+        .pb-my-key-input {
+            flex: 1;
+            max-width: 280px;
+            padding: 0.4375rem 0.625rem;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-primary, #fff);
+            color: var(--text-primary, #0f172a);
+            outline: none;
+        }
+
+        .pb-my-key-input:focus { border-color: var(--tool-primary); }
+
+        [data-theme="dark"] .pb-my-key-input {
+            background: #1e293b;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        /* Pastes table */
+        .pb-table-wrap {
+            overflow-x: auto;
+        }
+
+        .pb-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8125rem;
+        }
+
+        .pb-table th {
+            padding: 0.625rem 1rem;
+            text-align: left;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary, #475569);
+            background: var(--bg-secondary, #f8fafc);
+            border-bottom: 1px solid var(--border, #e2e8f0);
+        }
+
+        .pb-table td {
+            padding: 0.625rem 1rem;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            color: var(--text-primary, #0f172a);
+        }
+
+        .pb-table tr:hover td {
+            background: var(--tool-light);
+        }
+
+        .pb-table a {
+            color: var(--tool-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .pb-table a:hover { text-decoration: underline; }
+
+        [data-theme="dark"] .pb-table th {
+            background: #0f172a;
+            border-color: #334155;
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .pb-table td {
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-table tr:hover td {
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .pb-table-empty {
+            padding: 3rem 1rem;
+            text-align: center;
+            color: var(--text-secondary, #94a3b8);
+            font-size: 0.875rem;
+        }
+
+        .pb-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--border, #e2e8f0);
+            font-size: 0.8125rem;
+            color: var(--text-secondary, #475569);
+        }
+
+        .pb-pagination button {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.375rem;
+            background: var(--bg-primary, #fff);
+            color: var(--text-primary, #0f172a);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .pb-pagination button:hover {
+            border-color: var(--tool-primary);
+            color: var(--tool-primary);
+        }
+
+        .pb-pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Error / status */
+        .pb-error {
+            display: none;
+            margin: 1rem 0 0;
+            padding: 0.75rem 1rem;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 0.5rem;
+            color: #991b1b;
+            font-size: 0.8125rem;
+        }
+
+        .pb-error.show { display: block; }
+
+        [data-theme="dark"] .pb-error {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        /* Loading spinner */
+        .pb-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: pbSpin 0.6s linear infinite;
+        }
+
+        @keyframes pbSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ── Transforms Toolbar ── */
+        .pb-transforms {
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+
+        /* Header row: icon + "Tools" + search + collapse chevron */
+        .pb-transform-header {
+            display: flex;
+            align-items: center;
+            padding: 0.4rem 0.6rem;
+            gap: 0.5rem;
+            user-select: none;
+            border-bottom: 1px solid transparent;
+        }
+        .pb-transforms:not(.collapsed) .pb-transform-header {
+            border-bottom-color: #e2e8f0;
+        }
+        .pb-transform-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #64748b;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .pb-transform-header-left svg { color: var(--tool-primary, #10b981); }
+        .pb-transform-search {
+            flex: 1;
+            min-width: 0;
+            padding: 0.2rem 0.45rem 0.2rem 1.5rem;
+            font-size: 0.7rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'/%3E%3C/svg%3E") 0.4rem center no-repeat;
+            color: #334155;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .pb-transform-search:focus { border-color: var(--tool-primary, #10b981); }
+        .pb-transform-search::placeholder { color: #b0b8c4; font-size: 0.68rem; }
+        .pb-transform-chevron {
+            cursor: pointer;
+            color: #94a3b8;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+            padding: 2px;
+        }
+        .pb-transforms.collapsed .pb-transform-chevron { transform: rotate(-90deg); }
+        .pb-transforms.collapsed .pb-transform-body { display: none; }
+        .pb-transforms.collapsed .pb-transform-search { display: none; }
+
+        /* Body: vertical icon tabs (left) + tools grid (right) */
+        .pb-transform-body {
+            display: flex;
+            min-height: 0;
+        }
+
+        /* ── Vertical icon tab strip ── */
+        .pb-transform-sidebar {
+            display: flex;
+            flex-direction: column;
+            width: 42px;
+            flex-shrink: 0;
+            background: #f1f5f9;
+            border-right: 1px solid #e2e8f0;
+            padding: 0.25rem 0;
+            gap: 1px;
+        }
+        .pb-tc {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1px;
+            padding: 0.35rem 0;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.12s;
+            position: relative;
+            border-left: 2px solid transparent;
+        }
+        .pb-tc svg { width: 15px; height: 15px; flex-shrink: 0; }
+        .pb-tc-label {
+            font-size: 0.52rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            line-height: 1;
+            max-width: 38px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .pb-tc:hover {
+            color: #475569;
+            background: #e2e8f0;
+        }
+        .pb-tc.active {
+            color: var(--tool-primary, #10b981);
+            background: #f8fafc;
+            border-left-color: var(--tool-primary, #10b981);
+        }
+        .pb-tc .pb-tc-count {
+            position: absolute;
+            top: 2px;
+            right: 3px;
+            font-size: 0.5rem;
+            font-weight: 700;
+            color: #94a3b8;
+            line-height: 1;
+        }
+        .pb-tc.active .pb-tc-count { color: var(--tool-primary, #10b981); }
+
+        /* ── Right panel: search results + tools grid ── */
+        .pb-transform-main {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .pb-transform-panel {
+            padding: 0.4rem 0.55rem;
+            flex: 1;
+        }
+        .pb-transform-panel-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            margin-bottom: 0.3rem;
+        }
+        .pb-transform-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            min-height: 22px;
+        }
+        .pb-transform-empty {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            padding: 0.5rem 0;
+            font-style: italic;
+        }
+
+        /* ── Tool buttons ── */
+        .pb-t-btn {
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            background: white;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.12s ease;
+            white-space: nowrap;
+            line-height: 1.4;
+        }
+        .pb-t-btn:hover {
+            border-color: var(--tool-primary, #10b981);
+            color: var(--tool-primary, #10b981);
+            background: rgba(16, 185, 129, 0.06);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+        }
+        .pb-t-btn:active { transform: translateY(0); box-shadow: none; }
+        .pb-t-btn.pb-t-readonly { border-style: dashed; }
+        .pb-t-btn.pb-t-readonly:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+            background: rgba(99, 102, 241, 0.06);
+            box-shadow: 0 2px 4px rgba(99, 102, 241, 0.1);
+        }
+        .pb-t-btn.pb-t-hidden { display: none; }
+
+        /* ── Footer: undo + result strip ── */
+        .pb-transform-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.55rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .pb-transform-undo {
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            background: white;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            flex-shrink: 0;
+        }
+        .pb-transform-undo:hover:not(:disabled) { border-color: #f59e0b; color: #f59e0b; }
+        .pb-transform-undo:disabled { opacity: 0.3; cursor: default; }
+        .pb-transform-result {
+            font-size: 0.7rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            color: #10b981;
+            padding: 0;
+            background: rgba(16, 185, 129, 0.08);
+            border-radius: 4px;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            opacity: 0;
+            max-height: 0;
+            transition: all 0.2s ease;
+            cursor: text;
+            user-select: all;
+        }
+        .pb-transform-result.show { opacity: 1; max-height: 40px; padding: 0.25rem 0.5rem; }
+        .pb-transform-result.error { color: #ef4444; background: rgba(239, 68, 68, 0.08); }
+
+        /* ── Dark mode ── */
+        [data-theme="dark"] .pb-transforms { background: #1e293b; border-color: #334155; }
+        [data-theme="dark"] .pb-transforms:not(.collapsed) .pb-transform-header { border-bottom-color: #334155; }
+        [data-theme="dark"] .pb-transform-search {
+            background-color: #0f172a; border-color: #334155; color: #e2e8f0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' fill='%23475569' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'/%3E%3C/svg%3E");
+        }
+        [data-theme="dark"] .pb-transform-sidebar { background: #151e2e; border-right-color: #334155; }
+        [data-theme="dark"] .pb-tc { color: #64748b; }
+        [data-theme="dark"] .pb-tc:hover { color: #cbd5e1; background: #1e293b; }
+        [data-theme="dark"] .pb-tc.active { color: var(--tool-primary, #10b981); background: #1e293b; }
+        [data-theme="dark"] .pb-t-btn { background: #0f172a; border-color: #334155; color: #cbd5e1; }
+        [data-theme="dark"] .pb-t-btn:hover { background: rgba(16, 185, 129, 0.1); }
+        [data-theme="dark"] .pb-t-btn.pb-t-readonly:hover { background: rgba(99, 102, 241, 0.1); }
+        [data-theme="dark"] .pb-transform-undo { background: #0f172a; border-color: #334155; color: #cbd5e1; }
+        [data-theme="dark"] .pb-transform-footer { border-top-color: #334155; }
+        [data-theme="dark"] .pb-transform-result { background: rgba(16, 185, 129, 0.12); }
+        [data-theme="dark"] .pb-transform-result.error { background: rgba(239, 68, 68, 0.12); }
+
+        /* Toast */
+        .pb-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 0.75rem 1.25rem;
+            background: #1e293b;
+            color: white;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            z-index: 9999;
+            animation: pbToastIn 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        @keyframes pbToastIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Dark mode for cards */
+        [data-theme="dark"] .pb-card,
+        [data-theme="dark"] .pb-card-top {
+            background: var(--bg-secondary, #1e293b);
+            border-color: #334155;
+        }
+
+        [data-theme="dark"] .pb-title-input {
+            background: #1e293b;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-tabs {
+            border-color: #334155;
+        }
+
+        [data-theme="dark"] .pb-tab {
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .pb-check {
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-opt-group label {
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .pb-passphrase-input {
+            background: #1e293b;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-copy-btn {
+            background: #1e293b;
+            border-color: #334155;
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .pb-result-label {
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .pb-result-value {
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-result-row + .pb-result-row {
+            border-top-color: #334155;
+        }
+
+        [data-theme="dark"] .pb-pagination button {
+            background: #1e293b;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        /* Content sections (SEO write-ups) */
+        .pb-content-section {
+            padding: 2rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pb-content-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pb-content-section .tool-card {
+            background: var(--bg-primary, #fff);
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .pb-content-section .tool-card-header {
+            background: var(--tool-gradient);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .pb-content-section .tool-card-body {
+            padding: 1.5rem;
+        }
+
+        .pb-section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary, #0f172a);
+            margin-bottom: 1rem;
+        }
+
+        .pb-subsection-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary, #0f172a);
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .pb-feature-list {
+            padding-left: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .pb-feature-list li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary, #475569);
+            line-height: 1.6;
+        }
+
+        .pb-feature-list li strong {
+            color: var(--text-primary, #0f172a);
+        }
+
+        .pb-highlight-box {
+            background: var(--tool-light);
+            border-left: 4px solid var(--tool-primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            color: var(--text-secondary, #475569);
+        }
+
+        .pb-highlight-box strong {
+            color: var(--tool-primary);
+        }
+
+        .pb-steps-list {
+            padding-left: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .pb-steps-list li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary, #475569);
+            line-height: 1.6;
+        }
+
+        .pb-steps-list li strong {
+            color: var(--text-primary, #0f172a);
+        }
+
+        /* Visible FAQ */
+        .pb-faq-list {
+            margin: 0.75rem 0 0;
+        }
+
+        .pb-faq-list dt {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            color: var(--text-primary, #0f172a);
+            padding: 0.625rem 0 0.25rem;
+            border-top: 1px solid var(--border, #e2e8f0);
+        }
+
+        .pb-faq-list dt:first-child { border-top: none; padding-top: 0; }
+
+        .pb-faq-list dd {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--text-secondary, #475569);
+        }
+
+        [data-theme="dark"] .pb-faq-list dt { color: #f1f5f9; border-top-color: #334155; }
+        [data-theme="dark"] .pb-faq-list dd { color: #94a3b8; }
+
+        .pb-use-cases-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .pb-use-cases-grid { grid-template-columns: 1fr; }
+        }
+
+        .pb-use-cases-grid ul {
+            padding-left: 1.25rem;
+            margin: 0;
+        }
+
+        .pb-use-cases-grid li {
+            color: var(--text-secondary, #475569);
+            margin-bottom: 0.375rem;
+        }
+
+        .pb-trust-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .pb-trust-grid { grid-template-columns: 1fr; }
+        }
+
+        .pb-trust-block ul {
+            padding-left: 1.25rem;
+            margin: 0;
+        }
+
+        .pb-trust-block li {
+            color: var(--text-secondary, #475569);
+            margin-bottom: 0.375rem;
+        }
+
+        .pb-content-section code {
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--tool-primary);
+        }
+
+        [data-theme="dark"] .pb-content-section .tool-card {
+            background: var(--bg-secondary, #1e293b);
+            border-color: #334155;
+        }
+
+        [data-theme="dark"] .pb-highlight-box {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        [data-theme="dark"] .pb-section-title,
+        [data-theme="dark"] .pb-subsection-title,
+        [data-theme="dark"] .pb-feature-list li strong,
+        [data-theme="dark"] .pb-steps-list li strong {
+            color: var(--text-primary, #f1f5f9);
+        }
+
+        [data-theme="dark"] .pb-feature-list li,
+        [data-theme="dark"] .pb-steps-list li,
+        [data-theme="dark"] .pb-use-cases-grid li,
+        [data-theme="dark"] .pb-trust-block li,
+        [data-theme="dark"] .pb-highlight-box {
+            color: var(--text-secondary, #94a3b8);
+        }
+    </style>
 </head>
+<body>
+    <!-- Navigation -->
+    <%@ include file="modern/components/nav-header.jsp" %>
 
-<%@ include file="body-script.jsp"%>
-<%@ include file="pgp-menu-nav.jsp"%>
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <h1 class="mb-2">Pastebin: Share Text Online</h1>
-        <p class="lead text-muted mb-3">Share text publicly or protect it with end-to-end encryption and a password. Free, browser-only, no sign-up.</p>
-        <div class="d-flex justify-content-center flex-wrap">
-            <span class="badge badge-success badge-pill px-3 py-2 m-1"><i class="fas fa-shield-alt"></i> Optional E2E Encryption</span>
-            <span class="badge badge-warning badge-pill px-3 py-2 m-1"><i class="fas fa-clock"></i> 24-Hour Expiry</span>
-            <span class="badge badge-info badge-pill px-3 py-2 m-1"><i class="fas fa-user-secret"></i> No Registration</span>
-            <span class="badge badge-primary badge-pill px-3 py-2 m-1"><i class="fas fa-lock"></i> AES-256-GCM</span>
+    <!-- Page Header -->
+    <header class="tool-page-header">
+        <div class="tool-page-header-inner">
+            <div>
+                <h1 class="tool-page-title">Free Online Pastebin</h1>
+                <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
+                    <a href="<%=request.getContextPath()%>/">Home</a> /
+                    <a href="<%=request.getContextPath()%>/index.jsp#sharing">Sharing Tools</a> /
+                    <span>Pastebin</span>
+                </nav>
+            </div>
+            <div class="tool-page-badges">
+                <span class="tool-badge"><svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg> Free &middot; No Login</span>
+                <span class="tool-badge"><svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0z"/></svg> Encrypted</span>
+                <span class="tool-badge"><svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zM10 1.6l3.4 3.4H10V1.6z"/></svg> 80+ Tools</span>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <div class="row">
-        <div class="col-lg-7 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-file-alt text-primary"></i> Create a New Paste</h5>
-                    <p class="text-muted mb-3">Share text publicly or with password protection. Email is optional and only sends the link.</p>
-                    <form id="uploadForm">
-                        <div class="form-group">
-                            <label for="email"><i class="fas fa-envelope"></i> Recipient Email (optional)</label>
-                            <input type="email" class="form-control" id="email" placeholder="name@example.com" aria-describedby="emailHelp" style="border-radius: 8px;">
-                            <small id="emailHelp" class="form-text text-muted">We email only the link. Share the password yourself if encryption is enabled.</small>
+    <!-- Description + Ad Section -->
+    <section class="tool-description-section">
+        <div class="tool-description-inner">
+            <div class="tool-description-content">
+                <p>Paste and share text, code, or files online. Supports passphrase encryption, burn-after-read, syntax highlighting, and 80+ built-in transform tools.</p>
+            </div>
+            <div class="tool-description-ad">
+                <%@ include file="modern/ads/ad-in-content-top.jsp" %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Layout: Content + Ad Sidebar -->
+    <main class="pb-layout">
+
+        <!-- Main Content Column -->
+        <div class="pb-main-col">
+
+            <!-- Tabs -->
+            <div class="pb-card-top">
+                <div class="pb-tabs" role="tablist">
+                    <button class="pb-tab active" role="tab" data-tab="create" aria-selected="true">
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:4px"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/><path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2z"/></svg>
+                        New Paste
+                    </button>
+                    <button class="pb-tab" role="tab" data-tab="mypastes" aria-selected="false">
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:4px"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/></svg>
+                        My Pastes
+                    </button>
+                </div>
+
+                <!-- ==================== CREATE TAB ==================== -->
+                <div class="pb-panel active" id="panel-create">
+                    <div class="pb-card">
+                        <input type="text" id="pb-title" class="pb-title-input" placeholder="Title (optional)" maxlength="200" autocomplete="off">
+                        <textarea id="pb-content" class="pb-textarea" placeholder="Paste or type your content here..." spellcheck="false"></textarea>
+
+                        <!-- Transforms Toolbar -->
+                        <div class="pb-transforms" id="pb-transforms">
+                            <!-- Header: label + search + collapse -->
+                            <div class="pb-transform-header">
+                                <div class="pb-transform-header-left pb-transform-toggle" role="button" aria-expanded="true" title="Toggle tools panel">
+                                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17l-5.658 3.163a1.106 1.106 0 01-1.605-1.056l.76-6.3L.832 6.7a1.101 1.101 0 01.638-1.898l6.305-.606L10.7.936a1.102 1.102 0 011.598 0l2.924 4.26 6.305.606a1.101 1.101 0 01.638 1.898l-4.075 4.277.76 6.3a1.106 1.106 0 01-1.605 1.056L12 15.17z"/></svg>
+                                    Tools
+                                </div>
+                                <input type="text" class="pb-transform-search" id="pb-transform-search" placeholder="Search 80+ tools..." autocomplete="off" spellcheck="false">
+                                <svg class="pb-transform-chevron pb-transform-toggle" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+                            </div>
+                            <!-- Body: vertical sidebar + tools grid -->
+                            <div class="pb-transform-body">
+                                <!-- Left: vertical icon tabs (built by JS) -->
+                                <div class="pb-transform-sidebar" id="pb-transform-cats"></div>
+                                <!-- Right: tools panel -->
+                                <div class="pb-transform-main">
+                                    <div class="pb-transform-panel">
+                                        <div class="pb-transform-panel-title" id="pb-transform-panel-title"></div>
+                                        <div class="pb-transform-grid" id="pb-transform-grid"></div>
+                                    </div>
+                                    <div class="pb-transform-footer">
+                                        <button type="button" class="pb-transform-undo" id="pb-transform-undo" disabled>
+                                            <svg width="10" height="10" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg>
+                                            Undo
+                                        </button>
+                                        <div class="pb-transform-result" id="pb-transform-output"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group mb-2">
-                            <label for="textData"><i class="fas fa-keyboard"></i> Content <span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="textData" rows="6" placeholder="Paste or type your text here..." style="border-radius: 8px; font-family: 'Courier New', monospace;"></textarea>
-                            <small class="form-text text-muted"><span id="charCount">0</span> characters</small>
+                        <!-- File dropzone (file mode) -->
+                        <div class="pb-dropzone" id="pb-dropzone">
+                            <div class="pb-dropzone-icon">
+                                <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+                            </div>
+                            <div class="pb-dropzone-text">Drop a file here or click to browse</div>
+                            <div class="pb-dropzone-hint">Max file size depends on server configuration</div>
+                            <input type="file" id="pb-file-input" style="display:none">
                         </div>
 
-                        <div class="form-group form-check mb-3">
-                            <input type="checkbox" value="true" class="form-check-input" id="isEncrypted">
-                            <label class="form-check-label" for="isEncrypted">
-                                <i class="fas fa-lock"></i> Protect with password (AES-256-GCM encryption)
+                        <!-- Selected file display -->
+                        <div class="pb-file-selected" id="pb-file-selected">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3z"/></svg>
+                            <span class="pb-file-name" id="pb-file-name"></span>
+                            <span class="pb-file-size" id="pb-file-size"></span>
+                            <button class="pb-file-remove" id="pb-file-remove" title="Remove file">&times;</button>
+                        </div>
+
+                        <!-- Options + Burn (single inline row) -->
+                        <div class="pb-options">
+                            <div class="pb-opt-group">
+                                <label for="pb-expiry">Expiry</label>
+                                <select id="pb-expiry">
+                                    <option value="1h">1 Hour</option>
+                                    <option value="24h" selected>24 Hours</option>
+                                    <option value="7d">7 Days</option>
+                                    <option value="30d">30 Days</option>
+                                    <option value="never">Never</option>
+                                </select>
+                            </div>
+                            <div class="pb-opt-group">
+                                <label for="pb-visibility">Visibility</label>
+                                <select id="pb-visibility">
+                                    <option value="unlisted">Unlisted</option>
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                            <div class="pb-opt-group">
+                                <label for="pb-syntax">Syntax</label>
+                                <select id="pb-syntax">
+                                    <option value="plain">Plain</option>
+                                    <option value="javascript">JS</option>
+                                    <option value="python">Python</option>
+                                    <option value="java">Java</option>
+                                    <option value="html">HTML</option>
+                                    <option value="css">CSS</option>
+                                    <option value="json">JSON</option>
+                                    <option value="xml">XML</option>
+                                    <option value="sql">SQL</option>
+                                    <option value="bash">Bash</option>
+                                    <option value="go">Go</option>
+                                    <option value="rust">Rust</option>
+                                    <option value="c">C</option>
+                                    <option value="cpp">C++</option>
+                                    <option value="yaml">YAML</option>
+                                    <option value="markdown">MD</option>
+                                </select>
+                            </div>
+                            <div class="pb-opt-sep"></div>
+                            <label class="pb-check">
+                                <input type="checkbox" id="pb-burn"> Burn after read
                             </label>
-                            <small class="form-text text-muted ml-4">Password will be auto-generated and must be shared separately</small>
                         </div>
 
-                        <div class="d-flex align-items-center">
-                            <button type="button" id="createPasteBtn" class="btn btn-primary btn-lg mr-2" onclick="createPresignedURL()" style="border-radius: 8px;">
-                                <i class="fas fa-share-alt"></i> Create Paste
-                            </button>
-                            <button type="reset" class="btn btn-outline-secondary" onclick="resetFormUI()" style="border-radius: 8px;">
-                                <i class="fas fa-eraser"></i> Clear Form
+                        <!-- Passphrase (shown when private) -->
+                        <div class="pb-passphrase-wrap" id="pb-passphrase-wrap">
+                            <input type="password" id="pb-passphrase" class="pb-passphrase-input" placeholder="Passphrase">
+                            <span class="pb-passphrase-hint">Share separately with recipient</span>
+                        </div>
+
+                        <!-- Bottom bar -->
+                        <div class="pb-bottom-bar">
+                            <span class="pb-char-count" id="pb-char-count">0 characters</span>
+
+                            <div class="pb-mode-toggle">
+                                <button class="pb-mode-btn active" data-mode="text">Text</button>
+                                <button class="pb-mode-btn" data-mode="file">File</button>
+                            </div>
+
+                            <span class="pb-spacer"></span>
+
+                            <button class="pb-submit-btn" id="pb-submit">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/></svg>
+                                Create Paste
                             </button>
                         </div>
-                        <small id="validationError" class="text-danger mt-2" style="display: none;">
-                            <i class="fas fa-exclamation-circle"></i> <strong>Please enter content before creating a paste.</strong>
-                        </small>
-                    </form>
+                    </div>
                 </div>
-                <div class="card-footer bg-white">
-                    <div id="progressWrapper" class="progress" style="display:none; height: 0.75rem;">
-                        <div id="uploadProgressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+
+                <!-- ==================== MY PASTES TAB ==================== -->
+                <div class="pb-panel" id="panel-mypastes">
+                    <div class="pb-card">
+                        <div class="pb-my-header">
+                            <input type="text" class="pb-my-key-input" id="pb-api-key" placeholder="API Key (optional)" autocomplete="off">
+                            <button class="tool-btn tool-btn-sm" id="pb-gen-key" title="Generate new API key">Generate Key</button>
+                            <span class="pb-spacer"></span>
+                            <button class="tool-btn tool-btn-sm tool-btn-primary" id="pb-load-pastes">
+                                <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>
+                                Load
+                            </button>
+                        </div>
+                        <div class="pb-table-wrap">
+                            <table class="pb-table" id="pb-pastes-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Type</th>
+                                        <th>Size</th>
+                                        <th>Created</th>
+                                        <th>Expires</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pb-pastes-body">
+                                    <tr><td colspan="6" class="pb-table-empty">Click "Load" to fetch your pastes (uses session cookie or API key)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pb-pagination" id="pb-pagination" style="display:none">
+                            <button id="pb-prev-page" disabled>&laquo; Prev</button>
+                            <span id="pb-page-info">Page 1</span>
+                            <button id="pb-next-page">Next &raquo;</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-5">
-            <div class="card shadow-sm sticky-top" style="top: 80px;">
-                <div class="card-body">
-                    <h5 class="card-title mb-3"><i class="fas fa-link text-success"></i> Share Link</h5>
-                    <div id="tableContainer" class="min-h-result text-center text-muted">
-                        <p class="mt-4"><i class="fas fa-arrow-left"></i> Create a paste to get a shareable link</p>
+
+            <!-- Error display -->
+            <div class="pb-error" id="pb-error" role="alert"></div>
+
+            <!-- Success result -->
+            <div class="pb-result" id="pb-result">
+                <div class="pb-result-header">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
+                    Paste Created Successfully
+                </div>
+                <div class="pb-result-body">
+                    <div class="pb-result-row">
+                        <span class="pb-result-label">Paste URL</span>
+                        <span class="pb-result-value"><a id="pb-res-url" href="#" target="_blank"></a></span>
+                        <button class="pb-copy-btn" data-copy="pb-res-url">Copy</button>
                     </div>
+                    <div class="pb-result-row">
+                        <span class="pb-result-label">Raw URL</span>
+                        <span class="pb-result-value"><a id="pb-res-raw" href="#" target="_blank"></a></span>
+                        <button class="pb-copy-btn" data-copy="pb-res-raw">Copy</button>
+                    </div>
+                    <div class="pb-result-row">
+                        <span class="pb-result-label">Delete Token</span>
+                        <span class="pb-result-value" id="pb-res-token"></span>
+                        <button class="pb-copy-btn" data-copy="pb-res-token">Copy</button>
+                    </div>
+                    <div class="pb-result-warn" id="pb-res-burn-warn" style="display:none">
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="flex-shrink:0;margin-top:1px"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
+                        <span>This paste will be <strong>permanently deleted</strong> after it is viewed once.</span>
+                    </div>
+                    <div class="pb-result-warn" id="pb-res-token-warn">
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="flex-shrink:0;margin-top:1px"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+                        <span>Save the delete token — it's the only way to delete this paste.</span>
+                    </div>
+                    <div class="pb-result-expire" id="pb-res-expire"></div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Visible FAQs -->
-    <h2 class="mt-4" id="faqs">FAQs</h2>
-    <div class="accordion" id="pastebinFaqs">
-        <div class="card"><div class="card-header"><h6 class="mb-0">Do links expire?</h6></div><div class="card-body small text-muted">Yes, encrypted or public pastes can expire (default 24 hours) to limit exposure.</div></div>
-        <div class="card"><div class="card-header"><h6 class="mb-0">Is encryption client‑side?</h6></div><div class="card-body small text-muted">Yes. If enabled, AES‑256‑GCM encryption happens in your browser; servers never see plaintext.</div></div>
-        <div class="card"><div class="card-header"><h6 class="mb-0">How should I share the password?</h6></div><div class="card-body small text-muted">Share the password separately from the link (e.g., different channel) for better security.</div></div>
-    </div>
-
-    <!-- Trust Banner -->
-    <div class="alert alert-light border mb-4">
-        <div class="row text-center small">
-            <div class="col-md-3 col-6 mb-2 mb-md-0">
-                <i class="fas fa-laptop-code text-primary"></i> <strong>Browser-Only:</strong> Client-side encryption
-            </div>
-            <div class="col-md-3 col-6 mb-2 mb-md-0">
-                <i class="fas fa-eye-slash text-success"></i> <strong>Zero-Knowledge:</strong> Server never sees plaintext
-            </div>
-            <div class="col-md-3 col-6">
-                <i class="fas fa-redo text-info"></i> <strong>Multiple Views:</strong> Access within 24 hours
-            </div>
-            <div class="col-md-3 col-6">
-                <i class="fas fa-trash-alt text-warning"></i> <strong>Auto-Delete:</strong> Removed after 24 hours
-            </div>
-        </div>
-    </div>
-
-    <!-- How It Works & Security Features -->
-    <div class="row mb-4">
-        <div class="col-md-6 mb-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title mb-3"><i class="fas fa-question-circle text-primary"></i> How It Works</h5>
-                    <ol class="mb-0 pl-3">
-                        <li class="mb-2"><strong>Enter your text:</strong> Paste code, logs, or any text content</li>
-                        <li class="mb-2"><strong>Choose protection:</strong> Enable encryption for sensitive data or share publicly</li>
-                        <li class="mb-2"><strong>Get shareable link:</strong> Receive a URL (and auto-generated password if encrypted)</li>
-                        <li class="mb-2"><strong>Share securely:</strong> Send link via email/chat, password via separate channel</li>
-                        <li class="mb-0"><strong>Recipient views:</strong> Opens link and enters password if required</li>
-                    </ol>
+            <!-- View Paste (shown when viewing a paste by ID) -->
+            <div class="pb-view-card" id="pb-view" style="display:none">
+                <!-- Burn-after-read warning -->
+                <div class="pb-burn-warning" id="pb-burn-gate">
+                    <div class="pb-burn-warning-icon">
+                        <svg width="48" height="48" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16c3.314 0 6-2.686 6-6 0-3.172-2.327-5.639-4.5-7.506C8.727 1.834 8 1.166 8 1.166S7.273 1.834 6.5 2.494C4.327 4.361 2 6.828 2 10c0 3.314 2.686 6 6 6zm0-1c-2.761 0-5-2.239-5-5 0-2.652 1.952-4.733 3.884-6.413.622-.54 1.116-.944 1.116-.944s.494.404 1.116.944C11.048 5.267 13 7.348 13 10c0 2.761-2.239 5-5 5z"/></svg>
+                    </div>
+                    <h3>Burn After Read</h3>
+                    <p>This paste will be <strong>permanently deleted</strong> after you view it. Are you sure you want to continue?</p>
+                    <button id="pb-burn-reveal">View & Destroy</button>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-3">
-            <div class="card shadow-sm h-100 border-success">
-                <div class="card-body">
-                    <h5 class="card-title mb-3"><i class="fas fa-shield-alt text-success"></i> Security Features</h5>
-                    <ul class="mb-0 list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Client-Side Encryption:</strong> AES-256-GCM in your browser</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Zero-Knowledge:</strong> Server never sees plaintext or passwords</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Auto-Generated Passwords:</strong> Strong 12-character passwords</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>24-Hour Auto-Delete:</strong> Automatic expiry and removal</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> <strong>Multiple Views:</strong> Access anytime within 24 hours</li>
-                        <li class="mb-0"><i class="fas fa-check text-success"></i> <strong>No Registration:</strong> Anonymous and private</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Common Use Cases -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <h5 class="card-title mb-3"><i class="fas fa-lightbulb text-warning"></i> Common Use Cases</h5>
-            <div class="row">
-                <div class="col-md-6">
-                    <ul class="mb-2">
-                        <li class="mb-2"><strong>Share Code Snippets:</strong> Share code examples, debug logs, or error traces with colleagues</li>
-                        <li class="mb-2"><strong>Temporary Credentials:</strong> Share API keys, passwords, or tokens securely with encryption</li>
-                        <li class="mb-2"><strong>Configuration Files:</strong> Share config files, environment variables, or setup instructions</li>
-                    </ul>
+                <!-- Passphrase prompt -->
+                <div class="pb-passphrase-prompt" id="pb-view-passphrase">
+                    <h3>This paste is private</h3>
+                    <p>Enter the passphrase to decrypt and view this paste.</p>
+                    <input type="password" id="pb-view-pass-input" placeholder="Passphrase">
+                    <br>
+                    <button id="pb-view-pass-submit">Unlock</button>
                 </div>
-                <div class="col-md-6">
-                    <ul class="mb-0">
-                        <li class="mb-2"><strong>Log Analysis:</strong> Share application logs, server outputs, or debugging information</li>
-                        <li class="mb-2"><strong>Notes & Documentation:</strong> Quick temporary notes, meeting notes, or documentation drafts</li>
-                        <li class="mb-2"><strong>Collaboration:</strong> Share JSON, XML, CSV data or API responses for review</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Author/Expertise Section (E-E-A-T) -->
-    <div class="card shadow-sm mb-4 border-primary">
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h5 class="card-title mb-2"><i class="fas fa-user-shield text-primary"></i> About the Developer</h5>
-                    <p class="mb-2">
-                        <strong>Anish Nath</strong> – Security Engineer & Cryptography Specialist
-                        <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="ml-2" title="Follow on Twitter">
-                            <i class="fab fa-twitter text-primary"></i> @anish2good
+                <!-- Paste content view -->
+                <div id="pb-view-container" style="display:none">
+                    <div class="pb-view-header">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg>
+                        <span id="pb-view-title">Untitled Paste</span>
+                    </div>
+                    <div class="pb-view-meta" id="pb-view-meta"></div>
+                    <pre class="pb-view-content" id="pb-view-content"><code id="pb-view-code"></code></pre>
+                    <div class="pb-view-actions">
+                        <button class="tool-btn tool-btn-sm" id="pb-view-copy">
+                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+                            Copy
+                        </button>
+                        <a class="tool-btn tool-btn-sm" id="pb-view-raw" href="#" target="_blank">
+                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/></svg>
+                            Raw
                         </a>
-                    </p>
-                    <p class="text-muted small mb-2">
-                        Extensive experience in cryptography, web security, and privacy engineering.
-                        Creator of 8gwifi.org, a comprehensive suite of free online security and networking tools used by developers and security professionals worldwide.
-                    </p>
-                    <div class="d-flex flex-wrap">
-                        <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-shield-alt"></i> Cryptography</span>
-                        <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-lock"></i> Web Security</span>
-                        <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-key"></i> AES Encryption</span>
-                        <span class="badge badge-primary mr-2 mb-2"><i class="fas fa-user-secret"></i> Zero-Knowledge Systems</span>
-                        <span class="badge badge-primary mb-2"><i class="fas fa-code"></i> Privacy Engineering</span>
+                        <button class="tool-btn tool-btn-sm" id="pb-view-download">
+                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+                            Download
+                        </button>
+                        <span class="pb-spacer"></span>
+                        <button class="tool-btn tool-btn-sm" id="pb-view-back">
+                            &larr; New Paste
+                        </button>
                     </div>
                 </div>
-                <div class="col-md-4 text-center">
-                    <div class="border rounded p-3 bg-light">
-                        <div class="mb-2">
-                            <i class="fas fa-tools fa-3x text-primary"></i>
+            </div>
+
+        </div>
+
+        <!-- Ads Column -->
+        <aside class="pb-ads-col">
+            <%@ include file="modern/ads/ad-three-column.jsp" %>
+        </aside>
+
+    </main>
+
+    <!-- Mobile Ad -->
+    <div class="tool-mobile-ad-container">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+    </div>
+
+    <!-- About Section -->
+    <section class="pb-content-section">
+        <div class="pb-content-container">
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+                    About This Pastebin
+                </div>
+                <div class="tool-card-body">
+                    <h2 class="pb-section-title">Paste &amp; Share Code, Text, or Files Online</h2>
+                    <p>Create and share text snippets, code, or files with this free online pastebin. Passphrase encryption keeps sensitive content secure. Burn-after-read ensures one-time viewing. Over 80 built-in transform tools let you encode, decode, hash, format, and analyze content directly in the editor.</p>
+
+                    <h3 class="pb-subsection-title">Key Features</h3>
+                    <ul class="pb-feature-list">
+                        <li><strong>Text &amp; File Pastes:</strong> Paste text directly or upload files of any type</li>
+                        <li><strong>Passphrase Encryption:</strong> Set visibility to Private and protect your paste with a passphrase</li>
+                        <li><strong>Burn After Read:</strong> Paste is permanently deleted after the first view</li>
+                        <li><strong>Configurable Expiry:</strong> Choose 1 hour, 24 hours, 7 days, 30 days, or never</li>
+                        <li><strong>Syntax Highlighting:</strong> Auto-detects language with manual override for 16 languages</li>
+                        <li><strong>80+ Built-in Tools:</strong> Base64, URL, Hex encode/decode, MD5/SHA hashing, JSON/YAML formatting, AES-256 encryption, JWT decode, and more</li>
+                        <li><strong>My Pastes Dashboard:</strong> Track and manage your pastes with session cookies or API keys</li>
+                    </ul>
+
+                    <h3 class="pb-subsection-title">Popular Use Cases</h3>
+                    <div class="pb-use-cases-grid">
+                        <ul>
+                            <li>Sharing code snippets with colleagues</li>
+                            <li>Sending configuration files or logs</li>
+                            <li>Sharing API responses for debugging</li>
+                            <li>Quick temporary note sharing</li>
+                        </ul>
+                        <ul>
+                            <li>Sending passwords or API keys securely</li>
+                            <li>Sharing build outputs and error traces</li>
+                            <li>Anonymous text publishing</li>
+                            <li>One-time secret sharing (burn mode)</li>
+                        </ul>
+                    </div>
+
+                    <h3 class="pb-subsection-title">How to Use</h3>
+                    <ol class="pb-steps-list">
+                        <li><strong>Enter Content:</strong> Type or paste text, or switch to File mode to upload a file</li>
+                        <li><strong>Configure Options:</strong> Set title, expiry, visibility, and syntax highlighting</li>
+                        <li><strong>Create Paste:</strong> Click "Create Paste" to get a shareable URL and delete token</li>
+                        <li><strong>Share:</strong> Send the paste URL. If private, share the passphrase separately</li>
+                    </ol>
+
+                    <h3 class="pb-subsection-title">Frequently Asked Questions</h3>
+                    <dl class="pb-faq-list">
+                        <dt>How do I share code online using this pastebin?</dt>
+                        <dd>Paste or type your code, optionally set a title and syntax language, then click Create Paste. You get a shareable URL instantly. No account required.</dd>
+                        <dt>How does encrypted paste work?</dt>
+                        <dd>Set visibility to Private and enter a passphrase. The server encrypts your paste. Anyone viewing it must enter the same passphrase to decrypt and read the content.</dd>
+                        <dt>What is burn-after-read?</dt>
+                        <dd>A burn-after-read paste is permanently deleted from the server after it is viewed once. Ideal for sharing passwords, API keys, or other secrets that should not persist.</dd>
+                        <dt>Can I upload files to this pastebin?</dt>
+                        <dd>Yes. Switch to File mode, drag and drop or browse to select a file. The file is stored on the server and recipients can download it via the raw URL.</dd>
+                        <dt>Does this pastebin support syntax highlighting?</dt>
+                        <dd>Yes. The pastebin auto-detects the language of your code using highlight.js. You can also manually select from 16 languages including JavaScript, Python, Java, Go, Rust, SQL, and more.</dd>
+                        <dt>What built-in tools does this pastebin have?</dt>
+                        <dd>Over 80 built-in transforms: Base64/URL/Hex encode and decode, MD5/SHA-256/SHA-512 hashing, JSON/YAML/CSV formatting, AES-256 encryption, ROT13, JWT decode, regex replace, extract URLs/emails/IPs, UUID generation, and more.</dd>
+                        <dt>How long do pastes last?</dt>
+                        <dd>You choose the expiry: 1 hour, 24 hours, 7 days, 30 days, or never. After expiry the paste is automatically deleted and cannot be recovered.</dd>
+                        <dt>Is this pastebin free to use?</dt>
+                        <dd>Completely free with no registration, no ads on paste view pages, and no limits on the number of pastes you can create.</dd>
+                    </dl>
+
+                    <div class="pb-highlight-box"><strong>Privacy First:</strong> Private pastes require a passphrase to view. Burn-after-read pastes are deleted from the server after a single view. No registration or personal data is required.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust & Methodology Section -->
+    <section class="pb-content-section">
+        <div class="pb-content-container">
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0z"/></svg>
+                    About This Tool & Methodology
+                </div>
+                <div class="tool-card-body">
+                    <p>This pastebin stores pastes on a dedicated backend server. Private pastes are encrypted server-side with the provided passphrase. All API communication uses HTTPS.</p>
+
+                    <div class="pb-trust-grid">
+                        <div class="pb-trust-block">
+                            <h3 class="pb-subsection-title">Authorship & Review</h3>
+                            <ul>
+                                <li><strong>Author:</strong> 8gwifi.org engineering team</li>
+                                <li><strong>Reviewed by:</strong> Anish Nath (tools maintainer)</li>
+                                <li><strong>Last updated:</strong> 2026-03-10</li>
+                            </ul>
                         </div>
-                        <p class="small mb-1"><strong>8gwifi.org</strong></p>
-                        <p class="small text-muted mb-0">Free Cryptography & Security Tools Since 2010</p>
+                        <div class="pb-trust-block">
+                            <h3 class="pb-subsection-title">Trust & Privacy</h3>
+                            <ul>
+                                <li>Private pastes require a passphrase for access.</li>
+                                <li>Burn-after-read pastes are permanently deleted after one view.</li>
+                                <li>No personal data or registration required.</li>
+                                <li>Questions? <a href="<%=request.getContextPath()%>/contactus.jsp" style="color:var(--tool-primary)">Contact us</a>.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Why Trust This Tool -->
-    <div class="alert alert-light border mb-4">
-        <div class="row text-center small">
-            <div class="col-md-4 mb-2 mb-md-0">
-                <i class="fas fa-code text-primary fa-2x mb-2"></i>
-                <p class="mb-0"><strong>Open Source Approach:</strong> Uses standard Web Crypto API</p>
-            </div>
-            <div class="col-md-4 mb-2 mb-md-0">
-                <i class="fas fa-history text-success fa-2x mb-2"></i>
-                <p class="mb-0"><strong>Proven Track Record:</strong> Serving developers since 2010</p>
-            </div>
-            <div class="col-md-4">
-                <i class="fas fa-users text-info fa-2x mb-2"></i>
-                <p class="mb-0"><strong>Trusted by Professionals:</strong> Used by security teams worldwide</p>
-            </div>
-        </div>
-    </div>
+    <!-- Support Section -->
+    <%@ include file="modern/components/support-section.jsp" %>
 
-    </div>
+    <!-- Sticky Footer Ad -->
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Tool Utilities -->
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+
+    <!-- Pastebin Config + JS -->
     <script>
-
-    function encryptText(text, password) {
-        var iv = crypto.getRandomValues(new Uint8Array(12));
-        return crypto.subtle.digest('SHA-256', new TextEncoder().encode(password))
-            .then(function (keyBuffer) {
-                return window.crypto.subtle.importKey(
-                    'raw',
-                    keyBuffer,
-                    'AES-GCM',
-                    true,
-                    ['encrypt' , 'decrypt']
-                );
-            })
-            .then(function (key) {
-                console.log("Key: ", key);
-                return crypto.subtle.encrypt(
-                    {name: 'AES-GCM', iv: iv},
-                    key,
-                    new TextEncoder().encode(text)
-                );
-            })
-            .then(function (encryptedBuffer) {
-                var combinedBuffer = new Uint8Array(iv.length + encryptedBuffer.byteLength);
-                combinedBuffer.set(iv, 0); // Set IV at the beginning
-                combinedBuffer.set(new Uint8Array(encryptedBuffer), iv.length); // Set encrypted text after IV
-                return combinedBuffer;
-            });
-    }
-
-    function generateStrongPassword(length) {
-        var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+";
-        var password = "";
-        for (var i = 0; i < length; i++) {
-            var randomIndex = Math.floor(Math.random() * charset.length);
-            password += charset[randomIndex];
-        }
-        return password;
-    }
-
-    function createPresignedURL() {
-        // Get values from the form
-        var email = document.getElementById("email").value;
-        var textData = document.getElementById("textData").value;
-        var isEncrypted = document.getElementById("isEncrypted").checked;
-        var password = generateStrongPassword(12);
-        var createBtn = document.getElementById("createPasteBtn");
-        var validationError = document.getElementById("validationError");
-
-        // Validation: Check if textData is empty
-        if (textData === null || textData.trim() === "") {
-            validationError.style.display = 'block';
-            // Add shake animation if available
-            if (validationError.classList) {
-                validationError.classList.add('animate__animated', 'animate__shakeX');
-                setTimeout(function() {
-                    validationError.classList.remove('animate__animated', 'animate__shakeX');
-                }, 1000);
-            }
-            // Scroll to and focus on textarea
-            document.getElementById("textData").focus();
-            document.getElementById("textData").style.borderColor = '#dc3545';
-            setTimeout(function() {
-                document.getElementById("textData").style.borderColor = '#dee2e6';
-            }, 2000);
-            return;
-        }
-
-        // Hide validation error if shown
-        validationError.style.display = 'none';
-
-        // Disable button and show processing state
-        var originalBtnHtml = createBtn.innerHTML;
-        createBtn.disabled = true;
-        createBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Paste...';
-
-
-        // Convert textData to Base58 format
-
-        // Encrypt textDataBase58 using AES encryption
-        if (isEncrypted) {
-            encryptText(textData, password)
-                .then(function (encryptedText) {
-                    // Make AJAX call to the servlet using jQuery
-                    console.log("Encrypted Text: " + encryptedText);
-                    var textDataBase64 = btoa(encryptedText);
-                    console.log("Encrypted Text (Base64): " + textDataBase64);
-                    var myblob = new Blob([textDataBase64], {
-                        type: 'text/plain'
-                    });
-                    $.ajax({
-                        type: "POST",
-                        url: "pastebin", // Replace with the actual servlet URL
-                        data: {email: email,  isEncrypted: isEncrypted},
-                        success: function (response) {
-                            // Handle the response here
-                            var jsonResponse = JSON.parse(response);
-                            var presignedUrl = jsonResponse.presignedUrl;
-                            var fileName = jsonResponse.fileName;
-                            var shortCode = jsonResponse.shortCode;
-
-                            // Use presignedUrl and fileName to upload the file to S3
-                            // You can implement the file upload logic here
-                            myblob.name = fileName;
-
-                            // Upload to S3
-                            uploadToS3(presignedUrl, myblob)
-                                .then(function () {
-                                    var viewUrl = window.location.origin + "/securebind.jsp?q=" + shortCode;
-
-                                    var cardHtml = ''+
-                                        '<div class="card shadow-sm">' +
-                                        '  <div class="card-body">' +
-                                        '    <h5 class="card-title mb-3">Paste Created</h5>' +
-                                        '    <div class="form-group">' +
-                                        '      <label for="pbUrlInput" class="font-weight-bold">Secret View URL</label>' +
-                                        '      <div class="input-group input-group-sm">' +
-                                        '        <input id="pbUrlInput" type="text" class="form-control" readonly value="' + viewUrl + '">' +
-                                        '        <div class="input-group-append">' +
-                                        '          <button class="btn btn-outline-secondary" type="button" onclick="copyById(\'pbUrlInput\', this)" data-toggle="tooltip" title="Copy URL" aria-label="Copy URL">📋 Copy</button>' +
-                                        '          <a class="btn btn-primary" target="_blank" rel="noopener" href="' + viewUrl + '" data-toggle="tooltip" title="Open in new tab" aria-label="Open URL">Open</a>' +
-                                        '        </div>' +
-                                        '      </div>' +
-                                        '    </div>' +
-                                        '    <div class="form-group mt-3">' +
-                                        '      <label for="pbPwdInput" class="font-weight-bold">Password</label>' +
-                                        '      <div class="input-group input-group-sm">' +
-                                        '        <input id="pbPwdInput" type="password" class="form-control" readonly value="' + password + '">' +
-                                        '        <div class="input-group-append">' +
-                                        '          <button class="btn btn-outline-secondary" type="button" onclick="copyById(\'pbPwdInput\', this)" data-toggle="tooltip" title="Copy password" aria-label="Copy Password">📋 Copy</button>' +
-                                        '          <button class="btn btn-outline-secondary" type="button" onclick="toggleReveal(\'pbPwdInput\', this)" data-toggle="tooltip" title="Show or hide password" aria-label="Show or hide password">👁 Show</button>' +
-                                        '        </div>' +
-                                        '      </div>' +
-                                        '      <small class="form-text text-muted">Share the URL and password via different channels for better security.</small>' +
-                                        '    </div>' +
-                                        '    <div class="d-flex mb-3">' +
-                                        '      <button class="btn btn-success btn-sm mr-2" type="button" onclick="copyBoth()" data-toggle="tooltip" title="Copy URL and password together">Copy Both</button>' +
-                                        '      <button class="btn btn-outline-secondary btn-sm" type="button" onclick="resetFormUI()" data-toggle="tooltip" title="Create another">Create Another</button>' +
-                                        '    </div>' +
-                                        '    <div class="alert alert-info mt-3 mb-0" role="alert"><i class="fas fa-info-circle"></i> This link remains active for <strong>24 hours</strong> and requires the password to view. Can be accessed multiple times.</div>' +
-                                        '  </div>' +
-                                        '</div>';
-
-                                    var tableContainer = document.getElementById("tableContainer");
-                                    tableContainer.innerHTML = cardHtml;
-
-                                    sendEmail(email, password , shortCode);
-
-                                    // Show success state on button
-                                    createBtn.disabled = false;
-                                    createBtn.innerHTML = '<i class="fas fa-check-circle"></i> Paste Created!';
-                                    createBtn.classList.remove('btn-primary');
-                                    createBtn.classList.add('btn-outline-success');
-                                    setTimeout(function() {
-                                        createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
-                                        createBtn.classList.remove('btn-outline-success');
-                                        createBtn.classList.add('btn-primary');
-                                    }, 3000);
-
-                                })
-                                .catch(function (error) {
-                                    console.error("Upload error:", error);
-                                    // Show error state on button
-                                    createBtn.disabled = false;
-                                    createBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Upload Failed';
-                                    createBtn.classList.remove('btn-primary');
-                                    createBtn.classList.add('btn-danger');
-                                    setTimeout(function() {
-                                        createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
-                                        createBtn.classList.remove('btn-danger');
-                                        createBtn.classList.add('btn-primary');
-                                    }, 4000);
-                                });
-                        },
-                        error: function (error) {
-                            console.error("Error:", error);
-                            // Show error state on button
-                            createBtn.disabled = false;
-                            createBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Server Error';
-                            createBtn.classList.remove('btn-primary');
-                            createBtn.classList.add('btn-danger');
-                            setTimeout(function() {
-                                createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
-                                createBtn.classList.remove('btn-danger');
-                                createBtn.classList.add('btn-primary');
-                            }, 4000);
-                        }
-                    });
-                })
-                .catch(function (error) {
-                    console.error("Encryption Error:", error);
-                    // Show error state on button
-                    createBtn.disabled = false;
-                    createBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Encryption Failed';
-                    createBtn.classList.remove('btn-primary');
-                    createBtn.classList.add('btn-danger');
-                    setTimeout(function() {
-                        createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
-                        createBtn.classList.remove('btn-danger');
-                        createBtn.classList.add('btn-primary');
-                    }, 4000);
-                });
-        } else {
-            var textDataBase64 = btoa(textData);
-            console.log("Text (Base64): " + textDataBase64);
-            var myblob = new Blob([textDataBase64], {
-                type: 'text/plain'
-            });
-            $.ajax({
-                type: "POST",
-                url: "pastebin", // Replace with the actual servlet URL
-                data: {email: email,  isEncrypted: isEncrypted},
-                success: function (response) {
-                    // Handle the response here
-                    var jsonResponse = JSON.parse(response);
-                    var presignedUrl = jsonResponse.presignedUrl;
-                    var fileName = jsonResponse.fileName;
-                    var shortCode = jsonResponse.shortCode;
-
-                    // Use presignedUrl and fileName to upload the file to S3
-                    // You can implement the file upload logic here
-                    myblob.name = fileName;
-
-                    // Upload to S3
-                    uploadToS3(presignedUrl, myblob)
-                        .then(function () {
-                            var viewUrl = window.location.origin + "/securebind.jsp?q=" + shortCode;
-
-                            var cardHtml = ''+
-                                '<div class="card shadow-sm">' +
-                                '  <div class="card-body">' +
-                                '    <h5 class="card-title mb-3">Paste Created</h5>' +
-                                '    <div class="form-group">' +
-                                '      <label for="pbUrlInput2" class="font-weight-bold">View URL</label>' +
-                                '      <div class="input-group input-group-sm">' +
-                                '        <input id="pbUrlInput2" type="text" class="form-control" readonly value="' + viewUrl + '">' +
-                                '        <div class="input-group-append">' +
-                                '          <button class="btn btn-outline-secondary" type="button" onclick="copyById(\'pbUrlInput2\', this)" data-toggle="tooltip" title="Copy URL" aria-label="Copy URL">📋 Copy</button>' +
-                                '          <a class="btn btn-primary" target="_blank" rel="noopener" href="' + viewUrl + '" data-toggle="tooltip" title="Open in new tab" aria-label="Open URL">Open</a>' +
-                                '        </div>' +
-                                '      </div>' +
-                                '    </div>' +
-                                '    <div class="alert alert-info mt-3 mb-0" role="alert"><i class="fas fa-info-circle"></i> This link remains active for <strong>24 hours</strong>. No password required. Can be accessed multiple times.</div>' +
-                                '  </div>' +
-                                '</div>';
-
-                            var tableContainer = document.getElementById("tableContainer");
-                            tableContainer.innerHTML = cardHtml;
-
-                            sendEmail(email, "", shortCode);
-
-                            // Show success state on button
-                            createBtn.disabled = false;
-                            createBtn.innerHTML = '<i class="fas fa-check-circle"></i> Paste Created!';
-                            createBtn.classList.remove('btn-primary');
-                            createBtn.classList.add('btn-outline-success');
-                            setTimeout(function() {
-                                createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
-                                createBtn.classList.remove('btn-outline-success');
-                                createBtn.classList.add('btn-primary');
-                            }, 3000);
-
-                        })
-                        .catch(function (error) {
-                            console.error("Upload error:", error);
-                            // Show error state on button
-                            createBtn.disabled = false;
-                            createBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Upload Failed';
-                            createBtn.classList.remove('btn-primary');
-                            createBtn.classList.add('btn-danger');
-                            setTimeout(function() {
-                                createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
-                                createBtn.classList.remove('btn-danger');
-                                createBtn.classList.add('btn-primary');
-                            }, 4000);
-                        });
-                },
-                error: function (error) {
-                    console.error("Error:", error);
-                    // Show error state on button
-                    createBtn.disabled = false;
-                    createBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Server Error';
-                    createBtn.classList.remove('btn-primary');
-                    createBtn.classList.add('btn-danger');
-                    setTimeout(function() {
-                        createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
-                        createBtn.classList.remove('btn-danger');
-                        createBtn.classList.add('btn-primary');
-                    }, 4000);
-                }
-            });
-
-        }
-    }
-
-    function uploadToS3(presignedUrl, file) {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.open("PUT", presignedUrl);
-
-            xhr.upload.onprogress = function(event) {
-                if (event.lengthComputable) {
-                    const percentComplete = Math.round((event.loaded / event.total) * 100);
-                    updateProgressBar(percentComplete);
-                }
-            };
-
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    console.log('Upload complete');
-                    resolve();
-                } else {
-                    reject(`Upload failed: ${xhr.status}`);
-                }
-            };
-
-            xhr.onerror = function() {
-                reject('XMLHttpRequest error');
-            };
-
-            xhr.setRequestHeader('Content-Type', file.type);
-            xhr.send(file);
-        });
-    }
-
-
-    function updateProgressBar(percent) {
-        const wrapper = document.getElementById('progressWrapper');
-        const progressBar = document.getElementById('uploadProgressBar');
-        if (!wrapper || !progressBar) return;
-        if (percent > 0 && wrapper.style.display === 'none') wrapper.style.display = 'block';
-        progressBar.style.width = percent + '%';
-        progressBar.setAttribute('aria-valuenow', percent);
-        progressBar.textContent = percent + '%';
-        if (percent >= 100) {
-            setTimeout(function(){ wrapper.style.display = 'none'; }, 1000);
-        }
-    }
-
-    // Utilities: clipboard and reveal helpers
-    function copyText(text) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            return navigator.clipboard.writeText(text);
-        }
-        return new Promise(function(resolve, reject) {
-            try {
-                var ta = document.createElement('textarea');
-                ta.value = text;
-                ta.style.position = 'fixed';
-                ta.style.opacity = '0';
-                document.body.appendChild(ta);
-                ta.focus();
-                ta.select();
-                var ok = document.execCommand('copy');
-                document.body.removeChild(ta);
-                ok ? resolve() : reject(new Error('copy failed'));
-            } catch (e) { reject(e); }
-        });
-    }
-
-    function copyById(inputId, btn) {
-        var el = document.getElementById(inputId);
-        if (!el) return;
-        copyText(el.value)
-            .then(function() { showCopied(btn); })
-            .catch(function() { showCopied(btn, false); });
-    }
-
-    function showCopied(btn, success) {
-        if (!btn) return;
-        var original = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = success === false ? '❌ Failed' : '✅ Copied';
-        setTimeout(function() {
-            btn.disabled = false;
-            btn.innerHTML = original;
-        }, 1500);
-    }
-
-    function toggleReveal(inputId, btn) {
-        var el = document.getElementById(inputId);
-        if (!el) return;
-        if (el.type === 'password') {
-            el.type = 'text';
-            if (btn) btn.innerHTML = '🙈 Hide';
-        } else {
-            el.type = 'password';
-            if (btn) btn.innerHTML = '👁 Show';
-        }
-    }
-
-   async function sendEmail(email, password, shortcode) {
-        // Create an object with the email and shortcode data
-        var data = {
-            email: email,
-            sendEmail: true,
-            password: password,
-            from: "pastebin.jsp",
-            shortcode: shortcode
-        };
-
-        // Make an AJAX POST request to the server-side script that handles email sending
-        $.ajax({
-            type: "POST",
-            url: "pastebin",
-            data: data,
-            success: function(response) {
-                // Handle success response
-                console.log("Email sent successfully");
-            },
-            error: function(xhr, status, error) {
-                // Handle error response
-                console.error("Error sending email:", status, error);
-            }
-        });
-    }
-
-
-
+    window.PASTEBIN_CONFIG = {
+        apiBase: '<%=request.getContextPath()%>/api/pastebin',
+        ctxPath: '<%=request.getContextPath()%>'
+    };
     </script>
-
-    <!-- JSON-LD: WebPage + Breadcrumbs + FAQ + HowTo -->
-    <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          "name": "Pastebin – Encrypted or Public Text Share",
-          "url": "https://8gwifi.org/pastebin.jsp",
-          "description": "Free online pastebin to share text publicly or encrypted with a password.",
-          "isPartOf": {"@id": "https://8gwifi.org#website"}
-        }
-    </script>
-    <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://8gwifi.org"},
-            {"@type": "ListItem", "position": 2, "name": "Pastebin", "item": "https://8gwifi.org/pastebin.jsp"}
-          ]
-        }
-    </script>
-    <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "Is encryption optional on this pastebin?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes. You can share text publicly (no password) or protect it with AES-256-GCM encryption by enabling the password option. All encryption happens client-side in your browser using the Web Crypto API."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Do I need to create an account?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "No sign-up or registration required. The pastebin is completely anonymous and runs entirely in your browser. No personal information is collected."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "What gets sent when I provide an email address?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Only the link to view the paste is emailed. Passwords are NEVER sent via email and must be shared through a separate secure channel (like Signal, WhatsApp, or in person)."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "How long do pastes remain available?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Pastes are available for 24 hours and can be viewed multiple times during this period. After 24 hours, they are automatically deleted from the server."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Is my data secure?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes. If you enable encryption, your text is encrypted client-side using AES-256-GCM before being uploaded. The server never sees your plaintext or password (zero-knowledge architecture). For public pastes, text is base64-encoded and stored temporarily."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Can I share code snippets or logs?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Absolutely. This pastebin is perfect for sharing code snippets, logs, configuration files, API responses, or any text content. Use encryption for sensitive data."
-              }
-            }
-          ]
-        }
-    </script>
-    <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "HowTo",
-          "name": "Share text online (public or encrypted)",
-          "description": "Free browser‑only pastebin to share text online.",
-          "totalTime": "PT1M",
-          "step": [
-            {"@type": "HowToStep", "name": "Enter text", "text": "Paste or type your text (email optional)."},
-            {"@type": "HowToStep", "name": "Enable encryption (optional)", "text": "Protect with a password (client‑side encryption)."},
-            {"@type": "HowToStep", "name": "Get link (+ password)", "text": "Receive a shareable link, and a password if encrypted."},
-            {"@type": "HowToStep", "name": "Share", "text": "Send the link. Share the password separately if used."},
-            {"@type": "HowToStep", "name": "Recipient views", "text": "Recipient opens the link (and enters password if required)."}
-          ],
-          "url": "https://8gwifi.org/pastebin.jsp"
-        }
-    </script>
-
-<script>
-    // DOM-ready hooks for tooltips and live character count
-    (function(){
-        if (window.jQuery && typeof $ === 'function') {
-            $(function(){
-                $('[data-toggle="tooltip"]').tooltip();
-
-                var createBtn = $('#createPasteBtn');
-                var textDataInput = $('#textData');
-                var validationError = $('#validationError');
-
-                // Initially disable button if empty
-                if (createBtn.length && textDataInput.length) {
-                    createBtn.prop('disabled', textDataInput.val().trim() === '');
-                }
-
-                // Real-time validation on input
-                textDataInput.on('input', function(){
-                    var len = (this.value || '').length;
-                    var cc = document.getElementById('charCount');
-                    if (cc) cc.textContent = len;
-
-                    // Enable/disable button based on content
-                    var hasContent = this.value.trim() !== '';
-                    if (createBtn.length) {
-                        createBtn.prop('disabled', !hasContent);
-
-                        // Add visual feedback
-                        if (hasContent) {
-                            createBtn.removeClass('btn-outline-primary').addClass('btn-primary');
-                            validationError.fadeOut();
-                        } else {
-                            createBtn.addClass('btn-primary').removeClass('btn-outline-primary');
-                        }
-                    }
-                });
-            });
-        }
-    })();
-
-    function resetFormUI() {
-        var form = document.getElementById('uploadForm');
-        if (form) form.reset();
-        var cc = document.getElementById('charCount');
-        if (cc) cc.textContent = '0';
-        var container = document.getElementById('tableContainer');
-        if (container) container.innerHTML = '';
-        var wrapper = document.getElementById('progressWrapper');
-        var bar = document.getElementById('uploadProgressBar');
-        if (bar) {
-            bar.style.width = '0%';
-            bar.setAttribute('aria-valuenow', 0);
-            bar.textContent = '0%';
-        }
-        if (wrapper) wrapper.style.display = 'none';
-
-        // Reset button state
-        var createBtn = document.getElementById('createPasteBtn');
-        if (createBtn) {
-            createBtn.disabled = true; // Disable since form is empty
-            createBtn.innerHTML = '<i class="fas fa-share-alt"></i> Create Paste';
-            createBtn.classList.remove('btn-outline-success', 'btn-danger', 'btn-outline-primary');
-            createBtn.classList.add('btn-primary');
-        }
-
-        // Hide validation error
-        var validationError = document.getElementById('validationError');
-        if (validationError) validationError.style.display = 'none';
-    }
-
-    function copyBoth() {
-        var urlEl = document.getElementById('pbUrlInput');
-        var pwdEl = document.getElementById('pbPwdInput');
-        var text = '';
-        if (urlEl) text += 'URL: ' + urlEl.value + '\n';
-        if (pwdEl) text += 'Password: ' + pwdEl.value + '\n';
-        if (text) {
-            copyText(text);
-        }
-    }
-</script>
-
-<%@ include file="thanks.jsp"%>
-<hr>
-
-<%@ include file="addcomments.jsp"%>
-
-</div>
-
-<%@ include file="body-close.jsp"%>
+    <script src="<%=request.getContextPath()%>/js/pastebin.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/pastebin-transforms.js?v=<%=cacheVersion%>"></script>
+</body>
+</html>
