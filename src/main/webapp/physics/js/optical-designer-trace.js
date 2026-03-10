@@ -260,21 +260,43 @@
 
   /**
    * Generate a fan of input rays for the 2D cross-section view.
+   * Supports both infinite conjugate (collimated) and finite object distance.
+   *
+   * Infinite:  parallel rays at height h, slope from field angle
+   * Finite:    rays diverge from object point at (-objectDistance, objHeight)
+   *            through the entrance pupil (beam radius)
+   *
    * @param {Design} design
-   * @param {number} fieldAngleDeg — half-field angle in degrees
+   * @param {number} fieldAngleDeg — half-field angle in degrees (infinite) or object height selector (finite)
    * @param {number} [numRays] — override design.raysPerBeam
    * @returns {Array<{height: number, slope: number}>} — 2D rays
    */
   function generateBeamRays2D(design, fieldAngleDeg, numRays) {
     numRays = numRays || design.raysPerBeam;
     var rays = [];
-    var slopeAngle = fieldAngleDeg * Math.PI / 180;
-    var slope = Math.tan(slopeAngle);
+    var objDist = design.objectDistance;
 
-    for (var i = 0; i < numRays; i++) {
-      var frac = numRays <= 1 ? 0 : (2 * i / (numRays - 1) - 1);
-      var h = design.beamRadius * frac;
-      rays.push({ height: h, slope: slope });
+    if (!isFinite(objDist)) {
+      // Infinite conjugate: collimated beam
+      var slopeAngle = fieldAngleDeg * Math.PI / 180;
+      var slope = Math.tan(slopeAngle);
+      for (var i = 0; i < numRays; i++) {
+        var frac = numRays <= 1 ? 0 : (2 * i / (numRays - 1) - 1);
+        var h = design.beamRadius * frac;
+        rays.push({ height: h, slope: slope });
+      }
+    } else {
+      // Finite conjugate: rays diverge from object point
+      // Object is at z = -objDist, y = objHeight
+      // objHeight from field angle: tan(angle) * objDist
+      var objHeight = Math.tan(fieldAngleDeg * Math.PI / 180) * objDist;
+      for (var j = 0; j < numRays; j++) {
+        var frac2 = numRays <= 1 ? 0 : (2 * j / (numRays - 1) - 1);
+        var pupilH = design.beamRadius * frac2;
+        // slope = (pupilH - objHeight) / objDist
+        var s = (pupilH - objHeight) / objDist;
+        rays.push({ height: pupilH, slope: s });
+      }
     }
     return rays;
   }
@@ -282,6 +304,7 @@
   /**
    * Generate 3D input rays for spot diagram / PSF.
    * Grid pattern across the entrance pupil.
+   * Supports finite object distance (rays diverge from object point).
    * @param {Design} design
    * @param {number} fieldAngleDeg
    * @param {number} numRays — total rays (gridded)
@@ -291,19 +314,39 @@
     var gridN = Math.max(3, Math.round(Math.sqrt(numRays)));
     var rays = [];
     var R = design.beamRadius;
-    var slopeAngle = fieldAngleDeg * Math.PI / 180;
-    var dirZ = Math.cos(slopeAngle);
-    var dirY = Math.sin(slopeAngle);
+    var objDist = design.objectDistance;
 
-    for (var ix = -gridN; ix <= gridN; ix++) {
-      for (var iy = -gridN; iy <= gridN; iy++) {
-        var x = R * ix / gridN;
-        var y = R * iy / gridN;
-        if (x*x + y*y > R*R) continue; // circular pupil
-        rays.push({
-          origin: [x, y, 0],
-          dir: [0, dirY, dirZ]
-        });
+    if (!isFinite(objDist)) {
+      // Infinite conjugate: collimated beam
+      var slopeAngle = fieldAngleDeg * Math.PI / 180;
+      var dirZ = Math.cos(slopeAngle);
+      var dirY = Math.sin(slopeAngle);
+
+      for (var ix = -gridN; ix <= gridN; ix++) {
+        for (var iy = -gridN; iy <= gridN; iy++) {
+          var x = R * ix / gridN;
+          var y = R * iy / gridN;
+          if (x*x + y*y > R*R) continue;
+          rays.push({ origin: [x, y, 0], dir: [0, dirY, dirZ] });
+        }
+      }
+    } else {
+      // Finite conjugate: rays from object point through pupil grid
+      var objHeight = Math.tan(fieldAngleDeg * Math.PI / 180) * objDist;
+
+      for (var jx = -gridN; jx <= gridN; jx++) {
+        for (var jy = -gridN; jy <= gridN; jy++) {
+          var px = R * jx / gridN;
+          var py = R * jy / gridN;
+          if (px*px + py*py > R*R) continue;
+          // Direction from object point (-objDist on z-axis, objHeight on y-axis)
+          // to pupil point (px, py, 0)
+          var dx = px;                  // x: 0 → px
+          var dy = py - objHeight;      // y: objHeight → py
+          var dz = objDist;             // z: -objDist → 0
+          var mag = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          rays.push({ origin: [px, py, 0], dir: [dx/mag, dy/mag, dz/mag] });
+        }
       }
     }
     return rays;
@@ -349,9 +392,23 @@
     numRays = numRays || 50;
     var R = design.beamRadius;
     var points = [];
+    var objDist = design.objectDistance;
+
+    // Helper: compute ray direction for a given pupil height
+    function rayDir3D(pupilY) {
+      if (!isFinite(objDist)) {
+        var sa = fieldAngleDeg * Math.PI / 180;
+        return [0, Math.sin(sa), Math.cos(sa)];
+      } else {
+        var objH = Math.tan(fieldAngleDeg * Math.PI / 180) * objDist;
+        var dy = pupilY - objH;
+        var mag = Math.sqrt(dy*dy + objDist*objDist);
+        return [0, dy/mag, objDist/mag];
+      }
+    }
 
     // First trace the chief ray (h=0) to get reference
-    var chiefSegs = traceSystem3D(design, [0, 0, 0], [0, Math.sin(fieldAngleDeg * Math.PI/180), Math.cos(fieldAngleDeg * Math.PI/180)], wavelength, { skipClip: true });
+    var chiefSegs = traceSystem3D(design, [0, 0, 0], rayDir3D(0), wavelength, { skipClip: true });
     var chiefY = 0;
     if (chiefSegs && chiefSegs.length > 0) {
       chiefY = chiefSegs[chiefSegs.length - 1].dst[1];
@@ -360,8 +417,7 @@
     for (var i = 0; i < numRays; i++) {
       var frac = 2 * i / (numRays - 1) - 1;
       var h = R * frac;
-      var slopeAngle = fieldAngleDeg * Math.PI / 180;
-      var segs = traceSystem3D(design, [0, h, 0], [0, Math.sin(slopeAngle), Math.cos(slopeAngle)], wavelength, { skipClip: true });
+      var segs = traceSystem3D(design, [0, h, 0], rayDir3D(h), wavelength, { skipClip: true });
       if (!segs || segs.length === 0) continue;
       var imgY = segs[segs.length - 1].dst[1];
       points.push({ h: frac, dy: imgY - chiefY });
@@ -406,14 +462,28 @@
     var fNum = Math.abs(f) / D;
     var NA = 1 / (2 * fNum);  // approximate for object at infinity
     var totalLen = design.totalLength();
+    var objDist = design.objectDistance;
+
+    // Magnification for finite conjugate: thin lens 1/v - 1/u = 1/f
+    // u = -objDist (object to the left), so 1/v = 1/f + 1/u = 1/f - 1/objDist
+    var magnification = null;
+    if (isFinite(objDist) && isFinite(f) && Math.abs(f) > 0.01) {
+      var invV = 1/f - 1/objDist;
+      if (Math.abs(invV) > 1e-15) {
+        var v = 1 / invV;
+        magnification = -v / objDist;  // m = v/u = v/(-objDist) → -v/objDist
+      }
+    }
 
     return {
-      focalLength: f,
-      fNumber:     fNum,
-      NA:          NA,
-      diameter:    D,
-      totalLength: totalLen,
-      power:       1000 / f   // diopters (1/m, f in mm → ×1000)
+      focalLength:   f,
+      fNumber:       fNum,
+      NA:            NA,
+      diameter:      D,
+      totalLength:   totalLen,
+      power:         1000 / f,   // diopters
+      objectDistance: objDist,
+      magnification: magnification
     };
   }
 
@@ -456,24 +526,32 @@
 
       var fanRays = generateBeamRays2D(design, angle);
       var allSegs = [];
+      var inputSlopes = [];
 
       for (var ri = 0; ri < fanRays.length; ri++) {
         var segs = traceRay2D(design, fanRays[ri].height, fanRays[ri].slope, wavelength, false);
-        if (segs) allSegs.push(segs);
+        if (segs) {
+          allSegs.push(segs);
+          inputSlopes.push(fanRays[ri].slope);
+        }
       }
 
-      beams.push({ angle: angle, color: color, raySegments: allSegs });
+      beams.push({ angle: angle, color: color, raySegments: allSegs, inputSlopes: inputSlopes });
 
       // Symmetric negative beam
       if (design.symBeams && angle > 0.01) {
         var negFan = generateBeamRays2D(design, -angle);
         var negSegs = [];
+        var negInputSlopes = [];
         for (var ni = 0; ni < negFan.length; ni++) {
           var ns = traceRay2D(design, negFan[ni].height, negFan[ni].slope, wavelength, false);
-          if (ns) negSegs.push(ns);
+          if (ns) {
+            negSegs.push(ns);
+            negInputSlopes.push(negFan[ni].slope);
+          }
         }
         var negColor = colorKey === 0.5 ? '#22c55e' : '#fb923c'; // green, salmon
-        beams.push({ angle: -angle, color: negColor, raySegments: negSegs });
+        beams.push({ angle: -angle, color: negColor, raySegments: negSegs, inputSlopes: negInputSlopes });
       }
     }
 

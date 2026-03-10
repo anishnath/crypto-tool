@@ -46,6 +46,7 @@
     els.wlShort        = document.getElementById('od-wl-short');
     els.wlLong         = document.getElementById('od-wl-long');
     els.imageRadius    = document.getElementById('od-image-radius');
+    els.objectDist     = document.getElementById('od-object-dist');
     els.autofocus      = document.getElementById('od-autofocus');
 
     // Metric display
@@ -107,7 +108,7 @@
     // Environment inputs — auto-update on change
     var envIds = ['od-beam-radius', 'od-rays-per-beam', 'od-fov-angle',
                   'od-wl-center', 'od-wl-short', 'od-wl-long',
-                  'od-image-radius'];
+                  'od-image-radius', 'od-object-dist'];
     for (var i = 0; i < envIds.length; i++) {
       var el = document.getElementById(envIds[i]);
       if (el) el.addEventListener('input', onEnvChange);
@@ -162,7 +163,11 @@
 
   function onEnvChange() {
     readEnvFromDOM();
-    refreshAll();
+    // Skip writeEnvToDOM (it would overwrite the field being edited)
+    buildTable();
+    design.applyAutofocus();
+    updateMetrics();
+    scheduleRepaint();
   }
 
   /* ================================================================
@@ -254,9 +259,10 @@
   /** Live editing: update on every keystroke for numeric fields */
   var inputDebounce = null;
   function onCellInput(e) {
+    var target = e.target;
     clearTimeout(inputDebounce);
     inputDebounce = setTimeout(function () {
-      applyCellValue(e.target);
+      applyCellValue(target);
     }, 200);
   }
 
@@ -319,6 +325,15 @@
     if (els.wlShort)     design.wavelengthShort  = parseFloat(els.wlShort.value)  || 0.44;
     if (els.wlLong)      design.wavelengthLong   = parseFloat(els.wlLong.value)   || 0.62;
     if (els.imageRadius) design.imageRadius = parseFloat(els.imageRadius.value) || 21.6;
+    if (els.objectDist) {
+      var odVal = els.objectDist.value.trim();
+      if (odVal === '' || odVal.toLowerCase() === 'inf' || odVal.toLowerCase() === 'infinity') {
+        design.objectDistance = Infinity;
+      } else {
+        var odNum = parseFloat(odVal);
+        design.objectDistance = (!isNaN(odNum) && odNum > 0) ? odNum : Infinity;
+      }
+    }
     if (els.autofocus)   design.autofocus   = els.autofocus.value;
   }
 
@@ -331,6 +346,7 @@
     if (els.wlShort)     els.wlShort.value     = design.wavelengthShort;
     if (els.wlLong)      els.wlLong.value      = design.wavelengthLong;
     if (els.imageRadius) els.imageRadius.value = design.imageRadius;
+    if (els.objectDist)  els.objectDist.value  = isFinite(design.objectDistance) ? design.objectDistance : 'Inf';
     if (els.autofocus)   els.autofocus.value   = design.autofocus;
   }
 
@@ -344,7 +360,21 @@
     if (els.metricFNum)  els.metricFNum.textContent  = isFinite(m.fNumber) ? 'f/' + m.fNumber.toFixed(2) : '—';
     if (els.metricNA)    els.metricNA.textContent    = isFinite(m.NA) ? m.NA.toFixed(4) : '—';
     if (els.metricLen)   els.metricLen.textContent   = m.totalLength.toFixed(2) + ' mm';
-    if (els.metricPower) els.metricPower.textContent = isFinite(m.power) ? m.power.toFixed(2) + ' D' : '—';
+    // Show magnification instead of power when finite conjugate
+    if (els.metricPower) {
+      if (m.magnification !== null) {
+        els.metricPower.textContent = m.magnification.toFixed(3) + '×';
+      } else {
+        els.metricPower.textContent = isFinite(m.power) ? m.power.toFixed(2) + ' D' : '—';
+      }
+    }
+    // Update label dynamically
+    var powerLabel = document.querySelector('#od-metric-power')
+      && document.querySelector('#od-metric-power').parentElement
+      && document.querySelector('#od-metric-power').parentElement.querySelector('.od-metric-label');
+    if (powerLabel) {
+      powerLabel.textContent = m.magnification !== null ? 'Magnification' : 'Power';
+    }
   }
 
   /* ================================================================

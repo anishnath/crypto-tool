@@ -266,6 +266,7 @@
     this.fovAngle      = 0;       // full field-of-view (degrees)
     this.symBeams      = false;   // draw symmetric negative-angle beams
     this.imageRadius   = 21.6;    // image plane half-height (mm)
+    this.objectDistance = Infinity; // mm from first surface (Infinity = collimated)
     this.initialMaterial = AIR;
 
     // Autofocus mode: 'off' | 'paraxial' | 'marginal'
@@ -346,14 +347,24 @@
   };
 
   /**
-   * Find paraxial image distance for the last surface.
-   * Uses the full system matrix: image distance = m00 / m01
-   * (from the condition that the imaging conjugate maps obj at infinity).
+   * Paraxial image distance (BFD) from last surface vertex.
+   * Row-vector convention: (y,u)*M where u = -n*theta.
+   * Infinite: BFD = M[0]/M[1].
+   * Finite: u_in = -n0*h/objDist, so:
+   *   BFD = (M[0] - M[2]*n0/objDist) / (M[1] - M[3]*n0/objDist)
    */
   Design.prototype.paraxialImageDist = function (wavelength_um) {
-    var M = this.systemMatrix(wavelength_um);
-    if (Math.abs(M[1]) < 1e-15) return Infinity;
-    return M[0] / M[1];
+    var S = this.systemMatrix(wavelength_um);
+    if (!isFinite(this.objectDistance)) {
+      if (Math.abs(S[1]) < 1e-15) return Infinity;
+      return S[0] / S[1];
+    }
+    var u = this.objectDistance;
+    var n0 = this.initialMaterial.getN(wavelength_um || this.wavelengthCenter);
+    var k = n0 / u;
+    var denom = S[1] - S[3] * k;
+    if (Math.abs(denom) < 1e-15) return Infinity;
+    return (S[0] - S[2] * k) / denom;
   };
 
   /**
@@ -384,7 +395,11 @@
   Design.prototype._marginalImageDist = function (wavelength_um) {
     if (!win.ODTrace) return Infinity;
     var h = this.beamRadius * 0.999;
-    var result = win.ODTrace.traceRay2D(this, h, 0, wavelength_um, true);
+    var slope = 0;
+    if (isFinite(this.objectDistance)) {
+      slope = h / this.objectDistance;
+    }
+    var result = win.ODTrace.traceRay2D(this, h, slope, wavelength_um, true);
     if (!result || result.length === 0) return Infinity;
     var lastSeg = result[result.length - 1];
     if (Math.abs(lastSeg.slope) < 1e-15) return Infinity;
@@ -413,6 +428,7 @@
     if (opts.fovAngle !== undefined)   d.fovAngle = opts.fovAngle;
     if (opts.imageRadius !== undefined) d.imageRadius = opts.imageRadius;
     if (opts.autofocus) d.autofocus = opts.autofocus;
+    if (opts.objectDistance !== undefined) d.objectDistance = opts.objectDistance;
 
     var surfs = opts.surfaces || [];
     for (var i = 0; i < surfs.length; i++) {
@@ -538,7 +554,7 @@
         conic:     s.conic
       });
     }
-    return JSON.stringify({
+    var obj = {
       version: 1,
       wavelengthCenter: this.wavelengthCenter,
       wavelengthShort:  this.wavelengthShort,
@@ -551,7 +567,11 @@
       initialMaterial: this.initialMaterial.name,
       autofocus:     this.autofocus,
       surfaces:      surfs
-    });
+    };
+    if (isFinite(this.objectDistance)) {
+      obj.objectDistance = this.objectDistance;
+    }
+    return JSON.stringify(obj);
   };
 
   Design.fromJSON = function (json) {
@@ -566,6 +586,7 @@
     d.symBeams      = !!data.symBeams;
     d.imageRadius   = data.imageRadius   || 21.6;
     d.autofocus     = data.autofocus     || 'off';
+    d.objectDistance = (data.objectDistance !== undefined && data.objectDistance !== null) ? data.objectDistance : Infinity;
     d.initialMaterial = MATERIALS[data.initialMaterial] || AIR;
 
     var surfs = data.surfaces || [];

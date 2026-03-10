@@ -85,17 +85,36 @@
     var maxAp = design.maxAperture();
     if (maxAp <= 0) maxAp = 25;
 
-    var marginL = 0.08, marginR = 0.06;
+    // For finite conjugate, show some object space before the lens
+    var objDist = design.objectDistance;
+    var preLenZ = 0; // how much z space before z=0 to show
+    var objCompressed = false; // true when obj space is compressed (break shown)
+    if (isFinite(objDist)) {
+      var maxPreLen = totalLen * 0.35;
+      if (objDist <= maxPreLen) {
+        preLenZ = objDist;
+      } else {
+        // Compressed: allocate fixed space, draw break indicator later
+        preLenZ = maxPreLen;
+        objCompressed = true;
+      }
+    } else {
+      // Collimated: show a small pre-lens region for incoming rays
+      preLenZ = totalLen * 0.12;
+    }
+    var fullZRange = preLenZ + totalLen;
+
+    var marginL = 0.06, marginR = 0.06;
     var marginTB = 0.10;
     var usableW = cw * (1 - marginL - marginR);
     var usableH = ch * (1 - 2 * marginTB);
 
-    var scaleX = usableW / totalLen;
+    var scaleX = usableW / fullZRange;
     var scaleY = usableH / (maxAp * 2);
     var scale = Math.min(scaleX, scaleY);
 
-    // Transform: optical axis at vertical center, left margin
-    var ox = cw * marginL;
+    // Transform: z=0 (first surface vertex) at preLenZ offset from left
+    var ox = cw * marginL + preLenZ * scale;
     var oy = ch / 2;
 
     function toCanvas(zOpt, yOpt) {
@@ -115,7 +134,8 @@
     c.strokeStyle = col.axis;
     c.lineWidth = 1;
     c.setLineDash([4, 3]);
-    var axL = toCanvas(-totalLen*0.05, 0);
+    var axLeftZ = -(preLenZ + totalLen * 0.05);
+    var axL = toCanvas(axLeftZ, 0);
     var axR = toCanvas(totalLen*1.05, 0);
     c.beginPath(); c.moveTo(axL.x, axL.y); c.lineTo(axR.x, axR.y); c.stroke();
     c.setLineDash([]);
@@ -195,6 +215,21 @@
       for (var rsi = 0; rsi < beam.raySegments.length; rsi++) {
         var segs = beam.raySegments[rsi];
         c.beginPath();
+
+        // Draw pre-lens ray (from object/left edge to first surface)
+        if (segs.length > 0) {
+          var startH = segs[0].y1;
+          var inSlope = (beam.inputSlopes && beam.inputSlopes[rsi] !== undefined) ? beam.inputSlopes[rsi] : 0;
+          // For compressed view, trace back to full objDist but draw at left edge
+          var traceBackDist = (objCompressed) ? objDist : preLenZ;
+          var backY = startH - inSlope * traceBackDist;
+          var drawZ = -preLenZ; // always draw from left edge of viewport
+          var pBack = toCanvas(drawZ, backY);
+          c.moveTo(pBack.x, pBack.y);
+          var pFirst = toCanvas(segs[0].x1, segs[0].y1);
+          c.lineTo(pFirst.x, pFirst.y);
+        }
+
         for (var si = 0; si < segs.length; si++) {
           var seg = segs[si];
           var p1 = toCanvas(seg.x1, seg.y1);
@@ -215,6 +250,53 @@
         c.stroke();
       }
       c.globalAlpha = 1;
+    }
+
+    /* ---- Object point marker (finite conjugate) ---- */
+    if (isFinite(objDist)) {
+      // Place object point at true position or left edge when compressed
+      var objDrawZ = objCompressed ? -preLenZ : -objDist;
+      var objFieldH = Math.tan(design.fovAngle * Math.PI / 180) * objDist;
+      var opP = toCanvas(objDrawZ, 0);
+
+      // Object point dot
+      c.fillStyle = '#22c55e';
+      c.beginPath(); c.arc(opP.x, opP.y, 5, 0, Math.PI * 2); c.fill();
+
+      // Off-axis object point (if FOV > 0, and within viewport)
+      if (objFieldH > 0.5 && objFieldH <= maxAp * 1.2) {
+        var opOff = toCanvas(objDrawZ, objFieldH);
+        c.beginPath(); c.arc(opOff.x, opOff.y, 3.5, 0, Math.PI * 2); c.fill();
+        var opOffN = toCanvas(objDrawZ, -objFieldH);
+        c.beginPath(); c.arc(opOffN.x, opOffN.y, 3.5, 0, Math.PI * 2); c.fill();
+      }
+
+      // "Obj" label + distance
+      c.fillStyle = col.textSub;
+      c.font = '10px system-ui, sans-serif';
+      c.textAlign = 'center';
+      var distLabel = objDist >= 1000 ? (objDist/1000).toFixed(1) + ' m' : objDist.toFixed(0) + ' mm';
+      c.fillText('Obj ' + distLabel, opP.x, opP.y - 10);
+
+      // Axis break indicator when compressed
+      if (objCompressed) {
+        // Position break at 25% between object point and first surface vertex
+        var surfP = toCanvas(0, 0);
+        var breakGap = (surfP.x - opP.x) * 0.25;
+        var breakX = opP.x + Math.max(breakGap, 16);
+        var breakW = 12;
+        var breakH = 6;
+        c.strokeStyle = col.text;
+        c.lineWidth = 1.5;
+        c.beginPath();
+        c.moveTo(breakX - 2, oy);
+        c.lineTo(breakX, oy - breakH);
+        c.lineTo(breakX + breakW * 0.33, oy + breakH);
+        c.lineTo(breakX + breakW * 0.66, oy - breakH);
+        c.lineTo(breakX + breakW, oy + breakH);
+        c.lineTo(breakX + breakW + 2, oy);
+        c.stroke();
+      }
     }
 
     /* ---- Focal dots (paraxial) ---- */

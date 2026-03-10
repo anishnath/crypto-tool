@@ -129,6 +129,8 @@
                     <input class="od-input od-env-inp" id="od-rays-per-beam" type="number" step="2" min="3" max="51">
                     <label class="od-env-lbl">FOV &deg;</label>
                     <input class="od-input od-env-inp" id="od-fov-angle" type="number" step="1" min="0" max="90">
+                    <label class="od-env-lbl">Obj D</label>
+                    <input class="od-input od-env-inp" id="od-object-dist" type="text" value="Inf" title="Object distance in mm (Inf = collimated)">
                     <label class="od-env-lbl">Img R</label>
                     <input class="od-input od-env-inp" id="od-image-radius" type="number" step="1" min="1">
                     <label class="od-env-lbl">&lambda;c</label>
@@ -439,7 +441,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (shared) {
             try {
                 var d = ODModel.Design.fromJSON(shared);
-                ODUI.loadPreset(null);
                 // Overwrite with shared design
                 ODUI.getDesign && (function () {
                     var current = ODUI.getDesign();
@@ -453,6 +454,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     current.wavelengthLong = d.wavelengthLong;
                     current.imageRadius = d.imageRadius;
                     current.autofocus = d.autofocus;
+                    current.objectDistance = d.objectDistance;
                     ODUI.refreshAll();
                 })();
             } catch (e) {
