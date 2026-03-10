@@ -515,24 +515,23 @@
         return toolIcons.tool;
     }
     
-    // Load tools database (uses shared promise from nav-header.jsp — single fetch)
+    async function fetchToolsDb(url) {
+        var r = await fetch(url);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+    }
+
     async function loadRelatedTools() {
         try {
-            // Use shared database loader if available (avoids duplicate fetches)
-            let data = null;
+            var data = null;
             if (typeof window.__getToolsDatabase === 'function') {
                 data = await window.__getToolsDatabase();
-            } else {
-                // Fallback: fetch directly
-                const response = await fetch(config.toolsDatabasePath);
-                if (!response.ok) {
-                    throw new Error('Failed to load tools database: ' + response.status);
-                }
-                data = await response.json();
             }
-
             if (!data || !data.tools) {
-                throw new Error('Invalid tools database format');
+                data = await fetchToolsDb(config.toolsDatabasePath);
+            }
+            if (!data || !data.tools) {
+                throw new Error('tools-database.json missing "tools" key (keys: ' + (data ? Object.keys(data).join(',') : 'null') + ')');
             }
 
             let tools = data.tools || [];

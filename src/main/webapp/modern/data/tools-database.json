@@ -2705,6 +2705,13 @@
       "description": "Optical Instruments Calculator - Microscope, telescope, and resolving power"
     },
     {
+      "name": "Optical Designer",
+      "url": "physics/optical-designer.jsp",
+      "category": "Physics",
+      "keywords": "optical designer, lens design, ray tracing, sequential ray trace, spot diagram, ABCD matrix, Sellmeier equation, achromatic doublet, Cooke triplet, Petzval lens, chromatic aberration, conic surfaces, focal length",
+      "description": "Optical Designer - Multi-surface lens design with sequential ray tracing, Sellmeier dispersion, spot diagrams, and ABCD matrix analysis"
+    },
+    {
       "name": "Oscillations & SHM Calculator",
       "url": "physics/oscillations.jsp",
       "category": "Physics",
