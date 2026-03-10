@@ -1540,6 +1540,10 @@
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:4px"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/><path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2z"/></svg>
                         New Paste
                     </button>
+                    <button class="pb-tab" role="tab" data-tab="recent" aria-selected="false">
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:4px"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/></svg>
+                        Recent
+                    </button>
                     <button class="pb-tab" role="tab" data-tab="mypastes" aria-selected="false">
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:4px"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/></svg>
                         My Pastes
@@ -1670,6 +1674,33 @@
                                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/></svg>
                                 Create Paste
                             </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== RECENT PASTES TAB ==================== -->
+                <div class="pb-panel" id="panel-recent">
+                    <div class="pb-card">
+                        <div class="pb-table-wrap">
+                            <table class="pb-table" id="pb-recent-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Syntax</th>
+                                        <th>Size</th>
+                                        <th>Views</th>
+                                        <th>Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pb-recent-body">
+                                    <tr><td colspan="5" class="pb-table-empty pb-table-loading">Loading recent pastes&hellip;</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pb-pagination" id="pb-recent-pagination" style="display:none">
+                            <button id="pb-recent-prev" disabled>&laquo; Prev</button>
+                            <span id="pb-recent-page-info">Page 1</span>
+                            <button id="pb-recent-next">Next &raquo;</button>
                         </div>
                     </div>
                 </div>

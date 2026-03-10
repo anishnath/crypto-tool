@@ -28,6 +28,9 @@
     var selectedFile = null;
     var myPastesOffset = 0;
     var myPastesLimit = 20;
+    var recentOffset = 0;
+    var recentLimit = 20;
+    var recentLoaded = false;
 
     // ── Tabs ──
     document.querySelectorAll('.pb-tab').forEach(function(tab) {
@@ -37,6 +40,10 @@
             tab.classList.add('active');
             tab.setAttribute('aria-selected', 'true');
             document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+            // Auto-load recent pastes on first tab visit
+            if (tab.dataset.tab === 'recent' && !recentLoaded) {
+                loadRecentPastes();
+            }
         });
     });
 
@@ -490,6 +497,61 @@
         })
         .catch(function(err) { showError(err.message); });
     }
+
+    // ── Recent Pastes ──
+    function loadRecentPastes() {
+        fetch(API_BASE + '/recent?limit=' + recentLimit + '&offset=' + recentOffset)
+        .then(handleResponse)
+        .then(function(data) {
+            recentLoaded = true;
+            renderRecentTable(data.pastes || []);
+        })
+        .catch(function(err) {
+            document.getElementById('pb-recent-body').innerHTML =
+                '<tr><td colspan="5" class="pb-table-empty">Failed to load recent pastes.</td></tr>';
+        });
+    }
+
+    function renderRecentTable(pastes) {
+        var $body = document.getElementById('pb-recent-body');
+        if (!pastes.length) {
+            $body.innerHTML = '<tr><td colspan="5" class="pb-table-empty">No public pastes yet.</td></tr>';
+            document.getElementById('pb-recent-pagination').style.display = 'none';
+            return;
+        }
+
+        $body.innerHTML = pastes.map(function(p) {
+            return '<tr>' +
+                '<td><a href="#" data-paste-id="' + escAttr(p.id) + '">' + escHtml(p.title || 'Untitled') + '</a></td>' +
+                '<td>' + escHtml(p.syntax || 'plain') + '</td>' +
+                '<td>' + formatBytes(p.size || 0) + '</td>' +
+                '<td>' + (p.viewCount || 0) + '</td>' +
+                '<td>' + timeAgo(p.createdAt) + '</td>' +
+                '</tr>';
+        }).join('');
+
+        $body.querySelectorAll('a[data-paste-id]').forEach(function(a) {
+            a.addEventListener('click', function(e) {
+                e.preventDefault();
+                viewPaste(a.dataset.pasteId);
+            });
+        });
+
+        document.getElementById('pb-recent-pagination').style.display = 'flex';
+        document.getElementById('pb-recent-page-info').textContent = 'Page ' + Math.floor(recentOffset / recentLimit + 1);
+        document.getElementById('pb-recent-prev').disabled = recentOffset === 0;
+        document.getElementById('pb-recent-next').disabled = pastes.length < recentLimit;
+    }
+
+    document.getElementById('pb-recent-prev').addEventListener('click', function() {
+        recentOffset = Math.max(0, recentOffset - recentLimit);
+        loadRecentPastes();
+    });
+
+    document.getElementById('pb-recent-next').addEventListener('click', function() {
+        recentOffset += recentLimit;
+        loadRecentPastes();
+    });
 
     // ── Check URL for paste ID on load ──
     function checkUrlForPaste() {
