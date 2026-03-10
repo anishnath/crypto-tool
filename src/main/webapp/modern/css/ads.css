@@ -101,6 +101,75 @@
 }
 
 /* ============================================
+   HERO BANNER AD (Above-the-fold, inside hero)
+   ============================================ */
+
+.ad-hero-banner {
+    margin: 0;
+    border: none;
+    border-left: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 8px 0;
+    min-height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.ad-hero-banner:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.ad-hero-banner .ad-label {
+    font-size: 9px;
+    margin-bottom: 4px;
+    opacity: 0.6;
+}
+
+/* Desktop: wide leaderboard */
+@media (min-width: 992px) {
+    .ad-hero-banner {
+        min-height: 90px;
+        max-width: 970px;
+        margin: 0 auto;
+        padding: 10px 0;
+    }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+    .ad-hero-banner {
+        min-height: 90px;
+        max-width: 728px;
+        margin: 0 auto;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .ad-hero-banner {
+        min-height: 50px;
+        padding: 6px 0;
+    }
+}
+
+/* Collapse if empty (no ad fill) */
+.ad-hero-banner:not(.ad-loaded) {
+    min-height: 0;
+    padding: 0;
+}
+
+/* Dark theme */
+[data-theme="dark"] .ad-hero-banner {
+    background: transparent;
+    border-color: transparent;
+}
+
+/* ============================================
    FLOATING RIGHT AD STYLES (Desktop Only)
    ============================================ */
 
