@@ -652,4 +652,14 @@
         <url-pattern>/jobs/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Pastebin Proxy -->
+    <servlet>
+        <servlet-name>PastebinProxyServlet</servlet-name>
+        <servlet-class>com.pastebin.web.servlets.PastebinProxyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PastebinProxyServlet</servlet-name>
+        <url-pattern>/api/pastebin/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
