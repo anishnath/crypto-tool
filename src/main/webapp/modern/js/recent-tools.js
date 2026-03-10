@@ -3,18 +3,26 @@
  * Tracks tool usage in localStorage and displays in navigation
  */
 
+function resolveToolUrl(url) {
+    if (typeof window.__resolveToolUrl === 'function') {
+        return window.__resolveToolUrl(url);
+    }
+    return url;
+}
+
 // Track tool visit
 function trackToolVisit(toolName, toolUrl, category) {
     try {
+        const normalizedUrl = resolveToolUrl(toolUrl);
         let recent = JSON.parse(localStorage.getItem('recentTools') || '[]');
         
         // Remove if already exists
-        recent = recent.filter(t => t.url !== toolUrl);
+        recent = recent.filter(t => resolveToolUrl(t.url) !== normalizedUrl);
         
         // Add to beginning
         recent.unshift({
             name: toolName,
-            url: toolUrl,
+            url: normalizedUrl,
             category: category,
             timestamp: Date.now()
         });
@@ -54,8 +62,9 @@ function updateRecentToolsDisplay() {
     
     const html = recent.map(tool => {
         const icon = (typeof window.getToolIcon === 'function') ? window.getToolIcon(tool) : '🔧';
+        const resolvedUrl = resolveToolUrl(tool.url);
         return `
-        <a href="${tool.url}" class="drawer-link" onclick="trackToolClick('${tool.name}', '${tool.category}')">
+        <a href="${resolvedUrl}" class="drawer-link" onclick="trackToolClick('${tool.name}', '${tool.category}')">
             <span class="drawer-link-icon">${icon}</span>
             <div style="flex: 1;">
                 <div style="font-weight: 500;">${escapeHtml(tool.name)}</div>
@@ -89,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Track current page as tool visit (with delay to ensure DOM is ready)
     setTimeout(function() {
         const currentPath = window.location.pathname;
-        const currentUrl = window.location.href;
+        const contextPath = window.__appContextPath || '';
         
         // Only track if it's a tool page (ends with .jsp and not index)
         if (currentPath && currentPath.endsWith('.jsp') && 
@@ -112,8 +121,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 category = categoryElement.textContent.trim() || categoryElement.getAttribute('data-category') || 'Unknown';
             }
             
-            const fileName = currentPath.split('/').pop();
-            trackToolVisit(toolName, fileName, category);
+            const appRelativePath = contextPath && currentPath.startsWith(contextPath + '/')
+                ? currentPath.substring(contextPath.length + 1)
+                : currentPath.replace(/^\/+/, '');
+            trackToolVisit(toolName, appRelativePath, category);
         }
     }, 500);
 });
@@ -121,4 +132,3 @@ document.addEventListener('DOMContentLoaded', function() {
 // Expose for use in other scripts
 window.trackToolVisit = trackToolVisit;
 window.getRecentTools = getRecentTools;
-

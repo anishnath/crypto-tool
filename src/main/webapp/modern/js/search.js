@@ -12,6 +12,13 @@ console.log('🔍 Search.js v2.1 loaded');
 
 (function() {
     'use strict';
+
+    function resolveToolUrl(url) {
+        if (typeof window.__resolveToolUrl === 'function') {
+            return window.__resolveToolUrl(url);
+        }
+        return url;
+    }
     
     // Prevent multiple initializations
     if (window._searchEngineInitialized) {
@@ -265,8 +272,9 @@ console.log('🔍 Search.js v2.1 loaded');
                 const escapedName = tool.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 const escapedCategory = tool.category.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 const icon = (typeof window.getToolIcon === 'function') ? window.getToolIcon(tool) : '🔧';
+                const resolvedUrl = resolveToolUrl(tool.url);
                 return `
-                    <a href="${tool.url}" class="search-result-item" onclick="if(window.trackSearchClick)window.trackSearchClick('${escapedName}', '${escapedCategory}')">
+                    <a href="${resolvedUrl}" class="search-result-item" onclick="if(window.trackSearchClick)window.trackSearchClick('${escapedName}', '${escapedCategory}')">
                         <span class="search-result-icon">${icon}</span>
                         <div class="search-result-content">
                             <div class="search-result-category">${tool.category}</div>

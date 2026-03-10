@@ -6,6 +6,13 @@
 let categoriesData = null;
 let toolsDatabase = null;
 
+function resolveToolUrl(url) {
+    if (typeof window.__resolveToolUrl === 'function') {
+        return window.__resolveToolUrl(url);
+    }
+    return url;
+}
+
 // Load categories data (uses shared promise from nav-header.jsp)
 async function loadCategoriesData() {
     if (categoriesData) return categoriesData;
@@ -271,9 +278,10 @@ async function renderCategoriesMegaMenu() {
         
         tools.forEach(tool => {
             const icon = getToolIcon(tool);
+            const resolvedUrl = resolveToolUrl(tool.url);
             html += `
                 <li>
-                    <a href="${tool.url}" class="mega-menu-tool-link" onclick="if(typeof trackToolVisit==='function')trackToolVisit('${escapeHtml(tool.name).replace(/'/g, "\\'")}', '${tool.url}', '${category.replace(/'/g, "\\'")}');">
+                    <a href="${resolvedUrl}" class="mega-menu-tool-link" onclick="if(typeof trackToolVisit==='function')trackToolVisit('${escapeHtml(tool.name).replace(/'/g, "\\'")}', '${resolvedUrl}', '${category.replace(/'/g, "\\'")}');">
                         <span class="tool-icon-small">${icon}</span>
                         ${escapeHtml(tool.name)}
                     </a>
@@ -351,8 +359,9 @@ async function renderCategoriesInDrawer() {
                     <div class="drawer-category-tools">
                         ${sortedTools.map(tool => {
                             const icon = getToolIcon(tool);
+                            const resolvedUrl = resolveToolUrl(tool.url);
                             return `
-                            <a href="${tool.url}" class="drawer-tool-link" onclick="if(typeof trackToolVisit==='function')trackToolVisit('${escapeHtml(tool.name).replace(/'/g, "\\'")}', '${tool.url}', '${category.replace(/'/g, "\\'")}');">
+                            <a href="${resolvedUrl}" class="drawer-tool-link" onclick="if(typeof trackToolVisit==='function')trackToolVisit('${escapeHtml(tool.name).replace(/'/g, "\\'")}', '${resolvedUrl}', '${category.replace(/'/g, "\\'")}');">
                                 <span class="tool-icon-small">${icon}</span>
                                 ${escapeHtml(tool.name)}
                             </a>
@@ -413,4 +422,3 @@ document.addEventListener('DOMContentLoaded', function() {
 // Expose functions
 window.toggleCategorySection = toggleCategorySection;
 window.getToolIcon = getToolIcon; // Make available for search and other components
-

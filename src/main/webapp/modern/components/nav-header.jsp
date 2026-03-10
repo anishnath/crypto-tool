@@ -326,9 +326,33 @@
 <!-- Shared tools-database.json loader (single fetch, reused by categories-menu, search, related-tools) -->
 <script>
 (function() {
+    var contextPath = '<%=request.getContextPath()%>' || '';
     var dbPath = '<%=request.getContextPath()%>/modern/data/tools-database.json';
+    window.__appContextPath = contextPath;
     window.__toolsDatabasePath = dbPath;
     window.__toolsDatabasePromise = null;
+    window.__resolveToolUrl = function(url) {
+        var raw = (url == null ? '' : String(url)).trim();
+        if (!raw) return '#';
+
+        if (/^(?:[a-z]+:)?\/\//i.test(raw) || raw.startsWith('mailto:') || raw.startsWith('tel:') || raw.startsWith('#')) {
+            return raw;
+        }
+
+        if (/^javascript:/i.test(raw)) {
+            return '#';
+        }
+
+        if (contextPath && (raw === contextPath || raw.startsWith(contextPath + '/'))) {
+            return raw;
+        }
+
+        if (raw.startsWith('/')) {
+            return contextPath + raw;
+        }
+
+        return contextPath + '/' + raw.replace(/^\.\//, '');
+    };
     window.__getToolsDatabase = function() {
         if (!window.__toolsDatabasePromise) {
             window.__toolsDatabasePromise = fetch(dbPath)
@@ -345,4 +369,3 @@
 
 <!-- Recent Tools Tracking -->
 <script src="<%=request.getContextPath()%>/modern/js/recent-tools.js" defer onerror="console.warn('recent-tools.js failed to load')"></script>
-
