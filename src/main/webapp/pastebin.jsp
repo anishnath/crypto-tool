@@ -1621,8 +1621,8 @@
                             <div class="pb-opt-group">
                                 <label for="pb-visibility">Visibility</label>
                                 <select id="pb-visibility">
-                                    <option value="unlisted">Unlisted</option>
                                     <option value="public">Public</option>
+                                    <option value="unlisted">Unlisted</option>
                                     <option value="private">Private</option>
                                 </select>
                             </div>
