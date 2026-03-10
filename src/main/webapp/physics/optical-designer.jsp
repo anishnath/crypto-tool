@@ -338,7 +338,7 @@
     </div>
 
     <!-- ===== ADS COLUMN ===== -->
-    <div class="tool-column-ads" style="position:sticky;top:70px;align-self:start;">
+    <div class="tool-ads-column" style="height:auto;align-self:start;position:sticky;top:70px;">
         <jsp:include page="../modern/ads/ad-in-content-mid.jsp" />
     </div>
 </div>
