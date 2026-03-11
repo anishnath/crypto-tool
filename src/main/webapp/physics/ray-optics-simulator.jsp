@@ -327,7 +327,7 @@
 
     <!-- ===== ADS COLUMN ===== -->
     <div class="rs-ads-col">
-        <jsp:include page="../modern/ads/ad-in-content-mid.jsp" />
+        <jsp:include page="../modern/ads/ad-three-column.jsp" />
     </div>
 </div>
 
