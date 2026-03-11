@@ -223,8 +223,6 @@
             </div>
         </div>
 
-        <jsp:include page="../modern/ads/ad-in-content-top.jsp" />
-
         <!-- ===== Educational Content ===== -->
         <div class="rs-card">
             <div class="rs-card-header">Ray Optics Concepts</div>
