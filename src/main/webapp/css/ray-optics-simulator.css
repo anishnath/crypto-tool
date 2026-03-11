@@ -12,7 +12,7 @@
 }
 
 /* ---- layout (overrides three-column-tool.css to 2-column) ---- */
-.rs-layout {
+.rs-layout.tool-page-container {
   grid-template-columns: 1fr 300px;
   min-height: calc(100vh - 180px);
 }
@@ -235,10 +235,35 @@
   padding: 0.75rem;
 }
 
-/* ---- responsive (ads column hiding handled by three-column-tool.css) ---- */
+/* ---- responsive: override three-column-tool.css breakpoints for 2-col layout ---- */
+/* three-column-tool.css hides tool-ads-column at 1024px and switches to flex at 900px.
+   Ray-optics is already 2-col so keep ads visible down to 768px. */
 @media (max-width: 1024px) {
-  .rs-layout {
+  .rs-layout.tool-page-container {
+    grid-template-columns: 1fr 300px;
+    display: grid;
+  }
+  .rs-layout .tool-ads-column {
+    display: block;
+  }
+}
+@media (max-width: 900px) {
+  .rs-layout.tool-page-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    flex-direction: unset;
+  }
+  .rs-layout .tool-ads-column {
+    display: block;
+  }
+}
+@media (max-width: 768px) {
+  .rs-layout.tool-page-container {
     grid-template-columns: 1fr;
+    display: grid;
+  }
+  .rs-layout .tool-ads-column {
+    display: none;
   }
 }
 
