@@ -2712,6 +2712,13 @@
       "description": "Optical Designer - Multi-surface lens design with sequential ray tracing, Sellmeier dispersion, spot diagrams, and ABCD matrix analysis"
     },
     {
+      "name": "Ray Optics Simulator",
+      "url": "physics/ray-optics-simulator.jsp",
+      "category": "Physics",
+      "keywords": "ray optics simulator, 2d ray tracing, optical bench, mirror simulator, lens simulator, prism rainbow, snell's law, fresnel equations, total internal reflection, beam splitter, diffraction grating, grin lens, refraction, reflection, dispersion, telescope, microscope, camera obscura, retroreflector, optical cavity",
+      "description": "Ray Optics Simulator - Freeform 2D ray tracing with 19 optical elements, 22 presets, Snell's law, Fresnel reflections, and Cauchy dispersion"
+    },
+    {
       "name": "Oscillations & SHM Calculator",
       "url": "physics/oscillations.jsp",
       "category": "Physics",

@@ -697,7 +697,7 @@
             <div class="category-header">
                 <span class="category-icon">🔬</span>
                 <h2>Optics</h2>
-                <span class="category-count">8 tools</span>
+                <span class="category-count">9 tools</span>
             </div>
             <div class="tools-grid">
                 <a href="<%=request.getContextPath()%>/lens-mirror-calculator.jsp" class="tool-card" style="--card-accent: #e11d48;">
@@ -805,6 +805,22 @@
                     <div class="tool-badges">
                         <span class="badge badge-interactive">Interactive</span>
                         <span class="badge badge-diagrams">Ray Diagrams</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/physics/ray-optics-simulator.jsp" class="tool-card" style="--card-accent: #0ea5e9;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #0ea5e9, #6366f1);">🔦</div>
+                        <div>
+                            <h3>Ray Optics Simulator</h3>
+                            <div class="tool-formula">Snell's Law, Fresnel, Cauchy Dispersion, GRIN</div>
+                        </div>
+                    </div>
+                    <p>Freeform 2D ray tracing with 19 optical elements and 22 presets. Drag-and-drop mirrors, lenses, prisms, beam splitters, diffraction gratings. Undo/redo, JSON export.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-interactive">Interactive</span>
+                        <span class="badge badge-new">22 Presets</span>
+                        <span class="badge badge-diagrams">Ray Tracing</span>
                     </div>
                 </a>
             </div>

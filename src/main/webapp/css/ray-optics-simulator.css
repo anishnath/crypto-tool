@@ -1,0 +1,346 @@
+/* ============================================================
+   Ray Optics Simulator – Tool-specific styles
+   Two-column: main content | ads rail
+   ============================================================ */
+
+:root {
+  --rs-primary: #0ea5e9;
+  --rs-primary-dark: #0284c7;
+  --rs-gradient: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+  --rs-glass: rgba(14,165,233,0.12);
+  --rs-light: #f0f9ff;
+}
+
+/* ---- layout ---- */
+.rs-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.25rem;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 1.25rem 2rem;
+  min-height: calc(100vh - 180px);
+}
+
+/* ---- main column ---- */
+.rs-main { min-width: 0; }
+
+/* ---- ads column ---- */
+.rs-ads-col {
+  height: auto;
+  align-self: start;
+  position: sticky;
+  top: 70px;
+}
+
+/* ---- canvas card ---- */
+.rs-canvas-card {
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rs-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+  flex-wrap: wrap;
+  background: var(--bg-secondary, #f8fafc);
+}
+
+.rs-toolbar-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--border, #e2e8f0);
+  margin: 0 0.125rem;
+}
+
+.rs-select {
+  font-size: 0.6875rem;
+  padding: 0.25rem 0.375rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 4px;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #1f2937);
+  cursor: pointer;
+  max-width: 160px;
+}
+
+.rs-btn {
+  font-size: 0.625rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 4px;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #1f2937);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.rs-btn:hover { background: var(--bg-secondary, #f1f5f9); border-color: var(--rs-primary); }
+.rs-btn-danger { color: #dc2626; }
+.rs-btn-danger:hover { background: #fef2f2; border-color: #dc2626; }
+.rs-btn-active {
+  background: var(--rs-primary);
+  color: #fff;
+  border-color: var(--rs-primary);
+}
+.rs-btn-active:hover { background: var(--rs-primary-dark); }
+
+.rs-label {
+  font-size: 0.625rem;
+  color: var(--text-secondary, #6b7280);
+  white-space: nowrap;
+}
+
+/* ---- canvas ---- */
+.rs-canvas-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 400px;
+  background: #1a1a2e;
+  cursor: crosshair;
+}
+.rs-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- object bar (appears when selected) ---- */
+.rs-objbar {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  border-top: 1px solid var(--border, #e2e8f0);
+  background: var(--bg-secondary, #f8fafc);
+  flex-wrap: wrap;
+  min-height: 36px;
+}
+.rs-objbar-empty {
+  font-size: 0.6875rem;
+  color: var(--text-secondary, #94a3b8);
+  font-style: italic;
+}
+.rs-objbar-title {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--rs-primary);
+  margin-right: 0.25rem;
+}
+.rs-prop-group {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.rs-prop-lbl {
+  font-size: 0.5625rem;
+  color: var(--text-secondary, #6b7280);
+  text-transform: lowercase;
+}
+.rs-prop-inp {
+  font-size: 0.625rem;
+  width: 52px;
+  padding: 0.15rem 0.25rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 3px;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #1f2937);
+  text-align: right;
+}
+.rs-prop-inp:focus {
+  outline: none;
+  border-color: var(--rs-primary);
+  box-shadow: 0 0 0 2px rgba(14,165,233,0.15);
+}
+
+/* ---- controls row (below canvas) ---- */
+.rs-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  border-top: 1px solid var(--border, #e2e8f0);
+  background: var(--bg-secondary, #f8fafc);
+  flex-wrap: wrap;
+}
+
+.rs-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.625rem;
+  color: var(--text-secondary, #6b7280);
+  cursor: pointer;
+}
+.rs-toggle input[type="checkbox"] {
+  width: 13px;
+  height: 13px;
+  accent-color: var(--rs-primary);
+  cursor: pointer;
+}
+
+/* ---- educational cards ---- */
+.rs-edu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+.rs-edu-card {
+  padding: 0.75rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 6px;
+  background: var(--bg-primary, #fff);
+}
+.rs-edu-card h4 {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin: 0 0 0.375rem;
+  color: var(--text-primary, #1f2937);
+}
+.rs-edu-card p {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-secondary, #475569);
+  margin: 0;
+}
+
+/* ---- FAQ ---- */
+.rs-faq-item {
+  border-bottom: 1px solid var(--border, #e2e8f0);
+}
+.rs-faq-item:last-child { border-bottom: none; }
+.rs-faq-q {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.625rem 0;
+  cursor: pointer;
+  color: var(--text-primary, #1f2937);
+}
+.rs-faq-a {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-secondary, #475569);
+  padding: 0 0 0.625rem;
+  margin: 0;
+}
+
+/* ---- tool card (reuse site pattern) ---- */
+.rs-card {
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 8px;
+  margin-top: 0.75rem;
+}
+.rs-card-header {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+  color: var(--text-primary, #1f2937);
+}
+.rs-card-body {
+  padding: 0.75rem;
+}
+
+/* ---- responsive ---- */
+@media (max-width: 1024px) {
+  .rs-layout {
+    grid-template-columns: 1fr;
+  }
+  .rs-ads-col { display: none; }
+}
+
+@media (max-width: 640px) {
+  .rs-layout { padding: 0 0.75rem 1.5rem; }
+  .rs-canvas-wrap { min-height: 300px; aspect-ratio: 3 / 2; }
+  .rs-toolbar { gap: 0.25rem; }
+  .rs-select { max-width: 120px; font-size: 0.625rem; }
+}
+
+/* ---- dark mode ---- */
+[data-theme="dark"] .rs-canvas-card {
+  background: var(--bg-primary, #1e1e2e);
+  border-color: var(--border, #2d2d3f);
+}
+[data-theme="dark"] .rs-toolbar,
+[data-theme="dark"] .rs-objbar,
+[data-theme="dark"] .rs-controls {
+  background: var(--bg-secondary, #16161a);
+  border-color: var(--border, #2d2d3f);
+}
+[data-theme="dark"] .rs-btn { background: var(--bg-secondary, #16161a); }
+[data-theme="dark"] .rs-btn:hover { background: var(--bg-primary, #1e1e2e); }
+[data-theme="dark"] .rs-prop-inp {
+  background: var(--bg-primary, #1e1e2e);
+  border-color: var(--border, #2d2d3f);
+}
+[data-theme="dark"] .rs-card {
+  background: var(--bg-primary, #1e1e2e);
+  border-color: var(--border, #2d2d3f);
+}
+[data-theme="dark"] .rs-edu-card {
+  background: var(--bg-secondary, #16161a);
+  border-color: var(--border, #2d2d3f);
+}
+
+/* ---- context menu ---- */
+.rs-ctx-menu {
+  position: absolute;
+  z-index: 100;
+  min-width: 160px;
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  padding: 0.25rem 0;
+  font-size: 0.6875rem;
+}
+.rs-ctx-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  border: none;
+  background: none;
+  color: var(--text-primary, #1f2937);
+  cursor: pointer;
+  font-size: 0.6875rem;
+  text-align: left;
+}
+.rs-ctx-item:hover {
+  background: var(--rs-glass, rgba(14,165,233,0.12));
+}
+.rs-ctx-danger { color: #dc2626; }
+.rs-ctx-danger:hover { background: #fef2f2; }
+.rs-ctx-key {
+  font-size: 0.5625rem;
+  color: var(--text-secondary, #94a3b8);
+  margin-left: 1rem;
+}
+.rs-ctx-sep {
+  border: none;
+  border-top: 1px solid var(--border, #e2e8f0);
+  margin: 0.2rem 0;
+}
+[data-theme="dark"] .rs-ctx-menu {
+  background: var(--bg-secondary, #16161a);
+  border-color: var(--border, #2d2d3f);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+[data-theme="dark"] .rs-ctx-item:hover {
+  background: rgba(14,165,233,0.15);
+}
+[data-theme="dark"] .rs-ctx-danger:hover { background: rgba(220,38,38,0.15); }
+
+/* ---- undo/redo buttons ---- */
+.rs-btn[disabled] {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
