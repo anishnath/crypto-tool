@@ -98,6 +98,7 @@ INTEGRANDS = [
     ("coth(log(x**Rational(3,2)))", "x"),  # coth composed with ln — SymPy may not resolve
     ("1/(1+x**4)", "x"),  # DontKnowRule but integrate() solves — tests apart() fallback
     ("x/((x**3 + 1)*sqrt(x**2 + x + 1))", "x"),  # elliptic-type, no elementary form, apart() crashes on sqrt
+    ("exp(sqrt(x + 2))", "x"),  # e^sqrt(x+2) — u-substitution: 2*sqrt(x+2)*exp(sqrt(x+2)) - 2*exp(sqrt(x+2))
 ]
 
 

@@ -240,6 +240,8 @@
         /** Convert nerdamer-style expr to Python/SymPy (e.g. e^x -> exp(x), ^ -> **) */
         function nerdamerToPython(expr) {
             var py = (expr || '')
+                // e^func(args) → exp(func(args)):  e^sqrt(x+2) → exp(sqrt(x+2))
+                .replace(/e\^([a-zA-Z_]+\([^)]*\))/g, 'exp($1)')
                 .replace(/e\^(\([^)]+\))/g, 'exp$1')
                 .replace(/e\^([a-zA-Z0-9_]+)/g, 'exp($1)')
                 .replace(/\^/g, '**')

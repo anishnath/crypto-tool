@@ -338,6 +338,13 @@ testIndefinite('theta^2 wrt theta', 'theta^2', 'theta^3/3', 'theta');
 // Combined shorthand in one expression
 testIndefinite('sin3x+cos2x', 'sin3x+cos2x');
 
+// e^func(args) — nerdamer can't integrate, falls back to SymPy
+// These test that normalizeExpr doesn't break e^sqrt(...) etc.
+console.log('\n--- e^func(args) normalization ---');
+testNormalize('e^sqrt(x+2)', 'e^sqrt(x+2)');
+testNormalize('e^sin(x+1)', 'e^sin(x+1)');
+testNormalize('e^log(2*x+1)', 'e^log(2*x+1)');
+
 // Unresolved / non-elementary (expect hasIntegral or error)
 testExpectUnresolved('e^(x^2) - Gaussian', 'e^(x^2)');
 testExpectUnresolved('sin(x)/x - sinc', 'sin(x)/x');
