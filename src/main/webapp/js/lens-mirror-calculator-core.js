@@ -26,8 +26,9 @@ function $(id) { return document.getElementById(id); }
 
 function val(id, fallback) {
     var el = $(id);
-    if (!el) return fallback || 0;
-    return parseFloat(el.value) || fallback || 0;
+    if (!el) return fallback !== undefined ? fallback : 0;
+    var n = parseFloat(el.value);
+    return isNaN(n) ? (fallback !== undefined ? fallback : 0) : n;
 }
 
 function setInput(id, value) {
@@ -85,7 +86,7 @@ function calculate() {
             showOutput(result);
             return;
         }
-        var inv_v = (1 / f) - (1 / u);
+        var inv_v = (1 / f) + (1 / u);
         if (Math.abs(inv_v) < 0.0001) {
             result.error = 'Image forms at infinity (object at focal point)';
             showOutput(result);
@@ -101,7 +102,7 @@ function calculate() {
             showOutput(result);
             return;
         }
-        var inv_u = (1 / f) - (1 / v);
+        var inv_u = (1 / v) - (1 / f);
         if (Math.abs(inv_u) < 0.0001) {
             result.error = 'Object at infinity';
             showOutput(result);
@@ -117,7 +118,7 @@ function calculate() {
             showOutput(result);
             return;
         }
-        var inv_f = (1 / u) + (1 / v);
+        var inv_f = (1 / v) - (1 / u);
         if (Math.abs(inv_f) < 0.0001) {
             result.error = 'Invalid configuration';
             showOutput(result);
@@ -196,6 +197,7 @@ function syncSlider(inputId, sliderId) {
 
     input.addEventListener('input', function() {
         slider.value = input.value;
+        calculate();
     });
     slider.addEventListener('input', function() {
         input.value = slider.value;

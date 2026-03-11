@@ -15,19 +15,19 @@
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Lens Equation Calculator - Ray Diagram & Mirror Formula" />
-        <jsp:param name="toolDescription" value="Free lens equation calculator with ray diagrams. Solve 1/f = 1/u + 1/v for 7 optical types: biconvex, plano-convex, concave mirror &amp; more. Step-by-step solutions, magnification, diopters." />
+        <jsp:param name="toolDescription" value="Free lens equation calculator with ray diagrams. Solve 1/f = 1/v − 1/u for 7 optical types: biconvex, plano-convex, concave mirror &amp; more. Step-by-step solutions, magnification, diopters." />
         <jsp:param name="toolCategory" value="Physics Tools" />
         <jsp:param name="toolUrl" value="lens-mirror-calculator.jsp" />
         <jsp:param name="breadcrumbCategoryUrl" value="physics" />
         <jsp:param name="toolKeywords" value="lens equation calculator, thin lens equation solver, mirror formula calculator, ray diagram generator, focal length calculator, magnification calculator, converging lens, diverging lens, plano-convex lens, plano-concave lens, concave mirror, convex mirror, plane mirror, radius of curvature, lens power diopters, image distance calculator, optics calculator" />
         <jsp:param name="toolImage" value="lens-mirror-calculator.svg" />
-        <jsp:param name="toolFeatures" value="Thin lens equation solver (1/f = 1/u + 1/v),Interactive canvas ray diagram with 3 principal rays and glow effects,7 optical elements: biconvex biconcave plano-convex plano-concave concave mirror convex mirror plane mirror,Radius of curvature R = 2f for curved mirrors,Magnification and image height calculation,Lens power in diopters,Real vs virtual image detection with badges,Step-by-step KaTeX math solutions,10 preset examples for instant learning,PNG ray diagram export and shareable URLs,Dark mode support" />
+        <jsp:param name="toolFeatures" value="Thin lens equation solver (1/f = 1/v − 1/u),Interactive canvas ray diagram with 3 principal rays and glow effects,7 optical elements: biconvex biconcave plano-convex plano-concave concave mirror convex mirror plane mirror,Radius of curvature R = 2f for curved mirrors,Magnification and image height calculation,Lens power in diopters,Real vs virtual image detection with badges,Step-by-step KaTeX math solutions,10 preset examples for instant learning,PNG ray diagram export and shareable URLs,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Select optical element|Choose from 7 types: biconvex lens biconcave lens plano-convex plano-concave concave mirror convex mirror or plane mirror,Enter known values|Input focal length (f) object distance (u) and object height (h) in centimeters. Use sliders for quick adjustment,Choose what to solve|Select Find Image (v) Find Object (u) or Find Focal Length (f) using the mode toggle,Click Calculate|Press Calculate to see the ray diagram step-by-step solution magnification and image properties,Export or share|Save the ray diagram as PNG or copy a shareable URL to send to classmates" />
         <jsp:param name="educationalLevel" value="High School, Undergraduate" />
         <jsp:param name="teaches" value="Geometric optics, thin lens equation, mirror formula, ray diagrams, magnification, image formation" />
         <jsp:param name="faq1q" value="What is the thin lens equation and how does it work?" />
-        <jsp:param name="faq1a" value="The thin lens equation is 1/f = 1/u + 1/v, where f is the focal length, u is the object distance, and v is the image distance. It predicts where an image forms for any thin lens or spherical mirror. Converging elements (biconvex lens, plano-convex lens, concave mirror) have positive f. Diverging elements (biconcave lens, plano-concave lens, convex mirror) have negative f. A plane mirror has f = infinity." />
+        <jsp:param name="faq1a" value="The thin lens equation is 1/f = 1/v − 1/u, where f is the focal length, u is the object distance, and v is the image distance. It predicts where an image forms for any thin lens or spherical mirror. Converging elements (biconvex lens, plano-convex lens, concave mirror) have positive f. Diverging elements (biconcave lens, plano-concave lens, convex mirror) have negative f. A plane mirror has f = infinity." />
         <jsp:param name="faq2q" value="How do you calculate magnification from the lens equation?" />
         <jsp:param name="faq2a" value="Magnification m = v/u, which also equals image height divided by object height (h'/h). When m is negative the image is inverted; when positive it is upright. If |m| > 1 the image is magnified; if |m| < 1 it is diminished. For example, m = -2 means an inverted image twice the object's size. A plane mirror always gives m = 1." />
         <jsp:param name="faq3q" value="What is the difference between real and virtual images?" />
@@ -91,7 +91,7 @@
 <section class="tool-description-section" style="background:var(--lm-light);">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Free <strong>lens equation calculator</strong> with <strong>interactive ray diagrams</strong>. Supports <strong>7 optical elements</strong> &mdash; biconvex, biconcave, plano-convex, plano-concave lenses, concave, convex, and plane mirrors. Solve <strong>1/f = 1/u + 1/v</strong> with step-by-step solutions, magnification, diopters, and <strong>radius of curvature</strong>.</p>
+            <p>Free <strong>lens equation calculator</strong> with <strong>interactive ray diagrams</strong>. Supports <strong>7 optical elements</strong> &mdash; biconvex, biconcave, plano-convex, plano-concave lenses, concave, convex, and plane mirrors. Solve <strong>1/f = 1/v − 1/u</strong> with step-by-step solutions, magnification, diopters, and <strong>radius of curvature</strong>.</p>
         </div>
         <%@ include file="modern/ads/ad-hero-banner.jsp" %>
     </div>
@@ -219,7 +219,7 @@
             </div>
             <div class="tool-result-content" id="lm-result-content">
                 <div class="tool-empty-state" id="lm-empty-state">
-                    <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">1/f = 1/u + 1/v</div>
+                    <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">1/f = 1/v − 1/u</div>
                     <h3>Enter values to calculate</h3>
                     <p>Solve lens and mirror equations with interactive ray diagrams.</p>
                 </div>
@@ -281,7 +281,7 @@
     <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
         <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">What is the Thin Lens Equation?</h2>
         <p class="lm-anim" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
-            The <strong>thin lens equation</strong> 1/f = 1/u + 1/v relates the <strong>focal length</strong> (f), <strong>object distance</strong> (u), and <strong>image distance</strong> (v) for any thin lens or spherical mirror. It is the foundation of geometric optics, used to predict where images form and whether they are real or virtual.
+            The <strong>thin lens equation</strong> 1/f = 1/v − 1/u relates the <strong>focal length</strong> (f), <strong>object distance</strong> (u), and <strong>image distance</strong> (v) for any thin lens or spherical mirror. It is the foundation of geometric optics, used to predict where images form and whether they are real or virtual.
         </p>
         <div class="lm-callout lm-callout-insight lm-anim lm-anim-d2">
             <span class="lm-callout-icon">&#128161;</span>
@@ -357,7 +357,7 @@
                 What is the thin lens equation and how does it work?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">The thin lens equation is 1/f = 1/u + 1/v, where f is the focal length, u is the object distance, and v is the image distance. It predicts where an image forms for any thin lens or spherical mirror. Converging elements (biconvex lens, plano-convex lens, concave mirror) have positive f. Diverging elements (biconcave lens, plano-concave lens, convex mirror) have negative f. A plane mirror has f = infinity.</div>
+            <div class="faq-answer">The thin lens equation is 1/f = 1/v − 1/u, where f is the focal length, u is the object distance, and v is the image distance. It predicts where an image forms for any thin lens or spherical mirror. Converging elements (biconvex lens, plano-convex lens, concave mirror) have positive f. Diverging elements (biconcave lens, plano-concave lens, convex mirror) have negative f. A plane mirror has f = infinity.</div>
         </div>
 
         <div class="faq-item">

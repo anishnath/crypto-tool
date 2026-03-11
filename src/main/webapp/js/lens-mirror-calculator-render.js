@@ -136,20 +136,23 @@ function renderSteps(container, result, mode) {
     container.appendChild(buildStepDOM('1', '<strong>Given values</strong>', givenLatex));
 
     if (mode === 'find-v') {
+        var inv_v = 1/result.f + 1/result.u;
         container.appendChild(buildStepDOM('2', '<strong>Thin Lens Equation:</strong> solve for v',
-            '\\frac{1}{v} = \\frac{1}{f} - \\frac{1}{u} = \\frac{1}{' + fmt(result.f) + '} - \\frac{1}{' + fmt(result.u) + '} = ' + fmt(1/result.f - 1/result.u)));
+            '\\frac{1}{v} = \\frac{1}{f} + \\frac{1}{u} = \\frac{1}{' + fmt(result.f) + '} + \\frac{1}{' + fmt(result.u) + '} = ' + fmt(inv_v)));
         container.appendChild(buildStepDOM('3', '<strong>Image distance</strong>',
-            'v = \\frac{1}{' + fmt(1/result.f - 1/result.u) + '} = \\boxed{' + fmt(result.v) + '\\text{ cm}}'));
+            'v = \\frac{1}{' + fmt(inv_v) + '} = \\boxed{' + fmt(result.v) + '\\text{ cm}}'));
     } else if (mode === 'find-u') {
+        var inv_u = 1/result.v - 1/result.f;
         container.appendChild(buildStepDOM('2', '<strong>Thin Lens Equation:</strong> solve for u',
-            '\\frac{1}{u} = \\frac{1}{f} - \\frac{1}{v} = \\frac{1}{' + fmt(result.f) + '} - \\frac{1}{' + fmt(result.v) + '} = ' + fmt(1/result.f - 1/result.v)));
+            '\\frac{1}{u} = \\frac{1}{v} - \\frac{1}{f} = \\frac{1}{' + fmt(result.v) + '} - \\frac{1}{' + fmt(result.f) + '} = ' + fmt(inv_u)));
         container.appendChild(buildStepDOM('3', '<strong>Object distance</strong>',
-            'u = \\frac{1}{' + fmt(1/result.f - 1/result.v) + '} = \\boxed{' + fmt(result.u) + '\\text{ cm}}'));
+            'u = \\frac{1}{' + fmt(inv_u) + '} = \\boxed{' + fmt(result.u) + '\\text{ cm}}'));
     } else {
+        var inv_f = 1/result.v - 1/result.u;
         container.appendChild(buildStepDOM('2', '<strong>Thin Lens Equation:</strong> solve for f',
-            '\\frac{1}{f} = \\frac{1}{u} + \\frac{1}{v} = \\frac{1}{' + fmt(result.u) + '} + \\frac{1}{' + fmt(result.v) + '} = ' + fmt(1/result.u + 1/result.v)));
+            '\\frac{1}{f} = \\frac{1}{v} - \\frac{1}{u} = \\frac{1}{' + fmt(result.v) + '} - \\frac{1}{' + fmt(result.u) + '} = ' + fmt(inv_f)));
         container.appendChild(buildStepDOM('3', '<strong>Focal length</strong>',
-            'f = \\frac{1}{' + fmt(1/result.u + 1/result.v) + '} = \\boxed{' + fmt(result.f) + '\\text{ cm}}'));
+            'f = \\frac{1}{' + fmt(inv_f) + '} = \\boxed{' + fmt(result.f) + '\\text{ cm}}'));
     }
 
     container.appendChild(buildStepDOM('4', '<strong>Magnification</strong>',
@@ -635,18 +638,31 @@ function drawRayDiagram(canvas, result, opticalType) {
     var absU = Math.abs(u);
     var absV = Math.abs(v);
     var absF = Math.abs(f);
+    var isMirrorType = opticalType === 'concave-mirror' || opticalType === 'convex-mirror';
 
     // ── Layout ──────────────────────────────────────────
-    var lx = W * 0.5;    // lens x
+    // For mirrors, shift element right to give room for reflected image on left
+    var lx = isMirrorType ? W * 0.62 : W * 0.5;
     var ly = H * 0.48;   // optical axis y
     var lh = Math.min(140, Math.max(80, h * 14 + 50));
     var lw = 22;
 
+    // For mirrors, flip v and f for diagram positioning:
+    // real images (v>0) go LEFT (in front), virtual (v<0) go RIGHT (behind)
+    var diag_v = isMirrorType ? -v : v;
+    var diag_f = isMirrorType ? -f : f;
+
     // Adaptive scale
     var leftPx = lx - 70;
     var rightPx = W - lx - 50;
-    var maxLeft = absU + 4;
-    var maxRight = Math.max(absF * 2.2, absV) + 8;
+    var maxLeft, maxRight;
+    if (isMirrorType) {
+        maxLeft = Math.max(absU, absV, absF * 2.2) + 4;
+        maxRight = Math.max(diag_v > 0 ? diag_v : 0, diag_f > 0 ? diag_f * 2.2 : 0, 4) + 8;
+    } else {
+        maxLeft = absU + 4;
+        maxRight = Math.max(absF * 2.2, absV) + 8;
+    }
     var scale = Math.min(leftPx / maxLeft, rightPx / maxRight);
     if (scale < 0.5) scale = 0.5;
 
@@ -657,12 +673,12 @@ function drawRayDiagram(canvas, result, opticalType) {
     if (vScale < 1) scale = scale * vScale;
 
     // Key pixel coordinates
-    var obj_x = lx - absU * scale;       // object (left of lens)
+    var obj_x = lx - absU * scale;       // object (left of element)
     var obj_ty = ly - h * scale;          // object tip (above axis)
-    var img_x = lx + v * scale;           // image (right if real, left if virtual)
+    var img_x = lx + diag_v * scale;     // image position (flipped for mirrors)
     var img_ty = ly - hi * scale;         // image tip
-    var F1x = lx + f * scale;             // F (right for converging, left for diverging)
-    var F2x = lx - f * scale;             // F'
+    var F1x = lx + diag_f * scale;       // F (flipped for mirrors)
+    var F2x = lx - diag_f * scale;       // F'
 
     // ── Clear + Background ──────────────────────────────
     ctx.clearRect(0, 0, W, H);
@@ -695,7 +711,11 @@ function drawRayDiagram(canvas, result, opticalType) {
     ctx.restore();
 
     // ── Principal Rays ──────────────────────────────────
-    drawPrincipalRays(ctx, result, T, lx, ly, scale, obj_x, obj_ty, img_x, img_ty, F1x, F2x);
+    if (isMirrorType) {
+        drawMirrorPrincipalRays(ctx, result, T, lx, ly, scale, obj_x, obj_ty, img_x, img_ty, F1x);
+    } else {
+        drawPrincipalRays(ctx, result, T, lx, ly, scale, obj_x, obj_ty, img_x, img_ty, F1x, F2x);
+    }
 
     // ── Optical Element ─────────────────────────────────
     if (opticalType === 'converging') {
@@ -958,7 +978,78 @@ function drawPlaneMirrorDiagram(ctx, W, H, result, T) {
     ctx.restore();
 }
 
-// ==================== Principal Rays ====================
+// ==================== Mirror Principal Rays ====================
+
+function drawMirrorPrincipalRays(ctx, result, T, lx, ly, scale, obj_x, obj_ty, img_x, img_ty, F1x) {
+    var v = result.v;
+    var isReal = v > 0;
+
+    // ── Ray 1: Parallel to axis → reflects through/from F ──
+    // Incoming: horizontal from object tip to mirror
+    drawRay(ctx, obj_x, obj_ty, lx, obj_ty, T.ray1, false, 0.9);
+    midArrow(ctx, obj_x, obj_ty, lx, obj_ty, 0.55, T.ray1, 0.9);
+
+    if (isReal) {
+        // Reflected through F to image (going left, in front of mirror)
+        drawRay(ctx, lx, obj_ty, img_x, img_ty, T.ray1, false, 0.9);
+        midArrow(ctx, lx, obj_ty, img_x, img_ty, 0.5, T.ray1, 0.9);
+    } else {
+        // Reflected diverges left; virtual extension to image behind mirror
+        var r1dx = lx - img_x;
+        var r1dy = obj_ty - img_ty;
+        var r1end = extendRay(ctx, lx, obj_ty, r1dx, r1dy);
+        drawRay(ctx, lx, obj_ty, r1end[0], r1end[1], T.ray1, false, 0.9);
+        midArrow(ctx, lx, obj_ty, r1end[0], r1end[1], 0.5, T.ray1, 0.9);
+        drawRay(ctx, lx, obj_ty, img_x, img_ty, T.virtualExt, true, 0.4);
+    }
+
+    // ── Ray 2: Through pole → reflects at equal angle ──
+    // Incoming: from object tip to pole (center of mirror)
+    drawRay(ctx, obj_x, obj_ty, lx, ly, T.ray3, false, 0.9);
+    midArrow(ctx, obj_x, obj_ty, lx, ly, 0.5, T.ray3, 0.9);
+
+    if (isReal) {
+        // Reflected at equal angle, reaching image
+        drawRay(ctx, lx, ly, img_x, img_ty, T.ray3, false, 0.9);
+        midArrow(ctx, lx, ly, img_x, img_ty, 0.45, T.ray3, 0.9);
+    } else {
+        // Reflected diverges left; virtual extension to image behind mirror
+        var r2dx = lx - img_x;
+        var r2dy = ly - img_ty;
+        var r2end = extendRay(ctx, lx, ly, r2dx, r2dy);
+        drawRay(ctx, lx, ly, r2end[0], r2end[1], T.ray3, false, 0.9);
+        midArrow(ctx, lx, ly, r2end[0], r2end[1], 0.45, T.ray3, 0.9);
+        drawRay(ctx, lx, ly, img_x, img_ty, T.virtualExt, true, 0.4);
+    }
+
+    // ── Ray 3: Through F → reflects parallel to axis ──
+    if (Math.abs(result.f) < 1000) {
+        // Find where line from object tip to F intersects mirror (x = lx)
+        var dx_of = F1x - obj_x;
+        if (Math.abs(dx_of) > 0.001) {
+            var t3 = (lx - obj_x) / dx_of;
+            var hitY = obj_ty + t3 * (ly - obj_ty);
+
+            drawRay(ctx, obj_x, obj_ty, lx, hitY, T.ray2, false, 0.9);
+            midArrow(ctx, obj_x, obj_ty, lx, hitY, 0.5, T.ray2, 0.9);
+
+            if (isReal) {
+                // Reflects horizontal (parallel) going left to image
+                drawRay(ctx, lx, hitY, img_x, hitY, T.ray2, false, 0.9);
+                midArrow(ctx, lx, hitY, img_x, hitY, 0.5, T.ray2, 0.9);
+            } else {
+                // Reflects horizontal going left
+                var r3end = extendRay(ctx, lx, hitY, -1, 0);
+                drawRay(ctx, lx, hitY, r3end[0], hitY, T.ray2, false, 0.9);
+                midArrow(ctx, lx, hitY, r3end[0], hitY, 0.5, T.ray2, 0.9);
+                // Virtual extension: horizontal right to behind mirror
+                drawRay(ctx, lx, hitY, img_x, hitY, T.virtualExt, true, 0.4);
+            }
+        }
+    }
+}
+
+// ==================== Lens Principal Rays ====================
 
 function drawPrincipalRays(ctx, result, T, lx, ly, scale, obj_x, obj_ty, img_x, img_ty, F1x, F2x) {
     var v = result.v;

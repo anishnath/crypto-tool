@@ -12,13 +12,13 @@ var R = window.LensMirrorRender;
 function buildLatex(result, mode) {
     if (!result || result.error) return '';
     var lines = [];
-    lines.push('\\text{Thin Lens Equation: } \\frac{1}{f} = \\frac{1}{u} + \\frac{1}{v}');
+    lines.push('\\text{Thin Lens Equation: } \\frac{1}{f} = \\frac{1}{v} - \\frac{1}{u}');
     if (mode === 'find-v') {
-        lines.push('\\frac{1}{v} = \\frac{1}{' + R.fmt(result.f) + '} - \\frac{1}{' + R.fmt(result.u) + '} \\Rightarrow v = ' + R.fmt(result.v) + '\\text{ cm}');
+        lines.push('\\frac{1}{v} = \\frac{1}{' + R.fmt(result.f) + '} + \\frac{1}{' + R.fmt(result.u) + '} \\Rightarrow v = ' + R.fmt(result.v) + '\\text{ cm}');
     } else if (mode === 'find-u') {
-        lines.push('\\frac{1}{u} = \\frac{1}{' + R.fmt(result.f) + '} - \\frac{1}{' + R.fmt(result.v) + '} \\Rightarrow u = ' + R.fmt(result.u) + '\\text{ cm}');
+        lines.push('\\frac{1}{u} = \\frac{1}{' + R.fmt(result.v) + '} - \\frac{1}{' + R.fmt(result.f) + '} \\Rightarrow u = ' + R.fmt(result.u) + '\\text{ cm}');
     } else {
-        lines.push('\\frac{1}{f} = \\frac{1}{' + R.fmt(result.u) + '} + \\frac{1}{' + R.fmt(result.v) + '} \\Rightarrow f = ' + R.fmt(result.f) + '\\text{ cm}');
+        lines.push('\\frac{1}{f} = \\frac{1}{' + R.fmt(result.v) + '} - \\frac{1}{' + R.fmt(result.u) + '} \\Rightarrow f = ' + R.fmt(result.f) + '\\text{ cm}');
     }
     lines.push('m = \\frac{v}{u} = ' + R.fmt(result.m));
     lines.push("h' = m \\times h = " + R.fmt(result.h_prime) + '\\text{ cm}');
