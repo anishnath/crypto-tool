@@ -11,14 +11,38 @@
   --rs-light: #f0f9ff;
 }
 
-/* ---- layout (overrides three-column-tool.css to 2-column) ---- */
-.rs-layout.tool-page-container {
+/* ---- layout ---- */
+.rs-layout {
+  display: grid;
   grid-template-columns: 1fr 300px;
+  gap: 1.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 1.5rem;
   min-height: calc(100vh - 180px);
 }
 
 /* ---- main column ---- */
 .rs-main { min-width: 0; }
+
+/* ---- ads column (match site-wide tool-ads-column) ---- */
+.rs-ads-col {
+  height: fit-content;
+  min-height: 280px;
+  align-self: start;
+  position: sticky;
+  top: 70px;
+}
+/* Override ads.css ::before aspect-ratio trick inside sticky sidebar —
+   the padding-bottom placeholder can cause collapse in fit-content containers */
+.rs-ads-col .ad-in-content-mid::before {
+  display: none;
+}
+.rs-ads-col .ad-in-content-mid {
+  min-height: 280px;
+  max-width: 300px;
+  margin: 0;
+}
 
 /* ---- canvas card ---- */
 .rs-canvas-card {
@@ -235,36 +259,12 @@
   padding: 0.75rem;
 }
 
-/* ---- responsive: override three-column-tool.css breakpoints for 2-col layout ---- */
-/* three-column-tool.css hides tool-ads-column at 1024px and switches to flex at 900px.
-   Ray-optics is already 2-col so keep ads visible down to 768px. */
-@media (max-width: 1024px) {
-  .rs-layout.tool-page-container {
-    grid-template-columns: 1fr 300px;
-    display: grid;
-  }
-  .rs-layout .tool-ads-column {
-    display: block;
-  }
-}
-@media (max-width: 900px) {
-  .rs-layout.tool-page-container {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    flex-direction: unset;
-  }
-  .rs-layout .tool-ads-column {
-    display: block;
-  }
-}
+/* ---- responsive ---- */
 @media (max-width: 768px) {
-  .rs-layout.tool-page-container {
+  .rs-layout {
     grid-template-columns: 1fr;
-    display: grid;
   }
-  .rs-layout .tool-ads-column {
-    display: none;
-  }
+  .rs-ads-col { display: none; }
 }
 
 @media (max-width: 640px) {
