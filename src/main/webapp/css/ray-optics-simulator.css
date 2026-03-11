@@ -11,27 +11,14 @@
   --rs-light: #f0f9ff;
 }
 
-/* ---- layout ---- */
+/* ---- layout (overrides three-column-tool.css to 2-column) ---- */
 .rs-layout {
-  display: grid;
   grid-template-columns: 1fr 300px;
-  gap: 1.25rem;
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 0 1.25rem 2rem;
   min-height: calc(100vh - 180px);
 }
 
 /* ---- main column ---- */
 .rs-main { min-width: 0; }
-
-/* ---- ads column ---- */
-.rs-ads-col {
-  height: auto;
-  align-self: start;
-  position: sticky;
-  top: 70px;
-}
 
 /* ---- canvas card ---- */
 .rs-canvas-card {
@@ -248,12 +235,11 @@
   padding: 0.75rem;
 }
 
-/* ---- responsive ---- */
+/* ---- responsive (ads column hiding handled by three-column-tool.css) ---- */
 @media (max-width: 1024px) {
   .rs-layout {
     grid-template-columns: 1fr;
   }
-  .rs-ads-col { display: none; }
 }
 
 @media (max-width: 640px) {

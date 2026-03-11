@@ -52,6 +52,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
@@ -70,7 +71,7 @@
 <%@ include file="../modern/ads/ad-hero-banner.jsp" %>
 
 <!-- ===== TWO-COLUMN LAYOUT ===== -->
-<div class="rs-layout">
+<div class="tool-page-container rs-layout">
 
     <!-- ===== MAIN COLUMN ===== -->
     <div class="rs-main">
@@ -326,7 +327,7 @@
     </div>
 
     <!-- ===== ADS COLUMN ===== -->
-    <div class="rs-ads-col">
+    <div class="tool-ads-column" style="height:auto;align-self:start;position:sticky;top:70px;">
         <jsp:include page="../modern/ads/ad-in-content-mid.jsp" />
     </div>
 </div>
