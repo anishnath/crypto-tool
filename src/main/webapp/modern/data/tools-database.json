@@ -1,7 +1,7 @@
 {
   "version": "1.3",
-  "lastUpdated": "2026-02-28T00:00:00.000Z",
-  "totalTools": 400,
+  "lastUpdated": "2026-03-16T00:00:00.000Z",
+  "totalTools": 401,
   "categories": [
     "Blockchain & Crypto",
     "CTF & Challenges",
@@ -1499,6 +1499,13 @@
       "category": "Mathematics",
       "keywords": "math art gallery fractal generator parametric plotter visualization diagram graphics mathematics",
       "description": "Math Art Gallery - Fractal Generator & Parametric Plotter - Free online mathematics tool"
+    },
+    {
+      "name": "Math Editor - WYSIWYG Equation Writer",
+      "url": "math/editor.jsp",
+      "category": "Mathematics",
+      "keywords": "math editor, equation editor, WYSIWYG math, write equations online, LaTeX editor, math document, formula editor, export PDF LaTeX",
+      "description": "Write math beautifully with our free WYSIWYG editor. Create equations visually, add diagrams, collaborate in real-time and export to PDF, Word or LaTeX."
     },
     {
       "name": "Math Equation Editor",
