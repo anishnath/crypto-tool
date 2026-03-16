@@ -11,7 +11,7 @@ const { execSync } = require('child_process');
 
 // ── Config ──────────────────────────────────────────────────
 const BASE_URL = (process.env.DEMO_URL || 'http://localhost:8080').replace(/\/$/, '');
-const VIEWPORT = { width: 1280, height: 720 };
+const VIEWPORT = { width: 1920, height: 1080 };
 const TYPE_DELAY = 55;          // ms per keystroke (human-like)
 const FAST_TYPE_DELAY = 30;     // faster for LaTeX input
 const SHORT_PAUSE = 600;        // brief beat
@@ -188,12 +188,17 @@ async function insertMathBlock(page, latex, options = {}) {
     }
 }
 
-/** Insert inline math via toolbar and type LaTeX */
-async function insertInlineMath(page, latex) {
+/** Insert inline math via toolbar and type LaTeX.
+ *  Pass { setValue: true } to set programmatically for complex LaTeX. */
+async function insertInlineMath(page, latex, options = {}) {
     await clickToolbarBtn(page, 'Insert Inline Math');
     await page.waitForTimeout(800);
-    await typeLatex(page, latex);
-    await page.waitForTimeout(MEDIUM_PAUSE);
+    if (options.setValue) {
+        await setMathValue(page, latex);
+    } else {
+        await typeLatex(page, latex);
+        await page.waitForTimeout(MEDIUM_PAUSE);
+    }
 }
 
 /** Exit math-field back to TipTap text (press Escape or Enter) */
@@ -245,6 +250,36 @@ async function rightClickLastMathField(page) {
     }
 }
 
+/** Move cursor to end of document via TipTap commands */
+async function moveCursorToEnd(page) {
+    await page.evaluate(() => {
+        const editor = window.MeEditor;
+        if (editor) {
+            editor.commands.focus('end');
+        }
+    });
+    await page.waitForTimeout(300);
+}
+
+/** Exit a list (numbered/bullet) by lifting the list item via TipTap */
+async function exitList(page) {
+    // Press Enter on an empty list item to exit, then ensure cursor is at end
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(150);
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(150);
+    // Use TipTap API to ensure we're out of any list and at the document end
+    await page.evaluate(() => {
+        const editor = window.MeEditor;
+        if (editor) {
+            // Lift out of any list context
+            try { editor.commands.liftListItem('listItem'); } catch (_) {}
+            editor.commands.focus('end');
+        }
+    });
+    await page.waitForTimeout(400);
+}
+
 // ── Pauses (named for readability) ──────────────────────────
 async function beat(page) { await page.waitForTimeout(SHORT_PAUSE); }
 async function pause(page) { await page.waitForTimeout(MEDIUM_PAUSE); }
@@ -261,5 +296,6 @@ module.exports = {
     insertMathBlock, insertInlineMath, exitMathField,
     openSlashMenu, selectSlashItem,
     smoothScroll, hoverElement, rightClickLastMathField,
+    moveCursorToEnd, exitList,
     beat, pause, longPause, extraPause
 };
