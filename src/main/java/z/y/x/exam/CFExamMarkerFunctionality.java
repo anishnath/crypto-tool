@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -116,9 +117,58 @@ public class CFExamMarkerFunctionality extends HttpServlet {
                path.contains("/api/mark-batch") ||
                path.contains("/api/mark-exam") ||
                path.contains("/api/math-steps") ||
-               path.contains("/api/tikz-generate");
+               path.contains("/api/tikz-generate") ||
+               path.startsWith("/api/documents");
     }
     
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if (action == null || action.isEmpty()) action = "proxy";
+        if ("proxy".equalsIgnoreCase(action)) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            try {
+                handleProxy(request, response, "PUT");
+                return;
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                PrintWriter out = response.getWriter();
+                Map<String, Object> err = new HashMap<>();
+                err.put("error", "server_error");
+                err.put("message", e.getMessage());
+                out.println(gson.toJson(err));
+                return;
+            }
+        }
+        response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if (action == null || action.isEmpty()) action = "proxy";
+        if ("proxy".equalsIgnoreCase(action)) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            try {
+                handleProxy(request, response, "DELETE");
+                return;
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                PrintWriter out = response.getWriter();
+                Map<String, Object> err = new HashMap<>();
+                err.put("error", "server_error");
+                err.put("message", e.getMessage());
+                out.println(gson.toJson(err));
+                return;
+            }
+        }
+        response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
@@ -285,8 +335,13 @@ public class CFExamMarkerFunctionality extends HttpServlet {
         if (queryString.length() > 0) {
             fullUrl += "?" + queryString.toString();
         }
-        
-        makeApiRequest(fullUrl, method, request, response, requiresApiKey(apiPath));
+
+        String requestBody = null;
+        if ("POST".equalsIgnoreCase(method) || "PUT".equalsIgnoreCase(method)) {
+            requestBody = readRequestBody(request);
+        }
+
+        makeApiRequestWithHeaders(fullUrl, method, requestBody, apiPath, request, response, requiresApiKey(apiPath));
     }
     
     /**
@@ -776,11 +831,73 @@ public class CFExamMarkerFunctionality extends HttpServlet {
     }
     
     /**
-     * Make API request (GET)
+     * Make API request (GET) — delegates to makeApiRequest without headers
      */
     private void makeApiRequest(String url, String method, HttpServletRequest request, 
                                 HttpServletResponse response, boolean requiresAuth) throws IOException {
         makeApiRequest(url, method, (String) null, response, requiresAuth);
+    }
+    
+    /**
+     * Make API request for Documents proxy — forwards X-User-Id, X-Edit-Token
+     */
+    private void makeApiRequestWithHeaders(String url, String method, String requestBody, String apiPath,
+                                           HttpServletRequest request, HttpServletResponse response,
+                                           boolean requiresAuth) throws IOException {
+        if (request == null || !apiPath.startsWith("/api/documents")) {
+            makeApiRequest(url, method, requestBody, response, requiresAuth);
+            return;
+        }
+        try {
+            URL apiUrl = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection) apiUrl.openConnection();
+            conn.setRequestMethod(method);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+            conn.setRequestProperty("X-API-Key", getApiKey());
+
+            HttpSession session = request.getSession(false);
+            String userId = session != null ? (String) session.getAttribute("oauth_user_sub") : null;
+            if (userId != null && !userId.isEmpty()) {
+                conn.setRequestProperty("X-User-Id", userId);
+            }
+            String editToken = request.getHeader("X-Edit-Token");
+            if (editToken != null && !editToken.isEmpty()) {
+                conn.setRequestProperty("X-Edit-Token", editToken);
+            }
+
+            if ((method.equals("POST") || method.equals("PUT")) && requestBody != null && !requestBody.isEmpty()) {
+                conn.setDoOutput(true);
+                try (OutputStream os = conn.getOutputStream()) {
+                    byte[] input = requestBody.getBytes(StandardCharsets.UTF_8);
+                    os.write(input, 0, input.length);
+                }
+            }
+
+            int responseCode = conn.getResponseCode();
+            StringBuilder responseBody = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                    responseCode >= 200 && responseCode < 300 ? conn.getInputStream() : conn.getErrorStream(),
+                    StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    responseBody.append(responseLine.trim());
+                }
+            }
+            response.setStatus(responseCode);
+            response.getWriter().println(responseBody.toString());
+        } catch (Exception e) {
+            System.err.println("Documents API request failed: " + url + " " + e.getMessage());
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "api_request_failed");
+            error.put("message", e.getMessage());
+            response.getWriter().println(gson.toJson(error));
+        }
     }
     
     /**

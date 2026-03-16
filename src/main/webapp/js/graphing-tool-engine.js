@@ -207,6 +207,24 @@ function latexToMathJS(latex) {
     // ── Whitespace cleanup ──
     s = s.replace(/\s+/g, ' ').trim();
 
+    // ── Implicit multiplication (Desmos-style) ──
+    // digit × opening paren: 2(x+1) → 2*(x+1)
+    s = s.replace(/(\d)\s*\(/g, '$1*(');
+    // closing paren × opening paren: )( → )*(
+    s = s.replace(/\)\s*\(/g, ')*(');
+    // closing paren × digit or letter: )x → )*x
+    s = s.replace(/\)\s*(\w)/g, ')*$1');
+    // digit × known function name: 2sin(x) → 2*sin(x)
+    s = s.replace(/(\d)\s*(sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|sec|csc|cot|log|exp|sqrt|abs|ceil|floor|sign|round)\s*\(/gi, '$1*$2(');
+    // variable × function name: xsin(x) → x*sin(x), but not asin(x), sinh(x)
+    s = s.replace(/(?<![a-zA-Z])([a-zA-Z])(sin|cos|tan|log|exp|sqrt|abs|ceil|floor|sign|round|sec|csc|cot)\s*\(/gi, (m, letter, fn) => {
+        const combined = (letter + fn).toLowerCase();
+        if (['asin','acos','atan','sinh','cosh','tanh'].includes(combined)) return m;
+        return letter + '*' + fn + '(';
+    });
+    // digit × single letter: 2x → 2*x
+    s = s.replace(/(\d)([a-zA-Z])/g, '$1*$2');
+
     return s;
 }
 
