@@ -634,6 +634,106 @@
 }
 
 /* ============================================
+   EDITOR PANEL NATIVE AD
+   Fits inside .me-right-panel (280px wide)
+   ============================================ */
+.ad-panel-native {
+    margin: 0;
+    padding: 8px;
+    border: none;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+    border-left: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--bg-secondary, #f8fafc);
+    max-width: 280px;
+    min-height: 250px;
+    flex-shrink: 0;
+}
+
+.ad-panel-native:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.ad-panel-native .ad-label {
+    font-size: 9px;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 4px;
+}
+
+/* Hidden when right panel is hidden (<= 1024px) */
+@media (max-width: 1024px) {
+    .ad-panel-native {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   DASHBOARD SIDEBAR NATIVE AD
+   Fits inside .me-sidebar (240px wide)
+   ============================================ */
+.ad-sidebar-native {
+    margin: 16px 0 0 0;
+    padding: 8px;
+    border: none;
+    border-top: 1px solid var(--border, #e2e8f0);
+    border-left: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    max-width: 220px;
+    min-height: 200px;
+}
+
+.ad-sidebar-native:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.ad-sidebar-native .ad-label {
+    font-size: 9px;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 4px;
+}
+
+/* Hidden when sidebar collapses */
+@media (max-width: 768px) {
+    .ad-sidebar-native {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   DASHBOARD BELOW-GRID LEADERBOARD
+   Sits after the document grid
+   ============================================ */
+.ad-below-grid {
+    margin: 32px auto 16px auto;
+    padding: 12px;
+    max-width: 728px;
+    min-height: 90px;
+    border-left-width: 2px;
+}
+
+@media (max-width: 991px) {
+    .ad-below-grid {
+        max-width: 100%;
+        min-height: 100px;
+    }
+}
+
+/* Dark mode */
+[data-theme="dark"] .ad-panel-native {
+    background: var(--bg-secondary, #1e293b);
+    border-bottom-color: var(--border, #334155);
+}
+
+[data-theme="dark"] .ad-sidebar-native {
+    border-top-color: var(--border, #334155);
+}
+
+/* ============================================
    PRINT STYLES
    ============================================ */
 

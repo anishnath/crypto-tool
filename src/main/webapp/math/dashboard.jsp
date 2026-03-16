@@ -107,6 +107,9 @@
 
             <div class="me-sidebar-divider"></div>
 
+            <!-- Sidebar Ad (200x200 / 160x600 — fills dead space below nav) -->
+            <%@ include file="../modern/ads/ad-sidebar-native.jsp" %>
+
         </aside>
 
         <!-- Main Content -->
@@ -123,6 +126,9 @@
             <div class="me-doc-grid" id="me-doc-grid">
                 <div class="me-doc-loading" id="me-doc-loading">Loading...</div>
             </div>
+
+            <!-- Below-Grid Leaderboard (728x90 desktop, 320x100 mobile) -->
+            <%@ include file="../modern/ads/ad-below-grid.jsp" %>
         </main>
     </div>
 

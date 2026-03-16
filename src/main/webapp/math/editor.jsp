@@ -214,6 +214,9 @@
 
         <!-- Right Panel -->
         <aside class="me-right-panel">
+            <!-- Panel Top Ad (250x250, above outline — high visibility) -->
+            <%@ include file="../modern/ads/ad-panel-native.jsp" %>
+
             <div class="me-panel-tabs">
                 <button class="me-panel-tab active">Outline</button>
             </div>

@@ -144,6 +144,44 @@
         }
 
         // ============================================
+        // AD SLOT 8: Panel Native (Editor Right Panel Top)
+        // Placement: Above outline in editor .me-right-panel
+        // ============================================
+        if (width >= 1025) {
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_250x250_panel_native',
+                [[250,250],[300,250]],
+                'site_8gwifi_org_panel_native')
+                .addService(googletag.pubads());
+        }
+
+        // ============================================
+        // AD SLOT 9: Sidebar Native (Dashboard Left Sidebar)
+        // Placement: Below nav links in dashboard .me-sidebar
+        // ============================================
+        if (width >= 769) {
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_200x200_sidebar_native',
+                [[200,200],[160,600],[120,600],[250,250]],
+                'site_8gwifi_org_sidebar_native')
+                .addService(googletag.pubads());
+        }
+
+        // ============================================
+        // AD SLOT 10: Below Grid (Dashboard Content Bottom)
+        // Placement: After document grid in dashboard .me-dash-main
+        // ============================================
+        if (width >= 992) {
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_728x90_below_grid_desktop',
+                [[728,90],[970,90]],
+                'site_8gwifi_org_below_grid')
+                .addService(googletag.pubads());
+        } else {
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_320x100_below_grid_mobile',
+                [[320,100],[320,50],[300,100]],
+                'site_8gwifi_org_below_grid')
+                .addService(googletag.pubads());
+        }
+
+        // ============================================
         // GPT Configuration
         // ============================================
         googletag.pubads().disableInitialLoad();  // Lazy load ads
