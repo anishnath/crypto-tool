@@ -902,6 +902,22 @@
     </div>
 </div>
 
+<!-- Math Editor Upgrade Banner -->
+<div style="max-width:900px;margin:1rem auto;padding:1rem 1.5rem;background:linear-gradient(135deg,#eff6ff 0%,#e0e7ff 100%);border:1px solid #bfdbfe;border-left:4px solid #2563eb;border-radius:10px;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+    <div style="flex:1;min-width:200px;">
+        <div style="font-weight:700;font-size:1rem;color:#1e3a5f;margin-bottom:0.25rem;">
+            <i class="fas fa-rocket" style="color:#2563eb;margin-right:0.4rem;"></i>
+            Need a full document editor?
+        </div>
+        <div style="font-size:0.875rem;color:#475569;line-height:1.5;">
+            Write entire math documents with our <strong>Math Editor</strong> &mdash; WYSIWYG equations, right-click to solve/differentiate/integrate, plot graphs inline, and export to PDF.
+        </div>
+    </div>
+    <a href="math/editor.jsp" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.6rem 1.25rem;background:#2563eb;color:#fff;border-radius:8px;font-weight:600;font-size:0.875rem;text-decoration:none;white-space:nowrap;transition:background 0.2s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+        Open Math Editor <i class="fas fa-arrow-right"></i>
+    </a>
+</div>
+
 <!-- Main Container -->
 <div class="main-container">
     <div class="desktop-layout">
