@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.03" stroke="#60a5fa" stroke-width="0.5">
+    <line x1="0" y1="0" x2="0" y2="630"/><line x1="100" y1="0" x2="100" y2="630"/>
+    <line x1="200" y1="0" x2="200" y2="630"/><line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/><line x1="500" y1="0" x2="500" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/><line x1="700" y1="0" x2="700" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/><line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/><line x1="1100" y1="0" x2="1100" y2="630"/>
+    <line x1="0" y1="60" x2="1200" y2="60"/><line x1="0" y1="150" x2="1200" y2="150"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="450" x2="1200" y2="450"/>
+  </g>
+
+  <!-- Top bar mockup -->
+  <g transform="translate(50, 40)">
+    <rect width="1100" height="56" rx="8" fill="#1e293b" stroke="#334155"/>
+    <!-- Logo + brand -->
+    <rect x="16" y="14" width="28" height="28" rx="6" fill="#2563eb"/>
+    <text x="30" y="32" text-anchor="middle" fill="white" font-family="serif" font-size="14" font-weight="bold">£</text>
+    <text x="52" y="34" fill="#f8fafc" font-family="sans-serif" font-size="16" font-weight="700">Math Editor</text>
+    <!-- New Doc button -->
+    <rect x="180" y="14" width="140" height="28" rx="6" fill="#2563eb"/>
+    <text x="250" y="32" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13" font-weight="600">+ New Document</text>
+    <!-- Search -->
+    <rect x="360" y="14" width="320" height="28" rx="6" fill="#0f172a" stroke="#334155"/>
+    <text x="380" y="32" fill="#64748b" font-family="sans-serif" font-size="12">Search documents...</text>
+  </g>
+
+  <!-- Document grid -->
+  <g transform="translate(50, 120)">
+    <text x="0" y="-8" fill="#94a3b8" font-family="sans-serif" font-size="13" font-weight="600">Recent Documents</text>
+
+    <!-- Card 1 -->
+    <g transform="translate(0, 16)">
+      <rect width="260" height="140" rx="8" fill="#1e293b" stroke="#334155"/>
+      <rect x="12" y="12" width="236" height="70" rx="4" fill="#0f172a"/>
+      <text x="130" y="52" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-size="11">+ e{ã² dx</text>
+      <text x="20" y="108" fill="#f8fafc" font-family="sans-serif" font-size="14" font-weight="600">Gaussian Integral Proof</text>
+      <text x="20" y="126" fill="#64748b" font-family="sans-serif" font-size="11">Edited 2 hours ago</text>
+    </g>
+
+    <!-- Card 2 -->
+    <g transform="translate(280, 16)">
+      <rect width="260" height="140" rx="8" fill="#1e293b" stroke="#334155"/>
+      <rect x="292" y="12" width="236" height="70" rx="4" fill="#0f172a"/>
+      <text x="410" y="52" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-size="11">f(x) = x²</text>
+      <text x="300" y="108" fill="#f8fafc" font-family="sans-serif" font-size="14" font-weight="600">Calculus Notes</text>
+      <text x="300" y="126" fill="#64748b" font-family="sans-serif" font-size="11">Edited yesterday</text>
+    </g>
+
+    <!-- Card 3 -->
+    <g transform="translate(560, 16)">
+      <rect width="260" height="140" rx="8" fill="#1e293b" stroke="#334155"/>
+      <rect x="572" y="12" width="236" height="70" rx="4" fill="#0f172a"/>
+      <text x="690" y="52" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-size="11">Ax = b</text>
+      <text x="580" y="108" fill="#f8fafc" font-family="sans-serif" font-size="14" font-weight="600">Linear Algebra HW</text>
+      <text x="580" y="126" fill="#64748b" font-family="sans-serif" font-size="11">Edited 3 days ago</text>
+    </g>
+
+    <!-- Card 4 -->
+    <g transform="translate(840, 16)">
+      <rect width="260" height="140" rx="8" fill="#1e293b" stroke="#334155" stroke-dasharray="4,3"/>
+      <text x="970" y="82" text-anchor="middle" fill="#475569" font-family="sans-serif" font-size="28" font-weight="300">+</text>
+      <text x="970" y="118" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-size="13">New document</text>
+    </g>
+  </g>
+
+  <!-- Sidebar mockup -->
+  <g transform="translate(50, 300)">
+    <rect width="200" height="220" rx="8" fill="#1e293b" stroke="#334155"/>
+    <text x="20" y="36" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="600">=Á Documents</text>
+    <text x="20" y="56" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="600">=P Recent</text>
+    <line x1="12" y1="70" x2="188" y2="70" stroke="#334155"/>
+    <rect x="12" y="84" width="176" height="28" rx="4" fill="#2563eb" opacity="0.2"/>
+    <text x="20" y="102" fill="#60a5fa" font-family="sans-serif" font-size="12">All Documents</text>
+    <text x="20" y="132" fill="#64748b" font-family="sans-serif" font-size="12">Starred</text>
+    <text x="20" y="156" fill="#64748b" font-family="sans-serif" font-size="12">Trash</text>
+  </g>
+
+  <!-- Bottom branding bar -->
+  <rect y="560" width="1200" height="70" fill="#0f172a"/>
+
+  <text x="80" y="600" fill="#60a5fa" font-family="sans-serif" font-size="20" font-weight="800">Math Editor Dashboard</text>
+  <text x="318" y="600" fill="#475569" font-family="sans-serif" font-size="14">|</text>
+  <text x="336" y="600" fill="#94a3b8" font-family="sans-serif" font-size="14">Manage documents · Create, share, collaborate</text>
+
+  <text x="1120" y="600" text-anchor="end" fill="#475569" font-family="sans-serif" font-size="16" font-weight="700">8gwifi.org</text>
+
+  <rect y="0" width="1200" height="3" fill="url(#accent)"/>
+</svg>

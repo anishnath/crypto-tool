@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.03" stroke="#60a5fa" stroke-width="0.5">
+    <line x1="0" y1="0" x2="0" y2="630"/><line x1="60" y1="0" x2="60" y2="630"/>
+    <line x1="120" y1="0" x2="120" y2="630"/><line x1="180" y1="0" x2="180" y2="630"/>
+    <line x1="240" y1="0" x2="240" y2="630"/><line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="360" y1="0" x2="360" y2="630"/><line x1="420" y1="0" x2="420" y2="630"/>
+    <line x1="480" y1="0" x2="480" y2="630"/><line x1="540" y1="0" x2="540" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/><line x1="660" y1="0" x2="660" y2="630"/>
+    <line x1="720" y1="0" x2="720" y2="630"/><line x1="780" y1="0" x2="780" y2="630"/>
+    <line x1="840" y1="0" x2="840" y2="630"/><line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="960" y1="0" x2="960" y2="630"/><line x1="1020" y1="0" x2="1020" y2="630"/>
+    <line x1="1080" y1="0" x2="1080" y2="630"/><line x1="1140" y1="0" x2="1140" y2="630"/>
+    <line x1="0" y1="60" x2="1200" y2="60"/><line x1="0" y1="120" x2="1200" y2="120"/>
+    <line x1="0" y1="180" x2="1200" y2="180"/><line x1="0" y1="240" x2="1200" y2="240"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="360" x2="1200" y2="360"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/><line x1="0" y1="480" x2="1200" y2="480"/>
+    <line x1="0" y1="540" x2="1200" y2="540"/>
+  </g>
+
+  <!-- Main editor mockup -->
+  <g transform="translate(50, 50)">
+    <!-- Editor frame -->
+    <rect width="1100" height="480" rx="12" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+
+    <!-- Title bar -->
+    <rect width="1100" height="44" rx="12" fill="#0f172a"/>
+    <circle cx="24" cy="22" r="6" fill="#ef4444" opacity="0.9"/>
+    <circle cx="44" cy="22" r="6" fill="#f59e0b" opacity="0.9"/>
+    <circle cx="64" cy="22" r="6" fill="#22c55e" opacity="0.9"/>
+    <text x="580" y="28" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="12">Untitled  Math Editor</text>
+
+    <!-- Toolbar -->
+    <rect x="0" y="44" width="1100" height="40" fill="#0f172a"/>
+    <g fill="#64748b" font-family="sans-serif" font-size="11" font-weight="600">
+      <rect x="12" y="52" width="28" height="24" rx="4" fill="#334155"/>
+      <text x="26" y="68" text-anchor="middle">B</text>
+      <rect x="46" y="52" width="28" height="24" rx="4" fill="#334155"/>
+      <text x="60" y="68" text-anchor="middle">I</text>
+      <rect x="80" y="52" width="28" height="24" rx="4" fill="#334155"/>
+      <text x="94" y="68" text-anchor="middle">U</text>
+      <rect x="114" y="52" width="48" height="24" rx="4" fill="#2563eb"/>
+      <text x="138" y="68" text-anchor="middle"></text>
+    </g>
+
+    <!-- Document content area -->
+    <rect x="0" y="84" width="1100" height="396" fill="#f8fafc"/>
+
+    <!-- Mock document content -->
+    <g font-family="'Georgia', serif" transform="translate(60, 110)">
+      <text x="0" y="0" fill="#1e293b" font-size="22" font-weight="bold">The Gaussian Integral</text>
+      <text x="0" y="36" fill="#475569" font-size="13">We wish to evaluate +‹^ e{ã² dx. Let I denote this integral.</text>
+      <text x="0" y="60" fill="#475569" font-size="13">Using Fubinis theorem:</text>
+      <!-- Equation block -->
+      <rect x="0" y="72" width="400" height="56" rx="6" fill="#e2e8f0"/>
+      <g transform="translate(200, 106)" text-anchor="middle">
+        <text fill="#1e293b" font-size="24" font-style="italic">I² = ++ e{ã²{¸² dx dy = À</text>
+      </g>
+      <text x="0" y="148" fill="#475569" font-size="13">Hence I = À. This integral appears throughout probability and physics.</text>
+      <!-- Inline math in sentence -->
+      <text x="0" y="192" fill="#475569" font-size="13">The normal distribution uses e{ã²/² in its density. The Fourier transform of e{ã² is </text>
+      <text x="380" y="192" fill="#1e293b" font-size="13" font-style="italic">e{O²/t</text>
+      <text x="420" y="192" fill="#475569" font-size="13">.</text>
+    </g>
+
+    <!-- Right panel outline -->
+    <rect x="820" y="84" width="280" height="396" fill="#f1f5f9"/>
+    <text x="960" y="110" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-size="11" font-weight="600">Outline</text>
+    <g fill="#334155" font-family="sans-serif" font-size="11">
+      <text x="840" y="140">The Gaussian Integral</text>
+      <text x="860" y="165">Definition</text>
+      <text x="860" y="185">Proof Sketch</text>
+      <text x="880" y="205">Applications</text>
+    </g>
+  </g>
+
+  <!-- Bottom branding bar -->
+  <rect y="560" width="1200" height="70" fill="#0f172a"/>
+
+  <text x="80" y="600" fill="#60a5fa" font-family="sans-serif" font-size="20" font-weight="800">Math Editor</text>
+  <text x="202" y="600" fill="#475569" font-family="sans-serif" font-size="14">|</text>
+  <text x="220" y="600" fill="#94a3b8" font-family="sans-serif" font-size="14">WYSIWYG equations · LaTeX · PDF export · Free</text>
+
+  <text x="1120" y="600" text-anchor="end" fill="#475569" font-family="sans-serif" font-size="16" font-weight="700">8gwifi.org</text>
+
+  <rect y="0" width="1200" height="3" fill="url(#accent)"/>
+</svg>
