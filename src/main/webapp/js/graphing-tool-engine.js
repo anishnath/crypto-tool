@@ -781,6 +781,14 @@ class GraphingEngine {
             if ((a + b).toLowerCase() === 'pi') return m;
             return a + '*' + b;
         });
+        // Variable × function name: xsin(x) → x*sin(x), ycos(t) → y*cos(t)
+        // Exclude known multi-letter function prefixes (asin, acos, atan, sinh, cosh, tanh)
+        s = s.replace(/(?<![a-zA-Z])([a-zA-Z])(sin|cos|tan|log|exp|sqrt|abs|ceil|floor|sign|round|sec|csc|cot)\s*\(/gi, (m, letter, fn) => {
+            const combined = (letter + fn).toLowerCase();
+            // Don't split known compound functions
+            if (['asin','acos','atan','sinh','cosh','tanh'].includes(combined)) return m;
+            return letter + '*' + fn + '(';
+        });
         // Function juxtaposition: sin(x)cos(x) → sin(x)*cos(x)
         s = s.replace(/\)\s*(sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|sec|csc|cot|log|exp|sqrt|abs)\s*\(/gi, ')*$1(');
         return s;

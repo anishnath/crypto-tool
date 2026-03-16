@@ -564,6 +564,47 @@
 
 </main>
 
+<!-- ==================== FTC INTUITION WALKTHROUGH ==================== -->
+<section class="tool-expertise-section" style="max-width:1200px;margin:0.75rem auto;padding:0 0.5rem;">
+    <div class="tool-card" style="padding:0.9rem;">
+        <h2 style="font-size:1rem;margin:0 0 0.4rem;">Why does a primitive also give area? (3-step intuition)</h2>
+        <p style="margin:0 0 0.7rem;color:#6b7280;font-size:0.82rem;line-height:1.5;">We fix <code>a=0</code> and use <code>f(x)=x<sup>2</sup></code>. Move <code>b</code> and switch steps to see how area accumulation and primitive values match.</p>
+
+        <style>
+            .gc-ftc-controls{display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin-bottom:0.6rem}
+            .gc-ftc-chip{border:1px solid #d1d5db;background:#fff;border-radius:999px;padding:0.25rem 0.6rem;font-size:0.75rem;cursor:pointer;color:#374151}
+            .gc-ftc-chip.active{background:#2563eb;color:#fff;border-color:#2563eb}
+            .gc-ftc-canvas-wrap{border:1px solid #e5e7eb;border-radius:10px;background:#fff;overflow:hidden}
+            .gc-ftc-canvas{width:100%;height:280px;display:block}
+            .gc-ftc-math{margin-top:0.6rem;font-size:0.82rem;color:#374151;line-height:1.55}
+            .gc-ftc-math strong{color:#111827}
+            [data-theme="dark"] .gc-ftc-chip{background:#1f2937;color:#e5e7eb;border-color:#334155}
+            [data-theme="dark"] .gc-ftc-chip.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
+            [data-theme="dark"] .gc-ftc-canvas-wrap{background:#0f172a;border-color:#334155}
+            [data-theme="dark"] .gc-ftc-math{color:#e5e7eb}
+        </style>
+
+        <div class="gc-ftc-controls">
+            <button type="button" class="gc-ftc-chip active" data-ftc-step="1">1) Tiny strip ≈ f(b)·Δx</button>
+            <button type="button" class="gc-ftc-chip" data-ftc-step="2">2) Sum strips = area A(b)</button>
+            <button type="button" class="gc-ftc-chip" data-ftc-step="3">3) A(b)=F(b)-F(0)</button>
+            <button type="button" class="gc-ftc-chip" id="gc-ftc-play">▶ Play</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.55rem;">
+            <label for="gc-ftc-b" style="font-size:0.78rem;color:#6b7280;white-space:nowrap;">Right bound b</label>
+            <input id="gc-ftc-b" type="range" min="0.2" max="4" step="0.05" value="2" style="flex:1;">
+            <span id="gc-ftc-b-val" style="font-size:0.78rem;min-width:2.3rem;text-align:right;color:#111827;">2.00</span>
+        </div>
+
+        <div class="gc-ftc-canvas-wrap">
+            <canvas id="gc-ftc-canvas" class="gc-ftc-canvas" width="920" height="280"></canvas>
+        </div>
+
+        <div id="gc-ftc-explain" class="gc-ftc-math"></div>
+    </div>
+</section>
+
 <!-- Embed Code Modal -->
 <div id="gc-embed-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
     <div style="background:var(--surface-primary,#fff);border-radius:12px;max-width:640px;width:90%;max-height:85vh;overflow-y:auto;padding:1.5rem;box-shadow:0 20px 60px rgba(0,0,0,0.3);position:relative;">
@@ -1049,6 +1090,155 @@ window.addEventListener('message', (e) => {
       if (ph) ph.innerHTML = '<span style="color:#dc3545;">Libraries failed to load. Check your network or disable script blockers.</span>';
     }
   }, 15000);
+})();
+</script>
+
+<script>
+(function(){
+  function initFtcWalkthrough(){
+    var canvas = document.getElementById('gc-ftc-canvas');
+    var slider = document.getElementById('gc-ftc-b');
+    var bVal = document.getElementById('gc-ftc-b-val');
+    var explain = document.getElementById('gc-ftc-explain');
+    var chips = Array.prototype.slice.call(document.querySelectorAll('[data-ftc-step]'));
+    var playBtn = document.getElementById('gc-ftc-play');
+    if (!canvas || !slider || !bVal || !explain || !chips.length || !playBtn) return;
+
+    var ctx = canvas.getContext('2d');
+    var step = 1;
+    var timer = null;
+
+    function sx(x){ return 56 + (x/4) * (canvas.width - 96); }
+    function sy(y){ return canvas.height - 36 - (y/16) * (canvas.height - 66); }
+    function fx(x){ return x*x; }
+
+    function drawAxes(){
+      ctx.strokeStyle = 'rgba(100,116,139,0.35)';
+      ctx.lineWidth = 1;
+      for (var gx=0; gx<=4; gx+=1){
+        ctx.beginPath(); ctx.moveTo(sx(gx), sy(0)); ctx.lineTo(sx(gx), sy(16)); ctx.stroke();
+      }
+      for (var gy=0; gy<=16; gy+=2){
+        ctx.beginPath(); ctx.moveTo(sx(0), sy(gy)); ctx.lineTo(sx(4), sy(gy)); ctx.stroke();
+      }
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(sx(0), sy(0)); ctx.lineTo(sx(4), sy(0)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx(0), sy(0)); ctx.lineTo(sx(0), sy(16)); ctx.stroke();
+      ctx.fillStyle = '#64748b';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText('x', sx(4)-4, sy(0)+18);
+      ctx.fillText('y', sx(0)-16, sy(16)+2);
+    }
+
+    function drawCurve(){
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      for (var x=0; x<=4.0001; x+=0.03){
+        var px = sx(x), py = sy(fx(x));
+        if (x===0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.fillStyle = '#2563eb';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText('f(x)=x²', sx(3.2), sy(fx(3.2))-8);
+    }
+
+    function drawArea(b){
+      ctx.fillStyle = 'rgba(34,197,94,0.30)';
+      ctx.beginPath();
+      ctx.moveTo(sx(0), sy(0));
+      for (var x=0; x<=b; x+=0.03){ ctx.lineTo(sx(x), sy(fx(x))); }
+      ctx.lineTo(sx(b), sy(0));
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(22,163,74,0.85)';
+      ctx.stroke();
+    }
+
+    function drawStrip(b){
+      var dx = 0.2;
+      var right = Math.min(4, b + dx);
+      var h = fx(b);
+      ctx.fillStyle = 'rgba(239,68,68,0.35)';
+      ctx.fillRect(sx(b), sy(h), sx(right)-sx(b), sy(0)-sy(h));
+      ctx.strokeStyle = 'rgba(239,68,68,0.95)';
+      ctx.strokeRect(sx(b), sy(h), sx(right)-sx(b), sy(0)-sy(h));
+      ctx.fillStyle = '#b91c1c';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText('≈ f(b)·Δx', sx(b)+6, sy(h)-8);
+    }
+
+    function drawMarker(b){
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5,4]);
+      ctx.beginPath(); ctx.moveTo(sx(b), sy(0)); ctx.lineTo(sx(b), sy(fx(b))); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath(); ctx.arc(sx(b), sy(fx(b)), 4, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#92400e';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText('b', sx(b)-3, sy(0)+16);
+    }
+
+    function setExplain(b){
+      var A = (b*b*b)/3;
+      var bStr = b.toFixed(2);
+      var aStr = A.toFixed(4);
+      if (step === 1) {
+        explain.innerHTML = '<strong>Step 1:</strong> Move from <code>b</code> to <code>b+Δx</code>. The new area is a thin strip with area <code>≈ f(b)·Δx</code>. So area-growth-rate is <code>A\'(b)=f(b)</code>.';
+      } else if (step === 2) {
+        explain.innerHTML = '<strong>Step 2:</strong> Adding many thin strips from <code>0</code> to <code>b=' + bStr + '</code> gives accumulated area <code>A(b)=∫[0,b] f(x)dx</code>. Here <code>A(' + bStr + ')= ' + aStr + '</code>.';
+      } else {
+        explain.innerHTML = '<strong>Step 3:</strong> A primitive <code>F</code> also satisfies <code>F\'(x)=f(x)</code>. So <code>A</code> and <code>F</code> differ by a constant: <code>A(b)=F(b)-F(0)</code>. With <code>F(x)=x³/3</code>, <code>F(' + bStr + ')-F(0)=' + aStr + '</code> (same area).';
+      }
+    }
+
+    function render(){
+      var b = parseFloat(slider.value);
+      bVal.textContent = b.toFixed(2);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      drawAxes();
+      drawCurve();
+      drawMarker(b);
+      if (step >= 2) drawArea(b);
+      if (step === 1) drawStrip(b);
+      setExplain(b);
+      chips.forEach(function(c){ c.classList.toggle('active', parseInt(c.getAttribute('data-ftc-step'), 10) === step); });
+    }
+
+    chips.forEach(function(chip){
+      chip.addEventListener('click', function(){
+        step = parseInt(chip.getAttribute('data-ftc-step'), 10) || 1;
+        render();
+      });
+    });
+
+    slider.addEventListener('input', render);
+
+    playBtn.addEventListener('click', function(){
+      if (timer) {
+        clearInterval(timer); timer = null; playBtn.textContent = '▶ Play'; return;
+      }
+      playBtn.textContent = '⏸ Pause';
+      timer = setInterval(function(){
+        var b = parseFloat(slider.value) + 0.04;
+        if (b > 4) { b = 0.2; step = (step % 3) + 1; }
+        slider.value = b.toFixed(2);
+        render();
+      }, 70);
+    });
+
+    render();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFtcWalkthrough);
+  } else {
+    initFtcWalkthrough();
+  }
 })();
 </script>
 
