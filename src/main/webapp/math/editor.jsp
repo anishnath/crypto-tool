@@ -38,6 +38,7 @@
     <!-- Site-wide CSS (navigation, etc.) -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%= cacheVersion %>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%= cacheVersion %>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%= cacheVersion %>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%= cacheVersion %>">
     <%@ include file="../modern/ads/ad-init.jsp" %>
 
@@ -330,6 +331,8 @@
 
 <!-- TipTap Editor (ES module — loads from CDN, creates editor, fires me:editor-ready) -->
 <script type="module" src="<%=request.getContextPath()%>/math/assets/js/tiptap-init.js?v=<%= cacheVersion %>"></script>
+
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%= cacheVersion %>" defer></script>
 
 <%@ include file="../modern/components/analytics.jsp" %>
 </body>

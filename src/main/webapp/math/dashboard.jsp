@@ -196,6 +196,8 @@
 })();
 </script>
 
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%= cacheVersion %>" defer></script>
+
 <%@ include file="../modern/components/analytics.jsp" %>
 </body>
 </html>
