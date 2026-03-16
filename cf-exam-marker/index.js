@@ -7,6 +7,13 @@ import { buildPolynomialPrompt } from './polynomial.js';
 import { buildVectorPrompt } from './vector.js';
 import { buildTrigonometryPrompt } from './trigonometry.js';
 import { buildTikzPrompt } from './tikz.js';
+import {
+  handleCreateDocument,
+  handleGetDocument,
+  handleUpdateDocument,
+  handleDeleteDocument,
+  handleListDocuments,
+} from './documents.js';
 
 const ALLOWED_ORIGINS = new Set([
   'http://localhost:8080',
@@ -24,8 +31,8 @@ function withCors(resp, origin) {
   const h = new Headers(resp.headers);
   if (ALLOWED_ORIGINS.has(origin)) {
     h.set('Access-Control-Allow-Origin', origin);
-    h.set('Access-Control-Allow-Methods', 'POST,OPTIONS');
-    h.set('Access-Control-Allow-Headers', 'content-type,x-api-key');
+    h.set('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    h.set('Access-Control-Allow-Headers', 'content-type,x-api-key,x-user-id,x-edit-token');
     h.set('Access-Control-Max-Age', '86400');
     h.append('Vary', 'Origin');
   }
@@ -1959,6 +1966,43 @@ export default {
           return withCors(authError, reqOrigin);
         }
         const r = await handleMarkExam(request, env);
+        return withCors(r, reqOrigin);
+      }
+
+      // =============================================
+      // DOCUMENTS API (generic: math, chemistry, etc.)
+      // =============================================
+
+      // POST /api/documents - Create (no auth required, x-user-id optional)
+      if (pathname === '/api/documents' && request.method === 'POST') {
+        const r = await handleCreateDocument(request, env);
+        return withCors(r, reqOrigin);
+      }
+
+      // GET /api/documents - List (filter by user_id, doc_type)
+      if (pathname === '/api/documents' && request.method === 'GET') {
+        const r = await handleListDocuments(request, env);
+        return withCors(r, reqOrigin);
+      }
+
+      // GET /api/documents/:id - Get single document
+      const docGetMatch = pathname.match(/^\/api\/documents\/([^/]+)$/);
+      if (docGetMatch && request.method === 'GET') {
+        const r = await handleGetDocument(docGetMatch[1], request, env);
+        return withCors(r, reqOrigin);
+      }
+
+      // PUT /api/documents/:id - Update (owner or x-edit-token)
+      const docPutMatch = pathname.match(/^\/api\/documents\/([^/]+)$/);
+      if (docPutMatch && request.method === 'PUT') {
+        const r = await handleUpdateDocument(docPutMatch[1], request, env);
+        return withCors(r, reqOrigin);
+      }
+
+      // DELETE /api/documents/:id - Delete (owner or x-edit-token)
+      const docDelMatch = pathname.match(/^\/api\/documents\/([^/]+)$/);
+      if (docDelMatch && request.method === 'DELETE') {
+        const r = await handleDeleteDocument(docDelMatch[1], request, env);
         return withCors(r, reqOrigin);
       }
 

@@ -22,3 +22,8 @@ routes = [
 binding = "DB"
 database_name = "exam-marker-db"
 database_id = "b146fd57-6fcc-4847-8b3f-17a9e747758b"
+
+# R2 bucket for document content (generic: math, chemistry, etc.)
+[[r2_buckets]]
+binding = "DOCUMENTS"
+bucket_name = "documents"

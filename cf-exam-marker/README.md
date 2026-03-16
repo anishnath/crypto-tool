@@ -541,6 +541,82 @@ Response:
 
 ---
 
+## Documents API (Math/Chemistry Editors)
+
+Generic document CRUD for editors. Anonymous create allowed; ownership via `x-user-id`; edit via `x-edit-token` for anonymous docs.
+
+### Setup (one-time)
+
+```bash
+# Create R2 bucket for document content
+wrangler r2 bucket create documents
+
+# Apply documents table migrations
+wrangler d1 execute exam-marker-db --file=migrations/002_documents.sql --remote
+wrangler d1 execute exam-marker-db --file=migrations/003_documents_drop_user_fk.sql --remote
+# For local dev:
+wrangler d1 execute exam-marker-db --file=migrations/002_documents.sql --local
+wrangler d1 execute exam-marker-db --file=migrations/003_documents_drop_user_fk.sql --local
+```
+
+All endpoints require `x-api-key`. Create/List/Update/Delete also use `x-user-id` and/or `x-edit-token` where applicable.
+
+### Endpoints
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| POST | `/api/documents` | x-api-key | Create document (x-user-id optional) |
+| GET | `/api/documents` | x-api-key | List (query: user_id, doc_type, visibility, limit, offset, sort) |
+| GET | `/api/documents/:id` | x-api-key | Get document (public or owner) |
+| PUT | `/api/documents/:id` | x-api-key + owner or x-edit-token | Update |
+| DELETE | `/api/documents/:id` | x-api-key + owner or x-edit-token | Delete |
+
+### Create Request Body
+
+```json
+{
+  "doc_type": "math",
+  "title": "My Worksheet",
+  "content": "<html>...</html>",
+  "content_type": "text/html",
+  "visibility": "private"
+}
+```
+
+- `doc_type`: `math`, `chemistry`, etc.
+- `visibility`: `public`, `private`, `unlisted`
+- Returns `edit_token` on create (use for anonymous edits)
+
+### List query params
+- `limit`, `offset` — pagination (default limit 50, max 100)
+- `sort` — `created_at` or `updated_at` (default: `updated_at`) — for landing "recent" section
+- `user_id` — filter by owner (requires matching `x-user-id` header)
+- `doc_type`, `visibility` — optional filters
+
+**Landing page:** `GET /api/documents?limit=8&sort=created_at` (no `x-user-id`) returns recently created **public** documents.
+
+### Claim flow (anonymous → logged-in)
+
+When a document was created anonymously (no `user_id`) and the user later logs in:
+- Send `PUT` with `X-Edit-Token` + `X-User-Id`
+- The doc is claimed (ownership set to that user)
+- Doc appears in "My Documents" (list filtered by `user_id`)
+- Only anonymous docs can be claimed; owned docs cannot change owner
+
+### Test Documents API locally
+
+```bash
+# Start the worker (in one terminal)
+wrangler dev --port 8787
+
+# Run tests (in another terminal)
+./test-documents-api.sh
+```
+
+The script loads `API_KEY` from `.dev.vars` and tests create, get, update, list, delete, and auth.
+
+---
+
 ## Math Steps Cache (D1)
 
 The `/api/math-steps` endpoint caches AI-generated step-by-step solutions in `math_steps_cache`. After changes to expression normalization (e.g. `sin3x` → `sin(3*x)`) in integral/derivative/limit calculators, the cache may serve incorrect or stale steps.
@@ -600,11 +676,14 @@ wrangler d1 execute exam-marker-db --file=tikz-requests.sql --remote
 
 ```bash
 # Start dev server
-wrangler dev
+wrangler dev --port 8787
 
-# Test endpoints
+# Test exam API endpoints
 curl http://localhost:8787/api/sets | jq .
 curl http://localhost:8787/api/chapters?exam_type=CBSE | jq .
+
+# Test Documents API (requires .dev.vars with API_KEY)
+./test-documents-api.sh
 ```
 
 ---
