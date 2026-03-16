@@ -6536,8 +6536,9 @@ function _showIntegrationResult(id, expression, a, b) {
     if (!resultEl) return;
     var area = _numericIntegrate(expression, a, b);
     var parts = [];
+    var areaStr = null;
     if (area !== null && isFinite(area)) {
-        var areaStr = Number.isInteger(area) ? String(area) : parseFloat(area.toPrecision(10)).toString();
+        areaStr = Number.isInteger(area) ? String(area) : parseFloat(area.toPrecision(10)).toString();
         parts.push('∫ [' + a + ', ' + b + '] ≈ ' + areaStr);
     }
     // Try symbolic antiderivative via Nerdamer
@@ -6548,6 +6549,9 @@ function _showIntegrationResult(id, expression, a, b) {
             var sym = antideriv.text();
             if (sym) {
                 parts.push('F(x) = ' + sym + ' + C');
+                if (areaStr !== null) {
+                    parts.push('FTC: ∫[' + a + ', ' + b + '] f(x)dx = F(' + b + ') - F(' + a + ') ≈ ' + areaStr);
+                }
             }
         }
     } catch (_) { /* Nerdamer can't integrate — that's fine */ }
@@ -7197,7 +7201,9 @@ function updateGraphForceRange() {
 }
 
 // Initialize: DOM may already be ready if script was loaded async after DOMContentLoaded
+// Skip boot when loaded as a library (e.g., from math editor's graph-insert.js)
 function _gcBoot() {
+    if (window._gcSkipBoot) return;
     initGraph();
     ['xMin', 'xMax', 'yMin', 'yMax'].forEach(id => {
         const el = document.getElementById(id);

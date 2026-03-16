@@ -481,6 +481,20 @@
         })();
         setRange(-3, 4, -2, 10);
         break;
+      case 'ftc_area_primitive':
+        gcSetExpr(firstId, 'cartesian', 'x^2', '#2563eb');
+        (function(){
+          var ci = document.getElementById('show-integration-'+firstId);
+          if (ci){ ci.checked = true; toggleIntegration(firstId); }
+          var a = document.getElementById('integration-a-'+firstId);
+          var b = document.getElementById('integration-b-'+firstId);
+          if (a && b){ a.value = 0; b.value = 3; updateIntegrationBounds(firstId); }
+          var ca = document.getElementById('show-antiderivative-'+firstId);
+          if (ca){ ca.checked = true; toggleAntiderivative(firstId); }
+        })();
+        gcAdd('cartesian', 'x^3/3', '#16a34a');
+        setRange(-3, 4, -2, 12);
+        break;
 
       // ============ SYSTEMS OF EQUATIONS ============
       case 'linear_system':
