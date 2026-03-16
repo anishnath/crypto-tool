@@ -285,6 +285,9 @@
                     <span class="hero-stat-label">KaTeX Solutions</span>
                 </div>
             </div>
+            <p style="margin-top: 1.25rem;">
+                <a href="<%=request.getContextPath()%>/math/dashboard.jsp" style="color: white; text-decoration: underline; font-weight: 600;">Math Editor</a> — Write equations, diagrams &amp; documents
+            </p>
         </section>
 
         <!-- ==================== EVERYDAY MATH ==================== -->
@@ -292,10 +295,25 @@
             <div class="category-header">
                 <span class="category-icon">&#128176;</span>
                 <h2>Everyday Math</h2>
-                <span class="category-count">3 tools</span>
+                <span class="category-count">4 tools</span>
             </div>
             <div class="tools-grid">
-                <a href="<%=request.getContextPath()%>/percentage-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #16a34a;">
+                <a href="<%=request.getContextPath()%>/math/dashboard.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #2563eb;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">&#x2211;</div>
+                        <div>
+                            <h3>Math Editor</h3>
+                            <div class="tool-formula">Write equations, graphs &amp; documents</div>
+                        </div>
+                    </div>
+                    <p>WYSIWYG math editor with live compute (derivative, integral, solve), right-click to plot, and export to PDF or LaTeX.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-steps">Steps</span>
+                        <span class="badge badge-graph">Graph</span>
+                    </div>
+                </a>
+
+                <a href="<%=request.getContextPath()%>/percentage-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #16a34a;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #16a34a, #22c55e);">%</div>
                         <div>
@@ -311,7 +329,7 @@
                     </div>
                 </a>
 
-                <a href="<%=request.getContextPath()%>/significant-figures-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #0891b2;">
+                <a href="<%=request.getContextPath()%>/significant-figures-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #0891b2;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #0891b2, #0d9488);">SF</div>
                         <div>
@@ -325,7 +343,7 @@
                     </div>
                 </a>
 
-                <a href="<%=request.getContextPath()%>/24-game-solver.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #ec4899;">
+                <a href="<%=request.getContextPath()%>/24-game-solver.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #ec4899;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">24</div>
                         <div>

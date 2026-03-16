@@ -1,0 +1,2340 @@
+/**
+ * Math Editor - Editor Page Stylesheet
+ * Phase 3 — Full editor with toolbar, canvas, slash menu, code blocks
+ */
+
+/* ============================================
+   EDITOR LAYOUT
+   ============================================ */
+.me-editor-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--me-background);
+}
+
+/* ============================================
+   EDITOR TOP BAR
+   ============================================ */
+.me-editor-topbar {
+    height: 52px;
+    background: var(--me-surface);
+    border-bottom: 1px solid var(--me-border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    flex-shrink: 0;
+    z-index: 100;
+}
+
+.me-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.me-back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--me-radius-sm);
+    background: none;
+    border: none;
+    color: var(--me-text-muted);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all var(--me-transition);
+    flex-shrink: 0;
+    text-decoration: none;
+}
+
+.me-back-btn:hover {
+    background: var(--me-background);
+    color: var(--me-text-primary);
+}
+
+.me-doc-title-input {
+    border: none;
+    background: none;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: var(--me-font-ui);
+    color: var(--me-text-primary);
+    padding: 4px 8px;
+    border-radius: var(--me-radius-sm);
+    min-width: 120px;
+    max-width: 320px;
+    transition: all var(--me-transition);
+}
+
+.me-doc-title-input:hover {
+    background: var(--me-background);
+}
+
+.me-doc-title-input:focus {
+    outline: none;
+    background: var(--me-background);
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+}
+
+/* ============================================
+   SAVE STATUS INDICATOR
+   ============================================ */
+.me-save-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--me-text-muted);
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+
+.me-save-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--me-success);
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+}
+
+.me-save-dot.saving {
+    background: var(--me-warning);
+    animation: pulse-dot 1s ease-in-out infinite;
+}
+
+.me-save-dot.me-save-error {
+    background: var(--me-error);
+}
+
+.me-status-faded {
+    opacity: 0.4;
+}
+
+.me-view-only-banner {
+    font-size: 12px;
+    color: var(--me-warning);
+    padding: 4px 10px;
+    background: rgba(245,158,11,0.12);
+    border-radius: var(--me-radius-sm);
+    margin-left: 8px;
+}
+
+.me-status-saved {
+    animation: fadeInSave 0.3s ease;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+@keyframes fadeInSave {
+    0%   { opacity: 0; transform: translateY(-4px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   TOP BAR — RIGHT SIDE
+   ============================================ */
+.me-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.me-collaborators {
+    display: flex;
+    margin-right: 4px;
+}
+
+.me-collaborators .me-collab-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--me-surface);
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    margin-left: -8px;
+    cursor: pointer;
+}
+
+.me-collaborators .me-collab-avatar:first-child {
+    margin-left: 0;
+}
+
+.me-visibility-dropdown {
+    position: relative;
+}
+
+.me-btn-visibility {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: var(--me-surface);
+    color: var(--me-text-secondary);
+    border: 1px solid var(--me-border);
+    border-radius: var(--me-radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: var(--me-font-ui);
+    cursor: pointer;
+    transition: all var(--me-transition);
+}
+
+.me-btn-visibility:hover {
+    background: var(--me-background);
+    border-color: var(--me-text-muted);
+}
+
+.me-visibility-icon {
+    font-size: 14px;
+}
+
+.me-visibility-chevron {
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+.me-visibility-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    min-width: 240px;
+    background: var(--me-surface);
+    border: 1px solid var(--me-border);
+    border-radius: var(--me-radius-md);
+    box-shadow: var(--me-shadow-lg);
+    padding: 4px;
+    z-index: 200;
+}
+
+.me-visibility-dropdown.open .me-visibility-menu {
+    display: block;
+}
+
+.me-visibility-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background: none;
+    border-radius: var(--me-radius-sm);
+    font-size: 13px;
+    font-family: var(--me-font-ui);
+    color: var(--me-text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: background var(--me-transition);
+}
+
+.me-visibility-item:hover {
+    background: var(--me-background);
+}
+
+.me-visibility-item.active {
+    background: var(--me-primary-50);
+    color: var(--me-primary);
+}
+
+.me-btn-share {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    background: var(--me-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--me-radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--me-font-ui);
+    cursor: pointer;
+    transition: all var(--me-transition);
+}
+
+.me-btn-share:hover {
+    background: var(--me-primary-dark);
+}
+
+.me-export-dropdown {
+    position: relative;
+}
+
+.me-btn-export {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: var(--me-surface);
+    color: var(--me-text-secondary);
+    border: 1px solid var(--me-border);
+    border-radius: var(--me-radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: var(--me-font-ui);
+    cursor: pointer;
+    transition: all var(--me-transition);
+}
+
+.me-btn-export:hover {
+    background: var(--me-background);
+    border-color: #CBD5E1;
+}
+
+.me-export-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    background: var(--me-surface);
+    border: 1px solid var(--me-border);
+    border-radius: var(--me-radius-md);
+    box-shadow: var(--me-shadow-lg);
+    min-width: 160px;
+    padding: 4px;
+    display: none;
+    z-index: 200;
+}
+
+.me-export-menu.show {
+    display: block;
+}
+
+.me-export-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--me-text-secondary);
+    border-radius: var(--me-radius-sm);
+    cursor: pointer;
+    transition: background var(--me-transition);
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: var(--me-font-ui);
+}
+
+.me-export-menu-item:hover {
+    background: var(--me-background);
+    color: var(--me-text-primary);
+}
+
+/* ============================================
+   SHARE MODAL
+   ============================================ */
+.me-share-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.me-share-modal {
+    background: var(--me-surface);
+    border-radius: var(--me-radius-lg);
+    box-shadow: var(--me-shadow-xl);
+    width: 100%;
+    max-width: 480px;
+    margin: 16px;
+}
+
+.me-share-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--me-border);
+}
+
+.me-share-header h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.me-share-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--me-text-muted);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.me-share-close:hover {
+    color: var(--me-text-primary);
+}
+
+.me-share-body {
+    padding: 20px;
+}
+
+/* Export login modal (reuses share modal structure) */
+.me-export-login-msg {
+    margin: 0 0 16px;
+    color: var(--me-text-secondary);
+}
+
+.me-export-login-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.me-share-no-id p {
+    margin: 0;
+    color: var(--me-text-muted);
+}
+
+.me-share-link-row {
+    margin-bottom: 16px;
+}
+
+.me-share-link-row:last-child {
+    margin-bottom: 0;
+}
+
+.me-share-link-row label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--me-text-secondary);
+    margin-bottom: 6px;
+}
+
+.me-share-input-wrap {
+    display: flex;
+    gap: 8px;
+}
+
+.me-share-input-wrap input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--me-border);
+    border-radius: var(--me-radius-sm);
+    font-size: 13px;
+    font-family: monospace;
+}
+
+.me-btn-copy {
+    padding: 8px 16px;
+    background: var(--me-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--me-radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.me-btn-copy:hover {
+    background: var(--me-primary-dark);
+}
+
+/* Toast notifications (export-pdf.js fallback) */
+.me-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: #fff;
+    z-index: 9999;
+    font-size: 14px;
+    font-family: var(--me-font-ui);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.me-toast-info { background: #1e293b; }
+.me-toast-success { background: #16a34a; }
+.me-toast-error { background: #dc2626; }
+.me-toast-warning { background: #d97706; }
+
+/* ============================================
+   TOOLBAR
+   ============================================ */
+.me-toolbar {
+    background: var(--me-surface);
+    border-bottom: 1px solid var(--me-border);
+    padding: 6px 16px;
+    flex-shrink: 0;
+}
+
+.me-toolbar-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-wrap: wrap;
+}
+
+.me-toolbar-row + .me-toolbar-row {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid var(--me-border-light);
+}
+
+.me-toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 30px;
+    padding: 0 6px;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--me-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: var(--me-font-ui);
+    white-space: nowrap;
+    position: relative;
+}
+
+.me-toolbar-btn:hover {
+    background: #F1F5F9;
+    color: var(--me-text-primary);
+}
+
+.me-toolbar-btn.active {
+    background: var(--me-primary-50);
+    color: var(--me-primary);
+    box-shadow: inset 0 1px 2px rgba(37,99,235,0.15);
+}
+
+/* Toolbar button tooltips (pure CSS) */
+.me-toolbar-btn[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background: var(--me-text-primary);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 300;
+    opacity: 0;
+    animation: tooltipFade 0.15s ease 0.3s forwards;
+}
+
+@keyframes tooltipFade {
+    to { opacity: 1; }
+}
+
+.me-toolbar-btn-text {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0 8px;
+}
+
+.me-toolbar-btn-math {
+    background: var(--me-math-bg);
+    color: var(--me-primary);
+    font-weight: 600;
+    gap: 4px;
+    padding: 0 10px;
+}
+
+.me-toolbar-btn-math:hover {
+    background: #DBEAFE;
+}
+
+.me-toolbar-sep {
+    width: 1px;
+    height: 20px;
+    background: var(--me-border);
+    margin: 0 4px;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   EDITOR BODY (canvas + right panel)
+   ============================================ */
+.me-editor-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* ============================================
+   CANVAS AREA
+   ============================================ */
+.me-canvas-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 24px;
+    position: relative;
+}
+
+.me-doc-loading-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.9);
+    z-index: 10;
+    font-size: 14px;
+    color: var(--me-text-muted);
+}
+
+.me-doc-loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--me-border);
+    border-top-color: var(--me-primary);
+    border-radius: 50%;
+    animation: me-spin 0.8s linear infinite;
+}
+
+@keyframes me-spin {
+    to { transform: rotate(360deg); }
+}
+
+.me-doc-load-error {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: var(--me-surface);
+    z-index: 10;
+    text-align: center;
+    padding: 24px;
+}
+
+.me-doc-load-error-icon {
+    font-size: 48px;
+    color: var(--me-warning);
+}
+
+.me-doc-load-error p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--me-text-secondary);
+}
+
+.me-canvas {
+    max-width: 850px;
+    margin: 0 auto;
+    background: var(--me-surface);
+    border: 1px solid var(--me-border);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 24px rgba(0,0,0,0.04);
+    padding: 60px 80px;
+    min-height: calc(100vh - 200px);
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--me-text-primary);
+    position: relative;
+    outline: none;
+    transform-origin: top center;
+}
+
+/* TipTap/ProseMirror container */
+.me-canvas .ProseMirror {
+    outline: none;
+    min-height: 100%;
+}
+
+/* TipTap placeholder (via Placeholder extension) */
+.me-canvas .ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    color: var(--me-text-muted);
+    font-style: italic;
+    font-size: 15px;
+    float: left;
+    pointer-events: none;
+    height: 0;
+}
+
+/* Selection highlight */
+.me-canvas ::selection {
+    background: rgba(37, 99, 235, 0.15);
+}
+
+/* ============================================
+   CANVAS TYPOGRAPHY
+   ============================================ */
+.me-canvas h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 32px 0 16px;
+    line-height: 1.3;
+    color: var(--me-text-primary);
+    border-bottom: 2px solid var(--me-border);
+    padding-bottom: 8px;
+}
+
+.me-canvas h1:first-child {
+    margin-top: 0;
+}
+
+.me-canvas h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 28px 0 12px;
+    line-height: 1.3;
+    color: #1E293B;
+}
+
+.me-canvas h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 24px 0 10px;
+    color: #334155;
+}
+
+.me-canvas p {
+    margin-bottom: 12px;
+}
+
+.me-canvas blockquote {
+    border-left: 3px solid var(--me-primary);
+    padding: 4px 0 4px 20px;
+    margin: 16px 0;
+    color: var(--me-text-muted);
+    font-style: italic;
+}
+
+.me-canvas ul,
+.me-canvas ol {
+    margin: 12px 0;
+    padding-left: 28px;
+}
+
+.me-canvas li {
+    margin-bottom: 4px;
+}
+
+.me-canvas hr {
+    border: none;
+    border-top: 1px solid var(--me-border);
+    margin: 24px 0;
+}
+
+/* ============================================
+   CODE BLOCKS (TipTap creates <pre><code>)
+   ============================================ */
+.me-canvas pre {
+    position: relative;
+    margin: 20px 0;
+    background: #1E293B;
+    color: #E2E8F0;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 16px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    tab-size: 4;
+}
+
+.me-canvas pre code {
+    background: none;
+    color: inherit;
+    font-size: inherit;
+    padding: 0;
+}
+
+.me-canvas pre:focus-within {
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.3);
+}
+
+/* ============================================
+   TABLE (TipTap creates plain <table> elements)
+   ============================================ */
+.me-canvas table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+.me-canvas th,
+.me-canvas td {
+    border: 1px solid var(--me-border);
+    padding: 8px 12px;
+    text-align: left;
+    min-width: 80px;
+    outline: none;
+}
+
+.me-canvas th {
+    background: var(--me-background);
+    font-weight: 600;
+    font-family: var(--me-font-ui);
+    font-size: 13px;
+    color: var(--me-text-secondary);
+}
+
+.me-canvas td:focus,
+.me-canvas th:focus {
+    box-shadow: inset 0 0 0 2px rgba(37,99,235,0.3);
+}
+
+/* ============================================
+   IMAGE / DIAGRAM PLACEHOLDER
+   ============================================ */
+.me-image-placeholder,
+.me-diagram-placeholder {
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+.me-image-placeholder-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 20px;
+    border: 2px dashed var(--me-border);
+    border-radius: var(--me-radius-md);
+    background: var(--me-background);
+    color: var(--me-text-muted);
+    font-size: 14px;
+    font-family: var(--me-font-ui);
+    transition: all var(--me-transition);
+}
+
+.me-image-placeholder-inner:hover {
+    border-color: var(--me-primary-light);
+    background: var(--me-primary-50);
+    color: var(--me-primary);
+}
+
+.me-image-placeholder-icon {
+    font-size: 28px;
+}
+
+/* ============================================
+   PAGE BREAK
+   ============================================ */
+.me-page-break {
+    border: none;
+    border-top: 2px dashed var(--me-border);
+    margin: 32px 0;
+    position: relative;
+}
+
+.me-page-break::after {
+    content: 'Page Break';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--me-surface);
+    padding: 0 12px;
+    font-size: 10px;
+    font-family: var(--me-font-ui);
+    color: var(--me-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+
+/* ============================================
+   LIVE MATH NODES (editable <math-field>)
+   ============================================ */
+
+/* Shared */
+.me-math-node {
+    position: relative;
+}
+
+/* Only show edit affordance on hover — subtle underline, not a box */
+.me-math-node:hover {
+    background: rgba(37, 99, 235, 0.04);
+    border-radius: 2px;
+}
+
+/* Selected / actively editing */
+.me-math-node.me-math-selected,
+.me-math-node:focus-within {
+    background: rgba(37, 99, 235, 0.06);
+    border-radius: 2px;
+    outline: 1px solid rgba(37, 99, 235, 0.25);
+    outline-offset: 1px;
+}
+
+/* ---- Inline math: sits on the same line as surrounding text ---- */
+.me-math-inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.me-math-inline math-field {
+    display: inline-block;
+    font-size: inherit;
+    vertical-align: middle;
+    min-width: 1.5em;
+}
+
+/* ---- Block/display math: centered equation on its own line ---- */
+.me-math-display {
+    display: block;
+    text-align: center;
+    margin: 20px 0;
+    padding: 12px 0;
+    min-height: 40px;
+}
+
+.me-math-display math-field {
+    display: inline-block;
+    font-size: 1.25em;
+    min-width: 3em;
+}
+
+/* math-field base reset */
+.me-canvas math-field {
+    outline: none;
+    border: none;
+    background: transparent;
+    --hue: 220;
+}
+
+/* Hide MathLive's menu toggle (we inject items via menuItems API) */
+.me-canvas math-field::part(menu-toggle) {
+    display: none;
+}
+/* Show keyboard toggle only on touch/mobile devices */
+@media not (pointer: coarse) {
+    .me-canvas math-field::part(virtual-keyboard-toggle) {
+        display: none;
+    }
+}
+
+/* ============================================
+   COMPUTE ENGINE: Auto-Result (Layer 1)
+   ============================================ */
+.me-math-result {
+    display: none;
+    text-align: center;
+    padding: 2px 0 0;
+    user-select: none;
+}
+
+.me-result-equals {
+    font-family: 'Georgia', serif;
+    font-size: 0.85em;
+    color: #94A3B8;
+    vertical-align: middle;
+}
+
+.me-result-mathfield {
+    display: inline-block;
+    vertical-align: middle;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    color: #64748B;
+    --hue: 220;
+    pointer-events: none;
+}
+
+/* Hide MathLive chrome on result fields */
+.me-result-mathfield::part(virtual-keyboard-toggle),
+.me-result-mathfield::part(menu-toggle) {
+    display: none;
+}
+
+/* ============================================
+   GRAPH INSERT
+   ============================================ */
+.me-image-wrapper {
+    display: block;
+    margin: 16px auto;
+    position: relative;
+    max-width: 100%;
+}
+
+.me-image-wrapper img.me-graph-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    cursor: grab;
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.me-image-wrapper:hover img.me-graph-image {
+    border-color: #93C5FD;
+    box-shadow: 0 2px 10px rgba(59,130,246,0.12);
+}
+
+.me-image-wrapper.me-image-selected img.me-graph-image {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+    border-color: #3B82F6;
+}
+
+/* Resize handle — bottom-right corner, visible on hover or when selected */
+.me-image-resize-handle {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 24px;
+    height: 24px;
+    background: #3B82F6;
+    color: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: nwse-resize;
+    user-select: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.me-image-resize-handle.me-image-handle-visible {
+    opacity: 1;
+}
+
+.me-image-wrapper:hover .me-image-resize-handle,
+.me-image-resize-handle:hover {
+    opacity: 1;
+}
+
+.me-image-resize-handle:hover {
+    background: #2563EB;
+}
+
+/* Fallback for non-NodeView img (e.g. pasted) */
+.me-canvas img.me-graph-image:not([style*="width"]),
+.me-canvas .ProseMirror img:not(.me-image-wrapper img) {
+    width: 560px;
+}
+
+.me-canvas [data-node-view-wrapper] {
+    max-width: 100%;
+}
+
+/* Loading indicator on math node while plotting */
+.me-graph-loading {
+    position: relative;
+}
+.me-graph-loading::after {
+    content: 'Plotting...';
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #3B82F6;
+    animation: me-pulse 1.2s ease-in-out infinite;
+}
+@keyframes me-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* ============================================
+   GRAPH EQUATION PICKER DIALOG
+   ============================================ */
+.me-graph-picker-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    background: rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: me-fade-in 0.15s ease;
+}
+@keyframes me-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.me-graph-picker {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    width: 520px;
+    max-width: 92vw;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: me-slide-up 0.2s ease;
+}
+@keyframes me-slide-up {
+    from { transform: translateY(12px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.me-graph-picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid #E2E8F0;
+}
+.me-graph-picker-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: #1E293B;
+}
+.me-graph-picker-close {
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #94A3B8;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+.me-graph-picker-close:hover {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+.me-graph-picker-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+}
+
+.me-graph-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+.me-graph-picker-row:hover {
+    background: #F8FAFC;
+}
+.me-graph-picker-current {
+    background: #EFF6FF;
+}
+.me-graph-picker-current:hover {
+    background: #DBEAFE;
+}
+
+.me-graph-picker-cb {
+    width: 16px;
+    height: 16px;
+    accent-color: #3B82F6;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.me-graph-picker-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.me-graph-picker-eq {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    pointer-events: none;
+    --hue: 220;
+}
+.me-graph-picker-eq::part(virtual-keyboard-toggle),
+.me-graph-picker-eq::part(menu-toggle) {
+    display: none;
+}
+
+.me-graph-picker-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-top: 1px solid #E2E8F0;
+}
+
+.me-graph-picker-btn {
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s, box-shadow 0.15s;
+}
+.me-graph-picker-btn-secondary {
+    background: #F1F5F9;
+    color: #475569;
+}
+.me-graph-picker-btn-secondary:hover {
+    background: #E2E8F0;
+}
+.me-graph-picker-btn-primary {
+    background: #3B82F6;
+    color: #fff;
+}
+.me-graph-picker-btn-primary:hover {
+    background: #2563EB;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+}
+
+/* ============================================
+   COMPUTE ENGINE: Action Bar (Layer 2)
+   ============================================ */
+.me-compute-bar {
+    position: fixed;
+    z-index: 400;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px 6px;
+    background: var(--me-surface, #fff);
+    border: 1px solid var(--me-border, #E2E8F0);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06);
+    transform: translateX(-50%);
+    opacity: 1;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+/* Entrance transition via class toggle (avoids re-triggering on rapid switches) */
+.me-compute-bar.me-bar-entering {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+}
+
+.me-compute-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border: none;
+    background: none;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: var(--me-font-ui, 'Inter', sans-serif);
+    color: var(--me-text-secondary, #64748B);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.me-compute-btn:hover {
+    background: var(--me-primary-50, #EFF6FF);
+    color: var(--me-primary, #2563EB);
+}
+
+.me-compute-icon {
+    font-weight: 700;
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+.me-compute-btn:hover .me-compute-icon {
+    opacity: 1;
+}
+
+/* Separator between action groups (General | Algebra | Calculus) */
+.me-compute-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--me-border, #E2E8F0);
+    margin: 0 2px;
+    flex-shrink: 0;
+}
+
+/* Print: hide all editing chrome */
+@media print {
+    .me-math-node:hover,
+    .me-math-node.me-math-selected,
+    .me-math-node:focus-within {
+        background: none;
+        outline: none;
+        box-shadow: none;
+    }
+
+    .me-compute-bar {
+        display: none !important;
+    }
+
+    .me-math-result {
+        color: #666;
+    }
+
+    .me-result-equals {
+        color: #666;
+    }
+}
+
+/* ============================================
+   CONTEXT MENU (Right-click on math nodes)
+   ============================================ */
+.me-context-menu {
+    position: fixed;
+    z-index: 600;
+    background: var(--me-surface, #fff);
+    border: 1px solid var(--me-border, #E2E8F0);
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06);
+    padding: 4px;
+    min-width: 220px;
+    max-width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    animation: ctxMenuIn 0.12s ease;
+}
+
+@keyframes ctxMenuIn {
+    from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.me-context-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: var(--me-font-ui, 'Inter', sans-serif);
+    color: var(--me-text-secondary, #64748B);
+    transition: background 0.1s ease, color 0.1s ease;
+    user-select: none;
+}
+
+.me-context-item:hover {
+    background: var(--me-primary-50, #EFF6FF);
+    color: var(--me-primary, #2563EB);
+}
+
+.me-context-item.me-context-disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.me-context-item.me-context-danger {
+    color: #EF4444;
+}
+
+.me-context-item.me-context-danger:hover {
+    background: #FEF2F2;
+    color: #DC2626;
+}
+
+.me-context-icon {
+    width: 22px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.me-context-item:hover .me-context-icon {
+    opacity: 1;
+}
+
+.me-context-shortcut {
+    margin-left: auto;
+    font-size: 11px;
+    color: #94A3B8;
+    font-weight: 400;
+}
+
+.me-context-sep {
+    height: 1px;
+    background: var(--me-border, #E2E8F0);
+    margin: 4px 8px;
+}
+
+/* Print: hide context menu */
+@media print {
+    .me-context-menu { display: none !important; }
+}
+
+/* ============================================
+   SLASH COMMAND MENU
+   ============================================ */
+.me-slash-menu {
+    position: fixed;
+    z-index: 500;
+    background: var(--me-surface);
+    border: 1px solid var(--me-border);
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    padding: 4px;
+    min-width: 240px;
+    max-width: 320px;
+    max-height: 360px;
+    overflow-y: auto;
+    animation: slashMenuIn 0.15s ease;
+}
+
+@keyframes slashMenuIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.me-slash-item {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s ease;
+    gap: 10px;
+    font-family: var(--me-font-ui);
+}
+
+.me-slash-item:hover,
+.me-slash-item.selected {
+    background: var(--me-primary-50);
+}
+
+.me-slash-item.selected {
+    color: var(--me-primary);
+}
+
+.me-slash-icon {
+    width: 24px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--me-text-muted);
+    flex-shrink: 0;
+    font-weight: 600;
+}
+
+.me-slash-item.selected .me-slash-icon,
+.me-slash-item:hover .me-slash-icon {
+    color: var(--me-primary);
+}
+
+.me-slash-label {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--me-text-primary);
+}
+
+.me-slash-shortcut {
+    font-size: 11px;
+    color: #94A3B8;
+    font-family: var(--me-font-ui);
+}
+
+/* ============================================
+   PANEL BOTTOM AD
+   ============================================ */
+.me-panel-ad {
+    padding: 12px 8px;
+    border-top: 1px solid var(--me-border);
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.me-panel-ad .ad-container,
+.me-panel-ad .ad-in-content-mid {
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    max-width: 100%;
+}
+
+/* ============================================
+   RIGHT PANEL
+   ============================================ */
+.me-right-panel {
+    width: 280px;
+    background: var(--me-surface);
+    border-left: 1px solid var(--me-border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.me-panel-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--me-border);
+    flex-shrink: 0;
+}
+
+.me-panel-tab {
+    flex: 1;
+    padding: 10px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--me-text-muted);
+    text-align: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: var(--me-font-ui);
+    border-bottom: 2px solid transparent;
+    transition: all var(--me-transition);
+}
+
+.me-panel-tab:hover {
+    color: var(--me-text-secondary);
+}
+
+.me-panel-tab.active {
+    color: var(--me-primary);
+    border-bottom-color: var(--me-primary);
+}
+
+.me-panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Outline Tab */
+.me-outline-tree {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.me-outline-item {
+    padding: 6px 8px;
+    font-size: 13px;
+    color: var(--me-text-secondary);
+    border-radius: var(--me-radius-sm);
+    cursor: pointer;
+    transition: all var(--me-transition);
+    display: block;
+    text-decoration: none;
+}
+
+.me-outline-item:hover {
+    background: var(--me-background);
+    color: var(--me-text-primary);
+}
+
+.me-outline-item.level-1 {
+    font-weight: 600;
+    color: var(--me-text-primary);
+}
+
+.me-outline-item.level-2 {
+    padding-left: 20px;
+}
+
+.me-outline-item.level-3 {
+    padding-left: 32px;
+    font-size: 12px;
+    color: var(--me-text-muted);
+}
+
+/* Comments Tab */
+.me-panel-empty {
+    text-align: center;
+    padding: 40px 16px;
+    color: var(--me-text-muted);
+    font-size: 13px;
+}
+
+.me-panel-empty-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    opacity: 0.4;
+}
+
+/* History Tab */
+.me-history-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 8px;
+    border-radius: var(--me-radius-sm);
+    cursor: pointer;
+    transition: background var(--me-transition);
+}
+
+.me-history-item:hover {
+    background: var(--me-background);
+}
+
+.me-history-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--me-primary);
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.me-history-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.me-history-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--me-text-primary);
+}
+
+.me-history-time {
+    font-size: 11px;
+    color: var(--me-text-muted);
+    margin-top: 2px;
+}
+
+/* ============================================
+   STATUS BAR
+   ============================================ */
+.me-statusbar {
+    height: 28px;
+    background: var(--me-surface);
+    border-top: 1px solid var(--me-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    font-size: 11px;
+    color: var(--me-text-muted);
+    flex-shrink: 0;
+}
+
+.me-statusbar-left,
+.me-statusbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.me-statusbar-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.me-zoom-control {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.me-zoom-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: none;
+    border-radius: 3px;
+    font-size: 12px;
+    color: var(--me-text-muted);
+    cursor: pointer;
+    font-family: var(--me-font-ui);
+}
+
+.me-zoom-btn:hover {
+    background: var(--me-background);
+    color: var(--me-text-primary);
+}
+
+.me-zoom-value {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--me-text-secondary);
+    min-width: 32px;
+    text-align: center;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+    .me-right-panel {
+        display: none;
+    }
+
+    .me-canvas {
+        padding: 40px 48px;
+    }
+}
+
+@media (max-width: 768px) {
+    .me-toolbar-row {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .me-toolbar-row::-webkit-scrollbar {
+        display: none;
+    }
+
+    .me-canvas {
+        padding: 32px 24px;
+        margin: 0;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .me-canvas-wrapper {
+        padding: 16px 0;
+    }
+
+    .me-editor-topbar {
+        padding: 0 12px;
+    }
+
+    .me-collaborators {
+        display: none;
+    }
+
+    .me-statusbar {
+        display: none;
+    }
+
+    /* Slash menu full-width on mobile */
+    .me-slash-menu {
+        left: 8px !important;
+        right: 8px;
+        min-width: auto;
+        max-width: none;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   Every page gets the same margins, fonts,
+   and layout — no toolbar, no sidebar, no ads.
+   ============================================ */
+@page {
+    size: A4;
+    margin: 20mm 18mm 25mm 18mm;
+}
+
+@media print {
+    /* Hide all chrome */
+    .me-editor-topbar,
+    .me-toolbar,
+    .me-right-panel,
+    .me-statusbar,
+    .me-slash-menu,
+    .me-panel-ad,
+    .me-zoom-control,
+    .me-compute-bar,
+    .ad-container,
+    .ad-in-content-mid,
+    [class*="ad-sticky"],
+    [class*="setupad"] {
+        display: none !important;
+    }
+
+    /* Reset the page layout — no flex, no overflow clipping */
+    .me-editor-page {
+        display: block;
+        height: auto;
+        overflow: visible;
+        background: none;
+    }
+
+    .me-editor-body {
+        display: block;
+        overflow: visible;
+    }
+
+    .me-canvas-wrapper {
+        display: block;
+        overflow: visible;
+        padding: 0;
+    }
+
+    /* Canvas: no border/shadow, just consistent content area */
+    .me-canvas {
+        max-width: none;
+        width: 100%;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+        margin: 0;
+        min-height: 0;
+        background: none;
+        transform: none !important;
+    }
+
+    /* Typography stays the same on every page */
+    .me-canvas,
+    .me-canvas .ProseMirror {
+        font-family: 'Georgia', 'Times New Roman', serif;
+        font-size: 12pt;
+        line-height: 1.6;
+        color: #000;
+    }
+
+    .me-canvas h1 {
+        font-size: 20pt;
+        border-bottom: 1px solid #999;
+        page-break-after: avoid;
+    }
+
+    .me-canvas h2 {
+        font-size: 16pt;
+        page-break-after: avoid;
+    }
+
+    .me-canvas h3 {
+        font-size: 13pt;
+        page-break-after: avoid;
+    }
+
+    /* Prevent headings from being orphaned at bottom of page */
+    .me-canvas h1,
+    .me-canvas h2,
+    .me-canvas h3 {
+        break-after: avoid;
+    }
+
+    /* Keep paragraphs together, avoid widows/orphans */
+    .me-canvas p {
+        orphans: 3;
+        widows: 3;
+    }
+
+    /* Don't split these across pages */
+    .me-canvas pre,
+    .me-canvas blockquote,
+    .me-canvas table,
+    .me-math-display {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* Math nodes: clean print output */
+    .me-math-node:hover,
+    .me-math-node.me-math-selected,
+    .me-math-node:focus-within {
+        background: none;
+        outline: none;
+        box-shadow: none;
+    }
+
+    .me-math-display {
+        margin: 12pt 0;
+        padding: 8pt 0;
+    }
+
+    /* Code blocks: lighter bg for print */
+    .me-canvas pre {
+        background: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+
+    /* Page break element — actual page break when printing */
+    .me-page-break {
+        border: none;
+        margin: 0;
+        padding: 0;
+        page-break-after: always;
+        break-after: page;
+    }
+
+    .me-page-break::after {
+        display: none;
+    }
+
+    /* Tables: clean borders */
+    .me-canvas table {
+        border-collapse: collapse;
+    }
+
+    .me-canvas th,
+    .me-canvas td {
+        border: 1px solid #666;
+        padding: 6pt 8pt;
+    }
+
+    .me-canvas th {
+        background: #eee;
+    }
+
+    /* Links: show URL after link text */
+    .me-canvas a[href]::after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        color: #666;
+    }
+}
+
+/* ============================================
+   VIRTUAL KEYBOARD THEMING
+   Match editor color palette
+   ============================================ */
+body {
+    --keyboard-accent-color: #3B82F6;
+    --keyboard-toolbar-text: #475569;
+    --keyboard-toolbar-background: #F8FAFC;
+    --keycap-background: #FFFFFF;
+    --keycap-border: #E2E8F0;
+    --keycap-text: #1E293B;
+    --keycap-shift-text: #94A3B8;
+    --keycap-primary-background: #EFF6FF;
+    --keycap-secondary-background: #F1F5F9;
+    --variant-panel-background: #FFFFFF;
+    --keyboard-border: 1px solid #E2E8F0;
+    --keycap-height: 42px;
+    --keycap-font-size: 18px;
+    --keycap-gap: 2px;
+    --keyboard-padding-horizontal: 6px;
+    --keyboard-padding-top: 6px;
+    --keyboard-padding-bottom: 6px;
+    --keyboard-zindex: 3000;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        --keyboard-toolbar-background: #1E293B;
+        --keyboard-toolbar-text: #CBD5E1;
+        --keycap-background: #334155;
+        --keycap-border: #475569;
+        --keycap-text: #F1F5F9;
+        --keycap-shift-text: #64748B;
+        --keycap-primary-background: #1E3A5F;
+        --keycap-secondary-background: #1E293B;
+        --variant-panel-background: #1E293B;
+        --keyboard-border: 1px solid #475569;
+    }
+}
+
+/* ==========================================================
+   DRAWING BLOCK — node in document
+   ========================================================== */
+.me-drawing-block {
+    position: relative;
+    margin: 1rem 0;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fafafa;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.me-drawing-block:hover {
+    border-color: #93c5fd;
+}
+.me-drawing-selected {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+.me-drawing-image {
+    display: block;
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    background: #fff;
+}
+.me-drawing-resize-handle {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    z-index: 2;
+}
+.me-drawing-hint {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    text-align: center;
+    padding: 6px;
+    padding-right: 36px; /* leave room for resize handle */
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.15s;
+    pointer-events: none;
+}
+.me-drawing-block:hover .me-drawing-hint {
+    opacity: 1;
+}
+
+/* ==========================================================
+   DRAWING MODAL — full-screen overlay
+   ========================================================== */
+.me-draw-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+/* ── Toolbar ─────────────────────────────────────────── */
+.me-draw-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    background: #ffffff;
+    border-radius: 12px 12px 0 0;
+    padding: 8px 12px;
+    width: 100%;
+    max-width: 960px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    border-bottom: 1px solid #e2e8f0;
+}
+.me-draw-tool-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 6px;
+    border-right: 1px solid #e2e8f0;
+}
+.me-draw-tool-group:last-child {
+    border-right: none;
+}
+.me-draw-group-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 4px;
+    white-space: nowrap;
+}
+.me-draw-tool {
+    width: 34px; height: 34px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+}
+.me-draw-tool:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+.me-draw-tool.active {
+    background: #dbeafe;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+}
+
+/* Color swatches */
+.me-draw-color {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid #e2e8f0;
+    cursor: pointer;
+    transition: transform 0.1s, border-color 0.1s;
+    padding: 0;
+}
+.me-draw-color:hover {
+    transform: scale(1.2);
+}
+.me-draw-color.active {
+    border-color: #1e293b;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3b82f6;
+}
+
+/* Width buttons */
+.me-draw-width {
+    width: 30px; height: 30px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #334155;
+    transition: all 0.12s;
+}
+.me-draw-width:hover { background: #f1f5f9; }
+.me-draw-width.active { background: #dbeafe; border-color: #3b82f6; }
+
+/* Fill toggle */
+.me-draw-fill-toggle {
+    padding: 4px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.12s;
+}
+.me-draw-fill-toggle:hover { background: #f1f5f9; }
+.me-draw-fill-toggle.active {
+    background: #dbeafe;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+}
+
+/* Action buttons */
+.me-draw-actions button {
+    width: 34px; height: 34px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+}
+.me-draw-actions button:hover { background: #f1f5f9; }
+
+/* ── Settings bar (second row) ───────────────────────── */
+.me-draw-settings-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    background: #f8fafc;
+    padding: 6px 12px;
+    width: 100%;
+    max-width: 960px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Buttons in settings bar (grid toggle, snap toggle, etc.) */
+.me-draw-settings-bar .me-draw-tool-group button {
+    width: 34px;
+    height: 34px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+}
+.me-draw-settings-bar .me-draw-tool-group button:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+.me-draw-settings-bar .me-draw-tool-group button.active {
+    background: #dbeafe;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+}
+
+/* Grid size slider */
+.me-draw-grid-size {
+    width: 70px;
+    height: 20px;
+    accent-color: #3b82f6;
+    cursor: pointer;
+}
+
+/* Dash style select */
+.me-draw-dash-style {
+    padding: 3px 6px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 11px;
+    background: #fff;
+    cursor: pointer;
+}
+
+/* Polygon sides */
+.me-draw-poly-sides {
+    gap: 4px !important;
+}
+.me-draw-poly-dec,
+.me-draw-poly-inc {
+    width: 26px; height: 26px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    color: #334155;
+    display: flex; align-items: center; justify-content: center;
+}
+.me-draw-poly-dec:hover,
+.me-draw-poly-inc:hover { background: #f1f5f9; }
+.me-draw-poly-count {
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ── Canvas area ─────────────────────────────────────── */
+.me-draw-canvas-wrap {
+    width: 100%;
+    max-width: 960px;
+    flex: 1;
+    min-height: 350px;
+    max-height: calc(100vh - 260px);
+    background: #ffffff;
+    border-left: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.me-draw-canvas-wrap canvas {
+    display: block;
+}
+
+/* ── Footer ──────────────────────────────────────────── */
+.me-draw-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border-radius: 0 0 12px 12px;
+    padding: 10px 16px;
+    width: 100%;
+    max-width: 960px;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.05);
+    border-top: 1px solid #e2e8f0;
+}
+.me-draw-status {
+    font-size: 12px;
+    color: #94a3b8;
+}
+.me-draw-footer > div {
+    display: flex;
+    gap: 8px;
+}
+.me-draw-cancel {
+    padding: 8px 20px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+}
+.me-draw-cancel:hover { background: #f1f5f9; }
+.me-draw-done {
+    padding: 8px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.12s;
+}
+.me-draw-done:hover { background: #2563eb; }
+.me-draw-done:disabled,
+.me-draw-done.me-draw-done-disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+.me-draw-done:disabled:hover,
+.me-draw-done.me-draw-done-disabled:hover {
+    background: #94a3b8;
+}
+
+/* ── Floating math input (for math text boxes) ───────── */
+.me-draw-math-input {
+    position: fixed;
+    z-index: 10001;
+    background: #fff;
+    border: 2px solid #3b82f6;
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.me-draw-math-input math-field {
+    min-width: 200px;
+    font-size: 18px;
+}
+.me-draw-math-ok {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    background: #3b82f6;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.me-draw-math-ok:hover { background: #2563eb; }
