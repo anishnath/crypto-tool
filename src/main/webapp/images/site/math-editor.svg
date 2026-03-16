@@ -8,6 +8,10 @@
       <stop offset="0%" stop-color="#60a5fa"/>
       <stop offset="100%" stop-color="#2563eb"/>
     </linearGradient>
+    <linearGradient id="mathBg" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#eff6ff"/>
+      <stop offset="100%" stop-color="#f0f4ff"/>
+    </linearGradient>
   </defs>
 
   <!-- Background -->
@@ -15,87 +19,204 @@
 
   <!-- Subtle grid -->
   <g opacity="0.03" stroke="#60a5fa" stroke-width="0.5">
-    <line x1="0" y1="0" x2="0" y2="630"/><line x1="60" y1="0" x2="60" y2="630"/>
-    <line x1="120" y1="0" x2="120" y2="630"/><line x1="180" y1="0" x2="180" y2="630"/>
-    <line x1="240" y1="0" x2="240" y2="630"/><line x1="300" y1="0" x2="300" y2="630"/>
-    <line x1="360" y1="0" x2="360" y2="630"/><line x1="420" y1="0" x2="420" y2="630"/>
-    <line x1="480" y1="0" x2="480" y2="630"/><line x1="540" y1="0" x2="540" y2="630"/>
-    <line x1="600" y1="0" x2="600" y2="630"/><line x1="660" y1="0" x2="660" y2="630"/>
-    <line x1="720" y1="0" x2="720" y2="630"/><line x1="780" y1="0" x2="780" y2="630"/>
-    <line x1="840" y1="0" x2="840" y2="630"/><line x1="900" y1="0" x2="900" y2="630"/>
-    <line x1="960" y1="0" x2="960" y2="630"/><line x1="1020" y1="0" x2="1020" y2="630"/>
-    <line x1="1080" y1="0" x2="1080" y2="630"/><line x1="1140" y1="0" x2="1140" y2="630"/>
     <line x1="0" y1="60" x2="1200" y2="60"/><line x1="0" y1="120" x2="1200" y2="120"/>
     <line x1="0" y1="180" x2="1200" y2="180"/><line x1="0" y1="240" x2="1200" y2="240"/>
     <line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="360" x2="1200" y2="360"/>
     <line x1="0" y1="420" x2="1200" y2="420"/><line x1="0" y1="480" x2="1200" y2="480"/>
-    <line x1="0" y1="540" x2="1200" y2="540"/>
+    <line x1="60" y1="0" x2="60" y2="630"/><line x1="120" y1="0" x2="120" y2="630"/>
+    <line x1="240" y1="0" x2="240" y2="630"/><line x1="360" y1="0" x2="360" y2="630"/>
+    <line x1="480" y1="0" x2="480" y2="630"/><line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="720" y1="0" x2="720" y2="630"/><line x1="840" y1="0" x2="840" y2="630"/>
+    <line x1="960" y1="0" x2="960" y2="630"/><line x1="1080" y1="0" x2="1080" y2="630"/>
   </g>
 
-  <!-- Main editor mockup -->
-  <g transform="translate(50, 50)">
-    <!-- Editor frame -->
-    <rect width="1100" height="480" rx="12" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <!-- Accent bar at top -->
+  <rect y="0" width="1200" height="3" fill="url(#accent)"/>
 
-    <!-- Title bar -->
-    <rect width="1100" height="44" rx="12" fill="#0f172a"/>
-    <circle cx="24" cy="22" r="6" fill="#ef4444" opacity="0.9"/>
-    <circle cx="44" cy="22" r="6" fill="#f59e0b" opacity="0.9"/>
-    <circle cx="64" cy="22" r="6" fill="#22c55e" opacity="0.9"/>
-    <text x="580" y="28" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="12">Untitled  Math Editor</text>
+  <!-- ==================== EDITOR FRAME ==================== -->
+  <g transform="translate(40, 30)">
+    <rect width="1120" height="510" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1"/>
 
-    <!-- Toolbar -->
-    <rect x="0" y="44" width="1100" height="40" fill="#0f172a"/>
-    <g fill="#64748b" font-family="sans-serif" font-size="11" font-weight="600">
-      <rect x="12" y="52" width="28" height="24" rx="4" fill="#334155"/>
-      <text x="26" y="68" text-anchor="middle">B</text>
-      <rect x="46" y="52" width="28" height="24" rx="4" fill="#334155"/>
-      <text x="60" y="68" text-anchor="middle">I</text>
-      <rect x="80" y="52" width="28" height="24" rx="4" fill="#334155"/>
-      <text x="94" y="68" text-anchor="middle">U</text>
-      <rect x="114" y="52" width="48" height="24" rx="4" fill="#2563eb"/>
-      <text x="138" y="68" text-anchor="middle"></text>
+    <!-- Title bar with traffic lights -->
+    <rect width="1120" height="38" rx="10" fill="#0f172a"/>
+    <rect y="28" width="1120" height="10" fill="#0f172a"/>
+    <circle cx="20" cy="19" r="5.5" fill="#ef4444" opacity="0.85"/>
+    <circle cx="38" cy="19" r="5.5" fill="#f59e0b" opacity="0.85"/>
+    <circle cx="56" cy="19" r="5.5" fill="#22c55e" opacity="0.85"/>
+    <text x="560" y="24" text-anchor="middle" fill="#64748b" font-family="system-ui, sans-serif" font-size="11">Calculus Notes &#8212; Math Editor</text>
+
+    <!-- ===== Toolbar Row 1: Text formatting ===== -->
+    <rect x="0" y="38" width="1120" height="32" fill="#0f172a" opacity="0.7"/>
+    <g font-family="system-ui, sans-serif" font-size="10" font-weight="600">
+      <!-- B I U S -->
+      <rect x="10" y="43" width="24" height="22" rx="3" fill="#334155"/>
+      <text x="22" y="58" text-anchor="middle" fill="#e2e8f0" font-weight="700">B</text>
+      <rect x="38" y="43" width="24" height="22" rx="3" fill="#334155"/>
+      <text x="50" y="58" text-anchor="middle" fill="#e2e8f0" font-style="italic">I</text>
+      <rect x="66" y="43" width="24" height="22" rx="3" fill="#334155"/>
+      <text x="78" y="58" text-anchor="middle" fill="#e2e8f0" text-decoration="underline">U</text>
+      <!-- sep -->
+      <rect x="98" y="47" width="1" height="14" fill="#334155"/>
+      <!-- H1 H2 H3 -->
+      <rect x="107" y="43" width="26" height="22" rx="3" fill="#334155"/>
+      <text x="120" y="58" text-anchor="middle" fill="#94a3b8">H1</text>
+      <rect x="137" y="43" width="26" height="22" rx="3" fill="#334155"/>
+      <text x="150" y="58" text-anchor="middle" fill="#94a3b8">H2</text>
+      <rect x="167" y="43" width="26" height="22" rx="3" fill="#334155"/>
+      <text x="180" y="58" text-anchor="middle" fill="#94a3b8">H3</text>
+      <!-- sep -->
+      <rect x="201" y="47" width="1" height="14" fill="#334155"/>
+      <!-- List icons (simplified) -->
+      <rect x="210" y="43" width="24" height="22" rx="3" fill="#334155"/>
+      <g fill="#94a3b8"><circle cx="217" cy="50" r="1.5"/><rect x="220" y="49" width="8" height="2" rx="0.5"/><circle cx="217" cy="56" r="1.5"/><rect x="220" y="55" width="8" height="2" rx="0.5"/></g>
+      <rect x="238" y="43" width="24" height="22" rx="3" fill="#334155"/>
+      <g fill="#94a3b8"><text x="245" y="52" font-size="5">1.</text><rect x="250" y="49" width="7" height="2" rx="0.5"/><text x="245" y="58" font-size="5">2.</text><rect x="250" y="55" width="7" height="2" rx="0.5"/></g>
     </g>
 
-    <!-- Document content area -->
-    <rect x="0" y="84" width="1100" height="396" fill="#f8fafc"/>
+    <!-- ===== Toolbar Row 2: Math + Insert ===== -->
+    <rect x="0" y="70" width="1120" height="32" fill="#0f172a" opacity="0.5"/>
+    <g font-family="system-ui, sans-serif" font-size="10">
+      <!-- Insert Math (blue, prominent) -->
+      <rect x="10" y="75" width="90" height="22" rx="4" fill="#2563eb"/>
+      <text x="55" y="90" text-anchor="middle" fill="#ffffff" font-weight="600">&#x2211; Insert Math</text>
+      <!-- Inline Math -->
+      <rect x="106" y="75" width="86" height="22" rx="4" fill="#1e40af" opacity="0.7"/>
+      <text x="149" y="90" text-anchor="middle" fill="#bfdbfe" font-weight="600">&#x221A; Inline</text>
+      <!-- sep -->
+      <rect x="200" y="79" width="1" height="14" fill="#334155"/>
+      <!-- Table icon -->
+      <rect x="209" y="75" width="24" height="22" rx="3" fill="#334155"/>
+      <g fill="none" stroke="#94a3b8" stroke-width="0.8"><rect x="213" y="79" width="16" height="14" rx="1"/><line x1="213" y1="85" x2="229" y2="85"/><line x1="213" y1="89" x2="229" y2="89"/><line x1="221" y1="79" x2="221" y2="93"/></g>
+      <!-- Image icon -->
+      <rect x="237" y="75" width="24" height="22" rx="3" fill="#334155"/>
+      <g fill="none" stroke="#94a3b8" stroke-width="0.8"><rect x="241" y="79" width="16" height="14" rx="1.5"/><circle cx="247" cy="84" r="1.5"/><path d="M241 90l4-4 2.5 2.5 3-4 5.5 5.5" stroke-linejoin="round"/></g>
+      <!-- Code icon -->
+      <rect x="265" y="75" width="24" height="22" rx="3" fill="#334155"/>
+      <g fill="none" stroke="#94a3b8" stroke-width="1" stroke-linecap="round"><polyline points="271,80 268,86 271,92"/><polyline points="283,80 286,86 283,92"/><line x1="279" y1="78" x2="275" y2="94"/></g>
+    </g>
 
-    <!-- Mock document content -->
-    <g font-family="'Georgia', serif" transform="translate(60, 110)">
-      <text x="0" y="0" fill="#1e293b" font-size="22" font-weight="bold">The Gaussian Integral</text>
-      <text x="0" y="36" fill="#475569" font-size="13">We wish to evaluate +‹^ e{ã² dx. Let I denote this integral.</text>
-      <text x="0" y="60" fill="#475569" font-size="13">Using Fubinis theorem:</text>
-      <!-- Equation block -->
-      <rect x="0" y="72" width="400" height="56" rx="6" fill="#e2e8f0"/>
-      <g transform="translate(200, 106)" text-anchor="middle">
-        <text fill="#1e293b" font-size="24" font-style="italic">I² = ++ e{ã²{¸² dx dy = À</text>
+    <!-- ===== Document Canvas (white) ===== -->
+    <rect x="0" y="102" width="840" height="408" fill="#ffffff"/>
+
+    <!-- Document content -->
+    <g transform="translate(50, 120)">
+
+      <!-- Heading -->
+      <text x="0" y="0" fill="#0f172a" font-family="Georgia, serif" font-size="24" font-weight="bold">Fundamental Theorem of Calculus</text>
+
+      <!-- Body text -->
+      <text x="0" y="36" fill="#475569" font-family="Georgia, serif" font-size="13">If F is an antiderivative of f on [a, b], then:</text>
+
+      <!-- Display math block (blue tinted background) -->
+      <rect x="-10" y="50" width="520" height="52" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="0.5"/>
+      <!-- Integral symbol -->
+      <text x="60" y="84" fill="#1e293b" font-family="Georgia, serif" font-size="26" font-style="italic">&#x222B;</text>
+      <!-- Superscript b -->
+      <text x="72" y="62" fill="#1e293b" font-family="Georgia, serif" font-size="12" font-style="italic">b</text>
+      <!-- Subscript a -->
+      <text x="72" y="94" fill="#1e293b" font-family="Georgia, serif" font-size="12" font-style="italic">a</text>
+      <!-- f(x) dx = F(b) - F(a) -->
+      <text x="84" y="84" fill="#1e293b" font-family="Georgia, serif" font-size="20" font-style="italic">f(x) dx = F(b) &#x2212; F(a)</text>
+
+      <!-- More body text -->
+      <text x="0" y="126" fill="#475569" font-family="Georgia, serif" font-size="13">Example: Evaluate the following integral:</text>
+
+      <!-- Second math block -->
+      <rect x="-10" y="140" width="520" height="52" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="0.5"/>
+      <text x="60" y="174" fill="#1e293b" font-family="Georgia, serif" font-size="26" font-style="italic">&#x222B;</text>
+      <text x="72" y="152" fill="#1e293b" font-family="Georgia, serif" font-size="12" font-style="italic">2</text>
+      <text x="72" y="184" fill="#1e293b" font-family="Georgia, serif" font-size="12" font-style="italic">0</text>
+      <text x="84" y="174" fill="#1e293b" font-family="Georgia, serif" font-size="20" font-style="italic">(3x&#xB2; + 2x) dx</text>
+
+      <!-- Compute result badge (the "= 12" auto-result) -->
+      <rect x="20" y="198" width="64" height="26" rx="13" fill="#dcfce7" stroke="#86efac" stroke-width="0.5"/>
+      <text x="52" y="215" text-anchor="middle" fill="#166534" font-family="system-ui, sans-serif" font-size="13" font-weight="600">= 12</text>
+
+      <!-- Right-click context menu floating -->
+      <g transform="translate(300, 140)">
+        <rect width="180" height="170" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+        <!-- Drop shadow simulation -->
+        <rect x="3" y="3" width="180" height="170" rx="8" fill="#000" opacity="0.15"/>
+        <rect width="180" height="170" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+
+        <g font-family="system-ui, sans-serif" font-size="11" fill="#e2e8f0">
+          <!-- Solve for x -->
+          <text x="14" y="24">Solve for x</text>
+          <!-- divider -->
+          <rect x="10" y="32" width="160" height="1" fill="#334155"/>
+          <!-- Evaluate (highlighted) -->
+          <rect x="4" y="38" width="172" height="24" rx="4" fill="#2563eb" opacity="0.2"/>
+          <text x="14" y="55" fill="#60a5fa" font-weight="600">Evaluate</text>
+          <!-- Simplify -->
+          <text x="14" y="78">Simplify</text>
+          <!-- Expand -->
+          <text x="14" y="98">Expand</text>
+          <!-- divider -->
+          <rect x="10" y="106" width="160" height="1" fill="#334155"/>
+          <!-- d/dx Derivative -->
+          <text x="14" y="124">d/dx  Derivative</text>
+          <!-- Integrate -->
+          <text x="14" y="144">&#x222B; dx  Integrate</text>
+          <!-- divider -->
+          <rect x="10" y="152" width="160" height="1" fill="#334155"/>
+          <!-- Plot This Equation -->
+          <text x="14" y="166" fill="#60a5fa">Plot This Equation</text>
+        </g>
       </g>
-      <text x="0" y="148" fill="#475569" font-size="13">Hence I = À. This integral appears throughout probability and physics.</text>
-      <!-- Inline math in sentence -->
-      <text x="0" y="192" fill="#475569" font-size="13">The normal distribution uses e{ã²/² in its density. The Fourier transform of e{ã² is </text>
-      <text x="380" y="192" fill="#1e293b" font-size="13" font-style="italic">e{O²/t</text>
-      <text x="420" y="192" fill="#475569" font-size="13">.</text>
+
+      <!-- Inline math example in text -->
+      <text x="0" y="248" fill="#475569" font-family="Georgia, serif" font-size="13">
+        Since <tspan font-style="italic" fill="#1e293b">F(x) = x&#xB3; + x&#xB2;</tspan>, we get
+        <tspan font-style="italic" fill="#1e293b">F(2) &#x2212; F(0) = 12 &#x2212; 0 = 12</tspan>.
+      </text>
+
+      <!-- Another body line -->
+      <text x="0" y="280" fill="#475569" font-family="Georgia, serif" font-size="13">This confirms the result computed by the engine above.</text>
+
     </g>
 
-    <!-- Right panel outline -->
-    <rect x="820" y="84" width="280" height="396" fill="#f1f5f9"/>
-    <text x="960" y="110" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-size="11" font-weight="600">Outline</text>
-    <g fill="#334155" font-family="sans-serif" font-size="11">
-      <text x="840" y="140">The Gaussian Integral</text>
-      <text x="860" y="165">Definition</text>
-      <text x="860" y="185">Proof Sketch</text>
-      <text x="880" y="205">Applications</text>
+    <!-- ===== Right Panel: Outline ===== -->
+    <rect x="840" y="102" width="280" height="408" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.5"/>
+
+    <!-- Outline tab -->
+    <rect x="840" y="102" width="280" height="32" fill="#f1f5f9"/>
+    <text x="980" y="123" text-anchor="middle" fill="#475569" font-family="system-ui, sans-serif" font-size="11" font-weight="700">Outline</text>
+
+    <!-- Outline items -->
+    <g font-family="system-ui, sans-serif" font-size="11" fill="#334155" transform="translate(858, 150)">
+      <!-- Active item -->
+      <rect x="-8" y="-10" width="240" height="22" rx="4" fill="#eff6ff"/>
+      <circle cx="0" cy="2" r="2.5" fill="#2563eb"/>
+      <text x="12" y="6" font-weight="600" fill="#1e40af">Fundamental Theorem of Calculus</text>
+
+      <circle cx="16" cy="28" r="2" fill="#94a3b8"/>
+      <text x="28" y="32" fill="#64748b">Statement</text>
+
+      <circle cx="16" cy="50" r="2" fill="#94a3b8"/>
+      <text x="28" y="54" fill="#64748b">Example: Definite Integral</text>
+
+      <circle cx="16" cy="72" r="2" fill="#94a3b8"/>
+      <text x="28" y="76" fill="#64748b">Verification</text>
+
+      <circle cx="0" cy="102" r="2.5" fill="#64748b"/>
+      <text x="12" y="106">Applications</text>
+
+      <circle cx="16" cy="124" r="2" fill="#94a3b8"/>
+      <text x="28" y="128" fill="#64748b">Area Under Curves</text>
+
+      <circle cx="16" cy="146" r="2" fill="#94a3b8"/>
+      <text x="28" y="150" fill="#64748b">Physics: Work &amp; Energy</text>
     </g>
+
   </g>
 
-  <!-- Bottom branding bar -->
+  <!-- ==================== BOTTOM BRANDING ==================== -->
   <rect y="560" width="1200" height="70" fill="#0f172a"/>
 
-  <text x="80" y="600" fill="#60a5fa" font-family="sans-serif" font-size="20" font-weight="800">Math Editor</text>
-  <text x="202" y="600" fill="#475569" font-family="sans-serif" font-size="14">|</text>
-  <text x="220" y="600" fill="#94a3b8" font-family="sans-serif" font-size="14">WYSIWYG equations · LaTeX · PDF export · Free</text>
+  <text x="80" y="600" fill="#60a5fa" font-family="system-ui, sans-serif" font-size="20" font-weight="800">Math Editor</text>
+  <text x="205" y="600" fill="#334155" font-family="system-ui, sans-serif" font-size="16">|</text>
+  <text x="222" y="600" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">WYSIWYG equations &#xB7; Right-click compute &#xB7; LaTeX &#xB7; PDF export &#xB7; Free</text>
 
-  <text x="1120" y="600" text-anchor="end" fill="#475569" font-family="sans-serif" font-size="16" font-weight="700">8gwifi.org</text>
+  <text x="1120" y="600" text-anchor="end" fill="#475569" font-family="system-ui, sans-serif" font-size="16" font-weight="700">8gwifi.org</text>
 
-  <rect y="0" width="1200" height="3" fill="url(#accent)"/>
 </svg>
