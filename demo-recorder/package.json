@@ -1,0 +1,17 @@
+{
+  "name": "math-editor-demo-recorder",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright scripts to record MP4 demos of the Math Editor",
+  "scripts": {
+    "install-browsers": "npx playwright install chromium",
+    "demo:math": "node record-math-demo.js",
+    "demo:slash": "node record-slash-demo.js",
+    "demo:drawing": "node record-drawing-demo.js",
+    "demo:all": "node record-math-demo.js && node record-slash-demo.js && node record-drawing-demo.js",
+    "convert": "node convert-to-mp4.js"
+  },
+  "dependencies": {
+    "playwright": "^1.52.0"
+  }
+}
