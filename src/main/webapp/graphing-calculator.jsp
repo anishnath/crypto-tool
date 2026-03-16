@@ -32,7 +32,7 @@
         <jsp:param name="faq5q" value="Does it support parameter sliders and animation?" />
         <jsp:param name="faq5a" value="Yes. Type any single letter like a, b, or c in your expression and a slider appears automatically. Drag the slider to change the parameter in real time. Press the play button to animate and watch the graph evolve continuously. This works for all plot types including polar, parametric, and implicit equations." />
         <jsp:param name="faq6q" value="What are the 50+ built-in presets?" />
-        <jsp:param name="faq6a" value="Presets include Quick Start (sin, parametric, polar), Calculus (antiderivative of x^2, FTC demo, limit sin(x)/x), Systems of Equations (linear, circle+line, parabola+line), Creative Curves (spirograph, lissajous, butterfly, cardioid), Physics (damped oscillation, projectile, wave interference), Machine Learning (activation functions, loss functions, gradient descent), and Classic curves (Witch of Agnesi, folium, cissoid)." />
+        <jsp:param name="faq6a" value="Presets include Quick Start (sin, parametric, polar), Calculus (antiderivative of x^2, FTC demo, Area-to-Primitive visual, limit sin(x)/x), Systems of Equations (linear, circle+line, parabola+line), Creative Curves (spirograph, lissajous, butterfly, cardioid), Physics (damped oscillation, projectile, wave interference), Machine Learning (activation functions, loss functions, gradient descent), and Classic curves (Witch of Agnesi, folium, cissoid)." />
         <jsp:param name="faq7q" value="Is this graphing calculator really free? What are the limits?" />
         <jsp:param name="faq7a" value="100 percent free with no signup, no ads blocking the graph, and no usage limits. All computation runs entirely in your browser using Math.js, Plotly.js, Nerdamer CAS, and KaTeX. Export graphs as PNG or SVG, save expression sets to local storage, or generate shareable URLs. Works on desktop, tablet, and mobile browsers." />
         <jsp:param name="faq8q" value="Can I plot 3D surfaces like z = sin(x)*cos(y)?" />
@@ -335,6 +335,7 @@
                         <button class="gc-preset-chip" onclick="gcQuickPreset('antiderivative_poly')">∫ x&sup2; dx</button>
                         <button class="gc-preset-chip" onclick="gcQuickPreset('antiderivative_trig')">∫ Trig</button>
                         <button class="gc-preset-chip" onclick="gcQuickPreset('ftc_demo')">FTC Demo</button>
+                        <button class="gc-preset-chip" onclick="gcQuickPreset('ftc_area_primitive')">Area ↔ Primitive</button>
                         <button class="gc-preset-chip" onclick="gcQuickPreset('limit_sinx_x')">lim sin(x)/x</button>
                         <button class="gc-preset-chip" onclick="gcQuickPreset('limit_rational')">lim (x&sup2;-1)/(x-1)</button>
                     </div>
@@ -915,7 +916,7 @@ window.addEventListener('message', (e) => {
                 What are the 50+ built-in presets?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">Presets are organized by category: <strong>Quick Start</strong> (sin, parametric, polar), <strong>Calculus</strong> (antiderivative of x&sup2;, FTC demo, limit sin(x)/x), <strong>Systems of Equations</strong> (linear 2&times;2, circle+line, parabola+line), <strong>Creative Curves</strong> (spirograph, lissajous, butterfly, cardioid, golden spiral), <strong>Physics</strong> (damped oscillation, projectile, wave interference), <strong>Machine Learning</strong> (activation functions, loss functions, gradient descent, Gaussians), and <strong>Classic &amp; Historical</strong> curves (Witch of Agnesi, folium, cissoid, nephroid). Click any preset chip to load instantly.</div>
+            <div class="faq-answer">Presets are organized by category: <strong>Quick Start</strong> (sin, parametric, polar), <strong>Calculus</strong> (antiderivative of x&sup2;, FTC demo, Area-to-Primitive visual, limit sin(x)/x), <strong>Systems of Equations</strong> (linear 2&times;2, circle+line, parabola+line), <strong>Creative Curves</strong> (spirograph, lissajous, butterfly, cardioid, golden spiral), <strong>Physics</strong> (damped oscillation, projectile, wave interference), <strong>Machine Learning</strong> (activation functions, loss functions, gradient descent, Gaussians), and <strong>Classic &amp; Historical</strong> curves (Witch of Agnesi, folium, cissoid, nephroid). Click any preset chip to load instantly.</div>
         </div>
 
         <div class="faq-item">
