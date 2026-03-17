@@ -1556,6 +1556,100 @@ section('Compare Pendulum — No Drive = No Divergence');
   assert(divergence < 0.01, `No drive: divergence stays small = ${divergence.toFixed(6)} rad`);
 }
 
+// --- Kapitza Pendulum ---
+const KapitzaSim = {
+  params: {
+    gravity: { value: 9.81 }, length: { value: 1.0 }, mass: { value: 1.0 },
+    damping: { value: 0.1 }, vibeAmp: { value: 0 }, vibeFreq: { value: 30 },
+    startAngle: { value: Math.PI / 4 },
+  },
+  init(p) { return [p.startAngle, 0, 0, 0, 0]; },
+  evaluate(vars, change, params, isDragging) {
+    change[2] = 1;
+    if (isDragging) { change[3]=0; change[4]=0; return; }
+    const [angle, angVel, time, pivotY, pivotVY] = vars;
+    const { gravity, length, mass, damping, vibeAmp, vibeFreq } = params;
+    const pivotAccelY = vibeAmp * Math.sin(vibeFreq * time);
+    change[3] = pivotVY;
+    change[4] = pivotAccelY - 5 * pivotVY;
+    const gEff = gravity + pivotAccelY;
+    change[0] = angVel;
+    change[1] = -(gEff / length) * Math.sin(angle) - (damping / (mass * length * length)) * angVel;
+  },
+  energy(vars, params) {
+    const [angle, angVel, , pivotY] = vars;
+    const { gravity, length, mass } = params;
+    const bobY = pivotY - length * Math.cos(angle);
+    const KE = 0.5 * mass * (length * angVel) ** 2;
+    const PE = mass * gravity * (bobY + length);
+    return { kinetic: KE, potential: PE, total: KE + PE };
+  },
+};
+
+section('Kapitza — No Vibration = Normal Pendulum');
+{
+  const p = getParams(KapitzaSim);
+  p.vibeAmp = 0;
+  p.damping = 0;
+  const state = Float64Array.from(KapitzaSim.init(p));
+  const e0 = KapitzaSim.energy(state, p);
+  const dt = 1/240;
+  for (let i = 0; i < 1200; i++) {
+    rk4(state, (v,c,par) => KapitzaSim.evaluate(v,c,par,false), dt, p);
+  }
+  const e1 = KapitzaSim.energy(state, p);
+  // Without vibration: energy should be conserved (no drive)
+  assertClose(e1.total, e0.total, 0.01, 'No vibration: energy conserved');
+}
+
+section('Kapitza — Inverted Position Stable with High Vibration');
+{
+  const p = getParams(KapitzaSim);
+  p.vibeAmp = 200;
+  p.vibeFreq = 40;
+  p.damping = 0.3;
+  p.startAngle = Math.PI - 0.05; // start nearly inverted
+  const state = Float64Array.from(KapitzaSim.init(p));
+  const dt = 1/240;
+  // Run for 10 seconds
+  for (let i = 0; i < 2400; i++) {
+    rk4(state, (v,c,par) => KapitzaSim.evaluate(v,c,par,false), dt, p);
+  }
+  // Should stay near inverted (θ ≈ π)
+  const angleFromInverted = Math.abs(Math.abs(state[0]) - Math.PI);
+  assert(angleFromInverted < 0.5, `Kapitza stable: angle from π = ${angleFromInverted.toFixed(3)} rad (should be < 0.5)`);
+}
+
+section('Kapitza — No Vibration = Inverted Unstable');
+{
+  const p = getParams(KapitzaSim);
+  p.vibeAmp = 0;
+  p.damping = 0.1;
+  p.startAngle = Math.PI - 0.05; // start nearly inverted
+  const state = Float64Array.from(KapitzaSim.init(p));
+  const dt = 1/120;
+  for (let i = 0; i < 600; i++) { // 5 seconds
+    rk4(state, (v,c,par) => KapitzaSim.evaluate(v,c,par,false), dt, p);
+  }
+  // Without vibration, should fall away from inverted
+  const angleFromInverted = Math.abs(Math.abs(state[0]) - Math.PI);
+  assert(angleFromInverted > 0.5, `No vibration: fell from inverted, angle from π = ${angleFromInverted.toFixed(3)}`);
+}
+
+section('Kapitza — Pivot Vibrates');
+{
+  const p = getParams(KapitzaSim);
+  p.vibeAmp = 100;
+  p.vibeFreq = 30;
+  const state = Float64Array.from(KapitzaSim.init(p));
+  const dt = 1/240;
+  for (let i = 0; i < 240; i++) {
+    rk4(state, (v,c,par) => KapitzaSim.evaluate(v,c,par,false), dt, p);
+  }
+  // Pivot Y should be oscillating (not zero)
+  assert(Math.abs(state[3]) > 0.001 || Math.abs(state[4]) > 0.001, 'Pivot Y is moving');
+}
+
 // ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════
