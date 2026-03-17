@@ -174,6 +174,25 @@ body::after {
 }
 
 /* ═══════════════════════════════════════════════════════
+   BREADCRUMB
+   ═══════════════════════════════════════════════════════ */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  margin-bottom: 14px;
+}
+.breadcrumb a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.breadcrumb a:hover { color: var(--accent-bright); }
+.breadcrumb .sep { color: var(--text-muted); opacity: 0.4; }
+.breadcrumb .current { color: var(--text-secondary); }
+
+/* ═══════════════════════════════════════════════════════
    HEADER
    ═══════════════════════════════════════════════════════ */
 .site-header {
@@ -1136,6 +1155,15 @@ body::after {
     </button>
   </div>
 </header>
+
+<!-- Breadcrumb -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="<%=request.getContextPath()%>/">Home</a>
+  <span class="sep">/</span>
+  <a href="<%=request.getContextPath()%>/chemistry/">Chemistry</a>
+  <span class="sep">/</span>
+  <span class="current">Molecule Draw</span>
+</nav>
 
 <!-- ═══════ MAIN GRID ═══════ -->
 <div class="main-grid">
