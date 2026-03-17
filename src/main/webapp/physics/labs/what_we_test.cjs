@@ -118,6 +118,30 @@ const PendulumSim = {
     if (id === 'bob') { vars[0] = Math.atan2(wx, -wy); vars[1] = 0; }
   },
   onRelease() {},
+  potentialEnergy(angle, params) {
+    return params.mass * params.gravity * params.length * (1 - Math.cos(angle));
+  },
+  theoreticalPeriod(params) {
+    return 2 * Math.PI * Math.sqrt(params.length / params.gravity);
+  },
+  periodVar: 1,
+  vectors(vars, params) {
+    const [angle, angVel] = vars;
+    const { gravity, length, mass, damping } = params;
+    const bobX = length * Math.sin(angle);
+    const bobY = -length * Math.cos(angle);
+    const speed = length * angVel;
+    const vx = speed * Math.cos(angle);
+    const vy = speed * Math.sin(angle);
+    const accel = -(gravity / length) * Math.sin(angle) - (damping / (mass * length * length)) * angVel;
+    const aT = length * accel;
+    const aC = length * angVel * angVel;
+    return {
+      pos: { x: bobX, y: bobY },
+      velocity: { x: vx, y: vy, mag: Math.abs(speed) },
+      accel: { x: aT * Math.cos(angle) - aC * Math.sin(angle), y: aT * Math.sin(angle) + aC * Math.cos(angle), mag: Math.hypot(aT, aC) },
+    };
+  },
 };
 
 // --- Spring sim ---
@@ -155,6 +179,21 @@ const SpringSim = {
     if (id === 'block') { vars[0] = wx - offset.offsetX; vars[1] = 0; }
   },
   onRelease() {},
+  potentialEnergy(x, params) {
+    const stretch = x - params.fixedPoint - params.restLength;
+    return 0.5 * params.stiffness * stretch * stretch;
+  },
+  theoreticalPeriod(params) {
+    return 2 * Math.PI * Math.sqrt(params.mass / params.stiffness);
+  },
+  periodVar: 1,
+  vectors(vars, params) {
+    const [x, v] = vars;
+    const stretch = x - params.fixedPoint - params.restLength;
+    const force = -params.stiffness * stretch - params.damping * v;
+    const accel = force / params.mass;
+    return { pos: { x, y: 0 }, velocity: { x: v, y: 0, mag: Math.abs(v) }, accel: { x: accel, y: 0, mag: Math.abs(accel) } };
+  },
 };
 
 // ═══════════════════════════════════════════
@@ -1095,6 +1134,189 @@ section('Double Spring — Sim Contract');
   assert(typeof DoubleSpringSim.energy === 'function', 'Has energy');
   assert(typeof DoubleSpringSim.hitTest === 'function', 'Has hitTest');
   assert(typeof DoubleSpringSim.onDrag === 'function', 'Has onDrag');
+}
+
+// --- direction-field.js logic (no DOM) ---
+function computeArrow(wx, wy, evaluate, params, xVar, yVar, varCount) {
+  const state = new Float64Array(varCount);
+  const change = new Float64Array(varCount);
+  state[xVar] = wx;
+  state[yVar] = wy;
+  evaluate(state, change, params);
+  return { dxdt: change[xVar], dydt: change[yVar] };
+}
+
+section('Direction Field — Pendulum Arrows');
+{
+  const p = getParams(PendulumSim);
+  p.damping = 0;
+
+  // At (θ=0, ω=0) — equilibrium, no motion
+  const eq = computeArrow(0, 0, (s, c, par) => PendulumSim.evaluate(s, c, par, false), p, 0, 1, 3);
+  assertClose(eq.dxdt, 0, 1e-10, 'At equilibrium: dθ/dt = 0');
+  assertClose(eq.dydt, 0, 1e-10, 'At equilibrium: dω/dt = 0');
+
+  // At (θ=π/4, ω=0) — displaced, gravity pulls back
+  const disp = computeArrow(Math.PI / 4, 0, (s, c, par) => PendulumSim.evaluate(s, c, par, false), p, 0, 1, 3);
+  assertClose(disp.dxdt, 0, 1e-10, 'Displaced, zero vel: dθ/dt = ω = 0');
+  assert(disp.dydt < 0, 'Displaced right: dω/dt < 0 (gravity restoring)');
+
+  // At (θ=0, ω=2) — at bottom, moving right
+  const moving = computeArrow(0, 2, (s, c, par) => PendulumSim.evaluate(s, c, par, false), p, 0, 1, 3);
+  assertClose(moving.dxdt, 2, 1e-10, 'Moving right: dθ/dt = ω = 2');
+  assertClose(moving.dydt, 0, 0.01, 'At bottom: dω/dt ≈ 0 (sin(0)=0)');
+
+  // At (θ=-π/4, ω=0) — displaced left, gravity pushes right
+  const left = computeArrow(-Math.PI / 4, 0, (s, c, par) => PendulumSim.evaluate(s, c, par, false), p, 0, 1, 3);
+  assert(left.dydt > 0, 'Displaced left: dω/dt > 0 (gravity restoring right)');
+}
+
+section('Direction Field — Spring Arrows');
+{
+  const p = getParams(SpringSim);
+  p.damping = 0;
+  const eqX = p.fixedPoint + p.restLength; // equilibrium position
+
+  // At equilibrium
+  const eq = computeArrow(eqX, 0, (s, c, par) => SpringSim.evaluate(s, c, par, false), p, 0, 1, 3);
+  assertClose(eq.dxdt, 0, 1e-10, 'Spring eq: dx/dt = v = 0');
+  assertClose(eq.dydt, 0, 0.01, 'Spring eq: dv/dt ≈ 0');
+
+  // Stretched right
+  const right = computeArrow(eqX + 2, 0, (s, c, par) => SpringSim.evaluate(s, c, par, false), p, 0, 1, 3);
+  assert(right.dydt < 0, 'Stretched right: dv/dt < 0 (spring pulls back)');
+
+  // Compressed left
+  const leftC = computeArrow(eqX - 1, 0, (s, c, par) => SpringSim.evaluate(s, c, par, false), p, 0, 1, 3);
+  assert(leftC.dydt > 0, 'Compressed left: dv/dt > 0 (spring pushes right)');
+}
+
+section('Direction Field — Arrow Symmetry');
+{
+  // For undamped pendulum, field should be symmetric: arrow at (θ, ω) should
+  // have opposite dydt to arrow at (-θ, ω) [odd symmetry in θ]
+  const p = getParams(PendulumSim);
+  p.damping = 0;
+  const a1 = computeArrow(0.5, 1, (s, c, par) => PendulumSim.evaluate(s, c, par, false), p, 0, 1, 3);
+  const a2 = computeArrow(-0.5, 1, (s, c, par) => PendulumSim.evaluate(s, c, par, false), p, 0, 1, 3);
+  assertClose(a1.dxdt, a2.dxdt, 1e-10, 'Symmetric: same dθ/dt (both ω=1)');
+  assertClose(a1.dydt, -a2.dydt, 1e-6, 'Anti-symmetric: opposite dω/dt');
+}
+
+// --- PeriodDetector ---
+class PeriodDetector {
+  constructor(varIndex) {
+    this.varIndex = varIndex; this.crossings = []; this.prevVal = 0; this.period = 0;
+  }
+  push(state, time) {
+    const val = state[this.varIndex];
+    if (this.prevVal <= 0 && val > 0) {
+      this.crossings.push(time);
+      if (this.crossings.length > 20) this.crossings.shift();
+      if (this.crossings.length >= 2) {
+        const n = this.crossings.length - 1;
+        this.period = (this.crossings[n] - this.crossings[0]) / n;
+      }
+    }
+    this.prevVal = val;
+  }
+  reset() { this.crossings = []; this.prevVal = 0; this.period = 0; }
+}
+
+section('PeriodDetector — Pendulum');
+{
+  const p = getParams(PendulumSim);
+  p.damping = 0;
+  p.startAngle = 0.2; // small angle for accurate T = 2π√(L/g)
+  const state = Float64Array.from(PendulumSim.init(p));
+  const pd = new PeriodDetector(1); // angular velocity zero-crossings
+  const dt = 1 / 240;
+
+  // Run for 15 seconds
+  for (let i = 0; i < 3600; i++) {
+    rk4(state, (v, c, par) => PendulumSim.evaluate(v, c, par, false), dt, p);
+    pd.push(state, state[2]);
+  }
+
+  const Ttheory = 2 * Math.PI * Math.sqrt(p.length / p.gravity);
+  assert(pd.period > 0, 'Period detected: ' + pd.period.toFixed(4));
+  // For small angle (0.2 rad), measured should be close to theory
+  assertClose(pd.period, Ttheory, 0.02, `Pendulum period: measured=${pd.period.toFixed(4)} theory=${Ttheory.toFixed(4)}`);
+}
+
+section('PeriodDetector — Spring');
+{
+  const p = getParams(SpringSim);
+  p.damping = 0;
+  const state = Float64Array.from(SpringSim.init(p));
+  const pd = new PeriodDetector(1); // velocity zero-crossings
+  const dt = 1 / 240;
+
+  for (let i = 0; i < 3600; i++) {
+    rk4(state, (v, c, par) => SpringSim.evaluate(v, c, par, false), dt, p);
+    pd.push(state, state[2]);
+  }
+
+  const Ttheory = 2 * Math.PI * Math.sqrt(p.mass / p.stiffness);
+  assert(pd.period > 0, 'Spring period detected');
+  assertClose(pd.period, Ttheory, 0.02, `Spring period: measured=${pd.period.toFixed(4)} theory=${Ttheory.toFixed(4)}`);
+}
+
+section('PeriodDetector — Reset');
+{
+  const pd = new PeriodDetector(0);
+  pd.push(Float64Array.from([-1]), 0);
+  pd.push(Float64Array.from([1]), 0.5);
+  assert(pd.crossings.length === 1, 'One crossing detected');
+  pd.reset();
+  assert(pd.crossings.length === 0, 'Reset clears crossings');
+  assert(pd.period === 0, 'Reset clears period');
+}
+
+// --- Potential Energy functions ---
+section('Potential Energy — Pendulum');
+{
+  const p = getParams(PendulumSim);
+  // PE at angle=0 should be 0 (bottom of well)
+  assertClose(PendulumSim.potentialEnergy(0, p), 0, 1e-10, 'PE at θ=0 = 0');
+  // PE at angle=π/2 should be mgL
+  const peHalf = PendulumSim.potentialEnergy(Math.PI / 2, p);
+  assertClose(peHalf, p.mass * p.gravity * p.length, 1e-6, 'PE at θ=π/2 = mgL');
+  // PE at angle=π should be 2mgL (top)
+  const peTop = PendulumSim.potentialEnergy(Math.PI, p);
+  assertClose(peTop, 2 * p.mass * p.gravity * p.length, 1e-6, 'PE at θ=π = 2mgL');
+  // PE is symmetric: PE(θ) = PE(-θ)
+  assertClose(PendulumSim.potentialEnergy(0.5, p), PendulumSim.potentialEnergy(-0.5, p), 1e-10, 'PE symmetric');
+}
+
+section('Potential Energy — Spring');
+{
+  const p = getParams(SpringSim);
+  const eqX = p.fixedPoint + p.restLength;
+  // PE at equilibrium = 0
+  assertClose(SpringSim.potentialEnergy(eqX, p), 0, 1e-10, 'PE at equilibrium = 0');
+  // PE at stretch=1 should be 0.5*k*1² = 1.5
+  assertClose(SpringSim.potentialEnergy(eqX + 1, p), 0.5 * p.stiffness, 1e-6, 'PE at stretch=1');
+  // PE is symmetric around equilibrium
+  assertClose(SpringSim.potentialEnergy(eqX + 0.5, p), SpringSim.potentialEnergy(eqX - 0.5, p), 1e-10, 'PE symmetric');
+}
+
+// --- Vectors ---
+section('Vectors — Pendulum at Rest');
+{
+  const p = getParams(PendulumSim);
+  const v = PendulumSim.vectors([0, 0, 0], p);
+  assertClose(v.velocity.mag, 0, 1e-10, 'Velocity = 0 at rest');
+  assertClose(v.accel.mag, 0, 0.01, 'Acceleration ≈ 0 at equilibrium');
+}
+
+section('Vectors — Spring Moving');
+{
+  const p = getParams(SpringSim);
+  const eqX = p.fixedPoint + p.restLength;
+  const v = SpringSim.vectors([eqX + 1, 2, 0], p); // stretched, moving right
+  assertClose(v.velocity.x, 2, 1e-10, 'Velocity = 2 m/s');
+  assert(v.accel.x < 0, 'Acceleration negative (spring pulls back)');
 }
 
 // ═══════════════════════════════════════════

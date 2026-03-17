@@ -28,7 +28,7 @@ export const SpringSim = {
     startX:     { value: 2.0,  min: -3, max: 5,   step: 0.1,  label: 'Start Position',   unit: 'm' },
   },
 
-  views: ['sim', 'phase', 'time', 'energy'],
+  views: ['sim', 'phase', 'time', 'energy', 'well'],
 
   graphDefaults: {
     phase: { x: 'position', y: 'velocity' },
@@ -69,6 +69,30 @@ export const SpringSim = {
     const KE = 0.5 * mass * v * v;
     const PE = 0.5 * stiffness * stretch * stretch;
     return { kinetic: KE, potential: PE, total: KE + PE };
+  },
+
+  potentialEnergy(x, params) {
+    const stretch = x - params.fixedPoint - params.restLength;
+    return 0.5 * params.stiffness * stretch * stretch;
+  },
+  peWellConfig: { posVar: 0, posLabel: 'x (m)', range: { min: -2, max: 5 } },
+
+  theoreticalPeriod(params) {
+    return 2 * Math.PI * Math.sqrt(params.mass / params.stiffness);
+  },
+  periodVar: 1, // velocity
+
+  vectors(vars, params) {
+    const [x, v] = vars;
+    const { mass, stiffness, damping, restLength, fixedPoint } = params;
+    const stretch = x - fixedPoint - restLength;
+    const force = -stiffness * stretch - damping * v;
+    const accel = force / mass;
+    return {
+      pos: { x: x, y: 0 },
+      velocity: { x: v, y: 0, mag: Math.abs(v) },
+      accel: { x: accel, y: 0, mag: Math.abs(accel) },
+    };
   },
 
   hitTest(wx, wy, vars, params) {

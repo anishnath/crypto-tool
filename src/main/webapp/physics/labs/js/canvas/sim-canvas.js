@@ -258,6 +258,89 @@ export class SimCanvas {
     if (peW > 22) { ctx.fillStyle = '#fff'; ctx.fillText('PE', margin + keW + 3, ly); }
   }
 
+  /** Draw velocity and acceleration vectors at a point */
+  vectorsOverlay(vectors, isDark) {
+    if (!vectors) return;
+    const { pos, velocity, accel } = vectors;
+    const scale = 0.12; // world units per m/s or m/s²
+
+    // Velocity arrow (green)
+    if (velocity.mag > 0.01) {
+      this._drawArrow(
+        pos.x, pos.y,
+        pos.x + velocity.x * scale,
+        pos.y + velocity.y * scale,
+        '#10B981', 2
+      );
+    }
+
+    // Acceleration arrow (orange)
+    if (accel.mag > 0.01) {
+      this._drawArrow(
+        pos.x, pos.y,
+        pos.x + accel.x * scale,
+        pos.y + accel.y * scale,
+        '#F59E0B', 2
+      );
+    }
+  }
+
+  /** Draw arrow from world (x1,y1) to (x2,y2) */
+  _drawArrow(wx1, wy1, wx2, wy2, color, width) {
+    const a = this.toScreen(wx1, wy1);
+    const b = this.toScreen(wx2, wy2);
+    const dx = b.sx - a.sx, dy = b.sy - a.sy;
+    const len = Math.hypot(dx, dy);
+    if (len < 2) return;
+
+    const ctx = this.ctx;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width || 2;
+    ctx.beginPath();
+    ctx.moveTo(a.sx, a.sy);
+    ctx.lineTo(b.sx, b.sy);
+    ctx.stroke();
+
+    // Arrowhead
+    const headLen = Math.min(len * 0.3, 10);
+    const angle = Math.atan2(dy, dx);
+    ctx.beginPath();
+    ctx.moveTo(b.sx, b.sy);
+    ctx.lineTo(b.sx - headLen * Math.cos(angle - 0.4), b.sy - headLen * Math.sin(angle - 0.4));
+    ctx.moveTo(b.sx, b.sy);
+    ctx.lineTo(b.sx - headLen * Math.cos(angle + 0.4), b.sy - headLen * Math.sin(angle + 0.4));
+    ctx.stroke();
+  }
+
+  /** Period/frequency readout overlay (top-left corner) */
+  periodOverlay(period, theoreticalPeriod, isDark) {
+    const ctx = this.ctx;
+    const lines = [];
+    if (period > 0) lines.push('T meas = ' + period.toFixed(3) + 's');
+    if (theoreticalPeriod > 0) lines.push('T theory = ' + theoreticalPeriod.toFixed(3) + 's');
+    if (period > 0) lines.push('f = ' + (1 / period).toFixed(2) + ' Hz');
+
+    if (lines.length === 0) return;
+
+    ctx.font = '10px "Fira Code", monospace';
+    const maxW = Math.max(...lines.map(l => ctx.measureText(l).width));
+    const boxW = maxW + 14;
+    const boxH = lines.length * 14 + 8;
+
+    // Background pill
+    ctx.fillStyle = isDark ? 'rgba(14,20,32,0.7)' : 'rgba(255,255,255,0.8)';
+    ctx.beginPath();
+    ctx.roundRect(8, 8, boxW, boxH, 4);
+    ctx.fill();
+
+    ctx.fillStyle = isDark ? '#A78BFA' : '#6D28D9';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    lines.forEach((line, i) => {
+      ctx.fillText(line, 15, 13 + i * 14);
+    });
+  }
+
   destroy() {
     if (this._resizeObserver) this._resizeObserver.disconnect();
   }

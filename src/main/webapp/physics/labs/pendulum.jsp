@@ -92,6 +92,7 @@ googletag.cmd.push(function(){
         <canvas id="graphCanvas" width="600" height="450"></canvas>
         <canvas id="timeCanvas" width="600" height="450" style="display:none;"></canvas>
         <canvas id="energyCanvas" width="600" height="300" style="display:none;"></canvas>
+        <canvas id="peWellCanvas" width="600" height="400" style="display:none;"></canvas>
       </div>
     </div>
 
@@ -138,6 +139,7 @@ const lab = createLab(PendulumSim, {
   graphCanvas:  document.getElementById('graphCanvas'),
   timeCanvas:   document.getElementById('timeCanvas'),
   energyCanvas: document.getElementById('energyCanvas'),
+  peWellCanvas: document.getElementById('peWellCanvas'),
   canvasArea:   document.getElementById('canvasArea'),
   controls:     document.getElementById('controls'),
   transport:    document.getElementById('transport'),

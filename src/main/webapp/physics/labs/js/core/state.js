@@ -2,6 +2,40 @@
  * State helpers — clone, compare, energy tracking.
  */
 
+/**
+ * PeriodDetector — measures oscillation period from zero-crossings.
+ */
+export class PeriodDetector {
+  constructor(varIndex) {
+    this.varIndex = varIndex;
+    this.crossings = [];   // timestamps of zero-crossings (positive-going)
+    this.prevVal = 0;
+    this.period = 0;
+    this.maxCrossings = 20;
+  }
+
+  push(state, time) {
+    const val = state[this.varIndex];
+    // Detect positive-going zero crossing
+    if (this.prevVal <= 0 && val > 0) {
+      this.crossings.push(time);
+      if (this.crossings.length > this.maxCrossings) this.crossings.shift();
+      // Average period from last N crossings
+      if (this.crossings.length >= 2) {
+        const n = this.crossings.length - 1;
+        this.period = (this.crossings[n] - this.crossings[0]) / n;
+      }
+    }
+    this.prevVal = val;
+  }
+
+  reset() {
+    this.crossings = [];
+    this.prevVal = 0;
+    this.period = 0;
+  }
+}
+
 /** Deep clone a state array */
 export function cloneState(vars) {
   return Float64Array.from(vars);

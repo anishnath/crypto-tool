@@ -11,10 +11,12 @@
  */
 
 import { SimRunner } from './core/runner.js';
+import { PeriodDetector } from './core/state.js';
 import { SimCanvas, screenToWorld } from './canvas/sim-canvas.js';
 import { GraphCanvas } from './canvas/graph-canvas.js';
 import { TimeGraph } from './canvas/time-graph.js';
 import { EnergyBar } from './canvas/energy-bar.js';
+import { PotentialWell } from './canvas/potential-well.js';
 import { bindInteraction } from './core/interact.js';
 import { TabSwitcher } from './ui/tabs.js';
 import { buildSimControls, extractDefaults } from './ui/controls.js';
@@ -30,7 +32,7 @@ import { buildVarPicker, resolveGraphDefaults } from './ui/var-picker.js';
  */
 export function createLab(sim, elements) {
   const {
-    simCanvas, graphCanvas, timeCanvas, energyCanvas,
+    simCanvas, graphCanvas, timeCanvas, energyCanvas, peWellCanvas,
     controls, transport, presets, tabs, varPicker,
     canvasArea,
   } = elements;
@@ -86,6 +88,12 @@ export function createLab(sim, elements) {
       xLabel: xDef?.symbol || gd.x,
       yLabel: yDef?.symbol || gd.y,
     });
+
+    // Enable direction field on phase graph
+    if (typeof sim.evaluate === 'function') {
+      const evalForField = (state, change, params) => sim.evaluate(state, change, params, false);
+      graphCvs.setDirectionField(evalForField, runner.params, sim.varCount);
+    }
   }
 
   // --- Time Graph ---
@@ -113,6 +121,25 @@ export function createLab(sim, elements) {
     energyCvs = new EnergyBar(energyCanvas);
   }
 
+  // --- Potential Well ---
+  let peWellCvs = null;
+  if (peWellCanvas && typeof sim.potentialEnergy === 'function' && sim.peWellConfig) {
+    peWellCvs = new PotentialWell(peWellCanvas, {
+      posVar: sim.peWellConfig.posVar,
+      posLabel: sim.peWellConfig.posLabel,
+      posRange: sim.peWellConfig.range,
+    });
+  }
+
+  // --- Period Detector ---
+  let periodDetector = null;
+  if (typeof sim.periodVar === 'number') {
+    periodDetector = new PeriodDetector(sim.periodVar);
+  }
+
+  // --- Overlay state ---
+  let showVectors = false;
+
   // --- Tabs ---
   let tabSwitcher = null;
   if (tabs && sim.views) {
@@ -122,6 +149,7 @@ export function createLab(sim, elements) {
         phase: graphCanvas || null,
         time: timeCanvas || null,
         energy: energyCanvas || null,
+        well: peWellCanvas || null,
       },
     });
     tabSwitcher.restoreFromSession();
@@ -140,7 +168,7 @@ export function createLab(sim, elements) {
   if (controls) {
     controlsHandle = buildSimControls(sim.params, controls, (name, value) => {
       runner.setParam(name, value);
-      // If sim is paused, re-render immediately
+      if (graphCvs) graphCvs.updateParams(runner.params);
       if (!runner.playing) runner._notifyRender();
     });
   }
@@ -163,6 +191,7 @@ export function createLab(sim, elements) {
       if (timeCvs) timeCvs.clear();
       if (energyCvs) energyCvs.reset();
       energyMax = 1;
+      if (periodDetector) periodDetector.reset();
       if (controlsHandle) controlsHandle.updateSliders(runner.params);
     });
   }
@@ -174,6 +203,7 @@ export function createLab(sim, elements) {
       showClock,
       onToggleEnergy(v) { showEnergy = v; },
       onToggleClock(v) { showClock = v; },
+      onToggleVectors: typeof sim.vectors === 'function' ? (v) => { showVectors = v; } : null,
       onBackground(mode) { bgMode = mode; },
       toolName: sim.name || 'Physics Lab',
     });
@@ -222,6 +252,17 @@ export function createLab(sim, elements) {
         energyMax = Math.max(energyMax, e.total * 1.1, 0.01);
         simCvs.energyOverlay(e.kinetic, e.potential, e.total, energyMax, isDark);
       }
+
+      // Velocity + acceleration vectors overlay
+      if (showVectors && typeof sim.vectors === 'function') {
+        simCvs.vectorsOverlay(sim.vectors(state, params), isDark);
+      }
+
+      // Period readout overlay
+      if (periodDetector && periodDetector.period > 0) {
+        const thP = typeof sim.theoreticalPeriod === 'function' ? sim.theoreticalPeriod(params) : 0;
+        simCvs.periodOverlay(periodDetector.period, thP, isDark);
+      }
     }
 
     // Graph canvases — render when their tab is active (shown side-by-side with sim)
@@ -231,6 +272,12 @@ export function createLab(sim, elements) {
       const e = sim.energy(state, params);
       energyCvs.update(e.kinetic, e.potential, e.total);
       energyCvs.render();
+    }
+
+    // Potential energy well
+    if (peWellCvs && activeTab === 'well' && sim.potentialEnergy) {
+      const e = sim.energy ? sim.energy(state, params) : null;
+      peWellCvs.render(sim.potentialEnergy, state, params, e);
     }
   });
 
@@ -246,6 +293,9 @@ export function createLab(sim, elements) {
       if (timeCvs) timeCvs.pushEnergy(t, e);
       if (energyCvs) energyCvs.pushTime(t, e.kinetic, e.potential, e.total);
     }
+
+    // Period detection
+    if (periodDetector) periodDetector.push(state, t);
   });
 
   // --- Auto-play ---

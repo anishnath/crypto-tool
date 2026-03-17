@@ -3,6 +3,7 @@
  * axis tick values, zero-crossing lines, current-point dot, and fading trail.
  */
 import { RingBuffer } from '../core/state.js';
+import { DirectionField } from './direction-field.js';
 
 export class GraphCanvas {
   constructor(el, opts = {}) {
@@ -16,6 +17,35 @@ export class GraphCanvas {
     this.lineColor = opts.lineColor || '#06B6D4';
     this.bounds = { xMin: -1, xMax: 1, yMin: -1, yMax: 1 };
     this.padding = 48;
+
+    // Direction field (optional — set via setDirectionField)
+    this.dirField = null;
+    this._evaluate = null;
+    this._params = null;
+    this._varCount = 0;
+  }
+
+  /**
+   * Enable direction field on this graph.
+   * @param {function} evaluate — sim's evaluate(state, change, params)
+   * @param {object} params — current sim params (updated via setParams)
+   * @param {number} varCount — sim's state variable count
+   * @param {object} opts — DirectionField options
+   */
+  setDirectionField(evaluate, params, varCount, opts = {}) {
+    this._evaluate = evaluate;
+    this._params = params;
+    this._varCount = varCount;
+    this.dirField = new DirectionField({
+      xVar: this.xVar,
+      yVar: this.yVar,
+      ...opts,
+    });
+  }
+
+  /** Update params reference (called when params change) */
+  updateParams(params) {
+    this._params = params;
   }
 
   setVars(xIdx, yIdx, xLabel, yLabel) {
@@ -97,6 +127,13 @@ export class GraphCanvas {
       ctx.beginPath(); ctx.moveTo(p, zy); ctx.lineTo(p + pw, zy); ctx.stroke();
     }
     ctx.setLineDash([]);
+
+    // Direction field (rendered behind the trajectory)
+    if (this.dirField && this._evaluate) {
+      this.dirField.xVar = this.xVar;
+      this.dirField.yVar = this.yVar;
+      this.dirField.render(ctx, this.bounds, p, pw, ph, this._evaluate, this._params, this._varCount);
+    }
 
     // Data trail with fade
     if (this.buffer.size > 1) {

@@ -25,6 +25,14 @@ export function buildEngineControls(containerEl, runner, opts = {}) {
   });
   body.appendChild(clockCb);
 
+  // Show Vectors checkbox (only if sim supports it)
+  if (opts.onToggleVectors) {
+    const vecCb = makeCheckbox('Show Vectors', false, v => {
+      opts.onToggleVectors(v);
+    });
+    body.appendChild(vecCb);
+  }
+
   // Solver dropdown
   const solverRow = document.createElement('div');
   solverRow.className = 'engine-row';

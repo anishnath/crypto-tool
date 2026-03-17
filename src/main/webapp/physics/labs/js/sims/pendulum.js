@@ -27,7 +27,7 @@ export const PendulumSim = {
     startAngle: { value: Math.PI / 3, min: -Math.PI, max: Math.PI, step: 0.05, label: 'Start Angle', unit: 'rad' },
   },
 
-  views: ['sim', 'phase', 'time', 'energy'],
+  views: ['sim', 'phase', 'time', 'energy', 'well'],
 
   graphDefaults: {
     phase: { x: 'angle', y: 'angularVel' },
@@ -74,6 +74,44 @@ export const PendulumSim = {
     const KE = 0.5 * mass * (length * angVel) ** 2;
     const PE = mass * gravity * length * (1 - Math.cos(angle));
     return { kinetic: KE, potential: PE, total: KE + PE };
+  },
+
+  // Potential energy as function of position (for PE well plot)
+  potentialEnergy(angle, params) {
+    return params.mass * params.gravity * params.length * (1 - Math.cos(angle));
+  },
+  peWellConfig: { posVar: 0, posLabel: 'θ (rad)', range: { min: -Math.PI, max: Math.PI } },
+
+  // Theoretical period (small angle approximation)
+  theoreticalPeriod(params) {
+    return 2 * Math.PI * Math.sqrt(params.length / params.gravity);
+  },
+  // Which var to detect zero-crossings for period measurement
+  periodVar: 1, // angular velocity
+
+  // Vectors for display on sim canvas: velocity + acceleration at bob
+  vectors(vars, params) {
+    const [angle, angVel] = vars;
+    const { gravity, length, mass, damping } = params;
+    const bobX = length * Math.sin(angle);
+    const bobY = -length * Math.cos(angle);
+    // Velocity is tangent to arc: v = L*ω, direction perpendicular to rod
+    const speed = length * angVel;
+    const vx = speed * Math.cos(angle);
+    const vy = speed * Math.sin(angle);
+    // Acceleration: tangential + centripetal
+    const accel = -(gravity / length) * Math.sin(angle) - (damping / (mass * length * length)) * angVel;
+    const aT = length * accel; // tangential
+    const aC = length * angVel * angVel; // centripetal (toward pivot)
+    const atx = aT * Math.cos(angle);
+    const aty = aT * Math.sin(angle);
+    const acx = -aC * Math.sin(angle);
+    const acy = aC * Math.cos(angle);
+    return {
+      pos: { x: bobX, y: bobY },
+      velocity: { x: vx, y: vy, mag: Math.abs(speed) },
+      accel: { x: atx + acx, y: aty + acy, mag: Math.hypot(atx + acx, aty + acy) },
+    };
   },
 
   // --- Drag interaction ---

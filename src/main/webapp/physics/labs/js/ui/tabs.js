@@ -24,7 +24,7 @@ export class TabSwitcher {
     const bar = document.createElement('div');
     bar.className = 'lab-tabs';
 
-    const dots = { sim: '#8B5CF6', phase: '#06B6D4', time: '#10B981', energy: '#F59E0B' };
+    const dots = { sim: '#8B5CF6', phase: '#06B6D4', time: '#10B981', energy: '#F59E0B', well: '#EC4899' };
 
     tabs.forEach(name => {
       const btn = document.createElement('button');
