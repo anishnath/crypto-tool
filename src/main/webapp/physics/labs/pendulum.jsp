@@ -112,7 +112,7 @@ googletag.cmd.push(function(){
   <div class="lab-related">
     <span>Also try &rarr;</span>
     <a href="<%=request.getContextPath()%>/physics/labs/spring.jsp">Spring Oscillator</a>
-    <a href="<%=request.getContextPath()%>/physics/spring-force-calculator.jsp">Spring Force Calculator</a>
+    <a href="<%=request.getContextPath()%>/physics/labs/double-spring.jsp">Double Spring</a>
     <a href="<%=request.getContextPath()%>/physics/acceleration-calculator.jsp">Acceleration Calculator</a>
     <a href="<%=request.getContextPath()%>/physics/">All Physics Tools</a>
   </div>

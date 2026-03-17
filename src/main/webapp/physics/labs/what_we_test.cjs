@@ -927,6 +927,176 @@ section('VarPicker — resolveGraphDefaults');
   assert(none.y === 'angularVel', 'No default → second var');
 }
 
+// --- Double Spring sim ---
+const DoubleSpringSim = {
+  params: {
+    mass1: { value: 1.0 }, mass2: { value: 1.0 },
+    stiffness: { value: 6.0 }, damping: { value: 0.0 },
+    restLength: { value: 2.0 }, thirdSpring: { value: true },
+    wallLeft: { value: -0.5 }, wallRight: { value: 9.5 },
+  },
+  _equilibrium(p) {
+    const { stiffness: k, restLength: R, wallLeft: w1, wallRight: w2, thirdSpring } = p;
+    if (thirdSpring) {
+      const totalSpace = w2 - w1;
+      return [w1 + totalSpace / 3, w1 + 2 * totalSpace / 3];
+    }
+    return [w1 + R, w1 + 2 * R];
+  },
+  init(p) {
+    const [x1eq, x2eq] = this._equilibrium(p);
+    return [x1eq, x2eq, 0, -2.3, 0];
+  },
+  evaluate(vars, change, params, isDragging) {
+    change[4] = 1;
+    if (isDragging) return;
+    const [x1, x2, v1, v2] = vars;
+    const { mass1, mass2, stiffness: k, damping: b, restLength: R, wallLeft: w1, wallRight: w2, thirdSpring } = params;
+    const L1 = (x1 - w1) - R;
+    const L2 = (x2 - x1) - R;
+    const k3 = thirdSpring ? k : 0;
+    const L3 = thirdSpring ? (w2 - x2) - R : 0;
+    change[0] = v1;
+    change[1] = v2;
+    change[2] = (-k * L1 + k * L2 - b * v1) / mass1;
+    change[3] = (-k * L2 + k3 * L3 - b * v2) / mass2;
+  },
+  energy(vars, params) {
+    const [x1, x2, v1, v2] = vars;
+    const { mass1, mass2, stiffness: k, restLength: R, wallLeft: w1, wallRight: w2, thirdSpring } = params;
+    const L1 = (x1 - w1) - R;
+    const L2 = (x2 - x1) - R;
+    const L3 = thirdSpring ? (w2 - x2) - R : 0;
+    const k3 = thirdSpring ? k : 0;
+    const KE = 0.5 * mass1 * v1 * v1 + 0.5 * mass2 * v2 * v2;
+    const PE = 0.5 * k * L1 * L1 + 0.5 * k * L2 * L2 + 0.5 * k3 * L3 * L3;
+    return { kinetic: KE, potential: PE, total: KE + PE };
+  },
+  hitTest(wx, wy, vars) {
+    if (Math.hypot(wx - vars[0], wy) < 0.4) return { id: 'block1', offsetX: wx - vars[0], offsetY: wy };
+    if (Math.hypot(wx - vars[1], wy) < 0.4) return { id: 'block2', offsetX: wx - vars[1], offsetY: wy };
+    return null;
+  },
+  onDrag(id, wx, wy, offset, vars) {
+    if (id === 'block1') { vars[0] = wx - offset.offsetX; vars[2] = 0; }
+    if (id === 'block2') { vars[1] = wx - offset.offsetX; vars[3] = 0; }
+  },
+  onRelease() {},
+};
+
+section('Double Spring — Init');
+{
+  const p = getParams(DoubleSpringSim);
+  const state = Float64Array.from(DoubleSpringSim.init(p));
+  assert(state.length === 5, 'Double spring has 5 state vars');
+  // Equilibrium: walls at -0.5 and 9.5, total space = 10, thirds: 2.83, 6.17
+  const [x1eq, x2eq] = DoubleSpringSim._equilibrium(p);
+  assertClose(state[0], x1eq, 0.01, 'Block1 at equilibrium x1');
+  assertClose(state[1], x2eq, 0.01, 'Block2 at equilibrium x2');
+  assertClose(state[2], 0, 1e-10, 'v1 = 0');
+  assertClose(state[3], -2.3, 0.01, 'v2 = -2.3 (initial kick)');
+  assert(state[0] < state[1], 'Block1 is left of block2');
+}
+
+section('Double Spring — Evaluate at Equilibrium');
+{
+  const p = getParams(DoubleSpringSim);
+  const [x1eq, x2eq] = DoubleSpringSim._equilibrium(p);
+  // At equilibrium with zero velocity → zero acceleration
+  const state = Float64Array.from([x1eq, x2eq, 0, 0, 0]);
+  const change = new Float64Array(5);
+  DoubleSpringSim.evaluate(state, change, p, false);
+  assertClose(change[2], 0, 0.01, 'Acceleration 1 = 0 at equilibrium');
+  assertClose(change[3], 0, 0.01, 'Acceleration 2 = 0 at equilibrium');
+}
+
+section('Double Spring — Energy Conservation (no damping)');
+{
+  const p = getParams(DoubleSpringSim);
+  p.damping = 0;
+  const state = Float64Array.from(DoubleSpringSim.init(p));
+  const e0 = DoubleSpringSim.energy(state, p);
+
+  const dt = 1 / 120;
+  for (let i = 0; i < 600; i++) {
+    rk4(state, (v, c, par) => DoubleSpringSim.evaluate(v, c, par, false), dt, p);
+  }
+
+  const e1 = DoubleSpringSim.energy(state, p);
+  assertClose(e1.total, e0.total, 1e-4, `DS energy conserved: ${e0.total.toFixed(4)} → ${e1.total.toFixed(4)}`);
+}
+
+section('Double Spring — Damping Reduces Energy');
+{
+  const p = getParams(DoubleSpringSim);
+  p.damping = 1.0;
+  const state = Float64Array.from(DoubleSpringSim.init(p));
+  const e0 = DoubleSpringSim.energy(state, p);
+
+  const dt = 1 / 120;
+  for (let i = 0; i < 600; i++) {
+    rk4(state, (v, c, par) => DoubleSpringSim.evaluate(v, c, par, false), dt, p);
+  }
+
+  const e1 = DoubleSpringSim.energy(state, p);
+  assert(e1.total < e0.total * 0.9, `DS energy decreased: ${e0.total.toFixed(4)} → ${e1.total.toFixed(4)}`);
+}
+
+section('Double Spring — Third Spring Toggle');
+{
+  const p = getParams(DoubleSpringSim);
+
+  // Start at equilibrium with third spring, then displace block2 right
+  p.thirdSpring = true;
+  const [eq1, eq2] = DoubleSpringSim._equilibrium(p);
+  const state = Float64Array.from([eq1, eq2 + 1.5, 0, 0, 0]);
+  const changeWith = new Float64Array(5);
+  DoubleSpringSim.evaluate(state, changeWith, p, false);
+  const accelWith = changeWith[3];
+
+  // Without third spring, same displacement
+  p.thirdSpring = false;
+  const changeWithout = new Float64Array(5);
+  DoubleSpringSim.evaluate(state, changeWithout, p, false);
+  const accelWithout = changeWithout[3];
+
+  // With third spring: block2 displaced right → spring3 stretched → extra restoring force
+  // So |accel| should be larger with third spring
+  assert(Math.abs(accelWith) > Math.abs(accelWithout),
+    `Third spring adds force: |${accelWith.toFixed(3)}| > |${accelWithout.toFixed(3)}|`);
+}
+
+section('Double Spring — HitTest Both Blocks');
+{
+  const p = getParams(DoubleSpringSim);
+  const state = Float64Array.from(DoubleSpringSim.init(p));
+  const hit1 = DoubleSpringSim.hitTest(state[0], 0, state);
+  assert(hit1 !== null && hit1.id === 'block1', 'Hit test finds block1');
+  const hit2 = DoubleSpringSim.hitTest(state[1], 0, state);
+  assert(hit2 !== null && hit2.id === 'block2', 'Hit test finds block2');
+  const miss = DoubleSpringSim.hitTest(50, 50, state);
+  assert(miss === null, 'Hit test misses far away');
+}
+
+section('Double Spring — Drag Block2');
+{
+  const p = getParams(DoubleSpringSim);
+  const state = Float64Array.from(DoubleSpringSim.init(p));
+  const origX2 = state[1];
+  DoubleSpringSim.onDrag('block2', origX2 + 2, 0, { offsetX: 0, offsetY: 0 }, state, p);
+  assertClose(state[1], origX2 + 2, 0.01, 'Block2 dragged right');
+  assertClose(state[3], 0, 1e-10, 'Velocity zeroed during drag');
+}
+
+section('Double Spring — Sim Contract');
+{
+  assert(typeof DoubleSpringSim.init === 'function', 'Has init');
+  assert(typeof DoubleSpringSim.evaluate === 'function', 'Has evaluate');
+  assert(typeof DoubleSpringSim.energy === 'function', 'Has energy');
+  assert(typeof DoubleSpringSim.hitTest === 'function', 'Has hitTest');
+  assert(typeof DoubleSpringSim.onDrag === 'function', 'Has onDrag');
+}
+
 // ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════

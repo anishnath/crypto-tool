@@ -6,21 +6,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Spring Oscillator Simulator — Interactive Physics Lab" />
+    <jsp:param name="toolName" value="Double Spring Simulator — Coupled Oscillations" />
     <jsp:param name="toolCategory" value="Physics" />
-    <jsp:param name="toolDescription" value="Interactive spring-mass simulation. Drag the block, adjust stiffness, mass, and damping. See energy conservation, phase plots, and critical damping. Free, no signup." />
-    <jsp:param name="toolUrl" value="physics/labs/spring.jsp" />
-    <jsp:param name="toolKeywords" value="spring simulator, spring mass system, harmonic oscillator, Hooke's law, spring constant, damping, critical damping, physics simulation, SHM" />
+    <jsp:param name="toolDescription" value="Interactive double spring-mass simulation. Two blocks connected by springs between walls. Explore coupled oscillations, normal modes, energy transfer, and damping. Free, no signup." />
+    <jsp:param name="toolUrl" value="physics/labs/double-spring.jsp" />
+    <jsp:param name="toolKeywords" value="double spring simulator, coupled oscillators, normal modes, spring mass system, coupled oscillations, energy transfer, physics simulation" />
     <jsp:param name="toolImage" value="logo.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="physics/" />
     <jsp:param name="educationalLevel" value="High School, Undergraduate" />
-    <jsp:param name="teaches" value="Hooke's law, simple harmonic motion, spring constant, damping, critical damping, energy conservation" />
+    <jsp:param name="teaches" value="Coupled oscillations, normal modes, energy transfer, Hooke's law, spring systems" />
     <jsp:param name="hasSteps" value="true" />
-    <jsp:param name="howToSteps" value="Drag the block|Click and drag the mass block to stretch or compress the spring then release,Adjust parameters|Use sliders to change mass and spring stiffness and damping,Try presets|Click Stiff or Soft or Overdamped to see different spring behaviors,View graphs|Switch to Phase tab to see the elliptical orbits of an oscillator" />
-    <jsp:param name="faq1q" value="What determines the period of a spring oscillator?" />
-    <jsp:param name="faq1a" value="The period is T = 2 pi sqrt(m/k) where m is mass and k is spring stiffness. Unlike a pendulum the period does not depend on amplitude. This simulator lets you verify this by changing the start position." />
-    <jsp:param name="faq2q" value="What is critical damping?" />
-    <jsp:param name="faq2a" value="Critical damping occurs when b = 2 sqrt(km). The system returns to equilibrium as fast as possible without oscillating. Try the Overdamped preset to see this behavior compared to underdamped oscillations." />
+    <jsp:param name="howToSteps" value="Drag a block|Click and drag either block to stretch the springs then release,Adjust parameters|Use sliders to change mass and stiffness and damping,Toggle third spring|Check or uncheck the third spring to change boundary conditions,View energy transfer|Switch to the Energy tab to see energy flow between the two masses" />
+    <jsp:param name="faq1q" value="What are normal modes in a double spring system?" />
+    <jsp:param name="faq1a" value="Normal modes are special patterns where both masses oscillate at the same frequency. The symmetric mode has both moving together at a lower frequency. The antisymmetric mode has them moving oppositely at a higher frequency. General motion is a mix of both." />
+    <jsp:param name="faq2q" value="Why does energy transfer between the two blocks?" />
+    <jsp:param name="faq2a" value="When normal mode frequencies are different the two modes go in and out of phase creating beats. Energy appears to flow back and forth between the blocks. Set equal masses and no damping then pull only one block to see this clearly." />
 </jsp:include>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,10 +71,10 @@ googletag.cmd.push(function(){
     <a href="<%=request.getContextPath()%>/">Home</a> /
     <a href="<%=request.getContextPath()%>/physics/">Physics</a> /
     <a href="<%=request.getContextPath()%>/physics/labs/">Labs</a> /
-    <span>Spring Oscillator</span>
+    <span>Double Spring</span>
   </nav>
 
-  <h1 class="lab-title">Spring Oscillator</h1>
+  <h1 class="lab-title">Double Spring</h1>
 
   <div id="labTabs"></div>
 
@@ -102,18 +102,16 @@ googletag.cmd.push(function(){
 
   <div class="lab-related">
     <span>Also try &rarr;</span>
-    <a href="<%=request.getContextPath()%>/physics/labs/double-spring.jsp">Double Spring</a>
-    <a href="<%=request.getContextPath()%>/physics/labs/pendulum.jsp">Simple Pendulum</a>
+    <a href="<%=request.getContextPath()%>/physics/labs/spring.jsp">Single Spring</a>
+    <a href="<%=request.getContextPath()%>/physics/labs/pendulum.jsp">Pendulum</a>
     <a href="<%=request.getContextPath()%>/physics/spring-force-calculator.jsp">Spring Force Calculator</a>
     <a href="<%=request.getContextPath()%>/physics/">All Physics Tools</a>
   </div>
 
-  <!-- Below-content Ad -->
   <div class="ad-lab-below" id="ad_lab_below"><div class="ad-label">Advertisement</div></div>
 
 </div>
 
-<!-- Sticky Footer Ad -->
 <div class="ad-lab-sticky" id="adLabSticky">
   <button class="ad-close" onclick="document.getElementById('adLabSticky').classList.add('ad-dismissed');try{localStorage.setItem('ad_lab_sticky_d','1')}catch(e){}">&times;</button>
   <div class="ad-label">Advertisement</div>
@@ -122,9 +120,9 @@ googletag.cmd.push(function(){
 
 <script type="module">
 import { createLab } from './js/lab.js';
-import { SpringSim } from './js/sims/spring.js';
+import { DoubleSpringSim } from './js/sims/double-spring.js';
 
-const lab = createLab(SpringSim, {
+const lab = createLab(DoubleSpringSim, {
   simCanvas:    document.getElementById('simCanvas'),
   graphCanvas:  document.getElementById('graphCanvas'),
   timeCanvas:   document.getElementById('timeCanvas'),
@@ -137,7 +135,7 @@ const lab = createLab(SpringSim, {
   varPicker:    document.getElementById('varPicker'),
 });
 
-document.getElementById('labInfo').innerHTML = SpringSim.info || '';
+document.getElementById('labInfo').innerHTML = DoubleSpringSim.info || '';
 </script>
 
 <script>
