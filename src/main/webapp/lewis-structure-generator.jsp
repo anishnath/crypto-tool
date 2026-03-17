@@ -1135,6 +1135,13 @@
 
 </section>
 
+<!-- Molecular Structure Tools -->
+<div style="max-width:1200px;margin:1.5rem auto;padding:0 1rem;display:flex;gap:10px;flex-wrap:wrap;">
+  <span style="font-size:0.8rem;color:var(--text-secondary,#64748b);align-self:center;font-weight:600;">Also try &rarr;</span>
+  <a href="<%=request.getContextPath()%>/chemistry/molecule-draw.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,#f1f5f9);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,#1e293b);transition:all 0.2s;" onmouseover="this.style.borderColor='#10b981';this.style.boxShadow='0 2px 8px rgba(16,185,129,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x270D;</span> Molecule Draw <span style="font-size:0.6rem;font-weight:700;background:#d946ef;color:#fff;padding:1px 5px;border-radius:3px;">NEW</span></a>
+  <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,#f1f5f9);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,#1e293b);transition:all 0.2s;" onmouseover="this.style.borderColor='#4f46e5';this.style.boxShadow='0 2px 8px rgba(79,70,229,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x1F4D0;</span> 3D Molecular Geometry</a>
+</div>
+
 <!-- Related Chemistry Tools -->
 <jsp:include page="modern/components/related-tools.jsp">
     <jsp:param name="currentToolUrl" value="lewis-structure-generator.jsp"/>

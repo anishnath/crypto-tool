@@ -1375,6 +1375,14 @@ body::after {
 
 </div><!-- /main-grid -->
 
+<!-- Related Tools -->
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;align-items:center;">
+  <span style="font-size:0.75rem;color:var(--text-muted);font-weight:600;letter-spacing:0.04em;">ALSO TRY &rarr;</span>
+  <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-elevated);border:1px solid var(--glass-border);border-radius:var(--radius-sm);text-decoration:none;font-size:0.8rem;font-weight:500;color:var(--text-primary);transition:all 0.2s;" onmouseover="this.style.borderColor='var(--accent)';this.style.boxShadow='var(--glow-sm)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">&#x1F517; Lewis Structures</a>
+  <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-elevated);border:1px solid var(--glass-border);border-radius:var(--radius-sm);text-decoration:none;font-size:0.8rem;font-weight:500;color:var(--text-primary);transition:all 0.2s;" onmouseover="this.style.borderColor='var(--accent)';this.style.boxShadow='var(--glow-sm)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">&#x1F4D0; 3D Geometry</a>
+  <a href="<%=request.getContextPath()%>/chemistry/" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-elevated);border:1px solid var(--glass-border);border-radius:var(--radius-sm);text-decoration:none;font-size:0.8rem;font-weight:500;color:var(--text-primary);transition:all 0.2s;" onmouseover="this.style.borderColor='var(--accent)';this.style.boxShadow='var(--glow-sm)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">&#x269B; All Chemistry Tools</a>
+</div>
+
 <!-- Ad: Below Editor Leaderboard -->
 <div class="ad-below-editor" id="ad_moldraw_below_editor" role="complementary" aria-label="Advertisement">
   <div class="ad-label">Advertisement</div>

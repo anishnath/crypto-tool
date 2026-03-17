@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-03-16T00:00:00.000Z",
-  "totalTools": 401,
+  "totalTools": 402,
   "categories": [
     "Blockchain & Crypto",
     "CTF & Challenges",
@@ -2157,6 +2157,13 @@
       "category": "Chemistry",
       "keywords": "molar mass calculator chemistry chemistry",
       "description": "Molar Mass Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Molecule Draw - Structure Editor",
+      "url": "chemistry/molecule-draw.jsp",
+      "category": "Chemistry",
+      "keywords": "molecule draw structure editor smiles mol file reaction drawing molecular weight chemistry",
+      "description": "Interactive molecular structure editor. Draw molecules, paste SMILES, export MOL/SVG/PNG, reaction mode with RXN export."
     },
     {
       "name": "Molecular Geometry Calculator",
