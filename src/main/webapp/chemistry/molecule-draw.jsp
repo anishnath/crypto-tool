@@ -35,6 +35,17 @@ stpd = window.stpd || {que: []};
 window.googletag = window.googletag || {cmd: []};
 googletag.cmd.push(function() {
   var w = window.innerWidth;
+  // Slot 0: Hero banner (above fold)
+  if (w >= 992) {
+    googletag.defineSlot('/147246189,22976055811/8gwifi.org_970x90_hero_desktop',
+      [[970,90],[728,90]], 'ad_moldraw_hero').addService(googletag.pubads());
+  } else if (w >= 768) {
+    googletag.defineSlot('/147246189,22976055811/8gwifi.org_728x90_hero_tablet',
+      [[728,90],[468,60]], 'ad_moldraw_hero').addService(googletag.pubads());
+  } else {
+    googletag.defineSlot('/147246189,22976055811/8gwifi.org_320x100_hero_mobile',
+      [[320,50],[320,100],[300,50]], 'ad_moldraw_hero').addService(googletag.pubads());
+  }
   // Slot 1: Below-editor leaderboard
   if (w >= 992) {
     googletag.defineSlot('/147246189,22976055811/8gwifi.org_728x90_leaderboard_desktop',
@@ -984,6 +995,20 @@ body::after {
 /* ═══════════════════════════════════════════════════════
    ADS
    ═══════════════════════════════════════════════════════ */
+.ad-hero {
+  text-align: center;
+  max-width: 970px;
+  margin: 0 auto 8px;
+  min-height: 50px;
+}
+.ad-hero .ad-label {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  opacity: 0.5;
+  margin-bottom: 4px;
+}
 .ad-below-editor {
   margin: 20px auto 0;
   padding: 12px 0;
@@ -1155,6 +1180,11 @@ body::after {
     </button>
   </div>
 </header>
+
+<!-- Ad: Hero Banner -->
+<div class="ad-hero" id="ad_moldraw_hero" role="complementary" aria-label="Advertisement">
+  <div class="ad-label">Advertisement</div>
+</div>
 
 <!-- Breadcrumb -->
 <nav class="breadcrumb" aria-label="Breadcrumb">
@@ -2008,6 +2038,11 @@ RENDER_OPT_IDS.forEach(id => {
 // ADS
 // ═══════════════════════════════════════════════════════
 (function initAds() {
+  // Slot 0: Hero banner — loads immediately (above fold)
+  if (typeof googletag !== 'undefined' && googletag.cmd) {
+    googletag.cmd.push(() => { googletag.display('ad_moldraw_hero'); });
+  }
+
   // Slot 1: Below-editor leaderboard — lazy load via IntersectionObserver
   const belowAd = document.getElementById('ad_moldraw_below_editor');
   if (belowAd && 'IntersectionObserver' in window) {
