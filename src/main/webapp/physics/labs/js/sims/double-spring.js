@@ -138,6 +138,23 @@ export const DoubleSpringSim = {
 
   onRelease() {},
 
+  // Vectors: velocity arrows on both blocks
+  vectors(vars, params) {
+    // Show block1 vectors (primary)
+    const [x1, x2, v1, v2] = vars;
+    const { mass1, stiffness: k, damping: b, restLength: R, wallLeft: w1, wallRight: w2, thirdSpring } = params;
+    const L1 = (x1 - w1) - R;
+    const L2 = (x2 - x1) - R;
+    const k3 = thirdSpring ? k : 0;
+    const L3 = thirdSpring ? (w2 - x2) - R : 0;
+    const F1 = -k * L1 + k * L2 - b * v1;
+    return {
+      pos: { x: x1, y: 0 },
+      velocity: { x: v1, y: 0, mag: Math.abs(v1) },
+      accel: { x: F1 / mass1, y: 0, mag: Math.abs(F1 / mass1) },
+    };
+  },
+
   // --- Rendering ---
 
   render(canvas, vars, params) {

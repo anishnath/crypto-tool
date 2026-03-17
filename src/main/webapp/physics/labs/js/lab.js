@@ -90,7 +90,8 @@ export function createLab(sim, elements) {
     });
 
     // Enable direction field on phase graph
-    if (typeof sim.evaluate === 'function') {
+    // Direction field only meaningful for low-DOF systems (<=5 state vars)
+    if (typeof sim.evaluate === 'function' && sim.varCount <= 5) {
       const evalForField = (state, change, params) => sim.evaluate(state, change, params, false);
       graphCvs.setDirectionField(evalForField, runner.params, sim.varCount);
     }
@@ -165,7 +166,19 @@ export function createLab(sim, elements) {
     controlsHandle = buildSimControls(sim.params, controls, (name, value) => {
       runner.setParam(name, value);
       if (graphCvs) graphCvs.updateParams(runner.params);
-      if (!runner.playing) runner._notifyRender();
+      // Params flagged resetsState require full reset (e.g., numAtoms changes state size)
+      const paramDef = sim.params[name];
+      if (paramDef && paramDef.resetsState) {
+        runner.reset();
+        if (graphCvs) graphCvs.clear();
+        if (timeCvs) timeCvs.clear();
+        if (energyCvs) energyCvs.reset();
+        energyMax = 1;
+        if (periodDetector) periodDetector.reset();
+        trailPoints.length = 0;
+      } else if (!runner.playing) {
+        runner._notifyRender();
+      }
     });
   }
 

@@ -40,7 +40,7 @@ export const MoleculeSim = {
   varCount: 4 * 6 + 1, // max 6 atoms
 
   params: {
-    numAtoms:   { value: 3, min: 2, max: 6, step: 1, label: 'Atoms' },
+    numAtoms:   { value: 3, min: 2, max: 6, step: 1, label: 'Atoms', resetsState: true },
     mass:       { value: 0.5, min: 0.1, max: 5, step: 0.1, label: 'Mass', unit: 'kg' },
     stiffness:  { value: 6.0, min: 0.1, max: 30, step: 0.5, label: 'Stiffness', unit: 'N/m' },
     restLength: { value: 2.0, min: 0.5, max: 5, step: 0.1, label: 'Rest Length', unit: 'm' },
@@ -193,6 +193,11 @@ export const MoleculeSim = {
   },
 
   onRelease() {},
+
+  // Trail for atom 0
+  trailPoint(vars) {
+    return { wx: vars[0], wy: vars[1] };
+  },
 
   // --- Rendering ---
 

@@ -12,7 +12,7 @@ export function buildVarPicker(simVars, containerEl, defaults, onPick) {
   const wrap = document.createElement('div');
   wrap.className = 'lab-var-picker';
 
-  const varNames = Object.keys(simVars);
+  const varNames = Object.keys(simVars).filter(name => simVars[name].index >= 0);
 
   const xSel = makeDropdown('X:', varNames, simVars, defaults.x);
   const ySel = makeDropdown('Y:', varNames, simVars, defaults.y);

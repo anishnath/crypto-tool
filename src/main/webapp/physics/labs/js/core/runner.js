@@ -177,7 +177,7 @@ export class SimRunner {
     // Find time var index from sim.vars
     const vars = this.sim.vars;
     for (const v of Object.values(vars)) {
-      if (v.symbol === 't' || v.label?.toLowerCase().includes('time')) {
+      if (v.index >= 0 && (v.symbol === 't' || v.label?.toLowerCase().includes('time'))) {
         return this.state[v.index];
       }
     }
