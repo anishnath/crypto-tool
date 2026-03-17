@@ -6,13 +6,13 @@
     <jsp:include page="../modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Chemistry Calculators - Free Online Chemistry Tools" />
         <jsp:param name="toolCategory" value="Chemistry" />
-        <jsp:param name="toolDescription" value="12 free chemistry calculators with step-by-step solutions. Periodic table, electron configuration, Lewis structures, 3D molecular geometry, equation balancer, stoichiometry, molarity, thermochemistry, and more." />
+        <jsp:param name="toolDescription" value="13 free chemistry tools with step-by-step solutions. Molecule structure editor, periodic table, electron configuration, Lewis structures, 3D molecular geometry, equation balancer, stoichiometry, molarity, thermochemistry, and more." />
         <jsp:param name="toolUrl" value="chemistry/" />
-        <jsp:param name="toolKeywords" value="chemistry calculator, online chemistry tools, periodic table, electron configuration, Lewis structure, molecular geometry, equation balancer, stoichiometry, molar mass, molarity, dilution, thermochemistry, electrochemistry, VSEPR" />
+        <jsp:param name="toolKeywords" value="chemistry calculator, online chemistry tools, molecule drawer, periodic table, electron configuration, Lewis structure, molecular geometry, equation balancer, stoichiometry, molar mass, molarity, dilution, thermochemistry, electrochemistry, VSEPR, SMILES editor" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="12 chemistry calculators,Step-by-step solutions,Interactive visualizations,3D molecular viewer,Free and instant results,No registration required,Mobile friendly,Works offline" />
-        <jsp:param name="faq1q" value="Are these chemistry calculators free to use?" />
-        <jsp:param name="faq1a" value="Yes, all 12 chemistry calculators are completely free. No registration, no payment, no limits. Use them as many times as you need for homework, exams, or professional work." />
+        <jsp:param name="toolFeatures" value="13 chemistry tools,Molecular structure editor,Step-by-step solutions,Interactive visualizations,3D molecular viewer,SMILES and MOL file support,Free and instant results,No registration required,Mobile friendly,Works offline" />
+        <jsp:param name="faq1q" value="Are these chemistry tools free to use?" />
+        <jsp:param name="faq1a" value="Yes, all 13 chemistry tools are completely free including the new Molecule Draw structure editor. No registration, no payment, no limits. Use them as many times as you need for homework, exams, or professional work." />
         <jsp:param name="faq2q" value="Do the calculators show step-by-step solutions?" />
         <jsp:param name="faq2a" value="Yes, every calculator shows detailed step-by-step solutions explaining each formula and calculation. This helps you understand the chemistry concepts, not just get answers." />
         <jsp:param name="faq3q" value="What chemistry topics are covered?" />
@@ -26,24 +26,25 @@
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "name": "Chemistry Calculators",
-      "description": "12 free chemistry calculators with step-by-step solutions covering atomic structure, molecular geometry, stoichiometry, solutions, thermodynamics, and electrochemistry.",
+      "description": "13 free chemistry tools with step-by-step solutions covering molecular structure drawing, atomic structure, molecular geometry, stoichiometry, solutions, thermodynamics, and electrochemistry.",
       "url": "https://8gwifi.org/chemistry/",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 12,
+        "numberOfItems": 13,
         "itemListElement": [
-          {"@type": "ListItem", "position": 1, "name": "Periodic Table", "url": "https://8gwifi.org/periodic-table.jsp"},
-          {"@type": "ListItem", "position": 2, "name": "Electron Configuration Calculator", "url": "https://8gwifi.org/electron-configuration-calculator.jsp"},
-          {"@type": "ListItem", "position": 3, "name": "Electronegativity & Polarity Checker", "url": "https://8gwifi.org/electronegativity-polarity-checker.jsp"},
-          {"@type": "ListItem", "position": 4, "name": "Lewis Structure Generator", "url": "https://8gwifi.org/lewis-structure-generator.jsp"},
-          {"@type": "ListItem", "position": 5, "name": "3D Molecular Geometry Calculator", "url": "https://8gwifi.org/molecular-geometry-calculator.jsp"},
-          {"@type": "ListItem", "position": 6, "name": "Chemical Equation Balancer", "url": "https://8gwifi.org/chemical-equation-balancer.jsp"},
-          {"@type": "ListItem", "position": 7, "name": "Stoichiometry Calculator", "url": "https://8gwifi.org/stoichiometry-calculator.jsp"},
-          {"@type": "ListItem", "position": 8, "name": "Molar Mass Calculator", "url": "https://8gwifi.org/molar-mass-calculator.jsp"},
-          {"@type": "ListItem", "position": 9, "name": "Molarity & Dilution Calculator", "url": "https://8gwifi.org/molarity-dilution-calculator.jsp"},
-          {"@type": "ListItem", "position": 10, "name": "Chemistry Unit Converter", "url": "https://8gwifi.org/unit-converter-chemistry.jsp"},
-          {"@type": "ListItem", "position": 11, "name": "Thermochemistry Calculator", "url": "https://8gwifi.org/thermochemistry-calculator.jsp"},
-          {"@type": "ListItem", "position": 12, "name": "Electrochemistry Calculator", "url": "https://8gwifi.org/electrochemistry-calculator.jsp"}
+          {"@type": "ListItem", "position": 1, "name": "Molecule Draw - Molecular Structure Editor", "url": "https://8gwifi.org/chemistry/molecule-draw.jsp"},
+          {"@type": "ListItem", "position": 2, "name": "Periodic Table", "url": "https://8gwifi.org/periodic-table.jsp"},
+          {"@type": "ListItem", "position": 3, "name": "Electron Configuration Calculator", "url": "https://8gwifi.org/electron-configuration-calculator.jsp"},
+          {"@type": "ListItem", "position": 4, "name": "Electronegativity & Polarity Checker", "url": "https://8gwifi.org/electronegativity-polarity-checker.jsp"},
+          {"@type": "ListItem", "position": 5, "name": "Lewis Structure Generator", "url": "https://8gwifi.org/lewis-structure-generator.jsp"},
+          {"@type": "ListItem", "position": 6, "name": "3D Molecular Geometry Calculator", "url": "https://8gwifi.org/molecular-geometry-calculator.jsp"},
+          {"@type": "ListItem", "position": 7, "name": "Chemical Equation Balancer", "url": "https://8gwifi.org/chemical-equation-balancer.jsp"},
+          {"@type": "ListItem", "position": 8, "name": "Stoichiometry Calculator", "url": "https://8gwifi.org/stoichiometry-calculator.jsp"},
+          {"@type": "ListItem", "position": 9, "name": "Molar Mass Calculator", "url": "https://8gwifi.org/molar-mass-calculator.jsp"},
+          {"@type": "ListItem", "position": 10, "name": "Molarity & Dilution Calculator", "url": "https://8gwifi.org/molarity-dilution-calculator.jsp"},
+          {"@type": "ListItem", "position": 11, "name": "Chemistry Unit Converter", "url": "https://8gwifi.org/unit-converter-chemistry.jsp"},
+          {"@type": "ListItem", "position": 12, "name": "Thermochemistry Calculator", "url": "https://8gwifi.org/thermochemistry-calculator.jsp"},
+          {"@type": "ListItem", "position": 13, "name": "Electrochemistry Calculator", "url": "https://8gwifi.org/electrochemistry-calculator.jsp"}
         ]
       }
     }
@@ -355,12 +356,12 @@
     <main class="chem-container">
         <!-- Hero -->
         <section class="hero">
-            <h1>Chemistry Calculators</h1>
-            <p>Free tools with step-by-step solutions and interactive visualizations</p>
+            <h1>Chemistry Tools & Calculators</h1>
+            <p>Free tools with step-by-step solutions, interactive visualizations, and molecular structure editor</p>
             <div class="hero-stats">
                 <div class="hero-stat">
-                    <span class="hero-stat-value">12</span>
-                    <span class="hero-stat-label">Calculators</span>
+                    <span class="hero-stat-value">13</span>
+                    <span class="hero-stat-label">Tools</span>
                 </div>
                 <div class="hero-stat">
                     <span class="hero-stat-value">100%</span>
@@ -431,9 +432,24 @@
             <div class="category-header">
                 <span class="category-icon">&#x1F9EA;</span>
                 <h2>Molecular Structure</h2>
-                <span class="category-count">2 tools</span>
+                <span class="category-count">3 tools</span>
             </div>
             <div class="tools-grid">
+                <a href="<%=request.getContextPath()%>/chemistry/molecule-draw.jsp" class="tool-card" style="--card-accent: #10b981;">
+                    <div class="tool-card-header">
+                        <div class="tool-icon" style="background: linear-gradient(135deg, #10b981, #06b6d4);">&#x270D;</div>
+                        <div>
+                            <h3>Molecule Draw</h3>
+                            <div class="tool-formula">SMILES &middot; MOL &middot; reactions &middot; SVG export</div>
+                        </div>
+                    </div>
+                    <p>Interactive molecular structure editor. Draw molecules and reactions, import SMILES, export MOL files, SVG, and PNG with real-time properties.</p>
+                    <div class="tool-badges">
+                        <span class="badge badge-new">NEW</span>
+                        <span class="badge badge-interactive">Interactive</span>
+                    </div>
+                </a>
+
                 <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp" class="tool-card" style="--card-accent: #2563eb;">
                     <div class="tool-card-header">
                         <div class="tool-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">&#x1F517;</div>
@@ -596,8 +612,8 @@
 
         <!-- SEO Content -->
         <section class="seo-content">
-            <h2>About Chemistry Calculators</h2>
-            <p>Our chemistry calculators help students, teachers, and professionals solve chemistry problems with detailed step-by-step solutions. From atomic structure to electrochemistry, each tool features interactive visualizations to help understand the underlying concepts.</p>
+            <h2>About Chemistry Tools</h2>
+            <p>Our chemistry tools help students, teachers, and professionals solve chemistry problems with detailed step-by-step solutions. From the interactive <strong>Molecule Draw</strong> structure editor to electrochemistry calculators, each tool features interactive visualizations to help understand the underlying concepts.</p>
 
             <h3>Quick Formula Reference</h3>
             <div class="formula-grid">
@@ -653,7 +669,7 @@
     </main>
 
     <footer class="chem-footer">
-        <p>&copy; 2025 8gwifi.org - Free Online Chemistry Calculators</p>
+        <p>&copy; 2026 8gwifi.org - Free Online Chemistry Tools & Calculators</p>
     </footer>
 
     <!-- Dark Mode Toggle -->
