@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#060B14"/>
+      <stop offset="1" stop-color="#0B1120"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#10b981"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="400" y1="200" x2="800" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10b981" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#06b6d4" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <ellipse cx="600" cy="315" rx="500" ry="300" fill="url(#glow)"/>
+  <!-- Hex grid hint -->
+  <g stroke="#10b981" stroke-opacity="0.06" stroke-width="1">
+    <path d="M100 150l30 17v35l-30 17-30-17v-35z"/>
+    <path d="M170 150l30 17v35l-30 17-30-17v-35z"/>
+    <path d="M135 192l30 17v35l-30 17-30-17v-35z"/>
+    <path d="M1000 400l30 17v35l-30 17-30-17v-35z"/>
+    <path d="M1070 400l30 17v35l-30 17-30-17v-35z"/>
+    <path d="M1035 442l30 17v35l-30 17-30-17v-35z"/>
+  </g>
+  <!-- Benzene ring (center-left) -->
+  <g transform="translate(340,260)" stroke="url(#accent)" stroke-width="3" fill="none" stroke-linecap="round">
+    <polygon points="0,-70 60.6,-35 60.6,35 0,70 -60.6,35 -60.6,-35" stroke-opacity="0.8"/>
+    <polygon points="0,-48 41.6,-24 41.6,24 0,48 -41.6,24 -41.6,-24" stroke-opacity="0.4"/>
+    <!-- Atoms at vertices -->
+    <g fill="#10b981">
+      <circle cx="0" cy="-70" r="8" fill-opacity="0.9"/>
+      <circle cx="60.6" cy="-35" r="8" fill-opacity="0.9"/>
+      <circle cx="60.6" cy="35" r="8" fill-opacity="0.9"/>
+      <circle cx="0" cy="70" r="8" fill-opacity="0.9"/>
+      <circle cx="-60.6" cy="35" r="8" fill-opacity="0.9"/>
+      <circle cx="-60.6" cy="-35" r="8" fill-opacity="0.9"/>
+    </g>
+    <!-- Atom glow -->
+    <g fill="#10b981" fill-opacity="0.15">
+      <circle cx="0" cy="-70" r="16"/>
+      <circle cx="60.6" cy="-35" r="16"/>
+      <circle cx="60.6" cy="35" r="16"/>
+      <circle cx="0" cy="70" r="16"/>
+      <circle cx="-60.6" cy="35" r="16"/>
+      <circle cx="-60.6" cy="-35" r="16"/>
+    </g>
+    <!-- Side chains -->
+    <line x1="60.6" y1="-35" x2="120" y2="-60" stroke-opacity="0.5"/>
+    <circle cx="120" cy="-60" r="6" fill="#06b6d4" fill-opacity="0.8" stroke="none"/>
+    <line x1="60.6" y1="35" x2="130" y2="55" stroke-opacity="0.5"/>
+    <circle cx="130" cy="55" r="6" fill="#ef4444" fill-opacity="0.8" stroke="none"/>
+    <line x1="130" y1="55" x2="130" y2="90" stroke-opacity="0.3"/>
+    <circle cx="130" cy="90" r="5" fill="#ef4444" fill-opacity="0.6" stroke="none"/>
+  </g>
+  <!-- Arrow (reaction) -->
+  <g transform="translate(530,310)" stroke="#10b981" stroke-width="2.5" stroke-opacity="0.35" stroke-linecap="round">
+    <line x1="0" y1="0" x2="80" y2="0"/>
+    <polyline points="65,-12 80,0 65,12" fill="none"/>
+  </g>
+  <!-- Second molecule (ethanol, simpler) -->
+  <g transform="translate(680,290)" stroke="url(#accent)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-opacity="0.6">
+    <line x1="0" y1="0" x2="45" y2="-26"/>
+    <line x1="45" y1="-26" x2="90" y2="0"/>
+    <circle cx="0" cy="0" r="6" fill="#10b981" fill-opacity="0.7" stroke="none"/>
+    <circle cx="45" cy="-26" r="6" fill="#10b981" fill-opacity="0.7" stroke="none"/>
+    <circle cx="90" cy="0" r="6" fill="#ef4444" fill-opacity="0.7" stroke="none"/>
+    <!-- H -->
+    <line x1="90" y1="0" x2="115" y2="18" stroke-opacity="0.35"/>
+    <circle cx="115" cy="18" r="4" fill="#94a3b8" fill-opacity="0.5" stroke="none"/>
+  </g>
+  <!-- Title text -->
+  <text x="600" y="500" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="52" fill="#e2e8f0" letter-spacing="-1">Molecule Draw</text>
+  <text x="600" y="540" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="400" font-size="22" fill="#94a3b8" letter-spacing="3">INTERACTIVE STRUCTURE EDITOR</text>
+  <!-- Brand -->
+  <text x="600" y="580" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="500" font-size="16" fill="#10b981" opacity="0.7">8gwifi.org</text>
+  <!-- Corner accents -->
+  <rect x="40" y="40" width="60" height="3" rx="1.5" fill="#10b981" opacity="0.3"/>
+  <rect x="40" y="40" width="3" height="60" rx="1.5" fill="#10b981" opacity="0.3"/>
+  <rect x="1100" y="587" width="60" height="3" rx="1.5" fill="#06b6d4" opacity="0.3"/>
+  <rect x="1157" y="530" width="3" height="60" rx="1.5" fill="#06b6d4" opacity="0.3"/>
+</svg>

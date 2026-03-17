@@ -10,7 +10,7 @@
     <jsp:param name="toolDescription" value="Draw molecular structures online with our free interactive editor. Supports SMILES input, MOL file export, SVG/PNG download, reaction drawing, and real-time molecular property calculation. No signup needed." />
     <jsp:param name="toolUrl" value="chemistry/molecule-draw.jsp" />
     <jsp:param name="toolKeywords" value="molecule drawer, molecular structure editor, draw molecules online, SMILES to structure, MOL file editor, chemical structure drawing, reaction editor, molecular weight calculator, SVG molecule export, free chemistry tool" />
-    <jsp:param name="toolImage" value="logo.png" />
+    <jsp:param name="toolImage" value="molecule-draw.svg" />
     <jsp:param name="breadcrumbCategoryUrl" value="chemistry/" />
     <jsp:param name="toolFeatures" value="Interactive molecular structure drawing,SMILES notation input and conversion,MOL V2/V3 file import and export,SVG and PNG molecule image export,Real-time molecular formula and weight,Reaction drawing mode with RXN export,12 pre-built common molecule templates,24 configurable render options,Atom and bond number display,Symmetry and stereochemistry visualization,Dark and light theme support,Keyboard shortcuts for power users,No registration required,100% client-side processing" />
     <jsp:param name="educationalLevel" value="High School, Undergraduate, Graduate" />
