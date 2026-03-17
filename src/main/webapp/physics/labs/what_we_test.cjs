@@ -90,16 +90,20 @@ const PendulumSim = {
     length:     { value: 1.0 },
     mass:       { value: 1.0 },
     damping:    { value: 0.1 },
+    driveAmp:   { value: 0 },
+    driveFreq:  { value: 0.667 },
     startAngle: { value: Math.PI / 3 },
   },
   init(p) { return [p.startAngle, 0, 0]; },
   evaluate(vars, change, params, isDragging) {
     change[2] = 1;
     if (isDragging) return;
-    const [angle, angVel] = vars;
-    const { gravity, length, mass, damping } = params;
+    const [angle, angVel, time] = vars;
+    const { gravity, length, mass, damping, driveAmp, driveFreq } = params;
     change[0] = angVel;
-    change[1] = -(gravity / length) * Math.sin(angle) - (damping / (mass * length * length)) * angVel;
+    change[1] = -(gravity / length) * Math.sin(angle)
+                - (damping / (mass * length * length)) * angVel
+                + ((driveAmp || 0) / (mass * length * length)) * Math.cos((driveFreq || 0) * time);
   },
   energy(vars, params) {
     const [angle, angVel] = vars;
@@ -1456,6 +1460,100 @@ section('Double Pendulum — Equilibrium at Bottom');
   DoublePendulumSim.evaluate(state, change, p, false);
   assertClose(change[1], 0, 0.01, 'α₁ ≈ 0 at equilibrium (both down)');
   assertClose(change[3], 0, 0.01, 'α₂ ≈ 0 at equilibrium (both down)');
+}
+
+// --- Driven Pendulum (updated PendulumSim with drive force) ---
+section('Driven Pendulum — No Drive = Same as Before');
+{
+  const p = getParams(PendulumSim);
+  p.driveAmp = 0; // no drive
+  p.driveFreq = 0.667;
+  p.damping = 0;
+  const state = Float64Array.from(PendulumSim.init(p));
+  const e0 = PendulumSim.energy(state, p);
+  const dt = 1/120;
+  for (let i = 0; i < 600; i++) {
+    rk4(state, (v,c,par) => PendulumSim.evaluate(v,c,par,false), dt, p);
+  }
+  const e1 = PendulumSim.energy(state, p);
+  assertClose(e1.total, e0.total, 1e-4, 'No drive + no damping = energy conserved');
+}
+
+section('Driven Pendulum — Drive Pumps Energy');
+{
+  const p = getParams(PendulumSim);
+  p.driveAmp = 1.15;
+  p.driveFreq = 0.667;
+  p.damping = 0.1;
+  p.startAngle = 0.1;
+  const state = Float64Array.from(PendulumSim.init(p));
+  const e0 = PendulumSim.energy(state, p);
+  const dt = 1/120;
+  for (let i = 0; i < 1200; i++) { // 10 seconds
+    rk4(state, (v,c,par) => PendulumSim.evaluate(v,c,par,false), dt, p);
+  }
+  const e1 = PendulumSim.energy(state, p);
+  // With drive, energy should NOT be conserved — drive pumps energy in
+  assert(e1.total !== e0.total, 'Driven pendulum: energy changes (drive injects/extracts energy)');
+}
+
+// --- Compare Pendulum (two chaotic pendulums) ---
+const ComparePendulumSim = {
+  params: {
+    gravity: { value: 9.81 }, length: { value: 1.0 }, mass: { value: 1.0 },
+    damping: { value: 0.5 }, driveAmp: { value: 10.0 }, driveFreq: { value: 0.667 },
+    startAngle: { value: 0.1 }, angleDelta: { value: 0.001 },
+  },
+  init(p) { return [p.startAngle, 0, p.startAngle + p.angleDelta, 0, 0]; },
+  _evalSingle(angle, angVel, time, params) {
+    const { gravity, length, mass, damping, driveAmp, driveFreq } = params;
+    return -(gravity/length)*Math.sin(angle) - (damping/(mass*length*length))*angVel
+           + (driveAmp/(mass*length*length))*Math.cos(driveFreq*time);
+  },
+  evaluate(vars, change, params, isDragging) {
+    change[4] = 1;
+    if (isDragging) return;
+    const ev = ComparePendulumSim._evalSingle;
+    change[0] = vars[1];
+    change[1] = ev(vars[0], vars[1], vars[4], params);
+    change[2] = vars[3];
+    change[3] = ev(vars[2], vars[3], vars[4], params);
+  },
+};
+
+section('Compare Pendulum — Init');
+{
+  const p = getParams(ComparePendulumSim);
+  const state = Float64Array.from(ComparePendulumSim.init(p));
+  assert(state.length === 5, 'Compare has 5 vars');
+  assertClose(state[0], 0.1, 1e-10, 'A starts at 0.1');
+  assertClose(state[2], 0.101, 1e-10, 'B starts at 0.1 + 0.001');
+}
+
+section('Compare Pendulum — Divergence');
+{
+  const p = getParams(ComparePendulumSim);
+  const state = Float64Array.from(ComparePendulumSim.init(p));
+  const dt = 1/120;
+  for (let i = 0; i < 3600; i++) { // 30 seconds
+    rk4(state, (v,c,par) => ComparePendulumSim.evaluate(v,c,par,false), dt, p);
+  }
+  const divergence = Math.abs(state[0] - state[2]);
+  assert(divergence > 0.5, `Compare: divergence after 30s = ${divergence.toFixed(3)} rad (should be large)`);
+}
+
+section('Compare Pendulum — No Drive = No Divergence');
+{
+  const p = getParams(ComparePendulumSim);
+  p.driveAmp = 0;
+  p.damping = 0.1;
+  const state = Float64Array.from(ComparePendulumSim.init(p));
+  const dt = 1/120;
+  for (let i = 0; i < 1200; i++) { // 10 seconds
+    rk4(state, (v,c,par) => ComparePendulumSim.evaluate(v,c,par,false), dt, p);
+  }
+  const divergence = Math.abs(state[0] - state[2]);
+  assert(divergence < 0.01, `No drive: divergence stays small = ${divergence.toFixed(6)} rad`);
 }
 
 // ═══════════════════════════════════════════

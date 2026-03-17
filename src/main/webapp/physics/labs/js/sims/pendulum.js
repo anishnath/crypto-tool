@@ -23,8 +23,10 @@ export const PendulumSim = {
     gravity:  { value: 9.81, min: 0, max: 25,   step: 0.01, label: 'Gravity',    unit: 'm/s²' },
     length:   { value: 1.0,  min: 0.1, max: 5,  step: 0.1,  label: 'Length',     unit: 'm' },
     mass:     { value: 1.0,  min: 0.1, max: 10, step: 0.1,  label: 'Mass',       unit: 'kg' },
-    damping:  { value: 0.1,  min: 0, max: 5,    step: 0.01, label: 'Damping',    unit: '' },
-    startAngle: { value: Math.PI / 3, min: -Math.PI, max: Math.PI, step: 0.05, label: 'Start Angle', unit: 'rad' },
+    damping:      { value: 0.1,  min: 0, max: 5,    step: 0.01, label: 'Damping',          unit: '' },
+    driveAmp:     { value: 0,    min: 0, max: 5,    step: 0.05, label: 'Drive Amplitude',   unit: '' },
+    driveFreq:    { value: 0.667,min: 0, max: 5,    step: 0.01, label: 'Drive Frequency',   unit: 'rad/s' },
+    startAngle:   { value: Math.PI / 3, min: -Math.PI, max: Math.PI, step: 0.05, label: 'Start Angle', unit: 'rad' },
   },
 
   views: ['sim', 'phase', 'time', 'energy', 'well'],
@@ -44,6 +46,8 @@ export const PendulumSim = {
     { name: 'Heavy Damp',   params: { damping: 2.0 } },
     { name: 'Long String',  params: { length: 3.0 } },
     { name: 'Large Angle',  params: { startAngle: Math.PI * 0.95, damping: 0 } },
+    { name: 'Chaotic',     params: { driveAmp: 10, driveFreq: 0.667, damping: 0.5, startAngle: Math.PI/4 } },
+    { name: 'Driven Mild', params: { driveAmp: 3, driveFreq: 0.667, damping: 0.5, startAngle: 0.2 } },
   ],
 
   init(p) {
@@ -60,12 +64,13 @@ export const PendulumSim = {
     change[2] = 1; // time always advances
     if (isDragging) return;
 
-    const [angle, angVel] = vars;
-    const { gravity, length, mass, damping } = params;
+    const [angle, angVel, time] = vars;
+    const { gravity, length, mass, damping, driveAmp, driveFreq } = params;
 
     change[0] = angVel;
     change[1] = -(gravity / length) * Math.sin(angle)
-                - (damping / (mass * length * length)) * angVel;
+                - (damping / (mass * length * length)) * angVel
+                + (driveAmp / (mass * length * length)) * Math.cos(driveFreq * time);
   },
 
   energy(vars, params) {
