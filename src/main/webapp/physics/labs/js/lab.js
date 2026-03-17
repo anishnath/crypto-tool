@@ -107,12 +107,8 @@ export function createLab(sim, elements) {
         if (def) timeCvs.addLine(def.index, def.symbol || def.label);
       });
     }
-    // Add energy lines if sim supports energy
-    if (typeof sim.energy === 'function') {
-      timeCvs.addEnergyLine('kinetic', 'KE', '#EF4444');
-      timeCvs.addEnergyLine('potential', 'PE', '#3B82F6');
-      timeCvs.addEnergyLine('total', 'Total', '#10B981');
-    }
+    // Energy has its own dedicated Energy tab (stacked area chart).
+    // Time graph stays clean with just state variables.
   }
 
   // --- Energy Bar ---
@@ -192,6 +188,7 @@ export function createLab(sim, elements) {
       if (energyCvs) energyCvs.reset();
       energyMax = 1;
       if (periodDetector) periodDetector.reset();
+      trailPoints.length = 0;
       if (controlsHandle) controlsHandle.updateSliders(runner.params);
     });
   }
@@ -238,6 +235,11 @@ export function createLab(sim, elements) {
       const bg = bgMode === 'white' ? '#ffffff' : '#0E1420';
       simCvs.clear(bg);
       if (bgMode === 'grid') simCvs.grid(1, '#ffffff', 0.04);
+
+      // Motion trail (behind the sim objects)
+      if (trailPoints.length > 1) {
+        simCvs.trail(trailPoints, '#8B5CF6', 120);
+      }
 
       sim.render(simCvs, state, params);
 
@@ -290,12 +292,17 @@ export function createLab(sim, elements) {
     // Feed energy data to time graph + energy chart
     if (sim.energy) {
       const e = sim.energy(state, params);
-      if (timeCvs) timeCvs.pushEnergy(t, e);
       if (energyCvs) energyCvs.pushTime(t, e.kinetic, e.potential, e.total);
     }
 
     // Period detection
     if (periodDetector) periodDetector.push(state, t);
+
+    // Collect trail point
+    if (typeof sim.trailPoint === 'function') {
+      trailPoints.push(sim.trailPoint(state, params));
+      if (trailPoints.length > 120) trailPoints.shift(); // keep last 120 frames (~2s at 60fps)
+    }
   });
 
   // --- Auto-play ---

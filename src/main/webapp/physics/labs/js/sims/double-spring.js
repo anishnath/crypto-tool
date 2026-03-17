@@ -9,7 +9,6 @@
  *   ü₁ = (-k·L₁ + k·L₂ - b·u̇₁) / m₁
  *   ü₂ = (-k·L₂ + k·L₃ - b·u̇₂) / m₂
  *
- * Reference: myphysicslab/src/sims/springs/DoubleSpringSim.ts
  *
  * State: [x1, x2, v1, v2, time]
  */

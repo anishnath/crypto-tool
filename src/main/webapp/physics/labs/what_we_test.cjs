@@ -1319,6 +1319,145 @@ section('Vectors — Spring Moving');
   assert(v.accel.x < 0, 'Acceleration negative (spring pulls back)');
 }
 
+// --- Double Pendulum sim ---
+const DoublePendulumSim = {
+  params: {
+    gravity: { value: 9.8 }, length1: { value: 1.0 }, length2: { value: 1.0 },
+    mass1: { value: 2.0 }, mass2: { value: 2.0 },
+    startAngle1: { value: Math.PI/2 }, startAngle2: { value: Math.PI/2 },
+  },
+  init(p) { return [p.startAngle1, 0, p.startAngle2, 0, 0]; },
+  evaluate(vars, change, params, isDragging) {
+    change[4] = 1;
+    if (isDragging) return;
+    const th1 = vars[0], dth1 = vars[1], th2 = vars[2], dth2 = vars[3];
+    const { gravity: g, length1: L1, length2: L2, mass1: m1, mass2: m2 } = params;
+    const delta = th1 - th2;
+    const sinD = Math.sin(delta), cosD = Math.cos(delta), sin2D = Math.sin(2*delta);
+    const denom = 2*m1 + m2 - m2*Math.cos(2*delta);
+    change[0] = dth1;
+    let num1 = -g*(2*m1+m2)*Math.sin(th1) - g*m2*Math.sin(th1-2*th2)
+               - 2*m2*dth2*dth2*L2*sinD - m2*dth1*dth1*L1*sin2D;
+    change[1] = num1 / (L1 * denom);
+    change[2] = dth2;
+    let num2 = (m1+m2)*dth1*dth1*L1 + g*(m1+m2)*Math.cos(th1) + m2*dth2*dth2*L2*cosD;
+    num2 *= 2*sinD;
+    change[3] = num2 / (L2 * denom);
+  },
+  energy(vars, params) {
+    const [th1, dth1, th2, dth2] = vars;
+    const { gravity: g, length1: L1, length2: L2, mass1: m1, mass2: m2 } = params;
+    const x1 = L1*Math.sin(th1), y1 = -L1*Math.cos(th1);
+    const x2 = x1 + L2*Math.sin(th2), y2 = y1 - L2*Math.cos(th2);
+    const vx1 = L1*dth1*Math.cos(th1), vy1 = L1*dth1*Math.sin(th1);
+    const vx2 = vx1 + L2*dth2*Math.cos(th2), vy2 = vy1 + L2*dth2*Math.sin(th2);
+    const KE = 0.5*m1*(vx1*vx1+vy1*vy1) + 0.5*m2*(vx2*vx2+vy2*vy2);
+    const PE = g*m1*(y1+L1) + g*m2*(y2+L1+L2);
+    return { kinetic: KE, potential: PE, total: KE+PE };
+  },
+  hitTest(wx, wy, vars, params) {
+    const { length1: L1, length2: L2 } = params;
+    const x1 = L1*Math.sin(vars[0]), y1 = -L1*Math.cos(vars[0]);
+    const x2 = x1+L2*Math.sin(vars[2]), y2 = y1-L2*Math.cos(vars[2]);
+    if (Math.hypot(wx-x2, wy-y2) < 0.3) return { id: 'bob2' };
+    if (Math.hypot(wx-x1, wy-y1) < 0.3) return { id: 'bob1' };
+    return null;
+  },
+  onDrag(id, wx, wy, offset, vars, params) {
+    if (id === 'bob1') { vars[0] = Math.atan2(wx, -wy); vars[1] = 0; vars[3] = 0; }
+    else if (id === 'bob2') {
+      const x1 = params.length1*Math.sin(vars[0]), y1 = -params.length1*Math.cos(vars[0]);
+      vars[2] = Math.atan2(wx-x1, -(wy-y1)); vars[1] = 0; vars[3] = 0;
+    }
+  },
+  onRelease() {},
+};
+
+section('Double Pendulum — Init');
+{
+  const p = getParams(DoublePendulumSim);
+  const state = Float64Array.from(DoublePendulumSim.init(p));
+  assert(state.length === 5, 'DP has 5 state vars');
+  assertClose(state[0], Math.PI/2, 1e-10, 'θ₁ = π/2');
+  assertClose(state[2], Math.PI/2, 1e-10, 'θ₂ = π/2');
+}
+
+section('Double Pendulum — Energy Conservation');
+{
+  const p = getParams(DoublePendulumSim);
+  const state = Float64Array.from(DoublePendulumSim.init(p));
+  const e0 = DoublePendulumSim.energy(state, p);
+  assert(e0.total > 0, 'Initial energy > 0');
+
+  const dt = 1/240;
+  for (let i = 0; i < 2400; i++) { // 10 seconds
+    rk4(state, (v,c,par) => DoublePendulumSim.evaluate(v,c,par,false), dt, p);
+  }
+
+  const e1 = DoublePendulumSim.energy(state, p);
+  const drift = Math.abs(e1.total - e0.total) / e0.total;
+  assert(drift < 0.001, `DP energy drift < 0.1%: ${(drift*100).toFixed(4)}%`);
+}
+
+section('Double Pendulum — Chaos Sensitivity');
+{
+  const p = getParams(DoublePendulumSim);
+  // Two runs with θ₁ differing by 0.001 rad
+  const stateA = Float64Array.from([Math.PI/2, 0, Math.PI/2, 0, 0]);
+  const stateB = Float64Array.from([Math.PI/2 + 0.001, 0, Math.PI/2, 0, 0]);
+
+  const dt = 1/120;
+  for (let i = 0; i < 2400; i++) { // 20 seconds — chaos needs time to diverge
+    rk4(stateA, (v,c,par) => DoublePendulumSim.evaluate(v,c,par,false), dt, p);
+    rk4(stateB, (v,c,par) => DoublePendulumSim.evaluate(v,c,par,false), dt, p);
+  }
+
+  const angleDiff = Math.abs(stateA[0] - stateB[0]) + Math.abs(stateA[2] - stateB[2]);
+  assert(angleDiff > 0.1, `Chaos: 0.001 rad initial diff → ${angleDiff.toFixed(3)} rad after 20s (should diverge)`);
+}
+
+section('Double Pendulum — Small Angle Stability');
+{
+  const p = getParams(DoublePendulumSim);
+  p.startAngle1 = 0.1;
+  p.startAngle2 = 0.1;
+  const state = Float64Array.from(DoublePendulumSim.init(p));
+
+  const dt = 1/120;
+  for (let i = 0; i < 600; i++) {
+    rk4(state, (v,c,par) => DoublePendulumSim.evaluate(v,c,par,false), dt, p);
+  }
+
+  // Small angles should stay bounded
+  assert(Math.abs(state[0]) < 0.5, 'Small angle θ₁ stays bounded');
+  assert(Math.abs(state[2]) < 0.5, 'Small angle θ₂ stays bounded');
+}
+
+section('Double Pendulum — HitTest & Drag');
+{
+  const p = getParams(DoublePendulumSim);
+  const state = Float64Array.from([0, 0, 0, 0, 0]); // both hanging down
+  // Bob1 at (0, -L1), bob2 at (0, -L1-L2)
+  const hit1 = DoublePendulumSim.hitTest(0, -p.length1, state, p);
+  assert(hit1 !== null && hit1.id === 'bob1', 'HitTest finds bob1');
+  const hit2 = DoublePendulumSim.hitTest(0, -p.length1 - p.length2, state, p);
+  assert(hit2 !== null && hit2.id === 'bob2', 'HitTest finds bob2');
+
+  // Drag bob2 sideways
+  DoublePendulumSim.onDrag('bob2', 0.5, -p.length1 - 0.866, {}, state, p);
+  assert(state[1] === 0 && state[3] === 0, 'Both velocities zeroed on drag');
+}
+
+section('Double Pendulum — Equilibrium at Bottom');
+{
+  const p = getParams(DoublePendulumSim);
+  const state = Float64Array.from([0, 0, 0, 0, 0]); // hanging straight down
+  const change = new Float64Array(5);
+  DoublePendulumSim.evaluate(state, change, p, false);
+  assertClose(change[1], 0, 0.01, 'α₁ ≈ 0 at equilibrium (both down)');
+  assertClose(change[3], 0, 0.01, 'α₂ ≈ 0 at equilibrium (both down)');
+}
+
 // ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════

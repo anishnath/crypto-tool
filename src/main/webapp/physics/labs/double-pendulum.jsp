@@ -6,23 +6,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Simple Pendulum Simulator — Interactive Physics Lab" />
+    <jsp:param name="toolName" value="Double Pendulum Simulator — Chaos Theory Visualization" />
     <jsp:param name="toolCategory" value="Physics" />
-    <jsp:param name="toolDescription" value="Interactive simple pendulum simulation. Drag the bob, adjust gravity, length, mass, and damping. See real-time energy graphs and phase-space plots. Free, no signup." />
-    <jsp:param name="toolUrl" value="physics/labs/pendulum.jsp" />
-    <jsp:param name="toolKeywords" value="pendulum simulator, simple pendulum, physics simulation, harmonic motion, pendulum period, gravity simulation, interactive physics, pendulum lab" />
+    <jsp:param name="toolDescription" value="Interactive double pendulum simulation demonstrating chaotic motion. Drag both bobs, compare sensitivity to initial conditions, view phase space trajectories, and verify energy conservation. Free, no signup." />
+    <jsp:param name="toolUrl" value="physics/labs/double-pendulum.jsp" />
+    <jsp:param name="toolKeywords" value="double pendulum simulator, chaos theory, chaotic pendulum, sensitive dependence, Lagrangian mechanics, phase space chaos, butterfly effect, physics simulation" />
     <jsp:param name="toolImage" value="logo.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="physics/" />
-    <jsp:param name="educationalLevel" value="High School, Undergraduate" />
-    <jsp:param name="teaches" value="Simple harmonic motion, pendulum period, energy conservation, damping, nonlinear oscillations" />
+    <jsp:param name="educationalLevel" value="Undergraduate, Graduate" />
+    <jsp:param name="teaches" value="Chaos theory, sensitive dependence on initial conditions, Lagrangian mechanics, coupled oscillators, energy conservation in chaotic systems" />
     <jsp:param name="hasSteps" value="true" />
-    <jsp:param name="howToSteps" value="Drag the bob|Click and drag the pendulum bob to any angle then release to watch it swing,Adjust parameters|Use the sliders to change gravity and length and mass and damping,Try presets|Click Moon or Jupiter or Zero Damping to see different behaviors instantly,View graphs|Switch to Phase or Time tab to see angle vs velocity or time-series plots" />
-    <jsp:param name="faq1q" value="What is the period of a simple pendulum?" />
-    <jsp:param name="faq1a" value="For small angles the period is T = 2 pi sqrt(L/g) where L is the length and g is gravitational acceleration. This simulator shows both the small-angle approximation and the full nonlinear behavior for large swings." />
-    <jsp:param name="faq2q" value="Why does the pendulum slow down?" />
-    <jsp:param name="faq2a" value="Damping represents air resistance and friction at the pivot. Set damping to zero to see perpetual motion with perfect energy conservation. Increase damping to see the amplitude decay exponentially." />
-    <jsp:param name="faq3q" value="Can I simulate pendulums on other planets?" />
-    <jsp:param name="faq3a" value="Yes. Click the Moon preset for g=1.62 or Jupiter for g=24.79 or drag the gravity slider to any value. Watch how the period and swing behavior change with different gravitational fields." />
+    <jsp:param name="howToSteps" value="Drag the bobs|Click and drag either pendulum bob to set starting angles then release,Watch chaos unfold|Observe the unpredictable motion emerging from simple deterministic equations,Test sensitivity|Reset and change the starting angle by just 0.01 rad to see completely different motion,Check energy|Switch to Energy tab to verify total energy stays constant despite the wild motion" />
+    <jsp:param name="faq1q" value="Why is the double pendulum chaotic?" />
+    <jsp:param name="faq1a" value="The coupling between the two pendulums creates nonlinear equations that amplify tiny differences exponentially over time. This is deterministic chaos — the equations are perfectly predictable step by step but long-term prediction is impossible because any measurement error grows exponentially." />
+    <jsp:param name="faq2q" value="Is energy conserved in a chaotic system?" />
+    <jsp:param name="faq2a" value="Yes. Switch to the Energy tab — the green Total Energy line stays perfectly flat even during the wildest chaotic motion. Chaos means unpredictable trajectories not energy loss. The system obeys conservation laws exactly." />
+    <jsp:param name="faq3q" value="What are the equations of motion for a double pendulum?" />
+    <jsp:param name="faq3a" value="The equations are derived from the Lagrangian and involve coupled nonlinear terms with sin and cos of angle differences. They have no closed-form solution and must be solved numerically. This simulator uses the 4th-order Runge-Kutta method for accurate integration." />
 </jsp:include>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,6 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>">
 <link rel="stylesheet" href="css/labs.css?v=<%=v%>">
 
-<!-- GPT Ads -->
 <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" onerror="console.warn('GPT failed')"></script>
 <script>
 stpd=window.stpd||{que:[]};window.googletag=window.googletag||{cmd:[]};
@@ -49,7 +48,6 @@ googletag.cmd.push(function(){
 });
 </script>
 <script>(function(){var s=document.createElement('script');s.src='https://stpd.cloud/saas/5796';s.async=true;s.onerror=function(){};document.head.appendChild(s)})()</script>
-
 <style>
 .ad-lab-hero{text-align:center;max-width:970px;margin:0 auto 8px;min-height:50px}
 .ad-lab-hero .ad-label,.ad-lab-below .ad-label,.ad-lab-sticky .ad-label{font-size:.55rem;text-transform:uppercase;letter-spacing:.06em;color:var(--lab-text-muted);opacity:.5;margin-bottom:4px}
@@ -65,25 +63,20 @@ googletag.cmd.push(function(){
 <%@ include file="../../modern/components/nav-header.jsp" %>
 
 <div class="lab-wrap">
-
-<!-- Hero Ad -->
 <div class="ad-lab-hero" id="ad_lab_hero"><div class="ad-label">Advertisement</div></div>
 
   <nav class="lab-crumb">
     <a href="<%=request.getContextPath()%>/">Home</a> /
     <a href="<%=request.getContextPath()%>/physics/">Physics</a> /
     <a href="<%=request.getContextPath()%>/physics/labs/">Labs</a> /
-    <span>Simple Pendulum</span>
+    <span>Double Pendulum</span>
   </nav>
 
-  <h1 class="lab-title">Simple Pendulum</h1>
+  <h1 class="lab-title">Double Pendulum — Chaos</h1>
 
-  <!-- Tabs -->
   <div id="labTabs"></div>
 
   <div class="lab-grid">
-
-    <!-- Canvas area: sim always visible, graph appears alongside -->
     <div class="lab-canvas-area" id="canvasArea">
       <div class="lab-canvas-wrap" id="simPanel">
         <canvas id="simCanvas"></canvas>
@@ -92,38 +85,30 @@ googletag.cmd.push(function(){
         <canvas id="graphCanvas" width="600" height="450"></canvas>
         <canvas id="timeCanvas" width="600" height="450" style="display:none;"></canvas>
         <canvas id="energyCanvas" width="600" height="300" style="display:none;"></canvas>
-        <canvas id="peWellCanvas" width="600" height="400" style="display:none;"></canvas>
       </div>
     </div>
 
-    <!-- Sidebar -->
     <div class="lab-sidebar">
       <div id="transport"></div>
       <div id="controls"></div>
       <div id="presets"></div>
       <div id="varPicker"></div>
     </div>
-
   </div>
 
-  <!-- Educational content -->
   <section class="lab-info" id="labInfo"></section>
 
-  <!-- Cross-links -->
   <div class="lab-related">
     <span>Also try &rarr;</span>
-    <a href="<%=request.getContextPath()%>/physics/labs/double-pendulum.jsp">Double Pendulum (Chaos)</a>
+    <a href="<%=request.getContextPath()%>/physics/labs/pendulum.jsp">Simple Pendulum</a>
     <a href="<%=request.getContextPath()%>/physics/labs/spring.jsp">Spring Oscillator</a>
-    <a href="<%=request.getContextPath()%>/physics/acceleration-calculator.jsp">Acceleration Calculator</a>
+    <a href="<%=request.getContextPath()%>/physics/labs/double-spring.jsp">Double Spring</a>
     <a href="<%=request.getContextPath()%>/physics/">All Physics Tools</a>
   </div>
 
-  <!-- Below-content Ad -->
   <div class="ad-lab-below" id="ad_lab_below"><div class="ad-label">Advertisement</div></div>
-
 </div>
 
-<!-- Sticky Footer Ad -->
 <div class="ad-lab-sticky" id="adLabSticky">
   <button class="ad-close" onclick="document.getElementById('adLabSticky').classList.add('ad-dismissed');try{localStorage.setItem('ad_lab_sticky_d','1')}catch(e){}">&times;</button>
   <div class="ad-label">Advertisement</div>
@@ -132,14 +117,13 @@ googletag.cmd.push(function(){
 
 <script type="module">
 import { createLab } from './js/lab.js';
-import { PendulumSim } from './js/sims/pendulum.js';
+import { DoublePendulumSim } from './js/sims/double-pendulum.js';
 
-const lab = createLab(PendulumSim, {
+const lab = createLab(DoublePendulumSim, {
   simCanvas:    document.getElementById('simCanvas'),
   graphCanvas:  document.getElementById('graphCanvas'),
   timeCanvas:   document.getElementById('timeCanvas'),
   energyCanvas: document.getElementById('energyCanvas'),
-  peWellCanvas: document.getElementById('peWellCanvas'),
   canvasArea:   document.getElementById('canvasArea'),
   controls:     document.getElementById('controls'),
   transport:    document.getElementById('transport'),
@@ -148,20 +132,17 @@ const lab = createLab(PendulumSim, {
   varPicker:    document.getElementById('varPicker'),
 });
 
-document.getElementById('labInfo').innerHTML = PendulumSim.info || '';
+document.getElementById('labInfo').innerHTML = DoublePendulumSim.info || '';
 </script>
 
 <script>
 (function(){
-  // Hero ad — immediate
   if(typeof googletag!=='undefined'&&googletag.cmd)googletag.cmd.push(function(){googletag.display('ad_lab_hero')});
-  // Below ad — lazy
   var below=document.getElementById('ad_lab_below');
   if(below&&'IntersectionObserver'in window){
     var obs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){if(typeof googletag!=='undefined'&&googletag.cmd)googletag.cmd.push(function(){googletag.display('ad_lab_below');below.classList.add('ad-loaded')});obs.unobserve(below)}})},{rootMargin:'200px'});
     obs.observe(below);
   }
-  // Sticky ad — delayed
   var sticky=document.getElementById('adLabSticky');
   if(sticky&&!(localStorage.getItem('ad_lab_sticky_d')==='1')){
     window.addEventListener('load',function(){setTimeout(function(){if(typeof googletag!=='undefined'&&googletag.cmd)googletag.cmd.push(function(){googletag.display('ad_lab_sticky');sticky.classList.add('ad-visible')});setTimeout(function(){if(sticky&&!sticky.classList.contains('ad-dismissed'))sticky.classList.add('ad-dismissed')},30000)},window.innerWidth<768?4000:2000)});

@@ -89,6 +89,12 @@ export const PendulumSim = {
   // Which var to detect zero-crossings for period measurement
   periodVar: 1, // angular velocity
 
+  // Trail point: bob position (for motion trail on sim canvas)
+  trailPoint(vars, params) {
+    const L = params.length;
+    return { wx: L * Math.sin(vars[0]), wy: -L * Math.cos(vars[0]) };
+  },
+
   // Vectors for display on sim canvas: velocity + acceleration at bob
   vectors(vars, params) {
     const [angle, angVel] = vars;
