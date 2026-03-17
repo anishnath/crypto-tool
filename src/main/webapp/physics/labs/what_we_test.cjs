@@ -1650,6 +1650,152 @@ section('Kapitza — Pivot Vibrates');
   assert(Math.abs(state[3]) > 0.001 || Math.abs(state[4]) > 0.001, 'Pivot Y is moving');
 }
 
+// --- Molecule sim ---
+const MoleculeSim = {
+  _getN(p) { return Math.round(p.numAtoms); },
+  _timeIdx(p) { return 4 * this._getN(p); },
+  params: {
+    numAtoms: { value: 3 }, mass: { value: 0.5 }, stiffness: { value: 6.0 },
+    restLength: { value: 2.0 }, gravity: { value: 2.0 }, damping: { value: 0 },
+    wallSize: { value: 5.0 }, elasticity: { value: 0.8 },
+  },
+  init(p) {
+    const N = this._getN(p);
+    const state = new Array(4*N+1).fill(0);
+    const radius = p.restLength * 0.8;
+    for (let i = 0; i < N; i++) {
+      const angle = (2*Math.PI*i)/N - Math.PI/2;
+      state[i*4] = radius * Math.cos(angle);
+      state[i*4+1] = radius * Math.sin(angle) + 1;
+    }
+    state[4*N] = 0;
+    return state;
+  },
+  evaluate(vars, change, params, isDragging) {
+    const N = Math.round(params.numAtoms);
+    change[4*N] = 1;
+    if (isDragging) return;
+    const { mass, stiffness: k, restLength: L0, gravity: g, damping: b } = params;
+    for (let i=0;i<N;i++) {
+      change[i*4] = vars[i*4+2]; change[i*4+1] = vars[i*4+3];
+      change[i*4+2] = 0; change[i*4+3] = -g;
+    }
+    for (let i=0;i<N;i++) for (let j=i+1;j<N;j++) {
+      const dx=vars[j*4]-vars[i*4], dy=vars[j*4+1]-vars[i*4+1];
+      const dist=Math.hypot(dx,dy); if(dist<1e-10) continue;
+      const force=k*(dist-L0)/dist;
+      const fx=force*dx, fy=force*dy;
+      change[i*4+2]+=fx/mass; change[i*4+3]+=fy/mass;
+      change[j*4+2]-=fx/mass; change[j*4+3]-=fy/mass;
+    }
+    if(b>0) for(let i=0;i<N;i++){change[i*4+2]-=b*vars[i*4+2]/mass; change[i*4+3]-=b*vars[i*4+3]/mass;}
+  },
+  postStep(vars, params) {
+    const N=Math.round(params.numAtoms), W=params.wallSize, e=params.elasticity;
+    for(let i=0;i<N;i++){
+      const xi=i*4,yi=i*4+1,vxi=i*4+2,vyi=i*4+3;
+      if(vars[xi]<-W){vars[xi]=-W;vars[vxi]=Math.abs(vars[vxi])*e;}
+      if(vars[xi]>W){vars[xi]=W;vars[vxi]=-Math.abs(vars[vxi])*e;}
+      if(vars[yi]<-W){vars[yi]=-W;vars[vyi]=Math.abs(vars[vyi])*e;}
+      if(vars[yi]>W){vars[yi]=W;vars[vyi]=-Math.abs(vars[vyi])*e;}
+    }
+  },
+  energy(vars, params) {
+    const N=Math.round(params.numAtoms), {mass,stiffness:k,restLength:L0,gravity:g,wallSize}=params;
+    let KE=0,PE=0;
+    for(let i=0;i<N;i++){const vx=vars[i*4+2],vy=vars[i*4+3];KE+=0.5*mass*(vx*vx+vy*vy);PE+=mass*g*(vars[i*4+1]+wallSize);}
+    for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const dx=vars[j*4]-vars[i*4],dy=vars[j*4+1]-vars[i*4+1];PE+=0.5*k*(Math.hypot(dx,dy)-L0)**2;}
+    return {kinetic:KE,potential:PE,total:KE+PE};
+  },
+  hitTest(wx,wy,vars,params){
+    const N=Math.round(params.numAtoms);
+    for(let i=N-1;i>=0;i--){if(Math.hypot(wx-vars[i*4],wy-vars[i*4+1])<0.5)return{id:i,offsetX:wx-vars[i*4],offsetY:wy-vars[i*4+1]};}
+    return null;
+  },
+  onDrag(id,wx,wy,offset,vars){vars[id*4]=wx-offset.offsetX;vars[id*4+1]=wy-offset.offsetY;vars[id*4+2]=0;vars[id*4+3]=0;},
+  onRelease(){},
+};
+
+section('Molecule — Init 3 Atoms');
+{
+  const p = getParams(MoleculeSim);
+  const state = Float64Array.from(MoleculeSim.init(p));
+  assert(state.length === 13, 'State: 4*3 + 1 = 13 vars');
+  // Atoms should be in a triangle
+  const x0 = state[0], y0 = state[1];
+  const x1 = state[4], y1 = state[5];
+  const x2 = state[8], y2 = state[9];
+  const d01 = Math.hypot(x1-x0, y1-y0);
+  const d02 = Math.hypot(x2-x0, y2-y0);
+  assertClose(d01, d02, 0.01, 'Triangle: atom0-1 ≈ atom0-2 distance');
+}
+
+section('Molecule — Spring Forces at Rest');
+{
+  // Two atoms at exactly rest length apart → zero spring force
+  const p = getParams(MoleculeSim);
+  p.numAtoms = 2;
+  p.gravity = 0;
+  const state = Float64Array.from([0, 0, 0, 0, p.restLength, 0, 0, 0, 0]);
+  const change = new Float64Array(9);
+  MoleculeSim.evaluate(state, change, p, false);
+  assertClose(change[2], 0, 0.01, 'Atom 0: zero x-acceleration at rest length');
+  assertClose(change[6], 0, 0.01, 'Atom 1: zero x-acceleration at rest length');
+}
+
+section('Molecule — Spring Force Direction');
+{
+  const p = getParams(MoleculeSim);
+  p.numAtoms = 2;
+  p.gravity = 0;
+  // Place atoms further than rest length → attraction
+  const state = Float64Array.from([0, 0, 0, 0, p.restLength * 2, 0, 0, 0, 0]);
+  const change = new Float64Array(9);
+  MoleculeSim.evaluate(state, change, p, false);
+  assert(change[2] > 0, 'Stretched: atom 0 pulled toward atom 1 (positive x)');
+  assert(change[6] < 0, 'Stretched: atom 1 pulled toward atom 0 (negative x)');
+}
+
+section('Molecule — Wall Collision');
+{
+  const p = getParams(MoleculeSim);
+  p.numAtoms = 2;
+  const state = Float64Array.from([
+    -6, 0, -1, 0,  // atom 0: past left wall, moving left
+    0, -6, 0, -1,  // atom 1: past bottom wall, moving down
+    0
+  ]);
+  MoleculeSim.postStep(state, p);
+  assertClose(state[0], -5, 0.01, 'Atom 0 clamped to left wall');
+  assert(state[2] > 0, 'Atom 0 velocity reversed (bounced right)');
+  assertClose(state[5], -5, 0.01, 'Atom 1 clamped to bottom wall');
+  assert(state[7] > 0, 'Atom 1 velocity reversed (bounced up)');
+}
+
+section('Molecule — HitTest');
+{
+  const p = getParams(MoleculeSim);
+  p.numAtoms = 3;
+  const state = Float64Array.from(MoleculeSim.init(p));
+  const hit = MoleculeSim.hitTest(state[0], state[1], state, p);
+  assert(hit !== null && hit.id === 0, 'Hit test finds atom 0');
+  const miss = MoleculeSim.hitTest(100, 100, state, p);
+  assert(miss === null, 'Miss when far away');
+}
+
+section('Molecule — Variable Atom Count');
+{
+  for (let n = 2; n <= 6; n++) {
+    const p = getParams(MoleculeSim);
+    p.numAtoms = n;
+    const state = Float64Array.from(MoleculeSim.init(p));
+    assert(state.length === 4*n+1, `${n} atoms: state length = ${4*n+1}`);
+    const change = new Float64Array(4*n+1);
+    MoleculeSim.evaluate(state, change, p, false);
+    assertClose(change[4*n], 1, 1e-10, `${n} atoms: time advances`);
+  }
+}
+
 // ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════

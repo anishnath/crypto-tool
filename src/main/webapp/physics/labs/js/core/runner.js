@@ -154,6 +154,11 @@ export class SimRunner {
     };
     solver(this.state, evaluate, this.dt, this.params);
 
+    // Post-step hook (e.g., wall collisions)
+    if (typeof this.sim.postStep === 'function') {
+      this.sim.postStep(this.state, this.params);
+    }
+
     // Notify tick listeners (graph data collection, etc.)
     for (const fn of this._onTick) {
       fn(this.state, this.params);
