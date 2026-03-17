@@ -1,0 +1,263 @@
+/**
+ * lab.js — The Orchestrator
+ *
+ * Single entry point for creating a physics lab.
+ * Wires: SimRunner + canvases + controls + tabs + presets + interaction.
+ *
+ * Usage in JSP:
+ *   import { createLab } from './js/lab.js';
+ *   import { PendulumSim } from './js/sims/pendulum.js';
+ *   const lab = createLab(PendulumSim, { simCanvas, graphCanvas, ... });
+ */
+
+import { SimRunner } from './core/runner.js';
+import { SimCanvas, screenToWorld } from './canvas/sim-canvas.js';
+import { GraphCanvas } from './canvas/graph-canvas.js';
+import { TimeGraph } from './canvas/time-graph.js';
+import { EnergyBar } from './canvas/energy-bar.js';
+import { bindInteraction } from './core/interact.js';
+import { TabSwitcher } from './ui/tabs.js';
+import { buildSimControls, extractDefaults } from './ui/controls.js';
+import { buildEngineControls, encodeShareUrl, decodeShareUrl } from './ui/engine-controls.js';
+import { buildTransport } from './ui/transport.js';
+import { buildPresets, applyPreset } from './ui/presets.js';
+import { buildVarPicker, resolveGraphDefaults } from './ui/var-picker.js';
+
+/**
+ * @param {object} sim — sim definition
+ * @param {object} elements — DOM elements
+ * @returns {{ runner: SimRunner, destroy: function }}
+ */
+export function createLab(sim, elements) {
+  const {
+    simCanvas, graphCanvas, timeCanvas, energyCanvas,
+    controls, transport, presets, tabs, varPicker,
+    canvasArea,
+  } = elements;
+
+  // --- Runner ---
+  const runner = new SimRunner(sim);
+
+  // Apply shared params from URL (?key=val from ToolUtils, or #key=val fallback)
+  if (typeof window !== 'undefined') {
+    let sharedParams = {};
+    // Prefer ?query params (ToolUtils.generateShareUrl format)
+    if (window.location.search) {
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.forEach((v, k) => {
+        const num = parseFloat(v);
+        sharedParams[k] = isNaN(num) ? v : num;
+      });
+    }
+    // Fallback: #hash params
+    if (Object.keys(sharedParams).length === 0 && window.location.hash) {
+      sharedParams = decodeShareUrl(window.location.hash);
+    }
+    let applied = false;
+    for (const [k, v] of Object.entries(sharedParams)) {
+      if (runner.params[k] !== undefined) { runner.setParam(k, v); applied = true; }
+    }
+    if (applied) runner.reset();
+  }
+
+  // --- Simulation Canvas ---
+  let simCvs = null;
+  if (simCanvas) {
+    simCvs = new SimCanvas(simCanvas, sim.worldRect || { xMin: -3, xMax: 3, yMin: -3, yMax: 3 });
+  }
+
+  // --- State for optional overlays ---
+  let showEnergy = true;
+  let showClock = true;
+  let bgMode = 'dark';
+  let energyMax = 1;
+  const trailPoints = [];
+  const maxTrail = 60;
+
+  // --- Graph Canvas ---
+  let graphCvs = null;
+  if (graphCanvas && sim.views?.includes('phase')) {
+    const gd = resolveGraphDefaults(sim.vars, sim.graphDefaults, 'phase');
+    const xDef = sim.vars[gd.x];
+    const yDef = sim.vars[gd.y];
+    graphCvs = new GraphCanvas(graphCanvas, {
+      xVar: xDef?.index ?? 0,
+      yVar: yDef?.index ?? 1,
+      xLabel: xDef?.symbol || gd.x,
+      yLabel: yDef?.symbol || gd.y,
+    });
+  }
+
+  // --- Time Graph ---
+  let timeCvs = null;
+  if (timeCanvas && sim.views?.includes('time')) {
+    timeCvs = new TimeGraph(timeCanvas);
+    const timeDefaults = sim.graphDefaults?.time;
+    if (Array.isArray(timeDefaults)) {
+      timeDefaults.forEach(varName => {
+        const def = sim.vars[varName];
+        if (def) timeCvs.addLine(def.index, def.symbol || def.label);
+      });
+    }
+    // Add energy lines if sim supports energy
+    if (typeof sim.energy === 'function') {
+      timeCvs.addEnergyLine('kinetic', 'KE', '#EF4444');
+      timeCvs.addEnergyLine('potential', 'PE', '#3B82F6');
+      timeCvs.addEnergyLine('total', 'Total', '#10B981');
+    }
+  }
+
+  // --- Energy Bar ---
+  let energyCvs = null;
+  if (energyCanvas && sim.views?.includes('energy') && typeof sim.energy === 'function') {
+    energyCvs = new EnergyBar(energyCanvas);
+  }
+
+  // --- Tabs ---
+  let tabSwitcher = null;
+  if (tabs && sim.views) {
+    tabSwitcher = new TabSwitcher(tabs, sim.views, {
+      canvasArea: canvasArea || null,
+      graphCanvases: {
+        phase: graphCanvas || null,
+        time: timeCanvas || null,
+        energy: energyCanvas || null,
+      },
+    });
+    tabSwitcher.restoreFromSession();
+
+    // Show var-picker only on graph tabs
+    if (varPicker) {
+      tabSwitcher.onSwitch(tab => {
+        varPicker.style.display = (tab === 'phase' || tab === 'time') ? '' : 'none';
+      });
+      varPicker.style.display = (tabSwitcher.active === 'phase' || tabSwitcher.active === 'time') ? '' : 'none';
+    }
+  }
+
+  // --- Controls ---
+  let controlsHandle = null;
+  if (controls) {
+    controlsHandle = buildSimControls(sim.params, controls, (name, value) => {
+      runner.setParam(name, value);
+      // If sim is paused, re-render immediately
+      if (!runner.playing) runner._notifyRender();
+    });
+  }
+
+  // --- Transport ---
+  let transportHandle = null;
+  if (transport) {
+    transportHandle = buildTransport(transport, runner);
+  }
+
+  // --- Presets ---
+  let presetsHandle = null;
+  if (presets && sim.presets) {
+    const defaults = extractDefaults(sim.params);
+    presetsHandle = buildPresets(sim.presets, presets, (preset) => {
+      const newParams = applyPreset(defaults, preset);
+      for (const [k, v] of Object.entries(newParams)) runner.setParam(k, v);
+      runner.reset();
+      if (graphCvs) graphCvs.clear();
+      if (timeCvs) timeCvs.clear();
+      if (energyCvs) energyCvs.reset();
+      energyMax = 1;
+      if (controlsHandle) controlsHandle.updateSliders(runner.params);
+    });
+  }
+
+  // --- Engine Controls ---
+  if (controls) {
+    buildEngineControls(controls, runner, {
+      showEnergy,
+      showClock,
+      onToggleEnergy(v) { showEnergy = v; },
+      onToggleClock(v) { showClock = v; },
+      onBackground(mode) { bgMode = mode; },
+      toolName: sim.name || 'Physics Lab',
+    });
+  }
+
+  // --- Var Picker ---
+  if (varPicker && sim.vars && sim.graphDefaults) {
+    const gd = resolveGraphDefaults(sim.vars, sim.graphDefaults, 'phase');
+    buildVarPicker(sim.vars, varPicker, gd, (xIdx, yIdx, xLabel, yLabel) => {
+      if (graphCvs) {
+        graphCvs.setVars(xIdx, yIdx, xLabel, yLabel);
+      }
+    });
+  }
+
+  // --- Interaction (drag) ---
+  let interactHandle = null;
+  if (simCvs && sim.hitTest) {
+    interactHandle = bindInteraction(
+      simCanvas, sim, runner,
+      (px, py) => simCvs.toWorld(px, py)
+    );
+  }
+
+  // --- Render callback ---
+  runner.onRender((state, params) => {
+    const activeTab = tabSwitcher?.active || 'sim';
+    const isDark = bgMode !== 'white';
+
+    // Sim canvas — always renders (visible in all tabs)
+    if (simCvs) {
+      const bg = bgMode === 'white' ? '#ffffff' : '#0E1420';
+      simCvs.clear(bg);
+      if (bgMode === 'grid') simCvs.grid(1, '#ffffff', 0.04);
+
+      sim.render(simCvs, state, params);
+
+      // Clock overlay
+      if (showClock) {
+        simCvs.clockOverlay(runner.getTime(), isDark);
+      }
+
+      // Energy bar overlay on sim canvas
+      if (showEnergy && sim.energy) {
+        const e = sim.energy(state, params);
+        energyMax = Math.max(energyMax, e.total * 1.1, 0.01);
+        simCvs.energyOverlay(e.kinetic, e.potential, e.total, energyMax, isDark);
+      }
+    }
+
+    // Graph canvases — render when their tab is active (shown side-by-side with sim)
+    if (graphCvs && activeTab === 'phase') graphCvs.render();
+    if (timeCvs && activeTab === 'time') timeCvs.render();
+    if (energyCvs && activeTab === 'energy' && sim.energy) {
+      const e = sim.energy(state, params);
+      energyCvs.update(e.kinetic, e.potential, e.total);
+      energyCvs.render();
+    }
+  });
+
+  // --- Tick callback (data collection for graphs) ---
+  runner.onTick((state, params) => {
+    if (graphCvs) graphCvs.push(state);
+    const t = runner.getTime();
+    if (timeCvs) timeCvs.push(t, state);
+
+    // Feed energy data to time graph + energy chart
+    if (sim.energy) {
+      const e = sim.energy(state, params);
+      if (timeCvs) timeCvs.pushEnergy(t, e);
+      if (energyCvs) energyCvs.pushTime(t, e.kinetic, e.potential, e.total);
+    }
+  });
+
+  // --- Auto-play ---
+  runner.play();
+
+  // --- Destroy ---
+  function destroy() {
+    runner.destroy();
+    if (interactHandle) interactHandle.destroy();
+    if (transportHandle) transportHandle.destroy();
+    if (simCvs) simCvs.destroy();
+  }
+
+  return { runner, destroy };
+}
