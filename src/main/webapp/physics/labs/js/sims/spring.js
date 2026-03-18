@@ -19,7 +19,8 @@ export const SpringSim = {
   varCount: 3,
 
   params: {
-    mass:       { value: 1.0,  min: 0.1, max: 10, step: 0.1,  label: 'Mass',            unit: 'kg' },
+    mass:       { value: 1.0,  min: 0.1, max: 10, step: 0.1,  label: 'Block Mass',       unit: 'kg' },
+    springMass: { value: 0,    min: 0, max: 2,    step: 0.05, label: 'Spring Mass',      unit: 'kg' },
     stiffness:  { value: 3.0,  min: 0.1, max: 30, step: 0.1,  label: 'Spring Stiffness', unit: 'N/m' },
     damping:    { value: 0.1,  min: 0, max: 5,    step: 0.01, label: 'Damping',          unit: '' },
     restLength: { value: 1.0,  min: 0.1, max: 3,  step: 0.1,  label: 'Rest Length',      unit: 'm' },
@@ -43,6 +44,7 @@ export const SpringSim = {
     { name: 'Heavy',      params: { mass: 8 } },
     { name: 'No Damping', params: { damping: 0 } },
     { name: 'Overdamped', params: { damping: 4, stiffness: 1 } },
+    { name: 'Heavy Spring', params: { springMass: 1.0, damping: 0 } },
   ],
 
   init(p) {
@@ -54,18 +56,20 @@ export const SpringSim = {
     if (isDragging) return;
 
     const [x, v] = vars;
-    const { mass, stiffness, damping, restLength, fixedPoint } = params;
+    const { mass, springMass, stiffness, damping, restLength, fixedPoint } = params;
+    const mEff = mass + (springMass || 0) / 3; // effective mass includes m_spring/3
     const stretch = x - fixedPoint - restLength;
 
     change[0] = v;
-    change[1] = (-stiffness * stretch - damping * v) / mass;
+    change[1] = (-stiffness * stretch - damping * v) / mEff;
   },
 
   energy(vars, params) {
     const [x, v] = vars;
-    const { mass, stiffness, restLength, fixedPoint } = params;
+    const { mass, springMass, stiffness, restLength, fixedPoint } = params;
+    const mEff = mass + (springMass || 0) / 3;
     const stretch = x - fixedPoint - restLength;
-    const KE = 0.5 * mass * v * v;
+    const KE = 0.5 * mEff * v * v;
     const PE = 0.5 * stiffness * stretch * stretch;
     return { kinetic: KE, potential: PE, total: KE + PE };
   },
@@ -77,16 +81,18 @@ export const SpringSim = {
   peWellConfig: { posVar: 0, posLabel: 'x (m)', range: { min: -2, max: 5 } },
 
   theoreticalPeriod(params) {
-    return 2 * Math.PI * Math.sqrt(params.mass / params.stiffness);
+    const mEff = params.mass + (params.springMass || 0) / 3;
+    return 2 * Math.PI * Math.sqrt(mEff / params.stiffness);
   },
   periodVar: 1, // velocity
 
   vectors(vars, params) {
     const [x, v] = vars;
-    const { mass, stiffness, damping, restLength, fixedPoint } = params;
+    const { mass, springMass, stiffness, damping, restLength, fixedPoint } = params;
+    const mEff = mass + (springMass || 0) / 3;
     const stretch = x - fixedPoint - restLength;
     const force = -stiffness * stretch - damping * v;
-    const accel = force / mass;
+    const accel = force / mEff;
     return {
       pos: { x: x, y: 0 },
       velocity: { x: v, y: 0, mag: Math.abs(v) },
@@ -140,11 +146,12 @@ export const SpringSim = {
     <p>Where <code>k</code> is spring stiffness, <code>m</code> is mass, <code>L₀</code> is the natural (rest) length, <code>x₀</code> is the fixed-point position, and <code>b</code> is the damping coefficient.</p>
 
     <h3>Period and Frequency</h3>
-    <p><code>T = 2π √(m/k)</code> &nbsp;&nbsp; <code>f = 1/T</code> &nbsp;&nbsp; <code>ω₀ = √(k/m)</code></p>
-    <p>Key insight: the period depends on mass and stiffness — <strong>not amplitude</strong>. Pull the block further and it oscillates with the same frequency, just a larger swing. Verify: drag the block to different distances, the period is identical.</p>
+    <p><code>T = 2π √(m_eff/k)</code> &nbsp;&nbsp; where <code>m_eff = m_block + m_spring/3</code></p>
+    <p>The <strong>effective mass</strong> includes one-third of the spring's own mass. This correction comes from integrating the kinetic energy of the spring coils (which move with velocity proportional to their distance from the fixed point). With a massless spring (default), this reduces to the textbook <code>T = 2π√(m/k)</code>.</p>
+    <p>Try the "Heavy Spring" preset — with a 1 kg spring on a 1 kg block, the period increases by ~15% compared to the massless case. Real oscillators behave like this.</p>
 
     <h3>Energy</h3>
-    <p><code>KE = ½mv²</code> &nbsp;&nbsp; <code>PE = ½k(stretch)²</code></p>
+    <p><code>KE = ½m_eff·v²</code> where <code>m_eff = m_block + m_spring/3</code> &nbsp;&nbsp; <code>PE = ½k(stretch)²</code></p>
     <p>Switch to the <strong>Energy tab</strong>:</p>
     <ul>
       <li>At maximum stretch/compression: all PE (block momentarily stops), KE = 0</li>

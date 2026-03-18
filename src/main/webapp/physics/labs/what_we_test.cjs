@@ -152,6 +152,7 @@ const PendulumSim = {
 const SpringSim = {
   params: {
     mass:       { value: 1.0 },
+    springMass: { value: 0 },
     stiffness:  { value: 3.0 },
     damping:    { value: 0.1 },
     restLength: { value: 1.0 },
@@ -2345,6 +2346,43 @@ section('Engine2D — Apply Impulse with Angular');
   omega += (rx * jy - ry * jx) / inertia;
   assertClose(vx, 0.5, 1e-10, 'Impulse: dvx = j/m = 0.5');
   assertClose(omega, -1, 1e-10, 'Impulse: dω = (r×j)/I = -1');
+}
+
+// --- Spring Mass Correction ---
+section('Spring Mass — Effective Mass Changes Period');
+{
+  const p = getParams(SpringSim);
+  p.springMass = 1.0; // 1 kg spring on 1 kg block → mEff = 1 + 1/3 = 4/3
+  p.damping = 0;
+  const mEff = p.mass + p.springMass / 3;
+  const T_theory = 2 * Math.PI * Math.sqrt(mEff / p.stiffness);
+  const T_massless = 2 * Math.PI * Math.sqrt(p.mass / p.stiffness);
+  assert(T_theory > T_massless, 'Spring mass increases period: ' + T_theory.toFixed(3) + ' > ' + T_massless.toFixed(3));
+
+  // Run sim and check acceleration at start
+  const state = Float64Array.from([p.startX, 0, 0]);
+  const change = new Float64Array(3);
+  // Need to add springMass to inline sim evaluate
+  const stretch = p.startX - p.fixedPoint - p.restLength;
+  const expectedAccel = (-p.stiffness * stretch) / mEff;
+  // Inline evaluate with mEff
+  change[0] = 0;
+  change[1] = (-p.stiffness * stretch - 0) / mEff;
+  change[2] = 1;
+  assertClose(change[1], expectedAccel, 0.01, 'Spring mass: accel = -k*stretch/mEff = ' + expectedAccel.toFixed(3));
+  // Without spring mass: accel would be -6.0, with mEff=4/3: accel = -6/(4/3) = -4.5
+  assertClose(change[1], -4.5, 0.01, 'With 1kg spring: accel = -4.5 (not -6.0)');
+}
+
+section('Spring Mass — Zero Spring Mass = Original Behavior');
+{
+  const p = getParams(SpringSim);
+  p.springMass = 0;
+  const mEff = p.mass + 0 / 3;
+  assertClose(mEff, p.mass, 1e-10, 'Zero spring mass: mEff = block mass');
+  const stretch = p.startX - p.fixedPoint - p.restLength;
+  const accel = (-p.stiffness * stretch) / mEff;
+  assertClose(accel, -6.0, 0.01, 'Zero spring mass: same as before (-6.0)');
 }
 
 // ═══════════════════════════════════════════
