@@ -31,6 +31,7 @@ export const DoubleSpringSim = {
     mass1:       { value: 1.0,  min: 0.2, max: 10, step: 0.1,  label: 'Mass 1',         unit: 'kg' },
     mass2:       { value: 1.0,  min: 0.2, max: 10, step: 0.1,  label: 'Mass 2',         unit: 'kg' },
     stiffness:   { value: 6.0,  min: 0.1, max: 50, step: 0.1,  label: 'Stiffness',      unit: 'N/m' },
+    springMass:  { value: 0,    min: 0, max: 2,    step: 0.05, label: 'Spring Mass',    unit: 'kg' },
     damping:     { value: 0.0,  min: 0, max: 5,    step: 0.01, label: 'Damping',         unit: '' },
     restLength:  { value: 2.0,  min: 0.5, max: 5,  step: 0.1,  label: 'Rest Length',     unit: 'm' },
     thirdSpring: { value: true, type: 'bool',                   label: 'Third Spring (wall₂)' },
@@ -86,7 +87,7 @@ export const DoubleSpringSim = {
     if (isDragging) return;
 
     const [x1, x2, v1, v2] = vars;
-    const { mass1, mass2, stiffness: k, damping: b, restLength: R, wallLeft: w1, wallRight: w2, thirdSpring } = params;
+    const { mass1, mass2, springMass, stiffness: k, damping: b, restLength: R, wallLeft: w1, wallRight: w2, thirdSpring } = params;
 
     // Spring stretches (positive = stretched beyond rest length)
     const L1 = (x1 - w1) - R;   // spring1: wall1 → block1
@@ -94,25 +95,33 @@ export const DoubleSpringSim = {
     const k3 = thirdSpring ? k : 0;
     const L3 = thirdSpring ? (w2 - x2) - R : 0; // spring3: block2 → wall2
 
+    // Effective mass: each block gets +ms/3 for each spring attached to it
+    // Block 1 is connected to spring1 + spring2 → +2*(ms/3)
+    // Block 2 is connected to spring2 + (spring3 if enabled) → +(1 or 2)*(ms/3)
+    const ms3 = (springMass || 0) / 3;
+    const mEff1 = mass1 + 2 * ms3;
+    const mEff2 = mass2 + (thirdSpring ? 2 : 1) * ms3;
+
     // Forces: Hooke's law + damping
-    // F1 = -k*L1 + k*L2 - b*v1  (spring1 pulls left, spring2 pulls right)
-    // F2 = -k*L2 + k3*L3 - b*v2  (spring2 pulls left, spring3 pulls right)
     change[0] = v1;
     change[1] = v2;
-    change[2] = (-k * L1 + k * L2 - b * v1) / mass1;
-    change[3] = (-k * L2 + k3 * L3 - b * v2) / mass2;
+    change[2] = (-k * L1 + k * L2 - b * v1) / mEff1;
+    change[3] = (-k * L2 + k3 * L3 - b * v2) / mEff2;
   },
 
   energy(vars, params) {
     const [x1, x2, v1, v2] = vars;
-    const { mass1, mass2, stiffness: k, restLength: R, wallLeft: w1, wallRight: w2, thirdSpring } = params;
+    const { mass1, mass2, springMass, stiffness: k, restLength: R, wallLeft: w1, wallRight: w2, thirdSpring } = params;
 
     const L1 = (x1 - w1) - R;
     const L2 = (x2 - x1) - R;
     const L3 = thirdSpring ? (w2 - x2) - R : 0;
     const k3 = thirdSpring ? k : 0;
 
-    const KE = 0.5 * mass1 * v1 * v1 + 0.5 * mass2 * v2 * v2;
+    const ms3 = (springMass || 0) / 3;
+    const mEff1 = mass1 + 2 * ms3;
+    const mEff2 = mass2 + (thirdSpring ? 2 : 1) * ms3;
+    const KE = 0.5 * mEff1 * v1 * v1 + 0.5 * mEff2 * v2 * v2;
     const PE = 0.5 * k * L1 * L1 + 0.5 * k * L2 * L2 + 0.5 * k3 * L3 * L3;
     return { kinetic: KE, potential: PE, total: KE + PE };
   },
@@ -142,16 +151,16 @@ export const DoubleSpringSim = {
   vectors(vars, params) {
     // Show block1 vectors (primary)
     const [x1, x2, v1, v2] = vars;
-    const { mass1, stiffness: k, damping: b, restLength: R, wallLeft: w1, wallRight: w2, thirdSpring } = params;
+    const { mass1, springMass, stiffness: k, damping: b, restLength: R, wallLeft: w1, wallRight: w2, thirdSpring } = params;
+    const ms3 = (springMass || 0) / 3;
+    const mEff1 = mass1 + 2 * ms3;
     const L1 = (x1 - w1) - R;
     const L2 = (x2 - x1) - R;
-    const k3 = thirdSpring ? k : 0;
-    const L3 = thirdSpring ? (w2 - x2) - R : 0;
     const F1 = -k * L1 + k * L2 - b * v1;
     return {
       pos: { x: x1, y: 0 },
       velocity: { x: v1, y: 0, mag: Math.abs(v1) },
-      accel: { x: F1 / mass1, y: 0, mag: Math.abs(F1 / mass1) },
+      accel: { x: F1 / mEff1, y: 0, mag: Math.abs(F1 / mEff1) },
     };
   },
 
