@@ -381,9 +381,100 @@
     </url>
     <url>
         <loc>https://8gwifi.org/chemistry/molecule-draw.jsp</loc>
-        <lastmod>2026-03-17</lastmod>
+        <lastmod>2026-03-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.95</priority>
+    </url>
+    <!-- Physics Labs -->
+    <url>
+        <loc>https://8gwifi.org/physics/labs/</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.95</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/pendulum.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.90</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/spring.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.90</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/double-spring.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/double-pendulum.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.90</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/compare-pendulum.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/kapitza-pendulum.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/cart-pendulum.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/collide-blocks.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/billiards.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.90</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/newtons-cradle.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.90</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/molecule.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/brachistochrone.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/string-wave.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.90</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/pile.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
     </url>
     <url>
         <loc>https://8gwifi.org/unit-converter-chemistry.jsp</loc>

@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-03-16T00:00:00.000Z",
-  "totalTools": 402,
+  "totalTools": 417,
   "categories": [
     "Blockchain & Crypto",
     "CTF & Challenges",
@@ -2164,6 +2164,111 @@
       "category": "Chemistry",
       "keywords": "molecule draw structure editor smiles mol file reaction drawing molecular weight chemistry",
       "description": "Interactive molecular structure editor. Draw molecules, paste SMILES, export MOL/SVG/PNG, reaction mode with RXN export."
+    },
+    {
+      "name": "Physics Labs — Interactive Simulations",
+      "url": "physics/labs/",
+      "category": "Physics",
+      "keywords": "physics labs interactive simulations pendulum spring chaos billiards wave equation",
+      "description": "15 interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations."
+    },
+    {
+      "name": "Pendulum Lab",
+      "url": "physics/labs/pendulum.jsp",
+      "category": "Physics",
+      "keywords": "pendulum simulator simple pendulum harmonic motion gravity damping period interactive drag",
+      "description": "Interactive pendulum simulation. Drag the bob, adjust gravity, view phase space and energy graphs."
+    },
+    {
+      "name": "Spring Oscillator Lab",
+      "url": "physics/labs/spring.jsp",
+      "category": "Physics",
+      "keywords": "spring oscillator simulator hooke's law harmonic motion stiffness damping critical damping",
+      "description": "Interactive spring-mass oscillator. Drag the block, adjust stiffness, see phase space and PE well."
+    },
+    {
+      "name": "Double Spring Lab",
+      "url": "physics/labs/double-spring.jsp",
+      "category": "Physics",
+      "keywords": "double spring coupled oscillators normal modes energy transfer spring chain",
+      "description": "Two masses connected by springs between walls. Explore coupled oscillations and normal modes."
+    },
+    {
+      "name": "Double Pendulum — Chaos",
+      "url": "physics/labs/double-pendulum.jsp",
+      "category": "Physics",
+      "keywords": "double pendulum chaos theory sensitive dependence lagrangian mechanics chaotic motion",
+      "description": "Chaotic double pendulum. Drag both bobs, watch chaos unfold, verify energy conservation."
+    },
+    {
+      "name": "Two Chaotic Pendulums — Butterfly Effect",
+      "url": "physics/labs/compare-pendulum.jsp",
+      "category": "Physics",
+      "keywords": "butterfly effect chaos two pendulums divergence lyapunov driven pendulum",
+      "description": "Two identical pendulums with 0.001 rad difference. Watch them diverge — the butterfly effect."
+    },
+    {
+      "name": "Kapitza Pendulum — Inverted",
+      "url": "physics/labs/kapitza-pendulum.jsp",
+      "category": "Physics",
+      "keywords": "kapitza pendulum inverted vibrating pivot parametric stabilization",
+      "description": "Inverted pendulum stabilized by rapid pivot vibration. The famous Kapitza effect."
+    },
+    {
+      "name": "Cart + Pendulum",
+      "url": "physics/labs/cart-pendulum.jsp",
+      "category": "Physics",
+      "keywords": "cart pendulum coupled dynamics lagrangian constraint segway control theory",
+      "description": "Cart on spring track with pendulum. Coupled dynamics — pendulum swings push the cart."
+    },
+    {
+      "name": "Colliding Blocks",
+      "url": "physics/labs/collide-blocks.jsp",
+      "category": "Physics",
+      "keywords": "colliding blocks elastic inelastic collision momentum conservation restitution",
+      "description": "Two blocks with elastic and inelastic collisions. Live momentum readout."
+    },
+    {
+      "name": "Billiards Simulator",
+      "url": "physics/labs/billiards.jsp",
+      "category": "Physics",
+      "keywords": "billiards simulator pool physics 2D elastic collision impulse friction",
+      "description": "Billiard balls on a 2D table. Break shot, friction, adjustable elasticity."
+    },
+    {
+      "name": "Newton's Cradle",
+      "url": "physics/labs/newtons-cradle.jsp",
+      "category": "Physics",
+      "keywords": "newton's cradle momentum chain elastic collision pendulum chain desktop toy",
+      "description": "Classic Newton's cradle. Lift 1, 2, or 3 balls — momentum transfers through the chain."
+    },
+    {
+      "name": "Molecule Dynamics — N-Body",
+      "url": "physics/labs/molecule.jsp",
+      "category": "Physics",
+      "keywords": "molecule simulator N-body spring network atom simulation molecular dynamics orbits",
+      "description": "2-6 atoms connected by springs in 2D. Linear, nonlinear, and attract spring types."
+    },
+    {
+      "name": "Brachistochrone Race",
+      "url": "physics/labs/brachistochrone.jsp",
+      "category": "Physics",
+      "keywords": "brachistochrone cycloid fastest descent calculus of variations curve race",
+      "description": "4 balls race on different curves. The cycloid always wins — calculus of variations."
+    },
+    {
+      "name": "Vibrating String — Wave Equation",
+      "url": "physics/labs/string-wave.jsp",
+      "category": "Physics",
+      "keywords": "vibrating string wave equation PDE standing waves harmonics pluck sine pulse",
+      "description": "Wave equation PDE simulator. Pluck, sine modes, pulse. Standing waves and harmonics."
+    },
+    {
+      "name": "Pile — Rigid Body Stacking",
+      "url": "physics/labs/pile.jsp",
+      "category": "Physics",
+      "keywords": "pile rigid body SAT collision polygon stacking game physics friction restitution",
+      "description": "Drop polygon shapes and watch them stack. SAT collision detection, friction, restitution."
     },
     {
       "name": "Molecular Geometry Calculator",
