@@ -154,7 +154,7 @@ export function createLab(sim, elements) {
     // Show var-picker only on graph tabs
     if (varPicker) {
       tabSwitcher.onSwitch(tab => {
-        varPicker.style.display = (tab === 'phase' || tab === 'time') ? '' : 'none';
+        varPicker.style.display = tab === 'phase' ? '' : 'none';
       });
       varPicker.style.display = (tabSwitcher.active === 'phase' || tabSwitcher.active === 'time') ? '' : 'none';
     }

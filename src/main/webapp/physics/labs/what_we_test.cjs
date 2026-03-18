@@ -1653,10 +1653,13 @@ section('Kapitza — Pivot Vibrates');
 // --- Molecule sim ---
 const MoleculeSim = {
   _getN(p) { return Math.round(p.numAtoms); },
-  _timeIdx(p) { return 4 * this._getN(p); },
+  _atomMass(i, p) { return i === 0 ? p.redMass : p.mass; },
   params: {
-    numAtoms: { value: 3 }, mass: { value: 0.5 }, stiffness: { value: 6.0 },
-    restLength: { value: 2.0 }, gravity: { value: 2.0 }, damping: { value: 0 },
+    numAtoms: { value: 3 }, mass: { value: 0.5 }, redMass: { value: 0.5 },
+    stiffness: { value: 6.0 }, redStiffness: { value: 6.0 },
+    restLength: { value: 2.0 }, redRestLength: { value: 2.0 },
+    springType: { value: 'linear' },
+    gravity: { value: 2.0 }, damping: { value: 0 },
     wallSize: { value: 5.0 }, elasticity: { value: 0.8 },
   },
   init(p) {
@@ -1794,6 +1797,158 @@ section('Molecule — Variable Atom Count');
     MoleculeSim.evaluate(state, change, p, false);
     assertClose(change[4*n], 1, 1e-10, `${n} atoms: time advances`);
   }
+}
+
+// --- Colliding Blocks ---
+const CollideBlocksSim = {
+  params:{mass1:{value:0.5},mass2:{value:1.5},stiffness:{value:6},restLength:{value:2.5},damping:{value:0},elasticity:{value:1},wallLeft:{value:-4},wallRight:{value:8}},
+  init(p){return[p.wallLeft+p.restLength,0,5,-3,0];},
+  evaluate(vars,change,params,isDragging){
+    change[4]=1;if(isDragging)return;
+    const{mass1:m1,mass2:m2,stiffness:k,restLength:R,damping:b,wallLeft}=params;
+    change[0]=vars[1];change[1]=(-k*(vars[0]-wallLeft-R)-b*vars[1])/m1;
+    change[2]=vars[3];change[3]=(-b*vars[3])/m2;
+  },
+  postStep(vars,params){
+    const{mass1:m1,mass2:m2,elasticity:e,wallLeft,wallRight}=params;
+    const bw1=0.25*Math.sqrt(m1),bw2=0.25*Math.sqrt(m2);
+    if(vars[0]-bw1<wallLeft){vars[0]=wallLeft+bw1;vars[1]=-vars[1]*e;}
+    if(vars[2]+bw2>wallRight){vars[2]=wallRight-bw2;vars[3]=-vars[3]*e;}
+    if(vars[0]+bw1>vars[2]-bw2){
+      const ol=(vars[0]+bw1)-(vars[2]-bw2);vars[0]-=ol*m2/(m1+m2);vars[2]+=ol*m1/(m1+m2);
+      const vcm=(m1*vars[1]+m2*vars[3])/(m1+m2);
+      vars[1]=vcm-e*(vars[1]-vcm);vars[3]=vcm-e*(vars[3]-vcm);
+    }
+  },
+  energy(vars,params){
+    const stretch=vars[0]-params.wallLeft-params.restLength;
+    const KE=0.5*params.mass1*vars[1]**2+0.5*params.mass2*vars[3]**2;
+    const PE=0.5*params.stiffness*stretch**2;
+    return{kinetic:KE,potential:PE,total:KE+PE};
+  },
+};
+
+section('Collide Blocks — Elastic Collision Preserves KE');
+{
+  // No spring, no walls — pure collision test
+  const p=getParams(CollideBlocksSim);p.elasticity=1;p.damping=0;p.stiffness=0;
+  p.wallLeft=-100;p.wallRight=100; // walls far away
+  // Block 1 at rest, block 2 approaching
+  const state=Float64Array.from([0,0,2,-3,0]);
+  const mom0=p.mass1*state[1]+p.mass2*state[3];
+  const ke0=0.5*p.mass1*state[1]**2+0.5*p.mass2*state[3]**2;
+  const dt=1/240;
+  for(let i=0;i<480;i++){ // 2 seconds — enough for collision
+    rk4(state,(v,c,par)=>CollideBlocksSim.evaluate(v,c,par,false),dt,p);
+    CollideBlocksSim.postStep(state,p);
+  }
+  const mom1=p.mass1*state[1]+p.mass2*state[3];
+  const ke1=0.5*p.mass1*state[1]**2+0.5*p.mass2*state[3]**2;
+  assertClose(mom1,mom0,0.01,`Elastic: momentum conserved ${mom0.toFixed(3)} → ${mom1.toFixed(3)}`);
+  assertClose(ke1,ke0,0.1,`Elastic: KE conserved ${ke0.toFixed(3)} → ${ke1.toFixed(3)}`);
+}
+
+section('Collide Blocks — Inelastic Loses KE');
+{
+  const p=getParams(CollideBlocksSim);p.elasticity=0.5;p.damping=0;
+  const state=Float64Array.from(CollideBlocksSim.init(p));
+  const e0=CollideBlocksSim.energy(state,p);
+  const dt=1/120;
+  for(let i=0;i<600;i++){
+    rk4(state,(v,c,par)=>CollideBlocksSim.evaluate(v,c,par,false),dt,p);
+    CollideBlocksSim.postStep(state,p);
+  }
+  const e1=CollideBlocksSim.energy(state,p);
+  assert(e1.kinetic<e0.kinetic,'Inelastic: KE decreased after collision');
+}
+
+section('Collide Blocks — Equal Mass Velocity Swap');
+{
+  const p=getParams(CollideBlocksSim);
+  p.mass1=1;p.mass2=1;p.stiffness=0;p.elasticity=1;p.damping=0;
+  // Block 1 at rest, block 2 approaching
+  const state=Float64Array.from([0,0,2,-3,0]);
+  CollideBlocksSim.postStep(state,p); // trigger collision since blocks overlap at x=0,2
+  // No overlap actually. Set them so they collide:
+  const state2=Float64Array.from([1.5,0,1.8,-3,0]);
+  CollideBlocksSim.postStep(state2,p);
+  // After elastic equal-mass collision: velocities swap
+  assertClose(state2[1],-3,0.1,'Equal mass: block1 gets block2 velocity');
+  assertClose(state2[3],0,0.1,'Equal mass: block2 gets block1 velocity');
+}
+
+// --- Cart + Pendulum ---
+const CartPendulumSim = {
+  params:{cartMass:{value:1},bobMass:{value:1},length:{value:1},stiffness:{value:6},gravity:{value:9.8},cartDamp:{value:0},bobDamp:{value:0},startAngle:{value:Math.PI/4}},
+  init(p){return[0,p.startAngle,0,0,0];},
+  evaluate(vars,change,params,isDragging){
+    change[4]=1;if(isDragging)return;
+    const[x,h,v,w]=vars;
+    const{cartMass:M,bobMass:m,length:L,stiffness:k,gravity:g,cartDamp:d,bobDamp:b}=params;
+    const sinH=Math.sin(h),cosH=Math.cos(h),denom=M+m*sinH*sinH;
+    change[0]=v;change[1]=w;
+    change[2]=(m*w*w*L*sinH+m*g*sinH*cosH-k*x-d*v+b*w*cosH/L)/denom;
+    change[3]=(-m*w*w*L*sinH*cosH+k*x*cosH-(M+m)*g*sinH+d*v*cosH-(M+m)*b*w/(m*L))/(L*denom);
+  },
+  energy(vars,params){
+    const[x,h,v,w]=vars;
+    const{cartMass:M,bobMass:m,length:L,stiffness:k,gravity:g}=params;
+    const vxB=v+L*w*Math.cos(h),vyB=L*w*Math.sin(h);
+    const KE=0.5*M*v*v+0.5*m*(vxB*vxB+vyB*vyB);
+    const PE=0.5*k*x*x+m*g*(-L*Math.cos(h)+L);
+    return{kinetic:KE,potential:PE,total:KE+PE};
+  },
+};
+
+section('Cart-Pendulum — Energy Conservation (no damping)');
+{
+  const p=getParams(CartPendulumSim);
+  const state=Float64Array.from(CartPendulumSim.init(p));
+  const e0=CartPendulumSim.energy(state,p);
+  const dt=1/240;
+  for(let i=0;i<2400;i++){
+    rk4(state,(v,c,par)=>CartPendulumSim.evaluate(v,c,par,false),dt,p);
+  }
+  const e1=CartPendulumSim.energy(state,p);
+  const drift=Math.abs(e1.total-e0.total)/Math.max(e0.total,0.01);
+  assert(drift<0.001,`Cart-Pend energy drift: ${(drift*100).toFixed(4)}%`);
+}
+
+section('Cart-Pendulum — Coupling: Pendulum Moves Cart');
+{
+  const p=getParams(CartPendulumSim);
+  const state=Float64Array.from(CartPendulumSim.init(p));
+  assertClose(state[0],0,1e-10,'Cart starts at x=0');
+  const dt=1/120;
+  for(let i=0;i<120;i++){
+    rk4(state,(v,c,par)=>CartPendulumSim.evaluate(v,c,par,false),dt,p);
+  }
+  assert(Math.abs(state[0])>0.01,'Cart moved from equilibrium due to pendulum coupling');
+}
+
+section('Cart-Pendulum — Heavy Cart Barely Moves');
+{
+  const p=getParams(CartPendulumSim);p.cartMass=100;
+  const state=Float64Array.from(CartPendulumSim.init(p));
+  const dt=1/120;
+  for(let i=0;i<300;i++){
+    rk4(state,(v,c,par)=>CartPendulumSim.evaluate(v,c,par,false),dt,p);
+  }
+  assert(Math.abs(state[0])<0.1,'Heavy cart: cart barely moves (|x|<0.1)');
+}
+
+section('Cart-Pendulum — No Spring: Momentum Conserved');
+{
+  const p=getParams(CartPendulumSim);p.stiffness=0;
+  const state=Float64Array.from(CartPendulumSim.init(p));
+  // Total horizontal momentum: M*v + m*(v + L*ω*cosθ) — should be 0 initially
+  const dt=1/120;
+  for(let i=0;i<300;i++){
+    rk4(state,(v,c,par)=>CartPendulumSim.evaluate(v,c,par,false),dt,p);
+  }
+  const[x,h,v,w]=state;const{cartMass:M,bobMass:m,length:L}=p;
+  const pTotal=M*v+m*(v+L*w*Math.cos(h));
+  assertClose(pTotal,0,0.05,'No spring: horizontal momentum conserved ≈ 0');
 }
 
 // ═══════════════════════════════════════════

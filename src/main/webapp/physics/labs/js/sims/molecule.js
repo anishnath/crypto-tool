@@ -4,20 +4,20 @@
  * 2 to 6 atoms connected by springs in 2D with gravity, damping,
  * and elastic wall collisions. Fully connected: N atoms → N(N-1)/2 springs.
  *
- * Physics per atom i:
- *   x_i'' = (ΣF_springs + F_gravity + F_damping) / m_i
- *   y_i'' = same for y
+ * Spring types:
+ *   LINEAR:        F = -k * (|r| - L₀) * r̂  (Hooke's law)
+ *   NON_LINEAR:    F = -k * (|r| - L₀)³ * r̂  (cubic restoring force)
+ *   ATTRACT:       F = -k / |r|²  * r̂  (gravitational-like attraction)
  *
- * Spring force between atoms i,j:
- *   F = -k * (|r_ij| - L₀) * r̂_ij
+ * Special springs: first atom ("red atom") can have different mass,
+ * and its springs can have different stiffness and rest length.
  *
- * Reference: myphysicslab/src/sims/springs/MoleculeSim.ts
+ * Reference: myphysicslab/src/sims/springs/MoleculeSim.ts, Molecule3App.ts
  *
- * State layout: [x1,y1,vx1,vy1, x2,y2,vx2,vy2, ..., time]
- *   Each atom uses 4 vars. Last var is time.
+ * State: [x1,y1,vx1,vy1, x2,y2,vx2,vy2, ..., time]
  */
 
-const ATOM_COLORS = ['#8B5CF6', '#06B6D4', '#EF4444', '#F59E0B', '#10B981', '#EC4899'];
+const ATOM_COLORS = ['#EF4444', '#06B6D4', '#8B5CF6', '#F59E0B', '#10B981', '#EC4899'];
 const ATOM_LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 export const MoleculeSim = {
@@ -32,29 +32,31 @@ export const MoleculeSim = {
     vy1:{ index: 3, label: 'vy₁',    symbol: 'vy₁' },
     x2: { index: 4, label: 'x₂ (m)', symbol: 'x₂' },
     y2: { index: 5, label: 'y₂ (m)', symbol: 'y₂' },
-    // time is always last
-    time: { index: -1, label: 'Time (s)', symbol: 't' }, // index set dynamically
+    time: { index: -1, label: 'Time (s)', symbol: 't' },
   },
 
-  // varCount is dynamic: 4*N + 1. We set a max for buffer allocation.
-  varCount: 4 * 6 + 1, // max 6 atoms
+  varCount: 4 * 6 + 1,
 
   params: {
-    numAtoms:   { value: 3, min: 2, max: 6, step: 1, label: 'Atoms', resetsState: true },
-    mass:       { value: 0.5, min: 0.1, max: 5, step: 0.1, label: 'Mass', unit: 'kg' },
-    stiffness:  { value: 6.0, min: 0.1, max: 30, step: 0.5, label: 'Stiffness', unit: 'N/m' },
-    restLength: { value: 2.0, min: 0.5, max: 5, step: 0.1, label: 'Rest Length', unit: 'm' },
-    gravity:    { value: 2.0, min: 0, max: 10, step: 0.1, label: 'Gravity', unit: 'm/s²' },
-    damping:    { value: 0.0, min: 0, max: 2, step: 0.01, label: 'Damping' },
-    wallSize:   { value: 5.0, min: 2, max: 10, step: 0.5, label: 'Wall Size', unit: 'm' },
-    elasticity: { value: 0.8, min: 0, max: 1, step: 0.05, label: 'Wall Elasticity' },
+    numAtoms:      { value: 3, min: 2, max: 6, step: 1, label: 'Atoms', resetsState: true },
+    springType:    { value: 'linear', type: 'choice', options: ['linear', 'nonlinear', 'attract'], label: 'Spring Type' },
+    mass:          { value: 0.5, min: 0.1, max: 5, step: 0.1, label: 'Mass', unit: 'kg' },
+    redMass:       { value: 0.5, min: 0.1, max: 5, step: 0.1, label: 'Red Mass (A)', unit: 'kg' },
+    stiffness:     { value: 6.0, min: 0.1, max: 30, step: 0.5, label: 'Stiffness', unit: 'N/m' },
+    redStiffness:  { value: 6.0, min: 0.1, max: 30, step: 0.5, label: 'Red Stiffness', unit: 'N/m' },
+    restLength:    { value: 2.0, min: 0.5, max: 5, step: 0.1, label: 'Rest Length', unit: 'm' },
+    redRestLength: { value: 2.0, min: 0.5, max: 5, step: 0.1, label: 'Red Rest Length', unit: 'm' },
+    gravity:       { value: 2.0, min: 0, max: 10, step: 0.1, label: 'Gravity', unit: 'm/s²' },
+    damping:       { value: 0.0, min: 0, max: 2, step: 0.01, label: 'Damping' },
+    wallSize:      { value: 5.0, min: 2, max: 10, step: 0.5, label: 'Wall Size', unit: 'm' },
+    elasticity:    { value: 0.8, min: 0, max: 1, step: 0.05, label: 'Wall Elasticity' },
   },
 
   views: ['sim', 'phase', 'time', 'energy'],
 
   graphDefaults: {
-    phase: { x: 'x1', y: 'vx1' },
-    time: ['x1', 'y1'],
+    phase: { x: 'x1', y: 'y1' },   // 2D trajectory of atom A — the natural view for N-body
+    time: ['x1', 'x2'],             // compare atom A vs B x-positions — shows coupling
   },
 
   get worldRect() {
@@ -62,49 +64,85 @@ export const MoleculeSim = {
   },
 
   presets: [
-    { name: '3 Atoms',     params: { numAtoms: 3 } },
-    { name: '2 Atoms',     params: { numAtoms: 2 } },
-    { name: '4 Atoms',     params: { numAtoms: 4 } },
-    { name: '6 Atoms',     params: { numAtoms: 6 } },
-    { name: 'No Gravity',  params: { gravity: 0, numAtoms: 3 } },
-    { name: 'Stiff',       params: { stiffness: 20, numAtoms: 3 } },
-    { name: 'Bouncy Walls',params: { elasticity: 1.0, numAtoms: 4, damping: 0 } },
+    { name: '3 Atoms',        params: { numAtoms: 3 } },
+    { name: '2 Atoms',        params: { numAtoms: 2 } },
+    { name: '4 Atoms',        params: { numAtoms: 4 } },
+    { name: '6 Atoms',        params: { numAtoms: 6 } },
+    { name: 'No Gravity',     params: { gravity: 0, numAtoms: 3 } },
+    { name: 'Nonlinear',      params: { springType: 'nonlinear', stiffness: 2, numAtoms: 3 } },
+    { name: 'Attract',        params: { springType: 'attract', stiffness: 10, gravity: 0, numAtoms: 4 } },
+    { name: 'Heavy Red Atom', params: { redMass: 3, numAtoms: 3 } },
+    { name: 'Stiff Red',      params: { redStiffness: 20, numAtoms: 3 } },
+    { name: 'Bouncy Walls',   params: { elasticity: 1.0, numAtoms: 4, damping: 0 } },
   ],
 
   _getN(params) { return Math.round(params.numAtoms); },
-  _timeIdx(params) { return 4 * this._getN(params); },
 
   init(p) {
     const N = this._getN(p);
     const state = new Array(4 * N + 1).fill(0);
-    // Place atoms in a circle
     const radius = p.restLength * 0.8;
     for (let i = 0; i < N; i++) {
       const angle = (2 * Math.PI * i) / N - Math.PI / 2;
-      state[i * 4] = radius * Math.cos(angle);     // x
-      state[i * 4 + 1] = radius * Math.sin(angle) + 1; // y (shifted up)
-      // Give slight initial velocities for interesting motion
-      state[i * 4 + 2] = (Math.random() - 0.5) * 2; // vx
-      state[i * 4 + 3] = (Math.random() - 0.5) * 2; // vy
+      state[i * 4] = radius * Math.cos(angle);
+      state[i * 4 + 1] = radius * Math.sin(angle) + 1;
+      state[i * 4 + 2] = (Math.random() - 0.5) * 2;
+      state[i * 4 + 3] = (Math.random() - 0.5) * 2;
     }
-    state[4 * N] = 0; // time
+    state[4 * N] = 0;
     return state;
+  },
+
+  /** Get mass for atom i (atom 0 = red atom with separate mass) */
+  _atomMass(i, params) {
+    return i === 0 ? params.redMass : params.mass;
+  },
+
+  /** Get spring params between atoms i,j (springs touching atom 0 use red params) */
+  _springParams(i, j, params) {
+    const isRed = i === 0 || j === 0;
+    return {
+      k: isRed ? params.redStiffness : params.stiffness,
+      L0: isRed ? params.redRestLength : params.restLength,
+    };
+  },
+
+  /** Compute spring force magnitude between two atoms */
+  _springForce(dist, k, L0, springType) {
+    if (springType === 'attract') {
+      // Gravitational-like attraction: F = -k / r²
+      if (dist < 0.1) return k / (0.1 * 0.1); // clamp to prevent infinity
+      return k / (dist * dist);
+    }
+    const stretch = dist - L0;
+    if (springType === 'nonlinear') {
+      // Cubic: F = k * stretch³
+      return k * stretch * stretch * stretch / dist;
+    }
+    // Linear (Hooke): F = k * stretch
+    return k * stretch / dist;
   },
 
   evaluate(vars, change, params, isDragging) {
     const N = this._getN(params);
     const tIdx = 4 * N;
-    change[tIdx] = 1; // time
+    change[tIdx] = 1;
     if (isDragging) return;
 
-    const { mass, stiffness: k, restLength: L0, gravity: g, damping: b } = params;
+    const { gravity: g, damping: b, springType } = params;
 
-    // Zero force accumulators
+    // Init: position derivatives = velocity, acceleration starts with gravity
     for (let i = 0; i < N; i++) {
-      change[i * 4] = vars[i * 4 + 2];     // dx/dt = vx
-      change[i * 4 + 1] = vars[i * 4 + 3]; // dy/dt = vy
-      change[i * 4 + 2] = 0;               // dvx/dt (accumulate forces)
-      change[i * 4 + 3] = -g;              // dvy/dt starts with gravity (down)
+      const mi = this._atomMass(i, params);
+      change[i * 4] = vars[i * 4 + 2];
+      change[i * 4 + 1] = vars[i * 4 + 3];
+      change[i * 4 + 2] = 0;
+      change[i * 4 + 3] = -g;
+      // Damping
+      if (b > 0) {
+        change[i * 4 + 2] -= b * vars[i * 4 + 2] / mi;
+        change[i * 4 + 3] -= b * vars[i * 4 + 3] / mi;
+      }
     }
 
     // Spring forces between all pairs
@@ -115,28 +153,22 @@ export const MoleculeSim = {
         const dx = xj - xi, dy = yj - yi;
         const dist = Math.hypot(dx, dy);
         if (dist < 1e-10) continue;
-        const stretch = dist - L0;
-        const force = k * stretch / dist; // force per unit displacement direction
-        const fx = force * dx;
-        const fy = force * dy;
 
-        change[i * 4 + 2] += fx / mass;  // atom i pulled toward j
-        change[i * 4 + 3] += fy / mass;
-        change[j * 4 + 2] -= fx / mass;  // atom j pulled toward i
-        change[j * 4 + 3] -= fy / mass;
-      }
-    }
+        const { k, L0 } = this._springParams(i, j, params);
+        const forceMag = this._springForce(dist, k, L0, springType);
+        const fx = forceMag * dx;
+        const fy = forceMag * dy;
 
-    // Damping
-    if (b > 0) {
-      for (let i = 0; i < N; i++) {
-        change[i * 4 + 2] -= b * vars[i * 4 + 2] / mass;
-        change[i * 4 + 3] -= b * vars[i * 4 + 3] / mass;
+        const mi = this._atomMass(i, params);
+        const mj = this._atomMass(j, params);
+        change[i * 4 + 2] += fx / mi;
+        change[i * 4 + 3] += fy / mi;
+        change[j * 4 + 2] -= fx / mj;
+        change[j * 4 + 3] -= fy / mj;
       }
     }
   },
 
-  /** Wall collision — called after each solver step by the runner */
   postStep(vars, params) {
     const N = this._getN(params);
     const W = params.wallSize;
@@ -152,20 +184,28 @@ export const MoleculeSim = {
 
   energy(vars, params) {
     const N = this._getN(params);
-    const { mass, stiffness: k, restLength: L0, gravity: g } = params;
+    const { gravity: g, wallSize, springType } = params;
     let KE = 0, PE = 0;
     for (let i = 0; i < N; i++) {
+      const mi = this._atomMass(i, params);
       const vx = vars[i * 4 + 2], vy = vars[i * 4 + 3];
-      KE += 0.5 * mass * (vx * vx + vy * vy);
-      PE += mass * g * (vars[i * 4 + 1] + params.wallSize); // reference: bottom wall
+      KE += 0.5 * mi * (vx * vx + vy * vy);
+      PE += mi * g * (vars[i * 4 + 1] + wallSize);
     }
     // Spring PE
     for (let i = 0; i < N; i++) {
       for (let j = i + 1; j < N; j++) {
         const dx = vars[j * 4] - vars[i * 4];
         const dy = vars[j * 4 + 1] - vars[i * 4 + 1];
-        const stretch = Math.hypot(dx, dy) - L0;
-        PE += 0.5 * k * stretch * stretch;
+        const dist = Math.hypot(dx, dy);
+        const { k, L0 } = this._springParams(i, j, params);
+        if (springType === 'attract') {
+          PE += dist > 0.1 ? -k / dist : -k / 0.1;
+        } else if (springType === 'nonlinear') {
+          PE += 0.25 * k * (dist - L0) ** 4;
+        } else {
+          PE += 0.5 * k * (dist - L0) ** 2;
+        }
       }
     }
     return { kinetic: KE, potential: PE, total: KE + PE };
@@ -184,17 +224,16 @@ export const MoleculeSim = {
     return null;
   },
 
-  onDrag(id, wx, wy, offset, vars, params) {
+  onDrag(id, wx, wy, offset, vars) {
     const i = id;
     vars[i * 4] = wx - offset.offsetX;
     vars[i * 4 + 1] = wy - offset.offsetY;
-    vars[i * 4 + 2] = 0; // zero velocity
+    vars[i * 4 + 2] = 0;
     vars[i * 4 + 3] = 0;
   },
 
   onRelease() {},
 
-  // Trail for atom 0
   trailPoint(vars) {
     return { wx: vars[0], wy: vars[1] };
   },
@@ -204,6 +243,7 @@ export const MoleculeSim = {
   render(canvas, vars, params) {
     const N = this._getN(params);
     const W = params.wallSize;
+    const { springType } = params;
 
     // Walls
     canvas.line(-W, -W, W, -W, '#475569', 1.5);
@@ -211,24 +251,33 @@ export const MoleculeSim = {
     canvas.line(-W, -W, -W, W, '#475569', 1.5);
     canvas.line(W, -W, W, W, '#475569', 1.5);
 
-    // Springs between all pairs
+    // Springs / connections between all pairs
     for (let i = 0; i < N; i++) {
       for (let j = i + 1; j < N; j++) {
         const xi = vars[i * 4], yi = vars[i * 4 + 1];
         const xj = vars[j * 4], yj = vars[j * 4 + 1];
         const dist = Math.hypot(xj - xi, yj - yi);
-        const stretch = Math.abs(dist - params.restLength);
+        const { L0 } = this._springParams(i, j, params);
+        const ratio = (dist - L0) / L0;
         // Color: green at rest, red when stretched, blue when compressed
-        const ratio = (dist - params.restLength) / params.restLength;
         const color = ratio > 0.1 ? '#EF444480' : ratio < -0.1 ? '#3B82F680' : '#10B98180';
-        canvas.line(xi, yi, xj, yj, color, 1.5);
+        const isRed = i === 0 || j === 0;
+
+        if (springType === 'attract') {
+          // Dashed line for gravitational attraction
+          canvas.line(xi, yi, xj, yj, '#F59E0B40', 1);
+        } else {
+          // Zigzag spring
+          canvas.spring(xi, yi, xj, yj, isRed ? 8 : 10, 0.12, isRed ? '#EF444480' : color);
+        }
       }
     }
 
     // Atoms
     for (let i = 0; i < N; i++) {
       const ax = vars[i * 4], ay = vars[i * 4 + 1];
-      const r = 0.15 * Math.sqrt(params.mass);
+      const mi = this._atomMass(i, params);
+      const r = 0.15 * Math.sqrt(mi);
       canvas.circle(ax, ay, r, ATOM_COLORS[i % ATOM_COLORS.length], '#ffffff40');
       canvas.text(ax + r + 0.1, ay, ATOM_LABELS[i], ATOM_COLORS[i % ATOM_COLORS.length], 9);
     }
@@ -238,45 +287,32 @@ export const MoleculeSim = {
     <h2>Molecular Dynamics — N-Body Spring Network</h2>
     <p>2 to 6 atoms connected by springs in 2D, bouncing inside a box with gravity. This is the simplest model of molecular dynamics — the same principles used in drug design, materials science, and protein folding simulations.</p>
 
+    <h3>Spring Types</h3>
+    <ul>
+      <li><strong>Linear (Hooke's law):</strong> <code>F = -k(r - L₀)</code> — proportional restoring force. The standard spring model</li>
+      <li><strong>Nonlinear (cubic):</strong> <code>F = -k(r - L₀)³</code> — much stiffer at large displacements, softer at small. Models real molecular bonds more accurately</li>
+      <li><strong>Attract (pseudo-gravity):</strong> <code>F = -k/r²</code> — gravitational-like attraction, no rest length. Atoms orbit and cluster. Models gravity or electrostatic attraction</li>
+    </ul>
+
+    <h3>Red Atom (Special)</h3>
+    <p>Atom A (red) can have a <strong>different mass, spring stiffness, and rest length</strong> from the other atoms. Springs connected to atom A use the "Red" parameters. This models molecules with a central heavy atom (like iron in hemoglobin) or different bond types.</p>
+
     <h3>Physics</h3>
     <p>Each atom obeys Newton's second law. Forces on atom i:</p>
     <ul>
-      <li><strong>Spring force</strong> from each connected atom j: <code>F = -k(|r_ij| - L₀) · r̂_ij</code></li>
+      <li><strong>Spring force</strong> from each connected atom j (type depends on Spring Type setting)</li>
       <li><strong>Gravity:</strong> <code>F_y = -m·g</code></li>
       <li><strong>Damping:</strong> <code>F = -b·v</code></li>
-    </ul>
-    <p>With N atoms, there are N(N-1)/2 springs (fully connected):</p>
-    <ul>
-      <li>2 atoms → 1 spring (dumbbell)</li>
-      <li>3 atoms → 3 springs (triangle)</li>
-      <li>4 atoms → 6 springs (tetrahedron-like)</li>
-      <li>6 atoms → 15 springs (complex network)</li>
-    </ul>
-
-    <h3>Spring Colors</h3>
-    <ul>
-      <li><strong style="color:#10B981">Green:</strong> near rest length (relaxed)</li>
-      <li><strong style="color:#EF4444">Red:</strong> stretched (tension)</li>
-      <li><strong style="color:#3B82F6">Blue:</strong> compressed</li>
     </ul>
 
     <h3>Try These Experiments</h3>
     <ol>
-      <li><strong>Add atoms:</strong> Start with 2, slide to 3 → triangle oscillations. Slide to 6 → complex coupled motion</li>
-      <li><strong>Grab and throw:</strong> Drag an atom and release with velocity — watch the energy propagate through the springs</li>
-      <li><strong>No gravity:</strong> Select "No Gravity" preset — pure spring dynamics, symmetric vibrations</li>
-      <li><strong>Stiff springs:</strong> Increase stiffness — the molecule vibrates faster and holds its shape tighter</li>
-      <li><strong>Wall bouncing:</strong> Try "Bouncy Walls" — elastic collisions with the box boundaries</li>
+      <li><strong>Add atoms:</strong> Start with 2, slide to 6 — see increasingly complex coupled motion</li>
+      <li><strong>Nonlinear springs:</strong> Select "Nonlinear" preset — springs feel softer near equilibrium, much stiffer when stretched far</li>
+      <li><strong>Attract mode:</strong> Select "Attract" — atoms orbit each other like a mini solar system (no gravity for clearest effect)</li>
+      <li><strong>Heavy red atom:</strong> Set Red Mass to 3+ — atom A barely moves while others bounce around it (like a heavy nucleus)</li>
+      <li><strong>Different red stiffness:</strong> Set Red Stiffness to 20 — atom A's bonds are rigid while others are floppy</li>
     </ol>
-
-    <h3>Normal Modes</h3>
-    <p>With zero gravity and damping, the system has distinct <strong>vibrational modes</strong>:</p>
-    <ul>
-      <li><strong>Breathing mode:</strong> All atoms move radially in/out together (symmetric)</li>
-      <li><strong>Rocking modes:</strong> The molecule tilts or rotates</li>
-      <li><strong>Stretching modes:</strong> Individual bonds oscillate asymmetrically</li>
-    </ul>
-    <p>These are directly analogous to the infrared absorption modes measured in molecular spectroscopy.</p>
 
     <h3>Real-World Applications</h3>
     <ul>
