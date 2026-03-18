@@ -1951,6 +1951,87 @@ section('Cart-Pendulum — No Spring: Momentum Conserved');
   assertClose(pTotal,0,0.05,'No spring: horizontal momentum conserved ≈ 0');
 }
 
+// --- Brachistochrone ---
+// Simplified curve defs for testing (matching the sim)
+const bD = 3, bH = 2;
+const bLine = { y: (x) => (bH/bD)*x, dy: (x) => bH/bD, d2y: (x) => 0 };
+const bParab = { y: (x) => bH*(1-(1-x/bD)**2), dy: (x) => 2*bH*(1-x/bD)/bD, d2y: (x) => -2*bH/(bD*bD) };
+
+function brachistoEval(vars, change, params) {
+  change[8] = 1;
+  const { gravity: g, damping: b } = params;
+  const curves = [null, bLine, bParab, null]; // only test line and parabola (indices 1,2)
+  for (let i = 1; i <= 2; i++) {
+    const x = vars[i*2], v = vars[i*2+1];
+    if (x >= bD) { change[i*2]=0; change[i*2+1]=0; continue; }
+    const curve = curves[i];
+    const fp = curve.dy(x), fpp = curve.d2y(x);
+    const denom = 1 + fp*fp;
+    change[i*2] = v;
+    change[i*2+1] = (g*fp - 2*v*v*fp*fpp)/denom - b*v;
+  }
+  // Skip cycloid/circle for test simplicity
+  change[0]=vars[1]; change[1]=0; change[6]=vars[7]; change[7]=0;
+}
+
+section('Brachistochrone — Line Ball Reaches End');
+{
+  const state = Float64Array.from([0,0, 0,0, 0,0, 0,0, 0]);
+  const p = { gravity: 9.81, damping: 0 };
+  const dt = 1/240;
+  for (let i = 0; i < 2400; i++) { // 10 seconds
+    rk4(state, brachistoEval, dt, p);
+    // Clamp
+    for (let j = 0; j < 4; j++) {
+      if (state[j*2] >= bD) { state[j*2] = bD; state[j*2+1] = 0; }
+      if (state[j*2] < 0) { state[j*2] = 0; state[j*2+1] = Math.max(0, state[j*2+1]); }
+    }
+  }
+  assert(state[2] >= bD - 0.01, 'Line ball reached end: x=' + state[2].toFixed(3));
+  assert(state[4] >= bD - 0.01, 'Parabola ball reached end: x=' + state[4].toFixed(3));
+}
+
+section('Brachistochrone — Energy Conservation (line, no friction)');
+{
+  const state = Float64Array.from([0,0, 0,0, 0,0, 0,0, 0]);
+  const p = { gravity: 9.81, damping: 0 };
+  const dt = 1/240;
+  // Run line ball halfway
+  for (let i = 0; i < 200; i++) {
+    rk4(state, brachistoEval, dt, p);
+  }
+  const x = state[2], v = state[3];
+  const fp = bLine.dy(x);
+  const speed2 = v*v*(1+fp*fp);
+  const KE = 0.5*speed2;
+  const PE = p.gravity*(bH - bLine.y(x));
+  const total = KE + PE;
+  const E0 = p.gravity * bH; // initial: KE=0, PE=g*H per ball
+  assertClose(total, E0, 0.5, 'Line energy conserved: E=' + total.toFixed(4) + ' vs E0=' + E0.toFixed(4));
+}
+
+section('Brachistochrone — Bead-on-Wire ODE Correctness');
+{
+  // At x=0 on straight line: f'=H/D, f''=0
+  // ẍ = g·(H/D) / (1 + (H/D)²) = 9.81·0.667 / (1 + 0.444) = 6.54 / 1.444 = 4.53
+  const fp = bH/bD, denom = 1 + fp*fp;
+  const expectedAccel = 9.81 * fp / denom;
+  const state = Float64Array.from([0,0, 0,0, 0,0, 0,0, 0]);
+  const change = new Float64Array(9);
+  brachistoEval(state, change, { gravity: 9.81, damping: 0 });
+  assertClose(change[3], expectedAccel, 0.01, 'Line initial accel = g·f\'/(1+f\'²) = ' + expectedAccel.toFixed(3));
+}
+
+section('Brachistochrone — Steep Parabola Starts Fast');
+{
+  // Steep parabola f'(0) = 2H/D = 1.333, steeper than line f'(0) = H/D = 0.667
+  const state = Float64Array.from([0,0, 0,0, 0,0, 0,0, 0]);
+  const change = new Float64Array(9);
+  brachistoEval(state, change, { gravity: 9.81, damping: 0 });
+  assert(change[3] > 0, 'Line: initial accel > 0');
+  assert(change[5] > change[3], 'Steep parabola starts faster than line (steeper initial slope)');
+}
+
 // ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════

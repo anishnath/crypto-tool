@@ -220,7 +220,7 @@ export function createLab(sim, elements) {
   }
 
   // --- Var Picker ---
-  if (varPicker && sim.vars && sim.graphDefaults) {
+  if (varPicker && sim.vars && sim.graphDefaults && sim.views?.includes('phase')) {
     const gd = resolveGraphDefaults(sim.vars, sim.graphDefaults, 'phase');
     buildVarPicker(sim.vars, varPicker, gd, (xIdx, yIdx, xLabel, yLabel) => {
       if (graphCvs) {
