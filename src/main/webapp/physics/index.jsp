@@ -4,15 +4,15 @@
 <html lang="en">
 <head>
     <jsp:include page="../modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Physics Calculators - Free Online Physics Tools" />
+        <jsp:param name="toolName" value="Physics Tools &amp; Labs - Free Calculators + Interactive Simulations" />
         <jsp:param name="toolCategory" value="Physics" />
-        <jsp:param name="toolDescription" value="44 free physics calculators with step-by-step solutions. Calculate velocity, acceleration, force, energy, momentum, optics, waves, AC circuits, and more. Interactive visualizations for better understanding." />
+        <jsp:param name="toolDescription" value="44 physics calculators + 15 interactive labs. Step-by-step solutions, drag-and-drop simulations. Pendulum, billiards, chaos, waves, molecular dynamics. Free, no signup." />
         <jsp:param name="toolUrl" value="physics/" />
         <jsp:param name="toolKeywords" value="physics calculator, online physics tools, velocity calculator, acceleration calculator, force calculator, energy calculator, momentum calculator, kinematics solver, projectile motion, optics calculator, wave calculator, thermodynamics, electromagnetism, AC circuits, electromagnetic waves, modern physics" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="44 physics calculators,Step-by-step solutions,Interactive visualizations,Unit conversions,Free and instant results,No registration required,Mobile friendly,Works offline" />
-        <jsp:param name="faq1q" value="Are these physics calculators free to use?" />
-        <jsp:param name="faq1a" value="Yes, all 44 physics calculators are completely free. No registration, no payment, no limits. Use them as many times as you need for homework, exams, or professional work." />
+        <jsp:param name="toolFeatures" value="44 physics calculators,15 interactive simulation labs,Step-by-step solutions,Drag-and-drop physics,Phase space and energy graphs,Export CSV for lab reports,Free and instant results,No registration required" />
+        <jsp:param name="faq1q" value="Are these physics tools free to use?" />
+        <jsp:param name="faq1a" value="Yes, all 44 calculators and 15 interactive labs are completely free. No registration, no payment, no limits. The labs run entirely in your browser with no data sent to any server." />
         <jsp:param name="faq2q" value="Do the calculators show step-by-step solutions?" />
         <jsp:param name="faq2a" value="Yes, every calculator shows detailed step-by-step solutions explaining each formula and calculation. This helps you understand the physics concepts, not just get answers." />
         <jsp:param name="faq3q" value="What physics topics are covered?" />
@@ -26,13 +26,14 @@
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "name": "Physics Calculators",
-      "description": "44 free physics calculators with step-by-step solutions covering mechanics, optics, waves, thermodynamics, electromagnetism, and modern physics.",
+      "description": "44 physics calculators + 15 interactive simulation labs covering mechanics, optics, waves, chaos, collisions, and more.",
       "url": "https://8gwifi.org/physics/",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 44,
+        "numberOfItems": 45,
         "itemListElement": [
-          {"@type": "ListItem", "position": 1, "name": "Velocity Calculator", "url": "https://8gwifi.org/physics/velocity-calculator.jsp"},
+          {"@type": "ListItem", "position": 1, "name": "Physics Labs — 15 Interactive Simulations", "url": "https://8gwifi.org/physics/labs/"},
+          {"@type": "ListItem", "position": 2, "name": "Velocity Calculator", "url": "https://8gwifi.org/physics/velocity-calculator.jsp"},
           {"@type": "ListItem", "position": 2, "name": "Acceleration Calculator", "url": "https://8gwifi.org/physics/acceleration-calculator.jsp"},
           {"@type": "ListItem", "position": 3, "name": "Force Calculator", "url": "https://8gwifi.org/physics/force-calculator.jsp"},
           {"@type": "ListItem", "position": 4, "name": "Energy Calculator", "url": "https://8gwifi.org/physics/energy-calculator.jsp"},
@@ -354,21 +355,70 @@
     <main class="physics-container">
         <!-- Hero -->
         <section class="hero">
-            <h1>Physics Calculators</h1>
-            <p>Free tools with step-by-step solutions and interactive visualizations</p>
+            <h1>Physics Tools &amp; Labs</h1>
+            <p>44 calculators + 15 interactive simulations</p>
             <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-value">44</span>
-                    <span class="hero-stat-label">Calculators</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value">100%</span>
-                    <span class="hero-stat-label">Free</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value">Step-by-Step</span>
-                    <span class="hero-stat-label">Solutions</span>
-                </div>
+                <div class="hero-stat"><span class="hero-stat-value">59</span><span class="hero-stat-label">Tools</span></div>
+                <div class="hero-stat"><span class="hero-stat-value">100%</span><span class="hero-stat-label">Free</span></div>
+                <div class="hero-stat"><span class="hero-stat-value">Drag &amp; Drop</span><span class="hero-stat-label">Simulations</span></div>
+            </div>
+        </section>
+
+        <!-- ==================== INTERACTIVE LABS (FEATURED — FIRST) ==================== -->
+        <section style="background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(6,182,212,0.06));border:1px solid rgba(139,92,246,0.15);border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:2rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+                <h2 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--text-primary,#1e293b);">🧪 Interactive Labs <span style="font-size:0.7rem;font-weight:600;background:#8B5CF6;color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;">15 sims</span></h2>
+                <a href="<%=request.getContextPath()%>/physics/labs/" style="font-size:0.8rem;color:#8B5CF6;text-decoration:none;font-weight:600;">View all &rarr;</a>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;">
+                <a href="<%=request.getContextPath()%>/physics/labs/pendulum.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#8B5CF6';this.style.boxShadow='0 2px 8px rgba(139,92,246,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">⟳</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Pendulum</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/spring.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#06B6D4';this.style.boxShadow='0 2px 8px rgba(6,182,212,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">🔩</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Spring</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/double-pendulum.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#EF4444';this.style.boxShadow='0 2px 8px rgba(239,68,68,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">🌀</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Chaos</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/compare-pendulum.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#EC4899';this.style.boxShadow='0 2px 8px rgba(236,72,153,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">🦋</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Butterfly</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/billiards.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#065f46';this.style.boxShadow='0 2px 8px rgba(6,95,70,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">🎱</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Billiards</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/newtons-cradle.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#94A3B8';this.style.boxShadow='0 2px 8px rgba(148,163,184,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">⚪</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Cradle</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/string-wave.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#10B981';this.style.boxShadow='0 2px 8px rgba(16,185,129,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">🎸</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Waves</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/molecule.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#8B5CF6';this.style.boxShadow='0 2px 8px rgba(139,92,246,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">⚛️</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Molecule</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/brachistochrone.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#F59E0B';this.style.boxShadow='0 2px 8px rgba(245,158,11,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">🏁</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Race</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/pile.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#EC4899';this.style.boxShadow='0 2px 8px rgba(236,72,153,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">📐</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Pile</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/kapitza-pendulum.jsp" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-primary,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#F59E0B';this.style.boxShadow='0 2px 8px rgba(245,158,11,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">🔄</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--text-primary,#1e293b);">Kapitza</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/physics/labs/" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:8px;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='#8B5CF6';this.style.boxShadow='0 2px 8px rgba(139,92,246,0.2)'" onmouseout="this.style.borderColor='rgba(139,92,246,0.25)';this.style.boxShadow=''">
+                    <span style="font-size:1.1rem;">🧪</span>
+                    <span style="font-size:0.78rem;font-weight:700;color:#8B5CF6;">+4 more &rarr;</span>
+                </a>
             </div>
         </section>
 
@@ -1148,7 +1198,7 @@
 
         <!-- SEO Content -->
         <section class="seo-content">
-            <h2>About Physics Calculators</h2>
+            <h2>About Physics Calculators &amp; Labs</h2>
             <p>Our physics calculators help students, teachers, and professionals solve physics problems with detailed step-by-step solutions. Each calculator features interactive visualizations to help understand the underlying concepts.</p>
 
             <h3>Quick Formula Reference</h3>
