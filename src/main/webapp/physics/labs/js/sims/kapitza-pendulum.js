@@ -13,7 +13,6 @@
  * The key insight: y₀'' adds to effective gravity. When vibration is fast
  * enough, the time-averaged effect creates a restoring force at θ = π.
  *
- * Reference: myphysicslab/src/sims/pendulum/MoveablePendulumSim.ts
  *
  * State: [θ, ω_θ, time, y₀, vy₀]
  */

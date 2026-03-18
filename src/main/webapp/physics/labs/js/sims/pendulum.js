@@ -2,7 +2,6 @@
  * Simple Pendulum Simulation
  *
  * Physics: θ'' = -(g/L)sin(θ) - (b/mL²)ω
- * Reference: myphysicslab/src/sims/pendulum/PendulumSim.ts evaluate()
  *
  * State: [angle, angularVelocity, time]
  */

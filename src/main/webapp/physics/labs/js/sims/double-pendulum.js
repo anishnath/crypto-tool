@@ -14,7 +14,6 @@
  * α₂ =  ──────────────────────────────────────────────────────────────────────────
  *                              L₂(2m₁ + m₂ - m₂cos(2(θ₁-θ₂)))
  *
- * Reference: myphysicslab/src/sims/pendulum/DoublePendulumSim.ts
  *
  * State: [θ₁, ω₁, θ₂, ω₂, time]
  */

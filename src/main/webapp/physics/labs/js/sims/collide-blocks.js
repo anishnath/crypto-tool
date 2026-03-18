@@ -9,7 +9,6 @@
  *   Block 2: x₂'' = -(b/m₂)v₂  (free, no spring)
  *   Collision: elastic — velocities reflected in center-of-mass frame
  *
- * Reference: myphysicslab/src/sims/springs/CollideBlocksSim.ts
  *
  * State: [x1, v1, x2, v2, time]
  */

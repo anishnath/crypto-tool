@@ -11,7 +11,6 @@
  * State: [θ₁, ω₁, θ₂, ω₂, time]
  *   Pendulum A = vars[0,1], Pendulum B = vars[2,3]
  *
- * Reference: myphysicslab/src/sims/pendulum/ComparePendulumApp.ts
  */
 
 export const ComparePendulumSim = {

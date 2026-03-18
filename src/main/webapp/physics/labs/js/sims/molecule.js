@@ -12,7 +12,6 @@
  * Special springs: first atom ("red atom") can have different mass,
  * and its springs can have different stiffness and rest length.
  *
- * Reference: myphysicslab/src/sims/springs/MoleculeSim.ts, Molecule3App.ts
  *
  * State: [x1,y1,vx1,vy1, x2,y2,vx2,vy2, ..., time]
  */

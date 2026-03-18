@@ -9,7 +9,6 @@
  *   v' = [m·ω²·L·sin(θ) + m·g·sin(θ)·cos(θ) - k·x - d·v + b·ω·cos(θ)/L] / (M + m·sin²θ)
  *   ω' = [-m·ω²·L·sin(θ)·cos(θ) + k·x·cos(θ) - (M+m)·g·sin(θ) + d·v·cos(θ) - (M+m)·b·ω/(m·L)] / [L·(M + m·sin²θ)]
  *
- * Reference: myphysicslab/src/sims/pendulum/CartPendulumSim.ts
  *
  * State: [x, θ, v, ω, time]
  */

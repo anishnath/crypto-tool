@@ -11,7 +11,6 @@
  * This does NOT use the ODE engine (RK4). It has its own time-stepping.
  * The sim runner just calls our custom advance() method.
  *
- * Reference: myphysicslab/src/sims/pde/StringSim.ts
  *
  * State: flat array [w0, w1, ..., wN, time] — displacements + time
  */

@@ -2,7 +2,6 @@
  * Single Spring Simulation
  *
  * Physics: x'' = -(k/m)(x - L₀) - (b/m)v
- * Reference: myphysicslab/src/sims/springs/SingleSpringSim.ts evaluate()
  *
  * State: [position, velocity, time]
  */
