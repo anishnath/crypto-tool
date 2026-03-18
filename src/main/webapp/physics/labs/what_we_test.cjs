@@ -2032,6 +2032,192 @@ section('Brachistochrone — Steep Parabola Starts Fast');
   assert(change[5] > change[3], 'Steep parabola starts faster than line (steeper initial slope)');
 }
 
+// --- Collision Engine ---
+function resolveCircleCircle(x1,y1,vx1,vy1,r1,m1,x2,y2,vx2,vy2,r2,m2,e){
+  const dx=x2-x1,dy=y2-y1,dist=Math.hypot(dx,dy),minDist=r1+r2;
+  if(dist>=minDist||dist<1e-10)return null;
+  const nx=dx/dist,ny=dy/dist;
+  const dvx=vx1-vx2,dvy=vy1-vy2,vRel=dvx*nx+dvy*ny;
+  if(vRel<=0)return null;
+  const j=(1+e)*vRel/(1/m1+1/m2);
+  return{nx,ny,impulse:j,overlap:minDist-dist};
+}
+
+section('Collision — Circle-Circle Elastic');
+{
+  // Two equal balls, head-on: ball1 moving right at v=3, ball2 stationary
+  const r = resolveCircleCircle(0,0, 3,0, 0.3,1, 0.5,0, 0,0, 0.3,1, 1.0);
+  assert(r !== null, 'Collision detected (overlap)');
+  assertClose(r.nx, 1, 0.01, 'Normal points right');
+  assertClose(r.ny, 0, 0.01, 'Normal is horizontal');
+  // For equal mass elastic: impulse j = (1+1)*3/(1+1) = 3
+  assertClose(r.impulse, 3, 0.01, 'Impulse j = (1+e)*vRel / (1/m1+1/m2) = 3');
+}
+
+section('Collision — No Collision When Separated');
+{
+  const r = resolveCircleCircle(0,0, 1,0, 0.3,1, 5,0, 0,0, 0.3,1, 1.0);
+  assert(r === null, 'No collision when far apart');
+}
+
+section('Collision — No Collision When Moving Apart');
+{
+  // Overlapping but moving away from each other
+  const r = resolveCircleCircle(0,0, -1,0, 0.3,1, 0.5,0, 1,0, 0.3,1, 1.0);
+  assert(r === null, 'No collision when separating');
+}
+
+section('Collision — Unequal Mass');
+{
+  // Heavy ball (m=5) hits light ball (m=1)
+  const r = resolveCircleCircle(0,0, 2,0, 0.3,5, 0.5,0, 0,0, 0.3,1, 1.0);
+  assert(r !== null, 'Collision detected');
+  // j = (1+1)*2 / (1/5 + 1/1) = 4 / 1.2 = 3.333
+  assertClose(r.impulse, 4/1.2, 0.01, 'Unequal mass impulse correct');
+}
+
+section('Collision — Momentum Conservation After Apply');
+{
+  // Simulate full collision: two equal balls
+  const vars = Float64Array.from([0,0, 3,0, 0.5,0, 0,0]);
+  const r = resolveCircleCircle(vars[0],vars[1],vars[2],vars[3],0.3,1, vars[4],vars[5],vars[6],vars[7],0.3,1, 1.0);
+  const mom0 = vars[2] + vars[6]; // total momentum before
+  // Apply
+  vars[2] -= (r.impulse/1)*r.nx;
+  vars[3] -= (r.impulse/1)*r.ny;
+  vars[6] += (r.impulse/1)*r.nx;
+  vars[7] += (r.impulse/1)*r.ny;
+  const mom1 = vars[2] + vars[6];
+  assertClose(mom1, mom0, 0.01, 'Momentum conserved after collision');
+  // Equal mass elastic: velocities should swap
+  assertClose(vars[2], 0, 0.01, 'Ball 1 stops');
+  assertClose(vars[6], 3, 0.01, 'Ball 2 gets full velocity');
+}
+
+section('Collision — KE Conservation (elastic)');
+{
+  const vars = Float64Array.from([0,0, 3,0, 0.5,0, -1,0.5]);
+  const r = resolveCircleCircle(vars[0],vars[1],vars[2],vars[3],0.3,1, vars[4],vars[5],vars[6],vars[7],0.3,1, 1.0);
+  const ke0 = 0.5*(vars[2]**2+vars[3]**2) + 0.5*(vars[6]**2+vars[7]**2);
+  if (r) {
+    vars[2] -= (r.impulse/1)*r.nx; vars[3] -= (r.impulse/1)*r.ny;
+    vars[6] += (r.impulse/1)*r.nx; vars[7] += (r.impulse/1)*r.ny;
+  }
+  const ke1 = 0.5*(vars[2]**2+vars[3]**2) + 0.5*(vars[6]**2+vars[7]**2);
+  assertClose(ke1, ke0, 0.01, 'KE conserved in 2D elastic collision');
+}
+
+// --- String Wave (PDE) ---
+section('String Wave — Finite Difference Stability');
+{
+  // CFL condition: r = (c*dt/dx)² < 1
+  const T = 10, rho = 1, N = 101, L = 5;
+  const dx = L / (N - 1);
+  const c = Math.sqrt(T / rho);
+  const dt = 0.4 * dx / c; // our chosen dt
+  const r = (c * dt / dx) ** 2;
+  assert(r < 1, `CFL stable: r = ${r.toFixed(4)} < 1`);
+  assertClose(r, 0.16, 0.01, 'Courant number r = (0.4)² = 0.16');
+}
+
+section('String Wave — Pluck Shape');
+{
+  // Pluck at 1/3: triangle from 0 to peak at L/3, then back to 0
+  const L = 5;
+  function shape(x) {
+    const xn = x / L;
+    return xn < 1/3 ? 3 * xn * 0.8 : (1 - xn) * 0.8 / (2/3);
+  }
+  assertClose(shape(0), 0, 1e-10, 'Pluck: w(0) = 0');
+  assertClose(shape(L), 0, 1e-10, 'Pluck: w(L) = 0');
+  assert(shape(L/3) > 0.7, 'Pluck: peak near L/3');
+  assert(shape(L/2) > 0, 'Pluck: positive at midpoint');
+}
+
+section('String Wave — PDE Update Rule');
+{
+  // Test one step of the finite difference: known input → expected output
+  const N = 5; // tiny grid for testing
+  const r = 0.16; // Courant number
+  const wCurr = Float64Array.from([0, 0.5, 1.0, 0.5, 0]);
+  const wPrev = Float64Array.from([0, 0.5, 1.0, 0.5, 0]); // same (just started)
+  const wNew = new Float64Array(N);
+
+  for (let i = 1; i < N - 1; i++) {
+    wNew[i] = 2 * (1 - r) * wCurr[i] + r * (wCurr[i + 1] + wCurr[i - 1]) - wPrev[i];
+  }
+  wNew[0] = 0; wNew[N - 1] = 0;
+
+  // With wPrev = wCurr and symmetric input: wNew should equal wCurr (stationary start)
+  // Actually: wNew[i] = 2(1-r)*w[i] + r*(w[i+1]+w[i-1]) - w[i] = (1-2r)*w[i] + r*(w[i+1]+w[i-1])
+  const expected1 = (1 - 2*r) * 0.5 + r * (1.0 + 0); // i=1: neighbors are 0 and 1.0
+  assertClose(wNew[1], expected1, 1e-10, 'PDE step: w[1] = (1-2r)*0.5 + r*(0+1) = ' + expected1.toFixed(4));
+  const expected2 = (1 - 2*r) * 1.0 + r * (0.5 + 0.5); // i=2: neighbors are 0.5 and 0.5
+  assertClose(wNew[2], expected2, 1e-10, 'PDE step: w[2] = (1-2r)*1.0 + r*(0.5+0.5) = ' + expected2.toFixed(4));
+}
+
+section('String Wave — Sine Mode Preserves Shape');
+{
+  // A pure sine mode should oscillate without changing shape (it's an eigenmode)
+  const N = 51, L = 5;
+  const dx = L / (N - 1);
+  const T = 10, rho = 1;
+  const c = Math.sqrt(T / rho);
+  const dt = 0.4 * dx / c;
+  const r = (c * dt / dx) ** 2;
+
+  // Initial: w = sin(πx/L), wPrev slightly less (cosine decay over dt)
+  const omega = Math.PI * c / L; // angular frequency of fundamental
+  const wCurr = new Float64Array(N);
+  const wPrev = new Float64Array(N);
+  for (let i = 0; i < N; i++) {
+    const x = i * dx;
+    wCurr[i] = Math.sin(Math.PI * x / L);
+    wPrev[i] = Math.sin(Math.PI * x / L) * Math.cos(omega * dt);
+  }
+  wCurr[0] = 0; wCurr[N-1] = 0;
+  wPrev[0] = 0; wPrev[N-1] = 0;
+
+  // Run 100 PDE steps
+  let curr = wCurr, prev = wPrev;
+  for (let step = 0; step < 100; step++) {
+    const wNew = new Float64Array(N);
+    for (let i = 1; i < N - 1; i++) {
+      wNew[i] = 2*(1-r)*curr[i] + r*(curr[i+1]+curr[i-1]) - prev[i];
+    }
+    prev = curr;
+    curr = wNew;
+  }
+
+  // Shape should still be approximately sin(πx/L) * cos(ω*100*dt)
+  const t = 100 * dt;
+  const expectedAmp = Math.cos(omega * t);
+  const midVal = curr[Math.floor(N/2)];
+  // The midpoint of sin(πx/L) is 1.0, so midVal ≈ cos(ω*t)
+  assertClose(Math.abs(midVal), Math.abs(expectedAmp), 0.1,
+    `Sine mode shape preserved: mid=${midVal.toFixed(4)} vs expected=${expectedAmp.toFixed(4)}`);
+}
+
+section('String Wave — Fixed Boundary Conditions');
+{
+  const N = 21;
+  const r = 0.16;
+  const wCurr = new Float64Array(N);
+  const wPrev = new Float64Array(N);
+  // Set non-zero interior
+  for (let i = 1; i < N - 1; i++) wCurr[i] = Math.sin(Math.PI * i / (N-1));
+
+  const wNew = new Float64Array(N);
+  for (let i = 1; i < N - 1; i++) {
+    wNew[i] = 2*(1-r)*wCurr[i] + r*(wCurr[i+1]+wCurr[i-1]) - wPrev[i];
+  }
+  wNew[0] = 0; wNew[N-1] = 0;
+
+  assertClose(wNew[0], 0, 1e-10, 'Left boundary fixed at 0');
+  assertClose(wNew[N-1], 0, 1e-10, 'Right boundary fixed at 0');
+  assert(Math.abs(wNew[Math.floor(N/2)]) > 0, 'Interior is non-zero');
+}
+
 // ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════

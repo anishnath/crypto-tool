@@ -157,7 +157,7 @@ export function createLab(sim, elements) {
       tabSwitcher.onSwitch(tab => {
         varPicker.style.display = tab === 'phase' ? '' : 'none';
       });
-      varPicker.style.display = (tabSwitcher.active === 'phase' || tabSwitcher.active === 'time') ? '' : 'none';
+      varPicker.style.display = tabSwitcher.active === 'phase' ? '' : 'none';
     }
   }
 
