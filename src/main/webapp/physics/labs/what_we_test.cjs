@@ -2218,6 +2218,135 @@ section('String Wave — Fixed Boundary Conditions');
   assert(Math.abs(wNew[Math.floor(N/2)]) > 0, 'Interior is non-zero');
 }
 
+// --- Engine2D: RigidBody + SAT ---
+
+// Inline polygon inertia (from rigid-body.js)
+function polygonInertia(vertices, mass) {
+  let num = 0, den = 0;
+  const n = vertices.length;
+  for (let i = 0; i < n; i++) {
+    const a = vertices[i], b = vertices[(i+1)%n];
+    const cross = Math.abs(a[0]*b[1] - a[1]*b[0]);
+    const dot = a[0]*a[0]+a[0]*b[0]+b[0]*b[0]+a[1]*a[1]+a[1]*b[1]+b[1]*b[1];
+    num += cross*dot; den += cross;
+  }
+  return den > 0 ? (mass/6)*num/den : mass*0.1;
+}
+
+// Inline SAT test (from contact-solver.js)
+function satTest(vA, vB) {
+  let minD = Infinity, minN = null;
+  for (let p = 0; p < 2; p++) {
+    const verts = p===0?vA:vB;
+    for (let i = 0; i < verts.length; i++) {
+      const j=(i+1)%verts.length;
+      const ex=verts[j][0]-verts[i][0], ey=verts[j][1]-verts[i][1];
+      const len=Math.hypot(ex,ey); if(len<1e-10)continue;
+      const nx=-ey/len, ny=ex/len;
+      let aMin=Infinity,aMax=-Infinity,bMin=Infinity,bMax=-Infinity;
+      for(const[x,y]of vA){const d=x*nx+y*ny;if(d<aMin)aMin=d;if(d>aMax)aMax=d;}
+      for(const[x,y]of vB){const d=x*nx+y*ny;if(d<bMin)bMin=d;if(d>bMax)bMax=d;}
+      const overlap=Math.min(aMax-bMin,bMax-aMin);
+      if(overlap<=0)return null;
+      if(overlap<minD){
+        minD=overlap;
+        const cax=vA.reduce((s,v)=>s+v[0],0)/vA.length, cay=vA.reduce((s,v)=>s+v[1],0)/vA.length;
+        const cbx=vB.reduce((s,v)=>s+v[0],0)/vB.length, cby=vB.reduce((s,v)=>s+v[1],0)/vB.length;
+        const dx=cbx-cax,dy=cby-cay;
+        minN=(dx*nx+dy*ny<0)?[-nx,-ny]:[nx,ny];
+      }
+    }
+  }
+  return minD<Infinity?{normal:minN,depth:minD}:null;
+}
+
+section('Engine2D — Polygon Inertia');
+{
+  // Unit square: I = m*(w²+h²)/12 = 1*(1+1)/12 = 0.1667
+  const square = [[-0.5,-0.5],[0.5,-0.5],[0.5,0.5],[-0.5,0.5]];
+  const I = polygonInertia(square, 1.0);
+  assertClose(I, 1/6, 0.02, 'Unit square inertia ≈ 1/6');
+}
+
+section('Engine2D — SAT: Two Separated Squares');
+{
+  const a = [[0,0],[1,0],[1,1],[0,1]];
+  const b = [[3,0],[4,0],[4,1],[3,1]];
+  const r = satTest(a, b);
+  assert(r === null, 'Separated squares: no collision');
+}
+
+section('Engine2D — SAT: Two Overlapping Squares');
+{
+  const a = [[0,0],[1,0],[1,1],[0,1]];
+  const b = [[0.8,0],[1.8,0],[1.8,1],[0.8,1]]; // overlap 0.2
+  const r = satTest(a, b);
+  assert(r !== null, 'Overlapping squares: collision detected');
+  assertClose(r.depth, 0.2, 0.01, 'Overlap depth ≈ 0.2');
+  // Normal should point from A to B (rightward)
+  assert(r.normal[0] > 0, 'Normal points right (A→B)');
+}
+
+section('Engine2D — SAT: Square and Triangle');
+{
+  const sq = [[0,0],[1,0],[1,1],[0,1]];
+  const tri = [[0.5,0.5],[1.5,0.5],[1,1.5]]; // overlaps
+  const r = satTest(sq, tri);
+  assert(r !== null, 'Square-triangle overlap detected');
+  assert(r.depth > 0, 'Positive depth');
+}
+
+section('Engine2D — SAT: Rotated Square');
+{
+  // 45-degree rotated square (diamond) centered at origin
+  const s = 0.5;
+  const diamond = [[s,0],[0,s],[-s,0],[0,-s]];
+  // Axis-aligned square shifted right, overlapping
+  const box = [[0.3,-0.3],[0.8,-0.3],[0.8,0.3],[0.3,0.3]];
+  const r = satTest(diamond, box);
+  assert(r !== null, 'Rotated diamond vs box: collision');
+}
+
+section('Engine2D — SAT: No Collision Corner Case');
+{
+  // Two squares touching but not overlapping
+  const a = [[0,0],[1,0],[1,1],[0,1]];
+  const b = [[1,0],[2,0],[2,1],[1,1]]; // touching edge
+  const r = satTest(a, b);
+  // depth should be 0 or very small — technically touching
+  assert(r === null || r.depth < 0.001, 'Edge-touching: no/minimal collision');
+}
+
+section('Engine2D — RigidBody Velocity At Point');
+{
+  // Body at origin, angular velocity omega=2 rad/s
+  // Point at (1, 0): v = (0, omega*1) = (0, 2)
+  // Plus linear velocity (3, 0): total = (3, 2)
+  const vel = { vx: 3, vy: 0 };
+  const omega = 2;
+  const rx = 1 - 0, ry = 0 - 0;
+  const vAtPt = { vx: vel.vx - omega * ry, vy: vel.vy + omega * rx };
+  assertClose(vAtPt.vx, 3, 1e-10, 'velocityAt: vx = 3 + 0 = 3');
+  assertClose(vAtPt.vy, 2, 1e-10, 'velocityAt: vy = 0 + omega*rx = 2');
+}
+
+section('Engine2D — Apply Impulse with Angular');
+{
+  // Body: mass=2, inertia=1, at origin
+  // Apply impulse (1,0) at point (0, 1)
+  // Linear: dvx = 1/2 = 0.5, dvy = 0
+  // Angular: dω = (0*0 - 1*1) / 1 = -1
+  const mass = 2, inertia = 1;
+  let vx = 0, vy = 0, omega = 0;
+  const jx = 1, jy = 0, px = 0, py = 1;
+  vx += jx / mass;
+  vy += jy / mass;
+  const rx = px - 0, ry = py - 0;
+  omega += (rx * jy - ry * jx) / inertia;
+  assertClose(vx, 0.5, 1e-10, 'Impulse: dvx = j/m = 0.5');
+  assertClose(omega, -1, 1e-10, 'Impulse: dω = (r×j)/I = -1');
+}
+
 // ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════

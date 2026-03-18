@@ -140,6 +140,21 @@ export class SimCanvas {
     }
   }
 
+  /** Draw a filled/stroked polygon from world-space vertices [[x,y], ...] */
+  polygon(worldVerts, fill, stroke) {
+    if (worldVerts.length < 3) return;
+    this.ctx.beginPath();
+    const first = this.toScreen(worldVerts[0][0], worldVerts[0][1]);
+    this.ctx.moveTo(first.sx, first.sy);
+    for (let i = 1; i < worldVerts.length; i++) {
+      const p = this.toScreen(worldVerts[i][0], worldVerts[i][1]);
+      this.ctx.lineTo(p.sx, p.sy);
+    }
+    this.ctx.closePath();
+    if (fill) { this.ctx.fillStyle = fill; this.ctx.fill(); }
+    if (stroke) { this.ctx.strokeStyle = stroke; this.ctx.lineWidth = 1.5; this.ctx.stroke(); }
+  }
+
   arc(wcx, wcy, wr, startAngle, endAngle, color, width) {
     const { sx, sy } = this.toScreen(wcx, wcy);
     const sr = this.scaleToScreen(wr);

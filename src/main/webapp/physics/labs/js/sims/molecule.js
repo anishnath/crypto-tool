@@ -74,6 +74,8 @@ export const MoleculeSim = {
     { name: 'Heavy Red Atom', params: { redMass: 3, numAtoms: 3 } },
     { name: 'Stiff Red',      params: { redStiffness: 20, numAtoms: 3 } },
     { name: 'Bouncy Walls',   params: { elasticity: 1.0, numAtoms: 4, damping: 0 } },
+    { name: 'Orbits',         params: { springType: 'attract', stiffness: 15, gravity: 0, numAtoms: 3, damping: 0, redMass: 3 } },
+    { name: 'Solar System',   params: { springType: 'attract', stiffness: 25, gravity: 0, numAtoms: 5, damping: 0, redMass: 5 } },
   ],
 
   _getN(params) { return Math.round(params.numAtoms); },
