@@ -93,6 +93,7 @@ googletag.cmd.push(function(){
       <div id="controls"></div>
       <div id="presets"></div>
       <div id="varPicker"></div>
+      <div id="dataTools"></div>
     </div>
   </div>
 
@@ -130,6 +131,7 @@ const lab = createLab(DoublePendulumSim, {
   presets:      document.getElementById('presets'),
   tabs:         document.getElementById('labTabs'),
   varPicker:    document.getElementById('varPicker'),
+  dataTools:    document.getElementById('dataTools'),
 });
 
 document.getElementById('labInfo').innerHTML = DoublePendulumSim.info || '';

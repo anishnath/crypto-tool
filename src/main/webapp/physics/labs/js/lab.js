@@ -24,6 +24,7 @@ import { buildEngineControls, encodeShareUrl, decodeShareUrl } from './ui/engine
 import { buildTransport } from './ui/transport.js';
 import { buildPresets, applyPreset } from './ui/presets.js';
 import { buildVarPicker, resolveGraphDefaults } from './ui/var-picker.js';
+import { buildDataTools } from './ui/data-tools.js';
 
 /**
  * @param {object} sim — sim definition
@@ -33,7 +34,7 @@ import { buildVarPicker, resolveGraphDefaults } from './ui/var-picker.js';
 export function createLab(sim, elements) {
   const {
     simCanvas, graphCanvas, timeCanvas, energyCanvas, peWellCanvas,
-    controls, transport, presets, tabs, varPicker,
+    controls, transport, presets, tabs, varPicker, dataTools,
     canvasArea,
   } = elements;
 
@@ -202,6 +203,7 @@ export function createLab(sim, elements) {
       energyMax = 1;
       if (periodDetector) periodDetector.reset();
       trailPoints.length = 0;
+      if (dataToolsHandle) dataToolsHandle.clearBuffer();
       if (controlsHandle) controlsHandle.updateSliders(runner.params);
     });
   }
@@ -226,6 +228,14 @@ export function createLab(sim, elements) {
       if (graphCvs) {
         graphCvs.setVars(xIdx, yIdx, xLabel, yLabel);
       }
+    });
+  }
+
+  // --- Data Tools (Export CSV, Screenshot, Live Readout) ---
+  let dataToolsHandle = null;
+  if (dataTools) {
+    dataToolsHandle = buildDataTools(dataTools, sim, runner, simCanvas, {
+      allCanvases: [simCanvas, graphCanvas, timeCanvas, energyCanvas, peWellCanvas].filter(Boolean),
     });
   }
 
@@ -294,6 +304,9 @@ export function createLab(sim, elements) {
       const e = sim.energy ? sim.energy(state, params) : null;
       peWellCvs.render(sim.potentialEnergy, state, params, e);
     }
+
+    // Live data readout
+    if (dataToolsHandle) dataToolsHandle.updateReadout(state, params);
   });
 
   // --- Tick callback (data collection for graphs) ---

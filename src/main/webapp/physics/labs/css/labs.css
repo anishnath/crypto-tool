@@ -467,6 +467,48 @@
 .lab-info ul { padding-left: 20px; }
 .lab-info li { margin-bottom: 4px; }
 
+/* ─── DATA TOOLS ─── */
+.lab-data-tools {
+  background: var(--lab-bg-panel);
+  border: 1px solid var(--lab-border);
+  border-radius: var(--lab-radius);
+  padding: 10px 12px;
+}
+.data-readout {
+  font-family: var(--lab-font-code);
+  font-size: 0.7rem;
+  color: var(--lab-accent-bright);
+  background: var(--lab-bg-input);
+  padding: 6px 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin-bottom: 8px;
+  min-height: 20px;
+}
+.data-btn-row {
+  display: flex;
+  gap: 6px;
+}
+.data-btn {
+  flex: 1;
+  padding: 5px 10px;
+  border: 1px solid var(--lab-border);
+  border-radius: 6px;
+  background: var(--lab-bg-input);
+  color: var(--lab-text-sec);
+  font-family: var(--lab-font);
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.data-btn:hover {
+  border-color: var(--lab-accent);
+  color: var(--lab-accent-bright);
+  box-shadow: var(--lab-glow);
+}
+
 /* ─── RELATED / CROSS-LINKS ─── */
 .lab-related {
   display: flex;
