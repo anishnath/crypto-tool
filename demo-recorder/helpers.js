@@ -131,9 +131,9 @@ async function pressEnter(page, count = 1) {
 
 // ── Editor Interactions ─────────────────────────────────────
 
-/** Click a toolbar button by its title attribute */
+/** Click a toolbar button by its title attribute (partial match to allow shortcut suffixes) */
 async function clickToolbarBtn(page, title) {
-    const selector = `.me-toolbar-btn[title="${title}"], .me-toolbar-btn-math[title="${title}"]`;
+    const selector = `.me-toolbar-btn[title*="${title}"], .me-toolbar-btn-math[title*="${title}"]`;
     await page.waitForSelector(selector, { timeout: 5000 });
     await page.click(selector);
     await page.waitForTimeout(SHORT_PAUSE);
