@@ -401,6 +401,64 @@ testEvalBound('\u2212\u221e', -Infinity);     // −∞ (Unicode minus + infinit
 // Definite integral with Unicode bounds
 testDefinite('\u222b\u2080\u03c0 sin(x) dx', 'sin(x)', 0, '\u03c0', 2);  // ∫₀^π sin(x) = 2
 
+// --- exprToLatex: nested fraction cleanup ---
+console.log('\n--- exprToLatex: nested fraction cleanup ---');
+
+function exprToLatex(expr) {
+    var parsed = nerdamer(expr);
+    var tex = parsed.toTeX();
+    tex = tex.replace(/\\frac\{1\}\{([a-zA-Z])\^\{([^{}]+(?:\{[^{}]*\}[^{}]*)*)\}\}/g, function(m, v, exp, off) {
+        return off === 0 ? m : v + '^{-' + exp + '}';
+    });
+    tex = tex.replace(/\\frac\{1\}\{\\sqrt\{([a-zA-Z])\}\}/g, function(m, v, off) {
+        return off === 0 ? m : v + '^{-1/2}';
+    });
+    tex = tex.replace(/\\frac\{1\}\{([a-zA-Z])\}/g, function(m, v, off) {
+        return off === 0 ? m : v + '^{-1}';
+    });
+    return tex;
+}
+
+// Nested fractions: integer negative exponents
+eq(exprToLatex('(1+x^4)/(1+x^(-4))'), '\\frac{x^{4}+1}{x^{-4}+1}',
+    'exprToLatex("(1+x^4)/(1+x^(-4))") no nested frac');
+eq(exprToLatex('(x+1)/(x^(-1)+1)'), '\\frac{x+1}{x^{-1}+1}',
+    'exprToLatex("(x+1)/(x^(-1)+1)") no nested frac');
+eq(exprToLatex('x^2/(1+x^(-3))'), '\\frac{x^{2}}{x^{-3}+1}',
+    'exprToLatex("x^2/(1+x^(-3))") no nested frac');
+eq(exprToLatex('1/(1+x^(-2))'), '\\frac{1}{\\left(x^{-2}+1\\right)}',
+    'exprToLatex("1/(1+x^(-2))") no nested frac');
+
+// Nested fractions: fractional negative exponents
+eq(exprToLatex('(1+x^2)/(1+x^(-1/2))'), '\\frac{x^{2}+1}{x^{-1/2}+1}',
+    'exprToLatex("(1+x^2)/(1+x^(-1/2))") sqrt nested frac cleaned');
+eq(exprToLatex('(1+x^2)/(1+x^(-3/2))'), '\\frac{x^{2}+1}{x^{-\\frac{3}{2}}+1}',
+    'exprToLatex("(1+x^2)/(1+x^(-3/2))") frac exponent nested frac cleaned');
+eq(exprToLatex('(1+x^2)/(1+x^(-2/3))'), '\\frac{x^{2}+1}{x^{-\\frac{2}{3}}+1}',
+    'exprToLatex("(1+x^2)/(1+x^(-2/3))") frac exponent nested frac cleaned');
+
+// Nested fractions: pi exponents
+eq(exprToLatex('(1+x^2)/(1+x^(-pi/4))'), '\\frac{x^{2}+1}{x^{-\\frac{\\pi}{4}}+1}',
+    'exprToLatex("(1+x^2)/(1+x^(-pi/4))") pi/4 nested frac cleaned');
+eq(exprToLatex('(1+x)/(1+x^(-pi))'), '\\frac{x+1}{x^{-\\pi}+1}',
+    'exprToLatex("(1+x)/(1+x^(-pi))") pi nested frac cleaned');
+
+// Standalone fractions should NOT be changed
+eq(exprToLatex('1/x^4'), '\\frac{1}{x^{4}}',
+    'exprToLatex("1/x^4") stays as single frac');
+eq(exprToLatex('x^(-4)'), '\\frac{1}{x^{4}}',
+    'exprToLatex("x^(-4)") stays as single frac');
+eq(exprToLatex('x^(-pi/4)'), '\\frac{1}{x^{\\frac{\\pi}{4}}}',
+    'exprToLatex("x^(-pi/4)") standalone stays as single frac');
+eq(exprToLatex('x^(-3/2)'), '\\frac{1}{x^{\\frac{3}{2}}}',
+    'exprToLatex("x^(-3/2)") standalone stays as single frac');
+
+// Non-fraction expressions stay untouched
+eq(exprToLatex('sin(x)/x'), '\\frac{\\mathrm{sin}\\left(x\\right)}{x}',
+    'exprToLatex("sin(x)/x") untouched');
+eq(exprToLatex('x^2+1'), 'x^{2}+1',
+    'exprToLatex("x^2+1") no frac at all');
+
 // Summary
 console.log('\n' + '='.repeat(50));
 console.log('\x1b[32mPassed:\x1b[0m', passed);

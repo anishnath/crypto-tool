@@ -446,7 +446,23 @@
         function exprToLatex(expr) {
             try {
                 var parsed = nerdamer(expr);
-                return parsed.toTeX();
+                var tex = parsed.toTeX();
+                // Nerdamer converts x^(-n) to \frac{1}{x^{n}} which creates ugly
+                // nested fractions when already inside another \frac denominator.
+                // Collapse inner \frac{1}{...} to ...^{-1} form when nested.
+                // Nerdamer converts x^(-n) to \frac{1}{x^{n}} — collapse these
+                // back to x^{-n} form only when nested inside another expression
+                // (offset > 0), preserving standalone fractions like \frac{1}{x^{4}}.
+                tex = tex.replace(/\\frac\{1\}\{([a-zA-Z])\^\{([^{}]+(?:\{[^{}]*\}[^{}]*)*)\}\}/g, function(m, v, exp, off) {
+                    return off === 0 ? m : v + '^{-' + exp + '}';
+                });
+                tex = tex.replace(/\\frac\{1\}\{\\sqrt\{([a-zA-Z])\}\}/g, function(m, v, off) {
+                    return off === 0 ? m : v + '^{-1/2}';
+                });
+                tex = tex.replace(/\\frac\{1\}\{([a-zA-Z])\}/g, function(m, v, off) {
+                    return off === 0 ? m : v + '^{-1}';
+                });
+                return tex;
             } catch (e) {
                 // Fallback: basic manual conversion
                 return expr
