@@ -2385,6 +2385,93 @@ section('Spring Mass — Zero Spring Mass = Original Behavior');
   assertClose(accel, -6.0, 0.01, 'Zero spring mass: same as before (-6.0)');
 }
 
+// --- Double Spring Normal Modes ---
+section('Normal Modes — Symmetric Decomposition');
+{
+  // Two equal blocks displaced symmetrically: q₊ nonzero, q₋ = 0
+  // x1 = eq + d, x2 = eq + d → q₊ = 2d/√2 = d√2, q₋ = 0
+  const d = 0.5;
+  const eq1 = 3, eq2 = 6; // approximate equilibrium
+  const dx1 = d, dx2 = d;
+  const qSym = (dx1 + dx2) / Math.SQRT2;
+  const qAnti = (dx1 - dx2) / Math.SQRT2;
+  assertClose(qSym, d * Math.SQRT2, 1e-10, 'Symmetric displacement: q₊ = d√2');
+  assertClose(qAnti, 0, 1e-10, 'Symmetric displacement: q₋ = 0');
+}
+
+section('Normal Modes — Antisymmetric Decomposition');
+{
+  // Two equal blocks displaced antisymmetrically: q₊ = 0, q₋ nonzero
+  const d = 0.5;
+  const dx1 = d, dx2 = -d;
+  const qSym = (dx1 + dx2) / Math.SQRT2;
+  const qAnti = (dx1 - dx2) / Math.SQRT2;
+  assertClose(qSym, 0, 1e-10, 'Antisymmetric: q₊ = 0');
+  assertClose(qAnti, d * Math.SQRT2, 1e-10, 'Antisymmetric: q₋ = d√2');
+}
+
+section('Normal Modes — Single Block Pull Excites Both');
+{
+  // Pull block 1 only: dx1 = d, dx2 = 0
+  const d = 1.0;
+  const qSym = (d + 0) / Math.SQRT2;
+  const qAnti = (d - 0) / Math.SQRT2;
+  assertClose(qSym, qAnti, 1e-10, 'Single pull: q₊ = q₋ (equal mix of both modes)');
+  assert(qSym > 0 && qAnti > 0, 'Both modes excited');
+}
+
+section('Normal Modes — Frequencies');
+{
+  // Symmetric 3-spring case, equal masses m=1, k=6:
+  // ω₊² = k/m = 6   → ω₊ = √6 ≈ 2.449
+  // ω₋² = 3k/m = 18  → ω₋ = √18 ≈ 4.243
+  const k = 6, m = 1;
+  const omegaSym = Math.sqrt(k / m);
+  const omegaAnti = Math.sqrt(3 * k / m);
+  assertClose(omegaSym, Math.sqrt(6), 1e-10, 'ω₊ = √(k/m) = √6');
+  assertClose(omegaAnti, Math.sqrt(18), 1e-10, 'ω₋ = √(3k/m) = √18');
+  // Beat frequency
+  const beatFreq = Math.abs(omegaAnti - omegaSym) / (2 * Math.PI);
+  assert(beatFreq > 0, 'Beat frequency > 0: ' + beatFreq.toFixed(3) + ' Hz');
+}
+
+section('Normal Modes — Mode Energy Conservation');
+{
+  // In a pure symmetric mode, E₊ should stay constant and E₋ ≈ 0
+  const k = 6, m = 1;
+  const omega2Sym = k / m;
+  // Start with pure symmetric: q₊ = 1.0, v₊ = 0
+  // E₊ = ½m(0 + ω₊²·1²) = ½·1·6·1 = 3.0
+  const eSym = 0.5 * m * (0 + omega2Sym * 1.0 * 1.0);
+  assertClose(eSym, 3.0, 1e-10, 'Pure symmetric mode energy E₊ = ½mω₊²q₊² = 3.0');
+  // E₋ = 0 (no antisymmetric component)
+  const eAnti = 0.5 * m * (0 + 0);
+  assertClose(eAnti, 0, 1e-10, 'No antisymmetric energy E₋ = 0');
+}
+
+section('Normal Modes — Total Energy = E₊ + E₋');
+{
+  // Mixed state: q₊ = 0.5, v₊ = 1.0, q₋ = 0.3, v₋ = 0.5
+  const k = 6, m = 1;
+  const omega2Sym = k / m, omega2Anti = 3 * k / m;
+  const eSym = 0.5 * m * (1.0 * 1.0 + omega2Sym * 0.5 * 0.5);
+  const eAnti = 0.5 * m * (0.5 * 0.5 + omega2Anti * 0.3 * 0.3);
+  const eTotal = eSym + eAnti;
+  // Also compute from original coords
+  // x1 = (q₊+q₋)/√2, x2 = (q₊-q₋)/√2, same for velocities
+  const s2 = Math.SQRT2;
+  const dx1 = (0.5 + 0.3) / s2, dx2 = (0.5 - 0.3) / s2;
+  const dv1 = (1.0 + 0.5) / s2, dv2 = (1.0 - 0.5) / s2;
+  // KE = ½m(v1² + v2²), PE = ½k(dx1² + dx2²) + ½k((dx1-dx2)²) for middle spring
+  // This should equal eTotal (energy is conserved in the mode decomposition)
+  const KE = 0.5 * m * (dv1*dv1 + dv2*dv2);
+  const PEwalls = 0.5 * k * (dx1*dx1 + dx2*dx2);
+  const PEmid = 0.5 * k * ((dx1-dx2)*(dx1-dx2));
+  const eTotalDirect = KE + PEwalls + PEmid;
+  assertClose(eTotal, eTotalDirect, 0.01,
+    'Mode energy sum = direct energy: ' + eTotal.toFixed(4) + ' ≈ ' + eTotalDirect.toFixed(4));
+}
+
 // ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════

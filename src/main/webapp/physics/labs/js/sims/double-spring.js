@@ -19,13 +19,17 @@ export const DoubleSpringSim = {
   category: 'Mechanics',
 
   vars: {
-    x1: { index: 0, label: 'Position 1 (m)',  symbol: 'x₁' },
-    x2: { index: 1, label: 'Position 2 (m)',  symbol: 'x₂' },
-    v1: { index: 2, label: 'Velocity 1 (m/s)', symbol: 'v₁' },
-    v2: { index: 3, label: 'Velocity 2 (m/s)', symbol: 'v₂' },
-    time: { index: 4, label: 'Time (s)',        symbol: 't' },
+    x1: { index: 0, label: 'Position 1 (m)',      symbol: 'x₁' },
+    x2: { index: 1, label: 'Position 2 (m)',      symbol: 'x₂' },
+    v1: { index: 2, label: 'Velocity 1 (m/s)',    symbol: 'v₁' },
+    v2: { index: 3, label: 'Velocity 2 (m/s)',    symbol: 'v₂' },
+    time: { index: 4, label: 'Time (s)',           symbol: 't' },
+    qSym:  { index: 5, label: 'Symmetric Mode',   symbol: 'q₊' },
+    qAnti: { index: 6, label: 'Antisymmetric Mode',symbol: 'q₋' },
+    eSym:  { index: 7, label: 'Energy Mode 1',    symbol: 'E₊' },
+    eAnti: { index: 8, label: 'Energy Mode 2',    symbol: 'E₋' },
   },
-  varCount: 5,
+  varCount: 9,
 
   params: {
     mass1:       { value: 1.0,  min: 0.2, max: 10, step: 0.1,  label: 'Mass 1',         unit: 'kg' },
@@ -43,7 +47,7 @@ export const DoubleSpringSim = {
 
   graphDefaults: {
     phase: { x: 'x1', y: 'v1' },
-    time: ['x1', 'x2'],
+    time: ['qSym', 'qAnti'],
   },
 
   worldRect: { xMin: -2, xMax: 11, yMin: -3, yMax: 3 },
@@ -54,6 +58,7 @@ export const DoubleSpringSim = {
     { name: 'Heavy + Light', params: { mass1: 5, mass2: 0.5 } },
     { name: 'Stiff',         params: { stiffness: 30 } },
     { name: 'Soft',          params: { stiffness: 1 } },
+    { name: 'Beat Pattern',  params: { mass1: 1, mass2: 1, stiffness: 6, damping: 0 } },
     { name: 'No Wall₂',     params: { thirdSpring: false } },
     { name: 'Damped',        params: { damping: 0.5 } },
   ],
@@ -78,12 +83,52 @@ export const DoubleSpringSim = {
 
   init(p) {
     const [x1eq, x2eq] = this._equilibrium(p);
-    // Start block2 with initial velocity (like reference)
-    return [x1eq, x2eq, 0, -2.3, 0];
+    // State: [x1, x2, v1, v2, time, qSym, qAnti, eSym, eAnti]
+    return [x1eq, x2eq, 0, -2.3, 0, 0, 0, 0, 0];
+  },
+
+  /** Compute normal mode coordinates and energies after each step */
+  postStep(vars, params) {
+    const [x1eq, x2eq] = this._equilibrium(params);
+    // Displacements from equilibrium
+    const dx1 = vars[0] - x1eq;
+    const dx2 = vars[1] - x2eq;
+    const dv1 = vars[2];
+    const dv2 = vars[3];
+
+    // Normal mode coordinates (equal mass symmetric case):
+    //   q₊ = (dx1 + dx2) / √2   — symmetric (in-phase)
+    //   q₋ = (dx1 - dx2) / √2   — antisymmetric (out-of-phase)
+    const s2 = Math.SQRT2;
+    const qSym  = (dx1 + dx2) / s2;
+    const qAnti = (dx1 - dx2) / s2;
+    const vSym  = (dv1 + dv2) / s2;
+    const vAnti = (dv1 - dv2) / s2;
+
+    // Normal mode frequencies (symmetric 3-spring case, equal masses):
+    //   ω₊² = k/m   (symmetric — middle spring doesn't stretch)
+    //   ω₋² = 3k/m  (antisymmetric — middle spring stretches double)
+    // For unequal masses or no third spring, these are approximate
+    const { mass1, springMass, stiffness: k, thirdSpring } = params;
+    const ms3 = (springMass || 0) / 3;
+    const mEff = mass1 + 2 * ms3; // approximate: use mass1 for both
+    const omega2Sym  = k / mEff;
+    const omega2Anti = (thirdSpring ? 3 : 2) * k / mEff;
+
+    // Mode energies: E = ½m(v² + ω²q²)
+    const eSym  = 0.5 * mEff * (vSym * vSym + omega2Sym * qSym * qSym);
+    const eAnti = 0.5 * mEff * (vAnti * vAnti + omega2Anti * qAnti * qAnti);
+
+    vars[5] = qSym;
+    vars[6] = qAnti;
+    vars[7] = eSym;
+    vars[8] = eAnti;
   },
 
   evaluate(vars, change, params, isDragging) {
     change[4] = 1; // time
+    // Zero out computed vars (they're set in postStep)
+    change[5] = 0; change[6] = 0; change[7] = 0; change[8] = 0;
     if (isDragging) return;
 
     const [x1, x2, v1, v2] = vars;
@@ -210,10 +255,13 @@ export const DoubleSpringSim = {
     <h3>Normal Modes</h3>
     <p>With equal masses and symmetric springs, the system has two <strong>normal modes</strong>:</p>
     <ul>
-      <li><strong>Symmetric mode:</strong> Both blocks move together in the same direction — like a single spring. Lower frequency.</li>
-      <li><strong>Antisymmetric mode:</strong> Blocks move in opposite directions — the middle spring stretches and compresses twice as much. Higher frequency.</li>
+      <li><strong>Symmetric mode (q₊):</strong> Both blocks move together: <code>q₊ = (x₁+x₂)/√2</code>. Frequency: <code>ω₊ = √(k/m)</code>. The middle spring doesn't stretch.</li>
+      <li><strong>Antisymmetric mode (q₋):</strong> Blocks move oppositely: <code>q₋ = (x₁-x₂)/√2</code>. Frequency: <code>ω₋ = √(3k/m)</code>. The middle spring stretches double.</li>
     </ul>
-    <p>General motion is a superposition of both modes, creating complex-looking oscillations that are actually simple underneath.</p>
+    <p>The <strong>Time tab</strong> shows these modes directly — q₊ and q₋ oscillate at different frequencies. General motion = superposition of both modes.</p>
+
+    <h3>Beat Pattern</h3>
+    <p>Pull just ONE block and release (try the "Beat Pattern" preset). You'll see the energy <strong>slosh back and forth</strong> between the two modes. The beat frequency = |ω₋ - ω₊|. On the Time tab, switch to view E₊ and E₋ (mode energies via the variable picker) — one rises while the other falls, periodically.</p>
 
     <h3>Energy</h3>
     <p><code>KE = ½m₁v₁² + ½m₂v₂²</code></p>
