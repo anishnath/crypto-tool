@@ -248,6 +248,22 @@
     }
 
     // =========================================================
+    //  AUTO-RESULT TOGGLE
+    // =========================================================
+    var autoResultCheckbox = document.getElementById('auto-result-toggle');
+    if (autoResultCheckbox) {
+        // Restore saved preference
+        var savedPref = localStorage.getItem('me_auto_result');
+        if (savedPref === 'off') autoResultCheckbox.checked = false;
+
+        autoResultCheckbox.addEventListener('change', function () {
+            if (window.MeCompute) {
+                MeCompute.setAutoResultEnabled(autoResultCheckbox.checked);
+            }
+        });
+    }
+
+    // =========================================================
     //  EXPOSE GLOBALLY
     // =========================================================
     window.MeEditorCore = {

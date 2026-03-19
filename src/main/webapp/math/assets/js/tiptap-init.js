@@ -99,17 +99,36 @@ function wireMathField(mf, getPos, editorInstance, nodeTypeName, resultEl) {
             var resolved = editorInstance.state.doc.resolve(pos);
             var nodeAfter = resolved.nodeAfter;
             var after = pos + (nodeAfter ? nodeAfter.nodeSize : 1);
+            var docSize = editorInstance.state.doc.content.size;
 
             if (direction === 'forward' || direction === 'downward') {
-                editorInstance.chain().focus().setTextSelection(after).run();
+                if (after >= docSize) {
+                    // No content after — insert a paragraph
+                    editorInstance.chain().focus()
+                        .insertContentAt(after, { type: 'paragraph' })
+                        .setTextSelection(after + 1)
+                        .run();
+                } else {
+                    editorInstance.chain().focus().setTextSelection(after).run();
+                }
             } else {
-                editorInstance.chain().focus().setTextSelection(pos).run();
+                if (pos <= 0) {
+                    // No content before — insert a paragraph at start
+                    editorInstance.chain().focus()
+                        .insertContentAt(0, { type: 'paragraph' })
+                        .setTextSelection(1)
+                        .run();
+                } else {
+                    editorInstance.chain().focus().setTextSelection(pos).run();
+                }
             }
         } catch (_) {}
     });
 }
 
-// Move TipTap cursor to after the node at getPos()
+// Move TipTap cursor to after the node at getPos().
+// If the math node is the last block, insert an empty paragraph so
+// the user always has somewhere to land.
 function moveCursorAfter(getPos, editorInstance) {
     var pos = getPos();
     if (typeof pos !== 'number') return;
@@ -118,7 +137,18 @@ function moveCursorAfter(getPos, editorInstance) {
         var nodeAfter = resolved.nodeAfter;
         if (!nodeAfter) return;
         var after = pos + nodeAfter.nodeSize;
-        editorInstance.chain().focus().setTextSelection(after).run();
+        var docSize = editorInstance.state.doc.content.size;
+
+        // If there is no content after this node (end of document),
+        // insert an empty paragraph first so the cursor has a target.
+        if (after >= docSize) {
+            editorInstance.chain().focus()
+                .insertContentAt(after, { type: 'paragraph' })
+                .setTextSelection(after + 1)
+                .run();
+        } else {
+            editorInstance.chain().focus().setTextSelection(after).run();
+        }
     } catch (_) {}
 }
 

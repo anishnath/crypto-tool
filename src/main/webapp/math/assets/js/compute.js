@@ -515,8 +515,24 @@
     //  Shows a subtle "= result" below block equations.
     //  CE-only for speed (auto-result fires on every keystroke).
     // =========================================================
+    var AUTO_RESULT_KEY = 'me_auto_result';
+    function isAutoResultEnabled() {
+        var v = localStorage.getItem(AUTO_RESULT_KEY);
+        return v !== 'off';  // on by default
+    }
+    function setAutoResultEnabled(on) {
+        localStorage.setItem(AUTO_RESULT_KEY, on ? 'on' : 'off');
+        // Hide all existing auto-results when turning off
+        if (!on) {
+            document.querySelectorAll('.me-math-result').forEach(function (el) {
+                el.style.display = 'none';
+            });
+        }
+    }
+
     function _updateAutoResult(latex, resultEl) {
         if (!resultEl) return;
+        if (!isAutoResultEnabled()) { resultEl.style.display = 'none'; return; }
         if (!latex || !latex.trim()) { resultEl.style.display = 'none'; return; }
 
         getCE().then(function (engine) {
@@ -560,18 +576,35 @@
         var mfResult = resultEl.querySelector('.me-result-mathfield');
         if (!mfResult) {
             resultEl.innerHTML = '';
-            resultEl.setAttribute('title', 'Auto-computed result (not part of document)');
+            resultEl.setAttribute('title', 'Auto-computed result (not part of document, hidden from print)');
             resultEl.setAttribute('aria-label', 'Auto-computed result');
+
             var eq = document.createElement('span');
             eq.className = 'me-result-equals';
             eq.textContent = '= ';
             eq.setAttribute('aria-hidden', 'true');
             resultEl.appendChild(eq);
+
             mfResult = document.createElement('math-field');
             mfResult.setAttribute('read-only', '');
             mfResult.className = 'me-result-mathfield';
             resultEl.appendChild(mfResult);
+
+            // Dismiss button to hide this individual result
+            var dismiss = document.createElement('button');
+            dismiss.className = 'me-result-dismiss';
+            dismiss.textContent = '\u00d7';
+            dismiss.setAttribute('title', 'Hide this result');
+            dismiss.setAttribute('aria-label', 'Dismiss auto-result');
+            dismiss.addEventListener('click', function (e) {
+                e.stopPropagation();
+                resultEl.style.display = 'none';
+                resultEl._dismissed = true;
+            });
+            resultEl.appendChild(dismiss);
         }
+        // Don't re-show if user dismissed this specific result
+        if (resultEl._dismissed) return;
         mfResult.value = latex;
         resultEl.style.display = 'block';
     }
@@ -973,7 +1006,9 @@
         getNerdamer:       getNerdamer,
         showToast:         showToast,
         showNodeLoading:   showNodeLoading,
-        hideNodeLoading:   hideNodeLoading
+        hideNodeLoading:   hideNodeLoading,
+        isAutoResultEnabled: isAutoResultEnabled,
+        setAutoResultEnabled: setAutoResultEnabled
     };
 
 })();

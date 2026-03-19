@@ -40,6 +40,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%= cacheVersion %>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%= cacheVersion %>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%= cacheVersion %>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%= cacheVersion %>">
     <%@ include file="../modern/ads/ad-init.jsp" %>
 
     <!-- MathLive static CSS — load async to avoid blocking LCP -->
@@ -291,6 +292,10 @@
             </span>
         </div>
         <div class="me-statusbar-right">
+            <label class="me-auto-result-toggle" title="Show/hide auto-computed results below equations (hidden from print)">
+                <input type="checkbox" id="auto-result-toggle" checked>
+                <span>Auto-results</span>
+            </label>
             <div class="me-zoom-control">
                 <button class="me-zoom-btn" id="zoom-out" title="Zoom out">&#x2212;</button>
                 <span class="me-zoom-value" id="zoom-label">100%</span>
@@ -332,6 +337,7 @@
 <!-- TipTap Editor (ES module — loads from CDN, creates editor, fires me:editor-ready) -->
 <script type="module" src="<%=request.getContextPath()%>/math/assets/js/tiptap-init.js?v=<%= cacheVersion %>"></script>
 
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%= cacheVersion %>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%= cacheVersion %>" defer></script>
 
 <%@ include file="../modern/components/analytics.jsp" %>
