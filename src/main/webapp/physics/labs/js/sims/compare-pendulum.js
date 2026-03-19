@@ -24,8 +24,10 @@ export const ComparePendulumSim = {
     angleB:  { index: 2, label: 'Angle B (rad)',    symbol: 'θ_B' },
     omegaB:  { index: 3, label: 'Angular Vel B',    symbol: 'ω_B' },
     time:    { index: 4, label: 'Time (s)',          symbol: 't' },
+    diverge: { index: 5, label: 'Divergence (rad)',  symbol: 'Δθ' },
+    logDiv:  { index: 6, label: 'log₁₀(Δθ)',        symbol: 'log Δθ' },
   },
-  varCount: 5,
+  varCount: 7,
 
   params: {
     gravity:    { value: 9.81, min: 0, max: 25,   step: 0.1,  label: 'Gravity',          unit: 'm/s²' },
@@ -42,6 +44,7 @@ export const ComparePendulumSim = {
 
   graphDefaults: {
     phase: { x: 'angleA', y: 'omegaA' },
+    time: ['diverge', 'logDiv'],
     time: ['angleA', 'angleB'],
   },
 
@@ -57,7 +60,16 @@ export const ComparePendulumSim = {
   ],
 
   init(p) {
-    return [p.startAngle, 0, p.startAngle + p.angleDelta, 0, 0];
+    const delta = p.angleDelta;
+    const logDelta = delta > 0 ? Math.log10(delta) : -10;
+    return [p.startAngle, 0, p.startAngle + delta, 0, 0, delta, logDelta];
+  },
+
+  /** Compute divergence after each physics step */
+  postStep(vars) {
+    const delta = Math.abs(vars[0] - vars[2]);
+    vars[5] = delta;
+    vars[6] = delta > 1e-10 ? Math.log10(delta) : -10;
   },
 
   _evalSingle(angle, angVel, time, params) {
@@ -70,6 +82,7 @@ export const ComparePendulumSim = {
 
   evaluate(vars, change, params, isDragging) {
     change[4] = 1;
+    change[5] = 0; change[6] = 0; // computed in postStep
     if (isDragging) return;
 
     const time = vars[4];
