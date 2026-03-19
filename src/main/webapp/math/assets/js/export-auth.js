@@ -83,6 +83,13 @@
      * @param {function} doExport - callback to run when authenticated (or when allowWithoutAccount for LaTeX)
      */
     function requireAuthForExport(exportType, doExport) {
+        // LaTeX export is client-side only — no auth needed, export directly
+        var isLatex = (exportType || '').toLowerCase() === 'latex';
+        if (isLatex) {
+            doExport();
+            return;
+        }
+
         if (!window.MathAPI || !window.MathAPI.checkSession) {
             doExport();
             return;
@@ -93,18 +100,16 @@
                 doExport();
                 return;
             }
-            var isLatex = (exportType || '').toLowerCase() === 'latex';
             showExportLoginModal({
                 exportType: exportType,
-                allowWithoutAccount: isLatex,
-                onExportAnyway: isLatex ? doExport : null
+                allowWithoutAccount: false,
+                onExportAnyway: null
             });
         }).catch(function () {
-            var isLatex = (exportType || '').toLowerCase() === 'latex';
             showExportLoginModal({
                 exportType: exportType,
-                allowWithoutAccount: isLatex,
-                onExportAnyway: isLatex ? doExport : null
+                allowWithoutAccount: false,
+                onExportAnyway: null
             });
         });
     }

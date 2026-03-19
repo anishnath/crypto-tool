@@ -54,9 +54,17 @@
         var tree = document.querySelector('.me-outline-tree');
         if (!tree) return;
         var pm = document.querySelector('.me-canvas .ProseMirror');
-        if (!pm) return;
+        if (!pm) {
+            // Editor not yet rendered — clear hardcoded placeholders
+            tree.innerHTML = '<div class="me-outline-empty">Add headings to see document outline</div>';
+            return;
+        }
         var headings = pm.querySelectorAll('h1, h2, h3');
         tree.innerHTML = '';
+        if (headings.length === 0) {
+            tree.innerHTML = '<div class="me-outline-empty">Add headings to see document outline</div>';
+            return;
+        }
         headings.forEach(function (h) {
             var level = parseInt(h.tagName.charAt(1), 10);
             var a = document.createElement('a');
@@ -69,6 +77,13 @@
             });
             tree.appendChild(a);
         });
+    }
+
+    // Debounced version for use on content-changed (avoids full DOM rebuild every keystroke)
+    var _outlineTimer = null;
+    function updateOutlineDebounced() {
+        if (_outlineTimer) clearTimeout(_outlineTimer);
+        _outlineTimer = setTimeout(updateOutline, 500);
     }
 
     // =========================================================
@@ -186,6 +201,10 @@
     // =========================================================
     //  LISTEN FOR EDITOR EVENTS
     // =========================================================
+
+    // Clear hardcoded outline placeholders immediately at script load (prevents flash)
+    updateOutline();
+
     document.addEventListener('me:editor-ready', function () {
         updateStats();
         updateOutline();
@@ -193,12 +212,40 @@
 
     document.addEventListener('me:content-changed', function () {
         updateStats();
-        updateOutline();
+        updateOutlineDebounced();
     });
 
     document.addEventListener('me:selection-changed', function () {
         if (window.MeToolbar) MeToolbar.sync();
     });
+
+    // =========================================================
+    //  BACK BUTTON — guard against unsaved changes
+    // =========================================================
+    var backBtn = document.querySelector('.me-back-btn');
+    if (backBtn) {
+        backBtn.addEventListener('click', function (e) {
+            var dirty = window.MeAutosave && window.MeAutosave.dirtyForApi;
+            if (dirty) {
+                e.preventDefault();
+                var leave = confirm('You have unsaved changes. Save before leaving?');
+                if (leave) {
+                    // Attempt to save, then navigate
+                    if (window.MeAutosave && window.MeAutosave.save) {
+                        var dest = backBtn.getAttribute('href') || backBtn.closest('a')?.getAttribute('href');
+                        Promise.resolve(window.MeAutosave.save()).then(function () {
+                            window.location.href = dest || 'dashboard.jsp';
+                        }).catch(function () {
+                            window.location.href = dest || 'dashboard.jsp';
+                        });
+                    } else {
+                        window.location.href = backBtn.getAttribute('href') || 'dashboard.jsp';
+                    }
+                }
+                // If user clicked cancel in confirm dialog, stay on page
+            }
+        });
+    }
 
     // =========================================================
     //  EXPOSE GLOBALLY

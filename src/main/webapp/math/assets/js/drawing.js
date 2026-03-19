@@ -64,6 +64,9 @@
     ];
     var WIDTHS = [1, 2, 3, 5, 8];
 
+    // Onboarding localStorage key (MAJOR 1.6)
+    var ONBOARDING_KEY = 'me_drawing_onboarded';
+
     // ── Tool Definitions ─────────────────────────────────────
     var TOOL_GROUPS = [
         {
@@ -136,6 +139,22 @@
     ];
 
     // ══════════════════════════════════════════════════════════
+    //  TOAST HELPER
+    // ══════════════════════════════════════════════════════════
+    function showToast(msg) {
+        var toast = document.createElement('div');
+        toast.textContent = msg;
+        toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);' +
+            'padding:8px 18px;background:#1e293b;color:#fff;border-radius:8px;font-size:13px;' +
+            'z-index:100001;opacity:1;transition:opacity 0.3s;pointer-events:none;';
+        document.body.appendChild(toast);
+        setTimeout(function () {
+            toast.style.opacity = '0';
+            setTimeout(function () { if (toast.parentNode) toast.remove(); }, 300);
+        }, 2500);
+    }
+
+    // ══════════════════════════════════════════════════════════
     //  MODAL BUILD
     // ══════════════════════════════════════════════════════════
     function ensureModal() {
@@ -154,12 +173,12 @@
         var h = '';
 
         // ─── Top toolbar ───
-        h += '<div class="me-draw-toolbar">';
+        h += '<div class="me-draw-toolbar" role="toolbar" aria-label="Drawing tools">';
         TOOL_GROUPS.forEach(function (g) {
             h += '<div class="me-draw-tool-group">';
             h += '<span class="me-draw-group-label">' + g.label + '</span>';
             g.tools.forEach(function (t) {
-                h += '<button class="me-draw-tool" data-tool="' + t.id + '" title="' + t.label + '">' + t.icon + '</button>';
+                h += '<button class="me-draw-tool" data-tool="' + t.id + '" title="' + t.label + '" role="button" tabindex="-1">' + t.icon + '</button>';
             });
             h += '</div>';
         });
@@ -274,6 +293,9 @@
         modal.querySelector('.me-draw-done').addEventListener('click', onDone);
         modal.querySelector('.me-draw-cancel').addEventListener('click', onCancel);
 
+        // Arrow key navigation for toolbar (MAJOR 9.4)
+        wireToolbarKeyboardNav();
+
         // Keyboard — only when NOT editing text inside canvas
         modal.addEventListener('keydown', function (e) {
             // If user is editing an IText inside the canvas, let fabric handle it
@@ -307,6 +329,45 @@
         });
     }
 
+    // ── Toolbar keyboard navigation (MAJOR 9.4) ─────────────
+    function wireToolbarKeyboardNav() {
+        var toolbar = modal.querySelector('.me-draw-toolbar');
+        if (!toolbar) return;
+
+        var toolButtons = Array.prototype.slice.call(toolbar.querySelectorAll('.me-draw-tool'));
+        if (toolButtons.length === 0) return;
+
+        // Make the first tool button tabbable
+        toolButtons[0].setAttribute('tabindex', '0');
+
+        toolbar.addEventListener('keydown', function (e) {
+            var current = document.activeElement;
+            var idx = toolButtons.indexOf(current);
+            if (idx < 0) return;
+
+            var newIdx = -1;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                newIdx = (idx + 1) % toolButtons.length;
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                newIdx = (idx - 1 + toolButtons.length) % toolButtons.length;
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                newIdx = 0;
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                newIdx = toolButtons.length - 1;
+            }
+
+            if (newIdx >= 0) {
+                toolButtons[idx].setAttribute('tabindex', '-1');
+                toolButtons[newIdx].setAttribute('tabindex', '0');
+                toolButtons[newIdx].focus();
+            }
+        });
+    }
+
     // ══════════════════════════════════════════════════════════
     //  HELPERS
     // ══════════════════════════════════════════════════════════
@@ -333,6 +394,37 @@
         btn.disabled = !hasContent;
         btn.title = hasContent ? 'Insert drawing into document' : 'Add a shape, line, or text first';
         btn.classList.toggle('me-draw-done-disabled', !hasContent);
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  ONBOARDING OVERLAY (MAJOR 1.6)
+    // ══════════════════════════════════════════════════════════
+    function showOnboarding() {
+        if (localStorage.getItem(ONBOARDING_KEY)) return;
+
+        var overlay = document.createElement('div');
+        overlay.className = 'me-draw-onboarding';
+        overlay.style.cssText = 'position:absolute;inset:0;z-index:100;display:flex;align-items:center;' +
+            'justify-content:center;background:rgba(0,0,0,0.35);cursor:pointer;';
+        overlay.innerHTML = '<div style="background:#fff;border-radius:12px;padding:24px 32px;max-width:400px;' +
+            'text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.15);pointer-events:auto;">' +
+            '<p style="margin:0 0 8px;font-size:16px;font-weight:600;color:#1e293b;">Welcome to the Drawing Tool</p>' +
+            '<p style="margin:0 0 12px;font-size:14px;color:#475569;line-height:1.5;">' +
+            'Select a tool from the toolbar, then click on the canvas to draw.<br>' +
+            'Use <kbd style="padding:1px 5px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:3px;font-size:12px;">Ctrl+Z</kbd> to undo.</p>' +
+            '<button style="padding:6px 20px;font-size:14px;border:none;border-radius:6px;background:#2563eb;color:#fff;cursor:pointer;">Got it</button>' +
+            '</div>';
+
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay || e.target.tagName === 'BUTTON') {
+                localStorage.setItem(ONBOARDING_KEY, '1');
+                overlay.remove();
+            }
+        });
+
+        // Append to modal (positioned relative)
+        modal.style.position = 'relative';
+        modal.appendChild(overlay);
     }
 
     // ══════════════════════════════════════════════════════════
@@ -1230,7 +1322,7 @@
     }
 
     // ══════════════════════════════════════════════════════════
-    //  UNDO / REDO
+    //  UNDO / REDO (MAJOR 10.2 — try/catch around loadFromJSON)
     // ══════════════════════════════════════════════════════════
     function saveState() {
         if (isRestoring || suppressSave) return;
@@ -1243,10 +1335,17 @@
         if (undoStack.length <= 1) return;
         redoStack.push(undoStack.pop());
         isRestoring = true;
-        canvas.loadFromJSON(undoStack[undoStack.length - 1], function () {
-            canvas.renderAll();
+        try {
+            canvas.loadFromJSON(undoStack[undoStack.length - 1], function () {
+                canvas.renderAll();
+                isRestoring = false;
+                updateDoneButton();
+            });
+        } catch (e) {
             isRestoring = false;
-        });
+            console.warn('Undo failed:', e);
+            showToast('Undo failed — canvas state could not be restored');
+        }
     }
 
     function redo() {
@@ -1254,10 +1353,17 @@
         var next = redoStack.pop();
         undoStack.push(next);
         isRestoring = true;
-        canvas.loadFromJSON(next, function () {
-            canvas.renderAll();
+        try {
+            canvas.loadFromJSON(next, function () {
+                canvas.renderAll();
+                isRestoring = false;
+                updateDoneButton();
+            });
+        } catch (e) {
             isRestoring = false;
-        });
+            console.warn('Redo failed:', e);
+            showToast('Redo failed — canvas state could not be restored');
+        }
     }
 
     // ── Delete / Clear ───────────────────────────────────────
@@ -1343,6 +1449,10 @@
         requestAnimationFrame(function () {
             initCanvas();
             setupResizeObserver();
+
+            // Show onboarding overlay on first use (MAJOR 1.6)
+            showOnboarding();
+
             if (existingJson) {
                 try {
                     isRestoring = true;
@@ -1356,6 +1466,8 @@
                     });
                 } catch (e) {
                     isRestoring = false;
+                    console.warn('Failed to load existing drawing:', e);
+                    showToast('Could not restore previous drawing');
                 }
             } else if (existingImageData) {
                 // Vector data lost (e.g. exported to PNG). Load image as background.

@@ -1,5 +1,5 @@
 /**
- * slash-menu.js — Slash command menu (/ at start of empty line)
+ * slash-menu.js — Slash command menu (/ at start of line)
  * TipTap-based Math Editor
  */
 (function () {
@@ -37,6 +37,7 @@
         var el = document.createElement('div');
         el.className = 'me-slash-item';
         el.setAttribute('role', 'option');
+        el.setAttribute('aria-selected', 'false');
         el.setAttribute('data-index', idx);
         el.innerHTML =
             '<span class="me-slash-icon">' + item.icon + '</span>' +
@@ -114,9 +115,13 @@
 
     function updateSelected() {
         var visible = getVisibleItems();
-        menuItems.forEach(function (el) { el.classList.remove('selected'); });
+        menuItems.forEach(function (el) {
+            el.classList.remove('selected');
+            el.setAttribute('aria-selected', 'false');
+        });
         if (visible[selectedIndex]) {
             visible[selectedIndex].classList.add('selected');
+            visible[selectedIndex].setAttribute('aria-selected', 'true');
             visible[selectedIndex].scrollIntoView({ block: 'nearest' });
         }
     }
@@ -167,14 +172,14 @@
                 return;
             }
 
-            // Detect / at start of empty block
+            // Detect / at start of block — only requires parentOffset === 0 (MAJOR 1.1)
+            // Removed isEmpty check so slash menu triggers at the start of any paragraph
             if (e.key === '/') {
                 var editor = window.MeEditor;
                 if (!editor) return;
                 var { $from } = editor.state.selection;
                 var isAtStart = $from.parentOffset === 0;
-                var isEmpty = $from.parent.textContent === '';
-                if (isAtStart && isEmpty) {
+                if (isAtStart) {
                     e.preventDefault();
                     show();
                 }

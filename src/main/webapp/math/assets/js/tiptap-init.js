@@ -357,18 +357,22 @@ const MeImage = Node.create({
             var onResizeStart = function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                var startX = e.clientX;
+                var isTouch = e.type === 'touchstart';
+                var startX = isTouch ? e.touches[0].clientX : e.clientX;
                 var startW = parseInt(img.style.width, 10) || 560;
                 var minW = 120, maxW = 960;
 
                 function onMove(ev) {
-                    var dx = ev.clientX - startX;
+                    var cx = ev.type === 'touchmove' ? ev.touches[0].clientX : ev.clientX;
+                    var dx = cx - startX;
                     var newW = Math.max(minW, Math.min(maxW, startW + dx));
                     img.style.width = newW + 'px';
                 }
                 function onUp() {
                     document.removeEventListener('mousemove', onMove);
                     document.removeEventListener('mouseup', onUp);
+                    document.removeEventListener('touchmove', onMove);
+                    document.removeEventListener('touchend', onUp);
                     var pos = getPos();
                     if (typeof pos !== 'number') return;
                     var newW = parseInt(img.style.width, 10) || 560;
@@ -381,8 +385,14 @@ const MeImage = Node.create({
                 }
                 document.addEventListener('mousemove', onMove);
                 document.addEventListener('mouseup', onUp);
+                document.addEventListener('touchmove', onMove, { passive: false });
+                document.addEventListener('touchend', onUp);
             };
             handle.addEventListener('mousedown', onResizeStart);
+            handle.addEventListener('touchstart', onResizeStart, { passive: false });
+            // Touch-friendly: make handle visible on touch devices
+            handle.style.minWidth = '44px';
+            handle.style.minHeight = '44px';
 
             return {
                 dom: wrapper,
@@ -498,20 +508,24 @@ const DrawingBlock = Node.create({
                 }
             });
 
-            handle.addEventListener('mousedown', function (e) {
+            var onDrawingResizeStart = function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                var startX = e.clientX;
+                var isTouch = e.type === 'touchstart';
+                var startX = isTouch ? e.touches[0].clientX : e.clientX;
                 var startW = parseInt(img.style.width, 10) || 560;
                 var minW = 120, maxW = 960;
                 function onMove(ev) {
-                    var dx = ev.clientX - startX;
+                    var cx = ev.type === 'touchmove' ? ev.touches[0].clientX : ev.clientX;
+                    var dx = cx - startX;
                     var newW = Math.max(minW, Math.min(maxW, startW + dx));
                     img.style.width = newW + 'px';
                 }
                 function onUp() {
                     document.removeEventListener('mousemove', onMove);
                     document.removeEventListener('mouseup', onUp);
+                    document.removeEventListener('touchmove', onMove);
+                    document.removeEventListener('touchend', onUp);
                     var pos = getPos();
                     if (typeof pos !== 'number') return;
                     var newW = parseInt(img.style.width, 10) || 560;
@@ -523,7 +537,14 @@ const DrawingBlock = Node.create({
                 }
                 document.addEventListener('mousemove', onMove);
                 document.addEventListener('mouseup', onUp);
-            });
+                document.addEventListener('touchmove', onMove, { passive: false });
+                document.addEventListener('touchend', onUp);
+            };
+            handle.addEventListener('mousedown', onDrawingResizeStart);
+            handle.addEventListener('touchstart', onDrawingResizeStart, { passive: false });
+            // Touch-friendly: make handle visible on touch devices
+            handle.style.minWidth = '44px';
+            handle.style.minHeight = '44px';
 
             // Overlay hint
             const hint = document.createElement('div');
@@ -601,7 +622,12 @@ if (editorEl) {
         element: editorEl,
         extensions: [
             StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
-            Placeholder.configure({ placeholder: "Start typing, press '/' for commands, or $ for math..." }),
+            Placeholder.configure({
+                placeholder: ({ node, pos }) =>
+                    pos === 0 ? "Start typing, press '/' for commands, or $ for math..." : '',
+                showOnlyWhenEditable: true,
+                showOnlyCurrent: false,
+            }),
             Underline,
             TextAlign.configure({ types: ['heading', 'paragraph'] }),
             Table.configure({ resizable: false }),

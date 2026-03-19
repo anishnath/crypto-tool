@@ -94,6 +94,56 @@
 }
 
 /* ============================================
+   DARK MODE (auto via OS preference)
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --me-primary: #3B82F6;
+        --me-primary-dark: #2563EB;
+        --me-primary-light: #60A5FA;
+        --me-primary-50: rgba(59,130,246,0.12);
+        --me-surface: #1e293b;
+        --me-background: #0f172a;
+        --me-border: #334155;
+        --me-border-light: #1e293b;
+        --me-text-primary: #e2e8f0;
+        --me-text-secondary: #cbd5e1;
+        --me-text-muted: #94a3b8;
+        --me-math-bg: rgba(59,130,246,0.1);
+        --me-success: #34d399;
+        --me-warning: #fbbf24;
+        --me-error: #f87171;
+        --me-shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+        --me-shadow-md: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+        --me-shadow-lg: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -2px rgba(0,0,0,0.3);
+        --me-shadow-xl: 0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -4px rgba(0,0,0,0.3);
+    }
+}
+
+/* Dark mode via manual toggle class on body */
+body.dark-mode {
+    --me-primary: #3B82F6;
+    --me-primary-dark: #2563EB;
+    --me-primary-light: #60A5FA;
+    --me-primary-50: rgba(59,130,246,0.12);
+    --me-surface: #1e293b;
+    --me-background: #0f172a;
+    --me-border: #334155;
+    --me-border-light: #1e293b;
+    --me-text-primary: #e2e8f0;
+    --me-text-secondary: #cbd5e1;
+    --me-text-muted: #94a3b8;
+    --me-math-bg: rgba(59,130,246,0.1);
+    --me-success: #34d399;
+    --me-warning: #fbbf24;
+    --me-error: #f87171;
+    --me-shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --me-shadow-md: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+    --me-shadow-lg: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -2px rgba(0,0,0,0.3);
+    --me-shadow-xl: 0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -4px rgba(0,0,0,0.3);
+}
+
+/* ============================================
    BASE / RESET (scoped)
    ============================================ */
 .math-editor-app {

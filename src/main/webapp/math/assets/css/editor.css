@@ -273,6 +273,70 @@
     background: var(--me-primary-dark);
 }
 
+/* Topbar overflow menu button (mobile: replaces visibility + share) */
+.me-topbar-overflow-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--me-border);
+    border-radius: var(--me-radius-sm);
+    background: var(--me-surface);
+    color: var(--me-text-secondary);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all var(--me-transition);
+    flex-shrink: 0;
+    position: relative;
+}
+
+.me-topbar-overflow-btn:hover {
+    background: var(--me-background);
+    color: var(--me-text-primary);
+}
+
+.me-topbar-overflow-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 180px;
+    background: var(--me-surface);
+    border: 1px solid var(--me-border);
+    border-radius: var(--me-radius-md);
+    box-shadow: var(--me-shadow-lg);
+    padding: 4px;
+    z-index: 300;
+}
+
+.me-topbar-overflow-menu.show {
+    display: block;
+}
+
+.me-topbar-overflow-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 9px 12px;
+    border: none;
+    background: none;
+    border-radius: var(--me-radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: var(--me-font-ui);
+    color: var(--me-text-secondary);
+    cursor: pointer;
+    text-align: left;
+    transition: background var(--me-transition);
+}
+
+.me-topbar-overflow-item:hover {
+    background: var(--me-background);
+    color: var(--me-text-primary);
+}
+
 .me-export-dropdown {
     position: relative;
 }
@@ -517,7 +581,7 @@
 }
 
 .me-toolbar-btn:hover {
-    background: #F1F5F9;
+    background: var(--me-border-light, #F1F5F9);
     color: var(--me-text-primary);
 }
 
@@ -525,6 +589,46 @@
     background: var(--me-primary-50);
     color: var(--me-primary);
     box-shadow: inset 0 1px 2px rgba(37,99,235,0.15);
+}
+
+.me-toolbar-btn.disabled,
+.me-toolbar-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ---- Table context toolbar ---- */
+.me-table-context-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background: #FFFBEB;
+    border-bottom: 1px solid #FDE68A;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.me-table-context-label {
+    font-weight: 600;
+    color: #92400E;
+    margin-right: 4px;
+}
+
+.me-table-ctx-btn {
+    font-size: 11px !important;
+    padding: 3px 8px !important;
+    font-weight: 600;
+}
+
+.me-table-ctx-btn-danger {
+    color: #DC2626;
+}
+
+.me-table-ctx-btn-danger:hover {
+    background: #FEE2E2 !important;
+    color: #DC2626;
 }
 
 /* Toolbar button tooltips (pure CSS) */
@@ -549,6 +653,12 @@
 
 @keyframes tooltipFade {
     to { opacity: 1; }
+}
+
+/* First toolbar row: reposition tooltips below buttons to avoid viewport clipping */
+.me-toolbar-row:first-child .me-toolbar-btn[title]:hover::after {
+    bottom: auto;
+    top: calc(100% + 6px);
 }
 
 .me-toolbar-btn-text {
@@ -604,7 +714,7 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    background: rgba(255,255,255,0.9);
+    background: var(--me-surface, rgba(255,255,255,0.9));
     z-index: 10;
     font-size: 14px;
     color: var(--me-text-muted);
@@ -710,14 +820,14 @@
     font-weight: 600;
     margin: 28px 0 12px;
     line-height: 1.3;
-    color: #1E293B;
+    color: var(--me-text-primary, #1E293B);
 }
 
 .me-canvas h3 {
     font-size: 1.25rem;
     font-weight: 600;
     margin: 24px 0 10px;
-    color: #334155;
+    color: var(--me-text-secondary, #334155);
 }
 
 .me-canvas p {
@@ -935,10 +1045,17 @@
 .me-canvas math-field::part(menu-toggle) {
     display: none;
 }
-/* Show keyboard toggle only on touch/mobile devices */
+/* On desktop, show the virtual keyboard toggle as a subtle small icon */
 @media not (pointer: coarse) {
     .me-canvas math-field::part(virtual-keyboard-toggle) {
-        display: none;
+        opacity: 0.35;
+        transform: scale(0.75);
+        transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .me-canvas math-field:hover::part(virtual-keyboard-toggle),
+    .me-canvas math-field:focus-within::part(virtual-keyboard-toggle) {
+        opacity: 0.7;
+        transform: scale(0.85);
     }
 }
 
@@ -955,7 +1072,7 @@
 .me-result-equals {
     font-family: 'Georgia', serif;
     font-size: 0.85em;
-    color: #94A3B8;
+    color: var(--me-text-muted, #94A3B8);
     vertical-align: middle;
 }
 
@@ -966,7 +1083,7 @@
     border: none;
     outline: none;
     font-size: 1em;
-    color: #64748B;
+    color: var(--me-text-secondary, #64748B);
     --hue: 220;
     pointer-events: none;
 }
@@ -1702,14 +1819,70 @@
 /* ============================================
    RESPONSIVE
    ============================================ */
+/* ---- Right panel toggle button (visible on tablet / mobile) ---- */
+.me-panel-toggle-btn {
+    display: none;
+    position: fixed;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 500;
+    width: 32px;
+    height: 64px;
+    border: 1px solid var(--me-border);
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    background: var(--me-surface);
+    color: var(--me-text-muted);
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: var(--me-shadow-md);
+    align-items: center;
+    justify-content: center;
+    transition: all var(--me-transition);
+}
+
+.me-panel-toggle-btn:hover {
+    color: var(--me-primary);
+    background: var(--me-background);
+}
+
 @media (max-width: 1024px) {
+    .me-panel-toggle-btn {
+        display: flex;
+    }
+
     .me-right-panel {
-        display: none;
+        position: fixed;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 499;
+        width: 280px;
+        transform: translateX(100%);
+        transition: transform 0.25s ease;
+        box-shadow: var(--me-shadow-xl);
+    }
+
+    .me-right-panel.me-panel-open {
+        transform: translateX(0);
     }
 
     .me-canvas {
         padding: 40px 48px;
     }
+}
+
+/* Overlay backdrop when panel is open on tablet/mobile */
+.me-panel-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 498;
+    background: rgba(0,0,0,0.3);
+}
+.me-panel-backdrop.me-panel-backdrop-visible {
+    display: block;
 }
 
 @media (max-width: 768px) {
@@ -1744,8 +1917,30 @@
         display: none;
     }
 
+    /* Hide visibility dropdown and share button on mobile — they go in overflow menu */
+    .me-visibility-dropdown,
+    .me-btn-share {
+        display: none !important;
+    }
+
+    /* Overflow "..." menu trigger (hidden by default, shown on mobile) */
+    .me-topbar-overflow-btn {
+        display: flex !important;
+    }
+
+    /* Simplified status bar: show zoom controls but reduce padding */
     .me-statusbar {
+        height: 32px;
+        padding: 0 8px;
+    }
+
+    .me-statusbar-left {
         display: none;
+    }
+
+    .me-statusbar-right {
+        width: 100%;
+        justify-content: center;
     }
 
     /* Slash menu full-width on mobile */
@@ -1967,15 +2162,15 @@ body {
 .me-drawing-block {
     position: relative;
     margin: 1rem 0;
-    border: 2px solid #e2e8f0;
+    border: 2px solid var(--me-border, #e2e8f0);
     border-radius: 8px;
     overflow: hidden;
-    background: #fafafa;
+    background: var(--me-background, #fafafa);
     cursor: pointer;
     transition: border-color 0.15s, box-shadow 0.15s;
 }
 .me-drawing-block:hover {
-    border-color: #93c5fd;
+    border-color: var(--me-primary-light, #93c5fd);
 }
 .me-drawing-selected {
     border-color: #3b82f6 !important;
@@ -1986,7 +2181,7 @@ body {
     width: 100%;
     max-height: 500px;
     object-fit: contain;
-    background: #fff;
+    background: var(--me-surface, #fff);
 }
 .me-drawing-resize-handle {
     position: absolute;
@@ -2033,20 +2228,20 @@ body {
     flex-wrap: wrap;
     align-items: center;
     gap: 4px;
-    background: #ffffff;
+    background: var(--me-surface, #ffffff);
     border-radius: 12px 12px 0 0;
     padding: 8px 12px;
     width: 100%;
     max-width: 960px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--me-border, #e2e8f0);
 }
 .me-draw-tool-group {
     display: flex;
     align-items: center;
     gap: 2px;
     padding: 0 6px;
-    border-right: 1px solid #e2e8f0;
+    border-right: 1px solid var(--me-border, #e2e8f0);
 }
 .me-draw-tool-group:last-child {
     border-right: none;
@@ -2054,7 +2249,7 @@ body {
 .me-draw-group-label {
     font-size: 9px;
     font-weight: 600;
-    color: #94a3b8;
+    color: var(--me-text-muted, #94a3b8);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-right: 4px;
@@ -2068,27 +2263,27 @@ body {
     cursor: pointer;
     font-size: 16px;
     line-height: 1;
-    color: #334155;
+    color: var(--me-text-secondary, #334155);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.12s;
 }
 .me-draw-tool:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
+    background: var(--me-border-light, #f1f5f9);
+    border-color: var(--me-border, #cbd5e1);
 }
 .me-draw-tool.active {
-    background: #dbeafe;
-    border-color: #3b82f6;
-    color: #1d4ed8;
+    background: var(--me-primary-50, #dbeafe);
+    border-color: var(--me-primary, #3b82f6);
+    color: var(--me-primary-dark, #1d4ed8);
 }
 
 /* Color swatches */
 .me-draw-color {
     width: 22px; height: 22px;
     border-radius: 50%;
-    border: 2px solid #e2e8f0;
+    border: 2px solid var(--me-border, #e2e8f0);
     cursor: pointer;
     transition: transform 0.1s, border-color 0.1s;
     padding: 0;
@@ -2097,8 +2292,8 @@ body {
     transform: scale(1.2);
 }
 .me-draw-color.active {
-    border-color: #1e293b;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3b82f6;
+    border-color: var(--me-text-primary, #1e293b);
+    box-shadow: 0 0 0 2px var(--me-surface, #fff), 0 0 0 4px var(--me-primary, #3b82f6);
 }
 
 /* Width buttons */
@@ -2111,29 +2306,29 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #334155;
+    color: var(--me-text-secondary, #334155);
     transition: all 0.12s;
 }
-.me-draw-width:hover { background: #f1f5f9; }
-.me-draw-width.active { background: #dbeafe; border-color: #3b82f6; }
+.me-draw-width:hover { background: var(--me-border-light, #f1f5f9); }
+.me-draw-width.active { background: var(--me-primary-50, #dbeafe); border-color: var(--me-primary, #3b82f6); }
 
 /* Fill toggle */
 .me-draw-fill-toggle {
     padding: 4px 8px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--me-border, #e2e8f0);
     border-radius: 6px;
-    background: #fff;
+    background: var(--me-surface, #fff);
     cursor: pointer;
     font-size: 11px;
     font-weight: 600;
-    color: #64748b;
+    color: var(--me-text-muted, #64748b);
     transition: all 0.12s;
 }
-.me-draw-fill-toggle:hover { background: #f1f5f9; }
+.me-draw-fill-toggle:hover { background: var(--me-border-light, #f1f5f9); }
 .me-draw-fill-toggle.active {
-    background: #dbeafe;
-    border-color: #3b82f6;
-    color: #1d4ed8;
+    background: var(--me-primary-50, #dbeafe);
+    border-color: var(--me-primary, #3b82f6);
+    color: var(--me-primary-dark, #1d4ed8);
 }
 
 /* Action buttons */
@@ -2144,13 +2339,13 @@ body {
     background: transparent;
     cursor: pointer;
     font-size: 18px;
-    color: #334155;
+    color: var(--me-text-secondary, #334155);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.12s;
 }
-.me-draw-actions button:hover { background: #f1f5f9; }
+.me-draw-actions button:hover { background: var(--me-border-light, #f1f5f9); }
 
 /* ── Settings bar (second row) ───────────────────────── */
 .me-draw-settings-bar {
@@ -2158,11 +2353,11 @@ body {
     flex-wrap: wrap;
     align-items: center;
     gap: 4px;
-    background: #f8fafc;
+    background: var(--me-background, #f8fafc);
     padding: 6px 12px;
     width: 100%;
     max-width: 960px;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--me-border, #e2e8f0);
 }
 
 /* Buttons in settings bar (grid toggle, snap toggle, etc.) */
@@ -2175,37 +2370,38 @@ body {
     cursor: pointer;
     font-size: 16px;
     line-height: 1;
-    color: #334155;
+    color: var(--me-text-secondary, #334155);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.12s;
 }
 .me-draw-settings-bar .me-draw-tool-group button:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
+    background: var(--me-border-light, #f1f5f9);
+    border-color: var(--me-border, #cbd5e1);
 }
 .me-draw-settings-bar .me-draw-tool-group button.active {
-    background: #dbeafe;
-    border-color: #3b82f6;
-    color: #1d4ed8;
+    background: var(--me-primary-50, #dbeafe);
+    border-color: var(--me-primary, #3b82f6);
+    color: var(--me-primary-dark, #1d4ed8);
 }
 
 /* Grid size slider */
 .me-draw-grid-size {
     width: 70px;
     height: 20px;
-    accent-color: #3b82f6;
+    accent-color: var(--me-primary, #3b82f6);
     cursor: pointer;
 }
 
 /* Dash style select */
 .me-draw-dash-style {
     padding: 3px 6px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--me-border, #e2e8f0);
     border-radius: 4px;
     font-size: 11px;
-    background: #fff;
+    background: var(--me-surface, #fff);
+    color: var(--me-text-secondary, #334155);
     cursor: pointer;
 }
 
@@ -2216,17 +2412,17 @@ body {
 .me-draw-poly-dec,
 .me-draw-poly-inc {
     width: 26px; height: 26px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--me-border, #cbd5e1);
     border-radius: 4px;
-    background: #fff;
+    background: var(--me-surface, #fff);
     cursor: pointer;
     font-size: 14px;
     line-height: 1;
-    color: #334155;
+    color: var(--me-text-secondary, #334155);
     display: flex; align-items: center; justify-content: center;
 }
 .me-draw-poly-dec:hover,
-.me-draw-poly-inc:hover { background: #f1f5f9; }
+.me-draw-poly-inc:hover { background: var(--me-border-light, #f1f5f9); }
 .me-draw-poly-count {
     font-size: 14px;
     font-weight: 600;
@@ -2241,9 +2437,9 @@ body {
     flex: 1;
     min-height: 350px;
     max-height: calc(100vh - 260px);
-    background: #ffffff;
-    border-left: 1px solid #e2e8f0;
-    border-right: 1px solid #e2e8f0;
+    background: var(--me-surface, #ffffff);
+    border-left: 1px solid var(--me-border, #e2e8f0);
+    border-right: 1px solid var(--me-border, #e2e8f0);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2259,17 +2455,17 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    background: #ffffff;
+    background: var(--me-surface, #ffffff);
     border-radius: 0 0 12px 12px;
     padding: 10px 16px;
     width: 100%;
     max-width: 960px;
     box-shadow: 0 -2px 12px rgba(0,0,0,0.05);
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--me-border, #e2e8f0);
 }
 .me-draw-status {
     font-size: 12px;
-    color: #94a3b8;
+    color: var(--me-text-muted, #94a3b8);
 }
 .me-draw-footer > div {
     display: flex;
@@ -2277,28 +2473,28 @@ body {
 }
 .me-draw-cancel {
     padding: 8px 20px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--me-border, #cbd5e1);
     border-radius: 8px;
-    background: #fff;
-    color: #334155;
+    background: var(--me-surface, #fff);
+    color: var(--me-text-secondary, #334155);
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.12s;
 }
-.me-draw-cancel:hover { background: #f1f5f9; }
+.me-draw-cancel:hover { background: var(--me-border-light, #f1f5f9); }
 .me-draw-done {
     padding: 8px 24px;
     border: none;
     border-radius: 8px;
-    background: #3b82f6;
+    background: var(--me-primary, #3b82f6);
     color: #fff;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.12s;
 }
-.me-draw-done:hover { background: #2563eb; }
+.me-draw-done:hover { background: var(--me-primary-dark, #2563eb); }
 .me-draw-done:disabled,
 .me-draw-done.me-draw-done-disabled {
     background: #94a3b8;
@@ -2314,8 +2510,8 @@ body {
 .me-draw-math-input {
     position: fixed;
     z-index: 10001;
-    background: #fff;
-    border: 2px solid #3b82f6;
+    background: var(--me-surface, #fff);
+    border: 2px solid var(--me-primary, #3b82f6);
     border-radius: 10px;
     padding: 8px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.2);
@@ -2331,10 +2527,46 @@ body {
     padding: 6px 14px;
     border: none;
     border-radius: 6px;
-    background: #3b82f6;
+    background: var(--me-primary, #3b82f6);
     color: #fff;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
 }
-.me-draw-math-ok:hover { background: #2563eb; }
+.me-draw-math-ok:hover { background: var(--me-primary-dark, #2563eb); }
+
+/* ============================================
+   DRAWING MODAL: Mobile min-height guard (8.4)
+   Prevent canvas from becoming unusable when
+   virtual keyboard is visible on phones.
+   ============================================ */
+@media (max-width: 768px) {
+    .me-draw-canvas-wrap {
+        min-height: 220px;
+    }
+
+    /* Use smaller viewport height unit if available */
+    @supports (min-height: 1svh) {
+        .me-draw-canvas-wrap {
+            min-height: max(220px, 30svh);
+            max-height: 60svh;
+        }
+    }
+
+    .me-draw-toolbar {
+        padding: 6px 8px;
+        gap: 2px;
+    }
+
+    .me-draw-settings-bar {
+        padding: 4px 8px;
+    }
+
+    .me-draw-group-label {
+        display: none;
+    }
+
+    .me-draw-footer {
+        padding: 8px 12px;
+    }
+}

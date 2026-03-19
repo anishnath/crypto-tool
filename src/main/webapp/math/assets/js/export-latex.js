@@ -213,6 +213,15 @@
         URL.revokeObjectURL(url);
     }
 
+    function dataUrlToUint8(dataUrl) {
+        var arr = dataUrl.split(',');
+        var bstr = atob(arr[1] || '');
+        var n = bstr.length;
+        var u8 = new Uint8Array(n);
+        for (var j = 0; j < n; j++) u8[j] = bstr.charCodeAt(j);
+        return u8;
+    }
+
     function downloadLatex() {
         var editor = window.MeEditor;
         if (!editor) return;
@@ -226,34 +235,63 @@
         var ctx = { baseName: baseName, imgCount: 0, imageFiles: [] };
         var latex = docToLatex(json, docTitle, ctx);
 
-        // Download embedded images first (with small delay between each), then the .tex
         var imageFiles = ctx.imageFiles || [];
-        if (imageFiles.length > 0) {
-            // fetch() may not work for data URLs in all browsers; use atob path
-            imageFiles.forEach(function (item, i) {
-                setTimeout(function () {
-                    try {
-                        var arr = item.dataUrl.split(',');
-                        var mime = (arr[0].match(/:(.*?);/) || [])[1] || 'image/png';
-                        var bstr = atob(arr[1] || '');
-                        var n = bstr.length;
-                        var u8 = new Uint8Array(n);
-                        for (var j = 0; j < n; j++) u8[j] = bstr.charCodeAt(j);
-                        var blob = new Blob([u8], { type: mime });
-                        downloadFile(blob, item.filename);
-                    } catch (err) {
-                        console.warn('Failed to extract image:', err);
-                    }
-                }, i * 120);
-            });
-            setTimeout(function () {
-                var blob = new Blob([latex], { type: 'text/plain;charset=utf-8' });
-                downloadFile(blob, texFilename);
-            }, imageFiles.length * 120 + 50);
-        } else {
+
+        // No images — just download the .tex file
+        if (imageFiles.length === 0) {
             var blob = new Blob([latex], { type: 'text/plain;charset=utf-8' });
             downloadFile(blob, texFilename);
+            return;
         }
+
+        // Has images — bundle into a single ZIP if JSZip is available
+        if (typeof JSZip !== 'undefined') {
+            var zip = new JSZip();
+            zip.file(texFilename, latex);
+            imageFiles.forEach(function (item) {
+                try {
+                    zip.file(item.filename, dataUrlToUint8(item.dataUrl));
+                } catch (err) {
+                    console.warn('Failed to add image to ZIP:', err);
+                }
+            });
+            zip.generateAsync({ type: 'blob' }).then(function (content) {
+                downloadFile(content, baseName + '.zip');
+            }).catch(function (err) {
+                console.error('ZIP generation failed, falling back to individual downloads:', err);
+                downloadLatexFallback(latex, texFilename, imageFiles);
+            });
+        } else {
+            // No JSZip — warn user, then fall back to individual downloads
+            var proceed = confirm(
+                'Your document contains ' + imageFiles.length + ' image(s). ' +
+                'Without the ZIP library, each image will be downloaded as a separate file.\n\n' +
+                'Click OK to proceed with ' + (imageFiles.length + 1) + ' individual downloads, or Cancel to abort.'
+            );
+            if (proceed) {
+                downloadLatexFallback(latex, texFilename, imageFiles);
+            }
+        }
+    }
+
+    function downloadLatexFallback(latex, texFilename, imageFiles) {
+        imageFiles.forEach(function (item, i) {
+            setTimeout(function () {
+                try {
+                    var u8 = dataUrlToUint8(item.dataUrl);
+                    var arr = item.dataUrl.split(',');
+                    var mime = (arr[0].match(/:(.*?);/) || [])[1] || 'image/png';
+                    var blob = new Blob([u8], { type: mime });
+                    downloadFile(blob, item.filename);
+                } catch (err) {
+                    console.warn('Failed to extract image:', err);
+                }
+            }, i * 120);
+        });
+        setTimeout(function () {
+            var blob = new Blob([latex], { type: 'text/plain;charset=utf-8' });
+            downloadFile(blob, texFilename);
+        }, imageFiles.length * 120 + 50);
     }
 
     function wireExportButton() {

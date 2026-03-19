@@ -15,9 +15,57 @@
     if (el) el.style.display = show ? 'flex' : 'none';
   }
 
-  function showError(show) {
+  /* ── Error display with specific messages (MAJOR 2.6) ─── */
+  function showError(show, options) {
     var el = document.getElementById('me-doc-load-error');
-    if (el) el.style.display = show ? 'flex' : 'none';
+    if (!el) return;
+    el.style.display = show ? 'flex' : 'none';
+    if (!show) return;
+
+    options = options || {};
+    var message = options.message || 'Something went wrong loading this document';
+    var showRetry = !!options.retry;
+
+    // Build error content
+    var html = '<p style="margin:0 0 8px;font-size:15px;color:#374151;">' + message + '</p>';
+    if (showRetry) {
+      html += '<button class="me-doc-retry-btn" style="padding:6px 16px;font-size:14px;border:1px solid #d1d5db;border-radius:6px;background:#f9fafb;cursor:pointer;">Try again</button>';
+    }
+    el.innerHTML = html;
+
+    if (showRetry) {
+      var retryBtn = el.querySelector('.me-doc-retry-btn');
+      if (retryBtn) {
+        retryBtn.addEventListener('click', function () {
+          window.location.reload();
+        });
+      }
+    }
+  }
+
+  function getErrorInfo(status, isNetworkError) {
+    if (isNetworkError) {
+      return {
+        message: 'Could not connect to the server \u2014 check your internet connection',
+        retry: true
+      };
+    }
+    if (status === 404) {
+      return {
+        message: 'Document not found \u2014 it may have been deleted',
+        retry: false
+      };
+    }
+    if (status === 403) {
+      return {
+        message: 'You don\u2019t have permission to view this document',
+        retry: false
+      };
+    }
+    return {
+      message: 'Something went wrong loading this document',
+      retry: true
+    };
   }
 
   document.addEventListener('me:editor-ready', function () {
@@ -46,7 +94,8 @@
     }).then(function (r) {
       showOverlay(false);
       if (!r.ok) {
-        showError(true);
+        var errInfo = getErrorInfo(r.status, false);
+        showError(true, errInfo);
         console.warn('Failed to load document:', r.status);
         return;
       }
@@ -70,12 +119,13 @@
             sessionStorage.setItem('me_edit_token_' + docId, params.token);
           }
         } else {
-          showError(true);
+          showError(true, { message: 'Something went wrong loading this document', retry: true });
         }
       });
     }).catch(function (e) {
       showOverlay(false);
-      showError(true);
+      var errInfo = getErrorInfo(null, true);
+      showError(true, errInfo);
       console.warn('Doc load error:', e);
     });
   });

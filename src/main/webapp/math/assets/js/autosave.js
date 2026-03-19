@@ -1,6 +1,8 @@
 /**
- * autosave.js — API-backed save + localStorage fallback
- * Debounced 2.5s, min 15s between API calls
+ * autosave.js — Two-tier save strategy
+ *   Tier 1: localStorage — debounced 2.5s after last edit (instant, no network)
+ *   Tier 2: API          — every 60s at most (protects server at scale)
+ * Ctrl+S and beforeunload always trigger an immediate API save.
  */
 (function () {
   'use strict';
@@ -9,10 +11,26 @@
   var saveDot = document.querySelector('.me-save-dot');
   var saveStatus = document.querySelector('.me-save-status');
 
-  var saveTimeout = null;
+  var localSaveTimeout = null;
+  var apiSaveTimeout = null;
   var lastApiSave = 0;
-  var DEBOUNCE_MS = 2500;
-  var MIN_API_INTERVAL_MS = 15000;
+  var dirtyForApi = false;          // true when local save happened but API hasn't synced yet
+  var LOCAL_DEBOUNCE_MS = 2500;
+  var API_INTERVAL_MS = 60000;      // 1 minute between API calls
+
+  // -- 13.6 fix: cache HTML to avoid re-serializing megabytes of base64 on every tick --
+  var _cachedHTML = null;
+  var _editorUpdateCounter = 0;
+  var _lastSerializedAt = 0;        // counter value when we last called getHTML()
+
+  function getEditorHTML(editor) {
+    if (_editorUpdateCounter === _lastSerializedAt && _cachedHTML !== null) {
+      return _cachedHTML;
+    }
+    _cachedHTML = editor.getHTML();
+    _lastSerializedAt = _editorUpdateCounter;
+    return _cachedHTML;
+  }
 
   function getDocId() {
     var p = new URLSearchParams(window.location.search);
@@ -36,11 +54,14 @@
         saveDot.classList.add('saving');
         saveStatus.classList.add('me-status-saving');
         setStatusText('Saving...');
+        saveStatus.removeAttribute('title');
         break;
       case 'saved':
         saveDot.style.background = '';
         saveStatus.classList.add('me-status-saved');
         setStatusText('Saved');
+        // 2.1 fix: explain what "Saved" means
+        saveStatus.setAttribute('title', 'Document synced to server');
         window._meSaveStatusTimer = setTimeout(function () {
           saveStatus.classList.add('me-status-faded');
         }, 3000);
@@ -49,10 +70,30 @@
         saveDot.classList.add('me-save-error');
         saveStatus.classList.add('me-status-error');
         setStatusText('Save failed');
+        saveStatus.removeAttribute('title');
         break;
       case 'local':
         saveStatus.classList.add('me-status-saved');
         setStatusText('Saved locally');
+        // 2.1 fix: explain what "Saved locally" means
+        saveStatus.setAttribute('title', 'Saved in your browser only — not yet synced to server');
+        break;
+      case 'local-warning':
+        // 10.1 fix: localStorage quota exceeded warning
+        saveDot.classList.add('me-save-error');
+        saveStatus.classList.add('me-status-error');
+        setStatusText('Storage full — local save failed');
+        saveStatus.setAttribute('title', 'Browser storage is full. Old drafts were cleared. Your work will sync to the server on the next API save.');
+        break;
+      case 'new':
+        // 2.2 fix: brand-new empty document
+        saveDot.style.background = '';
+        saveStatus.classList.add('me-status-saved');
+        setStatusText('New document');
+        saveStatus.setAttribute('title', 'Start typing — your work is auto-saved');
+        window._meSaveStatusTimer = setTimeout(function () {
+          saveStatus.classList.add('me-status-faded');
+        }, 3000);
         break;
     }
   }
@@ -70,7 +111,45 @@
   function saveToLocalStorage(key, data) {
     try {
       localStorage.setItem(key, JSON.stringify(data));
-    } catch (e) {}
+      return true;
+    } catch (e) {
+      if (e && (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014)) {
+        // 10.1 fix: storage full — try to clear old drafts and retry once
+        _purgeOldDrafts(key);
+        try {
+          localStorage.setItem(key, JSON.stringify(data));
+          return true;
+        } catch (e2) {
+          // Still full after purge — warn user
+          showStatus('local-warning');
+          return false;
+        }
+      }
+      // Non-quota error (e.g. private browsing blocking storage)
+      showStatus('local-warning');
+      return false;
+    }
+  }
+
+  /** Remove matheditor drafts other than `keepKey`, oldest first. */
+  function _purgeOldDrafts(keepKey) {
+    var drafts = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf('matheditor_doc_') === 0 && k !== keepKey) {
+        try {
+          var d = JSON.parse(localStorage.getItem(k));
+          drafts.push({ key: k, time: d && d.savedAt ? d.savedAt : '' });
+        } catch (_) {
+          drafts.push({ key: k, time: '' });
+        }
+      }
+    }
+    // Sort oldest first
+    drafts.sort(function (a, b) { return a.time < b.time ? -1 : a.time > b.time ? 1 : 0; });
+    for (var j = 0; j < drafts.length; j++) {
+      localStorage.removeItem(drafts[j].key);
+    }
   }
 
   function getVisibility() {
@@ -78,33 +157,62 @@
     return (v === 'public' || v === 'unlisted') ? v : 'private';
   }
 
-  function save() {
+  // -----------------------------------------------------------
+  //  Tier 1: localStorage save (fast, every 2.5s debounce)
+  // -----------------------------------------------------------
+  function saveLocal() {
     var editor = window.MeEditor;
     if (!editor) return;
 
     var title = titleInput ? titleInput.value : 'Untitled';
-    var content = editor.getHTML();
+    var content = getEditorHTML(editor); // 13.6 fix: use cached HTML
+    var state = getState();
+    var docId = state.id || getDocId();
+
+    var ok = saveToLocalStorage('matheditor_doc_' + (docId || 'draft'), {
+      version: 2, title: title, content: content,
+      savedAt: new Date().toISOString()
+    });
+
+    dirtyForApi = true;
+    if (ok) showStatus('local');  // 10.1: only show "local" if save actually succeeded
+    scheduleApiSave();
+  }
+
+  // -----------------------------------------------------------
+  //  Tier 2: API save (at most once per API_INTERVAL_MS)
+  // -----------------------------------------------------------
+  function saveToApi() {
+    var editor = window.MeEditor;
+    if (!editor) return;
     var state = getState();
     var docId = state.id || getDocId();
     var api = window.MathAPI;
     var canEdit = state.canEdit !== false;
+
+    if (!dirtyForApi) return;
+
+    // View-only — already saved locally, nothing to push
+    if (docId && !canEdit) { dirtyForApi = false; return; }
+
+    var title = titleInput ? titleInput.value : 'Untitled';
+    var content = getEditorHTML(editor); // 13.6 fix: use cached HTML
     var visibility = getVisibility();
 
     function onSuccess() {
       lastApiSave = Date.now();
+      dirtyForApi = false;
       showStatus('saved');
-      saveToLocalStorage('matheditor_doc_' + (docId || 'draft'), { version: 2, title: title, content: content, savedAt: new Date().toISOString() });
+      // Sync local copy with what we just sent
+      saveToLocalStorage('matheditor_doc_' + (docId || 'draft'), {
+        version: 2, title: title, content: content,
+        savedAt: new Date().toISOString()
+      });
     }
 
-    function onError(useLocalMsg) {
-      saveToLocalStorage('matheditor_doc_' + (docId || 'draft'), { version: 2, title: title, content: content, savedAt: new Date().toISOString() });
-      showStatus(useLocalMsg ? 'local' : 'error');
-    }
-
-    if (docId && !canEdit) {
-      saveToLocalStorage('matheditor_doc_' + (docId || 'draft'), { version: 2, title: title, content: content, savedAt: new Date().toISOString() });
+    function onError() {
+      // Already in localStorage — show local status, will retry next cycle
       showStatus('local');
-      return;
     }
 
     showStatus('saving');
@@ -112,11 +220,8 @@
     if (api) {
       if (docId) {
         api.update(docId, { title: title, content: content, visibility: visibility }, { editToken: state.editToken, userId: state.userId })
-          .then(function (r) {
-            if (r.ok) onSuccess();
-            else onError(true);
-          })
-          .catch(function () { onError(true); });
+          .then(function (r) { if (r.ok) onSuccess(); else onError(); })
+          .catch(onError);
       } else {
         api.create({ doc_type: 'math', title: title, content: content, content_type: 'text/html', visibility: visibility }, { userId: state.userId })
           .then(function (r) {
@@ -126,33 +231,51 @@
                   var id = data.document.id;
                   var token = data.document.edit_token;
                   window.MeDocState = { id: id, editToken: token, userId: state.userId, canEdit: true, visibility: visibility };
+                  docId = id;
                   if (token) sessionStorage.setItem('me_edit_token_' + id, token);
                   var u = new URL(window.location.href);
                   u.searchParams.set('id', id);
                   window.history.replaceState({}, '', u.pathname + u.search);
                   onSuccess();
-              } else onError(true);
-            });
-          } else onError(true);
-        })
-        .catch(function () { onError(true); });
+                } else onError();
+              });
+            } else onError();
+          })
+          .catch(onError);
       }
     } else {
-      onError(true);
+      onError();
     }
   }
 
-  function scheduleSave() {
-    if (saveTimeout) clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(function () {
-      saveTimeout = null;
-      var now = Date.now();
-      if (lastApiSave && (now - lastApiSave) < MIN_API_INTERVAL_MS) {
-        saveTimeout = setTimeout(scheduleSave, MIN_API_INTERVAL_MS - (now - lastApiSave));
-        return;
-      }
-      save();
-    }, DEBOUNCE_MS);
+  // -----------------------------------------------------------
+  //  Scheduling
+  // -----------------------------------------------------------
+  function scheduleLocalSave() {
+    if (localSaveTimeout) clearTimeout(localSaveTimeout);
+    localSaveTimeout = setTimeout(function () {
+      localSaveTimeout = null;
+      saveLocal();
+    }, LOCAL_DEBOUNCE_MS);
+  }
+
+  function scheduleApiSave() {
+    if (apiSaveTimeout) return;   // already scheduled
+    var now = Date.now();
+    var elapsed = now - lastApiSave;
+    var delay = elapsed >= API_INTERVAL_MS ? 0 : API_INTERVAL_MS - elapsed;
+    apiSaveTimeout = setTimeout(function () {
+      apiSaveTimeout = null;
+      saveToApi();
+    }, delay);
+  }
+
+  // Ctrl+S / beforeunload: flush immediately to API
+  function saveNow() {
+    if (localSaveTimeout) { clearTimeout(localSaveTimeout); localSaveTimeout = null; }
+    saveLocal();
+    if (apiSaveTimeout) { clearTimeout(apiSaveTimeout); apiSaveTimeout = null; }
+    saveToApi();
   }
 
   function loadFromStorage() {
@@ -173,22 +296,27 @@
     }
   }
 
-  window.addEventListener('beforeunload', function () { save(); });
-  if (titleInput) titleInput.addEventListener('input', scheduleSave);
+  window.addEventListener('beforeunload', function () { saveNow(); });
+  if (titleInput) titleInput.addEventListener('input', scheduleLocalSave);
 
   document.addEventListener('me:editor-ready', function () {
     var editor = window.MeEditor;
     if (!editor) return;
 
-    editor.on('update', scheduleSave);
+    // 13.6 fix: bump update counter so we know when to re-serialize
+    editor.on('update', function () {
+      _editorUpdateCounter++;
+      scheduleLocalSave();
+    });
 
+    // 2.2 fix: don't show "Saved" on a brand-new empty document
     if (!getDocId()) {
-      if (loadFromStorage()) showStatus('saved');
-      else showStatus('saved');
+      if (loadFromStorage()) showStatus('local');
+      else showStatus('new');
     } else {
       showStatus('saved');
     }
   });
 
-  window.MeAutosave = { save: save, load: loadFromStorage };
+  window.MeAutosave = { save: saveNow, load: loadFromStorage };
 })();

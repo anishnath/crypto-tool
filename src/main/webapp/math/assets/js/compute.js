@@ -53,6 +53,8 @@
     var NERDAMER_CDN = 'https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/';
     var NERDAMER_MODULES = ['nerdamer.core.min.js', 'Algebra.min.js', 'Calculus.min.js', 'Solve.min.js'];
 
+    var nerdamerFailed = false;
+
     function getNerdamer() {
         if (nerd) return Promise.resolve(nerd);
         if (nerdLoading) return nerdLoading;
@@ -63,6 +65,7 @@
             return nerd;
         }).catch(function (err) {
             console.warn('Nerdamer failed to load:', err);
+            nerdamerFailed = true;
             nerdLoading = null;
             return null;
         });
@@ -162,6 +165,61 @@
     // =========================================================
     //  UTILITIES
     // =========================================================
+
+    /** Show a brief toast notification at the bottom of the viewport. */
+    function showToast(message, duration) {
+        duration = duration || 3000;
+        var existing = document.querySelector('.me-compute-toast');
+        if (existing) existing.remove();
+        var toast = document.createElement('div');
+        toast.className = 'me-compute-toast';
+        toast.textContent = message;
+        toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);' +
+            'background:#1E293B;color:#F8FAFC;padding:8px 18px;border-radius:8px;font-size:13px;' +
+            'z-index:100001;box-shadow:0 4px 12px rgba(0,0,0,.15);opacity:0;transition:opacity .2s;' +
+            'pointer-events:none;max-width:400px;text-align:center;';
+        document.body.appendChild(toast);
+        requestAnimationFrame(function () { toast.style.opacity = '1'; });
+        setTimeout(function () {
+            toast.style.opacity = '0';
+            setTimeout(function () { toast.remove(); }, 250);
+        }, duration);
+    }
+
+    /** Add a spinner overlay to a math node element. */
+    function showNodeLoading(mathNodeEl) {
+        if (!mathNodeEl) return;
+        mathNodeEl.classList.add('me-computing');
+        var overlay = document.createElement('div');
+        overlay.className = 'me-compute-loading-overlay';
+        overlay.innerHTML = '<div class="me-compute-spinner"></div>';
+        overlay.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;' +
+            'justify-content:center;background:rgba(255,255,255,.6);border-radius:8px;z-index:10;' +
+            'pointer-events:none;';
+        var spinnerStyle = 'width:20px;height:20px;border:2px solid #CBD5E1;border-top-color:#3B82F6;' +
+            'border-radius:50%;animation:me-spin .6s linear infinite;';
+        overlay.firstChild.style.cssText = spinnerStyle;
+        // Ensure math node is position:relative for overlay
+        var pos = window.getComputedStyle(mathNodeEl).position;
+        if (pos === 'static') mathNodeEl.style.position = 'relative';
+        mathNodeEl.appendChild(overlay);
+        // Inject keyframes if not already present
+        if (!document.getElementById('me-spin-keyframes')) {
+            var style = document.createElement('style');
+            style.id = 'me-spin-keyframes';
+            style.textContent = '@keyframes me-spin{to{transform:rotate(360deg)}}';
+            document.head.appendChild(style);
+        }
+    }
+
+    /** Remove the spinner overlay from a math node element. */
+    function hideNodeLoading(mathNodeEl) {
+        if (!mathNodeEl) return;
+        mathNodeEl.classList.remove('me-computing');
+        var overlay = mathNodeEl.querySelector('.me-compute-loading-overlay');
+        if (overlay) overlay.remove();
+    }
+
     function debounce(fn, ms) {
         var timer = null;
         return function () {
@@ -439,6 +497,10 @@
                 return { latex: nResult.latex, tier: 'nerdamer' };
             }
             // --- Tier 3: SymPy ---
+            // Notify user that we are falling back to the slower server solver
+            if (nerdamerFailed) {
+                showToast('Using advanced solver \u2014 this may take a moment\u2026', 4000);
+            }
             return trySymPy(action, latex, v).then(function (sResult) {
                 if (sResult && isUseful(sResult, latex)) {
                     return { latex: sResult.latex, tier: 'sympy' };
@@ -498,9 +560,12 @@
         var mfResult = resultEl.querySelector('.me-result-mathfield');
         if (!mfResult) {
             resultEl.innerHTML = '';
+            resultEl.setAttribute('title', 'Auto-computed result (not part of document)');
+            resultEl.setAttribute('aria-label', 'Auto-computed result');
             var eq = document.createElement('span');
             eq.className = 'me-result-equals';
             eq.textContent = '= ';
+            eq.setAttribute('aria-hidden', 'true');
             resultEl.appendChild(eq);
             mfResult = document.createElement('math-field');
             mfResult.setAttribute('read-only', '');
@@ -546,18 +611,24 @@
         { id: 'factor',     icon: '( )',        label: 'Factor',     title: 'Factor into irreducibles' },
         { id: 'solve',      icon: 'x\u2080',    label: 'Solve',      title: 'Solve equation for variable' },
         { id: 'derivative', icon: 'd/dx',       label: 'd/dx',       title: 'Symbolic derivative' },
-        { id: 'integrate',  icon: '\u222B',     label: 'Integrate',  title: 'Symbolic antiderivative' }
+        { id: 'integrate',  icon: '\u222B',     label: 'Integrate',  title: 'Symbolic antiderivative' },
+        { id: 'plot',       icon: '\uD83D\uDCC8', label: 'Plot',    title: 'Plot this equation as a graph' }
     ];
 
     function createActionBar() {
         var bar = document.createElement('div');
         bar.className = 'me-compute-bar';
+        bar.setAttribute('role', 'toolbar');
+        bar.setAttribute('aria-label', 'Math actions');
         var html = '';
         for (var i = 0; i < ACTIONS.length; i++) {
             var a = ACTIONS[i];
-            if (i === 2 || i === 5) html += '<span class="me-compute-sep"></span>';
-            html += '<button class="me-compute-btn" data-action="' + a.id + '" title="' + a.title + '">' +
-                '<span class="me-compute-icon">' + a.icon + '</span> ' + a.label + '</button>';
+            if (i === 2 || i === 5) html += '<span class="me-compute-sep" aria-hidden="true"></span>';
+            // Add separator before Plot button
+            if (a.id === 'plot') html += '<span class="me-compute-sep" aria-hidden="true"></span>';
+            html += '<button class="me-compute-btn" data-action="' + a.id + '" title="' + a.title + '"' +
+                ' role="button" tabindex="0" aria-label="' + a.label + '">' +
+                '<span class="me-compute-icon" aria-hidden="true">' + a.icon + '</span> ' + a.label + '</button>';
         }
         bar.innerHTML = html;
         bar.style.display = 'none';
@@ -566,7 +637,15 @@
         bar.addEventListener('click', function (e) {
             var btn = e.target.closest('.me-compute-btn');
             if (!btn || !currentMathField) return;
-            performAction(btn.getAttribute('data-action'), currentMathField);
+            var action = btn.getAttribute('data-action');
+            if (action === 'plot') {
+                // Handle Plot action directly via MeGraph
+                if (window.MeGraph) {
+                    window.MeGraph.insertGraph(readLatex(currentMathField), currentMathField);
+                }
+            } else {
+                performAction(action, currentMathField);
+            }
         });
         bar.addEventListener('mousedown', function (e) { e.preventDefault(); });
         return bar;
@@ -583,6 +662,31 @@
         var latex = fullLatex.replace(/\s*=\s*[^=]+$/, '').trim();
         if (!latex) latex = fullLatex;
 
+        // Show loading state on the triggering button and disable all action buttons
+        var clickedBtn = actionBar ? actionBar.querySelector('[data-action="' + action + '"]') : null;
+        var allBtns = actionBar ? actionBar.querySelectorAll('.me-compute-btn') : [];
+        var origLabel = '';
+        if (clickedBtn) {
+            origLabel = clickedBtn.innerHTML;
+            clickedBtn.innerHTML = '<span class="me-compute-icon" aria-hidden="true">\u23F3</span> Computing\u2026';
+            clickedBtn.classList.add('me-btn-loading');
+        }
+        for (var bi = 0; bi < allBtns.length; bi++) {
+            allBtns[bi].disabled = true;
+            allBtns[bi].setAttribute('aria-disabled', 'true');
+        }
+
+        // Show spinner overlay on the math node
+        var mathNodeEl = currentMathNode;
+        showNodeLoading(mathNodeEl);
+
+        // Show "Using advanced solver..." if Nerdamer already failed
+        var showedSolverMsg = false;
+        if (nerdamerFailed) {
+            showToast('Using advanced solver \u2014 this may take a moment\u2026', 4000);
+            showedSolverMsg = true;
+        }
+
         getCE().then(function (engine) {
             // Determine variable
             var v = targetVar;
@@ -595,8 +699,22 @@
             }
 
             computeAction(action, latex, v, engine).then(function (r) {
+                // Restore button states
+                if (clickedBtn) {
+                    clickedBtn.innerHTML = origLabel;
+                    clickedBtn.classList.remove('me-btn-loading');
+                }
+                for (var bj = 0; bj < allBtns.length; bj++) {
+                    allBtns[bj].disabled = false;
+                    allBtns[bj].removeAttribute('aria-disabled');
+                }
+                hideNodeLoading(mathNodeEl);
+
                 if (r) {
                     appendResultToField(mf, latex, r.latex, action, v);
+                    if (r.tier === 'sympy' && !showedSolverMsg) {
+                        showToast('Computed via advanced solver (SymPy)', 2000);
+                    }
                 }
             });
         });
@@ -852,7 +970,10 @@
         hideActionBar:     hideActionBar,
         wireMenuItems:     wireMenuItems,
         getCE:             getCE,
-        getNerdamer:       getNerdamer
+        getNerdamer:       getNerdamer,
+        showToast:         showToast,
+        showNodeLoading:   showNodeLoading,
+        hideNodeLoading:   hideNodeLoading
     };
 
 })();

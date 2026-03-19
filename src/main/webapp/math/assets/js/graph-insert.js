@@ -315,17 +315,82 @@
         }
     }
 
-    /** Plot a single equation (from right-click → Plot Graph). */
+    /** Show a toast via MeCompute if available, otherwise create one inline. */
+    function graphToast(message, duration) {
+        if (window.MeCompute && window.MeCompute.showToast) {
+            window.MeCompute.showToast(message, duration);
+        } else {
+            // Standalone fallback toast
+            var toast = document.createElement('div');
+            toast.className = 'me-compute-toast';
+            toast.textContent = message;
+            toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);' +
+                'background:#1E293B;color:#F8FAFC;padding:8px 18px;border-radius:8px;font-size:13px;' +
+                'z-index:100001;box-shadow:0 4px 12px rgba(0,0,0,.15);opacity:0;transition:opacity .2s;' +
+                'pointer-events:none;max-width:400px;text-align:center;';
+            document.body.appendChild(toast);
+            requestAnimationFrame(function () { toast.style.opacity = '1'; });
+            setTimeout(function () {
+                toast.style.opacity = '0';
+                setTimeout(function () { toast.remove(); }, 250);
+            }, duration || 3000);
+        }
+    }
+
+    /** Show a loading spinner overlay on a math node. */
+    function showGraphLoading(mathNode) {
+        if (!mathNode) return;
+        mathNode.classList.add('me-graph-loading');
+        if (window.MeCompute && window.MeCompute.showNodeLoading) {
+            window.MeCompute.showNodeLoading(mathNode);
+        } else {
+            // Standalone fallback spinner
+            var overlay = document.createElement('div');
+            overlay.className = 'me-compute-loading-overlay';
+            overlay.innerHTML = '<div class="me-graph-spinner-text">Plotting\u2026</div>';
+            overlay.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;' +
+                'justify-content:center;background:rgba(255,255,255,.6);border-radius:8px;z-index:10;' +
+                'pointer-events:none;';
+            overlay.firstChild.style.cssText = 'font-size:13px;color:#3B82F6;font-weight:500;';
+            var pos = window.getComputedStyle(mathNode).position;
+            if (pos === 'static') mathNode.style.position = 'relative';
+            mathNode.appendChild(overlay);
+        }
+    }
+
+    /** Remove loading spinner overlay from a math node. */
+    function hideGraphLoading(mathNode) {
+        if (!mathNode) return;
+        mathNode.classList.remove('me-graph-loading');
+        if (window.MeCompute && window.MeCompute.hideNodeLoading) {
+            window.MeCompute.hideNodeLoading(mathNode);
+        } else {
+            var overlay = mathNode.querySelector('.me-compute-loading-overlay');
+            if (overlay) overlay.remove();
+        }
+    }
+
+    /** Format an error into a user-readable string. */
+    function formatGraphError(err) {
+        if (!err) return 'Unknown error';
+        if (typeof err === 'string') return err;
+        if (err.message) return err.message;
+        return String(err);
+    }
+
+    /** Plot a single equation (from right-click → Plot Graph or action bar). */
     function insertGraphForLatex(latex, mf) {
         var mathNode = mf ? mf.closest('.me-math-node') : null;
-        if (mathNode) mathNode.classList.add('me-graph-loading');
+        showGraphLoading(mathNode);
 
         renderGraph(latex).then(function (dataUrl) {
-            if (mathNode) mathNode.classList.remove('me-graph-loading');
+            hideGraphLoading(mathNode);
             insertGraphImage(dataUrl, 'Graph of ' + latex.substring(0, 100));
         }).catch(function (err) {
-            if (mathNode) mathNode.classList.remove('me-graph-loading');
+            hideGraphLoading(mathNode);
+            var msg = formatGraphError(err);
             console.warn('Graph render failed:', err);
+            graphToast('Could not plot: ' + msg, 4000);
         });
     }
 
@@ -342,7 +407,7 @@
         var plottable = filterPlottable(all);
 
         if (plottable.length === 0) {
-            console.warn('No plottable equations found');
+            graphToast('No plottable equations found in the document', 3000);
             return;
         }
 
@@ -439,15 +504,17 @@
             if (selected.length === 0) return;
 
             var mathNode = mf ? mf.closest('.me-math-node') : null;
-            if (mathNode) mathNode.classList.add('me-graph-loading');
+            showGraphLoading(mathNode);
 
             renderGraphMulti(selected).then(function (dataUrl) {
-                if (mathNode) mathNode.classList.remove('me-graph-loading');
+                hideGraphLoading(mathNode);
                 var labels = selected.map(function (l) { return l.substring(0, 30); }).join(', ');
                 insertGraphImage(dataUrl, 'Graph of ' + labels);
             }).catch(function (err) {
-                if (mathNode) mathNode.classList.remove('me-graph-loading');
+                hideGraphLoading(mathNode);
+                var msg = formatGraphError(err);
                 console.warn('Multi-graph render failed:', err);
+                graphToast('Could not plot: ' + msg, 4000);
             });
         });
         footer.appendChild(plotBtn);
