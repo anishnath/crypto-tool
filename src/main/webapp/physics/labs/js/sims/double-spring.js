@@ -47,7 +47,7 @@ export const DoubleSpringSim = {
 
   graphDefaults: {
     phase: { x: 'x1', y: 'v1' },
-    time: ['qSym', 'qAnti'],
+    time: ['qSym', 'qAnti', 'eSym', 'eAnti'],
   },
 
   worldRect: { xMin: -2, xMax: 11, yMin: -3, yMax: 3 },
