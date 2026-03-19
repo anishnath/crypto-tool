@@ -16,6 +16,11 @@ export class TimeGraph {
     this.padding = 48;
     this.yMin = -1;
     this.yMax = 1;
+    this._autoResize();
+    if (typeof ResizeObserver !== 'undefined') {
+      this._ro = new ResizeObserver(() => this._autoResize());
+      this._ro.observe(el.parentElement || el);
+    }
   }
 
   addLine(varIdx, label, color) {
@@ -80,8 +85,24 @@ export class TimeGraph {
     this.yMax = yMax + pad;
   }
 
+  _autoResize() {
+    const parent = this.el.parentElement;
+    if (!parent) return;
+    const dpr = window.devicePixelRatio || 1;
+    const w = parent.clientWidth || this.el.clientWidth;
+    const h = parent.clientHeight || this.el.clientHeight || w * 0.7;
+    if (w > 0 && h > 0) {
+      this.el.style.width = w + 'px';
+      this.el.style.height = h + 'px';
+      this.el.width = Math.round(w * dpr);
+      this.el.height = Math.round(h * dpr);
+      this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+  }
+
   render() {
-    const w = this.el.width, h = this.el.height;
+    const w = this.el.clientWidth || this.el.width;
+    const h = this.el.clientHeight || this.el.height;
     const ctx = this.ctx;
     const p = this.padding;
     const pw = w - p * 2, ph = h - p * 2;

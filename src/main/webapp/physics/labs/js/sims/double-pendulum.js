@@ -29,8 +29,11 @@ export const DoublePendulumSim = {
     theta2:  { index: 2, label: 'Angle 2 (rad)',    symbol: 'θ₂' },
     omega2:  { index: 3, label: 'Angular Vel 2',    symbol: 'ω₂' },
     time:    { index: 4, label: 'Time (s)',          symbol: 't' },
+    x2:      { index: 5, label: 'Bob 2 x (m)',      symbol: 'x₂' },
+    y2:      { index: 6, label: 'Bob 2 y (m)',      symbol: 'y₂' },
+    speed2:  { index: 7, label: 'Bob 2 Speed',      symbol: '|v₂|' },
   },
-  varCount: 5,
+  varCount: 8,
 
   params: {
     gravity:  { value: 9.8,  min: 0, max: 25,   step: 0.1,  label: 'Gravity',    unit: 'm/s²' },
@@ -46,7 +49,7 @@ export const DoublePendulumSim = {
 
   graphDefaults: {
     phase: { x: 'theta1', y: 'omega1' },
-    time: ['theta1', 'theta2'],
+    time: ['x2', 'y2', 'speed2'],
   },
 
   worldRect: { xMin: -3, xMax: 3, yMin: -3.5, yMax: 1 },
@@ -63,11 +66,29 @@ export const DoublePendulumSim = {
   ],
 
   init(p) {
-    return [p.startAngle1, 0, p.startAngle2, 0, 0];
+    const { length1: L1, length2: L2 } = p;
+    const x2 = L1 * Math.sin(p.startAngle1) + L2 * Math.sin(p.startAngle2);
+    const y2 = -L1 * Math.cos(p.startAngle1) - L2 * Math.cos(p.startAngle2);
+    return [p.startAngle1, 0, p.startAngle2, 0, 0, x2, y2, 0];
+  },
+
+  /** Compute bob2 Cartesian position and speed after each step */
+  postStep(vars, params) {
+    const { length1: L1, length2: L2 } = params;
+    const [th1, dth1, th2, dth2] = vars;
+    const x1 = L1 * Math.sin(th1);
+    const y1 = -L1 * Math.cos(th1);
+    vars[5] = x1 + L2 * Math.sin(th2);
+    vars[6] = y1 - L2 * Math.cos(th2);
+    // Speed of bob2
+    const vx2 = L1 * dth1 * Math.cos(th1) + L2 * dth2 * Math.cos(th2);
+    const vy2 = L1 * dth1 * Math.sin(th1) + L2 * dth2 * Math.sin(th2);
+    vars[7] = Math.hypot(vx2, vy2);
   },
 
   evaluate(vars, change, params, isDragging) {
     change[4] = 1; // time
+    change[5] = 0; change[6] = 0; change[7] = 0; // computed in postStep
     if (isDragging) return;
 
     const th1 = vars[0], dth1 = vars[1];

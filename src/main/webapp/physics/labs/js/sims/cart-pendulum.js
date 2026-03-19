@@ -24,8 +24,11 @@ export const CartPendulumSim = {
     cartVel:   { index: 2, label: 'Cart Velocity',       symbol: 'v' },
     angularVel:{ index: 3, label: 'Angular Velocity',    symbol: 'ω' },
     time:      { index: 4, label: 'Time (s)',             symbol: 't' },
+    eCart:     { index: 5, label: 'Cart Energy',           symbol: 'E_cart' },
+    ePend:    { index: 6, label: 'Pendulum Energy',       symbol: 'E_pend' },
+    bobX:      { index: 7, label: 'Bob x (m)',             symbol: 'x_bob' },
   },
-  varCount: 5,
+  varCount: 8,
 
   params: {
     cartMass:   { value: 1.0,  min: 0.1, max: 10, step: 0.1, label: 'Cart Mass (M)',    unit: 'kg' },
@@ -42,7 +45,7 @@ export const CartPendulumSim = {
 
   graphDefaults: {
     phase: { x: 'cartX', y: 'angle' },
-    time: ['cartX', 'angle'],
+    time: ['eCart', 'ePend', 'bobX'],
   },
 
   worldRect: { xMin: -5, xMax: 5, yMin: -2.5, yMax: 1.5 },
@@ -58,11 +61,37 @@ export const CartPendulumSim = {
   ],
 
   init(p) {
-    return [0, p.startAngle, 0, 0, 0];
+    const bobX = 0 + p.length * Math.sin(p.startAngle);
+    const eCart = 0.5 * p.stiffness * 0; // cart at equilibrium
+    const ePend = p.bobMass * p.gravity * p.length * (1 - Math.cos(p.startAngle));
+    return [0, p.startAngle, 0, 0, 0, eCart, ePend, bobX];
+  },
+
+  /** Compute subsystem energies and bob position after each step */
+  postStep(vars, params) {
+    const [x, h, v, w] = vars;
+    const { cartMass: M, bobMass: m, length: L, stiffness: k, gravity: g } = params;
+
+    // Cart energy: KE_cart + PE_spring
+    const eCart = 0.5 * M * v * v + 0.5 * k * x * x;
+
+    // Pendulum energy: KE_bob + PE_gravity
+    // Bob velocity in lab frame
+    const vxBob = v + L * w * Math.cos(h);
+    const vyBob = L * w * Math.sin(h);
+    const ePend = 0.5 * m * (vxBob * vxBob + vyBob * vyBob) + m * g * L * (1 - Math.cos(h));
+
+    // Bob x position (for tracking coupling visually)
+    const bobX = x + L * Math.sin(h);
+
+    vars[5] = eCart;
+    vars[6] = ePend;
+    vars[7] = bobX;
   },
 
   evaluate(vars, change, params, isDragging) {
     change[4] = 1;
+    change[5] = 0; change[6] = 0; change[7] = 0; // computed in postStep
     if (isDragging) return;
 
     const [x, h, v, w] = vars;

@@ -36,7 +36,15 @@ export class SimCanvas {
     const worldW = this.world.xMax - this.world.xMin;
     const worldH = this.world.yMax - this.world.yMin;
     const aspect = worldW / worldH;
-    const cssH = Math.round(cssW / aspect);
+    let cssH = Math.round(cssW / aspect);
+
+    // Respect container's min/max-height from CSS
+    const parentH = parent ? parent.clientHeight : 0;
+    if (parentH > 0 && parentH > cssH) cssH = parentH;
+    // Cap to max-height if set
+    const style = parent ? getComputedStyle(parent) : null;
+    const maxH = style ? parseInt(style.maxHeight) : 0;
+    if (maxH > 0 && cssH > maxH) cssH = maxH;
 
     this.w = cssW;
     this.h = cssH;
