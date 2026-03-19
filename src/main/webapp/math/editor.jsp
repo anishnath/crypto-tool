@@ -123,72 +123,72 @@
     <div class="me-toolbar">
         <!-- Row 1: Text Formatting -->
         <div class="me-toolbar-row">
-            <button class="me-toolbar-btn me-toolbar-btn-text" title="Bold"><b>B</b></button>
-            <button class="me-toolbar-btn me-toolbar-btn-text" title="Italic"><i>I</i></button>
-            <button class="me-toolbar-btn me-toolbar-btn-text" title="Underline"><u>U</u></button>
-            <button class="me-toolbar-btn me-toolbar-btn-text" title="Strikethrough"><s>S</s></button>
+            <button type="button" class="me-toolbar-btn me-toolbar-btn-text" title="Bold (Ctrl+B)"><b>B</b></button>
+            <button type="button" class="me-toolbar-btn me-toolbar-btn-text" title="Italic (Ctrl+I)"><i>I</i></button>
+            <button type="button" class="me-toolbar-btn me-toolbar-btn-text" title="Underline (Ctrl+U)"><u>U</u></button>
+            <button type="button" class="me-toolbar-btn me-toolbar-btn-text" title="Strikethrough (Ctrl+Shift+S)"><s>S</s></button>
 
             <span class="me-toolbar-sep"></span>
 
-            <button class="me-toolbar-btn me-toolbar-btn-text" title="Heading 1">H1</button>
-            <button class="me-toolbar-btn me-toolbar-btn-text" title="Heading 2">H2</button>
-            <button class="me-toolbar-btn me-toolbar-btn-text" title="Heading 3">H3</button>
+            <button type="button" class="me-toolbar-btn me-toolbar-btn-text" title="Heading 1">H1</button>
+            <button type="button" class="me-toolbar-btn me-toolbar-btn-text" title="Heading 2">H2</button>
+            <button type="button" class="me-toolbar-btn me-toolbar-btn-text" title="Heading 3">H3</button>
 
             <span class="me-toolbar-sep"></span>
 
-            <button class="me-toolbar-btn" title="Bullet List">
+            <button type="button" class="me-toolbar-btn" title="Bullet List">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="4" r="1.5"/><rect x="6" y="3" width="8" height="2" rx="0.5"/><circle cx="3" cy="8" r="1.5"/><rect x="6" y="7" width="8" height="2" rx="0.5"/><circle cx="3" cy="12" r="1.5"/><rect x="6" y="11" width="8" height="2" rx="0.5"/></svg>
             </button>
-            <button class="me-toolbar-btn" title="Numbered List">
+            <button type="button" class="me-toolbar-btn" title="Numbered List">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><text x="1" y="5.5" font-size="5" font-weight="600">1.</text><rect x="6" y="3" width="8" height="2" rx="0.5"/><text x="1" y="9.5" font-size="5" font-weight="600">2.</text><rect x="6" y="7" width="8" height="2" rx="0.5"/><text x="1" y="13.5" font-size="5" font-weight="600">3.</text><rect x="6" y="11" width="8" height="2" rx="0.5"/></svg>
             </button>
-            <button class="me-toolbar-btn" title="Blockquote">
+            <button type="button" class="me-toolbar-btn" title="Blockquote (Ctrl+Shift+B)">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="2" height="12" rx="1"/><rect x="6" y="4" width="8" height="2" rx="0.5"/><rect x="6" y="7" width="6" height="2" rx="0.5"/><rect x="6" y="10" width="7" height="2" rx="0.5"/></svg>
             </button>
 
             <span class="me-toolbar-sep"></span>
 
-            <button class="me-toolbar-btn" title="Align Left">
+            <button type="button" class="me-toolbar-btn" title="Align Left">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="3" width="12" height="1.5" rx="0.5"/><rect x="2" y="6.5" width="8" height="1.5" rx="0.5"/><rect x="2" y="10" width="10" height="1.5" rx="0.5"/><rect x="2" y="13" width="6" height="1.5" rx="0.5"/></svg>
             </button>
-            <button class="me-toolbar-btn" title="Align Center">
+            <button type="button" class="me-toolbar-btn" title="Align Center">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="3" width="12" height="1.5" rx="0.5"/><rect x="4" y="6.5" width="8" height="1.5" rx="0.5"/><rect x="3" y="10" width="10" height="1.5" rx="0.5"/><rect x="5" y="13" width="6" height="1.5" rx="0.5"/></svg>
             </button>
-            <button class="me-toolbar-btn" title="Align Right">
+            <button type="button" class="me-toolbar-btn" title="Align Right">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="3" width="12" height="1.5" rx="0.5"/><rect x="6" y="6.5" width="8" height="1.5" rx="0.5"/><rect x="4" y="10" width="10" height="1.5" rx="0.5"/><rect x="8" y="13" width="6" height="1.5" rx="0.5"/></svg>
             </button>
         </div>
 
         <!-- Row 2: Math & Insert -->
         <div class="me-toolbar-row">
-            <button class="me-toolbar-btn me-toolbar-btn-math" title="Insert Display Math">
+            <button type="button" class="me-toolbar-btn me-toolbar-btn-math" title="Insert Display Math (Ctrl+M)">
                 &#x2211; Insert Math
             </button>
-            <button class="me-toolbar-btn me-toolbar-btn-math" title="Insert Inline Math">
+            <button type="button" class="me-toolbar-btn me-toolbar-btn-math" title="Insert Inline Math (Ctrl+Shift+M)">
                 &#x221A; Inline Math
             </button>
 
             <span class="me-toolbar-sep"></span>
 
-            <button class="me-toolbar-btn" title="Insert Table">
+            <button type="button" class="me-toolbar-btn" title="Insert Table">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="2" width="12" height="12" rx="1.5"/><line x1="2" y1="6" x2="14" y2="6"/><line x1="2" y1="10" x2="14" y2="10"/><line x1="6" y1="2" x2="6" y2="14"/><line x1="10" y1="2" x2="10" y2="14"/></svg>
             </button>
-            <button class="me-toolbar-btn" title="Insert Image">
+            <button type="button" class="me-toolbar-btn" title="Insert Image">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="3" width="12" height="10" rx="1.5"/><circle cx="5.5" cy="6.5" r="1.2"/><path d="M2 11l3-3 2 2 3-4 4 5" stroke-linejoin="round"/></svg>
             </button>
-            <button class="me-toolbar-btn" title="Insert Diagram">
+            <button type="button" class="me-toolbar-btn" title="Insert Diagram">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="4" cy="4" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="8" cy="12" r="2"/><line x1="5.5" y1="5.5" x2="6.8" y2="10.5"/><line x1="10.5" y1="5.5" x2="9.2" y2="10.5"/></svg>
             </button>
-            <button class="me-toolbar-btn" title="Insert Code Block">
+            <button type="button" class="me-toolbar-btn" title="Insert Code Block">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,4 2,8 5,12"/><polyline points="11,4 14,8 11,12"/><line x1="9" y1="3" x2="7" y2="13"/></svg>
             </button>
 
             <span class="me-toolbar-sep"></span>
 
-            <button class="me-toolbar-btn" title="Horizontal Rule">
+            <button type="button" class="me-toolbar-btn" title="Horizontal Rule">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="7.5" width="12" height="1.5" rx="0.75"/></svg>
             </button>
-            <button class="me-toolbar-btn" title="Page Break" style="font-size:11px; font-weight:600;">
+            <button type="button" class="me-toolbar-btn" title="Page Break" style="font-size:11px; font-weight:600;">
                 &#x23CE;
             </button>
         </div>
