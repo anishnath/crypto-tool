@@ -24,14 +24,18 @@ export const CollideBlocksSim = {
     x2: { index: 2, label: 'Position 2 (m)',  symbol: 'x₂' },
     v2: { index: 3, label: 'Velocity 2 (m/s)',symbol: 'v₂' },
     time: { index: 4, label: 'Time (s)',       symbol: 't' },
+    p1:    { index: 5, label: 'Momentum 1',    symbol: 'p₁' },
+    p2:    { index: 6, label: 'Momentum 2',    symbol: 'p₂' },
+    pTotal:{ index: 7, label: 'Total Momentum', symbol: 'Σp' },
   },
-  varCount: 5,
+  varCount: 8,
 
   params: {
     mass1:      { value: 0.5, min: 0.1, max: 10, step: 0.1, label: 'Mass 1',       unit: 'kg' },
     mass2:      { value: 1.5, min: 0.1, max: 10, step: 0.1, label: 'Mass 2',       unit: 'kg' },
     stiffness:  { value: 6.0, min: 0, max: 30,   step: 0.5, label: 'Spring k',     unit: 'N/m' },
     restLength: { value: 2.5, min: 0.5, max: 5,  step: 0.1, label: 'Rest Length',  unit: 'm' },
+    springMass: { value: 0,   min: 0, max: 2,    step: 0.05,label: 'Spring Mass',   unit: 'kg' },
     damping:    { value: 0,   min: 0, max: 2,    step: 0.01,label: 'Damping' },
     elasticity: { value: 1.0, min: 0, max: 1,    step: 0.05,label: 'Elasticity (e)' },
     wallLeft:   { value: -4,  hidden: true },
@@ -42,7 +46,7 @@ export const CollideBlocksSim = {
 
   graphDefaults: {
     phase: { x: 'x1', y: 'v1' },
-    time: ['v1', 'v2'],
+    time: ['p1', 'p2', 'pTotal'],
   },
 
   worldRect: { xMin: -5, xMax: 9, yMin: -2, yMax: 2 },
@@ -58,22 +62,26 @@ export const CollideBlocksSim = {
   ],
 
   init(p) {
-    // Block 1 at rest at spring equilibrium, block 2 approaching from right
     const x1eq = p.wallLeft + p.restLength;
-    return [x1eq, 0, 5, -3, 0];
+    const v1 = 0, v2 = -3;
+    const p1 = p.mass1 * v1, p2 = p.mass2 * v2;
+    return [x1eq, v1, 5, v2, 0, p1, p2, p1 + p2];
   },
+
 
   evaluate(vars, change, params, isDragging) {
     change[4] = 1;
+    change[5] = 0; change[6] = 0; change[7] = 0;
     if (isDragging) return;
 
     const [x1, v1, x2, v2] = vars;
-    const { mass1, mass2, stiffness: k, restLength: R, damping: b, wallLeft } = params;
+    const { mass1, mass2, springMass, stiffness: k, restLength: R, damping: b, wallLeft } = params;
+    const mEff1 = mass1 + (springMass || 0) / 3; // spring mass correction for block 1
 
     // Block 1: spring attached to left wall
     const stretch = x1 - wallLeft - R;
     change[0] = v1;
-    change[1] = (-k * stretch - b * v1) / mass1;
+    change[1] = (-k * stretch - b * v1) / mEff1;
 
     // Block 2: free (no spring, just damping)
     change[2] = v2;
@@ -113,13 +121,19 @@ export const CollideBlocksSim = {
       vars[1] = vcm - e * v1rel;
       vars[3] = vcm - e * v2rel;
     }
+
+    // Compute momenta
+    vars[5] = m1 * vars[1];
+    vars[6] = m2 * vars[3];
+    vars[7] = vars[5] + vars[6];
   },
 
   energy(vars, params) {
     const [x1, v1, x2, v2] = vars;
-    const { mass1, mass2, stiffness: k, restLength: R, wallLeft } = params;
+    const { mass1, mass2, springMass, stiffness: k, restLength: R, wallLeft } = params;
+    const mEff1 = mass1 + (springMass || 0) / 3;
     const stretch = x1 - wallLeft - R;
-    const KE = 0.5 * mass1 * v1 * v1 + 0.5 * mass2 * v2 * v2;
+    const KE = 0.5 * mEff1 * v1 * v1 + 0.5 * mass2 * v2 * v2;
     const PE = 0.5 * k * stretch * stretch;
     return { kinetic: KE, potential: PE, total: KE + PE };
   },
@@ -138,7 +152,8 @@ export const CollideBlocksSim = {
 
   theoreticalPeriod(params) {
     if (params.stiffness <= 0) return 0;
-    return 2 * Math.PI * Math.sqrt(params.mass1 / params.stiffness);
+    const mEff = params.mass1 + (params.springMass || 0) / 3;
+    return 2 * Math.PI * Math.sqrt(mEff / params.stiffness);
   },
   periodVar: 1,
 

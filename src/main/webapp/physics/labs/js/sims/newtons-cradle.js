@@ -25,9 +25,12 @@ export const NewtonsCradleSim = {
     theta2: { index: 2, label: 'Angle 2', symbol: 'θ₂' },
     omega2: { index: 3, label: 'Ang Vel 2', symbol: 'ω₂' },
     time: { index: -1, label: 'Time (s)', symbol: 't' },
+    omFirst: { index: -2, label: 'First Bob ω', symbol: 'ω_first' },
+    omLast:  { index: -2, label: 'Last Bob ω',  symbol: 'ω_last' },
+    totalKE: { index: -2, label: 'Total KE',    symbol: 'KE' },
   },
 
-  varCount: 2 * 7 + 1, // max 7 bobs
+  varCount: 2 * 7 + 4, // max 7 bobs + time + 3 computed
 
   params: {
     numBobs:    { value: 5, min: 2, max: 7, step: 1, label: 'Bobs', resetsState: true },
@@ -44,7 +47,7 @@ export const NewtonsCradleSim = {
   views: ['sim', 'time', 'energy'],
 
   graphDefaults: {
-    time: ['theta1', 'theta2'],
+    time: ['omFirst', 'omLast', 'totalKE'],
   },
 
   worldRect: { xMin: -3, xMax: 3, yMin: -3.5, yMax: 0.5 },
@@ -63,14 +66,38 @@ export const NewtonsCradleSim = {
 
   init(p) {
     const N = this._getN(p);
-    const state = new Array(2 * N + 1).fill(0);
-    // Lift the first liftBobs to liftAngle
+    // State: [θ₁,ω₁,...,θ_N,ω_N, time, ωFirst, ωLast, totalKE]
+    const state = new Array(2 * N + 4).fill(0);
     const lift = Math.min(Math.round(p.liftBobs), N - 1);
     for (let i = 0; i < lift; i++) {
-      state[i * 2] = -p.liftAngle; // negative angle = left side
+      state[i * 2] = -p.liftAngle;
     }
     state[2 * N] = 0; // time
+
+    // Set dynamic indices for computed vars
+    this.vars.omFirst.index = 2 * N + 1;
+    this.vars.omLast.index = 2 * N + 2;
+    this.vars.totalKE.index = 2 * N + 3;
+
     return state;
+  },
+
+  /** Compute first/last bob ω and total KE */
+  _computeExtras(vars, params) {
+    const N = this._getN(params);
+    const { mass, length: L } = params;
+    const iFirst = 2 * N + 1;
+    const iLast = 2 * N + 2;
+    const iKE = 2 * N + 3;
+
+    vars[iFirst] = vars[1]; // ω of first bob
+    vars[iLast] = vars[(N - 1) * 2 + 1]; // ω of last bob
+
+    let ke = 0;
+    for (let i = 0; i < N; i++) {
+      ke += 0.5 * mass * (L * vars[i * 2 + 1]) ** 2;
+    }
+    vars[iKE] = ke;
   },
 
   evaluate(vars, change, params, isDragging) {
@@ -142,6 +169,8 @@ export const NewtonsCradleSim = {
         }
       }
     }
+
+    this._computeExtras(vars, params);
   },
 
   energy(vars, params) {

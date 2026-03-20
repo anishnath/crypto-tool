@@ -28,8 +28,10 @@ export const KapitzaPendulumSim = {
     time:      { index: 2, label: 'Time (s)',           symbol: 't' },
     pivotY:    { index: 3, label: 'Pivot Y (m)',        symbol: 'y₀' },
     pivotVY:   { index: 4, label: 'Pivot Vel Y',       symbol: 'vy₀' },
+    gEff:      { index: 5, label: 'Effective g',        symbol: 'g_eff' },
+    stability: { index: 6, label: 'Stability (Aω²/2gL)', symbol: 'S' },
   },
-  varCount: 5,
+  varCount: 7,
 
   params: {
     gravity:    { value: 9.81, min: 0, max: 25,    step: 0.1,  label: 'Gravity',          unit: 'm/s²' },
@@ -45,7 +47,7 @@ export const KapitzaPendulumSim = {
 
   graphDefaults: {
     phase: { x: 'angle', y: 'angularVel' },
-    time: ['angle', 'angularVel'],
+    time: ['angle', 'gEff'],
   },
 
   worldRect: { xMin: -2.5, xMax: 2.5, yMin: -3, yMax: 2 },
@@ -60,11 +62,23 @@ export const KapitzaPendulumSim = {
   ],
 
   init(p) {
-    return [p.startAngle, 0, 0, 0, 0];
+    return [p.startAngle, 0, 0, 0, 0, p.gravity, 0];
+  },
+
+  /** Compute effective gravity and stability parameter */
+  postStep(vars, params) {
+    const { gravity, vibeAmp, vibeFreq, length } = params;
+    const time = vars[2];
+    // Effective gravity = g + A·sin(ω·t) — what the pendulum "feels"
+    vars[5] = gravity + vibeAmp * Math.sin(vibeFreq * time);
+    // Stability parameter: S = Aω²/(2gL). Inverted position stable when S > 1
+    const S = vibeFreq > 0 ? (vibeAmp * vibeFreq * vibeFreq) / (2 * gravity * length) : 0;
+    vars[6] = S;
   },
 
   evaluate(vars, change, params, isDragging) {
     change[2] = 1; // time
+    change[5] = 0; change[6] = 0; // computed in postStep
     if (isDragging) {
       change[3] = 0; change[4] = 0;
       return;
