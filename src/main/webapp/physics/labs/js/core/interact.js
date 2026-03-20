@@ -78,6 +78,8 @@ export function bindInteraction(canvasEl, sim, runner, toWorld) {
       if (typeof sim.onDrag === 'function') {
         sim.onDrag(hit.id, wx, wy, hit, runner.state, runner.params);
       }
+      // Render immediately so drag is visible even when paused
+      if (!runner.playing) runner._notifyRender();
       e.preventDefault();
     }
   }
@@ -90,6 +92,8 @@ export function bindInteraction(canvasEl, sim, runner, toWorld) {
       if (typeof sim.onDrag === 'function') {
         sim.onDrag(drag.objectId, wx, wy, drag.offset, runner.state, runner.params);
       }
+      // Render immediately so drag is visible even when paused
+      if (!runner.playing) runner._notifyRender();
       e.preventDefault();
     } else {
       // Hover — change cursor if near draggable object
@@ -106,6 +110,8 @@ export function bindInteraction(canvasEl, sim, runner, toWorld) {
     if (typeof sim.onRelease === 'function') {
       sim.onRelease(id, runner.state, runner.params);
     }
+    // Render final position after release
+    if (!runner.playing) runner._notifyRender();
   }
 
   // Mouse events
