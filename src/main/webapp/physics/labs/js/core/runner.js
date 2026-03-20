@@ -102,7 +102,9 @@ export class SimRunner {
     this.playing = true;
     this.lastTimestamp = null;
     this.accumulator = 0;
-    this._loop();
+    // Must go through RAF so _loop receives a valid DOMHighResTimeStamp.
+    // Direct this._loop() passes undefined, corrupting accumulator to NaN.
+    this.rafId = requestAnimationFrame((ts) => this._loop(ts));
   }
 
   pause() {
@@ -133,10 +135,14 @@ export class SimRunner {
       this.accumulator += wallDt;
 
       // Fixed timestep loop — physics catches up to real time
+      // Skip physics entirely while dragging — the user controls state,
+      // and postStep (collisions, constraints) would fight the drag.
       const maxSteps = 20; // safety cap
       let steps = 0;
       while (this.accumulator >= this.dt && steps < maxSteps) {
-        this._stepPhysics();
+        if (!this.isDragging) {
+          this._stepPhysics();
+        }
         this.accumulator -= this.dt;
         steps++;
       }
