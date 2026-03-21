@@ -122,7 +122,13 @@ class TikZDrawApp {
     }
 
     initMathJax() {
-        // Check if MathJax is already loaded and ready
+        // Check if MathJax already resolved before app was created (async race)
+        if (window._mathJaxLoaded) {
+            this.mathJaxReady = true;
+            this.render();
+            return;
+        }
+        // Check if MathJax is loaded and ready
         if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
             MathJax.startup.promise.then(() => {
                 this.mathJaxReady = true;
@@ -142,7 +148,8 @@ class TikZDrawApp {
     parseContour(text) {
         // Parse \contour{color}{text} and return {text, contourColor} or null
         // Handle both: \contour{color}{$math$} and $\contour{color}{math}$
-        const contourMatch = text.match(/\\contour\{([^}]+)\}\{([^}]+)\}/);
+        // Use a pattern that supports nested braces (e.g. \frac{a}{b} inside contour)
+        const contourMatch = text.match(/\\contour\{([^}]+)\}\{((?:[^{}]|\{[^{}]*\})*)\}/);
         if (contourMatch) {
             let innerText = contourMatch[2];
 
@@ -569,6 +576,37 @@ class TikZDrawApp {
             this.updateObjectCount();
             this.updateUndoRedoButtons();
             this.render();
+        }
+    }
+
+    // Remove object without calling saveState (for batch operations where caller saves state once)
+    removeObjectNoSave(obj) {
+        const idx = this.objects.indexOf(obj);
+        if (idx >= 0) {
+            const coordsUsedByObject = this.getObjectCoordinates(obj);
+            this.objects.splice(idx, 1);
+
+            const selIdx = this.selectedObjects.indexOf(obj);
+            if (selIdx >= 0) {
+                this.selectedObjects.splice(selIdx, 1);
+            }
+
+            for (const coordName of coordsUsedByObject) {
+                if (!this.isCoordinateShared(coordName, obj)) {
+                    const coord = this.getCoordByName(coordName);
+                    if (coord) {
+                        const coordIdx = this.objects.indexOf(coord);
+                        if (coordIdx >= 0) {
+                            this.objects.splice(coordIdx, 1);
+                            const coordSelIdx = this.selectedObjects.indexOf(coord);
+                            if (coordSelIdx >= 0) {
+                                this.selectedObjects.splice(coordSelIdx, 1);
+                            }
+                        }
+                    }
+                }
+            }
+            this._invalidateCoordMap();
         }
     }
 

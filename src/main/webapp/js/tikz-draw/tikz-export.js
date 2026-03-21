@@ -19,9 +19,25 @@ Object.assign(TikZDrawApp.prototype, {
     },
 
     copyExport() {
-        const textarea = document.getElementById('exportCode');
-        textarea.select();
+        const code = document.getElementById('exportCode').value;
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(code).then(() => {
+                this.showToast('Copied to clipboard!', 'success');
+            }).catch(() => {
+                this._fallbackCopy(code);
+            });
+        } else {
+            this._fallbackCopy(code);
+        }
+    },
+
+    _fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
         document.execCommand('copy');
+        document.body.removeChild(ta);
         this.showToast('Copied to clipboard!', 'success');
     },
 
@@ -695,7 +711,8 @@ Object.assign(TikZDrawApp.prototype, {
             this.cleanupImageCache();
         }
 
-        this.inNudge = false; // Keeps from saving sequential nudges
+        // inNudge is managed by the nudge keydown/keyup handlers, not here.
+        // Resetting it here would break nudge batching when concurrent operations trigger saveState.
         this.hasUnsavedChanges = true;
 
         this.updateUndoRedoButtons();

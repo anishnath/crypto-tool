@@ -283,8 +283,9 @@ class TikZArc extends TikZObject {
 
         let optStr = opts.length ? `[${opts.join(', ')}]` : '';
 
-        const startX = parseFloat(app.getCoordByName(this.center)?.x || 0) + this.radius * Math.cos(this.startAngle * Math.PI / 180);
-        const startY = parseFloat(app.getCoordByName(this.center)?.y || 0) + this.radius * Math.sin(this.startAngle * Math.PI / 180);
+        const _app = window.app;
+        const startX = parseFloat(_app && _app.getCoordByName(this.center)?.x || 0) + this.radius * Math.cos(this.startAngle * Math.PI / 180);
+        const startY = parseFloat(_app && _app.getCoordByName(this.center)?.y || 0) + this.radius * Math.sin(this.startAngle * Math.PI / 180);
 
         return `  \\draw${optStr} (${startX.toFixed(2)}, ${startY.toFixed(2)}) arc (${this.startAngle.toFixed(1)}:${this.endAngle.toFixed(1)}:${this.radius.toFixed(2)});`;
     }
@@ -460,8 +461,9 @@ class TikZBezier extends TikZObject {
 
         let optStr = opts.length ? `[${opts.join(', ')}]` : '';
 
-        const ctrl1 = app.getCoordByName(this.control1);
-        const ctrl2 = app.getCoordByName(this.control2);
+        const _app = window.app;
+        const ctrl1 = _app && _app.getCoordByName(this.control1);
+        const ctrl2 = _app && _app.getCoordByName(this.control2);
         if (ctrl1 && ctrl2) {
             const c1x = ctrl1.x.toFixed(2);
             const c1y = ctrl1.y.toFixed(2);
@@ -548,7 +550,7 @@ class TikZImage extends TikZObject {
     }
 
     getBounds() {
-        const coord = app.getCoordByName(this.at);
+        const coord = window.app && window.app.getCoordByName(this.at);
         if (!coord) return null;
 
         const h = this.height || (this.width / this.naturalAspect);

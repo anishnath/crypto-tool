@@ -553,9 +553,10 @@ Object.assign(TikZDrawApp.prototype, {
         this.updateCursor();
 
         // Update temp drawing for tools
+        // Store lastSnapped so render() picks it up via drawTempGeometry(this.lastSnapped)
         if (this.tempPoints.length > 0) {
+            this.lastSnapped = snapped;
             this.render();
-            this.drawTempGeometry(snapped);
         }
     },
 
@@ -676,6 +677,20 @@ Object.assign(TikZDrawApp.prototype, {
             return;
         }
 
+        // Z-order shortcuts: ] = forward, [ = backward, Shift+] = front, Shift+[ = back
+        if (!isInputActive && !e.ctrlKey && !e.metaKey && this.selectedObjects.length > 0) {
+            if (e.key === ']' || e.key === '}') {
+                e.preventDefault();
+                e.shiftKey ? this.sendToFront() : this.bringForward();
+                return;
+            }
+            if (e.key === '[' || e.key === '{') {
+                e.preventDefault();
+                e.shiftKey ? this.sendToBack() : this.sendBackward();
+                return;
+            }
+        }
+
         // Delete - only when not in input field
         if ((e.key === 'Delete' || e.key === 'Backspace') && this.selectedObjects.length > 0 && !isInputActive) {
             e.preventDefault();
@@ -683,10 +698,18 @@ Object.assign(TikZDrawApp.prototype, {
             // Make a copy of the array since removeObject modifies selectedObjects
             const objectsToRemove = [...this.selectedObjects];
 
-            // Remove all selected objects
+            // Save state once for the entire batch delete (not per-object)
+            this.saveState();
+
+            // Remove all selected objects without individual saveState calls
             for (const obj of objectsToRemove) {
-                this.removeObject(obj);
+                this.removeObjectNoSave(obj);
             }
+            this.updateObjectList();
+            this.updateObjectCount();
+            this.updatePropertiesPanel();
+            this.updateUndoRedoButtons();
+            this.render();
             return;
         }
 
@@ -823,6 +846,11 @@ Object.assign(TikZDrawApp.prototype, {
         // Save ctrl/shift state
         this.ctrlKey = e.ctrlKey;
         this.shiftKey = e.shiftKey;
+
+        // Reset nudge flag when arrow key is released so next nudge gets its own undo state
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+            this.inNudge = false;
+        }
     },
 
     // ========================================================================
@@ -1408,7 +1436,6 @@ Object.assign(TikZDrawApp.prototype, {
                 tikzImg.naturalAspect = aspect;
                 tikzImg.cachedImage = img;
 
-                this.saveState(); // For undo
                 this.addObject(tikzImg);
                 this.selectedObjects = [tikzImg];
                 this.switchToSelectMode();

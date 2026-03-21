@@ -16,6 +16,7 @@ Object.assign(TikZDrawApp.prototype, {
         // Only show for single selection
         if (this.selectedObjects.length !== 1) {
             section.style.display = 'none';
+            this.updateZOrderButtons();
             return;
         }
 
@@ -69,10 +70,13 @@ Object.assign(TikZDrawApp.prototype, {
         if (obj instanceof TikZLabel) {
             this.updateLabelPreview();
         }
+
+        // Update z-order buttons
+        this.updateZOrderButtons();
     },
 
     renderColorSelect(currentColor, propertyName) {
-        let options = (propertyName == 'fill') ? [`<option value="none" ${currentColor === "none" ? 'selected' : ''}>none</option>`] : [];
+        let options = (propertyName == 'fill') ? `<option value="none" ${currentColor === "none" ? 'selected' : ''}>none</option>` : '';
         options += Object.keys(TIKZ_COLORS).map(c =>
             `<option value="${c}" ${currentColor === c ? 'selected' : ''}>${c}</option>`
         ).join('');
@@ -804,8 +808,11 @@ Object.assign(TikZDrawApp.prototype, {
         // Queue LaTeX render
         this.queueLatexRender(text, color, fontSize);
 
+        // Debounce: cancel any previous timer to avoid stacking
+        if (this._labelPreviewTimer) clearTimeout(this._labelPreviewTimer);
+
         // Wait a bit for MathJax to process, then update preview
-        setTimeout(() => {
+        this._labelPreviewTimer = setTimeout(() => {
             const cacheKey = `${text}::${color}::${fontSize}`;
             const cached = this.latexCache.get(cacheKey);
 
@@ -875,6 +882,7 @@ Object.assign(TikZDrawApp.prototype, {
                     if (obj.from === oldName) obj.from = newName;
                     if (obj.to === oldName) obj.to = newName;
                     if (obj.center === oldName) obj.center = newName;
+                    if (obj.center2 === oldName) obj.center2 = newName;
                     if (obj.control1 === oldName) obj.control1 = newName;
                     if (obj.control2 === oldName) obj.control2 = newName;
                     if (obj.at === oldName) obj.at = newName;
@@ -1174,6 +1182,7 @@ Object.assign(TikZDrawApp.prototype, {
                     usedCoords.add(obj.to);
                 } else if (obj instanceof TikZCircle || obj instanceof TikZArc) {
                     usedCoords.add(obj.center);
+                    if (obj.center2) usedCoords.add(obj.center2);
                 } else if (obj instanceof TikZPath) {
                     obj.points.forEach(p => usedCoords.add(p));
                 } else if (obj instanceof TikZBezier) {
@@ -1196,21 +1205,26 @@ Object.assign(TikZDrawApp.prototype, {
                 obj instanceof TikZCoordinate && !obj.showPoint && obj.label.length == 0 && !usedCoords.has(obj.name)
             );
             if (toRemove.length > 0) {
-                this.saveState();
-                for (const obj of toRemove) {
-                    const idx = this.objects.indexOf(obj);
-                    if (idx !== -1) {
-                        this.objects.splice(idx, 1);
+                // Defer removal to avoid calling saveState() inside a display-update method.
+                // Schedule it as a microtask so the current updateObjectList completes first.
+                setTimeout(() => {
+                    this.saveState();
+                    for (const obj of toRemove) {
+                        const idx = this.objects.indexOf(obj);
+                        if (idx !== -1) {
+                            this.objects.splice(idx, 1);
+                        }
+                        const selIdx = this.selectedObjects.indexOf(obj);
+                        if (selIdx !== -1) {
+                            this.selectedObjects.splice(selIdx, 1);
+                        }
                     }
-                    // Remove from selection if selected
-                    const selIdx = this.selectedObjects.indexOf(obj);
-                    if (selIdx !== -1) {
-                        this.selectedObjects.splice(selIdx, 1);
-                    }
-                }
-                // Uncheck the checkbox after removal
-                document.getElementById('removeUnusedPoints').checked = false;
-                this.render();
+                    document.getElementById('removeUnusedPoints').checked = false;
+                    this.updateObjectList();
+                    this.updateObjectCount();
+                    this.render();
+                }, 0);
+                return; // Skip the rest of the rendering; the deferred callback will re-call updateObjectList
             }
         }
 
@@ -1591,6 +1605,100 @@ Object.assign(TikZDrawApp.prototype, {
             this.updateObjectList();
             this.render();
         }
+    },
+
+    // Z-order controls: send to front/back and step forward/backward
+    // Objects later in the array are drawn on top (higher z-order).
+    // Coordinates are kept at the start, so z-order operations only affect non-coordinate objects.
+
+    _getZOrderableIndex(obj) {
+        // Find the index in the objects array, skip if it's an invisible coordinate
+        return this.objects.indexOf(obj);
+    },
+
+    sendToFront() {
+        if (this.selectedObjects.length === 0) return;
+        this.saveState();
+        for (const obj of [...this.selectedObjects]) {
+            if (obj instanceof TikZCoordinate) continue;
+            const idx = this.objects.indexOf(obj);
+            if (idx >= 0 && idx < this.objects.length - 1) {
+                this.objects.splice(idx, 1);
+                this.objects.push(obj);
+            }
+        }
+        this.updateObjectList();
+        this.render();
+        this.showToast('Sent to front', 'info');
+    },
+
+    sendToBack() {
+        if (this.selectedObjects.length === 0) return;
+        this.saveState();
+        // Find the first non-coordinate index (coordinates stay at the top)
+        const firstNonCoord = this.objects.findIndex(o => !(o instanceof TikZCoordinate));
+        const insertAt = firstNonCoord >= 0 ? firstNonCoord : 0;
+
+        for (const obj of [...this.selectedObjects].reverse()) {
+            if (obj instanceof TikZCoordinate) continue;
+            const idx = this.objects.indexOf(obj);
+            if (idx >= 0 && idx > insertAt) {
+                this.objects.splice(idx, 1);
+                this.objects.splice(insertAt, 0, obj);
+            }
+        }
+        this.updateObjectList();
+        this.render();
+        this.showToast('Sent to back', 'info');
+    },
+
+    bringForward() {
+        if (this.selectedObjects.length === 0) return;
+        this.saveState();
+        // Process from end to start to avoid index shifting issues
+        const sorted = [...this.selectedObjects]
+            .filter(o => !(o instanceof TikZCoordinate))
+            .sort((a, b) => this.objects.indexOf(b) - this.objects.indexOf(a));
+
+        for (const obj of sorted) {
+            const idx = this.objects.indexOf(obj);
+            if (idx >= 0 && idx < this.objects.length - 1) {
+                // Swap with the next object
+                [this.objects[idx], this.objects[idx + 1]] = [this.objects[idx + 1], this.objects[idx]];
+            }
+        }
+        this.updateObjectList();
+        this.render();
+    },
+
+    sendBackward() {
+        if (this.selectedObjects.length === 0) return;
+        this.saveState();
+        const firstNonCoord = this.objects.findIndex(o => !(o instanceof TikZCoordinate));
+        const minIdx = firstNonCoord >= 0 ? firstNonCoord : 0;
+
+        // Process from start to end
+        const sorted = [...this.selectedObjects]
+            .filter(o => !(o instanceof TikZCoordinate))
+            .sort((a, b) => this.objects.indexOf(a) - this.objects.indexOf(b));
+
+        for (const obj of sorted) {
+            const idx = this.objects.indexOf(obj);
+            if (idx > minIdx) {
+                [this.objects[idx], this.objects[idx - 1]] = [this.objects[idx - 1], this.objects[idx]];
+            }
+        }
+        this.updateObjectList();
+        this.render();
+    },
+
+    updateZOrderButtons() {
+        const hasSelection = this.selectedObjects.some(o => !(o instanceof TikZCoordinate));
+        const btns = ['sendToFrontBtn', 'bringForwardBtn', 'sendBackwardBtn', 'sendToBackBtn'];
+        btns.forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) btn.disabled = !hasSelection;
+        });
     },
 
     // ========================================================================

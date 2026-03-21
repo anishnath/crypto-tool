@@ -117,6 +117,7 @@
 
     <!-- MathJax for LaTeX rendering in labels -->
     <script>
+        window._mathJaxLoaded = false;
         window.MathJax = {
             tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
             svg: { fontCache: 'global' },
@@ -124,6 +125,7 @@
                 ready: () => {
                     MathJax.startup.defaultReady();
                     MathJax.startup.promise.then(() => {
+                        window._mathJaxLoaded = true;
                         if (window.app) { window.app.mathJaxReady = true; window.app.render(); }
                     });
                 }
@@ -178,6 +180,12 @@
                     <button id="redoBtn" class="btn" onclick="app.redo()" title="Redo (Ctrl+Y)" disabled>&#x21B7; Redo</button>
                     <button id="copyBtn" class="btn" onclick="app.copyObject()" title="Copy (Ctrl+C)" disabled>Copy</button>
                     <button id="pasteBtn" class="btn" onclick="app.pasteObject()" title="Paste (Ctrl+V)" disabled>Paste</button>
+                    <span class="header-separator"></span>
+                    <button id="sendToFrontBtn" class="btn" onclick="app.sendToFront()" title="Send to Front (Shift+])" disabled>&#x2191; Front</button>
+                    <button id="bringForwardBtn" class="btn" onclick="app.bringForward()" title="Bring Forward (])" disabled>&#x2191;</button>
+                    <button id="sendBackwardBtn" class="btn" onclick="app.sendBackward()" title="Send Backward ([)" disabled>&#x2193;</button>
+                    <button id="sendToBackBtn" class="btn" onclick="app.sendToBack()" title="Send to Back (Shift+[)" disabled>&#x2193; Back</button>
+                    <span class="header-separator"></span>
                     <button class="btn" onclick="app.loadProject()">Open</button>
                     <button class="btn" onclick="app.saveProject()">Save</button>
                     <button class="btn btn-primary" onclick="app.showExport()">Export TikZ</button>

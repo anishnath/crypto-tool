@@ -107,6 +107,17 @@
     opacity: 0.35;
 }
 
+.tikz-draw-workspace .header-separator {
+    width: 1px;
+    height: 20px;
+    background: #e3e3e6;
+    margin: 0 2px;
+    flex-shrink: 0;
+}
+[data-theme="dark"] .tikz-draw-workspace .header-separator {
+    background: #3a3a3e;
+}
+
 /* ── Main Layout ──────────────────────────────────────────────────────────── */
 .tikz-draw-workspace .main {
     display: flex;
