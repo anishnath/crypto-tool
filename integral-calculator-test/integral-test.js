@@ -193,6 +193,11 @@ testNormalize('log(2x)', 'log(2*x)');
 // Preserve asin, acos, atan (arc functions)
 testNormalize('asin(x)', 'asin(x)');
 testNormalize('acos(x)', 'acos(x)');
+// arcsin → asin, arccos → acos, arctan → atan
+testNormalize('arcsin(x)', 'asin(x)');
+testNormalize('arccos(x)', 'acos(x)');
+testNormalize('arctan(x)', 'atan(x)');
+testNormalize('arctan(x)/(x*(1+x^2))', 'atan(x)/(x*(1+x^2))');
 
 // 2. Non-elementary detection
 console.log('\n--- checkNonElementaryIntegral ---');
@@ -458,6 +463,60 @@ eq(exprToLatex('sin(x)/x'), '\\frac{\\mathrm{sin}\\left(x\\right)}{x}',
     'exprToLatex("sin(x)/x") untouched');
 eq(exprToLatex('x^2+1'), 'x^{2}+1',
     'exprToLatex("x^2+1") no frac at all');
+
+// --- King's Property detection ---
+console.log("\n--- King's Property (symmetry) detection ---");
+
+const checkKingsProperty = IntegralCalculatorCore.checkKingsProperty;
+
+function testKings(name, expr, a, b, expectValue) {
+    var result = checkKingsProperty(normalizeExpr(expr), 'x', a, b, nerdamer);
+    if (expectValue === null) {
+        ok(result === null, 'Kings: "' + name + '" correctly NOT detected');
+    } else {
+        var pass = result && Math.abs(result.value - expectValue) < 1e-9;
+        ok(pass, 'Kings: "' + name + '" → ' + (result ? result.value.toFixed(6) : 'null') + ' (expect ' + expectValue.toFixed(6) + ')');
+    }
+}
+
+// Should detect (result = π/4)
+testKings('sin²/(cos²+sin²) [0,π/2]', 'sin(x)^2/(cos(x)^2+sin(x)^2)', '0', 'pi/2', Math.PI/4);
+testKings('sin³/(cos³+sin³) [0,π/2]', 'sin(x)^3/(cos(x)^3+sin(x)^3)', '0', 'pi/2', Math.PI/4);
+testKings('sin⁵/(cos⁵+sin⁵) [0,π/2]', 'sin(x)^5/(cos(x)^5+sin(x)^5)', '0', 'pi/2', Math.PI/4);
+testKings('sin¹⁰/(cos¹⁰+sin¹⁰) [0,π/2]', 'sin(x)^10/(cos(x)^10+sin(x)^10)', '0', 'pi/2', Math.PI/4);
+testKings('√sin/(√cos+√sin) [0,π/2]', 'sqrt(sin(x))/(sqrt(cos(x))+sqrt(sin(x)))', '0', 'pi/2', Math.PI/4);
+
+// Famous integrals: verify input parsing (normalizeExpr → nerdamer parse → eval)
+console.log('\n--- Famous integrals: input parsing ---');
+function testParsable(name, raw, testX, expectApprox, tol) {
+    var expr = normalizeExpr(raw);
+    try {
+        var val = parseFloat(nerdamer(expr).evaluate({x: testX}).text('decimals'));
+        var pass = Math.abs(val - expectApprox) < (tol || 0.001);
+        ok(pass, 'parse "' + raw + '" → eval(' + testX + ')=' + val.toFixed(6) + ' (expect ~' + expectApprox + ')');
+    } catch(e) {
+        ok(false, 'parse "' + raw + '" FAILED: ' + e.message.substring(0,50));
+    }
+}
+testParsable('sin(x)/x', 'sin(x)/x', 0.5, 0.958851, 0.001);
+testParsable('e^(-x^2)', 'e^(-x^2)', 0.5, 0.778801, 0.001);
+testParsable('ln(-ln(x))/(1+x)', 'ln(-ln(x))/(1+x)', 0.3, 0.142790, 0.001);
+testParsable('log(sin(x))', 'log(sin(x))', 0.5, -0.735167, 0.001);
+testParsable('atan(x)/(x*(1+x^2))', 'atan(x)/(x*(1+x^2))', 0.5, 0.741836, 0.001);
+testParsable('arctan(x)/(x*(1+x^2))', 'arctan(x)/(x*(1+x^2))', 0.5, 0.741836, 0.001);
+testParsable('x/(e^x-1)', 'x/(e^x-1)', 0.5, 0.770747, 0.001);
+testParsable('cos(2*x)/(x^2+1)', 'cos(2*x)/(x^2+1)', 0.5, 0.432242, 0.001);
+testParsable('e^(-x)*sin(x)', 'e^(-x)*sin(x)', 0.5, 0.290786, 0.001);
+testParsable('sinx/x shorthand', 'sinx/x', 0.5, 0.958851, 0.001);
+
+// Symbolic parameter m — should still detect
+testKings('sin^m/(cos^m+sin^m) symbolic m [0,π/2]', 'sin(x)^m/(cos(x)^m+sin(x)^m)', '0', 'pi/2', Math.PI/4);
+testKings('sin^n/(cos^n+sin^n) symbolic n [0,π/2]', 'sin(x)^n/(cos(x)^n+sin(x)^n)', '0', 'pi/2', Math.PI/4);
+
+// Should NOT detect
+testKings('sin(x) [0,π/2]', 'sin(x)', '0', 'pi/2', null);
+testKings('x² [0,1]', 'x^2', '0', '1', null);
+testKings('1/x [1,2]', '1/x', '1', '2', null);
 
 // Summary
 console.log('\n' + '='.repeat(50));

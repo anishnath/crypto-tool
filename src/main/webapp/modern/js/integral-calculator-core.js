@@ -34,6 +34,8 @@ function normalizeExpr(expr) {
          .replace(/\u2084/g, '4').replace(/\u2085/g, '5')
          .replace(/\u2086/g, '6').replace(/\u2087/g, '7')
          .replace(/\u2088/g, '8').replace(/\u2089/g, '9');
+    /* arcsin → asin, arccos → acos, arctan → atan, arccot → acot, arcsec → asec, arccsc → acsc */
+    s = s.replace(/\barc(sin|cos|tan|cot|sec|csc)\b/g, 'a$1');
     var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt';
     /* Lookahead: operator, close-paren, whitespace, comma, end-of-string,
        OR the start of another known function name (handles sinxcosx). */
@@ -97,7 +99,128 @@ function evalBound(s, nerdamer) {
     return parseFloat(s) || 0;
 }
 
-var api = { normalizeExpr: normalizeExpr, checkNonElementaryIntegral: checkNonElementaryIntegral, evalBound: evalBound };
+/**
+ * King's Property detector for definite integrals.
+ * If ∫ₐᵇ f(x)/(f(x)+f(a+b-x)) dx, the result is (b-a)/2.
+ *
+ * Detection: parse "N/(D)" form, check that D = N + N', where N' is N
+ * with x replaced by (a+b-x). Verified numerically at multiple test points.
+ *
+ * Returns { value: (b-a)/2, exact, latex, steps } or null.
+ */
+function checkKingsProperty(expr, v, a, b, nerdamerRef) {
+    var nm = nerdamerRef || (typeof global !== 'undefined' && global.nerdamer) || (typeof window !== 'undefined' && window.nerdamer);
+    if (!nm) return null;
+
+    // Parse bounds to numbers
+    var aNum = evalBound(a, nm);
+    var bNum = evalBound(b, nm);
+    if (!isFinite(aNum) || !isFinite(bNum)) return null;
+    var sum = aNum + bNum;  // a + b
+
+    try {
+        // Detect free parameters (variables other than the integration variable).
+        // e.g. in sin(x)^m/(cos(x)^m+sin(x)^m), m is a free parameter.
+        var freeParams = [];
+        try {
+            var vars = nm(expr).variables();
+            for (var vi = 0; vi < vars.length; vi++) {
+                if (vars[vi] !== v) freeParams.push(vars[vi]);
+            }
+        } catch (_) {}
+
+        // Test values for free parameters — use several values to ensure
+        // the property holds for all of them, not just one lucky choice.
+        var paramSets = [{}];
+        if (freeParams.length > 0) {
+            paramSets = [];
+            var testParamValues = [2, 3.5, 7];  // integer, fractional, larger
+            for (var pi = 0; pi < testParamValues.length; pi++) {
+                var ps = {};
+                for (var pj = 0; pj < freeParams.length; pj++) {
+                    ps[freeParams[pj]] = testParamValues[pi];
+                }
+                paramSets.push(ps);
+            }
+        }
+
+        // Strategy: evaluate the integrand at x and check if
+        // integrand(x) + integrand(a+b-x) ≈ 1 at multiple test points.
+        // If so, it satisfies King's property and the integral = (b-a)/2.
+        // For expressions with free parameters, verify across multiple param values.
+        var testPoints = [0.1, 0.3, 0.5, 0.7, 0.9];
+        var allOne = true;
+
+        for (var psi = 0; psi < paramSets.length && allOne; psi++) {
+            for (var i = 0; i < testPoints.length; i++) {
+                var xVal = aNum + testPoints[i] * (bNum - aNum);
+                var mirrorVal = sum - xVal;  // a + b - x
+
+                var scope1 = {};
+                scope1[v] = xVal;
+                var scope2 = {};
+                scope2[v] = mirrorVal;
+
+                // Add free parameter values to both scopes
+                for (var pk in paramSets[psi]) {
+                    scope1[pk] = paramSets[psi][pk];
+                    scope2[pk] = paramSets[psi][pk];
+                }
+
+                var f1 = parseFloat(nm(expr).evaluate(scope1).text('decimals'));
+                var f2 = parseFloat(nm(expr).evaluate(scope2).text('decimals'));
+
+                if (!isFinite(f1) || !isFinite(f2)) { allOne = false; break; }
+                if (Math.abs(f1 + f2 - 1) > 1e-9) { allOne = false; break; }
+            }
+        }
+
+        if (!allOne) return null;
+
+        // King's property confirmed: ∫ₐᵇ f(x) dx = (b-a)/2
+        var numericVal = (bNum - aNum) / 2;
+
+        // Build exact symbolic answer
+        var exactText, exactTeX;
+        try {
+            var symExact = nm('(' + b + '-(' + a + '))/2').text();
+            exactText = symExact;
+            exactTeX = nm('(' + b + '-(' + a + '))/2').toTeX();
+        } catch (_) {
+            exactText = String(numericVal);
+            exactTeX = String(numericVal);
+        }
+
+        // Build step-by-step explanation
+        var steps = [
+            { title: "King's Property (Symmetry Rule)",
+              latex: '\\text{If } f(x) + f(a+b-x) = 1 \\text{ for all } x \\in [a,b], \\text{ then } \\int_a^b f(x)\\,dx = \\frac{b-a}{2}' },
+            { title: 'Verify symmetry',
+              latex: '\\text{Let } I = \\int_{' + a + '}^{' + b + '} f(' + v + ')\\,d' + v +
+                     '.\\text{ Substitute } ' + v + ' \\to (' + a + '+' + b + '-' + v + '):' },
+            { title: 'Apply substitution',
+              latex: 'I = \\int_{' + a + '}^{' + b + '} f(' + a + '+' + b + '-' + v + ')\\,d' + v +
+                     ' = \\int_{' + a + '}^{' + b + '} \\bigl(1 - f(' + v + ')\\bigr)\\,d' + v },
+            { title: 'Add original and substituted',
+              latex: '2I = \\int_{' + a + '}^{' + b + '} \\bigl[f(' + v + ') + f(' + a + '+' + b + '-' + v + ')\\bigr]\\,d' + v +
+                     ' = \\int_{' + a + '}^{' + b + '} 1\\,d' + v + ' = ' + b + ' - ' + a },
+            { title: 'Solve for I',
+              latex: 'I = \\frac{' + b + ' - ' + a + '}{2} = ' + exactTeX }
+        ];
+
+        return {
+            value: numericVal,
+            exactText: exactText,
+            exactTeX: exactTeX,
+            method: "King's Property (Symmetry)",
+            steps: steps
+        };
+    } catch (_) {
+        return null;
+    }
+}
+
+var api = { normalizeExpr: normalizeExpr, checkNonElementaryIntegral: checkNonElementaryIntegral, evalBound: evalBound, checkKingsProperty: checkKingsProperty };
 
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;

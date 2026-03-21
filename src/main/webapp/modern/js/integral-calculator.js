@@ -603,6 +603,22 @@
                 return;
             }
 
+            // King's Property check for definite integrals (e.g. sin^m(x)/(cos^m(x)+sin^m(x)) on [0,π/2] = π/4)
+            if (useDefinite) {
+                var kingsResult = checkKingsProperty(expr, v, a, b, nerdamer);
+                if (kingsResult) {
+                    var kSteps = { paths: [{ name: "King's Property", steps: kingsResult.steps, rules: ['KingsPropertyRule'] }] };
+                    showDefiniteResult(expr, v, a, b,
+                        exprToLatex(expr), expr,
+                        kingsResult.exactText, kingsResult.value,
+                        kingsResult.method, kSteps);
+                    resultActions.classList.add('visible');
+                    if (emptyState) emptyState.style.display = 'none';
+                    try { prepareGraph(expr, v, nerdamerToPython(expr), 'definite', a, b); } catch(e) {}
+                    return;
+                }
+            }
+
             try {
                 // Compute indefinite integral
                 var result = nerdamer('integrate(' + expr + ', ' + v + ')');
