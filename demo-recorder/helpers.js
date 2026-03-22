@@ -12,12 +12,13 @@ const { execSync } = require('child_process');
 // ── Config ──────────────────────────────────────────────────
 const BASE_URL = (process.env.DEMO_URL || 'http://localhost:8080').replace(/\/$/, '');
 const VIEWPORT = { width: 1920, height: 1080 };
-const TYPE_DELAY = 55;          // ms per keystroke (human-like)
-const FAST_TYPE_DELAY = 30;     // faster for LaTeX input
-const SHORT_PAUSE = 600;        // brief beat
-const MEDIUM_PAUSE = 1200;      // let viewer read
-const LONG_PAUSE = 2000;        // dramatic pause / let animation finish
-const EXTRA_PAUSE = 3000;       // wait for heavy computation / plot render
+const SPEED = parseFloat(process.env.DEMO_SPEED || '1');  // >1 = faster, e.g. DEMO_SPEED=2
+const TYPE_DELAY = Math.round(55 / SPEED);
+const FAST_TYPE_DELAY = Math.round(30 / SPEED);
+const SHORT_PAUSE = Math.round(400 / SPEED);
+const MEDIUM_PAUSE = Math.round(800 / SPEED);
+const LONG_PAUSE = Math.round(1200 / SPEED);
+const EXTRA_PAUSE = Math.round(2000 / SPEED);
 
 // ── Browser Launch ──────────────────────────────────────────
 async function launchRecorder(videoName) {
@@ -133,9 +134,16 @@ async function pressEnter(page, count = 1) {
 
 /** Click a toolbar button by its title attribute (partial match to allow shortcut suffixes) */
 async function clickToolbarBtn(page, title) {
+    // Ensure editor focus first — buttons may be disabled when cursor is inside a math-field
+    await page.evaluate(() => {
+        const editor = window.MeEditor;
+        if (editor) editor.commands.focus();
+    });
+    await page.waitForTimeout(200);
     const selector = `.me-toolbar-btn[title*="${title}"], .me-toolbar-btn-math[title*="${title}"]`;
     await page.waitForSelector(selector, { timeout: 5000 });
-    await page.click(selector);
+    // Force-click even if disabled (toolbar sync may lag behind focus)
+    await page.click(selector, { force: true });
     await page.waitForTimeout(SHORT_PAUSE);
 }
 
@@ -204,7 +212,13 @@ async function insertInlineMath(page, latex, options = {}) {
 /** Exit math-field back to TipTap text (press Escape or Enter) */
 async function exitMathField(page) {
     await page.keyboard.press('Escape');
-    await page.waitForTimeout(400);
+    await page.waitForTimeout(300);
+    // Explicitly focus TipTap editor to ensure toolbar buttons re-enable
+    await page.evaluate(() => {
+        const editor = window.MeEditor;
+        if (editor) editor.commands.focus('end');
+    });
+    await page.waitForTimeout(300);
 }
 
 /** Trigger slash menu by pressing / at start of empty line */

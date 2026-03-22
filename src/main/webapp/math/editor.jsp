@@ -312,6 +312,12 @@
 <!-- Context path for server-side compute (SymPy tier) -->
 <script>window.ME_CTX = "<%=request.getContextPath()%>";</script>
 
+<!-- Integral Calculator Core Engine (normalizeExpr, King's property, etc.) -->
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+<script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js?v=<%= cacheVersion %>"></script>
+
 <!-- Math Editor JS (IIFE scripts — listen for me:editor-ready event) -->
 <script src="<%=request.getContextPath()%>/math/assets/js/editor-core.js?v=<%= cacheVersion %>"></script>
 <script src="<%=request.getContextPath()%>/math/assets/js/toolbar.js?v=<%= cacheVersion %>"></script>

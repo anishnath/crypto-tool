@@ -38,6 +38,37 @@ function wireMathField(mf, getPos, editorInstance, nodeTypeName, resultEl) {
     mf.addEventListener('keydown', function (e) {
         e.stopPropagation();
 
+        // Backspace/Delete on empty math-field → delete the node entirely
+        if ((e.key === 'Backspace' || e.key === 'Delete') && !getLatex(mf).trim()) {
+            e.preventDefault();
+            var pos = getPos();
+            if (typeof pos === 'number') {
+                try {
+                    var node = editorInstance.state.doc.nodeAt(pos);
+                    if (node) {
+                        // Move cursor before deleting so user has somewhere to land
+                        var after = pos + node.nodeSize;
+                        var docSize = editorInstance.state.doc.content.size;
+                        if (after < docSize) {
+                            editorInstance.chain().focus().setTextSelection(after).run();
+                        } else if (pos > 0) {
+                            editorInstance.chain().focus().setTextSelection(pos).run();
+                        } else {
+                            // Only node in doc — insert empty paragraph first
+                            editorInstance.chain().focus()
+                                .insertContentAt(0, { type: 'paragraph' })
+                                .setTextSelection(1)
+                                .run();
+                        }
+                        // Delete the math node
+                        var tr = editorInstance.state.tr.delete(pos, pos + node.nodeSize);
+                        editorInstance.view.dispatch(tr);
+                    }
+                } catch (_) {}
+            }
+            return;
+        }
+
         // Shift+Enter → evaluate inline (append = result)
         if (e.key === 'Enter' && e.shiftKey) {
             e.preventDefault();
@@ -262,6 +293,47 @@ const MathBlock = Node.create({
             mf.className = 'me-mathfield-live';
             if (node.attrs.latex) mf.value = node.attrs.latex;
             dom.appendChild(mf);
+
+            // Delete button — visible on hover/select
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'me-math-delete-btn';
+            deleteBtn.innerHTML = '\u00d7';
+            deleteBtn.setAttribute('title', 'Delete this math block');
+            deleteBtn.setAttribute('aria-label', 'Delete math block');
+            deleteBtn.setAttribute('type', 'button');
+            deleteBtn.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var pos = getPos();
+                if (typeof pos !== 'number') return;
+                try {
+                    var n = ed.state.doc.nodeAt(pos);
+                    if (!n) return;
+                    var after = pos + n.nodeSize;
+                    var docSize = ed.state.doc.content.size;
+                    // Ensure there's somewhere for the cursor to go
+                    if (pos <= 0 && after >= docSize) {
+                        ed.chain().focus()
+                            .insertContentAt(0, { type: 'paragraph' })
+                            .setTextSelection(1)
+                            .run();
+                        // Re-get pos since doc changed
+                        pos = 2; // paragraph took pos 0-1
+                        n = ed.state.doc.nodeAt(pos);
+                        if (n) {
+                            ed.view.dispatch(ed.state.tr.delete(pos, pos + n.nodeSize));
+                        }
+                    } else {
+                        if (after < docSize) {
+                            ed.chain().focus().setTextSelection(after).run();
+                        } else {
+                            ed.chain().focus().setTextSelection(Math.max(0, pos)).run();
+                        }
+                        ed.view.dispatch(ed.state.tr.delete(pos, pos + n.nodeSize));
+                    }
+                } catch (_) {}
+            });
+            dom.appendChild(deleteBtn);
 
             // Auto-result element (Layer 1 — Compute Engine)
             const resultEl = document.createElement('div');

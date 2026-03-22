@@ -824,9 +824,452 @@ async function runCETests() {
     assert(nDiffTex.includes('x^{2}') || nDiffTex.includes('x^2'), 'diff toTeX (got: ' + nDiffTex + ')');
 
     // =============================================
+    //  EQUATION PARSING (f(x)=expr extraction)
+    // =============================================
+    domain('Equation Parsing (f(x)=expr)');
+
+    function extractLatex(fullLatex) {
+        var latex = fullLatex;
+        var eqParts = fullLatex.split('=');
+        if (eqParts.length === 2) {
+            var lhs = eqParts[0].trim();
+            var rhs = eqParts[1].trim();
+            if (/^[a-zA-Z]\s*\\left\(/.test(lhs) || /^[a-zA-Z]\s*\(/.test(lhs) || /^[a-zA-Z]$/.test(lhs)) {
+                latex = rhs;
+            }
+        } else if (eqParts.length > 2) {
+            latex = eqParts[0].trim();
+        }
+        if (!latex) latex = fullLatex;
+        return latex;
+    }
+
+    // f(x)= patterns → extract RHS
+    eq(extractLatex('f\\left(x\\right)=x^{2}+1'), 'x^{2}+1', 'f(x)=x²+1 → RHS');
+    eq(extractLatex('f\\left(x\\right)=x^{2}-4'), 'x^{2}-4', 'f(x)=x²-4 → RHS');
+    eq(extractLatex('y=\\sin(x)'), '\\sin(x)', 'y=sin(x) → RHS');
+    eq(extractLatex('g\\left(t\\right)=e^{t}'), 'e^{t}', 'g(t)=eᵗ → RHS');
+    eq(extractLatex('y=x^{3}-6x^{2}+11x-6'), 'x^{3}-6x^{2}+11x-6', 'y=cubic → RHS');
+
+    // No equals → as-is
+    eq(extractLatex('x^{2}+3x'), 'x^{2}+3x', 'no = → as-is');
+    eq(extractLatex('\\int x^{2} dx'), '\\int x^{2} dx', 'integral → as-is');
+    eq(extractLatex('\\sin(x)+\\cos(x)'), '\\sin(x)+\\cos(x)', 'trig → as-is');
+
+    // Non-func-def equation → stays as full (for solve)
+    eq(extractLatex('x^{2}+2x+1=0'), 'x^{2}+2x+1=0', 'equation=0 stays full');
+    eq(extractLatex('x^{2}+y^{2}=8'), 'x^{2}+y^{2}=8', 'multi-var eq stays full');
+
+    // Multiple equals (prev result appended) → take first part
+    eq(extractLatex('x^{2}+1 = x^{2}+1 = simplified'), 'x^{2}+1', 'multi-= takes first');
+
+    // f(x)=RHS then compute on RHS via nerdamer
+    let fxFactor = nm('factor(' + nm.convertFromLaTeX(extractLatex('f\\left(x\\right)=x^{2}-4')).toString() + ')').text();
+    assert(fxFactor.includes('2+x') || fxFactor.includes('x+2'), 'f(x)=x²-4 → factor RHS → (x-2)(x+2) (got: ' + fxFactor + ')');
+
+    let fxSimplify = nm('simplify(' + nm.convertFromLaTeX(extractLatex('f\\left(x\\right)=x^{3}-6x^{2}+11x-6')).toString() + ')').text();
+    assert(fxSimplify.includes('x') && fxSimplify.includes('1'), 'f(x)=cubic → simplify RHS factors (got: ' + fxSimplify + ')');
+
+    // =============================================
+    //  INTEGRAL LaTeX PARSING
+    // =============================================
+    domain('Integral LaTeX Parsing');
+
+    function extractBraced(str, pos) {
+        var depth = 1, i = pos;
+        while (i < str.length && depth > 0) {
+            if (str[i] === '{') depth++;
+            else if (str[i] === '}') depth--;
+            i++;
+        }
+        return depth === 0 ? { content: str.substring(pos, i - 1), end: i } : null;
+    }
+
+    function parseIntegralLatex(latex) {
+        if (!latex || !(/(\\int)/.test(latex))) return null;
+        var s = latex.trim();
+        var lower = null, upper = null;
+        var intMatch = s.match(/^\\int\s*/);
+        if (intMatch) {
+            var cursor = intMatch[0].length;
+            if (s[cursor] === '_' && s[cursor + 1] === '{') {
+                var lo = extractBraced(s, cursor + 2);
+                if (lo) {
+                    lower = lo.content;
+                    cursor = lo.end;
+                    while (cursor < s.length && s[cursor] === ' ') cursor++;
+                    if (s[cursor] === '^' && s[cursor + 1] === '{') {
+                        var hi = extractBraced(s, cursor + 2);
+                        if (hi) { upper = hi.content; cursor = hi.end; }
+                    } else if (s[cursor] === '^') {
+                        var ubMatch = s.substring(cursor + 1).match(/^(\S+)/);
+                        if (ubMatch) { upper = ubMatch[1]; cursor += 1 + ubMatch[1].length; }
+                    }
+                }
+            }
+            s = s.substring(cursor);
+        } else {
+            s = s.replace(/^\\int\s*/, '');
+        }
+        var variable = 'x';
+        s = s.replace(/\\[,;!]\s*d([a-zA-Z])\s*$/, function (_, v) { variable = v; return ''; });
+        s = s.replace(/\s+d([a-zA-Z])\s*$/, function (_, v) { variable = v; return ''; });
+        s = s.replace(/\\[,;!]\s*d\{([^}]+)\}\s*$/, function (_, v) { variable = v; return ''; });
+        s = s.replace(/^\\left\(/, '').replace(/\\right\)\s*$/, '');
+        s = s.trim();
+        if (!s) return null;
+        return { integrand: s, variable: variable, lower: lower, upper: upper, isDefinite: lower !== null && upper !== null };
+    }
+
+    // Indefinite
+    let pi1 = parseIntegralLatex('\\int x^{2}+3x\\,dx');
+    eq(pi1.integrand, 'x^{2}+3x', '\\int x²+3x dx → integrand');
+    eq(pi1.variable, 'x', '→ var x');
+    eq(pi1.isDefinite, false, '→ indefinite');
+
+    // Definite with nested braces
+    let pi2 = parseIntegralLatex('\\int_{0}^{\\frac{\\pi}{2}} \\sin^{3}(x)\\,dx');
+    eq(pi2.lower, '0', 'lower = 0');
+    eq(pi2.upper, '\\frac{\\pi}{2}', 'upper = π/2 (nested braces)');
+    eq(pi2.variable, 'x', 'var = x');
+    eq(pi2.isDefinite, true, 'definite');
+
+    // Definite with infinity
+    let pi3 = parseIntegralLatex('\\int_{0}^{\\infty} \\frac{\\sin(x)}{x}\\,dx');
+    eq(pi3.lower, '0', 'lower = 0');
+    eq(pi3.upper, '\\infty', 'upper = ∞');
+    eq(pi3.isDefinite, true, 'definite');
+
+    // No \\int → null
+    eq(parseIntegralLatex('x^{2}+3x'), null, 'no \\int → null');
+    eq(parseIntegralLatex('f\\left(x\\right)=x^2'), null, 'f(x)= → null');
+
+    // Different variable
+    let pi4 = parseIntegralLatex('\\int t^{2}\\,dt');
+    eq(pi4.variable, 't', 'var = t');
+
+    // Trig power normalization for nerdamer
+    let trigNorm = '\\sin^{3}(x)'
+        .replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\{[^}]+\})(\([^)]+\))/g, '\\$1$3^$2')
+        .replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\{[^}]+\})([a-zA-Z])/g, '\\$1($3)^$2');
+    eq(trigNorm, '\\sin(x)^{3}', '\\sin^{3}(x) → \\sin(x)^{3}');
+    let trigParsed = nm.convertFromLaTeX(trigNorm).toString();
+    eq(trigParsed, 'sin(x)^3', 'nerdamer parses sin(x)^3');
+
+    // Full pipeline: integral LaTeX → nerdamer → result
+    // Load core via vm (same pattern as integral-calculator-test/require-core.js)
+    const coreFilePath = require('path').join(__dirname, '..', 'modern', 'js', 'integral-calculator-core.js');
+    const coreCode = require('fs').readFileSync(coreFilePath, 'utf8');
+    const coreVm = require('vm');
+    const coreSandbox = { module: { exports: {} }, exports: {}, console, Math, parseFloat, String, RegExp, undefined, global, window: {}, self: {} };
+    coreVm.createContext(coreSandbox);
+    coreVm.runInContext(coreCode, coreSandbox);
+    let core = coreSandbox.module.exports;
+    let intExpr = nm.convertFromLaTeX('\\sin(x)^{3}').toString();
+    intExpr = core.normalizeExpr(intExpr);
+    let intResult = nm('integrate(' + intExpr + ', x)').text();
+    assert(!intResult.includes('integrate('), 'sin³(x) integration resolved (got: ' + intResult.substring(0, 50) + ')');
+
+    // King's property via core
+    let kingsResult = core.checkKingsProperty(
+        core.normalizeExpr('sin(x)^3/(cos(x)^3+sin(x)^3)'), 'x', '0', 'pi/2', nm
+    );
+    assert(kingsResult && Math.abs(kingsResult.value - Math.PI/4) < 1e-9, 'Kings property → π/4');
+
+    // =============================================
     //  TIER 3: SymPy code generation tests
     //  (Can't call server, but test code builder)
     // =============================================
+    // =============================================
+    //  ODE/PDE DETECTION & CONVERSION
+    // =============================================
+    domain('ODE/PDE Detection');
+
+    function detectDEType(latex) {
+        if (!latex) return null;
+        if (/\\partial/.test(latex) || /\\frac\{\\partial/.test(latex)) return 'pde';
+        if (/y'+|y''+|y'''+/.test(latex)) return 'ode';
+        if (/\\frac\{d\^?\{?\d?\}?y\}\{dx/.test(latex)) return 'ode';
+        if (/\\frac\{d\^?\{?2\}?y\}\{dx\^?\{?2\}?\}/.test(latex)) return 'ode';
+        if (/\\dot\{y\}|\\ddot\{y\}/.test(latex)) return 'ode';
+        if (/dy\/dx|d\^2y\/dx\^2/.test(latex)) return 'ode';
+        return null;
+    }
+
+    // ODE detection
+    eq(detectDEType("y'+2y=e^{x}"), 'ode', "y' → ode");
+    eq(detectDEType("y''+3y'+2y=0"), 'ode', "y'' → ode");
+    eq(detectDEType("\\frac{dy}{dx}+2y=e^{x}"), 'ode', "dy/dx → ode");
+    eq(detectDEType("\\frac{d^{2}y}{dx^{2}}+y=0"), 'ode', "d²y/dx² → ode");
+    eq(detectDEType("\\dot{y}+2y=0"), 'ode', "dot(y) → ode");
+    eq(detectDEType("\\ddot{y}+\\omega^{2}y=0"), 'ode', "ddot(y) → ode");
+
+    // PDE detection
+    eq(detectDEType("\\frac{\\partial u}{\\partial t}=k\\frac{\\partial^{2}u}{\\partial x^{2}}"), 'pde', "heat eq → pde");
+    eq(detectDEType("\\frac{\\partial^{2}u}{\\partial x^{2}}+\\frac{\\partial^{2}u}{\\partial y^{2}}=0"), 'pde', "Laplace → pde");
+
+    // Not DEs
+    eq(detectDEType("x^{2}+3x+1"), null, "polynomial → null");
+    eq(detectDEType("\\sin(x)+\\cos(x)"), null, "trig → null");
+    eq(detectDEType("f\\left(x\\right)=x^{2}+1"), null, "func def → null");
+    eq(detectDEType("\\int x^{2}dx"), null, "integral → null");
+
+    domain('ODE LaTeX → Python Conversion');
+
+    function convertODE(latex) {
+        var pyExpr = latex
+            .replace(/\\frac\{d\^\{?(\d+)\}?y\}\{dx\^\{?\1\}?\}/g, 'Derivative(y(x), x, $1)')
+            .replace(/\\frac\{dy\}\{dx\}/g, "y(x).diff(x)")
+            .replace(/y'''/g, 'Derivative(y(x), x, 3)')
+            .replace(/y''/g, 'Derivative(y(x), x, 2)')
+            .replace(/y'/g, "y(x).diff(x)")
+            .replace(/\\dot\{y\}/g, "y(x).diff(x)")
+            .replace(/\\ddot\{y\}/g, 'Derivative(y(x), x, 2)')
+            .replace(/\\left|\\right/g, '')
+            .replace(/\\sin/g, 'sin').replace(/\\cos/g, 'cos')
+            .replace(/\\ln/g, 'log').replace(/\\exp/g, 'exp').replace(/\\sqrt/g, 'sqrt')
+            .replace(/\{/g, '(').replace(/\}/g, ')')
+            .replace(/\^/g, '**');
+
+        pyExpr = pyExpr.replace(/([^a-zA-Z])y(?!\()/g, '$1y(x)');
+        pyExpr = pyExpr.replace(/^y(?!\()/g, 'y(x)');
+        pyExpr = pyExpr.replace(/(\d)(y\(x\))/g, '$1*$2');
+        pyExpr = pyExpr.replace(/(\d)([a-wz])\b/g, '$1*$2');
+        pyExpr = pyExpr.replace(/\)(y\(x\))/g, ')*$1');
+        pyExpr = pyExpr.replace(/\)([a-wz])\b/g, ')*$1');
+
+        var eqSplit = pyExpr.split('=');
+        if (eqSplit.length === 2 && eqSplit[0].trim() && eqSplit[1].trim()) {
+            pyExpr = 'Eq(' + eqSplit[0].trim() + ', ' + eqSplit[1].trim() + ')';
+        }
+        return pyExpr;
+    }
+
+    // Verify Python output is valid
+    function checkODE(latex, label) {
+        var py = convertODE(latex);
+        var hasEq = py.startsWith('Eq(');
+        var hasDeriv = py.includes('.diff(') || py.includes('Derivative(');
+        var noBarey = !/(\d)y\(x\)/.test(py);  // no missing * before y(x)
+        assert(hasEq, label + ' → has Eq()');
+        assert(hasDeriv, label + ' → has derivative');
+        assert(noBarey, label + ' → no missing * (got: ' + py + ')');
+    }
+
+    checkODE("y'+2y=e^{x}", "1st order y'");
+    checkODE("y''+3y'+2y=0", "2nd order y''");
+    checkODE("\\frac{dy}{dx}+2y=e^{x}", "Leibniz dy/dx");
+    checkODE("\\frac{d^{2}y}{dx^{2}}+y=0", "Leibniz d²y/dx²");
+    checkODE("\\dot{y}+y=0", "dot notation");
+
+    // =============================================
+    //  MATRIX PARSING & COMPUTATION
+    // =============================================
+    domain('Matrix LaTeX Parsing');
+
+    function isMatrixLatex(latex) {
+        return /\\begin\{[pbvBV]?matrix\}/.test(latex);
+    }
+
+    function matrixLatexToNerdamer(latex) {
+        var m = latex.match(/\\begin\{[pbvBV]?matrix\}([\s\S]*?)\\end\{[pbvBV]?matrix\}/);
+        if (!m) return null;
+        var body = m[1].trim();
+        var rows = body.split(/\\\\|\\cr/).map(function (r) { return r.trim(); }).filter(Boolean);
+        var nRows = [];
+        for (var i = 0; i < rows.length; i++) {
+            var cols = rows[i].split('&').map(function (c) {
+                return c.trim().replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '(($1)/($2))')
+                    .replace(/\{/g, '(').replace(/\}/g, ')').replace(/\\left|\\right/g, '');
+            });
+            nRows.push('[' + cols.join(',') + ']');
+        }
+        return 'matrix(' + nRows.join(',') + ')';
+    }
+
+    function matrixLatexToSymPy(latex) {
+        var m = latex.match(/\\begin\{[pbvBV]?matrix\}([\s\S]*?)\\end\{[pbvBV]?matrix\}/);
+        if (!m) return null;
+        var body = m[1].trim();
+        var rows = body.split(/\\\\|\\cr/).map(function (r) { return r.trim(); }).filter(Boolean);
+        var pyRows = [];
+        for (var i = 0; i < rows.length; i++) {
+            var cols = rows[i].split('&').map(function (c) {
+                return c.trim().replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, 'Rational($1,$2)')
+                    .replace(/\{/g, '').replace(/\}/g, '').replace(/\^/g, '**');
+            });
+            pyRows.push('[' + cols.join(', ') + ']');
+        }
+        return 'Matrix([' + pyRows.join(', ') + '])';
+    }
+
+    // Detection
+    assert(isMatrixLatex('\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}'), 'pmatrix detected');
+    assert(isMatrixLatex('\\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}'), 'bmatrix detected');
+    assert(isMatrixLatex('\\begin{vmatrix} 1 & 2 \\\\ 3 & 4 \\end{vmatrix}'), 'vmatrix detected');
+    assert(!isMatrixLatex('x^2+1'), 'non-matrix → false');
+    assert(!isMatrixLatex("y'+2y=0"), 'ODE → false');
+
+    // LaTeX → nerdamer
+    eq(matrixLatexToNerdamer('\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}'),
+        'matrix([1,2],[3,4])', 'pmatrix → nerdamer');
+    eq(matrixLatexToNerdamer('\\begin{bmatrix} 5 & 6 \\\\ 7 & 8 \\end{bmatrix}'),
+        'matrix([5,6],[7,8])', 'bmatrix → nerdamer');
+
+    // 3x3
+    var m3x3 = '\\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}';
+    eq(matrixLatexToNerdamer(m3x3), 'matrix([1,0,0],[0,1,0],[0,0,1])', '3x3 identity → nerdamer');
+
+    // LaTeX → SymPy
+    eq(matrixLatexToSymPy('\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}'),
+        'Matrix([[1, 2], [3, 4]])', 'pmatrix → SymPy');
+
+    // With fractions
+    var fracMatrix = '\\begin{pmatrix} \\frac{1}{2} & \\frac{3}{4} \\\\ 1 & 2 \\end{pmatrix}';
+    var fracNerd = matrixLatexToNerdamer(fracMatrix);
+    assert(fracNerd && fracNerd.includes('((1)/(2))'), 'fraction matrix parsed (got: ' + fracNerd + ')');
+
+    domain('Matrix Computation via Nerdamer');
+
+    // Determinant
+    var nerdDet = nm('determinant(' + matrixLatexToNerdamer('\\begin{pmatrix} 2 & 3 \\\\ 1 & 4 \\end{pmatrix}') + ')').text();
+    eq(nerdDet, '5', 'det([[2,3],[1,4]]) = 5');
+
+    // Inverse
+    var nerdInv = nm('invert(' + matrixLatexToNerdamer('\\begin{pmatrix} 2 & 3 \\\\ 1 & 4 \\end{pmatrix}') + ')').text();
+    assert(nerdInv.includes('matrix'), 'inverse returns matrix (got: ' + nerdInv.substring(0, 50) + ')');
+
+    // Transpose
+    var nerdTrans = nm('transpose(' + matrixLatexToNerdamer('\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}') + ')').text();
+    eq(nerdTrans, 'matrix([1,3],[2,4])', 'transpose correct');
+
+    // Multiply
+    var m1 = matrixLatexToNerdamer('\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}');
+    var m2 = matrixLatexToNerdamer('\\begin{pmatrix} 5 & 6 \\\\ 7 & 8 \\end{pmatrix}');
+    var nerdMul = nm(m1 + '*' + m2).text();
+    eq(nerdMul, 'matrix([19,22],[43,50])', 'matrix multiply');
+
+    // 3x3 determinant
+    var nerd3x3 = nm('determinant(' + matrixLatexToNerdamer('\\begin{pmatrix} 1 & 2 & 3 \\\\ 4 & 5 & 6 \\\\ 7 & 8 & 9 \\end{pmatrix}') + ')').text();
+    eq(nerd3x3, '0', '3x3 singular det = 0');
+
+    // toTeX produces LaTeX
+    var invTex = nm('invert(' + matrixLatexToNerdamer('\\begin{pmatrix} 2 & 3 \\\\ 1 & 4 \\end{pmatrix}') + ')').toTeX();
+    assert(invTex.includes('\\begin{vmatrix}') || invTex.includes('frac'), 'inverse toTeX has LaTeX (got: ' + invTex.substring(0, 50) + ')');
+
+    domain('Matrix Operations (multi-matrix expressions)');
+
+    // Full expression conversion (multiple matrices + operators)
+    function _singleToNerd(body) {
+        var rows = body.split(/\\\\|\\cr/).map(function (r) { return r.trim(); }).filter(Boolean);
+        var nRows = [];
+        for (var ri = 0; ri < rows.length; ri++) {
+            var cols = rows[ri].split('&').map(function (c) {
+                return c.trim().replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '(($1)/($2))')
+                    .replace(/\{/g, '(').replace(/\}/g, ')').replace(/\\left|\\right/g, '');
+            });
+            nRows.push('[' + cols.join(',') + ']');
+        }
+        return 'matrix(' + nRows.join(',') + ')';
+    }
+
+    function fullMatrixConvert(latex) {
+        var result = latex.replace(
+            /\\begin\{[pbvBV]?matrix\}([\s\S]*?)\\end\{[pbvBV]?matrix\}/g,
+            function (_, body) { return _singleToNerd(body); }
+        );
+        result = result.replace(/\\cdot/g, '*').replace(/\\times/g, '*');
+        result = result.replace(/\\left|\\right/g, '');
+        result = result.replace(/\{/g, '(').replace(/\}/g, ')');
+        return result;
+    }
+
+    // A · B multiply
+    var mulLatex = '\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix} \\cdot \\begin{pmatrix} 5 & 6 \\\\ 7 & 8 \\end{pmatrix}';
+    var mulNerd = fullMatrixConvert(mulLatex);
+    eq(nm(mulNerd).text(), 'matrix([19,22],[43,50])', 'A·B = [[19,22],[43,50]]');
+
+    // A + B add
+    var addLatex = '\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix} + \\begin{pmatrix} 5 & 6 \\\\ 7 & 8 \\end{pmatrix}';
+    eq(nm(fullMatrixConvert(addLatex)).text(), 'matrix([6,8],[10,12])', 'A+B = [[6,8],[10,12]]');
+
+    // A - B subtract
+    var subLatex = '\\begin{pmatrix} 5 & 6 \\\\ 7 & 8 \\end{pmatrix} - \\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}';
+    eq(nm(fullMatrixConvert(subLatex)).text(), 'matrix([4,4],[4,4])', 'A-B = [[4,4],[4,4]]');
+
+    // 3A scalar multiply
+    var scalarLatex = '3 \\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}';
+    eq(nm(fullMatrixConvert(scalarLatex)).text(), 'matrix([3,6],[9,12])', '3A = [[3,6],[9,12]]');
+
+    // det(A·B) = det(A)*det(B)
+    var detAB = nm('determinant(' + nm(fullMatrixConvert(mulLatex)).text() + ')').text();
+    // det(A)=-2, det(B)=-2, det(AB)=4
+    eq(detAB, '4', 'det(A·B) = det(A)·det(B) = 4');
+
+    // Singular matrix inverse fails gracefully
+    var singularLatex = '\\begin{pmatrix} 1 & 2 \\\\ 2 & 4 \\end{pmatrix}';
+    try {
+        nm('invert(' + fullMatrixConvert(singularLatex) + ')');
+        assert(false, 'singular inverse should throw');
+    } catch(e) {
+        assert(true, 'singular matrix inverse throws (got: ' + e.message.substring(0, 30) + ')');
+    }
+
+    // Cross product
+    var crossResult = nm('cross([1,2,3],[4,5,6])').text();
+    eq(crossResult, '[-3,6,-3]', 'cross product [1,2,3]×[4,5,6]');
+
+    // Dot product
+    var dotResult = nm('dot([1,2,3],[4,5,6])').text();
+    eq(dotResult, '32', 'dot product [1,2,3]·[4,5,6] = 32');
+
+    // Identity matrix
+    var imatResult = nm('imatrix(3)').text();
+    eq(imatResult, 'matrix([1,0,0],[0,1,0],[0,0,1])', 'imatrix(3) = I₃');
+
+    // SymPy code generation for matrices
+    domain('Matrix SymPy Code Generation');
+
+    function singleMatrixToSymPy(body) {
+        var rows = body.split(/\\\\|\\cr/).map(function (r) { return r.trim(); }).filter(Boolean);
+        var pyRows = [];
+        for (var i = 0; i < rows.length; i++) {
+            var cols = rows[i].split('&').map(function (c) {
+                return c.trim().replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, 'Rational($1,$2)')
+                    .replace(/\{/g, '').replace(/\}/g, '').replace(/\^/g, '**');
+            });
+            pyRows.push('[' + cols.join(', ') + ']');
+        }
+        return 'Matrix([' + pyRows.join(', ') + '])';
+    }
+
+    function matrixLatexToSymPyFull(latex) {
+        var result = latex.replace(
+            /\\begin\{[pbvBV]?matrix\}([\s\S]*?)\\end\{[pbvBV]?matrix\}/g,
+            function (_, body) { return singleMatrixToSymPy(body); }
+        );
+        result = result.replace(/\\cdot/g, '*').replace(/\\times/g, '*');
+        result = result.replace(/\\left|\\right/g, '');
+        result = result.replace(/\{/g, '(').replace(/\}/g, ')');
+        result = result.replace(/\^/g, '**');
+        return result;
+    }
+
+    // Single matrix → SymPy
+    eq(matrixLatexToSymPyFull('\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}'),
+        'Matrix([[1, 2], [3, 4]])', 'single matrix → SymPy');
+
+    // A*B → SymPy
+    var sympyMul = matrixLatexToSymPyFull(mulLatex);
+    assert(sympyMul.includes('Matrix([[1, 2], [3, 4]])') && sympyMul.includes('Matrix([[5, 6], [7, 8]])'),
+        'A·B → SymPy has both matrices (got: ' + sympyMul.substring(0, 60) + ')');
+    assert(sympyMul.includes('*'), 'A·B → SymPy has * operator');
+
+    // Fraction matrix → SymPy with Rational
+    var fracSympyLatex = '\\begin{pmatrix} \\frac{1}{2} & \\frac{3}{4} \\\\ 1 & 2 \\end{pmatrix}';
+    var fracSympy = matrixLatexToSymPyFull(fracSympyLatex);
+    assert(fracSympy.includes('Rational(1,2)'), 'fraction → Rational in SymPy (got: ' + fracSympy + ')');
+
     domain('Tier 3: SymPy Code Builder');
 
     function nerdamerToPython(expr) {

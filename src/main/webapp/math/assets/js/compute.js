@@ -57,6 +57,8 @@
 
     function getNerdamer() {
         if (nerd) return Promise.resolve(nerd);
+        // Check if nerdamer was already loaded (e.g. by integral-calculator-core.js)
+        if (window.nerdamer) { nerd = window.nerdamer; return Promise.resolve(nerd); }
         if (nerdLoading) return nerdLoading;
         nerdLoading = loadScriptsSequential(NERDAMER_MODULES.map(function (m) {
             return NERDAMER_CDN + m;
@@ -125,6 +127,205 @@
         if (!latex) return '';
         return latex
             .replace(/\\ln\b/g, '\\log');  // nerdamer only understands \log
+    }
+
+    // =========================================================
+    //  INTEGRAL-AWARE LaTeX PARSER
+    //  Detects \int ... dx patterns in LaTeX and extracts:
+    //    { integrand, variable, lower, upper, isDefinite }
+    //  Then routes through integral-calculator-core.js engine.
+    // =========================================================
+
+    /**
+     * Parse \int LaTeX into components.
+     * Handles: \int f(x)\,dx, \int_{a}^{b} f(x)\,dx, \int f(x) dx
+     * Returns { integrand, variable, lower, upper, isDefinite } or null.
+     */
+    function parseIntegralLatex(latex) {
+        if (!latex || !(/\\int/.test(latex))) return null;
+        var s = latex.trim();
+
+        // Helper: extract balanced brace content starting at pos (just after opening {)
+        function extractBraced(str, pos) {
+            var depth = 1, i = pos;
+            while (i < str.length && depth > 0) {
+                if (str[i] === '{') depth++;
+                else if (str[i] === '}') depth--;
+                i++;
+            }
+            return depth === 0 ? { content: str.substring(pos, i - 1), end: i } : null;
+        }
+
+        // Extract optional bounds: \int_{lower}^{upper}
+        var lower = null, upper = null;
+        var intMatch = s.match(/^\\int\s*/);
+        if (intMatch) {
+            var cursor = intMatch[0].length;
+            if (s[cursor] === '_' && s[cursor + 1] === '{') {
+                var lo = extractBraced(s, cursor + 2);
+                if (lo) {
+                    lower = lo.content;
+                    cursor = lo.end;
+                    // Skip whitespace
+                    while (cursor < s.length && s[cursor] === ' ') cursor++;
+                    if (s[cursor] === '^' && s[cursor + 1] === '{') {
+                        var hi = extractBraced(s, cursor + 2);
+                        if (hi) {
+                            upper = hi.content;
+                            cursor = hi.end;
+                        }
+                    } else if (s[cursor] === '^') {
+                        // ^X without braces (single token)
+                        var ubMatch = s.substring(cursor + 1).match(/^(\S+)/);
+                        if (ubMatch) {
+                            upper = ubMatch[1];
+                            cursor += 1 + ubMatch[1].length;
+                        }
+                    }
+                }
+            }
+            s = s.substring(cursor);
+        } else {
+            // Strip bare \int
+            s = s.replace(/^\\int\s*/, '');
+        }
+
+        // Extract d<var> from the end: \,dx or \,dt or just dx
+        var variable = 'x';
+        s = s.replace(/\\[,;!]\s*d([a-zA-Z])\s*$/, function (_, v) { variable = v; return ''; });
+        s = s.replace(/\s+d([a-zA-Z])\s*$/, function (_, v) { variable = v; return ''; });
+        // Also handle d\theta, d{var}
+        s = s.replace(/\\[,;!]\s*d\{([^}]+)\}\s*$/, function (_, v) { variable = v; return ''; });
+
+        // Strip wrapping \left( ... \right) if present
+        s = s.replace(/^\\left\(/, '').replace(/\\right\)\s*$/, '');
+        s = s.trim();
+
+        if (!s) return null;
+
+        return {
+            integrand: s,
+            variable: variable,
+            lower: lower,
+            upper: upper,
+            isDefinite: lower !== null && upper !== null
+        };
+    }
+
+    /**
+     * Compute an integral using the integral-calculator-core engine.
+     * Uses: normalizeExpr → King's property → nerdamer integrate → SymPy fallback.
+     * Returns Promise<{ latex, tier }> or null.
+     */
+    function computeIntegralViaCoreEngine(integrandLatex, variable, lower, upper, isDefinite) {
+        var core = window.IntegralCalculatorCore;
+        var nm = window.nerdamer;
+        if (!core || !nm) return Promise.resolve(null);
+
+        // Normalize LaTeX before conversion:
+        // \sin^{3}(x) → \sin(x)^{3}  (nerdamer doesn't handle trig^n(x) form)
+        var normLatex = normalizeLatexForNerdamer(integrandLatex)
+            .replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\{[^}]+\})(\([^)]+\))/g, '\\$1$3^$2')
+            .replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\{[^}]+\})([a-zA-Z])/g, '\\$1($3)^$2');
+
+        // Convert LaTeX integrand to nerdamer text
+        var nExpr;
+        try {
+            nExpr = nm.convertFromLaTeX(normLatex).toString();
+        } catch (_) {
+            // Fallback: try treating it as already-text (user may have typed text, not LaTeX)
+            nExpr = integrandLatex;
+        }
+        if (!nExpr) return Promise.resolve(null);
+
+        // Normalize through the core engine
+        nExpr = core.normalizeExpr(nExpr);
+        var v = variable || 'x';
+
+        // --- King's property check for definite integrals ---
+        if (isDefinite) {
+            var kings = core.checkKingsProperty(nExpr, v, lower, upper, nm);
+            if (kings) {
+                return Promise.resolve({
+                    latex: kings.exactTeX,
+                    tier: 'kings'
+                });
+            }
+        }
+
+        // --- nerdamer integration ---
+        try {
+            if (isDefinite) {
+                // Try definite integral
+                var defResult = nm('defint(' + nExpr + ', ' + lower + ', ' + upper + ', ' + v + ')');
+                var numVal = parseFloat(defResult.text('decimals'));
+                if (isFinite(numVal)) {
+                    return Promise.resolve({
+                        latex: defResult.toTeX(),
+                        tier: 'nerdamer'
+                    });
+                }
+            }
+
+            // Indefinite
+            var result = nm('integrate(' + nExpr + ', ' + v + ')');
+            var txt = result.text();
+            // Reject unresolved integrals
+            if (txt && txt.indexOf('integrate(') !== -1) {
+                // Fall through to SymPy
+            } else {
+                var resultTeX = result.toTeX();
+                if (isDefinite) {
+                    // Evaluate antiderivative at bounds
+                    try {
+                        var aNum = core.evalBound(lower, nm);
+                        var bNum = core.evalBound(upper, nm);
+                        var scope = {};
+                        scope[v] = bNum;
+                        var Fb = parseFloat(nm(txt).evaluate(scope).text('decimals'));
+                        scope[v] = aNum;
+                        var Fa = parseFloat(nm(txt).evaluate(scope).text('decimals'));
+                        if (isFinite(Fb) && isFinite(Fa)) {
+                            var val = Fb - Fa;
+                            // Try to get exact form
+                            var exactTex;
+                            try { exactTex = nm(Fb + '-(' + Fa + ')').toTeX(); } catch (_) { exactTex = String(val); }
+                            return Promise.resolve({ latex: exactTex + ' \\approx ' + val.toFixed(6), tier: 'nerdamer' });
+                        }
+                    } catch (_) {}
+                } else {
+                    return Promise.resolve({ latex: resultTeX + ' + C', tier: 'nerdamer' });
+                }
+            }
+        } catch (_) {}
+
+        // --- SymPy fallback ---
+        var pyExpr = nerdamerToPython(nExpr);
+        if (!pyExpr) return Promise.resolve(null);
+
+        var symDecl = buildSympySymbolsDecl(v, pyExpr);
+        var pyOp;
+        if (isDefinite) {
+            var pyLower = (lower || '0').replace(/\\infty/g, 'oo').replace(/\\pi/g, 'pi').replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '(($1)/($2))');
+            var pyUpper = (upper || '1').replace(/\\infty/g, 'oo').replace(/\\pi/g, 'pi').replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '(($1)/($2))');
+            pyOp = 'integrate(' + pyExpr + ', (' + v + ', ' + pyLower + ', ' + pyUpper + '))';
+        } else {
+            pyOp = 'integrate(' + pyExpr + ', ' + v + ')';
+        }
+
+        var code = 'from sympy import *\n' +
+            symDecl + '\n' +
+            'result = ' + pyOp + '\n' +
+            'print("LATEX:" + latex(result))';
+
+        return runSymPy(code).then(function (stdout) {
+            if (!stdout) return null;
+            var m = stdout.match(/LATEX:([^\n]*)/);
+            if (!m || !m[1]) return null;
+            var tex = m[1].trim();
+            if (!tex || /^\\int/.test(tex)) return null;  // Reject unevaluated
+            return { latex: tex + (isDefinite ? '' : ' + C'), tier: 'sympy' };
+        }).catch(function () { return null; });
     }
 
     /** Convert Nerdamer text to SymPy-compatible Python.
@@ -246,6 +447,10 @@
         if (rl === '\\mathrm{True}' || rl === '\\mathrm{False}') return false;
         if (rl === '\u22A5' || rl === '\u22A4') return false;
         if (rl === '\\perp') return false;
+        if (/\\error/.test(rl)) return false;           // CE error marker
+        if (/\\blacksquare/.test(rl)) return false;     // CE error square
+        if (/1e\+\d+/.test(rl)) return false;           // floating-point noise (huge numbers)
+        if (/\d{12,}/.test(rl)) return false;            // enormous integer literals (numeric noise)
         if (/\\mathrm\{(Solve|Integrate|Isolate|Roots|D|Factor|Binomial|Fibonacci)\}/.test(rl)) return false;
         if (/^\\int[\\!\s]/.test(rl)) return false;
         try { if (result.json === 'False' || result.json === 'True') return false; } catch (_) {}
@@ -279,6 +484,18 @@
 
     function detectVarsFromLatex(latex) {
         if (!latex) return [];
+
+        // Detect function-definition names: single letter at the START followed by \left( or (
+        // before the first = sign. e.g. f\left(x\right)=..., g(t)=...
+        // Only look at the LHS of the equation to avoid false positives.
+        var funcNames = {};
+        var eqIdx = latex.indexOf('=');
+        var lhsPart = eqIdx > 0 ? latex.substring(0, eqIdx) : '';
+        if (lhsPart) {
+            var fnMatch = lhsPart.match(/^([a-zA-Z])\s*\\left\(/) || lhsPart.match(/^([a-zA-Z])\s*\(/);
+            if (fnMatch) funcNames[fnMatch[1]] = true;
+        }
+
         var cleaned = latex
             .replace(/\\(frac|sqrt|int|sum|prod|lim|sin|cos|tan|log|ln|exp|cdot|left|right|begin|end|mathrm|text|operatorname)\b/g, '')
             .replace(/\\[a-zA-Z]+/g, '')
@@ -288,7 +505,9 @@
         var result = [];
         for (var i = 0; i < tokens.length; i++) {
             if (/^[a-zA-Z]$/.test(tokens[i]) && !seen[tokens[i]]) {
+                // Skip constants and function names
                 if (tokens[i] === 'd' || tokens[i] === 'e' || tokens[i] === 'i') continue;
+                if (funcNames[tokens[i]]) continue;
                 seen[tokens[i]] = true;
                 result.push(tokens[i]);
             }
@@ -340,6 +559,12 @@
                         if (!v) return null;
                         result = nm.solve(nExpr, v);
                         tex = result.toTeX();
+                        // Reject garbage results: floating-point noise in complex roots,
+                        // huge denominators from numeric approximation, or too many solutions
+                        // (e.g. sin(x)=0 returns 35 numeric values instead of x=nπ)
+                        if (/1e\+\d+/.test(tex) || /\d{10,}/.test(tex)) return null;
+                        var solCount = (tex.match(/,/g) || []).length + 1;
+                        if (solCount > 10) return null;  // too many numeric roots — let SymPy give closed form
                         break;
                     case 'derivative':
                         if (!v) return null;
@@ -645,8 +870,401 @@
         { id: 'solve',      icon: 'x\u2080',    label: 'Solve',      title: 'Solve equation for variable' },
         { id: 'derivative', icon: 'd/dx',       label: 'd/dx',       title: 'Symbolic derivative' },
         { id: 'integrate',  icon: '\u222B',     label: 'Integrate',  title: 'Symbolic antiderivative' },
+        { id: 'solveODE',   icon: 'ODE',        label: 'Solve ODE',  title: 'Solve ordinary differential equation', conditional: true },
+        { id: 'solvePDE',   icon: 'PDE',        label: 'Solve PDE',  title: 'Solve partial differential equation', conditional: true },
+        { id: 'matDet',     icon: '|A|',        label: 'Det',        title: 'Determinant', conditional: true },
+        { id: 'matInv',     icon: 'A\u207B\u00B9', label: 'Inverse', title: 'Matrix inverse', conditional: true },
+        { id: 'matTrans',   icon: 'A\u1D40',    label: 'Transpose',  title: 'Matrix transpose', conditional: true },
+        { id: 'matEig',     icon: '\u03BB',      label: 'Eigen',      title: 'Eigenvalues & eigenvectors', conditional: true },
+        { id: 'matRREF',    icon: 'RREF',       label: 'RREF',       title: 'Row echelon form', conditional: true },
+        { id: 'matRank',    icon: 'rk',         label: 'Rank',       title: 'Matrix rank', conditional: true },
         { id: 'plot',       icon: '\uD83D\uDCC8', label: 'Plot',    title: 'Plot this equation as a graph' }
     ];
+
+    // =========================================================
+    //  ODE/PDE DETECTION
+    //  Detects differential equation notation in LaTeX:
+    //    ODE: y', y'', dy/dx, d²y/dx², \frac{dy}{dx}
+    //    PDE: ∂u/∂x, ∂²u/∂t², \frac{\partial u}{\partial x}
+    // =========================================================
+    function detectDEType(latex) {
+        if (!latex) return null;
+        // PDE patterns (check first — more specific)
+        if (/\\partial/.test(latex) || /\\frac\{\\partial/.test(latex)) return 'pde';
+        // ODE patterns
+        if (/y'+|y''+|y'''+/.test(latex)) return 'ode';
+        if (/\\frac\{d\^?\{?\d?\}?y\}\{dx/.test(latex)) return 'ode';
+        if (/\\frac\{d\^?\{?2\}?y\}\{dx\^?\{?2\}?\}/.test(latex)) return 'ode';
+        if (/\\dot\{y\}|\\ddot\{y\}/.test(latex)) return 'ode';
+        if (/dy\/dx|d\^2y\/dx\^2/.test(latex)) return 'ode';
+        return null;
+    }
+
+    /**
+     * Solve an ODE via SymPy dsolve.
+     * Converts LaTeX to Python, calls dsolve, returns { latex, tier }.
+     */
+    function solveODE(latex) {
+        var nm = window.nerdamer || nerd;
+        var pyExpr = '';
+
+        // Try nerdamer convertFromLaTeX → Python
+        try {
+            pyExpr = nm.convertFromLaTeX(latex.replace(/\\ln\b/g, '\\log')).toString();
+            pyExpr = nerdamerToPython(pyExpr);
+        } catch (_) {}
+
+        // Fallback: manual LaTeX → Python conversion for common ODE patterns
+        if (!pyExpr) {
+            pyExpr = latex
+                .replace(/\\frac\{d\^?\{?(\d+)\}?y\}\{dx\^?\{?\1\}?\}/g, 'Derivative(y(x), x, $1)')
+                .replace(/\\frac\{dy\}\{dx\}/g, "y(x).diff(x)")
+                .replace(/y'''/g, 'Derivative(y(x), x, 3)')
+                .replace(/y''/g, 'Derivative(y(x), x, 2)')
+                .replace(/y'/g, "y(x).diff(x)")
+                .replace(/\\dot\{y\}/g, "y(x).diff(x)")
+                .replace(/\\ddot\{y\}/g, 'Derivative(y(x), x, 2)')
+                .replace(/\\left|\\right/g, '')
+                .replace(/\\sin/g, 'sin').replace(/\\cos/g, 'cos').replace(/\\tan/g, 'tan')
+                .replace(/\\ln/g, 'log').replace(/\\log/g, 'log')
+                .replace(/\\exp/g, 'exp').replace(/\\sqrt/g, 'sqrt')
+                .replace(/\{/g, '(').replace(/\}/g, ')')
+                .replace(/\^/g, '**');
+        }
+
+        // Handle y → y(x) for standalone y
+        // \b doesn't work between digit and letter (both \w), so use lookaround
+        pyExpr = pyExpr.replace(/([^a-zA-Z])y(?!\()/g, '$1y(x)');  // non-letter + y → y(x)
+        pyExpr = pyExpr.replace(/^y(?!\()/g, 'y(x)');              // y at start
+        // Insert * for implicit multiplication: 2y(x) → 2*y(x), 2x → 2*x
+        pyExpr = pyExpr.replace(/(\d)(y\(x\))/g, '$1*$2');
+        pyExpr = pyExpr.replace(/(\d)([a-wz])\b/g, '$1*$2');
+        pyExpr = pyExpr.replace(/\)(y\(x\))/g, ')*$1');
+        pyExpr = pyExpr.replace(/\)([a-wz])\b/g, ')*$1');
+
+        // Handle equations: lhs=rhs → Eq(lhs, rhs)
+        var eqSplit = pyExpr.split('=');
+        if (eqSplit.length === 2 && eqSplit[0].trim() && eqSplit[1].trim()) {
+            pyExpr = 'Eq(' + eqSplit[0].trim() + ', ' + eqSplit[1].trim() + ')';
+        }
+
+        var code = 'from sympy import *\n' +
+            'x = symbols("x")\n' +
+            'y = Function("y")\n' +
+            'ode = ' + pyExpr + '\n' +
+            'solution = dsolve(ode, y(x))\n' +
+            'print("LATEX:" + latex(solution))';
+
+        return runSymPy(code).then(function (stdout) {
+            if (!stdout) return null;
+            var m = stdout.match(/LATEX:([^\n]*)/);
+            if (!m || !m[1]) return null;
+            return { latex: m[1].trim(), tier: 'sympy' };
+        }).catch(function () { return null; });
+    }
+
+    /**
+     * Solve a PDE via SymPy pdsolve.
+     */
+    function solvePDE(latex) {
+        // Manual LaTeX → Python for PDE
+        var pyExpr = latex
+            .replace(/\\frac\{\\partial\^?\{?(\d+)\}?\s*u\}\{\\partial\s*([a-zA-Z])\^?\{?\1\}?\}/g, 'Derivative(u($2, t), $2, $1)')
+            .replace(/\\frac\{\\partial\s*u\}\{\\partial\s*([a-zA-Z])\}/g, 'Derivative(u(x, t), $1)')
+            .replace(/\\partial/g, '')
+            .replace(/\\left|\\right/g, '')
+            .replace(/\\sin/g, 'sin').replace(/\\cos/g, 'cos')
+            .replace(/\\ln/g, 'log').replace(/\\exp/g, 'exp')
+            .replace(/\{/g, '(').replace(/\}/g, ')')
+            .replace(/\^/g, '**');
+
+        pyExpr = pyExpr.replace(/\bu\b(?!\()/g, 'u(x, t)');
+        pyExpr = pyExpr.replace(/(\d)(u\(x, t\))/g, '$1*$2');
+        pyExpr = pyExpr.replace(/(\d)([a-tv-z])\b/g, '$1*$2');
+
+        // Handle equations
+        var pdeSplit = pyExpr.split('=');
+        if (pdeSplit.length === 2 && pdeSplit[0].trim() && pdeSplit[1].trim()) {
+            pyExpr = 'Eq(' + pdeSplit[0].trim() + ', ' + pdeSplit[1].trim() + ')';
+        }
+
+        var code = 'from sympy import *\n' +
+            'x, t = symbols("x t")\n' +
+            'u = Function("u")\n' +
+            'pde = ' + pyExpr + '\n' +
+            'try:\n' +
+            '    solution = pdsolve(pde)\n' +
+            '    print("LATEX:" + latex(solution))\n' +
+            'except Exception as e:\n' +
+            '    print("ERROR:" + str(e))';
+
+        return runSymPy(code).then(function (stdout) {
+            if (!stdout) return null;
+            if (stdout.indexOf('ERROR:') === 0) return null;
+            var m = stdout.match(/LATEX:([^\n]*)/);
+            if (!m || !m[1]) return null;
+            return { latex: m[1].trim(), tier: 'sympy' };
+        }).catch(function () { return null; });
+    }
+
+    // =========================================================
+    //  MATRIX ENGINE
+    //  Parses \begin{pmatrix/bmatrix/vmatrix}...LaTeX → nerdamer matrix()
+    //  Client-side: det, inverse, transpose, multiply, add
+    //  Server-side (SymPy): eigenvalues, RREF, rank, LU, QR
+    // =========================================================
+
+    /** Detect if LaTeX contains a matrix */
+    function isMatrixLatex(latex) {
+        if (!latex) return false;
+        return /\\begin\{[pbvBV]?matrix\}/.test(latex);
+    }
+
+    /**
+     * Convert a single matrix LaTeX block → nerdamer matrix(...) text.
+     */
+    function singleMatrixToNerdamer(body) {
+        var rows = body.split(/\\\\|\\cr/).map(function (r) { return r.trim(); }).filter(Boolean);
+        var nRows = [];
+        for (var i = 0; i < rows.length; i++) {
+            var cols = rows[i].split('&').map(function (c) {
+                var val = c.trim();
+                val = val.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '(($1)/($2))');
+                val = val.replace(/\\sqrt\{([^}]+)\}/g, 'sqrt($1)');
+                val = val.replace(/\\sin/g, 'sin').replace(/\\cos/g, 'cos').replace(/\\tan/g, 'tan');
+                val = val.replace(/\\ln/g, 'log').replace(/\\log/g, 'log');
+                val = val.replace(/\\pi/g, 'pi').replace(/\\infty/g, 'Infinity');
+                val = val.replace(/\{/g, '(').replace(/\}/g, ')');
+                val = val.replace(/\\left|\\right/g, '').replace(/\\[,;!]/g, '');
+                return val;
+            });
+            nRows.push('[' + cols.join(',') + ']');
+        }
+        return 'matrix(' + nRows.join(',') + ')';
+    }
+
+    /**
+     * Convert full LaTeX expression (may contain multiple matrices + operators)
+     * to nerdamer text. Replaces each \begin{...matrix}...\end{...matrix}
+     * with matrix(...) and cleans LaTeX operators.
+     */
+    function matrixLatexToNerdamer(latex) {
+        var result = latex.replace(
+            /\\begin\{[pbvBV]?matrix\}([\s\S]*?)\\end\{[pbvBV]?matrix\}/g,
+            function (_, body) { return singleMatrixToNerdamer(body); }
+        );
+        // Clean remaining LaTeX operators
+        result = result.replace(/\\cdot/g, '*').replace(/\\times/g, '*');
+        result = result.replace(/\\left|\\right/g, '');
+        result = result.replace(/\{/g, '(').replace(/\}/g, ')');
+        // ^ on a matrix should be matpow — nerdamer does element-wise, so leave it
+        // (we'll handle matrix power via SymPy when needed)
+        return result;
+    }
+
+    /**
+     * Convert a single matrix LaTeX block → SymPy Matrix([[...],...])
+     */
+    function singleMatrixToSymPy(body) {
+        var rows = body.split(/\\\\|\\cr/).map(function (r) { return r.trim(); }).filter(Boolean);
+        var pyRows = [];
+        for (var i = 0; i < rows.length; i++) {
+            var cols = rows[i].split('&').map(function (c) {
+                var val = c.trim();
+                val = val.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, 'Rational($1,$2)');
+                val = val.replace(/\\sqrt\{([^}]+)\}/g, 'sqrt($1)');
+                val = val.replace(/\\sin/g, 'sin').replace(/\\cos/g, 'cos');
+                val = val.replace(/\\ln/g, 'log').replace(/\\pi/g, 'pi');
+                val = val.replace(/\{/g, '').replace(/\}/g, '');
+                val = val.replace(/\\left|\\right/g, '');
+                val = val.replace(/\^/g, '**');
+                return val;
+            });
+            pyRows.push('[' + cols.join(', ') + ']');
+        }
+        return 'Matrix([' + pyRows.join(', ') + '])';
+    }
+
+    /**
+     * Convert full LaTeX expression → SymPy.
+     */
+    function matrixLatexToSymPy(latex) {
+        var result = latex.replace(
+            /\\begin\{[pbvBV]?matrix\}([\s\S]*?)\\end\{[pbvBV]?matrix\}/g,
+            function (_, body) { return singleMatrixToSymPy(body); }
+        );
+        result = result.replace(/\\cdot/g, '*').replace(/\\times/g, '*');
+        result = result.replace(/\\left|\\right/g, '');
+        result = result.replace(/\{/g, '(').replace(/\}/g, ')');
+        result = result.replace(/\^/g, '**');
+        return result;
+    }
+
+    /**
+     * Perform a matrix action via nerdamer (client-side, instant).
+     * Returns { latex } or null.
+     */
+    function matrixViaNerdamer(action, latex) {
+        var nm = window.nerdamer || nerd;
+        if (!nm) return null;
+
+        var nExpr = matrixLatexToNerdamer(latex);
+        if (!nExpr) return null;
+
+        try {
+            var result;
+            switch (action) {
+                case 'matDet':
+                    result = nm('determinant(' + nExpr + ')');
+                    return { latex: result.toTeX() };
+                case 'matInv':
+                    result = nm('invert(' + nExpr + ')');
+                    return { latex: result.toTeX() };
+                case 'matTrans':
+                    result = nm('transpose(' + nExpr + ')');
+                    return { latex: result.toTeX() };
+                case 'matEval':
+                    // Evaluate full expression: A*B, A+B, 3A, etc.
+                    result = nm(nExpr);
+                    return { latex: result.toTeX() };
+                default:
+                    return null;
+            }
+        } catch (_) {
+            return null;
+        }
+    }
+
+    /**
+     * Perform a matrix action via SymPy (server-side).
+     * Handles: eigenvalues, RREF, rank, power, linear system, and fallback.
+     */
+    function matrixViaSymPy(action, latex) {
+        var pyExpr = matrixLatexToSymPy(latex);
+        if (!pyExpr) return Promise.resolve(null);
+
+        // Detect symbols used (x, y, z, etc.) for linear system solving
+        var symbols = [];
+        var symMatch = pyExpr.match(/\b([a-wz])\b/g);
+        if (symMatch) {
+            var seen = {};
+            symMatch.forEach(function (s) {
+                if (!seen[s] && !/^(e|i|d)$/.test(s)) { seen[s] = true; symbols.push(s); }
+            });
+        }
+        var symDecl = symbols.length > 0
+            ? symbols.join(', ') + ' = symbols("' + symbols.join(' ') + '")\n'
+            : '';
+
+        var pyOp;
+        switch (action) {
+            case 'matDet':
+                pyOp = 'A = ' + pyExpr + '\nprint("LATEX:" + latex(A.det()))';
+                break;
+            case 'matInv':
+                pyOp = 'A = ' + pyExpr + '\nprint("LATEX:" + latex(A.inv()))';
+                break;
+            case 'matTrans':
+                pyOp = 'A = ' + pyExpr + '\nprint("LATEX:" + latex(A.T))';
+                break;
+            case 'matEig':
+                pyOp = 'A = ' + pyExpr + '\n' +
+                    'evecs = A.eigenvects()\n' +
+                    'parts = []\n' +
+                    'for val, mult, vecs in evecs:\n' +
+                    '    part = r"\\lambda = " + latex(val)\n' +
+                    '    if mult > 1: part += r" \\;(\\times " + str(mult) + ")"\n' +
+                    '    for v in vecs:\n' +
+                    '        part += r", \\; \\mathbf{v} = " + latex(v)\n' +
+                    '    parts.append(part)\n' +
+                    'print("LATEX:" + r" \\\\[4pt] ".join(parts))';
+                break;
+            case 'matRREF':
+                pyOp = 'A = ' + pyExpr + '\n' +
+                    'rref, pivots = A.rref()\n' +
+                    'print("LATEX:" + latex(rref) + r" \\quad \\text{pivots: }" + str(list(pivots)))';
+                break;
+            case 'matRank':
+                pyOp = 'A = ' + pyExpr + '\nprint("LATEX:" + str(A.rank()))';
+                break;
+            case 'matPower':
+                // Matrix power: A^n → A**n (proper matrix multiplication)
+                pyOp = 'result = ' + pyExpr + '\nprint("LATEX:" + latex(result))';
+                break;
+            case 'matEval':
+                // Evaluate a full matrix expression: A*B, A+B, 3A, A^2, etc.
+                pyOp = 'result = ' + pyExpr + '\nprint("LATEX:" + latex(result))';
+                break;
+            case 'matSolve':
+                // Solve Ax = b → find x
+                // Detect if it's an equation: ... = ...
+                var eqParts = pyExpr.split('=');
+                if (eqParts.length === 2) {
+                    pyOp = 'A_expr = ' + eqParts[0].trim() + '\n' +
+                        'b = ' + eqParts[1].trim() + '\n' +
+                        'from sympy import linsolve\n' +
+                        'sol = linsolve((A_expr, b))\n' +
+                        'print("LATEX:" + latex(sol))';
+                } else {
+                    return Promise.resolve(null);
+                }
+                break;
+            default:
+                return Promise.resolve(null);
+        }
+
+        var code = 'from sympy import *\n' + symDecl + pyOp;
+
+        return runSymPy(code).then(function (stdout) {
+            if (!stdout) return null;
+            var m = stdout.match(/LATEX:([^\n]*)/);
+            if (!m || !m[1]) return null;
+            return { latex: m[1].trim(), tier: 'sympy' };
+        }).catch(function () { return null; });
+    }
+
+    /**
+     * Perform matrix action: try nerdamer first (instant), fall back to SymPy.
+     */
+    function performMatrixAction(action, mf) {
+        var fullLatex = readLatex(mf);
+        if (!fullLatex) return;
+
+        var cBtn = actionBar ? actionBar.querySelector('[data-action="' + action + '"]') : null;
+        var aBtns = actionBar ? actionBar.querySelectorAll('.me-compute-btn') : [];
+        var oLabel = cBtn ? cBtn.innerHTML : '';
+        if (cBtn) {
+            cBtn.innerHTML = '<span class="me-compute-icon" aria-hidden="true">\u23F3</span> Computing\u2026';
+            cBtn.classList.add('me-btn-loading');
+        }
+        for (var j = 0; j < aBtns.length; j++) { aBtns[j].disabled = true; }
+        showNodeLoading(currentMathNode);
+
+        function onDone(r) {
+            if (cBtn) { cBtn.innerHTML = oLabel; cBtn.classList.remove('me-btn-loading'); }
+            for (var k = 0; k < aBtns.length; k++) { aBtns[k].disabled = false; }
+            hideNodeLoading(currentMathNode);
+            if (r) {
+                var labels = { matDet: 'det', matInv: 'inverse', matTrans: 'transpose',
+                    matEig: 'eigenvalues', matRREF: 'RREF', matRank: 'rank' };
+                showResultPopover(mf, r.latex, fullLatex + ' \\Rightarrow ' + r.latex);
+            } else {
+                showToast('Could not compute — matrix may be singular or invalid', 3000);
+            }
+        }
+
+        // Try nerdamer first for det/inv/trans/eval (instant, client-side)
+        if (action === 'matDet' || action === 'matInv' || action === 'matTrans' || action === 'matEval') {
+            var nResult = matrixViaNerdamer(action, fullLatex);
+            if (nResult) {
+                onDone(nResult);
+                return;
+            }
+        }
+
+        // Fall back to SymPy for everything else (eigenvalues, RREF, rank)
+        matrixViaSymPy(action, fullLatex).then(onDone);
+    }
 
     function createActionBar() {
         var bar = document.createElement('div');
@@ -657,10 +1275,11 @@
         for (var i = 0; i < ACTIONS.length; i++) {
             var a = ACTIONS[i];
             if (i === 2 || i === 5) html += '<span class="me-compute-sep" aria-hidden="true"></span>';
-            // Add separator before Plot button
             if (a.id === 'plot') html += '<span class="me-compute-sep" aria-hidden="true"></span>';
+            // Conditional buttons (ODE/PDE) are hidden by default, shown when relevant
+            var hideStyle = a.conditional ? ' style="display:none"' : '';
             html += '<button class="me-compute-btn" data-action="' + a.id + '" title="' + a.title + '"' +
-                ' role="button" tabindex="0" aria-label="' + a.label + '">' +
+                ' role="button" tabindex="0" aria-label="' + a.label + '"' + hideStyle + '>' +
                 '<span class="me-compute-icon" aria-hidden="true">' + a.icon + '</span> ' + a.label + '</button>';
         }
         bar.innerHTML = html;
@@ -672,16 +1291,68 @@
             if (!btn || !currentMathField) return;
             var action = btn.getAttribute('data-action');
             if (action === 'plot') {
-                // Handle Plot action directly via MeGraph
                 if (window.MeGraph) {
                     window.MeGraph.insertGraph(readLatex(currentMathField), currentMathField);
                 }
+            } else if (action === 'solveODE' || action === 'solvePDE') {
+                performDESolve(action, currentMathField);
+            } else if (action.startsWith('mat')) {
+                performMatrixAction(action, currentMathField);
             } else {
                 performAction(action, currentMathField);
             }
         });
         bar.addEventListener('mousedown', function (e) { e.preventDefault(); });
         return bar;
+    }
+
+    /** Show/hide ODE/PDE buttons based on the current expression */
+    function updateConditionalActions(latex) {
+        if (!actionBar) return;
+        var deType = detectDEType(latex);
+        var hasMatrix = isMatrixLatex(latex);
+
+        var odeBtn = actionBar.querySelector('[data-action="solveODE"]');
+        var pdeBtn = actionBar.querySelector('[data-action="solvePDE"]');
+        if (odeBtn) odeBtn.style.display = deType === 'ode' ? '' : 'none';
+        if (pdeBtn) pdeBtn.style.display = deType === 'pde' ? '' : 'none';
+
+        // Show/hide matrix actions
+        var matActions = ['matDet', 'matInv', 'matTrans', 'matEig', 'matRREF', 'matRank'];
+        for (var i = 0; i < matActions.length; i++) {
+            var btn = actionBar.querySelector('[data-action="' + matActions[i] + '"]');
+            if (btn) btn.style.display = hasMatrix ? '' : 'none';
+        }
+    }
+
+    /** Perform ODE/PDE solve action */
+    function performDESolve(action, mf) {
+        var fullLatex = readLatex(mf);
+        if (!fullLatex) return;
+
+        var cBtn = actionBar ? actionBar.querySelector('[data-action="' + action + '"]') : null;
+        var aBtns = actionBar ? actionBar.querySelectorAll('.me-compute-btn') : [];
+        var oLabel = cBtn ? cBtn.innerHTML : '';
+        if (cBtn) {
+            cBtn.innerHTML = '<span class="me-compute-icon" aria-hidden="true">\u23F3</span> Solving\u2026';
+            cBtn.classList.add('me-btn-loading');
+        }
+        for (var j = 0; j < aBtns.length; j++) { aBtns[j].disabled = true; }
+        showNodeLoading(currentMathNode);
+
+        var solvePromise = action === 'solveODE' ? solveODE(fullLatex) : solvePDE(fullLatex);
+
+        solvePromise.then(function (r) {
+            if (cBtn) { cBtn.innerHTML = oLabel; cBtn.classList.remove('me-btn-loading'); }
+            for (var k = 0; k < aBtns.length; k++) { aBtns[k].disabled = false; }
+            hideNodeLoading(currentMathNode);
+            if (r) {
+                showResultPopover(mf, r.latex, fullLatex + ' \\Rightarrow ' + r.latex);
+                showToast('Solved via SymPy', 2000);
+            } else {
+                showToast('Could not solve this differential equation', 3000);
+            }
+        });
     }
 
     // =========================================================
@@ -691,9 +1362,88 @@
         var fullLatex = readLatex(mf);
         if (!fullLatex) return;
 
-        // Strip any previous "= result" before computing
-        var latex = fullLatex.replace(/\s*=\s*[^=]+$/, '').trim();
+        // Smart equation handling:
+        // - "f(x) = x^2+1" or "y = sin(x)" → extract RHS for computation
+        // - "2+2 = 4" (previous result) → strip the "= result", compute on LHS
+        // - "x^2+1 = 0" (equation to solve) → keep as-is for solve action
+        // - "x^2+1" (no equals) → use as-is
+        var latex = fullLatex;
+        var eqParts = fullLatex.split('=');
+        if (eqParts.length === 2) {
+            var lhs = eqParts[0].trim();
+            var rhs = eqParts[1].trim();
+            // If LHS looks like a function def (f(x), y, g(t)) → compute on the RHS
+            if (/^[a-zA-Z]\s*\\left\(/.test(lhs) || /^[a-zA-Z]\s*\(/.test(lhs) || /^[a-zA-Z]$/.test(lhs)) {
+                latex = rhs;
+            }
+            // If this looks like a previous result (LHS has operators, RHS is simpler or a number),
+            // and the action is NOT "solve" → strip RHS, compute on LHS only.
+            // e.g. "2+2 = 4", "x^2+2x+1 = (x+1)^2"
+            else if (action !== 'solve') {
+                latex = lhs;
+            }
+            // For "solve" action, keep the full equation (e.g. "x^2+1 = 0")
+        } else if (eqParts.length > 2) {
+            // Multiple equals — take the first part (everything before first =)
+            latex = eqParts[0].trim();
+        }
         if (!latex) latex = fullLatex;
+
+        // --- Matrix-aware routing ---
+        // If the expression contains matrices and user clicks Evaluate/Simplify,
+        // route through the matrix pipeline instead of the generic CE/nerdamer path.
+        if (isMatrixLatex(latex) && (action === 'evaluate' || action === 'simplify')) {
+            performMatrixAction('matEval', mf);
+            return;
+        }
+
+        // --- Integral-aware routing ---
+        // If the LaTeX contains \int, parse it and route through integral-calculator-core.
+        // This handles: user typed \int x^2+3x dx and clicks Evaluate/Simplify/Integrate.
+        // IMPORTANT: original latex (with \int) is preserved for display; only the
+        // integrand is extracted for computation.
+        var parsed = parseIntegralLatex(latex);
+        var originalLatexForDisplay = fullLatex;  // always preserve what the user wrote
+
+        if (parsed) {
+            // If user clicked "evaluate"/"simplify"/"integrate" on an \int expression,
+            // compute the integral via the core engine.
+            var shouldIntegrate = (action === 'evaluate' || action === 'simplify' || action === 'integrate');
+            if (shouldIntegrate) {
+                // Show loading
+                var cBtn = actionBar ? actionBar.querySelector('[data-action="' + action + '"]') : null;
+                var aBtns = actionBar ? actionBar.querySelectorAll('.me-compute-btn') : [];
+                var oLabel = cBtn ? cBtn.innerHTML : '';
+                if (cBtn) {
+                    cBtn.innerHTML = '<span class="me-compute-icon" aria-hidden="true">\u23F3</span> Computing\u2026';
+                    cBtn.classList.add('me-btn-loading');
+                }
+                for (var j = 0; j < aBtns.length; j++) { aBtns[j].disabled = true; }
+                showNodeLoading(currentMathNode);
+
+                computeIntegralViaCoreEngine(
+                    parsed.integrand, parsed.variable,
+                    parsed.lower, parsed.upper, parsed.isDefinite
+                ).then(function (r) {
+                    if (cBtn) { cBtn.innerHTML = oLabel; cBtn.classList.remove('me-btn-loading'); }
+                    for (var k = 0; k < aBtns.length; k++) { aBtns[k].disabled = false; }
+                    hideNodeLoading(currentMathNode);
+                    if (r) {
+                        // Use the original \int latex for display so the integral symbol is preserved
+                        appendResultToField(mf, originalLatexForDisplay, r.latex, 'evaluate', parsed.variable);
+                        if (r.tier === 'kings') showToast("Solved via King\u2019s Property (symmetry)", 2500);
+                        else if (r.tier === 'sympy') showToast('Computed via advanced solver (SymPy)', 2000);
+                    } else {
+                        showToast('Could not evaluate this integral', 3000);
+                    }
+                });
+                return;
+            }
+            // For other actions (derivative, expand, factor, solve) on an \int expression,
+            // extract the integrand for computation. The original \int latex is preserved
+            // in originalLatexForDisplay for the result display.
+            latex = parsed.integrand;
+        }
 
         // Show loading state on the triggering button and disable all action buttons
         var clickedBtn = actionBar ? actionBar.querySelector('[data-action="' + action + '"]') : null;
@@ -744,7 +1494,7 @@
                 hideNodeLoading(mathNodeEl);
 
                 if (r) {
-                    appendResultToField(mf, latex, r.latex, action, v);
+                    appendResultToField(mf, originalLatexForDisplay, r.latex, action, v);
                     if (r.tier === 'sympy' && !showedSolverMsg) {
                         showToast('Computed via advanced solver (SymPy)', 2000);
                     }
@@ -753,9 +1503,29 @@
         });
     }
 
-    /** Append result to the current math-field (maintains continuity). */
+    /**
+     * Show computation result.
+     * Simple expressions (no \int): appends "= result" inline in the math-field.
+     * Complex / \int expressions: shows a floating result popover with options
+     * to insert inline, insert below, or copy — without touching the original.
+     */
     function appendResultToField(mf, originalLatex, resultLatex, action, v) {
         var vStr = v || 'x';
+
+        // Check if the result is essentially the same as the input (no-op)
+        // Strip whitespace and compare normalized forms
+        var normOrig = originalLatex.replace(/\s+/g, '').replace(/\\left|\\right/g, '');
+        var normResult = resultLatex.replace(/\s+/g, '').replace(/\\left|\\right/g, '');
+        // Also check the extracted RHS for f(x)= patterns
+        var eqParts = normOrig.split('=');
+        var origRHS = eqParts.length === 2 ? eqParts[1] : normOrig;
+        if (normResult === normOrig || normResult === origRHS) {
+            var labels = { simplify: 'Already simplified', expand: 'Already expanded',
+                factor: 'Cannot factor further', evaluate: 'Already evaluated' };
+            showToast(labels[action] || 'No change', 2000);
+            return;
+        }
+
         var joined;
 
         switch (action) {
@@ -769,13 +1539,148 @@
                 joined = originalLatex + " \\Rightarrow " + resultLatex;
                 break;
             default:
-                // evaluate, simplify, expand, factor
                 joined = originalLatex + " = " + resultLatex;
                 break;
         }
 
-        mf.value = joined;
-        mf.dispatchEvent(new Event('input'));
+        // Always show result in a floating popover — user decides what to do.
+        // Never replace the original expression without user consent.
+        showResultPopover(mf, resultLatex, joined);
+    }
+
+    // =========================================================
+    //  RESULT POPOVER — non-intrusive result display
+    //  Shows the computed result with actions: Insert Inline,
+    //  Insert Below, Copy LaTeX. Doesn't modify the original.
+    // =========================================================
+    var resultPopover = null;
+
+    function removeResultPopover() {
+        if (resultPopover && resultPopover.parentNode) {
+            resultPopover.remove();
+        }
+        resultPopover = null;
+        // Restore action bar if a math node is still selected
+        if (actionBar && currentMathNode) {
+            actionBar.style.display = 'flex';
+            positionActionBar();
+        }
+    }
+
+    function showResultPopover(mf, resultLatex, fullJoinedLatex) {
+        removeResultPopover();
+
+        // Hide action bar while popover is visible — they overlap
+        if (actionBar) actionBar.style.display = 'none';
+
+        var pop = document.createElement('div');
+        pop.className = 'me-result-popover';
+
+        // Result preview (rendered via a read-only math-field)
+        var preview = document.createElement('div');
+        preview.className = 'me-result-popover-preview';
+        var previewMf = document.createElement('math-field');
+        previewMf.setAttribute('read-only', '');
+        previewMf.className = 'me-result-popover-math';
+        previewMf.value = '= ' + resultLatex;
+        preview.appendChild(previewMf);
+        pop.appendChild(preview);
+
+        // Action buttons
+        var actions = document.createElement('div');
+        actions.className = 'me-result-popover-actions';
+
+        var btnInline = document.createElement('button');
+        btnInline.className = 'me-result-popover-btn';
+        btnInline.textContent = 'Append inline';
+        btnInline.title = 'Add result to this equation';
+        btnInline.addEventListener('click', function () {
+            mf.value = fullJoinedLatex;
+            mf.dispatchEvent(new Event('input'));
+            removeResultPopover();
+        });
+        actions.appendChild(btnInline);
+
+        var btnBelow = document.createElement('button');
+        btnBelow.className = 'me-result-popover-btn';
+        btnBelow.textContent = 'Insert below';
+        btnBelow.title = 'Insert result as new equation below';
+        btnBelow.addEventListener('click', function () {
+            if (window.MeEditor) {
+                try {
+                    var editor = window.MeEditor;
+                    var sel = editor.state.selection;
+                    var pos = sel.from;
+                    var node = editor.state.doc.nodeAt(pos);
+                    var after = pos + (node ? node.nodeSize : 1);
+                    var docSize = editor.state.doc.content.size;
+                    if (after >= docSize) {
+                        editor.chain().focus()
+                            .insertContentAt(after, [
+                                { type: 'paragraph' },
+                                { type: 'mathBlock', attrs: { latex: fullJoinedLatex } }
+                            ]).run();
+                    } else {
+                        editor.chain().focus()
+                            .insertContentAt(after, { type: 'mathBlock', attrs: { latex: fullJoinedLatex } })
+                            .run();
+                    }
+                } catch (_) {
+                    mf.value = fullJoinedLatex;
+                    mf.dispatchEvent(new Event('input'));
+                }
+            }
+            removeResultPopover();
+        });
+        actions.appendChild(btnBelow);
+
+        var btnCopy = document.createElement('button');
+        btnCopy.className = 'me-result-popover-btn me-result-popover-btn-secondary';
+        btnCopy.textContent = 'Copy LaTeX';
+        btnCopy.title = 'Copy result LaTeX to clipboard';
+        btnCopy.addEventListener('click', function () {
+            navigator.clipboard.writeText(resultLatex).then(function () {
+                btnCopy.textContent = 'Copied!';
+                setTimeout(function () { removeResultPopover(); }, 600);
+            }).catch(function () {});
+        });
+        actions.appendChild(btnCopy);
+
+        pop.appendChild(actions);
+        document.body.appendChild(pop);
+        resultPopover = pop;
+
+        // Position near the math field
+        requestAnimationFrame(function () {
+            var mfRect = mf.getBoundingClientRect();
+            var popRect = pop.getBoundingClientRect();
+            var top = mfRect.bottom + 6;
+            var left = mfRect.left + (mfRect.width - popRect.width) / 2;
+            // Keep on screen
+            if (left < 8) left = 8;
+            if (left + popRect.width > window.innerWidth - 8) left = window.innerWidth - popRect.width - 8;
+            if (top + popRect.height > window.innerHeight - 8) top = mfRect.top - popRect.height - 6;
+            pop.style.top = top + 'px';
+            pop.style.left = left + 'px';
+            pop.style.opacity = '1';
+        });
+
+        // Dismiss on click outside
+        setTimeout(function () {
+            document.addEventListener('click', function dismiss(e) {
+                if (pop.contains(e.target)) return;
+                removeResultPopover();
+                document.removeEventListener('click', dismiss);
+            });
+        }, 100);
+
+        // Dismiss on Escape
+        document.addEventListener('keydown', function escDismiss(e) {
+            if (e.key === 'Escape') {
+                removeResultPopover();
+                document.removeEventListener('keydown', escDismiss);
+            }
+        });
     }
 
     // =========================================================
@@ -792,6 +1697,8 @@
         if (!actionBar) actionBar = createActionBar();
         currentMathField = mf;
         currentMathNode = mathNodeEl;
+        // Show/hide ODE/PDE buttons based on current expression
+        updateConditionalActions(readLatex(mf));
         actionBar.classList.add('me-bar-entering');
         actionBar.style.display = 'flex';
         positionActionBar();
@@ -929,6 +1836,52 @@
                 }
                 items.push({ label: 'Integrate', submenu: intSub });
             }
+        }
+
+        // --- ODE/PDE Solve (only if detected) ---
+        var deType = detectDEType(latex);
+        if (deType) {
+            items.push({ type: 'divider' });
+            if (deType === 'ode') {
+                items.push({
+                    label: '\uD83D\uDD27 Solve ODE',
+                    onMenuSelect: function () { performDESolve('solveODE', mf); }
+                });
+            } else {
+                items.push({
+                    label: '\uD83D\uDD27 Solve PDE',
+                    onMenuSelect: function () { performDESolve('solvePDE', mf); }
+                });
+            }
+        }
+
+        // --- Matrix Operations (only if matrix detected) ---
+        if (isMatrixLatex(latex)) {
+            items.push({ type: 'divider' });
+            items.push({
+                label: '|A| Determinant',
+                onMenuSelect: function () { performMatrixAction('matDet', mf); }
+            });
+            items.push({
+                label: 'A\u207B\u00B9 Inverse',
+                onMenuSelect: function () { performMatrixAction('matInv', mf); }
+            });
+            items.push({
+                label: 'A\u1D40 Transpose',
+                onMenuSelect: function () { performMatrixAction('matTrans', mf); }
+            });
+            items.push({
+                label: '\u03BB Eigenvalues',
+                onMenuSelect: function () { performMatrixAction('matEig', mf); }
+            });
+            items.push({
+                label: 'RREF (Row Echelon)',
+                onMenuSelect: function () { performMatrixAction('matRREF', mf); }
+            });
+            items.push({
+                label: 'Rank',
+                onMenuSelect: function () { performMatrixAction('matRank', mf); }
+            });
         }
 
         // --- Plot Graph ---

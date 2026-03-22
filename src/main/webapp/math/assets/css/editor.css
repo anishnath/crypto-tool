@@ -1025,6 +1025,39 @@
     margin: 20px 0;
     padding: 12px 0;
     min-height: 40px;
+    position: relative;
+}
+
+/* Delete button — top-right corner, visible on hover or selection */
+.me-math-delete-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--me-background, #F1F5F9);
+    border: 1px solid var(--me-border, #E2E8F0);
+    border-radius: 4px;
+    color: var(--me-text-muted, #94A3B8);
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.12s, background 0.12s, color 0.12s;
+    z-index: 2;
+    padding: 0;
+}
+.me-math-display:hover .me-math-delete-btn,
+.me-math-display.me-math-selected .me-math-delete-btn {
+    opacity: 1;
+}
+.me-math-delete-btn:hover {
+    background: var(--me-error, #EF4444);
+    border-color: var(--me-error, #EF4444);
+    color: #fff;
 }
 
 .me-math-display math-field {
@@ -1365,6 +1398,74 @@
 /* ============================================
    COMPUTE ENGINE: Action Bar (Layer 2)
    ============================================ */
+/* ============================================
+   RESULT POPOVER — floating result with actions
+   ============================================ */
+.me-result-popover {
+    position: fixed;
+    z-index: 500;
+    background: var(--me-surface, #fff);
+    border: 1px solid var(--me-border, #E2E8F0);
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+    padding: 12px 16px;
+    min-width: 200px;
+    max-width: 480px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+.me-result-popover-preview {
+    margin-bottom: 10px;
+    text-align: center;
+}
+.me-result-popover-math {
+    display: inline-block;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1.1em;
+    color: var(--me-text-primary, #0F172A);
+    --hue: 220;
+    pointer-events: none;
+}
+.me-result-popover-math::part(virtual-keyboard-toggle),
+.me-result-popover-math::part(menu-toggle) {
+    display: none;
+}
+.me-result-popover-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.me-result-popover-btn {
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: var(--me-font-ui, sans-serif);
+    border: 1px solid var(--me-border, #E2E8F0);
+    border-radius: 6px;
+    background: var(--me-primary-50, #EFF6FF);
+    color: var(--me-primary, #2563EB);
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+    white-space: nowrap;
+}
+.me-result-popover-btn:hover {
+    background: var(--me-primary, #2563EB);
+    color: #fff;
+    border-color: var(--me-primary, #2563EB);
+}
+.me-result-popover-btn-secondary {
+    background: var(--me-background, #F8FAFC);
+    color: var(--me-text-secondary, #334155);
+}
+.me-result-popover-btn-secondary:hover {
+    background: var(--me-border, #E2E8F0);
+    color: var(--me-text-primary, #0F172A);
+    border-color: var(--me-border, #E2E8F0);
+}
+
 .me-compute-bar {
     position: fixed;
     z-index: 400;
