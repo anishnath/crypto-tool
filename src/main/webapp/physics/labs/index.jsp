@@ -6,16 +6,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Physics Labs — 17 Interactive Simulations" />
+    <jsp:param name="toolName" value="Physics Labs — 18 Interactive Simulations" />
     <jsp:param name="toolCategory" value="Physics" />
-    <jsp:param name="toolDescription" value="17 free interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations. All run in your browser with no signup required." />
+    <jsp:param name="toolDescription" value="18 free interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations. All run in your browser with no signup required." />
     <jsp:param name="toolUrl" value="physics/labs/" />
     <jsp:param name="toolKeywords" value="physics simulations, interactive physics, pendulum simulator, spring oscillator, chaos theory, billiards physics, wave equation, Newton's cradle, molecular dynamics, brachistochrone" />
     <jsp:param name="toolImage" value="logo.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="physics/" />
-    <jsp:param name="toolFeatures" value="17 interactive simulations,Drag-and-drop physics,Real-time graphs and energy plots,Phase space visualization,Direction field overlays,Export CSV data for lab reports,Screenshot sim and graph,Dark and light themes,No signup required,100% client-side" />
+    <jsp:param name="toolFeatures" value="18 interactive simulations,Drag-and-drop physics,Real-time graphs and energy plots,Phase space visualization,Direction field overlays,Export CSV data for lab reports,Screenshot sim and graph,Dark and light themes,No signup required,100% client-side" />
     <jsp:param name="faq1q" value="Are these physics simulations free?" />
-    <jsp:param name="faq1a" value="Yes all 17 simulations are completely free. No registration no payment no limits. They run entirely in your browser using JavaScript. Your data never leaves your device." />
+    <jsp:param name="faq1a" value="Yes all 18 simulations are completely free. No registration no payment no limits. They run entirely in your browser using JavaScript. Your data never leaves your device." />
     <jsp:param name="faq2q" value="Can I use these for homework and lab reports?" />
     <jsp:param name="faq2a" value="Yes. Every simulation has Export CSV to download data for Excel or Google Sheets and Screenshot to capture the sim and graphs as PNG for lab reports. You can also share specific configurations via URL." />
 </jsp:include>
@@ -32,11 +32,11 @@
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "Physics Labs",
-  "description": "17 free interactive physics simulations",
+  "description": "18 free interactive physics simulations",
   "url": "https://8gwifi.org/physics/labs/",
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 17,
+    "numberOfItems": 18,
     "itemListElement": [
       {"@type":"ListItem","position":1,"name":"Simple Pendulum","url":"https://8gwifi.org/physics/labs/pendulum.jsp"},
       {"@type":"ListItem","position":2,"name":"Spring Oscillator","url":"https://8gwifi.org/physics/labs/spring.jsp"},
@@ -53,7 +53,8 @@
       {"@type":"ListItem","position":13,"name":"Vibrating String","url":"https://8gwifi.org/physics/labs/string-wave.jsp"},
       {"@type":"ListItem","position":14,"name":"Pile","url":"https://8gwifi.org/physics/labs/pile.jsp"},
       {"@type":"ListItem","position":15,"name":"Ramp: Forces & Motion","url":"https://8gwifi.org/physics/labs/ramp.jsp"},
-      {"@type":"ListItem","position":16,"name":"Resonance","url":"https://8gwifi.org/physics/labs/resonance.jsp"}
+      {"@type":"ListItem","position":16,"name":"Resonance","url":"https://8gwifi.org/physics/labs/resonance.jsp"},
+      {"@type":"ListItem","position":17,"name":"Inclined Plane Pulley","url":"https://8gwifi.org/physics/labs/pulley.jsp"}
     ]
   }
 }
@@ -270,7 +271,7 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
 
 <%-- ═══ MECHANICS ═══ --%>
 <div class="labs-cat">
-  <div class="labs-cat-header">Mechanics <span class="cat-line"></span> <span class="cat-count">7</span></div>
+  <div class="labs-cat-header">Mechanics <span class="cat-line"></span> <span class="cat-count">8</span></div>
   <div class="labs-grid">
 
     <a href="pendulum.jsp" class="lab-card">
@@ -347,6 +348,17 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
         <h3>Resonance</h3>
         <p>Driven oscillator — frequency response, phase flip, Q factor</p>
         <div class="card-badges"><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
+    <a href="pulley.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#22AA55,#0891B2);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="16" cy="4" r="2.5" fill="none"/><line x1="2" y1="20" x2="16" y2="6"/><rect x="6" y="10" width="4" height="3.5" rx=".5" fill="#C07828" stroke="none" transform="rotate(-55 8 12)"/><line x1="16" y1="6.5" x2="16" y2="20"/><rect x="14" y="16" width="4" height="3.5" rx=".5" fill="#22AA55" stroke="none"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Inclined Plane Pulley</h3>
+        <p>Two masses, rope, pulley — tension, friction, coupled motion</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
       </div>
     </a>
 

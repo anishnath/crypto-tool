@@ -3160,6 +3160,139 @@ section('Resonance — Oscillators Are Independent (no coupling)');
 }
 
 // ═══════════════════════════════════════════
+// PULLEY: TWO MASSES ON INCLINED PLANE
+// ═══════════════════════════════════════════
+
+function pulleyPhys(s, v, P) {
+  const th = P.angle * Math.PI / 180;
+  const m1 = P.m1, m2 = P.m2, mu_k = P.mu_k, mu_s = P.mu_s;
+  const ct = Math.cos(th), st = Math.sin(th);
+  const N = m1 * RAMP_G * ct;
+  const gravRamp = m1 * RAMP_G * st;
+  const gravHang = m2 * RAMP_G;
+  const Fnet_nf = gravHang - gravRamp;
+  let Ff = 0, equilibrium = false;
+  const moving = Math.abs(v) > 1e-3;
+  if (moving) {
+    Ff = mu_k * N * Math.sign(v);
+  } else {
+    const Fs_max = mu_s * N;
+    if (Math.abs(Fnet_nf) <= Fs_max) {
+      return { a: 0, T: gravHang, Ff: -Fnet_nf, Fnet: 0, N, equilibrium: true };
+    }
+    Ff = mu_k * N * Math.sign(Fnet_nf);
+  }
+  const Fnet = Fnet_nf - Ff;
+  const a = Fnet / (m1 + m2);
+  const T = m2 * (RAMP_G - a);
+  return { a, T, Ff, Fnet, N, equilibrium };
+}
+
+const defaultPulP = { m1: 5, m2: 3, angle: 30, mu_k: 0.3, mu_s: 0.4, rampLength: 6 };
+
+section('Pulley — Frictionless Acceleration: a = g(m₂−m₁sinθ)/(m₁+m₂)');
+{
+  const P = { ...defaultPulP, mu_k: 0, mu_s: 0 };
+  const th = P.angle * Math.PI / 180;
+  const expected = RAMP_G * (P.m2 - P.m1 * Math.sin(th)) / (P.m1 + P.m2);
+  const f = pulleyPhys(1, 0.01, P);
+  assertClose(f.a, expected, 0.001,
+    'a = ' + f.a.toFixed(4) + ' ≈ ' + expected.toFixed(4));
+}
+
+section('Pulley — Frictionless Tension: T = m₁m₂g(1+sinθ)/(m₁+m₂)');
+{
+  const P = { ...defaultPulP, mu_k: 0, mu_s: 0 };
+  const th = P.angle * Math.PI / 180;
+  const expected = P.m1 * P.m2 * RAMP_G * (1 + Math.sin(th)) / (P.m1 + P.m2);
+  const f = pulleyPhys(1, 0.01, P);
+  assertClose(f.T, expected, 0.01,
+    'T = ' + f.T.toFixed(2) + ' ≈ ' + expected.toFixed(2));
+}
+
+section('Pulley — Equilibrium Dead Zone');
+{
+  const P = { ...defaultPulP };
+  const th = P.angle * Math.PI / 180;
+  const m2Low = P.m1 * (Math.sin(th) - P.mu_s * Math.cos(th));
+  const m2High = P.m1 * (Math.sin(th) + P.mu_s * Math.cos(th));
+
+  // m₂ inside dead zone → equilibrium
+  const m2Mid = (m2Low + m2High) / 2;
+  const fMid = pulleyPhys(1, 0, { ...P, m2: m2Mid });
+  assert(fMid.equilibrium, 'm₂=' + m2Mid.toFixed(2) + ' in [' + m2Low.toFixed(2) + ',' + m2High.toFixed(2) + '] → equilibrium');
+
+  // m₂ above dead zone → system moves
+  const fAbove = pulleyPhys(1, 0, { ...P, m2: m2High + 0.5 });
+  assert(!fAbove.equilibrium && fAbove.a > 0, 'm₂ above dead zone → moves uphill');
+
+  // m₂ below dead zone → system moves downhill
+  const m2Below = Math.max(0.1, m2Low - 0.5);
+  const fBelow = pulleyPhys(1, 0, { ...P, m2: m2Below });
+  assert(!fBelow.equilibrium && fBelow.a < 0, 'm₂ below dead zone → slides downhill');
+}
+
+section('Pulley — Tension < m₂g When Accelerating Down');
+{
+  const P = { ...defaultPulP, mu_k: 0, mu_s: 0 };
+  const f = pulleyPhys(1, 0.1, P);
+  assert(f.T < P.m2 * RAMP_G,
+    'T=' + f.T.toFixed(2) + ' < m₂g=' + (P.m2 * RAMP_G).toFixed(2));
+}
+
+section('Pulley — At Equilibrium T = m₂g');
+{
+  const P = { ...defaultPulP };
+  const th = P.angle * Math.PI / 180;
+  const m2eq = P.m1 * Math.sin(th);  // inside dead zone for reasonable μ
+  const f = pulleyPhys(1, 0, { ...P, m2: m2eq });
+  if (f.equilibrium) {
+    assertClose(f.T, m2eq * RAMP_G, 0.01,
+      'At equilibrium T = m₂g = ' + (m2eq * RAMP_G).toFixed(2));
+  }
+}
+
+section('Pulley — Equal Masses on 30° Frictionless: m₂ wins');
+{
+  const P = { m1: 5, m2: 5, angle: 30, mu_k: 0, mu_s: 0, rampLength: 6 };
+  const f = pulleyPhys(1, 0.01, P);
+  assert(f.a > 0, 'Equal masses 30°: m₂ wins (a=' + f.a.toFixed(3) + ' > 0) since sin30°=0.5 < 1');
+}
+
+section('Pulley — Heavy m₁ Slides Downhill');
+{
+  const P = { m1: 15, m2: 3, angle: 40, mu_k: 0.1, mu_s: 0.15, rampLength: 6 };
+  const f = pulleyPhys(3, -0.01, P);
+  assert(f.a < 0, 'Heavy m₁ on steep ramp slides down: a=' + f.a.toFixed(3));
+}
+
+section('Pulley — Friction Flips With Direction');
+{
+  const P = { ...defaultPulP, mu_k: 0.3, mu_s: 0.4 };
+  const fUp = pulleyPhys(1, 1.0, P);     // moving uphill
+  const fDown = pulleyPhys(1, -1.0, P);   // moving downhill
+  assert(fUp.Ff > 0, 'Moving uphill: Ff > 0 (resists uphill)');
+  assert(fDown.Ff < 0, 'Moving downhill: Ff < 0 (resists downhill)');
+}
+
+section('Pulley — Analytical Formulas Match (with friction, uphill)');
+{
+  const P = { ...defaultPulP };
+  const th = P.angle * Math.PI / 180;
+  const ct = Math.cos(th), st = Math.sin(th);
+  // Analytical: a = g(m₂ − μ·m₁·cosθ − m₁·sinθ)/(m₁+m₂)
+  const aExpected = RAMP_G * (P.m2 - P.mu_k * P.m1 * ct - P.m1 * st) / (P.m1 + P.m2);
+  // Analytical: T = m₁·m₂·g·(1 + μ·cosθ + sinθ)/(m₁+m₂)
+  const TExpected = P.m1 * P.m2 * RAMP_G * (1 + P.mu_k * ct + st) / (P.m1 + P.m2);
+
+  const f = pulleyPhys(1, 0.1, P);  // small uphill velocity → kinetic friction
+  assertClose(f.a, aExpected, 0.01,
+    'a analytical=' + aExpected.toFixed(4) + ' code=' + f.a.toFixed(4));
+  assertClose(f.T, TExpected, 0.1,
+    'T analytical=' + TExpected.toFixed(2) + ' code=' + f.T.toFixed(2));
+}
+
+// ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════
 console.log('\n' + '═'.repeat(50));
