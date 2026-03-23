@@ -1088,7 +1088,68 @@ export function createRampSim(el) {
       pre.appendChild(b);
     });
     sidebarEl.appendChild(pre);
+
+    /* ── Settings (collapsible, matching engine sims) ── */
+    const settings = document.createElement('details');
+    settings.className = 'lab-engine-settings';
+    const sum = document.createElement('summary');
+    sum.textContent = 'Settings';
+    settings.appendChild(sum);
+    const setBody = document.createElement('div');
+    setBody.className = 'engine-body';
+
+    // Sim Speed
+    const speedRow = document.createElement('div');
+    speedRow.className = 'engine-row';
+    speedRow.innerHTML = `<span class="param-label">Speed</span>
+      <select class="param-select" id="ramp_speed" aria-label="Simulation speed">
+        <option value="0.25">0.25×</option><option value="0.5">0.5×</option>
+        <option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option>
+      </select>`;
+    setBody.appendChild(speedRow);
+    document.getElementById('ramp_speed')?.addEventListener('change', e => {
+      simSpeed = parseFloat(e.target.value);
+    });
+
+    // Background
+    const bgRow = document.createElement('div');
+    bgRow.className = 'engine-row';
+    bgRow.innerHTML = `<span class="param-label">Background</span>
+      <select class="param-select" id="ramp_bg" aria-label="Background style">
+        <option value="sky" selected>Sky Blue</option><option value="dark">Dark</option>
+        <option value="white">White</option>
+      </select>`;
+    setBody.appendChild(bgRow);
+    document.getElementById('ramp_bg')?.addEventListener('change', e => {
+      const bgMap = { sky: 0x87AACC, dark: 0x1A1A2E, white: 0xF0F0F0 };
+      const col = bgMap[e.target.value] || 0x87AACC;
+      scene.background.set(col);
+      if (scene.fog) scene.fog.color.set(col);
+    });
+
+    // Share Link
+    const shareBtn = document.createElement('button');
+    shareBtn.className = 'lab-share-btn';
+    shareBtn.textContent = 'Share Link';
+    shareBtn.addEventListener('click', () => {
+      const pairs = Object.entries(P)
+        .filter(([, v]) => typeof v !== 'boolean' && typeof v !== 'object')
+        .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v));
+      const url = location.href.split('#')[0] + '#' + pairs.join('&');
+      navigator.clipboard.writeText(url).then(() => {
+        shareBtn.textContent = 'Copied!';
+        setTimeout(() => { shareBtn.textContent = 'Share Link'; }, 2000);
+      }).catch(() => {
+        prompt('Copy this link:', url);
+      });
+    });
+    setBody.appendChild(shareBtn);
+
+    settings.appendChild(setBody);
+    sidebarEl.appendChild(settings);
   }
+
+  let simSpeed = 1;
 
   function syncAll() {
     // Param sliders
@@ -1140,7 +1201,7 @@ export function createRampSim(el) {
   function animate(now) {
     requestAnimationFrame(animate);
     if (running && lastTime !== null) {
-      let dt = Math.min((now - lastTime) / 1000, 0.05);
+      let dt = Math.min((now - lastTime) / 1000, 0.05) * simSpeed;
       while (dt >= DT) {
         step(DT);
         // Compute current forces for graph data

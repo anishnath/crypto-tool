@@ -2904,6 +2904,262 @@ section('Ramp — No Heat on Frictionless Surface');
 }
 
 // ═══════════════════════════════════════════
+// RESONANCE: DRIVEN DAMPED HARMONIC OSCILLATOR
+// ═══════════════════════════════════════════
+
+// Inline physics from js/sims/resonance.js (multi-oscillator version)
+// Per-oscillator: osc = { m, k, b }
+function resAccel(x, v, t, osc, driveFreq, driveAmp) {
+  const omega0sq = osc.k / osc.m;
+  const gamma = osc.b / (2 * osc.m);
+  const drive = (driveAmp / osc.m) * Math.cos(driveFreq * t);
+  return -omega0sq * x - 2 * gamma * v + drive;
+}
+
+function resSsAmplitude(wd, osc, driveAmp) {
+  const w0sq = osc.k / osc.m;
+  const g2 = osc.b / osc.m;
+  const denom = Math.sqrt((w0sq - wd * wd) ** 2 + (g2 * wd) ** 2);
+  return denom > 1e-12 ? (driveAmp / osc.m) / denom : 999;
+}
+
+function resSsPhase(wd, osc) {
+  const w0sq = osc.k / osc.m;
+  const g2 = osc.b / osc.m;
+  return -Math.atan2(g2 * wd, w0sq - wd * wd);
+}
+
+function resStep(x, v, t, dt, osc, wD, F0) {
+  const k1a = resAccel(x, v, t, osc, wD, F0);
+  const k1v = v;
+  const k2a = resAccel(x+.5*dt*k1v, v+.5*dt*k1a, t+.5*dt, osc, wD, F0);
+  const k2v = v+.5*dt*k1a;
+  const k3a = resAccel(x+.5*dt*k2v, v+.5*dt*k2a, t+.5*dt, osc, wD, F0);
+  const k3v = v+.5*dt*k2a;
+  const k4a = resAccel(x+dt*k3v, v+dt*k3a, t+dt, osc, wD, F0);
+  const k4v = v+dt*k3a;
+  return {
+    x: x + (dt/6)*(k1v + 2*k2v + 2*k3v + k4v),
+    v: v + (dt/6)*(k1a + 2*k2a + 2*k3a + k4a),
+    t: t + dt,
+  };
+}
+
+// Convenience: same interface as before for single-oscillator tests
+const defaultResOsc = { m: 1, k: 10, b: 0.5 };
+const defaultResF0 = 5, defaultResWd = 3.162;
+
+section('Resonance — Natural Frequency ω₀ = √(k/m)');
+{
+  const osc = { ...defaultResOsc, b: 0.01 };
+  const w0 = Math.sqrt(osc.k / osc.m);
+  assertClose(w0, Math.sqrt(10), 1e-6, 'ω₀ = √(10) = ' + w0.toFixed(4));
+
+  let sv = { x: 1, v: 0, t: 0 };
+  const dt = 1 / 240;
+  let lastSign = 1, crossT = [];
+  for (let i = 0; i < 4800; i++) {
+    sv = resStep(sv.x, sv.v, sv.t, dt, osc, 0, 0); // no drive
+    const sign = sv.x >= 0 ? 1 : -1;
+    if (sign !== lastSign && lastSign > 0) crossT.push(sv.t);
+    lastSign = sign;
+  }
+  if (crossT.length >= 3) {
+    const measuredT = crossT[2] - crossT[0];
+    const measuredW = 2 * Math.PI / (measuredT / 2);
+    assertClose(measuredW, w0, 0.05, 'Measured ω = ' + measuredW.toFixed(3) + ' ≈ ω₀ = ' + w0.toFixed(3));
+  }
+}
+
+section('Resonance — Amplitude Peaks at ω₀');
+{
+  const osc = defaultResOsc;
+  const w0 = Math.sqrt(osc.k / osc.m);
+  const Aw0 = resSsAmplitude(w0, osc, defaultResF0);
+  const Ahalf = resSsAmplitude(w0 * 0.5, osc, defaultResF0);
+  const Adouble = resSsAmplitude(w0 * 2, osc, defaultResF0);
+  assert(Aw0 > Ahalf, 'A(ω₀) > A(0.5ω₀): ' + Aw0.toFixed(2) + ' > ' + Ahalf.toFixed(2));
+  assert(Aw0 > Adouble, 'A(ω₀) > A(2ω₀): ' + Aw0.toFixed(2) + ' > ' + Adouble.toFixed(2));
+}
+
+section('Resonance — Analytical Amplitude at ω₀ = F₀/(b·ω₀)');
+{
+  const osc = defaultResOsc;
+  const w0 = Math.sqrt(osc.k / osc.m);
+  const expected = defaultResF0 / (osc.b * w0);
+  const actual = resSsAmplitude(w0, osc, defaultResF0);
+  assertClose(actual, expected, 0.01, 'A(ω₀) = F₀/(b·ω₀) = ' + expected.toFixed(4));
+}
+
+section('Resonance — Phase at ω₀ = −90°');
+{
+  const osc = defaultResOsc;
+  const w0 = Math.sqrt(osc.k / osc.m);
+  const phi = resSsPhase(w0, osc);
+  assertClose(phi, -Math.PI / 2, 0.01, 'φ(ω₀) = ' + (phi * 180 / Math.PI).toFixed(1) + '°');
+}
+
+section('Resonance — Phase Below ≈ 0°, Above ≈ −180°');
+{
+  const osc = defaultResOsc;
+  const w0 = Math.sqrt(osc.k / osc.m);
+  const phiLow = resSsPhase(w0 * 0.1, osc);
+  const phiHigh = resSsPhase(w0 * 10, osc);
+  assert(Math.abs(phiLow) < 0.2, 'φ(0.1ω₀) ≈ 0°: ' + (phiLow * 180 / Math.PI).toFixed(1) + '°');
+  assert(Math.abs(phiHigh + Math.PI) < 0.2, 'φ(10ω₀) ≈ -180°: ' + (phiHigh * 180 / Math.PI).toFixed(1) + '°');
+}
+
+section('Resonance — Q Factor = √(km)/b');
+{
+  const osc = defaultResOsc;
+  const Q = Math.sqrt(osc.k * osc.m) / osc.b;
+  assertClose(Q, Math.sqrt(10) / 0.5, 1e-6, 'Q = ' + Q.toFixed(2));
+}
+
+section('Resonance — Higher Damping Lowers Peak');
+{
+  const osc1 = { ...defaultResOsc, b: 0.5 };
+  const osc2 = { ...defaultResOsc, b: 2.0 };
+  const w0 = Math.sqrt(osc1.k / osc1.m);
+  const A1 = resSsAmplitude(w0, osc1, defaultResF0);
+  const A2 = resSsAmplitude(w0, osc2, defaultResF0);
+  assert(A1 > A2 * 2, 'Low b peak (' + A1.toFixed(2) + ') >> high b peak (' + A2.toFixed(2) + ')');
+}
+
+section('Resonance — Numerical Matches Analytical (steady-state)');
+{
+  const osc = defaultResOsc;
+  const wD = defaultResWd;
+  const dt = 1 / 240;
+  let sv = { x: 0, v: 0, t: 0 };
+  for (let i = 0; i < 40 * 240; i++) sv = resStep(sv.x, sv.v, sv.t, dt, osc, wD, defaultResF0);
+  let peak = 0;
+  const period = 2 * Math.PI / wD;
+  for (let i = 0; i < Math.ceil(2 * period / dt); i++) {
+    sv = resStep(sv.x, sv.v, sv.t, dt, osc, wD, defaultResF0);
+    peak = Math.max(peak, Math.abs(sv.x));
+  }
+  const expected = resSsAmplitude(wD, osc, defaultResF0);
+  assertClose(peak, expected, expected * 0.1, 'Numerical=' + peak.toFixed(3) + ' ≈ analytical=' + expected.toFixed(3));
+}
+
+section('Resonance — Energy Conservation (no drive, no damping)');
+{
+  const osc = { ...defaultResOsc, b: 0 };
+  let sv = { x: 1, v: 0, t: 0 };
+  const dt = 1 / 240;
+  const E0 = 0.5 * osc.k * sv.x * sv.x;
+  for (let i = 0; i < 2400; i++) sv = resStep(sv.x, sv.v, sv.t, dt, osc, 0, 0);
+  const E = 0.5 * osc.k * sv.x * sv.x + 0.5 * osc.m * sv.v * sv.v;
+  assertClose(E, E0, 0.01, 'Energy conserved: E₀=' + E0.toFixed(4) + ' → E=' + E.toFixed(4));
+}
+
+section('Resonance — Damping Dissipates Energy');
+{
+  const osc = { ...defaultResOsc, b: 1.0 };
+  let sv = { x: 2, v: 0, t: 0 };
+  const dt = 1 / 240;
+  const E0 = 0.5 * osc.k * sv.x * sv.x;
+  for (let i = 0; i < 4800; i++) sv = resStep(sv.x, sv.v, sv.t, dt, osc, 0, 0);
+  const E = 0.5 * osc.k * sv.x * sv.x + 0.5 * osc.m * sv.v * sv.v;
+  assert(E < E0 * 0.1, 'Energy dissipated: E₀=' + E0.toFixed(2) + ' → E=' + E.toFixed(4));
+}
+
+section('Resonance — Transient Decay ≈ exp(−γt)');
+{
+  const osc = { ...defaultResOsc, b: 1.0 };
+  const gamma = osc.b / (2 * osc.m);
+  let sv = { x: 2, v: 0, t: 0 };
+  const dt = 1 / 240;
+  const T = 2 / gamma;
+  for (let i = 0; i < Math.ceil(T / dt); i++) sv = resStep(sv.x, sv.v, sv.t, dt, osc, 0, 0);
+  const expected = 2 * Math.exp(-gamma * T);
+  let peak = 0;
+  const halfP = Math.PI / Math.sqrt(osc.k / osc.m);
+  for (let i = 0; i < Math.ceil(halfP / dt); i++) {
+    sv = resStep(sv.x, sv.v, sv.t, dt, osc, 0, 0);
+    peak = Math.max(peak, Math.abs(sv.x));
+  }
+  assertClose(peak, expected, expected * 0.2, 'Envelope: ' + peak.toFixed(4) + ' ≈ ' + expected.toFixed(4));
+}
+
+// ─── Multi-oscillator tests ───
+
+section('Resonance — Two Oscillators: Only the Resonant One Responds');
+{
+  const oscA = { m: 1, k: 10, b: 0.5 };  // ω₀ ≈ 3.16
+  const oscB = { m: 4, k: 10, b: 0.5 };  // ω₀ ≈ 1.58
+  const wD = Math.sqrt(oscA.k / oscA.m);  // drive at A's resonance
+  const F0 = 5;
+  const dt = 1 / 240;
+
+  let svA = { x: 0, v: 0, t: 0 };
+  let svB = { x: 0, v: 0, t: 0 };
+  let tNow = 0;
+
+  // Run to steady state
+  for (let i = 0; i < 40 * 240; i++) {
+    svA = resStep(svA.x, svA.v, tNow, dt, oscA, wD, F0);
+    svB = resStep(svB.x, svB.v, tNow, dt, oscB, wD, F0);
+    tNow += dt;
+  }
+
+  // Measure peaks over 2 periods
+  let peakA = 0, peakB = 0;
+  for (let i = 0; i < Math.ceil(4 * Math.PI / wD / dt); i++) {
+    svA = resStep(svA.x, svA.v, tNow, dt, oscA, wD, F0);
+    svB = resStep(svB.x, svB.v, tNow, dt, oscB, wD, F0);
+    tNow += dt;
+    peakA = Math.max(peakA, Math.abs(svA.x));
+    peakB = Math.max(peakB, Math.abs(svB.x));
+  }
+
+  assert(peakA > peakB * 3,
+    'Resonant A (' + peakA.toFixed(2) + ') >> non-resonant B (' + peakB.toFixed(2) + ')');
+}
+
+section('Resonance — Three Oscillators: Each Peaks at Its Own ω₀');
+{
+  const oscsTest = [
+    { m: 1, k: 4,  b: 0.3 },   // ω₀ = 2.0
+    { m: 1, k: 10, b: 0.3 },   // ω₀ ≈ 3.16
+    { m: 1, k: 25, b: 0.3 },   // ω₀ = 5.0
+  ];
+  const F0 = 5;
+
+  // For each oscillator, its amplitude should be maximal when driven at its own ω₀
+  for (let i = 0; i < 3; i++) {
+    const ownW0 = Math.sqrt(oscsTest[i].k / oscsTest[i].m);
+    const Aown = resSsAmplitude(ownW0, oscsTest[i], F0);
+    for (let j = 0; j < 3; j++) {
+      if (j === i) continue;
+      const otherW0 = Math.sqrt(oscsTest[j].k / oscsTest[j].m);
+      const Aother = resSsAmplitude(otherW0, oscsTest[i], F0);
+      assert(Aown > Aother,
+        'Osc ' + i + ' peaks at own ω₀ (' + Aown.toFixed(2) + ') > at osc ' + j + ' ω₀ (' + Aother.toFixed(2) + ')');
+    }
+  }
+}
+
+section('Resonance — Oscillators Are Independent (no coupling)');
+{
+  // Running two oscillators with same params should give identical results
+  const osc = { m: 1, k: 10, b: 0.5 };
+  const wD = 3.0, F0 = 5;
+  const dt = 1 / 240;
+  let svA = { x: 0, v: 0, t: 0 };
+  let svB = { x: 0, v: 0, t: 0 };
+  let tNow = 0;
+  for (let i = 0; i < 2400; i++) {
+    svA = resStep(svA.x, svA.v, tNow, dt, osc, wD, F0);
+    svB = resStep(svB.x, svB.v, tNow, dt, osc, wD, F0);
+    tNow += dt;
+  }
+  assertClose(svA.x, svB.x, 1e-10, 'Same params → identical x');
+  assertClose(svA.v, svB.v, 1e-10, 'Same params → identical v');
+}
+
+// ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════
 console.log('\n' + '═'.repeat(50));
