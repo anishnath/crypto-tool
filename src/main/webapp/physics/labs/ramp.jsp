@@ -116,6 +116,8 @@ googletag.cmd.push(function(){
 .ramp-legend .lg-app::before{background:#F97316}
 .ramp-legend .lg-fric::before{background:#EE3333}
 .ramp-legend .lg-decomp::before{background:#6699FF}
+.ramp-legend .lg-vel::before{background:#10B981}
+.ramp-legend .lg-acc::before{background:#F59E0B}
 /* Graph lines */
 .ramp-legend .lg-g-pos::before{background:#8B5CF6}
 .ramp-legend .lg-g-vel::before{background:#06B6D4}
@@ -183,6 +185,8 @@ googletag.cmd.push(function(){
       <span class="lg-app">Applied (F)</span>
       <span class="lg-fric">Friction (f)</span>
       <span class="lg-decomp">mg components</span>
+      <span class="lg-vel">Velocity (v)</span>
+      <span class="lg-acc">Acceleration (a)</span>
     </div>
     <div class="ramp-legend">
       <strong>Graphs</strong>

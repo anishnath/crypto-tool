@@ -290,6 +290,9 @@ export function createRampSim(el) {
       spr.position.set(topX + 1.2, topY / 2, RAMP_W / 2 + 0.1);
       rampGroup.add(spr);
     }
+
+    // Rebuild support legs whenever ramp changes
+    buildSupport();
   }
 
   /* Left wall */
@@ -397,6 +400,131 @@ export function createRampSim(el) {
     crateMesh.rotation.z = rot;
     crateEdges.position.copy(crateMesh.position);
     crateEdges.rotation.copy(crateMesh.rotation);
+  }
+
+  /* ─── Velocity & acceleration arrows — created later after arrowGroup ─── */
+  let velArrow, accArrow, velLabel, accLabel;
+
+  function updateKinematicArrows() {
+    if (!velArrow || !P.showForces || !crateMesh) {
+      if (velArrow) velArrow.visible = false;
+      if (accArrow) accArrow.visible = false;
+      if (velLabel) velLabel.visible = false;
+      if (accLabel) accLabel.visible = false;
+      return;
+    }
+    const ox = crateMesh.position.x, oy = crateMesh.position.y;
+    const th = P.angle * Math.PI / 180;
+    const ct = Math.cos(th), st = Math.sin(th);
+    const onRamp = s >= 0;
+    const VEL_SCALE = 0.3;
+    const ACC_SCALE = 0.15;
+    const f = forces(s, v, P);
+
+    if (Math.abs(v) > 0.05) {
+      const dir = v > 0 ? 1 : -1;
+      const len = Math.abs(v) * VEL_SCALE;
+      const dx = dir * len * (onRamp ? ct : 1);
+      const dy = dir * len * (onRamp ? st : 0);
+      setArrow3D(velArrow, ox, oy + crateSize * 0.6, dx, dy, true);
+      velLabel.visible = P.showValues;
+      velLabel.position.set(ox + dx + 0.3, oy + crateSize * 0.6 + dy + 0.2, 0.3);
+    } else { velArrow.visible = false; velLabel.visible = false; }
+
+    if (Math.abs(f.a) > 0.05) {
+      const dir = f.a > 0 ? 1 : -1;
+      const len = Math.abs(f.a) * ACC_SCALE;
+      const dx = dir * len * (onRamp ? ct : 1);
+      const dy = dir * len * (onRamp ? st : 0);
+      setArrow3D(accArrow, ox, oy - crateSize * 0.1, dx, dy, true);
+      accLabel.visible = P.showValues;
+      accLabel.position.set(ox + dx + 0.3, oy - crateSize * 0.1 + dy - 0.2, 0.3);
+    } else { accArrow.visible = false; accLabel.visible = false; }
+  }
+
+  /* ─── Motion trail (dots showing path history) ─── */
+  const TRAIL_MAX = 80;
+  const trailDots = [];
+  const trailMat = new THREE.MeshBasicMaterial({ color: 0x8B5CF6, transparent: true });
+  const trailGeo = new THREE.SphereGeometry(0.06, 6, 6);
+  let trailTimer = 0;
+
+  function updateTrail(dt) {
+    trailTimer += dt;
+    if (trailTimer < 0.05 || Math.abs(v) < 0.01) return;  // drop dot every 50ms if moving
+    trailTimer = 0;
+    const dot = new THREE.Mesh(trailGeo, trailMat.clone());
+    dot.position.copy(crateMesh.position);
+    dot.position.z = -0.3;   // slightly behind block
+    dot.material.opacity = 0.7;
+    scene.add(dot);
+    trailDots.push({ mesh: dot, age: 0 });
+    // Trim old dots
+    while (trailDots.length > TRAIL_MAX) {
+      const old = trailDots.shift();
+      scene.remove(old.mesh);
+      old.mesh.material.dispose();
+    }
+  }
+
+  function fadeTrail(dt) {
+    for (let i = trailDots.length - 1; i >= 0; i--) {
+      trailDots[i].age += dt;
+      const alpha = 1 - trailDots[i].age / 4;  // fade over 4 seconds
+      if (alpha <= 0) {
+        scene.remove(trailDots[i].mesh);
+        trailDots[i].mesh.material.dispose();
+        trailDots.splice(i, 1);
+      } else {
+        trailDots[i].mesh.material.opacity = alpha * 0.5;
+      }
+    }
+  }
+
+  function clearTrail() {
+    trailDots.forEach(d => { scene.remove(d.mesh); d.mesh.material.dispose(); });
+    trailDots.length = 0;
+  }
+
+  /* ─── Ramp support triangle (legs under the ramp) ─── */
+  const supportGroup = new THREE.Group();
+  scene.add(supportGroup);
+
+  function buildSupport() {
+    while (supportGroup.children.length) {
+      const c = supportGroup.children[0]; supportGroup.remove(c);
+      if (c.geometry) c.geometry.dispose();
+    }
+    const th = P.angle * Math.PI / 180;
+    if (th < 0.02) return;
+    const L = P.rampLength;
+    const topX = L * Math.cos(th), topY = L * Math.sin(th);
+
+    // Triangular side supports (two thin triangles on front and back of ramp)
+    const shape = new THREE.Shape();
+    shape.moveTo(0, 0);
+    shape.lineTo(topX, topY);
+    shape.lineTo(topX, 0);
+    shape.closePath();
+    [-RAMP_W / 2 - 0.01, RAMP_W / 2 + 0.01].forEach(z => {
+      const geo = new THREE.ShapeGeometry(shape);
+      const mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({
+        color: 0x8B7355, side: THREE.DoubleSide }));
+      mesh.position.z = z;
+      mesh.receiveShadow = true;
+      supportGroup.add(mesh);
+    });
+
+    // Cross braces (diagonal struts under the ramp)
+    const braceMat = new THREE.MeshLambertMaterial({ color: 0x7A6545 });
+    for (let frac = 0.3; frac <= 0.7; frac += 0.4) {
+      const bx = topX * frac;
+      const by = topY * frac;
+      const braceGeo = new THREE.BoxGeometry(0.08, by, 0.08);
+      const brace = new THREE.Mesh(braceGeo, braceMat);
+      brace.position.set(bx, by / 2, 0);
+      supportGroup.add(brace);
+    }
   }
 
   /* ─── Click-drag interaction ─── */
@@ -526,6 +654,10 @@ export function createRampSim(el) {
     mgCos:   make3DArrow(0x6699FF),
   };
 
+  /* Kinematic arrows (velocity + acceleration) — created here after arrowGroup exists */
+  velArrow = make3DArrow(0x10B981);   // green
+  accArrow = make3DArrow(0xF59E0B);   // amber
+
   /* Sprite labels for forces */
   const labels = {};
   /**
@@ -559,6 +691,10 @@ export function createRampSim(el) {
   [labels.gravity, labels.normal, labels.applied, labels.friction].forEach(l => {
     l.visible = false; scene.add(l);
   });
+
+  /* Kinematic labels (created after makeSprite exists) */
+  velLabel = makeSprite('v', '#10B981', 26); velLabel.scale.set(2, 0.5, 1); velLabel.visible = false; scene.add(velLabel);
+  accLabel = makeSprite('a', '#F59E0B', 26); accLabel.scale.set(2, 0.5, 1); accLabel.visible = false; scene.add(accLabel);
 
   const ASCALE = 0.04; // world units per Newton
 
@@ -1027,7 +1163,10 @@ export function createRampSim(el) {
 
     syncCrate();
     updateDistLabels();
-    updateFlash(1 / 60);  // fade wall flash
+    updateFlash(1 / 60);
+    updateKinematicArrows();
+    if (running) { updateTrail(1 / 60); }
+    fadeTrail(1 / 60);
     const f = updateArrows();
     updateReadout(f);
 
@@ -1043,6 +1182,7 @@ export function createRampSim(el) {
     s = -3; v = 0; t = 0; lastTime = null;
     frictionHeat = 0; workApplied = 0;
     flashTop = 0; flashLeft = 0;
+    clearTrail();
     if (timeGraph) timeGraph.clear();
     if (energyChart) energyChart.reset();
   }
