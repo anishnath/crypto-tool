@@ -872,6 +872,10 @@
         { id: 'integrate',  icon: '\u222B',     label: 'Integrate',  title: 'Symbolic antiderivative' },
         { id: 'solveODE',   icon: 'ODE',        label: 'Solve ODE',  title: 'Solve ordinary differential equation', conditional: true },
         { id: 'solvePDE',   icon: 'PDE',        label: 'Solve PDE',  title: 'Solve partial differential equation', conditional: true },
+        { id: 'limit',      icon: 'lim',        label: 'Limit',      title: 'Evaluate limit', conditional: true },
+        { id: 'taylor',     icon: 'T\u2099',    label: 'Series',     title: 'Taylor/Maclaurin series expansion', conditional: true },
+        { id: 'laplace',    icon: '\u2112',      label: 'Laplace',    title: 'Laplace transform', conditional: true },
+        { id: 'solveSys',   icon: '{=}',        label: 'Solve System', title: 'Solve system of equations', conditional: true },
         { id: 'matDet',     icon: '|A|',        label: 'Det',        title: 'Determinant', conditional: true },
         { id: 'matInv',     icon: 'A\u207B\u00B9', label: 'Inverse', title: 'Matrix inverse', conditional: true },
         { id: 'matTrans',   icon: 'A\u1D40',    label: 'Transpose',  title: 'Matrix transpose', conditional: true },
@@ -1266,6 +1270,388 @@
         matrixViaSymPy(action, fullLatex).then(onDone);
     }
 
+    // =========================================================
+    //  LIMITS, SERIES, LAPLACE, SYSTEMS — Detection & Solve
+    //  All route to SymPy via OneCompiler.
+    // =========================================================
+
+    /** Detect \lim notation */
+    function isLimitLatex(latex) {
+        return /\\lim/.test(latex);
+    }
+
+    /** Detect series/sum notation: \sum, \Sigma, Taylor/Maclaurin keywords */
+    function isSeriesLatex(latex) {
+        return /\\sum/.test(latex) || /\\Sigma/.test(latex);
+    }
+
+    /** Detect Laplace transform: \mathcal{L}, L{}, laplace */
+    function isLaplaceLatex(latex) {
+        return /\\mathcal\{L\}/.test(latex) || /\\mathscr\{L\}/.test(latex) || /\\text\{laplace\}/i.test(latex);
+    }
+
+    /** Detect system of equations: multiple lines with = (via \\ or cases environment) */
+    function isSystemLatex(latex) {
+        if (/\\begin\{cases\}/.test(latex)) return true;
+        if (/\\begin\{aligned\}/.test(latex) && (latex.match(/=/g) || []).length >= 2) return true;
+        return false;
+    }
+
+    /**
+     * Evaluate a limit via SymPy.
+     * Parses: \lim_{x \to a} f(x)
+     */
+    function solveLimit(latex) {
+        // Extract: \lim_{VAR \to POINT} EXPR
+        var m = latex.match(/\\lim\s*_\s*\{?\s*([a-zA-Z])\s*\\to\s*([^}]+)\}?\s*([\s\S]*)/);
+        var v = 'x', point = '0', expr = latex.replace(/\\lim.*?\}/, '').trim();
+        if (m) { v = m[1]; point = m[2].trim(); expr = m[3].trim(); }
+
+        // Clean LaTeX → Python
+        point = point.replace(/\\infty/g, 'oo').replace(/\\pi/g, 'pi').replace(/\{/g, '').replace(/\}/g, '');
+        var pyExpr = latexToPython(expr);
+
+        var code = 'from sympy import *\n' +
+            v + ' = symbols("' + v + '")\n' +
+            'result = limit(' + pyExpr + ', ' + v + ', ' + point + ')\n' +
+            'print("LATEX:" + latex(result))';
+
+        return runSymPy(code).then(extractLatexResult).catch(returnNull);
+    }
+
+    /**
+     * Compute Taylor/Maclaurin series via SymPy.
+     * For \sum notation, evaluates the sum. For plain expressions, expands as Taylor around 0.
+     */
+    function solveSeries(latex) {
+        var pyExpr = latexToPython(latex);
+
+        // If it's a \sum, try to evaluate it
+        if (/\\sum/.test(latex)) {
+            // Parse: \sum_{n=a}^{b} f(n)
+            var m = latex.match(/\\sum\s*_\s*\{?\s*([a-zA-Z])\s*=\s*([^}]+)\}\s*\^\s*\{?([^}]+)\}?\s*([\s\S]*)/);
+            if (m) {
+                var v = m[1], lo = m[2].trim(), hi = m[3].trim(), body = m[4].trim();
+                hi = hi.replace(/\\infty/g, 'oo').replace(/\\pi/g, 'pi');
+                lo = lo.replace(/\\pi/g, 'pi');
+                var pyBody = latexToPython(body);
+                var code = 'from sympy import *\n' +
+                    v + ' = symbols("' + v + '")\n' +
+                    'result = summation(' + pyBody + ', (' + v + ', ' + lo + ', ' + hi + '))\n' +
+                    'print("LATEX:" + latex(result))';
+                return runSymPy(code).then(extractLatexResult).catch(returnNull);
+            }
+        }
+
+        // Fallback: Taylor series expansion around 0, 6 terms
+        var vars = detectVarsFromLatex(latex);
+        var v = vars.length > 0 ? vars[0] : 'x';
+        var code = 'from sympy import *\n' +
+            v + ' = symbols("' + v + '")\n' +
+            'result = series(' + pyExpr + ', ' + v + ', 0, n=6)\n' +
+            'print("LATEX:" + latex(result))';
+
+        return runSymPy(code).then(extractLatexResult).catch(returnNull);
+    }
+
+    /**
+     * Compute Laplace transform via SymPy.
+     */
+    function solveLaplace(latex) {
+        // Strip \mathcal{L}\{ ... \} wrapper
+        var inner = latex
+            .replace(/\\mathcal\{L\}\s*\\?\{?\s*/, '')
+            .replace(/\\mathscr\{L\}\s*\\?\{?\s*/, '')
+            .replace(/\}\s*$/, '').trim();
+        if (!inner) inner = latex;
+
+        var pyExpr = latexToPython(inner);
+
+        var code = 'from sympy import *\n' +
+            't, s = symbols("t s")\n' +
+            'f = ' + pyExpr + '\n' +
+            'F, a, cond = laplace_transform(f, t, s)\n' +
+            'print("LATEX:" + latex(F))';
+
+        return runSymPy(code).then(extractLatexResult).catch(returnNull);
+    }
+
+    /**
+     * Solve system of equations via SymPy.
+     * Parses \begin{cases} or \begin{aligned} with multiple = equations.
+     */
+    /**
+     * Extract equations from \begin{cases} or \begin{aligned} LaTeX.
+     */
+    function extractSystemEquations(latex) {
+        var equations = [];
+        if (/\\begin\{cases\}/.test(latex)) {
+            var body = latex.match(/\\begin\{cases\}([\s\S]*?)\\end\{cases\}/);
+            if (body) {
+                equations = body[1].split(/\\\\/).map(function (l) {
+                    return l.replace(/&/g, '').replace(/\\text\{.*?\}/g, '').trim();
+                }).filter(Boolean);
+            }
+        } else if (/\\begin\{aligned\}/.test(latex)) {
+            var body2 = latex.match(/\\begin\{aligned\}([\s\S]*?)\\end\{aligned\}/);
+            if (body2) {
+                equations = body2[1].split(/\\\\/).map(function (l) {
+                    return l.replace(/&/g, '').trim();
+                }).filter(Boolean);
+            }
+        }
+        return equations;
+    }
+
+    function solveSystem(latex) {
+        var equations = extractSystemEquations(latex);
+        if (equations.length < 2) return Promise.resolve(null);
+
+        // Detect all variables
+        var allVars = {};
+        equations.forEach(function (eq) {
+            detectVarsFromLatex(eq).forEach(function (v) { allVars[v] = true; });
+        });
+        var varList = Object.keys(allVars).sort();
+        if (varList.length === 0) return Promise.resolve(null);
+
+        // --- Tier 1: nerdamer.solveEquations (instant, client-side) ---
+        var nm = window.nerdamer || nerd;
+        if (nm && nm.solveEquations) {
+            try {
+                // Convert LaTeX equations to nerdamer text (split on = to avoid assignment)
+                var nerdEqs = equations.map(function (eq) {
+                    try { return eqLatexToNerdamer(eq); }
+                    catch (_) { return eq; }
+                });
+                var sol = nm.solveEquations(nerdEqs, varList);
+                if (sol && sol.length > 0) {
+                    // Format as LaTeX: x = 1, y = 2
+                    var parts = sol.map(function (s) { return s[0] + ' = ' + s[1]; });
+                    var resultLatex = parts.join(', \\quad ');
+                    // Also get plottable y=f(x) forms from each equation
+                    var plotEqs = [];
+                    equations.forEach(function (eq) {
+                        try {
+                            var nExpr = eqLatexToNerdamer(eq);
+                            var ySol = nm.solve(nExpr, 'y');
+                            if (ySol) {
+                                var yText = ySol.text();
+                                if (yText && yText !== '[]' && !yText.includes('solve')) {
+                                    yText = yText.replace(/^\[/, '').replace(/\]$/, '');
+                                    try { yText = nm('expand(' + yText + ')').text(); } catch (_) {}
+                                    plotEqs.push('y = ' + yText);
+                                }
+                            }
+                        } catch (_) {}
+                    });
+                    return Promise.resolve({
+                        latex: resultLatex,
+                        tier: 'nerdamer',
+                        plotEquations: plotEqs.length > 0 ? plotEqs : null
+                    });
+                }
+            } catch (_) {
+                // Fall through to SymPy
+            }
+        }
+
+        // --- Tier 2: SymPy (server, symbolic, all roots) ---
+        // Convert each equation to SymPy Eq()
+        var pyEqs = equations.map(function (eq) {
+            var parts = eq.split('=');
+            if (parts.length === 2) {
+                return 'Eq(' + latexToPython(parts[0]) + ', ' + latexToPython(parts[1]) + ')';
+            }
+            return latexToPython(eq);
+        });
+
+        // Also solve each equation for y (for plotting)
+        var solveForYCode = equations.map(function (eq, i) {
+            var parts = eq.split('=');
+            if (parts.length === 2) {
+                var pyLHS = latexToPython(parts[0]);
+                var pyRHS = latexToPython(parts[1]);
+                return 'try:\n' +
+                    '    _ysol' + i + ' = solve(Eq(' + pyLHS + ', ' + pyRHS + '), y)\n' +
+                    '    if _ysol' + i + ': print("PLOT_EQ:y = " + str(_ysol' + i + '[0]))\n' +
+                    'except: pass';
+            }
+            return '';
+        }).filter(Boolean).join('\n');
+
+        var code = 'from sympy import *\n' +
+            varList.join(', ') + ' = symbols("' + varList.join(' ') + '")\n' +
+            'result = solve([' + pyEqs.join(', ') + '], [' + varList.join(', ') + '])\n' +
+            'print("LATEX:" + latex(result))\n' +
+            solveForYCode;
+
+        return runSymPy(code).then(function (stdout) {
+            if (!stdout) return null;
+            var m = stdout.match(/LATEX:([^\n]*)/);
+            if (!m || !m[1]) return null;
+
+            // Extract plottable y=f(x) forms
+            var plotEqs = [];
+            var plotMatches = stdout.match(/PLOT_EQ:(.*)/g);
+            if (plotMatches) {
+                plotMatches.forEach(function (pm) {
+                    var eq = pm.replace('PLOT_EQ:', '').trim();
+                    if (eq) plotEqs.push(eq);
+                });
+            }
+
+            return { latex: m[1].trim(), tier: 'sympy', plotEquations: plotEqs };
+        }).catch(returnNull);
+    }
+
+    /** Quick LaTeX → Python converter (covers common patterns) */
+    /** Convert LaTeX equation to nerdamer text, handling = properly.
+     *  convertFromLaTeX treats = as assignment (drops LHS), so we split first. */
+    function eqLatexToNerdamer(eqLatex) {
+        var nm = window.nerdamer || nerd;
+        if (!nm) return eqLatex;
+        var parts = eqLatex.split('=');
+        if (parts.length === 2 && parts[0].trim() && parts[1].trim()) {
+            var lhs = nm.convertFromLaTeX(parts[0].trim().replace(/\\ln\b/g, '\\log')).toString();
+            var rhs = nm.convertFromLaTeX(parts[1].trim().replace(/\\ln\b/g, '\\log')).toString();
+            return lhs + '=(' + rhs + ')';
+        }
+        return nm.convertFromLaTeX(eqLatex.replace(/\\ln\b/g, '\\log')).toString();
+    }
+
+    function latexToPython(latex) {
+        if (!latex) return '';
+        var nm = window.nerdamer || nerd;
+        // Try nerdamer first
+        if (nm) {
+            try {
+                var nExpr = nm.convertFromLaTeX(latex.replace(/\\ln\b/g, '\\log')).toString();
+                return nerdamerToPython(nExpr);
+            } catch (_) {}
+        }
+        // Fallback: manual conversion
+        return latex
+            .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '(($1)/($2))')
+            .replace(/\\sqrt\{([^}]+)\}/g, 'sqrt($1)')
+            .replace(/\\sin/g, 'sin').replace(/\\cos/g, 'cos').replace(/\\tan/g, 'tan')
+            .replace(/\\ln/g, 'log').replace(/\\log/g, 'log')
+            .replace(/\\exp/g, 'exp').replace(/\\pi/g, 'pi').replace(/\\infty/g, 'oo')
+            .replace(/\\left|\\right/g, '')
+            .replace(/\{/g, '(').replace(/\}/g, ')').replace(/\^/g, '**')
+            .replace(/\\cdot/g, '*').replace(/\\times/g, '*')
+            .replace(/\\[,;!]/g, '').replace(/\\,/g, '');
+    }
+
+    /** Extract LATEX: line from SymPy output */
+    function extractLatexResult(stdout) {
+        if (!stdout) return null;
+        var m = stdout.match(/LATEX:([^\n]*)/);
+        if (!m || !m[1]) return null;
+        return { latex: m[1].trim(), tier: 'sympy' };
+    }
+    function returnNull() { return null; }
+
+    /**
+     * Perform a limit/series/laplace/system action.
+     */
+    function performSpecialAction(action, mf) {
+        var fullLatex = readLatex(mf);
+        if (!fullLatex) return;
+
+        var cBtn = actionBar ? actionBar.querySelector('[data-action="' + action + '"]') : null;
+        var aBtns = actionBar ? actionBar.querySelectorAll('.me-compute-btn') : [];
+        var oLabel = cBtn ? cBtn.innerHTML : '';
+        if (cBtn) {
+            cBtn.innerHTML = '<span class="me-compute-icon" aria-hidden="true">\u23F3</span> Computing\u2026';
+            cBtn.classList.add('me-btn-loading');
+        }
+        for (var j = 0; j < aBtns.length; j++) { aBtns[j].disabled = true; }
+        showNodeLoading(currentMathNode);
+
+        var promise;
+        switch (action) {
+            case 'limit':   promise = solveLimit(fullLatex); break;
+            case 'taylor':  promise = solveSeries(fullLatex); break;
+            case 'laplace': promise = solveLaplace(fullLatex); break;
+            case 'solveSys': promise = solveSystem(fullLatex); break;
+            default: promise = Promise.resolve(null);
+        }
+
+        promise.then(function (r) {
+            if (cBtn) { cBtn.innerHTML = oLabel; cBtn.classList.remove('me-btn-loading'); }
+            for (var k = 0; k < aBtns.length; k++) { aBtns[k].disabled = false; }
+            hideNodeLoading(currentMathNode);
+            if (r) {
+                // For systems, pass plotEquations so popover can offer "Solve & Plot"
+                showResultPopover(mf, r.latex, fullLatex + ' = ' + r.latex,
+                    r.plotEquations && r.plotEquations.length > 0 ? r.plotEquations : null);
+            } else {
+                showToast('Could not compute — check the expression syntax', 3000);
+            }
+        });
+    }
+
+    /**
+     * Plot a system of equations: extract each equation, solve for y,
+     * and render all curves on one graph via MeGraph.renderGraphMulti.
+     */
+    function plotSystemEquations(latex, mf) {
+        var equations = extractSystemEquations(latex);
+        if (equations.length < 2) {
+            showToast('Need at least 2 equations to plot a system', 2000);
+            return;
+        }
+
+        var nm = window.nerdamer || nerd;
+        var plotEqs = [];
+
+        // Solve each equation for y
+        equations.forEach(function (eq) {
+            if (!nm) return;
+            try {
+                var nExpr = eqLatexToNerdamer(eq);
+                var ySol = nm.solve(nExpr, 'y');
+                if (ySol) {
+                    var yText = ySol.text().replace(/^\[/, '').replace(/\]$/, '');
+                    if (yText) {
+                        try { yText = nm('expand(' + yText + ')').text(); } catch (_) {}
+                        plotEqs.push('y = ' + yText.replace(/\*\*/g, '^'));
+                    }
+                }
+            } catch (_) {
+                // If can't solve for y, try using the equation as-is (implicit)
+                try {
+                    plotEqs.push(eqLatexToNerdamer(eq).replace(/\*\*/g, '^'));
+                } catch (_) {}
+            }
+        });
+
+        if (plotEqs.length === 0) {
+            showToast('Could not extract plottable equations', 3000);
+            return;
+        }
+
+        var mathNode = mf ? mf.closest('.me-math-node') : null;
+        showNodeLoading(mathNode);
+        var labels = plotEqs.join(', ');
+
+        window.MeGraph.renderGraphMulti(plotEqs).then(function (dataUrl) {
+            hideNodeLoading(mathNode);
+            var editor = window.MeEditor;
+            if (editor) {
+                editor.commands.setImage({
+                    src: dataUrl,
+                    alt: 'Graph of ' + labels,
+                    title: labels
+                });
+            }
+        }).catch(function (err) {
+            hideNodeLoading(mathNode);
+            showToast('Could not plot: ' + (err.message || err), 3000);
+        });
+    }
+
     function createActionBar() {
         var bar = document.createElement('div');
         bar.className = 'me-compute-bar';
@@ -1291,11 +1677,19 @@
             if (!btn || !currentMathField) return;
             var action = btn.getAttribute('data-action');
             if (action === 'plot') {
+                var plotLatex = readLatex(currentMathField);
                 if (window.MeGraph) {
-                    window.MeGraph.insertGraph(readLatex(currentMathField), currentMathField);
+                    // If it's a system of equations, split into y=f(x) forms and plot all
+                    if (isSystemLatex(plotLatex)) {
+                        plotSystemEquations(plotLatex, currentMathField);
+                    } else {
+                        window.MeGraph.insertGraph(plotLatex, currentMathField);
+                    }
                 }
             } else if (action === 'solveODE' || action === 'solvePDE') {
                 performDESolve(action, currentMathField);
+            } else if (action === 'limit' || action === 'taylor' || action === 'laplace' || action === 'solveSys') {
+                performSpecialAction(action, currentMathField);
             } else if (action.startsWith('mat')) {
                 performMatrixAction(action, currentMathField);
             } else {
@@ -1311,13 +1705,25 @@
         if (!actionBar) return;
         var deType = detectDEType(latex);
         var hasMatrix = isMatrixLatex(latex);
+        var hasLimit = isLimitLatex(latex);
+        var hasSeries = isSeriesLatex(latex);
+        var hasLaplace = isLaplaceLatex(latex);
+        var hasSystem = isSystemLatex(latex);
 
+        // ODE/PDE
         var odeBtn = actionBar.querySelector('[data-action="solveODE"]');
         var pdeBtn = actionBar.querySelector('[data-action="solvePDE"]');
         if (odeBtn) odeBtn.style.display = deType === 'ode' ? '' : 'none';
         if (pdeBtn) pdeBtn.style.display = deType === 'pde' ? '' : 'none';
 
-        // Show/hide matrix actions
+        // Limit, Series, Laplace, System
+        var specialActions = { limit: hasLimit, taylor: hasSeries, laplace: hasLaplace, solveSys: hasSystem };
+        Object.keys(specialActions).forEach(function (id) {
+            var btn = actionBar.querySelector('[data-action="' + id + '"]');
+            if (btn) btn.style.display = specialActions[id] ? '' : 'none';
+        });
+
+        // Matrix
         var matActions = ['matDet', 'matInv', 'matTrans', 'matEig', 'matRREF', 'matRank'];
         for (var i = 0; i < matActions.length; i++) {
             var btn = actionBar.querySelector('[data-action="' + matActions[i] + '"]');
@@ -1567,7 +1973,7 @@
         }
     }
 
-    function showResultPopover(mf, resultLatex, fullJoinedLatex) {
+    function showResultPopover(mf, resultLatex, fullJoinedLatex, plotEquations) {
         removeResultPopover();
 
         // Hide action bar while popover is visible — they overlap
@@ -1645,6 +2051,41 @@
             }).catch(function () {});
         });
         actions.appendChild(btnCopy);
+
+        // "Plot System" button — only if we have plottable y=f(x) equations
+        if (plotEquations && plotEquations.length > 0 && window.MeGraph) {
+            var btnPlot = document.createElement('button');
+            btnPlot.className = 'me-result-popover-btn';
+            btnPlot.textContent = '\uD83D\uDCC8 Plot curves';
+            btnPlot.title = 'Plot all equations on one graph';
+            btnPlot.addEventListener('click', function () {
+                removeResultPopover();
+                // Convert nerdamer/Python text to LaTeX-style for the graph engine
+                // "y = -x^2+5" → "y = -x^2+5" (already valid for graphing engine)
+                var latexEqs = plotEquations.map(function (eq) {
+                    return eq.replace(/\*\*/g, '^');
+                });
+
+                // Directly render multi-equation graph using the existing engine
+                var labels = latexEqs.join(', ');
+                showToast('Plotting: ' + labels.substring(0, 50) + '...', 2000);
+
+                window.MeGraph.renderGraphMulti(latexEqs).then(function (dataUrl) {
+                    // Insert the graph image into the document
+                    var editor = window.MeEditor;
+                    if (editor) {
+                        editor.commands.setImage({
+                            src: dataUrl,
+                            alt: 'Graph of ' + labels,
+                            title: labels
+                        });
+                    }
+                }).catch(function (err) {
+                    showToast('Could not plot: ' + (err.message || err), 3000);
+                });
+            });
+            actions.appendChild(btnPlot);
+        }
 
         pop.appendChild(actions);
         document.body.appendChild(pop);
@@ -1853,6 +2294,36 @@
                     onMenuSelect: function () { performDESolve('solvePDE', mf); }
                 });
             }
+        }
+
+        // --- Limit / Series / Laplace / System (only if detected) ---
+        if (isLimitLatex(latex)) {
+            items.push({ type: 'divider' });
+            items.push({
+                label: 'lim  Evaluate Limit',
+                onMenuSelect: function () { performSpecialAction('limit', mf); }
+            });
+        }
+        if (isSeriesLatex(latex)) {
+            items.push({ type: 'divider' });
+            items.push({
+                label: '\u03A3  Evaluate Sum / Series',
+                onMenuSelect: function () { performSpecialAction('taylor', mf); }
+            });
+        }
+        if (isLaplaceLatex(latex)) {
+            items.push({ type: 'divider' });
+            items.push({
+                label: '\u2112  Laplace Transform',
+                onMenuSelect: function () { performSpecialAction('laplace', mf); }
+            });
+        }
+        if (isSystemLatex(latex)) {
+            items.push({ type: 'divider' });
+            items.push({
+                label: '{=}  Solve System',
+                onMenuSelect: function () { performSpecialAction('solveSys', mf); }
+            });
         }
 
         // --- Matrix Operations (only if matrix detected) ---

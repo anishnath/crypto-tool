@@ -1270,6 +1270,203 @@ async function runCETests() {
     var fracSympy = matrixLatexToSymPyFull(fracSympyLatex);
     assert(fracSympy.includes('Rational(1,2)'), 'fraction → Rational in SymPy (got: ' + fracSympy + ')');
 
+    // =============================================
+    //  LIMIT / SERIES / LAPLACE / SYSTEM DETECTION
+    // =============================================
+    domain('Limit/Series/Laplace/System Detection');
+
+    function isLimitLatex(l) { return /\\lim/.test(l); }
+    function isSeriesLatex(l) { return /\\sum/.test(l) || /\\Sigma/.test(l); }
+    function isLaplaceLatex(l) { return /\\mathcal\{L\}/.test(l) || /\\mathscr\{L\}/.test(l); }
+    function isSystemLatex(l) {
+        if (/\\begin\{cases\}/.test(l)) return true;
+        if (/\\begin\{aligned\}/.test(l) && (l.match(/=/g) || []).length >= 2) return true;
+        return false;
+    }
+
+    // Limits
+    assert(isLimitLatex('\\lim_{x \\to 0} \\frac{\\sin x}{x}'), 'lim sin(x)/x detected');
+    assert(isLimitLatex('\\lim_{x \\to \\infty} (1+1/x)^x'), 'lim (1+1/x)^x detected');
+    assert(!isLimitLatex('x^2+1'), 'no lim → false');
+
+    // Series
+    assert(isSeriesLatex('\\sum_{n=0}^{\\infty} \\frac{x^n}{n!}'), 'sum detected');
+    assert(isSeriesLatex('\\sum_{k=1}^{10} k^2'), 'finite sum detected');
+    assert(!isSeriesLatex('x^2+1'), 'no sum → false');
+
+    // Laplace
+    assert(isLaplaceLatex('\\mathcal{L}\\{\\sin(t)\\}'), 'Laplace L{sin(t)} detected');
+    assert(!isLaplaceLatex('\\sin(x)'), 'no Laplace → false');
+
+    // System
+    assert(isSystemLatex('\\begin{cases} x+y=3 \\\\ 2x-y=0 \\end{cases}'), 'cases system detected');
+    assert(isSystemLatex('\\begin{aligned} x+y &= 3 \\\\ 2x-y &= 0 \\end{aligned}'), 'aligned system detected');
+    assert(!isSystemLatex('x+y=3'), 'single eq → false');
+    assert(!isSystemLatex('x^2+1'), 'no system → false');
+
+    // Mutual exclusivity — these should NOT trigger other detectors
+    assert(!isLimitLatex('\\sum_{n=0}^{\\infty} x^n'), 'sum ≠ limit');
+    assert(!isSeriesLatex('\\lim_{x \\to 0} x'), 'limit ≠ series');
+    assert(!isMatrixLatex('\\lim_{x \\to 0} x'), 'limit ≠ matrix');
+    assert(!detectDEType('\\lim_{x \\to 0} x'), 'limit ≠ ODE');
+
+    // =============================================
+    //  eqLatexToNerdamer (= split fix)
+    // =============================================
+    domain('eqLatexToNerdamer (= handling)');
+
+    function eqLatexToNerdamer(eqLatex) {
+        var parts = eqLatex.split('=');
+        if (parts.length === 2 && parts[0].trim() && parts[1].trim()) {
+            var lhs = nm.convertFromLaTeX(parts[0].trim().replace(/\\ln\b/g, '\\log')).toString();
+            var rhs = nm.convertFromLaTeX(parts[1].trim().replace(/\\ln\b/g, '\\log')).toString();
+            return lhs + '=(' + rhs + ')';
+        }
+        return nm.convertFromLaTeX(eqLatex.replace(/\\ln\b/g, '\\log')).toString();
+    }
+
+    // Preserves LHS (convertFromLaTeX drops it for =)
+    eq(eqLatexToNerdamer('x^2+y=5'), 'x^2+y=(5)', 'x²+y=5 keeps LHS');
+    eq(eqLatexToNerdamer('4x-y=2'), '-y+4*x=(2)', '4x-y=2 keeps LHS');
+    eq(eqLatexToNerdamer('x+y=3'), 'x+y=(3)', 'x+y=3 keeps LHS');
+    // solve for y works after fix
+    var ySol1 = nm.solve(eqLatexToNerdamer('x^2+y=5'), 'y').text().replace(/^\[/,'').replace(/\]$/,'');
+    try { ySol1 = nm('expand(' + ySol1 + ')').text(); } catch(_) {}
+    eq(ySol1, '-x^2+5', 'x²+y=5 → y = -x²+5');
+    var ySol2 = nm.solve(eqLatexToNerdamer('4x-y=2'), 'y').text().replace(/^\[/,'').replace(/\]$/,'');
+    try { ySol2 = nm('expand(' + ySol2 + ')').text(); } catch(_) {}
+    eq(ySol2, '-2+4*x', '4x-y=2 → y = -2+4x');
+
+    // =============================================
+    //  SYSTEM SOLVE + PLOT via nerdamer
+    // =============================================
+    domain('System Solve + Plot Equations');
+
+    // solveEquations
+    var sysEqs1 = ['x+y=3', '2x-y=0'].map(function(eq) { return eqLatexToNerdamer(eq); });
+    var sol1 = nm.solveEquations(sysEqs1, ['x','y']);
+    eq(JSON.stringify(sol1), '[["x",1],["y",2]]', '2x2 linear: x=1,y=2');
+
+    var sysEqs2 = ['x^2+y=5', '-y+4*x=2'].map(function(eq) { return eq; }); // already nerdamer text
+    // Use eqLatexToNerdamer on the LaTeX forms
+    var sysEqs2b = ['x^{2}+y=5', '4x-y=2'].map(function(eq) { return eqLatexToNerdamer(eq); });
+    var sol2 = nm.solveEquations(sysEqs2b, ['x','y']);
+    assert(sol2 && sol2.length === 2, 'nonlinear system solved (got ' + JSON.stringify(sol2) + ')');
+
+    var sysEqs3 = ['x+y+z=6', '2x-y+z=3', 'x+2y-z=2'].map(function(eq) { return eqLatexToNerdamer(eq); });
+    var sol3 = nm.solveEquations(sysEqs3, ['x','y','z']);
+    eq(JSON.stringify(sol3), '[["x",1],["y",2],["z",3]]', '3x3 system: x=1,y=2,z=3');
+
+    // Plot equation extraction from system
+    function extractPlotEqs(eqsLatex) {
+        var plotEqs = [];
+        eqsLatex.forEach(function(eq) {
+            try {
+                var nExpr = eqLatexToNerdamer(eq);
+                var ySol = nm.solve(nExpr, 'y');
+                if (ySol) {
+                    var yText = ySol.text().replace(/^\[/,'').replace(/\]$/,'');
+                    try { yText = nm('expand(' + yText + ')').text(); } catch(_) {}
+                    plotEqs.push('y = ' + yText);
+                }
+            } catch(_) {}
+        });
+        return plotEqs;
+    }
+
+    var plot1 = extractPlotEqs(['x+y=3', '2x-y=0']);
+    deepEq(plot1, ['y = -x+3', 'y = 2*x'], 'linear system → plot eqs');
+
+    var plot2 = extractPlotEqs(['x^{2}+y=5', '4x-y=2']);
+    deepEq(plot2, ['y = -x^2+5', 'y = -2+4*x'], 'nonlinear system → plot eqs');
+
+    // =============================================
+    //  PLOTTING: LaTeX → mathjs compilation
+    // =============================================
+    domain('Plot: LaTeX → mathjs');
+
+    var mathjs;
+    try { mathjs = require('mathjs'); } catch(_) { mathjs = null; }
+
+    function testPlotCompile(name, latex) {
+        if (!mathjs) { assert(true, name + ' (mathjs not available, skip)'); return; }
+        var s = latex;
+        s = s.replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^\{([^}]+)\}\s*(\([^)]+\))/g, '$1$3^($2)');
+        for (var i = 0; i < 5; i++) { var prev = s; s = s.replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g, '(($1)/($2))'); if (s === prev) break; }
+        s = s.replace(/\\sqrt\{([^{}]*)\}/g, 'sqrt($1)');
+        s = s.replace(/\^\{([^{}]*)\}/g, '^($1)');
+        s = s.replace(/_\{[^{}]*\}/g, '');
+        s = s.replace(/\\left\|([^|]*?)\\right\|/g, 'abs($1)');
+        s = s.replace(/\\left\s*([(\[{])/g, '$1').replace(/\\right\s*([)\]}])/g, '$1');
+        s = s.replace(/\\cdot/g, '*').replace(/\\times/g, '*');
+        s = s.replace(/\\arcsin/g, 'asin').replace(/\\arccos/g, 'acos').replace(/\\arctan/g, 'atan');
+        s = s.replace(/\\ln\b/g, 'log').replace(/\bln\b/g, 'log');
+        s = s.replace(/\\(sin|cos|tan|sec|csc|cot|asin|acos|atan|log|exp|abs|sinh|cosh|tanh)\b/g, '$1');
+        s = s.replace(/\\pi/g, 'pi');
+        s = s.replace(/\\[a-zA-Z]+/g, '').replace(/\{/g, '(').replace(/\}/g, ')').replace(/\\[,;!]/g, '');
+        s = s.replace(/\s+/g, ' ').trim();
+        s = s.replace(/(\d)\s*(sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|sec|csc|cot|log|exp|sqrt|abs)\s*\(/gi, '$1*$2(');
+        s = s.replace(/([a-zA-Z])\s*(sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|sec|csc|cot|log|exp|sqrt|abs)\s*\(/gi, function(m, letter, fn) {
+            var combined = (letter + fn).toLowerCase();
+            if (['asin','acos','atan','sinh','cosh','tanh'].includes(combined)) return m;
+            return letter + '*' + fn + '(';
+        });
+        s = s.replace(/(\d)([a-zA-Z])/g, '$1*$2');
+        s = s.replace(/\)\s*\(/g, ')*(').replace(/\)\s*(\w)/g, ')*$1');
+        // Strip y= / f(x)=
+        s = s.replace(/^\s*[yf]\s*(?:\([^)]*\))?\s*=\s*/, '');
+        try {
+            var val = mathjs.compile(s).evaluate({x:1, y:1, t:1, theta:1, e:Math.E, pi:Math.PI});
+            assert(typeof val === 'number' && isFinite(val), name + ' compiles (val=' + val + ')');
+        } catch(e) {
+            assert(false, name + ' FAIL: ' + e.message.substring(0,40));
+        }
+    }
+
+    testPlotCompile('y=sin(x)', 'y=\\sin(x)');
+    testPlotCompile('y=ln(x)', 'y=\\ln(x)');
+    testPlotCompile('y=arctan(x)', 'y=\\arctan(x)');
+    testPlotCompile('y=sin²(x)', 'y=\\sin^{2}(x)');
+    testPlotCompile('y=x·sin(1/x)', 'y=x\\sin\\left(\\frac{1}{x}\\right)');
+    testPlotCompile('y=e^{-x²}', 'y=e^{-x^2}');
+    testPlotCompile('y=1/(1+e^{-x})', 'y=\\frac{1}{1+e^{-x}}');
+    testPlotCompile('f(x)=x²+1', 'f(x)=x^{2}+1');
+    testPlotCompile('y=(x²-1)/(x+2)', 'y=\\frac{x^2-1}{x+2}');
+
+    // Plot eqs from system solve (nerdamer text → mathjs)
+    testPlotCompile('sys: y=-x^2+5', 'y=-x^2+5');
+    testPlotCompile('sys: y=-2+4*x', 'y=-2+4*x');
+    testPlotCompile('sys: y=-x+3', 'y=-x+3');
+    testPlotCompile('sys: y=2*x', 'y=2*x');
+
+    // =============================================
+    //  f(x)= EQUATION PARSING + RE-EVALUATE
+    // =============================================
+    domain('f(x)= Parsing + Re-evaluate');
+
+    function extractForAction(fullLatex, action) {
+        var latex = fullLatex;
+        var eqParts = fullLatex.split('=');
+        if (eqParts.length === 2) {
+            var lhs = eqParts[0].trim();
+            var rhs = eqParts[1].trim();
+            if (/^[a-zA-Z]\s*\\left\(/.test(lhs) || /^[a-zA-Z]\s*\(/.test(lhs) || /^[a-zA-Z]$/.test(lhs)) {
+                latex = rhs;
+            } else if (action !== 'solve') {
+                latex = lhs;
+            }
+        } else if (eqParts.length > 2) {
+            latex = eqParts[0].trim();
+        }
+        return latex || fullLatex;
+    }
+
+    eq(extractForAction('f\\left(x\\right)=x^{2}+1', 'evaluate'), 'x^{2}+1', 'f(x)= → RHS');
+    eq(extractForAction('y=\\sin(x)', 'diff'), '\\sin(x)', 'y= → RHS');
+    eq(extractForAction('2+2=4', 'evaluate'), '2+2', '2+2=4 → LHS (strip old result)');
+    eq(extractForAction('x^{2}-5x+6=0', 'solve'), 'x^{2}-5x+6=0', 'equation kept for solve');
+    eq(extractForAction('x^{2}+1', 'evaluate'), 'x^{2}+1', 'no = → as-is');
+
     domain('Tier 3: SymPy Code Builder');
 
     function nerdamerToPython(expr) {

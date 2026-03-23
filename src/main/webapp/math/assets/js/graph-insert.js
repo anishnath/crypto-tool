@@ -63,6 +63,11 @@
     function basicLatexToMathJS(latex) {
         if (!latex) return '';
         var s = latex;
+
+        // Fix 1: \sin^{n}(x) → sin(x)^n (trig powers — do BEFORE stripping LaTeX)
+        s = s.replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^\{([^}]+)\}\s*(\([^)]+\))/g, '$1$3^($2)');
+        s = s.replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\d)\s*(\([^)]+\))/g, '$1$3^$2');
+
         for (var i = 0; i < 5; i++) {
             var prev = s;
             s = s.replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g, '(($1)/($2))');
@@ -75,18 +80,29 @@
         s = s.replace(/\\left\s*([(\[{])/g, '$1');
         s = s.replace(/\\right\s*([)\]}])/g, '$1');
         s = s.replace(/\\cdot/g, '*').replace(/\\times/g, '*');
-        s = s.replace(/\\(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|ln|log|exp|abs|sinh|cosh|tanh)\b/g, '$1');
+
+        // Fix 2: arcsin/arccos/arctan → asin/acos/atan (math.js names)
+        s = s.replace(/\\arcsin/g, 'asin').replace(/\\arccos/g, 'acos').replace(/\\arctan/g, 'atan');
+        s = s.replace(/\barcsin\b/g, 'asin').replace(/\barccos\b/g, 'acos').replace(/\barctan\b/g, 'atan');
+
+        // Fix 3: \ln → log (math.js uses log for natural log)
+        s = s.replace(/\\ln\b/g, 'log');
+        s = s.replace(/\bln\b/g, 'log');
+
+        s = s.replace(/\\(sin|cos|tan|sec|csc|cot|asin|acos|atan|log|exp|abs|sinh|cosh|tanh)\b/g, '$1');
         s = s.replace(/\\pi/g, 'pi').replace(/\\infty/g, 'Infinity');
         s = s.replace(/\\(alpha|beta|gamma|delta|theta|phi|omega|lambda|mu|sigma|tau|epsilon|rho)\b/g, '$1');
         s = s.replace(/\\[a-zA-Z]+/g, '');
         s = s.replace(/\{/g, '(').replace(/\}/g, ')');
         s = s.replace(/\\[,;!]/g, '').replace(/\\ /g, ' ');
         s = s.replace(/\s+/g, ' ').trim();
-        // Implicit multiplication: xsin(x) → x*sin(x), 2sin(x) → 2*sin(x), etc.
+
+        // Fix 4: Implicit multiplication — improved to catch xsin, xcos, etc.
         s = s.replace(/(\d)\s*(sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|sec|csc|cot|log|exp|sqrt|abs|ceil|floor|sign|round)\s*\(/gi, '$1*$2(');
-        s = s.replace(/(?<![a-zA-Z])([a-zA-Z])(sin|cos|tan|log|exp|sqrt|abs|ceil|floor|sign|round|sec|csc|cot)\s*\(/gi, function(m, letter, fn) {
+        s = s.replace(/([a-zA-Z])\s*(sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|sec|csc|cot|log|exp|sqrt|abs)\s*\(/gi, function(m, letter, fn) {
             var combined = (letter + fn).toLowerCase();
-            if (['asin','acos','atan','sinh','cosh','tanh'].includes(combined)) return m;
+            // Preserve compound function names
+            if (['asin','acos','atan','sinh','cosh','tanh','asec','acsc','acot'].includes(combined)) return m;
             return letter + '*' + fn + '(';
         });
         s = s.replace(/(\d)([a-zA-Z])/g, '$1*$2');
@@ -102,7 +118,10 @@
         if (/[^<>!]=/.test(latex) && /[xy]/.test(latex)) {
             var sides = latex.split(/(?<![<>!])=(?!=)/);
             if (sides.length === 2) {
+                var lhs = sides[0].replace(/\\[a-zA-Z]+/g, '').replace(/[{}\s]/g, '').trim();
                 var hasX = /x/.test(latex), hasY = /y/.test(latex);
+                // If LHS is just "y" or "f(x)" or "g(x)", it's cartesian y = f(x), not implicit
+                if (/^y$/.test(lhs) || /^[a-zA-Z]\([a-zA-Z]\)$/.test(lhs)) return 'cartesian';
                 if (hasX && hasY) return 'implicit';
             }
         }
@@ -378,11 +397,71 @@
         return String(err);
     }
 
-    /** Plot a single equation (from right-click → Plot Graph or action bar). */
+    /** Plot a single equation (from right-click → Plot Graph or action bar).
+     *  Also handles system of equations (\begin{cases}...) by splitting
+     *  into y=f(x) forms via nerdamer and plotting all curves together. */
     function insertGraphForLatex(latex, mf) {
         var mathNode = mf ? mf.closest('.me-math-node') : null;
-        showGraphLoading(mathNode);
 
+        // System of equations: split, solve each for y, plot all
+        if (/\\begin\{(cases|aligned)\}/.test(latex)) {
+            var nm = window.nerdamer;
+            if (!nm) { graphToast('Nerdamer not loaded', 2000); return; }
+
+            var body = latex.match(/\\begin\{(?:cases|aligned)\}([\s\S]*?)\\end\{(?:cases|aligned)\}/);
+            if (!body) { graphToast('Could not parse system', 2000); return; }
+
+            var eqs = body[1].split(/\\\\/).map(function (l) {
+                return l.replace(/&/g, '').replace(/\\text\{.*?\}/g, '').trim();
+            }).filter(Boolean);
+
+            // Convert LaTeX equation to nerdamer text, handling = properly.
+            // convertFromLaTeX treats = as assignment (drops LHS), so we split first.
+            function eqLatexToNerdamer(eqLatex) {
+                var parts = eqLatex.split('=');
+                if (parts.length === 2) {
+                    var lhs = nm.convertFromLaTeX(parts[0].trim().replace(/\\ln\b/g, '\\log')).toString();
+                    var rhs = nm.convertFromLaTeX(parts[1].trim().replace(/\\ln\b/g, '\\log')).toString();
+                    return lhs + '=(' + rhs + ')';
+                }
+                return nm.convertFromLaTeX(eqLatex.replace(/\\ln\b/g, '\\log')).toString();
+            }
+
+            var plotEqs = [];
+            eqs.forEach(function (eq) {
+                try {
+                    var nExpr = eqLatexToNerdamer(eq);
+                    var ySol = nm.solve(nExpr, 'y');
+                    if (ySol) {
+                        var yText = ySol.text().replace(/^\[/, '').replace(/\]$/, '');
+                        if (yText) {
+                            try { yText = nm('expand(' + yText + ')').text(); } catch (_) {}
+                            plotEqs.push('y = ' + yText.replace(/\*\*/g, '^'));
+                        }
+                    }
+                } catch (_) {
+                    // Fallback: use as implicit equation
+                    try {
+                        plotEqs.push(eqLatexToNerdamer(eq).replace(/\*\*/g, '^'));
+                    } catch (_) {}
+                }
+            });
+
+            if (plotEqs.length === 0) { graphToast('Could not extract plottable equations from system', 3000); return; }
+
+            showGraphLoading(mathNode);
+            renderGraphMulti(plotEqs).then(function (dataUrl) {
+                hideGraphLoading(mathNode);
+                insertGraphImage(dataUrl, 'System: ' + plotEqs.join(', ').substring(0, 100));
+            }).catch(function (err) {
+                hideGraphLoading(mathNode);
+                graphToast('Could not plot system: ' + formatGraphError(err), 4000);
+            });
+            return;
+        }
+
+        // Single equation: plot normally
+        showGraphLoading(mathNode);
         renderGraph(latex).then(function (dataUrl) {
             hideGraphLoading(mathNode);
             insertGraphImage(dataUrl, 'Graph of ' + latex.substring(0, 100));

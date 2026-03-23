@@ -33,6 +33,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.plot.ly">
+
+    <!-- Prefetch graphing libs so first Plot click is fast (won't block page load) -->
+    <link rel="prefetch" href="https://cdn.jsdelivr.net/npm/mathjs@13.2.0/lib/browser/math.min.js" as="script">
+    <link rel="prefetch" href="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" as="script">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Site-wide CSS (navigation, etc.) -->
@@ -316,6 +321,7 @@
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js"></script>
 <script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js?v=<%= cacheVersion %>"></script>
 
 <!-- Math Editor JS (IIFE scripts — listen for me:editor-ready event) -->
