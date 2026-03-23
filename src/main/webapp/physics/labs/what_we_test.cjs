@@ -2473,6 +2473,437 @@ section('Normal Modes — Total Energy = E₊ + E₋');
 }
 
 // ═══════════════════════════════════════════
+// RAMP: FORCES & MOTION
+// ═══════════════════════════════════════════
+
+// Inline physics from js/sims/ramp.js (pure math, no Three.js)
+const RAMP_G = 9.81;
+const RAMP_LEN = 8;
+const RAMP_LEFT = -7;
+
+function rampForces(s, v, P) {
+  const th = P.angle * Math.PI / 180, m = P.mass;
+  const onRamp = s >= 0, slope = onRamp ? th : 0;
+  const Fg = m * RAMP_G;
+  const Fg_par = Fg * Math.sin(slope), Fg_perp = Fg * Math.cos(slope);
+  const Fa_along = P.appliedForce * Math.cos(slope);
+  const Fa_into = onRamp ? P.appliedForce * Math.sin(slope) : 0;
+  const N = Math.max(0, Fg_perp + Fa_into);
+  const Fnet_nf = Fa_along - Fg_par;
+  let Ff = 0;
+  if (Math.abs(v) > 1e-3) {
+    Ff = -Math.sign(v) * P.mu_k * N;
+  } else {
+    const Fs_max = P.mu_s * N;
+    Ff = Math.abs(Fnet_nf) <= Fs_max ? -Fnet_nf : -Math.sign(Fnet_nf) * P.mu_k * N;
+  }
+  const Fnet = Fnet_nf + Ff;
+  return { Fg, Fg_par, Fg_perp, N, Fa_along, Fa_into, Ff, Fnet, a: Fnet / m,
+           Fs_max: P.mu_s * N, slope, onRamp };
+}
+
+function rampEvaluate(vars, change, params) {
+  change[2] = 1;
+  const f = rampForces(vars[0], vars[1], params);
+  change[0] = vars[1];
+  change[1] = f.a;
+}
+
+function rampStep(s, v, dt, P) {
+  const f = rampForces(s, v, P);
+  v += f.a * dt;
+  s += v * dt;
+  // Per-wall restitution (matching ramp.js)
+  if (s > P.rampLength) {
+    const e = Math.max(P.eTop || 0, 0.02);
+    s = P.rampLength; if (v > 0) v = -v * e;
+  }
+  if (s < RAMP_LEFT) {
+    const e = Math.max(P.eLeft || 0, 0.02);
+    s = RAMP_LEFT; if (v < 0) v = -v * e;
+  }
+  return { s, v };
+}
+
+const defaultRampP = { angle: 30, mass: 5, mu_s: 0.5, mu_k: 0.3,
+  appliedForce: 0, rampLength: 8, eTop: 0, eLeft: 0 };
+
+// ─── Force decomposition on flat ground ───
+section('Ramp — Flat Ground Forces (s < 0)');
+{
+  const P = { ...defaultRampP, appliedForce: 0 };
+  const f = rampForces(-3, 0, P);
+
+  // On flat ground, no gravity component along surface
+  assertClose(f.Fg_par, 0, 1e-10, 'Gravity parallel = 0 on flat ground');
+  assertClose(f.Fg_perp, P.mass * RAMP_G, 1e-6, 'Gravity perp = mg on flat ground');
+  assertClose(f.N, P.mass * RAMP_G, 1e-6, 'Normal force = mg on flat ground');
+  assertClose(f.Fnet, 0, 0.01, 'No net force at rest on flat ground');
+  assert(!f.onRamp, 's < 0 is not on ramp');
+}
+
+// ─── Force decomposition on ramp ───
+section('Ramp — Force Decomposition on Ramp');
+{
+  const P = { ...defaultRampP, angle: 30, mass: 10, appliedForce: 0 };
+  const f = rampForces(3, 0, P);
+  const th = 30 * Math.PI / 180;
+
+  assertClose(f.Fg, 10 * RAMP_G, 1e-6, 'Fg = mg');
+  assertClose(f.Fg_par, 10 * RAMP_G * Math.sin(th), 1e-6,
+    'Fg_par = mg sin θ = ' + (10 * RAMP_G * Math.sin(th)).toFixed(2));
+  assertClose(f.Fg_perp, 10 * RAMP_G * Math.cos(th), 1e-6,
+    'Fg_perp = mg cos θ = ' + (10 * RAMP_G * Math.cos(th)).toFixed(2));
+  assertClose(f.N, 10 * RAMP_G * Math.cos(th), 1e-6,
+    'N = mg cos θ (no applied force)');
+  assert(f.onRamp, 's >= 0 is on ramp');
+}
+
+// ─── Normal force increases when pushing at angle ───
+section('Ramp — Applied Force Increases Normal Force');
+{
+  const P = { ...defaultRampP, angle: 30, mass: 5, appliedForce: 50 };
+  const f = rampForces(3, 0, P);
+  const th = 30 * Math.PI / 180;
+  const expectedN = 5 * RAMP_G * Math.cos(th) + 50 * Math.sin(th);
+
+  assertClose(f.N, expectedN, 1e-4,
+    'N = mg cos θ + F sin θ = ' + expectedN.toFixed(2));
+  assert(f.N > 5 * RAMP_G * Math.cos(th),
+    'Normal force increased by applied force component');
+}
+
+// ─── Critical angle: tan(θ) = μs ───
+section('Ramp — Critical Angle (tan θ = μs)');
+{
+  const mu_s = 0.5;
+  const critAngle = Math.atan(mu_s) * 180 / Math.PI;  // ≈ 26.57°
+  const P = { ...defaultRampP, mu_s, mu_k: 0.3, appliedForce: 0 };
+
+  // Just below critical: block should NOT slide (net force ≈ 0)
+  const fBelow = rampForces(3, 0, { ...P, angle: critAngle - 0.5 });
+  assertClose(fBelow.Fnet, 0, 0.5,
+    'Just below critical angle: static friction holds, ΣF ≈ 0');
+
+  // Just above critical: block SHOULD slide
+  const fAbove = rampForces(3, 0, { ...P, angle: critAngle + 1 });
+  assert(fAbove.Fnet < -0.5,
+    'Just above critical angle: block slides down, ΣF = ' + fAbove.Fnet.toFixed(2));
+}
+
+// ─── Static friction holds exactly ───
+section('Ramp — Static Friction Balances Exactly');
+{
+  const P = { ...defaultRampP, angle: 20, appliedForce: 0 };
+  const f = rampForces(3, 0, P);
+  const th = 20 * Math.PI / 180;
+  const mg_par = P.mass * RAMP_G * Math.sin(th);
+  const Fs_max = P.mu_s * P.mass * RAMP_G * Math.cos(th);
+
+  assert(mg_par < Fs_max, 'mg sin θ < μs mg cos θ at 20°');
+  assertClose(f.Ff, mg_par, 0.01,
+    'Static friction = mg sin θ = ' + mg_par.toFixed(2));
+  assertClose(f.Fnet, 0, 0.01, 'Net force = 0 (equilibrium)');
+  assertClose(f.a, 0, 0.01, 'Acceleration = 0 in equilibrium');
+}
+
+// ─── Kinetic friction when moving ───
+section('Ramp — Kinetic Friction When Moving');
+{
+  const P = { ...defaultRampP, angle: 30 };
+  const f = rampForces(3, 2.0, P);  // moving uphill at 2 m/s
+  const th = 30 * Math.PI / 180;
+  const expectedFf = -P.mu_k * P.mass * RAMP_G * Math.cos(th);  // opposes motion (downhill)
+
+  assertClose(f.Ff, expectedFf, 1e-4,
+    'Kinetic friction = -μk mg cos θ (opposes uphill motion)');
+}
+
+// ─── Frictionless ramp: a = g sin θ (mass cancels) ───
+section('Ramp — Frictionless: a = g sin θ');
+{
+  const P1 = { ...defaultRampP, mu_s: 0, mu_k: 0, mass: 1, angle: 30, appliedForce: 0 };
+  const P2 = { ...defaultRampP, mu_s: 0, mu_k: 0, mass: 50, angle: 30, appliedForce: 0 };
+  const f1 = rampForces(3, 0.01, P1);
+  const f2 = rampForces(3, 0.01, P2);
+  const expected = -RAMP_G * Math.sin(30 * Math.PI / 180);
+
+  assertClose(f1.a, expected, 0.01,
+    'Mass 1 kg: a = -g sin 30° = ' + expected.toFixed(3));
+  assertClose(f2.a, expected, 0.01,
+    'Mass 50 kg: a = -g sin 30° = ' + expected.toFixed(3) + ' (mass cancels!)');
+  assertClose(f1.a, f2.a, 1e-10,
+    'Acceleration identical regardless of mass');
+}
+
+// ─── Energy conservation on frictionless ramp ───
+section('Ramp — Energy Conservation (frictionless)');
+{
+  const P = { ...defaultRampP, mu_s: 0, mu_k: 0, angle: 30, appliedForce: 0, rampLength: 10, eTop: 0, eLeft: 0 };
+  // Start on ground with velocity, let it go up the ramp
+  let sv = { s: -1, v: 5 };   // start on ground moving right
+  const dt = 1 / 120;
+  const th = P.angle * Math.PI / 180;
+
+  // Initial KE
+  const KE0 = 0.5 * P.mass * sv.v * sv.v;
+
+  for (let i = 0; i < 300; i++) sv = rampStep(sv.s, sv.v, dt, P);
+
+  const h = sv.s >= 0 ? sv.s * Math.sin(th) : 0;
+  const KE = 0.5 * P.mass * sv.v * sv.v;
+  const PE = P.mass * RAMP_G * h;
+  const totalE = KE + PE;
+
+  assertClose(totalE, KE0, 0.5,
+    'Total energy conserved: E₀=' + KE0.toFixed(2) + ' → E=' + totalE.toFixed(2));
+}
+
+// ─── Friction dissipates energy ───
+section('Ramp — Friction Dissipates Energy');
+{
+  const P = { ...defaultRampP, angle: 30, mu_k: 0.3, mu_s: 0.5, appliedForce: 0, rampLength: 10 };
+  let sv = { s: -1, v: 5 };
+  const dt = 1 / 120;
+  const th = P.angle * Math.PI / 180;
+  const KE0 = 0.5 * P.mass * sv.v * sv.v;
+
+  for (let i = 0; i < 300; i++) sv = rampStep(sv.s, sv.v, dt, P);
+
+  const h = sv.s >= 0 ? sv.s * Math.sin(th) : 0;
+  const totalE = 0.5 * P.mass * sv.v * sv.v + P.mass * RAMP_G * h;
+
+  assert(totalE < KE0 - 1,
+    'Energy lost to friction: E₀=' + KE0.toFixed(2) + ' → E=' + totalE.toFixed(2));
+}
+
+// ─── Wall collision: block bounces back ───
+section('Ramp — Wall Bounce');
+{
+  const P = { ...defaultRampP, mu_s: 0, mu_k: 0, angle: 10, appliedForce: 100, rampLength: 6, eTop: 0.6, eLeft: 0.6 };
+  let sv = { s: -1, v: 0 };
+  const dt = 1 / 120;
+
+  // Push until it hits the wall
+  for (let i = 0; i < 600; i++) sv = rampStep(sv.s, sv.v, dt, P);
+
+  // After 5 seconds with large force, it should have hit the wall and bounced
+  // Since force keeps pushing, it bounces back and forth.
+  // At some point during the sim, velocity should have gone negative (bounced)
+  let hadNegativeV = false;
+  sv = { s: -1, v: 0 };
+  for (let i = 0; i < 1200; i++) {
+    sv = rampStep(sv.s, sv.v, dt, P);
+    if (sv.v < -0.1) hadNegativeV = true;
+  }
+  assert(hadNegativeV, 'Block bounced off wall (velocity went negative)');
+}
+
+// ─── Block slides back down after hitting wall (no applied force) ───
+section('Ramp — Block Slides Back After Wall Hit');
+{
+  const P = { ...defaultRampP, mu_s: 0, mu_k: 0, angle: 30, appliedForce: 0, rampLength: 6, eTop: 0, eLeft: 0 };
+  // Start at wall with zero velocity — should slide back
+  let sv = { s: 6, v: 0 };
+  const dt = 1 / 120;
+
+  for (let i = 0; i < 120; i++) sv = rampStep(sv.s, sv.v, dt, P);  // 1 second
+
+  assert(sv.s < 5.5, 'Block slid back from wall: s=' + sv.s.toFixed(2));
+  assert(sv.v < -0.5, 'Block has downhill velocity: v=' + sv.v.toFixed(2));
+}
+
+// ─── RK4 integration matches Euler for simple case ───
+section('Ramp — RK4 vs Euler Agreement');
+{
+  const P = { ...defaultRampP, mu_s: 0, mu_k: 0, angle: 30, appliedForce: 0 };
+  const dt = 0.001;
+
+  // RK4
+  const rk4State = Float64Array.from([3, 0, 0]);
+  for (let i = 0; i < 1000; i++) rk4(rk4State, rampEvaluate, dt, P);
+
+  // Euler
+  const eulerState = Float64Array.from([3, 0, 0]);
+  for (let i = 0; i < 1000; i++) euler(eulerState, rampEvaluate, dt, P);
+
+  // At small dt, both should agree within ~1%
+  assertClose(rk4State[0], eulerState[0], 0.1,
+    'Position agrees: RK4=' + rk4State[0].toFixed(4) + ' Euler=' + eulerState[0].toFixed(4));
+  assertClose(rk4State[1], eulerState[1], 0.1,
+    'Velocity agrees: RK4=' + rk4State[1].toFixed(4) + ' Euler=' + eulerState[1].toFixed(4));
+}
+
+// ─── Analytical check: frictionless ramp, constant acceleration ───
+section('Ramp — Analytical: s(t) = s₀ + v₀t + ½at² (frictionless)');
+{
+  const P = { ...defaultRampP, mu_s: 0, mu_k: 0, angle: 30, appliedForce: 0, rampLength: 20 };
+  const th = 30 * Math.PI / 180;
+  const a = -RAMP_G * Math.sin(th);  // constant accel on frictionless ramp
+  const s0 = 5, v0 = 2;
+  const T = 0.5;   // simulate 0.5 seconds
+
+  // Analytical
+  const s_exact = s0 + v0 * T + 0.5 * a * T * T;
+  const v_exact = v0 + a * T;
+
+  // Numerical (RK4)
+  const vars = Float64Array.from([s0, v0, 0]);
+  const dt = 0.001;
+  for (let i = 0; i < T / dt; i++) rk4(vars, rampEvaluate, dt, P);
+
+  assertClose(vars[0], s_exact, 0.01,
+    'Position: numerical=' + vars[0].toFixed(4) + ' analytical=' + s_exact.toFixed(4));
+  assertClose(vars[1], v_exact, 0.01,
+    'Velocity: numerical=' + vars[1].toFixed(4) + ' analytical=' + v_exact.toFixed(4));
+}
+
+// ─── Applied force on flat ground: a = F/m ───
+section('Ramp — Flat Ground: a = F/m (no friction)');
+{
+  const P = { ...defaultRampP, mu_s: 0, mu_k: 0, angle: 30, appliedForce: 50, mass: 10 };
+  const f = rampForces(-3, 0.01, P);  // on ground (s<0), small velocity to trigger kinetic
+
+  // On flat ground, applied force is fully horizontal = along path
+  assertClose(f.a, 50 / 10, 0.01,
+    'a = F/m = 50/10 = 5 m/s² on flat ground');
+}
+
+// ─── Force reversal: friction flips direction ───
+section('Ramp — Friction Flips Direction');
+{
+  const P = { ...defaultRampP, angle: 30 };
+  const th = 30 * Math.PI / 180;
+  const fUp = rampForces(3, 2, P);     // moving uphill
+  const fDown = rampForces(3, -2, P);  // moving downhill
+
+  assert(fUp.Ff < 0, 'Moving uphill: friction points downhill (negative)');
+  assert(fDown.Ff > 0, 'Moving downhill: friction points uphill (positive)');
+  assertClose(Math.abs(fUp.Ff), Math.abs(fDown.Ff), 1e-6,
+    'Friction magnitude is same regardless of direction');
+}
+
+// ─── N = 0 when pushing block off surface ───
+section('Ramp — Normal Force Cannot Be Negative');
+{
+  // Large downward force component can theoretically make N < 0
+  // The physics clamps N ≥ 0
+  const P = { ...defaultRampP, angle: 80, mass: 1, appliedForce: -200 };
+  const f = rampForces(1, 0, P);
+
+  assert(f.N >= 0, 'Normal force clamped to ≥ 0: N=' + f.N.toFixed(2));
+}
+
+// ─── Flat→ramp transition: velocity continuous ───
+section('Ramp — Velocity Continuous Across Ground-Ramp Transition');
+{
+  const P = { ...defaultRampP, mu_s: 0, mu_k: 0, angle: 30, appliedForce: 0, rampLength: 20 };
+  // Start on ground just before ramp, moving right
+  let sv = { s: -0.01, v: 3.0 };
+  const dt = 1 / 1200;  // very small step
+
+  // Step just past the transition
+  for (let i = 0; i < 5; i++) sv = rampStep(sv.s, sv.v, dt, P);
+
+  assert(sv.s > 0, 'Crossed onto ramp: s=' + sv.s.toFixed(4));
+  assertClose(sv.v, 3.0, 0.1,
+    'Velocity roughly continuous at transition: v=' + sv.v.toFixed(4));
+}
+
+// ─── Accumulated friction heat ───
+section('Ramp — Friction Heat Accumulation');
+{
+  const P = { ...defaultRampP, angle: 30, mu_k: 0.3, mu_s: 0.5, appliedForce: 0, rampLength: 20 };
+  const th = P.angle * Math.PI / 180;
+  let sv = { s: 5, v: 0 };   // start on ramp, will slide down
+  let heat = 0;
+  const dt = 1 / 120;
+
+  // Track initial mechanical energy
+  const h0 = sv.s * Math.sin(th);
+  const E0 = 0.5 * P.mass * sv.v * sv.v + P.mass * RAMP_G * h0;
+
+  for (let i = 0; i < 600; i++) {  // 5 seconds
+    const f = rampForces(sv.s, sv.v, P);
+    // Accumulate friction heat: |Ff| * |v| * dt
+    heat += Math.abs(f.Ff) * Math.abs(sv.v) * dt;
+    sv = rampStep(sv.s, sv.v, dt, P);
+  }
+
+  const h = sv.s >= 0 ? sv.s * Math.sin(th) : 0;
+  const KE = 0.5 * P.mass * sv.v * sv.v;
+  const PE = P.mass * RAMP_G * h;
+  const total = KE + PE + heat;
+
+  assert(heat > 1, 'Friction generated heat: Q=' + heat.toFixed(2) + ' J');
+  assert(KE + PE < E0 - 1,
+    'Mechanical energy dropped: E_mech=' + (KE+PE).toFixed(2) + ' < E0=' + E0.toFixed(2));
+  assertClose(total, E0, 2.0,
+    'Energy conserved: KE+PE+Heat=' + total.toFixed(2) + ' ≈ E0=' + E0.toFixed(2));
+}
+
+section('Ramp — Bouncy Walls: Block Bounces and Comes to Rest');
+{
+  // High restitution + low friction on flat → block bounces between walls
+  const P = { ...defaultRampP, mu_s: 0.02, mu_k: 0.01, angle: 0, rampLength: 6,
+    eTop: 0.85, eLeft: 0.85, appliedForce: 0 };
+  let sv = { s: -1, v: 8 };  // fast initial push on flat ground
+  const dt = 1 / 120;
+
+  let bounces = 0;
+  let prevV = sv.v;
+  for (let i = 0; i < 3600; i++) {  // 30 seconds
+    sv = rampStep(sv.s, sv.v, dt, P);
+    // Count direction reversals (bounces)
+    if (prevV > 0.1 && sv.v < -0.1) bounces++;
+    if (prevV < -0.1 && sv.v > 0.1) bounces++;
+    prevV = sv.v;
+  }
+
+  assert(bounces >= 3, 'Block bounced at least 3 times: bounces=' + bounces);
+  assert(Math.abs(sv.v) < 0.5,
+    'Block came to near-rest after 30s: v=' + sv.v.toFixed(3));
+}
+
+section('Ramp — Per-Wall Restitution: Top Bouncy, Left Brick');
+{
+  const P = { ...defaultRampP, mu_s: 0, mu_k: 0, angle: 10, rampLength: 6,
+    eTop: 0.9, eLeft: 0.02, appliedForce: 0 };
+
+  // Push block uphill → hits top wall → bounces back with 90% velocity
+  let sv = { s: 0, v: 8 };
+  const dt = 1 / 120;
+  for (let i = 0; i < 120; i++) sv = rampStep(sv.s, sv.v, dt, P);
+
+  // After hitting top wall, should be moving back (negative v)
+  assert(sv.v < -1, 'Bounced off top wall: v=' + sv.v.toFixed(2));
+
+  // Keep going until it hits left wall
+  for (let i = 0; i < 600; i++) sv = rampStep(sv.s, sv.v, dt, P);
+
+  // After hitting left brick wall, should barely bounce
+  // (block may have come to rest on the ramp due to gravity before reaching left wall)
+  assert(Math.abs(sv.v) < 5,
+    'Left wall is brick — much less bounce: |v|=' + Math.abs(sv.v).toFixed(2));
+}
+
+section('Ramp — No Heat on Frictionless Surface');
+{
+  const P = { ...defaultRampP, mu_s: 0, mu_k: 0, angle: 30, appliedForce: 0, rampLength: 20 };
+  let sv = { s: 5, v: 0 };
+  let heat = 0;
+  const dt = 1 / 120;
+
+  for (let i = 0; i < 300; i++) {
+    const f = rampForces(sv.s, sv.v, P);
+    heat += Math.abs(f.Ff) * Math.abs(sv.v) * dt;
+    sv = rampStep(sv.s, sv.v, dt, P);
+  }
+
+  assertClose(heat, 0, 0.001, 'No friction → no heat: Q=' + heat.toFixed(6));
+}
+
+// ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════
 console.log('\n' + '═'.repeat(50));
