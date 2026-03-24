@@ -3390,6 +3390,109 @@ section('Raft — Total Momentum = 0');
 }
 
 // ═══════════════════════════════════════════
+// STATES OF MATTER: LENNARD-JONES MD
+// ═══════════════════════════════════════════
+
+// Inline LJ functions from states-of-matter.js
+function ljFxR(r2, eps, sig) {
+  const s2 = sig * sig / r2, s6 = s2 * s2 * s2;
+  return 24 * eps * (2 * s6 * s6 - s6);
+}
+function ljV(r2, eps, sig) {
+  const s2 = sig * sig / r2, s6 = s2 * s2 * s2;
+  return 4 * eps * (s6 * s6 - s6);
+}
+
+section('MD — LJ Force at Equilibrium r = 2^(1/6)·σ: F ≈ 0');
+{
+  const sig = 1.0, eps = 1.0;
+  const rEq = sig * Math.pow(2, 1 / 6);
+  const r2 = rEq * rEq;
+  const ftr = ljFxR(r2, eps, sig);  // F * r
+  assertClose(ftr, 0, 0.001, 'F·r at equilibrium = ' + ftr.toFixed(6) + ' ≈ 0');
+}
+
+section('MD — LJ Potential Minimum at r = 2^(1/6)·σ: V = -ε');
+{
+  const sig = 1.0, eps = 1.0;
+  const rEq = sig * Math.pow(2, 1 / 6);
+  const v = ljV(rEq * rEq, eps, sig);
+  assertClose(v, -eps, 0.001, 'V(r_eq) = ' + v.toFixed(6) + ' ≈ -ε = ' + (-eps));
+}
+
+section('MD — LJ Potential at r = σ: V = 0');
+{
+  const sig = 1.0, eps = 1.0;
+  const v = ljV(sig * sig, eps, sig);
+  assertClose(v, 0, 0.001, 'V(σ) = ' + v.toFixed(6) + ' ≈ 0');
+}
+
+section('MD — LJ Force Repulsive at r < σ');
+{
+  const sig = 1.0, eps = 1.0;
+  const r = 0.9;  // less than sigma
+  const ftr = ljFxR(r * r, eps, sig);  // F * r > 0 means repulsive
+  assert(ftr > 0, 'F·r at r=0.9σ = ' + ftr.toFixed(2) + ' > 0 (repulsive)');
+}
+
+section('MD — LJ Force Attractive at σ < r < 2.5σ');
+{
+  const sig = 1.0, eps = 1.0;
+  const r = 1.5;  // between sigma and cutoff
+  const ftr = ljFxR(r * r, eps, sig);
+  assert(ftr < 0, 'F·r at r=1.5σ = ' + ftr.toFixed(4) + ' < 0 (attractive)');
+}
+
+section('MD — LJ Scales with ε');
+{
+  const sig = 1.0;
+  const rEq = sig * Math.pow(2, 1 / 6);
+  const v1 = ljV(rEq * rEq, 1.0, sig);
+  const v2 = ljV(rEq * rEq, 2.5, sig);
+  assertClose(v2 / v1, 2.5, 0.001, 'V scales linearly with ε: ratio = ' + (v2 / v1).toFixed(3));
+}
+
+section('MD — LJ Scales with σ');
+{
+  const eps = 1.0;
+  // V(σ) = 0 for any σ
+  [0.5, 1.0, 1.5, 2.0].forEach(sig => {
+    const v = ljV(sig * sig, eps, sig);
+    assertClose(v, 0, 0.001, 'V(σ=' + sig + ') = ' + v.toFixed(6) + ' ≈ 0');
+  });
+}
+
+section('MD — Temperature from KE: T = KE/N [2D]');
+{
+  // 2D system: T = KE/N
+  const N = 10;
+  const vx = new Float64Array(N), vy = new Float64Array(N);
+  for (let i = 0; i < N; i++) { vx[i] = 1.0; vy[i] = 0.5; }
+  let ke = 0;
+  for (let i = 0; i < N; i++) ke += vx[i] * vx[i] + vy[i] * vy[i];
+  ke *= 0.5;
+  const T = ke / N;
+  const expected = 0.5 * (1.0 + 0.25);
+  assertClose(T, expected, 1e-10, 'T = KE/N = ' + T.toFixed(4) + ' ≈ ' + expected.toFixed(4));
+}
+
+section('MD — Momentum Conservation (total = 0 after init)');
+{
+  // After removing net momentum, total should be ~0
+  const N = 20;
+  const vx = new Float64Array(N), vy = new Float64Array(N);
+  for (let i = 0; i < N; i++) { vx[i] = Math.random() - 0.5; vy[i] = Math.random() - 0.5; }
+  let svx = 0, svy = 0;
+  for (let i = 0; i < N; i++) { svx += vx[i]; svy += vy[i]; }
+  svx /= N; svy /= N;
+  for (let i = 0; i < N; i++) { vx[i] -= svx; vy[i] -= svy; }
+  let px = 0, py = 0;
+  for (let i = 0; i < N; i++) { px += vx[i]; py += vy[i]; }
+  assertClose(px, 0, 1e-10, 'Total px = ' + px.toFixed(12));
+  assertClose(py, 0, 1e-10, 'Total py = ' + py.toFixed(12));
+}
+
+// ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════
 console.log('\n' + '═'.repeat(50));

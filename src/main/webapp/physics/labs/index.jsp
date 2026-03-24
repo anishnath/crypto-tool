@@ -6,16 +6,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Physics Labs — 19 Interactive Simulations" />
+    <jsp:param name="toolName" value="Physics Labs — 20 Interactive Simulations" />
     <jsp:param name="toolCategory" value="Physics" />
-    <jsp:param name="toolDescription" value="19 free interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations. All run in your browser with no signup required." />
+    <jsp:param name="toolDescription" value="20 free interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations. All run in your browser with no signup required." />
     <jsp:param name="toolUrl" value="physics/labs/" />
     <jsp:param name="toolKeywords" value="physics simulations, interactive physics, pendulum simulator, spring oscillator, chaos theory, billiards physics, wave equation, Newton's cradle, molecular dynamics, brachistochrone" />
     <jsp:param name="toolImage" value="logo.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="physics/" />
-    <jsp:param name="toolFeatures" value="19 interactive simulations,Drag-and-drop physics,Real-time graphs and energy plots,Phase space visualization,Direction field overlays,Export CSV data for lab reports,Screenshot sim and graph,Dark and light themes,No signup required,100% client-side" />
+    <jsp:param name="toolFeatures" value="20 interactive simulations,Drag-and-drop physics,Real-time graphs and energy plots,Phase space visualization,Direction field overlays,Export CSV data for lab reports,Screenshot sim and graph,Dark and light themes,No signup required,100% client-side" />
     <jsp:param name="faq1q" value="Are these physics simulations free?" />
-    <jsp:param name="faq1a" value="Yes all 19 simulations are completely free. No registration no payment no limits. They run entirely in your browser using JavaScript. Your data never leaves your device." />
+    <jsp:param name="faq1a" value="Yes all 20 simulations are completely free. No registration no payment no limits. They run entirely in your browser using JavaScript. Your data never leaves your device." />
     <jsp:param name="faq2q" value="Can I use these for homework and lab reports?" />
     <jsp:param name="faq2a" value="Yes. Every simulation has Export CSV to download data for Excel or Google Sheets and Screenshot to capture the sim and graphs as PNG for lab reports. You can also share specific configurations via URL." />
 </jsp:include>
@@ -32,11 +32,11 @@
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "Physics Labs",
-  "description": "19 free interactive physics simulations",
+  "description": "20 free interactive physics simulations",
   "url": "https://8gwifi.org/physics/labs/",
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 19,
+    "numberOfItems": 20,
     "itemListElement": [
       {"@type":"ListItem","position":1,"name":"Simple Pendulum","url":"https://8gwifi.org/physics/labs/pendulum.jsp"},
       {"@type":"ListItem","position":2,"name":"Spring Oscillator","url":"https://8gwifi.org/physics/labs/spring.jsp"},
@@ -55,7 +55,8 @@
       {"@type":"ListItem","position":15,"name":"Ramp: Forces & Motion","url":"https://8gwifi.org/physics/labs/ramp.jsp"},
       {"@type":"ListItem","position":16,"name":"Resonance","url":"https://8gwifi.org/physics/labs/resonance.jsp"},
       {"@type":"ListItem","position":17,"name":"Inclined Plane Pulley","url":"https://8gwifi.org/physics/labs/pulley.jsp"},
-      {"@type":"ListItem","position":18,"name":"Center of Mass: Raft","url":"https://8gwifi.org/physics/labs/raft-cm.jsp"}
+      {"@type":"ListItem","position":18,"name":"Center of Mass: Raft","url":"https://8gwifi.org/physics/labs/raft-cm.jsp"},
+      {"@type":"ListItem","position":19,"name":"States of Matter","url":"https://8gwifi.org/physics/labs/states-of-matter.jsp"}
     ]
   }
 }
@@ -461,6 +462,17 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
         <h3>Molecule</h3>
         <p>2-6 atoms, spring types, orbits, wall bouncing</p>
         <div class="card-badges"><span class="card-badge badge-drag">Drag</span></div>
+      </div>
+    </a>
+
+    <a href="states-of-matter.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#3B82F6,#EF4444);">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="5" r="2" fill="#3B82F6"/><circle cx="10" cy="5" r="2" fill="#3B82F6"/><circle cx="7" cy="9" r="2" fill="#22C55E"/><circle cx="12" cy="9" r="2" fill="#22C55E"/><circle cx="17" cy="4" r="2" fill="#EF4444"/><circle cx="20" cy="10" r="2" fill="#EF4444"/><circle cx="4" cy="14" r="2" fill="#F59E0B"/><rect x="1" y="18" width="22" height="3" rx="1" fill="#F97316" opacity=".5"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>States of Matter</h3>
+        <p>Lennard-Jones MD — solid, liquid, gas, phase transitions, heat</p>
+        <div class="card-badges"><span class="card-badge badge-new">New</span></div>
       </div>
     </a>
 
