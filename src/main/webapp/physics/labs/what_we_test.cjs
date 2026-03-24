@@ -3293,6 +3293,103 @@ section('Pulley — Analytical Formulas Match (with friction, uphill)');
 }
 
 // ═══════════════════════════════════════════
+// RAFT: CENTER OF MASS CONSERVATION
+// ═══════════════════════════════════════════
+
+function raftX(personOnRaft, P) {
+  return -P.massPerson * personOnRaft / (P.massPerson + P.massRaft);
+}
+function raftCM(personOnRaft, P) {
+  const rx = raftX(personOnRaft, P);
+  return (P.massPerson * (rx + personOnRaft) + P.massRaft * rx) / (P.massPerson + P.massRaft);
+}
+
+section('Raft — CM Conservation: CM stays at 0');
+{
+  const P = { massPerson: 70, massRaft: 200 };
+  // Person at various positions on raft — CM should always be 0
+  [0, 1, 2, -1, -3, 2.5].forEach(pos => {
+    const cm = raftCM(pos, P);
+    assertClose(cm, 0, 1e-10, 'person at ' + pos + ': CM = ' + cm.toFixed(10));
+  });
+}
+
+section('Raft — Raft Displacement = −mₚ·Δx_onRaft / (mₚ+mᵣ)');
+{
+  const P = { massPerson: 70, massRaft: 200 };
+  const personOnRaftPos = 2;  // person walks 2m right ON the raft
+  const rx = raftX(personOnRaftPos, P);
+  // From constraint: raftX = -mₚ·personOnRaft / (mₚ+mᵣ) = -70·2/270
+  const expected = -70 * 2 / (70 + 200);
+  assertClose(rx, expected, 1e-10,
+    'Δraft = ' + rx.toFixed(4) + ' ≈ ' + expected.toFixed(4));
+  // Also verify: person world position = raftX + personOnRaft
+  const personWorld = rx + personOnRaftPos;
+  // personWorld = personOnRaft - mₚ·personOnRaft/(mₚ+mᵣ) = mᵣ·personOnRaft/(mₚ+mᵣ)
+  const expectedPW = P.massRaft * personOnRaftPos / (P.massPerson + P.massRaft);
+  assertClose(personWorld, expectedPW, 1e-10,
+    'Person world x = ' + personWorld.toFixed(4) + ' ≈ mᵣ·d/(mₚ+mᵣ) = ' + expectedPW.toFixed(4));
+}
+
+section('Raft — Equal Masses: Raft and Person Move Same Distance');
+{
+  const P = { massPerson: 100, massRaft: 100 };
+  const personPos = 1;
+  const rx = raftX(personPos, P);
+  const personWorld = rx + personPos;
+  assertClose(Math.abs(rx), Math.abs(personWorld), 1e-10,
+    '|raft|=' + Math.abs(rx).toFixed(4) + ' = |person|=' + Math.abs(personWorld).toFixed(4));
+  assert(rx < 0 && personWorld > 0, 'Opposite directions');
+}
+
+section('Raft — Heavy Raft Barely Moves');
+{
+  const P = { massPerson: 70, massRaft: 500 };
+  const rx = raftX(2, P);
+  assert(Math.abs(rx) < 0.3, 'Heavy raft: |Δraft| = ' + Math.abs(rx).toFixed(3) + ' < 0.3m');
+}
+
+section('Raft — Light Raft Moves More Than Person');
+{
+  const P = { massPerson: 100, massRaft: 50 };
+  const personPos = 1;
+  const rx = raftX(personPos, P);
+  const personWorld = rx + personPos;
+  assert(Math.abs(rx) > Math.abs(personWorld),
+    'Light raft: |raft|=' + Math.abs(rx).toFixed(2) + ' > |person|=' + Math.abs(personWorld).toFixed(2));
+}
+
+section('Raft — Person Returns: Raft Returns to Zero');
+{
+  const P = { massPerson: 70, massRaft: 200 };
+  // Person walks out and comes back to center
+  const rx0 = raftX(0, P);
+  const rx1 = raftX(2, P);  // walked right
+  const rx2 = raftX(0, P);  // walked back to center
+  assertClose(rx0, 0, 1e-10, 'Start: raft at 0');
+  assert(Math.abs(rx1) > 0.5, 'During walk: raft displaced');
+  assertClose(rx2, 0, 1e-10, 'Back to center: raft returns to 0');
+}
+
+section('Raft — Zero Person Mass: Raft Stays Put');
+{
+  const P = { massPerson: 0, massRaft: 200 };
+  const rx = raftX(3, P);
+  assertClose(rx, 0, 1e-10, 'Zero person mass → raft at 0 always');
+}
+
+section('Raft — Total Momentum = 0');
+{
+  // If person velocity = v, raft velocity = −(mₚ/mᵣ)·v
+  // Total p = mₚ·v + mᵣ·(−mₚ/mᵣ·v) = mₚ·v − mₚ·v = 0
+  const P = { massPerson: 70, massRaft: 200 };
+  const vPerson = 1.5;  // walking speed
+  const vRaft = -(P.massPerson / P.massRaft) * vPerson;
+  const pTotal = P.massPerson * vPerson + P.massRaft * vRaft;
+  assertClose(pTotal, 0, 1e-10, 'Total momentum = ' + pTotal.toFixed(10));
+}
+
+// ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════
 console.log('\n' + '═'.repeat(50));
