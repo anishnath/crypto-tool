@@ -3493,6 +3493,125 @@ section('MD — Momentum Conservation (total = 0 after init)');
 }
 
 // ═══════════════════════════════════════════
+// DROP MASS: INELASTIC COLLISION ON OSCILLATOR
+// ═══════════════════════════════════════════
+
+// Inline physics from drop-mass.js
+const G_DROP = 9.81;
+function dropMassEval(vars, change, params) {
+  change[2] = 1;
+  const [y, vy] = vars;
+  const m = params._mass || params.m1;
+  const { k, damping, restLength } = params;
+  const springStretch = y - restLength;
+  change[0] = vy;
+  change[1] = G_DROP - (k / m) * springStretch - (damping / m) * vy;
+}
+
+{
+  // Test 1: Equilibrium position — at y_eq = L₀ + mg/k, acceleration should be zero
+  section('Drop Mass — Equilibrium Position');
+  const m1 = 1.0, k = 20, L0 = 1.0, b = 0.2;
+  const eq = L0 + m1 * G_DROP / k;
+  const vars = new Float64Array([eq, 0, 0]);
+  const change = new Float64Array(3);
+  dropMassEval(vars, change, { m1, k, damping: b, restLength: L0, _mass: m1 });
+  assertClose(change[1], 0, 0.001, 'Accel at equilibrium ≈ 0');
+}
+
+{
+  // Test 2: Period — T = 2π√(m/k)
+  section('Drop Mass — Period Before Collision');
+  const m1 = 1.0, k = 20, L0 = 1.0;
+  const eq = L0 + m1 * G_DROP / k;
+  const p = { m1, k, damping: 0, restLength: L0, _mass: m1 };
+  const vars = new Float64Array([eq + 0.3, 0, 0]);
+  const dt = 0.001;
+  // Run for ~10 seconds, find zero crossings of (y - eq)
+  const crossings = [];
+  let prevDisp = vars[0] - eq;
+  for (let i = 0; i < 10000; i++) {
+    rk4(vars, (v, c, pp) => dropMassEval(v, c, pp), dt, p);
+    const disp = vars[0] - eq;
+    if (prevDisp > 0 && disp <= 0) crossings.push(vars[2]);
+    prevDisp = disp;
+  }
+  if (crossings.length >= 3) {
+    const measuredT = (crossings[crossings.length - 1] - crossings[0]) / (crossings.length - 1);
+    const expectedT = 2 * Math.PI * Math.sqrt(m1 / k);
+    assertClose(measuredT, expectedT, 0.01, `Period: measured=${measuredT.toFixed(4)} expected=${expectedT.toFixed(4)}`);
+  }
+}
+
+{
+  // Test 3: Inelastic collision — momentum conservation
+  section('Drop Mass — Momentum Conservation at Collision');
+  const m1 = 1.0, m2 = 0.5;
+  const v1 = 0.8;  // m1 moving down
+  const v2 = 3.0;  // m2 falling fast
+  const vAfter = (m1 * v1 + m2 * v2) / (m1 + m2);
+  const pBefore = m1 * v1 + m2 * v2;
+  const pAfter = (m1 + m2) * vAfter;
+  assertClose(pBefore, pAfter, 1e-10, 'Momentum conserved: ' + pBefore.toFixed(6) + ' = ' + pAfter.toFixed(6));
+}
+
+{
+  // Test 4: Energy loss in inelastic collision
+  section('Drop Mass — Energy Lost in Collision');
+  const m1 = 1.0, m2 = 1.0;
+  const v1 = 0, v2 = 4.0;  // m₁ stationary, m₂ arrives at 4 m/s
+  const vAfter = (m1 * v1 + m2 * v2) / (m1 + m2);  // = 2.0
+  const keBefore = 0.5 * m1 * v1 * v1 + 0.5 * m2 * v2 * v2;  // = 8.0
+  const keAfter = 0.5 * (m1 + m2) * vAfter * vAfter;  // = 4.0
+  const loss = keBefore - keAfter;  // = 4.0
+  assertClose(vAfter, 2.0, 1e-10, 'v_after = 2.0 m/s');
+  assertClose(loss, 4.0, 1e-10, 'Energy lost = 4.0 J (50% for equal masses)');
+  assert(loss > 0, 'Energy is lost (not gained) in inelastic collision');
+}
+
+{
+  // Test 5: Frequency change after collision — ω₂ = √(k/(m₁+m₂))
+  section('Drop Mass — Frequency Change After Collision');
+  const m1 = 1.0, m2 = 1.0, k = 20, L0 = 1.0;
+  const mTotal = m1 + m2;
+  const eq2 = L0 + mTotal * G_DROP / k;
+  const p = { m1: mTotal, k, damping: 0, restLength: L0, _mass: mTotal };
+  const vars = new Float64Array([eq2 + 0.3, 0, 0]);
+  const dt = 0.001;
+  const crossings = [];
+  let prevDisp = vars[0] - eq2;
+  for (let i = 0; i < 10000; i++) {
+    rk4(vars, (v, c, pp) => dropMassEval(v, c, pp), dt, p);
+    const disp = vars[0] - eq2;
+    if (prevDisp > 0 && disp <= 0) crossings.push(vars[2]);
+    prevDisp = disp;
+  }
+  if (crossings.length >= 3) {
+    const measuredT = (crossings[crossings.length - 1] - crossings[0]) / (crossings.length - 1);
+    const expectedT = 2 * Math.PI * Math.sqrt(mTotal / k);
+    assertClose(measuredT, expectedT, 0.01, `Combined period: measured=${measuredT.toFixed(4)} expected=${expectedT.toFixed(4)}`);
+  }
+}
+
+{
+  // Test 6: New equilibrium is lower — eq₂ = L₀ + (m₁+m₂)g/k > eq₁
+  section('Drop Mass — Equilibrium Shift');
+  const m1 = 1.0, m2 = 0.5, k = 20, L0 = 1.0;
+  const eq1 = L0 + m1 * G_DROP / k;
+  const eq2 = L0 + (m1 + m2) * G_DROP / k;
+  assert(eq2 > eq1, 'New equilibrium is lower (larger y): eq2=' + eq2.toFixed(4) + ' > eq1=' + eq1.toFixed(4));
+  assertClose(eq2 - eq1, m2 * G_DROP / k, 1e-10, 'Shift = m₂g/k = ' + (m2 * G_DROP / k).toFixed(4));
+}
+
+{
+  // Test 7: Free fall velocity — v = √(2gh)
+  section('Drop Mass — Free Fall Impact Velocity');
+  const h = 1.5;
+  const vImpact = Math.sqrt(2 * G_DROP * h);
+  assertClose(vImpact, 5.424, 0.01, 'v_impact at h=1.5m: ' + vImpact.toFixed(3) + ' m/s');
+}
+
+// ═══════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════
 console.log('\n' + '═'.repeat(50));

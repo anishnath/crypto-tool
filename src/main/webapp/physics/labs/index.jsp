@@ -309,6 +309,17 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
       </div>
     </a>
 
+    <a href="drop-mass.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#EF4444,#8B5CF6);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="12" y1="2" x2="12" y2="8"/><polyline points="9,6 12,8 15,6" fill="none"/><rect x="9" y="8" width="6" height="4" rx="1" fill="#EF4444" stroke="none"/><polyline points="12,12 9,16 15,16 12,12" fill="none"/><rect x="9" y="16" width="6" height="5" rx="1" fill="#8B5CF6" stroke="none"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Drop Mass</h3>
+        <p>Drop a mass onto an oscillator — inelastic collision</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
     <a href="kapitza-pendulum.jsp" class="lab-card">
       <div class="lab-card-icon" style="background:linear-gradient(135deg,#F59E0B,#D97706);">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="12" y1="20" x2="12" y2="6" stroke-dasharray="2 2"/><circle cx="12" cy="20" r="2" fill="#F59E0B" stroke="none"/><line x1="12" y1="6" x2="12" y2="2"/><circle cx="12" cy="2" r="2" fill="#FBBF24" stroke="none"/><text x="16" y="5" font-size="6" fill="#fff">↕</text></svg>

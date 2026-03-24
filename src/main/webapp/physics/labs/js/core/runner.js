@@ -160,9 +160,9 @@ export class SimRunner {
     };
     solver(this.state, evaluate, this.dt, this.params);
 
-    // Post-step hook (e.g., wall collisions)
+    // Post-step hook (e.g., wall collisions, drop-mass free fall)
     if (typeof this.sim.postStep === 'function') {
-      this.sim.postStep(this.state, this.params);
+      this.sim.postStep(this.state, this.params, this.dt);
     }
 
     // Notify tick listeners (graph data collection, etc.)
