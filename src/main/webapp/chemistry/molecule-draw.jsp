@@ -1170,6 +1170,11 @@ body::after {
     </div>
   </div>
   <div class="header-actions">
+    <button class="insert-into-doc-btn" id="insertIntoDocBtn"
+            style="display:none; background:linear-gradient(135deg,#10b981,#06b6d4); color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.85rem; transition:opacity 0.2s;"
+            title="Send this molecule to the Math Editor document">
+      &#x2934; Insert into Document
+    </button>
     <button class="shortcuts-btn" onclick="document.getElementById('shortcutsModal').classList.add('open')">
       Shortcuts <kbd>?</kbd>
     </button>
@@ -2094,6 +2099,128 @@ RENDER_OPT_IDS.forEach(id => {
       });
     }
   }
+})();
+
+// ═══════════════════════════════════════════════════════
+// INSERT INTO DOCUMENT (Math Editor integration)
+// ═══════════════════════════════════════════════════════
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('returnTo') !== 'editor') return;
+
+  const btn = document.getElementById('insertIntoDocBtn');
+  if (!btn) return;
+  btn.style.display = '';
+
+  btn.addEventListener('click', function () {
+    if (!window.opener) {
+      toast('No parent editor window found');
+      return;
+    }
+
+    if (currentMode === 'reaction') {
+      // Reaction mode: get reaction data
+      const reaction = editor ? editor.getReaction() : null;
+      if (!reaction) { toast('Draw a reaction first'); return; }
+
+      let rxnSmiles = '';
+      try { rxnSmiles = reaction.toSmiles(); } catch (e) {}
+
+      // Strategy 1: Try canvas capture
+      let imageData = '';
+      try {
+        const canvasEl = document.querySelector('#editorContainer canvas');
+        if (canvasEl) imageData = canvasEl.toDataURL('image/png');
+      } catch (e) {
+        console.warn('Canvas capture failed (CORS?):', e.message);
+      }
+
+      // Strategy 2: If canvas capture failed, build SVG from individual molecules
+      let svgData = '';
+      if (!imageData) {
+        try {
+          const mols = reaction.getMolecules();
+          const nR = reaction.getReactants();
+          var svgParts = [];
+          var xOffset = 0;
+          for (let i = 0; i < mols; i++) {
+            const mol = reaction.getMolecule(i);
+            if (mol && mol.getAllAtoms() > 0) {
+              const partSvg = mol.toSVG(200, 150, null, { suppressChiralText: true, suppressESR: true });
+              svgParts.push('<g transform="translate(' + xOffset + ',0)">' + partSvg.replace(/<\/?svg[^>]*>/g, '') + '</g>');
+              xOffset += 210;
+              // Add arrow between reactants and products
+              if (i === nR - 1 && i < mols - 1) {
+                svgParts.push('<text x="' + (xOffset + 10) + '" y="80" font-size="24" fill="#333">\u2192</text>');
+                xOffset += 40;
+              } else if (i < mols - 1 && i < nR - 1) {
+                svgParts.push('<text x="' + (xOffset + 5) + '" y="80" font-size="18" fill="#333">+</text>');
+                xOffset += 25;
+              } else if (i >= nR && i < mols - 1) {
+                svgParts.push('<text x="' + (xOffset + 5) + '" y="80" font-size="18" fill="#333">+</text>');
+                xOffset += 25;
+              }
+            }
+          }
+          if (svgParts.length > 0) {
+            svgData = '<svg xmlns="http://www.w3.org/2000/svg" width="' + (xOffset + 10) + '" height="160">' + svgParts.join('') + '</svg>';
+          }
+        } catch (e) {
+          console.warn('SVG assembly failed:', e.message);
+        }
+      }
+
+      if (!imageData && !svgData) { toast('Could not capture reaction — try molecule mode for individual structures'); return; }
+
+      // Count reactants/products for the caption
+      let caption = '';
+      try {
+        const nR = reaction.getReactants();
+        const nP = reaction.getProducts();
+        caption = nR + ' reactant' + (nR > 1 ? 's' : '') + ' \u2192 ' + nP + ' product' + (nP > 1 ? 's' : '');
+      } catch (e) {}
+
+      window.opener.postMessage({
+        type: 'molecule-insert',
+        svg: svgData || null,
+        imageDataUrl: imageData || null,
+        smiles: rxnSmiles,
+        formula: caption || 'Reaction',
+        weight: '',
+        name: rxnSmiles || 'Reaction'
+      }, '*');
+
+      toast('Reaction inserted into document');
+      return;
+    }
+
+    if (!currentMolecule || currentMolecule.getAllAtoms() === 0) {
+      toast('Draw a molecule first');
+      return;
+    }
+
+    // Gather molecule data — use smaller size for document insertion
+    const svg = currentMolecule.toSVG(400, 300, null, getRenderOptions());
+    const smiles = currentMolecule.toSmiles() || '';
+
+    let formula = '';
+    try { formula = currentMolecule.getMolecularFormula().formula || ''; } catch (e) {}
+
+    let weight = '';
+    try { const w = currentMolecule.getMolweight(); weight = w ? w.toFixed(2) : ''; } catch (e) {}
+
+    // Send to parent editor via postMessage
+    window.opener.postMessage({
+      type: 'molecule-insert',
+      svg: svg,
+      smiles: smiles,
+      formula: formula,
+      weight: weight,
+      name: ''
+    }, '*');
+
+    toast('Inserted into document');
+  });
 })();
 
 // ═══════════════════════════════════════════════════════
