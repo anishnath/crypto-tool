@@ -498,6 +498,28 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
       </div>
     </a>
 
+    <a href="../optical-designer.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#3B82F6,#06B6D4);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="6" cy="12" r="2.5"/><line x1="8.5" y1="12" x2="19" y2="12"/><path d="M19 7 L22 12 L19 17"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Optical Designer</h3>
+        <p>Design optical setups with lenses, mirrors, and ray tracing</p>
+        <div class="card-badges"><span class="card-badge badge-wave">Optics</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
+    <a href="../ray-optics-simulator.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><line x1="3" y1="6" x2="11" y2="12"/><line x1="11" y1="12" x2="21" y2="12"/><line x1="11" y1="12" x2="20" y2="6"/><line x1="11" y1="12" x2="20" y2="18"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Ray Optics Simulator</h3>
+        <p>Explore reflection, refraction, and lens behavior with live rays</p>
+        <div class="card-badges"><span class="card-badge badge-wave">Optics</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
     <a href="brachistochrone.jsp" class="lab-card">
       <div class="lab-card-icon" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><circle cx="4" cy="4" r="2" fill="#fff"/><circle cx="20" cy="20" r="2" fill="#fff"/><path d="M4 4 Q4 20 20 20" stroke="#8B5CF6" stroke-width="2" fill="none"/><path d="M4 4 L20 20" stroke="#EF4444" stroke-width="1.5" fill="none"/><circle cx="10" cy="14" r="2" fill="#8B5CF6" stroke="none"/><circle cx="13" cy="13" r="2" fill="#EF4444" stroke="none"/></svg>
