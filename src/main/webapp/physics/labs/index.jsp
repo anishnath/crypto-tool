@@ -487,6 +487,17 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
       </div>
     </a>
 
+    <a href="circuit-simulator.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#06b6d4,#8b5cf6);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="2" y1="12" x2="6" y2="12"/><polyline points="6,12 8,8 10,16 12,8 14,16 16,12"/><line x1="16" y1="12" x2="22" y2="12"/><circle cx="4" cy="12" r="1.5" fill="#06b6d4" stroke="none"/><circle cx="20" cy="12" r="1.5" fill="#06b6d4" stroke="none"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Circuit Simulator</h3>
+        <p>Draw circuits, see current flow and voltage colors live</p>
+        <div class="card-badges"><span class="card-badge badge-new">New</span><span class="card-badge badge-drag">Draw</span></div>
+      </div>
+    </a>
+
     <a href="brachistochrone.jsp" class="lab-card">
       <div class="lab-card-icon" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><circle cx="4" cy="4" r="2" fill="#fff"/><circle cx="20" cy="20" r="2" fill="#fff"/><path d="M4 4 Q4 20 20 20" stroke="#8B5CF6" stroke-width="2" fill="none"/><path d="M4 4 L20 20" stroke="#EF4444" stroke-width="1.5" fill="none"/><circle cx="10" cy="14" r="2" fill="#8B5CF6" stroke="none"/><circle cx="13" cy="13" r="2" fill="#EF4444" stroke="none"/></svg>
