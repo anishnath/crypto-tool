@@ -88,7 +88,21 @@ function calculate() {
         }
         var inv_v = (1 / f) + (1 / u);
         if (Math.abs(inv_v) < 0.0001) {
-            result.error = 'Image forms at infinity (object at focal point)';
+            result.imageAtInfinity = true;
+            result.f = f;
+            result.u = u;
+            result.v = Infinity;
+            result.m = Infinity;
+            result.h_prime = Infinity;
+            result.h = h;
+            result.imageType = 'At infinity';
+            result.orientation = '—';
+            result.size = 'Parallel emergent rays';
+            result.power = 1 / (f / 100);
+            if (isMirror(state.opticalType)) {
+                result.R = 2 * f;
+            }
+            state.lastResult = result;
             showOutput(result);
             return;
         }
@@ -298,6 +312,7 @@ function bindEvents() {
         (function(btn) {
             btn.addEventListener('click', function() {
                 switchCalcMode(btn.getAttribute('data-mode'));
+                calculate();
             });
         })(modeBtns[i]);
     }
@@ -333,10 +348,6 @@ function bindEvents() {
     syncSlider('lm-obj-dist', 'lm-u-slider');
     syncSlider('lm-img-dist', 'lm-v-slider');
     syncSlider('lm-obj-height', 'lm-h-slider');
-
-    // Calculate button
-    var solveBtn = $('lm-solve-btn');
-    if (solveBtn) solveBtn.addEventListener('click', calculate);
 
     // Share
     var shareBtn = $('lm-share-btn');

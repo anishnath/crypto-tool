@@ -23,7 +23,7 @@
         <jsp:param name="toolImage" value="lens-mirror-calculator.svg" />
         <jsp:param name="toolFeatures" value="Thin lens equation solver (1/f = 1/v − 1/u),Interactive canvas ray diagram with 3 principal rays and glow effects,7 optical elements: biconvex biconcave plano-convex plano-concave concave mirror convex mirror plane mirror,Radius of curvature R = 2f for curved mirrors,Magnification and image height calculation,Lens power in diopters,Real vs virtual image detection with badges,Step-by-step KaTeX math solutions,10 preset examples for instant learning,PNG ray diagram export and shareable URLs,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="howToSteps" value="Select optical element|Choose from 7 types: biconvex lens biconcave lens plano-convex plano-concave concave mirror convex mirror or plane mirror,Enter known values|Input focal length (f) object distance (u) and object height (h) in centimeters. Use sliders for quick adjustment,Choose what to solve|Select Find Image (v) Find Object (u) or Find Focal Length (f) using the mode toggle,Click Calculate|Press Calculate to see the ray diagram step-by-step solution magnification and image properties,Export or share|Save the ray diagram as PNG or copy a shareable URL to send to classmates" />
+        <jsp:param name="howToSteps" value="Select optical element|Choose from 7 types: biconvex lens biconcave lens plano-convex plano-concave concave mirror convex mirror or plane mirror,Enter known values|Input focal length (f) object distance (u) and object height (h) in centimeters. Use sliders for quick adjustment,Choose what to solve|Select Find Image (v) Find Object (u) or Find Focal Length (f) using the mode toggle,See results live|Ray diagram steps magnification and image properties update as you adjust sliders inputs or the solve mode,Export or share|Save the ray diagram as PNG or copy a shareable URL to send to classmates" />
         <jsp:param name="educationalLevel" value="High School, Undergraduate" />
         <jsp:param name="teaches" value="Geometric optics, thin lens equation, mirror formula, ray diagrams, magnification, image formation" />
         <jsp:param name="faq1q" value="What is the thin lens equation and how does it work?" />
@@ -37,7 +37,7 @@
         <jsp:param name="faq5q" value="What is lens power and how is it measured in diopters?" />
         <jsp:param name="faq5a" value="Lens power P is the reciprocal of focal length in meters: P = 1/f(m), measured in diopters (D). A converging lens with f = 50 cm has power +2D. Positive diopters mean converging, negative mean diverging. Optometrists prescribe eyeglasses in diopters. For lenses in contact, total power is P_total = P1 + P2." />
         <jsp:param name="faq6q" value="What happens when the object is at the focal point?" />
-        <jsp:param name="faq6a" value="When the object is placed exactly at the focal point (u = -f), the image forms at infinity. The light rays emerge parallel after passing through the lens or reflecting off the mirror. This principle is used in searchlights and collimators. Our calculator shows an error message for this special case since v approaches infinity." />
+        <jsp:param name="faq6a" value="When the object is placed exactly at the focal point (u = -f), the image forms at infinity. The light rays emerge parallel after passing through the lens or reflecting off the mirror. This principle is used in searchlights and collimators. For converging thin lenses (biconvex or plano-convex), the calculator draws a parallel-ray (collimated) diagram instead of hiding the diagram." />
         <jsp:param name="faq7q" value="What are plano-convex and plano-concave lenses?" />
         <jsp:param name="faq7a" value="Plano-convex lenses have one flat surface and one curved outward surface. They converge light (positive f) and are common in laser optics and condensers. Plano-concave lenses have one flat and one inward-curved surface, diverging light (negative f). Both follow the same thin lens equation as biconvex and biconcave lenses." />
     </jsp:include>
@@ -165,11 +165,6 @@
                         <input type="number" class="lm-input" id="lm-obj-height" value="5" step="0.1">
                         <input type="range" class="lm-slider" id="lm-h-slider" min="1" max="20" step="0.5" value="5">
                     </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div style="display:flex;gap:0.5rem;">
-                    <button type="button" class="tool-action-btn" id="lm-solve-btn" style="flex:1">Calculate</button>
                 </div>
 
                 <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
@@ -397,7 +392,7 @@
                 What happens when the object is at the focal point?
                 <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">When the object is placed exactly at the focal point (u = -f), the image forms at infinity. The light rays emerge parallel after passing through the lens or reflecting off the mirror. This principle is used in searchlights and collimators. Our calculator shows an error message for this special case since v approaches infinity.</div>
+            <div class="faq-answer">When the object is placed exactly at the focal point (u = -f), the image forms at infinity. The light rays emerge parallel after passing through the lens or reflecting off the mirror. This principle is used in searchlights and collimators. For converging thin lenses (biconvex or plano-convex), the calculator draws a parallel-ray (collimated) diagram instead of hiding the diagram.</div>
         </div>
 
         <div class="faq-item">

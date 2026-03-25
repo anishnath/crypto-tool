@@ -10,18 +10,30 @@
     --lm-light: rgba(225, 29, 72, 0.15);
 }
 
-/* ===== Layout Override: narrow input, wide output ===== */
-.lm-layout.tool-page-container {
-    grid-template-columns: minmax(240px, 280px) 1fr 300px;
-}
-@media (max-width: 1024px) {
+/* ===== Layout Override: narrow input, wide ray diagram ===== */
+@media (min-width: 1025px) {
     .lm-layout.tool-page-container {
-        grid-template-columns: minmax(230px, 270px) 1fr;
+        grid-template-columns: minmax(210px, 268px) minmax(0, 1fr) minmax(228px, 280px);
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+    }
+}
+@media (min-width: 901px) and (max-width: 1024px) {
+    .lm-layout.tool-page-container {
+        grid-template-columns: minmax(200px, 252px) minmax(0, 1fr);
+        gap: 1rem;
+        padding: 1rem 1.25rem;
     }
 }
 @media (max-width: 900px) {
     .lm-layout.tool-page-container {
         grid-template-columns: 1fr;
+    }
+}
+@media (min-width: 901px) {
+    .lm-layout .tool-input-column {
+        top: 80px;
+        max-height: calc(100vh - 96px);
     }
 }
 

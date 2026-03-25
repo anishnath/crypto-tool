@@ -70,6 +70,16 @@ function copyShareUrl(state) {
 
 function savePNG(canvas, result, opticalTypeLabel) {
     if (!canvas || !result || result.error) return;
+    var fmtN = function (x) {
+        if (x === Infinity || x === -Infinity) return '\u221E';
+        if (typeof x === 'number' && isFinite(x)) return x.toFixed(2);
+        return String(x);
+    };
+    var fmtM = function (x) {
+        if (x === Infinity || x === -Infinity) return '\u221E';
+        if (typeof x === 'number' && isFinite(x)) return x.toFixed(3);
+        return String(x);
+    };
 
     var tempCanvas = document.createElement('canvas');
     var w = canvas.width;
@@ -125,9 +135,9 @@ function savePNG(canvas, result, opticalTypeLabel) {
 
     ctx.fillStyle = '#1e293b';
     ctx.font = '12px sans-serif';
-    ctx.fillText('Image Distance (v): ' + result.v.toFixed(2) + ' cm', rightX, yPos += 20);
-    ctx.fillText('Magnification (m): ' + result.m.toFixed(3), rightX, yPos += 18);
-    ctx.fillText("Image Height (h'): " + result.h_prime.toFixed(2) + ' cm', rightX, yPos += 18);
+    ctx.fillText('Image Distance (v): ' + (result.imageAtInfinity ? '\u221E (parallel rays)' : fmtN(result.v) + ' cm'), rightX, yPos += 20);
+    ctx.fillText('Magnification (m): ' + fmtM(result.m), rightX, yPos += 18);
+    ctx.fillText("Image Height (h'): " + fmtN(result.h_prime) + (result.imageAtInfinity ? '' : ' cm'), rightX, yPos += 18);
     ctx.fillText('Lens Power (P): ' + result.power.toFixed(2) + ' D', rightX, yPos += 18);
 
     yPos += 10;

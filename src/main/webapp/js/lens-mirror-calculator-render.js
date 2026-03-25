@@ -9,6 +9,7 @@
 
 function fmt(n) {
     if (n === 0) return '0';
+    if (n === Infinity || n === -Infinity) return '\u221E';
     if (!isFinite(n)) return String(n);
     if (Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n));
     return n.toFixed(4).replace(/\.?0+$/, '');
@@ -58,6 +59,13 @@ function renderResults(container, result) {
         container.appendChild(err);
         return;
     }
+    if (result.imageAtInfinity) {
+        var note = document.createElement('div');
+        note.className = 'lm-info';
+        note.style.cssText = 'padding:0.65rem 0.75rem;margin-bottom:0.75rem;font-size:0.8125rem;line-height:1.45;color:var(--text-secondary);background:var(--bg-secondary);border-radius:0.5rem;border:1px solid var(--border);';
+        note.textContent = 'Object at the focal point: image distance v is infinite; emergent rays are parallel (collimated).';
+        container.appendChild(note);
+    }
     var grid = document.createElement('div');
     grid.className = 'lm-results-grid';
     var items = [];
@@ -67,9 +75,9 @@ function renderResults(container, result) {
         items.push({ label: 'Focal Length (f)', value: fmt(result.f) + ' cm' });
     }
     items.push({ label: 'Object Distance (u)', value: fmt(result.u) + ' cm' });
-    items.push({ label: 'Image Distance (v)', value: fmt(result.v) + ' cm' });
-    items.push({ label: 'Magnification (m)', value: fmt(result.m) });
-    items.push({ label: 'Image Height (h\')', value: fmt(result.h_prime) + ' cm' });
+    items.push({ label: 'Image Distance (v)', value: result.imageAtInfinity ? '\u221E (no finite image)' : fmt(result.v) + ' cm' });
+    items.push({ label: 'Magnification (m)', value: result.imageAtInfinity ? '\u221E' : fmt(result.m) });
+    items.push({ label: 'Image Height (h\')', value: result.imageAtInfinity ? '\u221E' : fmt(result.h_prime) + ' cm' });
     if (result.R !== undefined) {
         items.push({ label: 'Radius of Curvature (R)', value: fmt(result.R) + ' cm' });
     }
@@ -94,12 +102,12 @@ function renderResults(container, result) {
     var badges = document.createElement('div');
     badges.className = 'lm-badges';
     var typeBadge = document.createElement('span');
-    typeBadge.className = 'lm-badge ' + (result.v > 0 ? 'lm-badge-real' : 'lm-badge-virtual');
+    typeBadge.className = 'lm-badge ' + (result.imageAtInfinity ? 'lm-badge-virtual' : (result.v > 0 ? 'lm-badge-real' : 'lm-badge-virtual'));
     typeBadge.textContent = result.imageType;
     badges.appendChild(typeBadge);
     var orBadge = document.createElement('span');
-    orBadge.className = 'lm-badge ' + (result.m < 0 ? 'lm-badge-inverted' : 'lm-badge-upright');
-    orBadge.textContent = result.orientation;
+    orBadge.className = 'lm-badge ' + (result.imageAtInfinity ? 'lm-badge-upright' : (result.m < 0 ? 'lm-badge-inverted' : 'lm-badge-upright'));
+    orBadge.textContent = result.imageAtInfinity ? 'N/A' : result.orientation;
     badges.appendChild(orBadge);
     var szBadge = document.createElement('span');
     szBadge.className = 'lm-badge';
@@ -113,6 +121,16 @@ function renderResults(container, result) {
 function renderSteps(container, result, mode) {
     if (!container || result.error) return;
     container.innerHTML = '';
+
+    if (result.imageAtInfinity) {
+        container.appendChild(buildStepDOM('1', '<strong>Given values</strong>',
+            'f = ' + fmt(result.f) + '\\text{ cm},\\quad u = ' + fmt(result.u) + '\\text{ cm},\\quad h = ' + fmt(result.h) + '\\text{ cm}'));
+        container.appendChild(buildStepDOM('2', '<strong>Thin lens equation</strong>',
+            '\\frac{1}{v} = \\frac{1}{f} + \\frac{1}{u} = 0 \\quad\\Rightarrow\\quad v \\to \\infty'));
+        container.appendChild(buildStepDOM('3', '<strong>Image &amp; rays</strong>',
+            '\\text{No finite image. Magnification } m = v/u \\to \\infty\\text{. Emergent rays are parallel (collimated) — see diagram.}'));
+        return;
+    }
 
     // Plane mirror: simplified steps
     if (result.isPlane) {
@@ -609,8 +627,230 @@ function drawPlaneMirror(ctx, cx, cy, lh, T) {
 
 // ==================== Main Draw ====================
 
+/** Converging / plano-convex: object at F → emergent bundle parallel (tip: parallel in → through F′; tip: through center). */
+function collimatedThinLensType(opticalType) {
+    return opticalType === 'converging' || opticalType === 'plano-convex';
+}
+
+function drawCollimatedLensDiagram(canvas, result, opticalType) {
+    var ctx = canvas.getContext('2d');
+    var container = canvas.parentElement;
+    var W = container.clientWidth || 600;
+    var H = Math.max(360, Math.min(480, W * 0.5));
+    canvas.width = W;
+    canvas.height = H;
+    canvas.style.height = H + 'px';
+    var T = getTheme();
+
+    var f = result.f;
+    var u = result.u;
+    var h = result.h;
+    var absU = Math.abs(u);
+    var absF = Math.abs(f);
+    var lx = W * 0.5;
+    var ly = H * 0.48;
+    var lh = Math.min(140, Math.max(80, h * 14 + 50));
+    var lw = 22;
+
+    var leftPx = lx - 70;
+    var rightPx = W - lx - 50;
+    var maxLeft = absU + 4;
+    var maxRight = absF * 2.5 + 8;
+    var scale = Math.min(leftPx / maxLeft, rightPx / maxRight);
+    if (scale < 0.5) scale = 0.5;
+    var maxArrowH = Math.abs(h);
+    var availH = ly - 50;
+    var vScale = availH / (maxArrowH * scale);
+    if (vScale < 1) scale = scale * vScale;
+
+    var obj_x = lx - absU * scale;
+    var obj_ty = ly - h * scale;
+    var F1x = lx - absF * scale;
+    var F2x = lx + absF * scale;
+
+    ctx.fillStyle = T.bg;
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = T.grid;
+    ctx.lineWidth = 1;
+    var gs = 44;
+    var gx, gy;
+    for (gx = 0; gx < W; gx += gs) {
+        ctx.beginPath();
+        ctx.moveTo(gx, 0);
+        ctx.lineTo(gx, H);
+        ctx.stroke();
+    }
+    for (gy = 0; gy < H; gy += gs) {
+        ctx.beginPath();
+        ctx.moveTo(0, gy);
+        ctx.lineTo(W, gy);
+        ctx.stroke();
+    }
+
+    ctx.strokeStyle = T.axis;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([10, 6]);
+    ln(ctx, 0, ly, W, ly);
+    ctx.setLineDash([]);
+    ctx.strokeStyle = T.axisCenter;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ln(ctx, lx, 10, lx, H - 10);
+    ctx.setLineDash([]);
+
+    var rightEnd = W - 24;
+
+    // Ray 1 (principal): from tip parallel to axis → after lens passes through F′ (not horizontal).
+    var y1Out = obj_ty + (ly - obj_ty) / (F2x - lx) * (rightEnd - lx);
+    drawRay(ctx, obj_x, obj_ty, lx, obj_ty, T.ray1, false, 0.95);
+    midArrow(ctx, obj_x, obj_ty, lx, obj_ty, 0.55, T.ray1, 0.95);
+    drawRay(ctx, lx, obj_ty, rightEnd, y1Out, T.ray1, false, 0.95);
+    midArrow(ctx, lx, obj_ty, rightEnd, y1Out, 0.45, T.ray1, 0.95);
+
+    // Ray 2 (principal): from tip through optical center — undeviated; parallel to ray 1 when |u| = |f|.
+    var y2Out = obj_ty + (ly - obj_ty) / (lx - obj_x) * (rightEnd - obj_x);
+    drawRay(ctx, obj_x, obj_ty, rightEnd, y2Out, T.ray2, false, 0.95);
+    midArrow(ctx, obj_x, obj_ty, lx, ly, 0.55, T.ray2, 0.95);
+    midArrow(ctx, lx, ly, rightEnd, y2Out, 0.45, T.ray2, 0.95);
+
+    if (opticalType === 'converging') {
+        drawConvergingLens(ctx, lx, ly, lh, lw, T);
+        drawText(ctx, 'Biconvex Lens', lx, ly - lh / 2 - 22, T.lens, 10, 'center', 0.6, T.font);
+    } else {
+        drawPlanoConvexLens(ctx, lx, ly, lh, lw, T);
+        drawText(ctx, 'Plano-Convex Lens', lx, ly - lh / 2 - 22, T.lens, 10, 'center', 0.6, T.font);
+    }
+
+    if (absF < 1000) {
+        ctx.save();
+        ctx.shadowColor = T.focal;
+        ctx.shadowBlur = 8;
+        drawDot(ctx, F1x, ly, 5, T.focal, 1);
+        ctx.restore();
+        ctx.strokeStyle = T.focal;
+        ctx.lineWidth = 1.5;
+        ln(ctx, F1x, ly - 6, F1x, ly + 6);
+        drawText(ctx, 'F', F1x, ly + 18, T.focal, 11, 'center', 1, T.font);
+
+        drawDot(ctx, F2x, ly, 4, T.focalDim, 1);
+        ctx.strokeStyle = T.focalDim;
+        ctx.lineWidth = 1;
+        ln(ctx, F2x, ly - 6, F2x, ly + 6);
+        drawText(ctx, "F'", F2x, ly + 18, T.focalDim, 11, 'center', 1, T.font);
+    }
+
+    ctx.save();
+    ctx.shadowColor = T.obj;
+    ctx.shadowBlur = 6;
+    drawObjectArrow(ctx, obj_x, ly, obj_ty, T.obj, false, 1);
+    ctx.restore();
+    drawDot(ctx, obj_x, ly, 3, T.obj, 1);
+    drawText(ctx, 'Object', obj_x, obj_ty - 16, T.objLabel, 10, 'center', 1, T.font);
+
+    drawText(ctx, 'Image at \u221E (no finite image)', W / 2, 22, T.dimText, 11, 'center', 0.85, T.font);
+    drawText(ctx, 'Two parallel emergent rays (collimated)', W / 2, 38, T.dimText, 10, 'center', 0.75, T.font);
+
+    ctx.save();
+    ctx.globalAlpha = 0.25;
+    ctx.strokeStyle = T.dimText;
+    ctx.fillStyle = T.dimText;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(W - 50, ly);
+    ctx.lineTo(W - 14, ly);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(W - 14, ly);
+    ctx.lineTo(W - 22, ly - 4);
+    ctx.lineTo(W - 22, ly + 4);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+    drawText(ctx, 'Optical Axis', W - 50, ly - 12, T.dimText, 9, 'right', 0.7, T.font);
+
+    var bracketY = ly + lh / 2 + 28;
+    drawBracket(ctx, obj_x, lx, bracketY, T.bracket,
+        'u = ' + absU.toFixed(1) + ' cm', bracketY + 14, T);
+    drawBracket(ctx, F1x, lx, bracketY + 48, T.bracketF,
+        'f = ' + absF.toFixed(1) + ' cm', bracketY + 62, T);
+}
+
+/** Clear canvas and show message when lens equation has no finite solution (avoids stale diagram). */
+function drawDiagramErrorPlaceholder(canvas, errorText) {
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var container = canvas.parentElement;
+    var W = container.clientWidth || 600;
+    var H = Math.max(360, Math.min(480, W * 0.5));
+    canvas.width = W;
+    canvas.height = H;
+    canvas.style.height = H + 'px';
+    var T = getTheme();
+    ctx.fillStyle = T.bg;
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = T.grid;
+    ctx.lineWidth = 1;
+    var gs = 44;
+    var gx, gy;
+    for (gx = 0; gx < W; gx += gs) {
+        ctx.beginPath();
+        ctx.moveTo(gx, 0);
+        ctx.lineTo(gx, H);
+        ctx.stroke();
+    }
+    for (gy = 0; gy < H; gy += gs) {
+        ctx.beginPath();
+        ctx.moveTo(0, gy);
+        ctx.lineTo(W, gy);
+        ctx.stroke();
+    }
+    ctx.fillStyle = T.dimText;
+    ctx.font = '600 14px ' + (T.font || 'system-ui,sans-serif');
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    var msg = errorText || 'Cannot draw diagram';
+    var maxW = W - 48;
+    if (ctx.measureText(msg).width > maxW) {
+        var parts = msg.split(' ');
+        var line = '';
+        var y0 = H / 2 - 18;
+        var lineH = 20;
+        for (var i = 0; i < parts.length; i++) {
+            var test = line ? line + ' ' + parts[i] : parts[i];
+            if (ctx.measureText(test).width > maxW && line) {
+                ctx.fillText(line, W / 2, y0);
+                y0 += lineH;
+                line = parts[i];
+            } else {
+                line = test;
+            }
+        }
+        if (line) ctx.fillText(line, W / 2, y0);
+    } else {
+        ctx.fillText(msg, W / 2, H / 2 - 8);
+    }
+    ctx.font = '13px ' + (T.font || 'system-ui,sans-serif');
+    ctx.globalAlpha = 0.8;
+    ctx.fillText('Ray diagram hidden — adjust inputs; results update automatically.', W / 2, H / 2 + 28);
+    ctx.globalAlpha = 1;
+}
+
 function drawRayDiagram(canvas, result, opticalType) {
-    if (!canvas || result.error) return;
+    if (!canvas) return;
+    if (result.error) {
+        drawDiagramErrorPlaceholder(canvas, result.error);
+        return;
+    }
+    if (result.imageAtInfinity) {
+        if (result.f > 0 && collimatedThinLensType(opticalType)) {
+            drawCollimatedLensDiagram(canvas, result, opticalType);
+        } else {
+            drawDiagramErrorPlaceholder(canvas,
+                'Parallel-ray diagram is shown for converging lenses (f > 0) with the object at F. Adjust f or u, or switch to Biconvex / Plano-Convex.');
+        }
+        return;
+    }
 
     var ctx = canvas.getContext('2d');
     var container = canvas.parentElement;
@@ -677,8 +917,15 @@ function drawRayDiagram(canvas, result, opticalType) {
     var obj_ty = ly - h * scale;          // object tip (above axis)
     var img_x = lx + diag_v * scale;     // image position (flipped for mirrors)
     var img_ty = ly - hi * scale;         // image tip
-    var F1x = lx + diag_f * scale;       // F (flipped for mirrors)
-    var F2x = lx - diag_f * scale;       // F'
+    // Focal points: mirrors keep diag_f flip; thin lenses use F on object side (left), F' on image side (right)
+    var F1x, F2x;
+    if (isMirrorType) {
+        F1x = lx + diag_f * scale;
+        F2x = lx - diag_f * scale;
+    } else {
+        F1x = lx - absF * scale;  // F (object side)
+        F2x = lx + absF * scale;  // F' (image side)
+    }
 
     // ── Clear + Background ──────────────────────────────
     ctx.clearRect(0, 0, W, H);
@@ -814,7 +1061,7 @@ function drawRayDiagram(canvas, result, opticalType) {
             '|v| = ' + absV.toFixed(1) + ' cm', labelY + 24, T);
     }
 
-    // f bracket
+    // f bracket: object-side focal distance (F to lens for lenses; same |f|)
     if (Math.abs(F1x - lx) > 20 && Math.abs(F1x - obj_x) > 25) {
         drawBracket(ctx, F1x, lx, bracketY + 48, T.bracketF,
             'f = ' + absF.toFixed(1) + ' cm', labelY + 48, T);
@@ -956,7 +1203,7 @@ function drawPlaneMirrorDiagram(ctx, W, H, result, T) {
     drawBracket(ctx, obj_x, mx, bracketY, T.bracket,
         'u = ' + absU.toFixed(1) + ' cm', bracketY + 14, T);
     drawBracket(ctx, img_x, mx, bracketY + 24, T.bracketImg,
-        'v = ' + absU.toFixed(1) + ' cm', bracketY + 38, T);
+        '|v| = ' + absU.toFixed(1) + ' cm', bracketY + 38, T);
 
     // Axis arrow
     ctx.save();
@@ -1054,66 +1301,60 @@ function drawMirrorPrincipalRays(ctx, result, T, lx, ly, scale, obj_x, obj_ty, i
 function drawPrincipalRays(ctx, result, T, lx, ly, scale, obj_x, obj_ty, img_x, img_ty, F1x, F2x) {
     var v = result.v;
     var isReal = v > 0;
+    // F1x = F (object side), F2x = F' (image side) for thin lenses
 
-    // ── Ray 1: Parallel to axis → through/from F ──────
-    // Incoming: horizontal from object tip to lens
+    // ── Ray 1: Parallel to axis → refracts through F' (real) or appears from F (virtual) ──
     drawRay(ctx, obj_x, obj_ty, lx, obj_ty, T.ray1, false, 0.9);
     midArrow(ctx, obj_x, obj_ty, lx, obj_ty, 0.55, T.ray1, 0.9);
 
     if (isReal) {
-        // Outgoing: from lens to image through F
+        // After lens: passes through F' (F2x) toward real image
         drawRay(ctx, lx, obj_ty, img_x, img_ty, T.ray1, false, 0.9);
         midArrow(ctx, lx, obj_ty, img_x, img_ty, 0.5, T.ray1, 0.9);
     } else {
-        // Outgoing: diverges away from F
-        var r1dx = lx - F1x;
-        var r1dy = obj_ty - ly;
+        // After lens: diverges; backward extension passes through F (F1x)
+        var r1dx = F1x - lx;
+        var r1dy = ly - obj_ty;
         var r1end = extendRay(ctx, lx, obj_ty, r1dx, r1dy);
         drawRay(ctx, lx, obj_ty, r1end[0], r1end[1], T.ray1, false, 0.9);
         midArrow(ctx, lx, obj_ty, r1end[0], r1end[1], 0.5, T.ray1, 0.9);
-        // Virtual extension back to image
         drawRay(ctx, lx, obj_ty, img_x, img_ty, T.virtualExt, true, 0.4);
     }
 
-    // ── Ray 2: Through center (undeviated) ────────────
+    // ── Ray 2: Through optical center (undeviated) ──
     if (isReal) {
         drawRay(ctx, obj_x, obj_ty, img_x, img_ty, T.ray3, false, 0.9);
         midArrow(ctx, obj_x, obj_ty, lx, ly, 0.5, T.ray3, 0.9);
         midArrow(ctx, lx, ly, img_x, img_ty, 0.45, T.ray3, 0.9);
     } else {
-        // Through center and extend beyond
-        var r3dx = lx - obj_x;
-        var r3dy = ly - obj_ty;
         drawRay(ctx, obj_x, obj_ty, lx, ly, T.ray3, false, 0.9);
         midArrow(ctx, obj_x, obj_ty, lx, ly, 0.5, T.ray3, 0.9);
+        var r3dx = lx - obj_x;
+        var r3dy = ly - obj_ty;
         var r3end = extendRay(ctx, lx, ly, r3dx, r3dy);
         drawRay(ctx, lx, ly, r3end[0], r3end[1], T.ray3, false, 0.9);
         midArrow(ctx, lx, ly, r3end[0], r3end[1], 0.45, T.ray3, 0.9);
         drawRay(ctx, lx, ly, img_x, img_ty, T.virtualExt, true, 0.4);
     }
 
-    // ── Ray 3: Through/toward F' → parallel after lens ─
+    // ── Ray 3: Through F → parallel after (real object beyond F); or toward F' → parallel after (virtual, object inside f) ──
     if (Math.abs(result.f) < 1000) {
-        if (isReal) {
-            // Incoming: from obj tip toward F' on object side
-            var slope = (ly - obj_ty) / (F2x - obj_x);
-            var lensY = obj_ty + slope * (lx - obj_x);
+        var aimFx = isReal ? F1x : F2x;
+        var dxAim = aimFx - obj_x;
+        if (Math.abs(dxAim) > 0.001) {
+            var tHit = (lx - obj_x) / dxAim;
+            var lensY = obj_ty + tHit * (ly - obj_ty);
             drawRay(ctx, obj_x, obj_ty, lx, lensY, T.ray2, false, 0.9);
             midArrow(ctx, obj_x, obj_ty, lx, lensY, 0.5, T.ray2, 0.9);
-            // Outgoing: to image
-            drawRay(ctx, lx, lensY, img_x, img_ty, T.ray2, false, 0.9);
-            midArrow(ctx, lx, lensY, img_x, img_ty, 0.5, T.ray2, 0.9);
-        } else {
-            // Aimed toward F' (on opposite side) → exits parallel
-            var r2t = (lx - obj_x) / (F1x - obj_x);
-            var r2LensY = obj_ty + r2t * (ly - obj_ty);
-            drawRay(ctx, obj_x, obj_ty, lx, r2LensY, T.ray2, false, 0.9);
-            midArrow(ctx, obj_x, obj_ty, lx, r2LensY, 0.5, T.ray2, 0.9);
-            // Exits parallel (horizontal)
-            var r2ex = extendRay(ctx, lx, r2LensY, 1, 0);
-            drawRay(ctx, lx, r2LensY, r2ex[0], r2LensY, T.ray2, false, 0.9);
-            midArrow(ctx, lx, r2LensY, r2ex[0], r2LensY, 0.5, T.ray2, 0.9);
-            drawRay(ctx, lx, r2LensY, img_x, r2LensY, T.virtualExt, true, 0.4);
+            if (isReal) {
+                drawRay(ctx, lx, lensY, img_x, lensY, T.ray2, false, 0.9);
+                midArrow(ctx, lx, lensY, img_x, lensY, 0.5, T.ray2, 0.9);
+            } else {
+                var r2ex = extendRay(ctx, lx, lensY, 1, 0);
+                drawRay(ctx, lx, lensY, r2ex[0], lensY, T.ray2, false, 0.9);
+                midArrow(ctx, lx, lensY, r2ex[0], lensY, 0.5, T.ray2, 0.9);
+                drawRay(ctx, lx, lensY, img_x, lensY, T.virtualExt, true, 0.4);
+            }
         }
     }
 }
