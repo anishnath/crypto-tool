@@ -142,12 +142,24 @@ export class CircuitCanvas {
 
   // ─── Touch (pinch zoom + two-finger pan) ───
 
+  // Callback: set by app.js to route single-touch to placement/selection
+  onSingleTouch = null;       // (type, x, y) => void — 'start'|'move'|'end'
+  touchMode = 'pan';          // 'pan' | 'draw' — set by app.js based on mode
+
   _onTouchStart(e) {
     e.preventDefault();
     this._touches = [...e.touches];
     if (e.touches.length === 1) {
       const rect = this.el.getBoundingClientRect();
-      this.startPan(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+      const tx = e.touches[0].clientX - rect.left;
+      const ty = e.touches[0].clientY - rect.top;
+      if (this.touchMode === 'draw' && this.onSingleTouch) {
+        // In draw mode: route to app for component placement
+        this.onSingleTouch('start', tx, ty);
+      } else {
+        // In select/pan mode: pan the canvas
+        this.startPan(tx, ty);
+      }
     } else if (e.touches.length === 2) {
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
@@ -162,6 +174,11 @@ export class CircuitCanvas {
 
   _onTouchMove(e) {
     e.preventDefault();
+    if (e.touches.length === 1 && this.touchMode === 'draw' && this.onSingleTouch) {
+      const rect = this.el.getBoundingClientRect();
+      this.onSingleTouch('move', e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+      return;
+    }
     if (e.touches.length === 2 && this._pinchDist > 0) {
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
@@ -182,6 +199,9 @@ export class CircuitCanvas {
   }
 
   _onTouchEnd(e) {
+    if (this.touchMode === 'draw' && this.onSingleTouch && e.touches.length === 0) {
+      this.onSingleTouch('end', 0, 0);
+    }
     this._touches = [...e.touches];
     if (e.touches.length === 0) {
       this._pinchDist = 0;

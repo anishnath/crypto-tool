@@ -159,6 +159,26 @@ export class CircuitApp {
     });
     canvasEl.addEventListener('dblclick', (e) => this._onDblClick(e));
 
+    // Long-press for context menu on mobile (replaces right-click)
+    let _longPressTimer = null;
+    canvasEl.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1 && this.mode === MODE.SELECT) {
+        _longPressTimer = setTimeout(() => {
+          const t = e.touches[0];
+          this._onRightClick({ offsetX: t.clientX, offsetY: t.clientY, clientX: t.clientX, clientY: t.clientY });
+        }, 600);
+      }
+    });
+    canvasEl.addEventListener('touchmove', () => { if (_longPressTimer) { clearTimeout(_longPressTimer); _longPressTimer = null; } });
+    canvasEl.addEventListener('touchend', () => { if (_longPressTimer) { clearTimeout(_longPressTimer); _longPressTimer = null; } });
+
+    // Touch → mouse routing for component placement
+    this.canvas.onSingleTouch = (type, x, y) => {
+      if (type === 'start') this._onMouseDown({ button: 0, offsetX: x, offsetY: y, altKey: false });
+      else if (type === 'move') this._onMouseMove({ offsetX: x, offsetY: y });
+      else if (type === 'end') this._onMouseUp({ button: 0 });
+    };
+
     // Keyboard
     document.addEventListener('keydown', (e) => this._onKey(e));
 
@@ -355,6 +375,7 @@ export class CircuitApp {
     this._dragStart = null;
     this._dragEnd = null;
     this.canvas.el.style.cursor = 'crosshair';
+    this.canvas.touchMode = 'draw';  // touch routes to placement
     this.menuBar.hideContextMenu();
   }
 
@@ -364,6 +385,7 @@ export class CircuitApp {
     this._dragStart = null;
     this._dragEnd = null;
     this.canvas.el.style.cursor = 'default';
+    this.canvas.touchMode = 'pan';   // touch routes to pan
   }
 
   // ─── Element creation ───
