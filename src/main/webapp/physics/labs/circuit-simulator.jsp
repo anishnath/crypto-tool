@@ -130,8 +130,9 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 .ckt-scope-splitter{position:absolute;top:-4px;left:0;right:0;height:8px;cursor:row-resize;z-index:10}
 
 /* Mobile floating component bar */
-.ckt-mobile-bar{display:none;position:absolute;bottom:60px;left:50%;transform:translateX(-50%);background:var(--ckt-panel);border:1px solid var(--ckt-border);border-radius:10px;padding:4px 6px;gap:2px;z-index:6100;box-shadow:0 4px 16px rgba(0,0,0,.3);flex-wrap:nowrap;overflow-x:auto;max-width:95vw}
-.ckt-mobile-bar button{width:36px;height:36px;border:1px solid var(--ckt-border);border-radius:6px;background:transparent;color:var(--ckt-text);font:bold 14px sans-serif;cursor:pointer;flex-shrink:0;transition:background .15s}
+/* Mobile component bar — vertical strip on left side of canvas */
+.ckt-mobile-bar{display:none;position:absolute;top:4px;left:4px;flex-direction:column;background:var(--ckt-panel);border:1px solid var(--ckt-border);border-radius:8px;padding:3px;gap:2px;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.25);overflow-y:auto;max-height:calc(100% - 8px)}
+.ckt-mobile-bar button{width:32px;height:32px;border:1px solid var(--ckt-border);border-radius:5px;background:transparent;color:var(--ckt-text);font:bold 13px sans-serif;cursor:pointer;flex-shrink:0;transition:background .15s}
 .ckt-mobile-bar button:active,.ckt-mobile-bar button.active{background:rgba(6,182,212,.2);border-color:var(--ckt-accent);color:var(--ckt-accent)}
 .ckt-mobile-bar button[data-cancel]{color:#ef4444;border-color:#ef4444}
 @media(max-width:768px){.ckt-mobile-bar{display:flex}}
