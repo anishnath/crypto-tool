@@ -435,6 +435,36 @@
         <priority>0.85</priority>
     </url>
     <url>
+        <loc>https://8gwifi.org/physics/labs/drop-mass.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/ramp.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/resonance.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/raft-cm.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/pulley.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
         <loc>https://8gwifi.org/physics/labs/collide-blocks.jsp</loc>
         <lastmod>2026-03-18</lastmod>
         <changefreq>monthly</changefreq>
@@ -454,6 +484,18 @@
     </url>
     <url>
         <loc>https://8gwifi.org/physics/labs/molecule.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/states-of-matter.jsp</loc>
+        <lastmod>2026-03-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/physics/labs/circuit-simulator.jsp</loc>
         <lastmod>2026-03-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.85</priority>

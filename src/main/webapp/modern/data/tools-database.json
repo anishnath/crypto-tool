@@ -1301,11 +1301,11 @@
       "description": "Fibonacci Sequence Generator - Free online mathematics tool"
     },
     {
-      "name": "Fibonacci Spiral",
+      "name": "Fibonacci Spiral Generator",
       "url": "fibonacci-spiral.jsp",
       "category": "Mathematics",
-      "keywords": "fibonacci spiral mathematics",
-      "description": "Fibonacci Spiral - Free online mathematics tool"
+      "keywords": "fibonacci spiral generator golden spiral fibonacci spiral calculator fibonacci spiral ascii fibonacci sequence spiral fibonacci spiral numbers fibonacci spiral online",
+      "description": "Fibonacci Spiral Generator - Golden spiral from Fibonacci tiling, Fibonacci numbers, phi ratio, PNG export"
     },
     {
       "name": "Graphing Calculator",
@@ -2222,6 +2222,41 @@
       "description": "Cart on spring track with pendulum. Coupled dynamics — pendulum swings push the cart."
     },
     {
+      "name": "Drop Mass Lab",
+      "url": "physics/labs/drop-mass.jsp",
+      "category": "Physics",
+      "keywords": "drop mass simulator free fall gravity drag terminal velocity",
+      "description": "Drop a mass under gravity and drag. Explore free fall, air resistance, and terminal speed."
+    },
+    {
+      "name": "Ramp: Forces & Motion",
+      "url": "physics/labs/ramp.jsp",
+      "category": "Physics",
+      "keywords": "ramp forces motion simulator incline friction normal force acceleration",
+      "description": "Interactive incline simulator. Adjust angle and friction to study net force and acceleration."
+    },
+    {
+      "name": "Resonance Lab",
+      "url": "physics/labs/resonance.jsp",
+      "category": "Physics",
+      "keywords": "resonance driven oscillator frequency response amplitude phase",
+      "description": "Drive an oscillator and sweep frequency to observe resonance peaks and phase response."
+    },
+    {
+      "name": "Center of Mass: Raft",
+      "url": "physics/labs/raft-cm.jsp",
+      "category": "Physics",
+      "keywords": "center of mass raft conservation momentum recoil system",
+      "description": "Center-of-mass raft simulation showing internal motion and system-level momentum behavior."
+    },
+    {
+      "name": "Inclined Plane Pulley",
+      "url": "physics/labs/pulley.jsp",
+      "category": "Physics",
+      "keywords": "inclined plane pulley tension friction dynamics connected masses",
+      "description": "Analyze connected masses with a pulley and incline. Study tension, friction, and acceleration."
+    },
+    {
       "name": "Colliding Blocks",
       "url": "physics/labs/collide-blocks.jsp",
       "category": "Physics",
@@ -2248,6 +2283,20 @@
       "category": "Physics",
       "keywords": "molecule simulator N-body spring network atom simulation molecular dynamics orbits",
       "description": "2-6 atoms connected by springs in 2D. Linear, nonlinear, and attract spring types."
+    },
+    {
+      "name": "States of Matter Lab",
+      "url": "physics/labs/states-of-matter.jsp",
+      "category": "Physics",
+      "keywords": "states of matter simulator solid liquid gas particle model temperature",
+      "description": "Particle-based simulation of solids, liquids, and gases with interactive temperature controls."
+    },
+    {
+      "name": "Circuit Simulator Lab",
+      "url": "physics/labs/circuit-simulator.jsp",
+      "category": "Physics",
+      "keywords": "circuit simulator voltage current resistance kirchhoff ohm law",
+      "description": "Build simple circuits and inspect voltage, current, and equivalent resistance in real time."
     },
     {
       "name": "Brachistochrone Race",
