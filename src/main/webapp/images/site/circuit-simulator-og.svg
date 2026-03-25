@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Grid dots -->
+  <g fill="#1e293b" opacity="0.6">
+    <pattern id="dots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+      <circle cx="15" cy="15" r="1.2" fill="#334155"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#dots)"/>
+  </g>
+
+  <!-- Circuit schematic (stylized) -->
+  <g transform="translate(120, 160)" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Wires (voltage colored) -->
+    <line x1="0" y1="80" x2="80" y2="80" stroke="#ef4444" stroke-width="3.5"/>
+    <line x1="200" y1="80" x2="280" y2="80" stroke="#22c55e" stroke-width="3.5"/>
+    <line x1="400" y1="80" x2="480" y2="80" stroke="#06b6d4" stroke-width="3.5"/>
+    <line x1="480" y1="80" x2="480" y2="240" stroke="#06b6d4" stroke-width="3.5"/>
+    <line x1="480" y1="240" x2="0" y2="240" stroke="#64748b" stroke-width="3.5"/>
+    <line x1="0" y1="240" x2="0" y2="80" stroke="#ef4444" stroke-width="3.5"/>
+
+    <!-- Voltage source (circle with +/-) -->
+    <circle cx="0" cy="160" r="28" fill="none" stroke="#e2e8f0" stroke-width="2.5"/>
+    <text x="0" y="150" text-anchor="middle" fill="#ef4444" font-size="20" font-weight="bold" font-family="sans-serif">+</text>
+    <text x="0" y="178" text-anchor="middle" fill="#3b82f6" font-size="20" font-weight="bold" font-family="sans-serif">−</text>
+    <text x="0" y="210" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="monospace">12V</text>
+
+    <!-- Resistor (zigzag) -->
+    <polyline points="80,80 95,65 110,95 125,65 140,95 155,65 170,95 185,80 200,80" fill="none" stroke="url(#accent)" stroke-width="3"/>
+    <text x="140" y="55" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="monospace">1kΩ</text>
+
+    <!-- Capacitor (two lines) -->
+    <line x1="280" y1="80" x2="330" y2="80" stroke="#22c55e" stroke-width="3.5"/>
+    <line x1="330" y1="55" x2="330" y2="105" stroke="#22c55e" stroke-width="3"/>
+    <line x1="345" y1="55" x2="345" y2="105" stroke="#06b6d4" stroke-width="3"/>
+    <line x1="345" y1="80" x2="400" y2="80" stroke="#06b6d4" stroke-width="3.5"/>
+    <text x="337" y="45" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="monospace">10μF</text>
+
+    <!-- Diode (triangle + bar) -->
+    <polygon points="400,60 400,100 440,80" fill="#8b5cf6" opacity="0.7"/>
+    <line x1="440" y1="58" x2="440" y2="102" stroke="#8b5cf6" stroke-width="3"/>
+
+    <!-- Current dots (animated feel) -->
+    <circle cx="50" cy="80" r="4" fill="#fbbf24"/>
+    <circle cx="120" cy="80" r="4" fill="#fbbf24" opacity="0.8"/>
+    <circle cx="240" cy="80" r="4" fill="#fbbf24" opacity="0.6"/>
+    <circle cx="370" cy="80" r="4" fill="#fbbf24" opacity="0.4"/>
+    <circle cx="480" cy="140" r="4" fill="#fbbf24" opacity="0.3"/>
+    <circle cx="350" cy="240" r="4" fill="#fbbf24" opacity="0.2"/>
+
+    <!-- Post dots -->
+    <circle cx="80" cy="80" r="5" fill="#06b6d4"/>
+    <circle cx="200" cy="80" r="5" fill="#06b6d4"/>
+    <circle cx="280" cy="80" r="5" fill="#06b6d4"/>
+    <circle cx="400" cy="80" r="5" fill="#06b6d4"/>
+    <circle cx="480" cy="80" r="5" fill="#06b6d4"/>
+
+    <!-- Ground symbol -->
+    <line x1="240" y1="240" x2="240" y2="260" stroke="#64748b" stroke-width="2.5"/>
+    <line x1="225" y1="260" x2="255" y2="260" stroke="#64748b" stroke-width="2.5"/>
+    <line x1="230" y1="267" x2="250" y2="267" stroke="#64748b" stroke-width="2"/>
+    <line x1="235" y1="274" x2="245" y2="274" stroke="#64748b" stroke-width="1.5"/>
+  </g>
+
+  <!-- Scope waveform (bottom-right area) -->
+  <g transform="translate(680, 200)">
+    <rect x="0" y="0" width="400" height="160" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <!-- Grid -->
+    <line x1="20" y1="80" x2="380" y2="80" stroke="#1e293b" stroke-width="0.8"/>
+    <line x1="200" y1="10" x2="200" y2="150" stroke="#1e293b" stroke-width="0.8"/>
+    <!-- Sine wave (voltage) -->
+    <path d="M20,80 C60,20 100,20 140,80 C180,140 220,140 260,80 C300,20 340,20 380,80" fill="none" stroke="#06b6d4" stroke-width="2.5"/>
+    <!-- Rectified wave (current) -->
+    <path d="M20,120 C40,60 60,60 80,120 L80,120 C100,60 120,60 140,120 L140,120 C160,60 180,60 200,120 L200,120 C220,60 240,60 260,120 L260,120 C280,60 300,60 320,120 L320,120 C340,60 360,60 380,120" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.7"/>
+    <!-- Labels -->
+    <text x="30" y="30" fill="#06b6d4" font-size="11" font-family="monospace">V(cap) = 4.23V</text>
+    <text x="30" y="148" fill="#f59e0b" font-size="11" font-family="monospace">I(R1) = 4.2mA</text>
+  </g>
+
+  <!-- Title text -->
+  <text x="720" y="440" text-anchor="middle" fill="#f8fafc" font-size="42" font-weight="700" font-family="'Segoe UI',system-ui,sans-serif">Circuit Simulator</text>
+  <text x="720" y="478" text-anchor="middle" fill="#94a3b8" font-size="18" font-family="'Segoe UI',system-ui,sans-serif">Draw circuits. See current flow. Analyze waveforms.</text>
+
+  <!-- Feature pills -->
+  <g transform="translate(720, 505)" text-anchor="middle">
+    <rect x="-280" y="-14" width="100" height="26" rx="13" fill="#06b6d4" opacity="0.15"/>
+    <text x="-230" y="4" fill="#06b6d4" font-size="12" font-weight="600" font-family="sans-serif">80+ Circuits</text>
+
+    <rect x="-160" y="-14" width="110" height="26" rx="13" fill="#8b5cf6" opacity="0.15"/>
+    <text x="-105" y="4" fill="#a78bfa" font-size="12" font-weight="600" font-family="sans-serif">37 Components</text>
+
+    <rect x="-30" y="-14" width="95" height="26" rx="13" fill="#22c55e" opacity="0.15"/>
+    <text x="17" y="4" fill="#22c55e" font-size="12" font-weight="600" font-family="sans-serif">Live Scope</text>
+
+    <rect x="85" y="-14" width="75" height="26" rx="13" fill="#f59e0b" opacity="0.15"/>
+    <text x="122" y="4" fill="#f59e0b" font-size="12" font-weight="600" font-family="sans-serif">Free</text>
+
+    <rect x="178" y="-14" width="100" height="26" rx="13" fill="#ef4444" opacity="0.15"/>
+    <text x="228" y="4" fill="#ef4444" font-size="12" font-weight="600" font-family="sans-serif">No Signup</text>
+  </g>
+
+  <!-- Brand -->
+  <text x="1160" y="600" text-anchor="end" fill="#475569" font-size="14" font-family="monospace">8gwifi.org</text>
+</svg>
