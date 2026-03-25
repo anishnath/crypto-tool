@@ -21,10 +21,12 @@ const LONG_PAUSE = Math.round(1200 / SPEED);
 const EXTRA_PAUSE = Math.round(2000 / SPEED);
 
 // ── Browser Launch ──────────────────────────────────────────
-async function launchRecorder(videoName) {
+async function launchRecorder(videoName, viewportOverride) {
     console.log('[launchRecorder] BASE_URL:', BASE_URL);
     const outputDir = path.join(__dirname, 'output');
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+
+    const vp = viewportOverride || VIEWPORT;
 
     const browser = await chromium.launch({
         headless: false,           // visible so we capture real rendering
@@ -32,10 +34,10 @@ async function launchRecorder(videoName) {
     });
 
     const context = await browser.newContext({
-        viewport: VIEWPORT,
+        viewport: vp,
         recordVideo: {
             dir: outputDir,
-            size: VIEWPORT
+            size: vp
         },
         // Disable "do you want to leave" prompts
         ignoreHTTPSErrors: true
