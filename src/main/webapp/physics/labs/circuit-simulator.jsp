@@ -129,6 +129,14 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 .ckt-scope-wrap canvas{display:block;width:100%;height:100%}
 .ckt-scope-splitter{position:absolute;top:-4px;left:0;right:0;height:8px;cursor:row-resize;z-index:10}
 
+/* Mobile floating component bar */
+.ckt-mobile-bar{display:none;position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:var(--ckt-panel);border:1px solid var(--ckt-border);border-radius:10px;padding:4px 6px;gap:2px;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.3);flex-wrap:nowrap;overflow-x:auto;max-width:95vw}
+.ckt-mobile-bar button{width:36px;height:36px;border:1px solid var(--ckt-border);border-radius:6px;background:transparent;color:var(--ckt-text);font:bold 14px sans-serif;cursor:pointer;flex-shrink:0;transition:background .15s}
+.ckt-mobile-bar button:active,.ckt-mobile-bar button.active{background:rgba(6,182,212,.2);border-color:var(--ckt-accent);color:var(--ckt-accent)}
+.ckt-mobile-bar button[data-cancel]{color:#ef4444;border-color:#ef4444}
+@media(max-width:768px){.ckt-mobile-bar{display:flex}}
+@media(min-width:769px){.ckt-mobile-bar{display:none !important}}
+
 /* Hint bar */
 .ckt-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:var(--ckt-muted);padding:4px 14px;border-radius:12px;font:12px 'DM Sans',sans-serif;pointer-events:none;transition:opacity .3s}
 
@@ -180,6 +188,19 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
     <div class="ckt-canvas-wrap">
       <canvas id="circuitCanvas"></canvas>
       <div class="ckt-hint" id="hint">Right-click or press a key (r, v, w, d...) to add components</div>
+      <!-- Mobile floating toolbar (quick component buttons) -->
+      <div class="ckt-mobile-bar" id="mobileBar">
+        <button data-type="wire" title="Wire">━</button>
+        <button data-type="resistor" title="Resistor">R</button>
+        <button data-type="capacitor" title="Capacitor">C</button>
+        <button data-type="dc-voltage" title="Voltage">V</button>
+        <button data-type="ground" title="Ground">⏚</button>
+        <button data-type="diode" title="Diode">▷</button>
+        <button data-type="led" title="LED">💡</button>
+        <button data-type="bjt-npn" title="NPN">T</button>
+        <button data-type="opamp" title="Op-Amp">△</button>
+        <button data-cancel title="Cancel">✕</button>
+      </div>
     </div>
     <div class="ckt-info" id="infoPanel">
       <div class="info-empty">Click an element to see its properties</div>
@@ -210,6 +231,25 @@ const app = new CircuitApp(document.getElementById('circuitApp'));
 const hint = document.getElementById('hint');
 const origAdd = app._startAdd.bind(app);
 app._startAdd = (type) => { hint.style.opacity = '0'; origAdd(type); };
+
+// Mobile component bar
+const mobileBar = document.getElementById('mobileBar');
+if (mobileBar) {
+  mobileBar.querySelectorAll('button[data-type]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Deactivate all, activate this one
+      mobileBar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      app._startAdd(btn.dataset.type);
+    });
+  });
+  mobileBar.querySelector('button[data-cancel]').addEventListener('click', (e) => {
+    e.stopPropagation();
+    mobileBar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    app._cancelAdd();
+  });
+}
 </script>
 
 <script>
