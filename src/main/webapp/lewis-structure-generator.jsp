@@ -4395,5 +4395,45 @@
         }
     });
 </script>
+<!-- Insert into Document (Math Editor integration) -->
+<button id="insertIntoDocBtn" style="display:none;position:fixed;bottom:20px;right:20px;z-index:9999;padding:10px 20px;background:#2563EB;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15);" title="Send to Math Editor">&#x2934; Insert into Document</button>
+<script>
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('returnTo') !== 'editor') return;
+    var btn = document.getElementById('insertIntoDocBtn');
+    if (!btn) return;
+    btn.style.display = '';
+
+    btn.addEventListener('click', function() {
+        if (!window.opener) { if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('No parent editor window found', 2000, 'error'); return; }
+
+        // Capture the Lewis structure canvas as PNG
+        var canvasEl = document.querySelector('#lewisCanvasContainer canvas');
+        if (!canvasEl) { if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Generate a Lewis structure first', 2000, 'warning'); return; }
+
+        var imageData = '';
+        try { imageData = canvasEl.toDataURL('image/png'); } catch(e) {}
+        if (!imageData) { if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Could not capture image', 2000, 'error'); return; }
+
+        // Get formula and geometry info
+        var formula = (document.getElementById('molecularFormula') || {}).value || '';
+        var geomEl = document.getElementById('geomLabel') || document.querySelector('.lewis-geometry-label');
+        var geometry = geomEl ? geomEl.textContent : '';
+
+        window.opener.postMessage({
+            type: 'molecule-insert',
+            svg: null,
+            imageDataUrl: imageData,
+            smiles: '',
+            formula: formula + (geometry ? ' \u2014 ' + geometry : ''),
+            weight: '',
+            name: 'Lewis Structure: ' + formula
+        }, '*');
+
+        if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Inserted into document', 1500);
+    });
+})();
+</script>
 </body>
 </html>
