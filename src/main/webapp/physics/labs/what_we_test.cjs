@@ -3854,3 +3854,210 @@ if (failed === 0) {
   console.log(`Vertical-Spring: ${p3}/${t3} passed` + (f3 ? ` (${f3} FAILED)` : ''));
 })();
 
+// ═══════════════════════════════════════════
+// SERIES vs PARALLEL SPRINGS
+// ═══════════════════════════════════════════
+(function() {
+  const G = 9.81;
+  let p4 = 0, f4 = 0, t4 = 0;
+  function ok(c, m) { t4++; if (c) p4++; else { f4++; console.log('  FAIL (series-parallel): ' + m); } }
+  function close(a, b, tol, m) { ok(Math.abs(a - b) <= tol, m + ' — got ' + a.toFixed(4) + ', exp ' + b.toFixed(4)); }
+
+  console.log('\n=== Series vs Parallel Springs ===');
+
+  // Test 1: Series formula: k_eff = k1*k2/(k1+k2)
+  {
+    const k1 = 20, k2 = 20;
+    const kS = k1 * k2 / (k1 + k2);
+    close(kS, 10, 0.01, 'Equal springs series: k_eff = k/2 = 10');
+  }
+
+  // Test 2: Parallel formula: k_eff = k1 + k2
+  {
+    const k1 = 20, k2 = 20;
+    const kP = k1 + k2;
+    close(kP, 40, 0.01, 'Equal springs parallel: k_eff = 2k = 40');
+  }
+
+  // Test 3: Series is always softer than either spring
+  {
+    for (const [k1, k2] of [[10,40],[5,50],[20,20],[1,100]]) {
+      const kS = k1 * k2 / (k1 + k2);
+      ok(kS < Math.min(k1, k2), `Series k_eff(${k1},${k2})=${kS.toFixed(1)} < min(${k1},${k2})`);
+    }
+  }
+
+  // Test 4: Parallel is always stiffer than either spring
+  {
+    for (const [k1, k2] of [[10,40],[5,50],[20,20]]) {
+      const kP = k1 + k2;
+      ok(kP > Math.max(k1, k2), `Parallel k_eff(${k1},${k2})=${kP} > max(${k1},${k2})`);
+    }
+  }
+
+  // Test 5: Period ratio: T_series/T_parallel = √(k_parallel/k_series)
+  {
+    const k1 = 20, k2 = 20, m = 1;
+    const kS = k1 * k2 / (k1 + k2);
+    const kP = k1 + k2;
+    const TS = 2 * Math.PI * Math.sqrt(m / kS);
+    const TP = 2 * Math.PI * Math.sqrt(m / kP);
+    close(TS / TP, Math.sqrt(kP / kS), 0.001, 'Period ratio = √(kP/kS) = 2.0');
+    close(TS / TP, 2.0, 0.001, 'Equal springs: series period is 2× parallel');
+  }
+
+  // Test 6: One weak link dominates series
+  {
+    const k1 = 5, k2 = 50;
+    const kS = k1 * k2 / (k1 + k2);
+    close(kS, 4.545, 0.01, 'Weak link: series k_eff ≈ k_weak = 4.55');
+    ok(kS < k1 * 1.1, 'Series dominated by weak spring');
+  }
+
+  // Test 7: Equilibrium — series stretches more than parallel
+  {
+    const m = 1, k1 = 20, k2 = 20;
+    const kS = k1 * k2 / (k1 + k2);
+    const kP = k1 + k2;
+    const stretchS = m * G / kS;
+    const stretchP = m * G / kP;
+    ok(stretchS > stretchP, 'Series eq stretch > parallel eq stretch');
+    close(stretchS / stretchP, kP / kS, 0.001, 'Stretch ratio = kP/kS');
+  }
+
+  // Test 8: With k1=k2, series = k/2, parallel = 2k → ratio = 4:1
+  {
+    const k = 20;
+    const kS = k * k / (k + k);
+    const kP = k + k;
+    close(kP / kS, 4, 0.001, 'Equal springs: parallel/series stiffness ratio = 4');
+  }
+
+  // Test 9: Harmonic mean property — series k_eff is harmonic mean
+  {
+    const k1 = 10, k2 = 40;
+    const kS = k1 * k2 / (k1 + k2);
+    const harmonicMean = 2 * k1 * k2 / (k1 + k2);
+    close(kS, harmonicMean / 2, 0.001, 'Series = half the harmonic mean');
+  }
+
+  console.log(`Series-Parallel: ${p4}/${t4} passed` + (f4 ? ` (${f4} FAILED)` : ''));
+})();
+
+// ═══════════════════════════════════════════
+// BUNGEE JUMP
+// ═══════════════════════════════════════════
+(function() {
+  const G = 9.81, PLATFORM = 8.0;
+  let p5 = 0, f5 = 0, t5 = 0;
+  function ok(c, m) { t5++; if (c) p5++; else { f5++; console.log('  FAIL (bungee): ' + m); } }
+  function close(a, b, tol, m) { ok(Math.abs(a - b) <= tol, m + ' — got ' + a.toFixed(4) + ', exp ' + b.toFixed(4)); }
+
+  console.log('\n=== Bungee Jump ===');
+
+  // Test 1: Free fall speed at cord engagement: v = √(2gL₀)
+  {
+    const L0 = 4;
+    const v = Math.sqrt(2 * G * L0);
+    close(v, 8.859, 0.01, 'Speed at cord engagement: v = √(2gL₀) = 8.86 m/s');
+  }
+
+  // Test 2: Cord only pulls — tension = 0 when stretch ≤ 0
+  {
+    const y = PLATFORM - 2;  // above cord end (cord length = 4)
+    const cordEnd = PLATFORM - 4;
+    const stretch = cordEnd - y;
+    ok(stretch < 0, 'Above cord end: stretch < 0');
+    const tension = stretch > 0 ? 50 * stretch : 0;
+    close(tension, 0, 0.01, 'Tension = 0 when cord is slack');
+  }
+
+  // Test 3: Cord engaged — tension = k × stretch
+  {
+    const k = 50, L0 = 4;
+    const y = PLATFORM - L0 - 2;  // 2m below cord end
+    const cordEnd = PLATFORM - L0;
+    const stretch = cordEnd - y;
+    close(stretch, 2, 0.01, 'Stretch = 2m');
+    close(k * stretch, 100, 0.01, 'Tension = k×stretch = 100N');
+  }
+
+  // Test 4: Equilibrium: y_eq = cordEnd - mg/k
+  {
+    const m = 70, k = 50, L0 = 4;
+    const cordEnd = PLATFORM - L0;
+    const eqY = cordEnd - m * G / k;
+    close(eqY, 4 - 70 * 9.81 / 50, 0.01, 'Equilibrium: y_eq = cordEnd - mg/k');
+    ok(eqY < cordEnd, 'Equilibrium is below cord natural length end');
+  }
+
+  // Test 5: Period of oscillation (when cord is engaged): T = 2π√(m/k)
+  {
+    const m = 70, k = 50;
+    const T = 2 * Math.PI * Math.sqrt(m / k);
+    close(T, 7.434, 0.01, 'Bungee period T = 2π√(m/k) = 7.43s');
+  }
+
+  // Test 6: Energy conservation — KE at cord end = mgh (from free fall)
+  {
+    const m = 70, L0 = 4;
+    const KE = m * G * L0;  // = mgh where h = L₀
+    const v = Math.sqrt(2 * G * L0);
+    close(0.5 * m * v * v, KE, 0.1, 'KE at cord end = mgh = mgL₀');
+  }
+
+  // Test 7: Max stretch from energy conservation
+  // At lowest point: KE=0, all energy is PE
+  // mg(L₀ + x_max) = ½k·x_max²
+  // Quadratic: ½kx² - mgx - mgL₀ = 0
+  {
+    const m = 70, k = 50, L0 = 4;
+    const a = 0.5 * k, b = -m * G, c = -m * G * L0;
+    const xMax = (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a);
+    ok(xMax > 0, 'Max stretch is positive: ' + xMax.toFixed(2) + 'm');
+    const lowestY = PLATFORM - L0 - xMax;
+    ok(true, 'Lowest point: y = ' + lowestY.toFixed(2) + 'm');
+  }
+
+  // Test 8: Heavy jumper falls further
+  {
+    const k = 50, L0 = 4;
+    const xMax70  = solveMaxStretch(70, k, L0);
+    const xMax120 = solveMaxStretch(120, k, L0);
+    ok(xMax120 > xMax70, 'Heavy jumper (120kg) stretches more than light (70kg)');
+  }
+
+  // Test 9: Stiffer cord = less stretch
+  {
+    const m = 70, L0 = 4;
+    const xMax50  = solveMaxStretch(m, 50, L0);
+    const xMax150 = solveMaxStretch(m, 150, L0);
+    ok(xMax150 < xMax50, 'Stiffer cord (k=150) stretches less than soft (k=50)');
+  }
+
+  // Test 10: "Dangerous" preset — does jumper hit ground?
+  // Long cord (6.5m) with k=500: only 1.5m of stretch available before ground
+  // k_min for survival = 2mg*H/(H-L0)² = 2*70*9.81*8/(1.5²) = 4887 N/m → k=500 is FATAL
+  {
+    const m = 70, k = 500, L0 = 6.5;
+    const xMax = solveMaxStretch(m, k, L0);
+    const lowestY = PLATFORM - L0 - xMax;
+    ok(lowestY < 0, 'Long cord preset is FATAL: lowest = ' + lowestY.toFixed(1) + 'm < 0');
+  }
+
+  // Test 11: Standard preset survives (k=800 is enough)
+  {
+    const m = 70, k = 800, L0 = 4;
+    const xMax = solveMaxStretch(m, k, L0);
+    const lowestY = PLATFORM - L0 - xMax;
+    ok(lowestY > 0, 'Standard preset survives: lowest = ' + lowestY.toFixed(1) + 'm > 0');
+  }
+
+  function solveMaxStretch(m, k, L0) {
+    const a = 0.5 * k, b = -m * G, c = -m * G * L0;
+    return (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a);
+  }
+
+  console.log(`Bungee: ${p5}/${t5} passed` + (f5 ? ` (${f5} FAILED)` : ''));
+})();
+

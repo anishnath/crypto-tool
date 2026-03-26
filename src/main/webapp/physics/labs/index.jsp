@@ -342,6 +342,17 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
       </div>
     </a>
 
+    <a href="bungee.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#22C55E,#EF4444);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="4" y1="3" x2="20" y2="3" stroke-width="3"/><line x1="12" y1="3" x2="12" y2="10" stroke-dasharray="2 1"/><circle cx="12" cy="12" r="2" fill="#22C55E"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="18" x2="14" y2="18"/><line x1="4" y1="22" x2="20" y2="22" stroke="#EF4444"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Bungee Jump</h3>
+        <p>Drop a mass onto an oscillator — inelastic collision</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
     <a href="pulley-scale.jsp" class="lab-card">
       <div class="lab-card-icon" style="background:linear-gradient(135deg,#06B6D4,#8B5CF6);">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="4" y1="4" x2="20" y2="4"/><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><line x1="6" y1="6" x2="6" y2="16"/><line x1="18" y1="6" x2="18" y2="16"/><rect x="3" y="16" width="6" height="4" rx="1" fill="#8B5CF6" stroke="none"/><rect x="15" y="16" width="6" height="4" rx="1" fill="#22C55E" stroke="none"/><rect x="9" y="2.5" width="6" height="3" rx="1" fill="#06B6D4" stroke="none"/></svg>
