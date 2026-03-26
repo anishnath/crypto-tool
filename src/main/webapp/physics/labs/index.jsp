@@ -6,16 +6,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Physics Labs — 32 Interactive Simulations" />
+    <jsp:param name="toolName" value="Physics Labs — 33 Interactive Simulations" />
     <jsp:param name="toolCategory" value="Physics" />
-    <jsp:param name="toolDescription" value="32 free interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations. All run in your browser with no signup required." />
+    <jsp:param name="toolDescription" value="33 free interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations. All run in your browser with no signup required." />
     <jsp:param name="toolUrl" value="physics/labs/" />
     <jsp:param name="toolKeywords" value="physics simulations, interactive physics, pendulum simulator, spring oscillator, chaos theory, billiards physics, wave equation, Newton's cradle, molecular dynamics, brachistochrone" />
     <jsp:param name="toolImage" value="logo.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="physics/" />
-    <jsp:param name="toolFeatures" value="32 interactive simulations,Drag-and-drop physics,Real-time graphs and energy plots,Phase space visualization,Direction field overlays,Export CSV data for lab reports,Screenshot sim and graph,Dark and light themes,No signup required,100% client-side" />
+    <jsp:param name="toolFeatures" value="33 interactive simulations,Drag-and-drop physics,Real-time graphs and energy plots,Phase space visualization,Direction field overlays,Export CSV data for lab reports,Screenshot sim and graph,Dark and light themes,No signup required,100% client-side" />
     <jsp:param name="faq1q" value="Are these physics simulations free?" />
-    <jsp:param name="faq1a" value="Yes all 32 simulations are completely free. No registration no payment no limits. They run entirely in your browser using JavaScript. Your data never leaves your device." />
+    <jsp:param name="faq1a" value="Yes all 33 simulations are completely free. No registration no payment no limits. They run entirely in your browser using JavaScript. Your data never leaves your device." />
     <jsp:param name="faq2q" value="Can I use these for homework and lab reports?" />
     <jsp:param name="faq2a" value="Yes. Every simulation has Export CSV to download data for Excel or Google Sheets and Screenshot to capture the sim and graphs as PNG for lab reports. You can also share specific configurations via URL." />
 </jsp:include>
@@ -32,11 +32,11 @@
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "Physics Labs",
-  "description": "32 free interactive physics simulations",
+  "description": "33 free interactive physics simulations",
   "url": "https://8gwifi.org/physics/labs/",
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 32,
+    "numberOfItems": 33,
     "itemListElement": [
       {"@type":"ListItem","position":1,"name":"Simple Pendulum","url":"https://8gwifi.org/physics/labs/pendulum.jsp"},
       {"@type":"ListItem","position":2,"name":"Spring Oscillator","url":"https://8gwifi.org/physics/labs/spring.jsp"},
@@ -69,7 +69,8 @@
       {"@type":"ListItem","position":29,"name":"Ray Optics Simulator","url":"https://8gwifi.org/physics/ray-optics-simulator.jsp"},
       {"@type":"ListItem","position":30,"name":"Center of Mass: Raft","url":"https://8gwifi.org/physics/labs/raft-cm.jsp"},
       {"@type":"ListItem","position":31,"name":"Inclined Plane Pulley","url":"https://8gwifi.org/physics/labs/pulley.jsp"},
-      {"@type":"ListItem","position":32,"name":"Car Suspension","url":"https://8gwifi.org/physics/labs/car-suspension.jsp"}
+      {"@type":"ListItem","position":32,"name":"Car Suspension","url":"https://8gwifi.org/physics/labs/car-suspension.jsp"},
+      {"@type":"ListItem","position":33,"name":"Bullet–Block–Spring","url":"https://8gwifi.org/physics/labs/bullet-block.jsp"}
     ]
   }
 }
@@ -351,6 +352,17 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
       <div class="lab-card-body">
         <h3>Drop Mass</h3>
         <p>Drop a mass onto an oscillator — inelastic collision</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
+    <a href="bullet-block.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#EF4444,#F59E0B);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="1" y="9" width="3" height="6" fill="#475569" stroke="none"/><line x1="4" y1="12" x2="8" y2="12" stroke-dasharray="1.5 1" stroke="#06B6D4"/><rect x="10" y="8" width="6" height="8" rx="1" fill="#8B5CF6" stroke="none"/><circle cx="20" cy="12" r="1.5" fill="#EF4444" stroke="none"/><line x1="18" y1="12" x2="16" y2="12" stroke="#EF4444" stroke-width="1.5"/><line x1="22" y1="12" x2="20" y2="12" stroke="#EF4444" stroke-dasharray="1 1"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Bullet–Block–Spring</h3>
+        <p>99% of bullet energy lost — where did it go?</p>
         <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
       </div>
     </a>
