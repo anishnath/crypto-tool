@@ -309,6 +309,17 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
       </div>
     </a>
 
+    <a href="series-parallel-springs.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#F59E0B,#22C55E);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="4" y1="2" x2="4" y2="6"/><polyline points="2,6 4,9 6,6 4,9 2,12"/><polyline points="2,12 4,15 6,12 4,15 2,18"/><rect x="2" y="18" width="4" height="3" rx="1" fill="#F59E0B" stroke="none"/><line x1="16" y1="2" x2="16" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/><polyline points="14,4 14,8 14,12" stroke-width="1.5"/><polyline points="18,4 18,8 18,12" stroke-width="1.5"/><rect x="13" y="12" width="6" height="3" rx="1" fill="#22C55E" stroke="none"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Series vs Parallel</h3>
+        <p>Compare spring combinations side by side</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
     <a href="double-spring.jsp" class="lab-card">
       <div class="lab-card-icon" style="background:linear-gradient(135deg,#10B981,#059669);">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="1" y="10" width="3" height="4" fill="#475569" stroke="none"/><polyline points="4,12 7,10 10,14 13,10"/><rect x="13" y="9" width="4" height="6" rx="1" fill="#10B981" stroke="none"/><polyline points="17,12 19,10 21,14"/><rect x="21" y="9" width="3" height="6" rx="1" fill="#06B6D4" stroke="none"/></svg>
