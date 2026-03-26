@@ -203,6 +203,7 @@
                         <button type="button" class="ic-example-chip" data-expr="sec(x)^2">sec&sup2;(x)</button>
                         <button type="button" class="ic-example-chip" data-expr="x*e^(-x)">x&middot;e^(-x)</button>
                         <button type="button" class="ic-example-chip" data-expr="1/sqrt(1-x^2)">1/&radic;(1-x&sup2;)</button>
+                        <button type="button" class="ic-example-chip" data-expr="Sum(x^n, (n, 2, oo)), (x, 0, 1/2)" title="SymPy Sum: integral of sum x^n (n=2 to infinity) from 0 to 1/2 — MIT Integration Bee style">&Sigma; x<sup>n</sup> [0,&frac12;]</button>
                     </div>
                 </div>
 

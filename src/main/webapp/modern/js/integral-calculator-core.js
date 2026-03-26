@@ -37,6 +37,8 @@ function normalizeExpr(expr) {
     /* arcsin → asin, arccos → acos, arctan → atan, arccot → acot, arcsec → asec, arccsc → acsc */
     s = s.replace(/\barc(sin|cos|tan|cot|sec|csc)\b/g, 'a$1');
     var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt';
+    /* sin^2025(x) → sin(x)^2025 — otherwise nerdamer reads sin^2025(x) as sin^2025*x (wrong). */
+    s = s.replace(new RegExp('\\b(' + FUNS + ')\\^([0-9]+)\\(([^)]+)\\)', 'g'), '$1($3)^$2');
     /* Lookahead: operator, close-paren, whitespace, comma, end-of-string,
        OR the start of another known function name (handles sinxcosx). */
     var LA = '(?=[+\\-*/^)\\s,]|$|(?:' + FUNS + '))';
@@ -54,6 +56,10 @@ function normalizeExpr(expr) {
     s = s.replace(new RegExp('([b-zB-Z])(' + FUNS + ')\\(', 'g'), '$1*$2(');
     /* Also handle digit prefix: 2sqrt(x) → 2*sqrt(x), 2sin(x) → 2*sin(x) */
     s = s.replace(new RegExp('(\\d)(' + FUNS + ')\\(', 'g'), '$1*$2(');
+    /* )cos( or )cos^2026( → )*cos…  (e.g. sin^2(x)cos^3(x)). Plain )cos( has no ^; Bee-style adds ^n before (. */
+    s = s.replace(new RegExp('\\)(' + FUNS + ')(\\^[0-9]+)?\\(', 'g'), ')*$1$2(');
+    /* 2025cos^2026 → 2025*cos^2026 after sin(x)^2025cos(x)^2026 (before generic digit·letter). */
+    s = s.replace(new RegExp('(\\d)(' + FUNS + ')(\\^)', 'g'), '$1*$2$3');
     /* Implicit multiplication: 3x → 3*x, 2y → 2*y (digit followed by variable).
        Function names (sin, cos, ...) already handled above with parens inserted. */
     s = s.replace(/(\d)([a-zA-Z])/g, '$1*$2');

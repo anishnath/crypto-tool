@@ -122,6 +122,12 @@ function testNormalize(input, expected) {
     eq(out, expected, 'normalize("' + input + '") → "' + expected + '"');
 }
 
+/** Same as testNormalize but message starts with a label (e.g. MIT Bee problem id). */
+function testNormalizeLabel(label, input, expected) {
+    const out = normalizeExpr(input);
+    eq(out, expected, label + ': normalize("' + input + '") → "' + expected + '"');
+}
+
 function testNonElementary(input, v, shouldDetect) {
     const r = checkNonElementaryIntegral(input, v);
     const detected = !!r;
@@ -198,6 +204,29 @@ testNormalize('arcsin(x)', 'asin(x)');
 testNormalize('arccos(x)', 'acos(x)');
 testNormalize('arctan(x)', 'atan(x)');
 testNormalize('arctan(x)/(x*(1+x^2))', 'atan(x)/(x*(1+x^2))');
+
+// MIT Integration Bee 2026 qualifying (PDF) — normalize only; solving is separate.
+// PASS (below): stable normalize for preview/parse.
+// REVIEW / not one-line UI: #4 nested abs×2026, #8 Σ x^n/n!, #12 infinite nested √, #15 long ⌊⌈·⌉⌋ expression.
+console.log('\n--- normalizeExpr: MIT Bee 2026 qualifying (entry-safe) ---');
+testNormalizeLabel('MIT Bee #1 (explicit *)', 'sin^2025(x)*cos^2026(x)', 'sin(x)^2025*cos(x)^2026');
+testNormalizeLabel('MIT Bee #1 (chained)', 'sin^2025(x)cos^2026(x)', 'sin(x)^2025*cos(x)^2026');
+testNormalizeLabel('MIT Bee #2', 'e^(2026*e^x+x)', 'e^(2026*e^x+x)');
+testNormalizeLabel('MIT Bee #3', 'mod(floor(x)/3,1)', 'mod(floor(x)/3,1)');
+testNormalizeLabel('MIT Bee #5', '1/(sqrt(x+1)-sqrt(x-1))', '1/(sqrt(x+1)-sqrt(x-1))');
+testNormalizeLabel('MIT Bee #6', 'sqrt(1+cosh(x))', 'sqrt(1+cosh(x))');
+testNormalizeLabel('MIT Bee #7a', '2^log(x)/x^2', '2^log(x)/x^2');
+testNormalizeLabel('MIT Bee #7b', '2*log(x)/x^2', '2*log(x)/x^2');
+testNormalizeLabel('MIT Bee #9', 'x^2*sin(x)', 'x^2*sin(x)');
+testNormalizeLabel('MIT Bee #10', '(x-1)^2/(2*e^x+x^2+1)', '(x-1)^2/(2*e^x+x^2+1)');
+testNormalizeLabel('MIT Bee #11', 'max(0,sqrt(1-x^2)-1/2)', 'max(0,sqrt(1-x^2)-1/2)');
+testNormalizeLabel('MIT Bee #13', 'cos(x)^5-10*cos(x)^3*sin(x)^2+5*cos(x)*sin(x)^4', 'cos(x)^5-10*cos(x)^3*sin(x)^2+5*cos(x)*sin(x)^4');
+testNormalizeLabel('MIT Bee #14', 'atan(sqrt(x))', 'atan(sqrt(x))');
+testNormalizeLabel('MIT Bee #16', 'sqrt(cos(x)*cot(x)*csc(x)/(sin(x)*tan(x)*sec(x)))', 'sqrt(cos(x)*cot(x)*csc(x)/(sin(x)*tan(x)*sec(x)))');
+testNormalizeLabel('MIT Bee #17', 'e^(-x^2)/(1+e^(2*x))', 'e^(-x^2)/(1+e^(2*x))');
+testNormalizeLabel('MIT Bee #18', 'sin(x)^2/x^2-sin(2*x)/x', 'sin(x)^2/x^2-sin(2*x)/x');
+testNormalizeLabel('MIT Bee #19', 'log(log(x))*log(log(log(x)))/(x*log(x))', 'log(log(x))*log(log(log(x)))/(x*log(x))');
+testNormalizeLabel('MIT Bee #20', 'cos(pi/2*cos(pi/2*cos(x)^2)^2)^2', 'cos(pi/2*cos(pi/2*cos(x)^2)^2)^2');
 
 // 2. Non-elementary detection
 console.log('\n--- checkNonElementaryIntegral ---');
@@ -409,7 +438,76 @@ testDefinite('\u222b\u2080\u03c0 sin(x) dx', 'sin(x)', 0, '\u03c0', 2);  // ∫�
 // --- exprToLatex: nested fraction cleanup ---
 console.log('\n--- exprToLatex: nested fraction cleanup ---');
 
+function boundToLatex(s) {
+    return String(s)
+        .replace(/\u221e/g, '\\infty')
+        .replace(/\u03c0/g, '\\pi')
+        .replace(/\u2212/g, '-')
+        .replace(/\u2080/g, '0').replace(/\u2081/g, '1')
+        .replace(/\u2082/g, '2').replace(/\u2083/g, '3')
+        .replace(/\u2084/g, '4').replace(/\u2085/g, '5')
+        .replace(/\u2086/g, '6').replace(/\u2087/g, '7')
+        .replace(/\u2088/g, '8').replace(/\u2089/g, '9')
+        .replace(/\binfinity\b/gi, '\\infty')
+        .replace(/\bInfinity\b/g, '\\infty')
+        .replace(/\binf\b/gi, '\\infty')
+        .replace(/\boo\b/g, '\\infty')
+        .replace(/\bpi\b/gi, '\\pi');
+}
+
+/** SymPy-style Sum(term, (idx, lo, hi)); whole expression only (mirrors integral-calculator.js). */
+function parseSympySum(expr) {
+    if (!expr || typeof expr !== 'string') return null;
+    var s = expr.replace(/\s+/g, ' ').trim();
+    if (!/^Sum\s*\(/i.test(s)) return null;
+    var open = s.indexOf('(');
+    if (open < 0) return null;
+    var p = open + 1;
+    var depth = 1;
+    var j = p;
+    var sep = -1;
+    while (j < s.length) {
+        var c = s[j];
+        if (c === '(') depth++;
+        else if (c === ')') {
+            depth--;
+            if (depth === 0) return null;
+        } else if (c === ',' && depth === 1) {
+            sep = j;
+            break;
+        }
+        j++;
+    }
+    if (sep < 0) return null;
+    var term = s.slice(p, sep).trim();
+    var rest = s.slice(sep + 1).trim();
+    if (rest[0] !== '(') return null;
+    var tdepth = 0;
+    var ti;
+    for (ti = 0; ti < rest.length; ti++) {
+        if (rest[ti] === '(') tdepth++;
+        else if (rest[ti] === ')') {
+            tdepth--;
+            if (tdepth === 0) break;
+        }
+    }
+    if (tdepth !== 0 || ti >= rest.length) return null;
+    var tupleInner = rest.slice(1, ti).trim();
+    var afterTuple = rest.slice(ti + 1).trim();
+    if (afterTuple !== ')') return null;
+    var parts = tupleInner.split(',').map(function(x) { return x.trim(); });
+    if (parts.length !== 3) return null;
+    return { term: term, idx: parts[0], lo: parts[1], hi: parts[2] };
+}
+
 function exprToLatex(expr) {
+    var sumParsed = parseSympySum(expr);
+    if (sumParsed) {
+        var termTex = exprToLatex(sumParsed.term);
+        var loTex = boundToLatex(sumParsed.lo);
+        var hiTex = boundToLatex(sumParsed.hi);
+        return '\\sum_{' + sumParsed.idx + '=' + loTex + '}^{' + hiTex + '} \\left(' + termTex + '\\right)';
+    }
     var parsed = nerdamer(expr);
     var tex = parsed.toTeX();
     tex = tex.replace(/\\frac\{1\}\{([a-zA-Z])\^\{([^{}]+(?:\{[^{}]*\}[^{}]*)*)\}\}/g, function(m, v, exp, off) {
@@ -463,6 +561,10 @@ eq(exprToLatex('sin(x)/x'), '\\frac{\\mathrm{sin}\\left(x\\right)}{x}',
     'exprToLatex("sin(x)/x") untouched');
 eq(exprToLatex('x^2+1'), 'x^{2}+1',
     'exprToLatex("x^2+1") no frac at all');
+
+// SymPy Sum → KaTeX (MIT Bee #8 style)
+eq(exprToLatex('Sum(x^n, (n, 2, oo))'), '\\sum_{n=2}^{\\infty} \\left(x^{n}\\right)',
+    'exprToLatex SymPy Sum(x^n, (n, 2, oo))');
 
 // --- King's Property detection ---
 console.log("\n--- King's Property (symmetry) detection ---");

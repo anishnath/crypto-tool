@@ -240,7 +240,7 @@
         /** Convert nerdamer-style expr to Python/SymPy (e.g. e^x -> exp(x), ^ -> **) */
         function nerdamerToPython(expr) {
             // Known single-token functions — protect "sin(" so implicit-mul pass does not turn it into "sin*("
-            var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|frac';
+            var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|frac|Sum';
             var py = (expr || '')
                 // e^func(args) → exp(func(args)):  e^sqrt(x+2) → exp(sqrt(x+2))
                 .replace(/e\^([a-zA-Z_]+\([^)]*\))/g, 'exp($1)')
@@ -249,6 +249,8 @@
                 .replace(/\^/g, '**')
                 // Convert integer fractions in exponents to Rational: **(3/2) → **(Rational(3,2))
                 .replace(/\*\*\((\d+)\/(\d+)\)/g, '**(Rational($1,$2))')
+                // normalizeExpr may turn ∞ into Infinity; SymPy expects oo
+                .replace(/\bInfinity\b/g, 'oo')
                 // Insert * between digit and variable: 3x → 3*x, 2pi → 2*pi
                 .replace(/(\d)([a-zA-Z])/g, '$1*$2');
             py = py.replace(new RegExp('\\b(' + FUNS + ')\\(', 'gi'), '\uE000$1\uE001(');
@@ -264,7 +266,8 @@
 
         /** Extract symbols in pyExpr that are not the integration variable. */
         function getExtraSymbols(pyExpr, v) {
-            var KNOWN = ['exp','log','sin','cos','tan','sec','csc','cot','sinh','cosh','tanh','coth','csch','sech','sqrt','asin','acos','atan','pi'];
+            var KNOWN = ['exp','log','sin','cos','tan','sec','csc','cot','sinh','cosh','tanh','coth','csch','sech','sqrt','asin','acos','atan','pi',
+                'Sum', 'Product', 'Integral', 'oo', 'Rational', 'Mod', 'Max', 'Min', 'Abs', 're', 'im', 'gamma', 'factorial'];
             var seen = {};
             var re = /\b([a-z][a-z]*)\b/g;
             var m;
@@ -450,7 +453,61 @@
         lowerInput.addEventListener('input', function() { clearTimeout(previewTimer); previewTimer = setTimeout(updatePreview, 200); });
         upperInput.addEventListener('input', function() { clearTimeout(previewTimer); previewTimer = setTimeout(updatePreview, 200); });
 
+        /** SymPy-style Sum(term, (idx, lo, hi)); returns null if not a whole-expression Sum. */
+        function parseSympySum(expr) {
+            if (!expr || typeof expr !== 'string') return null;
+            var s = expr.replace(/\s+/g, ' ').trim();
+            if (!/^Sum\s*\(/i.test(s)) return null;
+            var open = s.indexOf('(');
+            if (open < 0) return null;
+            var p = open + 1;
+            var depth = 1;
+            var j = p;
+            var sep = -1;
+            while (j < s.length) {
+                var c = s[j];
+                if (c === '(') depth++;
+                else if (c === ')') {
+                    depth--;
+                    if (depth === 0) return null;
+                } else if (c === ',' && depth === 1) {
+                    sep = j;
+                    break;
+                }
+                j++;
+            }
+            if (sep < 0) return null;
+            var term = s.slice(p, sep).trim();
+            var rest = s.slice(sep + 1).trim();
+            if (rest[0] !== '(') return null;
+            var tdepth = 0;
+            var ti;
+            for (ti = 0; ti < rest.length; ti++) {
+                if (rest[ti] === '(') tdepth++;
+                else if (rest[ti] === ')') {
+                    tdepth--;
+                    if (tdepth === 0) break;
+                }
+            }
+            if (tdepth !== 0 || ti >= rest.length) return null;
+            var tupleInner = rest.slice(1, ti).trim();
+            var afterTuple = rest.slice(ti + 1).trim();
+            if (afterTuple !== ')') return null;
+            var parts = tupleInner.split(',').map(function(x) { return x.trim(); });
+            if (parts.length !== 3) return null;
+            return { term: term, idx: parts[0], lo: parts[1], hi: parts[2] };
+        }
+
         function exprToLatex(expr) {
+            var sumParsed = parseSympySum(expr);
+            if (sumParsed) {
+                try {
+                    var termTex = exprToLatex(sumParsed.term);
+                    var loTex = boundToLatex(sumParsed.lo);
+                    var hiTex = boundToLatex(sumParsed.hi);
+                    return '\\sum_{' + sumParsed.idx + '=' + loTex + '}^{' + hiTex + '} \\left(' + termTex + '\\right)';
+                } catch (eSum) { /* fall through to nerdamer */ }
+            }
             try {
                 var parsed = nerdamer(expr);
                 var tex = parsed.toTeX();
@@ -489,6 +546,7 @@
                 .replace(/\u2086/g, '6').replace(/\u2087/g, '7')    // ₆ ₇
                 .replace(/\u2088/g, '8').replace(/\u2089/g, '9')    // ₈ ₉
                 .replace(/\binfinity\b/gi, '\\infty')
+                .replace(/\bInfinity\b/g, '\\infty')
                 .replace(/\binf\b/gi, '\\infty')
                 .replace(/\boo\b/g, '\\infty')
                 .replace(/\bpi\b/gi, '\\pi');
@@ -624,6 +682,12 @@
                     try { prepareGraph(expr, v, nerdamerToPython(expr), 'definite', a, b); } catch(e) {}
                     return;
                 }
+            }
+
+            // SymPy-style Sum(term, (idx, lo, hi)) — Nerdamer cannot integrate; use SymPy directly
+            if (parseSympySum(expr)) {
+                sympyFallback(expr, v);
+                return;
             }
 
             try {
@@ -875,6 +939,11 @@
                     'import json\n' +
                     symDecl + '\n' +
                     'expr = simplify(' + pyExpr + ')\n' +
+                    'try:\n' +
+                    '    if expr.has(Sum):\n' +
+                    '        expr = expr.doit(deep=True)\n' +
+                    'except Exception:\n' +
+                    '    pass\n' +
                     'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
                     'import signal\n' +
                     'def _timeout(s, f): raise TimeoutError\n' +
@@ -935,6 +1004,11 @@
                     'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
                     symDecl + '\n' +
                     'expr = simplify(' + pyExpr + ')\n' +
+                    'try:\n' +
+                    '    if expr.has(Sum):\n' +
+                    '        expr = expr.doit(deep=True)\n' +
+                    'except Exception:\n' +
+                    '    pass\n' +
                     'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
                     'import signal\n' +
                     'def _timeout(s, f): raise TimeoutError\n' +
@@ -1291,7 +1365,12 @@
                     '    except: st.append({"title":"Result","latex":"= "+latex(res)}) if res else None\n' +
                     '    return st\n' +
                     buildSympySymbolsDecl(v, pyExpr) + '\n' +
-                    'expr = ' + pyExpr + '\n' +
+                    'expr = simplify(' + pyExpr + ')\n' +
+                    'try:\n' +
+                    '    if expr.has(Sum):\n' +
+                    '        expr = expr.doit(deep=True)\n' +
+                    'except Exception:\n' +
+                    '    pass\n' +
                     'a_s = sympify("' + (''+a).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '")\n' +
                     'b_s = sympify("' + (''+b).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '")\n' +
                     'antideriv = integrate(expr, ' + v + ')\n' +
@@ -1459,7 +1538,12 @@
                 '    return st\n' +
                 'try:\n' +
                 '    ' + buildSympySymbolsDecl(v, pyExpr) + '\n' +
-                '    expr = ' + pyExpr + '\n' +
+                '    expr = simplify(' + pyExpr + ')\n' +
+                '    try:\n' +
+                '        if expr.has(Sum):\n' +
+                '            expr = expr.doit(deep=True)\n' +
+                '    except Exception:\n' +
+                '        pass\n' +
                 '    steps = integral_steps(expr, ' + v + ')\n' +
                 '    st = []\n' +
                 '    if steps and not isinstance(steps, DontKnowRule):\n' +
@@ -2011,9 +2095,9 @@
 
             var symDecl = buildSympySymbolsDecl(v, pyExpr);
             if (template === 'symbolic-indef') {
-                return 'from sympy import *\n\n' + symDecl + '\nexpr = ' + pyExpr + '\n\nresult = integrate(expr, ' + v + ')\nprint("Integral:")\npprint(result)\nprint("\\nLaTeX:", latex(result))';
+                return 'from sympy import *\n\n' + symDecl + '\nexpr = simplify(' + pyExpr + ')\ntry:\n    if expr.has(Sum):\n        expr = expr.doit(deep=True)\nexcept Exception:\n    pass\n\nresult = integrate(expr, ' + v + ')\nprint("Integral:")\npprint(result)\nprint("\\nLaTeX:", latex(result))';
             } else if (template === 'symbolic-def') {
-                return 'from sympy import *\n\n' + symDecl + '\nexpr = ' + pyExpr + '\n\nresult = integrate(expr, (' + v + ', ' + a + ', ' + b + '))\nprint("Definite integral from ' + a + ' to ' + b + ':")\npprint(result)\nprint("\\nNumeric:", float(result))';
+                return 'from sympy import *\n\n' + symDecl + '\nexpr = simplify(' + pyExpr + ')\ntry:\n    if expr.has(Sum):\n        expr = expr.doit(deep=True)\nexcept Exception:\n    pass\n\nresult = integrate(expr, (' + v + ', ' + a + ', ' + b + '))\nprint("Definite integral from ' + a + ' to ' + b + ':")\npprint(result)\nprint("\\nNumeric:", float(result))';
             } else {
                 // SciPy: needs math.* prefixes; sec/csc/cot must be expanded
                 var scipyExpr = pyExpr
