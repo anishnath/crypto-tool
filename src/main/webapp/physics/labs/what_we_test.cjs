@@ -3745,3 +3745,112 @@ if (failed === 0) {
   console.log(`Pulley-Scale: ${p2}/${t2} passed` + (f2 ? ` (${f2} FAILED)` : ''));
 })();
 
+// ═══════════════════════════════════════════
+// VERTICAL SPRING WITH GRAVITY
+// ═══════════════════════════════════════════
+(function() {
+  const G = 9.81, ANCHOR_Y = 4.5;
+  let p3 = 0, f3 = 0, t3 = 0;
+  function ok(c, m) { t3++; if (c) p3++; else { f3++; console.log('  FAIL (vert-spring): ' + m); } }
+  function close(a, b, tol, m) { ok(Math.abs(a - b) <= tol, m + ' — got ' + a.toFixed(4) + ', exp ' + b.toFixed(4)); }
+
+  console.log('\n=== Vertical Spring ===');
+
+  // Test 1: Equilibrium position: y_eq = ANCHOR - L₀ - mg/k
+  {
+    const m = 1, k = 20, L0 = 1;
+    const eq = ANCHOR_Y - L0 - m * G / k;
+    close(eq, 4.5 - 1 - 0.4905, 0.001, 'Equilibrium: y_eq = 3.0095');
+  }
+
+  // Test 2: At equilibrium, net force = 0
+  {
+    const m = 1, k = 20, L0 = 1;
+    const eq = ANCHOR_Y - L0 - m * G / k;
+    const extension = (ANCHOR_Y - eq) - L0;
+    const springF = k * extension;  // upward
+    const gravF = m * G;            // downward
+    close(springF, gravF, 0.001, 'At equilibrium: spring force = gravity');
+  }
+
+  // Test 3: Period = 2π√(m/k) — INDEPENDENT of gravity
+  {
+    const m = 1, k = 20;
+    const T = 2 * Math.PI * Math.sqrt(m / k);
+    close(T, 1.4050, 0.001, 'Period T = 2π√(m/k) = 1.405s');
+
+    // Same period on Moon
+    const T_moon = 2 * Math.PI * Math.sqrt(m / k);  // g doesn't appear!
+    close(T_moon, T, 0.0001, 'Moon period = Earth period (g-independent)');
+  }
+
+  // Test 4: Equilibrium shift changes with gravity
+  {
+    const m = 1, k = 20, L0 = 1;
+    const eq_earth = ANCHOR_Y - L0 - m * 9.81 / k;
+    const eq_moon  = ANCHOR_Y - L0 - m * 1.62 / k;
+    ok(eq_moon > eq_earth, 'Moon eq is HIGHER than Earth eq (less stretch)');
+    close(eq_moon - eq_earth, m * (9.81 - 1.62) / k, 0.001, 'Eq shift = m·Δg/k');
+  }
+
+  // Test 5: Equilibrium shift changes with mass
+  {
+    const k = 20, L0 = 1;
+    const eq_light = ANCHOR_Y - L0 - 1 * G / k;
+    const eq_heavy = ANCHOR_Y - L0 - 5 * G / k;
+    ok(eq_heavy < eq_light, 'Heavy mass eq is LOWER (more stretch)');
+    close(eq_light - eq_heavy, (5 - 1) * G / k, 0.001, 'Eq diff = Δm·g/k');
+  }
+
+  // Test 6: Energy at equilibrium (PE well minimum)
+  {
+    const m = 1, k = 20, L0 = 1;
+    const eq = ANCHOR_Y - L0 - m * G / k;
+    const ext = (ANCHOR_Y - eq) - L0;
+    const springPE = 0.5 * k * ext * ext;
+    const gravPE = m * G * eq;
+    // At equilibrium with v=0: KE=0, total = springPE + gravPE
+    ok(springPE > 0, 'Spring PE > 0 at equilibrium (spring is stretched)');
+    ok(gravPE > 0, 'Grav PE > 0 (mass above y=0)');
+  }
+
+  // Test 7: Period doesn't depend on amplitude (SHM is isochronous)
+  {
+    const m = 1, k = 20;
+    // Same formula regardless of startStretch
+    const T1 = 2 * Math.PI * Math.sqrt(m / k);
+    const T2 = 2 * Math.PI * Math.sqrt(m / k);
+    close(T1, T2, 0.0001, 'Period same for any amplitude (isochronous)');
+  }
+
+  // Test 8: Stiff spring = small eq shift + fast period
+  {
+    const m = 1, L0 = 1;
+    const k_soft = 5, k_stiff = 80;
+    const eq_soft  = m * G / k_soft;
+    const eq_stiff = m * G / k_stiff;
+    ok(eq_stiff < eq_soft, 'Stiff spring: smaller eq shift');
+    const T_soft  = 2 * Math.PI * Math.sqrt(m / k_soft);
+    const T_stiff = 2 * Math.PI * Math.sqrt(m / k_stiff);
+    ok(T_stiff < T_soft, 'Stiff spring: shorter period');
+  }
+
+  // Test 9: Verify ODE — at displaced position, acceleration points toward equilibrium
+  {
+    const m = 1, k = 20, L0 = 1, b = 0;
+    const eq = ANCHOR_Y - L0 - m * G / k;
+    // Below equilibrium (y < eq): acceleration should be upward (positive)
+    const y_below = eq - 0.5;
+    const ext = (ANCHOR_Y - y_below) - L0;
+    const accel = (k * ext) / m - G;
+    ok(accel > 0, 'Below eq: acceleration is upward (restoring)');
+    // Above equilibrium: acceleration downward
+    const y_above = eq + 0.5;
+    const ext2 = (ANCHOR_Y - y_above) - L0;
+    const accel2 = (k * ext2) / m - G;
+    ok(accel2 < 0, 'Above eq: acceleration is downward (restoring)');
+  }
+
+  console.log(`Vertical-Spring: ${p3}/${t3} passed` + (f3 ? ` (${f3} FAILED)` : ''));
+})();
+

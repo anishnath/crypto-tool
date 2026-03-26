@@ -298,6 +298,17 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
       </div>
     </a>
 
+    <a href="vertical-spring.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#06B6D4,#22C55E);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="6" y1="2" x2="18" y2="2" stroke-width="3"/><polyline points="12,2 10,5 14,7 10,9 14,11 12,13" fill="none"/><rect x="9" y="13" width="6" height="5" rx="1" fill="#8B5CF6" stroke="none"/><line x1="12" y1="20" x2="12" y2="22" stroke="#EF4444" stroke-dasharray="1 1"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Vertical Spring</h3>
+        <p>Does gravity change the period? (Spoiler: no!)</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
     <a href="double-spring.jsp" class="lab-card">
       <div class="lab-card-icon" style="background:linear-gradient(135deg,#10B981,#059669);">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="1" y="10" width="3" height="4" fill="#475569" stroke="none"/><polyline points="4,12 7,10 10,14 13,10"/><rect x="13" y="9" width="4" height="6" rx="1" fill="#10B981" stroke="none"/><polyline points="17,12 19,10 21,14"/><rect x="21" y="9" width="3" height="6" rx="1" fill="#06B6D4" stroke="none"/></svg>
