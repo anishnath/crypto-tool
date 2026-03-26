@@ -239,6 +239,8 @@
         };
         /** Convert nerdamer-style expr to Python/SymPy (e.g. e^x -> exp(x), ^ -> **) */
         function nerdamerToPython(expr) {
+            // Known single-token functions — protect "sin(" so implicit-mul pass does not turn it into "sin*("
+            var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|frac';
             var py = (expr || '')
                 // e^func(args) → exp(func(args)):  e^sqrt(x+2) → exp(sqrt(x+2))
                 .replace(/e\^([a-zA-Z_]+\([^)]*\))/g, 'exp($1)')
@@ -248,10 +250,15 @@
                 // Convert integer fractions in exponents to Rational: **(3/2) → **(Rational(3,2))
                 .replace(/\*\*\((\d+)\/(\d+)\)/g, '**(Rational($1,$2))')
                 // Insert * between digit and variable: 3x → 3*x, 2pi → 2*pi
-                .replace(/(\d)([a-zA-Z])/g, '$1*$2')
+                .replace(/(\d)([a-zA-Z])/g, '$1*$2');
+            py = py.replace(new RegExp('\\b(' + FUNS + ')\\(', 'gi'), '\uE000$1\uE001(');
+            py = py
                 // Insert * between closing paren and opening paren or variable: )(  )x
                 .replace(/\)(\()/g, ')*$1')
-                .replace(/\)([a-zA-Z])/g, ')*$1');
+                .replace(/\)([a-zA-Z])/g, ')*$1')
+                // Implicit multiplication: x(1+x**n) → x*(1+x**n) (required for valid SymPy)
+                .replace(/([a-zA-Z0-9])\(/g, '$1*(');
+            py = py.replace(/\uE000(\w+)\uE001\(/g, '$1(');
             return py;
         }
 

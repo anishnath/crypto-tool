@@ -61,6 +61,8 @@ INTEGRANDS = [
     ("x**(-2)", "x"),
     ("sin(3*x) + cos(2*x)", "x"),
     ("1/(x**3 + 1)", "x"),
+    # Parameter n: ∫ 1/(x(1+x^n)) dx — nerdamer fails; SymPy fallback needs x*(1+x**n) in Python, not x(1+x**n)
+    ("1/(x*(x**n + 1))", "x"),
     # Variable t
     ("sin(t)", "t"),
     ("sin(3*t)", "t"),
