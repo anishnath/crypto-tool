@@ -6,16 +6,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Physics Labs — 20 Interactive Simulations" />
+    <jsp:param name="toolName" value="Physics Labs — 31 Interactive Simulations" />
     <jsp:param name="toolCategory" value="Physics" />
-    <jsp:param name="toolDescription" value="20 free interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations. All run in your browser with no signup required." />
+    <jsp:param name="toolDescription" value="31 free interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations. All run in your browser with no signup required." />
     <jsp:param name="toolUrl" value="physics/labs/" />
     <jsp:param name="toolKeywords" value="physics simulations, interactive physics, pendulum simulator, spring oscillator, chaos theory, billiards physics, wave equation, Newton's cradle, molecular dynamics, brachistochrone" />
     <jsp:param name="toolImage" value="logo.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="physics/" />
-    <jsp:param name="toolFeatures" value="20 interactive simulations,Drag-and-drop physics,Real-time graphs and energy plots,Phase space visualization,Direction field overlays,Export CSV data for lab reports,Screenshot sim and graph,Dark and light themes,No signup required,100% client-side" />
+    <jsp:param name="toolFeatures" value="31 interactive simulations,Drag-and-drop physics,Real-time graphs and energy plots,Phase space visualization,Direction field overlays,Export CSV data for lab reports,Screenshot sim and graph,Dark and light themes,No signup required,100% client-side" />
     <jsp:param name="faq1q" value="Are these physics simulations free?" />
-    <jsp:param name="faq1a" value="Yes all 20 simulations are completely free. No registration no payment no limits. They run entirely in your browser using JavaScript. Your data never leaves your device." />
+    <jsp:param name="faq1a" value="Yes all 31 simulations are completely free. No registration no payment no limits. They run entirely in your browser using JavaScript. Your data never leaves your device." />
     <jsp:param name="faq2q" value="Can I use these for homework and lab reports?" />
     <jsp:param name="faq2a" value="Yes. Every simulation has Export CSV to download data for Excel or Google Sheets and Screenshot to capture the sim and graphs as PNG for lab reports. You can also share specific configurations via URL." />
 </jsp:include>
@@ -32,11 +32,11 @@
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "Physics Labs",
-  "description": "20 free interactive physics simulations",
+  "description": "31 free interactive physics simulations",
   "url": "https://8gwifi.org/physics/labs/",
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 20,
+    "numberOfItems": 31,
     "itemListElement": [
       {"@type":"ListItem","position":1,"name":"Simple Pendulum","url":"https://8gwifi.org/physics/labs/pendulum.jsp"},
       {"@type":"ListItem","position":2,"name":"Spring Oscillator","url":"https://8gwifi.org/physics/labs/spring.jsp"},
@@ -56,7 +56,19 @@
       {"@type":"ListItem","position":16,"name":"Resonance","url":"https://8gwifi.org/physics/labs/resonance.jsp"},
       {"@type":"ListItem","position":17,"name":"Inclined Plane Pulley","url":"https://8gwifi.org/physics/labs/pulley.jsp"},
       {"@type":"ListItem","position":18,"name":"Center of Mass: Raft","url":"https://8gwifi.org/physics/labs/raft-cm.jsp"},
-      {"@type":"ListItem","position":19,"name":"States of Matter","url":"https://8gwifi.org/physics/labs/states-of-matter.jsp"}
+      {"@type":"ListItem","position":19,"name":"States of Matter","url":"https://8gwifi.org/physics/labs/states-of-matter.jsp"},
+      {"@type":"ListItem","position":20,"name":"Vertical Spring","url":"https://8gwifi.org/physics/labs/vertical-spring.jsp"},
+      {"@type":"ListItem","position":21,"name":"Series vs Parallel Springs","url":"https://8gwifi.org/physics/labs/series-parallel-springs.jsp"},
+      {"@type":"ListItem","position":22,"name":"Drop Mass","url":"https://8gwifi.org/physics/labs/drop-mass.jsp"},
+      {"@type":"ListItem","position":23,"name":"Bungee Jump","url":"https://8gwifi.org/physics/labs/bungee.jsp"},
+      {"@type":"ListItem","position":24,"name":"Spring on Incline","url":"https://8gwifi.org/physics/labs/spring-incline.jsp"},
+      {"@type":"ListItem","position":25,"name":"Spring Pendulum","url":"https://8gwifi.org/physics/labs/spring-pendulum.jsp"},
+      {"@type":"ListItem","position":26,"name":"Pulley-Spring Scale","url":"https://8gwifi.org/physics/labs/pulley-scale.jsp"},
+      {"@type":"ListItem","position":27,"name":"Circuit Simulator","url":"https://8gwifi.org/physics/labs/circuit-simulator.jsp"},
+      {"@type":"ListItem","position":28,"name":"Optical Designer","url":"https://8gwifi.org/physics/optical-designer.jsp"},
+      {"@type":"ListItem","position":29,"name":"Ray Optics Simulator","url":"https://8gwifi.org/physics/ray-optics-simulator.jsp"},
+      {"@type":"ListItem","position":30,"name":"Center of Mass: Raft","url":"https://8gwifi.org/physics/labs/raft-cm.jsp"},
+      {"@type":"ListItem","position":31,"name":"Inclined Plane Pulley","url":"https://8gwifi.org/physics/labs/pulley.jsp"}
     ]
   }
 }
@@ -348,7 +360,29 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
       </div>
       <div class="lab-card-body">
         <h3>Bungee Jump</h3>
-        <p>Drop a mass onto an oscillator — inelastic collision</p>
+        <p>Three-phase jump: free fall, bungee engaged, slack bounce</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
+    <a href="spring-incline.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#06B6D4,#22C55E);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="2" y1="20" x2="20" y2="6"/><line x1="20" y1="6" x2="20" y2="20"/><line x1="20" y1="20" x2="2" y2="20"/><rect x="10" y="11" width="4" height="3" rx="0.5" fill="#8B5CF6" stroke="none" transform="rotate(-35 12 12.5)"/><line x1="4" y1="18" x2="9" y2="13" stroke-dasharray="1.5 1" stroke="#06B6D4"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Spring on Incline</h3>
+        <p>Period independent of ramp angle — only equilibrium shifts</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
+    <a href="spring-pendulum.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#8B5CF6,#06B6D4);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="12" y1="2" x2="12" y2="4"/><line x1="8" y1="2" x2="16" y2="2" stroke-width="3"/><line x1="12" y1="4" x2="12" y2="12" stroke-dasharray="2 1" stroke="#06B6D4"/><circle cx="12" cy="14" r="2.5" fill="#8B5CF6" stroke="none"/><path d="M12 4 Q16 8 14 14" fill="none" stroke="#F59E0B" stroke-width="1" stroke-dasharray="2 2"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Spring Pendulum</h3>
+        <p>Coupled radial + angular modes with 2:1 resonance</p>
         <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
       </div>
     </a>

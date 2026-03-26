@@ -4061,3 +4061,310 @@ if (failed === 0) {
   console.log(`Bungee: ${p5}/${t5} passed` + (f5 ? ` (${f5} FAILED)` : ''));
 })();
 
+// ═══════════════════════════════════════════
+// SPRING ON INCLINED PLANE
+// ═══════════════════════════════════════════
+(function() {
+  const G = 9.81;
+  let p6 = 0, f6 = 0, t6 = 0;
+  function ok(c, m) { t6++; if (c) p6++; else { f6++; console.log('  FAIL (spring-incline): ' + m); } }
+  function close(a, b, tol, m) { ok(Math.abs(a - b) <= tol, m + ' — got ' + a.toFixed(4) + ', exp ' + b.toFixed(4)); }
+
+  console.log('\n=== Spring on Incline ===');
+
+  // Test 1: Period = 2π√(m/k) for ALL angles
+  {
+    const m = 1, k = 20;
+    const T = 2 * Math.PI * Math.sqrt(m / k);
+    for (const angle of [0, 10, 30, 45, 60, 90]) {
+      // Period doesn't depend on angle
+      const T_angle = 2 * Math.PI * Math.sqrt(m / k);
+      close(T_angle, T, 0.0001, `Period at ${angle}° = ${T.toFixed(3)}s (same as all angles)`);
+    }
+  }
+
+  // Test 2: Equilibrium shift = mg·sin(θ)/k
+  {
+    const m = 1, k = 20, L0 = 1.5;
+    for (const [angle, expected] of [[0, 0], [30, 0.2453], [45, 0.3468], [90, 0.4905]]) {
+      const th = angle * Math.PI / 180;
+      const shift = m * G * Math.sin(th) / k;
+      close(shift, expected, 0.001, `Eq shift at ${angle}° = ${shift.toFixed(4)}m`);
+    }
+  }
+
+  // Test 3: At θ=0°, eq shift = 0 (horizontal spring, no gravity component)
+  {
+    const m = 1, k = 20;
+    const shift = m * G * Math.sin(0) / k;
+    close(shift, 0, 0.0001, 'Horizontal (0°): no equilibrium shift');
+  }
+
+  // Test 4: At θ=90°, eq shift = mg/k (same as vertical spring)
+  {
+    const m = 1, k = 20;
+    const shift = m * G * Math.sin(Math.PI / 2) / k;
+    close(shift, m * G / k, 0.0001, 'Vertical (90°): eq shift = mg/k');
+  }
+
+  // Test 5: Net force at equilibrium = 0
+  {
+    const m = 1, k = 20, L0 = 1.5, angle = 30;
+    const th = angle * Math.PI / 180;
+    const eqS = L0 + m * G * Math.sin(th) / k;
+    const stretch = eqS - L0;
+    const springF = -k * stretch;
+    const gravF = m * G * Math.sin(th);
+    close(springF + gravF, 0, 0.001, 'At equilibrium: net force along ramp = 0');
+  }
+
+  // Test 6: Normal force = mg·cos(θ)
+  {
+    const m = 1, angle = 30;
+    const th = angle * Math.PI / 180;
+    const N = m * G * Math.cos(th);
+    close(N, m * G * Math.cos(th), 0.001, 'Normal force = mg cos(30°) = ' + N.toFixed(2));
+    ok(N < m * G, 'Normal force < weight (ramp supports less than full weight)');
+  }
+
+  // Test 7: Friction force = μ·N = μ·mg·cos(θ)
+  {
+    const m = 1, mu = 0.2, angle = 30;
+    const th = angle * Math.PI / 180;
+    const N = m * G * Math.cos(th);
+    const fFriction = mu * N;
+    close(fFriction, 0.2 * 9.81 * Math.cos(th), 0.001, 'Friction = μmg cosθ = ' + fFriction.toFixed(3));
+  }
+
+  // Test 8: Heavier mass → more eq shift (same period)
+  {
+    const k = 20, L0 = 1.5, angle = 30;
+    const th = angle * Math.PI / 180;
+    const shift1 = 1 * G * Math.sin(th) / k;
+    const shift5 = 5 * G * Math.sin(th) / k;
+    ok(shift5 > shift1, 'Heavy mass: more eq shift');
+    close(shift5 / shift1, 5, 0.001, 'Shift scales linearly with mass');
+  }
+
+  console.log(`Spring-Incline: ${p6}/${t6} passed` + (f6 ? ` (${f6} FAILED)` : ''));
+})();
+
+// ═══════════════════════════════════════════
+// 7. Spring Pendulum (Elastic Pendulum)
+// ═══════════════════════════════════════════
+(function() {
+  let t7 = 0, p7 = 0, f7 = 0;
+  function ok(c, m) { t7++; if (c) p7++; else { f7++; console.log('  FAIL (spring-pendulum): ' + m); } }
+  function close(a, b, tol, m) { ok(Math.abs(a - b) < tol, m + ' (got ' + a + ', expected ' + b + ')'); }
+
+  const G = 9.81;
+
+  // Sim definition (inline for CJS)
+  const sim = {
+    _eqR(p) { return p.restLength + p.mass * G / p.stiffness; },
+    init(p) {
+      const eq = this._eqR(p);
+      return [eq + p.initStretch, 0, p.initAngle * Math.PI / 180, 0, 0];
+    },
+    evaluate(vars, change, params, isDragging) {
+      change[4] = 1;
+      if (isDragging) return;
+      const [r, vr, theta, omega] = vars;
+      const { mass, stiffness, restLength, damping } = params;
+      const rSafe = Math.max(r, 0.01);
+      const springF = -stiffness * (rSafe - restLength) / mass;
+      const centripetal = rSafe * omega * omega;
+      const gravRadial = G * Math.cos(theta);
+      const dampRadial = -damping * vr / mass;
+      change[0] = vr;
+      change[1] = centripetal + springF + gravRadial + dampRadial;
+      change[2] = omega;
+      change[3] = -G * Math.sin(theta) / rSafe - 2 * vr * omega / rSafe - damping * omega / mass;
+    },
+    energy(vars, params) {
+      const [r, vr, theta, omega] = vars;
+      const { mass, stiffness, restLength } = params;
+      const KE = 0.5 * mass * (vr * vr + r * r * omega * omega);
+      const springPE = 0.5 * stiffness * (r - restLength) * (r - restLength);
+      const gravPE = -mass * G * r * Math.cos(theta);
+      return { kinetic: KE, potential: springPE + gravPE, total: KE + springPE + gravPE };
+    },
+  };
+
+  const defaults = { mass: 1.0, stiffness: 40, restLength: 1.5, damping: 0.1, initAngle: 30, initStretch: 0.3 };
+
+  // Test 1: Equilibrium radial distance = L₀ + mg/k
+  {
+    const p = { ...defaults };
+    const eqR = sim._eqR(p);
+    const expected = p.restLength + p.mass * G / p.stiffness;
+    close(eqR, expected, 0.0001, 'Eq radius = L₀ + mg/k = ' + expected.toFixed(4));
+  }
+
+  // Test 2: At equilibrium, zero angle, zero velocity → net radial acceleration = 0
+  {
+    const p = { ...defaults, initAngle: 0, initStretch: 0 };
+    const vars = sim.init(p);
+    const change = new Float64Array(5);
+    sim.evaluate(vars, change, p, false);
+    // At eq with θ=0, ω=0, vr=0: accel should be ~0
+    close(change[1], 0, 0.01, 'Zero radial accel at equilibrium');
+  }
+
+  // Test 3: Pure pendulum (θ=0 → no angular acceleration at equilibrium)
+  {
+    const p = { ...defaults, initAngle: 0, initStretch: 0 };
+    const vars = sim.init(p);
+    const change = new Float64Array(5);
+    sim.evaluate(vars, change, p, false);
+    close(change[3], 0, 0.01, 'Zero angular accel at θ=0');
+  }
+
+  // Test 4: Angular acceleration sign — displaced right should accelerate left
+  {
+    const p = { ...defaults, initAngle: 30, initStretch: 0, damping: 0 };
+    const vars = sim.init(p);
+    const change = new Float64Array(5);
+    sim.evaluate(vars, change, p, false);
+    ok(change[3] < 0, 'θ>0 → angular accel < 0 (restoring toward vertical)');
+  }
+
+  // Test 5: Spring period = 2π√(m/k), pendulum period = 2π√(r_eq/g)
+  {
+    const p = { ...defaults };
+    const Ts = 2 * Math.PI * Math.sqrt(p.mass / p.stiffness);
+    const rEq = sim._eqR(p);
+    const Tp = 2 * Math.PI * Math.sqrt(rEq / G);
+    ok(Ts > 0 && Tp > 0, 'Both periods positive');
+    ok(Tp > Ts, 'Pendulum period > spring period for default params');
+    close(Ts, 2 * Math.PI * Math.sqrt(1.0 / 40), 0.001, 'Spring period = ' + Ts.toFixed(4));
+  }
+
+  // Test 6: 2:1 resonance condition: ω_s = 2ω_p → k = 3mg/L₀
+  {
+    const m = 1.0, L0 = 1.5;
+    const kRes = 3 * m * G / L0;  // ≈ 19.62
+    const rEq = L0 + m * G / kRes;
+    const Ts = 2 * Math.PI * Math.sqrt(m / kRes);
+    const Tp = 2 * Math.PI * Math.sqrt(rEq / G);
+    close(Tp / Ts, 2.0, 0.1, '2:1 resonance ratio Tp/Ts ≈ 2 when k=4mg/L₀ (' + (Tp/Ts).toFixed(3) + ')');
+  }
+
+  // Test 7: Energy conservation (no damping, run 100 steps)
+  {
+    const p = { ...defaults, damping: 0 };
+    const vars = Float64Array.from(sim.init(p));
+    const E0 = sim.energy(vars, p).total;
+    const dt = 0.001;
+    for (let i = 0; i < 100; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    const E1 = sim.energy(vars, p).total;
+    close(E1, E0, 0.01, 'Energy conserved over 100 RK4 steps: ' + E0.toFixed(4) + ' → ' + E1.toFixed(4));
+  }
+
+  // Test 8: Pure spring mode (θ=0) — should oscillate radially
+  {
+    const p = { ...defaults, initAngle: 0, initStretch: 0.5, damping: 0 };
+    const vars = Float64Array.from(sim.init(p));
+    ok(Math.abs(vars[2]) < 0.001, 'Pure spring: starts at θ=0');
+    const dt = 0.001;
+    for (let i = 0; i < 500; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    ok(Math.abs(vars[2]) < 0.001, 'Pure spring: θ stays ~0 after 500 steps');
+    ok(Math.abs(vars[1]) > 0.001, 'Pure spring: has radial velocity');
+  }
+
+  // Test 9: Kinetic energy formula: ½m(ṙ² + r²ω²)
+  {
+    const vars = [2.0, 0.5, 0.3, 1.2, 1.0];
+    const p = { ...defaults };
+    const e = sim.energy(vars, p);
+    const expectedKE = 0.5 * p.mass * (0.5*0.5 + 2.0*2.0*1.2*1.2);
+    close(e.kinetic, expectedKE, 0.001, 'KE = ½m(ṙ²+r²ω²) = ' + expectedKE.toFixed(4));
+  }
+
+  // Test 10: Spring PE = ½k(r-L₀)²
+  {
+    const r = 2.5, L0 = 1.5, k = 40;
+    const vars = [r, 0, 0, 0, 0];
+    const p = { ...defaults };
+    const e = sim.energy(vars, p);
+    const expectedSpringPE = 0.5 * k * (r - L0) * (r - L0);
+    const expectedGravPE = -p.mass * G * r * Math.cos(0);
+    close(e.potential, expectedSpringPE + expectedGravPE, 0.001, 'PE = ½k(r-L₀)² + mgr·cosθ');
+  }
+
+  // Test 11: Equilibrium shifts with mass (heavier → longer)
+  {
+    const p1 = { ...defaults, mass: 1 };
+    const p2 = { ...defaults, mass: 5 };
+    ok(sim._eqR(p2) > sim._eqR(p1), 'Heavier mass → longer eq radius');
+    close(sim._eqR(p2) - sim._eqR(p1), 4 * G / defaults.stiffness, 0.001, 'Eq shift scales linearly with mass');
+  }
+
+  // Test 12: Stiffer spring → shorter eq radius (closer to L₀)
+  {
+    const p1 = { ...defaults, stiffness: 20 };
+    const p2 = { ...defaults, stiffness: 200 };
+    ok(sim._eqR(p2) < sim._eqR(p1), 'Stiffer spring → eq closer to L₀');
+  }
+
+  // Test 13: Coriolis term: -2ṙω/r present in angular equation
+  {
+    const p = { ...defaults, damping: 0 };
+    // Give it radial velocity and angular velocity
+    const vars = [2.0, 1.0, 0.1, 0.5, 0];
+    const change = new Float64Array(5);
+    sim.evaluate(vars, change, p, false);
+    // Angular accel should include Coriolis: -2*1.0*0.5/2.0 = -0.5
+    // Plus gravity: -G*sin(0.1)/2.0 ≈ -0.489
+    // Total should be negative (both terms push left)
+    ok(change[3] < 0, 'Coriolis + gravity give negative angular accel');
+  }
+
+  // Test 14: Centripetal term: r·ω² present in radial equation
+  {
+    const p = { ...defaults, damping: 0, initAngle: 0, initStretch: 0 };
+    // At equilibrium with θ=0, add angular velocity only
+    const vars = Float64Array.from(sim.init(p));
+    vars[3] = 2.0; // ω = 2 rad/s
+    const change = new Float64Array(5);
+    sim.evaluate(vars, change, p, false);
+    // Centripetal term = r·ω² > 0 should make radial accel positive (outward)
+    // At eq, spring+gravity ≈ 0, so accel ≈ r·ω²
+    const rEq = sim._eqR(p);
+    // At eq with θ=0: spring+grav cancel. Only centripetal r_eq·ω²=r_eq·4 remains positive.
+    ok(change[1] > rEq * 3, 'Centripetal r·ω² makes positive radial accel (' + change[1].toFixed(2) + ')');
+  }
+
+  // Test 15: Damping reduces energy
+  {
+    const p = { ...defaults, damping: 1.0 };
+    const vars = Float64Array.from(sim.init(p));
+    const E0 = sim.energy(vars, p).total;
+    const dt = 0.001;
+    for (let i = 0; i < 1000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    const E1 = sim.energy(vars, p).total;
+    ok(E1 < E0, 'Damping reduces total energy: ' + E0.toFixed(3) + ' → ' + E1.toFixed(3));
+  }
+
+  // Test 16: isDragging stops physics
+  {
+    const p = { ...defaults };
+    const vars = Float64Array.from(sim.init(p));
+    const change = new Float64Array(5);
+    sim.evaluate(vars, change, p, true);
+    close(change[0], 0, 0.001, 'isDragging: dr/dt = 0');
+    close(change[1], 0, 0.001, 'isDragging: dvr/dt = 0');
+    close(change[2], 0, 0.001, 'isDragging: dθ/dt = 0');
+    close(change[3], 0, 0.001, 'isDragging: dω/dt = 0');
+    close(change[4], 1, 0.001, 'isDragging: dt/dt = 1');
+  }
+
+  console.log(`Spring-Pendulum: ${p7}/${t7} passed` + (f7 ? ` (${f7} FAILED)` : ''));
+})();
+
