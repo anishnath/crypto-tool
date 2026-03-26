@@ -320,6 +320,17 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
       </div>
     </a>
 
+    <a href="pulley-scale.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#06B6D4,#8B5CF6);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="4" y1="4" x2="20" y2="4"/><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><line x1="6" y1="6" x2="6" y2="16"/><line x1="18" y1="6" x2="18" y2="16"/><rect x="3" y="16" width="6" height="4" rx="1" fill="#8B5CF6" stroke="none"/><rect x="15" y="16" width="6" height="4" rx="1" fill="#22C55E" stroke="none"/><rect x="9" y="2.5" width="6" height="3" rx="1" fill="#06B6D4" stroke="none"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Pulley-Spring Scale</h3>
+        <p>Does the scale read 100N or 200N? Tension misconception</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
     <a href="kapitza-pendulum.jsp" class="lab-card">
       <div class="lab-card-icon" style="background:linear-gradient(135deg,#F59E0B,#D97706);">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="12" y1="20" x2="12" y2="6" stroke-dasharray="2 2"/><circle cx="12" cy="20" r="2" fill="#F59E0B" stroke="none"/><line x1="12" y1="6" x2="12" y2="2"/><circle cx="12" cy="2" r="2" fill="#FBBF24" stroke="none"/><text x="16" y="5" font-size="6" fill="#fff">↕</text></svg>
@@ -462,7 +473,7 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
 
 <%-- ═══ ADVANCED ═══ --%>
 <div class="labs-cat">
-  <div class="labs-cat-header">Advanced <span class="cat-line"></span> <span class="cat-count">2</span></div>
+  <div class="labs-cat-header">Advanced <span class="cat-line"></span> <span class="cat-count">8</span></div>
   <div class="labs-grid">
 
     <a href="molecule.jsp" class="lab-card">
@@ -475,6 +486,28 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
         <div class="card-badges"><span class="card-badge badge-drag">Drag</span></div>
       </div>
     </a>
+
+<%--    <a href="oscillating-charge.jsp" class="lab-card">--%>
+<%--      <div class="lab-card-icon" style="background:linear-gradient(135deg,#0EA5E9,#8B5CF6);">--%>
+<%--        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7"><circle cx="12" cy="12" r="2.2" fill="#EF4444" stroke="none"/><path d="M2 12 C5 8, 8 8, 12 12 C16 16, 19 16, 22 12"/><path d="M2 9 C5 5, 8 5, 12 9 C16 13, 19 13, 22 9" opacity=".7"/><path d="M2 15 C5 11, 8 11, 12 15 C16 19, 19 19, 22 15" opacity=".7"/></svg>--%>
+<%--      </div>--%>
+<%--      <div class="lab-card-body">--%>
+<%--        <h3>Oscillating Charge</h3>--%>
+<%--        <p>Liénard-Wiechert E-field heatmap + quiver animation</p>--%>
+<%--        <div class="card-badges"><span class="card-badge badge-wave">EM</span><span class="card-badge badge-new">New</span></div>--%>
+<%--      </div>--%>
+<%--    </a>--%>
+
+<%--    <a href="current-coil-magnetic-field.jsp" class="lab-card">--%>
+<%--      <div class="lab-card-icon" style="background:linear-gradient(135deg,#14B8A6,#0EA5E9);">--%>
+<%--        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="7"/><path d="M12 3 v18" opacity=".7"/><path d="M3 12 h18" opacity=".7"/><circle cx="19" cy="12" r="1.8" fill="#fff" stroke="none"/></svg>--%>
+<%--      </div>--%>
+<%--      <div class="lab-card-body">--%>
+<%--        <h3>Current Coil B-Field</h3>--%>
+<%--        <p>Bz heatmap + on-axis Biot-Savart comparison</p>--%>
+<%--        <div class="card-badges"><span class="card-badge badge-wave">EM</span><span class="card-badge badge-new">New</span></div>--%>
+<%--      </div>--%>
+<%--    </a>--%>
 
     <a href="states-of-matter.jsp" class="lab-card">
       <div class="lab-card-icon" style="background:linear-gradient(135deg,#3B82F6,#EF4444);">

@@ -3622,3 +3622,126 @@ if (failed === 0) {
   console.log(`${failed} TESTS FAILED`);
   process.exit(1);
 }
+
+// ═══════════════════════════════════════════
+// (appended below main results)
+// PULLEY-SPRING SCALE TESTS
+// ═══════════════════════════════════════════
+
+(function() {
+  const G = 9.81;
+  let p2 = 0, f2 = 0, t2 = 0;
+  function ok(c, m) { t2++; if (c) p2++; else { f2++; console.log('  FAIL (pulley-scale): ' + m); } }
+  function close(a, b, tol, m) { ok(Math.abs(a - b) <= tol, m + ' — got ' + a.toFixed(4) + ', expected ' + b.toFixed(4)); }
+
+  console.log('\n=== Pulley-Spring Scale ===');
+
+  // Test 1: Equal masses → T = mg
+  {
+    const m1 = 10, m2 = 10;
+    const T = 2 * m1 * m2 * G / (m1 + m2);
+    close(T, m1 * G, 0.01, 'Equal masses (10kg): T = mg = 98.1N');
+  }
+
+  // Test 2: Unequal masses → T = 2m1m2g/(m1+m2)
+  {
+    const m1 = 5, m2 = 10;
+    const T = 2 * m1 * m2 * G / (m1 + m2);
+    close(T, 65.4, 0.1, 'Unequal (5 vs 10 kg): T = 65.4N');
+  }
+
+  // Test 3: Very unequal → T approaches 2*m_small*g
+  {
+    const m1 = 1, m2 = 100;
+    const T = 2 * m1 * m2 * G / (m1 + m2);
+    const limit = 2 * m1 * G;
+    ok(T < limit, 'Very unequal: T < 2*m_small*g');
+    close(T, 19.43, 0.1, 'T(1kg vs 100kg) = 19.4N');
+  }
+
+  // Test 4: Atwood acceleration formula
+  {
+    const m1 = 15, m2 = 5;
+    const a = (m1 - m2) * G / (m1 + m2);
+    close(a, 4.905, 0.01, 'Acceleration: a = (m1-m2)g/(m1+m2) = 4.905 m/s²');
+  }
+
+  // Test 5: Equal masses → acceleration = 0
+  {
+    const m1 = 10, m2 = 10;
+    const a = (m1 - m2) * G / (m1 + m2);
+    close(a, 0, 0.001, 'Equal masses: acceleration = 0');
+  }
+
+  // Test 6: T is always between lighter and heavier weight
+  // T = 2m1m2g/(m1+m2) → this is the harmonic mean of the two weights
+  // It's always ≥ lighter weight AND ≤ heavier weight (when they're different)
+  {
+    for (const [m1, m2] of [[5,10],[1,50],[10,10],[20,1]]) {
+      const T = 2 * m1 * m2 * G / (m1 + m2);
+      const maxWeight = Math.max(m1, m2) * G;
+      ok(T <= maxWeight + 0.01, `T(${m1},${m2}) = ${T.toFixed(1)} ≤ max weight ${maxWeight.toFixed(1)}`);
+    }
+  }
+
+  // Test 7: Scale never reads 2mg (the misconception)
+  {
+    const m1 = 10, m2 = 10;
+    const T = 2 * m1 * m2 * G / (m1 + m2);
+    ok(T < 2 * m1 * G - 0.1, 'Scale does NOT read 2mg (common misconception)');
+  }
+
+  // Test 8: Moon gravity (g=1.62) — T scales linearly with g
+  {
+    const g_moon = 1.62;
+    const m1 = 10, m2 = 10;
+    const T_moon = 2 * m1 * m2 * g_moon / (m1 + m2);
+    close(T_moon, m1 * g_moon, 0.01, 'Moon equal masses: T = mg_moon = 16.2N');
+    // Should be proportionally less than Earth
+    const T_earth = 2 * m1 * m2 * G / (m1 + m2);
+    close(T_moon / T_earth, g_moon / G, 0.001, 'Moon/Earth tension ratio = g_moon/g_earth');
+  }
+
+  // Test 9: Mars gravity (g=3.72) with unequal masses
+  {
+    const g_mars = 3.72;
+    const m1 = 10, m2 = 5;
+    const T_mars = 2 * m1 * m2 * g_mars / (m1 + m2);
+    const T_earth = 2 * m1 * m2 * G / (m1 + m2);
+    close(T_mars, T_earth * g_mars / G, 0.1, 'Mars unequal: T scales with g');
+    // Acceleration also scales with g
+    const a_mars = (m1 - m2) * g_mars / (m1 + m2);
+    const a_earth = (m1 - m2) * G / (m1 + m2);
+    close(a_mars / a_earth, g_mars / G, 0.001, 'Mars/Earth acceleration ratio = g_mars/g_earth');
+  }
+
+  // Test 10: Jupiter gravity (g=24.79)
+  {
+    const g_jup = 24.79;
+    const m1 = 10, m2 = 10;
+    const T_jup = 2 * m1 * m2 * g_jup / (m1 + m2);
+    close(T_jup, m1 * g_jup, 0.01, 'Jupiter equal masses: T = mg_jup = 247.9N');
+    ok(T_jup > 200, 'Jupiter tension > 200N (much heavier)');
+  }
+
+  // Test 11: Zero-ish gravity (space station)
+  {
+    const g_space = 0.1;
+    const m1 = 10, m2 = 10;
+    const T_space = 2 * m1 * m2 * g_space / (m1 + m2);
+    close(T_space, 1.0, 0.01, 'Near-zero g: T = 1.0N (almost weightless)');
+  }
+
+  // Test 12: Tension formula is g-independent when normalized → T/(m1*g) = 2m2/(m1+m2)
+  {
+    const m1 = 10, m2 = 5;
+    for (const g of [1.62, 3.72, 9.81, 24.79]) {
+      const T = 2 * m1 * m2 * g / (m1 + m2);
+      const normalized = T / (m1 * g);
+      close(normalized, 2 * m2 / (m1 + m2), 0.001, `T/(m1*g) = ${normalized.toFixed(3)} at g=${g} (universal ratio)`);
+    }
+  }
+
+  console.log(`Pulley-Scale: ${p2}/${t2} passed` + (f2 ? ` (${f2} FAILED)` : ''));
+})();
+
