@@ -8,7 +8,7 @@
 <jsp:include page="../../modern/components/seo-tool-page.jsp">
     <jsp:param name="toolName" value="Bullet–Block–Spring — Where Does 99% of the Energy Go?" />
     <jsp:param name="toolCategory" value="Physics" />
-    <jsp:param name="toolDescription" value="Fire a bullet into a block on a spring. Watch momentum conservation and energy loss in a perfectly inelastic collision. Add friction to see the oscillation decay. Free, no signup." />
+    <jsp:param name="toolDescription" value="Fire a bullet into a wooden block on a spring. Explore embed (perfectly inelastic) and pass-through collisions: momentum conservation, energy dissipation, spring compression, and kinetic friction. Free, no signup." />
     <jsp:param name="toolUrl" value="physics/labs/bullet-block.jsp" />
     <jsp:param name="toolKeywords" value="bullet block spring, inelastic collision, momentum conservation, energy loss, ballistic pendulum, friction oscillation, AP physics collision" />
     <jsp:param name="toolImage" value="logo.png" />
