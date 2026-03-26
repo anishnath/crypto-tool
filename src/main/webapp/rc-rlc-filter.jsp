@@ -41,6 +41,12 @@
 <div class="container mt-4 rf">
   <h1 class="mb-2">RC/RLC Filter Calculator</h1>
   <p class="text-muted mb-3">Cutoff, resonance, Q, bandwidth, and Bode magnitude plot for common filters.</p>
+  <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:10px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+    <div style="color:#e0e7ff;font-size:.92rem;line-height:1.45;">
+      <strong style="color:#a5b4fc;">Advanced Circuit Simulator</strong> &mdash; Build full RC, RLC, and 37+ component circuits with real-time MNA solving, oscilloscope, current animation, and 79 preset circuits.
+    </div>
+    <a href="<%=request.getContextPath()%>/physics/labs/circuit-simulator.jsp" style="background:#6366f1;color:#fff;padding:8px 18px;border-radius:6px;font-size:.85rem;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0;">Try Circuit Simulator &rarr;</a>
+  </div>
   <div class="row">
     <div class="col-lg-4">
       <div class="card mb-3"><h5 class="card-header d-flex justify-content-between align-items-center">Inputs
