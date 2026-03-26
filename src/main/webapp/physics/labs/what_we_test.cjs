@@ -4368,3 +4368,682 @@ if (failed === 0) {
   console.log(`Spring-Pendulum: ${p7}/${t7} passed` + (f7 ? ` (${f7} FAILED)` : ''));
 })();
 
+// ═══════════════════════════════════════════
+// 8. Car Suspension (Quarter-Car Model)
+// ═══════════════════════════════════════════
+(function() {
+  let t8 = 0, p8 = 0, f8 = 0;
+  function ok(c, m) { t8++; if (c) p8++; else { f8++; console.log('  FAIL (car-suspension): ' + m); } }
+  function close(a, b, tol, m) { ok(Math.abs(a - b) < tol, m + ' (got ' + a + ', expected ' + b + ')'); }
+
+  // Inline sim physics
+  const sim = {
+    _roadHeight(x, h) {
+      const xm = ((x % 60) + 60) % 60;
+      if (xm >= 8 && xm <= 10) return h * Math.sin(Math.PI * (xm - 8) / 2);
+      if (xm >= 20 && xm <= 40) return 0.5 * h * Math.sin(2 * Math.PI * (xm - 20) / 5);
+      if (xm >= 48 && xm <= 50) return -h * Math.sin(Math.PI * (xm - 48) / 2);
+      return 0;
+    },
+    _roadSlope(x, h) {
+      const xm = ((x % 60) + 60) % 60;
+      if (xm >= 8 && xm <= 10) return h * (Math.PI / 2) * Math.cos(Math.PI * (xm - 8) / 2);
+      if (xm >= 20 && xm <= 40) return 0.5 * h * (2 * Math.PI / 5) * Math.cos(2 * Math.PI * (xm - 20) / 5);
+      if (xm >= 48 && xm <= 50) return -h * (Math.PI / 2) * Math.cos(Math.PI * (xm - 48) / 2);
+      return 0;
+    },
+    evaluate(vars, change, params, isDragging) {
+      change[3] = 1;
+      if (isDragging) return;
+      const [y, vy, x] = vars;
+      const { mass, stiffness, damping, carSpeed, bumpHeight } = params;
+      const yr = this._roadHeight(x, bumpHeight);
+      const yrDot = this._roadSlope(x, bumpHeight) * carSpeed;
+      change[0] = vy;
+      change[1] = (-stiffness * (y - yr) - damping * (vy - yrDot)) / mass;
+      change[2] = carSpeed;
+    },
+    energy(vars, params) {
+      const [y, vy, x] = vars;
+      const { mass, stiffness, bumpHeight } = params;
+      const yr = this._roadHeight(x, bumpHeight);
+      return {
+        kinetic: 0.5 * mass * vy * vy,
+        potential: 0.5 * stiffness * (y - yr) * (y - yr),
+        total: 0.5 * mass * vy * vy + 0.5 * stiffness * (y - yr) * (y - yr),
+      };
+    },
+  };
+
+  const defaults = { mass: 500, stiffness: 20000, damping: 4000, carSpeed: 8, bumpHeight: 0.08 };
+
+  // Test 1: Flat road → zero force at y=0
+  {
+    const vars = [0, 0, 0, 0]; // on flat road
+    const change = new Float64Array(4);
+    sim.evaluate(vars, change, defaults, false);
+    close(change[1], 0, 0.001, 'Zero accel on flat road at equilibrium');
+    close(change[2], defaults.carSpeed, 0.001, 'Road position advances at carSpeed');
+  }
+
+  // Test 2: Displaced body → restoring force
+  {
+    const vars = [0.05, 0, 0, 0]; // body 5cm above eq on flat road
+    const change = new Float64Array(4);
+    sim.evaluate(vars, change, defaults, false);
+    ok(change[1] < 0, 'Body above eq → downward accel (' + change[1].toFixed(2) + ')');
+    const expectedAccel = -defaults.stiffness * 0.05 / defaults.mass; // -2 m/s²
+    close(change[1], expectedAccel, 0.1, 'Accel = -k·y/m on flat road');
+  }
+
+  // Test 3: Natural frequency = √(k/m)/(2π)
+  {
+    const fn = Math.sqrt(defaults.stiffness / defaults.mass) / (2 * Math.PI);
+    close(fn, 1.007, 0.01, 'Natural frequency ≈ 1.0 Hz for defaults');
+    const T = 2 * Math.PI * Math.sqrt(defaults.mass / defaults.stiffness);
+    close(T, 0.993, 0.01, 'Natural period ≈ 1.0s for defaults');
+  }
+
+  // Test 4: Critical damping = 2√(mk)
+  {
+    const bc = 2 * Math.sqrt(defaults.mass * defaults.stiffness);
+    close(bc, 6324.6, 1.0, 'Critical damping b_c = 2√(mk) ≈ 6325');
+  }
+
+  // Test 5: Road profile — flat at x=0
+  {
+    close(sim._roadHeight(0, 0.08), 0, 0.001, 'Road flat at x=0');
+    close(sim._roadHeight(5, 0.08), 0, 0.001, 'Road flat at x=5');
+  }
+
+  // Test 6: Speed bump is positive half-sine at x=8-10
+  {
+    const peak = sim._roadHeight(9, 0.08); // midpoint of bump
+    close(peak, 0.08, 0.001, 'Bump peak = bumpHeight at x=9');
+    ok(sim._roadHeight(8, 0.08) < 0.001, 'Bump starts at ~0 at x=8');
+    ok(sim._roadHeight(10, 0.08) < 0.001, 'Bump ends at ~0 at x=10');
+  }
+
+  // Test 7: Pothole is negative at x=48-50
+  {
+    const bottom = sim._roadHeight(49, 0.08);
+    close(bottom, -0.08, 0.001, 'Pothole bottom = -bumpHeight at x=49');
+  }
+
+  // Test 8: Washboard is sinusoidal at x=20-40
+  {
+    const h1 = sim._roadHeight(21.25, 0.08); // quarter wavelength (peak)
+    close(h1, 0.04, 0.005, 'Washboard peak = 0.5·bumpHeight');
+    const h2 = sim._roadHeight(22.5, 0.08); // half wavelength (zero crossing)
+    close(h2, 0, 0.005, 'Washboard zero at half wavelength');
+  }
+
+  // Test 9: Road slope is derivative of height (numerical check)
+  {
+    const x = 9.0, h = 0.08, dx = 0.0001;
+    const numSlope = (sim._roadHeight(x + dx, h) - sim._roadHeight(x - dx, h)) / (2 * dx);
+    const anaSlope = sim._roadSlope(x, h);
+    close(anaSlope, numSlope, 0.01, 'Analytical slope matches numerical at x=9');
+  }
+
+  // Test 10: Energy on flat road — displaced body has PE only
+  {
+    const vars = [0.05, 0, 0, 0];
+    const e = sim.energy(vars, defaults);
+    close(e.kinetic, 0, 0.001, 'Zero KE when stationary');
+    close(e.potential, 0.5 * 20000 * 0.05 * 0.05, 0.001, 'PE = ½k·y²');
+    close(e.total, e.kinetic + e.potential, 0.001, 'Total = KE + PE');
+  }
+
+  // Test 11: Energy conservation on flat road (no damping)
+  {
+    const p = { ...defaults, damping: 0 };
+    const vars = Float64Array.from([0.05, 0, 0, 0]); // displaced, flat road
+    const E0 = sim.energy(vars, p).total;
+    const dt = 0.001;
+    for (let i = 0; i < 500; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    const E1 = sim.energy(vars, p).total;
+    close(E1, E0, 0.01, 'Energy conserved (no damping, flat road): ' + E0.toFixed(4) + ' → ' + E1.toFixed(4));
+  }
+
+  // Test 12: Damping dissipates energy on flat road
+  {
+    const p = { ...defaults, damping: 6000 };
+    const vars = Float64Array.from([0.05, 0, 0, 0]);
+    const E0 = sim.energy(vars, p).total;
+    const dt = 0.001;
+    for (let i = 0; i < 2000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    const E1 = sim.energy(vars, p).total;
+    ok(E1 < E0 * 0.5, 'Damping dissipates >50% energy: ' + E0.toFixed(4) + ' → ' + E1.toFixed(4));
+  }
+
+  // Test 13: Critically damped — no overshoot on flat road
+  {
+    const bc = 2 * Math.sqrt(defaults.mass * defaults.stiffness);
+    const p = { ...defaults, damping: bc, carSpeed: 0 }; // stop car
+    const vars = Float64Array.from([0.05, 0, 0, 0]);
+    const dt = 0.001;
+    let crossed = false;
+    for (let i = 0; i < 5000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+      if (vars[0] < -0.0005) crossed = true; // overshoot past equilibrium
+    }
+    ok(!crossed, 'Critically damped: no overshoot past equilibrium');
+    ok(Math.abs(vars[0]) < 0.001, 'Critically damped: settles to eq (' + vars[0].toFixed(5) + ')');
+  }
+
+  // Test 14: Underdamped — oscillates (crosses zero)
+  {
+    const p = { ...defaults, damping: 1000, carSpeed: 0 };
+    const vars = Float64Array.from([0.05, 0, 0, 0]);
+    const dt = 0.001;
+    let crossings = 0;
+    let prevSign = 1;
+    for (let i = 0; i < 5000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+      const s = vars[0] > 0 ? 1 : -1;
+      if (s !== prevSign) { crossings++; prevSign = s; }
+    }
+    ok(crossings >= 2, 'Underdamped: body oscillates (≥2 zero crossings, got ' + crossings + ')');
+  }
+
+  // Test 15: Bump transfers energy to body
+  {
+    const p = { ...defaults, damping: 0 };
+    const vars = Float64Array.from([0, 0, 6, 0]); // start at x=6, approaching bump at x=8
+    const E0 = sim.energy(vars, p).total;
+    const dt = 0.001;
+    // Drive through the bump
+    for (let i = 0; i < 2000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    // After passing bump (x > 10), body should have energy
+    ok(vars[2] > 10, 'Car passed the bump (x=' + vars[2].toFixed(1) + ')');
+    const E1 = sim.energy(vars, p).total;
+    ok(E1 > E0 + 0.01, 'Bump transferred energy to body: ' + E0.toFixed(4) + ' → ' + E1.toFixed(4));
+  }
+
+  // Test 16: Road profile periodic (60m)
+  {
+    const h = 0.1;
+    for (let x = 0; x < 60; x += 0.5) {
+      const y1 = sim._roadHeight(x, h);
+      const y2 = sim._roadHeight(x + 60, h);
+      if (Math.abs(y1 - y2) > 0.0001) {
+        ok(false, 'Road not periodic at x=' + x);
+        break;
+      }
+    }
+    ok(true, 'Road profile is periodic with period 60m');
+  }
+
+  // Test 17: isDragging stops physics
+  {
+    const vars = [0.05, 1.0, 5.0, 1.0];
+    const change = new Float64Array(4);
+    sim.evaluate(vars, change, defaults, true);
+    close(change[0], 0, 0.001, 'isDragging: dy/dt = 0');
+    close(change[1], 0, 0.001, 'isDragging: dvy/dt = 0');
+    close(change[2], 0, 0.001, 'isDragging: dx/dt = 0');
+    close(change[3], 1, 0.001, 'isDragging: dt/dt = 1');
+  }
+
+  // Test 18: Resonance speed = f₀ × washboard_wavelength
+  {
+    const fn = Math.sqrt(defaults.stiffness / defaults.mass) / (2 * Math.PI);
+    const vRes = fn * 5; // washboard λ = 5m
+    close(vRes, 5.03, 0.1, 'Resonance speed ≈ 5 m/s (18 km/h)');
+  }
+
+  // Test 19: Overdamped — no zero crossing
+  {
+    const bc = 2 * Math.sqrt(defaults.mass * defaults.stiffness);
+    const p = { ...defaults, damping: bc * 2, carSpeed: 0 };
+    const vars = Float64Array.from([0.05, 0, 0, 0]);
+    const dt = 0.001;
+    let wentNeg = false;
+    for (let i = 0; i < 10000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+      if (vars[0] < -0.0005) wentNeg = true;
+    }
+    ok(!wentNeg, 'Overdamped: no overshoot');
+    ok(Math.abs(vars[0]) < 0.001, 'Overdamped: eventually settles (' + vars[0].toFixed(5) + ')');
+  }
+
+  // Test 20: Washboard slope matches numerical derivative
+  {
+    const x = 25.0, h = 0.1, dx = 0.0001;
+    const numSlope = (sim._roadHeight(x + dx, h) - sim._roadHeight(x - dx, h)) / (2 * dx);
+    const anaSlope = sim._roadSlope(x, h);
+    close(anaSlope, numSlope, 0.01, 'Washboard slope matches numerical at x=25');
+  }
+
+  console.log(`Car-Suspension: ${p8}/${t8} passed` + (f8 ? ` (${f8} FAILED)` : ''));
+})();
+
+// ═══════════════════════════════════════════
+// 9. Bullet–Block–Spring (with pass-through)
+// ═══════════════════════════════════════════
+(function() {
+  let t9 = 0, p9 = 0, f9 = 0;
+  function ok(c, m) { t9++; if (c) p9++; else { f9++; console.log('  FAIL (bullet-block): ' + m); } }
+  function close(a, b, tol, m) { ok(Math.abs(a - b) < tol, m + ' (got ' + a + ', expected ' + b + ')'); }
+
+  const G = 9.81;
+
+  // Inline sim physics
+  const sim = {
+    _collided: false,
+    _passedThrough: false,
+    // Embed: block+bullet oscillate together
+    // Pass-through: only block oscillates (lighter)
+    evaluate(vars, change, params, isDragging) {
+      change[3] = 1;
+      if (isDragging) return;
+      if (!this._collided) {
+        change[0] = 0; change[1] = 0; change[2] = -4;
+      } else {
+        const [x, vx] = vars;
+        const { bulletMass, blockMass, springMass, stiffness, friction, restLength } = params;
+        const ms = springMass || 0;
+        const blockTotal = this._passedThrough ? blockMass : bulletMass + blockMass;
+        const mEff = blockTotal + ms / 3;
+        const mGrav = blockTotal; // spring weight doesn't press block on surface
+        const displacement = x - restLength;
+        const springF = -stiffness * displacement;
+        let frictionF = 0;
+        if (Math.abs(vx) > 1e-5 && friction > 0) {
+          frictionF = -friction * mGrav * G * Math.sign(vx);
+        } else if (friction > 0) {
+          const staticMax = friction * mGrav * G * 1.2;
+          if (Math.abs(springF) < staticMax) frictionF = -springF;
+          else frictionF = -friction * mGrav * G * Math.sign(springF);
+        }
+        change[0] = vx;
+        change[1] = (springF + frictionF) / mEff;
+        change[2] = vx;
+      }
+    },
+    energy(vars, params) {
+      const [x, vx] = vars;
+      const { bulletMass, blockMass, springMass, stiffness, restLength } = params;
+      const ms = springMass || 0;
+      const blockTotal = this._passedThrough ? blockMass : (this._collided ? bulletMass + blockMass : blockMass);
+      const mEff = blockTotal + ms / 3;
+      const d = x - restLength;
+      return { kinetic: 0.5 * mEff * vx * vx, potential: 0.5 * stiffness * d * d, total: 0.5 * mEff * vx * vx + 0.5 * stiffness * d * d };
+    },
+  };
+
+  const defaults = { bulletMass: 0.01, bulletSpeed: 400, blockMass: 2, springMass: 0, blockWidth: 0.2, resistForce: 8000, stiffness: 500, friction: 0.3, restLength: 1.5 };
+
+  // Test 1: Embed — momentum conservation: v₁ = m·v₀/(m+M)
+  {
+    const { bulletMass: m, bulletSpeed: v0, blockMass: M } = defaults;
+    const v1 = m * v0 / (m + M);
+    close(v1, 0.01 * 400 / 2.01, 0.001, 'v_after = m·v₀/(m+M) = ' + v1.toFixed(4));
+  }
+
+  // Test 2: Energy lost in collision = ½m·v₀²·M/(m+M)
+  {
+    const { bulletMass: m, bulletSpeed: v0, blockMass: M } = defaults;
+    const KE_before = 0.5 * m * v0 * v0;
+    const v1 = m * v0 / (m + M);
+    const KE_after = 0.5 * (m + M) * v1 * v1;
+    const loss = KE_before - KE_after;
+    const expected = 0.5 * m * v0 * v0 * M / (m + M);
+    close(loss, expected, 0.01, 'Energy loss = ½m·v₀²·M/(m+M)');
+    const pct = loss / KE_before * 100;
+    ok(pct > 99, 'Energy loss > 99% for 10g bullet into 2kg block (' + pct.toFixed(1) + '%)');
+  }
+
+  // Test 3: KE retained fraction = m/(m+M)
+  {
+    const m = 0.01, M = 2.0;
+    const frac = m / (m + M);
+    close(frac, 0.00498, 0.0001, 'KE fraction retained = m/(m+M) = ' + frac.toFixed(5));
+  }
+
+  // Test 4: Post-collision — at rest at natural length → zero force
+  {
+    sim._collided = true;
+    const vars = [1.5, 0, 1.5, 0]; // at L₀, no velocity
+    const change = new Float64Array(4);
+    sim.evaluate(vars, change, defaults, false);
+    close(change[1], 0, 0.01, 'Zero force at natural length (spring relaxed, v=0)');
+    sim._collided = false;
+  }
+
+  // Test 5: Spring restoring force direction
+  {
+    sim._collided = true;
+    // Block compressed (x < L₀) → spring pushes right (positive)
+    const vars = [1.2, 0, 1.2, 0]; // 30cm compressed
+    const change = new Float64Array(4);
+    sim.evaluate(vars, change, { ...defaults, friction: 0 }, false);
+    ok(change[1] > 0, 'Compressed spring → positive accel (rightward): ' + change[1].toFixed(2));
+
+    // Block stretched (x > L₀) → spring pulls left (negative)
+    const vars2 = [1.8, 0, 1.8, 0];
+    sim.evaluate(vars2, change, { ...defaults, friction: 0 }, false);
+    ok(change[1] < 0, 'Stretched spring → negative accel (leftward): ' + change[1].toFixed(2));
+    sim._collided = false;
+  }
+
+  // Test 6: Friction opposes motion
+  {
+    sim._collided = true;
+    // Moving left (v < 0) → friction pushes right
+    const vars1 = [1.3, -1, 1.3, 0];
+    const change1 = new Float64Array(4);
+    sim.evaluate(vars1, change1, defaults, false);
+    // Moving right (v > 0) → friction pushes left
+    const vars2 = [1.3, 1, 1.3, 0];
+    const change2 = new Float64Array(4);
+    sim.evaluate(vars2, change2, defaults, false);
+    ok(change1[1] > change2[1], 'Friction opposes motion (accel difference)');
+    sim._collided = false;
+  }
+
+  // Test 7: Energy conservation without friction (post-collision)
+  {
+    sim._collided = true;
+    const p = { ...defaults, friction: 0 };
+    const v1 = -defaults.bulletMass * defaults.bulletSpeed / (defaults.bulletMass + defaults.blockMass);
+    const vars = Float64Array.from([1.5, v1, 1.5, 0]);
+    const E0 = sim.energy(vars, p).total;
+    const dt = 0.001;
+    for (let i = 0; i < 1000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    const E1 = sim.energy(vars, p).total;
+    close(E1, E0, 0.01, 'Energy conserved without friction: ' + E0.toFixed(4) + ' → ' + E1.toFixed(4));
+    sim._collided = false;
+  }
+
+  // Test 8: Friction dissipates energy
+  {
+    sim._collided = true;
+    const p = { ...defaults };
+    const v1 = -defaults.bulletMass * defaults.bulletSpeed / (defaults.bulletMass + defaults.blockMass);
+    const vars = Float64Array.from([1.5, v1, 1.5, 0]);
+    const E0 = sim.energy(vars, p).total;
+    const dt = 0.001;
+    for (let i = 0; i < 5000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    const E1 = sim.energy(vars, p).total;
+    ok(E1 < E0, 'Friction dissipates energy: ' + E0.toFixed(4) + ' → ' + E1.toFixed(4));
+    sim._collided = false;
+  }
+
+  // Test 9: Max compression (no friction) = v₁·√((m+M)/k)
+  {
+    sim._collided = true;
+    const p = { ...defaults, friction: 0 };
+    const totalMass = p.bulletMass + p.blockMass;
+    const v1 = p.bulletMass * p.bulletSpeed / totalMass; // magnitude
+    const expected_xmax = v1 * Math.sqrt(totalMass / p.stiffness);
+    // Simulate and track max compression
+    const vars = Float64Array.from([p.restLength, -v1, p.restLength, 0]);
+    let maxComp = 0;
+    const dt = 0.0005;
+    for (let i = 0; i < 10000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+      const comp = p.restLength - vars[0];
+      if (comp > maxComp) maxComp = comp;
+    }
+    close(maxComp, expected_xmax, 0.005, 'Max compression matches v₁√((m+M)/k) = ' + expected_xmax.toFixed(4) + ', got ' + maxComp.toFixed(4));
+    sim._collided = false;
+  }
+
+  // Test 10: Period = 2π√((m+M)/k)
+  {
+    const totalMass = defaults.bulletMass + defaults.blockMass;
+    const T = 2 * Math.PI * Math.sqrt(totalMass / defaults.stiffness);
+    close(T, 2 * Math.PI * Math.sqrt(2.01 / 500), 0.001, 'Period = 2π√((m+M)/k) = ' + T.toFixed(4));
+  }
+
+  // Test 11: Heavier bullet → more post-collision velocity
+  {
+    const m1 = 0.01, m2 = 0.05, v0 = 400, M = 2;
+    const v1 = m1 * v0 / (m1 + M);
+    const v2 = m2 * v0 / (m2 + M);
+    ok(v2 > v1, 'Heavier bullet → more post-collision speed: ' + v1.toFixed(3) + ' vs ' + v2.toFixed(3));
+  }
+
+  // Test 12: Heavier block → less post-collision velocity
+  {
+    const m = 0.01, v0 = 400;
+    const v1 = m * v0 / (m + 2);
+    const v2 = m * v0 / (m + 10);
+    ok(v1 > v2, 'Heavier block → less post-collision speed: ' + v1.toFixed(3) + ' vs ' + v2.toFixed(3));
+  }
+
+  // Test 13: KE before collision
+  {
+    const KE = 0.5 * 0.01 * 400 * 400;
+    close(KE, 800, 0.01, 'Bullet KE = ½mv² = 800 J');
+  }
+
+  // Test 14: KE after collision
+  {
+    const m = 0.01, v0 = 400, M = 2;
+    const totalMass = m + M;
+    const v1 = m * v0 / totalMass;
+    const KE = 0.5 * totalMass * v1 * v1;
+    close(KE, 0.5 * 2.01 * (400 * 0.01 / 2.01) * (400 * 0.01 / 2.01), 0.01, 'Post-collision KE ≈ 3.98 J');
+  }
+
+  // Test 15: Block oscillates without friction
+  {
+    sim._collided = true;
+    const p = { ...defaults, friction: 0 };
+    const v1 = -p.bulletMass * p.bulletSpeed / (p.bulletMass + p.blockMass);
+    const vars = Float64Array.from([p.restLength, v1, p.restLength, 0]);
+    const dt = 0.001;
+    let crossings = 0, prevSide = 0;
+    for (let i = 0; i < 5000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+      const side = vars[0] > p.restLength ? 1 : -1;
+      if (prevSide !== 0 && side !== prevSide) crossings++;
+      prevSide = side;
+    }
+    ok(crossings >= 4, 'Block oscillates without friction (≥4 crossings, got ' + crossings + ')');
+    sim._collided = false;
+  }
+
+  // Test 16: Static friction can stop block
+  {
+    sim._collided = true;
+    const p = { ...defaults, friction: 0.8, bulletMass: 0.005, bulletSpeed: 100 };
+    const totalMass = p.bulletMass + p.blockMass;
+    const v1 = -p.bulletMass * p.bulletSpeed / totalMass;
+    const vars = Float64Array.from([p.restLength, v1, p.restLength, 0]);
+    const dt = 0.001;
+    for (let i = 0; i < 10000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    ok(Math.abs(vars[1]) < 0.01, 'High friction stops block: v=' + vars[1].toFixed(5));
+    sim._collided = false;
+  }
+
+  // Test 17: isDragging stops physics
+  {
+    sim._collided = true;
+    const vars = [1.3, 0.5, 1.3, 0];
+    const change = new Float64Array(4);
+    sim.evaluate(vars, change, defaults, true);
+    close(change[0], 0, 0.001, 'isDragging: dx/dt = 0');
+    close(change[1], 0, 0.001, 'isDragging: dv/dt = 0');
+    close(change[3], 1, 0.001, 'isDragging: dt/dt = 1');
+    sim._collided = false;
+  }
+
+  // Test 18: Spring PE at compression
+  {
+    sim._collided = true;
+    const vars = [1.3, 0, 1.3, 0]; // 20cm compressed
+    const e = sim.energy(vars, defaults);
+    close(e.potential, 0.5 * 500 * 0.2 * 0.2, 0.001, 'PE = ½k·δ² = ' + e.potential.toFixed(3));
+    close(e.kinetic, 0, 0.001, 'KE = 0 when stationary');
+    sim._collided = false;
+  }
+
+  // Test 19: Spring mass increases effective mass → longer period
+  {
+    const p0 = { ...defaults, springMass: 0 };
+    const p1 = { ...defaults, springMass: 1.5 };
+    const mEff0 = p0.bulletMass + p0.blockMass;           // 2.01
+    const mEff1 = p1.bulletMass + p1.blockMass + 1.5 / 3; // 2.01 + 0.5 = 2.51
+    const T0 = 2 * Math.PI * Math.sqrt(mEff0 / defaults.stiffness);
+    const T1 = 2 * Math.PI * Math.sqrt(mEff1 / defaults.stiffness);
+    ok(T1 > T0, 'Spring mass increases period: ' + T0.toFixed(4) + ' → ' + T1.toFixed(4));
+    close(mEff1, 2.51, 0.01, 'm_eff = m + M + mₛ/3 = 2.51');
+  }
+
+  // Test 20: Spring mass adds to inertia but NOT to friction normal force
+  {
+    sim._collided = true;
+    sim._passedThrough = false;
+    const p = { ...defaults, springMass: 1.5, friction: 0.3 };
+    const vars1 = [1.3, -1, 1.3, 0]; // moving left, compressed 0.2m
+    const change = new Float64Array(4);
+    sim.evaluate(vars1, change, p, false);
+    // mGrav = m+M = 2.01 (spring NOT included)
+    // mEff = m+M+mₛ/3 = 2.01+0.5 = 2.51
+    // Friction accel = μ·mGrav·g/mEff = 0.3·2.01·9.81/2.51 ≈ 2.36 (positive, opposing left motion)
+    // Spring accel = k·0.2/mEff = 500*0.2/2.51 ≈ 39.8 (positive)
+    ok(change[1] > 0, 'With spring mass: accel positive when compressed & moving left');
+    // Verify spring mass does NOT inflate friction (compare with and without)
+    const p_noSpring = { ...defaults, springMass: 0, friction: 0.3 };
+    const change2 = new Float64Array(4);
+    sim.evaluate([1.3, -1, 1.3, 0], change2, p_noSpring, false);
+    // With spring mass: larger mEff → LESS accel (friction same, but F/m smaller)
+    ok(Math.abs(change[1]) < Math.abs(change2[1]), 'Spring mass slows response (higher inertia, same friction)');
+    sim._collided = false;
+    sim._passedThrough = false;
+  }
+
+  // Test 21: Energy conservation with spring mass (no friction)
+  {
+    sim._collided = true;
+    const p = { ...defaults, springMass: 1.0, friction: 0 };
+    const totalMass = p.bulletMass + p.blockMass;
+    const v1 = -p.bulletMass * p.bulletSpeed / totalMass;
+    const vars = Float64Array.from([p.restLength, v1, p.restLength, 0]);
+    const E0 = sim.energy(vars, p).total;
+    const dt = 0.001;
+    for (let i = 0; i < 1000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    const E1 = sim.energy(vars, p).total;
+    close(E1, E0, 0.02, 'Energy conserved with spring mass (no friction): ' + E0.toFixed(4) + ' → ' + E1.toFixed(4));
+    sim._collided = false;
+  }
+
+  // Test 22: Spring mass doesn't affect collision (momentum only block+bullet)
+  {
+    const m = 0.01, v0 = 400, M = 2;
+    const v_after = m * v0 / (m + M);
+    close(v_after, 1.9900, 0.001, 'Collision velocity independent of spring mass');
+  }
+
+  // ── Pass-through tests ──
+
+  // Test 23: Embed/pass-through threshold: KE vs F×d
+  {
+    const KE = 0.5 * 0.01 * 400 * 400; // 800 J
+    const work = 8000 * 0.2;             // 1600 J
+    ok(KE < work, 'Default: KE=800 < F×d=1600 → embeds');
+  }
+
+  // Test 24: Pass-through when KE > F×d
+  {
+    const p = { ...defaults, blockWidth: 0.05, resistForce: 5000 };
+    const KE = 0.5 * p.bulletMass * p.bulletSpeed * p.bulletSpeed; // 800 J
+    const work = p.resistForce * p.blockWidth; // 250 J
+    ok(KE > work, 'Thin block: KE=800 > F×d=250 → passes through');
+  }
+
+  // Test 25: Exit speed formula: v_exit = √(v₀² - 2Fd/m)
+  {
+    const m = 0.01, v0 = 400, F = 5000, d = 0.05;
+    const vExit = Math.sqrt(v0 * v0 - 2 * F * d / m);
+    const expected = Math.sqrt(160000 - 50000); // √110000 ≈ 331.66
+    close(vExit, expected, 0.01, 'Exit speed v_exit = √(v₀²-2Fd/m) = ' + vExit.toFixed(2));
+    ok(vExit < v0, 'Exit speed < entry speed');
+    ok(vExit > 0, 'Exit speed > 0 (passes through)');
+  }
+
+  // Test 26: Pass-through gives LESS block momentum than embed
+  {
+    const m = 0.01, v0 = 400, M = 2, F = 5000, d = 0.05;
+    const vExit = Math.sqrt(v0 * v0 - 2 * F * d / m);
+    const deltaP_passThrough = m * (v0 - vExit);
+    const deltaP_embed = m * v0;
+    ok(deltaP_passThrough < deltaP_embed, 'Pass-through: less momentum to block (' +
+      deltaP_passThrough.toFixed(4) + ' vs ' + deltaP_embed.toFixed(4) + ')');
+  }
+
+  // Test 27: Pass-through block velocity < embed block velocity
+  {
+    const m = 0.01, v0 = 400, M = 2, F = 5000, d = 0.05;
+    const vExit = Math.sqrt(v0 * v0 - 2 * F * d / m);
+    const v_block_pass = m * (v0 - vExit) / M;
+    const v_block_embed = m * v0 / (m + M);
+    ok(v_block_pass < v_block_embed, 'Block moves less with pass-through: ' +
+      v_block_pass.toFixed(4) + ' < ' + v_block_embed.toFixed(4));
+  }
+
+  // Test 28: Energy conservation: KE_before = KE_bullet_after + KE_block + heat
+  {
+    const m = 0.01, v0 = 400, M = 2, F = 5000, d = 0.05;
+    const KE_before = 0.5 * m * v0 * v0;
+    const vExit = Math.sqrt(v0 * v0 - 2 * F * d / m);
+    const KE_bulletAfter = 0.5 * m * vExit * vExit;
+    const v_block = m * (v0 - vExit) / M;
+    const KE_block = 0.5 * M * v_block * v_block;
+    const heat = KE_before - KE_bulletAfter - KE_block;
+    ok(heat > 0, 'Heat dissipated in pass-through > 0: ' + heat.toFixed(2) + ' J');
+    close(KE_before, KE_bulletAfter + KE_block + heat, 0.01, 'Energy conservation: KE_in = KE_out + heat');
+  }
+
+  // Test 29: Exit speed = 0 exactly at KE = F×d boundary
+  {
+    const m = 0.01, F = 8000, d = 0.2;
+    const v_boundary = Math.sqrt(2 * F * d / m); // v where KE = F×d exactly
+    const KE = 0.5 * m * v_boundary * v_boundary;
+    close(KE, F * d, 0.01, 'At boundary: KE = F×d = ' + (F * d));
+    const vExit = Math.sqrt(v_boundary * v_boundary - 2 * F * d / m);
+    close(vExit, 0, 0.001, 'At boundary: exit speed = 0 (just barely embeds)');
+  }
+
+  // Test 30: Post-pass-through block oscillates (no bullet mass in effective mass)
+  {
+    sim._collided = true;
+    sim._passedThrough = true;
+    const p = { ...defaults, friction: 0 };
+    // Block gets small velocity from pass-through
+    const vars = Float64Array.from([p.restLength, -0.5, p.restLength, 0]);
+    const E0 = sim.energy(vars, p).total;
+    // Effective mass should be blockMass only (no bullet)
+    const expectedKE = 0.5 * p.blockMass * 0.5 * 0.5;
+    close(E0, expectedKE, 0.01, 'Pass-through: KE uses block mass only (no bullet)');
+    const dt = 0.001;
+    for (let i = 0; i < 1000; i++) {
+      rk4(vars, (v, c) => sim.evaluate(v, c, p, false), dt, p);
+    }
+    const E1 = sim.energy(vars, p).total;
+    close(E1, E0, 0.01, 'Energy conserved post-pass-through (no friction)');
+    sim._collided = false;
+    sim._passedThrough = false;
+  }
+
+  console.log(`Bullet-Block: ${p9}/${t9} passed` + (f9 ? ` (${f9} FAILED)` : ''));
+})();
+

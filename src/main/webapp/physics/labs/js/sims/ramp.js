@@ -73,13 +73,14 @@ export function createRampSim(el) {
   const P = {
     angle: 30, mass: 5, mu_s: 0.5, mu_k: 0.3,
     appliedForce: 0, rampLength: 8,
+    startPosition: -3,     // initial block position (s<0 = ground, s>=0 = on ramp)
     showForces: true, showValues: true, showDecomp: false,
     eTop: 0.0,             // restitution: top wall (0=brick, 1=perfectly elastic)
     eLeft: 0.0,            // restitution: left wall
     object: 'crate_sm',
     surface: 'wood',
   };
-  let s = -3, v = 0, t = 0, running = true, lastTime = null;
+  let s = P.startPosition, v = 0, t = 0, running = true, lastTime = null;
   let frictionHeat = 0;   // accumulated energy lost to friction (Joules)
   let workApplied = 0;    // accumulated work done by applied force (Joules)
 
@@ -870,6 +871,7 @@ export function createRampSim(el) {
         row.querySelector('.param-value').textContent = fmt(P[key],stp) + (unit||'');
         if (key === 'angle' || key === 'rampLength') buildRamp();
         if (key === 'mass') buildCrate();
+        if (key === 'startPosition') reset();
       });
       return row;
     }
@@ -1014,6 +1016,7 @@ export function createRampSim(el) {
     ps.appendChild(slider('\u03BC\u209B (static)', 'mu_s', 0, 1.5, 0.01, ''));
     ps.appendChild(slider('\u03BC\u2096 (kinetic)', 'mu_k', 0, 1.0, 0.01, ''));
     ps.appendChild(slider('Ramp Length', 'rampLength', 2, 12, 0.5, ' m'));
+    ps.appendChild(slider('Start Position', 'startPosition', -5, 8, 0.5, ' m'));
     sidebarEl.appendChild(ps);
 
     // Wire: manually changing mass/friction → switch to Custom
@@ -1063,13 +1066,15 @@ export function createRampSim(el) {
       { name: 'Ice Hockey',         p: { object: 'ice_block', mass: 10, mu_s: 0.05, mu_k: 0.02, angle: 5, appliedForce: 30, surface: 'ice', eTop: 0.7, eLeft: 0.7 } },
       { name: 'Pinball',            p: { angle: 15, mu_s: 0.05, mu_k: 0.02, eTop: 0.9, eLeft: 0.9, appliedForce: 100, surface: 'metal' } },
       { name: 'Push Uphill',        p: { angle: 25, appliedForce: 80 } },
+      { name: 'Slide Down Ramp',    p: { angle: 35, startPosition: 6, mu_s: 0.3, mu_k: 0.2, appliedForce: 0 } },
+      { name: 'Start at Top',       p: { angle: 30, startPosition: 7.5, mu_s: 0, mu_k: 0, surface: 'ice', appliedForce: 0 } },
     ];
     presets.forEach(pr => {
       const b = document.createElement('button'); b.className = 'preset-btn'; b.textContent = pr.name;
       b.onclick = () => {
         // Defaults reset everything; pr.p overrides only what it specifies
         const defaults = { angle: 30, mass: 5, mu_s: 0.5, mu_k: 0.3, appliedForce: 0,
-          rampLength: 8, eTop: 0, eLeft: 0, object: 'custom', surface: 'wood' };
+          rampLength: 8, startPosition: -3, eTop: 0, eLeft: 0, object: 'custom', surface: 'wood' };
         Object.assign(P, defaults, pr.p);
         // If preset specifies an object, fill in any missing mass/friction from catalog
         if (pr.p.object && OBJECTS[pr.p.object]) {
@@ -1153,11 +1158,11 @@ export function createRampSim(el) {
 
   function syncAll() {
     // Param sliders
-    ['angle','mass','mu_s','mu_k','rampLength','eTop','eLeft'].forEach(k => {
+    ['angle','mass','mu_s','mu_k','rampLength','startPosition','eTop','eLeft'].forEach(k => {
       const inp = document.getElementById('ramp_'+k); if (inp) inp.value = P[k];
       const ve = document.getElementById('ramp_'+k+'_v');
-      if (ve) { const stp={angle:0.5,mass:0.5,mu_s:0.01,mu_k:0.01,rampLength:0.5,eTop:0.05,eLeft:0.05}[k]||0.01;
-        const u={angle:'°',mass:' kg',rampLength:' m'}[k]||'';
+      if (ve) { const stp={angle:0.5,mass:0.5,mu_s:0.01,mu_k:0.01,rampLength:0.5,startPosition:0.5,eTop:0.05,eLeft:0.05}[k]||0.01;
+        const u={angle:'°',mass:' kg',rampLength:' m',startPosition:' m'}[k]||'';
         ve.textContent = (stp>=0.1?P[k].toFixed(1):P[k].toFixed(2))+u; }
     });
     // Checkboxes
@@ -1240,7 +1245,7 @@ export function createRampSim(el) {
   }
 
   function reset() {
-    s = -3; v = 0; t = 0; lastTime = null;
+    s = P.startPosition; v = 0; t = 0; lastTime = null;
     frictionHeat = 0; workApplied = 0;
     flashTop = 0; flashLeft = 0;
     clearTrail();
