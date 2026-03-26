@@ -55,6 +55,12 @@
 <div class="container mt-4 ohm">
   <h1 class="mb-2">Ohm's Law & Circuit Calculator</h1>
   <p class="text-muted mb-3">Enter any two values to solve the rest. Visual circuit sketch updates with your inputs. Use tabs for series/parallel and resistor color codes.</p>
+  <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:10px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+    <div style="color:#e0e7ff;font-size:.92rem;line-height:1.45;">
+      <strong style="color:#a5b4fc;">Advanced Circuit Simulator</strong> &mdash; Build full circuits with 37+ components (resistors, capacitors, diodes, BJTs, op-amps), real-time solving, oscilloscope, and 79 preset circuits.
+    </div>
+    <a href="<%=request.getContextPath()%>/physics/labs/circuit-simulator.jsp" style="background:#6366f1;color:#fff;padding:8px 18px;border-radius:6px;font-size:.85rem;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0;">Try Circuit Simulator &rarr;</a>
+  </div>
 
   <div class="row">
     <div class="col-lg-4">
