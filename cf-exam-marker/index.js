@@ -7,7 +7,7 @@ import { buildPolynomialPrompt } from './polynomial.js';
 import { buildVectorPrompt } from './vector.js';
 import { buildTrigonometryPrompt } from './trigonometry.js';
 import { buildTikzPrompt } from './tikz.js';
-import { buildCircuitPrompt } from './circuit.js';
+import { buildCircuitPrompt, validateCircuitDescription } from './circuit.js';
 import {
   handleCreateDocument,
   handleGetDocument,
@@ -1845,11 +1845,11 @@ async function handleCircuitGenerate(request, env) {
   }
 
   const { description } = payload;
-  if (!description || description.trim().length < 5) {
-    return jsonResponse({ error: 'Description too short (min 5 chars)' }, { status: 400 });
-  }
-  if (description.length > 500) {
-    return jsonResponse({ error: 'Description too long (max 500 chars)' }, { status: 400 });
+
+  // Sanity check: is this actually about circuits?
+  const validationError = validateCircuitDescription(description);
+  if (validationError) {
+    return jsonResponse({ error: validationError }, { status: 400 });
   }
 
   try {

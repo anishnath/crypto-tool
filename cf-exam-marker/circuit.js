@@ -1,6 +1,89 @@
 // Circuit AI generation prompt builder for the CF Worker
 // Converts natural language → circuit preset JSON for 8gwifi.org circuit simulator
 
+// ── Sanity check: is this actually a circuit request? ──
+
+const CIRCUIT_KEYWORDS = new Set([
+  // components
+  'resistor', 'capacitor', 'inductor', 'diode', 'led', 'transistor', 'bjt', 'mosfet', 'jfet',
+  'opamp', 'op-amp', 'op amp', 'amplifier', 'oscillator', 'timer', '555',
+  'relay', 'fuse', 'lamp', 'bulb', 'switch', 'transformer', 'zener', 'darlington',
+  'comparator', 'schmitt', 'counter', 'flip-flop', 'flipflop', 'latch', 'adder',
+  'mux', 'multiplexer', 'demux', 'demultiplexer', 'shift register', 'gate', 'inverter',
+  'potentiometer', 'pot', 'rheostat', 'varistor', 'thermistor', 'photoresistor', 'ldr',
+  'photodiode', 'optocoupler', 'triac', 'scr', 'thyristor', 'diac', 'igbt',
+  'crystal', 'quartz', 'piezo', 'solenoid', 'motor', 'speaker', 'buzzer', 'antenna',
+  'battery', 'cell', 'power supply', 'regulator', 'converter',
+  // circuit types
+  'circuit', 'filter', 'rectifier', 'regulator', 'divider', 'bridge',
+  'oscilloscope', 'waveform', 'signal', 'generator', 'detector', 'demodulator',
+  'attenuator', 'coupler', 'mixer', 'modulator',
+  'low-pass', 'high-pass', 'band-pass', 'band-stop', 'notch', 'bandpass', 'lowpass', 'highpass',
+  'half-wave', 'full-wave', 'clamp', 'clipper', 'clamper', 'doubler', 'tripler',
+  'colpitts', 'hartley', 'wien', 'astable', 'monostable', 'bistable', 'multivibrator',
+  'schmitt trigger', 'wheatstone', 'h-bridge', 'push-pull', 'cascode', 'emitter follower',
+  'common emitter', 'common base', 'common collector', 'common source', 'common drain', 'common gate',
+  'current mirror', 'differential', 'instrumentation', 'summing', 'integrator', 'differentiator',
+  // electrical terms
+  'voltage', 'current', 'resistance', 'ohm', 'volt', 'amp', 'ampere', 'watt', 'farad', 'henry',
+  'ac', 'dc', 'frequency', 'impedance', 'reactance', 'resonance', 'bandwidth', 'gain',
+  'series', 'parallel', 'kirchhoff', 'kvl', 'kcl', 'thevenin', 'norton', 'superposition',
+  'power', 'energy', 'charge', 'capacitance', 'inductance', 'conductance', 'admittance',
+  'phase', 'phasor', 'decibel', 'bode', 'transfer function', 'cutoff', 'rolloff',
+  'bias', 'quiescent', 'operating point', 'load line', 'saturation',
+  'feedback', 'negative feedback', 'positive feedback', 'closed loop', 'open loop',
+  'ground', 'node', 'mesh', 'anode', 'cathode', 'collector', 'emitter', 'base', 'drain', 'source',
+  // shorthand
+  'nmos', 'pmos', 'cmos', 'npn', 'pnp', 'rlc', 'rc', 'rl', 'lc', 'cr',
+  'adc', 'dac', 'pwm', 'vco', 'pll', 'ldo', 'smps', 'ttl', 'ecl',
+  'and gate', 'or gate', 'nand gate', 'nor gate', 'xor gate', 'xnor gate', 'not gate',
+  'sr latch', 'jk flip', 'd flip', 't flip',
+  // units
+  'kohm', 'mohm', 'uf', 'nf', 'pf', 'mh', 'uh', 'khz', 'mhz', 'ghz',
+  'milliamp', 'microamp', 'millivolt', 'microvolt', 'kilohm', 'megohm',
+  // actions
+  'build', 'design', 'create', 'make', 'draw', 'simulate', 'wire', 'connect', 'solder',
+]);
+
+const BLOCK_PATTERNS = [
+  /ignore.*(?:instructions|prompt|above|previous)/i,
+  /(?:write|generate|create).*(?:code|script|program|essay|story|poem)/i,
+  /(?:tell|say|explain|describe).*(?:joke|story|yourself|who are you)/i,
+  /(?:forget|disregard|override).*(?:rules|system|prompt)/i,
+  /(?:pretend|act as|you are now|roleplay)/i,
+  /(?:hack|exploit|inject|xss|sql|eval|exec)\b/i,
+  /\b(?:password|credential|secret|api.?key|token)\b/i,
+];
+
+/**
+ * Validate that a description is actually about circuits/electronics.
+ * Returns null if valid, or an error message string if invalid.
+ */
+export function validateCircuitDescription(description) {
+  if (!description || typeof description !== 'string') return 'Missing description';
+
+  const trimmed = description.trim();
+  if (trimmed.length < 5) return 'Description too short (min 5 chars)';
+  if (trimmed.length > 500) return 'Description too long (max 500 chars)';
+
+  // Block prompt injection / off-topic
+  for (const pattern of BLOCK_PATTERNS) {
+    if (pattern.test(trimmed)) return 'Please describe an electronic circuit';
+  }
+
+  // Must contain at least one circuit-related keyword
+  const lower = trimmed.toLowerCase();
+  let found = false;
+  for (const kw of CIRCUIT_KEYWORDS) {
+    if (lower.includes(kw)) { found = true; break; }
+  }
+  if (!found) {
+    return 'Please describe an electronic circuit (e.g. "LED with 220 ohm resistor and 5V supply")';
+  }
+
+  return null; // valid
+}
+
 /**
  * Build a prompt for GPT to generate a circuit in our simulator's JSON format.
  *
