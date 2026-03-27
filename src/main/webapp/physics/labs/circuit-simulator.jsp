@@ -320,11 +320,62 @@ function setAiStatus(text, cls) {
   aiStatus.className = 'ckt-ai-status' + (cls ? ' ' + cls : '');
 }
 
+// Client-side circuit keyword validation (mirrors server-side, avoids unnecessary round-trip)
+const _CKT_KW = [
+  'resistor','capacitor','inductor','diode','led','transistor','bjt','mosfet','jfet',
+  'opamp','op-amp','op amp','amplifier','oscillator','timer','555',
+  'relay','fuse','lamp','bulb','switch','transformer','zener','darlington',
+  'comparator','schmitt','counter','flip-flop','flipflop','latch','adder',
+  'mux','multiplexer','demux','gate','inverter','potentiometer','pot',
+  'thermistor','photoresistor','ldr','optocoupler','triac','scr','thyristor',
+  'crystal','motor','speaker','buzzer','antenna','battery','cell','power supply','converter',
+  'circuit','filter','rectifier','regulator','divider','bridge',
+  'waveform','signal','generator','detector','attenuator','mixer',
+  'low-pass','high-pass','band-pass','notch','bandpass','lowpass','highpass',
+  'half-wave','full-wave','clamp','clipper','doubler','tripler',
+  'colpitts','hartley','wien','astable','monostable','bistable','multivibrator',
+  'schmitt trigger','wheatstone','h-bridge','push-pull','cascode','emitter follower',
+  'common emitter','common base','common collector','common source','common drain',
+  'current mirror','differential','summing','integrator','differentiator',
+  'voltage','current','resistance','ohm','volt','amp','watt','farad','henry',
+  'ac','dc','frequency','impedance','reactance','resonance','bandwidth','gain',
+  'series','parallel','kirchhoff','kvl','kcl','thevenin','norton',
+  'power','charge','capacitance','inductance','phase','bode','cutoff',
+  'bias','feedback','ground','node','anode','cathode','collector','emitter','drain','source',
+  'nmos','pmos','cmos','npn','pnp','rlc','rc','rl','lc',
+  'adc','dac','pwm','vco','pll','ttl',
+  'and gate','or gate','nand gate','nor gate','xor gate','not gate',
+  'sr latch','jk flip','d flip',
+  'kohm','uf','nf','pf','mh','khz','mhz',
+  'build','design','create','make','draw','simulate','wire','connect',
+];
+const _CKT_BLOCK = [
+  /ignore.*(?:instructions|prompt|above|previous)/i,
+  /(?:write|generate|create).*(?:code|script|program|essay|story|poem)/i,
+  /(?:tell|say|explain).*(?:joke|story|yourself|who are you)/i,
+  /(?:pretend|act as|you are now|roleplay)/i,
+  /(?:hack|exploit|inject|xss|sql|eval|exec)\b/i,
+  /\b(?:password|credential|secret|api.?key|token)\b/i,
+];
+
+function validateCircuitInput(desc) {
+  if (!desc || desc.length < 5) return 'Too short (min 5 chars)';
+  if (desc.length > 500) return 'Too long (max 500 chars)';
+  for (const p of _CKT_BLOCK) { if (p.test(desc)) return 'Please describe an electronic circuit'; }
+  const lower = desc.toLowerCase();
+  if (!_CKT_KW.some(kw => lower.includes(kw))) {
+    return 'Please describe a circuit (e.g. "LED with 220 ohm resistor and 5V supply")';
+  }
+  return null;
+}
+
 async function generateCircuit() {
   const desc = aiInput.value.trim();
   if (!desc) { setAiStatus('Enter a description', 'error'); return; }
-  if (desc.length < 5) { setAiStatus('Too short (min 5 chars)', 'error'); return; }
-  if (desc.length > 500) { setAiStatus('Too long (max 500 chars)', 'error'); return; }
+
+  // Client-side validation (saves a round-trip)
+  const valErr = validateCircuitInput(desc);
+  if (valErr) { setAiStatus(valErr, 'error'); return; }
 
   aiBtn.disabled = true;
   aiInput.disabled = true;
