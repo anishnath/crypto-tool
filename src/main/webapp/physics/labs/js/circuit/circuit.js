@@ -26,6 +26,8 @@ export class Circuit {
   /** Add an element to the circuit */
   addElement(elm) {
     this.elements.push(elm);
+    // Save raw (grid-based) node IDs — analyze() overwrites elm.nodes with sequential IDs
+    elm._rawNodes = elm.nodes.slice();
   }
 
   /** Remove an element */
@@ -47,6 +49,13 @@ export class Circuit {
    * Call this whenever the circuit topology changes.
    */
   analyze() {
+    // Restore raw (grid-based) node IDs — previous analyze() overwrote them with sequential IDs
+    for (const elm of this.elements) {
+      if (elm._rawNodes) {
+        for (let i = 0; i < elm._rawNodes.length; i++) elm.nodes[i] = elm._rawNodes[i];
+      }
+    }
+
     // Step 1: Merge wire-connected nodes using Union-Find
     const nodeMap = this._mergeWires();
 

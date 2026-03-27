@@ -272,14 +272,11 @@ export class CircuitApp {
     const stepsPerFrame = Math.max(1, Math.round(iterCount));
     const dt = this.circuit.timeStep || 5e-6;
 
-    const hasTimeDep = this.uiElements.some(ui => {
-      const t = ui.type;
-      return t === 'capacitor' || t === 'inductor' || t === 'ac-voltage' ||
-        t === 'clock' || t === 'ideal-switch' || t === 'relay' || t === '555-timer' ||
-        t === 'vco' || t === 'diode' || t === 'led' || t === 'zener' ||
-        t === 'bjt-npn' || t === 'bjt-pnp' || t === 'mosfet-n' || t === 'mosfet-p' ||
-        t === 'opamp' || t.includes('gate') || t.includes('flipflop');
-    });
+    // Check if circuit needs time-stepping.
+    // Only pure DC resistor networks skip stepping; everything else needs it.
+    const DC_ONLY = new Set(['resistor', 'dc-voltage', 'dc-current', 'wire', 'ground',
+      'ammeter', 'voltmeter', 'seven-seg', 'logic-output']);
+    const hasTimeDep = this.uiElements.some(ui => !DC_ONLY.has(ui.type));
 
     // Pure DC: advance time for dots/scope but skip re-solve
     if (!hasTimeDep) {
@@ -696,19 +693,18 @@ export class CircuitApp {
       const dy = gy - this._dragMoveStart.gy;
       if (dx !== 0 || dy !== 0) {
         this._pushUndo();
-        // Rebuild all node IDs from new positions
+        // Rebuild raw node IDs from new grid positions
         const nodeId = (x, y) => x * 10000 + y;
         for (const ui of this.uiElements) {
-          if (!ui.elm || !ui.gridPos) continue;
-          for (let i = 0; i < Math.min(ui.elm.nodes.length, ui.gridPos.length); i++) {
-            ui.elm.nodes[i] = nodeId(ui.gridPos[i][0], ui.gridPos[i][1]);
+          if (!ui.elm || !ui.elm._rawNodes || !ui.gridPos) continue;
+          for (let i = 0; i < Math.min(ui.elm._rawNodes.length, ui.gridPos.length); i++) {
+            ui.elm._rawNodes[i] = nodeId(ui.gridPos[i][0], ui.gridPos[i][1]);
           }
-          // Hidden 3rd terminal
-          if (ui.elm.nodes.length > 2 && ui.gridPos.length >= 2) {
-            ui.elm.nodes[2] = nodeId(ui.gridPos[1][0], ui.gridPos[1][1] + 1);
+          if (ui.elm._rawNodes.length > 2 && ui.gridPos.length >= 2) {
+            ui.elm._rawNodes[2] = nodeId(ui.gridPos[1][0], ui.gridPos[1][1] + 1);
           }
-          if (ui.elm.nodes.length > 3 && ui.gridPos.length >= 2) {
-            ui.elm.nodes[3] = nodeId(ui.gridPos[0][0], ui.gridPos[0][1] + 1);
+          if (ui.elm._rawNodes.length > 3 && ui.gridPos.length >= 2) {
+            ui.elm._rawNodes[3] = nodeId(ui.gridPos[0][0], ui.gridPos[0][1] + 1);
           }
         }
         this._rebuildAndSolve();
@@ -726,26 +722,20 @@ export class CircuitApp {
       const dx = gx - this._dragMoveStart.gx;
       const dy = gy - this._dragMoveStart.gy;
       if (dx !== 0 || dy !== 0) {
-        // Element was moved — rebuild node connections with new positions
+        // Element was moved — rebuild raw node IDs from new grid positions
         this._pushUndo();
         const ui = this._dragMoveElm;
-        // Update the element's node IDs based on new grid positions
         const nodeId = (x, y) => x * 10000 + y;
         if (ui.elm && ui.gridPos) {
-          const newNodes = [];
-          for (const [px, py] of ui.gridPos) {
-            newNodes.push(nodeId(px, py));
-          }
-          // For 3+ terminal devices, also update hidden terminals
           if (ui.gridPos.length >= 2) {
-            ui.elm.nodes[0] = nodeId(ui.gridPos[0][0], ui.gridPos[0][1]);
-            ui.elm.nodes[1] = nodeId(ui.gridPos[1][0], ui.gridPos[1][1]);
+            ui.elm._rawNodes[0] = nodeId(ui.gridPos[0][0], ui.gridPos[0][1]);
+            ui.elm._rawNodes[1] = nodeId(ui.gridPos[1][0], ui.gridPos[1][1]);
           }
-          if (ui.elm.nodes.length > 2 && ui.gridPos.length >= 2) {
-            ui.elm.nodes[2] = nodeId(ui.gridPos[1][0], ui.gridPos[1][1] + 1);
+          if (ui.elm._rawNodes.length > 2 && ui.gridPos.length >= 2) {
+            ui.elm._rawNodes[2] = nodeId(ui.gridPos[1][0], ui.gridPos[1][1] + 1);
           }
-          if (ui.elm.nodes.length > 3 && ui.gridPos.length >= 2) {
-            ui.elm.nodes[3] = nodeId(ui.gridPos[0][0], ui.gridPos[0][1] + 1);
+          if (ui.elm._rawNodes.length > 3 && ui.gridPos.length >= 2) {
+            ui.elm._rawNodes[3] = nodeId(ui.gridPos[0][0], ui.gridPos[0][1] + 1);
           }
         }
         this._rebuildAndSolve();
