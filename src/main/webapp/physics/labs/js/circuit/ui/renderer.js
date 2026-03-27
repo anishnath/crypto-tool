@@ -744,6 +744,265 @@ DRAW['seven-seg'] = (ctx, elm) => {
   ctx.fillRect(cx - 5, cy, w, t);
 };
 
+// ── New components rendering ──
+
+/** JFET — reuse MOSFET drawing with different label */
+DRAW['jfet-n'] = DRAW['jfet-p'] = (ctx, elm) => {
+  // Use same visual as MOSFET but with 'JFET' label
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const gx3 = gx2, gy3 = gy2 + 1;
+  const cx = (gx1 + gx2) / 2 * G, cy = (gy1 + gy2) / 2 * G;
+  drawLead(ctx, gx1, gy1, cx / G, cy / G, elm.volts ? elm.volts[0] : 0, 0);
+  drawLead(ctx, gx2, gy2, cx / G, cy / G, elm.volts ? elm.volts[1] : 0, 0);
+  const label = elm.type === 'jfet-p' ? 'P-JF' : 'N-JF';
+  ctx.fillStyle = '#0e7490';
+  ctx.fillRect(cx - 12, cy - 16, 24, 32);
+  ctx.strokeStyle = '#155e75';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(cx - 12, cy - 16, 24, 32);
+  ctx.fillStyle = '#fff';
+  ctx.font = '9px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(label, cx, cy + 3);
+};
+
+/** Darlington — BJT-like with doubled label */
+DRAW['darlington-npn'] = DRAW['darlington-pnp'] = (ctx, elm) => {
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const cx = (gx1 + gx2) / 2 * G, cy = (gy1 + gy2) / 2 * G;
+  drawLead(ctx, gx1, gy1, cx / G, cy / G, elm.volts ? elm.volts[0] : 0, 0);
+  drawLead(ctx, gx2, gy2, cx / G, cy / G, elm.volts ? elm.volts[1] : 0, 0);
+  const label = elm.type === 'darlington-pnp' ? 'PNP-D' : 'NPN-D';
+  ctx.fillStyle = '#7c2d12';
+  ctx.fillRect(cx - 14, cy - 16, 28, 32);
+  ctx.strokeStyle = '#9a3412';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(cx - 14, cy - 16, 28, 32);
+  ctx.fillStyle = '#fff';
+  ctx.font = '8px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(label, cx, cy + 3);
+};
+
+/** Push Switch — circle with NC symbol */
+DRAW['push-switch'] = (ctx, elm) => {
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const x1 = gx1 * G, y1 = gy1 * G, x2 = gx2 * G, y2 = gy2 * G;
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  drawLead(ctx, gx1, gy1, mx / G, my / G, elm.volts[0], 0);
+  drawLead(ctx, mx / G, my / G, gx2, gy2, 0, elm.volts[1]);
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(mx, my, 6, 0, 2 * Math.PI);
+  ctx.stroke();
+  ctx.fillStyle = '#334155';
+  ctx.font = '8px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('PB', mx, my - 10);
+};
+
+/** SPDT Switch */
+DRAW['spdt-switch'] = (ctx, elm) => {
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const cx = (gx1 + gx2) / 2 * G, cy = (gy1 + gy2) / 2 * G;
+  drawLead(ctx, gx1, gy1, cx / G, cy / G, elm.volts ? elm.volts[0] : 0, 0);
+  drawLead(ctx, gx2, gy2, cx / G, cy / G, 0, elm.volts ? elm.volts[1] : 0);
+  ctx.fillStyle = '#475569';
+  ctx.font = '8px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('SPDT', cx, cy - 8);
+};
+
+/** Fuse */
+DRAW['fuse'] = (ctx, elm, showValues) => {
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const x1 = gx1 * G, y1 = gy1 * G, x2 = gx2 * G, y2 = gy2 * G;
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  drawLead(ctx, gx1, gy1, gx2, gy2, elm.volts[0], elm.volts[1]);
+  ctx.strokeStyle = elm.elm && elm.elm.blown ? '#ef4444' : '#f59e0b';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(mx - 8, my - 4, 16, 8);
+  ctx.fillStyle = elm.elm && elm.elm.blown ? '#ef4444' : '#f59e0b';
+  ctx.font = '8px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(elm.elm && elm.elm.blown ? 'BLOWN' : 'FUSE', mx, my - 8);
+};
+
+/** Lamp */
+DRAW['lamp'] = (ctx, elm) => {
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const x1 = gx1 * G, y1 = gy1 * G, x2 = gx2 * G, y2 = gy2 * G;
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  drawLead(ctx, gx1, gy1, gx2, gy2, elm.volts[0], elm.volts[1]);
+  const brightness = elm.elm ? elm.elm.brightness || 0 : 0;
+  const glow = Math.floor(255 * brightness);
+  ctx.fillStyle = `rgb(${glow}, ${Math.floor(glow * 0.8)}, ${Math.floor(glow * 0.3)})`;
+  ctx.beginPath();
+  ctx.arc(mx, my, 8, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.strokeStyle = '#f59e0b';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  // X inside circle
+  ctx.beginPath();
+  ctx.moveTo(mx - 5, my - 5);
+  ctx.lineTo(mx + 5, my + 5);
+  ctx.moveTo(mx + 5, my - 5);
+  ctx.lineTo(mx - 5, my + 5);
+  ctx.strokeStyle = '#92400e';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+};
+
+/** Polarized Capacitor — capacitor with + marker */
+DRAW['polarized-cap'] = (ctx, elm, showValues) => {
+  // Reuse capacitor drawing then add + symbol
+  if (DRAW.capacitor) DRAW.capacitor(ctx, elm, showValues);
+  const [gx1, gy1] = elm.gridPos[0];
+  ctx.fillStyle = '#ef4444';
+  ctx.font = 'bold 10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('+', gx1 * G, gy1 * G - 10);
+};
+
+/** Comparator */
+DRAW['comparator'] = (ctx, elm) => {
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const cx = (gx1 + gx2) / 2 * G, cy = (gy1 + gy2) / 2 * G;
+  drawLead(ctx, gx1, gy1, cx / G, cy / G, elm.volts ? elm.volts[0] : 0, 0);
+  drawLead(ctx, gx2, gy2, cx / G, cy / G, 0, elm.volts ? elm.volts[1] : 0);
+  // Triangle body
+  ctx.fillStyle = '#1e293b';
+  ctx.beginPath();
+  ctx.moveTo(cx - 14, cy - 14);
+  ctx.lineTo(cx + 14, cy);
+  ctx.lineTo(cx - 14, cy + 14);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '7px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('+', cx - 11, cy - 4);
+  ctx.fillText('−', cx - 11, cy + 8);
+  ctx.textAlign = 'center';
+  ctx.fillText('CMP', cx + 2, cy + 3);
+};
+
+/** Schmitt Trigger */
+DRAW['schmitt'] = DRAW['schmitt-inv'] = (ctx, elm) => {
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const x1 = gx1 * G, y1 = gy1 * G, x2 = gx2 * G, y2 = gy2 * G;
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  drawLead(ctx, gx1, gy1, gx2, gy2, elm.volts[0], elm.volts[1]);
+  ctx.fillStyle = '#1e293b';
+  ctx.fillRect(mx - 12, my - 10, 24, 20);
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(mx - 12, my - 10, 24, 20);
+  // Hysteresis symbol
+  ctx.strokeStyle = '#22d3ee';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(mx - 6, my + 3);
+  ctx.lineTo(mx - 2, my + 3);
+  ctx.lineTo(mx - 2, my - 3);
+  ctx.lineTo(mx + 6, my - 3);
+  ctx.stroke();
+  if (elm.type === 'schmitt-inv') {
+    ctx.beginPath();
+    ctx.arc(mx + 10, my, 3, 0, 2 * Math.PI);
+    ctx.stroke();
+  }
+};
+
+/** Monostable */
+DRAW['monostable'] = (ctx, elm) => {
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const x1 = gx1 * G, y1 = gy1 * G, x2 = gx2 * G, y2 = gy2 * G;
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  drawLead(ctx, gx1, gy1, gx2, gy2, elm.volts[0], elm.volts[1]);
+  ctx.fillStyle = '#1e293b';
+  ctx.fillRect(mx - 14, my - 10, 28, 20);
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(mx - 14, my - 10, 28, 20);
+  ctx.fillStyle = '#a78bfa';
+  ctx.font = '8px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('MONO', mx, my + 3);
+};
+
+/** CCVS / CCCS */
+DRAW['ccvs'] = DRAW['cccs'] = (ctx, elm) => {
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const cx = (gx1 + gx2) / 2 * G, cy = (gy1 + gy2) / 2 * G;
+  drawLead(ctx, gx1, gy1, gx2, gy2, elm.volts ? elm.volts[0] : 0, elm.volts ? elm.volts[1] : 0);
+  ctx.fillStyle = '#1e293b';
+  const r = 10;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - r);
+  ctx.lineTo(cx + r, cy);
+  ctx.lineTo(cx, cy + r);
+  ctx.lineTo(cx - r, cy);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.fillStyle = '#f59e0b';
+  ctx.font = '7px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(elm.type === 'ccvs' ? 'CCVS' : 'CCCS', cx, cy + 3);
+};
+
+/** Digital chips — reuse flip-flop style */
+DRAW['jk-flipflop'] = (ctx, elm) => drawFlipFlop(ctx, elm, 'JK-FF', ['J', 'CLK']);
+DRAW['counter'] = (ctx, elm) => drawFlipFlop(ctx, elm, 'CTR', ['CLK', 'RST']);
+DRAW['mux'] = (ctx, elm) => drawFlipFlop(ctx, elm, 'MUX', ['I0', 'I1']);
+DRAW['demux'] = (ctx, elm) => drawFlipFlop(ctx, elm, 'DEMUX', ['IN', 'SEL']);
+DRAW['shift-register'] = (ctx, elm) => drawFlipFlop(ctx, elm, 'SREG', ['D', 'CLK']);
+DRAW['half-adder'] = (ctx, elm) => drawFlipFlop(ctx, elm, 'HA', ['A', 'B']);
+DRAW['full-adder'] = (ctx, elm) => drawFlipFlop(ctx, elm, 'FA', ['A', 'B']);
+
+/** Logic Input — circle with H/L */
+DRAW['logic-input'] = (ctx, elm) => {
+  if (!elm.gridPos || !elm.gridPos[0]) return;
+  const [gx, gy] = elm.gridPos[0];
+  const x = gx * G, y = gy * G;
+  drawPost(ctx, gx, gy, false);
+  const state = elm.elm && elm.elm._state;
+  ctx.fillStyle = state ? '#22c55e' : '#475569';
+  ctx.beginPath();
+  ctx.arc(x - 14, y, 8, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(state ? 'H' : 'L', x - 14, y + 4);
+};
+
+/** Logic Output — square indicator */
+DRAW['logic-output'] = (ctx, elm) => {
+  if (!elm.gridPos || !elm.gridPos[0]) return;
+  const [gx, gy] = elm.gridPos[0];
+  const x = gx * G, y = gy * G;
+  drawPost(ctx, gx, gy, false);
+  const state = elm.elm && elm.elm._state;
+  ctx.fillStyle = state ? '#22c55e' : '#1e293b';
+  ctx.fillRect(x + 6, y - 8, 16, 16);
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x + 6, y - 8, 16, 16);
+  ctx.fillStyle = state ? '#fff' : '#64748b';
+  ctx.font = '8px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(state ? 'H' : 'L', x + 14, y + 3);
+};
+
 // ═══════════════════════════════════════════
 // Main render function
 // ═══════════════════════════════════════════

@@ -36,6 +36,13 @@ import { SevenSegDisplay } from '../elements/seven-seg.js';
 import { VCO } from '../elements/vco.js';
 import { TransmissionLine } from '../elements/transmission-line.js';
 import { Subcircuit } from '../elements/subcircuit.js';
+import { JFET } from '../elements/jfet.js';
+import { CCVS, CCCS } from '../elements/cc-source.js';
+import { PushSwitch, SPDTSwitch } from '../elements/switch2.js';
+import { Fuse, Lamp, PolarizedCapacitor } from '../elements/fuse.js';
+import { Comparator, SchmittTrigger } from '../elements/comparator.js';
+import { Darlington } from '../elements/darlington.js';
+import { JKFlipFlop, Counter, Multiplexer, Demultiplexer, ShiftRegister, HalfAdder, FullAdder, LogicInput, LogicOutput, Monostable } from '../elements/digital.js';
 
 const MODE = { SELECT: 0, ADD_ELM: 1, DRAG_ALL: 2 };
 
@@ -54,6 +61,19 @@ const EDIT_MAP = {
   'mosfet-p': [{ label: 'Threshold Vth (V)', key: 'vth', unit: 'V' }],
   'vco': [{ label: 'Center Freq (Hz)', key: 'fCenter', unit: 'Hz' }, { label: 'Gain (Hz/V)', key: 'gain', unit: 'Hz/V' }],
   'relay': [{ label: 'Coil Resistance (Ω)', key: 'coilR', unit: 'Ω' }],
+  'jfet-n': [{ label: 'Idss (A)', key: 'idss', unit: 'A' }, { label: 'Vp (V)', key: 'vp', unit: 'V' }],
+  'jfet-p': [{ label: 'Idss (A)', key: 'idss', unit: 'A' }, { label: 'Vp (V)', key: 'vp', unit: 'V' }],
+  'ccvs': [{ label: 'Gain (Ω)', key: 'gain', unit: 'Ω' }],
+  'cccs': [{ label: 'Current Gain', key: 'gain', unit: '' }],
+  'fuse': [{ label: 'Rating (A)', key: 'rating', unit: 'A' }],
+  'lamp': [{ label: 'Wattage (W)', key: 'wattage', unit: 'W' }, { label: 'Voltage (V)', key: 'nomVoltage', unit: 'V' }],
+  'polarized-cap': [{ label: 'Capacitance (F)', key: 'capacitance', unit: 'F' }],
+  'darlington-npn': [{ label: 'Single β', key: 'beta1', unit: '' }],
+  'darlington-pnp': [{ label: 'Single β', key: 'beta1', unit: '' }],
+  'schmitt': [{ label: 'V_high threshold', key: 'vHigh', unit: 'V' }, { label: 'V_low threshold', key: 'vLow', unit: 'V' }],
+  'schmitt-inv': [{ label: 'V_high threshold', key: 'vHigh', unit: 'V' }, { label: 'V_low threshold', key: 'vLow', unit: 'V' }],
+  'counter': [{ label: 'Modulus', key: 'modulus', unit: '' }],
+  'monostable': [{ label: 'Pulse Duration (s)', key: 'pulseDuration', unit: 's' }],
 };
 
 export class CircuitApp {
@@ -433,6 +453,31 @@ export class CircuitApp {
       case 'seven-seg':  elm = new SevenSegDisplay(n1, n2, nodeId(gx1+1,gy1), nodeId(gx1+2,gy1), nodeId(gx1+3,gy1), nodeId(gx1,gy1+1), nodeId(gx1+1,gy1+1), nodeId(gx2, gy2)); break;
       case 'vco':         elm = new VCO(n1, n2, nodeId(gx2, gy2 + 1)); break;
       case 'transmission-line': elm = new TransmissionLine(n1, n2, nodeId(gx2, gy2 + 1), nodeId(gx1, gy1 + 1)); break;
+      // New components
+      case 'jfet-n':        elm = new JFET(n1, n2, nodeId(gx2, gy2 + 1)); break;
+      case 'jfet-p':        elm = new JFET(n1, n2, nodeId(gx2, gy2 + 1), { pch: true }); break;
+      case 'ccvs':          elm = new CCVS(n1, n2, nodeId(gx2, gy2 + 1), nodeId(gx1, gy1 + 1), 1000); break;
+      case 'cccs':          elm = new CCCS(n1, n2, nodeId(gx2, gy2 + 1), nodeId(gx1, gy1 + 1), 10); break;
+      case 'push-switch':   elm = new PushSwitch(n1, n2); break;
+      case 'spdt-switch':   elm = new SPDTSwitch(n1, n2, nodeId(gx2, gy2 + 1)); break;
+      case 'fuse':          elm = new Fuse(n1, n2, 1); break;
+      case 'lamp':          elm = new Lamp(n1, n2); break;
+      case 'polarized-cap': elm = new PolarizedCapacitor(n1, n2, 100e-6); break;
+      case 'comparator':    elm = new Comparator(n1, n2, nodeId(gx2, gy2 + 1)); break;
+      case 'schmitt':       elm = new SchmittTrigger(n1, n2); break;
+      case 'schmitt-inv':   elm = new SchmittTrigger(n1, n2, { inverting: true }); break;
+      case 'darlington-npn': elm = new Darlington(n1, n2, nodeId(gx2, gy2 + 1)); break;
+      case 'darlington-pnp': elm = new Darlington(n1, n2, nodeId(gx2, gy2 + 1), { pnp: true }); break;
+      case 'jk-flipflop':  elm = new JKFlipFlop(n1, n2, nodeId(gx2, gy2 + 1), nodeId(gx2, gy2 + 2)); break;
+      case 'counter':       elm = new Counter(n1, n2, nodeId(gx2, gy2 + 1)); break;
+      case 'mux':           elm = new Multiplexer(n1, n2, nodeId(gx2, gy2 + 1), nodeId(gx1, gy1 + 1)); break;
+      case 'demux':         elm = new Demultiplexer(n1, n2, nodeId(gx2, gy2 + 1), nodeId(gx1, gy1 + 1)); break;
+      case 'shift-register': elm = new ShiftRegister(n1, n2, nodeId(gx2, gy2 + 1)); break;
+      case 'half-adder':    elm = new HalfAdder(n1, n2, nodeId(gx2, gy2 + 1), nodeId(gx1, gy1 + 1)); break;
+      case 'full-adder':    elm = new FullAdder(n1, n2, nodeId(gx2, gy2 + 1), nodeId(gx1, gy1 + 1), nodeId(gx2, gy2 + 2)); break;
+      case 'logic-input':   elm = new LogicInput(n1); break;
+      case 'logic-output':  elm = new LogicOutput(n1); break;
+      case 'monostable':    elm = new Monostable(n1, n2); break;
       default: return null;
     }
 
@@ -2235,6 +2280,236 @@ const PRESETS = {
     { type: 'resistor', x1: 8, y1: 0, x2: 8, y2: 4, params: { resistance: 100 } },
     { type: 'wire', x1: 0, y1: 4, x2: 4, y2: 4 },
     { type: 'wire', x1: 4, y1: 4, x2: 8, y2: 4 },
+    { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
+  ],
+
+  // ═══════════════════════════════════════════
+  // New component presets
+  // ═══════════════════════════════════════════
+
+  // ── JFET ──
+  'jfet-amplifier': [
+    // Common-source JFET amplifier
+    { type: 'dc-voltage', x1: 6, y1: 8, x2: 6, y2: 0, params: { voltage: 15 } },
+    { type: 'resistor', x1: 6, y1: 0, x2: 6, y2: 2, params: { resistance: 2200 } },  // Rd
+    { type: 'jfet-n', x1: 3, y1: 3, x2: 6, y2: 3 },   // G(3,3) D(6,3) S(6,4)
+    { type: 'resistor', x1: 6, y1: 4, x2: 6, y2: 8, params: { resistance: 1000 } },  // Rs
+    { type: 'ac-voltage', x1: 0, y1: 8, x2: 0, y2: 3, params: { peakVoltage: 0.2, frequency: 1000 } },
+    { type: 'wire', x1: 0, y1: 3, x2: 3, y2: 3 },
+    { type: 'wire', x1: 0, y1: 8, x2: 6, y2: 8 },
+    { type: 'ground', x1: 0, y1: 8, x2: 0, y2: 8 },
+  ],
+  'jfet-switch': [
+    // JFET as voltage-controlled switch
+    { type: 'dc-voltage', x1: 6, y1: 6, x2: 6, y2: 0, params: { voltage: 10 } },
+    { type: 'resistor', x1: 6, y1: 0, x2: 6, y2: 2, params: { resistance: 1000 } },
+    { type: 'jfet-n', x1: 3, y1: 3, x2: 6, y2: 3 },
+    { type: 'wire', x1: 6, y1: 4, x2: 6, y2: 6 },
+    { type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 3, params: { voltage: 0 } },  // Gate bias
+    { type: 'wire', x1: 0, y1: 3, x2: 3, y2: 3 },
+    { type: 'wire', x1: 0, y1: 6, x2: 6, y2: 6 },
+    { type: 'ground', x1: 0, y1: 6, x2: 0, y2: 6 },
+  ],
+
+  // ── Current-Controlled Sources ──
+  'ccvs-demo': [
+    // CCVS: output voltage proportional to sensed current
+    { type: 'dc-voltage', x1: 0, y1: 4, x2: 0, y2: 0, params: { voltage: 5 } },
+    { type: 'resistor', x1: 0, y1: 0, x2: 4, y2: 0, params: { resistance: 1000 } },
+    { type: 'ccvs', x1: 4, y1: 0, x2: 4, y2: 4 },  // sense(4,0)-(4,4), out(4,5)-(4,1_adj)
+    { type: 'resistor', x1: 8, y1: 0, x2: 8, y2: 4, params: { resistance: 100 } },
+    { type: 'wire', x1: 0, y1: 4, x2: 4, y2: 4 },
+    { type: 'wire', x1: 4, y1: 4, x2: 8, y2: 4 },
+    { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
+  ],
+  'cccs-demo': [
+    { type: 'dc-voltage', x1: 0, y1: 4, x2: 0, y2: 0, params: { voltage: 5 } },
+    { type: 'resistor', x1: 0, y1: 0, x2: 4, y2: 0, params: { resistance: 5000 } },
+    { type: 'cccs', x1: 4, y1: 0, x2: 4, y2: 4 },
+    { type: 'resistor', x1: 8, y1: 0, x2: 8, y2: 4, params: { resistance: 100 } },
+    { type: 'wire', x1: 0, y1: 4, x2: 4, y2: 4 },
+    { type: 'wire', x1: 4, y1: 4, x2: 8, y2: 4 },
+    { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
+  ],
+
+  // ── Switches ──
+  'push-switch-demo': [
+    // Push switch controls LED
+    { type: 'dc-voltage', x1: 0, y1: 4, x2: 0, y2: 0, params: { voltage: 5 } },
+    { type: 'push-switch', x1: 0, y1: 0, x2: 4, y2: 0 },
+    { type: 'resistor', x1: 4, y1: 0, x2: 4, y2: 2, params: { resistance: 220 } },
+    { type: 'led', x1: 4, y1: 2, x2: 4, y2: 4 },
+    { type: 'wire', x1: 4, y1: 4, x2: 0, y2: 4 },
+    { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
+  ],
+  'spdt-switch-demo': [
+    // SPDT switches between two LEDs
+    { type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 0, params: { voltage: 5 } },
+    { type: 'wire', x1: 0, y1: 0, x2: 3, y2: 0 },
+    { type: 'spdt-switch', x1: 3, y1: 0, x2: 6, y2: 0 },  // common(3,0) A(6,0) B(6,1)
+    { type: 'resistor', x1: 6, y1: 0, x2: 6, y2: 3, params: { resistance: 220 } },
+    { type: 'led', x1: 6, y1: 3, x2: 6, y2: 6 },
+    { type: 'wire', x1: 0, y1: 6, x2: 6, y2: 6 },
+    { type: 'ground', x1: 0, y1: 6, x2: 0, y2: 6 },
+  ],
+
+  // ── Fuse ──
+  'fuse-demo': [
+    // Fuse protects LED — increase voltage to blow it
+    { type: 'dc-voltage', x1: 0, y1: 4, x2: 0, y2: 0, params: { voltage: 5 } },
+    { type: 'fuse', x1: 0, y1: 0, x2: 3, y2: 0 },
+    { type: 'resistor', x1: 3, y1: 0, x2: 3, y2: 2, params: { resistance: 100 } },
+    { type: 'led', x1: 3, y1: 2, x2: 3, y2: 4 },
+    { type: 'wire', x1: 3, y1: 4, x2: 0, y2: 4 },
+    { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
+  ],
+
+  // ── Lamp ──
+  'lamp-demo': [
+    // Lamp with variable voltage — see brightness change
+    { type: 'dc-voltage', x1: 0, y1: 4, x2: 0, y2: 0, params: { voltage: 120 } },
+    { type: 'lamp', x1: 0, y1: 0, x2: 4, y2: 0 },
+    { type: 'wire', x1: 4, y1: 0, x2: 4, y2: 4 },
+    { type: 'wire', x1: 4, y1: 4, x2: 0, y2: 4 },
+    { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
+  ],
+
+  // ── Comparator ──
+  'comparator-demo': [
+    // Comparator: AC input vs DC reference → square wave output
+    { type: 'ac-voltage', x1: 0, y1: 6, x2: 0, y2: 0, params: { peakVoltage: 3, frequency: 100 } },
+    { type: 'wire', x1: 0, y1: 0, x2: 4, y2: 0 },
+    { type: 'comparator', x1: 4, y1: 0, x2: 4, y2: 2 },  // V+(4,0) V-(4,2) Out(4,3)
+    { type: 'dc-voltage', x1: 4, y1: 6, x2: 4, y2: 2, params: { voltage: 1 } },  // reference
+    { type: 'resistor', x1: 4, y1: 3, x2: 8, y2: 3, params: { resistance: 1000 } },
+    { type: 'wire', x1: 8, y1: 3, x2: 8, y2: 6 },
+    { type: 'wire', x1: 0, y1: 6, x2: 4, y2: 6 },
+    { type: 'wire', x1: 4, y1: 6, x2: 8, y2: 6 },
+    { type: 'ground', x1: 0, y1: 6, x2: 0, y2: 6 },
+  ],
+
+  // ── Schmitt (native) ──
+  'schmitt-native': [
+    // Schmitt trigger with hysteresis
+    { type: 'ac-voltage', x1: 0, y1: 4, x2: 0, y2: 0, params: { peakVoltage: 4, frequency: 50 } },
+    { type: 'schmitt', x1: 0, y1: 0, x2: 4, y2: 0 },
+    { type: 'resistor', x1: 4, y1: 0, x2: 4, y2: 4, params: { resistance: 1000 } },
+    { type: 'wire', x1: 4, y1: 4, x2: 0, y2: 4 },
+    { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
+  ],
+
+  // ── Darlington (native component) ──
+  'darlington-native': [
+    { type: 'dc-voltage', x1: 6, y1: 8, x2: 6, y2: 0, params: { voltage: 12 } },
+    { type: 'resistor', x1: 6, y1: 0, x2: 6, y2: 2, params: { resistance: 100 } },
+    { type: 'darlington-npn', x1: 3, y1: 3, x2: 6, y2: 3 },  // B(3,3) C(6,3) E(6,4)
+    { type: 'wire', x1: 6, y1: 4, x2: 6, y2: 8 },
+    { type: 'dc-voltage', x1: 0, y1: 8, x2: 0, y2: 3, params: { voltage: 2 } },
+    { type: 'resistor', x1: 0, y1: 3, x2: 3, y2: 3, params: { resistance: 100000 } },
+    { type: 'wire', x1: 0, y1: 8, x2: 6, y2: 8 },
+    { type: 'ground', x1: 0, y1: 8, x2: 0, y2: 8 },
+  ],
+
+  // ── JK Flip-Flop ──
+  'jk-flipflop-demo': [
+    // JK flip-flop toggling with J=K=HIGH
+    { type: 'dc-voltage', x1: 0, y1: 4, x2: 0, y2: 0, params: { voltage: 5 } },
+    { type: 'wire', x1: 0, y1: 0, x2: 3, y2: 0 },    // J = HIGH
+    { type: 'wire', x1: 0, y1: 0, x2: 0, y2: -2 },
+    { type: 'wire', x1: 0, y1: -2, x2: 3, y2: -2 },   // K = HIGH
+    { type: 'clock', x1: 0, y1: 4, x2: 3, y2: 4, params: { frequency: 2 } },
+    { type: 'jk-flipflop', x1: 3, y1: 0, x2: 3, y2: 4 },  // J(3,0) CLK(3,4) K(3,-2_adj) Q(3,5)
+    { type: 'resistor', x1: 3, y1: 5, x2: 3, y2: 8, params: { resistance: 1000 } },
+    { type: 'wire', x1: 3, y1: 8, x2: 0, y2: 8 },
+    { type: 'ground', x1: 0, y1: 8, x2: 0, y2: 8 },
+  ],
+
+  // ── Counter ──
+  'counter-demo': [
+    // 4-bit counter driven by clock
+    { type: 'clock', x1: 0, y1: 0, x2: 3, y2: 0, params: { frequency: 2 } },
+    { type: 'counter', x1: 3, y1: 0, x2: 3, y2: 2 },  // CLK(3,0) RST(3,2) Out(3,3)
+    { type: 'wire', x1: 3, y1: 2, x2: 3, y2: 4 },  // RST tied to ground
+    { type: 'resistor', x1: 3, y1: 3, x2: 6, y2: 3, params: { resistance: 1000 } },
+    { type: 'wire', x1: 6, y1: 3, x2: 6, y2: 4 },
+    { type: 'wire', x1: 0, y1: 4, x2: 3, y2: 4 },
+    { type: 'wire', x1: 3, y1: 4, x2: 6, y2: 4 },
+    { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
+  ],
+
+  // ── Multiplexer ──
+  'mux-demo': [
+    // 2:1 MUX: select between two voltage levels
+    { type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 0, params: { voltage: 5 } },
+    { type: 'wire', x1: 0, y1: 0, x2: 4, y2: 0 },     // In0 = 5V
+    { type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 2, params: { voltage: 0 } },
+    { type: 'wire', x1: 0, y1: 2, x2: 4, y2: 2 },     // In1 = 0V
+    { type: 'clock', x1: 0, y1: 6, x2: 4, y2: 6, params: { frequency: 1 } },  // Select
+    { type: 'mux', x1: 4, y1: 0, x2: 4, y2: 2 },  // I0(4,0) I1(4,2) Sel(4,6_adj) Out(4,-1_adj)
+    { type: 'wire', x1: 0, y1: 6, x2: 0, y2: 6 },
+    { type: 'ground', x1: 0, y1: 6, x2: 0, y2: 6 },
+  ],
+
+  // ── Shift Register ──
+  'shift-register-demo': [
+    // Clock + data → serial-to-parallel
+    { type: 'dc-voltage', x1: 0, y1: 4, x2: 0, y2: 0, params: { voltage: 5 } },
+    { type: 'wire', x1: 0, y1: 0, x2: 3, y2: 0 },       // Data = HIGH
+    { type: 'clock', x1: 0, y1: 4, x2: 3, y2: 4, params: { frequency: 2 } },
+    { type: 'shift-register', x1: 3, y1: 0, x2: 3, y2: 4 },  // D(3,0) CLK(3,4) Out(3,5)
+    { type: 'resistor', x1: 3, y1: 5, x2: 3, y2: 8, params: { resistance: 1000 } },
+    { type: 'wire', x1: 0, y1: 8, x2: 3, y2: 8 },
+    { type: 'ground', x1: 0, y1: 8, x2: 0, y2: 8 },
+  ],
+
+  // ── Half Adder (native) ──
+  'half-adder-native': [
+    { type: 'dc-voltage', x1: 0, y1: 4, x2: 0, y2: 0, params: { voltage: 5 } },
+    { type: 'wire', x1: 0, y1: 0, x2: 4, y2: 0 },  // A = HIGH
+    { type: 'dc-voltage', x1: 0, y1: 4, x2: 0, y2: 2, params: { voltage: 5 } },
+    { type: 'wire', x1: 0, y1: 2, x2: 4, y2: 2 },  // B = HIGH
+    { type: 'half-adder', x1: 4, y1: 0, x2: 4, y2: 2 },  // A(4,0) B(4,2) S(4,3) C(4,-1)
+    { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
+  ],
+
+  // ── Full Adder (native) ──
+  'full-adder-native': [
+    { type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 0, params: { voltage: 5 } },
+    { type: 'wire', x1: 0, y1: 0, x2: 4, y2: 0 },  // A = HIGH
+    { type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 2, params: { voltage: 5 } },
+    { type: 'wire', x1: 0, y1: 2, x2: 4, y2: 2 },  // B = HIGH
+    { type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 4, params: { voltage: 5 } },
+    { type: 'wire', x1: 0, y1: 4, x2: 4, y2: 4 },  // Cin = HIGH (1+1+1 = 11 binary)
+    { type: 'full-adder', x1: 4, y1: 0, x2: 4, y2: 2 },
+    { type: 'ground', x1: 0, y1: 6, x2: 0, y2: 6 },
+  ],
+
+  // ── Logic I/O ──
+  'logic-io-demo': [
+    // Logic input → NOT gate → logic output
+    { type: 'logic-input', x1: 0, y1: 0, x2: 0, y2: 0 },
+    { type: 'not-gate', x1: 0, y1: 0, x2: 4, y2: 0 },
+    { type: 'logic-output', x1: 4, y1: 0, x2: 4, y2: 0 },
+  ],
+
+  // ── Monostable ──
+  'monostable-demo': [
+    // Clock triggers monostable → fixed pulse output
+    { type: 'clock', x1: 0, y1: 4, x2: 4, y2: 4, params: { frequency: 1 } },
+    { type: 'monostable', x1: 4, y1: 4, x2: 4, y2: 0 },
+    { type: 'resistor', x1: 4, y1: 0, x2: 8, y2: 0, params: { resistance: 1000 } },
+    { type: 'wire', x1: 8, y1: 0, x2: 8, y2: 4 },
+    { type: 'wire', x1: 0, y1: 4, x2: 0, y2: 4 },
+    { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
+  ],
+
+  // ── Polarized Cap ──
+  'polarized-cap-demo': [
+    // Electrolytic cap in RC circuit — shows reverse polarity warning
+    { type: 'dc-voltage', x1: 0, y1: 4, x2: 0, y2: 0, params: { voltage: 10 } },
+    { type: 'resistor', x1: 0, y1: 0, x2: 4, y2: 0, params: { resistance: 1000 } },
+    { type: 'polarized-cap', x1: 4, y1: 0, x2: 4, y2: 4, params: { capacitance: 100e-6 } },
+    { type: 'wire', x1: 4, y1: 4, x2: 0, y2: 4 },
     { type: 'ground', x1: 0, y1: 4, x2: 0, y2: 4 },
   ],
 };
