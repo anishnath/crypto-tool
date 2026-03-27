@@ -8,6 +8,7 @@
     "demo:math": "node record-math-demo.js",
     "demo:slash": "node record-slash-demo.js",
     "demo:drawing": "node record-drawing-demo.js",
+    "demo:integral": "node record-integral-calculator-demo.js",
     "demo:all": "node record-math-demo.js && node record-slash-demo.js && node record-drawing-demo.js",
     "convert": "node convert-to-mp4.js"
   },

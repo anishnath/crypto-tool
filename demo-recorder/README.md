@@ -20,6 +20,12 @@ Or use the npm script:
 
 ```bash
 DEMO_URL=http://localhost:8080/mywebapp2_war_exploded/ npm run demo:math
+
+# Integral calculator (step-by-step demo)
+DEMO_URL=http://localhost:8080/mywebapp2_war_exploded/ npm run demo:integral
+
+**Video size:** default **1920×1080** (same as `VIEWPORT` in `helpers.js`). Override with  
+`DEMO_VIEWPORT=1280x720` (width×height) if you need a smaller frame.
 ```
 
 ## Scripts
@@ -27,6 +33,7 @@ DEMO_URL=http://localhost:8080/mywebapp2_war_exploded/ npm run demo:math
 | Script | Output | Description |
 |--------|--------|-------------|
 | `record-math-demo.js` | `math-editor-hero-demo.mp4` | Full hero demo: typing, compute, graphs |
+| `record-integral-calculator-demo.js` | `integral-calculator-demo.mp4` | Integral calculator: by-parts, u-sub, definite + Show Steps |
 | `record-slash-demo.js` | `slash-commands-demo.mp4` | Slash menu and formatting |
 | `record-drawing-demo.js` | `drawing-demo.mp4` | Drawing canvas and diagrams |
 | `convert-to-mp4.js` | — | Batch convert .webm → .mp4 |
