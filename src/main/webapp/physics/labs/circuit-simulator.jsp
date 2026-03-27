@@ -6,30 +6,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Free Online Circuit Simulator — Build & Test Circuits Instantly" />
+    <jsp:param name="toolName" value="Free Online Circuit Simulator with AI — Describe a Circuit, Watch It Build" />
     <jsp:param name="toolCategory" value="Physics" />
-    <jsp:param name="toolDescription" value="Draw electronic circuits and simulate them live in your browser. See animated current flow, voltage colors, and oscilloscope waveforms. 80+ built-in circuits: resistors, capacitors, diodes, BJTs, MOSFETs, op-amps, logic gates. No download, no signup." />
+    <jsp:param name="toolDescription" value="Build circuits with AI: type a description and get a working circuit instantly. Or draw your own with 60 component types. Live animated current flow, voltage colors, oscilloscope. 108 built-in circuits. 100% browser-based, free, no signup." />
     <jsp:param name="toolUrl" value="physics/labs/circuit-simulator.jsp" />
-    <jsp:param name="toolKeywords" value="circuit simulator online free, electronic circuit builder, circuit design tool, SPICE simulator, resistor calculator, RC circuit, voltage divider, diode rectifier, transistor amplifier, op-amp circuit, logic gate simulator, Ohm's law, KVL, KCL, oscilloscope, breadboard simulator" />
+    <jsp:param name="toolKeywords" value="AI circuit generator, circuit simulator online free, AI build circuit, text to circuit, electronic circuit builder, circuit design tool, SPICE simulator, RC circuit, voltage divider, diode rectifier, transistor amplifier, op-amp circuit, logic gate simulator, JFET, Darlington, comparator, Schmitt trigger, Ohm's law, KVL, KCL, oscilloscope" />
     <jsp:param name="toolImage" value="circuit-simulator-og.svg" />
     <jsp:param name="breadcrumbCategoryUrl" value="physics/" />
     <jsp:param name="educationalLevel" value="High School, Undergraduate, AP Physics, IB Physics, Engineering" />
     <jsp:param name="teaches" value="circuit analysis, Ohm's law, Kirchhoff's voltage law, Kirchhoff's current law, voltage dividers, series parallel circuits, RC time constant, RL circuits, RLC resonance, diode rectification, BJT amplifiers, MOSFET switching, op-amp circuits, logic gates, flip-flops, digital electronics" />
-    <jsp:param name="toolFeatures" value="Draw circuits by clicking and dragging on a grid,80+ built-in example circuits across 19 categories,Live animated current flow dots showing electron direction,Voltage-to-color mapping shows potential at every node,Built-in oscilloscope with auto-scaling waveforms,37 component types including R C L diodes BJTs MOSFETs op-amps logic gates,Newton-Raphson solver for nonlinear circuits,Export as PNG image or shareable URL,Undo/redo with 50-level history,Works on desktop tablet and mobile browsers" />
+    <jsp:param name="toolFeatures" value="AI circuit generator: describe a circuit in plain English and it builds automatically,60 component types: resistors capacitors diodes BJTs MOSFETs JFETs Darlington op-amps comparators Schmitt triggers logic gates flip-flops counters adders,108 built-in example circuits across 19 categories,Live animated current flow dots showing electron direction,Voltage-to-color mapping shows potential at every node,Built-in oscilloscope with auto-scaling waveforms,Newton-Raphson solver for nonlinear circuits,Export as PNG image or shareable URL,Undo/redo with 50-level history,Works on desktop tablet and mobile browsers" />
     <jsp:param name="hasSteps" value="true" />
-    <jsp:param name="howToSteps" value="Choose a circuit|Click Circuits menu and select from 80+ built-in examples like Voltage Divider or Common Emitter Amplifier,Or draw your own|Right-click the canvas or press a shortcut key like r for resistor then click-drag to place components,Connect with wires|Press w for wire mode and click-drag between component terminals to complete the circuit,Watch it simulate|The circuit solves instantly showing animated current dots flowing through wires and voltage colors at every node,Analyze with scope|Right-click any component and select View in Scope to see voltage and current waveforms over time,Edit values|Click any component to see its properties in the right panel and change resistance voltage capacitance etc,Export and share|Use File menu to export as PNG image or copy a shareable URL that anyone can open" />
-    <jsp:param name="faq1q" value="What is a circuit simulator?" />
-    <jsp:param name="faq1a" value="A circuit simulator lets you build electronic circuits virtually and test them without physical components. You draw resistors capacitors diodes transistors and other parts on a canvas, connect them with wires, and the software solves the circuit equations to show you voltages currents and waveforms in real time." />
-    <jsp:param name="faq2q" value="How do I use this free online circuit simulator?" />
-    <jsp:param name="faq2a" value="Right-click the canvas or press a keyboard shortcut like r for resistor or v for voltage source. Click and drag on the grid to place the component. Connect components with wires by pressing w. Add a ground with g. The circuit solves automatically showing current flow as animated dots and voltage as color gradients." />
+    <jsp:param name="howToSteps" value="Use AI to build a circuit|Click the AI button in the menu bar and type a description like inverting op-amp with gain -10 then press Generate. The circuit appears on the canvas ready to simulate,Or choose a preset|Click Circuits menu and select from 108 built-in examples like Voltage Divider or Common Emitter Amplifier,Or draw your own|Right-click the canvas or press a shortcut key like r for resistor then click-drag to place components,Connect with wires|Press w for wire mode and click-drag between component terminals to complete the circuit,Watch it simulate|The circuit solves instantly showing animated current dots flowing through wires and voltage colors at every node,Analyze with scope|Click Options then Show Scope or right-click any component and select View in Scope to see voltage and current waveforms,Edit values|Click any component to see its properties in the right panel and change resistance voltage capacitance etc,Export and share|Use File menu to export as PNG image or copy a shareable URL that anyone can open" />
+    <jsp:param name="faq1q" value="How does the AI circuit generator work?" />
+    <jsp:param name="faq1a" value="Click the AI button in the menu bar and describe any circuit in plain English, like inverting op-amp with gain of -10 or RC low-pass filter with 10k and 100nF. The AI generates a complete working circuit with correct component values and wiring. It supports 60 component types including resistors, capacitors, diodes, BJTs, MOSFETs, JFETs, op-amps, logic gates, flip-flops, counters, and more." />
+    <jsp:param name="faq2q" value="What is a circuit simulator?" />
+    <jsp:param name="faq2a" value="A circuit simulator lets you build electronic circuits virtually and test them without physical components. You draw resistors capacitors diodes transistors and other parts on a canvas, connect them with wires, and the software solves the circuit equations using Modified Nodal Analysis to show you voltages currents and waveforms in real time." />
     <jsp:param name="faq3q" value="What types of circuits can I simulate?" />
-    <jsp:param name="faq3a" value="You can simulate DC circuits with resistors and batteries, AC circuits with capacitors and inductors, diode circuits including rectifiers and voltage regulators, transistor amplifiers using BJTs and MOSFETs, op-amp circuits like inverting amplifiers and filters, and digital logic circuits with AND OR NAND gates and flip-flops. Over 80 example circuits are built in." />
+    <jsp:param name="faq3a" value="You can simulate DC circuits with resistors and batteries, AC circuits with capacitors and inductors, diode circuits including rectifiers and voltage regulators, transistor amplifiers using BJTs MOSFETs and JFETs, Darlington pairs, op-amp circuits like inverting amplifiers and comparators, Schmitt triggers, 555 timers, and digital logic circuits with gates flip-flops counters shift registers multiplexers and adders. 108 example circuits are built in and AI can generate any circuit you describe." />
     <jsp:param name="faq4q" value="Is this circuit simulator free?" />
-    <jsp:param name="faq4a" value="Yes, completely free with no signup required. It runs entirely in your browser with no downloads or installations needed. Works on desktop, tablet, and mobile devices." />
-    <jsp:param name="faq5q" value="Can I export my circuit as an image?" />
-    <jsp:param name="faq5a" value="Yes. Go to File then Export as Image PNG to download a high-resolution screenshot of your circuit. You can also use File then Share Circuit URL to get a link that anyone can open to see your exact circuit." />
-    <jsp:param name="faq6q" value="Does this simulator support oscilloscope waveforms?" />
-    <jsp:param name="faq6a" value="Yes. Right-click any component and select View in Scope to add voltage and current traces to the built-in oscilloscope panel. It shows real-time waveforms with auto-scaling axes, perfect for visualizing AC signals, RC charging curves, and oscillator outputs." />
+    <jsp:param name="faq4a" value="Yes, completely free with no signup required. The simulator and all 108 preset circuits run entirely in your browser. The AI circuit generator is also free with a rate limit of 5 generations per hour. Works on desktop, tablet, and mobile devices." />
+    <jsp:param name="faq5q" value="What AI prompts work best for generating circuits?" />
+    <jsp:param name="faq5a" value="Be specific about component values and topology. Good examples: LED with 330 ohm resistor powered by 5V, inverting op-amp amplifier with gain of -10, NPN BJT switch driving LED with 10k base resistor, RLC series resonance R=100 L=10mH C=10nF, SR latch using two NAND gates. Simple circuits like filters and dividers generate perfectly. Complex multi-transistor circuits may need minor wiring adjustments." />
+    <jsp:param name="faq6q" value="Can I export my circuit as an image or share it?" />
+    <jsp:param name="faq6a" value="Yes. Go to File then Export as Image PNG to download a high-resolution screenshot. Use File then Share Circuit URL to get a link that anyone can open to see your exact circuit with all component values preserved. AI-generated circuits can also be exported and shared the same way." />
 </jsp:include>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,6 +94,8 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 .circuit-menu-bar{display:flex;background:var(--ckt-panel);border-bottom:1px solid var(--ckt-border);padding:0 4px;height:32px;align-items:center;gap:0;user-select:none;z-index:100;flex-shrink:0}
 .circuit-menu-btn{padding:4px 12px;color:var(--ckt-text);font:500 13px 'DM Sans',sans-serif;cursor:pointer;border-radius:4px;transition:background .15s}
 .circuit-menu-btn:hover{background:rgba(255,255,255,.08)}
+.circuit-menu-ai{color:#c7d2fe;background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(139,92,246,.2));border:1px solid rgba(99,102,241,.3);border-radius:4px;padding:3px 10px;font-weight:600}
+.circuit-menu-ai:hover{background:linear-gradient(135deg,rgba(99,102,241,.35),rgba(139,92,246,.35));color:#e0e7ff}
 .circuit-menu-popup{position:fixed;background:var(--ckt-panel);border:1px solid var(--ckt-border);border-radius:6px;padding:4px 0;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:1100;font:13px 'DM Sans',sans-serif}
 .circuit-menu-item{display:flex;align-items:center;padding:6px 16px;cursor:pointer;gap:12px;color:var(--ckt-text);transition:background .1s}
 .circuit-menu-item:hover{background:rgba(6,182,212,.15)}
@@ -112,6 +114,28 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 .ckt-header strong{color:var(--ckt-text);font-weight:600}
 
 /* Toolbar */
+/* AI panel — hidden by default, opened from menu bar "🤖 AI" button */
+.ckt-ai-panel{display:none;flex-direction:column;flex-shrink:0}
+.ckt-ai-panel.open{display:flex}
+.ckt-ai-bar{display:flex;align-items:center;gap:8px;padding:4px 12px;background:linear-gradient(90deg,rgba(99,102,241,.08),rgba(6,182,212,.08));border-bottom:1px solid var(--ckt-border);flex-shrink:0;height:36px;font:12px 'DM Sans',sans-serif}
+.ckt-ai-input{flex:1;min-width:0;padding:4px 10px;border:1px solid rgba(99,102,241,.3);border-radius:6px;background:rgba(0,0,0,.2);color:var(--ckt-text);font:12px 'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.ckt-ai-input:focus{border-color:#6366f1}
+.ckt-ai-input::placeholder{color:var(--ckt-muted);font-size:11px}
+.ckt-ai-btn{padding:4px 14px;border:none;border-radius:6px;background:#6366f1;color:#fff;font:600 12px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:background .15s}
+.ckt-ai-btn:hover{background:#4f46e5}
+.ckt-ai-btn:disabled{opacity:.5;cursor:wait}
+.ckt-ai-close{padding:2px 8px;border:none;background:transparent;color:var(--ckt-muted);font-size:16px;cursor:pointer;line-height:1}
+.ckt-ai-close:hover{color:#ef4444}
+.ckt-ai-status{font-size:11px;white-space:nowrap;flex-shrink:0;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.ckt-ai-status.loading{color:#a78bfa}
+.ckt-ai-status.success{color:#22c55e}
+.ckt-ai-status.error{color:#ef4444}
+.ckt-ai-status.warning{color:#f59e0b}
+.ckt-ai-examples{display:flex;align-items:center;gap:6px;padding:3px 12px;background:rgba(99,102,241,.04);border-bottom:1px solid var(--ckt-border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.ckt-ai-examples::-webkit-scrollbar{display:none}
+.ckt-ai-examples-label{color:var(--ckt-muted);font:11px 'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0}
+.ckt-ai-chip{padding:2px 10px;border:1px solid rgba(99,102,241,.25);border-radius:12px;background:transparent;color:#a5b4fc;font:11px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.ckt-ai-chip:hover{background:rgba(99,102,241,.15);border-color:#6366f1;color:#c7d2fe}
 .ckt-toolbar{display:flex;align-items:center;gap:8px;padding:4px 12px;background:var(--ckt-panel);border-bottom:1px solid var(--ckt-border);flex-shrink:0;height:34px;font:12px 'DM Sans',sans-serif;overflow-x:auto}
 .ckt-tb-btn{padding:3px 10px;border:1px solid var(--ckt-border);border-radius:4px;background:transparent;color:var(--ckt-text);font:600 12px 'DM Sans',sans-serif;cursor:pointer;transition:background .15s;white-space:nowrap}
 .ckt-tb-btn:hover{background:rgba(255,255,255,.08)}
@@ -152,6 +176,10 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
   .ckt-tb-slider{width:50px}
   .ckt-tb-label{display:none}
   .ckt-tb-info{display:none}
+  .ckt-ai-examples{display:none}
+  .ckt-ai-input{font-size:16px}
+  .ckt-ai-bar{height:auto;padding:6px 8px}
+  .circuit-menu-ai{font-size:11px;padding:4px 6px}
 }
 </style>
 </head>
@@ -164,8 +192,8 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 
   <!-- Page header -->
   <div class="ckt-header">
-    <h1>Circuit Simulator</h1>
-    <p>Draw electronic circuits and simulate them live. Right-click to add components, see current flow as animated dots, voltage as color gradients. <strong>80+ built-in circuits</strong> — from Ohm's law to BJT amplifiers to logic gates. <a href="#" id="cktLearnMore">How to use &darr;</a></p>
+    <h1>Circuit Simulator with AI</h1>
+    <p>Describe a circuit and AI builds it, or draw your own with 60 components. Live current animation, voltage colors, oscilloscope. <strong>108 built-in circuits</strong> &amp; <strong>AI generator</strong>. <a href="#" id="cktLearnMore">How to use &darr;</a></p>
   </div>
 
   <!-- Menu bar injected by menus.js -->
@@ -183,6 +211,29 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
     <span class="ckt-tb-value" id="valCurrentSpeed">50%</span>
     <div class="ckt-tb-sep"></div>
     <span class="ckt-tb-info" id="circuitInfo">t = 0.000s</span>
+  </div>
+
+  <!-- AI Circuit Generator (panel hidden by default) -->
+  <div class="ckt-ai-panel" id="aiPanel">
+    <div class="ckt-ai-bar" id="aiBar">
+      <input type="text" class="ckt-ai-input" id="aiInput" placeholder="Describe a circuit... e.g. &quot;inverting op-amp with gain -10&quot;" maxlength="500" autocomplete="off">
+      <button class="ckt-ai-btn" id="aiGenerate">Generate</button>
+      <button class="ckt-ai-close" id="aiClose" title="Close">&times;</button>
+      <span class="ckt-ai-status" id="aiStatus"></span>
+    </div>
+    <div class="ckt-ai-examples" id="aiExamples">
+      <span class="ckt-ai-examples-label">Try:</span>
+      <button class="ckt-ai-chip" data-prompt="LED with 330 ohm resistor powered by 5V">LED Circuit</button>
+      <button class="ckt-ai-chip" data-prompt="Voltage divider with 10k and 5k resistors, 9V battery">Voltage Divider</button>
+      <button class="ckt-ai-chip" data-prompt="RC low-pass filter, R=10k, C=100nF, AC source at 1kHz">RC Filter</button>
+      <button class="ckt-ai-chip" data-prompt="Inverting op-amp amplifier with gain of -10, 1kHz AC input">Op-Amp Inverter</button>
+      <button class="ckt-ai-chip" data-prompt="NPN BJT switch driving LED, base through 10k from 5V, Vcc=9V">BJT Switch</button>
+      <button class="ckt-ai-chip" data-prompt="Half-wave rectifier with diode, 100uF smoothing cap, 1k load">Rectifier</button>
+      <button class="ckt-ai-chip" data-prompt="Zener regulator: 12V input, 5.1V zener, 470 ohm series resistor">Zener Regulator</button>
+      <button class="ckt-ai-chip" data-prompt="RLC series resonance: R=100, L=10mH, C=10nF, AC source">RLC Resonance</button>
+      <button class="ckt-ai-chip" data-prompt="SR latch using two cross-coupled NAND gates">SR Latch</button>
+      <button class="ckt-ai-chip" data-prompt="D flip-flop with 2Hz clock input">D Flip-Flop</button>
+    </div>
   </div>
 
   <div class="ckt-main">
@@ -251,6 +302,133 @@ if (mobileBar) {
     app._cancelAdd();
   });
 }
+
+// ── AI Circuit Generator ──
+const aiPanel = document.getElementById('aiPanel');
+const aiClose = document.getElementById('aiClose');
+const aiInput = document.getElementById('aiInput');
+const aiBtn = document.getElementById('aiGenerate');
+const aiStatus = document.getElementById('aiStatus');
+
+// Close button
+aiClose.addEventListener('click', () => {
+  aiPanel.classList.remove('open');
+});
+
+function setAiStatus(text, cls) {
+  aiStatus.textContent = text;
+  aiStatus.className = 'ckt-ai-status' + (cls ? ' ' + cls : '');
+}
+
+async function generateCircuit() {
+  const desc = aiInput.value.trim();
+  if (!desc) { setAiStatus('Enter a description', 'error'); return; }
+  if (desc.length < 5) { setAiStatus('Too short (min 5 chars)', 'error'); return; }
+  if (desc.length > 500) { setAiStatus('Too long (max 500 chars)', 'error'); return; }
+
+  aiBtn.disabled = true;
+  aiInput.disabled = true;
+  setAiStatus('Generating circuit...', 'loading');
+
+  try {
+    const resp = await fetch('<%=request.getContextPath()%>/CFExamMarkerFunctionality?action=circuit_generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description: desc }),
+    });
+
+    // Handle HTTP errors
+    if (resp.status === 429) {
+      const data = await resp.json().catch(() => ({}));
+      setAiStatus(data.message || 'Rate limit — try again later', 'error');
+      return;
+    }
+    if (resp.status === 401) {
+      setAiStatus('Auth error — please reload', 'error');
+      return;
+    }
+    if (!resp.ok) {
+      const data = await resp.json().catch(() => ({}));
+      setAiStatus(data.error || data.message || 'Server error (' + resp.status + ')', 'error');
+      return;
+    }
+
+    const data = await resp.json();
+
+    // API returned error in body
+    if (data.error) {
+      setAiStatus(data.error, 'error');
+      return;
+    }
+
+    // Validate response
+    if (!data.success || !data.elements || !Array.isArray(data.elements)) {
+      setAiStatus('Invalid response from AI', 'error');
+      return;
+    }
+    if (data.elements.length === 0) {
+      setAiStatus('AI returned empty circuit', 'error');
+      return;
+    }
+
+    // Check for minimum viable circuit
+    const types = data.elements.map(e => e.type);
+    const hasSource = types.some(t => ['dc-voltage','ac-voltage','dc-current','clock'].includes(t));
+    const hasGround = types.includes('ground');
+    if (!hasSource) {
+      setAiStatus('AI circuit has no source — adding 5V DC', 'warning');
+      data.elements.unshift({ type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 0, params: { voltage: 5 } });
+    }
+    if (!hasGround) {
+      let maxY = 0;
+      for (const e of data.elements) { maxY = Math.max(maxY, e.y1 || 0, e.y2 || 0); }
+      data.elements.push({ type: 'ground', x1: 0, y1: maxY, x2: 0, y2: maxY });
+    }
+
+    // Load into simulator
+    app.loadFromElements(data.elements);
+
+    // Build status message
+    const name = data.name || 'Circuit';
+    const count = data.elements.length;
+    const time = data.responseTimeMs ? (data.responseTimeMs / 1000).toFixed(1) + 's' : '';
+    let statusMsg = name + ' (' + count + ' elements)';
+    if (time) statusMsg += ' in ' + time;
+
+    if (data.warnings && data.warnings.length > 0) {
+      setAiStatus('⚠ ' + statusMsg + ' — may have wiring issues', 'warning');
+    } else {
+      setAiStatus('✓ ' + statusMsg, 'success');
+    }
+
+  } catch (e) {
+    console.error('AI circuit error:', e);
+    if (e.name === 'TypeError' && e.message.includes('fetch')) {
+      setAiStatus('Network error — check connection', 'error');
+    } else {
+      setAiStatus('Error: ' + (e.message || 'Unknown'), 'error');
+    }
+  } finally {
+    aiBtn.disabled = false;
+    aiInput.disabled = false;
+    aiInput.focus();
+  }
+}
+
+aiBtn.addEventListener('click', generateCircuit);
+aiInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generateCircuit(); }
+});
+
+// Example chips — click to fill input (user presses Enter or Generate to submit)
+document.querySelectorAll('.ckt-ai-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    aiInput.value = chip.dataset.prompt;
+    aiInput.focus();
+    aiInput.select();
+    setAiStatus('Press Enter or click Generate', '');
+  });
+});
 </script>
 
 <script>

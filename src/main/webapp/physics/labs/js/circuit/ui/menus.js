@@ -275,7 +275,10 @@ export class MenuBar {
       { label: '☑ Show Voltage Colors', action: 'toggleVoltage', toggle: true },
       { label: '☑ Show Values', action: 'toggleValues', toggle: true },
       { label: '☐ Conventional Current', action: 'toggleConventional', toggle: true },
+      { divider: true },
+      { label: '☐ Show Scope/Graph', action: 'toggleScope', toggle: true },
     ]);
+    this._addActionButton('🤖 AI', 'toggleAI');
 
     // Build key map from Draw menu
     this._buildKeyMap(DRAW_MENU);
@@ -303,6 +306,18 @@ export class MenuBar {
       { label: 'Common Emitter', action: 'preset:common-emitter' },
       { label: 'Inverting Op-Amp', action: 'preset:inverting-opamp' },
     ];
+  }
+
+  _addActionButton(label, action) {
+    const btn = document.createElement('div');
+    btn.className = 'circuit-menu-btn circuit-menu-ai';
+    btn.textContent = label;
+    this._bar.appendChild(btn);
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this._closePopup();
+      this._onAction(action);
+    });
   }
 
   _addTopMenu(label, items) {
@@ -373,7 +388,16 @@ export class MenuBar {
           this._closePopup();
           this.hideContextMenu();
           if (item.type) this._onSelect(item.type);
-          else if (item.action) this._onAction(item.action);
+          else if (item.action) {
+            this._onAction(item.action);
+            // Toggle checkmark for toggle items
+            if (item.toggle) {
+              const txt = row.textContent;
+              if (txt.startsWith('☑')) item.label = '☐' + txt.slice(1);
+              else if (txt.startsWith('☐')) item.label = '☑' + txt.slice(1);
+              row.textContent = item.label;
+            }
+          }
         });
       }
 

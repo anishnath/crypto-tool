@@ -91,6 +91,7 @@ export class CircuitApp {
     // UI elements (grid-based: [{type, gridPos, elm, ...}])
     this.uiElements = [];
     this.selectedElm = null;
+    this.selectedAll = false;  // Ctrl+A select-all mode
 
     // Mode
     this.mode = MODE.SELECT;
@@ -196,7 +197,7 @@ export class CircuitApp {
     this.canvas.onSingleTouch = (type, x, y) => {
       if (type === 'start') this._onMouseDown({ button: 0, offsetX: x, offsetY: y, altKey: false });
       else if (type === 'move') this._onMouseMove({ offsetX: x, offsetY: y });
-      else if (type === 'end') this._onMouseUp({ button: 0 });
+      else if (type === 'end') this._onMouseUp({ button: 0, offsetX: x, offsetY: y });
     };
 
     // Keyboard
@@ -367,6 +368,7 @@ export class CircuitApp {
   _showScope(show) {
     if (this._scopeWrap) {
       this._scopeWrap.style.display = show ? 'block' : 'none';
+      if (this.scope) this.scope.visible = show;
       // Trigger canvas resize after layout change
       requestAnimationFrame(() => {
         this.canvas._resize();
@@ -597,9 +599,36 @@ export class CircuitApp {
       this._dragStart = { gx, gy };
       this._dragEnd = { gx, gy };
     } else {
+      // Select-all mode: clicking on a component starts drag-all, clicking empty deselects
+      if (this.selectedAll) {
+        const clickedElm = this._findElementAt(gx, gy);
+        if (clickedElm) {
+          // Drag entire circuit
+          this._dragMoveAll = true;
+          this._dragMoveStart = { gx, gy };
+          this._dragMoveAllOrig = this.uiElements.map(ui => ui.gridPos.map(p => [...p]));
+        } else {
+          // Click on empty = deselect all
+          this.selectedAll = false;
+          this.selectedElm = null;
+          this._updateInfoPanel();
+        }
+        return;
+      }
+
       // Select mode: find element under cursor
-      this.selectedElm = this._findElementAt(gx, gy);
+      const clicked = this._findElementAt(gx, gy);
+      this.selectedElm = clicked;
       this._updateInfoPanel();
+
+      // Start dragging selected element to reposition
+      if (clicked) {
+        this._dragMoveElm = clicked;
+        this._dragMoveStart = { gx, gy };
+        this._dragMoveOrigPos = clicked.gridPos.map(p => [...p]); // deep copy
+      } else {
+        this._dragMoveElm = null;
+      }
     }
   }
 
@@ -617,14 +646,118 @@ export class CircuitApp {
     this.canvas.mouseGY = gy;
     this.canvas.showCrosshair = (this.mode === MODE.ADD_ELM);
 
+    // Drag-all: move entire circuit
+    if (this._dragMoveAll && this._dragMoveStart) {
+      const dx = gx - this._dragMoveStart.gx;
+      const dy = gy - this._dragMoveStart.gy;
+      if (dx !== 0 || dy !== 0) {
+        for (let i = 0; i < this.uiElements.length; i++) {
+          const orig = this._dragMoveAllOrig[i];
+          const ui = this.uiElements[i];
+          for (let j = 0; j < ui.gridPos.length; j++) {
+            ui.gridPos[j][0] = orig[j][0] + dx;
+            ui.gridPos[j][1] = orig[j][1] + dy;
+          }
+        }
+        this.canvas.el.style.cursor = 'move';
+      }
+      return;
+    }
+
+    // Drag-to-reposition selected element
+    if (this.mode === MODE.SELECT && this._dragMoveElm && this._dragMoveStart) {
+      const dx = gx - this._dragMoveStart.gx;
+      const dy = gy - this._dragMoveStart.gy;
+      if (dx !== 0 || dy !== 0) {
+        const orig = this._dragMoveOrigPos;
+        const ui = this._dragMoveElm;
+        // Update grid positions
+        for (let i = 0; i < ui.gridPos.length; i++) {
+          ui.gridPos[i][0] = orig[i][0] + dx;
+          ui.gridPos[i][1] = orig[i][1] + dy;
+        }
+        this.canvas.el.style.cursor = 'grabbing';
+      }
+      return;
+    }
+
     // Cursor hints
     if (this.mode === MODE.SELECT) {
       const elm = this._findElementAt(gx, gy);
-      this.canvas.el.style.cursor = elm ? 'pointer' : 'default';
+      this.canvas.el.style.cursor = elm ? 'grab' : 'default';
     }
   }
 
   _onMouseUp(e) {
+    // Finalize drag-all reposition
+    if (this._dragMoveAll && this._dragMoveStart) {
+      const { gx, gy } = this.canvas.screenToGrid(e.offsetX, e.offsetY);
+      const dx = gx - this._dragMoveStart.gx;
+      const dy = gy - this._dragMoveStart.gy;
+      if (dx !== 0 || dy !== 0) {
+        this._pushUndo();
+        // Rebuild all node IDs from new positions
+        const nodeId = (x, y) => x * 10000 + y;
+        for (const ui of this.uiElements) {
+          if (!ui.elm || !ui.gridPos) continue;
+          for (let i = 0; i < Math.min(ui.elm.nodes.length, ui.gridPos.length); i++) {
+            ui.elm.nodes[i] = nodeId(ui.gridPos[i][0], ui.gridPos[i][1]);
+          }
+          // Hidden 3rd terminal
+          if (ui.elm.nodes.length > 2 && ui.gridPos.length >= 2) {
+            ui.elm.nodes[2] = nodeId(ui.gridPos[1][0], ui.gridPos[1][1] + 1);
+          }
+          if (ui.elm.nodes.length > 3 && ui.gridPos.length >= 2) {
+            ui.elm.nodes[3] = nodeId(ui.gridPos[0][0], ui.gridPos[0][1] + 1);
+          }
+        }
+        this._rebuildAndSolve();
+      }
+      this._dragMoveAll = false;
+      this._dragMoveStart = null;
+      this._dragMoveAllOrig = null;
+      this.canvas.el.style.cursor = 'default';
+      return;
+    }
+
+    // Finalize drag-to-reposition single element
+    if (this._dragMoveElm && this._dragMoveStart) {
+      const { gx, gy } = this.canvas.screenToGrid(e.offsetX, e.offsetY);
+      const dx = gx - this._dragMoveStart.gx;
+      const dy = gy - this._dragMoveStart.gy;
+      if (dx !== 0 || dy !== 0) {
+        // Element was moved — rebuild node connections with new positions
+        this._pushUndo();
+        const ui = this._dragMoveElm;
+        // Update the element's node IDs based on new grid positions
+        const nodeId = (x, y) => x * 10000 + y;
+        if (ui.elm && ui.gridPos) {
+          const newNodes = [];
+          for (const [px, py] of ui.gridPos) {
+            newNodes.push(nodeId(px, py));
+          }
+          // For 3+ terminal devices, also update hidden terminals
+          if (ui.gridPos.length >= 2) {
+            ui.elm.nodes[0] = nodeId(ui.gridPos[0][0], ui.gridPos[0][1]);
+            ui.elm.nodes[1] = nodeId(ui.gridPos[1][0], ui.gridPos[1][1]);
+          }
+          if (ui.elm.nodes.length > 2 && ui.gridPos.length >= 2) {
+            ui.elm.nodes[2] = nodeId(ui.gridPos[1][0], ui.gridPos[1][1] + 1);
+          }
+          if (ui.elm.nodes.length > 3 && ui.gridPos.length >= 2) {
+            ui.elm.nodes[3] = nodeId(ui.gridPos[0][0], ui.gridPos[0][1] + 1);
+          }
+        }
+        this._rebuildAndSolve();
+      }
+      this._dragMoveElm = null;
+      this._dragMoveStart = null;
+      this._dragMoveOrigPos = null;
+      this.canvas.el.style.cursor = 'default';
+      return;
+    }
+    this._dragMoveElm = null;
+
     if (this.mode === MODE.DRAG_ALL) {
       this.canvas.endPan();
       this.mode = MODE.SELECT;
@@ -654,6 +787,7 @@ export class CircuitApp {
   _onRightClick(e) {
     const { gx, gy } = this.canvas.screenToGrid(e.offsetX, e.offsetY);
     const elm = this._findElementAt(gx, gy);
+    if (elm) { this.selectedElm = elm; this._updateInfoPanel(); }
     this.menuBar.showContextMenu(e.clientX, e.clientY, elm);
   }
 
@@ -664,13 +798,27 @@ export class CircuitApp {
   }
 
   _onKey(e) {
+    // Don't intercept keys when user is typing in an input, textarea, or select
+    const tag = e.target.tagName;
+    const isEditing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target.isContentEditable;
+    if (isEditing) {
+      // Only intercept Escape (to blur the field and return focus to canvas)
+      if (e.key === 'Escape') { e.target.blur(); }
+      return; // let the input handle Delete, Backspace, arrow keys, etc.
+    }
+
     // Space = run/stop
     if (e.key === ' ') { e.preventDefault(); this._toggleRun(); return; }
-    // Escape = cancel
-    if (e.key === 'Escape') { this._cancelAdd(); return; }
+    // Escape = cancel / deselect all
+    if (e.key === 'Escape') {
+      if (this.selectedAll) { this.selectedAll = false; this._updateInfoPanel(); return; }
+      this._cancelAdd();
+      return;
+    }
 
     // Delete
     if (e.key === 'Delete' || e.key === 'Backspace') {
+      e.preventDefault();
       if (this.selectedElm) {
         this._pushUndo();
         this._removeElement(this.selectedElm);
@@ -685,6 +833,13 @@ export class CircuitApp {
     if (e.ctrlKey || e.metaKey) {
       if (e.key === 'z') { e.preventDefault(); this._undo(); return; }
       if (e.key === 'y') { e.preventDefault(); this._redo(); return; }
+      if (e.key === 'a') {
+        e.preventDefault();
+        this.selectedAll = true;
+        this.selectedElm = null;
+        this._updateInfoPanel();
+        return;
+      }
       return; // let browser handle other Ctrl combos
     }
 
@@ -734,26 +889,13 @@ export class CircuitApp {
   // ─── Edit dialog ───
 
   _editElement(uiElm) {
-    const elm = uiElm.elm;
-    const type = uiElm.type;
-    let fields = [];
-
-    fields = (EDIT_MAP[type] || []).map(f => ({ ...f, value: elm[f.key] }));
-    if (fields.length === 0) { alert(`No editable properties for ${type}.`); return; }
-
-    this._pushUndo();
-    let changed = false;
-    for (const f of fields) {
-      const val = prompt(`${f.label}:`, f.value);
-      if (val === null) continue;
-      const num = parseFloat(val);
-      if (isNaN(num) || num <= 0) continue;
-      elm[f.key] = num;
-      uiElm[f.key] = num;
-      changed = true;
+    // Select element and focus its first editable input in the info panel
+    this.selectedElm = uiElm;
+    this._updateInfoPanel();
+    if (this._infoPanel) {
+      const firstInput = this._infoPanel.querySelector('.info-input');
+      if (firstInput) { firstInput.focus(); firstInput.select(); }
     }
-    if (changed) this._rebuildAndSolve();
-    else this._undoStack.pop();  // nothing changed, discard undo snapshot
   }
 
   // ─── Export / Import ───
@@ -1095,6 +1237,34 @@ export class CircuitApp {
       this.renderer.showValues = !this.renderer.showValues;
     } else if (action === 'toggleConventional') {
       this.renderer.conventionalCurrent = !this.renderer.conventionalCurrent;
+    } else if (action === 'toggleAI') {
+      const panel = this.wrap.querySelector('#aiPanel');
+      if (panel) {
+        const isOpen = panel.classList.contains('open');
+        panel.classList.toggle('open');
+        if (!isOpen) {
+          const inp = panel.querySelector('#aiInput');
+          if (inp) inp.focus();
+        }
+      }
+    } else if (action === 'toggleScope') {
+      if (this._scopeWrap) {
+        const isVisible = this._scopeWrap.style.display !== 'none';
+        if (!isVisible && this.scope) {
+          // If no traces, auto-add from first interesting element
+          if (this.scope.traces.length === 0) {
+            const interesting = this.uiElements.find(ui =>
+              ui.type !== 'wire' && ui.type !== 'ground' &&
+              ui.type !== 'dc-voltage' && ui.type !== 'dc-current'
+            );
+            if (interesting) {
+              this.scope.addVoltageTrace(interesting);
+              this.scope.addCurrentTrace(interesting);
+            }
+          }
+        }
+        this._showScope(!isVisible);
+      }
     } else if (action === 'scope' && this.selectedElm && this.scope) {
       // Add voltage + current traces for selected element
       this.scope.addVoltageTrace(this.selectedElm);
@@ -1110,6 +1280,12 @@ export class CircuitApp {
 
   _updateInfoPanel() {
     if (!this._infoPanel) return;
+    if (this.selectedAll) {
+      this._infoPanel.innerHTML = '<div class="info-type">All Selected (' + this.uiElements.length + ' elements)</div>'
+        + '<div class="info-section">Drag to move entire circuit</div>'
+        + '<div class="info-row"><span>Press Escape or click empty area to deselect</span></div>';
+      return;
+    }
     if (!this.selectedElm) {
       this._infoPanel.innerHTML = '<div class="info-empty">Click an element to see its properties</div>';
       return;
@@ -1154,7 +1330,7 @@ export class CircuitApp {
       input.addEventListener('change', (e) => {
         const key = e.target.dataset.key;
         const num = parseFloat(e.target.value);
-        if (isNaN(num) || num <= 0) return;
+        if (isNaN(num)) return;
         this._pushUndo();
         elm[key] = num;
         ui[key] = num;
@@ -1233,6 +1409,42 @@ export class CircuitApp {
     this.canvas.zoomToFit(allPos);
   }
 
+  /**
+   * Load a circuit from an array of element descriptors (same format as presets).
+   * Used by AI circuit generation and import.
+   * @param {Array} elements - [{type, x1, y1, x2, y2, params}, ...]
+   */
+  loadFromElements(elements) {
+    if (!elements || !Array.isArray(elements) || elements.length === 0) return;
+    this._pushUndo();
+    this.uiElements = [];
+    this.circuit.clear();
+    this.selectedElm = null;
+    const hint = this.wrap.querySelector('#hint');
+    if (hint) hint.style.opacity = '0';
+
+    for (const p of elements) {
+      if (!p.type) continue;
+      const x2 = p.x2 ?? p.x1;
+      const y2 = p.y2 ?? p.y1;
+      const ui = this._createElement(p.type, p.x1, p.y1, x2, y2);
+      if (ui && p.params) {
+        for (const [k, v] of Object.entries(p.params)) {
+          ui.elm[k] = v;
+          ui[k] = v;
+        }
+      }
+    }
+    this._rebuildAndSolve();
+
+    // Center view
+    const allPos = [];
+    for (const ui of this.uiElements) {
+      if (ui.gridPos) for (const gp of ui.gridPos) allPos.push(gp);
+    }
+    this.canvas.zoomToFit(allPos);
+  }
+
   // ─── Render loop ───
 
   _frame(t) {
@@ -1254,7 +1466,12 @@ export class CircuitApp {
     const ctx = cv.ctx;
 
     // Selection highlight
-    if (this.selectedElm) this.renderer.drawSelection(ctx, this.selectedElm);
+    if (this.selectedAll) {
+      // Highlight all elements
+      for (const ui of this.uiElements) this.renderer.drawSelection(ctx, ui);
+    } else if (this.selectedElm) {
+      this.renderer.drawSelection(ctx, this.selectedElm);
+    }
 
     // All elements (components + wires)
     this.renderer.drawElements(ctx, this.uiElements);
