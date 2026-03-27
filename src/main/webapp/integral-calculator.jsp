@@ -204,6 +204,7 @@
                         <button type="button" class="ic-example-chip" data-expr="x*e^(-x)">x&middot;e^(-x)</button>
                         <button type="button" class="ic-example-chip" data-expr="1/sqrt(1-x^2)">1/&radic;(1-x&sup2;)</button>
                         <button type="button" class="ic-example-chip" data-expr="Sum(x^n, (n, 2, oo)), (x, 0, 1/2)" title="SymPy Sum: integral of sum x^n (n=2 to infinity) from 0 to 1/2 — MIT Integration Bee style">&Sigma; x<sup>n</sup> [0,&frac12;]</button>
+                        <button type="button" class="ic-example-chip" data-expr="Max(0, sqrt(1-x^2)-1/2), (x, -1, 1)" title="Semicircle cap: max(0, sqrt(1-x^2)-1/2) on [-1,1] — SymPy Max">&radic; cap on [&minus;1,1]</button>
                     </div>
                 </div>
 
@@ -223,7 +224,8 @@
                         sec(x) &nbsp;&nbsp; csc(x) &nbsp;&nbsp; cot(x)<br>
                         sinh(x) &nbsp;&nbsp; cosh(x) &nbsp;&nbsp; tanh(x) &nbsp;&nbsp; coth(x) &nbsp;&nbsp; csch(x) &nbsp;&nbsp; sech(x)<br>
                         asin(x) &nbsp;&nbsp; acos(x) &nbsp;&nbsp; atan(x)<br>
-                        pi &nbsp;&nbsp; e &nbsp;&nbsp; abs(x) &nbsp;&nbsp; 1/x
+                        pi &nbsp;&nbsp; e &nbsp;&nbsp; abs(x) &nbsp;&nbsp; 1/x<br>
+                        <strong>SymPy one-liner:</strong> <code>integrand, (variable, a, b)</code> &mdash; use <code>Max</code>, <code>Sum</code>, <code>Rational(1,2)</code> in bounds; commas inside the integrand are fine.
                     </div>
                 </div>
             </div>

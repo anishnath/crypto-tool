@@ -68,6 +68,59 @@ function normalizeExpr(expr) {
     return s;
 }
 
+/** Split on commas only when parenthesis depth is zero (supports Rational(1,2) in bounds). */
+function splitCommaAtDepth0(inner) {
+    var parts = [];
+    var depth = 0;
+    var start = 0;
+    for (var i = 0; i < inner.length; i++) {
+        var c = inner[i];
+        if (c === '(') depth++;
+        else if (c === ')') {
+            depth--;
+            if (depth < 0) return [];
+        } else if (c === ',' && depth === 0) {
+            parts.push(inner.slice(start, i).trim());
+            start = i + 1;
+        }
+    }
+    parts.push(inner.slice(start).trim());
+    return parts;
+}
+
+/**
+ * Parse SymPy-style "integrand, (var, a, b)" when the integrand may contain commas
+ * (e.g. Max(0, sqrt(1-x^2)-1/2), Sum(...)).
+ * Returns { integrand, var, a, b } or null.
+ */
+function parseSympyStyleInput(raw) {
+    if (!raw || typeof raw !== 'string') return null;
+    var s = raw.replace(/\s+/g, ' ').trim();
+    if (s.length < 6) return null;
+    if (s[s.length - 1] !== ')') return null;
+    var depth = 1;
+    var i = s.length - 2;
+    while (i >= 0 && depth > 0) {
+        var c = s[i];
+        if (c === ')') depth++;
+        else if (c === '(') depth--;
+        i--;
+    }
+    if (depth !== 0) return null;
+    var tupleOpen = i + 1;
+    if (s[tupleOpen] !== '(') return null;
+    var inner = s.slice(tupleOpen + 1, s.length - 1);
+    var parts = splitCommaAtDepth0(inner);
+    if (parts.length !== 3) return null;
+    var varName = parts[0];
+    if (!/^\w+$/.test(varName)) return null;
+    var before = s.slice(0, tupleOpen).trim();
+    if (!/,\s*$/.test(before)) return null;
+    var integrand = before.replace(/,\s*$/, '').trim();
+    if (!integrand) return null;
+    return { integrand: integrand, var: varName, a: parts[1].trim(), b: parts[2].trim() };
+}
+
 function checkNonElementaryIntegral(expr, v) {
     var e = expr.replace(/\s+/g, ' ').trim().toLowerCase();
     var vNorm = v.toLowerCase();
@@ -226,7 +279,13 @@ function checkKingsProperty(expr, v, a, b, nerdamerRef) {
     }
 }
 
-var api = { normalizeExpr: normalizeExpr, checkNonElementaryIntegral: checkNonElementaryIntegral, evalBound: evalBound, checkKingsProperty: checkKingsProperty };
+var api = {
+    normalizeExpr: normalizeExpr,
+    checkNonElementaryIntegral: checkNonElementaryIntegral,
+    evalBound: evalBound,
+    checkKingsProperty: checkKingsProperty,
+    parseSympyStyleInput: parseSympyStyleInput
+};
 
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;

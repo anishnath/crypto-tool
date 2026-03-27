@@ -8,6 +8,7 @@
 
         var normalizeExpr = IntegralCalculatorCore.normalizeExpr;
         var checkNonElementaryIntegral = IntegralCalculatorCore.checkNonElementaryIntegral;
+        var parseSympyStyleInput = IntegralCalculatorCore.parseSympyStyleInput;
         var evalBound = function(s) { return IntegralCalculatorCore.evalBound(s, nerdamer); };
 
         // ========== DOM References ==========
@@ -240,7 +241,7 @@
         /** Convert nerdamer-style expr to Python/SymPy (e.g. e^x -> exp(x), ^ -> **) */
         function nerdamerToPython(expr) {
             // Known single-token functions — protect "sin(" so implicit-mul pass does not turn it into "sin*("
-            var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|frac|Sum';
+            var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|Min|Max|frac|Sum';
             var py = (expr || '')
                 // e^func(args) → exp(func(args)):  e^sqrt(x+2) → exp(sqrt(x+2))
                 .replace(/e\^([a-zA-Z_]+\([^)]*\))/g, 'exp($1)')
@@ -264,10 +265,13 @@
             return py;
         }
 
+        /** Names that must never be declared via symbols(...) — they come from `from sympy import *` or builtins. */
+        var SYMPY_NOT_SYMBOL_NAMES = ['exp','log','sin','cos','tan','sec','csc','cot','sinh','cosh','tanh','coth','csch','sech','sqrt','asin','acos','atan','pi',
+            'Sum', 'Product', 'Integral', 'oo', 'Rational', 'Mod', 'Max', 'Min', 'min', 'max', 'Abs', 're', 'im', 'gamma', 'factorial', 'floor', 'ceil', 'ceiling', 'sign'];
+
         /** Extract symbols in pyExpr that are not the integration variable. */
         function getExtraSymbols(pyExpr, v) {
-            var KNOWN = ['exp','log','sin','cos','tan','sec','csc','cot','sinh','cosh','tanh','coth','csch','sech','sqrt','asin','acos','atan','pi',
-                'Sum', 'Product', 'Integral', 'oo', 'Rational', 'Mod', 'Max', 'Min', 'Abs', 're', 'im', 'gamma', 'factorial'];
+            var KNOWN = SYMPY_NOT_SYMBOL_NAMES;
             var seen = {};
             var re = /\b([a-z][a-z]*)\b/g;
             var m;
@@ -282,6 +286,7 @@
 
         function buildSympySymbolsDecl(v, pyExpr) {
             var extra = getExtraSymbols(pyExpr, v);
+            extra = extra.filter(function (name) { return SYMPY_NOT_SYMBOL_NAMES.indexOf(name) < 0; });
             var all = extra.length > 0 ? extra.concat(v) : [v];
             var opts = (extra.length > 0) ? ", positive=True" : "";
             return all.join(', ') + " = symbols('" + all.join(' ') + "'" + opts + ")";
@@ -386,14 +391,6 @@
         });
 
         // ========== Live Preview ==========
-        /** Parse SymPy-style input: "integrand, (var, a, b)" → { integrand, var, a, b } */
-        function parseSympyStyleInput(raw) {
-            if (!raw || typeof raw !== 'string') return null;
-            var m = raw.match(/^(.+),\s*\(\s*(\w+)\s*,\s*([^,)]+)\s*,\s*([^)]+)\s*\)\s*$/);
-            if (!m) return null;
-            return { integrand: m[1].trim(), var: m[2], a: m[3].trim(), b: m[4].trim() };
-        }
-
         /** Convert SymPy-style integrand to calculator form: ** → ^ for nerdamer */
         function integrandForNerdamer(s) {
             return (s || '').replace(/\*\*/g, '^');
@@ -787,6 +784,13 @@
             return 'Symbolic Integration';
         }
 
+        /** floor/ceil/frac integrands: no useful antiderivative; definite mode uses numeric quadrature. */
+        function isStepFunctionIntegrand(expr) {
+            if (!expr || typeof expr !== 'string') return false;
+            var e = expr.toLowerCase();
+            return /\bfloor\s*\(/.test(e) || /\bceil\s*\(/.test(e) || /\bfrac\s*\(/.test(e);
+        }
+
         // ========== Result Display: Indefinite ==========
         function showIndefiniteResult(expr, v, resultTeX, resultText, method, sympyStepsCache) {
             var exprTeX = exprToLatex(expr);
@@ -818,18 +822,24 @@
         // ========== Result Display: Non-Elementary ==========
         function showNonElementaryResult(expr, v, exprLatex, method, sympyStepsCache) {
             var exprTeX = exprToLatex(expr);
+            var stepFn = isStepFunctionIntegrand(expr);
             lastResultLatex = '\\text{No elementary closed form}';
             lastResultText = 'No elementary closed form';
 
             lastIntegrationContext = { expr: expr, v: v, resultTeX: '', resultText: '', method: method, mode: 'indefinite', a: null, b: null, sympyStepsCache: sympyStepsCache || null };
 
+            var bodyMsg = stepFn
+                ? 'Integrals with <strong>floor</strong>, <strong>ceil</strong>, or <strong>frac</strong> are piecewise. SymPy does not produce a simple antiderivative, so the indefinite integral stays unevaluated.<br><br>Switch to <strong>Definite</strong> mode and enter numeric bounds: the value is computed numerically (SciPy quadrature when available).'
+                : 'This integral cannot be expressed in terms of elementary functions.<br>Use definite mode with bounds for a numerical result.';
+            var badge = stepFn ? 'Step / piecewise' : 'Non-Elementary (Elliptic)';
+
             var html = '<div class="ic-result-math">';
             html += '<div class="ic-result-label">Integral</div>';
             html += '<div id="ic-r-integral"></div>';
             html += '<div class="ic-result-label" style="margin-top:1rem;">Result</div>';
-            html += '<div class="ic-result-main" id="ic-r-result" style="color:#e67e22;font-size:0.95rem;padding:0.75rem 0;">This integral cannot be expressed in terms of elementary functions.<br>Use definite mode with bounds for a numerical result.</div>';
+            html += '<div class="ic-result-main" id="ic-r-result" style="color:#e67e22;font-size:0.95rem;padding:0.75rem 0;">' + bodyMsg + '</div>';
             html += '<div class="ic-result-detail">';
-            html += '<span class="ic-method-badge">Non-Elementary (Elliptic)</span>';
+            html += '<span class="ic-method-badge">' + escapeHtml(badge) + '</span>';
             html += '</div>';
             html += '<button type="button" class="ic-steps-btn" id="ic-steps-btn">&#128221; Show Analysis</button>';
             html += '<div id="ic-steps-area"></div>';

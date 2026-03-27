@@ -11,6 +11,7 @@ require('nerdamer/Algebra.js');
 const IntegralCalculatorCore = require('./require-core');
 const normalizeExpr = IntegralCalculatorCore.normalizeExpr;
 const checkNonElementaryIntegral = IntegralCalculatorCore.checkNonElementaryIntegral;
+const parseSympyStyleInput = IntegralCalculatorCore.parseSympyStyleInput;
 const evalBound = (s) => IntegralCalculatorCore.evalBound(s, nerdamer);
 
 function integrate(expr, v) {
@@ -204,6 +205,55 @@ testNormalize('arcsin(x)', 'asin(x)');
 testNormalize('arccos(x)', 'acos(x)');
 testNormalize('arctan(x)', 'atan(x)');
 testNormalize('arctan(x)/(x*(1+x^2))', 'atan(x)/(x*(1+x^2))');
+
+// MIT Bee 2025 qualifying — integrand strings (bounds are separate in the UI)
+console.log('\n--- normalizeExpr: MIT Bee 2025 qualifying (integrands) ---');
+testNormalizeLabel('Bee25 #1 (x+sqrt)/(1+sqrt)', '(x+sqrt(x))/(1+sqrt(x))', '(x+sqrt(x))/(1+sqrt(x))');
+testNormalizeLabel('Bee25 #2 e^(x+1)/(e^x+1)', 'e^(x+1)/(e^x+1)', 'e^(x+1)/(e^x+1)');
+testNormalizeLabel('Bee25 #3 ∛(3sin x − sin 3x)', '(3*sin(x)-sin(3*x))^(1/3)', '(3*sin(x)-sin(3*x))^(1/3)');
+testNormalizeLabel('Bee25 #4 log(x^{log(x^x)})/x²', 'log(x^(log(x^x)))/x^2', 'log(x^(log(x^x)))/x^2');
+testNormalizeLabel('Bee25 #4 alt (log x)²/x', 'log(x)^2/x', 'log(x)^2/x');
+testNormalizeLabel('Bee25 #5 cos(20x)sin(25x)', 'cos(20*x)*sin(25*x)', 'cos(20*x)*sin(25*x)');
+testNormalizeLabel('Bee25 #6 sin cos tan cot sec csc', 'sin(x)*cos(x)*tan(x)*cot(x)*sec(x)*csc(x)', 'sin(x)*cos(x)*tan(x)*cot(x)*sec(x)*csc(x)');
+testNormalizeLabel('Bee25 #7 (x log x cos − sin)/(x log²x)', '(x*log(x)*cos(x)-sin(x))/(x*log(x)^2)', '(x*log(x)*cos(x)-sin(x))/(x*log(x)^2)');
+testNormalizeLabel('Bee25 #8 2^(x−1)+log₂(2x)', '2^(x-1)+log(2*x)/log(2)', '2^(x-1)+log(2*x)/log(2)');
+testNormalizeLabel('Bee25 #9 x^2024(1−x^2025)^2025', 'x^2024*(1-x^2025)^2025', 'x^2024*(1-x^2025)^2025');
+testNormalizeLabel('Bee25 #10 x(x−½)(x−1)', 'x*(x-1/2)*(x-1)', 'x*(x-1/2)*(x-1)');
+testNormalizeLabel('Bee25 #11 ⌊⌊x⌋/2⌋', 'floor(floor(x)/2)', 'floor(floor(x)/2)');
+// Bee25 #12 nested radical ··· — no finite closed integrand string (PDF pattern is infinite)
+testNormalizeLabel('Bee25 #13 e^(2x)(x²+x)/((xe^x)⁴+1)', 'e^(2*x)*(x^2+x)/((x*e^x)^4+1)', 'e^(2*x)*(x^2+x)/((x*e^x)^4+1)');
+
+// parseSympyStyleInput: "integrand, (var, a, b)" with commas inside integrand (Max, Sum, …)
+console.log('\n--- parseSympyStyleInput ---');
+function testParseSympy(label, raw, want) {
+    var p = parseSympyStyleInput(raw);
+    if (!want) {
+        ok(p === null, label + ' → null');
+        return;
+    }
+    var pass = p && p.integrand === want.integrand && p.var === want.var && p.a === want.a && p.b === want.b;
+    ok(pass, label + (pass ? '' : ' got ' + JSON.stringify(p)));
+}
+testParseSympy('simple', 'x^2, (x, 0, 1)', { integrand: 'x^2', var: 'x', a: '0', b: '1' });
+testParseSympy('Max in integrand (MIT Bee #11 style)', 'Max(0, sqrt(1-x^2)-1/2), (x, -1, 1)', {
+    integrand: 'Max(0, sqrt(1-x^2)-1/2)',
+    var: 'x',
+    a: '-1',
+    b: '1'
+});
+testParseSympy('Sum in integrand', 'Sum(x^n, (n, 2, oo)), (x, 0, 1/2)', {
+    integrand: 'Sum(x^n, (n, 2, oo))',
+    var: 'x',
+    a: '0',
+    b: '1/2'
+});
+testParseSympy('Rational bound', 't^2, (t, 0, Rational(1,2))', {
+    integrand: 't^2',
+    var: 't',
+    a: '0',
+    b: 'Rational(1,2)'
+});
+testParseSympy('not SymPy line', 'x^2', null);
 
 // MIT Integration Bee 2026 qualifying (PDF) — normalize only; solving is separate.
 // PASS (below): stable normalize for preview/parse.
