@@ -624,7 +624,10 @@ export class CircuitApp {
         this._dragMoveStart = { gx, gy };
         this._dragMoveOrigPos = clicked.gridPos.map(p => [...p]); // deep copy
       } else {
+        // Click on empty space → start panning the canvas
         this._dragMoveElm = null;
+        this.canvas.startPan(e.offsetX, e.offsetY);
+        this._emptySpacePan = true;
       }
     }
   }
@@ -632,6 +635,13 @@ export class CircuitApp {
   _onMouseMove(e) {
     if (this.mode === MODE.DRAG_ALL) {
       this.canvas.updatePan(e.offsetX, e.offsetY);
+      return;
+    }
+
+    // Empty-space pan (left-click drag on empty area)
+    if (this._emptySpacePan) {
+      this.canvas.updatePan(e.offsetX, e.offsetY);
+      this.canvas.el.style.cursor = 'grabbing';
       return;
     }
 
@@ -686,6 +696,14 @@ export class CircuitApp {
   }
 
   _onMouseUp(e) {
+    // End empty-space pan
+    if (this._emptySpacePan) {
+      this.canvas.endPan();
+      this._emptySpacePan = false;
+      this.canvas.el.style.cursor = 'default';
+      return;
+    }
+
     // Finalize drag-all reposition
     if (this._dragMoveAll && this._dragMoveStart) {
       const { gx, gy } = this.canvas.screenToGrid(e.offsetX, e.offsetY);
