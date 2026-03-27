@@ -541,6 +541,76 @@ Response:
 
 ---
 
+## Circuit AI Generation API
+
+Generate circuit simulator JSON from natural language descriptions. Returns a ready-to-load preset for the [8gwifi.org Circuit Simulator](https://8gwifi.org/physics/labs/circuit-simulator.jsp).
+
+### Generate Circuit
+```
+POST /api/circuit-generate
+Content-Type: application/json
+X-API-Key: your_api_key
+
+{
+  "description": "Inverting op-amp amplifier with gain of -10"
+}
+```
+
+**Parameters:**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `description` | string | Yes | Natural language circuit description (5–500 chars) |
+
+**Response:**
+```json
+{
+  "success": true,
+  "name": "Inverting Amplifier",
+  "description": "Op-amp inverting amplifier with gain of -10",
+  "elements": [
+    { "type": "ac-voltage", "x1": 0, "y1": 6, "x2": 0, "y2": 2, "params": { "peakVoltage": 0.5, "frequency": 1000 } },
+    { "type": "resistor", "x1": 0, "y1": 2, "x2": 4, "y2": 2, "params": { "resistance": 1000 } },
+    { "type": "opamp", "x1": 4, "y1": 0, "x2": 4, "y2": 2 },
+    { "type": "resistor", "x1": 4, "y1": 2, "x2": 4, "y2": -2, "params": { "resistance": 10000 } },
+    { "type": "wire", "x1": 4, "y1": -2, "x2": 8, "y2": -2 },
+    { "type": "wire", "x1": 8, "y1": -2, "x2": 8, "y2": 3 },
+    { "type": "wire", "x1": 8, "y1": 3, "x2": 4, "y2": 3 },
+    { "type": "ground", "x1": 0, "y1": 6, "x2": 0, "y2": 6 }
+  ],
+  "responseTimeMs": 4523
+}
+```
+
+**Supported Components (60 types):**
+- Passive: resistor, capacitor, polarized-cap, inductor, switch, push-switch, spdt-switch, fuse, lamp, transmission-line
+- Sources: dc-voltage, dc-current, ac-voltage, clock, vco, vcvs, vccs, ccvs, cccs
+- Semiconductors: diode, zener, led, bjt-npn, bjt-pnp, darlington-npn, darlington-pnp, mosfet-n, mosfet-p, jfet-n, jfet-p
+- Op-amp, comparator, schmitt, 555-timer, monostable, relay
+- Logic: and/or/not/nand/nor/xor gates, d/sr/jk flip-flops, counter, shift-register, mux, demux, half-adder, full-adder
+- I/O: ammeter, voltmeter, logic-input, logic-output, seven-seg
+
+**Example prompts:**
+- "RC low-pass filter with 10kΩ and 100nF"
+- "Common emitter NPN amplifier with voltage divider bias"
+- "Full-wave bridge rectifier with smoothing cap"
+- "CMOS NAND gate using NMOS and PMOS transistors"
+- "555 timer in astable mode, 1Hz output"
+- "2-bit ripple counter using JK flip-flops"
+
+**Cost:** Uses `gpt-4o-mini`, ~500-2000 tokens per request.
+
+### Test locally
+```bash
+wrangler dev --port 8787
+
+curl -X POST http://localhost:8787/api/circuit-generate \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your_api_key" \
+  -d '{"description": "Simple LED circuit with 220 ohm resistor and 5V supply"}'
+```
+
+---
+
 ## Documents API (Math/Chemistry Editors)
 
 Generic document CRUD for editors. Anonymous create allowed; ownership via `x-user-id`; edit via `x-edit-token` for anonymous docs.
@@ -672,7 +742,7 @@ wrangler d1 execute exam-marker-db --file=tikz-requests.sql --remote
 
 ---
 
-## Local Development
+## Local Development (including Circuit API)
 
 ```bash
 # Start dev server
@@ -684,6 +754,12 @@ curl http://localhost:8787/api/chapters?exam_type=CBSE | jq .
 
 # Test Documents API (requires .dev.vars with API_KEY)
 ./test-documents-api.sh
+
+# Test Circuit AI Generation
+curl -X POST http://localhost:8787/api/circuit-generate \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: $(grep API_KEY .dev.vars | head -1 | cut -d= -f2)" \
+  -d '{"description": "Voltage divider with 10k and 5k resistors, 9V battery"}' | jq .
 ```
 
 ---

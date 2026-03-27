@@ -7,6 +7,7 @@ import { buildPolynomialPrompt } from './polynomial.js';
 import { buildVectorPrompt } from './vector.js';
 import { buildTrigonometryPrompt } from './trigonometry.js';
 import { buildTikzPrompt } from './tikz.js';
+import { buildCircuitPrompt } from './circuit.js';
 import {
   handleCreateDocument,
   handleGetDocument,
@@ -1813,6 +1814,136 @@ async function handleTikzGenerate(request, env) {
   }
 }
 
+// ── Circuit AI Generation ──
+async function logCircuitRequest(env, { description, response, elementCount, success, errorMessage, model, responseTimeMs }) {
+  if (!env.DB) return;
+  try {
+    await env.DB.prepare(
+      `INSERT INTO circuit_requests (description, response_json, element_count, success, error_message, model, response_time_ms)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      description,
+      response ? JSON.stringify(response) : null,
+      elementCount || 0,
+      success ? 1 : 0,
+      errorMessage || null,
+      model || 'gpt-4o-mini',
+      responseTimeMs
+    ).run();
+  } catch (e) {
+    console.error('Failed to log circuit request:', e);
+  }
+}
+
+async function handleCircuitGenerate(request, env) {
+  const startTime = Date.now();
+  let payload;
+  try {
+    payload = await request.json();
+  } catch {
+    return jsonResponse({ error: 'Invalid JSON body' }, { status: 400 });
+  }
+
+  const { description } = payload;
+  if (!description || description.trim().length < 5) {
+    return jsonResponse({ error: 'Description too short (min 5 chars)' }, { status: 400 });
+  }
+  if (description.length > 500) {
+    return jsonResponse({ error: 'Description too long (max 500 chars)' }, { status: 400 });
+  }
+
+  try {
+    const prompt = buildCircuitPrompt(description.trim());
+    const result = await callOpenAI(prompt, env, {
+      model: 'gpt-4o-mini',
+      temperature: 0.2,
+      maxTokens: 2000,
+      systemMessage: 'You are an expert electronics engineer. Always respond with valid JSON only, no markdown, no explanation outside the JSON object.'
+    });
+
+    // Validate response has required fields
+    if (!result.elements || !Array.isArray(result.elements) || result.elements.length === 0) {
+      return jsonResponse({ error: 'AI returned invalid circuit (no elements)' }, { status: 500 });
+    }
+
+    // Validate each element has required fields
+    for (const elm of result.elements) {
+      if (!elm.type || elm.x1 === undefined || elm.y1 === undefined) {
+        return jsonResponse({ error: 'AI returned malformed element: ' + JSON.stringify(elm) }, { status: 500 });
+      }
+      // Ground is single-point
+      if (elm.type === 'ground') {
+        elm.x2 = elm.x1;
+        elm.y2 = elm.y1;
+      }
+      // Default x2/y2 for 2-terminal elements
+      if (elm.x2 === undefined) elm.x2 = elm.x1;
+      if (elm.y2 === undefined) elm.y2 = elm.y1;
+    }
+
+    // Check for ground
+    const hasGround = result.elements.some(e => e.type === 'ground');
+    if (!hasGround) {
+      let maxY = 0;
+      for (const e of result.elements) { maxY = Math.max(maxY, e.y1, e.y2); }
+      result.elements.push({ type: 'ground', x1: 0, y1: maxY, x2: 0, y2: maxY });
+    }
+
+    // Connectivity check: warn about isolated nodes
+    const pointCount = {};
+    const THREE_TERM = new Set(['bjt-npn','bjt-pnp','darlington-npn','darlington-pnp','mosfet-n','mosfet-p','jfet-n','jfet-p','opamp','comparator','and-gate','or-gate','nand-gate','nor-gate','xor-gate']);
+    for (const e of result.elements) {
+      const pts = [[e.x1, e.y1]];
+      if (e.type !== 'ground') pts.push([e.x2, e.y2]);
+      // Add hidden 3rd terminal for 3-terminal devices
+      if (THREE_TERM.has(e.type)) pts.push([e.x2, e.y2 + 1]);
+      for (const [px, py] of pts) {
+        const k = px + ',' + py;
+        pointCount[k] = (pointCount[k] || 0) + 1;
+      }
+    }
+    const isolated = Object.entries(pointCount).filter(([, c]) => c < 2).map(([k]) => k);
+    const warnings = [];
+    if (isolated.length > 0) {
+      warnings.push('Isolated nodes detected: ' + isolated.join('; ') + '. Circuit may have wiring issues.');
+    }
+
+    const elapsed = Date.now() - startTime;
+    const responsePayload = {
+      success: true,
+      name: result.name || 'AI Circuit',
+      description: result.description || '',
+      elements: result.elements,
+      responseTimeMs: elapsed,
+    };
+    if (warnings.length > 0) responsePayload.warnings = warnings;
+
+    await logCircuitRequest(env, {
+      description: description.trim(),
+      response: responsePayload,
+      elementCount: result.elements.length,
+      success: true,
+      model: 'gpt-4o-mini',
+      responseTimeMs: elapsed,
+    });
+
+    return jsonResponse(responsePayload);
+  } catch (e) {
+    console.error('Circuit generate error:', e);
+    const elapsed = Date.now() - startTime;
+    await logCircuitRequest(env, {
+      description: description.trim(),
+      response: null,
+      elementCount: 0,
+      success: false,
+      errorMessage: e.message || 'Failed to generate circuit',
+      model: 'gpt-4o-mini',
+      responseTimeMs: elapsed,
+    });
+    return jsonResponse({ error: e.message || 'Failed to generate circuit' }, { status: 500 });
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -1956,6 +2087,16 @@ export default {
           return withCors(authError, reqOrigin);
         }
         const r = await handleTikzGenerate(request, env);
+        return withCors(r, reqOrigin);
+      }
+
+      // POST /api/circuit-generate - Natural language → circuit simulator JSON
+      if (pathname === '/api/circuit-generate' && request.method === 'POST') {
+        const authError = requireApiKey(request, env);
+        if (authError) {
+          return withCors(authError, reqOrigin);
+        }
+        const r = await handleCircuitGenerate(request, env);
         return withCors(r, reqOrigin);
       }
 
