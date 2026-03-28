@@ -136,6 +136,13 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 .ckt-ai-examples-label{color:var(--ckt-muted);font:11px 'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0}
 .ckt-ai-chip{padding:2px 10px;border:1px solid rgba(99,102,241,.25);border-radius:12px;background:transparent;color:#a5b4fc;font:11px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
 .ckt-ai-chip:hover{background:rgba(99,102,241,.15);border-color:#6366f1;color:#c7d2fe}
+/* Canvas toast notification */
+.ckt-toast{position:absolute;top:12px;left:50%;transform:translateX(-50%) translateY(-20px);padding:8px 20px;border-radius:8px;font:600 13px 'DM Sans',sans-serif;z-index:200;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.ckt-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.ckt-toast-success{background:rgba(22,163,74,.9);color:#fff;border:1px solid #22c55e}
+.ckt-toast-warning{background:rgba(180,83,9,.9);color:#fff;border:1px solid #f59e0b}
+.ckt-toast-error{background:rgba(185,28,28,.9);color:#fff;border:1px solid #ef4444}
+.ckt-toast-info{background:rgba(30,41,59,.9);color:#e2e8f0;border:1px solid #475569}
 .ckt-toolbar{display:flex;align-items:center;gap:8px;padding:4px 12px;background:var(--ckt-panel);border-bottom:1px solid var(--ckt-border);flex-shrink:0;height:34px;font:12px 'DM Sans',sans-serif;overflow-x:auto}
 .ckt-tb-btn{padding:3px 10px;border:1px solid var(--ckt-border);border-radius:4px;background:transparent;color:var(--ckt-text);font:600 12px 'DM Sans',sans-serif;cursor:pointer;transition:background .15s;white-space:nowrap}
 .ckt-tb-btn:hover{background:rgba(255,255,255,.08)}
@@ -303,6 +310,24 @@ if (mobileBar) {
   });
 }
 
+// ── Canvas Toast Notification ──
+function showCanvasToast(message, type, duration) {
+  const existing = document.getElementById('cktToast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'cktToast';
+  toast.className = 'ckt-toast ckt-toast-' + (type || 'info');
+  toast.textContent = message;
+  const canvasWrap = document.querySelector('.ckt-canvas-wrap');
+  if (canvasWrap) canvasWrap.appendChild(toast);
+  else document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, duration || 4000);
+}
+
 // ── AI Circuit Generator ──
 const aiPanel = document.getElementById('aiPanel');
 const aiClose = document.getElementById('aiClose');
@@ -448,8 +473,10 @@ async function generateCircuit() {
 
     if (data.warnings && data.warnings.length > 0) {
       setAiStatus('⚠ ' + statusMsg + ' — may have wiring issues', 'warning');
+      showCanvasToast('⚠ AI circuit may have wiring issues — check 3-terminal device connections (BJT emitter, op-amp output)', 'warning', 8000);
     } else {
       setAiStatus('✓ ' + statusMsg, 'success');
+      showCanvasToast('✓ ' + statusMsg, 'success', 3000);
     }
 
   } catch (e) {
