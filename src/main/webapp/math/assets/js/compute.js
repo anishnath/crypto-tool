@@ -269,6 +269,12 @@
         nExpr = core.normalizeExpr(nExpr);
         var v = variable || 'x';
 
+        // Convert LaTeX bounds to nerdamer text (e.g., \frac{\pi}{2} → pi/2)
+        if (isDefinite) {
+            try { lower = nm.convertFromLaTeX(lower.replace(/\\ln\b/g, '\\log')).toString(); } catch (_) {}
+            try { upper = nm.convertFromLaTeX(upper.replace(/\\ln\b/g, '\\log')).toString(); } catch (_) {}
+        }
+
         // --- King's property check for definite integrals ---
         if (isDefinite) {
             var kings = core.checkKingsProperty(nExpr, v, lower, upper, nm);
@@ -1756,6 +1762,20 @@
             var btn = actionBar.querySelector('[data-action="' + matActions[i] + '"]');
             if (btn) btn.style.display = hasMatrix ? '' : 'none';
         }
+
+        // Hide standard actions that don't apply to systems/matrices
+        // (they'd try to parse \begin{cases}... as a math expression and fail)
+        var standardActions = ['evaluate', 'simplify', 'expand', 'factor', 'solve', 'derivative', 'integrate'];
+        var hideStandard = hasSystem || hasMatrix;
+        for (var j = 0; j < standardActions.length; j++) {
+            var sBtn = actionBar.querySelector('[data-action="' + standardActions[j] + '"]');
+            if (sBtn) sBtn.style.display = hideStandard ? 'none' : '';
+        }
+        // Also hide/show separators based on visible buttons
+        var seps = actionBar.querySelectorAll('.me-compute-sep');
+        for (var k = 0; k < seps.length; k++) {
+            seps[k].style.display = hideStandard ? 'none' : '';
+        }
     }
 
     /** Perform ODE/PDE solve action */
@@ -1821,6 +1841,14 @@
             latex = eqParts[0].trim();
         }
         if (!latex) latex = fullLatex;
+
+        // --- System-aware routing ---
+        // If the expression is \begin{cases}..., redirect any action to Solve System.
+        // Standard actions (evaluate, simplify, factor, etc.) can't parse cases LaTeX.
+        if (isSystemLatex(fullLatex)) {
+            performSpecialAction('solveSys', mf);
+            return;
+        }
 
         // --- Matrix-aware routing ---
         // If the expression contains matrices and user clicks Evaluate/Simplify,
@@ -2226,9 +2254,31 @@
      *  Called once per math-field in wireMenuItems(). */
     function buildNativeMenuItems(mf) {
         var items = [];
+        var latex = readLatex(mf);
+
+        // --- Systems: only show Solve System + Plot (standard actions can't parse cases) ---
+        if (isSystemLatex(latex)) {
+            items.push({
+                label: '{=}  Solve System',
+                onMenuSelect: function () { performSpecialAction('solveSys', mf); }
+            });
+            items.push({
+                label: '\uD83D\uDCC8  Plot System',
+                onMenuSelect: function () {
+                    if (window.MeGraph) window.MeGraph.insertGraph(latex, mf);
+                }
+            });
+            items.push({ type: 'divider' });
+            items.push({
+                label: 'Copy LaTeX',
+                onMenuSelect: function () {
+                    if (latex) navigator.clipboard.writeText(latex).catch(function () {});
+                }
+            });
+            return items;
+        }
 
         // --- Solve for each detected variable ---
-        var latex = readLatex(mf);
         var vars = ce ? getAllVars(mf, ce) : detectVarsFromLatex(latex);
 
         for (var i = 0; i < vars.length; i++) {
