@@ -51,7 +51,10 @@
             'Insert Inline Math (Ctrl+Shift+M)': function () { return true; },
             'Insert Image':    function () { return true; },
             'Insert Diagram':  function () { return true; },
-            'Insert Drawing':  function () { return true; }
+            'Insert Drawing':  function () { return true; },
+            'Insert Molecule': function () { return true; },
+            'Lewis Structure': function () { return true; },
+            'Molecular Geometry': function () { return true; }
         };
 
         // Sync active states
@@ -191,7 +194,22 @@
                 editor.chain().focus().insertContent('<div class="me-page-break"></div>').run();
             },
             'Insert Display Math (Ctrl+M)': function () { if (window.MeMath) MeMath.insertBlock(); },
-            'Insert Inline Math (Ctrl+Shift+M)':  function () { if (window.MeMath) MeMath.insertInline(); }
+            'Insert Inline Math (Ctrl+Shift+M)':  function () { if (window.MeMath) MeMath.insertInline(); },
+            'Insert Molecule': function () {
+                var ctx = window.ME_CTX || '';
+                window.open(ctx + '/chemistry/molecule-draw.jsp?returnTo=editor', '_blank',
+                    'width=1200,height=800,menubar=no,toolbar=no,location=no,status=no');
+            },
+            'Lewis Structure': function () {
+                var ctx = window.ME_CTX || '';
+                window.open(ctx + '/lewis-structure-generator.jsp?returnTo=editor', '_blank',
+                    'width=1200,height=800,menubar=no,toolbar=no,location=no,status=no');
+            },
+            'Molecular Geometry': function () {
+                var ctx = window.ME_CTX || '';
+                window.open(ctx + '/molecular-geometry-calculator.jsp?returnTo=editor', '_blank',
+                    'width=1200,height=800,menubar=no,toolbar=no,location=no,status=no');
+            }
         };
 
         Object.keys(buttonActions).forEach(function (title) {

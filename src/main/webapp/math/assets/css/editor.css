@@ -1184,6 +1184,44 @@
     border-color: #3B82F6;
 }
 
+/* Layout toggle button — top-left, visible on hover */
+.me-image-layout-btn {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 24px;
+    height: 24px;
+    background: var(--me-surface, #fff);
+    border: 1px solid var(--me-border, #E2E8F0);
+    border-radius: 4px;
+    color: var(--me-text-muted, #94A3B8);
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.12s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    padding: 0;
+}
+.me-image-wrapper:hover .me-image-layout-btn,
+.me-image-selected .me-image-layout-btn {
+    opacity: 1;
+}
+.me-image-layout-btn:hover {
+    background: var(--me-primary, #2563EB);
+    color: #fff;
+    border-color: var(--me-primary, #2563EB);
+}
+
+/* Inline image wrapper */
+.me-image-wrapper-inline {
+    display: inline-block;
+    vertical-align: top;
+    margin: 4px 8px 4px 0;
+}
+
 /* Resize handle — bottom-right corner, visible on hover or when selected */
 .me-image-resize-handle {
     position: absolute;

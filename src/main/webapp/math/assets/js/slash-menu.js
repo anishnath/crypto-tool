@@ -21,7 +21,10 @@
         { icon: '&#x229E;',  label: 'Table',         shortcut: '3x3',          action: 'table'        },
         { icon: '&#x201C;',  label: 'Blockquote',    shortcut: '',             action: 'blockquote'   },
         { icon: '&#x2014;',  label: 'Divider',       shortcut: '',             action: 'divider'      },
-        { icon: '&#x270F;',  label: 'Drawing',       shortcut: '',             action: 'drawing'      }
+        { icon: '&#x270F;',  label: 'Drawing',       shortcut: '',             action: 'drawing'      },
+        { icon: '&#x2697;',  label: 'Molecule',      shortcut: '',             action: 'molecule'     },
+        { icon: '&#x25CB;:',  label: 'Lewis Structure', shortcut: '',           action: 'lewis'        },
+        { icon: '&#x25C7;',  label: 'Molecular Geometry', shortcut: '',         action: 'geometry'     }
     ];
 
     // =========================================================
@@ -249,6 +252,18 @@
                         }).run();
                     });
                 }
+                break;
+            case 'molecule':
+                var ctx = window.ME_CTX || '';
+                window.open(ctx + '/chemistry/molecule-draw.jsp?returnTo=editor', '_blank', 'width=1200,height=800');
+                break;
+            case 'lewis':
+                var ctx2 = window.ME_CTX || '';
+                window.open(ctx2 + '/lewis-structure-generator.jsp?returnTo=editor', '_blank', 'width=1200,height=800');
+                break;
+            case 'geometry':
+                var ctx3 = window.ME_CTX || '';
+                window.open(ctx3 + '/molecular-geometry-calculator.jsp?returnTo=editor', '_blank', 'width=1200,height=800');
                 break;
         }
 

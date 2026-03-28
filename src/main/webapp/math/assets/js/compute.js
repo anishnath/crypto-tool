@@ -89,6 +89,27 @@
     }
 
     // =========================================================
+    //  OpenChemLib (lazy ESM import for SMILES → molecule)
+    // =========================================================
+    var oclModule = null;
+    function getOCL() {
+        if (oclModule) return Promise.resolve(oclModule);
+        return import('https://esm.sh/openchemlib@9.21.0').then(function (mod) {
+            oclModule = mod.default || mod;
+            return oclModule;
+        });
+    }
+
+    /** Detect if text looks like a SMILES string (no spaces, has uppercase letter, no LaTeX commands) */
+    function isSmilesLike(text) {
+        if (!text || text.length < 2) return false;
+        if (/\s/.test(text)) return false;
+        if (/\\[a-zA-Z]/.test(text)) return false; // LaTeX commands like \frac
+        if (!/[A-Z]/.test(text)) return false;      // Must have at least one uppercase letter
+        return /^[A-Za-z0-9=#()[\]@+\-\\.\/\\\\]+$/.test(text);
+    }
+
+    // =========================================================
     //  TIER 3: SymPy (server-side via OneCompilerFunctionality)
     // =========================================================
     function runSymPy(code) {
@@ -161,26 +182,29 @@
         var intMatch = s.match(/^\\int\s*/);
         if (intMatch) {
             var cursor = intMatch[0].length;
-            if (s[cursor] === '_' && s[cursor + 1] === '{') {
-                var lo = extractBraced(s, cursor + 2);
-                if (lo) {
-                    lower = lo.content;
-                    cursor = lo.end;
-                    // Skip whitespace
-                    while (cursor < s.length && s[cursor] === ' ') cursor++;
-                    if (s[cursor] === '^' && s[cursor + 1] === '{') {
-                        var hi = extractBraced(s, cursor + 2);
-                        if (hi) {
-                            upper = hi.content;
-                            cursor = hi.end;
-                        }
-                    } else if (s[cursor] === '^') {
-                        // ^X without braces (single token)
-                        var ubMatch = s.substring(cursor + 1).match(/^(\S+)/);
-                        if (ubMatch) {
-                            upper = ubMatch[1];
-                            cursor += 1 + ubMatch[1].length;
-                        }
+            if (s[cursor] === '_') {
+                cursor++; // skip _
+                if (s[cursor] === '{') {
+                    // Braced lower bound: _{...}
+                    var lo = extractBraced(s, cursor + 1);
+                    if (lo) { lower = lo.content; cursor = lo.end; }
+                } else {
+                    // Bare lower bound: _0, _a, _1 (single char/digit)
+                    var loMatch = s.substring(cursor).match(/^([a-zA-Z0-9])/);
+                    if (loMatch) { lower = loMatch[1]; cursor += loMatch[1].length; }
+                }
+                // Skip whitespace
+                while (cursor < s.length && s[cursor] === ' ') cursor++;
+                if (s[cursor] === '^') {
+                    cursor++; // skip ^
+                    if (s[cursor] === '{') {
+                        // Braced upper bound: ^{...}
+                        var hi = extractBraced(s, cursor + 1);
+                        if (hi) { upper = hi.content; cursor = hi.end; }
+                    } else {
+                        // Bare upper bound: ^1, ^a
+                        var hiMatch = s.substring(cursor).match(/^(\S+)/);
+                        if (hiMatch) { upper = hiMatch[1]; cursor += hiMatch[1].length; }
                     }
                 }
             }
@@ -224,9 +248,12 @@
 
         // Normalize LaTeX before conversion:
         // \sin^{3}(x) → \sin(x)^{3}  (nerdamer doesn't handle trig^n(x) form)
+        // Handles both braced ^{3} and bare ^3
         var normLatex = normalizeLatexForNerdamer(integrandLatex)
-            .replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\{[^}]+\})(\([^)]+\))/g, '\\$1$3^$2')
-            .replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\{[^}]+\})([a-zA-Z])/g, '\\$1($3)^$2');
+            .replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\{[^}]+\})(\([^)]*\))/g, '\\$1$3^$2')
+            .replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\d+)(\([^)]*\))/g, '\\$1$3^$2')
+            .replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\{[^}]+\})([a-zA-Z])/g, '\\$1($3)^$2')
+            .replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\^(\d+)([a-zA-Z])/g, '\\$1($3)^$2');
 
         // Convert LaTeX integrand to nerdamer text
         var nExpr;
@@ -2373,6 +2400,45 @@
                 }
             }
         });
+
+        // --- SMILES / Molecule (only if text looks like SMILES) ---
+        if (isSmilesLike(latex)) {
+            items.push({ type: 'divider' });
+            (function (smiles) {
+                items.push({
+                    label: '\uD83D\uDD2C Insert Molecule Image',
+                    onMenuSelect: function () {
+                        var editor = window.MeEditor;
+                        if (!editor) return;
+                        showToast('Loading molecule...', 2000);
+                        getOCL().then(function (OCL) {
+                            try {
+                                var mol = OCL.Molecule.fromSmiles(smiles);
+                                var svg = mol.toSVG(400, 300, null, { autoCrop: true });
+                                var formula = mol.getMolecularFormula();
+                                var dataUrl = 'data:image/svg+xml;base64,' + btoa(svg);
+                                editor.chain().focus('end').insertContent({
+                                    type: 'image',
+                                    attrs: { src: dataUrl, alt: formula.formula + ' \u2014 ' + formula.absoluteWeight.toFixed(2) + ' g/mol', title: smiles, width: 300 }
+                                }).run();
+                                showToast('Molecule inserted', 2000);
+                            } catch (err) {
+                                showToast('Invalid SMILES: ' + (err.message || err), 3000);
+                            }
+                        }).catch(function (err) {
+                            showToast('Failed to load OpenChemLib: ' + (err.message || err), 3000);
+                        });
+                    }
+                });
+                items.push({
+                    label: '\uD83D\uDD2C Open in Molecule Editor',
+                    onMenuSelect: function () {
+                        var ctx = window.ME_CTX || '';
+                        window.open(ctx + '/chemistry/molecule-draw.jsp?smiles=' + encodeURIComponent(smiles) + '&returnTo=editor', '_blank', 'width=1200,height=800');
+                    }
+                });
+            })(latex);
+        }
 
         // --- Utility ---
         items.push({ type: 'divider' });

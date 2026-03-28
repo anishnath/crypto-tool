@@ -188,6 +188,15 @@
             <button type="button" class="me-toolbar-btn" title="Insert Code Block">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,4 2,8 5,12"/><polyline points="11,4 14,8 11,12"/><line x1="9" y1="3" x2="7" y2="13"/></svg>
             </button>
+            <button type="button" class="me-toolbar-btn" title="Insert Molecule">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="5" cy="5" r="2"/><circle cx="11" cy="5" r="2"/><circle cx="8" cy="12" r="2"/><line x1="6.8" y1="5.8" x2="9.2" y2="5.8"/><line x1="5.8" y1="6.8" x2="7" y2="10.5"/><line x1="10.2" y1="6.8" x2="9" y2="10.5"/></svg>
+            </button>
+            <button type="button" class="me-toolbar-btn" title="Lewis Structure">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" font-family="sans-serif" font-size="7" font-weight="600"><text x="2" y="10">L</text><circle cx="10" cy="4" r="1.2"/><circle cx="14" cy="4" r="1.2"/><circle cx="10" cy="8" r="1.2"/><circle cx="14" cy="8" r="1.2"/><circle cx="10" cy="12" r="1.2"/><circle cx="14" cy="12" r="1.2"/></svg>
+            </button>
+            <button type="button" class="me-toolbar-btn" title="Molecular Geometry">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="3" r="1.5" fill="currentColor"/><circle cx="3" cy="13" r="1.5" fill="currentColor"/><circle cx="13" cy="13" r="1.5" fill="currentColor"/><line x1="8" y1="4.5" x2="3" y2="11.5"/><line x1="8" y1="4.5" x2="13" y2="11.5"/><line x1="3" y1="13" x2="13" y2="13" stroke-dasharray="2,2"/></svg>
+            </button>
 
             <span class="me-toolbar-sep"></span>
 
@@ -353,5 +362,71 @@
 <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%= cacheVersion %>" defer></script>
 
 <%@ include file="../modern/components/analytics.jsp" %>
+
+<!-- Molecule integration: receive molecules from molecule-draw.jsp via postMessage -->
+<script>
+(function () {
+    window.addEventListener('message', function (event) {
+        if (!event.data || event.data.type !== 'molecule-insert') return;
+
+        var editor = window.MeEditor;
+        if (!editor) return;
+
+        var svg = event.data.svg;
+        var imageDataUrl = event.data.imageDataUrl;  // PNG from canvas (reactions)
+        var smiles = event.data.smiles || '';
+        var formula = event.data.formula || '';
+        var weight = event.data.weight || '';
+        var name = event.data.name || '';
+
+        if (!svg && !imageDataUrl) return;
+
+        // Convert SVG string to data URL, or use the PNG data URL directly
+        var dataUrl = imageDataUrl || 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+        var altText = formula || smiles;
+        var titleText = name || smiles;
+
+        // Build caption text
+        var caption = '';
+        if (formula) caption += formula;
+        if (weight) caption += ' \u2014 ' + weight + ' g/mol';
+
+        // Focus editor and move cursor to end before inserting
+        editor.commands.focus('end');
+
+        // Insert molecule image + caption as a block sequence
+        // Use insertContent with array for reliable insertion (same pattern as graph-insert)
+        var content = [
+            { type: 'image', attrs: { src: dataUrl, alt: altText, title: titleText, width: 300 } }
+        ];
+        if (caption) {
+            content.push({
+                type: 'paragraph',
+                content: [{ type: 'text', text: caption }]
+            });
+        }
+
+        try {
+            editor.chain().focus('end').insertContent(content).run();
+        } catch (_) {
+            // Fallback: try setImage command
+            try {
+                editor.commands.setImage({ src: dataUrl, alt: altText, title: titleText });
+                if (caption) {
+                    editor.commands.insertContent({
+                        type: 'paragraph',
+                        content: [{ type: 'text', text: caption }]
+                    });
+                }
+            } catch (_2) {}
+        }
+
+        // Show confirmation
+        if (window.MeCompute && MeCompute.showToast) {
+            MeCompute.showToast('Molecule inserted: ' + (formula || smiles), 2000);
+        }
+    });
+})();
+</script>
 </body>
 </html>

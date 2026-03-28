@@ -387,7 +387,8 @@ const MeImage = Node.create({
             src:    { default: null },
             alt:    { default: null },
             title:  { default: null },
-            width:  { default: 560 }  // px; user can resize via drag handle
+            width:  { default: 560 },  // px; user can resize via drag handle
+            layout: { default: 'block' }  // 'block' = full row, 'inline' = side by side
         };
     },
 
@@ -398,17 +399,21 @@ const MeImage = Node.create({
                 src: el.getAttribute('src'),
                 alt: el.getAttribute('alt') || null,
                 title: el.getAttribute('title') || null,
-                width: parseInt(el.getAttribute('data-width') || el.style.width || '560', 10) || 560
+                width: parseInt(el.getAttribute('data-width') || el.style.width || '560', 10) || 560,
+                layout: el.getAttribute('data-layout') || 'block'
             })
         }];
     },
 
     renderHTML({ HTMLAttributes }) {
         var w = HTMLAttributes.width || 560;
+        var layout = HTMLAttributes.layout || 'block';
+        var displayStyle = layout === 'inline' ? 'display:inline-block;vertical-align:top;margin:4px 8px 4px 0;' : '';
         return ['img', mergeAttributes({
-            class: 'me-graph-image',
+            class: 'me-graph-image' + (layout === 'inline' ? ' me-image-inline' : ''),
             'data-width': String(w),
-            style: 'width:' + w + 'px;height:auto;'
+            'data-layout': layout,
+            style: 'width:' + w + 'px;height:auto;' + displayStyle
         }, {
             src: HTMLAttributes.src,
             alt: HTMLAttributes.alt,
@@ -427,7 +432,13 @@ const MeImage = Node.create({
     addNodeView() {
         return ({ node, getPos, editor: ed }) => {
             var wrapper = document.createElement('div');
-            wrapper.className = 'me-image-wrapper';
+            var layout = node.attrs.layout || 'block';
+            wrapper.className = 'me-image-wrapper' + (layout === 'inline' ? ' me-image-wrapper-inline' : '');
+            if (layout === 'inline') {
+                wrapper.style.display = 'inline-block';
+                wrapper.style.verticalAlign = 'top';
+                wrapper.style.margin = '4px 8px 4px 0';
+            }
 
             var img = document.createElement('img');
             img.className = 'me-graph-image';
@@ -439,6 +450,28 @@ const MeImage = Node.create({
             img.style.height = 'auto';
             img.draggable = true;
             wrapper.appendChild(img);
+
+            // Layout toggle button (block ↔ inline)
+            var layoutBtn = document.createElement('button');
+            layoutBtn.className = 'me-image-layout-btn';
+            layoutBtn.innerHTML = layout === 'inline' ? '\u2B1C' : '\u25A3';  // □ or ⬜
+            layoutBtn.title = layout === 'inline' ? 'Full width' : 'Side by side';
+            layoutBtn.setAttribute('type', 'button');
+            layoutBtn.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var pos = getPos();
+                if (typeof pos !== 'number') return;
+                var newLayout = (node.attrs.layout || 'block') === 'block' ? 'inline' : 'block';
+                ed.view.dispatch(ed.state.tr.setNodeMarkup(pos, undefined, {
+                    src: node.attrs.src,
+                    alt: node.attrs.alt,
+                    title: node.attrs.title,
+                    width: newLayout === 'inline' ? Math.min(node.attrs.width || 560, 300) : node.attrs.width || 560,
+                    layout: newLayout
+                }));
+            });
+            wrapper.appendChild(layoutBtn);
 
             var handle = document.createElement('div');
             handle.className = 'me-image-resize-handle';
@@ -505,6 +538,14 @@ const MeImage = Node.create({
                     if (updatedNode.attrs.title) img.title = updatedNode.attrs.title;
                     var nw = updatedNode.attrs.width || 560;
                     img.style.width = nw + 'px';
+                    // Update layout
+                    var nl = updatedNode.attrs.layout || 'block';
+                    wrapper.className = 'me-image-wrapper' + (nl === 'inline' ? ' me-image-wrapper-inline' : '');
+                    wrapper.style.display = nl === 'inline' ? 'inline-block' : '';
+                    wrapper.style.verticalAlign = nl === 'inline' ? 'top' : '';
+                    wrapper.style.margin = nl === 'inline' ? '4px 8px 4px 0' : '';
+                    layoutBtn.innerHTML = nl === 'inline' ? '\u2B1C' : '\u25A3';
+                    layoutBtn.title = nl === 'inline' ? 'Full width' : 'Side by side';
                     return true;
                 },
                 selectNode() {

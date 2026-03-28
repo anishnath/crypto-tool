@@ -1467,6 +1467,92 @@ async function runCETests() {
     eq(extractForAction('x^{2}-5x+6=0', 'solve'), 'x^{2}-5x+6=0', 'equation kept for solve');
     eq(extractForAction('x^{2}+1', 'evaluate'), 'x^{2}+1', 'no = → as-is');
 
+    // =============================================
+    //  SLASH MENU ITEMS
+    // =============================================
+    domain('Slash Menu Items');
+
+    var EXPECTED_SLASH_ITEMS = [
+        'mathBlock', 'inlineMath', 'paragraph', 'h1', 'h2', 'h3',
+        'bulletList', 'numberedList', 'codeBlock', 'table',
+        'blockquote', 'divider', 'drawing', 'molecule', 'lewis', 'geometry'
+    ];
+
+    // Read slash-menu.js and extract MENU_ITEMS actions
+    var slashMenuPath = require('path').join(__dirname, 'assets', 'js', 'slash-menu.js');
+    var slashMenuCode = require('fs').readFileSync(slashMenuPath, 'utf8');
+    var actionMatches = slashMenuCode.match(/action:\s*'([^']+)'/g) || [];
+    var slashActions = actionMatches.map(function (m) { return m.replace(/action:\s*'/, '').replace(/'$/, ''); });
+
+    EXPECTED_SLASH_ITEMS.forEach(function (item) {
+        assert(slashActions.includes(item), 'Slash menu has /' + item);
+    });
+    eq(slashActions.length, EXPECTED_SLASH_ITEMS.length, 'Slash menu has ' + EXPECTED_SLASH_ITEMS.length + ' items total');
+
+    // =============================================
+    //  SMILES DETECTION
+    // =============================================
+    domain('SMILES Detection');
+
+    function isSmilesLike(text) {
+        if (!text || text.length < 2) return false;
+        if (/\s/.test(text)) return false;
+        if (/\\[a-zA-Z]/.test(text)) return false;
+        if (!/[A-Z]/.test(text)) return false;
+        return /^[A-Za-z0-9=#()[\]@+\-\\.\/\\\\]+$/.test(text);
+    }
+
+    // Valid SMILES
+    assert(isSmilesLike('C1=CC=CC=C1'), 'benzene SMILES');
+    assert(isSmilesLike('CCO'), 'ethanol SMILES');
+    assert(isSmilesLike('CC(=O)O'), 'acetic acid SMILES');
+    assert(isSmilesLike('O=C(O)C(O)(CC)CC'), 'complex SMILES');
+    assert(isSmilesLike('c1ccc(O)cc1'), 'aromatic phenol');
+    assert(isSmilesLike('[Na+].[Cl-]'), 'NaCl ionic');
+    assert(isSmilesLike('CC(C)CC'), 'isopentane');
+
+    // NOT SMILES (math expressions)
+    assert(!isSmilesLike('x^2+1'), 'math expression → false');
+    assert(!isSmilesLike('\\sin(x)'), 'LaTeX command → false');
+    assert(!isSmilesLike('\\frac{1}{2}'), 'LaTeX frac → false');
+    assert(!isSmilesLike('hello world'), 'has space → false');
+    assert(!isSmilesLike('abc'), 'all lowercase → false');
+    assert(!isSmilesLike(''), 'empty → false');
+    assert(!isSmilesLike('x'), 'single char → false');
+    assert(!isSmilesLike('123'), 'digits only → false');
+
+    // =============================================
+    //  MOLECULE POSTMESSAGE PROTOCOL
+    // =============================================
+    domain('Molecule postMessage Protocol');
+
+    // Verify editor.jsp has the postMessage listener
+    var editorJspPath = require('path').join(__dirname, 'editor.jsp');
+    var editorJspCode = require('fs').readFileSync(editorJspPath, 'utf8');
+    assert(editorJspCode.includes("event.data.type !== 'molecule-insert'"), 'editor.jsp has molecule-insert listener');
+    assert(editorJspCode.includes('imageDataUrl'), 'editor.jsp handles imageDataUrl (reactions)');
+    assert(editorJspCode.includes('data:image/svg+xml'), 'editor.jsp converts SVG to data URL');
+    assert(editorJspCode.includes('title: titleText') || editorJspCode.includes('title: smiles'), 'editor.jsp stores SMILES in title attribute');
+
+    // Verify molecule-draw.jsp has the Insert into Document button
+    var molDrawPath = require('path').join(__dirname, '..', 'chemistry', 'molecule-draw.jsp');
+    var molDrawCode = require('fs').readFileSync(molDrawPath, 'utf8');
+    assert(molDrawCode.includes('insertIntoDocBtn'), 'molecule-draw.jsp has insert button');
+    assert(molDrawCode.includes("returnTo") && molDrawCode.includes("'editor'"), 'molecule-draw.jsp checks returnTo=editor');
+    assert(molDrawCode.includes("window.opener.postMessage"), 'molecule-draw.jsp sends postMessage');
+    assert(molDrawCode.includes("type: 'molecule-insert'"), 'molecule-draw.jsp sends molecule-insert type');
+    assert(molDrawCode.includes('canvasEl.toDataURL'), 'molecule-draw.jsp captures reaction canvas as PNG');
+    assert(molDrawCode.includes('reaction.toSmiles'), 'molecule-draw.jsp gets reaction SMILES');
+
+    // Verify compute.js has SMILES context menu items
+    var computePath = require('path').join(__dirname, 'assets', 'js', 'compute.js');
+    var computeCode = require('fs').readFileSync(computePath, 'utf8');
+    assert(computeCode.includes('isSmilesLike'), 'compute.js has SMILES detection');
+    assert(computeCode.includes('Insert Molecule Image'), 'compute.js has Insert Molecule Image menu item');
+    assert(computeCode.includes('Open in Molecule Editor'), 'compute.js has Open in Molecule Editor menu item');
+    assert(computeCode.includes('openchemlib'), 'compute.js lazy-loads OCL');
+    assert(computeCode.includes('fromSmiles'), 'compute.js uses OCL.Molecule.fromSmiles');
+
     domain('Tier 3: SymPy Code Builder');
 
     function nerdamerToPython(expr) {
