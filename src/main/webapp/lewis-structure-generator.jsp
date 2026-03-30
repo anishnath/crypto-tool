@@ -1460,7 +1460,10 @@
 
         // Give central atom lone pairs from remaining
         var cLonePairs = 0;
-        var centralTarget = (centralAtom === 'H') ? 2 : 8;
+        // Electron-deficient atoms (B, Be, Al) are stable with fewer than 8 electrons
+        var electronDeficient = ['B', 'Be', 'Al'];
+        var centralTarget = (centralAtom === 'H') ? 2 :
+            (electronDeficient.indexOf(centralAtom) !== -1) ? centralE : 8;
 
         while (centralE + cLonePairs * 2 < centralTarget && remaining >= 2) {
             cLonePairs++;
@@ -3048,7 +3051,58 @@
                     },
                     'oxalic-acid-style',
                     [[1, 0], [1, 0]]
-                )
+                ),
+                // Acetone (C3H6O): CH3-C(=O)-CH3
+                'C3H6O|0': buildChainTemplate(
+                    ['C', 'C', 'C'],
+                    [['H', 'H', 'H'], ['O'], ['H', 'H', 'H']],
+                    {
+                        bbBondOrders: [1, 1],
+                        bbLonePairs: [0, 0, 0],
+                        termLonePairs: [[0, 0, 0], [2], [0, 0, 0]],
+                        termBondOrders: [[1, 1, 1], [2], [1, 1, 1]]
+                    },
+                    'acetone'
+                ),
+                // Acetaldehyde (C2H4O): CH3-CHO
+                'C2H4O|0': buildChainTemplate(
+                    ['C', 'C'],
+                    [['H', 'H', 'H'], ['O', 'H']],
+                    {
+                        bbBondOrders: [1],
+                        bbLonePairs: [0, 0],
+                        termLonePairs: [[0, 0, 0], [2, 0]],
+                        termBondOrders: [[1, 1, 1], [2, 1]]
+                    },
+                    'acetaldehyde'
+                ),
+                // Methylamine (CH5N): CH3-NH2
+                'CH5N|0': buildChainTemplate(
+                    ['C', 'N'],
+                    [['H', 'H', 'H'], ['H', 'H']],
+                    {
+                        bbBondOrders: [1],
+                        bbLonePairs: [0, 1],
+                        termLonePairs: [[0, 0, 0], [0, 0]],
+                        termBondOrders: [[1, 1, 1], [1, 1]]
+                    },
+                    'methylamine'
+                ),
+                // Dichlorine monoxide (Cl2O): Cl-O-Cl with O central
+                'Cl2O|0': {
+                    centralAtom: 'O',
+                    bonding: {
+                        peripherals: ['Cl', 'Cl'],
+                        bondOrders: [1, 1],
+                        peripheralLonePairs: [3, 3],
+                        centralLonePairs: 2,
+                        hasResonance: false,
+                        isRadical: false,
+                        unpairedElectrons: 0
+                    },
+                    isResonanceTemplate: false,
+                    note: 'Predefined dichlorine monoxide structure applied.'
+                }
             };
 
             function addGeneratedTemplate(central, peripheral, count, charge, label, allowOddValence) {
@@ -3140,12 +3194,21 @@
             return String(ch.charCodeAt(0) - 0x2080);
         });
         normalized = normalized.replace(/[\u207A\u207B\u2212+\-]+$/, '');
-        return /C[0-9H]*O[0-9H]*C/.test(normalized);
+        // Match C-O-C ether connectivity. Require digits or H between first C and O
+        // so bare "CO" (carbonyl) doesn't match (e.g., CH3COCH3 is ketone not ether).
+        // Use negative lookahead after trailing C to avoid two-letter elements (Cl, Cr, etc.)
+        return /C[0-9H]+O[0-9H]*C(?![a-z])/.test(normalized);
     }
 
     // Detect ring structure: Formula suggests cyclic (e.g., C6H6, C5H10, C6H12)
     function detectRing(atoms) {
         if (!atoms['C']) return false;
+        // Only pure hydrocarbons — non-C/H atoms mean the CnH2n ratio
+        // is coincidental (e.g. C3H6O is acetone, not cyclopropane)
+        var elementKeys = Object.keys(atoms).filter(function(el) { return atoms[el] > 0; });
+        for (var i = 0; i < elementKeys.length; i++) {
+            if (elementKeys[i] !== 'C' && elementKeys[i] !== 'H') return false;
+        }
         var numC = atoms['C'] || 0;
         var numH = atoms['H'] || 0;
 
@@ -3156,6 +3219,328 @@
         return (numC >= 3 && numH === 2 * numC) || // Cycloalkane
             (numC >= 6 && numH === numC) ||      // Benzene-like
             (numC >= 3 && numH === 2 * numC - 2); // Cycloalkene
+    }
+
+    // ========== PUBCHEM SDF INTEGRATION ==========
+    // Minimal SDF parser (mirrors molecular-geometry-render.js parseSDF)
+    var pubchemLewisCache = {};
+
+    function lewisParseSDF(sdf) {
+        var lines = sdf.split('\n');
+        var countsIdx = -1;
+        for (var i = 0; i < Math.min(lines.length, 10); i++) {
+            if (lines[i].indexOf('V2000') !== -1 || lines[i].indexOf('V3000') !== -1) {
+                countsIdx = i; break;
+            }
+        }
+        if (countsIdx === -1) return null;
+        var countsParts = lines[countsIdx].trim().split(/\s+/);
+        var numAtoms = parseInt(countsParts[0]);
+        var numBonds = parseInt(countsParts[1]);
+        if (isNaN(numAtoms) || isNaN(numBonds) || numAtoms < 1) return null;
+        var atoms = [];
+        for (var a = 0; a < numAtoms; a++) {
+            var line = lines[countsIdx + 1 + a];
+            if (!line) continue;
+            var parts = line.trim().split(/\s+/);
+            if (parts.length < 4) continue;
+            atoms.push({ elem: parts[3], idx: a });
+        }
+        var bonds = [];
+        for (var b = 0; b < numBonds; b++) {
+            var bline = lines[countsIdx + 1 + numAtoms + b];
+            if (!bline) continue;
+            var bparts = bline.trim().split(/\s+/);
+            if (bparts.length < 3) continue;
+            bonds.push({ from: parseInt(bparts[0]) - 1, to: parseInt(bparts[1]) - 1,
+                order: parseInt(bparts[2]) });
+        }
+        return { atoms: atoms, bonds: bonds };
+    }
+
+    function lewisFetchPubChem(query) {
+        var clean = query.replace(/\s+/g, '').replace(/\(\d*[+-]\)$/, '').replace(/[+-]$/, '');
+        if (!clean) return Promise.resolve(null);
+        if (pubchemLewisCache[clean.toUpperCase()]) {
+            return Promise.resolve(pubchemLewisCache[clean.toUpperCase()]);
+        }
+        // Try formula first, then name
+        var cidUrl = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/formula/' +
+            encodeURIComponent(clean) + '/cids/JSON?MaxRecords=1';
+        var nameUrl = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/' +
+            encodeURIComponent(clean) + '/cids/JSON?MaxRecords=1';
+
+        function fetchCIDFromUrl(url) {
+            return fetch(url).then(function(resp) {
+                if (!resp.ok) return null;
+                return resp.json();
+            }).then(function(data) {
+                if (data && data.IdentifierList && data.IdentifierList.CID &&
+                    data.IdentifierList.CID.length > 0) {
+                    return data.IdentifierList.CID[0];
+                }
+                if (data && data.Waiting) {
+                    var listKey = data.Waiting.ListKey;
+                    return new Promise(function(r) { setTimeout(r, 2000); }).then(function() {
+                        return fetch('https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/listkey/' +
+                            listKey + '/cids/JSON?MaxRecords=1');
+                    }).then(function(r) { return r.ok ? r.json() : null; }).then(function(d) {
+                        if (d && d.IdentifierList && d.IdentifierList.CID && d.IdentifierList.CID.length > 0) {
+                            return d.IdentifierList.CID[0];
+                        }
+                        return null;
+                    });
+                }
+                return null;
+            }).catch(function() { return null; });
+        }
+
+        return fetchCIDFromUrl(cidUrl).then(function(cid) {
+            if (cid) return cid;
+            return fetchCIDFromUrl(nameUrl);
+        }).then(function(cid) {
+            if (!cid) return null;
+            // Fetch 3D SDF, fallback to 2D
+            return fetch('https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/' +
+                cid + '/SDF?record_type=3d').then(function(resp) {
+                if (resp.ok) return resp.text();
+                return fetch('https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/' +
+                    cid + '/SDF').then(function(r) { return r.ok ? r.text() : null; });
+            }).then(function(sdf) {
+                if (!sdf) return null;
+                var result = { sdf: sdf, cid: cid };
+                pubchemLewisCache[clean.toUpperCase()] = result;
+                return result;
+            });
+        }).catch(function() { return null; });
+    }
+
+    /**
+     * Convert parsed SDF bond graph into Lewis structure format.
+     * Returns { backbone, termsPerAtom, chainBonding } or null.
+     */
+    function sdfToLewisStructure(parsed, totalValence) {
+        if (!parsed || !parsed.atoms || !parsed.bonds) return null;
+
+        // Build adjacency list
+        var adj = [];
+        for (var i = 0; i < parsed.atoms.length; i++) adj.push([]);
+        for (var b = 0; b < parsed.bonds.length; b++) {
+            var bond = parsed.bonds[b];
+            adj[bond.from].push({ neighbor: bond.to, order: bond.order });
+            adj[bond.to].push({ neighbor: bond.from, order: bond.order });
+        }
+
+        // Identify heavy atoms (non-H) and H atoms
+        var heavyIndices = [];
+        var hIndices = [];
+        for (var i = 0; i < parsed.atoms.length; i++) {
+            if (parsed.atoms[i].elem === 'H') hIndices.push(i);
+            else heavyIndices.push(i);
+        }
+
+        // Single heavy atom → star structure
+        if (heavyIndices.length === 1) {
+            var ci = heavyIndices[0];
+            var centralAtom = parsed.atoms[ci].elem;
+            var peripherals = [];
+            var bondOrders = [];
+            for (var b = 0; b < adj[ci].length; b++) {
+                peripherals.push(parsed.atoms[adj[ci][b].neighbor].elem);
+                bondOrders.push(adj[ci][b].order);
+            }
+            // Compute lone pairs from remaining electrons
+            var bondE = bondOrders.reduce(function(s, o) { return s + o * 2; }, 0);
+            var remaining = totalValence - bondE;
+            var pLonePairs = peripherals.map(function(el, pi) {
+                if (el === 'H') return 0;
+                var need = 3;
+                var canGive = Math.min(need, Math.floor(remaining / 2));
+                remaining -= canGive * 2;
+                return canGive;
+            });
+            var centralTarget = (centralAtom === 'H') ? 2 : 8;
+            var cLonePairs = Math.max(0, Math.floor((centralTarget - bondE) / 2));
+            if (cLonePairs * 2 > remaining) cLonePairs = Math.floor(remaining / 2);
+
+            return {
+                type: 'star',
+                centralAtom: centralAtom,
+                bonding: {
+                    peripherals: peripherals, bondOrders: bondOrders,
+                    peripheralLonePairs: pLonePairs, centralLonePairs: cLonePairs,
+                    hasResonance: false, isRadical: (totalValence % 2 !== 0),
+                    unpairedElectrons: 0
+                }
+            };
+        }
+
+        // Multi-heavy-atom: build backbone from heavy atom connectivity
+        // Find the longest chain of heavy atoms (simple DFS)
+        var heavyAdj = {};
+        for (var i = 0; i < heavyIndices.length; i++) heavyAdj[heavyIndices[i]] = [];
+        for (var b = 0; b < parsed.bonds.length; b++) {
+            var bond = parsed.bonds[b];
+            if (parsed.atoms[bond.from].elem !== 'H' && parsed.atoms[bond.to].elem !== 'H') {
+                heavyAdj[bond.from].push({ neighbor: bond.to, order: bond.order });
+                heavyAdj[bond.to].push({ neighbor: bond.from, order: bond.order });
+            }
+        }
+
+        // Check for ring: if any heavy atom has a cycle
+        var isRing = false;
+        if (heavyIndices.length >= 3) {
+            // Ring if edges >= vertices among heavy atoms
+            var heavyBondCount = 0;
+            for (var b = 0; b < parsed.bonds.length; b++) {
+                var bond = parsed.bonds[b];
+                if (parsed.atoms[bond.from].elem !== 'H' && parsed.atoms[bond.to].elem !== 'H') {
+                    heavyBondCount++;
+                }
+            }
+            isRing = heavyBondCount >= heavyIndices.length;
+        }
+
+        if (isRing) {
+            // For now, fall back to heuristic for rings
+            return null;
+        }
+
+        // Find longest path (backbone) via DFS from each endpoint
+        function findLongestPath() {
+            var best = [];
+            // Start from degree-1 heavy atoms (endpoints)
+            var endpoints = heavyIndices.filter(function(hi) {
+                return heavyAdj[hi].length === 1;
+            });
+            if (endpoints.length === 0) endpoints = [heavyIndices[0]];
+
+            for (var ei = 0; ei < endpoints.length; ei++) {
+                var stack = [[endpoints[ei], [endpoints[ei]]]];
+                var visited = {};
+                while (stack.length > 0) {
+                    var item = stack.pop();
+                    var node = item[0], path = item[1];
+                    if (path.length > best.length) best = path.slice();
+                    visited[node] = true;
+                    var neighbors = heavyAdj[node] || [];
+                    for (var ni = 0; ni < neighbors.length; ni++) {
+                        var next = neighbors[ni].neighbor;
+                        if (!visited[next] && path.indexOf(next) === -1) {
+                            stack.push([next, path.concat(next)]);
+                        }
+                    }
+                }
+            }
+            return best;
+        }
+
+        var backbonePath = findLongestPath();
+        var backboneSet = {};
+        for (var i = 0; i < backbonePath.length; i++) backboneSet[backbonePath[i]] = i;
+
+        var backbone = backbonePath.map(function(idx) { return parsed.atoms[idx].elem; });
+
+        // Backbone bond orders
+        var bbBondOrders = [];
+        for (var i = 0; i < backbonePath.length - 1; i++) {
+            var fromIdx = backbonePath[i];
+            var toIdx = backbonePath[i + 1];
+            var order = 1;
+            for (var b = 0; b < parsed.bonds.length; b++) {
+                if ((parsed.bonds[b].from === fromIdx && parsed.bonds[b].to === toIdx) ||
+                    (parsed.bonds[b].from === toIdx && parsed.bonds[b].to === fromIdx)) {
+                    order = parsed.bonds[b].order;
+                    break;
+                }
+            }
+            bbBondOrders.push(order);
+        }
+
+        // Terminal atoms: everything bonded to backbone atoms that's not on the backbone
+        var termsPerAtom = [];
+        var termBondOrders = [];
+        var termLonePairs = [];
+        var termAttachedHydrogens = [];
+
+        for (var bi = 0; bi < backbonePath.length; bi++) {
+            var bbIdx = backbonePath[bi];
+            var terms = [];
+            var tOrders = [];
+            var tLP = [];
+            var tAttH = [];
+
+            for (var ni = 0; ni < adj[bbIdx].length; ni++) {
+                var nb = adj[bbIdx][ni];
+                if (backboneSet[nb.neighbor] !== undefined) continue; // skip backbone neighbors
+                var nbElem = parsed.atoms[nb.neighbor].elem;
+
+                if (nbElem === 'H') {
+                    terms.push('H');
+                    tOrders.push(1);
+                    tLP.push(0);
+                    tAttH.push(0);
+                } else {
+                    // Non-H terminal (branch atom): collect its H neighbors
+                    terms.push(nbElem);
+                    tOrders.push(nb.order);
+                    // Lone pairs: (8 - bond_order*2) / 2 for non-H
+                    var termTarget = 8;
+                    var termBondE = nb.order * 2;
+                    // Count H bonded to this terminal atom
+                    var termH = 0;
+                    for (var ti = 0; ti < adj[nb.neighbor].length; ti++) {
+                        var termNb = adj[nb.neighbor][ti];
+                        if (termNb.neighbor !== bbIdx && parsed.atoms[termNb.neighbor].elem === 'H') {
+                            termH++;
+                            termBondE += 2;
+                        }
+                    }
+                    tLP.push(Math.max(0, Math.floor((termTarget - termBondE) / 2)));
+                    tAttH.push(termH);
+                }
+            }
+            termsPerAtom.push(terms);
+            termBondOrders.push(tOrders);
+            termLonePairs.push(tLP);
+            termAttachedHydrogens.push(tAttH);
+        }
+
+        // Backbone lone pairs
+        var bbLonePairs = [];
+        for (var bi = 0; bi < backbone.length; bi++) {
+            var atomE = 0;
+            if (bi > 0) atomE += bbBondOrders[bi - 1] * 2;
+            if (bi < backbone.length - 1) atomE += bbBondOrders[bi] * 2;
+            for (var ti = 0; ti < termBondOrders[bi].length; ti++) {
+                atomE += termBondOrders[bi][ti] * 2;
+            }
+            var target = (backbone[bi] === 'H') ? 2 : 8;
+            bbLonePairs.push(Math.max(0, Math.floor((target - atomE) / 2)));
+        }
+
+        // Check if any termAttachedHydrogens are non-zero
+        var hasTermAttachedH = false;
+        for (var bi = 0; bi < termAttachedHydrogens.length; bi++) {
+            for (var ti = 0; ti < termAttachedHydrogens[bi].length; ti++) {
+                if (termAttachedHydrogens[bi][ti] > 0) { hasTermAttachedH = true; break; }
+            }
+            if (hasTermAttachedH) break;
+        }
+
+        return {
+            type: 'chain',
+            backbone: backbone,
+            termsPerAtom: termsPerAtom,
+            chainBonding: {
+                bbBondOrders: bbBondOrders,
+                bbLonePairs: bbLonePairs,
+                termLonePairs: termLonePairs,
+                termBondOrders: termBondOrders,
+                termAttachedHydrogens: hasTermAttachedH ? termAttachedHydrogens : undefined
+            },
+            termAttachedHydrogens: hasTermAttachedH ? termAttachedHydrogens : null
+        };
     }
 
     // ========== GENERATE LEWIS STRUCTURE ==========
@@ -3367,11 +3752,33 @@
                     }
                 }
                 if (invalidStar) {
-                    ToolUtils.showToast(
-                        'Formula is ambiguous in molecular form. Try a structural formula (e.g., CH3OH or CH3COOH) or specify charge.',
-                        4500,
-                        'warning'
-                    );
+                    // Star structure invalid — try PubChem for real connectivity
+                    ToolUtils.showToast('Looking up structure from PubChem\u2026', 2000, 'info');
+                    lewisFetchPubChem(formulaStr).then(function(pubData) {
+                        if (!pubData || !pubData.sdf) {
+                            ToolUtils.showToast(
+                                'Formula is ambiguous. Try a structural formula (e.g., CH3OH or CH3COOH).',
+                                4500, 'warning');
+                            return;
+                        }
+                        var parsed = lewisParseSDF(pubData.sdf);
+                        var sdfResult = parsed ? sdfToLewisStructure(parsed, totalValence) : null;
+                        if (!sdfResult) {
+                            ToolUtils.showToast(
+                                'Could not determine structure. Try a structural formula.',
+                                4500, 'warning');
+                            return;
+                        }
+                        if (sdfResult.type === 'star') {
+                            createLewisSketch(atoms, sdfResult.centralAtom, totalValence, charge,
+                                sdfResult.bonding, formulaStr);
+                        } else {
+                            createChainLewisSketch(sdfResult.backbone, sdfResult.termsPerAtom,
+                                totalValence, charge, formulaStr, sdfResult.chainBonding,
+                                sdfResult.termAttachedHydrogens);
+                        }
+                        ToolUtils.showToast('Structure from PubChem (CID ' + pubData.cid + ')', 2500);
+                    });
                     return;
                 }
                 createLewisSketch(atoms, centralAtom, totalValence, charge, bonding, formulaStr);
