@@ -1402,9 +1402,12 @@
         // Keep empty state hidden after first render
         var emptyState = document.getElementById('emptyState');
         if (emptyState) emptyState.style.display = 'none';
-        // Remove any existing canvas
+        // Remove any existing canvas or spinner content
         var existingCanvas = container.querySelector('canvas');
         if (existingCanvas) existingCanvas.remove();
+        // Clear non-canvas children (e.g. loading spinner)
+        var nonCanvas = container.querySelectorAll(':scope > div:not(.tool-empty-state)');
+        for (var i = 0; i < nonCanvas.length; i++) nonCanvas[i].remove();
     }
 
     function isDarkMode() {
@@ -3752,10 +3755,25 @@
                     }
                 }
                 if (invalidStar) {
-                    // Star structure invalid — try PubChem for real connectivity
-                    ToolUtils.showToast('Looking up structure from PubChem\u2026', 2000, 'info');
+                    // Star structure invalid — try real connectivity lookup
+                    // Show spinner in canvas area
+                    destroyCurrentSketch();
+                    var spinnerContainer = document.getElementById('lewisCanvasContainer');
+                    var emptyS = document.getElementById('emptyState');
+                    if (emptyS) emptyS.style.display = 'none';
+                    spinnerContainer.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:200px;gap:12px;">' +
+                        '<div style="width:36px;height:36px;border:3px solid var(--border-color,#e2e8f0);border-top-color:var(--primary,#6366f1);border-radius:50%;animation:lewis-spin 0.8s linear infinite;"></div>' +
+                        '<span style="color:var(--text-secondary,#64748b);font-size:0.875rem;">Analyzing structure\u2026</span></div>';
+                    // Add spin animation if not already present
+                    if (!document.getElementById('lewis-spin-style')) {
+                        var styleEl = document.createElement('style');
+                        styleEl.id = 'lewis-spin-style';
+                        styleEl.textContent = '@keyframes lewis-spin{to{transform:rotate(360deg)}}';
+                        document.head.appendChild(styleEl);
+                    }
                     lewisFetchPubChem(formulaStr).then(function(pubData) {
                         if (!pubData || !pubData.sdf) {
+                            spinnerContainer.innerHTML = '';
                             ToolUtils.showToast(
                                 'Formula is ambiguous. Try a structural formula (e.g., CH3OH or CH3COOH).',
                                 4500, 'warning');
@@ -3764,6 +3782,7 @@
                         var parsed = lewisParseSDF(pubData.sdf);
                         var sdfResult = parsed ? sdfToLewisStructure(parsed, totalValence) : null;
                         if (!sdfResult) {
+                            spinnerContainer.innerHTML = '';
                             ToolUtils.showToast(
                                 'Could not determine structure. Try a structural formula.',
                                 4500, 'warning');
@@ -3777,7 +3796,100 @@
                                 totalValence, charge, formulaStr, sdfResult.chainBonding,
                                 sdfResult.termAttachedHydrogens);
                         }
-                        ToolUtils.showToast('Structure from PubChem (CID ' + pubData.cid + ')', 2500);
+
+                        // Build result info panel (same as other paths)
+                        var pubHtml = '';
+                        pubHtml += buildMoleculeHeader(formulaStr, charge);
+                        pubHtml += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#6366f1;">' +
+                            '\u2139\ufe0f <strong>Structure resolved from database.</strong> ' +
+                            'Real connectivity data used for accurate bond placement.</div>';
+
+                        // Electron summary
+                        var pubBondE = 0;
+                        if (sdfResult.type === 'star') {
+                            for (var si = 0; si < sdfResult.bonding.bondOrders.length; si++) pubBondE += sdfResult.bonding.bondOrders[si] * 2;
+                        } else {
+                            var cb = sdfResult.chainBonding;
+                            for (var si = 0; si < cb.bbBondOrders.length; si++) pubBondE += cb.bbBondOrders[si] * 2;
+                            for (var bi = 0; bi < cb.termBondOrders.length; bi++) {
+                                for (var ti = 0; ti < cb.termBondOrders[bi].length; ti++) pubBondE += cb.termBondOrders[bi][ti] * 2;
+                            }
+                            if (cb.termAttachedHydrogens) {
+                                for (var bi = 0; bi < cb.termAttachedHydrogens.length; bi++) {
+                                    for (var ti = 0; ti < (cb.termAttachedHydrogens[bi] || []).length; ti++) {
+                                        pubBondE += (cb.termAttachedHydrogens[bi][ti] || 0) * 2;
+                                    }
+                                }
+                            }
+                        }
+                        pubHtml += '<div class="lewis-info-grid">';
+                        pubHtml += '<div class="lewis-info-card"><strong>Total Valence e\u207b</strong><span>' + totalValence + '</span></div>';
+                        pubHtml += '<div class="lewis-info-card"><strong>Bonding e\u207b</strong><span>' + pubBondE + '</span></div>';
+                        pubHtml += '<div class="lewis-info-card"><strong>Remaining e\u207b</strong><span>' + (totalValence - pubBondE) + '</span></div>';
+                        pubHtml += '</div>';
+
+                        if (sdfResult.type === 'star') {
+                            var sb = sdfResult.bonding;
+                            pubHtml += '<div class="lewis-result-label">Central Atom</div>';
+                            pubHtml += '<div class="lewis-result-value"><span class="lewis-chem">' + sdfResult.centralAtom + '</span>' +
+                                (sb.centralLonePairs > 0 ? ' (' + sb.centralLonePairs + ' lone pair' + (sb.centralLonePairs !== 1 ? 's' : '') + ')' : ' (no lone pairs)') + '</div>';
+                            pubHtml += '<div class="lewis-result-label">Bond Types</div>';
+                            pubHtml += '<div class="lewis-result-value">' + describeBondOrders(sb.bondOrders) + '</div>';
+                        } else {
+                            var cb = sdfResult.chainBonding;
+                            var bb = sdfResult.backbone;
+                            pubHtml += '<div class="lewis-result-label">Backbone Chain</div>';
+                            pubHtml += '<div class="lewis-result-value"><span class="lewis-chem">';
+                            for (var bi = 0; bi < bb.length; bi++) {
+                                pubHtml += bb[bi];
+                                if (bi < bb.length - 1) {
+                                    var bo = cb.bbBondOrders[bi] || 1;
+                                    pubHtml += (bo === 3 ? ' \u2261 ' : bo === 2 ? ' = ' : ' \u2014 ');
+                                }
+                            }
+                            pubHtml += '</span></div>';
+
+                            pubHtml += '<div class="lewis-result-label">Bond Types</div>';
+                            var allPubOrders = cb.bbBondOrders.slice();
+                            for (var bi = 0; bi < sdfResult.termsPerAtom.length; bi++) {
+                                for (var ti = 0; ti < sdfResult.termsPerAtom[bi].length; ti++) {
+                                    var tbo = (cb.termBondOrders && cb.termBondOrders[bi] && cb.termBondOrders[bi][ti] !== undefined) ?
+                                        cb.termBondOrders[bi][ti] : 1;
+                                    allPubOrders.push(tbo);
+                                }
+                            }
+                            if (cb.termAttachedHydrogens) {
+                                for (var bi = 0; bi < cb.termAttachedHydrogens.length; bi++) {
+                                    for (var ti = 0; ti < (cb.termAttachedHydrogens[bi] || []).length; ti++) {
+                                        for (var h = 0; h < (cb.termAttachedHydrogens[bi][ti] || 0); h++) allPubOrders.push(1);
+                                    }
+                                }
+                            }
+                            pubHtml += '<div class="lewis-result-value">' + describeBondOrders(allPubOrders) + '</div>';
+
+                            // Backbone lone pairs
+                            var hasAnyLP = false;
+                            for (var bi = 0; bi < cb.bbLonePairs.length; bi++) { if (cb.bbLonePairs[bi] > 0) hasAnyLP = true; }
+                            if (hasAnyLP) {
+                                pubHtml += '<div class="lewis-result-label">Backbone Lone Pairs</div>';
+                                pubHtml += '<div class="lewis-result-value">';
+                                for (var bi = 0; bi < bb.length; bi++) {
+                                    if (cb.bbLonePairs[bi] > 0) pubHtml += bb[bi] + (bi+1) + ': ' + cb.bbLonePairs[bi] + ' pair' + (cb.bbLonePairs[bi] !== 1 ? 's' : '') + '  ';
+                                }
+                                pubHtml += '</div>';
+                            }
+                        }
+
+                        document.getElementById('resultDisplay').innerHTML = pubHtml;
+                        document.getElementById('resultActions').classList.add('visible');
+
+                        // Build text result for copying
+                        currentResultText = 'Lewis Structure: ' + formatFormulaText(formulaStr) +
+                            '\nTotal Valence Electrons: ' + totalValence +
+                            '\nBonding Electrons: ' + pubBondE +
+                            '\nType: ' + sdfResult.type;
+
+                        ToolUtils.showToast('Structure resolved successfully', 2000);
                     });
                     return;
                 }
