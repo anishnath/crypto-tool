@@ -35,11 +35,11 @@ export class AnalogSensorBinding {
   }
 
   attach() {
+    const vRef = this.runner.vRef || 5.0;
     const onInput = () => {
       const raw = this.element.value ?? 0;
-      // Normalize to 0–5V range
       const normalized = (raw - this.min) / (this.max - this.min);
-      const voltage = Math.max(0, Math.min(5, normalized * 5.0));
+      const voltage = Math.max(0, Math.min(vRef, normalized * vRef));
       this.runner.setADCValue(this.channel, voltage);
     };
 

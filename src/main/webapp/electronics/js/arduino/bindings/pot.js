@@ -29,11 +29,13 @@ export class PotBinding {
   }
 
   attach() {
+    // Detect reference voltage: RP2040 = 3.3V, AVR = 5.0V
+    const vRef = this.runner.vRef || 5.0;
+
     const onInput = () => {
       // wokwi-potentiometer .value is 0–1023 (or custom min/max)
       const raw = this.element.value || 0;
-      // Convert to voltage: 0–1023 maps to 0–5V
-      const voltage = (raw / 1023) * 5.0;
+      const voltage = (raw / 1023) * vRef;
       this.runner.setADCValue(this.channel, voltage);
     };
 

@@ -25,7 +25,8 @@ export class PhotoresistorBinding {
   attach() {
     const onInput = () => {
       const raw = this.element.value || 0;
-      const voltage = (raw / 1023) * 5.0;
+      const vRef = this.runner.vRef || 5.0;
+      const voltage = (raw / 1023) * vRef;
       this.runner.setADCValue(this.channel, voltage);
     };
 
