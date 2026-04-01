@@ -36,6 +36,8 @@ export class SimulatorCanvas {
     this._dragTarget = null; // { element, offsetX, offsetY }
     /** @type {((element: HTMLElement) => void) | null} */
     this.onDragEnd = null; // callback after component drag finishes
+    /** @type {((element: HTMLElement) => void) | null} */
+    this.onDragMove = null; // callback while component drag is in progress
     /** Set true to suppress panning (e.g. during wire creation) */
     this.suppressPan = false;
 
@@ -154,6 +156,7 @@ export class SimulatorCanvas {
           world.x - this._dragTarget.offsetX,
           world.y - this._dragTarget.offsetY,
         );
+        if (this.onDragMove) this.onDragMove(this._dragTarget.element);
       } else if (this._isPanning) {
         this.pan.x = this._panStart.panX + (e.clientX - this._panStart.mouseX);
         this.pan.y = this._panStart.panY + (e.clientY - this._panStart.mouseY);
@@ -278,6 +281,7 @@ export class SimulatorCanvas {
         if (touchDragTarget) {
           const world = this.toWorld(touch.clientX, touch.clientY);
           this.setComponentPosition(touchDragTarget, world.x - touchDragOffset.x, world.y - touchDragOffset.y);
+          if (this.onDragMove) this.onDragMove(touchDragTarget);
           e.preventDefault();
         } else if (this._isPanning) {
           this.pan.x = this._panStart.panX + (touch.clientX - this._panStart.mouseX);
@@ -289,6 +293,7 @@ export class SimulatorCanvas {
     }, { passive: false });
 
     const onTouchEnd = () => {
+      if (touchDragTarget && this.onDragEnd) this.onDragEnd(touchDragTarget);
       touchDragTarget = null;
       isPinching = false;
       this._isPanning = false;

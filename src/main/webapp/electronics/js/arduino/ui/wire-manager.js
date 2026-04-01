@@ -7,7 +7,7 @@
  *   3. User clicks another pin dot → finishWire()
  *   4. Orthogonal SVG path rendered between the two pins
  *
- * Wire data: { id, startComp, startPin, endComp, endPin, startX, startY, endX, endY, color, path }
+ * Wire data: { id, startComp, startPin, endComp, endPin, color, path }
  */
 
 const WIRE_COLORS = {
@@ -29,7 +29,7 @@ export class WireManager {
     this.svgLayer = svgLayer;
     this.pinOverlay = pinOverlay;
 
-    /** @type {Array<{id: string, startComp: string, startPin: string, endComp: string, endPin: string, startX: number, startY: number, endX: number, endY: number, color: string, pathEl: SVGPathElement}>} */
+    /** @type {Array<{id: string, startComp: string, startPin: string, endComp: string, endPin: string, color: string, pathEl: SVGPathElement}>} */
     this.wires = [];
 
     // In-progress wire state
@@ -94,10 +94,6 @@ export class WireManager {
       startPin: this._inProgress.startPin,
       endComp: componentId,
       endPin: pinName,
-      startX: this._inProgress.startX,
-      startY: this._inProgress.startY,
-      endX: worldX,
-      endY: worldY,
       color: WIRE_COLORS.default,
       pathEl: null,
     };
@@ -130,6 +126,31 @@ export class WireManager {
     const wire = this.wires[idx];
     if (wire.pathEl) wire.pathEl.remove();
     this.wires.splice(idx, 1);
+  }
+
+  /** Remove all wires attached to a component */
+  removeWiresForComponent(componentId) {
+    const matches = this.wires
+      .filter(w => w.startComp === componentId || w.endComp === componentId)
+      .map(w => w.id);
+    for (const wireId of matches) this.removeWire(wireId);
+  }
+
+  /** Recompute geometry for a wire after component movement or overlay refresh */
+  refreshWire(wire) {
+    if (!wire || !wire.pathEl) return;
+    const endpoints = this._resolveEndpoints(wire);
+    if (!endpoints) {
+      wire.pathEl.style.display = 'none';
+      return;
+    }
+    wire.pathEl.style.display = '';
+    wire.pathEl.setAttribute('d', this._buildPath(endpoints));
+  }
+
+  /** Recompute geometry for all wires */
+  refreshAllWires() {
+    for (const wire of this.wires) this.refreshWire(wire);
   }
 
   /** Find wire near a world coordinate (for click/hover detection) */
@@ -178,14 +199,9 @@ export class WireManager {
   // ── Internal ──
 
   _renderWire(wire) {
-    const { startX, startY, endX, endY, color } = wire;
-
-    // Orthogonal routing: go horizontal first, then vertical, then horizontal
-    const midX = (startX + endX) / 2;
-    const d = `M ${startX} ${startY} L ${midX} ${startY} L ${midX} ${endY} L ${endX} ${endY}`;
+    const { color } = wire;
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', d);
     path.setAttribute('stroke', color);
     path.setAttribute('stroke-width', '3');
     path.setAttribute('fill', 'none');
@@ -209,11 +225,15 @@ export class WireManager {
     });
 
     this.svgLayer.appendChild(path);
+    wire.pathEl = path;
+    this.refreshWire(wire);
     return path;
   }
 
   _distToOrthoPath(px, py, wire) {
-    const { startX, startY, endX, endY } = wire;
+    const endpoints = this._resolveEndpoints(wire);
+    if (!endpoints) return Infinity;
+    const { startX, startY, endX, endY } = endpoints;
     const midX = (startX + endX) / 2;
 
     // 3 segments: (startX,startY)→(midX,startY), (midX,startY)→(midX,endY), (midX,endY)→(endX,endY)
@@ -260,5 +280,22 @@ export class WireManager {
     this._inProgress = null;
     if (this._previewLine) this._previewLine.style.display = 'none';
     document.body.style.cursor = '';
+  }
+
+  _resolveEndpoints(wire) {
+    const start = this.pinOverlay.getPinPosition(wire.startComp, wire.startPin);
+    const end = this.pinOverlay.getPinPosition(wire.endComp, wire.endPin);
+    if (!start || !end) return null;
+    return {
+      startX: start.x,
+      startY: start.y,
+      endX: end.x,
+      endY: end.y,
+    };
+  }
+
+  _buildPath({ startX, startY, endX, endY }) {
+    const midX = (startX + endX) / 2;
+    return `M ${startX} ${startY} L ${midX} ${startY} L ${midX} ${endY} L ${endX} ${endY}`;
   }
 }
