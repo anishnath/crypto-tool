@@ -30,11 +30,18 @@ export class RP2040Runner {
     this.mcu = new RP2040();
     this.mcu.logger = new ConsoleLogger(LogLevel.Error);
 
-    // Load bootrom
+    // Load bootrom (for lookup tables the app may reference)
     this.mcu.loadBootrom(bootromB1);
 
     // Load program into flash
     this.mcu.flash.set(flashImage, 0);
+
+    // Skip bootrom boot sequence — jump directly to flash start
+    // (same approach as Velxio — bootrom CRC check is unreliable in emulation)
+    this.mcu.core.PC = 0x10000000;
+
+    // RP2040: 3.3V reference, 12-bit ADC
+    this.vRef = 3.3;
 
     // State
     this.running = false;
@@ -175,10 +182,10 @@ export class RP2040Runner {
     if (!this.mcu || !this._flashImage) return;
     const wasRunning = this.running;
     this.pause();
-    // rp2040js reset() wipes flash — reload from stored copy
-    this.mcu.reset();
+    // rp2040js reset() wipes flash — reload everything
     this.mcu.loadBootrom(bootromB1);
     this.mcu.flash.set(this._flashImage, 0);
+    this.mcu.core.PC = 0x10000000; // skip bootrom, jump to flash
     // Re-setup GPIO listeners (cleared by reset)
     for (const unsub of this._gpioUnsubs) unsub();
     this._gpioUnsubs = [];

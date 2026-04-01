@@ -52,6 +52,9 @@ export class AVRRunner {
     // ADC (analogRead)
     this.adc = new AVRADC(this.cpu, adcConfig);
 
+    // AVR: 5V reference, 10-bit ADC
+    this.vRef = 5.0;
+
     // State
     this.running = false;
     this.speed = 1.0;

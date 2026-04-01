@@ -135,6 +135,7 @@
             <option value="arduino:avr:mega" disabled title="Coming soon — requires extended port map">Arduino Mega (soon)</option>
             <option value="rp2040:rp2040:rpipico">Raspberry Pi Pico</option>
             <option value="rp2040:rp2040:rpipicow">Raspberry Pi Pico W</option>
+            <option value="esp32:esp32:esp32c3">ESP32-C3</option>
           </select>
         </div>
         <div class="ard-canvas-header-right">
@@ -161,10 +162,7 @@
           <wokwi-arduino-uno id="arduinoBoard"></wokwi-arduino-uno>
         </div>
         <div class="ard-components-area" id="componentsArea">
-          <div class="ard-component-item" data-comp-id="led13-default">
-            <wokwi-led id="led13" color="green"></wokwi-led>
-            <span class="ard-component-label">LED D13</span>
-          </div>
+          <!-- Components added dynamically by presets / component panel -->
         </div>
         <!-- Wire banner -->
         <div class="ard-wire-banner" id="wireBanner">
@@ -195,7 +193,7 @@
 <script type="module">
 import { AVRRunner } from '<%=request.getContextPath()%>/electronics/js/arduino/runner.js';
 import { BoardBinding } from '<%=request.getContextPath()%>/electronics/js/arduino/bindings/board.js';
-import { LedBinding } from '<%=request.getContextPath()%>/electronics/js/arduino/bindings/led.js';
+// LedBinding managed by ComponentPanel — no direct import needed
 import { SerialMonitor } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/serial-monitor.js';
 import { ArduinoEditor } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/editor.js';
 import { ComponentPanel } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/component-panel.js';
@@ -204,10 +202,40 @@ import { SelectionManager } from '<%=request.getContextPath()%>/electronics/js/a
 import { PinOverlay } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/pin-overlay.js';
 import { WireManager } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/wire-manager.js';
 import { PRESETS, getPresetsByCategory } from '<%=request.getContextPath()%>/electronics/js/arduino/presets.js';
-import { RP2040Runner } from '<%=request.getContextPath()%>/electronics/js/arduino/rp2040-runner.js';
-import { PicoBoardBinding } from '<%=request.getContextPath()%>/electronics/js/arduino/bindings/pico-board.js';
-import { uf2ToFlash } from '<%=request.getContextPath()%>/electronics/js/arduino/uf2-parser.js';
-import '<%=request.getContextPath()%>/electronics/js/arduino/ui/pico-board.js';
+// RP2040 modules — lazy loaded (only when Pico board is selected)
+let _rp2040Modules = null;
+async function loadRP2040Modules() {
+  if (_rp2040Modules) return _rp2040Modules;
+  const [runnerMod, bindingMod, parserMod] = await Promise.all([
+    import('<%=request.getContextPath()%>/electronics/js/arduino/rp2040-runner.js'),
+    import('<%=request.getContextPath()%>/electronics/js/arduino/bindings/pico-board.js'),
+    import('<%=request.getContextPath()%>/electronics/js/arduino/uf2-parser.js'),
+  ]);
+  await import('<%=request.getContextPath()%>/electronics/js/arduino/ui/pico-board.js');
+  _rp2040Modules = {
+    RP2040Runner: runnerMod.RP2040Runner,
+    PicoBoardBinding: bindingMod.PicoBoardBinding,
+    uf2ToFlash: parserMod.uf2ToFlash,
+  };
+  return _rp2040Modules;
+}
+// ESP32-C3 modules — lazy loaded (only when ESP32-C3 board is selected)
+let _esp32c3Modules = null;
+async function loadESP32C3Modules() {
+  if (_esp32c3Modules) return _esp32c3Modules;
+  const [runnerMod, bindingMod, parserMod] = await Promise.all([
+    import('<%=request.getContextPath()%>/electronics/js/arduino/esp32c3-runner.js'),
+    import('<%=request.getContextPath()%>/electronics/js/arduino/bindings/esp32c3-board.js'),
+    import('<%=request.getContextPath()%>/electronics/js/arduino/bin-parser.js'),
+  ]);
+  await import('<%=request.getContextPath()%>/electronics/js/arduino/ui/esp32c3-board.js');
+  _esp32c3Modules = {
+    ESP32C3Runner: runnerMod.ESP32C3Runner,
+    ESP32C3BoardBinding: bindingMod.ESP32C3BoardBinding,
+    binToFirmware: parserMod.binToFirmware,
+  };
+  return _esp32c3Modules;
+}
 import { FileManager } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/file-manager.js';
 import { FileExplorer } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/file-explorer.js';
 
@@ -229,7 +257,7 @@ const outputContent = document.getElementById('outputContent');
 const serialPanel = document.getElementById('serialPanel');
 const statusDot = document.getElementById('statusDot');
 const boardEl = document.getElementById('arduinoBoard');
-const ledEl = document.getElementById('led13');
+// ledEl removed — components managed by componentPanel
 
 // ── Editor ──
 const editor = new ArduinoEditor(document.getElementById('editorContainer'));
@@ -280,17 +308,9 @@ wireSvg.classList.add('ard-wire-layer');
 // No viewBox — SVG coordinates match CSS pixel space of the world div
 simCanvas.world.appendChild(wireSvg);
 
-// Update pin overlay after any component/board drag ends
-simCanvas.onDragEnd = (element) => {
-  const compId = element.dataset.compId;
-  if (compId) {
-    const wokwiEl = element.querySelector('[id]');
-    if (wokwiEl) pinOverlay.updateComponent(compId, wokwiEl, element);
-  } else if (element.classList.contains('ard-board-wrap')) {
-    const boardInner = element.querySelector('wokwi-arduino-uno');
-    if (boardInner) pinOverlay.updateComponent('board', boardInner, element);
-  }
-};
+// Wires are modeled as live pin-to-pin connections, so dragging only needs a reroute pass.
+simCanvas.onDragMove = () => wireManager.refreshAllWires();
+simCanvas.onDragEnd = () => wireManager.refreshAllWires();
 
 // ── Pin Overlay (clickable dots on pins) ──
 const pinOverlay = new PinOverlay(simCanvas.world);
@@ -337,10 +357,12 @@ componentPanel.onComponentAdded = (comp) => {
   setTimeout(() => {
     if (comp.element && comp.element.pinInfo) {
       pinOverlay.updateComponent(comp.id, comp.element, comp.wrapper);
+      wireManager.refreshAllWires();
     }
   }, 100);
 };
 componentPanel.onComponentRemoved = (compId) => {
+  wireManager.removeWiresForComponent(compId);
   pinOverlay.removeComponent(compId);
 };
 
@@ -362,36 +384,27 @@ simCanvas.world.addEventListener('mousedown', (e) => {
   }
 });
 
-// Update pin overlay for the default LED and board — retry until pinInfo is available
-function initPinOverlays(retries = 10) {
+// Initialize board pin overlay — retry until wokwi element renders pinInfo
+function initBoardPins(retries = 10) {
   const boardInner = document.getElementById('arduinoBoard');
   const boardWrap = document.querySelector('.ard-board-wrap');
-  const defaultLed = document.getElementById('led13');
-  const defaultWrapper = document.querySelector('[data-comp-id="led13-default"]');
-
-  // Check if wokwi elements have rendered their pinInfo
-  const boardReady = boardInner && boardInner.pinInfo && boardInner.pinInfo.length > 0;
-
-  if (!boardReady && retries > 0) {
-    setTimeout(() => initPinOverlays(retries - 1), 300);
+  if (boardInner && boardInner.pinInfo && boardInner.pinInfo.length > 0) {
+    pinOverlay.updateComponent('board', boardInner, boardWrap);
     return;
   }
-
-  if (defaultLed && defaultWrapper) {
-    simCanvas.makeDraggable(defaultWrapper);
-    simCanvas.placeNearBoard(defaultWrapper, 0);
-    pinOverlay.updateComponent('led13-default', defaultLed, defaultWrapper);
-  }
-  if (boardInner && boardWrap) {
-    pinOverlay.updateComponent('board', boardInner, boardWrap);
-  }
+  if (retries > 0) setTimeout(() => initBoardPins(retries - 1), 300);
 }
-initPinOverlays();
+initBoardPins();
+
+// Load default Blink components on startup
+componentPanel.loadPreset([
+  { type: 'led', pin: 13, x: 340, y: 20, attrs: { color: 'green' } },
+]);
 
 // ── State ──
 let runner = null;
 let boardBinding = null;
-let ledBinding = null;
+// ledBinding removed — managed by componentPanel.setRunner()
 
 // ── Splitter (horizontal, editor ↔ simulator) ──
 const splitter = document.getElementById('splitter');
@@ -627,7 +640,7 @@ async function compile(showPanel = true) {
 
     // Success
     const fmt = data.outputFormat || 'hex';
-    lastCompiledHex = data.hex || data.uf2 || null;
+    lastCompiledHex = data.hex || data.uf2 || data.bin || null;
     logOutput('Compiled in ' + elapsed + 's (' + fmt.toUpperCase() + ')', 'success');
     if (data.programSize) {
       logOutput('Sketch uses ' + data.programSize + ' bytes (' +
@@ -662,19 +675,34 @@ async function compile(showPanel = true) {
 
 async function compileAndRun() {
   const result = await compile(true);
-  if (result) startRunnerFromCompile(result);
+  if (result) await startRunnerFromCompile(result);
 }
 
 /**
  * Start the appropriate runner based on compile result.
  * @param {object} result - { hex, uf2, outputFormat } from compile response
  */
-function startRunnerFromCompile(result) {
+async function startRunnerFromCompile(result) {
   if (!result) return;
-  const fmt = result.outputFormat || (result.uf2 ? 'uf2' : 'hex');
+  const fmt = result.outputFormat || (result.uf2 ? 'uf2' : result.bin ? 'bin' : 'hex');
+
   if (fmt === 'uf2' && result.uf2) {
-    const flash = uf2ToFlash(result.uf2);
-    startRP2040Runner(flash);
+    try {
+      const mods = await loadRP2040Modules();
+      const flash = mods.uf2ToFlash(result.uf2);
+      await startRP2040Runner(flash, mods);
+    } catch (err) {
+      logOutput('RP2040 error: ' + err.message, 'error');
+    }
+  } else if (fmt === 'bin' && result.bin) {
+    try {
+      const mods = await loadESP32C3Modules();
+      const firmware = mods.binToFirmware(result.bin);
+      logOutput('ESP32-C3 firmware: ' + firmware.segments.length + ' segments, entry=0x' + firmware.entryAddr.toString(16));
+      await startESP32C3Runner(firmware, mods);
+    } catch (err) {
+      logOutput('ESP32-C3 error: ' + err.message, 'error');
+    }
   } else if (result.hex) {
     startRunner(result.hex);
   } else {
@@ -691,8 +719,33 @@ function startRunner(hex) {
   boardBinding = new BoardBinding(currentBoard, runner);
   boardBinding.attach();
 
-  ledBinding = new LedBinding(ledEl, runner, 13);
-  ledBinding.attach();
+  serialMonitor.clear();
+  serialMonitor.attach(runner);
+  componentPanel.setRunner(runner);
+
+  runner.speed = parseFloat(document.getElementById('speedSelect').value);
+  runner.start();
+
+  statusDot.classList.add('running');
+  btnRun.disabled = false;
+  btnRun.classList.add('running');
+  btnRun.querySelector('span').textContent = 'Running';
+  updateButtonStates();
+}
+
+async function startRP2040Runner(flashImage, mods) {
+  stopRunner();
+  if (!mods) mods = await loadRP2040Modules();
+
+  runner = new mods.RP2040Runner(flashImage);
+
+  const currentBoard = document.getElementById('arduinoBoard');
+  if (currentBoard.tagName.toLowerCase() === 'pico-board') {
+    boardBinding = new mods.PicoBoardBinding(currentBoard, runner);
+  } else {
+    boardBinding = new BoardBinding(currentBoard, runner);
+  }
+  boardBinding.attach();
 
   serialMonitor.clear();
   serialMonitor.attach(runner);
@@ -708,22 +761,19 @@ function startRunner(hex) {
   updateButtonStates();
 }
 
-function startRP2040Runner(flashImage) {
+async function startESP32C3Runner(firmware, mods) {
   stopRunner();
+  if (!mods) mods = await loadESP32C3Modules();
 
-  runner = new RP2040Runner(flashImage);
+  runner = new mods.ESP32C3Runner(firmware);
 
   const currentBoard = document.getElementById('arduinoBoard');
-  // Use PicoBoardBinding for Pico boards, BoardBinding for AVR
-  if (currentBoard.tagName.toLowerCase() === 'pico-board') {
-    boardBinding = new PicoBoardBinding(currentBoard, runner);
+  if (currentBoard.tagName.toLowerCase() === 'esp32c3-board') {
+    boardBinding = new mods.ESP32C3BoardBinding(currentBoard, runner);
   } else {
     boardBinding = new BoardBinding(currentBoard, runner);
   }
   boardBinding.attach();
-
-  // LED_BUILTIN is GPIO25 on Pico — attach LED binding if there's an LED component on pin 25
-  // (skip default LED13 binding for Pico)
 
   serialMonitor.clear();
   serialMonitor.attach(runner);
@@ -743,18 +793,16 @@ function stopRunner() {
   if (!runner) return;
   runner.stop();
   if (boardBinding) boardBinding.detach();
-  if (ledBinding) ledBinding.detach();
+  // ledBinding removed — managed by componentPanel
   serialMonitor.detach();
   componentPanel.detachAll();
   runner = null;
   boardBinding = null;
-  ledBinding = null;
 
   statusDot.classList.remove('running');
   btnRun.classList.remove('running');
   btnRun.querySelector('span').textContent = 'Run';
-  ledEl.value = false;
-  ledEl.brightness = 0;
+  // Component visuals reset by componentPanel.detachAll()
 }
 
 // Compile button — compile only, check errors
@@ -806,22 +854,20 @@ btnReset.addEventListener('click', () => {
     examplesSelect.appendChild(optgroup);
   }
 
-  examplesSelect.addEventListener('change', () => {
+  examplesSelect.addEventListener('change', async () => {
     const preset = PRESETS.find(p => p.id === examplesSelect.value);
     if (preset) {
-      // Switch board if preset specifies one (e.g. Pico presets)
-      if (preset.board) {
-        const boardSelect = document.getElementById('boardSelect');
-        if (boardSelect.value !== preset.board) {
-          boardSelect.value = preset.board;
-          boardSelect.dispatchEvent(new Event('change'));
-        }
+      // Switch board to match preset (default to Uno for AVR presets)
+      const targetBoard = preset.board || 'arduino:avr:uno';
+      const boardSelect = document.getElementById('boardSelect');
+      if (boardSelect.value !== targetBoard) {
+        boardSelect.value = targetBoard;
+        await switchBoard(targetBoard);
       }
-      fileManager.switchTo(0);
-      editor.setCode(preset.code);
-      fileManager.files[0].content = preset.code;
-      fileManager.markModified();
       stopRunner();
+      wireManager.clear();
+      selection.deselect();
+      fileManager.loadFiles([{ name: 'sketch.ino', content: preset.code }]);
       componentPanel.loadPreset(preset.components || []);
     }
     examplesSelect.value = '';
@@ -859,17 +905,28 @@ const BOARD_TAGS = {
   'arduino:avr:mega': 'wokwi-arduino-mega',
   'rp2040:rp2040:rpipico':  'pico-board',
   'rp2040:rp2040:rpipicow': 'pico-board',
+  'esp32:esp32:esp32c3':    'esp32c3-board',
 };
 
 /** Check if a board FQBN is RP2040-based */
 function isRP2040(fqbn) { return fqbn.startsWith('rp2040:'); }
 /** Check if a board FQBN is AVR-based */
 function isAVR(fqbn) { return fqbn.startsWith('arduino:avr:'); }
+/** Check if a board FQBN is ESP32-C3 */
+function isESP32C3(fqbn) { return fqbn === 'esp32:esp32:esp32c3'; }
 
-document.getElementById('boardSelect').addEventListener('change', (e) => {
-  const fqbn = e.target.value;
+/**
+ * Switch the board element on the canvas.
+ * Async: pre-loads custom element modules for RP2040/ESP32-C3 before creating the element.
+ * @param {string} fqbn - board FQBN
+ */
+async function switchBoard(fqbn) {
   const tag = BOARD_TAGS[fqbn];
   if (!tag) return;
+
+  // Pre-load custom element definition so createElement works
+  if (isESP32C3(fqbn)) await loadESP32C3Modules();
+  else if (isRP2040(fqbn)) await loadRP2040Modules();
 
   // Stop simulation
   stopRunner();
@@ -881,6 +938,7 @@ document.getElementById('boardSelect').addEventListener('change', (e) => {
 
   // Remove old pin overlay for board
   pinOverlay.removeComponent('board');
+  wireManager.refreshAllWires();
 
   // Create new board element
   const newBoard = document.createElement(tag);
@@ -890,19 +948,21 @@ document.getElementById('boardSelect').addEventListener('change', (e) => {
   if (oldBoard) oldBoard.remove();
   boardWrap.appendChild(newBoard);
 
-  // Update references
-  // boardEl is const — we need to update the bindings to use the new element
-  // Wait for wokwi element to render, then re-init pin overlay
+  // Wait for element to render, then re-init pin overlay
   const waitForBoard = (retries = 10) => {
     const el = document.getElementById('arduinoBoard');
     if (el && el.pinInfo && el.pinInfo.length > 0) {
       pinOverlay.updateComponent('board', el, boardWrap);
+      wireManager.refreshAllWires();
       return;
     }
     if (retries > 0) setTimeout(() => waitForBoard(retries - 1), 200);
   };
   waitForBoard();
+}
 
+document.getElementById('boardSelect').addEventListener('change', async (e) => {
+  await switchBoard(e.target.value);
   logOutput('Switched to ' + e.target.options[e.target.selectedIndex].text);
 });
 
