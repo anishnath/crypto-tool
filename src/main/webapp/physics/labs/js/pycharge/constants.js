@@ -1,0 +1,6 @@
+export const SPEED_OF_LIGHT = 299792458;
+export const VACUUM_PERMITTIVITY = 8.8541878128e-12;
+export const PI = Math.PI;
+export const ELEMENTARY_CHARGE = 1.602176634e-19;
+export const ELECTRON_MASS = 9.1093837015e-31;
+
