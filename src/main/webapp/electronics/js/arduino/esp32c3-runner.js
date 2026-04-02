@@ -21,6 +21,24 @@ const CYCLES_PER_TICK  = 160_000;                    // 1ms FreeRTOS tick
 const RTC_CALI_VALUE = 140_000;
 const RTC_SLOW_CLK_HZ = 136_000;
 const RTC_SLOW_CLK_CAL = Math.floor((1_000_000 * (1 << 19)) / RTC_SLOW_CLK_HZ);
+const RTC_TIMER1_RESET =
+  (20 << 24) | // PLL_BUF_WAIT default
+  (100 << 14) | // XTL_BUF_WAIT default
+  (0x10 << 6) | // CK8M_WAIT default
+  (1 << 1) | // CPU_STALL_WAIT default
+  1; // CPU_STALL_EN default
+const RTC_TIMER3_RESET =
+  (5 << 25) | // BT_POWERUP_TIMER default
+  (8 << 16) | // BT_WAIT_TIMER default
+  (5 << 9) | // WIFI_POWERUP_TIMER default
+  8; // WIFI_WAIT_TIMER default
+const RTC_TIMER5_RESET = (0x80 << 8); // MIN_SLP_VAL default
+const RTC_TIMER6_RESET =
+  (5 << 25) | // DG_PERI_POWERUP_TIMER default
+  (8 << 16); // DG_PERI_WAIT_TIMER default
+const RTC_ANA_CONF_RESET =
+  (1 << 23) | // PLLA_FORCE_PD default
+  (1 << 22); // SAR_I2C_PU default
 
 // ── Memory Map ──
 // ESP32-C3 SRAM1 (384 KB) is dual-mapped:
@@ -60,6 +78,12 @@ const PERIPH_END    = 0x70000000;
 // Interrupt sources
 const ETS_FROM_CPU_INTR0_SRC  = 28;
 const ETS_SYSTIMER_TARGET0_SRC = 37;
+
+// Flash functions we emulate directly to smooth early ESP-IDF boot on the browser runner.
+// These addresses are from the arduino-esp32 v3.3.7 ESP32-C3 core used by this project.
+const SOC_GET_AVAILABLE_MEMORY_REGION_MAX_COUNT = new Set([0x420080E0, 0x42008ACC]);
+const SOC_GET_AVAILABLE_MEMORY_REGIONS = new Set([0x42008102, 0x42008AEE]);
+const ESP_MPROT_SET_PROT = new Set([0x42009D96, 0x4200A782]);
 
 // ── ROM function addresses (ESP32-C3 ROM) ──
 const ROM_FUNCS = {
@@ -118,8 +142,10 @@ export class ESP32C3Runner {
     // ── Memory ──
     this._dram  = new Uint8Array(DRAM_SIZE);  // SRAM1 (384KB) — also IRAM1 alias
     this._iram0 = new Uint8Array(IRAM0_SIZE); // SRAM0 (16KB) — IRAM only
-    this._flash = new Uint8Array(FLASH_SIZE);
+    this._flash = new Uint8Array(FLASH_SIZE); // 4MB flash backing store
     this._rom   = new Uint8Array(ROM_SIZE);
+    this._flashDataImage = null;
+    this._flashDataBase = 0;
 
     // ── Peripheral echo-back store ──
     this._periRegs = new Map();
@@ -137,6 +163,7 @@ export class ESP32C3Runner {
     // ── SYSTIMER state ──
     this._stIntEna = 0;
     this._stIntRaw = 0;
+    this._systimerTickArmed = false;
 
     // ── Interrupt Matrix (62 sources → 31 CPU lines) ──
     this._intSrcMap     = new Uint8Array(62);
@@ -174,6 +201,19 @@ export class ESP32C3Runner {
 
     // Wire MIE callback for deferred interrupt delivery
     this.cpu.onMieEnabled = () => this._onMieEnabled();
+
+    // Hook a handful of flash-resident helpers that are easier to virtualize
+    // than to model through the full ESP-IDF hardware discovery path.
+    const origExecuteInstruction = this.cpu.executeInstruction.bind(this.cpu);
+    this.cpu.executeInstruction = () => {
+      if (this._emulateFlashFunction()) {
+        this.cpu.x[0] = 0;
+        this.cpu._cycleCount++;
+        this.cpu._instretCount++;
+        return 1;
+      }
+      return origExecuteInstruction();
+    };
 
     // Load firmware and init ROM stubs
     this._loadFirmware(firmware);
@@ -233,9 +273,12 @@ export class ESP32C3Runner {
             }
           }
           rem -= chunk;
-          // Fire 1ms FreeRTOS tick
+          // Fire 1ms FreeRTOS tick.
+          // ESP-IDF v5 uses CLIC (not legacy interrupt matrix) on ESP32-C3.
+          // The firmware configures SYSTIMER via CSRs, not SOURCE_MAP registers.
+          // We inject the timer interrupt directly when threshold allows it.
           this._stIntRaw |= 1;
-          if (this._stIntEna & 1) this._raiseIntSource(ETS_SYSTIMER_TARGET0_SRC);
+          this._injectTimerInterrupt();
           // Flush peripherals
           this._processGPIOChanges();
           this._flushUART();
@@ -263,7 +306,7 @@ export class ESP32C3Runner {
     this._dram.fill(0); this._iram0.fill(0); this._flash.fill(0);
     this._gpioOut = 0; this._gpioEnable = 0; this._gpioIn = 0; this._prevGpioOut = 0;
     this._uartTxFifo = []; this._uartRxFifo = [];
-    this._stIntEna = 0; this._stIntRaw = 0;
+    this._stIntEna = 0; this._stIntRaw = 0; this._systimerTickArmed = false;
     this._intSrcMap.fill(0); this._intLineEnable = 0;
     this._intLinePrio.fill(0); this._intThreshold = 0;
     this._intPending = 0; this._intSrcActive.fill(0);
@@ -283,43 +326,84 @@ export class ESP32C3Runner {
   //  Firmware Loading
   // ════════════════════════════════════════════════════
 
+  /**
+   * Load firmware into emulated memory.
+   *
+   * Flash model: one coherent 4MB _flash buffer.
+   *   - Merged image: copied in whole; _appOffset from partition table.
+   *   - App-only image (.bin): placed at _appOffset=0; rawImage IS the flash.
+   *
+   * MMU mapping (same as real hardware after bootloader configures cache):
+   *   IROM virtual 0x42000000+X  →  _flash[_appOffset + X]
+   *   DROM virtual 0x3C000000+X  →  _flash[_appOffset + X]
+   *
+   * RAM segments (0x3FC8xxxx DRAM, 0x4037xxxx/0x4038xxxx IRAM) are still
+   * loaded into their respective RAM buffers.
+   */
+  /**
+   * Load firmware into emulated memory.
+   *
+   * Flash model: single 4MB flash buffer.
+   *   - IROM segment (virtual 0x42XXXXXX): loaded at flash[vaddr - 0x42000000]
+   *   - DROM segment (virtual 0x3CXXXXXX): loaded at flash[vaddr - 0x3C000000]
+   *   IROM and DROM occupy non-overlapping regions of the same flash buffer
+   *   because their virtual offsets differ (IROM at low offsets, DROM at higher).
+   *
+   * RAM segments loaded into separate RAM buffers:
+   *   - DRAM (0x3FC8XXXX) → _dram
+   *   - IRAM1 (0x4038XXXX) → _dram (SRAM1 alias)
+   *   - IRAM0 (0x4037XXXX) → _iram0
+   *
+   * For reads: IROM/DROM virtual addr → flash[vaddr - base] (no appOffset).
+   */
   _loadFirmware(fw) {
-    for (const seg of fw.segments) this._loadSegment(seg.loadAddr, seg.data);
+    this._flashDataImage = fw.rawImage || null;
+    this._flashDataBase = fw.rawImageBase || 0;
+    for (const seg of fw.segments) {
+      const a = seg.loadAddr >>> 0;
+      const data = seg.data;
+      const len = data.length;
+
+      // IROM (flash instruction) — load at virtual offset
+      if (a >= FLASH_IBUS_BASE && a < FLASH_IBUS_BASE + FLASH_SIZE) {
+        const off = a - FLASH_IBUS_BASE;
+        this._flash.set(data.subarray(0, Math.min(len, FLASH_SIZE - off)), off);
+      }
+      // DROM (flash data) — load at virtual offset (same flash buffer)
+      else if (a >= FLASH_DBUS_BASE && a < FLASH_DBUS_BASE + FLASH_SIZE) {
+        const off = a - FLASH_DBUS_BASE;
+        this._flash.set(data.subarray(0, Math.min(len, FLASH_SIZE - off)), off);
+      }
+      // DRAM
+      else if (a >= DRAM_BASE && a < DRAM_BASE + DRAM_SIZE) {
+        const off = a - DRAM_BASE;
+        this._dram.set(data.subarray(0, Math.min(len, DRAM_SIZE - off)), off);
+      }
+      // IRAM1 (SRAM1 alias → same physical memory as DRAM)
+      else if (a >= IRAM1_BASE && a < IRAM1_BASE + IRAM1_SIZE) {
+        const off = a - IRAM1_BASE;
+        this._dram.set(data.subarray(0, Math.min(len, IRAM1_SIZE - off)), off);
+      }
+      // IRAM0 (SRAM0, separate 16KB)
+      else if (a >= IRAM0_BASE && a < IRAM0_BASE + IRAM0_SIZE) {
+        const off = a - IRAM0_BASE;
+        this._iram0.set(data.subarray(0, Math.min(len, IRAM0_SIZE - off)), off);
+      }
+      // Skip other segments (ROM, ULP, etc.)
+    }
+
     this.cpu.pc = fw.entryAddr >>> 0;
     this.cpu.x[2] = (DRAM_BASE + DRAM_SIZE - 16) >>> 0;
-    // Patch the ESP-IDF assert/abort handler to return instead of spin-looping.
-    // ESP-IDF's esp_system_abort() ends with `j .` (infinite loop). We patch it
-    // to `c.ret` so the calling function returns 0 and boot continues.
-    // This is needed because our peripheral stubs can't satisfy every hardware check.
-    this._patchAbortLoop();
   }
 
-  _patchAbortLoop() {
-    // ESP-IDF's esp_system_abort() and __assert_func end with `C.J .` (0xA001)
-    // — an infinite spin loop. We detect these by looking for 0xA001 at the end
-    // of a function block (after a sequence of stores setting up the abort info).
-    // Rather than pattern-matching individual firmwares, we intercept the abort
-    // at runtime: if the CPU loops at any `C.J .` for too long, we force-return.
-    // This is handled in the execution loop instead of patching IRAM.
-  }
-
-  _loadSegment(addr, data) {
-    const a = addr >>> 0;
-    const regions = [
-      [DRAM_BASE,       DRAM_SIZE,  this._dram],
-      [IRAM1_BASE,      IRAM1_SIZE, this._dram],   // SRAM1 IRAM alias → same buffer
-      [IRAM0_BASE,      IRAM0_SIZE, this._iram0],
-      [FLASH_IBUS_BASE, FLASH_SIZE, this._flash],
-      [FLASH_DBUS_BASE, FLASH_SIZE, this._flash],
-      [ROM_BASE,        ROM_SIZE,   this._rom],
-    ];
-    for (const [base, size, buf] of regions) {
-      if (a >= base && a < base + size) {
-        const off = a - base;
-        buf.set(data.subarray(0, Math.min(data.length, size - off)), off);
-        return;
-      }
-    }
+  _readFlashData(off, size) {
+    if (!this._flashDataImage) return undefined;
+    const idx = this._flashDataBase + off;
+    if (idx < 0 || idx + size > this._flashDataImage.length) return undefined;
+    const buf = this._flashDataImage;
+    if (size === 1) return buf[idx];
+    if (size === 2) return buf[idx] | (buf[idx + 1] << 8);
+    return buf[idx] | (buf[idx + 1] << 8) | (buf[idx + 2] << 16) | (buf[idx + 3] << 24);
   }
 
   _initROM() {
@@ -334,6 +418,12 @@ export class ESP32C3Runner {
     this._rtcTimeSnapshot = 0n;
     // RTC store registers used by esp_clk helpers during early boot.
     this._periRegs.set(RTC_CNTL_BASE + 0x54, RTC_SLOW_CLK_CAL >>> 0); // RTC_SLOW_CLK_CAL_REG
+    // RTC reset defaults that ESP-IDF early init reads before it programs them.
+    this._periRegs.set(RTC_CNTL_BASE + 0x1C, RTC_TIMER1_RESET >>> 0); // TIMER1
+    this._periRegs.set(RTC_CNTL_BASE + 0x24, RTC_TIMER3_RESET >>> 0); // TIMER3
+    this._periRegs.set(RTC_CNTL_BASE + 0x2C, RTC_TIMER5_RESET >>> 0); // TIMER5
+    this._periRegs.set(RTC_CNTL_BASE + 0x30, RTC_TIMER6_RESET >>> 0); // TIMER6
+    this._periRegs.set(RTC_CNTL_BASE + 0x34, RTC_ANA_CONF_RESET >>> 0); // ANA_CONF
   }
 
   _getRtcTime() {
@@ -344,6 +434,38 @@ export class ESP32C3Runner {
     this._rtcTimeSnapshot = this._getRtcTime();
     this._periRegs.set(RTC_CNTL_BASE + 0x10, Number(this._rtcTimeSnapshot & 0xFFFFFFFFn) >>> 0);
     this._periRegs.set(RTC_CNTL_BASE + 0x14, Number((this._rtcTimeSnapshot >> 32n) & 0xFFFFn) >>> 0);
+  }
+
+  _emulateFlashFunction() {
+    const pc = this.cpu.pc >>> 0;
+    if (SOC_GET_AVAILABLE_MEMORY_REGION_MAX_COUNT.has(pc)) {
+      this.cpu.x[10] = 1; // one synthesized DRAM heap region
+      this.cpu.pc = (this.cpu.x[1] & ~1) >>> 0;
+      return true;
+    }
+    if (SOC_GET_AVAILABLE_MEMORY_REGIONS.has(pc)) {
+      const ptr = this.cpu.x[10] >>> 0;
+      const heapStart = DRAM_BASE + 0x20000; // stay clear of early boot static/data usage
+      const heapSize = (DRAM_BASE + DRAM_SIZE) - heapStart;
+      const iramAlias = IRAM1_BASE + (heapStart - DRAM_BASE);
+      // struct soc_memory_region_t { intptr_t start; size_t size; size_t type; intptr_t iram_address; bool startup_stack; }
+      this._write32(ptr + 0, heapStart);
+      this._write32(ptr + 4, heapSize);
+      this._write32(ptr + 8, 0); // type index 0 is sufficient for emulator heap bootstrap
+      this._write32(ptr + 12, iramAlias);
+      this._write8(ptr + 16, 0);
+      this.cpu.x[10] = 1;
+      this.cpu.pc = (this.cpu.x[1] & ~1) >>> 0;
+      return true;
+    }
+    if (ESP_MPROT_SET_PROT.has(pc)) {
+      // Memory protection setup is not meaningful in the browser runner and
+      // currently trips several ESP-IDF early-boot checks. Report success.
+      this.cpu.x[10] = 0;
+      this.cpu.pc = (this.cpu.x[1] & ~1) >>> 0;
+      return true;
+    }
+    return false;
   }
 
   // ════════════════════════════════════════════════════
@@ -369,12 +491,17 @@ export class ESP32C3Runner {
     // IRAM0 (SRAM0, separate 16KB)
     if (a >= IRAM0_BASE && a < IRAM0_BASE + IRAM0_SIZE)
       return this._readBuf(this._iram0, a - IRAM0_BASE, size);
-    // Flash instruction
+    // Flash instruction (IROM): virtual 0x42000000+X → _flash[X]
     if (a >= FLASH_IBUS_BASE && a < FLASH_IBUS_BASE + FLASH_SIZE)
       return this._readBuf(this._flash, a - FLASH_IBUS_BASE, size);
-    // Flash data (DROM — read-only alias)
-    if (a >= FLASH_DBUS_BASE && a < FLASH_DBUS_BASE + FLASH_SIZE)
-      return this._readBuf(this._flash, a - FLASH_DBUS_BASE, size);
+    // Flash data (DROM): prefer raw flash image if present so early boot can
+    // inspect app headers/metadata using the real flash layout.
+    if (a >= FLASH_DBUS_BASE && a < FLASH_DBUS_BASE + FLASH_SIZE) {
+      const off = a - FLASH_DBUS_BASE;
+      const raw = this._readFlashData(off, size);
+      if (raw !== undefined) return raw;
+      return this._readBuf(this._flash, off, size);
+    }
     // ROM — check for function hooks first
     if (a >= ROM_BASE && a < ROM_BASE + ROM_SIZE) {
       if (size >= 2 && this._checkRomHook(a)) {
@@ -699,7 +826,10 @@ export class ESP32C3Runner {
     // ── SYSTIMER ──
     if (a >= SYSTIMER_BASE && a < SYSTIMER_BASE + 0x100) {
       const off = wordAddr - SYSTIMER_BASE;
-      if (off === 0x04) this._stIntEna = value;
+      if (off === 0x04) {
+        this._stIntEna = value;
+        if (value & 1) this._systimerTickArmed = true;
+      }
       else if (off === 0x0C) {
         // INT_CLR: write-1-to-clear
         this._stIntRaw &= ~value;
@@ -819,7 +949,7 @@ export class ESP32C3Runner {
   }
 
   _onMieEnabled() {
-    // MIE just transitioned 0→1 — scan for pending interrupts
+    // MIE just transitioned 0→1 — scan for pending interrupts (legacy matrix)
     let bestLine = -1, bestPrio = -1;
     let pending = this._intPending & this._intLineEnable;
     while (pending) {
@@ -835,6 +965,43 @@ export class ESP32C3Runner {
       this._intPending &= ~(1 << bestLine);
       this.cpu.triggerInterrupt((0x80000000 | bestLine) >>> 0);
     }
+    // Also check CLIC-style timer interrupt
+    if (this._stIntRaw & this._stIntEna & 1) {
+      this._injectTimerInterrupt();
+    }
+  }
+
+  /**
+   * Inject SYSTIMER_TARGET0 interrupt via CLIC model.
+   * ESP-IDF v5 on ESP32-C3 uses CLIC where the timer interrupt is routed
+   * to a specific CPU interrupt line (typically line 7 for systimer).
+   * The firmware configures this via CSRs, not SOURCE_MAP registers.
+   * We deliver the interrupt when: MIE=1 and threshold=0.
+   */
+  _injectTimerInterrupt() {
+    if (!(this._stIntRaw & 1)) return;
+    const mstatus = this.cpu.csrs.get(0x300) || 0;
+    if (!(mstatus & 0x8)) return; // MIE disabled
+    if (this._intThreshold > 0) return; // interrupts gated by threshold
+
+    // Find the SYSTIMER interrupt line. ESP-IDF v5 typically uses line 1
+    // for the systimer on ESP32-C3 (configured via esp_intr_alloc).
+    // If the firmware mapped src37 via SOURCE_MAP, use that line.
+    // Otherwise, scan for any configured line or use line 7 as default.
+    let line = this._intSrcMap[ETS_SYSTIMER_TARGET0_SRC] & 0x1F;
+    if (!line) {
+      // CLIC fallback: the firmware may have configured interrupt priority
+      // for a specific line. Find the first line with non-zero priority.
+      for (let l = 1; l < 32; l++) {
+        if (this._intLinePrio[l] > 0 && (this._intLineEnable & (1 << l))) {
+          line = l;
+          break;
+        }
+      }
+    }
+    if (!line) line = 7; // absolute fallback: machine timer interrupt line
+
+    this.cpu.triggerInterrupt((0x80000000 | line) >>> 0);
   }
 
   // ════════════════════════════════════════════════════

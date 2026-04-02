@@ -233,6 +233,7 @@ async function loadESP32C3Modules() {
     ESP32C3Runner: runnerMod.ESP32C3Runner,
     ESP32C3BoardBinding: bindingMod.ESP32C3BoardBinding,
     binToFirmware: parserMod.binToFirmware,
+    mergedBinToFirmware: parserMod.mergedBinToFirmware,
   };
   return _esp32c3Modules;
 }
@@ -694,12 +695,19 @@ async function startRunnerFromCompile(result) {
     } catch (err) {
       logOutput('RP2040 error: ' + err.message, 'error');
     }
-  } else if (fmt === 'bin' && result.bin) {
+  } else if (fmt === 'bin') {
     try {
-      const mods = await loadESP32C3Modules();
-      const firmware = mods.binToFirmware(result.bin);
-      logOutput('ESP32-C3 firmware: ' + firmware.segments.length + ' segments, entry=0x' + firmware.entryAddr.toString(16));
-      await startESP32C3Runner(firmware, mods);
+      // ESP32 boards: use server-side QEMU emulation via SSE streaming
+      const board = document.getElementById('boardSelect').value;
+      if (result.jobId) {
+        // Job-based flow: firmware stays on server, just send jobId
+        await startQemuRunner(board, null, result.jobId);
+      } else if (result.mergedBin || result.bin) {
+        // Legacy fallback: send base64 firmware
+        await startQemuRunner(board, result.mergedBin || result.bin, null);
+      } else {
+        logOutput('No firmware in compile response', 'error');
+      }
     } catch (err) {
       logOutput('ESP32-C3 error: ' + err.message, 'error');
     }
@@ -761,12 +769,115 @@ async function startRP2040Runner(flashImage, mods) {
   updateButtonStates();
 }
 
-async function startESP32C3Runner(firmware, mods) {
+/**
+ * QEMU-backed runner for ESP32 boards.
+ * Starts a server-side QEMU instance and streams serial/GPIO events via SSE.
+ */
+let _qemuSessionId = null;
+let _qemuEventSource = null;
+
+async function startQemuRunner(board, firmwareB64, jobId) {
   stopRunner();
-  if (!mods) mods = await loadESP32C3Modules();
 
-  runner = new mods.ESP32C3Runner(firmware);
+  // Generate a unique session ID
+  _qemuSessionId = 'sim-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
 
+  logOutput('Starting QEMU simulation (' + board + ')...');
+
+  // 1. Start QEMU instance on server
+  const startBody = { id: _qemuSessionId, board };
+  if (jobId) startBody.jobId = jobId;
+  else if (firmwareB64) startBody.firmware = firmwareB64;
+
+  const startResp = await fetch('<%=request.getContextPath()%>/api/arduino/simulate/start', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(startBody),
+  });
+  const startData = await startResp.json();
+  if (!startData.success) {
+    logOutput('QEMU start failed: ' + (startData.error || 'unknown'), 'error');
+    return;
+  }
+
+  // 2. Connect SSE stream for serial/GPIO events
+  _qemuEventSource = new EventSource(
+    '<%=request.getContextPath()%>/api/arduino/simulate/stream?id=' + encodeURIComponent(_qemuSessionId)
+  );
+
+  // Create a lightweight runner shim so the UI (serial monitor, buttons) works
+  runner = {
+    running: true,
+    speed: 1,
+    onSerial: null,
+    _pinChangeListeners: [],
+    addPinChangeListener(fn) {
+      this._pinChangeListeners.push(fn);
+      return () => { const i = this._pinChangeListeners.indexOf(fn); if (i >= 0) this._pinChangeListeners.splice(i, 1); };
+    },
+    addPwmChangeListener() { return () => {}; },
+    setPinState() {},
+    setADCValue() {},
+    start() { this.running = true; },
+    pause() { this.running = false; },
+    stop() {
+      this.running = false;
+      if (_qemuEventSource) { _qemuEventSource.close(); _qemuEventSource = null; }
+      if (_qemuSessionId) {
+        fetch('<%=request.getContextPath()%>/api/arduino/simulate/stop', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: _qemuSessionId }),
+        }).catch(() => {});
+        _qemuSessionId = null;
+      }
+    },
+    reset() { /* QEMU restart not implemented yet */ },
+    // Serial input (user types in serial monitor)
+    usart: {
+      writeByte(b) {
+        if (!_qemuSessionId) return;
+        fetch('<%=request.getContextPath()%>/api/arduino/simulate/input', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: _qemuSessionId, data: String.fromCharCode(b) }),
+        }).catch(() => {});
+      }
+    },
+    vRef: 3.3,
+  };
+
+  _qemuEventSource.onmessage = (event) => {
+    try {
+      const ev = JSON.parse(event.data);
+      if (ev.type === 'serial_output' && ev.data?.data) {
+        // Forward to serial monitor
+        if (runner.onSerial) {
+          for (const ch of ev.data.data) runner.onSerial(ch);
+        }
+      } else if (ev.type === 'gpio_change' && ev.data) {
+        const pin = ev.data.pin;
+        const high = !!ev.data.state;
+        for (const fn of runner._pinChangeListeners) fn(pin, high);
+      } else if (ev.type === 'system') {
+        const evt = ev.data?.event || '';
+        if (evt === 'booted') logOutput('QEMU booted', 'success');
+        else if (evt === 'exited') { logOutput('QEMU exited'); stopRunner(); updateButtonStates(); }
+        else logOutput('QEMU: ' + evt);
+      } else if (ev.type === 'error') {
+        logOutput('QEMU error: ' + (ev.data?.message || ''), 'error');
+      }
+    } catch (e) {
+      // ignore parse errors
+    }
+  };
+
+  _qemuEventSource.onerror = () => {
+    logOutput('QEMU stream disconnected', 'error');
+  };
+
+  // Wire up board binding
+  const mods = await loadESP32C3Modules();
   const currentBoard = document.getElementById('arduinoBoard');
   if (currentBoard.tagName.toLowerCase() === 'esp32c3-board') {
     boardBinding = new mods.ESP32C3BoardBinding(currentBoard, runner);
@@ -779,14 +890,12 @@ async function startESP32C3Runner(firmware, mods) {
   serialMonitor.attach(runner);
   componentPanel.setRunner(runner);
 
-  runner.speed = parseFloat(document.getElementById('speedSelect').value);
-  runner.start();
-
   statusDot.classList.add('running');
   btnRun.disabled = false;
   btnRun.classList.add('running');
   btnRun.querySelector('span').textContent = 'Running';
   updateButtonStates();
+  logOutput('QEMU simulation started (id: ' + _qemuSessionId + ')');
 }
 
 function stopRunner() {

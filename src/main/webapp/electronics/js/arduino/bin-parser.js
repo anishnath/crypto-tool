@@ -29,6 +29,8 @@ const ESP_IMAGE_MAGIC = 0xE9;
  * @property {number} entryAddr - Entry point address
  * @property {Array<{loadAddr: number, data: Uint8Array}>} segments - Memory segments
  * @property {number} chipId - Chip ID from header (ESP32-C3 = 5)
+ * @property {Uint8Array} rawImage - Original application image bytes
+ * @property {number} [rawImageBase] - Flash offset where rawImage starts
  */
 
 /**
@@ -102,5 +104,70 @@ export function parseBin(bin) {
     offset += dataLen;
   }
 
-  return { entryAddr, segments, chipId };
+  return { entryAddr, segments, chipId, rawImage: bin.slice() };
+}
+
+// ── ESP32 Partition Table Parser ──
+
+const PARTITION_MAGIC = 0x50AA;
+const PART_TYPE_APP   = 0x00;
+const PART_SUBTYPE_OTA0 = 0x10;
+
+/**
+ * Parse a 4MB merged flash image (bootloader + partition table + app).
+ * Finds the first app partition offset, reads the app header for entry point
+ * and RAM segments, and returns a firmware descriptor backed by the full flash.
+ *
+ * @param {Uint8Array} merged - full 4MB merged flash image
+ * @returns {ParsedFirmware & { mergedFlash: Uint8Array, appOffset: number }}
+ */
+/**
+ * Decode base64 merged flash image and parse it.
+ * @param {string} base64 - base64-encoded 4MB merged flash image
+ * @returns {ParsedFirmware & { mergedFlash: Uint8Array, appOffset: number }}
+ */
+export function mergedBinToFirmware(base64) {
+  const raw = atob(base64);
+  const bytes = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+  return parseMergedBin(bytes);
+}
+
+export function parseMergedBin(merged) {
+  if (merged.length < 0x10000 + 24) {
+    throw new Error('Merged image too small (need at least 64KB + app header)');
+  }
+
+  const view = new DataView(merged.buffer, merged.byteOffset, merged.byteLength);
+
+  // Find app partition from partition table at 0x8000
+  // Each entry: 2-byte magic, 1 type, 1 subtype, 4 offset, 4 size, 16 label, 4 flags = 32 bytes
+  let appOffset = 0x10000; // default fallback
+  for (let i = 0x8000; i < 0x9000; i += 32) {
+    const magic = view.getUint16(i, true);
+    if (magic !== PARTITION_MAGIC) break;
+    const type = merged[i + 2];
+    const subtype = merged[i + 3];
+    const offset = view.getUint32(i + 4, true);
+    if (type === PART_TYPE_APP && subtype >= PART_SUBTYPE_OTA0) {
+      appOffset = offset;
+      break;
+    }
+  }
+
+  // Parse app header at appOffset
+  if (merged[appOffset] !== ESP_IMAGE_MAGIC) {
+    throw new Error(`No valid app image at offset 0x${appOffset.toString(16)} (got 0x${merged[appOffset].toString(16)})`);
+  }
+
+  const appBin = merged.subarray(appOffset);
+  const fw = parseBin(appBin);
+
+  return {
+    ...fw,
+    rawImage: merged,
+    rawImageBase: appOffset,
+    mergedFlash: merged,
+    appOffset,
+  };
 }

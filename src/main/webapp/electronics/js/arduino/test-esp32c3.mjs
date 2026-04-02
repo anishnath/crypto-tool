@@ -514,9 +514,11 @@ void loop() {
           runner.cpu.executeInstruction();
         }
         cycles += chunk;
-        // Fire 1ms FreeRTOS tick
-        runner._stIntRaw |= 1;
-        if (runner._stIntEna & 1) runner._raiseIntSource(37); // SYSTIMER_TARGET0
+        // Fire 1ms FreeRTOS tick only after firmware arms SYSTIMER target0.
+        if (runner._systimerTickArmed) {
+          runner._stIntRaw |= 1;
+          if (runner._stIntEna & 1) runner._raiseIntSource(37); // SYSTIMER_TARGET0
+        }
         runner._processGPIOChanges();
         runner._flushUART();
       }
@@ -534,6 +536,127 @@ void loop() {
       } else {
         failed++;
         console.error('  FAIL: Firmware did not execute enough instructions');
+      }
+    } else {
+      failed++;
+      console.error('  COMPILE FAIL:', result.stderr?.toString().slice(0, 200));
+    }
+  } catch (e) {
+    failed++;
+    console.error('  ERROR:', e.message);
+  }
+} else {
+  console.log('  SKIPPED: arduino-cli not available');
+}
+
+// ── Test 12: Merged Flash Image Blink (ACCEPTANCE TEST) ──
+console.log('=== Test 12: Merged Flash Image Blink ===');
+if (hasArduinoCli) {
+  const dir = mkdtempSync(join(tmpdir(), 'esp32c3-merged-'));
+  const sketchDir = join(dir, 'sketch');
+  mkdirSync(sketchDir);
+  writeFileSync(join(sketchDir, 'sketch.ino'), `
+void setup() {
+  Serial.begin(115200);
+  pinMode(8, OUTPUT);
+}
+void loop() {
+  Serial.println("Hello ESP32-C3!");
+  digitalWrite(8, HIGH);
+  delay(500);
+  digitalWrite(8, LOW);
+  delay(500);
+}
+`);
+  const outDir = join(dir, 'out');
+  mkdirSync(outDir);
+
+  try {
+    const result = spawnSync('arduino-cli', [
+      'compile', '--fqbn', 'esp32:esp32:esp32c3', '--output-dir', outDir, sketchDir
+    ], { timeout: 120000, stdio: 'pipe' });
+
+    if (result.status === 0) {
+      const mergedPath = join(outDir, 'sketch.ino.merged.bin');
+      const binPath = join(outDir, 'sketch.ino.bin');
+      assert(existsSync(mergedPath), 'sketch.ino.merged.bin should exist');
+      assert(existsSync(binPath), 'sketch.ino.bin should exist');
+
+      const mergedData = new Uint8Array(readFileSync(mergedPath));
+      console.log('  Merged image size:', mergedData.length, 'bytes');
+
+      // Parse merged image
+      const { parseMergedBin } = await import('./bin-parser.js');
+      const fw = parseMergedBin(mergedData);
+      console.log('  App offset: 0x' + fw.appOffset.toString(16));
+      console.log('  Entry addr: 0x' + fw.entryAddr.toString(16));
+      console.log('  Chip ID:', fw.chipId);
+      console.log('  RAM segments:', fw.segments.filter(s => {
+        const a = s.loadAddr >>> 0;
+        return (a >= 0x3FC80000 && a < 0x3FCE0000) || (a >= 0x40380000 && a < 0x403E0000);
+      }).length);
+
+      // Boot with merged flash image
+      const runner = new ESP32C3Runner(fw);
+      let serialOut = '';
+      runner.onSerial = (ch) => { serialOut += ch; };
+
+      let ledOn = false, ledOff = false, ledChanges = 0;
+      runner.addPinChangeListener((pin, high) => {
+        if (pin === 8) {
+          ledChanges++;
+          if (high) ledOn = true; else ledOff = true;
+          if (ledChanges <= 10) {
+            console.log('  [GPIO8]', high ? 'HIGH' : 'LOW', '@', (runner.cpu._cycleCount / 160000000).toFixed(3) + 's');
+          }
+        }
+      });
+
+      // Run up to 10 seconds simulated time
+      const TICK = 160_000; // 1ms
+      const MAX_TICKS = 10_000; // 10s
+      const startTime = Date.now();
+      let finalMIE = 0;
+
+      for (let t = 0; t < MAX_TICKS; t++) {
+        for (let i = 0; i < TICK; i++) {
+          runner.cpu.executeInstruction();
+        }
+        // 1ms SYSTIMER tick
+        if (runner._systimerTickArmed) {
+          runner._stIntRaw |= 1;
+          if (runner._stIntEna & 1) runner._raiseIntSource(37);
+        }
+        runner._processGPIOChanges();
+        runner._flushUART();
+
+        finalMIE = runner.cpu.csrs.get(0x300) & 8 ? 1 : 0;
+
+        // Success: LED toggled or serial output
+        if ((ledOn && ledOff) || serialOut.includes('Hello')) {
+          console.log('  SUCCESS at t=' + t + 'ms');
+          break;
+        }
+      }
+
+      const elapsed = ((Date.now() - startTime)).toFixed(0);
+      console.log('  Wall time:', elapsed + 'ms');
+      console.log('  MIE:', finalMIE);
+      console.log('  LED changes:', ledChanges);
+      console.log('  Serial:', serialOut.length > 0 ? JSON.stringify(serialOut.slice(0, 200)) : '(none)');
+      console.log('  Final PC: 0x' + runner.cpu.pc.toString(16));
+
+      // ACCEPTANCE CRITERIA: GPIO8 toggled or serial output
+      if (ledOn && ledOff) {
+        passed++;
+        console.log('  PASS: GPIO8 toggled (LED blinks!)');
+      } else if (serialOut.length > 0) {
+        passed++;
+        console.log('  PASS: Serial output received');
+      } else {
+        failed++;
+        console.error('  FAIL: No GPIO8 toggle and no serial output after 10s simulated');
+        console.error('  (Boot may still be in progress — needs more peripheral stubs)');
       }
     } else {
       failed++;
