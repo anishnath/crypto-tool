@@ -135,7 +135,10 @@
             <option value="arduino:avr:mega" disabled title="Coming soon — requires extended port map">Arduino Mega (soon)</option>
             <option value="rp2040:rp2040:rpipico">Raspberry Pi Pico</option>
             <option value="rp2040:rp2040:rpipicow">Raspberry Pi Pico W</option>
+            <option value="esp32:esp32:esp32">ESP32</option>
             <option value="esp32:esp32:esp32c3">ESP32-C3</option>
+            <option value="esp32:esp32:esp32s3">ESP32-S3</option>
+            <option value="pi:pi:raspi3b">Raspberry Pi 3B</option>
           </select>
         </div>
         <div class="ard-canvas-header-right">
@@ -641,7 +644,7 @@ async function compile(showPanel = true) {
 
     // Success
     const fmt = data.outputFormat || 'hex';
-    lastCompiledHex = data.hex || data.uf2 || data.bin || null;
+    lastCompiledHex = data.hex || data.uf2 || data.bin || data.jobId || null;
     logOutput('Compiled in ' + elapsed + 's (' + fmt.toUpperCase() + ')', 'success');
     if (data.programSize) {
       logOutput('Sketch uses ' + data.programSize + ' bytes (' +
@@ -674,9 +677,24 @@ async function compile(showPanel = true) {
   }
 }
 
+let _isStarting = false;
 async function compileAndRun() {
-  const result = await compile(true);
-  if (result) await startRunnerFromCompile(result);
+  if (_isStarting) return;
+  _isStarting = true;
+  btnRun.disabled = true;
+  try {
+    const board = document.getElementById('boardSelect').value;
+    // Pi boards: no compilation — boot the OS directly
+    if (isPi(board)) {
+      await startPiRunner();
+      return;
+    }
+    const result = await compile(true);
+    if (result) await startRunnerFromCompile(result);
+  } finally {
+    _isStarting = false;
+    updateButtonStates();
+  }
 }
 
 /**
@@ -789,23 +807,30 @@ async function startQemuRunner(board, firmwareB64, jobId) {
   if (jobId) startBody.jobId = jobId;
   else if (firmwareB64) startBody.firmware = firmwareB64;
 
-  const startResp = await fetch('<%=request.getContextPath()%>/api/arduino/simulate/start', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(startBody),
-  });
-  const startData = await startResp.json();
+  let startData;
+  try {
+    const startResp = await fetch('<%=request.getContextPath()%>/api/arduino/simulate/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(startBody),
+    });
+    if (!startResp.ok) throw new Error('Server returned ' + startResp.status);
+    startData = await startResp.json();
+  } catch (err) {
+    logOutput('Simulation service unavailable: ' + err.message, 'error');
+    compileStatus.textContent = '\u2717 Service unavailable';
+    compileStatus.className = 'ard-compile-status error';
+    return;
+  }
   if (!startData.success) {
-    logOutput('QEMU start failed: ' + (startData.error || 'unknown'), 'error');
+    logOutput('Simulation start failed: ' + (startData.error || 'unknown'), 'error');
+    compileStatus.textContent = '\u2717 ' + (startData.error || 'Start failed');
+    compileStatus.className = 'ard-compile-status error';
     return;
   }
 
-  // 2. Connect SSE stream for serial/GPIO events
-  _qemuEventSource = new EventSource(
-    '<%=request.getContextPath()%>/api/arduino/simulate/stream?id=' + encodeURIComponent(_qemuSessionId)
-  );
-
   // Create a lightweight runner shim so the UI (serial monitor, buttons) works
+  // MUST be created BEFORE connecting SSE stream so serialMonitor.attach() wires onSerial first.
   runner = {
     running: true,
     speed: 1,
@@ -847,55 +872,261 @@ async function startQemuRunner(board, firmwareB64, jobId) {
     vRef: 3.3,
   };
 
-  _qemuEventSource.onmessage = (event) => {
-    try {
-      const ev = JSON.parse(event.data);
-      if (ev.type === 'serial_output' && ev.data?.data) {
-        // Forward to serial monitor
-        if (runner.onSerial) {
-          for (const ch of ev.data.data) runner.onSerial(ch);
-        }
-      } else if (ev.type === 'gpio_change' && ev.data) {
-        const pin = ev.data.pin;
-        const high = !!ev.data.state;
-        for (const fn of runner._pinChangeListeners) fn(pin, high);
-      } else if (ev.type === 'system') {
-        const evt = ev.data?.event || '';
-        if (evt === 'booted') logOutput('QEMU booted', 'success');
-        else if (evt === 'exited') { logOutput('QEMU exited'); stopRunner(); updateButtonStates(); }
-        else logOutput('QEMU: ' + evt);
-      } else if (ev.type === 'error') {
-        logOutput('QEMU error: ' + (ev.data?.message || ''), 'error');
-      }
-    } catch (e) {
-      // ignore parse errors
-    }
-  };
-
-  _qemuEventSource.onerror = () => {
-    logOutput('QEMU stream disconnected', 'error');
-  };
-
-  // Wire up board binding
-  const mods = await loadESP32C3Modules();
+  // Wire up board binding — wokwi-esp32-devkit-v1 for all ESP32 variants
   const currentBoard = document.getElementById('arduinoBoard');
-  if (currentBoard.tagName.toLowerCase() === 'esp32c3-board') {
-    boardBinding = new mods.ESP32C3BoardBinding(currentBoard, runner);
-  } else {
-    boardBinding = new BoardBinding(currentBoard, runner);
-  }
+  const fqbn = document.getElementById('boardSelect').value;
+  // LED pin differs by variant: GPIO2 (ESP32), GPIO8 (C3), GPIO48 (S3)
+  const ledPin = fqbn.includes('esp32c3') ? 8 : fqbn.includes('esp32s3') ? 48 : 2;
+  boardBinding = {
+    attach() {
+      currentBoard.ledPower = true;
+      this._unsub = runner.addPinChangeListener((pin, high) => {
+        if (pin === ledPin) currentBoard.led1 = high;
+      });
+    },
+    detach() {
+      if (this._unsub) this._unsub();
+      currentBoard.ledPower = false;
+      currentBoard.led1 = false;
+    },
+  };
   boardBinding.attach();
 
   serialMonitor.clear();
   serialMonitor.attach(runner);
   componentPanel.setRunner(runner);
 
+  // 2. Connect SSE stream AFTER serialMonitor.attach() has wired runner.onSerial
+  _qemuEventSource = new EventSource(
+    '<%=request.getContextPath()%>/api/arduino/simulate/stream?id=' + encodeURIComponent(_qemuSessionId)
+  );
+
+  // Filter out QEMU crash dumps from serial output so users see clean output
+  let _qemuCrashFilter = false;
+
+  _qemuEventSource.onmessage = (event) => {
+    try {
+      const ev = JSON.parse(event.data);
+      if (ev.type === 'serial_output' && ev.data?.data) {
+        const text = ev.data.data;
+        // Detect start of crash dump and suppress everything after it
+        if (text.includes('Guru Meditation Error') || text.includes('Core  0 register dump')) {
+          _qemuCrashFilter = true;
+          // Show a clean message instead
+          if (runner.onSerial) {
+            const msg = '\n[Simulation ended — watchdog timeout]\n';
+            for (const ch of msg) runner.onSerial(ch);
+          }
+          return;
+        }
+        if (_qemuCrashFilter) return; // suppress crash dump lines
+        if (runner.onSerial) {
+          for (const ch of text) runner.onSerial(ch);
+        }
+      } else if (ev.type === 'gpio_change' && ev.data) {
+        for (const fn of runner._pinChangeListeners) fn(ev.data.pin, !!ev.data.state);
+      } else if (ev.type === 'system') {
+        const evt = ev.data?.event || '';
+        const bootMessages = {
+          booting:         '\u23F3 Starting emulator...',
+          booted:          '\u2705 Connected to emulator',
+          boot_reset:      '\u27F3 ESP32 reset...',
+          boot_loading:    '\u27F3 Loading firmware...',
+          boot_entry:      '\u27F3 Entering application...',
+          boot_setup:      '\u2705 Running setup()',
+          boot_kernel:     '\u27F3 Loading Linux kernel...',
+          boot_smp:        '\u27F3 Starting CPU cores...',
+          boot_network:    '\u27F3 Initializing network...',
+          boot_sdcard:     '\u27F3 Reading SD card...',
+          boot_filesystem: '\u27F3 Mounting filesystem...',
+          boot_systemd:    '\u27F3 Starting services...',
+          boot_login:      '\u2705 Login prompt ready',
+          boot_ready:      '\u2705 Raspberry Pi is ready!',
+        };
+        if (evt === 'exited') {
+          compileStatus.textContent = '';
+          compileStatus.className = 'ard-compile-status';
+          stopRunner(); updateButtonStates();
+        } else if (bootMessages[evt]) {
+          compileStatus.textContent = bootMessages[evt];
+          compileStatus.className = 'ard-compile-status compiling';
+          if (evt.startsWith('boot_setup') || evt === 'boot_login' || evt === 'boot_ready') {
+            compileStatus.className = 'ard-compile-status success';
+            btnRun.querySelector('span').textContent = 'Running';
+          }
+        }
+      } else if (ev.type === 'error') {
+        logOutput('Error: ' + (ev.data?.message || ''), 'error');
+        compileStatus.textContent = '\u2717 Error';
+        compileStatus.className = 'ard-compile-status error';
+      }
+    } catch (e) {}
+  };
+
+  _qemuEventSource.onerror = () => {
+    logOutput('Simulation stream disconnected', 'error');
+    compileStatus.textContent = '\u2717 Disconnected';
+    compileStatus.className = 'ard-compile-status error';
+    stopRunner();
+    updateButtonStates();
+  };
+
   statusDot.classList.add('running');
   btnRun.disabled = false;
   btnRun.classList.add('running');
-  btnRun.querySelector('span').textContent = 'Running';
+  btnRun.querySelector('span').textContent = 'Booting...';
   updateButtonStates();
-  logOutput('QEMU simulation started (id: ' + _qemuSessionId + ')');
+  logOutput('Simulation started (id: ' + _qemuSessionId + ')');
+}
+
+/**
+ * Pi 3 runner — boots Raspberry Pi OS in QEMU. No compilation needed.
+ * Uses /api/arduino/simulate/pi/ endpoints (proxied to Go API /api/pi-simulate/).
+ */
+async function startPiRunner() {
+  stopRunner();
+
+  _qemuSessionId = 'pi-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+
+  compileStatus.textContent = '\u23F3 Booting Raspberry Pi...';
+  compileStatus.className = 'ard-compile-status compiling';
+  logOutput('Starting Raspberry Pi 3B...');
+
+  // 1. Start Pi QEMU instance
+  let startData;
+  try {
+    const startResp = await fetch('<%=request.getContextPath()%>/api/arduino/simulate/pi/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: _qemuSessionId }),
+    });
+    if (!startResp.ok) throw new Error('Server returned ' + startResp.status);
+    startData = await startResp.json();
+  } catch (err) {
+    logOutput('Pi simulation service unavailable: ' + err.message, 'error');
+    compileStatus.textContent = '\u2717 Service unavailable';
+    compileStatus.className = 'ard-compile-status error';
+    return;
+  }
+  if (!startData.success) {
+    logOutput('Pi start failed: ' + (startData.error || 'unknown'), 'error');
+    compileStatus.textContent = '\u2717 ' + (startData.error || 'Start failed');
+    compileStatus.className = 'ard-compile-status error';
+    return;
+  }
+
+  // 2. SSE stream
+  _qemuEventSource = new EventSource(
+    '<%=request.getContextPath()%>/api/arduino/simulate/pi/stream?id=' + encodeURIComponent(_qemuSessionId)
+  );
+
+  // 3. Runner shim (same as ESP32 but serial input goes to Pi endpoints)
+  runner = {
+    running: true,
+    speed: 1,
+    onSerial: null,
+    _pinChangeListeners: [],
+    addPinChangeListener(fn) {
+      this._pinChangeListeners.push(fn);
+      return () => { const i = this._pinChangeListeners.indexOf(fn); if (i >= 0) this._pinChangeListeners.splice(i, 1); };
+    },
+    addPwmChangeListener() { return () => {}; },
+    setPinState() {},
+    setADCValue() {},
+    start() { this.running = true; },
+    pause() { this.running = false; },
+    stop() {
+      this.running = false;
+      if (_qemuEventSource) { _qemuEventSource.close(); _qemuEventSource = null; }
+      if (_qemuSessionId) {
+        fetch('<%=request.getContextPath()%>/api/arduino/simulate/pi/stop', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: _qemuSessionId }),
+        }).catch(() => {});
+        _qemuSessionId = null;
+      }
+    },
+    reset() {},
+    usart: {
+      writeByte(b) {
+        if (!_qemuSessionId) return;
+        fetch('<%=request.getContextPath()%>/api/arduino/simulate/pi/input', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: _qemuSessionId, data: String.fromCharCode(b) }),
+        }).catch(() => {});
+      }
+    },
+    vRef: 3.3,
+  };
+
+  // 4. SSE event handler (same as ESP32 — shared boot progress messages)
+  _qemuEventSource.onmessage = (event) => {
+    try {
+      const ev = JSON.parse(event.data);
+      if (ev.type === 'serial_output' && ev.data?.data) {
+        if (runner.onSerial) {
+          for (const ch of ev.data.data) runner.onSerial(ch);
+        }
+      } else if (ev.type === 'gpio_change' && ev.data) {
+        for (const fn of runner._pinChangeListeners) fn(ev.data.pin, !!ev.data.state);
+      } else if (ev.type === 'system') {
+        const evt = ev.data?.event || '';
+        const bootMessages = {
+          booting: '\u23F3 Starting Raspberry Pi...',
+          booted: '\u2705 Connected',
+          boot_kernel: '\u27F3 Loading Linux kernel...',
+          boot_smp: '\u27F3 Starting CPU cores...',
+          boot_network: '\u27F3 Initializing network...',
+          boot_sdcard: '\u27F3 Reading SD card...',
+          boot_filesystem: '\u27F3 Mounting filesystem...',
+          boot_systemd: '\u27F3 Starting services...',
+          boot_login: '\u2705 Login prompt ready',
+          boot_ready: '\u2705 Raspberry Pi is ready!',
+        };
+        if (evt === 'exited') {
+          compileStatus.textContent = '';
+          compileStatus.className = 'ard-compile-status';
+          stopRunner(); updateButtonStates();
+        } else if (bootMessages[evt]) {
+          compileStatus.textContent = bootMessages[evt];
+          const bootDone = evt.includes('login') || evt.includes('ready');
+          compileStatus.className = bootDone ? 'ard-compile-status success' : 'ard-compile-status compiling';
+          if (bootDone) btnRun.querySelector('span').textContent = 'Running';
+        }
+      } else if (ev.type === 'error') {
+        logOutput('Error: ' + (ev.data?.message || ''), 'error');
+        compileStatus.textContent = '\u2717 Error';
+        compileStatus.className = 'ard-compile-status error';
+      }
+    } catch (e) {}
+  };
+
+  _qemuEventSource.onerror = () => {
+    logOutput('Pi stream disconnected', 'error');
+    compileStatus.textContent = '\u2717 Disconnected';
+    compileStatus.className = 'ard-compile-status error';
+    stopRunner();
+    updateButtonStates();
+  };
+
+  // 5. Board binding (no LED mapping for Pi — just power indicator)
+  const currentBoard = document.getElementById('arduinoBoard');
+  boardBinding = {
+    attach() { currentBoard.ledPower = true; },
+    detach() { currentBoard.ledPower = false; },
+  };
+  boardBinding.attach();
+
+  serialMonitor.clear();
+  serialMonitor.attach(runner);
+
+  statusDot.classList.add('running');
+  btnRun.disabled = false;
+  btnRun.classList.add('running');
+  btnRun.querySelector('span').textContent = 'Booting Pi...';
+  updateButtonStates();
 }
 
 function stopRunner() {
@@ -1014,15 +1245,22 @@ const BOARD_TAGS = {
   'arduino:avr:mega': 'wokwi-arduino-mega',
   'rp2040:rp2040:rpipico':  'pico-board',
   'rp2040:rp2040:rpipicow': 'pico-board',
-  'esp32:esp32:esp32c3':    'esp32c3-board',
+  'esp32:esp32:esp32c3':    'wokwi-esp32-devkit-v1',
+  'esp32:esp32:esp32':      'wokwi-esp32-devkit-v1',
+  'esp32:esp32:esp32s3':    'wokwi-esp32-devkit-v1',
+  'pi:pi:raspi3b':          'wokwi-esp32-devkit-v1', // placeholder visual for Pi 3 (TODO: custom Pi SVG)
 };
 
 /** Check if a board FQBN is RP2040-based */
 function isRP2040(fqbn) { return fqbn.startsWith('rp2040:'); }
 /** Check if a board FQBN is AVR-based */
 function isAVR(fqbn) { return fqbn.startsWith('arduino:avr:'); }
-/** Check if a board FQBN is ESP32-C3 */
+/** Check if a board FQBN is ESP32-family (any variant) */
+function isESP32(fqbn) { return fqbn.startsWith('esp32:'); }
+/** Check if a board FQBN is ESP32-C3 specifically */
 function isESP32C3(fqbn) { return fqbn === 'esp32:esp32:esp32c3'; }
+/** Check if a board FQBN is Raspberry Pi */
+function isPi(fqbn) { return fqbn.startsWith('pi:'); }
 
 /**
  * Switch the board element on the canvas.
@@ -1033,12 +1271,13 @@ async function switchBoard(fqbn) {
   const tag = BOARD_TAGS[fqbn];
   if (!tag) return;
 
-  // Pre-load custom element definition so createElement works
-  if (isESP32C3(fqbn)) await loadESP32C3Modules();
-  else if (isRP2040(fqbn)) await loadRP2040Modules();
+  // Pre-load custom element definitions for boards with lazy-loaded elements.
+  // ESP32 boards use wokwi-esp32-devkit-v1 from CDN — no lazy load needed.
+  if (isRP2040(fqbn)) await loadRP2040Modules();
 
-  // Stop simulation
+  // Stop simulation and clear stale compile result
   stopRunner();
+  lastCompiledHex = null;
   updateButtonStates();
 
   // Swap board SVG element
@@ -1068,6 +1307,20 @@ async function switchBoard(fqbn) {
     if (retries > 0) setTimeout(() => waitForBoard(retries - 1), 200);
   };
   waitForBoard();
+
+  // Pi boards: hide compile button, change Run label; show for others
+  const piMode = isPi(fqbn);
+  btnCompile.style.display = piMode ? 'none' : '';
+  btnRun.querySelector('span').textContent = piMode ? 'Boot Pi' : 'Run';
+  // Show a hint in the editor for Pi (only if editor is empty or has default code)
+  if (piMode) {
+    editor.onReady(() => {
+      const code = editor.getCode().trim();
+      if (!code || code.startsWith('void setup') || code.startsWith('//')) {
+        editor.setCode('// Raspberry Pi 3B — click "Boot Pi" to start.\n// The Pi runs Raspberry Pi OS. Use the Serial Monitor as a terminal.\n// Type Linux commands (ls, echo, python3, etc.)\n');
+      }
+    });
+  }
 }
 
 document.getElementById('boardSelect').addEventListener('change', async (e) => {

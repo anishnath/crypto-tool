@@ -573,12 +573,15 @@ void loop() {
       { type: 'led', pin: 8, x: 340, y: 20, attrs: { color: 'green' } },
     ],
     code: `void setup() {
+  Serial.begin(115200);
   pinMode(8, OUTPUT); // LED_BUILTIN on ESP32-C3 = GPIO8
 }
 
 void loop() {
+  Serial.println("LED ON");
   digitalWrite(8, HIGH);
   delay(500);
+  Serial.println("LED OFF");
   digitalWrite(8, LOW);
   delay(500);
 }`,
@@ -653,6 +656,101 @@ void loop() {
     fadeAmount = -fadeAmount;
   }
   delay(30);
+}`,
+  },
+  // ── ESP32 (Xtensa) ──
+  {
+    id: 'esp32-blink',
+    title: 'ESP32 Blink',
+    category: 'ESP32',
+    board: 'esp32:esp32:esp32',
+    components: [
+      { type: 'led', pin: 2, x: 340, y: 20, attrs: { color: 'blue' } },
+    ],
+    code: `void setup() {
+  Serial.begin(115200);
+  pinMode(2, OUTPUT); // LED_BUILTIN on ESP32 DevKit = GPIO2
+}
+
+void loop() {
+  Serial.println("LED ON");
+  digitalWrite(2, HIGH);
+  delay(500);
+  Serial.println("LED OFF");
+  digitalWrite(2, LOW);
+  delay(500);
+}`,
+  },
+  {
+    id: 'esp32-serial',
+    title: 'ESP32 Serial',
+    category: 'ESP32',
+    board: 'esp32:esp32:esp32',
+    components: [],
+    code: `void setup() {
+  Serial.begin(115200);
+  pinMode(2, OUTPUT);
+}
+
+void loop() {
+  Serial.println("Hello from ESP32!");
+  digitalWrite(2, HIGH);
+  delay(500);
+  Serial.println("LED OFF");
+  digitalWrite(2, LOW);
+  delay(500);
+}`,
+  },
+  {
+    id: 'esp32-analog',
+    title: 'ESP32 Analog Read',
+    category: 'ESP32',
+    board: 'esp32:esp32:esp32',
+    components: [
+      { type: 'potentiometer', pin: 'A0', x: 340, y: 20 },
+    ],
+    code: `// ESP32: A0 = GPIO36 (VP), 12-bit ADC (0-4095), 3.3V reference
+void setup() {
+  Serial.begin(115200);
+  analogReadResolution(12);
+}
+
+void loop() {
+  int val = analogRead(A0);
+  float voltage = val * 3.3 / 4095.0;
+  Serial.print("ADC: ");
+  Serial.print(val);
+  Serial.print(" Voltage: ");
+  Serial.print(voltage, 2);
+  Serial.println("V");
+  delay(200);
+}`,
+  },
+  {
+    id: 'esp32-button',
+    title: 'ESP32 Button',
+    category: 'ESP32',
+    board: 'esp32:esp32:esp32',
+    components: [
+      { type: 'led', pin: 2, x: 340, y: 20, attrs: { color: 'blue' } },
+      { type: 'pushbutton', pin: 4, x: 340, y: 100, attrs: { color: 'red' } },
+    ],
+    code: `const int buttonPin = 4;
+const int ledPin = 2; // LED_BUILTIN
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(ledPin, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
+}
+
+void loop() {
+  int state = digitalRead(buttonPin);
+  digitalWrite(ledPin, state == LOW ? HIGH : LOW);
+  if (state == LOW) {
+    Serial.println("Button pressed!");
+  }
+  delay(50);
 }`,
   },
   {
