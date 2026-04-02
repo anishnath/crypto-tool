@@ -77,7 +77,10 @@ public class ArduinoCompileServlet extends HttpServlet {
         "arduino:avr:nano",
         "arduino:avr:mega",
         "rp2040:rp2040:rpipico",
-        "rp2040:rp2040:rpipicow"
+        "rp2040:rp2040:rpipicow",
+        "esp32:esp32:esp32c3",
+        "esp32:esp32:esp32",
+        "esp32:esp32:esp32s3"
     ));
 
     // ── Library allowlist (V1) ──
