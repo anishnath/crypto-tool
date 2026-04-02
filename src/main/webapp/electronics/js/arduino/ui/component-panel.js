@@ -7,6 +7,7 @@
  */
 
 import { LedBinding } from '../bindings/led.js';
+import { RgbLedBinding } from '../bindings/rgb-led.js';
 import { ButtonBinding } from '../bindings/button.js';
 import { PotBinding } from '../bindings/pot.js';
 import { ServoBinding } from '../bindings/servo.js';
@@ -14,6 +15,15 @@ import { BuzzerBinding } from '../bindings/buzzer.js';
 import { SlideSwitchBinding } from '../bindings/slide-switch.js';
 import { PhotoresistorBinding } from '../bindings/photoresistor.js';
 import { RelayBinding } from '../bindings/relay.js';
+import { NeoPixelBinding } from '../bindings/neopixel.js';
+import { SevenSegBinding } from '../bindings/seven-seg.js';
+import { EncoderBinding } from '../bindings/encoder.js';
+import { KeypadBinding } from '../bindings/keypad.js';
+import { LcdBinding } from '../bindings/lcd.js';
+import { OledBinding } from '../bindings/oled.js';
+import { Dht22Binding } from '../bindings/dht22.js';
+import { HcSr04Binding } from '../bindings/hcsr04.js';
+import { AnalogSensorBinding } from '../bindings/analog-sensor.js';
 import { PWM_PIN_SET } from '../pin-map.js';
 
 /** Component type definitions */
@@ -105,6 +115,87 @@ const COMPONENT_TYPES = {
     pins: 'analog',
     attrs: {},
     binding: PhotoresistorBinding,
+  },
+  // ── New: components with existing bindings ──
+  'rgb-led': {
+    label: 'RGB LED',
+    tag: 'wokwi-led',
+    group: 'Output',
+    pins: 'digital',
+    attrs: { color: 'white', label: 'RGB' },
+    binding: RgbLedBinding,
+  },
+  neopixel: {
+    label: 'NeoPixel',
+    tag: 'wokwi-neopixel',
+    group: 'Output',
+    pins: 'digital',
+    attrs: {},
+    binding: NeoPixelBinding,
+  },
+  '7segment': {
+    label: '7-Segment',
+    tag: 'wokwi-7segment',
+    group: 'Displays',
+    pins: 'digital',
+    attrs: {},
+    binding: SevenSegBinding,
+  },
+  encoder: {
+    label: 'Rotary Encoder',
+    tag: 'wokwi-ky-040',
+    group: 'Input',
+    pins: 'digital',
+    attrs: {},
+    binding: EncoderBinding,
+  },
+  keypad: {
+    label: 'Keypad 4×4',
+    tag: 'wokwi-membrane-keypad',
+    group: 'Input',
+    pins: 'digital',
+    attrs: {},
+    binding: KeypadBinding,
+  },
+  lcd: {
+    label: 'LCD 16×2',
+    tag: 'wokwi-lcd1602',
+    group: 'Displays',
+    pins: 'digital',
+    attrs: {},
+    binding: LcdBinding,
+  },
+  oled: {
+    label: 'OLED SSD1306',
+    tag: 'wokwi-ssd1306',
+    group: 'Displays',
+    pins: 'digital',
+    attrs: {},
+    binding: OledBinding,
+  },
+  dht22: {
+    label: 'DHT22 Sensor',
+    tag: 'wokwi-dht22',
+    group: 'Sensors',
+    pins: 'digital',
+    attrs: {},
+    binding: Dht22Binding,
+  },
+  hcsr04: {
+    label: 'Ultrasonic HC-SR04',
+    tag: 'wokwi-hc-sr04',
+    group: 'Sensors',
+    pins: 'digital',
+    attrs: {},
+    binding: HcSr04Binding,
+  },
+  'ntc-temp': {
+    label: 'Temp Sensor (NTC)',
+    tag: 'wokwi-ntc-temperature-sensor',
+    group: 'Sensors',
+    pins: 'analog',
+    attrs: {},
+    binding: AnalogSensorBinding,
   },
 };
 
@@ -263,65 +354,183 @@ export class ComponentPanel {
   // ── Internal ──
 
   _initMenu() {
-    const menu = document.createElement('div');
-    menu.className = 'ard-add-menu';
-    menu.style.cssText = `
-      display:none; position:absolute; top:calc(100% + 4px); right:0;
-      background:var(--ard-panel); border:1px solid var(--ard-border);
-      border-radius:8px; padding:6px 0; min-width:180px; z-index:100;
-      box-shadow:0 8px 24px rgba(0,0,0,.4);
+    // ── Slide-in component catalog panel ──
+    const overlay = document.createElement('div');
+    overlay.className = 'ard-comp-overlay';
+    overlay.style.cssText = `
+      display:none; position:fixed; inset:0; z-index:200;
+      background:rgba(0,0,0,.4); backdrop-filter:blur(2px);
+      opacity:0; transition:opacity .2s ease;
     `;
 
-    // Build grouped menu
+    const panel = document.createElement('div');
+    panel.className = 'ard-comp-panel';
+    panel.style.cssText = `
+      position:absolute; top:0; right:0; bottom:0; width:320px;
+      background:var(--ard-panel-deep, var(--ard-panel));
+      border-left:1px solid var(--ard-border);
+      box-shadow:-8px 0 32px rgba(0,0,0,.5);
+      transform:translateX(100%); transition:transform .25s cubic-bezier(.4,0,.2,1);
+      display:flex; flex-direction:column; overflow:hidden;
+    `;
+
+    // Header
+    const header = document.createElement('div');
+    header.style.cssText = `
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 16px; border-bottom:1px solid var(--ard-border);
+      flex-shrink:0;
+    `;
+    const title = document.createElement('span');
+    title.textContent = 'Components';
+    title.style.cssText = 'font:600 14px "Sora",sans-serif; color:var(--ard-text); letter-spacing:-.02em;';
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.style.cssText = `
+      border:none; background:none; color:var(--ard-muted); font-size:20px;
+      cursor:pointer; padding:0 4px; line-height:1; border-radius:4px;
+      transition:color .15s, background .15s;
+    `;
+    closeBtn.addEventListener('mouseenter', () => { closeBtn.style.color = 'var(--ard-text)'; closeBtn.style.background = 'rgba(255,255,255,.08)'; });
+    closeBtn.addEventListener('mouseleave', () => { closeBtn.style.color = 'var(--ard-muted)'; closeBtn.style.background = 'none'; });
+    closeBtn.addEventListener('click', () => this._closePanel());
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+    panel.appendChild(header);
+
+    // Scrollable body
+    const body = document.createElement('div');
+    body.style.cssText = 'flex:1; overflow-y:auto; padding:12px;';
+
+    // Build grouped cards
     const groups = {};
+    const groupOrder = ['Output', 'Input', 'Sensors', 'Displays'];
     for (const [key, def] of Object.entries(COMPONENT_TYPES)) {
       if (!groups[def.group]) groups[def.group] = [];
       groups[def.group].push({ key, ...def });
     }
 
-    for (const [group, items] of Object.entries(groups)) {
-      const header = document.createElement('div');
-      header.textContent = group;
-      header.style.cssText = 'padding:4px 12px;font:600 10px "Sora",sans-serif;color:var(--ard-muted);text-transform:uppercase;letter-spacing:.05em;';
-      menu.appendChild(header);
+    for (const groupName of groupOrder) {
+      const items = groups[groupName];
+      if (!items) continue;
+
+      // Category header (collapsible)
+      const catHeader = document.createElement('div');
+      catHeader.style.cssText = `
+        display:flex; align-items:center; gap:6px; padding:8px 4px 6px;
+        cursor:pointer; user-select:none;
+      `;
+      const arrow = document.createElement('span');
+      arrow.textContent = '\u25BE';
+      arrow.style.cssText = 'color:var(--ard-muted); font-size:10px; transition:transform .2s;';
+      const catLabel = document.createElement('span');
+      catLabel.textContent = groupName;
+      catLabel.style.cssText = 'font:600 11px "Sora",sans-serif; color:var(--ard-muted); text-transform:uppercase; letter-spacing:.06em;';
+      catHeader.appendChild(arrow);
+      catHeader.appendChild(catLabel);
+
+      const grid = document.createElement('div');
+      grid.style.cssText = `
+        display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;
+        padding-bottom:12px; transition:max-height .25s ease, opacity .2s ease;
+        overflow:hidden;
+      `;
+
+      catHeader.addEventListener('click', () => {
+        const collapsed = grid.style.display === 'none';
+        grid.style.display = collapsed ? 'grid' : 'none';
+        arrow.style.transform = collapsed ? '' : 'rotate(-90deg)';
+      });
 
       for (const item of items) {
-        const btn = document.createElement('button');
-        btn.textContent = item.label;
-        btn.style.cssText = `
-          display:block; width:100%; text-align:left; padding:6px 12px;
-          border:none; background:none; color:var(--ard-text);
-          font:12px "DM Sans",sans-serif; cursor:pointer;
+        const card = document.createElement('div');
+        card.style.cssText = `
+          display:flex; flex-direction:column; align-items:center; gap:4px;
+          padding:10px 4px 8px; border-radius:8px; cursor:pointer;
+          border:1px solid transparent;
+          background:rgba(255,255,255,.02);
+          transition:all .15s ease;
         `;
-        btn.addEventListener('mouseenter', () => { btn.style.background = 'rgba(255,255,255,.06)'; });
-        btn.addEventListener('mouseleave', () => { btn.style.background = 'none'; });
-        btn.addEventListener('click', () => {
-          menu.style.display = 'none';
+
+        // Preview container — clips the wokwi element to a fixed box
+        const previewBox = document.createElement('div');
+        previewBox.style.cssText = `
+          width:72px; height:52px; overflow:hidden; display:flex;
+          align-items:center; justify-content:center;
+          pointer-events:none; border-radius:4px;
+        `;
+
+        // Render live wokwi element at small scale
+        const el = document.createElement(item.tag);
+        if (item.attrs) for (const [k, v] of Object.entries(item.attrs)) el.setAttribute(k, v);
+        el.style.cssText = 'transform:scale(0.35); transform-origin:center center; pointer-events:none;';
+        previewBox.appendChild(el);
+        card.appendChild(previewBox);
+
+        // Label
+        const nameLabel = document.createElement('span');
+        nameLabel.textContent = item.label;
+        nameLabel.style.cssText = `
+          font:500 10px "DM Sans",sans-serif; color:var(--ard-text);
+          text-align:center; line-height:1.2; max-width:80px;
+          overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+        `;
+        card.appendChild(nameLabel);
+
+        // Hover effect
+        card.addEventListener('mouseenter', () => {
+          card.style.background = 'rgba(255,255,255,.06)';
+          card.style.borderColor = 'var(--ard-border)';
+          card.style.transform = 'translateY(-1px)';
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.background = 'rgba(255,255,255,.02)';
+          card.style.borderColor = 'transparent';
+          card.style.transform = '';
+        });
+
+        // Click → close panel + show pin picker
+        card.addEventListener('click', () => {
+          this._closePanel();
           this._showPinPicker(item.key, item.pins);
         });
-        menu.appendChild(btn);
+
+        grid.appendChild(card);
       }
+
+      body.appendChild(catHeader);
+      body.appendChild(grid);
     }
 
-    this._menuEl = menu;
+    panel.appendChild(body);
+    overlay.appendChild(panel);
+    document.body.appendChild(overlay);
+
+    // Click overlay (outside panel) to close
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) this._closePanel();
+    });
+
+    this._overlayEl = overlay;
+    this._panelEl = panel;
+  }
+
+  _openPanel() {
+    this._overlayEl.style.display = 'block';
+    requestAnimationFrame(() => {
+      this._overlayEl.style.opacity = '1';
+      this._panelEl.style.transform = 'translateX(0)';
+    });
+  }
+
+  _closePanel() {
+    this._panelEl.style.transform = 'translateX(100%)';
+    this._overlayEl.style.opacity = '0';
+    setTimeout(() => { this._overlayEl.style.display = 'none'; }, 250);
   }
 
   _initAddBtn() {
-    this.addBtn.style.position = 'relative';
-    this.addBtn.appendChild(this._menuEl);
-
-    this.addBtn.addEventListener('click', (e) => {
-      if (this._menuEl.contains(e.target)) return; // click was inside menu itself
-      const open = this._menuEl.style.display !== 'none';
-      this._menuEl.style.display = open ? 'none' : 'block';
-    });
-
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (!this.addBtn.contains(e.target)) {
-        this._menuEl.style.display = 'none';
-      }
-    });
+    this.addBtn.addEventListener('click', () => this._openPanel());
   }
 
   _showPinPicker(typeKey, pinType) {
