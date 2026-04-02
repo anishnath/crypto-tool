@@ -242,6 +242,8 @@ async function loadESP32C3Modules() {
 }
 import { FileManager } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/file-manager.js';
 import { FileExplorer } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/file-explorer.js';
+import { exportDiagram, importDiagram, downloadDiagram, openDiagramFile } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/diagram.js';
+import { DiagramSync } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/diagram-sync.js';
 
 // ── DOM refs ──
 const btnCompile = document.getElementById('btnCompile');
@@ -404,6 +406,19 @@ initBoardPins();
 componentPanel.loadPreset([
   { type: 'led', pin: 13, x: 340, y: 20, attrs: { color: 'green' } },
 ]);
+
+// ── diagram.json sync (two-way: editor ↔ canvas) ──
+const diagramSync = new DiagramSync(
+  fileManager,
+  componentPanel,
+  wireManager,
+  simCanvas,
+  () => document.getElementById('arduinoBoard')?.tagName?.toLowerCase() || 'wokwi-arduino-uno',
+  async (fqbn) => {
+    document.getElementById('boardSelect').value = fqbn;
+    await switchBoard(fqbn);
+  }
+);
 
 // ── State ──
 let runner = null;
@@ -1397,6 +1412,45 @@ shareBtn.title = 'Share sketch URL';
 shareBtn.innerHTML = '<span>Share</span>';
 shareBtn.addEventListener('click', encodeSketchToHash);
 document.getElementById('btnTheme').before(shareBtn);
+
+// ── Diagram import/export buttons ──
+const diagramExportBtn = document.createElement('button');
+diagramExportBtn.className = 'ard-tb-btn';
+diagramExportBtn.title = 'Export circuit as diagram.json (Wokwi-compatible)';
+diagramExportBtn.innerHTML = '<span>\u2B07 Diagram</span>';
+diagramExportBtn.addEventListener('click', () => {
+  const boardEl = document.getElementById('arduinoBoard');
+  const boardTag = boardEl?.tagName?.toLowerCase() || 'wokwi-arduino-uno';
+  const boardPos = { x: 0, y: 0 };
+  const diagram = exportDiagram(boardTag, 'board', boardPos, componentPanel.components, wireManager.wires);
+  downloadDiagram(diagram);
+  compileStatus.textContent = 'Diagram exported';
+  compileStatus.className = 'ard-compile-status success';
+  setTimeout(() => { compileStatus.textContent = ''; compileStatus.className = 'ard-compile-status'; }, 2000);
+});
+document.getElementById('btnTheme').before(diagramExportBtn);
+
+const diagramImportBtn = document.createElement('button');
+diagramImportBtn.className = 'ard-tb-btn';
+diagramImportBtn.title = 'Import diagram.json (Wokwi-compatible)';
+diagramImportBtn.innerHTML = '<span>\u2B06 Diagram</span>';
+diagramImportBtn.addEventListener('click', async () => {
+  const diagram = await openDiagramFile();
+  if (!diagram) return;
+  compileStatus.textContent = '\u27F3 Loading diagram...';
+  compileStatus.className = 'ard-compile-status compiling';
+  const result = await importDiagram(diagram, componentPanel, wireManager, simCanvas, async (fqbn) => {
+    document.getElementById('boardSelect').value = fqbn;
+    await switchBoard(fqbn);
+  });
+  if (result.errors.length) {
+    logOutput('Diagram import: ' + result.errors.join('; '), 'warning');
+  }
+  compileStatus.textContent = '\u2713 Loaded ' + result.partsLoaded + ' parts, ' + result.wiresLoaded + ' wires';
+  compileStatus.className = 'ard-compile-status success';
+  setTimeout(() => { compileStatus.textContent = ''; compileStatus.className = 'ard-compile-status'; }, 3000);
+});
+document.getElementById('btnTheme').before(diagramImportBtn);
 </script>
 </body>
 </html>

@@ -119,6 +119,25 @@ export class WireManager {
     this._previewLine.setAttribute('y2', worldY);
   }
 
+  /** Programmatically add a wire (for diagram.json import). */
+  addWire(startComp, startPin, endComp, endPin, color) {
+    const wire = {
+      id: 'wire-' + (++wireIdCounter),
+      startComp,
+      startPin,
+      endComp,
+      endPin,
+      color: color || WIRE_COLORS.default,
+      pathEl: null,
+    };
+    wire.pathEl = this._renderWire(wire);
+    this.wires.push(wire);
+    return wire;
+  }
+
+  /** Clear all wires */
+  clearAll() { this.clear(); }
+
   /** Remove a wire by id */
   removeWire(wireId) {
     const idx = this.wires.findIndex(w => w.id === wireId);
