@@ -82,6 +82,14 @@ public class LoadPropertyFileFunctionality extends HttpServlet {
                 configProperty.put("api", "http://localhost:8080/");
           }
 
+          if(prop.getProperty("arduino")!=null)
+          {
+              configProperty.put("arduino", prop.getProperty("arduino"));
+          }
+          else{
+              configProperty.put("arduino", "http://localhost:8080/");
+          }
+
           if(prop.getProperty("onecompiler")!=null)
           {
                 configProperty.put("onecompiler", prop.getProperty("onecompiler"));
