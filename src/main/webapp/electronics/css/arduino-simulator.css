@@ -765,8 +765,10 @@ body {
   /* Hide diagram buttons on mobile (too small) */
   .ard-canvas-header-right .ard-tb-btn[title*="Diagram"] { display: none; }
 
-  /* Ad hero: hide */
+  /* Ad hero: hide on mobile */
   .ad-ard-hero { display: none; }
+  .ard-hero-bar { justify-content: center; padding: 4px 8px; }
+  .ard-hero-h1 { font-size: 13px; }
 }
 
 /* ── User-select guard during drag ── */
