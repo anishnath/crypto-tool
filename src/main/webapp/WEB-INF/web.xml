@@ -12,6 +12,7 @@
 	<filter>
 		<filter-name>Set Character Encoding</filter-name>
 		<filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>encoding</param-name>
 			<param-value>UTF-8</param-value>
@@ -26,6 +27,7 @@
 	<filter>
 		<filter-name>ExpiresFilter</filter-name>
 		<filter-class>org.apache.catalina.filters.ExpiresFilter</filter-class>
+		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>ExpiresByType image</param-name>
 			<param-value>access plus 10 days</param-value>
@@ -660,6 +662,27 @@
     <servlet-mapping>
         <servlet-name>PastebinProxyServlet</servlet-name>
         <url-pattern>/api/pastebin/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Arduino Compile Proxy -->
+    <servlet>
+        <servlet-name>ArduinoCompileServlet</servlet-name>
+        <servlet-class>com.arduino.web.servlets.ArduinoCompileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ArduinoCompileServlet</servlet-name>
+        <url-pattern>/api/arduino/compile</url-pattern>
+    </servlet-mapping>
+
+    <!-- Arduino QEMU Simulation Proxy (SSE streaming for ESP32) -->
+    <servlet>
+        <servlet-name>ArduinoSimulateServlet</servlet-name>
+        <servlet-class>com.arduino.web.servlets.ArduinoSimulateServlet</servlet-class>
+        <async-supported>true</async-supported>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ArduinoSimulateServlet</servlet-name>
+        <url-pattern>/api/arduino/simulate/*</url-pattern>
     </servlet-mapping>
 
 </web-app>
