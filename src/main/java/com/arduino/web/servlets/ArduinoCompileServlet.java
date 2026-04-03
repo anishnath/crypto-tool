@@ -130,7 +130,7 @@ public class ArduinoCompileServlet extends HttpServlet {
     }
 
     private String getBackendUrl() {
-        return ApiClientConfig.getApiBaseUrl() + "/api/arduino-compile";
+        return ApiClientConfig.getApiBaseUrlV2("arduino") + "/api/arduino-compile";
     }
 
     // ── POST /api/arduino/compile ──
@@ -245,6 +245,7 @@ public class ArduinoCompileServlet extends HttpServlet {
         CloseableHttpClient client = HttpClients.createDefault();
         try {
             HttpPost post = new HttpPost(getBackendUrl());
+            System.out.println(post);
             post.setConfig(defaultConfig());
             post.setEntity(new StringEntity(body, ContentType.APPLICATION_JSON));
 

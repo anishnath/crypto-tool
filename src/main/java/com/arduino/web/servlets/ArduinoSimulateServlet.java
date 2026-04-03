@@ -48,11 +48,11 @@ public class ArduinoSimulateServlet extends HttpServlet {
     private static final int STREAM_READ_TIMEOUT_MS = 600_000;
 
     private String backendBaseUrl() {
-        return ApiClientConfig.getApiBaseUrl() + "/api/arduino-simulate";
+        return ApiClientConfig.getApiBaseUrlV2("arduino") + "/api/arduino-simulate";
     }
 
     private String piBackendBaseUrl() {
-        return ApiClientConfig.getApiBaseUrl() + "/api/pi-simulate";
+        return ApiClientConfig.getApiBaseUrlV2("arduino") + "/api/pi-simulate";
     }
 
     /** Map servlet path to backend URL. Returns null if not found. */
@@ -76,9 +76,25 @@ public class ArduinoSimulateServlet extends HttpServlet {
 
     // ── POST handlers (ESP32 + Pi) ──
 
+    // Pi simulation temporarily disabled — block at servlet level
+    private static final boolean PI_SIMULATION_ENABLED = false;
+
+    private boolean isPiPath(String pathInfo) {
+        return pathInfo != null && pathInfo.startsWith("/pi/");
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
+
+        // Block Pi simulation requests when disabled
+        if (isPiPath(pathInfo) && !PI_SIMULATION_ENABLED) {
+            resp.setContentType("application/json");
+            resp.setStatus(503);
+            resp.getWriter().write("{\"success\":false,\"error\":\"Raspberry Pi simulation is temporarily unavailable. All machines are occupied. Please try again later.\"}");
+            return;
+        }
+
         String backendUrl = resolveBackendUrl(pathInfo);
         if (backendUrl == null || (pathInfo != null && pathInfo.equals("/stream")) || (pathInfo != null && pathInfo.equals("/pi/stream"))) {
             resp.setStatus(404);
@@ -130,6 +146,14 @@ public class ArduinoSimulateServlet extends HttpServlet {
         if (!"/stream".equals(pathInfo) && !"/pi/stream".equals(pathInfo)) {
             resp.setStatus(404);
             resp.getWriter().write("{\"error\":\"not found\"}");
+            return;
+        }
+
+        // Block Pi stream when disabled
+        if (isPiPath(pathInfo) && !PI_SIMULATION_ENABLED) {
+            resp.setContentType("application/json");
+            resp.setStatus(503);
+            resp.getWriter().write("{\"success\":false,\"error\":\"Raspberry Pi simulation is temporarily unavailable.\"}");
             return;
         }
 
