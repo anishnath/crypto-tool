@@ -26,9 +26,15 @@ export class BuzzerBinding {
   }
 
   attach() {
-    // Track pin state
+    // Track pin toggles to detect tone() frequency
+    this._toggleCount = 0;
+    this._toggleTime = performance.now();
+
     const unsub = this.runner.addPinChangeListener((pin, high) => {
-      if (pin === this.pin) this._pinHigh = high;
+      if (pin === this.pin) {
+        this._pinHigh = high;
+        this._toggleCount++;
+      }
     });
     this._cleanups.push(unsub);
 
@@ -37,43 +43,51 @@ export class BuzzerBinding {
       const cpu = this.runner.cpu;
       if (!cpu) return;
 
-      // Check pin is being toggled by timer (COM2x bits set)
+      // Method 1: Timer2 register detection (tone() uses CTC mode)
       const tccr2a = cpu.data[TCCR2A] || 0;
       const tccr2b = cpu.data[TCCR2B] || 0;
-
-      // Check COM2A0 or COM2B0 toggle mode is active
       const com2a = (tccr2a >> 6) & 0x03;
       const com2b = (tccr2a >> 4) & 0x03;
-      const toggleActive = (com2a === 1) || (com2b === 1); // toggle on compare match
+      const toggleActive = (com2a === 1) || (com2b === 1);
 
-      if (!toggleActive) {
-        this._stopSound();
+      if (toggleActive) {
+        const csField = tccr2b & 0x07;
+        const prescaler = PRESCALER_TABLE[csField];
+        const ocr2a = cpu.data[OCR2A] || 0;
+        const wgm = (tccr2a & 0x03) | ((tccr2b & 0x08) >> 1);
+        if (prescaler && ocr2a > 0 && (wgm === 2 || wgm === 3)) {
+          const freq = CPU_HZ / (2 * prescaler * (ocr2a + 1));
+          if (freq >= 20 && freq <= 20000 && Math.abs(freq - this._lastFreq) > 1) {
+            this._startSound(freq);
+            this._lastFreq = freq;
+          }
+          return;
+        }
+      }
+
+      // Method 2: Pin toggle frequency detection (fallback for tone() variants)
+      const now = performance.now();
+      const elapsed = now - this._toggleTime;
+      if (elapsed > 50) { // measure every 50ms
+        const togglesPerSec = (this._toggleCount / elapsed) * 1000;
+        const freq = togglesPerSec / 2; // two toggles per cycle
+        this._toggleCount = 0;
+        this._toggleTime = now;
+
+        if (freq >= 20 && freq <= 20000) {
+          if (Math.abs(freq - this._lastFreq) > 5) {
+            this._startSound(freq);
+            this._lastFreq = freq;
+          }
+        } else {
+          this._stopSound();
+        }
         return;
       }
 
-      const csField = tccr2b & 0x07;
-      const prescaler = PRESCALER_TABLE[csField];
-      const ocr2a = cpu.data[OCR2A] || 0;
-
-      // Accept CTC (WGM=2) or Fast PWM (WGM=3) — tone() may use either
-      const wgm = (tccr2a & 0x03) | ((tccr2b & 0x08) >> 1);
-      const validMode = (wgm === 2 || wgm === 3);
-
-      if (!prescaler || ocr2a === 0 || !validMode) {
+      // No activity
+      if (this._toggleCount === 0 && elapsed > 200) {
         this._stopSound();
-        return;
-      }
-
-      const freq = CPU_HZ / (2 * prescaler * (ocr2a + 1));
-
-      if (freq < 20 || freq > 20000) {
-        this._stopSound();
-        return;
-      }
-
-      if (Math.abs(freq - this._lastFreq) > 1) {
-        this._startSound(freq);
-        this._lastFreq = freq;
       }
     };
 
@@ -98,8 +112,12 @@ export class BuzzerBinding {
     if (!this._audioCtx) {
       this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       this._gainNode = this._audioCtx.createGain();
-      this._gainNode.gain.value = 0.05;
+      this._gainNode.gain.value = 0.08;
       this._gainNode.connect(this._audioCtx.destination);
+    }
+    // Resume suspended AudioContext (browser autoplay policy)
+    if (this._audioCtx.state === 'suspended') {
+      this._audioCtx.resume();
     }
     if (this._oscillator) {
       this._oscillator.frequency.value = freq;

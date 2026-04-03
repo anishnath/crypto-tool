@@ -100,7 +100,8 @@ for (const preset of PRESETS) {
     const pin = comp.pin;
     if (typeof pin === 'string' && pin.startsWith('A')) {
       // Analog pin — check code uses analogRead
-      assert(code.includes('analogRead') || code.includes(pin),
+      const allCode = code + (preset.files || []).map(f => f.content).join('\n');
+      assert(allCode.includes('analogRead') || allCode.includes(pin),
         preset.id + ': component on ' + pin + ' but code never reads analog');
     } else if (typeof pin === 'number') {
       assert(codePins.has(pin) || code.includes('pin') || code.includes('ledPins'),
@@ -127,6 +128,12 @@ for (const preset of PRESETS) {
     const sketchDir = join(dir, 'sketch');
     mkdirSync(sketchDir);
     writeFileSync(join(sketchDir, 'sketch.ino'), code);
+    // Write extra files for multi-file presets
+    if (preset.files) {
+      for (const f of preset.files) {
+        writeFileSync(join(sketchDir, f.name), f.content);
+      }
+    }
     mkdirSync(join(dir, 'out'));
 
     try {

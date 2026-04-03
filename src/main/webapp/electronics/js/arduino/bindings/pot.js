@@ -33,9 +33,9 @@ export class PotBinding {
     const vRef = this.runner.vRef || 5.0;
 
     const onInput = () => {
-      // wokwi-potentiometer .value is 0–1023 (or custom min/max)
-      const raw = this.element.value || 0;
-      const voltage = (raw / 1023) * vRef;
+      // wokwi-potentiometer .value is 0–100 (percentage of rotation)
+      const pct = this.element.value || 0;
+      const voltage = (pct / 100) * vRef;
       this.runner.setADCValue(this.channel, voltage);
     };
 

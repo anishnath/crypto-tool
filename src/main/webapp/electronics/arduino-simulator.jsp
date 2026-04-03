@@ -33,6 +33,9 @@
 
 <!-- wokwi-elements: component visuals -->
 <script src="https://unpkg.com/@wokwi/elements@0.48.3/dist/wokwi-elements.bundle.js"></script>
+<!-- xterm.js: Linux terminal for Raspberry Pi simulation -->
+<link rel="stylesheet" href="https://unpkg.com/xterm@5.3.0/css/xterm.css">
+<script src="https://unpkg.com/xterm@5.3.0/lib/xterm.js"></script>
 </head>
 <body>
 <%@ include file="../modern/components/nav-header.jsp" %>
@@ -70,12 +73,12 @@
 
       <!-- Editor Toolbar -->
       <div class="ard-editor-toolbar">
-        <button class="ard-tb-btn ard-tb-compile" id="btnCompile" title="Compile only (check errors)">
+        <button class="ard-tb-btn ard-tb-compile" id="btnCompile" title="Compile only — check for errors (Ctrl+B)">
           <svg class="ard-tb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
           <span>Compile</span>
           <svg class="ard-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg>
         </button>
-        <button class="ard-tb-btn ard-tb-run" id="btnRun" title="Compile &amp; Run" disabled>
+        <button class="ard-tb-btn ard-tb-run" id="btnRun" title="Compile &amp; Run (Ctrl+Enter)">
           <svg class="ard-tb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           <span>Run</span>
         </button>
@@ -86,8 +89,8 @@
           <svg class="ard-tb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
         </button>
         <div class="ard-tb-sep"></div>
-        <select class="ard-examples-select" id="examplesSelect">
-          <option value="">Examples...</option>
+        <select class="ard-examples-select" id="examplesSelect" title="Load an example sketch">
+          <option value="">&#9733; Examples</option>
         </select>
         <div class="ard-tb-sep"></div>
         <button class="ard-tb-btn ard-tb-toggle" id="btnOutput"><span>Output</span></button>
@@ -153,7 +156,7 @@
             <option value="4">4&times;</option>
             <option value="8">Max</option>
           </select>
-          <button class="ard-tb-btn" id="btnAddComponent"><span>+ Component</span></button>
+          <button class="ard-tb-btn" id="btnAddComponent" title="Add LED, button, sensor, display..."><span>+ Component</span></button>
           <button class="ard-tb-btn ard-tb-toggle" id="btnSerial"><span>Serial</span></button>
           <button class="ard-tb-btn" id="btnTheme">&#9788;</button>
         </div>
@@ -175,6 +178,17 @@
       </div>
 
       <!-- Serial Monitor -->
+      <!-- Pi Terminal (xterm.js) — shown instead of serial monitor when Pi board is active -->
+      <div class="ard-serial-panel" id="piTerminalPanel" style="height:300px; display:none;">
+        <div class="ard-serial-resize" id="piTerminalResize"></div>
+        <div class="ard-serial-header">
+          <span class="ard-serial-title">Pi Terminal</span>
+          <button id="btnPiTerminalClear">Clear</button>
+          <button id="btnPiTerminalCollapse">&#9660;</button>
+        </div>
+        <div id="piTerminalContainer" style="flex:1;overflow:hidden;"></div>
+      </div>
+
       <div class="ard-serial-panel" id="serialPanel" style="height:200px;">
         <div class="ard-serial-resize" id="serialResize"></div>
         <div class="ard-serial-header">
@@ -244,6 +258,7 @@ import { FileManager } from '<%=request.getContextPath()%>/electronics/js/arduin
 import { FileExplorer } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/file-explorer.js';
 import { exportDiagram, importDiagram, downloadDiagram, openDiagramFile } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/diagram.js';
 import { DiagramSync } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/diagram-sync.js';
+import { PiTerminal } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/pi-terminal.js';
 
 // ── DOM refs ──
 const btnCompile = document.getElementById('btnCompile');
@@ -402,10 +417,18 @@ function initBoardPins(retries = 10) {
 }
 initBoardPins();
 
-// Load default Blink components on startup
-componentPanel.loadPreset([
-  { type: 'led', pin: 13, x: 340, y: 20, attrs: { color: 'green' } },
-]);
+// Load default Blink preset on startup (code + components)
+{
+  const blink = PRESETS.find(p => p.id === 'blink');
+  if (blink) {
+    editor.onReady(() => editor.setCode(blink.code));
+    componentPanel.loadPreset(blink.components || []);
+  } else {
+    componentPanel.loadPreset([
+      { type: 'led', pin: 13, x: 340, y: 20, attrs: { color: 'green' } },
+    ]);
+  }
+}
 
 // ── diagram.json sync (two-way: editor ↔ canvas) ──
 const diagramSync = new DiagramSync(
@@ -419,6 +442,47 @@ const diagramSync = new DiagramSync(
     await switchBoard(fqbn);
   }
 );
+
+// ── Pi Terminal ──
+const piTerminal = new PiTerminal(document.getElementById('piTerminalContainer'));
+const piTerminalPanel = document.getElementById('piTerminalPanel');
+
+// Toggle between serial monitor and Pi terminal
+function _showPiTerminal(show) {
+  piTerminalPanel.style.display = show ? 'flex' : 'none';
+  serialPanel.style.display = show ? 'none' : 'flex';
+  if (show) {
+    piTerminal.fit();
+  }
+}
+
+// Pi terminal panel buttons
+document.getElementById('btnPiTerminalClear')?.addEventListener('click', () => piTerminal.clear());
+{
+  let savedH = '300px';
+  document.getElementById('btnPiTerminalCollapse')?.addEventListener('click', () => {
+    const collapsed = piTerminalPanel.style.height === '28px';
+    if (!collapsed) { savedH = piTerminalPanel.style.height || '300px'; piTerminalPanel.style.height = '28px'; }
+    else { piTerminalPanel.style.height = savedH; piTerminal.fit(); }
+  });
+}
+
+// Pi terminal resize handle
+{
+  const resize = document.getElementById('piTerminalResize');
+  if (resize) {
+    let dragging = false, startY = 0, startH = 0;
+    const onStart = (e) => { dragging = true; startY = e.touches ? e.touches[0].clientY : e.clientY; startH = piTerminalPanel.offsetHeight; e.preventDefault(); };
+    const onMove = (e) => { if (!dragging) return; const cy = e.touches ? e.touches[0].clientY : e.clientY; let h = startH - (cy - startY); h = Math.max(100, Math.min(600, h)); piTerminalPanel.style.height = h + 'px'; piTerminal.fit(); };
+    const onEnd = () => { dragging = false; };
+    resize.addEventListener('mousedown', onStart);
+    resize.addEventListener('touchstart', onStart, { passive: false });
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('mouseup', onEnd);
+    document.addEventListener('touchend', onEnd);
+  }
+}
 
 // ── State ──
 let runner = null;
@@ -556,8 +620,14 @@ document.querySelectorAll('.ard-mtab').forEach(btn => {
     document.getElementById('simSide').classList.toggle('active', tab === 'circuit' || tab === 'serial');
     const canvasArea = document.getElementById('canvasArea');
     if (tab === 'serial') {
-      serialPanel.style.display = 'flex';
-      serialPanel.classList.add('tab-active');
+      const piMode = isPi(document.getElementById('boardSelect').value);
+      if (piMode && piTerminalPanel) {
+        piTerminalPanel.style.display = 'flex';
+        requestAnimationFrame(() => piTerminal.fit());
+      } else {
+        serialPanel.style.display = 'flex';
+        serialPanel.classList.add('tab-active');
+      }
       canvasArea.style.display = 'none';
     } else {
       serialPanel.classList.remove('tab-active');
@@ -581,7 +651,7 @@ let isCompiling = false;
 let lastCompiledHex = null;
 
 function updateButtonStates() {
-  btnRun.disabled = !lastCompiledHex && !runner;
+  btnRun.disabled = _isStarting; // Run always enabled except during compile/start
   btnStop.disabled = !runner;
   btnReset.disabled = !runner;
 }
@@ -611,7 +681,7 @@ async function compile(showPanel = true) {
   compileStatus.textContent = '\u27F3 Compiling...';
   compileStatus.className = 'ard-compile-status compiling';
   editor.clearErrors();
-  logOutput('Compiling ' + fileManager.count + ' file(s)...');
+  logOutput('Compiling ' + fileManager.count + ' file(s) for board: ' + document.getElementById('boardSelect').value);
 
   const startMs = performance.now();
 
@@ -999,6 +1069,18 @@ async function startQemuRunner(board, firmwareB64, jobId) {
  * Uses /api/arduino/simulate/pi/ endpoints (proxied to Go API /api/pi-simulate/).
  */
 async function startPiRunner() {
+  // Pi simulation is temporarily at capacity — show friendly message
+  compileStatus.textContent = '\u23F3 Pi machines are busy';
+  compileStatus.className = 'ard-compile-status compiling';
+  logOutput('All Raspberry Pi machines are currently occupied. Please try again in a few minutes.', 'warning');
+  logOutput('Tip: ESP32 and Arduino boards are available immediately — select one from the board dropdown.');
+  setTimeout(() => {
+    compileStatus.textContent = '';
+    compileStatus.className = 'ard-compile-status';
+  }, 5000);
+  return;
+
+  // ── Original Pi boot code (re-enable when Pi QEMU image is ready) ──
   stopRunner();
 
   _qemuSessionId = 'pi-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
@@ -1030,12 +1112,7 @@ async function startPiRunner() {
     return;
   }
 
-  // 2. SSE stream
-  _qemuEventSource = new EventSource(
-    '<%=request.getContextPath()%>/api/arduino/simulate/pi/stream?id=' + encodeURIComponent(_qemuSessionId)
-  );
-
-  // 3. Runner shim (same as ESP32 but serial input goes to Pi endpoints)
+  // 2. Runner shim (same as ESP32 but serial input goes to Pi endpoints)
   runner = {
     running: true,
     speed: 1,
@@ -1076,14 +1153,33 @@ async function startPiRunner() {
     vRef: 3.3,
   };
 
-  // 4. SSE event handler (same as ESP32 — shared boot progress messages)
+  // 4. Open xterm.js terminal (instead of serial monitor for Pi)
+  _showPiTerminal(true);
+  piTerminal.open();
+  // Defer fit() — browser needs one frame to paint the container at its real size
+  requestAnimationFrame(() => piTerminal.fit());
+
+  // Wire keyboard input → QEMU
+  piTerminal.onInput = (data) => {
+    if (!_qemuSessionId) return;
+    fetch('<%=request.getContextPath()%>/api/arduino/simulate/pi/input', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: _qemuSessionId, data }),
+    }).catch(() => {});
+  };
+
+  // 5. SSE → xterm + boot progress
+  // 5. Connect SSE AFTER terminal is open and onmessage handler is ready
+  _qemuEventSource = new EventSource(
+    '<%=request.getContextPath()%>/api/arduino/simulate/pi/stream?id=' + encodeURIComponent(_qemuSessionId)
+  );
+
   _qemuEventSource.onmessage = (event) => {
     try {
       const ev = JSON.parse(event.data);
       if (ev.type === 'serial_output' && ev.data?.data) {
-        if (runner.onSerial) {
-          for (const ch of ev.data.data) runner.onSerial(ch);
-        }
+        piTerminal.write(ev.data.data);
       } else if (ev.type === 'gpio_change' && ev.data) {
         for (const fn of runner._pinChangeListeners) fn(ev.data.pin, !!ev.data.state);
       } else if (ev.type === 'system') {
@@ -1108,7 +1204,10 @@ async function startPiRunner() {
           compileStatus.textContent = bootMessages[evt];
           const bootDone = evt.includes('login') || evt.includes('ready');
           compileStatus.className = bootDone ? 'ard-compile-status success' : 'ard-compile-status compiling';
-          if (bootDone) btnRun.querySelector('span').textContent = 'Running';
+          if (bootDone) {
+            btnRun.querySelector('span').textContent = 'Running';
+            piTerminal.focus();
+          }
         }
       } else if (ev.type === 'error') {
         logOutput('Error: ' + (ev.data?.message || ''), 'error');
@@ -1126,16 +1225,13 @@ async function startPiRunner() {
     updateButtonStates();
   };
 
-  // 5. Board binding (no LED mapping for Pi — just power indicator)
+  // 6. Board binding
   const currentBoard = document.getElementById('arduinoBoard');
   boardBinding = {
     attach() { currentBoard.ledPower = true; },
     detach() { currentBoard.ledPower = false; },
   };
   boardBinding.attach();
-
-  serialMonitor.clear();
-  serialMonitor.attach(runner);
 
   statusDot.classList.add('running');
   btnRun.disabled = false;
@@ -1148,9 +1244,13 @@ function stopRunner() {
   if (!runner) return;
   runner.stop();
   if (boardBinding) boardBinding.detach();
-  // ledBinding removed — managed by componentPanel
   serialMonitor.detach();
   componentPanel.detachAll();
+  // Close Pi terminal only if it was active
+  if (piTerminalPanel.style.display !== 'none') {
+    piTerminal.close();
+    _showPiTerminal(false);
+  }
   runner = null;
   boardBinding = null;
 
@@ -1210,7 +1310,10 @@ btnReset.addEventListener('click', () => {
   }
 
   examplesSelect.addEventListener('change', async () => {
-    const preset = PRESETS.find(p => p.id === examplesSelect.value);
+    const selectedId = examplesSelect.value;
+    if (!selectedId) return;
+    logOutput('Loading preset: ' + selectedId);
+    const preset = PRESETS.find(p => p.id === selectedId);
     if (preset) {
       // Switch board to match preset (default to Uno for AVR presets)
       const targetBoard = preset.board || 'arduino:avr:uno';
@@ -1218,12 +1321,32 @@ btnReset.addEventListener('click', () => {
       if (boardSelect.value !== targetBoard) {
         boardSelect.value = targetBoard;
         await switchBoard(targetBoard);
+        logOutput('Board switched to ' + boardSelect.options[boardSelect.selectedIndex].text + ' for this preset');
       }
       stopRunner();
       wireManager.clear();
       selection.deselect();
-      fileManager.loadFiles([{ name: 'sketch.ino', content: preset.code }]);
-      componentPanel.loadPreset(preset.components || []);
+
+      // Load files: multi-file presets have files[], single-file have just code
+      if (preset.files && preset.files.length) {
+        const allFiles = [{ name: 'sketch.ino', content: preset.code }, ...preset.files];
+        fileManager.loadFiles(allFiles);
+      } else {
+        fileManager.loadFiles([{ name: 'sketch.ino', content: preset.code }]);
+      }
+
+      // Load circuit: diagram takes priority over components[]
+      if (preset.diagram && preset.diagram.parts) {
+        // Import diagram (creates components + wires)
+        await importDiagram(preset.diagram, componentPanel, wireManager, simCanvas, async () => {}).catch(e => console.error('Diagram import failed:', e));
+      } else {
+        componentPanel.loadPreset(preset.components || []);
+      }
+
+      // Show description in output
+      if (preset.description) {
+        logOutput(preset.title + ': ' + preset.description);
+      }
     }
     examplesSelect.value = '';
   });
@@ -1263,7 +1386,7 @@ const BOARD_TAGS = {
   'esp32:esp32:esp32c3':    'wokwi-esp32-devkit-v1',
   'esp32:esp32:esp32':      'wokwi-esp32-devkit-v1',
   'esp32:esp32:esp32s3':    'wokwi-esp32-devkit-v1',
-  'pi:pi:raspi3b':          'wokwi-esp32-devkit-v1', // placeholder visual for Pi 3 (TODO: custom Pi SVG)
+  'pi:pi:raspi3b':          'pi3-board',
 };
 
 /** Check if a board FQBN is RP2040-based */
@@ -1287,8 +1410,8 @@ async function switchBoard(fqbn) {
   if (!tag) return;
 
   // Pre-load custom element definitions for boards with lazy-loaded elements.
-  // ESP32 boards use wokwi-esp32-devkit-v1 from CDN — no lazy load needed.
   if (isRP2040(fqbn)) await loadRP2040Modules();
+  if (isPi(fqbn)) await import('<%=request.getContextPath()%>/electronics/js/arduino/ui/pi3-board.js');
 
   // Stop simulation and clear stale compile result
   stopRunner();
@@ -1339,8 +1462,41 @@ async function switchBoard(fqbn) {
 }
 
 document.getElementById('boardSelect').addEventListener('change', async (e) => {
-  await switchBoard(e.target.value);
-  logOutput('Switched to ' + e.target.options[e.target.selectedIndex].text);
+  const fqbn = e.target.value;
+  const boardName = e.target.options[e.target.selectedIndex].text;
+  await switchBoard(fqbn);
+
+  // Auto-load matching starter preset so code matches the board.
+  // Find the first preset that targets this board (or default Blink for AVR).
+  const matchingPreset = PRESETS.find(p => p.board === fqbn)
+    || (fqbn.startsWith('arduino:avr:') ? PRESETS.find(p => p.id === 'blink') : null);
+
+  if (matchingPreset) {
+    // If user hasn't modified the code (still a preset), auto-switch
+    const currentCode = editor.getCode().trim();
+    const isDefaultCode = PRESETS.some(p => p.code.trim() === currentCode)
+      || currentCode === '' || currentCode.startsWith('//');
+
+    if (isDefaultCode) {
+      stopRunner();
+      wireManager.clear();
+      if (matchingPreset.files && matchingPreset.files.length) {
+        fileManager.loadFiles([{ name: 'sketch.ino', content: matchingPreset.code }, ...matchingPreset.files]);
+      } else {
+        fileManager.loadFiles([{ name: 'sketch.ino', content: matchingPreset.code }]);
+      }
+      if (matchingPreset.diagram && matchingPreset.diagram.parts) {
+        importDiagram(matchingPreset.diagram, componentPanel, wireManager, simCanvas, async () => {}).catch(() => {});
+      } else {
+        componentPanel.loadPreset(matchingPreset.components || []);
+      }
+      logOutput('Switched to ' + boardName + ' — loaded "' + matchingPreset.title + '" example');
+    } else {
+      logOutput('Switched to ' + boardName + ' — your code was kept. Check pin numbers match the new board.', 'warning');
+    }
+  } else {
+    logOutput('Switched to ' + boardName);
+  }
 });
 
 // ── Zoom buttons ──

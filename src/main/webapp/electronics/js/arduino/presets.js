@@ -77,9 +77,20 @@ void loop() {
     id: 'fade',
     title: 'Fade (PWM)',
     category: 'Basics',
+    description: 'Smoothly fade an LED using PWM (analogWrite) on pin 9.',
     components: [
       { type: 'led', pin: 9, x: 340, y: 20, attrs: { color: 'red' } },
     ],
+    diagram: {
+      parts: [
+        { type: 'wokwi-arduino-uno', id: 'board', top: 0, left: 0 },
+        { type: 'wokwi-led', id: 'led1', top: 20, left: 340, attrs: { color: 'red', _pin: '9' } },
+      ],
+      connections: [
+        ['board:9', 'led1:A', 'green', []],
+        ['board:GND.1', 'led1:C', 'black', []],
+      ],
+    },
     code: `int led = 9;
 int brightness = 0;
 int fadeAmount = 5;
@@ -103,9 +114,20 @@ void loop() {
     id: 'button',
     title: 'Button',
     category: 'Input',
+    description: 'Read a push button on pin 2 and control the LED on pin 13.',
     components: [
       { type: 'pushbutton', pin: 2, x: 340, y: 100, attrs: { color: 'red' } },
     ],
+    diagram: {
+      parts: [
+        { type: 'wokwi-arduino-uno', id: 'board', top: 0, left: 0 },
+        { type: 'wokwi-pushbutton', id: 'btn1', top: 100, left: 340, attrs: { color: 'red', _pin: '2' } },
+      ],
+      connections: [
+        ['board:2', 'btn1:1.l', 'green', []],
+        ['board:GND.1', 'btn1:2.l', 'black', []],
+      ],
+    },
     code: `const int buttonPin = 2;
 const int ledPin = 13;
 
@@ -168,9 +190,21 @@ void loop() {
     id: 'analog-read',
     title: 'Analog Read',
     category: 'Analog',
+    description: 'Read a potentiometer on A0 and print the value to Serial Monitor.',
     components: [
       { type: 'potentiometer', pin: 'A0', x: 340, y: 20 },
     ],
+    diagram: {
+      parts: [
+        { type: 'wokwi-arduino-uno', id: 'board', top: 0, left: 0 },
+        { type: 'wokwi-potentiometer', id: 'pot1', top: 20, left: 340, attrs: { _pin: 'A0' } },
+      ],
+      connections: [
+        ['board:A0', 'pot1:SIG', 'green', []],
+        ['board:5V', 'pot1:VCC', 'red', []],
+        ['board:GND.1', 'pot1:GND', 'black', []],
+      ],
+    },
     code: `void setup() {
   Serial.begin(115200);
 }
@@ -229,6 +263,7 @@ void loop() {
     id: 'serial-echo',
     title: 'Serial Echo',
     category: 'Serial',
+    description: 'Type in the Serial Monitor — Arduino echoes your message back.',
     components: [],
     code: `void setup() {
   Serial.begin(115200);
@@ -272,9 +307,21 @@ void loop() {
     id: 'servo-sweep',
     title: 'Servo Sweep',
     category: 'Servo',
+    description: 'Sweep a servo motor back and forth from 0° to 180°.',
     components: [
       { type: 'servo', pin: 9, x: 340, y: 20 },
     ],
+    diagram: {
+      parts: [
+        { type: 'wokwi-arduino-uno', id: 'board', top: 0, left: 0 },
+        { type: 'wokwi-servo', id: 'servo1', top: 20, left: 340, attrs: { _pin: '9' } },
+      ],
+      connections: [
+        ['board:9', 'servo1:PWM', 'orange', []],
+        ['board:5V', 'servo1:V+', 'red', []],
+        ['board:GND.1', 'servo1:GND', 'black', []],
+      ],
+    },
     code: `#include <Servo.h>
 
 Servo myservo;
@@ -332,9 +379,20 @@ void loop() {
     id: 'tone-melody',
     title: 'Tone Melody',
     category: 'Buzzer',
+    description: 'Play a musical scale on a buzzer using the tone() function.',
     components: [
       { type: 'buzzer', pin: 3, x: 340, y: 20 },
     ],
+    diagram: {
+      parts: [
+        { type: 'wokwi-arduino-uno', id: 'board', top: 0, left: 0 },
+        { type: 'wokwi-buzzer', id: 'bz1', top: 20, left: 340, attrs: { _pin: '3' } },
+      ],
+      connections: [
+        ['board:3', 'bz1:1', 'purple', []],
+        ['board:GND.1', 'bz1:2', 'black', []],
+      ],
+    },
     code: `// Simple melody on pin 3
 int melody[] = {262, 294, 330, 349, 392, 440, 494, 523};
 int noteDuration = 250;
@@ -405,9 +463,9 @@ void loop() {
     diagram: {
       parts: [
         { type: 'wokwi-arduino-uno', id: 'board', top: 0, left: 0 },
-        { type: 'wokwi-led', id: 'red', top: 20, left: 340, attrs: { color: 'red', label: 'RED' } },
-        { type: 'wokwi-led', id: 'yellow', top: 80, left: 340, attrs: { color: 'yellow', label: 'YEL' } },
-        { type: 'wokwi-led', id: 'green', top: 140, left: 340, attrs: { color: 'green', label: 'GRN' } },
+        { type: 'wokwi-led', id: 'red', top: 20, left: 340, attrs: { color: 'red', label: 'RED', _pin: '4' } },
+        { type: 'wokwi-led', id: 'yellow', top: 80, left: 340, attrs: { color: 'yellow', label: 'YEL', _pin: '3' } },
+        { type: 'wokwi-led', id: 'green', top: 140, left: 340, attrs: { color: 'green', label: 'GRN', _pin: '2' } },
       ],
       connections: [
         ['board:4', 'red:A', 'red', []],
@@ -456,6 +514,7 @@ void loop() {
     id: 'knight-rider',
     title: 'Knight Rider',
     category: 'Projects',
+    description: 'Animate 8 LEDs in a scanning "Knight Rider" pattern.',
     components: [
       { type: 'led', pin: 2, x: 340, y: 20, attrs: { color: 'red' } },
       { type: 'led', pin: 3, x: 380, y: 20, attrs: { color: 'red' } },
@@ -486,6 +545,89 @@ void loop() {
     delay(80);
     digitalWrite(leds[i], LOW);
   }
+}`,
+  },
+  // ── Multi-file project ──
+  {
+    id: 'multi-file-sensor',
+    title: 'Multi-File Sensor',
+    category: 'Projects',
+    description: 'A multi-file project: config.h defines pins, sensor.h/cpp reads analog, sketch.ino ties it together.',
+    components: [
+      { type: 'potentiometer', pin: 'A0', x: 340, y: 20 },
+      { type: 'led', pin: 9, x: 340, y: 120, attrs: { color: 'green' } },
+    ],
+    diagram: {
+      parts: [
+        { type: 'wokwi-arduino-uno', id: 'board', top: 0, left: 0 },
+        { type: 'wokwi-potentiometer', id: 'pot1', top: 20, left: 340, attrs: { _pin: 'A0' } },
+        { type: 'wokwi-led', id: 'led1', top: 120, left: 340, attrs: { color: 'green', _pin: '9' } },
+      ],
+      connections: [
+        ['board:A0', 'pot1:SIG', 'green', []],
+        ['board:5V', 'pot1:VCC', 'red', []],
+        ['board:GND.1', 'pot1:GND', 'black', []],
+        ['board:9', 'led1:A', 'orange', []],
+        ['board:GND.1', 'led1:C', 'black', []],
+      ],
+    },
+    files: [
+      { name: 'config.h', content: `#pragma once
+// Pin configuration — change these to match your wiring
+#define SENSOR_PIN  A0
+#define LED_PIN     9
+#define THRESHOLD   512   // mid-range (0-1023)
+#define BAUD_RATE   115200
+` },
+      { name: 'sensor.h', content: `#pragma once
+// Sensor reading helper
+int readSensor();
+bool isAboveThreshold(int value, int threshold);
+` },
+      { name: 'sensor.cpp', content: `#include "sensor.h"
+#include "config.h"
+#include <Arduino.h>
+
+int readSensor() {
+  return analogRead(SENSOR_PIN);
+}
+
+bool isAboveThreshold(int value, int threshold) {
+  return value > threshold;
+}
+` },
+    ],
+    code: `// Multi-file project: config.h + sensor.h/cpp + sketch.ino
+// Demonstrates organizing Arduino code into multiple files.
+//
+// HOW TO USE:
+//   1. Click Run to compile & start
+//   2. Drag the potentiometer knob on the canvas (right side)
+//   3. When the sensor value exceeds 512, the LED turns ON
+//   4. Edit config.h to change the threshold or pin numbers
+
+#include "config.h"
+#include "sensor.h"
+
+void setup() {
+  Serial.begin(BAUD_RATE);
+  pinMode(LED_PIN, OUTPUT);
+  Serial.println("Multi-file sensor project ready!");
+  Serial.println(">> Drag the potentiometer on the canvas to control the LED");
+}
+
+void loop() {
+  int value = readSensor();
+  bool active = isAboveThreshold(value, THRESHOLD);
+
+  digitalWrite(LED_PIN, active ? HIGH : LOW);
+
+  Serial.print("Sensor: ");
+  Serial.print(value);
+  Serial.print(" | LED ");
+  Serial.println(active ? "ON" : "OFF");
+
+  delay(200);
 }`,
   },
   // ── Raspberry Pi Pico ──
@@ -656,11 +798,11 @@ void loop() {
     id: 'esp32c3-analog',
     title: 'ESP32-C3 Analog Read',
     category: 'ESP32-C3',
+    description: 'Read 12-bit ADC on ESP32-C3. Note: ADC reads 0 in QEMU simulation. For interactive ADC, use Arduino Uno.',
     board: 'esp32:esp32:esp32c3',
-    components: [
-      { type: 'potentiometer', pin: 'A0', x: 340, y: 20 },
-    ],
+    components: [],
     code: `// ESP32-C3: A0 = GPIO0, 12-bit ADC (0-4095), 3.3V reference
+// NOTE: In QEMU simulation, analogRead() always returns 0.
 void setup() {
   Serial.begin(115200);
   analogReadResolution(12); // 12-bit on ESP32-C3
@@ -749,11 +891,11 @@ void loop() {
     id: 'esp32-analog',
     title: 'ESP32 Analog Read',
     category: 'ESP32',
+    description: 'Read 12-bit ADC on ESP32. Note: ADC reads 0 in QEMU simulation. For interactive ADC, use Arduino Uno.',
     board: 'esp32:esp32:esp32',
-    components: [
-      { type: 'potentiometer', pin: 'A0', x: 340, y: 20 },
-    ],
+    components: [],
     code: `// ESP32: A0 = GPIO36 (VP), 12-bit ADC (0-4095), 3.3V reference
+// NOTE: In QEMU simulation, analogRead() always returns 0.
 void setup() {
   Serial.begin(115200);
   analogReadResolution(12);
@@ -864,11 +1006,14 @@ void loop() {
     id: 'esp32s3-analog',
     title: 'ESP32-S3 Analog Read',
     category: 'ESP32-S3',
+    description: 'Read 12-bit ADC on ESP32-S3. Note: ADC reads 0 in QEMU simulation (no hardware sensor). For interactive ADC, use Arduino Uno board.',
     board: 'esp32:esp32:esp32s3',
-    components: [
-      { type: 'potentiometer', pin: 'A0', x: 340, y: 20 },
-    ],
+    components: [],
     code: `// ESP32-S3: A0 = GPIO1, 12-bit ADC (0-4095), 3.3V reference
+// NOTE: In QEMU simulation, analogRead() always returns 0
+// (QEMU doesn't emulate ADC hardware).
+// For interactive analog input, switch to Arduino Uno board.
+
 void setup() {
   Serial.begin(115200);
   analogReadResolution(12);
