@@ -32,6 +32,7 @@ export class DiagramSync {
 
     this._syncing = false; // guard against infinite loops
     this._debounceTimer = null;
+    this._canvasDebounceTimer = null;
 
     this._ensureDiagramFile();
     this._hookEditorChanges();
@@ -67,28 +68,30 @@ export class DiagramSync {
     );
   }
 
-  /** Canvas → editor: update diagram.json content */
+  /** Canvas → editor: update diagram.json content (debounced to avoid N updates during preset load) */
   _canvasToEditor() {
     if (this._syncing) return;
-    this._syncing = true;
+    clearTimeout(this._canvasDebounceTimer);
+    this._canvasDebounceTimer = setTimeout(() => {
+      if (this._syncing) return;
+      this._syncing = true;
+      try {
+        const json = JSON.stringify(this._buildDiagram(), null, 2);
+        const fm = this.fileManager;
+        const idx = fm.files.findIndex(f => f.name === DIAGRAM_FILENAME);
+        if (idx < 0) return;
 
-    try {
-      const json = JSON.stringify(this._buildDiagram(), null, 2);
-      const fm = this.fileManager;
-      const idx = fm.files.findIndex(f => f.name === DIAGRAM_FILENAME);
-      if (idx < 0) return;
+        fm.files[idx].content = json;
+        fm.files[idx].modified = true;
 
-      fm.files[idx].content = json;
-      fm.files[idx].modified = true;
-
-      // If diagram.json is currently active in editor, update Monaco
-      if (fm.activeIndex === idx) {
-        fm.editor.setCode(json);
+        if (fm.activeIndex === idx) {
+          fm.editor.setCode(json);
+        }
+        if (fm.onChange) fm.onChange();
+      } finally {
+        this._syncing = false;
       }
-      if (fm.onChange) fm.onChange();
-    } finally {
-      this._syncing = false;
-    }
+    }, 200);
   }
 
   /** Editor → canvas: parse diagram.json and rebuild canvas (debounced) */

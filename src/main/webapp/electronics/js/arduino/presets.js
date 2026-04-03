@@ -1,15 +1,19 @@
 /**
- * Preset Arduino Sketches
+ * Preset Arduino Sketches — complete starter projects.
  *
  * Each preset has:
  *   - id: unique key
  *   - title: display name
+ *   - description: one-line explanation of what the project does
  *   - category: for grouping in dropdown
- *   - code: Arduino source code
- *   - components: (optional) array of { type, pin, x, y, attrs } for canvas setup
+ *   - board: (optional) FQBN — defaults to 'arduino:avr:uno'
+ *   - code: main sketch.ino source code
+ *   - files: (optional) extra files [{name, content}] for multi-file projects
+ *   - components: (optional) array of { type, pin, x, y, attrs } for canvas
+ *   - diagram: (optional) Wokwi-compatible diagram.json object { parts, connections }
  *
- * Component types match COMPONENT_TYPES keys in component-panel.js:
- *   led, led-green, led-yellow, pushbutton, potentiometer, servo, buzzer, relay, slide-switch, photoresistor
+ * Component types match COMPONENT_TYPES keys in component-panel.js.
+ * When diagram is provided, it takes priority over components[] for canvas layout.
  */
 
 export const PRESETS = [
@@ -18,25 +22,45 @@ export const PRESETS = [
     id: 'blink',
     title: 'Blink',
     category: 'Basics',
+    description: 'The classic first Arduino project — blink the built-in LED on pin 13.',
     components: [],
-    code: `void setup() {
-  pinMode(13, OUTPUT);
+    diagram: {
+      parts: [
+        { type: 'wokwi-arduino-uno', id: 'board', top: 0, left: 0 },
+      ],
+      connections: [],
+    },
+    code: `// Blink — the "Hello World" of Arduino
+// The built-in LED on pin 13 turns on and off every second.
+
+void setup() {
+  pinMode(13, OUTPUT);  // Pin 13 has an LED on most Arduino boards
 }
 
 void loop() {
-  digitalWrite(13, HIGH);
-  delay(1000);
-  digitalWrite(13, LOW);
-  delay(1000);
+  digitalWrite(13, HIGH);  // Turn LED on
+  delay(1000);             // Wait 1 second
+  digitalWrite(13, LOW);   // Turn LED off
+  delay(1000);             // Wait 1 second
 }`,
   },
   {
     id: 'blink-serial',
     title: 'Blink + Serial',
     category: 'Basics',
+    description: 'Blink LED and print status to the Serial Monitor.',
     components: [],
-    code: `void setup() {
-  Serial.begin(115200);
+    diagram: {
+      parts: [
+        { type: 'wokwi-arduino-uno', id: 'board', top: 0, left: 0 },
+      ],
+      connections: [],
+    },
+    code: `// Blink + Serial Monitor
+// Watch the LED blink AND see messages in the Serial Monitor (bottom right).
+
+void setup() {
+  Serial.begin(115200);   // Start serial communication
   pinMode(13, OUTPUT);
 }
 
@@ -372,12 +396,32 @@ void loop() {
     id: 'traffic-light',
     title: 'Traffic Light',
     category: 'Projects',
+    description: 'Simulate a traffic light with 3 LEDs cycling through Green → Yellow → Red.',
     components: [
       { type: 'led', pin: 4, x: 340, y: 20, attrs: { color: 'red' } },
       { type: 'led', pin: 3, x: 340, y: 80, attrs: { color: 'yellow' } },
       { type: 'led', pin: 2, x: 340, y: 140, attrs: { color: 'green' } },
     ],
-    code: `const int redPin = 4;
+    diagram: {
+      parts: [
+        { type: 'wokwi-arduino-uno', id: 'board', top: 0, left: 0 },
+        { type: 'wokwi-led', id: 'red', top: 20, left: 340, attrs: { color: 'red', label: 'RED' } },
+        { type: 'wokwi-led', id: 'yellow', top: 80, left: 340, attrs: { color: 'yellow', label: 'YEL' } },
+        { type: 'wokwi-led', id: 'green', top: 140, left: 340, attrs: { color: 'green', label: 'GRN' } },
+      ],
+      connections: [
+        ['board:4', 'red:A', 'red', []],
+        ['board:3', 'yellow:A', 'orange', []],
+        ['board:2', 'green:A', 'green', []],
+        ['board:GND.1', 'red:C', 'black', []],
+        ['board:GND.1', 'yellow:C', 'black', []],
+        ['board:GND.1', 'green:C', 'black', []],
+      ],
+    },
+    code: `// Traffic Light — 3 LEDs cycle through Green → Yellow → Red
+// Red = pin 4, Yellow = pin 3, Green = pin 2
+
+const int redPin = 4;
 const int yellowPin = 3;
 const int greenPin = 2;
 
@@ -389,19 +433,19 @@ void setup() {
 }
 
 void loop() {
-  // Green
+  // Green phase
   digitalWrite(greenPin, HIGH);
   Serial.println("GREEN - Go");
   delay(3000);
   digitalWrite(greenPin, LOW);
 
-  // Yellow
+  // Yellow phase
   digitalWrite(yellowPin, HIGH);
   Serial.println("YELLOW - Caution");
   delay(1000);
   digitalWrite(yellowPin, LOW);
 
-  // Red
+  // Red phase
   digitalWrite(redPin, HIGH);
   Serial.println("RED - Stop");
   delay(3000);
@@ -778,6 +822,67 @@ void loop() {
     Serial.println("Button pressed!");
   }
   delay(50);
+}`,
+  },
+  // ── ESP32-S3 ──
+  {
+    id: 'esp32s3-blink',
+    title: 'ESP32-S3 Blink',
+    category: 'ESP32-S3',
+    board: 'esp32:esp32:esp32s3',
+    components: [],
+    code: `void setup() {
+  Serial.begin(115200);
+  pinMode(48, OUTPUT); // RGB LED on ESP32-S3 = GPIO48
+}
+
+void loop() {
+  Serial.println("LED ON");
+  digitalWrite(48, HIGH);
+  delay(500);
+  Serial.println("LED OFF");
+  digitalWrite(48, LOW);
+  delay(500);
+}`,
+  },
+  {
+    id: 'esp32s3-serial',
+    title: 'ESP32-S3 Serial',
+    category: 'ESP32-S3',
+    board: 'esp32:esp32:esp32s3',
+    components: [],
+    code: `void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  Serial.println("Hello from ESP32-S3!");
+  delay(1000);
+}`,
+  },
+  {
+    id: 'esp32s3-analog',
+    title: 'ESP32-S3 Analog Read',
+    category: 'ESP32-S3',
+    board: 'esp32:esp32:esp32s3',
+    components: [
+      { type: 'potentiometer', pin: 'A0', x: 340, y: 20 },
+    ],
+    code: `// ESP32-S3: A0 = GPIO1, 12-bit ADC (0-4095), 3.3V reference
+void setup() {
+  Serial.begin(115200);
+  analogReadResolution(12);
+}
+
+void loop() {
+  int val = analogRead(A0);
+  float voltage = val * 3.3 / 4095.0;
+  Serial.print("ADC: ");
+  Serial.print(val);
+  Serial.print(" Voltage: ");
+  Serial.print(voltage, 2);
+  Serial.println("V");
+  delay(200);
 }`,
   },
 ];

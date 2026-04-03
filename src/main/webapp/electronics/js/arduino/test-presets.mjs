@@ -114,10 +114,10 @@ for (const preset of PRESETS) {
       preset.id + ': Pico preset missing rp2040 board FQBN');
   }
 
-  // Board field check for ESP32-C3 presets
-  if (preset.category === 'ESP32-C3') {
+  // Board field check for ESP32 presets
+  if (preset.category === 'ESP32-C3' || preset.category === 'ESP32' || preset.category === 'ESP32-S3') {
     assert(preset.board && preset.board.startsWith('esp32:'),
-      preset.id + ': ESP32-C3 preset missing esp32 board FQBN');
+      preset.id + ': ESP32 preset missing esp32 board FQBN');
   }
 
   // Compile test
