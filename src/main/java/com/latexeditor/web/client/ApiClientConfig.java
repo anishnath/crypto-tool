@@ -16,4 +16,16 @@ public class ApiClientConfig {
         }
         return apiBase;
     }
+
+    public static String getApiBaseUrlV2(String key) {
+        String apiBase = LoadPropertyFileFunctionality.getConfigProperty().get(key);
+        System.out.println(apiBase);
+        if (apiBase == null || apiBase.trim().isEmpty()) {
+            apiBase = DEFAULT_API_BASE;
+        }
+        if (apiBase.endsWith("/")) {
+            apiBase = apiBase.substring(0, apiBase.length() - 1);
+        }
+        return apiBase;
+    }
 }
