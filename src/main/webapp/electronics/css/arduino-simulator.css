@@ -686,7 +686,8 @@ body {
 @media (max-width: 991px) {
   .ard-editor-side { width: 35%; }
   .ard-tb-btn span { display: none; }
-  .ard-compile-status { display: none; }
+  /* Keep compile status visible on tablet — it shows boot progress */
+  .ard-compile-status { font-size: 10px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
 }
 
 @media (max-width: 767px) {
@@ -707,8 +708,43 @@ body {
     flex: 1;
     height: auto !important;
   }
-  .ard-editor-toolbar { gap: 4px; padding: 0 6px; }
-  .ard-canvas-header { padding: 0 6px; }
+
+  /* Toolbar: compact layout */
+  .ard-editor-toolbar { gap: 2px; padding: 0 4px; flex-wrap: nowrap; overflow-x: auto; }
+  .ard-editor-toolbar .ard-tb-sep { display: none; }
+  .ard-tb-btn { padding: 4px 6px; font-size: 11px; flex-shrink: 0; }
+  .ard-tb-btn span { display: none; }
+  /* Show Run/Stop labels — they're essential */
+  .ard-tb-run span, .ard-tb-stop span { display: inline; font-size: 11px; }
+  /* Compile status: visible but compact */
+  .ard-compile-status { display: inline; font-size: 10px; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* Examples dropdown: compact */
+  .ard-examples-select { max-width: 100px; font-size: 11px; }
+
+  /* Canvas header: compact */
+  .ard-canvas-header { padding: 0 4px; gap: 2px; flex-wrap: nowrap; overflow-x: auto; }
+  .ard-canvas-header .ard-tb-btn span { display: none; }
+  .ard-board-select { max-width: 120px; font-size: 11px; }
+  .ard-speed-select { max-width: 60px; font-size: 11px; }
+
+  /* Component panel: full-width on mobile */
+  .ard-comp-panel { width: 100% !important; }
+
+  /* Serial panel: fill available space */
+  .ard-serial-panel { border-radius: 0; }
+  .ard-serial-output { font-size: 12px; }
+  .ard-serial-input { font-size: 14px; } /* easier to type on mobile */
+
+  /* Pi terminal: fill screen in serial tab */
+  #piTerminalPanel.tab-active,
+  #piTerminalPanel {
+    border-radius: 0;
+  }
+
+  /* Hide diagram buttons on mobile (too small) */
+  .ard-canvas-header-right .ard-tb-btn[title*="Diagram"] { display: none; }
+
+  /* Ad hero: hide */
   .ad-ard-hero { display: none; }
 }
 

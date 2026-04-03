@@ -6,29 +6,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Arduino Simulator — Write, Compile & Run Arduino Code in Your Browser" />
+    <jsp:param name="toolName" value="Arduino Simulator Online — Write, Compile & Run Arduino, ESP32, Raspberry Pi Code in Your Browser" />
     <jsp:param name="toolCategory" value="Electronics" />
-    <jsp:param name="toolDescription" value="Browser-based Arduino simulator. Write Arduino C++ code, compile via arduino-cli, and run on a virtual ATmega328p with real CPU emulation. Interactive LEDs, buttons, potentiometers, servos, LCD, serial monitor. 23 virtual components, 15 example sketches. Powered by avr8js." />
+    <jsp:param name="toolDescription" value="Free browser-based Arduino simulator and ESP32 emulator. Write C++ code, compile via arduino-cli, and run on virtual hardware: Arduino Uno (avr8js), Raspberry Pi Pico (rp2040js), ESP32/ESP32-C3/ESP32-S3 (QEMU), and Raspberry Pi 3B. 21 interactive components, 33 example sketches, serial monitor, Wokwi-compatible diagram.json, multi-file projects." />
     <jsp:param name="toolUrl" value="electronics/arduino-simulator.jsp" />
-    <jsp:param name="toolKeywords" value="arduino simulator online, arduino emulator, avr simulator, arduino IDE online, virtual arduino, wokwi alternative, circuit simulator arduino, arduino uno simulator, compile arduino online, serial monitor, LED blink, analogWrite, servo control, LCD display arduino, potentiometer arduino" />
+    <jsp:param name="toolKeywords" value="arduino simulator online, arduino emulator, esp32 simulator, esp32-c3 emulator, raspberry pi pico simulator, avr simulator, arduino IDE online, virtual arduino, wokwi alternative, circuit simulator, arduino uno simulator, compile arduino online, serial monitor, LED blink, analogWrite, servo control, LCD display, OLED SSD1306, NeoPixel, DHT22 sensor, potentiometer, ESP32 QEMU, RISC-V emulator, raspberry pi emulator" />
     <jsp:param name="breadcrumbCategoryUrl" value="electronics/" />
-    <jsp:param name="educationalLevel" value="High School, Undergraduate, AP Physics, Engineering, Maker Education" />
-    <jsp:param name="teaches" value="Arduino programming, embedded systems, microcontroller basics, digital I/O, analog input, PWM output, serial communication, sensor interfacing, motor control, display programming" />
-    <jsp:param name="toolFeatures" value="Real AVR8 CPU emulation via avr8js at 16MHz,Monaco code editor with C++ syntax highlighting and error markers,Compile sketches via arduino-cli (Uno Nano Mega),23 virtual components: LEDs buttons potentiometers servos buzzers LCD OLED 7-segment NeoPixel DHT22 HC-SR04 stepper motor keypad relay shift register,Serial monitor with baud rate detection and send input,15 example sketches across 8 categories,PWM brightness and servo angle visualization,Resizable split-panel IDE layout,Dark and light theme support,Mobile responsive with tab switcher,URL sharing for sketches,Speed control 0.25x to 8x" />
+    <jsp:param name="educationalLevel" value="High School, Undergraduate, AP Physics, Engineering, Maker Education, IoT Development" />
+    <jsp:param name="teaches" value="Arduino programming, ESP32 development, embedded systems, microcontroller basics, digital I/O, analog input, PWM output, serial communication, sensor interfacing, motor control, display programming, IoT prototyping, RISC-V architecture" />
+    <jsp:param name="toolFeatures" value="6 board families: Arduino Uno/Nano ESP32 ESP32-C3 ESP32-S3 Raspberry Pi Pico Raspberry Pi 3B,Real CPU emulation: avr8js (16MHz AVR) rp2040js (125MHz ARM) QEMU (160MHz RISC-V and 240MHz Xtensa),Monaco code editor with C++ syntax highlighting and error markers,Compile via arduino-cli with DIO flash mode for ESP32,21 virtual components: LEDs buttons potentiometers servos buzzers LCD OLED 7-segment NeoPixel DHT22 HC-SR04 encoder keypad relay,Serial monitor with baud rate detection and bidirectional I/O,33 example sketches across 9 categories including multi-file projects,Wokwi-compatible diagram.json import/export with live editor sync,Server-side QEMU emulation with SSE streaming for ESP32 boards,GPIO bridge for ESP32 LED visualization in browser,Boot progress status bar for QEMU boards,xterm.js Linux terminal for Raspberry Pi,Dark and light theme support,Mobile responsive with tab switcher,URL sharing for sketches,Speed control 0.25x to 8x" />
     <jsp:param name="faq1q" value="What is this Arduino simulator?" />
-    <jsp:param name="faq1a" value="A browser-based Arduino IDE that lets you write Arduino C++ code, compile it using the real arduino-cli toolchain, and run it on a virtual ATmega328p microcontroller. The CPU emulation is cycle-accurate using avr8js, supporting delay(), millis(), analogWrite(), Serial, and all standard Arduino functions." />
-    <jsp:param name="faq2q" value="What components can I simulate?" />
-    <jsp:param name="faq2a" value="23 virtual components including LEDs, RGB LEDs, push buttons, potentiometers, slide switches, servo motors, buzzers with Web Audio, 7-segment displays, LCD 16x2 (GPIO and I2C), OLED SSD1306, NeoPixel strips, DHT22 temperature sensor, HC-SR04 ultrasonic sensor, stepper motor, membrane keypad, rotary encoder, relay, 74HC595 shift register, LED bar graph, and photoresistor." />
-    <jsp:param name="faq3q" value="How does compilation work?" />
-    <jsp:param name="faq3a" value="Your Arduino sketch is sent to our server which runs arduino-cli with the real AVR GCC compiler. The compiled hex file is returned to your browser where it runs on the avr8js CPU emulator. Compilation typically takes 1-3 seconds." />
+    <jsp:param name="faq1a" value="A free browser-based Arduino IDE and hardware simulator. Write Arduino C++ code, compile it using the real arduino-cli toolchain, and run it on virtual hardware. Supports Arduino Uno/Nano (cycle-accurate AVR emulation via avr8js), Raspberry Pi Pico (RP2040 via rp2040js), ESP32/ESP32-C3/ESP32-S3 (via server-side QEMU), and Raspberry Pi 3B. No installation required." />
+    <jsp:param name="faq2q" value="What boards and components can I simulate?" />
+    <jsp:param name="faq2a" value="6 board families and 21 virtual components. Boards: Arduino Uno, Arduino Nano, Raspberry Pi Pico, ESP32, ESP32-C3, ESP32-S3, Raspberry Pi 3B. Components: LEDs (red/green/yellow/RGB), push buttons, potentiometers, slide switches, servo motors, buzzers with Web Audio, 7-segment displays, LCD 16x2, OLED SSD1306, NeoPixel, DHT22 temperature sensor, HC-SR04 ultrasonic, rotary encoder, membrane keypad, relay, photoresistor, and NTC temperature sensor." />
+    <jsp:param name="faq3q" value="How does ESP32 simulation work?" />
+    <jsp:param name="faq3a" value="ESP32 sketches are compiled with arduino-cli using DIO flash mode, then run in Espressif QEMU on the server. Serial output and GPIO pin changes stream to your browser in real-time via Server-Sent Events (SSE). A compile-time GPIO bridge intercepts digitalWrite calls to visualize LED state. ESP32-C3 uses RISC-V QEMU, ESP32/S3 uses Xtensa QEMU." />
     <jsp:param name="faq4q" value="Is it free?" />
-    <jsp:param name="faq4a" value="Yes completely free with no signup required. The simulator runs entirely in your browser after compilation. 15 example sketches are included and you can write any Arduino code. Rate limited to 10 compilations per hour." />
+    <jsp:param name="faq4a" value="Yes, completely free with no signup required. Arduino Uno and Pico simulations run entirely in your browser. ESP32 simulations use server-side QEMU (shared resource, auto-cleanup after 10 minutes). 33 example sketches included, supports multi-file projects, and Wokwi-compatible diagram.json import/export." />
 </jsp:include>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=v%>">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/electronics/css/arduino-simulator.css?v=<%=v%>">
 
 <!-- wokwi-elements: component visuals -->
@@ -36,9 +37,20 @@
 <!-- xterm.js: Linux terminal for Raspberry Pi simulation -->
 <link rel="stylesheet" href="https://unpkg.com/xterm@5.3.0/css/xterm.css">
 <script src="https://unpkg.com/xterm@5.3.0/lib/xterm.js"></script>
+<!-- Theme toggle (nav + mobile drawer) -->
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=v%>" defer></script>
 </head>
 <body>
 <%@ include file="../modern/components/nav-header.jsp" %>
+
+<!-- H1 + top ad banner (collapses on mobile) -->
+<div style="max-width:1400px;margin:0 auto;padding:4px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+  <h1 style="font:600 16px/1.3 'Sora',sans-serif;color:var(--ard-text);margin:0;">Arduino & ESP32 Simulator Online</h1>
+  <div class="ad-ard-hero" style="flex:1;min-width:300px;max-width:728px;text-align:center;">
+    <%@ include file="../setupad.jsp"%>
+  </div>
+</div>
 
 <div class="ard-app" id="arduinoApp">
 
@@ -602,13 +614,31 @@ btnSerial.classList.add('active');
 }
 
 // ── Theme toggle ──
-btnTheme.addEventListener('click', () => {
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  editor.setTheme(isDark ? 'vs' : 'vs-dark');
-  btnTheme.textContent = isDark ? '\u263E' : '\u2606';
-});
+// Syncs: nav header (dark-mode.js), editor toolbar, canvas header buttons + Monaco
+const btnThemeEditor = document.getElementById('btnThemeEditor');
+function syncEditorTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  editor.setTheme(isDark ? 'vs-dark' : 'vs');
+  const icon = isDark ? '\u2606' : '\u263E';
+  btnTheme.textContent = icon;
+  if (btnThemeEditor) btnThemeEditor.textContent = icon;
+}
+function toggleTheme() {
+  if (window.darkMode) {
+    window.darkMode.toggle();
+  } else {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  }
+  syncEditorTheme();
+}
+btnTheme.addEventListener('click', toggleTheme);
+if (btnThemeEditor) btnThemeEditor.addEventListener('click', toggleTheme);
+// Sync on page load (respect saved preference from dark-mode.js)
+setTimeout(syncEditorTheme, 100);
+// Watch for theme changes from nav header button
+new MutationObserver(syncEditorTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
 // ── Mobile tabs ──
 document.querySelectorAll('.ard-mtab').forEach(btn => {
@@ -621,16 +651,20 @@ document.querySelectorAll('.ard-mtab').forEach(btn => {
     const canvasArea = document.getElementById('canvasArea');
     if (tab === 'serial') {
       const piMode = isPi(document.getElementById('boardSelect').value);
-      if (piMode && piTerminalPanel) {
+      if (piMode && piTerminalPanel && piTerminalPanel.style.display !== 'none') {
         piTerminalPanel.style.display = 'flex';
+        piTerminalPanel.classList.add('tab-active');
+        serialPanel.style.display = 'none';
         requestAnimationFrame(() => piTerminal.fit());
       } else {
         serialPanel.style.display = 'flex';
         serialPanel.classList.add('tab-active');
+        piTerminalPanel.style.display = 'none';
       }
       canvasArea.style.display = 'none';
     } else {
       serialPanel.classList.remove('tab-active');
+      if (piTerminalPanel) piTerminalPanel.classList.remove('tab-active');
       canvasArea.style.display = '';
     }
   });
@@ -1608,5 +1642,50 @@ diagramImportBtn.addEventListener('click', async () => {
 });
 document.getElementById('btnTheme').before(diagramImportBtn);
 </script>
+
+<!-- SEO Content + Footer Ads (below the simulator fold) -->
+<div style="max-width:1200px;margin:0 auto;padding:24px 16px;color:var(--ard-text);font:14px/1.7 'DM Sans',sans-serif;">
+
+  <!-- Footer Ad -->
+  <div style="text-align:center;margin:16px 0;">
+    <%@ include file="../footer_adsense.jsp"%>
+  </div>
+
+  <h2 style="font:600 20px/1.3 'Sora',sans-serif;margin:24px 0 12px;">About This Arduino Simulator</h2>
+  <p>This free online Arduino simulator lets you write, compile, and run Arduino C++ code directly in your browser. No software installation required. Supports 6 board families: <strong>Arduino Uno</strong>, <strong>Arduino Nano</strong>, <strong>Raspberry Pi Pico</strong>, <strong>ESP32</strong>, <strong>ESP32-C3</strong>, <strong>ESP32-S3</strong>, and <strong>Raspberry Pi 3B</strong>.</p>
+
+  <h2 style="font:600 20px/1.3 'Sora',sans-serif;margin:24px 0 12px;">How It Works</h2>
+  <p><strong>Arduino Uno/Nano:</strong> Your sketch compiles to AVR machine code using the real <code>arduino-cli</code> toolchain. The compiled hex runs on a cycle-accurate ATmega328p emulator (<a href="https://github.com/niccolocastelli/avr8js" rel="noopener">avr8js</a>) at 16MHz in your browser. All 21 virtual components (LEDs, buttons, potentiometers, servos, LCD, OLED, sensors) are interactive.</p>
+  <p><strong>Raspberry Pi Pico:</strong> Compiled UF2 firmware runs on an RP2040 emulator (<a href="https://github.com/niccolocastelli/rp2040js" rel="noopener">rp2040js</a>) at 125MHz in your browser. Supports GPIO, ADC, PWM, and UART.</p>
+  <p><strong>ESP32 / ESP32-C3 / ESP32-S3:</strong> Sketches compile with DIO flash mode and run on <a href="https://github.com/niccolocastelli/qemu" rel="noopener">Espressif's QEMU</a> on our server. Serial output and GPIO pin changes stream to your browser in real-time via SSE. A compile-time GPIO bridge visualizes <code>digitalWrite()</code> calls as LED state changes.</p>
+
+  <h2 style="font:600 20px/1.3 'Sora',sans-serif;margin:24px 0 12px;">Supported Components</h2>
+  <p>21 virtual components with live SVG rendering: LED (red/green/yellow/RGB), push button, potentiometer, slide potentiometer, slide switch, servo motor, buzzer (Web Audio), relay, NeoPixel, 7-segment display, rotary encoder, membrane keypad, LCD 16x2, OLED SSD1306, DHT22 temperature sensor, HC-SR04 ultrasonic sensor, NTC temperature sensor, and photoresistor (LDR). Components are powered by <a href="https://github.com/niccolocastelli/wokwi-elements" rel="noopener">wokwi-elements</a> (MIT licensed).</p>
+
+  <h2 style="font:600 20px/1.3 'Sora',sans-serif;margin:24px 0 12px;">Features</h2>
+  <ul style="padding-left:20px;">
+    <li>Monaco code editor with C++ syntax highlighting and compile error markers</li>
+    <li>33 example sketches across 9 categories (Basics, Input, Analog, Serial, Servo, Buzzer, RGB, Projects, ESP32)</li>
+    <li>Multi-file project support (header files, libraries)</li>
+    <li>Wokwi-compatible <code>diagram.json</code> import/export with live two-way editor sync</li>
+    <li>Serial monitor with bidirectional I/O</li>
+    <li>xterm.js Linux terminal for Raspberry Pi</li>
+    <li>Dark and light theme</li>
+    <li>Mobile responsive with tab switcher</li>
+    <li>URL sharing for sketches</li>
+    <li>Keyboard shortcuts: Ctrl+Enter (Run), Ctrl+B (Compile), Ctrl+S (Save)</li>
+  </ul>
+
+  <h2 style="font:600 20px/1.3 'Sora',sans-serif;margin:24px 0 12px;">Frequently Asked Questions</h2>
+  <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">Is this simulator free?</summary><p style="margin:8px 0 0 16px;">Yes, completely free with no signup required. Arduino and Pico simulations run in your browser. ESP32 simulations use shared server resources with automatic 10-minute timeout.</p></details>
+  <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">Can I use my own Arduino libraries?</summary><p style="margin:8px 0 0 16px;">The compile server includes popular libraries (Servo, Wire, SPI, Adafruit NeoPixel, DHT, LiquidCrystal, U8g2, FastLED, and more). You can also use multi-file projects with custom header files.</p></details>
+  <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">How is this different from Wokwi?</summary><p style="margin:8px 0 0 16px;">This simulator supports ESP32 via real QEMU emulation (not just browser-side), Raspberry Pi Pico, and Raspberry Pi 3B. It uses the same wokwi-elements for component visuals and supports Wokwi's diagram.json format for circuit interchange.</p></details>
+  <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">Why does my ESP32 sketch crash after 14 seconds?</summary><p style="margin:8px 0 0 16px;">ESP32-C3 QEMU has a watchdog timer limitation. ESP32 (Xtensa) runs indefinitely. The crash dump is filtered from the serial monitor.</p></details>
+
+</div>
+
+<!-- Analytics -->
+<%@ include file="../modern/components/analytics.jsp" %>
+
 </body>
 </html>
