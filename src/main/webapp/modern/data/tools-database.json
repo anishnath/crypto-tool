@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-03-16T00:00:00.000Z",
-  "totalTools": 417,
+  "totalTools": 418,
   "categories": [
     "Blockchain & Crypto",
     "CTF & Challenges",
@@ -2292,6 +2292,13 @@
       "description": "Particle-based simulation of solids, liquids, and gases with interactive temperature controls."
     },
     {
+      "name": "Arduino & ESP32 Simulator",
+      "url": "electronics/arduino-simulator.jsp",
+      "category": "Physics",
+      "keywords": "arduino simulator esp32 emulator raspberry pi pico online ide avr risc-v qemu wokwi serial monitor led blink servo lcd oled neopixel dht22 embedded microcontroller iot",
+      "description": "Write, compile, and run Arduino/ESP32/Pico code in the browser — 6 boards, 21 components, real CPU emulation, serial monitor, diagram.json support."
+    },
+    {
       "name": "Circuit Simulator Lab",
       "url": "physics/labs/circuit-simulator.jsp",
       "category": "Physics",
@@ -2318,6 +2325,20 @@
       "category": "Physics",
       "keywords": "pile rigid body SAT collision polygon stacking game physics friction restitution",
       "description": "Drop polygon shapes and watch them stack. SAT collision detection, friction, restitution."
+    },
+    {
+      "name": "Oscillating Charge — E-Field Animation",
+      "url": "physics/labs/oscillating-charge.jsp",
+      "category": "Physics",
+      "keywords": "oscillating charge electromagnetic field lienard-wiechert retarded time electric field heatmap",
+      "description": "Interactive oscillating charge lab showing electric-field magnitude and direction over time."
+    },
+    {
+      "name": "Current Coil Magnetic Field",
+      "url": "physics/labs/current-coil-magnetic-field.jsp",
+      "category": "Physics",
+      "keywords": "current coil magnetic field biot-savart law electromagnetism Bz heatmap",
+      "description": "Visualize coil Bz map and compare pycharge simulation with analytical Biot-Savart on-axis results."
     },
     {
       "name": "Molecular Geometry Calculator",
