@@ -10,6 +10,7 @@
     <jsp:param name="toolCategory" value="Electronics" />
     <jsp:param name="toolDescription" value="Free browser-based Arduino simulator and ESP32 emulator. Write C++ code, compile via arduino-cli, and run on virtual hardware: Arduino Uno (avr8js), Raspberry Pi Pico (rp2040js), ESP32/ESP32-C3/ESP32-S3 (QEMU), and Raspberry Pi 3B. 21 interactive components, 33 example sketches, serial monitor, Wokwi-compatible diagram.json, multi-file projects." />
     <jsp:param name="toolUrl" value="electronics/arduino-simulator.jsp" />
+    <jsp:param name="toolImage" value="arduino-simulator.svg" />
     <jsp:param name="toolKeywords" value="arduino simulator online, arduino emulator, esp32 simulator, esp32-c3 emulator, raspberry pi pico simulator, avr simulator, arduino IDE online, virtual arduino, wokwi alternative, circuit simulator, arduino uno simulator, compile arduino online, serial monitor, LED blink, analogWrite, servo control, LCD display, OLED SSD1306, NeoPixel, DHT22 sensor, potentiometer, ESP32 QEMU, RISC-V emulator, raspberry pi emulator" />
     <jsp:param name="breadcrumbCategoryUrl" value="electronics/" />
     <jsp:param name="educationalLevel" value="High School, Undergraduate, AP Physics, Engineering, Maker Education, IoT Development" />
@@ -44,15 +45,15 @@
 <body>
 <%@ include file="../modern/components/nav-header.jsp" %>
 
-<!-- H1 + top ad banner (collapses on mobile) -->
-<div style="max-width:1400px;margin:0 auto;padding:4px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-  <h1 style="font:600 16px/1.3 'Sora',sans-serif;color:var(--ard-text);margin:0;">Arduino & ESP32 Simulator Online</h1>
-  <div class="ad-ard-hero" style="flex:1;min-width:300px;max-width:728px;text-align:center;">
-    <%@ include file="../setupad.jsp"%>
-  </div>
-</div>
-
 <div class="ard-app" id="arduinoApp">
+
+  <!-- H1 + top ad banner (collapses on mobile) -->
+  <div class="ard-hero-bar">
+    <h1 class="ard-hero-h1">Arduino & ESP32 Simulator Online</h1>
+    <div class="ad-ard-hero">
+      <%@ include file="../setupad.jsp"%>
+    </div>
+  </div>
 
   <!-- Mobile Tab Bar -->
   <nav class="ard-mobile-tabs" id="mobileTabs">
