@@ -2746,3 +2746,404 @@ body {
         padding: 8px 12px;
     }
 }
+
+/* ============================================
+   RUNNABLE CODE BLOCK  (.me-rcb)
+   ============================================ */
+.me-rcb {
+    position: relative;
+    margin: 20px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #2D3F55;
+    background: #1E293B;
+}
+
+.me-rcb-selected {
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.5);
+}
+
+/* ---- Header bar ---- */
+.me-rcb-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: #162032;
+    border-bottom: 1px solid #2D3F55;
+    user-select: none;
+}
+
+.me-rcb-lang-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: #1E293B url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2364748B'/%3E%3C/svg%3E") no-repeat right 6px center;
+    color: #CBD5E1;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    font-size: 11px;
+    padding: 3px 22px 3px 8px;
+    cursor: pointer;
+    max-width: 140px;
+    transition: border-color var(--me-transition, 150ms ease);
+}
+
+.me-rcb-lang-select:hover,
+.me-rcb-lang-select:focus {
+    border-color: #3B82F6;
+    outline: none;
+    color: #E2E8F0;
+}
+
+.me-rcb-stdin-btn {
+    margin-left: auto;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-family: var(--me-font-ui, system-ui);
+    background: transparent;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    color: #64748B;
+    cursor: pointer;
+    transition: all var(--me-transition, 150ms ease);
+}
+
+.me-rcb-stdin-btn:hover,
+.me-rcb-stdin-btn.active {
+    border-color: #3B82F6;
+    color: #93C5FD;
+    background: rgba(59,130,246,0.1);
+}
+
+.me-rcb-run-btn {
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--me-font-ui, system-ui);
+    background: #2563EB;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background var(--me-transition, 150ms ease);
+    white-space: nowrap;
+}
+
+.me-rcb-run-btn:hover {
+    background: #1D4ED8;
+}
+
+.me-rcb-run-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ---- Add file button (in header, for single-file mode) ---- */
+.me-rcb-add-file-btn {
+    padding: 3px 8px;
+    font-size: 11px;
+    font-family: var(--me-font-ui, system-ui);
+    background: transparent;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    color: #64748B;
+    cursor: pointer;
+    transition: all var(--me-transition, 150ms ease);
+}
+
+.me-rcb-add-file-btn:hover {
+    border-color: #3B82F6;
+    color: #93C5FD;
+    background: rgba(59,130,246,0.1);
+}
+
+/* ---- File tabs bar ---- */
+.me-rcb-tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    background: #162032;
+    border-bottom: 1px solid #2D3F55;
+    overflow-x: auto;
+    user-select: none;
+    scrollbar-width: none;
+}
+
+.me-rcb-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.me-rcb-tab {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 11px;
+    color: #64748B;
+    cursor: pointer;
+    border-right: 1px solid #2D3F55;
+    white-space: nowrap;
+    transition: all var(--me-transition, 150ms ease);
+}
+
+.me-rcb-tab:hover {
+    color: #CBD5E1;
+    background: rgba(255,255,255,0.03);
+}
+
+.me-rcb-tab.active {
+    color: #E2E8F0;
+    background: #1E293B;
+    border-bottom: 2px solid #3B82F6;
+    margin-bottom: -1px;
+}
+
+.me-rcb-tab-name {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.me-rcb-tab-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    font-size: 13px;
+    line-height: 1;
+    background: transparent;
+    border: none;
+    border-radius: 3px;
+    color: #475569;
+    cursor: pointer;
+    transition: all var(--me-transition, 150ms ease);
+}
+
+.me-rcb-tab-close:hover {
+    background: rgba(239,68,68,0.15);
+    color: #F87171;
+}
+
+.me-rcb-tab-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    color: #475569;
+    cursor: pointer;
+    transition: color var(--me-transition, 150ms ease);
+}
+
+.me-rcb-tab-add:hover {
+    color: #3B82F6;
+}
+
+.me-rcb-tab-rename {
+    width: 90px;
+    padding: 1px 4px;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 11px;
+    background: #1E293B;
+    color: #E2E8F0;
+    border: 1px solid #3B82F6;
+    border-radius: 3px;
+    outline: none;
+}
+
+/* ---- Extra file editor (textarea for non-primary files) ---- */
+.me-rcb-extra-editor {
+    background: #1E293B;
+}
+
+.me-rcb-extra-area {
+    width: 100%;
+    min-height: 4.8em;
+    padding: 16px 20px;
+    background: #1E293B;
+    color: #E2E8F0;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    border: none;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+    tab-size: 4;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+/* ---- Code editing area ---- */
+.me-rcb .me-rcb-pre {
+    margin: 0;
+    padding: 16px 20px;
+    background: #1E293B;
+    color: #E2E8F0;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    border-radius: 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    tab-size: 4;
+    min-height: 3.2em;
+}
+
+.me-rcb .me-rcb-code {
+    background: none;
+    color: inherit;
+    font-size: inherit;
+    padding: 0;
+    display: block;
+    min-height: 1.6em;
+    outline: none;
+}
+
+.me-rcb .me-rcb-pre:focus-within {
+    box-shadow: none;
+}
+
+/* ---- Stdin panel ---- */
+.me-rcb-stdin-panel {
+    border-top: 1px solid #2D3F55;
+    background: #162032;
+    padding: 8px 12px;
+}
+
+.me-rcb-stdin-area {
+    width: 100%;
+    background: #1E293B;
+    color: #CBD5E1;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 13px;
+    padding: 6px 10px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.me-rcb-stdin-area::placeholder {
+    color: #475569;
+}
+
+.me-rcb-stdin-area:focus {
+    outline: none;
+    border-color: #3B82F6;
+}
+
+/* ---- Output panel ---- */
+.me-rcb-output {
+    border-top: 1px solid #2D3F55;
+    background: #0F172A;
+    color: #CBD5E1;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 13px;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.me-rcb-output.me-rcb-running {
+    min-height: 48px;
+}
+
+.me-rcb-stdout,
+.me-rcb-stderr,
+.me-rcb-empty,
+.me-rcb-exit {
+    padding: 10px 16px;
+}
+
+.me-rcb-stdout pre,
+.me-rcb-stderr pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+    border-radius: 0;
+}
+
+.me-rcb-stdout {
+    color: #A7F3D0;
+}
+
+.me-rcb-stderr {
+    color: #FCA5A5;
+    border-top: 1px solid #2D3F55;
+}
+
+.me-rcb-stderr pre {
+    color: #F87171;
+}
+
+.me-rcb-exit {
+    color: #FBBF24;
+    font-size: 11px;
+    border-top: 1px solid #2D3F55;
+}
+
+.me-rcb-empty {
+    color: #475569;
+    font-style: italic;
+}
+
+/* ---- Spinner ---- */
+.me-rcb-spinner-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    color: #64748B;
+}
+
+.me-rcb-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #334155;
+    border-top-color: #3B82F6;
+    border-radius: 50%;
+    animation: me-rcb-spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes me-rcb-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ---- Print: hide run UI, show code only ---- */
+@media print {
+    .me-rcb-header,
+    .me-rcb-tabs,
+    .me-rcb-stdin-panel,
+    .me-rcb-output,
+    .me-rcb-extra-editor,
+    .me-rcb-run-btn,
+    .me-rcb-stdin-btn,
+    .me-rcb-add-file-btn {
+        display: none !important;
+    }
+
+    .me-rcb {
+        border: 1px solid #ddd;
+        background: #f5f5f5;
+    }
+
+    .me-rcb .me-rcb-pre {
+        background: #f5f5f5;
+        color: #333;
+        border: none;
+    }
+}
