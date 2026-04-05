@@ -746,6 +746,679 @@ const DrawingBlock = Node.create({
 });
 
 // =========================================================
+//  RUNNABLE CODE BLOCK NODE
+//  Replaces StarterKit's codeBlock with an executable version.
+//  Uses contentDOM so code text remains editable by TipTap.
+//  Header bar (language picker, run button) and output panel
+//  are pure DOM decorations — not part of the document model.
+// =========================================================
+
+// Helper: populate <select> with language options
+function populateLangSelect(select, currentLang) {
+    var fallback = ['plaintext', 'python', 'javascript', 'java', 'c', 'cpp',
+                    'csharp', 'rust', 'go', 'typescript', 'bash', 'ruby', 'php',
+                    'swift', 'kotlin', 'r', 'haskell', 'lua', 'perl', 'scala', 'sql'];
+    fallback.forEach(function (lang) {
+        var opt = document.createElement('option');
+        opt.value = lang;
+        opt.textContent = lang;
+        if (lang === currentLang) opt.selected = true;
+        select.appendChild(opt);
+    });
+    // Hydrate with real server list when available
+    if (window.MeCodeRunner) {
+        window.MeCodeRunner.getLanguages().then(function (langs) {
+            if (!langs || !langs.length) return;
+            var current = select.value;
+            select.innerHTML = '';
+            langs.forEach(function (name) {
+                var opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                if (name === current) opt.selected = true;
+                select.appendChild(opt);
+            });
+            // Ensure current language is still present even if not in server list
+            if (current && !select.querySelector('option[value="' + current + '"]')) {
+                var opt = document.createElement('option');
+                opt.value = current;
+                opt.textContent = current;
+                opt.selected = true;
+                select.prepend(opt);
+            }
+        });
+    }
+}
+
+// Default filenames per language
+function defaultFileName(lang, index) {
+    var names = {
+        'java': 'Main.java', 'python': 'main.py', 'javascript': 'index.js',
+        'typescript': 'index.ts', 'c': 'main.c', 'cpp': 'main.cpp',
+        'csharp': 'Program.cs', 'go': 'main.go', 'rust': 'main.rs',
+        'ruby': 'main.rb', 'php': 'main.php', 'swift': 'main.swift',
+        'kotlin': 'Main.kt', 'scala': 'Main.scala', 'bash': 'script.sh',
+        'r': 'main.R', 'lua': 'main.lua', 'haskell': 'Main.hs', 'perl': 'main.pl'
+    };
+    if (index === 0) return names[lang] || 'main.txt';
+    var ext = (names[lang] || 'main.txt').split('.').pop();
+    return 'file' + index + '.' + ext;
+}
+
+const RunnableCodeBlock = Node.create({
+    name: 'runnableCodeBlock',
+    group: 'block',
+    content: 'text*',
+    marks: '',
+    code: true,
+    defining: true,
+
+    addAttributes() {
+        return {
+            language: {
+                default: 'plaintext',
+                parseHTML: el => el.getAttribute('data-language') || 'plaintext'
+            },
+            // Extra files stored as JSON string: [{"name":"Helper.java","content":"..."}]
+            // The main file (index 0) content lives in contentDOM, not here.
+            files: {
+                default: '[]',
+                parseHTML: el => el.getAttribute('data-files') || '[]'
+            },
+            // Name of the main file (index 0)
+            mainFileName: {
+                default: '',
+                parseHTML: el => el.getAttribute('data-main-file') || ''
+            }
+        };
+    },
+
+    parseHTML() {
+        return [
+            {
+                tag: 'div.me-rcb',
+                preserveWhitespace: 'full',
+                getAttrs: el => ({
+                    language: el.getAttribute('data-language') || 'plaintext',
+                    files: el.getAttribute('data-files') || '[]',
+                    mainFileName: el.getAttribute('data-main-file') || ''
+                }),
+                contentElement: 'code'
+            },
+            // Backward compat: StarterKit's <pre><code>
+            {
+                tag: 'pre',
+                preserveWhitespace: 'full',
+                getAttrs: el => {
+                    var code = el.querySelector('code');
+                    if (!code) return false;
+                    var cls = code.className || '';
+                    var match = cls.match(/language-(\w+)/);
+                    return { language: match ? match[1] : 'plaintext', files: '[]', mainFileName: '' };
+                },
+                contentElement: 'code'
+            }
+        ];
+    },
+
+    renderHTML({ HTMLAttributes }) {
+        var attrs = {
+            class: 'me-rcb',
+            'data-language': HTMLAttributes.language || 'plaintext'
+        };
+        if (HTMLAttributes.files && HTMLAttributes.files !== '[]') {
+            attrs['data-files'] = HTMLAttributes.files;
+        }
+        if (HTMLAttributes.mainFileName) {
+            attrs['data-main-file'] = HTMLAttributes.mainFileName;
+        }
+        return ['div', mergeAttributes(attrs), ['pre', ['code', { spellcheck: 'false' }, 0]]];
+    },
+
+    addCommands() {
+        return {
+            setRunnableCodeBlock: (attrs) => ({ commands }) => {
+                return commands.setNode(this.name, attrs || {});
+            },
+            toggleRunnableCodeBlock: (attrs) => ({ commands }) => {
+                return commands.toggleNode(this.name, 'paragraph', attrs || {});
+            }
+        };
+    },
+
+    addKeyboardShortcuts() {
+        return {
+            'Tab': ({ editor }) => {
+                if (!editor.isActive('runnableCodeBlock')) return false;
+                return editor.commands.insertContent('\t');
+            },
+            'Shift-Tab': ({ editor }) => {
+                if (!editor.isActive('runnableCodeBlock')) return false;
+                return true;
+            },
+            'Mod-Enter': ({ editor }) => {
+                if (!editor.isActive('runnableCodeBlock')) return false;
+                var { from } = editor.state.selection;
+                document.dispatchEvent(new CustomEvent('me:run-code-block', { detail: { from: from } }));
+                return true;
+            },
+            // Enter on an empty trailing line → exit code block, create paragraph below
+            'Enter': ({ editor }) => {
+                if (!editor.isActive('runnableCodeBlock')) return false;
+                var { $from, empty } = editor.state.selection;
+                if (!empty) return false;
+                var text = $from.parent.textContent;
+                var offset = $from.parentOffset;
+                // Check: cursor at end AND last char before cursor is a newline (empty trailing line)
+                if (offset === text.length && offset > 0 && text.charAt(offset - 1) === '\n') {
+                    // Delete the trailing newline and insert a paragraph after the block
+                    var afterBlock = $from.after();
+                    return editor.chain()
+                        .deleteRange({ from: $from.pos - 1, to: $from.pos })
+                        .insertContentAt(afterBlock - 1, { type: 'paragraph' })
+                        .focus()
+                        .run();
+                }
+                return false; // let ProseMirror insert a normal newline
+            },
+            // ArrowDown on the last line → move cursor to the node below
+            'ArrowDown': ({ editor }) => {
+                if (!editor.isActive('runnableCodeBlock')) return false;
+                var { $from } = editor.state.selection;
+                var text = $from.parent.textContent;
+                var textAfterCursor = text.slice($from.parentOffset);
+                // If no newline after cursor, we're on the last line
+                if (!textAfterCursor.includes('\n')) {
+                    var afterBlock = $from.after();
+                    var docSize = editor.state.doc.content.size;
+                    if (afterBlock < docSize) {
+                        editor.commands.setTextSelection(afterBlock);
+                        return true;
+                    }
+                    // At end of document — create a paragraph
+                    return editor.chain()
+                        .insertContentAt(afterBlock, { type: 'paragraph' })
+                        .setTextSelection(afterBlock + 1)
+                        .run();
+                }
+                return false;
+            },
+            'Backspace': ({ editor }) => {
+                if (!editor.isActive('runnableCodeBlock')) return false;
+                var { $from } = editor.state.selection;
+                if ($from.parentOffset > 0) return false;
+                var parentContent = $from.parent.textContent;
+                if (parentContent.length > 0) return false;
+                return editor.commands.toggleNode('runnableCodeBlock', 'paragraph');
+            }
+        };
+    },
+
+    addNodeView() {
+        return ({ node, getPos, editor: ed }) => {
+            // ── State: files array ──────────────────────────────────
+            // files[0] is the main file (content in contentDOM)
+            // files[1..n] are extra files (content in this array)
+            var lang = node.attrs.language || 'plaintext';
+            var mainName = node.attrs.mainFileName || defaultFileName(lang, 0);
+            var extraFiles = [];
+            try { extraFiles = JSON.parse(node.attrs.files || '[]'); } catch (_) {}
+            // Full files model: [{name, content}] — index 0 content is always from contentDOM
+            var files = [{ name: mainName, content: '' }].concat(extraFiles);
+            var activeTab = 0;
+
+            // ── Outer wrapper ───────────────────────────────────────
+            const dom = document.createElement('div');
+            dom.className = 'me-rcb';
+            dom.setAttribute('data-language', lang);
+
+            // ── Header bar ──────────────────────────────────────────
+            const header = document.createElement('div');
+            header.className = 'me-rcb-header';
+            header.contentEditable = 'false';
+
+            const langSelect = document.createElement('select');
+            langSelect.className = 'me-rcb-lang-select';
+            langSelect.setAttribute('aria-label', 'Select language');
+            populateLangSelect(langSelect, lang);
+
+            langSelect.addEventListener('change', function (e) {
+                e.stopPropagation();
+                var newLang = langSelect.value;
+                dom.setAttribute('data-language', newLang);
+                // Update main file name if still default
+                var oldDefault = defaultFileName(lang, 0);
+                if (files[0].name === oldDefault) {
+                    files[0].name = defaultFileName(newLang, 0);
+                    renderTabs();
+                }
+                lang = newLang;
+                persistAttrs();
+            });
+
+            const stdinBtn = document.createElement('button');
+            stdinBtn.type = 'button';
+            stdinBtn.className = 'me-rcb-stdin-btn';
+            stdinBtn.title = 'Toggle stdin input';
+            stdinBtn.textContent = 'stdin';
+
+            const runBtn = document.createElement('button');
+            runBtn.type = 'button';
+            runBtn.className = 'me-rcb-run-btn';
+            runBtn.innerHTML = '&#x25B6; Run';
+            runBtn.setAttribute('aria-label', 'Run code');
+
+            header.appendChild(langSelect);
+            header.appendChild(stdinBtn);
+            header.appendChild(runBtn);
+            dom.appendChild(header);
+
+            // ── File tabs bar ───────────────────────────────────────
+            const tabBar = document.createElement('div');
+            tabBar.className = 'me-rcb-tabs';
+            tabBar.contentEditable = 'false';
+            dom.appendChild(tabBar);
+
+            // ── Pre + Code (contentDOM — main file) ─────────────────
+            const pre = document.createElement('pre');
+            pre.className = 'me-rcb-pre';
+            const code = document.createElement('code');
+            code.className = 'me-rcb-code';
+            code.setAttribute('spellcheck', 'false');
+            pre.appendChild(code);
+            dom.appendChild(pre);
+
+            // ── Extra file editor (textarea, shown when tab > 0) ────
+            const extraEditor = document.createElement('div');
+            extraEditor.className = 'me-rcb-extra-editor';
+            extraEditor.style.display = 'none';
+            extraEditor.contentEditable = 'false';
+            const extraArea = document.createElement('textarea');
+            extraArea.className = 'me-rcb-extra-area';
+            extraArea.setAttribute('spellcheck', 'false');
+            extraArea.addEventListener('keydown', function (e) {
+                e.stopPropagation();
+                // Tab key inserts a real tab
+                if (e.key === 'Tab' && !e.shiftKey) {
+                    e.preventDefault();
+                    var start = extraArea.selectionStart;
+                    var end = extraArea.selectionEnd;
+                    extraArea.value = extraArea.value.substring(0, start) + '\t' + extraArea.value.substring(end);
+                    extraArea.selectionStart = extraArea.selectionEnd = start + 1;
+                }
+            });
+            extraArea.addEventListener('input', function () {
+                if (activeTab > 0 && files[activeTab]) {
+                    files[activeTab].content = extraArea.value;
+                    persistAttrs();
+                }
+            });
+            extraEditor.appendChild(extraArea);
+            dom.appendChild(extraEditor);
+
+            // ── Stdin panel ─────────────────────────────────────────
+            const stdinPanel = document.createElement('div');
+            stdinPanel.className = 'me-rcb-stdin-panel';
+            stdinPanel.style.display = 'none';
+            stdinPanel.contentEditable = 'false';
+            const stdinArea = document.createElement('textarea');
+            stdinArea.className = 'me-rcb-stdin-area';
+            stdinArea.placeholder = 'Program input (stdin)';
+            stdinArea.rows = 3;
+            stdinArea.addEventListener('keydown', e => e.stopPropagation());
+            stdinPanel.appendChild(stdinArea);
+            dom.appendChild(stdinPanel);
+
+            // ── Output panel ────────────────────────────────────────
+            const outputPanel = document.createElement('div');
+            outputPanel.className = 'me-rcb-output';
+            outputPanel.style.display = 'none';
+            outputPanel.contentEditable = 'false';
+            dom.appendChild(outputPanel);
+
+            // ── Persist attributes to TipTap document model ─────────
+            function persistAttrs() {
+                var pos = getPos();
+                if (typeof pos !== 'number') return;
+                var extraOnly = files.slice(1).map(function (f) {
+                    return { name: f.name, content: f.content };
+                });
+                ed.view.dispatch(
+                    ed.state.tr.setNodeMarkup(pos, undefined, {
+                        language: langSelect.value || 'plaintext',
+                        files: JSON.stringify(extraOnly),
+                        mainFileName: files[0].name
+                    })
+                );
+            }
+
+            // ── Tab rendering ───────────────────────────────────────
+            function renderTabs() {
+                tabBar.innerHTML = '';
+                // Only show tab bar if there are multiple files
+                if (files.length <= 1) {
+                    tabBar.style.display = 'none';
+                    return;
+                }
+                tabBar.style.display = 'flex';
+
+                files.forEach(function (file, idx) {
+                    var tab = document.createElement('div');
+                    tab.className = 'me-rcb-tab' + (idx === activeTab ? ' active' : '');
+
+                    var nameSpan = document.createElement('span');
+                    nameSpan.className = 'me-rcb-tab-name';
+                    nameSpan.textContent = file.name;
+                    tab.appendChild(nameSpan);
+
+                    // Double-click to rename
+                    nameSpan.addEventListener('dblclick', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        startRename(idx, nameSpan);
+                    });
+
+                    // Close button (not on main file)
+                    if (idx > 0) {
+                        var closeBtn = document.createElement('button');
+                        closeBtn.className = 'me-rcb-tab-close';
+                        closeBtn.type = 'button';
+                        closeBtn.innerHTML = '&times;';
+                        closeBtn.title = 'Remove file';
+                        closeBtn.addEventListener('mousedown', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            removeFile(idx);
+                        });
+                        tab.appendChild(closeBtn);
+                    }
+
+                    // Click to switch tab
+                    tab.addEventListener('mousedown', function (e) {
+                        if (e.target === closeBtn) return;
+                        e.preventDefault();
+                        e.stopPropagation();
+                        switchTab(idx);
+                    });
+
+                    tabBar.appendChild(tab);
+                });
+
+                // Add file button
+                var addBtn = document.createElement('button');
+                addBtn.className = 'me-rcb-tab-add';
+                addBtn.type = 'button';
+                addBtn.innerHTML = '+';
+                addBtn.title = 'Add file';
+                addBtn.addEventListener('mousedown', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    addFile();
+                });
+                tabBar.appendChild(addBtn);
+            }
+
+            // ── Tab switching ───────────────────────────────────────
+            function switchTab(idx) {
+                if (idx === activeTab) return;
+                // Save current extra file content
+                if (activeTab > 0 && files[activeTab]) {
+                    files[activeTab].content = extraArea.value;
+                }
+                activeTab = idx;
+                if (idx === 0) {
+                    // Show contentDOM (main file), hide extra editor
+                    pre.style.display = '';
+                    extraEditor.style.display = 'none';
+                    ed.commands.focus();
+                } else {
+                    // Hide contentDOM, show extra editor
+                    pre.style.display = 'none';
+                    extraEditor.style.display = 'block';
+                    extraArea.value = files[idx].content || '';
+                    extraArea.focus();
+                }
+                renderTabs();
+            }
+
+            // ── Add file ────────────────────────────────────────────
+            function addFile() {
+                var name = defaultFileName(langSelect.value || lang, files.length);
+                files.push({ name: name, content: '' });
+                persistAttrs();
+                switchTab(files.length - 1);
+            }
+
+            // ── Remove file ─────────────────────────────────────────
+            function removeFile(idx) {
+                if (idx <= 0 || idx >= files.length) return;
+                files.splice(idx, 1);
+                if (activeTab >= idx) {
+                    activeTab = Math.max(0, activeTab - 1);
+                }
+                // If we were viewing the removed file, switch back
+                if (activeTab === 0) {
+                    pre.style.display = '';
+                    extraEditor.style.display = 'none';
+                } else {
+                    extraArea.value = files[activeTab].content || '';
+                }
+                persistAttrs();
+                renderTabs();
+            }
+
+            // ── Rename file ─────────────────────────────────────────
+            function startRename(idx, nameSpan) {
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'me-rcb-tab-rename';
+                input.value = files[idx].name;
+                input.addEventListener('keydown', function (e) {
+                    e.stopPropagation();
+                    if (e.key === 'Enter') { finishRename(); }
+                    if (e.key === 'Escape') { cancelRename(); }
+                });
+                input.addEventListener('blur', finishRename);
+
+                nameSpan.textContent = '';
+                nameSpan.appendChild(input);
+                input.focus();
+                input.select();
+
+                var done = false;
+                function finishRename() {
+                    if (done) return;
+                    done = true;
+                    var newName = input.value.trim();
+                    if (newName && newName !== files[idx].name) {
+                        // Check for duplicates
+                        var dup = files.some(function (f, i) { return i !== idx && f.name === newName; });
+                        if (!dup) files[idx].name = newName;
+                    }
+                    nameSpan.textContent = files[idx].name;
+                    persistAttrs();
+                }
+                function cancelRename() {
+                    if (done) return;
+                    done = true;
+                    nameSpan.textContent = files[idx].name;
+                }
+            }
+
+            // ── Stdin toggle ────────────────────────────────────────
+            stdinBtn.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var open = stdinPanel.style.display !== 'none';
+                stdinPanel.style.display = open ? 'none' : 'block';
+                stdinBtn.classList.toggle('active', !open);
+                if (!open) stdinArea.focus();
+            });
+
+            // ── Gather all files for execution ──────────────────────
+            function gatherFiles() {
+                // Always read main file from contentDOM
+                var mainContent = code.textContent || '';
+                var result = [{ name: files[0].name, content: mainContent }];
+                for (var i = 1; i < files.length; i++) {
+                    // If this is the active extra tab, read from textarea
+                    var content = (i === activeTab) ? extraArea.value : files[i].content;
+                    result.push({ name: files[i].name, content: content });
+                }
+                return result;
+            }
+
+            // ── Run logic ───────────────────────────────────────────
+            function doRun() {
+                if (runBtn.disabled) return;
+                if (!window.MeCodeRunner) return;
+                var curLang = dom.getAttribute('data-language') || 'plaintext';
+                var allFiles = gatherFiles();
+                var hasContent = allFiles.some(function (f) { return f.content.trim(); });
+                if (!hasContent) return;
+                var stdin = stdinPanel.style.display !== 'none' ? (stdinArea.value || '') : '';
+                runBtn.disabled = true;
+                runBtn.innerHTML = '&#x23F3; Running...';
+                window.MeCodeRunner.run(curLang, allFiles, stdin, outputPanel).then(function () {
+                    runBtn.disabled = false;
+                    runBtn.innerHTML = '&#x25B6; Run';
+                }).catch(function () {
+                    runBtn.disabled = false;
+                    runBtn.innerHTML = '&#x25B6; Run';
+                });
+            }
+
+            runBtn.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                doRun();
+            });
+
+            // Ctrl/Cmd+Enter handler
+            function onRunShortcut(e) {
+                var cursorFrom = e.detail && e.detail.from;
+                if (typeof cursorFrom !== 'number') return;
+                var pos = getPos();
+                if (typeof pos !== 'number') return;
+                var n = ed.state.doc.nodeAt(pos);
+                if (n && cursorFrom > pos && cursorFrom <= pos + n.nodeSize) {
+                    doRun();
+                }
+            }
+            document.addEventListener('me:run-code-block', onRunShortcut);
+
+            // ── Auto-detect language (debounced, with loop guard) ───
+            var detectTimer = null;
+            var isAutoDetecting = false;
+            var codeObserver = new MutationObserver(function () {
+                if (isAutoDetecting) return;
+                clearTimeout(detectTimer);
+                detectTimer = setTimeout(function () {
+                    if (!window.MeCodeRunner) return;
+                    var text = code.textContent || '';
+                    if (text.trim().length < 10) return;
+                    var detected = window.MeCodeRunner.detectLanguage(text);
+                    if (detected && detected !== langSelect.value && langSelect.value === 'plaintext') {
+                        langSelect.value = detected;
+                        if (langSelect.value !== detected) return;
+                        dom.setAttribute('data-language', detected);
+                        // Update main filename if default
+                        var oldDefault = defaultFileName('plaintext', 0);
+                        if (files[0].name === oldDefault || files[0].name === 'main.txt') {
+                            files[0].name = defaultFileName(detected, 0);
+                            renderTabs();
+                        }
+                        lang = detected;
+                        var pos = getPos();
+                        if (typeof pos === 'number') {
+                            isAutoDetecting = true;
+                            persistAttrs();
+                            isAutoDetecting = false;
+                        }
+                    }
+                }, 1000);
+            });
+            codeObserver.observe(code, { childList: true, subtree: true, characterData: true });
+
+            // ── Initial tab bar render ──────────────────────────────
+            renderTabs();
+
+            // ── Show + button in header when single file ────────────
+            // (tab bar is hidden for single file, so we need an add button in the header)
+            const headerAddBtn = document.createElement('button');
+            headerAddBtn.type = 'button';
+            headerAddBtn.className = 'me-rcb-add-file-btn';
+            headerAddBtn.innerHTML = '+ File';
+            headerAddBtn.title = 'Add a file';
+            headerAddBtn.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                addFile();
+            });
+            // Insert before stdin button
+            header.insertBefore(headerAddBtn, stdinBtn);
+
+            return {
+                dom,
+                contentDOM: code,
+
+                update(updatedNode) {
+                    if (updatedNode.type.name !== 'runnableCodeBlock') return false;
+                    var newLang = updatedNode.attrs.language || 'plaintext';
+                    if (newLang !== langSelect.value) {
+                        langSelect.value = newLang;
+                        dom.setAttribute('data-language', newLang);
+                    }
+                    // Sync extra files from attrs (e.g., on undo/redo)
+                    try {
+                        var newExtra = JSON.parse(updatedNode.attrs.files || '[]');
+                        var newMain = updatedNode.attrs.mainFileName || files[0].name;
+                        files = [{ name: newMain, content: '' }].concat(newExtra);
+                        if (activeTab >= files.length) {
+                            activeTab = 0;
+                            pre.style.display = '';
+                            extraEditor.style.display = 'none';
+                        }
+                        if (activeTab > 0) {
+                            extraArea.value = files[activeTab].content || '';
+                        }
+                        renderTabs();
+                    } catch (_) {}
+                    return true;
+                },
+
+                selectNode() {
+                    dom.classList.add('me-rcb-selected');
+                },
+
+                deselectNode() {
+                    dom.classList.remove('me-rcb-selected');
+                },
+
+                stopEvent(event) {
+                    var target = event.target;
+                    return header.contains(target) ||
+                           tabBar.contains(target) ||
+                           extraEditor.contains(target) ||
+                           outputPanel.contains(target) ||
+                           stdinPanel.contains(target);
+                },
+
+                ignoreMutation(mutation) {
+                    return mutation.target !== code && !code.contains(mutation.target);
+                },
+
+                destroy() {
+                    codeObserver.disconnect();
+                    clearTimeout(detectTimer);
+                    document.removeEventListener('me:run-code-block', onRunShortcut);
+                }
+            };
+        };
+    }
+});
+
+// =========================================================
 //  INITIAL CONTENT — blank document (single empty paragraph)
 // =========================================================
 const INITIAL_CONTENT = '<p></p>';
@@ -764,7 +1437,7 @@ if (editorEl) {
     const editor = new Editor({
         element: editorEl,
         extensions: [
-            StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+            StarterKit.configure({ heading: { levels: [1, 2, 3] }, codeBlock: false }),
             Placeholder.configure({
                 placeholder: ({ node, pos }) =>
                     pos === 0 ? "Start typing, press '/' for commands, or $ for math..." : '',
@@ -779,6 +1452,7 @@ if (editorEl) {
             TableHeader,
             MeImage,
             DrawingBlock,
+            RunnableCodeBlock,
             MathInline,
             MathBlock
         ],

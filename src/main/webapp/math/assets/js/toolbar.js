@@ -25,7 +25,8 @@
             'Blockquote (Ctrl+Shift+B)': function () { return editor.isActive('blockquote'); },
             'Heading 1':       function () { return editor.isActive('heading', { level: 1 }); },
             'Heading 2':       function () { return editor.isActive('heading', { level: 2 }); },
-            'Heading 3':       function () { return editor.isActive('heading', { level: 3 }); }
+            'Heading 3':       function () { return editor.isActive('heading', { level: 3 }); },
+            'Insert Code Block': function () { return editor.isActive('runnableCodeBlock'); }
         };
 
         // Map of button titles to their can() checks
@@ -44,7 +45,7 @@
             'Align Center':    function () { return editor.can().setTextAlign('center'); },
             'Align Right':     function () { return editor.can().setTextAlign('right'); },
             'Horizontal Rule': function () { return editor.can().setHorizontalRule(); },
-            'Insert Code Block': function () { return editor.can().toggleCodeBlock(); },
+            'Insert Code Block': function () { return editor.can().toggleRunnableCodeBlock(); },
             'Insert Table':    function () { return editor.can().insertTable({ rows: 3, cols: 3, withHeaderRow: true }); },
             'Page Break':      function () { return true; },
             'Insert Display Math (Ctrl+M)': function () { return true; },
@@ -188,7 +189,7 @@
             'Align Center':    function () { editor.chain().focus().setTextAlign('center').run(); },
             'Align Right':     function () { editor.chain().focus().setTextAlign('right').run(); },
             'Horizontal Rule': function () { editor.chain().focus().setHorizontalRule().run(); },
-            'Insert Code Block': function () { editor.chain().focus().toggleCodeBlock().run(); },
+            'Insert Code Block': function () { editor.chain().focus().toggleRunnableCodeBlock().run(); },
             'Insert Table':    function () { editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(); },
             'Page Break':      function () {
                 editor.chain().focus().insertContent('<div class="me-page-break"></div>').run();

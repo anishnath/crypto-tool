@@ -94,12 +94,37 @@
             return '\\noindent\\rule{\\textwidth}{0.4pt}\n\n';
         }
 
-        if (type === 'codeBlock') {
+        if (type === 'codeBlock' || type === 'runnableCodeBlock') {
             var code = '';
             content.forEach(function (n) {
                 if (n.type === 'text') code += (n.text || '');
             });
-            return '\\begin{verbatim}\n' + code + '\n\\end{verbatim}\n\n';
+            var lang = (attrs && attrs.language && attrs.language !== 'plaintext') ? attrs.language : '';
+            var lstOpts = lang ? '[language=' + lang + ']' : '';
+            var result = '';
+            // Main file
+            var mainName = (attrs && attrs.mainFileName) || '';
+            if (mainName) result += '% ' + mainName + '\n';
+            if (lang) {
+                result += '\\begin{lstlisting}' + lstOpts + '\n' + code + '\n\\end{lstlisting}\n\n';
+            } else {
+                result += '\\begin{verbatim}\n' + code + '\n\\end{verbatim}\n\n';
+            }
+            // Extra files
+            if (attrs && attrs.files && attrs.files !== '[]') {
+                try {
+                    var extraFiles = JSON.parse(attrs.files);
+                    extraFiles.forEach(function (f) {
+                        result += '% ' + (f.name || 'file') + '\n';
+                        if (lang) {
+                            result += '\\begin{lstlisting}' + lstOpts + '\n' + (f.content || '') + '\n\\end{lstlisting}\n\n';
+                        } else {
+                            result += '\\begin{verbatim}\n' + (f.content || '') + '\n\\end{verbatim}\n\n';
+                        }
+                    });
+                } catch (_) {}
+            }
+            return result;
         }
 
         if (type === 'table') {
@@ -192,6 +217,7 @@
             '\\usepackage{ulem}\n' +
             '\\usepackage{graphicx}\n' +
             '\\usepackage{hyperref}\n' +
+            '\\usepackage{listings}\n' +
             '\n' +
             '\\title{' + escapedTitle + '}\n' +
             '\\date{\\today}\n' +

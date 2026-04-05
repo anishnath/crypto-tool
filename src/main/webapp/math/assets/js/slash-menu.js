@@ -232,7 +232,7 @@
                 editor.chain().focus().toggleOrderedList().run();
                 break;
             case 'codeBlock':
-                editor.chain().focus().toggleCodeBlock().run();
+                editor.chain().focus().toggleRunnableCodeBlock().run();
                 break;
             case 'table':
                 editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
