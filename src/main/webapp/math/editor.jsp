@@ -355,6 +355,9 @@
 <script src="<%=request.getContextPath()%>/math/assets/js/export-latex.js?v=<%= cacheVersion %>"></script>
 <script src="<%=request.getContextPath()%>/math/assets/js/export-pdf.js?v=<%= cacheVersion %>"></script>
 
+<!-- Code Runner (must load before TipTap so window.MeCodeRunner is available during node init) -->
+<script src="<%=request.getContextPath()%>/math/assets/js/code-runner.js?v=<%= cacheVersion %>"></script>
+
 <!-- TipTap Editor (ES module — loads from CDN, creates editor, fires me:editor-ready) -->
 <script type="module" src="<%=request.getContextPath()%>/math/assets/js/tiptap-init.js?v=<%= cacheVersion %>"></script>
 
