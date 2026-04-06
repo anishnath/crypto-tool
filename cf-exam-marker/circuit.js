@@ -84,17 +84,8 @@ export function validateCircuitDescription(description) {
   return null; // valid
 }
 
-/**
- * Build a prompt for GPT to generate a circuit in our simulator's JSON format.
- *
- * @param {string} description - User's natural language description of the circuit
- * @returns {string} The prompt string
- */
-export function buildCircuitPrompt(description) {
+export function buildCircuitSystemMessage() {
   return `You are an expert electronics engineer and circuit designer. Generate a circuit for the 8gwifi.org circuit simulator based on the user's description.
-
-## User Request
-${description}
 
 ## Output Format
 Return a JSON object with this structure:
@@ -315,4 +306,16 @@ Before responding, mentally trace each path in the circuit:
 - For BJTs: place horizontally with base on left, collector/emitter on right in a vertical stack
 
 Respond with ONLY the JSON object.`;
+}
+
+/**
+ * Build the end-user request passed as the user message.
+ *
+ * @param {string} description - User's natural language description of the circuit
+ * @returns {string} The prompt string
+ */
+export function buildCircuitPrompt(description) {
+  return `Generate a circuit for this request:
+
+${description}`;
 }

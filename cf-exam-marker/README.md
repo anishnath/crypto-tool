@@ -70,6 +70,7 @@ For local development, create `.dev.vars`:
 ```
 OPENAI_API_KEY=sk-...
 API_KEY=your-local-api-key
+DEFAULT_OPENAI_MODEL=gpt-5-mini
 ```
 
 ### 4. Deploy
@@ -481,7 +482,7 @@ Response:
 }
 ```
 
-**Cost:** Uses `gpt-4o-mini` with max 500 tokens. Prompt requests 3-5 steps with abbreviated keys to minimize token usage.
+**Cost:** Uses `gpt-5-mini` by default with max 500 tokens. Prompt requests 3-5 steps with abbreviated keys to minimize token usage. You can override per request with `"model"`.
 
 ---
 
@@ -597,7 +598,7 @@ X-API-Key: your_api_key
 - "555 timer in astable mode, 1Hz output"
 - "2-bit ripple counter using JK flip-flops"
 
-**Cost:** Uses `gpt-4o-mini`, ~500-2000 tokens per request.
+**Cost:** Uses `gpt-5-mini` by default, ~500-2000 tokens per request.
 
 ### Test locally
 ```bash
@@ -766,8 +767,8 @@ curl -X POST http://localhost:8787/api/circuit-generate \
 
 ## Cost Considerations
 
-- Uses `gpt-4o-mini` by default (cheaper, fast)
-- Can specify `"model": "gpt-4o"` for higher accuracy (more expensive)
+- Uses `gpt-5-mini` by default
+- Can specify `"model": "gpt-4o-mini"` or another supported OpenAI model per request
 - Batching reduces API calls
 - Typical exam (25 subjective questions): ~5 API calls
 - Math steps: ~500 tokens per request (3-5 steps), answer-anchored prompt keeps output concise

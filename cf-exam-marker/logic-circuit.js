@@ -57,11 +57,8 @@ export function validateLogicDescription(description) {
   return null;
 }
 
-export function buildLogicCircuitPrompt(description) {
+export function buildLogicCircuitSystemMessage() {
   return `You are an expert digital logic designer. Generate a logic circuit for the 8gwifi.org Logic Gate Simulator based on the user's description.
-
-## User Request
-${description}
 
 ## Output Format
 Return a JSON object:
@@ -215,4 +212,10 @@ All gates have ports: [input0, input1, output] (port indices 0, 1, 2)
 7. Keep layout compact: x range -200 to 200, y range -100 to 100
 
 Respond with ONLY the JSON object.`;
+}
+
+export function buildLogicCircuitPrompt(description) {
+  return `Generate a logic circuit for this request:
+
+${description}`;
 }

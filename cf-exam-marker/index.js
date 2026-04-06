@@ -6,9 +6,9 @@ import { buildLinearSystemPrompt } from './linear-system.js';
 import { buildPolynomialPrompt } from './polynomial.js';
 import { buildVectorPrompt } from './vector.js';
 import { buildTrigonometryPrompt } from './trigonometry.js';
-import { buildTikzPrompt } from './tikz.js';
-import { buildCircuitPrompt, validateCircuitDescription } from './circuit.js';
-import { buildLogicCircuitPrompt, validateLogicDescription } from './logic-circuit.js';
+import { buildTikzPrompt, buildTikzSystemMessage } from './tikz.js';
+import { buildCircuitPrompt, buildCircuitSystemMessage, validateCircuitDescription } from './circuit.js';
+import { buildLogicCircuitPrompt, buildLogicCircuitSystemMessage, validateLogicDescription } from './logic-circuit.js';
 import {
   handleCreateDocument,
   handleGetDocument,
@@ -22,11 +22,46 @@ const ALLOWED_ORIGINS = new Set([
   'https://8gwifi.org',
 ]);
 
+const FALLBACK_OPENAI_MODEL = 'gpt-5-mini';
+
 function jsonResponse(body, init = {}) {
   return new Response(JSON.stringify(body), {
     headers: { 'content-type': 'application/json; charset=utf-8' },
     ...init,
   });
+}
+
+function getDefaultOpenAIModel(env) {
+  return env.DEFAULT_OPENAI_MODEL || FALLBACK_OPENAI_MODEL;
+}
+
+function resolveOpenAIModel(env, explicitModel) {
+  return explicitModel || getDefaultOpenAIModel(env);
+}
+
+function usesMaxCompletionTokens(model) {
+  return /^(gpt-5|o[134])/.test(model);
+}
+
+function supportsCustomTemperature(model) {
+  return !/^gpt-5/.test(model);
+}
+
+function extractMessageContent(message) {
+  if (!message) return '';
+  if (typeof message.content === 'string') return message.content;
+  if (Array.isArray(message.content)) {
+    return message.content
+      .map(part => {
+        if (typeof part === 'string') return part;
+        if (part?.type === 'text' && typeof part.text === 'string') return part.text;
+        if (part?.type === 'output_text' && typeof part.text === 'string') return part.text;
+        return '';
+      })
+      .join('')
+      .trim();
+  }
+  return '';
 }
 
 function withCors(resp, origin) {
@@ -141,10 +176,35 @@ async function callOpenAI(prompt, env, options = {}) {
     throw new Error('OpenAI API key not configured');
   }
 
-  const model = options.model || 'gpt-4o-mini';
+  const model = resolveOpenAIModel(env, options.model);
   const temperature = options.temperature ?? 0.1;
   const maxTokens = options.maxTokens || 1000;
   const systemMessage = options.systemMessage || 'You are a precise exam evaluator. Always respond with valid JSON only.';
+
+  const requestBody = {
+    model,
+    messages: [
+      {
+        role: 'system',
+        content: systemMessage
+      },
+      {
+        role: 'user',
+        content: prompt
+      }
+    ],
+    response_format: { type: 'json_object' }
+  };
+
+  if (supportsCustomTemperature(model)) {
+    requestBody.temperature = temperature;
+  }
+
+  if (usesMaxCompletionTokens(model)) {
+    requestBody.max_completion_tokens = maxTokens;
+  } else {
+    requestBody.max_tokens = maxTokens;
+  }
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -152,22 +212,7 @@ async function callOpenAI(prompt, env, options = {}) {
       'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      model,
-      messages: [
-        {
-          role: 'system',
-          content: systemMessage
-        },
-        {
-          role: 'user',
-          content: prompt
-        }
-      ],
-      temperature,
-      max_tokens: maxTokens,
-      response_format: { type: 'json_object' }
-    }),
+    body: JSON.stringify(requestBody),
   });
 
   if (!response.ok) {
@@ -177,10 +222,18 @@ async function callOpenAI(prompt, env, options = {}) {
   }
 
   const data = await response.json();
-  const content = data.choices?.[0]?.message?.content;
+  const firstChoice = data.choices?.[0];
+  const firstMessage = firstChoice?.message;
+  const content = extractMessageContent(firstMessage);
 
   if (!content) {
-    throw new Error('No content in OpenAI response');
+    console.error('OpenAI response missing content:', JSON.stringify({
+      model,
+      finish_reason: firstChoice?.finish_reason,
+      message: firstMessage,
+      usage: data.usage,
+    }));
+    throw new Error(`No content in OpenAI response${firstChoice?.finish_reason ? ` (finish_reason=${firstChoice.finish_reason})` : ''}`);
   }
 
   // Parse JSON response
@@ -226,7 +279,7 @@ async function handleMark(request, env) {
     );
 
     const result = await callOpenAI(prompt, env, {
-      model: payload.model || 'gpt-4o-mini',
+      model: resolveOpenAIModel(env, payload.model),
       maxTokens: 1000
     });
 
@@ -282,7 +335,7 @@ async function handleMarkBatch(request, env) {
     const prompt = buildBatchPrompt(questions);
 
     const results = await callOpenAI(prompt, env, {
-      model: payload.model || 'gpt-4o-mini',
+      model: resolveOpenAIModel(env, payload.model),
       maxTokens: 2000
     });
 
@@ -406,7 +459,7 @@ async function handleMarkExam(request, env) {
     try {
       const prompt = buildBatchPrompt(batch);
       const results = await callOpenAI(prompt, env, {
-        model: payload.model || 'gpt-4o-mini',
+        model: resolveOpenAIModel(env, payload.model),
         maxTokens: 2000
       });
 
@@ -687,7 +740,7 @@ async function logTikzRequest(env, { description, prompt, response, success, err
       response ? JSON.stringify(response) : null,
       success ? 1 : 0,
       errorMessage || null,
-      model || 'gpt-4o-mini',
+      model || getDefaultOpenAIModel(env),
       responseTimeMs
     ).run();
   } catch (e) {
@@ -783,7 +836,7 @@ async function handleMathSteps(request, env, ctx) {
               : buildMathStepsPrompt(op, expression, v, answer, bounds);
 
     const result = await callOpenAI(prompt, env, {
-      model: 'gpt-4o-mini',
+      model: getDefaultOpenAIModel(env),
       temperature: 0.1,
       maxTokens: 800,
       systemMessage: 'You are a patient math tutor who shows every intermediate step. Never skip algebra. Respond with valid JSON only.'
@@ -1753,7 +1806,7 @@ async function handleGetUserAttempts(userId, request, env) {
  */
 async function handleTikzGenerate(request, env) {
   const startTime = Date.now();
-  const model = 'gpt-4o-mini';
+  const model = getDefaultOpenAIModel(env);
   let payload;
   try {
     payload = await request.json();
@@ -1771,14 +1824,14 @@ async function handleTikzGenerate(request, env) {
 
   const trimmedDescription = description.trim();
 
-  try {
-    const prompt = buildTikzPrompt(trimmedDescription);
-    const result = await callOpenAI(prompt, env, {
-      model,
-      temperature: 0.2,
-      maxTokens: 1200,
-      systemMessage: 'You are an expert TikZ programmer. Always respond with valid JSON only, no markdown, no explanation outside the JSON object.'
-    });
+	try {
+	    const prompt = buildTikzPrompt(trimmedDescription);
+	    const result = await callOpenAI(prompt, env, {
+	      model,
+	      temperature: 0.2,
+	      maxTokens: 6000,
+	      systemMessage: buildTikzSystemMessage()
+	    });
 
     const responsePayload = {
       success: true,
@@ -1828,7 +1881,7 @@ async function logCircuitRequest(env, { description, response, elementCount, suc
       elementCount || 0,
       success ? 1 : 0,
       errorMessage || null,
-      model || 'gpt-4o-mini',
+      model || getDefaultOpenAIModel(env),
       responseTimeMs
     ).run();
   } catch (e) {
@@ -1849,7 +1902,7 @@ async function logLogicRequest(env, { description, response, componentCount, wir
       wireCount || 0,
       success ? 1 : 0,
       errorMessage || null,
-      model || 'gpt-4o-mini',
+      model || getDefaultOpenAIModel(env),
       responseTimeMs
     ).run();
   } catch (e) {
@@ -1867,16 +1920,16 @@ async function handleLogicGenerate(request, env) {
   const validationError = validateLogicDescription(description);
   if (validationError) return jsonResponse({ error: validationError }, { status: 400 });
 
-  const model = 'gpt-4o-mini';
+  const model = getDefaultOpenAIModel(env);
 
   try {
     const prompt = buildLogicCircuitPrompt(description.trim());
-    const result = await callOpenAI(prompt, env, {
-      model,
-      temperature: 0.2,
-      maxTokens: 3000,
-      systemMessage: 'You are an expert digital logic designer. Always respond with valid JSON only, no markdown, no explanation.'
-    });
+	    const result = await callOpenAI(prompt, env, {
+	      model,
+	      temperature: 0.2,
+	      maxTokens: 3000,
+	      systemMessage: buildLogicCircuitSystemMessage()
+	    });
 
     if (!result.components || !Array.isArray(result.components) || result.components.length === 0) {
       const elapsed = Date.now() - startTime;
@@ -1972,12 +2025,12 @@ async function handleCircuitGenerate(request, env) {
 
   try {
     const prompt = buildCircuitPrompt(description.trim());
-    const result = await callOpenAI(prompt, env, {
-      model: 'gpt-4o-mini',
-      temperature: 0.2,
-      maxTokens: 2000,
-      systemMessage: 'You are an expert electronics engineer. Always respond with valid JSON only, no markdown, no explanation outside the JSON object.'
-    });
+	    const result = await callOpenAI(prompt, env, {
+	      model: getDefaultOpenAIModel(env),
+	      temperature: 0.2,
+	      maxTokens: 2000,
+	      systemMessage: buildCircuitSystemMessage()
+	    });
 
     // Validate response has required fields
     if (!result.elements || !Array.isArray(result.elements) || result.elements.length === 0) {
@@ -2041,7 +2094,7 @@ async function handleCircuitGenerate(request, env) {
       response: responsePayload,
       elementCount: result.elements.length,
       success: true,
-      model: 'gpt-4o-mini',
+      model: getDefaultOpenAIModel(env),
       responseTimeMs: elapsed,
     });
 
@@ -2055,7 +2108,7 @@ async function handleCircuitGenerate(request, env) {
       elementCount: 0,
       success: false,
       errorMessage: e.message || 'Failed to generate circuit',
-      model: 'gpt-4o-mini',
+      model: getDefaultOpenAIModel(env),
       responseTimeMs: elapsed,
     });
     return jsonResponse({ error: e.message || 'Failed to generate circuit' }, { status: 500 });

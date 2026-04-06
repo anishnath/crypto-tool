@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS tikz_requests (
     response_json TEXT,
     success INTEGER NOT NULL DEFAULT 1,
     error_message TEXT,
-    model TEXT DEFAULT 'gpt-4o-mini',
+    model TEXT DEFAULT 'gpt-5-mini',
     response_time_ms INTEGER,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );

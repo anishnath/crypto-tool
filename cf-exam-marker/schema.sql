@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS evaluations (
     feedback TEXT,
     step_analysis_json TEXT,
     confidence REAL,
-    model_used TEXT DEFAULT 'gpt-4o-mini',
+    model_used TEXT DEFAULT 'gpt-5-mini',
     evaluated_at TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (attempt_id) REFERENCES test_attempts(id) ON DELETE CASCADE,
     FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE,
@@ -225,7 +225,7 @@ CREATE TABLE IF NOT EXISTS tikz_requests (
     response_json TEXT,
     success INTEGER NOT NULL DEFAULT 1,
     error_message TEXT,
-    model TEXT DEFAULT 'gpt-4o-mini',
+    model TEXT DEFAULT 'gpt-5-mini',
     response_time_ms INTEGER,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );

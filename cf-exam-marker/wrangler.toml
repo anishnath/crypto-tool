@@ -11,7 +11,8 @@ routes = [
 
 # Environment variables (non-secret)
 [vars]
-# Add any non-secret config here
+# Default OpenAI model for AI-backed endpoints
+DEFAULT_OPENAI_MODEL = "gpt-5-mini"
 
 # Secrets (add via: wrangler secret put OPENAI_API_KEY, wrangler secret put API_KEY)
 # OPENAI_API_KEY = "sk-..." (don't put here, use wrangler secret put)
