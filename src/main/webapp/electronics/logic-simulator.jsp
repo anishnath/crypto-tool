@@ -25,15 +25,55 @@
     <jsp:param name="faq4q" value="Can I type a Boolean expression and generate a circuit?" />
     <jsp:param name="faq4a" value="Yes. Click Expr to Circuit in the toolbar and type an expression like A*B + !C or AB + A'C using standard notation. The simulator parses it, creates input pins for each variable, generates the necessary AND OR and NOT gates, wires them together, and adds an output pin. Supports implicit AND (AB means A AND B), postfix NOT (A' means NOT A), and parentheses for grouping." />
 </jsp:include>
+<!-- Critical CSS inlined for LCP -->
+<style>
+:root,[data-theme="dark"]{--lg-bg:#0f1117;--lg-panel:#181b22;--lg-panel-deep:#12141a;--lg-border:#2a2e38;--lg-text:#e2e8f0;--lg-muted:#64748b;--lg-accent:#a78bfa;--lg-canvas-bg:#13151c;--lg-gate-fill:#1e2230;--lg-gate-stroke:#8b95a8;--header-height-desktop:72px}
+*{box-sizing:border-box;margin:0;padding:0}
+.lg-hero-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:5px 14px;padding-top:calc(var(--header-height-desktop) + 5px);border-bottom:1px solid var(--lg-border);background:var(--lg-panel-deep);overflow:hidden}
+.lg-hero-h1{font:600 15px/1.3 'Sora',sans-serif;color:var(--lg-text);margin:0;white-space:nowrap}
+.lg-app{display:flex;flex-direction:column;height:calc(100vh - var(--header-height-desktop) - 40px - var(--lg-ad-bottom-h,100px));background:var(--lg-bg);color:var(--lg-text);font-family:'DM Sans',sans-serif;overflow:hidden}
+.lg-toolbar{display:flex;align-items:center;gap:2px;height:44px;padding:0 10px;background:var(--lg-panel);border-bottom:1px solid var(--lg-border);flex-shrink:0}
+.lg-main{display:flex;flex:1;min-height:0}
+.lg-library{width:200px;flex-shrink:0;background:var(--lg-panel);border-right:1px solid var(--lg-border);overflow-y:auto}
+.lg-canvas-wrap{flex:1;position:relative;overflow:hidden;background:var(--lg-canvas-bg);isolation:isolate;z-index:0}
+.lg-canvas-wrap svg{width:100%;height:100%;display:block}
+</style>
+
+<!-- Fonts: preload critical, defer rest -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/electronics/css/logic-simulator.css?v=<%=v%>">
-<!-- STPD banner ad (hero only, no overlay/interstitial) -->
-<%@ include file="../setupad.jsp"%>
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"></noscript>
+
+<!-- CSS: navigation + dark-mode deferred, logic-simulator critical already inlined -->
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/electronics/css/logic-simulator.css">
+
+<!-- Ads: defer to not block LCP -->
+<script>
+// Lazy-load setupad after page render
+window.addEventListener('load', function() {
+  var s1 = document.createElement('script');
+  s1.src = 'https://securepubads.g.doubleclick.net/tag/js/gpt.js';
+  s1.async = true;
+  document.head.appendChild(s1);
+
+  window.googletag = window.googletag || {cmd: []};
+  googletag.cmd.push(function() {
+    var w = window.innerWidth;
+    if (w >= 992) googletag.defineSlot('/147246189,22976055811/8gwifi.org_336x336_sidebar_desktop', [[336,336],[300,300],[320,250]], 'site_8gwifi_org_sidebar_desktop').addService(googletag.pubads());
+    else if (w >= 768) googletag.defineSlot('/147246189,22976055811/8gwifi.org_250x250_sidebar_desktop', [[250,250]], 'site_8gwifi_org_sidebar_desktop').addService(googletag.pubads());
+    googletag.pubads().disableInitialLoad();
+    googletag.pubads().enableSingleRequest();
+    googletag.pubads().collapseEmptyDivs();
+    googletag.enableServices();
+    googletag.display('site_8gwifi_org_sidebar_desktop');
+  });
+});
+</script>
+
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
 </head>
 <body>
 <%@ include file="../modern/components/nav-header.jsp" %>
@@ -247,41 +287,49 @@
 
 </div>
 
-<!-- AdSense bottom bar (visible within viewport, below the app) -->
-<div class="lg-adsense-bar">
-  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- AdSense bottom bar (lazy-loaded after page render) -->
+<div class="lg-adsense-bar" id="adsenseBar">
   <ins class="adsbygoogle"
        style="display:block"
        data-ad-client="ca-pub-9265938999349914"
        data-ad-slot="6684554088"
        data-ad-format="horizontal"
        data-full-width-responsive="false"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
-
-<!-- Logic simulator scripts -->
-<script src="<%=request.getContextPath()%>/electronics/js/logic/core/value.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/core/circuit.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/components/gates.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/components/pin.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/components/clock.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/components/wiring.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/components/io.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/components/memory.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/components/arithmetic.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/components/displays.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/components/ttl/ttl.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/core/project.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/core/history.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/presets.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/analysis/analyzer.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/analysis/synthesize.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/analysis/chronogram.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/io/file-io.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/ui/canvas.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/electronics/js/logic/ui/wire-manager.js?v=<%=v%>"></script>
 <script>
-(function () {
+// Load AdSense after LCP
+window.addEventListener('load', function() {
+  var s = document.createElement('script');
+  s.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+  s.async = true;
+  s.onload = function() { (adsbygoogle = window.adsbygoogle || []).push({}); };
+  document.head.appendChild(s);
+});
+</script>
+
+<!-- Logic simulator scripts (defer preserves order, doesn't block LCP) -->
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/core/value.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/core/circuit.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/components/gates.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/components/pin.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/components/clock.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/components/wiring.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/components/io.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/components/memory.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/components/arithmetic.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/components/displays.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/components/ttl/ttl.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/core/project.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/core/history.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/presets.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/analysis/analyzer.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/analysis/synthesize.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/analysis/chronogram.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/io/file-io.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/ui/canvas.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/ui/wire-manager.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
   'use strict';
   const L = window.LogicSim;
   const { GATE_TYPES, PIN_TYPES, CLOCK_TYPE, WIRING_TYPES, IO_TYPES, MEMORY_TYPES, ARITH_TYPES, DISPLAY_TYPES, TTL_TYPES, Circuit, Canvas, WireManager } = L;
@@ -1046,7 +1094,7 @@
     canvas.render();
   })();
 
-})();
+});
 </script>
 
 <!-- SEO Content + Footer Ad -->
