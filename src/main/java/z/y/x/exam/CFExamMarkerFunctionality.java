@@ -119,6 +119,7 @@ public class CFExamMarkerFunctionality extends HttpServlet {
                path.contains("/api/math-steps") ||
                path.contains("/api/tikz-generate") ||
                path.contains("/api/circuit-generate") ||
+               path.contains("/api/logic-generate") ||
                path.startsWith("/api/documents");
     }
     
@@ -278,6 +279,9 @@ public class CFExamMarkerFunctionality extends HttpServlet {
                     break;
                 case "circuit_generate":
                     handleCircuitGenerate(request, response);
+                    break;
+                case "logic_generate":
+                    handleLogicGenerate(request, response);
                     break;
                 case "upsert_user":
                     handleUpsertUser(request, response);
@@ -892,6 +896,92 @@ public class CFExamMarkerFunctionality extends HttpServlet {
         }
 
         makeApiRequest(getApiBaseUrl() + "/api/circuit-generate", "POST", requestBody, response, true);
+    }
+
+    // ── Logic Circuit AI Generation ──
+
+    private static final Set<String> LOGIC_KEYWORDS = new HashSet<>(Arrays.asList(
+        "gate", "and", "or", "not", "nand", "nor", "xor", "xnor", "buffer", "inverter",
+        "flip-flop", "flipflop", "ff", "latch", "d-ff", "jk-ff", "sr-ff", "t-ff",
+        "register", "counter", "memory", "sequential",
+        "adder", "half adder", "full adder", "subtractor", "comparator", "alu",
+        "multiplexer", "mux", "demultiplexer", "demux", "decoder", "encoder",
+        "7-segment", "seven segment", "hex display", "led", "display", "bar graph",
+        "boolean", "truth table", "karnaugh", "logic", "digital", "binary",
+        "combinational", "combinatorial", "clock", "toggle", "pulse",
+        "input", "output", "switch", "button", "probe",
+        "ttl", "7400", "7402", "7404", "7408", "7432", "7486", "7474", "7447", "74138",
+        "sum of products", "product of sums", "sop", "pos", "minterm", "maxterm",
+        "minimize", "simplify", "expression"
+    ));
+
+    private static boolean isLogicRelated(String descLower) {
+        for (String kw : LOGIC_KEYWORDS) {
+            if (descLower.contains(kw)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Generate logic circuit from natural language description.
+     * POST /CFExamMarkerFunctionality?action=logic_generate
+     * Body: { "description": "..." }
+     *
+     * Rate-limited: shares the same bucket as TikZ/Circuit (both cost AI tokens).
+     */
+    private void handleLogicGenerate(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        // Rate limit: shares TikZ bucket (5/hour sustained, burst 2/5 min per IP)
+        String clientIp = getClientIp(request);
+        Bucket bucket = resolveTikzBucket(clientIp);
+        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+        if (!probe.isConsumed()) {
+            long waitSeconds = Math.max(1, probe.getNanosToWaitForRefill() / 1_000_000_000);
+            response.setStatus(429);
+            response.setHeader("Retry-After", String.valueOf(waitSeconds));
+            sendError(response, 429, "rate_limit_exceeded",
+                    "AI generation limit reached. Try again in " + waitSeconds + "s (limit: " + TIKZ_PER_HOUR + " per hour)");
+            return;
+        }
+        response.setHeader("X-RateLimit-Remaining", String.valueOf(probe.getRemainingTokens()));
+
+        String requestBody = readRequestBody(request);
+
+        JsonObject payload;
+        try {
+            JsonElement parsed = new JsonParser().parse(requestBody);
+            payload = parsed.getAsJsonObject();
+        } catch (JsonSyntaxException | IllegalStateException e) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_json", "Request body must be valid JSON");
+            return;
+        }
+
+        String description = getJsonString(payload, "description");
+        if (description == null || description.length() < 3) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "missing_field", "description is required (min 3 chars)");
+            return;
+        }
+        if (description.length() > 500) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_field", "description too long (max 500 chars)");
+            return;
+        }
+
+        // Sanity check: reject non-logic prompts before hitting the AI API
+        String descLower = description.toLowerCase();
+        if (!isLogicRelated(descLower)) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_description",
+                    "Please describe a digital logic circuit (e.g. \"2-bit adder\" or \"SR latch from NAND gates\")");
+            return;
+        }
+        // Block prompt injection attempts
+        if (PROMPT_INJECTION_PATTERN.matcher(description).find()) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_description",
+                    "Please describe a digital logic circuit");
+            return;
+        }
+
+        makeApiRequest(getApiBaseUrl() + "/api/logic-generate", "POST", requestBody, response, true);
     }
 
     /**
