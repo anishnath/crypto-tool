@@ -6,17 +6,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Electronics Tools — Circuit Simulator & Arduino Emulator" />
+    <jsp:param name="toolName" value="Electronics Tools — Circuit Simulator, Arduino Emulator & Logic Gate Simulator" />
     <jsp:param name="toolCategory" value="Electronics" />
-    <jsp:param name="toolDescription" value="Free online electronics tools. Build circuits with 60 components and AI, or write Arduino code and run it on a virtual ATmega328p with LEDs, servos, LCD, and 23 interactive components. All browser-based, no signup." />
+    <jsp:param name="toolDescription" value="Free online electronics tools. Build analog circuits with 60 components, write Arduino/ESP32 code on virtual hardware, or design digital logic with gates, flip-flops, truth tables, and K-maps. All browser-based, no signup." />
     <jsp:param name="toolUrl" value="electronics/" />
-    <jsp:param name="toolKeywords" value="circuit simulator, arduino simulator, electronics tools, online circuit builder, arduino emulator, SPICE simulator, virtual breadboard, LED circuit, servo motor, LCD display, serial monitor, avr simulator, wokwi alternative" />
+    <jsp:param name="toolKeywords" value="circuit simulator, arduino simulator, logic gate simulator, electronics tools, online circuit builder, arduino emulator, SPICE simulator, digital logic, truth table generator, karnaugh map, flip flop, TTL 7400, logisim online, boolean algebra" />
     <jsp:param name="breadcrumbCategoryUrl" value="electronics/" />
-    <jsp:param name="toolFeatures" value="Circuit simulator with 60 components and AI generation,Arduino simulator with real AVR8 CPU emulation,23 interactive virtual components,Monaco code editor with compile and run,Serial monitor and oscilloscope,108 built-in circuit presets,15 Arduino example sketches,Dark and light themes,100% browser-based no signup" />
+    <jsp:param name="toolFeatures" value="Circuit simulator with 60 components and AI generation,Arduino simulator with 6 boards and 21 components,Logic gate simulator with truth tables and K-maps,53 digital logic components including TTL ICs,Quine-McCluskey Boolean minimization,Timing diagrams and subcircuits,Monaco code editor with compile and run,Serial monitor and oscilloscope,100% browser-based no signup" />
     <jsp:param name="faq1q" value="What electronics tools are available?" />
-    <jsp:param name="faq1a" value="Two main tools: a Circuit Simulator for designing and simulating analog and digital circuits with 60 component types and AI generation, and an Arduino Simulator for writing compiling and running Arduino code on a virtual microcontroller with interactive components like LEDs buttons servos and displays." />
+    <jsp:param name="faq1a" value="Three tools: a Circuit Simulator for analog and digital circuits with 60 components and AI generation, an Arduino Simulator for writing and running code on 6 virtual boards (Uno ESP32 Pico), and a Logic Gate Simulator for designing digital circuits with gates flip-flops TTL ICs truth tables Karnaugh maps and Boolean algebra." />
     <jsp:param name="faq2q" value="Are these tools free?" />
-    <jsp:param name="faq2a" value="Yes completely free with no signup required. Both tools run entirely in your browser. The Circuit Simulator includes 108 built-in circuits and an AI generator. The Arduino Simulator compiles via arduino-cli and includes 15 example sketches." />
+    <jsp:param name="faq2a" value="Yes completely free with no signup required. All three tools run in your browser. The Circuit Simulator has 108 presets and AI generation. The Arduino Simulator compiles via arduino-cli with 33 example sketches. The Logic Gate Simulator includes 53 components 9 TTL ICs 10 preset circuits and Quine-McCluskey minimization." />
 </jsp:include>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,10 +35,11 @@
   "url": "https://8gwifi.org/electronics/",
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 2,
+    "numberOfItems": 3,
     "itemListElement": [
       {"@type":"ListItem","position":1,"name":"Circuit Simulator with AI","url":"https://8gwifi.org/physics/labs/circuit-simulator.jsp"},
-      {"@type":"ListItem","position":2,"name":"Arduino Simulator","url":"https://8gwifi.org/electronics/arduino-simulator.jsp"}
+      {"@type":"ListItem","position":2,"name":"Arduino & ESP32 Simulator","url":"https://8gwifi.org/electronics/arduino-simulator.jsp"},
+      {"@type":"ListItem","position":3,"name":"Logic Gate Simulator","url":"https://8gwifi.org/electronics/logic-simulator.jsp"}
     ]
   }
 }
@@ -102,8 +103,7 @@ body { background: var(--el-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
 .elec-crumb a:hover { color: var(--el-accent); }
 
 /* Cards */
-.elec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
-@media(max-width:700px) { .elec-grid { grid-template-columns: 1fr; } }
+.elec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 20px; }
 
 .elec-card {
   display: flex; flex-direction: column; padding: 24px;
@@ -166,10 +166,10 @@ body { background: var(--el-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
 
 <section class="elec-hero">
   <h1>Electronics Tools</h1>
-  <p>Design circuits with AI, simulate Arduino code on a virtual microcontroller &mdash; all in your browser</p>
+  <p>Design analog circuits with AI, run Arduino/ESP32 code on virtual hardware, build digital logic with truth tables &amp; K-maps &mdash; all in your browser</p>
   <div class="elec-stats">
-    <span class="elec-stat">2 Tools</span>
-    <span class="elec-stat">60+ Components</span>
+    <span class="elec-stat">3 Tools</span>
+    <span class="elec-stat">130+ Components</span>
     <span class="elec-stat">100% Free</span>
     <span class="elec-stat">No Signup</span>
   </div>
@@ -219,18 +219,46 @@ body { background: var(--el-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
         </svg>
       </div>
       <div>
-        <h2 class="elec-card-title">Arduino Simulator</h2>
-        <div class="elec-card-subtitle">AVR8 CPU Emulation</div>
+        <h2 class="elec-card-title">Arduino & ESP32 Simulator</h2>
+        <div class="elec-card-subtitle">6 Boards &bull; Real CPU Emulation</div>
       </div>
     </div>
     <p class="elec-card-desc">
-      Write Arduino C++ code in a Monaco editor, compile with arduino-cli, and run on a virtual ATmega328p. Interactive LEDs, buttons, potentiometers, servos, LCD, OLED, NeoPixels, buzzer, serial monitor, and 23 virtual components.
+      Write Arduino C++ code, compile with arduino-cli, and run on virtual hardware &mdash; Arduino Uno/Nano (avr8js), Raspberry Pi Pico (rp2040js), ESP32/C3/S3 (QEMU). 21 interactive components, serial monitor, diagram.json support.
     </p>
     <div class="elec-card-features">
       <span class="elec-feature feat-code">Code Editor</span>
-      <span class="elec-feature feat-components">23 Components</span>
+      <span class="elec-feature feat-components">21 Components</span>
       <span class="elec-feature feat-serial">Serial Monitor</span>
-      <span class="elec-feature feat-presets">15 Sketches</span>
+      <span class="elec-feature feat-presets">33 Sketches</span>
+    </div>
+  </a>
+
+  <!-- Logic Gate Simulator -->
+  <a href="<%=request.getContextPath()%>/electronics/logic-simulator.jsp" class="elec-card">
+    <div class="elec-card-header">
+      <div class="elec-card-icon" style="background:linear-gradient(135deg,#a78bfa,#ec4899);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+          <path d="M4 6h6a6 6 0 010 12H4z"/>
+          <circle cx="17" cy="12" r="2"/>
+          <line x1="19" y1="12" x2="22" y2="12"/>
+          <line x1="1" y1="9" x2="4" y2="9"/>
+          <line x1="1" y1="15" x2="4" y2="15"/>
+        </svg>
+      </div>
+      <div>
+        <h2 class="elec-card-title">Logic Gate Simulator</h2>
+        <div class="elec-card-subtitle">Digital Logic &bull; Truth Tables &bull; K-Maps</div>
+      </div>
+    </div>
+    <p class="elec-card-desc">
+      Drag-and-drop AND, OR, NOT, NAND gates, flip-flops, counters, MUX, decoders, and 9 TTL ICs. Auto-generate truth tables, Karnaugh maps, minimize with Quine-McCluskey. Timing diagrams, subcircuits, expression-to-circuit synthesis.
+    </p>
+    <div class="elec-card-features">
+      <span class="elec-feature feat-components">53 Components</span>
+      <span class="elec-feature feat-ai">Truth Tables</span>
+      <span class="elec-feature feat-presets">K-Maps</span>
+      <span class="elec-feature feat-code">9 TTL ICs</span>
       <span class="elec-feature feat-new">New</span>
     </div>
   </a>

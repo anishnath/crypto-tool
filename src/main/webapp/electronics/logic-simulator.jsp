@@ -5,8 +5,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Logic Gate Simulator Online — Truth Tables, Karnaugh Maps, Timing Diagrams | 8gwifi.org</title>
-<meta name="description" content="Free browser-based digital logic simulator. Drag-and-drop AND, OR, NOT, NAND, NOR, XOR gates. Auto-generate truth tables, Karnaugh maps, and Boolean expressions. No install required.">
+<jsp:include page="../modern/components/seo-tool-page.jsp">
+    <jsp:param name="toolName" value="Logic Gate Simulator Online — Truth Tables, Karnaugh Maps, Boolean Algebra, Timing Diagrams" />
+    <jsp:param name="toolCategory" value="Electronics" />
+    <jsp:param name="toolDescription" value="Free browser-based digital logic simulator. Drag-and-drop AND, OR, NOT, NAND, NOR, XOR gates, flip-flops, counters, MUX, decoders, TTL 7400 ICs. Auto-generate truth tables, Karnaugh maps, minimize with Quine-McCluskey, view timing diagrams, build subcircuits. No install required." />
+    <jsp:param name="toolUrl" value="electronics/logic-simulator.jsp" />
+    <jsp:param name="toolKeywords" value="logic gate simulator online, logisim online, truth table generator, karnaugh map solver, boolean algebra calculator, digital circuit simulator, logic gates, flip flop simulator, D flip-flop, JK flip-flop, SR latch, binary counter, multiplexer, decoder, 7-segment display, TTL 7400, TTL 7474, Quine-McCluskey, sum of products, timing diagram, subcircuit, half adder, full adder, ALU, combinational logic, sequential logic" />
+    <jsp:param name="breadcrumbCategoryUrl" value="electronics/" />
+    <jsp:param name="educationalLevel" value="High School, Undergraduate, AP Computer Science, Digital Logic Design, Computer Engineering" />
+    <jsp:param name="teaches" value="Boolean algebra, truth tables, Karnaugh maps, logic minimization, combinational circuits, sequential circuits, flip-flops, registers, counters, multiplexers, decoders, binary arithmetic, adders, subtractors, ALU design, TTL IC families, timing analysis, state machines, hierarchical design" />
+    <jsp:param name="toolFeatures" value="53 digital logic components: 9 gates 7 wiring 3 I/O 6 memory 6 arithmetic/plexers 5 displays 9 TTL ICs,Auto truth table generation for up to 8 inputs,Karnaugh map visualization for 2 3 4 variables,Quine-McCluskey Boolean minimization with SOP expressions,Expression to circuit synthesis: type A*B+!C and get gates,Timing diagram with signal recording and waveform display,Hierarchical subcircuits: build once reuse everywhere,10 example circuits: half adder full adder SR latch D-FF counter MUX,JSON save/load PNG/SVG export URL sharing,Undo/redo with 40-level history,Dark and light themes" />
+    <jsp:param name="faq1q" value="What is this logic gate simulator?" />
+    <jsp:param name="faq1a" value="A free browser-based digital logic simulator inspired by Logisim. Drag and drop gates (AND OR NOT NAND NOR XOR), flip-flops (D JK SR T), counters, registers, multiplexers, decoders, 7-segment displays, and TTL 7400-series ICs onto a canvas. Wire them together and the circuit propagates instantly. Generate truth tables, Karnaugh maps, and minimized Boolean expressions automatically. No installation or signup required." />
+    <jsp:param name="faq2q" value="What components are available?" />
+    <jsp:param name="faq2a" value="53 components across 8 categories. Gates: AND OR NOT NAND NOR XOR XNOR Buffer. Wiring: Input Output Clock Constant Probe Tunnel. I/O: LED Button Switch. Memory: SR D JK T flip-flops 4-bit Register 4-bit Counter. Arithmetic: Full Adder Subtractor Comparator 2:1 MUX 1:2 DEMUX 2:4 Decoder. Displays: 7-Segment Hex Display LED Bar Hex Keypad TTY. TTL: 7400 7402 7404 7408 7432 7486 7474 7447 74138." />
+    <jsp:param name="faq3q" value="How does truth table and Karnaugh map generation work?" />
+    <jsp:param name="faq3a" value="Click the Analyze button in the toolbar. The simulator enumerates all input combinations (up to 2^8 = 256 rows), propagates each through the circuit, and records the outputs. It displays the truth table, extracts the Sum of Products expression, minimizes it using the Quine-McCluskey algorithm, and renders Karnaugh maps for 2 to 4 variable circuits with proper Gray code ordering." />
+    <jsp:param name="faq4q" value="Can I type a Boolean expression and generate a circuit?" />
+    <jsp:param name="faq4a" value="Yes. Click Expr to Circuit in the toolbar and type an expression like A*B + !C or AB + A'C using standard notation. The simulator parses it, creates input pins for each variable, generates the necessary AND OR and NOT gates, wires them together, and adds an output pin. Supports implicit AND (AB means A AND B), postfix NOT (A' means NOT A), and parentheses for grouping." />
+</jsp:include>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
