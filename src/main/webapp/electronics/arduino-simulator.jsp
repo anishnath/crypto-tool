@@ -25,22 +25,38 @@
     <jsp:param name="faq4q" value="Is it free?" />
     <jsp:param name="faq4a" value="Yes, completely free with no signup required. Arduino Uno and Pico simulations run entirely in your browser. ESP32 simulations use server-side QEMU (shared resource, auto-cleanup after 10 minutes). 33 example sketches included, supports multi-file projects, and Wokwi-compatible diagram.json import/export." />
 </jsp:include>
+<!-- Critical CSS inlined for fast LCP -->
+<style>
+:root,[data-theme="dark"]{--ard-bg:#111318;--ard-panel:#1a1d24;--ard-panel-deep:#14171c;--ard-border:#2d3139;--ard-text:#e2e8f0;--ard-muted:#64748b;--ard-accent:#06b6d4;--ard-editor-bg:#1e1e1e;--ard-success:#22c55e;--ard-error:#ef4444;--header-height-desktop:72px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ard-bg);color:var(--ard-text);font-family:'DM Sans',sans-serif;margin:0;overflow:hidden}
+.ard-app{display:flex;flex-direction:column;height:100vh;padding-top:var(--header-height-desktop)}
+.ard-hero-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;flex-shrink:0;max-width:1400px;width:100%;margin:0 auto;padding:6px 12px;border-bottom:1px solid var(--ard-border);background:var(--ard-panel-deep)}
+.ard-hero-h1{font:600 15px/1.3 'Sora',sans-serif;color:var(--ard-text);margin:0;white-space:nowrap}
+.ard-main{display:flex;flex:1;min-height:0;overflow:hidden}
+.ard-editor-side{display:flex;flex-direction:column;flex:1;min-width:0}
+</style>
+
+<!-- Fonts: preload then swap -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=v%>">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/electronics/css/arduino-simulator.css?v=<%=v%>">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
-<!-- wokwi-elements: component visuals -->
-<script src="https://unpkg.com/@wokwi/elements@0.48.3/dist/wokwi-elements.bundle.js"></script>
-<!-- xterm.js: Linux terminal for Raspberry Pi simulation -->
-<link rel="stylesheet" href="https://unpkg.com/xterm@5.3.0/css/xterm.css">
-<script src="https://unpkg.com/xterm@5.3.0/lib/xterm.js"></script>
-<!-- Theme toggle (nav + mobile drawer) -->
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=v%>" defer></script>
+<!-- CSS: defer non-critical, keep arduino-simulator.css as main -->
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/electronics/css/arduino-simulator.css">
+
+<!-- wokwi-elements: defer (not needed for LCP, canvas renders after) -->
+<script defer src="https://unpkg.com/@wokwi/elements@0.48.3/dist/wokwi-elements.bundle.js"></script>
+<!-- xterm.js: lazy-load (only needed for Pi 3B board) -->
+<link rel="stylesheet" href="https://unpkg.com/xterm@5.3.0/css/xterm.css" media="print" onload="this.media='all'">
+<script defer src="https://unpkg.com/xterm@5.3.0/lib/xterm.js"></script>
+<!-- Theme + search -->
+<script defer src="<%=request.getContextPath()%>/modern/js/dark-mode.js"></script>
+<script defer src="<%=request.getContextPath()%>/modern/js/search.js"></script>
 </head>
 <body>
 <%@ include file="../modern/components/nav-header.jsp" %>
