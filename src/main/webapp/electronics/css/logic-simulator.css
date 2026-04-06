@@ -139,6 +139,59 @@
 .lg-tb-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
 .lg-tb-btn#btnSimulate.active { background: rgba(34,197,94,.12); color: #22c55e; border-color: #22c55e; }
 .lg-tb-btn#btnSimulate:not(.active) { color: var(--lg-muted); }
+.lg-tb-btn#btnAI { background: linear-gradient(135deg, rgba(167,139,250,.15), rgba(236,72,153,.15)); color: #a78bfa; border-color: rgba(167,139,250,.3); }
+.lg-tb-btn#btnAI:hover { background: linear-gradient(135deg, rgba(167,139,250,.25), rgba(236,72,153,.25)); }
+.lg-tb-btn#btnAI:disabled { opacity: .5; cursor: wait; }
+
+/* ── AI Panel (inline bar below toolbar) ── */
+.lg-ai-panel { display: none; flex-direction: column; flex-shrink: 0; }
+.lg-ai-panel.open { display: flex; }
+.lg-ai-bar {
+  display: flex; align-items: center; gap: 8px; padding: 4px 12px;
+  background: linear-gradient(90deg, rgba(167,139,250,.08), rgba(236,72,153,.08));
+  border-bottom: 1px solid var(--lg-border); flex-shrink: 0; height: 36px;
+}
+.lg-ai-input {
+  flex: 1; min-width: 0; padding: 4px 10px;
+  border: 1px solid rgba(167,139,250,.3); border-radius: 6px;
+  background: rgba(0,0,0,.2); color: var(--lg-text);
+  font: 12px/1.3 'DM Sans', sans-serif; outline: none;
+}
+.lg-ai-input:focus { border-color: #a78bfa; }
+.lg-ai-input::placeholder { color: var(--lg-muted); font-size: 11px; }
+.lg-ai-btn {
+  padding: 4px 14px; border: none; border-radius: 6px;
+  background: #a78bfa; color: #fff;
+  font: 600 12px/1 'DM Sans', sans-serif; cursor: pointer; white-space: nowrap;
+}
+.lg-ai-btn:hover { background: #8b5cf6; }
+.lg-ai-btn:disabled { opacity: .5; cursor: wait; }
+.lg-ai-close {
+  padding: 2px 8px; border: none; background: transparent;
+  color: var(--lg-muted); font-size: 16px; cursor: pointer; line-height: 1;
+}
+.lg-ai-close:hover { color: #ef4444; }
+.lg-ai-status {
+  font-size: 11px; white-space: nowrap; flex-shrink: 0;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.lg-ai-status.loading { color: #a78bfa; }
+.lg-ai-status.success { color: #22c55e; }
+.lg-ai-status.error { color: #ef4444; }
+.lg-ai-examples {
+  display: flex; align-items: center; gap: 6px; padding: 3px 12px;
+  background: rgba(167,139,250,.04); border-bottom: 1px solid var(--lg-border);
+  flex-shrink: 0; overflow-x: auto; scrollbar-width: none;
+}
+.lg-ai-examples::-webkit-scrollbar { display: none; }
+.lg-ai-label { color: var(--lg-muted); font: 11px/1 'DM Sans', sans-serif; white-space: nowrap; flex-shrink: 0; }
+.lg-ai-chip {
+  padding: 2px 10px; border: 1px solid rgba(167,139,250,.25); border-radius: 12px;
+  background: transparent; color: #c4b5fd;
+  font: 11px/1.3 'DM Sans', sans-serif; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: all .15s;
+}
+.lg-ai-chip:hover { background: rgba(167,139,250,.15); border-color: #a78bfa; color: #e9d5ff; }
 .lg-tb-sep { width: 1px; height: 20px; background: var(--lg-border); margin: 0 4px; }
 
 /* ── Circuit Tabs ── */

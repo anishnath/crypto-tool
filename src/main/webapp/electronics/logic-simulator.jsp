@@ -50,6 +50,27 @@
 
 <div class="lg-app" id="logicApp">
 
+  <!-- AI Panel (hidden by default, opens below toolbar) -->
+  <div class="lg-ai-panel" id="aiPanel">
+    <div class="lg-ai-bar">
+      <input type="text" class="lg-ai-input" id="aiInput" placeholder="Describe a logic circuit... e.g. &quot;half adder with XOR and AND&quot;" maxlength="500" autocomplete="off">
+      <button class="lg-ai-btn" id="aiGenerate">Generate</button>
+      <button class="lg-ai-close" id="aiClose" title="Close">&times;</button>
+      <span class="lg-ai-status" id="aiStatus"></span>
+    </div>
+    <div class="lg-ai-examples">
+      <span class="lg-ai-label">Try:</span>
+      <button class="lg-ai-chip" data-prompt="AND gate with two input switches and LED output">AND + LED</button>
+      <button class="lg-ai-chip" data-prompt="Half adder with XOR for sum and AND for carry">Half Adder</button>
+      <button class="lg-ai-chip" data-prompt="XOR gate built from 4 NAND gates">XOR from NAND</button>
+      <button class="lg-ai-chip" data-prompt="D flip-flop with clock source and LED on Q output">D-FF + Clock</button>
+      <button class="lg-ai-chip" data-prompt="4-bit binary counter with clock, enable, and 4 LEDs">4-bit Counter</button>
+      <button class="lg-ai-chip" data-prompt="2 to 1 multiplexer with select switch and output LED">2:1 MUX</button>
+      <button class="lg-ai-chip" data-prompt="SR latch using SR flip-flop with set and reset inputs">SR Latch</button>
+      <button class="lg-ai-chip" data-prompt="3-input majority voter using AND and OR gates">Majority Gate</button>
+    </div>
+  </div>
+
   <!-- Toolbar -->
   <div class="lg-toolbar" id="toolbar">
     <div class="lg-tb-group">
@@ -105,6 +126,10 @@
       <button class="lg-tb-btn" id="btnChrono" title="Timing diagram (chronogram)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 2 12 2-6h4"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         <span>Timing</span>
+      </button>
+      <button class="lg-tb-btn" id="btnAI" title="AI: describe a circuit in plain English">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v1h1a3 3 0 010 6h-1v1a4 4 0 01-8 0v-1H7a3 3 0 010-6h1V6a4 4 0 014-4z"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M9 14h6"/></svg>
+        <span>AI</span>
       </button>
       <button class="lg-tb-btn" id="btnSynthesize" title="Generate circuit from expression">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
@@ -552,6 +577,112 @@
   document.getElementById('btnCloseAnalysis').addEventListener('click', () => {
     analysisPanel.style.display = 'none';
   });
+
+  /* ── AI Circuit Generation ── */
+  const aiPanel  = document.getElementById('aiPanel');
+  const aiInput  = document.getElementById('aiInput');
+  const aiBtn    = document.getElementById('aiGenerate');
+  const aiStatus = document.getElementById('aiStatus');
+
+  function setAiStatus(msg, cls) {
+    aiStatus.textContent = msg;
+    aiStatus.className = 'lg-ai-status' + (cls ? ' ' + cls : '');
+  }
+
+  // Toggle panel
+  document.getElementById('btnAI').addEventListener('click', () => {
+    aiPanel.classList.toggle('open');
+    if (aiPanel.classList.contains('open')) aiInput.focus();
+  });
+  document.getElementById('aiClose').addEventListener('click', () => {
+    aiPanel.classList.remove('open');
+  });
+
+  // Example chips fill the input
+  document.querySelectorAll('.lg-ai-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      aiInput.value = chip.dataset.prompt;
+      aiInput.focus();
+    });
+  });
+
+  // Enter key triggers generate
+  aiInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !aiBtn.disabled) generateLogicCircuit();
+  });
+  aiBtn.addEventListener('click', generateLogicCircuit);
+
+  async function generateLogicCircuit() {
+    const desc = aiInput.value.trim();
+    if (!desc) { setAiStatus('Enter a description', 'error'); return; }
+
+    aiBtn.disabled = true;
+    aiInput.disabled = true;
+    setAiStatus('Generating circuit...', 'loading');
+
+    try {
+      const resp = await fetch('<%=request.getContextPath()%>/CFExamMarkerFunctionality?action=logic_generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: desc }),
+      });
+
+      if (resp.status === 429) {
+        const data = await resp.json().catch(() => ({}));
+        setAiStatus(data.message || 'Rate limit — try again later', 'error');
+        return;
+      }
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        setAiStatus(data.error || data.message || 'Error (' + resp.status + ')', 'error');
+        return;
+      }
+
+      const data = await resp.json();
+      if (!data.components || !data.components.length) {
+        setAiStatus('AI returned empty circuit. Try a more specific description.', 'error');
+        return;
+      }
+
+      // Clear current circuit
+      [...circuit.components.keys()].forEach(id => circuit.removeComponent(id));
+
+      // Build components
+      const compMap = [];
+      for (const cd of data.components) {
+        const typeDef = ALL_TYPES[cd.type];
+        if (!typeDef) { console.warn('AI: unknown type', cd.type); compMap.push(null); continue; }
+        const comp = circuit.addComponent(typeDef, cd.x || 0, cd.y || 0, cd.attrs || {});
+        compMap.push(comp);
+      }
+
+      // Wire them
+      let wireCount = 0;
+      if (data.wires) {
+        for (const w of data.wires) {
+          const fromComp = compMap[w.from];
+          const toComp = compMap[w.to];
+          if (!fromComp || !toComp) continue;
+          if (circuit.addWire(fromComp.id, w.fromPort, toComp.id, w.toPort)) wireCount++;
+        }
+      }
+
+      canvas.fitContent();
+      saveSnapshot();
+
+      const time = data.responseTimeMs ? ' in ' + (data.responseTimeMs / 1000).toFixed(1) + 's' : '';
+      const warn = data.warnings && data.warnings.length ? ' ⚠ ' + data.warnings.length + ' warnings' : '';
+      setAiStatus('"' + (data.name || 'Circuit') + '" — ' + data.components.length + ' parts, ' + wireCount + ' wires' + time + warn, 'success');
+
+      if (data.warnings && data.warnings.length) console.warn('AI warnings:', data.warnings);
+
+    } catch (e) {
+      setAiStatus('Failed: ' + e.message, 'error');
+    } finally {
+      aiBtn.disabled = false;
+      aiInput.disabled = false;
+    }
+  }
 
   /* Expression → Circuit */
   document.getElementById('btnSynthesize').addEventListener('click', () => {
