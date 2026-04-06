@@ -8,6 +8,7 @@ import { buildVectorPrompt } from './vector.js';
 import { buildTrigonometryPrompt } from './trigonometry.js';
 import { buildTikzPrompt } from './tikz.js';
 import { buildCircuitPrompt, validateCircuitDescription } from './circuit.js';
+import { buildLogicCircuitPrompt, validateLogicDescription } from './logic-circuit.js';
 import {
   handleCreateDocument,
   handleGetDocument,
@@ -1835,6 +1836,123 @@ async function logCircuitRequest(env, { description, response, elementCount, suc
   }
 }
 
+async function logLogicRequest(env, { description, response, componentCount, wireCount, success, errorMessage, model, responseTimeMs }) {
+  if (!env.DB) return;
+  try {
+    await env.DB.prepare(
+      `INSERT INTO logic_requests (description, response_json, component_count, wire_count, success, error_message, model, response_time_ms)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      description,
+      response ? JSON.stringify(response) : null,
+      componentCount || 0,
+      wireCount || 0,
+      success ? 1 : 0,
+      errorMessage || null,
+      model || 'gpt-4o-mini',
+      responseTimeMs
+    ).run();
+  } catch (e) {
+    console.error('Failed to log logic request:', e);
+  }
+}
+
+async function handleLogicGenerate(request, env) {
+  const startTime = Date.now();
+  let payload;
+  try { payload = await request.json(); }
+  catch { return jsonResponse({ error: 'Invalid JSON body' }, { status: 400 }); }
+
+  const { description } = payload;
+  const validationError = validateLogicDescription(description);
+  if (validationError) return jsonResponse({ error: validationError }, { status: 400 });
+
+  const model = 'gpt-4o-mini';
+
+  try {
+    const prompt = buildLogicCircuitPrompt(description.trim());
+    const result = await callOpenAI(prompt, env, {
+      model,
+      temperature: 0.2,
+      maxTokens: 3000,
+      systemMessage: 'You are an expert digital logic designer. Always respond with valid JSON only, no markdown, no explanation.'
+    });
+
+    if (!result.components || !Array.isArray(result.components) || result.components.length === 0) {
+      const elapsed = Date.now() - startTime;
+      await logLogicRequest(env, { description: description.trim(), success: false, errorMessage: 'No components in response', model, responseTimeMs: elapsed });
+      return jsonResponse({ error: 'AI returned invalid logic circuit (no components)' }, { status: 500 });
+    }
+
+    // Validate each component
+    const warnings = [];
+    for (const c of result.components) {
+      if (!c.type || c.x === undefined || c.y === undefined) {
+        const elapsed = Date.now() - startTime;
+        await logLogicRequest(env, { description: description.trim(), success: false, errorMessage: 'Malformed component', model, responseTimeMs: elapsed });
+        return jsonResponse({ error: 'AI returned malformed component: ' + JSON.stringify(c) }, { status: 500 });
+      }
+      if (!c.attrs) c.attrs = {};
+    }
+
+    // Validate wires
+    if (!result.wires) result.wires = [];
+    for (const w of result.wires) {
+      if (w.from === undefined || w.to === undefined || w.fromPort === undefined || w.toPort === undefined) {
+        warnings.push('Malformed wire removed: ' + JSON.stringify(w));
+        continue;
+      }
+      if (w.from < 0 || w.from >= result.components.length || w.to < 0 || w.to >= result.components.length) {
+        warnings.push('Out-of-bounds wire removed: from=' + w.from + ' to=' + w.to);
+      }
+    }
+    // Filter valid wires only
+    result.wires = result.wires.filter(w =>
+      w.from !== undefined && w.to !== undefined && w.fromPort !== undefined && w.toPort !== undefined &&
+      w.from >= 0 && w.from < result.components.length && w.to >= 0 && w.to < result.components.length
+    );
+
+    // Check: has at least one input and one output
+    const hasInput = result.components.some(c => c.type === 'INPUT' || c.type === 'CLOCK' || c.type === 'SWITCH' || c.type === 'BUTTON' || c.type === 'CONSTANT');
+    const hasOutput = result.components.some(c => c.type === 'OUTPUT' || c.type === 'LED' || c.type === 'HEX_DISPLAY' || c.type === 'SEVEN_SEG' || c.type === 'LED_BAR');
+    if (!hasInput) warnings.push('No input component found — circuit may not be interactive');
+    if (!hasOutput) warnings.push('No output component found — circuit results not visible');
+
+    const elapsed = Date.now() - startTime;
+    const responsePayload = {
+      success: true,
+      name: result.name || 'AI Logic Circuit',
+      description: result.description || '',
+      components: result.components,
+      wires: result.wires,
+      responseTimeMs: elapsed,
+    };
+    if (warnings.length > 0) responsePayload.warnings = warnings;
+
+    await logLogicRequest(env, {
+      description: description.trim(),
+      response: responsePayload,
+      componentCount: result.components.length,
+      wireCount: result.wires.length,
+      success: true,
+      model,
+      responseTimeMs: elapsed,
+    });
+
+    return jsonResponse(responsePayload);
+  } catch (e) {
+    const elapsed = Date.now() - startTime;
+    await logLogicRequest(env, {
+      description: description.trim(),
+      success: false,
+      errorMessage: e.message || 'Failed to generate logic circuit',
+      model,
+      responseTimeMs: elapsed,
+    });
+    return jsonResponse({ error: e.message || 'Failed to generate logic circuit' }, { status: 500 });
+  }
+}
+
 async function handleCircuitGenerate(request, env) {
   const startTime = Date.now();
   let payload;
@@ -2087,6 +2205,14 @@ export default {
           return withCors(authError, reqOrigin);
         }
         const r = await handleTikzGenerate(request, env);
+        return withCors(r, reqOrigin);
+      }
+
+      // POST /api/logic-generate - Natural language → logic gate simulator JSON
+      if (pathname === '/api/logic-generate' && request.method === 'POST') {
+        const authError = requireApiKey(request, env);
+        if (authError) return withCors(authError, reqOrigin);
+        const r = await handleLogicGenerate(request, env);
         return withCors(r, reqOrigin);
       }
 
