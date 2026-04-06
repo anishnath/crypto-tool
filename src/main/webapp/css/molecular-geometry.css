@@ -10,6 +10,28 @@
     --mg-light: rgba(5, 150, 105, 0.15);
 }
 
+/* Narrower left column, wider center (3D viewer) — scoped to mg-tool-page only */
+@media (min-width: 1025px) {
+    .mg-tool-page.tool-page-container {
+        grid-template-columns: minmax(220px, 280px) minmax(0, 1fr) minmax(228px, 280px);
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+    }
+}
+
+@media (min-width: 901px) and (max-width: 1024px) {
+    .mg-tool-page.tool-page-container {
+        grid-template-columns: minmax(200px, 260px) minmax(0, 1fr);
+    }
+}
+
+@media (min-width: 901px) {
+    .mg-tool-page .tool-input-column {
+        top: 80px;
+        max-height: calc(100vh - 96px);
+    }
+}
+
 /* ===== Mode Toggle ===== */
 .mg-mode-toggle {
     display: flex;

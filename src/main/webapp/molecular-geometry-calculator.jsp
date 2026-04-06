@@ -91,7 +91,7 @@
     </div>
 </section>
 
-<main class="tool-page-container">
+<main class="tool-page-container mg-tool-page">
     <!-- ==================== INPUT COLUMN ==================== -->
     <div class="tool-input-column">
         <div class="tool-card">
@@ -931,5 +931,92 @@ H&mdash;O&mdash;H</div>
 <script src="<%=request.getContextPath()%>/js/molecular-geometry-core.js?v=<%=cacheVersion%>"></script>
 
 <%@ include file="modern/components/analytics.jsp" %>
+
+<!-- Insert into Document (Math Editor integration) -->
+<button id="insertIntoDocBtn" style="display:none;position:fixed;bottom:20px;right:20px;z-index:9999;padding:10px 20px;background:#2563EB;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15);" title="Send to Math Editor">&#x2934; Insert into Document</button>
+<script>
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('returnTo') !== 'editor') return;
+    var btn = document.getElementById('insertIntoDocBtn');
+    if (!btn) return;
+    btn.style.display = '';
+
+    btn.addEventListener('click', function() {
+        if (!window.opener) { if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('No parent editor window found', 2000, 'error'); return; }
+
+        // Find the 3Dmol.js WebGL canvas (inside .mg-3d-viewer)
+        var canvasEl = document.querySelector('.mg-3d-viewer canvas') ||
+                       document.querySelector('#mg-result-content canvas');
+        var imageData = '';
+
+        // Try canvas capture (preserveDrawingBuffer is enabled)
+        if (canvasEl) {
+            try { imageData = canvasEl.toDataURL('image/png'); } catch(e) {
+                console.warn('Canvas capture failed:', e.message);
+            }
+        }
+
+        // Fallback: use html2canvas on the result content area
+        if (!imageData) {
+            var resultEl = document.getElementById('mg-result-content');
+            if (resultEl && typeof html2canvas !== 'undefined') {
+                html2canvas(resultEl).then(function(c) {
+                    sendToEditor(c.toDataURL('image/png'));
+                });
+                return;
+            }
+            // Second fallback: try loading html2canvas
+            if (resultEl && typeof ToolUtils !== 'undefined' && ToolUtils._loadScript) {
+                ToolUtils._loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js').then(function() {
+                    html2canvas(resultEl).then(function(c) {
+                        sendToEditor(c.toDataURL('image/png'));
+                    });
+                });
+                return;
+            }
+        }
+
+        if (!imageData) { if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Generate a geometry first, then try again', 2000, 'warning'); return; }
+        sendToEditor(imageData);
+    });
+
+    function sendToEditor(imageData) {
+        // Get molecule info from the actual input and result fields
+        var formulaEl = document.getElementById('mg-formula');
+        var formula = formulaEl ? formulaEl.value.trim() : '';
+        // Scrape geometry data from the rendered result
+        var resultEl = document.getElementById('mg-result-content');
+        var geometry = '', angle = '', hybrid = '';
+        if (resultEl) {
+            // The result card renders text like "Tetrahedral", "109.5°", "sp3"
+            var text = resultEl.textContent || '';
+            var geomMatch = text.match(/(Linear|Bent|Trigonal Planar|Trigonal Pyramidal|Tetrahedral|Trigonal Bipyramidal|Octahedral|T-shaped|See-saw|Square Planar|Square Pyramidal)/i);
+            if (geomMatch) geometry = geomMatch[1];
+            var angleMatch = text.match(/(\d+\.?\d*)\s*°/);
+            if (angleMatch) angle = angleMatch[1] + '°';
+            var hybridMatch = text.match(/(sp3d2|sp3d|sp3|sp2|sp)\b/i);
+            if (hybridMatch) hybrid = hybridMatch[1];
+        }
+
+        var caption = formula;
+        if (geometry) caption += ' \u2014 ' + geometry;
+        if (angle) caption += ' (' + angle + ')';
+        if (hybrid) caption += ', ' + hybrid;
+
+        window.opener.postMessage({
+            type: 'molecule-insert',
+            svg: null,
+            imageDataUrl: imageData,
+            smiles: '',
+            formula: caption || formula,
+            weight: '',
+            name: 'Molecular Geometry: ' + formula
+        }, '*');
+
+        if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Inserted into document', 1500);
+    }
+})();
+</script>
 </body>
 </html>
