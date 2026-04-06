@@ -5,28 +5,28 @@
 <head>
     <!-- SEO Component -->
     <jsp:include page="../modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Math Editor - WYSIWYG Equation Writer" />
-        <jsp:param name="toolCategory" value="Math Tools" />
-        <jsp:param name="toolDescription" value="Write math beautifully with our free WYSIWYG editor. Create equations visually, add diagrams, collaborate in real-time and export to PDF, Word or LaTeX." />
+        <jsp:param name="toolName" value="Online Document Editor — Math, Code Runner, Diagrams & PDF Export" />
+        <jsp:param name="toolCategory" value="Editor Tools" />
+        <jsp:param name="toolDescription" value="Free browser-based document editor with LaTeX math rendering, runnable code blocks in Python Java Rust Bash Node.js and Lua, diagrams, chemistry structures, graphing, and one-click PDF export. No install or signup required." />
         <jsp:param name="toolUrl" value="math/editor.jsp" />
-        <jsp:param name="toolKeywords" value="math editor, equation editor, WYSIWYG math, write equations online, LaTeX editor, math document, formula editor" />
+        <jsp:param name="toolKeywords" value="online document editor, math editor, LaTeX editor, run code in browser, online code runner, python editor online, rust playground, run java online, bash online, technical writing editor, equation editor, diagram editor, LaTeX to PDF, WYSIWYG math editor, chemistry editor, Lewis structure editor, molecular geometry, online IDE, code and math editor" />
         <jsp:param name="toolImage" value="math-editor.svg" />
-        <jsp:param name="toolFeatures" value="WYSIWYG editing,LaTeX math input,Export PDF Word LaTeX,Real-time collaboration,Document outline,Version history" />
+        <jsp:param name="toolFeatures" value="WYSIWYG rich-text editing,LaTeX math with live compute,Run code in 6 languages (Python Java Rust Bash Node.js Lua),Diagrams and drawing canvas,Chemistry structures and Lewis diagrams,Graphing and plotting,Export PDF Word LaTeX,Real-time collaboration,Document outline and version history,Stdin input for interactive programs" />
         <jsp:param name="breadcrumbCategoryUrl" value="math/" />
-        <jsp:param name="educationalLevel" value="High School, Undergraduate, Graduate" />
-        <jsp:param name="teaches" value="Mathematical notation, equation formatting, document preparation" />
+        <jsp:param name="educationalLevel" value="High School, Undergraduate, Graduate, Professional" />
+        <jsp:param name="teaches" value="Mathematical notation, programming, equation formatting, technical document preparation, chemistry visualization" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="howToSteps" value="Open the editor|Navigate to the Math Editor page to start a new document,Write your content|Type text normally and use the toolbar for formatting like bold italic and headings,Insert math equations|Click Insert Math on the toolbar or type LaTeX to add rendered equations,Export your document|Click the Export button to download as PDF Word or LaTeX" />
-        <jsp:param name="faq1q" value="Is the Math Editor free to use?" />
-        <jsp:param name="faq1a" value="Yes, the Math Editor is completely free. Create documents, add equations, diagrams, and export to PDF or LaTeX with no registration required." />
-        <jsp:param name="faq2q" value="How do I insert math equations in the editor?" />
-        <jsp:param name="faq2a" value="Click the Insert Math button on the toolbar, or type LaTeX directly. The editor supports both inline and display math. Right-click on equations for derivative, integral, and plotting options." />
-        <jsp:param name="faq3q" value="Can I export my document to PDF or LaTeX?" />
-        <jsp:param name="faq3a" value="Yes. Use the Export dropdown to download as PDF (compiled via LaTeX) or raw LaTeX. Login is required for PDF export; LaTeX can be exported without an account." />
-        <jsp:param name="faq4q" value="Does the Math Editor support LaTeX?" />
-        <jsp:param name="faq4a" value="Yes. You can type LaTeX in math blocks for full equation support. The editor uses MathLive for rendering and supports common commands, fractions, integrals, matrices, and more." />
-        <jsp:param name="faq5q" value="Can I add diagrams and drawings to my math document?" />
-        <jsp:param name="faq5a" value="Yes. Click Insert Diagram to open the drawing canvas. Create shapes, arrows, coordinate axes, function curves, and geometric figures. Export as images that embed in your document." />
+        <jsp:param name="howToSteps" value="Open the editor|Navigate to the editor page — no signup or install needed,Write your content|Type text with rich formatting — bold italic headings lists tables and more,Insert math equations|Click Insert Math or press Ctrl+M to add LaTeX equations with live rendering. Right-click equations to compute derivatives integrals or plot graphs,Add runnable code|Insert a code block and choose from Python Java Rust Bash Node.js or Lua. Click Run to execute and see output inline,Add diagrams or chemistry|Insert diagrams with the drawing canvas or add chemistry structures like Lewis diagrams and molecular geometry,Export your document|Click Export to download as PDF Word or LaTeX — notes code output and diagrams all included" />
+        <jsp:param name="faq1q" value="Is the editor free to use?" />
+        <jsp:param name="faq1a" value="Yes, the editor is completely free. Write documents with math, code, diagrams, and chemistry — and export to PDF or LaTeX with no registration required." />
+        <jsp:param name="faq2q" value="What programming languages can I run in the editor?" />
+        <jsp:param name="faq2a" value="You can run Python, Java, Rust, Bash, Node.js, and Lua directly in the browser. Insert a code block, select a language, write your code, and click Run. Output appears inline. Stdin input is also supported for interactive programs." />
+        <jsp:param name="faq3q" value="How do I insert math equations?" />
+        <jsp:param name="faq3a" value="Click Insert Math on the toolbar or press Ctrl+M for display math and Ctrl+Shift+M for inline math. Type LaTeX directly — the editor renders it live using MathLive. Right-click any equation for derivative, integral, solve, and plot options." />
+        <jsp:param name="faq4q" value="Can I export my document to PDF?" />
+        <jsp:param name="faq4a" value="Yes. Use the Export dropdown to download as PDF (compiled via LaTeX), raw LaTeX, or Word. The PDF includes all your text, math equations, code blocks with output, diagrams, and chemistry structures." />
+        <jsp:param name="faq5q" value="Does it support diagrams and chemistry?" />
+        <jsp:param name="faq5a" value="Yes. Insert diagrams using the built-in drawing canvas with shapes, arrows, coordinate axes, and curves. For chemistry, add Lewis structures and molecular geometry visualizations directly in your document." />
     </jsp:include>
 
     <!-- LCP: Preconnect for fonts + MathLive CDN -->
