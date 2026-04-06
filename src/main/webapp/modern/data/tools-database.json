@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-03-16T00:00:00.000Z",
-  "totalTools": 418,
+  "totalTools": 419,
   "categories": [
     "Blockchain & Crypto",
     "CTF & Challenges",
@@ -2297,6 +2297,13 @@
       "category": "Physics",
       "keywords": "arduino simulator esp32 emulator raspberry pi pico online ide avr risc-v qemu wokwi serial monitor led blink servo lcd oled neopixel dht22 embedded microcontroller iot",
       "description": "Write, compile, and run Arduino/ESP32/Pico code in the browser — 6 boards, 21 components, real CPU emulation, serial monitor, diagram.json support."
+    },
+    {
+      "name": "Logic Gate Simulator",
+      "url": "electronics/logic-simulator.jsp",
+      "category": "Physics",
+      "keywords": "logic gate simulator online logisim digital circuit boolean algebra truth table karnaugh map quine mccluskey flip flop d-ff jk-ff counter register mux decoder 7-segment ttl 7400 subcircuit timing diagram",
+      "description": "Free browser-based digital logic simulator. Drag-and-drop gates, flip-flops, TTL ICs. Auto truth tables, K-maps, Boolean minimization, timing diagrams, subcircuits."
     },
     {
       "name": "Circuit Simulator Lab",
