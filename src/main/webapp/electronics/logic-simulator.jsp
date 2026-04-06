@@ -31,6 +31,20 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/electronics/css/logic-simulator.css?v=<%=v%>">
+<!-- Ad Setup -->
+<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" onerror="console.warn('GPT failed')"></script>
+<script>
+stpd=window.stpd||{que:[]};window.googletag=window.googletag||{cmd:[]};
+googletag.cmd.push(function(){
+  var w=window.innerWidth;
+  // Hero banner ad (above simulator)
+  if(w>=992)googletag.defineSlot('/147246189,22976055811/8gwifi.org_970x90_hero_desktop',[[970,90],[728,90]],'ad_logic_hero').addService(googletag.pubads());
+  else if(w>=768)googletag.defineSlot('/147246189,22976055811/8gwifi.org_728x90_hero_tablet',[[728,90]],'ad_logic_hero').addService(googletag.pubads());
+  else googletag.defineSlot('/147246189,22976055811/8gwifi.org_320x100_hero_mobile',[[320,50],[320,100]],'ad_logic_hero').addService(googletag.pubads());
+  googletag.pubads().disableInitialLoad();googletag.pubads().enableSingleRequest();googletag.pubads().collapseEmptyDivs();googletag.enableServices();
+});
+</script>
+<script>(function(){var s=document.createElement('script');s.src='https://stpd.cloud/saas/5796';s.async=true;s.onerror=function(){};document.head.appendChild(s)})()</script>
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
 </head>
 <body>
@@ -41,9 +55,7 @@
   <!-- H1 + hero bar -->
   <div class="lg-hero-bar">
     <h1 class="lg-hero-h1">Logic Gate Simulator Online</h1>
-    <div class="ad-lg-hero" style="flex:1;min-width:300px;max-width:728px;text-align:center;">
-      <%@ include file="../setupad.jsp"%>
-    </div>
+    <div class="ad-lg-hero" id="ad_logic_hero" style="flex:1;min-width:300px;max-width:970px;text-align:center;"></div>
   </div>
 
   <!-- Toolbar -->
@@ -161,12 +173,7 @@
         <div class="lg-lib-header lg-collapsible">TTL ICs <span class="lg-chevron"></span></div>
         <div class="lg-lib-body" id="libTTL"></div>
       </div>
-      <!-- Ad slot below library -->
-      <div style="padding:8px;text-align:center;border-top:1px solid var(--lg-border);">
-        <div class="ad-lg-sidebar" style="min-height:250px;">
-          <%@ include file="../setupad.jsp"%>
-        </div>
-      </div>
+      <!-- Ad slot below library (lazy loaded by setupad anchor) -->
     </div>
 
     <!-- Canvas -->
@@ -940,6 +947,13 @@
   <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">What do the TTL ICs simulate?</summary><p style="margin:8px 0 0 16px;">9 real-world 7400-series TTL ICs with accurate DIP pin layouts: 7400 (quad NAND), 7402 (quad NOR), 7404 (hex inverter), 7408 (quad AND), 7432 (quad OR), 7486 (quad XOR), 7474 (dual D flip-flop with active-low set/clear), 7447 (BCD to 7-segment decoder), and 74138 (3-to-8 line decoder).</p></details>
 
 </div>
+
+<!-- Ad display init -->
+<script>
+(function(){
+  if(typeof googletag!=='undefined'&&googletag.cmd)googletag.cmd.push(function(){googletag.display('ad_logic_hero')});
+})();
+</script>
 
 <!-- Analytics -->
 <%@ include file="../modern/components/analytics.jsp" %>

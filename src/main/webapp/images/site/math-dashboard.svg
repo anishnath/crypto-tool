@@ -8,10 +8,37 @@
       <stop offset="0%" stop-color="#60a5fa"/>
       <stop offset="100%" stop-color="#2563eb"/>
     </linearGradient>
+    <!-- Depth: soft shadow under elevated panels -->
+    <filter id="elevate" x="-8%" y="-8%" width="116%" height="124%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="blur"/>
+      <feOffset in="blur" dx="0" dy="10" result="off"/>
+      <feFlood flood-color="#020617" flood-opacity="0.45" result="flood"/>
+      <feComposite in="flood" in2="off" operator="in" result="shadow"/>
+      <feMerge>
+        <feMergeNode in="shadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="elevateSm" x="-6%" y="-6%" width="112%" height="118%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+      <feOffset in="blur" dx="0" dy="5" result="off"/>
+      <feFlood flood-color="#020617" flood-opacity="0.35" result="flood"/>
+      <feComposite in="flood" in2="off" operator="in" result="shadow"/>
+      <feMerge>
+        <feMergeNode in="shadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Ambient vignette: draws eye to the center -->
+    <radialGradient id="vignette" cx="50%" cy="42%" r="68%" fx="50%" fy="38%">
+      <stop offset="0%" stop-color="#0f172a" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="0.55"/>
+    </radialGradient>
   </defs>
 
   <!-- Background -->
   <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#vignette)" pointer-events="none"/>
 
   <!-- Subtle grid -->
   <g opacity="0.03" stroke="#60a5fa" stroke-width="0.5">
@@ -26,11 +53,11 @@
   </g>
 
   <!-- Top bar mockup -->
-  <g transform="translate(50, 40)">
+  <g transform="translate(50, 36)" filter="url(#elevate)">
     <rect width="1100" height="56" rx="8" fill="#1e293b" stroke="#334155"/>
     <!-- Logo + brand -->
     <rect x="16" y="14" width="28" height="28" rx="6" fill="#2563eb"/>
-    <text x="30" y="32" text-anchor="middle" fill="white" font-family="serif" font-size="14" font-weight="bold">£</text>
+    <text x="30" y="32" text-anchor="middle" fill="white" font-family="serif" font-size="14" font-weight="bold">ï¿½</text>
     <text x="52" y="34" fill="#f8fafc" font-family="sans-serif" font-size="16" font-weight="700">Math Editor</text>
     <!-- New Doc button -->
     <rect x="180" y="14" width="140" height="28" rx="6" fill="#2563eb"/>
@@ -41,14 +68,14 @@
   </g>
 
   <!-- Document grid -->
-  <g transform="translate(50, 120)">
+  <g transform="translate(50, 116)" filter="url(#elevateSm)">
     <text x="0" y="-8" fill="#94a3b8" font-family="sans-serif" font-size="13" font-weight="600">Recent Documents</text>
 
     <!-- Card 1 -->
     <g transform="translate(0, 16)">
       <rect width="260" height="140" rx="8" fill="#1e293b" stroke="#334155"/>
       <rect x="12" y="12" width="236" height="70" rx="4" fill="#0f172a"/>
-      <text x="130" y="52" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-size="11">+ e{ã² dx</text>
+      <text x="130" y="52" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-size="11">+ e{ï¿½ dx</text>
       <text x="20" y="108" fill="#f8fafc" font-family="sans-serif" font-size="14" font-weight="600">Gaussian Integral Proof</text>
       <text x="20" y="126" fill="#64748b" font-family="sans-serif" font-size="11">Edited 2 hours ago</text>
     </g>
@@ -57,7 +84,7 @@
     <g transform="translate(280, 16)">
       <rect width="260" height="140" rx="8" fill="#1e293b" stroke="#334155"/>
       <rect x="292" y="12" width="236" height="70" rx="4" fill="#0f172a"/>
-      <text x="410" y="52" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-size="11">f(x) = x²</text>
+      <text x="410" y="52" text-anchor="middle" fill="#64748b" font-family="sans-serif" font-size="11">f(x) = xï¿½</text>
       <text x="300" y="108" fill="#f8fafc" font-family="sans-serif" font-size="14" font-weight="600">Calculus Notes</text>
       <text x="300" y="126" fill="#64748b" font-family="sans-serif" font-size="11">Edited yesterday</text>
     </g>
@@ -80,9 +107,9 @@
   </g>
 
   <!-- Sidebar mockup -->
-  <g transform="translate(50, 300)">
+  <g transform="translate(50, 296)" filter="url(#elevateSm)">
     <rect width="200" height="220" rx="8" fill="#1e293b" stroke="#334155"/>
-    <text x="20" y="36" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="600">=Á Documents</text>
+    <text x="20" y="36" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="600">=ï¿½ Documents</text>
     <text x="20" y="56" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="600">=P Recent</text>
     <line x1="12" y1="70" x2="188" y2="70" stroke="#334155"/>
     <rect x="12" y="84" width="176" height="28" rx="4" fill="#2563eb" opacity="0.2"/>
@@ -96,7 +123,7 @@
 
   <text x="80" y="600" fill="#60a5fa" font-family="sans-serif" font-size="20" font-weight="800">Math Editor Dashboard</text>
   <text x="318" y="600" fill="#475569" font-family="sans-serif" font-size="14">|</text>
-  <text x="336" y="600" fill="#94a3b8" font-family="sans-serif" font-size="14">Manage documents · Create, share, collaborate</text>
+  <text x="336" y="600" fill="#94a3b8" font-family="sans-serif" font-size="14">Manage documents ï¿½ Create, share, collaborate</text>
 
   <text x="1120" y="600" text-anchor="end" fill="#475569" font-family="sans-serif" font-size="16" font-weight="700">8gwifi.org</text>
 
