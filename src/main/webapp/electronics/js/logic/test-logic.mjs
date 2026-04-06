@@ -2049,16 +2049,13 @@ section('Undo/Redo History');
   assert(afterLock.components.length === 2, 'History: locked push was ignored');
 }
 
-/* ════════════════ Phase 11: Presets load ════════════════ */
-section('Presets: build circuits');
+/* ════════════════ Phase 11: Presets — build all ════════════════ */
+section('Presets: build all without error');
+
+const ALL = Object.assign({}, GATE_TYPES, PIN_TYPES,
+  { CLOCK: CLOCK_TYPE }, WIRING_TYPES, IO_TYPES, MEMORY_TYPES, ARITH_TYPES, DISPLAY_TYPES);
 
 {
-  const ALL = Object.assign({}, GATE_TYPES, PIN_TYPES,
-    { CLOCK: CLOCK_TYPE }, WIRING_TYPES, IO_TYPES, MEMORY_TYPES, ARITH_TYPES, DISPLAY_TYPES);
-
-  assert(L.PRESETS.length >= 8, 'Presets: at least 8 presets defined');
-
-  // Test each preset builds without error
   let buildOK = 0;
   for (const preset of L.PRESETS) {
     const c = new Circuit();
@@ -2071,6 +2068,199 @@ section('Presets: build circuits');
     }
   }
   assert(buildOK === L.PRESETS.length, 'All ' + L.PRESETS.length + ' presets built successfully');
+}
+
+/* ════════════════ Preset: Half Adder — full truth table ════════════════ */
+section('Preset: Half Adder correctness');
+
+{
+  const c = new Circuit();
+  L.PRESETS.find(p => p.name === 'Half Adder').build(c, ALL);
+  const analyzer = new L.Analyzer(c);
+  const tt = analyzer.generateTruthTable();
+  assert(tt.numInputs === 2, 'Half Adder: 2 inputs');
+  // Outputs sorted alphabetically: Carry, Sum
+  const ci = tt.outputNames.indexOf('Carry');
+  const si = tt.outputNames.indexOf('Sum');
+  assert(ci >= 0 && si >= 0, 'Half Adder: has Carry and Sum outputs');
+  // 0+0=S0,C0  0+1=S1,C0  1+0=S1,C0  1+1=S0,C1
+  assert(tt.rows[0].out[si] === 0 && tt.rows[0].out[ci] === 0, 'HA: 0+0 = S0,C0');
+  assert(tt.rows[1].out[si] === 1 && tt.rows[1].out[ci] === 0, 'HA: 0+1 = S1,C0');
+  assert(tt.rows[2].out[si] === 1 && tt.rows[2].out[ci] === 0, 'HA: 1+0 = S1,C0');
+  assert(tt.rows[3].out[si] === 0 && tt.rows[3].out[ci] === 1, 'HA: 1+1 = S0,C1');
+}
+
+/* ════════════════ Preset: Full Adder — full truth table ════════════════ */
+section('Preset: Full Adder correctness');
+
+{
+  const c = new Circuit();
+  L.PRESETS.find(p => p.name === 'Full Adder').build(c, ALL);
+  const analyzer = new L.Analyzer(c);
+  const tt = analyzer.generateTruthTable();
+  assert(tt.numInputs === 3, 'Full Adder: 3 inputs');
+  const ci = tt.outputNames.indexOf('Cout');
+  const si = tt.outputNames.indexOf('Sum');
+  assert(ci >= 0 && si >= 0, 'Full Adder: has Cout and Sum outputs');
+  // Full adder truth table: A+B+Cin
+  const expected = [
+    [0,0], [1,0], [1,0], [0,1], // Cin=0: 0+0,0+1,1+0,1+1
+    [1,0], [0,1], [0,1], [1,1]  // Cin=1: 0+0,0+1,1+0,1+1
+  ];
+  for (let i = 0; i < 8; i++) {
+    assert(tt.rows[i].out[si] === expected[i][0], 'FA row ' + i + ' Sum=' + expected[i][0]);
+    assert(tt.rows[i].out[ci] === expected[i][1], 'FA row ' + i + ' Cout=' + expected[i][1]);
+  }
+}
+
+/* ════════════════ Preset: AND Truth Table ════════════════ */
+section('Preset: AND Truth Table correctness');
+
+{
+  const c = new Circuit();
+  L.PRESETS.find(p => p.name === 'AND Truth Table').build(c, ALL);
+  const analyzer = new L.Analyzer(c);
+  const tt = analyzer.generateTruthTable();
+  assert(tt.numInputs === 2, 'AND: 2 inputs');
+  assert(tt.rows[0].out[0] === 0, 'AND: 00→0');
+  assert(tt.rows[1].out[0] === 0, 'AND: 01→0');
+  assert(tt.rows[2].out[0] === 0, 'AND: 10→0');
+  assert(tt.rows[3].out[0] === 1, 'AND: 11→1');
+}
+
+/* ════════════════ Preset: 2:1 MUX ════════════════ */
+section('Preset: 2:1 MUX correctness');
+
+{
+  const c = new Circuit();
+  L.PRESETS.find(p => p.name === '2:1 MUX').build(c, ALL);
+  const analyzer = new L.Analyzer(c);
+  const tt = analyzer.generateTruthTable();
+  assert(tt.numInputs === 3, 'MUX: 3 inputs (D0, D1, SEL)');
+  // Inputs sorted: D0, D1, SEL (alphabetical)
+  // SEL=0→D0, SEL=1→D1
+  // Row format: D0,D1,SEL → Y
+  // 000→0, 001→0, 010→0, 011→1, 100→1, 101→0, 110→1, 111→1
+  const exp = [0, 0, 0, 1, 1, 0, 1, 1];
+  for (let i = 0; i < 8; i++) {
+    assert(tt.rows[i].out[0] === exp[i], 'MUX row ' + i + ' → ' + exp[i]);
+  }
+}
+
+/* ════════════════ Preset: XOR from NAND — full truth table ════════════════ */
+section('Preset: XOR from NAND correctness');
+
+{
+  const c = new Circuit();
+  L.PRESETS.find(p => p.name === 'XOR from NAND').build(c, ALL);
+  const analyzer = new L.Analyzer(c);
+  const tt = analyzer.generateTruthTable();
+  assert(tt.numInputs === 2, 'XOR-NAND: 2 inputs');
+  assert(tt.rows[0].out[0] === 0, 'XOR-NAND: 00→0');
+  assert(tt.rows[1].out[0] === 1, 'XOR-NAND: 01→1');
+  assert(tt.rows[2].out[0] === 1, 'XOR-NAND: 10→1');
+  assert(tt.rows[3].out[0] === 0, 'XOR-NAND: 11→0');
+}
+
+/* ════════════════ Preset: D Flip-Flop — functional test ════════════════ */
+section('Preset: D Flip-Flop correctness');
+
+{
+  const c = new Circuit();
+  L.PRESETS.find(p => p.name === 'D Flip-Flop').build(c, ALL);
+  // Find components by label
+  const inputs = [...c.components.values()].filter(x => x.type === 'INPUT');
+  const outputs = [...c.components.values()].filter(x => x.type === 'OUTPUT');
+  const dIn = inputs.find(x => x.attrs.label === 'D');
+  const clkIn = inputs.find(x => x.attrs.label === 'CLK');
+  const clrIn = inputs.find(x => x.attrs.label === 'CLR');
+  const qOut = outputs.find(x => x.attrs.label === 'Q');
+  assert(dIn && clkIn && clrIn && qOut, 'D-FF preset: all pins found');
+
+  // Initial: Q=0
+  assert(qOut.ports[0].value.isFalse(), 'D-FF preset: initial Q=0');
+
+  // Set D=1, rising edge → Q=1
+  dIn.attrs.state = TRUE;
+  clkIn.attrs.state = TRUE; c.propagate();
+  assert(qOut.ports[0].value.isTrue(), 'D-FF preset: D=1 edge → Q=1');
+
+  // D=0, new edge → Q=0
+  dIn.attrs.state = FALSE;
+  clkIn.attrs.state = FALSE; c.propagate();
+  clkIn.attrs.state = TRUE; c.propagate();
+  assert(qOut.ports[0].value.isFalse(), 'D-FF preset: D=0 edge → Q=0');
+}
+
+/* ════════════════ Preset: 4-bit Counter — functional test ════════════════ */
+section('Preset: 4-bit Counter correctness');
+
+{
+  const c = new Circuit();
+  L.PRESETS.find(p => p.name === '4-bit Counter').build(c, ALL);
+  const ctr = [...c.components.values()].find(x => x.type === 'COUNTER');
+  const clk = [...c.components.values()].find(x => x.type === 'CLOCK');
+  assert(ctr && clk, 'Counter preset: counter and clock found');
+
+  // Manual clock pulses
+  assert(ctr.attrs._val === 0, 'Counter preset: initial=0');
+  clk.attrs.state = TRUE; c.propagate();
+  clk.attrs.state = FALSE; c.propagate();
+  assert(ctr.attrs._val === 1, 'Counter preset: after 1 pulse = 1');
+  clk.attrs.state = TRUE; c.propagate();
+  clk.attrs.state = FALSE; c.propagate();
+  assert(ctr.attrs._val === 2, 'Counter preset: after 2 pulses = 2');
+}
+
+/* ════════════════ Preset: 7-Segment Decoder — structure check ════════════════ */
+section('Preset: 7-Segment Decoder correctness');
+
+{
+  const c = new Circuit();
+  L.PRESETS.find(p => p.name === '7-Segment Decoder').build(c, ALL);
+  const switches = [...c.components.values()].filter(x => x.type === 'SWITCH');
+  const hexDisps = [...c.components.values()].filter(x => x.type === 'HEX_DISPLAY');
+  assert(switches.length === 4, '7-Seg preset: 4 switches');
+  assert(hexDisps.length === 1, '7-Seg preset: exactly 1 hex display');
+  assert(c.wires.size === 4, '7-Seg preset: 4 wires (each switch → display)');
+}
+
+/* ════════════════ Preset: SR Latch — functional test ════════════════ */
+section('Preset: SR Latch correctness');
+
+{
+  const c = new Circuit();
+  L.PRESETS.find(p => p.name === 'SR Latch').build(c, ALL);
+  const inputs = [...c.components.values()].filter(x => x.type === 'INPUT');
+  const outputs = [...c.components.values()].filter(x => x.type === 'OUTPUT');
+  const sIn = inputs.find(x => x.attrs.label === 'S');
+  const clkIn = inputs.find(x => x.attrs.label === 'CLK');
+  const rIn = inputs.find(x => x.attrs.label === 'R');
+  const qOut = outputs.find(x => x.attrs.label === 'Q');
+  assert(sIn && clkIn && rIn && qOut, 'SR Latch: all pins found');
+
+  // Set: S=1, R=0, rising edge → Q=1
+  sIn.attrs.state = TRUE;
+  clkIn.attrs.state = TRUE; c.propagate();
+  assert(qOut.ports[0].value.isTrue(), 'SR Latch: Set → Q=1');
+
+  // Reset: S=0, R=1, new edge → Q=0
+  sIn.attrs.state = FALSE; rIn.attrs.state = TRUE;
+  clkIn.attrs.state = FALSE; c.propagate();
+  clkIn.attrs.state = TRUE; c.propagate();
+  assert(qOut.ports[0].value.isFalse(), 'SR Latch: Reset → Q=0');
+}
+
+/* ════════════════ Preset: Clock + LED — structure check ════════════════ */
+section('Preset: Clock + LED structure');
+
+{
+  const c = new Circuit();
+  L.PRESETS.find(p => p.name === 'Clock + LED').build(c, ALL);
+  const clk = [...c.components.values()].find(x => x.type === 'CLOCK');
+  const led = [...c.components.values()].find(x => x.type === 'LED');
+  assert(clk && led, 'Clock+LED: both components exist');
+  assert(c.wires.size === 1, 'Clock+LED: 1 wire');
 }
 
 /* ════════════════ Summary ════════════════ */

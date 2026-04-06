@@ -38,21 +38,19 @@
       }
     },
     {
-      name: 'SR Latch (NOR)',
+      name: 'SR Latch',
       category: 'Memory',
-      description: 'Cross-coupled NOR gates. Set/Reset memory element.',
+      description: 'SR flip-flop. Set drives Q high, Reset drives Q low.',
       build(c, T) {
-        const s = c.addComponent(T.INPUT, -120, -32, { label: 'S', state: 0 });
-        const r = c.addComponent(T.INPUT, -120,  32, { label: 'R', state: 0 });
-        const n1 = c.addComponent(T.NOR, 0, -32);
-        const n2 = c.addComponent(T.NOR, 0,  32);
-        const q = c.addComponent(T.OUTPUT, 120, -32, { label: 'Q' });
-        const qn = c.addComponent(T.OUTPUT, 120,  32, { label: "Q'" });
-        c.addWire(s.id, 0, n1.id, 0);
-        c.addWire(r.id, 0, n2.id, 1);
-        c.addWire(n1.id, 2, q.id, 0);
-        c.addWire(n2.id, 2, qn.id, 0);
-        // Cross-coupling would need feedback wires — skipping for simplicity
+        const s = c.addComponent(T.INPUT, -120, -16, { label: 'S', state: 0 });
+        const clk = c.addComponent(T.INPUT, -120, 0, { label: 'CLK', state: 0 });
+        const r = c.addComponent(T.INPUT, -120, 16, { label: 'R', state: 0 });
+        const ff = c.addComponent(T.SR_FF, 0, 0);
+        const q = c.addComponent(T.OUTPUT, 120, -8, { label: 'Q' });
+        const qn = c.addComponent(T.OUTPUT, 120, 8, { label: "Q'" });
+        c.addWire(s.id, 0, ff.id, 0); c.addWire(clk.id, 0, ff.id, 1);
+        c.addWire(r.id, 0, ff.id, 2);
+        c.addWire(ff.id, 3, q.id, 0); c.addWire(ff.id, 4, qn.id, 0);
       }
     },
     {
@@ -105,12 +103,11 @@
     {
       name: '7-Segment Decoder',
       category: 'Displays',
-      description: 'Hex display driven by 4 input switches.',
+      description: 'Hex display driven by 4 input switches. Toggle switches to change digit.',
       build(c, T) {
+        const hex = c.addComponent(T.HEX_DISPLAY, 40, 0);
         for (let i = 0; i < 4; i++) {
-          const sw = c.addComponent(T.SWITCH, -120, -24 + i * 16);
-          const hex = c.addComponent(T.HEX_DISPLAY, 0, 0);
-          if (i === 0) { /* only create hex display once */ }
+          const sw = c.addComponent(T.SWITCH, -80, -12 + i * 8);
           c.addWire(sw.id, 0, hex.id, i);
         }
       }
