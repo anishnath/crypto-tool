@@ -71,12 +71,12 @@
     // =========================================================
     var DETECT_RULES = [
         { lang: 'python',     pattern: /^\s*(def |import |from .+ import|print\(|if __name__|class \w+:)/m },
-        { lang: 'javascript', pattern: /^\s*(const |let |var |function |=>|console\.log|require\(|module\.exports)/m },
+        { lang: 'rust',       pattern: /^\s*(fn main\(\)|fn \w+\(|let mut |println!|use std::|impl |pub fn|\.unwrap\(\)|::from\(|Vec<)/m },
         { lang: 'typescript', pattern: /^\s*(interface |type \w+ =|: string|: number|: boolean|<T>)/m },
         { lang: 'java',       pattern: /^\s*(public (class|static|void)|System\.out|import java\.|@Override)/m },
         { lang: 'cpp',        pattern: /^\s*(#include\s*<(iostream|vector|string|algorithm)|using namespace std|cout\s*<<|std::)/m },
         { lang: 'c',          pattern: /^\s*(#include\s*<(stdio|stdlib|string)\.h>|printf\(|int main\s*\()/m },
-        { lang: 'rust',       pattern: /^\s*(fn main\(\)|let mut |println!|use std::|impl |pub fn)/m },
+        { lang: 'javascript', pattern: /^\s*(const |var |function |=>|console\.log|require\(|module\.exports)/m },
         { lang: 'go',         pattern: /^\s*(package main|import \(|func main\(\)|fmt\.Print)/m },
         { lang: 'bash',       pattern: /^\s*(#!\/bin\/(bash|sh)|echo |grep |awk |sed |chmod |\$\{)/m },
         { lang: 'ruby',       pattern: /^\s*(def |puts |require |class \w+ < |\.each \{|do \|)/m },
