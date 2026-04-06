@@ -906,5 +906,43 @@
 
 })();
 </script>
+
+<!-- SEO Content + Footer Ad -->
+<div style="max-width:1200px;margin:0 auto;padding:24px 16px;color:var(--lg-text);font:14px/1.7 'DM Sans',sans-serif;">
+
+  <!-- Footer Ad -->
+  <div style="text-align:center;margin:16px 0;">
+    <%@ include file="../footer_adsense.jsp"%>
+  </div>
+
+  <h2 style="font:600 20px/1.3 'Sora',sans-serif;margin:24px 0 12px;">About This Logic Gate Simulator</h2>
+  <p>This free online logic gate simulator lets you design and test digital circuits directly in your browser. Inspired by <strong>Logisim</strong>, it provides a modern web-based alternative with no Java installation required. Build circuits with 53 component types across 8 categories, auto-generate truth tables and Karnaugh maps, minimize Boolean expressions with the Quine-McCluskey algorithm, and visualize signal timing.</p>
+
+  <h2 style="font:600 20px/1.3 'Sora',sans-serif;margin:24px 0 12px;">Components</h2>
+  <p><strong>Gates:</strong> AND, OR, NOT, NAND, NOR, XOR, XNOR, Buffer &mdash; all with configurable input count.</p>
+  <p><strong>Memory:</strong> SR, D, JK, and T flip-flops (edge-triggered with async clear), 4-bit register, 4-bit binary counter with enable and overflow.</p>
+  <p><strong>Arithmetic &amp; Plexers:</strong> Full adder, subtractor, comparator, 2:1 MUX, 1:2 DEMUX, 2:4 decoder.</p>
+  <p><strong>Displays:</strong> 7-segment display, hex display with auto-decode, 8-bit LED bar, hex keypad, TTY text terminal.</p>
+  <p><strong>TTL 7400 Series:</strong> 7400 (NAND), 7402 (NOR), 7404 (NOT), 7408 (AND), 7432 (OR), 7486 (XOR), 7474 (Dual D-FF), 7447 (BCD-to-7-seg), 74138 (3:8 decoder) &mdash; all with accurate DIP pin layouts.</p>
+
+  <h2 style="font:600 20px/1.3 'Sora',sans-serif;margin:24px 0 12px;">Analysis Tools</h2>
+  <p><strong>Truth Tables:</strong> Click Analyze to enumerate all 2<sup>n</sup> input combinations (up to 8 inputs) and see outputs for every combination.</p>
+  <p><strong>Boolean Expressions:</strong> Automatically extract Sum of Products (SOP) from truth tables, then minimize using the Quine-McCluskey algorithm to find the simplest equivalent expression.</p>
+  <p><strong>Karnaugh Maps:</strong> Visual K-map display for 2, 3, or 4 variable circuits with Gray code ordering.</p>
+  <p><strong>Timing Diagrams:</strong> Record signal changes over time. Start a clock, toggle inputs, and watch waveforms update in real-time with color-coded HIGH/LOW/unknown states.</p>
+  <p><strong>Expression &rarr; Circuit:</strong> Type a Boolean expression like <code>A&middot;B + &not;C</code> and the simulator generates the corresponding gate circuit automatically.</p>
+
+  <h2 style="font:600 20px/1.3 'Sora',sans-serif;margin:24px 0 12px;">Frequently Asked Questions</h2>
+  <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">Is this a replacement for Logisim?</summary><p style="margin:8px 0 0 16px;">It covers the most commonly used Logisim features &mdash; gates, flip-flops, truth tables, K-maps, subcircuits &mdash; in a modern browser-based interface. No Java required. Advanced features like VHDL simulation and FPGA export are not yet supported.</p></details>
+  <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">How many inputs can I analyze?</summary><p style="margin:8px 0 0 16px;">Truth table generation supports up to 8 inputs (256 rows). Karnaugh maps are available for 2, 3, or 4 variables. The Quine-McCluskey minimizer works for any number of inputs.</p></details>
+  <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">Can I save my circuits?</summary><p style="margin:8px 0 0 16px;">Yes. Save as JSON file, export as PNG or SVG image, or share via URL. Circuits are encoded in the URL hash so anyone with the link sees your exact design.</p></details>
+  <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">What are subcircuits?</summary><p style="margin:8px 0 0 16px;">Subcircuits let you build a circuit (e.g., a half adder), save it, then reuse it as a single component in a larger design. Double-click a subcircuit to drill into its internal logic. This enables hierarchical design &mdash; build an ALU from adders, which are built from gates.</p></details>
+  <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">What do the TTL ICs simulate?</summary><p style="margin:8px 0 0 16px;">9 real-world 7400-series TTL ICs with accurate DIP pin layouts: 7400 (quad NAND), 7402 (quad NOR), 7404 (hex inverter), 7408 (quad AND), 7432 (quad OR), 7486 (quad XOR), 7474 (dual D flip-flop with active-low set/clear), 7447 (BCD to 7-segment decoder), and 74138 (3-to-8 line decoder).</p></details>
+
+</div>
+
+<!-- Analytics -->
+<%@ include file="../modern/components/analytics.jsp" %>
+
 </body>
 </html>
