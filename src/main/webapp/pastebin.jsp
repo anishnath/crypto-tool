@@ -16,12 +16,12 @@
     <!-- SEO -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Free Online Pastebin - Paste &amp; Share Code Securely" />
-        <jsp:param name="toolDescription" value="Paste and share text or code online. Supports passphrase encryption, burn-after-read, syntax highlighting, file uploads, and auto-expiry. No sign-up needed." />
+        <jsp:param name="toolDescription" value="Paste and share text or code online. Supports passphrase encryption, burn-after-read, syntax highlighting, inline code execution for supported languages, file uploads, and auto-expiry. No sign-up needed." />
         <jsp:param name="toolCategory" value="Sharing" />
         <jsp:param name="toolUrl" value="pastebin.jsp" />
         <jsp:param name="toolKeywords" value="pastebin, paste code online, share code snippet, encrypted paste, burn after read, anonymous paste, code sharing tool, paste text online, temporary paste, syntax highlighting paste" />
         <jsp:param name="toolImage" value="pastebin.svg" />
-        <jsp:param name="toolFeatures" value="Paste text or upload files,Passphrase-encrypted private pastes,Burn-after-read self-destructing pastes,Auto-detect syntax highlighting,80+ built-in transform tools (encode decode hash),Configurable expiry (1h to never),Public unlisted and private visibility,No sign-up required" />
+        <jsp:param name="toolFeatures" value="Paste text or upload files,Passphrase-encrypted private pastes,Burn-after-read self-destructing pastes,Auto-detect syntax highlighting,Run code inline for supported languages,80+ built-in transform tools (encode decode hash),Configurable expiry (1h to never),Public unlisted and private visibility,No sign-up required" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Paste your content|Type or paste text into the editor or switch to File mode to upload a file,Set options|Choose expiry (1h to never) and visibility (public or unlisted or private with passphrase),Apply transforms (optional)|Use the built-in Tools panel to encode decode hash or format your content before sharing,Create paste|Click Create Paste to get a shareable URL and save the delete token to manage it later,Share the URL|Send the paste URL to your recipient and share the passphrase separately for private pastes" />
         <jsp:param name="faq1q" value="How do I share code online using this pastebin?" />
@@ -33,7 +33,7 @@
         <jsp:param name="faq4q" value="Can I upload files to this pastebin?" />
         <jsp:param name="faq4a" value="Yes. Switch to File mode, drag and drop or browse to select a file. The file is stored on the server and recipients can download it via the raw URL." />
         <jsp:param name="faq5q" value="Does this pastebin support syntax highlighting?" />
-        <jsp:param name="faq5a" value="Yes. The pastebin auto-detects the language of your code using highlight.js. You can also manually select from 16 languages including JavaScript, Python, Java, Go, Rust, SQL, and more." />
+        <jsp:param name="faq5a" value="Yes. The pastebin auto-detects the language of your code using highlight.js plus built-in syntax heuristics. You can also manually select from 20+ languages including JavaScript, TypeScript, Python, Java, PHP, Go, Rust, SQL, and more. Runnable languages also get a Run Code option so you can test snippets before or after sharing." />
         <jsp:param name="faq6q" value="What built-in tools does this pastebin have?" />
         <jsp:param name="faq6a" value="Over 80 built-in transforms: Base64/URL/Hex encode and decode, MD5/SHA-256/SHA-512 hashing, JSON/YAML/CSV formatting, AES-256 encryption, ROT13, JWT decode, regex replace, extract URLs/emails/IPs, UUID generation, and more." />
         <jsp:param name="faq7q" value="How long do pastes last?" />
@@ -75,9 +75,7 @@
     <!-- Highlight.js (language auto-detection + syntax highlighting) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
     <style>
         /* Pastebin Theme */
@@ -481,6 +479,72 @@
             cursor: not-allowed;
         }
 
+        .pb-submit-btn.pb-submit-secondary {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .pb-submit-btn.pb-submit-secondary:hover {
+            opacity: 1;
+            background: #cbd5e1;
+        }
+
+        .pb-submit-btn.pb-submit-secondary svg {
+            color: currentColor;
+        }
+
+        .pb-draft-run {
+            display: none;
+            border-top: 1px solid var(--border, #e2e8f0);
+            background: var(--bg-secondary, #f8fafc);
+        }
+
+        .pb-draft-run.show {
+            display: block;
+        }
+
+        .pb-draft-run-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            font-size: 0.75rem;
+            color: var(--text-secondary, #475569);
+        }
+
+        .pb-draft-run-head strong {
+            color: var(--text-primary, #0f172a);
+        }
+
+        .pb-draft-run pre {
+            margin: 0;
+            padding: 1rem;
+            min-height: 100px;
+            max-height: 280px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            color: var(--text-primary, #0f172a);
+            background: var(--bg-primary, #fff);
+        }
+
+        .pb-draft-run pre.is-empty {
+            color: #64748b;
+        }
+
+        .pb-draft-run pre.is-error {
+            color: #b91c1c;
+        }
+
+        .pb-draft-run pre.is-success {
+            color: #065f46;
+        }
+
         [data-theme="dark"] .pb-bottom-bar {
             background: #0f172a;
             border-top-color: #334155;
@@ -489,6 +553,46 @@
         [data-theme="dark"] .pb-mode-toggle { background: #334155; }
 
         [data-theme="dark"] .pb-mode-btn.active { background: #1e293b; }
+
+        [data-theme="dark"] .pb-submit-btn.pb-submit-secondary {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-submit-btn.pb-submit-secondary:hover {
+            background: #475569;
+        }
+
+        [data-theme="dark"] .pb-draft-run {
+            background: #0f172a;
+            border-top-color: #334155;
+        }
+
+        [data-theme="dark"] .pb-draft-run-head {
+            border-bottom-color: #334155;
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .pb-draft-run-head strong {
+            color: #f1f5f9;
+        }
+
+        [data-theme="dark"] .pb-draft-run pre {
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-draft-run pre.is-empty {
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .pb-draft-run pre.is-error {
+            color: #fca5a5;
+        }
+
+        [data-theme="dark"] .pb-draft-run pre.is-success {
+            color: #86efac;
+        }
 
         [data-theme="dark"] .pb-passphrase-wrap {
             background: rgba(239, 68, 68, 0.06);
@@ -719,6 +823,232 @@
         [data-theme="dark"] .pb-view-actions {
             background: #0f172a;
             border-top-color: #334155;
+        }
+
+        .pb-run-panel {
+            display: none;
+            border-top: 1px solid var(--border, #e2e8f0);
+            background: var(--bg-primary, #fff);
+        }
+
+        .pb-run-panel.show {
+            display: block;
+        }
+
+        .pb-run-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            background: rgba(16, 185, 129, 0.06);
+        }
+
+        .pb-run-header strong {
+            display: block;
+            font-size: 0.9375rem;
+            color: var(--text-primary, #0f172a);
+        }
+
+        .pb-run-header span {
+            display: block;
+            margin-top: 0.2rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary, #475569);
+        }
+
+        .pb-run-status {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary, #64748b);
+            white-space: nowrap;
+        }
+
+        .pb-run-status.running { color: #0f766e; }
+        .pb-run-status.success { color: #047857; }
+        .pb-run-status.error { color: #b91c1c; }
+
+        .pb-run-body {
+            padding: 1rem;
+        }
+
+        .pb-run-controls {
+            display: grid;
+            grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .pb-run-field label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary, #475569);
+        }
+
+        .pb-run-select,
+        .pb-run-input {
+            width: 100%;
+            border: 1px solid var(--border, #dbe2ea);
+            border-radius: 0.5rem;
+            padding: 0.625rem 0.75rem;
+            font-size: 0.8125rem;
+            font-family: inherit;
+            background: var(--bg-primary, #fff);
+            color: var(--text-primary, #0f172a);
+            outline: none;
+        }
+
+        .pb-run-input {
+            min-height: 110px;
+            resize: vertical;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            line-height: 1.5;
+        }
+
+        .pb-run-select:focus,
+        .pb-run-input:focus {
+            border-color: var(--tool-primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+        }
+
+        .pb-run-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .pb-run-note {
+            font-size: 0.75rem;
+            color: var(--text-secondary, #64748b);
+        }
+
+        .pb-run-output {
+            margin-top: 1rem;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            background: var(--bg-secondary, #f8fafc);
+        }
+
+        .pb-run-output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            background: rgba(15, 23, 42, 0.04);
+        }
+
+        .pb-run-output-header strong {
+            font-size: 0.8125rem;
+            color: var(--text-primary, #0f172a);
+        }
+
+        .pb-run-output-meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary, #64748b);
+        }
+
+        .pb-run-output pre {
+            margin: 0;
+            padding: 1rem;
+            min-height: 120px;
+            max-height: 360px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            color: var(--text-primary, #0f172a);
+            background: var(--bg-primary, #fff);
+        }
+
+        .pb-run-output pre.is-empty {
+            color: #64748b;
+        }
+
+        .pb-run-output pre.is-error {
+            color: #b91c1c;
+        }
+
+        .pb-run-output pre.is-success {
+            color: #065f46;
+        }
+
+        @media (max-width: 768px) {
+            .pb-run-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .pb-run-header,
+            .pb-run-output-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        [data-theme="dark"] .pb-run-panel {
+            background: var(--bg-secondary, #1e293b);
+            border-top-color: #334155;
+        }
+
+        [data-theme="dark"] .pb-run-header {
+            background: rgba(16, 185, 129, 0.1);
+            border-bottom-color: #334155;
+        }
+
+        [data-theme="dark"] .pb-run-header strong,
+        [data-theme="dark"] .pb-run-output-header strong {
+            color: #f1f5f9;
+        }
+
+        [data-theme="dark"] .pb-run-header span,
+        [data-theme="dark"] .pb-run-note,
+        [data-theme="dark"] .pb-run-output-meta,
+        [data-theme="dark"] .pb-run-field label,
+        [data-theme="dark"] .pb-run-status {
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .pb-run-select,
+        [data-theme="dark"] .pb-run-input {
+            background: #0f172a;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-run-output {
+            background: #0f172a;
+            border-color: #334155;
+        }
+
+        [data-theme="dark"] .pb-run-output-header {
+            background: rgba(15, 23, 42, 0.45);
+            border-bottom-color: #334155;
+        }
+
+        [data-theme="dark"] .pb-run-output pre {
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .pb-run-output pre.is-empty {
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .pb-run-output pre.is-error {
+            color: #fca5a5;
+        }
+
+        [data-theme="dark"] .pb-run-output pre.is-success {
+            color: #86efac;
         }
 
         /* Passphrase prompt overlay */
@@ -1519,7 +1849,7 @@
     <section class="tool-description-section">
         <div class="tool-description-inner">
             <div class="tool-description-content">
-                <p>Paste and share text, code, or files online. Supports passphrase encryption, burn-after-read, syntax highlighting, and 80+ built-in transform tools.</p>
+                <p>Paste and share text, code, or files online. Supports passphrase encryption, burn-after-read, syntax highlighting, inline code execution for supported languages, and 80+ built-in transform tools.</p>
             </div>
             <div class="tool-description-ad">
                 <%@ include file="modern/ads/ad-in-content-top.jsp" %>
@@ -1631,8 +1961,17 @@
                                 <select id="pb-syntax">
                                     <option value="plain">Plain</option>
                                     <option value="javascript">JS</option>
+                                    <option value="typescript">TypeScript</option>
                                     <option value="python">Python</option>
                                     <option value="java">Java</option>
+                                    <option value="php">PHP</option>
+                                    <option value="ruby">Ruby</option>
+                                    <option value="csharp">C#</option>
+                                    <option value="kotlin">Kotlin</option>
+                                    <option value="swift">Swift</option>
+                                    <option value="scala">Scala</option>
+                                    <option value="dart">Dart</option>
+                                    <option value="lua">Lua</option>
                                     <option value="html">HTML</option>
                                     <option value="css">CSS</option>
                                     <option value="json">JSON</option>
@@ -1670,10 +2009,22 @@
 
                             <span class="pb-spacer"></span>
 
+                            <button class="pb-submit-btn pb-submit-secondary" id="pb-run-draft" type="button" style="display:none">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M6.271 3.055a.5.5 0 0 1 .52.03l5.5 4a.5.5 0 0 1 0 .81l-5.5 4A.5.5 0 0 1 6 11.5v-8a.5.5 0 0 1 .271-.445z"/></svg>
+                                Run Code
+                            </button>
+
                             <button class="pb-submit-btn" id="pb-submit">
                                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/></svg>
                                 Create Paste
                             </button>
+                        </div>
+                        <div class="pb-draft-run" id="pb-draft-run-output-wrap">
+                            <div class="pb-draft-run-head">
+                                <strong>Draft Run Output</strong>
+                                <span id="pb-draft-run-meta">No draft run yet</span>
+                            </div>
+                            <pre id="pb-draft-run-output" class="is-empty">Select a runnable syntax to test your code before creating the paste.</pre>
                         </div>
                     </div>
                 </div>
@@ -1827,6 +2178,41 @@
                             &larr; New Paste
                         </button>
                     </div>
+                    <section class="pb-run-panel" id="pb-run-panel">
+                        <div class="pb-run-header">
+                            <div>
+                                <strong>Run Code</strong>
+                                <span>Execute this paste in the existing OneCompiler sandbox. Execution output is shown below and is not saved back into the paste.</span>
+                            </div>
+                            <div class="pb-run-status" id="pb-run-status">Idle</div>
+                        </div>
+                        <div class="pb-run-body">
+                            <div class="pb-run-controls">
+                                <div class="pb-run-field">
+                                    <label for="pb-run-language">Language</label>
+                                    <select id="pb-run-language" class="pb-run-select">
+                                        <option value="">Select a runnable language</option>
+                                    </select>
+                                </div>
+                                <div class="pb-run-field">
+                                    <label for="pb-run-input">Program input (stdin)</label>
+                                    <textarea id="pb-run-input" class="pb-run-input" placeholder="Optional stdin passed to the program"></textarea>
+                                </div>
+                            </div>
+                            <div class="pb-run-actions">
+                                <button class="tool-btn tool-btn-sm tool-btn-primary" id="pb-run-execute" disabled>Run Code</button>
+                                <button class="tool-btn tool-btn-sm" id="pb-run-clear" type="button">Clear Output</button>
+                                <span class="pb-run-note" id="pb-run-note">Choose a language to execute this paste.</span>
+                            </div>
+                            <div class="pb-run-output">
+                                <div class="pb-run-output-header">
+                                    <strong>Execution Output</strong>
+                                    <span class="pb-run-output-meta" id="pb-run-output-meta">No run yet</span>
+                                </div>
+                                <pre id="pb-run-output" class="is-empty">Run output will appear here.</pre>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
 
@@ -1854,7 +2240,7 @@
                 </div>
                 <div class="tool-card-body">
                     <h2 class="pb-section-title">Paste &amp; Share Code, Text, or Files Online</h2>
-                    <p>Create and share text snippets, code, or files with this free online pastebin. Passphrase encryption keeps sensitive content secure. Burn-after-read ensures one-time viewing. Over 80 built-in transform tools let you encode, decode, hash, format, and analyze content directly in the editor.</p>
+                    <p>Create and share text snippets, code, or files with this free online pastebin. Passphrase encryption keeps sensitive content secure. Burn-after-read ensures one-time viewing. Run supported languages inline to test code before or after sharing, and use 80+ built-in transform tools to encode, decode, hash, format, and analyze content directly in the editor.</p>
 
                     <h3 class="pb-subsection-title">Key Features</h3>
                     <ul class="pb-feature-list">
@@ -1862,7 +2248,8 @@
                         <li><strong>Passphrase Encryption:</strong> Set visibility to Private and protect your paste with a passphrase</li>
                         <li><strong>Burn After Read:</strong> Paste is permanently deleted after the first view</li>
                         <li><strong>Configurable Expiry:</strong> Choose 1 hour, 24 hours, 7 days, 30 days, or never</li>
-                        <li><strong>Syntax Highlighting:</strong> Auto-detects language with manual override for 16 languages</li>
+                        <li><strong>Syntax Highlighting:</strong> Auto-detects language with manual override for 20+ languages</li>
+                        <li><strong>Run Code Inline:</strong> Supported languages show a Run Code action so you can test snippets without leaving the pastebin</li>
                         <li><strong>80+ Built-in Tools:</strong> Base64, URL, Hex encode/decode, MD5/SHA hashing, JSON/YAML formatting, AES-256 encryption, JWT decode, and more</li>
                         <li><strong>My Pastes Dashboard:</strong> Track and manage your pastes with session cookies or API keys</li>
                     </ul>
@@ -1887,6 +2274,7 @@
                     <ol class="pb-steps-list">
                         <li><strong>Enter Content:</strong> Type or paste text, or switch to File mode to upload a file</li>
                         <li><strong>Configure Options:</strong> Set title, expiry, visibility, and syntax highlighting</li>
+                        <li><strong>Run Code (optional):</strong> If the selected syntax is runnable, click Run Code to test the snippet before sharing</li>
                         <li><strong>Create Paste:</strong> Click "Create Paste" to get a shareable URL and delete token</li>
                         <li><strong>Share:</strong> Send the paste URL. If private, share the passphrase separately</li>
                     </ol>
@@ -1902,7 +2290,7 @@
                         <dt>Can I upload files to this pastebin?</dt>
                         <dd>Yes. Switch to File mode, drag and drop or browse to select a file. The file is stored on the server and recipients can download it via the raw URL.</dd>
                         <dt>Does this pastebin support syntax highlighting?</dt>
-                        <dd>Yes. The pastebin auto-detects the language of your code using highlight.js. You can also manually select from 16 languages including JavaScript, Python, Java, Go, Rust, SQL, and more.</dd>
+                        <dd>Yes. The pastebin auto-detects the language of your code using highlight.js plus built-in syntax heuristics. You can also manually select from 20+ languages including JavaScript, TypeScript, Python, Java, PHP, Go, Rust, SQL, and more. Runnable languages also get a Run Code option so you can test snippets before or after sharing.</dd>
                         <dt>What built-in tools does this pastebin have?</dt>
                         <dd>Over 80 built-in transforms: Base64/URL/Hex encode and decode, MD5/SHA-256/SHA-512 hashing, JSON/YAML/CSV formatting, AES-256 encryption, ROT13, JWT decode, regex replace, extract URLs/emails/IPs, UUID generation, and more.</dd>
                         <dt>How long do pastes last?</dt>
@@ -1960,21 +2348,21 @@
     <%@ include file="modern/components/analytics.jsp" %>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Tool Utilities -->
-    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js"></script>
+    <script defer src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
+    <script defer src="<%=request.getContextPath()%>/modern/js/dark-mode.js"></script>
     <script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
 
     <!-- Pastebin Config + JS -->
     <script>
     window.PASTEBIN_CONFIG = {
         apiBase: '<%=request.getContextPath()%>/api/pastebin',
-        ctxPath: '<%=request.getContextPath()%>'
+        ctxPath: '<%=request.getContextPath()%>',
+        compilerExecuteUrl: '<%=request.getContextPath()%>/OneCompilerFunctionality?action=execute'
     };
     </script>
-    <script src="<%=request.getContextPath()%>/js/pastebin.js"></script>
-    <script src="<%=request.getContextPath()%>/js/pastebin-transforms.js"></script>
+    <script defer src="<%=request.getContextPath()%>/js/pastebin.js"></script>
 </body>
 </html>
