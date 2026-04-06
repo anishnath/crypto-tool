@@ -50,12 +50,26 @@
 .lg-app {
   display: flex;
   flex-direction: column;
-  /* height fills remaining space below nav + hero bar */
-  height: calc(100vh - var(--header-height-desktop, 72px) - 40px);
+  /* height: viewport minus nav(72) minus hero bar(~40) minus bottom ad bar(100) */
+  height: calc(100vh - var(--header-height-desktop, 72px) - 40px - var(--lg-ad-bottom-h, 100px));
   background: var(--lg-bg);
   color: var(--lg-text);
   font-family: 'DM Sans', sans-serif;
   overflow: hidden;
+}
+
+/* ── Bottom AdSense bar (always visible, below .lg-app) ── */
+.lg-adsense-bar {
+  height: var(--lg-ad-bottom-h, 100px);
+  max-height: 100px;
+  overflow: hidden;
+  text-align: center;
+  background: var(--lg-panel-deep);
+  border-top: 1px solid var(--lg-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 /* ── Hero bar (H1 + ad) — sits OUTSIDE .lg-app, below nav ── */
@@ -495,6 +509,9 @@
   .lg-library { width: 140px; }
   .lg-hero-bar { justify-content: center; padding: 4px 8px; }
   .lg-hero-h1 { font-size: 13px; }
+  .ad-lg-hero { display: none; }
+  .lg-adsense-bar { height: 60px; --lg-ad-bottom-h: 60px; }
+  .lg-app { height: calc(100vh - var(--header-height-desktop, 72px) - 32px - 60px); }
   .lg-circuit-tabs { display: none; }
   .lg-analysis { display: none; }
   .lg-chrono { height: 120px; }

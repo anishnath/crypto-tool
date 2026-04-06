@@ -31,29 +31,21 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/electronics/css/logic-simulator.css?v=<%=v%>">
-<!-- Ad Setup -->
-<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" onerror="console.warn('GPT failed')"></script>
-<script>
-stpd=window.stpd||{que:[]};window.googletag=window.googletag||{cmd:[]};
-googletag.cmd.push(function(){
-  var w=window.innerWidth;
-  // Hero banner ad (above simulator)
-  if(w>=992)googletag.defineSlot('/147246189,22976055811/8gwifi.org_970x90_hero_desktop',[[970,90],[728,90]],'ad_logic_hero').addService(googletag.pubads());
-  else if(w>=768)googletag.defineSlot('/147246189,22976055811/8gwifi.org_728x90_hero_tablet',[[728,90]],'ad_logic_hero').addService(googletag.pubads());
-  else googletag.defineSlot('/147246189,22976055811/8gwifi.org_320x100_hero_mobile',[[320,50],[320,100]],'ad_logic_hero').addService(googletag.pubads());
-  googletag.pubads().disableInitialLoad();googletag.pubads().enableSingleRequest();googletag.pubads().collapseEmptyDivs();googletag.enableServices();
-});
-</script>
-<!-- stpd overlay script removed — injects unconstrained fixed-position ads over full-viewport apps -->
+<!-- STPD banner ad (hero only, no overlay/interstitial) -->
+<%@ include file="../setupad.jsp"%>
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
 </head>
 <body>
 <%@ include file="../modern/components/nav-header.jsp" %>
 
-<!-- Hero bar + ad OUTSIDE the app container -->
+<!-- Hero bar + STPD ad OUTSIDE the app container -->
 <div class="lg-hero-bar">
   <h1 class="lg-hero-h1">Logic Gate Simulator Online</h1>
-  <div class="ad-lg-hero" id="ad_logic_hero"></div>
+  <div class="ad-lg-hero" id="ad_logic_hero">
+    <div id="site_8gwifi_org_sidebar_desktop">
+      <script>googletag.cmd.push(function(){googletag.display('site_8gwifi_org_sidebar_desktop')});</script>
+    </div>
+  </div>
 </div>
 
 <div class="lg-app" id="logicApp">
@@ -228,6 +220,18 @@ googletag.cmd.push(function(){
     </span>
   </div>
 
+</div>
+
+<!-- AdSense bottom bar (visible within viewport, below the app) -->
+<div class="lg-adsense-bar">
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9265938999349914"
+       data-ad-slot="6684554088"
+       data-ad-format="horizontal"
+       data-full-width-responsive="false"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 
 <!-- Logic simulator scripts -->
@@ -917,11 +921,6 @@ googletag.cmd.push(function(){
 <!-- SEO Content + Footer Ad -->
 <div style="max-width:1200px;margin:0 auto;padding:24px 16px;color:var(--lg-text);font:14px/1.7 'DM Sans',sans-serif;">
 
-  <!-- Footer Ad -->
-  <div style="text-align:center;margin:16px 0;">
-    <%@ include file="../footer_adsense.jsp"%>
-  </div>
-
   <h2 style="font:600 20px/1.3 'Sora',sans-serif;margin:24px 0 12px;">About This Logic Gate Simulator</h2>
   <p>This free online logic gate simulator lets you design and test digital circuits directly in your browser. Inspired by <strong>Logisim</strong>, it provides a modern web-based alternative with no Java installation required. Build circuits with 53 component types across 8 categories, auto-generate truth tables and Karnaugh maps, minimize Boolean expressions with the Quine-McCluskey algorithm, and visualize signal timing.</p>
 
@@ -947,13 +946,6 @@ googletag.cmd.push(function(){
   <details style="margin:8px 0;"><summary style="cursor:pointer;font-weight:600;">What do the TTL ICs simulate?</summary><p style="margin:8px 0 0 16px;">9 real-world 7400-series TTL ICs with accurate DIP pin layouts: 7400 (quad NAND), 7402 (quad NOR), 7404 (hex inverter), 7408 (quad AND), 7432 (quad OR), 7486 (quad XOR), 7474 (dual D flip-flop with active-low set/clear), 7447 (BCD to 7-segment decoder), and 74138 (3-to-8 line decoder).</p></details>
 
 </div>
-
-<!-- Ad display init -->
-<script>
-(function(){
-  if(typeof googletag!=='undefined'&&googletag.cmd)googletag.cmd.push(function(){googletag.display('ad_logic_hero')});
-})();
-</script>
 
 <!-- Analytics -->
 <%@ include file="../modern/components/analytics.jsp" %>
