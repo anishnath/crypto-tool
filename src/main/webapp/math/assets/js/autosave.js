@@ -158,6 +158,15 @@
   }
 
   // -----------------------------------------------------------
+  //  Blank-document check — skip save when editor is empty
+  // -----------------------------------------------------------
+  function isBlankDocument(title, content) {
+    // Strip HTML tags and whitespace to check if content has any real text
+    var text = (content || '').replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+    return text.length < 10;
+  }
+
+  // -----------------------------------------------------------
   //  Tier 1: localStorage save (fast, every 2.5s debounce)
   // -----------------------------------------------------------
   function saveLocal() {
@@ -168,6 +177,9 @@
     var content = getEditorHTML(editor); // 13.6 fix: use cached HTML
     var state = getState();
     var docId = state.id || getDocId();
+
+    // Don't save blank new documents to localStorage or server
+    if (!docId && isBlankDocument(title, content)) return;
 
     var ok = saveToLocalStorage('matheditor_doc_' + (docId || 'draft'), {
       version: 2, title: title, content: content,
@@ -197,6 +209,10 @@
 
     var title = titleInput ? titleInput.value : 'Untitled';
     var content = getEditorHTML(editor); // 13.6 fix: use cached HTML
+
+    // Don't create a new server document for blank content
+    if (!docId && isBlankDocument(title, content)) { dirtyForApi = false; return; }
+
     var visibility = getVisibility();
 
     function onSuccess() {

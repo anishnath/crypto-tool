@@ -38,14 +38,15 @@
     <!-- Prefetch graphing libs so first Plot click is fast (won't block page load) -->
     <link rel="prefetch" href="https://cdn.jsdelivr.net/npm/mathjs@13.2.0/lib/browser/math.min.js" as="script">
     <link rel="prefetch" href="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" as="script">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 
     <!-- Site-wide CSS (navigation, etc.) -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%= cacheVersion %>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%= cacheVersion %>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%= cacheVersion %>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%= cacheVersion %>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%= cacheVersion %>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
     <%@ include file="../modern/ads/ad-init.jsp" %>
 
     <!-- MathLive static CSS — load async to avoid blocking LCP -->
@@ -53,8 +54,8 @@
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
 
     <!-- Math Editor CSS -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/assets/css/main.css?v=<%= cacheVersion %>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/assets/css/editor.css?v=<%= cacheVersion %>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/assets/css/main.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/assets/css/editor.css">
 </head>
 <body>
 
@@ -326,43 +327,44 @@
 <!-- Context path for server-side compute (SymPy tier) -->
 <script>window.ME_CTX = "<%=request.getContextPath()%>";</script>
 
-<!-- Integral Calculator Core Engine (normalizeExpr, King's property, etc.) -->
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js"></script>
-<script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js?v=<%= cacheVersion %>"></script>
+<!-- Nerdamer CAS — defer to unblock LCP/INP (only needed on first compute action) -->
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js" defer></script>
 
-<!-- Math Editor JS (IIFE scripts — listen for me:editor-ready event) -->
-<script src="<%=request.getContextPath()%>/math/assets/js/editor-core.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/toolbar.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/mathlive-init.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/compute.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/virtual-keyboard.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/graph-insert.js?v=<%= cacheVersion %>"></script>
+<!-- Math Editor JS — critical path: editor-core, toolbar, code-runner (needed before TipTap) -->
+<script src="<%=request.getContextPath()%>/math/assets/js/editor-core.js"></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/toolbar.js"></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/code-runner.js"></script>
+
+<!-- Math Editor JS — deferred (listen for me:editor-ready, not needed for first paint) -->
+<script src="<%=request.getContextPath()%>/math/assets/js/mathlive-init.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/compute.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/virtual-keyboard.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/graph-insert.js" defer></script>
 
 <!-- Fabric.js — defer to avoid blocking LCP/INP; loads before first diagram use -->
 <script src="https://cdn.jsdelivr.net/npm/fabric@5.5.2/dist/fabric.min.js" defer></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/drawing.js?v=<%= cacheVersion %>" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/drawing.js" defer></script>
 
-<script src="<%=request.getContextPath()%>/math/assets/js/math-api.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/doc-loader.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/visibility-dropdown.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/autosave.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/share-modal.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/export-auth.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/slash-menu.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/export-latex.js?v=<%= cacheVersion %>"></script>
-<script src="<%=request.getContextPath()%>/math/assets/js/export-pdf.js?v=<%= cacheVersion %>"></script>
-
-<!-- Code Runner (must load before TipTap so window.MeCodeRunner is available during node init) -->
-<script src="<%=request.getContextPath()%>/math/assets/js/code-runner.js?v=<%= cacheVersion %>"></script>
+<!-- Document management — defer (autosave hooks into me:editor-ready event) -->
+<script src="<%=request.getContextPath()%>/math/assets/js/math-api.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/doc-loader.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/visibility-dropdown.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/autosave.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/share-modal.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/export-auth.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/slash-menu.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/export-latex.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/export-pdf.js" defer></script>
 
 <!-- TipTap Editor (ES module — loads from CDN, creates editor, fires me:editor-ready) -->
-<script type="module" src="<%=request.getContextPath()%>/math/assets/js/tiptap-init.js?v=<%= cacheVersion %>"></script>
+<script type="module" src="<%=request.getContextPath()%>/math/assets/js/tiptap-init.js"></script>
 
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%= cacheVersion %>" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%= cacheVersion %>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
 
 <%@ include file="../modern/components/analytics.jsp" %>
 
