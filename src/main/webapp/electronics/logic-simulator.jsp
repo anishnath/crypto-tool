@@ -10,6 +10,7 @@
     <jsp:param name="toolCategory" value="Electronics" />
     <jsp:param name="toolDescription" value="Free browser-based digital logic simulator. Drag-and-drop AND, OR, NOT, NAND, NOR, XOR gates, flip-flops, counters, MUX, decoders, TTL 7400 ICs. Auto-generate truth tables, Karnaugh maps, minimize with Quine-McCluskey, view timing diagrams, build subcircuits. No install required." />
     <jsp:param name="toolUrl" value="electronics/logic-simulator.jsp" />
+    <jsp:param name="toolImage" value="logic-simulator.svg" />
     <jsp:param name="toolKeywords" value="logic gate simulator online, logisim online, truth table generator, karnaugh map solver, boolean algebra calculator, digital circuit simulator, logic gates, flip flop simulator, D flip-flop, JK flip-flop, SR latch, binary counter, multiplexer, decoder, 7-segment display, TTL 7400, TTL 7474, Quine-McCluskey, sum of products, timing diagram, subcircuit, half adder, full adder, ALU, combinational logic, sequential logic" />
     <jsp:param name="breadcrumbCategoryUrl" value="electronics/" />
     <jsp:param name="educationalLevel" value="High School, Undergraduate, AP Computer Science, Digital Logic Design, Computer Engineering" />

@@ -1,0 +1,218 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f1117"/>
+      <stop offset="100%" stop-color="#181b22"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.04" stroke="#a78bfa" stroke-width="1">
+    <line x1="0" y1="0" x2="1200" y2="630"/>
+    <line x1="0" y1="630" x2="1200" y2="0"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+  </g>
+
+  <!-- AND Gate (left area) -->
+  <g transform="translate(120, 180)">
+    <!-- Body -->
+    <path d="M0,0 L50,0 A50,50 0 0,1 50,100 L0,100 Z" fill="#1e2230" stroke="#8b95a8" stroke-width="2"/>
+    <!-- Input lines -->
+    <line x1="-30" y1="30" x2="0" y2="30" stroke="#64748b" stroke-width="3"/>
+    <line x1="-30" y1="70" x2="0" y2="70" stroke="#22c55e" stroke-width="3"/>
+    <!-- Output line -->
+    <line x1="80" y1="50" x2="130" y2="50" stroke="#64748b" stroke-width="3"/>
+    <!-- Input dots -->
+    <circle cx="-30" cy="30" r="5" fill="#64748b"/>
+    <circle cx="-30" cy="70" r="5" fill="#22c55e"/>
+    <circle cx="130" cy="50" r="5" fill="#64748b"/>
+    <!-- Label -->
+    <text x="35" y="55" text-anchor="middle" fill="#8b95a8" font-size="16" font-weight="600" font-family="monospace">AND</text>
+    <!-- Input labels -->
+    <text x="-38" y="34" text-anchor="end" fill="#64748b" font-size="11" font-family="sans-serif">A=0</text>
+    <text x="-38" y="74" text-anchor="end" fill="#22c55e" font-size="11" font-family="sans-serif">B=1</text>
+  </g>
+
+  <!-- OR Gate -->
+  <g transform="translate(120, 340)">
+    <path d="M0,0 Q15,50 0,100 Q40,100 80,50 Q40,0 0,0" fill="#1e2230" stroke="#8b95a8" stroke-width="2"/>
+    <line x1="-30" y1="30" x2="8" y2="30" stroke="#22c55e" stroke-width="3"/>
+    <line x1="-30" y1="70" x2="8" y2="70" stroke="#22c55e" stroke-width="3"/>
+    <line x1="80" y1="50" x2="130" y2="50" stroke="#22c55e" stroke-width="3"/>
+    <circle cx="-30" cy="30" r="5" fill="#22c55e"/>
+    <circle cx="-30" cy="70" r="5" fill="#22c55e"/>
+    <circle cx="130" cy="50" r="5" fill="#22c55e"/>
+    <text x="30" y="55" text-anchor="middle" fill="#8b95a8" font-size="16" font-weight="600" font-family="monospace">OR</text>
+  </g>
+
+  <!-- NOT Gate -->
+  <g transform="translate(300, 240)">
+    <path d="M0,0 L60,30 L0,60 Z" fill="#1e2230" stroke="#8b95a8" stroke-width="2"/>
+    <circle cx="65" cy="30" r="5" fill="#1e2230" stroke="#8b95a8" stroke-width="2"/>
+    <line x1="-25" y1="30" x2="0" y2="30" stroke="#22c55e" stroke-width="3"/>
+    <line x1="70" y1="30" x2="100" y2="30" stroke="#64748b" stroke-width="3"/>
+    <circle cx="-25" cy="30" r="5" fill="#22c55e"/>
+    <circle cx="100" cy="30" r="5" fill="#64748b"/>
+    <text x="25" y="35" text-anchor="middle" fill="#8b95a8" font-size="14" font-weight="600" font-family="monospace">NOT</text>
+  </g>
+
+  <!-- Wires connecting gates -->
+  <g stroke-width="2.5" fill="none" opacity="0.5">
+    <path d="M250 230 Q280 230 300 270" stroke="#64748b"/>
+    <path d="M250 390 Q280 390 350 340" stroke="#22c55e"/>
+  </g>
+
+  <!-- Truth Table Panel -->
+  <g transform="translate(480, 100)">
+    <rect x="0" y="0" width="280" height="200" rx="8" fill="#1a1d24" stroke="#2d3139" stroke-width="1"/>
+    <!-- Header bar -->
+    <rect x="0" y="0" width="280" height="30" rx="8" fill="#14171c"/>
+    <rect x="0" y="20" width="280" height="10" fill="#14171c"/>
+    <text x="140" y="20" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace">Truth Table</text>
+
+    <!-- Column headers -->
+    <text x="40" y="52" text-anchor="middle" fill="#a78bfa" font-size="13" font-weight="600" font-family="monospace">A</text>
+    <text x="100" y="52" text-anchor="middle" fill="#a78bfa" font-size="13" font-weight="600" font-family="monospace">B</text>
+    <line x1="135" y1="38" x2="135" y2="195" stroke="#a78bfa" stroke-width="1.5" opacity="0.4"/>
+    <text x="190" y="52" text-anchor="middle" fill="#22c55e" font-size="13" font-weight="600" font-family="monospace">Q</text>
+
+    <!-- Rows -->
+    <g font-family="monospace" font-size="13">
+      <text x="40" y="78" text-anchor="middle" fill="#64748b">0</text>
+      <text x="100" y="78" text-anchor="middle" fill="#64748b">0</text>
+      <text x="190" y="78" text-anchor="middle" fill="#64748b">0</text>
+
+      <text x="40" y="104" text-anchor="middle" fill="#64748b">0</text>
+      <text x="100" y="104" text-anchor="middle" fill="#22c55e">1</text>
+      <text x="190" y="104" text-anchor="middle" fill="#64748b">0</text>
+
+      <text x="40" y="130" text-anchor="middle" fill="#22c55e">1</text>
+      <text x="100" y="130" text-anchor="middle" fill="#64748b">0</text>
+      <text x="190" y="130" text-anchor="middle" fill="#64748b">0</text>
+
+      <text x="40" y="156" text-anchor="middle" fill="#22c55e">1</text>
+      <text x="100" y="156" text-anchor="middle" fill="#22c55e">1</text>
+      <text x="190" y="156" text-anchor="middle" fill="#22c55e" font-weight="700">1</text>
+    </g>
+
+    <!-- Expression below -->
+    <rect x="10" y="170" width="260" height="22" rx="4" fill="#12141a"/>
+    <text x="140" y="185" text-anchor="middle" fill="#a78bfa" font-size="11" font-family="monospace">Q = A · B</text>
+  </g>
+
+  <!-- K-Map Panel -->
+  <g transform="translate(480, 330)">
+    <rect x="0" y="0" width="280" height="170" rx="8" fill="#1a1d24" stroke="#2d3139" stroke-width="1"/>
+    <rect x="0" y="0" width="280" height="30" rx="8" fill="#14171c"/>
+    <rect x="0" y="20" width="280" height="10" fill="#14171c"/>
+    <text x="140" y="20" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace">Karnaugh Map</text>
+
+    <!-- K-map grid header -->
+    <text x="60" y="54" text-anchor="middle" fill="#a78bfa" font-size="11" font-family="monospace">A\B</text>
+    <text x="120" y="54" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace">0</text>
+    <text x="180" y="54" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace">1</text>
+
+    <!-- Row 0 -->
+    <text x="60" y="82" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace">0</text>
+    <rect x="96" y="64" width="48" height="26" rx="3" fill="#1e2230" stroke="#2d3139"/>
+    <text x="120" y="82" text-anchor="middle" fill="#64748b" font-size="14" font-weight="600" font-family="monospace">0</text>
+    <rect x="156" y="64" width="48" height="26" rx="3" fill="#1e2230" stroke="#2d3139"/>
+    <text x="180" y="82" text-anchor="middle" fill="#64748b" font-size="14" font-weight="600" font-family="monospace">0</text>
+
+    <!-- Row 1 -->
+    <text x="60" y="116" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace">1</text>
+    <rect x="96" y="98" width="48" height="26" rx="3" fill="#1e2230" stroke="#2d3139"/>
+    <text x="120" y="116" text-anchor="middle" fill="#64748b" font-size="14" font-weight="600" font-family="monospace">0</text>
+    <rect x="156" y="98" width="48" height="26" rx="3" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="180" y="116" text-anchor="middle" fill="#22c55e" font-size="14" font-weight="700" font-family="monospace">1</text>
+
+    <!-- Minimized expression -->
+    <rect x="10" y="138" width="260" height="22" rx="4" fill="#12141a"/>
+    <text x="140" y="153" text-anchor="middle" fill="#22c55e" font-size="11" font-family="monospace" font-weight="600">Minimized: Q = A · B</text>
+  </g>
+
+  <!-- TTL IC chip (right area) -->
+  <g transform="translate(830, 120)">
+    <rect x="0" y="0" width="80" height="120" rx="3" fill="#1a1a2e" stroke="#4a4a6a" stroke-width="2"/>
+    <path d="M30,0 A10,10 0 0,1 50,0" fill="#0f0f1e" stroke="#4a4a6a"/>
+    <circle cx="14" cy="14" r="3" fill="#6a6a8a"/>
+    <text x="40" y="65" text-anchor="middle" fill="#8a8aaa" font-size="14" font-weight="700" font-family="monospace">7408</text>
+    <text x="40" y="82" text-anchor="middle" fill="#6a6a8a" font-size="9" font-family="sans-serif">Quad AND</text>
+    <!-- Pin dots left -->
+    <g fill="#64748b"><circle cx="-8" cy="20" r="3"/><circle cx="-8" cy="36" r="3"/><circle cx="-8" cy="52" r="3"/><circle cx="-8" cy="68" r="3"/><circle cx="-8" cy="84" r="3"/><circle cx="-8" cy="100" r="3"/></g>
+    <!-- Pin dots right -->
+    <g fill="#22c55e"><circle cx="88" cy="20" r="3"/><circle cx="88" cy="36" r="3"/><circle cx="88" cy="52" r="3"/></g>
+    <g fill="#64748b"><circle cx="88" cy="68" r="3"/><circle cx="88" cy="84" r="3"/><circle cx="88" cy="100" r="3"/></g>
+  </g>
+
+  <!-- D Flip-Flop -->
+  <g transform="translate(830, 290)">
+    <rect x="0" y="0" width="100" height="80" rx="4" fill="#1e2230" stroke="#8b95a8" stroke-width="1.5"/>
+    <text x="50" y="45" text-anchor="middle" fill="#8b95a8" font-size="12" font-weight="600" font-family="sans-serif">D-FF</text>
+    <!-- Clock triangle -->
+    <path d="M0,48 L10,54 L0,60" fill="none" stroke="#8b95a8" stroke-width="1.5"/>
+    <!-- Labels -->
+    <text x="8" y="28" fill="#64748b" font-size="9" font-family="monospace">D</text>
+    <text x="8" y="58" fill="#64748b" font-size="9" font-family="monospace">CLK</text>
+    <text x="85" y="28" text-anchor="end" fill="#64748b" font-size="9" font-family="monospace">Q</text>
+    <text x="85" y="58" text-anchor="end" fill="#64748b" font-size="9" font-family="monospace">Q'</text>
+    <!-- Ports -->
+    <circle cx="-12" cy="24" r="4" fill="#22c55e"/>
+    <circle cx="-12" cy="54" r="4" fill="#a78bfa"/>
+    <circle cx="112" cy="24" r="4" fill="#22c55e"/>
+    <circle cx="112" cy="54" r="4" fill="#64748b"/>
+    <!-- Value display -->
+    <text x="50" y="72" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="600" font-family="monospace">Q=1</text>
+  </g>
+
+  <!-- Timing diagram (bottom right) -->
+  <g transform="translate(830, 410)">
+    <rect x="0" y="0" width="280" height="100" rx="6" fill="#1a1d24" stroke="#2d3139"/>
+    <text x="10" y="16" fill="#64748b" font-size="9" font-family="sans-serif" font-weight="600">Timing Diagram</text>
+    <!-- CLK signal -->
+    <text x="10" y="38" fill="#a78bfa" font-size="8" font-family="monospace">CLK</text>
+    <path d="M40,42 L40,28 L70,28 L70,42 L100,42 L100,28 L130,28 L130,42 L160,42 L160,28 L190,28 L190,42 L220,42 L220,28 L250,28 L250,42" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+    <!-- Q signal -->
+    <text x="10" y="68" fill="#22c55e" font-size="8" font-family="monospace">Q</text>
+    <path d="M40,72 L40,72 L70,72 L70,58 L130,58 L130,72 L160,72 L160,58 L250,58" fill="none" stroke="#22c55e" stroke-width="1.5"/>
+    <!-- Grid lines -->
+    <g stroke="#2d3139" stroke-width="0.5" stroke-dasharray="2 2">
+      <line x1="70" y1="22" x2="70" y2="80"/>
+      <line x1="100" y1="22" x2="100" y2="80"/>
+      <line x1="130" y1="22" x2="130" y2="80"/>
+      <line x1="160" y1="22" x2="160" y2="80"/>
+      <line x1="190" y1="22" x2="190" y2="80"/>
+      <line x1="220" y1="22" x2="220" y2="80"/>
+    </g>
+  </g>
+
+  <!-- Component badges -->
+  <g transform="translate(100, 530)">
+    <rect x="0" y="0" width="80" height="24" rx="4" fill="#a78bfa" opacity="0.15"/>
+    <text x="40" y="16" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="600" font-family="sans-serif">53 Components</text>
+
+    <rect x="90" y="0" width="80" height="24" rx="4" fill="#22c55e" opacity="0.15"/>
+    <text x="130" y="16" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="600" font-family="sans-serif">Truth Tables</text>
+
+    <rect x="180" y="0" width="70" height="24" rx="4" fill="#ec4899" opacity="0.15"/>
+    <text x="215" y="16" text-anchor="middle" fill="#ec4899" font-size="10" font-weight="600" font-family="sans-serif">K-Maps</text>
+
+    <rect x="260" y="0" width="80" height="24" rx="4" fill="#f59e0b" opacity="0.15"/>
+    <text x="300" y="16" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="600" font-family="sans-serif">9 TTL ICs</text>
+
+    <rect x="350" y="0" width="90" height="24" rx="4" fill="#06b6d4" opacity="0.15"/>
+    <text x="395" y="16" text-anchor="middle" fill="#06b6d4" font-size="10" font-weight="600" font-family="sans-serif">Subcircuits</text>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="580" text-anchor="middle" fill="#e2e8f0" font-size="28" font-weight="700" font-family="'Sora', sans-serif" letter-spacing="-0.02em">Logic Gate Simulator Online</text>
+  <text x="600" y="610" text-anchor="middle" fill="#64748b" font-size="14" font-family="'DM Sans', sans-serif">Truth tables, Karnaugh maps, Boolean minimization, timing diagrams — 53 components, free</text>
+</svg>
