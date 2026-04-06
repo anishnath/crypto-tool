@@ -44,19 +44,19 @@ googletag.cmd.push(function(){
   googletag.pubads().disableInitialLoad();googletag.pubads().enableSingleRequest();googletag.pubads().collapseEmptyDivs();googletag.enableServices();
 });
 </script>
-<script>(function(){var s=document.createElement('script');s.src='https://stpd.cloud/saas/5796';s.async=true;s.onerror=function(){};document.head.appendChild(s)})()</script>
+<!-- stpd overlay script removed — injects unconstrained fixed-position ads over full-viewport apps -->
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
 </head>
 <body>
 <%@ include file="../modern/components/nav-header.jsp" %>
 
-<div class="lg-app" id="logicApp">
+<!-- Hero bar + ad OUTSIDE the app container -->
+<div class="lg-hero-bar">
+  <h1 class="lg-hero-h1">Logic Gate Simulator Online</h1>
+  <div class="ad-lg-hero" id="ad_logic_hero"></div>
+</div>
 
-  <!-- H1 + hero bar -->
-  <div class="lg-hero-bar">
-    <h1 class="lg-hero-h1">Logic Gate Simulator Online</h1>
-    <div class="ad-lg-hero" id="ad_logic_hero" style="flex:1;min-width:300px;max-width:970px;text-align:center;"></div>
-  </div>
+<div class="lg-app" id="logicApp">
 
   <!-- Toolbar -->
   <div class="lg-toolbar" id="toolbar">
