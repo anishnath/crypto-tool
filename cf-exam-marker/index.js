@@ -178,7 +178,7 @@ async function callOpenAI(prompt, env, options = {}) {
 
   const model = resolveOpenAIModel(env, options.model);
   const temperature = options.temperature ?? 0.1;
-  const maxTokens = options.maxTokens || 1000;
+  const maxTokens = options.maxTokens || 10000;
   const systemMessage = options.systemMessage || 'You are a precise exam evaluator. Always respond with valid JSON only.';
 
   const requestBody = {
@@ -280,7 +280,7 @@ async function handleMark(request, env) {
 
     const result = await callOpenAI(prompt, env, {
       model: resolveOpenAIModel(env, payload.model),
-      maxTokens: 1000
+      maxTokens: 10000
     });
 
     return jsonResponse({
@@ -2028,7 +2028,7 @@ async function handleCircuitGenerate(request, env) {
 	    const result = await callOpenAI(prompt, env, {
 	      model: getDefaultOpenAIModel(env),
 	      temperature: 0.2,
-	      maxTokens: 2000,
+	      maxTokens: 12000,
 	      systemMessage: buildCircuitSystemMessage()
 	    });
 
