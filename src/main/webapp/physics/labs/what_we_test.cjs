@@ -155,7 +155,7 @@ const SpringSim = {
     springMass: { value: 0 },
     stiffness:  { value: 3.0 },
     damping:    { value: 0.1 },
-    restLength: { value: 1.0 },
+    restLength: { value: 2.0 },
     fixedPoint: { value: -1.0 },
     startX:     { value: 2.0 },
   },
@@ -165,23 +165,32 @@ const SpringSim = {
     if (isDragging) return;
     const [x, v] = vars;
     const { mass, stiffness, damping, restLength, fixedPoint } = params;
+    const mEff = mass + ((params.springMass || 0) / 3);
     const stretch = x - fixedPoint - restLength;
     change[0] = v;
-    change[1] = (-stiffness * stretch - damping * v) / mass;
+    change[1] = (-stiffness * stretch - damping * v) / mEff;
+  },
+  postStep(vars, params) {
+    const wall = params.fixedPoint;
+    if (vars[0] <= wall) {
+      vars[0] = wall + 0.001;
+      if (vars[1] < 0) vars[1] = -vars[1] * 0.3;
+    }
   },
   energy(vars, params) {
     const [x, v] = vars;
     const { mass, stiffness, restLength, fixedPoint } = params;
+    const mEff = mass + ((params.springMass || 0) / 3);
     const stretch = x - fixedPoint - restLength;
-    const KE = 0.5 * mass * v * v;
+    const KE = 0.5 * mEff * v * v;
     const PE = 0.5 * stiffness * stretch * stretch;
     return { kinetic: KE, potential: PE, total: KE + PE };
   },
   hitTest(wx, wy, vars) {
     return Math.hypot(wx - vars[0], wy) < 0.3 ? { id: 'block', offsetX: wx - vars[0], offsetY: wy } : null;
   },
-  onDrag(id, wx, wy, offset, vars) {
-    if (id === 'block') { vars[0] = wx - offset.offsetX; vars[1] = 0; }
+  onDrag(id, wx, wy, offset, vars, params) {
+    if (id === 'block') { vars[0] = Math.max(wx - offset.offsetX, params.fixedPoint + 0.01); vars[1] = 0; }
   },
   onRelease() {},
   potentialEnergy(x, params) {
@@ -388,9 +397,9 @@ section('Spring — Init & Evaluate');
   SpringSim.evaluate(state, change, p, false);
   assert(change[0] === 0, 'dx/dt = v = 0 at start');
   assert(change[1] < 0, 'dv/dt < 0 (spring pulls back from stretched position)');
-  // Spring stretched by (2.0 - (-1.0) - 1.0) = 2.0 meters
-  // Force = -k * stretch / m = -3 * 2 / 1 = -6
-  assertClose(change[1], -6.0, 0.01, 'Acceleration = -k*stretch/m = -6.0');
+  // Spring stretched by (2.0 - (-1.0) - 2.0) = 1.0 meters
+  // Force = -k * stretch / m = -3 * 1 / 1 = -3
+  assertClose(change[1], -3.0, 0.01, 'Acceleration = -k*stretch/m = -3.0');
 }
 
 section('Spring — Energy Conservation (no damping)');
@@ -443,6 +452,42 @@ section('Spring — Drag Interaction');
   SpringSim.onDrag('block', 3.0, 0, hit, state, p);
   assertClose(state[0], 3.0 - hit.offsetX, 0.01, 'Block dragged to new position');
   assertClose(state[1], 0, 1e-10, 'Velocity zeroed during drag');
+}
+
+section('Spring — Wall Collision (postStep clamp)');
+{
+  const p = getParams(SpringSim);
+
+  // Test 1: Block past wall gets clamped
+  const state = Float64Array.from([-2.0, -5.0, 0]); // past wall at -1, moving left
+  SpringSim.postStep(state, p);
+  assert(state[0] > p.fixedPoint, 'postStep clamps block to wall: x=' + state[0].toFixed(3) + ' > ' + p.fixedPoint);
+  assert(state[1] >= 0, 'postStep reverses velocity on wall hit: v=' + state[1].toFixed(3));
+
+  // Test 2: Block safely right of wall is not affected
+  const safe = Float64Array.from([2.0, -1.0, 0]);
+  SpringSim.postStep(safe, p);
+  assertClose(safe[0], 2.0, 1e-10, 'postStep does not affect block away from wall');
+  assertClose(safe[1], -1.0, 1e-10, 'postStep does not affect velocity away from wall');
+
+  // Test 3: Drag cannot go past wall
+  const state2 = Float64Array.from([2.0, 0, 0]);
+  SpringSim.onDrag('block', -5.0, 0, { offsetX: 0, offsetY: 0 }, state2, p);
+  assert(state2[0] > p.fixedPoint, 'Drag clamped at wall: x=' + state2[0].toFixed(3));
+
+  // Test 4: Large amplitude with wall — simulate and verify no penetration
+  const p2 = getParams(SpringSim);
+  p2.damping = 0;
+  p2.startX = 4.0; // large stretch → large amplitude
+  const state3 = Float64Array.from(SpringSim.init(p2));
+  const dt = 1 / 500;
+  let minX = state3[0];
+  for (let i = 0; i < 5000; i++) {
+    rk4(state3, (v, c, par) => SpringSim.evaluate(v, c, par, false), dt, p2);
+    SpringSim.postStep(state3, p2);
+    if (state3[0] < minX) minX = state3[0];
+  }
+  assert(minX >= p2.fixedPoint, 'After 5000 steps with large amplitude: min x=' + minX.toFixed(3) + ' >= wall=' + p2.fixedPoint);
 }
 
 section('RingBuffer');
@@ -2363,15 +2408,15 @@ section('Spring Mass — Effective Mass Changes Period');
   const state = Float64Array.from([p.startX, 0, 0]);
   const change = new Float64Array(3);
   // Need to add springMass to inline sim evaluate
-  const stretch = p.startX - p.fixedPoint - p.restLength;
-  const expectedAccel = (-p.stiffness * stretch) / mEff;
+  const stretch = p.startX - p.fixedPoint - p.restLength; // 2.0 - (-1.0) - 2.0 = 1.0
+  const expectedAccel = (-p.stiffness * stretch) / mEff;  // -3 * 1 / (4/3) = -2.25
   // Inline evaluate with mEff
   change[0] = 0;
   change[1] = (-p.stiffness * stretch - 0) / mEff;
   change[2] = 1;
   assertClose(change[1], expectedAccel, 0.01, 'Spring mass: accel = -k*stretch/mEff = ' + expectedAccel.toFixed(3));
-  // Without spring mass: accel would be -6.0, with mEff=4/3: accel = -6/(4/3) = -4.5
-  assertClose(change[1], -4.5, 0.01, 'With 1kg spring: accel = -4.5 (not -6.0)');
+  // Without spring mass: accel would be -3.0, with mEff=4/3: accel = -3/(4/3) = -2.25
+  assertClose(change[1], -2.25, 0.01, 'With 1kg spring: accel = -2.25 (not -3.0)');
 }
 
 section('Spring Mass — Zero Spring Mass = Original Behavior');
@@ -2380,9 +2425,9 @@ section('Spring Mass — Zero Spring Mass = Original Behavior');
   p.springMass = 0;
   const mEff = p.mass + 0 / 3;
   assertClose(mEff, p.mass, 1e-10, 'Zero spring mass: mEff = block mass');
-  const stretch = p.startX - p.fixedPoint - p.restLength;
+  const stretch = p.startX - p.fixedPoint - p.restLength; // 2.0 - (-1.0) - 2.0 = 1.0
   const accel = (-p.stiffness * stretch) / mEff;
-  assertClose(accel, -6.0, 0.01, 'Zero spring mass: same as before (-6.0)');
+  assertClose(accel, -3.0, 0.01, 'Zero spring mass: accel = -3.0');
 }
 
 // --- Double Spring Normal Modes ---

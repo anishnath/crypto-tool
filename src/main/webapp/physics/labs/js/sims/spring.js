@@ -23,7 +23,7 @@ export const SpringSim = {
     springMass: { value: 0,    min: 0, max: 2,    step: 0.05, label: 'Spring Mass',      unit: 'kg' },
     stiffness:  { value: 3.0,  min: 0.1, max: 30, step: 0.1,  label: 'Spring Stiffness', unit: 'N/m' },
     damping:    { value: 0.1,  min: 0, max: 5,    step: 0.01, label: 'Damping',          unit: '' },
-    restLength: { value: 1.0,  min: 0.1, max: 3,  step: 0.1,  label: 'Rest Length',      unit: 'm' },
+    restLength: { value: 2.0,  min: 0.1, max: 3,  step: 0.1,  label: 'Rest Length',      unit: 'm' },
     fixedPoint: { value: -1.0, min: -3, max: 3,   step: 0.1,  label: 'Fixed Point',      unit: 'm' },
     startX:     { value: 2.0,  min: -3, max: 5,   step: 0.1,  label: 'Start Position',   unit: 'm' },
   },
@@ -62,6 +62,15 @@ export const SpringSim = {
 
     change[0] = v;
     change[1] = (-stiffness * stretch - damping * v) / mEff;
+  },
+
+  /** Clamp block to wall — elastic bounce on contact */
+  postStep(vars, params) {
+    const wall = params.fixedPoint;
+    if (vars[0] <= wall) {
+      vars[0] = wall + 0.001; // push just off the wall
+      if (vars[1] < 0) vars[1] = -vars[1] * 0.3; // inelastic bounce
+    }
   },
 
   energy(vars, params) {
@@ -110,7 +119,7 @@ export const SpringSim = {
 
   onDrag(id, wx, wy, offset, vars, params) {
     if (id === 'block') {
-      vars[0] = wx - offset.offsetX;
+      vars[0] = Math.max(wx - offset.offsetX, params.fixedPoint + 0.01);
       vars[1] = 0;
     }
   },
@@ -118,16 +127,33 @@ export const SpringSim = {
   onRelease(id, vars, params) {},
 
   render(canvas, vars, params) {
-    const [x] = vars;
-    const { fixedPoint, restLength } = params;
-    const blockW = 0.25 * Math.sqrt(params.mass);
+    const [x, v] = vars;
+    const { fixedPoint, restLength, mass, springMass, stiffness } = params;
+    const blockW = 0.25 * Math.sqrt(mass);
     const y = 0;
 
     // Wall/fixed point
     canvas.line(fixedPoint, -0.4, fixedPoint, 0.4, '#475569', 3);
+    // Wall hatching (solid surface indicator)
+    for (let hy = -0.4; hy < 0.4; hy += 0.12) {
+      canvas.line(fixedPoint, hy, fixedPoint - 0.15, hy - 0.1, '#334155', 1);
+    }
+
+    // Spring color: blend PE blue ↔ KE red based on energy ratio
+    const mEff = mass + (springMass || 0) / 3;
+    const stretch = x - fixedPoint - restLength;
+    const KE = 0.5 * mEff * v * v;
+    const PE = 0.5 * stiffness * stretch * stretch;
+    const total = KE + PE || 1; // avoid div by zero
+    const keRatio = KE / total; // 0 = all PE (blue), 1 = all KE (red)
+    // PE blue: #3B82F6 → (59,130,246)   KE red: #EF4444 → (239,68,68)
+    const sr = Math.round(59 + (239 - 59) * keRatio);
+    const sg = Math.round(130 + (68 - 130) * keRatio);
+    const sb = Math.round(246 + (68 - 246) * keRatio);
+    const springColor = 'rgb(' + sr + ',' + sg + ',' + sb + ')';
 
     // Spring (zigzag)
-    canvas.spring(fixedPoint, y, x, y, 12, 0.15, '#06B6D4');
+    canvas.spring(fixedPoint, y, x, y, 12, 0.15, springColor);
 
     // Block
     canvas.rect(x - blockW / 2, y - blockW / 2, blockW, blockW, '#8B5CF6', '#A78BFA');
