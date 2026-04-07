@@ -91,22 +91,22 @@
             --tool-light: rgba(16, 185, 129, 0.12);
         }
 
-        /* Compact header overrides */
-        .tool-page-header { padding: 0.625rem 1.5rem; }
-        .tool-page-title { font-size: 1.125rem; font-weight: 700; }
-        .tool-breadcrumbs { margin-top: 0.125rem; font-size: 0.75rem; }
-        .tool-badge { padding: 0.15rem 0.5rem; font-size: 0.625rem; }
-        .tool-description-section { padding: 0.5rem 1.5rem; }
-        .tool-description-content p { font-size: 0.8125rem; line-height: 1.4; }
+        /* Page header + intro — readable, not cramped */
+        .tool-page-header { padding: 0.875rem 1.5rem 0.75rem; }
+        .tool-page-title { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; }
+        .tool-breadcrumbs { margin-top: 0.25rem; font-size: 0.8125rem; }
+        .tool-badge { padding: 0.2rem 0.55rem; font-size: 0.6875rem; }
+        .tool-description-section { padding: 0.75rem 1.5rem 1rem; }
+        .tool-description-content p { font-size: 0.9375rem; line-height: 1.55; max-width: 65ch; }
 
         /* Two-column layout: wide content + ad sidebar */
         .pb-layout {
             display: grid;
             grid-template-columns: 1fr 300px;
-            gap: 1.5rem;
+            gap: 1.75rem;
             max-width: 1600px;
             margin: 0 auto;
-            padding: 1rem 1.5rem;
+            padding: 1.25rem 1.5rem 2rem;
         }
 
         @media (max-width: 1024px) {
@@ -117,7 +117,7 @@
         }
 
         @media (max-width: 768px) {
-            .pb-layout { padding: 0.75rem; }
+            .pb-layout { padding: 1rem 1rem 1.5rem; }
         }
 
         /* Main content column */
@@ -141,8 +141,8 @@
         }
 
         .pb-tab {
-            padding: 0.5rem 1rem;
-            font-size: 0.8125rem;
+            padding: 0.625rem 1.125rem;
+            font-size: 0.9375rem;
             font-weight: 600;
             border: none;
             background: transparent;
@@ -191,10 +191,10 @@
         /* Title input — flush, no wrapping div needed */
         .pb-title-input {
             width: 100%;
-            padding: 0.5rem 0.75rem;
+            padding: 0.625rem 1rem;
             border: none;
             border-bottom: 1px solid var(--border, #e2e8f0);
-            font-size: 0.8125rem;
+            font-size: 0.9375rem;
             background: var(--bg-primary, #fff);
             color: var(--text-primary, #0f172a);
             outline: none;
@@ -208,13 +208,13 @@
         /* Textarea — no extra wrap padding */
         .pb-textarea {
             width: 100%;
-            min-height: 280px;
-            padding: 0.625rem 0.75rem;
+            min-height: 320px;
+            padding: 0.875rem 1rem;
             border: none;
             border-bottom: 1px solid var(--border, #e2e8f0);
             font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-            font-size: 0.8125rem;
-            line-height: 1.6;
+            font-size: 0.9375rem;
+            line-height: 1.65;
             resize: vertical;
             background: var(--bg-primary, #fff);
             color: var(--text-primary, #0f172a);
@@ -319,31 +319,33 @@
         .pb-options {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 0.75rem;
+            gap: 0.75rem;
+            padding: 0.65rem 1rem;
             flex-wrap: wrap;
+            row-gap: 0.5rem;
         }
 
         .pb-opt-group {
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.4rem;
         }
 
         .pb-opt-group label {
-            font-size: 0.68rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--text-secondary, #475569);
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.02em;
             white-space: nowrap;
         }
 
         .pb-opt-group select {
-            padding: 0.25rem 0.4rem;
+            padding: 0.375rem 0.5rem;
+            min-height: 2.25rem;
             border: 1px solid var(--border, #e2e8f0);
-            border-radius: 4px;
-            font-size: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
             background: var(--bg-primary, #fff);
             color: var(--text-primary, #0f172a);
             outline: none;
@@ -368,8 +370,8 @@
         .pb-check {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
-            font-size: 0.75rem;
+            gap: 0.35rem;
+            font-size: 0.875rem;
             cursor: pointer;
             color: var(--text-primary, #0f172a);
             white-space: nowrap;
@@ -397,11 +399,11 @@
 
         .pb-passphrase-input {
             flex: 1;
-            max-width: 260px;
-            padding: 0.3rem 0.5rem;
+            max-width: 280px;
+            padding: 0.45rem 0.65rem;
             border: 1px solid var(--border, #e2e8f0);
-            border-radius: 4px;
-            font-size: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
             background: var(--bg-primary, #fff);
             color: var(--text-primary, #0f172a);
             outline: none;
@@ -410,7 +412,7 @@
         .pb-passphrase-input:focus { border-color: var(--tool-primary); }
 
         .pb-passphrase-hint {
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             color: var(--text-secondary, #94a3b8);
         }
 
@@ -420,14 +422,14 @@
         .pb-bottom-bar {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 0.75rem;
+            gap: 0.625rem;
+            padding: 0.65rem 1rem;
             background: var(--bg-secondary, #f8fafc);
             border-top: 1px solid var(--border, #e2e8f0);
         }
 
         .pb-char-count {
-            font-size: 0.7rem;
+            font-size: 0.8125rem;
             color: var(--text-secondary, #94a3b8);
             font-variant-numeric: tabular-nums;
         }
@@ -435,13 +437,13 @@
         .pb-mode-toggle {
             display: inline-flex;
             background: var(--border, #e2e8f0);
-            border-radius: 4px;
-            padding: 1px;
+            border-radius: 6px;
+            padding: 2px;
         }
 
         .pb-mode-btn {
-            padding: 0.2rem 0.5rem;
-            font-size: 0.7rem;
+            padding: 0.35rem 0.65rem;
+            font-size: 0.8125rem;
             font-weight: 500;
             border: none;
             background: transparent;
@@ -458,9 +460,9 @@
         }
 
         .pb-submit-btn {
-            padding: 0.35rem 1.25rem;
+            padding: 0.5rem 1.35rem;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.9375rem;
             border: none;
             border-radius: 6px;
             cursor: pointer;
@@ -508,9 +510,9 @@
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-            padding: 0.75rem 1rem;
+            padding: 0.85rem 1rem;
             border-bottom: 1px solid var(--border, #e2e8f0);
-            font-size: 0.75rem;
+            font-size: 0.8125rem;
             color: var(--text-secondary, #475569);
         }
 
@@ -520,14 +522,14 @@
 
         .pb-draft-run pre {
             margin: 0;
-            padding: 1rem;
-            min-height: 100px;
-            max-height: 280px;
+            padding: 1rem 1.125rem;
+            min-height: 120px;
+            max-height: 300px;
             overflow: auto;
             white-space: pre-wrap;
             word-break: break-word;
-            font-size: 0.8125rem;
-            line-height: 1.6;
+            font-size: 0.9375rem;
+            line-height: 1.65;
             font-family: 'JetBrains Mono', 'Fira Code', monospace;
             color: var(--text-primary, #0f172a);
             background: var(--bg-primary, #fff);
@@ -622,10 +624,10 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.75rem 1rem;
+            padding: 0.9rem 1.1rem;
             background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 0.9375rem;
             color: #065f46;
         }
 
@@ -640,7 +642,7 @@
         }
 
         .pb-result-body {
-            padding: 1rem;
+            padding: 1.1rem 1.15rem;
         }
 
         .pb-result-row {
@@ -655,7 +657,7 @@
         }
 
         .pb-result-label {
-            font-size: 0.75rem;
+            font-size: 0.8125rem;
             font-weight: 600;
             color: var(--text-secondary, #475569);
             text-transform: uppercase;
@@ -667,7 +669,7 @@
         .pb-result-value {
             flex: 1;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8125rem;
+            font-size: 0.875rem;
             color: var(--text-primary, #0f172a);
             overflow: hidden;
             text-overflow: ellipsis;
@@ -682,8 +684,8 @@
         .pb-result-value a:hover { text-decoration: underline; }
 
         .pb-copy-btn {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.6875rem;
+            padding: 0.35rem 0.6rem;
+            font-size: 0.75rem;
             font-weight: 500;
             border: 1px solid var(--border, #e2e8f0);
             border-radius: 0.25rem;
@@ -749,20 +751,20 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.875rem 1rem;
+            padding: 1rem 1.125rem;
             background: var(--tool-gradient);
             color: white;
             font-weight: 600;
-            font-size: 0.9375rem;
+            font-size: 1rem;
         }
 
         .pb-view-meta {
             display: flex;
             gap: 1rem;
-            padding: 0.625rem 1rem;
+            padding: 0.75rem 1.125rem;
             background: var(--bg-secondary, #f8fafc);
             border-bottom: 1px solid var(--border, #e2e8f0);
-            font-size: 0.75rem;
+            font-size: 0.8125rem;
             color: var(--text-secondary, #475569);
             flex-wrap: wrap;
         }
@@ -782,7 +784,7 @@
             padding: 0;
             margin: 0;
             font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 0.8125rem;
+            font-size: 0.9375rem;
             line-height: 1.65;
             overflow: auto;
             max-height: 600px;
@@ -792,7 +794,7 @@
 
         .pb-view-content code {
             display: block;
-            padding: 1rem;
+            padding: 1.125rem 1.25rem;
             white-space: pre-wrap;
             word-break: break-word;
         }
@@ -847,19 +849,19 @@
 
         .pb-run-header strong {
             display: block;
-            font-size: 0.9375rem;
+            font-size: 1rem;
             color: var(--text-primary, #0f172a);
         }
 
         .pb-run-header span {
             display: block;
-            margin-top: 0.2rem;
-            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            font-size: 0.8125rem;
             color: var(--text-secondary, #475569);
         }
 
         .pb-run-status {
-            font-size: 0.75rem;
+            font-size: 0.8125rem;
             font-weight: 600;
             color: var(--text-secondary, #64748b);
             white-space: nowrap;
@@ -882,8 +884,8 @@
 
         .pb-run-field label {
             display: block;
-            margin-bottom: 0.35rem;
-            font-size: 0.75rem;
+            margin-bottom: 0.4rem;
+            font-size: 0.8125rem;
             font-weight: 600;
             color: var(--text-secondary, #475569);
         }
@@ -893,8 +895,8 @@
             width: 100%;
             border: 1px solid var(--border, #dbe2ea);
             border-radius: 0.5rem;
-            padding: 0.625rem 0.75rem;
-            font-size: 0.8125rem;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.9375rem;
             font-family: inherit;
             background: var(--bg-primary, #fff);
             color: var(--text-primary, #0f172a);
@@ -923,7 +925,7 @@
         }
 
         .pb-run-note {
-            font-size: 0.75rem;
+            font-size: 0.8125rem;
             color: var(--text-secondary, #64748b);
         }
 
@@ -946,25 +948,25 @@
         }
 
         .pb-run-output-header strong {
-            font-size: 0.8125rem;
+            font-size: 0.875rem;
             color: var(--text-primary, #0f172a);
         }
 
         .pb-run-output-meta {
-            font-size: 0.75rem;
+            font-size: 0.8125rem;
             color: var(--text-secondary, #64748b);
         }
 
         .pb-run-output pre {
             margin: 0;
-            padding: 1rem;
+            padding: 1rem 1.125rem;
             min-height: 120px;
             max-height: 360px;
             overflow: auto;
             white-space: pre-wrap;
             word-break: break-word;
-            font-size: 0.8125rem;
-            line-height: 1.6;
+            font-size: 0.9375rem;
+            line-height: 1.65;
             font-family: 'JetBrains Mono', 'Fira Code', monospace;
             color: var(--text-primary, #0f172a);
             background: var(--bg-primary, #fff);
@@ -1061,14 +1063,14 @@
         .pb-passphrase-prompt.show { display: block; }
 
         .pb-passphrase-prompt h3 {
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary, #0f172a);
             margin-bottom: 0.5rem;
         }
 
         .pb-passphrase-prompt p {
-            font-size: 0.875rem;
+            font-size: 0.9375rem;
             color: var(--text-secondary, #475569);
             margin-bottom: 1.25rem;
         }
@@ -1076,10 +1078,10 @@
         .pb-passphrase-prompt input {
             width: 100%;
             max-width: 300px;
-            padding: 0.625rem 0.875rem;
+            padding: 0.65rem 1rem;
             border: 1px solid var(--border, #e2e8f0);
             border-radius: 0.5rem;
-            font-size: 0.875rem;
+            font-size: 0.9375rem;
             outline: none;
             text-align: center;
             background: var(--bg-primary, #fff);
@@ -1146,17 +1148,17 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 1rem;
+            padding: 1rem 1.125rem;
             border-bottom: 1px solid var(--border, #e2e8f0);
         }
 
         .pb-my-key-input {
             flex: 1;
             max-width: 280px;
-            padding: 0.4375rem 0.625rem;
+            padding: 0.5rem 0.75rem;
             border: 1px solid var(--border, #e2e8f0);
             border-radius: 0.375rem;
-            font-size: 0.8125rem;
+            font-size: 0.875rem;
             font-family: 'JetBrains Mono', monospace;
             background: var(--bg-primary, #fff);
             color: var(--text-primary, #0f172a);
@@ -1179,13 +1181,13 @@
         .pb-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.8125rem;
+            font-size: 0.875rem;
         }
 
         .pb-table th {
-            padding: 0.625rem 1rem;
+            padding: 0.75rem 1rem;
             text-align: left;
-            font-size: 0.6875rem;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -1195,7 +1197,7 @@
         }
 
         .pb-table td {
-            padding: 0.625rem 1rem;
+            padding: 0.75rem 1rem;
             border-bottom: 1px solid var(--border, #e2e8f0);
             color: var(--text-primary, #0f172a);
         }
@@ -1239,20 +1241,20 @@
             align-items: center;
             justify-content: center;
             gap: 0.75rem;
-            padding: 0.75rem 1rem;
+            padding: 0.85rem 1rem;
             border-top: 1px solid var(--border, #e2e8f0);
-            font-size: 0.8125rem;
+            font-size: 0.875rem;
             color: var(--text-secondary, #475569);
         }
 
         .pb-pagination button {
-            padding: 0.375rem 0.75rem;
+            padding: 0.45rem 0.85rem;
             border: 1px solid var(--border, #e2e8f0);
             border-radius: 0.375rem;
             background: var(--bg-primary, #fff);
             color: var(--text-primary, #0f172a);
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 500;
         }
 
@@ -1270,12 +1272,13 @@
         .pb-error {
             display: none;
             margin: 1rem 0 0;
-            padding: 0.75rem 1rem;
+            padding: 0.85rem 1.1rem;
             background: #fef2f2;
             border: 1px solid #fecaca;
             border-radius: 0.5rem;
             color: #991b1b;
-            font-size: 0.8125rem;
+            font-size: 0.9375rem;
+            line-height: 1.5;
         }
 
         .pb-error.show { display: block; }
@@ -1301,7 +1304,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ── Transforms Toolbar ── */
+        /* ── Transforms Toolbar (default collapsed in markup + localStorage) ── */
         .pb-transforms {
             border-top: 1px solid #e2e8f0;
             border-bottom: 1px solid #e2e8f0;
@@ -1313,8 +1316,8 @@
         .pb-transform-header {
             display: flex;
             align-items: center;
-            padding: 0.4rem 0.6rem;
-            gap: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            gap: 0.65rem;
             user-select: none;
             border-bottom: 1px solid transparent;
         }
@@ -1324,10 +1327,10 @@
         .pb-transform-header-left {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
-            font-size: 0.72rem;
+            gap: 0.45rem;
+            font-size: 0.8125rem;
             font-weight: 700;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.03em;
             text-transform: uppercase;
             color: #64748b;
             cursor: pointer;
@@ -1337,17 +1340,17 @@
         .pb-transform-search {
             flex: 1;
             min-width: 0;
-            padding: 0.2rem 0.45rem 0.2rem 1.5rem;
-            font-size: 0.7rem;
+            padding: 0.4rem 0.5rem 0.4rem 1.65rem;
+            font-size: 0.8125rem;
             border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'/%3E%3C/svg%3E") 0.4rem center no-repeat;
+            border-radius: 6px;
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'/%3E%3C/svg%3E") 0.5rem center no-repeat;
             color: #334155;
             outline: none;
             transition: border-color 0.15s;
         }
         .pb-transform-search:focus { border-color: var(--tool-primary, #10b981); }
-        .pb-transform-search::placeholder { color: #b0b8c4; font-size: 0.68rem; }
+        .pb-transform-search::placeholder { color: #b0b8c4; font-size: 0.75rem; }
         .pb-transform-chevron {
             cursor: pointer;
             color: #94a3b8;
@@ -1369,20 +1372,20 @@
         .pb-transform-sidebar {
             display: flex;
             flex-direction: column;
-            width: 42px;
+            width: 48px;
             flex-shrink: 0;
             background: #f1f5f9;
             border-right: 1px solid #e2e8f0;
-            padding: 0.25rem 0;
-            gap: 1px;
+            padding: 0.35rem 0;
+            gap: 2px;
         }
         .pb-tc {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1px;
-            padding: 0.35rem 0;
+            gap: 2px;
+            padding: 0.45rem 0.15rem;
             border: none;
             background: transparent;
             color: #94a3b8;
@@ -1391,14 +1394,14 @@
             position: relative;
             border-left: 2px solid transparent;
         }
-        .pb-tc svg { width: 15px; height: 15px; flex-shrink: 0; }
+        .pb-tc svg { width: 16px; height: 16px; flex-shrink: 0; }
         .pb-tc-label {
-            font-size: 0.52rem;
+            font-size: 0.625rem;
             font-weight: 600;
             letter-spacing: 0.02em;
             text-transform: uppercase;
-            line-height: 1;
-            max-width: 38px;
+            line-height: 1.15;
+            max-width: 44px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -1415,8 +1418,8 @@
         .pb-tc .pb-tc-count {
             position: absolute;
             top: 2px;
-            right: 3px;
-            font-size: 0.5rem;
+            right: 2px;
+            font-size: 0.5625rem;
             font-weight: 700;
             color: #94a3b8;
             line-height: 1;
@@ -1431,34 +1434,34 @@
             flex-direction: column;
         }
         .pb-transform-panel {
-            padding: 0.4rem 0.55rem;
+            padding: 0.55rem 0.65rem;
             flex: 1;
         }
         .pb-transform-panel-title {
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
             color: #94a3b8;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.4rem;
         }
         .pb-transform-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.3rem;
-            min-height: 22px;
+            gap: 0.4rem;
+            min-height: 28px;
         }
         .pb-transform-empty {
-            font-size: 0.7rem;
+            font-size: 0.8125rem;
             color: #94a3b8;
-            padding: 0.5rem 0;
+            padding: 0.6rem 0;
             font-style: italic;
         }
 
         /* ── Tool buttons ── */
         .pb-t-btn {
-            padding: 0.2rem 0.5rem;
-            font-size: 0.7rem;
+            padding: 0.35rem 0.6rem;
+            font-size: 0.8125rem;
             font-weight: 500;
             border: 1px solid #e2e8f0;
             border-radius: 4px;
@@ -1490,13 +1493,13 @@
         .pb-transform-footer {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.35rem 0.55rem;
+            gap: 0.5rem;
+            padding: 0.45rem 0.65rem;
             border-top: 1px solid #e2e8f0;
         }
         .pb-transform-undo {
-            padding: 0.2rem 0.5rem;
-            font-size: 0.7rem;
+            padding: 0.35rem 0.55rem;
+            font-size: 0.8125rem;
             font-weight: 500;
             border: 1px solid #e2e8f0;
             border-radius: 4px;
@@ -1512,7 +1515,7 @@
         .pb-transform-undo:hover:not(:disabled) { border-color: #f59e0b; color: #f59e0b; }
         .pb-transform-undo:disabled { opacity: 0.3; cursor: default; }
         .pb-transform-result {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-family: 'SF Mono', 'Fira Code', monospace;
             color: #10b981;
             padding: 0;
@@ -1529,15 +1532,19 @@
             cursor: text;
             user-select: all;
         }
-        .pb-transform-result.show { opacity: 1; max-height: 40px; padding: 0.25rem 0.5rem; }
+        .pb-transform-result.show { opacity: 1; max-height: 48px; padding: 0.35rem 0.6rem; }
         .pb-transform-result.error { color: #ef4444; background: rgba(239, 68, 68, 0.08); }
 
         /* ── Dark mode ── */
         [data-theme="dark"] .pb-transforms { background: #1e293b; border-color: #334155; }
         [data-theme="dark"] .pb-transforms:not(.collapsed) .pb-transform-header { border-bottom-color: #334155; }
         [data-theme="dark"] .pb-transform-search {
-            background-color: #0f172a; border-color: #334155; color: #e2e8f0;
+            background-color: #0f172a;
+            border-color: #334155;
+            color: #e2e8f0;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' fill='%23475569' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 0.5rem center;
         }
         [data-theme="dark"] .pb-transform-sidebar { background: #151e2e; border-right-color: #334155; }
         [data-theme="dark"] .pb-tc { color: #64748b; }
@@ -1667,14 +1674,15 @@
         }
 
         .pb-section-title {
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             font-weight: 700;
             color: var(--text-primary, #0f172a);
             margin-bottom: 1rem;
+            line-height: 1.35;
         }
 
         .pb-subsection-title {
-            font-size: 1rem;
+            font-size: 1.0625rem;
             font-weight: 600;
             color: var(--text-primary, #0f172a);
             margin: 1.5rem 0 0.75rem;
@@ -1730,18 +1738,18 @@
 
         .pb-faq-list dt {
             font-weight: 600;
-            font-size: 0.9375rem;
+            font-size: 1rem;
             color: var(--text-primary, #0f172a);
-            padding: 0.625rem 0 0.25rem;
+            padding: 0.75rem 0 0.35rem;
             border-top: 1px solid var(--border, #e2e8f0);
         }
 
         .pb-faq-list dt:first-child { border-top: none; padding-top: 0; }
 
         .pb-faq-list dd {
-            margin: 0 0 0.5rem 0;
-            font-size: 0.875rem;
-            line-height: 1.6;
+            margin: 0 0 0.65rem 0;
+            font-size: 0.9375rem;
+            line-height: 1.65;
             color: var(--text-secondary, #475569);
         }
 
@@ -1887,10 +1895,10 @@
                         <textarea id="pb-content" class="pb-textarea" placeholder="Paste or type your content here..." spellcheck="false"></textarea>
 
                         <!-- Transforms Toolbar -->
-                        <div class="pb-transforms" id="pb-transforms">
-                            <!-- Header: label + search + collapse -->
+                        <div class="pb-transforms collapsed" id="pb-transforms">
+                            <!-- Header: label + search + collapse (collapsed by default; expanded state in localStorage) -->
                             <div class="pb-transform-header">
-                                <div class="pb-transform-header-left pb-transform-toggle" role="button" aria-expanded="true" title="Toggle tools panel">
+                                <div class="pb-transform-header-left pb-transform-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="pb-transform-body-wrap" title="Expand tools panel (80+ transforms)">
                                     <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17l-5.658 3.163a1.106 1.106 0 01-1.605-1.056l.76-6.3L.832 6.7a1.101 1.101 0 01.638-1.898l6.305-.606L10.7.936a1.102 1.102 0 011.598 0l2.924 4.26 6.305.606a1.101 1.101 0 01.638 1.898l-4.075 4.277.76 6.3a1.106 1.106 0 01-1.605 1.056L12 15.17z"/></svg>
                                     Tools
                                 </div>
@@ -1898,7 +1906,7 @@
                                 <svg class="pb-transform-chevron pb-transform-toggle" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
                             </div>
                             <!-- Body: vertical sidebar + tools grid -->
-                            <div class="pb-transform-body">
+                            <div class="pb-transform-body" id="pb-transform-body-wrap">
                                 <!-- Left: vertical icon tabs (built by JS) -->
                                 <div class="pb-transform-sidebar" id="pb-transform-cats"></div>
                                 <!-- Right: tools panel -->

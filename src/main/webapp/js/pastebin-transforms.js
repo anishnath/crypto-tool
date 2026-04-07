@@ -1113,7 +1113,14 @@
         if (e.key === '/' && document.activeElement !== $textarea && document.activeElement !== $search &&
             !document.activeElement.matches('input, textarea, select')) {
             e.preventDefault();
-            if ($toolbar.classList.contains('collapsed')) $toolbar.classList.remove('collapsed');
+            if ($toolbar.classList.contains('collapsed')) {
+                $toolbar.classList.remove('collapsed');
+                try { localStorage.setItem('pb_transforms_collapsed', '0'); } catch(err) {}
+                $toolbar.querySelectorAll('.pb-transform-toggle').forEach(function(el) {
+                    if (el === $search) return;
+                    el.setAttribute('aria-expanded', 'true');
+                });
+            }
             $search.focus();
         }
         // Esc to blur search
@@ -1196,6 +1203,14 @@
         }
     }
 
+    function syncTransformsAria() {
+        var collapsed = $toolbar.classList.contains('collapsed');
+        $toolbar.querySelectorAll('.pb-transform-toggle').forEach(function(el) {
+            if (el === $search) return;
+            el.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        });
+    }
+
     // ── Collapse toggle ──
     $toolbar.querySelectorAll('.pb-transform-toggle').forEach(function($toggle) {
         $toggle.addEventListener('click', function(e) {
@@ -1204,16 +1219,28 @@
             $toolbar.classList.toggle('collapsed');
             var isCollapsed = $toolbar.classList.contains('collapsed');
             try { localStorage.setItem('pb_transforms_collapsed', isCollapsed ? '1' : '0'); } catch(e) {}
+            syncTransformsAria();
         });
+        // Keyboard: header toggle only
+        if ($toggle.classList.contains('pb-transform-header-left')) {
+            $toggle.addEventListener('keydown', function(e) {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                e.preventDefault();
+                $toggle.click();
+            });
+        }
     });
-    // Restore collapsed state (default: collapsed)
+    // Restore collapsed state (default: collapsed; must sync with HTML default .collapsed)
     try {
         var savedState = localStorage.getItem('pb_transforms_collapsed');
-        if (savedState !== '0') {
+        if (savedState === '0') {
+            $toolbar.classList.remove('collapsed');
+        } else {
             $toolbar.classList.add('collapsed');
         }
     } catch(e) {
         $toolbar.classList.add('collapsed');
     }
+    syncTransformsAria();
 
 })();
