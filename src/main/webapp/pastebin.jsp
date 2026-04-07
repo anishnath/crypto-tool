@@ -1828,9 +1828,56 @@
         [data-theme="dark"] .pb-highlight-box {
             color: var(--text-secondary, #94a3b8);
         }
+
+        /* Matter.js decorative background — non-interactive, behind content */
+        .pb-matter-host {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        /* Canvas paints above ::before so bodies stay visible (was ::after on top = invisible) */
+        .pb-matter-host canvas {
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+        /* Aurora-style wash behind the canvas (physics draws on top of ::before) */
+        .pb-matter-host::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 90% 55% at 10% 15%, rgba(167, 243, 208, 0.55) 0%, transparent 52%),
+                radial-gradient(ellipse 70% 50% at 92% 22%, rgba(199, 210, 254, 0.35) 0%, transparent 48%),
+                radial-gradient(ellipse 60% 45% at 50% 95%, rgba(110, 231, 183, 0.25) 0%, transparent 45%),
+                linear-gradient(165deg, rgba(248, 250, 252, 0.97) 0%, rgba(236, 253, 245, 0.55) 45%, rgba(248, 250, 252, 0.96) 100%);
+        }
+        [data-theme="dark"] #pb-matter-host.pb-matter-host::before {
+            background:
+                radial-gradient(ellipse 85% 50% at 12% 12%, rgba(16, 185, 129, 0.22) 0%, transparent 50%),
+                radial-gradient(ellipse 65% 55% at 88% 18%, rgba(99, 102, 241, 0.18) 0%, transparent 48%),
+                radial-gradient(ellipse 55% 40% at 48% 100%, rgba(52, 211, 153, 0.12) 0%, transparent 42%),
+                linear-gradient(168deg, rgba(15, 23, 42, 0.97) 0%, rgba(30, 41, 59, 0.72) 50%, rgba(15, 23, 42, 0.98) 100%);
+        }
+        /*
+         * Critical: a fixed fullscreen #pb-matter-host (z-index:0) paints above in-flow content
+         * unless the whole page sits in a higher stacking layer. Do NOT use body>*{z-index:1}
+         * — it overrides .modern-nav (1030) and breaks menus. One wrapper fixes both.
+         */
+        .pb-page-layer {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
     </style>
 </head>
 <body>
+    <div id="pb-matter-host" class="pb-matter-host" aria-hidden="true"></div>
+    <div class="pb-page-layer">
     <!-- Navigation -->
     <%@ include file="modern/components/nav-header.jsp" %>
 
@@ -2355,6 +2402,8 @@
     <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
     <%@ include file="modern/components/analytics.jsp" %>
 
+    </div><!-- /.pb-page-layer -->
+
     <!-- Bootstrap JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -2362,6 +2411,10 @@
     <script defer src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
     <script defer src="<%=request.getContextPath()%>/modern/js/dark-mode.js"></script>
     <script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
+
+    <!-- Matter.js: subtle floating “paste” background (skipped if prefers-reduced-motion) -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js" crossorigin="anonymous"></script>
+    <script defer src="<%=request.getContextPath()%>/js/pastebin-matter-bg.js?v=<%=cacheVersion%>"></script>
 
     <!-- Pastebin Config + JS -->
     <script>
