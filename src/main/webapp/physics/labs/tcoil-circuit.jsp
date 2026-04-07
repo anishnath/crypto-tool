@@ -89,7 +89,7 @@ googletag.cmd.push(function(){
   <div class="lab-related">
     <span>Also try &rarr;</span>
     <a href="<%=request.getContextPath()%>/physics/labs/circuit-simulator.jsp">Circuit Simulator</a>
-    <a href="<%=request.getContextPath()%>/physics/labs/oscillating-charge.jsp">Oscillating Charge</a>
+    <a href="<%=request.getContextPath()%>/electronics/logic-simulator.jsp">Logic Gate Simulator</a>
     <a href="<%=request.getContextPath()%>/physics/labs/resonance.jsp">Resonance</a>
     <a href="<%=request.getContextPath()%>/physics/labs/">All Physics Labs</a>
   </div>

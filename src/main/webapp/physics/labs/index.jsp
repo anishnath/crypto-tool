@@ -589,7 +589,7 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
 
 <%-- ═══ ADVANCED ═══ --%>
 <div class="labs-cat">
-  <div class="labs-cat-header">Advanced <span class="cat-line"></span> <span class="cat-count">8</span></div>
+  <div class="labs-cat-header">Advanced <span class="cat-line"></span> <span class="cat-count">10</span></div>
   <div class="labs-grid">
 
     <a href="molecule.jsp" class="lab-card">
@@ -688,6 +688,28 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
         <h3>Brachistochrone</h3>
         <p>4 balls race — cycloid always wins</p>
         <div class="card-badges"><span class="card-badge badge-race">Race</span></div>
+      </div>
+    </a>
+
+    <a href="<%=request.getContextPath()%>/electronics/logic-simulator.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#22C55E,#06B6D4);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="6" width="8" height="12" rx="1.5" fill="none"/><line x1="11" y1="12" x2="16" y2="12"/><circle cx="18" cy="12" r="2" fill="none"/><line x1="1" y1="9" x2="3" y2="9"/><line x1="1" y1="15" x2="3" y2="15"/><line x1="20" y1="12" x2="23" y2="12"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Logic Gate Simulator</h3>
+        <p>Build circuits with gates, truth tables, K-maps, and TTL ICs</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Draw</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
+    <a href="<%=request.getContextPath()%>/electronics/arduino-simulator.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#0EA5E9,#22C55E);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2" fill="none"/><rect x="7" y="6" width="10" height="6" rx="1" fill="#0EA5E9" stroke="none"/><circle cx="8" cy="16" r="1" fill="#22C55E" stroke="none"/><circle cx="12" cy="16" r="1" fill="#F59E0B" stroke="none"/><circle cx="16" cy="16" r="1" fill="#EF4444" stroke="none"/><line x1="2" y1="8" x2="4" y2="8"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="8" x2="22" y2="8"/><line x1="20" y1="12" x2="22" y2="12"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Arduino & ESP32 Simulator</h3>
+        <p>6 boards, 21 components, QEMU emulation, 33 presets</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Draw</span><span class="card-badge badge-new">New</span></div>
       </div>
     </a>
 
