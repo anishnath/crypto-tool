@@ -623,28 +623,25 @@ export const TCoilSim = {
       canvas.line(x, bwY, Math.min(x + 0.2, px2), bwY, '#F59E0B', 0.7);
     }
 
-    // Ideal curve (if available)
+    // Ideal curve (if available) — draw all segments, clamp y to plot bounds
+    const clampY = (v) => Math.max(py1, Math.min(py2, v));
     if (c.bodeIdeal) {
       for (let i = 1; i < c.freqs.length; i++) {
         const x1 = mapX(Math.log10(c.freqs[i - 1]));
-        const y1 = mapY(c.bodeIdeal[i - 1]);
+        const y1 = clampY(mapY(c.bodeIdeal[i - 1]));
         const x2 = mapX(Math.log10(c.freqs[i]));
-        const y2 = mapY(c.bodeIdeal[i]);
-        if (y1 >= py1 && y1 <= py2 && y2 >= py1 && y2 <= py2) {
-          canvas.line(x1, y1, x2, y2, '#EF4444', 1.5);
-        }
+        const y2 = clampY(mapY(c.bodeIdeal[i]));
+        canvas.line(x1, y1, x2, y2, '#EF4444', 1.5);
       }
     }
 
-    // Main magnitude curve
+    // Main magnitude curve — clamp y so deep dips don't leave gaps
     for (let i = 1; i < c.freqs.length; i++) {
       const x1 = mapX(Math.log10(c.freqs[i - 1]));
-      const y1 = mapY(c.magDB[i - 1]);
+      const y1 = clampY(mapY(c.magDB[i - 1]));
       const x2 = mapX(Math.log10(c.freqs[i]));
-      const y2 = mapY(c.magDB[i]);
-      if (y1 >= py1 && y1 <= py2 && y2 >= py1 && y2 <= py2) {
-        canvas.line(x1, y1, x2, y2, '#06B6D4', 2);
-      }
+      const y2 = clampY(mapY(c.magDB[i]));
+      canvas.line(x1, y1, x2, y2, '#06B6D4', 2);
     }
 
     // Bandwidth marker
@@ -670,7 +667,10 @@ export const TCoilSim = {
       let sweepDB = c.magDB[0];
       for (let i = 1; i < c.freqs.length; i++) {
         if (c.freqs[i] >= sweepF) {
-          const t = (sweepF - c.freqs[i - 1]) / (c.freqs[i] - c.freqs[i - 1]);
+          // Interpolate in log-frequency space (data is log-uniform)
+          const logF0 = Math.log10(c.freqs[i - 1]);
+          const logF1 = Math.log10(c.freqs[i]);
+          const t = (sweepLogF - logF0) / (logF1 - logF0);
           sweepDB = c.magDB[i - 1] + t * (c.magDB[i] - c.magDB[i - 1]);
           break;
         }

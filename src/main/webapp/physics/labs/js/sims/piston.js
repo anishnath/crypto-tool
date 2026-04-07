@@ -122,10 +122,15 @@ export const PistonSim = {
     const L = params?.rodLength ?? 150;
     const a = params?.crankRadius ?? 50;
     const B = params?.bore ?? 86;
-    const H0 = this._pistonHeight(0, L, a);
-    const V0 = Math.PI * (B / 2) * (B / 2) * (L + a - H0) / 1000;
+    const omega = (params?.rpm ?? 60) * 2 * Math.PI / 60;
     // [crankAngle, time, height, velocity, accel, volume]
-    return [0, 0, H0, 0, 0, V0];
+    return [
+      0, 0,
+      this._pistonHeight(0, L, a),
+      this._pistonVelocity(0, omega, L, a),
+      this._pistonAccel(0, omega, L, a),
+      this._cylinderVolume(0, L, a, B) / 1000,
+    ];
   },
 
   /** Compute derived quantities after each RK4 step */
@@ -195,10 +200,10 @@ export const PistonSim = {
 
     // Scale: convert mm to world units
     const sc = 1 / 80;
-    const H = vars[2] || this._pistonHeight(theta, L, a);
-    const vPiston = vars[3] || 0;
-    const aPiston = vars[4] || 0;
-    const volCC = vars[5] || 0;
+    const H = vars[2];
+    const vPiston = vars[3];
+    const aPiston = vars[4];
+    const volCC = vars[5];
     const TDC = L + a;
     const BDC = L - a;
     const stroke = 2 * a;
