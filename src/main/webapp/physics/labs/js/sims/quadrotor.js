@@ -58,8 +58,8 @@ export const QuadrotorSim = {
     Izz:       { value: 2.3,  min: 0.5, max: 5,    step: 0.1,  label: 'Izz',             unit: 'kg·m²' },
     liftK:     { value: 1.0,  min: 0.5, max: 2,    step: 0.1,  label: 'Lift Constant k', unit: '' },
     dragB:     { value: 0.2,  min: 0.05, max: 1,   step: 0.05, label: 'Drag Constant b', unit: '' },
-    targetZ:   { value: 5.0,  min: 0,   max: 10,   step: 0.5,  label: 'Target Altitude', unit: 'm' },
-    targetX:   { value: 0,    min: -5,  max: 5,    step: 0.5,  label: 'Target X',        unit: 'm' },
+    targetZ:   { value: 5.0,  min: 0,   max: 30,   step: 0.5,  label: 'Target Altitude', unit: 'm' },
+    targetX:   { value: 0,    min: -20, max: 20,   step: 0.5,  label: 'Target X',        unit: 'm' },
     ctrlGain:  { value: 1.0,  min: 0,   max: 3,    step: 0.1,  label: 'Controller Gain', unit: '' },
     windX:     { value: 0,    min: -3,  max: 3,    step: 0.1,  label: 'Wind Force X',    unit: 'N' },
   },
@@ -71,7 +71,7 @@ export const QuadrotorSim = {
     time: ['z', 'theta', 'phi'],
   },
 
-  worldRect: { xMin: -6, xMax: 6, yMin: -1, yMax: 11 },
+  worldRect: { xMin: -4, xMax: 4, yMin: -1, yMax: 5 },
 
   presets: [
     { name: 'Default Hover',           params: {} },
@@ -210,8 +210,8 @@ export const QuadrotorSim = {
 
   onDrag(id, wx, wy, offset, vars, params) {
     if (id === 'target') {
-      params.targetX = Math.max(-5, Math.min(5, wx - offset.offX));
-      params.targetZ = Math.max(0.5, Math.min(10, wy - offset.offZ));
+      params.targetX = Math.max(-20, Math.min(20, wx - offset.offX));
+      params.targetZ = Math.max(0.5, Math.min(30, wy - offset.offZ));
     }
   },
 
@@ -222,24 +222,40 @@ export const QuadrotorSim = {
     const { armLen: l, targetZ, targetX, mass: m, liftK: k } = params;
     const u = this._lastU;
 
+    // ── Camera follows quadrotor (smooth tracking) ──
+    const viewW = 8, viewH = 6;
+    // Center camera on quadrotor, but keep ground visible
+    const camX = x;
+    const camZ = Math.max(viewH / 2 - 0.5, z); // don't go below showing ground
+    canvas.world.xMin = camX - viewW / 2;
+    canvas.world.xMax = camX + viewW / 2;
+    canvas.world.yMin = camZ - viewH / 2;
+    canvas.world.yMax = camZ + viewH / 2;
+
+    // Visible edges in world coords
+    const vxMin = canvas.world.xMin, vxMax = canvas.world.xMax;
+    const vyMin = canvas.world.yMin, vyMax = canvas.world.yMax;
+
     // Visual scaling: arm length scaled up for visibility
-    const VIS = 3.2; // visual arm scale
+    const VIS = 4.0;
 
     // ── Ground ──
-    canvas.line(-6, 0, 6, 0, '#334155', 2);
-    for (let gx = -6; gx < 6; gx += 0.4) {
-      canvas.line(gx, 0, gx - 0.15, -0.15, '#1E293B', 1);
+    if (vyMin < 0.5) {
+      canvas.line(vxMin, 0, vxMax, 0, '#334155', 3);
+      for (let gx = Math.floor(vxMin); gx < vxMax; gx += 0.3) {
+        canvas.line(gx, 0, gx - 0.12, -0.12, '#1E293B', 1);
+      }
     }
 
     // ── Target crosshair ──
-    canvas.line(targetX - 0.3, targetZ, targetX + 0.3, targetZ, '#22C55E', 1.5);
-    canvas.line(targetX, targetZ - 0.3, targetX, targetZ + 0.3, '#22C55E', 1.5);
-    canvas.circle(targetX, targetZ, 0.2, null, '#22C55E');
-    canvas.text(targetX + 0.4, targetZ + 0.3, 'Target', '#22C55E', 7);
+    canvas.line(targetX - 0.25, targetZ, targetX + 0.25, targetZ, '#22C55E', 2);
+    canvas.line(targetX, targetZ - 0.25, targetX, targetZ + 0.25, '#22C55E', 2);
+    canvas.circle(targetX, targetZ, 0.15, null, '#22C55E');
+    canvas.text(targetX + 0.3, targetZ + 0.2, 'Target', '#22C55E', 10);
 
     // ── Target altitude line (dashed) ──
-    for (let dx = -6; dx < 6; dx += 0.6) {
-      canvas.line(dx, targetZ, dx + 0.3, targetZ, 'rgba(34,197,94,0.15)', 1);
+    for (let dx = vxMin; dx < vxMax; dx += 0.5) {
+      canvas.line(dx, targetZ, dx + 0.25, targetZ, 'rgba(34,197,94,0.2)', 1);
     }
 
     // ── Quadrotor body ── (side view: x-z plane)
@@ -248,9 +264,7 @@ export const QuadrotorSim = {
     const armVz = l * VIS * sth;
 
     // Body arms (front-back along pitch axis)
-    // Rotor 1 (front): +x body direction
     const r1x = x + armVx, r1z = z + armVz;
-    // Rotor 3 (back): -x body direction
     const r3x = x - armVx, r3z = z - armVz;
 
     // Body cross-arm (left-right, perpendicular to view — draw shorter)
@@ -259,78 +273,87 @@ export const QuadrotorSim = {
     const r4x = x, r4z = z - l * VIS * 0.3 * sphi_vis;
 
     // Draw body arms
-    canvas.line(r1x, r1z, r3x, r3z, '#94A3B8', 3); // front-back
-    canvas.line(r2x, r2z + l * VIS * 0.15, r4x, r4z - l * VIS * 0.15, '#64748B', 2); // left-right (thin, perspective)
+    canvas.line(r1x, r1z, r3x, r3z, '#94A3B8', 4);
+    canvas.line(r2x, r2z + l * VIS * 0.15, r4x, r4z - l * VIS * 0.15, '#64748B', 2.5);
 
     // Center of mass
-    canvas.circle(x, z, 0.12, '#8B5CF6', '#A78BFA');
+    canvas.circle(x, z, 0.1, '#8B5CF6', '#A78BFA');
 
     // ── Rotors ──
-    const rotorR = 0.15;
-    // Thrust direction in inertial frame (body z-axis projected to x-z)
+    const rotorR = 0.12;
     const thrustDx = -sth;
     const thrustDz = cth;
 
     // Rotor 1 (front)
-    const t1 = Math.sqrt(Math.max(0, u[0])) * 0.06;
+    const t1 = Math.sqrt(Math.max(0, u[0])) * 0.08;
     canvas.circle(r1x, r1z, rotorR, '#475569', '#64748B');
-    if (t1 > 0.01) canvas.line(r1x, r1z, r1x + thrustDx * t1, r1z + thrustDz * t1, '#F59E0B', 2);
+    if (t1 > 0.01) canvas.line(r1x, r1z, r1x + thrustDx * t1, r1z + thrustDz * t1, '#F59E0B', 2.5);
 
     // Rotor 3 (back)
-    const t3 = Math.sqrt(Math.max(0, u[2])) * 0.06;
+    const t3 = Math.sqrt(Math.max(0, u[2])) * 0.08;
     canvas.circle(r3x, r3z, rotorR, '#475569', '#64748B');
-    if (t3 > 0.01) canvas.line(r3x, r3z, r3x + thrustDx * t3, r3z + thrustDz * t3, '#F59E0B', 2);
+    if (t3 > 0.01) canvas.line(r3x, r3z, r3x + thrustDx * t3, r3z + thrustDz * t3, '#F59E0B', 2.5);
 
-    // Rotor 2 (right — shown at center, perspective)
-    const t2 = Math.sqrt(Math.max(0, u[1])) * 0.06;
+    // Rotor 2 (right — perspective)
+    const t2 = Math.sqrt(Math.max(0, u[1])) * 0.08;
     canvas.circle(r2x, r2z + l * VIS * 0.15, rotorR * 0.6, '#475569', '#64748B');
-    if (t2 > 0.01) canvas.line(r2x, r2z + l * VIS * 0.15, r2x + thrustDx * t2 * 0.5, r2z + l * VIS * 0.15 + thrustDz * t2 * 0.5, '#F59E0B', 1.5);
+    if (t2 > 0.01) canvas.line(r2x, r2z + l * VIS * 0.15, r2x + thrustDx * t2 * 0.5, r2z + l * VIS * 0.15 + thrustDz * t2 * 0.5, '#F59E0B', 2);
 
     // Rotor 4 (left)
-    const t4 = Math.sqrt(Math.max(0, u[3])) * 0.06;
+    const t4 = Math.sqrt(Math.max(0, u[3])) * 0.08;
     canvas.circle(r4x, r4z - l * VIS * 0.15, rotorR * 0.6, '#475569', '#64748B');
-    if (t4 > 0.01) canvas.line(r4x, r4z - l * VIS * 0.15, r4x + thrustDx * t4 * 0.5, r4z - l * VIS * 0.15 + thrustDz * t4 * 0.5, '#F59E0B', 1.5);
+    if (t4 > 0.01) canvas.line(r4x, r4z - l * VIS * 0.15, r4x + thrustDx * t4 * 0.5, r4z - l * VIS * 0.15 + thrustDz * t4 * 0.5, '#F59E0B', 2);
 
     // ── Rotor labels ──
-    canvas.text(r1x + 0.15, r1z + 0.2, '1', '#64748B', 6);
-    canvas.text(r3x - 0.3, r3z + 0.2, '3', '#64748B', 6);
+    canvas.text(r1x + 0.12, r1z + 0.15, '1', '#94A3B8', 9);
+    canvas.text(r3x - 0.25, r3z + 0.15, '3', '#94A3B8', 9);
 
     // ── Weight arrow ──
-    const wLen = 0.4;
-    canvas.line(x, z, x, z - wLen, '#EF4444', 2);
-    canvas.line(x, z - wLen, x - 0.06, z - wLen + 0.08, '#EF4444', 1.5);
-    canvas.line(x, z - wLen, x + 0.06, z - wLen + 0.08, '#EF4444', 1.5);
-    canvas.text(x + 0.12, z - wLen * 0.5, 'mg', '#EF4444', 6);
+    const wLen = 0.35;
+    canvas.line(x, z, x, z - wLen, '#EF4444', 2.5);
+    canvas.line(x, z - wLen, x - 0.05, z - wLen + 0.07, '#EF4444', 2);
+    canvas.line(x, z - wLen, x + 0.05, z - wLen + 0.07, '#EF4444', 2);
+    canvas.text(x + 0.1, z - wLen * 0.5, 'mg', '#EF4444', 9);
 
     // ── Total thrust arrow ──
     const T = k * (u[0] + u[1] + u[2] + u[3]);
-    const tScale = T / (m * 9.81) * 0.4;
+    const tScale = T / (m * 9.81) * 0.35;
     if (tScale > 0.01) {
-      canvas.line(x, z, x + thrustDx * tScale, z + thrustDz * tScale, '#22C55E', 2.5);
+      canvas.line(x, z, x + thrustDx * tScale, z + thrustDz * tScale, '#22C55E', 3);
       const tx2 = x + thrustDx * tScale, tz2 = z + thrustDz * tScale;
-      canvas.line(tx2, tz2, tx2 - thrustDx * 0.08 + thrustDz * 0.05, tz2 - thrustDz * 0.08 - thrustDx * 0.05, '#22C55E', 1.5);
-      canvas.line(tx2, tz2, tx2 - thrustDx * 0.08 - thrustDz * 0.05, tz2 - thrustDz * 0.08 + thrustDx * 0.05, '#22C55E', 1.5);
-      canvas.text(x + thrustDx * tScale + 0.15, z + thrustDz * tScale, 'T', '#22C55E', 6);
+      canvas.line(tx2, tz2, tx2 - thrustDx * 0.07 + thrustDz * 0.04, tz2 - thrustDz * 0.07 - thrustDx * 0.04, '#22C55E', 2);
+      canvas.line(tx2, tz2, tx2 - thrustDx * 0.07 - thrustDz * 0.04, tz2 - thrustDz * 0.07 + thrustDx * 0.04, '#22C55E', 2);
+      canvas.text(x + thrustDx * tScale + 0.1, z + thrustDz * tScale, 'T', '#22C55E', 9);
     }
 
-    // ── Readouts ──
+    // ── HUD Readouts (pinned to viewport corners) ──
+    const hudTop = vyMax - 0.15;
+    const hudLeft = vxMin + 0.1;
+    const sp = 0.28; // line spacing
     const angleDeg = (a) => (a * 180 / Math.PI).toFixed(1);
-    canvas.text(-5.8, 10.5, 'z = ' + z.toFixed(2) + ' m', '#94A3B8', 9);
-    canvas.text(-5.8, 10.1, 'ż = ' + zd.toFixed(2) + ' m/s', '#64748B', 8);
-    canvas.text(-5.8, 9.7, 'x = ' + x.toFixed(2) + ' m', '#94A3B8', 8);
 
-    canvas.text(-1.5, 10.5, 'φ = ' + angleDeg(phi) + '°', '#06B6D4', 8);
-    canvas.text(-1.5, 10.1, 'θ = ' + angleDeg(theta) + '°', '#06B6D4', 8);
-    canvas.text(-1.5, 9.7, 'ψ = ' + angleDeg(psi) + '°', '#06B6D4', 8);
+    // Top-left: position
+    canvas.text(hudLeft, hudTop,        'z = ' + z.toFixed(2) + ' m', '#94A3B8', 12);
+    canvas.text(hudLeft, hudTop - sp,   'ż = ' + zd.toFixed(2) + ' m/s', '#64748B', 10);
+    canvas.text(hudLeft, hudTop - 2*sp, 'x = ' + x.toFixed(2) + ' m', '#94A3B8', 10);
 
-    canvas.text(2.5, 10.5, 'u₁=' + u[0].toFixed(1) + '  u₂=' + u[1].toFixed(1), '#F59E0B', 7);
-    canvas.text(2.5, 10.1, 'u₃=' + u[2].toFixed(1) + '  u₄=' + u[3].toFixed(1), '#F59E0B', 7);
-    canvas.text(2.5, 9.7, 'T = ' + T.toFixed(1) + ' N  (mg=' + (m * 9.81).toFixed(1) + ')', '#64748B', 7);
+    // Top-center: angles
+    canvas.text(hudLeft + 3, hudTop,        'φ = ' + angleDeg(phi) + '°', '#06B6D4', 11);
+    canvas.text(hudLeft + 3, hudTop - sp,   'θ = ' + angleDeg(theta) + '°', '#06B6D4', 11);
+    canvas.text(hudLeft + 3, hudTop - 2*sp, 'ψ = ' + angleDeg(psi) + '°', '#06B6D4', 11);
 
-    // ── Altitude scale ──
-    for (let h = 1; h <= 10; h++) {
-      canvas.line(5.5, h, 5.7, h, '#334155', 1);
-      canvas.text(5.8, h, h + '', '#475569', 6);
+    // Top-right: rotor speeds + thrust
+    canvas.text(hudLeft + 5.5, hudTop,        'u₁=' + u[0].toFixed(1) + ' u₂=' + u[1].toFixed(1), '#F59E0B', 10);
+    canvas.text(hudLeft + 5.5, hudTop - sp,   'u₃=' + u[2].toFixed(1) + ' u₄=' + u[3].toFixed(1), '#F59E0B', 10);
+    canvas.text(hudLeft + 5.5, hudTop - 2*sp, 'T=' + T.toFixed(1) + 'N (mg=' + (m * 9.81).toFixed(1) + ')', '#64748B', 9);
+
+    // ── Altitude scale (right edge) ──
+    const scaleX = vxMax - 0.3;
+    const hMin = Math.max(0, Math.floor(vyMin));
+    const hMax = Math.ceil(vyMax);
+    for (let h = hMin; h <= hMax; h++) {
+      canvas.line(scaleX, h, scaleX + 0.15, h, '#334155', 1.5);
+      canvas.text(scaleX + 0.2, h, h + 'm', '#475569', 8);
     }
   },
 
