@@ -6,16 +6,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Physics Labs — 37 Interactive Simulations" />
+    <jsp:param name="toolName" value="Physics Labs — 39 Interactive Simulations" />
     <jsp:param name="toolCategory" value="Physics" />
-    <jsp:param name="toolDescription" value="37 free interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations. All run in your browser with no signup required." />
+    <jsp:param name="toolDescription" value="39 free interactive physics simulations. Drag pendulums, collide billiard balls, watch chaos unfold, explore wave equations. All run in your browser with no signup required." />
     <jsp:param name="toolUrl" value="physics/labs/" />
     <jsp:param name="toolKeywords" value="physics simulations, interactive physics, pendulum simulator, spring oscillator, chaos theory, billiards physics, wave equation, Newton's cradle, molecular dynamics, brachistochrone" />
     <jsp:param name="toolImage" value="logo.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="physics/" />
-    <jsp:param name="toolFeatures" value="37 interactive simulations,Drag-and-drop physics,Real-time graphs and energy plots,Phase space visualization,Direction field overlays,Export CSV data for lab reports,Screenshot sim and graph,Dark and light themes,No signup required,100% client-side" />
+    <jsp:param name="toolFeatures" value="39 interactive simulations,Drag-and-drop physics,Real-time graphs and energy plots,Phase space visualization,Direction field overlays,Export CSV data for lab reports,Screenshot sim and graph,Dark and light themes,No signup required,100% client-side" />
     <jsp:param name="faq1q" value="Are these physics simulations free?" />
-    <jsp:param name="faq1a" value="Yes all 37 simulations are completely free. No registration no payment no limits. They run entirely in your browser using JavaScript. Your data never leaves your device." />
+    <jsp:param name="faq1a" value="Yes all 39 simulations are completely free. No registration no payment no limits. They run entirely in your browser using JavaScript. Your data never leaves your device." />
     <jsp:param name="faq2q" value="Can I use these for homework and lab reports?" />
     <jsp:param name="faq2a" value="Yes. Every simulation has Export CSV to download data for Excel or Google Sheets and Screenshot to capture the sim and graphs as PNG for lab reports. You can also share specific configurations via URL." />
 </jsp:include>
@@ -32,11 +32,11 @@
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "Physics Labs",
-  "description": "37 free interactive physics simulations",
+  "description": "39 free interactive physics simulations",
   "url": "https://8gwifi.org/physics/labs/",
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 37,
+    "numberOfItems": 39,
     "itemListElement": [
       {"@type":"ListItem","position":1,"name":"Simple Pendulum","url":"https://8gwifi.org/physics/labs/pendulum.jsp"},
       {"@type":"ListItem","position":2,"name":"Spring Oscillator","url":"https://8gwifi.org/physics/labs/spring.jsp"},
@@ -74,7 +74,9 @@
       {"@type":"ListItem","position":34,"name":"Automotive Piston","url":"https://8gwifi.org/physics/labs/piston.jsp"},
       {"@type":"ListItem","position":35,"name":"T-Coil Circuit","url":"https://8gwifi.org/physics/labs/tcoil-circuit.jsp"},
       {"@type":"ListItem","position":36,"name":"Quadrotor Dynamics","url":"https://8gwifi.org/physics/labs/quadrotor.jsp"},
-      {"@type":"ListItem","position":37,"name":"Cart-Pole (Inverted Pendulum)","url":"https://8gwifi.org/physics/labs/cart-pole.jsp"}
+      {"@type":"ListItem","position":37,"name":"Cart-Pole (Inverted Pendulum)","url":"https://8gwifi.org/physics/labs/cart-pole.jsp"},
+      {"@type":"ListItem","position":38,"name":"Two-Link Robot Arm","url":"https://8gwifi.org/physics/labs/robot-arm.jsp"},
+      {"@type":"ListItem","position":39,"name":"AC Generator","url":"https://8gwifi.org/physics/labs/generator.jsp"}
     ]
   }
 }
@@ -601,7 +603,7 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
 
 <%-- ═══ ADVANCED ═══ --%>
 <div class="labs-cat">
-  <div class="labs-cat-header">Advanced <span class="cat-line"></span> <span class="cat-count">10</span></div>
+  <div class="labs-cat-header">Advanced <span class="cat-line"></span> <span class="cat-count">12</span></div>
   <div class="labs-grid">
 
     <a href="molecule.jsp" class="lab-card">
@@ -700,6 +702,28 @@ body { background: var(--li-bg); margin: 0; font-family: 'DM Sans', sans-serif; 
         <h3>Brachistochrone</h3>
         <p>4 balls race — cycloid always wins</p>
         <div class="card-badges"><span class="card-badge badge-race">Race</span></div>
+      </div>
+    </a>
+
+    <a href="robot-arm.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#8B5CF6,#06B6D4);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="4" cy="20" r="2" fill="#475569" stroke="none"/><line x1="4" y1="20" x2="12" y2="10"/><line x1="12" y1="10" x2="20" y2="6" stroke="#06B6D4"/><circle cx="12" cy="10" r="1.5" fill="#94A3B8" stroke="none"/><circle cx="20" cy="6" r="2" fill="#F59E0B" stroke="none"/><line x1="18" y1="5" x2="22" y2="5" stroke="#22C55E" stroke-width="1.5"/><line x1="20" y1="3" x2="20" y2="7" stroke="#22C55E" stroke-width="1.5"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>Two-Link Robot Arm</h3>
+        <p>Forward & inverse kinematics, Jacobian, singularities, trajectory tracking</p>
+        <div class="card-badges"><span class="card-badge badge-drag">Drag</span><span class="card-badge badge-new">New</span></div>
+      </div>
+    </a>
+
+    <a href="generator.jsp" class="lab-card">
+      <div class="lab-card-icon" style="background:linear-gradient(135deg,#EF4444,#3B82F6);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="6" width="4" height="12" rx="0.5" fill="#DC2626" stroke="none"/><rect x="18" y="6" width="4" height="12" rx="0.5" fill="#2563EB" stroke="none"/><line x1="12" y1="4" x2="12" y2="20" stroke="#475569" stroke-width="1"/><rect x="9" y="7" width="6" height="10" rx="0.5" fill="none" stroke="#F59E0B" transform="rotate(30 12 12)"/><path d="M6 21 Q9 18 12 21 Q15 24 18 21" stroke="#06B6D4" fill="none" stroke-width="1.5"/></svg>
+      </div>
+      <div class="lab-card-body">
+        <h3>AC Generator</h3>
+        <p>Faraday's law: rotating coil, flux, EMF waveform, DC commutator</p>
+        <div class="card-badges"><span class="card-badge badge-wave">EM</span><span class="card-badge badge-new">New</span></div>
       </div>
     </a>
 
