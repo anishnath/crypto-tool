@@ -763,6 +763,18 @@ function addErrorWidget(lineNum, message) {
   text.className = 'cm-error-widget-text';
   text.textContent = message;
 
+  // AI Fix button
+  var aiBtn = document.createElement('button');
+  aiBtn.className = 'ai-fix-btn';
+  aiBtn.textContent = '\u2728 AI Fix';
+  aiBtn.title = 'Let AI fix this error';
+  aiBtn.onclick = function(e) {
+    e.stopPropagation();
+    if (typeof window.fixError === 'function') {
+      window.fixError(message, lineNum);
+    }
+  };
+
   var dismiss = document.createElement('span');
   dismiss.className = 'cm-error-widget-dismiss';
   dismiss.textContent = '\u00D7';
@@ -770,6 +782,7 @@ function addErrorWidget(lineNum, message) {
 
   widgetEl.appendChild(icon);
   widgetEl.appendChild(text);
+  widgetEl.appendChild(aiBtn);
   widgetEl.appendChild(dismiss);
 
   var widget = editor.addLineWidget(line, widgetEl, {

@@ -24,23 +24,23 @@
 
 <!-- SEO -->
 <jsp:include page="/modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Free Online LaTeX Editor - Compile PDF Instantly" />
-    <jsp:param name="toolDescription" value="Free online LaTeX editor with real-time PDF preview, syntax highlighting, auto-compilation and symbol picker. Write, compile and download LaTeX documents instantly. No signup required." />
+    <jsp:param name="toolName" value="Free AI-Powered LaTeX Editor - Write, Fix and Compile Instantly" />
+    <jsp:param name="toolDescription" value="Free AI-powered online LaTeX editor with instant PDF compilation. AI fixes errors automatically, generates LaTeX from plain English, and rewrites text in academic style. Real-time preview, 170+ autocomplete commands, syntax highlighting. No signup required." />
     <jsp:param name="toolCategory" value="Developer Tools" />
     <jsp:param name="toolUrl" value="latex/editor.jsp" />
-    <jsp:param name="toolKeywords" value="latex editor online, online latex compiler, latex to pdf, free latex editor, overleaf alternative, latex editor free, write latex online, latex compiler online, latex pdf preview, latex syntax highlighting" />
+    <jsp:param name="toolKeywords" value="ai latex editor, latex editor online, ai latex generator, online latex compiler, latex to pdf, free latex editor, overleaf alternative, ai latex error fix, natural language to latex, latex editor free, write latex online, ai powered latex, latex compiler online, latex pdf preview, latex syntax highlighting, ai academic writing" />
     <jsp:param name="toolImage" value="latex-editor.svg" />
-    <jsp:param name="toolFeatures" value="Real-time PDF preview,LaTeX syntax highlighting,170+ autocomplete commands,Symbol picker with Greek Math and Arrows,Multiple templates (Article Report Beamer CV Letter),File upload for images,Download PDF and .tex source,Project save to localStorage,Dark and light theme support,No registration required" />
+    <jsp:param name="toolFeatures" value="AI error fix - automatically corrects LaTeX compilation errors,AI LaTeX generator - describe in English and get LaTeX code,AI rewrite - restyle text as formal academic or concise or expanded,Real-time PDF preview,LaTeX syntax highlighting,170+ autocomplete commands,Symbol picker with Greek Math and Arrows,Multiple templates (Article Report Beamer CV Letter),File upload for images,Download PDF and .tex source,Project save to localStorage,Dark and light theme support,No registration required" />
     <jsp:param name="hasSteps" value="true" />
-    <jsp:param name="howToSteps" value="Write LaTeX|Write your LaTeX code in the editor with syntax highlighting and 170+ autocomplete commands,Compile to PDF|Click Compile or press Ctrl+Enter to generate the PDF using pdfLaTeX,Preview and Download|Preview the PDF in the right pane then download the PDF or .tex source file" />
-    <jsp:param name="faq1q" value="What is this online LaTeX editor?" />
-    <jsp:param name="faq1a" value="A free browser-based LaTeX editor that compiles your documents to PDF in real-time with syntax highlighting, 170+ autocomplete commands, and multiple templates." />
-    <jsp:param name="faq2q" value="Do I need to install anything?" />
-    <jsp:param name="faq2a" value="No. Everything runs in your browser. The compilation happens on our server using pdfLaTeX with a full TeX Live distribution." />
-    <jsp:param name="faq3q" value="Can I upload images for my LaTeX document?" />
-    <jsp:param name="faq3a" value="Yes, use the upload button to add PNG, JPG, PDF, EPS or SVG images. The editor prompts you to insert them as a figure or inline includegraphics." />
+    <jsp:param name="howToSteps" value="Write or Generate LaTeX|Write LaTeX code with 170+ autocomplete commands or press Ctrl+Shift+A to describe what you want in plain English and let AI generate the LaTeX for you,Compile to PDF|Click Compile or press Ctrl+Enter to generate the PDF using pdfLaTeX. If there are errors the AI Fix button appears to correct them automatically,Preview and Download|Preview the PDF in the right pane then download the PDF or .tex source file. Select any text and click Rewrite to improve it with AI" />
+    <jsp:param name="faq1q" value="What is this AI-powered LaTeX editor?" />
+    <jsp:param name="faq1a" value="A free browser-based LaTeX editor with built-in AI that compiles documents to PDF in real-time. The AI can fix compilation errors automatically, generate LaTeX from plain English descriptions, and rewrite selected text in formal academic, concise, or expanded style." />
+    <jsp:param name="faq2q" value="How does the AI LaTeX generator work?" />
+    <jsp:param name="faq2a" value="Press Ctrl+Shift+A or click the AI button in the toolbar, then describe what you want in plain English such as a 3x3 matrix or a table comparing algorithms. The AI streams valid LaTeX code directly into your editor at the cursor position." />
+    <jsp:param name="faq3q" value="Can AI fix my LaTeX errors?" />
+    <jsp:param name="faq3a" value="Yes. When compilation fails, an AI Fix button appears on each error. Click it and the AI reads the error message and surrounding code, then replaces the broken lines with corrected LaTeX automatically." />
     <jsp:param name="faq4q" value="Is this a free alternative to Overleaf?" />
-    <jsp:param name="faq4a" value="Yes. This editor offers real-time PDF preview, syntax highlighting, autocomplete, templates, and file uploads completely free with no account required." />
+    <jsp:param name="faq4a" value="Yes. This editor offers everything Overleaf does including real-time PDF preview, syntax highlighting, autocomplete, templates, and file uploads plus AI-powered error fixing, code generation, and text rewriting. Completely free with no account required." />
     <jsp:param name="faq5q" value="Are my documents saved?" />
     <jsp:param name="faq5a" value="Yes, all projects are auto-saved to your browser localStorage. You can create multiple projects, rename them, and switch between them from the Projects menu." />
     <jsp:param name="faq6q" value="Which LaTeX packages are supported?" />
@@ -92,7 +92,8 @@
     logsUrl: "<%=ctx%>/logs",
     pdfUrl: "<%=ctx%>/pdf",
     uploadUrl: "<%=ctx%>/upload",
-    jobsUrl: "<%=ctx%>/jobs"
+    jobsUrl: "<%=ctx%>/jobs",
+    aiUrl: "<%=ctx%>/ai"
   };
 </script>
 
@@ -102,8 +103,8 @@
 <!-- ========== HERO SECTION — SEO heading + Ad placement ========== -->
 <section class="latex-hero" id="latex-hero">
   <div class="latex-hero-content">
-    <h1 class="latex-hero-title">Free Online LaTeX Editor</h1>
-    <p class="latex-hero-desc">Write, compile and download LaTeX documents to PDF instantly. No signup required.</p>
+    <h1 class="latex-hero-title">Free AI-Powered LaTeX Editor</h1>
+    <p class="latex-hero-desc">Write, generate and compile LaTeX to PDF with AI. Fix errors, generate code from English, rewrite text. No signup.</p>
   </div>
   <div class="latex-hero-ad">
     <%@ include file="/modern/ads/ad-hero-banner.jsp" %>
@@ -193,7 +194,7 @@
   </div>
 
   <!-- Log panel -->
-  <div class="log-panel" id="log-panel">
+  <div class="log-panel collapsed" id="log-panel">
     <%@ include file="partials/logpanel.jsp" %>
   </div>
 
@@ -205,6 +206,8 @@
     <span class="sb-sep"></span>
     <span class="sb-item sb-errors" id="sb-errors" style="display:none" onclick="nextError()"></span>
     <span class="sb-sep"></span>
+    <span class="sb-item ai-status" id="sb-ai-status" style="display:none"></span>
+    <span class="sb-sep"></span>
     <span class="sb-item">UTF-8</span>
   </div>
 
@@ -215,6 +218,32 @@
   <span id="fab-icon">&#128196;</span>
   <span class="fab-label" id="fab-label">Preview</span>
 </button>
+
+<!-- AI Prompt popup -->
+<div class="ai-prompt-popup" id="ai-prompt-popup">
+  <div class="ai-prompt-header">
+    <span class="ai-prompt-icon">&#10024;</span>
+    <span class="ai-prompt-title">Describe LaTeX to generate</span>
+    <span class="ai-prompt-close" onclick="toggleAIPrompt()">&times;</span>
+  </div>
+  <div class="ai-prompt-body">
+    <textarea id="ai-prompt-input" class="ai-prompt-input" rows="3"
+      placeholder="e.g. &quot;3x3 identity matrix&quot; or &quot;table comparing sorting algorithms&quot;"
+      onkeydown="handleAIPromptKey(event)"></textarea>
+    <div class="ai-prompt-actions">
+      <span class="ai-prompt-hint">Enter to submit &middot; Esc to close</span>
+      <button class="ai-prompt-submit" onclick="submitAIPrompt()">Generate &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<!-- AI Rewrite menu -->
+<div class="ai-rewrite-menu" id="ai-rewrite-menu">
+  <div class="ai-rw-header">Rewrite selection as...</div>
+  <button class="ai-rw-item" onclick="rewriteSelection('formal'); document.getElementById('ai-rewrite-menu').classList.remove('visible')">&#127891; Formal Academic</button>
+  <button class="ai-rw-item" onclick="rewriteSelection('concise'); document.getElementById('ai-rewrite-menu').classList.remove('visible')">&#9986; Concise</button>
+  <button class="ai-rw-item" onclick="rewriteSelection('expand'); document.getElementById('ai-rewrite-menu').classList.remove('visible')">&#128214; Expand with Detail</button>
+</div>
 
 <!-- Symbol picker popup (fixed position, outside app flow) -->
 <div class="symbol-picker" id="symbol-picker">
@@ -323,6 +352,7 @@
 <script src="<%=ctx%>/latex/static/js/editor.js?v=<%=cacheVersion%>"></script>
 <script src="<%=ctx%>/latex/static/js/preview.js?v=<%=cacheVersion%>"></script>
 <script src="<%=ctx%>/latex/static/js/compile.js?v=<%=cacheVersion%>"></script>
+<script src="<%=ctx%>/latex/static/js/ai.js?v=<%=cacheVersion%>"></script>
 
 </body>
 </html>
