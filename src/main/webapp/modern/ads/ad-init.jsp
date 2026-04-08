@@ -182,6 +182,28 @@
         }
 
         // ============================================
+        // AD SLOT 11: IDE Right Rail Top (Desktop Only, >= 1024px)
+        // Placement: Dedicated right column in IDE/compiler layout
+        // ============================================
+        if (width >= 1024) {
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_300x250_ide_rail_top',
+                [[300,250],[336,280],[250,250]],
+                'site_8gwifi_org_ide_rail_top')
+                .addService(googletag.pubads());
+        }
+
+        // ============================================
+        // AD SLOT 12: IDE Right Rail Bottom Sticky (Desktop Only, >= 1024px)
+        // Placement: Sticky ad in IDE right column, stays visible on scroll
+        // ============================================
+        if (width >= 1024) {
+            googletag.defineSlot('/147246189,22976055811/8gwifi.org_300x250_ide_rail_bottom',
+                [[300,250],[336,280],[250,250]],
+                'site_8gwifi_org_ide_rail_bottom')
+                .addService(googletag.pubads());
+        }
+
+        // ============================================
         // GPT Configuration
         // ============================================
         googletag.pubads().disableInitialLoad();  // Lazy load ads
