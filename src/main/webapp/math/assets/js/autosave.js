@@ -213,6 +213,9 @@
     // Don't create a new server document for blank content
     if (!docId && isBlankDocument(title, content)) { dirtyForApi = false; return; }
 
+    // Don't save to server if user is not logged in
+    if (!state.userId) { showStatus('local'); dirtyForApi = false; return; }
+
     var visibility = getVisibility();
 
     function onSuccess() {
