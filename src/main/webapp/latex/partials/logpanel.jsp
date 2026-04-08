@@ -7,6 +7,6 @@
     <button class="error-nav-btn" onclick="prevError()" title="Previous error (Shift+F8)">&#9650;</button>
     <button class="error-nav-btn" onclick="nextError()" title="Next error (F8)">&#9660;</button>
   </div>
-  <span class="log-toggle" id="log-toggle-icon">&#9650; collapse</span>
+  <span class="log-toggle" id="log-toggle-icon">&#9660; expand</span>
 </div>
 <div class="log-body" id="log-output"></div>
