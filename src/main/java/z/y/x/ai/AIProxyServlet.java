@@ -60,10 +60,13 @@ public class AIProxyServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String DEFAULT_MODEL = "qwen3-coder:latest";
 
-    // Rate limit: 5 AI requests per IP per minute, burst of 2
+    // Rate limit: 5 AI requests per IP per minute, max 2 burst
     private static final int REQUESTS_PER_MINUTE = 5;
     private static final int BURST_CAPACITY = 2;
     private static final int MAX_BUCKETS = 10_000;
+
+    private static final java.util.logging.Logger log =
+        java.util.logging.Logger.getLogger(AIProxyServlet.class.getName());
 
     private static final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
@@ -87,12 +90,17 @@ public class AIProxyServlet extends HttpServlet {
         if (buckets.size() > MAX_BUCKETS) {
             buckets.clear();
         }
-        return buckets.computeIfAbsent(ip, k -> Bucket.builder()
+        return buckets.computeIfAbsent(ip, k -> {
+            log.info("AI rate-limit: new bucket for IP " + ip);
+            return Bucket.builder()
+                // Hard cap: 5 tokens, all refill at once every 60 seconds
                 .addLimit(Bandwidth.classic(REQUESTS_PER_MINUTE,
-                        Refill.greedy(REQUESTS_PER_MINUTE, Duration.ofMinutes(1))))
+                        Refill.intervally(REQUESTS_PER_MINUTE, Duration.ofMinutes(1))))
+                // Burst: max 2 rapid-fire, refills 2 every 30 seconds
                 .addLimit(Bandwidth.classic(BURST_CAPACITY,
-                        Refill.intervally(BURST_CAPACITY, Duration.ofSeconds(10))))
-                .build());
+                        Refill.intervally(BURST_CAPACITY, Duration.ofSeconds(30))))
+                .build();
+        });
     }
 
     private String getClientIp(HttpServletRequest req) {
@@ -115,7 +123,10 @@ public class AIProxyServlet extends HttpServlet {
         Bucket bucket = resolveBucket(clientIp);
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
 
+        log.fine("AI rate-limit: IP=" + clientIp + " remaining=" + probe.getRemainingTokens() + " consumed=" + probe.isConsumed());
+
         if (!probe.isConsumed()) {
+            log.warning("AI rate-limit: BLOCKED IP=" + clientIp);
             long waitSeconds = Math.max(1, probe.getNanosToWaitForRefill() / 1_000_000_000);
             resp.setContentType("application/json");
             resp.setStatus(429);
