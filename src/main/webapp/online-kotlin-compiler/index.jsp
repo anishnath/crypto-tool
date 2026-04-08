@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online Kotlin Compiler & IDE - Run Kotlin Code Online Free | 8gwifi.org");
+request.setAttribute("pageTitle", "AI Kotlin Compiler - Run, Fix & Explain Kotlin Code Free");
 request.setAttribute("pageDescription", "Run Kotlin online with a free compiler and IDE. Write, execute, and share Kotlin code with multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-kotlin-compiler/");
 request.setAttribute("preferredLanguage", "kotlin");

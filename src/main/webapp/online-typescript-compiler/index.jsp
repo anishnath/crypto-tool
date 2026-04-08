@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online TypeScript Compiler & IDE - Run TS Code Online Free | 8gwifi.org");
+request.setAttribute("pageTitle", "AI TypeScript Compiler - Run, Fix & Explain TS Code Free");
 request.setAttribute("pageDescription", "Run TypeScript (Node.js) online with a free compiler and IDE. Write, execute, and share TypeScript code with examples and multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-typescript-compiler/");
 request.setAttribute("preferredLanguage", "typescript");

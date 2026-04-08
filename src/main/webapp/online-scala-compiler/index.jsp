@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online Scala Compiler & IDE - Run Scala Code Online Free | 8gwifi.org");
+request.setAttribute("pageTitle", "AI Scala Compiler - Run, Fix & Explain Scala Code Free");
 request.setAttribute("pageDescription", "Run Scala online with a free compiler and IDE. Write, execute, and share Scala code with multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-scala-compiler/");
 request.setAttribute("preferredLanguage", "scala");

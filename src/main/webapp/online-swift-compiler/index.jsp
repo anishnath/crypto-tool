@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online Swift Compiler & IDE - Run Swift Code Online Free | 8gwifi.org");
+request.setAttribute("pageTitle", "AI Swift Compiler - Run, Fix & Explain Swift Code Free");
 request.setAttribute("pageDescription", "Run Swift online with a free compiler and IDE. Write, execute, and share Swift code with multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-swift-compiler/");
 request.setAttribute("preferredLanguage", "swift");

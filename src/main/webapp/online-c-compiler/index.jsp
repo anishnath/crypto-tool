@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online C Compiler & IDE - Run C Code Online Free | 8gwifi.org");
+request.setAttribute("pageTitle", "AI C Compiler - Run, Fix & Explain C Code Free");
 request.setAttribute("pageDescription", "Run C online with a fast, free compiler and IDE. Write, execute, and share C code with stdin and multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-c-compiler/");
 request.setAttribute("preferredLanguage", "c");

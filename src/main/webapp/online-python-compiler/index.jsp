@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online Python Compiler & IDE - Run Python Code Online Free | 8gwifi.org");
+request.setAttribute("pageTitle", "AI Python Compiler - Run, Fix & Explain Python Code Free");
 request.setAttribute("pageDescription", "Run Python online with a fast, free compiler and IDE. Write, execute, and share Python code with examples, stdin, and multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-python-compiler/");
 request.setAttribute("preferredLanguage", "python");

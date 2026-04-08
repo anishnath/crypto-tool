@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online Go Compiler & IDE - Run Go Code Online Free | 8gwifi.org");
+request.setAttribute("pageTitle", "AI Go Compiler - Run, Fix & Explain Go Code Free");
 request.setAttribute("pageDescription", "Run Go online with a free compiler and IDE. Write, execute, and share Go code with multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-go-compiler/");
 request.setAttribute("preferredLanguage", "go");

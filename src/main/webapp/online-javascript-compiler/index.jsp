@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online JavaScript Compiler & IDE - Run JS Code Online Free | 8gwifi.org");
+request.setAttribute("pageTitle", "AI JavaScript Compiler - Run, Fix & Explain JS Code Free");
 request.setAttribute("pageDescription", "Run JavaScript (Node.js) online with a free compiler and IDE. Write, execute, and share JS code with examples and multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-javascript-compiler/");
 request.setAttribute("preferredLanguage", "javascript");

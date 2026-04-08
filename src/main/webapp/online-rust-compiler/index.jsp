@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online Rust Compiler & IDE - Run Rust Code Online Free | 8gwifi.org");
+request.setAttribute("pageTitle", "AI Rust Compiler - Run, Fix & Explain Rust Code Free");
 request.setAttribute("pageDescription", "Run Rust online with a free compiler and IDE. Write, execute, and share Rust code with multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-rust-compiler/");
 request.setAttribute("preferredLanguage", "rust");

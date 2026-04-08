@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "Online Dart Compiler & IDE - Run Dart Code Online Free | 8gwifi.org");
+request.setAttribute("pageTitle", "AI Dart Compiler - Run, Fix & Explain Dart Code Free");
 request.setAttribute("pageDescription", "Run Dart online with a free compiler and IDE. Write, execute, and share Dart code with multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-dart-compiler/");
 request.setAttribute("preferredLanguage", "dart");
