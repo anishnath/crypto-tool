@@ -72,8 +72,7 @@
     </jsp:include>
     <% } %>
 
-    <!-- Canonical (may be overridden by wrapper pages) -->
-    <link rel="canonical" href="<%= pageUrl %>">
+    <!-- Canonical is emitted by seo-tool-page.jsp above -->
 
         <% if (request.getAttribute("preferredLanguage") != null) { %>
         <script>
@@ -1991,7 +1990,7 @@
                 <section class="ide-description-section">
                     <div class="ide-description-inner">
                         <div class="ide-description-content">
-                            <h1><%= (request.getAttribute("h1Text") != null) ? request.getAttribute("h1Text") : "Free Online Compiler - Run Code in 60+ Programming Languages" %></h1>
+                            <h2><%= (request.getAttribute("h1Text") != null) ? request.getAttribute("h1Text") : "Free Online Compiler - Run Code in 60+ Programming Languages" %></h2>
                             <p>Write, compile, and run code instantly in your browser. Our free online compiler supports <strong>60+ programming languages</strong> including Python, Java, C++, JavaScript, Go, Rust, and many more. No installation required.</p>
                         </div>
                     </div>
