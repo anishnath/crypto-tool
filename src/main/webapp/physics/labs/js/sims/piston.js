@@ -56,7 +56,7 @@ export const PistonSim = {
     time: ['height', 'velocity', 'volume'],
   },
 
-  worldRect: { xMin: -3.5, xMax: 3.5, yMin: -2.5, yMax: 4.5 },
+  worldRect: { xMin: -4, xMax: 4, yMin: -1.5, yMax: 4.5 },
 
   presets: [
     { name: 'Default',                     params: {} },
