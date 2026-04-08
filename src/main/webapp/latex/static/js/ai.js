@@ -3,6 +3,7 @@
 
 var AI_URL = CONFIG.ctx + '/ai';
 var aiAbortController = null;
+var AI_TIMEOUT_MS = 90000; // 90s client-side timeout
 
 // ── LaTeX-specific system prompts (client-side, not in servlet) ──
 
@@ -54,6 +55,8 @@ function streamAI(payload, callbacks) {
   var onDone   = callbacks.onDone   || function() {};
   var onError  = callbacks.onError  || function() {};
 
+  var timeoutId = setTimeout(function() { aiAbortController.abort(); onError('Request timed out'); }, AI_TIMEOUT_MS);
+
   fetch(AI_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -69,9 +72,11 @@ function streamAI(payload, callbacks) {
     return readNDJSON(res.body, onToken);
   })
   .then(function() {
+    clearTimeout(timeoutId);
     onDone();
   })
   .catch(function(err) {
+    clearTimeout(timeoutId);
     if (err.name === 'AbortError') return;
     onError(err.message || 'AI request failed');
   });
@@ -117,6 +122,8 @@ function requestAI(payload, callback) {
   if (aiAbortController) aiAbortController.abort();
   aiAbortController = new AbortController();
 
+  var timeoutId = setTimeout(function() { aiAbortController.abort(); callback('Request timed out', null); }, AI_TIMEOUT_MS);
+
   payload.stream = false;
 
   fetch(AI_URL, {
@@ -134,6 +141,7 @@ function requestAI(payload, callback) {
     return res.json();
   })
   .then(function(data) {
+    clearTimeout(timeoutId);
     var content = '';
     if (data.message && data.message.content) {
       content = data.message.content;
@@ -141,6 +149,8 @@ function requestAI(payload, callback) {
     callback(null, content);
   })
   .catch(function(err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') return;
     callback(err.message || 'AI request failed', null);
   });
 }

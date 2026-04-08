@@ -6,24 +6,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Arduino Simulator Online — Write, Compile & Run Arduino, ESP32, Raspberry Pi Code in Your Browser" />
+    <jsp:param name="toolName" value="AI-Powered Arduino Simulator Online — Generate, Compile & Run Arduino, ESP32, Raspberry Pi Projects" />
     <jsp:param name="toolCategory" value="Electronics" />
-    <jsp:param name="toolDescription" value="Free browser-based Arduino simulator and ESP32 emulator. Write C++ code, compile via arduino-cli, and run on virtual hardware: Arduino Uno (avr8js), Raspberry Pi Pico (rp2040js), ESP32/ESP32-C3/ESP32-S3 (QEMU), and Raspberry Pi 3B. 21 interactive components, 33 example sketches, serial monitor, Wokwi-compatible diagram.json, multi-file projects." />
+    <jsp:param name="toolDescription" value="Free AI-powered Arduino simulator. Describe a project in plain English and AI generates both the code and circuit diagram. Auto-fix compile errors with AI. Supports Arduino Uno, ESP32, Raspberry Pi Pico, and 21 virtual components. Compile via arduino-cli, simulate with avr8js/QEMU. No installation required." />
     <jsp:param name="toolUrl" value="electronics/arduino-simulator.jsp" />
     <jsp:param name="toolImage" value="arduino-simulator.svg" />
-    <jsp:param name="toolKeywords" value="arduino simulator online, arduino emulator, esp32 simulator, esp32-c3 emulator, raspberry pi pico simulator, avr simulator, arduino IDE online, virtual arduino, wokwi alternative, circuit simulator, arduino uno simulator, compile arduino online, serial monitor, LED blink, analogWrite, servo control, LCD display, OLED SSD1306, NeoPixel, DHT22 sensor, potentiometer, ESP32 QEMU, RISC-V emulator, raspberry pi emulator" />
+    <jsp:param name="toolKeywords" value="ai arduino simulator, ai circuit generator, arduino simulator online, ai arduino code generator, arduino emulator, esp32 simulator, ai fix arduino errors, esp32-c3 emulator, raspberry pi pico simulator, avr simulator, arduino IDE online, virtual arduino, wokwi alternative, circuit simulator, ai electronics, arduino uno simulator, compile arduino online, ai explain arduino code, serial monitor, LED blink, servo control, LCD display, NeoPixel, DHT22 sensor, ai embedded systems" />
     <jsp:param name="breadcrumbCategoryUrl" value="electronics/" />
     <jsp:param name="educationalLevel" value="High School, Undergraduate, AP Physics, Engineering, Maker Education, IoT Development" />
     <jsp:param name="teaches" value="Arduino programming, ESP32 development, embedded systems, microcontroller basics, digital I/O, analog input, PWM output, serial communication, sensor interfacing, motor control, display programming, IoT prototyping, RISC-V architecture" />
-    <jsp:param name="toolFeatures" value="6 board families: Arduino Uno/Nano ESP32 ESP32-C3 ESP32-S3 Raspberry Pi Pico Raspberry Pi 3B,Real CPU emulation: avr8js (16MHz AVR) rp2040js (125MHz ARM) QEMU (160MHz RISC-V and 240MHz Xtensa),Monaco code editor with C++ syntax highlighting and error markers,Compile via arduino-cli with DIO flash mode for ESP32,21 virtual components: LEDs buttons potentiometers servos buzzers LCD OLED 7-segment NeoPixel DHT22 HC-SR04 encoder keypad relay,Serial monitor with baud rate detection and bidirectional I/O,33 example sketches across 9 categories including multi-file projects,Wokwi-compatible diagram.json import/export with live editor sync,Server-side QEMU emulation with SSE streaming for ESP32 boards,GPIO bridge for ESP32 LED visualization in browser,Boot progress status bar for QEMU boards,xterm.js Linux terminal for Raspberry Pi,Dark and light theme support,Mobile responsive with tab switcher,URL sharing for sketches,Speed control 0.25x to 8x" />
-    <jsp:param name="faq1q" value="What is this Arduino simulator?" />
-    <jsp:param name="faq1a" value="A free browser-based Arduino IDE and hardware simulator. Write Arduino C++ code, compile it using the real arduino-cli toolchain, and run it on virtual hardware. Supports Arduino Uno/Nano (cycle-accurate AVR emulation via avr8js), Raspberry Pi Pico (RP2040 via rp2040js), ESP32/ESP32-C3/ESP32-S3 (via server-side QEMU), and Raspberry Pi 3B. No installation required." />
-    <jsp:param name="faq2q" value="What boards and components can I simulate?" />
-    <jsp:param name="faq2a" value="6 board families and 21 virtual components. Boards: Arduino Uno, Arduino Nano, Raspberry Pi Pico, ESP32, ESP32-C3, ESP32-S3, Raspberry Pi 3B. Components: LEDs (red/green/yellow/RGB), push buttons, potentiometers, slide switches, servo motors, buzzers with Web Audio, 7-segment displays, LCD 16x2, OLED SSD1306, NeoPixel, DHT22 temperature sensor, HC-SR04 ultrasonic, rotary encoder, membrane keypad, relay, photoresistor, and NTC temperature sensor." />
-    <jsp:param name="faq3q" value="How does ESP32 simulation work?" />
-    <jsp:param name="faq3a" value="ESP32 sketches are compiled with arduino-cli using DIO flash mode, then run in Espressif QEMU on the server. Serial output and GPIO pin changes stream to your browser in real-time via Server-Sent Events (SSE). A compile-time GPIO bridge intercepts digitalWrite calls to visualize LED state. ESP32-C3 uses RISC-V QEMU, ESP32/S3 uses Xtensa QEMU." />
+    <jsp:param name="toolFeatures" value="AI project generator - describe in English and get code plus circuit diagram,AI error fix - automatically corrects compile errors,AI code explainer - explains code or circuit in plain English,6 board families: Arduino Uno/Nano ESP32 ESP32-C3 ESP32-S3 Raspberry Pi Pico Raspberry Pi 3B,Real CPU emulation: avr8js (16MHz AVR) rp2040js (125MHz ARM) QEMU (160MHz RISC-V and 240MHz Xtensa),Monaco code editor with C++ syntax highlighting and error markers,Compile via arduino-cli with DIO flash mode for ESP32,21 virtual components: LEDs buttons potentiometers servos buzzers LCD OLED 7-segment NeoPixel DHT22 HC-SR04 encoder keypad relay,Serial monitor with baud rate detection and bidirectional I/O,33 example sketches across 9 categories including multi-file projects,Wokwi-compatible diagram.json import/export with live editor sync,Server-side QEMU emulation with SSE streaming for ESP32 boards,Dark and light theme support,URL sharing for sketches" />
+    <jsp:param name="faq1q" value="How does the AI Arduino project generator work?" />
+    <jsp:param name="faq1a" value="Click the AI button or press Ctrl+Shift+A and describe your project in plain English, for example 'traffic light with 3 LEDs cycling red-yellow-green' or 'servo controlled by potentiometer with angle on LCD'. The AI generates both the complete Arduino sketch and a Wokwi-compatible circuit diagram with components and wiring, then loads everything into the editor and canvas ready to compile and run." />
+    <jsp:param name="faq2q" value="Can AI fix my Arduino compile errors?" />
+    <jsp:param name="faq2a" value="Yes. When compilation fails, an AI Fix button appears in the toolbar. Click it and the AI reads the error messages and your code, then replaces it with a corrected version. It understands Arduino-specific issues like missing libraries, incorrect pin modes, syntax errors, and type mismatches." />
+    <jsp:param name="faq3q" value="What boards and components can I simulate?" />
+    <jsp:param name="faq3a" value="6 board families and 21 virtual components. Boards: Arduino Uno, Arduino Nano, Raspberry Pi Pico, ESP32, ESP32-C3, ESP32-S3, Raspberry Pi 3B. Components: LEDs, push buttons, potentiometers, servo motors, buzzers, 7-segment displays, LCD 16x2, OLED SSD1306, NeoPixel, DHT22, HC-SR04 ultrasonic, rotary encoder, membrane keypad, relay, photoresistor, and NTC temperature sensor. The AI can generate circuits using any of these components." />
     <jsp:param name="faq4q" value="Is it free?" />
-    <jsp:param name="faq4a" value="Yes, completely free with no signup required. Arduino Uno and Pico simulations run entirely in your browser. ESP32 simulations use server-side QEMU (shared resource, auto-cleanup after 10 minutes). 33 example sketches included, supports multi-file projects, and Wokwi-compatible diagram.json import/export." />
+    <jsp:param name="faq4a" value="Yes, completely free with no signup required. AI code generation, AI error fixing, AI explanations, compilation, simulation, 33 example sketches, multi-file projects, and Wokwi-compatible diagram import/export are all available immediately with no account needed." />
 </jsp:include>
 <!-- Critical CSS inlined for fast LCP -->
 <style>
@@ -121,6 +121,16 @@ body{background:var(--ard-bg);color:var(--ard-text);font-family:'DM Sans',sans-s
         <select class="ard-examples-select" id="examplesSelect" title="Load an example sketch">
           <option value="">&#9733; Examples</option>
         </select>
+        <div class="ard-tb-sep"></div>
+        <button class="ard-tb-btn ard-tb-ai" id="btnAI" title="AI: Generate project from description (Ctrl+Shift+A)">
+          <span>&#10024; AI</span>
+        </button>
+        <button class="ard-tb-btn ard-tb-aifix" id="btnAIFix" title="AI: Fix compile errors" style="display:none">
+          <span>&#128295; Fix</span>
+        </button>
+        <button class="ard-tb-btn" id="btnAIExplain" title="AI: Explain code or circuit">
+          <span>&#128161; Explain</span>
+        </button>
         <div class="ard-tb-sep"></div>
         <button class="ard-tb-btn ard-tb-toggle" id="btnOutput"><span>Output</span></button>
         <span class="ard-compile-status" id="compileStatus"></span>
@@ -288,6 +298,7 @@ import { FileExplorer } from '<%=request.getContextPath()%>/electronics/js/ardui
 import { exportDiagram, importDiagram, downloadDiagram, openDiagramFile } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/diagram.js';
 import { DiagramSync } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/diagram-sync.js';
 import { PiTerminal } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/pi-terminal.js';
+import { AIAssistant } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/ai-assistant.js';
 
 // ── DOM refs ──
 const btnCompile = document.getElementById('btnCompile');
@@ -700,6 +711,7 @@ function logOutput(text, cls) {
 
 let isCompiling = false;
 let lastCompiledHex = null;
+let lastCompileErrors = '';
 
 function updateButtonStates() {
   btnRun.disabled = _isStarting; // Run always enabled except during compile/start
@@ -764,9 +776,12 @@ async function compile(showPanel = true) {
       if (data.errors && data.errors.length) {
         editor.setErrors(data.errors);
         editor.setWarnings(data.warnings || []);
+        lastCompileErrors = data.errors.map(e => 'Line ' + (e.line || '?') + ': ' + e.message).join('\n');
         for (const e of data.errors) {
           logOutput('  Line ' + (e.line || '?') + ': ' + e.message, 'error');
         }
+        // Show AI Fix button
+        document.getElementById('btnAIFix').style.display = '';
       }
       if (data.warnings && data.warnings.length) {
         for (const w of data.warnings) {
@@ -779,6 +794,8 @@ async function compile(showPanel = true) {
     }
 
     // Success
+    lastCompileErrors = '';
+    document.getElementById('btnAIFix').style.display = 'none';
     const fmt = data.outputFormat || 'hex';
     lastCompiledHex = data.hex || data.uf2 || data.bin || data.jobId || null;
     logOutput('Compiled in ' + elapsed + 's (' + fmt.toUpperCase() + ')', 'success');
@@ -1426,6 +1443,88 @@ document.addEventListener('keydown', (e) => {
 
 // Initial button states
 updateButtonStates();
+
+// ── AI Assistant ──
+const aiAssistant = new AIAssistant({
+  ctx: '<%=request.getContextPath()%>',
+  getCode: () => editor.getCode(),
+  setCode: (code) => {
+    // Update sketch.ino content without resetting the file list
+    // (loadFiles would destroy diagram.json during streaming)
+    fileManager.files[0].content = code;
+    if (fileManager.activeIndex === 0) {
+      editor.setCode(code);
+    }
+  },
+  getSelection: () => {
+    const m = editor._editor;
+    return m ? m.getModel().getValueInRange(m.getSelection()) : '';
+  },
+  getBoard: () => document.getElementById('boardSelect').value,
+  loadPreset: async (preset) => {
+    const targetBoard = preset.board || 'arduino:avr:uno';
+    const boardSelect = document.getElementById('boardSelect');
+    if (boardSelect.value !== targetBoard) {
+      boardSelect.value = targetBoard;
+      await switchBoard(targetBoard);
+    }
+    stopRunner();
+    wireManager.clear();
+    selection.deselect();
+
+    // Build file list: always sketch.ino, add diagram.json if AI generated a circuit
+    const files = [{ name: 'sketch.ino', content: preset.code }];
+    if (preset.diagram && preset.diagram.parts) {
+      files.push({ name: 'diagram.json', content: JSON.stringify(preset.diagram, null, 2) });
+    }
+    fileManager.loadFiles(files);
+
+    // Import diagram onto canvas
+    if (preset.diagram && preset.diagram.parts) {
+      try {
+        const result = await importDiagram(preset.diagram, componentPanel, wireManager, simCanvas, async (fqbn) => {
+          boardSelect.value = fqbn;
+          await switchBoard(fqbn);
+        });
+        if (result.errors && result.errors.length) {
+          for (const err of result.errors) {
+            logOutput('  ⚠ Diagram: ' + err, 'warning');
+          }
+        }
+        logOutput('  Canvas: ' + result.partsLoaded + ' components, ' + result.wiresLoaded + ' wires loaded');
+      } catch (e) {
+        logOutput('Circuit import failed: ' + e.message, 'warning');
+      }
+    }
+  },
+  getErrors: () => lastCompileErrors,
+  getDiagram: () => exportDiagram(componentPanel, wireManager),
+  logOutput: (text, replace) => {
+    if (replace) {
+      // Replace last line (for streaming updates)
+      const last = outputContent.lastElementChild;
+      if (last && last.dataset.aiStream) {
+        last.textContent = text;
+        outputContent.scrollTop = outputContent.scrollHeight;
+        return;
+      }
+    }
+    const line = document.createElement('div');
+    if (replace) line.dataset.aiStream = '1';
+    line.textContent = text;
+    outputContent.appendChild(line);
+    outputContent.scrollTop = outputContent.scrollHeight;
+    // Ensure output panel is visible
+    outputPanel.style.display = 'flex';
+    outputPanel.style.height = outputPanel.style.height || '180px';
+    btnOutput.classList.add('active');
+  }
+});
+
+// Wire AI toolbar buttons
+document.getElementById('btnAI').addEventListener('click', () => aiAssistant.openPrompt());
+document.getElementById('btnAIFix').addEventListener('click', () => aiAssistant.fix());
+document.getElementById('btnAIExplain').addEventListener('click', () => aiAssistant.explain());
 
 // ── Board Switcher ──
 const BOARD_TAGS = {

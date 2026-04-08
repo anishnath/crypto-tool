@@ -3188,6 +3188,7 @@ print("Welcome to 8gwifi.org Online Compiler")
 
                     var AI_URL = '<%= request.getContextPath() %>/ai';
                     var aiAbortCtrl = null;
+                    var AI_TIMEOUT_MS = 90000;
 
                     // ── System prompts ──
 
@@ -3232,6 +3233,8 @@ print("Welcome to 8gwifi.org Online Compiler")
                         var onDone  = callbacks.onDone  || function() {};
                         var onError = callbacks.onError || function() {};
 
+                        var timeoutId = setTimeout(function() { aiAbortCtrl.abort(); onError('Request timed out'); }, AI_TIMEOUT_MS);
+
                         fetch(AI_URL, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -3266,8 +3269,9 @@ print("Welcome to 8gwifi.org Online Compiler")
                             }
                             return reader.read().then(processChunk);
                         })
-                        .then(function() { onDone(); })
+                        .then(function() { clearTimeout(timeoutId); onDone(); })
                         .catch(function(err) {
+                            clearTimeout(timeoutId);
                             if (err.name === 'AbortError') return;
                             onError(err.message || 'AI request failed');
                         });
@@ -3277,6 +3281,8 @@ print("Welcome to 8gwifi.org Online Compiler")
                         if (aiAbortCtrl) aiAbortCtrl.abort();
                         aiAbortCtrl = new AbortController();
                         payload.stream = false;
+
+                        var timeoutId = setTimeout(function() { aiAbortCtrl.abort(); callback('Request timed out', null); }, AI_TIMEOUT_MS);
 
                         fetch(AI_URL, {
                             method: 'POST',
@@ -3289,10 +3295,12 @@ print("Welcome to 8gwifi.org Online Compiler")
                             return res.json();
                         })
                         .then(function(data) {
+                            clearTimeout(timeoutId);
                             var content = (data.message && data.message.content) ? data.message.content : '';
                             callback(null, content);
                         })
                         .catch(function(err) {
+                            clearTimeout(timeoutId);
                             if (err.name === 'AbortError') return;
                             callback(err.message, null);
                         });
