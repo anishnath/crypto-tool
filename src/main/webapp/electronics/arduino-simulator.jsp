@@ -1498,7 +1498,13 @@ const aiAssistant = new AIAssistant({
     }
   },
   getErrors: () => lastCompileErrors,
-  getDiagram: () => exportDiagram(componentPanel, wireManager),
+  getDiagram: () => {
+    try {
+      const boardEl = document.getElementById('arduinoBoard');
+      const boardTag = boardEl?.tagName?.toLowerCase() || 'wokwi-arduino-uno';
+      return exportDiagram(boardTag, 'board', { x: 0, y: 0 }, componentPanel.components, wireManager.wires);
+    } catch (e) { return null; }
+  },
   logOutput: (text, replace) => {
     if (replace) {
       // Replace last line (for streaming updates)
