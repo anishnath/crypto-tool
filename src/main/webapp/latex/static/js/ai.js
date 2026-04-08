@@ -4,6 +4,7 @@
 var AI_URL = CONFIG.ctx + '/ai';
 var aiAbortController = null;
 var AI_TIMEOUT_MS = 90000; // 90s client-side timeout
+var aiBusy = false;
 
 // ── LaTeX-specific system prompts (client-side, not in servlet) ──
 
@@ -160,6 +161,7 @@ function requestAI(payload, callback) {
 // ══════════════════════════════════════════════════════════════
 
 function fixError(errorMsg, lineNum) {
+  if (aiBusy) { if (typeof window.showWarningToast === 'function') window.showWarningToast('AI is busy'); return; }
   if (!window.editorInstance) return;
   var cm = window.editorInstance;
 
@@ -233,6 +235,7 @@ function resetFixButton(widget) {
 // ══════════════════════════════════════════════════════════════
 
 function nlToLatex(description) {
+  if (aiBusy) { if (typeof window.showWarningToast === 'function') window.showWarningToast('AI is busy'); return; }
   if (!window.editorInstance || !description || !description.trim()) return;
   var cm = window.editorInstance;
   var insertPos = cm.getCursor();
@@ -273,6 +276,7 @@ function nlToLatex(description) {
 // ══════════════════════════════════════════════════════════════
 
 function rewriteSelection(style) {
+  if (aiBusy) { if (typeof window.showWarningToast === 'function') window.showWarningToast('AI is busy'); return; }
   if (!window.editorInstance) return;
   var cm = window.editorInstance;
   var selection = cm.getSelection();
@@ -326,6 +330,7 @@ function cancelAI() {
     aiAbortController.abort();
     aiAbortController = null;
   }
+  aiBusy = false;
   showAIIndicator(false);
 }
 
@@ -397,6 +402,8 @@ function showRewriteMenu() {
 // ══════════════════════════════════════════════════════════════
 
 function showAIIndicator(show) {
+  aiBusy = show;
+
   // Status bar
   var el = document.getElementById('sb-ai-status');
   if (el) {

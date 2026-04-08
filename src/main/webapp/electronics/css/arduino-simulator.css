@@ -412,6 +412,17 @@ body {
   background: var(--ard-border);
   transition: background .15s;
   position: relative;
+  z-index: 10;
+}
+/* Wider invisible hit area so it's easy to grab */
+.ard-splitter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4px;
+  right: -4px;
+  cursor: col-resize;
 }
 .ard-splitter:hover,
 .ard-splitter.dragging { background: var(--ard-accent); }

@@ -3189,6 +3189,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                     var AI_URL = '<%= request.getContextPath() %>/ai';
                     var aiAbortCtrl = null;
                     var AI_TIMEOUT_MS = 90000;
+                    var aiBusy = false;
 
                     // ── System prompts ──
 
@@ -3340,6 +3341,8 @@ print("Welcome to 8gwifi.org Online Compiler")
                     }
 
                     function aiGenerate(description) {
+                        if (aiBusy) { alert('AI is busy. Cancel or wait.'); return; }
+                        aiBusy = true;
                         showAIStatus(true, 'Generating code...');
 
                         // Clear editor and stream directly into it
@@ -3375,6 +3378,8 @@ print("Welcome to 8gwifi.org Online Compiler")
                     // ── AI Fix Error ──
 
                     function aiFixError() {
+                        if (aiBusy) { alert('AI is busy. Cancel or wait.'); return; }
+                        aiBusy = true;
                         var code = editor ? editor.getValue() : '';
                         var stderr = document.getElementById('outputContent').textContent || '';
                         if (!stderr || stderr.indexOf('Error') === -1 && stderr.indexOf('error') === -1) {
@@ -3415,6 +3420,8 @@ print("Welcome to 8gwifi.org Online Compiler")
                     // ── AI Explain Code / Error ──
 
                     function aiExplainCode() {
+                        if (aiBusy) { alert('AI is busy. Cancel or wait.'); return; }
+                        aiBusy = true;
                         var selection = editor ? editor.getModel().getValueInRange(editor.getSelection()) : '';
                         var code = selection || (editor ? editor.getValue() : '');
                         var stderr = document.getElementById('outputContent').textContent || '';
@@ -3453,6 +3460,7 @@ print("Welcome to 8gwifi.org Online Compiler")
 
                     function cancelAI() {
                         if (aiAbortCtrl) { aiAbortCtrl.abort(); aiAbortCtrl = null; }
+                        aiBusy = false;
                         showAIStatus(false);
                         document.getElementById('aiStopBtn').style.display = 'none';
                     }
@@ -3509,6 +3517,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                     }
 
                     function showAIStatus(show, text) {
+                        if (!show) aiBusy = false;
                         var el = document.getElementById('statusAI');
                         var txt = document.getElementById('statusAIText');
                         if (show) {

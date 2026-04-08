@@ -43,7 +43,7 @@ export class FileExplorer {
       // File icon
       const icon = document.createElement('span');
       icon.className = 'ard-fe-icon';
-      icon.textContent = file.name.endsWith('.ino') ? '\u25B6' : file.name.endsWith('.h') ? 'H' : file.name.endsWith('.json') ? '{ }' : 'C';
+      icon.textContent = file.name.endsWith('.ino') ? '\u25B6' : file.name.endsWith('.h') ? 'H' : file.name.endsWith('.json') ? 'J' : 'C';
       row.appendChild(icon);
 
       // Filename

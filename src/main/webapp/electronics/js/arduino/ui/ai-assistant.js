@@ -170,6 +170,7 @@ export class AIAssistant {
     this.getDiagram = opts.getDiagram;
     this.logOutput = opts.logOutput;
     this.abortCtrl = null;
+    this.busy = false;
 
     this._initUI();
     this._initKeyboard();
@@ -256,6 +257,9 @@ export class AIAssistant {
   }
 
   async generate(description) {
+    if (this.busy) { this.logOutput('⚠ AI is busy. Cancel or wait for current request.'); return; }
+    this.busy = true;
+    this._disableButtons(true);
     const board = this.getBoard();
     const boardInfo = getBoardInfo(board);
     this.logOutput('🤖 AI generating project for ' + boardInfo.name + ': "' + description + '"');
@@ -429,6 +433,9 @@ export class AIAssistant {
   // ══════════════════════════════════════════════
 
   async fix() {
+    if (this.busy) { this.logOutput('⚠ AI is busy. Cancel or wait for current request.'); return; }
+    this.busy = true;
+    this._disableButtons(true);
     const code = this.getCode();
     const errors = this.getErrors();
 
@@ -471,6 +478,9 @@ export class AIAssistant {
   // ══════════════════════════════════════════════
 
   async explain() {
+    if (this.busy) { this.logOutput('⚠ AI is busy. Cancel or wait for current request.'); return; }
+    this.busy = true;
+    this._disableButtons(true);
     const selection = this.getSelection();
     const code = this.getCode();
     const errors = this.getErrors();
@@ -527,6 +537,7 @@ export class AIAssistant {
       this.abortCtrl = null;
       this.logOutput('AI generation cancelled.');
     }
+    this.busy = false;
     this._showStatus(false);
   }
 
@@ -621,7 +632,23 @@ export class AIAssistant {
   // Status indicator
   // ══════════════════════════════════════════════
 
+  _disableButtons(disabled) {
+    const ids = ['btnAI', 'btnAIFix', 'btnAIExplain'];
+    for (const id of ids) {
+      const btn = document.getElementById(id);
+      if (btn) {
+        btn.disabled = disabled;
+        if (disabled) btn.style.opacity = '0.4';
+        else btn.style.opacity = '';
+      }
+    }
+  }
+
   _showStatus(show, text) {
+    if (!show) {
+      this.busy = false;
+      this._disableButtons(false);
+    }
     let el = document.getElementById('ardAiStatus');
     if (!el) {
       el = document.createElement('span');

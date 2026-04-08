@@ -56,6 +56,16 @@ export class FileManager {
 
     // Load new file into editor
     this.editor.setCode(this.files[index].content);
+
+    // Switch Monaco language based on file extension
+    if (this.editor._editor && window.monaco) {
+      const name = this.files[index].name;
+      const ext = name.split('.').pop().toLowerCase();
+      const langMap = { ino: 'cpp', cpp: 'cpp', c: 'c', h: 'cpp', json: 'json', txt: 'plaintext' };
+      const lang = langMap[ext] || 'cpp';
+      monaco.editor.setModelLanguage(this.editor._editor.getModel(), lang);
+    }
+
     if (this.onChange) this.onChange();
   }
 
@@ -145,6 +155,10 @@ export class FileManager {
     }
     this.activeIndex = 0;
     this.editor.setCode(this.files[0].content);
+    // Reset language to cpp for sketch.ino
+    if (this.editor._editor && window.monaco) {
+      monaco.editor.setModelLanguage(this.editor._editor.getModel(), 'cpp');
+    }
     if (this.onChange) this.onChange();
   }
 
