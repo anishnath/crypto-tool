@@ -262,21 +262,7 @@ export const PistonSim = {
     // Piston pin
     canvas.circle(pistonX, pistonY, 0.06, '#CBD5E1', null);
 
-    // ── Connecting rod ──
-    canvas.rod(pistonX, pistonY, cpx, cpy, '#06B6D4', 3);
-
-    // ── Crank arm ──
-    canvas.rod(crankCenterX, crankCenterY, cpx, cpy, '#F59E0B', 3);
-
-    // ── Crank pin ──
-    canvas.circle(cpx, cpy, 0.08, '#F59E0B', '#FCD34D');
-
-    // ── Crankshaft center ──
-    canvas.circle(crankCenterX, crankCenterY, 0.1, '#64748B', '#94A3B8');
-    canvas.line(-0.06, 0, 0.06, 0, '#CBD5E1', 1);
-    canvas.line(0, -0.06, 0, 0.06, '#CBD5E1', 1);
-
-    // ── Crank circle (dashed) ──
+    // ── Crank circle (dashed, drawn first as background) ──
     const crankR = a * sc;
     const segments = 48;
     for (let i = 0; i < segments; i++) {
@@ -289,6 +275,32 @@ export const PistonSim = {
         '#334155', 1
       );
     }
+
+    // ── Crank arm (drawn as a thick filled web, not a thin line) ──
+    // This makes it visually distinct from the connecting rod at all angles,
+    // especially at TDC/BDC where they become collinear.
+    const cwW = 0.08; // half-width of crank web
+    const perpX = -Math.cos(theta); // perpendicular to crank direction
+    const perpY = Math.sin(theta);
+    // Counterweight (opposite side of crank pin, shorter)
+    const cwX = -cpx * 0.5, cwY = -cpy * 0.5;
+    canvas.polygon([
+      [cwX - perpX * cwW * 0.8, cwY - perpY * cwW * 0.8],
+      [cwX + perpX * cwW * 0.8, cwY + perpY * cwW * 0.8],
+      [cpx + perpX * cwW, cpy + perpY * cwW],
+      [cpx - perpX * cwW, cpy - perpY * cwW],
+    ], '#B45309', '#F59E0B');
+
+    // ── Crankshaft center ──
+    canvas.circle(crankCenterX, crankCenterY, 0.12, '#64748B', '#94A3B8');
+    canvas.line(-0.06, 0, 0.06, 0, '#CBD5E1', 1);
+    canvas.line(0, -0.06, 0, 0.06, '#CBD5E1', 1);
+
+    // ── Connecting rod (drawn on top of crank, clearly separate) ──
+    canvas.rod(pistonX, pistonY, cpx, cpy, '#06B6D4', 3);
+
+    // ── Crank pin (large, on top of everything) ──
+    canvas.circle(cpx, cpy, 0.1, '#F59E0B', '#FCD34D');
 
     // ── Inertial force arrow on piston (F = m·a) ──
     const F_inertial = mP * aPiston / 1000; // N (aPiston is mm/s², so /1000 for m/s²)
