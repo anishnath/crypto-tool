@@ -114,12 +114,16 @@ function readNDJSON(body, onToken) {
 // ══════════════════════════════════════════════════════════════
 
 function requestAI(payload, callback) {
+  if (aiAbortController) aiAbortController.abort();
+  aiAbortController = new AbortController();
+
   payload.stream = false;
 
   fetch(AI_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    signal: aiAbortController.signal
   })
   .then(function(res) {
     if (!res.ok) {
@@ -444,11 +448,17 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Keyboard shortcut: Ctrl+Shift+A to toggle AI prompt
+// Keyboard shortcuts
 document.addEventListener('keydown', function(e) {
+  // Ctrl+Shift+A to toggle AI prompt
   if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
     e.preventDefault();
     toggleAIPrompt();
+    return;
+  }
+  // Escape to cancel in-progress AI generation
+  if (e.key === 'Escape' && aiAbortController) {
+    cancelAI();
   }
 });
 
