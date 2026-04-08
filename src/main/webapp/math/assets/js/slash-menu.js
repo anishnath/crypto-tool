@@ -24,7 +24,9 @@
         { icon: '&#x270F;',  label: 'Drawing',       shortcut: '',             action: 'drawing'      },
         { icon: '&#x2697;',  label: 'Molecule',      shortcut: '',             action: 'molecule'     },
         { icon: '&#x25CB;:',  label: 'Lewis Structure', shortcut: '',           action: 'lewis'        },
-        { icon: '&#x25C7;',  label: 'Molecular Geometry', shortcut: '',         action: 'geometry'     }
+        { icon: '&#x25C7;',  label: 'Molecular Geometry', shortcut: '',         action: 'geometry'     },
+        { icon: '&#x2728;',  label: 'AI Assistant',        shortcut: 'Ctrl+Shift+A', action: 'aiWrite'   },
+        { icon: '&#x270D;',  label: 'AI Continue Writing', shortcut: '',             action: 'aiContinue' }
     ];
 
     // =========================================================
@@ -264,6 +266,12 @@
             case 'geometry':
                 var ctx3 = window.ME_CTX || '';
                 window.open(ctx3 + '/molecular-geometry-calculator.jsp?returnTo=editor', '_blank', 'width=1200,height=800');
+                break;
+            case 'aiWrite':
+                if (window.MeAI) MeAI.showPrompt();
+                break;
+            case 'aiContinue':
+                if (window.MeAI) MeAI.continue();
                 break;
         }
 

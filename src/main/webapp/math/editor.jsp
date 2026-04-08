@@ -5,28 +5,28 @@
 <head>
     <!-- SEO Component -->
     <jsp:include page="../modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Online Document Editor — Math, Code Runner, Diagrams & PDF Export" />
+        <jsp:param name="toolName" value="AI-Powered Document Editor — Math, Code, Diagrams & PDF Export" />
         <jsp:param name="toolCategory" value="Editor Tools" />
-        <jsp:param name="toolDescription" value="Free browser-based document editor with LaTeX math rendering, runnable code blocks in Python Java Rust Bash Node.js and Lua, diagrams, chemistry structures, graphing, and one-click PDF export. No install or signup required." />
+        <jsp:param name="toolDescription" value="Free AI-powered document editor. AI writes content, solves equations step-by-step, fixes code errors, rewrites text, generates practice problems. LaTeX math with live compute, runnable code in 6 languages, diagrams, chemistry, graphing, PDF export. No signup required." />
         <jsp:param name="toolUrl" value="math/editor.jsp" />
-        <jsp:param name="toolKeywords" value="online document editor, math editor, LaTeX editor, run code in browser, online code runner, python editor online, rust playground, run java online, bash online, technical writing editor, equation editor, diagram editor, LaTeX to PDF, WYSIWYG math editor, chemistry editor, Lewis structure editor, molecular geometry, online IDE, code and math editor" />
+        <jsp:param name="toolKeywords" value="ai document editor, ai math solver, ai equation explainer, ai writing assistant, online document editor, math editor, ai step by step solver, LaTeX editor, ai code fix, run code in browser, online code runner, ai rewrite, ai summarize, ai translate, technical writing editor, equation editor, ai practice problems, diagram editor, LaTeX to PDF, WYSIWYG math editor, chemistry editor, ai homework helper" />
         <jsp:param name="toolImage" value="math-editor.svg" />
-        <jsp:param name="toolFeatures" value="WYSIWYG rich-text editing,LaTeX math with live compute,Run code in 6 languages (Python Java Rust Bash Node.js Lua),Diagrams and drawing canvas,Chemistry structures and Lewis diagrams,Graphing and plotting,Export PDF Word LaTeX,Real-time collaboration,Document outline and version history,Stdin input for interactive programs" />
+        <jsp:param name="toolFeatures" value="AI writing assistant - generate content from descriptions,AI math solver - step-by-step solutions for any equation,AI equation explainer - explains math in plain English,AI text rewrite - formal or concise or expanded or grammar fix,AI code error fix - auto-fix code block errors,AI practice problem generator - create problems by topic,AI summarize and translate,WYSIWYG rich-text editing,LaTeX math with live compute,Run code in 6 languages (Python Java Rust Bash Node.js Lua),Diagrams and drawing canvas,Chemistry structures and Lewis diagrams,Graphing and plotting,Export PDF Word LaTeX" />
         <jsp:param name="breadcrumbCategoryUrl" value="math/" />
         <jsp:param name="educationalLevel" value="High School, Undergraduate, Graduate, Professional" />
         <jsp:param name="teaches" value="Mathematical notation, programming, equation formatting, technical document preparation, chemistry visualization" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="howToSteps" value="Open the editor|Navigate to the editor page — no signup or install needed,Write your content|Type text with rich formatting — bold italic headings lists tables and more,Insert math equations|Click Insert Math or press Ctrl+M to add LaTeX equations with live rendering. Right-click equations to compute derivatives integrals or plot graphs,Add runnable code|Insert a code block and choose from Python Java Rust Bash Node.js or Lua. Click Run to execute and see output inline,Add diagrams or chemistry|Insert diagrams with the drawing canvas or add chemistry structures like Lewis diagrams and molecular geometry,Export your document|Click Export to download as PDF Word or LaTeX — notes code output and diagrams all included" />
-        <jsp:param name="faq1q" value="Is the editor free to use?" />
-        <jsp:param name="faq1a" value="Yes, the editor is completely free. Write documents with math, code, diagrams, and chemistry — and export to PDF or LaTeX with no registration required." />
-        <jsp:param name="faq2q" value="What programming languages can I run in the editor?" />
-        <jsp:param name="faq2a" value="You can run Python, Java, Rust, Bash, Node.js, and Lua directly in the browser. Insert a code block, select a language, write your code, and click Run. Output appears inline. Stdin input is also supported for interactive programs." />
-        <jsp:param name="faq3q" value="How do I insert math equations?" />
-        <jsp:param name="faq3a" value="Click Insert Math on the toolbar or press Ctrl+M for display math and Ctrl+Shift+M for inline math. Type LaTeX directly — the editor renders it live using MathLive. Right-click any equation for derivative, integral, solve, and plot options." />
-        <jsp:param name="faq4q" value="Can I export my document to PDF?" />
-        <jsp:param name="faq4a" value="Yes. Use the Export dropdown to download as PDF (compiled via LaTeX), raw LaTeX, or Word. The PDF includes all your text, math equations, code blocks with output, diagrams, and chemistry structures." />
-        <jsp:param name="faq5q" value="Does it support diagrams and chemistry?" />
-        <jsp:param name="faq5a" value="Yes. Insert diagrams using the built-in drawing canvas with shapes, arrows, coordinate axes, and curves. For chemistry, add Lewis structures and molecular geometry visualizations directly in your document." />
+        <jsp:param name="howToSteps" value="Open the editor|Navigate to the editor page — no signup or install needed,Write or let AI generate|Type text with rich formatting or press Ctrl+Shift+A to ask AI to write content for you. Use /ai in the slash menu for more AI commands,Insert math and let AI solve|Press Ctrl+M to add equations. Right-click any equation for AI Explain or AI Solve Step-by-Step plus derivatives integrals and plots,Add code and let AI fix|Insert a code block in Python Java or Rust. Run it and if it fails click AI Fix. Select code and click AI Explain,Rewrite and polish|Select any text to see the AI toolbar — rewrite as formal or concise or fix grammar or translate or summarize,Export your document|Export to PDF Word or LaTeX with all content including AI-generated solutions and explanations" />
+        <jsp:param name="faq1q" value="What AI features does this editor have?" />
+        <jsp:param name="faq1a" value="The editor includes AI writing (generate content from descriptions), AI math solving (step-by-step solutions for equations), AI equation explanation (plain English), AI text rewriting (formal, concise, expand, grammar fix), AI code fixing (auto-fix errors), AI problem generation (practice problems by topic), AI summarization, and AI translation. Access via the AI toolbar button, Ctrl+Shift+A, the slash menu, or right-click on equations." />
+        <jsp:param name="faq2q" value="How does AI solve equations step by step?" />
+        <jsp:param name="faq2a" value="Right-click any math equation and select AI Solve Step-by-Step. The AI reads the LaTeX equation and generates a complete worked solution with intermediate steps, all formatted with proper math notation. You can also type /ai in the slash menu and choose AI Solve Step-by-Step." />
+        <jsp:param name="faq3q" value="Can AI rewrite or improve my text?" />
+        <jsp:param name="faq3a" value="Yes. Select any text and a floating AI toolbar appears with options to rewrite as formal academic, make concise, expand with detail, fix grammar, summarize, or translate. The AI preserves all LaTeX math and code formatting while improving the natural language." />
+        <jsp:param name="faq4q" value="What programming languages can I run?" />
+        <jsp:param name="faq4a" value="Python, Java, Rust, Bash, Node.js, and Lua. Insert a code block, write code, click Run. If it fails, AI can auto-fix the error. Select code and click Explain for an AI explanation of what the code does." />
+        <jsp:param name="faq5q" value="Is this free? Do I need to sign up?" />
+        <jsp:param name="faq5a" value="Completely free with no signup required. All AI features, math computation, code execution, diagrams, chemistry structures, and PDF export are available immediately." />
     </jsp:include>
 
     <!-- LCP: Preconnect for fonts + MathLive CDN -->
@@ -201,6 +201,12 @@
 
             <span class="me-toolbar-sep"></span>
 
+            <button type="button" class="me-toolbar-btn me-toolbar-btn-ai" title="AI Assistant (Ctrl+Shift+A)" onclick="if(window.MeAI)MeAI.showPrompt()">
+                &#10024; AI
+            </button>
+
+            <span class="me-toolbar-sep"></span>
+
             <button type="button" class="me-toolbar-btn" title="Horizontal Rule">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="7.5" width="12" height="1.5" rx="0.75"/></svg>
             </button>
@@ -356,6 +362,7 @@
 <script src="<%=request.getContextPath()%>/math/assets/js/autosave.js" defer></script>
 <script src="<%=request.getContextPath()%>/math/assets/js/share-modal.js" defer></script>
 <script src="<%=request.getContextPath()%>/math/assets/js/export-auth.js" defer></script>
+<script src="<%=request.getContextPath()%>/math/assets/js/ai-assistant.js" defer></script>
 <script src="<%=request.getContextPath()%>/math/assets/js/slash-menu.js" defer></script>
 <script src="<%=request.getContextPath()%>/math/assets/js/export-latex.js" defer></script>
 <script src="<%=request.getContextPath()%>/math/assets/js/export-pdf.js" defer></script>

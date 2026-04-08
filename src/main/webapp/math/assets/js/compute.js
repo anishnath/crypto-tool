@@ -2490,6 +2490,21 @@
             })(latex);
         }
 
+        // --- AI Actions ---
+        items.push({ type: 'divider' });
+        items.push({
+            label: '\u2728 AI Explain This',
+            onMenuSelect: function () {
+                if (window.MeAI) MeAI.explainEquation(readLatex(mf));
+            }
+        });
+        items.push({
+            label: '\u2728 AI Solve Step-by-Step',
+            onMenuSelect: function () {
+                if (window.MeAI) MeAI.solveSteps(readLatex(mf));
+            }
+        });
+
         // --- Utility ---
         items.push({ type: 'divider' });
         items.push({
