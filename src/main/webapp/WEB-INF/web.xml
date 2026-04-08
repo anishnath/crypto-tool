@@ -581,6 +581,16 @@
 		</user-data-constraint>
 	</security-constraint>
 
+    <!-- AI Proxy — generic Ollama proxy, any tool can use POST /ai -->
+    <servlet>
+        <servlet-name>AIProxyServlet</servlet-name>
+        <servlet-class>z.y.x.ai.AIProxyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AIProxyServlet</servlet-name>
+        <url-pattern>/ai</url-pattern>
+    </servlet-mapping>
+
     <!-- LaTeX Editor Servlets -->
     <servlet>
         <servlet-name>EditorServlet</servlet-name>
