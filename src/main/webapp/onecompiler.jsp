@@ -158,6 +158,75 @@
                     padding-top: var(--nav-height, 72px);
                 }
 
+                /* IDE Body: workspace + right rail side-by-side */
+                .ide-body {
+                    display: flex;
+                    flex: 1;
+                    min-height: 0;
+                    overflow: hidden;
+                }
+
+                /* Right Rail Ad Column */
+                .ide-right-rail {
+                    display: none;
+                }
+
+                @media (min-width: 1024px) {
+                    .ide-right-rail {
+                        display: flex;
+                        flex-direction: column;
+                        width: 300px;
+                        flex-shrink: 0;
+                        gap: 16px;
+                        padding: 12px 8px 12px 0;
+                        background: var(--oc-bg-dark);
+                        border-left: 1px solid var(--oc-border);
+                        overflow-y: auto;
+                    }
+
+                    .ide-right-rail .ad-ide-rail-slot {
+                        width: 300px;
+                        min-height: 250px;
+                        background: var(--oc-bg-darker);
+                        border: 1px solid var(--oc-border);
+                        border-radius: 6px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .ide-right-rail .ad-ide-rail-sticky {
+                        position: sticky;
+                        top: 12px;
+                    }
+
+                    .ide-right-rail .ad-label {
+                        font-size: 9px;
+                        color: #555;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                        text-align: center;
+                        padding: 4px 0;
+                    }
+
+                    .ide-workspace {
+                        flex: 1;
+                        min-width: 0;
+                    }
+                }
+
+                @media (min-width: 1400px) {
+                    .ide-right-rail {
+                        width: 336px;
+                    }
+
+                    .ide-right-rail .ad-ide-rail-slot {
+                        width: 336px;
+                        min-height: 280px;
+                    }
+                }
+
                 /* Header Bar with H1 and Ad - Always visible above fold */
                 .ide-header-bar {
                     display: flex;
@@ -195,6 +264,8 @@
                 .ide-workspace {
                     display: flex;
                     flex-direction: column;
+                    flex: 1;
+                    min-width: 0;
                     height: calc(100vh - var(--nav-height, 72px) - var(--header-bar-height, 90px));
                     min-height: 400px;
                 }
@@ -1094,6 +1165,34 @@
                     font-size: 16px;
                 }
 
+                /* AI Editor overlay — shows on top of Monaco while generating */
+                .oc-ai-editor-overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(30,30,30,0.7);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    color: #a5b4fc;
+                    font-size: 14px;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                    z-index: 5;
+                    backdrop-filter: blur(2px);
+                    pointer-events: none;
+                }
+                .oc-ai-editor-overlay i {
+                    font-size: 18px;
+                }
+
+                /* Make editor container position relative for overlay */
+                .ide-editor-container {
+                    position: relative;
+                }
+
                 /* AI Stop button in pane */
                 .oc-ai-stop-btn {
                     position: absolute;
@@ -1571,10 +1670,6 @@
     <%@ include file="/modern/components/nav-header.jsp" %>
 
     <div class="ide-container">
-        <!-- Floating Sidebar Ad (Desktop >1400px only) -->
-        <div class="ide-floating-ad-container">
-            <%@ include file="/modern/ads/ad-floating-right.jsp" %>
-        </div>
 
         <!-- Header Bar with H1 and Ad - Always visible above fold -->
         <div class="ide-header-bar">
@@ -1589,7 +1684,10 @@
             </div>
         </div>
 
-        <!-- IDE Workspace (viewport-fitting) -->
+        <!-- IDE Body: workspace + right rail side-by-side -->
+        <div class="ide-body">
+
+        <!-- IDE Workspace -->
         <div class="ide-workspace">
                         <!-- Toolbar -->
                         <div class="ide-toolbar">
@@ -1656,6 +1754,10 @@
                                 </div>
                                 <div class="ide-editor-container">
                                     <div id="codeEditor"></div>
+                                    <div class="oc-ai-editor-overlay" id="aiEditorOverlay" style="display:none">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        <span id="aiEditorOverlayText">AI generating...</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1738,6 +1840,14 @@
                             </div>
                         </div>
                     </div><!-- End IDE Workspace -->
+
+        <!-- Right Rail Ad Column (Desktop >= 1024px) -->
+        <aside class="ide-right-rail" id="ideRightRail">
+            <%@ include file="/modern/ads/ad-ide-rail-top.jsp" %>
+            <%@ include file="/modern/ads/ad-ide-rail-bottom.jsp" %>
+        </aside>
+
+        </div><!-- End IDE Body -->
 
                     <!-- Embed Modal -->
                     <div class="embed-modal-overlay" id="embedModal" onclick="closeEmbedModal(event)">
@@ -3527,6 +3637,13 @@ print("Welcome to 8gwifi.org Online Compiler")
                             el.style.display = 'none';
                         }
                         showAISpinner(show, text);
+                        // Editor overlay
+                        var overlay = document.getElementById('aiEditorOverlay');
+                        var overlayText = document.getElementById('aiEditorOverlayText');
+                        if (overlay) {
+                            overlay.style.display = show ? '' : 'none';
+                            if (overlayText && text) overlayText.textContent = text;
+                        }
                     }
 
                     function cleanCodeResponse(text) {
