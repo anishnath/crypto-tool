@@ -14,15 +14,17 @@
     // Get SEO attributes with defaults
     String pageTitle = (request.getAttribute("pageTitle") != null)
         ? (String) request.getAttribute("pageTitle")
-        : "Online Compiler & IDE - Run Code Online (60+ Languages) | Free";
+        : "AI-Powered Online Compiler & IDE - Run Code Online (60+ Languages) | Free";
     String pageDescription = (request.getAttribute("pageDescription") != null)
         ? (String) request.getAttribute("pageDescription")
-        : "Free online compiler and IDE. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages instantly. No setup required.";
+        : "Free AI-powered online compiler and IDE. Generate code from English, auto-fix errors with AI, and get instant explanations. Run Python, Java, C++, JavaScript, Go, Rust and 60+ languages. No setup required.";
     String pageUrl = (request.getAttribute("pageUrl") != null)
         ? (String) request.getAttribute("pageUrl")
         : "https://8gwifi.org/online-compiler/";
     // Extract URL path for seo-tool-page (e.g., "online-java-compiler/" from full URL)
     String toolUrlPath = pageUrl.replace("https://8gwifi.org/", "");
+    // If a wrapper page set language-specific FAQs, skip generic FAQs to avoid duplicate FAQPage JSON-LD
+    boolean hasLanguageFaq = (request.getAttribute("languageFaqJsonLd") != null);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,22 +34,43 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
 
     <!-- SEO Component (absolute path needed since this file is included from subdirectories) -->
+    <% if (!hasLanguageFaq) { %>
+    <!-- Generic FAQs — only rendered on /online-compiler/ (no language-specific wrapper) -->
     <jsp:include page="/modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="<%= pageTitle %>" />
         <jsp:param name="toolDescription" value="<%= pageDescription %>" />
         <jsp:param name="toolCategory" value="DeveloperApplication" />
         <jsp:param name="toolUrl" value="<%= toolUrlPath %>" />
-        <jsp:param name="toolKeywords" value="online compiler, run code online, online ide, compile code online, execute code online, code editor online, run python online, run java online, run javascript online, free compiler, code playground, programming online, write code online" />
+        <jsp:param name="toolKeywords" value="ai online compiler, ai code generator, online compiler, run code online, ai fix code errors, ai explain code, online ide, compile code online, execute code online, code editor online, ai programming assistant, run python online, run java online, run javascript online, free compiler, code playground, programming online, ai code assistant free" />
         <jsp:param name="toolImage" value="onecompiler-preview.png" />
-        <jsp:param name="toolFeatures" value="Run code in 60+ programming languages,VS Code editor (Monaco) with IntelliSense,Instant code execution with real-time output,Share code snippets via unique URLs,Embed runnable code in websites and blogs,Multi-file project support,Stdin/stdout and compiler flags,No installation or signup required" />
+        <jsp:param name="toolFeatures" value="AI code generator - describe in English and get runnable code,AI error fix - automatically fixes compilation and runtime errors,AI code explainer - explains code or errors in plain English,Run code in 60+ programming languages,VS Code editor (Monaco) with IntelliSense,Instant code execution with real-time output,Share code snippets via unique URLs,Embed runnable code in websites and blogs,Multi-file project support,Stdin/stdout and compiler flags,No installation or signup required" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="faq1q" value="How do I run code online without installing anything?" />
-        <jsp:param name="faq1a" value="Simply visit our online compiler, select your programming language (Python, Java, C++, JavaScript, etc.), write or paste your code, and click Run. Your code executes instantly in a secure cloud sandbox - no downloads, no installation, no signup required." />
-        <jsp:param name="faq2q" value="What programming languages can I compile online?" />
-        <jsp:param name="faq2a" value="You can compile and run 60+ languages online including Python, Java, C, C++, JavaScript, TypeScript, Go, Rust, Ruby, PHP, Swift, Kotlin, Scala, R, and many more. Each language supports multiple versions and compiler flags." />
-        <jsp:param name="faq3q" value="Can I embed code examples in my website or blog?" />
-        <jsp:param name="faq3a" value="Yes! Click the Embed button to generate an iframe code. Readers can view, edit, and run your code examples directly on your page. Perfect for programming tutorials, technical documentation, and online courses." />
+        <jsp:param name="howToSteps" value="Write or Generate Code|Select a language and write code in the Monaco editor or press Ctrl+Shift+A to describe what you want in plain English and let AI generate it,Run and Fix|Click Run or press Ctrl+Enter. If there are errors the AI Fix button appears to automatically correct your code,Explain and Share|Select any code and click Explain for an AI explanation. Share your code via unique URLs or embed it in your website" />
+        <jsp:param name="faq1q" value="How does the AI code generator work?" />
+        <jsp:param name="faq1a" value="Click the AI button or press Ctrl+Shift+A, then describe what you want in plain English like 'merge sort function' or 'HTTP server that returns JSON'. The AI generates complete runnable code in your selected language and streams it directly into the editor." />
+        <jsp:param name="faq2q" value="Can AI fix my code errors automatically?" />
+        <jsp:param name="faq2a" value="Yes. When your code has errors, an AI Fix button appears in the toolbar. Click it and the AI reads your code and the error output, then replaces your code with a corrected version. It works for compilation errors, runtime errors, and logic issues across all 60+ supported languages." />
+        <jsp:param name="faq3q" value="What programming languages are supported?" />
+        <jsp:param name="faq3a" value="You can compile and run 60+ languages online including Python, Java, C, C++, JavaScript, TypeScript, Go, Rust, Ruby, PHP, Swift, Kotlin, Scala, R, and many more. The AI features work with all supported languages, generating and fixing code in whichever language you select." />
+        <jsp:param name="faq4q" value="Can AI explain my code or errors?" />
+        <jsp:param name="faq4a" value="Yes. Select any code and click the Explain button for a clear explanation of what the code does. If your code produced an error, the AI automatically explains the error, why it happened, and how to fix it." />
+        <jsp:param name="faq5q" value="Is this free? Do I need to sign up?" />
+        <jsp:param name="faq5a" value="Completely free with no signup required. The AI code generation, error fixing, code explanation, code execution, sharing, and embedding features are all available immediately with no account needed." />
     </jsp:include>
+    <% } else { %>
+    <!-- Language-specific page — no generic FAQs (avoids duplicate FAQPage JSON-LD in GSC) -->
+    <jsp:include page="/modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="<%= pageTitle %>" />
+        <jsp:param name="toolDescription" value="<%= pageDescription %>" />
+        <jsp:param name="toolCategory" value="DeveloperApplication" />
+        <jsp:param name="toolUrl" value="<%= toolUrlPath %>" />
+        <jsp:param name="toolKeywords" value="ai online compiler, ai code generator, online compiler, run code online, ai fix code errors, ai explain code, online ide, compile code online, execute code online, code editor online, ai programming assistant, free compiler, code playground, programming online, ai code assistant free" />
+        <jsp:param name="toolImage" value="onecompiler-preview.png" />
+        <jsp:param name="toolFeatures" value="AI code generator - describe in English and get runnable code,AI error fix - automatically fixes compilation and runtime errors,AI code explainer - explains code or errors in plain English,Run code in 60+ programming languages,VS Code editor (Monaco) with IntelliSense,Instant code execution with real-time output,Share code snippets via unique URLs,Embed runnable code in websites and blogs,Multi-file project support,Stdin/stdout and compiler flags,No installation or signup required" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Write or Generate Code|Select a language and write code in the Monaco editor or press Ctrl+Shift+A to describe what you want in plain English and let AI generate it,Run and Fix|Click Run or press Ctrl+Enter. If there are errors the AI Fix button appears to automatically correct your code,Explain and Share|Select any code and click Explain for an AI explanation. Share your code via unique URLs or embed it in your website" />
+    </jsp:include>
+    <% } %>
 
     <!-- Canonical (may be overridden by wrapper pages) -->
     <link rel="canonical" href="<%= pageUrl %>">
@@ -932,6 +955,208 @@
                     background: #555;
                 }
 
+                /* ── AI Styles ── */
+                .oc-ai-btn {
+                    background: rgba(129,140,248,0.12) !important;
+                    color: #a5b4fc !important;
+                    font-weight: 600;
+                }
+                .oc-ai-btn:hover {
+                    background: rgba(129,140,248,0.22) !important;
+                }
+
+                .oc-ai-tab {
+                    color: #a5b4fc !important;
+                }
+                .oc-ai-tab.active {
+                    color: #c4b5fd !important;
+                    border-bottom-color: #818cf8 !important;
+                }
+
+                .oc-ai-status {
+                    color: #a5b4fc !important;
+                    animation: ocAiPulse 1.5s ease-in-out infinite;
+                }
+                @keyframes ocAiPulse {
+                    0%, 100% { opacity: 0.6; }
+                    50% { opacity: 1; }
+                }
+
+                /* AI Prompt Modal */
+                .oc-ai-modal-overlay {
+                    display: none;
+                    position: fixed;
+                    top: 0; left: 0; right: 0; bottom: 0;
+                    background: rgba(0,0,0,0.6);
+                    z-index: 1000;
+                    align-items: center;
+                    justify-content: center;
+                    backdrop-filter: blur(2px);
+                }
+                .oc-ai-modal {
+                    width: 480px;
+                    max-width: 92vw;
+                    background: var(--oc-bg-darker);
+                    border: 1px solid var(--oc-border);
+                    border-radius: 10px;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+                    overflow: hidden;
+                }
+                .oc-ai-modal-header {
+                    padding: 12px 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    border-bottom: 1px solid var(--oc-border);
+                    color: var(--oc-text-bright);
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+                .oc-ai-modal-close {
+                    background: none;
+                    border: none;
+                    color: var(--oc-text);
+                    font-size: 20px;
+                    cursor: pointer;
+                    width: 28px;
+                    height: 28px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 4px;
+                }
+                .oc-ai-modal-close:hover {
+                    background: var(--oc-bg-sidebar);
+                    color: var(--oc-text-bright);
+                }
+                .oc-ai-modal-body {
+                    padding: 14px 16px;
+                }
+                .oc-ai-input {
+                    width: 100%;
+                    background: var(--oc-bg-dark);
+                    border: 1px solid var(--oc-border);
+                    border-radius: 6px;
+                    padding: 10px 12px;
+                    color: var(--oc-text-bright);
+                    font-size: 13px;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                    line-height: 1.5;
+                    resize: none;
+                    outline: none;
+                }
+                .oc-ai-input:focus {
+                    border-color: #818cf8;
+                }
+                .oc-ai-input::placeholder {
+                    color: #666;
+                }
+                .oc-ai-modal-footer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-top: 10px;
+                }
+                .oc-ai-hint {
+                    font-size: 11px;
+                    color: #666;
+                }
+                .oc-ai-submit {
+                    padding: 7px 18px;
+                    border-radius: 6px;
+                    border: none;
+                    background: #818cf8;
+                    color: white;
+                    font-size: 12px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                .oc-ai-submit:hover {
+                    background: #6d6ff0;
+                }
+
+                /* AI Spinner in pane */
+                .oc-ai-spinner-wrap {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 10px 14px;
+                    color: #a5b4fc;
+                    font-size: 13px;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                    border-bottom: 1px solid var(--oc-border);
+                    background: rgba(129,140,248,0.05);
+                }
+                .oc-ai-spinner-wrap i {
+                    font-size: 16px;
+                }
+
+                /* AI Stop button in pane */
+                .oc-ai-stop-btn {
+                    position: absolute;
+                    bottom: 8px;
+                    right: 12px;
+                    padding: 5px 14px;
+                    border-radius: 5px;
+                    border: 1px solid var(--oc-border);
+                    background: var(--oc-bg-sidebar);
+                    color: var(--oc-text);
+                    font-size: 11px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    z-index: 5;
+                }
+                .oc-ai-stop-btn:hover {
+                    background: var(--oc-border);
+                    color: var(--oc-text-bright);
+                }
+
+                /* AI Apply action button */
+                .oc-ai-action-btn {
+                    margin: 10px 12px;
+                    padding: 7px 16px;
+                    border-radius: 5px;
+                    border: 1px solid rgba(129,140,248,0.3);
+                    background: rgba(129,140,248,0.1);
+                    color: #a5b4fc;
+                    font-size: 12px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                .oc-ai-action-btn:hover {
+                    background: rgba(129,140,248,0.2);
+                }
+                .oc-ai-action-btn:disabled {
+                    opacity: 0.5;
+                    cursor: default;
+                    color: var(--oc-success);
+                    border-color: rgba(78,201,176,0.3);
+                }
+
+                /* AI Fix button visibility in toolbar */
+                #aiFixBtn {
+                    background: rgba(244,135,113,0.12) !important;
+                    color: #f48771 !important;
+                }
+                #aiFixBtn:hover {
+                    background: rgba(244,135,113,0.22) !important;
+                }
+
+                @media (max-width: 768px) {
+                    .oc-ai-btn span,
+                    #aiFixBtn span {
+                        display: none;
+                    }
+                }
+
                 /* Embed Modal */
                 .embed-modal-overlay {
                     display: none;
@@ -1393,6 +1618,18 @@
                                 <i class="fas fa-play"></i><span>Run</span>
                             </button>
 
+                            <div class="toolbar-divider"></div>
+
+                            <button class="ide-toolbar-btn oc-ai-btn" onclick="toggleAIPrompt()" title="AI: Generate code from description (Ctrl+Shift+A)">
+                                <i class="fas fa-wand-magic-sparkles"></i><span>AI</span>
+                            </button>
+                            <button class="ide-toolbar-btn" id="aiFixBtn" onclick="aiFixError()" title="AI: Fix errors in your code" style="display:none">
+                                <i class="fas fa-wrench"></i><span>AI Fix</span>
+                            </button>
+                            <button class="ide-toolbar-btn" onclick="aiExplainCode()" title="AI: Explain selected code or full code">
+                                <i class="fas fa-lightbulb"></i><span>Explain</span>
+                            </button>
+
                             <div class="toolbar-spacer"></div>
 
                             <input type="text" id="compilerArgs" class="toolbar-input" placeholder="Compiler flags...">
@@ -1441,6 +1678,9 @@
                                             Problems<span id="problemsBadge" class="badge"
                                                 style="display:none;">0</span>
                                         </button>
+                                        <button class="ide-panel-tab oc-ai-tab" data-panel="ai" onclick="switchPanel('ai')">
+                                            <i class="fas fa-wand-magic-sparkles"></i> AI
+                                        </button>
                                     </div>
                                     <div class="ide-panel-actions">
                                         <button class="ide-panel-btn" onclick="clearOutput()" title="Clear Output">
@@ -1463,6 +1703,16 @@
                                     <div class="ide-panel-pane" id="problemsPane">
                                         <div class="output-content system">No problems detected.</div>
                                     </div>
+                                    <div class="ide-panel-pane" id="aiPane">
+                                        <div id="aiSpinner" class="oc-ai-spinner-wrap" style="display:none">
+                                            <i class="fas fa-spinner fa-spin"></i>
+                                            <span id="aiSpinnerText">AI generating...</span>
+                                        </div>
+                                        <div id="aiPaneContent" class="output-content system">// AI responses will appear here</div>
+                                        <button id="aiStopBtn" class="oc-ai-stop-btn" onclick="cancelAI()" style="display:none">
+                                            <i class="fas fa-stop"></i> Stop generating
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1477,6 +1727,9 @@
                             </div>
                             <div class="status-item" id="statusExec">
                                 <i class="fas fa-check-circle"></i> Ready
+                            </div>
+                            <div class="status-item oc-ai-status" id="statusAI" style="display:none">
+                                <i class="fas fa-wand-magic-sparkles"></i> <span id="statusAIText">AI generating...</span>
                             </div>
                             <div class="status-spacer"></div>
                             <div class="status-item" id="statusTime"></div>
@@ -1542,6 +1795,25 @@
                                     <i class="fas fa-info-circle"></i> First share your code to get a snippet ID, then
                                     embed it.
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Prompt Modal -->
+                    <div class="oc-ai-modal-overlay" id="aiPromptModal" onclick="closeAIPrompt(event)">
+                        <div class="oc-ai-modal" onclick="event.stopPropagation()">
+                            <div class="oc-ai-modal-header">
+                                <span><i class="fas fa-wand-magic-sparkles"></i> AI Code Generator</span>
+                                <button class="oc-ai-modal-close" onclick="closeAIPrompt()">&times;</button>
+                            </div>
+                            <div class="oc-ai-modal-body">
+                                <textarea id="aiPromptInput" class="oc-ai-input" rows="3"
+                                    placeholder="Describe what you want... e.g. &quot;merge sort function&quot; or &quot;HTTP server that returns JSON&quot;"
+                                    onkeydown="handleAIPromptKey(event)"></textarea>
+                                <div class="oc-ai-modal-footer">
+                                    <span class="oc-ai-hint">Enter to generate &middot; Esc to close &middot; Uses <span id="aiLangLabel">Python</span></span>
+                                    <button class="oc-ai-submit" onclick="submitAIGenerate()"><i class="fas fa-play"></i> Generate</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2891,15 +3163,383 @@ print("Welcome to 8gwifi.org Online Compiler")
                         }, 100);
                     }
 
-                    // Keyboard shortcut
+                    // Keyboard shortcuts
                     document.addEventListener('keydown', function (e) {
                         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                             e.preventDefault();
                             executeCode();
                         }
+                        // Ctrl+Shift+A — AI prompt
+                        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
+                            e.preventDefault();
+                            toggleAIPrompt();
+                        }
+                        // Escape — cancel AI generation
+                        if (e.key === 'Escape' && aiAbortCtrl) {
+                            cancelAI();
+                        }
                     });
 
                     loadFromURL();
+
+                    // ══════════════════════════════════════════════
+                    // AI FUNCTIONALITY
+                    // ══════════════════════════════════════════════
+
+                    var AI_URL = '<%= request.getContextPath() %>/ai';
+                    var aiAbortCtrl = null;
+
+                    // ── System prompts ──
+
+                    var AI_SYS_GENERATE = 'You are an expert programmer. Generate code in {LANG}. '
+                      + 'Return ONLY valid {LANG} code. No markdown fences, no explanation, no commentary. '
+                      + 'The code must be complete and runnable.';
+
+                    var AI_SYS_FIX = 'You are an expert programmer. The user ran {LANG} code and got an error. '
+                      + 'Fix the code. Return ONLY the complete corrected {LANG} code. '
+                      + 'No markdown fences, no explanation, no commentary.';
+
+                    var AI_SYS_EXPLAIN = 'You are an expert programmer and teacher. '
+                      + 'Explain the following {LANG} code clearly and concisely. '
+                      + 'Use short paragraphs. Mention what it does, key logic, and any issues.';
+
+                    var AI_SYS_EXPLAIN_ERROR = 'You are an expert programmer and teacher. '
+                      + 'The user ran {LANG} code and got the following error. '
+                      + 'Explain what the error means, why it happened, and how to fix it. Be concise.';
+
+                    function aiSysPrompt(template) {
+                        var lang = currentLanguage || 'code';
+                        return template.replace(/\{LANG\}/g, lang);
+                    }
+
+                    function buildAIPayload(systemPrompt, userContent, stream) {
+                        return {
+                            messages: [
+                                { role: 'system', content: systemPrompt },
+                                { role: 'user', content: userContent }
+                            ],
+                            stream: !!stream
+                        };
+                    }
+
+                    // ── NDJSON streaming ──
+
+                    function streamAI(payload, callbacks) {
+                        if (aiAbortCtrl) aiAbortCtrl.abort();
+                        aiAbortCtrl = new AbortController();
+
+                        var onToken = callbacks.onToken || function() {};
+                        var onDone  = callbacks.onDone  || function() {};
+                        var onError = callbacks.onError || function() {};
+
+                        fetch(AI_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                            signal: aiAbortCtrl.signal
+                        })
+                        .then(function(res) {
+                            if (!res.ok) {
+                                return res.json().then(function(d) {
+                                    throw new Error(d.error || 'AI request failed (' + res.status + ')');
+                                });
+                            }
+                            var reader = res.body.getReader();
+                            var decoder = new TextDecoder();
+                            var buffer = '';
+
+                            function processChunk(result) {
+                                if (result.done) return;
+                                buffer += decoder.decode(result.value, { stream: true });
+                                var lines = buffer.split('\n');
+                                buffer = lines.pop();
+                                for (var i = 0; i < lines.length; i++) {
+                                    var line = lines[i].trim();
+                                    if (!line) continue;
+                                    try {
+                                        var obj = JSON.parse(line);
+                                        if (obj.message && obj.message.content) onToken(obj.message.content);
+                                        if (obj.done === true) return;
+                                    } catch(e) {}
+                                }
+                                return reader.read().then(processChunk);
+                            }
+                            return reader.read().then(processChunk);
+                        })
+                        .then(function() { onDone(); })
+                        .catch(function(err) {
+                            if (err.name === 'AbortError') return;
+                            onError(err.message || 'AI request failed');
+                        });
+                    }
+
+                    function requestAI(payload, callback) {
+                        if (aiAbortCtrl) aiAbortCtrl.abort();
+                        aiAbortCtrl = new AbortController();
+                        payload.stream = false;
+
+                        fetch(AI_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                            signal: aiAbortCtrl.signal
+                        })
+                        .then(function(res) {
+                            if (!res.ok) return res.json().then(function(d) { throw new Error(d.error || 'Failed'); });
+                            return res.json();
+                        })
+                        .then(function(data) {
+                            var content = (data.message && data.message.content) ? data.message.content : '';
+                            callback(null, content);
+                        })
+                        .catch(function(err) {
+                            if (err.name === 'AbortError') return;
+                            callback(err.message, null);
+                        });
+                    }
+
+                    // ── AI Generate (NL → Code) ──
+
+                    function toggleAIPrompt() {
+                        var modal = document.getElementById('aiPromptModal');
+                        if (modal.style.display === 'flex') {
+                            modal.style.display = 'none';
+                        } else {
+                            modal.style.display = 'flex';
+                            var label = document.getElementById('aiLangLabel');
+                            if (label) label.textContent = currentLanguage || 'code';
+                            var input = document.getElementById('aiPromptInput');
+                            if (input) { input.value = ''; input.focus(); }
+                        }
+                    }
+
+                    function closeAIPrompt(e) {
+                        if (e && e.target !== document.getElementById('aiPromptModal')) return;
+                        document.getElementById('aiPromptModal').style.display = 'none';
+                    }
+
+                    function handleAIPromptKey(e) {
+                        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitAIGenerate(); }
+                        else if (e.key === 'Escape') { closeAIPrompt(); }
+                    }
+
+                    function submitAIGenerate() {
+                        var input = document.getElementById('aiPromptInput');
+                        var desc = input ? input.value.trim() : '';
+                        if (!desc) return;
+                        closeAIPrompt();
+                        aiGenerate(desc);
+                    }
+
+                    function aiGenerate(description) {
+                        showAIStatus(true, 'Generating code...');
+
+                        // Clear editor and stream directly into it
+                        editor.setValue('');
+                        var model = editor.getModel();
+                        var accumulated = '';
+
+                        streamAI(buildAIPayload(aiSysPrompt(AI_SYS_GENERATE), description, true), {
+                            onToken: function(token) {
+                                accumulated += token;
+                                // Get current end position and insert token there
+                                var lastLine = model.getLineCount();
+                                var lastCol = model.getLineMaxColumn(lastLine);
+                                var range = new monaco.Range(lastLine, lastCol, lastLine, lastCol);
+                                editor.executeEdits('ai', [{ range: range, text: token }]);
+                                // Scroll to bottom
+                                editor.revealLine(model.getLineCount());
+                            },
+                            onDone: function() {
+                                showAIStatus(false);
+                                // Clean markdown fences if model included them
+                                var clean = cleanCodeResponse(editor.getValue());
+                                if (clean !== editor.getValue()) editor.setValue(clean);
+                            },
+                            onError: function(err) {
+                                showAIStatus(false);
+                                switchPanel('ai');
+                                setAIPane('Error: ' + err, false);
+                            }
+                        });
+                    }
+
+                    // ── AI Fix Error ──
+
+                    function aiFixError() {
+                        var code = editor ? editor.getValue() : '';
+                        var stderr = document.getElementById('outputContent').textContent || '';
+                        if (!stderr || stderr.indexOf('Error') === -1 && stderr.indexOf('error') === -1) {
+                            alert('No errors to fix. Run your code first.');
+                            return;
+                        }
+
+                        showAIStatus(true, 'Fixing errors...');
+
+                        // Clear editor and stream fixed code directly into it
+                        editor.setValue('');
+                        var model = editor.getModel();
+                        var userContent = 'Error output:\n' + stderr + '\n\nCode:\n' + code;
+                        var accumulated = '';
+
+                        streamAI(buildAIPayload(aiSysPrompt(AI_SYS_FIX), userContent, true), {
+                            onToken: function(token) {
+                                accumulated += token;
+                                var lastLine = model.getLineCount();
+                                var lastCol = model.getLineMaxColumn(lastLine);
+                                var range = new monaco.Range(lastLine, lastCol, lastLine, lastCol);
+                                editor.executeEdits('ai', [{ range: range, text: token }]);
+                                editor.revealLine(model.getLineCount());
+                            },
+                            onDone: function() {
+                                showAIStatus(false);
+                                var clean = cleanCodeResponse(editor.getValue());
+                                if (clean !== editor.getValue()) editor.setValue(clean);
+                            },
+                            onError: function(err) {
+                                showAIStatus(false);
+                                switchPanel('ai');
+                                setAIPane('Error: ' + err, false);
+                            }
+                        });
+                    }
+
+                    // ── AI Explain Code / Error ──
+
+                    function aiExplainCode() {
+                        var selection = editor ? editor.getModel().getValueInRange(editor.getSelection()) : '';
+                        var code = selection || (editor ? editor.getValue() : '');
+                        var stderr = document.getElementById('outputContent').textContent || '';
+
+                        // If there's an error in output, explain the error
+                        var hasError = stderr && (stderr.indexOf('Error') !== -1 || stderr.indexOf('error') !== -1 || stderr.indexOf('Traceback') !== -1);
+                        var systemPrompt, userContent;
+
+                        if (hasError && !selection) {
+                            systemPrompt = aiSysPrompt(AI_SYS_EXPLAIN_ERROR);
+                            userContent = 'Error:\n' + stderr + '\n\nCode:\n' + code;
+                        } else {
+                            systemPrompt = aiSysPrompt(AI_SYS_EXPLAIN);
+                            userContent = code;
+                        }
+
+                        switchPanel('ai');
+                        setAIPane('', true);
+                        showAIStatus(true, hasError && !selection ? 'Explaining error...' : 'Explaining code...');
+
+                        var accumulated = '';
+                        streamAI(buildAIPayload(systemPrompt, userContent, true), {
+                            onToken: function(token) {
+                                accumulated += token;
+                                setAIPaneText(accumulated);
+                            },
+                            onDone: function() { showAIStatus(false); },
+                            onError: function(err) {
+                                showAIStatus(false);
+                                appendAIPaneText('\n\nError: ' + err, 'stderr');
+                            }
+                        });
+                    }
+
+                    // ── Cancel ──
+
+                    function cancelAI() {
+                        if (aiAbortCtrl) { aiAbortCtrl.abort(); aiAbortCtrl = null; }
+                        showAIStatus(false);
+                        document.getElementById('aiStopBtn').style.display = 'none';
+                    }
+
+                    // ── AI Pane helpers ──
+
+                    function setAIPane(text, showStop) {
+                        var el = document.getElementById('aiPaneContent');
+                        el.textContent = text || '';
+                        el.className = 'output-content system';
+                        document.getElementById('aiStopBtn').style.display = showStop ? '' : 'none';
+                        // Remove any existing action buttons
+                        var existing = document.querySelectorAll('.oc-ai-action-btn');
+                        for (var i = 0; i < existing.length; i++) existing[i].remove();
+                    }
+
+                    function showAISpinner(show, text) {
+                        var spinner = document.getElementById('aiSpinner');
+                        var spinnerText = document.getElementById('aiSpinnerText');
+                        if (spinner) {
+                            spinner.style.display = show ? '' : 'none';
+                            if (spinnerText && text) spinnerText.textContent = text;
+                        }
+                    }
+
+                    function setAIPaneText(text) {
+                        var el = document.getElementById('aiPaneContent');
+                        el.textContent = text;
+                        el.className = 'output-content stdout';
+                        el.scrollTop = el.scrollHeight;
+                        // Scroll parent too
+                        var pane = document.getElementById('aiPane');
+                        if (pane) pane.scrollTop = pane.scrollHeight;
+                    }
+
+                    function appendAIPaneText(text, cls) {
+                        var el = document.getElementById('aiPaneContent');
+                        el.textContent += text;
+                        if (cls) el.className = 'output-content ' + cls;
+                    }
+
+                    function appendAIAction(label, onClick) {
+                        document.getElementById('aiStopBtn').style.display = 'none';
+                        var pane = document.getElementById('aiPane');
+                        var btn = document.createElement('button');
+                        btn.className = 'oc-ai-action-btn';
+                        btn.innerHTML = '<i class="fas fa-check"></i> ' + label;
+                        btn.onclick = function() {
+                            onClick();
+                            btn.textContent = 'Applied!';
+                            btn.disabled = true;
+                        };
+                        pane.appendChild(btn);
+                    }
+
+                    function showAIStatus(show, text) {
+                        var el = document.getElementById('statusAI');
+                        var txt = document.getElementById('statusAIText');
+                        if (show) {
+                            el.style.display = '';
+                            if (txt) txt.textContent = text || 'AI generating...';
+                        } else {
+                            el.style.display = 'none';
+                        }
+                        showAISpinner(show, text);
+                    }
+
+                    function cleanCodeResponse(text) {
+                        text = text.replace(/^```[a-zA-Z]*\s*\n?/i, '');
+                        text = text.replace(/\n?```\s*$/i, '');
+                        return text.trim();
+                    }
+
+                    // Show/hide AI Fix button based on errors in output
+                    var origExecuteFinally = null;
+                    function hookExecuteForAIFix() {
+                        // After each execution, check if there are errors and show/hide AI Fix btn
+                        var observer = new MutationObserver(function() {
+                            var outputEl = document.getElementById('outputContent');
+                            var aiFixBtn = document.getElementById('aiFixBtn');
+                            if (outputEl && aiFixBtn) {
+                                var text = outputEl.textContent || '';
+                                var isError = outputEl.classList.contains('stderr') ||
+                                    text.indexOf('Error') !== -1 || text.indexOf('error') !== -1 ||
+                                    text.indexOf('Traceback') !== -1 || text.indexOf('Exception') !== -1;
+                                aiFixBtn.style.display = isError ? '' : 'none';
+                            }
+                        });
+                        var outputEl = document.getElementById('outputContent');
+                        if (outputEl) {
+                            observer.observe(outputEl, { childList: true, characterData: true, subtree: true });
+                        }
+                    }
+                    hookExecuteForAIFix();
+
                 </script>
 
     <!-- Sticky Footer Ad -->
