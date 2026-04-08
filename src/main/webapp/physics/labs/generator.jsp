@@ -87,9 +87,9 @@ googletag.cmd.push(function(){
   <div class="ad-lab-below" id="ad_lab_below"><div class="ad-label">Advertisement</div></div>
   <div class="lab-related">
     <span>Also try &rarr;</span>
+    <a href="<%=request.getContextPath()%>/physics/labs/generator-3d.jsp">3D Generator</a>
     <a href="<%=request.getContextPath()%>/physics/labs/circuit-simulator.jsp">Circuit Simulator</a>
     <a href="<%=request.getContextPath()%>/physics/labs/tcoil-circuit.jsp">T-Coil Circuit</a>
-    <a href="<%=request.getContextPath()%>/physics/labs/resonance.jsp">Resonance</a>
     <a href="<%=request.getContextPath()%>/physics/labs/">All Physics Labs</a>
   </div>
 </div>
