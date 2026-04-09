@@ -269,6 +269,7 @@
                                         <li><a href="/websocket-client.jsp">WebSocket Client</a></li>
                                         <li><a href="/httpstat.jsp">HTTP Status Analysis</a></li>
                                         <li><a href="/screenshot.jsp">Website Screenshot</a></li>
+                                        <li><a href="/seo/seo-checker.jsp">SEO Checker</a></li>
                                         <li><a href="/sslscan.jsp">SSL Scanner</a></li>
                                     </ul>
                                 </div>
@@ -494,6 +495,7 @@
                                         <li><a href="/Logistic_Regression.jsp">Logistic Regression</a></li>
                                         <li><a href="/ML_Pipeline.jsp">ML Pipeline</a></li>
                                         <li><a href="/neural_network_playground.jsp">Neural Network Playground</a></li>
+                                        <li><a href="/ml/nn-viz.jsp">NN Architecture Visualizer</a></li>
                                         <li><a href="/probability_calibration_lab.jsp">Probability Calibration Lab</a>
                                         </li>
                                         <li><a href="/ROC_AUC.jsp">ROC AUC</a></li>
@@ -834,7 +836,7 @@
                                             <li><a href="/tower-of-hanoi.jsp">Tower of Hanoi</a></li>
                                             <li><a href="/monty-hall-simulator.jsp">Monty Hall Simulator</a></li>
                                             <li><a href="/prime-spiral.jsp">Prime Spiral (Ulam)</a></li>
-                                            <li><a href="/fibonacci-spiral.jsp">Fibonacci Spiral</a></li>
+                                            <li><a href="/fibonacci-spiral.jsp">Fibonacci Spiral Generator</a></li>
                                             <li><a href="/binary-card-trick.jsp">Binary Card Trick</a></li>
                                             <li><a href="/recaman-sequence.jsp">Recamán's Sequence</a></li>
                                             <li><a href="/pythagorean-triples.jsp">Pythagorean Triples</a></li>
