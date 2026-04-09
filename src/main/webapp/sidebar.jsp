@@ -269,7 +269,7 @@
                                         <li><a href="/websocket-client.jsp">WebSocket Client</a></li>
                                         <li><a href="/httpstat.jsp">HTTP Status Analysis</a></li>
                                         <li><a href="/screenshot.jsp">Website Screenshot</a></li>
-                                        <li><a href="/seo/seo-checker.jsp">SEO Checker</a></li>
+                                        <li><a href="/seo/seo-checker.jsp">AI SEO Checker</a></li>
                                         <li><a href="/sslscan.jsp">SSL Scanner</a></li>
                                     </ul>
                                 </div>

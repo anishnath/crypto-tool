@@ -15,20 +15,20 @@
 
     <!-- SEO -->
     <jsp:include page="/modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="SEO Checker - Free Website SEO Audit Tool Online" />
-        <jsp:param name="toolDescription" value="Crawl any website and get a detailed SEO audit with 79+ technical checks. Find broken links, missing meta tags, duplicate content, security issues, and more. Free score 0-100." />
+        <jsp:param name="toolName" value="AI SEO Checker - Free Website Audit with AI Fix Suggestions" />
+        <jsp:param name="toolDescription" value="AI-powered SEO checker. Crawl any website, get 79+ technical checks with a 0-100 score, and receive AI-generated fix suggestions for every issue. Free, no signup." />
         <jsp:param name="toolCategory" value="Network Tools" />
         <jsp:param name="toolUrl" value="seo/seo-checker.jsp" />
-        <jsp:param name="toolKeywords" value="seo checker, seo audit tool, website seo analyzer, technical seo checker, free seo tool, seo score, broken link checker, meta tag checker, site crawler, seo report, website audit, on-page seo, seo analysis online free" />
-        <jsp:param name="toolFeatures" value="Full multi-page website crawl,79+ SEO issue checks,0-100 SEO score with grade,Issues grouped by severity,Drill-down to affected URLs,Free no signup required" />
+        <jsp:param name="toolKeywords" value="ai seo checker, ai seo audit, ai website analyzer, seo checker with ai, ai fix seo issues, free ai seo tool, ai seo score, ai broken link checker, ai meta tag fixer, ai site crawler, ai seo report, website audit ai, on-page seo ai, seo analysis ai online free" />
+        <jsp:param name="toolFeatures" value="AI-powered fix suggestions for every issue,Full multi-page website crawl,79+ SEO issue checks,0-100 SEO score with grade,Issues grouped by severity,Drill-down to affected URLs,AI generates exact code fixes,Shareable report URLs,Free no signup required" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="howToSteps" value="Enter URL|Enter the website URL you want to audit and click Analyze,Wait for Crawl|The crawler visits your pages and checks for 79+ SEO issues,Review Results|View your SEO score and issues grouped by Critical Alerts and Warnings,Fix Issues|Click any issue to see affected URLs then fix them on your site" />
-        <jsp:param name="faq1q" value="What does this SEO Checker do?" />
-        <jsp:param name="faq1a" value="It crawls your website and checks for 79+ technical SEO issues including broken links, missing meta tags, duplicate content, heading hierarchy, security headers, image optimization, and more. You get a 0-100 score with prioritized recommendations." />
-        <jsp:param name="faq2q" value="Is it free?" />
-        <jsp:param name="faq2a" value="Yes, completely free with no signup or login required. Enter any URL and get a full audit report instantly." />
-        <jsp:param name="faq3q" value="How many pages does it crawl?" />
-        <jsp:param name="faq3a" value="The crawler follows links within your domain and can check up to 20,000 pages per crawl. It respects robots.txt by default." />
+        <jsp:param name="howToSteps" value="Enter URL|Enter the website URL you want to audit and click Analyze,AI Crawl and Audit|The AI crawler visits your pages and checks for 79+ SEO issues,Review AI Results|View your SEO score with issues grouped by Critical Alerts and Warnings,Get AI Fixes|Click any issue then hit AI Fix Suggestion to get exact code and config fixes" />
+        <jsp:param name="faq1q" value="How does the AI SEO Checker work?" />
+        <jsp:param name="faq1a" value="It crawls your website and checks for 79+ technical SEO issues. For each issue found, AI analyzes the page evidence (title, meta, headings, images, status codes) and generates a specific fix with exact code or configuration changes." />
+        <jsp:param name="faq2q" value="Is the AI SEO Checker free?" />
+        <jsp:param name="faq2a" value="Yes, completely free with no signup or login required. The full audit, AI fix suggestions, and shareable reports are all available immediately." />
+        <jsp:param name="faq3q" value="What makes this different from other SEO checkers?" />
+        <jsp:param name="faq3a" value="Unlike traditional SEO checkers that only list problems, our AI analyzes each issue and generates the exact fix — corrected title tags, meta descriptions, nginx headers, image alt text — so you can copy-paste the solution directly." />
     </jsp:include>
 
     <!-- Fonts -->
@@ -65,8 +65,8 @@
             <!-- Matter.js physics background -->
             <div id="seo-matter-host" class="seo-matter-host" aria-hidden="true"></div>
             <div class="seo-hero-inner">
-                <h1 class="seo-hero-title">SEO Checker</h1>
-                <p class="seo-hero-sub">Analyze any website. 79+ technical SEO checks. Instant results.</p>
+                <h1 class="seo-hero-title">AI SEO Checker</h1>
+                <p class="seo-hero-sub">Crawl any website. 79+ checks. AI generates the exact fix for every issue.</p>
                 <form id="seo-crawl-form" class="seo-hero-form">
                     <div class="seo-search-bar">
                         <svg class="seo-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -88,11 +88,12 @@
                 </form>
                 <div class="seo-error-msg" id="seo-error-msg"></div>
                 <div class="seo-hero-features">
+                    <span>AI Fix Suggestions</span>
                     <span>Titles &amp; Meta</span>
                     <span>Links &amp; Images</span>
                     <span>Security Headers</span>
                     <span>Performance</span>
-                    <span>Structured Data</span>
+                    <span>79+ Checks</span>
                 </div>
                 <!-- Recent scans (loaded dynamically) -->
                 <div class="seo-history" id="seo-history"></div>
@@ -176,8 +177,8 @@
     <!-- SEO content (below fold, for crawlers) -->
     <section class="seo-seo-content">
         <div class="seo-seo-inner">
-            <h2>Free Online SEO Checker &amp; Website Audit Tool</h2>
-            <p>Our SEO Checker crawls your entire website and checks for 79+ technical SEO issues. Get a 0-100 SEO score with issues grouped by severity: critical, alerts, and warnings. Click any issue to see the exact pages affected. Checks include page titles, meta descriptions, heading hierarchy, broken links, image alt text, HTTPS, security headers, structured data, hreflang, canonicals, and much more.</p>
+            <h2>Free AI SEO Checker &amp; Website Audit Tool</h2>
+            <p>Our AI SEO Checker crawls your entire website and checks for 79+ technical SEO issues. Unlike traditional SEO audit tools, AI analyzes each issue and generates the exact fix — corrected title tags, optimized meta descriptions, nginx security headers, image alt text suggestions, and more. Get a 0-100 SEO score with issues grouped by severity: critical, alerts, and warnings. Click any issue to see affected pages, then hit AI Fix Suggestion for copy-paste-ready solutions. Share results via URL. Free, no signup required.</p>
         </div>
     </section>
 
