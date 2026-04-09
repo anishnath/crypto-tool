@@ -13,6 +13,7 @@
     var MAX_POLLS = 300;
     var findingsData = null;
     var statusData = null;
+    var currentDrilldownType = null;
 
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('seo-crawl-form').addEventListener('submit', function(e) {
@@ -562,6 +563,7 @@
     // ── Drill-down ──
 
     function showDrilldown(errorType) {
+        currentDrilldownType = errorType;
         var meta = getIssueMeta(errorType);
         var titleEl = document.getElementById('seo-drilldown-title');
         var descEl = document.getElementById('seo-drilldown-desc');
@@ -688,8 +690,26 @@
                 html += '</div>';
             }
 
+            // AI Fix button + response container
+            html += '<div class="seo-ai-section">';
+            html += '<button class="seo-ai-fix-btn" data-page-json="' + escapeHtml(JSON.stringify(p)) + '">AI Fix Suggestion</button>';
+            html += '<div class="seo-ai-container" style="display:none;"></div>';
+            html += '</div>';
+
             html += '<button class="seo-detail-close" onclick="this.closest(\'.seo-page-detail\').remove()">Close</button>';
             panel.innerHTML = html;
+
+            // Wire AI Fix button
+            var aiBtn = panel.querySelector('.seo-ai-fix-btn');
+            if (aiBtn) {
+                aiBtn.addEventListener('click', function() {
+                    var pageJson = JSON.parse(this.getAttribute('data-page-json'));
+                    var aiContainer = this.parentNode.querySelector('.seo-ai-container');
+                    if (typeof SeoAI !== 'undefined' && currentDrilldownType) {
+                        SeoAI.requestFix(currentDrilldownType, pageJson, aiContainer);
+                    }
+                });
+            }
         })
         .catch(function(err) {
             panel.innerHTML = '<div class="seo-error">' + escapeHtml(err.message) + '</div>';

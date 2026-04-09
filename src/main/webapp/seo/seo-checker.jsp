@@ -207,6 +207,7 @@
     <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
     <script src="<%=request.getContextPath()%>/seo/js/seo-issues.js" defer></script>
+    <script src="<%=request.getContextPath()%>/seo/js/seo-ai.js" defer></script>
     <script src="<%=request.getContextPath()%>/seo/js/seo-checker.js" defer></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js" crossorigin="anonymous"></script>
     <script defer src="<%=request.getContextPath()%>/seo/js/seo-matter-bg.js"></script>
