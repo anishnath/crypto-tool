@@ -461,6 +461,15 @@
 	</servlet-mapping>
 
     <servlet>
+        <servlet-name>SEOCrawlFunctionality</servlet-name>
+        <servlet-class>z.y.x.seo.SEOCrawlFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SEOCrawlFunctionality</servlet-name>
+        <url-pattern>/SEOCrawlFunctionality</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>SSLScannerFunctionality</servlet-name>
         <servlet-class>z.y.x.ssl.SSLScannerFunctionality</servlet-class>
     </servlet>
