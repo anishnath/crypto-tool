@@ -70,7 +70,7 @@
     <header class="tool-page-header">
         <div class="tool-page-header-inner">
             <div>
-                <h1 class="tool-page-title">Neural Network Architecture SVG Visualizer</h1>
+                <h1 class="tool-page-title">Neural Network Architecture Visualizer</h1>
                 <nav class="tool-breadcrumbs">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                     <a href="<%=request.getContextPath()%>/index.jsp#ml">Machine Learning</a> /
@@ -90,7 +90,7 @@
     <section class="tool-description-section">
         <div class="tool-description-inner">
             <div class="tool-description-content">
-                <p>Create publication-ready neural network architecture diagrams. Three visualization modes: fully-connected networks (FCNN), convolutional networks in 2D (LeNet), and deep networks in 3D (AlexNet). Export as SVG or PNG.</p>
+                <p>Neural network architecture diagrams. Three visualization modes: fully-connected networks (FCNN), convolutional networks in 2D (LeNet), and deep networks in 3D (AlexNet). Export as SVG or PNG.</p>
             </div>
             <div class="tool-description-ad">
                 <%@ include file="../modern/ads/ad-in-content-top.jsp" %>
