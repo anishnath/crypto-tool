@@ -36,18 +36,18 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/seo/css/seo-checker.css?v=<%=cacheVersion%>">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/seo/css/seo-checker.css">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
     </noscript>
 
     <%@ include file="../modern/ads/ad-init.jsp" %>
@@ -204,12 +204,12 @@
     <%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
     <%@ include file="../modern/components/analytics.jsp" %>
 
-    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/seo/js/seo-issues.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/seo/js/seo-checker.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+    <script src="<%=request.getContextPath()%>/seo/js/seo-issues.js" defer></script>
+    <script src="<%=request.getContextPath()%>/seo/js/seo-checker.js" defer></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js" crossorigin="anonymous"></script>
-    <script defer src="<%=request.getContextPath()%>/seo/js/seo-matter-bg.js?v=<%=cacheVersion%>"></script>
+    <script defer src="<%=request.getContextPath()%>/seo/js/seo-matter-bg.js"></script>
 
 </body>
 </html>
