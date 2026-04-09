@@ -107,46 +107,83 @@
 
     function loadFromHash() {
         var hash = window.location.hash;
-        var match = hash.match(/crawl=(\d+)/);
-        if (!match) return;
 
-        var sharedCrawlId = parseInt(match[1]);
-        if (isNaN(sharedCrawlId)) return;
+        // Support both #url=https://... and legacy #crawl=N
+        var urlMatch = hash.match(/url=(.+)/);
+        var crawlMatch = hash.match(/crawl=(\d+)/);
 
-        // Load shared results
-        crawlId = sharedCrawlId;
-        showSection('progress');
-        updateProgress(-1, 'Loading shared results...');
+        if (urlMatch) {
+            var sharedUrl = decodeURIComponent(urlMatch[1]);
+            crawledUrl = sharedUrl;
+            showSection('progress');
+            updateProgress(-1, 'Loading results for ' + sharedUrl + '...');
 
-        // First get status to check if crawl exists and is finished
-        fetch(getContextPath() + '/SEOCrawlFunctionality?action=status&id=' + crawlId)
-        .then(function(r) {
-            if (!r.ok) throw new Error('Crawl not found');
-            return r.json();
-        })
-        .then(function(data) {
-            if (data.error) throw new Error(data.error);
-            statusData = data;
+            // Look up the latest crawl for this URL
+            fetch(getContextPath() + '/SEOCrawlFunctionality?action=history&url=' + encodeURIComponent(sharedUrl) + '&limit=1')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (!data.crawls || data.crawls.length === 0) {
+                    // No crawl exists — pre-fill URL and show input
+                    var urlInput = document.getElementById('seo-url');
+                    if (urlInput) urlInput.value = sharedUrl;
+                    showSection('input');
+                    showError('No results found for this URL yet. Click Analyze to scan it.');
+                    return;
+                }
 
-            if (data.crawling === true) {
-                // Still running — start polling
-                pollStatus();
-                return;
-            }
+                var latest = data.crawls[0];
+                crawlId = latest.crawl_id;
+                statusData = latest;
 
-            // Finished — load findings directly
-            fetchFindings();
-        })
-        .catch(function(err) {
-            crawlId = null;
-            showSection('input');
-            showError('Could not load shared results: ' + err.message);
-        });
+                if (latest.crawling === true) {
+                    pollStatus();
+                    return;
+                }
+
+                fetchFindings();
+            })
+            .catch(function(err) {
+                showSection('input');
+                showError('Could not load results: ' + err.message);
+            });
+            return;
+        }
+
+        if (crawlMatch) {
+            var sharedCrawlId = parseInt(crawlMatch[1]);
+            if (isNaN(sharedCrawlId)) return;
+
+            crawlId = sharedCrawlId;
+            showSection('progress');
+            updateProgress(-1, 'Loading shared results...');
+
+            fetch(getContextPath() + '/SEOCrawlFunctionality?action=status&id=' + crawlId)
+            .then(function(r) {
+                if (!r.ok) throw new Error('Crawl not found');
+                return r.json();
+            })
+            .then(function(data) {
+                if (data.error) throw new Error(data.error);
+                statusData = data;
+
+                if (data.crawling === true) {
+                    pollStatus();
+                    return;
+                }
+
+                fetchFindings();
+            })
+            .catch(function(err) {
+                crawlId = null;
+                showSection('input');
+                showError('Could not load shared results: ' + err.message);
+            });
+        }
     }
 
     function shareResults() {
-        if (!crawlId) return;
-        var shareUrl = window.location.origin + window.location.pathname + '#crawl=' + crawlId;
+        if (!crawledUrl) return;
+        var shareUrl = window.location.origin + window.location.pathname + '#url=' + encodeURIComponent(crawledUrl);
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(shareUrl).then(function() {
@@ -357,7 +394,12 @@
             if (data.error) throw new Error(data.error);
             findingsData = data;
             // Set URL hash for sharing
-            window.location.hash = 'crawl=' + crawlId;
+            // Set shareable URL hash
+            if (crawledUrl) {
+                window.location.hash = 'url=' + encodeURIComponent(crawledUrl);
+            } else {
+                window.location.hash = 'crawl=' + crawlId;
+            }
             renderResults(data);
             showSection('results');
         })
