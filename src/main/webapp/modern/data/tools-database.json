@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-03-16T00:00:00.000Z",
-  "totalTools": 419,
+  "totalTools": 420,
   "categories": [
     "Blockchain & Crypto",
     "CTF & Challenges",
@@ -1124,6 +1124,13 @@
       "category": "Machine Learning",
       "keywords": "neural network playground machine learning",
       "description": "Neural Network Playground - Free online machine learning tool"
+    },
+    {
+      "name": "NN Architecture SVG Visualizer",
+      "url": "ml/nn-viz.jsp",
+      "category": "Machine Learning",
+      "keywords": "neural network architecture diagram svg visualizer FCNN LeNet AlexNet CNN publication deep learning",
+      "description": "NN Architecture SVG Visualizer - Create publication-ready neural network diagrams"
     },
     {
       "name": "Predicted Probability Explorer",
