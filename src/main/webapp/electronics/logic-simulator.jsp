@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <% String v = String.valueOf(System.currentTimeMillis()); %>
+<%
+    // AI_LEGACY=true → use legacy CFExamMarkerFunctionality (OpenAI). Default: local /ai (Ollama)
+    String aiLegacy = System.getenv("AI_LEGACY");
+    boolean useLocalAI = !"true".equalsIgnoreCase(aiLegacy);
+%>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -660,6 +665,91 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   aiBtn.addEventListener('click', generateLogicCircuit);
 
+  // AI backend selection: injected from server-side env variable
+  const USE_LOCAL_AI = <%= useLocalAI %>;
+
+  // System prompt for local AI (Ollama) — derived from source code analysis of all component types
+  const LOGIC_AI_SYSTEM = `You are an expert digital logic designer. Generate a circuit for the 8gwifi.org Logic Gate Simulator.
+
+## Output Format
+Return ONLY a JSON object (no markdown, no text, no code fences):
+{"name":"Short name","description":"One sentence","components":[{"type":"TYPE","x":<int>,"y":<int>,"attrs":{}}],"wires":[{"from":<idx>,"fromPort":<port>,"to":<idx>,"toPort":<port>}]}
+
+## Component Types & Port Indices
+
+### Gates
+Default 2 inputs. Ports: [in0=0, in1=1, out=2]. For N-input gate use attrs:{"inputs":N} — ports become [in0..inN-1, out=N].
+AND, OR, NAND, NOR, XOR, XNOR — 2-input: ports 0,1=in, 2=out. 3-input: ports 0,1,2=in, 3=out.
+NOT — ports: [in=0, out=1]
+BUFFER — ports: [in=0, out=1]
+
+### I/O Pins
+INPUT — [out=0]. attrs:{"label":"A","state":0}
+OUTPUT — [in=0]. attrs:{"label":"Q"}
+CLOCK — [out=0]. attrs:{"state":0,"period":500}
+CONSTANT — [out=0]. attrs:{"value":1} (0=LOW, 1=HIGH)
+PROBE — [in=0]
+
+### Interactive
+LED — [in=0]. attrs:{"color":"#22c55e"} (green). Other colors: "#ef4444"=red, "#3b82f6"=blue, "#eab308"=yellow
+BUTTON — [out=0] (momentary push)
+SWITCH — [out=0] (toggle)
+
+### Memory (rising-edge triggered)
+SR_FF — [S=0, CLK=1, R=2, Q=3, Q'=4]
+D_FF — [D=0, CLK=1, CLR=2, Q=3, Q'=4]
+JK_FF — [J=0, CLK=1, K=2, Q=3, Q'=4]
+T_FF — [T=0, CLK=1, Q=2, Q'=3]
+REGISTER — [D0=0,D1=1,D2=2,D3=3, CLK=4, CLR=5, Q0=6,Q1=7,Q2=8,Q3=9]
+COUNTER — [CLK=0, EN=1, CLR=2, Q0=3,Q1=4,Q2=5,Q3=6, OVF=7]
+
+### Arithmetic & Plexers
+ADDER — [A=0, B=1, Cin=2, S=3, Cout=4]
+SUBTRACTOR — [A=0, B=1, Bin=2, D=3, Bout=4]
+COMPARATOR — [A=0, B=1, A>B=2, A=B=3, A<B=4]
+MUX — [D0=0, D1=1, SEL=2, Y=3]
+DEMUX — [D=0, SEL=1, Y0=2, Y1=3]
+DECODER — [A0=0, A1=1, Y0=2, Y1=3, Y2=4, Y3=5]
+
+### Displays
+SEVEN_SEG — [a=0,b=1,c=2,d=3,e=4,f=5,g=6] all inputs
+HEX_DISPLAY — [D0=0,D1=1,D2=2,D3=3] all inputs
+LED_BAR — [L0-L7] indices 0-7, all inputs
+
+### Wiring
+TUNNEL_SRC — [in=0]. attrs:{"label":"bus_name"} (named bus source)
+TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receives from matching TUNNEL_SRC)
+
+## Wiring Rules
+- from/to = zero-based component index. fromPort/toPort = port index within that component
+- Wires go from OUTPUT ports to INPUT ports ONLY
+- 2-input gate output is port 2. NOT/BUFFER output is port 1. N-input gate output is port N
+- INPUT/CLOCK/SWITCH/BUTTON/CONSTANT output = port 0
+- OUTPUT/LED/PROBE input = port 0
+- One input port receives at most one wire (fan-out from output is OK)
+
+## Layout
+- 80px grid. Inputs left x=-160..-80, gates middle x=-40..120, outputs right x=160..240
+- Vertical spacing 40-60px. y range -120 to 120. Keep compact
+
+## Examples
+
+### AND gate
+{"name":"AND Gate","description":"Simple AND gate with two inputs","components":[{"type":"INPUT","x":-120,"y":-20,"attrs":{"label":"A","state":0}},{"type":"INPUT","x":-120,"y":20,"attrs":{"label":"B","state":0}},{"type":"AND","x":0,"y":0,"attrs":{}},{"type":"OUTPUT","x":120,"y":0,"attrs":{"label":"Q"}}],"wires":[{"from":0,"fromPort":0,"to":2,"toPort":0},{"from":1,"fromPort":0,"to":2,"toPort":1},{"from":2,"fromPort":2,"to":3,"toPort":0}]}
+
+### 3-input OR gate
+{"name":"3-Input OR","description":"OR gate with 3 inputs","components":[{"type":"INPUT","x":-120,"y":-40,"attrs":{"label":"A","state":0}},{"type":"INPUT","x":-120,"y":0,"attrs":{"label":"B","state":0}},{"type":"INPUT","x":-120,"y":40,"attrs":{"label":"C","state":0}},{"type":"OR","x":0,"y":0,"attrs":{"inputs":3}},{"type":"OUTPUT","x":120,"y":0,"attrs":{"label":"Y"}}],"wires":[{"from":0,"fromPort":0,"to":3,"toPort":0},{"from":1,"fromPort":0,"to":3,"toPort":1},{"from":2,"fromPort":0,"to":3,"toPort":2},{"from":3,"fromPort":3,"to":4,"toPort":0}]}
+
+### D flip-flop with clock and LED
+{"name":"D-FF + LED","description":"D flip-flop with clock showing Q on LED","components":[{"type":"INPUT","x":-120,"y":-16,"attrs":{"label":"D","state":0}},{"type":"CLOCK","x":-120,"y":0,"attrs":{"state":0,"period":500}},{"type":"CONSTANT","x":-120,"y":16,"attrs":{"value":0}},{"type":"D_FF","x":0,"y":0,"attrs":{}},{"type":"LED","x":120,"y":-8,"attrs":{"color":"#22c55e"}},{"type":"OUTPUT","x":120,"y":8,"attrs":{"label":"Q'"}}],"wires":[{"from":0,"fromPort":0,"to":3,"toPort":0},{"from":1,"fromPort":0,"to":3,"toPort":1},{"from":2,"fromPort":0,"to":3,"toPort":2},{"from":3,"fromPort":3,"to":4,"toPort":0},{"from":3,"fromPort":4,"to":5,"toPort":0}]}
+
+## CRITICAL
+1. Output ONLY valid JSON — no markdown, no explanation, no code fences
+2. Every circuit MUST have at least one INPUT or CLOCK and one OUTPUT or LED
+3. All wires: output port → input port. Port indices MUST match the spec above
+4. For N-input gates: output port index = N (not 2). Include attrs:{"inputs":N} when N>2
+5. Respond with ONLY the JSON object`;
+
   async function generateLogicCircuit() {
     const desc = aiInput.value.trim();
     if (!desc) { setAiStatus('Enter a description', 'error'); return; }
@@ -668,25 +758,80 @@ document.addEventListener('DOMContentLoaded', function () {
     aiInput.disabled = true;
     setAiStatus('Generating circuit...', 'loading');
 
+    const startTime = Date.now();
+
     try {
-      const resp = await fetch('<%=request.getContextPath()%>/CFExamMarkerFunctionality?action=logic_generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description: desc }),
-      });
+      let data;
 
-      if (resp.status === 429) {
-        const data = await resp.json().catch(() => ({}));
-        setAiStatus(data.message || 'Rate limit — try again later', 'error');
-        return;
-      }
-      if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
-        setAiStatus(data.error || data.message || 'Error (' + resp.status + ')', 'error');
-        return;
+      if (USE_LOCAL_AI) {
+        // ── Local AI path (/ai endpoint — Ollama) ──
+        const resp = await fetch('<%=request.getContextPath()%>/ai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [
+              { role: 'system', content: LOGIC_AI_SYSTEM },
+              { role: 'user', content: desc }
+            ],
+            stream: false
+          }),
+        });
+
+        if (resp.status === 429) {
+          setAiStatus('Rate limit — try again later', 'error');
+          return;
+        }
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          setAiStatus(err.error || 'AI error (' + resp.status + ')', 'error');
+          return;
+        }
+
+        const aiResp = await resp.json();
+        // Extract text from Ollama response
+        let text = '';
+        if (aiResp.message && aiResp.message.content) text = aiResp.message.content;
+        else if (aiResp.response) text = aiResp.response;
+        else if (aiResp.choices && aiResp.choices[0]) {
+          text = aiResp.choices[0].message ? aiResp.choices[0].message.content : (aiResp.choices[0].text || '');
+        }
+
+        if (!text) { setAiStatus('AI returned empty response', 'error'); return; }
+
+        // Clean: strip markdown fences if AI included them
+        text = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+
+        try {
+          data = JSON.parse(text);
+        } catch (parseErr) {
+          console.error('AI JSON parse error:', parseErr, '\nRaw:', text);
+          setAiStatus('AI returned invalid JSON. Try a simpler description.', 'error');
+          return;
+        }
+
+      } else {
+        // ── Legacy path (CFExamMarkerFunctionality — OpenAI via CF Workers) ──
+        const resp = await fetch('<%=request.getContextPath()%>/CFExamMarkerFunctionality?action=logic_generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ description: desc }),
+        });
+
+        if (resp.status === 429) {
+          const d = await resp.json().catch(() => ({}));
+          setAiStatus(d.message || 'Rate limit — try again later', 'error');
+          return;
+        }
+        if (!resp.ok) {
+          const d = await resp.json().catch(() => ({}));
+          setAiStatus(d.error || d.message || 'Error (' + resp.status + ')', 'error');
+          return;
+        }
+
+        data = await resp.json();
       }
 
-      const data = await resp.json();
+      // ── Common: build circuit from data ──
       if (!data.components || !data.components.length) {
         setAiStatus('AI returned empty circuit. Try a more specific description.', 'error');
         return;
@@ -718,9 +863,10 @@ document.addEventListener('DOMContentLoaded', function () {
       canvas.fitContent();
       saveSnapshot();
 
-      const time = data.responseTimeMs ? ' in ' + (data.responseTimeMs / 1000).toFixed(1) + 's' : '';
-      const warn = data.warnings && data.warnings.length ? ' ⚠ ' + data.warnings.length + ' warnings' : '';
-      setAiStatus('"' + (data.name || 'Circuit') + '" — ' + data.components.length + ' parts, ' + wireCount + ' wires' + time + warn, 'success');
+      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+      const warn = data.warnings && data.warnings.length ? ' \u26A0 ' + data.warnings.length + ' warnings' : '';
+      const src = USE_LOCAL_AI ? ' (local AI)' : '';
+      setAiStatus('"' + (data.name || 'Circuit') + '" \u2014 ' + data.components.length + ' parts, ' + wireCount + ' wires in ' + elapsed + 's' + warn + src, 'success');
 
       if (data.warnings && data.warnings.length) console.warn('AI warnings:', data.warnings);
 
