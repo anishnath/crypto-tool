@@ -41,8 +41,15 @@ var SeoAI = (function() {
     function requestFix(issueType, pageData, containerEl) {
         var meta = (typeof getIssueMeta === 'function') ? getIssueMeta(issueType) : { title: issueType, desc: '' };
 
+        // Disable the button that triggered this
+        var triggerBtn = containerEl.parentNode ? containerEl.parentNode.querySelector('.seo-ai-fix-btn') : null;
+        if (triggerBtn) {
+            triggerBtn.disabled = true;
+            triggerBtn.textContent = 'Analyzing...';
+        }
+
         // Show loading state
-        containerEl.innerHTML = '<div class="seo-ai-loading"><span class="seo-ai-spinner"></span> AI is analyzing...</div>';
+        containerEl.innerHTML = '<div class="seo-ai-loading"><span class="seo-ai-spinner"></span> AI is analyzing this issue...</div>';
         containerEl.style.display = 'block';
 
         var prompt = buildPrompt(issueType, meta, pageData);
@@ -79,6 +86,8 @@ var SeoAI = (function() {
 
             if (!text) throw new Error('Empty AI response');
 
+            if (triggerBtn) { triggerBtn.disabled = false; triggerBtn.textContent = 'AI Fix Suggestion'; }
+
             containerEl.innerHTML =
                 '<div class="seo-ai-response">' +
                 '  <div class="seo-ai-header"><span class="seo-ai-badge">AI Fix</span></div>' +
@@ -87,6 +96,8 @@ var SeoAI = (function() {
                 '</div>';
         })
         .catch(function(err) {
+            if (triggerBtn) { triggerBtn.disabled = false; triggerBtn.textContent = 'AI Fix Suggestion'; }
+
             containerEl.innerHTML =
                 '<div class="seo-ai-error">' + escapeHtml(err.message) +
                 ' <button class="seo-ai-close" onclick="this.closest(\'.seo-ai-error\').parentNode.style.display=\'none\'">Dismiss</button></div>';

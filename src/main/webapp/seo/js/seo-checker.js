@@ -692,21 +692,21 @@
 
             // AI Fix button + response container
             html += '<div class="seo-ai-section">';
-            html += '<button class="seo-ai-fix-btn" data-page-json="' + escapeHtml(JSON.stringify(p)) + '">AI Fix Suggestion</button>';
+            html += '<button class="seo-ai-fix-btn">AI Fix Suggestion</button>';
             html += '<div class="seo-ai-container" style="display:none;"></div>';
             html += '</div>';
 
             html += '<button class="seo-detail-close" onclick="this.closest(\'.seo-page-detail\').remove()">Close</button>';
             panel.innerHTML = html;
 
-            // Wire AI Fix button
+            // Wire AI Fix button — store page data in closure, not in HTML attribute
+            var pageData = p;
             var aiBtn = panel.querySelector('.seo-ai-fix-btn');
             if (aiBtn) {
                 aiBtn.addEventListener('click', function() {
-                    var pageJson = JSON.parse(this.getAttribute('data-page-json'));
                     var aiContainer = this.parentNode.querySelector('.seo-ai-container');
                     if (typeof SeoAI !== 'undefined' && currentDrilldownType) {
-                        SeoAI.requestFix(currentDrilldownType, pageJson, aiContainer);
+                        SeoAI.requestFix(currentDrilldownType, pageData, aiContainer);
                     }
                 });
             }

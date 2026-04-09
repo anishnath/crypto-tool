@@ -845,6 +845,12 @@ body {
     box-shadow: 0 3px 10px rgba(99,102,241,0.3);
 }
 .seo-ai-fix-btn:active { transform: translateY(0); }
+.seo-ai-fix-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
+    box-shadow: none;
+}
 
 .seo-ai-loading {
     display: flex;
