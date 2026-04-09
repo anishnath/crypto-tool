@@ -202,6 +202,7 @@
         </div>
     </footer>
 
+    <%@ include file="../modern/ads/ad-side-rails.jsp" %>
     <%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
     <%@ include file="../modern/components/analytics.jsp" %>
 
