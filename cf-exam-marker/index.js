@@ -178,7 +178,7 @@ async function callOpenAI(prompt, env, options = {}) {
 
   const model = resolveOpenAIModel(env, options.model);
   const temperature = options.temperature ?? 0.1;
-  const maxTokens = options.maxTokens || 10000;
+  const maxTokens = options.maxTokens || 20000;
   const systemMessage = options.systemMessage || 'You are a precise exam evaluator. Always respond with valid JSON only.';
 
   const requestBody = {
@@ -280,7 +280,7 @@ async function handleMark(request, env) {
 
     const result = await callOpenAI(prompt, env, {
       model: resolveOpenAIModel(env, payload.model),
-      maxTokens: 10000
+      maxTokens: 20000
     });
 
     return jsonResponse({
@@ -336,7 +336,7 @@ async function handleMarkBatch(request, env) {
 
     const results = await callOpenAI(prompt, env, {
       model: resolveOpenAIModel(env, payload.model),
-      maxTokens: 2000
+      maxTokens: 20000
     });
 
     // Handle both array and object responses
@@ -460,7 +460,7 @@ async function handleMarkExam(request, env) {
       const prompt = buildBatchPrompt(batch);
       const results = await callOpenAI(prompt, env, {
         model: resolveOpenAIModel(env, payload.model),
-        maxTokens: 2000
+        maxTokens: 20000
       });
 
       // Extract evaluations array - handle various response formats from OpenAI
@@ -1829,7 +1829,7 @@ async function handleTikzGenerate(request, env) {
 	    const result = await callOpenAI(prompt, env, {
 	      model,
 	      temperature: 0.2,
-	      maxTokens: 6000,
+	      maxTokens: 20000,
 	      systemMessage: buildTikzSystemMessage()
 	    });
 
@@ -1927,7 +1927,7 @@ async function handleLogicGenerate(request, env) {
 	    const result = await callOpenAI(prompt, env, {
 	      model,
 	      temperature: 0.2,
-	      maxTokens: 3000,
+	      maxTokens: 20000,
 	      systemMessage: buildLogicCircuitSystemMessage()
 	    });
 
