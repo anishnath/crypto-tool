@@ -26,7 +26,7 @@
 
     <!-- SEO (competitive targeting: integral-calculator.com #1, Symbolab, Wolfram, Mathway) -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Integral Calculator • With Steps!" />
+        <jsp:param name="toolName" value="Free Integral Calculator With Steps" />
         <jsp:param name="toolDescription" value="Free integral calculator with step-by-step solutions and 1,000+ practice worksheet problems. Solve indefinite &amp; definite integrals instantly. Power rule, u-substitution, integration by parts, partial fractions, trig substitution. AI explanations, interactive graph, PDF &amp; LaTeX export. Generate printable integration worksheets with answer keys for exam prep. No signup." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="integral-calculator.jsp" />
