@@ -58,31 +58,31 @@
         6. (LearningResource skipped — not math/science)
     --%>
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Text to ASCII Diagram - Mermaid Alternative" />
-        <jsp:param name="toolDescription" value="Convert text to ASCII diagrams online. Free Mermaid to ASCII alternative. Export to PNG/SVG/PDF." />
+        <jsp:param name="toolName" value="AI ASCII Diagram Generator - Describe in English, Get Diagrams" />
+        <jsp:param name="toolDescription" value="AI-powered ASCII diagram generator. Describe your diagram in plain English and AI creates Graph-Easy notation. ASCII art flowcharts, architecture diagrams, system design. Export PNG/SVG/PDF." />
         <jsp:param name="toolCategory" value="Developer Tools" />
         <jsp:param name="toolUrl" value="graph-easy.jsp" />
-        <jsp:param name="toolKeywords" value="mermaid to ascii, ascii to diagram converter, text to ascii diagram, ascii flowchart generator, mermaid alternative, graph easy online, text to diagram, plantuml alternative, text to graph, diagram as code, ascii art diagram, text to flowchart, graphviz online, dot to png, dot to svg, unicode box art, architecture diagram generator, readme diagram tool, documentation flowchart, system design diagram, free diagram tool, ascii diagram tool, text diagram converter, graph notation online, ascii art flowchart, text based diagram, text to ascii art" />
+        <jsp:param name="toolKeywords" value="ai ascii diagram, ai flowchart generator, ai text to diagram, ai architecture diagram, mermaid to ascii, ascii to diagram converter, text to ascii diagram, ai graph generator, mermaid alternative, graph easy online, ai system design diagram, diagram as code ai, ascii art diagram ai, plantuml alternative, graphviz online, readme diagram tool, free ai diagram tool" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Text to ASCII flowchart conversion,Free Mermaid and PlantUML alternative,Export to PNG and SVG and PDF via Viz.js,Unicode box-drawing art output,GraphViz DOT export with live SVG preview,Live HTML table preview with source toggle,Share diagrams via encoded URL,Keyboard shortcut Ctrl+Enter to render instantly,8 built-in example templates,Runs entirely in browser via WebAssembly — no server,No signup and no data stored" />
+        <jsp:param name="toolFeatures" value="AI generates Graph-Easy notation from plain English,Text to ASCII flowchart conversion,Free Mermaid and PlantUML alternative,Export to PNG and SVG and PDF via Viz.js,Unicode box-drawing art output,GraphViz DOT export with live SVG preview,AI example prompts for CI/CD microservices git flow,Share diagrams via encoded URL,Keyboard shortcut Ctrl+Enter to render,Runs entirely in browser via WebAssembly,No signup and no data stored" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="howToSteps" value="Write your graph notation|Type nodes in square brackets like [Start] and connect them with directed arrows -> or bidirectional arrows <-> to define relationships,Choose an output format|Pick ASCII Art for plain text or Box Art for Unicode or GraphViz DOT for image export or HTML for a live web preview,Render the diagram|Click the Render Graph button or press Ctrl+Enter to generate your diagram instantly in the browser,Export or share|For DOT output use the PNG and SVG and PDF buttons to download. Click Share to create a URL anyone can open" />
-        <jsp:param name="faq1q" value="What is Graph-Easy and how does it work?" />
-        <jsp:param name="faq1a" value="Graph-Easy is a Perl library that converts simple text notation into ASCII art flowcharts and graphs. Write [Node A] -> [Node B] and it generates properly formatted diagrams with boxes and arrows. This online tool runs the full library in your browser via WebAssembly so nothing is sent to a server." />
+        <jsp:param name="howToSteps" value="Describe your diagram|Type what you want in plain English like 'CI/CD pipeline with build test deploy' and click Generate,AI creates the notation|AI generates valid Graph-Easy syntax with nodes edges labels and groups automatically,Render and export|The diagram renders as ASCII art or Box Art. Export to PNG SVG or PDF. Share via URL" />
+        <jsp:param name="faq1q" value="How does the AI diagram generator work?" />
+        <jsp:param name="faq1a" value="Describe your diagram in plain English — like 'microservice architecture with API gateway' or 'git branching workflow' — and AI generates valid Graph-Easy notation with nodes, edges, labels, and groups. The diagram renders instantly as ASCII art. No need to learn the syntax." />
         <jsp:param name="faq2q" value="How do I convert Mermaid to ASCII text diagrams?" />
-        <jsp:param name="faq2a" value="Mermaid does not output ASCII art natively. Graph-Easy is the best free Mermaid to ASCII alternative. Rewrite your diagram in Graph-Easy notation like [A] -> [B] and select ASCII Art or Box Art format. The output works in terminals, README files, and plain-text docs. You can also export to PNG, SVG, and PDF just like Mermaid." />
+        <jsp:param name="faq2a" value="Mermaid does not output ASCII art natively. This tool is the best free Mermaid to ASCII alternative. Use AI to describe your diagram in English or write Graph-Easy notation like [A] -> [B]. The output works in terminals, README files, and plain-text docs. Export to PNG, SVG, and PDF too." />
         <jsp:param name="faq3q" value="How do I export a diagram to PNG, SVG, or PDF?" />
-        <jsp:param name="faq3a" value="Select the GraphViz DOT output format and click Render. Export buttons for PNG, SVG, and PDF appear above the output. Click one to open a preview modal where you can set the filename and download. All rendering happens client-side via Viz.js with no upload required." />
-        <jsp:param name="faq4q" value="How do I create architecture or system design diagrams?" />
-        <jsp:param name="faq4a" value="Use parentheses to create groups like (Frontend) and (Backend) then place nodes inside them. Connect services with labeled edges such as [API] -> { label: REST; } [Database]. This workflow is ideal for documenting microservices and cloud architecture." />
-        <jsp:param name="faq5q" value="Can I paste Graph-Easy output into a GitHub README?" />
-        <jsp:param name="faq5a" value="Yes. ASCII art output renders correctly on GitHub, GitLab, Bitbucket, and any plain-text viewer. Wrap the output in a fenced code block with triple backticks in your Markdown file and the diagram displays with proper monospace alignment. No image hosting needed." />
-        <jsp:param name="faq6q" value="Does Graph-Easy work offline or need an account?" />
-        <jsp:param name="faq6a" value="No account is required. The tool loads Perl compiled to WebAssembly which is about 4 MB compressed. Once loaded, diagram generation works fully offline. Your input never leaves the browser and no data is stored on any server." />
+        <jsp:param name="faq3a" value="Select the GraphViz DOT output format and click Render. Export buttons for PNG, SVG, and PDF appear above the output. All rendering happens client-side via Viz.js with no upload required." />
+        <jsp:param name="faq4q" value="Can AI generate architecture and system design diagrams?" />
+        <jsp:param name="faq4a" value="Yes. Describe your architecture in English — like 'microservices with API gateway connecting to user service, order service, each with its own database' — and AI generates the complete Graph-Easy notation with groups, labeled edges, and proper structure." />
+        <jsp:param name="faq5q" value="Can I paste the output into a GitHub README?" />
+        <jsp:param name="faq5a" value="Yes. ASCII art output renders correctly on GitHub, GitLab, Bitbucket, and any plain-text viewer. Wrap in a fenced code block with triple backticks. No image hosting needed." />
+        <jsp:param name="faq6q" value="Is it free?" />
+        <jsp:param name="faq6a" value="Yes, completely free with no signup. AI diagram generation, rendering, editing, and export are all available immediately. The tool runs entirely in your browser via WebAssembly." />
         <jsp:param name="faq7q" value="What is the syntax for edge labels, groups, and styling?" />
-        <jsp:param name="faq7a" value="Add labels with curly braces between nodes: [A] -> { label: yes; } [B]. Apply styles with { style: dashed; } or { style: bold; }. Group related nodes by placing them under a line like ( Backend ). Combine attributes in one block: -> { label: HTTP; style: bold; }." />
-        <jsp:param name="faq8q" value="How do I share a diagram with a colleague?" />
-        <jsp:param name="faq8a" value="Click the Share button to generate a URL that base64-encodes your graph notation. Anyone who opens the link sees your diagram pre-loaded and auto-rendered. You can also copy the ASCII text output directly into Slack, email, Jira, or any documentation tool." />
+        <jsp:param name="faq7a" value="Add labels: [A] -> { label: yes; } [B]. Styles: { style: dashed; }. Groups: ( Backend ). Or just describe what you want in English and let AI generate the syntax for you." />
+        <jsp:param name="faq8q" value="How do I share a diagram?" />
+        <jsp:param name="faq8a" value="Click Share to generate a URL that encodes your diagram. Anyone who opens the link sees it pre-loaded and auto-rendered. You can also copy ASCII output directly into Slack, email, Jira, or docs." />
     </jsp:include>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
@@ -786,10 +786,29 @@
                     </div>
                 </div>
 
+                <!-- AI: Describe in English -->
+                <div style="margin-bottom:0.5rem;padding:0.6rem;background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(139,92,246,0.04));border:1px solid rgba(99,102,241,0.15);border-radius:0.375rem;">
+                    <label style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;font-weight:600;color:#6366f1;margin-bottom:0.35rem;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M12 2a4 4 0 014 4v1h1a3 3 0 010 6h-1v1a4 4 0 01-8 0v-1H7a3 3 0 010-6h1V6a4 4 0 014-4z"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/></svg>
+                        AI — describe your diagram
+                    </label>
+                    <div style="display:flex;gap:0.3rem;">
+                        <input type="text" id="ge-ai-input" placeholder="e.g. CI/CD pipeline with build, test, deploy" autocomplete="off" spellcheck="false" style="flex:1;padding:0.35rem 0.5rem;border:1px solid var(--border);border-radius:0.25rem;font-size:0.75rem;background:var(--bg-primary);color:var(--text-primary);">
+                        <button type="button" id="ge-ai-btn" style="padding:0.35rem 0.7rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:0.25rem;font-size:0.7rem;font-weight:600;cursor:pointer;white-space:nowrap;">Generate</button>
+                    </div>
+                    <div id="ge-ai-status" style="display:none;margin-top:0.3rem;padding:0.25rem 0.4rem;border-radius:0.2rem;font-size:0.68rem;"></div>
+                    <div style="display:flex;flex-wrap:wrap;gap:0.25rem;margin-top:0.4rem;">
+                        <button type="button" class="ge-ai-chip" data-prompt="CI/CD pipeline: code commit, build, unit tests, integration tests, staging deploy, production deploy">CI/CD</button>
+                        <button type="button" class="ge-ai-chip" data-prompt="microservice architecture: API gateway connects to user service, order service, payment service, each has its own database">microservices</button>
+                        <button type="button" class="ge-ai-chip" data-prompt="git branching: main branch, develop branch, feature branch merges to develop, develop merges to main, hotfix from main">git flow</button>
+                        <button type="button" class="ge-ai-chip" data-prompt="TCP three-way handshake: client sends SYN, server sends SYN-ACK, client sends ACK, connection established">TCP handshake</button>
+                    </div>
+                </div>
+
                 <!-- Graph Notation Input -->
                 <div class="ge-section-label">Graph Notation Input</div>
                 <div class="ge-form-group">
-                    <textarea id="graphInput" placeholder="Enter graph notation...&#10;Example: [A] -> [B] -> [C]">[ Start ] -> [ Process ] -> [ End ]
+                    <textarea id="graphInput" placeholder="Enter graph notation, or use AI above...&#10;Example: [A] -> [B] -> [C]">[ Start ] -> [ Process ] -> [ End ]
 [ Process ] -> { style: dashed; } [ Error ]
 [ Error ] -> [ Start ]</textarea>
                 </div>
@@ -1842,6 +1861,114 @@ if ($@) {
 
     js('window')->graphEasyReady();
 }
+</script>
+
+<style>
+.ge-ai-chip{padding:0.15rem 0.4rem;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:10px;font-size:0.65rem;color:#6366f1;font-weight:500;cursor:pointer;transition:background 0.12s}
+.ge-ai-chip:hover{background:rgba(99,102,241,0.15)}
+[data-theme="dark"] .ge-ai-chip{background:rgba(99,102,241,0.12);border-color:rgba(99,102,241,0.2);color:#a5b4fc}
+[data-theme="dark"] .ge-ai-chip:hover{background:rgba(99,102,241,0.2)}
+</style>
+
+<script>
+// AI: Describe → Graph-Easy notation
+(function() {
+    var aiInput = document.getElementById('ge-ai-input');
+    var aiBtn = document.getElementById('ge-ai-btn');
+    var aiStatus = document.getElementById('ge-ai-status');
+    var graphInput = document.getElementById('graphInput');
+
+    var AI_SYSTEM = 'You are a Graph-Easy notation expert. Given a plain-English description, output ONLY valid Graph-Easy syntax.\n\n' +
+        'Graph-Easy syntax rules:\n' +
+        '- Nodes: [Node Name]\n' +
+        '- Directed edge: [A] -> [B]\n' +
+        '- Bidirectional: [A] <-> [B]\n' +
+        '- Edge label: [A] -> { label: yes; } [B]\n' +
+        '- Edge style: [A] -> { style: dashed; } [B]\n' +
+        '- Groups: ( Group Name )\n' +
+        '- Each connection on its own line\n' +
+        '- Output ONLY the Graph-Easy code, no explanation\n\n' +
+        'Examples:\n' +
+        '"simple pipeline: A to B to C"\n[ A ] -> [ B ] -> [ C ]\n\n' +
+        '"login flow with error handling"\n[ Login ] -> { label: valid; } [ Dashboard ]\n[ Login ] -> { label: invalid; } [ Error ]\n[ Error ] -> [ Login ]\n\n' +
+        '"microservices with gateway"\n( Frontend )\n  [ Browser ] -> [ API Gateway ]\n\n( Backend )\n  [ API Gateway ] -> [ User Service ]\n  [ API Gateway ] -> [ Order Service ]\n  [ User Service ] -> [ User DB ]\n  [ Order Service ] -> [ Order DB ]\n\n' +
+        'RESPOND WITH ONLY GRAPH-EASY CODE.';
+
+    function setStatus(msg, cls) {
+        if (!aiStatus) return;
+        aiStatus.textContent = msg;
+        aiStatus.style.display = msg ? 'block' : 'none';
+        aiStatus.style.color = cls === 'error' ? '#dc2626' : cls === 'success' ? '#16a34a' : '#6366f1';
+        aiStatus.style.background = cls === 'error' ? 'rgba(220,38,38,0.08)' : cls === 'success' ? 'rgba(22,163,74,0.08)' : 'rgba(99,102,241,0.08)';
+    }
+
+    if (aiBtn && aiInput) {
+        aiBtn.addEventListener('click', function() { aiGenerate(); });
+        aiInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !aiBtn.disabled) aiGenerate();
+        });
+        document.querySelectorAll('.ge-ai-chip').forEach(function(chip) {
+            chip.addEventListener('click', function() {
+                aiInput.value = chip.getAttribute('data-prompt');
+                aiInput.focus();
+            });
+        });
+    }
+
+    function aiGenerate() {
+        var desc = aiInput.value.trim();
+        if (!desc) { setStatus('Enter a description', 'error'); return; }
+
+        aiBtn.disabled = true;
+        aiBtn.textContent = 'Thinking...';
+        setStatus('AI is generating Graph-Easy notation...', 'loading');
+
+        fetch('<%=request.getContextPath()%>/ai', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [
+                    { role: 'system', content: AI_SYSTEM },
+                    { role: 'user', content: desc }
+                ],
+                stream: false
+            })
+        })
+        .then(function(r) {
+            if (r.status === 429) throw new Error('Rate limit — try again');
+            if (!r.ok) throw new Error('AI unavailable');
+            return r.json();
+        })
+        .then(function(data) {
+            var text = '';
+            if (data.message && data.message.content) text = data.message.content;
+            else if (data.response) text = data.response;
+            else if (data.choices && data.choices[0]) {
+                text = data.choices[0].message ? data.choices[0].message.content : (data.choices[0].text || '');
+            }
+            if (!text) throw new Error('Empty AI response');
+
+            text = text.replace(/```[a-z-]*\s*/gi, '').replace(/```/g, '').trim();
+
+            graphInput.value = text;
+            setStatus('Generated! Click Render or press Ctrl+Enter', 'success');
+
+            // Auto-render if renderGraph function exists
+            if (typeof window.renderGraph === 'function') {
+                window.renderGraph();
+            }
+
+            setTimeout(function() { setStatus('', ''); }, 4000);
+        })
+        .catch(function(err) {
+            setStatus(err.message, 'error');
+        })
+        .finally(function() {
+            aiBtn.disabled = false;
+            aiBtn.textContent = 'Generate';
+        });
+    }
+})();
 </script>
 
 </body>
