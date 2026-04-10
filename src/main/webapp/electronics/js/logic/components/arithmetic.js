@@ -196,5 +196,114 @@
     render(comp, ctx) { renderBlock(comp, ctx, 'DEC', ['A0','A1'], ['Y0','Y1','Y2','Y3']); }
   };
 
-  L.ARITH_TYPES = { ADDER, SUBTRACTOR, COMPARATOR, MUX, DEMUX, DECODER };
+  /* ═══════════ LUT (Lookup Table) — FPGA primitive ═══════════ */
+  // N-input, 1-output configurable truth table.
+  // The truth table is stored as a bitmask in attrs.table (integer).
+  // For N inputs, the table has 2^N bits. Bit i = output when input = i.
+  // Example: 2-input AND = table 0b1000 = 8 (only row 11 outputs 1)
+  const LUT = {
+    type: 'LUT',
+    label: 'LUT',
+    category: 'Arithmetic',
+    defaultAttrs: { inputs: 2, table: 8 },  // default: 2-input AND
+
+    createPorts(attrs) {
+      const n = Math.max(1, Math.min(6, attrs.inputs || 2));
+      const ports = [];
+      const totalH = (n - 1) * 14;
+      for (let i = 0; i < n; i++) {
+        ports.push(new Port('in', -24, -totalH / 2 + i * 14, 1));
+      }
+      ports.push(new Port('out', 24, 0, 1));
+      return ports;
+    },
+
+    compute(inputs, attrs) {
+      const n = inputs.length;
+      let addr = 0;
+      let hasUnknown = false;
+      for (let i = 0; i < n; i++) {
+        const v = inputs[i].get(0);
+        if (v === UNKNOWN || v === ERROR) { hasUnknown = true; break; }
+        if (v === TRUE) addr |= (1 << i);
+      }
+      if (hasUnknown) return [Value.of(UNKNOWN)];
+      const table = attrs.table || 0;
+      const bit = (table >> addr) & 1;
+      return [Value.of(bit ? TRUE : FALSE)];
+    },
+
+    render(comp, ctx) {
+      const g = ctx.group;
+      const n = Math.max(1, Math.min(6, comp.attrs.inputs || 2));
+      const totalH = Math.max(30, (n - 1) * 14 + 20);
+
+      // Box
+      const box = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      box.setAttribute('x', -18); box.setAttribute('y', -totalH / 2);
+      box.setAttribute('width', 36); box.setAttribute('height', totalH);
+      box.setAttribute('rx', 3);
+      box.setAttribute('fill', 'var(--lg-gate-fill, #1e293b)');
+      box.setAttribute('stroke', 'var(--lg-accent)');
+      box.setAttribute('stroke-width', '1.5');
+      g.appendChild(box);
+
+      // LUT label
+      const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      txt.setAttribute('x', 0); txt.setAttribute('y', -2);
+      txt.setAttribute('text-anchor', 'middle');
+      txt.setAttribute('fill', 'var(--lg-accent)');
+      txt.setAttribute('font-size', '9');
+      txt.setAttribute('font-weight', '700');
+      txt.setAttribute('font-family', "'Fira Code', monospace");
+      txt.textContent = 'LUT';
+      txt.classList.add('lg-clickable');
+      g.appendChild(txt);
+
+      // Size label
+      const sz = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      sz.setAttribute('x', 0); sz.setAttribute('y', 9);
+      sz.setAttribute('text-anchor', 'middle');
+      sz.setAttribute('fill', 'var(--lg-text-dim)');
+      sz.setAttribute('font-size', '7');
+      sz.setAttribute('font-family', "'Fira Code', monospace");
+      sz.textContent = n + '→1';
+      g.appendChild(sz);
+
+      // Table hex value
+      const hex = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      hex.setAttribute('x', 0); hex.setAttribute('y', totalH / 2 + 10);
+      hex.setAttribute('text-anchor', 'middle');
+      hex.setAttribute('fill', 'var(--lg-text-dim)');
+      hex.setAttribute('font-size', '7');
+      hex.setAttribute('font-family', "'Fira Code', monospace");
+      hex.textContent = '0x' + (comp.attrs.table || 0).toString(16).toUpperCase();
+      g.appendChild(hex);
+    },
+
+    onClick(comp, circuit) {
+      const n = comp.attrs.inputs || 2;
+      const maxVal = (1 << (1 << n)) - 1;
+      const current = comp.attrs.table || 0;
+      const input = prompt(
+        'LUT truth table (' + n + ' inputs, ' + (1 << n) + ' rows)\n' +
+        'Enter as hex (0x..) or decimal.\n' +
+        'Each bit = output for that input combination.\n' +
+        'Examples: AND=' + (1 << ((1 << n) - 1)) + ', OR=' + (maxVal - 1) + '\n' +
+        'Current: 0x' + current.toString(16).toUpperCase() + ' (' + current + ')',
+        '0x' + current.toString(16).toUpperCase()
+      );
+      if (input != null) {
+        let val = input.trim().toLowerCase().startsWith('0x')
+          ? parseInt(input.trim(), 16)
+          : parseInt(input.trim());
+        if (!isNaN(val)) {
+          comp.attrs.table = val & maxVal;
+          circuit.propagate();
+        }
+      }
+    }
+  };
+
+  L.ARITH_TYPES = { ADDER, SUBTRACTOR, COMPARATOR, MUX, DEMUX, DECODER, LUT };
 })(window.LogicSim);
