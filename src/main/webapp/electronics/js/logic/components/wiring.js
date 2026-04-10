@@ -104,6 +104,62 @@
     }
   };
 
+  /* ── Pull Resistor (weak pull-up or pull-down) ── */
+  // Outputs a weak signal that can be overridden by any active driver.
+  // In our 1-bit simulator, it acts like a default value provider:
+  // - Pull-up: outputs HIGH unless overridden
+  // - Pull-down: outputs LOW unless overridden
+  const PULL_RESISTOR = {
+    type: 'PULL_RESISTOR',
+    label: 'Pull Resistor',
+    category: 'Wiring',
+    defaultAttrs: { pullTo: 1 },  // 1 = pull-up (HIGH), 0 = pull-down (LOW)
+
+    createPorts() {
+      return [ new Port('out', 0, 16, 1) ];
+    },
+
+    compute(inputs, attrs) {
+      return [ Value.of(attrs.pullTo ? TRUE : FALSE) ];
+    },
+
+    render(comp, ctx) {
+      const g = ctx.group;
+      const isPullUp = comp.attrs.pullTo !== 0;
+
+      // Resistor zigzag symbol
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', isPullUp
+        ? 'M0,-10 L0,-6 L-4,-4 L4,-1 L-4,2 L4,5 L-4,8 L0,10 L0,14'  // pull-up: power on top
+        : 'M0,14 L0,10 L-4,8 L4,5 L-4,2 L4,-1 L-4,-4 L0,-6 L0,-10'  // pull-down: ground on top
+      );
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', 'var(--lg-wire, #475569)');
+      path.setAttribute('stroke-width', '1.5');
+      path.setAttribute('stroke-linejoin', 'round');
+      g.appendChild(path);
+
+      // Power/ground symbol at top
+      const sym = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      sym.setAttribute('x', 0);
+      sym.setAttribute('y', isPullUp ? -14 : -14);
+      sym.setAttribute('text-anchor', 'middle');
+      sym.setAttribute('fill', isPullUp ? 'var(--lg-success, #22c55e)' : 'var(--lg-text-dim, #94a3b8)');
+      sym.setAttribute('font-size', '10');
+      sym.setAttribute('font-weight', '700');
+      sym.setAttribute('font-family', "'Fira Code', monospace");
+      sym.textContent = isPullUp ? 'VCC' : 'GND';
+      sym.classList.add('lg-clickable');
+      g.appendChild(sym);
+    },
+
+    onClick(comp, circuit) {
+      // Toggle between pull-up and pull-down
+      comp.attrs.pullTo = comp.attrs.pullTo ? 0 : 1;
+      circuit.propagate();
+    }
+  };
+
   /* ── Tunnel Source (receives value, broadcasts by name) ── */
   const TUNNEL_SOURCE = {
     type: 'TUNNEL_SRC',
@@ -335,6 +391,7 @@
     PROBE: PROBE,
     TUNNEL_SRC: TUNNEL_SOURCE,
     TUNNEL_TGT: TUNNEL_TARGET,
-    SPLITTER: SPLITTER
+    SPLITTER: SPLITTER,
+    PULL_RESISTOR: PULL_RESISTOR
   };
 })(window.LogicSim);

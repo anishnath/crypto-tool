@@ -16,7 +16,7 @@
         'Power':         function() { return 'CONSTANT'; },
         'Tunnel':        function() { return 'TUNNEL'; },
         'Splitter':      function() { return '_SPLITTER'; },
-        'Pull Resistor': function() { return '_PULL'; },
+        'Pull Resistor': function() { return 'PULL_RESISTOR'; },
         'Probe':         function() { return 'PROBE'; },
         'Bit Extender':  function() { return '_SKIP'; },
 
@@ -80,7 +80,13 @@
         '7486': function() { return 'TTL_7486'; },
         '7474': function() { return 'TTL_7474'; },
         '7447': function() { return 'TTL_7447'; },
-        '74138': function() { return 'TTL_74138'; }
+        '74138': function() { return 'TTL_74138'; },
+
+        // lib 8 — Base
+        'Text': function() { return 'TEXT_LABEL'; },
+
+        // lib 9 — BFH-Praktika
+        'BCD_to_7_Segment_decoder': function() { return 'BCD_7SEG_DECODER'; }
     };
 
     // ── Port offsets from Logisim Evolution source ──
@@ -547,21 +553,8 @@
             var isOutputPin = getAttr(el, 'type') === 'output';
             var type = mapFn({ type: getAttr(el, 'type') });
 
-            // Gap 3: Pull Resistor → CONSTANT
-            if (type === '_PULL') {
-                type = 'CONSTANT';
-                // Pull resistor defaults to HIGH
-                var comp = {
-                    type: 'CONSTANT',
-                    x: Math.round(loc.x * 0.6),
-                    y: Math.round(loc.y * 0.6),
-                    attrs: { value: 1 }
-                };
-                var compIdx = components.length;
-                components.push(comp);
-                portMap.push({ idx: compIdx + compIndexOffset, ports: [{ x: loc.x, y: loc.y, dir: 'out' }] });
-                continue;
-            }
+            // Pull Resistor — now a real component
+            // (no special handling needed — falls through to normal component creation)
 
             // Skip unsupported
             if (type === '_SKIP') {
@@ -645,6 +638,11 @@
                 compAttrs.color = color || '#22c55e';
             }
 
+            // Text label
+            if (type === 'TEXT_LABEL') {
+                compAttrs.text = getAttr(el, 'text') || 'Label';
+            }
+
             // Gap 5: TTL components — pass through, no special attrs needed
             // (TTL_7400 etc. are already in our ALL_TYPES registry)
 
@@ -702,6 +700,34 @@
                     pointIndex[key].push({ compIdx: pm.idx, portIdx: p, dir: 'in', type: pm.compType || '' });
                 } else {
                     pointIndex[key].push({ compIdx: pm.idx, portIdx: p, dir: pt.dir, type: pm.compType || '' });
+                }
+            }
+        }
+
+        // ── Fuzzy matching: connect wire endpoints near (±5px) port positions ──
+        var FUZZ = 5;
+        for (var rw2 = 0; rw2 < rawWires.length; rw2++) {
+            var pts = [rawWires[rw2].from, rawWires[rw2].to];
+            for (var pi2 = 0; pi2 < pts.length; pi2++) {
+                var wp = pts[pi2];
+                var wpKey = pointKey(wp.x, wp.y);
+                // If this wire point is already in pointIndex, skip
+                if (pointIndex[wpKey]) continue;
+                // Search nearby for a port
+                for (var fx = -FUZZ; fx <= FUZZ; fx++) {
+                    for (var fy = -FUZZ; fy <= FUZZ; fy++) {
+                        if (fx === 0 && fy === 0) continue;
+                        var nearKey = pointKey(wp.x + fx, wp.y + fy);
+                        if (pointIndex[nearKey]) {
+                            // Found a nearby port — link this wire point to it
+                            if (!pointIndex[wpKey]) pointIndex[wpKey] = [];
+                            pointIndex[nearKey].forEach(function(pinfo) {
+                                pointIndex[wpKey].push(pinfo);
+                            });
+                            fx = FUZZ + 1; // break outer
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -851,6 +877,8 @@
                 return clockPortOffsets(facing);
             case 'CONSTANT':
                 return [{ dx: 0, dy: 0, dir: 'out' }];
+            case 'PULL_RESISTOR':
+                return [{ dx: 0, dy: 0, dir: 'out' }];
             case 'BUTTON': case 'SWITCH':
                 return [{ dx: 0, dy: 0, dir: 'out' }];
             case 'LED':
@@ -900,6 +928,16 @@
             case 'TTL_7408': case 'TTL_7432': case 'TTL_7486':
             case 'TTL_7474': case 'TTL_7447': case 'TTL_74138':
                 return ttlDipPorts(14, facing);
+            case 'BCD_7SEG_DECODER':
+                // 4 inputs (D0-D3) left, 7 outputs (a-g) right
+                return (function() {
+                    var ports = [];
+                    for (var i = 0; i < 4; i++) ports.push({ dx: -24, dy: -15 + i * 10, dir: 'in' });
+                    for (var j = 0; j < 7; j++) ports.push({ dx: 24, dy: -30 + j * 10, dir: 'out' });
+                    return ports;
+                })();
+            case 'TEXT_LABEL':
+                return [];  // no ports
             default:
                 return [{ dx: 0, dy: 0, dir: 'out' }];
         }

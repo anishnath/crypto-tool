@@ -431,5 +431,135 @@
     }
   };
 
-  L.DISPLAY_TYPES = { SEVEN_SEG, HEX_DISPLAY, LED_BAR, KEYBOARD, TTY };
+  /* ── BCD to 7-Segment Decoder ── */
+  // Takes 4 BCD inputs (D0-D3) and outputs 7 segment lines (a-g)
+  // Same truth table as HEX_DECODE but as a standalone component
+  const BCD_7SEG_DECODER = {
+    type: 'BCD_7SEG_DECODER',
+    label: 'BCD → 7-Seg',
+    category: 'Displays',
+    defaultAttrs: {},
+
+    createPorts() {
+      const ports = [];
+      // 4 inputs (left): D0, D1, D2, D3
+      for (let i = 0; i < 4; i++)
+        ports.push(new Port('in', -24, -15 + i * 10, 1));
+      // 7 outputs (right): a, b, c, d, e, f, g
+      for (let i = 0; i < 7; i++)
+        ports.push(new Port('out', 24, -30 + i * 10, 1));
+      return ports;
+    },
+
+    compute(inputs) {
+      // Decode 4-bit BCD → 7 segment bits
+      let val = 0, hasUnknown = false;
+      for (let i = 0; i < 4; i++) {
+        const s = inputs[i].get(0);
+        if (s === UNKNOWN || s === ERROR) { hasUnknown = true; break; }
+        if (s === TRUE) val |= (1 << i);
+      }
+
+      if (hasUnknown) {
+        return [0,0,0,0,0,0,0].map(() => Value.of(UNKNOWN));
+      }
+
+      const segs = HEX_DECODE[val & 0xF];
+      // Bits: a=6, b=5, c=4, d=3, e=2, f=1, g=0
+      return [
+        Value.of((segs >> 6) & 1 ? TRUE : FALSE),  // a
+        Value.of((segs >> 5) & 1 ? TRUE : FALSE),  // b
+        Value.of((segs >> 4) & 1 ? TRUE : FALSE),  // c
+        Value.of((segs >> 3) & 1 ? TRUE : FALSE),  // d
+        Value.of((segs >> 2) & 1 ? TRUE : FALSE),  // e
+        Value.of((segs >> 1) & 1 ? TRUE : FALSE),  // f
+        Value.of((segs >> 0) & 1 ? TRUE : FALSE),  // g
+      ];
+    },
+
+    render(comp, ctx) {
+      const g = ctx.group;
+
+      // Box body
+      const box = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      box.setAttribute('x', -18); box.setAttribute('y', -35);
+      box.setAttribute('width', 36); box.setAttribute('height', 70);
+      box.setAttribute('rx', 3);
+      box.setAttribute('fill', 'var(--lg-gate-fill, #1e293b)');
+      box.setAttribute('stroke', 'var(--lg-gate-stroke, #94a3b8)');
+      box.setAttribute('stroke-width', '1');
+      g.appendChild(box);
+
+      // Label
+      const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      txt.setAttribute('x', 0); txt.setAttribute('y', 2);
+      txt.setAttribute('text-anchor', 'middle');
+      txt.setAttribute('fill', 'var(--lg-accent)');
+      txt.setAttribute('font-size', '8');
+      txt.setAttribute('font-weight', '600');
+      txt.setAttribute('font-family', "'Fira Code', monospace");
+      txt.textContent = 'BCD';
+      g.appendChild(txt);
+
+      // Input labels
+      ['D0','D1','D2','D3'].forEach((l, i) => {
+        const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        t.setAttribute('x', -14); t.setAttribute('y', -12 + i * 10);
+        t.setAttribute('fill', 'var(--lg-text-dim)');
+        t.setAttribute('font-size', '6');
+        t.setAttribute('font-family', "'Fira Code', monospace");
+        t.textContent = l;
+        g.appendChild(t);
+      });
+
+      // Output labels
+      ['a','b','c','d','e','f','g'].forEach((l, i) => {
+        const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        t.setAttribute('x', 14); t.setAttribute('y', -27 + i * 10);
+        t.setAttribute('text-anchor', 'end');
+        t.setAttribute('fill', 'var(--lg-text-dim)');
+        t.setAttribute('font-size', '6');
+        t.setAttribute('font-family', "'Fira Code', monospace");
+        t.textContent = l;
+        g.appendChild(t);
+      });
+    }
+  };
+
+  /* ── Text Label (decorative annotation) ── */
+  const TEXT_LABEL = {
+    type: 'TEXT_LABEL',
+    label: 'Text Label',
+    category: 'Displays',
+    defaultAttrs: { text: 'Label' },
+
+    createPorts() { return []; },  // no ports — purely decorative
+    compute() { return []; },
+
+    render(comp, ctx) {
+      const g = ctx.group;
+      const text = comp.attrs.text || 'Label';
+
+      const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      txt.setAttribute('x', 0); txt.setAttribute('y', 4);
+      txt.setAttribute('text-anchor', 'middle');
+      txt.setAttribute('fill', 'var(--lg-text, #e2e8f0)');
+      txt.setAttribute('font-size', '12');
+      txt.setAttribute('font-weight', '500');
+      txt.setAttribute('font-family', "'DM Sans', sans-serif");
+      txt.textContent = text;
+      txt.classList.add('lg-clickable');
+      g.appendChild(txt);
+    },
+
+    onClick(comp, circuit) {
+      const text = prompt('Label text:', comp.attrs.text || 'Label');
+      if (text != null) {
+        comp.attrs.text = text;
+        circuit.propagate();
+      }
+    }
+  };
+
+  L.DISPLAY_TYPES = { SEVEN_SEG, HEX_DISPLAY, LED_BAR, KEYBOARD, TTY, BCD_7SEG_DECODER, TEXT_LABEL };
 })(window.LogicSim);

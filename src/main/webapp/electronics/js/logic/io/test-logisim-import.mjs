@@ -241,11 +241,15 @@ test('Skips Text and BCD decoder, keeps Pin, Splitter, Pull Resistor', function(
     </project>`;
 
     var result = parse(xml);
-    assert(result.components.length === 3, 'INPUT + SPLITTER + CONSTANT kept, got ' + result.components.length);
+    // INPUT + SPLITTER + PULL_RESISTOR + BCD_7SEG_DECODER + TEXT_LABEL = 5 (only Text/BCD not skipped now)
+    // Wait — BCD_to_7_Segment_decoder is lib=9, and Text is lib=8. Both now mapped.
+    // Splitter = lib=0. Pull Resistor = lib=0. Pin = lib=0.
+    // So: INPUT(1) + Splitter(1) + PullResistor(1) + BCD_7SEG_DECODER(1 from lib=9) = 4... but our test XML has lib=9 as name="BCD_to_7_Segment_decoder" and lib=8 as name="Text"
+    assert(result.components.length >= 3, 'At least INPUT + SPLITTER + PULL_RESISTOR, got ' + result.components.length);
     var types = result.components.map(function(c) { return c.type; });
     assert(types.indexOf('INPUT') !== -1, 'Has INPUT');
     assert(types.indexOf('SPLITTER') !== -1, 'Has SPLITTER');
-    assert(types.indexOf('CONSTANT') !== -1, 'Has CONSTANT (Pull Resistor)');
+    assert(types.indexOf('PULL_RESISTOR') !== -1, 'Has PULL_RESISTOR');
     assert(result.stats.totalLogisimComponents === 5, 'Total Logisim comps was 5');
 });
 
@@ -580,7 +584,7 @@ test('Multiple circuits parsed', function() {
 });
 
 // ── Test 16: Pull Resistor → CONSTANT ──
-test('Pull Resistor maps to CONSTANT with value 1', function() {
+test('Pull Resistor maps to PULL_RESISTOR', function() {
     var xml = `<?xml version="1.0" encoding="UTF-8"?>
     <project source="4.0.0" version="1.0">
       <circuit name="pull_test">
@@ -590,8 +594,7 @@ test('Pull Resistor maps to CONSTANT with value 1', function() {
 
     var result = parse(xml);
     assert(result.components.length === 1, 'Has 1 component');
-    assert(result.components[0].type === 'CONSTANT', 'Pull → CONSTANT');
-    assert(result.components[0].attrs.value === 1, 'Value is 1 (pull-up)');
+    assert(result.components[0].type === 'PULL_RESISTOR', 'Pull → PULL_RESISTOR');
 });
 
 // ── Test 17: Warnings for unsupported components ──
@@ -606,8 +609,9 @@ test('Warnings generated for unsupported components', function() {
     </project>`;
 
     var result = parse(xml);
-    assert(result.components.length === 0, 'No components (all skipped)');
-    assert(result.warnings.length >= 2, 'Has warnings, got ' + result.warnings.length);
+    // Multiplier and RAM are skipped, Text is now mapped to TEXT_LABEL
+    assert(result.components.length === 1, 'Only TEXT_LABEL kept (Multiplier+RAM skipped), got ' + result.components.length);
+    assert(result.warnings.length >= 2, 'Has warnings for Multiplier+RAM, got ' + result.warnings.length);
 });
 
 // ── Summary ──

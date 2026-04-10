@@ -417,6 +417,7 @@ document.addEventListener('DOMContentLoaded', function () {
   makeLibItem(WIRING_TYPES.TUNNEL_SRC, libWiring);
   makeLibItem(WIRING_TYPES.TUNNEL_TGT, libWiring);
   makeLibItem(WIRING_TYPES.SPLITTER, libWiring);
+  makeLibItem(WIRING_TYPES.PULL_RESISTOR, libWiring);
   // I/O
   const libIO = document.getElementById('libIO');
   makeLibItem(IO_TYPES.LED, libIO);
@@ -435,7 +436,7 @@ document.addEventListener('DOMContentLoaded', function () {
   ['MUX','DEMUX','DECODER'].forEach(t => makeLibItem(ARITH_TYPES[t], libPlex));
   // Displays
   const libDisp = document.getElementById('libDisplays');
-  ['SEVEN_SEG','HEX_DISPLAY','LED_BAR','KEYBOARD','TTY'].forEach(t => makeLibItem(DISPLAY_TYPES[t], libDisp));
+  ['SEVEN_SEG','HEX_DISPLAY','LED_BAR','BCD_7SEG_DECODER','KEYBOARD','TTY','TEXT_LABEL'].forEach(t => makeLibItem(DISPLAY_TYPES[t], libDisp));
   // TTL ICs
   const libTTL = document.getElementById('libTTL');
   Object.keys(TTL_TYPES).forEach(t => makeLibItem(TTL_TYPES[t], libTTL));
@@ -560,6 +561,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (type === 'TUNNEL_SRC' || type === 'TUNNEL_TGT') {
       html += '<div class="lg-props-row"><label>Name</label><input type="text" data-attr="name" value="' + (attrs.name || '') + '"></div>';
+    }
+    if (type === 'PULL_RESISTOR') {
+      html += '<div class="lg-props-row"><label>Pull to</label><select data-attr="pullTo"><option value="1"' + (attrs.pullTo !== 0 ? ' selected' : '') + '>HIGH (VCC)</option><option value="0"' + (attrs.pullTo === 0 ? ' selected' : '') + '>LOW (GND)</option></select></div>';
+    }
+    if (type === 'TEXT_LABEL') {
+      html += '<div class="lg-props-row"><label>Text</label><input type="text" data-attr="text" value="' + (attrs.text || 'Label') + '"></div>';
     }
 
     // Action buttons
