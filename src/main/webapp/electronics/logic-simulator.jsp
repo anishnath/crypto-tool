@@ -161,6 +161,7 @@ window.addEventListener('load', function() {
       </button>
       <button class="lg-tb-btn" id="btnExportPNG" title="Export as PNG">PNG</button>
       <button class="lg-tb-btn" id="btnExportSVG" title="Export as SVG">SVG</button>
+      <button class="lg-tb-btn" id="btnExportVerilog" title="Export as Verilog HDL">HDL</button>
       <button class="lg-tb-btn" id="btnShare" title="Share via URL">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       </button>
@@ -357,6 +358,7 @@ window.addEventListener('load', function() {
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/presets.js"></script>
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/analysis/analyzer.js"></script>
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/analysis/synthesize.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/analysis/verilog-export.js"></script>
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/analysis/chronogram.js"></script>
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/io/file-io.js"></script>
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/io/logisim-import.js"></script>
@@ -430,7 +432,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   // Arithmetic
   const libArith = document.getElementById('libArith');
-  ['ADDER','SUBTRACTOR','COMPARATOR'].forEach(t => makeLibItem(ARITH_TYPES[t], libArith));
+  ['ADDER','SUBTRACTOR','COMPARATOR','LUT'].forEach(t => makeLibItem(ARITH_TYPES[t], libArith));
   // Plexers
   const libPlex = document.getElementById('libPlexers');
   ['MUX','DEMUX','DECODER'].forEach(t => makeLibItem(ARITH_TYPES[t], libPlex));
@@ -568,6 +570,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (type === 'TEXT_LABEL') {
       html += '<div class="lg-props-row"><label>Text</label><input type="text" data-attr="text" value="' + (attrs.text || 'Label') + '"></div>';
     }
+    if (type === 'LUT') {
+      html += '<div class="lg-props-row"><label>Inputs</label><input type="number" data-attr="inputs" value="' + (attrs.inputs || 2) + '" min="1" max="6"></div>';
+      html += '<div class="lg-props-row"><label>Table</label><input type="text" data-attr="table" value="0x' + (attrs.table || 0).toString(16).toUpperCase() + '"></div>';
+    }
 
     // Action buttons
     html += '<div class="lg-props-actions">';
@@ -598,7 +604,11 @@ document.addEventListener('DOMContentLoaded', function () {
         let val = input.value;
 
         // Type conversion
-        if (['state','value','inputs','fanout','period'].includes(attr)) val = parseInt(val) || 0;
+        if (['state','value','inputs','fanout','period','pullTo'].includes(attr)) val = parseInt(val) || 0;
+        if (attr === 'table') {
+          val = val.trim().toLowerCase().startsWith('0x') ? parseInt(val, 16) : parseInt(val);
+          if (isNaN(val)) val = 0;
+        }
 
         // For inputs/fanout changes, need to rebuild ports
         if ((attr === 'inputs' || attr === 'fanout' || attr === 'mode') && val !== comp.attrs[attr]) {
@@ -1380,6 +1390,22 @@ TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receive
   });
   document.getElementById('btnExportSVG').addEventListener('click', () => {
     L.FileIO.exportSVG(svgEl, 'circuit.svg');
+  });
+  document.getElementById('btnExportVerilog').addEventListener('click', () => {
+    if (!L.VerilogExporter) { alert('Verilog export module not loaded.'); return; }
+    const exporter = new L.VerilogExporter(circuit);
+    const mode = confirm('Export as:\n\nOK = Structural (gate-level netlist)\nCancel = Behavioral (minimized expressions)');
+    const verilog = mode ? exporter.exportStructural('circuit') : exporter.exportBehavioral('circuit');
+    // Download as .v file
+    const blob = new Blob([verilog], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'circuit.v';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   });
   document.getElementById('btnShare').addEventListener('click', () => {
     const result = L.FileIO.shareURL(circuit);

@@ -38,6 +38,7 @@ await import('./components/arithmetic.js');
 await import('./components/displays.js');
 await import('./analysis/analyzer.js');
 await import('./analysis/synthesize.js');
+await import('./analysis/verilog-export.js');
 await import('./analysis/chronogram.js');
 await import('./core/project.js');
 await import('./core/history.js');
@@ -2305,6 +2306,137 @@ section('Preset: Clock + LED structure');
   const led = [...c.components.values()].find(x => x.type === 'LED');
   assert(clk && led, 'Clock+LED: both components exist');
   assert(c.wires.size === 1, 'Clock+LED: 1 wire');
+}
+
+/* ════════════════ LUT (Lookup Table) ════════════════ */
+section('LUT component');
+
+{
+  const c = new Circuit();
+  const inA = c.addComponent(PIN_TYPES.INPUT, 0, 0, { label: 'A', state: FALSE });
+  const inB = c.addComponent(PIN_TYPES.INPUT, 0, 20, { label: 'B', state: FALSE });
+  // 2-input AND: table = 0b1000 = 8 (only inputs=11 gives output=1)
+  const lut = c.addComponent(ARITH_TYPES.LUT, 60, 10, { inputs: 2, table: 8 });
+  const out = c.addComponent(PIN_TYPES.OUTPUT, 120, 10, { label: 'Y' });
+
+  c.addWire(inA.id, 0, lut.id, 0);
+  c.addWire(inB.id, 0, lut.id, 1);
+  c.addWire(lut.id, 2, out.id, 0);
+
+  // A=0, B=0 → addr=0, table bit 0 = 0
+  assert(out.ports[0].value.isFalse(), 'LUT AND: 00 → 0');
+
+  // A=1, B=0 → addr=1, table bit 1 = 0
+  inA.attrs.state = TRUE; c.propagate();
+  assert(out.ports[0].value.isFalse(), 'LUT AND: 10 → 0');
+
+  // A=0, B=1 → addr=2, table bit 2 = 0
+  inA.attrs.state = FALSE; inB.attrs.state = TRUE; c.propagate();
+  assert(out.ports[0].value.isFalse(), 'LUT AND: 01 → 0');
+
+  // A=1, B=1 → addr=3, table bit 3 = 1
+  inA.attrs.state = TRUE; c.propagate();
+  assert(out.ports[0].value.isTrue(), 'LUT AND: 11 → 1');
+
+  // Change table to OR: 0b1110 = 14
+  lut.attrs.table = 14;
+  inA.attrs.state = FALSE; inB.attrs.state = FALSE; c.propagate();
+  assert(out.ports[0].value.isFalse(), 'LUT OR: 00 → 0');
+
+  inA.attrs.state = TRUE; c.propagate();
+  assert(out.ports[0].value.isTrue(), 'LUT OR: 10 → 1');
+
+  inA.attrs.state = FALSE; inB.attrs.state = TRUE; c.propagate();
+  assert(out.ports[0].value.isTrue(), 'LUT OR: 01 → 1');
+
+  // Change table to XOR: 0b0110 = 6
+  lut.attrs.table = 6;
+  inA.attrs.state = TRUE; inB.attrs.state = TRUE; c.propagate();
+  assert(out.ports[0].value.isFalse(), 'LUT XOR: 11 → 0');
+
+  inA.attrs.state = TRUE; inB.attrs.state = FALSE; c.propagate();
+  assert(out.ports[0].value.isTrue(), 'LUT XOR: 10 → 1');
+}
+
+/* ════════════════ Verilog Export ════════════════ */
+section('Verilog Export');
+
+{
+  // Build a simple circuit: A AND B → Y
+  const c = new Circuit();
+  const inA = c.addComponent(PIN_TYPES.INPUT, 0, 0, { label: 'A', state: FALSE });
+  const inB = c.addComponent(PIN_TYPES.INPUT, 0, 20, { label: 'B', state: FALSE });
+  const gate = c.addComponent(GATE_TYPES.AND, 60, 10);
+  const out = c.addComponent(PIN_TYPES.OUTPUT, 120, 10, { label: 'Y' });
+  c.addWire(inA.id, 0, gate.id, 0);
+  c.addWire(inB.id, 0, gate.id, 1);
+  c.addWire(gate.id, 2, out.id, 0);
+
+  const exporter = new L.VerilogExporter(c);
+
+  // Structural export
+  const structural = exporter.exportStructural('test_and');
+  assert(structural.includes('module test_and'), 'Structural: has module declaration');
+  assert(structural.includes('input'), 'Structural: has input ports');
+  assert(structural.includes('output'), 'Structural: has output ports');
+  assert(structural.includes('assign'), 'Structural: has assign statements');
+  assert(structural.includes('&'), 'Structural: has AND operator');
+  assert(structural.includes('endmodule'), 'Structural: has endmodule');
+
+  // Behavioral export
+  const behavioral = exporter.exportBehavioral('test_and_beh');
+  assert(behavioral.includes('module test_and_beh'), 'Behavioral: has module declaration');
+  assert(behavioral.includes('assign'), 'Behavioral: has assign');
+  assert(behavioral.includes('endmodule'), 'Behavioral: has endmodule');
+}
+
+{
+  // NOT gate
+  const c = new Circuit();
+  const inA = c.addComponent(PIN_TYPES.INPUT, 0, 0, { label: 'A', state: FALSE });
+  const gate = c.addComponent(GATE_TYPES.NOT, 60, 0);
+  const out = c.addComponent(PIN_TYPES.OUTPUT, 120, 0, { label: 'Y' });
+  c.addWire(inA.id, 0, gate.id, 0);
+  c.addWire(gate.id, 1, out.id, 0);
+
+  const v = new L.VerilogExporter(c).exportStructural('test_not');
+  assert(v.includes('~'), 'NOT Verilog: has ~ operator');
+}
+
+{
+  // D flip-flop
+  const c = new Circuit();
+  const inD = c.addComponent(PIN_TYPES.INPUT, 0, 0, { label: 'D', state: FALSE });
+  const clk = c.addComponent(CLOCK_TYPE, 0, 20, { state: FALSE });
+  const ff = c.addComponent(MEMORY_TYPES.D_FF, 80, 10);
+  const out = c.addComponent(PIN_TYPES.OUTPUT, 160, 0, { label: 'Q' });
+  c.addWire(inD.id, 0, ff.id, 0);
+  c.addWire(clk.id, 0, ff.id, 1);
+  c.addWire(ff.id, 3, out.id, 0);
+
+  const v = new L.VerilogExporter(c).exportStructural('test_dff');
+  assert(v.includes('always'), 'D_FF Verilog: has always block');
+  assert(v.includes('posedge'), 'D_FF Verilog: has posedge');
+  assert(v.includes('reg'), 'D_FF Verilog: has reg declaration');
+}
+
+{
+  // Adder
+  const c = new Circuit();
+  const inA = c.addComponent(PIN_TYPES.INPUT, 0, 0, { label: 'A', state: FALSE });
+  const inB = c.addComponent(PIN_TYPES.INPUT, 0, 20, { label: 'B', state: FALSE });
+  const inCin = c.addComponent(PIN_TYPES.INPUT, 0, 40, { label: 'Cin', state: FALSE });
+  const adder = c.addComponent(ARITH_TYPES.ADDER, 80, 20);
+  const outS = c.addComponent(PIN_TYPES.OUTPUT, 160, 10, { label: 'S' });
+  const outCout = c.addComponent(PIN_TYPES.OUTPUT, 160, 30, { label: 'Cout' });
+  c.addWire(inA.id, 0, adder.id, 0);
+  c.addWire(inB.id, 0, adder.id, 1);
+  c.addWire(inCin.id, 0, adder.id, 2);
+  c.addWire(adder.id, 3, outS.id, 0);
+  c.addWire(adder.id, 4, outCout.id, 0);
+
+  const v = new L.VerilogExporter(c).exportStructural('test_adder');
+  assert(v.includes('+'), 'Adder Verilog: has + operator');
 }
 
 /* ════════════════ Summary ════════════════ */
