@@ -851,4 +851,111 @@
         }
     } catch(e) {}
 
+    // ========== AI: Describe in English → H(s) ==========
+    var aiInput = document.getElementById('bp-ai-input');
+    var aiBtn = document.getElementById('bp-ai-btn');
+    var aiStatus = document.getElementById('bp-ai-status');
+
+    var AI_SYSTEM = 'You are a control systems expert. Given a plain-English description of a system, filter, or controller, output ONLY the transfer function H(s) as a mathematical expression using s as the variable. Use * for multiplication, ^ for powers, and parentheses for grouping. Output ONLY the expression — no explanation, no text, no markdown, no H(s)= prefix. Examples:\n' +
+        'Input: "PID controller with Kp=10 Ki=5 Kd=2"\nOutput: 2*s^2+10*s+5)/s\n' +
+        'Input: "second order low pass filter cutoff 10 rad/s damping 0.7"\nOutput: 100/(s^2+14*s+100)\n' +
+        'Input: "lead compensator gain 10 zero at -1 pole at -10"\nOutput: 10*(s+1)/(s+10)\n' +
+        'Input: "RC low pass R=1000 C=0.000001"\nOutput: 1/(0.001*s+1)\n' +
+        'Input: "integrator"\nOutput: 1/s\n' +
+        'RESPOND WITH ONLY THE EXPRESSION. No text before or after.';
+
+    function setAiStatus(msg, cls) {
+        if (!aiStatus) return;
+        aiStatus.textContent = msg;
+        aiStatus.className = 'bp-ai-status ' + (cls || '');
+        aiStatus.style.display = msg ? 'block' : 'none';
+    }
+
+    if (aiBtn && aiInput) {
+        aiBtn.addEventListener('click', function() { generateFromAI(); });
+        aiInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !aiBtn.disabled) generateFromAI();
+        });
+
+        // Example chips
+        document.querySelectorAll('.bp-ai-chip').forEach(function(chip) {
+            chip.addEventListener('click', function() {
+                aiInput.value = chip.getAttribute('data-prompt');
+                aiInput.focus();
+            });
+        });
+    }
+
+    function generateFromAI() {
+        var desc = aiInput.value.trim();
+        if (!desc) { setAiStatus('Enter a description', 'error'); return; }
+
+        aiBtn.disabled = true;
+        aiBtn.textContent = 'Thinking...';
+        setAiStatus('AI is generating the transfer function...', 'loading');
+
+        var ctx = window.BP_CALC_CTX || '';
+
+        fetch(ctx + '/ai', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [
+                    { role: 'system', content: AI_SYSTEM },
+                    { role: 'user', content: desc }
+                ],
+                stream: false
+            })
+        })
+        .then(function(r) {
+            if (r.status === 429) throw new Error('Rate limit — try again in a minute');
+            if (!r.ok) throw new Error('AI unavailable');
+            return r.json();
+        })
+        .then(function(data) {
+            var text = '';
+            if (data.message && data.message.content) text = data.message.content;
+            else if (data.response) text = data.response;
+            else if (data.choices && data.choices[0]) {
+                text = data.choices[0].message ? data.choices[0].message.content : (data.choices[0].text || '');
+            }
+
+            if (!text) throw new Error('Empty AI response');
+
+            // Clean: strip markdown, H(s)= prefix, whitespace
+            text = text.replace(/```[a-z]*\s*/gi, '').replace(/```/g, '').trim();
+            text = text.replace(/^H\(s\)\s*=\s*/i, '').trim();
+            text = text.replace(/^Transfer function:\s*/i, '').trim();
+            // Remove any lines that aren't math
+            var lines = text.split('\n').filter(function(l) {
+                return l.trim() && !l.match(/^[A-Za-z ]{10,}/); // skip long English lines
+            });
+            text = lines[0] || text.split('\n')[0];
+            text = text.trim();
+
+            if (!text || text.length > 200) throw new Error('AI returned invalid expression');
+
+            // Fill the H(s) input and switch to transfer function mode
+            if (currentMode !== 'transfer') {
+                document.querySelector('.bp-mode-btn[data-mode="transfer"]').click();
+            }
+            tfInput.value = text;
+            tfInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+            setAiStatus('Generated: ' + text, 'success');
+
+            // Auto-compute
+            setTimeout(function() {
+                computeBtn.click();
+            }, 300);
+        })
+        .catch(function(err) {
+            setAiStatus(err.message, 'error');
+        })
+        .finally(function() {
+            aiBtn.disabled = false;
+            aiBtn.textContent = 'Generate H(s)';
+        });
+    }
+
 })();
