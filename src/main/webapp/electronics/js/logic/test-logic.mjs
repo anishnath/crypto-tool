@@ -464,6 +464,50 @@ assert(tdOut.ports[0].value.toString() === 'E', 'Tunnel D: 2 sources → ERROR')
 tunD.removeComponent(tdSrc2.id);
 assert(tdOut.ports[0].value.isTrue(), 'Tunnel D: 1 source left → value=1');
 
+/* ════════════════ Splitter ════════════════ */
+section('Splitter (fan-out)');
+
+const splC = new Circuit();
+const splIn = splC.addComponent(PIN_TYPES.INPUT, 0, 0, { label: 'A', state: TRUE });
+const splSplit = splC.addComponent(WIRING_TYPES.SPLITTER, 60, 0, { fanout: 3, mode: 'out' });
+const splOut0 = splC.addComponent(PIN_TYPES.OUTPUT, 120, -14, { label: 'Y0' });
+const splOut1 = splC.addComponent(PIN_TYPES.OUTPUT, 120, 0, { label: 'Y1' });
+const splOut2 = splC.addComponent(PIN_TYPES.OUTPUT, 120, 14, { label: 'Y2' });
+
+splC.addWire(splIn.id, 0, splSplit.id, 0);    // input → splitter combined
+splC.addWire(splSplit.id, 1, splOut0.id, 0);   // splitter out 0 → Y0
+splC.addWire(splSplit.id, 2, splOut1.id, 0);   // splitter out 1 → Y1
+splC.addWire(splSplit.id, 3, splOut2.id, 0);   // splitter out 2 → Y2
+
+assert(splOut0.ports[0].value.isTrue(), 'Splitter: Y0 = 1');
+assert(splOut1.ports[0].value.isTrue(), 'Splitter: Y1 = 1');
+assert(splOut2.ports[0].value.isTrue(), 'Splitter: Y2 = 1');
+
+// Toggle input off
+splIn.attrs.state = FALSE;
+splC.propagate();
+assert(splOut0.ports[0].value.isFalse(), 'Splitter: Y0 = 0 after toggle');
+assert(splOut1.ports[0].value.isFalse(), 'Splitter: Y1 = 0 after toggle');
+assert(splOut2.ports[0].value.isFalse(), 'Splitter: Y2 = 0 after toggle');
+
+section('Splitter (fan-in)');
+
+const sfiC = new Circuit();
+const sfiA = sfiC.addComponent(PIN_TYPES.INPUT, 0, -14, { label: 'A', state: TRUE });
+const sfiB = sfiC.addComponent(PIN_TYPES.INPUT, 0, 14, { label: 'B', state: FALSE });
+const sfiSplit = sfiC.addComponent(WIRING_TYPES.SPLITTER, 60, 0, { fanout: 2, mode: 'in' });
+const sfiOut = sfiC.addComponent(PIN_TYPES.OUTPUT, 120, 0, { label: 'Y' });
+
+sfiC.addWire(sfiA.id, 0, sfiSplit.id, 0);     // A → split input 0
+sfiC.addWire(sfiB.id, 0, sfiSplit.id, 1);      // B → split input 1
+sfiC.addWire(sfiSplit.id, 2, sfiOut.id, 0);    // combined output → Y
+
+assert(sfiOut.ports[0].value.isTrue(), 'Splitter fan-in: A=1,B=0 → Y=1 (OR)');
+
+sfiA.attrs.state = FALSE;
+sfiC.propagate();
+assert(sfiOut.ports[0].value.isFalse(), 'Splitter fan-in: A=0,B=0 → Y=0');
+
 /* ════════════════ Phase 2: Complex — Clock + NOT = Oscillator ════════════════ */
 section('Clock + NOT (feedback test)');
 

@@ -193,10 +193,148 @@
     }
   };
 
+  /* ── Splitter (fan-out / fan-in bus node) ── */
+  // In our 1-bit simulator, a splitter acts as a distribution/collection node:
+  // - Fan-out mode (default): 1 combined input → N split outputs (all carry same value)
+  // - Fan-in mode: N split inputs → 1 combined output (OR of all inputs)
+  // Configurable via attrs.fanout (2-8) and attrs.mode ('out' or 'in')
+  const SPLITTER = {
+    type: 'SPLITTER',
+    label: 'Splitter',
+    category: 'Wiring',
+    defaultAttrs: { fanout: 2, mode: 'out' },
+
+    createPorts(attrs) {
+      const n = Math.max(2, Math.min(8, attrs.fanout || 2));
+      const isOut = (attrs.mode !== 'in');
+      const ports = [];
+
+      if (isOut) {
+        // Fan-out: 1 input (combined) → N outputs (split)
+        ports.push(new Port('in', -20, 0, 1));  // combined input
+        const totalH = (n - 1) * 14;
+        for (let i = 0; i < n; i++) {
+          ports.push(new Port('out', 20, -totalH / 2 + i * 14, 1));
+        }
+      } else {
+        // Fan-in: N inputs (split) → 1 output (combined)
+        const totalH = (n - 1) * 14;
+        for (let i = 0; i < n; i++) {
+          ports.push(new Port('in', -20, -totalH / 2 + i * 14, 1));
+        }
+        ports.push(new Port('out', 20, 0, 1));  // combined output
+      }
+      return ports;
+    },
+
+    compute(inputs, attrs) {
+      const n = Math.max(2, Math.min(8, attrs.fanout || 2));
+      const isOut = (attrs.mode !== 'in');
+
+      if (isOut) {
+        // Fan-out: replicate input to all outputs
+        const val = inputs[0];
+        const outputs = [];
+        for (let i = 0; i < n; i++) outputs.push(val);
+        return outputs;
+      } else {
+        // Fan-in: OR all inputs
+        let result = inputs[0];
+        for (let i = 1; i < inputs.length; i++) {
+          const a = result.get(0), b = inputs[i].get(0);
+          if (a === TRUE || b === TRUE) result = Value.of(TRUE);
+          else if (a === UNKNOWN || b === UNKNOWN) result = Value.of(UNKNOWN);
+          else result = Value.of(FALSE);
+        }
+        return [result];
+      }
+    },
+
+    render(comp, ctx) {
+      const g = ctx.group;
+      const n = Math.max(2, Math.min(8, comp.attrs.fanout || 2));
+      const isOut = (comp.attrs.mode !== 'in');
+      const totalH = (n - 1) * 14;
+
+      // Draw spine (vertical line)
+      const spine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      spine.setAttribute('x1', 0);
+      spine.setAttribute('y1', -totalH / 2);
+      spine.setAttribute('x2', 0);
+      spine.setAttribute('y2', totalH / 2);
+      spine.setAttribute('stroke', 'var(--lg-wire, #475569)');
+      spine.setAttribute('stroke-width', '2');
+      g.appendChild(spine);
+
+      // Draw combined port side (thicker line to body)
+      const combX = isOut ? -20 : 20;
+      const combLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      combLine.setAttribute('x1', combX);
+      combLine.setAttribute('y1', 0);
+      combLine.setAttribute('x2', 0);
+      combLine.setAttribute('y2', 0);
+      combLine.setAttribute('stroke', 'var(--lg-wire, #475569)');
+      combLine.setAttribute('stroke-width', '3');
+      g.appendChild(combLine);
+
+      // Draw split lines
+      const splitX = isOut ? 20 : -20;
+      for (let i = 0; i < n; i++) {
+        const y = -totalH / 2 + i * 14;
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', 0);
+        line.setAttribute('y1', y);
+        line.setAttribute('x2', splitX);
+        line.setAttribute('y2', y);
+        line.setAttribute('stroke', 'var(--lg-wire, #475569)');
+        line.setAttribute('stroke-width', '1.5');
+        g.appendChild(line);
+
+        // Bit index label
+        const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        txt.setAttribute('x', splitX > 0 ? splitX - 5 : splitX + 5);
+        txt.setAttribute('y', y + 3);
+        txt.setAttribute('text-anchor', splitX > 0 ? 'end' : 'start');
+        txt.setAttribute('fill', 'var(--lg-text-dim, #94a3b8)');
+        txt.setAttribute('font-size', '7');
+        txt.setAttribute('font-family', "'Fira Code', monospace");
+        txt.textContent = '' + i;
+        g.appendChild(txt);
+      }
+
+      // Fanout label
+      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      label.setAttribute('x', 0);
+      label.setAttribute('y', totalH / 2 + 12);
+      label.setAttribute('text-anchor', 'middle');
+      label.setAttribute('fill', 'var(--lg-text-dim, #94a3b8)');
+      label.setAttribute('font-size', '8');
+      label.setAttribute('font-family', "'Fira Code', monospace");
+      label.textContent = n + '-bit';
+      label.classList.add('lg-clickable');
+      g.appendChild(label);
+    },
+
+    onClick(comp, circuit) {
+      const n = prompt('Fan-out count (2-8):', comp.attrs.fanout || 2);
+      if (n != null) {
+        const val = Math.max(2, Math.min(8, parseInt(n) || 2));
+        if (val !== comp.attrs.fanout) {
+          // Remove and re-add with new fanout (ports change)
+          const x = comp.x, y = comp.y;
+          const attrs = Object.assign({}, comp.attrs, { fanout: val });
+          circuit.removeComponent(comp.id);
+          circuit.addComponent(SPLITTER, x, y, attrs);
+        }
+      }
+    }
+  };
+
   L.WIRING_TYPES = {
     CONSTANT: CONSTANT,
     PROBE: PROBE,
     TUNNEL_SRC: TUNNEL_SOURCE,
-    TUNNEL_TGT: TUNNEL_TARGET
+    TUNNEL_TGT: TUNNEL_TARGET,
+    SPLITTER: SPLITTER
   };
 })(window.LogicSim);

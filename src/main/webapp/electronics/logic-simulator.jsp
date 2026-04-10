@@ -39,7 +39,22 @@
 .lg-app{display:flex;flex-direction:column;height:calc(100vh - var(--header-height-desktop) - 40px - var(--lg-ad-bottom-h,100px));background:var(--lg-bg);color:var(--lg-text);font-family:'DM Sans',sans-serif;overflow:hidden}
 .lg-toolbar{display:flex;align-items:center;gap:2px;height:44px;padding:0 10px;background:var(--lg-panel);border-bottom:1px solid var(--lg-border);flex-shrink:0}
 .lg-main{display:flex;flex:1;min-height:0}
-.lg-library{width:200px;flex-shrink:0;background:var(--lg-panel);border-right:1px solid var(--lg-border);overflow-y:auto}
+.lg-library{width:200px;flex-shrink:0;background:var(--lg-panel);border-right:1px solid var(--lg-border);overflow:hidden;display:flex;flex-direction:column}
+.lg-library>.lg-lib-section,.lg-library>div:first-child{flex-shrink:0}
+.lg-lib-scroll{flex:1;overflow-y:auto}
+.lg-props{border-top:2px solid var(--lg-accent);padding:0;flex-shrink:0;max-height:45vh;overflow-y:auto;background:var(--lg-panel)}
+.lg-props-header{padding:5px 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--lg-text-dim);background:var(--lg-bg);border-bottom:1px solid var(--lg-border)}
+.lg-props-body{padding:4px 8px 8px}
+.lg-props-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:11px}
+.lg-props-row label{min-width:55px;color:var(--lg-text-dim);font-weight:500;font-size:10px}
+.lg-props-row input,.lg-props-row select{flex:1;padding:2px 4px;border:1px solid var(--lg-border);border-radius:3px;background:var(--lg-bg);color:var(--lg-text);font-size:11px;font-family:'Fira Code',monospace}
+.lg-props-row input:focus,.lg-props-row select:focus{border-color:var(--lg-accent);outline:none}
+.lg-props-row input[type="color"]{width:28px;height:20px;padding:0;flex:none;cursor:pointer}
+.lg-props-row input[type="number"]{width:50px;flex:none;text-align:center}
+.lg-props-type{font-size:11px;font-weight:600;color:var(--lg-accent);margin-bottom:4px}
+.lg-props-actions{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.lg-props-actions button{padding:3px 8px;font-size:10px;font-weight:600;border:1px solid var(--lg-border);border-radius:3px;background:var(--lg-bg);color:var(--lg-text);cursor:pointer;transition:background .1s}
+.lg-props-actions button:hover{background:var(--lg-accent);color:#fff;border-color:var(--lg-accent)}
 .lg-canvas-wrap{flex:1;position:relative;overflow:hidden;background:var(--lg-canvas-bg);isolation:isolate;z-index:0}
 .lg-canvas-wrap svg{width:100%;height:100%;display:block}
 </style>
@@ -140,6 +155,10 @@ window.addEventListener('load', function() {
       <button class="lg-tb-btn" id="btnLoad" title="Load circuit (JSON)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </button>
+      <button class="lg-tb-btn" id="btnImportLogisim" title="Import Logisim (.circ) file">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+        <span>.circ</span>
+      </button>
       <button class="lg-tb-btn" id="btnExportPNG" title="Export as PNG">PNG</button>
       <button class="lg-tb-btn" id="btnExportSVG" title="Export as SVG">SVG</button>
       <button class="lg-tb-btn" id="btnShare" title="Share via URL">
@@ -202,6 +221,7 @@ window.addEventListener('load', function() {
 
     <!-- Library panel -->
     <div class="lg-library" id="libraryPanel">
+      <div class="lg-lib-scroll">
       <div style="padding:6px 8px;"><input type="text" id="libSearch" class="lg-lib-search" placeholder="Search components..." autocomplete="off"></div>
       <div class="lg-lib-section open" data-section="gates">
         <div class="lg-lib-header lg-collapsible">Gates <span class="lg-chevron"></span></div>
@@ -235,6 +255,14 @@ window.addEventListener('load', function() {
         <div class="lg-lib-header lg-collapsible">TTL ICs <span class="lg-chevron"></span></div>
         <div class="lg-lib-body" id="libTTL"></div>
       </div>
+      </div><!-- end lg-lib-scroll -->
+
+      <!-- Properties panel (appears when component selected) -->
+      <div class="lg-props" id="propsPanel" style="display:none;">
+        <div class="lg-props-header">Properties</div>
+        <div class="lg-props-body" id="propsBody"></div>
+      </div>
+
       <!-- Ad slot below library (lazy loaded by setupad anchor) -->
     </div>
 
@@ -331,6 +359,7 @@ window.addEventListener('load', function() {
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/analysis/synthesize.js"></script>
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/analysis/chronogram.js"></script>
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/io/file-io.js"></script>
+<script defer src="<%=request.getContextPath()%>/electronics/js/logic/io/logisim-import.js"></script>
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/ui/canvas.js"></script>
 <script defer src="<%=request.getContextPath()%>/electronics/js/logic/ui/wire-manager.js"></script>
 <script>
@@ -387,6 +416,7 @@ document.addEventListener('DOMContentLoaded', function () {
   makeLibItem(WIRING_TYPES.PROBE, libWiring);
   makeLibItem(WIRING_TYPES.TUNNEL_SRC, libWiring);
   makeLibItem(WIRING_TYPES.TUNNEL_TGT, libWiring);
+  makeLibItem(WIRING_TYPES.SPLITTER, libWiring);
   // I/O
   const libIO = document.getElementById('libIO');
   makeLibItem(IO_TYPES.LED, libIO);
@@ -464,14 +494,147 @@ document.addEventListener('DOMContentLoaded', function () {
     const n = canvas.selected.size;
     if (n === 0) {
       document.getElementById('statusSelected').textContent = 'Selected: none';
+      hideProps();
     } else if (n === 1) {
       const id = [...canvas.selected][0];
-      const name = circuit.components.get(id)?.type || 'Wire';
+      const comp = circuit.components.get(id);
+      const name = comp?.type || 'Wire';
       document.getElementById('statusSelected').textContent = 'Selected: ' + name;
+      if (comp) showProps(comp);
+      else hideProps();
     } else {
       document.getElementById('statusSelected').textContent = 'Selected: ' + n + ' items';
+      hideProps();
     }
   });
+
+  /* ── Properties Panel ── */
+  const propsPanel = document.getElementById('propsPanel');
+  const propsBody = document.getElementById('propsBody');
+
+  function hideProps() {
+    propsPanel.style.display = 'none';
+  }
+
+  function showProps(comp) {
+    propsPanel.style.display = 'block';
+    let html = '<div class="lg-props-type">' + comp.typeDef.label + '</div>';
+
+    // Position
+    html += '<div class="lg-props-row"><label>X</label><input type="number" data-prop="x" value="' + comp.x + '" step="10"></div>';
+    html += '<div class="lg-props-row"><label>Y</label><input type="number" data-prop="y" value="' + comp.y + '" step="10"></div>';
+
+    // Rotation
+    html += '<div class="lg-props-row"><label>Facing</label><select data-prop="rotation">';
+    ['0','90','180','270'].forEach(deg => {
+      const labels = {'0':'East →','90':'South ↓','180':'West ←','270':'North ↑'};
+      html += '<option value="' + deg + '"' + (comp.rotation == deg ? ' selected' : '') + '>' + labels[deg] + '</option>';
+    });
+    html += '</select></div>';
+
+    // Type-specific attributes
+    const attrs = comp.attrs || {};
+    const type = comp.typeDef.type;
+
+    if (type === 'INPUT' || type === 'OUTPUT') {
+      html += '<div class="lg-props-row"><label>Label</label><input type="text" data-attr="label" value="' + (attrs.label || '') + '"></div>';
+    }
+    if (type === 'INPUT') {
+      html += '<div class="lg-props-row"><label>State</label><select data-attr="state"><option value="0"' + (attrs.state ? '' : ' selected') + '>0 (Low)</option><option value="1"' + (attrs.state ? ' selected' : '') + '>1 (High)</option></select></div>';
+    }
+    if (type === 'CLOCK') {
+      html += '<div class="lg-props-row"><label>Period</label><input type="number" data-attr="period" value="' + (attrs.period || 500) + '" min="50" step="50"> ms</div>';
+    }
+    if (type === 'CONSTANT') {
+      html += '<div class="lg-props-row"><label>Value</label><select data-attr="value"><option value="0"' + (attrs.value === 0 ? ' selected' : '') + '>0 (Low)</option><option value="1"' + (attrs.value === 1 ? ' selected' : '') + '>1 (High)</option></select></div>';
+    }
+    if (type === 'LED') {
+      html += '<div class="lg-props-row"><label>Color</label><input type="color" data-attr="color" value="' + (attrs.color || '#22c55e') + '"></div>';
+    }
+    if (['AND','OR','NAND','NOR','XOR','XNOR'].includes(type)) {
+      html += '<div class="lg-props-row"><label>Inputs</label><input type="number" data-attr="inputs" value="' + (attrs.inputs || 2) + '" min="2" max="8"></div>';
+    }
+    if (type === 'SPLITTER') {
+      html += '<div class="lg-props-row"><label>Fanout</label><input type="number" data-attr="fanout" value="' + (attrs.fanout || 2) + '" min="2" max="8"></div>';
+      html += '<div class="lg-props-row"><label>Mode</label><select data-attr="mode"><option value="out"' + (attrs.mode !== 'in' ? ' selected' : '') + '>Fan-out (1→N)</option><option value="in"' + (attrs.mode === 'in' ? ' selected' : '') + '>Fan-in (N→1)</option></select></div>';
+    }
+    if (type === 'TUNNEL_SRC' || type === 'TUNNEL_TGT') {
+      html += '<div class="lg-props-row"><label>Name</label><input type="text" data-attr="name" value="' + (attrs.name || '') + '"></div>';
+    }
+
+    // Action buttons
+    html += '<div class="lg-props-actions">';
+    html += '<button data-action="rotateCW" title="Rotate 90° clockwise">↻ Rotate</button>';
+    html += '<button data-action="rotateCCW" title="Rotate 90° counter-clockwise">↺ Rotate</button>';
+    html += '<button data-action="delete" title="Delete component">🗑 Delete</button>';
+    html += '</div>';
+
+    propsBody.innerHTML = html;
+
+    // Wire up change handlers
+    propsBody.querySelectorAll('[data-prop]').forEach(input => {
+      input.addEventListener('change', () => {
+        const prop = input.dataset.prop;
+        if (prop === 'x') { comp.x = parseInt(input.value) || 0; }
+        else if (prop === 'y') { comp.y = parseInt(input.value) || 0; }
+        else if (prop === 'rotation') {
+          comp.rotation = parseInt(input.value) || 0;
+        }
+        canvas.render();
+        saveSnapshot();
+      });
+    });
+
+    propsBody.querySelectorAll('[data-attr]').forEach(input => {
+      input.addEventListener('change', () => {
+        const attr = input.dataset.attr;
+        let val = input.value;
+
+        // Type conversion
+        if (['state','value','inputs','fanout','period'].includes(attr)) val = parseInt(val) || 0;
+
+        // For inputs/fanout changes, need to rebuild ports
+        if ((attr === 'inputs' || attr === 'fanout' || attr === 'mode') && val !== comp.attrs[attr]) {
+          const x = comp.x, y = comp.y;
+          const newAttrs = Object.assign({}, comp.attrs);
+          newAttrs[attr] = val;
+          circuit.removeComponent(comp.id);
+          const newComp = circuit.addComponent(comp.typeDef, x, y, newAttrs);
+          canvas.select(newComp.id);
+          canvas.render();
+          saveSnapshot();
+          return;
+        }
+
+        comp.attrs[attr] = val;
+        circuit.propagate();
+        canvas.render();
+        saveSnapshot();
+      });
+    });
+
+    propsBody.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        if (action === 'rotateCW') {
+          comp.rotate(90);
+          canvas.render();
+          saveSnapshot();
+          showProps(comp); // refresh panel
+        } else if (action === 'rotateCCW') {
+          comp.rotate(-90);
+          canvas.render();
+          saveSnapshot();
+          showProps(comp);
+        } else if (action === 'delete') {
+          circuit.removeComponent(comp.id);
+          canvas.selected.clear();
+          canvas.render();
+          saveSnapshot();
+        }
+      });
+    });
+  }
 
   /* ── Help banner ── */
   let helpTimer;
@@ -764,7 +927,7 @@ TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receive
       let data;
 
       if (USE_LOCAL_AI) {
-        // ── Local AI path (/ai endpoint — Ollama) ──
+        // ── Local AI path (/ai endpoint — Ollama, streaming for longer timeout) ──
         const resp = await fetch('<%=request.getContextPath()%>/ai', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -773,7 +936,7 @@ TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receive
               { role: 'system', content: LOGIC_AI_SYSTEM },
               { role: 'user', content: desc }
             ],
-            stream: false
+            stream: true
           }),
         });
 
@@ -787,19 +950,43 @@ TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receive
           return;
         }
 
-        const aiResp = await resp.json();
-        // Extract text from Ollama response
+        // Read NDJSON stream — accumulate content chunks
         let text = '';
-        if (aiResp.message && aiResp.message.content) text = aiResp.message.content;
-        else if (aiResp.response) text = aiResp.response;
-        else if (aiResp.choices && aiResp.choices[0]) {
-          text = aiResp.choices[0].message ? aiResp.choices[0].message.content : (aiResp.choices[0].text || '');
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let tokenCount = 0;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          // Each line is a JSON object: {"message":{"content":"..."}, "done":false}
+          const lines = chunk.split('\n').filter(l => l.trim());
+          for (const line of lines) {
+            try {
+              const obj = JSON.parse(line);
+              if (obj.message && obj.message.content) {
+                text += obj.message.content;
+                tokenCount++;
+                // Update status with token count every 10 tokens
+                if (tokenCount % 10 === 0) {
+                  setAiStatus('Generating... ' + tokenCount + ' tokens', 'loading');
+                }
+              }
+              if (obj.response) {
+                text += obj.response;
+              }
+            } catch (e) { /* skip non-JSON lines */ }
+          }
         }
 
         if (!text) { setAiStatus('AI returned empty response', 'error'); return; }
 
         // Clean: strip markdown fences if AI included them
         text = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+
+        setAiStatus('Parsing circuit...', 'loading');
 
         try {
           data = JSON.parse(text);
@@ -1014,6 +1201,38 @@ TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receive
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
     if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); restoreSnapshot(history.undo()); }
     if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); restoreSnapshot(history.redo()); }
+
+    // R = Rotate selected component(s) 90° CW
+    if (e.key === 'r' || e.key === 'R') {
+      if (canvas.selected.size > 0) {
+        canvas.selected.forEach(id => {
+          const comp = circuit.components.get(id);
+          if (comp) comp.rotate(e.shiftKey ? -90 : 90);
+        });
+        canvas.render();
+        saveSnapshot();
+        // Refresh properties panel if single selection
+        if (canvas.selected.size === 1) {
+          const comp = circuit.components.get([...canvas.selected][0]);
+          if (comp) showProps(comp);
+        }
+      }
+    }
+
+    // Delete / Backspace = Delete selected
+    if (e.key === 'Delete' || e.key === 'Backspace') {
+      if (canvas.selected.size > 0) {
+        e.preventDefault();
+        const ids = [...canvas.selected];
+        canvas.selected.clear();
+        ids.forEach(id => {
+          if (circuit.components.has(id)) circuit.removeComponent(id);
+          else if (circuit.wires.has(id)) circuit.removeWire(id);
+        });
+        canvas.render();
+        saveSnapshot();
+      }
+    }
   });
 
   /* ── Presets ── */
@@ -1083,6 +1302,72 @@ TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receive
       canvas.fitContent();
     });
   });
+
+  /* ── Import Logisim .circ ── */
+  document.getElementById('btnImportLogisim').addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.circ,.xml';
+    input.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const xmlStr = ev.target.result;
+        if (!L.LogisimImport) {
+          alert('Logisim import module not loaded.');
+          return;
+        }
+        const result = L.LogisimImport.parse(xmlStr);
+        if (result.error) {
+          alert('Import error: ' + result.error);
+          return;
+        }
+
+        // Clear current circuit
+        [...circuit.components.keys()].forEach(id => circuit.removeComponent(id));
+
+        // Add components
+        const compMap = [];
+        for (const cd of result.components) {
+          const typeDef = ALL_TYPES[cd.type];
+          if (!typeDef) {
+            console.warn('Logisim import: unknown type', cd.type);
+            compMap.push(null);
+            continue;
+          }
+          const comp = circuit.addComponent(typeDef, cd.x || 0, cd.y || 0, cd.attrs || {});
+          compMap.push(comp);
+        }
+
+        // Add wires
+        let wireCount = 0;
+        for (const w of result.wires) {
+          const fromComp = compMap[w.from];
+          const toComp = compMap[w.to];
+          if (!fromComp || !toComp) continue;
+          if (circuit.addWire(fromComp.id, w.fromPort, toComp.id, w.toPort)) wireCount++;
+        }
+
+        canvas.fitContent();
+        saveSnapshot();
+
+        // Show import stats
+        const stats = result.stats;
+        const warns = result.warnings && result.warnings.length ? '\n\nWarnings:\n' + result.warnings.slice(0, 10).join('\n') : '';
+        alert(
+          'Imported "' + result.name + '"\n' +
+          stats.mappedComponents + ' components, ' + wireCount + ' wires connected\n' +
+          '(' + stats.totalLogisimComponents + ' Logisim components, ' + stats.totalLogisimWires + ' wire segments)' +
+          (stats.circuits > 1 ? '\n' + stats.circuits + ' circuits merged' : '') +
+          warns
+        );
+      };
+      reader.readAsText(file);
+    });
+    input.click();
+  });
+
   document.getElementById('btnExportPNG').addEventListener('click', () => {
     L.FileIO.exportPNG(svgEl, 'circuit.png');
   });
