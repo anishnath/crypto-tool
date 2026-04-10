@@ -976,4 +976,108 @@
         }
     } catch(e) {}
 
+    // ========== AI: Describe in English → expression ==========
+    var aiInput = document.getElementById('zt-ai-input');
+    var aiBtn = document.getElementById('zt-ai-btn');
+    var aiStatus = document.getElementById('zt-ai-status');
+
+    var AI_SYSTEM = 'You are a digital signal processing expert. Given a plain-English description, output ONLY the mathematical expression.\n' +
+        'If the description is a time-domain sequence, output a function of n.\n' +
+        'If the description is a Z-domain system/filter, output a function of z.\n' +
+        'Use * for multiplication, ^ for powers, parentheses for grouping.\n' +
+        'Output ONLY the expression — no explanation, no text, no prefixes.\n\n' +
+        'Examples:\n' +
+        '"unit step sequence" → 1\n' +
+        '"exponential decay a=0.5" → (1/2)^n\n' +
+        '"cosine frequency pi/4" → cos(pi*n/4)\n' +
+        '"damped sinusoid r=0.9 omega=pi/6" → 0.9^n*sin(pi*n/6)\n' +
+        '"first order IIR low pass alpha=0.1" → 0.1/(1-0.9*z^(-1))\n' +
+        '"digital integrator trapezoidal T=0.01" → 0.005*(z+1)/(z-1)\n' +
+        '"moving average filter length 4" → (1/4)*(1+z^(-1)+z^(-2)+z^(-3))\n' +
+        'RESPOND WITH ONLY THE EXPRESSION.';
+
+    function setAiStatus(msg, cls) {
+        if (!aiStatus) return;
+        aiStatus.textContent = msg;
+        aiStatus.className = 'zt-ai-status ' + (cls || '');
+        aiStatus.style.display = msg ? 'block' : 'none';
+    }
+
+    if (aiBtn && aiInput) {
+        aiBtn.addEventListener('click', function() { generateFromAI(); });
+        aiInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !aiBtn.disabled) generateFromAI();
+        });
+        document.querySelectorAll('.zt-ai-chip').forEach(function(chip) {
+            chip.addEventListener('click', function() {
+                aiInput.value = chip.getAttribute('data-prompt');
+                var mode = chip.getAttribute('data-mode');
+                if (mode && mode !== currentMode) {
+                    document.querySelector('.zt-mode-btn[data-mode="' + mode + '"]').click();
+                }
+                aiInput.focus();
+            });
+        });
+    }
+
+    function generateFromAI() {
+        var desc = aiInput.value.trim();
+        if (!desc) { setAiStatus('Enter a description', 'error'); return; }
+
+        aiBtn.disabled = true;
+        aiBtn.textContent = 'Thinking...';
+        setAiStatus('AI is generating...', 'loading');
+
+        fetch((window.ZT_CALC_CTX || '') + '/ai', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [
+                    { role: 'system', content: AI_SYSTEM },
+                    { role: 'user', content: desc + (currentMode === 'inverse' ? ' (give Z-domain function of z)' : ' (give time-domain sequence of n)') }
+                ],
+                stream: false
+            })
+        })
+        .then(function(r) {
+            if (r.status === 429) throw new Error('Rate limit — try again in a minute');
+            if (!r.ok) throw new Error('AI unavailable');
+            return r.json();
+        })
+        .then(function(data) {
+            var text = '';
+            if (data.message && data.message.content) text = data.message.content;
+            else if (data.response) text = data.response;
+            else if (data.choices && data.choices[0]) {
+                text = data.choices[0].message ? data.choices[0].message.content : (data.choices[0].text || '');
+            }
+            if (!text) throw new Error('Empty AI response');
+
+            text = text.replace(/```[a-z]*\s*/gi, '').replace(/```/g, '').trim();
+            text = text.replace(/^[xXhH]\([nz]\)\s*=\s*/i, '').trim();
+            var lines = text.split('\n').filter(function(l) { return l.trim() && !l.match(/^[A-Za-z ]{10,}/); });
+            text = (lines[0] || text.split('\n')[0]).trim();
+
+            if (!text || text.length > 200) throw new Error('AI returned invalid expression');
+
+            if (currentMode === 'forward') {
+                forwardInput.value = text;
+                forwardInput.dispatchEvent(new Event('input', { bubbles: true }));
+            } else {
+                inverseInput.value = text;
+                inverseInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+
+            setAiStatus('Generated: ' + text, 'success');
+            setTimeout(function() { computeBtn.click(); }, 300);
+        })
+        .catch(function(err) {
+            setAiStatus(err.message, 'error');
+        })
+        .finally(function() {
+            aiBtn.disabled = false;
+            aiBtn.textContent = 'Generate';
+        });
+    }
+
 })();

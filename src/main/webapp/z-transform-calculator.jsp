@@ -21,8 +21,8 @@
     <link rel="dns-prefetch" href="https://cdn.plot.ly">
 
     <!-- Z-Transform Calculator styles -->
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/z-transform-calculator.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/z-transform-calculator.css?v=<%=cacheVersion%>"></noscript>
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/z-transform-calculator.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/z-transform-calculator.css"></noscript>
 
     <!-- SEO -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
@@ -53,21 +53,21 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 
     <!-- CSS - all async -->
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/design-system.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/navigation.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
     </noscript>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
@@ -129,12 +129,32 @@
                     <button type="button" class="zt-mode-btn" data-mode="inverse">Z&#8315;&#185;{X(z)} Inverse</button>
                 </div>
 
+                <!-- AI: Describe in English -->
+                <div class="tool-form-group zt-ai-group">
+                    <label class="tool-form-label zt-ai-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px;"><path d="M12 2a4 4 0 014 4v1h1a3 3 0 010 6h-1v1a4 4 0 01-8 0v-1H7a3 3 0 010-6h1V6a4 4 0 014-4z"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/></svg>
+                        AI &mdash; describe in plain English
+                    </label>
+                    <div class="zt-ai-row">
+                        <input type="text" class="tool-input" id="zt-ai-input" placeholder="e.g. exponential decay with a=0.5" autocomplete="off" spellcheck="false">
+                        <button type="button" class="zt-ai-btn" id="zt-ai-btn">Generate</button>
+                    </div>
+                    <div class="zt-ai-status" id="zt-ai-status" style="display:none;"></div>
+                    <div class="zt-ai-examples">
+                        <button type="button" class="zt-ai-chip" data-prompt="unit step sequence" data-mode="forward">unit step</button>
+                        <button type="button" class="zt-ai-chip" data-prompt="exponential decay with a=0.5" data-mode="forward">exp decay</button>
+                        <button type="button" class="zt-ai-chip" data-prompt="cosine signal with frequency pi/4" data-mode="forward">cosine</button>
+                        <button type="button" class="zt-ai-chip" data-prompt="first order IIR low pass filter with alpha=0.1" data-mode="inverse">IIR LPF</button>
+                        <button type="button" class="zt-ai-chip" data-prompt="digital integrator using trapezoidal rule with T=0.01" data-mode="inverse">digital integrator</button>
+                    </div>
+                </div>
+
                 <!-- Forward mode input -->
                 <div id="zt-forward-wrap">
                     <div class="tool-form-group">
                         <label class="tool-form-label" for="zt-forward-expr">x[n] &mdash; discrete-time sequence</label>
                         <input type="text" class="tool-input tool-input-mono" id="zt-forward-expr" placeholder="e.g. (1/2)^n" autocomplete="off" spellcheck="false">
-                        <span class="tool-form-hint">Enter a function of n (n &ge; 0)</span>
+                        <span class="tool-form-hint">Enter a function of n, or use AI above</span>
                     </div>
                 </div>
 
@@ -143,7 +163,7 @@
                     <div class="tool-form-group">
                         <label class="tool-form-label" for="zt-inverse-expr">X(z) &mdash; Z-domain function</label>
                         <input type="text" class="tool-input tool-input-mono" id="zt-inverse-expr" placeholder="e.g. z/(z-1)" autocomplete="off" spellcheck="false">
-                        <span class="tool-form-hint">Enter a function of z</span>
+                        <span class="tool-form-hint">Enter a function of z, or use AI above</span>
                     </div>
                 </div>
 
@@ -490,12 +510,12 @@
     }
 </script>
 
-<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
 
 <script>window.ZT_CALC_CTX = "<%=request.getContextPath()%>";</script>
-<script src="<%=request.getContextPath()%>/modern/js/z-transform-calculator.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/z-transform-calculator.js"></script>
 
 </body>
 </html>
