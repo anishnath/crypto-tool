@@ -475,3 +475,96 @@
     border-radius: 50%;
     animation: bp-spin 0.6s linear infinite;
 }
+
+/* ===== AI Describe Section ===== */
+.bp-ai-group {
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(139,92,246,0.04));
+    border: 1px solid rgba(99,102,241,0.15);
+    border-radius: 0.5rem;
+}
+.bp-ai-label {
+    color: #6366f1 !important;
+    font-weight: 600 !important;
+}
+.bp-ai-row {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+}
+.bp-ai-row .tool-input {
+    flex: 1;
+    font-size: 0.85rem;
+}
+.bp-ai-btn {
+    padding: 0.45rem 0.9rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.12s, box-shadow 0.12s;
+}
+.bp-ai-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(99,102,241,0.3);
+}
+.bp-ai-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
+    box-shadow: none;
+}
+.bp-ai-status {
+    margin-top: 0.4rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.78rem;
+}
+.bp-ai-status.loading {
+    color: #6366f1;
+    background: rgba(99,102,241,0.08);
+}
+.bp-ai-status.success {
+    color: #16a34a;
+    background: rgba(22,163,74,0.08);
+}
+.bp-ai-status.error {
+    color: #dc2626;
+    background: rgba(220,38,38,0.08);
+}
+.bp-ai-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+}
+.bp-ai-chip {
+    padding: 0.2rem 0.5rem;
+    background: rgba(99,102,241,0.08);
+    border: 1px solid rgba(99,102,241,0.15);
+    border-radius: 12px;
+    font-size: 0.7rem;
+    color: #6366f1;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+.bp-ai-chip:hover {
+    background: rgba(99,102,241,0.15);
+}
+[data-theme="dark"] .bp-ai-group {
+    background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.05));
+    border-color: rgba(99,102,241,0.2);
+}
+[data-theme="dark"] .bp-ai-label { color: #818cf8 !important; }
+[data-theme="dark"] .bp-ai-chip {
+    background: rgba(99,102,241,0.12);
+    border-color: rgba(99,102,241,0.2);
+    color: #a5b4fc;
+}
+[data-theme="dark"] .bp-ai-chip:hover { background: rgba(99,102,241,0.2); }
