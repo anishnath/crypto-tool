@@ -660,18 +660,6 @@
 
 <hr>
 
-<h2 class="mt-4" id="faqs">Prometheus & PromQL FAQs</h2>
-<div class="accordion" id="promFaqs">
-  <div class="card"><div class="card-header"><h6 class="mb-0">When should I use rate, irate, or increase?</h6></div><div class="card-body small text-muted">Use rate() for stable per-second rates, irate() for instantaneous rates on spiky series, and increase() for total change over the range.</div></div>
-  <div class="card"><div class="card-header"><h6 class="mb-0">How do group aggregations work?</h6></div><div class="card-body small text-muted">Use sum/avg by(...) to keep grouping labels; for binary ops use on()/group_left/right with ignoring/without to control label matching.</div></div>
-  <div class="card"><div class="card-header"><h6 class="mb-0">How do I reduce high cardinality?</h6></div><div class="card-body small text-muted">Pre-aggregate with recording rules, drop unneeded labels, and avoid wildcard-heavy matchers in hot paths.</div></div>
-</div>
-
-        <div class="info-box">
-            <h3>🚀 Professional Prometheus Query Builder</h3>
-            <p>Build PromQL queries visually with quick-insert function buttons, test with mock data, generate alert rules, and export to YAML or Grafana. Includes 70+ query templates for common monitoring scenarios, comprehensive PromQL documentation for beginners, and smart function insertion with templates.</p>
-        </div>
-
         <div class="operation-tabs">
             <button class="tab-btn active" data-tab="query-builder">Query Builder</button>
             <button class="tab-btn" data-tab="alert-rules">Alert Rules</button>
