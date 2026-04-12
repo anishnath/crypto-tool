@@ -1,0 +1,432 @@
+/* Lens & Mirror Calculator - Component Styles */
+
+:root {
+    --lm-tool: #e11d48;
+    --lm-tool-dark: #be123c;
+    --lm-gradient: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%);
+    --lm-light: #ffe4e6;
+}
+[data-theme="dark"] {
+    --lm-light: rgba(225, 29, 72, 0.15);
+}
+
+/* ===== Layout Override: narrow input, wide ray diagram ===== */
+@media (min-width: 1025px) {
+    .lm-layout.tool-page-container {
+        grid-template-columns: minmax(210px, 268px) minmax(0, 1fr) minmax(228px, 280px);
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+    }
+}
+@media (min-width: 901px) and (max-width: 1024px) {
+    .lm-layout.tool-page-container {
+        grid-template-columns: minmax(200px, 252px) minmax(0, 1fr);
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+    }
+}
+@media (max-width: 900px) {
+    .lm-layout.tool-page-container {
+        grid-template-columns: 1fr;
+    }
+}
+@media (min-width: 901px) {
+    .lm-layout .tool-input-column {
+        top: 80px;
+        max-height: calc(100vh - 96px);
+    }
+}
+
+/* ===== Mode Toggle ===== */
+.lm-mode-toggle {
+    display: flex;
+    border: 1.5px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+.lm-mode-btn {
+    flex: 1;
+    padding: 0.5rem 0.25rem;
+    font-weight: 600;
+    font-size: 0.65rem;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+    text-align: center;
+}
+.lm-mode-btn.active {
+    background: var(--lm-gradient);
+    color: #fff;
+}
+.lm-mode-btn:hover:not(.active) {
+    background: var(--bg-tertiary);
+}
+[data-theme="dark"] .lm-mode-btn { background: var(--bg-tertiary); }
+[data-theme="dark"] .lm-mode-btn.active { background: var(--lm-gradient); color: #fff; }
+
+/* ===== Input Groups ===== */
+.lm-input-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+    margin-bottom: 0.5rem;
+}
+.lm-input-group {
+    flex: 1;
+    min-width: 0;
+}
+.lm-input-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+.lm-input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    text-align: center;
+    transition: border-color 0.15s;
+}
+.lm-input:focus {
+    outline: none;
+    border-color: var(--lm-tool);
+    box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.1);
+}
+.lm-select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.8125rem;
+    font-family: var(--font-sans);
+    border: 1.5px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: border-color 0.15s;
+}
+.lm-select:focus {
+    outline: none;
+    border-color: var(--lm-tool);
+}
+
+/* ===== Slider ===== */
+.lm-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.lm-slider-row .lm-input {
+    width: 80px;
+    flex-shrink: 0;
+}
+.lm-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+}
+.lm-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--lm-tool);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.lm-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--lm-tool);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* ===== Compact input column ===== */
+.lm-layout .tool-card-body {
+    padding: 0.75rem;
+}
+.lm-layout .tool-card-header {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8125rem;
+}
+
+/* ===== Hint text ===== */
+.lm-hint {
+    font-size: 0.625rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+}
+
+/* ===== Canvas Diagram Container ===== */
+.lm-diagram-wrap {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: relative;
+}
+.lm-diagram-wrap canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ===== Result Cards ===== */
+.lm-results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.lm-result-card {
+    padding: 0.625rem 0.75rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--lm-tool);
+}
+.lm-result-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.15rem;
+}
+.lm-result-value {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* ===== Image Badges ===== */
+.lm-badges {
+    display: flex;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+.lm-badge {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border-radius: 1rem;
+    background: var(--lm-light);
+    color: var(--lm-tool);
+}
+.lm-badge-real { background: #dbeafe; color: #1e40af; }
+.lm-badge-virtual { background: #fef3c7; color: #92400e; }
+.lm-badge-inverted { background: #fce7f3; color: #9d174d; }
+.lm-badge-upright { background: #d1fae5; color: #065f46; }
+
+/* ===== Steps ===== */
+.lm-step {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+.lm-step:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.lm-step-number {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--lm-gradient);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+.lm-step-content {
+    flex: 1;
+    min-width: 0;
+}
+.lm-step-desc {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+.lm-step-math {
+    font-size: 1rem;
+    overflow-x: auto;
+}
+
+/* ===== Examples Chips ===== */
+.lm-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.lm-example-chip {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    border-radius: 1rem;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+}
+.lm-example-chip:hover {
+    border-color: var(--lm-tool);
+    color: var(--lm-tool);
+    background: var(--lm-light);
+}
+
+/* ===== Output Tabs ===== */
+.lm-output-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 1rem;
+}
+.lm-output-tab {
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    position: relative;
+    font-family: var(--font-sans);
+    transition: color 0.15s;
+}
+.lm-output-tab.active {
+    color: var(--lm-tool);
+}
+.lm-output-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--lm-gradient);
+    border-radius: 1px;
+}
+.lm-panel {
+    display: none;
+}
+.lm-panel.active {
+    display: block;
+}
+
+/* ===== Error Alert ===== */
+.lm-error {
+    padding: 0.75rem 1rem;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 0.5rem;
+    color: #991b1b;
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+[data-theme="dark"] .lm-error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}
+
+/* ===== Educational Content ===== */
+.lm-edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.75rem;
+}
+.lm-edu-card {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+}
+.lm-edu-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.375rem;
+}
+.lm-edu-card p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.lm-callout {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+}
+.lm-callout-insight {
+    background: var(--lm-light);
+    border: 1px solid rgba(225, 29, 72, 0.2);
+}
+.lm-callout-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+.lm-callout-text {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+/* ===== Scroll Animations ===== */
+.lm-anim {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s, transform 0.5s;
+}
+.lm-anim.lm-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.lm-anim-d1 { transition-delay: 0.1s; }
+.lm-anim-d2 { transition-delay: 0.2s; }
+.lm-anim-d3 { transition-delay: 0.3s; }
+.lm-anim-d4 { transition-delay: 0.4s; }
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+    .lm-results-grid {
+        grid-template-columns: 1fr;
+    }
+    .lm-edu-grid {
+        grid-template-columns: 1fr;
+    }
+}
