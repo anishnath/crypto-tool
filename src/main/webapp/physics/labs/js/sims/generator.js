@@ -238,26 +238,51 @@ export const GeneratorSim = {
 
     const cw = 0.9, ch = 0.65, cy = 0.3;
 
+    // ── Viewpoint: looking perpendicular to B (from above rotation axis).
+    //    Rotation axis is INTO the screen (vertical on canvas = depth axis).
+    //    Coil rotates in the horizontal plane.
+    //    cos(θ) projects the coil width; sin(θ) gives the depth component.
+    //    Normal vector n̂ lies in the horizontal plane → only horizontal on screen.
+
+    const cosT = Math.cos(theta), sinT = Math.sin(theta);
+
     // ── 3-phase ghost coils ──
     if (phases >= 3) {
       const phaseOffsets = [2 * Math.PI / 3, 4 * Math.PI / 3];
       const phaseColors = ['rgba(239,68,68,0.25)', 'rgba(34,197,94,0.25)'];
       for (let p = 0; p < 2; p++) {
         const pth = theta + phaseOffsets[p];
-        const pw = cw * Math.cos(pth);
+        const pCos = Math.cos(pth), pSin = Math.sin(pth);
+        const pw = cw * pCos;
+        // Depth shading: front edge brighter, back edge dimmer
+        const frontAlpha = (0.15 + 0.15 * Math.abs(pSin)).toFixed(2);
+        const backAlpha = (0.08 + 0.08 * Math.abs(pSin)).toFixed(2);
         if (Math.abs(pw) > 0.02) {
-          canvas.line(-pw, cy - ch, pw, cy - ch, phaseColors[p], 2);
-          canvas.line(-pw, cy + ch, pw, cy + ch, phaseColors[p], 2);
+          // Back edge (drawn first, dimmer)
+          if (pSin < 0) {
+            canvas.line(-pw, cy - ch, pw, cy - ch, phaseColors[p].replace('0.25', backAlpha), 1.5);
+            canvas.line(-pw, cy + ch, pw, cy + ch, phaseColors[p].replace('0.25', backAlpha), 1.5);
+          }
+          // Side edges
           canvas.line(-pw, cy - ch, -pw, cy + ch, phaseColors[p], 2.5);
           canvas.line(pw, cy - ch, pw, cy + ch, phaseColors[p], 2.5);
+          // Front edge (drawn last, brighter)
+          if (pSin >= 0) {
+            canvas.line(-pw, cy - ch, pw, cy - ch, phaseColors[p].replace('0.25', frontAlpha), 2);
+            canvas.line(-pw, cy + ch, pw, cy + ch, phaseColors[p].replace('0.25', frontAlpha), 2);
+          }
         }
       }
     }
 
     // ── Main coil (phase 1) ──
-    const projW = cw * Math.cos(theta);
-    const fluxFrac = Math.abs(Math.cos(theta));
+    const projW = cw * cosT;
+    const fluxFrac = Math.abs(cosT);
+    // Depth factor: |sin(θ)| indicates how much the coil faces us
+    const depthFrac = Math.abs(sinT);
+
     if (Math.abs(projW) > 0.02) {
+      // Fill: brighter when face-on (flux is max), dimmer when edge-on
       canvas.polygon([[-projW, cy - ch], [projW, cy - ch],
         [projW, cy + ch], [-projW, cy + ch]],
         'rgba(34,197,94,' + (fluxFrac * 0.15).toFixed(2) + ')', null);
@@ -269,12 +294,26 @@ export const GeneratorSim = {
     const ac2 = curDir > 0 ? '#3B82F6' : curDir < 0 ? '#EF4444' : '#64748B';
 
     const lx = -projW, rx = projW;
-    canvas.line(lx, cy + ch, rx, cy + ch, '#94A3B8', 2.5);
-    canvas.line(lx, cy - ch, rx, cy - ch, '#94A3B8', 2.5);
+
+    // Draw back horizontal edges dimmer (depth cue: further away)
+    const backColor = 'rgba(148,163,184,' + (0.3 + 0.2 * depthFrac).toFixed(2) + ')';
+    const frontColor = '#94A3B8';
+    // Determine which horizontal edge is "back" based on sin(θ)
+    if (sinT < 0) {
+      // Bottom edge is back
+      canvas.line(lx, cy + ch, rx, cy + ch, backColor, 1.5);
+      canvas.line(lx, cy - ch, rx, cy - ch, frontColor, 2.5);
+    } else {
+      // Top edge is back
+      canvas.line(lx, cy - ch, rx, cy - ch, backColor, 1.5);
+      canvas.line(lx, cy + ch, rx, cy + ch, frontColor, 2.5);
+    }
+
+    // Side edges (always visible, carry current)
     canvas.line(lx, cy + ch, lx, cy - ch, ac1, 3.5);
     canvas.line(rx, cy + ch, rx, cy - ch, ac2, 3.5);
 
-    // Current arrows
+    // Current arrows on side edges
     if (curDir !== 0) {
       const d = curDir * 0.08;
       canvas.line(lx, cy - 0.15, lx, cy + 0.15, ac1, 2);
@@ -285,13 +324,26 @@ export const GeneratorSim = {
       canvas.line(rx, cy - 0.15, rx + 0.04, cy - 0.15 + d, ac2, 2);
     }
 
-    // ── Normal vector ──
-    const cosT = Math.cos(theta), sinT = Math.sin(theta);
-    const nx = 0.6 * cosT, ny = 0.6 * sinT;
-    canvas.line(0, cy, nx, cy + ny, '#22C55E', 2.5);
-    canvas.line(nx, cy + ny, nx - cosT * 0.08 + sinT * 0.05, cy + ny - sinT * 0.08 - cosT * 0.05, '#22C55E', 2);
-    canvas.line(nx, cy + ny, nx - cosT * 0.08 - sinT * 0.05, cy + ny - sinT * 0.08 + cosT * 0.05, '#22C55E', 2);
-    canvas.text(nx + 0.1, cy + ny + 0.1, 'n̂', '#22C55E', 9);
+    // ── Normal vector n̂ — HORIZONTAL ONLY ──
+    // The area normal lies in the horizontal plane (perpendicular to rotation axis).
+    // In this side view, it projects as a purely horizontal oscillation.
+    // Length is CONSTANT (it's a unit direction scaled for display).
+    // The horizontal component = cos(θ) relative to B direction.
+    const nLen = 0.6;
+    const nx = nLen * cosT;
+    // Arrow: horizontal line from coil center
+    canvas.line(0, cy, nx, cy, '#22C55E', 2.5);
+    // Arrowhead
+    const aDir = cosT >= 0 ? 1 : -1;
+    canvas.line(nx, cy, nx - aDir * 0.08, cy - 0.05, '#22C55E', 2);
+    canvas.line(nx, cy, nx - aDir * 0.08, cy + 0.05, '#22C55E', 2);
+    canvas.text(nx + aDir * 0.12, cy - 0.08, 'n̂', '#22C55E', 9);
+
+    // Dotted circle showing n̂ traces a horizontal line (projection of circular path)
+    // Draw faint reference circle to show the full rotation path of n̂
+    canvas.arc(0, cy, nLen, 0, 2 * Math.PI, 'rgba(34,197,94,0.12)', 1);
+    // Dot on the circle showing current n̂ position (3D view hint)
+    canvas.circle(nLen * cosT, cy + nLen * sinT * 0.15, 0.03, '#22C55E', null);
 
     // ── Torque arrow (curved) ──
     const tau = vars[10];
@@ -302,15 +354,22 @@ export const GeneratorSim = {
       canvas.text(0.55, cy - 0.2, 'τ', '#F59E0B', 9);
     }
 
-    // ── Angle arc ──
+    // ── Angle θ between n̂ and B ──
+    // θ is measured from the B-field direction (horizontal right) to n̂
+    // In the side view, this is the angle of the projected normal
     if (Math.abs(theta % Math.PI) > 0.05) {
-      canvas.arc(0, cy, 0.3, 0, Math.min(Math.abs(theta), Math.PI / 2) * Math.sign(theta),
+      const arcAngle = Math.min(Math.abs(theta % (2 * Math.PI)), Math.PI);
+      canvas.arc(0, cy, 0.25, 0, theta > 0 ? Math.min(theta, Math.PI) : Math.max(theta, -Math.PI),
         'rgba(139,92,246,0.6)', 1.5);
-      canvas.text(0.35, cy + 0.15, 'θ', '#8B5CF6', 10);
+      canvas.text(0.3, cy + 0.12, 'θ', '#8B5CF6', 10);
     }
 
-    // ── Rotation axis ──
-    canvas.line(0, cy + ch + 0.15, 0, cy - ch - 0.15, '#475569', 1);
+    // ── Rotation axis (into screen — shown as ⊗ symbol) ──
+    canvas.circle(0, cy, 0.04, '#475569', null);
+    canvas.line(-0.03, cy - 0.03, 0.03, cy + 0.03, '#475569', 1);
+    canvas.line(-0.03, cy + 0.03, 0.03, cy - 0.03, '#475569', 1);
+    // Small label
+    canvas.text(0.08, cy + ch + 0.25, 'axis ⊗', '#475569', 7);
 
     // ── Slip rings / Commutator ──
     const sry = cy - ch - 0.35;
