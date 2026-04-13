@@ -54,17 +54,17 @@
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.min.js" as="script" crossorigin>
 
     <!-- Critical CSS: only layout + above-the-fold (render-blocking, small) -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/graphing-calculator.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/graphing-calculator.css">
 
     <!-- Non-critical CSS: load async (ads, dark mode, footer, search) -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css" media="print" onload="this.media='all'">
 
     <!-- Fonts: non-blocking -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -1113,9 +1113,9 @@ window.addEventListener('message', (e) => {
     if (!loaded.math || !loaded.plotly || !loaded.nerdamer) return;
     // Stage 2: Load engine + presets (all dependencies ready)
     loadScript('<%=request.getContextPath()%>/js/graphing-tool-engine.js', function(){
-      loadScript('<%=request.getContextPath()%>/js/graphing-calculator-presets.js?v=<%=cacheVersion%>', function(){
+      loadScript('<%=request.getContextPath()%>/js/graphing-calculator-presets.js', function(){
         // Load AI assistant (depends on engine + presets being ready)
-        loadScript('<%=request.getContextPath()%>/js/graphing-calculator-ai.js?v=<%=cacheVersion%>');
+        loadScript('<%=request.getContextPath()%>/js/graphing-calculator-ai.js');
         if (ph) ph.remove();
         var g = document.getElementById('graph');
         if (g && typeof ResizeObserver !== 'undefined') {
@@ -1330,9 +1330,9 @@ window.addEventListener('message', (e) => {
 </script>
 
 <!-- Stage 4: Low-priority utilities -->
-<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
 
 <%@ include file="modern/components/analytics.jsp" %>
 </body>
