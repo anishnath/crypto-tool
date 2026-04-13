@@ -705,3 +705,166 @@
     background: var(--tool-light);
     color: var(--tool-primary);
 }
+
+/* ==================== AI Assistant ==================== */
+.lm-ai-group {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(99, 102, 241, 0.06));
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 0.875rem;
+}
+[data-theme="dark"] .lm-ai-group {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(99, 102, 241, 0.12));
+    border-color: rgba(139, 92, 246, 0.35);
+}
+.lm-ai-label { margin-bottom: 0.375rem; }
+.lm-ai-sparkle { font-size: 1em; margin-right: 0.25rem; }
+.lm-ai-input {
+    width: 100%;
+    font-family: var(--font-sans, sans-serif);
+    resize: vertical;
+    min-height: 40px;
+}
+.lm-ai-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.375rem;
+}
+.lm-ai-chip {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.lm-ai-chip:hover { background: rgba(99, 102, 241, 0.18); }
+[data-theme="dark"] .lm-ai-chip {
+    color: #a78bfa;
+    background: rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.35);
+}
+.lm-ai-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+}
+.lm-ai-go {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+.lm-ai-go:hover:not(:disabled) { opacity: 0.9; }
+.lm-ai-go:disabled { opacity: 0.6; cursor: not-allowed; }
+.lm-ai-spinner {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: lm-ai-spin 0.8s linear infinite;
+}
+@keyframes lm-ai-spin { to { transform: rotate(360deg); } }
+.lm-ai-status {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.625rem;
+    font-size: 0.75rem;
+    border-radius: 0.375rem;
+}
+.lm-ai-status.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+[data-theme="dark"] .lm-ai-status.error { color: #fca5a5; }
+.lm-ai-preview {
+    margin-top: 0.5rem;
+    padding: 0.625rem;
+    background: var(--surface-primary, #fff);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 0.375rem;
+}
+[data-theme="dark"] .lm-ai-preview {
+    background: var(--surface-secondary, #1e293b);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+.lm-ai-preview-title {
+    font-weight: 700;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+    margin-bottom: 0.375rem;
+}
+.lm-ai-preview-list {
+    margin: 0;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.7rem;
+    line-height: 1.4;
+}
+.lm-ai-preview-list dt {
+    display: inline-block;
+    width: 2.5em;
+    font-weight: 700;
+    color: #6366f1;
+}
+[data-theme="dark"] .lm-ai-preview-list dt { color: #a78bfa; }
+.lm-ai-preview-list dd {
+    display: inline;
+    margin: 0;
+    color: var(--text-primary);
+    word-break: break-all;
+}
+.lm-ai-preview-list dd::after { content: "\A"; white-space: pre; }
+.lm-ai-preview-notes {
+    margin-top: 0.5rem;
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+.lm-ai-preview-actions {
+    display: flex;
+    gap: 0.375rem;
+    margin-top: 0.5rem;
+}
+.lm-ai-confirm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    background: #10b981;
+    border: 1px solid #10b981;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+.lm-ai-confirm:hover { background: #059669; }
+.lm-ai-cancel {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+.lm-ai-cancel:hover { background: var(--bg-hover, var(--surface-secondary)); }
+.lm-ai-firewall {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.625rem;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.3;
+}

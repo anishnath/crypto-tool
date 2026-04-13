@@ -27,30 +27,32 @@
 
     <!-- SEO -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Lagrangian Mechanics Calculator - Euler-Lagrange & Hamiltonian | Free" />
-        <jsp:param name="toolDescription" value="Free online Lagrangian mechanics calculator. Derive Euler-Lagrange equations, Hamiltonian, conservation laws, and numerical solutions with step-by-step derivations. Features D3.js animations, phase portraits, and energy plots. No signup required." />
+        <jsp:param name="toolName" value="AI Lagrangian Mechanics Calculator &mdash; Euler-Lagrange &amp; Hamiltonian" />
+        <jsp:param name="toolDescription" value="AI Lagrangian mechanics calculator: describe the system in plain English (&quot;simple pendulum&quot;, &quot;mass on a cone&quot;, &quot;pendulum hanging from a spring&quot;) and AI fills in T, V, coordinates, and initial conditions. Our symbolic engine derives Euler-Lagrange equations, Hamiltonian, conservation laws, runs RK45 integration, and animates the motion. No signup." />
         <jsp:param name="toolCategory" value="Physics Tools" />
         <jsp:param name="toolUrl" value="lagrangian-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="lagrangian mechanics calculator, euler-lagrange equation, hamiltonian mechanics, lagrangian calculator, classical mechanics, generalized coordinates, noether theorem, conservation laws, phase portrait, double pendulum" />
+        <jsp:param name="toolKeywords" value="ai lagrangian calculator, lagrangian mechanics calculator, lagrangian from english, euler-lagrange equation, hamiltonian mechanics, classical mechanics, generalized coordinates, noether theorem, conservation laws, phase portrait, double pendulum, lagrangian from description, ai physics homework" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Euler-Lagrange equations with steps,Hamiltonian and canonical variables,Conservation law detection,Numerical integration (RK45),D3.js system animations,Phase portraits and energy plots,7 preset mechanical systems,Live KaTeX math preview,Dark mode support,Free and no signup required" />
+        <jsp:param name="toolFeatures" value="AI Describe-in-English (fill T V coordinates and IC from a plain sentence),Euler-Lagrange equations with steps,Hamiltonian and canonical variables,Conservation law detection,Numerical integration (RK45),D3.js system animations,Phase portraits and energy plots,7 preset mechanical systems,Live KaTeX math preview,Dark mode support,Free and no signup required" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="faq1q" value="What is the Lagrangian in mechanics?" />
-        <jsp:param name="faq1a" value="The Lagrangian L is defined as the difference between kinetic energy T and potential energy V: L = T - V. It is a scalar function of generalized coordinates, their time derivatives, and time. The Lagrangian formulation provides an elegant alternative to Newtonian mechanics for deriving equations of motion." />
-        <jsp:param name="faq2q" value="What is the Euler-Lagrange equation?" />
-        <jsp:param name="faq2a" value="The Euler-Lagrange equation is d/dt(dL/dq_dot) - dL/dq = 0, where q is a generalized coordinate and q_dot is its time derivative. This equation yields the equations of motion for the system. For a system with n degrees of freedom, there are n Euler-Lagrange equations." />
-        <jsp:param name="faq3q" value="How is the Hamiltonian related to the Lagrangian?" />
-        <jsp:param name="faq3a" value="The Hamiltonian H is obtained from the Lagrangian via a Legendre transformation: H = sum(p_i * q_dot_i) - L, where p_i = dL/dq_dot_i are the conjugate momenta. For conservative systems where L does not depend explicitly on time, H equals the total energy T + V." />
-        <jsp:param name="faq4q" value="What is Noether's theorem?" />
-        <jsp:param name="faq4a" value="Noether's theorem states that every continuous symmetry of the Lagrangian corresponds to a conserved quantity. For example, time translation symmetry gives conservation of energy, spatial translation symmetry gives conservation of momentum, and rotational symmetry gives conservation of angular momentum." />
-        <jsp:param name="faq5q" value="What are generalized coordinates?" />
-        <jsp:param name="faq5a" value="Generalized coordinates are any set of independent parameters that completely describe the configuration of a mechanical system. Unlike Cartesian coordinates, they can be angles, distances, or any convenient variables. For a simple pendulum, the angle theta is a natural generalized coordinate instead of x and y." />
-        <jsp:param name="faq6q" value="How does the double pendulum exhibit chaos?" />
-        <jsp:param name="faq6a" value="The double pendulum is a classic example of a chaotic system. Its equations of motion are nonlinear coupled differential equations. For small oscillations it behaves predictably, but for larger amplitudes, tiny differences in initial conditions lead to dramatically different trajectories over time." />
-        <jsp:param name="faq7q" value="What is a phase portrait in mechanics?" />
-        <jsp:param name="faq7a" value="A phase portrait plots a system's generalized coordinate q against its conjugate momentum p (or velocity q_dot). Each point represents a complete state of the system. Trajectories in phase space reveal the system's qualitative behavior: closed orbits indicate periodic motion, fixed points indicate equilibria." />
-        <jsp:param name="faq8q" value="Is this Lagrangian calculator free?" />
-        <jsp:param name="faq8a" value="Yes, this calculator is completely free with no signup required. You get symbolic derivation of Euler-Lagrange equations, Hamiltonian mechanics, conservation laws, numerical integration, interactive D3 animations, and Plotly phase portraits." />
+        <jsp:param name="faq1q" value="How does the AI input work?" />
+        <jsp:param name="faq1a" value="Describe the system in plain English (&quot;simple pendulum length 1m&quot;, &quot;pendulum hanging from a spring&quot;, &quot;mass on a cone&quot;) in the AI box. The AI only writes the six input strings (kinetic energy T, potential energy V, generalized coordinates, parameters, initial conditions, time span). All actual physics &mdash; deriving Euler-Lagrange equations, the Hamiltonian, conservation laws, and running RK45 numerical integration &mdash; is done by our symbolic engine. You review the parsed T/V/coords before clicking Use this, so you can catch any bad AI output before the engine runs." />
+        <jsp:param name="faq2q" value="What is the Lagrangian in mechanics?" />
+        <jsp:param name="faq2a" value="The Lagrangian L is defined as the difference between kinetic energy T and potential energy V: L = T - V. It is a scalar function of generalized coordinates, their time derivatives, and time. The Lagrangian formulation provides an elegant alternative to Newtonian mechanics for deriving equations of motion." />
+        <jsp:param name="faq3q" value="What is the Euler-Lagrange equation?" />
+        <jsp:param name="faq3a" value="The Euler-Lagrange equation is d/dt(dL/dq_dot) - dL/dq = 0, where q is a generalized coordinate and q_dot is its time derivative. This equation yields the equations of motion for the system. For a system with n degrees of freedom, there are n Euler-Lagrange equations." />
+        <jsp:param name="faq4q" value="How is the Hamiltonian related to the Lagrangian?" />
+        <jsp:param name="faq4a" value="The Hamiltonian H is obtained from the Lagrangian via a Legendre transformation: H = sum(p_i * q_dot_i) - L, where p_i = dL/dq_dot_i are the conjugate momenta. For conservative systems where L does not depend explicitly on time, H equals the total energy T + V." />
+        <jsp:param name="faq5q" value="What is Noether's theorem?" />
+        <jsp:param name="faq5a" value="Noether's theorem states that every continuous symmetry of the Lagrangian corresponds to a conserved quantity. For example, time translation symmetry gives conservation of energy, spatial translation symmetry gives conservation of momentum, and rotational symmetry gives conservation of angular momentum." />
+        <jsp:param name="faq6q" value="What are generalized coordinates?" />
+        <jsp:param name="faq6a" value="Generalized coordinates are any set of independent parameters that completely describe the configuration of a mechanical system. Unlike Cartesian coordinates, they can be angles, distances, or any convenient variables. For a simple pendulum, the angle theta is a natural generalized coordinate instead of x and y." />
+        <jsp:param name="faq7q" value="How does the double pendulum exhibit chaos?" />
+        <jsp:param name="faq7a" value="The double pendulum is a classic example of a chaotic system. Its equations of motion are nonlinear coupled differential equations. For small oscillations it behaves predictably, but for larger amplitudes, tiny differences in initial conditions lead to dramatically different trajectories over time." />
+        <jsp:param name="faq8q" value="What is a phase portrait in mechanics?" />
+        <jsp:param name="faq8a" value="A phase portrait plots a system's generalized coordinate q against its conjugate momentum p (or velocity q_dot). Each point represents a complete state of the system. Trajectories in phase space reveal the system's qualitative behavior: closed orbits indicate periodic motion, fixed points indicate equilibria." />
+        <jsp:param name="faq9q" value="Is this Lagrangian calculator free?" />
+        <jsp:param name="faq9a" value="Yes, this calculator is completely free with no signup required. You get AI natural-language input, symbolic derivation of Euler-Lagrange equations, Hamiltonian mechanics, conservation laws, numerical integration, interactive D3 animations, and Plotly phase portraits." />
     </jsp:include>
 
     <!-- Fonts -->
@@ -89,7 +91,7 @@
 <header class="tool-page-header">
     <div class="tool-page-header-inner">
         <div>
-            <h1 class="tool-page-title">Lagrangian Mechanics Calculator</h1>
+            <h1 class="tool-page-title">AI Lagrangian Mechanics Calculator</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                 <a href="<%=request.getContextPath()%>/physics">Physics Tools</a> /
@@ -97,6 +99,7 @@
             </nav>
         </div>
         <div class="tool-page-badges">
+            <span class="tool-badge">AI-Powered</span>
             <span class="tool-badge">Step-by-Step</span>
             <span class="tool-badge">Lagrangian &amp; Hamiltonian</span>
             <span class="tool-badge">D3 Animations</span>
@@ -109,7 +112,7 @@
 <section class="tool-description-section">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Compute <strong>Euler-Lagrange equations</strong>, <strong>Hamiltonian</strong>, and <strong>conservation laws</strong> from kinetic and potential energy. Features <strong>step-by-step derivations</strong>, numerical solutions with phase portraits, energy plots, and interactive D3.js animations of mechanical systems.</p>
+            <p><strong>Describe a system in plain English</strong> (&quot;pendulum hanging from a spring&quot;, &quot;mass on a cone&quot;) and AI fills in the kinetic energy T, potential V, coordinates, and initial conditions &mdash; or type them yourself. Our symbolic engine derives <strong>Euler-Lagrange equations</strong>, the <strong>Hamiltonian</strong>, and <strong>conservation laws</strong>, runs RK45 integration, and animates the motion with phase portraits and energy plots. AI only writes the strings; every calculation is ours.</p>
         </div>
     </div>
 </section>
@@ -127,6 +130,40 @@
                 Lagrangian Mechanics
             </div>
             <div class="tool-card-body">
+                <!-- AI: Describe the system in English -->
+                <div class="tool-form-group lm-ai-group">
+                    <label class="tool-form-label lm-ai-label">
+                        <span class="lm-ai-sparkle">&#x2728;</span> Describe the system (AI)
+                    </label>
+                    <textarea class="tool-input lm-ai-input" id="lm-ai-input" rows="2"
+                        placeholder='e.g., "simple pendulum length 1m", "mass on a cone", "pendulum hanging from a spring"'></textarea>
+                    <div class="lm-ai-chip-row">
+                        <button type="button" class="lm-ai-chip" onclick="lmAiChip('pendulum hanging from a spring')">pendulum+spring</button>
+                        <button type="button" class="lm-ai-chip" onclick="lmAiChip('mass on a frictionless cone, half-angle 30 degrees')">cone</button>
+                        <button type="button" class="lm-ai-chip" onclick="lmAiChip('bead on a parabolic wire y=x^2')">bead on wire</button>
+                        <button type="button" class="lm-ai-chip" onclick="lmAiChip('particle in central 1/r^2 potential')">central force</button>
+                        <button type="button" class="lm-ai-chip" onclick="lmAiChip('two masses coupled by springs in a line')">coupled</button>
+                        <button type="button" class="lm-ai-chip" onclick="lmAiChip('driven damped harmonic oscillator')">driven</button>
+                    </div>
+                    <div class="lm-ai-actions">
+                        <button type="button" class="lm-ai-go" id="lm-ai-btn">
+                            <span class="lm-ai-go-label">Ask AI</span>
+                            <span class="lm-ai-spinner" style="display:none;"></span>
+                        </button>
+                    </div>
+                    <div class="lm-ai-status" id="lm-ai-status" style="display:none;"></div>
+                    <div class="lm-ai-preview" id="lm-ai-preview" style="display:none;">
+                        <div class="lm-ai-preview-title" id="lm-ai-preview-name">System</div>
+                        <dl class="lm-ai-preview-list" id="lm-ai-preview-list"></dl>
+                        <div class="lm-ai-preview-notes" id="lm-ai-preview-notes"></div>
+                        <div class="lm-ai-preview-actions">
+                            <button type="button" class="lm-ai-confirm" id="lm-ai-confirm">Use this &rarr;</button>
+                            <button type="button" class="lm-ai-cancel" id="lm-ai-cancel">Cancel</button>
+                        </div>
+                    </div>
+                    <p class="lm-ai-firewall">AI writes T, V, coords, and initial conditions. All physics (Euler-Lagrange, Hamiltonian, conservation laws, integration) is computed by our engine.</p>
+                </div>
+
                 <!-- Systems Library -->
                 <div class="tool-form-group">
                     <label class="tool-form-label" for="lm-system-select">Systems Library</label>
@@ -562,6 +599,7 @@
 
 <script>window.LM_CALC_CTX = "<%=request.getContextPath()%>";</script>
 <script src="<%=request.getContextPath()%>/modern/js/lagrangian-calculator.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/lagrangian-calculator-ai.js?v=<%=cacheVersion%>" defer></script>
 
 </body>
 </html>
