@@ -37,7 +37,13 @@
 
     var PLOT_RULES =
         'Return ONLY a JSON object: {\n'
-        + '  "expressions": [ { "type": string, "expression": string, "color": string?, "notes": string?, "sliders": [{name,min,max,default}]? } ],\n'
+        + '  "expressions": [ {\n'
+        + '      "type": string,\n'
+        + '      "expression": string,\n'
+        + '      "color": string?,\n'
+        + '      "calculus": { "derivative": bool?, "antiderivative": bool?, "integral": {"a": number, "b": number} | null }?,\n'
+        + '      "notes": string?\n'
+        + '  } ],\n'
         + '  "viewRange": { "xMin": number, "xMax": number, "yMin": number, "yMax": number } ?,\n'
         + '  "confidence": number between 0 and 1,\n'
         + '  "notes": short string\n'
@@ -56,24 +62,34 @@
         + '- NEVER compute numerical answers. You emit only expressions; the engine evaluates them.\n'
         + '- For scenes (e.g. "circle with tangent line"), return multiple entries in the "expressions" array.\n'
         + '- Pick a clean viewRange when the default (-10..10) does not show the function well (e.g. Gaussian needs smaller y range).\n'
+        + '\n'
+        + 'CALCULUS (cartesian only) - if the user asks for it, set fields in "calculus":\n'
+        + '- "area under the curve", "integral", "definite integral from a to b"\n'
+        + '     → "calculus": { "integral": { "a": 0, "b": 2 } }   (pick sensible default bounds if none given, e.g. 0 to 2 or -1 to 1)\n'
+        + '- "derivative", "slope function", "rate of change", "f\'(x)"\n'
+        + '     → "calculus": { "derivative": true }\n'
+        + '- "antiderivative", "indefinite integral", "F(x)"\n'
+        + '     → "calculus": { "antiderivative": true }\n'
+        + '- All three can be combined. Example: "show x^2 with its derivative and integral from 0 to 2":\n'
+        + '     { "type": "cartesian", "expression": "x^2", "calculus": { "derivative": true, "integral": {"a":0,"b":2} } }\n'
+        + '- If user asks "area under the curve" without specifying a function, pick a sensible default like "x^2" or "sin(x)".\n'
+        + '\n'
         + '- "confidence" low (< 0.5) if the prompt is ambiguous or could map to many different things.\n'
         + '- NO markdown, NO code fences, NO prose outside the JSON. Just the JSON object.';
 
+    // Single merged system prompt. Handles both short descriptions ("heart shape")
+    // and full word problems ("A projectile at 20 m/s at 45°..."). The LLM decides
+    // based on what the user writes — no tab selection needed.
     var SYS_PLOT =
-        'You translate English descriptions of math graphs into plottable expressions for a graphing calculator. '
-        + 'You do NOT perform any math yourself - a separate engine (Math.js, Nerdamer, Plotly) plots and analyzes what you return. '
-        + 'Your job: pick the right type and write a clean expression that represents the user\'s idea.\n\n'
-        + PLOT_RULES;
-
-    var SYS_HOMEWORK =
-        'You extract plottable expressions from a homework problem written in plain English. '
-        + 'The user pastes a word problem; you identify what should be graphed and return expressions for a graphing calculator engine to plot. '
-        + 'You do NOT solve the problem - only pick expressions.\n\n'
-        + 'Additional guidance:\n'
-        + '- Physics: projectile → parametric with t as time; oscillation → cartesian with t mapped to x.\n'
-        + '- "Area between f and g on [a,b]": return both f and g as cartesian expressions, and hint at bounds in "notes".\n'
-        + '- "Trajectory at angle theta, speed v" → parametric: "v*cos(theta)*t, v*sin(theta)*t - 0.5*9.8*t^2" with explicit numbers.\n'
-        + '- If the problem asks for a system of equations → return each equation separately.\n\n'
+        'You translate English into plottable expressions for a graphing calculator. '
+        + 'The user may give you a short description ("heart shape", "Gaussian mean 3") or paste a homework word problem ("A projectile at 20 m/s at 45°, plot trajectory"). Treat both the same way: pick the right type(s) and write clean expression(s).\n\n'
+        + 'You do NOT perform math yourself - a separate engine (Math.js, Nerdamer, Plotly) plots and analyzes what you return. Do NOT solve problems; only pick expressions to plot.\n\n'
+        + 'Word-problem guidance:\n'
+        + '- Physics projectile: return parametric "v*cos(theta)*t, v*sin(theta)*t - 0.5*9.8*t^2" with explicit numbers substituted.\n'
+        + '- Oscillation / wave: cartesian where x represents time.\n'
+        + '- "Area between f and g on [a,b]": return both f and g as separate cartesian expressions; mention bounds in "notes".\n'
+        + '- "System of equations" or "find where X meets Y": return each equation as a separate entry so the user\'s Intersections button can solve them.\n'
+        + '- Definite integrals: return the integrand as cartesian; mention bounds in "notes" so the user can set a/b.\n\n'
         + PLOT_RULES;
 
     var SYS_EXPLAIN =
@@ -91,16 +107,16 @@
 
     function $(id) { return document.getElementById(id); }
 
+    // Toggle busy state on every AI button in the card at once.
+    // (There are only 2: "Ask AI" and "Explain current plot".)
     function setBusy(busy) {
-        var tab = currentTab();
-        var pane = $('gc-ai-pane-' + tab);
-        if (!pane) return;
-        var btn = pane.querySelector('.gc-ai-go');
-        var label = pane.querySelector('.gc-ai-go-label');
-        var spin = pane.querySelector('.gc-ai-spinner');
-        if (btn) btn.disabled = busy;
-        if (label) label.style.display = busy ? 'none' : '';
-        if (spin) spin.style.display = busy ? '' : 'none';
+        document.querySelectorAll('.gc-ai-card .gc-ai-go, .gc-ai-card .gc-ai-explain-btn').forEach(function (btn) {
+            btn.disabled = busy;
+            var label = btn.querySelector('.gc-ai-go-label');
+            var spin = btn.querySelector('.gc-ai-spinner');
+            if (label) label.style.display = busy ? 'none' : '';
+            if (spin) spin.style.display = busy ? '' : 'none';
+        });
     }
 
     function showStatus(msg, kind) {
@@ -135,11 +151,6 @@
         if (titleEl) titleEl.textContent = title || 'AI';
         body.innerHTML = '<span style="color:var(--text-muted,#94a3b8);">Thinking&hellip;</span>';
         panel.style.display = '';
-    }
-
-    function currentTab() {
-        var activeTab = document.querySelector('.gc-ai-tab.active');
-        return activeTab ? activeTab.getAttribute('data-ai-mode') : 'plot';
     }
 
     // ---- Validation -------------------------------------------------------
@@ -240,13 +251,25 @@
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
+    function calculusBadge(calc) {
+        if (!calc) return '';
+        var parts = [];
+        if (calc.derivative) parts.push('f\u2032(x)');
+        if (calc.antiderivative) parts.push('F(x)');
+        if (calc.integral && typeof calc.integral.a === 'number') {
+            parts.push('\u222B[' + calc.integral.a + ',' + calc.integral.b + ']');
+        }
+        return parts.length ? ' <span class="gc-ai-calc-badge">' + parts.join(' · ') + '</span>' : '';
+    }
+
     function buildPreview(data) {
         var count = data.expressions.length;
         $('gc-ai-preview-count').textContent = count;
         var listEl = $('gc-ai-preview-list');
         listEl.innerHTML = data.expressions.map(function (e) {
             return '<li><span class="gc-ai-type">' + escHtml(e.type) + '</span>'
-                + '<code>' + escHtml(e.expression) + '</code></li>';
+                + '<code>' + escHtml(e.expression) + '</code>'
+                + calculusBadge(e.calculus) + '</li>';
         }).join('');
         var notesEl = $('gc-ai-preview-notes');
         var notes = data.notes || '';
@@ -292,6 +315,15 @@
 
         applyViewRange(data.viewRange);
 
+        // If any expression asks for calculus features, reveal the FTC helper
+        // section so the learner sees the teaching walkthrough alongside.
+        var usesCalculus = data.expressions.some(function (e) {
+            return e && e.calculus && (e.calculus.derivative || e.calculus.antiderivative || e.calculus.integral);
+        });
+        if (usesCalculus && typeof window.gcShowFTCHelper === 'function') {
+            try { window.gcShowFTCHelper(); } catch (e) { }
+        }
+
         // Add each expression via addExpression() then set type + value.
         // Pattern mirrors gcAdd() from graphing-calculator-presets.js.
         data.expressions.forEach(function (item, idx) {
@@ -331,6 +363,11 @@
                         }
                     }
                 }
+
+                // Apply calculus toggles (cartesian only - engine ignores otherwise)
+                if (item.calculus && type === 'cartesian') {
+                    applyCalculusToggles(id, item.calculus);
+                }
             } catch (e) {
                 console.warn('[GraphAI] could not apply expression', idx, e);
             }
@@ -341,12 +378,48 @@
         }
     }
 
+    // Flip the engine's calculus checkboxes for an expression. The engine's
+    // toggle functions read from DOM checkboxes, so we set those first then
+    // call the function. Bounds similarly go through their input elements.
+    function applyCalculusToggles(id, calc) {
+        if (!calc) return;
+
+        // Derivative
+        if (calc.derivative) {
+            var cb = $('show-derivative-' + id);
+            if (cb && typeof window.toggleDerivative === 'function') {
+                cb.checked = true;
+                window.toggleDerivative(id);
+            }
+        }
+
+        // Antiderivative F(x)
+        if (calc.antiderivative) {
+            var cbA = $('show-antiderivative-' + id);
+            if (cbA && typeof window.toggleAntiderivative === 'function') {
+                cbA.checked = true;
+                window.toggleAntiderivative(id);
+            }
+        }
+
+        // Definite integral with bounds
+        if (calc.integral && typeof calc.integral.a === 'number' && typeof calc.integral.b === 'number') {
+            var boundA = $('integration-a-' + id);
+            var boundB = $('integration-b-' + id);
+            var cbI = $('show-integration-' + id);
+            if (boundA) boundA.value = calc.integral.a;
+            if (boundB) boundB.value = calc.integral.b;
+            if (cbI && typeof window.toggleIntegration === 'function') {
+                cbI.checked = true;
+                window.toggleIntegration(id);
+            }
+        }
+    }
+
     // ---- Ask AI: Plot + Homework modes ------------------------------------
 
-    function askPlot(mode) {
-        var inputId = mode === 'homework' ? 'gc-ai-hw-input' : 'gc-ai-plot-input';
-        var clearFirstId = mode === 'homework' ? 'gc-ai-hw-clear-first' : 'gc-ai-clear-first';
-        var inputEl = $(inputId);
+    function askPlot() {
+        var inputEl = $('gc-ai-input');
         if (!inputEl) return;
         var desc = inputEl.value.trim();
         if (!desc) { inputEl.focus(); return; }
@@ -360,10 +433,8 @@
         hidePanel();
         setBusy(true);
 
-        var sys = mode === 'homework' ? SYS_HOMEWORK : SYS_PLOT;
-
         callAI([
-            { role: 'system', content: sys },
+            { role: 'system', content: SYS_PLOT },
             { role: 'user', content: desc }
         ])
             .then(function (text) {
@@ -378,9 +449,10 @@
                 }
 
                 // Stash for preview confirm
+                var clearEl = $('gc-ai-clear-first');
                 pendingPlot = {
                     data: parsed,
-                    clearFirst: !!$(clearFirstId) && $(clearFirstId).checked
+                    clearFirst: !!clearEl && clearEl.checked
                 };
                 buildPreview(parsed);
             })
@@ -489,27 +561,14 @@
 
     // ---- Public API (attached to window) ---------------------------------
 
-    window.gcAiSwitchTab = function (mode) {
-        document.querySelectorAll('.gc-ai-tab').forEach(function (t) {
-            t.classList.toggle('active', t.getAttribute('data-ai-mode') === mode);
-        });
-        ['plot', 'homework', 'explain'].forEach(function (m) {
-            var pane = $('gc-ai-pane-' + m);
-            if (pane) pane.style.display = (m === mode) ? '' : 'none';
-        });
-        hideStatus();
-        hidePreview();
-        hidePanel();
-    };
-
     window.gcAiChip = function (prompt) {
-        var input = $('gc-ai-plot-input');
+        var input = $('gc-ai-input');
         if (input) { input.value = prompt; input.focus(); }
     };
 
     window.gcAiAsk = function (mode) {
         if (mode === 'explain') askExplain();
-        else askPlot(mode);
+        else askPlot();
     };
 
     window.gcAiApplyPreview = function () {
@@ -522,21 +581,14 @@
     window.gcAiClearPreview = hidePreview;
     window.gcAiClosePanel = hidePanel;
 
-    // Enter to submit in the text inputs
+    // Enter submits the textarea (Shift+Enter for newline — standard chat UX)
     document.addEventListener('DOMContentLoaded', function () {
-        var plotInput = $('gc-ai-plot-input');
-        if (plotInput) {
-            plotInput.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter') { e.preventDefault(); askPlot('plot'); }
-            });
-        }
-        var hwInput = $('gc-ai-hw-input');
-        if (hwInput) {
-            hwInput.addEventListener('keydown', function (e) {
-                // Ctrl/Cmd+Enter to submit (Enter allows newlines in textarea)
-                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        var input = $('gc-ai-input');
+        if (input) {
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    askPlot('homework');
+                    askPlot();
                 }
             });
         }

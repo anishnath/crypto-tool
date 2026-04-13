@@ -1398,32 +1398,36 @@
     background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
 }
 .gc-ai-sparkle { font-size: 1em; margin-right: 0.25rem; }
-.gc-ai-tabs {
-    display: flex;
-    gap: 0.25rem;
-    margin-bottom: 0.625rem;
-    border-bottom: 1px solid var(--border, #e2e8f0);
+.gc-ai-divider {
+    height: 1px;
+    background: var(--border, #e2e8f0);
+    margin: 0.75rem -1rem 0.625rem;
 }
-.gc-ai-tab {
-    flex: 1;
-    padding: 0.375rem 0.5rem;
-    font-size: 0.75rem;
+[data-theme="dark"] .gc-ai-divider { background: rgba(255,255,255,0.08); }
+.gc-ai-explain-btn {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.8125rem;
     font-weight: 600;
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid transparent;
-    color: var(--text-secondary, #64748b);
-    cursor: pointer;
-    transition: color 0.15s, border-color 0.15s;
-}
-.gc-ai-tab:hover { color: var(--text-primary, #0f172a); }
-.gc-ai-tab.active {
     color: #6366f1;
-    border-bottom-color: #6366f1;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 0.375rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    transition: background 0.15s;
 }
-[data-theme="dark"] .gc-ai-tab.active { color: #a78bfa; border-bottom-color: #a78bfa; }
-.gc-ai-pane { display: none; }
-.gc-ai-pane.active { display: block; }
+.gc-ai-explain-btn:hover:not(:disabled) { background: rgba(99, 102, 241, 0.15); }
+.gc-ai-explain-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+[data-theme="dark"] .gc-ai-explain-btn {
+    color: #a78bfa;
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.35);
+}
+[data-theme="dark"] .gc-ai-explain-btn:hover:not(:disabled) { background: rgba(139, 92, 246, 0.22); }
 .gc-ai-input {
     width: 100%;
     padding: 0.5rem 0.625rem;
@@ -1556,6 +1560,21 @@
     background: rgba(99, 102, 241, 0.15);
     color: #6366f1;
     border-radius: 3px;
+}
+.gc-ai-preview-list .gc-ai-calc-badge {
+    display: inline-block;
+    margin-left: 0.375rem;
+    padding: 1px 6px;
+    font-family: var(--font-sans, sans-serif);
+    font-size: 0.625rem;
+    font-weight: 600;
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+    border-radius: 3px;
+}
+[data-theme="dark"] .gc-ai-preview-list .gc-ai-calc-badge {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
 }
 .gc-ai-preview-notes {
     margin-top: 0.375rem;

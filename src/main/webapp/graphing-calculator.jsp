@@ -319,60 +319,33 @@
                 <span class="gc-ai-sparkle">&#x2728;</span> AI Assistant
             </div>
             <div class="tool-card-body">
-                <div class="gc-ai-tabs" role="tablist">
-                    <button class="gc-ai-tab active" data-ai-mode="plot" onclick="gcAiSwitchTab('plot')">Plot from English</button>
-                    <button class="gc-ai-tab" data-ai-mode="homework" onclick="gcAiSwitchTab('homework')">Homework</button>
-                    <button class="gc-ai-tab" data-ai-mode="explain" onclick="gcAiSwitchTab('explain')">Explain plot</button>
+                <textarea id="gc-ai-input" class="form-control gc-ai-input" rows="2"
+                    placeholder='Describe a graph or paste a homework problem. e.g. "heart shape", "Gaussian mean 3", or "A projectile at 20 m/s at 45°, plot trajectory"'></textarea>
+                <div class="gc-ai-chip-row">
+                    <button class="gc-ai-chip" onclick="gcAiChip('heart shape')">heart shape</button>
+                    <button class="gc-ai-chip" onclick="gcAiChip('Gaussian bell curve')">Gaussian</button>
+                    <button class="gc-ai-chip" onclick="gcAiChip('damped oscillation')">damped</button>
+                    <button class="gc-ai-chip" onclick="gcAiChip('3D saddle surface')">saddle</button>
+                    <button class="gc-ai-chip" onclick="gcAiChip('sigmoid activation')">sigmoid</button>
+                    <button class="gc-ai-chip" onclick="gcAiChip('area under x^2 from 0 to 2')">&#8747; area under curve</button>
+                    <button class="gc-ai-chip" onclick="gcAiChip('show sin(x) with its derivative')">f &amp; f&#8242;(x)</button>
+                </div>
+                <div class="gc-ai-actions">
+                    <label class="gc-ai-check">
+                        <input type="checkbox" id="gc-ai-clear-first" checked> Replace existing
+                    </label>
+                    <button class="gc-ai-go" onclick="gcAiAsk('plot')">
+                        <span class="gc-ai-go-label">Ask AI</span>
+                        <span class="gc-ai-spinner" style="display:none;"></span>
+                    </button>
                 </div>
 
-                <!-- Plot from English -->
-                <div class="gc-ai-pane active" id="gc-ai-pane-plot">
-                    <input type="text" id="gc-ai-plot-input" class="form-control gc-ai-input"
-                        placeholder='e.g., "heart shape", "Gaussian with mean 3", "3D saddle"'>
-                    <div class="gc-ai-chip-row">
-                        <button class="gc-ai-chip" onclick="gcAiChip('heart shape')">heart shape</button>
-                        <button class="gc-ai-chip" onclick="gcAiChip('Gaussian bell curve')">Gaussian</button>
-                        <button class="gc-ai-chip" onclick="gcAiChip('damped oscillation')">damped</button>
-                        <button class="gc-ai-chip" onclick="gcAiChip('3D saddle surface')">saddle</button>
-                        <button class="gc-ai-chip" onclick="gcAiChip('sigmoid activation')">sigmoid</button>
-                        <button class="gc-ai-chip" onclick="gcAiChip('unit circle with tangent at 45 degrees')">circle+tangent</button>
-                    </div>
-                    <div class="gc-ai-actions">
-                        <label class="gc-ai-check">
-                            <input type="checkbox" id="gc-ai-clear-first" checked> Replace existing
-                        </label>
-                        <button class="gc-ai-go" onclick="gcAiAsk('plot')">
-                            <span class="gc-ai-go-label">Ask AI</span>
-                            <span class="gc-ai-spinner" style="display:none;"></span>
-                        </button>
-                    </div>
-                </div>
+                <div class="gc-ai-divider"></div>
 
-                <!-- Homework -->
-                <div class="gc-ai-pane" id="gc-ai-pane-homework" style="display:none;">
-                    <textarea id="gc-ai-hw-input" class="form-control gc-ai-input" rows="3"
-                        placeholder="Paste a homework problem. e.g., 'A projectile is launched at 20 m/s at 45 degrees. Plot its trajectory.' Or: 'Graph the area between y=x^2 and y=x from 0 to 1.'"></textarea>
-                    <div class="gc-ai-actions">
-                        <label class="gc-ai-check">
-                            <input type="checkbox" id="gc-ai-hw-clear-first" checked> Replace existing
-                        </label>
-                        <button class="gc-ai-go" onclick="gcAiAsk('homework')">
-                            <span class="gc-ai-go-label">Extract &amp; plot</span>
-                            <span class="gc-ai-spinner" style="display:none;"></span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Explain -->
-                <div class="gc-ai-pane" id="gc-ai-pane-explain" style="display:none;">
-                    <p class="gc-ai-explain-hint">AI narrates what the plotted graph shows. Only uses features your engine computed (zeros, extrema, asymptotes) &mdash; never invents math.</p>
-                    <div class="gc-ai-actions">
-                        <button class="gc-ai-go" onclick="gcAiAsk('explain')">
-                            <span class="gc-ai-go-label">Explain the current plot</span>
-                            <span class="gc-ai-spinner" style="display:none;"></span>
-                        </button>
-                    </div>
-                </div>
+                <button class="gc-ai-explain-btn" onclick="gcAiAsk('explain')">
+                    <span class="gc-ai-go-label"><i class="fas fa-lightbulb" style="margin-right:0.25rem;"></i>Explain current plot</span>
+                    <span class="gc-ai-spinner" style="display:none;"></span>
+                </button>
 
                 <!-- Shared status + preview + panel -->
                 <div class="gc-ai-status" id="gc-ai-status" style="display:none;"></div>
@@ -652,10 +625,20 @@
 
 </main>
 
-<!-- ==================== FTC INTUITION WALKTHROUGH ==================== -->
-<section class="tool-expertise-section" style="max-width:1200px;margin:0.75rem auto;padding:0 0.5rem;">
+<!-- ==================== FTC INTUITION WALKTHROUGH (collapsible, calculus-only) ==================== -->
+<section id="gc-ftc-section" class="tool-expertise-section gc-ftc-collapsed" style="max-width:1200px;margin:0.75rem auto;padding:0 0.5rem;">
     <div class="tool-card" style="padding:0.9rem;">
-        <h2 style="font-size:1rem;margin:0 0 0.4rem;">Why does a primitive also give area? (3-step intuition)</h2>
+        <button type="button" id="gc-ftc-toggle"
+            onclick="document.getElementById('gc-ftc-section').classList.toggle('gc-ftc-collapsed')"
+            style="display:flex;width:100%;align-items:center;justify-content:space-between;gap:0.5rem;background:transparent;border:none;padding:0;cursor:pointer;text-align:left;">
+            <h2 style="font-size:1rem;margin:0;display:flex;align-items:center;gap:0.5rem;">
+                <i class="fas fa-lightbulb" style="color:#f59e0b;"></i>
+                Why does a primitive also give area? (3-step intuition)
+            </h2>
+            <span class="gc-ftc-chevron" style="font-size:0.75rem;color:#6b7280;">&#9660;</span>
+        </button>
+
+        <div class="gc-ftc-body" style="margin-top:0.6rem;">
         <p style="margin:0 0 0.7rem;color:#6b7280;font-size:0.82rem;line-height:1.5;">We fix <code>a=0</code> and use <code>f(x)=x<sup>2</sup></code>. Move <code>b</code> and switch steps to see how area accumulation and primitive values match.</p>
 
         <style>
@@ -670,6 +653,10 @@
             [data-theme="dark"] .gc-ftc-chip.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
             [data-theme="dark"] .gc-ftc-canvas-wrap{background:#0f172a;border-color:#334155}
             [data-theme="dark"] .gc-ftc-math{color:#e5e7eb}
+
+            /* Collapsed state: hide the body, rotate chevron */
+            .gc-ftc-collapsed .gc-ftc-body { display: none; }
+            .gc-ftc-collapsed .gc-ftc-chevron { transform: rotate(-90deg); display: inline-block; }
         </style>
 
         <div class="gc-ftc-controls">
@@ -690,8 +677,18 @@
         </div>
 
         <div id="gc-ftc-explain" class="gc-ftc-math"></div>
+        </div>
     </div>
 </section>
+
+<script>
+    // Expose a helper so other code (AI, preset loader) can auto-reveal the
+    // FTC walkthrough when the user is actively doing calculus.
+    window.gcShowFTCHelper = function () {
+        var s = document.getElementById('gc-ftc-section');
+        if (s) s.classList.remove('gc-ftc-collapsed');
+    };
+</script>
 
 <!-- Embed Code Modal -->
 <div id="gc-embed-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
