@@ -90,17 +90,62 @@ var SEO_ISSUES = {
 };
 
 // ── Scoring ──
+//
+// Score is 100 minus deductions across three severity tiers. Each tier has a
+// maximum deduction cap so one tier cannot tank the whole score. Per-issue
+// deduction scales by the fraction of crawled pages affected (so 1/100 pages
+// with missing alt is not the same as 100/100). Weights come from SEO_ISSUES.
 
-function calculateSeoScore(findings) {
+var SCORE_TIER_CAP = { critical: 45, alert: 30, warning: 20 };
+// Multiplier turning (weight × page-fraction) into points. Tuned so a
+// maxed-out tier (several 100%-affected issues) hits its cap; a modest site
+// with a few issues loses single digits per issue.
+var SCORE_SCALAR = 3;
+
+function calculateSeoScore(findings, totalUrls) {
+    var pages = (typeof totalUrls === 'number' && totalUrls > 0) ? totalUrls : null;
     var score = 100;
-    var groups = ['critical', 'alert', 'warning'];
-    groups.forEach(function(group) {
-        var issues = findings[group] || [];
-        issues.forEach(function(issue) {
+    var tiers = ['critical', 'alert', 'warning'];
+    tiers.forEach(function(tier) {
+        var tierDeduction = 0;
+        (findings[tier] || []).forEach(function(issue) {
             var meta = SEO_ISSUES[issue.error_type] || { weight: 1 };
-            // Cap per-issue deduction: each issue type can deduct at most weight * 10
-            score -= meta.weight * Math.min(issue.count, 10);
+            var count = Math.max(0, issue.count || 0);
+            // Fraction of pages affected. If we don't know total pages, fall
+            // back to treating each 10-page chunk as "full saturation".
+            var fraction;
+            if (pages) {
+                fraction = Math.min(count / pages, 1);
+            } else {
+                fraction = Math.min(count / 10, 1);
+            }
+            tierDeduction += meta.weight * fraction * SCORE_SCALAR;
         });
+        // Cap each tier's contribution
+        score -= Math.min(tierDeduction, SCORE_TIER_CAP[tier]);
+    });
+    return Math.max(0, Math.min(100, Math.round(score)));
+}
+
+// Estimate score from aggregate counts (history/list view — we don't have the
+// per-issue-type breakdown, so we approximate using average weights per tier
+// and "issues per page" as a saturation proxy).
+function estimateSeoScore(criticalCount, alertCount, warningCount, totalUrls) {
+    var pages = (typeof totalUrls === 'number' && totalUrls > 0) ? totalUrls : 10;
+    // Average weights per tier: critical~10, alert~5, warning~2
+    var tiers = [
+        { count: criticalCount || 0, weight: 10, cap: SCORE_TIER_CAP.critical },
+        { count: alertCount    || 0, weight: 5,  cap: SCORE_TIER_CAP.alert },
+        { count: warningCount  || 0, weight: 2,  cap: SCORE_TIER_CAP.warning }
+    ];
+    var score = 100;
+    tiers.forEach(function(t) {
+        // Aggregate issues-per-page as a saturation proxy. Clamped at 3
+        // (3+ distinct issues per page = max deduction for that tier), then
+        // multiplied through the standard scalar and capped.
+        var issuesPerPage = t.count / pages;
+        var deduction = t.weight * Math.min(issuesPerPage, 3) * SCORE_SCALAR;
+        score -= Math.min(deduction, t.cap);
     });
     return Math.max(0, Math.min(100, Math.round(score)));
 }

@@ -414,7 +414,8 @@
     // ── Render Results ──
 
     function renderResults(data) {
-        var score = calculateSeoScore(data);
+        var totalUrls = statusData && statusData.total_urls;
+        var score = calculateSeoScore(data, totalUrls);
         var grade = getScoreGrade(score);
 
         // Show analyzed URL in results header
@@ -810,12 +811,12 @@
             var html = '<div class="seo-history-title">Recent Scans</div>';
             html += '<div class="seo-history-list">';
             data.crawls.forEach(function(c) {
-                var score = 100;
-                // Estimate score from aggregate counts
-                score -= (c.critical_issues || 0) * 10;
-                score -= (c.alert_issues || 0) * 3;
-                score -= (c.warning_issues || 0) * 1;
-                score = Math.max(0, Math.min(100, score));
+                var score = estimateSeoScore(
+                    c.critical_issues,
+                    c.alert_issues,
+                    c.warning_issues,
+                    c.total_urls
+                );
                 var grade = getScoreGrade(score);
 
                 var domain = c.url.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
