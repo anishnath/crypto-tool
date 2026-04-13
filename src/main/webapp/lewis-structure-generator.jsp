@@ -150,23 +150,27 @@
 
     <!-- SEO -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Lewis Structure Generator & VSEPR Calculator | 8gwifi.org" />
-        <jsp:param name="toolDescription" value="Free Lewis Structure Generator with VSEPR theory, molecular geometry, bond angles, and polarity predictions. Printable practice worksheet for teachers and students. Draw Lewis dot structures, calculate formal charges, and visualize 3D molecular shapes." />
+        <jsp:param name="toolName" value="AI Lewis Structure Generator & VSEPR Calculator | 8gwifi.org" />
+        <jsp:param name="toolDescription" value="Free AI-powered Lewis Structure Generator. Describe a molecule in plain English (&quot;acetic acid&quot;, &quot;a bent molecule&quot;, &quot;expanded octet&quot;) or type the formula directly. Draws Lewis dot structures, predicts VSEPR geometry, calculates formal charges, bond angles, and polarity. Printable practice worksheet for teachers and students." />
         <jsp:param name="toolCategory" value="Chemistry" />
         <jsp:param name="toolUrl" value="lewis-structure-generator.jsp" />
-        <jsp:param name="toolKeywords" value="lewis structure, lewis dot structure, lewis structure worksheet, lewis structure practice sheet, lewis structure worksheet printable, vsepr theory, molecular geometry, electron geometry, bond angles, formal charge calculator, octet rule, valence electrons, molecular shape, polarity, chemistry worksheet for teachers" />
+        <jsp:param name="toolKeywords" value="ai lewis structure generator, lewis structure, lewis dot structure, name to chemical formula, chemical name to formula converter, convert name to formula, lewis structure ai, lewis structure from name, lewis structure worksheet, lewis structure practice sheet, lewis structure worksheet printable, vsepr theory, molecular geometry, electron geometry, bond angles, formal charge calculator, octet rule, valence electrons, molecular shape, polarity, ai chemistry tool, chemistry worksheet for teachers" />
         <jsp:param name="toolImage" value="lewis-structure-og.png" />
-        <jsp:param name="toolFeatures" value="Printable practice worksheet with answer key,Lewis structure generation,VSEPR geometry prediction,Formal charge calculation,Bond angle determination,Molecular polarity analysis,Interactive molecular visualization,Electron domain geometry,Octet rule validation" />
+        <jsp:param name="toolFeatures" value="AI name-to-formula conversion (describe a molecule in English),AI property-based example picker (bent molecule expanded octet trigonal planar),Printable practice worksheet with answer key,Lewis structure generation,VSEPR geometry prediction,Formal charge calculation,Bond angle determination,Molecular polarity analysis,Interactive molecular visualization,Electron domain geometry,Octet rule validation" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="howToSteps" value="Count valence electrons|Add up all valence electrons from each atom. For ions add for negative or subtract for positive charge,Arrange atoms|Place least electronegative atom in center. Hydrogen is always terminal,Draw single bonds|Connect atoms with single bonds. Each bond uses 2 electrons,Complete octets|Distribute remaining electrons as lone pairs for octet rule,Form multiple bonds|Convert lone pairs to double or triple bonds if central atom lacks octet,Check formal charges|Calculate formal charges. Best structure has charges closest to zero" />
+        <jsp:param name="howToSteps" value="Describe or enter the molecule|Type a name like 'acetic acid' into the AI box or enter the formula directly (e.g. CH3COOH),Review the AI suggestion|If you used the AI box the parsed formula appears for confirmation before running,Count valence electrons|Engine adds up valence electrons from each atom (charge adjusts the count for ions),Arrange atoms|Least electronegative atom goes in center. Hydrogen is always terminal,Draw bonds and lone pairs|Engine connects atoms single/double/triple bonds then distributes lone pairs for octets,Check formal charges|Engine calculates formal charges — best structure has charges closest to zero" />
         <jsp:param name="faq1q" value="What is a Lewis structure?" />
         <jsp:param name="faq1a" value="A Lewis structure (or Lewis dot diagram) is a representation of a molecule showing all valence electrons as dots or lines (bonds). It helps visualize bonding patterns, lone pairs, and formal charges in molecules." />
-        <jsp:param name="faq2q" value="What is VSEPR theory?" />
-        <jsp:param name="faq2a" value="VSEPR (Valence Shell Electron Pair Repulsion) theory predicts molecular geometry based on electron pair repulsion. Electron domains (bonds and lone pairs) arrange themselves to minimize repulsion, determining the 3D shape of molecules." />
-        <jsp:param name="faq3q" value="How do you calculate formal charge?" />
-        <jsp:param name="faq3a" value="Formal charge = (Valence electrons) - (Non-bonding electrons) - (Bonding electrons/2). The most stable Lewis structure has formal charges closest to zero, with negative charges on more electronegative atoms." />
-        <jsp:param name="faq4q" value="Where can I get a free Lewis structure practice worksheet?" />
-        <jsp:param name="faq4a" value="Click Practice Sheet on this page to generate a printable Lewis structure worksheet. Each click randomly selects 12 molecules from a pool of 80+ (H2O, CO2, NH3, O2, N2, SO2, XeF2, IF5, and more). Answer key with valence electrons, geometry, and bond angles included for teachers. Download as PDF. No signup required." />
+        <jsp:param name="faq2q" value="How does the AI input work?" />
+        <jsp:param name="faq2a" value="Type a chemical name ('acetic acid'), common name ('baking soda'), or property description ('a molecule with no lone pairs', 'expanded octet example') into the AI box. The AI only converts your description into a formula string — all chemistry (bonds, geometry, lone pairs, formal charges) is computed by our engine. You review the parsed formula before anything runs." />
+        <jsp:param name="faq3q" value="What is VSEPR theory?" />
+        <jsp:param name="faq3a" value="VSEPR (Valence Shell Electron Pair Repulsion) theory predicts molecular geometry based on electron pair repulsion. Electron domains (bonds and lone pairs) arrange themselves to minimize repulsion, determining the 3D shape of molecules." />
+        <jsp:param name="faq4q" value="How do you calculate formal charge?" />
+        <jsp:param name="faq4a" value="Formal charge = (Valence electrons) - (Non-bonding electrons) - (Bonding electrons/2). The most stable Lewis structure has formal charges closest to zero, with negative charges on more electronegative atoms." />
+        <jsp:param name="faq5q" value="Is the AI output reliable for chemistry?" />
+        <jsp:param name="faq5a" value="The AI is only a name-to-formula translator. It never calculates bonds, lone pairs, geometry, formal charges, or polarity — those are always computed by our deterministic chemistry engine. If the AI picks a poor example, the drawn structure will show it clearly and you can reject and retry." />
+        <jsp:param name="faq6q" value="Where can I get a free Lewis structure practice worksheet?" />
+        <jsp:param name="faq6a" value="Click Practice Sheet on this page to generate a printable Lewis structure worksheet. Each click randomly selects 12 molecules from a pool of 80+ (H2O, CO2, NH3, O2, N2, SO2, XeF2, IF5, and more). Answer key with valence electrons, geometry, and bond angles included for teachers. Download as PDF. No signup required." />
     </jsp:include>
 
     <!-- OG, Twitter, canonical, JSON-LD all handled by seo-tool-page.jsp above -->
@@ -294,23 +298,23 @@
         /* Quick example pills */
         .lewis-example-pill {
             display: inline-block;
-            padding: 0.35rem 0.75rem;
-            margin: 0.2rem;
+            padding: 0.15rem 0.5rem;
+            margin: 0.125rem;
             background: var(--bg-secondary, #f8fafc);
             border: 1px solid var(--border, #e2e8f0);
-            border-radius: 1rem;
+            border-radius: 0.75rem;
             cursor: pointer;
-            font-size: 0.8125rem;
+            font-size: 0.75rem;
             font-weight: 500;
             color: var(--text-primary, #0f172a);
-            transition: all 0.2s;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+            line-height: 1.4;
         }
 
         .lewis-example-pill:hover {
             background: var(--tool-primary);
             color: white;
             border-color: var(--tool-primary);
-            transform: translateY(-1px);
         }
 
         .lewis-example-pill.generic {
@@ -338,6 +342,129 @@
         [data-theme="dark"] .lewis-example-pill.generic {
             border-color: rgba(245, 158, 11, 0.5);
             color: #fbbf24;
+        }
+
+        /* ── AI name → formula block ── */
+        .lewis-ai-group {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(99, 102, 241, 0.06));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 0.875rem;
+        }
+        [data-theme="dark"] .lewis-ai-group {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(99, 102, 241, 0.12));
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+        .lewis-ai-sparkle { font-size: 1em; }
+        .lewis-ai-input-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: stretch;
+        }
+        .lewis-ai-input { flex: 1; min-width: 0; }
+        .lewis-ai-btn {
+            padding: 0 0.875rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            transition: opacity 0.15s, transform 0.15s;
+        }
+        .lewis-ai-btn:hover:not(:disabled) { opacity: 0.9; }
+        .lewis-ai-btn:active:not(:disabled) { transform: translateY(1px); }
+        .lewis-ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .lewis-ai-btn-spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: lewis-ai-spin 0.8s linear infinite;
+        }
+        @keyframes lewis-ai-spin { to { transform: rotate(360deg); } }
+        .lewis-ai-status {
+            margin-top: 0.5rem;
+            padding: 0.5rem 0.625rem;
+            font-size: 0.75rem;
+            border-radius: 0.375rem;
+        }
+        .lewis-ai-status.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+        [data-theme="dark"] .lewis-ai-status.error { color: #fca5a5; }
+        .lewis-ai-preview {
+            margin-top: 0.5rem;
+            padding: 0.625rem;
+            background: var(--bg-primary);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 0.375rem;
+        }
+        [data-theme="dark"] .lewis-ai-preview {
+            background: var(--bg-tertiary);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+        .lewis-ai-preview-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .lewis-ai-preview-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        .lewis-ai-preview-formula {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 1rem;
+            color: #10b981;
+        }
+        .lewis-ai-preview-charge {
+            font-family: var(--font-mono);
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+        .lewis-ai-preview-actions {
+            display: flex;
+            gap: 0.375rem;
+            margin-top: 0.5rem;
+        }
+        .lewis-ai-confirm, .lewis-ai-reject {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            border: 1px solid;
+        }
+        .lewis-ai-confirm {
+            color: #fff;
+            background: #10b981;
+            border-color: #10b981;
+        }
+        .lewis-ai-confirm:hover { background: #059669; }
+        .lewis-ai-reject {
+            color: var(--text-secondary);
+            background: transparent;
+            border-color: var(--border);
+        }
+        .lewis-ai-reject:hover { background: var(--bg-hover); }
+        .lewis-ai-preview-note {
+            margin-top: 0.375rem;
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            font-style: italic;
         }
 
         /* p5.js canvas wrapper */
@@ -688,7 +815,7 @@
 <header class="tool-page-header">
     <div class="tool-page-header-inner">
         <div>
-            <h1 class="tool-page-title">Lewis Structure Generator & VSEPR Calculator</h1>
+            <h1 class="tool-page-title">AI Lewis Structure Generator &amp; VSEPR Calculator</h1>
             <nav class="tool-breadcrumbs">
                 <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                 <a href="<%=request.getContextPath()%>/chemical-equation-balancer.jsp">Chemistry</a> /
@@ -696,6 +823,7 @@
             </nav>
         </div>
         <div class="tool-page-badges">
+            <span class="tool-badge">AI-Powered</span>
             <span class="tool-badge">Lewis Dot Diagrams</span>
             <span class="tool-badge">VSEPR Theory</span>
             <span class="tool-badge">Molecular Visualization</span>
@@ -707,7 +835,7 @@
 <section class="tool-description-section">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Generate Lewis dot structures, predict molecular geometry using VSEPR theory, calculate bond angles, and analyze molecular polarity. <strong>Free printable practice worksheet</strong>—each click generates a random 12-molecule sheet from 80+ options (H&#8322;O, CO&#8322;, NH&#8323;, O&#8322;, N&#8322;, XeF&#8322;, IF&#8325;, and more). Drawing boxes and answer blanks included. No signup required.</p>
+            <p><strong>Describe any molecule in plain English</strong> ("acetic acid", "a bent molecule", "expanded octet example") and let AI convert it to a formula &mdash; or type the formula directly. Our chemistry engine then draws the Lewis dot structure, predicts VSEPR geometry, and calculates bond angles, formal charges, and polarity. <strong>Free printable practice worksheet</strong>&mdash;each click generates a random 12-molecule sheet from 80+ options (H&#8322;O, CO&#8322;, NH&#8323;, O&#8322;, N&#8322;, XeF&#8322;, IF&#8325;, and more). No signup required.</p>
         </div>
     </div>
 </section>
@@ -732,6 +860,35 @@
 
             <!-- ========== Tab 1: Lewis Structure ========== -->
             <div id="lewisSection" class="tool-form-section active">
+                <!-- AI: Describe the molecule in English -->
+                <div class="tool-form-group lewis-ai-group">
+                    <label class="tool-label">
+                        <span class="lewis-ai-sparkle">&#x2728;</span> Describe the molecule (AI)
+                    </label>
+                    <div class="lewis-ai-input-row">
+                        <input type="text" class="tool-input lewis-ai-input" id="lewisAiInput"
+                            placeholder="e.g., acetic acid, a bent molecule, expanded octet example">
+                        <button type="button" class="lewis-ai-btn" id="lewisAiBtn" title="Convert to formula">
+                            <span class="lewis-ai-btn-label">Ask AI</span>
+                            <span class="lewis-ai-btn-spinner" style="display:none;"></span>
+                        </button>
+                    </div>
+                    <div class="lewis-ai-status" id="lewisAiStatus" style="display:none;"></div>
+                    <div class="lewis-ai-preview" id="lewisAiPreview" style="display:none;">
+                        <div class="lewis-ai-preview-row">
+                            <span class="lewis-ai-preview-label">AI parsed as:</span>
+                            <span class="lewis-ai-preview-formula" id="lewisAiPreviewFormula"></span>
+                            <span class="lewis-ai-preview-charge" id="lewisAiPreviewCharge"></span>
+                        </div>
+                        <div class="lewis-ai-preview-actions">
+                            <button type="button" class="lewis-ai-confirm" id="lewisAiConfirm">Use this &rarr;</button>
+                            <button type="button" class="lewis-ai-reject" id="lewisAiReject">Edit</button>
+                        </div>
+                        <div class="lewis-ai-preview-note" id="lewisAiPreviewNote"></div>
+                    </div>
+                    <p class="tool-hint" style="margin-top:0.375rem;">Describe by name ("water"), common name ("baking soda"), or property ("no lone pairs", "expanded octet"). The engine verifies the chemistry — if AI picks a poor example, the drawing will show it.</p>
+                </div>
+
                 <div class="tool-form-group">
                     <label class="tool-label">Molecular Formula</label>
                     <input type="text" class="tool-input" id="molecularFormula" placeholder="e.g., H2O, CO2, NH3, or ML2 (generic)">
@@ -739,8 +896,8 @@
                 </div>
 
                 <div class="tool-form-group">
-                    <label class="tool-label">Quick Examples</label>
-                    <div style="margin-top:0.25rem;">
+                    <label class="tool-label" style="margin-bottom:0.25rem;">Quick Examples</label>
+                    <div>
                         <span class="lewis-example-pill" data-formula="H2O">H&#8322;O</span>
                         <span class="lewis-example-pill" data-formula="CO2">CO&#8322;</span>
                         <span class="lewis-example-pill" data-formula="NH3">NH&#8323;</span>
@@ -803,8 +960,8 @@
                 </div>
 
                 <div class="tool-form-group">
-                    <label class="tool-label">Quick VSEPR Examples</label>
-                    <div style="margin-top:0.25rem;">
+                    <label class="tool-label" style="margin-bottom:0.25rem;">Quick VSEPR Examples</label>
+                    <div>
                         <span class="lewis-example-pill" data-vsepr="2,0">2B-0LP (Linear)</span>
                         <span class="lewis-example-pill" data-vsepr="3,0">3B-0LP (Trig. Planar)</span>
                         <span class="lewis-example-pill" data-vsepr="2,1">2B-1LP (Bent ~120&deg;)</span>
@@ -1164,8 +1321,8 @@
 <!-- E-E-A-T: Experience, Expertise, Authoritativeness, Trustworthiness -->
 <section class="tool-expertise-section" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
     <div class="tool-card" style="padding: 2rem;">
-        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">About This Lewis Structure Tool & Methodology</h2>
-        <p style="margin-bottom: 1rem; color: var(--text-secondary);">This Lewis Structure Generator uses valence electron calculations and VSEPR (Valence Shell Electron Pair Repulsion) theory to predict molecular geometry, bond angles, and polarity. All calculations and visualizations run entirely in your browser for instant, interactive molecular diagrams.</p>
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">About This AI Lewis Structure Tool &amp; Methodology</h2>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">This AI-powered Lewis Structure Generator lets you describe a molecule in plain English (&quot;acetic acid&quot;, &quot;a bent molecule&quot;, &quot;expanded octet example&quot;) &mdash; AI handles the name-to-formula translation while our deterministic chemistry engine handles every bond, lone pair, formal charge, and geometry calculation. Built on valence electron counting and VSEPR (Valence Shell Electron Pair Repulsion) theory. AI never computes chemistry; it only suggests formulas that the engine then validates and draws.</p>
 
         <h3 style="font-size: 1rem; margin: 1.5rem 0 0.75rem;">How Lewis Structure Generation Works:</h3>
         <ol style="margin-left: 1.5rem; color: var(--text-secondary);">
@@ -4446,6 +4603,214 @@
     document.getElementById('generateLewisBtn').addEventListener('click', generateLewis);
     document.getElementById('predictVSEPRBtn').addEventListener('click', predictVSEPR);
     document.getElementById('calcFormalBtn').addEventListener('click', calculateFormalCharge);
+
+    // ========== AI: NAME → FORMULA ==========
+    // AI only translates English to formula+charge. All chemistry is computed
+    // by the existing engine after the user confirms the parsed formula.
+    (function initLewisAI() {
+        var aiInput    = document.getElementById('lewisAiInput');
+        var aiBtn      = document.getElementById('lewisAiBtn');
+        var aiBtnLabel = aiBtn.querySelector('.lewis-ai-btn-label');
+        var aiBtnSpin  = aiBtn.querySelector('.lewis-ai-btn-spinner');
+        var aiStatus   = document.getElementById('lewisAiStatus');
+        var aiPreview  = document.getElementById('lewisAiPreview');
+        var aiPrevForm = document.getElementById('lewisAiPreviewFormula');
+        var aiPrevChg  = document.getElementById('lewisAiPreviewCharge');
+        var aiPrevNote = document.getElementById('lewisAiPreviewNote');
+        var aiConfirm  = document.getElementById('lewisAiConfirm');
+        var aiReject   = document.getElementById('lewisAiReject');
+        var aiAbort    = null;
+
+        // Strict formula regex: element symbols + optional counts, optional charge suffix.
+        // Accepts: H2O, CH3COOH, NH4+, CO3-2, SO4^2-, Fe(CN)6, etc.
+        var FORMULA_RE = /^[A-Z][a-zA-Z0-9()]*(\^?[+-]\d*|\d*[+-])?$/;
+
+        var SYS_PROMPT = 'You are a chemistry helper that picks a molecule formula based on what the user describes. The user may give you: '
+            + '(1) a chemical name ("acetic acid"), (2) a common name ("baking soda"), (3) a description of properties ("a molecule with no lone pairs", "a bent molecule", "expanded octet example", "polar diatomic"), or (4) a category ("a simple sugar", "a strong acid"). '
+            + 'Your job is to return ONE example formula that best fits. You return ONLY a JSON object: {"formula": string, "charge": integer, "confidence": number between 0 and 1, "notes": short string}. '
+            + 'RULES:\n'
+            + '- The formula must be standard chemistry notation: element symbols with counts (e.g. "H2O", "CH3COOH", "NH4", "SO4", "Fe2O3", "CH4", "BF3", "SF6").\n'
+            + '- Do NOT include the charge inside the formula string. Put the charge (as a signed integer) in the "charge" field. For neutral molecules use 0.\n'
+            + '- Do NOT use subscripts or superscripts — ASCII only.\n'
+            + '- Do NOT include any chemistry analysis (bonds, geometry, lone pair counts, hybridization). You only pick a representative formula. The user\'s engine will do the actual chemistry.\n'
+            + '- For property or category queries, pick a classic textbook example (e.g. "no lone pairs on central atom" → "CH4", "bent" → "H2O", "trigonal planar" → "BF3", "expanded octet" → "SF6", "linear triatomic" → "CO2").\n'
+            + '- "confidence" should reflect how well the formula matches the intent. Lower it (< 0.6) if the description is vague, ambiguous, or could refer to many different molecules.\n'
+            + '- "notes" should be 1 short sentence (under 80 chars) explaining why you picked this example.\n'
+            + '- If the input is truly not about chemistry (random gibberish, unrelated topics), return {"formula": "", "charge": 0, "confidence": 0, "notes": "Not a chemistry query"}.\n'
+            + '- Return ONLY the JSON, no markdown, no code fences, no prose.';
+
+        function setBusy(busy) {
+            aiBtn.disabled = busy;
+            aiBtnLabel.style.display = busy ? 'none' : '';
+            aiBtnSpin.style.display = busy ? '' : 'none';
+        }
+
+        function showStatus(msg, kind) {
+            aiStatus.textContent = msg;
+            aiStatus.className = 'lewis-ai-status ' + (kind || '');
+            aiStatus.style.display = '';
+        }
+
+        function hideStatus() {
+            aiStatus.style.display = 'none';
+            aiStatus.textContent = '';
+        }
+
+        function hidePreview() {
+            aiPreview.style.display = 'none';
+        }
+
+        function showPreview(formula, charge, note) {
+            aiPrevForm.textContent = formula;
+            if (charge === 0 || charge === undefined || charge === null) {
+                aiPrevChg.textContent = '(neutral)';
+            } else {
+                aiPrevChg.textContent = 'charge ' + (charge > 0 ? '+' : '') + charge;
+            }
+            aiPrevNote.textContent = note || '';
+            aiPrevNote.style.display = note ? '' : 'none';
+            aiPreview.style.display = '';
+        }
+
+        // Local validator — ensures AI output is syntactically a formula our
+        // engine will accept. Runs BEFORE we feed it to generateLewis().
+        function validateFormula(f) {
+            if (typeof f !== 'string') return false;
+            var s = f.trim();
+            if (!s || s.length > 40) return false;
+            // Reject anything obviously prose-like
+            if (/\s/.test(s)) return false;
+            if (!FORMULA_RE.test(s)) return false;
+            // Must start with an uppercase letter (element symbol)
+            if (!/^[A-Z]/.test(s)) return false;
+            return true;
+        }
+
+        function parseAIResponse(text) {
+            // Strip any markdown fences in case AI ignored the rule
+            var clean = text.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '').trim();
+            // Try to extract the first JSON object if there's surrounding prose
+            var braceStart = clean.indexOf('{');
+            var braceEnd = clean.lastIndexOf('}');
+            if (braceStart !== -1 && braceEnd !== -1 && braceEnd > braceStart) {
+                clean = clean.slice(braceStart, braceEnd + 1);
+            }
+            return JSON.parse(clean);
+        }
+
+        function askAI() {
+            var desc = aiInput.value.trim();
+            if (!desc) { aiInput.focus(); return; }
+            if (desc.length > 200) {
+                showStatus('Description too long. Keep it brief.', 'error');
+                return;
+            }
+
+            hideStatus();
+            hidePreview();
+            setBusy(true);
+
+            if (aiAbort) { try { aiAbort.abort(); } catch (e) {} }
+            aiAbort = new AbortController();
+
+            var ctxPath = '<%=request.getContextPath()%>';
+            fetch(ctxPath + '/ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [
+                        { role: 'system', content: SYS_PROMPT },
+                        { role: 'user', content: desc }
+                    ],
+                    stream: false
+                }),
+                signal: aiAbort.signal
+            })
+            .then(function(r) {
+                if (r.status === 429) throw new Error('Rate limit — try again in a minute.');
+                if (!r.ok) throw new Error('AI is unavailable (' + r.status + ').');
+                return r.json();
+            })
+            .then(function(data) {
+                var text = '';
+                if (data.message && data.message.content) text = data.message.content;
+                else if (data.response) text = data.response;
+                else if (data.choices && data.choices[0]) {
+                    text = data.choices[0].message ? data.choices[0].message.content : (data.choices[0].text || '');
+                }
+                if (!text) throw new Error('Empty response from AI.');
+
+                text = text.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+
+                var parsed;
+                try { parsed = parseAIResponse(text); }
+                catch (e) { throw new Error('AI returned invalid JSON. Try rephrasing.'); }
+
+                var formula = (parsed.formula || '').trim();
+                var charge = parseInt(parsed.charge, 10);
+                if (isNaN(charge)) charge = 0;
+                var confidence = typeof parsed.confidence === 'number' ? parsed.confidence : 0;
+                var note = (parsed.notes || '').trim();
+
+                if (!formula) {
+                    showStatus(note || 'AI could not recognize that molecule. Try a different name.', 'error');
+                    return;
+                }
+
+                if (!validateFormula(formula)) {
+                    showStatus('AI returned an unusable formula: "' + formula + '". Try rephrasing.', 'error');
+                    return;
+                }
+
+                if (confidence < 0.4) {
+                    showStatus('Low confidence — AI is unsure. ' + (note ? '(' + note + ') ' : '') + 'Review the parsed formula below before using.', 'error');
+                    // Still show preview so the user can decide
+                }
+
+                showPreview(formula, charge, note);
+            })
+            .catch(function(err) {
+                if (err && err.name === 'AbortError') return;
+                showStatus(err.message || 'Something went wrong.', 'error');
+            })
+            .finally(function() {
+                setBusy(false);
+                aiAbort = null;
+            });
+        }
+
+        aiBtn.addEventListener('click', askAI);
+        aiInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); askAI(); }
+        });
+
+        // "Use this" → copy to formula input, trigger engine-owned generate
+        aiConfirm.addEventListener('click', function() {
+            var formula = aiPrevForm.textContent.trim();
+            var charge = 0;
+            var chgText = aiPrevChg.textContent;
+            var m = chgText.match(/-?\d+/);
+            if (m) charge = parseInt(m[0], 10);
+            if (!formula) return;
+
+            document.getElementById('molecularFormula').value = formula;
+            document.getElementById('molecularCharge').value = charge;
+            hidePreview();
+            hideStatus();
+            // Engine owns all chemistry from here.
+            generateLewis();
+        });
+
+        aiReject.addEventListener('click', function() {
+            // Pre-fill the formula input so the user can tweak it manually
+            var formula = aiPrevForm.textContent.trim();
+            if (formula) {
+                document.getElementById('molecularFormula').value = formula;
+                document.getElementById('molecularFormula').focus();
+            }
+            hidePreview();
+        });
+    })();
 
     // ========== RESULT ACTIONS (using ToolUtils) ==========
     document.getElementById('copyResultBtn').addEventListener('click', function() {
