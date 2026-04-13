@@ -262,7 +262,11 @@
                             <div class="ai-panel" id="<%= editorId %>-ai-panel" style="display:none;">
                                 <div class="ai-panel-header">
                                     <span class="ai-panel-title" id="<%= editorId %>-ai-panel-title">AI</span>
-                                    <button class="ai-panel-close" onclick="closeAIPanel('<%= editorId %>')" title="Close">&times;</button>
+                                    <div class="ai-panel-actions">
+                                        <button class="ai-cancel-btn" id="<%= editorId %>-ai-cancel-btn"
+                                            onclick="cancelAI('<%= editorId %>')" title="Stop generating" style="display:none;">Stop</button>
+                                        <button class="ai-panel-close" onclick="closeAIPanel('<%= editorId %>')" title="Close">&times;</button>
+                                    </div>
                                 </div>
                                 <div class="ai-panel-body" id="<%= editorId %>-ai-panel-body"></div>
                             </div>
@@ -722,6 +726,46 @@
 
                     .ai-panel-close:hover {
                         color: #fca5a5;
+                    }
+
+                    .ai-panel-actions {
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+
+                    .ai-cancel-btn {
+                        padding: 3px 10px;
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: #fca5a5;
+                        background: rgba(239, 68, 68, 0.15);
+                        border: 1px solid rgba(239, 68, 68, 0.4);
+                        border-radius: 4px;
+                        cursor: pointer;
+                        transition: all 0.15s ease;
+                    }
+
+                    .ai-cancel-btn:hover {
+                        background: rgba(239, 68, 68, 0.3);
+                        color: #fecaca;
+                    }
+
+                    /* Busy state — disable all AI inputs during streaming */
+                    .compiler-container[data-ai-busy="1"] .ai-btn,
+                    .compiler-container[data-ai-busy="1"] .ai-modify-input,
+                    .compiler-container[data-ai-busy="1"] .ai-apply-btn {
+                        opacity: 0.5;
+                        pointer-events: none;
+                        cursor: not-allowed;
+                    }
+
+                    .compiler-container[data-ai-busy="1"] .ai-panel {
+                        border-color: rgba(245, 158, 11, 0.4);
+                    }
+
+                    .compiler-container[data-ai-busy="1"] .ai-panel-title {
+                        color: #fbbf24;
                     }
 
                     .ai-panel-body {
@@ -1280,6 +1324,11 @@
                         }
 
                         window.closeAIPanel = window.closeAIPanel || function (id) {
+                            // If still streaming, abort first
+                            const ctrl = aiControllers[id];
+                            if (ctrl) {
+                                try { ctrl.abort(); } catch (e) { /* ignore */ }
+                            }
                             const panel = document.getElementById(id + '-ai-panel');
                             if (panel) panel.style.display = 'none';
                         };
@@ -1297,9 +1346,35 @@
                             }
                         };
 
+                        // Track in-flight AbortControllers per compiler instance
+                        const aiControllers = {};
+
+                        window.cancelAI = window.cancelAI || function (id) {
+                            const ctrl = aiControllers[id];
+                            if (ctrl) {
+                                try { ctrl.abort(); } catch (e) { /* ignore */ }
+                            }
+                        };
+
+                        function setAIBusy(id, busy) {
+                            const container = document.getElementById(id + '-container');
+                            if (!container) return;
+                            if (busy) {
+                                container.dataset.aiBusy = '1';
+                            } else {
+                                delete container.dataset.aiBusy;
+                            }
+                            const cancelBtn = document.getElementById(id + '-ai-cancel-btn');
+                            if (cancelBtn) cancelBtn.style.display = busy ? '' : 'none';
+                        }
+
                         window.askAI = window.askAI || function (id, mode) {
                             const container = document.getElementById(id + '-container');
                             if (!container) return;
+
+                            // Block duplicate requests while streaming
+                            if (container.dataset.aiBusy === '1') return;
+
                             const lang = container.dataset.language;
                             const editor = window.codeMirrorEditors && window.codeMirrorEditors[id];
                             const code = editor ? editor.getValue() : (document.getElementById(id + '-code') || {}).value || '';
@@ -1361,6 +1436,11 @@
                             const titleEl = document.getElementById(id + '-ai-panel-title');
                             if (!bodyEl) return;
 
+                            // Mark busy + show Stop button + prep abort controller
+                            const controller = new AbortController();
+                            aiControllers[id] = controller;
+                            setAIBusy(id, true);
+
                             let text = '';
                             let lastRenderTs = 0;
                             let tokenCount = 0;
@@ -1404,7 +1484,8 @@
                                             { role: 'user', content: userPrompt }
                                         ],
                                         stream: true
-                                    })
+                                    }),
+                                    signal: controller.signal
                                 });
 
                                 if (resp.status === 429) throw new Error('Rate limit — try again in a minute.');
@@ -1468,8 +1549,26 @@
                                     if (input) input.value = '';
                                 }
                             } catch (err) {
-                                bodyEl.innerHTML = '<span class="ai-error">' + (err.message || 'Something went wrong.') + '</span>';
-                                if (titleEl) titleEl.textContent = baseTitle;
+                                if (err && err.name === 'AbortError') {
+                                    // User clicked Stop — preserve partial output, annotate panel
+                                    let shown = text.replace(/<think>[\s\S]*?<\/think>/g, '');
+                                    const openThink = shown.indexOf('<think>');
+                                    if (openThink !== -1) shown = shown.slice(0, openThink);
+                                    shown = shown.trim();
+                                    if (shown) {
+                                        bodyEl.innerHTML = renderAIMarkdown(id, shown)
+                                            + '<div class="ai-error" style="margin-top:8px;">Stopped.</div>';
+                                    } else {
+                                        bodyEl.innerHTML = '<span class="ai-error">Stopped.</span>';
+                                    }
+                                    if (titleEl) titleEl.textContent = baseTitle + ' (stopped)';
+                                } else {
+                                    bodyEl.innerHTML = '<span class="ai-error">' + (err.message || 'Something went wrong.') + '</span>';
+                                    if (titleEl) titleEl.textContent = baseTitle;
+                                }
+                            } finally {
+                                delete aiControllers[id];
+                                setAIBusy(id, false);
                             }
                         }
                     })();
