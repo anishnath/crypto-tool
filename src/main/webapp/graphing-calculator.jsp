@@ -10,33 +10,35 @@
     <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Free Online Graphing Calculator - 2D, 3D, Calculus (2026)" />
-        <jsp:param name="toolDescription" value="Free graphing calculator online: plot functions, 3D surfaces, derivatives f'(x), integrals, limits, polar, parametric, and equations. Auto-detect input type, 50+ presets, sliders, animation. No signup. Desmos alternative with built-in CAS." />
+        <jsp:param name="toolName" value="AI Graphing Calculator &mdash; Plot from English, 2D/3D, Calculus (2026)" />
+        <jsp:param name="toolDescription" value="AI graphing calculator: describe any graph in plain English (&quot;heart shape&quot;, &quot;3D saddle&quot;, &quot;Gaussian with mean 3&quot;) or paste a homework problem and let AI extract the expressions. Our engine plots 2D/3D functions, derivatives f'(x), integrals, limits, polar, parametric, and equations. Auto-detect input, 50+ presets, sliders, animation. Free Desmos alternative." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="graphing-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="graphing calculator, online graphing calculator free, graphing calculator online, free graphing calculator, 3D graphing calculator, graph functions online, desmos alternative, graphing calculator with derivatives, calculus graphing calculator, plot functions online free, graph equations online, parametric graphing calculator, polar graph plotter, 3D surface plot calculator, graph inequalities online, function plotter, limit calculator graph, systems of equations grapher, interactive math graph tool, TI-84 graphing calculator online" />
+        <jsp:param name="toolKeywords" value="ai graphing calculator, graphing calculator ai, plot from english, graph from description, natural language graphing calculator, ai graph plotter, word problem graphing calculator, homework graphing calculator, graphing calculator, online graphing calculator free, graphing calculator online, free graphing calculator, 3D graphing calculator, graph functions online, desmos alternative, graphing calculator with derivatives, calculus graphing calculator, plot functions online free, graph equations online, parametric graphing calculator, polar graph plotter, 3D surface plot calculator, graph inequalities online, function plotter, limit calculator graph, systems of equations grapher, interactive math graph tool, TI-84 graphing calculator online" />
         <jsp:param name="toolImage" value="graphing-calculator.svg" />
-        <jsp:param name="toolFeatures" value="3D surface plotting for z=f(x y) expressions,Derivative overlay f'(x) for any function,Symbolic antiderivative F(x) plotting via CAS,Definite integral shading with adjustable bounds,Limit evaluation and visualization with annotations,Auto-detect expression type (cartesian polar parametric surface equation inequality),Systems of equations with intersection solving,Implicit equation solver (circles ellipses hyperbolas),50+ built-in presets including calculus physics and ML,Parameter sliders with real-time animation,Trace mode showing coordinates and slope,KaTeX live math preview as you type,Export as PNG or SVG,Shareable graph URLs,Unicode math input support (π θ √ ² ³)" />
+        <jsp:param name="toolFeatures" value="AI Plot from English (describe a graph in plain language),AI Homework mode (paste a word problem AI extracts the expressions),AI Explain plot (engine features narrated in plain English),3D surface plotting for z=f(x y) expressions,Derivative overlay f'(x) for any function,Symbolic antiderivative F(x) plotting via CAS,Definite integral shading with adjustable bounds,Limit evaluation and visualization with annotations,Auto-detect expression type (cartesian polar parametric surface equation inequality),Systems of equations with intersection solving,Implicit equation solver (circles ellipses hyperbolas),50+ built-in presets including calculus physics and ML,Parameter sliders with real-time animation,Trace mode showing coordinates and slope,KaTeX live math preview as you type,Export as PNG or SVG,Shareable graph URLs,Unicode math input support (π θ √ ² ³)" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Type an expression|Enter any math expression like sin(x) or x^2+y^2=25 and the calculator auto-detects the graph type,Enable calculus overlays|Toggle f'(x) for derivatives or F(x) for antiderivatives or shade definite integrals with adjustable bounds,Evaluate limits|Switch to Limit type and enter the approach value to see the limit computed symbolically and annotated on the graph,Add more expressions|Click Add Expression to overlay multiple functions with different colors and compare them visually,Export or share|Export your graph as PNG or SVG or generate a shareable link to send to classmates or colleagues" />
         <jsp:param name="teaches" value="Calculus derivatives and integrals, limits, graphing functions, systems of equations, polar and parametric curves" />
         <jsp:param name="educationalLevel" value="High School, Undergraduate" />
-        <jsp:param name="faq1q" value="What types of graphs can this calculator plot?" />
-        <jsp:param name="faq1a" value="This graphing calculator supports 8 plot types: Cartesian y=f(x) functions like sin(x) and x^2, equations solved symbolically such as x^2+y^2=25 or 2x+3y=8, parametric curves x(t) y(t), polar graphs r=f(theta), limits with visual annotations, piecewise functions, inequalities with shaded regions, and statistical distributions. Just type any expression and it auto-detects the type." />
-        <jsp:param name="faq2q" value="How do I graph derivatives, integrals, and antiderivatives?" />
-        <jsp:param name="faq2a" value="For any Cartesian function, use the calculus toggles next to the expression input. Toggle f'(x) to overlay the derivative curve, click the integral symbol to shade the area under the curve with adjustable a and b bounds, or toggle F(x) to plot the symbolic antiderivative computed by the built-in CAS engine. All three can be shown simultaneously." />
-        <jsp:param name="faq3q" value="How does the limit calculator work on the graph?" />
-        <jsp:param name="faq3a" value="Select the Limit type from the dropdown, enter the function like sin(x)/x, and set the approach value such as 0. The calculator uses a symbolic CAS to compute the exact limit, plots the function, and annotates the limit point with an open circle marker, a dashed horizontal line at y=L, and a dotted vertical line at x=a. Try presets like lim sin(x)/x as x approaches 0 equals 1." />
-        <jsp:param name="faq4q" value="Can I solve systems of equations and find intersections?" />
-        <jsp:param name="faq4a" value="Yes. Add multiple equations such as y=x^2 and y=2x+3 and the calculator graphs both curves. Use the Intersections button to find where they cross. The Equation type uses Nerdamer CAS to solve any equation symbolically, including circles, ellipses, hyperbolas, and higher-degree polynomials. Over 15 system presets are built in." />
-        <jsp:param name="faq5q" value="Does it support parameter sliders and animation?" />
-        <jsp:param name="faq5a" value="Yes. Type any single letter like a, b, or c in your expression and a slider appears automatically. Drag the slider to change the parameter in real time. Press the play button to animate and watch the graph evolve continuously. This works for all plot types including polar, parametric, and implicit equations." />
-        <jsp:param name="faq6q" value="What are the 50+ built-in presets?" />
-        <jsp:param name="faq6a" value="Presets include Quick Start (sin, parametric, polar), Calculus (antiderivative of x^2, FTC demo, Area-to-Primitive visual, limit sin(x)/x), Systems of Equations (linear, circle+line, parabola+line), Creative Curves (spirograph, lissajous, butterfly, cardioid), Physics (damped oscillation, projectile, wave interference), Machine Learning (activation functions, loss functions, gradient descent), and Classic curves (Witch of Agnesi, folium, cissoid)." />
-        <jsp:param name="faq7q" value="Is this graphing calculator really free? What are the limits?" />
-        <jsp:param name="faq7a" value="100 percent free with no signup, no ads blocking the graph, and no usage limits. All computation runs entirely in your browser using Math.js, Plotly.js, Nerdamer CAS, and KaTeX. Export graphs as PNG or SVG, save expression sets to local storage, or generate shareable URLs. Works on desktop, tablet, and mobile browsers." />
-        <jsp:param name="faq8q" value="Can I plot 3D surfaces like z = sin(x)*cos(y)?" />
-        <jsp:param name="faq8a" value="Yes. Type any expression with both x and y like sin(x)*cos(y) or x^2+y^2 and the calculator auto-detects it as a 3D surface. It loads a full WebGL renderer and displays an interactive surface you can rotate and zoom. Presets include Ripple, Saddle, Gaussian, and Waves. You can also type z=f(x,y) with a z= prefix." />
+        <jsp:param name="faq1q" value="How does the AI input work?" />
+        <jsp:param name="faq1a" value="Use the AI Assistant card in the left column. Describe the graph you want in plain English (&quot;heart shape&quot;, &quot;Gaussian bell curve&quot;, &quot;3D saddle&quot;) or paste a homework problem. The AI converts your description into one or more expressions and shows a preview. Click Plot it and our engine runs the actual graphing. AI never calculates values, zeros, or derivatives &mdash; Math.js, Nerdamer, and Plotly do that. There is also an Explain tab that narrates what the current plot shows using features the engine computed." />
+        <jsp:param name="faq2q" value="What types of graphs can this calculator plot?" />
+        <jsp:param name="faq2a" value="This graphing calculator supports 8 plot types: Cartesian y=f(x) functions like sin(x) and x^2, equations solved symbolically such as x^2+y^2=25 or 2x+3y=8, parametric curves x(t) y(t), polar graphs r=f(theta), limits with visual annotations, piecewise functions, inequalities with shaded regions, and statistical distributions. Just type any expression and it auto-detects the type. Or describe the graph in English using AI." />
+        <jsp:param name="faq3q" value="How do I graph derivatives, integrals, and antiderivatives?" />
+        <jsp:param name="faq3a" value="For any Cartesian function, use the calculus toggles next to the expression input. Toggle f'(x) to overlay the derivative curve, click the integral symbol to shade the area under the curve with adjustable a and b bounds, or toggle F(x) to plot the symbolic antiderivative computed by the built-in CAS engine. All three can be shown simultaneously." />
+        <jsp:param name="faq4q" value="How does the limit calculator work on the graph?" />
+        <jsp:param name="faq4a" value="Select the Limit type from the dropdown, enter the function like sin(x)/x, and set the approach value such as 0. The calculator uses a symbolic CAS to compute the exact limit, plots the function, and annotates the limit point with an open circle marker, a dashed horizontal line at y=L, and a dotted vertical line at x=a. Try presets like lim sin(x)/x as x approaches 0 equals 1." />
+        <jsp:param name="faq5q" value="Can I solve systems of equations and find intersections?" />
+        <jsp:param name="faq5a" value="Yes. Add multiple equations such as y=x^2 and y=2x+3 and the calculator graphs both curves. Use the Intersections button to find where they cross. The Equation type uses Nerdamer CAS to solve any equation symbolically, including circles, ellipses, hyperbolas, and higher-degree polynomials. Over 15 system presets are built in." />
+        <jsp:param name="faq6q" value="Does it support parameter sliders and animation?" />
+        <jsp:param name="faq6a" value="Yes. Type any single letter like a, b, or c in your expression and a slider appears automatically. Drag the slider to change the parameter in real time. Press the play button to animate and watch the graph evolve continuously. This works for all plot types including polar, parametric, and implicit equations." />
+        <jsp:param name="faq7q" value="What are the 50+ built-in presets?" />
+        <jsp:param name="faq7a" value="Presets include Quick Start (sin, parametric, polar), Calculus (antiderivative of x^2, FTC demo, Area-to-Primitive visual, limit sin(x)/x), Systems of Equations (linear, circle+line, parabola+line), Creative Curves (spirograph, lissajous, butterfly, cardioid), Physics (damped oscillation, projectile, wave interference), Machine Learning (activation functions, loss functions, gradient descent), and Classic curves (Witch of Agnesi, folium, cissoid)." />
+        <jsp:param name="faq8q" value="Is this graphing calculator really free? What are the limits?" />
+        <jsp:param name="faq8a" value="100 percent free with no signup, no ads blocking the graph, and no usage limits. All computation runs entirely in your browser using Math.js, Plotly.js, Nerdamer CAS, and KaTeX. AI calls go through our proxy with rate limiting. Export graphs as PNG or SVG, save expression sets to local storage, or generate shareable URLs. Works on desktop, tablet, and mobile browsers." />
+        <jsp:param name="faq9q" value="Can I plot 3D surfaces like z = sin(x)*cos(y)?" />
+        <jsp:param name="faq9a" value="Yes. Type any expression with both x and y like sin(x)*cos(y) or x^2+y^2 and the calculator auto-detects it as a 3D surface. It loads a full WebGL renderer and displays an interactive surface you can rotate and zoom. Presets include Ripple, Saddle, Gaussian, and Waves. You can also type z=f(x,y) with a z= prefix, or just ask AI for &quot;3D saddle&quot; or &quot;Gaussian surface&quot;." />
     </jsp:include>
 
     <!-- Preconnect to CDN origins (high priority) -->
@@ -281,7 +283,7 @@
 <section class="tool-description-section gc-desc-section" style="background:var(--gc-light);">
     <div class="tool-description-inner" style="gap:0.375rem;">
         <div class="tool-description-content">
-            <p style="margin:0;">Free <strong>online graphing calculator</strong> &mdash; plot functions, <strong>3D surfaces</strong>, <strong>derivatives</strong>, <strong>integrals</strong>, <strong>limits</strong>, polar, parametric, equations, and inequalities. Auto-detects your input type. Built-in CAS for symbolic calculus, 50+ presets, sliders, animation. A powerful <strong>Desmos alternative</strong> &mdash; no signup, works on any device.</p>
+            <p style="margin:0;"><strong>Describe any graph in plain English</strong> (&quot;heart shape&quot;, &quot;3D saddle&quot;, &quot;Gaussian with mean 3&quot;) &mdash; or paste a homework problem and let AI extract the expressions. Plot <strong>functions, 3D surfaces, derivatives, integrals, limits, polar, parametric, equations, and inequalities</strong>. Built-in CAS for symbolic calculus, 50+ presets, sliders, animation. Our engine handles every calculation &mdash; AI only translates your description into expressions. A powerful <strong>Desmos alternative</strong> &mdash; no signup, works on any device.</p>
         </div>
     </div>
     <div style="max-width:1400px;margin:0.25rem auto 0;padding:0 0.5rem;">
@@ -308,6 +310,92 @@
                         <i class="fas fa-folder-plus"></i> Folder
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- ==================== AI ASSISTANT ==================== -->
+        <div class="tool-card gc-ai-card" style="margin-top:0.5rem;">
+            <div class="tool-card-header gc-ai-header">
+                <span class="gc-ai-sparkle">&#x2728;</span> AI Assistant
+            </div>
+            <div class="tool-card-body">
+                <div class="gc-ai-tabs" role="tablist">
+                    <button class="gc-ai-tab active" data-ai-mode="plot" onclick="gcAiSwitchTab('plot')">Plot from English</button>
+                    <button class="gc-ai-tab" data-ai-mode="homework" onclick="gcAiSwitchTab('homework')">Homework</button>
+                    <button class="gc-ai-tab" data-ai-mode="explain" onclick="gcAiSwitchTab('explain')">Explain plot</button>
+                </div>
+
+                <!-- Plot from English -->
+                <div class="gc-ai-pane active" id="gc-ai-pane-plot">
+                    <input type="text" id="gc-ai-plot-input" class="form-control gc-ai-input"
+                        placeholder='e.g., "heart shape", "Gaussian with mean 3", "3D saddle"'>
+                    <div class="gc-ai-chip-row">
+                        <button class="gc-ai-chip" onclick="gcAiChip('heart shape')">heart shape</button>
+                        <button class="gc-ai-chip" onclick="gcAiChip('Gaussian bell curve')">Gaussian</button>
+                        <button class="gc-ai-chip" onclick="gcAiChip('damped oscillation')">damped</button>
+                        <button class="gc-ai-chip" onclick="gcAiChip('3D saddle surface')">saddle</button>
+                        <button class="gc-ai-chip" onclick="gcAiChip('sigmoid activation')">sigmoid</button>
+                        <button class="gc-ai-chip" onclick="gcAiChip('unit circle with tangent at 45 degrees')">circle+tangent</button>
+                    </div>
+                    <div class="gc-ai-actions">
+                        <label class="gc-ai-check">
+                            <input type="checkbox" id="gc-ai-clear-first" checked> Replace existing
+                        </label>
+                        <button class="gc-ai-go" onclick="gcAiAsk('plot')">
+                            <span class="gc-ai-go-label">Ask AI</span>
+                            <span class="gc-ai-spinner" style="display:none;"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Homework -->
+                <div class="gc-ai-pane" id="gc-ai-pane-homework" style="display:none;">
+                    <textarea id="gc-ai-hw-input" class="form-control gc-ai-input" rows="3"
+                        placeholder="Paste a homework problem. e.g., 'A projectile is launched at 20 m/s at 45 degrees. Plot its trajectory.' Or: 'Graph the area between y=x^2 and y=x from 0 to 1.'"></textarea>
+                    <div class="gc-ai-actions">
+                        <label class="gc-ai-check">
+                            <input type="checkbox" id="gc-ai-hw-clear-first" checked> Replace existing
+                        </label>
+                        <button class="gc-ai-go" onclick="gcAiAsk('homework')">
+                            <span class="gc-ai-go-label">Extract &amp; plot</span>
+                            <span class="gc-ai-spinner" style="display:none;"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Explain -->
+                <div class="gc-ai-pane" id="gc-ai-pane-explain" style="display:none;">
+                    <p class="gc-ai-explain-hint">AI narrates what the plotted graph shows. Only uses features your engine computed (zeros, extrema, asymptotes) &mdash; never invents math.</p>
+                    <div class="gc-ai-actions">
+                        <button class="gc-ai-go" onclick="gcAiAsk('explain')">
+                            <span class="gc-ai-go-label">Explain the current plot</span>
+                            <span class="gc-ai-spinner" style="display:none;"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Shared status + preview + panel -->
+                <div class="gc-ai-status" id="gc-ai-status" style="display:none;"></div>
+
+                <div class="gc-ai-preview" id="gc-ai-preview" style="display:none;">
+                    <div class="gc-ai-preview-title">AI suggested <span id="gc-ai-preview-count">0</span> expression(s):</div>
+                    <ul class="gc-ai-preview-list" id="gc-ai-preview-list"></ul>
+                    <div class="gc-ai-preview-notes" id="gc-ai-preview-notes"></div>
+                    <div class="gc-ai-preview-actions">
+                        <button class="gc-ai-confirm" onclick="gcAiApplyPreview()">Plot it &rarr;</button>
+                        <button class="gc-ai-cancel" onclick="gcAiClearPreview()">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="gc-ai-panel" id="gc-ai-panel" style="display:none;">
+                    <div class="gc-ai-panel-header">
+                        <span id="gc-ai-panel-title">Explanation</span>
+                        <button class="gc-ai-panel-close" onclick="gcAiClosePanel()" title="Close">&times;</button>
+                    </div>
+                    <div class="gc-ai-panel-body" id="gc-ai-panel-body"></div>
+                </div>
+
+                <p class="gc-ai-firewall">AI translates English to expressions. All math (plotting, derivatives, zeros, asymptotes) is computed by our engine.</p>
             </div>
         </div>
 
@@ -1029,6 +1117,8 @@ window.addEventListener('message', (e) => {
     // Stage 2: Load engine + presets (all dependencies ready)
     loadScript('<%=request.getContextPath()%>/js/graphing-tool-engine.js', function(){
       loadScript('<%=request.getContextPath()%>/js/graphing-calculator-presets.js?v=<%=cacheVersion%>', function(){
+        // Load AI assistant (depends on engine + presets being ready)
+        loadScript('<%=request.getContextPath()%>/js/graphing-calculator-ai.js?v=<%=cacheVersion%>');
         if (ph) ph.remove();
         var g = document.getElementById('graph');
         if (g && typeof ResizeObserver !== 'undefined') {
