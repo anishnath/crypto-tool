@@ -52,18 +52,18 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 
 <!-- System CSS -->
-<link rel="stylesheet" href="<%=ctx%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-<link rel="stylesheet" href="<%=ctx%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-<link rel="stylesheet" href="<%=ctx%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-<link rel="preload" href="<%=ctx%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<link rel="preload" href="<%=ctx%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<link rel="preload" href="<%=ctx%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<link rel="preload" href="<%=ctx%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="<%=ctx%>/modern/css/design-system.css">
+<link rel="stylesheet" href="<%=ctx%>/modern/css/navigation.css">
+<link rel="stylesheet" href="<%=ctx%>/modern/css/tool-page.css">
+<link rel="preload" href="<%=ctx%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="<%=ctx%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="<%=ctx%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="<%=ctx%>/modern/css/search.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
-    <link rel="stylesheet" href="<%=ctx%>/modern/css/ads.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=ctx%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=ctx%>/modern/css/footer.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=ctx%>/modern/css/search.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=ctx%>/modern/css/ads.css">
+    <link rel="stylesheet" href="<%=ctx%>/modern/css/dark-mode.css">
+    <link rel="stylesheet" href="<%=ctx%>/modern/css/footer.css">
+    <link rel="stylesheet" href="<%=ctx%>/modern/css/search.css">
 </noscript>
 
 <!-- CodeMirror CSS -->
@@ -72,9 +72,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/hint/show-hint.min.css"/>
 
 <!-- LaTeX Editor CSS -->
-<link rel="stylesheet" href="<%=ctx%>/latex/static/css/layout.css?v=<%=cacheVersion%>"/>
-<link rel="stylesheet" href="<%=ctx%>/latex/static/css/editor.css?v=<%=cacheVersion%>"/>
-<link rel="stylesheet" href="<%=ctx%>/latex/static/css/toolbar.css?v=<%=cacheVersion%>"/>
+<link rel="stylesheet" href="<%=ctx%>/latex/static/css/layout.css"/>
+<link rel="stylesheet" href="<%=ctx%>/latex/static/css/editor.css"/>
+<link rel="stylesheet" href="<%=ctx%>/latex/static/css/toolbar.css"/>
 
 <%@ include file="/modern/ads/ad-init.jsp" %>
 
@@ -291,9 +291,9 @@
 <%@ include file="/modern/components/analytics.jsp" %>
 
 <!-- System JS -->
-<script src="<%=ctx%>/modern/js/tool-utils.js?v=<%=cacheVersion%>" defer></script>
-<script src="<%=ctx%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-<script src="<%=ctx%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=ctx%>/modern/js/tool-utils.js" defer></script>
+<script src="<%=ctx%>/modern/js/dark-mode.js" defer></script>
+<script src="<%=ctx%>/modern/js/search.js" defer></script>
 
 <!-- CDN Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
@@ -347,12 +347,12 @@
 </script>
 
 <!-- App JS -->
-<script src="<%=ctx%>/latex/static/js/storage.js?v=<%=cacheVersion%>"></script>
-<script src="<%=ctx%>/latex/static/js/symbols.js?v=<%=cacheVersion%>"></script>
-<script src="<%=ctx%>/latex/static/js/editor.js?v=<%=cacheVersion%>"></script>
-<script src="<%=ctx%>/latex/static/js/preview.js?v=<%=cacheVersion%>"></script>
-<script src="<%=ctx%>/latex/static/js/compile.js?v=<%=cacheVersion%>"></script>
-<script src="<%=ctx%>/latex/static/js/ai.js?v=<%=cacheVersion%>"></script>
+<script src="<%=ctx%>/latex/static/js/storage.js"></script>
+<script src="<%=ctx%>/latex/static/js/symbols.js"></script>
+<script src="<%=ctx%>/latex/static/js/editor.js"></script>
+<script src="<%=ctx%>/latex/static/js/preview.js"></script>
+<script src="<%=ctx%>/latex/static/js/compile.js"></script>
+<script src="<%=ctx%>/latex/static/js/ai.js"></script>
 
 </body>
 </html>
