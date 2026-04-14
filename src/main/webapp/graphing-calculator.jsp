@@ -272,6 +272,7 @@
             </nav>
         </div>
         <div class="tool-page-badges">
+            <span class="tool-badge" style="background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(99,102,241,0.15));color:#6366f1;border:1px solid rgba(99,102,241,0.25);">AI-Powered</span>
             <span class="tool-badge">Free Online</span>
             <span class="tool-badge">Calculus Built-In</span>
             <span class="tool-badge">50+ Presets</span>
