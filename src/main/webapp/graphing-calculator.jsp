@@ -341,13 +341,6 @@
                     </button>
                 </div>
 
-                <div class="gc-ai-divider"></div>
-
-                <button class="gc-ai-explain-btn" onclick="gcAiAsk('explain')">
-                    <span class="gc-ai-go-label"><i class="fas fa-lightbulb" style="margin-right:0.25rem;"></i>Explain current plot</span>
-                    <span class="gc-ai-spinner" style="display:none;"></span>
-                </button>
-
                 <!-- Shared status + preview + panel -->
                 <div class="gc-ai-status" id="gc-ai-status" style="display:none;"></div>
 
