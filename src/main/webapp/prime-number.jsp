@@ -14,11 +14,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Prime Number Checker &amp; Generator &mdash; Primality, Sieve, Factorize | Free" />
-        <jsp:param name="toolDescription" value="Free prime number calculator. Check if any integer is prime (BigInt Miller-Rabin), generate primes up to N or within a range using the Sieve of Eratosthenes, and factorize numbers into prime factors. All computation runs in your browser. No signup." />
+        <jsp:param name="toolName" value="Prime Number Calculator &mdash; Check, Factorize, Nth Prime, Goldbach" />
+        <jsp:param name="toolDescription" value="Is it prime? Check any number instantly (even huge ones). Factorize, find the Nth prime, nearest prime, twin primes, Goldbach partition, GCD. See prime gaps &amp; density charts. Free, no signup, runs in your browser." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="prime-number.jsp" />
-        <jsp:param name="toolKeywords" value="prime number checker, is it prime, prime number calculator, sieve of eratosthenes, prime generator, prime factorization, miller rabin, bigint prime, prime numbers list, number theory tools, nth prime, nearest prime, goldbach conjecture, twin primes, prime gaps, coprime calculator, gcd calculator, prime density" />
+        <jsp:param name="toolKeywords" value="is it prime, prime number calculator, prime factorization calculator, nth prime calculator, prime number checker, list of prime numbers, prime number generator, gcd calculator, twin primes, goldbach conjecture, coprime calculator, nearest prime, prime factorization, sieve of eratosthenes, miller rabin, bigint prime, prime gaps, prime density, number theory calculator, factorize number online" />
         <jsp:param name="toolImage" value="logo.png" />
         <jsp:param name="toolFeatures" value="Primality check with Miller-Rabin (supports BigInt),Sieve of Eratosthenes up to 2 million,Segmented sieve for arbitrary ranges,Prime factorization with trial division,Nth prime finder (up to 1.3 million),Nearest prime above and below,Goldbach partition for even numbers,Coprimality and GCD calculator,Twin prime highlighting,Prime gap visualization chart,Prime density chart (PNT),Dark mode support,No signup required" />
         <jsp:param name="hasSteps" value="true" />
