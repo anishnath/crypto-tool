@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-03-16T00:00:00.000Z",
-  "totalTools": 422,
+  "totalTools": 423,
   "categories": [
     "Blockchain & Crypto",
     "CTF & Challenges",
@@ -1983,6 +1983,13 @@
       "category": "SEO & Web Audits",
       "keywords": "lighthouse audit lighthouse online free lighthouse test page speed test core web vitals checker lcp tester performance audit seo audit accessibility audit",
       "description": "Run a real Google Lighthouse audit on any URL. Get Performance, Accessibility, Best Practices, and SEO scores plus Core Web Vitals"
+    },
+    {
+      "name": "Structured Data Test",
+      "url": "seo/structured-data.jsp",
+      "category": "SEO & Web Audits",
+      "keywords": "structured data testing tool json-ld validator schema.org tester rich results test open graph checker twitter card validator microdata rdfa seo",
+      "description": "Validate JSON-LD, Microdata, RDFa, Open Graph, and Twitter Cards. Check Google Rich Results eligibility for any URL"
     },
     {
       "name": "HTTP Status Analysis",

@@ -32,10 +32,11 @@
       "url": "https://8gwifi.org/seo/",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 2,
+        "numberOfItems": 3,
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Lighthouse Audit", "url": "https://8gwifi.org/seo/lighthouse.jsp"},
-          {"@type": "ListItem", "position": 2, "name": "AI SEO Checker", "url": "https://8gwifi.org/seo/seo-checker.jsp"}
+          {"@type": "ListItem", "position": 2, "name": "AI SEO Checker", "url": "https://8gwifi.org/seo/seo-checker.jsp"},
+          {"@type": "ListItem", "position": 3, "name": "Structured Data Test", "url": "https://8gwifi.org/seo/structured-data.jsp"}
         ]
       }
     }
@@ -118,7 +119,7 @@
             margin: 0 auto;
             padding: 3rem 2rem 4rem;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
         }
         @media (max-width: 640px) {
@@ -152,6 +153,7 @@
         }
         .seo-idx-card-icon.lighthouse { background: linear-gradient(135deg, #ff6633, #ff8855); }
         .seo-idx-card-icon.seo-check { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .seo-idx-card-icon.struct-data { background: linear-gradient(135deg, #059669, #10b981); }
 
         .seo-idx-card h2 {
             font-family: var(--seo-idx-font);
@@ -257,6 +259,21 @@
                 <span class="seo-idx-tag">0-100 Score</span>
             </div>
             <span class="seo-idx-card-cta">Run SEO Audit &rarr;</span>
+        </a>
+
+        <a href="<%=request.getContextPath()%>/seo/structured-data.jsp" class="seo-idx-card">
+            <div class="seo-idx-card-icon struct-data">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M19 14l2 2-2 2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h2>Structured Data Test</h2>
+            <p>Validate JSON-LD, Microdata, RDFa, Open Graph, and Twitter Cards. Check Google Rich Results eligibility for Article, Product, FAQ, and more.</p>
+            <div class="seo-idx-card-features">
+                <span class="seo-idx-tag">JSON-LD + Microdata</span>
+                <span class="seo-idx-tag">Rich Results</span>
+                <span class="seo-idx-tag">Open Graph</span>
+                <span class="seo-idx-tag">Twitter Cards</span>
+            </div>
+            <span class="seo-idx-card-cta">Test Structured Data &rarr;</span>
         </a>
     </div>
 
