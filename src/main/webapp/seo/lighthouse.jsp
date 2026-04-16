@@ -148,11 +148,9 @@
          STATE: PROGRESS — running audit (30-90s)
          ═══════════════════════════════════════════════ -->
     <div id="lh-progress-section" style="display:none;">
+        <!-- Matter.js "building the report" background -->
+        <div id="lh-progress-matter" class="lh-progress-matter" aria-hidden="true"></div>
         <div class="lh-progress-wrap">
-            <div class="lh-pulse-visual">
-                <div class="lh-pulse-ring"></div>
-                <div class="lh-pulse-dot"></div>
-            </div>
             <div class="lh-progress-url" id="lh-progress-url"></div>
             <div class="lh-progress-text" id="lh-progress-text">Enqueuing audit&hellip;</div>
             <div class="lh-progress-hint" id="lh-progress-hint">Your audit is running on a real headless Chrome worker. Typical total wait: 30&ndash;90 seconds (including queue time).</div>
@@ -282,6 +280,7 @@
     <script src="<%=request.getContextPath()%>/seo/js/lighthouse.js" defer></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js" crossorigin="anonymous"></script>
     <script defer src="<%=request.getContextPath()%>/seo/js/lighthouse-matter-bg.js"></script>
+    <script defer src="<%=request.getContextPath()%>/seo/js/lighthouse-matter-progress.js"></script>
     <script defer src="<%=request.getContextPath()%>/seo/js/lighthouse-matter-results.js"></script>
 
 </body>

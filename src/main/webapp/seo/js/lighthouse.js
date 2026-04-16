@@ -81,6 +81,11 @@
             if (name === 'results') LighthouseResultsBg.start();
             else LighthouseResultsBg.stop();
         }
+        // Start/stop progress "building the report" animation
+        if (typeof LighthouseProgressBg !== 'undefined') {
+            if (name === 'progress') LighthouseProgressBg.start();
+            else LighthouseProgressBg.stop();
+        }
     }
 
     function resetState() {
@@ -156,6 +161,30 @@
         return { ok: true, url: s };
     }
 
+    // Quick client-side reachability check (best-effort, CORS may block it)
+    function checkReachable(url) {
+        var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        var timeoutId;
+        if (controller) {
+            timeoutId = setTimeout(function () { controller.abort(); }, 6000);
+        }
+        return fetch(url, {
+            method: 'HEAD',
+            mode: 'no-cors',       // won't get status, but network errors still throw
+            cache: 'no-store',
+            signal: controller ? controller.signal : undefined
+        }).then(function () {
+            if (timeoutId) clearTimeout(timeoutId);
+            return { ok: true };
+        }).catch(function (err) {
+            if (timeoutId) clearTimeout(timeoutId);
+            if (err.name === 'AbortError') {
+                return { ok: false, error: 'Site took too long to respond. Check the URL and try again.' };
+            }
+            return { ok: false, error: 'Site appears unreachable. Check the URL and try again.' };
+        });
+    }
+
     function startAudit() {
         var urlEl = document.getElementById('lh-url');
         var v = validateUrl(urlEl.value);
@@ -174,11 +203,27 @@
         }
 
         setButtonEnabled(false);
-        showSection('progress');
-        document.getElementById('lh-progress-url').textContent = url;
-        document.getElementById('lh-progress-text').textContent = 'Enqueuing audit…';
-        startElapsed();
+        document.getElementById('lh-start-btn').textContent = 'Checking…';
 
+        // Step 0: quick reachability check before hitting the backend
+        checkReachable(url).then(function (result) {
+            if (!result.ok) {
+                setButtonEnabled(true);
+                showError(result.error);
+                urlEl.focus();
+                return;
+            }
+
+            showSection('progress');
+            document.getElementById('lh-progress-url').textContent = url;
+            document.getElementById('lh-progress-text').textContent = 'Enqueuing audit…';
+            startElapsed();
+
+            submitAudit(url, strategy, categories);
+        });
+    }
+
+    function submitAudit(url, strategy, categories) {
         // Step 1: enqueue (returns 202 with job_id immediately)
         fetch(getContextPath() + '/LighthouseFunctionality?action=audit', {
             method: 'POST',
@@ -228,6 +273,10 @@
             return;
         }
 
+        // Track when the request starts so we can enforce a minimum gap
+        var pollStart = Date.now();
+        var POLL_INTERVAL = 3000; // minimum 3s between polls
+
         fetch(getContextPath() + '/LighthouseFunctionality?action=job&id=' + jobId)
             .then(function (r) {
                 if (!r.ok) return r.json().then(function (d) { throw new Error(d.error || 'Job lookup failed'); });
@@ -236,27 +285,20 @@
             .then(function (data) {
                 var status = data.status;
 
-                if (status === 'queued') {
-                    document.getElementById('lh-progress-text').textContent = 'Queued — waiting for worker…';
-                    schedulePoll(2500);
-                    return;
-                }
-
-                if (status === 'running') {
-                    document.getElementById('lh-progress-text').textContent = 'Running Lighthouse audit…';
-                    schedulePoll(2500);
-                    return;
-                }
-
                 if (status === 'done' && data.result) {
+                    // Celebration burst before switching to results
+                    if (typeof LighthouseProgressBg !== 'undefined') LighthouseProgressBg.setPhase('done');
                     stopPolling();
                     stopElapsed();
                     currentResult = data.result;
                     auditId = data.result.audit_id;
                     renderResults(data.result);
                     window.location.hash = 'id=' + data.result.audit_id;
-                    showSection('results');
-                    setButtonEnabled(true);
+                    // Brief delay so the user sees the burst
+                    setTimeout(function () {
+                        showSection('results');
+                        setButtonEnabled(true);
+                    }, 800);
                     loadHistory();
                     return;
                 }
@@ -270,8 +312,17 @@
                     return;
                 }
 
-                // Unknown status — keep polling
-                schedulePoll(3000);
+                // Still in progress — update phase and schedule next poll
+                if (status === 'queued') {
+                    document.getElementById('lh-progress-text').textContent = 'Queued — waiting for worker…';
+                    if (typeof LighthouseProgressBg !== 'undefined') LighthouseProgressBg.setPhase('queued');
+                } else if (status === 'running') {
+                    document.getElementById('lh-progress-text').textContent = 'Running Lighthouse audit…';
+                    if (typeof LighthouseProgressBg !== 'undefined') LighthouseProgressBg.setPhase('running');
+                }
+                var elapsed = Date.now() - pollStart;
+                var delay = Math.max(POLL_INTERVAL - elapsed, 500);
+                schedulePoll(delay);
             })
             .catch(function (err) {
                 stopPolling();
