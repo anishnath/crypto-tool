@@ -479,6 +479,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>StructuredDataFunctionality</servlet-name>
+        <servlet-class>z.y.x.seo.StructuredDataFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StructuredDataFunctionality</servlet-name>
+        <url-pattern>/StructuredDataFunctionality</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>SSLScannerFunctionality</servlet-name>
         <servlet-class>z.y.x.ssl.SSLScannerFunctionality</servlet-class>
     </servlet>
