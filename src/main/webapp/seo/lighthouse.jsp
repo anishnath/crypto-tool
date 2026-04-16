@@ -20,7 +20,7 @@
         <jsp:param name="toolCategory" value="SEO &amp; Web Audits" />
         <jsp:param name="toolUrl" value="seo/lighthouse.jsp" />
         <jsp:param name="toolImage" value="lighthouse-audit.svg" />
-        <jsp:param name="breadcrumbCategoryUrl" value="seo/seo-checker.jsp" />
+        <jsp:param name="breadcrumbCategoryUrl" value="seo/" />
         <jsp:param name="toolKeywords" value="lighthouse audit, lighthouse online, free lighthouse test, page speed test, core web vitals checker, lcp tester, performance audit, seo audit, accessibility audit, best practices audit, web vitals online, page speed insights alternative, lighthouse score, ai lighthouse fix, ai performance fix, mobile vs desktop performance" />
         <jsp:param name="toolFeatures" value="Real Google Lighthouse engine (headless Chrome),AI Fix suggestions for every failed audit,Mobile and desktop strategies,Performance Accessibility Best Practices SEO scores,Core Web Vitals: LCP FCP CLS TBT TTFB Speed Index TTI,Page load filmstrip and final screenshot,Failed and passed audits with descriptions,Audit history per URL,Shareable result links,Free no signup required" />
         <jsp:param name="hasSteps" value="true" />
@@ -83,6 +83,17 @@
              data-ad-type="side-rail" role="complementary" aria-label="Advertisement">
         </div>
     </div>
+
+    <!-- Breadcrumb navigation (single instance, always visible) -->
+    <nav class="lh-breadcrumbs" id="lh-breadcrumbs" aria-label="Breadcrumb">
+        <div class="lh-breadcrumbs-inner">
+            <a href="<%=request.getContextPath()%>/index.jsp">Home</a>
+            <span class="lh-breadcrumb-sep">/</span>
+            <a href="<%=request.getContextPath()%>/seo/">SEO &amp; Web Audits</a>
+            <span class="lh-breadcrumb-sep">/</span>
+            <span class="lh-breadcrumb-current">Lighthouse Audit</span>
+        </div>
+    </nav>
 
     <!-- ═══════════════════════════════════════════════
          STATE: INPUT — Hero with audit form
@@ -158,6 +169,7 @@
     <div id="lh-results-section" style="display:none;">
         <!-- Matter.js ambient background for results -->
         <div id="lh-results-matter" class="lh-results-matter" aria-hidden="true"></div>
+
         <div class="lh-results-wrap">
 
             <!-- Top bar -->

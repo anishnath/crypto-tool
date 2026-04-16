@@ -24,23 +24,23 @@
     function palette() {
         if (themeIsDark()) {
             return [
-                'rgba(99, 102, 241, 0.07)',   // indigo
-                'rgba(139, 92, 246, 0.06)',    // violet
-                'rgba(59, 130, 246, 0.06)',    // blue
-                'rgba(14, 165, 233, 0.05)',    // sky
-                'rgba(236, 72, 153, 0.04)',    // pink
-                'rgba(13, 128, 67, 0.05)',     // green
-                'rgba(230, 119, 0, 0.04)'      // orange
+                'rgba(99, 102, 241, 0.25)',    // indigo
+                'rgba(139, 92, 246, 0.22)',    // violet
+                'rgba(59, 130, 246, 0.20)',    // blue
+                'rgba(14, 165, 233, 0.18)',    // sky
+                'rgba(236, 72, 153, 0.16)',    // pink
+                'rgba(13, 128, 67, 0.18)',     // green
+                'rgba(230, 119, 0, 0.15)'      // orange
             ];
         }
         return [
-            'rgba(99, 102, 241, 0.05)',
-            'rgba(139, 92, 246, 0.04)',
-            'rgba(59, 130, 246, 0.04)',
-            'rgba(14, 165, 233, 0.035)',
-            'rgba(236, 72, 153, 0.03)',
-            'rgba(13, 128, 67, 0.035)',
-            'rgba(230, 119, 0, 0.03)'
+            'rgba(99, 102, 241, 0.15)',    // indigo
+            'rgba(139, 92, 246, 0.13)',    // violet
+            'rgba(59, 130, 246, 0.12)',    // blue
+            'rgba(14, 165, 233, 0.10)',    // sky
+            'rgba(236, 72, 153, 0.10)',    // pink
+            'rgba(13, 128, 67, 0.10)',     // green
+            'rgba(230, 119, 0, 0.09)'      // orange
         ];
     }
 
@@ -61,7 +61,7 @@
         var r = Math.random;
         var pal = palette();
         var fill = pick(pal);
-        var strokeAlpha = themeIsDark() ? 0.08 : 0.05;
+        var strokeAlpha = themeIsDark() ? 0.20 : 0.12;
         var stroke = 'rgba(148, 163, 184, ' + strokeAlpha + ')';
 
         var x = r() * w;
@@ -69,45 +69,45 @@
         var rnd = r();
         var body;
 
-        if (rnd < 0.35) {
-            // Soft circle — like a data point
-            body = B.circle(x, y, 4 + r() * 12, {
+        if (rnd < 0.30) {
+            // Soft circle — like a data point / gauge echo
+            body = B.circle(x, y, 8 + r() * 18, {
                 frictionAir: 0.01 + r() * 0.02,
                 label: 'particle',
-                render: { fillStyle: fill, strokeStyle: stroke, lineWidth: 0.5 }
+                render: { fillStyle: fill, strokeStyle: stroke, lineWidth: 1 }
             });
-        } else if (rnd < 0.55) {
-            // Tiny ring — hollow circle
-            var radius = 6 + r() * 10;
+        } else if (rnd < 0.50) {
+            // Ring — hollow circle, like a gauge outline
+            var radius = 10 + r() * 16;
             body = B.circle(x, y, radius, {
                 frictionAir: 0.012 + r() * 0.02,
                 label: 'ring',
-                render: { fillStyle: 'transparent', strokeStyle: fill, lineWidth: 1.5 }
+                render: { fillStyle: 'transparent', strokeStyle: fill, lineWidth: 2 }
             });
-        } else if (rnd < 0.75) {
-            // Small rounded rect — like a metric chip
-            body = B.rectangle(x, y, 20 + r() * 30, 8 + r() * 6, {
-                chamfer: { radius: 4 },
+        } else if (rnd < 0.72) {
+            // Rounded rect — like a metric chip
+            body = B.rectangle(x, y, 28 + r() * 40, 10 + r() * 8, {
+                chamfer: { radius: 5 },
                 angle: r() * Math.PI * 2,
                 frictionAir: 0.015 + r() * 0.02,
                 label: 'chip',
-                render: { fillStyle: fill, strokeStyle: stroke, lineWidth: 0.5 }
+                render: { fillStyle: fill, strokeStyle: stroke, lineWidth: 1 }
             });
-        } else if (rnd < 0.9) {
-            // Thin line — like a score bar fragment
-            body = B.rectangle(x, y, 30 + r() * 50, 2 + r() * 2, {
-                chamfer: { radius: 1 },
+        } else if (rnd < 0.88) {
+            // Bar — like a score bar fragment
+            body = B.rectangle(x, y, 40 + r() * 60, 3 + r() * 3, {
+                chamfer: { radius: 2 },
                 angle: r() * Math.PI,
                 frictionAir: 0.018 + r() * 0.02,
                 label: 'line',
                 render: { fillStyle: fill, strokeStyle: 'transparent', lineWidth: 0 }
             });
         } else {
-            // Tiny dot
-            body = B.circle(x, y, 2 + r() * 3, {
+            // Small dot
+            body = B.circle(x, y, 3 + r() * 5, {
                 frictionAir: 0.008 + r() * 0.015,
                 label: 'dot',
-                render: { fillStyle: fill, strokeStyle: 'transparent', lineWidth: 0 }
+                render: { fillStyle: fill, strokeStyle: stroke, lineWidth: 0.5 }
             });
         }
 
@@ -133,7 +133,7 @@
     function recolorAll() {
         if (!engine || !engine.world) return;
         var pal = palette();
-        var strokeAlpha = themeIsDark() ? 0.08 : 0.05;
+        var strokeAlpha = themeIsDark() ? 0.20 : 0.12;
         var stroke = 'rgba(148, 163, 184, ' + strokeAlpha + ')';
         var bodies = Matter.Composite.allBodies(engine.world);
         for (var i = 0; i < bodies.length; i++) {
@@ -145,7 +145,7 @@
                 b.render.strokeStyle = fill;
             } else {
                 b.render.fillStyle = fill;
-                b.render.strokeStyle = b.label === 'line' || b.label === 'dot' ? 'transparent' : stroke;
+                b.render.strokeStyle = b.label === 'line' ? 'transparent' : stroke;
             }
         }
     }

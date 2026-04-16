@@ -20,7 +20,7 @@
         <jsp:param name="toolCategory" value="SEO &amp; Web Audits" />
         <jsp:param name="toolUrl" value="seo/seo-checker.jsp" />
         <jsp:param name="toolImage" value="seo-checker.svg" />
-        <jsp:param name="breadcrumbCategoryUrl" value="seo/lighthouse.jsp" />
+        <jsp:param name="breadcrumbCategoryUrl" value="seo/" />
         <jsp:param name="toolKeywords" value="ai seo checker, ai seo audit, ai website analyzer, seo checker with ai, ai fix seo issues, free ai seo tool, ai seo score, ai broken link checker, ai meta tag fixer, ai site crawler, ai seo report, website audit ai, on-page seo ai, seo analysis ai online free" />
         <jsp:param name="toolFeatures" value="AI-powered fix suggestions for every issue,Full multi-page website crawl,79+ SEO issue checks,0-100 SEO score with grade,Issues grouped by severity: Critical Alerts Warnings,Drill-down to affected URLs with page evidence,AI generates exact code and config fixes,Shareable report URLs,Free no signup required" />
         <jsp:param name="hasSteps" value="true" />
@@ -64,6 +64,17 @@
 
     <!-- Navigation -->
     <%@ include file="../modern/components/nav-header.jsp" %>
+
+    <!-- Breadcrumb navigation -->
+    <nav class="seo-breadcrumbs" aria-label="Breadcrumb">
+        <div class="seo-breadcrumbs-inner">
+            <a href="<%=request.getContextPath()%>/index.jsp">Home</a>
+            <span class="seo-breadcrumb-sep">/</span>
+            <a href="<%=request.getContextPath()%>/seo/">SEO &amp; Web Audits</a>
+            <span class="seo-breadcrumb-sep">/</span>
+            <span class="seo-breadcrumb-current">AI SEO Checker</span>
+        </div>
+    </nav>
 
     <!-- ═══════════════════════════════════════════════
          STATE: INPUT — Hero search bar

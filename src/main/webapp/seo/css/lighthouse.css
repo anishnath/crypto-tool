@@ -9,7 +9,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Ensure content clears the fixed nav on every state (hero has its own padding-top) */
+/* Progress/results clear the fixed nav (breadcrumbs handle it for the input state) */
 #lh-progress-section,
 #lh-results-section {
     padding-top: var(--header-height-desktop, 72px);
@@ -20,6 +20,50 @@ body {
         padding-top: var(--header-height-mobile, 64px);
     }
 }
+
+/* ═══════════════════════════════════════
+   BREADCRUMBS
+   ═══════════════════════════════════════ */
+/* Breadcrumbs — sits below fixed nav, above content */
+.lh-breadcrumbs {
+    padding-top: var(--header-height-desktop, 72px);
+    background: #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
+    position: relative;
+    z-index: 5;
+}
+@media (max-width: 991px) {
+    .lh-breadcrumbs { padding-top: var(--header-height-mobile, 64px); }
+}
+.lh-breadcrumbs-inner {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 0.625rem 2rem;
+    font-size: 0.8125rem;
+    color: #94a3b8;
+}
+@media (max-width: 640px) {
+    .lh-breadcrumbs-inner { padding: 0.5rem 1rem; }
+}
+.lh-breadcrumbs a {
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.lh-breadcrumbs a:hover { color: #0f172a; text-decoration: underline; }
+.lh-breadcrumb-sep {
+    margin: 0 0.375rem;
+    color: #cbd5e1;
+}
+.lh-breadcrumb-current {
+    color: #0f172a;
+    font-weight: 500;
+}
+[data-theme="dark"] .lh-breadcrumbs { background: #0f172a; border-bottom-color: rgba(255,255,255,0.06); }
+[data-theme="dark"] .lh-breadcrumbs a { color: #94a3b8; }
+[data-theme="dark"] .lh-breadcrumbs a:hover { color: #e2e8f0; }
+[data-theme="dark"] .lh-breadcrumb-sep { color: #475569; }
+[data-theme="dark"] .lh-breadcrumb-current { color: #e2e8f0; }
 
 /* ═══════════════════════════════════════
    HERO — full-width gradient input
@@ -46,12 +90,11 @@ body {
     /* Match nav logo gradient: indigo → violet → pink (from navigation.css .nav-logo span) */
     background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #312e81 100%);
     padding: 3rem 1.5rem 4rem;
-    padding-top: calc(var(--header-height-desktop, 72px) + 3rem);
     position: relative;
     overflow: hidden;
 }
 @media (max-width: 991px) {
-    .lh-hero { padding-top: calc(var(--header-height-mobile, 64px) + 2rem); }
+    .lh-hero { padding-top: 2rem; }
 }
 .lh-hero::before {
     content: '';
