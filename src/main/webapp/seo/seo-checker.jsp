@@ -17,18 +17,26 @@
     <jsp:include page="/modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="AI SEO Checker - Free Website Audit with AI Fix Suggestions" />
         <jsp:param name="toolDescription" value="AI-powered SEO checker. Crawl any website, get 79+ technical checks with a 0-100 score, and receive AI-generated fix suggestions for every issue. Free, no signup." />
-        <jsp:param name="toolCategory" value="Network Tools" />
+        <jsp:param name="toolCategory" value="SEO &amp; Web Audits" />
         <jsp:param name="toolUrl" value="seo/seo-checker.jsp" />
+        <jsp:param name="toolImage" value="seo-checker.svg" />
+        <jsp:param name="breadcrumbCategoryUrl" value="seo/lighthouse.jsp" />
         <jsp:param name="toolKeywords" value="ai seo checker, ai seo audit, ai website analyzer, seo checker with ai, ai fix seo issues, free ai seo tool, ai seo score, ai broken link checker, ai meta tag fixer, ai site crawler, ai seo report, website audit ai, on-page seo ai, seo analysis ai online free" />
-        <jsp:param name="toolFeatures" value="AI-powered fix suggestions for every issue,Full multi-page website crawl,79+ SEO issue checks,0-100 SEO score with grade,Issues grouped by severity,Drill-down to affected URLs,AI generates exact code fixes,Shareable report URLs,Free no signup required" />
+        <jsp:param name="toolFeatures" value="AI-powered fix suggestions for every issue,Full multi-page website crawl,79+ SEO issue checks,0-100 SEO score with grade,Issues grouped by severity: Critical Alerts Warnings,Drill-down to affected URLs with page evidence,AI generates exact code and config fixes,Shareable report URLs,Free no signup required" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Enter URL|Enter the website URL you want to audit and click Analyze,AI Crawl and Audit|The AI crawler visits your pages and checks for 79+ SEO issues,Review AI Results|View your SEO score with issues grouped by Critical Alerts and Warnings,Get AI Fixes|Click any issue then hit AI Fix Suggestion to get exact code and config fixes" />
         <jsp:param name="faq1q" value="How does the AI SEO Checker work?" />
         <jsp:param name="faq1a" value="It crawls your website and checks for 79+ technical SEO issues. For each issue found, AI analyzes the page evidence (title, meta, headings, images, status codes) and generates a specific fix with exact code or configuration changes." />
-        <jsp:param name="faq2q" value="Is the AI SEO Checker free?" />
-        <jsp:param name="faq2a" value="Yes, completely free with no signup or login required. The full audit, AI fix suggestions, and shareable reports are all available immediately." />
-        <jsp:param name="faq3q" value="What makes this different from other SEO checkers?" />
-        <jsp:param name="faq3a" value="Unlike traditional SEO checkers that only list problems, our AI analyzes each issue and generates the exact fix — corrected title tags, meta descriptions, nginx headers, image alt text — so you can copy-paste the solution directly." />
+        <jsp:param name="faq2q" value="What kind of AI fixes does it generate?" />
+        <jsp:param name="faq2a" value="AI generates copy-paste-ready fixes: corrected title tags, optimized meta descriptions, nginx/Apache security headers, image alt text, canonical URLs, robots.txt rules, structured data markup, and more. Each fix is specific to your page, not generic advice." />
+        <jsp:param name="faq3q" value="Is the AI SEO Checker free?" />
+        <jsp:param name="faq3a" value="Yes, completely free with no signup or login required. The full audit, AI fix suggestions, and shareable reports are all available immediately." />
+        <jsp:param name="faq4q" value="What makes this different from other SEO checkers?" />
+        <jsp:param name="faq4a" value="Unlike traditional SEO checkers that only list problems, our AI analyzes each issue and generates the exact fix. Other tools say 'missing meta description' - ours writes the meta description for you based on your page content." />
+        <jsp:param name="faq5q" value="How many pages does it crawl?" />
+        <jsp:param name="faq5a" value="The crawler follows internal links and audits multiple pages in a single run. It checks each page for all 79+ SEO issues and aggregates results into one report with drill-down to affected URLs." />
+        <jsp:param name="faq6q" value="Can I share my SEO report?" />
+        <jsp:param name="faq6a" value="Yes, every audit generates a shareable URL. Share it with your team, clients, or developers so they can see the issues and AI fixes without re-running the audit." />
     </jsp:include>
 
     <!-- Fonts -->
@@ -179,13 +187,18 @@
         <div class="seo-seo-inner">
             <h2>Free AI SEO Checker &amp; Website Audit Tool</h2>
             <p>Our AI SEO Checker crawls your entire website and checks for 79+ technical SEO issues. Unlike traditional SEO audit tools, AI analyzes each issue and generates the exact fix — corrected title tags, optimized meta descriptions, nginx security headers, image alt text suggestions, and more. Get a 0-100 SEO score with issues grouped by severity: critical, alerts, and warnings. Click any issue to see affected pages, then hit AI Fix Suggestion for copy-paste-ready solutions. Share results via URL. Free, no signup required.</p>
+
+            <div class="seo-cross-link">
+                <h3>Also try our Lighthouse Audit</h3>
+                <p>The SEO Checker crawls your site for technical issues. To measure real page performance &mdash; Core Web Vitals (LCP, FCP, CLS, TBT), load speed, and accessibility &mdash; run a <a href="<%=request.getContextPath()%>/seo/lighthouse.jsp"><strong>Lighthouse Audit</strong></a>. It uses real headless Chrome to score your page 0&ndash;100 on Performance, Accessibility, Best Practices, and SEO, plus a filmstrip of the page load.</p>
+            </div>
         </div>
     </section>
 
     <!-- Related Tools -->
     <jsp:include page="/modern/components/related-tools.jsp">
         <jsp:param name="currentToolUrl" value="seo/seo-checker.jsp"/>
-        <jsp:param name="category" value="Network Tools"/>
+        <jsp:param name="category" value="SEO &amp; Web Audits"/>
         <jsp:param name="limit" value="6"/>
     </jsp:include>
 
