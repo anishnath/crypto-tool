@@ -4,3 +4,16 @@ target
 !.settings/.jsdtscope
 .project
 .classpath
+/demo-recorder/node_modules/
+/demo-recorder/output/
+/src/main/webapp/math/MATH_EDITOR_INTEGRATION_PLAN.md
+/src/main/webapp/math/MATH_EDITOR_FUNCTIONALITY.md
+/src/main/webapp/math/CSS_AUDIT.md
+/src/main/webapp/math/TODO.md
+/src/main/webapp/physics/labs/CIRCUIT_PLAN.md
+.omx/
+/src/main/webapp/electronics/LOGIC_SIM_PLAN.md
+/src/main/webapp/electronics/REDDIT_POST.md
+/src/main/webapp/electronics/REDDIT_POST_LOGIC.md
+/src/main/webapp/seo/8gwifi-lighthouse-results.html
+/src/main/webapp/seo/lighthouse-results.html
