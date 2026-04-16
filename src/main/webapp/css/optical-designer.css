@@ -65,6 +65,12 @@
     color: #fff;
     background: var(--od-gradient);
 }
+.od-toolbar-btn-accent {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    border-color: transparent;
+}
+.od-toolbar-btn-accent:hover { filter: brightness(1.1); color: #fff; }
 .od-toolbar-btn-danger {
     color: #dc2626;
     border-color: #fca5a5;

@@ -58,15 +58,21 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/optical-designer.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/ray-optics-simulator.css?v=<%=cacheVersion%>">
 
     <%@ include file="../modern/ads/ad-init.jsp" %>
 </head>
 <body>
 <%@ include file="../modern/components/nav-header.jsp" %>
 
-<!-- ===== H1 ===== -->
-<h1 style="font-size:1.25rem;font-weight:700;text-align:center;margin:0;padding:4.5rem 0 0.25rem;color:var(--text-primary);">Free Online Optical Designer &amp; Ray Tracing Simulator</h1>
-<p style="text-align:center;font-size:0.8125rem;color:var(--text-secondary);margin:0 auto 0.75rem;max-width:680px;">Design multi-element lens systems with real-time sequential ray tracing, 15+ Sellmeier glass materials, spot diagrams, ABCD matrix analysis, and chromatic aberration evaluation. No signup required.</p>
+<!-- Breadcrumbs -->
+<nav style="padding:calc(var(--header-height-desktop, 72px) + 0.5rem) 1.5rem 0.5rem; font-size:0.8125rem; color:#94a3b8;" aria-label="Breadcrumb">
+    <a href="<%=request.getContextPath()%>/index.jsp" style="color:#64748b;text-decoration:none;">Home</a>
+    <span style="margin:0 0.375rem;color:#cbd5e1;">/</span>
+    <a href="<%=request.getContextPath()%>/physics/" style="color:#64748b;text-decoration:none;">Physics</a>
+    <span style="margin:0 0.375rem;color:#cbd5e1;">/</span>
+    <span style="color:#0f172a;font-weight:500;">Optical Designer</span>
+</nav>
 
 <%@ include file="../modern/ads/ad-hero-banner.jsp" %>
 
@@ -76,7 +82,10 @@
     <!-- ===== INPUT COLUMN ===== -->
     <div class="tool-column-input" style="position:sticky;top:70px;align-self:start;max-height:calc(100vh - 80px);overflow-y:auto;">
         <div class="tool-card">
-            <div class="tool-card-header">Optical System</div>
+            <div class="tool-card-header" style="padding-bottom:0.5rem;">
+                <h1 style="font-size:0.9375rem;font-weight:700;margin:0;color:inherit;line-height:1.3;">Optical Designer</h1>
+                <p style="font-size:0.6875rem;color:rgba(255,255,255,0.75);margin:0.25rem 0 0;line-height:1.4;">Sequential ray tracing &middot; 15+ Sellmeier glasses &middot; Spot diagrams &middot; ABCD matrix &middot; Chromatic aberration</p>
+            </div>
             <div class="tool-card-body">
 
                 <!-- Preset + Actions -->
@@ -95,6 +104,7 @@
                     <button class="od-toolbar-btn od-toolbar-btn-primary" id="od-add-surface" title="Add surface after selection">+ Add</button>
                     <button class="od-toolbar-btn od-toolbar-btn-danger" id="od-remove-surface" title="Remove selected surface">- Remove</button>
                     <div style="flex:1;"></div>
+                    <button class="od-toolbar-btn od-toolbar-btn-accent" id="od-rx-btn" title="Import lens prescription from patent/paper data">Lens Rx</button>
                     <button class="od-toolbar-btn" id="od-export-json" title="Save design as JSON">Export</button>
                     <button class="od-toolbar-btn" id="od-import-json" title="Load design from JSON">Import</button>
                     <input type="file" id="od-import-file" class="od-hidden" accept=".json">
@@ -345,6 +355,38 @@
     </div>
 </div>
 
+<!-- ===== LENS PRESCRIPTION MODAL ===== -->
+<div id="od-rx-overlay" class="rs-rx-overlay" style="display:none;">
+    <div class="rs-rx-modal">
+        <div class="rs-rx-header">
+            <h3>Import Lens Prescription</h3>
+            <button class="rs-rx-close" id="od-rx-close">&times;</button>
+        </div>
+        <p class="rs-rx-desc">Paste a surface data table from a patent or paper. Each row = one surface. Columns: Surface, Radius, Thickness, Refractive Index, Abbe Number, [Conic K].</p>
+        <div class="rs-rx-examples">
+            <button class="rs-rx-ex-btn" id="od-rx-ex-singlet">Singlet</button>
+            <button class="rs-rx-ex-btn" id="od-rx-ex-doublet">Achromatic Doublet</button>
+            <button class="rs-rx-ex-btn" id="od-rx-ex-cooke">Cooke Triplet</button>
+            <button class="rs-rx-ex-btn" id="od-rx-ex-aspheric">Aspheric (K)</button>
+            <button class="rs-rx-ex-btn" id="od-rx-ex-patent">US11125971B2</button>
+        </div>
+        <textarea id="od-rx-input" class="rs-rx-input" rows="10" placeholder="Surface&#9;Radius&#9;Thickness&#9;n&#9;Abbe&#10;S1&#9;61.47&#9;6.0&#9;1.517&#9;64.2&#10;S2&#9;-43.47&#9;2.5&#9;1.620&#9;36.4&#10;S3&#9;-124.6&#9;90.0"></textarea>
+        <div class="rs-rx-settings">
+            <label>Aperture (mm): <input type="number" id="od-rx-aperture" value="12.5" min="1" max="100" step="0.5"></label>
+        </div>
+        <div class="rs-rx-preview" id="od-rx-preview"></div>
+        <div class="rs-rx-error" id="od-rx-error" style="display:none;"></div>
+        <div class="rs-rx-actions">
+            <button class="od-toolbar-btn" id="od-rx-preview-btn">Preview</button>
+            <button class="od-toolbar-btn od-toolbar-btn-accent" id="od-rx-import-btn" disabled>Import into Design</button>
+        </div>
+        <div class="rs-rx-note">
+            <strong>Supported:</strong> Spherical, plano, aspheric (conic K), air gaps, aperture stops, cemented surfaces. Materials auto-matched from 15+ Sellmeier glasses.<br>
+            <strong>Tip:</strong> Conic K column is optional. Use K=-1 for parabola, K&lt;-1 for hyperbola, -1&lt;K&lt;0 for prolate ellipse.
+        </div>
+    </div>
+</div>
+
 <!-- ===== FOOTER ===== -->
 <footer class="page-footer">
     <div class="footer-content">
@@ -365,6 +407,7 @@
 <script src="<%=request.getContextPath()%>/physics/js/optical-designer-trace.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/physics/js/optical-designer-render.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/physics/js/optical-designer-ui.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/physics/js/optical-designer-prescription.js?v=<%=cacheVersion%>"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     ODUI.init({
@@ -462,6 +505,93 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
+
+    /* ---- Lens Prescription Modal ---- */
+    var rxOverlay = document.getElementById('od-rx-overlay');
+    var rxInput = document.getElementById('od-rx-input');
+    var rxPreview = document.getElementById('od-rx-preview');
+    var rxError = document.getElementById('od-rx-error');
+    var rxImportBtn = document.getElementById('od-rx-import-btn');
+    var lastRxResult = null;
+
+    document.getElementById('od-rx-btn').addEventListener('click', function () {
+        rxOverlay.style.display = 'flex';
+    });
+    document.getElementById('od-rx-close').addEventListener('click', function () {
+        rxOverlay.style.display = 'none';
+    });
+    rxOverlay.addEventListener('click', function (e) {
+        if (e.target === rxOverlay) rxOverlay.style.display = 'none';
+    });
+
+    // Example buttons
+    var rxExamples = {
+        'od-rx-ex-singlet':  'EXAMPLE_SINGLET',
+        'od-rx-ex-doublet':  'EXAMPLE_DOUBLET',
+        'od-rx-ex-cooke':    'EXAMPLE_COOKE_TRIPLET',
+        'od-rx-ex-aspheric': 'EXAMPLE_ASPHERIC',
+        'od-rx-ex-patent':   'EXAMPLE_US11125971B2'
+    };
+    Object.keys(rxExamples).forEach(function (id) {
+        document.getElementById(id).addEventListener('click', function () {
+            rxInput.value = ODPrescription[rxExamples[id]];
+            doRxPreview();
+        });
+    });
+
+    document.getElementById('od-rx-preview-btn').addEventListener('click', doRxPreview);
+
+    function doRxPreview() {
+        rxError.style.display = 'none';
+        var text = rxInput.value;
+        if (!text.trim()) { showRxError('Paste lens data first.'); return; }
+
+        var aperture = Number(document.getElementById('od-rx-aperture').value) || 12.5;
+        var result = ODPrescription.importPrescription(text, { aperture: aperture });
+        if (result.error) { showRxError(result.error); return; }
+
+        lastRxResult = result;
+        rxImportBtn.disabled = false;
+
+        var html = '<table class="rs-rx-table"><thead><tr><th>#</th><th>R (mm)</th><th>t (mm)</th><th>Material</th><th>K</th></tr></thead><tbody>';
+        result.surfaces.forEach(function (s, i) {
+            var matName = result.materialNames[i] || 'Air';
+            var rStr = (s.radius === Infinity) ? '&infin;' : Number(s.radius).toFixed(3);
+            html += '<tr' + (s.isStop ? ' class="rs-rx-stop"' : (!s.n || s.n <= 1 ? ' class="rs-rx-gap"' : '')) + '>' +
+                '<td>' + (s.surfId || (i + 1)) + '</td>' +
+                '<td>' + rStr + '</td>' +
+                '<td>' + (s.thickness || 0) + '</td>' +
+                '<td>' + matName + '</td>' +
+                '<td>' + (s.conic || 0) + '</td></tr>';
+        });
+        html += '</tbody></table>';
+        html += '<div class="rs-rx-summary">' + result.surfaceCount + ' surfaces &mdash; materials: ' +
+            result.materialNames.filter(function (n, i, a) { return a.indexOf(n) === i; }).join(', ') + '</div>';
+        rxPreview.innerHTML = html;
+    }
+
+    function showRxError(msg) {
+        rxError.textContent = msg;
+        rxError.style.display = 'block';
+        rxImportBtn.disabled = true;
+        rxPreview.innerHTML = '';
+        lastRxResult = null;
+    }
+
+    rxImportBtn.addEventListener('click', function () {
+        if (!lastRxResult || !lastRxResult.design) return;
+
+        // Replace current design with imported one
+        var current = ODUI.getDesign();
+        var imported = lastRxResult.design;
+        current.surfaces = imported.surfaces;
+        current.beamRadius = imported.beamRadius;
+        current.raysPerBeam = imported.raysPerBeam;
+        current.fovAngle = imported.fovAngle;
+        current.autofocus = imported.autofocus;
+        ODUI.refreshAll();
+        rxOverlay.style.display = 'none';
+    });
 });
 </script>
 

@@ -63,9 +63,14 @@
 <body>
 <%@ include file="../modern/components/nav-header.jsp" %>
 
-<!-- ===== H1 ===== -->
-<h1 style="font-size:1.25rem;font-weight:700;text-align:center;margin:0;padding:4.5rem 0 0.25rem;color:var(--text-primary);">Free Online Ray Optics Simulator &amp; 2D Ray Tracing Tool</h1>
-<p style="text-align:center;font-size:0.8125rem;color:var(--text-secondary);margin:0 auto 0.75rem;max-width:680px;">Build optical scenes with mirrors, lenses, prisms, beam splitters, and gratings. Real-time ray tracing with Snell's law, Fresnel reflections, dispersion, and total internal reflection. No signup required.</p>
+<!-- Breadcrumbs -->
+<nav style="padding:calc(var(--header-height-desktop, 72px) + 0.5rem) 1.5rem 0.5rem; font-size:0.8125rem; color:#94a3b8;" aria-label="Breadcrumb">
+    <a href="<%=request.getContextPath()%>/index.jsp" style="color:#64748b;text-decoration:none;">Home</a>
+    <span style="margin:0 0.375rem;color:#cbd5e1;">/</span>
+    <a href="<%=request.getContextPath()%>/physics/" style="color:#64748b;text-decoration:none;">Physics</a>
+    <span style="margin:0 0.375rem;color:#cbd5e1;">/</span>
+    <span style="color:#0f172a;font-weight:500;">Ray Optics Simulator</span>
+</nav>
 
 <%@ include file="../modern/ads/ad-hero-banner.jsp" %>
 
@@ -77,6 +82,9 @@
 
         <!-- Canvas Card -->
         <div class="rs-canvas-card">
+
+            <!-- H1 (compact, inside toolbar area for SEO) -->
+            <h1 style="font-size:0.8125rem;font-weight:600;margin:0;padding:0.375rem 0.75rem 0;color:var(--text-primary,#0f172a);">Ray Optics Simulator <span style="font-weight:400;font-size:0.6875rem;color:var(--text-secondary,#64748b);">&mdash; mirrors, lenses, prisms, beam splitters &amp; gratings</span></h1>
 
             <!-- Toolbar -->
             <div class="rs-toolbar">
@@ -166,6 +174,7 @@
 
                 <div style="flex:1;"></div>
 
+                <button id="rs-prescription-btn" class="rs-btn rs-btn-accent" title="Import lens prescription from patent/paper data">Lens Rx</button>
                 <button id="rs-import-btn" class="rs-btn" title="Import scene from JSON">Import</button>
                 <button id="rs-export-json" class="rs-btn" title="Export scene as JSON">Export</button>
                 <input type="file" id="rs-import-file" accept=".json" style="display:none;">
@@ -331,6 +340,40 @@
     </div>
 </div>
 
+<!-- ===== LENS PRESCRIPTION MODAL ===== -->
+<div id="rs-rx-overlay" class="rs-rx-overlay" style="display:none;">
+    <div class="rs-rx-modal">
+        <div class="rs-rx-header">
+            <h3>Import Lens Prescription</h3>
+            <button class="rs-rx-close" id="rs-rx-close">&times;</button>
+        </div>
+        <p class="rs-rx-desc">Paste a lens data table from a patent or paper. Columns: Surface, Radius, Thickness, Refractive Index, Abbe Number.</p>
+        <div class="rs-rx-examples">
+            <button class="rs-rx-ex-btn" id="rs-rx-ex-singlet">Biconvex Singlet</button>
+            <button class="rs-rx-ex-btn" id="rs-rx-ex-doublet">Achromatic Doublet</button>
+            <button class="rs-rx-ex-btn" id="rs-rx-ex-cooke">Cooke Triplet</button>
+            <button class="rs-rx-ex-btn" id="rs-rx-ex-patent">US11125971B2 (6-element)</button>
+        </div>
+        <textarea id="rs-rx-input" class="rs-rx-input" rows="12" placeholder="Surface&#9;Radius&#9;Thickness&#9;n&#9;Abbe&#10;S1&#9;61.9&#9;4.0&#9;1.517&#9;64.2&#10;S2&#9;-44.2&#9;1.5&#9;1.649&#9;33.8&#10;S3&#9;-129.0&#9;96.3&#10;..."></textarea>
+        <div class="rs-rx-settings">
+            <label>Scale (mm &rarr; px, 0=auto): <input type="number" id="rs-rx-scale" value="0" min="0" max="50" step="1"></label>
+            <label>Lens diameter (px): <input type="number" id="rs-rx-diameter" value="50" min="10" max="200" step="5"></label>
+            <label>Beam rays: <input type="number" id="rs-rx-rays" value="15" min="3" max="50" step="1"></label>
+            <label><input type="checkbox" id="rs-rx-clear" checked> Clear existing scene</label>
+        </div>
+        <div class="rs-rx-preview" id="rs-rx-preview"></div>
+        <div class="rs-rx-error" id="rs-rx-error" style="display:none;"></div>
+        <div class="rs-rx-actions">
+            <button class="rs-btn" id="rs-rx-preview-btn">Preview</button>
+            <button class="rs-btn rs-btn-accent" id="rs-rx-import-btn" disabled>Import into Scene</button>
+        </div>
+        <div class="rs-rx-note">
+            <strong>Supported:</strong> Spherical &amp; plano surfaces, air gaps, aperture stops, cemented doublets, Abbe&rarr;dispersion.<br>
+            <strong>Not yet supported:</strong> Aspherical coefficients (K, B, C, D conic terms).
+        </div>
+    </div>
+</div>
+
 <!-- ===== FOOTER ===== -->
 <footer class="page-footer">
     <div class="footer-content">
@@ -351,6 +394,7 @@
 <script src="<%=request.getContextPath()%>/physics/js/ray-sim-engine.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/physics/js/ray-sim-render.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/physics/js/ray-sim-ui.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/physics/js/ray-sim-prescription.js?v=<%=cacheVersion%>"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     RayUI.init({
@@ -384,6 +428,131 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
+
+    /* ---- Lens Prescription Modal ---- */
+    var rxOverlay = document.getElementById('rs-rx-overlay');
+    var rxInput = document.getElementById('rs-rx-input');
+    var rxPreview = document.getElementById('rs-rx-preview');
+    var rxError = document.getElementById('rs-rx-error');
+    var rxImportBtn = document.getElementById('rs-rx-import-btn');
+    var lastRxResult = null;
+
+    document.getElementById('rs-prescription-btn').addEventListener('click', function () {
+        rxOverlay.style.display = 'flex';
+    });
+    document.getElementById('rs-rx-close').addEventListener('click', function () {
+        rxOverlay.style.display = 'none';
+    });
+    rxOverlay.addEventListener('click', function (e) {
+        if (e.target === rxOverlay) rxOverlay.style.display = 'none';
+    });
+
+    // Example buttons
+    document.getElementById('rs-rx-ex-singlet').addEventListener('click', function () {
+        rxInput.value = RayPrescription.EXAMPLE_SINGLET;
+        doPreview();
+    });
+    document.getElementById('rs-rx-ex-doublet').addEventListener('click', function () {
+        rxInput.value = RayPrescription.EXAMPLE_DOUBLET;
+        doPreview();
+    });
+    document.getElementById('rs-rx-ex-cooke').addEventListener('click', function () {
+        rxInput.value = RayPrescription.EXAMPLE_COOKE_TRIPLET;
+        doPreview();
+    });
+    document.getElementById('rs-rx-ex-patent').addEventListener('click', function () {
+        rxInput.value = RayPrescription.EXAMPLE_US11125971B2;
+        doPreview();
+    });
+
+    // Preview
+    document.getElementById('rs-rx-preview-btn').addEventListener('click', doPreview);
+
+    function doPreview() {
+        rxError.style.display = 'none';
+        var text = rxInput.value;
+        if (!text.trim()) { showRxError('Paste lens data first.'); return; }
+
+        var result = RayPrescription.importPrescription(text, getRxOpts());
+        if (result.error) { showRxError(result.error); return; }
+
+        lastRxResult = result;
+        rxImportBtn.disabled = false;
+
+        // Render preview table
+        var html = '<table class="rs-rx-table"><thead><tr><th>#</th><th>Type</th><th>R1</th><th>R2</th><th>Thick</th><th>n</th><th>Abbe</th></tr></thead><tbody>';
+        var idx = 0;
+        result.elements.forEach(function (el) {
+            idx++;
+            if (el.type === 'lens') {
+                html += '<tr><td>' + idx + '</td><td>Lens</td>' +
+                    '<td>' + fmt(el.radius1) + '</td><td>' + fmt(el.radius2) + '</td>' +
+                    '<td>' + fmt(el.thickness) + '</td><td>' + (el.n || '') + '</td><td>' + (el.abbe || '') + '</td></tr>';
+                if (el.airGap) {
+                    idx++;
+                    html += '<tr class="rs-rx-gap"><td>' + idx + '</td><td>Air gap</td><td></td><td></td><td>' + fmt(el.airGap) + '</td><td>1.0</td><td></td></tr>';
+                }
+            } else if (el.type === 'stop') {
+                html += '<tr class="rs-rx-stop"><td>' + idx + '</td><td>Aperture</td><td>&infin;</td><td></td><td>' + fmt(el.thickness) + '</td><td></td><td></td></tr>';
+            } else {
+                html += '<tr class="rs-rx-gap"><td>' + idx + '</td><td>Gap</td><td></td><td></td><td>' + fmt(el.thickness) + '</td><td></td><td></td></tr>';
+            }
+        });
+        html += '</tbody></table>';
+        html += '<div class="rs-rx-summary">' + result.elements.filter(function(e){return e.type==='lens';}).length + ' lenses, ' +
+            result.elements.filter(function(e){return e.type==='stop';}).length + ' stops &mdash; ' +
+            result.objects.length + ' scene objects' +
+            (result.scale ? ' (auto-scale: ' + result.scale + ' px/mm)' : '') + '</div>';
+        rxPreview.innerHTML = html;
+    }
+
+    function fmt(v) {
+        if (v === Infinity || v === -Infinity) return '&infin;';
+        if (v == null) return '';
+        return typeof v === 'number' ? (Math.abs(v) > 999 ? v.toExponential(2) : Number(v.toFixed(3))) : v;
+    }
+
+    function getRxOpts() {
+        var scaleVal = Number(document.getElementById('rs-rx-scale').value);
+        return {
+            scale: scaleVal > 0 ? scaleVal : 0, // 0 = auto-scale
+            maxDiameter: Number(document.getElementById('rs-rx-diameter').value) || 50,
+            beamRays: Number(document.getElementById('rs-rx-rays').value) || 15,
+            startX: 150,
+            centerY: 300,
+            beamWidth: (Number(document.getElementById('rs-rx-diameter').value) || 50) * 0.7
+        };
+    }
+
+    function showRxError(msg) {
+        rxError.textContent = msg;
+        rxError.style.display = 'block';
+        rxImportBtn.disabled = true;
+        rxPreview.innerHTML = '';
+        lastRxResult = null;
+    }
+
+    // Import into scene
+    rxImportBtn.addEventListener('click', function () {
+        if (!lastRxResult || !lastRxResult.objects.length) return;
+
+        var scene = RayUI.getScene();
+        if (!scene) return;
+
+        // Clear existing scene if checked
+        if (document.getElementById('rs-rx-clear').checked) {
+            scene.objects = [];
+        }
+
+        // Add all objects
+        lastRxResult.objects.forEach(function (opts) {
+            var obj = RayScene.createObject(opts);
+            if (obj) scene.addObject(obj);
+        });
+
+        RayUI.refreshAll();
+        rxOverlay.style.display = 'none';
+    });
 });
 </script>
 
