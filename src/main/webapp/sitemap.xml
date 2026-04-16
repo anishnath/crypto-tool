@@ -2051,7 +2051,13 @@
         <loc>https://8gwifi.org/sslscan.jsp</loc>
     </url>
     <url>
+        <loc>https://8gwifi.org/seo/</loc>
+    </url>
+    <url>
         <loc>https://8gwifi.org/seo/seo-checker.jsp</loc>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/seo/lighthouse.jsp</loc>
     </url>
     <url>
         <loc>https://8gwifi.org/revdns.jsp</loc>

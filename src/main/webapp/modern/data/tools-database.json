@@ -1,7 +1,7 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-03-16T00:00:00.000Z",
-  "totalTools": 421,
+  "totalTools": 422,
   "categories": [
     "Blockchain & Crypto",
     "CTF & Challenges",
@@ -23,6 +23,7 @@
     "Network Tools",
     "Physics",
     "Productivity",
+    "SEO & Web Audits",
     "Security & PKI"
   ],
   "tools": [
@@ -1315,11 +1316,11 @@
       "description": "Fibonacci Spiral Generator - Golden spiral from Fibonacci tiling, Fibonacci numbers, phi ratio, PNG export"
     },
     {
-      "name": "Graphing Calculator",
+      "name": "AI Graphing Calculator",
       "url": "graphing-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "graphing calculator mathematics",
-      "description": "Graphing Calculator - Free online mathematics tool"
+      "keywords": "ai graphing calculator, graphing calculator, plot from english, natural language graph plotter, homework graphing calculator, desmos alternative, 3d graphing calculator, calculus, derivatives, integrals, limits, polar, parametric",
+      "description": "AI Graphing Calculator - describe any graph in plain English or paste a homework problem. Plots 2D/3D functions, derivatives, integrals, limits, polar, parametric, equations. Free Desmos alternative."
     },
     {
       "name": "Heron’s Formula Area",
@@ -1972,9 +1973,16 @@
     {
       "name": "AI SEO Checker",
       "url": "seo/seo-checker.jsp",
-      "category": "Network Tools",
+      "category": "SEO & Web Audits",
       "keywords": "ai seo checker ai website audit ai seo tool ai fix seo issues seo score crawler ai site analyzer ai meta tag fixer",
       "description": "AI SEO Checker - Crawl any website, get 79+ checks with AI-generated fix suggestions for every issue"
+    },
+    {
+      "name": "Lighthouse Audit",
+      "url": "seo/lighthouse.jsp",
+      "category": "SEO & Web Audits",
+      "keywords": "lighthouse audit lighthouse online free lighthouse test page speed test core web vitals checker lcp tester performance audit seo audit accessibility audit",
+      "description": "Run a real Google Lighthouse audit on any URL. Get Performance, Accessibility, Best Practices, and SEO scores plus Core Web Vitals"
     },
     {
       "name": "HTTP Status Analysis",
