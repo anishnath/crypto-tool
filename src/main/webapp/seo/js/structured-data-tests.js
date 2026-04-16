@@ -27,7 +27,8 @@ var StructuredDataTests;
             name: 'Article',
             types: ['Article', 'NewsArticle', 'BlogPosting', 'TechArticle', 'ScholarlyArticle',
                     'SatiricalArticle', 'Report', 'AdvertiserContentArticle',
-                    'SocialMediaPosting', 'LiveBlogPosting', 'DiscussionForumPosting'],
+                    'SocialMediaPosting', 'LiveBlogPosting'],
+            // Note: DiscussionForumPosting has its own stricter preset (requires author+date+content)
             // Google: NO required properties. All are recommended.
             tests: [
                 w('headline'),
@@ -49,12 +50,24 @@ var StructuredDataTests;
                 r('name'),
                 w('image'),
                 w('description'),
-                w('offers', [w('price'), w('priceCurrency'), w('availability'), w('priceValidUntil')]),
+                w('offers', [r('price'), r('priceCurrency'), w('availability'), w('priceValidUntil')]),
                 w('aggregateRating', [w('ratingValue'), w('reviewCount')]),
                 w('review'),
                 w('sku'),
                 w('brand')
-            ]
+            ],
+            custom: function (item, tests) {
+                var hasOffers = item.offers != null;
+                var hasRating = item.aggregateRating != null;
+                var hasReview = item.review != null;
+                if (!hasOffers && !hasRating && !hasReview) {
+                    tests.push({
+                        label: 'Must have at least one of: offers, aggregateRating, or review (Google requirement)',
+                        passed: false, value: null, warning: false, status: 'fail',
+                        description: 'Google requires at least one of these for Product rich results eligibility.'
+                    });
+                }
+            }
         },
 
         FAQPage: {
@@ -319,7 +332,18 @@ var StructuredDataTests;
                 w('review'),
                 w('applicationCategory'),
                 w('operatingSystem')
-            ]
+            ],
+            custom: function (item, tests) {
+                var hasRating = item.aggregateRating != null;
+                var hasReview = item.review != null;
+                if (!hasRating && !hasReview) {
+                    tests.push({
+                        label: 'Must have at least one of: aggregateRating or review (Google requirement)',
+                        passed: false, value: null, warning: false, status: 'fail',
+                        description: 'Google requires aggregateRating or review for Software App rich results eligibility.'
+                    });
+                }
+            }
         },
 
         Dataset: {
@@ -372,7 +396,7 @@ var StructuredDataTests;
         DiscussionForumPosting: {
             name: 'DiscussionForumPosting',
             types: ['DiscussionForumPosting'],
-            // Google: author, author.name, datePublished, + one of text/image/video required
+            // Google: author+author.name, datePublished, + one of text/image/video required
             tests: [
                 r('author', [r('name'), w('url')]),
                 r('datePublished'),
@@ -385,7 +409,16 @@ var StructuredDataTests;
                 w('dateModified'),
                 w('url'),
                 w('interactionStatistic')
-            ]
+            ],
+            custom: function (item, tests) {
+                if (!item.text && !item.image && !item.video) {
+                    tests.push({
+                        label: 'Must have at least one of: text, image, or video (Google requirement)',
+                        passed: false, value: null, warning: false, status: 'fail',
+                        description: 'Google requires at least one content property for DiscussionForumPosting.'
+                    });
+                }
+            }
         },
 
         Review: {
@@ -412,7 +445,16 @@ var StructuredDataTests;
                 w('bestRating'),
                 w('worstRating'),
                 w('itemReviewed', [w('name')])
-            ]
+            ],
+            custom: function (item, tests) {
+                if (!item.ratingCount && !item.reviewCount) {
+                    tests.push({
+                        label: 'Must have at least one of: ratingCount or reviewCount (Google requirement)',
+                        passed: false, value: null, warning: false, status: 'fail',
+                        description: 'Google requires ratingCount or reviewCount for AggregateRating rich results.'
+                    });
+                }
+            }
         },
 
         ProfilePage: {
