@@ -470,6 +470,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>LighthouseFunctionality</servlet-name>
+        <servlet-class>z.y.x.seo.LighthouseFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LighthouseFunctionality</servlet-name>
+        <url-pattern>/LighthouseFunctionality</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>SSLScannerFunctionality</servlet-name>
         <servlet-class>z.y.x.ssl.SSLScannerFunctionality</servlet-class>
     </servlet>
