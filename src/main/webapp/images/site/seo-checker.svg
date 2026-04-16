@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" rx="12" fill="#0f172a"/>
+  <rect x="40" y="40" width="1120" height="550" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <!-- Browser bar -->
+  <rect x="40" y="40" width="1120" height="44" rx="8" fill="#334155"/>
+  <circle cx="72" cy="62" r="7" fill="#ef4444"/>
+  <circle cx="96" cy="62" r="7" fill="#f59e0b"/>
+  <circle cx="120" cy="62" r="7" fill="#22c55e"/>
+  <rect x="160" y="52" width="300" height="20" rx="10" fill="#475569"/>
+  <!-- Score gauge -->
+  <circle cx="200" cy="260" r="80" stroke="#334155" stroke-width="12" fill="none"/>
+  <circle cx="200" cy="260" r="80" stroke="#22c55e" stroke-width="12" fill="none" stroke-dasharray="402 503" stroke-linecap="round" transform="rotate(-90 200 260)"/>
+  <text x="200" y="272" text-anchor="middle" fill="#22c55e" font-family="system-ui,sans-serif" font-size="48" font-weight="700">80</text>
+  <text x="200" y="370" text-anchor="middle" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="16" font-weight="500">SEO SCORE</text>
+  <!-- Issue bars -->
+  <rect x="360" y="160" width="720" height="40" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <rect x="372" y="172" width="12" height="16" rx="3" fill="#ef4444"/>
+  <rect x="396" y="172" width="200" height="8" rx="4" fill="#64748b"/>
+  <rect x="396" y="184" width="140" height="6" rx="3" fill="#475569"/>
+  <rect x="360" y="212" width="720" height="40" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <rect x="372" y="224" width="12" height="16" rx="3" fill="#f59e0b"/>
+  <rect x="396" y="224" width="240" height="8" rx="4" fill="#64748b"/>
+  <rect x="396" y="236" width="160" height="6" rx="3" fill="#475569"/>
+  <rect x="360" y="264" width="720" height="40" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <rect x="372" y="276" width="12" height="16" rx="3" fill="#22c55e"/>
+  <rect x="396" y="276" width="180" height="8" rx="4" fill="#64748b"/>
+  <rect x="396" y="288" width="120" height="6" rx="3" fill="#475569"/>
+  <rect x="360" y="316" width="720" height="40" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <rect x="372" y="328" width="12" height="16" rx="3" fill="#22c55e"/>
+  <rect x="396" y="328" width="220" height="8" rx="4" fill="#64748b"/>
+  <rect x="396" y="340" width="150" height="6" rx="3" fill="#475569"/>
+  <!-- AI Fix badge -->
+  <rect x="880" y="170" width="80" height="24" rx="12" fill="#6366f1"/>
+  <text x="920" y="186" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-size="11" font-weight="600">AI Fix</text>
+  <!-- Bottom text -->
+  <text x="600" y="480" text-anchor="middle" fill="#e2e8f0" font-family="system-ui,sans-serif" font-size="32" font-weight="700">AI SEO Checker</text>
+  <text x="600" y="520" text-anchor="middle" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="18">79+ checks with AI-generated fix suggestions</text>
+  <text x="600" y="560" text-anchor="middle" fill="#6366f1" font-family="system-ui,sans-serif" font-size="16" font-weight="500">8gwifi.org</text>
+</svg>
