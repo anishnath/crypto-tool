@@ -71,6 +71,22 @@
         .cad-topbar-bc a:hover { color: #fff; }
         .cad-topbar-bc .sep { margin: 0 0.25rem; }
 
+        /* AI hint — visible when editor is closed */
+        .cad-ai-hint {
+            display: flex; align-items: center; gap: 4px;
+            padding: 3px 12px; background: rgba(99,102,241,0.15);
+            border: 1px solid rgba(99,102,241,0.3); border-radius: 9999px;
+            color: #a5b4fc; font-size: 0.6875rem; font-weight: 500;
+            white-space: nowrap; cursor: default;
+            animation: cad-ai-pulse 3s ease-in-out infinite;
+        }
+        .cad-ai-hint-icon { font-size: 0.75rem; }
+        .cad-ai-hint.hidden { display: none; }
+        @keyframes cad-ai-pulse {
+            0%, 100% { border-color: rgba(99,102,241,0.3); }
+            50% { border-color: rgba(99,102,241,0.6); }
+        }
+
         /* AI input — integrated into the topbar */
         .cad-ai-wrap {
             flex: 1; display: flex; align-items: center; gap: 4px;
@@ -291,6 +307,12 @@
             <button class="cad-ai-send" id="cad-ai-send" disabled>Go</button>
         </div>
 
+        <!-- AI hint — always visible, points users to the editor -->
+        <div class="cad-ai-hint" id="cad-ai-hint">
+            <span class="cad-ai-hint-icon">&#10024;</span>
+            <span class="cad-ai-hint-text">AI: Open editor to generate 3D models with text</span>
+        </div>
+
         <div class="cad-topbar-right">
             <span class="cad-topbar-badge">JSCAD</span>
             <a href="<%=request.getContextPath()%>/cad/" class="cad-topbar-link">All CAD</a>
@@ -351,6 +373,7 @@
         // Watch for editor open/close → show/hide AI bar
         // Watch for errors → suggest fix in AI bar
         var aiWrap = document.getElementById('cad-ai-wrap');
+        var aiHint = document.getElementById('cad-ai-hint');
         var aiInput = document.getElementById('cad-ai-input');
         var aiSend = document.getElementById('cad-ai-send');
         var jscadRoot = document.getElementById('jscad');
@@ -358,17 +381,17 @@
 
         if (jscadRoot && aiWrap) {
             new MutationObserver(function () {
-                // Show/hide AI bar based on editor state
+                // Show AI input when editor is open, show hint when closed
                 var edSec = document.querySelector('#editor');
                 var isOpen = edSec && edSec.style.visibility !== 'hidden' && edSec.offsetParent !== null;
                 aiWrap.style.display = isOpen ? 'flex' : 'none';
+                if (aiHint) aiHint.classList.toggle('hidden', isOpen);
 
                 // Detect errors in #status and suggest fix
                 var statusEl = document.querySelector('#status');
                 var errText = statusEl ? statusEl.textContent.trim() : '';
                 if (errText && errText !== lastSeenError && isOpen) {
                     lastSeenError = errText;
-                    // Auto-populate AI input with fix suggestion
                     if (aiInput && !aiInput.value.trim()) {
                         aiInput.value = 'Fix this error';
                         aiInput.style.borderColor = '#f87171';
