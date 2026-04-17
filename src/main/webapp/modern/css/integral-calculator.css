@@ -258,6 +258,15 @@ color: #fff;
 
 /* ===== Autocomplete ===== */
 .ic-expr-wrap { position: relative; }
+.ic-image-btn {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 2px 8px; margin-left: 6px;
+    background: rgba(99, 102, 241, 0.08); color: var(--primary, #6366f1);
+    border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 4px;
+    font-size: 0.6875rem; font-weight: 500; cursor: pointer;
+    transition: all 0.12s; vertical-align: middle;
+}
+.ic-image-btn:hover { background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.4); }
 .ic-autocomplete {
     display: none;
     position: absolute;

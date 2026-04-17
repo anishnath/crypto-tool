@@ -22,7 +22,11 @@
 
     <!-- Integral Calculator styles -->
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/integral-calculator.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/integral-calculator.css?v=<%=cacheVersion%>"></noscript>
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/integral-calculator.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=cacheVersion%>">
+    </noscript>
 
     <!-- SEO (competitive targeting: integral-calculator.com #1, Symbolab, Wolfram, Mathway) -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
@@ -137,7 +141,7 @@
 
                 <!-- Function input -->
                 <div class="tool-form-group ic-expr-wrap">
-                    <label class="tool-form-label" for="ic-expr">Function f(x)</label>
+                    <label class="tool-form-label" for="ic-expr">Function f(x) <button type="button" class="ic-image-btn" id="ic-image-btn" title="Scan problem from image">&#128247; Scan Image</button></label>
                     <input type="text" class="tool-input tool-input-mono" id="ic-expr" placeholder="e.g. sin(3*x), x^2, e^x" autocomplete="off" spellcheck="false">
                     <div class="ic-autocomplete" id="ic-autocomplete"></div>
                     <span class="tool-form-hint">Both sin3x and sin(3*x) work. Definite: <code>expr, (x, 0, oo)</code> accepted</span>
@@ -629,6 +633,146 @@
 <script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
 <script>window.INTEGRAL_CALC_CTX = "<%=request.getContextPath()%>";</script>
 <script src="<%=request.getContextPath()%>/modern/js/integral-calculator.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/image-to-math.js?v=<%=cacheVersion%>"></script>
+<script>
+    ImageToMath.init({
+        buttonId: 'ic-image-btn',
+        aiUrl: (window.INTEGRAL_CALC_CTX || '') + '/ai',
+        toolName: 'Integral Calculator',
+        extractionPrompt:
+            'You are a math problem extractor for an integral calculator.\n' +
+            'Given OCR text from a math image, extract ALL integration problems.\n' +
+            'Return a JSON array. Each object has:\n' +
+            '  - "latex": the integrand ONLY in LaTeX (NOT the full integral, just f(x)). Examples: "x^{2}", "\\sin(x)", "\\frac{1}{x}", "x e^{x}"\n' +
+            '  - "variable": the integration variable (default "x")\n' +
+            '  - "type": "definite" or "indefinite"\n' +
+            '  - "lower": lower bound in LaTeX (only if definite, e.g. "0", "1", "\\pi", "\\infty")\n' +
+            '  - "upper": upper bound in LaTeX (only if definite)\n' +
+            '  - "display": the full integral in LaTeX for display (e.g. "\\int_0^1 x^{2} dx")\n\n' +
+            'CRITICAL RULES:\n' +
+            '- Extract ONLY the problems to solve, NOT the solutions.\n' +
+            '- "latex" must be ONLY the integrand (the function being integrated), NOT the \\int or dx part.\n' +
+            '- Keep LaTeX notation as-is: \\frac, \\sin, \\cos, \\sqrt, \\ln, \\pi, \\infty, ^{}, _{}.\n' +
+            '- Do NOT convert to calculator format. Return raw LaTeX.\n' +
+            '- Return ONLY valid JSON array, no markdown fences, no explanation.\n' +
+            '- If no problems found, return []\n\n' +
+            'Example:\n' +
+            'Input: "Evaluate: $\\int_{0}^{1} x^{2} dx$ and $\\int \\sin(x) dx$"\n' +
+            'Output: [{"latex":"x^{2}","variable":"x","type":"definite","lower":"0","upper":"1","display":"\\\\int_{0}^{1} x^{2} dx"},{"latex":"\\\\sin(x)","variable":"x","type":"indefinite","display":"\\\\int \\\\sin(x) dx"}]',
+        onSelect: function (problem) {
+            // Convert LaTeX integrand → calculator expression
+            var expr = latexToCalcExpr(problem.latex || problem.expr || '');
+            var lower = latexToCalcExpr(problem.lower || '');
+            var upper = latexToCalcExpr(problem.upper || '');
+
+            // Fill expression
+            var exprInput = document.getElementById('ic-expr');
+            if (exprInput && expr) {
+                exprInput.value = expr;
+                exprInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+
+            // Set mode
+            if (problem.type === 'definite') {
+                var defBtn = document.querySelector('.ic-mode-btn[data-mode="definite"]');
+                if (defBtn) defBtn.click();
+                var lowerInput = document.getElementById('ic-lower');
+                var upperInput = document.getElementById('ic-upper');
+                if (lowerInput && lower) lowerInput.value = lower;
+                if (upperInput && upper) upperInput.value = upper;
+            } else {
+                var indefBtn = document.querySelector('.ic-mode-btn[data-mode="indefinite"]');
+                if (indefBtn) indefBtn.click();
+            }
+
+            // Set variable
+            if (problem.variable && problem.variable !== 'x') {
+                var varSelect = document.getElementById('ic-var');
+                if (varSelect) varSelect.value = problem.variable;
+            }
+
+            // Auto-trigger integration
+            setTimeout(function () {
+                var intBtn = document.getElementById('ic-integrate-btn');
+                if (intBtn) intBtn.click();
+            }, 300);
+        }
+    });
+
+    /**
+     * Convert LaTeX math notation to calculator-accepted expression.
+     * This is a client-side converter — no LLM involved, mathematically deterministic.
+     *
+     * \frac{a}{b} → (a)/(b)
+     * \sin, \cos, \tan etc → sin, cos, tan
+     * \sqrt{x} → sqrt(x)
+     * \sqrt[3]{x} → (x)^(1/3)
+     * \ln → log  (nerdamer uses log for natural log)
+     * \pi → pi
+     * \infty → Infinity
+     * \left, \right → removed
+     * x^{2} → x^(2)
+     * \cdot → *
+     * Implicit multiplication handled by normalizeExpr afterward
+     */
+    function latexToCalcExpr(latex) {
+        if (!latex || typeof latex !== 'string') return '';
+        var s = latex.trim();
+
+        // Remove \left \right \bigl \bigr etc
+        s = s.replace(/\\(?:left|right|[Bb]ig[lrmg]?)\s*/g, '');
+
+        // \frac{a}{b} → (a)/(b) — handle nested braces by processing innermost first
+        var maxFrac = 20;
+        while (/\\frac\s*\{/.test(s) && maxFrac-- > 0) {
+            // Match \frac{...}{...} where inner content may contain ^{} but not nested \frac
+            s = s.replace(/\\frac\s*\{((?:[^{}]|\{[^{}]*\})*)\}\s*\{((?:[^{}]|\{[^{}]*\})*)\}/g, '($1)/($2)');
+        }
+
+        // \sqrt[n]{x} → (x)^(1/n)
+        s = s.replace(/\\sqrt\s*\[([^\]]+)\]\s*\{([^{}]*)\}/g, '($2)^(1/$1)');
+        // \sqrt{x} → sqrt(x)
+        s = s.replace(/\\sqrt\s*\{([^{}]*)\}/g, 'sqrt($1)');
+
+        // Named functions: \sin → sin, \cos → cos, etc
+        s = s.replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|sech|csch|arcsin|arccos|arctan|exp)\b/g, '$1');
+
+        // \ln → log (nerdamer convention)
+        s = s.replace(/\\ln\b/g, 'log');
+        // \log → log
+        s = s.replace(/\\log\b/g, 'log');
+
+        // Constants
+        s = s.replace(/\\pi\b/g, 'pi');
+        s = s.replace(/\\infty\b/g, 'Infinity');
+        s = s.replace(/\\infinity\b/g, 'Infinity');
+        s = s.replace(/\\e\b/g, 'e');
+
+        // Operators
+        s = s.replace(/\\cdot\s*/g, '*');
+        s = s.replace(/\\times\s*/g, '*');
+        s = s.replace(/\\div\s*/g, '/');
+        s = s.replace(/\\pm\s*/g, '+');
+
+        // Braces: x^{2} → x^(2), x_{1} → x1
+        s = s.replace(/\^{([^{}]*)}/g, '^($1)');
+        s = s.replace(/_{([^{}]*)}/g, '$1');
+
+        // Remove remaining backslashes and braces
+        s = s.replace(/\\[a-zA-Z]+/g, ''); // any unknown \command
+        s = s.replace(/[{}]/g, '');
+
+        // Clean up whitespace
+        s = s.replace(/\s+/g, '');
+
+        // Run through normalizeExpr for implicit multiplication, shorthand, etc.
+        if (typeof IntegralCalculatorCore !== 'undefined' && IntegralCalculatorCore.normalizeExpr) {
+            s = IntegralCalculatorCore.normalizeExpr(s);
+        }
+
+        return s;
+    }
+</script>
 
 </body>
 </html>
