@@ -17,8 +17,8 @@
     </jsp:include>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
     <style>
         :root { --td-red: #b91c1c; --td-amber: #d97706; --surface-1: #fff; --surface-2: #f8fafc; --text-primary: #0f172a; --text-secondary: #475569; --border-light: #e2e8f0; }
         [data-theme="dark"] { --surface-1: #1e293b; --surface-2: #0f172a; --text-primary: #f1f5f9; --text-secondary: #cbd5e1; --border-light: #334155; }
@@ -248,8 +248,8 @@
         <p style="margin:0; color: var(--text-secondary); font-size: 0.85rem;">&copy; 2025 8gwifi.org.</p>
     </footer>
     <%@ include file="../modern/components/analytics.jsp" %>
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/physics/js/thermodynamics.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
+    <script src="<%=request.getContextPath()%>/physics/js/thermodynamics.js"></script>
 </body>
 </html>
