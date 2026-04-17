@@ -1,9 +1,10 @@
 {
   "version": "1.3",
   "lastUpdated": "2026-03-16T00:00:00.000Z",
-  "totalTools": 423,
+  "totalTools": 424,
   "categories": [
     "Blockchain & Crypto",
+    "CAD & 3D Design",
     "CTF & Challenges",
     "Chemistry",
     "Cryptography",
@@ -418,6 +419,13 @@
       "category": "Developer Tools",
       "keywords": "graph easy ascii diagram generator developer tools",
       "description": "Graph-Easy ASCII Diagram Generator - Free online developer tools tool"
+    },
+    {
+      "name": "3D CAD Modeler (JSCAD)",
+      "url": "cad/3d-modeler/",
+      "category": "CAD & 3D Design",
+      "keywords": "3d cad online parametric modeler jscad openscad stl export 3d printing csg boolean javascript 3d design",
+      "description": "Parametric 3D modeling with JavaScript. Boolean CSG, extrusions, 15+ primitives. Export STL/OBJ for 3D printing. Built-in presets with parameter sliders."
     },
     {
       "name": "HTML/CSS/JS Editor",
