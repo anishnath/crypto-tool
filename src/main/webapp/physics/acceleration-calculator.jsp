@@ -40,14 +40,14 @@
                     rel="stylesheet">
 
                 <link rel="stylesheet"
-                    href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+                    href="<%=request.getContextPath()%>/modern/css/navigation.css">
                 <link rel="stylesheet"
-                    href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+                    href="<%=request.getContextPath()%>/modern/css/tool-page.css">
                 <link rel="stylesheet"
-                    href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+                    href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
                 <link rel="stylesheet"
-                    href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+                    href="<%=request.getContextPath()%>/modern/css/footer.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
 
                 <style>
                     :root {
@@ -1139,11 +1139,11 @@
                     </footer>
 
                     <%@ include file="../modern/components/analytics.jsp" %>
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
 
                         <script
-                            src="<%=request.getContextPath()%>/physics/js/acceleration-calculator.js?v=<%=cacheVersion%>"></script>
+                            src="<%=request.getContextPath()%>/physics/js/acceleration-calculator.js"></script>
             </body>
 
             </html>

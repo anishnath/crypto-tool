@@ -21,11 +21,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
 
     <style>
         :root {
@@ -832,10 +832,10 @@
     </footer>
 
     <%@ include file="../modern/components/analytics.jsp" %>
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
-    <script src="<%=request.getContextPath()%>/physics/js/current-electricity.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/physics/js/current-electricity.js"></script>
 </body>
 </html>
 
