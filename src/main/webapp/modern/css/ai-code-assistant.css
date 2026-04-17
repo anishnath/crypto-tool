@@ -1,0 +1,150 @@
+/**
+ * AI Code Assistant — inline chat bar styles.
+ * Reusable across all code editor tools.
+ */
+
+.ai-ca-bar {
+    padding: 6px 8px;
+    background: #1e293b;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.75rem;
+}
+
+/* Quick action buttons */
+.ai-ca-quick {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+.ai-ca-quick-btn {
+    padding: 3px 8px;
+    background: #334155;
+    color: #cbd5e1;
+    border: 1px solid #475569;
+    border-radius: 9999px;
+    font-size: 0.625rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+    font-family: inherit;
+}
+.ai-ca-quick-btn:hover {
+    background: #475569;
+    color: #fff;
+    border-color: #6366f1;
+}
+
+/* Input row */
+.ai-ca-input-row {
+    display: flex;
+    gap: 4px;
+}
+.ai-ca-input {
+    flex: 1;
+    padding: 6px 10px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.12s;
+}
+.ai-ca-input:focus { border-color: #6366f1; }
+.ai-ca-input::placeholder { color: #475569; }
+.ai-ca-input:disabled { opacity: 0.5; }
+
+.ai-ca-send {
+    padding: 4px 10px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: filter 0.12s;
+}
+.ai-ca-send:hover:not(:disabled) { filter: brightness(1.15); }
+.ai-ca-send:disabled { opacity: 0.35; cursor: default; }
+.ai-ca-send svg { stroke: currentColor; }
+
+/* Status line */
+.ai-ca-status {
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    min-height: 0;
+    transition: all 0.15s;
+    overflow: hidden;
+}
+.ai-ca-status:empty { padding: 0; margin: 0; }
+.ai-ca-status.loading {
+    padding: 4px 0 0;
+    color: #818cf8;
+}
+.ai-ca-status.error {
+    padding: 4px 0 0;
+    color: #f87171;
+}
+.ai-ca-status.success {
+    padding: 4px 0 0;
+    color: #34d399;
+}
+.ai-ca-status.info {
+    padding: 6px 0 2px;
+    color: #94a3b8;
+}
+.ai-ca-response {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    max-height: 120px;
+    overflow-y: auto;
+}
+.ai-ca-response code {
+    background: rgba(99,102,241,0.15);
+    color: #a5b4fc;
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+}
+
+/* Light theme variant */
+[data-theme="light"] .ai-ca-bar,
+.ai-ca-bar.light {
+    background: #f8fafc;
+    border-top-color: #e2e8f0;
+}
+[data-theme="light"] .ai-ca-input,
+.ai-ca-bar.light .ai-ca-input {
+    background: #fff;
+    color: #0f172a;
+    border-color: #e2e8f0;
+}
+[data-theme="light"] .ai-ca-input::placeholder,
+.ai-ca-bar.light .ai-ca-input::placeholder { color: #94a3b8; }
+[data-theme="light"] .ai-ca-quick-btn,
+.ai-ca-bar.light .ai-ca-quick-btn {
+    background: #e2e8f0;
+    color: #475569;
+    border-color: #cbd5e1;
+}
+[data-theme="light"] .ai-ca-quick-btn:hover,
+.ai-ca-bar.light .ai-ca-quick-btn:hover {
+    background: #cbd5e1;
+    color: #0f172a;
+}
+[data-theme="light"] .ai-ca-response,
+.ai-ca-bar.light .ai-ca-response {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #475569;
+}
