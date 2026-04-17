@@ -241,7 +241,7 @@
         /** Convert nerdamer-style expr to Python/SymPy (e.g. e^x -> exp(x), ^ -> **) */
         function nerdamerToPython(expr) {
             // Known single-token functions — protect "sin(" so implicit-mul pass does not turn it into "sin*("
-            var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|Min|Max|frac|Sum';
+            var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|Min|Max|frac|Sum|Rational|Product|Integral|Mod';
             var py = (expr || '')
                 // e^func(args) → exp(func(args)):  e^sqrt(x+2) → exp(sqrt(x+2))
                 .replace(/e\^([a-zA-Z_]+\([^)]*\))/g, 'exp($1)')

@@ -638,6 +638,74 @@ testKings('sin⁵/(cos⁵+sin⁵) [0,π/2]', 'sin(x)^5/(cos(x)^5+sin(x)^5)', '0'
 testKings('sin¹⁰/(cos¹⁰+sin¹⁰) [0,π/2]', 'sin(x)^10/(cos(x)^10+sin(x)^10)', '0', 'pi/2', Math.PI/4);
 testKings('√sin/(√cos+√sin) [0,π/2]', 'sqrt(sin(x))/(sqrt(cos(x))+sqrt(sin(x)))', '0', 'pi/2', Math.PI/4);
 
+// Image-to-Math pipeline: normalizeExpr must handle expressions from latexToCalcExpr
+console.log('\n--- Image-to-Math: normalizeExpr for OCR-derived expressions ---');
+testNormalize('(3*sin(x)-sin(3*x))^(1/3)', '(3*sin(x)-sin(3*x))^(1/3)');
+testNormalize('(3sin(x)-sin(3x))^(1/3)', '(3*sin(x)-sin(3*x))^(1/3)');
+testNormalize('(3sinx-sin3x)^(1/3)', '(3*sin(x)-sin(3*x))^(1/3)');
+testNormalize('(x^(2))/(3)', '(x^(2))/(3)');
+testNormalize('(1)/(x)', '(1)/(x)');
+testNormalize('(1+cos(2*x))/(2)', '(1+cos(2*x))/(2)');
+testNormalize('sqrt(x+1)', 'sqrt(x+1)');
+testNormalize('(x)^(1/3)', '(x)^(1/3)');
+testNormalize('log(x)', 'log(x)');  // ln→log already done by latexToCalcExpr
+testNormalize('e^(x)*x^(2)', 'e^(x)*x^(2)');
+testNormalize('sin(x)*cos(x)', 'sin(x)*cos(x)');
+testNormalize('(x^(3))/(3)', '(x^(3))/(3)');
+
+// exprToPython: extract from integral-calculator.js for testing
+// (it's inside the IIFE so we recreate the logic here)
+console.log('\n--- exprToPython: Rational protection ---');
+function exprToPython(expr) {
+    var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|Min|Max|frac|Sum|Rational|Product|Integral|Mod';
+    var py = (expr || '')
+        .replace(/e\^([a-zA-Z_]+\([^)]*\))/g, 'exp($1)')
+        .replace(/e\^(\([^)]+\))/g, 'exp$1')
+        .replace(/e\^([a-zA-Z0-9_]+)/g, 'exp($1)')
+        .replace(/\^/g, '**')
+        .replace(/\*\*\((\d+)\/(\d+)\)/g, '**(Rational($1,$2))')
+        .replace(/\bInfinity\b/g, 'oo')
+        .replace(/(\d)([a-zA-Z])/g, '$1*$2');
+    py = py.replace(new RegExp('\\b(' + FUNS + ')\\(', 'gi'), '\uE000$1\uE001(');
+    py = py
+        .replace(/\)(\()/g, ')*$1')
+        .replace(/\)([a-zA-Z])/g, ')*$1')
+        .replace(/([a-zA-Z0-9])\(/g, '$1*(');
+    py = py.replace(/\uE000(\w+)\uE001\(/g, '$1(');
+    return py;
+}
+
+function testPython(input, expected, label) {
+    var out = exprToPython(input);
+    eq(out, expected, (label || '') + 'exprToPython("' + input + '") → "' + expected + '"');
+}
+
+// Rational() must NOT become Rational*()
+testPython('(3*sin(x)-sin(3*x))^(1/3)', '(3*sin(x)-sin(3*x))**(Rational(1,3))', 'cube root: ');
+testPython('x^(1/2)', 'x**(Rational(1,2))', 'sqrt as ^(1/2): ');
+testPython('x^(2/3)', 'x**(Rational(2,3))', 'fractional exponent: ');
+testPython('x^(3/2)', 'x**(Rational(3,2))', '3/2 exponent: ');
+testPython('(x+1)^(1/3)', '(x+1)**(Rational(1,3))', 'grouped cube root: ');
+testPython('sin(x)^(1/2)', 'sin(x)**(Rational(1,2))', 'function cube root: ');
+
+// Other functions must also be protected
+testPython('sin(x)', 'sin(x)', 'basic sin: ');
+testPython('cos(x)*sin(x)', 'cos(x)*sin(x)', 'product of trig: ');
+testPython('sqrt(x)', 'sqrt(x)', 'sqrt: ');
+testPython('log(x)', 'log(x)', 'log: ');
+testPython('exp(x)', 'exp(x)', 'exp: ');
+testPython('floor(x)', 'floor(x)', 'floor: ');
+testPython('Max(0,x)', 'Max(0,x)', 'Max: ');
+testPython('Sum(x,n)', 'Sum(x,n)', 'Sum: ');
+
+// e^ conversions
+testPython('e^x', 'exp(x)', 'e^x: ');
+testPython('e^(2*x)', 'exp(2*x)', 'e^(2x): ');
+
+// Implicit multiplication should still work
+testPython('2x', '2*x', 'implicit mul: ');
+testPython('3x^2', '3*x**2', 'implicit mul with power: ');
+
 // Famous integrals: verify input parsing (normalizeExpr → nerdamer parse → eval)
 console.log('\n--- Famous integrals: input parsing ---');
 function testParsable(name, raw, testX, expectApprox, tol) {
