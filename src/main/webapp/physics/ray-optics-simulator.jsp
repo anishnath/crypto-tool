@@ -49,14 +49,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/ray-optics-simulator.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/ray-optics-simulator.css">
 
     <%@ include file="../modern/ads/ad-init.jsp" %>
 </head>
@@ -388,13 +388,13 @@
 <%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
 
 <!-- ===== SCRIPTS ===== -->
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/physics/js/ray-sim-scene.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/physics/js/ray-sim-engine.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/physics/js/ray-sim-render.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/physics/js/ray-sim-ui.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/physics/js/ray-sim-prescription.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js"></script>
+<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
+<script src="<%=request.getContextPath()%>/physics/js/ray-sim-scene.js"></script>
+<script src="<%=request.getContextPath()%>/physics/js/ray-sim-engine.js"></script>
+<script src="<%=request.getContextPath()%>/physics/js/ray-sim-render.js"></script>
+<script src="<%=request.getContextPath()%>/physics/js/ray-sim-ui.js"></script>
+<script src="<%=request.getContextPath()%>/physics/js/ray-sim-prescription.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     RayUI.init({
