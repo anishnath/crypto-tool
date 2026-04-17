@@ -37,6 +37,7 @@
   <div class="toolbar-group ai-group">
     <button class="tb-btn ai-btn" id="btn-ai-prompt" onclick="toggleAIPrompt()" title="AI: Describe what you want in plain English (Ctrl+Shift+A)">&#10024; AI</button>
     <button class="tb-btn" id="btn-ai-rewrite" onclick="showRewriteMenu()" title="AI: Rewrite selected text">&#9998; Rewrite</button>
+    <button class="tb-btn" id="btn-img-to-latex" onclick="toggleImageToLatex()" title="Image to LaTeX: Convert photos of equations, text, or tables to LaTeX">&#128247; Image to LaTeX</button>
   </div>
 
   <span class="compile-status" id="compile-status"></span>

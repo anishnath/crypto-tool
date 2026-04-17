@@ -86,6 +86,22 @@ public class AIProxyServlet extends HttpServlet {
         return base + "/ai";
     }
 
+    private static String getOcrEndpoint() {
+        String base = System.getenv("AI_ENDPOINT2");
+        if (base == null || base.isEmpty()) {
+            return null; // OCR not configured
+        }
+        if (base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
+        }
+        return base + "/ocr";
+    }
+
+    // Max base64 image size: ~10MB decoded ≈ ~13.3MB base64
+    private static final long MAX_IMAGE_BASE64_LENGTH = 14_000_000;
+    private static final java.util.Set<String> VALID_OCR_MODES =
+        new java.util.HashSet<>(java.util.Arrays.asList("text", "formula", "table"));
+
     private Bucket resolveBucket(String ip) {
         if (buckets.size() > MAX_BUCKETS) {
             buckets.clear();
@@ -138,15 +154,23 @@ public class AIProxyServlet extends HttpServlet {
 
         resp.setHeader("X-RateLimit-Remaining", String.valueOf(probe.getRemainingTokens()));
 
-        // ── Read request body ──
-        StringBuilder sb = new StringBuilder();
-        BufferedReader reader = req.getReader();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line).append("\n");
+        // ── Route by action ──
+        String action = req.getParameter("action");
+        if ("ocr".equals(action)) {
+            handleOcr(req, resp);
+            return;
         }
-        String body = sb.toString().trim();
 
+        // ── Default: AI chat ──
+        handleChat(req, resp);
+    }
+
+    /**
+     * Handle AI chat requests (default action) — forwards to AI_ENDPOINT/ai.
+     */
+    private void handleChat(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        // ── Read request body ──
+        String body = readRequestBody(req);
         if (body.isEmpty()) {
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -154,7 +178,6 @@ public class AIProxyServlet extends HttpServlet {
             return;
         }
 
-        // ── Inject default model if not present ──
         @SuppressWarnings("unchecked")
         Map<String, Object> payload = JsonUtil.fromJson(body, Map.class);
         if (payload == null) {
@@ -169,12 +192,8 @@ public class AIProxyServlet extends HttpServlet {
             payload.put("model", DEFAULT_MODEL);
         }
 
-        // Determine if streaming
         boolean stream = Boolean.TRUE.equals(payload.get("stream"));
-
         String ollamaJson = JsonUtil.toJson(payload);
-
-        // ── Forward to AI endpoint ──
         String aiUrl = getAiEndpoint();
 
         if (stream) {
@@ -182,6 +201,112 @@ public class AIProxyServlet extends HttpServlet {
         } else {
             forwardBlocking(aiUrl, ollamaJson, resp);
         }
+    }
+
+    /**
+     * Handle OCR requests (action=ocr) — forwards to AI_ENDPOINT2/ocr.
+     *
+     * Validates:
+     *   - image field present and non-empty
+     *   - image base64 size ≤ 10MB decoded (~13.3MB base64)
+     *   - mode is one of: text, formula, table (defaults to formula)
+     */
+    private void handleOcr(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String ocrUrl = getOcrEndpoint();
+        if (ocrUrl == null) {
+            resp.setContentType("application/json");
+            resp.setStatus(503);
+            resp.getWriter().write("{\"error\":\"Image to LaTeX is temporarily unavailable. Please try again later.\"}");
+            return;
+        }
+
+        String body = readRequestBody(req);
+        if (body.isEmpty()) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Empty request body\"}");
+            return;
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> payload = JsonUtil.fromJson(body, Map.class);
+        if (payload == null) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Invalid JSON\"}");
+            return;
+        }
+
+        // ── Validate image ──
+        Object imageObj = payload.get("image");
+        if (imageObj == null || imageObj.toString().trim().isEmpty()) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Missing required field: image (base64-encoded)\"}");
+            return;
+        }
+
+        String imageB64 = imageObj.toString().trim();
+
+        // Strip data URI prefix if present (e.g. "data:image/png;base64,...")
+        if (imageB64.startsWith("data:")) {
+            int commaIdx = imageB64.indexOf(',');
+            if (commaIdx > 0) {
+                imageB64 = imageB64.substring(commaIdx + 1);
+                payload.put("image", imageB64);
+            }
+        }
+
+        // Validate base64 size (rough check: base64 is ~1.33x the binary size)
+        if (imageB64.length() > MAX_IMAGE_BASE64_LENGTH) {
+            long approxMB = imageB64.length() * 3 / 4 / 1024 / 1024;
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Image too large (~" + approxMB + "MB). Maximum is 10MB.\"}");
+            return;
+        }
+
+        // Validate base64 characters (quick check on first 100 chars)
+        String sample = imageB64.length() > 100 ? imageB64.substring(0, 100) : imageB64;
+        if (!sample.matches("[A-Za-z0-9+/=\\s]+")) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Invalid base64 image data\"}");
+            return;
+        }
+
+        // ── Validate mode ──
+        Object modeObj = payload.get("mode");
+        String mode = (modeObj != null) ? modeObj.toString().trim().toLowerCase() : "formula";
+        if (!VALID_OCR_MODES.contains(mode)) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Invalid mode. Use: text, formula, or table\"}");
+            return;
+        }
+        payload.put("mode", mode);
+
+        // ── Forward to OCR endpoint ──
+        boolean stream = Boolean.TRUE.equals(payload.get("stream"));
+        String ocrJson = JsonUtil.toJson(payload);
+
+        log.info("OCR request: mode=" + mode + " imageSize=" + (imageB64.length() / 1024) + "KB stream=" + stream);
+
+        if (stream) {
+            forwardStreaming(ocrUrl, ocrJson, resp);
+        } else {
+            forwardBlocking(ocrUrl, ocrJson, resp);
+        }
+    }
+
+    private String readRequestBody(HttpServletRequest req) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader reader = req.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        return sb.toString().trim();
     }
 
     /**

@@ -24,9 +24,9 @@
   height: 28px;
   padding: 0 8px;
   border-radius: 5px;
-  border: none;
-  background: none;
-  color: var(--text2);
+  border: 1px solid transparent;
+  background: var(--surface2);
+  color: var(--text, #cdd1e0);
   font-size: 11px;
   font-family: 'DM Sans', sans-serif;
   cursor: pointer;
@@ -37,7 +37,7 @@
   white-space: nowrap;
 }
 
-.tb-btn:hover { background: var(--surface2); color: var(--text); }
+.tb-btn:hover { background: var(--surface3); border-color: var(--border2); color: #fff; }
 
 .tb-btn.primary {
   background: var(--accent);
@@ -124,3 +124,68 @@
 .compile-status.done { color: var(--accent); background: rgba(110,231,183,0.08); }
 .compile-status.error { color: var(--error); background: rgba(248,113,113,0.08); }
 .compile-status.compiling { color: var(--accent2); background: rgba(129,140,248,0.08); }
+
+/* ── AI group — distinct visual treatment ── */
+.ai-group {
+  border-left: 1px solid var(--border);
+  border-right: none !important;
+  margin-left: auto;
+  padding-left: 8px;
+}
+
+.ai-group .tb-btn {
+  background: rgba(129, 140, 248, 0.08);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  color: var(--accent2, #818cf8);
+  font-weight: 500;
+}
+
+.ai-group .tb-btn:hover {
+  background: rgba(129, 140, 248, 0.18);
+  border-color: rgba(129, 140, 248, 0.4);
+  color: #a5b4fc;
+}
+
+/* AI button gets a sparkle gradient */
+.ai-group .ai-btn {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.12));
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.ai-group .ai-btn:hover {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(139, 92, 246, 0.22));
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+/* Image to LaTeX button — slightly different accent */
+#btn-img-to-latex {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--accent, #6ee7b7);
+}
+
+#btn-img-to-latex:hover {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #a7f3d0;
+}
+
+/* Light theme overrides */
+[data-theme="light"] .ai-group .tb-btn {
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  color: #6366f1;
+}
+[data-theme="light"] .ai-group .tb-btn:hover {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+[data-theme="light"] #btn-img-to-latex {
+  background: rgba(5, 150, 105, 0.06);
+  border: 1px solid rgba(5, 150, 105, 0.15);
+  color: #059669;
+}
+[data-theme="light"] #btn-img-to-latex:hover {
+  background: rgba(5, 150, 105, 0.12);
+  border-color: rgba(5, 150, 105, 0.3);
+}
