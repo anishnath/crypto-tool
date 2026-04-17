@@ -1018,6 +1018,167 @@ assert(approx(E.pointToSegmentDist(5, 3, 0, 0, 10, 0), 3, 0.01), 'Point above se
 assert(approx(E.pointToSegmentDist(15, 0, 0, 0, 10, 0), 5, 0.01), 'Point past end: dist=5');
 
 /* ================================================================
+ *  LENS PRESCRIPTION IMPORT
+ * ================================================================ */
+
+loadScript('js/ray-sim-prescription.js');
+var Rx = global.RayPrescription;
+
+section('Prescription: Parse Table');
+
+var parsed = Rx.parseTable(Rx.EXAMPLE_SINGLET);
+assert(parsed.length === 2, 'Singlet: 2 surfaces parsed: ' + parsed.length);
+assert(parsed[0].radius === 50, 'Singlet S1 radius=50: ' + parsed[0].radius);
+assert(parsed[0].n === 1.517, 'Singlet S1 n=1.517: ' + parsed[0].n);
+assert(parsed[1].radius === -50, 'Singlet S2 radius=-50: ' + parsed[1].radius);
+assert(parsed[1].n === null || parsed[1].n === undefined, 'Singlet S2 n=null (air)');
+
+parsed = Rx.parseTable(Rx.EXAMPLE_US11125971B2);
+assert(parsed.length === 12, 'Patent: 12 surfaces: ' + parsed.length);
+assert(parsed[4].isStop, 'Patent S5 (ST) is aperture stop');
+assert(parsed[0].radius === 8.363, 'Patent S1 radius=8.363: ' + parsed[0].radius);
+assert(parsed[0].n === 1.81, 'Patent S1 n=1.81: ' + parsed[0].n);
+
+// Header detection
+parsed = Rx.parseTable('Surface\tRadius\tThickness\tn\n---\t---\t---\t---\nS1\t50\t5\t1.5\n');
+assert(parsed.length === 1, 'Skips header + separator: ' + parsed.length);
+
+// Infinity handling
+parsed = Rx.parseTable('S1\tInfinity\t2.5\n');
+assert(parsed.length === 1, 'Infinity parsed');
+assert(parsed[0].radius === Infinity, 'Infinity radius: ' + parsed[0].radius);
+
+section('Prescription: Sign Convention');
+
+var cv = Rx.convertRadii(50, -50);
+assert(cv.radius1 === 50, 'Biconvex: engine r1=50 (same sign)');
+assert(cv.radius2 === 50, 'Biconvex: engine r2=50 (flipped from -50)');
+
+cv = Rx.convertRadii(-50, 50);
+assert(cv.radius1 === -50, 'Biconcave: engine r1=-50');
+assert(cv.radius2 === -50, 'Biconcave: engine r2=-50 (flipped from +50)');
+
+cv = Rx.convertRadii(30, 50);
+assert(cv.radius1 === 30, 'Meniscus: engine r1=30');
+assert(cv.radius2 === -50, 'Meniscus: engine r2=-50');
+
+cv = Rx.convertRadii(50, Infinity);
+assert(cv.radius1 === 50, 'Plano-convex: engine r1=50');
+assert(cv.radius2 === -Infinity, 'Plano-convex: engine r2=-Infinity');
+
+section('Prescription: Surface Grouping');
+
+var surfs = Rx.parseTable(Rx.EXAMPLE_SINGLET);
+var elements = Rx.groupSurfaces(surfs);
+assert(elements.length === 1, 'Singlet: 1 element: ' + elements.length);
+assert(elements[0].type === 'lens', 'Singlet: type is lens');
+assert(elements[0].radius1 === 50, 'Singlet: R1=50');
+assert(elements[0].radius2 === -50, 'Singlet: R2=-50');
+assert(elements[0].n === 1.517, 'Singlet: n=1.517');
+
+surfs = Rx.parseTable(Rx.EXAMPLE_DOUBLET);
+elements = Rx.groupSurfaces(surfs);
+assert(elements.length === 2, 'Doublet: 2 elements (cemented): ' + elements.length);
+assert(elements[0].type === 'lens', 'Doublet E1: lens');
+assert(elements[1].type === 'lens', 'Doublet E2: lens');
+assert(elements[0].n === 1.517, 'Doublet E1: n=1.517 (crown)');
+assert(elements[1].n === 1.649, 'Doublet E2: n=1.649 (flint)');
+
+surfs = Rx.parseTable(Rx.EXAMPLE_US11125971B2);
+elements = Rx.groupSurfaces(surfs);
+var lenses = elements.filter(function (e) { return e.type === 'lens'; });
+var stops = elements.filter(function (e) { return e.type === 'stop'; });
+assert(lenses.length === 6, 'Patent: 6 lenses: ' + lenses.length);
+assert(stops.length === 1, 'Patent: 1 aperture stop: ' + stops.length);
+
+// Negative air gap (patent S4: -0.239)
+assert(elements[1].airGap === -0.239, 'Patent L2: negative airGap=-0.239: ' + elements[1].airGap);
+
+section('Prescription: Abbe to Cauchy B');
+
+var b = Rx.abbeToCauchyB(1.5168, 64.17);
+assert(approx(b, 0.0042, 0.001), 'BK7: Cauchy B ≈ 0.0042: ' + b.toFixed(5));
+
+b = Rx.abbeToCauchyB(1.62, 36.37);
+assert(b > 0.0042, 'Flint: higher dispersion than BK7: ' + b.toFixed(5));
+
+b = Rx.abbeToCauchyB(1.5, 0);
+assert(b === 0.00420, 'Abbe=0: returns default 0.0042');
+
+section('Prescription: Build Scene Objects');
+
+var result = Rx.importPrescription(Rx.EXAMPLE_SINGLET, { scale: 10, maxDiameter: 40 });
+assert(!result.error, 'Singlet: no error');
+assert(result.objects.length === 3, 'Singlet: 3 objects (beam+lens+blocker): ' + result.objects.length);
+assert(result.objects[0].type === 'ParallelBeam', 'Singlet: first is ParallelBeam');
+assert(result.objects[1].type === 'SphericalLens', 'Singlet: second is SphericalLens');
+assert(result.objects[2].type === 'Blocker', 'Singlet: third is Blocker');
+
+var lens = result.objects[1];
+assert(lens.refractiveIndex === 1.517, 'Singlet lens: n=1.517');
+assert(lens.thickness >= 4, 'Singlet lens: thickness scaled');
+
+result = Rx.importPrescription(Rx.EXAMPLE_US11125971B2, { scale: 0 });
+assert(!result.error, 'Patent: no error');
+assert(result.scale > 0, 'Patent: auto-scale computed: ' + result.scale);
+var sceneLenses = result.objects.filter(function (o) { return o.type === 'SphericalLens'; });
+var sceneApertures = result.objects.filter(function (o) { return o.type === 'Aperture'; });
+assert(sceneLenses.length === 6, 'Patent: 6 SphericalLens objects: ' + sceneLenses.length);
+assert(sceneApertures.length === 1, 'Patent: 1 Aperture: ' + sceneApertures.length);
+
+// All lenses should have diameter < 2*|radius| (renderable)
+sceneLenses.forEach(function (l, i) {
+    var ok = (l.diameter / 2) < Math.abs(l.radius1) && (l.diameter / 2) < Math.abs(l.radius2);
+    assert(ok, 'Patent lens ' + (i+1) + ': diameter fits within radii');
+});
+
+// Lenses should be in x-order
+for (var li = 1; li < sceneLenses.length; li++) {
+    assert(sceneLenses[li].x >= sceneLenses[li-1].x, 'Patent: lenses in x-order (' + li + ')');
+}
+
+// Negative air gap should be clamped (not cause overlap in final positions)
+assert(sceneLenses[1].x >= sceneLenses[0].x, 'Patent: L2 does not overlap L1');
+
+section('Prescription: Cooke Triplet');
+
+result = Rx.importPrescription(Rx.EXAMPLE_COOKE_TRIPLET, { scale: 0 });
+assert(!result.error, 'Cooke: no error');
+lenses = result.objects.filter(function (o) { return o.type === 'SphericalLens'; });
+stops = result.objects.filter(function (o) { return o.type === 'Aperture'; });
+assert(lenses.length === 3, 'Cooke: 3 lenses: ' + lenses.length);
+assert(stops.length === 1, 'Cooke: 1 aperture: ' + stops.length);
+
+section('Prescription: Scene Integration');
+
+// Verify imported objects can be added to a real RayScene and traced
+var scene = new S.Scene({ width: 800, height: 600 });
+result = Rx.importPrescription(Rx.EXAMPLE_DOUBLET, { scale: 6, maxDiameter: 40 });
+result.objects.forEach(function (opts) {
+    var obj = S.createObject(opts);
+    assert(obj !== null, 'Doublet object created: ' + opts.type);
+    scene.addObject(obj);
+});
+assert(scene.objects.length === result.objects.length, 'All objects added to scene: ' + scene.objects.length);
+
+var paths = E.traceAll(scene);
+assert(paths.length > 0, 'Doublet scene traces rays: ' + paths.length + ' paths');
+var firstPath = paths[0];
+var segs = firstPath.segments || firstPath;
+assert(Array.isArray(segs) && segs.length >= 2, 'Doublet: ray has ≥2 segments: ' + (segs ? segs.length : 'N/A'));
+
+section('Prescription: Error Cases');
+
+result = Rx.importPrescription('', {});
+assert(result.error !== null, 'Empty input: returns error');
+
+result = Rx.importPrescription('not a table at all', {});
+assert(result.error !== null, 'Garbage input: returns error');
+
+result = Rx.importPrescription('Surface\tRadius\tThickness\tn\n', {});
+assert(result.error !== null, 'Header only: returns error');
+
+/* ================================================================
  *  SUMMARY
  * ================================================================ */
 console.log('\n\x1b[1m===================================\x1b[0m');
