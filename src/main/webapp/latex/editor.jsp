@@ -75,6 +75,7 @@
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/layout.css"/>
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/editor.css"/>
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/toolbar.css"/>
+<link rel="stylesheet" href="<%=ctx%>/latex/static/css/image-to-latex.css"/>
 
 <%@ include file="/modern/ads/ad-init.jsp" %>
 
@@ -353,6 +354,7 @@
 <script src="<%=ctx%>/latex/static/js/preview.js"></script>
 <script src="<%=ctx%>/latex/static/js/compile.js"></script>
 <script src="<%=ctx%>/latex/static/js/ai.js"></script>
+<script src="<%=ctx%>/latex/static/js/image-to-latex.js"></script>
 
 </body>
 </html>
