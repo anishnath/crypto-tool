@@ -29,8 +29,11 @@
     var busy = false;
     var abortCtrl = null;
 
-    var ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/bmp'];
+    var ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'application/pdf'];
     var MAX_SIZE_BYTES = 10 * 1024 * 1024;
+    var MAX_PDF_PAGES = 50;
+    var pdfDoc = null;        // loaded PDF.js document
+    var pdfPageNum = 1;       // selected page number
     var quoteTimer = null;
 
     var QUOTES = [
@@ -231,14 +234,14 @@
             '    <div class="itm-step" id="itm-step-upload">' +
             '      <div class="itm-dropzone" data-action="browse">' +
             '        <div class="itm-dropzone-icon">&#128444;</div>' +
-            '        <div class="itm-dropzone-text">Drop image, paste (Ctrl+V), or <span class="itm-browse">browse</span></div>' +
-            '        <div class="itm-dropzone-hint">Photo of textbook, whiteboard, homework &bull; Max 10MB</div>' +
+            '        <div class="itm-dropzone-text">Drop image or PDF, paste (Ctrl+V), or <span class="itm-browse">browse</span></div>' +
+            '        <div class="itm-dropzone-hint">Photo, screenshot, or PDF of textbook/homework &bull; Max 10MB</div>' +
             '      </div>' +
-            '      <input type="file" class="itm-file-input" accept="image/*" />' +
+            '      <input type="file" class="itm-file-input" accept="image/*,.pdf,application/pdf" />' +
             '      <div class="itm-url-row">' +
             '        <div class="itm-url-divider"><span>or load from URL</span></div>' +
             '        <div class="itm-url-input-row">' +
-            '          <input type="url" class="itm-url-input" placeholder="https://example.com/equation.png" />' +
+            '          <input type="url" class="itm-url-input" placeholder="https://example.com/equation.png or .pdf" />' +
             '          <button class="itm-url-btn" data-action="load-url">Load</button>' +
             '        </div>' +
             '      </div>' +
@@ -249,6 +252,15 @@
             '      </div>' +
             '      <div class="itm-error" style="display:none;"></div>' +
             '      <button class="itm-scan-btn" data-action="scan" disabled>Scan Image</button>' +
+            '    </div>' +
+            // Step 1b: PDF page picker
+            '    <div class="itm-step" id="itm-step-pdf" style="display:none;">' +
+            '      <div class="itm-pdf-header">PDF has <span class="itm-pdf-total">0</span> page(s) &mdash; select one to scan</div>' +
+            '      <div class="itm-pdf-pages"></div>' +
+            '      <div class="itm-pdf-actions">' +
+            '        <button class="itm-btn-primary" data-action="pdf-use-page" disabled>Use Page <span class="itm-pdf-sel-num">1</span></button>' +
+            '        <button class="itm-btn" data-action="back">&#8592; Back</button>' +
+            '      </div>' +
             '    </div>' +
             // Step 2: Processing
             '    <div class="itm-step" id="itm-step-processing" style="display:none;">' +
@@ -285,6 +297,7 @@
         els.error = overlay.querySelector('.itm-error');
         els.scanBtn = overlay.querySelector('[data-action="scan"]');
         els.stepUpload = document.getElementById('itm-step-upload');
+        els.stepPdf = document.getElementById('itm-step-pdf');
         els.stepProcessing = document.getElementById('itm-step-processing');
         els.stepPick = document.getElementById('itm-step-pick');
         els.processingText = overlay.querySelector('.itm-processing-text');
@@ -306,6 +319,7 @@
                 case 'scan': doScan(); break;
                 case 'solve-selected': doSolveSelected(); break;
                 case 'load-url': doLoadUrl(); break;
+                case 'pdf-use-page': doPdfUsePage(); break;
                 case 'back': showStep('upload'); clearImage(); break;
                 case 'select-problem': toggleProblem(target); break;
                 case 'select-all': toggleSelectAll(target); break;
@@ -351,8 +365,17 @@
 
     function handleFile(file) {
         hideError();
-        if (ALLOWED_TYPES.indexOf(file.type) === -1) { showError('Use JPEG, PNG, or WEBP.'); return; }
-        if (file.size > MAX_SIZE_BYTES) { showError('Image too large. Max 10MB.'); return; }
+        if (ALLOWED_TYPES.indexOf(file.type) === -1) {
+            showError('Use JPEG, PNG, WEBP, or PDF.');
+            return;
+        }
+        if (file.size > MAX_SIZE_BYTES) { showError('File too large. Max 10MB.'); return; }
+
+        // PDF → route to page picker
+        if (file.type === 'application/pdf' || (file.name && /\.pdf$/i.test(file.name))) {
+            handlePdf(file);
+            return;
+        }
 
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -369,7 +392,7 @@
     function doLoadUrl() {
         var urlInput = overlay.querySelector('.itm-url-input');
         var url = urlInput ? urlInput.value.trim() : '';
-        if (!url) { showError('Enter an image URL.'); return; }
+        if (!url) { showError('Enter an image or PDF URL.'); return; }
         if (!/^https?:\/\/.+/i.test(url)) { showError('Enter a valid URL starting with http:// or https://'); return; }
 
         hideError();
@@ -377,27 +400,159 @@
         var btn = overlay.querySelector('.itm-url-btn');
         if (btn) { btn.disabled = true; btn.textContent = 'Loading\u2026'; }
 
-        // Fetch image as blob → convert to base64
+        var isPdfUrl = /\.pdf(\?|#|$)/i.test(url);
+
+        // Fetch file as blob → route to image or PDF handler
         fetch(url, { mode: 'cors' })
             .then(function (res) {
-                if (!res.ok) throw new Error('Could not load image (HTTP ' + res.status + ')');
+                if (!res.ok) throw new Error('Could not load file (HTTP ' + res.status + ')');
                 var ct = res.headers.get('content-type') || '';
-                if (ct.indexOf('image') === -1) throw new Error('URL does not point to an image');
+                var isImage = ct.indexOf('image') !== -1;
+                var isPdf = ct.indexOf('pdf') !== -1 || isPdfUrl;
+                if (!isImage && !isPdf) throw new Error('URL does not point to an image or PDF');
                 return res.blob();
             })
             .then(function (blob) {
-                if (blob.size > MAX_SIZE_BYTES) throw new Error('Image too large (' + (blob.size / 1024 / 1024).toFixed(1) + 'MB). Max 10MB.');
-                // Convert blob to File and use existing handleFile
-                var file = new File([blob], 'from-url.png', { type: blob.type || 'image/png' });
+                if (blob.size > MAX_SIZE_BYTES) throw new Error('File too large (' + (blob.size / 1024 / 1024).toFixed(1) + 'MB). Max 10MB.');
+                var ct = blob.type || '';
+                var isPdf = ct.indexOf('pdf') !== -1 || isPdfUrl;
+                var fname = isPdf ? 'from-url.pdf' : 'from-url.png';
+                var ftype = isPdf ? 'application/pdf' : (blob.type || 'image/png');
+                var file = new File([blob], fname, { type: ftype });
                 handleFile(file);
             })
             .catch(function (err) {
-                showError(err.message || 'Failed to load image from URL.');
+                showError(err.message || 'Failed to load from URL.');
             })
             .finally(function () {
                 if (urlInput) urlInput.disabled = false;
                 if (btn) { btn.disabled = false; btn.textContent = 'Load'; }
             });
+    }
+
+    // ═══════════════════════════════════════
+    // PDF HANDLING
+    // ═══════════════════════════════════════
+
+    var PDFJS_CDN = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.min.mjs';
+    var PDFJS_WORKER = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.worker.min.mjs';
+
+    function loadPdfJs(cb) {
+        if (win.pdfjsLib) { cb(); return; }
+        import(PDFJS_CDN).then(function (mod) {
+            win.pdfjsLib = mod;
+            mod.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+            cb();
+        }).catch(function () {
+            showError('Could not load PDF library. Try a different browser.');
+        });
+    }
+
+    function handlePdf(file) {
+        hideError();
+        loadPdfJs(function () {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var typedArray = new Uint8Array(e.target.result);
+                win.pdfjsLib.getDocument({ data: typedArray }).promise
+                    .then(function (doc) {
+                        pdfDoc = doc;
+                        var total = doc.numPages;
+                        if (total > MAX_PDF_PAGES) {
+                            showError('PDF has ' + total + ' pages (max ' + MAX_PDF_PAGES + '). Use a shorter file.');
+                            return;
+                        }
+                        showPdfPagePicker(total, file.name);
+                    })
+                    .catch(function (err) {
+                        showError('Could not read PDF: ' + (err.message || 'unknown error'));
+                    });
+            };
+            reader.onerror = function () { showError('Failed to read PDF.'); };
+            reader.readAsArrayBuffer(file);
+        });
+    }
+
+    function showPdfPagePicker(total, fileName) {
+        showStep('pdf');
+        var totalSpan = overlay.querySelector('.itm-pdf-total');
+        if (totalSpan) totalSpan.textContent = total;
+        pdfPageNum = 1;
+
+        var container = overlay.querySelector('.itm-pdf-pages');
+        container.innerHTML = '';
+
+        // Render page thumbnails
+        for (var i = 1; i <= total; i++) {
+            (function (pageNum) {
+                var card = document.createElement('div');
+                card.className = 'itm-pdf-page' + (pageNum === 1 ? ' selected' : '');
+                card.setAttribute('data-page', pageNum);
+                card.innerHTML =
+                    '<canvas class="itm-pdf-thumb"></canvas>' +
+                    '<div class="itm-pdf-page-num">Page ' + pageNum + '</div>';
+                card.addEventListener('click', function () {
+                    container.querySelectorAll('.itm-pdf-page').forEach(function (el) { el.classList.remove('selected'); });
+                    card.classList.add('selected');
+                    pdfPageNum = pageNum;
+                    var selNum = overlay.querySelector('.itm-pdf-sel-num');
+                    if (selNum) selNum.textContent = pageNum;
+                    var useBtn = overlay.querySelector('[data-action="pdf-use-page"]');
+                    if (useBtn) useBtn.disabled = false;
+                });
+                container.appendChild(card);
+
+                // Render thumbnail
+                pdfDoc.getPage(pageNum).then(function (page) {
+                    var vp = page.getViewport({ scale: 0.4 });
+                    var canvas = card.querySelector('canvas');
+                    canvas.width = vp.width;
+                    canvas.height = vp.height;
+                    page.render({ canvasContext: canvas.getContext('2d'), viewport: vp });
+                });
+            })(i);
+        }
+
+        // Enable button for default selection (page 1)
+        var useBtn = overlay.querySelector('[data-action="pdf-use-page"]');
+        if (useBtn) useBtn.disabled = false;
+        var selNum = overlay.querySelector('.itm-pdf-sel-num');
+        if (selNum) selNum.textContent = '1';
+    }
+
+    function doPdfUsePage() {
+        if (!pdfDoc || !pdfPageNum) return;
+
+        // Show processing while rendering full-res page
+        showStep('processing');
+        els.processingText.textContent = 'Rendering page ' + pdfPageNum + '\u2026';
+
+        pdfDoc.getPage(pdfPageNum).then(function (page) {
+            // Render at 2x for good OCR quality
+            var scale = 2.0;
+            var vp = page.getViewport({ scale: scale });
+            var canvas = document.createElement('canvas');
+            canvas.width = vp.width;
+            canvas.height = vp.height;
+            return page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise.then(function () {
+                return canvas;
+            });
+        }).then(function (canvas) {
+            var dataUrl = canvas.toDataURL('image/png');
+            var base64 = dataUrl.split(',')[1];
+            imageData = {
+                base64: base64,
+                dataUrl: dataUrl,
+                name: 'pdf-page-' + pdfPageNum + '.png',
+                size: Math.round(base64.length * 0.75),
+                type: 'image/png'
+            };
+            // Continue to OCR pipeline
+            doScan();
+        }).catch(function (err) {
+            showStep('upload');
+            showError('Failed to render PDF page: ' + (err.message || 'unknown error'));
+        });
     }
 
     function showPreview() {
@@ -412,6 +567,8 @@
 
     function clearImage() {
         imageData = null;
+        pdfDoc = null;
+        pdfPageNum = 1;
         els.dropzone.style.display = '';
         var urlRow = overlay.querySelector('.itm-url-row');
         if (urlRow) urlRow.style.display = '';
@@ -677,6 +834,7 @@
 
     function showStep(name) {
         els.stepUpload.style.display = name === 'upload' ? '' : 'none';
+        els.stepPdf.style.display = name === 'pdf' ? '' : 'none';
         els.stepProcessing.style.display = name === 'processing' ? '' : 'none';
         els.stepPick.style.display = name === 'pick' ? '' : 'none';
 
