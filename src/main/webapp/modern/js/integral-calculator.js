@@ -923,9 +923,16 @@
 
         // ========== SymPy Fallback via OneCompiler ==========
         function boundToSympy(s) {
-            return (s || '').replace(/\u03c0/g, 'pi').replace(/\u221e/g, 'oo').replace(/\u2212/g, '-')
+            var r = (s || '').replace(/\u03c0/g, 'pi').replace(/\u221e/g, 'oo').replace(/\u2212/g, '-')
                 .replace(/^-?infinity$/i, function(m) { return m.charAt(0) === '-' ? '-oo' : 'oo'; })
                 .replace(/^-?inf$/i, function(m) { return m.charAt(0) === '-' ? '-oo' : 'oo'; });
+            // e^(...) → exp(...), e^x → exp(x), then ^ → **
+            r = r.replace(/e\^(\([^)]+\))/g, 'exp$1')
+                .replace(/e\^([a-zA-Z0-9_]+)/g, 'exp($1)')
+                .replace(/\^/g, '**');
+            // Standalone e (Euler's number) → E for SymPy
+            r = r.replace(/\be\b(?!\s*\()/g, 'E');
+            return r;
         }
 
         function sympyFallback(expr, v) {
@@ -2397,6 +2404,17 @@
 
         // ========== Init ==========
         window.showSteps = doShowSteps;
+
+        // Expose helpers for batch-solve (Image-to-Math)
+        window.IC = {
+            nerdamerToPython: nerdamerToPython,
+            buildSympySymbolsDecl: buildSympySymbolsDecl,
+            boundToSympy: boundToSympy,
+            normalizeExpr: normalizeExpr,
+            exprToLatex: exprToLatex,
+            escapeHtml: escapeHtml
+        };
+
         loadFromUrl();
 
     }());

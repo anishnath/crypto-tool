@@ -696,8 +696,337 @@
                 var intBtn = document.getElementById('ic-integrate-btn');
                 if (intBtn) intBtn.click();
             }, 300);
+        },
+        onSolveAll: function (problems) {
+            batchSolveIntegrals(problems);
         }
     });
+
+    // ═══════════════════════════════════════════════════════════
+    // Batch Solve — solves multiple integrals via SymPy and
+    // displays results in a modal. No UI input required.
+    // ═══════════════════════════════════════════════════════════
+
+    function batchSolveIntegrals(problems) {
+        var ic = window.IC;
+        if (!ic) return;
+
+        // Build the results modal
+        var existing = document.getElementById('itm-results-overlay');
+        if (existing) existing.remove();
+
+        var ov = document.createElement('div');
+        ov.id = 'itm-results-overlay';
+        ov.className = 'itm-results-overlay';
+        ov.innerHTML =
+            '<div class="itm-results-modal">' +
+            '  <div class="itm-results-header">' +
+            '    <span class="itm-results-title">Solving ' + problems.length + ' Problem' + (problems.length > 1 ? 's' : '') + '</span>' +
+            '    <button class="itm-close" id="itm-results-close">&times;</button>' +
+            '  </div>' +
+            '  <div class="itm-results-body" id="itm-results-body"></div>' +
+            '  <div class="itm-results-footer">' +
+            '    <button class="itm-btn" id="itm-results-done">Close</button>' +
+            '  </div>' +
+            '</div>';
+        document.body.appendChild(ov);
+        ov.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        var closeResults = function () {
+            ov.style.display = 'none';
+            document.body.style.overflow = '';
+            ov.remove();
+        };
+        document.getElementById('itm-results-close').addEventListener('click', closeResults);
+        document.getElementById('itm-results-done').addEventListener('click', closeResults);
+        ov.addEventListener('click', function (e) { if (e.target === ov) closeResults(); });
+
+        var body = document.getElementById('itm-results-body');
+
+        // Render cards (all pending)
+        problems.forEach(function (p, i) {
+            var display = p.display || p.latex || p.expr || '';
+            var card = document.createElement('div');
+            card.className = 'itm-result-card';
+            card.id = 'itm-rc-' + i;
+            card.innerHTML =
+                '<div class="itm-result-card-header">' +
+                '  <span class="itm-result-num">' + (i + 1) + '</span>' +
+                '  <span class="itm-result-problem" id="itm-rp-' + i + '">' + ic.escapeHtml(display) + '</span>' +
+                '  <span class="itm-result-status pending" id="itm-rs-' + i + '">Pending</span>' +
+                '</div>' +
+                '<div class="itm-result-card-body" id="itm-rb-' + i + '"></div>';
+            body.appendChild(card);
+
+            // Try KaTeX for the problem display
+            if (window.katex) {
+                try {
+                    katex.render(display, document.getElementById('itm-rp-' + i), { throwOnError: false, displayMode: false });
+                } catch (e) { /* keep text */ }
+            }
+        });
+
+        // Solve sequentially
+        solveNext(problems, 0, ic);
+    }
+
+    function solveNext(problems, idx, ic) {
+        if (idx >= problems.length) return;
+
+        var p = problems[idx];
+        var card = document.getElementById('itm-rc-' + idx);
+        var status = document.getElementById('itm-rs-' + idx);
+        var bodyEl = document.getElementById('itm-rb-' + idx);
+
+        // Mark solving
+        card.className = 'itm-result-card solving';
+        status.className = 'itm-result-status solving';
+        status.textContent = 'Solving...';
+        bodyEl.innerHTML = '<div class="itm-spinner"></div>';
+
+        // Scroll card into view
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        // Convert problem to SymPy
+        var expr = latexToCalcExpr(p.latex || p.expr || '');
+        var v = p.variable || 'x';
+        var isDefinite = p.type === 'definite' && p.lower != null && p.upper != null;
+        var pyExpr = ic.nerdamerToPython(ic.normalizeExpr(expr));
+        var symDecl = ic.buildSympySymbolsDecl(v, pyExpr);
+
+        var code;
+        if (isDefinite) {
+            var a = ic.boundToSympy(latexToCalcExpr(p.lower || '')) || '0';
+            var b = ic.boundToSympy(latexToCalcExpr(p.upper || '')) || '1';
+            code = 'from sympy import *\n' +
+                'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
+                'import json\n' +
+                symDecl + '\n' +
+                'expr = simplify(' + pyExpr + ')\n' +
+                'try:\n' +
+                '    if expr.has(Sum):\n' +
+                '        expr = expr.doit(deep=True)\n' +
+                'except Exception:\n' +
+                '    pass\n' +
+                'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
+                'import signal\n' +
+                'def _timeout(s, f): raise TimeoutError\n' +
+                'signal.signal(signal.SIGALRM, _timeout)\n' +
+                'signal.alarm(10)\n' +
+                'try:\n' +
+                '    antideriv = integrate(expr, ' + v + ')\n' +
+                'except (TimeoutError, Exception):\n' +
+                '    antideriv = Integral(expr, ' + v + ')\n' +
+                'finally:\n' +
+                '    signal.alarm(0)\n' +
+                'if isinstance(antideriv, Integral):\n' +
+                '    result = Integral(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
+                '    print("LATEX:" + latex(result))\n' +
+                '    print("TEXT:" + str(result))\n' +
+                '    print("EXPR:" + latex(expr))\n' +
+                '    print("RULES:" + (str(steps) if steps else ""))\n' +
+                '    print("ANTIDERIV:")\n' +
+                '    try:\n' +
+                '        from scipy.integrate import quad as _quad\n' +
+                '        from math import isfinite as _isf\n' +
+                '        _f = lambdify(' + v + ', expr, "numpy")\n' +
+                '        _val, _err = _quad(_f, float(' + a + '), float(' + b + '), limit=100)\n' +
+                '        if not _isf(_val) or (abs(_val) > 1e-10 and abs(_err/_val) > 0.01):\n' +
+                '            raise ValueError("divergent")\n' +
+                '        print("NUMERIC:" + str(_val))\n' +
+                '    except:\n' +
+                '        print("NUMERIC:NaN")\n' +
+                '    print("STEPS:" + json.dumps([{"title":"Integral","latex":"\\\\int_{' + a + '}^{' + b + '} "+latex(expr)+"\\\\,d' + v + '"},{"title":"No closed-form antiderivative","latex":"\\\\text{Evaluated numerically}"}]))\n' +
+                'else:\n' +
+                '    result = integrate(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
+                '    print("LATEX:" + latex(result))\n' +
+                '    print("TEXT:" + str(result))\n' +
+                '    print("EXPR:" + latex(expr))\n' +
+                '    print("RULES:" + (str(steps) if steps else ""))\n' +
+                '    print("ANTIDERIV:" + latex(antideriv))\n' +
+                '    try:\n' +
+                '        print("NUMERIC:" + str(float(result)))\n' +
+                '    except:\n' +
+                '        print("NUMERIC:NaN")\n' +
+                '    try:\n' +
+                '        var_sym = ' + v + '\n' +
+                '        a_s = sympify("' + a.replace(/"/g, '\\"') + '")\n' +
+                '        b_s = sympify("' + b.replace(/"/g, '\\"') + '")\n' +
+                '        def _ev(bound):\n' +
+                '            if bound == oo: return limit(antideriv, var_sym, oo)\n' +
+                '            if bound == -oo: return limit(antideriv, var_sym, -oo)\n' +
+                '            return antideriv.subs(var_sym, bound)\n' +
+                '        v_u = _ev(b_s); v_l = _ev(a_s)\n' +
+                '        a_tex = "\\\\infty" if a_s == oo else ("-\\\\infty" if a_s == -oo else latex(a_s))\n' +
+                '        b_tex = "\\\\infty" if b_s == oo else ("-\\\\infty" if b_s == -oo else latex(b_s))\n' +
+                '        ev_latex = r"\\left[ " + latex(antideriv) + r" \\right]_{" + a_tex + "}^{" + b_tex + "} = " + latex(v_u) + " - (" + latex(v_l) + ") = " + latex(result)\n' +
+                '        print("STEPS:" + json.dumps([{"title":"Antiderivative","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + ' = "+latex(antideriv)+" + C"},{"title":"Evaluate at bounds","latex":ev_latex}]))\n' +
+                '    except:\n' +
+                '        print("STEPS:" + json.dumps([{"title":"Antiderivative","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + ' = "+latex(antideriv)+" + C"},{"title":"Evaluate at bounds","latex":"\\\\left["+latex(antideriv)+"\\\\right]_{' + a + '}^{' + b + '} = "+latex(result)}]))\n';
+        } else {
+            code = 'from sympy import *\n' +
+                'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
+                'import json\n' +
+                symDecl + '\n' +
+                'expr = simplify(' + pyExpr + ')\n' +
+                'try:\n' +
+                '    if expr.has(Sum):\n' +
+                '        expr = expr.doit(deep=True)\n' +
+                'except Exception:\n' +
+                '    pass\n' +
+                'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
+                'import signal\n' +
+                'def _timeout(s, f): raise TimeoutError\n' +
+                'signal.signal(signal.SIGALRM, _timeout)\n' +
+                'signal.alarm(10)\n' +
+                'try:\n' +
+                '    result = integrate(expr, ' + v + ')\n' +
+                'except (TimeoutError, Exception):\n' +
+                '    result = Integral(expr, ' + v + ')\n' +
+                'finally:\n' +
+                '    signal.alarm(0)\n' +
+                'print("LATEX:" + latex(result))\n' +
+                'print("TEXT:" + str(result))\n' +
+                'print("EXPR:" + latex(expr))\n' +
+                'print("RULES:" + (str(steps) if steps else ""))\n' +
+                '_steps_out = []\n' +
+                'if not isinstance(result, Integral) and not result.has(Integral):\n' +
+                '    if steps and not isinstance(steps, DontKnowRule):\n' +
+                '        def _walk(s, depth=0):\n' +
+                '            name = type(s).__name__\n' +
+                '            if hasattr(s, "context") and hasattr(s, "symbol"):\n' +
+                '                _steps_out.append({"title":name.replace("Rule",""),"latex":"\\\\int "+latex(s.context)+"\\\\,d"+str(s.symbol)})\n' +
+                '            if hasattr(s, "substeps"):\n' +
+                '                if isinstance(s.substeps, (list, tuple)):\n' +
+                '                    for sub in s.substeps:\n' +
+                '                        _walk(sub, depth+1)\n' +
+                '                else:\n' +
+                '                    _walk(s.substeps, depth+1)\n' +
+                '            if hasattr(s, "alternatives"):\n' +
+                '                for alt in s.alternatives:\n' +
+                '                    _walk(alt, depth+1)\n' +
+                '        try:\n' +
+                '            _walk(steps)\n' +
+                '        except:\n' +
+                '            pass\n' +
+                '    _steps_out.append({"title":"Result","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + ' = "+latex(result)+" + C"})\n' +
+                '    print("STEPS:" + json.dumps(_steps_out))\n' +
+                'elif isinstance(result, Integral) or result.has(Integral):\n' +
+                '    _steps_out.append({"title":"Identify the integral","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + '"})\n' +
+                '    _steps_out.append({"title":"Conclusion","latex":"\\\\text{This integral cannot be expressed using elementary functions.}"})\n' +
+                '    print("STEPS:" + json.dumps(_steps_out))\n';
+        }
+
+        fetch((window.INTEGRAL_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ language: 'python', version: '3.10', code: code })
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            var stdout = (data.Stdout || data.stdout || '').trim();
+            var stderr = (data.Stderr || data.stderr || '').trim();
+
+            if (!stdout && stderr) throw new Error(stderr.split('\n').pop() || 'Solver error');
+            if (!stdout) throw new Error('No result from solver');
+
+            var latexMatch = stdout.match(/LATEX:([^\n]*)/);
+            var textMatch = stdout.match(/TEXT:([^\n]*)/);
+            var numericMatch = stdout.match(/NUMERIC:([^\n]*)/);
+            var antiderivMatch = stdout.match(/ANTIDERIV:([^\n]*)/);
+            var stepsMatch = stdout.match(/STEPS:(\[[\s\S]*?\])(?:\n|$)/);
+            var resultTeX = latexMatch ? latexMatch[1].trim() : '';
+            var resultText = textMatch ? textMatch[1].trim() : resultTeX;
+            var antiderivLatex = antiderivMatch ? antiderivMatch[1].trim() : '';
+            var hasNumeric = numericMatch && numericMatch[1].trim() !== 'NaN' && numericMatch[1].trim() !== '';
+
+            // Check for unevaluated Integral — allow through if we have numeric value
+            if (resultTeX.indexOf('Integral') !== -1 && !hasNumeric) {
+                throw new Error('Could not solve this integral');
+            }
+
+            // Build result HTML
+            var html = '';
+            if (isDefinite) {
+                var numVal = numericMatch ? parseFloat(numericMatch[1].trim()) : NaN;
+                html += '<div class="itm-result-integral" id="itm-ri-' + idx + '"></div>';
+                html += '<div class="itm-result-answer" id="itm-ra-' + idx + '"></div>';
+                if (isFinite(numVal)) {
+                    html += '<div style="font-size:0.8125rem;color:var(--text-secondary);margin-top:0.25rem;">&asymp; ' + ic.escapeHtml(numVal.toFixed(6)) + '</div>';
+                }
+            } else {
+                html += '<div class="itm-result-integral" id="itm-ri-' + idx + '"></div>';
+                html += '<div class="itm-result-answer" id="itm-ra-' + idx + '"></div>';
+            }
+
+            // Steps toggle
+            var steps = [];
+            if (stepsMatch) { try { steps = JSON.parse(stepsMatch[1]); } catch (e) {} }
+            if (steps.length) {
+                html += '<button class="itm-result-steps-btn" data-steps-idx="' + idx + '">Show Steps</button>';
+                html += '<div class="itm-result-steps-area" id="itm-rsa-' + idx + '">';
+                steps.forEach(function (s) {
+                    html += '<div class="itm-result-step"><div class="itm-result-step-title">' + ic.escapeHtml(s.title) + '</div><div id="itm-rst-' + idx + '-' + Math.random().toString(36).substr(2, 5) + '" data-step-katex="' + ic.escapeHtml(s.latex).replace(/"/g, '&quot;') + '"></div></div>';
+                });
+                html += '</div>';
+            }
+
+            bodyEl.innerHTML = html;
+
+            // KaTeX render
+            if (window.katex) {
+                var integralEl = document.getElementById('itm-ri-' + idx);
+                var answerEl = document.getElementById('itm-ra-' + idx);
+                if (integralEl) {
+                    try {
+                        var integralTeX = isDefinite
+                            ? '\\int_{' + (latexToCalcExpr(p.lower)||'0') + '}^{' + (latexToCalcExpr(p.upper)||'1') + '} ' + ic.exprToLatex(expr) + ' \\, d' + v
+                            : '\\int ' + ic.exprToLatex(expr) + ' \\, d' + v;
+                        katex.render(integralTeX, integralEl, { throwOnError: false, displayMode: false });
+                    } catch (e) {}
+                }
+                if (answerEl) {
+                    try {
+                        var ansTeX = isDefinite ? resultTeX : resultTeX + ' + C';
+                        katex.render('= ' + ansTeX, answerEl, { throwOnError: false, displayMode: true });
+                    } catch (e) { answerEl.textContent = '= ' + resultText; }
+                }
+                // Render step equations
+                bodyEl.querySelectorAll('[data-step-katex]').forEach(function (el) {
+                    try { katex.render(el.getAttribute('data-step-katex'), el, { throwOnError: false, displayMode: true }); }
+                    catch (e) { el.textContent = el.getAttribute('data-step-katex'); }
+                });
+            }
+
+            // Wire steps toggle
+            var stepsBtn = bodyEl.querySelector('[data-steps-idx="' + idx + '"]');
+            if (stepsBtn) {
+                stepsBtn.addEventListener('click', function () {
+                    var area = document.getElementById('itm-rsa-' + idx);
+                    if (area) {
+                        area.classList.toggle('open');
+                        stepsBtn.textContent = area.classList.contains('open') ? 'Hide Steps' : 'Show Steps';
+                    }
+                });
+            }
+
+            // Mark done
+            card.className = 'itm-result-card solved';
+            status.className = 'itm-result-status done';
+            status.textContent = 'Solved';
+        })
+        .catch(function (err) {
+            card.className = 'itm-result-card error';
+            status.className = 'itm-result-status fail';
+            status.textContent = 'Failed';
+            bodyEl.innerHTML = '<div class="itm-result-error-msg">' + ic.escapeHtml(err.message) + '</div>';
+        })
+        .finally(function () {
+            // Solve next
+            solveNext(problems, idx + 1, ic);
+        });
+    }
 
     /**
      * Convert LaTeX math notation to calculator-accepted expression.

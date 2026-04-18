@@ -706,6 +706,52 @@ testPython('e^(2*x)', 'exp(2*x)', 'e^(2x): ');
 testPython('2x', '2*x', 'implicit mul: ');
 testPython('3x^2', '3*x**2', 'implicit mul with power: ');
 
+// boundToSympy: extract from integral-calculator.js for testing
+console.log('\n--- boundToSympy: bound conversion ---');
+function boundToSympy(s) {
+    var r = (s || '').replace(/\u03c0/g, 'pi').replace(/\u221e/g, 'oo').replace(/\u2212/g, '-')
+        .replace(/^-?infinity$/i, function(m) { return m.charAt(0) === '-' ? '-oo' : 'oo'; })
+        .replace(/^-?inf$/i, function(m) { return m.charAt(0) === '-' ? '-oo' : 'oo'; });
+    r = r.replace(/e\^(\([^)]+\))/g, 'exp$1')
+        .replace(/e\^([a-zA-Z0-9_]+)/g, 'exp($1)')
+        .replace(/\^/g, '**');
+    r = r.replace(/\be\b(?!\s*\()/g, 'E');
+    return r;
+}
+
+function testBound(input, expected, label) {
+    var out = boundToSympy(input);
+    eq(out, expected, (label || '') + 'boundToSympy("' + input + '") → "' + expected + '"');
+}
+
+// Basic values pass through
+testBound('0', '0', 'zero: ');
+testBound('1', '1', 'one: ');
+testBound('pi', 'pi', 'pi: ');
+testBound('-1', '-1', 'negative: ');
+
+// Unicode conversions
+testBound('\u03c0', 'pi', 'unicode pi: ');
+testBound('\u221e', 'oo', 'unicode infinity: ');
+testBound('Infinity', 'oo', 'Infinity: ');
+testBound('-Infinity', '-oo', '-Infinity: ');
+testBound('inf', 'oo', 'inf: ');
+testBound('-inf', '-oo', '-inf: ');
+
+// Euler's number e
+testBound('e', 'E', 'standalone e: ');
+testBound('e^e', 'exp(E)', 'e^e: ');
+testBound('e^2', 'exp(2)', 'e^2: ');
+testBound('e^(2)', 'exp(2)', 'e^(2): ');
+testBound('e^(pi)', 'exp(pi)', 'e^(pi): ');
+
+// Caret conversion
+testBound('2^3', '2**3', '2^3: ');
+testBound('pi^2', 'pi**2', 'pi^2: ');
+
+// Must NOT break exp or other function names containing 'e'
+testBound('exp(1)', 'exp(1)', 'exp(1) unchanged: ');
+
 // Famous integrals: verify input parsing (normalizeExpr → nerdamer parse → eval)
 console.log('\n--- Famous integrals: input parsing ---');
 function testParsable(name, raw, testX, expectApprox, tol) {
