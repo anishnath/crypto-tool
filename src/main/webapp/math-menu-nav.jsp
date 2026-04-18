@@ -301,7 +301,7 @@
               <i class="fas fa-spiral text-purple"></i> Prime Spiral (Ulam)
             </a>
             <a class="dropdown-item" href="fibonacci-spiral.jsp">
-              <i class="fas fa-wave-square text-purple"></i> Fibonacci Spiral
+              <i class="fas fa-wave-square text-purple"></i> Fibonacci Spiral Generator
             </a>
             <a class="dropdown-item" href="binary-card-trick.jsp">
               <i class="fas fa-cards text-purple"></i> Binary Card Trick
