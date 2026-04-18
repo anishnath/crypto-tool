@@ -50,6 +50,38 @@
         { text: 'Imagination is more important than knowledge.', author: 'Albert Einstein' },
         { text: 'An equation means nothing to me unless it expresses a thought of God.', author: 'Srinivasa Ramanujan' },
         { text: 'No great discovery was ever made without a bold guess.', author: 'Isaac Newton' },
+        { text: 'A mathematician is a device for turning coffee into theorems.', author: 'Alfr\u00e9d R\u00e9nyi' },
+        { text: 'Nature is written in mathematical language.', author: 'Galileo Galilei' },
+        { text: 'In mathematics you don\'t understand things. You just get used to them.', author: 'John von Neumann' },
+        { text: 'The miracle of the appropriateness of the language of mathematics for the formulation of the laws of physics is a wonderful gift.', author: 'Eugene Wigner' },
+        { text: 'Mathematics compares the most diverse phenomena and discovers the secret analogies that unite them.', author: 'Joseph Fourier' },
+        { text: 'It is impossible to be a mathematician without being a poet in soul.', author: 'Sofia Kovalevskaya' },
+        { text: 'The art of doing mathematics consists in finding that special case which contains all the germs of generality.', author: 'David Hilbert' },
+        { text: 'There is no branch of mathematics, however abstract, which may not someday be applied to the real world.', author: 'Nikolai Lobachevsky' },
+        { text: 'Mathematics knows no races or geographic boundaries; for mathematics, the cultural world is one country.', author: 'David Hilbert' },
+        { text: 'Life is good for only two things: discovering mathematics and teaching mathematics.', author: 'Sim\u00e9on Poisson' },
+        { text: 'The integers were made by God; all else is the work of man.', author: 'Leopold Kronecker' },
+        { text: 'One can measure the importance of a scientific work by the number of earlier publications rendered superfluous by it.', author: 'David Hilbert' },
+        { text: 'Since the mathematicians have invaded the theory of relativity, I do not understand it myself anymore.', author: 'Albert Einstein' },
+        { text: 'Mathematics is not about numbers, equations, computations, or algorithms: it is about understanding.', author: 'William Paul Thurston' },
+        { text: 'Young man, in mathematics you don\'t understand things. You just get used to them.', author: 'John von Neumann' },
+        // Physics & Science
+        { text: 'If I have seen further it is by standing on the shoulders of giants.', author: 'Isaac Newton' },
+        { text: 'The important thing in science is not so much to obtain new facts as to discover new ways of thinking about them.', author: 'William Lawrence Bragg' },
+        { text: 'Equipped with his five senses, man explores the universe around him and calls the adventure Science.', author: 'Edwin Hubble' },
+        { text: 'Nothing in life is to be feared, it is only to be understood.', author: 'Marie Curie' },
+        { text: 'I was taught that the way of progress is neither swift nor easy.', author: 'Marie Curie' },
+        { text: 'Two things are infinite: the universe and human stupidity; and I\'m not sure about the universe.', author: 'Albert Einstein' },
+        { text: 'We cannot solve our problems with the same thinking we used when we created them.', author: 'Albert Einstein' },
+        { text: 'Science is a way of thinking much more than it is a body of knowledge.', author: 'Carl Sagan' },
+        { text: 'Somewhere, something incredible is waiting to be known.', author: 'Carl Sagan' },
+        { text: 'The good thing about science is that it\'s true whether or not you believe in it.', author: 'Neil deGrasse Tyson' },
+        { text: 'Not only is the universe stranger than we imagine, it is stranger than we can imagine.', author: 'Sir Arthur Eddington' },
+        { text: 'Research is what I\'m doing when I don\'t know what I\'m doing.', author: 'Wernher von Braun' },
+        { text: 'The saddest aspect of life right now is that science gathers knowledge faster than society gathers wisdom.', author: 'Isaac Asimov' },
+        { text: 'An experiment is a question which science poses to Nature, and a measurement is the recording of Nature\'s answer.', author: 'Max Planck' },
+        { text: 'Science is organized knowledge. Wisdom is organized life.', author: 'Immanuel Kant' },
+        { text: 'The universe is under no obligation to make sense to you.', author: 'Neil deGrasse Tyson' },
         // Motivational
         { text: 'The expert in anything was once a beginner.', author: 'Helen Hayes' },
         { text: 'It always seems impossible until it\'s done.', author: 'Nelson Mandela' },
@@ -66,7 +98,22 @@
         { text: 'I have not failed. I\'ve just found 10,000 ways that won\'t work.', author: 'Thomas Edison' },
         { text: 'The important thing is not to stop questioning.', author: 'Albert Einstein' },
         { text: 'Every problem is a gift. Without problems we would not grow.', author: 'Tony Robbins' },
-        // Famous figures
+        { text: 'What one man calls God, another calls the laws of physics.', author: 'Nikola Tesla' },
+        { text: 'The present is theirs; the future, for which I really worked, is mine.', author: 'Nikola Tesla' },
+        { text: 'Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.', author: 'Thomas Edison' },
+        { text: 'It does not matter how slowly you go as long as you do not stop.', author: 'Confucius' },
+        { text: 'Start where you are. Use what you have. Do what you can.', author: 'Arthur Ashe' },
+        { text: 'Whether you think you can, or you think you can\'t \u2014 you\'re right.', author: 'Henry Ford' },
+        { text: 'You don\'t have to be great to start, but you have to start to be great.', author: 'Zig Ziglar' },
+        { text: 'The only way to do great work is to love what you do.', author: 'Steve Jobs' },
+        { text: 'Dream big and dare to fail.', author: 'Norman Vaughan' },
+        { text: 'A person who never made a mistake never tried anything new.', author: 'Albert Einstein' },
+        { text: 'The harder you work, the luckier you get.', author: 'Gary Player' },
+        { text: 'Believe you can and you\'re halfway there.', author: 'Theodore Roosevelt' },
+        { text: 'The best time to plant a tree was 20 years ago. The second best time is now.', author: 'Chinese Proverb' },
+        { text: 'Do what you can, with what you have, where you are.', author: 'Theodore Roosevelt' },
+        { text: 'Everything you\'ve ever wanted is on the other side of fear.', author: 'George Addair' },
+        // Famous figures & Philosophy
         { text: 'I think, therefore I am.', author: 'Ren\u00e9 Descartes' },
         { text: 'The unexamined life is not worth living.', author: 'Socrates' },
         { text: 'Knowledge is power.', author: 'Francis Bacon' },
@@ -74,13 +121,36 @@
         { text: 'Simplicity is the ultimate sophistication.', author: 'Leonardo da Vinci' },
         { text: 'Logic will get you from A to B. Imagination will take you everywhere.', author: 'Albert Einstein' },
         { text: 'Live as if you were to die tomorrow. Learn as if you were to live forever.', author: 'Mahatma Gandhi' },
-        { text: 'The only true wisdom is in knowing you know nothing.', author: 'Socrates' },
         { text: 'If you can dream it, you can do it.', author: 'Walt Disney' },
         { text: 'Be the change you wish to see in the world.', author: 'Mahatma Gandhi' },
         { text: 'Strive not to be a success, but rather to be of value.', author: 'Albert Einstein' },
         { text: 'The only limit to our realization of tomorrow is our doubts of today.', author: 'Franklin D. Roosevelt' },
         { text: 'Curiosity is the wick in the candle of learning.', author: 'William Arthur Ward' },
         { text: 'Tell me and I forget. Teach me and I remember. Involve me and I learn.', author: 'Benjamin Franklin' },
+        { text: 'An investment in knowledge pays the best interest.', author: 'Benjamin Franklin' },
+        { text: 'The only thing we have to fear is fear itself.', author: 'Franklin D. Roosevelt' },
+        { text: 'Knowing is not enough; we must apply. Willing is not enough; we must do.', author: 'Johann Wolfgang von Goethe' },
+        { text: 'There is nothing permanent except change.', author: 'Heraclitus' },
+        { text: 'The only true wisdom is in knowing you know nothing.', author: 'Socrates' },
+        { text: 'Happiness is not something readymade. It comes from your own actions.', author: 'Dalai Lama' },
+        { text: 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.', author: 'Aristotle' },
+        { text: 'The journey of a thousand miles begins with one step.', author: 'Lao Tzu' },
+        { text: 'He who has a why to live can bear almost any how.', author: 'Friedrich Nietzsche' },
+        { text: 'Knowing yourself is the beginning of all wisdom.', author: 'Aristotle' },
+        { text: 'The measure of intelligence is the ability to change.', author: 'Albert Einstein' },
+        { text: 'To improve is to change; to be perfect is to change often.', author: 'Winston Churchill' },
+        { text: 'Turn your wounds into wisdom.', author: 'Oprah Winfrey' },
+        // Technology & Innovation
+        { text: 'The science of today is the technology of tomorrow.', author: 'Edward Teller' },
+        { text: 'Innovation distinguishes between a leader and a follower.', author: 'Steve Jobs' },
+        { text: 'Any sufficiently advanced technology is indistinguishable from magic.', author: 'Arthur C. Clarke' },
+        { text: 'The computer was born to solve problems that did not exist before.', author: 'Bill Gates' },
+        { text: 'First, solve the problem. Then, write the code.', author: 'John Johnson' },
+        { text: 'Programs must be written for people to read, and only incidentally for machines to execute.', author: 'Harold Abelson' },
+        { text: 'Measuring programming progress by lines of code is like measuring aircraft building progress by weight.', author: 'Bill Gates' },
+        { text: 'Simplicity is prerequisite for reliability.', author: 'Edsger W. Dijkstra' },
+        { text: 'The most dangerous phrase in the language is: We\'ve always done it this way.', author: 'Grace Hopper' },
+        { text: 'The advance of technology is based on making it fit in so that you don\'t really even notice it, so it\'s part of everyday life.', author: 'Bill Gates' },
         // Sports legends
         { text: 'I\'ve missed more than 9000 shots in my career. I\'ve failed over and over again. And that is why I succeed.', author: 'Michael Jordan' },
         { text: 'It\'s not whether you get knocked down, it\'s whether you get up.', author: 'Vince Lombardi' },
@@ -96,8 +166,24 @@
         { text: 'Persistence can change failure into extraordinary achievement.', author: 'Marv Levy' },
         { text: 'The man who has no imagination has no wings.', author: 'Muhammad Ali' },
         { text: 'If you aren\'t going all the way, why go at all?', author: 'Joe Namath' },
-        { text: 'Age is no barrier. It\'s a limitation you put on your mind.', author: 'Jackie Joyner-Kersee' }
+        { text: 'Age is no barrier. It\'s a limitation you put on your mind.', author: 'Jackie Joyner-Kersee' },
+        { text: 'Gold medals aren\'t really made of gold. They\'re made of sweat, determination, and a hard-to-find alloy called guts.', author: 'Dan Gable' },
+        { text: 'The principle is competing against yourself. It\'s about self-improvement, about being better than you were the day before.', author: 'Steve Young' },
+        { text: 'Never give up! Failure and rejection are only the first step to succeeding.', author: 'Jim Valvano' },
+        { text: 'Set your goals high, and don\'t stop till you get there.', author: 'Bo Jackson' },
+        { text: 'There may be people that have more talent than you, but there\'s no excuse for anyone to work harder than you do.', author: 'Derek Jeter' },
+        { text: 'Obstacles don\'t have to stop you. If you run into a wall, don\'t turn around. Figure out how to climb it.', author: 'Michael Jordan' },
+        { text: 'I\'ve always believed that if you put in the work, the results will come.', author: 'Michael Jordan' },
+        { text: 'The difference between the impossible and the possible lies in a person\'s determination.', author: 'Tommy Lasorda' },
+        { text: 'Winning isn\'t everything, but wanting to win is.', author: 'Vince Lombardi' },
+        { text: 'It\'s hard to beat a person who never gives up.', author: 'Babe Ruth' },
+        { text: 'The five S\'s of sports training: stamina, speed, strength, skill, and spirit. But the greatest of these is spirit.', author: 'Ken Doherty' },
+        { text: 'Pain is temporary. Quitting lasts forever.', author: 'Lance Armstrong' },
+        { text: 'You can\'t put a limit on anything. The more you dream, the farther you get.', author: 'Michael Phelps' },
+        { text: 'I became a good pitcher when I stopped trying to make them miss the ball and started trying to make them hit it.', author: 'Sandy Koufax' },
+        { text: 'A champion is someone who gets up when they can\'t.', author: 'Jack Dempsey' }
     ];
+    var quotePool = [];   // shuffled deck for no-repeat cycling
 
     // ═══════════════════════════════════════
     // INIT
@@ -178,9 +264,10 @@
             // Step 3: Pick problem
             '    <div class="itm-step" id="itm-step-pick" style="display:none;">' +
             '      <div class="itm-pick-header">Found <span class="itm-pick-count"></span> problem(s) in image</div>' +
+            '      <label class="itm-select-all"><input type="checkbox" data-action="select-all" checked /> Select All</label>' +
             '      <div class="itm-pick-list"></div>' +
             '      <div class="itm-pick-actions">' +
-            '        <button class="itm-btn-primary" data-action="solve-selected" disabled>Solve</button>' +
+            '        <button class="itm-btn-primary" data-action="solve-selected">Solve All (<span class="itm-solve-count">0</span>)</button>' +
             '        <button class="itm-btn" data-action="back">&#8592; Scan Another</button>' +
             '      </div>' +
             '    </div>' +
@@ -221,6 +308,7 @@
                 case 'load-url': doLoadUrl(); break;
                 case 'back': showStep('upload'); clearImage(); break;
                 case 'select-problem': toggleProblem(target); break;
+                case 'select-all': toggleSelectAll(target); break;
             }
         });
 
@@ -333,6 +421,53 @@
     }
 
     // ═══════════════════════════════════════
+    // OCR CONTENT VALIDATION
+    // ═══════════════════════════════════════
+
+    /**
+     * Check if OCR output contains math-related content worth sending to AI.
+     * Saves an AI call if the image is random/blank/non-math.
+     */
+    function validateOcrContent(text) {
+        if (!text || !text.trim()) {
+            return { ok: false, error: 'No text found in image. Try a clearer photo.' };
+        }
+
+        var s = text.trim();
+
+        // Too short — likely noise or single word
+        if (s.length < 5) {
+            return { ok: false, error: 'Image contains too little text. Try a clearer photo with a math problem.' };
+        }
+
+        // Check for math indicators: numbers, operators, math symbols, LaTeX commands, function names
+        var hasMathSymbols = /[0-9+\-*/=^()∫∑∏√π∞±÷×≤≥≠≈∂∇∈∉⊂⊃∪∩]/.test(s);
+        var hasLatexCommands = /\\(?:frac|int|sum|sqrt|sin|cos|tan|log|ln|lim|partial|begin|end|alpha|beta|gamma|theta|pi|infty|cdot|times|left|right)/.test(s);
+        var hasMathFunctions = /\b(?:sin|cos|tan|cot|sec|csc|log|ln|exp|sqrt|lim|max|min|arcsin|arccos|arctan|sinh|cosh|tanh)\b/i.test(s);
+        var hasMathWords = /\b(?:integral|integrate|derivative|differentiate|solve|evaluate|calculate|compute|find|prove|equation|function|limit|sum|series|matrix|determinant|vector|polynomial|factor|simplify)\b/i.test(s);
+        var hasVariables = /\b[xyz]\b/.test(s) || /\bd[xyz]\b/.test(s);
+        var hasEquation = /[=<>]/.test(s) && /[0-9a-zA-Z]/.test(s);
+
+        var mathScore = 0;
+        if (hasMathSymbols) mathScore += 2;
+        if (hasLatexCommands) mathScore += 3;
+        if (hasMathFunctions) mathScore += 2;
+        if (hasMathWords) mathScore += 2;
+        if (hasVariables) mathScore += 1;
+        if (hasEquation) mathScore += 1;
+
+        if (mathScore === 0) {
+            return { ok: false, error: 'No math content detected in image. Please upload a photo of a math problem, equation, or formula.' };
+        }
+
+        if (mathScore < 2 && s.length < 20) {
+            return { ok: false, error: 'Image doesn\'t appear to contain a math problem. Try a photo with equations or formulas.' };
+        }
+
+        return { ok: true };
+    }
+
+    // ═══════════════════════════════════════
     // TWO-STEP PIPELINE
     // ═══════════════════════════════════════
 
@@ -358,7 +493,10 @@
         })
         .then(function (data) {
             var ocrText = data.response || '';
-            if (!ocrText.trim()) throw new Error('No text found in image.');
+
+            // ── Validate OCR output before calling AI ──
+            var validation = validateOcrContent(ocrText);
+            if (!validation.ok) throw new Error(validation.error);
 
             els.processingText.textContent = 'Extracting problems\u2026';
 
@@ -418,6 +556,10 @@
         showStep('pick');
         els.pickCount.textContent = problems.length;
 
+        // Check "select all" by default
+        var selectAllCb = overlay.querySelector('[data-action="select-all"]');
+        if (selectAllCb) selectAllCb.checked = true;
+
         var html = '';
         problems.forEach(function (p, i) {
             var display = p.display || p.latex || p.expr || '(unknown)';
@@ -425,13 +567,12 @@
             if (p.type) meta.push(p.type);
             if (p.lower != null && p.upper != null) meta.push('from ' + p.lower + ' to ' + p.upper);
             if (p.variable && p.variable !== 'x') meta.push('var: ' + p.variable);
-            // Show the raw latex/expr as code hint
             var exprHint = p.latex || p.expr || '';
 
             html +=
-                '<div class="itm-problem" data-action="select-problem" data-idx="' + i + '">' +
+                '<div class="itm-problem selected" data-action="select-problem" data-idx="' + i + '">' +
                 '  <div class="itm-problem-check">' +
-                '    <input type="radio" name="itm-problem-select" class="itm-problem-cb" data-idx="' + i + '"' + (i === 0 ? ' checked' : '') + ' />' +
+                '    <input type="checkbox" class="itm-problem-cb" data-idx="' + i + '" checked />' +
                 '  </div>' +
                 '  <div class="itm-problem-content">' +
                 '    <div class="itm-problem-display" data-katex="' + escAttr(display) + '">' + escHtml(display) + '</div>' +
@@ -456,30 +597,78 @@
 
     function toggleProblem(target) {
         var idx = target.getAttribute('data-idx');
-        var radio = overlay.querySelector('.itm-problem-cb[data-idx="' + idx + '"]');
-        if (radio) {
-            radio.checked = true;
-            // Update selected styling
-            overlay.querySelectorAll('.itm-problem').forEach(function (el) {
-                el.classList.remove('selected');
-            });
-            target.classList.add('selected');
+        var cb = overlay.querySelector('.itm-problem-cb[data-idx="' + idx + '"]');
+        if (cb) {
+            cb.checked = !cb.checked;
+            target.classList.toggle('selected', cb.checked);
         }
+        syncSelectAll();
         updateSolveBtn();
     }
 
+    function toggleSelectAll(target) {
+        var checked = target.checked !== undefined ? target.checked : target.querySelector('input').checked;
+        overlay.querySelectorAll('.itm-problem-cb').forEach(function (cb) {
+            cb.checked = checked;
+            var card = cb.closest('.itm-problem');
+            if (card) card.classList.toggle('selected', checked);
+        });
+        updateSolveBtn();
+    }
+
+    function syncSelectAll() {
+        var all = overlay.querySelectorAll('.itm-problem-cb');
+        var checkedCount = overlay.querySelectorAll('.itm-problem-cb:checked').length;
+        var selectAllCb = overlay.querySelector('[data-action="select-all"]');
+        if (selectAllCb) {
+            selectAllCb.checked = checkedCount === all.length;
+            selectAllCb.indeterminate = checkedCount > 0 && checkedCount < all.length;
+        }
+    }
+
     function updateSolveBtn() {
-        var checked = overlay.querySelector('.itm-problem-cb:checked');
+        var checkedCbs = overlay.querySelectorAll('.itm-problem-cb:checked');
         var btn = overlay.querySelector('[data-action="solve-selected"]');
-        if (btn) btn.disabled = !checked;
+        var countSpan = overlay.querySelector('.itm-solve-count');
+        if (countSpan) countSpan.textContent = checkedCbs.length;
+        if (btn) {
+            btn.disabled = checkedCbs.length === 0;
+            // Update button label
+            btn.innerHTML = checkedCbs.length <= 1
+                ? 'Solve' + (checkedCbs.length ? '' : '')
+                : 'Solve All (<span class="itm-solve-count">' + checkedCbs.length + '</span>)';
+        }
+    }
+
+    function getSelectedProblems() {
+        var selected = [];
+        overlay.querySelectorAll('.itm-problem-cb:checked').forEach(function (cb) {
+            var idx = parseInt(cb.getAttribute('data-idx'));
+            if (problems[idx]) selected.push(problems[idx]);
+        });
+        return selected;
     }
 
     function doSolveSelected() {
-        var checked = overlay.querySelector('.itm-problem-cb:checked');
-        if (!checked) return;
-        var idx = parseInt(checked.getAttribute('data-idx'));
-        if (problems[idx]) config.onSelect(problems[idx]);
-        close();
+        var selected = getSelectedProblems();
+        if (selected.length === 0) return;
+
+        // Single problem — use original onSelect (fills main UI)
+        if (selected.length === 1 && !config.onSolveAll) {
+            config.onSelect(selected[0]);
+            close();
+            return;
+        }
+
+        // Multiple problems — use batch solve
+        if (config.onSolveAll) {
+            close();
+            config.onSolveAll(selected);
+        } else {
+            // Fallback: just use first
+            config.onSelect(selected[0]);
+            close();
+        }
     }
 
     // ═══════════════════════════════════════
@@ -499,16 +688,28 @@
     }
 
     function startQuotes() {
-        showRandomQuote();
-        quoteTimer = setInterval(showRandomQuote, 6000);
+        showNextQuote();
+        quoteTimer = setInterval(showNextQuote, 6000);
     }
 
     function stopQuotes() {
         if (quoteTimer) { clearInterval(quoteTimer); quoteTimer = null; }
     }
 
-    function showRandomQuote() {
-        var q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+    /** Fisher-Yates shuffle — cycles through all quotes before repeating any. */
+    function shuffleQuotes() {
+        quotePool = QUOTES.slice();
+        for (var i = quotePool.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = quotePool[i];
+            quotePool[i] = quotePool[j];
+            quotePool[j] = tmp;
+        }
+    }
+
+    function showNextQuote() {
+        if (quotePool.length === 0) shuffleQuotes();
+        var q = quotePool.pop();
         var textEl = overlay.querySelector('.itm-quote-text');
         var authorEl = overlay.querySelector('.itm-quote-author');
         if (textEl && authorEl) {

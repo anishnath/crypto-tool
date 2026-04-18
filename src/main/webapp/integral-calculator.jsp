@@ -31,15 +31,15 @@
     <!-- SEO (competitive targeting: integral-calculator.com #1, Symbolab, Wolfram, Mathway) -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Free Integral Calculator With Steps" />
-        <jsp:param name="toolDescription" value="Free integral calculator with step-by-step solutions and 1,000+ practice worksheet problems. Solve indefinite &amp; definite integrals instantly. Power rule, u-substitution, integration by parts, partial fractions, trig substitution. AI explanations, interactive graph, PDF &amp; LaTeX export. Generate printable integration worksheets with answer keys for exam prep. No signup." />
+        <jsp:param name="toolDescription" value="Free integral calculator with step-by-step solutions. Snap a photo of your homework or type any integral &mdash; get the answer with every step explained. Power rule, u-sub, by parts, partial fractions, trig sub. Interactive graph, PDF &amp; LaTeX export, 1,000+ practice worksheets. No signup." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="integral-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="integral calculator, integral calculator with steps, definite integral calculator, antiderivative calculator, indefinite integral calculator, integration by parts calculator, symbolic integration, solve integrals online free, calculus calculator with steps, u substitution calculator, trig integral calculator, download integral solution pdf, integral worksheet, integration practice problems, integral practice problems with solutions, integration worksheet with answers, calculus integration worksheet, u-substitution practice, integration by parts worksheet, partial fractions practice, trig substitution worksheet, AP calculus integral practice, integral quiz generator, definite integral practice, indefinite integral worksheet, power rule integration practice, improper integral calculator, double integral calculator, area under curve calculator, fundamental theorem of calculus calculator" />
+        <jsp:param name="toolKeywords" value="integral calculator, integral calculator with steps, definite integral calculator, antiderivative calculator, indefinite integral calculator, integration by parts calculator, symbolic integration, solve integrals online free, calculus calculator with steps, u substitution calculator, trig integral calculator, download integral solution pdf, integral worksheet, integration practice problems, integral practice problems with solutions, integration worksheet with answers, calculus integration worksheet, u-substitution practice, integration by parts worksheet, partial fractions practice, trig substitution worksheet, AP calculus integral practice, integral quiz generator, definite integral practice, indefinite integral worksheet, power rule integration practice, improper integral calculator, double integral calculator, area under curve calculator, fundamental theorem of calculus calculator, photo integral solver, scan math homework, image to math, math photo solver, OCR integral calculator, snap photo integral, homework scanner math, screenshot to integral, picture to equation solver" />
         <jsp:param name="educationalLevel" value="High School, AP Calculus, College, University, Graduate" />
         <jsp:param name="teaches" value="Calculus, integration, antiderivatives, definite integrals, indefinite integrals, power rule, u-substitution, integration by parts, partial fractions, trigonometric substitution, improper integrals, area under curves, Fundamental Theorem of Calculus, numerical integration, Riemann sums, exponential integrals, logarithmic integrals, hyperbolic integrals" />
         <jsp:param name="howToSteps" value="Enter your function|Type your integral using math notation (e.g. sin(x), x^2, e^x) in the function input field,Select indefinite or definite mode|Toggle between indefinite (antiderivative) and definite (with bounds) integral,Click Integrate|Click the Integrate button to compute the result,View steps &amp; result|See the symbolic answer, step-by-step solution with AI explanations, and interactive graph" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Step-by-step solutions with AI explanations,Indefinite and definite integral evaluation,Live LaTeX math preview as you type,Interactive Plotly graph with shaded area,AI-powered detailed solution steps,Download result as PDF,Polynomials and rational functions,Trigonometric and hyperbolic integration,Exponential and logarithmic functions,Integration by parts and substitution,U-substitution with automatic detection,Partial fractions decomposition,Trig substitution solver,Copy LaTeX or plain text output,Share results via URL,Built-in Python compiler,1000+ integration practice worksheet problems,Printable worksheet with answer key,Filter by question type and 4 difficulty levels,Dark mode support,Free and no signup required" />
+        <jsp:param name="toolFeatures" value="Scan a photo or screenshot to solve integrals instantly,Batch solve multiple problems from one image,Step-by-step solutions with AI explanations,Indefinite and definite integral evaluation,Live LaTeX math preview as you type,Interactive Plotly graph with shaded area,AI-powered detailed solution steps,Download result as PDF,Polynomials and rational functions,Trigonometric and hyperbolic integration,Exponential and logarithmic functions,Integration by parts and substitution,U-substitution with automatic detection,Partial fractions decomposition,Trig substitution solver,Copy LaTeX or plain text output,Share results via URL,Built-in Python compiler,1000+ integration practice worksheet problems,Printable worksheet with answer key,Filter by question type and 4 difficulty levels,Dark mode support,Free and no signup required" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="Does this integral calculator have a printable practice worksheet?" />
         <jsp:param name="faq1a" value="Yes. Click the Print Worksheet button to open a bank of 1,000+ integration practice problems with full answer keys. Problems are organized by type (power rule, u-substitution, integration by parts, partial fractions, trig substitution, definite integrals) and four difficulty levels (basic, medium, hard, scholar). You can filter, print, or work through them on screen. New problems are generated with step-by-step solutions, perfect for AP Calculus, college calculus, or self-study." />
@@ -115,7 +115,7 @@
 <section class="tool-description-section">
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <p>Solve indefinite and definite integrals with <strong>detailed step-by-step solutions</strong>. Supports polynomials, trig, exponential, logarithmic, hyperbolic, and rational functions. Includes <strong>AI-powered explanations</strong>, interactive graph, <strong>PDF download</strong>, LaTeX export, and a built-in Python compiler. Free, instant, no signup.</p>
+            <p>Stuck on an integral? Type it in or <strong>snap a photo of your homework</strong> &mdash; get the full solution with every step explained: power rule, u-substitution, integration by parts, partial fractions, and more. Works for polynomials, trig, exponential, log, and hyperbolic functions. <strong>Graph the result</strong>, export to LaTeX or PDF, and verify in the built-in Python sandbox. Free, instant, no signup.</p>
         </div>
     </div>
 </section>
@@ -799,9 +799,7 @@
         if (isDefinite) {
             var a = ic.boundToSympy(latexToCalcExpr(p.lower || '')) || '0';
             var b = ic.boundToSympy(latexToCalcExpr(p.upper || '')) || '1';
-            code = 'from sympy import *\n' +
-                'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
-                'import json\n' +
+            code = ic.buildR2sPreamble(false) +
                 symDecl + '\n' +
                 'expr = simplify(' + pyExpr + ')\n' +
                 'try:\n' +
@@ -809,7 +807,7 @@
                 '        expr = expr.doit(deep=True)\n' +
                 'except Exception:\n' +
                 '    pass\n' +
-                'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
+                'try:\n    _s_obj = integral_steps(expr, ' + v + ')\nexcept:\n    _s_obj = None\n' +
                 'import signal\n' +
                 'def _timeout(s, f): raise TimeoutError\n' +
                 'signal.signal(signal.SIGALRM, _timeout)\n' +
@@ -824,8 +822,6 @@
                 '    result = Integral(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
                 '    print("LATEX:" + latex(result))\n' +
                 '    print("TEXT:" + str(result))\n' +
-                '    print("EXPR:" + latex(expr))\n' +
-                '    print("RULES:" + (str(steps) if steps else ""))\n' +
                 '    print("ANTIDERIV:")\n' +
                 '    try:\n' +
                 '        from scipy.integrate import quad as _quad\n' +
@@ -842,13 +838,16 @@
                 '    result = integrate(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
                 '    print("LATEX:" + latex(result))\n' +
                 '    print("TEXT:" + str(result))\n' +
-                '    print("EXPR:" + latex(expr))\n' +
-                '    print("RULES:" + (str(steps) if steps else ""))\n' +
                 '    print("ANTIDERIV:" + latex(antideriv))\n' +
                 '    try:\n' +
                 '        print("NUMERIC:" + str(float(result)))\n' +
                 '    except:\n' +
                 '        print("NUMERIC:NaN")\n' +
+                '    st = []\n' +
+                '    if _s_obj and not isinstance(_s_obj, DontKnowRule):\n' +
+                '        st = r2s(_s_obj, ' + v + ')\n' +
+                '    if not st:\n' +
+                '        st.append({"title":"Antiderivative","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + ' = "+latex(antideriv)+" + C"})\n' +
                 '    try:\n' +
                 '        var_sym = ' + v + '\n' +
                 '        a_s = sympify("' + a.replace(/"/g, '\\"') + '")\n' +
@@ -861,13 +860,12 @@
                 '        a_tex = "\\\\infty" if a_s == oo else ("-\\\\infty" if a_s == -oo else latex(a_s))\n' +
                 '        b_tex = "\\\\infty" if b_s == oo else ("-\\\\infty" if b_s == -oo else latex(b_s))\n' +
                 '        ev_latex = r"\\left[ " + latex(antideriv) + r" \\right]_{" + a_tex + "}^{" + b_tex + "} = " + latex(v_u) + " - (" + latex(v_l) + ") = " + latex(result)\n' +
-                '        print("STEPS:" + json.dumps([{"title":"Antiderivative","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + ' = "+latex(antideriv)+" + C"},{"title":"Evaluate at bounds","latex":ev_latex}]))\n' +
+                '        st.append({"title":"Evaluate at bounds","latex":ev_latex})\n' +
                 '    except:\n' +
-                '        print("STEPS:" + json.dumps([{"title":"Antiderivative","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + ' = "+latex(antideriv)+" + C"},{"title":"Evaluate at bounds","latex":"\\\\left["+latex(antideriv)+"\\\\right]_{' + a + '}^{' + b + '} = "+latex(result)}]))\n';
+                '        st.append({"title":"Evaluate at bounds","latex":"\\\\left["+latex(antideriv)+"\\\\right]_{' + a + '}^{' + b + '} = "+latex(result)})\n' +
+                '    print("STEPS:" + json.dumps(st))\n';
         } else {
-            code = 'from sympy import *\n' +
-                'from sympy.integrals.manualintegrate import integral_steps, DontKnowRule\n' +
-                'import json\n' +
+            code = ic.buildR2sPreamble(true) +
                 symDecl + '\n' +
                 'expr = simplify(' + pyExpr + ')\n' +
                 'try:\n' +
@@ -875,7 +873,7 @@
                 '        expr = expr.doit(deep=True)\n' +
                 'except Exception:\n' +
                 '    pass\n' +
-                'try:\n    steps = integral_steps(expr, ' + v + ')\nexcept:\n    steps = None\n' +
+                'try:\n    _s_obj = integral_steps(expr, ' + v + ')\nexcept:\n    _s_obj = None\n' +
                 'import signal\n' +
                 'def _timeout(s, f): raise TimeoutError\n' +
                 'signal.signal(signal.SIGALRM, _timeout)\n' +
@@ -888,34 +886,16 @@
                 '    signal.alarm(0)\n' +
                 'print("LATEX:" + latex(result))\n' +
                 'print("TEXT:" + str(result))\n' +
-                'print("EXPR:" + latex(expr))\n' +
-                'print("RULES:" + (str(steps) if steps else ""))\n' +
-                '_steps_out = []\n' +
+                'st = []\n' +
                 'if not isinstance(result, Integral) and not result.has(Integral):\n' +
-                '    if steps and not isinstance(steps, DontKnowRule):\n' +
-                '        def _walk(s, depth=0):\n' +
-                '            name = type(s).__name__\n' +
-                '            if hasattr(s, "context") and hasattr(s, "symbol"):\n' +
-                '                _steps_out.append({"title":name.replace("Rule",""),"latex":"\\\\int "+latex(s.context)+"\\\\,d"+str(s.symbol)})\n' +
-                '            if hasattr(s, "substeps"):\n' +
-                '                if isinstance(s.substeps, (list, tuple)):\n' +
-                '                    for sub in s.substeps:\n' +
-                '                        _walk(sub, depth+1)\n' +
-                '                else:\n' +
-                '                    _walk(s.substeps, depth+1)\n' +
-                '            if hasattr(s, "alternatives"):\n' +
-                '                for alt in s.alternatives:\n' +
-                '                    _walk(alt, depth+1)\n' +
-                '        try:\n' +
-                '            _walk(steps)\n' +
-                '        except:\n' +
-                '            pass\n' +
-                '    _steps_out.append({"title":"Result","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + ' = "+latex(result)+" + C"})\n' +
-                '    print("STEPS:" + json.dumps(_steps_out))\n' +
+                '    if _s_obj and not isinstance(_s_obj, DontKnowRule):\n' +
+                '        st = r2s(_s_obj, ' + v + ')\n' +
+                '    if not st:\n' +
+                '        st.append({"title":"Result","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + ' = "+latex(result)+" + C"})\n' +
                 'elif isinstance(result, Integral) or result.has(Integral):\n' +
-                '    _steps_out.append({"title":"Identify the integral","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + '"})\n' +
-                '    _steps_out.append({"title":"Conclusion","latex":"\\\\text{This integral cannot be expressed using elementary functions.}"})\n' +
-                '    print("STEPS:" + json.dumps(_steps_out))\n';
+                '    st.append({"title":"Identify the integral","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + '"})\n' +
+                '    st.append({"title":"Conclusion","latex":"\\\\text{This integral cannot be expressed using elementary functions.}"})\n' +
+                'print("STEPS:" + json.dumps(st))\n';
         }
 
         fetch((window.INTEGRAL_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
@@ -989,13 +969,15 @@
                 if (answerEl) {
                     try {
                         var ansTeX = isDefinite ? resultTeX : resultTeX + ' + C';
-                        katex.render('= ' + ansTeX, answerEl, { throwOnError: false, displayMode: true });
+                        katex.render('= ' + ic.prepareLatexForKatex(ansTeX), answerEl, { throwOnError: false, displayMode: true });
                     } catch (e) { answerEl.textContent = '= ' + resultText; }
                 }
-                // Render step equations
+                // Render step equations (normalize \\cmd → \cmd for KaTeX)
                 bodyEl.querySelectorAll('[data-step-katex]').forEach(function (el) {
-                    try { katex.render(el.getAttribute('data-step-katex'), el, { throwOnError: false, displayMode: true }); }
-                    catch (e) { el.textContent = el.getAttribute('data-step-katex'); }
+                    var raw = el.getAttribute('data-step-katex');
+                    var tex = ic.prepareLatexForKatex(raw);
+                    try { katex.render(tex, el, { throwOnError: false, displayMode: true }); }
+                    catch (e) { el.textContent = raw; }
                 });
             }
 
