@@ -66,6 +66,11 @@ function saveCurrentProject() {
   projects[currentProjectId].content = content;
   projects[currentProjectId].updatedAt = Date.now();
   projects[currentProjectId].name = getProjectName();
+
+  // Persist sub-files and uploaded file registry
+  if (window.fileContents) projects[currentProjectId].fileContents = window.fileContents;
+  if (window.uploadedFiles) projects[currentProjectId].uploadedFiles = window.uploadedFiles;
+
   saveProjects(projects);
 
   showSaveIndicator('saved');
@@ -87,8 +92,63 @@ function loadProject(id) {
   // Set project name in titlebar
   setProjectName(project.name);
 
+  // Restore sub-files and uploaded file registry
+  if (window.fileContents) {
+    // Clear and restore
+    for (var k in window.fileContents) delete window.fileContents[k];
+    if (project.fileContents) {
+      for (var f in project.fileContents) window.fileContents[f] = project.fileContents[f];
+    }
+  }
+  if (window.uploadedFiles) {
+    window.uploadedFiles.length = 0;
+    if (project.uploadedFiles) {
+      for (var i = 0; i < project.uploadedFiles.length; i++) {
+        window.uploadedFiles.push(project.uploadedFiles[i]);
+      }
+    }
+  }
+
+  // Rebuild file tree from restored data
+  rebuildFileTree(project);
+
   showSaveIndicator('loaded');
   return true;
+}
+
+function rebuildFileTree(project) {
+  var fileList = document.getElementById('file-list');
+  if (!fileList) return;
+
+  // Clear all except main.tex
+  var items = fileList.querySelectorAll('.file-item');
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].getAttribute('data-file') !== 'main.tex') {
+      items[i].remove();
+    }
+  }
+
+  // Re-add from fileContents (.tex files)
+  if (project.fileContents) {
+    for (var fname in project.fileContents) {
+      if (typeof window.addFileToTree === 'function') {
+        window.addFileToTree(fname, false);
+      }
+    }
+  }
+
+  // Re-add uploaded images not in fileContents
+  if (project.uploadedFiles) {
+    var IMAGE_EXT = /\.(png|jpg|jpeg|gif|svg|eps|pdf)$/i;
+    for (var j = 0; j < project.uploadedFiles.length; j++) {
+      var uf = project.uploadedFiles[j];
+      if (IMAGE_EXT.test(uf.filename) && !(project.fileContents && project.fileContents[uf.filename])) {
+        if (typeof window.addFileToTree === 'function') {
+          window.addFileToTree(uf.filename, true);
+        }
+      }
+    }
+  }
 }
 
 function deleteProject(id) {

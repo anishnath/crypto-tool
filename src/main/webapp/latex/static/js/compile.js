@@ -13,6 +13,10 @@ window.currentJobId = null;
 // Each entry: { fileId: "uuid", filename: "photo.png" }
 var uploadedFiles = [];
 
+// ── File content cache (for .tex files created via Move to File) ──
+// { "section-1.tex": "\\section{Intro}\n..." }
+var fileContents = {};
+
 // Collected errors with line numbers for navigation
 var collectedErrors = [];
 
@@ -236,6 +240,37 @@ function triggerCompile() {
   clearTimeout(debounceTimer);
   stopMonitoring();
 
+  // If editing a sub-file, save it and wait for re-upload before compiling
+  if (editingFile) {
+    var cm = window.editorInstance;
+    var pendingFile = editingFile;
+    var pendingContent = cm ? cm.getValue() : '';
+    if (cm) fileContents[pendingFile] = pendingContent;
+
+    // Restore main.tex into editor
+    if (cm && mainTexContent != null) {
+      cm.setValue(mainTexContent);
+      mainTexContent = null;
+    }
+    editingFile = null;
+    updateEditingIndicator();
+    var items = document.querySelectorAll('.file-item');
+    items.forEach(function(el) {
+      el.classList.toggle('active', el.getAttribute('data-file') === 'main.tex');
+    });
+
+    // Upload then compile — don't compile until upload completes
+    setCompileStatus('Saving ' + pendingFile + '...', 'compiling');
+    reuploadFile(pendingFile, pendingContent, function() {
+      doCompile();
+    });
+    return;
+  }
+
+  doCompile();
+}
+
+function doCompile() {
   var source = window.getEditorContent();
   if (!source || !source.trim()) {
     showErrorToast('No LaTeX source to compile');
@@ -260,6 +295,29 @@ function triggerCompile() {
   if (compileBtn) compileBtn.classList.add('compiling');
   updateCompileButton();
 
+  // Re-upload any sub-files we have local content for (ensures fresh fileIds after server cleanup)
+  var filesToUpload = [];
+  for (var fname in fileContents) {
+    if (fileContents.hasOwnProperty(fname)) {
+      filesToUpload.push(fname);
+    }
+  }
+
+  if (filesToUpload.length > 0) {
+    appendLogLine('Syncing ' + filesToUpload.length + ' sub-file(s)...', 'info');
+    var pending = filesToUpload.length;
+    filesToUpload.forEach(function(f) {
+      reuploadFile(f, fileContents[f], function() {
+        pending--;
+        if (pending <= 0) sendCompile(source);
+      });
+    });
+  } else {
+    sendCompile(source);
+  }
+}
+
+function sendCompile(source) {
   appendLogLine('Sending source to compiler...', 'info');
   if (uploadedFiles.length > 0) {
     appendLogLine('Attaching ' + uploadedFiles.length + ' uploaded file(s)', 'info');
@@ -599,9 +657,15 @@ function insertUploadedFigure(filename, asFigure) {
   }
 }
 
-function addFileToTree(filename, isImage) {
+function addFileToTree(filename, isImage, content) {
   var fileList = document.getElementById('file-list');
   if (!fileList) return;
+
+  // Store content if provided
+  if (content != null) fileContents[filename] = content;
+
+  // Don't add duplicate
+  if (fileList.querySelector('[data-file="' + filename + '"]')) return;
 
   var icon = '\uD83D\uDCC4';
   if (isImage) icon = '\uD83D\uDDBC';
@@ -642,6 +706,124 @@ function selectFile(el) {
   var items = document.querySelectorAll('.file-item');
   for (var i = 0; i < items.length; i++) items[i].classList.remove('active');
   el.classList.add('active');
+
+  var filename = el.getAttribute('data-file');
+  if (!filename) return;
+
+  if (filename === 'main.tex') {
+    if (editingFile) switchBackToMain();
+    return;
+  }
+
+  // Image file — just insert
+  if (IMAGE_EXTENSIONS.test(filename)) {
+    insertUploadedFigure(filename, true);
+    return;
+  }
+
+  // .tex file — open in editor
+  openFileInEditor(filename);
+}
+
+// ── File editing: swap editor content, track main.tex ──
+
+var editingFile = null;  // null = main.tex
+var mainTexContent = null;
+
+function openFileInEditor(filename) {
+  var cm = window.editorInstance;
+  if (!cm) return;
+
+  // Already editing this file
+  if (editingFile === filename) return;
+
+  var content = fileContents[filename];
+  if (content == null) {
+    showWarningToast('File content not available locally');
+    return;
+  }
+
+  // Save current editor content
+  if (!editingFile) {
+    mainTexContent = cm.getValue();
+  } else {
+    fileContents[editingFile] = cm.getValue();
+  }
+
+  editingFile = filename;
+  cm.setValue(content);
+  cm.clearHistory();
+  cm.focus();
+
+  updateEditingIndicator();
+}
+
+function switchBackToMain() {
+  var cm = window.editorInstance;
+  if (!cm || !editingFile) return;
+
+  // Save current file
+  fileContents[editingFile] = cm.getValue();
+
+  // Re-upload the edited content so compile gets the latest
+  reuploadFile(editingFile, cm.getValue());
+
+  editingFile = null;
+  if (mainTexContent != null) {
+    cm.setValue(mainTexContent);
+    mainTexContent = null;
+  }
+  cm.clearHistory();
+  cm.focus();
+  updateEditingIndicator();
+
+  // Re-select main.tex in tree
+  var items = document.querySelectorAll('.file-item');
+  items.forEach(function(el) {
+    el.classList.toggle('active', el.getAttribute('data-file') === 'main.tex');
+  });
+}
+
+function reuploadFile(filename, content, cb) {
+  var blob = new Blob([content], { type: 'text/plain' });
+  var formData = new FormData();
+  formData.append('file', blob, filename);
+
+  fetch(CONFIG.uploadUrl, { method: 'POST', body: formData })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.fileId) {
+        for (var i = 0; i < uploadedFiles.length; i++) {
+          if (uploadedFiles[i].filename === filename) {
+            uploadedFiles[i].fileId = data.fileId;
+            if (cb) cb();
+            return;
+          }
+        }
+        uploadedFiles.push({ fileId: data.fileId, filename: filename });
+      }
+      if (cb) cb();
+    })
+    .catch(function() { if (cb) cb(); });
+}
+
+function updateEditingIndicator() {
+  var existing = document.getElementById('editing-indicator');
+  if (!editingFile) {
+    if (existing) existing.remove();
+    return;
+  }
+
+  if (!existing) {
+    existing = document.createElement('div');
+    existing.id = 'editing-indicator';
+    existing.className = 'editing-indicator';
+    var editorPane = document.querySelector('.editor-pane');
+    if (editorPane) editorPane.insertBefore(existing, editorPane.firstChild);
+  }
+  existing.innerHTML =
+    '<span>Editing: <strong>' + editingFile + '</strong></span>' +
+    '<button class="ei-back" onclick="switchBackToMain()">&#8592; main.tex</button>';
 }
 
 function newFile() {
@@ -654,6 +836,167 @@ function formatFileSize(bytes) {
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
   return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
 }
+
+// Add an uploaded file to the registry (called from ai.js move-to-file)
+function addUploadedFile(fileId, filename) {
+  uploadedFiles.push({ fileId: fileId, filename: filename });
+}
+
+// ── Drag-drop & paste images directly into editor ──
+
+var IMAGE_MIME = /^image\/(png|jpe?g|gif|svg\+xml|webp|bmp)$/;
+var dropCounter = 0;  // track dragenter/dragleave nesting
+
+function initEditorImageDrop() {
+  var cm = window.editorInstance;
+  if (!cm) { setTimeout(initEditorImageDrop, 300); return; }
+
+  var wrapper = cm.getWrapperElement();
+
+  // ── Drag-drop ──
+  wrapper.addEventListener('dragenter', function(e) {
+    if (!hasImageFile(e.dataTransfer)) return;
+    e.preventDefault();
+    dropCounter++;
+    wrapper.classList.add('image-drop-active');
+  });
+
+  wrapper.addEventListener('dragover', function(e) {
+    if (!hasImageFile(e.dataTransfer)) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  });
+
+  wrapper.addEventListener('dragleave', function(e) {
+    dropCounter--;
+    if (dropCounter <= 0) {
+      dropCounter = 0;
+      wrapper.classList.remove('image-drop-active');
+    }
+  });
+
+  wrapper.addEventListener('drop', function(e) {
+    dropCounter = 0;
+    wrapper.classList.remove('image-drop-active');
+    if (!e.dataTransfer || !e.dataTransfer.files || !e.dataTransfer.files.length) return;
+
+    var file = findImageFile(e.dataTransfer.files);
+    if (!file) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Place cursor at drop position
+    var coords = cm.coordsChar({ left: e.clientX, top: e.clientY });
+    cm.setCursor(coords);
+
+    uploadAndInsertImage(file);
+  });
+
+  // ── Paste image from clipboard ──
+  wrapper.addEventListener('paste', function(e) {
+    if (!e.clipboardData || !e.clipboardData.items) return;
+    var items = e.clipboardData.items;
+    for (var i = 0; i < items.length; i++) {
+      if (IMAGE_MIME.test(items[i].type)) {
+        e.preventDefault();
+        var file = items[i].getAsFile();
+        if (file) uploadAndInsertImage(file);
+        return;
+      }
+    }
+  });
+}
+
+function hasImageFile(dt) {
+  if (!dt || !dt.types) return false;
+  if (dt.types.indexOf('Files') === -1) return false;
+  // Check items if available
+  if (dt.items) {
+    for (var i = 0; i < dt.items.length; i++) {
+      if (dt.items[i].kind === 'file' && IMAGE_MIME.test(dt.items[i].type)) return true;
+    }
+  }
+  return true; // allow drop, validate on actual drop
+}
+
+function findImageFile(files) {
+  for (var i = 0; i < files.length; i++) {
+    if (IMAGE_MIME.test(files[i].type)) return files[i];
+  }
+  return null;
+}
+
+function uploadAndInsertImage(file) {
+  if (file.size > MAX_FILE_SIZE) {
+    showErrorToast('Image too large. Maximum 5MB.');
+    return;
+  }
+
+  var cm = window.editorInstance;
+  if (!cm) return;
+
+  // Insert placeholder at cursor
+  var cursor = cm.getCursor();
+  var placeholder = '% Uploading ' + file.name + '...';
+  cm.replaceRange(placeholder + '\n', cursor);
+  var placeholderFrom = { line: cursor.line, ch: 0 };
+  var placeholderTo = { line: cursor.line, ch: placeholder.length };
+
+  showSuccessToast('Uploading ' + file.name + '...');
+
+  var formData = new FormData();
+  formData.append('file', file);
+
+  fetch(CONFIG.uploadUrl, {
+    method: 'POST',
+    body: formData
+  })
+  .then(function(res) {
+    if (!res.ok) return res.json().then(function(d) { throw new Error(d.error || 'Upload failed'); });
+    return res.json();
+  })
+  .then(function(data) {
+    var fname = data.filename || file.name;
+    var fid = data.fileId;
+
+    if (fid) addUploadedFile(fid, fname);
+    addFileToTree(fname, true);
+
+    // Replace placeholder with \includegraphics
+    var label = fname.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '-');
+    var figureCode =
+      '\\begin{figure}[htbp]\n' +
+      '\\centering\n' +
+      '\\includegraphics[width=0.8\\textwidth]{' + fname + '}\n' +
+      '\\caption{' + fname.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') + '}\n' +
+      '\\label{fig:' + label + '}\n' +
+      '\\end{figure}';
+
+    // Find and replace the placeholder line
+    var lineContent = cm.getLine(placeholderFrom.line);
+    if (lineContent && lineContent.indexOf('% Uploading') === 0) {
+      cm.replaceRange(figureCode, placeholderFrom, { line: placeholderFrom.line + 1, ch: 0 });
+    } else {
+      // Placeholder was edited/moved — just insert at cursor
+      cm.replaceRange(figureCode + '\n', cm.getCursor());
+    }
+
+    showSuccessToast('Inserted ' + fname);
+    appendLogLine('Image uploaded: ' + fname, 'success');
+  })
+  .catch(function(err) {
+    // Remove placeholder on error
+    var lineContent = cm.getLine(placeholderFrom.line);
+    if (lineContent && lineContent.indexOf('% Uploading') === 0) {
+      cm.replaceRange('', placeholderFrom, { line: placeholderFrom.line + 1, ch: 0 });
+    }
+    showErrorToast('Upload failed: ' + err.message);
+    appendLogLine('Image upload failed: ' + err.message, 'error');
+  });
+}
+
+initEditorImageDrop();
 
 // Expose globally
 window.triggerCompile = triggerCompile;
@@ -668,5 +1011,10 @@ window.showWarningToast = showWarningToast;
 window.nextError = nextError;
 window.prevError = prevError;
 window.insertUploadedFigure = insertUploadedFigure;
+window.addUploadedFile = addUploadedFile;
+window.addFileToTree = addFileToTree;
+window.switchBackToMain = switchBackToMain;
+window.fileContents = fileContents;
+window.uploadedFiles = uploadedFiles;
 
 })();

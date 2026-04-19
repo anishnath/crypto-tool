@@ -479,6 +479,228 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+// ══════════════════════════════════════════════════════════════
+// SELECTION POPUP — floating actions on text selection
+// ══════════════════════════════════════════════════════════════
+
+var selPopup = null;
+var selPopupDebounce = null;
+
+var SYSTEM_PROOFREAD =
+    'You are a proofreader for LaTeX documents. '
+  + 'Fix grammar, spelling, punctuation, and awkward phrasing in the selected text. '
+  + 'Keep ALL LaTeX commands, environments, math mode, labels, and references exactly as-is. '
+  + 'Only correct the natural language. '
+  + 'Return ONLY the corrected LaTeX. No markdown fences, no explanation.';
+
+var SYSTEM_SIMPLIFY =
+    'Simplify the following LaTeX text. Make it shorter and clearer while preserving the meaning. '
+  + 'Keep ALL LaTeX commands, environments, math mode, labels, and references exactly as-is. '
+  + 'Return ONLY the simplified LaTeX. No markdown fences, no explanation.';
+
+var SYSTEM_TRANSLATE =
+    'Translate the following LaTeX text into TARGET_LANG. '
+  + 'Keep ALL LaTeX commands, environments, math mode, labels, and references exactly as-is. '
+  + 'Only translate the natural language content. '
+  + 'Return ONLY the translated LaTeX. No markdown fences, no explanation.';
+
+function createSelPopup() {
+  if (selPopup) return;
+  selPopup = document.createElement('div');
+  selPopup.className = 'sel-popup';
+  selPopup.innerHTML =
+    '<button data-sel-action="proofread" title="Fix grammar &amp; spelling">Proofread</button>' +
+    '<span class="sel-divider"></span>' +
+    '<button data-sel-action="formal" title="Formal academic tone">Formal</button>' +
+    '<button data-sel-action="concise" title="Make concise">Concise</button>' +
+    '<button data-sel-action="expand" title="Expand with detail">Expand</button>' +
+    '<span class="sel-divider"></span>' +
+    '<button data-sel-action="simplify" title="Simplify text">Simplify</button>' +
+    '<span class="sel-divider"></span>' +
+    '<div class="sel-translate-wrap">' +
+    '  <button data-sel-action="translate" title="Translate keeping LaTeX">Translate</button>' +
+    '  <select class="sel-lang-picker">' +
+    '    <option value="Spanish">ES</option><option value="French">FR</option>' +
+    '    <option value="German">DE</option><option value="Chinese">ZH</option>' +
+    '    <option value="Japanese">JA</option><option value="Portuguese">PT</option>' +
+    '    <option value="Hindi">HI</option><option value="Arabic">AR</option>' +
+    '  </select>' +
+    '</div>' +
+    '<span class="sel-divider"></span>' +
+    '<button data-sel-action="move-to-file" title="Extract to separate .tex file">Move to File</button>';
+
+  selPopup.addEventListener('mousedown', function(e) { e.preventDefault(); }); // prevent deselection
+  selPopup.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-sel-action]');
+    if (!btn) return;
+    var action = btn.getAttribute('data-sel-action');
+    hideSelPopup();
+    if (action === 'proofread') doSelAction(SYSTEM_PROOFREAD);
+    else if (action === 'formal') rewriteSelection('formal');
+    else if (action === 'concise') rewriteSelection('concise');
+    else if (action === 'expand') rewriteSelection('expand');
+    else if (action === 'simplify') doSelAction(SYSTEM_SIMPLIFY);
+    else if (action === 'translate') {
+      var lang = selPopup.querySelector('.sel-lang-picker').value || 'Spanish';
+      doSelAction(SYSTEM_TRANSLATE.replace('TARGET_LANG', lang));
+    }
+    else if (action === 'move-to-file') { doMoveToFile(); }
+  });
+
+  document.body.appendChild(selPopup);
+}
+
+function doSelAction(systemPrompt) {
+  if (aiBusy) { if (typeof window.showWarningToast === 'function') window.showWarningToast('AI is busy'); return; }
+  var cm = window.editorInstance;
+  if (!cm) return;
+  var selection = cm.getSelection();
+  if (!selection || !selection.trim()) return;
+
+  var from = cm.getCursor('from');
+  var to = cm.getCursor('to');
+  cm.replaceRange('', from, to);
+  var currentPos = { line: from.line, ch: from.ch };
+
+  showAIIndicator(true);
+  streamAI(buildPayload(systemPrompt, selection, true), {
+    onToken: function(token) {
+      cm.replaceRange(token, currentPos);
+      var lines = token.split('\n');
+      if (lines.length === 1) {
+        currentPos = { line: currentPos.line, ch: currentPos.ch + token.length };
+      } else {
+        currentPos = { line: currentPos.line + lines.length - 1, ch: lines[lines.length - 1].length };
+      }
+    },
+    onDone: function() { showAIIndicator(false); cm.focus(); },
+    onError: function(err) {
+      showAIIndicator(false);
+      if (typeof window.showErrorToast === 'function') window.showErrorToast('AI error: ' + err);
+    }
+  });
+}
+
+// ── Move to File: extract selection → upload as .tex → replace with \input{} ──
+
+var moveToFileCounter = 0;
+
+function doMoveToFile() {
+  var cm = window.editorInstance;
+  if (!cm) return;
+  var selection = cm.getSelection();
+  if (!selection || !selection.trim()) return;
+
+  // Suggest a filename based on content or counter
+  moveToFileCounter++;
+  var defaultName = 'section-' + moveToFileCounter + '.tex';
+
+  // Try to extract a meaningful name from \section{} or \chapter{}
+  var secMatch = selection.match(/\\(?:section|chapter|subsection)\{([^}]{1,40})\}/);
+  if (secMatch) {
+    defaultName = secMatch[1].toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') + '.tex';
+  }
+
+  var filename = prompt('File name for extracted content:', defaultName);
+  if (!filename) return;
+  filename = filename.trim();
+  if (!filename) return;
+  if (!/\.tex$/i.test(filename)) filename += '.tex';
+
+  // Validate filename
+  if (/[\/\\:*?"<>|]/.test(filename)) {
+    if (typeof window.showErrorToast === 'function') window.showErrorToast('Invalid filename');
+    return;
+  }
+
+  // Upload as .tex file
+  var blob = new Blob([selection], { type: 'text/plain' });
+  var formData = new FormData();
+  formData.append('file', blob, filename);
+
+  if (typeof window.showSuccessToast === 'function') window.showSuccessToast('Moving to ' + filename + '...');
+
+  fetch(CONFIG.uploadUrl, {
+    method: 'POST',
+    body: formData
+  })
+  .then(function(res) {
+    if (!res.ok) return res.json().then(function(d) { throw new Error(d.error || 'Upload failed'); });
+    return res.json();
+  })
+  .then(function(data) {
+    var fid = data.fileId;
+    var fname = data.filename || filename;
+
+    // Track for compile
+    if (fid) {
+      if (typeof window.addUploadedFile === 'function') {
+        window.addUploadedFile(fid, fname);
+      }
+    }
+
+    // Replace selection with \input{filename}
+    var inputCmd = '\\input{' + fname.replace(/\.tex$/i, '') + '}';
+    var from = cm.getCursor('from');
+    var to = cm.getCursor('to');
+    cm.replaceRange(inputCmd, from, to);
+    cm.focus();
+
+    if (typeof window.showSuccessToast === 'function')
+      window.showSuccessToast('Moved to ' + fname + ' — \\input{} inserted');
+
+    // Add to file tree with content
+    if (typeof window.addFileToTree === 'function') window.addFileToTree(fname, false, selection);
+  })
+  .catch(function(err) {
+    if (typeof window.showErrorToast === 'function') window.showErrorToast('Move failed: ' + err.message);
+  });
+}
+
+function showSelPopup(cm) {
+  if (!selPopup) createSelPopup();
+  // Position near the selection end
+  var cursor = cm.getCursor('to');
+  var coords = cm.cursorCoords(cursor, 'page');
+  selPopup.style.left = Math.max(8, coords.left - 120) + 'px';
+  selPopup.style.top = (coords.bottom + 6) + 'px';
+  selPopup.classList.add('visible');
+}
+
+function hideSelPopup() {
+  if (selPopup) selPopup.classList.remove('visible');
+}
+
+function onCursorActivity(cm) {
+  clearTimeout(selPopupDebounce);
+  selPopupDebounce = setTimeout(function() {
+    if (aiBusy) { hideSelPopup(); return; }
+    var sel = cm.getSelection();
+    if (sel && sel.trim().length > 2) {
+      showSelPopup(cm);
+    } else {
+      hideSelPopup();
+    }
+  }, 300);
+}
+
+// Wire up after editor is ready
+function wireSelPopup() {
+  var cm = window.editorInstance;
+  if (!cm) { setTimeout(wireSelPopup, 200); return; }
+  cm.on('cursorActivity', onCursorActivity);
+}
+wireSelPopup();
+
+// Hide on outside click
+document.addEventListener('mousedown', function(e) {
+  if (selPopup && selPopup.classList.contains('visible') && !selPopup.contains(e.target)) {
+    hideSelPopup();
+  }
+});
+
 // Expose globally
 window.fixError = fixError;
 window.nlToLatex = nlToLatex;
