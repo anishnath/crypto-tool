@@ -9,8 +9,9 @@
 <input type="file" id="file-upload-input" style="display:none" onchange="uploadFile(this)" accept=".png,.jpg,.jpeg,.gif,.svg,.eps,.pdf,.tex,.bib,.bst,.cls,.sty,.csv,.dat,.txt"/>
 
 <div id="file-list">
-  <div class="file-item active" data-file="main.tex" onclick="selectFile(this)">
-    <span class="file-icon">&#128196;</span> main.tex
+  <div class="file-item active" data-file="main.tex" onclick="selectFile(this)" oncontextmenu="event.preventDefault(); showFileContextMenu(event, 'main.tex', false, this);">
+    <span class="file-icon">&#128196;</span> <span class="file-name">main.tex</span>
+    <span class="file-actions-btn" title="File actions" onclick="event.stopPropagation(); showFileContextMenu(event, 'main.tex', false, this.parentElement);">&#8942;</span>
   </div>
 </div>
 

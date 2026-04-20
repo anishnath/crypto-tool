@@ -253,6 +253,7 @@ function triggerCompile() {
       mainTexContent = null;
     }
     editingFile = null;
+    updateEditorTab('main.tex');
     updateEditingIndicator();
     var items = document.querySelectorAll('.file-item');
     items.forEach(function(el) {
@@ -295,7 +296,8 @@ function doCompile() {
   if (compileBtn) compileBtn.classList.add('compiling');
   updateCompileButton();
 
-  // Re-upload any sub-files we have local content for (ensures fresh fileIds after server cleanup)
+  // Re-upload all sub-files from local content to get fresh fileIds.
+  // Clear stale entries first — rebuild entirely from fresh uploads.
   var filesToUpload = [];
   for (var fname in fileContents) {
     if (fileContents.hasOwnProperty(fname)) {
@@ -304,6 +306,13 @@ function doCompile() {
   }
 
   if (filesToUpload.length > 0) {
+    // Wipe only .tex sub-file entries — preserve image/binary uploads
+    for (var wi = uploadedFiles.length - 1; wi >= 0; wi--) {
+      if (fileContents[uploadedFiles[wi].filename]) {
+        uploadedFiles.splice(wi, 1);
+      }
+    }
+
     appendLogLine('Syncing ' + filesToUpload.length + ' sub-file(s)...', 'info');
     var pending = filesToUpload.length;
     filesToUpload.forEach(function(f) {
@@ -698,37 +707,246 @@ function addFileToTree(filename, isImage, content) {
     item.appendChild(insertBtn);
   }
 
+  // Actions button (three-dot menu) — except main.tex shows limited options
+  var actionsBtn = document.createElement('span');
+  actionsBtn.className = 'file-actions-btn';
+  actionsBtn.title = 'File actions';
+  actionsBtn.textContent = '\u22EE'; // vertical ellipsis ⋮
+  actionsBtn.onclick = function(e) {
+
+    e.stopPropagation();
+    showFileContextMenu(e, filename, isImage, item);
+  };
+  item.appendChild(actionsBtn);
+
+  // Also support right-click
+  item.addEventListener('contextmenu', function(e) {
+
+    e.preventDefault();
+    e.stopPropagation();
+    showFileContextMenu(e, filename, isImage, item);
+  });
+
   item.onclick = function() { selectFile(item); };
   fileList.appendChild(item);
 }
 
+// ── File context menu: Download / Rename / Delete ──
+
+var fileCtxMenu = null;
+
+function createFileCtxMenu() {
+  if (fileCtxMenu) return;
+  fileCtxMenu = document.createElement('div');
+  fileCtxMenu.className = 'file-ctx-menu';
+  fileCtxMenu.innerHTML =
+    '<div class="file-ctx-item" data-ctx="download">Download</div>' +
+    '<div class="file-ctx-item" data-ctx="rename">Rename</div>' +
+    '<div class="file-ctx-divider"></div>' +
+    '<div class="file-ctx-item file-ctx-danger" data-ctx="delete">Delete</div>';
+  document.body.appendChild(fileCtxMenu);
+
+  fileCtxMenu.addEventListener('click', function(e) {
+    var item = e.target.closest('[data-ctx]');
+    if (!item) return;
+    var action = item.getAttribute('data-ctx');
+    var fname = fileCtxMenu._filename;
+    var el = fileCtxMenu._element;
+    hideFileCtxMenu();
+    if (action === 'download') downloadFile(fname);
+    else if (action === 'rename') renameFile(fname, el);
+    else if (action === 'delete') deleteFile(fname, el);
+  });
+
+  document.addEventListener('click', hideFileCtxMenu);
+  document.addEventListener('contextmenu', function(e) {
+    if (fileCtxMenu && !fileCtxMenu.contains(e.target)) hideFileCtxMenu();
+  });
+}
+
+function showFileContextMenu(e, filename, isImage, el) {
+
+  createFileCtxMenu();
+
+
+  var isMain = filename === 'main.tex';
+  fileCtxMenu._filename = filename;
+  fileCtxMenu._element = el;
+
+  // Disable rename/delete for main.tex
+  var items = fileCtxMenu.querySelectorAll('[data-ctx]');
+  items.forEach(function(item) {
+    var action = item.getAttribute('data-ctx');
+    if (action === 'rename' || action === 'delete') {
+      item.classList.toggle('file-ctx-disabled', isMain);
+    }
+  });
+
+  fileCtxMenu.style.left = '-9999px';
+  fileCtxMenu.style.top = '-9999px';
+  fileCtxMenu.classList.add('visible');
+
+  // Clamp to viewport
+  var mw = fileCtxMenu.offsetWidth;
+  var mh = fileCtxMenu.offsetHeight;
+  var x = Math.min(e.clientX, window.innerWidth - mw - 8);
+  var y = Math.min(e.clientY, window.innerHeight - mh - 8);
+  fileCtxMenu.style.left = Math.max(4, x) + 'px';
+  fileCtxMenu.style.top = Math.max(4, y) + 'px';
+}
+
+function hideFileCtxMenu() {
+  if (fileCtxMenu) fileCtxMenu.classList.remove('visible');
+}
+
+function downloadFile(filename) {
+  var content = '';
+  if (filename === 'main.tex') {
+    content = editingFile ? (mainTexContent || '') : (window.getEditorContent ? window.getEditorContent() : '');
+  } else if (editingFile === filename) {
+    content = window.editorInstance ? window.editorInstance.getValue() : '';
+  } else if (fileContents[filename] != null) {
+    content = fileContents[filename];
+  } else {
+    showWarningToast('No local content to download for ' + filename);
+    return;
+  }
+
+  var blob = new Blob([content], { type: 'text/plain' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  setTimeout(function() { URL.revokeObjectURL(url); }, 200);
+}
+
+function renameFile(oldName, el) {
+  if (oldName === 'main.tex') { showWarningToast('Cannot rename main.tex'); return; }
+
+  var newName = prompt('Rename file:', oldName);
+  if (!newName || !newName.trim() || newName === oldName) return;
+  newName = newName.trim();
+  // Only enforce .tex if original was .tex and user removed extension
+  if (/\.tex$/i.test(oldName) && !/\.\w+$/.test(newName)) newName += '.tex';
+  if (/[\/\\:*?"<>|]/.test(newName)) { showErrorToast('Invalid filename'); return; }
+
+  // Update fileContents
+  if (fileContents[oldName] != null) {
+    fileContents[newName] = fileContents[oldName];
+    delete fileContents[oldName];
+  }
+
+  // Update uploadedFiles
+  for (var i = 0; i < uploadedFiles.length; i++) {
+    if (uploadedFiles[i].filename === oldName) {
+      uploadedFiles[i].filename = newName;
+      break;
+    }
+  }
+
+  // Update \input{} and \include{} references in main.tex
+  var oldRef = oldName.replace(/\.tex$/i, '');
+  var newRef = newName.replace(/\.tex$/i, '');
+  var cm = window.editorInstance;
+  if (cm && !editingFile) {
+    // Editing main.tex — update live editor
+    var src = cm.getValue();
+    var updated = src.split('\\input{' + oldRef + '}').join('\\input{' + newRef + '}');
+    updated = updated.split('\\include{' + oldRef + '}').join('\\include{' + newRef + '}');
+    if (updated !== src) cm.setValue(updated);
+  } else if (editingFile && mainTexContent != null) {
+    // Editing a sub-file — update saved mainTexContent
+    mainTexContent = mainTexContent.split('\\input{' + oldRef + '}').join('\\input{' + newRef + '}');
+    mainTexContent = mainTexContent.split('\\include{' + oldRef + '}').join('\\include{' + newRef + '}');
+  }
+
+  // If currently editing this file, update editingFile
+  if (editingFile === oldName) editingFile = newName;
+
+  // Update DOM
+  el.setAttribute('data-file', newName);
+  var nameSpan = el.querySelector('.file-name');
+  if (nameSpan) nameSpan.textContent = ' ' + newName;
+
+  showSuccessToast('Renamed to ' + newName);
+}
+
+function deleteFile(filename, el) {
+  if (filename === 'main.tex') { showWarningToast('Cannot delete main.tex'); return; }
+  if (!confirm('Delete "' + filename + '"?')) return;
+
+  // If editing this file, switch back first
+  if (editingFile === filename) switchBackToMain();
+
+  // Remove from fileContents
+  delete fileContents[filename];
+
+  // Remove from uploadedFiles
+  for (var i = uploadedFiles.length - 1; i >= 0; i--) {
+    if (uploadedFiles[i].filename === filename) {
+      uploadedFiles.splice(i, 1);
+    }
+  }
+
+  // Remove \input{} / \include{} from main.tex
+  var ref = filename.replace(/\.tex$/i, '');
+  var inputLine = '\\input{' + ref + '}';
+  var includeLine = '\\include{' + ref + '}';
+  function removeRef(src) {
+    return src.split('\n').filter(function(l) { var t = l.trim(); return t !== inputLine && t !== includeLine; }).join('\n');
+  }
+  var cm = window.editorInstance;
+  if (cm && !editingFile) {
+    var src = cm.getValue();
+    var updated = removeRef(src);
+    if (updated !== src) cm.setValue(updated);
+  } else if (editingFile && mainTexContent != null) {
+    mainTexContent = removeRef(mainTexContent);
+  }
+
+  // Remove from DOM
+  if (el && el.parentNode) el.parentNode.removeChild(el);
+
+  showSuccessToast('Deleted ' + filename);
+}
+
 function selectFile(el) {
+  var filename = el.getAttribute('data-file');
+  if (!filename) return;
+
+  // Image file — don't select, don't insert on click (use + button or context menu)
+  if (IMAGE_EXTENSIONS.test(filename)) return;
+
+  // Non-tex, non-image files (bib, cls, etc.) — no content to edit
+  if (!/\.tex$/i.test(filename) && filename !== 'main.tex') return;
+
   var items = document.querySelectorAll('.file-item');
   for (var i = 0; i < items.length; i++) items[i].classList.remove('active');
   el.classList.add('active');
 
-  var filename = el.getAttribute('data-file');
-  if (!filename) return;
-
   if (filename === 'main.tex') {
     if (editingFile) switchBackToMain();
-    return;
+  } else {
+    openFileInEditor(filename);
   }
 
-  // Image file — just insert
-  if (IMAGE_EXTENSIONS.test(filename)) {
-    insertUploadedFigure(filename, true);
-    return;
-  }
-
-  // .tex file — open in editor
-  openFileInEditor(filename);
+  // On mobile, close the file drawer after selecting
+  closeMobileDrawer();
 }
 
 // ── File editing: swap editor content, track main.tex ──
 
 var editingFile = null;  // null = main.tex
 var mainTexContent = null;
+
+function updateEditorTab(filename) {
+  var tab = document.querySelector('#editor-tabs .editor-tab');
+  if (tab) {
+    tab.textContent = filename;
+    tab.setAttribute('data-file', filename);
+  }
+}
 
 function openFileInEditor(filename) {
   var cm = window.editorInstance;
@@ -755,6 +973,7 @@ function openFileInEditor(filename) {
   cm.clearHistory();
   cm.focus();
 
+  updateEditorTab(filename);
   updateEditingIndicator();
 }
 
@@ -775,6 +994,8 @@ function switchBackToMain() {
   }
   cm.clearHistory();
   cm.focus();
+
+  updateEditorTab('main.tex');
   updateEditingIndicator();
 
   // Re-select main.tex in tree
@@ -828,7 +1049,14 @@ function updateEditingIndicator() {
 
 function newFile() {
   var name = prompt('File name:', 'new-file.tex');
-  if (name) addFileToTree(name, false);
+  if (!name || !name.trim()) return;
+  name = name.trim();
+  if (!/\.\w+$/.test(name)) name += '.tex';
+  if (/[\/\\:*?"<>|]/.test(name)) { showErrorToast('Invalid filename'); return; }
+  // Initialize with empty content so it's editable
+  addFileToTree(name, false, '');
+  // Open it immediately
+  if (/\.tex$/i.test(name)) openFileInEditor(name);
 }
 
 function formatFileSize(bytes) {
@@ -868,6 +1096,7 @@ function initEditorImageDrop() {
   });
 
   wrapper.addEventListener('dragleave', function(e) {
+    if (!hasImageFile(e.dataTransfer)) return;
     dropCounter--;
     if (dropCounter <= 0) {
       dropCounter = 0;
@@ -1014,6 +1243,25 @@ window.insertUploadedFigure = insertUploadedFigure;
 window.addUploadedFile = addUploadedFile;
 window.addFileToTree = addFileToTree;
 window.switchBackToMain = switchBackToMain;
+
+// ── Mobile file drawer ──
+function toggleMobileDrawer() {
+  var tree = document.getElementById('file-tree');
+  var backdrop = document.getElementById('filetree-backdrop');
+  if (!tree) return;
+  var isOpen = tree.classList.contains('drawer-open');
+  tree.classList.toggle('drawer-open', !isOpen);
+  if (backdrop) backdrop.classList.toggle('visible', !isOpen);
+}
+function closeMobileDrawer() {
+  var tree = document.getElementById('file-tree');
+  var backdrop = document.getElementById('filetree-backdrop');
+  if (tree) tree.classList.remove('drawer-open');
+  if (backdrop) backdrop.classList.remove('visible');
+}
+window.toggleMobileDrawer = toggleMobileDrawer;
+window.closeMobileDrawer = closeMobileDrawer;
+window.showFileContextMenu = showFileContextMenu;
 window.fileContents = fileContents;
 window.uploadedFiles = uploadedFiles;
 

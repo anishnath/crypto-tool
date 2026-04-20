@@ -72,10 +72,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/hint/show-hint.min.css"/>
 
 <!-- LaTeX Editor CSS -->
-<link rel="stylesheet" href="<%=ctx%>/latex/static/css/layout.css"/>
-<link rel="stylesheet" href="<%=ctx%>/latex/static/css/editor.css"/>
-<link rel="stylesheet" href="<%=ctx%>/latex/static/css/toolbar.css"/>
-<link rel="stylesheet" href="<%=ctx%>/latex/static/css/image-to-latex.css"/>
+<%  long cssV = System.currentTimeMillis(); %>
+<link rel="stylesheet" href="<%=ctx%>/latex/static/css/layout.css?v=<%=cssV%>"/>
+<link rel="stylesheet" href="<%=ctx%>/latex/static/css/editor.css?v=<%=cssV%>"/>
+<link rel="stylesheet" href="<%=ctx%>/latex/static/css/toolbar.css?v=<%=cssV%>"/>
+<link rel="stylesheet" href="<%=ctx%>/latex/static/css/image-to-latex.css?v=<%=cssV%>"/>
 
 <%@ include file="/modern/ads/ad-init.jsp" %>
 
@@ -142,9 +143,12 @@
     <%@ include file="partials/toolbar.jsp" %>
   </div>
 
+  <!-- Mobile file drawer backdrop -->
+  <div class="filetree-backdrop" id="filetree-backdrop" onclick="closeMobileDrawer()"></div>
+
   <!-- Main layout -->
   <div class="main">
-    <!-- File tree sidebar -->
+    <!-- File tree sidebar (slide-in drawer on mobile) -->
     <div class="filetree" id="file-tree">
       <%@ include file="partials/filetree.jsp" %>
     </div>
@@ -348,13 +352,14 @@
 </script>
 
 <!-- App JS -->
-<script src="<%=ctx%>/latex/static/js/storage.js"></script>
-<script src="<%=ctx%>/latex/static/js/symbols.js"></script>
-<script src="<%=ctx%>/latex/static/js/editor.js"></script>
-<script src="<%=ctx%>/latex/static/js/preview.js"></script>
-<script src="<%=ctx%>/latex/static/js/compile.js"></script>
-<script src="<%=ctx%>/latex/static/js/ai.js"></script>
-<script src="<%=ctx%>/latex/static/js/image-to-latex.js"></script>
+<%  long jsV = System.currentTimeMillis(); %>
+<script src="<%=ctx%>/latex/static/js/storage.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/latex/static/js/symbols.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/latex/static/js/editor.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/latex/static/js/preview.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/latex/static/js/compile.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/latex/static/js/ai.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/latex/static/js/image-to-latex.js?v=<%=jsV%>"></script>
 
 </body>
 </html>

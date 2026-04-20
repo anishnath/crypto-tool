@@ -42,6 +42,11 @@
 
   <span class="compile-status" id="compile-status"></span>
 
+  <!-- Mobile: files drawer toggle -->
+  <button class="tb-btn mobile-files-btn" id="btn-mobile-files" onclick="toggleMobileDrawer()" title="Files">
+    &#128193; Files
+  </button>
+
   <!-- Mobile: toggle between editor and preview -->
   <button class="tb-btn mobile-toggle" id="btn-mobile-toggle" onclick="toggleMobileView()">
     <span id="mobile-toggle-icon">&#128196;</span>

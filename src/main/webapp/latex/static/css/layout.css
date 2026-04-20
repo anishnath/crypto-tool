@@ -286,6 +286,52 @@
 }
 
 .file-icon { font-size: 11px; opacity: 0.7; }
+
+.file-actions-btn {
+  display: none;
+  margin-left: auto; padding: 2px 5px;
+  font-size: 16px; font-weight: bold; line-height: 1;
+  color: var(--text2, #8b8fa8); cursor: pointer;
+  border-radius: 3px;
+}
+.file-actions-btn:hover { color: var(--text, #e2e4f0); background: var(--surface3, #222533); }
+.file-item:hover .file-actions-btn { display: block; }
+[data-theme="light"] .file-actions-btn { color: #94a3b8; }
+[data-theme="light"] .file-actions-btn:hover { color: #334155; background: #f1f5f9; }
+
+/* ── File context menu ── */
+.file-ctx-menu {
+  position: fixed; z-index: 9999;
+  display: none;
+  min-width: 140px;
+  background: var(--surface2, #1c1e28);
+  border: 1px solid var(--border, #2a2d3e);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  padding: 4px 0;
+  font-size: 12px;
+}
+.file-ctx-menu.visible { display: block; }
+.file-ctx-item {
+  padding: 6px 14px; cursor: pointer;
+  color: var(--text, #e2e4f0);
+  transition: background 0.1s;
+}
+.file-ctx-item:hover { background: var(--surface3, #222533); }
+.file-ctx-danger { color: var(--error, #f87171); }
+.file-ctx-danger:hover { background: rgba(248,113,113,0.12); }
+.file-ctx-disabled {
+  opacity: 0.3; pointer-events: none;
+}
+.file-ctx-divider {
+  height: 1px; background: var(--border, #2a2d3e);
+  margin: 3px 0;
+}
+[data-theme="light"] .file-ctx-menu { background: #fff; border-color: #e2e8f0; box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+[data-theme="light"] .file-ctx-item { color: #334155; }
+[data-theme="light"] .file-ctx-item:hover { background: #f1f5f9; }
+[data-theme="light"] .file-ctx-danger { color: #dc2626; }
+[data-theme="light"] .file-ctx-danger:hover { background: rgba(220,38,38,0.06); }
 .file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .file-insert-btn {
@@ -1196,6 +1242,7 @@
 
 /* ── Mobile toggle FAB — hidden on desktop ── */
 .mobile-toggle { display: none !important; }
+.mobile-files-btn { display: none !important; }
 .mobile-fab { display: none; }
 
 /* ── MOBILE ── */
@@ -1216,8 +1263,34 @@
   .latex-hero-title { font-size: 14px; }
   .latex-hero-desc { font-size: 10px; }
 
-  /* Hide file tree on mobile */
-  .filetree { display: none; }
+  /* File tree — slide-in drawer on mobile */
+  .filetree {
+    display: none;
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 260px; z-index: 200;
+    background: var(--surface);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  .filetree.drawer-open {
+    display: flex;
+    transform: translateX(0);
+  }
+  .filetree-backdrop {
+    display: none;
+    position: fixed; inset: 0; z-index: 199;
+    background: rgba(0,0,0,0.4);
+  }
+  .filetree-backdrop.visible { display: block; }
+
+  /* Three-dot menu always visible on mobile (no hover) */
+  .file-actions-btn { display: block !important; }
+
+  /* Larger tap targets */
+  .file-item { padding: 10px 12px 10px 16px; font-size: 13px; }
+  .file-ctx-item { padding: 12px 16px; font-size: 14px; }
+  .filetree-actions span { font-size: 22px; padding: 6px; }
 
   /* Stack editor and preview — show one at a time */
   .latex-app .main { flex-direction: column; }
@@ -1302,17 +1375,67 @@
   }
 
   /* Collapse toolbar — hide less essential groups */
-  .toolbar { flex-wrap: wrap; height: auto; min-height: 42px; padding: 4px 8px; gap: 4px; }
+  .toolbar { flex-wrap: wrap; height: auto; min-height: 44px; padding: 4px 8px; gap: 4px; }
   .toolbar-group:nth-child(4) { display: none; } /* formatting buttons */
   .tb-shortcut { display: none; }
+  .tb-btn { min-height: 38px; font-size: 13px; padding: 0 10px; }
+  .tb-select { min-height: 38px; font-size: 13px; }
 
   /* AI: hide rewrite on mobile, keep AI prompt */
   #btn-ai-rewrite { display: none; }
 
   /* Preview toolbar compact */
-  .preview-toolbar { flex-wrap: wrap; height: auto; min-height: 34px; padding: 4px 8px; }
+  .preview-toolbar { flex-wrap: wrap; height: auto; min-height: 38px; padding: 4px 8px; }
+  .preview-btn { min-height: 36px; min-width: 36px; font-size: 13px; }
 
-  /* Log panel shorter on mobile */
+  /* Editing indicator — larger back button */
+  .editing-indicator { font-size: 13px; padding: 6px 12px; }
+  .ei-back { padding: 8px 14px; font-size: 13px; }
+
+  /* Log panel */
   .log-panel { height: 100px; }
-  .log-panel.collapsed { height: 28px; }
+  .log-panel.collapsed { height: 38px; }
+  .log-header { min-height: 38px; }
+  .log-line { font-size: 12px; }
+  .log-title, .log-badge, .log-toggle { font-size: 12px; }
+
+  /* Status bar */
+  .sb-item { font-size: 12px; }
+
+  /* Diff review buttons */
+  .ai-diff-accept, .ai-diff-reject { padding: 10px 18px; font-size: 13px; }
+  .ai-diff-hint { font-size: 11px; }
+
+  /* Selection popup — stack vertically */
+  .sel-popup {
+    flex-wrap: wrap; max-width: 280px;
+    padding: 6px;
+  }
+  .sel-popup button { padding: 8px 12px; font-size: 13px; }
+  .sel-lang-picker { width: 42px; font-size: 12px; }
+
+  /* Symbol picker */
+  .symbol-picker { left: 8px !important; right: 8px; width: auto !important; max-width: 95vw; bottom: 120px; }
+  .sp-tab { font-size: 12px; padding: 8px; }
+
+  /* AI prompt — bottom sheet */
+  .ai-prompt-popup {
+    top: auto !important; left: 0 !important; right: 0;
+    bottom: 0; transform: none !important;
+    width: 100% !important; max-width: 100vw !important;
+    border-radius: 12px 12px 0 0;
+  }
+  .ai-prompt-close { width: 38px; height: 38px; font-size: 20px; }
+
+  /* Toast buttons */
+  .upload-insert-btn { padding: 8px 14px; font-size: 13px; }
+
+  /* Mobile files drawer button */
+  .mobile-files-btn {
+    display: flex !important;
+    align-items: center; gap: 4px;
+  }
+
+  /* Mobile FAB safe area */
+  .mobile-fab { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
 }

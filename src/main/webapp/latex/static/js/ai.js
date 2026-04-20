@@ -276,49 +276,8 @@ function nlToLatex(description) {
 // ══════════════════════════════════════════════════════════════
 
 function rewriteSelection(style) {
-  if (aiBusy) { if (typeof window.showWarningToast === 'function') window.showWarningToast('AI is busy'); return; }
-  if (!window.editorInstance) return;
-  var cm = window.editorInstance;
-  var selection = cm.getSelection();
-
-  if (!selection || !selection.trim()) {
-    if (typeof window.showWarningToast === 'function') window.showWarningToast('Select text to rewrite');
-    return;
-  }
-
-  var from = cm.getCursor('from');
-  var to = cm.getCursor('to');
-
-  // Delete selected text first, then stream replacement
-  cm.replaceRange('', from, to);
-  var currentPos = { line: from.line, ch: from.ch };
-
-  showAIIndicator(true);
-
   var rewriteSystem = SYSTEM_REWRITE + (REWRITE_STYLES[style] || REWRITE_STYLES.formal);
-  streamAI(buildPayload(rewriteSystem, selection, true), {
-    onToken: function(token) {
-      cm.replaceRange(token, currentPos);
-      var lines = token.split('\n');
-      if (lines.length === 1) {
-        currentPos = { line: currentPos.line, ch: currentPos.ch + token.length };
-      } else {
-        currentPos = {
-          line: currentPos.line + lines.length - 1,
-          ch: lines[lines.length - 1].length
-        };
-      }
-    },
-    onDone: function() {
-      showAIIndicator(false);
-      cm.focus();
-      if (typeof window.showSuccessToast === 'function') window.showSuccessToast('Rewrite applied');
-    },
-    onError: function(err) {
-      showAIIndicator(false);
-      if (typeof window.showErrorToast === 'function') window.showErrorToast('AI error: ' + err);
-    }
-  });
+  streamWithDiff(rewriteSystem);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -551,34 +510,166 @@ function createSelPopup() {
 }
 
 function doSelAction(systemPrompt) {
+  streamWithDiff(systemPrompt);
+}
+
+// ══════════════════════════════════════════════════════════════
+// DIFF REVIEW — stream AI into buffer, show inline diff,
+// user accepts or rejects
+// ══════════════════════════════════════════════════════════════
+
+var activeDiff = null; // tracks current diff state
+
+function streamWithDiff(systemPrompt) {
   if (aiBusy) { if (typeof window.showWarningToast === 'function') window.showWarningToast('AI is busy'); return; }
   var cm = window.editorInstance;
   if (!cm) return;
   var selection = cm.getSelection();
-  if (!selection || !selection.trim()) return;
+  if (!selection || !selection.trim()) {
+    if (typeof window.showWarningToast === 'function') window.showWarningToast('Select text first');
+    return;
+  }
+
+  // Dismiss any existing diff
+  if (activeDiff) dismissDiff(false);
 
   var from = cm.getCursor('from');
   var to = cm.getCursor('to');
-  cm.replaceRange('', from, to);
-  var currentPos = { line: from.line, ch: from.ch };
+  var originalText = selection;
+  var aiBuffer = '';
+
+  // Mark original text as "pending" (dim it)
+  var pendingMark = cm.markText(from, to, { className: 'ai-diff-pending' });
 
   showAIIndicator(true);
-  streamAI(buildPayload(systemPrompt, selection, true), {
+
+  streamAI(buildPayload(systemPrompt, originalText, true), {
     onToken: function(token) {
-      cm.replaceRange(token, currentPos);
-      var lines = token.split('\n');
-      if (lines.length === 1) {
-        currentPos = { line: currentPos.line, ch: currentPos.ch + token.length };
-      } else {
-        currentPos = { line: currentPos.line + lines.length - 1, ch: lines[lines.length - 1].length };
-      }
+      aiBuffer += token;
     },
-    onDone: function() { showAIIndicator(false); cm.focus(); },
+    onDone: function() {
+      showAIIndicator(false);
+      var aiText = cleanLatexResponse(aiBuffer);
+      if (!aiText || aiText === originalText) {
+        pendingMark.clear();
+        if (typeof window.showSuccessToast === 'function') window.showSuccessToast('No changes needed');
+        cm.focus();
+        return;
+      }
+      showInlineDiff(cm, from, to, originalText, aiText, pendingMark);
+    },
     onError: function(err) {
       showAIIndicator(false);
+      pendingMark.clear();
       if (typeof window.showErrorToast === 'function') window.showErrorToast('AI error: ' + err);
     }
   });
+}
+
+function showInlineDiff(cm, from, to, originalText, aiText, pendingMark) {
+  // Clear the pending mark
+  pendingMark.clear();
+
+  // Strike-through original text (red)
+  var originalMark = cm.markText(from, to, { className: 'ai-diff-remove' });
+
+  // Insert AI text right after the original with green highlight
+  var insertPos = to;
+  var separator = '\n';
+  cm.replaceRange(separator + aiText, insertPos);
+
+  // Calculate end of inserted text
+  var aiLines = (separator + aiText).split('\n');
+  var aiEnd;
+  if (aiLines.length === 1) {
+    aiEnd = { line: insertPos.line, ch: insertPos.ch + aiLines[0].length };
+  } else {
+    aiEnd = { line: insertPos.line + aiLines.length - 1, ch: aiLines[aiLines.length - 1].length };
+  }
+  var aiFrom = { line: insertPos.line, ch: insertPos.ch };
+  var aiMark = cm.markText(
+    { line: aiFrom.line + 1, ch: 0 },  // skip the separator newline
+    aiEnd,
+    { className: 'ai-diff-add' }
+  );
+
+  // Add Accept/Reject widget below the diff
+  var widget = document.createElement('div');
+  widget.className = 'ai-diff-actions';
+  widget.innerHTML =
+    '<button class="ai-diff-accept" data-action="accept">Accept</button>' +
+    '<button class="ai-diff-reject" data-action="reject">Reject</button>' +
+    '<span class="ai-diff-hint">Ctrl+Enter to accept &middot; Esc to reject</span>';
+
+  var lineWidget = cm.addLineWidget(aiEnd.line, widget, { coverGutter: false, noHScroll: true });
+
+  activeDiff = {
+    cm: cm,
+    originalText: originalText,
+    aiText: aiText,
+    originalFrom: from,
+    originalTo: to,
+    aiFrom: { line: aiFrom.line + 1, ch: 0 },
+    aiEnd: aiEnd,
+    separator: separator,
+    originalMark: originalMark,
+    aiMark: aiMark,
+    lineWidget: lineWidget,
+    widget: widget
+  };
+
+  // Wire buttons
+  widget.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    if (btn.getAttribute('data-action') === 'accept') dismissDiff(true);
+    else dismissDiff(false);
+  });
+
+  // Keyboard: Tab=accept, Esc=reject
+  cm.addKeyMap(diffKeyMap);
+  cm.focus();
+}
+
+var diffKeyMap = {
+  'Ctrl-Enter': function() { dismissDiff(true); },
+  'Cmd-Enter': function() { dismissDiff(true); },
+  'Escape': function() { dismissDiff(false); }
+};
+
+function dismissDiff(accept) {
+  if (!activeDiff) return;
+  var d = activeDiff;
+  activeDiff = null;
+
+  d.cm.removeKeyMap(diffKeyMap);
+
+  // Read live positions from marks (survive document edits during review)
+  var origRange = d.originalMark.find();
+  var aiRange = d.aiMark.find();
+
+  d.originalMark.clear();
+  d.aiMark.clear();
+  d.lineWidget.clear();
+
+  if (!origRange || !aiRange) {
+    // Marks were cleared by external edits — just clean up
+    if (typeof window.showWarningToast === 'function') window.showWarningToast('Diff lost — text was edited');
+    d.cm.focus();
+    return;
+  }
+
+  if (accept) {
+    // Remove original + separator, keep AI text
+    d.cm.replaceRange('', origRange.from, aiRange.from);
+    if (typeof window.showSuccessToast === 'function') window.showSuccessToast('Change accepted');
+  } else {
+    // Remove separator + AI text, keep original
+    d.cm.replaceRange('', origRange.to, aiRange.to);
+    if (typeof window.showSuccessToast === 'function') window.showSuccessToast('Change rejected');
+  }
+
+  d.cm.focus();
 }
 
 // ── Move to File: extract selection → upload as .tex → replace with \input{} ──
@@ -615,6 +706,15 @@ function doMoveToFile() {
     return;
   }
 
+  // Capture cursor positions NOW (before async fetch)
+  var selFrom = cm.getCursor('from');
+  var selTo = cm.getCursor('to');
+
+  // Check for duplicate
+  if (window.fileContents && window.fileContents[filename] != null) {
+    if (!confirm(filename + ' already exists. Overwrite?')) return;
+  }
+
   // Upload as .tex file
   var blob = new Blob([selection], { type: 'text/plain' });
   var formData = new FormData();
@@ -641,11 +741,9 @@ function doMoveToFile() {
       }
     }
 
-    // Replace selection with \input{filename}
+    // Replace selection with \input{filename} using pre-captured positions
     var inputCmd = '\\input{' + fname.replace(/\.tex$/i, '') + '}';
-    var from = cm.getCursor('from');
-    var to = cm.getCursor('to');
-    cm.replaceRange(inputCmd, from, to);
+    cm.replaceRange(inputCmd, selFrom, selTo);
     cm.focus();
 
     if (typeof window.showSuccessToast === 'function')
