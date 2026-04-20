@@ -1346,6 +1346,7 @@
             '    parsed = parse_latex(LATEX, backend="lark")\n' +
             '    if getattr(parsed, "data", None) == "_ambig":\n' +
             '        parsed = parsed.children[0]\n' +
+            '    parsed = parsed.subs(Symbol("e"), E)\n' +
             '    out = {"ok": True, "expr": str(parsed).replace("**", "^")}\n' +
             'except Exception as e:\n' +
             '    out = {"ok": False, "error": type(e).__name__ + ": " + str(e)}\n' +
@@ -1464,6 +1465,8 @@
             '    parsed = parse_latex(LATEX, backend="lark")\n' +
             'if getattr(parsed, "data", None) == "_ambig":\n' +
             '    parsed = parsed.children[0]\n' +
+            '# parse_latex treats e as Symbol; replace with Euler number E\n' +
+            'parsed = parsed.subs(Symbol("e"), E)\n' +
             'var = Symbol(V)\n' +
             'def _timeout(s, f): raise TimeoutError\n' +
             'signal.signal(signal.SIGALRM, _timeout)\n' +

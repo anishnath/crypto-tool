@@ -1184,6 +1184,8 @@
             'if not isinstance(parsed, Integral):\n' +
             '    raise ValueError("Not a full integral expression")\n' +
             'expr = simplify(parsed.function)\n' +
+            '# parse_latex treats e as Symbol; replace with Euler number E\n' +
+            'expr = expr.subs(Symbol("e"), E)\n' +
             'limits = parsed.limits[0]\n' +
             'v = limits[0]\n' +
             'is_def = len(limits) == 3\n' +
@@ -1479,7 +1481,7 @@
             '    if not isinstance(parsed, Integral):\n' +
             '        out["error"] = "Not a full integral expression"\n' +
             '    else:\n' +
-            '        expr = parsed.function\n' +
+            '        expr = parsed.function.subs(Symbol("e"), E)\n' +
             '        limits = parsed.limits[0]\n' +
             '        # SymPy str() uses **, Python-style; calculator uses ^.\n' +
             '        def asc(s): return str(s).replace("**", "^")\n' +

@@ -285,7 +285,10 @@
                 </div>
                 <div class="tool-card-body">
                     <div class="tool-form-group">
-                        <label class="tool-form-label" for="lc-expr">Function f(x)</label>
+                        <div style="display:flex;align-items:center;justify-content:space-between;">
+                            <label class="tool-form-label" for="lc-expr" style="margin-bottom:0;">Function f(x)</label>
+                            <button type="button" id="lc-image-btn" title="Scan limit problems from image or PDF" style="padding:0.25rem 0.625rem;border-radius:9999px;border:1.5px solid var(--primary);background:transparent;color:var(--primary);font-size:0.75rem;font-weight:600;cursor:pointer;">&#128247; Scan Image</button>
+                        </div>
                         <input type="text" class="tool-input tool-input-mono" id="lc-expr" placeholder="e.g. sin(3*x)/x, (x^2-1)/(x-1)" autocomplete="off" spellcheck="false">
                         <span class="tool-form-hint">Both sin3x and sin(3*x) work</span>
                     </div>
@@ -313,7 +316,6 @@
                         </div>
                     </div>
                     <button type="button" class="tool-action-btn" id="lc-calculate-btn">Calculate Limit</button>
-                    <button type="button" class="ic-image-btn" id="lc-image-btn" title="Scan limit problems from image or PDF" style="margin-left:0.5rem;padding:0.5rem 0.875rem;border-radius:var(--radius-full,9999px);border:1.5px solid var(--primary);background:transparent;color:var(--primary);font-size:0.8125rem;font-weight:600;cursor:pointer;">&#128247; Scan Image</button>
                     <hr class="lc-sep">
                     <div class="tool-form-group">
                         <label class="tool-form-label">Quick Examples</label>
@@ -729,6 +731,8 @@
             '    expr = parse_latex(FUNC_LATEX, backend="lark")\n' +
             'if getattr(expr, "data", None) == "_ambig":\n' +
             '    expr = expr.children[0]\n' +
+            '# parse_latex treats e as Symbol; replace with Euler number E\n' +
+            'expr = expr.subs(Symbol("e"), E)\n' +
             'try:\n' +
             '    pt = parse_latex(PT_LATEX)\n' +
             'except Exception:\n' +
