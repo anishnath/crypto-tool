@@ -1,0 +1,222 @@
+/* Speech to Text — modal styles */
+
+.stt-overlay {
+    position: fixed;
+    inset: 0; z-index: 99999;
+    background: rgba(0, 0, 0, 0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.stt-modal {
+    background: var(--bg-primary, #1e293b);
+    border-radius: 0.75rem;
+    width: 100%; max-width: 380px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.stt-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.stt-title {
+    font-weight: 700; font-size: 0.9375rem;
+    color: var(--text-primary, #f1f5f9);
+}
+.stt-close {
+    background: none; border: none; font-size: 1.5rem; line-height: 1;
+    color: var(--text-muted, #94a3b8); cursor: pointer;
+}
+.stt-close:hover { color: var(--text-primary, #f1f5f9); }
+
+.stt-body {
+    padding: 1.25rem;
+    text-align: center;
+}
+
+/* Visualization */
+.stt-viz-wrap {
+    margin: 0 auto 0.75rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: #0e0f14;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.stt-viz {
+    display: block; width: 100%; height: 80px;
+}
+
+/* Timer */
+.stt-timer {
+    font-size: 2rem; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-primary, #f1f5f9);
+    margin-bottom: 0.25rem;
+}
+
+/* Status */
+.stt-status {
+    font-size: 0.8125rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 1rem;
+}
+
+/* Record button */
+.stt-btn-row {
+    display: flex; justify-content: center;
+    margin-bottom: 1rem;
+}
+.stt-record-btn {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    border: 3px solid var(--primary, #6366f1);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary, #6366f1);
+    font-size: 1.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+}
+.stt-record-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+    transform: scale(1.05);
+}
+.stt-record-btn.stt-recording {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    animation: stt-pulse 1.2s ease infinite;
+}
+.stt-record-btn.stt-disabled {
+    opacity: 0.5; pointer-events: none;
+}
+
+@keyframes stt-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3); }
+    50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+}
+
+.stt-mic-icon { font-size: 1.75rem; }
+.stt-stop-icon { font-size: 1.5rem; }
+
+/* Spinner */
+.stt-spinner {
+    width: 28px; height: 28px;
+    border: 3px solid rgba(255,255,255,0.15);
+    border-top-color: var(--primary, #6366f1);
+    border-radius: 50%;
+    animation: stt-spin 0.7s linear infinite;
+    display: inline-block;
+}
+@keyframes stt-spin { to { transform: rotate(360deg); } }
+
+/* Upload row */
+.stt-upload-row {
+    margin-bottom: 1rem;
+}
+.stt-or-divider {
+    display: block; text-align: center;
+    font-size: 0.6875rem; color: var(--text-muted, #94a3b8);
+    margin-bottom: 0.5rem; position: relative;
+}
+.stt-or-divider span {
+    background: var(--bg-primary, #1e293b); padding: 0 0.75rem;
+    position: relative; z-index: 1;
+}
+.stt-or-divider::before {
+    content: ''; position: absolute;
+    left: 0; right: 0; top: 50%;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+.stt-upload-label {
+    display: flex; flex-direction: column; align-items: center; gap: 0.375rem;
+    cursor: pointer;
+}
+.stt-upload-input {
+    position: absolute; width: 0; height: 0; opacity: 0;
+}
+.stt-upload-btn {
+    display: inline-block;
+    padding: 0.4rem 1rem; border-radius: 0.375rem;
+    background: rgba(255,255,255,0.06);
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.8125rem; font-weight: 500;
+    transition: all 0.12s;
+}
+.stt-upload-label:hover .stt-upload-btn {
+    background: rgba(255,255,255,0.1);
+    color: var(--text-primary, #f1f5f9);
+}
+.stt-upload-hint {
+    font-size: 0.6875rem; color: var(--text-muted, #64748b);
+}
+
+[data-theme="light"] .stt-or-divider span { background: #fff; }
+[data-theme="light"] .stt-or-divider::before { border-top-color: #e2e8f0; }
+[data-theme="light"] .stt-upload-btn { background: #f1f5f9; color: #64748b; }
+[data-theme="light"] .stt-upload-label:hover .stt-upload-btn { background: #e2e8f0; color: #334155; }
+
+/* Result */
+.stt-result {
+    text-align: left;
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.5rem;
+}
+.stt-result-label {
+    font-size: 0.6875rem; font-weight: 600;
+    color: var(--text-muted, #94a3b8);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.375rem;
+}
+.stt-result-text {
+    font-size: 0.875rem;
+    color: var(--text-primary, #f1f5f9);
+    line-height: 1.5;
+    max-height: 120px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.stt-result-actions {
+    display: flex; gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+.stt-btn-primary, .stt-btn-secondary {
+    padding: 0.5rem 1rem; border-radius: 0.375rem;
+    font-size: 0.8125rem; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.12s;
+}
+.stt-btn-primary {
+    background: var(--primary, #6366f1); color: #fff; flex: 1;
+}
+.stt-btn-primary:hover { filter: brightness(1.1); }
+.stt-btn-secondary {
+    background: rgba(255,255,255,0.06); color: var(--text-muted, #94a3b8);
+}
+.stt-btn-secondary:hover { background: rgba(255,255,255,0.1); color: var(--text-primary, #f1f5f9); }
+
+/* ── Light theme ── */
+[data-theme="light"] .stt-modal { background: #fff; }
+[data-theme="light"] .stt-header { border-bottom-color: #e2e8f0; }
+[data-theme="light"] .stt-title { color: #0f172a; }
+[data-theme="light"] .stt-timer { color: #0f172a; }
+[data-theme="light"] .stt-result { background: #f8fafc; border-color: #e2e8f0; }
+[data-theme="light"] .stt-result-text { color: #1e293b; }
+[data-theme="light"] .stt-btn-secondary { background: #f1f5f9; color: #64748b; }
+[data-theme="light"] .stt-btn-secondary:hover { background: #e2e8f0; color: #334155; }
+[data-theme="light"] .stt-viz-wrap { background: #f8fafc; border-color: #e2e8f0; }
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+    .stt-modal { max-width: 100%; margin: 0.5rem; }
+    .stt-btn-primary, .stt-btn-secondary { padding: 0.625rem 1rem; font-size: 0.875rem; }
+    .stt-record-btn { width: 80px; height: 80px; }
+}
