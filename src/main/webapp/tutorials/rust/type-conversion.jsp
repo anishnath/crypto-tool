@@ -251,21 +251,23 @@ let text: String = "Hello".into(); // Calls String::from("Hello")</code></pre>
                                     </jsp:include>
 
                                     <!-- Section 3: Parsing Strings -->
+                                    <!-- Reviewed by jeremie2 (Reddit u/Ok-Reaction3396) -->
                                     <h2>Parsing Strings to Numbers</h2>
                                     <p>The <code>parse</code> method converts strings to numbers. It returns a
                                         <code>Result</code> because parsing can fail:
                                     </p>
 
-                                    <pre><code class="language-rust">// Using parse with type annotation
+                                    <pre><code class="language-rust">// Reviewed by jeremie2 (Reddit u/Ok-Reaction3396)
+// Using parse with type annotation
 let number_str = "42";
 let number: i32 = number_str.parse().expect("Not a number!");
 
 // Using turbofish syntax
-let float_num = "3.14".parse::<f64>().expect("Not a float!");
+let float_num = "3.14".parse::&lt;f64&gt;().expect("Not a float!");
 
 // Handling errors with match
 let input = "not a number";
-match input.parse::<i32>() {
+match input.parse::&lt;i32&gt;() {
     Ok(n) => println!("Parsed: {}", n),
     Err(e) => println!("Parse error: {}", e),
 }</code></pre>
@@ -287,7 +289,7 @@ use std::convert::TryInto;
 
 // TryFrom - safe conversion that can fail
 let big_num: i64 = 1000;
-let small_num: Result<i8, _> = i8::try_from(big_num);
+let small_num: Result&lt;i8, _&gt; = i8::try_from(big_num);
 
 match small_num {
     Ok(n) => println!("Converted: {}", n),
@@ -296,7 +298,7 @@ match small_num {
 
 // TryInto - the reverse
 let value: i32 = 100;
-let result: Result<i8, _> = value.try_into();
+let result: Result&lt;i8, _&gt; = value.try_into();
 match result {
     Ok(n) => println!("Success: {}", n),
     Err(e) => println!("Failed: {}", e),
@@ -446,7 +448,7 @@ fn main() {
     
     // Safe conversion with error handling
     let big_number: i64 = 1000;
-    let small_number: Result<i8, _> = big_number.try_into();
+    let small_number: Result&lt;i8, _&gt; = big_number.try_into();
     match small_number {
         Ok(n) => println!("Converted: {}", n),
         Err(_) => println!("Number too large for i8"),
@@ -454,7 +456,7 @@ fn main() {
     
     // Parse with error handling
     let input = "not a number";
-    match input.parse::<i32>() {
+    match input.parse::&lt;i32&gt;() {
         Ok(n) => println!("Parsed: {}", n),
         Err(e) => println!("Parse error: {}", e),
     }
