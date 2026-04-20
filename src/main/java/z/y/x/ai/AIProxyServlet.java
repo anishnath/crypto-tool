@@ -97,6 +97,17 @@ public class AIProxyServlet extends HttpServlet {
         return base + "/ocr";
     }
 
+    private static String getVisionEndpoint() {
+        String base = System.getenv("AI_ENDPOINT2");
+        if (base == null || base.isEmpty()) {
+            return null;
+        }
+        if (base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
+        }
+        return base + "/ai";
+    }
+
     private static String getTranscribeEndpoint() {
         String base = System.getenv("AI_ENDPOINT2");
         if (base == null || base.isEmpty()) {
@@ -180,6 +191,10 @@ public class AIProxyServlet extends HttpServlet {
         }
         if ("transcribe".equals(action)) {
             handleTranscribe(req, resp);
+            return;
+        }
+        if ("vision".equals(action)) {
+            handleVision(req, resp);
             return;
         }
 
@@ -318,6 +333,103 @@ public class AIProxyServlet extends HttpServlet {
             forwardStreaming(ocrUrl, ocrJson, resp);
         } else {
             forwardBlocking(ocrUrl, ocrJson, resp);
+        }
+    }
+
+    /**
+     * Handle image analyse requests (action=analyse) — forwards to AI_ENDPOINT2/ai with image.
+     *
+     * Uses Ollama chat format with images in the user message.
+     * Caller provides: image (base64), messages (optional system+user), model (optional), stream.
+     */
+    private void handleVision(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String analyseUrl = getVisionEndpoint();
+        if (analyseUrl == null) {
+            resp.setContentType("application/json");
+            resp.setStatus(503);
+            resp.getWriter().write("{\"error\":\"Image analysis is temporarily unavailable. Please try again later.\"}");
+            return;
+        }
+
+        String body = readRequestBody(req);
+        if (body.isEmpty()) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Empty request body\"}");
+            return;
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> payload = JsonUtil.fromJson(body, Map.class);
+        if (payload == null) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Invalid JSON\"}");
+            return;
+        }
+
+        // ── Validate image ──
+        Object imageObj = payload.get("image");
+        if (imageObj == null || imageObj.toString().trim().isEmpty()) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Missing required field: image (base64-encoded)\"}");
+            return;
+        }
+
+        String imageB64 = imageObj.toString().trim();
+        if (imageB64.startsWith("data:")) {
+            int commaIdx = imageB64.indexOf(',');
+            if (commaIdx > 0) imageB64 = imageB64.substring(commaIdx + 1);
+        }
+
+        if (imageB64.length() > MAX_IMAGE_BASE64_LENGTH) {
+            long approxMB = imageB64.length() * 3 / 4 / 1024 / 1024;
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Image too large (~" + approxMB + "MB). Maximum is 10MB.\"}");
+            return;
+        }
+
+        // ── Build Ollama chat payload with images ──
+        // The caller may pass messages (with system prompt) or just a prompt string.
+        // We ensure the user message has the images array.
+        @SuppressWarnings("unchecked")
+        java.util.List<Map<String, Object>> messages = (java.util.List<Map<String, Object>>) payload.get("messages");
+        if (messages == null || messages.isEmpty()) {
+            String prompt = payload.get("prompt") != null ? payload.get("prompt").toString() : "Describe this image.";
+            messages = new java.util.ArrayList<>();
+            Map<String, Object> userMsg = new java.util.HashMap<>();
+            userMsg.put("role", "user");
+            userMsg.put("content", prompt);
+            userMsg.put("images", java.util.Collections.singletonList(imageB64));
+            messages.add(userMsg);
+        } else {
+            // Attach image to the last user message
+            for (int i = messages.size() - 1; i >= 0; i--) {
+                if ("user".equals(messages.get(i).get("role"))) {
+                    messages.get(i).put("images", java.util.Collections.singletonList(imageB64));
+                    break;
+                }
+            }
+        }
+        payload.put("messages", messages);
+        payload.remove("image"); // don't send raw image field to Ollama
+
+        if (!payload.containsKey("model") || payload.get("model") == null
+                || payload.get("model").toString().trim().isEmpty()) {
+            payload.put("model", "gemma4:latest");
+        }
+
+        boolean stream = Boolean.TRUE.equals(payload.get("stream"));
+        String analyseJson = JsonUtil.toJson(payload);
+
+        log.info("Analyse request: imageSize=" + (imageB64.length() / 1024) + "KB model=" + payload.get("model") + " stream=" + stream);
+
+        if (stream) {
+            forwardStreaming(analyseUrl, analyseJson, resp);
+        } else {
+            forwardBlocking(analyseUrl, analyseJson, resp, 180000); // 3 min timeout for vision
         }
     }
 

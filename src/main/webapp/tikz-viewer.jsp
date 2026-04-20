@@ -204,6 +204,36 @@
         .tikz-ai-input:focus { border-color: var(--primary, #6366f1); }
         .tikz-ai-btn { white-space: nowrap; font-size: 0.82rem; }
         .tikz-ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .tikz-img-spinner {
+            display: inline-block; width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: tikz-spin 0.6s linear infinite;
+            vertical-align: middle;
+        }
+        @keyframes tikz-spin { to { transform: rotate(360deg); } }
+        .tikz-img-progress {
+            margin-top: 0.5rem; display: none;
+        }
+        .tikz-img-progress.active { display: block; }
+        .tikz-img-progress-bar {
+            height: 4px; border-radius: 2px;
+            background: var(--bg-tertiary, #f1f5f9);
+            overflow: hidden;
+        }
+        [data-theme="dark"] .tikz-img-progress-bar { background: rgba(255,255,255,0.08); }
+        .tikz-img-progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--primary, #6366f1), #818cf8);
+            border-radius: 2px;
+            transition: width 1s linear;
+        }
+        .tikz-img-progress-text {
+            display: flex; justify-content: space-between;
+            font-size: 0.6875rem; color: var(--text-muted, #94a3b8);
+            margin-top: 0.25rem;
+        }
         .tikz-ai-hint {
             font-size: 0.75rem;
             color: var(--text-secondary, #475569);
@@ -671,6 +701,22 @@
                         </button>
                     </div>
                     <div id="tikz-ai-hint" class="tikz-ai-hint" style="display:none;"></div>
+                    <!-- Image to TikZ -->
+                    <div class="tikz-ai-row" style="margin-top:0.5rem;">
+                        <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="flex-shrink:0;color:var(--primary)"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>
+                        <label class="tikz-img-label" style="flex:1;cursor:pointer;">
+                            <span id="tikz-img-filename" style="font-size:0.8rem;color:var(--text-secondary);">Drop or choose an image to convert to TikZ</span>
+                            <input type="file" id="tikz-img-input" accept="image/*" style="display:none;" />
+                        </label>
+                        <button id="tikz-img-btn" class="tool-btn tool-btn-primary tikz-ai-btn" type="button" disabled>
+                            Convert
+                        </button>
+                    </div>
+                    <div id="tikz-img-hint" class="tikz-ai-hint" style="display:none;"></div>
+                    <div id="tikz-img-progress" class="tikz-img-progress">
+                        <div class="tikz-img-progress-bar"><div id="tikz-img-progress-fill" class="tikz-img-progress-fill"></div></div>
+                        <div class="tikz-img-progress-text"><span id="tikz-img-progress-label">Analyzing image...</span><span id="tikz-img-progress-time">~3 min</span></div>
+                    </div>
                 </div>
 
                 <!-- Toolbar -->
@@ -1081,6 +1127,186 @@
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') generate();
         });
+
+        // ── Image to TikZ ──
+        const imgInput = document.getElementById('tikz-img-input');
+        const imgBtn = document.getElementById('tikz-img-btn');
+        const imgHint = document.getElementById('tikz-img-hint');
+        const imgFilename = document.getElementById('tikz-img-filename');
+        let imgBase64 = null;
+        let progressTimer = null;
+
+        const progressEl = document.getElementById('tikz-img-progress');
+        const progressFill = document.getElementById('tikz-img-progress-fill');
+        const progressLabel = document.getElementById('tikz-img-progress-label');
+        const progressTime = document.getElementById('tikz-img-progress-time');
+
+        const ESTIMATED_MS = 210000; // ~3.5 min estimate
+        const PHASES = [
+            { pct: 15, ms: 5000, label: 'Uploading image...' },
+            { pct: 30, ms: 15000, label: 'Analyzing diagram structure...' },
+            { pct: 50, ms: 45000, label: 'Identifying shapes and labels...' },
+            { pct: 70, ms: 90000, label: 'Generating TikZ code...' },
+            { pct: 85, ms: 150000, label: 'Refining coordinates...' },
+            { pct: 92, ms: 190000, label: 'Almost done...' }
+        ];
+
+        function startProgress() {
+            progressEl.classList.add('active');
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
+            const startTime = Date.now();
+
+            progressTimer = setInterval(function() {
+                const elapsed = Date.now() - startTime;
+                let pct = 0, label = 'Analyzing image...';
+
+                for (let i = PHASES.length - 1; i >= 0; i--) {
+                    if (elapsed >= PHASES[i].ms) {
+                        pct = PHASES[i].pct;
+                        label = PHASES[i].label;
+                        // Interpolate to next phase
+                        if (i < PHASES.length - 1) {
+                            var next = PHASES[i + 1];
+                            var frac = (elapsed - PHASES[i].ms) / (next.ms - PHASES[i].ms);
+                            pct += (next.pct - pct) * Math.min(frac, 1);
+                        }
+                        break;
+                    }
+                }
+                if (elapsed < PHASES[0].ms) {
+                    pct = (elapsed / PHASES[0].ms) * PHASES[0].pct;
+                    label = PHASES[0].label;
+                }
+
+                var remaining = Math.max(0, Math.ceil((ESTIMATED_MS - elapsed) / 60000));
+                var timeText = remaining > 1 ? '~' + remaining + ' min' : remaining === 1 ? '~1 min' : 'almost done';
+
+                progressFill.style.transition = 'width 1s linear';
+                progressFill.style.width = Math.min(pct, 95) + '%';
+                progressLabel.textContent = label;
+                progressTime.textContent = timeText;
+            }, 1000);
+        }
+
+        function stopProgress(success) {
+            clearInterval(progressTimer);
+            progressTimer = null;
+            if (success) {
+                progressFill.style.transition = 'width 0.3s ease';
+                progressFill.style.width = '100%';
+                progressLabel.textContent = 'Done!';
+                progressTime.textContent = '';
+                setTimeout(function() { progressEl.classList.remove('active'); }, 1500);
+            } else {
+                progressEl.classList.remove('active');
+            }
+        }
+
+        function showImgHint(msg, isError) {
+            imgHint.textContent = msg;
+            imgHint.className = 'tikz-ai-hint' + (isError ? ' error' : '');
+            imgHint.style.display = msg ? 'block' : 'none';
+        }
+
+        imgInput.addEventListener('change', function(e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            if (file.size > 10 * 1024 * 1024) { showImgHint('Image too large. Max 10MB.', true); return; }
+            imgFilename.textContent = file.name + ' (' + (file.size / 1024).toFixed(0) + 'KB)';
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const dataUrl = ev.target.result;
+                imgBase64 = dataUrl.split(',')[1];
+                imgBtn.disabled = false;
+                showImgHint('', false);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        imgBtn.addEventListener('click', async function() {
+            if (!imgBase64) return;
+            imgBtn.disabled = true;
+            imgBtn.innerHTML = '<span class="tikz-img-spinner"></span> Analyzing…';
+            showImgHint('', false);
+            startProgress();
+
+            try {
+                const resp = await fetch('<%=request.getContextPath()%>/ai?action=vision', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        image: imgBase64,
+                        stream: false,
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are a TikZ expert. Given an image of a diagram, chart, graph, shape, or illustration, generate TikZ/PGF code that recreates it as closely as possible.\n\n'
+                                    + 'Rules:\n'
+                                    + '- Return ONLY the TikZ code starting from \\begin{tikzpicture} to \\end{tikzpicture}.\n'
+                                    + '- If tikz libraries are needed, put \\usetikzlibrary{...} BEFORE \\begin{tikzpicture}.\n'
+                                    + '- Do NOT include \\documentclass, \\usepackage{tikz}, \\begin{document}, or any preamble.\n'
+                                    + '- Do NOT include markdown fences, explanation, or commentary.\n'
+                                    + '- Use coordinates, colors, and styles to match the image.\n'
+                                    + '- For text labels, use the text from the image.\n'
+                                    + '- Keep the code clean and well-indented.'
+                            },
+                            {
+                                role: 'user',
+                                content: 'Convert this image to TikZ code. Recreate the diagram as accurately as possible.'
+                            }
+                        ]
+                    })
+                });
+
+                const data = await resp.json();
+                if (!resp.ok || data.error) {
+                    stopProgress(false);
+                    showImgHint(data.error || 'Analysis failed', true);
+                    return;
+                }
+
+                // Extract code from response
+                let code = '';
+                if (data.message && data.message.content) code = data.message.content;
+                else if (data.response) code = data.response;
+
+                if (!code) { stopProgress(false); showImgHint('No TikZ code generated', true); return; }
+
+                // Clean markdown fences if present
+                code = code.replace(/^```(?:latex|tex|tikz)?\s*\n?/gm, '').replace(/\n?```\s*$/gm, '').trim();
+
+                // Extract preamble (usetikzlibrary) from code
+                let preamble = '';
+                const libMatch = code.match(/\\usetikzlibrary\{[^}]+\}/g);
+                if (libMatch) {
+                    preamble = libMatch.join('\n');
+                    code = code.replace(/\\usetikzlibrary\{[^}]+\}\s*/g, '').trim();
+                }
+
+                // Format and load
+                const formatted = formatTikz(code);
+                if (window.tikzLoadCode) {
+                    window.tikzLoadCode(formatted, preamble);
+                } else {
+                    const ta = document.getElementById('tikzInput');
+                    if (ta) ta.value = (preamble ? preamble + '\n\n' : '') + formatted;
+                    const renderBtn = document.getElementById('btn-render');
+                    if (renderBtn) renderBtn.click();
+                }
+
+                stopProgress(true);
+                showImgHint('\u2728 TikZ code generated from image', false);
+
+            } catch (e) {
+                stopProgress(false);
+                showImgHint('Network error: ' + e.message, true);
+            } finally {
+                imgBtn.disabled = !imgBase64;
+                imgBtn.textContent = 'Convert';
+            }
+        });
+
     })();
     </script>
 
