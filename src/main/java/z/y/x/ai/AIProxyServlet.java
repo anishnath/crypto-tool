@@ -406,11 +406,11 @@ public class AIProxyServlet extends HttpServlet {
         }
         payload.put("task", task);
 
-        // ── Forward to transcribe endpoint (always non-streaming) ──
+        // ── Forward to transcribe endpoint (always non-streaming, 5 min timeout) ──
         String transcribeJson = JsonUtil.toJson(payload);
         log.info("Transcribe request: format=" + format + " task=" + task + " audioSize=" + (audioB64.length() / 1024) + "KB");
 
-        forwardBlocking(transcribeUrl, transcribeJson, resp);
+        forwardBlocking(transcribeUrl, transcribeJson, resp, 300000);
     }
 
     private String readRequestBody(HttpServletRequest req) throws IOException {
@@ -423,15 +423,19 @@ public class AIProxyServlet extends HttpServlet {
         return sb.toString().trim();
     }
 
+    private void forwardBlocking(String aiUrl, String payload, HttpServletResponse resp) throws IOException {
+        forwardBlocking(aiUrl, payload, resp, 120000);
+    }
+
     /**
      * Non-streaming: forward to /ai, wait for full response, return JSON to client.
      */
-    private void forwardBlocking(String aiUrl, String payload, HttpServletResponse resp) throws IOException {
+    private void forwardBlocking(String aiUrl, String payload, HttpServletResponse resp, int socketTimeoutMs) throws IOException {
         resp.setContentType("application/json");
 
         RequestConfig config = RequestConfig.custom()
                 .setConnectTimeout(5000)
-                .setSocketTimeout(120000)
+                .setSocketTimeout(socketTimeoutMs)
                 .build();
 
         CloseableHttpClient client = HttpClients.createDefault();
