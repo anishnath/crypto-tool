@@ -97,10 +97,28 @@ public class AIProxyServlet extends HttpServlet {
         return base + "/ocr";
     }
 
+    private static String getTranscribeEndpoint() {
+        String base = System.getenv("AI_ENDPOINT2");
+        if (base == null || base.isEmpty()) {
+            return null;
+        }
+        if (base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
+        }
+        return base + "/transcribe";
+    }
+
     // Max base64 image size: ~10MB decoded ≈ ~13.3MB base64
     private static final long MAX_IMAGE_BASE64_LENGTH = 14_000_000;
     private static final java.util.Set<String> VALID_OCR_MODES =
         new java.util.HashSet<>(java.util.Arrays.asList("text", "formula", "table"));
+
+    // Max base64 audio size: ~5MB decoded ≈ ~6.7MB base64
+    private static final long MAX_AUDIO_BASE64_LENGTH = 7_000_000;
+    private static final java.util.Set<String> VALID_AUDIO_FORMATS =
+        new java.util.HashSet<>(java.util.Arrays.asList("mp3", "wav", "m4a", "webm", "ogg", "flac"));
+    private static final java.util.Set<String> VALID_TRANSCRIBE_TASKS =
+        new java.util.HashSet<>(java.util.Arrays.asList("transcribe", "translate"));
 
     private Bucket resolveBucket(String ip) {
         if (buckets.size() > MAX_BUCKETS) {
@@ -158,6 +176,10 @@ public class AIProxyServlet extends HttpServlet {
         String action = req.getParameter("action");
         if ("ocr".equals(action)) {
             handleOcr(req, resp);
+            return;
+        }
+        if ("transcribe".equals(action)) {
+            handleTranscribe(req, resp);
             return;
         }
 
@@ -297,6 +319,98 @@ public class AIProxyServlet extends HttpServlet {
         } else {
             forwardBlocking(ocrUrl, ocrJson, resp);
         }
+    }
+
+    /**
+     * Handle transcribe requests (action=transcribe) — forwards to AI_ENDPOINT2/transcribe.
+     *
+     * Validates:
+     *   - audio field present and non-empty
+     *   - audio base64 size ≤ 50MB decoded
+     *   - format is one of: mp3, wav, m4a, webm, ogg, flac
+     *   - task is one of: transcribe, translate
+     */
+    private void handleTranscribe(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String transcribeUrl = getTranscribeEndpoint();
+        if (transcribeUrl == null) {
+            resp.setContentType("application/json");
+            resp.setStatus(503);
+            resp.getWriter().write("{\"error\":\"Speech-to-text is temporarily unavailable. Please try again later.\"}");
+            return;
+        }
+
+        String body = readRequestBody(req);
+        if (body.isEmpty()) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Empty request body\"}");
+            return;
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> payload = JsonUtil.fromJson(body, Map.class);
+        if (payload == null) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Invalid JSON\"}");
+            return;
+        }
+
+        // ── Validate audio ──
+        Object audioObj = payload.get("audio");
+        if (audioObj == null || audioObj.toString().trim().isEmpty()) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Missing required field: audio (base64-encoded)\"}");
+            return;
+        }
+
+        String audioB64 = audioObj.toString().trim();
+
+        // Strip data URI prefix if present
+        if (audioB64.startsWith("data:")) {
+            int commaIdx = audioB64.indexOf(',');
+            if (commaIdx > 0) {
+                audioB64 = audioB64.substring(commaIdx + 1);
+                payload.put("audio", audioB64);
+            }
+        }
+
+        if (audioB64.length() > MAX_AUDIO_BASE64_LENGTH) {
+            long approxMB = audioB64.length() * 3 / 4 / 1024 / 1024;
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Audio too large (~" + approxMB + "MB). Maximum is 5MB.\"}");
+            return;
+        }
+
+        // ── Validate format ──
+        Object formatObj = payload.get("format");
+        String format = (formatObj != null) ? formatObj.toString().trim().toLowerCase() : "webm";
+        if (!VALID_AUDIO_FORMATS.contains(format)) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Invalid format. Use: mp3, wav, m4a, webm, ogg, or flac\"}");
+            return;
+        }
+        payload.put("format", format);
+
+        // ── Validate task ──
+        Object taskObj = payload.get("task");
+        String task = (taskObj != null) ? taskObj.toString().trim().toLowerCase() : "transcribe";
+        if (!VALID_TRANSCRIBE_TASKS.contains(task)) {
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Invalid task. Use: transcribe or translate\"}");
+            return;
+        }
+        payload.put("task", task);
+
+        // ── Forward to transcribe endpoint (always non-streaming) ──
+        String transcribeJson = JsonUtil.toJson(payload);
+        log.info("Transcribe request: format=" + format + " task=" + task + " audioSize=" + (audioB64.length() / 1024) + "KB");
+
+        forwardBlocking(transcribeUrl, transcribeJson, resp);
     }
 
     private String readRequestBody(HttpServletRequest req) throws IOException {
