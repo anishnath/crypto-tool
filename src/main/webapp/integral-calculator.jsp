@@ -1165,9 +1165,19 @@
 
         var code = ic.buildR2sPreamble(!isDefinite) +
             'from sympy.parsing.latex import parse_latex\n' +
-            'import signal\n' +
+            'import re, signal\n' +
             'LATEX = r"""' + pyLiteral + '"""\n' +
-            'parsed = parse_latex(LATEX, backend="lark")\n' +
+            '# Clean LaTeX for parse_latex: strip sizing commands it cannot handle\n' +
+            'LATEX = re.sub(r"\\\\left\\s*([({\\\\[|])", r"\\1", LATEX)\n' +
+            'LATEX = re.sub(r"\\\\right\\s*([)}\\\\]|])", r"\\1", LATEX)\n' +
+            'LATEX = re.sub(r"\\\\(?:Big[lrg]?|bigl|bigr|Bigl|Bigr)\\s*", "", LATEX)\n' +
+            'try:\n' +
+            '    parsed = parse_latex(LATEX)\n' +
+            'except Exception:\n' +
+            '    try:\n' +
+            '        parsed = parse_latex(LATEX, backend="lark")\n' +
+            '    except Exception as e:\n' +
+            '        raise ValueError("Could not parse LaTeX: " + str(e)[:80])\n' +
             'if getattr(parsed, "data", None) == "_ambig":\n' +
             '    cands = [c for c in parsed.children if isinstance(c, Integral)]\n' +
             '    parsed = cands[0] if cands else parsed.children[0]\n' +
@@ -1445,14 +1455,21 @@
         var pyLiteral = s.replace(/"""/g, '\\"\\"\\"');
 
         var code =
-            'import json, sys\n' +
+            'import json, re, sys\n' +
             'from sympy.parsing.latex import parse_latex\n' +
             'from sympy import Integral\n' +
             '\n' +
             'LATEX = r"""' + pyLiteral + '"""\n' +
+            '# Strip sizing commands parse_latex cannot handle\n' +
+            'LATEX = re.sub(r"\\\\left\\s*([({\\\\[|])", r"\\1", LATEX)\n' +
+            'LATEX = re.sub(r"\\\\right\\s*([)}\\\\]|])", r"\\1", LATEX)\n' +
+            'LATEX = re.sub(r"\\\\(?:Big[lrg]?|bigl|bigr|Bigl|Bigr)\\s*", "", LATEX)\n' +
             'out = {"ok": False}\n' +
             'try:\n' +
-            '    parsed = parse_latex(LATEX, backend="lark")\n' +
+            '    try:\n' +
+            '        parsed = parse_latex(LATEX)\n' +
+            '    except Exception:\n' +
+            '        parsed = parse_latex(LATEX, backend="lark")\n' +
             '    # lark can return a Tree(_ambig, [option1, option2, ...]) when\n' +
             '    # the grammar is ambiguous (e.g. f(x) could be call-or-product).\n' +
             '    # Pick the first Integral child if present, else the first child.\n' +
