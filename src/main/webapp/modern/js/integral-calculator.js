@@ -413,6 +413,12 @@
         varSelect.addEventListener('change', updatePreview);
 
         function updatePreview() {
+            // In Visual mode the <math-field> IS the live preview, so the
+            // separate KaTeX preview is hidden and we skip the render entirely.
+            var exprWrap = document.getElementById('ic-expr-wrap');
+            if (exprWrap && exprWrap.getAttribute('data-input-mode') === 'visual') return;
+            if (exprWrap && !exprWrap.hasAttribute('data-input-mode')) return;
+
             var rawExpr = exprInput.value.trim();
             var v = varSelect.value;
             if (!rawExpr) {
@@ -613,6 +619,50 @@
         });
 
         function doIntegrate() {
+            // Full-integral pre-pass. If the user pasted a complete integral
+            // (LaTeX like `\int_0^{10}\frac{1}{x^2+1}dx` or AsciiMath like
+            // `int_0^10 1/(x^2+1) dx`), we don't parse it client-side — we
+            // hand the raw string to SymPy's parse_latex on the backend,
+            // which is the authoritative grammar. The response populates the
+            // UI fields (integrand, definite/indefinite, bounds, variable)
+            // and we re-enter doIntegrate() with a clean integrand, flowing
+            // through the normal Nerdamer/SymPy path.
+            if (window.IC && typeof window.IC.looksLikeLatexIntegral === 'function'
+                && window.IC.looksLikeLatexIntegral(exprInput.value)
+                && !doIntegrate._parsingLatex) {
+                doIntegrate._parsingLatex = true;
+                if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Parsing integral…', 1500, 'info');
+                window.IC.parseIntegralViaBackend(exprInput.value, function (shape) {
+                    doIntegrate._parsingLatex = false;
+                    if (!shape || !shape.ok) {
+                        if (typeof ToolUtils !== 'undefined') {
+                            ToolUtils.showToast(
+                                'Could not parse that integral. Try entering just the integrand f(x).',
+                                3000, 'warning');
+                        }
+                        return;
+                    }
+                    exprInput.value = shape.integrand;
+                    if (shape.variable && varSelect.querySelector('option[value="' + shape.variable + '"]')) {
+                        varSelect.value = shape.variable;
+                    }
+                    if (shape.is_definite) {
+                        if (currentMode !== 'definite') {
+                            var defBtn = document.querySelector('.ic-mode-btn[data-mode="definite"]');
+                            if (defBtn) defBtn.click();
+                        }
+                        lowerInput.value = shape.lower;
+                        upperInput.value = shape.upper;
+                    } else if (currentMode !== 'indefinite') {
+                        var indefBtn = document.querySelector('.ic-mode-btn[data-mode="indefinite"]');
+                        if (indefBtn) indefBtn.click();
+                    }
+                    updatePreview();
+                    doIntegrate();
+                });
+                return;
+            }
+
             var rawExpr = exprInput.value.trim();
             var parsed = parseSympyStyleInput(rawExpr);
             var expr, v, useDefinite, a, b;

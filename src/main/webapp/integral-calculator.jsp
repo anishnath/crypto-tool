@@ -86,6 +86,10 @@
     <!-- KaTeX -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 
+    <!-- MathLive (visual math input). Loaded async: static CSS first, element ESM on demand. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
+
 </head>
 <body>
 <!-- Navigation -->
@@ -139,12 +143,52 @@
                     <button type="button" class="ic-mode-btn" data-mode="definite">Definite</button>
                 </div>
 
-                <!-- Function input -->
-                <div class="tool-form-group ic-expr-wrap">
-                    <label class="tool-form-label" for="ic-expr">Function f(x) <button type="button" class="ic-image-btn" id="ic-image-btn" title="Scan problem from image">&#128247; Scan Image</button></label>
+                <!-- Function input.
+                     Single row. The Visual/Text toggle lives inline with the label,
+                     so there's no separate "Input Mode" section. In Visual mode the
+                     <math-field> is the editor AND the live preview; in Text mode
+                     the plain <input> is shown and the preview below renders it. -->
+                <div class="tool-form-group ic-expr-wrap" id="ic-expr-wrap">
+                    <div class="ic-expr-label-row">
+                        <label class="tool-form-label ic-expr-label" for="ic-expr">Function f(x)</label>
+                        <div class="ic-expr-label-actions">
+                            <div class="ic-input-mode-toggle" id="ic-input-mode-toggle" role="radiogroup" aria-label="Input mode">
+                                <button type="button" class="ic-input-mode-btn active" data-input-mode="visual" role="radio" aria-checked="true" title="Write math visually (like a textbook)">
+                                    <span aria-hidden="true" style="font-family:'Times New Roman',serif;font-style:italic;">&fnof;</span><span class="ic-mode-label"> Visual</span>
+                                </button>
+                                <button type="button" class="ic-input-mode-btn" data-input-mode="text" role="radio" aria-checked="false" title="Type a plain-text expression (e.g. sin(3*x))">
+                                    <span aria-hidden="true" style="font-family:var(--font-mono);">&lt;/&gt;</span><span class="ic-mode-label"> Text</span>
+                                </button>
+                            </div>
+                            <button type="button" class="ic-image-btn" id="ic-image-btn" title="Scan problem from image">&#128247; Scan</button>
+                        </div>
+                    </div>
+
+                    <!-- Visual math input (MathLive). Placeholder is rendered as LaTeX.
+                         The virtual keyboard layout is configured in JS below with a
+                         calculus-first custom layer (see "Calc" layout registration).
+                         No `math-virtual-keyboard-policy` is set, so MathLive uses its
+                         default "auto": the virtual keyboard appears on focus on touch
+                         devices, and desktop users summon it via the keyboard toggle
+                         in the field's chrome. -->
+                    <math-field id="ic-mathfield" class="ic-mathfield" aria-label="Function, visual math input"
+                                placeholder="\frac{1}{x^2+1}"
+                                smart-mode="on"
+                                smart-fence="on"
+                                smart-superscript="on"
+                                remove-extraneous-parentheses="on"
+                                math-mode-space="\:"></math-field>
+
+                    <!-- Plain text input — ALSO the canonical buffer read by the solver,
+                         chips, URL loader, image-scan and share. In Visual mode it's
+                         hidden but kept in sync (one-way) from the math-field. -->
                     <input type="text" class="tool-input tool-input-mono" id="ic-expr" placeholder="e.g. sin(3*x), x^2, e^x" autocomplete="off" spellcheck="false">
                     <div class="ic-autocomplete" id="ic-autocomplete"></div>
-                    <span class="tool-form-hint">Both sin3x and sin(3*x) work. Definite: <code>expr, (x, 0, oo)</code> accepted</span>
+
+                    <span class="tool-form-hint ic-expr-hint">
+                        <span class="ic-hint-visual">Enter just the integrand f(x) &mdash; the &#8747; and dx are added automatically. Type <code>sin</code>, <code>cos</code>, <code>sqrt</code>, <code>/</code>, <code>^</code> naturally.</span>
+                        <span class="ic-hint-text">Both <code>sin3x</code> and <code>sin(3*x)</code> work. Definite one-liner: <code>expr, (x, 0, oo)</code>.</span>
+                    </span>
                 </div>
 
                 <!-- Live preview -->
@@ -633,6 +677,316 @@
 <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
 <script>window.INTEGRAL_CALC_CTX = "<%=request.getContextPath()%>";</script>
 <script src="<%=request.getContextPath()%>/modern/js/integral-calculator.js"></script>
+
+<!-- MathLive visual math input.
+
+     Data model (deliberately minimal):
+       * #ic-expr is the ONE canonical buffer read by the solver, chips,
+         autocomplete, URL loader, image-scan and share.
+       * The <math-field> is a visual editor that, in Visual mode, writes
+         one-way into #ic-expr on every input (via MathLive's native
+         `ascii-math` format — which is already our calculator's dialect:
+         sin(x), sqrt(x), ^, *, /, pi, implicit multiplication).
+       * No bidirectional sync, no loop-guards, no custom LaTeX regex.
+       * Programmatic writes to #ic-expr (chips/URL/scan) are mirrored into
+         the math-field via a value-setter hook that calls MathLive's own
+         ascii-math parser. If that parse fails (e.g. SymPy Sum(...)), we
+         auto-switch to Text mode so the user still sees their expression. -->
+<script type="module">
+    import 'https://cdn.jsdelivr.net/npm/mathlive/+esm';
+    if (window.MathfieldElement) {
+        window.MathfieldElement.fontsDirectory = 'https://cdn.jsdelivr.net/npm/mathlive/dist/fonts';
+        try { window.MathfieldElement.soundsDirectory = null; } catch (e) {}
+    }
+
+    /*
+     * Calculus-first virtual keyboard.
+     *
+     * The default MathLive keyboards are great for general math input, but a
+     * student writing an integrand spends ~all their time in a narrow alphabet:
+     * variables, constants (pi / e / infinity), powers, fractions, roots, a
+     * handful of trig/log/exp functions, and parentheses. So we define a "Calc"
+     * layer up front and relegate the stock `numeric` / `symbols` / `greek`
+     * layouts to the layer switcher for the long tail.
+     *
+     * Layout shape (4 rows × 10 keycaps, following MathLive's row-size advice):
+     *   Row 1:  vars (x y t n) · constants (pi e ∞) · nav (← → ⌫)
+     *   Row 2:  digits 1-5 · + − · / · frac · x^n
+     *   Row 3:  digits 6-9,0 · ( ) · x² · √ · 1/x · undo
+     *   Row 4:  sin cos tan · ln log e^x · arctan arcsin arccos · ↵
+     *
+     * Long-press variants pack the related-but-rare symbols in without
+     * cluttering the primary surface (x → a,b,u,v,θ; sin → sinh,csc; √ → ∛,ⁿ√;
+     * ∞ → -∞,0⁺,0⁻; + → ±,∓; e^x → e^-x, a^x; etc.). This mirrors how the stock
+     * MathLive layouts hide depth behind long-press.
+     */
+    if (window.mathVirtualKeyboard) {
+        window.mathVirtualKeyboard.layouts = [
+            {
+                label: 'Calc',
+                tooltip: 'Calculus integrands',
+                rows: [
+                    [
+                        { latex: 'x', variants: ['a', 'b', 'u', 'v', 'r', 's', '\\theta'] },
+                        { latex: 'y', variants: ['z'] },
+                        { latex: 't', variants: ['\\tau'] },
+                        { latex: 'n', variants: ['m', 'k', 'p', 'q'] },
+                        { latex: '\\pi', variants: ['\\Pi'] },
+                        { latex: 'e', variants: ['\\mathrm{e}'] },
+                        { latex: '\\infty', variants: ['-\\infty', '0^{+}', '0^{-}'] },
+                        '[left]', '[right]', '[backspace]'
+                    ],
+                    [
+                        '[1]', '[2]', '[3]', '[4]', '[5]',
+                        { latex: '+', variants: ['\\pm', '\\mp'] },
+                        { latex: '-', variants: ['\\mp', '\\pm'] },
+                        { latex: '\\cdot', variants: ['\\times', '*'] },
+                        { class: 'small', latex: '\\frac{#@}{#?}',
+                          variants: [{ latex: '\\frac{#?}{#?}' }, { latex: '#@/#?' }] },
+                        { class: 'small', latex: '#@^{#?}', label: 'x<sup>n</sup>',
+                          variants: ['#@^{-1}', '#@^{1/2}'] }
+                    ],
+                    [
+                        '[6]', '[7]', '[8]', '[9]', '[0]',
+                        '[(]', '[)]',
+                        { latex: '#@^{2}', label: 'x<sup>2</sup>',
+                          variants: ['#@^{3}', '#@^{-1}', '#@^{1/2}'] },
+                        { latex: '\\sqrt{#@}', label: '&radic;',
+                          variants: ['\\sqrt[3]{#@}', '\\sqrt[#?]{#@}'] },
+                        { class: 'small', latex: '\\frac{1}{#?}', label: '1/x',
+                          variants: ['\\frac{1}{#?^{2}}', '\\frac{#?}{#?+1}'] }
+                    ],
+                    [
+                        { latex: '\\sin', variants: ['\\sinh', '\\csc', '\\operatorname{csch}'] },
+                        { latex: '\\cos', variants: ['\\cosh', '\\sec', '\\operatorname{sech}'] },
+                        { latex: '\\tan', variants: ['\\tanh', '\\cot', '\\coth'] },
+                        { latex: '\\ln', variants: ['\\log_{#?}'] },
+                        { latex: '\\log' },
+                        { class: 'small', latex: 'e^{#?}', label: 'e<sup>x</sup>',
+                          variants: ['e^{-#?}', 'a^{#?}', 'e^{-#?^{2}}'] },
+                        { latex: '\\arctan', variants: ['\\operatorname{arccot}'] },
+                        { latex: '\\arcsin', variants: ['\\operatorname{arccsc}'] },
+                        { latex: '\\arccos', variants: ['\\operatorname{arcsec}'] },
+                        '[return]'
+                    ]
+                ]
+            },
+            'numeric',
+            'symbols',
+            'greek'
+        ];
+    }
+</script>
+
+<script>
+(function () {
+    'use strict';
+
+    var mf        = document.getElementById('ic-mathfield');
+    var exprInput = document.getElementById('ic-expr');
+    var wrap      = document.getElementById('ic-expr-wrap');
+    var toggle    = document.getElementById('ic-input-mode-toggle');
+    if (!mf || !exprInput || !toggle) return;
+
+    var STORAGE_KEY = 'ic.inputMode';
+    var cardBody = wrap.closest('.tool-card-body') || wrap.parentNode;
+
+    // Native <input>.value setter — used to bypass our own property hook
+    // when mirroring math-field → #ic-expr (so we don't re-enter the hook).
+    var nativeInputValueSetter = (function () {
+        try {
+            var d = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+            return d && typeof d.set === 'function' ? d.set : null;
+        } catch (e) { return null; }
+    })();
+    function setExprRaw(v) {
+        if (nativeInputValueSetter) nativeInputValueSetter.call(exprInput, v);
+        else exprInput.value = v;
+    }
+
+    // ---------- Mode control ----------
+    function getMode() { return wrap.getAttribute('data-input-mode') || 'visual'; }
+    function setMode(mode) {
+        if (mode !== 'visual' && mode !== 'text') mode = 'visual';
+        wrap.setAttribute('data-input-mode', mode);
+        if (cardBody) cardBody.setAttribute('data-input-mode', mode);
+        toggle.querySelectorAll('.ic-input-mode-btn').forEach(function (btn) {
+            var active = btn.getAttribute('data-input-mode') === mode;
+            btn.classList.toggle('active', active);
+            btn.setAttribute('aria-checked', active ? 'true' : 'false');
+        });
+        try { localStorage.setItem(STORAGE_KEY, mode); } catch (e) {}
+    }
+
+    // Initial mode (default visual; migrate legacy 'both').
+    var initial = 'visual';
+    try {
+        var stored = localStorage.getItem(STORAGE_KEY);
+        if (stored === 'text') initial = 'text';
+    } catch (e) {}
+    setMode(initial);
+
+    // SymPy-style constructs that have no visual math representation.
+    // Fast-reject these before handing them to MathLive — its ascii-math
+    // parser will otherwise happily emit unreadable garbage.
+    function isAdvancedSympy(expr) {
+        if (!expr) return false;
+        if (/^\s*(Sum|Max|Min|Integral|Product|Rational)\s*\(/i.test(expr)) return true;
+        if (/,\s*\([^)]*\)\s*$/.test(expr)) return true;
+        return false;
+    }
+
+    // Seed the math-field from a calculator-format expression via MathLive's
+    // own ascii-math parser. Returns true on success, false if the expression
+    // cannot be meaningfully represented visually (caller should switch to Text).
+    function seedMathField(expr) {
+        expr = (expr == null ? '' : String(expr)).trim();
+        if (!expr) {
+            try { mf.setValue('', { silenceNotifications: true }); } catch (_) {}
+            return true;
+        }
+        if (isAdvancedSympy(expr)) return false;
+        if (typeof mf.setValue !== 'function') return false;
+        try {
+            mf.setValue(expr, { format: 'ascii-math', silenceNotifications: true });
+            var back = '';
+            try { back = (mf.getValue('ascii-math') || '').trim(); } catch (_) {}
+            return !!back;
+        } catch (_) {
+            try { mf.setValue('', { silenceNotifications: true }); } catch (_) {}
+            return false;
+        }
+    }
+
+    // ---------- Mode toggle click ----------
+    toggle.addEventListener('click', function (e) {
+        var btn = e.target.closest('.ic-input-mode-btn');
+        if (!btn || btn.disabled) return;
+        var next = btn.getAttribute('data-input-mode');
+        if (next === getMode()) return;
+
+        if (next === 'visual') {
+            if (!seedMathField(exprInput.value)) {
+                // Can't render (e.g. SymPy Sum) — refuse the switch.
+                return;
+            }
+            setMode('visual');
+            try { mf.focus(); } catch (_) {}
+        } else {
+            // #ic-expr is already current (unidirectional flow). Just flip.
+            setMode('text');
+            // Nudge the preview & autocomplete once.
+            exprInput.dispatchEvent(new Event('input', { bubbles: true }));
+            try { exprInput.focus(); } catch (_) {}
+        }
+    });
+
+    // ---------- Programmatic #ic-expr writes mirror into math-field ----------
+    // Chips, URL loader, image-scan, autocomplete-accept all do
+    //   exprInput.value = '...';
+    // We hook the setter to seed the math-field when in Visual mode.
+    // No dispatchEvent here: that's the caller's job.
+    (function hookExprSetter() {
+        if (!nativeInputValueSetter) return;
+        try {
+            var nativeGetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').get;
+            Object.defineProperty(exprInput, 'value', {
+                configurable: true,
+                enumerable: true,
+                get: function () { return nativeGetter.call(this); },
+                set: function (v) {
+                    nativeInputValueSetter.call(this, v);
+                    if (getMode() === 'visual') {
+                        if (!seedMathField(v)) setMode('text');
+                    }
+                }
+            });
+        } catch (e) { /* non-fatal */ }
+    })();
+
+    // ---------- Wire events once the <math-field> custom element upgrades ----------
+    function wire() {
+        // Calculus-focused inline shortcuts layered on top of MathLive's
+        // defaults. MathLive already ships `pi`, `oo`, `inf`, `int`, `sum`,
+        // `sin`/`cos`/`tan`, `sqrt`, `lim`, Greek letters, etc. — we only add
+        // what calculus students actually reach for and the defaults miss:
+        //   • "atan", "asin", "acos", "acot", "asec", "acsc"  → arc-trig
+        //     aliases (matches our normalizeExpr()'s `arcsin`→`asin` rewrite
+        //     and what students typically type)
+        //   • "exp" → e^{…}
+        //   • "abs" → |…|
+        //   • "cbrt" → ∛
+        //   • "dx", "dt", "dy", "du", "dn" → upright differential (visual
+        //     cue for students who paste a full integral and include the
+        //     differential — the doIntegrate() pre-pass then extracts it)
+        try {
+            mf.inlineShortcuts = Object.assign({}, mf.inlineShortcuts || {}, {
+                'atan':  '\\arctan',
+                'asin':  '\\arcsin',
+                'acos':  '\\arccos',
+                'acot':  '\\operatorname{arccot}',
+                'asec':  '\\operatorname{arcsec}',
+                'acsc':  '\\operatorname{arccsc}',
+                'exp':   'e^{#?}',
+                'abs':   '\\left|#?\\right|',
+                'cbrt':  '\\sqrt[3]{#?}',
+                'dx':    '\\,\\mathrm{d}x',
+                'dt':    '\\,\\mathrm{d}t',
+                'dy':    '\\,\\mathrm{d}y',
+                'du':    '\\,\\mathrm{d}u',
+                'dn':    '\\,\\mathrm{d}n'
+            });
+        } catch (_) { /* MathLive version without inlineShortcuts setter */ }
+
+        // Visual -> Text, one-way. Use the NATIVE setter + dispatch 'input'
+        // so every downstream listener (preview, autocomplete, ...) sees it
+        // exactly once, without re-entering our value-setter hook.
+        mf.addEventListener('input', function () {
+            if (getMode() !== 'visual') return;
+            var ascii = '';
+            try { ascii = (mf.getValue('ascii-math') || '').trim(); } catch (_) {}
+            if (exprInput.value === ascii) return;
+            setExprRaw(ascii);
+            exprInput.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+
+        // Enter submits.
+        mf.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                var btn = document.getElementById('ic-integrate-btn');
+                if (btn) btn.click();
+            }
+        });
+
+        // Seed from any pre-existing text (URL param, server-rendered value).
+        if (getMode() === 'visual' && exprInput.value) {
+            if (!seedMathField(exprInput.value)) setMode('text');
+        }
+    }
+
+    if (window.customElements && customElements.get('math-field')) {
+        wire();
+    } else if (window.customElements && customElements.whenDefined) {
+        customElements.whenDefined('math-field').then(wire).catch(function () {
+            // MathLive failed to load — force Text mode, disable Visual button.
+            setMode('text');
+            if (mf && mf.parentNode) mf.parentNode.removeChild(mf);
+            toggle.querySelectorAll('.ic-input-mode-btn').forEach(function (btn) {
+                if (btn.getAttribute('data-input-mode') === 'visual') {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                    btn.title = 'Visual math input failed to load';
+                }
+            });
+        });
+    } else {
+        setMode('text');
+    }
+})();
+</script>
+
 <script src="<%=request.getContextPath()%>/modern/js/image-to-math.js"></script>
 <script>
     ImageToMath.init({
@@ -788,115 +1142,118 @@
         // Scroll card into view
         card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-        // Convert problem to SymPy
-        var expr = latexToCalcExpr(p.latex || p.expr || '');
-        var v = p.variable || 'x';
-        var isDefinite = p.type === 'definite' && p.lower != null && p.upper != null;
-        var pyExpr = ic.nerdamerToPython(ic.normalizeExpr(expr));
-        var symDecl = ic.buildSympySymbolsDecl(v, pyExpr);
-
-        var code;
-        if (isDefinite) {
-            var a = ic.boundToSympy(latexToCalcExpr(p.lower || '')) || '0';
-            var b = ic.boundToSympy(latexToCalcExpr(p.upper || '')) || '1';
-            code = ic.buildR2sPreamble(false) +
-                symDecl + '\n' +
-                'expr = simplify(' + pyExpr + ')\n' +
-                'try:\n' +
-                '    if expr.has(Sum):\n' +
-                '        expr = expr.doit(deep=True)\n' +
-                'except Exception:\n' +
-                '    pass\n' +
-                'try:\n    _s_obj = integral_steps(expr, ' + v + ')\nexcept:\n    _s_obj = None\n' +
-                'import signal\n' +
-                'def _timeout(s, f): raise TimeoutError\n' +
-                'signal.signal(signal.SIGALRM, _timeout)\n' +
-                'signal.alarm(10)\n' +
-                'try:\n' +
-                '    antideriv = integrate(expr, ' + v + ')\n' +
-                'except (TimeoutError, Exception):\n' +
-                '    antideriv = Integral(expr, ' + v + ')\n' +
-                'finally:\n' +
-                '    signal.alarm(0)\n' +
-                'if isinstance(antideriv, Integral):\n' +
-                '    result = Integral(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
-                '    print("LATEX:" + latex(result))\n' +
-                '    print("TEXT:" + str(result))\n' +
-                '    print("ANTIDERIV:")\n' +
-                '    try:\n' +
-                '        from scipy.integrate import quad as _quad\n' +
-                '        from math import isfinite as _isf\n' +
-                '        _f = lambdify(' + v + ', expr, "numpy")\n' +
-                '        _val, _err = _quad(_f, float(' + a + '), float(' + b + '), limit=100)\n' +
-                '        if not _isf(_val) or (abs(_val) > 1e-10 and abs(_err/_val) > 0.01):\n' +
-                '            raise ValueError("divergent")\n' +
-                '        print("NUMERIC:" + str(_val))\n' +
-                '    except:\n' +
-                '        print("NUMERIC:NaN")\n' +
-                '    print("STEPS:" + json.dumps([{"title":"Integral","latex":"\\\\int_{' + a + '}^{' + b + '} "+latex(expr)+"\\\\,d' + v + '"},{"title":"No closed-form antiderivative","latex":"\\\\text{Evaluated numerically}"}]))\n' +
-                'else:\n' +
-                '    result = integrate(expr, (' + v + ', ' + a + ', ' + b + '))\n' +
-                '    print("LATEX:" + latex(result))\n' +
-                '    print("TEXT:" + str(result))\n' +
-                '    print("ANTIDERIV:" + latex(antideriv))\n' +
-                '    try:\n' +
-                '        print("NUMERIC:" + str(float(result)))\n' +
-                '    except:\n' +
-                '        print("NUMERIC:NaN")\n' +
-                '    st = []\n' +
-                '    if _s_obj and not isinstance(_s_obj, DontKnowRule):\n' +
-                '        st = r2s(_s_obj, ' + v + ')\n' +
-                '    if not st:\n' +
-                '        st.append({"title":"Antiderivative","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + ' = "+latex(antideriv)+" + C"})\n' +
-                '    try:\n' +
-                '        var_sym = ' + v + '\n' +
-                '        a_s = sympify("' + a.replace(/"/g, '\\"') + '")\n' +
-                '        b_s = sympify("' + b.replace(/"/g, '\\"') + '")\n' +
-                '        def _ev(bound):\n' +
-                '            if bound == oo: return limit(antideriv, var_sym, oo)\n' +
-                '            if bound == -oo: return limit(antideriv, var_sym, -oo)\n' +
-                '            return antideriv.subs(var_sym, bound)\n' +
-                '        v_u = _ev(b_s); v_l = _ev(a_s)\n' +
-                '        a_tex = "\\\\infty" if a_s == oo else ("-\\\\infty" if a_s == -oo else latex(a_s))\n' +
-                '        b_tex = "\\\\infty" if b_s == oo else ("-\\\\infty" if b_s == -oo else latex(b_s))\n' +
-                '        ev_latex = r"\\left[ " + latex(antideriv) + r" \\right]_{" + a_tex + "}^{" + b_tex + "} = " + latex(v_u) + " - (" + latex(v_l) + ") = " + latex(result)\n' +
-                '        st.append({"title":"Evaluate at bounds","latex":ev_latex})\n' +
-                '    except:\n' +
-                '        st.append({"title":"Evaluate at bounds","latex":"\\\\left["+latex(antideriv)+"\\\\right]_{' + a + '}^{' + b + '} = "+latex(result)})\n' +
-                '    print("STEPS:" + json.dumps(st))\n';
-        } else {
-            code = ic.buildR2sPreamble(true) +
-                symDecl + '\n' +
-                'expr = simplify(' + pyExpr + ')\n' +
-                'try:\n' +
-                '    if expr.has(Sum):\n' +
-                '        expr = expr.doit(deep=True)\n' +
-                'except Exception:\n' +
-                '    pass\n' +
-                'try:\n    _s_obj = integral_steps(expr, ' + v + ')\nexcept:\n    _s_obj = None\n' +
-                'import signal\n' +
-                'def _timeout(s, f): raise TimeoutError\n' +
-                'signal.signal(signal.SIGALRM, _timeout)\n' +
-                'signal.alarm(10)\n' +
-                'try:\n' +
-                '    result = integrate(expr, ' + v + ')\n' +
-                'except (TimeoutError, Exception):\n' +
-                '    result = Integral(expr, ' + v + ')\n' +
-                'finally:\n' +
-                '    signal.alarm(0)\n' +
-                'print("LATEX:" + latex(result))\n' +
-                'print("TEXT:" + str(result))\n' +
-                'st = []\n' +
-                'if not isinstance(result, Integral) and not result.has(Integral):\n' +
-                '    if _s_obj and not isinstance(_s_obj, DontKnowRule):\n' +
-                '        st = r2s(_s_obj, ' + v + ')\n' +
-                '    if not st:\n' +
-                '        st.append({"title":"Result","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + ' = "+latex(result)+" + C"})\n' +
-                'elif isinstance(result, Integral) or result.has(Integral):\n' +
-                '    st.append({"title":"Identify the integral","latex":"\\\\int "+latex(expr)+"\\\\,d' + v + '"})\n' +
-                '    st.append({"title":"Conclusion","latex":"\\\\text{This integral cannot be expressed using elementary functions.}"})\n' +
-                'print("STEPS:" + json.dumps(st))\n';
+        // We now send raw LaTeX to SymPy's parse_latex(backend='lark') and let
+        // it derive the expr / variable / bounds / definite-ness. No more
+        // client-side latexToCalcExpr → nerdamerToPython → boundToSympy chain
+        // for the batch path. One authoritative LaTeX parser.
+        //
+        // Prefer p.display (full integral LaTeX from the AI). If the AI didn't
+        // emit it, synthesise one from (latex, lower, upper, variable, type).
+        var displayLatex = p.display;
+        if (!displayLatex) {
+            var _v = p.variable || 'x';
+            var _l = p.latex || p.expr || 'x';
+            if (p.type === 'definite' && p.lower != null && p.upper != null) {
+                displayLatex = '\\int_{' + p.lower + '}^{' + p.upper + '} ' + _l + '\\, d' + _v;
+            } else {
+                displayLatex = '\\int ' + _l + '\\, d' + _v;
+            }
         }
+        var isDefinite = p.type === 'definite' && p.lower != null && p.upper != null;
+        // Escape closing triple-quote for the Python raw-string literal.
+        var pyLiteral = displayLatex.replace(/"""/g, '\\"\\"\\"');
+
+        var code = ic.buildR2sPreamble(!isDefinite) +
+            'from sympy.parsing.latex import parse_latex\n' +
+            'import signal\n' +
+            'LATEX = r"""' + pyLiteral + '"""\n' +
+            'parsed = parse_latex(LATEX, backend="lark")\n' +
+            'if getattr(parsed, "data", None) == "_ambig":\n' +
+            '    cands = [c for c in parsed.children if isinstance(c, Integral)]\n' +
+            '    parsed = cands[0] if cands else parsed.children[0]\n' +
+            'if not isinstance(parsed, Integral):\n' +
+            '    raise ValueError("Not a full integral expression")\n' +
+            'expr = simplify(parsed.function)\n' +
+            'limits = parsed.limits[0]\n' +
+            'v = limits[0]\n' +
+            'is_def = len(limits) == 3\n' +
+            'try:\n' +
+            '    if expr.has(Sum):\n' +
+            '        expr = expr.doit(deep=True)\n' +
+            'except Exception:\n' +
+            '    pass\n' +
+            'try:\n    _s_obj = integral_steps(expr, v)\nexcept:\n    _s_obj = None\n' +
+            'def _timeout(s, f): raise TimeoutError\n' +
+            'signal.signal(signal.SIGALRM, _timeout)\n' +
+            'signal.alarm(10)\n' +
+            'try:\n' +
+            '    antideriv = integrate(expr, v)\n' +
+            'except (TimeoutError, Exception):\n' +
+            '    antideriv = Integral(expr, v)\n' +
+            'finally:\n' +
+            '    signal.alarm(0)\n' +
+            'if is_def:\n' +
+            '    a = limits[1]; b = limits[2]\n' +
+            '    if isinstance(antideriv, Integral):\n' +
+            '        result = Integral(expr, (v, a, b))\n' +
+            '        print("LATEX:" + latex(result))\n' +
+            '        print("TEXT:" + str(result))\n' +
+            '        print("ANTIDERIV:")\n' +
+            '        try:\n' +
+            '            from scipy.integrate import quad as _quad\n' +
+            '            from math import isfinite as _isf\n' +
+            '            _f = lambdify(v, expr, "numpy")\n' +
+            '            _val, _err = _quad(_f, float(a), float(b), limit=100)\n' +
+            '            if not _isf(_val) or (abs(_val) > 1e-10 and abs(_err/_val) > 0.01):\n' +
+            '                raise ValueError("divergent")\n' +
+            '            print("NUMERIC:" + str(_val))\n' +
+            '        except:\n' +
+            '            print("NUMERIC:NaN")\n' +
+            '        print("STEPS:" + json.dumps([\n' +
+            '            {"title":"Integral","latex":"\\\\int_{"+latex(a)+"}^{"+latex(b)+"} "+latex(expr)+"\\\\,d"+str(v)},\n' +
+            '            {"title":"No closed-form antiderivative","latex":"\\\\text{Evaluated numerically}"}\n' +
+            '        ]))\n' +
+            '    else:\n' +
+            '        result = integrate(expr, (v, a, b))\n' +
+            '        print("LATEX:" + latex(result))\n' +
+            '        print("TEXT:" + str(result))\n' +
+            '        print("ANTIDERIV:" + latex(antideriv))\n' +
+            '        try:\n' +
+            '            print("NUMERIC:" + str(float(result)))\n' +
+            '        except:\n' +
+            '            print("NUMERIC:NaN")\n' +
+            '        st = []\n' +
+            '        if _s_obj and not isinstance(_s_obj, DontKnowRule):\n' +
+            '            st = r2s(_s_obj, v)\n' +
+            '        if not st:\n' +
+            '            st.append({"title":"Antiderivative","latex":"\\\\int "+latex(expr)+"\\\\,d"+str(v)+" = "+latex(antideriv)+" + C"})\n' +
+            '        try:\n' +
+            '            def _ev(bound):\n' +
+            '                if bound == oo: return limit(antideriv, v, oo)\n' +
+            '                if bound == -oo: return limit(antideriv, v, -oo)\n' +
+            '                return antideriv.subs(v, bound)\n' +
+            '            v_u = _ev(b); v_l = _ev(a)\n' +
+            '            a_tex = "\\\\infty" if a == oo else ("-\\\\infty" if a == -oo else latex(a))\n' +
+            '            b_tex = "\\\\infty" if b == oo else ("-\\\\infty" if b == -oo else latex(b))\n' +
+            '            ev_latex = r"\\left[ " + latex(antideriv) + r" \\right]_{" + a_tex + "}^{" + b_tex + "} = " + latex(v_u) + " - (" + latex(v_l) + ") = " + latex(result)\n' +
+            '            st.append({"title":"Evaluate at bounds","latex":ev_latex})\n' +
+            '        except:\n' +
+            '            st.append({"title":"Evaluate at bounds","latex":"\\\\left["+latex(antideriv)+"\\\\right]_{"+latex(a)+"}^{"+latex(b)+"} = "+latex(result)})\n' +
+            '        print("STEPS:" + json.dumps(st))\n' +
+            'else:\n' +
+            '    result = antideriv\n' +
+            '    print("LATEX:" + latex(result))\n' +
+            '    print("TEXT:" + str(result))\n' +
+            '    st = []\n' +
+            '    if not isinstance(result, Integral) and not result.has(Integral):\n' +
+            '        if _s_obj and not isinstance(_s_obj, DontKnowRule):\n' +
+            '            st = r2s(_s_obj, v)\n' +
+            '        if not st:\n' +
+            '            st.append({"title":"Result","latex":"\\\\int "+latex(expr)+"\\\\,d"+str(v)+" = "+latex(result)+" + C"})\n' +
+            '    elif isinstance(result, Integral) or result.has(Integral):\n' +
+            '        st.append({"title":"Identify the integral","latex":"\\\\int "+latex(expr)+"\\\\,d"+str(v)})\n' +
+            '        st.append({"title":"Conclusion","latex":"\\\\text{This integral cannot be expressed using elementary functions.}"})\n' +
+            '    print("STEPS:" + json.dumps(st))\n';
 
         fetch((window.INTEGRAL_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
             method: 'POST',
@@ -1011,77 +1368,151 @@
     }
 
     /**
-     * Convert LaTeX math notation to calculator-accepted expression.
-     * This is a client-side converter — no LLM involved, mathematically deterministic.
+     * Convert LaTeX → calculator expression.
      *
-     * \frac{a}{b} → (a)/(b)
-     * \sin, \cos, \tan etc → sin, cos, tan
-     * \sqrt{x} → sqrt(x)
-     * \sqrt[3]{x} → (x)^(1/3)
-     * \ln → log  (nerdamer uses log for natural log)
-     * \pi → pi
-     * \infty → Infinity
-     * \left, \right → removed
-     * x^{2} → x^(2)
-     * \cdot → *
-     * Implicit multiplication handled by normalizeExpr afterward
+     * We no longer maintain a hand-rolled regex pipeline. MathLive (already
+     * loaded on the page) ships a battle-tested LaTeX parser that can re-emit
+     * its AST as AsciiMath, which is exactly the dialect our calculator
+     * speaks. We use an off-screen read-only <math-field> as a thin adapter:
+     *
+     *     LaTeX  --(mf.setValue, format:'latex')-->  MathLive AST
+     *     calc-expr  <--(mf.getValue, 'ascii-math')--+
+     *
+     * Then normalizeExpr canonicalises implicit multiplication, shorthand
+     * forms, and the infty→Infinity mapping.
+     *
+     * Called from the image-scan flow (onSelect, batchSolveIntegrals) and
+     * the batch KaTeX render for bounds. Gracefully degrades to a tiny
+     * string-strip if MathLive hasn't upgraded yet (rare — ESM loads in <head>).
      */
+    var _latexParserMF = null;
     function latexToCalcExpr(latex) {
         if (!latex || typeof latex !== 'string') return '';
-        var s = latex.trim();
+        var tex = latex.trim();
+        if (!tex) return '';
 
-        // Remove \left \right \bigl \bigr etc
-        s = s.replace(/\\(?:left|right|[Bb]ig[lrmg]?)\s*/g, '');
-
-        // \frac{a}{b} → (a)/(b) — handle nested braces by processing innermost first
-        var maxFrac = 20;
-        while (/\\frac\s*\{/.test(s) && maxFrac-- > 0) {
-            // Match \frac{...}{...} where inner content may contain ^{} but not nested \frac
-            s = s.replace(/\\frac\s*\{((?:[^{}]|\{[^{}]*\})*)\}\s*\{((?:[^{}]|\{[^{}]*\})*)\}/g, '($1)/($2)');
+        if (!(window.customElements && customElements.get('math-field'))) {
+            // Pre-upgrade fallback: cover the handful of symbols most AI
+            // extractions emit for plain bounds ("0", "1", "\\pi", "\\infty").
+            return tex.replace(/\\pi\b/g, 'pi')
+                      .replace(/\\(?:infty|infinity)\b/g, 'Infinity')
+                      .replace(/[{}\\]/g, '');
         }
 
-        // \sqrt[n]{x} → (x)^(1/n)
-        s = s.replace(/\\sqrt\s*\[([^\]]+)\]\s*\{([^{}]*)\}/g, '($2)^(1/$1)');
-        // \sqrt{x} → sqrt(x)
-        s = s.replace(/\\sqrt\s*\{([^{}]*)\}/g, 'sqrt($1)');
+        try {
+            if (!_latexParserMF) {
+                _latexParserMF = document.createElement('math-field');
+                _latexParserMF.setAttribute('read-only', '');
+                _latexParserMF.style.cssText =
+                    'position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;' +
+                    'visibility:hidden;pointer-events:none;opacity:0;';
+                document.body.appendChild(_latexParserMF);
+            }
+            _latexParserMF.setValue(tex, { format: 'latex', silenceNotifications: true });
+            var ascii = '';
+            try { ascii = (_latexParserMF.getValue('ascii-math') || '').trim(); } catch (_) {}
+            if (!ascii) return '';
 
-        // Named functions: \sin → sin, \cos → cos, etc
-        s = s.replace(/\\(sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|sech|csch|arcsin|arccos|arctan|exp)\b/g, '$1');
-
-        // \ln → log (nerdamer convention)
-        s = s.replace(/\\ln\b/g, 'log');
-        // \log → log
-        s = s.replace(/\\log\b/g, 'log');
-
-        // Constants
-        s = s.replace(/\\pi\b/g, 'pi');
-        s = s.replace(/\\infty\b/g, 'Infinity');
-        s = s.replace(/\\infinity\b/g, 'Infinity');
-        s = s.replace(/\\e\b/g, 'e');
-
-        // Operators
-        s = s.replace(/\\cdot\s*/g, '*');
-        s = s.replace(/\\times\s*/g, '*');
-        s = s.replace(/\\div\s*/g, '/');
-        s = s.replace(/\\pm\s*/g, '+');
-
-        // Braces: x^{2} → x^(2), x_{1} → x1
-        s = s.replace(/\^{([^{}]*)}/g, '^($1)');
-        s = s.replace(/_{([^{}]*)}/g, '$1');
-
-        // Remove remaining backslashes and braces
-        s = s.replace(/\\[a-zA-Z]+/g, ''); // any unknown \command
-        s = s.replace(/[{}]/g, '');
-
-        // Clean up whitespace
-        s = s.replace(/\s+/g, '');
-
-        // Run through normalizeExpr for implicit multiplication, shorthand, etc.
-        if (typeof IntegralCalculatorCore !== 'undefined' && IntegralCalculatorCore.normalizeExpr) {
-            s = IntegralCalculatorCore.normalizeExpr(s);
+            if (typeof IntegralCalculatorCore !== 'undefined' && IntegralCalculatorCore.normalizeExpr) {
+                ascii = IntegralCalculatorCore.normalizeExpr(ascii);
+            }
+            return ascii;
+        } catch (_) {
+            return '';
         }
+    }
 
-        return s;
+    /**
+     * Parse a full-integral LaTeX or AsciiMath expression via the backend.
+     *
+     * No client-side regex. The backend runs SymPy's parse_latex(backend='lark')
+     * which is the authoritative reference implementation — whatever shape the
+     * user pastes (textbook LaTeX, MathLive export with \differentialD, ASCII
+     * "int_0^10 ... dx"), if SymPy can parse it, we can use it.
+     *
+     * Callback receives { ok, integrand, variable, is_definite, lower?, upper? }
+     * on success, or { ok: false, error } on parse failure. Integrand and bounds
+     * are returned in calculator-friendly plain-text form (** → ^, so the
+     * existing Nerdamer / normalizeExpr path consumes them unchanged).
+     */
+    function parseIntegralViaBackend(raw, callback) {
+        var s = (raw || '').trim();
+        if (!s) { callback({ ok: false, error: 'empty input' }); return; }
+
+        // Escape for a Python raw-triple-quoted string literal. The only char
+        // we have to fear is a closing triple-quote sequence, which SymPy's
+        // integrand alphabet essentially never contains, but guard anyway.
+        var pyLiteral = s.replace(/"""/g, '\\"\\"\\"');
+
+        var code =
+            'import json, sys\n' +
+            'from sympy.parsing.latex import parse_latex\n' +
+            'from sympy import Integral\n' +
+            '\n' +
+            'LATEX = r"""' + pyLiteral + '"""\n' +
+            'out = {"ok": False}\n' +
+            'try:\n' +
+            '    parsed = parse_latex(LATEX, backend="lark")\n' +
+            '    # lark can return a Tree(_ambig, [option1, option2, ...]) when\n' +
+            '    # the grammar is ambiguous (e.g. f(x) could be call-or-product).\n' +
+            '    # Pick the first Integral child if present, else the first child.\n' +
+            '    if getattr(parsed, "data", None) == "_ambig":\n' +
+            '        cands = [c for c in parsed.children if isinstance(c, Integral)]\n' +
+            '        parsed = cands[0] if cands else parsed.children[0]\n' +
+            '    if not isinstance(parsed, Integral):\n' +
+            '        out["error"] = "Not a full integral expression"\n' +
+            '    else:\n' +
+            '        expr = parsed.function\n' +
+            '        limits = parsed.limits[0]\n' +
+            '        # SymPy str() uses **, Python-style; calculator uses ^.\n' +
+            '        def asc(s): return str(s).replace("**", "^")\n' +
+            '        out = {\n' +
+            '            "ok": True,\n' +
+            '            "integrand": asc(expr),\n' +
+            '            "variable": str(limits[0]),\n' +
+            '            "is_definite": len(limits) == 3,\n' +
+            '        }\n' +
+            '        if len(limits) == 3:\n' +
+            '            out["lower"] = asc(limits[1])\n' +
+            '            out["upper"] = asc(limits[2])\n' +
+            'except Exception as e:\n' +
+            '    out = {"ok": False, "error": type(e).__name__ + ": " + str(e)}\n' +
+            'print("RESULT:" + json.dumps(out))\n';
+
+        fetch((window.INTEGRAL_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ language: 'python', version: '3.10', code: code })
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            var stdout = (data.Stdout || data.stdout || '').trim();
+            var m = stdout.match(/RESULT:(\{[\s\S]*\})/);
+            if (!m) {
+                callback({ ok: false, error: 'no backend response' });
+                return;
+            }
+            try { callback(JSON.parse(m[1])); }
+            catch (e) { callback({ ok: false, error: 'bad backend JSON' }); }
+        })
+        .catch(function (err) {
+            callback({ ok: false, error: err.message || 'network error' });
+        });
+    }
+
+    // Shape detector: "is this a full integral the user wants us to solve?"
+    // Intentionally minimal — we don't PARSE here, just decide whether to
+    // route the request to the backend parse_latex. Any shape this gate
+    // misses stays on the normal (typed-integrand) path, which is fine.
+    function looksLikeLatexIntegral(s) {
+        if (!s || typeof s !== 'string') return false;
+        return /\\int\b/.test(s)                 // LaTeX \int
+            || /^\s*int(?=[_^\s(]|$)/i.test(s);  // AsciiMath int, int_, int^, int(
+    }
+
+    if (window.IC) {
+        window.IC.parseIntegralViaBackend = parseIntegralViaBackend;
+        window.IC.looksLikeLatexIntegral = looksLikeLatexIntegral;
     }
 </script>
 

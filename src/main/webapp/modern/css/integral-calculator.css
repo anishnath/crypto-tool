@@ -193,6 +193,173 @@ background: var(--bg-tertiary);
 [data-theme="dark"] .ic-mode-btn.active { background: var(--tool-gradient); color: #fff; }
 [data-theme="dark"] .ic-mode-btn:hover:not(.active) { background: rgba(255,255,255,0.08); }
 
+/* ===== Inline label row (label + Visual/Text toggle + Scan button) ===== */
+.ic-expr-label-row {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 0.5rem;
+margin-bottom: 0.375rem;
+flex-wrap: wrap;
+}
+.ic-expr-label-row .ic-expr-label {
+margin: 0;
+flex: 0 0 auto;
+}
+.ic-expr-label-actions {
+display: inline-flex;
+align-items: center;
+gap: 0.375rem;
+}
+
+/* ===== Visual / Text compact pill toggle (inline with label) ===== */
+.ic-input-mode-toggle {
+display: inline-flex;
+gap: 2px;
+padding: 2px;
+background: var(--bg-secondary, #f8fafc);
+border: 1px solid var(--border, #e2e8f0);
+border-radius: var(--radius-full, 9999px);
+}
+.ic-input-mode-btn {
+display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+padding: 0.25rem 0.625rem;
+font-size: 0.6875rem; font-weight: 600;
+color: var(--text-secondary, #475569);
+background: transparent;
+border: none;
+border-radius: var(--radius-full, 9999px);
+cursor: pointer;
+transition: all 0.15s;
+font-family: var(--font-sans);
+line-height: 1;
+}
+.ic-input-mode-btn:hover:not(.active):not(:disabled) {
+color: var(--text-primary);
+}
+.ic-input-mode-btn.active {
+background: var(--bg-primary, #fff);
+color: var(--tool-primary, #4f46e5);
+box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(79, 70, 229, 0.2);
+}
+.ic-input-mode-btn > span:first-child { font-size: 0.95em; opacity: 0.9; }
+[data-theme="dark"] .ic-input-mode-toggle {
+background: var(--bg-tertiary);
+border-color: var(--border);
+}
+[data-theme="dark"] .ic-input-mode-btn { color: var(--text-secondary); }
+[data-theme="dark"] .ic-input-mode-btn.active {
+background: var(--bg-secondary);
+color: var(--primary-light, #818cf8);
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(129, 140, 248, 0.3);
+}
+[data-theme="dark"] .ic-input-mode-btn:hover:not(.active):not(:disabled) {
+color: var(--text-primary);
+}
+/* Drop the "Visual"/"Text" word on very narrow screens — keep the glyph. */
+@media (max-width: 380px) {
+.ic-mode-label { display: none; }
+.ic-input-mode-btn { padding: 0.25rem 0.5rem; }
+}
+
+/* ===== MathLive <math-field> ===== */
+.ic-mathfield {
+display: block;
+width: 100%;
+min-height: 48px;
+padding: 0.625rem 0.75rem;
+background: var(--bg-primary, #fff);
+color: var(--text-primary, #0f172a);
+border: 1.5px solid var(--border, #e2e8f0);
+border-radius: var(--radius-md, 0.5rem);
+font-size: 1.0625rem;
+line-height: 1.4;
+transition: border-color 0.15s, box-shadow 0.15s;
+/* MathLive-specific CSS variables */
+--selection-background-color: rgba(79, 70, 229, 0.25);
+--selection-color: var(--text-primary, #0f172a);
+--caret-color: var(--tool-primary, #4f46e5);
+--contains-highlight-background-color: rgba(79, 70, 229, 0.08);
+}
+.ic-mathfield:focus,
+.ic-mathfield:focus-within {
+outline: none;
+border-color: var(--tool-primary, #4f46e5);
+box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+.ic-mathfield:not(:defined) {
+/* Custom element not yet upgraded — show a skeleton that matches the input. */
+min-height: 48px;
+background: var(--bg-secondary, #f8fafc);
+color: transparent;
+}
+[data-theme="dark"] .ic-mathfield {
+background: var(--bg-tertiary);
+border-color: var(--border);
+color: var(--text-primary);
+--selection-background-color: rgba(129, 140, 248, 0.28);
+--caret-color: var(--primary-light, #818cf8);
+--contains-highlight-background-color: rgba(129, 140, 248, 0.12);
+}
+[data-theme="dark"] .ic-mathfield:focus,
+[data-theme="dark"] .ic-mathfield:focus-within {
+border-color: var(--primary-light, #818cf8);
+box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+}
+
+/* ===== Input mode visibility =====
+   Mode is written to .ic-expr-wrap (input block) and .tool-card-body
+   (so sibling groups like Live Preview can respond). Absence of the
+   attribute is treated as "visual" to avoid FOUC before JS runs. */
+
+/* Visual mode — show math-field, hide plain text input + autocomplete. */
+.ic-expr-wrap[data-input-mode="visual"] #ic-expr,
+.ic-expr-wrap[data-input-mode="visual"] #ic-autocomplete,
+.ic-expr-wrap:not([data-input-mode]) #ic-expr,
+.ic-expr-wrap:not([data-input-mode]) #ic-autocomplete {
+display: none;
+}
+
+/* Text mode — hide the math-field. */
+.ic-expr-wrap[data-input-mode="text"] #ic-mathfield {
+display: none;
+}
+
+/* Single morphing hint: show the slot that matches the active mode. */
+.ic-expr-wrap .ic-expr-hint {
+display: block;
+margin-top: 0.375rem;
+font-size: 0.6875rem;
+color: var(--text-secondary, #475569);
+line-height: 1.4;
+}
+.ic-expr-wrap .ic-expr-hint > span { display: none; }
+.ic-expr-wrap[data-input-mode="visual"] .ic-expr-hint .ic-hint-visual,
+.ic-expr-wrap:not([data-input-mode]) .ic-expr-hint .ic-hint-visual,
+.ic-expr-wrap[data-input-mode="text"] .ic-expr-hint .ic-hint-text {
+display: inline;
+}
+.ic-expr-wrap .ic-expr-hint code {
+font-family: var(--font-mono);
+background: var(--bg-secondary, #f8fafc);
+border: 1px solid var(--border, #e2e8f0);
+border-radius: 3px;
+padding: 1px 4px;
+font-size: 0.95em;
+}
+[data-theme="dark"] .ic-expr-wrap .ic-expr-hint code {
+background: var(--bg-tertiary);
+border-color: var(--border);
+}
+
+/* In Visual mode the <math-field> IS the live preview, so hide the
+   separate KaTeX preview (and its label). In Text mode the preview
+   below the input stays visible as a parsing sanity-check. */
+.tool-card-body[data-input-mode="visual"] .tool-form-group:has(> #ic-preview),
+.tool-card-body:not([data-input-mode]) .tool-form-group:has(> #ic-preview) {
+display: none;
+}
+
 /* ===== Live preview ===== */
 .ic-preview {
 background: var(--bg-secondary, #f8fafc);
@@ -260,11 +427,12 @@ color: #fff;
 .ic-expr-wrap { position: relative; }
 .ic-image-btn {
     display: inline-flex; align-items: center; gap: 3px;
-    padding: 2px 8px; margin-left: 6px;
+    padding: 2px 8px;
     background: rgba(99, 102, 241, 0.08); color: var(--primary, #6366f1);
     border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 4px;
     font-size: 0.6875rem; font-weight: 500; cursor: pointer;
     transition: all 0.12s; vertical-align: middle;
+    line-height: 1.2;
 }
 .ic-image-btn:hover { background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.4); }
 .ic-autocomplete {

@@ -784,7 +784,11 @@ testKings('sin(x) [0,π/2]', 'sin(x)', '0', 'pi/2', null);
 testKings('x² [0,1]', 'x^2', '0', '1', null);
 testKings('1/x [1,2]', '1/x', '1', '2', null);
 
-// Summary
+// NOTE: Full-integral LaTeX/AsciiMath parsing (e.g. `\int_0^1 x^2 dx`) is
+// handled by the backend via sympy.parsing.latex.parse_latex(backend='lark'),
+// not by a client-side regex. See integral-calculator.jsp:parseIntegralViaBackend.
+
+// ===== Summary =====
 console.log('\n' + '='.repeat(50));
 console.log('\x1b[32mPassed:\x1b[0m', passed);
 console.log('\x1b[31mFailed:\x1b[0m', failed);
