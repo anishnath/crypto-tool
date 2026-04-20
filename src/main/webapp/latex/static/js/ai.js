@@ -799,6 +799,32 @@ document.addEventListener('mousedown', function(e) {
   }
 });
 
+// ══════════════════════════════════════════════════════════════
+// VOICE TO LATEX — mic → transcribe → AI convert → insert
+// ══════════════════════════════════════════════════════════════
+
+function initVoiceToLatex() {
+  if (typeof SpeechToText === 'undefined') return;
+
+  SpeechToText.init({
+    buttonId: 'btn-voice',
+    aiUrl: AI_URL,
+    onResult: function(text) {
+      // Insert transcribed text directly at cursor
+      if (!window.editorInstance) return;
+      var cm = window.editorInstance;
+      cm.replaceRange(text, cm.getCursor());
+      cm.focus();
+      if (typeof window.showSuccessToast === 'function') window.showSuccessToast('Voice input inserted');
+    },
+    onError: function(msg) {
+      if (typeof window.showErrorToast === 'function') window.showErrorToast(msg);
+    }
+  });
+}
+
+initVoiceToLatex();
+
 // Expose globally
 window.fixError = fixError;
 window.nlToLatex = nlToLatex;

@@ -77,6 +77,7 @@
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/editor.css?v=<%=cssV%>"/>
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/toolbar.css?v=<%=cssV%>"/>
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/image-to-latex.css?v=<%=cssV%>"/>
+<link rel="stylesheet" href="<%=ctx%>/modern/css/speech-to-text.css?v=<%=cssV%>"/>
 
 <%@ include file="/modern/ads/ad-init.jsp" %>
 
@@ -358,6 +359,7 @@
 <script src="<%=ctx%>/latex/static/js/editor.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/latex/static/js/preview.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/latex/static/js/compile.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/modern/js/speech-to-text.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/latex/static/js/ai.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/latex/static/js/image-to-latex.js?v=<%=jsV%>"></script>
 
