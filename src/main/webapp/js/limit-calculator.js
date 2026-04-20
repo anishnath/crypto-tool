@@ -728,5 +728,35 @@ if (wsBtn) wsBtn.addEventListener('click', openWorksheet);
 var wsTbBtn = document.getElementById('lc-toolbar-worksheet-btn');
 if (wsTbBtn) wsTbBtn.addEventListener('click', openWorksheet);
 
+// Expose for image-to-math scan
+window.__LC_SCAN__ = {
+    fillAndSolve: function(problem) {
+        // Parse LaTeX via backend to get calculator-form expression
+        var latex = problem.latex || problem.expr || '';
+        var pt = problem.point || '0';
+        var dir = problem.direction || 'two-sided';
+        var v = problem.variable || 'x';
+
+        // Convert common LaTeX point values
+        pt = pt.replace(/\\infty/g, 'Infinity').replace(/\\pi/g, 'pi').replace(/\\e/g, 'e');
+
+        if (exprInput) exprInput.value = latex;
+        if (pointInput) pointInput.value = pt;
+        if (varSelect) {
+            var opt = varSelect.querySelector('option[value="' + v + '"]');
+            if (opt) varSelect.value = v;
+        }
+        // Set direction
+        currentDir = dir;
+        dirBtns.forEach(function(b) {
+            b.classList.toggle('active', b.getAttribute('data-dir') === dir);
+        });
+        updatePreview();
+        setTimeout(doCalculateLimit, 300);
+    },
+    generateLimitSteps: generateLimitSteps,
+    exprToLatex: exprToLatex
+};
+
 loadFromUrl();
 })();
