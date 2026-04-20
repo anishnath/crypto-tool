@@ -1077,6 +1077,7 @@
             btn.disabled = true;
             btn.textContent = 'Generating…';
             showHint('', false);
+            startProgress(TEXT_PHASES, TEXT_ESTIMATED_MS);
 
             try {
                 const resp = await fetch('<%=request.getContextPath()%>/CFExamMarkerFunctionality?action=tikz_generate', {
@@ -1087,11 +1088,13 @@
                 const data = await resp.json();
 
                 if (resp.status === 429) {
+                    stopProgress(false);
                     const wait = resp.headers.get('Retry-After') || '60';
                     showHint('\u26a0\ufe0f Rate limit reached (5 per hour). Try again in ' + wait + 's.', true);
                     return;
                 }
                 if (!resp.ok || data.error) {
+                    stopProgress(false);
                     showHint(data.message || data.error || 'Generation failed', true);
                     return;
                 }
@@ -1113,9 +1116,11 @@
                     if (renderBtn) renderBtn.click();
                 }
 
+                stopProgress(true);
                 showHint((data.title ? '\u2728 ' + data.title + ' — ' : '\u2728 ') + (data.hint || 'Diagram generated'), false);
 
             } catch (e) {
+                stopProgress(false);
                 showHint('Network error: ' + e.message, true);
             } finally {
                 btn.disabled = false;
@@ -1141,8 +1146,8 @@
         const progressLabel = document.getElementById('tikz-img-progress-label');
         const progressTime = document.getElementById('tikz-img-progress-time');
 
-        const ESTIMATED_MS = 210000; // ~3.5 min estimate
-        const PHASES = [
+        const IMG_ESTIMATED_MS = 210000; // ~3.5 min estimate
+        const IMG_PHASES = [
             { pct: 15, ms: 5000, label: 'Uploading image...' },
             { pct: 30, ms: 15000, label: 'Analyzing diagram structure...' },
             { pct: 50, ms: 45000, label: 'Identifying shapes and labels...' },
@@ -1151,7 +1156,22 @@
             { pct: 92, ms: 190000, label: 'Almost done...' }
         ];
 
-        function startProgress() {
+        const TEXT_ESTIMATED_MS = 20000; // ~20s estimate for describe→TikZ
+        const TEXT_PHASES = [
+            { pct: 20, ms: 1000, label: 'Parsing description...' },
+            { pct: 45, ms: 4000, label: 'Planning diagram...' },
+            { pct: 70, ms: 9000, label: 'Generating TikZ code...' },
+            { pct: 88, ms: 15000, label: 'Finalizing...' }
+        ];
+
+        function formatRemaining(ms) {
+            if (ms <= 0) return 'almost done';
+            if (ms < 60000) return '~' + Math.max(1, Math.ceil(ms / 1000)) + 's';
+            var mins = Math.ceil(ms / 60000);
+            return mins === 1 ? '~1 min' : '~' + mins + ' min';
+        }
+
+        function startProgress(phases, estimatedMs) {
             progressEl.classList.add('active');
             progressFill.style.transition = 'none';
             progressFill.style.width = '0%';
@@ -1159,33 +1179,29 @@
 
             progressTimer = setInterval(function() {
                 const elapsed = Date.now() - startTime;
-                let pct = 0, label = 'Analyzing image...';
+                let pct = 0, label = phases[0].label;
 
-                for (let i = PHASES.length - 1; i >= 0; i--) {
-                    if (elapsed >= PHASES[i].ms) {
-                        pct = PHASES[i].pct;
-                        label = PHASES[i].label;
-                        // Interpolate to next phase
-                        if (i < PHASES.length - 1) {
-                            var next = PHASES[i + 1];
-                            var frac = (elapsed - PHASES[i].ms) / (next.ms - PHASES[i].ms);
+                for (let i = phases.length - 1; i >= 0; i--) {
+                    if (elapsed >= phases[i].ms) {
+                        pct = phases[i].pct;
+                        label = phases[i].label;
+                        if (i < phases.length - 1) {
+                            var next = phases[i + 1];
+                            var frac = (elapsed - phases[i].ms) / (next.ms - phases[i].ms);
                             pct += (next.pct - pct) * Math.min(frac, 1);
                         }
                         break;
                     }
                 }
-                if (elapsed < PHASES[0].ms) {
-                    pct = (elapsed / PHASES[0].ms) * PHASES[0].pct;
-                    label = PHASES[0].label;
+                if (elapsed < phases[0].ms) {
+                    pct = (elapsed / phases[0].ms) * phases[0].pct;
+                    label = phases[0].label;
                 }
-
-                var remaining = Math.max(0, Math.ceil((ESTIMATED_MS - elapsed) / 60000));
-                var timeText = remaining > 1 ? '~' + remaining + ' min' : remaining === 1 ? '~1 min' : 'almost done';
 
                 progressFill.style.transition = 'width 1s linear';
                 progressFill.style.width = Math.min(pct, 95) + '%';
                 progressLabel.textContent = label;
-                progressTime.textContent = timeText;
+                progressTime.textContent = formatRemaining(estimatedMs - elapsed);
             }, 1000);
         }
 
@@ -1229,7 +1245,7 @@
             imgBtn.disabled = true;
             imgBtn.innerHTML = '<span class="tikz-img-spinner"></span> Analyzing…';
             showImgHint('', false);
-            startProgress();
+            startProgress(IMG_PHASES, IMG_ESTIMATED_MS);
 
             try {
                 const resp = await fetch('<%=request.getContextPath()%>/ai?action=vision', {
