@@ -426,7 +426,9 @@ public class AIProxyServlet extends HttpServlet {
         if (stream) {
             forwardStreaming(analyseUrl, analyseJson, resp);
         } else {
-            forwardBlocking(analyseUrl, analyseJson, resp, 180000); // 3 min timeout for vision
+            // Vision is slow AND upstream queue can eat up to OLLAMA_QUEUE_TIMEOUT (5 min today)
+            // before inference even starts. Total budget: queue + inference + headroom.
+            forwardBlocking(analyseUrl, analyseJson, resp, 360000); // 6 min
         }
     }
 

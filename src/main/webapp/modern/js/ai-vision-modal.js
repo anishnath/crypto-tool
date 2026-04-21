@@ -20,14 +20,15 @@
     'use strict';
 
     var MAX_SIZE = 10 * 1024 * 1024; // 10MB (matches AIProxyServlet limit)
-    var DEFAULT_ESTIMATED_MS = 240000; // 4 min
+    var DEFAULT_ESTIMATED_MS = 360000; // 6 min — matches AIProxyServlet vision timeout
     var DEFAULT_PHASES = [
-        { pct: 12, ms: 3000,   label: 'Uploading image...' },
-        { pct: 25, ms: 15000,  label: 'Analyzing image...' },
-        { pct: 45, ms: 45000,  label: 'Identifying structure...' },
-        { pct: 65, ms: 90000,  label: 'Generating code...' },
-        { pct: 80, ms: 150000, label: 'Refining output...' },
-        { pct: 90, ms: 210000, label: 'Almost done...' }
+        { pct: 10, ms: 5000,   label: 'Uploading image...' },
+        { pct: 22, ms: 30000,  label: 'Waiting in queue...' },
+        { pct: 38, ms: 75000,  label: 'Analyzing image...' },
+        { pct: 55, ms: 150000, label: 'Identifying structure...' },
+        { pct: 72, ms: 225000, label: 'Generating code...' },
+        { pct: 85, ms: 300000, label: 'Refining output...' },
+        { pct: 92, ms: 340000, label: 'Almost done...' }
     ];
 
     var modalEl = null;

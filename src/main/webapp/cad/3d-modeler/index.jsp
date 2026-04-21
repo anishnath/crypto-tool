@@ -741,11 +741,11 @@
                     }
                     window.AIVisionModal.open({
                         title: 'Image to JSCAD',
-                        subtitle: 'Upload a sketch, photo, or CAD screenshot — AI will generate editable JSCAD code (~3–4 min).',
+                        subtitle: 'Upload a sketch, photo, or CAD screenshot — AI will generate editable JSCAD code (~4–6 min).',
                         ctx: ctxPath,
                         systemPrompt: VISION_SYSTEM_PROMPT,
                         userPrompt: 'Analyze the attached image and produce a complete, runnable JSCAD module that reproduces the 3D model. Prioritise topological correctness and parametric flexibility over exact visual match. Include getParameterDefinitions() covering every notable dimension.',
-                        estimatedMs: 240000,
+                        estimatedMs: 360000,
                         cleanCode: cleanJscadCode,
                         onResult: function (code) {
                             showStatus('success', '\u2728 Code generated — rendering\u2026');
