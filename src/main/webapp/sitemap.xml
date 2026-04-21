@@ -2069,6 +2069,11 @@
         <loc>https://8gwifi.org/cad/3d-modeler/</loc>
     </url>
     <url>
+        <loc>https://8gwifi.org/video/</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
         <loc>https://8gwifi.org/revdns.jsp</loc>
     </url>
     <url>

@@ -1,7 +1,7 @@
 {
-  "version": "1.3",
-  "lastUpdated": "2026-03-16T00:00:00.000Z",
-  "totalTools": 424,
+  "version": "1.4",
+  "lastUpdated": "2026-04-21T00:00:00.000Z",
+  "totalTools": 425,
   "categories": [
     "Blockchain & Crypto",
     "CAD & 3D Design",
@@ -25,7 +25,8 @@
     "Physics",
     "Productivity",
     "SEO & Web Audits",
-    "Security & PKI"
+    "Security & PKI",
+    "Video & Audio AI"
   ],
   "tools": [
     {
@@ -3146,6 +3147,13 @@
       "category": "Education",
       "keywords": "visual physics, interactive physics, projectile motion simulator, lens ray diagram, electric field simulator, circuit simulator, wave interference, pendulum SHM, collisions, inclined plane, snells law, magnetic field, standing waves, doppler effect, orbital mechanics, torque rotation, pulley systems, ideal gas, electromagnetic induction, diffraction, photoelectric effect, physics visualization",
       "description": "Visual Physics Lab - 19 interactive physics simulations covering mechanics, optics, electromagnetism, waves, thermodynamics, and modern physics"
+    },
+    {
+      "name": "AI Video Transcription & Translation",
+      "url": "video/",
+      "category": "Video & Audio AI",
+      "keywords": "transcribe video to text, ai video transcription, speech to text, translate video to english, mp4 to text, video to srt, srt generator, vtt subtitles, youtube video transcription, video subtitle generator, audio to text converter, video caption generator, free transcription, otter alternative, rev alternative",
+      "description": "Free AI video transcription and translation — upload any video or audio, get an accurate transcript in 90+ languages, translate to English, export as plain text, SRT or VTT subtitles"
     }
   ]
 }
