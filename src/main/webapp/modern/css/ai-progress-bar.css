@@ -1,0 +1,59 @@
+/* Reusable inline horizontal progress bar for long-running AI calls.
+ * Mount with: AIProgressBar.attach(containerEl, { phases, estimatedMs })
+ * The .aipb element is hidden by default; .aipb.active makes it visible.
+ */
+
+.aipb {
+    display: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+.aipb.active { display: block; }
+
+.aipb-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: inherit;
+    opacity: 0.85;
+    margin-bottom: 4px;
+    gap: 0.5rem;
+}
+.aipb-label {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.aipb-msg { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.aipb-time { flex-shrink: 0; opacity: 0.75; }
+
+.aipb-bar {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+.aipb-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #6366f1, #818cf8);
+    border-radius: 2px;
+    transition: width 1s linear;
+}
+
+.aipb-spinner {
+    display: inline-block;
+    width: 11px; height: 11px;
+    border: 2px solid rgba(129, 140, 248, 0.3);
+    border-top-color: #818cf8;
+    border-radius: 50%;
+    animation: aipb-spin 0.7s linear infinite;
+    margin-right: 6px;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+@keyframes aipb-spin { to { transform: rotate(360deg); } }

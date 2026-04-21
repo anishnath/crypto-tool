@@ -46,6 +46,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-code-assistant.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-vision-modal.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-progress-bar.css">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
@@ -134,10 +135,10 @@
             .cad-img-btn-label { display: none; }
         }
 
-        /* AI status — slim bar below topbar, auto-hides */
+        /* AI status — slim bar below topbar, auto-hides. Hosts text + horizontal progress bar. */
         .cad-ai-status {
             position: fixed; top: 40px; left: 0; right: 0; z-index: 99;
-            text-align: center; font-size: 0.6875rem; padding: 3px 0;
+            font-size: 0.6875rem; padding: 5px 12px;
             font-family: 'Inter', system-ui, sans-serif;
             transform: translateY(-100%); transition: transform 0.2s;
         }
@@ -145,6 +146,11 @@
         .cad-ai-status.loading { background: #1e293b; color: #818cf8; }
         .cad-ai-status.error { background: #451a1a; color: #f87171; }
         .cad-ai-status.success { background: #052e16; color: #34d399; }
+        .cad-ai-status-text { text-align: center; min-height: 1em; }
+        /* Progress bar wrapper gets a little breathing room when the bar is active */
+        .cad-ai-status-progress { margin-top: 4px; }
+        .cad-ai-status-progress:empty,
+        .cad-ai-status-progress > .aipb:not(.active) { margin-top: 0; }
 
         /* ── Content flows under fixed topbar ── */
         .cad-content {
@@ -344,8 +350,11 @@
         </div>
     </div>
 
-    <!-- AI status bar (slides in below topbar) -->
-    <div class="cad-ai-status" id="cad-ai-status"></div>
+    <!-- AI status bar (slides in below topbar) — holds text + horizontal progress bar -->
+    <div class="cad-ai-status" id="cad-ai-status">
+        <div class="cad-ai-status-text" id="cad-ai-status-text"></div>
+        <div class="cad-ai-status-progress" id="cad-ai-status-progress"></div>
+    </div>
 
     <!-- Content flows: ad → jscad (no overlapping) -->
     <div class="cad-content">
@@ -433,7 +442,18 @@
             var input = document.getElementById('cad-ai-input');
             var sendBtn = document.getElementById('cad-ai-send');
             var statusBar = document.getElementById('cad-ai-status');
+            var statusText = document.getElementById('cad-ai-status-text');
+            var progressHost = document.getElementById('cad-ai-status-progress');
             var busy = false;
+
+            // Lazy-mount progress bar (ai-progress-bar.js is deferred)
+            var progressBar = null;
+            function getProgressBar() {
+                if (progressBar) return progressBar;
+                if (typeof window.AIProgressBar === 'undefined' || !progressHost) return null;
+                progressBar = window.AIProgressBar.attach(progressHost, { estimatedMs: 240000 });
+                return progressBar;
+            }
 
             var ctxMeta = document.querySelector('meta[name="ctx"]');
             var aiUrl = (ctxMeta ? ctxMeta.getAttribute('content') : '') + '/ai';
@@ -487,7 +507,7 @@
 
             function showStatus(cls, text) {
                 statusBar.className = 'cad-ai-status ' + cls + ' show';
-                statusBar.textContent = text;
+                if (statusText) statusText.textContent = text;
             }
             function hideStatus() {
                 statusBar.classList.remove('show');
@@ -531,8 +551,10 @@
                 var inThinkBlock = false;
                 var codeStarted = false;  // true once first real code token arrives
 
-                // Don't touch the editor yet — show "thinking" in status bar
+                // Don't touch the editor yet — show "thinking" in status bar + start progress
                 showStatus('loading', '\u2728 AI is thinking\u2026');
+                var pb = getProgressBar();
+                if (pb) pb.start();
 
                 fetch(aiUrl, {
                     method: 'POST',
@@ -598,6 +620,7 @@
                     return reader.read().then(processChunk);
                 })
                 .catch(function (err) {
+                    if (pb) pb.stop(false);
                     if (cm) cm.setOption('readOnly', false);
                     showStatus('error', err.message);
                     setTimeout(hideStatus, 5000);
@@ -646,6 +669,7 @@
                         }, 300);
                     }
 
+                    if (pb) pb.stop(true);
                     showStatus('success', 'Done! Rendering 3D model\u2026');
                     setTimeout(hideStatus, 3000);
                     busy = false;
@@ -738,6 +762,7 @@
         })();
     </script>
 
+    <script src="<%=request.getContextPath()%>/modern/js/ai-progress-bar.js" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/ai-vision-modal.js" defer></script>
 
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
