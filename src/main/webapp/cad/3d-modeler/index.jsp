@@ -45,6 +45,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-code-assistant.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-vision-modal.css">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
@@ -118,6 +119,20 @@
         }
         .cad-topbar-link { color: #64748b; text-decoration: none; font-size: 0.625rem; }
         .cad-topbar-link:hover { color: #fff; }
+
+        /* Image-to-JSCAD trigger in topbar */
+        .cad-img-btn {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 8px; background: rgba(99,102,241,0.15);
+            border: 1px solid rgba(99,102,241,0.35); border-radius: 6px;
+            color: #a5b4fc; font-size: 0.625rem; font-weight: 600;
+            cursor: pointer; font-family: inherit;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+        .cad-img-btn:hover { background: rgba(99,102,241,0.3); color: #fff; border-color: #818cf8; }
+        @media (max-width: 640px) {
+            .cad-img-btn-label { display: none; }
+        }
 
         /* AI status — slim bar below topbar, auto-hides */
         .cad-ai-status {
@@ -304,6 +319,15 @@
             <input type="text" class="cad-ai-input" id="cad-ai-input"
                    placeholder="Create a gear... / Add holes... / Fix error..."
                    autocomplete="off" />
+            <button type="button" class="cad-img-btn" id="cad-img-btn"
+                    title="Upload an image — AI will generate JSCAD from it"
+                    aria-label="Generate JSCAD from an image">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                    <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
+                </svg>
+                <span class="cad-img-btn-label">From Image</span>
+            </button>
             <button class="cad-ai-send" id="cad-ai-send" disabled>Go</button>
         </div>
 
@@ -630,8 +654,91 @@
                     input.focus();
                 }
             }
+
+            // ── Image → JSCAD via AIVisionModal ──
+            var imgBtn = document.getElementById('cad-img-btn');
+            var ctxPath = ctxMeta ? ctxMeta.getAttribute('content') : '';
+
+            var VISION_SYSTEM_PROMPT = SYSTEM_PROMPT
+                + '\nIMAGE-TO-CODE GUIDANCE:\n'
+                + '- You MAY reason privately inside <think>...</think> blocks; those blocks are stripped from the final output. Use them to plan before emitting code.\n'
+                + '- Silent observation checklist: (1) medium (photo / hand sketch / CAD render / blueprint / multi-view drawing), (2) number of distinct parts, (3) primitives building each part, (4) boolean operations connecting them, (5) any visible dimensions, labels, or scale cues.\n'
+                + '- Dimensions: if explicit measurements appear in the image (e.g. "20mm", "Ø5"), use those EXACT values as parameter defaults. Otherwise pick defaults in the 10–50mm range and expose them as sliders.\n'
+                + '- Multi-view drawings (front / top / side): combine them into ONE 3D model. Dashed lines = hidden edges; hatching = cross-sections; centerlines mark symmetry axes.\n'
+                + '- Fidelity priority (highest to lowest): correct topology (right primitives + right booleans) > overall proportions > decorative detail. A simple correct model beats a detailed broken one.\n'
+                + '- Parameters: expose every dimension a user would plausibly want to tweak (width, depth, height, hole diameters, wall thickness, corner radius, tooth counts, etc.).\n'
+                + '- Colors: if the image shows clear colors, reproduce them with colorize([r,g,b], shape) using values 0.0–1.0.\n'
+                + '- If the image is unreadable or ambiguous, return a best-effort placeholder model with a /* */ comment near main() naming what was unclear.\n'
+                + '- OUTPUT: still only pure JSCAD JavaScript — no markdown fences, no commentary outside code. Use // or /* */ comments INSIDE the code for annotations.\n';
+
+            function cleanJscadCode(raw) {
+                if (!raw) return '';
+                return raw
+                    .replace(/^```(?:javascript|js|jscad)?\s*\n?/gm, '')
+                    .replace(/\n?```\s*$/gm, '')
+                    .replace(/<think>[\s\S]*?<\/think>/g, '')
+                    .replace(/^(?:javascript|js|jscad)\s*\n/, '')
+                    .trim();
+            }
+
+            function loadCodeAndRender(code) {
+                var cm = getCM();
+                if (!cm) {
+                    // Editor not open yet — rely on the sessionStorage bootstrap in the outer script.
+                    sessionStorage.setItem('jscad_ai_code', code);
+                    window.location.hash = '';
+                    window.location.reload();
+                    return;
+                }
+                cm.setValue(code);
+                cm.refresh();
+                var busyEl = document.querySelector('#busy');
+                var isStuck = busyEl && busyEl.textContent.indexOf('processing') !== -1;
+                if (isStuck) {
+                    sessionStorage.setItem('jscad_ai_code', code);
+                    window.location.hash = '';
+                    window.location.reload();
+                    return;
+                }
+                setTimeout(function () {
+                    cm.triggerOnKeyDown({
+                        type: 'keydown', keyCode: 13, shiftKey: true,
+                        preventDefault: function () {}, stopPropagation: function () {}
+                    });
+                }, 300);
+            }
+
+            if (imgBtn) {
+                imgBtn.addEventListener('click', function () {
+                    if (typeof window.AIVisionModal === 'undefined') {
+                        showStatus('error', 'Image-to-code module still loading — try again in a moment.');
+                        setTimeout(hideStatus, 3000);
+                        return;
+                    }
+                    window.AIVisionModal.open({
+                        title: 'Image to JSCAD',
+                        subtitle: 'Upload a sketch, photo, or CAD screenshot — AI will generate editable JSCAD code (~3–4 min).',
+                        ctx: ctxPath,
+                        systemPrompt: VISION_SYSTEM_PROMPT,
+                        userPrompt: 'Analyze the attached image and produce a complete, runnable JSCAD module that reproduces the 3D model. Prioritise topological correctness and parametric flexibility over exact visual match. Include getParameterDefinitions() covering every notable dimension.',
+                        estimatedMs: 240000,
+                        cleanCode: cleanJscadCode,
+                        onResult: function (code) {
+                            showStatus('success', '\u2728 Code generated — rendering\u2026');
+                            setTimeout(hideStatus, 3000);
+                            loadCodeAndRender(code);
+                        },
+                        onError: function (msg) {
+                            showStatus('error', msg);
+                            setTimeout(hideStatus, 5000);
+                        }
+                    });
+                });
+            }
         })();
     </script>
+
+    <script src="<%=request.getContextPath()%>/modern/js/ai-vision-modal.js" defer></script>
 
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
     <%@ include file="../../modern/ads/ad-sticky-footer.jsp" %>
