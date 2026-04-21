@@ -1,0 +1,503 @@
+/* Video Studio — independent ElevenLabs-inspired layout.
+ * Does NOT extend design-system.css. Theme-aware via [data-theme] set by
+ * /modern/js/dark-mode.js — the navbar and studio body flip together.
+ *
+ * All selectors scoped under .vs-* so tokens don't leak.
+ */
+
+/* ── Token palette ──────────────────────────────────────────────────── */
+/* Defaults = dark. Light-theme block below overrides the same tokens. */
+body.vs-body {
+    --vs-bg-body:      #0b0f17;
+    --vs-bg-panel:     #131827;
+    --vs-bg-sidebar:   #0f1422;
+    --vs-bg-inset:     #0f1422;
+    --vs-bg-input:     #0b0f17;
+    --vs-bg-btn:       #1e293b;
+    --vs-bg-btn-hover: #334155;
+    --vs-bg-tint:      rgba(99, 102, 241, 0.04);
+    --vs-bg-tint-hover:rgba(99, 102, 241, 0.08);
+    --vs-bg-soft:      rgba(99, 102, 241, 0.15);
+
+    --vs-grid:         rgba(255, 255, 255, 0.04);
+    --vs-border:       rgba(255, 255, 255, 0.06);
+    --vs-border-strong:rgba(255, 255, 255, 0.08);
+    --vs-dash:         rgba(129, 140, 248, 0.35);
+
+    --vs-text:         #e8ebf3;
+    --vs-text-dim:     #cbd5e1;
+    --vs-text-soft:    #94a3b8;
+    --vs-text-muted:   #64748b;
+    --vs-text-faint:   #475569;
+
+    --vs-accent:         #818cf8;
+    --vs-accent-strong:  #6366f1;
+    --vs-accent-2:       #8b5cf6;
+    --vs-accent-2-bright:#a78bfa;
+    --vs-link:           #a5b4fc;
+
+    --vs-danger:      #f87171;
+    --vs-danger-bg:   rgba(220, 38, 38, 0.1);
+    --vs-danger-bd:   rgba(220, 38, 38, 0.3);
+    --vs-danger-text: #fca5a5;
+
+    --vs-progress-track: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] body.vs-body {
+    --vs-bg-body:      #f7f8fb;
+    --vs-bg-panel:     #ffffff;
+    --vs-bg-sidebar:   #eef1f7;
+    --vs-bg-inset:     #f8fafc;
+    --vs-bg-input:     #ffffff;
+    --vs-bg-btn:       #ffffff;
+    --vs-bg-btn-hover: #f1f5f9;
+    --vs-bg-tint:      rgba(99, 102, 241, 0.05);
+    --vs-bg-tint-hover:rgba(99, 102, 241, 0.1);
+    --vs-bg-soft:      rgba(99, 102, 241, 0.12);
+
+    --vs-grid:         rgba(15, 23, 42, 0.06);
+    --vs-border:       rgba(15, 23, 42, 0.08);
+    --vs-border-strong:rgba(15, 23, 42, 0.12);
+    --vs-dash:         rgba(99, 102, 241, 0.45);
+
+    --vs-text:         #0f172a;
+    --vs-text-dim:     #1f2937;
+    --vs-text-soft:    #475569;
+    --vs-text-muted:   #64748b;
+    --vs-text-faint:   #94a3b8;
+
+    --vs-link:         #4f46e5;
+
+    --vs-danger-bg:   rgba(220, 38, 38, 0.08);
+    --vs-danger-bd:   rgba(220, 38, 38, 0.25);
+    --vs-danger-text: #b91c1c;
+
+    --vs-progress-track: rgba(15, 23, 42, 0.08);
+}
+
+/* ── Root shell ─────────────────────────────────────────────────────── */
+/* !important defeats dark-mode.css's [data-theme="light"] body rule so our
+ * token-driven background wins while still flipping with the toggle. */
+body.vs-body,
+[data-theme="light"] body.vs-body,
+[data-theme="dark"] body.vs-body {
+    margin: 0;
+    padding-top: 72px;               /* offset for fixed .modern-nav */
+    background: var(--vs-bg-body) !important;
+    color: var(--vs-text) !important;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+body.vs-body a { color: var(--vs-link); }
+
+@media (max-width: 991px) {
+    body.vs-body,
+    [data-theme="light"] body.vs-body,
+    [data-theme="dark"] body.vs-body { padding-top: 64px; }
+}
+
+/* ── Hero banner strip ──────────────────────────────────────────────── */
+/* Wraps /modern/ads/ad-hero-banner.jsp. Centres the ad and gives it air. */
+.vs-hero {
+    background: var(--vs-bg-sidebar);
+    border-bottom: 1px solid var(--vs-border);
+    padding: 0.625rem 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60px;
+}
+.vs-hero .ad-container { margin: 0; }
+.vs-hero:empty { display: none; }
+
+/* ── Main grid ──────────────────────────────────────────────────────── */
+/* Default (≥1280px): 3 columns — sidebar | workspace | ad rail */
+.vs-main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr) 320px;
+    gap: 1px;
+    background: var(--vs-grid);
+    min-height: calc(100vh - 72px);
+}
+/* Medium (880–1279px): drop the rail, keep sidebar */
+@media (max-width: 1279px) {
+    .vs-main { grid-template-columns: 240px minmax(0, 1fr); }
+    .vs-rail { display: none; }
+}
+/* Small (<880px): stack — sidebar on top as horizontal tabs */
+@media (max-width: 879px) { .vs-main { grid-template-columns: 1fr; } }
+/* Height adjust for mobile nav */
+@media (max-width: 991px) { .vs-main { min-height: calc(100vh - 64px); } }
+
+/* ── Sidebar ────────────────────────────────────────────────────────── */
+.vs-sidebar {
+    background: var(--vs-bg-sidebar);
+    padding: 1.25rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.vs-sidebar-heading {
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vs-text-muted);
+    padding: 0 0.5rem;
+}
+.vs-sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.vs-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--vs-text-dim);
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    position: relative;
+}
+.vs-sidebar-item:hover:not(.disabled) {
+    background: var(--vs-bg-tint-hover);
+    color: var(--vs-text);
+}
+.vs-sidebar-item.active {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(129, 140, 248, 0.12));
+    color: var(--vs-text);
+    border-color: rgba(99, 102, 241, 0.4);
+}
+.vs-sidebar-item.disabled { color: var(--vs-text-faint); cursor: not-allowed; }
+.vs-sidebar-icon {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+}
+.vs-sidebar-label { flex: 1; }
+.vs-sidebar-badge {
+    font-size: 0.5625rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--vs-text-muted);
+    background: rgba(100, 116, 139, 0.15);
+    padding: 2px 6px;
+    border-radius: 9999px;
+}
+
+/* ── Workspace ──────────────────────────────────────────────────────── */
+.vs-workspace {
+    background: var(--vs-bg-body);
+    padding: 1.5rem 1.75rem 2rem;
+    overflow-y: auto;
+}
+.vs-view { display: none; }
+.vs-view.active { display: block; }
+.vs-view-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--vs-border);
+    margin-bottom: 1.5rem;
+}
+.vs-view-title { font-size: 1.5rem; font-weight: 700; margin: 0 0 0.375rem; color: var(--vs-text); }
+.vs-view-subtitle {
+    font-size: 0.875rem; color: var(--vs-text-soft);
+    margin: 0; max-width: 60ch; line-height: 1.5;
+}
+
+/* ── Card (reusable block) ──────────────────────────────────────────── */
+.vs-card {
+    background: var(--vs-bg-panel);
+    border: 1px solid var(--vs-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+.vs-card-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--vs-text-soft);
+    margin: 0 0 0.75rem;
+}
+
+/* ── Drop zone ──────────────────────────────────────────────────────── */
+.vs-drop {
+    display: block;
+    border: 2px dashed var(--vs-dash);
+    border-radius: 0.75rem;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    background: var(--vs-bg-tint);
+    transition: border-color 0.15s, background 0.15s;
+}
+.vs-drop:hover, .vs-drop.drag-active {
+    border-color: var(--vs-accent);
+    background: var(--vs-bg-tint-hover);
+}
+.vs-drop-icon { color: var(--vs-accent); margin-bottom: 0.5rem; }
+.vs-drop-title { font-size: 0.95rem; font-weight: 600; color: var(--vs-text); margin: 0.25rem 0; }
+.vs-drop-hint { font-size: 0.75rem; color: var(--vs-text-muted); margin: 0.25rem 0 0; }
+.vs-drop-link { color: var(--vs-link); font-weight: 600; text-decoration: underline; }
+.vs-drop-file { display: none; }
+
+/* ── Selected file preview ──────────────────────────────────────────── */
+.vs-preview {
+    display: none;
+    border: 1px solid var(--vs-border-strong);
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: var(--vs-bg-inset);
+    align-items: center;
+    gap: 1rem;
+}
+.vs-preview.active { display: flex; }
+.vs-preview-icon {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border-radius: 0.5rem;
+    background: var(--vs-bg-soft);
+    color: var(--vs-accent);
+    display: flex; align-items: center; justify-content: center;
+}
+.vs-preview-meta { flex: 1; min-width: 0; }
+.vs-preview-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--vs-text);
+    margin: 0 0 0.125rem;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.vs-preview-stats { font-size: 0.75rem; color: var(--vs-text-soft); margin: 0; }
+.vs-preview-remove {
+    background: transparent;
+    border: 1px solid var(--vs-danger-bd);
+    color: var(--vs-danger);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+.vs-preview-remove:hover { background: var(--vs-danger-bg); }
+
+/* ── Options grid ───────────────────────────────────────────────────── */
+.vs-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+.vs-option label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--vs-text-soft);
+    margin-bottom: 0.375rem;
+}
+.vs-option select,
+.vs-option input[type="text"] {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background: var(--vs-bg-input);
+    border: 1px solid var(--vs-border-strong);
+    border-radius: 0.375rem;
+    color: var(--vs-text);
+    font-size: 0.8125rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+}
+.vs-option select:focus,
+.vs-option input[type="text"]:focus { border-color: var(--vs-accent); }
+
+/* ── Actions row ────────────────────────────────────────────────────── */
+.vs-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+}
+.vs-btn {
+    padding: 0.625rem 1.125rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--vs-border-strong);
+    background: var(--vs-bg-btn);
+    color: var(--vs-text);
+    font-family: inherit;
+    transition: background 0.15s, border-color 0.15s, transform 0.05s;
+}
+.vs-btn:hover:not(:disabled) { background: var(--vs-bg-btn-hover); }
+.vs-btn:active:not(:disabled) { transform: translateY(1px); }
+.vs-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.vs-btn-primary {
+    background: linear-gradient(135deg, var(--vs-accent-strong), var(--vs-accent-2));
+    border-color: transparent;
+    color: #fff;
+}
+.vs-btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--vs-accent), var(--vs-accent-2-bright));
+}
+
+/* ── Progress host (AIProgressBar mount) ────────────────────────────── */
+.vs-progress-host { margin-top: 1rem; }
+.vs-progress-host .aipb-text { color: var(--vs-text-dim); }
+.vs-progress-host .aipb-bar  { background: var(--vs-progress-track); }
+
+/* ── Output panel ───────────────────────────────────────────────────── */
+.vs-output {
+    display: none;
+    background: var(--vs-bg-inset);
+    border: 1px solid var(--vs-border);
+    border-radius: 0.75rem;
+    margin-top: 1.25rem;
+    overflow: hidden;
+}
+.vs-output.active { display: block; }
+.vs-output-header {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--vs-border);
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 0.5rem;
+}
+.vs-output-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--vs-text-soft);
+    margin: 0;
+}
+.vs-output-actions { display: flex; gap: 0.375rem; }
+.vs-output-actions .vs-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+}
+.vs-output-body {
+    padding: 1.25rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--vs-text);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 480px;
+    overflow-y: auto;
+}
+.vs-output-meta {
+    padding: 0.625rem 1.25rem;
+    border-top: 1px solid var(--vs-border);
+    font-size: 0.6875rem;
+    color: var(--vs-text-muted);
+    display: flex; justify-content: space-between; gap: 1rem;
+}
+
+/* ── Error banner ───────────────────────────────────────────────────── */
+.vs-error {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--vs-danger-bg);
+    border: 1px solid var(--vs-danger-bd);
+    border-radius: 0.5rem;
+    color: var(--vs-danger-text);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+}
+.vs-error.active { display: block; }
+
+/* ── Coming-soon hero (for stubbed services) ────────────────────────── */
+.vs-soon {
+    text-align: center;
+    padding: 4rem 1.5rem;
+    color: var(--vs-text-soft);
+}
+.vs-soon-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+.vs-soon-title { color: var(--vs-text); font-size: 1.25rem; margin: 0 0 0.25rem; }
+.vs-soon-body { font-size: 0.875rem; max-width: 48ch; margin: 0 auto; }
+
+/* ── Right ad rail (desktop ≥1280px) ────────────────────────────────── */
+.vs-rail {
+    background: var(--vs-bg-sidebar);
+    padding: 1.25rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* Sticky so the top 300×250 follows the user while they scroll the workspace */
+    position: sticky;
+    top: 72px;                 /* aligns with fixed nav */
+    align-self: start;
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+}
+.vs-rail .ad-container { margin: 0 auto; }
+
+/* ── In-content ad (mobile / tablet — where the rail is hidden) ─────── */
+.vs-inline-ad {
+    margin: 1.5rem 0 0.25rem;
+    display: flex;
+    justify-content: center;
+}
+.vs-inline-ad:empty { display: none; }
+/* Desktop has the rail, so hide the inline ad there to avoid double-serving */
+@media (min-width: 1280px) { .vs-inline-ad { display: none; } }
+
+/* ── Mobile (<880px): stack layout ──────────────────────────────────── */
+@media (max-width: 879px) {
+    .vs-sidebar {
+        flex-direction: row;
+        gap: 0.25rem;
+        padding: 0.75rem;
+        overflow-x: auto;
+        /* Scroll the sidebar horizontally on mobile without bumping workspace width */
+        -webkit-overflow-scrolling: touch;
+    }
+    .vs-sidebar-heading { display: none; }
+    .vs-sidebar-list { flex-direction: row; gap: 0.25rem; flex-shrink: 0; }
+    .vs-sidebar-item { white-space: nowrap; padding: 0.5rem 0.75rem; }
+    .vs-workspace { padding: 1rem 1rem 2rem; }
+    .vs-view-title { font-size: 1.25rem; }
+    .vs-view-subtitle { font-size: 0.8125rem; }
+
+    /* Tighten cards + options on small screens */
+    .vs-card { padding: 1rem; }
+    .vs-options { grid-template-columns: 1fr; }
+    .vs-drop { padding: 1.75rem 1rem; }
+    .vs-actions { justify-content: stretch; }
+    .vs-actions .vs-btn { flex: 1; }
+    .vs-output-body { padding: 1rem; max-height: 60vh; }
+    .vs-output-header { padding: 0.625rem 1rem; flex-wrap: wrap; }
+    .vs-output-meta { padding: 0.5rem 1rem; flex-wrap: wrap; gap: 0.25rem; }
+
+    /* Leave room at bottom for the sticky footer ad */
+    body.vs-body { padding-bottom: 60px; }
+    .vs-hero { padding: 0.5rem; min-height: auto; }
+}
