@@ -618,6 +618,16 @@
         <url-pattern>/ai</url-pattern>
     </servlet-mapping>
 
+    <!-- Video Studio — transcribe / translate / future video services (Whisper-backed) -->
+    <servlet>
+        <servlet-name>VideoServiceServlet</servlet-name>
+        <servlet-class>z.y.x.video.VideoServiceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>VideoServiceServlet</servlet-name>
+        <url-pattern>/video-service</url-pattern>
+    </servlet-mapping>
+
     <!-- LaTeX Editor Servlets -->
     <servlet>
         <servlet-name>EditorServlet</servlet-name>
