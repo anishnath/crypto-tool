@@ -22,13 +22,13 @@
     <meta name="ctx" content="<%=request.getContextPath()%>" />
 
     <jsp:include page="/modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Free Auto-Caption Generator: Add Subtitles" />
-        <jsp:param name="toolDescription" value="Free auto-caption generator. Add animated TikTok-style subtitles to any video and export a captioned MP4, all in your browser. No signup." />
+        <jsp:param name="toolName" value="Free Subtitle Generator: AI Auto-Captions" />
+        <jsp:param name="toolDescription" value="Free subtitle generator. AI writes TikTok-style captions for any video and exports a subtitled MP4 — all in your browser. No signup." />
         <jsp:param name="toolCategory" value="Video &amp; Audio AI" />
         <jsp:param name="toolUrl" value="video/captions/" />
         <jsp:param name="breadcrumbCategoryUrl" value="video/" />
         <jsp:param name="toolImage" value="auto-captions-og.jpg" />
-        <jsp:param name="toolKeywords" value="auto caption generator, add subtitles to video, tiktok captions, reels captions free, video subtitle maker, burn subtitles, subtitle generator ai, captions for video, animated subtitles, karaoke subtitles, video caption ai, captions.ai alternative, submagic alternative, free subtitle app, srt vtt export, word highlight subtitles" />
+        <jsp:param name="toolKeywords" value="subtitle generator, add subtitles to video, video subtitle maker, auto subtitle generator, subtitle generator ai, burn subtitles into video, free subtitle app, auto caption generator, tiktok captions, reels captions free, animated subtitles, captions for video, video caption ai, captions.ai alternative, submagic alternative, srt vtt export, word highlight subtitles" />
         <jsp:param name="toolFeatures" value="AI transcription with word-level timing,Instant TikTok-style caption preview,Karaoke and word-pop highlight modes,Style presets: TikTok Bold / Podcast Clean / Minimal,Export as burned-in MP4,Works entirely in your browser — video never uploaded,Supports MP4 MOV WebM,Free and no signup" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Upload your video|Drop a clip (MP4 MOV WebM) — it stays on your device,Transcription runs automatically|AI extracts speech and times every word — takes 30s to 2min depending on length,Pick a caption style|Choose TikTok Bold Podcast Clean or Minimal — change position color and highlight live,Export the captioned MP4|Click Export and download a new video with captions burned in" />
@@ -92,7 +92,7 @@
 
                 <header class="vs-view-header">
                     <div>
-                        <h1 class="vs-view-title">Free AI Auto-Caption Generator</h1>
+                        <h1 class="vs-view-title">Free AI Subtitle Generator for Video</h1>
                         <p class="vs-view-subtitle">
                             Add animated TikTok-style subtitles to any video. AI transcribes the
                             speech, you pick a style, your browser burns them into an MP4.

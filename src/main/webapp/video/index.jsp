@@ -8,13 +8,13 @@
     <meta name="ctx" content="<%=request.getContextPath()%>" />
 
     <jsp:include page="/modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="AI Video to Text &amp; Subtitle Generator" />
-        <jsp:param name="toolDescription" value="Transcribe or translate any video in minutes. 90+ languages. Export plain text, SRT or VTT subtitles. Free, no signup." />
+        <jsp:param name="toolName" value="Free AI Video to Text: Transcribe &amp; Translate" />
+        <jsp:param name="toolDescription" value="Free AI video transcription. Turn any video or audio into accurate text in 90+ languages, translate to English, export plain text, SRT or VTT. No signup." />
         <jsp:param name="toolCategory" value="Video &amp; Audio AI" />
         <jsp:param name="toolUrl" value="video/" />
         <jsp:param name="breadcrumbCategoryUrl" value="video/" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolKeywords" value="transcribe video to text, ai video transcription, video to text, speech to text, mp4 to text, translate video to english, youtube video transcription, video subtitle generator, video to srt, srt generator free, vtt subtitles, video caption generator, audio to text converter, free transcription, otter alternative free, rev alternative" />
+        <jsp:param name="toolKeywords" value="transcribe video to text, ai video transcription, video to text, speech to text, mp4 to text, translate video to english, youtube video transcription, video to srt, srt generator free, vtt export, audio to text converter, meeting transcription free, podcast transcription, interview transcription, zoom recording transcription, free transcription online, otter alternative free, rev alternative" />
         <jsp:param name="toolFeatures" value="Transcribe video or audio to accurate text,Translate speech to English from 90+ languages,Export as plain text SRT VTT or JSON,Time-stamped subtitle segments ready for editors,Works in any modern browser — no install,Your video stays on your device,Up to 25 MB per clip,Free and no signup" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Upload a file|Drop a video (MP4 MOV WebM) or audio file (MP3 WAV M4A OGG FLAC) into the studio,Pick a task|Choose Transcribe to keep the original language or Translate to convert speech to English,Choose output format|TXT for plain text SRT for subtitles VTT for web video or JSON for machine parsing,Run and download|Hit Transcribe wait 1-4 minutes then Copy or Download the result" />
