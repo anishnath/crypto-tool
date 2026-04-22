@@ -1,18 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
-    // Cross-origin isolation so SharedArrayBuffer is available (ffmpeg.wasm runs
-    // multi-threaded — ~3× faster than the single-threaded fallback).
+    // No cross-origin isolation headers on this page.
     //
-    // COEP=credentialless (not require-corp) lets third-party resources load
-    // WITHOUT requiring them to advertise `Cross-Origin-Resource-Policy:
-    // cross-origin`. This is critical for the GPT ad scripts (stpd.cloud,
-    // doubleclick.net), AdSense, and StatCounter pixels — none of those reliably
-    // send CORP. Credentialless requests go out without cookies/auth to
-    // cross-origin destinations, which is fine for ads and anonymous analytics.
-    // Supported in Chrome 96+, Firefox 110+, Safari 16.4+.
-    response.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-    response.setHeader("Cross-Origin-Embedder-Policy", "credentialless");
-    response.setHeader("Cross-Origin-Resource-Policy", "same-origin");
+    // Rationale: our header-bidding stack (Setupad, ADX Premium, Topics
+    // attestation, StatCounter) needs cross-origin cookie sharing for bid sync
+    // pipelines. Both `require-corp` and `credentialless` break those flows —
+    // the first by blocking the scripts outright, the second by stripping
+    // cookies on cross-origin fetches.
+    //
+    // The tradeoff: ffmpeg.wasm can't use SharedArrayBuffer, so it runs
+    // single-threaded (~3× slower export). For a typical 1–3 min clip that's
+    // 2–9 min instead of 40s–3min. Acceptable for this feature's workload,
+    // and ad revenue / analytics coverage is worth more than faster renders.
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +39,7 @@
         <jsp:param name="faq3q" value="Can I edit the AI-generated captions?" />
         <jsp:param name="faq3a" value="Yes — click Edit transcript after the captions load. You can fix a misheard word, adjust timing, add a missed word by typing in a gap, or delete an extra one. Changes show up in the preview live, so the exported MP4 matches exactly what you see." />
         <jsp:param name="faq4q" value="How long can the video be?" />
-        <jsp:param name="faq4a" value="Under 10 minutes works great on a modern laptop. Longer clips or very high-resolution video can take several minutes and might slow down your browser. For TikTok and Reels clips (usually under 3 minutes), you'll have your captioned video in 1 to 3 minutes." />
+        <jsp:param name="faq4a" value="Under 5 minutes works well on a modern laptop. Longer clips or high-resolution video take progressively longer and may slow your browser. As a rule of thumb, expect the export to take roughly 2–3× the length of the clip. A 1-minute video is typically ready in 2–4 minutes." />
         <jsp:param name="faq5q" value="Can I translate captions to another language?" />
         <jsp:param name="faq5a" value="In the Auto-Captions editor, captions stay in the source language. To get English captions from non-English audio, use the Transcribe tab in Translate mode first — copy the English text back in, or export SRT from there and import into a video editor of your choice." />
         <jsp:param name="faq6q" value="What formats are supported?" />
