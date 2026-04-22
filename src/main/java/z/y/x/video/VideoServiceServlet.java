@@ -67,7 +67,12 @@ public class VideoServiceServlet extends HttpServlet {
 
         switch (action) {
             case "transcribe":
+                // Segment-level timestamps, Whisper-backed.
                 TranscribeService.handle(req, resp, MAX_AUDIO_BASE64_LENGTH);
+                return;
+            case "caption-init":
+                // Word-level timestamps via WhisperX. Powers the Auto-Captions editor.
+                TranscribeService.handle(req, resp, MAX_AUDIO_BASE64_LENGTH, "/transcribe-x");
                 return;
             default:
                 resp.setContentType("application/json");

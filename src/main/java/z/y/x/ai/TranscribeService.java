@@ -48,15 +48,28 @@ public final class TranscribeService {
 
     /**
      * Handle a transcribe POST: parse JSON body, validate audio/format/task, forward to Whisper.
+     * Uses the legacy /transcribe upstream path (segment-level timestamps only).
      *
      * @param maxAudioBase64Length caller-chosen upper bound on base64 audio length.
      */
     public static void handle(HttpServletRequest req, HttpServletResponse resp, long maxAudioBase64Length)
             throws IOException {
+        handle(req, resp, maxAudioBase64Length, "/transcribe");
+    }
+
+    /**
+     * Same as {@link #handle(HttpServletRequest, HttpServletResponse, long)} but lets the caller
+     * choose the upstream path on the Go onecompiler server. Used by the Auto-Captions flow
+     * which needs word-level timestamps via {@code /transcribe-x} (WhisperX-backed).
+     *
+     * @param upstreamPath e.g. {@code "/transcribe"} (Whisper) or {@code "/transcribe-x"} (WhisperX).
+     */
+    public static void handle(HttpServletRequest req, HttpServletResponse resp,
+                              long maxAudioBase64Length, String upstreamPath) throws IOException {
 
         resp.setCharacterEncoding("UTF-8");
 
-        String transcribeUrl = getTranscribeEndpoint();
+        String transcribeUrl = getTranscribeEndpoint(upstreamPath);
         if (transcribeUrl == null) {
             resp.setContentType("application/json");
             resp.setStatus(503);
@@ -117,7 +130,8 @@ public final class TranscribeService {
         payload.put("task", task);
 
         String json = JsonUtil.toJson(payload);
-        log.info("Transcribe: format=" + format + " task=" + task
+        log.info("Transcribe: path=" + upstreamPath
+                + " format=" + format + " task=" + task
                 + " audioSize=" + (audioB64.length() / 1024) + "KB"
                 + " limitKB=" + (maxAudioBase64Length / 1024));
 
@@ -132,11 +146,12 @@ public final class TranscribeService {
         resp.getWriter().write("{\"error\":\"" + msg.replace("\"", "\\\"") + "\"}");
     }
 
-    private static String getTranscribeEndpoint() {
+    private static String getTranscribeEndpoint(String path) {
         String base = System.getenv("AI_ENDPOINT2");
         if (base == null || base.isEmpty()) return null;
         if (base.endsWith("/")) base = base.substring(0, base.length() - 1);
-        return base + "/transcribe";
+        if (!path.startsWith("/")) path = "/" + path;
+        return base + path;
     }
 
     private static String getApiKey() {
