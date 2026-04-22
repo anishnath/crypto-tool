@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Social card / OG image for /video/captions/.
+  1200×630 — Facebook/OG and Twitter-large-image recommended size.
+  Pure SVG; renders crisply at any scale and ships in ~2 KB.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Auto-Captions — free AI video subtitles by 8gwifi.org">
+    <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#0b0f17"/>
+            <stop offset="1" stop-color="#1e1b4b"/>
+        </linearGradient>
+    </defs>
+
+    <!-- Dark gradient canvas -->
+    <rect width="1200" height="630" fill="url(#bg)"/>
+
+    <!-- Soft ambient glows — purple, spread diagonally for visual weight -->
+    <circle cx="1000" cy="140" r="260" fill="#6366f1" opacity="0.18"/>
+    <circle cx="180"  cy="510" r="200" fill="#a855f7" opacity="0.13"/>
+
+    <!-- Heading + tagline -->
+    <text x="80" y="150" font-family="-apple-system,Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="92" font-weight="900" fill="#ffffff">Auto-Captions</text>
+    <text x="80" y="208" font-family="-apple-system,Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="32" font-weight="500" fill="#a5b4fc">Free AI video subtitles — runs in your browser</text>
+
+    <!-- Mock video frame -->
+    <g transform="translate(80,260)">
+        <rect width="1040" height="290" rx="18" fill="#000000"/>
+        <rect width="1040" height="290" rx="18" fill="#6366f1" opacity="0.1"/>
+
+        <!-- Play icon centered in the frame -->
+        <circle cx="520" cy="110" r="48" fill="#ffffff" opacity="0.2"/>
+        <polygon points="508,86 508,134 544,110" fill="#ffffff" opacity="0.85"/>
+
+        <!-- Burned-in caption sample — TikTok-style bold + yellow word-pop -->
+        <text x="520" y="240" text-anchor="middle"
+              font-family="Impact,'Arial Black',sans-serif" font-size="52" font-weight="900"
+              fill="#ffffff" stroke="#000000" stroke-width="6" paint-order="stroke fill">WELCOME BACK TO THE <tspan fill="#fde047">CHANNEL</tspan></text>
+    </g>
+
+    <!-- Brand watermark -->
+    <text x="1120" y="595" text-anchor="end" font-family="-apple-system,Segoe UI,Inter,sans-serif" font-size="20" font-weight="600" fill="#64748b">8gwifi.org</text>
+</svg>
