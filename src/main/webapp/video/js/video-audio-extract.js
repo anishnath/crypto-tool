@@ -130,9 +130,9 @@
                 if (AUDIO_MIME_TO_FORMAT['audio/' + ext]) format = ext;
                 else format = 'webm'; // Whisper is forgiving; let the server/ffmpeg decide
             }
-            onProgress(5, 'Reading audio file...');
+            onProgress(5, 'Reading your file...');
             return fileToArrayBuffer(file).then(function (buf) {
-                onProgress(90, 'Encoding...');
+                onProgress(90, 'Preparing upload...');
                 var base64 = arrayBufferToBase64(buf);
                 onProgress(100, 'Ready');
                 return { base64: base64, format: format, durationSec: null, sampleRate: null };
@@ -145,29 +145,49 @@
         }
         var Ctx = global.AudioContext || global.webkitAudioContext;
 
-        onProgress(5, 'Reading video...');
+        onProgress(5, 'Reading your video...');
         return fileToArrayBuffer(file).then(function (buf) {
-            onProgress(25, 'Decoding audio track...');
+            onProgress(25, 'Getting the audio out...');
             var ctx = new Ctx();
             return new Promise(function (resolve, reject) {
-                // Safari prefers the callback form
-                var decoded = ctx.decodeAudioData(buf, function (audioBuf) {
-                    resolve({ ctx: ctx, audioBuf: audioBuf });
-                }, function (err) {
-                    reject(err || new Error('Could not decode audio track. Is there one in the file?'));
-                });
-                // Promise-returning impl
+                // Any failure of decodeAudioData — whether it's "no audio track"
+                // (most common), "unsupported codec", or "corrupted file" — gets
+                // the same user-friendly message. The browser's native message
+                // ("Unable to decode audio data") is accurate but unhelpful.
+                var handleFailure = function () {
+                    reject(new Error(
+                        "We couldn't read the audio from this video. " +
+                        "The usual reason is that the video has no audio track — " +
+                        "but it can also happen with unusual audio formats or damaged files. " +
+                        "Try a different clip, or a clip that you know has clear speech."
+                    ));
+                };
+                // Safari prefers the callback form; modern Chrome/Firefox also
+                // support the Promise-returning form. Support both safely.
+                var decoded;
+                try {
+                    decoded = ctx.decodeAudioData(buf,
+                        function (audioBuf) { resolve({ ctx: ctx, audioBuf: audioBuf }); },
+                        handleFailure
+                    );
+                } catch (e) {
+                    handleFailure();
+                    return;
+                }
                 if (decoded && typeof decoded.then === 'function') {
-                    decoded.then(function (audioBuf) { resolve({ ctx: ctx, audioBuf: audioBuf }); }, reject);
+                    decoded.then(
+                        function (audioBuf) { resolve({ ctx: ctx, audioBuf: audioBuf }); },
+                        handleFailure
+                    );
                 }
             });
         }).then(function (r) {
             var audioBuf = r.audioBuf;
-            onProgress(55, 'Mixing to mono...');
+            onProgress(55, 'Cleaning up the audio...');
             var mono = mixToMono(audioBuf);
-            onProgress(70, 'Resampling to 16 kHz...');
+            onProgress(70, 'Tuning the audio...');
             var resampled = resample(mono, audioBuf.sampleRate, TARGET_SAMPLE_RATE);
-            onProgress(85, 'Encoding WAV...');
+            onProgress(85, 'Almost ready...');
             var wav = encodeWav(resampled, TARGET_SAMPLE_RATE);
             var base64 = arrayBufferToBase64(wav);
             onProgress(100, 'Ready');

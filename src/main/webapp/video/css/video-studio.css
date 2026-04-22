@@ -190,6 +190,17 @@ body.vs-body a { color: var(--vs-link); }
     font-size: 1rem;
 }
 .vs-sidebar-label { flex: 1; }
+/* When sidebar items wrap their content in an <a>, make the link fill the item
+ * so the entire row is clickable and no decoration bleeds through. */
+.vs-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex: 1;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+}
 .vs-sidebar-badge {
     font-size: 0.5625rem;
     font-weight: 700;

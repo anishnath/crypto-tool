@@ -10,29 +10,9 @@
     var ENDPOINT = CTX + '/video-service';
     var MAX_BASE64_BYTES = 33_500_000; // must mirror VideoServiceServlet limit
 
-    // ── Sidebar service switching ────────────────────────────────────
-    var sidebarItems = document.querySelectorAll('.vs-sidebar-item');
-    var views = document.querySelectorAll('.vs-view');
-
-    sidebarItems.forEach(function (item) {
-        item.addEventListener('click', function () {
-            if (item.classList.contains('disabled')) return;
-            var target = item.getAttribute('data-service');
-            sidebarItems.forEach(function (s) { s.classList.remove('active'); });
-            item.classList.add('active');
-            views.forEach(function (v) {
-                v.classList.toggle('active', v.getAttribute('data-service') === target);
-            });
-            try { history.replaceState(null, '', '#' + target); } catch (e) {}
-        });
-    });
-    // Honour hash on load
-    (function () {
-        var h = (location.hash || '').replace('#', '');
-        if (!h) return;
-        var match = document.querySelector('.vs-sidebar-item[data-service="' + h + '"]');
-        if (match && !match.classList.contains('disabled')) match.click();
-    })();
+    // Sidebar navigation is now real links — the active item is flagged
+    // server-side by the partial. Nothing to do here; kept as a placeholder
+    // in case we need cross-tool JS state later.
 
     // ── Transcribe view ──────────────────────────────────────────────
     (function initTranscribe() {

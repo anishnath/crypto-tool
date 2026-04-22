@@ -64,45 +64,9 @@
 
     <main class="vs-main">
 
-        <!-- ── Sidebar: service picker ─────────────────────────────── -->
-        <aside class="vs-sidebar" aria-label="Video services">
-            <div class="vs-sidebar-heading">Audio &amp; Speech</div>
-            <ul class="vs-sidebar-list" role="tablist">
-                <li class="vs-sidebar-item active" data-service="transcribe" role="tab" aria-selected="true">
-                    <span class="vs-sidebar-icon">&#127908;</span>
-                    <span class="vs-sidebar-label">Transcribe</span>
-                </li>
-                <li class="vs-sidebar-item disabled" data-service="dubbing" role="tab" aria-disabled="true">
-                    <span class="vs-sidebar-icon">&#127916;</span>
-                    <span class="vs-sidebar-label">Dubbing</span>
-                    <span class="vs-sidebar-badge">Soon</span>
-                </li>
-                <li class="vs-sidebar-item disabled" data-service="voice-clone" role="tab" aria-disabled="true">
-                    <span class="vs-sidebar-icon">&#128483;</span>
-                    <span class="vs-sidebar-label">Voice Clone</span>
-                    <span class="vs-sidebar-badge">Soon</span>
-                </li>
-                <li class="vs-sidebar-item disabled" data-service="voice-changer" role="tab" aria-disabled="true">
-                    <span class="vs-sidebar-icon">&#128266;</span>
-                    <span class="vs-sidebar-label">Voice Changer</span>
-                    <span class="vs-sidebar-badge">Soon</span>
-                </li>
-            </ul>
-
-            <div class="vs-sidebar-heading" style="margin-top:0.5rem;">Video</div>
-            <ul class="vs-sidebar-list">
-                <li class="vs-sidebar-item disabled" data-service="subtitles" role="tab" aria-disabled="true">
-                    <span class="vs-sidebar-icon">&#128172;</span>
-                    <span class="vs-sidebar-label">Burn-in Subtitles</span>
-                    <span class="vs-sidebar-badge">Soon</span>
-                </li>
-                <li class="vs-sidebar-item disabled" data-service="summarize" role="tab" aria-disabled="true">
-                    <span class="vs-sidebar-icon">&#128196;</span>
-                    <span class="vs-sidebar-label">Summarize Video</span>
-                    <span class="vs-sidebar-badge">Soon</span>
-                </li>
-            </ul>
-        </aside>
+        <!-- Shared sidebar (highlight current tool) -->
+        <% request.setAttribute("activeService", "transcribe"); %>
+        <jsp:include page="/video/partials/sidebar.jsp" />
 
         <!-- ── Workspace: active service ───────────────────────────── -->
         <section class="vs-workspace">
@@ -200,43 +164,6 @@
                     </div>
                     <div class="vs-output-body"></div>
                     <div class="vs-output-meta"></div>
-                </div>
-            </div>
-
-            <!-- ── Coming-soon views (sidebar stubs) ─────────────── -->
-            <div class="vs-view" data-service="dubbing" role="tabpanel">
-                <div class="vs-soon">
-                    <div class="vs-soon-icon">&#127916;</div>
-                    <h2 class="vs-soon-title">Dubbing — Coming soon</h2>
-                    <p class="vs-soon-body">Automatically re-voice a clip in a different language while preserving timing. Under active development.</p>
-                </div>
-            </div>
-            <div class="vs-view" data-service="voice-clone" role="tabpanel">
-                <div class="vs-soon">
-                    <div class="vs-soon-icon">&#128483;</div>
-                    <h2 class="vs-soon-title">Voice Clone — Coming soon</h2>
-                    <p class="vs-soon-body">Capture a short reference and generate speech in that voice. Consent-gated, research-use only.</p>
-                </div>
-            </div>
-            <div class="vs-view" data-service="voice-changer" role="tabpanel">
-                <div class="vs-soon">
-                    <div class="vs-soon-icon">&#128266;</div>
-                    <h2 class="vs-soon-title">Voice Changer — Coming soon</h2>
-                    <p class="vs-soon-body">Transform a voice in real time — pitch, timbre, style. Preview and render.</p>
-                </div>
-            </div>
-            <div class="vs-view" data-service="subtitles" role="tabpanel">
-                <div class="vs-soon">
-                    <div class="vs-soon-icon">&#128172;</div>
-                    <h2 class="vs-soon-title">Burn-in Subtitles — Coming soon</h2>
-                    <p class="vs-soon-body">Generate subtitles and render them directly into your video. In the meantime, the Transcribe tab already exports SRT and VTT files you can drop into any video editor.</p>
-                </div>
-            </div>
-            <div class="vs-view" data-service="summarize" role="tabpanel">
-                <div class="vs-soon">
-                    <div class="vs-soon-icon">&#128196;</div>
-                    <h2 class="vs-soon-title">Summarize Video — Coming soon</h2>
-                    <p class="vs-soon-body">Transcribe then summarize — chapters, bullets, a short abstract, and a highlights reel.</p>
                 </div>
             </div>
 
