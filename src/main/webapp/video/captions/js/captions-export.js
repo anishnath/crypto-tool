@@ -347,13 +347,13 @@
         // The ffmpeg progress callback writes directly to .aipb-fill (see initFFmpeg).
         // We still mount the bar so the DOM chrome renders (label row, time, etc.).
         progressBar = window.AIProgressBar.attach(host, {
-            estimatedMs: 180000, // 3 min guess; ffmpeg overrides .aipb-fill width live
+            estimatedMs: 480000, // ~8 min for typical clip; ffmpeg progress overrides width live
             phases: [
-                { pct: 5,  ms: 1000,   label: 'Getting ready...' },
-                { pct: 15, ms: 6000,   label: 'Reading your video...' },
-                { pct: 30, ms: 20000,  label: 'Adding captions...' },
-                { pct: 80, ms: 120000, label: 'Saving your video...' },
-                { pct: 92, ms: 170000, label: 'Almost done...' }
+                { pct: 5,  ms: 2000,   label: 'Getting ready...' },
+                { pct: 12, ms: 10000,  label: 'Reading your video...' },
+                { pct: 25, ms: 40000,  label: 'Adding captions...' },
+                { pct: 70, ms: 300000, label: 'Saving your video...' },
+                { pct: 90, ms: 450000, label: 'Almost done...' }
             ]
         });
         progressBar.start();

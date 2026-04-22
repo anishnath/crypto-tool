@@ -76,6 +76,26 @@
             maxWords: 6,
             position: 'bottom',
             highlight: 'off'
+        },
+        // "Karaoke Pop" — one word at a time, scale-pop animation on entry.
+        // The style that's been driving Reels retention: MrBeast / Hormozi /
+        // Iman Gadzhi territory. Big bold white-on-black with a yellow beat.
+        'karaoke-pop': {
+            name: 'Karaoke Pop',
+            thumb: 'WORD',
+            font: '"Anton", "Bebas Neue", Impact, sans-serif',
+            fontSize: 78,
+            weight: '900',
+            letterSpacing: '0.02em',
+            color: '#ffffff',
+            hlColor: '#fde047',
+            outline: '#000000',
+            outlineWidth: 10,
+            shadow: true,
+            uppercase: true,
+            maxWords: 1,
+            position: 'middle',
+            highlight: 'pop'
         }
     };
 
