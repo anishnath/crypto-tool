@@ -1,9 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
-    // Enable cross-origin isolation so SharedArrayBuffer is available — ffmpeg.wasm
-    // runs much faster multi-threaded. Same pattern as /video-trim.jsp.
+    // Cross-origin isolation so SharedArrayBuffer is available (ffmpeg.wasm runs
+    // multi-threaded — ~3× faster than the single-threaded fallback).
+    //
+    // COEP=credentialless (not require-corp) lets third-party resources load
+    // WITHOUT requiring them to advertise `Cross-Origin-Resource-Policy:
+    // cross-origin`. This is critical for the GPT ad scripts (stpd.cloud,
+    // doubleclick.net), AdSense, and StatCounter pixels — none of those reliably
+    // send CORP. Credentialless requests go out without cookies/auth to
+    // cross-origin destinations, which is fine for ads and anonymous analytics.
+    // Supported in Chrome 96+, Firefox 110+, Safari 16.4+.
     response.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-    response.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+    response.setHeader("Cross-Origin-Embedder-Policy", "credentialless");
     response.setHeader("Cross-Origin-Resource-Policy", "same-origin");
 %>
 <!DOCTYPE html>
