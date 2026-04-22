@@ -20,7 +20,7 @@
         <jsp:param name="toolCategory" value="Video &amp; Audio AI" />
         <jsp:param name="toolUrl" value="video/captions/" />
         <jsp:param name="breadcrumbCategoryUrl" value="video/" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="auto-captions-og.jpg" />
         <jsp:param name="toolKeywords" value="auto caption generator, add subtitles to video, tiktok captions, reels captions free, video subtitle maker, burn subtitles, subtitle generator ai, captions for video, animated subtitles, karaoke subtitles, video caption ai, captions.ai alternative, submagic alternative, free subtitle app, srt vtt export, word highlight subtitles" />
         <jsp:param name="toolFeatures" value="AI transcription with word-level timing,Instant TikTok-style caption preview,Karaoke and word-pop highlight modes,Style presets: TikTok Bold / Podcast Clean / Minimal,Export as burned-in MP4,Works entirely in your browser — video never uploaded,Supports MP4 MOV WebM,Free and no signup" />
         <jsp:param name="hasSteps" value="true" />

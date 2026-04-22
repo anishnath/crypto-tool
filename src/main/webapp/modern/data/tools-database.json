@@ -1,7 +1,7 @@
 {
-  "version": "1.4",
-  "lastUpdated": "2026-04-21T00:00:00.000Z",
-  "totalTools": 425,
+  "version": "1.5",
+  "lastUpdated": "2026-04-22T00:00:00.000Z",
+  "totalTools": 426,
   "categories": [
     "Blockchain & Crypto",
     "CAD & 3D Design",
@@ -3154,6 +3154,13 @@
       "category": "Video & Audio AI",
       "keywords": "transcribe video to text, ai video transcription, speech to text, translate video to english, mp4 to text, video to srt, srt generator, vtt subtitles, youtube video transcription, video subtitle generator, audio to text converter, video caption generator, free transcription, otter alternative, rev alternative",
       "description": "Free AI video transcription and translation — upload any video or audio, get an accurate transcript in 90+ languages, translate to English, export as plain text, SRT or VTT subtitles"
+    },
+    {
+      "name": "Auto-Caption Generator for Video",
+      "url": "video/captions/",
+      "category": "Video & Audio AI",
+      "keywords": "auto caption generator, add subtitles to video, tiktok captions, reels captions free, video subtitle maker, burn subtitles into video, subtitle generator ai, captions for video, animated subtitles, karaoke subtitles, video caption ai, submagic alternative, captions.ai alternative, free subtitle burner, word highlight captions, youtube shorts captions",
+      "description": "Free AI auto-caption generator — add animated TikTok-style subtitles to any video, style live in your browser, export a caption-burned MP4 in minutes. No upload, no signup."
     }
   ]
 }
