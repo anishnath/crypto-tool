@@ -452,7 +452,11 @@ public class AIProxyServlet extends HttpServlet {
     }
 
     private void forwardBlocking(String aiUrl, String payload, HttpServletResponse resp) throws IOException {
-        forwardBlocking(aiUrl, payload, resp, 120000);
+        // 5 min — covers cold qwen3-coder generation (~4:45 observed) with
+        // headroom.  Matches forwardStreaming's socket timeout so the two
+        // modes share one budget.  Callers needing longer (e.g. vision)
+        // use the explicit-timeout overload.
+        forwardBlocking(aiUrl, payload, resp, 300000);
     }
 
     /**
