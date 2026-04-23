@@ -1,0 +1,241 @@
+/*
+ * AIChatModal — reusable conversational AI modal.
+ *
+ * Opened with: AIChatModal.open({ title, ctx, systemPrompt, seedContext,
+ *                                  toolBlocks, footerHtml, ... })
+ * See modern/js/ai-chat-modal.js for the full API.
+ *
+ * Design tokens mirror ai-vision-modal.css — same indigo accents, same
+ * dark-mode handling, so both components feel like one family.
+ */
+
+.aicm-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(8, 10, 14, 0.72);
+    backdrop-filter: blur(3px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 1000;
+}
+.aicm-backdrop.open { display: flex; }
+
+.aicm-modal {
+    width: min(94vw, 720px);
+    max-height: min(92vh, 860px);
+    background: var(--panel, #151821);
+    color: var(--text, #e2e8f0);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    font: 13px 'DM Sans', system-ui, sans-serif;
+}
+
+/* ── Header ── */
+.aicm-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.18);
+    display: flex; align-items: flex-start; gap: 12px;
+}
+.aicm-header-text { flex: 1; min-width: 0; }
+.aicm-title {
+    margin: 0 0 2px;
+    font: 600 15px 'Sora', system-ui, sans-serif;
+}
+.aicm-subtitle {
+    margin: 0;
+    font-size: 12px;
+    color: var(--muted, #94a3b8);
+}
+.aicm-header-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.aicm-icon-btn {
+    padding: 4px 10px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted, #94a3b8);
+    font: 500 11px 'DM Sans', sans-serif;
+    cursor: pointer;
+    line-height: 1.4;
+}
+.aicm-icon-btn:hover { color: #c7d2fe; border-color: rgba(99, 102, 241, 0.5); }
+.aicm-close {
+    width: 28px; height: 28px;
+    padding: 0;
+    font-size: 18px; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* ── Message list ── */
+.aicm-messages {
+    flex: 1; min-height: 0;
+    padding: 14px 18px;
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 10px;
+    scrollbar-width: thin;
+}
+.aicm-messages::-webkit-scrollbar { width: 8px; }
+.aicm-messages::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 4px; }
+
+.aicm-msg {
+    max-width: 90%;
+    display: flex; flex-direction: column; gap: 4px;
+}
+.aicm-msg.user { align-self: flex-end; align-items: flex-end; }
+.aicm-msg.assistant, .aicm-msg.system { align-self: flex-start; align-items: flex-start; }
+
+.aicm-msg-role {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted, #64748b);
+}
+.aicm-msg-content {
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+}
+.aicm-msg.user .aicm-msg-content {
+    background: rgba(99, 102, 241, 0.18);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: #e2e8f0;
+    white-space: pre-wrap;
+}
+.aicm-msg.assistant .aicm-msg-content {
+    background: rgba(30, 34, 46, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    color: #e2e8f0;
+}
+.aicm-msg.system .aicm-msg-content {
+    background: rgba(220, 38, 38, 0.08);
+    border: 1px solid rgba(220, 38, 38, 0.25);
+    color: #fca5a5;
+    font-style: italic;
+}
+
+/* Assistant markdown internals */
+.aicm-msg-content p  { margin: 0 0 0.5em; }
+.aicm-msg-content p:last-child { margin-bottom: 0; }
+.aicm-msg-content ul, .aicm-msg-content ol { margin: 0 0 0.5em; padding-left: 1.5em; }
+.aicm-msg-content li { margin-bottom: 0.2em; }
+.aicm-msg-content code {
+    background: rgba(99, 102, 241, 0.15);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font: 12px 'Fira Code', ui-monospace, monospace;
+    color: #a5b4fc;
+}
+.aicm-msg-content pre {
+    background: rgba(10, 12, 18, 0.7);
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin: 8px 0;
+    overflow-x: auto;
+    position: relative;
+}
+.aicm-msg-content pre code {
+    background: transparent;
+    padding: 0;
+    color: #cbd5e1;
+    font-size: 12px;
+    line-height: 1.45;
+    display: block;
+}
+.aicm-msg-content strong { color: #c7d2fe; }
+.aicm-msg-content a { color: #a5b4fc; }
+
+/* Apply-action button shown below a recognised fenced block */
+.aicm-tool-action {
+    margin: -2px 0 10px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+}
+.aicm-tool-action button {
+    padding: 5px 12px;
+    background: rgba(99, 102, 241, 0.2);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    border-radius: 6px;
+    color: #c7d2fe;
+    font: 500 11px 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.aicm-tool-action button:hover { background: rgba(99, 102, 241, 0.32); }
+.aicm-tool-action button.applied {
+    background: rgba(34, 197, 94, 0.18);
+    border-color: rgba(34, 197, 94, 0.4);
+    color: #86efac;
+    cursor: default;
+}
+
+/* Per-turn inline progress bar slot (AIProgressBar mounts here) */
+.aicm-progress-slot { padding: 0 4px 4px; }
+.aicm-progress-slot:empty { display: none; }
+
+/* ── Input row ── */
+.aicm-input-row {
+    border-top: 1px solid rgba(99, 102, 241, 0.18);
+    padding: 10px 14px;
+    display: flex; align-items: flex-end; gap: 8px;
+}
+.aicm-input {
+    flex: 1;
+    min-height: 38px; max-height: 140px;
+    padding: 9px 12px;
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 8px;
+    color: var(--text, #e2e8f0);
+    font: 13px 'DM Sans', system-ui, sans-serif;
+    line-height: 1.4;
+    resize: none;
+    outline: none;
+    transition: border-color 0.15s;
+}
+.aicm-input:focus { border-color: #6366f1; }
+.aicm-input::placeholder { color: #64748b; }
+
+.aicm-send {
+    padding: 9px 16px;
+    background: #6366f1;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font: 600 12px 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.aicm-send:hover { background: #4f46e5; }
+.aicm-send:disabled { opacity: 0.5; cursor: wait; }
+
+/* ── Footer note ── */
+.aicm-footer {
+    padding: 10px 18px;
+    border-top: 1px solid rgba(99, 102, 241, 0.12);
+    background: rgba(99, 102, 241, 0.04);
+    font-size: 11px;
+    color: var(--muted, #94a3b8);
+}
+.aicm-footer:empty { display: none; }
+.aicm-footer a { color: #a5b4fc; text-decoration: none; font-weight: 500; }
+.aicm-footer a:hover { text-decoration: underline; }
+
+/* ── Streaming cursor ── */
+.aicm-msg.streaming .aicm-msg-content::after {
+    content: '▍';
+    display: inline-block;
+    margin-left: 2px;
+    animation: aicm-blink 1s steps(2, end) infinite;
+    color: #a5b4fc;
+}
+@keyframes aicm-blink { from { opacity: 1; } 50% { opacity: 0; } }
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+    .aicm-modal { width: 100vw; max-height: 100vh; border-radius: 0; }
+    .aicm-msg { max-width: 100%; }
+    .aicm-header { padding: 12px 14px; }
+    .aicm-messages { padding: 10px 14px; }
+}
