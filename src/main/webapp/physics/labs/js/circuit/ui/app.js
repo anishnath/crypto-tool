@@ -204,10 +204,13 @@ export class CircuitApp {
     // Keyboard
     document.addEventListener('keydown', (e) => this._onKey(e));
 
-    // Re-size canvas after menu bar is injected, then load URL if present
+    // Re-size canvas after menu bar is injected, then load URL if present.
+    // If no share-link circuit arrived, seed a random showcase preset so the
+    // first-load experience isn't a blank grid.
     requestAnimationFrame(() => {
       this.canvas._resize();
       this._loadFromURL();
+      if (this.uiElements.length === 0) this._loadRandomPreset();
     });
 
     // Start render loop
@@ -1437,6 +1440,26 @@ export class CircuitApp {
   }
 
   // ─── Presets ───
+
+  /** Pick a random showcase preset and load it.  Used on first page-load
+   *  when the URL carries no shared circuit — gives visitors immediate
+   *  "this is a circuit simulator" visual feedback instead of a blank grid.
+   *  Curated subset — only presets that actually ANIMATE (AC or transient)
+   *  or are visually compact + instantly recognisable. */
+  _loadRandomPreset() {
+    const SHOWCASE = [
+      'led-circuit', 'voltage-divider', 'rc-lowpass', 'rc-highpass',
+      'rlc-series', 'wheatstone', 'half-wave-rectifier', 'full-wave-rectifier',
+      'zener-regulator', 'common-emitter', 'inverting-opamp', 'noninverting-opamp',
+      'comparator-demo', 'schmitt-trigger', 'astable-multi', 'and-gate-demo',
+      'd-flipflop-demo', 'sr-flipflop-demo', 'bjt-switch', 'darlington',
+    ];
+    // Filter to presets that actually exist in PRESETS (list can drift).
+    const available = SHOWCASE.filter(name => PRESETS[name]);
+    if (available.length === 0) return;
+    const pick = available[Math.floor(Math.random() * available.length)];
+    this._loadPreset(pick);
+  }
 
   _loadPreset(name) {
     this.uiElements = [];

@@ -42,6 +42,7 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-vision-modal.css?v=<%=v%>" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-progress-bar.css?v=<%=v%>" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-chat-modal.css?v=<%=v%>" media="print" onload="this.media='all'">
 
 <!-- GPT Ads: defer to after LCP -->
 <script>
@@ -257,6 +258,7 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
       <input type="text" class="ckt-ai-input" id="aiInput" placeholder="Describe a circuit... e.g. &quot;inverting op-amp with gain -10&quot;" maxlength="500" autocomplete="off">
       <button class="ckt-ai-btn" id="aiGenerate">Generate</button>
       <button class="ckt-ai-img-btn" id="aiFromImage" title="Upload a circuit image (schematic, sketch, photo)" aria-label="Generate from image">📷</button>
+      <button class="ckt-ai-img-btn" id="aiChat" title="Chat about your current circuit" aria-label="Chat with AI">💬</button>
       <button class="ckt-ai-close" id="aiClose" title="Close">&times;</button>
       <span class="ckt-ai-status" id="aiStatus"></span>
     </div>
@@ -339,8 +341,8 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 
 <script type="module">
 import { CircuitApp } from './js/circuit/ui/app.js';
-import { AI_SYSTEM_PROMPT, buildUserPrompt, CIRCUIT_VISION_PROMPT, buildVisionUserPrompt } from './js/circuit/ai-prompt.js';
-import { parseNetlist } from './js/circuit/netlist.js';
+import { AI_SYSTEM_PROMPT, buildUserPrompt, CIRCUIT_VISION_PROMPT, buildVisionUserPrompt, CIRCUIT_CHAT_PROMPT } from './js/circuit/ai-prompt.js';
+import { parseNetlist, formatNetlist } from './js/circuit/netlist.js';
 import { validateCircuitInput } from './js/circuit/validation.js';
 const app = new CircuitApp(document.getElementById('circuitApp'));
 
@@ -392,6 +394,7 @@ const aiClose = document.getElementById('aiClose');
 const aiInput = document.getElementById('aiInput');
 const aiBtn = document.getElementById('aiGenerate');
 const aiImgBtn = document.getElementById('aiFromImage');
+const aiChatBtn = document.getElementById('aiChat');
 const aiStatus = document.getElementById('aiStatus');
 const aiProgressSlot = document.getElementById('aiProgressSlot');
 const stage2Overlay = document.getElementById('stage2Overlay');
@@ -632,11 +635,67 @@ function generateFromImage() {
   });
 }
 
+// Chat path — conversational AI over the current circuit.  Uses the shared
+// AIChatModal component; the modal is tool-agnostic, domain logic lives
+// here: seedContext returns the current circuit as a netlist, and the
+// registered `netlist` toolBlock wires the "Load this circuit" button
+// back into app.loadFromElements.
+function openChat() {
+  if (typeof window.AIChatModal === 'undefined') {
+    setAiStatus('Chat module still loading — try again in a moment', 'error');
+    return;
+  }
+  window.AIChatModal.open({
+    title: 'Circuit Assistant',
+    subtitle: 'Ask questions, request fixes, iterate on your circuit.',
+    ctx: AI_CTX,
+    systemPrompt: CIRCUIT_CHAT_PROMPT,
+    placeholder: 'e.g. "why is there no current flowing?" or "change the LED to red and add a switch"',
+    estimatedMs: 180000,
+    historyTurns: 3,
+    stream: true,
+    // Snapshot current circuit state for every turn — the AI sees exactly
+    // what the user sees, including any edits made between messages.
+    seedContext: () => {
+      try {
+        const elements = app._serializeCircuit().elements;
+        if (!elements.length) return '(empty canvas)';
+        return formatNetlist(elements);
+      } catch (e) {
+        return '(circuit serialization unavailable)';
+      }
+    },
+    toolBlocks: {
+      netlist: {
+        label: 'Load this circuit',
+        // Claim fences even when the model forgets the `netlist` language
+        // tag — content sniff: first non-blank line starts with a known
+        // element type.  parseNetlist will still succeed on the actual
+        // Apply since it's whitespace-tolerant.
+        detect: (content) => {
+          const line = (content.split('\n').find(l => l.trim()) || '').trim();
+          if (!line) return false;
+          const firstToken = line.split(/\s+/)[0];
+          return /^(wire|ground|resistor|capacitor|polarized-cap|inductor|switch|push-switch|spdt-switch|fuse|lamp|dc-voltage|ac-voltage|dc-current|clock|led|diode|zener|bjt-npn|bjt-pnp|mosfet-n|mosfet-p|jfet-n|jfet-p|opamp|comparator|schmitt|schmitt-inv|555-timer|monostable|relay|and-gate|or-gate|nand-gate|nor-gate|xor-gate|not-gate|d-flipflop|sr-flipflop|jk-flipflop|counter|shift-register|mux|demux|half-adder|full-adder|logic-input|logic-output|transmission-line|vco|ideal-switch|vcvs|vccs|ccvs|cccs|ammeter|voltmeter|seven-seg|darlington-npn|darlington-pnp)$/.test(firstToken);
+        },
+        apply: (content) => {
+          const parsed = parseNetlist(content);
+          app.loadFromElements(parsed.elements);
+          showCanvasToast('✓ Circuit updated from chat', 'success', 3000);
+        },
+      },
+    },
+    footerHtml: '💎 Want higher limits / faster AI? Contact <a href="https://x.com/anish2good" target="_blank" rel="noopener noreferrer">@anish2good on X</a>.',
+    onError: (msg) => console.warn('[AIChatModal]', msg),
+  });
+}
+
 aiBtn.addEventListener('click', generateCircuit);
 aiInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generateCircuit(); }
 });
 if (aiImgBtn) aiImgBtn.addEventListener('click', generateFromImage);
+if (aiChatBtn) aiChatBtn.addEventListener('click', openChat);
 
 // Example chips — click to fill input (user presses Enter or Generate to submit)
 document.querySelectorAll('.ckt-ai-chip').forEach(chip => {
@@ -665,6 +724,7 @@ document.querySelectorAll('.ckt-ai-chip').forEach(chip => {
 </script>
 <script src="<%=request.getContextPath()%>/modern/js/ai-progress-bar.js?v=<%=v%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/ai-vision-modal.js?v=<%=v%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/ai-chat-modal.js?v=<%=v%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
 <%@ include file="../../modern/components/analytics.jsp" %>
 </body>
