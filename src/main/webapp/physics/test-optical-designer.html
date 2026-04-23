@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Optical Designer — JS Test Harness</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; background: #f9fafb; }
+  h2 { margin-top: 2rem; }
+  .pass { color: #16a34a; font-weight: 600; }
+  .fail { color: #dc2626; font-weight: 600; }
+  .info { color: #6b7280; font-size: 0.875rem; }
+  pre { background: #1e1e2e; color: #e5e7eb; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-size: 0.8125rem; }
+  canvas { border: 1px solid #d1d5db; border-radius: 0.5rem; width: 100%; height: 400px; background: #fff; }
+  #log { white-space: pre-wrap; font-family: monospace; font-size: 0.8125rem; line-height: 1.6; }
+  .test-section { margin: 1rem 0; padding: 1rem; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Optical Designer — Test Harness</h1>
+<div id="log"></div>
+
+<h2>Cross-Section Render Test</h2>
+<canvas id="test-canvas-cross" style="height:350px;"></canvas>
+
+<h2>Spot Diagram Test</h2>
+<canvas id="test-canvas-spot" style="height:300px;"></canvas>
+
+<h2>Ray Aberration Test</h2>
+<canvas id="test-canvas-aber" style="height:300px;"></canvas>
+
+<h2>Chromatic Aberration</h2>
+<div id="test-chrom"></div>
+
+<h2>All Presets</h2>
+<div id="preset-tests"></div>
+
+<script src="js/optical-designer-model.js"></script>
+<script src="js/optical-designer-trace.js"></script>
+<script src="js/optical-designer-render.js"></script>
+<script src="js/optical-designer-ui.js"></script>
+<script>
+(function () {
+  var M = window.ODModel;
+  var T = window.ODTrace;
+  var R = window.ODRender;
+  var log = document.getElementById('log');
+  var passed = 0, failed = 0;
+
+  function assert(condition, msg) {
+    if (condition) {
+      log.innerHTML += '<span class="pass">PASS</span> ' + msg + '\n';
+      passed++;
+    } else {
+      log.innerHTML += '<span class="fail">FAIL</span> ' + msg + '\n';
+      failed++;
+    }
+  }
+
+  function approx(a, b, tol) {
+    tol = tol || 0.01;
+    return Math.abs(a - b) < tol;
+  }
+
+  // ==========================================
+  // 1. Material / Sellmeier tests
+  // ==========================================
+  log.innerHTML += '\n<strong>--- Material System ---</strong>\n';
+
+  assert(M.AIR.getN(0.55) > 1.0 && M.AIR.getN(0.55) < 1.001, 'Air n ≈ 1.000293 at 550nm: ' + M.AIR.getN(0.55));
+  assert(M.VACUUM.getN(0.55) === 1.0, 'Vacuum n = 1.0');
+
+  var bk7 = M.MATERIALS['N-BK7'];
+  var nbk7_n = bk7.getN(0.5876);  // d-line
+  assert(approx(nbk7_n, 1.5168, 0.002), 'N-BK7 n_d ≈ 1.5168: ' + nbk7_n.toFixed(4));
+
+  var sf11 = M.MATERIALS['N-SF11'];
+  var nsf11_n = sf11.getN(0.5876);
+  assert(approx(nsf11_n, 1.7847, 0.01), 'N-SF11 n_d ≈ 1.7847: ' + nsf11_n.toFixed(4));
+
+  var fs = M.MATERIALS['Fused Silica'];
+  var nfs = fs.getN(0.5876);
+  assert(approx(nfs, 1.4585, 0.002), 'Fused Silica n_d ≈ 1.4585: ' + nfs.toFixed(4));
+
+  // PMMA (tabulated)
+  var pmma = M.MATERIALS['PMMA'];
+  var npmma = pmma.getN(0.55);
+  assert(approx(npmma, 1.489, 0.005), 'PMMA n(550nm) ≈ 1.489: ' + npmma.toFixed(4));
+
+  // Dispersion check: n(short) > n(long) for normal dispersion
+  var nbk7_short = bk7.getN(0.44);
+  var nbk7_long  = bk7.getN(0.62);
+  assert(nbk7_short > nbk7_long, 'N-BK7 normal dispersion: n(440)=' + nbk7_short.toFixed(4) + ' > n(620)=' + nbk7_long.toFixed(4));
+
+  // ==========================================
+  // 2. Surface / sag tests
+  // ==========================================
+  log.innerHTML += '\n<strong>--- Surface Sag ---</strong>\n';
+
+  var flatSurf = new M.Surface({ radius: Infinity, aperture: 25 });
+  assert(flatSurf.sag(10) === 0, 'Flat surface sag = 0');
+
+  var convSurf = new M.Surface({ radius: 50, aperture: 25, conic: 0 });
+  var sagAt10 = convSurf.sag(10);
+  // For sphere: sag = R - sqrt(R^2 - y^2) = 50 - sqrt(2500-100) = 50 - 48.9898 ≈ 1.0102
+  assert(approx(sagAt10, 1.0102, 0.01), 'Spherical sag(y=10, R=50) ≈ 1.01: ' + sagAt10.toFixed(4));
+
+  var paraSurf = new M.Surface({ radius: 50, aperture: 25, conic: -1 });
+  var sagPara = paraSurf.sag(10);
+  // Parabola: sag = y^2 / (2R) = 100/100 = 1.0
+  assert(approx(sagPara, 1.0, 0.01), 'Parabolic sag(y=10, R=50, K=-1) ≈ 1.0: ' + sagPara.toFixed(4));
+
+  // ==========================================
+  // 3. Single surface ray trace
+  // ==========================================
+  log.innerHTML += '\n<strong>--- Single Surface Ray Trace ---</strong>\n';
+
+  // Parallel ray hitting a convex spherical surface (BK7, R=50mm)
+  var testSurf = new M.Surface({ radius: 50, aperture: 25, conic: 0 });
+  var n_air = 1.0;
+  var n_bk7 = bk7.getN(0.55);
+  var result = T.traceRay3D([0, 5, 0], [0, 0, 1], n_air, testSurf, n_bk7);
+  assert(result !== null, '3D trace: ray hits convex surface');
+  if (result) {
+    assert(result.hit[2] > 0, '3D trace: hit z > 0 (hit is on positive side): z=' + result.hit[2].toFixed(4));
+    assert(result.dir[2] > 0.9, '3D trace: refracted ray still going forward: dz=' + result.dir[2].toFixed(4));
+    assert(result.dir[1] < 0, '3D trace: refracted ray bends toward axis: dy=' + result.dir[1].toFixed(4));
+  }
+
+  // Parallel axial ray — should go straight through flat surface
+  var flatResult = T.traceRay3D([0, 0, 0], [0, 0, 1], 1.0, flatSurf, 1.0);
+  assert(flatResult !== null, '3D trace: flat surface, axial ray passes');
+
+  // ==========================================
+  // 4. ABCD Matrix / Focal Length
+  // ==========================================
+  log.innerHTML += '\n<strong>--- ABCD Matrix / Focal Length ---</strong>\n';
+
+  // PCX singlet: R1=51.68, R2=Inf, t=5, BK7 → f ≈ 100mm
+  var pcxDesign = new M.Design();
+  pcxDesign.addSurface(new M.Surface({ radius: 51.68, aperture: 12.5, thickness: 5, material: bk7 }));
+  pcxDesign.addSurface(new M.Surface({ radius: Infinity, aperture: 12.5, thickness: 95, material: M.AIR }));
+  pcxDesign.beamRadius = 12.5;
+
+  var pcxF = pcxDesign.focalLength(0.55);
+  assert(approx(pcxF, 100, 2), 'PCX singlet f ≈ 100mm: ' + pcxF.toFixed(2));
+
+  // Thin lens approximation: 1/f = (n-1)(1/R1 - 1/R2) = 0.516 * (1/51.68 - 0) ≈ 0.00999 → f ≈ 100.1
+  var thinF = 1 / ((n_bk7 - 1) * (1/51.68));
+  log.innerHTML += '<span class="info">  Thin lens approx: f = ' + thinF.toFixed(2) + ' mm</span>\n';
+
+  // Symmetric biconvex: f ≈ 50mm (1/f = (n-1)(2/R) = 0.5168*2/51.68 ≈ 0.02)
+  var biconvexDesign = M.PRESETS['Symmetric Biconvex']();
+  var biconvexF = biconvexDesign.focalLength(0.55);
+  assert(approx(biconvexF, 50, 5), 'Symmetric Biconvex f ≈ 50mm: ' + biconvexF.toFixed(2));
+
+  // Achromatic doublet preset
+  var achroDesign = M.PRESETS['Achromatic Doublet']();
+  var achroF = achroDesign.focalLength(0.55);
+  assert(isFinite(achroF) && achroF > 50 && achroF < 200, 'Achromatic doublet f in range [50,200]: ' + achroF.toFixed(2));
+
+  // Chromatic aberration should be small for achromat
+  var ca = T.computeChromaticAberration(achroDesign);
+  assert(Math.abs(ca.axial) < 2, 'Achromatic CA < 2mm: Δf = ' + ca.axial.toFixed(4));
+
+  // Cooke Triplet should have positive, finite focal length
+  var cookeDesign = M.PRESETS['Cooke Triplet']();
+  var cookeF = cookeDesign.focalLength(0.55);
+  assert(isFinite(cookeF) && cookeF > 0, 'Cooke Triplet has positive focal length: f=' + cookeF.toFixed(2) + 'mm');
+
+  // ==========================================
+  // 5. 2D Ray Trace
+  // ==========================================
+  log.innerHTML += '\n<strong>--- 2D System Ray Trace ---</strong>\n';
+
+  var segs = T.traceRay2D(pcxDesign, 5, 0, 0.55, false);
+  assert(segs !== null && segs.length >= 2, '2D trace through PCX: ' + (segs ? segs.length : 0) + ' segments');
+  if (segs && segs.length >= 2) {
+    // After exiting lens, ray should slope downward (converging)
+    assert(segs[1].slope < 0, '2D trace: exiting ray slopes toward axis: slope=' + segs[1].slope.toFixed(4));
+  }
+
+  // Full beam trace
+  var beams = T.traceAllBeams2D(pcxDesign, 0.55);
+  assert(beams.length >= 1, 'Beam trace returns ≥1 beam: ' + beams.length);
+  if (beams.length > 0) {
+    var totalRays = 0;
+    for (var bi = 0; bi < beams.length; bi++) totalRays += beams[bi].raySegments.length;
+    assert(totalRays >= 3, 'Total traced rays ≥ 3: ' + totalRays);
+  }
+
+  // ==========================================
+  // 6. Spot Diagram
+  // ==========================================
+  log.innerHTML += '\n<strong>--- Spot Diagram ---</strong>\n';
+
+  var spots = T.computeSpotDiagram(pcxDesign, 0, 0.55, 100);
+  assert(spots.length > 10, 'Spot diagram returns rays: ' + spots.length);
+
+  // ==========================================
+  // 7. All Presets Load
+  // ==========================================
+  log.innerHTML += '\n<strong>--- Presets ---</strong>\n';
+
+  var presetNames = Object.keys(M.PRESETS);
+  for (var pi = 0; pi < presetNames.length; pi++) {
+    var pName = presetNames[pi];
+    try {
+      var pDesign = M.PRESETS[pName]();
+      var pF = pDesign.focalLength(0.55);
+      var nSurf = pDesign.surfaces.length;
+      assert(nSurf > 0, pName + ': ' + nSurf + ' surfaces, f=' + (isFinite(pF) ? pF.toFixed(2) : '∞') + 'mm');
+    } catch (e) {
+      assert(false, pName + ': ERROR — ' + e.message);
+    }
+  }
+
+  // ==========================================
+  // 8. Serialization round-trip
+  // ==========================================
+  log.innerHTML += '\n<strong>--- Serialization ---</strong>\n';
+
+  var origJSON = achroDesign.toJSON();
+  var restored = M.Design.fromJSON(origJSON);
+  assert(restored.surfaces.length === achroDesign.surfaces.length, 'Round-trip preserves surface count');
+  var restoredF = restored.focalLength(0.55);
+  assert(approx(restoredF, achroF, 0.01), 'Round-trip preserves focal length: ' + restoredF.toFixed(2));
+
+  // ==========================================
+  // Render Tests
+  // ==========================================
+  log.innerHTML += '\n<strong>--- Render Tests ---</strong>\n';
+
+  try {
+    var crossCanvas = document.getElementById('test-canvas-cross');
+    R.paintCrossSection(crossCanvas, achroDesign, { selectedSurface: 1 });
+    assert(true, 'Cross-section render: OK');
+  } catch (e) {
+    assert(false, 'Cross-section render: ' + e.message);
+  }
+
+  try {
+    var spotCanvas = document.getElementById('test-canvas-spot');
+    R.paintSpotDiagram(spotCanvas, achroDesign, { fieldAngles: [0], numRays: 200 });
+    assert(true, 'Spot diagram render: OK');
+  } catch (e) {
+    assert(false, 'Spot diagram render: ' + e.message);
+  }
+
+  try {
+    var aberCanvas = document.getElementById('test-canvas-aber');
+    R.paintRayAberration(aberCanvas, achroDesign, { fieldAngles: [0], numRays: 30 });
+    assert(true, 'Ray aberration render: OK');
+  } catch (e) {
+    assert(false, 'Ray aberration render: ' + e.message);
+  }
+
+  try {
+    var chromDiv = document.getElementById('test-chrom');
+    R.paintChromaticTable(chromDiv, achroDesign);
+    assert(true, 'Chromatic table render: OK');
+  } catch (e) {
+    assert(false, 'Chromatic table render: ' + e.message);
+  }
+
+  // Render all presets
+  var presetDiv = document.getElementById('preset-tests');
+  for (var qi = 0; qi < presetNames.length; qi++) {
+    var qName = presetNames[qi];
+    var qDesign = M.PRESETS[qName]();
+    qDesign.applyAutofocus();
+
+    var sec = document.createElement('div');
+    sec.className = 'test-section';
+    sec.innerHTML = '<h3>' + qName + '</h3>';
+    var qCanvas = document.createElement('canvas');
+    qCanvas.style.width = '100%';
+    qCanvas.style.height = '280px';
+    sec.appendChild(qCanvas);
+    presetDiv.appendChild(sec);
+
+    try {
+      R.paintCrossSection(qCanvas, qDesign, {});
+    } catch (e) {
+      sec.innerHTML += '<span class="fail">Render error: ' + e.message + '</span>';
+    }
+  }
+
+  // Summary
+  log.innerHTML += '\n<strong>===========================</strong>\n';
+  log.innerHTML += '<strong>Total: ' + (passed + failed) + ' tests — ';
+  log.innerHTML += '<span class="pass">' + passed + ' passed</span>, ';
+  log.innerHTML += '<span class="fail">' + failed + ' failed</span></strong>\n';
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton's Cradle — Matter.js PoC</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0B1120; display: flex; flex-direction: column; align-items: center; min-height: 100vh; font-family: system-ui; color: #E2E8F0; }
+  h1 { margin: 20px 0 5px; font-size: 1.3rem; color: #A78BFA; }
+  p { font-size: 0.8rem; color: #64748B; margin-bottom: 10px; }
+  canvas { border-radius: 10px; }
+  .controls { display: flex; gap: 10px; margin: 12px 0; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    padding: 6px 16px; border: 1px solid rgba(139,92,246,0.3); border-radius: 8px;
+    background: #131B2A; color: #E2E8F0; font-size: 0.8rem; cursor: pointer; transition: all 0.15s;
+  }
+  .controls button:hover { border-color: #8B5CF6; color: #A78BFA; box-shadow: 0 0 8px rgba(139,92,246,0.2); }
+  .info { max-width: 700px; font-size: 0.75rem; color: #475569; text-align: center; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<h1>Newton's Cradle — Matter.js</h1>
+<p>Constraint-based pendulums with real rigid body collision</p>
+
+<div class="controls">
+  <button onclick="liftAndDrop(1)">Lift 1</button>
+  <button onclick="liftAndDrop(2)">Lift 2</button>
+  <button onclick="liftAndDrop(3)">Lift 3</button>
+  <button onclick="resetCradle()">Reset</button>
+</div>
+
+<canvas id="canvas" width="800" height="500"></canvas>
+
+<div class="info">
+  Matter.js handles: constraint joints (rods), circle-circle elastic collision, gravity, restitution.
+  No custom collision code needed — the engine does it all.
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js"></script>
+<script>
+const { Engine, Render, Runner, Bodies, Body, Composite, Constraint, Mouse, MouseConstraint, Events } = Matter;
+
+const canvas = document.getElementById('canvas');
+const NUM_BALLS = 5;
+const BALL_RADIUS = 25;
+const ROD_LENGTH = 200;
+const SPACING = BALL_RADIUS * 2.02;
+const ANCHOR_Y = 80;
+const CENTER_X = 400;
+
+let engine, render, runner, balls = [], constraints = [];
+
+function createCradle() {
+  engine = Engine.create({
+    gravity: { x: 0, y: 1, scale: 0.001 },
+  });
+
+  render = Render.create({
+    canvas: canvas,
+    engine: engine,
+    options: {
+      width: 800,
+      height: 500,
+      wireframes: false,
+      background: '#0E1420',
+    },
+  });
+
+  balls = [];
+  constraints = [];
+
+  // Create balls + rod constraints
+  for (let i = 0; i < NUM_BALLS; i++) {
+    const x = CENTER_X + (i - (NUM_BALLS - 1) / 2) * SPACING;
+    const y = ANCHOR_Y + ROD_LENGTH;
+
+    const ball = Bodies.circle(x, y, BALL_RADIUS, {
+      restitution: 0.99,
+      friction: 0.0,
+      frictionAir: 0.0001,
+      density: 0.04,
+      render: {
+        fillStyle: '#C0C0C0',
+        strokeStyle: '#E8E8E8',
+        lineWidth: 2,
+      },
+    });
+
+    const constraint = Constraint.create({
+      pointA: { x: x, y: ANCHOR_Y },
+      bodyB: ball,
+      length: ROD_LENGTH,
+      stiffness: 1,
+      damping: 0,
+      render: {
+        strokeStyle: '#94A3B8',
+        lineWidth: 2,
+      },
+    });
+
+    balls.push(ball);
+    constraints.push(constraint);
+  }
+
+  // Frame bar
+  const frame = Bodies.rectangle(CENTER_X, ANCHOR_Y - 5, NUM_BALLS * SPACING + 60, 10, {
+    isStatic: true,
+    render: { fillStyle: '#475569' },
+  });
+
+  Composite.add(engine.world, [...balls, ...constraints, frame]);
+
+  // Mouse drag
+  const mouse = Mouse.create(canvas);
+  const mouseConstraint = MouseConstraint.create(engine, {
+    mouse: mouse,
+    constraint: {
+      stiffness: 0.2,
+      render: { visible: false },
+    },
+  });
+  Composite.add(engine.world, mouseConstraint);
+  render.mouse = mouse;
+
+  Render.run(render);
+  runner = Runner.create();
+  Runner.run(runner, engine);
+}
+
+function liftAndDrop(count) {
+  resetCradle();
+  setTimeout(() => {
+    for (let i = 0; i < Math.min(count, NUM_BALLS); i++) {
+      const ball = balls[i];
+      const anchorX = CENTER_X + (i - (NUM_BALLS - 1) / 2) * SPACING;
+      // Lift to ~45 degrees left
+      const angle = -Math.PI / 3;
+      const newX = anchorX + ROD_LENGTH * Math.sin(angle);
+      const newY = ANCHOR_Y + ROD_LENGTH * Math.cos(angle);
+      Body.setPosition(ball, { x: newX, y: newY });
+      Body.setVelocity(ball, { x: 0, y: 0 });
+    }
+  }, 100);
+}
+
+function resetCradle() {
+  if (runner) Runner.stop(runner);
+  if (render) Render.stop(render);
+  Composite.clear(engine.world);
+  Engine.clear(engine);
+  createCradle();
+}
+
+// Init
+createCradle();
+</script>
+</body>
+</html>

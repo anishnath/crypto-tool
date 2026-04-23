@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton's Cradle — Three.js 3D PoC</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0B1120; display: flex; flex-direction: column; align-items: center; min-height: 100vh; font-family: system-ui; color: #E2E8F0; overflow: hidden; }
+  h1 { margin: 15px 0 5px; font-size: 1.3rem; color: #A78BFA; }
+  p { font-size: 0.8rem; color: #64748B; margin-bottom: 8px; }
+  canvas { border-radius: 10px; cursor: grab; }
+  canvas:active { cursor: grabbing; }
+  .controls { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    padding: 6px 16px; border: 1px solid rgba(139,92,246,0.3); border-radius: 8px;
+    background: #131B2A; color: #E2E8F0; font-size: 0.8rem; cursor: pointer; transition: all 0.15s;
+  }
+  .controls button:hover { border-color: #8B5CF6; color: #A78BFA; }
+  .info { max-width: 700px; font-size: 0.75rem; color: #475569; text-align: center; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<h1>Newton's Cradle — Three.js 3D</h1>
+<p>Orbit with mouse. Physics runs on simple pendulum ODE + elastic collision.</p>
+
+<div class="controls">
+  <button onclick="liftBalls(1)">Lift 1</button>
+  <button onclick="liftBalls(2)">Lift 2</button>
+  <button onclick="liftBalls(3)">Lift 3</button>
+  <button onclick="resetScene()">Reset</button>
+</div>
+
+<div class="info">
+  Three.js renders the 3D scene. Physics uses our own pendulum ODE (RK4) + elastic collision in postStep.
+  No physics engine library — just rendering library + our math.
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ═══════ CONFIG ═══════
+const NUM = 5;
+const RADIUS = 0.3;
+const ROD_LEN = 3;
+const SPACING = RADIUS * 2.05;
+const GRAVITY = 9.81;
+const ELASTICITY = 0.99;
+const DT = 1 / 120;
+
+// ═══════ STATE ═══════
+const angles = new Float64Array(NUM);
+const omegas = new Float64Array(NUM);
+let running = true;
+
+// ═══════ THREE.JS SCENE ═══════
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0E1420);
+scene.fog = new THREE.Fog(0x0E1420, 10, 25);
+
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / (window.innerHeight - 100), 0.1, 100);
+camera.position.set(0, 0, 8);
+camera.lookAt(0, -1, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(Math.min(window.innerWidth - 20, 900), Math.min(window.innerHeight - 140, 550));
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.insertBefore(renderer.domElement, document.querySelector('.info'));
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.target.set(0, -1.5, 0);
+
+// ═══════ LIGHTS ═══════
+const ambient = new THREE.AmbientLight(0x404060, 0.6);
+scene.add(ambient);
+
+const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+dirLight.position.set(3, 5, 4);
+dirLight.castShadow = true;
+dirLight.shadow.mapSize.set(1024, 1024);
+scene.add(dirLight);
+
+const rimLight = new THREE.PointLight(0x8B5CF6, 0.5, 15);
+rimLight.position.set(-3, 2, -2);
+scene.add(rimLight);
+
+// ═══════ FRAME (top bar) ═══════
+const frameGeo = new THREE.BoxGeometry((NUM + 1) * SPACING, 0.12, 0.12);
+const frameMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.7, roughness: 0.3 });
+const frame = new THREE.Mesh(frameGeo, frameMat);
+frame.position.set(0, 0, 0);
+frame.castShadow = true;
+scene.add(frame);
+
+// Frame supports
+for (const side of [-1, 1]) {
+  const supportGeo = new THREE.CylinderGeometry(0.04, 0.05, ROD_LEN + 0.5, 8);
+  const support = new THREE.Mesh(supportGeo, frameMat);
+  support.position.set(side * (NUM * SPACING / 2 + 0.3), -ROD_LEN / 2, 0);
+  scene.add(support);
+}
+
+// Base
+const baseGeo = new THREE.BoxGeometry((NUM + 2) * SPACING, 0.08, 1.2);
+const baseMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, metalness: 0.5, roughness: 0.5 });
+const base = new THREE.Mesh(baseGeo, baseMat);
+base.position.set(0, -ROD_LEN - RADIUS - 0.1, 0);
+base.receiveShadow = true;
+scene.add(base);
+
+// ═══════ BALLS + RODS ═══════
+const ballMeshes = [];
+const rodMeshes = [];
+
+const ballGeo = new THREE.SphereGeometry(RADIUS, 32, 32);
+const ballMat = new THREE.MeshStandardMaterial({
+  color: 0xC0C0C0,
+  metalness: 0.95,
+  roughness: 0.05,
+  envMapIntensity: 1.0,
+});
+
+const stringMat = new THREE.LineBasicMaterial({ color: 0x94A3B8 });
+
+for (let i = 0; i < NUM; i++) {
+  // Ball
+  const ball = new THREE.Mesh(ballGeo, ballMat);
+  ball.castShadow = true;
+  ball.receiveShadow = true;
+  scene.add(ball);
+  ballMeshes.push(ball);
+
+  // Two strings (V-shape for stability look)
+  for (const zOff of [-0.15, 0.15]) {
+    const lineGeo = new THREE.BufferGeometry();
+    const positions = new Float32Array(6);
+    lineGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const line = new THREE.Line(lineGeo, stringMat);
+    scene.add(line);
+    rodMeshes.push({ line, ballIndex: i, zOff });
+  }
+}
+
+// ═══════ ENVIRONMENT ═══════
+// Floor plane for reflections
+const floorGeo = new THREE.PlaneGeometry(20, 20);
+const floorMat = new THREE.MeshStandardMaterial({ color: 0x0a0e14, metalness: 0.3, roughness: 0.8 });
+const floor = new THREE.Mesh(floorGeo, floorMat);
+floor.rotation.x = -Math.PI / 2;
+floor.position.y = -ROD_LEN - RADIUS - 0.2;
+floor.receiveShadow = true;
+scene.add(floor);
+
+// ═══════ PHYSICS ═══════
+function stepPhysics() {
+  // Pendulum ODE per bob: θ'' = -(g/L)sin(θ)
+  for (let i = 0; i < NUM; i++) {
+    const alpha = -(GRAVITY / ROD_LEN) * Math.sin(angles[i]);
+    omegas[i] += alpha * DT;
+    angles[i] += omegas[i] * DT;
+  }
+
+  // Collision between adjacent bobs
+  for (let i = 0; i < NUM - 1; i++) {
+    const pivotXi = (i - (NUM - 1) / 2) * SPACING;
+    const pivotXj = (i + 1 - (NUM - 1) / 2) * SPACING;
+    const bxi = pivotXi + ROD_LEN * Math.sin(angles[i]);
+    const byi = -ROD_LEN * Math.cos(angles[i]);
+    const bxj = pivotXj + ROD_LEN * Math.sin(angles[i + 1]);
+    const byj = -ROD_LEN * Math.cos(angles[i + 1]);
+    const dist = Math.hypot(bxj - bxi, byj - byi);
+
+    if (dist < RADIUS * 2) {
+      // Convert to linear velocity, elastic collision, convert back
+      const vi = ROD_LEN * omegas[i];
+      const vj = ROD_LEN * omegas[i + 1];
+      // Equal mass elastic: swap velocities
+      const newVi = ELASTICITY * vj + (1 - ELASTICITY) * vi;
+      const newVj = ELASTICITY * vi + (1 - ELASTICITY) * vj;
+      omegas[i] = newVi / ROD_LEN;
+      omegas[i + 1] = newVj / ROD_LEN;
+
+      // Separate
+      const overlap = RADIUS * 2 - dist;
+      angles[i] -= overlap * 0.3 / ROD_LEN;
+      angles[i + 1] += overlap * 0.3 / ROD_LEN;
+    }
+  }
+}
+
+// ═══════ UPDATE MESHES ═══════
+function updateMeshes() {
+  for (let i = 0; i < NUM; i++) {
+    const pivotX = (i - (NUM - 1) / 2) * SPACING;
+    const bx = pivotX + ROD_LEN * Math.sin(angles[i]);
+    const by = -ROD_LEN * Math.cos(angles[i]);
+    ballMeshes[i].position.set(bx, by, 0);
+  }
+
+  // Update strings
+  for (const rod of rodMeshes) {
+    const i = rod.ballIndex;
+    const pivotX = (i - (NUM - 1) / 2) * SPACING;
+    const ball = ballMeshes[i];
+    const positions = rod.line.geometry.attributes.position.array;
+    positions[0] = pivotX;
+    positions[1] = 0;
+    positions[2] = rod.zOff;
+    positions[3] = ball.position.x;
+    positions[4] = ball.position.y;
+    positions[5] = rod.zOff * 0.3;
+    rod.line.geometry.attributes.position.needsUpdate = true;
+  }
+}
+
+// ═══════ ANIMATION LOOP ═══════
+function animate() {
+  requestAnimationFrame(animate);
+
+  if (running) {
+    // Multiple physics substeps per frame
+    for (let i = 0; i < 4; i++) stepPhysics();
+  }
+
+  updateMeshes();
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+// ═══════ CONTROLS ═══════
+window.liftBalls = function(count) {
+  resetScene();
+  setTimeout(() => {
+    for (let i = 0; i < Math.min(count, NUM); i++) {
+      angles[i] = -Math.PI / 3;
+      omegas[i] = 0;
+    }
+  }, 50);
+};
+
+window.resetScene = function() {
+  angles.fill(0);
+  omegas.fill(0);
+};
+
+// Initial lift
+liftBalls(1);
+
+// Handle resize
+window.addEventListener('resize', () => {
+  const w = Math.min(window.innerWidth - 20, 900);
+  const h = Math.min(window.innerHeight - 140, 550);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+});
+
+animate();
+</script>
+</body>
+</html>

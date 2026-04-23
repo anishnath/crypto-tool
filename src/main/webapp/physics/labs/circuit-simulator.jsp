@@ -40,6 +40,7 @@
 <!-- CSS: defer non-critical nav/theme -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-vision-modal.css?v=<%=v%>" media="print" onload="this.media='all'">
 
 <!-- GPT Ads: defer to after LCP -->
 <script>
@@ -130,6 +131,10 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 .ckt-ai-btn{padding:4px 14px;border:none;border-radius:6px;background:#6366f1;color:#fff;font:600 12px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:background .15s}
 .ckt-ai-btn:hover{background:#4f46e5}
 .ckt-ai-btn:disabled{opacity:.5;cursor:wait}
+.ckt-ai-img-btn{padding:4px 8px;border:1px solid rgba(99,102,241,.35);border-radius:6px;background:transparent;color:#a5b4fc;font-size:14px;cursor:pointer;line-height:1;transition:all .15s}
+.ckt-ai-img-btn:hover{background:rgba(99,102,241,.15);color:#c7d2fe;border-color:#6366f1}
+.ckt-ai-progress-slot{padding:0 12px}
+.ckt-ai-progress-slot:empty{display:none}
 .ckt-ai-close{padding:2px 8px;border:none;background:transparent;color:var(--ckt-muted);font-size:16px;cursor:pointer;line-height:1}
 .ckt-ai-close:hover{color:#ef4444}
 .ckt-ai-status{font-size:11px;white-space:nowrap;flex-shrink:0;min-width:0;overflow:hidden;text-overflow:ellipsis}
@@ -231,9 +236,11 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
     <div class="ckt-ai-bar" id="aiBar">
       <input type="text" class="ckt-ai-input" id="aiInput" placeholder="Describe a circuit... e.g. &quot;inverting op-amp with gain -10&quot;" maxlength="500" autocomplete="off">
       <button class="ckt-ai-btn" id="aiGenerate">Generate</button>
+      <button class="ckt-ai-img-btn" id="aiFromImage" title="Upload a circuit image (schematic, sketch, photo)" aria-label="Generate from image">📷</button>
       <button class="ckt-ai-close" id="aiClose" title="Close">&times;</button>
       <span class="ckt-ai-status" id="aiStatus"></span>
     </div>
+    <div class="ckt-ai-progress-slot" id="aiProgressSlot"></div>
     <div class="ckt-ai-examples" id="aiExamples">
       <span class="ckt-ai-examples-label">Try:</span>
       <button class="ckt-ai-chip" data-prompt="LED with 330 ohm resistor powered by 5V">LED Circuit</button>
@@ -290,6 +297,9 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 
 <script type="module">
 import { CircuitApp } from './js/circuit/ui/app.js';
+import { AI_SYSTEM_PROMPT, buildUserPrompt, CIRCUIT_VISION_PROMPT, buildVisionUserPrompt } from './js/circuit/ai-prompt.js';
+import { parseNetlist } from './js/circuit/netlist.js';
+import { validateCircuitInput } from './js/circuit/validation.js';
 const app = new CircuitApp(document.getElementById('circuitApp'));
 
 // Hide hint after first component placed
@@ -339,7 +349,10 @@ const aiPanel = document.getElementById('aiPanel');
 const aiClose = document.getElementById('aiClose');
 const aiInput = document.getElementById('aiInput');
 const aiBtn = document.getElementById('aiGenerate');
+const aiImgBtn = document.getElementById('aiFromImage');
 const aiStatus = document.getElementById('aiStatus');
+const aiProgressSlot = document.getElementById('aiProgressSlot');
+const AI_CTX = '<%=request.getContextPath()%>';
 
 // Close button
 aiClose.addEventListener('click', () => {
@@ -351,158 +364,171 @@ function setAiStatus(text, cls) {
   aiStatus.className = 'ckt-ai-status' + (cls ? ' ' + cls : '');
 }
 
-// Client-side circuit keyword validation (mirrors server-side, avoids unnecessary round-trip)
-const _CKT_KW = [
-  'resistor','capacitor','inductor','diode','led','transistor','bjt','mosfet','jfet',
-  'opamp','op-amp','op amp','amplifier','oscillator','timer','555',
-  'relay','fuse','lamp','bulb','switch','transformer','zener','darlington',
-  'comparator','schmitt','counter','flip-flop','flipflop','latch','adder',
-  'mux','multiplexer','demux','gate','inverter','potentiometer','pot',
-  'thermistor','photoresistor','ldr','optocoupler','triac','scr','thyristor',
-  'crystal','motor','speaker','buzzer','antenna','battery','cell','power supply','converter',
-  'circuit','filter','rectifier','regulator','divider','bridge',
-  'waveform','signal','generator','detector','attenuator','mixer',
-  'low-pass','high-pass','band-pass','notch','bandpass','lowpass','highpass',
-  'half-wave','full-wave','clamp','clipper','doubler','tripler',
-  'colpitts','hartley','wien','astable','monostable','bistable','multivibrator',
-  'schmitt trigger','wheatstone','h-bridge','push-pull','cascode','emitter follower',
-  'common emitter','common base','common collector','common source','common drain',
-  'current mirror','differential','summing','integrator','differentiator',
-  'voltage','current','resistance','ohm','volt','amp','watt','farad','henry',
-  'ac','dc','frequency','impedance','reactance','resonance','bandwidth','gain',
-  'series','parallel','kirchhoff','kvl','kcl','thevenin','norton',
-  'power','charge','capacitance','inductance','phase','bode','cutoff',
-  'bias','feedback','ground','node','anode','cathode','collector','emitter','drain','source',
-  'nmos','pmos','cmos','npn','pnp','rlc','rc','rl','lc',
-  'adc','dac','pwm','vco','pll','ttl',
-  'and gate','or gate','nand gate','nor gate','xor gate','not gate',
-  'sr latch','jk flip','d flip',
-  'kohm','uf','nf','pf','mh','khz','mhz',
-  'build','design','create','make','draw','simulate','wire','connect',
-];
-const _CKT_BLOCK = [
-  /ignore.*(?:instructions|prompt|above|previous)/i,
-  /(?:write|generate|create).*(?:code|script|program|essay|story|poem)/i,
-  /(?:tell|say|explain).*(?:joke|story|yourself|who are you)/i,
-  /(?:pretend|act as|you are now|roleplay)/i,
-  /(?:hack|exploit|inject|xss|sql|eval|exec)\b/i,
-  /\b(?:password|credential|secret|api.?key|token)\b/i,
-];
+// Shared stage-2: description → elements (throws user-facing errors).
+// Used by both the text-prompt path and the image → vision → text chain.
+async function descriptionToElements(desc) {
+  const resp = await fetch(AI_CTX + '/ai', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      stream: false,
+      messages: [
+        { role: 'system', content: AI_SYSTEM_PROMPT },
+        { role: 'user',   content: buildUserPrompt(desc) },
+      ],
+    }),
+  });
 
-function validateCircuitInput(desc) {
-  if (!desc || desc.length < 5) return 'Too short (min 5 chars)';
-  if (desc.length > 500) return 'Too long (max 500 chars)';
-  for (const p of _CKT_BLOCK) { if (p.test(desc)) return 'Please describe an electronic circuit'; }
-  const lower = desc.toLowerCase();
-  if (!_CKT_KW.some(kw => lower.includes(kw))) {
-    return 'Please describe a circuit (e.g. "LED with 220 ohm resistor and 5V supply")';
+  if (resp.status === 429) throw new Error('Rate limit — try again later');
+  if (resp.status === 401) throw new Error('Auth error — please reload');
+  if (!resp.ok) {
+    const data = await resp.json().catch(() => ({}));
+    throw new Error(data.error || 'Server error (' + resp.status + ')');
   }
-  return null;
+
+  const data = await resp.json();
+  const content = (data?.message?.content ?? data?.response ?? '').trim();
+  if (!content) throw new Error('Empty response from AI');
+  if (/^error\s+unclear_request\b/i.test(content)) {
+    throw new Error('AI could not understand the request — try rewording');
+  }
+
+  let elements;
+  try {
+    elements = parseNetlist(content).elements;
+  } catch (err) {
+    console.error('netlist parse failed. raw content:\n' + content);
+    throw new Error('Could not parse AI output — try rewording');
+  }
+
+  // Auto-insert source / ground if missing.
+  const types = elements.map(e => e.type);
+  if (!types.some(t => ['dc-voltage','ac-voltage','dc-current','clock'].includes(t))) {
+    elements.unshift({ type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 0, params: { voltage: 5 } });
+  }
+  if (!types.includes('ground')) {
+    let maxY = 0;
+    for (const e of elements) { maxY = Math.max(maxY, e.y1 || 0, e.y2 || 0); }
+    elements.push({ type: 'ground', x1: 0, y1: maxY, x2: 0, y2: maxY });
+  }
+  return elements;
 }
 
+// Text path — user types a description.
 async function generateCircuit() {
   const desc = aiInput.value.trim();
   if (!desc) { setAiStatus('Enter a description', 'error'); return; }
 
-  // Client-side validation (saves a round-trip)
   const valErr = validateCircuitInput(desc);
   if (valErr) { setAiStatus(valErr, 'error'); return; }
 
   aiBtn.disabled = true;
   aiInput.disabled = true;
+  if (aiImgBtn) aiImgBtn.disabled = true;
   setAiStatus('Generating circuit...', 'loading');
 
+  const t0 = Date.now();
   try {
-    const resp = await fetch('<%=request.getContextPath()%>/CFExamMarkerFunctionality?action=circuit_generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ description: desc }),
-    });
-
-    // Handle HTTP errors
-    if (resp.status === 429) {
-      const data = await resp.json().catch(() => ({}));
-      setAiStatus(data.message || 'Rate limit — try again later', 'error');
-      return;
-    }
-    if (resp.status === 401) {
-      setAiStatus('Auth error — please reload', 'error');
-      return;
-    }
-    if (!resp.ok) {
-      const data = await resp.json().catch(() => ({}));
-      setAiStatus(data.error || data.message || 'Server error (' + resp.status + ')', 'error');
-      return;
-    }
-
-    const data = await resp.json();
-
-    // API returned error in body
-    if (data.error) {
-      setAiStatus(data.error, 'error');
-      return;
-    }
-
-    // Validate response
-    if (!data.success || !data.elements || !Array.isArray(data.elements)) {
-      setAiStatus('Invalid response from AI', 'error');
-      return;
-    }
-    if (data.elements.length === 0) {
-      setAiStatus('AI returned empty circuit', 'error');
-      return;
-    }
-
-    // Check for minimum viable circuit
-    const types = data.elements.map(e => e.type);
-    const hasSource = types.some(t => ['dc-voltage','ac-voltage','dc-current','clock'].includes(t));
-    const hasGround = types.includes('ground');
-    if (!hasSource) {
-      setAiStatus('AI circuit has no source — adding 5V DC', 'warning');
-      data.elements.unshift({ type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 0, params: { voltage: 5 } });
-    }
-    if (!hasGround) {
-      let maxY = 0;
-      for (const e of data.elements) { maxY = Math.max(maxY, e.y1 || 0, e.y2 || 0); }
-      data.elements.push({ type: 'ground', x1: 0, y1: maxY, x2: 0, y2: maxY });
-    }
-
-    // Load into simulator
-    app.loadFromElements(data.elements);
-
-    // Build status message
-    const name = data.name || 'Circuit';
-    const count = data.elements.length;
-    const time = data.responseTimeMs ? (data.responseTimeMs / 1000).toFixed(1) + 's' : '';
-    let statusMsg = name + ' (' + count + ' elements)';
-    if (time) statusMsg += ' in ' + time;
-
-    if (data.warnings && data.warnings.length > 0) {
-      setAiStatus('⚠ ' + statusMsg + ' — may have wiring issues', 'warning');
-      showCanvasToast('⚠ AI circuit may have wiring issues — check 3-terminal device connections (BJT emitter, op-amp output)', 'warning', 8000);
-    } else {
-      setAiStatus('✓ ' + statusMsg, 'success');
-      showCanvasToast('✓ ' + statusMsg, 'success', 3000);
-    }
-
+    const elements = await descriptionToElements(desc);
+    app.loadFromElements(elements);
+    const time = ((Date.now() - t0) / 1000).toFixed(1) + 's';
+    const statusMsg = 'Circuit (' + elements.length + ' elements) in ' + time;
+    setAiStatus('✓ ' + statusMsg, 'success');
+    showCanvasToast('✓ ' + statusMsg, 'success', 3000);
   } catch (e) {
     console.error('AI circuit error:', e);
-    if (e.name === 'TypeError' && e.message.includes('fetch')) {
+    if (e.name === 'TypeError' && String(e.message).includes('fetch')) {
       setAiStatus('Network error — check connection', 'error');
     } else {
-      setAiStatus('Error: ' + (e.message || 'Unknown'), 'error');
+      setAiStatus(e.message || 'Unknown error', 'error');
     }
   } finally {
     aiBtn.disabled = false;
     aiInput.disabled = false;
+    if (aiImgBtn) aiImgBtn.disabled = false;
     aiInput.focus();
   }
+}
+
+// Image path — opens AIVisionModal (gemma vision), chains to qwen text model
+// to produce the netlist.  Mirrors the video/captions + 3D-modeler pattern:
+// phased AIProgressBar timer, server-chosen model, no client-side model field.
+function generateFromImage() {
+  if (typeof window.AIVisionModal === 'undefined') {
+    setAiStatus('Image module still loading — try again in a moment', 'error');
+    return;
+  }
+  window.AIVisionModal.open({
+    title: 'Image to Circuit',
+    subtitle: 'Upload a schematic, sketch, or photo — AI will rebuild it as a simulator circuit.',
+    ctx: AI_CTX,
+    systemPrompt: CIRCUIT_VISION_PROMPT,
+    userPrompt: buildVisionUserPrompt(),
+    estimatedMs: 240000,
+    // Vision description is prose, not code — don't strip anything.
+    cleanCode: (raw) => (raw || '').trim(),
+    onResult: async (description) => {
+      // Vision models often wrap the sentinel (backticks, quotes, periods).
+      // Treat any short response containing `not_a_circuit` as the sentinel.
+      const trimmed = (description || '').trim();
+      if (trimmed.length < 50 && /not_a_circuit/i.test(trimmed)) {
+        setAiStatus('Image does not appear to be a circuit', 'error');
+        showCanvasToast('This image does not look like a circuit', 'warning', 5000);
+        return;
+      }
+
+      // Stage 2: text → netlist.  Show the shared AIProgressBar while waiting.
+      aiBtn.disabled = true;
+      aiInput.disabled = true;
+      if (aiImgBtn) aiImgBtn.disabled = true;
+      setAiStatus('Building circuit from image...', 'loading');
+
+      let progress = null;
+      if (window.AIProgressBar && aiProgressSlot) {
+        progress = window.AIProgressBar.attach(aiProgressSlot, {
+          estimatedMs: 180000,
+          phases: [
+            { pct: 15, ms: 2000,   label: 'Sending description...' },
+            { pct: 30, ms: 15000,  label: 'Planning circuit...' },
+            { pct: 55, ms: 60000,  label: 'Placing components...' },
+            { pct: 75, ms: 120000, label: 'Finalizing netlist...' },
+            { pct: 90, ms: 160000, label: 'Almost done...' },
+          ],
+        });
+        progress.start();
+      }
+
+      const t0 = Date.now();
+      try {
+        const elements = await descriptionToElements(description);
+        app.loadFromElements(elements);
+        const time = ((Date.now() - t0) / 1000).toFixed(1) + 's';
+        const statusMsg = 'Circuit (' + elements.length + ' elements) in ' + time;
+        setAiStatus('✓ ' + statusMsg, 'success');
+        showCanvasToast('✓ Circuit from image ready', 'success', 3000);
+        if (progress) progress.stop(true);
+      } catch (err) {
+        console.error('image→circuit stage 2 error:', err);
+        setAiStatus(err.message || 'Failed to build circuit', 'error');
+        if (progress) progress.stop(false);
+      } finally {
+        if (progress) setTimeout(() => progress.destroy(), 1500);
+        aiBtn.disabled = false;
+        aiInput.disabled = false;
+        if (aiImgBtn) aiImgBtn.disabled = false;
+      }
+    },
+    onError: (msg) => {
+      setAiStatus(msg, 'error');
+    },
+  });
 }
 
 aiBtn.addEventListener('click', generateCircuit);
 aiInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generateCircuit(); }
 });
+if (aiImgBtn) aiImgBtn.addEventListener('click', generateFromImage);
 
 // Example chips — click to fill input (user presses Enter or Generate to submit)
 document.querySelectorAll('.ckt-ai-chip').forEach(chip => {
@@ -529,6 +555,8 @@ document.querySelectorAll('.ckt-ai-chip').forEach(chip => {
   }
 })();
 </script>
+<script src="<%=request.getContextPath()%>/modern/js/ai-progress-bar.js?v=<%=v%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/ai-vision-modal.js?v=<%=v%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
 <%@ include file="../../modern/components/analytics.jsp" %>
 </body>

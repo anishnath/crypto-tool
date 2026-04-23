@@ -43,6 +43,7 @@ import { Fuse, Lamp, PolarizedCapacitor } from '../elements/fuse.js';
 import { Comparator, SchmittTrigger } from '../elements/comparator.js';
 import { Darlington } from '../elements/darlington.js';
 import { JKFlipFlop, Counter, Multiplexer, Demultiplexer, ShiftRegister, HalfAdder, FullAdder, LogicInput, LogicOutput, Monostable } from '../elements/digital.js';
+import { parseNetlist, formatNetlist } from '../netlist.js';
 
 const MODE = { SELECT: 0, ADD_ELM: 1, DRAG_ALL: 2 };
 
@@ -1023,19 +1024,31 @@ export class CircuitApp {
     });
   }
 
-  /** Import circuit: file picker or paste from clipboard */
+  /** Import circuit: file picker accepts both JSON and netlist formats. */
   _importCircuit() {
-    // Try clipboard first, fall back to file picker
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.json';
+    input.accept = '.json,.txt,.net,.netlist';
     input.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.onload = (ev) => {
+        const raw = ev.target.result;
+        let data;
         try {
-          const data = JSON.parse(ev.target.result);
+          // Try JSON first — it's strict, so either it parses or it doesn't.
+          data = JSON.parse(raw);
+        } catch {
+          // Not JSON — try the compact netlist format.
+          try {
+            data = parseNetlist(raw);
+          } catch (err) {
+            alert('Failed to parse circuit file as JSON or netlist:\n' + err.message);
+            return;
+          }
+        }
+        try {
           if (this._deserializeCircuit(data)) {
             // Auto-add scope traces
             if (this.scope) {
@@ -1054,6 +1067,69 @@ export class CircuitApp {
           }
         } catch (err) {
           alert('Failed to parse circuit file: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    });
+    input.click();
+  }
+
+  /** Export current circuit in compact netlist format (one element per line). */
+  _exportNetlist() {
+    const data = this._serializeCircuit();
+    const text = formatNetlist(data.elements);
+    const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const filename = `8gwifi.org-circuit-${ts}.netlist`;
+
+    const download = () => {
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    navigator.clipboard.writeText(text).then(() => {
+      download();
+      alert(`Netlist exported!\n\nFile: ${filename}\nNetlist copied to clipboard.`);
+    }).catch(() => {
+      download();
+    });
+  }
+
+  /** Import a netlist (.txt / .net / .netlist) via file picker. */
+  _importNetlist() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.txt,.net,.netlist,text/plain';
+    input.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        let data;
+        try {
+          data = parseNetlist(ev.target.result);
+        } catch (err) {
+          alert('Failed to parse netlist: ' + err.message);
+          return;
+        }
+        if (this._deserializeCircuit(data)) {
+          if (this.scope) {
+            this.scope.traces = [];
+            const interesting = this.uiElements.filter(ui =>
+              ui.type !== 'wire' && ui.type !== 'ground' &&
+              ui.type !== 'dc-voltage' && ui.type !== 'dc-current' && ui.type !== 'ac-voltage'
+            );
+            if (interesting.length > 0) {
+              this.scope.addVoltageTrace(interesting[0]);
+              this.scope.addCurrentTrace(interesting[0]);
+            }
+            this.scope.resetData();
+            this._showScope(this.scope.traces.length > 0);
+          }
         }
       };
       reader.readAsText(file);
@@ -1226,6 +1302,10 @@ export class CircuitApp {
       this._exportCircuit();
     } else if (action === 'import') {
       this._importCircuit();
+    } else if (action === 'export-netlist') {
+      this._exportNetlist();
+    } else if (action === 'import-netlist') {
+      this._importNetlist();
     } else if (action === 'export-image') {
       this._exportImage();
     } else if (action === 'share-url') {

@@ -258,6 +258,8 @@ export class MenuBar {
       { divider: true },
       { label: 'Export Circuit (JSON)', action: 'export' },
       { label: 'Import Circuit (JSON)', action: 'import' },
+      { label: 'Export Circuit (Netlist)', action: 'export-netlist' },
+      { label: 'Import Circuit (Netlist)', action: 'import-netlist' },
       { divider: true },
       { label: 'Export as Image (PNG)', action: 'export-image' },
       { label: 'Share Circuit (URL)', action: 'share-url' },
