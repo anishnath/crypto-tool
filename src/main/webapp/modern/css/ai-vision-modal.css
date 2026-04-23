@@ -165,6 +165,20 @@
     line-height: 1.4;
 }
 
+.aivm-note {
+    margin-top: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(99, 102, 241, 0.06);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--muted, #64748b);
+}
+.aivm-note a { color: #6366f1; text-decoration: none; font-weight: 500; }
+.aivm-note a:hover { text-decoration: underline; }
+[data-theme="dark"] .aivm-note { color: #a5b4fc; background: rgba(99, 102, 241, 0.08); }
+
 .aivm-footer {
     padding: 0.75rem 1.25rem;
     border-top: 1px solid var(--border, #e2e8f0);

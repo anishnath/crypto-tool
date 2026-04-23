@@ -12,6 +12,7 @@
  *     estimatedMs:  240000,                    // optional, default ~4 min
  *     phases:       [...]                      // optional, custom progress phases
  *     cleanCode:    function(raw) {...},       // optional post-processor
+ *     footerHtml:   '<a href=...>Upgrade</a>',  // optional small HTML note
  *     onResult:     function(code, data) {},   // required — receives cleaned text
  *     onError:      function(msg) {}           // optional
  *   });
@@ -81,6 +82,7 @@
           +       '<div class="aivm-progress-bar"><div class="aivm-progress-fill"></div></div>'
           +     '</div>'
           +     '<div class="aivm-error" style="display:none"></div>'
+          +     '<div class="aivm-note" style="display:none"></div>'
           +   '</div>'
           +   '<div class="aivm-footer">'
           +     '<button type="button" class="aivm-btn aivm-cancel">Cancel</button>'
@@ -371,6 +373,12 @@
         var sub = $('.aivm-subtitle');
         if (cfg.subtitle) { sub.textContent = cfg.subtitle; sub.style.display = 'block'; }
         else { sub.textContent = ''; sub.style.display = 'none'; }
+
+        // Optional HTML note (e.g. upgrade / contact link).  Opt-in per caller
+        // — existing consumers that don't set `footerHtml` see no change.
+        var note = $('.aivm-note');
+        if (cfg.footerHtml) { note.innerHTML = cfg.footerHtml; note.style.display = 'block'; }
+        else { note.innerHTML = ''; note.style.display = 'none'; }
 
         $('.aivm-progress-time').textContent = formatRemaining(cfg.estimatedMs || DEFAULT_ESTIMATED_MS);
         modalEl.classList.add('open');
