@@ -41,6 +41,7 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-vision-modal.css?v=<%=v%>" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-progress-bar.css?v=<%=v%>" media="print" onload="this.media='all'">
 
 <!-- GPT Ads: defer to after LCP -->
 <script>
@@ -135,6 +136,25 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 .ckt-ai-img-btn:hover{background:rgba(99,102,241,.15);color:#c7d2fe;border-color:#6366f1}
 .ckt-ai-progress-slot{padding:0 12px}
 .ckt-ai-progress-slot:empty{display:none}
+/* Stage-2 overlay shown after vision completes, while text→netlist runs */
+.ckt-stage2{position:fixed;inset:0;background:rgba(8,10,14,.72);display:none;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(2px)}
+.ckt-stage2.open{display:flex}
+.ckt-stage2-card{width:min(92vw,480px);background:#151821;border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5);color:var(--ckt-text);font:13px 'DM Sans',sans-serif}
+.ckt-stage2-step{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#a5b4fc;margin-bottom:6px}
+.ckt-stage2-title{font:600 16px 'Sora',sans-serif;margin:0 0 4px}
+.ckt-stage2-subtitle{color:var(--ckt-muted);margin:0 0 14px;font-size:12px}
+.ckt-stage2-desc{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:6px;padding:10px 12px;font-size:12px;line-height:1.45;color:#cbd5e1;max-height:110px;overflow:auto;margin-bottom:14px}
+.ckt-stage2-progress{margin-bottom:14px}
+.ckt-stage2-actions{display:flex;justify-content:flex-end}
+.ckt-stage2-cancel{padding:6px 14px;border:1px solid rgba(148,163,184,.3);border-radius:6px;background:transparent;color:var(--ckt-muted);font:500 12px 'DM Sans',sans-serif;cursor:pointer}
+.ckt-stage2-cancel:hover{color:#ef4444;border-color:#ef4444}
+/* Unlock / contact notice (AI bar + stage-2 overlay use the same look) */
+.ckt-ai-upsell{padding:3px 12px;background:rgba(99,102,241,.05);border-bottom:1px solid var(--ckt-border);color:var(--ckt-muted);font:11px 'DM Sans',sans-serif;display:flex;align-items:center;gap:6px}
+.ckt-ai-upsell a{color:#a5b4fc;text-decoration:none;font-weight:500}
+.ckt-ai-upsell a:hover{color:#c7d2fe;text-decoration:underline}
+.ckt-stage2-upsell{margin-top:4px;padding:8px 10px;background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:6px;font-size:11px;color:var(--ckt-muted)}
+.ckt-stage2-upsell a{color:#a5b4fc;text-decoration:none;font-weight:500}
+.ckt-stage2-upsell a:hover{text-decoration:underline}
 .ckt-ai-close{padding:2px 8px;border:none;background:transparent;color:var(--ckt-muted);font-size:16px;cursor:pointer;line-height:1}
 .ckt-ai-close:hover{color:#ef4444}
 .ckt-ai-status{font-size:11px;white-space:nowrap;flex-shrink:0;min-width:0;overflow:hidden;text-overflow:ellipsis}
@@ -254,6 +274,10 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
       <button class="ckt-ai-chip" data-prompt="SR latch using two cross-coupled NAND gates">SR Latch</button>
       <button class="ckt-ai-chip" data-prompt="D flip-flop with 2Hz clock input">D Flip-Flop</button>
     </div>
+    <div class="ckt-ai-upsell">
+      <span>💎 Want higher limits / faster AI? Contact</span>
+      <a href="https://x.com/anish2good" target="_blank" rel="noopener noreferrer">@anish2good on X</a>
+    </div>
   </div>
 
   <div class="ckt-main">
@@ -293,6 +317,24 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
   <button class="ad-close" onclick="document.getElementById('adLabSticky').classList.add('ad-dismissed');try{localStorage.setItem('ad_lab_sticky_d','1')}catch(e){}">&times;</button>
   <div class="ad-label">Advertisement</div>
   <div id="ad_lab_sticky"></div>
+</div>
+
+<!-- Stage-2 overlay: shown after vision completes, while qwen builds the netlist -->
+<div class="ckt-stage2" id="stage2Overlay" role="dialog" aria-modal="true" aria-labelledby="stage2Title">
+  <div class="ckt-stage2-card">
+    <div class="ckt-stage2-step">Step 2 of 2</div>
+    <h3 class="ckt-stage2-title" id="stage2Title">Building circuit from image…</h3>
+    <p class="ckt-stage2-subtitle">Translating the description into a simulator netlist. Typical time ~4 min.</p>
+    <div class="ckt-stage2-desc" id="stage2Desc"></div>
+    <div class="ckt-stage2-progress" id="stage2ProgressSlot"></div>
+    <div class="ckt-stage2-upsell">
+      💎 Want higher limits / faster AI? Contact
+      <a href="https://x.com/anish2good" target="_blank" rel="noopener noreferrer">@anish2good on X</a>.
+    </div>
+    <div class="ckt-stage2-actions">
+      <button type="button" class="ckt-stage2-cancel" id="stage2Cancel">Hide</button>
+    </div>
+  </div>
 </div>
 
 <script type="module">
@@ -352,6 +394,10 @@ const aiBtn = document.getElementById('aiGenerate');
 const aiImgBtn = document.getElementById('aiFromImage');
 const aiStatus = document.getElementById('aiStatus');
 const aiProgressSlot = document.getElementById('aiProgressSlot');
+const stage2Overlay = document.getElementById('stage2Overlay');
+const stage2Desc = document.getElementById('stage2Desc');
+const stage2ProgressSlot = document.getElementById('stage2ProgressSlot');
+const stage2Cancel = document.getElementById('stage2Cancel');
 const AI_CTX = '<%=request.getContextPath()%>';
 
 // Close button
@@ -414,6 +460,65 @@ async function descriptionToElements(desc) {
   return elements;
 }
 
+// Phases for the text → netlist call.  Typical cold-start is ~4 min, warm
+// runs are 10–30 s — AIProgressBar will complete smoothly either way because
+// the fill clamps at 95 % until success triggers the jump to 100 %.
+const CIRCUIT_PROGRESS_PHASES = [
+  { pct: 10, ms: 3000,   label: 'Sending description...' },
+  { pct: 25, ms: 20000,  label: 'Planning circuit...' },
+  { pct: 45, ms: 60000,  label: 'Placing components...' },
+  { pct: 65, ms: 120000, label: 'Wiring connections...' },
+  { pct: 80, ms: 180000, label: 'Finalizing netlist...' },
+  { pct: 90, ms: 220000, label: 'Almost done...' },
+];
+const CIRCUIT_PROGRESS_ESTIMATE_MS = 240000; // 4 min
+
+function attachCircuitProgress() {
+  if (!window.AIProgressBar || !aiProgressSlot) return null;
+  const bar = window.AIProgressBar.attach(aiProgressSlot, {
+    estimatedMs: CIRCUIT_PROGRESS_ESTIMATE_MS,
+    phases: CIRCUIT_PROGRESS_PHASES,
+  });
+  bar.start();
+  return bar;
+}
+
+// Opens the centered "Step 2 of 2" overlay with the same AIProgressBar so the
+// user sees continuity between the vision modal closing and the circuit
+// appearing.  Returns a handle mirroring AIProgressBar: {stop, destroy}.
+function openStage2Overlay(description) {
+  if (!stage2Overlay) return null;
+  if (stage2Desc) {
+    const preview = (description || '').slice(0, 280);
+    stage2Desc.textContent = preview + ((description || '').length > 280 ? '…' : '');
+  }
+  // Clear any residue from a previous run.
+  if (stage2ProgressSlot) stage2ProgressSlot.innerHTML = '';
+  stage2Overlay.classList.add('open');
+
+  let bar = null;
+  if (window.AIProgressBar && stage2ProgressSlot) {
+    bar = window.AIProgressBar.attach(stage2ProgressSlot, {
+      estimatedMs: CIRCUIT_PROGRESS_ESTIMATE_MS,
+      phases: CIRCUIT_PROGRESS_PHASES,
+    });
+    bar.start();
+  }
+  return {
+    stop: (ok) => { if (bar) bar.stop(ok); },
+    destroy: () => {
+      if (bar) bar.destroy();
+      stage2Overlay.classList.remove('open');
+    },
+  };
+}
+
+// "Hide" just dismisses the overlay — the underlying fetch keeps running,
+// the result still loads into the simulator when it arrives.
+if (stage2Cancel) {
+  stage2Cancel.addEventListener('click', () => stage2Overlay.classList.remove('open'));
+}
+
 // Text path — user types a description.
 async function generateCircuit() {
   const desc = aiInput.value.trim();
@@ -427,6 +532,7 @@ async function generateCircuit() {
   if (aiImgBtn) aiImgBtn.disabled = true;
   setAiStatus('Generating circuit...', 'loading');
 
+  const progress = attachCircuitProgress();
   const t0 = Date.now();
   try {
     const elements = await descriptionToElements(desc);
@@ -435,6 +541,7 @@ async function generateCircuit() {
     const statusMsg = 'Circuit (' + elements.length + ' elements) in ' + time;
     setAiStatus('✓ ' + statusMsg, 'success');
     showCanvasToast('✓ ' + statusMsg, 'success', 3000);
+    if (progress) progress.stop(true);
   } catch (e) {
     console.error('AI circuit error:', e);
     if (e.name === 'TypeError' && String(e.message).includes('fetch')) {
@@ -442,7 +549,9 @@ async function generateCircuit() {
     } else {
       setAiStatus(e.message || 'Unknown error', 'error');
     }
+    if (progress) progress.stop(false);
   } finally {
+    if (progress) setTimeout(() => progress.destroy(), 1500);
     aiBtn.disabled = false;
     aiInput.disabled = false;
     if (aiImgBtn) aiImgBtn.disabled = false;
@@ -458,13 +567,24 @@ function generateFromImage() {
     setAiStatus('Image module still loading — try again in a moment', 'error');
     return;
   }
+  // Two-stage UX: vision ~2 min + circuit ~4 min = ~6 min total.
+  // Use shorter vision phases than the AIVisionModal default (6 min), then
+  // hand off to the same 4-min AIProgressBar the text path uses.
   window.AIVisionModal.open({
     title: 'Image to Circuit',
-    subtitle: 'Upload a schematic, sketch, or photo — AI will rebuild it as a simulator circuit.',
+    subtitle: 'Upload a schematic, sketch, or photo — AI will rebuild it as a simulator circuit. Typical total time ~6 min.',
     ctx: AI_CTX,
     systemPrompt: CIRCUIT_VISION_PROMPT,
     userPrompt: buildVisionUserPrompt(),
-    estimatedMs: 240000,
+    estimatedMs: 120000,
+    footerHtml: '💎 Want higher limits / faster AI? Contact <a href="https://x.com/anish2good" target="_blank" rel="noopener noreferrer">@anish2good on X</a>.',
+    phases: [
+      { pct: 12, ms: 3000,   label: 'Uploading image...' },
+      { pct: 28, ms: 15000,  label: 'Reading components...' },
+      { pct: 50, ms: 40000,  label: 'Tracing connections...' },
+      { pct: 70, ms: 75000,  label: 'Describing circuit...' },
+      { pct: 88, ms: 105000, label: 'Almost done...' },
+    ],
     // Vision description is prose, not code — don't strip anything.
     cleanCode: (raw) => (raw || '').trim(),
     onResult: async (description) => {
@@ -477,27 +597,15 @@ function generateFromImage() {
         return;
       }
 
-      // Stage 2: text → netlist.  Show the shared AIProgressBar while waiting.
+      // Stage 2: text → netlist.  Show the centered overlay so the user sees
+      // continuity after the vision modal closes (they get to read the
+      // description while the circuit is being built).
       aiBtn.disabled = true;
       aiInput.disabled = true;
       if (aiImgBtn) aiImgBtn.disabled = true;
       setAiStatus('Building circuit from image...', 'loading');
 
-      let progress = null;
-      if (window.AIProgressBar && aiProgressSlot) {
-        progress = window.AIProgressBar.attach(aiProgressSlot, {
-          estimatedMs: 180000,
-          phases: [
-            { pct: 15, ms: 2000,   label: 'Sending description...' },
-            { pct: 30, ms: 15000,  label: 'Planning circuit...' },
-            { pct: 55, ms: 60000,  label: 'Placing components...' },
-            { pct: 75, ms: 120000, label: 'Finalizing netlist...' },
-            { pct: 90, ms: 160000, label: 'Almost done...' },
-          ],
-        });
-        progress.start();
-      }
-
+      const progress = openStage2Overlay(description);
       const t0 = Date.now();
       try {
         const elements = await descriptionToElements(description);
