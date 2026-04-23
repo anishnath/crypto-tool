@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online Bash Shell – Run Bash Scripts Online (T
 request.setAttribute("seoIntroTitle", "Run Bash Online (Test Environment)");
 request.setAttribute("seoIntroBody", "Execute simple Bash scripts in a sandboxed environment. Great for shell snippets and small demonstrations.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>What is this?</strong> A test environment for lightweight Bash scripts.</p>" +
-    "<p><strong>Stdin?</strong> Yes, provide input in the Stdin panel.</p>" +
-    "<p><strong>Share?</strong> Click Share to get a URL.</p>");
+    "<p><strong>What environment is this?</strong> A test environment for lightweight Bash scripts.</p>" +
+    "<p><strong>Stdin supported?</strong> Yes, provide input in the Stdin panel.</p>" +
+    "<p><strong>How do I share?</strong> Use Share to get a snippet URL.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

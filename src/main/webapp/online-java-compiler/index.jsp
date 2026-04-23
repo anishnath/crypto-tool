@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online Java Compiler – Run Java Online (11, 17
 request.setAttribute("seoIntroTitle", "Run Java Online (11, 17, 21)");
 request.setAttribute("seoIntroBody", "Compile and run Java online using LTS versions 11 and 17, or the latest 21. Supports multi‑file projects.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions?</strong> Java 11, 17, 21.</p>" +
+    "<p><strong>Which Java versions are available?</strong> Java 11, 17, and 21 are available.</p>" +
     "<p><strong>How do I set the main class?</strong> Use a file named <code>Main.java</code> with <code>public static void main</code>.</p>" +
-    "<p><strong>Share?</strong> Click Share for a snippet link.</p>");
+    "<p><strong>How do I share code?</strong> Click Share to get a snippet URL.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

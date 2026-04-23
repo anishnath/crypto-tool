@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online Swift Compiler – Run Swift Online (5.9,
 request.setAttribute("seoIntroTitle", "Run Swift Online (5.9, 5.10)");
 request.setAttribute("seoIntroBody", "Run Swift 5.9 or 5.10 code online for learning and demos. Multi‑file projects supported.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions?</strong> Swift 5.9, 5.10.</p>" +
+    "<p><strong>Which Swift versions are available?</strong> Swift 5.9 and 5.10 are available.</p>" +
     "<p><strong>SwiftPM?</strong> Use self‑contained examples; package dependencies aren't persisted.</p>" +
-    "<p><strong>Share?</strong> Click Share to publish a snippet link.</p>");
+    "<p><strong>How do I share?</strong> Use Share to generate a snippet URL.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

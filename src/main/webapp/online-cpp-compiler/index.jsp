@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online C++ Compiler – Run C++ Online (GCC 12, 
 request.setAttribute("seoIntroTitle", "Run C++ Online (GCC 12, 13)");
 request.setAttribute("seoIntroBody", "Compile and run C++ online with GCC 12 or 13. Supports common flags like -O3 and -std=c++20, multi‑file projects, and stdin.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions?</strong> GCC 12, GCC 13.</p>" +
-    "<p><strong>Can I pass compiler flags?</strong> Yes, add flags in the Compiler Args field (e.g., <code>-std=c++20</code>).</p>" +
-    "<p><strong>Share?</strong> Use Share to generate a link.</p>");
+    "<p><strong>Which GCC versions are available?</strong> GCC 12 and GCC 13 are available.</p>" +
+    "<p><strong>How to pass compiler flags?</strong> Use the Compiler Args field, e.g., <code>-std=c++20</code> or <code>-O3</code>.</p>" +
+    "<p><strong>How do I share code?</strong> Use Share to generate a link.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

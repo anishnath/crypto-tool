@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online Scala Compiler – Run Scala Online (2.13
 request.setAttribute("seoIntroTitle", "Run Scala Online (2.13)");
 request.setAttribute("seoIntroBody", "Write and run Scala 2.13 code online. Good for quick experiments and teaching.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which version?</strong> Scala 2.13.</p>" +
+    "<p><strong>Which Scala version is available?</strong> Scala 2.13.</p>" +
     "<p><strong>Multi‑file?</strong> Yes, add more .scala files as needed.</p>" +
-    "<p><strong>Share?</strong> Use Share to get a link.</p>");
+    "<p><strong>How do I share?</strong> Use Share to get a link.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

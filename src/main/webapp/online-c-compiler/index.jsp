@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online C Compiler – Run C Online (GCC 12, 13)"
 request.setAttribute("seoIntroTitle", "Run C Online (GCC 12, 13)");
 request.setAttribute("seoIntroBody", "Compile and run C online with GCC 12 or 13. Supports stdin, compiler flags, and multi‑file projects.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions?</strong> GCC 12, GCC 13.</p>" +
-    "<p><strong>Flags?</strong> Add flags in Compiler Args (e.g., <code>-O2</code>).</p>" +
-    "<p><strong>Share?</strong> Click Share to get a snippet link.</p>");
+    "<p><strong>Which GCC versions are available?</strong> GCC 12 and GCC 13 are available.</p>" +
+    "<p><strong>How to pass flags?</strong> Add flags in Compiler Args, e.g., <code>-O2</code>.</p>" +
+    "<p><strong>How do I share code?</strong> Click Share to copy a snippet URL.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

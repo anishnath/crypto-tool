@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online Kotlin Compiler – Run Kotlin Online (1.
 request.setAttribute("seoIntroTitle", "Run Kotlin Online (1.9, 2.0)");
 request.setAttribute("seoIntroBody", "Write and run Kotlin online targeting versions 1.9 or 2.0. Multi‑file projects supported.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions?</strong> Kotlin 1.9, 2.0.</p>" +
-    "<p><strong>How do I run?</strong> Ensure a file with a <code>main</code> function is present.</p>" +
-    "<p><strong>Share?</strong> Use Share to generate a link.</p>");
+    "<p><strong>Which Kotlin versions are available?</strong> Kotlin 1.9 and 2.0.</p>" +
+    "<p><strong>How to run the program?</strong> Ensure a file has a <code>main</code> function.</p>" +
+    "<p><strong>How do I share?</strong> Use Share to copy a snippet URL.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

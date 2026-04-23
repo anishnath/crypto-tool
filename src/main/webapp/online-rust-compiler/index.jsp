@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online Rust Compiler – Run Rust Online (1.74, 
 request.setAttribute("seoIntroTitle", "Run Rust Online (1.74, 1.75)");
 request.setAttribute("seoIntroBody", "Write and execute Rust code online. Try features targeting Rust 1.74 or 1.75, with stdin and multi‑file support.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions?</strong> Rust 1.74, 1.75.</p>" +
+    "<p><strong>Which Rust versions are available?</strong> Rust 1.74 and 1.75 are available.</p>" +
     "<p><strong>Crates?</strong> Prefer self‑contained examples; external crates aren't persisted.</p>" +
-    "<p><strong>Share?</strong> Use Share for a permalink.</p>");
+    "<p><strong>How do I share?</strong> Click Share to generate a snippet URL.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online C# Compiler – Run C# Online (6, 7, 8)")
 request.setAttribute("seoIntroTitle", "Run C# Online (6, 7, 8)");
 request.setAttribute("seoIntroBody", "Write and run C# online. Choose language levels 6, 7, or 8 for examples and interviews.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions?</strong> C# 6, 7, 8 language features.</p>" +
-    "<p><strong>Multi‑file?</strong> Yes, add additional .cs files as needed.</p>" +
-    "<p><strong>Share?</strong> Use Share to create a public link.</p>");
+    "<p><strong>Which C# versions are supported?</strong> C# language levels 6, 7, and 8.</p>" +
+    "<p><strong>Multi‑file projects?</strong> Yes, add additional .cs files and a Main entry point.</p>" +
+    "<p><strong>How do I share code?</strong> Use Share to generate a link.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

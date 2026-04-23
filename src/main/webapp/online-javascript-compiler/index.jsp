@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online JavaScript Compiler – Run JS Online (No
 request.setAttribute("seoIntroTitle", "Run JavaScript (Node.js) Online (18, 20, 21)");
 request.setAttribute("seoIntroBody", "Execute Node.js scripts in your browser using versions 18, 20, or 21. Great for quick JS experiments, utilities, and interview tasks. Multi‑file and stdin supported.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions are available?</strong> Node.js 18, 20, and 21.</p>" +
-    "<p><strong>TypeScript?</strong> Use the <a href=\"/online-typescript-compiler/\">TypeScript page</a> for TS, compiled and run on Node 20.</p>" +
-    "<p><strong>How do I share?</strong> Click Share to generate a public snippet URL.</p>");
+    "<p><strong>Which Node.js versions are available?</strong> Node.js 18, 20, and 21 are available.</p>" +
+    "<p><strong>How do I share code?</strong> Click Share to generate a permalink for your snippet.</p>" +
+    "<p><strong>Should I use TypeScript?</strong> For TS, use the TypeScript page which compiles TS 5.3 on Node 20.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

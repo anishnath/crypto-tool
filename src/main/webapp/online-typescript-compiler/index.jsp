@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online TypeScript Compiler – Run TS Online (TS
 request.setAttribute("seoIntroTitle", "Run TypeScript Online (TS 5.3 on Node 20)");
 request.setAttribute("seoIntroBody", "Write TypeScript and run it online. The environment compiles TS 5.3 and runs it on Node.js 20. Perfect for quick demos and teaching.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions are available?</strong> TypeScript 5.3 on Node 20.</p>" +
-    "<p><strong>How do I import packages?</strong> Use pure TS/JS examples; external packages vary by template. Prefer self‑contained snippets.</p>" +
-    "<p><strong>Can I share?</strong> Yes, click Share to copy a snippet URL.</p>");
+    "<p><strong>Which versions are used?</strong> TypeScript 5.3 compiled and executed on Node.js 20.</p>" +
+    "<p><strong>How do I share code?</strong> Use the Share button to generate a URL.</p>" +
+    "<p><strong>Can I import packages?</strong> Prefer self‑contained examples; external packages vary by template.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

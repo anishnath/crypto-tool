@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online Go Compiler – Run Go Online (1.21, 1.22
 request.setAttribute("seoIntroTitle", "Run Go Online (1.21, 1.22)");
 request.setAttribute("seoIntroBody", "Write and run Go code online with versions 1.21 and 1.22. Ideal for snippets, learning, and demos.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions?</strong> Go 1.21, 1.22.</p>" +
-    "<p><strong>Modules?</strong> Prefer self‑contained examples; third‑party modules aren't persisted.</p>" +
-    "<p><strong>Share?</strong> Use Share to copy a snippet URL.</p>");
+    "<p><strong>Which Go versions are available?</strong> Go 1.21 and 1.22 are available.</p>" +
+    "<p><strong>How do I share code?</strong> Click Share to generate a permalink.</p>" +
+    "<p><strong>Are modules supported?</strong> Prefer self‑contained examples; third‑party modules aren't persisted.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

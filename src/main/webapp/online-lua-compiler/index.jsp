@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online Lua Compiler – Run Lua Online (5.4)");
 request.setAttribute("seoIntroTitle", "Run Lua Online (5.4)");
 request.setAttribute("seoIntroBody", "Write and run Lua 5.4 code online. Simple, fast, and great for learning.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which version?</strong> Lua 5.4.</p>" +
+    "<p><strong>Which Lua version is available?</strong> Lua 5.4.</p>" +
     "<p><strong>Multi‑file?</strong> Yes, add additional .lua files.</p>" +
-    "<p><strong>Share?</strong> Use Share for a permalink.</p>");
+    "<p><strong>How do I share?</strong> Click Share to generate a URL.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

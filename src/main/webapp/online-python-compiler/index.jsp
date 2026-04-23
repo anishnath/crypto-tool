@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online Python Compiler – Run Python Code Onlin
 request.setAttribute("seoIntroTitle", "Run Python Online (3.9, 3.10, 3.11)");
 request.setAttribute("seoIntroBody", "Write and execute Python in your browser. Supports Python 3.9, 3.10, and 3.11 with popular packages for examples like requests, numpy, and pandas. Share snippets, stdin, and multi‑file projects.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions are available?</strong> Python 3.9, 3.10, 3.11.</p>" +
-    "<p><strong>Are packages available?</strong> Common packages are available in templates for examples (e.g., requests, numpy). For full control, paste code inline or use snippets.</p>" +
-    "<p><strong>How do I share code?</strong> Click Share to get a unique link that preserves files, input and version.</p>");
+    "<p><strong>Which Python versions are available?</strong> Python 3.9, 3.10, and 3.11 are available.</p>" +
+    "<p><strong>How do I share code?</strong> Click Share to generate a URL that preserves your files, input, and Python version.</p>" +
+    "<p><strong>Are packages supported?</strong> Common packages are available in examples. For portability, prefer self‑contained snippets.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

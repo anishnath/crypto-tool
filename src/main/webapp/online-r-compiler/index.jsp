@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online R Compiler – Run R Online (4.2, 4.3)");
 request.setAttribute("seoIntroTitle", "Run R Online (4.2, 4.3)");
 request.setAttribute("seoIntroBody", "Execute R code online targeting R 4.2 or 4.3. Great for stats snippets and quick visualizations.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions?</strong> R 4.2, 4.3.</p>" +
+    "<p><strong>Which R versions are available?</strong> R 4.2 and 4.3.</p>" +
     "<p><strong>Packages?</strong> Prefer examples without external packages; availability varies.</p>" +
-    "<p><strong>Share?</strong> Click Share to grab a link.</p>");
+    "<p><strong>How do I share?</strong> Use Share to get a snippet URL.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

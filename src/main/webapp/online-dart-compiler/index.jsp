@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online Dart Compiler – Run Dart Online (3.2)")
 request.setAttribute("seoIntroTitle", "Run Dart Online (3.2)");
 request.setAttribute("seoIntroBody", "Write and run Dart 3.2 code online. Great for small demos and learning.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which version?</strong> Dart 3.2.</p>" +
+    "<p><strong>Which Dart version is available?</strong> Dart 3.2.</p>" +
     "<p><strong>Packages?</strong> Prefer self‑contained examples; pub packages aren't persisted.</p>" +
-    "<p><strong>Share?</strong> Click Share to get a snippet link.</p>");
+    "<p><strong>How do I share?</strong> Click Share to generate a snippet URL.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +

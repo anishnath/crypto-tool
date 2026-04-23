@@ -8,9 +8,9 @@ request.setAttribute("h1Text", "Online PHP Compiler – Run PHP Online (8.1, 8.2
 request.setAttribute("seoIntroTitle", "Run PHP Online (8.1, 8.2, 8.3)");
 request.setAttribute("seoIntroBody", "Execute PHP scripts online using PHP 8.1, 8.2, or 8.3. Great for learning and quick experiments.");
 request.setAttribute("languageFaqHtml",
-    "<p><strong>Which versions?</strong> PHP 8.1, 8.2, 8.3.</p>" +
-    "<p><strong>Extensions?</strong> Keep examples self‑contained; extension availability varies by template.</p>" +
-    "<p><strong>Share?</strong> Click Share to get a snippet URL.</p>");
+    "<p><strong>Which PHP versions are available?</strong> PHP 8.1, 8.2, and 8.3 are available.</p>" +
+    "<p><strong>How do I share code?</strong> Use Share to generate a URL for your snippet.</p>" +
+    "<p><strong>Are extensions supported?</strong> Prefer self‑contained examples; extension availability varies by template.</p>");
 request.setAttribute("languageFaqJsonLd",
     "{\n" +
     "  \"@context\": \"https://schema.org\",\n" +
