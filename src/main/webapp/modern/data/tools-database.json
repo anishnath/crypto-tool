@@ -3149,18 +3149,18 @@
       "description": "Visual Physics Lab - 19 interactive physics simulations covering mechanics, optics, electromagnetism, waves, thermodynamics, and modern physics"
     },
     {
-      "name": "AI Video Transcription & Translation",
+      "name": "Free AI Video Transcription & Translation",
       "url": "video/",
       "category": "Video & Audio AI",
-      "keywords": "transcribe video to text, ai video transcription, speech to text, translate video to english, mp4 to text, video to srt, srt generator, vtt subtitles, youtube video transcription, video subtitle generator, audio to text converter, video caption generator, free transcription, otter alternative, rev alternative",
-      "description": "Free AI video transcription and translation — upload any video or audio, get an accurate transcript in 90+ languages, translate to English, export as plain text, SRT or VTT subtitles"
+      "keywords": "transcribe video to text, ai video transcription, speech to text, translate video to english, mp4 to text, video to srt, srt generator, youtube video transcription, audio to text converter, meeting transcription, podcast transcription, interview transcription, zoom transcription, free transcription online, otter alternative, rev alternative",
+      "description": "Free AI video transcription and translation — upload any video or audio, get an accurate transcript in 90+ languages, translate to English, export as plain text, SRT or VTT"
     },
     {
-      "name": "Auto-Caption Generator for Video",
+      "name": "Subtitle Generator for Video",
       "url": "video/captions/",
       "category": "Video & Audio AI",
-      "keywords": "auto caption generator, add subtitles to video, tiktok captions, reels captions free, video subtitle maker, burn subtitles into video, subtitle generator ai, captions for video, animated subtitles, karaoke subtitles, video caption ai, submagic alternative, captions.ai alternative, free subtitle burner, word highlight captions, youtube shorts captions",
-      "description": "Free AI auto-caption generator — add animated TikTok-style subtitles to any video, style live in your browser, export a caption-burned MP4 in minutes. No upload, no signup."
+      "keywords": "subtitle generator, add subtitles to video, video subtitle maker, auto subtitle generator, subtitle generator ai, burn subtitles into video, auto caption generator, tiktok captions, reels captions free, animated subtitles, video caption ai, submagic alternative, captions.ai alternative, free subtitle app, srt vtt export, word highlight subtitles, youtube shorts captions",
+      "description": "Free AI subtitle generator — add animated TikTok-style captions to any video, style live in your browser, export a subtitled MP4 in minutes. No upload, no signup."
     }
   ]
 }
