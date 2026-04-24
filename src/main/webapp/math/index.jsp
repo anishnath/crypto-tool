@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<% String cacheVersion = String.valueOf(System.currentTimeMillis()); %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<% String v = String.valueOf(System.currentTimeMillis()); %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,1393 +8,368 @@
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolDescription" value="48 free math calculators with step-by-step solutions. Percentage, algebra, statistics, calculus, matrices, and more. All free, no signup." />
         <jsp:param name="toolUrl" value="math/" />
-        <jsp:param name="toolKeywords" value="math calculator, online math tools, percentage calculator, exponent calculator, quadratic solver, matrix calculator, integral calculator, derivative calculator, logarithm calculator, series calculator, limit calculator, inequality solver, step by step math, free math solver" />
+        <jsp:param name="toolKeywords" value="math calculator, online math tools, percentage calculator, quadratic solver, matrix calculator, integral calculator, derivative calculator, logarithm calculator, series calculator, limit calculator, step by step math, free math solver" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="48 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode support,Mobile responsive,100% free" />
-        <jsp:param name="teaches" value="Arithmetic, algebra, calculus, linear algebra, matrix operations, series and sequences, logarithms, exponents, percentages" />
+        <jsp:param name="toolFeatures" value="48 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode,Mobile responsive,100% free" />
+        <jsp:param name="teaches" value="Arithmetic, algebra, calculus, linear algebra, matrix operations, series and sequences, logarithms, exponents, percentages, statistics" />
         <jsp:param name="educationalLevel" value="Middle School, High School, Undergraduate" />
         <jsp:param name="faq1q" value="Are these math calculators free?" />
-        <jsp:param name="faq1a" value="Yes all 48 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification." />
+        <jsp:param name="faq1a" value="Yes, all 48 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification." />
         <jsp:param name="faq2q" value="Do the calculators show step-by-step solutions?" />
-        <jsp:param name="faq2a" value="Yes every calculator renders detailed step-by-step solutions using KaTeX math notation. Each step explains the formula applied and shows the intermediate calculation so you learn the method not just the answer." />
+        <jsp:param name="faq2a" value="Yes, every calculator renders detailed step-by-step solutions using KaTeX math notation. Each step explains the formula applied and shows the intermediate calculation, so you learn the method, not just the answer." />
         <jsp:param name="faq3q" value="What math topics are covered?" />
-        <jsp:param name="faq3a" value="We cover everyday math like percentages and significant figures, algebra including quadratic equations linear systems and inequalities, 21 statistics calculators covering descriptive stats hypothesis testing regression and ANOVA, calculus with derivatives integrals and limits, linear algebra with 9 matrix calculators, and more including logarithms exponents and Taylor series." />
+        <jsp:param name="faq3a" value="We cover everyday math (percentages, significant figures), algebra (quadratic equations, linear systems, inequalities), 21 statistics calculators (descriptive stats, hypothesis testing, regression, ANOVA), calculus (derivatives, integrals, limits), linear algebra (9 matrix calculators), trigonometry, logarithms, exponents, and Taylor series." />
+        <jsp:param name="faq4q" value="Can I share or export results from these math calculators?" />
+        <jsp:param name="faq4a" value="Yes. Most calculators support copy-to-clipboard (plain text or LaTeX), a shareable URL that reproduces your inputs, and PDF download where applicable. You can embed formulas directly into papers, homework, or lecture slides." />
+        <jsp:param name="faq5q" value="Do these math calculators work on mobile?" />
+        <jsp:param name="faq5a" value="Yes. Every calculator is mobile-responsive — the input UI adapts to narrow viewports and the step-by-step solutions remain fully readable on phones and tablets. The left sidebar collapses into a slide-in drawer on screens below 1024px." />
+        <jsp:param name="faq6q" value="Is there a practice worksheet for these calculators?" />
+        <jsp:param name="faq6a" value="Tools with a worksheet button (integral, derivative, quadratic, and more) open a bank of 1000+ practice problems with full answer keys, organised by topic and difficulty. Perfect for AP, college, or self-study exam prep." />
     </jsp:include>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="ctx" content="<%=request.getContextPath()%>" />
 
-    <!-- CollectionPage + ItemList Schema -->
+    <!-- CollectionPage + ItemList Schema — ported verbatim from the legacy
+         math/index.jsp so Google's "48 items" rich-card stays intact. If
+         tools are added/removed, sync BOTH the sidebar partial AND this
+         block. -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "name": "Math Calculators",
-      "description": "48 free math calculators with step-by-step solutions covering percentages, algebra, statistics, calculus, linear algebra, trigonometry, and more.",
-      "url": "https://8gwifi.org/math/",
-      "mainEntity": {
-        "@type": "ItemList",
-        "numberOfItems": 48,
-        "itemListElement": [
-          {"@type": "ListItem", "position": 1, "name": "Percentage Calculator", "url": "https://8gwifi.org/percentage-calculator.jsp"},
-          {"@type": "ListItem", "position": 2, "name": "Exponent Calculator", "url": "https://8gwifi.org/exponent-calculator.jsp"},
-          {"@type": "ListItem", "position": 3, "name": "Logarithm Calculator", "url": "https://8gwifi.org/logarithm-calculator.jsp"},
-          {"@type": "ListItem", "position": 4, "name": "Significant Figures Calculator", "url": "https://8gwifi.org/significant-figures-calculator.jsp"},
-          {"@type": "ListItem", "position": 5, "name": "Quadratic Equation Solver", "url": "https://8gwifi.org/quadratic-solver.jsp"},
-          {"@type": "ListItem", "position": 6, "name": "System of Equations Solver", "url": "https://8gwifi.org/linear-equations-solver.jsp"},
-          {"@type": "ListItem", "position": 7, "name": "Systems of Equations Solver — Step-by-Step", "url": "https://8gwifi.org/system-equations-solver.jsp"},
-          {"@type": "ListItem", "position": 8, "name": "Inequality Solver", "url": "https://8gwifi.org/inequality-solver.jsp"},
-          {"@type": "ListItem", "position": 8, "name": "24 Game Solver", "url": "https://8gwifi.org/24-game-solver.jsp"},
-          {"@type": "ListItem", "position": 9, "name": "Taylor & Maclaurin Series Calculator", "url": "https://8gwifi.org/series-calculator.jsp"},
-          {"@type": "ListItem", "position": 10, "name": "Derivative Calculator", "url": "https://8gwifi.org/derivative-calculator.jsp"},
-          {"@type": "ListItem", "position": 11, "name": "Integral Calculator", "url": "https://8gwifi.org/integral-calculator.jsp"},
-          {"@type": "ListItem", "position": 12, "name": "Limit Calculator", "url": "https://8gwifi.org/limit-calculator.jsp"},
-          {"@type": "ListItem", "position": 13, "name": "Matrix Determinant Calculator", "url": "https://8gwifi.org/matrix-determinant-calculator.jsp"},
-          {"@type": "ListItem", "position": 14, "name": "Matrix Multiplication Calculator", "url": "https://8gwifi.org/matrix-multiplication-calculator.jsp"},
-          {"@type": "ListItem", "position": 15, "name": "Matrix Inverse Calculator", "url": "https://8gwifi.org/matrix-inverse-calculator.jsp"},
-          {"@type": "ListItem", "position": 16, "name": "Matrix Eigenvalue Calculator", "url": "https://8gwifi.org/matrix-eigenvalue-calculator.jsp"},
-          {"@type": "ListItem", "position": 17, "name": "Matrix Rank Calculator", "url": "https://8gwifi.org/matrix-rank-calculator.jsp"},
-          {"@type": "ListItem", "position": 18, "name": "Matrix Addition Calculator", "url": "https://8gwifi.org/matrix-addition-calculator.jsp"},
-          {"@type": "ListItem", "position": 19, "name": "Matrix Power Calculator", "url": "https://8gwifi.org/matrix-power-calculator.jsp"},
-          {"@type": "ListItem", "position": 20, "name": "Matrix Transpose Calculator", "url": "https://8gwifi.org/matrix-transpose-calculator.jsp"},
-          {"@type": "ListItem", "position": 21, "name": "Matrix Type Classifier", "url": "https://8gwifi.org/matrix-type-classifier.jsp"},
-          {"@type": "ListItem", "position": 22, "name": "Polynomial Calculator", "url": "https://8gwifi.org/polynomial-calculator.jsp"},
-          {"@type": "ListItem", "position": 23, "name": "Vector Calculator", "url": "https://8gwifi.org/vector-calculator.jsp"},
-          {"@type": "ListItem", "position": 24, "name": "Trig Function Calculator", "url": "https://8gwifi.org/trigonometric-function-calculator.jsp"},
-          {"@type": "ListItem", "position": 25, "name": "Trig Identity Calculator", "url": "https://8gwifi.org/trigonometric-identity-calculator.jsp"},
-          {"@type": "ListItem", "position": 26, "name": "Trig Equation Solver", "url": "https://8gwifi.org/trigonometric-equation-solver.jsp"},
-          {"@type": "ListItem", "position": 27, "name": "Summary Statistics Calculator", "url": "https://8gwifi.org/summary-statistics-calculator.jsp"},
-          {"@type": "ListItem", "position": 28, "name": "Standard Deviation Calculator", "url": "https://8gwifi.org/standard-deviation.jsp"},
-          {"@type": "ListItem", "position": 29, "name": "Mean Median Mode Calculator", "url": "https://8gwifi.org/mean-median-mode.jsp"},
-          {"@type": "ListItem", "position": 30, "name": "Variance Calculator", "url": "https://8gwifi.org/variance-calculator.jsp"},
-          {"@type": "ListItem", "position": 31, "name": "Percentile Calculator", "url": "https://8gwifi.org/percentile-calculator.jsp"},
-          {"@type": "ListItem", "position": 32, "name": "Z-Score Calculator", "url": "https://8gwifi.org/z-score-calculator.jsp"},
-          {"@type": "ListItem", "position": 33, "name": "Normal Distribution Calculator", "url": "https://8gwifi.org/normal-distribution-calculator.jsp"},
-          {"@type": "ListItem", "position": 34, "name": "Binomial Distribution Calculator", "url": "https://8gwifi.org/binomial-distribution-calculator.jsp"},
-          {"@type": "ListItem", "position": 35, "name": "Probability Calculator", "url": "https://8gwifi.org/probability-calculator.jsp"},
-          {"@type": "ListItem", "position": 36, "name": "Confidence Interval Calculator", "url": "https://8gwifi.org/confidence-interval-calculator.jsp"},
-          {"@type": "ListItem", "position": 37, "name": "Hypothesis Test Calculator", "url": "https://8gwifi.org/hypothesis-test-calculator.jsp"},
-          {"@type": "ListItem", "position": 38, "name": "T-Test Calculator", "url": "https://8gwifi.org/t-test-calculator.jsp"},
-          {"@type": "ListItem", "position": 39, "name": "Chi-Square Calculator", "url": "https://8gwifi.org/chi-square-calculator.jsp"},
-          {"@type": "ListItem", "position": 40, "name": "ANOVA Calculator", "url": "https://8gwifi.org/anova-calculator.jsp"},
-          {"@type": "ListItem", "position": 41, "name": "Correlation Calculator", "url": "https://8gwifi.org/correlation-calculator.jsp"},
-          {"@type": "ListItem", "position": 42, "name": "Linear Regression Calculator", "url": "https://8gwifi.org/linear-regression-calculator.jsp"},
-          {"@type": "ListItem", "position": 43, "name": "Sample Size Calculator", "url": "https://8gwifi.org/sample-size-calculator.jsp"},
-          {"@type": "ListItem", "position": 44, "name": "Effect Size Calculator", "url": "https://8gwifi.org/effect-size-calculator.jsp"},
-          {"@type": "ListItem", "position": 45, "name": "Standard Error Calculator", "url": "https://8gwifi.org/standard-error-calculator.jsp"},
-          {"@type": "ListItem", "position": 46, "name": "Outlier Detection Calculator", "url": "https://8gwifi.org/outlier-detection-calculator.jsp"},
-          {"@type": "ListItem", "position": 47, "name": "P-Value Calculator", "url": "https://8gwifi.org/p-value-calculator.jsp"},
-          {"@type": "ListItem", "position": 48, "name": "Graphing Calculator", "url": "https://8gwifi.org/graphing-calculator.jsp"}
-        ]
-      }
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": "Math Calculators",
+            "description": "48 free math calculators with step-by-step solutions covering percentages, algebra, statistics, calculus, linear algebra, trigonometry, and more.",
+            "url": "https://8gwifi.org/math/",
+            "mainEntity": {
+                "@type": "ItemList",
+                "numberOfItems": 49,
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Percentage Calculator", "url": "https://8gwifi.org/percentage-calculator.jsp"},
+                    {"@type": "ListItem", "position": 2, "name": "Exponent Calculator", "url": "https://8gwifi.org/exponent-calculator.jsp"},
+                    {"@type": "ListItem", "position": 3, "name": "Logarithm Calculator", "url": "https://8gwifi.org/logarithm-calculator.jsp"},
+                    {"@type": "ListItem", "position": 4, "name": "Significant Figures Calculator", "url": "https://8gwifi.org/significant-figures-calculator.jsp"},
+                    {"@type": "ListItem", "position": 5, "name": "Quadratic Equation Solver", "url": "https://8gwifi.org/quadratic-solver.jsp"},
+                    {"@type": "ListItem", "position": 6, "name": "System of Equations Solver", "url": "https://8gwifi.org/linear-equations-solver.jsp"},
+                    {"@type": "ListItem", "position": 7, "name": "Systems of Equations Solver — Step-by-Step", "url": "https://8gwifi.org/system-equations-solver.jsp"},
+                    {"@type": "ListItem", "position": 8, "name": "Inequality Solver", "url": "https://8gwifi.org/inequality-solver.jsp"},
+                    {"@type": "ListItem", "position": 9, "name": "24 Game Solver", "url": "https://8gwifi.org/24-game-solver.jsp"},
+                    {"@type": "ListItem", "position": 10, "name": "Taylor & Maclaurin Series Calculator", "url": "https://8gwifi.org/series-calculator.jsp"},
+                    {"@type": "ListItem", "position": 11, "name": "Derivative Calculator", "url": "https://8gwifi.org/derivative-calculator.jsp"},
+                    {"@type": "ListItem", "position": 12, "name": "Integral Calculator", "url": "https://8gwifi.org/integral-calculator.jsp"},
+                    {"@type": "ListItem", "position": 13, "name": "Limit Calculator", "url": "https://8gwifi.org/limit-calculator.jsp"},
+                    {"@type": "ListItem", "position": 14, "name": "Matrix Determinant Calculator", "url": "https://8gwifi.org/matrix-determinant-calculator.jsp"},
+                    {"@type": "ListItem", "position": 15, "name": "Matrix Multiplication Calculator", "url": "https://8gwifi.org/matrix-multiplication-calculator.jsp"},
+                    {"@type": "ListItem", "position": 16, "name": "Matrix Inverse Calculator", "url": "https://8gwifi.org/matrix-inverse-calculator.jsp"},
+                    {"@type": "ListItem", "position": 17, "name": "Matrix Eigenvalue Calculator", "url": "https://8gwifi.org/matrix-eigenvalue-calculator.jsp"},
+                    {"@type": "ListItem", "position": 18, "name": "Matrix Rank Calculator", "url": "https://8gwifi.org/matrix-rank-calculator.jsp"},
+                    {"@type": "ListItem", "position": 19, "name": "Matrix Addition Calculator", "url": "https://8gwifi.org/matrix-addition-calculator.jsp"},
+                    {"@type": "ListItem", "position": 20, "name": "Matrix Power Calculator", "url": "https://8gwifi.org/matrix-power-calculator.jsp"},
+                    {"@type": "ListItem", "position": 21, "name": "Matrix Transpose Calculator", "url": "https://8gwifi.org/matrix-transpose-calculator.jsp"},
+                    {"@type": "ListItem", "position": 22, "name": "Matrix Type Classifier", "url": "https://8gwifi.org/matrix-type-classifier.jsp"},
+                    {"@type": "ListItem", "position": 23, "name": "Polynomial Calculator", "url": "https://8gwifi.org/polynomial-calculator.jsp"},
+                    {"@type": "ListItem", "position": 24, "name": "Vector Calculator", "url": "https://8gwifi.org/vector-calculator.jsp"},
+                    {"@type": "ListItem", "position": 25, "name": "Trig Function Calculator", "url": "https://8gwifi.org/trigonometric-function-calculator.jsp"},
+                    {"@type": "ListItem", "position": 26, "name": "Trig Identity Calculator", "url": "https://8gwifi.org/trigonometric-identity-calculator.jsp"},
+                    {"@type": "ListItem", "position": 27, "name": "Trig Equation Solver", "url": "https://8gwifi.org/trigonometric-equation-solver.jsp"},
+                    {"@type": "ListItem", "position": 28, "name": "Summary Statistics Calculator", "url": "https://8gwifi.org/summary-statistics-calculator.jsp"},
+                    {"@type": "ListItem", "position": 29, "name": "Standard Deviation Calculator", "url": "https://8gwifi.org/standard-deviation.jsp"},
+                    {"@type": "ListItem", "position": 30, "name": "Mean Median Mode Calculator", "url": "https://8gwifi.org/mean-median-mode.jsp"},
+                    {"@type": "ListItem", "position": 31, "name": "Variance Calculator", "url": "https://8gwifi.org/variance-calculator.jsp"},
+                    {"@type": "ListItem", "position": 32, "name": "Percentile Calculator", "url": "https://8gwifi.org/percentile-calculator.jsp"},
+                    {"@type": "ListItem", "position": 33, "name": "Z-Score Calculator", "url": "https://8gwifi.org/z-score-calculator.jsp"},
+                    {"@type": "ListItem", "position": 34, "name": "Normal Distribution Calculator", "url": "https://8gwifi.org/normal-distribution-calculator.jsp"},
+                    {"@type": "ListItem", "position": 35, "name": "Binomial Distribution Calculator", "url": "https://8gwifi.org/binomial-distribution-calculator.jsp"},
+                    {"@type": "ListItem", "position": 36, "name": "Probability Calculator", "url": "https://8gwifi.org/probability-calculator.jsp"},
+                    {"@type": "ListItem", "position": 37, "name": "Confidence Interval Calculator", "url": "https://8gwifi.org/confidence-interval-calculator.jsp"},
+                    {"@type": "ListItem", "position": 38, "name": "Hypothesis Test Calculator", "url": "https://8gwifi.org/hypothesis-test-calculator.jsp"},
+                    {"@type": "ListItem", "position": 39, "name": "T-Test Calculator", "url": "https://8gwifi.org/t-test-calculator.jsp"},
+                    {"@type": "ListItem", "position": 40, "name": "Chi-Square Calculator", "url": "https://8gwifi.org/chi-square-calculator.jsp"},
+                    {"@type": "ListItem", "position": 41, "name": "ANOVA Calculator", "url": "https://8gwifi.org/anova-calculator.jsp"},
+                    {"@type": "ListItem", "position": 42, "name": "Correlation Calculator", "url": "https://8gwifi.org/correlation-calculator.jsp"},
+                    {"@type": "ListItem", "position": 43, "name": "Linear Regression Calculator", "url": "https://8gwifi.org/linear-regression-calculator.jsp"},
+                    {"@type": "ListItem", "position": 44, "name": "Sample Size Calculator", "url": "https://8gwifi.org/sample-size-calculator.jsp"},
+                    {"@type": "ListItem", "position": 45, "name": "Effect Size Calculator", "url": "https://8gwifi.org/effect-size-calculator.jsp"},
+                    {"@type": "ListItem", "position": 46, "name": "Standard Error Calculator", "url": "https://8gwifi.org/standard-error-calculator.jsp"},
+                    {"@type": "ListItem", "position": 47, "name": "Outlier Detection Calculator", "url": "https://8gwifi.org/outlier-detection-calculator.jsp"},
+                    {"@type": "ListItem", "position": 48, "name": "P-Value Calculator", "url": "https://8gwifi.org/p-value-calculator.jsp"},
+                    {"@type": "ListItem", "position": 49, "name": "Graphing Calculator", "url": "https://8gwifi.org/graphing-calculator.jsp"}
+                ]
+            }
+        }
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <%@ include file="../modern/ads/ad-init.jsp" %>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=v%>">
 
     <style>
-        :root {
-            --math-primary: #16a34a;
-            --math-secondary: #22c55e;
+        /* Index-specific: hero banner + featured-tool cards.
+           All tokens come from math-studio.css; no duplication. */
+        .ms-hero-banner {
+            position: relative; overflow: hidden;
+            background:
+                    radial-gradient(circle at 10% 0%, rgba(21, 128, 61, 0.18), transparent 45%),
+                    radial-gradient(circle at 90% 100%, rgba(79, 70, 229, 0.12), transparent 50%),
+                    var(--ms-panel-bg);
+            color: var(--ms-ink);
+            padding: 2.25rem 2.25rem 2rem;
+            border-radius: var(--ms-radius-lg);
+            border: 1px solid var(--ms-line);
+            box-shadow: var(--ms-shadow);
+        }
+        .ms-hero-banner h1 {
+            font: 400 2.4rem/1.1 var(--ms-font-serif);
+            margin: 0 0 0.4rem;
+            letter-spacing: -0.02em;
+        }
+        .ms-hero-banner h1 em { font-style: italic; color: var(--ms-accent); }
+        .ms-hero-banner p { font: 1.02rem var(--ms-font-sans); color: var(--ms-ink-soft); margin: 0 0 1.5rem; max-width: 56ch; }
+        .ms-hero-stats { display: flex; gap: 2.25rem; flex-wrap: wrap; }
+        .ms-hero-stat { font: 500 0.82rem var(--ms-font-sans); color: var(--ms-muted); }
+        .ms-hero-stat strong {
+            display: block;
+            font: 400 1.65rem var(--ms-font-serif);
+            color: var(--ms-ink);
+            margin-bottom: 2px;
+            letter-spacing: -0.015em;
         }
 
-        .math-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
+        .ms-section-title {
+            font: 500 1.25rem var(--ms-font-serif);
+            color: var(--ms-ink);
+            margin: 0 0 1rem;
+            letter-spacing: -0.015em;
         }
 
-        /* Hero */
-        .hero {
-            background: linear-gradient(135deg, var(--math-primary) 0%, var(--math-secondary) 100%);
-            color: white;
-            padding: 2.5rem 2rem;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 20px 60px rgba(22, 163, 74, 0.25);
-        }
-        .hero h1 { font-size: 2.25rem; margin: 0 0 0.5rem; font-weight: 800; }
-        .hero p { font-size: 1.05rem; opacity: 0.95; margin: 0 0 1.25rem; }
-        .hero-stats { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
-        .hero-stat { text-align: center; }
-        .hero-stat-value { font-size: 1.75rem; font-weight: 800; display: block; }
-        .hero-stat-label { font-size: 0.8rem; opacity: 0.85; }
-
-        /* Category */
-        .category { margin-bottom: 2.5rem; }
-        .category-header {
-            display: flex; align-items: center; gap: 0.75rem;
-            margin-bottom: 1.25rem; padding-bottom: 0.75rem;
-            border-bottom: 2px solid var(--border-color, #e2e8f0);
-        }
-        .category-icon {
-            font-size: 1.5rem; width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center;
-            background: var(--bg-secondary, #f1f5f9); border-radius: 10px;
-        }
-        .category-header h2 { margin: 0; font-size: 1.35rem; font-weight: 700; color: var(--text-primary, #1e293b); }
-        .category-count {
-            margin-left: auto; background: var(--bg-secondary, #f1f5f9);
-            padding: 0.3rem 0.75rem; border-radius: 20px;
-            font-size: 0.8rem; color: var(--text-secondary, #64748b); font-weight: 600;
-        }
-
-        /* Grid */
-        .tools-grid {
+        .ms-tool-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 0.85rem;
         }
+        .ms-tool-card {
+            display: flex; align-items: center; gap: 0.85rem;
+            padding: 1rem 1.1rem;
+            background: var(--ms-panel-bg);
+            border: 1px solid var(--ms-line);
+            border-radius: var(--ms-radius);
+            text-decoration: none; color: var(--ms-ink);
+            transition: transform var(--ms-transition),
+            border-color var(--ms-transition),
+            box-shadow var(--ms-transition);
+        }
+        .ms-tool-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--ms-accent);
+            box-shadow: var(--ms-shadow);
+        }
+        .ms-tool-card-icon {
+            width: 40px; height: 40px; flex-shrink: 0;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: var(--ms-radius-sm);
+            font: 1.1rem var(--ms-font-serif);
+            background: var(--ms-accent-soft);
+            color: var(--ms-accent);
+        }
+        .ms-tool-card:hover .ms-tool-card-icon {
+            background: var(--ms-accent); color: #fff;
+        }
+        .ms-tool-card-title { font: 600 0.95rem var(--ms-font-sans); display: block; margin-bottom: 2px; }
+        .ms-tool-card-sub { font: 0.8rem var(--ms-font-sans); color: var(--ms-muted); }
 
-        /* Card */
-        .tool-card-link {
-            background: var(--bg-primary, #fff);
-            border: 1px solid var(--border-color, #e2e8f0);
-            border-radius: 14px; padding: 1.25rem;
-            text-decoration: none; display: block;
-            transition: all 0.2s ease; position: relative; overflow: hidden;
-        }
-        .tool-card-link::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0;
-            height: 3px; background: var(--card-accent, var(--math-primary));
-            transform: scaleX(0); transition: transform 0.2s ease;
-        }
-        .tool-card-link:hover {
-            transform: translateY(-3px); border-color: var(--math-primary);
-            box-shadow: 0 10px 30px rgba(22, 163, 74, 0.12);
-        }
-        .tool-card-link:hover::before { transform: scaleX(1); }
-
-        .tool-card-header { display: flex; gap: 0.875rem; margin-bottom: 0.625rem; }
-        .tool-icon {
-            width: 44px; height: 44px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.35rem; flex-shrink: 0; color: #fff; font-weight: 700;
-        }
-        .tool-card-link h3 { margin: 0; font-size: 1rem; font-weight: 700; color: var(--text-primary, #1e293b); line-height: 1.3; }
-        .tool-formula { font-family: 'Times New Roman', Georgia, serif; font-size: 0.8rem; color: var(--text-secondary, #64748b); margin-top: 0.2rem; }
-        .tool-card-link p { color: var(--text-secondary, #64748b); margin: 0 0 0.625rem; font-size: 0.875rem; line-height: 1.5; }
-
-        .tool-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-        .badge { padding: 0.2rem 0.5rem; border-radius: 5px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
-        .badge-steps { background: linear-gradient(135deg, #16a34a, #22c55e); color: white; }
-        .badge-python { background: linear-gradient(135deg, #3b82f6, #6366f1); color: white; }
-        .badge-graph { background: linear-gradient(135deg, #f59e0b, #ea580c); color: white; }
-        .badge-new { background: linear-gradient(135deg, #ec4899, #f43f5e); color: white; }
-
-        /* Ad container between sections */
-        .math-ad-slot { margin: 1.5rem 0; text-align: center; }
-
-        /* SEO Content */
-        .seo-content {
-            background: var(--bg-primary, #fff);
-            border: 1px solid var(--border-color, #e2e8f0);
-            border-radius: 16px; padding: 2rem; margin-top: 2rem;
-        }
-        .seo-content h2 { color: var(--text-primary, #1e293b); margin: 0 0 1rem; font-size: 1.4rem; }
-        .seo-content h3 { color: var(--text-primary, #1e293b); margin: 1.5rem 0 0.75rem; font-size: 1.1rem; }
-        .seo-content p, .seo-content li { color: var(--text-secondary, #64748b); line-height: 1.7; }
-
-        .formula-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 0.75rem; margin: 1rem 0;
-        }
-        .formula-item {
-            background: var(--bg-secondary, #f8fafc);
-            padding: 0.875rem; border-radius: 10px;
-            border-left: 3px solid var(--math-primary);
-        }
-        .formula-item strong { display: block; color: var(--text-primary, #1e293b); font-size: 0.85rem; margin-bottom: 0.2rem; }
-        .formula-item code { font-family: 'Times New Roman', Georgia, serif; font-size: 1.05rem; color: var(--math-primary); }
-
-        /* FAQ */
-        .faq-item { border-bottom: 1px solid var(--border-color, #e2e8f0); }
-        .faq-question {
-            width: 100%; background: none; border: none; cursor: pointer;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 1rem 0; font-size: 1rem; font-weight: 600;
-            color: var(--text-primary, #1e293b); text-align: left; font-family: inherit; gap: 0.75rem;
-        }
-        .faq-question:hover { color: var(--math-primary); }
-        .faq-chevron { transition: transform 0.3s ease; flex-shrink: 0; }
-        .faq-answer {
-            max-height: 0; overflow: hidden;
-            color: var(--text-secondary, #64748b); line-height: 1.7;
-            transition: max-height 0.3s ease, padding 0.3s ease; padding: 0;
-        }
-        .faq-item.open .faq-answer { max-height: 500px; padding: 0 0 1rem 0; }
-        .faq-item.open .faq-chevron { transform: rotate(180deg); }
-
-        /* Scroll animations */
-        .math-anim { opacity: 0; transform: translateY(1.5rem); transition: opacity 0.5s ease, transform 0.5s ease; }
-        .math-anim.math-visible { opacity: 1; transform: translateY(0); }
-        .math-anim-d1 { transition-delay: 0.05s; }
-        .math-anim-d2 { transition-delay: 0.1s; }
-        .math-anim-d3 { transition-delay: 0.15s; }
-        .math-anim-d4 { transition-delay: 0.2s; }
-        @media (prefers-reduced-motion: reduce) { .math-anim { opacity: 1; transform: none; transition: none; } }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .math-container { padding: 1rem; }
-            .hero { padding: 1.75rem 1.25rem; }
-            .hero h1 { font-size: 1.5rem; }
-            .hero p { font-size: 0.95rem; }
-            .hero-stats { gap: 1.5rem; }
-            .hero-stat-value { font-size: 1.4rem; }
-            .tools-grid { grid-template-columns: 1fr; }
-            .category-header h2 { font-size: 1.15rem; }
-        }
-
-        /* Dark mode */
-        [data-theme="dark"] {
-            --bg-primary: #1e293b; --bg-secondary: #334155;
-            --text-primary: #f1f5f9; --text-secondary: #94a3b8;
-            --border-color: #475569;
-        }
+        /* .ms-faq-* styles now live in math-studio.css (shared with tool pages) */
     </style>
+    <%@ include file="../modern/ads/ad-init.jsp" %>
 </head>
-<body>
-    <%@ include file="../modern/components/nav-header.jsp" %>
+<body class="ms-body">
 
-    <main class="math-container">
+<jsp:include page="../modern/components/nav-header.jsp" />
+
+<!-- Decorative physics backdrop (shared across all math pages) -->
+<jsp:include page="/math/partials/matter-bg.jsp" />
+
+<!-- Hero banner ad -->
+<div class="ms-hero">
+    <%@ include file="../modern/ads/ad-hero-banner.jsp" %>
+</div>
+
+<main class="ms-main">
+
+    <!-- Mobile drawer toggle -->
+    <button type="button" id="msSidebarToggle" class="ms-sidebar-toggle" aria-label="Open math tools menu">
+        &#9776; Math tools
+    </button>
+
+    <% request.setAttribute("activeService", "home"); %>
+    <jsp:include page="/math/partials/sidebar.jsp" />
+
+    <section class="ms-workspace">
+
         <!-- Hero -->
-        <section class="hero">
-            <h1>Math Calculators</h1>
-            <p>Free step-by-step solvers with KaTeX formulas and Python compilers</p>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-value">48</span>
-                    <span class="hero-stat-label">Calculators</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value">100%</span>
-                    <span class="hero-stat-label">Free</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value">Step-by-Step</span>
-                    <span class="hero-stat-label">KaTeX Solutions</span>
-                </div>
+        <div class="ms-hero-banner">
+            <h1>A quiet place for <em>math</em>.</h1>
+            <p>48 step-by-step solvers &mdash; from the percentage trick to eigenvalues. KaTeX formulas, Python verification, nothing to sign up for.</p>
+            <div class="ms-hero-stats">
+                <div class="ms-hero-stat"><strong>48</strong>calculators</div>
+                <div class="ms-hero-stat"><strong>step</strong>by step solutions</div>
+                <div class="ms-hero-stat"><strong>free</strong>no signup</div>
             </div>
-            <p style="margin-top: 1.25rem;">
-                <a href="<%=request.getContextPath()%>/math/dashboard.jsp" style="color: white; text-decoration: underline; font-weight: 600;">Math Editor</a> — Write equations, diagrams &amp; documents
+        </div>
+
+        <!-- Featured tools -->
+        <div class="ms-card">
+            <h2 class="ms-section-title">Featured</h2>
+            <div class="ms-tool-grid">
+                <a href="<%=request.getContextPath()%>/integral-calculator.jsp" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#8747;</span>
+                    <span><span class="ms-tool-card-title">Integral Calculator</span><span class="ms-tool-card-sub">Definite, indefinite, by parts</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/derivative-calculator.jsp" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">d/dx</span>
+                    <span><span class="ms-tool-card-title">Derivative</span><span class="ms-tool-card-sub">Power, product, chain rules</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/quadratic-solver.jsp" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">x&#178;</span>
+                    <span><span class="ms-tool-card-title">Quadratic Solver</span><span class="ms-tool-card-sub">Formula, factoring, completing</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/matrix-determinant-calculator.jsp" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">|A|</span>
+                    <span><span class="ms-tool-card-title">Determinant</span><span class="ms-tool-card-sub">Cofactor + row reduction</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/standard-deviation.jsp" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#963;</span>
+                    <span><span class="ms-tool-card-title">Standard Deviation</span><span class="ms-tool-card-sub">Sample &amp; population</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/percentage-calculator.jsp" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">%</span>
+                    <span><span class="ms-tool-card-title">Percentage</span><span class="ms-tool-card-sub">8 modes, discount, tax</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/graphing-calculator.jsp" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#8962;</span>
+                    <span><span class="ms-tool-card-title">Graphing Calculator</span><span class="ms-tool-card-sub">Plot f(x), roots, extrema</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/math/dashboard.jsp" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#x2211;</span>
+                    <span><span class="ms-tool-card-title">Math Editor</span><span class="ms-tool-card-sub">WYSIWYG + live compute</span></span>
+                </a>
+            </div>
+        </div>
+
+        <!-- In-content ad (mobile/tablet only; hidden on desktop where rail shows) -->
+        <div class="ms-inline-ad">
+            <%@ include file="../modern/ads/ad-in-content-mid.jsp" %>
+        </div>
+
+        <!-- Quick category summary -->
+        <div class="ms-card">
+            <h2 class="ms-section-title">Browse by Category</h2>
+            <p style="color:var(--ms-muted); margin:0 0 0.85rem; font-size:0.9rem;">
+                Every calculator is one click away in the left sidebar. Quick jumps:
             </p>
-        </section>
-
-        <!-- ==================== EVERYDAY MATH ==================== -->
-        <section class="category">
-            <div class="category-header">
-                <span class="category-icon">&#128176;</span>
-                <h2>Everyday Math</h2>
-                <span class="category-count">4 tools</span>
-            </div>
-            <div class="tools-grid">
-                <a href="<%=request.getContextPath()%>/math/dashboard.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #2563eb;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">&#x2211;</div>
-                        <div>
-                            <h3>Math Editor</h3>
-                            <div class="tool-formula">Write equations, graphs &amp; documents</div>
-                        </div>
-                    </div>
-                    <p>WYSIWYG math editor with live compute (derivative, integral, solve), right-click to plot, and export to PDF or LaTeX.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                    </div>
+            <div class="ms-tool-grid">
+                <a href="#" onclick="document.querySelector('.ms-group[data-group=&quot;everyday&quot;] .ms-group-header').click();document.querySelector('.ms-group[data-group=&quot;everyday&quot;]').scrollIntoView({block:'center'});return false" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#128176;</span>
+                    <span><span class="ms-tool-card-title">Everyday</span><span class="ms-tool-card-sub">5 tools</span></span>
                 </a>
-
-                <a href="<%=request.getContextPath()%>/percentage-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #16a34a;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #16a34a, #22c55e);">%</div>
-                        <div>
-                            <h3>Percentage Calculator</h3>
-                            <div class="tool-formula">X% of Y, % change, discount + tax</div>
-                        </div>
-                    </div>
-                    <p>8 modes: percent of, what percent, increase/decrease, percent change, reverse, discount simulator, chained steps.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
+                <a href="#" onclick="document.querySelector('.ms-group[data-group=&quot;algebra&quot;] .ms-group-header').click();document.querySelector('.ms-group[data-group=&quot;algebra&quot;]').scrollIntoView({block:'center'});return false" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#916;</span>
+                    <span><span class="ms-tool-card-title">Algebra</span><span class="ms-tool-card-sub">5 tools</span></span>
                 </a>
-
-                <a href="<%=request.getContextPath()%>/significant-figures-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #0891b2;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #0891b2, #0d9488);">SF</div>
-                        <div>
-                            <h3>Significant Figures Calculator</h3>
-                            <div class="tool-formula">Count, round &amp; convert sig figs</div>
-                        </div>
-                    </div>
-                    <p>Count significant figures, round to N sig figs, and convert between standard and scientific notation.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
+                <a href="#" onclick="document.querySelector('.ms-group[data-group=&quot;calculus&quot;] .ms-group-header').click();document.querySelector('.ms-group[data-group=&quot;calculus&quot;]').scrollIntoView({block:'center'});return false" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#8747;</span>
+                    <span><span class="ms-tool-card-title">Calculus</span><span class="ms-tool-card-sub">5 tools</span></span>
                 </a>
-
-                <a href="<%=request.getContextPath()%>/24-game-solver.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #ec4899;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">24</div>
-                        <div>
-                            <h3>24 Game Solver</h3>
-                            <div class="tool-formula">Make 24 from any 4 numbers</div>
-                        </div>
-                    </div>
-                    <p>Find all solutions that combine 4 numbers using +, -, &times;, &divide; to make 24. Step-by-step explanations.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
+                <a href="#" onclick="document.querySelector('.ms-group[data-group=&quot;linear-algebra&quot;] .ms-group-header').click();document.querySelector('.ms-group[data-group=&quot;linear-algebra&quot;]').scrollIntoView({block:'center'});return false" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#119924;</span>
+                    <span><span class="ms-tool-card-title">Linear Algebra</span><span class="ms-tool-card-sub">10 tools</span></span>
+                </a>
+                <a href="#" onclick="document.querySelector('.ms-group[data-group=&quot;statistics&quot;] .ms-group-header').click();document.querySelector('.ms-group[data-group=&quot;statistics&quot;]').scrollIntoView({block:'center'});return false" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#128202;</span>
+                    <span><span class="ms-tool-card-title">Statistics</span><span class="ms-tool-card-sub">21 tools</span></span>
+                </a>
+                <a href="#" onclick="document.querySelector('.ms-group[data-group=&quot;trig&quot;] .ms-group-header').click();document.querySelector('.ms-group[data-group=&quot;trig&quot;]').scrollIntoView({block:'center'});return false" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">sin</span>
+                    <span><span class="ms-tool-card-title">Trigonometry</span><span class="ms-tool-card-sub">3 tools</span></span>
                 </a>
             </div>
-        </section>
-
-        <!-- ==================== ALGEBRA ==================== -->
-        <section class="category">
-            <div class="category-header">
-                <span class="category-icon">&#128200;</span>
-                <h2>Algebra</h2>
-                <span class="category-count">11 tools</span>
-            </div>
-            <div class="tools-grid">
-                <a href="<%=request.getContextPath()%>/exponent-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #d97706;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">x<sup>n</sup></div>
-                        <div>
-                            <h3>Exponent Calculator</h3>
-                            <div class="tool-formula">All 8 laws of exponents</div>
-                        </div>
-                    </div>
-                    <p>Calculate powers, apply product/quotient/power rules, handle negative, zero, and fractional exponents with steps.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/logarithm-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #0d9488;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">log</div>
-                        <div>
-                            <h3>Logarithm Calculator</h3>
-                            <div class="tool-formula">log, ln, change of base</div>
-                        </div>
-                    </div>
-                    <p>Compute logarithms with any base, natural log, change of base, and log equations with step-by-step solutions.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/quadratic-solver.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #7c3aed;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">x&sup2;</div>
-                        <div>
-                            <h3>Quadratic Equation Solver</h3>
-                            <div class="tool-formula">ax&sup2; + bx + c = 0</div>
-                        </div>
-                    </div>
-                    <p>Solve with quadratic formula, completing the square, or factoring. Includes discriminant analysis and graph.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/linear-equations-solver.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #2563eb;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">Ax=b</div>
-                        <div>
-                            <h3>System of Equations Solver</h3>
-                            <div class="tool-formula">2&times;2, 3&times;3, 4&times;4 systems</div>
-                        </div>
-                    </div>
-                    <p>Solve systems of linear equations using substitution, elimination, or Cramer's rule with detailed steps.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/system-equations-solver.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #10b981;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #10b981, #0d9488);">f(x,y)</div>
-                        <div>
-                            <h3>Systems of Equations Solver</h3>
-                            <div class="tool-formula">Linear &amp; nonlinear, 2&times;2 &amp; 3&times;3</div>
-                        </div>
-                    </div>
-                    <p>Solve linear and nonlinear systems step-by-step using Cramer's rule, Gaussian elimination, substitution, or matrix inversion. Plots intersection curves.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/inequality-solver.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #dc2626;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #dc2626, #f43f5e);">&ge;</div>
-                        <div>
-                            <h3>Inequality Solver</h3>
-                            <div class="tool-formula">Linear, quadratic, rational inequalities</div>
-                        </div>
-                    </div>
-                    <p>Solve linear, quadratic, and rational inequalities with step-by-step solutions and number line visualization.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/diophantine-solver.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #7c3aed;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">ax+by</div>
-                        <div>
-                            <h3>Diophantine Equation Solver</h3>
-                            <div class="tool-formula">Integer solutions, Pell, CRT</div>
-                        </div>
-                    </div>
-                    <p>Solve linear, quadratic, and modular Diophantine equations with extended Euclidean algorithm steps and lattice graphs.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/polynomial-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #0d9488;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">P(x)</div>
-                        <div>
-                            <h3>Polynomial Calculator</h3>
-                            <div class="tool-formula">Add, subtract, multiply, divide, factor, roots</div>
-                        </div>
-                    </div>
-                    <p>Perform all polynomial operations with step-by-step solutions. Long division, factoring, root finding for any degree.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/vector-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #0284c7;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #0284c7, #0ea5e9);">&rarr;</div>
-                        <div>
-                            <h3>Vector Calculator</h3>
-                            <div class="tool-formula">Dot, cross, projection, angle &mdash; 2D &amp; 3D</div>
-                        </div>
-                    </div>
-                    <p>13 vector operations with step-by-step solutions. Dot product, cross product, projection, magnitude, and more for 2D and 3D.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/trigonometric-function-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #7c3aed;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">sin</div>
-                        <div>
-                            <h3>Trig Function Calculator</h3>
-                            <div class="tool-formula">Evaluate, quadrant, coterminal</div>
-                        </div>
-                    </div>
-                    <p>Evaluate all 6 trig functions at any angle. Find quadrants, reference angles, and coterminal angles with unit circle visualization.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/trigonometric-identity-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #7c3aed;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">&equiv;</div>
-                        <div>
-                            <h3>Trig Identity Calculator</h3>
-                            <div class="tool-formula">Browse &amp; prove identities</div>
-                        </div>
-                    </div>
-                    <p>Browse 8 categories of trig identities (Pythagorean, double angle, sum-to-product, etc.) and prove identities step-by-step.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-python">Prove</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/trigonometric-equation-solver.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #7c3aed;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">&theta;=</div>
-                        <div>
-                            <h3>Trig Equation Solver</h3>
-                            <div class="tool-formula">Equations, inequalities, simplify</div>
-                        </div>
-                    </div>
-                    <p>Solve trig equations and inequalities with step-by-step solutions. Simplify expressions and find general solutions with periodicity.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- ==================== STATISTICS ==================== -->
-        <section class="category">
-            <div class="category-header">
-                <span class="category-icon">&#128202;</span>
-                <h2>Statistics</h2>
-                <span class="category-count">21 tools</span>
-            </div>
-            <div class="tools-grid">
-                <a href="<%=request.getContextPath()%>/summary-statistics-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">&Sigma;x</div>
-                        <div>
-                            <h3>Summary Statistics Calculator</h3>
-                            <div class="tool-formula">Mean, median, mode, SD, quartiles, skewness</div>
-                        </div>
-                    </div>
-                    <p>Complete descriptive statistics with interactive histogram, box plot, frequency table, and Python scipy export.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/standard-deviation.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">&sigma;</div>
-                        <div>
-                            <h3>Standard Deviation Calculator</h3>
-                            <div class="tool-formula">Sample &amp; population SD, variance</div>
-                        </div>
-                    </div>
-                    <p>Calculate standard deviation and variance for sample and population data with step-by-step worked examples.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/mean-median-mode.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">x&#772;</div>
-                        <div>
-                            <h3>Mean, Median, Mode</h3>
-                            <div class="tool-formula">Central tendency measures</div>
-                        </div>
-                    </div>
-                    <p>Calculate mean, median, and mode with step-by-step solutions and visual comparison.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/variance-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">s&sup2;</div>
-                        <div>
-                            <h3>Variance Calculator</h3>
-                            <div class="tool-formula">Sample &amp; population variance</div>
-                        </div>
-                    </div>
-                    <p>Compute variance with step-by-step deviation calculations for both sample and population data.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/percentile-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">P<sub>k</sub></div>
-                        <div>
-                            <h3>Percentile Calculator</h3>
-                            <div class="tool-formula">Percentile rank &amp; value</div>
-                        </div>
-                    </div>
-                    <p>Find the percentile rank of a value or compute the value at a given percentile in your dataset.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/z-score-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">Z</div>
-                        <div>
-                            <h3>Z-Score Calculator</h3>
-                            <div class="tool-formula">z = (x &minus; &mu;) / &sigma;</div>
-                        </div>
-                    </div>
-                    <p>Calculate z-scores, find probabilities from the standard normal distribution, and look up z-table values.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/normal-distribution-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">N</div>
-                        <div>
-                            <h3>Normal Distribution Calculator</h3>
-                            <div class="tool-formula">PDF, CDF, inverse normal</div>
-                        </div>
-                    </div>
-                    <p>Compute probabilities for normal distributions. Find P(X &lt; a), P(a &lt; X &lt; b), and inverse normal values.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/binomial-distribution-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">B</div>
-                        <div>
-                            <h3>Binomial Distribution</h3>
-                            <div class="tool-formula">P(X=k) = C(n,k) p<sup>k</sup>(1-p)<sup>n-k</sup></div>
-                        </div>
-                    </div>
-                    <p>Compute binomial probabilities, cumulative distribution, expected value, and variance for Bernoulli trials.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/probability-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">P</div>
-                        <div>
-                            <h3>Probability Calculator</h3>
-                            <div class="tool-formula">Combinations, permutations, Bayes</div>
-                        </div>
-                    </div>
-                    <p>Calculate probabilities for events, combinations, permutations, and conditional probability with Bayes' theorem.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/confidence-interval-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">CI</div>
-                        <div>
-                            <h3>Confidence Interval Calculator</h3>
-                            <div class="tool-formula">x&#772; &plusmn; z &middot; s/&radic;n</div>
-                        </div>
-                    </div>
-                    <p>Compute confidence intervals for means and proportions at 90%, 95%, or 99% confidence levels.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/hypothesis-test-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">H<sub>0</sub></div>
-                        <div>
-                            <h3>Hypothesis Test Calculator</h3>
-                            <div class="tool-formula">z-test, t-test, p-value</div>
-                        </div>
-                    </div>
-                    <p>Perform one-sample and two-sample hypothesis tests with p-value computation and decision rules.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/t-test-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">t</div>
-                        <div>
-                            <h3>T-Test Calculator</h3>
-                            <div class="tool-formula">One-sample, two-sample, paired</div>
-                        </div>
-                    </div>
-                    <p>Perform t-tests for means comparison with degrees of freedom, critical values, and p-value interpretation.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/chi-square-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">&chi;&sup2;</div>
-                        <div>
-                            <h3>Chi-Square Calculator</h3>
-                            <div class="tool-formula">Goodness of fit &amp; independence</div>
-                        </div>
-                    </div>
-                    <p>Chi-square tests for goodness of fit and independence with observed vs expected comparison and p-values.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/anova-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">F</div>
-                        <div>
-                            <h3>ANOVA Calculator</h3>
-                            <div class="tool-formula">One-way analysis of variance</div>
-                        </div>
-                    </div>
-                    <p>Compare means across multiple groups with F-statistic, sum of squares, and post-hoc analysis.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/correlation-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">r</div>
-                        <div>
-                            <h3>Correlation Calculator</h3>
-                            <div class="tool-formula">Pearson r, Spearman &rho;</div>
-                        </div>
-                    </div>
-                    <p>Calculate Pearson and Spearman correlation coefficients with scatter plot and significance testing.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/linear-regression-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">y&#770;</div>
-                        <div>
-                            <h3>Linear Regression Calculator</h3>
-                            <div class="tool-formula">y = mx + b, R&sup2;</div>
-                        </div>
-                    </div>
-                    <p>Fit a least-squares regression line with slope, intercept, R-squared, residuals, and scatter plot.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/sample-size-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">n</div>
-                        <div>
-                            <h3>Sample Size Calculator</h3>
-                            <div class="tool-formula">n = (z&middot;&sigma;/E)&sup2;</div>
-                        </div>
-                    </div>
-                    <p>Determine the required sample size for surveys and experiments given confidence level, margin of error, and population size.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/effect-size-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">d</div>
-                        <div>
-                            <h3>Effect Size Calculator</h3>
-                            <div class="tool-formula">Cohen's d, &eta;&sup2;, Cramér's V</div>
-                        </div>
-                    </div>
-                    <p>Calculate Cohen's d, eta-squared, odds ratio, and other effect size measures with interpretation guidelines.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/standard-error-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">SE</div>
-                        <div>
-                            <h3>Standard Error Calculator</h3>
-                            <div class="tool-formula">SE = s / &radic;n</div>
-                        </div>
-                    </div>
-                    <p>Compute standard error of the mean, proportion, and difference between means with step-by-step formulas.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/outlier-detection-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">&#8861;</div>
-                        <div>
-                            <h3>Outlier Detection Calculator</h3>
-                            <div class="tool-formula">IQR, Z-score, Grubbs' test</div>
-                        </div>
-                    </div>
-                    <p>Detect outliers using IQR method, Z-score method, and Grubbs' test with step-by-step identification.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/p-value-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #e11d48;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #e11d48, #f43f5e);">p</div>
-                        <div>
-                            <h3>P-Value Calculator</h3>
-                            <div class="tool-formula">z, t, &chi;&sup2;, F distributions</div>
-                        </div>
-                    </div>
-                    <p>Calculate p-values from z-scores, t-statistics, chi-square, and F-statistics with one-tail and two-tail options.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Mid-page ad -->
-        <div class="math-ad-slot">
-            <%@ include file="../modern/ads/ad-in-content-mid.jsp" %>
         </div>
 
-        <!-- ==================== CALCULUS ==================== -->
-        <section class="category">
-            <div class="category-header">
-                <span class="category-icon">&#8747;</span>
-                <h2>Calculus</h2>
-                <span class="category-count">10 tools</span>
-            </div>
-            <div class="tools-grid">
-                <a href="<%=request.getContextPath()%>/graphing-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #8b5cf6;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">&#128200;</div>
-                        <div>
-                            <h3>Graphing Calculator</h3>
-                            <div class="tool-formula">Plot y=f(x), parametric, polar, implicit</div>
-                        </div>
-                    </div>
-                    <p>Plot Cartesian, parametric, polar, and implicit equations. Trace slopes, find intersections, animate sliders, export PNG/SVG. 35+ presets.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/derivative-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #059669;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #059669, #10b981);">d/dx</div>
-                        <div>
-                            <h3>Derivative Calculator</h3>
-                            <div class="tool-formula">f'(x), chain rule, product rule</div>
-                        </div>
-                    </div>
-                    <p>Differentiate any function with step-by-step application of differentiation rules. Supports higher-order derivatives.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/integral-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #4f46e5;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">&int;</div>
-                        <div>
-                            <h3>Integral Calculator</h3>
-                            <div class="tool-formula">&int;f(x)dx, definite &amp; indefinite</div>
-                        </div>
-                    </div>
-                    <p>Compute definite and indefinite integrals with step-by-step solutions using substitution, parts, and partial fractions.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/limit-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #9333ea;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #9333ea, #a855f7);">lim</div>
-                        <div>
-                            <h3>Limit Calculator</h3>
-                            <div class="tool-formula">lim f(x) as x &rarr; a</div>
-                        </div>
-                    </div>
-                    <p>Evaluate limits at a point or at infinity. Handles indeterminate forms with L'H&ocirc;pital's rule and step-by-step solutions.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/vector-calculus-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #0284c7;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #0284c7, #4f46e5);">&#8711;</div>
-                        <div>
-                            <h3>Vector Calculus Calculator</h3>
-                            <div class="tool-formula">&#8711;f, &#8711;&middot;F, &#8711;&times;F</div>
-                        </div>
-                    </div>
-                    <p>Compute gradient, divergence, and curl with step-by-step partial derivatives, 3D cone plots, and printable worksheets.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">3D Graph</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/laplace-transform-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #0891b2;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">&#8466;</div>
-                        <div>
-                            <h3>Laplace Transform Calculator</h3>
-                            <div class="tool-formula">L{f(t)} &harr; F(s), forward &amp; inverse</div>
-                        </div>
-                    </div>
-                    <p>Forward and inverse Laplace transforms with step-by-step solutions, partial fractions, ROC, and common pairs table.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/fourier-transform-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #7c3aed;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">&#8497;</div>
-                        <div>
-                            <h3>Fourier Transform Calculator</h3>
-                            <div class="tool-formula">F{f(t)} &harr; F(&omega;)</div>
-                        </div>
-                    </div>
-                    <p>Forward and inverse Fourier transforms with step-by-step solutions, frequency domain analysis, and common pairs table.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/z-transform-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #059669;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #059669, #10b981);">Z</div>
-                        <div>
-                            <h3>Z-Transform Calculator</h3>
-                            <div class="tool-formula">Z{x[n]} &harr; X(z)</div>
-                        </div>
-                    </div>
-                    <p>Forward and inverse Z-transforms with step-by-step solutions, ROC, stem plots, and common pairs table.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/bode-plot-generator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #dc2626;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444); font-size: 0.85rem; font-weight: 700;">H(s)</div>
-                        <div>
-                            <h3>Bode Plot Generator</h3>
-                            <div class="tool-formula">|H(j&omega;)| dB, &angle;H(j&omega;)&deg;</div>
-                        </div>
-                    </div>
-                    <p>Generate Bode magnitude and phase plots for transfer functions with step-by-step analysis and interactive graphs.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/convolution-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #d97706;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">&ast;</div>
-                        <div>
-                            <h3>Convolution Calculator</h3>
-                            <div class="tool-formula">(f&ast;g)(t) = &int;f(&tau;)g(t&minus;&tau;)d&tau;</div>
-                        </div>
-                    </div>
-                    <p>Compute continuous and discrete convolution with step-by-step solutions, interactive graphs, and properties table.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/finite-difference-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #0d9488;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">&Delta;</div>
-                        <div>
-                            <h3>Finite Difference Calculator</h3>
-                            <div class="tool-formula">&Delta;f = f(x+h) &minus; f(x)</div>
-                        </div>
-                    </div>
-                    <p>Compute finite difference approximations with forward, central, and backward methods. Symbolic, numerical, and weights modes.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/ode-solver-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #db2777;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #db2777, #f472b6); font-size: 0.85rem; font-weight: 700;">y'</div>
-                        <div>
-                            <h3>ODE Solver Calculator</h3>
-                            <div class="tool-formula">y' = f(x, y)</div>
-                        </div>
-                    </div>
-                    <p>Solve first and second-order ordinary differential equations with step-by-step solutions, direction field plots, and ODE classification.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/pde-solver-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #0891b2;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #0891b2, #06b6d4); font-size: 0.85rem; font-weight: 700;">&#8706;&#178;</div>
-                        <div>
-                            <h3>PDE Solver Calculator</h3>
-                            <div class="tool-formula">u_t = k u_xx, u_tt = c&#178;u_xx, &#8711;&#178;u = 0</div>
-                        </div>
-                    </div>
-                    <p>Solve heat equation, wave equation, and Laplace equation numerically with finite difference and 3D surface plots.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-graph">3D Plot</span>
-                        <span class="badge badge-python">Python</span>
-                        <span class="badge badge-new">New</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/series-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #2563eb;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">&Sigma;</div>
-                        <div>
-                            <h3>Taylor &amp; Maclaurin Series</h3>
-                            <div class="tool-formula">&Sigma; f<sup>(n)</sup>(a)/n! &middot; (x-a)<sup>n</sup></div>
-                        </div>
-                    </div>
-                    <p>Compute Taylor and Maclaurin series expansions with step-by-step derivatives and convergence analysis.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                        <span class="badge badge-graph">Graph</span>
-                        <span class="badge badge-python">Python</span>
-                    </div>
-                </a>
+        <!-- Visible FAQ — keep in sync with faqNq/faqNa jsp:params above.
+             Rendered markup reinforces the schema signal. -->
+        <section class="ms-faq-wrap" style="max-width:100%;margin-top:0;padding:0;">
+            <h2 class="ms-faq-title" id="faqs">Frequently asked</h2>
+            <div class="ms-faq" aria-label="Math calculators FAQ">
+                <div class="ms-faq-item">
+                    <button class="ms-faq-q" type="button">
+                        Are these math calculators free?
+                        <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="ms-faq-a">Yes, all 48 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification.</div>
+                </div>
+                <div class="ms-faq-item">
+                    <button class="ms-faq-q" type="button">
+                        Do the calculators show step-by-step solutions?
+                        <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="ms-faq-a">Yes, every calculator renders detailed step-by-step solutions using KaTeX math notation. Each step explains the formula applied and shows the intermediate calculation, so you learn the method, not just the answer.</div>
+                </div>
+                <div class="ms-faq-item">
+                    <button class="ms-faq-q" type="button">
+                        What math topics are covered?
+                        <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="ms-faq-a">We cover <strong>everyday math</strong> (percentages, significant figures), <strong>algebra</strong> (quadratic equations, linear systems, inequalities), <strong>21 statistics calculators</strong> (descriptive stats, hypothesis testing, regression, ANOVA), <strong>calculus</strong> (derivatives, integrals, limits, Taylor series), <strong>linear algebra</strong> (9 matrix calculators), <strong>trigonometry</strong>, logarithms, exponents, and graphing.</div>
+                </div>
+                <div class="ms-faq-item">
+                    <button class="ms-faq-q" type="button">
+                        Can I share or export results from these math calculators?
+                        <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="ms-faq-a">Yes. Most calculators support <strong>copy-to-clipboard</strong> (plain text or LaTeX), a <strong>shareable URL</strong> that reproduces your inputs, and <strong>PDF download</strong> where applicable. You can embed formulas directly into papers, homework, or lecture slides.</div>
+                </div>
+                <div class="ms-faq-item">
+                    <button class="ms-faq-q" type="button">
+                        Do these math calculators work on mobile?
+                        <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="ms-faq-a">Yes. Every calculator is mobile-responsive &mdash; the input UI adapts to narrow viewports and the step-by-step solutions remain fully readable on phones and tablets. The left sidebar collapses into a slide-in drawer on screens below 1024&nbsp;px.</div>
+                </div>
+                <div class="ms-faq-item">
+                    <button class="ms-faq-q" type="button">
+                        Is there a practice worksheet for these calculators?
+                        <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="ms-faq-a">Tools with a worksheet button (integral, derivative, quadratic, and more) open a bank of <strong>1000+ practice problems</strong> with full answer keys, organised by topic and difficulty. Perfect for AP, college, or self-study exam prep.</div>
+                </div>
             </div>
         </section>
 
-        <!-- ==================== LINEAR ALGEBRA ==================== -->
-        <section class="category">
-            <div class="category-header">
-                <span class="category-icon">&#9638;</span>
-                <h2>Linear Algebra (Matrices)</h2>
-                <span class="category-count">9 tools</span>
-            </div>
-            <div class="tools-grid">
-                <a href="<%=request.getContextPath()%>/matrix-determinant-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #6366f1;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">det</div>
-                        <div>
-                            <h3>Matrix Determinant</h3>
-                            <div class="tool-formula">det(A), 2&times;2 to 10&times;10</div>
-                        </div>
-                    </div>
-                    <p>Compute determinants of matrices up to 10&times;10 using cofactor expansion with step-by-step solutions.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
+    </section>
 
-                <a href="<%=request.getContextPath()%>/matrix-multiplication-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #2563eb;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">A&times;B</div>
-                        <div>
-                            <h3>Matrix Multiplication</h3>
-                            <div class="tool-formula">C = A &times; B</div>
-                        </div>
-                    </div>
-                    <p>Multiply matrices of any compatible dimensions with detailed element-by-element computation steps.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
+    <!-- Right ad rail (desktop ≥1280px only) -->
+    <aside class="ms-rail" aria-label="Advertisements">
+        <%@ include file="../modern/ads/ad-ide-rail-top.jsp" %>
+        <%@ include file="../modern/ads/ad-ide-rail-bottom.jsp" %>
+    </aside>
 
-                <a href="<%=request.getContextPath()%>/matrix-inverse-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #059669;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #059669, #10b981);">A<sup>-1</sup></div>
-                        <div>
-                            <h3>Matrix Inverse</h3>
-                            <div class="tool-formula">A<sup>&minus;1</sup> via Gauss-Jordan</div>
-                        </div>
-                    </div>
-                    <p>Find the inverse matrix using Gauss-Jordan elimination with row operation steps.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
+</main>
 
-                <a href="<%=request.getContextPath()%>/matrix-eigenvalue-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #d97706;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">&lambda;</div>
-                        <div>
-                            <h3>Eigenvalue Calculator</h3>
-                            <div class="tool-formula">&lambda; &amp; eigenvectors</div>
-                        </div>
-                    </div>
-                    <p>Compute eigenvalues and eigenvectors with characteristic polynomial and step-by-step solutions.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
+<%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
+<%@ include file="../modern/components/analytics.jsp" %>
 
-                <a href="<%=request.getContextPath()%>/matrix-rank-calculator.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #dc2626;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #dc2626, #f43f5e);">rank</div>
-                        <div>
-                            <h3>Matrix Rank</h3>
-                            <div class="tool-formula">rank(A) via row echelon</div>
-                        </div>
-                    </div>
-                    <p>Compute matrix rank using row echelon form with step-by-step row operations.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/matrix-addition-calculator.jsp" class="tool-card-link math-anim math-anim-d2" style="--card-accent: #0891b2;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">A+B</div>
-                        <div>
-                            <h3>Matrix Addition</h3>
-                            <div class="tool-formula">A+B, A&minus;B, cA, aA+bB</div>
-                        </div>
-                    </div>
-                    <p>Add, subtract, and scale matrices with element-wise computation steps.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/matrix-power-calculator.jsp" class="tool-card-link math-anim math-anim-d3" style="--card-accent: #9333ea;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #9333ea, #a855f7);">A<sup>n</sup></div>
-                        <div>
-                            <h3>Matrix Power</h3>
-                            <div class="tool-formula">A<sup>n</sup> with practice worksheet</div>
-                        </div>
-                    </div>
-                    <p>Compute matrix raised to any power with step-by-step multiplication and practice problems.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/matrix-transpose-calculator.jsp" class="tool-card-link math-anim math-anim-d4" style="--card-accent: #4f46e5;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #4f46e5, #6366f1);">A<sup>T</sup></div>
-                        <div>
-                            <h3>Matrix Transpose</h3>
-                            <div class="tool-formula">A<sup>T</sup> with practice worksheet</div>
-                        </div>
-                    </div>
-                    <p>Transpose matrices and verify properties like (AB)<sup>T</sup> = B<sup>T</sup>A<sup>T</sup> with steps.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-
-                <a href="<%=request.getContextPath()%>/matrix-type-classifier.jsp" class="tool-card-link math-anim math-anim-d1" style="--card-accent: #be185d;">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: linear-gradient(135deg, #be185d, #ec4899);">?</div>
-                        <div>
-                            <h3>Matrix Type Classifier</h3>
-                            <div class="tool-formula">20+ matrix types detected</div>
-                        </div>
-                    </div>
-                    <p>Identify symmetric, orthogonal, diagonal, identity, nilpotent, and 20+ other matrix types.</p>
-                    <div class="tool-badges">
-                        <span class="badge badge-steps">Steps</span>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Bottom ad -->
-        <div class="math-ad-slot">
-            <%@ include file="../modern/ads/ad-in-content-mid.jsp" %>
-        </div>
-
-        <!-- SEO Content -->
-        <section class="seo-content">
-            <h2>About Our Math Calculators</h2>
-            <p>Our math calculators help students, teachers, and professionals solve problems with detailed step-by-step solutions rendered in KaTeX. Each tool includes a built-in Python compiler so you can verify results programmatically.</p>
-
-            <h3>Quick Formula Reference</h3>
-            <div class="formula-grid">
-                <div class="formula-item">
-                    <strong>Percent Of</strong>
-                    <code>X% of Y = XY/100</code>
-                </div>
-                <div class="formula-item">
-                    <strong>Quadratic</strong>
-                    <code>x = (-b &plusmn; &radic;(b&sup2;-4ac)) / 2a</code>
-                </div>
-                <div class="formula-item">
-                    <strong>Exponent</strong>
-                    <code>a<sup>m</sup> &times; a<sup>n</sup> = a<sup>m+n</sup></code>
-                </div>
-                <div class="formula-item">
-                    <strong>Logarithm</strong>
-                    <code>log<sub>b</sub>(x) = ln(x)/ln(b)</code>
-                </div>
-                <div class="formula-item">
-                    <strong>Derivative</strong>
-                    <code>d/dx [x<sup>n</sup>] = nx<sup>n-1</sup></code>
-                </div>
-                <div class="formula-item">
-                    <strong>Integral</strong>
-                    <code>&int;x<sup>n</sup>dx = x<sup>n+1</sup>/(n+1)</code>
-                </div>
-                <div class="formula-item">
-                    <strong>Determinant 2&times;2</strong>
-                    <code>ad - bc</code>
-                </div>
-                <div class="formula-item">
-                    <strong>Taylor Series</strong>
-                    <code>&Sigma; f<sup>(n)</sup>(a)(x-a)<sup>n</sup>/n!</code>
-                </div>
-            </div>
-
-            <h3>Features</h3>
-            <ul>
-                <li><strong>Step-by-Step Solutions:</strong> Every calculator shows detailed solution steps with KaTeX-rendered math notation</li>
-                <li><strong>Python Compiler:</strong> Verify results with built-in Python code templates using SymPy</li>
-                <li><strong>LaTeX Export:</strong> Copy solutions as LaTeX for use in papers and homework</li>
-                <li><strong>Shareable URLs:</strong> Share specific calculations via encoded URL parameters</li>
-                <li><strong>Mobile Friendly:</strong> Responsive design works on all devices</li>
-                <li><strong>100% Free:</strong> No registration, no payment, no limits</li>
-            </ul>
-
-            <h3>For Students</h3>
-            <p>Whether you're studying for exams or working through homework, our calculators show you the method, not just the answer. Every step explains which formula or rule is being applied so you learn the underlying mathematics.</p>
-
-            <h3>For Teachers</h3>
-            <p>Generate worked examples for class, create practice problems, and demonstrate mathematical concepts with step-by-step breakdowns. The Python compiler lets students verify their work programmatically.</p>
-        </section>
-
-        <!-- FAQ (matches schema) -->
-        <section class="seo-content" style="margin-top:1.5rem;">
-            <h2 id="faqs">Frequently Asked Questions</h2>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Are these math calculators free?
-                    <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                <div class="faq-answer">Yes, all 48 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification.</div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Do the calculators show step-by-step solutions?
-                    <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                <div class="faq-answer">Yes, every calculator renders detailed step-by-step solutions using KaTeX math notation. Each step explains the formula applied and shows the intermediate calculation, so you learn the method, not just the answer.</div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    What math topics are covered?
-                    <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                <div class="faq-answer">We cover everyday math (percentages, significant figures), algebra (quadratic equations, linear systems, inequalities, polynomials, vectors, trigonometry), 21 statistics calculators (descriptive stats, hypothesis testing, regression, ANOVA, distributions, and more), calculus (derivatives, integrals, limits, Taylor series), and linear algebra (9 matrix calculators covering determinants, multiplication, inverse, eigenvalues, rank, and more).</div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="page-footer">
-        <div class="footer-content">
-            <p class="footer-text">&copy; 2026 8gwifi.org - Free Online Math Calculators</p>
-            <div class="footer-links">
-                <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
-                <a href="<%=request.getContextPath()%>/physics/" class="footer-link">Physics</a>
-                <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
-            </div>
-        </div>
-    </footer>
-
-    <%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
-
-    <!-- Dark mode & search -->
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
-
-    <!-- Scroll animations -->
-    <script>
-    (function(){
-        var els = document.querySelectorAll('.math-anim');
-        if (!els.length) return;
-        if (!('IntersectionObserver' in window)) {
-            for (var i = 0; i < els.length; i++) els[i].classList.add('math-visible');
-            return;
-        }
-        var obs = new IntersectionObserver(function(entries){
-            for (var j = 0; j < entries.length; j++) {
-                if (entries[j].isIntersecting) {
-                    entries[j].target.classList.add('math-visible');
-                    obs.unobserve(entries[j].target);
-                }
-            }
-        }, { threshold: 0.1 });
-        for (var k = 0; k < els.length; k++) obs.observe(els[k]);
-    })();
-    </script>
-
-    <!-- FAQ toggle -->
-    <script>
-    (function(){
-        var btns = document.querySelectorAll('.faq-question');
-        for (var i = 0; i < btns.length; i++) {
-            btns[i].addEventListener('click', function() {
-                this.parentElement.classList.toggle('open');
-            });
-        }
-    })();
-    </script>
-
-    <%@ include file="../modern/components/analytics.jsp" %>
+<script>
+    // FAQ toggle
+    document.querySelectorAll('.ms-faq-q').forEach(function (q) {
+        q.addEventListener('click', function () {
+            q.closest('.ms-faq-item').classList.toggle('open');
+        });
+    });
+</script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
 </body>
 </html>
