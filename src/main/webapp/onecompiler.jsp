@@ -2039,6 +2039,7 @@
                             </ul>
                         </div>
 
+                        <% if (!hasLanguageFaq) { %>
                         <!-- FAQ -->
                         <div class="ide-info-card">
                             <h2><i class="fas fa-question-circle"></i> FAQ</h2>
@@ -2047,6 +2048,7 @@
                             <p><strong>Execution time limit?</strong> Programs have a 30-second limit.</p>
                             <p><strong>Can I share code?</strong> Yes, click Share to get a unique URL.</p>
                         </div>
+                        <% } %>
 
                         <% if (request.getAttribute("seoIntroTitle") != null) { %>
                         <!-- Language-specific intro (from wrapper pages) -->
@@ -2059,7 +2061,7 @@
                         <% if (request.getAttribute("languageFaqHtml") != null) { %>
                         <!-- Language-specific FAQ (from wrapper pages) -->
                         <div class="ide-info-card">
-                            <h2><i class="fas fa-question-circle"></i> Language FAQ</h2>
+                            <h2><i class="fas fa-question-circle"></i> FAQ</h2>
                             <div><%= request.getAttribute("languageFaqHtml") %></div>
                         </div>
                         <% } %>
