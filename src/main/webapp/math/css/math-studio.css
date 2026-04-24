@@ -1,0 +1,1241 @@
+/*
+ * math-studio.css — editorial-calm layout shell for all math/ tool pages.
+ *
+ * Design direction (2026):
+ *   · Warm zinc/stone neutrals instead of cold slate/gray — reads as "paper"
+ *   · Soft multi-layer shadows replace hard 1px borders (panels float,
+ *     don't cage)
+ *   · Serif display (Instrument Serif) for H1/hero titles, Inter for body
+ *   · Generous radii (14–18px cards, 24px pill toggles) — less clinical
+ *   · Spring-easing transitions (cubic-bezier(0.2, 0.8, 0.2, 1))
+ *   · OKLCH-friendly accent — consistent lightness in dark mode
+ *   · Bento-style card groupings for learning content
+ *
+ * Grid (unchanged):
+ *     [ sidebar 264 ]  [ workspace flex ]  [ rail 300  (≥1280px only) ]
+ */
+
+:root {
+    /* Spacing / sizing */
+    --ms-sidebar-w: 272px;
+    --ms-rail-w: 300px;
+    --ms-gap: 1.5rem;
+    --ms-radius-sm: 8px;
+    --ms-radius: 14px;
+    --ms-radius-lg: 20px;
+    --ms-radius-pill: 999px;
+
+    /* Neutrals — warm zinc/stone, not cold gray */
+    --ms-page-bg: #f7f6f3;
+    --ms-panel-bg: #fefdfb;
+    --ms-panel-bg-soft: #faf8f4;
+    --ms-ink: #1c1917;
+    --ms-ink-soft: #44403c;
+    --ms-muted: #78716c;
+    --ms-line: rgba(28, 25, 23, 0.08);
+    --ms-line-strong: rgba(28, 25, 23, 0.14);
+
+    /* Accent — forest/sage (ink-friendly, printable, reads as "study") */
+    --ms-accent: #15803d;
+    --ms-accent-hover: #166534;
+    --ms-accent-soft: rgba(21, 128, 61, 0.08);
+    --ms-accent-softer: rgba(21, 128, 61, 0.04);
+    --ms-accent-ring: rgba(21, 128, 61, 0.22);
+
+    /* CTA gradient — green family, stays in the accent palette.  Two-stop
+       so the button has a subtle dimension without a chromatic clash. */
+    --ms-cta-start: #15803d;
+    --ms-cta-end: #22c55e;
+    --ms-cta-shadow: rgba(21, 128, 61, 0.22);
+
+    /* Shadows — multi-layer for a "paper on desk" feel */
+    --ms-shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.04),
+                    0 1px 3px rgba(28, 25, 23, 0.06);
+    --ms-shadow: 0 1px 3px rgba(28, 25, 23, 0.05),
+                 0 4px 12px rgba(28, 25, 23, 0.06);
+    --ms-shadow-lg: 0 2px 6px rgba(28, 25, 23, 0.05),
+                    0 12px 32px rgba(28, 25, 23, 0.08);
+    --ms-ring: 0 0 0 3px var(--ms-accent-ring);
+
+    /* Transitions */
+    --ms-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ms-transition: 200ms var(--ms-ease);
+
+    /* Typography */
+    --ms-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --ms-font-serif: 'Instrument Serif', 'Fraunces', 'Cambria', Georgia, serif;
+    --ms-font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+}
+
+[data-theme="dark"] {
+    --ms-page-bg: #0c0a09;
+    --ms-panel-bg: #1c1917;
+    --ms-panel-bg-soft: #292524;
+    --ms-ink: #f5f5f4;
+    --ms-ink-soft: #d6d3d1;
+    --ms-muted: #a8a29e;
+    --ms-line: rgba(245, 245, 244, 0.08);
+    --ms-line-strong: rgba(245, 245, 244, 0.14);
+
+    --ms-accent: #4ade80;
+    --ms-accent-hover: #86efac;
+    --ms-accent-soft: rgba(74, 222, 128, 0.1);
+    --ms-accent-softer: rgba(74, 222, 128, 0.05);
+    --ms-accent-ring: rgba(74, 222, 128, 0.28);
+
+    --ms-cta-start: #16a34a;
+    --ms-cta-end: #4ade80;
+    --ms-cta-shadow: rgba(74, 222, 128, 0.28);
+
+    --ms-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --ms-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3);
+    --ms-shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Body / page offset ─────────────────────────────────────────── */
+body.ms-body {
+    padding-top: var(--header-height-desktop, 72px);
+    background: var(--ms-page-bg);
+    color: var(--ms-ink);
+    font-family: var(--ms-font-sans);
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* The matter.js host is positioned absolute inside the body so it
+       scrolls with the page but stays behind all interactive content. */
+    position: relative;
+}
+
+/* ── Matter.js decorative backdrop ─────────────────────────────────
+   A soft physics scene behind the title + hero area.  Canvas is
+   absolute-positioned and masked to fade into the page below the
+   top ~720 px so the result card + learning band sit on a plain
+   background.  Other math tool pages inherit this by including
+   /math/partials/matter-bg.jsp. */
+.ms-matter-host {
+    position: absolute;
+    top: var(--header-height-desktop, 72px);
+    left: 0; right: 0;
+    height: 720px;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+    /* Fade toward transparency near the bottom so the scene dissolves
+       into the page.  Masked both native + webkit for Safari parity. */
+    -webkit-mask-image: linear-gradient(to bottom,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 45%,
+        rgba(0, 0, 0, 0.65) 75%,
+        rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to bottom,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 45%,
+        rgba(0, 0, 0, 0.65) 75%,
+        rgba(0, 0, 0, 0) 100%);
+}
+.ms-matter-host canvas { display: block; }
+
+@media (max-width: 899px) {
+    .ms-matter-host {
+        top: var(--header-height-mobile, 64px);
+        height: 520px;
+    }
+}
+
+/* Every interactive layer sits above the backdrop. */
+.ms-hero, .ms-main { position: relative; z-index: 1; }
+.ms-sidebar, .ms-rail { z-index: 5; }
+
+/* Respect the user's motion preference — hide the canvas entirely so
+   it doesn't waste pixels. */
+@media (prefers-reduced-motion: reduce) {
+    .ms-matter-host { display: none; }
+}
+@media (max-width: 899px) {
+    body.ms-body { padding-top: var(--header-height-mobile, 64px); }
+}
+
+/* ── Hero ad band (full-width above the grid) ──────────────────── */
+.ms-hero { max-width: 1440px; margin: 1rem auto; padding: 0 var(--ms-gap); }
+
+/* ── Three-column grid ──────────────────────────────────────────── */
+.ms-main {
+    max-width: 1440px;
+    margin: 1rem auto 3rem;
+    padding: 0 var(--ms-gap) 2rem;
+    display: grid;
+    grid-template-columns: var(--ms-sidebar-w) minmax(0, 1fr);
+    gap: var(--ms-gap);
+    align-items: start;
+}
+@media (min-width: 1280px) {
+    .ms-main {
+        grid-template-columns: var(--ms-sidebar-w) minmax(0, 1fr) var(--ms-rail-w);
+    }
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────── */
+.ms-sidebar {
+    background: var(--ms-panel-bg);
+    border-radius: var(--ms-radius);
+    padding: 0.75rem 0.5rem;
+    position: sticky;
+    top: calc(var(--header-height-desktop, 72px) + 12px);
+    max-height: calc(100vh - var(--header-height-desktop, 72px) - 28px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    box-shadow: var(--ms-shadow-sm);
+    border: 1px solid var(--ms-line);
+}
+
+.ms-sidebar-search {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.45rem 0.7rem;
+    margin: 0.25rem 0.25rem 0.6rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid transparent;
+    border-radius: var(--ms-radius-sm);
+    transition: border-color var(--ms-transition),
+                background var(--ms-transition);
+}
+.ms-sidebar-search:focus-within {
+    border-color: var(--ms-accent);
+    background: var(--ms-panel-bg);
+    box-shadow: var(--ms-ring);
+}
+.ms-sidebar-search input {
+    flex: 1; min-width: 0;
+    border: none; background: none; outline: none;
+    font: 13px var(--ms-font-sans);
+    color: var(--ms-ink);
+}
+.ms-sidebar-search::before {
+    content: ''; width: 14px; height: 14px; flex-shrink: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2378716c' stroke-width='1.8'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 3 3'/%3E%3C/svg%3E");
+    background-size: contain; background-repeat: no-repeat;
+}
+
+.ms-group { margin-bottom: 0.15rem; }
+.ms-group-header {
+    display: flex; align-items: center; gap: 0.45rem;
+    width: 100%; padding: 0.5rem 0.65rem;
+    background: none; border: none;
+    font: 600 10.5px var(--ms-font-sans);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ms-muted);
+    cursor: pointer;
+    border-radius: var(--ms-radius-sm);
+    transition: background var(--ms-transition), color var(--ms-transition);
+    text-align: left;
+}
+.ms-group-header:hover { background: var(--ms-accent-softer); color: var(--ms-ink); }
+.ms-group-chevron {
+    margin-left: auto; transition: transform var(--ms-transition);
+    font-size: 9px; color: var(--ms-muted);
+}
+.ms-group.collapsed .ms-group-chevron { transform: rotate(-90deg); }
+
+.ms-group-body {
+    display: flex; flex-direction: column;
+    padding: 0.15rem 0 0.25rem;
+    overflow: hidden;
+    max-height: 2400px;
+    transition: max-height 0.28s var(--ms-ease);
+}
+.ms-group.collapsed .ms-group-body { max-height: 0; padding: 0; }
+
+.ms-item {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0.42rem 0.65rem;
+    margin: 1px 0;
+    border-radius: var(--ms-radius-sm);
+    text-decoration: none;
+    color: var(--ms-ink);
+    font: 500 13.5px var(--ms-font-sans);
+    line-height: 1.25;
+    transition: background var(--ms-transition), color var(--ms-transition);
+}
+.ms-item:hover { background: var(--ms-accent-softer); color: var(--ms-accent); }
+.ms-item.active {
+    background: var(--ms-accent-soft);
+    color: var(--ms-accent);
+    font-weight: 600;
+}
+.ms-item-icon {
+    width: 24px; height: 24px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 6px; font-size: 12.5px;
+    background: var(--ms-panel-bg-soft);
+    color: var(--ms-ink-soft);
+    font-family: var(--ms-font-serif);
+    font-weight: 400;
+    transition: background var(--ms-transition), color var(--ms-transition);
+}
+.ms-item:hover .ms-item-icon { background: var(--ms-accent-soft); color: var(--ms-accent); }
+.ms-item.active .ms-item-icon { background: var(--ms-accent); color: #fff; }
+
+/* ── Workspace (middle column) ──────────────────────────────────── */
+.ms-workspace {
+    display: flex; flex-direction: column;
+    gap: var(--ms-gap);
+    min-width: 0;
+}
+.ms-card {
+    background: var(--ms-panel-bg);
+    border-radius: var(--ms-radius);
+    padding: 1.75rem;
+    box-shadow: var(--ms-shadow-sm);
+    border: 1px solid var(--ms-line);
+}
+
+/* ── Right rail ─────────────────────────────────────────────────── */
+.ms-rail {
+    position: sticky;
+    top: calc(var(--header-height-desktop, 72px) + 12px);
+    max-height: calc(100vh - var(--header-height-desktop, 72px) - 28px);
+    overflow-y: auto;
+    display: none;
+    flex-direction: column; gap: 1rem;
+    scrollbar-width: thin;
+}
+@media (min-width: 1280px) { .ms-rail { display: flex; } }
+
+.ms-inline-ad { margin: var(--ms-gap) 0; }
+@media (min-width: 1280px) { .ms-inline-ad { display: none; } }
+
+/* ── Mobile drawer ──────────────────────────────────────────────── */
+.ms-sidebar-toggle {
+    display: none;
+    padding: 0.55rem 0.9rem;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    box-shadow: var(--ms-shadow-sm);
+    font: 500 13px var(--ms-font-sans);
+    color: var(--ms-ink);
+    cursor: pointer;
+    transition: transform var(--ms-transition), box-shadow var(--ms-transition);
+}
+.ms-sidebar-toggle:hover { transform: translateY(-1px); box-shadow: var(--ms-shadow); }
+
+.ms-sidebar-backdrop {
+    display: none; position: fixed; inset: 0;
+    background: rgba(12, 10, 9, 0.55);
+    backdrop-filter: blur(3px);
+    z-index: 99;
+}
+
+@media (max-width: 1023px) {
+    .ms-main { grid-template-columns: minmax(0, 1fr); }
+    .ms-sidebar-toggle { display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
+    .ms-sidebar {
+        position: fixed; top: 0; left: 0; bottom: 0;
+        width: 300px; max-height: none;
+        border-radius: 0; z-index: 100;
+        transform: translateX(-102%);
+        transition: transform 0.25s var(--ms-ease);
+        box-shadow: 4px 0 32px rgba(0, 0, 0, 0.25);
+    }
+    .ms-sidebar.open { transform: translateX(0); }
+    .ms-sidebar-backdrop.open { display: block; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Stacked calculator layout (.ic-stack)
+   Reference pattern for math calculator pages.
+   ═══════════════════════════════════════════════════════════════════ */
+.ic-stack {
+    display: flex; flex-direction: column;
+    gap: var(--ms-gap);
+    min-width: 0;
+}
+
+/* ── Input hero ─────────────────────────────────────────────────── */
+.ic-hero {
+    background: var(--ms-panel-bg);
+    border-radius: var(--ms-radius-lg);
+    padding: 1.5rem 1.75rem;
+    box-shadow: var(--ms-shadow-sm);
+    border: 1px solid var(--ms-line);
+    position: relative;
+    overflow: hidden;
+}
+/* Subtle brand gradient on the top edge */
+.ic-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--ms-accent) 0%, var(--ms-cta-start) 50%, var(--ms-cta-end) 100%);
+    opacity: 0.7;
+}
+/* Note: deliberately NOT sticky on desktop.  A sticky hero + long
+   chip rows pushes the result card below the fold, so on click
+   users see "nothing happens".  Normal flow keeps input and result
+   both comfortably visible on a typical 900+ px viewport. */
+
+.ic-hero-top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+
+.ic-hero-top .ic-mode-toggle {
+    display: inline-flex; gap: 2px;
+    background: var(--ms-panel-bg-soft);
+    padding: 3px; border-radius: var(--ms-radius-pill);
+    border: 1px solid var(--ms-line);
+}
+.ic-hero-top .ic-mode-btn {
+    padding: 5px 14px; border: none; background: transparent;
+    color: var(--ms-muted);
+    font: 600 12px var(--ms-font-sans);
+    cursor: pointer; border-radius: var(--ms-radius-pill);
+    transition: color var(--ms-transition), background var(--ms-transition);
+}
+.ic-hero-top .ic-mode-btn:hover:not(.active) { color: var(--ms-ink); }
+.ic-hero-top .ic-mode-btn.active {
+    background: var(--ms-panel-bg);
+    color: var(--ms-accent);
+    box-shadow: var(--ms-shadow-sm);
+}
+.ic-hero-label-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 0.45rem; gap: 0.75rem;
+}
+.ic-hero-label-row .ic-expr-label {
+    font: 600 0.78rem var(--ms-font-sans);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ms-muted); margin: 0;
+}
+
+.ic-hero .ic-expr-wrap { margin: 0; }
+
+/* The math-field's own `display` property is controlled by
+   integral-calculator.css + the Visual/Text mode attribute the IIFE
+   sets on .ic-expr-wrap.  We ONLY override visual styling — never the
+   display property — otherwise the mode toggle stops hiding one input. */
+.ic-hero .ic-mathfield {
+    min-height: 56px;
+    padding: 0.85rem 1.1rem;
+    font-size: 1.2rem;
+    border: 1.5px solid var(--ms-line-strong);
+    border-radius: var(--ms-radius);
+    background: var(--ms-panel-bg-soft);
+    color: var(--ms-ink);
+    transition: border-color var(--ms-transition),
+                box-shadow var(--ms-transition),
+                background var(--ms-transition);
+}
+.ic-hero .ic-mathfield:focus-within {
+    border-color: var(--ms-accent);
+    background: var(--ms-panel-bg);
+    box-shadow: var(--ms-ring);
+}
+.ic-hero #ic-expr {
+    min-height: 48px;
+    padding: 0.7rem 0.95rem;
+    font: 15px var(--ms-font-mono);
+    border: 1.5px solid var(--ms-line-strong);
+    border-radius: var(--ms-radius);
+    background: var(--ms-panel-bg-soft);
+    color: var(--ms-ink);
+    width: 100%;
+    transition: border-color var(--ms-transition), box-shadow var(--ms-transition), background var(--ms-transition);
+}
+.ic-hero #ic-expr:focus {
+    outline: none;
+    border-color: var(--ms-accent);
+    background: var(--ms-panel-bg);
+    box-shadow: var(--ms-ring);
+}
+.ic-hero .ic-expr-hint { font-size: 0.76rem; margin-top: 0.4rem; color: var(--ms-muted); }
+.ic-hero .ic-expr-hint code {
+    background: var(--ms-panel-bg-soft);
+    padding: 1px 5px; border-radius: 4px;
+    font: 11px var(--ms-font-mono);
+    color: var(--ms-ink-soft);
+}
+
+/* Live preview strip — ONLY useful in Text mode.  In Visual mode the
+   <math-field> IS the WYSIWYG preview, so an extra "Preview" block
+   just duplicates what the user just typed.  We hide it by default
+   and reveal only when the IIFE flips the mode to text.
+
+   The IIFE sets data-input-mode on both .ic-expr-wrap (always) and on
+   the closest .tool-card-body OR the wrap's parentNode (fallback).
+   In our hero markup the parentNode IS .ic-hero, so we target that. */
+.ic-hero .ic-preview-strip {
+    margin-top: 0.65rem; padding: 0.7rem 0.9rem;
+    background: var(--ms-accent-softer);
+    border-left: 3px solid var(--ms-accent);
+    border-radius: 0 var(--ms-radius-sm) var(--ms-radius-sm) 0;
+    font-size: 0.95rem;
+    color: var(--ms-ink);
+    min-height: 2.25em;
+    display: none;  /* hidden by default (visual mode is the default) */
+    align-items: center;
+    gap: 0.6rem;
+}
+.ic-hero[data-input-mode="text"] .ic-preview-strip { display: flex; }
+.ic-hero .ic-preview-label {
+    color: var(--ms-muted);
+    font: 600 0.7rem var(--ms-font-sans);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    flex-shrink: 0;
+}
+
+/* Variable + bounds grid */
+.ic-hero-params {
+    display: grid;
+    grid-template-columns: minmax(110px, 180px);
+    gap: 0.75rem;
+    margin-top: 1rem;
+    align-items: end;
+    transition: grid-template-columns 0.25s var(--ms-ease);
+}
+.ic-hero-params.visible {
+    grid-template-columns: minmax(110px, 180px) 1fr 1fr;
+}
+@media (max-width: 480px) {
+    .ic-hero-params.visible { grid-template-columns: 1fr 1fr; }
+    .ic-hero-params.visible > .tool-form-group:first-child { grid-column: 1 / -1; }
+}
+.ic-hero-params .tool-form-group { margin: 0; }
+.ic-hero-params label {
+    display: block;
+    font: 600 0.72rem var(--ms-font-sans);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--ms-muted); margin-bottom: 0.3rem;
+}
+.ic-hero-params .tool-select,
+.ic-hero-params .tool-input {
+    width: 100%;
+    padding: 0.55rem 0.8rem;
+    border: 1.5px solid var(--ms-line-strong);
+    border-radius: var(--ms-radius-sm);
+    background: var(--ms-panel-bg-soft);
+    font: 14px var(--ms-font-sans);
+    color: var(--ms-ink);
+    transition: border-color var(--ms-transition), box-shadow var(--ms-transition), background var(--ms-transition);
+}
+.ic-hero-params .tool-select:focus,
+.ic-hero-params .tool-input:focus {
+    outline: none;
+    border-color: var(--ms-accent);
+    background: var(--ms-panel-bg);
+    box-shadow: var(--ms-ring);
+}
+.ic-hero-params .ic-bounds-group { display: none; }
+.ic-hero-params.visible .ic-bounds-group { display: block; }
+
+/* ── Button hierarchy (single source of truth) ──────────────────────
+   Tier 1 (primary):    solid accent pill, white text  — Integrate, Worksheet
+   Tier 2 (secondary):  ghost accent pill              — Copy LaTeX, Share, Show Steps, …
+   Tier 3 (toggles):    segment-pill card              — Indef/Def, Visual/Text, tabs
+   Tier 4 (reveal):     text-only toggle               — Syntax, Examples summary
+
+   All share: pill radius, same horizontal padding scale (0.5–0.6 rem
+   vertical, 1–1.5 rem horizontal), same spring transition.  Hierarchy
+   comes from FILL vs OUTLINE, not from size or gradient. */
+
+/* Tier 1 (primary): identical size/shape to Tier 2 ghost pills —
+   the only difference is fill color.  That's what makes the family
+   feel unified: one pill geometry, two fill states. */
+.ic-hero-cta {
+    margin-top: 1rem;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--ms-accent);
+    color: #fff;
+    border: 1px solid var(--ms-accent);
+    border-radius: var(--ms-radius-pill);
+    font: 500 0.82rem var(--ms-font-sans);
+    letter-spacing: 0;
+    cursor: pointer;
+    transition: background var(--ms-transition),
+                border-color var(--ms-transition),
+                transform 0.1s var(--ms-ease);
+}
+.ic-hero-cta:hover {
+    background: var(--ms-accent-hover);
+    border-color: var(--ms-accent-hover);
+    transform: translateY(-1px);
+}
+.ic-hero-cta:active { transform: translateY(0); }
+
+/* In-flight: spinner + dim + no pointer events.  Still keeps same
+   size and color family, just disabled. */
+.ic-hero-cta.is-busy {
+    pointer-events: none;
+    opacity: 0.7;
+    cursor: wait;
+    transform: none !important;
+}
+.ic-hero-cta.is-busy::after {
+    content: '';
+    display: inline-block;
+    width: 12px; height: 12px;
+    margin-left: 0.55rem;
+    vertical-align: -1px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: ms-spin 0.7s linear infinite;
+}
+@keyframes ms-spin { to { transform: rotate(360deg); } }
+
+/* Method-grouped examples — collapsed by default via native <details>.
+   Summary styled as a discreet text toggle matching Syntax help. */
+.ic-hero-methods {
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px dashed var(--ms-line);
+}
+.ic-hero-methods > .ic-hero-methods-summary {
+    /* Hide the default triangle marker — we render our own chevron. */
+    list-style: none;
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.35rem 0;
+    cursor: pointer;
+    color: var(--ms-muted);
+    font: 600 0.78rem var(--ms-font-sans);
+    transition: color var(--ms-transition);
+}
+.ic-hero-methods > .ic-hero-methods-summary::-webkit-details-marker { display: none; }
+.ic-hero-methods > .ic-hero-methods-summary::marker { content: ''; }
+.ic-hero-methods > .ic-hero-methods-summary:hover { color: var(--ms-accent); }
+.ic-hero-methods-chevron {
+    margin-left: auto;
+    width: 14px; height: 14px;
+    transition: transform 0.18s var(--ms-ease);
+}
+.ic-hero-methods[open] .ic-hero-methods-chevron { transform: rotate(180deg); }
+
+.ic-hero-methods-body {
+    display: flex; flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding: 0.85rem 0.95rem;
+    background: var(--ms-panel-bg-soft);
+    border-radius: var(--ms-radius-sm);
+}
+
+.ic-method-row {
+    display: flex; align-items: center; gap: 0.5rem;
+    overflow-x: auto; scrollbar-width: thin;
+    white-space: nowrap;
+}
+.ic-method-row::-webkit-scrollbar { height: 4px; }
+.ic-method-row::-webkit-scrollbar-thumb { background: var(--ms-line-strong); border-radius: 2px; }
+.ic-method-label {
+    flex-shrink: 0;
+    font: 600 0.7rem var(--ms-font-sans);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--ms-muted);
+    min-width: 5.5rem;
+}
+.ic-hero .ic-example-chip {
+    flex-shrink: 0;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--ms-line-strong);
+    border-radius: var(--ms-radius-pill);
+    background: var(--ms-panel-bg);
+    color: var(--ms-ink);
+    font: 500 13px var(--ms-font-mono);
+    cursor: pointer;
+    transition: border-color var(--ms-transition), background var(--ms-transition), color var(--ms-transition);
+}
+.ic-hero .ic-example-chip:hover {
+    border-color: var(--ms-accent);
+    background: var(--ms-accent-softer);
+    color: var(--ms-accent);
+}
+
+/* Collapsible syntax help */
+.ic-hero-syntax {
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px dashed var(--ms-line);
+}
+.ic-hero-syntax .ic-syntax-toggle {
+    display: flex; align-items: center; gap: 0.4rem;
+    width: 100%;
+    padding: 0.35rem 0;
+    background: none; border: none; cursor: pointer;
+    color: var(--ms-muted);
+    font: 600 0.78rem var(--ms-font-sans);
+    text-align: left;
+    transition: color var(--ms-transition);
+}
+.ic-hero-syntax .ic-syntax-toggle:hover { color: var(--ms-accent); }
+.ic-hero-syntax .ic-syntax-chevron {
+    margin-left: auto; width: 14px; height: 14px;
+    transition: transform 0.18s var(--ms-ease);
+}
+.ic-hero-syntax .ic-syntax-content.open + .ic-syntax-toggle .ic-syntax-chevron,
+.ic-hero-syntax .ic-syntax-toggle + .ic-syntax-content.open .ic-syntax-chevron { transform: rotate(180deg); }
+.ic-hero-syntax .ic-syntax-content {
+    display: none;
+    margin-top: 0.7rem;
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border-radius: var(--ms-radius-sm);
+    font: 0.82rem var(--ms-font-sans);
+    color: var(--ms-muted);
+    line-height: 1.65;
+}
+.ic-hero-syntax .ic-syntax-content.open { display: block; }
+.ic-hero-syntax .ic-syntax-content code {
+    background: var(--ms-panel-bg);
+    padding: 1px 5px; border-radius: 4px;
+    font: 11.5px var(--ms-font-mono);
+    color: var(--ms-ink-soft);
+    border: 1px solid var(--ms-line);
+}
+
+/* ── Result card ────────────────────────────────────────────────── */
+.ic-result-card {
+    background: var(--ms-panel-bg);
+    border-radius: var(--ms-radius-lg);
+    min-height: 440px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--ms-shadow-sm);
+    border: 1px solid var(--ms-line);
+}
+
+/* Tab bar — same pill segment control the Indef/Def + Visual/Text
+   toggles use.  One design language: all segmented UI feels related. */
+.ic-stack .ic-output-tabs {
+    display: inline-flex;
+    gap: 2px;
+    margin: 0.85rem 0.85rem 0;
+    padding: 3px;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-pill);
+    align-self: flex-start;
+}
+.ic-stack .ic-output-tab {
+    padding: 5px 14px;
+    background: transparent;
+    border: none;
+    color: var(--ms-muted);
+    font: 600 12px var(--ms-font-sans);
+    cursor: pointer;
+    border-radius: var(--ms-radius-pill);
+    transition: color var(--ms-transition), background var(--ms-transition);
+}
+.ic-stack .ic-output-tab:hover:not(.active) { color: var(--ms-ink); }
+.ic-stack .ic-output-tab.active {
+    background: var(--ms-panel-bg);
+    color: var(--ms-accent);
+    box-shadow: var(--ms-shadow-sm);
+}
+
+.ic-stack .ic-panel {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: none;
+    padding: 1.5rem;
+}
+.ic-stack .ic-panel.active { display: flex; flex-direction: column; }
+.ic-stack .ic-panel > .tool-card {
+    flex: 1; margin: 0;
+    box-shadow: none; border: none; padding: 0; background: transparent;
+}
+
+/* Result action buttons — both three-column-tool.css AND
+   integral-calculator.css set `.tool-action-btn { width: 100%;
+   background: gradient; margin-top: 1rem }` — those win on any tie
+   and there are two of them, so we use `!important` on the properties
+   that need to be guaranteed uniform across the four siblings.  The
+   rest of the styling (border, radius, hover) is regular — higher
+   specificity is enough there. */
+.ic-result-card .tool-result-actions {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    padding: 0.9rem 0 0;
+    margin: 0.9rem 0 0;
+    border-top: 1px solid var(--ms-line);
+}
+.ic-result-card .tool-result-actions .tool-action-btn,
+.ic-result-card .tool-result-actions .tool-action-btn:hover {
+    width: auto !important;
+    margin-top: 0 !important;
+}
+.ic-result-card .tool-result-actions .tool-action-btn {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    background: var(--ms-panel-bg-soft) !important;
+    color: var(--ms-ink-soft) !important;
+    border: 1px solid var(--ms-line-strong);
+    border-radius: var(--ms-radius-pill);
+    font: 500 0.82rem var(--ms-font-sans);
+    cursor: pointer;
+    box-shadow: none !important;
+    transform: none;
+    transition: color var(--ms-transition),
+                background var(--ms-transition),
+                border-color var(--ms-transition),
+                transform var(--ms-transition) !important;
+}
+.ic-result-card .tool-result-actions .tool-action-btn:hover {
+    background: var(--ms-accent-softer) !important;
+    border-color: var(--ms-accent);
+    color: var(--ms-accent) !important;
+    transform: translateY(-1px) !important;
+    opacity: 1 !important;
+}
+
+/* Worksheet CTA — Tier-1 primary, same solid-accent pill as Integrate. */
+.ic-result-card .ic-worksheet-cta {
+    padding: 1rem 0 0;
+    margin: 1rem 0 0;
+    border-top: 1px solid var(--ms-line);
+}
+.ic-result-card .ic-worksheet-cta .tool-action-btn {
+    width: auto !important;
+    display: inline-block !important;
+    margin-top: 0 !important;
+    padding: 0.5rem 1rem !important;
+    background: var(--ms-accent) !important;
+    color: #fff !important;
+    border: 1px solid var(--ms-accent) !important;
+    border-radius: var(--ms-radius-pill) !important;
+    font: 500 0.82rem var(--ms-font-sans) !important;
+    cursor: pointer;
+    box-shadow: none !important;
+    transition: background var(--ms-transition),
+                border-color var(--ms-transition),
+                transform 0.1s var(--ms-ease) !important;
+}
+.ic-result-card .ic-worksheet-cta .tool-action-btn:hover {
+    background: var(--ms-accent-hover) !important;
+    border-color: var(--ms-accent-hover) !important;
+    transform: translateY(-1px) !important;
+    opacity: 1 !important;
+}
+
+/* Icon button ("Scan from image") in the hero top row */
+.ic-hero .ic-image-btn {
+    padding: 0.45rem 0.85rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line-strong);
+    border-radius: var(--ms-radius-pill);
+    font: 500 12px var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    cursor: pointer;
+    transition: color var(--ms-transition), background var(--ms-transition), border-color var(--ms-transition);
+}
+.ic-hero .ic-image-btn:hover {
+    color: var(--ms-accent);
+    border-color: var(--ms-accent);
+    background: var(--ms-accent-softer);
+}
+
+/* Visual/Text pill toggle (matches Indef/Def look) */
+.ic-hero .ic-input-mode-toggle {
+    display: inline-flex; gap: 2px;
+    background: var(--ms-panel-bg-soft);
+    padding: 3px; border-radius: var(--ms-radius-pill);
+    border: 1px solid var(--ms-line);
+}
+.ic-hero .ic-input-mode-btn {
+    padding: 5px 12px; border: none; background: transparent;
+    color: var(--ms-muted);
+    font: 600 11.5px var(--ms-font-sans);
+    cursor: pointer; border-radius: var(--ms-radius-pill);
+    transition: color var(--ms-transition), background var(--ms-transition);
+}
+.ic-hero .ic-input-mode-btn:hover:not(.active) { color: var(--ms-ink); }
+.ic-hero .ic-input-mode-btn.active {
+    background: var(--ms-panel-bg);
+    color: var(--ms-accent);
+    box-shadow: var(--ms-shadow-sm);
+}
+
+/* Remove the big empty-state 🔧 illustration that three-column-tool.css
+   inserts (SVG icon 60×60 px).  Our 2026 empty state uses a large serif
+   ∫ glyph — two illustrations fighting for attention. */
+.ic-stack .tool-empty-state svg { display: none; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   Result content — injected by integral-calculator.js after Integrate.
+   The shared script writes classes like .ic-result-math, .ic-method-badge,
+   .ic-steps-btn etc. that integral-calculator.css styles with the legacy
+   indigo/purple `--tool-*` variables.  We re-skin every one of those
+   inside the new .ic-result-card scope so clicking Integrate doesn't
+   reveal a totally different color palette.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Main result wrapper */
+.ic-result-card .ic-result-math {
+    padding: 1.75rem 0 0;
+    text-align: center;
+}
+.ic-result-card .ic-result-math .katex-display {
+    margin: 0.5rem 0;
+    overflow-x: auto; overflow-y: hidden;
+}
+
+/* Section labels ("Integral", "Result", …) */
+.ic-result-card .ic-result-label {
+    font: 600 0.7rem var(--ms-font-sans) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ms-muted) !important;
+    margin-bottom: 0.45rem !important;
+}
+
+/* The primary KaTeX output (F(x) + C) */
+.ic-result-card .ic-result-main {
+    font-size: 1.4rem !important;
+    padding: 1.2rem 0 !important;
+    color: var(--ms-ink) !important;
+}
+
+/* Definite-integral numeric value strip — was purple gradient card,
+   now a subtle accent-tinted panel so it reads as "the number" without
+   stealing focus from the symbolic result above. */
+.ic-result-card .ic-result-numeric {
+    background: var(--ms-accent-soft) !important;
+    color: var(--ms-accent) !important;
+    padding: 1rem 1.25rem !important;
+    border-radius: var(--ms-radius) !important;
+    border: 1px solid var(--ms-accent-ring);
+    font: 600 1.3rem var(--ms-font-mono) !important;
+    margin: 0.9rem 0 !important;
+}
+
+/* Detail box that wraps the method badge */
+.ic-result-card .ic-result-detail {
+    background: transparent !important;
+    border: none !important;
+    padding: 0.25rem 0 0 !important;
+    margin-top: 1rem !important;
+}
+
+/* Method badge ("u-substitution", "Power rule", etc.) */
+.ic-result-card .ic-method-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    background: var(--ms-accent-soft) !important;
+    color: var(--ms-accent) !important;
+    padding: 0.25rem 0.75rem !important;
+    border-radius: var(--ms-radius-pill) !important;
+    border: 1px solid var(--ms-accent-ring);
+    font: 600 0.72rem var(--ms-font-sans) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Show Steps button — matches the secondary pill-ghost buttons */
+.ic-result-card .ic-steps-btn {
+    margin-top: 1rem !important;
+    padding: 0.55rem 1.1rem !important;
+    border: 1px solid var(--ms-accent) !important;
+    background: transparent !important;
+    color: var(--ms-accent) !important;
+    border-radius: var(--ms-radius-pill) !important;
+    font: 600 0.82rem var(--ms-font-sans) !important;
+    transition: background var(--ms-transition), color var(--ms-transition) !important;
+}
+.ic-result-card .ic-steps-btn:hover {
+    background: var(--ms-accent) !important;
+    color: #fff !important;
+}
+.ic-result-card .ic-steps-btn.loading {
+    opacity: 0.65 !important;
+    pointer-events: none;
+}
+
+/* Steps panel (revealed after "Show Steps") */
+.ic-result-card .ic-steps-container {
+    margin-top: 1.1rem !important;
+    border: 1px solid var(--ms-line) !important;
+    border-radius: var(--ms-radius) !important;
+    overflow: hidden;
+    background: var(--ms-panel-bg-soft);
+    text-align: left;
+}
+.ic-result-card .ic-steps-header {
+    padding: 0.7rem 1.1rem !important;
+    background: var(--ms-accent-soft) !important;
+    border-bottom: 1px solid var(--ms-line) !important;
+    color: var(--ms-accent) !important;
+    font: 600 0.78rem var(--ms-font-sans) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.ic-result-card .ic-step {
+    padding: 0.9rem 1.1rem !important;
+    border-bottom: 1px solid var(--ms-line) !important;
+    display: flex; gap: 0.9rem;
+    align-items: flex-start;
+}
+.ic-result-card .ic-step:last-child { border-bottom: none !important; }
+.ic-result-card .ic-step-num {
+    width: 26px !important; height: 26px !important;
+    background: var(--ms-accent) !important;
+    color: #fff !important;
+    font: 700 0.72rem var(--ms-font-sans) !important;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.ic-result-card .ic-step-title {
+    font: 600 0.75rem var(--ms-font-sans) !important;
+    color: var(--ms-ink-soft) !important;
+    margin-bottom: 0.35rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.ic-result-card .ic-step-math {
+    font-size: 1.02rem !important;
+    color: var(--ms-ink) !important;
+}
+.ic-result-card .ic-step-math .katex-display {
+    margin: 0 !important;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Step-by-step (from the SymPy steps path) — same classes rendered
+   with a slightly different wrapper pattern.  Re-using our tokens. */
+.ic-result-card .ic-result-step {
+    padding: 0.85rem 0 !important;
+    border-bottom: 1px solid var(--ms-line) !important;
+}
+.ic-result-card .ic-result-step:last-child { border-bottom: none !important; }
+.ic-result-card .ic-result-step-title {
+    font: 600 0.72rem var(--ms-font-sans) !important;
+    color: var(--ms-muted) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem !important;
+}
+
+/* Error state — yellow/amber was jarring, use a softer warning tone */
+.ic-result-card .ic-error {
+    background: #fef7ed !important;
+    border: 1px solid #fdba74 !important;
+    border-radius: var(--ms-radius) !important;
+    padding: 1.25rem !important;
+    color: #9a3412 !important;
+    text-align: left;
+}
+.ic-result-card .ic-error h4 {
+    font: 600 0.92rem var(--ms-font-sans) !important;
+    margin: 0 0 0.5rem !important;
+}
+.ic-result-card .ic-error ul {
+    margin: 0.5rem 0 0 !important;
+    font-size: 0.85rem !important;
+    line-height: 1.65;
+}
+[data-theme="dark"] .ic-result-card .ic-error {
+    background: rgba(251, 146, 60, 0.08) !important;
+    border-color: rgba(251, 146, 60, 0.3) !important;
+    color: #fdba74 !important;
+}
+
+/* Spinner used by loading states */
+.ic-result-card .ic-spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: ms-spin 0.7s linear infinite;
+    vertical-align: -2px;
+    margin-right: 0.35rem;
+}
+
+/* Empty state — friendly, descriptive */
+.ic-empty-state {
+    padding: 3rem 1.5rem !important;
+    text-align: center;
+}
+.ic-empty-illustration {
+    font-family: var(--ms-font-serif);
+    font-size: 5.5rem;
+    line-height: 1;
+    color: var(--ms-accent);
+    opacity: 0.45;
+    margin-bottom: 0.5rem;
+}
+.ic-empty-state h3 {
+    font: 400 1.5rem var(--ms-font-serif);
+    margin: 0 0 0.5rem;
+    color: var(--ms-ink);
+}
+.ic-empty-state p {
+    max-width: 420px; margin: 0 auto;
+    color: var(--ms-muted); font-size: 0.92rem;
+    line-height: 1.6;
+}
+.ic-empty-preview {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 1rem;
+    padding: 0.4rem 0.85rem;
+    background: var(--ms-accent-softer);
+    color: var(--ms-accent);
+    border-radius: var(--ms-radius-pill);
+    font: 600 0.78rem var(--ms-font-sans);
+}
+
+/* ── FAQ accordion (shared across math tool + index pages) ─────
+   Matches the 2026 editorial tone: no cards, just type with a
+   hairline between items.  Chevron rotates on open. */
+.ms-faq {
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    padding: 0.5rem 1.25rem;
+    box-shadow: var(--ms-shadow-sm);
+}
+.ms-faq-title {
+    font: 400 1.35rem var(--ms-font-serif);
+    letter-spacing: -0.015em;
+    color: var(--ms-ink);
+    margin: 0.75rem 0 0.25rem;
+}
+.ms-faq-item { border-bottom: 1px solid var(--ms-line); }
+.ms-faq-item:last-child { border-bottom: none; }
+.ms-faq-q {
+    width: 100%; background: none; border: none; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: 1rem 0;
+    font: 500 0.98rem var(--ms-font-sans);
+    color: var(--ms-ink); text-align: left;
+    transition: color var(--ms-transition);
+}
+.ms-faq-q:hover { color: var(--ms-accent); }
+.ms-faq-chevron {
+    width: 16px; height: 16px;
+    color: var(--ms-muted);
+    transition: transform var(--ms-transition);
+    flex-shrink: 0;
+}
+.ms-faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s var(--ms-ease), padding 0.3s var(--ms-ease);
+    color: var(--ms-ink-soft); line-height: 1.65;
+    font-size: 0.93rem; padding: 0;
+}
+.ms-faq-item.open .ms-faq-a { max-height: 700px; padding: 0 0 1rem; }
+.ms-faq-item.open .ms-faq-chevron { transform: rotate(180deg); color: var(--ms-accent); }
+
+/* ── Methods reference band ─────────────────────────────────────
+   Supporting content — intentionally lighter than the hero/result.
+   Borderless, flat, one-line formulas. Reads as a reference strip,
+   not a third pane competing with the tool. */
+.ic-learn {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+@media (max-width: 899px) { .ic-learn { grid-template-columns: 1fr; } }
+.ic-learn-card {
+    background: transparent;
+    border: 1px dashed var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: border-color var(--ms-transition), background var(--ms-transition);
+}
+.ic-learn-card:hover {
+    border-color: var(--ms-line-strong);
+    background: var(--ms-panel-bg-soft);
+}
+.ic-learn-method {
+    font: 600 0.68rem var(--ms-font-sans);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.ic-learn-formula {
+    font: 0.88rem var(--ms-font-mono);
+    color: var(--ms-ink);
+    padding: 0;
+    background: none;
+    border: none;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* ── Slim title row — no card, just type ───────────────────────── */
+.ms-title { padding: 0.25rem 0.25rem 0.5rem; }
+.ms-crumbs {
+    display: flex; align-items: center; gap: 0.35rem;
+    font: 0.78rem var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin-bottom: 0.15rem;
+}
+.ms-crumbs a {
+    color: var(--ms-muted);
+    text-decoration: none;
+    transition: color var(--ms-transition);
+}
+.ms-crumbs a:hover { color: var(--ms-accent); }
+.ms-crumbs span[aria-current="page"] { color: var(--ms-ink); font-weight: 500; }
+.ms-title h1 {
+    margin: 0;
+    font: 400 2rem var(--ms-font-serif);
+    color: var(--ms-ink);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+@media (max-width: 899px) { .ms-title h1 { font-size: 1.5rem; } }
+
+/* ── Mobile trims ───────────────────────────────────────────────── */
+@media (max-width: 899px) {
+    .ic-hero { position: static !important; padding: 1.15rem; }
+    .ic-hero .ic-mathfield { min-height: 46px !important; font-size: 1.05rem !important; }
+    .ic-result-card { min-height: 340px; }
+    .ic-stack .ic-panel { padding: 1rem; }
+    .ms-tool-header { padding: 1.15rem; }
+    .ms-tool-header h1 { font-size: 1.4rem; }
+}
+
+/* ── Print styles — teachers & students printing results ───────── */
+@media print {
+    body.ms-body {
+        padding-top: 0 !important;
+        background: #fff !important; color: #000 !important;
+    }
+    .modern-nav,
+    .ms-sidebar,
+    .ms-rail,
+    .ms-hero,
+    .ms-inline-ad,
+    .ms-sidebar-toggle,
+    .ms-sidebar-backdrop,
+    .ad-lab-sticky,
+    .ad-hero-banner,
+    [class*="ad-"],
+    .ic-hero-methods,
+    .ic-hero-syntax,
+    .ic-output-tabs,
+    .tool-result-actions,
+    #ic-worksheet-btn,
+    footer { display: none !important; }
+    .ms-main { grid-template-columns: 1fr !important; margin: 0; padding: 0; }
+    .ic-hero, .ic-result-card, .ms-tool-header, .ic-learn-card {
+        box-shadow: none !important; border: 1px solid #000 !important;
+        page-break-inside: avoid;
+    }
+    .ic-hero::before { display: none !important; }
+    .ic-panel { display: block !important; }
+    .ic-panel:not(.active) { display: none !important; }  /* only print active tab */
+    a { color: #000 !important; text-decoration: none; }
+    h1, h2, h3 { font-family: Georgia, serif !important; }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
