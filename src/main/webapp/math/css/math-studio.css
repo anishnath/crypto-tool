@@ -539,8 +539,37 @@ body.ms-body {
 /* Tier 1 (primary): identical size/shape to Tier 2 ghost pills —
    the only difference is fill color.  That's what makes the family
    feel unified: one pill geometry, two fill states. */
-.ic-hero-cta {
+/* CTA + inline warning row.  The warning slot sits to the right of the
+   Integrate button and fills in only when validation fails (e.g. empty
+   input).  It shakes once so the user notices, then clears on the next
+   keystroke or successful submit. */
+.ic-hero-cta-row {
     margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+.ic-hero-warn {
+    font: 500 0.82rem var(--ms-font-sans);
+    color: #b91c1c;
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity var(--ms-transition), transform var(--ms-transition);
+}
+.ic-hero-warn.show {
+    opacity: 1;
+    transform: none;
+    animation: ms-shake 0.35s var(--ms-ease);
+}
+[data-theme="dark"] .ic-hero-warn { color: #fca5a5; }
+@keyframes ms-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+.ic-hero-cta {
     display: inline-block;
     padding: 0.5rem 1rem;
     background: var(--ms-accent);
@@ -560,6 +589,22 @@ body.ms-body {
     transform: translateY(-1px);
 }
 .ic-hero-cta:active { transform: translateY(0); }
+
+/* Disabled state — button has no value to act on yet.  Faded, muted,
+   cursor indicates "not available".  We use a class (not the native
+   disabled attribute) so the button still renders with hover/focus
+   affordances during transition; pointer-events:none fully blocks
+   clicks until valid input arrives. */
+.ic-hero-cta.is-disabled,
+.ic-hero-cta.is-disabled:hover {
+    background: var(--ms-panel-bg-soft);
+    color: var(--ms-muted);
+    border-color: var(--ms-line-strong);
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none;
+    box-shadow: none;
+}
 
 /* In-flight: spinner + dim + no pointer events.  Still keeps same
    size and color family, just disabled. */

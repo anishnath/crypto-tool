@@ -187,8 +187,14 @@
                     </div>
                 </div>
 
-                <!-- Primary CTA -->
-                <button type="button" class="ic-hero-cta" id="ic-integrate-btn">Integrate</button>
+                <!-- Primary CTA.  Starts disabled (.is-disabled) because the
+                     input is empty on first paint — the placeholder is purely
+                     visual.  The inline script below enables it on the first
+                     keystroke / chip click. -->
+                <div class="ic-hero-cta-row">
+                    <button type="button" class="ic-hero-cta is-disabled" id="ic-integrate-btn" aria-disabled="true">Integrate</button>
+                    <span class="ic-hero-warn" id="ic-integrate-warn" role="alert" aria-live="polite"></span>
+                </div>
 
                 <!-- Examples by method — collapsed by default.  Native
                      <details> is the simplest, accessible choice; the
@@ -433,10 +439,23 @@
      Zero change to the shared integral-calculator.js — pure UI layer. -->
 <script>
     (function () {
+        // Debug switch — set window.__IC_DEBUG = true in the console OR
+        // load the page with ?ic_debug=1 to see the enable/disable state
+        // traced step by step.  All logs are prefixed [ic-debug] so they're
+        // easy to filter or grep from a pasted console output.
+        if (/[?&]ic_debug=1/.test(window.location.search)) window.__IC_DEBUG = true;
+        if (window.__IC_DEBUG) console.log('[ic-debug] IIFE starting');
+
         var btn = document.getElementById('ic-integrate-btn');
-        var target = document.getElementById('ic-panel-result');
+        var scrollTarget = document.getElementById('ic-panel-result');
         var resultContent = document.getElementById('ic-result-content');
-        if (!btn || !target || !resultContent) return;
+        if (!btn || !scrollTarget || !resultContent) {
+            if (window.__IC_DEBUG) {
+                console.log('[ic-debug] IIFE bail — missing element',
+                    'btn=', !!btn, 'scrollTarget=', !!scrollTarget, 'resultContent=', !!resultContent);
+            }
+            return;
+        }
 
         var safetyTimer = null;
         var resultObserver = null;
@@ -464,17 +483,147 @@
         // another handler is already running.  The button has no native
         // `disabled` state because we don't want the label to change —
         // just the visual busy indicator.
+        // Empty-input validation runs BEFORE lock.  The shared script also
+        // checks this, but a toast is easy to miss and `.is-busy` would
+        // otherwise hold for the full 30 s safety window.  We surface the
+        // warning inline next to the button and bail early.
+        var exprInput = document.getElementById('ic-expr');
+        var mathField = document.getElementById('ic-mathfield');
+        var warnEl    = document.getElementById('ic-integrate-warn');
+
+        function currentExpression() {
+            // #ic-expr is the canonical source; shared script mirrors
+            // math-field → #ic-expr with dispatched `input` events.
+            var v = exprInput ? (exprInput.value || '').trim() : '';
+            if (window.__IC_DEBUG) {
+                var mfVal = '(no mathField)';
+                if (mathField && typeof mathField.getValue === 'function') {
+                    try { mfVal = mathField.getValue('ascii-math'); } catch (e) { mfVal = 'THROW: ' + e.message; }
+                }
+                console.log('[ic-debug] currentExpression()',
+                    'exprInput.value=', JSON.stringify(exprInput && exprInput.value),
+                    'trimmed=', JSON.stringify(v),
+                    'mathField.getValue=', JSON.stringify(mfVal));
+            }
+            return v;
+        }
+
+        function showWarn(msg) {
+            if (!warnEl) return;
+            warnEl.textContent = msg;
+            warnEl.classList.remove('show');
+            // Force a reflow so the animation restarts on repeated clicks.
+            void warnEl.offsetWidth;
+            warnEl.classList.add('show');
+        }
+        function clearWarn() {
+            if (warnEl) {
+                warnEl.classList.remove('show');
+                warnEl.textContent = '';
+            }
+        }
+
+        // Enable/disable the Integrate button based on whether there's any
+        // actual input.  Starts disabled (set in HTML); we flip it live as
+        // the user types, pastes, or clicks a Quick Example chip.
+        function updateEnableState(reason) {
+            var expr = currentExpression();
+            var hasValue = !!expr;
+            var wasDisabled = btn.classList.contains('is-disabled');
+            btn.classList.toggle('is-disabled', !hasValue);
+            btn.setAttribute('aria-disabled', hasValue ? 'false' : 'true');
+            if (window.__IC_DEBUG) {
+                console.log('[ic-debug] updateEnableState',
+                    'reason=', reason || '(direct)',
+                    'expr=', JSON.stringify(expr),
+                    'hasValue=', hasValue,
+                    'classList=', btn.className,
+                    'was->now=', (wasDisabled ? 'disabled' : 'enabled') + ' -> ' + (hasValue ? 'enabled' : 'disabled'));
+            }
+        }
+
+        // Keystroke in either input: clear stale warning + refresh enable state.
+        function onInput(ev) {
+            if (window.__IC_DEBUG) {
+                console.log('[ic-debug] input event on', ev && ev.target && ev.target.id,
+                    'value=', JSON.stringify(ev && ev.target && ev.target.value));
+            }
+            clearWarn();
+            updateEnableState('input:' + (ev && ev.target && ev.target.id));
+        }
+        if (exprInput) exprInput.addEventListener('input', onInput);
+        if (mathField) mathField.addEventListener('input', onInput);
+
+        // Chip click populates the input via the shared script — which uses
+        // a native value-setter that does NOT fire the 'input' event.  We
+        // re-check on a short delay so the next tick's value is visible.
+        document.addEventListener('click', function (e) {
+            if (!e.target || !e.target.closest) return;
+            if (e.target.closest('.ic-example-chip')) {
+                if (window.__IC_DEBUG) console.log('[ic-debug] chip clicked, scheduling re-check');
+                setTimeout(function () { updateEnableState('chip'); }, 30);
+            }
+        }, true);
+
+        // Image-scan and URL-param paths also populate input then programmatically
+        // click Integrate.  Mode toggles can affect the mathfield visibility.
+        // Cheap safety net: re-check on any mode-toggle or input-mode-toggle click.
+        document.querySelectorAll('.ic-mode-btn, .ic-input-mode-btn').forEach(function (b) {
+            b.addEventListener('click', function () {
+                setTimeout(function () { updateEnableState('mode-btn'); }, 40);
+            });
+        });
+
+        // First paint — inputs may already be populated by URL param.
+        if (window.__IC_DEBUG) {
+            console.log('[ic-debug] IIFE end, firing initial updateEnableState');
+            console.log('[ic-debug]   exprInput found?', !!exprInput, 'id=', exprInput && exprInput.id);
+            console.log('[ic-debug]   mathField found?', !!mathField, 'id=', mathField && mathField.id);
+            console.log('[ic-debug]   mathField.getValue is function?', !!(mathField && typeof mathField.getValue === 'function'));
+            console.log('[ic-debug]   button initial className=', btn.className);
+        }
+        updateEnableState('initial-load');
+
+        // Extra diagnostic: log when the button actually gets clicked.
         btn.addEventListener('click', function (e) {
+            if (window.__IC_DEBUG) {
+                console.log('[ic-debug] BUTTON CLICK received',
+                    'is-disabled=', btn.classList.contains('is-disabled'),
+                    'is-busy=', btn.classList.contains('is-busy'),
+                    'expr=', JSON.stringify(currentExpression()));
+            }
+        }, false);
+
+        // Attach validation on DOCUMENT in capture phase — this ensures we
+        // fire BEFORE the shared script's bubble-phase handler on the button.
+        // (The `useCapture=true` flag only truly affects ancestors; listeners
+        // on the target itself run in registration order regardless of phase,
+        // and the shared script registered first.  Attaching higher up in the
+        // tree puts us genuinely in the capture cascade.)
+        document.addEventListener('click', function (e) {
+            var target = e.target && e.target.closest ? e.target.closest('#ic-integrate-btn') : null;
+            if (!target) return;
+
             if (btn.classList.contains('is-busy')) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                return false;
+                return;
             }
+            if (!currentExpression()) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                showWarn('Enter a function first — try a chip below.');
+                var focusEl = mathField && mathField.offsetParent !== null ? mathField : exprInput;
+                if (focusEl && typeof focusEl.focus === 'function') focusEl.focus();
+                return;
+            }
+            // Valid input — let the shared doIntegrate handler proceed.
+            // Engage busy state + smooth-scroll to result.
+            clearWarn();
             lock();
-            // Scroll AFTER render, not immediately, so the result is in place.
-            if (target.scrollIntoView) {
+            if (scrollTarget.scrollIntoView) {
                 setTimeout(function () {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 140);
             }
         }, true);
