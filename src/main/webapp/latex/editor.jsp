@@ -362,6 +362,7 @@
 <script src="<%=ctx%>/modern/js/speech-to-text.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/latex/static/js/ai.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/latex/static/js/image-to-latex.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/latex/static/js/chem-insert.js?v=<%=jsV%>"></script>
 
 </body>
 </html>

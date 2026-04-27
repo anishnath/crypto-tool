@@ -445,6 +445,49 @@
 .sel-popup button[data-sel-action="move-to-file"]:hover {
   background: #0891b2; color: #fff;
 }
+/* Chemistry "Render" dropdown trigger */
+.sel-popup .sel-mol-btn {
+  color: #34d399;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.sel-popup .sel-mol-btn:hover { background: #059669; color: #fff; }
+.sel-popup .sel-mol-caret { font-size: 0.7em; opacity: 0.85; }
+
+/* Submenu — opens below the trigger */
+.sel-mol-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 220px;
+  background: var(--surface2, #1e293b);
+  border: 1px solid var(--border, #334155);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+  padding: 4px;
+  display: none;
+  z-index: 10000;
+}
+.sel-mol-wrap.open .sel-mol-menu { display: block; }
+.sel-mol-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #e2e8f0;
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.3;
+}
+.sel-mol-menu button b { display: block; font-weight: 600; font-size: 0.85rem; color: #34d399; }
+.sel-mol-menu button span { display: block; font-size: 0.72rem; opacity: 0.65; margin-top: 2px; }
+.sel-mol-menu button:hover { background: rgba(52, 211, 153, 0.15); }
+.sel-mol-menu button:hover b { color: #6ee7b7; }
+.sel-mol-menu button:hover span { opacity: 0.9; }
 
 /* Light theme */
 [data-theme="light"] .sel-popup {
@@ -459,3 +502,14 @@
 [data-theme="light"] .sel-lang-picker option { background: #fff; color: #334155; }
 [data-theme="light"] .sel-popup button[data-sel-action="move-to-file"] { color: #0891b2; }
 [data-theme="light"] .sel-popup button[data-sel-action="move-to-file"]:hover { background: #0891b2; color: #fff; }
+[data-theme="light"] .sel-popup .sel-mol-btn { color: #059669; }
+[data-theme="light"] .sel-popup .sel-mol-btn:hover { background: #059669; color: #fff; }
+[data-theme="light"] .sel-mol-menu {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 12px 28px rgba(15,23,42,0.12);
+}
+[data-theme="light"] .sel-mol-menu button { color: #1e293b; }
+[data-theme="light"] .sel-mol-menu button b { color: #059669; }
+[data-theme="light"] .sel-mol-menu button:hover { background: rgba(5, 150, 105, 0.10); }
+[data-theme="light"] .sel-mol-menu button:hover b { color: #047857; }

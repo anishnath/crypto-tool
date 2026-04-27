@@ -486,13 +486,31 @@ function createSelPopup() {
     '  </select>' +
     '</div>' +
     '<span class="sel-divider"></span>' +
-    '<button data-sel-action="move-to-file" title="Extract to separate .tex file">Move to File</button>';
+    '<button data-sel-action="move-to-file" title="Extract to separate .tex file">Move to File</button>' +
+    '<span class="sel-divider sel-mol-sep" style="display:none"></span>' +
+    '<div class="sel-mol-wrap" style="display:none;position:relative">' +
+    '  <button data-sel-action="render-mol-toggle" class="sel-mol-btn" title="Render molecular structure from \\ce{...}">&#9883; Render <span class="sel-mol-caret">&#9662;</span></button>' +
+    '  <div class="sel-mol-menu" role="menu">' +
+    '    <button data-sel-action="render-mol" data-mol-mode="lewis" role="menuitem"><b>Lewis dot structure</b><span>electrons & formal charges</span></button>' +
+    '    <button data-sel-action="render-mol" data-mol-mode="2d" role="menuitem"><b>2D skeletal</b><span>publication-quality SVG</span></button>' +
+    '    <button data-sel-action="render-mol" data-mol-mode="3d" role="menuitem"><b>3D geometry</b><span>VSEPR shape, bond angles</span></button>' +
+    '  </div>' +
+    '</div>';
 
   selPopup.addEventListener('mousedown', function(e) { e.preventDefault(); }); // prevent deselection
   selPopup.addEventListener('click', function(e) {
     var btn = e.target.closest('[data-sel-action]');
     if (!btn) return;
     var action = btn.getAttribute('data-sel-action');
+
+    // Toggle action: keep popup open, just open/close the chem submenu
+    if (action === 'render-mol-toggle') {
+      e.stopPropagation();
+      var wrap = selPopup.querySelector('.sel-mol-wrap');
+      if (wrap) wrap.classList.toggle('open');
+      return;
+    }
+
     hideSelPopup();
     if (action === 'proofread') doSelAction(SYSTEM_PROOFREAD);
     else if (action === 'formal') rewriteSelection('formal');
@@ -504,6 +522,12 @@ function createSelPopup() {
       doSelAction(SYSTEM_TRANSLATE.replace('TARGET_LANG', lang));
     }
     else if (action === 'move-to-file') { doMoveToFile(); }
+    else if (action === 'render-mol') {
+      var mode = btn.getAttribute('data-mol-mode') || 'lewis';
+      if (window.ChemInsert && selPopup._chemDetected) {
+        window.ChemInsert.render(selPopup._chemDetected, mode);
+      }
+    }
   });
 
   document.body.appendChild(selPopup);
@@ -759,6 +783,27 @@ function doMoveToFile() {
 
 function showSelPopup(cm) {
   if (!selPopup) createSelPopup();
+
+  // Toggle the chemistry render dropdown based on \ce{...} detection in selection
+  var molWrap = selPopup.querySelector('.sel-mol-wrap');
+  var molBtn = selPopup.querySelector('.sel-mol-btn');
+  var molSep = selPopup.querySelector('.sel-mol-sep');
+  var detected = (window.ChemInsert && cm.getSelection())
+    ? window.ChemInsert.detect(cm.getSelection())
+    : null;
+  selPopup._chemDetected = detected;
+  if (molWrap && molBtn && molSep) {
+    molWrap.classList.remove('open'); // always start collapsed
+    if (detected) {
+      molBtn.innerHTML = '&#9883; Render ' + detected.main + ' <span class="sel-mol-caret">&#9662;</span>';
+      molWrap.style.display = '';
+      molSep.style.display = '';
+    } else {
+      molWrap.style.display = 'none';
+      molSep.style.display = 'none';
+    }
+  }
+
   // Position near the selection end
   var cursor = cm.getCursor('to');
   var coords = cm.cursorCoords(cursor, 'page');
