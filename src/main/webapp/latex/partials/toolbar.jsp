@@ -21,6 +21,7 @@
       <option value="beamer">Presentation</option>
       <option value="letter">Letter</option>
       <option value="cv">CV</option>
+      <option value="chemistry">Chemistry</option>
     </select>
   </div>
 
