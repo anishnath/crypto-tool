@@ -97,6 +97,8 @@
     var iframeW = (opts.iframeSize && opts.iframeSize.width) || 1200;
     var iframeH = (opts.iframeSize && opts.iframeSize.height) || 800;
     var injectCSS = opts.injectCSS || '';
+    var injectScript = opts.injectScript || '';
+    var readyFlag = opts.readyFlag || '';
     var extractProps = opts.extractProps || null;
 
     return new Promise(function (resolve, reject) {
@@ -143,6 +145,14 @@
           try { iframe.contentWindow.dispatchEvent(new Event('resize')); } catch (e) {}
         }
 
+        // Inject custom script (e.g. 3Dmol style overrides) — runs in the
+        // iframe's context with full access to its globals.
+        if (injectScript && doc.head) {
+          var scriptEl = doc.createElement('script');
+          scriptEl.textContent = injectScript;
+          doc.head.appendChild(scriptEl);
+        }
+
         var stableFrames = 0;
         var lastSig = '';
         pollTimer = setInterval(function () {
@@ -152,6 +162,14 @@
           var canvas = findCanvas(doc, canvasSelectors);
           if (!canvas || !canvas.width || !canvas.height) return;
           var sig = canvas.width + 'x' + canvas.height;
+          // If the injected script signals readiness via a flag, wait for it
+          // before capturing — otherwise we'd grab the canvas BEFORE our
+          // re-style takes effect.
+          if (readyFlag) {
+            try {
+              if (!iframe.contentWindow[readyFlag]) return;
+            } catch (e) { /* cross-origin, fall through */ }
+          }
           if (sig === lastSig) {
             stableFrames++;
             if (stableFrames >= 2) {
@@ -247,6 +265,45 @@
     return props;
   }
 
+  // Injected into the 3D iframe — finds the 3Dmol viewer after the calculator
+  // creates it, then re-styles with fatter spheres + thicker bonds + zoom-out
+  // so the molecule reads clearly in a figure rather than as a tight skeleton.
+  // The calculator's own zoomTo() runs at end-of-render; we re-render after so
+  // our zoom factor wins.
+  var INJECT_3D_RESTYLE = [
+    '(function(){',
+    '  function findViewer() {',
+    '    if (!window.$3Dmol) return null;',
+    '    var V = $3Dmol.viewers || $3Dmol.viewers_ || {};',
+    '    var keys = Object.keys(V);',
+    '    if (!keys.length) return null;',
+    '    var v = V[keys[0]];',
+    '    return (v && typeof v.setStyle === "function") ? v : null;',
+    '  }',
+    '  function applyStyle() {',
+    '    var v = findViewer();',
+    '    if (!v) return false;',
+    '    try {',
+    '      v.setStyle({}, {',
+    '        stick:  { radius: 0.20, colorscheme: "Jmol" },',
+    '        sphere: { scale: 0.45, colorscheme: "Jmol" }',
+    '      });',
+    '      v.zoomTo();',
+    '      v.zoom(0.78);',  // pull back ~22% from the auto-fit so atoms aren't on the edges
+    '      v.render();',
+    '      setTimeout(function(){ window.__chem3dReady = true; }, 350);',
+    '      return true;',
+    '    } catch (e) { return false; }',
+    '  }',
+    '  var attempts = 0;',
+    '  var iv = setInterval(function() {',
+    '    attempts++;',
+    '    if (applyStyle()) { clearInterval(iv); }',
+    '    else if (attempts > 80) { clearInterval(iv); window.__chem3dReady = true; }',
+    '  }, 150);',
+    '})();'
+  ].join('\n');
+
   function render3DToDataUrl(formula) {
     var ctx = (window.CONFIG && window.CONFIG.ctx) || '';
     var payload = { mode: 'formula', f: formula };
@@ -258,11 +315,17 @@
     return captureCanvasFromIframe(url,
       ['.mg-3d-viewer canvas', '#mg-result-content canvas'],
       '3D geometry',
-      { iframeSize: { width: 1600, height: 1300 }, injectCSS: oversizeCSS,
-        extractProps: extract3DProps })
-      // Iframes default to light mode (#fff bg); trim whitespace to zoom in.
+      {
+        iframeSize: { width: 1600, height: 1300 },
+        injectCSS: oversizeCSS,
+        injectScript: INJECT_3D_RESTYLE,
+        readyFlag: '__chem3dReady',
+        extractProps: extract3DProps
+      })
+      // Iframes default to light mode (#fff bg); trim whitespace afterwards
+      // gives the figure a tight crop without losing the breathing room from zoom(0.78).
       .then(function (r) {
-        return autoTrim(r.dataUrl, [255, 255, 255], 14, 24)
+        return autoTrim(r.dataUrl, [255, 255, 255], 14, 36)
           .then(function (trimmed) { return { dataUrl: trimmed, props: r.props }; });
       });
   }
