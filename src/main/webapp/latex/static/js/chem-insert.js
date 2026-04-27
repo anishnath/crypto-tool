@@ -82,37 +82,6 @@
     };
   }
 
-  // ── Formula → SMILES (for the 2D OpenChemLib path) ───────────────────────
-
-  // Common species; covers most introductory chemistry. If a formula is not
-  // here, the 2D mode shows a toast suggesting Lewis or 3D Geometry instead.
-  var FORMULA_TO_SMILES = {
-    H2O: 'O', H2: '[H][H]', O2: 'O=O', N2: 'N#N',
-    F2: 'FF', Cl2: 'ClCl', Br2: 'BrBr', I2: 'II',
-    HF: 'F', HCl: 'Cl', HBr: 'Br', HI: 'I',
-    HCN: 'C#N', NH3: 'N', PH3: 'P', H2S: 'S',
-    CH4: 'C', CO: '[C-]#[O+]', CO2: 'O=C=O',
-    SO2: 'O=S=O', SO3: 'O=S(=O)=O',
-    NO: '[N]=O', NO2: 'O=N[O]', N2O: 'N=[N+]=[O-]', O3: '[O-][O+]=O',
-    CH3OH: 'CO', CH4O: 'CO',
-    C2H6O: 'CCO', CH3CH2OH: 'CCO',
-    C2H4: 'C=C', C2H6: 'CC', C2H2: 'C#C',
-    C6H6: 'c1ccccc1',
-    CH2O: 'C=O', HCHO: 'C=O',
-    CH2O2: 'OC=O', HCOOH: 'OC=O',
-    C2H4O2: 'CC(=O)O', CH3COOH: 'CC(=O)O',
-    H2SO4: 'OS(=O)(=O)O',
-    H3PO4: 'OP(=O)(O)O',
-    HNO3: 'O[N+](=O)[O-]',
-    NaCl: '[Na+].[Cl-]', KCl: '[K+].[Cl-]',
-    CaCO3: '[Ca+2].[O-]C(=O)[O-]',
-    NaOH: '[Na+].[OH-]', KOH: '[K+].[OH-]'
-  };
-
-  function lookupSmiles(formula) {
-    return FORMULA_TO_SMILES[formula] || null;
-  }
-
   // ── Iframe + canvas capture (for Lewis & 3D paths) ───────────────────────
 
   function findCanvas(doc, selectors) {
@@ -366,29 +335,28 @@
     });
   }
 
-  function render2DToDataUrl(formula) {
-    var smiles = lookupSmiles(formula);
-    if (!smiles) {
-      return Promise.reject(new Error(
-        '2D structure unavailable: no SMILES mapping for "' + formula +
-        '". Try Lewis dot or 3D Geometry instead.'));
-    }
+  // SMILES → 2D structure via OpenChemLib. The input is treated as SMILES
+  // verbatim — no formula translation. If it's not valid SMILES we point the
+  // user at /chemistry/molecule-draw.jsp where they can draw it and copy a
+  // correct SMILES string back in.
+  function render2DFromSmiles(smiles) {
+    var ctx = (window.CONFIG && window.CONFIG.ctx) || '';
+    var hint = ' Use ' + ctx + '/chemistry/molecule-draw.jsp to draw the structure and copy a valid SMILES.';
+
     return getOCL().then(function (OCL) {
       var mol;
       try { mol = OCL.Molecule.fromSmiles(smiles); }
       catch (e) {
-        throw new Error('OpenChemLib could not parse SMILES "' + smiles +
-          '" for ' + formula + ': ' + (e && e.message ? e.message : e));
+        throw new Error('Invalid SMILES: "' + smiles + '"' +
+          (e && e.message ? ' — ' + e.message : '') + '.' + hint);
       }
       if (!mol || mol.getAllAtoms() === 0) {
-        throw new Error('Empty molecule from SMILES "' + smiles + '" for ' + formula);
+        throw new Error('Empty molecule from SMILES "' + smiles + '".' + hint);
       }
-      var w = 400, h = 300;
-      var svg;
-      try { svg = mol.toSVG(w, h, null, { suppressChiralText: true, suppressESR: true }); }
-      catch (e) { throw new Error('SVG render failed for ' + formula + ': ' + e.message); }
 
-      // Collect properties for the figure caption
+      var w = 400, h = 300;
+      var svg = mol.toSVG(w, h, null, { suppressChiralText: true, suppressESR: true });
+
       var props = { smiles: smiles };
       try { props.formula = mol.getMolecularFormula().formula; } catch (e) {}
       try {
@@ -550,9 +518,9 @@
   // ── Public entry point ───────────────────────────────────────────────────
 
   var MODE_CONFIG = {
-    lewis: { fn: renderLewisToDataUrl, label: 'Lewis structure',  prefix: 'lewis' },
-    '2d':  { fn: render2DToDataUrl,    label: '2D structure',     prefix: 'mol2d' },
-    '3d':  { fn: render3DToDataUrl,    label: '3D geometry',      prefix: 'mol3d' }
+    lewis:  { fn: renderLewisToDataUrl,  label: 'Lewis structure',     prefix: 'lewis' },
+    smiles: { fn: render2DFromSmiles,    label: 'SMILES structure',    prefix: 'smiles' },
+    '3d':   { fn: render3DToDataUrl,     label: '3D geometry',         prefix: 'mol3d' }
   };
 
   function toast(kind, msg) {
@@ -600,7 +568,13 @@
         }
         var anchorPos = anchorMark.find();
         if (anchorMark) anchorMark.clear();
-        insertFigureBlock(cm, detected.ceRaw, fname, cfg.label, capturedProps, anchorPos);
+        // For SMILES mode, prefer the parsed molecular formula in the caption —
+        // a raw SMILES inside \ce{...} doesn't typeset cleanly with mhchem.
+        var ceForCaption = detected.ceRaw;
+        if (mode === 'smiles' && capturedProps && capturedProps.formula) {
+          ceForCaption = '\\ce{' + capturedProps.formula + '}';
+        }
+        insertFigureBlock(cm, ceForCaption, fname, cfg.label, capturedProps, anchorPos);
         toast('Success', 'Inserted ' + cfg.label + ' for ' + detected.main);
       })
       .catch(function (err) {
@@ -612,6 +586,6 @@
   window.ChemInsert = {
     detect: detect,
     render: render,
-    MODES: ['lewis', '2d', '3d']
+    MODES: ['lewis', 'smiles', '3d']
   };
 })();

@@ -492,7 +492,7 @@ function createSelPopup() {
     '  <button data-sel-action="render-mol-toggle" class="sel-mol-btn" title="Render molecular structure from \\ce{...}">&#9883; Render <span class="sel-mol-caret">&#9662;</span></button>' +
     '  <div class="sel-mol-menu" role="menu">' +
     '    <button data-sel-action="render-mol" data-mol-mode="lewis" role="menuitem"><b>Lewis dot structure</b><span>electrons & formal charges</span></button>' +
-    '    <button data-sel-action="render-mol" data-mol-mode="2d" role="menuitem"><b>2D skeletal</b><span>publication-quality SVG</span></button>' +
+    '    <button data-sel-action="render-mol" data-mol-mode="smiles" role="menuitem"><b>SMILES</b><span>render 2D from SMILES notation</span></button>' +
     '    <button data-sel-action="render-mol" data-mol-mode="3d" role="menuitem"><b>3D geometry</b><span>VSEPR shape, bond angles</span></button>' +
     '  </div>' +
     '</div>';
