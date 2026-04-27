@@ -291,18 +291,21 @@
       });
   }
 
-  function insertFigureBlock(cm, ceRaw, filename, modeLabel) {
+  function insertFigureBlock(cm, ceRaw, filename, modeLabel, anchorLine) {
     var label = filename.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '-');
     var caption = modeLabel + ' of ' + ceRaw;
+    // Insert with surrounding blank lines so \includegraphics is a paragraph
+    // on its own — graphicx is sensitive to neighbouring tokens
     var block =
-      '\n\\begin{figure}[h]\n' +
-      '\\centering\n' +
-      '\\includegraphics[width=0.45\\textwidth]{' + filename + '}\n' +
-      '\\caption{' + caption + '}\n' +
-      '\\label{fig:' + label + '}\n' +
+      '\n\n\\begin{figure}[h]\n' +
+      '  \\centering\n' +
+      '  \\includegraphics[width=0.45\\textwidth]{' + filename + '}\n' +
+      '  \\caption{' + caption + '}\n' +
+      '  \\label{fig:' + label + '}\n' +
       '\\end{figure}\n';
-    var to = cm.getCursor('to');
-    var lineEnd = { line: to.line, ch: cm.getLine(to.line).length };
+    var line = (typeof anchorLine === 'number') ? anchorLine : cm.getCursor('to').line;
+    if (line >= cm.lineCount()) line = cm.lineCount() - 1;
+    var lineEnd = { line: line, ch: cm.getLine(line).length };
     cm.replaceRange(block, lineEnd, lineEnd);
     cm.focus();
   }
@@ -330,6 +333,10 @@
     var cfg = MODE_CONFIG[mode];
     if (!cfg) { toast('Error', 'Unknown render mode: ' + mode); return; }
 
+    // Capture insertion anchor NOW — render is async (3–15 s) and the cursor
+    // may move during the wait. Anchor to the line containing the selection's end.
+    var anchorLine = cm.getCursor('to').line;
+
     toast('Success', 'Rendering ' + detected.main + ' (' + cfg.label + ')…');
 
     cfg.fn(detected.main)
@@ -347,7 +354,7 @@
         if (typeof window.addFileToTree === 'function') {
           window.addFileToTree(fname, true);
         }
-        insertFigureBlock(cm, detected.ceRaw, fname, cfg.label);
+        insertFigureBlock(cm, detected.ceRaw, fname, cfg.label, anchorLine);
         toast('Success', 'Inserted ' + cfg.label + ' for ' + detected.main);
       })
       .catch(function (err) {
