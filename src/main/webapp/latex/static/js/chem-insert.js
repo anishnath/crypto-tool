@@ -271,13 +271,48 @@
 
   function extractLewisProps(doc) {
     var props = {};
-    var geomEl = doc.getElementById('geomLabel') || doc.querySelector('.lewis-geometry-label');
-    if (geomEl && geomEl.textContent) props.geometry = geomEl.textContent.trim();
-    // Some pages also expose total valence electrons / formal charges; grab anything obvious
-    var resultText = (doc.getElementById('lewisResultPanel') ||
-                      doc.getElementById('molecularFormula-result') || {}).textContent || '';
-    var veMatch = resultText.match(/(\d+)\s*(?:total\s*)?valence\s*electrons?/i);
-    if (veMatch) props.valenceElectrons = veMatch[1];
+    var panel = doc.getElementById('resultDisplay') || doc.getElementById('resultOutput');
+    if (!panel) return props;
+
+    // Type A: .lewis-info-card → <strong>label</strong><span>value</span>
+    var cards = {};
+    var cardEls = panel.querySelectorAll('.lewis-info-card');
+    for (var i = 0; i < cardEls.length; i++) {
+      var labelEl = cardEls[i].querySelector('strong');
+      var valueEl = cardEls[i].querySelector('span');
+      if (!labelEl || !valueEl) continue;
+      var k = (labelEl.textContent || '').trim().toLowerCase();
+      var v = (valueEl.textContent || '').trim();
+      if (k && v) cards[k] = v;
+    }
+
+    // Type B: .lewis-result-label sibling-pair with .lewis-result-value
+    var labels = {};
+    var labelDivs = panel.querySelectorAll('.lewis-result-label');
+    for (var j = 0; j < labelDivs.length; j++) {
+      var lk = (labelDivs[j].textContent || '').trim().toLowerCase();
+      var sib = labelDivs[j].nextElementSibling;
+      if (!sib) continue;
+      var lv = (sib.textContent || '').trim().replace(/\s+/g, ' ');
+      if (lk && lv) labels[lk] = lv;
+    }
+
+    // Map cards (substring match — survives "e⁻" vs "e-" etc.)
+    Object.keys(cards).forEach(function (k) {
+      if (k.indexOf('total valence') >= 0) props.valenceElectrons = cards[k];
+      else if (k.indexOf('bonding pair') >= 0) props.bondingPairs = cards[k];
+      else if (k.indexOf('lone pair') >= 0) props.lonePairs = cards[k];
+      else if (k.indexOf('steric') >= 0) props.stericNumber = cards[k];
+    });
+
+    // Map result-label rows
+    if (labels['molecular geometry']) props.geometry = labels['molecular geometry'];
+    if (labels['electron geometry'])  props.electronGeometry = labels['electron geometry'];
+    if (labels['bond angle'])         props.angle = labels['bond angle'];
+    if (labels['polarity'])           props.polarity = labels['polarity'];
+    if (labels['formal charge'])      props.formalCharge = labels['formal charge'];
+    if (labels['central atom'])       props.centralAtom = labels['central atom'];
+
     return props;
   }
 
@@ -404,20 +439,31 @@
       .replace(/\^/g, '\\textasciicircum{}');
   }
 
-  // Build the property-table rows in mode-relevant order.
+  // Build the property-table rows. Order: identity → geometry → bonding → counts.
   // Returns an array of [labelLatex, valueLatex] pairs, already escaped.
   function buildPropRows(props) {
     var rows = [];
     if (!props) return rows;
-    if (props.formula)          rows.push(['Formula',         '\\ce{' + props.formula + '}']);
-    if (props.weight)           rows.push(['Mol.\\ weight',   escapeForLatex(props.weight)]);
-    if (props.geometry)         rows.push(['Geometry',        escapeForLatex(props.geometry)]);
-    if (props.angle)            rows.push(['Bond angle',      escapeForLatex(props.angle)]);
-    if (props.hybridization)    rows.push(['Hybridization',   escapeForLatex(props.hybridization)]);
-    if (props.atoms != null)    rows.push(['Atoms',           String(props.atoms)]);
-    if (props.bonds != null)    rows.push(['Bonds',           String(props.bonds)]);
-    if (props.valenceElectrons) rows.push(['Valence e\\textsuperscript{$-$}', String(props.valenceElectrons)]);
-    if (props.smiles)           rows.push(['SMILES',          '\\texttt{' + escapeForLatex(props.smiles) + '}']);
+    // ── identity / composition ───────────────────────
+    if (props.formula)            rows.push(['Formula',            '\\ce{' + props.formula + '}']);
+    if (props.weight)             rows.push(['Mol.\\ weight',      escapeForLatex(props.weight)]);
+    if (props.centralAtom)        rows.push(['Central atom',       '\\ce{' + props.centralAtom + '}']);
+    // ── geometry / shape ─────────────────────────────
+    if (props.electronGeometry)   rows.push(['Electron geometry',  escapeForLatex(props.electronGeometry)]);
+    if (props.geometry)           rows.push(['Molecular geometry', escapeForLatex(props.geometry)]);
+    if (props.angle)              rows.push(['Bond angle',         escapeForLatex(props.angle)]);
+    if (props.hybridization)      rows.push(['Hybridization',      escapeForLatex(props.hybridization)]);
+    if (props.polarity)           rows.push(['Polarity',           escapeForLatex(props.polarity)]);
+    // ── bonding / electrons ──────────────────────────
+    if (props.valenceElectrons)   rows.push(['Total valence e\\textsuperscript{$-$}', String(props.valenceElectrons)]);
+    if (props.bondingPairs != null)  rows.push(['Bonding pairs',   String(props.bondingPairs)]);
+    if (props.lonePairs != null)     rows.push(['Lone pairs',      String(props.lonePairs)]);
+    if (props.stericNumber != null)  rows.push(['Steric number',   String(props.stericNumber)]);
+    if (props.formalCharge)       rows.push(['Formal charge',      escapeForLatex(props.formalCharge)]);
+    // ── counts (mostly 2D/SMILES) ────────────────────
+    if (props.atoms != null)      rows.push(['Atoms',              String(props.atoms)]);
+    if (props.bonds != null)      rows.push(['Bonds',              String(props.bonds)]);
+    if (props.smiles)             rows.push(['SMILES',             '\\texttt{' + escapeForLatex(props.smiles) + '}']);
     return rows;
   }
 
