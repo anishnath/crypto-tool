@@ -206,6 +206,56 @@
     });
   }
 
+  // ── Auto-crop background whitespace (zoom into the rendered molecule) ────
+
+  function autoTrim(dataUrl, bgRGB, tolerance, padding) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      img.onload = function () {
+        try {
+          var w = img.width, h = img.height;
+          var c = document.createElement('canvas');
+          c.width = w; c.height = h;
+          var ctx = c.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          var data = ctx.getImageData(0, 0, w, h).data;
+          var bgR = bgRGB[0], bgG = bgRGB[1], bgB = bgRGB[2];
+          var tol = (tolerance != null) ? tolerance : 14;
+          var minX = w, minY = h, maxX = -1, maxY = -1;
+          for (var y = 0; y < h; y++) {
+            for (var x = 0; x < w; x++) {
+              var i = (y * w + x) * 4;
+              // Treat near-transparent pixels as background too
+              if (data[i + 3] < 8) continue;
+              if (Math.abs(data[i] - bgR) > tol ||
+                  Math.abs(data[i + 1] - bgG) > tol ||
+                  Math.abs(data[i + 2] - bgB) > tol) {
+                if (x < minX) minX = x;
+                if (y < minY) minY = y;
+                if (x > maxX) maxX = x;
+                if (y > maxY) maxY = y;
+              }
+            }
+          }
+          if (maxX < 0) { resolve(dataUrl); return; } // entirely background
+          var pad = (padding != null) ? padding : 24;
+          minX = Math.max(0, minX - pad);
+          minY = Math.max(0, minY - pad);
+          maxX = Math.min(w - 1, maxX + pad);
+          maxY = Math.min(h - 1, maxY + pad);
+          var cw = maxX - minX + 1;
+          var ch = maxY - minY + 1;
+          var out = document.createElement('canvas');
+          out.width = cw; out.height = ch;
+          out.getContext('2d').drawImage(c, minX, minY, cw, ch, 0, 0, cw, ch);
+          resolve(out.toDataURL('image/png'));
+        } catch (e) { reject(e); }
+      };
+      img.onerror = function () { reject(new Error('Could not decode image for trim')); };
+      img.src = dataUrl;
+    });
+  }
+
   // ── 3D: molecular-geometry-calculator ────────────────────────────────────
 
   function render3DToDataUrl(formula) {
@@ -213,16 +263,16 @@
     var payload = { mode: 'formula', f: formula };
     var d = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
     var url = ctx + '/molecular-geometry-calculator.jsp?d=' + encodeURIComponent(d);
-    // Default .mg-3d-viewer is hard-coded to 420px tall — too small for figures.
-    // Inject an override so 3Dmol renders at higher resolution, then we capture
-    // the WebGL canvas at that native size.
     var oversizeCSS =
       '.mg-3d-viewer{width:1100px!important;height:1000px!important;min-height:1000px!important;}' +
       '.mg-3d-wrapper{width:1100px!important;}';
     return captureCanvasFromIframe(url,
       ['.mg-3d-viewer canvas', '#mg-result-content canvas'],
       '3D geometry',
-      { iframeSize: { width: 1600, height: 1300 }, injectCSS: oversizeCSS });
+      { iframeSize: { width: 1600, height: 1300 }, injectCSS: oversizeCSS })
+      // Calculator uses #ffffff (light) or #1e293b (dark) viewer background.
+      // Iframes default to light mode — trim white whitespace around the model.
+      .then(function (d) { return autoTrim(d, [255, 255, 255], 14, 24); });
   }
 
   // ── Lewis: lewis-structure-generator ─────────────────────────────────────
@@ -233,7 +283,8 @@
     return captureCanvasFromIframe(url,
       ['#lewisCanvasContainer canvas', '.lewis-canvas-container canvas', 'canvas'],
       'Lewis structure',
-      { iframeSize: { width: 1400, height: 1100 } });
+      { iframeSize: { width: 1400, height: 1100 } })
+      .then(function (d) { return autoTrim(d, [255, 255, 255], 14, 28); });
   }
 
   // ── 2D: OpenChemLib in-page (SMILES → SVG → PNG) ─────────────────────────
