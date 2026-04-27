@@ -465,21 +465,21 @@
   }
 
   // Insert any missing \usepackage lines just before \begin{document}.
-  // Returns the number of lines actually inserted (so callers can adjust anchors).
+  // Each entry is either a string (plain package) or { name, options }.
+  // Returns the number of lines actually inserted.
   function ensurePackages(cm, packages) {
     var content = cm.getValue();
     var missing = [];
-    packages.forEach(function (pkg) {
-      // Match \usepackage[opts]{...,pkg,...} as well as plain \usepackage{pkg}
+    packages.forEach(function (p) {
+      var name = (typeof p === 'string') ? p : p.name;
       var re = new RegExp(
         '\\\\usepackage(?:\\[[^\\]]*\\])?\\{[^}]*\\b' +
-        pkg.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') +
+        name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') +
         '\\b[^}]*\\}');
-      if (!re.test(content)) missing.push(pkg);
+      if (!re.test(content)) missing.push(p);
     });
     if (!missing.length) return 0;
 
-    // Find \begin{document} and the line of the last \usepackage above it
     var beginDocLine = -1;
     var lastUsepkgLine = -1;
     for (var i = 0; i < cm.lineCount(); i++) {
@@ -487,19 +487,31 @@
       if (beginDocLine < 0 && /\\begin\{document\}/.test(ln)) { beginDocLine = i; break; }
       if (/\\usepackage/.test(ln)) lastUsepkgLine = i;
     }
-    if (beginDocLine < 0) return 0; // No preamble we can identify; bail safely
+    if (beginDocLine < 0) return 0;
 
     var insertLine = (lastUsepkgLine >= 0) ? lastUsepkgLine + 1 : beginDocLine;
-    var text = missing.map(function (p) { return '\\usepackage{' + p + '}'; }).join('\n') + '\n';
+    var text = missing.map(function (p) {
+      if (typeof p === 'string') return '\\usepackage{' + p + '}';
+      return '\\usepackage' + (p.options ? '[' + p.options + ']' : '') + '{' + p.name + '}';
+    }).join('\n') + '\n';
     cm.replaceRange(text, { line: insertLine, ch: 0 });
     return missing.length;
+  }
+
+  // Convenience: ensure mhchem v4 is loaded. Called from selection detection
+  // so the doc compiles as soon as the user touches \ce{...}.
+  function ensureMhchem(cm) {
+    if (!cm) return 0;
+    return ensurePackages(cm, [{ name: 'mhchem', options: 'version=4' }]);
   }
 
   function insertFigureBlock(cm, ceRaw, filename, modeLabel, props, anchorPos) {
     var label = filename.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '-');
     var rows = buildPropRows(props);
-    var needsPackages = ['booktabs', 'float']; // [H] needs float; \toprule/\bottomrule need booktabs
-    if (rows.length === 0) needsPackages = ['float']; // simple layout doesn't need booktabs
+    var mhchem = { name: 'mhchem', options: 'version=4' };
+    var needsPackages = (rows.length > 0)
+      ? ['booktabs', 'float', mhchem]   // booktabs for \toprule, float for [H], mhchem for \ce in caption/table
+      : ['float', mhchem];
 
     // Add missing packages first; the anchor (a CodeMirror bookmark) auto-shifts.
     ensurePackages(cm, needsPackages);
@@ -586,6 +598,7 @@
   window.ChemInsert = {
     detect: detect,
     render: render,
+    ensureMhchem: ensureMhchem,
     MODES: ['lewis', 'smiles', '3d']
   };
 })();

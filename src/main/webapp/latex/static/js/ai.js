@@ -792,6 +792,11 @@ function showSelPopup(cm) {
     ? window.ChemInsert.detect(cm.getSelection())
     : null;
   selPopup._chemDetected = detected;
+  // As soon as a \ce{...} is touched, make sure the mhchem package is loaded
+  // so the document compiles even if the user never opens the render menu.
+  if (detected && window.ChemInsert && typeof window.ChemInsert.ensureMhchem === 'function') {
+    try { window.ChemInsert.ensureMhchem(cm); } catch (e) {}
+  }
   if (molWrap && molBtn && molSep) {
     molWrap.classList.remove('open'); // always start collapsed
     if (detected) {
