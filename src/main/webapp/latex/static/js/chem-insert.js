@@ -128,6 +128,7 @@
     var iframeW = (opts.iframeSize && opts.iframeSize.width) || 1200;
     var iframeH = (opts.iframeSize && opts.iframeSize.height) || 800;
     var injectCSS = opts.injectCSS || '';
+    var extractProps = opts.extractProps || null;
 
     return new Promise(function (resolve, reject) {
       var iframe = document.createElement('iframe');
@@ -147,11 +148,11 @@
         if (timeoutTimer) clearTimeout(timeoutTimer);
         if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
       }
-      function finish(err, dataUrl) {
+      function finish(err, result) {
         if (done) return;
         done = true;
         cleanup();
-        if (err) reject(err); else resolve(dataUrl);
+        if (err) reject(err); else resolve(result);
       }
 
       timeoutTimer = setTimeout(function () {
@@ -188,7 +189,12 @@
               try {
                 var dataUrl = canvas.toDataURL('image/png');
                 if (!dataUrl || dataUrl.length < 1000) return;
-                finish(null, dataUrl);
+                // Scrape any extra info from the page BEFORE we tear the iframe down
+                var props = {};
+                if (extractProps) {
+                  try { props = extractProps(doc) || {}; } catch (e) {}
+                }
+                finish(null, { dataUrl: dataUrl, props: props });
               } catch (e) {
                 finish(new Error('Canvas capture failed: ' + e.message));
               }
@@ -258,6 +264,20 @@
 
   // ── 3D: molecular-geometry-calculator ────────────────────────────────────
 
+  function extract3DProps(doc) {
+    var props = {};
+    var resultEl = doc.getElementById('mg-result-content');
+    if (!resultEl) return props;
+    var text = resultEl.textContent || '';
+    var geomMatch = text.match(/(Linear|Bent|Trigonal Planar|Trigonal Pyramidal|Tetrahedral|Trigonal Bipyramidal|Octahedral|T-shaped|See-saw|Square Planar|Square Pyramidal)/i);
+    if (geomMatch) props.geometry = geomMatch[1];
+    var angleMatch = text.match(/(\d+(?:\.\d+)?)\s*°/);
+    if (angleMatch) props.angle = angleMatch[1] + '°';
+    var hybridMatch = text.match(/(sp3d2|sp3d|sp3|sp2|sp)\b/i);
+    if (hybridMatch) props.hybridization = hybridMatch[1];
+    return props;
+  }
+
   function render3DToDataUrl(formula) {
     var ctx = (window.CONFIG && window.CONFIG.ctx) || '';
     var payload = { mode: 'formula', f: formula };
@@ -269,13 +289,28 @@
     return captureCanvasFromIframe(url,
       ['.mg-3d-viewer canvas', '#mg-result-content canvas'],
       '3D geometry',
-      { iframeSize: { width: 1600, height: 1300 }, injectCSS: oversizeCSS })
-      // Calculator uses #ffffff (light) or #1e293b (dark) viewer background.
-      // Iframes default to light mode — trim white whitespace around the model.
-      .then(function (d) { return autoTrim(d, [255, 255, 255], 14, 24); });
+      { iframeSize: { width: 1600, height: 1300 }, injectCSS: oversizeCSS,
+        extractProps: extract3DProps })
+      // Iframes default to light mode (#fff bg); trim whitespace to zoom in.
+      .then(function (r) {
+        return autoTrim(r.dataUrl, [255, 255, 255], 14, 24)
+          .then(function (trimmed) { return { dataUrl: trimmed, props: r.props }; });
+      });
   }
 
   // ── Lewis: lewis-structure-generator ─────────────────────────────────────
+
+  function extractLewisProps(doc) {
+    var props = {};
+    var geomEl = doc.getElementById('geomLabel') || doc.querySelector('.lewis-geometry-label');
+    if (geomEl && geomEl.textContent) props.geometry = geomEl.textContent.trim();
+    // Some pages also expose total valence electrons / formal charges; grab anything obvious
+    var resultText = (doc.getElementById('lewisResultPanel') ||
+                      doc.getElementById('molecularFormula-result') || {}).textContent || '';
+    var veMatch = resultText.match(/(\d+)\s*(?:total\s*)?valence\s*electrons?/i);
+    if (veMatch) props.valenceElectrons = veMatch[1];
+    return props;
+  }
 
   function renderLewisToDataUrl(formula) {
     var ctx = (window.CONFIG && window.CONFIG.ctx) || '';
@@ -283,8 +318,11 @@
     return captureCanvasFromIframe(url,
       ['#lewisCanvasContainer canvas', '.lewis-canvas-container canvas', 'canvas'],
       'Lewis structure',
-      { iframeSize: { width: 1400, height: 1100 } })
-      .then(function (d) { return autoTrim(d, [255, 255, 255], 14, 28); });
+      { iframeSize: { width: 1400, height: 1100 }, extractProps: extractLewisProps })
+      .then(function (r) {
+        return autoTrim(r.dataUrl, [255, 255, 255], 14, 28)
+          .then(function (trimmed) { return { dataUrl: trimmed, props: r.props }; });
+      });
   }
 
   // ── 2D: OpenChemLib in-page (SMILES → SVG → PNG) ─────────────────────────
@@ -332,13 +370,36 @@
     var smiles = lookupSmiles(formula);
     if (!smiles) {
       return Promise.reject(new Error(
-        'No SMILES known for ' + formula + '. Try Lewis or 3D Geometry.'));
+        '2D structure unavailable: no SMILES mapping for "' + formula +
+        '". Try Lewis dot or 3D Geometry instead.'));
     }
     return getOCL().then(function (OCL) {
-      var mol = OCL.Molecule.fromSmiles(smiles);
+      var mol;
+      try { mol = OCL.Molecule.fromSmiles(smiles); }
+      catch (e) {
+        throw new Error('OpenChemLib could not parse SMILES "' + smiles +
+          '" for ' + formula + ': ' + (e && e.message ? e.message : e));
+      }
+      if (!mol || mol.getAllAtoms() === 0) {
+        throw new Error('Empty molecule from SMILES "' + smiles + '" for ' + formula);
+      }
       var w = 400, h = 300;
-      var svg = mol.toSVG(w, h, null, { suppressChiralText: true, suppressESR: true });
-      return svgToPngDataUrl(svg, w, h);
+      var svg;
+      try { svg = mol.toSVG(w, h, null, { suppressChiralText: true, suppressESR: true }); }
+      catch (e) { throw new Error('SVG render failed for ' + formula + ': ' + e.message); }
+
+      // Collect properties for the figure caption
+      var props = { smiles: smiles };
+      try { props.formula = mol.getMolecularFormula().formula; } catch (e) {}
+      try {
+        var mw = mol.getMolweight();
+        if (mw) props.weight = mw.toFixed(2) + ' g/mol';
+      } catch (e) {}
+      try { props.atoms = mol.getAllAtoms(); } catch (e) {}
+      try { props.bonds = mol.getAllBonds(); } catch (e) {}
+
+      return svgToPngDataUrl(svg, w, h)
+        .then(function (dataUrl) { return { dataUrl: dataUrl, props: props }; });
     });
   }
 
@@ -367,21 +428,121 @@
       });
   }
 
-  function insertFigureBlock(cm, ceRaw, filename, modeLabel, anchorLine) {
-    var label = filename.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '-');
+  function escapeForLatex(s) {
+    return String(s)
+      .replace(/\\/g, '\\textbackslash{}')
+      .replace(/([&%$#_{}])/g, '\\$1')
+      .replace(/~/g, '\\textasciitilde{}')
+      .replace(/\^/g, '\\textasciicircum{}');
+  }
+
+  // Build the property-table rows in mode-relevant order.
+  // Returns an array of [labelLatex, valueLatex] pairs, already escaped.
+  function buildPropRows(props) {
+    var rows = [];
+    if (!props) return rows;
+    if (props.formula)          rows.push(['Formula',         '\\ce{' + props.formula + '}']);
+    if (props.weight)           rows.push(['Mol.\\ weight',   escapeForLatex(props.weight)]);
+    if (props.geometry)         rows.push(['Geometry',        escapeForLatex(props.geometry)]);
+    if (props.angle)            rows.push(['Bond angle',      escapeForLatex(props.angle)]);
+    if (props.hybridization)    rows.push(['Hybridization',   escapeForLatex(props.hybridization)]);
+    if (props.atoms != null)    rows.push(['Atoms',           String(props.atoms)]);
+    if (props.bonds != null)    rows.push(['Bonds',           String(props.bonds)]);
+    if (props.valenceElectrons) rows.push(['Valence e\\textsuperscript{$-$}', String(props.valenceElectrons)]);
+    if (props.smiles)           rows.push(['SMILES',          '\\texttt{' + escapeForLatex(props.smiles) + '}']);
+    return rows;
+  }
+
+  function buildSimpleFigure(filename, ceRaw, modeLabel, label) {
     var caption = modeLabel + ' of ' + ceRaw;
-    // Insert with surrounding blank lines so \includegraphics is a paragraph
-    // on its own — graphicx is sensitive to neighbouring tokens
-    var block =
-      '\n\n\\begin{figure}[h]\n' +
-      '  \\centering\n' +
-      '  \\includegraphics[width=0.45\\textwidth]{' + filename + '}\n' +
-      '  \\caption{' + caption + '}\n' +
-      '  \\label{fig:' + label + '}\n' +
-      '\\end{figure}\n';
-    var line = (typeof anchorLine === 'number') ? anchorLine : cm.getCursor('to').line;
-    if (line >= cm.lineCount()) line = cm.lineCount() - 1;
-    var lineEnd = { line: line, ch: cm.getLine(line).length };
+    return [
+      '',
+      '',
+      '\\begin{figure}[H]',
+      '  \\centering',
+      '  \\includegraphics[width=0.5\\textwidth,keepaspectratio]{' + filename + '}',
+      '  \\caption[' + modeLabel + ' of ' + ceRaw + ']{' + caption + '}',
+      '  \\label{fig:' + label + '}',
+      '\\end{figure}',
+      ''
+    ].join('\n');
+  }
+
+  function buildSideBySideFigure(filename, ceRaw, modeLabel, label, rows) {
+    var rowLines = rows.map(function (r) {
+      return '      \\textbf{' + r[0] + '} & ' + r[1] + ' \\\\';
+    }).join('\n');
+    return [
+      '',
+      '',
+      '\\begin{figure}[H]',
+      '  \\centering',
+      '  \\begin{minipage}[c]{0.48\\textwidth}',
+      '    \\centering',
+      '    \\includegraphics[width=\\linewidth,keepaspectratio]{' + filename + '}',
+      '  \\end{minipage}\\hfill',
+      '  \\begin{minipage}[c]{0.48\\textwidth}',
+      '    \\small\\renewcommand{\\arraystretch}{1.2}%',
+      '    \\begin{tabular}{@{}ll@{}}',
+      '      \\toprule',
+      rowLines,
+      '      \\bottomrule',
+      '    \\end{tabular}',
+      '  \\end{minipage}',
+      '  \\caption[' + modeLabel + ' of ' + ceRaw + ']{' + modeLabel + ' of ' + ceRaw + '}',
+      '  \\label{fig:' + label + '}',
+      '\\end{figure}',
+      ''
+    ].join('\n');
+  }
+
+  // Insert any missing \usepackage lines just before \begin{document}.
+  // Returns the number of lines actually inserted (so callers can adjust anchors).
+  function ensurePackages(cm, packages) {
+    var content = cm.getValue();
+    var missing = [];
+    packages.forEach(function (pkg) {
+      // Match \usepackage[opts]{...,pkg,...} as well as plain \usepackage{pkg}
+      var re = new RegExp(
+        '\\\\usepackage(?:\\[[^\\]]*\\])?\\{[^}]*\\b' +
+        pkg.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') +
+        '\\b[^}]*\\}');
+      if (!re.test(content)) missing.push(pkg);
+    });
+    if (!missing.length) return 0;
+
+    // Find \begin{document} and the line of the last \usepackage above it
+    var beginDocLine = -1;
+    var lastUsepkgLine = -1;
+    for (var i = 0; i < cm.lineCount(); i++) {
+      var ln = cm.getLine(i);
+      if (beginDocLine < 0 && /\\begin\{document\}/.test(ln)) { beginDocLine = i; break; }
+      if (/\\usepackage/.test(ln)) lastUsepkgLine = i;
+    }
+    if (beginDocLine < 0) return 0; // No preamble we can identify; bail safely
+
+    var insertLine = (lastUsepkgLine >= 0) ? lastUsepkgLine + 1 : beginDocLine;
+    var text = missing.map(function (p) { return '\\usepackage{' + p + '}'; }).join('\n') + '\n';
+    cm.replaceRange(text, { line: insertLine, ch: 0 });
+    return missing.length;
+  }
+
+  function insertFigureBlock(cm, ceRaw, filename, modeLabel, props, anchorPos) {
+    var label = filename.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '-');
+    var rows = buildPropRows(props);
+    var needsPackages = ['booktabs', 'float']; // [H] needs float; \toprule/\bottomrule need booktabs
+    if (rows.length === 0) needsPackages = ['float']; // simple layout doesn't need booktabs
+
+    // Add missing packages first; the anchor (a CodeMirror bookmark) auto-shifts.
+    ensurePackages(cm, needsPackages);
+
+    var pos = anchorPos || cm.getCursor('to');
+    if (pos.line >= cm.lineCount()) pos.line = cm.lineCount() - 1;
+    var lineEnd = { line: pos.line, ch: cm.getLine(pos.line).length };
+
+    var block = (rows.length > 0)
+      ? buildSideBySideFigure(filename, ceRaw, modeLabel, label, rows)
+      : buildSimpleFigure(filename, ceRaw, modeLabel, label);
     cm.replaceRange(block, lineEnd, lineEnd);
     cm.focus();
   }
@@ -409,17 +570,20 @@
     var cfg = MODE_CONFIG[mode];
     if (!cfg) { toast('Error', 'Unknown render mode: ' + mode); return; }
 
-    // Capture insertion anchor NOW — render is async (3–15 s) and the cursor
-    // may move during the wait. Anchor to the line containing the selection's end.
-    var anchorLine = cm.getCursor('to').line;
+    // CodeMirror bookmark survives all subsequent edits (user typing, our package
+    // injection at top of file, etc). Insertion lands exactly where the user clicked.
+    var anchorMark = cm.setBookmark(cm.getCursor('to'));
 
     toast('Success', 'Rendering ' + detected.main + ' (' + cfg.label + ')…');
 
     var capturedDataUrl = null;
+    var capturedProps = {};
     cfg.fn(detected.main)
-      .then(function (dataUrl) {
-        capturedDataUrl = dataUrl;
-        var blob = dataUrlToBlob(dataUrl);
+      .then(function (result) {
+        if (!result || !result.dataUrl) throw new Error('Renderer returned no image');
+        capturedDataUrl = result.dataUrl;
+        capturedProps = result.props || {};
+        var blob = dataUrlToBlob(capturedDataUrl);
         var filename = cfg.prefix + '-' + safeFilenamePart(detected.main) + '-' + Date.now() + '.png';
         return uploadImage(blob, filename);
       })
@@ -429,16 +593,18 @@
         if (fid && typeof window.addUploadedFile === 'function') {
           window.addUploadedFile(fid, fname);
         }
-        // Register the binary so the file-tree download can retrieve it locally.
         window.imageBlobs = window.imageBlobs || {};
         window.imageBlobs[fname] = capturedDataUrl;
         if (typeof window.addFileToTree === 'function') {
           window.addFileToTree(fname, true);
         }
-        insertFigureBlock(cm, detected.ceRaw, fname, cfg.label, anchorLine);
+        var anchorPos = anchorMark.find();
+        if (anchorMark) anchorMark.clear();
+        insertFigureBlock(cm, detected.ceRaw, fname, cfg.label, capturedProps, anchorPos);
         toast('Success', 'Inserted ' + cfg.label + ' for ' + detected.main);
       })
       .catch(function (err) {
+        if (anchorMark) anchorMark.clear();
         toast('Error', (err && err.message) || ('Could not render ' + detected.main));
       });
   }
