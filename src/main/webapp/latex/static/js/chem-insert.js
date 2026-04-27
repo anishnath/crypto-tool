@@ -123,12 +123,17 @@
     return null;
   }
 
-  function captureCanvasFromIframe(url, canvasSelectors, label) {
+  function captureCanvasFromIframe(url, canvasSelectors, label, opts) {
+    opts = opts || {};
+    var iframeW = (opts.iframeSize && opts.iframeSize.width) || 1200;
+    var iframeH = (opts.iframeSize && opts.iframeSize.height) || 800;
+    var injectCSS = opts.injectCSS || '';
+
     return new Promise(function (resolve, reject) {
       var iframe = document.createElement('iframe');
       iframe.src = url;
       iframe.style.cssText =
-        'position:fixed;left:-10000px;top:0;width:1200px;height:800px;' +
+        'position:fixed;left:-20000px;top:0;width:' + iframeW + 'px;height:' + iframeH + 'px;' +
         'border:0;visibility:hidden;pointer-events:none;';
       iframe.setAttribute('aria-hidden', 'true');
       iframe.setAttribute('tabindex', '-1');
@@ -159,9 +164,21 @@
         catch (e) { return finish(new Error('Cannot access ' + label + ' frame')); }
         if (!doc) return finish(new Error(label + ' frame has no document'));
 
+        // Inject CSS overrides early so the renderer picks up the larger size.
+        // Also nudge a resize event so libraries (3Dmol) re-sync to the new container.
+        if (injectCSS && doc.head) {
+          var styleEl = doc.createElement('style');
+          styleEl.textContent = injectCSS;
+          doc.head.appendChild(styleEl);
+          try { iframe.contentWindow.dispatchEvent(new Event('resize')); } catch (e) {}
+        }
+
         var stableFrames = 0;
         var lastSig = '';
         pollTimer = setInterval(function () {
+          // Re-dispatch resize while waiting in case the renderer initialised
+          // before our CSS landed
+          if (injectCSS) { try { iframe.contentWindow.dispatchEvent(new Event('resize')); } catch (e) {} }
           var canvas = findCanvas(doc, canvasSelectors);
           if (!canvas || !canvas.width || !canvas.height) return;
           var sig = canvas.width + 'x' + canvas.height;
@@ -196,9 +213,16 @@
     var payload = { mode: 'formula', f: formula };
     var d = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
     var url = ctx + '/molecular-geometry-calculator.jsp?d=' + encodeURIComponent(d);
+    // Default .mg-3d-viewer is hard-coded to 420px tall — too small for figures.
+    // Inject an override so 3Dmol renders at higher resolution, then we capture
+    // the WebGL canvas at that native size.
+    var oversizeCSS =
+      '.mg-3d-viewer{width:1100px!important;height:1000px!important;min-height:1000px!important;}' +
+      '.mg-3d-wrapper{width:1100px!important;}';
     return captureCanvasFromIframe(url,
       ['.mg-3d-viewer canvas', '#mg-result-content canvas'],
-      '3D geometry');
+      '3D geometry',
+      { iframeSize: { width: 1600, height: 1300 }, injectCSS: oversizeCSS });
   }
 
   // ── Lewis: lewis-structure-generator ─────────────────────────────────────
@@ -208,7 +232,8 @@
     var url = ctx + '/lewis-structure-generator.jsp?formula=' + encodeURIComponent(formula);
     return captureCanvasFromIframe(url,
       ['#lewisCanvasContainer canvas', '.lewis-canvas-container canvas', 'canvas'],
-      'Lewis structure');
+      'Lewis structure',
+      { iframeSize: { width: 1400, height: 1100 } });
   }
 
   // ── 2D: OpenChemLib in-page (SMILES → SVG → PNG) ─────────────────────────
@@ -339,8 +364,10 @@
 
     toast('Success', 'Rendering ' + detected.main + ' (' + cfg.label + ')…');
 
+    var capturedDataUrl = null;
     cfg.fn(detected.main)
       .then(function (dataUrl) {
+        capturedDataUrl = dataUrl;
         var blob = dataUrlToBlob(dataUrl);
         var filename = cfg.prefix + '-' + safeFilenamePart(detected.main) + '-' + Date.now() + '.png';
         return uploadImage(blob, filename);
@@ -351,6 +378,9 @@
         if (fid && typeof window.addUploadedFile === 'function') {
           window.addUploadedFile(fid, fname);
         }
+        // Register the binary so the file-tree download can retrieve it locally.
+        window.imageBlobs = window.imageBlobs || {};
+        window.imageBlobs[fname] = capturedDataUrl;
         if (typeof window.addFileToTree === 'function') {
           window.addFileToTree(fname, true);
         }

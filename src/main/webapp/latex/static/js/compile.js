@@ -800,6 +800,16 @@ function hideFileCtxMenu() {
 }
 
 function downloadFile(filename) {
+  // Binary images registered via window.imageBlobs (data URLs) — handle first
+  if (window.imageBlobs && window.imageBlobs[filename]) {
+    var dataUrl = window.imageBlobs[filename];
+    var a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = filename;
+    a.click();
+    return;
+  }
+
   var content = '';
   if (filename === 'main.tex') {
     content = editingFile ? (mainTexContent || '') : (window.getEditorContent ? window.getEditorContent() : '');
