@@ -8,6 +8,14 @@
 function normalizeExpr(expr) {
     if (!expr || typeof expr !== 'string') return expr;
     var s = expr.trim();
+    /* Strip ALL internal whitespace before applying implicit-multiplication
+       rules.  Reason: MathLive's ascii-math output for `x^2 \sin(x)` is
+       `x^2 sin(x)` (space-separated) — but the implicit-mul rules below
+       expect adjacency (e.g. `\d` followed by a function name) to insert
+       the missing `*`.  Without this strip, "x^2 sin(x)" passes through
+       unchanged and nerdamer rejects it.  Whitespace is never load-bearing
+       in math expressions, so dropping it globally is safe. */
+    s = s.replace(/\s+/g, '');
     /* Unicode math → ASCII: superscripts, symbols, operators */
     /* Superscript minus + digits → ^(-N) before individual replacements */
     var supDigit = '\u00b2\u00b3\u2074\u2075\u2076\u2077\u2078\u2079\u2070\u00b9';

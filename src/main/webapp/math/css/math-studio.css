@@ -1233,6 +1233,114 @@ body.ms-body {
     box-shadow: var(--ms-shadow-sm);
 }
 
+/* ── Limit-tool aliases — same styling as ic-result-* twins.
+   Added during the limit-calculator migration.  Same pattern as the
+   dc-* block above; keeps the JS unchanged.  ──────────────────── */
+.ic-result-card .lc-result-math   { padding: 1.75rem 0 0; text-align: center; }
+.ic-result-card .lc-result-math .katex-display { margin: 0.5rem 0; overflow-x: auto; overflow-y: hidden; }
+.ic-result-card .lc-result-label {
+    font: 600 0.7rem var(--ms-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ms-muted) !important;
+    margin-bottom: 0.45rem !important;
+}
+.ic-result-card .lc-result-main  { font-size: 1.4rem !important; padding: 1.2rem 0 !important; color: var(--ms-ink) !important; }
+.ic-result-card .lc-result-numeric {
+    background: var(--ms-accent-soft) !important; color: var(--ms-accent) !important;
+    padding: 1rem 1.25rem !important; border-radius: var(--ms-radius) !important;
+    border: 1px solid var(--ms-accent-ring);
+    font: 600 1.3rem var(--ms-font-mono) !important; margin: 0.9rem 0 !important;
+}
+.ic-result-card .lc-result-detail { background: transparent !important; border: none !important; padding: 0.25rem 0 0 !important; margin-top: 1rem !important; }
+.ic-result-card .lc-method-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    background: var(--ms-accent-soft) !important; color: var(--ms-accent) !important;
+    padding: 0.25rem 0.75rem !important; border-radius: var(--ms-radius-pill) !important;
+    border: 1px solid var(--ms-accent-ring);
+    font: 600 0.72rem var(--ms-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.05em;
+}
+.ic-result-card .lc-steps-btn {
+    margin-top: 1rem !important;
+    padding: 0.55rem 1.1rem !important;
+    border: 1px solid var(--ms-accent) !important;
+    background: transparent !important; color: var(--ms-accent) !important;
+    border-radius: var(--ms-radius-pill) !important;
+    font: 600 0.82rem var(--ms-font-sans) !important;
+    transition: background var(--ms-transition), color var(--ms-transition) !important;
+}
+.ic-result-card .lc-steps-btn:hover { background: var(--ms-accent) !important; color: #fff !important; }
+.ic-result-card .lc-steps-container {
+    margin-top: 1.1rem !important;
+    border: 1px solid var(--ms-line) !important;
+    border-radius: var(--ms-radius) !important;
+    overflow: hidden; background: var(--ms-panel-bg-soft); text-align: left;
+}
+.ic-result-card .lc-steps-header {
+    padding: 0.7rem 1.1rem !important;
+    background: var(--ms-accent-soft) !important;
+    border-bottom: 1px solid var(--ms-line) !important;
+    color: var(--ms-accent) !important;
+    font: 600 0.78rem var(--ms-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.06em;
+}
+.ic-result-card .lc-step {
+    padding: 0.9rem 1.1rem !important;
+    border-bottom: 1px solid var(--ms-line) !important;
+    display: flex; gap: 0.9rem; align-items: flex-start;
+}
+.ic-result-card .lc-step:last-child { border-bottom: none !important; }
+.ic-result-card .lc-step-num {
+    width: 26px !important; height: 26px !important;
+    background: var(--ms-accent) !important; color: #fff !important;
+    font: 700 0.72rem var(--ms-font-sans) !important;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.ic-result-card .lc-step-title {
+    font: 600 0.75rem var(--ms-font-sans) !important;
+    color: var(--ms-ink-soft) !important;
+    margin-bottom: 0.35rem !important;
+    text-transform: uppercase; letter-spacing: 0.04em;
+}
+.ic-result-card .lc-step-math    { font-size: 1.02rem !important; color: var(--ms-ink) !important; }
+.ic-result-card .lc-step-math .katex-display { margin: 0 !important; display: inline-block; white-space: nowrap; }
+.ic-result-card .lc-error {
+    background: #fef7ed !important;
+    border: 1px solid #fdba74 !important;
+    border-radius: var(--ms-radius) !important;
+    padding: 1.25rem !important;
+    color: #9a3412 !important;
+    text-align: left;
+}
+[data-theme="dark"] .ic-result-card .lc-error {
+    background: rgba(251, 146, 60, 0.08) !important;
+    border-color: rgba(251, 146, 60, 0.3) !important;
+    color: #fdba74 !important;
+}
+
+/* Limit direction toggle — left / right / two-sided pill segment.
+   Same pattern as Indef/Def + 1st/2nd/3rd derivative-order toggles. */
+.ic-hero .lc-dir-toggle {
+    display: inline-flex; gap: 2px;
+    background: var(--ms-panel-bg-soft);
+    padding: 3px; border-radius: var(--ms-radius-pill);
+    border: 1px solid var(--ms-line);
+}
+.ic-hero .lc-dir-btn {
+    padding: 5px 12px; border: none; background: transparent;
+    color: var(--ms-muted);
+    font: 600 12px var(--ms-font-sans);
+    cursor: pointer; border-radius: var(--ms-radius-pill);
+    transition: color var(--ms-transition), background var(--ms-transition);
+}
+.ic-hero .lc-dir-btn:hover:not(.active) { color: var(--ms-ink); }
+.ic-hero .lc-dir-btn.active {
+    background: var(--ms-panel-bg);
+    color: var(--ms-accent);
+    box-shadow: var(--ms-shadow-sm);
+}
+
 /* Spinner used by loading states */
 .ic-result-card .ic-spinner {
     display: inline-block;
