@@ -132,8 +132,12 @@ orderBtns.forEach(function(btn){
 });
 
 // Output tabs
-var tabBtns=document.querySelectorAll('.dc-output-tab');
-var panels=document.querySelectorAll('.dc-panel');
+// Tab/panel classes are SHARED across all migrated calc pages — they're
+// styled in math-studio.css as `.ic-output-tab` / `.ic-panel` and we
+// reuse the same selectors for click-binding.  (The IDs stay
+// tool-specific: `dc-panel-result/graph/python`.)
+var tabBtns=document.querySelectorAll('.ic-output-tab');
+var panels=document.querySelectorAll('.ic-panel');
 tabBtns.forEach(function(btn){
     btn.addEventListener('click',function(){
         var panel=this.getAttribute('data-panel');
@@ -166,7 +170,23 @@ document.getElementById('dc-examples').addEventListener('click',function(e){
 
 // Live preview
 var previewTimer=null;
-exprInput.addEventListener('input',function(){clearTimeout(previewTimer);previewTimer=setTimeout(updatePreview,200);});
+exprInput.addEventListener('input',function(){
+    // Eagerly auto-fill variable / eval-point if the user typed a
+    // semantic derivative operator (d/dx f(x) — common in MathLive
+    // visual mode) or |_{x=a} eval bar.  Side-effects only — exprInput
+    // is stripped at submit time inside doDifferentiate().  Same
+    // pattern as limit-calculator.js.
+    var evalBefore = evalPointInput.value;
+    unwrapSemanticDerivative(exprInput.value.trim(), {
+        varSelect: varSelect,
+        evalInput: evalPointInput
+    });
+    if (evalPointInput.value !== evalBefore && document.activeElement !== evalPointInput) {
+        evalPointInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    clearTimeout(previewTimer);
+    previewTimer = setTimeout(updatePreview, 200);
+});
 varSelect.addEventListener('change',updatePreview);
 
 function updatePreview(){
@@ -354,7 +374,7 @@ window.showSteps=function(){
     // AI fallback
     if(stepsBtn){stepsBtn.classList.add('loading');stepsBtn.innerHTML='<span class="dc-spinner"></span> Generating steps\u2026';}
     var payload={operation:'differentiate',expression:ctx.expr,variable:ctx.v,answer:ctx.intermediates[0].text};
-    fetch('<%=request.getContextPath()%>/CFExamMarkerFunctionality?action=math_steps',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    fetch('' + (window.__DC_CTX || '') + '/CFExamMarkerFunctionality?action=math_steps',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
     .then(function(r){return r.json();})
     .then(function(data){
         if(data.success&&data.steps&&data.steps.length>0){renderSteps(data.steps,data.method||ctx.method);}
@@ -639,13 +659,59 @@ function nerdamerToPython(expr){
 }
 
 function buildCompilerCode(template){
-    var expr=exprInput.value.trim()||'x**3';
-    var pyExpr=nerdamerToPython(expr);var v=varSelect.value;
-    if(template==='sympy-diff'){
-        return 'from sympy import *\n\n'+v+' = symbols(\''+v+'\')\nexpr = '+pyExpr+'\n\nresult = diff(expr, '+v+')\nprint("Derivative:")\npprint(result)\nprint("\\nLaTeX:", latex(result))';
-    }else{
-        return 'from sympy import *\n\n'+v+' = symbols(\''+v+'\')\nexpr = '+pyExpr+'\nn = '+currentOrder+'\n\nresult = diff(expr, '+v+', n)\nprint(f"Derivative of order {n}:")\npprint(result)\nprint("\\nLaTeX:", latex(result))';
+    // Strip the d/dx wrapper + |_{x=a} eval bar if the user typed a
+    // semantic operator in MathLive visual mode.  Without unwrap, SymPy
+    // would see literal `(d)/(dx)*x*sin(x)|_(x=2)` which is junk.  Pure
+    // call (no opts) — we don't want side effects during code-gen.
+    var rawExpr = exprInput.value.trim() || 'x^3';
+    // Pipeline: unwrap semantic ops → normalizeExpr (inserts implicit
+    // `*` between digit/letter and function names — `3sin(x)` →
+    // `3*sin(x)`, mandatory for valid SymPy) → nerdamerToPython (^→**).
+    var cleanExpr = normalizeExpr(unwrapSemanticDerivative(rawExpr));
+    var pyExpr = nerdamerToPython(cleanExpr);
+    var v = varSelect.value;
+    var evalPt = (evalPointInput && evalPointInput.value || '').trim()
+        .replace(/\u03c0/g, 'pi').replace(/\u221e/g, 'oo').replace(/infinity/gi, 'oo');
+
+    // Both 'symbolic' (new staging value) and 'sympy-diff' (legacy) map
+    // to the order-aware template.  Always use currentOrder so the user's
+    // 1st/2nd/3rd toggle survives the round-trip into Python.  If they
+    // also filled an Evaluate-at point, append the substitution + numeric
+    // evaluation lines.
+    var head = 'from sympy import *\n\n'
+        + v + ' = symbols(\'' + v + '\')\n'
+        + 'expr = ' + pyExpr + '\n'
+        + 'n = ' + currentOrder + '\n\n'
+        + 'result = diff(expr, ' + v + ', n)\n'
+        + 'print(f"Derivative of order {n}:")\npprint(result)\n'
+        + 'print("\\nLaTeX:", latex(result))';
+
+    if (evalPt) {
+        head += '\n\n# Evaluate at ' + v + ' = ' + evalPt + '\n'
+            + 'value = result.subs(' + v + ', ' + evalPt + ')\n'
+            + 'print(f"\\nf^({n})(' + evalPt + ') =", value)\n'
+            + 'print("Numeric:", float(value) if value.is_real else value)';
     }
+
+    if (template === 'numerical') {
+        // Override with a SciPy-based numerical derivative around the eval
+        // point (or 0 if not specified).
+        var pt = evalPt || '0';
+        return 'import numpy as np\n'
+            + 'from scipy.misc import derivative\n\n'
+            + 'def f(' + v + '):\n'
+            + '    return ' + pyExpr.replace(/\bsin\b/g, 'np.sin')
+                                    .replace(/\bcos\b/g, 'np.cos')
+                                    .replace(/\btan\b/g, 'np.tan')
+                                    .replace(/\bexp\b/g, 'np.exp')
+                                    .replace(/\blog\b/g, 'np.log')
+                                    .replace(/\bsqrt\b/g, 'np.sqrt') + '\n\n'
+            + 'point = ' + pt + '\n'
+            + 'order = ' + currentOrder + '\n'
+            + 'value = derivative(f, point, n=order, dx=1e-6, order=2*order+1)\n'
+            + 'print(f"f^({order})({point}) =", value)';
+    }
+    return head;
 }
 
 function loadCompilerWithTemplate(){
@@ -653,7 +719,7 @@ function loadCompilerWithTemplate(){
     var code=buildCompilerCode(template);
     var b64Code=btoa(unescape(encodeURIComponent(code)));
     var config=JSON.stringify({lang:'python',code:b64Code});
-    document.getElementById('dc-compiler-iframe').src='<%=request.getContextPath()%>/onecompiler-embed.jsp?c='+encodeURIComponent(config);
+    document.getElementById('dc-compiler-iframe').src='' + (window.__DC_CTX || '') + '/onecompiler-embed.jsp?c='+encodeURIComponent(config);
 }
 document.getElementById('dc-compiler-template').addEventListener('change',function(){loadCompilerWithTemplate();});
 
