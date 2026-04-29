@@ -1,0 +1,9 @@
+{
+  "name": "graphing-tool-test",
+  "version": "1.0.0",
+  "description": "Round-trip tests for graphing-tool-engine.js LaTeX ↔ MathJS conversion and handler matching",
+  "private": true,
+  "scripts": {
+    "test": "node rtt-test.js"
+  }
+}
