@@ -1,0 +1,10 @@
+{
+  "name": "limit-calculator-test",
+  "version": "1.0.0",
+  "description": "Test suite for limit-calculator.jsp",
+  "private": true,
+  "scripts": {
+    "test": "node unwrap-test.js",
+    "test:unwrap": "node unwrap-test.js"
+  }
+}
