@@ -1,1 +1,14 @@
-{"name":"derivative-calculator-test","version":"1.0.0","description":"Test suite for derivative-calculator.jsp","private":true,"scripts":{"test":"node derivative-test.js"},"dependencies":{"nerdamer":"1.1.13"}}
+{
+  "name": "derivative-calculator-test",
+  "version": "1.0.0",
+  "description": "Test suite for derivative-calculator.jsp",
+  "private": true,
+  "scripts": {
+    "test": "node derivative-test.js && node unwrap-test.js",
+    "test:math": "node derivative-test.js",
+    "test:unwrap": "node unwrap-test.js"
+  },
+  "dependencies": {
+    "nerdamer": "1.1.13"
+  }
+}
