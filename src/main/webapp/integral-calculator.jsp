@@ -427,7 +427,16 @@
      scanner) live in a shared partial so integral-calculator.jsp and this
      file stay in lockstep.  Do NOT inline any of these scripts here —
      the partial is the single source of truth. -->
+<%--
+    Load order matters:
+      1. math-libs.jsp        — CDN deps, shared libs (no DOM reqs)
+      2. <tool>-scripts.jsp   — tool-specific logic (reads DOM)
+      3. math-input-setup.jsp — MathLive + mode toggle (reads DOM, registers events)
+    Every math tool page follows this 3-include pattern.
+--%>
+<jsp:include page="/math/partials/math-libs.jsp" />
 <jsp:include page="/math/partials/integral-calculator-scripts.jsp" />
+<jsp:include page="/math/partials/math-input-setup.jsp" />
 
 <!-- Integrate-button UX: prevent double-fire during compute + auto-scroll
      the result into view.

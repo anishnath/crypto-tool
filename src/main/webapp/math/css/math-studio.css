@@ -408,10 +408,38 @@ body.ms-body {
 
 .ic-hero .ic-expr-wrap { margin: 0; }
 
-/* The math-field's own `display` property is controlled by
-   integral-calculator.css + the Visual/Text mode attribute the IIFE
-   sets on .ic-expr-wrap.  We ONLY override visual styling — never the
-   display property — otherwise the mode toggle stops hiding one input. */
+/* ── Math-input contract: visibility rules for the Visual/Text toggle ──
+   These rules are the shared "display one input at a time" logic.
+   Originally in modern/css/integral-calculator.css; promoted here so
+   EVERY math tool that includes math-input-setup.jsp gets the correct
+   initial paint without also needing integral-calculator.css.
+
+   Visual mode (default) → text input hidden, math-field visible.
+   Text mode             → math-field hidden, text input visible.
+   No mode attribute yet → behaves as Visual. */
+.ic-expr-wrap[data-input-mode="visual"] #ic-expr,
+.ic-expr-wrap[data-input-mode="visual"] #ic-autocomplete,
+.ic-expr-wrap:not([data-input-mode]) #ic-expr,
+.ic-expr-wrap:not([data-input-mode]) #ic-autocomplete {
+    display: none;
+}
+.ic-expr-wrap[data-input-mode="text"] #ic-mathfield {
+    display: none;
+}
+
+/* Single morphing hint line: only the span matching the current mode
+   is shown.  Same default-to-visual behaviour as the inputs above. */
+.ic-expr-wrap .ic-expr-hint > span { display: none; }
+.ic-expr-wrap[data-input-mode="visual"] .ic-expr-hint .ic-hint-visual,
+.ic-expr-wrap:not([data-input-mode]) .ic-expr-hint .ic-hint-visual,
+.ic-expr-wrap[data-input-mode="text"] .ic-expr-hint .ic-hint-text {
+    display: inline;
+}
+
+/* The math-field's own `display` property is controlled by the rules
+   above + the mode attribute the IIFE sets on .ic-expr-wrap.  We ONLY
+   override visual styling in the block below — never the display
+   property — otherwise the mode toggle stops hiding one input. */
 .ic-hero .ic-mathfield {
     min-height: 56px;
     padding: 0.85rem 1.1rem;
@@ -1079,6 +1107,130 @@ body.ms-body {
     background: rgba(251, 146, 60, 0.08) !important;
     border-color: rgba(251, 146, 60, 0.3) !important;
     color: #fdba74 !important;
+}
+
+/* ── Derivative-tool aliases — same styling as ic-result-* twins.
+   Added during the derivative-calculator migration so the extracted
+   derivative-calculator.js (which uses dc-result-* classes) lands in the
+   same 2026 visual language.  Rename in the JS later if we do a DRY
+   pass; for now these parallel rules keep the scope of the migration
+   contained. ─────────────────────────────────────────────────────── */
+.ic-result-card .dc-result-math   { padding: 1.75rem 0 0; text-align: center; }
+.ic-result-card .dc-result-math .katex-display { margin: 0.5rem 0; overflow-x: auto; overflow-y: hidden; }
+.ic-result-card .dc-result-label {
+    font: 600 0.7rem var(--ms-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ms-muted) !important;
+    margin-bottom: 0.45rem !important;
+}
+.ic-result-card .dc-result-main  { font-size: 1.4rem !important; padding: 1.2rem 0 !important; color: var(--ms-ink) !important; }
+.ic-result-card .dc-result-numeric {
+    background: var(--ms-accent-soft) !important; color: var(--ms-accent) !important;
+    padding: 1rem 1.25rem !important; border-radius: var(--ms-radius) !important;
+    border: 1px solid var(--ms-accent-ring);
+    font: 600 1.3rem var(--ms-font-mono) !important; margin: 0.9rem 0 !important;
+}
+.ic-result-card .dc-result-detail { background: transparent !important; border: none !important; padding: 0.25rem 0 0 !important; margin-top: 1rem !important; }
+.ic-result-card .dc-method-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    background: var(--ms-accent-soft) !important; color: var(--ms-accent) !important;
+    padding: 0.25rem 0.75rem !important; border-radius: var(--ms-radius-pill) !important;
+    border: 1px solid var(--ms-accent-ring);
+    font: 600 0.72rem var(--ms-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.05em;
+}
+.ic-result-card .dc-intermediate {
+    background: var(--ms-panel-bg-soft) !important;
+    border: 1px solid var(--ms-line) !important;
+    border-radius: var(--ms-radius) !important;
+    padding: 0.85rem 1rem !important;
+    margin-top: 0.75rem !important;
+    text-align: center;
+}
+.ic-result-card .dc-intermediate-label {
+    font: 600 0.68rem var(--ms-font-sans) !important;
+    color: var(--ms-muted) !important;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 0.35rem !important;
+}
+.ic-result-card .dc-steps-btn {
+    margin-top: 1rem !important;
+    padding: 0.55rem 1.1rem !important;
+    border: 1px solid var(--ms-accent) !important;
+    background: transparent !important; color: var(--ms-accent) !important;
+    border-radius: var(--ms-radius-pill) !important;
+    font: 600 0.82rem var(--ms-font-sans) !important;
+    transition: background var(--ms-transition), color var(--ms-transition) !important;
+}
+.ic-result-card .dc-steps-btn:hover { background: var(--ms-accent) !important; color: #fff !important; }
+.ic-result-card .dc-steps-container {
+    margin-top: 1.1rem !important;
+    border: 1px solid var(--ms-line) !important;
+    border-radius: var(--ms-radius) !important;
+    overflow: hidden; background: var(--ms-panel-bg-soft); text-align: left;
+}
+.ic-result-card .dc-steps-header {
+    padding: 0.7rem 1.1rem !important;
+    background: var(--ms-accent-soft) !important;
+    border-bottom: 1px solid var(--ms-line) !important;
+    color: var(--ms-accent) !important;
+    font: 600 0.78rem var(--ms-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.06em;
+}
+.ic-result-card .dc-step {
+    padding: 0.9rem 1.1rem !important;
+    border-bottom: 1px solid var(--ms-line) !important;
+    display: flex; gap: 0.9rem; align-items: flex-start;
+}
+.ic-result-card .dc-step:last-child { border-bottom: none !important; }
+.ic-result-card .dc-step-num {
+    width: 26px !important; height: 26px !important;
+    background: var(--ms-accent) !important; color: #fff !important;
+    font: 700 0.72rem var(--ms-font-sans) !important;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.ic-result-card .dc-step-title {
+    font: 600 0.75rem var(--ms-font-sans) !important;
+    color: var(--ms-ink-soft) !important;
+    margin-bottom: 0.35rem !important;
+    text-transform: uppercase; letter-spacing: 0.04em;
+}
+.ic-result-card .dc-step-math    { font-size: 1.02rem !important; color: var(--ms-ink) !important; }
+.ic-result-card .dc-step-math .katex-display { margin: 0 !important; display: inline-block; white-space: nowrap; }
+.ic-result-card .dc-error {
+    background: #fef7ed !important;
+    border: 1px solid #fdba74 !important;
+    border-radius: var(--ms-radius) !important;
+    padding: 1.25rem !important;
+    color: #9a3412 !important;
+    text-align: left;
+}
+[data-theme="dark"] .ic-result-card .dc-error {
+    background: rgba(251, 146, 60, 0.08) !important;
+    border-color: rgba(251, 146, 60, 0.3) !important;
+    color: #fdba74 !important;
+}
+
+/* Derivative order toggle — same pill-segment pattern as the ic-mode-toggle */
+.ic-hero .dc-order-toggle {
+    display: inline-flex; gap: 2px;
+    background: var(--ms-panel-bg-soft);
+    padding: 3px; border-radius: var(--ms-radius-pill);
+    border: 1px solid var(--ms-line);
+}
+.ic-hero .dc-order-btn {
+    padding: 5px 12px; border: none; background: transparent;
+    color: var(--ms-muted);
+    font: 600 12px var(--ms-font-sans);
+    cursor: pointer; border-radius: var(--ms-radius-pill);
+    transition: color var(--ms-transition), background var(--ms-transition);
+}
+.ic-hero .dc-order-btn:hover:not(.active) { color: var(--ms-ink); }
+.ic-hero .dc-order-btn.active {
+    background: var(--ms-panel-bg);
+    color: var(--ms-accent);
+    box-shadow: var(--ms-shadow-sm);
 }
 
 /* Spinner used by loading states */
