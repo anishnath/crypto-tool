@@ -104,32 +104,8 @@
     <div class="ms-group" data-group="linear-algebra">
         <button class="ms-group-header" type="button">Linear Algebra <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
-            <a href="<%= ctx %>/matrix-determinant-calculator.jsp" class="ms-item <%= "matrix-det".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">|A|</span> <span class="ms-item-label">Determinant</span>
-            </a>
-            <a href="<%= ctx %>/matrix-multiplication-calculator.jsp" class="ms-item <%= "matrix-mul".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">A&#183;B</span> <span class="ms-item-label">Multiplication</span>
-            </a>
-            <a href="<%= ctx %>/matrix-inverse-calculator.jsp" class="ms-item <%= "matrix-inv".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">A&#8315;&#185;</span> <span class="ms-item-label">Inverse</span>
-            </a>
-            <a href="<%= ctx %>/matrix-eigenvalue-calculator.jsp" class="ms-item <%= "matrix-eig".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">&#955;</span> <span class="ms-item-label">Eigenvalues</span>
-            </a>
-            <a href="<%= ctx %>/matrix-rank-calculator.jsp" class="ms-item <%= "matrix-rank".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">rk</span> <span class="ms-item-label">Rank</span>
-            </a>
-            <a href="<%= ctx %>/matrix-addition-calculator.jsp" class="ms-item <%= "matrix-add".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">A+B</span> <span class="ms-item-label">Addition</span>
-            </a>
-            <a href="<%= ctx %>/matrix-power-calculator.jsp" class="ms-item <%= "matrix-pow".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">A&#8319;</span> <span class="ms-item-label">Power</span>
-            </a>
-            <a href="<%= ctx %>/matrix-transpose-calculator.jsp" class="ms-item <%= "matrix-t".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">A&#7488;</span> <span class="ms-item-label">Transpose</span>
-            </a>
-            <a href="<%= ctx %>/matrix-type-classifier.jsp" class="ms-item <%= "matrix-type".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">?</span> <span class="ms-item-label">Type Classifier</span>
+            <a href="<%= ctx %>/math/matrix-calculator.jsp" class="ms-item <%= "matrix".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#119820;</span> <span class="ms-item-label">Matrix Calculator</span>
             </a>
             <a href="<%= ctx %>/vector-calculator.jsp" class="ms-item <%= "vector".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#8407;v</span> <span class="ms-item-label">Vector</span>

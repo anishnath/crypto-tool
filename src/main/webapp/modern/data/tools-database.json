@@ -1525,46 +1525,11 @@
       "description": "Math Equation Editor - Free online mathematics tool"
     },
     {
-      "name": "Matrix Addition Calculator",
-      "url": "matrix-addition-calculator.jsp",
+      "name": "Matrix Calculator with Steps & AI Image Scan",
+      "url": "math/matrix-calculator.jsp",
       "category": "Mathematics",
-      "keywords": "matrix addition calculator mathematics",
-      "description": "Matrix Addition Calculator - Free online mathematics tool"
-    },
-    {
-      "name": "Matrix Determinant Calculator",
-      "url": "matrix-determinant-calculator.jsp",
-      "category": "Mathematics",
-      "keywords": "matrix determinant calculator mathematics",
-      "description": "Matrix Determinant Calculator - Free online mathematics tool"
-    },
-    {
-      "name": "Matrix Inverse Calculator",
-      "url": "matrix-inverse-calculator.jsp",
-      "category": "Mathematics",
-      "keywords": "matrix inverse calculator mathematics",
-      "description": "Matrix Inverse Calculator - Free online mathematics tool"
-    },
-    {
-      "name": "Matrix Power Calculator (A^n)",
-      "url": "matrix-power-calculator.jsp",
-      "category": "Mathematics",
-      "keywords": "matrix power calculator mathematics",
-      "description": "Matrix Power Calculator (A^n) - Free online mathematics tool"
-    },
-    {
-      "name": "Matrix Rank Calculator",
-      "url": "matrix-rank-calculator.jsp",
-      "category": "Mathematics",
-      "keywords": "matrix rank calculator mathematics",
-      "description": "Matrix Rank Calculator - Free online mathematics tool"
-    },
-    {
-      "name": "Matrix Type Classifier",
-      "url": "matrix-type-classifier.jsp",
-      "category": "Mathematics",
-      "keywords": "matrix type classifier mathematics",
-      "description": "Matrix Type Classifier - Free online mathematics tool"
+      "keywords": "matrix calculator with steps, matrix calculator scan image, AI matrix solver, matrix calculator photo, snap matrix problem, determinant calculator, matrix inverse calculator, matrix multiplication calculator, eigenvalue calculator, eigenvector calculator, matrix transpose calculator, matrix power calculator A^n, matrix addition calculator, matrix subtraction calculator, matrix rank calculator, RREF calculator, gauss jordan calculator, characteristic polynomial calculator, trace of matrix calculator, linear algebra calculator step by step, matrix solver online free, AP linear algebra solver, college linear algebra homework help, scan math problem from photo, photo math matrix, MathLive matrix editor, visualize matrix transformation, matrix transformation graph, eigenvector visualization, parallelogram determinant",
+      "description": "Free unified matrix calculator — det, inverse, multiply, eigenvalues, eigenvectors, transpose, rank, RREF, char. poly, power Aⁿ, A+B, A−B, A·B. Step-by-step solutions, scan a problem from a photo (AI extracts + solves), Symbolab-style smart input (\\det A / A^{-1} / A·B all auto-detected), live geometric visualization of the transformation. No signup."
     },
     {
       "name": "Mean, Median, Mode Finder",
