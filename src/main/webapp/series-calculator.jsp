@@ -5,6 +5,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <%--
+        Series Calculator — fourth tool migrated to math-studio shell.
+        Pragmatic minimal-shell migration: wraps existing sc-* markup
+        verbatim (no MathLive — the function input has its own palette
+        + autocomplete that don't fit the ic-* contract).
+
+        Build contract:
+          · SEO params: ported VERBATIM from series-calculator.jsp
+            (29 schema entries incl. 8 FAQ pairs)
+          · Sidebar tree, ms-rail, matter-bg backdrop
+          · Visible FAQ accordion mirroring faqNq/faqNa params
+          · All sc-* IDs preserved so series-calculator-core.js works
+            unchanged
+
+        See math/MIGRATION_TEMPLATE.md.
+    --%>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -50,954 +66,523 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="https://cdn.plot.ly">
 
-    <!-- Critical inline CSS — eliminates render-blocking requests for LCP -->
-    <style>
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
-        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#fff}
-        :root{
-            --sc-tool:#2563eb;--sc-tool-dark:#1d4ed8;--sc-gradient:linear-gradient(135deg,#2563eb 0%,#60a5fa 100%);--sc-light:#eff6ff;
-            --bg-primary:#fff;--bg-secondary:#f8fafc;--bg-tertiary:#f1f5f9;
-            --text-primary:#0f172a;--text-secondary:#475569;--text-muted:#94a3b8;
-            --border:#e2e8f0;--font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-            --font-mono:'JetBrains Mono','Fira Code',Consolas,monospace;
-            --shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow-lg:0 10px 15px -3px rgba(0,0,0,0.1);
-            --radius-md:0.5rem;--radius-lg:0.75rem;
-            --z-dropdown:1000;--z-fixed:1030;--z-modal:1050;
-            --header-height-desktop:72px;--header-height-mobile:64px
-        }
-        [data-theme="dark"]{--sc-light:rgba(37,99,235,0.15);--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155}
-        [data-theme="dark"] body{background:var(--bg-primary);color:var(--text-primary)}
-        .modern-nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-fixed);background:var(--bg-primary);border-bottom:1px solid var(--border);height:var(--header-height-desktop)}
-        .tool-page-header{background:var(--bg-primary);border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;margin-top:72px}
-        .tool-page-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-        .tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary);margin:0}
-        .tool-page-badges{display:flex;gap:0.5rem;flex-wrap:wrap}
-        .tool-badge{display:inline-flex;align-items:center;padding:0.25rem 0.625rem;font-size:0.6875rem;font-weight:500;border-radius:9999px;background:var(--sc-light);color:var(--sc-tool)}
-        .tool-description-section{border-bottom:1px solid var(--border);padding:1.25rem 1.5rem}
-        .tool-description-inner{max-width:1600px;margin:0 auto}
-        .tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary)}
-        .tool-page-container{display:grid;grid-template-columns:minmax(320px,400px) minmax(0,1fr) 300px;gap:1.5rem;max-width:1600px;margin:0 auto;padding:1.5rem;min-height:calc(100vh - 180px)}
-        @media(max-width:1024px){.tool-page-container{grid-template-columns:minmax(300px,380px) minmax(0,1fr)}.tool-ads-column{display:none}}
-        @media(max-width:900px){.tool-page-container{grid-template-columns:1fr;display:flex;flex-direction:column}.tool-input-column{order:1}.tool-output-column{order:2;min-height:350px}}
-        .tool-input-column{position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 110px);overflow-y:auto}
-        .tool-card{background:var(--bg-primary);border:1px solid var(--border);border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
-        .tool-card-header{background:var(--sc-gradient);color:#fff;padding:0.875rem 1rem;font-weight:600;font-size:0.9375rem}
-        .tool-card-body{padding:1rem}
-        .tool-form-label{display:block;font-weight:500;margin-bottom:0.375rem;color:var(--text-primary);font-size:0.8125rem}
-        .tool-form-hint{font-size:0.6875rem;color:var(--text-secondary);margin-top:0.25rem}
-        .tool-action-btn{width:100%;padding:0.75rem;font-weight:600;font-size:0.875rem;border:none;border-radius:0.5rem;cursor:pointer;background:var(--sc-gradient)!important;color:#fff;transition:opacity .15s}
-        .tool-result-header{display:flex;align-items:center;gap:0.5rem;padding:1rem 1.25rem;background:var(--bg-secondary);border-bottom:1px solid var(--border);border-radius:0.75rem 0.75rem 0 0}
-        .tool-result-header h4{margin:0;font-size:0.95rem;font-weight:600;color:var(--text-primary);flex:1}
-        .tool-result-content{padding:1.25rem;min-height:300px;overflow-y:auto}
-        .tool-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.5rem;color:var(--text-muted)}
-        .tool-empty-state h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem;color:var(--text-secondary)}
-        .tool-empty-state p{font-size:0.875rem;max-width:280px}
-        [data-theme="dark"] .tool-card{background:var(--bg-secondary);border-color:var(--border)}
-        [data-theme="dark"] .tool-result-header{background:var(--bg-tertiary)}
-    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
 
-    <!-- Non-blocking CSS (preload + noscript fallback) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/css/series-calculator.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/css/series-calculator.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=cacheVersion%>">
-    </noscript>
+    <!-- Shared site CSS -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
+
+    <!-- Math shell -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=cacheVersion%>">
+
+    <!-- Tool-specific CSS (sc-* widgets, mode toggles, palettes, edu cards) -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/series-calculator.css?v=<%=cacheVersion%>">
+
+    <!-- KaTeX + MathLive + image-to-math -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=cacheVersion%>">
 
     <%@ include file="modern/ads/ad-init.jsp" %>
 </head>
-<body>
-<%@ include file="modern/components/nav-header.jsp" %>
+<body class="ms-body">
 
-<header class="tool-page-header">
-    <div class="tool-page-header-inner">
-        <div>
-            <h1 class="tool-page-title">Taylor & Maclaurin Series Calculator</h1>
-            <nav class="tool-breadcrumbs">
-                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
-                Series Calculator
-            </nav>
-        </div>
-        <div class="tool-page-badges">
-            <span class="tool-badge">Free Online</span>
-            <span class="tool-badge">Step-by-Step</span>
-            <span class="tool-badge">1000+ Practice Problems</span>
-        </div>
+    <%@ include file="modern/components/nav-header.jsp" %>
+
+    <jsp:include page="/math/partials/matter-bg.jsp" />
+
+    <div class="ms-hero">
+        <%@ include file="modern/ads/ad-hero-banner.jsp" %>
     </div>
-</header>
 
-<section class="tool-description-section" style="background:var(--sc-light);">
-    <div class="tool-description-inner">
-        <div class="tool-description-content">
-            <p>Free <strong>Taylor and Maclaurin series calculator</strong> with <strong>step-by-step derivative solutions</strong>. Expand any function into a <strong>power series</strong> around any point. Interactive convergence graph, <strong>radius of convergence</strong> analysis, and <strong>printable practice worksheets</strong> with 1,000+ problems and answer keys.</p>
-        </div>
-    </div>
-</section>
+    <main class="ms-main">
 
-<main class="tool-page-container">
-    <!-- ==================== INPUT COLUMN ==================== -->
-    <div class="tool-input-column">
-        <div class="tool-card">
-            <div class="tool-card-header" style="background:var(--sc-gradient);">Series Expansion</div>
-            <div class="tool-card-body">
+        <button type="button" id="msSidebarToggle" class="ms-sidebar-toggle" aria-label="Open math tools menu">
+            &#9776; Math tools
+        </button>
 
-                <!-- Mode Toggle -->
-                <div class="tool-form-group" style="margin-bottom:0.75rem;">
-                    <label class="tool-form-label">Mode</label>
-                    <div class="sc-mode-toggle" id="sc-mode-toggle">
-                        <button type="button" class="sc-mode-btn active" data-mode="expansion">Series Expansion</button>
-                        <button type="button" class="sc-mode-btn" data-mode="remainder">Error Bound</button>
-                        <button type="button" class="sc-mode-btn" data-mode="integral">Integral Approx</button>
-                        <button type="button" class="sc-mode-btn" data-mode="limit">Limit Eval</button>
-                    </div>
-                </div>
+        <% request.setAttribute("activeService", "series"); %>
+        <jsp:include page="/math/partials/sidebar.jsp" />
 
-                <!-- Series Type Toggle -->
-                <div class="tool-form-group" style="margin-bottom:0.5rem;" id="sc-type-toggle-group">
-                    <label class="tool-form-label">Series Type</label>
-                    <div class="sc-type-toggle">
-                        <button type="button" class="sc-type-btn active" data-type="maclaurin">Maclaurin (a=0)</button>
-                        <button type="button" class="sc-type-btn" data-type="taylor">Taylor (custom a)</button>
-                    </div>
-                </div>
+        <section class="ms-workspace">
 
-                <!-- Function Input -->
-                <div class="tool-form-group">
-                    <div style="display:flex;align-items:center;justify-content:space-between;">
-                        <label class="tool-form-label" for="sc-func-input" style="margin-bottom:0;">Function f(x)</label>
-                        <button type="button" id="sc-image-btn" title="Scan series problems from image or PDF" style="padding:0.25rem 0.625rem;border-radius:9999px;border:1.5px solid var(--primary);background:transparent;color:var(--primary);font-size:0.75rem;font-weight:600;cursor:pointer;">&#128247; Scan Image</button>
-                    </div>
-                    <div class="sc-func-input-wrap">
-                        <input type="text" class="sc-func-input" id="sc-func-input" placeholder="e.g., e^x, sin(x), cos(x), ln(1+x)" value="e^x" autocomplete="off" spellcheck="false">
-                        <div class="sc-func-autocomplete" id="sc-func-autocomplete"></div>
-                    </div>
-                    <!-- Function Palette -->
-                    <div class="sc-func-palette" id="sc-func-palette">
-                        <button type="button" class="sc-palette-btn" data-insert="sin(" title="sine">sin</button>
-                        <button type="button" class="sc-palette-btn" data-insert="cos(" title="cosine">cos</button>
-                        <button type="button" class="sc-palette-btn" data-insert="tan(" title="tangent">tan</button>
-                        <button type="button" class="sc-palette-btn" data-insert="e^(" title="exponential">e<sup>x</sup></button>
-                        <button type="button" class="sc-palette-btn" data-insert="ln(" title="natural log">ln</button>
-                        <button type="button" class="sc-palette-btn" data-insert="log(" title="logarithm">log</button>
-                        <button type="button" class="sc-palette-btn" data-insert="sqrt(" title="square root">&radic;</button>
-                        <button type="button" class="sc-palette-btn" data-insert="^" title="power">x<sup>n</sup></button>
-                        <button type="button" class="sc-palette-btn" data-insert="pi" title="pi">&pi;</button>
-                        <button type="button" class="sc-palette-btn" data-insert="(" title="open paren">(</button>
-                        <button type="button" class="sc-palette-btn" data-insert=")" title="close paren">)</button>
-                        <button type="button" class="sc-palette-btn" data-insert="1/(" title="reciprocal">1/x</button>
-                    </div>
-                    <div class="tool-form-hint">Click buttons above or type directly. Use ^ for powers, e.g. x^2</div>
-                    <!-- Quick Examples (contextual to function input) -->
-                    <div class="sc-examples" style="margin-top:0.375rem;">
-                        <button type="button" class="sc-example-chip" data-example="exp">e^x</button>
-                        <button type="button" class="sc-example-chip" data-example="sin">sin(x)</button>
-                        <button type="button" class="sc-example-chip" data-example="cos">cos(x)</button>
-                        <button type="button" class="sc-example-chip" data-example="ln">ln(1+x)</button>
-                        <button type="button" class="sc-example-chip" data-example="geo">1/(1-x)</button>
-                        <button type="button" class="sc-example-chip" data-example="sqrt">&radic;(1+x)</button>
-                        <button type="button" class="sc-example-chip" data-example="tan">tan(x)</button>
-                        <button type="button" class="sc-example-chip" data-example="taylor">sin(x) @ &pi;</button>
-                    </div>
-                </div>
+            <header class="ms-title">
+                <nav class="ms-crumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a>
+                    <span>/</span>
+                    <a href="<%=request.getContextPath()%>/math/">Math</a>
+                    <span>/</span>
+                    <span aria-current="page">Series</span>
+                </nav>
+                <h1>Taylor &amp; Maclaurin Series Calculator</h1>
+            </header>
 
-                <!-- Parameters -->
-                <div class="sc-param-row">
-                    <div class="sc-param-group" id="sc-center-group" style="display:none;">
-                        <label class="sc-param-label" for="sc-center-point">Center (a)</label>
-                        <input type="text" class="sc-param-input" id="sc-center-point" placeholder="e.g., 0, 1, pi" value="0">
-                    </div>
-                    <div class="sc-param-group">
-                        <label class="sc-param-label" for="sc-num-terms">Terms (n)</label>
-                        <input type="number" class="sc-param-input" id="sc-num-terms" min="1" max="20" value="5">
-                    </div>
-                </div>
+            <%-- Two-column input/output grid (no separate ads column — rail handles ads). --%>
+            <div class="tool-page-container" style="grid-template-columns:minmax(300px,400px) minmax(0,1fr); max-width:none; padding:0; margin:0; min-height:0;">
 
-                <!-- Remainder Mode Inputs -->
-                <div class="sc-mode-inputs" id="sc-remainder-inputs" style="display:none">
-                    <div class="sc-param-row">
-                        <div class="sc-param-group">
-                            <label class="sc-param-label" for="sc-eval-point">Evaluate at x =</label>
-                            <input type="text" class="sc-param-input" id="sc-eval-point" placeholder="e.g., 0.5, 1, pi/4" value="0.5">
+                <!-- ==================== INPUT COLUMN ==================== -->
+                <div class="tool-input-column">
+                    <div class="tool-card">
+                        <div class="tool-card-header" style="background:var(--sc-gradient);">Series Expansion</div>
+                        <div class="tool-card-body">
+
+                            <!-- Mode Toggle -->
+                            <div class="tool-form-group" style="margin-bottom:0.75rem;">
+                                <label class="tool-form-label">Mode</label>
+                                <div class="sc-mode-toggle" id="sc-mode-toggle">
+                                    <button type="button" class="sc-mode-btn active" data-mode="expansion">Series Expansion</button>
+                                    <button type="button" class="sc-mode-btn" data-mode="remainder">Error Bound</button>
+                                    <button type="button" class="sc-mode-btn" data-mode="integral">Integral Approx</button>
+                                    <button type="button" class="sc-mode-btn" data-mode="limit">Limit Eval</button>
+                                </div>
+                            </div>
+
+                            <!-- Series Type Toggle -->
+                            <div class="tool-form-group" style="margin-bottom:0.5rem;" id="sc-type-toggle-group">
+                                <label class="tool-form-label">Series Type</label>
+                                <div class="sc-type-toggle">
+                                    <button type="button" class="sc-type-btn active" data-type="maclaurin">Maclaurin (a=0)</button>
+                                    <button type="button" class="sc-type-btn" data-type="taylor">Taylor (custom a)</button>
+                                </div>
+                            </div>
+
+                            <!-- Function Input — MathLive Visual + Text fallback -->
+                            <div class="tool-form-group">
+                                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+                                    <label class="tool-form-label" for="sc-func-input" style="margin-bottom:0;">Function f(x)</label>
+                                    <div style="display:flex;gap:0.5rem;align-items:center;">
+                                        <div class="ic-input-mode-toggle" data-mml-toggle role="radiogroup" aria-label="Input mode" style="display:inline-flex;border:1px solid var(--border);border-radius:9999px;padding:2px;background:var(--bg-secondary);">
+                                            <button type="button" class="ic-input-mode-btn active" data-input-mode="visual" role="radio" aria-checked="true" title="Write math visually" style="padding:0.2rem 0.6rem;border:none;background:transparent;font-size:0.7rem;font-weight:600;cursor:pointer;border-radius:9999px;">&fnof; Visual</button>
+                                            <button type="button" class="ic-input-mode-btn" data-input-mode="text" role="radio" aria-checked="false" title="Type plain text" style="padding:0.2rem 0.6rem;border:none;background:transparent;font-size:0.7rem;font-weight:600;cursor:pointer;border-radius:9999px;font-family:var(--font-mono);">&lt;/&gt; Text</button>
+                                        </div>
+                                        <button type="button" id="sc-image-btn" title="Scan series problems from image or PDF" style="padding:0.25rem 0.625rem;border-radius:9999px;border:1.5px solid var(--primary);background:transparent;color:var(--primary);font-size:0.75rem;font-weight:600;cursor:pointer;">&#128247; Scan</button>
+                                    </div>
+                                </div>
+                                <div class="sc-func-input-wrap mml-pair">
+                                    <math-field class="mml-mathfield" aria-label="Function for series expansion"
+                                                placeholder="e^x"
+                                                smart-mode="on" smart-fence="on" smart-superscript="on"
+                                                remove-extraneous-parentheses="on"></math-field>
+                                    <input type="text" class="sc-func-input mml-text" id="sc-func-input" placeholder="e.g., e^x, sin(x), cos(x), ln(1+x)" value="e^x" autocomplete="off" spellcheck="false">
+                                    <div class="sc-func-autocomplete mml-text-extra" id="sc-func-autocomplete"></div>
+                                </div>
+                                <!-- Function Palette -->
+                                <div class="sc-func-palette" id="sc-func-palette">
+                                    <button type="button" class="sc-palette-btn" data-insert="sin(" title="sine">sin</button>
+                                    <button type="button" class="sc-palette-btn" data-insert="cos(" title="cosine">cos</button>
+                                    <button type="button" class="sc-palette-btn" data-insert="tan(" title="tangent">tan</button>
+                                    <button type="button" class="sc-palette-btn" data-insert="e^(" title="exponential">e<sup>x</sup></button>
+                                    <button type="button" class="sc-palette-btn" data-insert="ln(" title="natural log">ln</button>
+                                    <button type="button" class="sc-palette-btn" data-insert="log(" title="logarithm">log</button>
+                                    <button type="button" class="sc-palette-btn" data-insert="sqrt(" title="square root">&radic;</button>
+                                    <button type="button" class="sc-palette-btn" data-insert="^" title="power">x<sup>n</sup></button>
+                                    <button type="button" class="sc-palette-btn" data-insert="pi" title="pi">&pi;</button>
+                                    <button type="button" class="sc-palette-btn" data-insert="(" title="open paren">(</button>
+                                    <button type="button" class="sc-palette-btn" data-insert=")" title="close paren">)</button>
+                                    <button type="button" class="sc-palette-btn" data-insert="1/(" title="reciprocal">1/x</button>
+                                </div>
+                                <div class="tool-form-hint">Click buttons above or type directly. Use ^ for powers, e.g. x^2</div>
+                                <!-- Quick Examples -->
+                                <div class="sc-examples" style="margin-top:0.375rem;">
+                                    <button type="button" class="sc-example-chip" data-example="exp">e^x</button>
+                                    <button type="button" class="sc-example-chip" data-example="sin">sin(x)</button>
+                                    <button type="button" class="sc-example-chip" data-example="cos">cos(x)</button>
+                                    <button type="button" class="sc-example-chip" data-example="ln">ln(1+x)</button>
+                                    <button type="button" class="sc-example-chip" data-example="geo">1/(1-x)</button>
+                                    <button type="button" class="sc-example-chip" data-example="sqrt">&radic;(1+x)</button>
+                                    <button type="button" class="sc-example-chip" data-example="tan">tan(x)</button>
+                                    <button type="button" class="sc-example-chip" data-example="taylor">sin(x) @ &pi;</button>
+                                </div>
+                            </div>
+
+                            <!-- Parameters -->
+                            <div class="sc-param-row">
+                                <div class="sc-param-group" id="sc-center-group" style="display:none;">
+                                    <label class="sc-param-label" for="sc-center-point">Center (a)</label>
+                                    <input type="text" class="sc-param-input" id="sc-center-point" placeholder="e.g., 0, 1, pi" value="0">
+                                </div>
+                                <div class="sc-param-group">
+                                    <label class="sc-param-label" for="sc-num-terms">Terms (n)</label>
+                                    <input type="number" class="sc-param-input" id="sc-num-terms" min="1" max="20" value="5">
+                                </div>
+                            </div>
+
+                            <!-- Remainder Mode Inputs -->
+                            <div class="sc-mode-inputs" id="sc-remainder-inputs" style="display:none">
+                                <div class="sc-param-row">
+                                    <div class="sc-param-group">
+                                        <label class="sc-param-label" for="sc-eval-point">Evaluate at x =</label>
+                                        <input type="text" class="sc-param-input" id="sc-eval-point" placeholder="e.g., 0.5, 1, pi/4" value="0.5">
+                                    </div>
+                                </div>
+                                <div class="tool-form-hint">Computes the Lagrange remainder bound |R<sub>n</sub>(x)| for the Taylor polynomial.</div>
+                            </div>
+
+                            <!-- Integral Mode Inputs -->
+                            <div class="sc-mode-inputs" id="sc-integral-inputs" style="display:none">
+                                <div class="sc-param-row">
+                                    <div class="sc-param-group">
+                                        <label class="sc-param-label" for="sc-int-lower">Lower bound</label>
+                                        <input type="text" class="sc-param-input" id="sc-int-lower" placeholder="e.g., 0" value="0">
+                                    </div>
+                                    <div class="sc-param-group">
+                                        <label class="sc-param-label" for="sc-int-upper">Upper bound</label>
+                                        <input type="text" class="sc-param-input" id="sc-int-upper" placeholder="e.g., 1" value="1">
+                                    </div>
+                                </div>
+                                <div class="tool-form-hint">Approximates &int;f(x)dx by integrating the Taylor polynomial term-by-term.</div>
+                            </div>
+
+                            <!-- Limit Mode Inputs -->
+                            <div class="sc-mode-inputs" id="sc-limit-inputs" style="display:none">
+                                <div class="sc-param-row">
+                                    <div class="sc-param-group">
+                                        <label class="sc-param-label" for="sc-limit-expr">Full expression</label>
+                                        <input type="text" class="sc-func-input" id="sc-limit-expr" placeholder="e.g., sin(x)/x, (e^x-1)/x" value="sin(x)/x" autocomplete="off" spellcheck="false">
+                                    </div>
+                                    <div class="sc-param-group">
+                                        <label class="sc-param-label" for="sc-limit-point">x &rarr;</label>
+                                        <input type="text" class="sc-param-input" id="sc-limit-point" placeholder="e.g., 0, inf" value="0">
+                                    </div>
+                                </div>
+                                <div class="tool-form-hint">Evaluates limits by substituting Taylor expansions and simplifying.</div>
+                            </div>
+
+                            <!-- Live Preview -->
+                            <div class="tool-form-group" style="margin-top:0.75rem;">
+                                <label class="tool-form-label">Series Preview</label>
+                                <div class="sc-preview" id="sc-preview"></div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div style="display:flex;gap:0.5rem;">
+                                <button type="button" class="tool-action-btn" id="sc-solve-btn" data-mml-submit style="flex:1">Calculate Series</button>
+                                <button type="button" class="tool-action-btn" id="sc-clear-btn" style="flex:0;min-width:60px;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Clear</button>
+                            </div>
+
+                            <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
+
+                            <!-- Worksheet Generator -->
+                            <div>
+                                <label class="tool-form-label">Worksheet Generator</label>
+                                <p style="font-size:0.75rem;color:var(--text-muted);margin:0 0 0.5rem;">
+                                    Generate a printable practice worksheet with random questions and answer key.
+                                </p>
+                                <button type="button" class="sc-worksheet-btn" id="sc-worksheet-btn">
+                                    Print Worksheet
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="tool-form-hint">Computes the Lagrange remainder bound |R<sub>n</sub>(x)| for the Taylor polynomial.</div>
                 </div>
 
-                <!-- Integral Mode Inputs -->
-                <div class="sc-mode-inputs" id="sc-integral-inputs" style="display:none">
-                    <div class="sc-param-row">
-                        <div class="sc-param-group">
-                            <label class="sc-param-label" for="sc-int-lower">Lower bound</label>
-                            <input type="text" class="sc-param-input" id="sc-int-lower" placeholder="e.g., 0" value="0">
+                <!-- ==================== OUTPUT COLUMN ==================== -->
+                <div class="tool-output-column">
+                    <!-- Tab bar -->
+                    <div class="sc-output-tabs">
+                        <button type="button" class="sc-output-tab active" data-panel="result">Result</button>
+                        <button type="button" class="sc-output-tab" data-panel="graph">Graph</button>
+                        <button type="button" class="sc-output-tab" data-panel="python">Python Compiler</button>
+                    </div>
+
+                    <!-- Result Panel -->
+                    <div class="sc-panel active" id="sc-panel-result">
+                        <div class="sc-result-scroll-container">
+                            <div class="tool-card tool-result-card">
+                                <div class="tool-result-header">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                                    </svg>
+                                    <h4>Series Expansion</h4>
+                                </div>
+                                <div class="tool-result-content" id="sc-result-content">
+                                    <div class="tool-empty-state" id="sc-empty-state">
+                                        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&Sigma;</div>
+                                        <h3>Enter a function</h3>
+                                        <p>Calculate Taylor or Maclaurin series expansion with step-by-step solutions.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step-by-Step CTA Button -->
+                            <div id="sc-steps-cta" style="display:none;margin-top:1rem;">
+                                <button type="button" class="sc-steps-toggle-btn" id="sc-steps-toggle-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;">
+                                        <path d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                    Show Step-by-Step Solution
+                                </button>
+                            </div>
+                            <div id="sc-steps-area" style="margin-top:1rem;display:none;"></div>
+                            <div id="sc-convergence-area" style="margin-top:0.5rem"></div>
                         </div>
-                        <div class="sc-param-group">
-                            <label class="sc-param-label" for="sc-int-upper">Upper bound</label>
-                            <input type="text" class="sc-param-input" id="sc-int-upper" placeholder="e.g., 1" value="1">
+
+                        <!-- Sticky action toolbar -->
+                        <div class="sc-result-toolbar" id="sc-result-actions" style="display:none">
+                            <div class="sc-toolbar-group">
+                                <button type="button" class="sc-toolbar-btn" id="sc-download-pdf-btn" title="Download as PDF">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    PDF
+                                </button>
+                            </div>
+                            <div class="sc-toolbar-sep"></div>
+                            <div class="sc-toolbar-group">
+                                <button type="button" class="sc-toolbar-btn" id="sc-share-btn" title="Copy share link">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                                    Share
+                                </button>
+                            </div>
+                            <div class="sc-toolbar-sep"></div>
+                            <div class="sc-toolbar-group">
+                                <button type="button" class="sc-toolbar-btn" id="sc-toolbar-worksheet-btn" title="Generate practice worksheet">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                    Worksheet
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="tool-form-hint">Approximates &int;f(x)dx by integrating the Taylor polynomial term-by-term.</div>
-                </div>
 
-                <!-- Limit Mode Inputs -->
-                <div class="sc-mode-inputs" id="sc-limit-inputs" style="display:none">
-                    <div class="sc-param-row">
-                        <div class="sc-param-group">
-                            <label class="sc-param-label" for="sc-limit-expr">Full expression</label>
-                            <input type="text" class="sc-func-input" id="sc-limit-expr" placeholder="e.g., sin(x)/x, (e^x-1)/x" value="sin(x)/x" autocomplete="off" spellcheck="false">
-                        </div>
-                        <div class="sc-param-group">
-                            <label class="sc-param-label" for="sc-limit-point">x &rarr;</label>
-                            <input type="text" class="sc-param-input" id="sc-limit-point" placeholder="e.g., 0, inf" value="0">
+                    <!-- Graph Panel -->
+                    <div class="sc-panel" id="sc-panel-graph">
+                        <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                            <div class="tool-result-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
+                                    <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                                </svg>
+                                <h4>Convergence Graph</h4>
+                            </div>
+                            <div style="flex:1;min-height:0;padding:0.75rem;">
+                                <div id="sc-graph-container"></div>
+                                <p id="sc-graph-hint" style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">Calculate a series to see the function vs approximation graph.</p>
+
+                                <!-- Term Slider -->
+                                <div class="sc-slider-group">
+                                    <span class="sc-slider-label">Terms:</span>
+                                    <input type="range" class="sc-slider" id="sc-term-slider" min="1" max="20" value="5">
+                                    <span class="sc-slider-value" id="sc-term-slider-value">5</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="tool-form-hint">Evaluates limits by substituting Taylor expansions and simplifying.</div>
+
+                    <!-- Python Compiler Panel -->
+                    <div class="sc-panel" id="sc-panel-python">
+                        <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
+                            <div class="tool-result-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                                <h4>Python Compiler</h4>
+                                <select id="sc-compiler-template" style="margin-left:auto;padding:0.3rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;">
+                                    <option value="sympy-series">Series Expansion</option>
+                                    <option value="numpy-approx">Numeric Approximation</option>
+                                    <option value="sympy-convergence">Convergence Analysis</option>
+                                </select>
+                            </div>
+                            <div style="flex:1;min-height:0;">
+                                <iframe id="sc-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Live Preview -->
-                <div class="tool-form-group" style="margin-top:0.75rem;">
-                    <label class="tool-form-label">Series Preview</label>
-                    <div class="sc-preview" id="sc-preview"></div>
-                </div>
+            <!-- In-content ad (mobile/tablet) -->
+            <div class="ms-inline-ad">
+                <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+            </div>
 
-                <!-- Action Buttons -->
-                <div style="display:flex;gap:0.5rem;">
-                    <button type="button" class="tool-action-btn" id="sc-solve-btn" style="flex:1">Calculate Series</button>
-                    <button type="button" class="tool-action-btn" id="sc-clear-btn" style="flex:0;min-width:60px;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Clear</button>
-                </div>
+            <!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
+            <section class="tool-expertise-section" style="margin:2rem 0;">
 
-                <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
-
-                <!-- Worksheet Generator -->
-                <div>
-                    <label class="tool-form-label">Worksheet Generator</label>
-                    <p style="font-size:0.75rem;color:var(--text-muted);margin:0 0 0.5rem;">
-                        Generate a printable practice worksheet with random questions and answer key.
+                <!-- ===== 1. WHAT IS A TAYLOR SERIES? ===== -->
+                <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+                    <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">What is a Taylor Series?</h2>
+                    <p class="sc-anim" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
+                        A <strong>Taylor series</strong> represents a function as an infinite sum of polynomial terms calculated from the function's <strong>derivatives at a single point</strong>. It is one of the most powerful tools in calculus &mdash; enabling us to approximate complex functions like sin(x), e<sup>x</sup>, and ln(x) using simple polynomials.
                     </p>
-                    <button type="button" class="sc-worksheet-btn" id="sc-worksheet-btn">
-                        Print Worksheet
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- ==================== OUTPUT COLUMN ==================== -->
-    <div class="tool-output-column">
-        <!-- Tab bar -->
-        <div class="sc-output-tabs">
-            <button type="button" class="sc-output-tab active" data-panel="result">Result</button>
-            <button type="button" class="sc-output-tab" data-panel="graph">Graph</button>
-            <button type="button" class="sc-output-tab" data-panel="python">Python Compiler</button>
-        </div>
-
-        <!-- Result Panel -->
-        <div class="sc-panel active" id="sc-panel-result">
-            <div class="sc-result-scroll-container">
-                <div class="tool-card tool-result-card">
-                    <div class="tool-result-header">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                        </svg>
-                        <h4>Series Expansion</h4>
+                    <!-- Taylor Series Formula Breakdown -->
+                    <div class="sc-concept-hero">
+                        <div class="sc-concept-block"><div class="sc-concept-symbol sc-c-fn">f(x)</div><div class="sc-concept-label sc-c-fn">Function</div></div>
+                        <div class="sc-concept-block"><div class="sc-concept-symbol sc-c-eq">=</div></div>
+                        <div class="sc-concept-block"><div class="sc-concept-symbol sc-c-eq">&Sigma;</div></div>
+                        <div class="sc-concept-block"><div class="sc-concept-symbol sc-c-deriv">f<sup>(n)</sup>(a)</div><div class="sc-concept-label sc-c-deriv">nth Derivative</div></div>
+                        <div class="sc-concept-block"><div class="sc-concept-symbol sc-c-eq">/</div></div>
+                        <div class="sc-concept-block"><div class="sc-concept-symbol sc-c-fact">n!</div><div class="sc-concept-label sc-c-fact">Factorial</div></div>
+                        <div class="sc-concept-block"><div class="sc-concept-symbol sc-c-eq">&middot;</div></div>
+                        <div class="sc-concept-block"><div class="sc-concept-symbol sc-c-power">(x&minus;a)<sup>n</sup></div><div class="sc-concept-label sc-c-power">Power Term</div></div>
                     </div>
-                    <div class="tool-result-content" id="sc-result-content">
-                        <div class="tool-empty-state" id="sc-empty-state">
-                            <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&Sigma;</div>
-                            <h3>Enter a function</h3>
-                            <p>Calculate Taylor or Maclaurin series expansion with step-by-step solutions.</p>
+
+                    <div class="sc-callout sc-callout-insight sc-anim sc-anim-d2">
+                        <span class="sc-callout-icon">&#128161;</span>
+                        <div class="sc-callout-text">
+                            <strong>Why does it work?</strong>
+                            Each term matches one more derivative of the original function at the center point. With enough terms, the polynomial approximation becomes indistinguishable from the original function &mdash; at least within the <strong>radius of convergence</strong>.
                         </div>
                     </div>
                 </div>
 
-                <!-- Step-by-Step CTA Button -->
-                <div id="sc-steps-cta" style="display:none;margin-top:1rem;">
-                    <button type="button" class="sc-steps-toggle-btn" id="sc-steps-toggle-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;">
-                            <path d="M9 5l7 7-7 7"/>
-                        </svg>
-                        Show Step-by-Step Solution
-                    </button>
-                </div>
-                <div id="sc-steps-area" style="margin-top:1rem;display:none;"></div>
-                <div id="sc-convergence-area" style="margin-top:0.5rem"></div>
-            </div>
+                <!-- ===== 2. COMMON SERIES ===== -->
+                <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+                    <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Common Maclaurin Series</h2>
+                    <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.5rem;">
+                        These series are used so frequently in mathematics and physics that they are worth memorizing.
+                    </p>
 
-            <!-- Sticky action toolbar -->
-            <div class="sc-result-toolbar" id="sc-result-actions" style="display:none">
-                <div class="sc-toolbar-group">
-                    <button type="button" class="sc-toolbar-btn" id="sc-download-pdf-btn" title="Download as PDF">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        PDF
-                    </button>
-                </div>
-                <div class="sc-toolbar-sep"></div>
-                <div class="sc-toolbar-group">
-                    <button type="button" class="sc-toolbar-btn" id="sc-share-btn" title="Copy share link">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                        Share
-                    </button>
-                </div>
-                <div class="sc-toolbar-sep"></div>
-                <div class="sc-toolbar-group">
-                    <button type="button" class="sc-toolbar-btn" id="sc-toolbar-worksheet-btn" title="Generate practice worksheet">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                        Worksheet
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Graph Panel -->
-        <div class="sc-panel" id="sc-panel-graph">
-            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
-                        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-                    </svg>
-                    <h4>Convergence Graph</h4>
-                </div>
-                <div style="flex:1;min-height:0;padding:0.75rem;">
-                    <div id="sc-graph-container"></div>
-                    <p id="sc-graph-hint" style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">Calculate a series to see the function vs approximation graph.</p>
-
-                    <!-- Term Slider -->
-                    <div class="sc-slider-group">
-                        <span class="sc-slider-label">Terms:</span>
-                        <input type="range" class="sc-slider" id="sc-term-slider" min="1" max="20" value="5">
-                        <span class="sc-slider-value" id="sc-term-slider-value">5</span>
+                    <div class="sc-series-grid">
+                        <div class="sc-series-card sc-anim sc-anim-d1" style="border-left-color:#2563eb;"><h4><span style="color:#2563eb;">&#9679;</span> Exponential</h4><p>e<sup>x</sup> = 1 + x + x&sup2;/2! + x&sup3;/3! + &hellip;</p><p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = &infin;</p></div>
+                        <div class="sc-series-card sc-anim sc-anim-d2" style="border-left-color:#dc2626;"><h4><span style="color:#dc2626;">&#9679;</span> Sine</h4><p>sin(x) = x &minus; x&sup3;/3! + x<sup>5</sup>/5! &minus; &hellip;</p><p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = &infin;</p></div>
+                        <div class="sc-series-card sc-anim sc-anim-d3" style="border-left-color:#059669;"><h4><span style="color:#059669;">&#9679;</span> Cosine</h4><p>cos(x) = 1 &minus; x&sup2;/2! + x<sup>4</sup>/4! &minus; &hellip;</p><p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = &infin;</p></div>
+                        <div class="sc-series-card sc-anim sc-anim-d4" style="border-left-color:#d97706;"><h4><span style="color:#d97706;">&#9679;</span> Natural Log</h4><p>ln(1+x) = x &minus; x&sup2;/2 + x&sup3;/3 &minus; &hellip;</p><p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = 1</p></div>
+                        <div class="sc-series-card sc-anim sc-anim-d5" style="border-left-color:#7c3aed;"><h4><span style="color:#7c3aed;">&#9679;</span> Geometric</h4><p>1/(1&minus;x) = 1 + x + x&sup2; + x&sup3; + &hellip;</p><p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = 1</p></div>
+                        <div class="sc-series-card sc-anim sc-anim-d5" style="border-left-color:#0891b2;"><h4><span style="color:#0891b2;">&#9679;</span> Square Root</h4><p>&radic;(1+x) = 1 + x/2 &minus; x&sup2;/8 + &hellip;</p><p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = 1</p></div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Python Compiler Panel -->
-        <div class="sc-panel" id="sc-panel-python">
-            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
-                        <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    <h4>Python Compiler</h4>
-                    <select id="sc-compiler-template" style="margin-left:auto;padding:0.3rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;">
-                        <option value="sympy-series">Series Expansion</option>
-                        <option value="numpy-approx">Numeric Approximation</option>
-                        <option value="sympy-convergence">Convergence Analysis</option>
-                    </select>
+                <!-- ===== 3. CONVERGENCE EXPLAINED ===== -->
+                <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+                    <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">Understanding Convergence</h2>
+                    <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
+                        Not every Taylor series converges everywhere. The <strong>radius of convergence R</strong> tells you how far from the center point the series reliably approximates the function.
+                    </p>
+
+                    <div class="sc-edu-grid">
+                        <div class="sc-edu-card sc-anim sc-anim-d1" style="border-left:3px solid #22c55e;"><h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#22c55e;">&#9679;</span> R = &infin;</h4><p>Functions like e<sup>x</sup>, sin(x), and cos(x) converge for all real x. Their series approximation works everywhere.</p></div>
+                        <div class="sc-edu-card sc-anim sc-anim-d2" style="border-left:3px solid #f59e0b;"><h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#f59e0b;">&#9679;</span> Finite R</h4><p>Functions like ln(1+x) and 1/(1&minus;x) only converge within a limited interval around the center. Beyond that, the series diverges.</p></div>
+                        <div class="sc-edu-card sc-anim sc-anim-d3" style="border-left:3px solid #ef4444;"><h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#ef4444;">&#9679;</span> Singularities</h4><p>The radius of convergence equals the distance to the nearest singularity (point where the function is undefined), even in the complex plane.</p></div>
+                    </div>
+
+                    <div class="sc-callout sc-callout-tip sc-anim sc-anim-d4">
+                        <span class="sc-callout-icon">&#128073;</span>
+                        <div class="sc-callout-text">
+                            <strong>Try it!</strong> Enter <code style="background:var(--bg-tertiary);padding:0.125rem 0.375rem;border-radius:0.25rem;font-size:0.8125rem;">ln(1+x)</code> and increase terms to 15. Watch how the graph matches well for |x| &lt; 1 but diverges wildly beyond x = 1.
+                        </div>
+                    </div>
                 </div>
-                <div style="flex:1;min-height:0;">
-                    <iframe id="sc-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
+
+                <!-- ===== 4. APPLICATIONS ===== -->
+                <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
+                    <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Real-World Applications</h2>
+                    <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
+                        Taylor series aren&rsquo;t just theoretical &mdash; they power real technology and science every day.
+                    </p>
+                    <div class="sc-edu-grid">
+                        <div class="sc-edu-card" style="border-left:3px solid #2563eb;"><h4>Calculator Chips</h4><p>Your calculator computes sin(x) and cos(x) using polynomial approximations derived from Taylor series. Hardware implements these as fast multiplications and additions.</p></div>
+                        <div class="sc-edu-card" style="border-left:3px solid #7c3aed;"><h4>Physics Approximations</h4><p>sin(&theta;) &approx; &theta; for small angles simplifies pendulum equations. Many physics formulas are first-order Taylor approximations.</p></div>
+                        <div class="sc-edu-card" style="border-left:3px solid #059669;"><h4>Machine Learning</h4><p>Gradient descent uses first-order Taylor approximation. Newton&rsquo;s method uses second-order. Higher-order optimization uses more terms.</p></div>
+                    </div>
                 </div>
+            </section>
+
+        </section>
+
+        <aside class="ms-rail" aria-label="Advertisements">
+            <%@ include file="modern/ads/ad-ide-rail-top.jsp" %>
+            <%@ include file="modern/ads/ad-ide-rail-bottom.jsp" %>
+        </aside>
+    </main>
+
+    <!-- Visible FAQ — keep in sync with faqNq/faqNa jsp:params above. -->
+    <section class="ms-faq-wrap" style="max-width:1440px;margin:2.5rem auto 0;padding:0 1.5rem;">
+        <h2 class="ms-faq-title" id="faqs">Frequently asked</h2>
+        <div class="ms-faq" aria-label="Series calculator FAQ">
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">What is the difference between Taylor and Maclaurin series?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">A <strong>Taylor series</strong> expands a function <em>f(x)</em> around any point <em>a</em> using <em>f(x) = &Sigma; f<sup>(n)</sup>(a)/n! &middot; (x&minus;a)<sup>n</sup></em>. A <strong>Maclaurin series</strong> is the special case where <em>a = 0</em>, so <em>f(x) = &Sigma; f<sup>(n)</sup>(0)/n! &middot; x<sup>n</sup></em>. Both represent functions as infinite polynomial sums &mdash; this calculator supports both.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">How many terms do I need for a good approximation?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Depends on the function and how far from the center you evaluate. Near the center, <strong>5&ndash;7 terms</strong> often give excellent accuracy. Farther away &mdash; or for functions with small convergence radii &mdash; you may need <strong>15&ndash;20 terms</strong>. Use the interactive graph with the term slider to watch convergence in real time.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">What is the radius of convergence?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">The <strong>radius of convergence R</strong> is the distance from the center within which the series converges to the actual function. For <em>|x&minus;a| &lt; R</em>, more terms get closer to the true value; for <em>|x&minus;a| &gt; R</em> the series diverges. Common values: <em>e<sup>x</sup></em> has <em>R = &infin;</em>, <em>ln(1+x)</em> has <em>R = 1</em>, <em>tan(x)</em> has <em>R = &pi;/2</em>.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">How do you use Taylor series to approximate definite integrals?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Replace the integrand with its Taylor polynomial, then integrate term-by-term. For example, <em>&int;<sub>0</sub><sup>1</sup> e<sup>&minus;x&sup2;</sup> dx</em> &asymp; <em>1 &minus; 1/3 + 1/10 &minus; &hellip; &asymp; 0.7468</em>. Use <strong>Integral Approx</strong> mode for automatic computation with error comparison.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">What is the Lagrange remainder (error bound)?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">The <strong>Lagrange remainder</strong> <em>R<sub>n</sub>(x) = f<sup>(n+1)</sup>(c)/(n+1)! &middot; (x&minus;a)<sup>n+1</sup></em> bounds the error between <em>f(x)</em> and its <em>n</em>th-degree Taylor polynomial, where <em>c</em> is some value between <em>a</em> and <em>x</em>. To get an upper bound, find the maximum of <em>|f<sup>(n+1)</sup>|</em> on the interval. Use <strong>Error Bound</strong> mode to compute it automatically.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Does this calculator generate practice worksheets?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Yes. Click <strong>Print Worksheet</strong> for <strong>1,000+ practice problems</strong> across 6 question types: expansion, binomial series, nth derivative, limits, integral approximation, and error bounds. Filter by type and difficulty (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key &mdash; ideal for exam prep and classroom use.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">What types of practice problems are in the worksheet?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">6 categories: series expansion (Taylor / Maclaurin polynomial), binomial series, <em>n</em>th derivative via series, limit evaluation by series substitution, definite integral approximation, and Lagrange error bound. Each problem has 4 difficulty levels from basic to scholar-level, with full LaTeX-rendered answers.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Is this Taylor series calculator really free?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Yes &mdash; <strong>100% free, no signup, no limits</strong>. Step-by-step derivative calculations, interactive convergence graph with term slider, radius of convergence analysis, printable practice worksheets with answer keys, Python compiler, LaTeX copy, and shareable URLs. All computation runs in your browser.</div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- ==================== ADS COLUMN ==================== -->
-    <div class="tool-ads-column">
-        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
-    </div>
-</main>
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
 
-<!-- Mobile Ad Fallback -->
-<div class="tool-mobile-ad-container">
-    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
-</div>
-
-<!-- Related Tools -->
-<jsp:include page="modern/components/related-tools.jsp">
-    <jsp:param name="currentToolUrl" value="series-calculator.jsp"/>
-    <jsp:param name="keyword" value="calculus"/>
-    <jsp:param name="limit" value="6"/>
-</jsp:include>
-
-<!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
-<section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
-
-    <!-- ===== 1. WHAT IS A TAYLOR SERIES? ===== -->
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">What is a Taylor Series?</h2>
-        <p class="sc-anim" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
-            A <strong>Taylor series</strong> represents a function as an infinite sum of polynomial terms calculated from the function's <strong>derivatives at a single point</strong>. It is one of the most powerful tools in calculus &mdash; enabling us to approximate complex functions like sin(x), e<sup>x</sup>, and ln(x) using simple polynomials.
-        </p>
-
-        <!-- Taylor Series Formula Breakdown -->
-        <div class="sc-concept-hero">
-            <div class="sc-concept-block">
-                <div class="sc-concept-symbol sc-c-fn">f(x)</div>
-                <div class="sc-concept-label sc-c-fn">Function</div>
-            </div>
-            <div class="sc-concept-block">
-                <div class="sc-concept-symbol sc-c-eq">=</div>
-            </div>
-            <div class="sc-concept-block">
-                <div class="sc-concept-symbol sc-c-eq">&Sigma;</div>
-            </div>
-            <div class="sc-concept-block">
-                <div class="sc-concept-symbol sc-c-deriv">f<sup>(n)</sup>(a)</div>
-                <div class="sc-concept-label sc-c-deriv">nth Derivative</div>
-            </div>
-            <div class="sc-concept-block">
-                <div class="sc-concept-symbol sc-c-eq">/</div>
-            </div>
-            <div class="sc-concept-block">
-                <div class="sc-concept-symbol sc-c-fact">n!</div>
-                <div class="sc-concept-label sc-c-fact">Factorial</div>
-            </div>
-            <div class="sc-concept-block">
-                <div class="sc-concept-symbol sc-c-eq">&middot;</div>
-            </div>
-            <div class="sc-concept-block">
-                <div class="sc-concept-symbol sc-c-power">(x&minus;a)<sup>n</sup></div>
-                <div class="sc-concept-label sc-c-power">Power Term</div>
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-content">
+            <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p>
+            <div class="footer-links">
+                <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
+                <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
+                <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
             </div>
         </div>
+    </footer>
 
-        <div class="sc-callout sc-callout-insight sc-anim sc-anim-d2">
-            <span class="sc-callout-icon">&#128161;</span>
-            <div class="sc-callout-text">
-                <strong>Why does it work?</strong>
-                Each term matches one more derivative of the original function at the center point. With enough terms, the polynomial approximation becomes indistinguishable from the original function &mdash; at least within the <strong>radius of convergence</strong>.
-            </div>
-        </div>
-    </div>
+    <%--
+        Canonical 3-partial load order:
+          1. math-libs                  — CDN deps (KaTeX, nerdamer, plotly loader, image-to-math)
+          2. series-calculator-scripts  — render/graph/export, worksheet, core, image-scan init
+          3. math-input-multi           — MathLive ES module + Visual/Text mode toggle (reads DOM)
+    --%>
+    <jsp:include page="/math/partials/math-libs.jsp" />
+    <jsp:include page="/math/partials/series-calculator-scripts.jsp" />
+    <jsp:include page="/math/partials/math-input-multi.jsp" />
 
-    <!-- ===== 2. COMMON SERIES ===== -->
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Common Maclaurin Series</h2>
-        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.5rem;">
-            These series are used so frequently in mathematics and physics that they are worth memorizing.
-        </p>
-
-        <div class="sc-series-grid">
-            <div class="sc-series-card sc-anim sc-anim-d1" style="border-left-color:#2563eb;">
-                <h4><span style="color:#2563eb;">&#9679;</span> Exponential</h4>
-                <p>e<sup>x</sup> = 1 + x + x&sup2;/2! + x&sup3;/3! + &hellip;</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = &infin;</p>
-            </div>
-            <div class="sc-series-card sc-anim sc-anim-d2" style="border-left-color:#dc2626;">
-                <h4><span style="color:#dc2626;">&#9679;</span> Sine</h4>
-                <p>sin(x) = x &minus; x&sup3;/3! + x<sup>5</sup>/5! &minus; &hellip;</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = &infin;</p>
-            </div>
-            <div class="sc-series-card sc-anim sc-anim-d3" style="border-left-color:#059669;">
-                <h4><span style="color:#059669;">&#9679;</span> Cosine</h4>
-                <p>cos(x) = 1 &minus; x&sup2;/2! + x<sup>4</sup>/4! &minus; &hellip;</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = &infin;</p>
-            </div>
-            <div class="sc-series-card sc-anim sc-anim-d4" style="border-left-color:#d97706;">
-                <h4><span style="color:#d97706;">&#9679;</span> Natural Log</h4>
-                <p>ln(1+x) = x &minus; x&sup2;/2 + x&sup3;/3 &minus; &hellip;</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = 1</p>
-            </div>
-            <div class="sc-series-card sc-anim sc-anim-d5" style="border-left-color:#7c3aed;">
-                <h4><span style="color:#7c3aed;">&#9679;</span> Geometric</h4>
-                <p>1/(1&minus;x) = 1 + x + x&sup2; + x&sup3; + &hellip;</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = 1</p>
-            </div>
-            <div class="sc-series-card sc-anim sc-anim-d5" style="border-left-color:#0891b2;">
-                <h4><span style="color:#0891b2;">&#9679;</span> Square Root</h4>
-                <p>&radic;(1+x) = 1 + x/2 &minus; x&sup2;/8 + &hellip;</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;margin-top:0.25rem;">R = 1</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== 3. CONVERGENCE EXPLAINED ===== -->
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">Understanding Convergence</h2>
-        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
-            Not every Taylor series converges everywhere. The <strong>radius of convergence R</strong> tells you how far from the center point the series reliably approximates the function.
-        </p>
-
-        <div class="sc-edu-grid">
-            <div class="sc-edu-card sc-anim sc-anim-d1" style="border-left:3px solid #22c55e;">
-                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#22c55e;">&#9679;</span> R = &infin;</h4>
-                <p>Functions like e<sup>x</sup>, sin(x), and cos(x) converge for all real x. Their series approximation works everywhere.</p>
-            </div>
-            <div class="sc-edu-card sc-anim sc-anim-d2" style="border-left:3px solid #f59e0b;">
-                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#f59e0b;">&#9679;</span> Finite R</h4>
-                <p>Functions like ln(1+x) and 1/(1&minus;x) only converge within a limited interval around the center. Beyond that, the series diverges.</p>
-            </div>
-            <div class="sc-edu-card sc-anim sc-anim-d3" style="border-left:3px solid #ef4444;">
-                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#ef4444;">&#9679;</span> Singularities</h4>
-                <p>The radius of convergence equals the distance to the nearest singularity (point where the function is undefined), even in the complex plane.</p>
-            </div>
-        </div>
-
-        <div class="sc-callout sc-callout-tip sc-anim sc-anim-d4">
-            <span class="sc-callout-icon">&#128073;</span>
-            <div class="sc-callout-text">
-                <strong>Try it!</strong> Enter <code style="background:var(--bg-tertiary);padding:0.125rem 0.375rem;border-radius:0.25rem;font-size:0.8125rem;">ln(1+x)</code> and increase terms to 15. Watch how the graph matches well for |x| &lt; 1 but diverges wildly beyond x = 1.
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== 4. REAL-WORLD APPLICATIONS ===== -->
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Real-World Applications</h2>
-        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
-            Taylor series aren&rsquo;t just theoretical &mdash; they power real technology and science every day.
-        </p>
-        <div class="sc-edu-grid">
-            <div class="sc-edu-card" style="border-left:3px solid #2563eb;">
-                <h4>Calculator Chips</h4>
-                <p>Your calculator computes sin(x) and cos(x) using polynomial approximations derived from Taylor series. Hardware implements these as fast multiplications and additions.</p>
-            </div>
-            <div class="sc-edu-card" style="border-left:3px solid #7c3aed;">
-                <h4>Physics Approximations</h4>
-                <p>sin(&theta;) &approx; &theta; for small angles simplifies pendulum equations. Many physics formulas are first-order Taylor approximations.</p>
-            </div>
-            <div class="sc-edu-card" style="border-left:3px solid #059669;">
-                <h4>Machine Learning</h4>
-                <p>Gradient descent uses first-order Taylor approximation. Newton&rsquo;s method uses second-order. Higher-order optimization uses more terms.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== 5. PRACTICE WORKSHEET ===== -->
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">Taylor Series Practice Worksheet Generator</h2>
-        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:1rem;">
-            Prepare for your calculus exam with our <strong>free printable Taylor series worksheet</strong> containing <strong>1,000+ practice problems with answers</strong>. Each worksheet is randomly generated so you get a fresh set every time &mdash; perfect for AP Calculus, college courses, or self-study.
-        </p>
-
-        <div class="sc-edu-grid">
-            <div class="sc-edu-card" style="border-left:3px solid #2563eb;">
-                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#2563eb;">&#9679;</span> 6 Question Types</h4>
-                <p>Series expansion, binomial series, nth derivative via Maclaurin, limit evaluation, definite integral approximation, and Lagrange error bound problems.</p>
-            </div>
-            <div class="sc-edu-card" style="border-left:3px solid #7c3aed;">
-                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#7c3aed;">&#9679;</span> 4 Difficulty Levels</h4>
-                <p>From basic polynomial expansions to scholar-level problems involving composite functions, inverse trig, and error analysis. Filter to match your course level.</p>
-            </div>
-            <div class="sc-edu-card" style="border-left:3px solid #059669;">
-                <h4 style="display:flex;align-items:center;gap:0.375rem;"><span style="color:#059669;">&#9679;</span> Full Answer Key</h4>
-                <p>Every worksheet includes a complete answer key with LaTeX-rendered solutions. Teachers can toggle the answer key on or off before printing.</p>
-            </div>
-        </div>
-
-        <div class="sc-callout sc-callout-tip" style="margin-top:1rem;">
-            <span class="sc-callout-icon">&#128073;</span>
-            <div class="sc-callout-text">
-                <strong>Try it!</strong> Click the <strong>Print Worksheet</strong> button in the input panel above. Select your desired question types and difficulty, then generate a unique practice set instantly.
-            </div>
-        </div>
-    </div>
-
-    <!-- FAQ Section — matches faq1q-faq8q schema params exactly -->
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What is the difference between Taylor and Maclaurin series?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">A Taylor series expands a function f(x) around any point a using the formula f(x) = &Sigma; f<sup>(n)</sup>(a)/n! &middot; (x&minus;a)<sup>n</sup>. A Maclaurin series is the special case where a = 0, so f(x) = &Sigma; f<sup>(n)</sup>(0)/n! &middot; x<sup>n</sup>. Both represent functions as infinite polynomial sums. This calculator supports both types.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                How many terms do I need for a good approximation?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">It depends on the function and how far from the center you evaluate. Near the center, 5&ndash;7 terms often give excellent accuracy. For points farther away, or for functions with small convergence radii, you may need 15&ndash;20 terms. Use the interactive graph with the term slider to see convergence in real time.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What is the radius of convergence?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">The radius of convergence R is the distance from the center point within which the series converges to the actual function. For |x&minus;a| &lt; R, adding more terms gets closer to the true value. For |x&minus;a| &gt; R, the series diverges. Common values: e<sup>x</sup> has R = &infin;, ln(1+x) has R = 1, tan(x) has R = &pi;/2.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                How do you use Taylor series to approximate definite integrals?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Replace the integrand with its Taylor polynomial, then integrate term-by-term. For example, to approximate &int;<sub>0</sub><sup>1</sup> e<sup>&minus;x&sup2;</sup> dx, expand e<sup>&minus;x&sup2;</sup> as 1 &minus; x&sup2; + x<sup>4</sup>/2! &minus; &hellip; and integrate each power of x. This gives 1 &minus; 1/3 + 1/10 &minus; &hellip; &approx; 0.7468. Use the Integral Approx mode to compute this automatically with error comparison.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What is the Lagrange remainder (error bound) for a Taylor polynomial?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">The Lagrange remainder R<sub>n</sub>(x) = f<sup>(n+1)</sup>(c)/(n+1)! &middot; (x&minus;a)<sup>n+1</sup> bounds the error between f(x) and its nth-degree Taylor polynomial, where c is some value between a and x. To get an upper bound, find the maximum of |f<sup>(n+1)</sup>| on the interval. Use the Error Bound mode in this calculator to compute the bound automatically.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Does this calculator generate practice worksheets?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Yes. Click the Print Worksheet button to access 1,000+ practice problems covering 6 question types: expansion, binomial series, nth derivative, limits, integral approximation, and error bounds. Filter by type and difficulty (basic, medium, hard, scholar), choose how many questions you want, and generate a randomized worksheet with a full answer key. Perfect for exam prep and classroom use.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What types of practice problems are included in the worksheet?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">The worksheet bank contains 1,000+ problems in 6 categories: series expansion (find the Taylor or Maclaurin polynomial), binomial series, nth derivative via series, limit evaluation using series substitution, definite integral approximation, and Lagrange error bound calculations. Each problem has 4 difficulty levels from basic to scholar-level, with full LaTeX-rendered answers.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Is this Taylor series calculator really free?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Yes, 100% free with no signup or limits. Features include step-by-step derivative calculations, interactive convergence graph with term slider, radius of convergence analysis, printable practice worksheets with answer keys, a Python compiler, LaTeX copy, and shareable URLs. All computation runs in your browser with no server calls.</div>
-        </div>
-    </div>
-</section>
-
-<!-- Explore More Math -->
-<section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
-    <div class="tool-card" style="padding:1.5rem 2rem;">
-        <h3 style="font-size:1.15rem;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem;color:var(--text-primary);">
-            Explore More Math Tools
-        </h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
-            <a href="<%=request.getContextPath()%>/derivative-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#dc2626,#ef4444);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;color:#fff;font-weight:700;">d/dx</div>
-                <div>
-                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Derivative Calculator</h4>
-                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Step-by-step differentiation with graphs</p>
-                </div>
-            </a>
-            <a href="<%=request.getContextPath()%>/integral-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#4f46e5,#6366f1);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem;color:#fff;">&#8747;</div>
-                <div>
-                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Integral Calculator</h4>
-                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Step-by-step integration with graphs and PDF export</p>
-                </div>
-            </a>
-            <a href="<%=request.getContextPath()%>/quadratic-solver.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">x&sup2;</div>
-                <div>
-                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Quadratic Solver</h4>
-                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Solve quadratic equations with 3 methods and graphs</p>
-                </div>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Support Section -->
-<%@ include file="modern/components/support-section.jsp" %>
-
-<!-- Footer -->
-<footer class="page-footer">
-    <div class="footer-content">
-        <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p>
-        <div class="footer-links">
-            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
-            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
-            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
-        </div>
-    </div>
-</footer>
-
-<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
-
-<!-- Scroll-triggered animations -->
-<script>
-(function(){
-    var els = document.querySelectorAll('.sc-anim');
-    if (!els.length) return;
-    if (!('IntersectionObserver' in window)) {
-        els.forEach(function(el){ el.classList.add('sc-visible'); });
-        return;
-    }
-    var obs = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){
-            if (e.isIntersecting) {
-                e.target.classList.add('sc-visible');
-                obs.unobserve(e.target);
-            }
-        });
-    }, { threshold: 0.15 });
-    els.forEach(function(el){ obs.observe(el); });
-})();
-</script>
-
-<!-- Core Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
-<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/series-calculator-render.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/series-calculator-graph.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/series-calculator-export.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/series-calculator-core.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/modern/js/image-to-math.js?v=<%=cacheVersion%>"></script>
-<script>
-(function() {
-var SC_CTX = (function(){ var m=document.querySelector('meta[name="context-path"]'); return m?m.getAttribute('content')||'':''; })();
-
-ImageToMath.init({
-    buttonId: 'sc-image-btn',
-    aiUrl: SC_CTX + '/ai',
-    toolName: 'Series Calculator',
-    extractionPrompt:
-        'You are a math problem extractor for a Taylor/Maclaurin series calculator.\n' +
-        'Given OCR text from a math image, extract ALL series expansion problems.\n' +
-        'Return a JSON array. Each object has:\n' +
-        '  - "latex": the function f(x) in LaTeX (e.g. "\\sin(x)", "e^{x}", "\\ln(1+x)")\n' +
-        '  - "expr": the function in plain math (e.g. "sin(x)", "e^x", "ln(1+x)")\n' +
-        '  - "center": center point a (default "0" for Maclaurin)\n' +
-        '  - "terms": number of terms if specified (default 6)\n' +
-        '  - "display": full problem in LaTeX for display\n\n' +
-        'CRITICAL RULES:\n' +
-        '- "expr" must be in calculator format: sin(x), e^x, ln(1+x), x^2, sqrt(x)\n' +
-        '- Return ONLY valid JSON array, no markdown fences, no explanation.\n' +
-        '- If no problems found, return []\n\n' +
-        'Example:\n' +
-        'Input: "Find the Maclaurin series for e^x up to 5 terms"\n' +
-        'Output: [{"latex":"e^{x}","expr":"e^x","center":"0","terms":5,"display":"e^{x} \\\\text{ about } x=0"}]',
-    onSelect: function(problem) {
-        var funcInput = document.getElementById('sc-func-input');
-        var centerInput = document.getElementById('sc-center-point');
-        var termsInput = document.getElementById('sc-num-terms');
-        if (funcInput) funcInput.value = problem.expr || problem.latex || '';
-        if (centerInput && problem.center != null) centerInput.value = problem.center;
-        if (termsInput && problem.terms) termsInput.value = problem.terms;
-        setTimeout(function() {
-            var solveBtn = document.getElementById('sc-solve-btn');
-            if (solveBtn) solveBtn.click();
-        }, 300);
-    },
-    onSolveAll: function(problems) {
-        batchSolveSeries(problems);
-    }
-});
-
-function batchSolveSeries(problems) {
-    var existing = document.getElementById('itm-results-overlay');
-    if (existing) existing.remove();
-
-    var ov = document.createElement('div');
-    ov.id = 'itm-results-overlay';
-    ov.className = 'itm-results-overlay';
-    ov.innerHTML =
-        '<div class="itm-results-modal">' +
-        '  <div class="itm-results-header">' +
-        '    <span class="itm-results-title">Expanding ' + problems.length + ' Series</span>' +
-        '    <button class="itm-close" id="itm-results-close">&times;</button>' +
-        '  </div>' +
-        '  <div class="itm-results-body" id="itm-results-body"></div>' +
-        '  <div class="itm-results-footer">' +
-        '    <button class="itm-btn" id="itm-results-done">Close</button>' +
-        '  </div>' +
-        '</div>';
-    document.body.appendChild(ov);
-    ov.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-
-    var closeResults = function() { ov.style.display = 'none'; document.body.style.overflow = ''; ov.remove(); };
-    document.getElementById('itm-results-close').addEventListener('click', closeResults);
-    document.getElementById('itm-results-done').addEventListener('click', closeResults);
-    ov.addEventListener('click', function(e) { if (e.target === ov) closeResults(); });
-
-    var body = document.getElementById('itm-results-body');
-    problems.forEach(function(p, i) {
-        var display = p.display || p.latex || p.expr || '';
-        var card = document.createElement('div');
-        card.className = 'itm-result-card';
-        card.id = 'itm-rc-' + i;
-        card.innerHTML =
-            '<div class="itm-result-card-header">' +
-            '  <span class="itm-result-num">' + (i + 1) + '</span>' +
-            '  <span class="itm-result-problem" id="itm-rp-' + i + '"></span>' +
-            '  <span class="itm-result-status pending" id="itm-rs-' + i + '">Pending</span>' +
-            '</div>' +
-            '<div class="itm-result-card-body" id="itm-rb-' + i + '"></div>';
-        body.appendChild(card);
-        if (window.katex) {
-            try { katex.render(display, document.getElementById('itm-rp-' + i), { throwOnError: false, displayMode: false }); }
-            catch(e) { document.getElementById('itm-rp-' + i).textContent = display; }
+    <!-- Scroll-triggered animations for sc-anim educational cards -->
+    <script>
+    (function(){
+        var els = document.querySelectorAll('.sc-anim');
+        if (!els.length) return;
+        if (!('IntersectionObserver' in window)) {
+            els.forEach(function(el){ el.classList.add('sc-visible'); });
+            return;
         }
-    });
-    solveNextSeries(problems, 0);
-}
-
-function solveNextSeries(problems, idx) {
-    if (idx >= problems.length) return;
-    var p = problems[idx];
-    var card = document.getElementById('itm-rc-' + idx);
-    var status = document.getElementById('itm-rs-' + idx);
-    var bodyEl = document.getElementById('itm-rb-' + idx);
-
-    card.className = 'itm-result-card solving';
-    status.className = 'itm-result-status solving';
-    status.textContent = 'Expanding...';
-    bodyEl.innerHTML = '<div class="itm-spinner"></div>';
-    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-    var funcExpr = (p.expr || p.latex || 'e^x').replace(/\^/g, '**').replace(/\be\b(?!\s*\()/g, 'E').replace(/\bln\b/g, 'log');
-    var center = p.center || '0';
-    var numTerms = parseInt(p.terms) || 6;
-    center = center.replace(/\\infty/g, 'oo').replace(/\\pi/g, 'pi');
-
-    var code = 'from sympy import *\nimport json\n' +
-        'x = symbols("x")\n' +
-        'f = ' + funcExpr + '\n' +
-        'a = ' + center + '\n' +
-        'n = ' + numTerms + '\n' +
-        'try:\n' +
-        '    s = series(f, x, a, n=n)\n' +
-        '    poly = s.removeO()\n' +
-        '    print("LATEX:" + latex(poly))\n' +
-        '    print("TEXT:" + str(poly))\n' +
-        '    print("FULL:" + latex(s))\n' +
-        '    # Steps: show each derivative and term\n' +
-        '    steps = []\n' +
-        '    steps.append({"title":"Function","latex":"f(x) = " + latex(f)})\n' +
-        '    if a == 0:\n' +
-        '        steps.append({"title":"Maclaurin series formula","latex":r"f(x) = \\\\sum_{n=0}^{\\\\infty} \\\\frac{f^{(n)}(0)}{n!} x^n"})\n' +
-        '    else:\n' +
-        '        steps.append({"title":"Taylor series formula","latex":r"f(x) = \\\\sum_{n=0}^{\\\\infty} \\\\frac{f^{(n)}(" + latex(a) + r")}{n!} (x-" + latex(a) + r")^n"})\n' +
-        '    cur = f\n' +
-        '    for i in range(min(n, 5)):\n' +
-        '        val = cur.subs(x, a)\n' +
-        '        if i == 0:\n' +
-        '            steps.append({"title":"f(" + latex(a) + ")","latex":"f(" + latex(a) + ") = " + latex(val)})\n' +
-        '        else:\n' +
-        '            steps.append({"title":"f" + "\\\\prime"*min(i,3) + ("^{("+str(i)+")}") * (1 if i>3 else 0) + "(" + latex(a) + ")","latex":"f^{(" + str(i) + ")}(" + latex(a) + ") = " + latex(val)})\n' +
-        '        cur = diff(cur, x)\n' +
-        '    steps.append({"title":"Series expansion","latex":latex(s)})\n' +
-        '    # Radius of convergence\n' +
-        '    try:\n' +
-        '        from sympy import Abs as sp_Abs\n' +
-        '        terms_list = poly.as_ordered_terms()\n' +
-        '        if len(terms_list) >= 2:\n' +
-        '            ratio = sp_Abs(terms_list[-1] / terms_list[-2])\n' +
-        '            R = limit(1/ratio.rewrite(x), x, oo)\n' +
-        '            if R.is_finite and R > 0:\n' +
-        '                steps.append({"title":"Radius of convergence","latex":"R = " + latex(R)})\n' +
-        '    except Exception:\n' +
-        '        pass\n' +
-        '    print("STEPS:" + json.dumps(steps))\n' +
-        'except Exception as e:\n' +
-        '    print("ERROR:" + str(e))\n';
-
-    fetch(SC_CTX + '/OneCompilerFunctionality?action=execute', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ language: 'python', version: '3.10', code: code })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        var stdout = (data.Stdout || data.stdout || '').trim();
-        var stderr = (data.Stderr || data.stderr || '').trim();
-        if (stdout.indexOf('ERROR:') === 0) throw new Error(stdout.replace('ERROR:', ''));
-        if (!stdout && stderr) throw new Error(stderr.split('\n').pop() || 'Solver error');
-        if (!stdout) throw new Error('No result');
-
-        var latexMatch = stdout.match(/LATEX:([^\n]*)/);
-        var textMatch = stdout.match(/TEXT:([^\n]*)/);
-        var stepsMatch = stdout.match(/STEPS:(\[[\s\S]*?\])(?:\n|$)/);
-        var resultTeX = latexMatch ? latexMatch[1].trim() : '';
-        var resultText = textMatch ? textMatch[1].trim() : resultTeX;
-        if (!resultTeX) throw new Error('Could not expand series');
-
-        var resultTeXNorm = resultTeX.replace(/\\\\/g, '\\');
-
-        var html = '';
-        html += '<div class="itm-result-integral" id="itm-ri-' + idx + '"></div>';
-        html += '<div class="itm-result-answer" id="itm-ra-' + idx + '"></div>';
-
-        var steps = [];
-        if (stepsMatch) { try { steps = JSON.parse(stepsMatch[1]); } catch(e) {} }
-        if (steps.length) {
-            html += '<button class="itm-result-steps-btn" data-steps-idx="' + idx + '">Show Steps</button>';
-            html += '<div class="itm-result-steps-area" id="itm-rsa-' + idx + '">';
-            steps.forEach(function(s) {
-                var stepId = 'itm-rst-' + idx + '-' + Math.random().toString(36).substr(2, 5);
-                html += '<div class="itm-result-step">' +
-                    '<div class="itm-result-step-title">' + (s.title || '').replace(/</g, '&lt;') + '</div>' +
-                    '<div id="' + stepId + '" data-step-katex="' + (s.latex || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '"></div></div>';
-            });
-            html += '</div>';
-        }
-        bodyEl.innerHTML = html;
-
-        if (window.katex) {
-            var probEl = document.getElementById('itm-ri-' + idx);
-            var ansEl = document.getElementById('itm-ra-' + idx);
-            if (probEl) {
-                var label = (p.display || p.latex || p.expr || '');
-                try { katex.render(label, probEl, { throwOnError: false, displayMode: false }); }
-                catch(e) { probEl.textContent = label; }
-            }
-            if (ansEl) {
-                try { katex.render('= ' + resultTeXNorm, ansEl, { throwOnError: false, displayMode: true }); }
-                catch(e) { ansEl.textContent = '= ' + resultText; }
-            }
-            bodyEl.querySelectorAll('[data-step-katex]').forEach(function(el) {
-                var raw = el.getAttribute('data-step-katex');
-                var norm = raw.replace(/\\\\/g, '\\');
-                try { katex.render(norm, el, { throwOnError: false, displayMode: true }); }
-                catch(e) { el.textContent = raw; }
-            });
-        }
-
-        var stepsBtn = bodyEl.querySelector('[data-steps-idx="' + idx + '"]');
-        if (stepsBtn) {
-            stepsBtn.addEventListener('click', function() {
-                var area = document.getElementById('itm-rsa-' + idx);
-                if (area) {
-                    area.classList.toggle('open');
-                    stepsBtn.textContent = area.classList.contains('open') ? 'Hide Steps' : 'Show Steps';
+        var obs = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){
+                if (e.isIntersecting) {
+                    e.target.classList.add('sc-visible');
+                    obs.unobserve(e.target);
                 }
             });
-        }
+        }, { threshold: 0.15 });
+        els.forEach(function(el){ obs.observe(el); });
+    })();
 
-        card.className = 'itm-result-card solved';
-        status.className = 'itm-result-status done';
-        status.textContent = 'Solved';
-    })
-    .catch(function(err) {
-        card.className = 'itm-result-card error';
-        status.className = 'itm-result-status fail';
-        status.textContent = 'Failed';
-        bodyEl.innerHTML = '<div class="itm-result-error-msg">' + (err.message || 'Error').replace(/</g, '&lt;') + '</div>';
-    })
-    .finally(function() {
-        solveNextSeries(problems, idx + 1);
-    });
-}
-})();
-</script>
-
-<%@ include file="modern/components/analytics.jsp" %>
+    // FAQ accordion
+    (function () {
+        document.querySelectorAll('.ms-faq-q').forEach(function (q) {
+            q.addEventListener('click', function () {
+                q.closest('.ms-faq-item').classList.toggle('open');
+            });
+        });
+    })();
+    </script>
 </body>
 </html>

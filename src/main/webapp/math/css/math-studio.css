@@ -1503,7 +1503,59 @@ body.ms-body {
     .ms-tool-header h1 { font-size: 1.4rem; }
 }
 
-/* ── Print styles — teachers & students printing results ───────── */
+/* ── .mml-pair — generic Visual/Text math input pair ────────────────
+   Used by tools that wire MathLive via /math/partials/math-input-multi.jsp
+   (series-calculator, vector-calculus-calculator).  The single-pair tools
+   (integral / derivative / limit) use the older #ic-mathfield + #ic-expr
+   ID-scoped rules above instead.
+
+   Visual mode → text input + autocomplete dropdown hidden, math-field shown.
+   Text mode   → math-field hidden, text input shown.
+   No mode set → behaves as Visual.                                        */
+.mml-pair { position: relative; }
+.mml-pair[data-input-mode="visual"] .mml-text,
+.mml-pair[data-input-mode="visual"] .mml-text-extra,
+.mml-pair:not([data-input-mode]) .mml-text,
+.mml-pair:not([data-input-mode]) .mml-text-extra {
+    display: none !important;
+}
+.mml-pair[data-input-mode="text"] .mml-mathfield {
+    display: none !important;
+}
+
+.mml-mathfield {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    padding: 0.65rem 0.9rem;
+    font-size: 1.05rem;
+    border: 1.5px solid var(--ms-line-strong, #cbd5e1);
+    border-radius: 0.5rem;
+    background: var(--ms-panel-bg-soft, #fafafa);
+    color: var(--ms-ink, #0f172a);
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.mml-mathfield:focus-within {
+    outline: none;
+    border-color: var(--ms-accent, #15803d);
+    background: var(--ms-panel-bg, #fff);
+    box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12);
+}
+[data-theme="dark"] .mml-mathfield {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+    color: var(--text-primary, #f1f5f9);
+}
+
+/* When .mml-pair is dropped inside vector-calc's flex .vc-vector-field-group
+   (label badge + input row), claim the remaining horizontal space — the
+   legacy rule `.vc-vector-field-group .tool-input { flex: 1 }` doesn't
+   reach the now-nested input. */
+.vc-vector-field-group > .mml-pair { flex: 1; min-width: 0; }
+.vc-vector-field-group > .mml-pair .mml-mathfield { min-height: 44px; padding: 0.55rem 0.8rem; font-size: 1rem; }
+.vc-vector-field-group > .mml-pair .mml-text { width: 100%; }
+
+/* Print styles — teachers & students printing results ───────── */
 @media print {
     body.ms-body {
         padding-top: 0 !important;
