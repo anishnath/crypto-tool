@@ -107,7 +107,7 @@
 <section class="latex-hero" id="latex-hero">
   <div class="latex-hero-content">
     <h1 class="latex-hero-title">Free AI-Powered LaTeX Editor</h1>
-    <p class="latex-hero-desc">Write, generate and compile LaTeX to PDF with AI. Fix errors, generate code from English, rewrite text. No signup.</p>
+    <p class="latex-hero-desc">Write, generate and compile LaTeX to PDF with AI. <strong>Built-in chemistry rendering</strong> (Lewis / 2D / 3D), image-to-LaTeX, error fix, no signup.</p>
   </div>
   <div class="latex-hero-ad">
     <%@ include file="/modern/ads/ad-hero-banner.jsp" %>
@@ -270,6 +270,81 @@
     <button class="pm-btn danger" onclick="deleteCurrentProject()">&#10005; Delete</button>
   </div>
 </div>
+
+<!-- About / Killer features — most users assume this is "just another LaTeX editor"
+     so we showcase the things that aren't elsewhere -->
+<style>
+  .latex-about{padding:3rem 1.5rem;background:var(--bg-secondary,#f1f5f9);border-top:1px solid var(--border,#e2e8f0)}
+  .latex-about-inner{max-width:1100px;margin:0 auto}
+  .latex-about-eyebrow{display:inline-block;font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#059669;background:rgba(5,150,105,0.10);padding:4px 10px;border-radius:999px;margin-bottom:0.6rem}
+  .latex-about-title{font-size:1.75rem;font-weight:700;color:var(--text-primary,#0f172a);margin:0 0 0.5rem}
+  .latex-about-subtitle{font-size:1rem;color:var(--text-secondary,#475569);margin:0 0 2rem;max-width:720px;line-height:1.55}
+  .latex-about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+  .latex-about-card{background:var(--bg-primary,#fff);border:1px solid var(--border,#e2e8f0);border-radius:12px;padding:1.25rem;position:relative;transition:transform 0.15s ease,box-shadow 0.15s ease}
+  .latex-about-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,23,42,0.06)}
+  .latex-about-icon{font-size:1.6rem;line-height:1;margin-bottom:0.6rem;display:block}
+  .latex-about-card h3{font-size:1rem;font-weight:600;color:var(--text-primary,#0f172a);margin:0 0 0.4rem;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}
+  .latex-about-card p{font-size:0.85rem;color:var(--text-secondary,#475569);line-height:1.5;margin:0}
+  .latex-about-card code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.78rem;background:rgba(99,102,241,0.10);color:#4f46e5;padding:1px 5px;border-radius:4px}
+  .latex-about-badge{font-size:0.62rem;font-weight:700;letter-spacing:0.06em;color:#fff;background:linear-gradient(135deg,#10b981,#059669);padding:2px 7px;border-radius:6px;text-transform:uppercase}
+  .latex-about-cta{margin-top:1.75rem;font-size:0.9rem;color:var(--text-secondary,#475569)}
+  .latex-about-cta a{color:#4f46e5;font-weight:600;text-decoration:none}
+  .latex-about-cta a:hover{text-decoration:underline}
+  [data-theme="dark"] .latex-about{background:#0f172a;border-top-color:#1e293b}
+  [data-theme="dark"] .latex-about-card{background:#1e293b;border-color:#334155}
+  [data-theme="dark"] .latex-about-card code{background:rgba(129,140,248,0.15);color:#a5b4fc}
+</style>
+<section class="latex-about" id="latex-about">
+  <div class="latex-about-inner">
+    <span class="latex-about-eyebrow">More than a LaTeX editor</span>
+    <h2 class="latex-about-title">What this editor does that others don't</h2>
+    <p class="latex-about-subtitle">A full LaTeX compiler with built-in chemistry rendering, AI assistance, and image-to-code conversion. Everything runs in your browser — no signup, no install, no Overleaf account.</p>
+
+    <div class="latex-about-grid">
+
+      <div class="latex-about-card">
+        <span class="latex-about-icon">&#9883;</span>
+        <h3>Chemistry rendering <span class="latex-about-badge">New</span></h3>
+        <p>Select any <code>\ce{H2O}</code> or <code>\ce{2H2 + O2 -&gt; 2H2O}</code> and choose <strong>Lewis dot</strong>, <strong>SMILES 2D</strong>, or <strong>3D geometry</strong>. The structure renders as an image with a property table (geometry, polarity, mol. weight, hybridization, etc.) inserted as a ready figure.</p>
+      </div>
+
+      <div class="latex-about-card">
+        <span class="latex-about-icon">&#10024;</span>
+        <h3>AI assistant</h3>
+        <p>Describe LaTeX in plain English and get code (<code>Ctrl+Shift+A</code>). When compilation fails, click <strong>AI Fix</strong> on the error to repair it automatically. Rewrite selections as formal academic, concise, or expanded tone.</p>
+      </div>
+
+      <div class="latex-about-card">
+        <span class="latex-about-icon">&#128247;</span>
+        <h3>Image to LaTeX</h3>
+        <p>Drag a screenshot of a math equation, table, or matrix into the editor — vision AI converts it into LaTeX source you can edit. Works for handwritten equations, textbook scans, and whiteboard photos.</p>
+      </div>
+
+      <div class="latex-about-card">
+        <span class="latex-about-icon">&#9889;</span>
+        <h3>Real-time PDF preview</h3>
+        <p>Full TeX Live distribution on the server — every package you need (mhchem, tikz, hyperref, booktabs, listings, &hellip; thousands more). Compile with <code>Ctrl+Enter</code>, preview as native PDF or page-by-page canvas.</p>
+      </div>
+
+      <div class="latex-about-card">
+        <span class="latex-about-icon">&#9000;</span>
+        <h3>Smart editor</h3>
+        <p>170+ autocomplete commands, syntax highlighting, bracket matching, symbol picker (Greek, math, arrows), multi-file projects with <code>\input{}</code>, voice-to-LaTeX dictation, and inline error markers.</p>
+      </div>
+
+      <div class="latex-about-card">
+        <span class="latex-about-icon">&#128190;</span>
+        <h3>Auto-save, no signup</h3>
+        <p>Projects auto-save to browser localStorage. Switch between multiple documents, rename, export <code>.tex</code> or PDF. No account, no email, no tracking — your work never leaves your browser unless you compile.</p>
+      </div>
+
+    </div>
+
+    <p class="latex-about-cta">
+      Try the chemistry features: pick <strong><a href="#" onclick="document.getElementById('template-select').value='chemistry';loadTemplate('chemistry');return false;">Chemistry</a></strong> from the Templates dropdown for a worked-example doc.
+    </p>
+  </div>
+</section>
 
 <!-- Related Tools (below the fold — user scrolls past editor to see) -->
 <jsp:include page="/modern/components/related-tools.jsp">
