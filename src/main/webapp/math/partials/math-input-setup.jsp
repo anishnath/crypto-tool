@@ -120,6 +120,15 @@
     var toggle    = document.getElementById('ic-input-mode-toggle');
     if (!mf || !exprInput || !toggle) return;
 
+    // Virtual-keyboard policy: "manual" — keyboard does NOT auto-open on
+    // focus.  Users summon it via the explicit toggle in the math-field's
+    // own chrome (the small keyboard glyph at the right edge), which is
+    // less intrusive on desktop typing and clearer for touch users.
+    // Set BOTH the attribute (observed by MathLive) AND the property
+    // (newer API) so we work across MathLive minor versions.
+    mf.setAttribute('math-virtual-keyboard-policy', 'manual');
+    try { mf.mathVirtualKeyboardPolicy = 'manual'; } catch (e) {}
+
     var STORAGE_KEY = 'ic.inputMode';
     var cardBody = wrap.closest('.tool-card-body') || wrap.parentNode;
 

@@ -24,6 +24,11 @@
 <!-- Practice worksheet — shared engine, derivative-specific question bank. -->
 <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
 
+<!-- Context for derivative-calculator.js (Python compiler iframe + AI
+     math-steps endpoint).  Mirrors the __LC_CTX pattern used by the
+     limit calculator.  MUST load before derivative-calculator.js. -->
+<script>window.__DC_CTX = '<%=request.getContextPath()%>';</script>
+
 <!-- Main DOM/UI controller. -->
 <script src="<%=request.getContextPath()%>/modern/js/derivative-calculator.js"></script>
 
