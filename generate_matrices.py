@@ -1193,9 +1193,12 @@ def gen_classify_quadratic_form_2x2():
             "type": "classify_quadratic_form_2x2", "op": "classify",
             "matrix_a": Q,
             "ans_text": ans_text, "ans_plain": cls,
+            # NOTE: question_text is HTML-escaped by the worksheet engine,
+            # so <strong>...</strong> tags render as literal text.  Use
+            # plain ALL-CAPS for emphasis instead.
             "q_text": (f"Classify the quadratic form \\(Q(x, y) = {Q_str}\\) as "
-                       f"<strong>positive definite</strong>, <strong>negative definite</strong>, or "
-                       f"<strong>indefinite</strong> by examining the eigenvalues of the symmetric "
+                       f"POSITIVE DEFINITE, NEGATIVE DEFINITE, or INDEFINITE "
+                       f"by examining the eigenvalues of the symmetric "
                        f"matrix \\(Q = {latex_pmatrix(Q)}\\) associated with it.")
         }
     return None
