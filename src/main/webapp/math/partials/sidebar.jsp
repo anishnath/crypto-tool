@@ -97,6 +97,12 @@
             <a href="<%= ctx %>/vector-calculus-calculator.jsp" class="ms-item <%= "vector-calculus".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#8711;</span> <span class="ms-item-label">Vector Calculus</span>
             </a>
+            <a href="<%= ctx %>/ode-solver-calculator.jsp" class="ms-item <%= "ode".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">y'</span> <span class="ms-item-label">ODE Solver</span>
+            </a>
+            <a href="<%= ctx %>/pde-solver-calculator.jsp" class="ms-item <%= "pde".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#8706;u</span> <span class="ms-item-label">PDE Solver</span>
+            </a>
         </div>
     </div>
 
