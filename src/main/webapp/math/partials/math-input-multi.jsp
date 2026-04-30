@@ -119,10 +119,150 @@
     }
 </script>
 
-<!-- ── 2. Multi-pair sync IIFE ── -->
+<!-- ── 2. LaTeX → plain-text normalizer ──
+     MathLive's getValue('ascii-math') sometimes leaks raw LaTeX into
+     its output (notably for \frac, \left/\right, and a few others).
+     The CAS on the server can't parse LaTeX backslash commands, so
+     anything LaTeX-flavoured must be flattened to a plain expression
+     before submission.  Exposed on window so controllers (trig, ode,
+     pde, …) can call it defensively right before any /ai POST. -->
 <script>
 (function () {
     'use strict';
+
+    function latexToAscii(s) {
+        if (!s) return s;
+        // Trim outer $ delimiters if present
+        s = s.replace(/^\s*\$+\s*|\s*\$+\s*$/g, '');
+
+        // Iterate so nested constructs unwrap fully (e.g. \frac inside
+        // \frac, \left( inside \frac{}{} arguments, etc.).
+        var prev, iter = 0;
+        do {
+            prev = s;
+            // Operators FIRST — must run before \sqrt and trig stripping,
+            // otherwise e.g. "\pm\sqrt{...}" → "\pmsqrt(...)" loses the
+            // word boundary "\pm\b" needs (since `\` is gone after sqrt
+            // strip, `m` and `s` are both word chars — no boundary).
+            s = s.replace(/\\cdot\b/g, '*');
+            s = s.replace(/\\times\b/g, '*');
+            s = s.replace(/\\div\b/g, '/');
+            s = s.replace(/\\pm\b/g, '+-');
+            s = s.replace(/\\mp\b/g, '-+');
+            // \left( \right) — collapse to bare brackets
+            s = s.replace(/\\left\s*\\?([(\[\{|.])/g, function (_, c) { return c === '.' ? '' : c; });
+            s = s.replace(/\\right\s*\\?([)\]\}|.])/g, function (_, c) { return c === '.' ? '' : c; });
+            // \left\{ \right\}  — explicit-brace form
+            s = s.replace(/\\left\\\{/g, '{').replace(/\\right\\\}/g, '}');
+            // \frac{a}{b} → ((a)/(b))   — innermost first via greedy [^{}]
+            s = s.replace(/\\d?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '(($1)/($2))');
+            // \tfrac, \dfrac variants
+            s = s.replace(/\\(?:t|d)frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '(($1)/($2))');
+            // \frac12  abbreviated "two-character" form
+            s = s.replace(/\\(?:t|d)?frac\s*(\d)\s*(\d)/g, '($1/$2)');
+            // \sqrt[n]{x} → (x)^(1/n)
+            s = s.replace(/\\sqrt\s*\[\s*([^\]]+)\s*\]\s*\{([^{}]*)\}/g, '(($2)^(1/($1)))');
+            s = s.replace(/\\sqrt\s*\{([^{}]*)\}/g, 'sqrt($1)');
+            // ^{...} → ^(...) and _{...} → _(...) — keep grouping
+            s = s.replace(/\^\s*\{([^{}]+)\}/g, '^($1)');
+            s = s.replace(/_\s*\{([^{}]+)\}/g, '_($1)');
+            // \operatorname{foo} → foo
+            s = s.replace(/\\operatorname\s*\{([^{}]+)\}/g, '$1');
+            // \text{foo} → foo
+            s = s.replace(/\\text\s*\{([^{}]+)\}/g, '$1');
+            // LaTeX whitespace tokens → DROP entirely (purely cosmetic).
+            // Run early so they don't break adjacent word boundaries the
+            // following regexes need (e.g. "\sin\!\left(" → "\sin\left(",
+            // not "\sin \left(").
+            s = s.replace(/\\,|\\!|\\;|\\:|\\\s|\\quad\b|\\qquad\b/g, '');
+            // Unicode minus (U+2212) → ASCII minus
+            s = s.replace(/\u2212/g, '-');
+            // Comparison operators — must run BEFORE Greek-letter
+            // substitution, otherwise "\le\pi" → "\lepi" loses the word
+            // boundary the operator regex needs.
+            s = s.replace(/\\leq?\b/g, '<=');
+            s = s.replace(/\\geq?\b/g, '>=');
+            s = s.replace(/\\neq?\b/g, '!=');
+            s = s.replace(/\\to\b/g, '->');
+            s = s.replace(/\\rightarrow\b/g, '->');
+            // (Operators \cdot/\times/\div/\pm/\mp ran at the top of
+            // the loop — they must precede \sqrt and trig stripping.)
+            // Trig / log / hyp / inverse trig — drop the backslash
+            s = s.replace(/\\(arcsin|arccos|arctan|arccot|arcsec|arccsc|sinh|cosh|tanh|sin|cos|tan|csc|sec|cot|ln|log|exp)\b/g, '$1');
+            // Degree marker — drop, the angle-unit toggle controls deg/rad
+            s = s.replace(/\\circ\b/g, '');
+            s = s.replace(/\u00B0/g, '');
+            // Greek letters — use (?![a-zA-Z]) instead of \b so we still
+            // strip when followed by an underscore subscript (which `\b`
+            // treats as a word char and skips: "\theta_1" → "\theta_1").
+            s = s.replace(/\\pi(?![a-zA-Z])/g, 'pi');
+            s = s.replace(/\\infty(?![a-zA-Z])/g, 'oo');
+            s = s.replace(/\\theta(?![a-zA-Z])/g, 'theta');
+            s = s.replace(/\\alpha(?![a-zA-Z])/g, 'alpha');
+            s = s.replace(/\\beta(?![a-zA-Z])/g, 'beta');
+            s = s.replace(/\\gamma(?![a-zA-Z])/g, 'gamma');
+            s = s.replace(/\\delta(?![a-zA-Z])/g, 'delta');
+            s = s.replace(/\\epsilon(?![a-zA-Z])/g, 'epsilon');
+            s = s.replace(/\\zeta(?![a-zA-Z])/g, 'zeta');
+            s = s.replace(/\\eta(?![a-zA-Z])/g, 'eta');
+            s = s.replace(/\\kappa(?![a-zA-Z])/g, 'kappa');
+            s = s.replace(/\\lambda(?![a-zA-Z])/g, 'lambda');
+            s = s.replace(/\\mu(?![a-zA-Z])/g, 'mu');
+            s = s.replace(/\\nu(?![a-zA-Z])/g, 'nu');
+            s = s.replace(/\\xi(?![a-zA-Z])/g, 'xi');
+            s = s.replace(/\\rho(?![a-zA-Z])/g, 'rho');
+            s = s.replace(/\\sigma(?![a-zA-Z])/g, 'sigma');
+            s = s.replace(/\\tau(?![a-zA-Z])/g, 'tau');
+            s = s.replace(/\\phi(?![a-zA-Z])/g, 'phi');
+            s = s.replace(/\\psi(?![a-zA-Z])/g, 'psi');
+            s = s.replace(/\\chi(?![a-zA-Z])/g, 'chi');
+            s = s.replace(/\\omega(?![a-zA-Z])/g, 'omega');
+            // Uppercase Greek
+            s = s.replace(/\\Gamma(?![a-zA-Z])/g, 'Gamma');
+            s = s.replace(/\\Delta(?![a-zA-Z])/g, 'Delta');
+            s = s.replace(/\\Theta(?![a-zA-Z])/g, 'Theta');
+            s = s.replace(/\\Lambda(?![a-zA-Z])/g, 'Lambda');
+            s = s.replace(/\\Sigma(?![a-zA-Z])/g, 'Sigma');
+            s = s.replace(/\\Phi(?![a-zA-Z])/g, 'Phi');
+            s = s.replace(/\\Psi(?![a-zA-Z])/g, 'Psi');
+            s = s.replace(/\\Omega(?![a-zA-Z])/g, 'Omega');
+            // Bare \{ \} (escaped braces) → ( )
+            s = s.replace(/\\\{/g, '(').replace(/\\\}/g, ')');
+        } while (s !== prev && ++iter < 8);
+
+        // Final pass — any remaining `{...}` after structured handlers
+        // is most likely an argument group (e.g. "\sin{x}" → "sin{x}"
+        // after the trig regex strips the backslash).  SymPy parses
+        // `(...)` but not `{...}`, so collapse to parens.  Run iteratively
+        // to handle nesting that wasn't unwrapped above.
+        var prev2, iter2 = 0;
+        do {
+            prev2 = s;
+            s = s.replace(/\{([^{}]*)\}/g, '($1)');
+        } while (s !== prev2 && ++iter2 < 8);
+
+        // Cleanup whitespace
+        s = s.replace(/\s+/g, ' ').trim();
+        return s;
+    }
+
+    // Expose for downstream defensive use (controllers calling /ai etc.)
+    if (typeof window !== 'undefined') {
+        window.MathInput = window.MathInput || {};
+        window.MathInput.latexToAscii = latexToAscii;
+    }
+})();
+</script>
+
+<!-- ── 3. Multi-pair sync IIFE ── -->
+<script>
+(function () {
+    'use strict';
+
+    // Pull the LaTeX→ascii normalizer published by the prior IIFE.
+    var latexToAscii = (window.MathInput && window.MathInput.latexToAscii)
+        ? window.MathInput.latexToAscii
+        : function (x) { return x; };
 
     var STORAGE_KEY = 'mml.inputMode';
 
@@ -256,6 +396,20 @@
         function wireOne() {
             try {
                 p.mf.inlineShortcuts = Object.assign({}, p.mf.inlineShortcuts || {}, {
+                    // Trig functions — these MUST be inline shortcuts,
+                    // otherwise MathLive's smart-mode interprets the
+                    // letters "in" inside "sin" as the set-membership
+                    // operator (\in), producing "s\in(2x)" instead of
+                    // "\sin(2x)" and a server 500 on submit.
+                    'sin':  '\\sin',
+                    'cos':  '\\cos',
+                    'tan':  '\\tan',
+                    'csc':  '\\csc',
+                    'sec':  '\\sec',
+                    'cot':  '\\cot',
+                    'sinh': '\\sinh',
+                    'cosh': '\\cosh',
+                    'tanh': '\\tanh',
                     'atan': '\\arctan',
                     'asin': '\\arcsin',
                     'acos': '\\arccos',
@@ -269,11 +423,32 @@
                 });
             } catch (_) {}
 
+            // ascii-math sanitizer — runs after every Visual→Text mirror
+            // to repair common MathLive output that the server can't
+            // parse.  Two layers:
+            //
+            //   1. latexToAscii — when MathLive's getValue('ascii-math')
+            //      leaks raw LaTeX (it does this for \frac, \left/\right
+            //      and a handful of constructs), strip the LaTeX into a
+            //      plain expression the server's CAS can handle.
+            //
+            //   2. smart-mode "sin → s\in" mis-parse repair — the `in`
+            //      smart-mode word eats the `i` and `n` of `sin`,
+            //      producing `s ∈ (`.  Pattern requires `s` + `in`-
+            //      variant + `(` so we never touch legitimate set
+            //      membership like "x ∈ S".
+            function sanitizeAscii(ascii) {
+                if (!ascii) return ascii;
+                ascii = latexToAscii(ascii);
+                return ascii.replace(/\bs\s*(?:\\in|\u2208|in)\s*\(/g, 'sin(');
+            }
+
             // Visual → Text mirror
             p.mf.addEventListener('input', function () {
                 if (getMode() !== 'visual') return;
                 var ascii = '';
                 try { ascii = (p.mf.getValue('ascii-math') || '').trim(); } catch (_) {}
+                ascii = sanitizeAscii(ascii);
                 if (p.input.value === ascii) return;
                 setInputRaw(p.input, ascii);
                 p.input.dispatchEvent(new Event('input', { bubbles: true }));
