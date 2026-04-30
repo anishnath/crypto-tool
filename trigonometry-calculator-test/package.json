@@ -1,0 +1,9 @@
+{
+  "name": "trigonometry-calculator-test",
+  "version": "1.0.0",
+  "description": "Test suite for the trig calculator family (function / equation / identity).  Validates the LaTeX→ascii sanitizer that protects the SymPy server from MathLive output, plus the smart-mode \"sin → s∈\" repair.",
+  "private": true,
+  "scripts": {
+    "test": "node trig-input-sanitize-test.js"
+  }
+}
