@@ -125,7 +125,11 @@ function renderEvaluate(container, expr, unit) {
     container.innerHTML = '';
     var parsed = parseTrigFunction(expr);
     if (!parsed) {
-        TC.showError(container, 'Enter a trig function like sin(45), cos(pi/3), tan(60).');
+        // ── SymPy fallback for composed expressions the simple parser
+        //    rejects (e.g. sin(20)cos(40)sin(80) = √3/8, sin(15°) =
+        //    (√6−√2)/4, sin(45)+cos(45) = √2).  These used to error
+        //    out with "Enter a trig function like sin(45)…".
+        tryEvaluateViaSympy(container, expr, unit);
         return;
     }
 
@@ -233,6 +237,104 @@ function renderEvaluate(container, expr, unit) {
         });
         if (els.graphHint) els.graphHint.style.display = 'none';
     };
+}
+
+// ==================== Evaluate via SymPy (fallback for composed expr) ====================
+
+function tryEvaluateViaSympy(container, expr, unit) {
+    if (!window.TrigBackend) {
+        TC.showError(container,
+            'Enter a trig function like sin(45), cos(pi/3), tan(60).');
+        return;
+    }
+    TC.showSpinner(container, 'Evaluating expression\u2026');
+
+    var latex = readEvalLatex('trig-expr-wrap');
+    window.TrigBackend.compute({
+        latex: latex, text: expr, mode: 'evaluate', unit: unit, variable: 'x'
+    }, function (res) {
+        if (res && res.ok && res.answer_latex) {
+            renderSympyEvalResult(container, res, expr, unit);
+        } else {
+            // SymPy couldn't close it either — show the friendlier
+            // "single function" prompt rather than a backend error.
+            TC.showError(container,
+                'Could not evaluate. Try a single trig call like sin(45) ' +
+                'or a composed expression like sin(20)*cos(40)*sin(80).');
+        }
+    });
+}
+
+function renderSympyEvalResult(container, res, expr, unit) {
+    container.innerHTML = '';
+    var badge = document.createElement('div');
+    badge.className = 'trig-result-badge';
+    badge.textContent = 'Step-by-step evaluation';
+    container.appendChild(badge);
+
+    var stepNum = 1;
+    container.appendChild(TC.buildStepDOM(stepNum++,
+        'Expression to evaluate (' + (unit === 'deg' ? 'degrees' : 'radians') + ')',
+        TC.safeTeX(expr)));
+
+    var steps = (res.steps && res.steps.length) ? res.steps : [];
+    for (var i = 0; i < steps.length; i++) {
+        var s = steps[i];
+        container.appendChild(TC.buildStepDOM(stepNum++,
+            s.label || s.rule || 'Apply rule', s.after_latex));
+    }
+
+    container.appendChild(TC.buildStepDOM(stepNum,
+        '<strong>Exact value</strong>',
+        '\\boxed{' + res.answer_latex + '}'));
+
+    // Numeric approximation if SymPy returned something symbolic.
+    // Best-effort — the answer_str like "sqrt(3)/8" is parseable by
+    // KaTeX but we don't necessarily know the float.  Skip if the
+    // answer looks like a plain integer or already-numeric form.
+    if (res.answer_str && /[a-zA-Z]/.test(res.answer_str)
+            && !/^Integer\(|^Rational\(/.test(res.answer_str)) {
+        try {
+            // Build a tiny Python-style → JS conversion to estimate.
+            // Crude but works for common forms (sqrt, pi, simple ops).
+            var jsExpr = res.answer_str
+                .replace(/sqrt\(/g, 'Math.sqrt(')
+                .replace(/\bpi\b/g, 'Math.PI')
+                .replace(/\bE\b/g, 'Math.E');
+            // eslint-disable-next-line no-new-func
+            var num = Function('"use strict"; return (' + jsExpr + ');')();
+            if (typeof num === 'number' && isFinite(num)) {
+                container.appendChild(TC.buildStepDOM(3,
+                    'Numeric approximation',
+                    '\\approx ' + TC.fmt(num)));
+            }
+        } catch (_) { /* skip approximation */ }
+    }
+
+    state.lastResult = { expr: expr, answer_latex: res.answer_latex,
+                         answer_str: res.answer_str };
+
+    // Graph: best-effort plot (skip if the expression isn't a simple
+    // single-variable trig curve; the boxed value above is the main
+    // result).  No-op for purely numeric expressions.
+    state.pendingGraph = function () {
+        if (els.graphHint) {
+            els.graphHint.textContent = 'No graph for composed expressions \u2014 ' +
+                'use the single-function modes for unit-circle plots.';
+        }
+    };
+}
+
+function readEvalLatex(wrapId) {
+    if (window.TrigBackend && typeof window.TrigBackend.readLatex === 'function') {
+        return window.TrigBackend.readLatex(wrapId);
+    }
+    var pair = document.getElementById(wrapId);
+    if (!pair) return '';
+    var mf = pair.querySelector('math-field, .mml-mathfield');
+    if (!mf || typeof mf.getValue !== 'function') return '';
+    try { return (mf.getValue('latex') || '').trim(); }
+    catch (_) { return ''; }
 }
 
 // ==================== Quadrant Mode ====================
@@ -405,6 +507,11 @@ function renderCoterminal(container, expr, unit) {
 
 function calculate() {
     var expr = els.exprInput ? els.exprInput.value.trim() : '';
+    // Strip any LaTeX leak (\sin, \frac, \left( etc.) before downstream
+    // parsing / AI sees the value.
+    if (window.MathInput && window.MathInput.latexToAscii) {
+        expr = window.MathInput.latexToAscii(expr);
+    }
     if (!expr) {
         if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Please enter an expression.', 2000, 'warning');
         return;
@@ -421,6 +528,14 @@ function calculate() {
         case 'evaluate': renderEvaluate(container, expr, state.unit); break;
         case 'quadrant': renderQuadrant(container, expr, state.unit); break;
         case 'coterminal': renderCoterminal(container, expr, state.unit); break;
+    }
+
+    // If the Graph tab is already active, fire the pending graph now —
+    // otherwise the new closure would only render after a tab switch.
+    var graphPanel = document.getElementById('trig-panel-graph');
+    if (graphPanel && graphPanel.classList.contains('active') && state.pendingGraph) {
+        state.pendingGraph();
+        state.pendingGraph = null;
     }
 }
 

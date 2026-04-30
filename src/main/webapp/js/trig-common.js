@@ -240,40 +240,136 @@ function showSpinner(container, message) {
     container.appendChild(wrap);
 }
 
+// AI fallback for the ~15% of trig problems the CAS layer (SymPy via
+// OneCompiler) can't close — typically greedy-stuck simplifications
+// like tan(x)+cot(x), or proofs requiring multi-step lookahead.  Goes
+// through AIProxyServlet at /ai (forwards to AI_ENDPOINT, the same
+// chat backend the rest of the site uses).  Image scanning uses a
+// different action on the same servlet which routes to AI_ENDPOINT2.
+//
+// Callback signature (err, steps, method) is unchanged so the trig
+// controllers remain drop-in compatible.
 function callAI(operation, expression, mode, variable, answer, callback) {
     var contextPath = document.querySelector('meta[name="context-path"]');
     var base = contextPath ? contextPath.getAttribute('content') : '';
-    var url = base + '/CFExamMarkerFunctionality?action=math_steps';
+    var url = base + '/ai';
+
+    // Defensive: if MathLive's Visual→Text mirror leaked LaTeX into the
+    // expression, strip it down to a plain form before the LLM sees it
+    // (smaller prompt, fewer mis-reads).
+    if (typeof window !== 'undefined' && window.MathInput && window.MathInput.latexToAscii) {
+        if (expression) expression = window.MathInput.latexToAscii(expression);
+        if (answer)     answer     = window.MathInput.latexToAscii(answer);
+    }
+
+    // Mode → human-readable goal description for the LLM
+    var modeLabels = {
+        'solve_equation':   'Solve the trigonometric equation for x.',
+        'solve_inequality': 'Solve the trigonometric inequality for x and express the answer in interval notation.',
+        'simplify':         'Simplify the trigonometric expression to its simplest form.',
+        'evaluate':         'Evaluate the trigonometric expression to an exact value.',
+        'prove':            'Prove (or disprove) the trigonometric identity by transforming one side until it matches the other.'
+    };
+    var goal = modeLabels[mode] || ('Solve this ' + operation + ' problem.');
+
+    var problem = expression;
+    if (mode === 'prove' && answer) {
+        problem = 'LHS: ' + expression + '\nRHS: ' + answer;
+    }
+
+    var systemPrompt =
+        'You are a precalculus tutor. Output ONLY valid JSON — no prose, no markdown fences. ' +
+        'Schema: {"method": "<short label, e.g. \'Step-by-step solution\'>", ' +
+        '"steps": [{"title": "<rule or action used>", "latex": "<LaTeX of the result of THIS step>"}]}. ' +
+        'Rules:\n' +
+        '1. Steps must be ordered: original → transformations → boxed final answer.\n' +
+        '2. The LAST step\'s latex must wrap the final answer in \\boxed{...}.\n' +
+        '3. Every "latex" field is pure LaTeX — no $ delimiters, no \\text wrappers around math.\n' +
+        '4. Use named identities for "title" (e.g. "Apply Pythagorean identity", "Convert tan to sin/cos", "Factor difference of squares").\n' +
+        '5. For "prove" mode: if the identity is FALSE, return method "Not an identity" with a counterexample step showing LHS(value) ≠ RHS(value).\n' +
+        '6. Keep steps tight — between 3 and 6 steps is ideal.';
+
+    var userContent = goal + '\n\nProblem:\n' + problem +
+                       '\n\nVariable: ' + (variable || 'x');
 
     var payload = {
-        operation: operation,
-        expression: expression,
-        mode: mode || '',
-        variable: variable || 'x'
+        messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user',   content: userContent }
+        ],
+        stream: false
     };
-    if (answer) payload.answer = answer;
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            try {
-                var data = JSON.parse(xhr.responseText);
-                if (data.success && data.steps) {
-                    callback(null, data.steps, data.method || '');
-                } else {
-                    callback(data.error || 'Unexpected response');
-                }
-            } catch (e) {
-                callback('Failed to parse response');
+    xhr.timeout = 30000;   // LLM can be slow; cap at 30s
+    xhr.ontimeout = function () { callback('AI timed out — try again.'); };
+    xhr.onerror = function ()   { callback('Network error.'); };
+    xhr.onload = function () {
+        if (xhr.status === 429) {
+            callback('Rate limit exceeded — please try again in a minute.');
+            return;
+        }
+        if (xhr.status !== 200) {
+            callback('AI server error (' + xhr.status + ')');
+            return;
+        }
+        try {
+            // Ollama non-streaming reply: { message: { content: "<...>" }, ... }
+            // Some backends return { content } at top level.  Accept either.
+            var data = JSON.parse(xhr.responseText);
+            var content = (data && data.message && data.message.content) ||
+                          data.content || data.response || '';
+            content = String(content || '').trim();
+            if (!content) { callback('Empty AI response.'); return; }
+
+            // The model SHOULD return pure JSON, but they sometimes wrap
+            // in markdown fences or add prose.  Pull out the JSON object.
+            var json = extractJsonObject(content);
+            if (!json) { callback('Could not parse AI response as JSON.'); return; }
+
+            var steps = json.steps;
+            if (!Array.isArray(steps) || !steps.length) {
+                callback('AI returned no steps.');
+                return;
             }
-        } else {
-            callback('Server error (' + xhr.status + ')');
+            callback(null, steps, json.method || '');
+        } catch (e) {
+            callback('Failed to parse AI response: ' + e.message);
         }
     };
-    xhr.onerror = function() { callback('Network error'); };
     xhr.send(JSON.stringify(payload));
+}
+
+// Best-effort JSON extraction from LLM text output.  Strips ``` fences
+// and tries to locate the outermost {...} block via brace balancing.
+function extractJsonObject(text) {
+    if (!text) return null;
+    // Strip markdown fences if present
+    text = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '');
+    // Try direct parse first
+    try { return JSON.parse(text); } catch (_) {}
+    // Locate the first { and find its matching }
+    var start = text.indexOf('{');
+    if (start < 0) return null;
+    var depth = 0, inStr = false, esc = false;
+    for (var i = start; i < text.length; i++) {
+        var ch = text.charAt(i);
+        if (esc) { esc = false; continue; }
+        if (ch === '\\' && inStr) { esc = true; continue; }
+        if (ch === '"') { inStr = !inStr; continue; }
+        if (inStr) continue;
+        if (ch === '{') depth++;
+        else if (ch === '}') {
+            depth--;
+            if (depth === 0) {
+                try { return JSON.parse(text.substring(start, i + 1)); }
+                catch (_) { return null; }
+            }
+        }
+    }
+    return null;
 }
 
 // ==================== Angle Helpers ====================

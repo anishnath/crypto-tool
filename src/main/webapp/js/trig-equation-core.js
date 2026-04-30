@@ -90,26 +90,92 @@ function updatePreview() {
 function renderSolveEquation(container, expr, unit) {
     container.innerHTML = '';
 
-    // Try simple client-side patterns first
+    // ── Layer 1: client-side regex shortcut (instant, free) ──
     var simpleResult = trySolveSimple(expr);
     if (simpleResult) {
         renderClientSolution(container, simpleResult, expr, unit);
+        setupEquationGraph(expr);
         return;
     }
 
-    // Fallback to AI
+    // ── Layer 2: SymPy via OneCompiler (deterministic, ~200-600ms) ──
+    // Send the TEXT input, not the math-field LaTeX.  MathLive's ascii-
+    // math seeder occasionally mangles "sin" → "s\in" (set-membership)
+    // when seeding from chip-written text — corrupt LaTeX would make
+    // SymPy parse e.g. "(1-cos(2x))/(s) ∈ (2x)" instead of the intended
+    // expression.  The text input is authoritative in all paths (chip,
+    // Visual mode via sanitised mirror, Text mode native).
     TC.showSpinner(container, 'Solving equation...');
-    TC.callAI('trigonometry', expr, 'solve_equation', 'x', '', function(err, steps, method) {
-        if (err) {
-            TC.showError(container, 'Error: ' + err);
-            return;
-        }
-        TC.showAISteps(container, steps, method || 'Equation Solver');
-    });
-
-    // Graph
     setupEquationGraph(expr);
+
+    var fallbackToAI = function () {
+        TC.callAI('trigonometry', expr, 'solve_equation', 'x', '', function (err, steps, method) {
+            if (err) { TC.showError(container, 'Error: ' + err); return; }
+            TC.showAISteps(container, steps, method || 'Equation Solver');
+        });
+    };
+    if (!window.TrigBackend) { fallbackToAI(); return; }
+    window.TrigBackend.compute({
+        text: expr, mode: 'solve_equation', unit: unit, variable: 'x'
+    }, function (res) {
+        if (res && res.ok && res.answer_latex) {
+            renderSympySolveResult(container, res, expr);
+        } else {
+            fallbackToAI();
+        }
+    });
 }
+
+// Render a CAS result.  If the backend returned named derivation
+// steps, walk them out as numbered steps before the boxed answer;
+// otherwise show just the boxed answer.  answer_str (the raw CAS
+// representation) is used to detect EmptySet / Reals for nicer copy.
+function renderSympySolveResult(container, res, expr) {
+    container.innerHTML = '';
+
+    var badge = document.createElement('div');
+    badge.className = 'trig-result-badge';
+    badge.textContent = 'Step-by-step solution';
+    container.appendChild(badge);
+
+    var stepNum = 1;
+    var steps = (res.steps && res.steps.length) ? res.steps : [];
+
+    // Step 0 (always): show the original input so students see where
+    // the derivation starts.
+    if (steps.length > 0) {
+        container.appendChild(TC.buildStepDOM(stepNum++,
+            'Original expression', TC.safeTeX(expr)));
+        for (var i = 0; i < steps.length; i++) {
+            var s = steps[i];
+            container.appendChild(TC.buildStepDOM(stepNum++,
+                s.label || s.rule || 'Apply rule', s.after_latex));
+        }
+    }
+
+    var title;
+    if (res.answer_str === 'EmptySet') {
+        title = 'No real solution';
+    } else if (res.answer_str === 'Reals' || res.answer_str === 'S.Reals') {
+        title = 'Identity — true for all real x';
+    } else if (res.kind === 'inequality') {
+        title = 'Solution set';
+    } else if (res.kind === 'simplify') {
+        title = '<strong>Simplified form</strong>';
+    } else if (res.kind === 'evaluate') {
+        title = '<strong>Exact value</strong>';
+    } else {
+        title = '<strong>General solution</strong>';
+    }
+    container.appendChild(TC.buildStepDOM(stepNum, title,
+        '\\boxed{' + res.answer_latex + '}'));
+}
+
+// (Helper readTrigLatex removed — controllers now send the text input
+//  value directly to TrigBackend.compute.  Math-field LaTeX is unsafe
+//  because MathLive's ascii-math seeder can mangle "sin" → "s\in" when
+//  parsing chip-written text, producing corrupt LaTeX that misleads
+//  parse_latex.  The text input is authoritative across all paths.)
 
 function parseKValue(kStr) {
     kStr = kStr.trim();
@@ -437,26 +503,33 @@ function renderSolveInequality(container, expr, unit) {
         return;
     }
 
-    // Fallback to AI for non-trivial inequalities
+    // ── SymPy via OneCompiler — handles non-trivial inequalities
+    //    deterministically (sin(x)>1/2 → Interval.open(π/6, 5π/6)). ──
     TC.showSpinner(container, 'Solving inequality...');
-
-    TC.callAI('trigonometry', expr, 'solve_inequality', 'x', '', function(err, steps, method) {
-        if (err) {
-            TC.showError(container, 'Error: ' + err);
-            return;
-        }
-        TC.showAISteps(container, steps, method || 'Inequality Solver');
-    });
-
-    // Graph
-    state.pendingGraph = function() {
-        // Parse and graph
+    state.pendingGraph = function () {
         var cleanExpr = expr.replace(/>=?|<=?/g, ' ').trim().split(/\s+/)[0];
         G.renderFunctionPlot('trig-graph-container', {
             functions: [{ expr: cleanExpr.replace(/\^/g, '**'), label: cleanExpr }]
         });
         if (els.graphHint) els.graphHint.style.display = 'none';
     };
+
+    var fallbackToAI = function () {
+        TC.callAI('trigonometry', expr, 'solve_inequality', 'x', '', function (err, steps, method) {
+            if (err) { TC.showError(container, 'Error: ' + err); return; }
+            TC.showAISteps(container, steps, method || 'Inequality Solver');
+        });
+    };
+    if (!window.TrigBackend) { fallbackToAI(); return; }
+    window.TrigBackend.compute({
+        text: expr, mode: 'solve_inequality', variable: 'x'
+    }, function (res) {
+        if (res && res.ok && res.answer_latex) {
+            renderSympySolveResult(container, res, expr);
+        } else {
+            fallbackToAI();
+        }
+    });
 }
 
 // ==================== Simplify ====================
@@ -495,28 +568,43 @@ function renderSimplify(container, expr) {
         } catch (e) { /* fallback to AI */ }
     }
 
-    // AI fallback
+    // ── SymPy via OneCompiler — multi-strategy simplifier covers the
+    //    cases nerdamer can't (e.g. cos(2x)+sin(2x)tan(x) → 1). ──
     TC.showSpinner(container, 'Simplifying...');
-    TC.callAI('trigonometry', expr, 'simplify', 'x', '', function(err, steps, method) {
-        if (err) {
-            TC.showError(container, 'Error: ' + err);
-            return;
-        }
-        TC.showAISteps(container, steps, method || 'Simplification');
-    });
-
-    state.pendingGraph = function() {
+    state.pendingGraph = function () {
         G.renderFunctionPlot('trig-graph-container', {
             functions: [{ expr: expr.replace(/\^/g, '**'), label: expr }]
         });
         if (els.graphHint) els.graphHint.style.display = 'none';
     };
+
+    var fallbackToAI = function () {
+        TC.callAI('trigonometry', expr, 'simplify', 'x', '', function (err, steps, method) {
+            if (err) { TC.showError(container, 'Error: ' + err); return; }
+            TC.showAISteps(container, steps, method || 'Simplification');
+        });
+    };
+    if (!window.TrigBackend) { fallbackToAI(); return; }
+    window.TrigBackend.compute({
+        text: expr, mode: 'simplify', variable: 'x'
+    }, function (res) {
+        if (res && res.ok && res.answer_latex) {
+            renderSympySolveResult(container, res, expr);
+        } else {
+            fallbackToAI();
+        }
+    });
 }
 
 // ==================== Calculate ====================
 
 function calculate() {
     var expr = els.exprInput ? els.exprInput.value.trim() : '';
+    // Strip any LaTeX leak (\sin, \frac, \left( etc.) before client-side
+    // regex / nerdamer / AI all see the value.
+    if (window.MathInput && window.MathInput.latexToAscii) {
+        expr = window.MathInput.latexToAscii(expr);
+    }
     if (!expr) {
         if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Please enter an expression.', 2000, 'warning');
         return;
@@ -533,6 +621,14 @@ function calculate() {
         case 'solve_equation': renderSolveEquation(container, expr, state.unit); break;
         case 'solve_inequality': renderSolveInequality(container, expr, state.unit); break;
         case 'simplify': renderSimplify(container, expr); break;
+    }
+
+    // If the Graph tab is already active, fire the pending graph now —
+    // otherwise the new closure would only render after a tab switch.
+    var graphPanel = document.getElementById('trig-panel-graph');
+    if (graphPanel && graphPanel.classList.contains('active') && state.pendingGraph) {
+        state.pendingGraph();
+        state.pendingGraph = null;
     }
 }
 

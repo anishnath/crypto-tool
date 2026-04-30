@@ -156,22 +156,9 @@ function renderProve(container, lhs, rhs) {
         return;
     }
 
-    TC.showSpinner(container, 'Proving identity...');
-
-    // Always use AI for proving
-    var expression = lhs + ' = ' + rhs;
-    TC.callAI('trigonometry', expression, 'prove', 'x', '', function(err, steps, method) {
-        if (err) {
-            TC.showError(container, 'Error: ' + err);
-            return;
-        }
-        TC.showAISteps(container, steps, method || 'Identity Proof');
-    });
-
     state.lastResult = { lhs: lhs, rhs: rhs };
-
-    // Graph: plot both sides to verify visually
-    state.pendingGraph = function() {
+    // Graph: plot both sides — fires on Graph-tab activation
+    state.pendingGraph = function () {
         G.renderFunctionPlot('trig-graph-container', {
             functions: [
                 { expr: lhs.replace(/\^2/g, '**2'), label: 'LHS' },
@@ -180,6 +167,106 @@ function renderProve(container, lhs, rhs) {
         });
         if (els.graphHint) els.graphHint.style.display = 'none';
     };
+
+    TC.showSpinner(container, 'Proving identity...');
+
+    // ── SymPy via OneCompiler (deterministic verification ~300-500ms) ──
+    // The CAS proves identity by simplifying (LHS - RHS) and checking
+    // for zero.  Returns is_identity:true/false with a counterexample
+    // for false claims.
+    //
+    // We send the TEXT-input values rather than the math-field LaTeX.
+    // Reason: MathLive's ascii-math seeder occasionally mangles "sin"
+    // → "s\in" (set-membership operator) when seeding from chip-set
+    // text, producing corrupt LaTeX like \frac{1-\cos(2x)}{s}\in(2x)
+    // for the chip "Prove (1-cos2x)/sin2x".  The text input has the
+    // authoritative clean value in all paths (chip writes directly;
+    // Visual-mode typing flows through the sanitised Visual→Text
+    // mirror; Text-mode typing is text-native).
+    var fallbackToAI = function () {
+        TC.callAI('trigonometry', lhs + ' = ' + rhs, 'prove', 'x', '',
+            function (err, steps, method) {
+                if (err) { TC.showError(container, 'Error: ' + err); return; }
+                TC.showAISteps(container, steps, method || 'Identity Proof');
+            });
+    };
+    if (!window.TrigBackend) { fallbackToAI(); return; }
+    window.TrigBackend.compute({
+        mode: 'prove',
+        lhs: lhs,
+        rhs: rhs,
+        variable: 'x'
+    }, function (res) {
+        if (res && res.ok && (res.is_identity === true || res.is_identity === false)) {
+            renderSympyProveResult(container, res, lhs, rhs);
+        } else {
+            fallbackToAI();
+        }
+    });
+}
+
+// Render an identity-prove result — true / false with counterexample.
+// If the CAS supplied named derivation steps, walk through them between
+// the original statement and the conclusion.
+function renderSympyProveResult(container, res, lhsText, rhsText) {
+    container.innerHTML = '';
+    var badge = document.createElement('div');
+    badge.className = 'trig-result-badge';
+    badge.textContent = res.is_identity
+        ? 'Identity verified ✓'
+        : 'Not an identity ✗';
+    container.appendChild(badge);
+
+    var stepNum = 1;
+    container.appendChild(TC.buildStepDOM(stepNum++,
+        'Statement to verify',
+        TC.safeTeX(lhsText) + ' \\;\\stackrel{?}{=}\\; ' + TC.safeTeX(rhsText)));
+
+    var steps = (res.steps && res.steps.length) ? res.steps : [];
+    for (var i = 0; i < steps.length; i++) {
+        var s = steps[i];
+        container.appendChild(TC.buildStepDOM(stepNum++,
+            s.label || s.rule || 'Apply identity', s.after_latex));
+    }
+
+    if (res.is_identity) {
+        if (steps.length === 0) {
+            container.appendChild(TC.buildStepDOM(stepNum++,
+                'Both sides simplify to the same canonical form',
+                '\\text{LHS} - \\text{RHS} = 0 \\quad \\text{for all real } x'));
+        }
+        container.appendChild(TC.buildStepDOM(stepNum,
+            '<strong>Result</strong>',
+            '\\boxed{\\text{This is a valid identity.}}'));
+    } else if (res.counterexample) {
+        var c = res.counterexample;
+        container.appendChild(TC.buildStepDOM(stepNum++,
+            'Counterexample at x = ' + c.x,
+            '\\text{LHS}(' + c.x + ') = ' + c.lhs +
+            ' \\quad \\ne \\quad \\text{RHS}(' + c.x + ') = ' + c.rhs));
+        container.appendChild(TC.buildStepDOM(stepNum,
+            '<strong>Result</strong>',
+            '\\boxed{\\text{Not an identity — the two sides differ.}}'));
+    } else {
+        container.appendChild(TC.buildStepDOM(stepNum,
+            '<strong>Result</strong>',
+            '\\boxed{\\text{Not an identity.}}'));
+    }
+}
+
+// Read raw LaTeX out of an .mml-pair wrapper.  Mirrors the helper in
+// trig-equation-core.js (the two controllers don't share a common file
+// so each duplicates the 5-line getter).
+function readIdentityLatex(wrapId) {
+    if (window.TrigBackend && typeof window.TrigBackend.readLatex === 'function') {
+        return window.TrigBackend.readLatex(wrapId);
+    }
+    var pair = document.getElementById(wrapId);
+    if (!pair) return '';
+    var mf = pair.querySelector('math-field, .mml-mathfield');
+    if (!mf || typeof mf.getValue !== 'function') return '';
+    try { return (mf.getValue('latex') || '').trim(); }
+    catch (_) { return ''; }
 }
 
 // ==================== Calculate ====================
@@ -191,14 +278,28 @@ function calculate() {
     if (els.emptyState) els.emptyState.style.display = 'none';
     if (els.resultActions) els.resultActions.style.display = 'flex';
 
+    // Strip any LaTeX leak (\sin, \frac, \left( etc.) before downstream
+    // parsing / AI sees the value.
+    var stripLatex = (window.MathInput && window.MathInput.latexToAscii)
+        ? window.MathInput.latexToAscii
+        : function (x) { return x; };
+
     if (state.mode === 'identity') {
         state.identityType = els.identitySelect ? els.identitySelect.value : 'pythagorean';
-        state.expression = els.exprInput ? els.exprInput.value.trim() : '';
+        state.expression = stripLatex(els.exprInput ? els.exprInput.value.trim() : '');
         renderIdentity(container, state.identityType, state.expression);
     } else {
-        state.lhs = els.lhsInput ? els.lhsInput.value.trim() : '';
-        state.rhs = els.rhsInput ? els.rhsInput.value.trim() : '';
+        state.lhs = stripLatex(els.lhsInput ? els.lhsInput.value.trim() : '');
+        state.rhs = stripLatex(els.rhsInput ? els.rhsInput.value.trim() : '');
         renderProve(container, state.lhs, state.rhs);
+    }
+
+    // If the Graph tab is already active, fire the pending graph now —
+    // otherwise the new closure would only render after a tab switch.
+    var graphPanel = document.getElementById('trig-panel-graph');
+    if (graphPanel && graphPanel.classList.contains('active') && state.pendingGraph) {
+        state.pendingGraph();
+        state.pendingGraph = null;
     }
 }
 
