@@ -144,7 +144,7 @@
         background: var(--ms-surface, #fff);
         border: 1px solid var(--ms-border, #e5e7eb);
         padding: 0.75rem 1rem;
-        margin-top: 0.5rem;
+        margin- top: 0.5rem;
         border-radius: 0.375rem;
     }
     .step-section p { margin: 0.25rem 0; font-size: 0.875rem; color: var(--ms-muted, #475569); }
