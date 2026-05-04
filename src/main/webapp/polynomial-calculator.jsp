@@ -422,6 +422,16 @@
                             <div class="tool-result-actions" id="poly-result-actions" style="display:none;">
                                 <button type="button" class="tool-action-btn" id="poly-copy-latex-btn">Copy LaTeX</button>
                                 <button type="button" class="tool-action-btn" id="poly-share-btn">Share</button>
+                                <button type="button" class="tool-action-btn" id="poly-toolbar-worksheet-btn">Worksheet</button>
+                            </div>
+
+                            <!-- Prominent worksheet CTA — always visible, drives the
+                                 WorksheetEngine modal (1,500+ SymPy-verified problems
+                                 across 26 polynomial types, basic→scholar). -->
+                            <div class="ic-worksheet-cta">
+                                <button type="button" class="tool-action-btn" id="poly-worksheet-btn">
+                                    Practice Worksheet &mdash; 1,500+ polynomial problems with answer key
+                                </button>
                             </div>
                         </div>
                     </div>

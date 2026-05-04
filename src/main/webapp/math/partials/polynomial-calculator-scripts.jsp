@@ -18,6 +18,9 @@
       7. image-to-math init            — polynomial-specific extraction prompt
 --%>
 
+<%-- Worksheet engine (drives the modal launched from #poly-worksheet-btn). --%>
+<script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
+
 <script src="<%=request.getContextPath()%>/js/polynomial-calculator-render.js"></script>
 <script src="<%=request.getContextPath()%>/js/polynomial-calculator-graph.js"></script>
 <script src="<%=request.getContextPath()%>/js/polynomial-calculator-export.js"></script>
@@ -271,6 +274,41 @@
                 if (cta && !cta.classList.contains('is-disabled')) cta.click();
             }, 350);
         }
+    });
+})();
+</script>
+
+<!-- ─── Worksheet button wiring — opens the WorksheetEngine modal with
+        polynomials.json (1,500+ SymPy-verified problems across 26 types).
+        Both the small toolbar button and the prominent CTA route here. ─── -->
+<script>
+(function () {
+    function openPolynomialWorksheet() {
+        if (!window.WorksheetEngine || typeof window.WorksheetEngine.open !== 'function') {
+            if (typeof ToolUtils !== 'undefined' && ToolUtils.showToast) {
+                ToolUtils.showToast('Worksheet engine not loaded', 2500, 'warning');
+            }
+            return;
+        }
+        window.WorksheetEngine.open({
+            jsonUrl: 'worksheet/math/algebra/polynomials.json',
+            title: 'Polynomial Operations',
+            accentColor: '#15803d',     // math-studio emerald — matches the shell
+            branding: '8gwifi.org',
+            defaultCount: 20
+        });
+    }
+
+    function whenReady(fn) {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', fn);
+        } else { fn(); }
+    }
+    whenReady(function () {
+        var ctaBtn     = document.getElementById('poly-worksheet-btn');
+        var toolbarBtn = document.getElementById('poly-toolbar-worksheet-btn');
+        if (ctaBtn)     ctaBtn.addEventListener('click', openPolynomialWorksheet);
+        if (toolbarBtn) toolbarBtn.addEventListener('click', openPolynomialWorksheet);
     });
 })();
 </script>
