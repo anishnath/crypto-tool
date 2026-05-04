@@ -24,13 +24,13 @@
         deeper step methods; cross-link sends users there for that case.
     --%>
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Inequality Solver - Solve Inequalities Step by Step Free" />
-        <jsp:param name="toolDescription" value="Free online inequality solver with step-by-step solutions and sign chart. Solve linear, quadratic, polynomial, rational, and absolute value inequalities. Shows interval notation, set-builder notation, number line graph. No signup." />
+        <jsp:param name="toolName" value="Inequality Solver — AI Photo Scan, Step-by-Step Free" />
+        <jsp:param name="toolDescription" value="Free inequality solver with AI photo scan. Solve linear, quadratic, polynomial, rational, absolute value, and compound inequalities with full sign chart steps." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="inequality-solver.jsp" />
-        <jsp:param name="toolKeywords" value="inequality solver, solve inequalities online, inequality calculator with steps, quadratic inequality solver, polynomial inequality calculator, rational inequality solver, absolute value inequality, interval notation calculator, sign chart method, inequality graphing calculator, solve inequalities step by step free" />
-        <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Step-by-step sign chart method,Linear and quadratic inequalities,Polynomial inequality solver,Rational inequality solver,Absolute value inequalities,Compound inequalities,Interval notation output,Set-builder notation,Interactive number line,Function graph with solution shading,Download PDF,Copy LaTeX,Share via URL,Python SymPy compiler,Dark mode" />
+        <jsp:param name="toolKeywords" value="inequality solver, solve inequalities online, inequality calculator with steps, quadratic inequality solver, polynomial inequality calculator, rational inequality solver, absolute value inequality, interval notation calculator, sign chart method, inequality graphing calculator, solve inequalities step by step free, ai inequality solver, photo math solver, scan inequality from photo, ai math homework helper, inequality photo solver, math problem photo scanner, compound inequality calculator, set builder notation calculator" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
+        <jsp:param name="toolFeatures" value="AI photo scanner extracts inequalities from images,Step-by-step sign chart method,Linear and quadratic inequalities,Polynomial inequality solver,Rational inequality solver,Absolute value inequalities,Compound inequalities,Interval notation output,Set-builder notation,Interactive number line,Function graph with solution shading,Download PDF,Copy LaTeX,Share via URL,Python SymPy compiler,Photo math problem solver,Auto-detect inequality type from image,Free with no signup or limits,Dark mode" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="What types of inequalities can this solver handle?" />
         <jsp:param name="faq1a" value="This solver handles linear inequalities (2x+3>7), quadratic inequalities (x^2-4>=0), polynomial inequalities (x^3-x<0), rational inequalities ((x-1)/(x+2)>0), absolute value inequalities (|x-3|<5), and compound inequalities (1<2x+3<7). It finds all solutions using the sign chart method and presents results in interval notation and set-builder notation." />
@@ -44,6 +44,10 @@
         <jsp:param name="faq5a" value="Yes. After solving an inequality you can: (1) Download as PDF with the original inequality, solution, sign chart, and steps, (2) Copy as LaTeX for papers and documents, (3) Copy as plain text, or (4) Generate a shareable URL. The PDF includes a watermark and date." />
         <jsp:param name="faq6q" value="Is this inequality solver free?" />
         <jsp:param name="faq6a" value="Yes, completely free with no signup, no account, and no limits. All computation runs client-side in your browser using the sign chart method. You get step-by-step solutions, interactive number line, function graph, PDF download, LaTeX export, and a Python SymPy compiler." />
+        <jsp:param name="faq7q" value="Can I scan an inequality from a photo or textbook?" />
+        <jsp:param name="faq7a" value="Yes. Click the Scan button and upload (or drop in) a photo of a handwritten or printed inequality. The AI vision model extracts the inequality (preserving < ≤ > ≥ symbols and absolute-value bars), fills the math field automatically, and detects the inequality type. Works on phone snapshots, textbook pages, whiteboard photos, and worksheet scans." />
+        <jsp:param name="faq8q" value="What grade levels and curricula does this cover?" />
+        <jsp:param name="faq8a" value="Covers Algebra 1 (linear inequalities, compound), Algebra 2 (quadratic, polynomial, rational, absolute value), Precalculus (sign chart analysis), and college algebra. Aligned with Common Core HSA-REI.B.3 and HSA-CED.A.1, plus CBSE/ICSE class 9-11 inequalities chapters. SAT, ACT, and JEE Mains practice covered." />
     </jsp:include>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="ctx" content="<%=request.getContextPath()%>" />
@@ -468,6 +472,14 @@
             <div class="ms-faq-item">
                 <button type="button" class="ms-faq-q">Is this inequality solver free?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
                 <div class="ms-faq-a">Yes &mdash; completely free with no signup, no account, and no limits. All computation runs client-side in your browser using the sign chart method. You get step-by-step solutions, interactive number line, function graph, PDF download, LaTeX export, and a Python SymPy compiler.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Can I scan an inequality from a photo or textbook?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Yes. Click the <strong>&#128247; Scan</strong> button and upload (or drop in) a photo of a handwritten or printed inequality. The AI vision model extracts the inequality (preserving <em>&lt; &le; &gt; &ge;</em> symbols and absolute-value bars), fills the math field automatically, and detects the inequality type. Works on phone snapshots, textbook pages, whiteboard photos, and worksheet scans.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">What grade levels and curricula does this cover?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Covers <strong>Algebra 1</strong> (linear inequalities, compound), <strong>Algebra 2</strong> (quadratic, polynomial, rational, absolute value), <strong>Precalculus</strong> (sign chart analysis), and college algebra. Aligned with Common Core HSA-REI.B.3 and HSA-CED.A.1, plus CBSE/ICSE class 9&ndash;11 inequalities chapters. SAT, ACT, and JEE Mains practice covered.</div>
             </div>
         </div>
     </section>

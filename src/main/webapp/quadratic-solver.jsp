@@ -24,7 +24,7 @@
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="quadratic-solver.jsp" />
         <jsp:param name="toolKeywords" value="quadratic formula calculator, quadratic equation solver, quadratic equation worksheet, quadratic formula worksheet printable, algebra 2 quadratic worksheet, solve quadratic equation step by step, quadratic practice problems with answers, completing the square calculator, factoring quadratics calculator, vertex form calculator, discriminant calculator, parabola graph calculator, ai quadratic solver, photo math solver, scan quadratic equation from photo, ai math homework helper, quadratic photo solver, math problem photo scanner, quadratic equation photo solver, quadratic worksheet pdf, quadratic worksheet for class 9, quadratic worksheet for class 10, printable quadratic worksheet" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
         <jsp:param name="toolFeatures" value="AI photo scanner extracts quadratics from images,Printable practice worksheet 50 problems with answer key,Quadratic formula with full substitution steps,Completing the square method,Factoring method,5 input forms including vertex factored and horizontal parabola,Quadratic inequality solver with interval notation,Interactive Plotly parabola graph,Discriminant and root classification,LaTeX export and PDF download,Shareable URLs,Photo math problem solver,Auto-detect quadratic form from image,Free with no signup or limits" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="educationalLevel" value="High School, College" />

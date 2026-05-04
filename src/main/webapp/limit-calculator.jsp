@@ -22,7 +22,7 @@
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="limit-calculator.jsp" />
         <jsp:param name="toolKeywords" value="limit calculator, limit calculator with steps, limit solver, limit calculator online free, calculus limit calculator, l'hopital rule calculator, evaluate limit calculator, one sided limit calculator, two sided limit calculator, limit at infinity calculator, indeterminate form calculator, find limit calculator, limit finder, squeeze theorem calculator, how to find limit of a function, left hand limit calculator, right hand limit calculator, 0/0 limit, limit practice problems, limit worksheet, limit worksheet with answers, calculus limits worksheet, limits practice worksheet pdf, limit problems with solutions, l'hopital's rule practice problems, one sided limit practice, limits exam practice, AP calculus limits worksheet, limit quiz generator" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
         <jsp:param name="toolFeatures" value="Step-by-step solutions,Direct substitution,L'Hopital's Rule,Factoring and cancellation,One-sided limits (left and right),Two-sided limits,Limits at infinity,Indeterminate form detection (0/0 and infinity/infinity),Numerical approximation table,Squeeze theorem,2000+ practice worksheet problems,Printable worksheet with answer key,11 question types,4 difficulty levels,Live KaTeX math preview,Interactive Plotly graph,Download PDF,Copy LaTeX,Share URL,Python SymPy compiler,Dark mode,Free with no signup" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="educationalLevel" value="College, AP Calculus, University, High School Calculus" />
