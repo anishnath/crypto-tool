@@ -132,6 +132,9 @@ function calculate() {
         case 'evaluate':
             result = R.renderEvaluate(container, p1, evalX);
             break;
+        case 'expand':
+            result = R.renderExpand(container, p1);
+            break;
     }
 
     // Only show AI fallback if input was valid but Nerdamer couldn't compute the result

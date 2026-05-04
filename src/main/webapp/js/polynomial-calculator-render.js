@@ -319,9 +319,14 @@ function renderEvaluate(container, poly, xVal) {
     try {
         var polyTex = safeTeX(poly);
         var val = parseFloat(xVal);
-        if (isNaN(val)) { showError(container, 'Please enter a valid number for x.'); return null; }
+        // Use the user-selected variable instead of hardcoded "x" so
+        // Evaluate works with y / z / t / w / n.
+        var varEl = document.getElementById('poly-var');
+        var varName = (varEl && varEl.value) || 'x';
+        if (isNaN(val)) { showError(container, 'Please enter a valid number for ' + varName + '.'); return null; }
 
-        var result = nerdamer(poly).evaluate({ x: val });
+        var subs = {}; subs[varName] = val;
+        var result = nerdamer(poly).evaluate(subs);
         var resultText = result.text('decimals');
         var resultTex = result.toTeX();
 
@@ -370,6 +375,36 @@ function showAISteps(container, steps, method) {
     container.appendChild(wrapper);
 }
 
+// ==================== Expand ====================
+// Used for problems like "expand 3(10 - 4y^3)^2" — single polynomial in,
+// fully-distributed/expanded polynomial out.
+function renderExpand(container, poly) {
+    container.innerHTML = '';
+    try {
+        var polyTex = safeTeX(poly);
+        var result = nerdamer(poly).expand();
+        var resultTex = result.toTeX();
+        var resultText = result.text();
+
+        var badge = document.createElement('div');
+        badge.innerHTML = '<span class="poly-result-badge">Expansion</span>';
+        container.appendChild(badge);
+
+        var mainMath = document.createElement('div');
+        mainMath.className = 'poly-result-math';
+        renderKaTeX(mainMath, polyTex + ' = ' + resultTex);
+        container.appendChild(mainMath);
+
+        container.appendChild(buildStepDOM(1, '<strong>Original expression</strong>', polyTex));
+        container.appendChild(buildStepDOM(2, '<strong>Distribute and combine like terms</strong>', '= ' + resultTex));
+
+        return { resultText: resultText, resultTeX: resultTex, polyTex: polyTex };
+    } catch (e) {
+        showError(container, 'Could not expand: ' + (e.message || e));
+        return null;
+    }
+}
+
 // ==================== Exports ====================
 
 window.PolyCalcRender = {
@@ -383,6 +418,7 @@ window.PolyCalcRender = {
     renderFactor: renderFactor,
     renderRoots: renderRoots,
     renderEvaluate: renderEvaluate,
+    renderExpand: renderExpand,
     showError: showError,
     showAISteps: showAISteps,
     safeTeX: safeTeX
