@@ -86,7 +86,7 @@ function injectStyles() {
     var css = [
         /* Config modal backdrop */
         '.we-backdrop{position:fixed;inset:0;z-index:1050;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem;animation:we-fadeIn .2s ease}',
-        '.we-card{position:relative;width:100%;max-width:640px;max-height:92vh;overflow-y:auto;background:var(--bg-primary,#fff);border-radius:1rem;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:we-slideUp .25s ease}',
+        '.we-card{position:relative;width:100%;max-width:640px;max-height:92vh;overflow-y:auto;background:var(--bg-primary,#fff);color:var(--text-primary,#111);border-radius:1rem;box-shadow:0 25px 50px rgba(0,0,0,0.25);animation:we-slideUp .25s ease}',
         '.we-card-header{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border,#e5e7eb)}',
         '.we-card-header h3{margin:0;font-size:1.125rem;font-weight:700;color:var(--text-primary,#111)}',
         '.we-card-header p{margin:0.25rem 0 0;font-size:0.75rem;color:var(--text-muted,#9ca3af)}',
@@ -137,7 +137,7 @@ function injectStyles() {
         '.we-cooldown-msg{font-size:0.6875rem;color:var(--we-accent,#2563eb);text-align:center;margin-top:0.375rem;min-height:1rem;font-weight:500}',
 
         /* Worksheet modal (full-screen overlay) */
-        '.we-ws-backdrop{position:fixed;inset:0;z-index:1060;background:var(--bg-primary,#fff);overflow-y:auto;animation:we-fadeIn .2s ease}',
+        '.we-ws-backdrop{position:fixed;inset:0;z-index:1060;background:var(--bg-primary,#fff);color:var(--text-primary,#111);overflow-y:auto;animation:we-fadeIn .2s ease}',
         '.we-ws-topbar{position:fixed;bottom:0;left:0;right:0;z-index:1070;display:flex;align-items:center;justify-content:center;gap:0.625rem;padding:0.75rem 1.5rem;background:var(--bg-primary,#fff);border-top:1.5px solid var(--border,#e5e7eb);box-shadow:0 -4px 20px rgba(0,0,0,0.1)}',
         '.we-ws-topbar-title{font-size:0.8125rem;font-weight:600;color:var(--text-secondary,#6b7280);margin-right:auto}',
         '.we-ws-topbar-actions{display:flex;gap:0.5rem;align-items:center}',
@@ -163,8 +163,13 @@ function injectStyles() {
         '.we-ws-ad-label{font-size:0.625rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted,#9ca3af)}',
         '.we-ws-ad.filled{background:transparent;border:none;padding:0;min-height:0}',
 
-        /* Questions */
-        '.we-ws-q{padding:1rem 1.25rem;margin-bottom:0.75rem;background:var(--bg-primary,#fff);border:1.5px solid var(--border,#e5e7eb);border-radius:0.75rem;transition:border-color .15s}',
+        /* Questions
+           NOTE: .we-ws-q sets an explicit foreground color too. The host page
+           may run a math-studio shell whose body color (--ms-ink) does not
+           track prefers-color-scheme; without this, the KaTeX-rendered math
+           inside .we-ws-q-expr would inherit the dark-on-dark body color
+           and the fraction lines / numerals would be unreadable in dark mode. */
+        '.we-ws-q{padding:1rem 1.25rem;margin-bottom:0.75rem;background:var(--bg-primary,#fff);color:var(--text-primary,#111);border:1.5px solid var(--border,#e5e7eb);border-radius:0.75rem;transition:border-color .15s}',
         '.we-ws-q:hover{border-color:var(--we-accent,#2563eb)}',
         '.we-ws-q-top{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem}',
         '.we-ws-q-num{width:1.75rem;height:1.75rem;border-radius:50%;background:var(--we-accent,#2563eb);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0}',
@@ -172,11 +177,11 @@ function injectStyles() {
         '.we-ws-q-badge{padding:0.125rem 0.5rem;font-size:0.625rem;font-weight:600;border-radius:2rem;text-transform:uppercase;letter-spacing:0.03em}',
         '.we-ws-q-type{background:var(--we-accent-light,#eff6ff);color:var(--we-accent,#2563eb)}',
         '.we-ws-q-text{font-size:0.9375rem;color:var(--text-primary,#111);line-height:1.7;margin-bottom:0.5rem}',
-        '.we-ws-q-text .katex{font-size:1em}',
+        '.we-ws-q-text .katex{font-size:1em;color:var(--text-primary,#111)}',
         /* Expression block — the actual math, displayed prominently */
-        '.we-ws-q-expr{text-align:center;margin:0.625rem 0 0.75rem;padding:0.75rem 1rem;background:var(--bg-secondary,#f9fafb);border-radius:0.5rem;overflow-x:auto}',
+        '.we-ws-q-expr{text-align:center;margin:0.625rem 0 0.75rem;padding:0.75rem 1rem;background:var(--bg-secondary,#f9fafb);color:var(--text-primary,#111);border-radius:0.5rem;overflow-x:auto}',
         '.we-ws-q-expr .katex-display{margin:0;overflow-x:auto;overflow-y:hidden}',
-        '.we-ws-q-expr .katex{font-size:1.15em}',
+        '.we-ws-q-expr .katex{font-size:1.15em;color:var(--text-primary,#111)}',
         '[data-theme="dark"] .we-ws-q-expr{background:var(--bg-tertiary)}',
         '.we-ws-q-figure{text-align:center;margin:0.5rem 0 0.75rem;break-inside:avoid}',
         '.we-ws-q-figure-img{max-width:100%;height:auto;max-height:220px;border-radius:0.375rem}',
@@ -188,10 +193,10 @@ function injectStyles() {
         '.we-ws-divider::before{content:"";position:absolute;top:50%;left:0;right:0;height:1.5px;background:var(--border,#e5e7eb)}',
         '.we-ws-divider span{position:relative;background:var(--bg-primary,#fff);padding:0 1rem;font-size:0.875rem;font-weight:700;color:var(--we-accent,#2563eb);text-transform:uppercase;letter-spacing:0.05em}',
         '.we-ws-ak{display:grid;grid-template-columns:1fr;gap:0.5rem}',
-        '.we-ws-ak-item{display:flex;align-items:baseline;gap:0.5rem;padding:0.5rem 0.75rem;background:var(--bg-secondary,#f9fafb);border-radius:0.5rem;border:1px solid var(--border,#e5e7eb);overflow-x:auto}',
+        '.we-ws-ak-item{display:flex;align-items:baseline;gap:0.5rem;padding:0.5rem 0.75rem;background:var(--bg-secondary,#f9fafb);color:var(--text-primary,#111);border-radius:0.5rem;border:1px solid var(--border,#e5e7eb);overflow-x:auto}',
         '.we-ws-ak-num{font-size:0.75rem;font-weight:700;color:var(--text-muted,#9ca3af);min-width:1.5rem;flex-shrink:0}',
         '.we-ws-ak-val{font-size:0.875rem;color:#16a34a;font-weight:600;min-width:0;overflow-x:auto}',
-        '.we-ws-ak-val .katex{font-size:0.9em}',
+        '.we-ws-ak-val .katex{font-size:0.9em;color:#16a34a}',
 
         /* Footer */
         '.we-ws-footer{margin-top:2rem;padding:0.75rem 1rem;border-top:2px solid var(--border,#e5e7eb);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}',

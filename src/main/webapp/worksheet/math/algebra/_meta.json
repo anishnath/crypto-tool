@@ -1,7 +1,7 @@
 {
   "name": "algebra",
-  "worksheet_count": 6,
-  "total_questions": 10000,
+  "worksheet_count": 7,
+  "total_questions": 11500,
   "worksheets": [
     {
       "topic": "Exponents and Powers",
@@ -158,6 +158,54 @@
       "warnings": [],
       "file": "logarithms.json",
       "url": "/worksheet/math/algebra/logarithms.json"
+    },
+    {
+      "topic": "Percentages",
+      "description": "NCERT Class 7 Ch 7 + Class 8 Ch 8 (Comparing Quantities) percentages, ratios, percent change, profit/loss, discount, tax, compound interest, successive discounts, partnership profit share, and markup/markdown commercial-math problems.",
+      "total": 1500,
+      "type_count": 27,
+      "types": {
+        "population_change": 143,
+        "chained_pct": 141,
+        "pct_of_quantity_word": 126,
+        "compound_interest": 100,
+        "profit_loss_pct": 94,
+        "markup_markdown": 80,
+        "what_pct": 78,
+        "pct_of_simple": 77,
+        "decrease_by": 63,
+        "successive_discount": 62,
+        "reverse_pct": 60,
+        "increase_by": 59,
+        "partnership_profit_share": 56,
+        "discount_calc": 49,
+        "alligation_mixture": 46,
+        "tax_calc": 40,
+        "two_pct_change_unknown": 36,
+        "required_markup_for_profit": 33,
+        "pct_word_equation": 29,
+        "ratio_to_pct": 29,
+        "geometry_pct_change": 25,
+        "decimal_to_pct": 19,
+        "pct_change": 15,
+        "pct_to_decimal_fraction": 15,
+        "fraction_to_pct": 14,
+        "ncert_classic_word": 7,
+        "successive_pct_proof": 4
+      },
+      "difficulty": {
+        "basic": 329,
+        "medium": 409,
+        "hard": 582,
+        "scholar": 180
+      },
+      "has_figures": 0,
+      "size_bytes": 617656,
+      "warnings": [
+        "low-variety types (1): successive_pct_proof"
+      ],
+      "file": "percentages.json",
+      "url": "/worksheet/math/algebra/percentages.json"
     },
     {
       "topic": "Polynomial Operations",
