@@ -63,9 +63,8 @@
             <a href="<%= ctx %>/quadratic-solver.jsp" class="ms-item <%= "quadratic".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">x&#178;</span> <span class="ms-item-label">Quadratic Solver</span>
             </a>
-            <a href="<%= ctx %>/linear-equations-solver.jsp" class="ms-item <%= "linear-equations".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">&#x2261;</span> <span class="ms-item-label">Linear Equations</span>
-            </a>
+            <%-- linear-equations-solver.jsp absorbed into system-equations-solver.jsp;
+                 Cloudflare 301s the old URL. Sidebar shows just the canonical entry. --%>
             <a href="<%= ctx %>/system-equations-solver.jsp" class="ms-item <%= "system-equations".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#123;</span> <span class="ms-item-label">System of Equations</span>
             </a>
