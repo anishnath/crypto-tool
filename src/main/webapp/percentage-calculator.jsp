@@ -1,30 +1,42 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
-<%
-    String cacheVersion = String.valueOf(System.currentTimeMillis());
-%>
+<% String v = String.valueOf(System.currentTimeMillis()); %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="index,follow">
-    <meta name="resource-type" content="document">
-    <meta name="language" content="en">
-    <meta name="author" content="Anish Nath">
-    <meta name="context-path" content="<%=request.getContextPath()%>">
+    <%--
+        Percentage Calculator — migrated to math-studio shell.
 
+        No MathLive, no AI scan — number-only inputs, focus on easy UX.
+
+        Architecture:
+          · Legacy core/render/export reused unchanged. The JSP preserves
+            every DOM ID the core looks up: pc-x, pc-y, pc-a, pc-b,
+            pc-disc-pct, pc-final-price, pc-base-price, pc-disc-sim,
+            pc-tax-sim, pc-qty, pc-chain-start, pc-chain-steps,
+            pc-result-content, pc-empty-state, pc-result-actions,
+            pc-solve-btn, pc-clear-btn, pc-preview, pc-compiler-iframe,
+            pc-compiler-template, pc-copy-latex-btn, pc-share-btn.
+          · #pc-preview is kept in the DOM (legacy renders KaTeX into it)
+            but visually hidden — the Result card itself is now the live
+            preview.
+          · Tiny bridge IIFE at end of body wires every .pc-input / .pc-input-text
+            input event + .pc-mode-btn click → debounced #pc-solve-btn.click()
+            so users see results live without pressing Calculate.
+          · 8 modes, examples chips, KaTeX result, Python compiler, share, LaTeX —
+            all behavior preserved.
+    --%>
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Percentage Calculator with Steps - All Formulas Free Online" />
         <jsp:param name="toolDescription" value="Free percentage calculator with step-by-step solutions. Find percent of, percent change, increase, decrease, reverse percentage, and discount with tax." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="percentage-calculator.jsp" />
         <jsp:param name="toolKeywords" value="percentage calculator, percent of calculator, percent change calculator, percent increase calculator, percent decrease calculator, discount calculator, reverse percentage, percentage formula, step by step percentage, tax calculator, percentage solver" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
         <jsp:param name="toolFeatures" value="Calculate X percent of Y with steps,Find what percent X is of Y,Percent increase and decrease calculator,Percent change from A to B,Reverse percentage - find original price,Discount plus tax simulator with quantity,Chained percentage steps with running total,Built-in Python compiler with 3 templates,LaTeX export and shareable URLs,8 quick example presets,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="teaches" value="Percentages, percent change, percent increase and decrease, reverse percentage, discount and tax calculations" />
         <jsp:param name="educationalLevel" value="Middle School, High School" />
-        <jsp:param name="howToSteps" value="Select a calculation mode|Choose from 8 modes: percent of or what percent or increase or decrease or percent change or reverse percentage or discount simulator or chained steps,Enter your values|Type numbers into the X and Y input fields. For discount mode enter base price and discount and tax percentages,Click Calculate|Press the Calculate button to see the step-by-step solution with KaTeX-rendered formulas,Review steps and export|Read each solution step then copy LaTeX or share the URL or try the Python compiler" />
+        <jsp:param name="howToSteps" value="Select a calculation mode|Choose from 8 modes: percent of or what percent or increase or decrease or percent change or reverse percentage or discount simulator or chained steps,Enter your values|Type numbers into the X and Y input fields. For discount mode enter base price and discount and tax percentages,View live result|The result card updates as you type with the step-by-step solution and KaTeX-rendered formulas,Review steps and export|Read each solution step then copy LaTeX or share the URL or try the Python compiler" />
         <jsp:param name="faq1q" value="How do you calculate a percentage of a number?" />
         <jsp:param name="faq1a" value="To find X percent of Y multiply Y by X divided by 100. For example 25 percent of 200 equals 200 times 25 divided by 100 equals 50. The formula is Result equals X divided by 100 times Y. This calculator shows every step of the computation." />
         <jsp:param name="faq2q" value="How do you calculate percent change between two numbers?" />
@@ -36,492 +48,649 @@
         <jsp:param name="faq5q" value="Is this percentage calculator free?" />
         <jsp:param name="faq5a" value="Yes 100 percent free with no signup required. Features include 8 calculation modes with step by step KaTeX solutions a discount tax simulator chained steps a Python compiler LaTeX export and shareable URLs. All computation runs in your browser." />
     </jsp:include>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="ctx" content="<%=request.getContextPath()%>" />
+    <meta name="context-path" content="<%=request.getContextPath()%>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
 
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/percentage-calculator.css?v=<%=cacheVersion%>">
-
-    <%@ include file="modern/ads/ad-init.jsp" %>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/percentage-calculator.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 
+    <%@ include file="modern/ads/ad-init.jsp" %>
+
     <style>
-        .tool-action-btn { background: var(--pc-gradient) !important; }
-        .tool-badge { background: var(--pc-light); color: var(--pc-tool); }
+        /* ───── Mode pill bar (8 modes) — math-studio tuned ───── */
+        .pc-mode-bar {
+            display: flex; flex-wrap: wrap; gap: 0.35rem;
+            padding: 0.4rem 0.5rem;
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            border: 1px solid var(--ms-line, rgba(0,0,0,0.08));
+            border-radius: var(--ms-radius, 14px);
+            align-items: center;
+            margin-bottom: 0.85rem;
+        }
+        .pc-mode-bar .pc-mode-label {
+            font-size: 0.7rem; font-weight: 600;
+            color: var(--ms-muted, #78716c);
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin-right: 0.25rem;
+        }
+        .pc-mode-bar .pc-mode-btn {
+            flex: 0 1 auto;
+            padding: 0.4rem 0.7rem;
+            font-size: 0.8rem; font-weight: 500;
+            border: none;
+            border-radius: var(--ms-radius-pill, 999px);
+            background: transparent;
+            color: var(--ms-ink-soft, #44403c);
+            cursor: pointer;
+            font-family: var(--ms-font-sans, Inter, sans-serif);
+            transition: background 200ms, color 200ms;
+        }
+        .pc-mode-bar .pc-mode-btn:hover {
+            background: var(--ms-accent-soft, rgba(21,128,61,0.08));
+            color: var(--ms-accent, #15803d);
+        }
+        .pc-mode-bar .pc-mode-btn.active {
+            background: var(--ms-panel-bg, #fefdfb);
+            color: var(--ms-accent, #15803d);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+            font-weight: 600;
+        }
+
+        /* ───── Mode-form area (only one .pc-mode-form is .active at a time) ───── */
+        .pc-mode-form { display: none; }
+        .pc-mode-form.active { display: block; }
+        .pc-input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.65rem;
+            margin-bottom: 0.5rem;
+        }
+        .pc-input-row:last-child { margin-bottom: 0; }
+        .pc-input-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        .pc-input-label {
+            font-size: 0.74rem; font-weight: 600;
+            color: var(--ms-ink-soft, #44403c);
+        }
+        .pc-input,
+        .pc-input-text {
+            width: 100%;
+            padding: 0.6rem 0.85rem;
+            font-size: 1rem;
+            font-family: var(--ms-font-mono, 'JetBrains Mono', monospace);
+            border: 1.5px solid var(--ms-line-strong, rgba(0,0,0,0.14));
+            border-radius: var(--ms-radius, 14px);
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            color: var(--ms-ink, #1c1917);
+            transition: border-color 200ms, box-shadow 200ms, background 200ms;
+            box-sizing: border-box;
+        }
+        .pc-input:focus,
+        .pc-input-text:focus {
+            outline: none;
+            border-color: var(--ms-accent, #15803d);
+            background: var(--ms-panel-bg, #fefdfb);
+            box-shadow: var(--ms-ring, 0 0 0 3px rgba(21,128,61,0.22));
+        }
+        .pc-form-hint {
+            font-size: 0.78rem;
+            color: var(--ms-muted, #78716c);
+            margin-top: 0.4rem;
+        }
+
+        /* ───── Hidden legacy preview node (kept for core compatibility) ───── */
+        #pc-preview { display: none !important; }
+
+        /* ───── Inline-formula hint above inputs (per active mode) ───── */
+        .pc-formula-hint {
+            display: block;
+            padding: 0.55rem 0.9rem;
+            margin-bottom: 0.65rem;
+            font-family: var(--ms-font-mono, 'JetBrains Mono', monospace);
+            font-size: 0.85rem;
+            color: var(--ms-ink-soft, #44403c);
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            border-left: 3px solid var(--ms-accent, #15803d);
+            border-radius: var(--ms-radius-sm, 8px);
+        }
+        .pc-formula-hint code {
+            font-family: inherit;
+            color: var(--ms-accent, #15803d);
+            font-weight: 600;
+            background: transparent;
+            padding: 0;
+        }
+
+        /* ───── Examples chip row ───── */
+        .pc-examples {
+            display: flex; flex-wrap: wrap; gap: 0.4rem;
+        }
+        .pc-example-chip {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.78rem; font-weight: 500;
+            border: 1px solid var(--ms-line-strong, rgba(0,0,0,0.14));
+            border-radius: var(--ms-radius-pill, 999px);
+            background: transparent;
+            color: var(--ms-ink-soft, #44403c);
+            cursor: pointer;
+            font-family: var(--ms-font-mono, 'JetBrains Mono', monospace);
+            transition: background 200ms, color 200ms, border-color 200ms;
+        }
+        .pc-example-chip:hover {
+            background: var(--ms-accent-soft, rgba(21,128,61,0.08));
+            color: var(--ms-accent, #15803d);
+            border-color: var(--ms-accent, #15803d);
+        }
+
+        /* ───── CTA + Clear row ───── */
+        .pc-cta-row {
+            display: flex; gap: 0.6rem; align-items: center;
+            margin-top: 0.85rem;
+        }
+        .pc-cta-row .ic-hero-cta { flex: 1; }
+        .pc-cta-row .ic-clear-btn {
+            padding: 0.5rem 0.9rem;
+            font-size: 0.82rem; font-weight: 500;
+            border: 1px solid var(--ms-line-strong, rgba(0,0,0,0.14));
+            border-radius: var(--ms-radius-pill, 999px);
+            background: transparent;
+            color: var(--ms-ink-soft, #44403c);
+            cursor: pointer;
+            font-family: var(--ms-font-sans, Inter, sans-serif);
+            transition: background 200ms, color 200ms, border-color 200ms;
+        }
+        .pc-cta-row .ic-clear-btn:hover {
+            background: var(--ms-accent-soft, rgba(21,128,61,0.08));
+            color: var(--ms-accent, #15803d);
+            border-color: var(--ms-accent, #15803d);
+        }
+
+        /* ───── Result card overrides — match polynomial/quadratic look ───── */
+        .pc-output-tabs { display: flex; }
+        .pc-panel { display: none; }
+        .pc-panel.active { display: block; }
+
+        /* Compiler dropdown (placed inside the result-header) */
+        #pc-compiler-template {
+            margin-left: auto;
+            padding: 0.3rem 0.55rem;
+            border: 1px solid var(--ms-line-strong, rgba(0,0,0,0.14));
+            border-radius: var(--ms-radius-sm, 8px);
+            font-size: 0.78rem;
+            font-family: var(--ms-font-sans, Inter, sans-serif);
+            background: var(--ms-panel-bg, #fefdfb);
+            color: var(--ms-ink, #1c1917);
+            cursor: pointer;
+        }
+
+        /* Result content tunes — the legacy render emits classes (.pc-step,
+           .pc-step-number, .pc-rule-badge, .pc-sim-item, …) that come from
+           percentage-calculator.css using site-theme tokens. Those tokens
+           flip in dark mode but don't match math-studio's cream/dark
+           surface, which made the result area invisible in some themes.
+           The rules below re-skin those classes inside the math-studio
+           result card using --ms-* tokens, which DO have proper light/dark
+           variants. */
+        #pc-result-content { padding: 1rem 1.25rem; min-height: 220px; }
+        #pc-result-content .tool-empty-state,
+        #pc-result-content .ic-empty-state {
+            background: transparent !important;
+            color: var(--ms-ink, #1c1917);
+            padding: 2.25rem 1rem;
+        }
+        #pc-result-content .tool-empty-state h3,
+        #pc-result-content .ic-empty-state h3 { color: var(--ms-ink, #1c1917); }
+        #pc-result-content .tool-empty-state p,
+        #pc-result-content .ic-empty-state p { color: var(--ms-muted, #78716c); }
+
+        /* Step rows */
+        #pc-result-content .pc-step {
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            border-left-color: var(--ms-accent, #15803d);
+            color: var(--ms-ink, #1c1917);
+        }
+        #pc-result-content .pc-step:hover {
+            background: var(--ms-accent-soft, rgba(21,128,61,0.08));
+        }
+        #pc-result-content .pc-step-number {
+            background: var(--ms-accent, #15803d);
+            color: #fff;
+        }
+        #pc-result-content .pc-step-desc { color: var(--ms-ink, #1c1917); }
+        #pc-result-content .pc-step-math { color: var(--ms-ink, #1c1917); }
+        #pc-result-content .pc-step-math .katex { color: var(--ms-ink, #1c1917); }
+
+        /* Rule badge ("Formula" pill etc.) */
+        #pc-result-content .pc-rule-badge {
+            background: var(--ms-accent, #15803d);
+            color: #fff;
+        }
+
+        /* Discount-simulator items */
+        #pc-result-content .pc-sim-item {
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            color: var(--ms-ink, #1c1917);
+        }
+        #pc-result-content .pc-sim-item-label { color: var(--ms-muted, #78716c); }
+        #pc-result-content .pc-sim-item-value { color: var(--ms-ink, #1c1917); }
+        #pc-result-content .pc-sim-item.pc-sim-total {
+            background: var(--ms-accent-soft, rgba(21,128,61,0.10));
+            border-left: 3px solid var(--ms-accent, #15803d);
+            color: var(--ms-ink, #1c1917);
+        }
+
+        /* Any heading or paragraph the renderer emits */
+        #pc-result-content h2,
+        #pc-result-content h3,
+        #pc-result-content h4,
+        #pc-result-content p,
+        #pc-result-content strong,
+        #pc-result-content span { color: var(--ms-ink, #1c1917); }
+        #pc-result-content .katex { color: var(--ms-ink, #1c1917); }
+
+        /* Mobile: shrink the mode pill bar so 8 chips wrap nicely */
+        @media (max-width: 720px) {
+            .pc-mode-bar .pc-mode-btn { padding: 0.35rem 0.55rem; font-size: 0.74rem; }
+            .pc-input-row { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
-<body>
-<%@ include file="modern/components/nav-header.jsp" %>
+<body class="ms-body">
 
-<header class="tool-page-header">
-    <div class="tool-page-header-inner">
-        <div>
-            <h1 class="tool-page-title">Percentage Calculator</h1>
-            <nav class="tool-breadcrumbs">
-                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
-                Percentage Calculator
-            </nav>
-        </div>
-        <div class="tool-page-badges">
-            <span class="tool-badge">Free Online</span>
-            <span class="tool-badge">8 Modes</span>
-            <span class="tool-badge">Step-by-Step</span>
-        </div>
+    <%@ include file="modern/components/nav-header.jsp" %>
+
+    <jsp:include page="/math/partials/matter-bg.jsp" />
+
+    <div class="ms-hero">
+        <%@ include file="modern/ads/ad-hero-banner.jsp" %>
     </div>
-</header>
 
-<section class="tool-description-section" style="background:var(--pc-light);">
-    <div class="tool-description-inner">
-        <div class="tool-description-content">
-            <p>Free <strong>percentage calculator</strong> with <strong>step-by-step solutions</strong> for all common formulas. Calculate percent of, percent change, increase/decrease, reverse percentage, discount with tax, and chained steps. All 8 modes with KaTeX-rendered math.</p>
-        </div>
-    </div>
-</section>
+    <main class="ms-main">
 
-<main class="tool-page-container">
-    <!-- ==================== INPUT COLUMN ==================== -->
-    <div class="tool-input-column">
-        <div class="tool-card">
-            <div class="tool-card-header" style="background:var(--pc-gradient);">Percentage Calculator</div>
-            <div class="tool-card-body">
+        <button type="button" id="msSidebarToggle" class="ms-sidebar-toggle" aria-label="Open math tools menu">
+            &#9776; Math tools
+        </button>
 
-                <!-- Mode Toggle (2 rows of 4) -->
-                <div class="tool-form-group" style="margin-bottom:0.75rem;">
-                    <label class="tool-form-label">Mode</label>
-                    <div class="pc-mode-toggle">
-                        <button type="button" class="pc-mode-btn active" data-mode="percentOf">X% of Y</button>
-                        <button type="button" class="pc-mode-btn" data-mode="whatPercent">What %</button>
-                        <button type="button" class="pc-mode-btn" data-mode="increaseBy">Increase</button>
-                        <button type="button" class="pc-mode-btn" data-mode="decreaseBy">Decrease</button>
-                        <button type="button" class="pc-mode-btn" data-mode="percentChange">% Change</button>
-                        <button type="button" class="pc-mode-btn" data-mode="reversePct">Reverse</button>
-                        <button type="button" class="pc-mode-btn" data-mode="discountSim">Discount</button>
-                        <button type="button" class="pc-mode-btn" data-mode="chain">Chain</button>
+        <% request.setAttribute("activeService", "percentage"); %>
+        <jsp:include page="/math/partials/sidebar.jsp" />
+
+        <section class="ms-workspace">
+
+            <header class="ms-title">
+                <nav class="ms-crumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a>
+                    <span>/</span>
+                    <a href="<%=request.getContextPath()%>/math/">Math</a>
+                    <span>/</span>
+                    <span aria-current="page">Percentage</span>
+                </nav>
+                <h1>Percentage Calculator &mdash; All 8 Formulas with Steps</h1>
+            </header>
+
+            <div class="ic-stack">
+
+                <!-- ═══ INPUT HERO ═══ -->
+                <div class="ic-hero" id="ic-hero">
+
+                    <!-- Mode pill bar -->
+                    <div class="pc-mode-bar" role="radiogroup" aria-label="Percentage mode">
+                        <span class="pc-mode-label">Mode</span>
+                        <button type="button" class="pc-mode-btn active" data-mode="percentOf"     role="radio" aria-checked="true">% of</button>
+                        <button type="button" class="pc-mode-btn"        data-mode="whatPercent"   role="radio" aria-checked="false">What %?</button>
+                        <button type="button" class="pc-mode-btn"        data-mode="increaseBy"    role="radio" aria-checked="false">+ %</button>
+                        <button type="button" class="pc-mode-btn"        data-mode="decreaseBy"    role="radio" aria-checked="false">&minus; %</button>
+                        <button type="button" class="pc-mode-btn"        data-mode="percentChange" role="radio" aria-checked="false">% Change</button>
+                        <button type="button" class="pc-mode-btn"        data-mode="reversePct"    role="radio" aria-checked="false">Reverse</button>
+                        <button type="button" class="pc-mode-btn"        data-mode="discountSim"   role="radio" aria-checked="false">Discount</button>
+                        <button type="button" class="pc-mode-btn"        data-mode="chain"         role="radio" aria-checked="false">Chain</button>
                     </div>
-                </div>
 
-                <!-- ===== SIMPLE MODES: percentOf, whatPercent, increaseBy, decreaseBy ===== -->
-                <div class="pc-mode-form active" id="pc-form-simple">
-                    <div class="tool-form-group">
+                    <!-- Per-mode formula hint (small grey snippet, updated by bridge IIFE) -->
+                    <div class="pc-formula-hint" id="pc-formula-hint">
+                        <code>X% of Y = (X / 100) &times; Y</code>
+                    </div>
+
+                    <!-- ───── Form: simple modes (percentOf / whatPercent / increaseBy / decreaseBy) ───── -->
+                    <div class="pc-mode-form active" id="pc-form-simple">
                         <div class="pc-input-row">
                             <div class="pc-input-group">
-                                <label class="pc-input-label" id="pc-x-label" for="pc-x">X (percent/value)</label>
-                                <input type="number" class="pc-input" id="pc-x" value="10" step="any">
+                                <label class="pc-input-label" id="pc-x-label" for="pc-x">X (percent)</label>
+                                <input type="number" class="pc-input" id="pc-x" value="10" step="any" inputmode="decimal">
                             </div>
                             <div class="pc-input-group">
                                 <label class="pc-input-label" id="pc-y-label" for="pc-y">Y (base)</label>
-                                <input type="number" class="pc-input" id="pc-y" value="200" step="any">
+                                <input type="number" class="pc-input" id="pc-y" value="200" step="any" inputmode="decimal">
                             </div>
                         </div>
-                        <div class="tool-form-hint" id="pc-simple-hint">Calculate X% of Y with step-by-step solution</div>
+                        <div class="pc-form-hint" id="pc-simple-hint">Calculate X% of Y with step-by-step solution</div>
                     </div>
-                </div>
 
-                <!-- ===== PERCENT CHANGE FORM ===== -->
-                <div class="pc-mode-form" id="pc-form-percentChange">
-                    <div class="tool-form-group">
+                    <!-- ───── Form: percent change ───── -->
+                    <div class="pc-mode-form" id="pc-form-percentChange">
                         <div class="pc-input-row">
                             <div class="pc-input-group">
                                 <label class="pc-input-label" for="pc-a">A (from)</label>
-                                <input type="number" class="pc-input" id="pc-a" value="120" step="any">
+                                <input type="number" class="pc-input" id="pc-a" value="120" step="any" inputmode="decimal">
                             </div>
                             <div class="pc-input-group">
                                 <label class="pc-input-label" for="pc-b">B (to)</label>
-                                <input type="number" class="pc-input" id="pc-b" value="150" step="any">
+                                <input type="number" class="pc-input" id="pc-b" value="150" step="any" inputmode="decimal">
                             </div>
                         </div>
-                        <div class="tool-form-hint">Percentage change from A to B</div>
+                        <div class="pc-form-hint">Percentage change from A to B</div>
                     </div>
-                </div>
 
-                <!-- ===== REVERSE PERCENTAGE FORM ===== -->
-                <div class="pc-mode-form" id="pc-form-reversePct">
-                    <div class="tool-form-group">
+                    <!-- ───── Form: reverse percentage ───── -->
+                    <div class="pc-mode-form" id="pc-form-reversePct">
                         <div class="pc-input-row">
                             <div class="pc-input-group">
                                 <label class="pc-input-label" for="pc-disc-pct">Discount %</label>
-                                <input type="number" class="pc-input" id="pc-disc-pct" value="20" step="any">
+                                <input type="number" class="pc-input" id="pc-disc-pct" value="20" step="any" inputmode="decimal">
                             </div>
                             <div class="pc-input-group">
                                 <label class="pc-input-label" for="pc-final-price">Final Price</label>
-                                <input type="number" class="pc-input" id="pc-final-price" value="80" step="any">
+                                <input type="number" class="pc-input" id="pc-final-price" value="80" step="any" inputmode="decimal">
                             </div>
                         </div>
-                        <div class="tool-form-hint">Find the original price before discount</div>
+                        <div class="pc-form-hint">Find the original price before the discount</div>
                     </div>
-                </div>
 
-                <!-- ===== DISCOUNT SIMULATOR FORM ===== -->
-                <div class="pc-mode-form" id="pc-form-discountSim">
-                    <div class="tool-form-group">
+                    <!-- ───── Form: discount + tax simulator ───── -->
+                    <div class="pc-mode-form" id="pc-form-discountSim">
                         <div class="pc-input-row">
                             <div class="pc-input-group">
                                 <label class="pc-input-label" for="pc-base-price">Base Price</label>
-                                <input type="number" class="pc-input" id="pc-base-price" value="1000" step="any">
+                                <input type="number" class="pc-input" id="pc-base-price" value="1000" step="any" inputmode="decimal">
                             </div>
                             <div class="pc-input-group">
                                 <label class="pc-input-label" for="pc-disc-sim">Discount %</label>
-                                <input type="number" class="pc-input" id="pc-disc-sim" value="15" step="any">
+                                <input type="number" class="pc-input" id="pc-disc-sim" value="15" step="any" inputmode="decimal">
                             </div>
                         </div>
                         <div class="pc-input-row">
                             <div class="pc-input-group">
                                 <label class="pc-input-label" for="pc-tax-sim">Tax %</label>
-                                <input type="number" class="pc-input" id="pc-tax-sim" value="5" step="any">
+                                <input type="number" class="pc-input" id="pc-tax-sim" value="5" step="any" inputmode="decimal">
                             </div>
                             <div class="pc-input-group">
                                 <label class="pc-input-label" for="pc-qty">Quantity</label>
-                                <input type="number" class="pc-input" id="pc-qty" value="1" step="1" min="1">
+                                <input type="number" class="pc-input" id="pc-qty" value="1" step="1" min="1" inputmode="numeric">
                             </div>
                         </div>
-                        <div class="tool-form-hint">Full breakdown: discount, tax, and total</div>
+                        <div class="pc-form-hint">Full breakdown: discount, tax, and total</div>
                     </div>
-                </div>
 
-                <!-- ===== CHAINED STEPS FORM ===== -->
-                <div class="pc-mode-form" id="pc-form-chain">
-                    <div class="tool-form-group">
-                        <div class="pc-input-row">
+                    <!-- ───── Form: chained steps ───── -->
+                    <div class="pc-mode-form" id="pc-form-chain">
+                        <div class="pc-input-row" style="grid-template-columns: 1fr;">
                             <div class="pc-input-group">
                                 <label class="pc-input-label" for="pc-chain-start">Start Value</label>
-                                <input type="number" class="pc-input" id="pc-chain-start" value="100" step="any">
+                                <input type="number" class="pc-input" id="pc-chain-start" value="100" step="any" inputmode="decimal">
                             </div>
                         </div>
-                        <div style="margin-top:0.5rem;">
-                            <label class="pc-input-label" for="pc-chain-steps">Steps (comma-separated)</label>
-                            <input type="text" class="pc-input-text" id="pc-chain-steps" value="+10%, -5%, +8%">
+                        <div class="pc-input-row" style="grid-template-columns: 1fr;">
+                            <div class="pc-input-group">
+                                <label class="pc-input-label" for="pc-chain-steps">Steps (comma-separated)</label>
+                                <input type="text" class="pc-input-text" id="pc-chain-steps" value="+10%, -5%, +8%">
+                            </div>
                         </div>
-                        <div class="tool-form-hint">Use +X% or -X% for percentage; +X or -X for absolute</div>
+                        <div class="pc-form-hint">Use <code>+X%</code> or <code>-X%</code> for percentage steps; <code>+X</code> or <code>-X</code> for absolute amounts</div>
+                    </div>
+
+                    <!-- Legacy live-preview node — hidden but kept for core compatibility -->
+                    <div id="pc-preview" aria-hidden="true"></div>
+
+                    <!-- CTA + Clear (auto-calc covers the typing case; button is for explicit submit / Enter affordance) -->
+                    <div class="pc-cta-row">
+                        <button type="button" class="ic-hero-cta" id="pc-solve-btn">Calculate</button>
+                        <button type="button" class="ic-clear-btn" id="pc-clear-btn" title="Reset to defaults">Clear</button>
+                    </div>
+
+                    <!-- Examples chips -->
+                    <div style="margin-top: 0.85rem;">
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--ms-muted, #78716c); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">Examples</div>
+                        <div class="pc-examples">
+                            <button type="button" class="pc-example-chip" data-example="pct-of">25% of 200</button>
+                            <button type="button" class="pc-example-chip" data-example="what-pct">45 of 180</button>
+                            <button type="button" class="pc-example-chip" data-example="increase">500 + 15%</button>
+                            <button type="button" class="pc-example-chip" data-example="decrease">800 &minus; 20%</button>
+                            <button type="button" class="pc-example-chip" data-example="change">120 &rarr; 150</button>
+                            <button type="button" class="pc-example-chip" data-example="reverse">$75 after 25% off</button>
+                            <button type="button" class="pc-example-chip" data-example="discount">Cart: 1000 &times; 2 + tax</button>
+                            <button type="button" class="pc-example-chip" data-example="chain">+10%, &minus;5%, +8%</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Live Preview -->
-                <div class="tool-form-group" style="margin-top:0.75rem;">
-                    <label class="tool-form-label">Preview</label>
-                    <div class="pc-preview" id="pc-preview"></div>
-                </div>
+                <!-- ═══ RESULT CARD ═══ -->
+                <div class="ic-result-card">
+                    <div class="ic-output-tabs pc-output-tabs" role="tablist">
+                        <button type="button" class="ic-output-tab pc-output-tab active" data-panel="result" role="tab" aria-selected="true">Result</button>
+                        <button type="button" class="ic-output-tab pc-output-tab"        data-panel="python" role="tab" aria-selected="false">Python Compiler</button>
+                    </div>
 
-                <!-- Action Buttons -->
-                <div style="display:flex;gap:0.5rem;">
-                    <button type="button" class="tool-action-btn" id="pc-solve-btn" style="flex:1">Calculate</button>
-                    <button type="button" class="tool-action-btn" id="pc-clear-btn" style="flex:0;min-width:60px;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Clear</button>
-                </div>
+                    <!-- Result panel -->
+                    <div class="ic-panel pc-panel active" id="pc-panel-result" role="tabpanel">
+                        <div class="tool-card tool-result-card">
+                            <div class="tool-result-content" id="pc-result-content">
+                                <div class="tool-empty-state ic-empty-state" id="pc-empty-state">
+                                    <div class="ic-empty-illustration">%</div>
+                                    <h3>Enter values to calculate</h3>
+                                    <p>Pick a mode above and the result updates as you type. Try one of the examples to see a worked solution.</p>
+                                </div>
+                            </div>
+                            <div class="tool-result-actions" id="pc-result-actions" style="display:none;">
+                                <button type="button" class="tool-action-btn" id="pc-copy-latex-btn">Copy LaTeX</button>
+                                <button type="button" class="tool-action-btn" id="pc-share-btn">Share</button>
+                            </div>
+                        </div>
+                    </div>
 
-                <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
-
-                <!-- Quick Examples -->
-                <div class="tool-form-group">
-                    <label class="tool-form-label">Quick Examples</label>
-                    <div class="pc-examples">
-                        <button type="button" class="pc-example-chip" data-example="pct-of">25% of 200</button>
-                        <button type="button" class="pc-example-chip" data-example="what-pct">What %?</button>
-                        <button type="button" class="pc-example-chip" data-example="increase">+15%</button>
-                        <button type="button" class="pc-example-chip" data-example="decrease">-20%</button>
-                        <button type="button" class="pc-example-chip" data-example="change">% Change</button>
-                        <button type="button" class="pc-example-chip" data-example="reverse">Reverse</button>
-                        <button type="button" class="pc-example-chip" data-example="discount">Discount+Tax</button>
-                        <button type="button" class="pc-example-chip" data-example="chain">Chain Steps</button>
+                    <!-- Python Compiler panel -->
+                    <div class="ic-panel pc-panel" id="pc-panel-python" role="tabpanel">
+                        <div class="tool-card" style="height:100%;display:flex;flex-direction:column;padding:0;">
+                            <div style="display:flex;align-items:center;gap:0.6rem;padding:0.75rem 1rem;border-bottom:1px solid var(--ms-line, rgba(0,0,0,0.08));">
+                                <strong style="font-size:0.85rem;color:var(--ms-ink-soft, #44403c);">Python template</strong>
+                                <select id="pc-compiler-template">
+                                    <option value="basic-pct">Basic Percentage</option>
+                                    <option value="discount-sim">Discount Simulator</option>
+                                    <option value="chain-steps">Chain Steps</option>
+                                </select>
+                            </div>
+                            <div style="flex:1;min-height:0;">
+                                <iframe id="pc-compiler-iframe" loading="lazy" title="Python compiler" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- ==================== OUTPUT COLUMN ==================== -->
-    <div class="tool-output-column">
-        <!-- Tab bar -->
-        <div class="pc-output-tabs">
-            <button type="button" class="pc-output-tab active" data-panel="result">Result</button>
-            <button type="button" class="pc-output-tab" data-panel="python">Python Compiler</button>
-        </div>
+            <div class="ms-inline-ad">
+                <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+            </div>
 
-        <!-- Result Panel -->
-        <div class="pc-panel active" id="pc-panel-result">
-            <div class="tool-card tool-result-card">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--pc-tool);">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                    </svg>
-                    <h4>Result</h4>
-                </div>
-                <div class="tool-result-content" id="pc-result-content">
-                    <div class="tool-empty-state" id="pc-empty-state">
-                        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">%</div>
-                        <h3>Enter values to calculate</h3>
-                        <p>Solve any percentage problem with step-by-step solutions.</p>
-                    </div>
-                </div>
-                <div class="tool-result-actions" id="pc-result-actions" style="display:none;gap:0.5rem;padding:1rem;border-top:1px solid var(--border);flex-wrap:wrap">
-                    <button type="button" class="tool-action-btn" id="pc-copy-latex-btn">Copy LaTeX</button>
-                    <button type="button" class="tool-action-btn" id="pc-share-btn">Share</button>
-                </div>
+            <!-- Method-at-a-glance cards -->
+            <section class="ic-learn" aria-label="Percentage formulas">
+                <article class="ic-learn-card">
+                    <span class="ic-learn-method">% of</span>
+                    <code class="ic-learn-formula">X% of Y = (X / 100) &times; Y</code>
+                </article>
+                <article class="ic-learn-card">
+                    <span class="ic-learn-method">% change</span>
+                    <code class="ic-learn-formula">((B &minus; A) / A) &times; 100%</code>
+                </article>
+                <article class="ic-learn-card">
+                    <span class="ic-learn-method">Reverse</span>
+                    <code class="ic-learn-formula">Original = Final / (1 &minus; Disc% / 100)</code>
+                </article>
+            </section>
+
+            <section class="ic-related-strip" style="margin-top:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.75rem;">
+                <a href="<%=request.getContextPath()%>/exponent-calculator.jsp" class="tool-card" style="padding:1rem;text-decoration:none;color:inherit;border-left:3px solid var(--ms-accent,#15803d);">
+                    <div style="font-size:0.72rem;font-weight:600;color:var(--ms-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem;">Powers</div>
+                    <div style="font-weight:600;">Exponent Calculator &rarr;</div>
+                    <div style="font-size:0.85rem;color:var(--ms-ink-soft);margin-top:0.2rem;">All 8 laws of exponents with steps.</div>
+                </a>
+                <a href="<%=request.getContextPath()%>/significant-figures-calculator.jsp" class="tool-card" style="padding:1rem;text-decoration:none;color:inherit;border-left:3px solid var(--ms-accent,#15803d);">
+                    <div style="font-size:0.72rem;font-weight:600;color:var(--ms-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem;">Rounding</div>
+                    <div style="font-weight:600;">Significant Figures &rarr;</div>
+                    <div style="font-size:0.85rem;color:var(--ms-ink-soft);margin-top:0.2rem;">Round to N sig figs with rule explanations.</div>
+                </a>
+                <a href="<%=request.getContextPath()%>/logarithm-calculator.jsp" class="tool-card" style="padding:1rem;text-decoration:none;color:inherit;border-left:3px solid var(--ms-accent,#15803d);">
+                    <div style="font-size:0.72rem;font-weight:600;color:var(--ms-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem;">Logs</div>
+                    <div style="font-weight:600;">Logarithm Calculator &rarr;</div>
+                    <div style="font-size:0.85rem;color:var(--ms-ink-soft);margin-top:0.2rem;">Compute logs with step-by-step solutions.</div>
+                </a>
+            </section>
+
+        </section>
+
+        <aside class="ms-rail" aria-label="Advertisements">
+            <%@ include file="modern/ads/ad-ide-rail-top.jsp" %>
+            <%@ include file="modern/ads/ad-ide-rail-bottom.jsp" %>
+        </aside>
+    </main>
+
+    <!-- Visible FAQ — keep in sync with faqNq/faqNa jsp:params. -->
+    <section class="ms-faq-wrap" style="max-width:1440px;margin:2.5rem auto 0;padding:0 1.5rem;">
+        <h2 class="ms-faq-title" id="faqs">Frequently asked</h2>
+        <div class="ms-faq" aria-label="Percentage calculator FAQ">
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">How do you calculate a percentage of a number?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">To find <em>X%</em> of <em>Y</em>, multiply <em>Y</em> by <em>X / 100</em>. For example, 25% of 200 = (25 / 100) &times; 200 = 0.25 &times; 200 = 50. The formula is <strong>Result = (X / 100) &times; Y</strong>.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">How do you calculate percent change between two numbers?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Percent change = <em>((B &minus; A) / A) &times; 100</em>. For example, going from 120 to 150 gives ((150 &minus; 120) / 120) &times; 100 = <strong>+25%</strong> increase. A negative result means a decrease.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">How do you find the original price before a discount?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Divide the final price by <em>1 &minus; (Discount% / 100)</em>. If the final price is $75 after a 25% discount, the original is $75 / 0.75 = <strong>$100</strong>. Formula: <strong>Original = Final / (1 &minus; Disc% / 100)</strong>.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Why don't chained percentages add up simply?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Each step applies to the running total, not the original. Starting at 100: <em>+10%</em> gives 110, then <em>&minus;10%</em> gives 99 (not 100). The second step uses 110 as its base, so <em>+X%</em> followed by <em>&minus;X%</em> never returns to the start.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Is this percentage calculator free?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Yes &mdash; 100% free with no signup. You get 8 calculation modes with step-by-step KaTeX solutions, a discount + tax simulator, chained steps, a Python compiler, LaTeX export, and shareable URLs. All computation runs in your browser.</div>
             </div>
         </div>
+    </section>
 
-        <!-- Python Compiler Panel -->
-        <div class="pc-panel" id="pc-panel-python">
-            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--pc-tool);">
-                        <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    <h4>Python Compiler</h4>
-                    <select id="pc-compiler-template" style="margin-left:auto;padding:0.3rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;">
-                        <option value="basic-pct">Basic Percentage</option>
-                        <option value="discount-sim">Discount Simulator</option>
-                        <option value="chain-steps">Chain Steps</option>
-                    </select>
-                </div>
-                <div style="flex:1;min-height:0;">
-                    <iframe id="pc-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
 
-    <!-- ==================== ADS COLUMN ==================== -->
-    <div class="tool-ads-column">
-        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
-    </div>
-</main>
+    <!-- Core scripts — KaTeX + tool-utils + render/export/core (legacy, unchanged) -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js" defer></script>
+    <script src="<%=request.getContextPath()%>/js/percentage-calculator-render.js" defer></script>
+    <script src="<%=request.getContextPath()%>/js/percentage-calculator-export.js" defer></script>
+    <script src="<%=request.getContextPath()%>/js/percentage-calculator-core.js" defer></script>
 
-<!-- Mobile Ad Fallback -->
-<div class="tool-mobile-ad-container">
-    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
-</div>
+    <!--
+        Bridge IIFE — adds two non-invasive UX layers without touching the legacy core:
+          1. Live result on input — debounced, calls the existing #pc-solve-btn.click()
+             so the legacy core's calculate() runs after each keystroke / mode change.
+          2. Per-mode formula hint — updates the small grey snippet above the inputs
+             when the user picks a different mode.
+    -->
+    <script>
+    (function(){
+        'use strict';
+        var FORMULA = {
+            percentOf:     'X% of Y = (X / 100) × Y',
+            whatPercent:   '(X / Y) × 100 = ?%',
+            increaseBy:    'Y × (1 + X / 100)',
+            decreaseBy:    'Y × (1 − X / 100)',
+            percentChange: '((B − A) / A) × 100%',
+            reversePct:    'Original = Final / (1 − Disc% / 100)',
+            discountSim:   '(Price − Discount) + Tax',
+            chain:         'Apply each ±X% to the running total'
+        };
 
-<!-- Related Tools -->
-<jsp:include page="modern/components/related-tools.jsp">
-    <jsp:param name="currentToolUrl" value="percentage-calculator.jsp"/>
-    <jsp:param name="keyword" value="mathematics"/>
-    <jsp:param name="limit" value="6"/>
-</jsp:include>
-
-<!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
-<section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
-
-    <!-- ===== 1. WHAT IS PERCENTAGE? ===== -->
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:0.75rem;color:var(--text-primary);">What is a Percentage?</h2>
-        <p class="pc-anim" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">
-            A <strong>percentage</strong> is a way of expressing a number as a fraction of 100. The word comes from the Latin <em>per centum</em>, meaning "by the hundred." For example, 25% means 25 out of 100, or 0.25 as a decimal. Percentages are used everywhere &mdash; shopping discounts, exam scores, interest rates, statistics, and data analysis.
-        </p>
-
-        <div class="pc-callout pc-callout-insight pc-anim pc-anim-d2">
-            <span class="pc-callout-icon">&#128161;</span>
-            <div class="pc-callout-text">
-                <strong>Key Insight:</strong> Converting between percentages, decimals, and fractions is the foundation of all percentage calculations. To convert X% to a decimal, divide by 100. To convert a decimal to a percentage, multiply by 100.
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== 2. KEY FORMULAS ===== -->
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Key Percentage Formulas</h2>
-        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
-            These formulas cover all common percentage calculations.
-        </p>
-
-        <div class="pc-formulas-grid">
-            <div class="pc-edu-card pc-anim pc-anim-d1" style="border-left:3px solid #16a34a;">
-                <h4>Percent Of</h4>
-                <p>X% of Y = (X/100) &times; Y</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;">25% of 200 = 50</p>
-            </div>
-            <div class="pc-edu-card pc-anim pc-anim-d1" style="border-left:3px solid #22c55e;">
-                <h4>What Percent</h4>
-                <p>% = (X/Y) &times; 100</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;">45 is 25% of 180</p>
-            </div>
-            <div class="pc-edu-card pc-anim pc-anim-d2" style="border-left:3px solid #dc2626;">
-                <h4>Percent Change</h4>
-                <p>Change = (B&minus;A)/A &times; 100%</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;">120 &rarr; 150 = +25%</p>
-            </div>
-            <div class="pc-edu-card pc-anim pc-anim-d2" style="border-left:3px solid #7c3aed;">
-                <h4>Increase / Decrease</h4>
-                <p>Y &times; (1 &plusmn; X/100)</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;">500 + 15% = 575</p>
-            </div>
-            <div class="pc-edu-card pc-anim pc-anim-d3" style="border-left:3px solid #2563eb;">
-                <h4>Reverse Percentage</h4>
-                <p>Original = Final &divide; (1 &minus; Disc%/100)</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;">$75 after 25% off &rarr; $100</p>
-            </div>
-            <div class="pc-edu-card pc-anim pc-anim-d3" style="border-left:3px solid #d97706;">
-                <h4>Discount + Tax</h4>
-                <p>(Price &minus; Disc) + Tax</p>
-                <p style="color:var(--text-muted);font-size:0.6875rem;">Full breakdown with quantity</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== 3. REAL-WORLD USES ===== -->
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Real-World Uses</h2>
-        <p style="color:var(--text-secondary);font-size:0.8125rem;line-height:1.7;margin-bottom:0.75rem;">
-            Percentages appear in nearly every aspect of daily life and professional work.
-        </p>
-        <div class="pc-formulas-grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
-            <div class="pc-edu-card" style="border-left:3px solid #16a34a;">
-                <h4>Shopping &amp; Finance</h4>
-                <p>Sale discounts, tax calculations, tips, interest rates, loan payments, and investment returns all use percentages.</p>
-            </div>
-            <div class="pc-edu-card" style="border-left:3px solid #2563eb;">
-                <h4>Education &amp; Testing</h4>
-                <p>Exam scores, grade calculations, GPA conversions, and performance metrics are expressed as percentages.</p>
-            </div>
-            <div class="pc-edu-card" style="border-left:3px solid #d97706;">
-                <h4>Business &amp; Data</h4>
-                <p>Profit margins, growth rates, market share, conversion rates, and KPIs rely on percentage calculations.</p>
-            </div>
-        </div>
-
-        <div class="pc-callout pc-callout-tip pc-anim pc-anim-d3">
-            <span class="pc-callout-icon">&#128073;</span>
-            <div class="pc-callout-text">
-                <strong>Try it!</strong> Use the Chain mode with +10%, -5%, +8% starting from 100 to see how successive percentage changes compound to 112.86 &mdash; not simply 100 + 13%.
-            </div>
-        </div>
-    </div>
-
-    <!-- FAQ Section -->
-    <div class="tool-card" style="padding:2rem;margin-bottom:1.5rem;">
-        <h2 style="font-size:1.25rem;margin-bottom:1rem;" id="faqs">Frequently Asked Questions</h2>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                How do you calculate a percentage of a number?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">To find X% of Y, multiply Y by X/100. For example, 25% of 200 = (25/100) &times; 200 = 0.25 &times; 200 = 50. The formula is: Result = (X / 100) &times; Y.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                How do you calculate percent change?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Percent change = ((B &minus; A) / A) &times; 100. For example, going from 120 to 150: ((150 &minus; 120) / 120) &times; 100 = 25% increase. A negative result indicates a decrease.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                How do you find the original price before a discount?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Original = Final Price &divide; (1 &minus; Discount%/100). For example, if the final price is $75 after a 25% discount: $75 &divide; 0.75 = $100 original price.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Why don't chained percentages add up simply?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Each percentage step applies to the current running total, not the original. +10% then &minus;10% does NOT return to the start. Starting at 100: +10% = 110, then &minus;10% = 99 (not 100). This is because the second step uses 110 as its base.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Is this percentage calculator free?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Yes, 100% free with no signup required. Features include 8 calculation modes with step-by-step KaTeX solutions, a discount + tax simulator, chained steps, a Python compiler, LaTeX export, and shareable URLs. All computation runs in your browser.</div>
-        </div>
-    </div>
-</section>
-
-<!-- Explore More Math -->
-<section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
-    <div class="tool-card" style="padding:1.5rem 2rem;">
-        <h3 style="font-size:1.15rem;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem;color:var(--text-primary);">
-            Explore More Math Tools
-        </h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
-            <a href="<%=request.getContextPath()%>/exponent-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#d97706,#f59e0b);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">x<sup>n</sup></div>
-                <div>
-                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Exponent Calculator</h4>
-                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">All 8 laws of exponents with steps</p>
-                </div>
-            </a>
-            <a href="<%=request.getContextPath()%>/quadratic-solver.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">x&sup2;</div>
-                <div>
-                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Quadratic Solver</h4>
-                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Solve quadratic equations with 3 methods</p>
-                </div>
-            </a>
-            <a href="<%=request.getContextPath()%>/logarithm-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#0d9488,#14b8a6);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">log</div>
-                <div>
-                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Logarithm Calculator</h4>
-                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Compute logs with step-by-step solutions</p>
-                </div>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Support Section -->
-<%@ include file="modern/components/support-section.jsp" %>
-
-<!-- Footer -->
-<footer class="page-footer">
-    <div class="footer-content">
-        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
-        <div class="footer-links">
-            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
-            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
-            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
-        </div>
-    </div>
-</footer>
-
-<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
-
-<!-- Scroll-triggered animations -->
-<script>
-(function(){
-    var els = document.querySelectorAll('.pc-anim');
-    if (!els.length) return;
-    if (!('IntersectionObserver' in window)) {
-        for (var i = 0; i < els.length; i++) els[i].classList.add('pc-visible');
-        return;
-    }
-    var obs = new IntersectionObserver(function(entries){
-        for (var j = 0; j < entries.length; j++) {
-            if (entries[j].isIntersecting) {
-                entries[j].target.classList.add('pc-visible');
-                obs.unobserve(entries[j].target);
-            }
+        function ready(fn){
+            if (document.readyState !== 'loading') fn();
+            else document.addEventListener('DOMContentLoaded', fn);
         }
-    }, { threshold: 0.15 });
-    for (var k = 0; k < els.length; k++) obs.observe(els[k]);
-})();
-</script>
 
-<!-- Core Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/percentage-calculator-render.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/percentage-calculator-export.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/percentage-calculator-core.js?v=<%=cacheVersion%>"></script>
+        ready(function(){
+            var solveBtn = document.getElementById('pc-solve-btn');
+            var hint = document.getElementById('pc-formula-hint');
 
-<%@ include file="modern/components/analytics.jsp" %>
+            function setHint(mode){
+                if (!hint) return;
+                var f = FORMULA[mode] || FORMULA.percentOf;
+                hint.innerHTML = '<code>' + f + '</code>';
+            }
+
+            function activeMode(){
+                var btn = document.querySelector('.pc-mode-bar .pc-mode-btn.active');
+                return btn ? btn.getAttribute('data-mode') : 'percentOf';
+            }
+
+            // Debounced auto-calc — waits ~250ms of typing inactivity then re-runs
+            // the existing legacy calculate() via the Solve button click.
+            var t = null;
+            function autoCalc(){
+                if (!solveBtn) return;
+                clearTimeout(t);
+                t = setTimeout(function(){ solveBtn.click(); }, 250);
+            }
+
+            // Attach to all numeric / text inputs
+            var inputs = document.querySelectorAll('.pc-input, .pc-input-text');
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].addEventListener('input', autoCalc);
+            }
+
+            // Mode-pill clicks: legacy switchMode() runs first (its own listener),
+            // then we update the hint and trigger an auto-calc on the new fields.
+            var modeBtns = document.querySelectorAll('.pc-mode-bar .pc-mode-btn');
+            for (var m = 0; m < modeBtns.length; m++) {
+                modeBtns[m].addEventListener('click', function(){
+                    setHint(this.getAttribute('data-mode'));
+                    autoCalc();
+                });
+            }
+
+            // Initial hint reflects the default-active mode
+            setHint(activeMode());
+
+            // Run an initial calculation so users see a populated result on load
+            // (instead of the empty state) — matches the "live preview" intent.
+            // Defer to next tick so legacy core has finished init.
+            setTimeout(function(){ if (solveBtn) solveBtn.click(); }, 100);
+        });
+    })();
+    </script>
+
+    <!-- FAQ accordion — math-studio standard -->
+    <script>
+    (function(){
+        var qs = document.querySelectorAll('.ms-faq-q');
+        for (var i = 0; i < qs.length; i++) {
+            qs[i].addEventListener('click', function(){
+                var item = this.parentElement;
+                if (item) item.classList.toggle('open');
+            });
+        }
+    })();
+    </script>
+
 </body>
 </html>

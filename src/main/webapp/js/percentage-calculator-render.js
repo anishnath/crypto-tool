@@ -168,7 +168,7 @@ function renderPercentChange(container, a, b) {
     makeResult(container, '\\text{Change} = ' + sign + fmt(change) + '\\% \\;(' + direction + ')');
 
     container.appendChild(buildStepDOM(1, '<strong>Write the formula</strong>',
-        '\\text{% Change} = \\frac{B - A}{A} \\times 100'));
+        '\\text{\\% Change} = \\frac{B - A}{A} \\times 100'));
     container.appendChild(buildStepDOM(2, '<strong>Calculate the difference</strong>',
         'B - A = ' + fmt(b) + ' - ' + fmt(a) + ' = ' + fmt(b - a)));
     container.appendChild(buildStepDOM(3, '<strong>Divide by original</strong>',
