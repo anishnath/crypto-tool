@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="209.7pt" height="149.01pt" viewBox="0 0 209.7 149.01" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <g>
+ <g>
+ <path d="M 0 149.01 
+L 209.7 149.01 
+L 209.7 0 
+L 0 0 
+L 0 149.01 
+z
+" style="fill: none"/>
+ </g>
+ <g>
+ <g>
+ <path d="M 33.05 115.96 
+L 176.65 115.96 
+" style="fill: none; stroke: #1c1917; stroke-width: 1.8; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 176.65 115.96 
+L 80.92 33.05 
+" style="fill: none; stroke: #1c1917; stroke-width: 1.8; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 80.92 33.05 
+L 33.05 115.96 
+" style="fill: none; stroke: #1c1917; stroke-width: 1.8; stroke-linecap: square"/>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 700 12px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="21.05" y="125.96" transform="rotate(-0 21.05 125.96)">A</text>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 700 12px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="184.65" y="125.96" transform="rotate(-0 184.65 125.96)">B</text>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 700 12px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="80.92" y="25.05" transform="rotate(-0 80.92 25.05)">C</text>
+ </g>
+ <g>
+ <text style="fill: #15803d; font: 700 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="128.78" y="77.26" transform="rotate(-0 128.78 77.26)">6</text>
+ </g>
+ <g>
+ <text style="fill: #15803d; font: 700 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="56.98" y="77.26" transform="rotate(-0 56.98 77.26)">11</text>
+ </g>
+ <g>
+ <text style="fill: #15803d; font: 700 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="80.92" y="37.72" transform="rotate(-0 80.92 37.72)">150°</text>
+ </g>
+ </g>
+ </g>
+ <defs>
+ </defs>
+</svg>

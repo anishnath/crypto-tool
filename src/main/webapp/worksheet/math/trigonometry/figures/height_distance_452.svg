@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="171.92pt" height="153pt" viewBox="0 0 171.92 153" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <g>
+ <g>
+ <path d="M 0 153 
+L 171.92 153 
+L 171.92 0 
+L 0 0 
+L 0 153 
+z
+" style="fill: none"/>
+ </g>
+ <g>
+ <g>
+ <path d="M 14.41 126 
+L 143.11 126 
+" style="fill: none; stroke: #a8a29e; stroke-width: 1.2; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 128.26 126 
+L 128.26 27 
+" style="fill: none; stroke: #1c1917; stroke-width: 2.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 29.26 126 
+L 128.26 27 
+" style="fill: none; stroke-dasharray: 6.66,2.88; stroke-dashoffset: 0; stroke: #15803d; stroke-width: 1.8"/>
+ </g>
+ <g>
+ <path d="M 47.08 126 
+L 47.08 125.53 
+L 47.06 125.07 
+L 47.03 124.60 
+L 46.98 124.14 
+L 46.93 123.67 
+L 46.86 123.21 
+L 46.78 122.75 
+L 46.69 122.30 
+L 46.59 121.84 
+L 46.47 121.39 
+L 46.35 120.94 
+L 46.21 120.49 
+L 46.06 120.05 
+L 45.90 119.61 
+L 45.73 119.18 
+L 45.54 118.75 
+L 45.35 118.33 
+L 45.14 117.91 
+L 44.92 117.50 
+L 44.69 117.09 
+L 44.46 116.69 
+L 44.21 116.29 
+L 43.95 115.91 
+L 43.68 115.53 
+L 43.40 115.15 
+L 43.11 114.79 
+L 42.81 114.43 
+L 42.50 114.08 
+L 42.19 113.73 
+L 41.86 113.40 
+" style="fill: none; stroke: #15803d; stroke-width: 1.4; stroke-linecap: square"/>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="29.26" y="133.60" transform="rotate(-0 29.26 133.60)">observer</text>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="78.76" y="143.50" transform="rotate(-0 78.76 143.50)">800.0 m</text>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="132.72" y="79.26" transform="rotate(-0 132.72 79.26)">800 m</text>
+ </g>
+ <g>
+ <text style="fill: #15803d; font: 700 11px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="53.96" y="118.81" transform="rotate(-0 53.96 118.81)">45°</text>
+ </g>
+ </g>
+ </g>
+ <defs>
+ </defs>
+</svg>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="131.36pt" height="153pt" viewBox="0 0 131.36 153" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <g>
+ <g>
+ <path d="M 0 153 
+L 131.36 153 
+L 131.36 0 
+L 0 0 
+L 0 153 
+z
+" style="fill: none"/>
+ </g>
+ <g>
+ <g>
+ <path d="M 20.69 126 
+L 94.97 126 
+" style="fill: none; stroke: #a8a29e; stroke-width: 1.2; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 86.40 126 
+L 86.40 27 
+" style="fill: none; stroke: #1c1917; stroke-width: 2.5; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 29.26 126 
+L 86.40 27 
+" style="fill: none; stroke-dasharray: 6.66,2.88; stroke-dashoffset: 0; stroke: #15803d; stroke-width: 1.8"/>
+ </g>
+ <g>
+ <path d="M 39.55 126 
+L 39.54 125.64 
+L 39.52 125.28 
+L 39.49 124.92 
+L 39.45 124.57 
+L 39.39 124.21 
+L 39.32 123.86 
+L 39.24 123.51 
+L 39.15 123.17 
+L 39.04 122.82 
+L 38.93 122.48 
+L 38.80 122.15 
+L 38.66 121.82 
+L 38.51 121.49 
+L 38.34 121.17 
+L 38.17 120.86 
+L 37.98 120.55 
+L 37.79 120.25 
+L 37.58 119.95 
+L 37.37 119.67 
+L 37.14 119.39 
+L 36.91 119.12 
+L 36.66 118.86 
+L 36.41 118.60 
+L 36.14 118.36 
+L 35.87 118.12 
+L 35.59 117.90 
+L 35.31 117.68 
+L 35.01 117.47 
+L 34.71 117.28 
+L 34.40 117.09 
+" style="fill: none; stroke: #15803d; stroke-width: 1.4; stroke-linecap: square"/>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="29.26" y="133.65" transform="rotate(-0 29.26 133.65)">observer</text>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="57.83" y="143.50" transform="rotate(-0 57.83 143.50)">54.6 m</text>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 10px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="88.97" y="79.26" transform="rotate(-0 88.97 79.26)">94.6 m</text>
+ </g>
+ <g>
+ <text style="fill: #15803d; font: 700 11px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="42.62" y="121.32" transform="rotate(-0 42.62 121.32)">60°</text>
+ </g>
+ </g>
+ </g>
+ <defs>
+ </defs>
+</svg>

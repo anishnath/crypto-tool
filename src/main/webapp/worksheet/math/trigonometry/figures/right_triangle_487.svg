@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="209.7pt" height="81.96pt" viewBox="0 0 209.7 81.96" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <g>
+ <g>
+ <path d="M 0 81.96 
+L 209.7 81.96 
+L 209.7 0 
+L 0 0 
+L 0 81.96 
+z
+" style="fill: none"/>
+ </g>
+ <g>
+ <g>
+ <path d="M 8.44 63.80 
+L 157.72 63.80 
+" style="fill: none; stroke: #1c1917; stroke-width: 1.8; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 157.72 63.80 
+L 157.72 20.26 
+" style="fill: none; stroke: #1c1917; stroke-width: 1.8; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 157.72 20.26 
+L 8.44 63.80 
+" style="fill: none; stroke: #1c1917; stroke-width: 1.8; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 11.49 63.80 
+L 11.49 60.75 
+L 8.44 60.75 
+" style="fill: none; stroke: #1c1917; stroke-linecap: square"/>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 11px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="83.08" y="72.47" transform="rotate(-0 83.08 72.47)">?</text>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 11px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="158.03" y="45.07" transform="rotate(-0 158.03 45.07)">21</text>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 11px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="82.67" y="39.43" transform="rotate(-0 82.67 39.43)">75</text>
+ </g>
+ <g>
+ <g style="fill: #15803d" transform="translate(149.24 30.66)">
+ <text>
+ <tspan style="font: oblique 13px 'DejaVu Sans'" x="0" y="-0.02">θ</tspan>
+ </text>
+ </g>
+ </g>
+ </g>
+ </g>
+ <defs>
+ </defs>
+</svg>

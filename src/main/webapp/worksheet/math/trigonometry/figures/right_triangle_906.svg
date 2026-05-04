@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="196.95pt" height="158.58pt" viewBox="0 0 196.95 158.58" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <g>
+ <g>
+ <path d="M 0 158.58 
+L 196.95 158.58 
+L 196.95 0 
+L 0 0 
+L 0 158.58 
+z
+" style="fill: none"/>
+ </g>
+ <g>
+ <g>
+ <path d="M 13.96 139.04 
+L 149.18 139.04 
+" style="fill: none; stroke: #1c1917; stroke-width: 1.8; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 149.18 139.04 
+L 149.18 37.62 
+" style="fill: none; stroke: #1c1917; stroke-width: 1.8; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 149.18 37.62 
+L 13.96 139.04 
+" style="fill: none; stroke: #1c1917; stroke-width: 1.8; stroke-linecap: square"/>
+ </g>
+ <g>
+ <path d="M 21.06 139.04 
+L 21.06 131.94 
+L 13.96 131.94 
+" style="fill: none; stroke: #1c1917; stroke-linecap: square"/>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 11px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="81.57" y="149.09" transform="rotate(-0 81.57 149.09)">12</text>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 11px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="150.87" y="91.37" transform="rotate(-0 150.87 91.37)">?</text>
+ </g>
+ <g>
+ <text style="fill: #1c1917; font: 11px 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" x="79.32" y="84.35" transform="rotate(-0 79.32 84.35)">15</text>
+ </g>
+ <g>
+ <g style="fill: #15803d" transform="translate(138.87 50.32)">
+ <text>
+ <tspan style="font: oblique 13px 'DejaVu Sans'" x="0" y="-0.02">θ</tspan>
+ </text>
+ </g>
+ </g>
+ </g>
+ </g>
+ <defs>
+ </defs>
+</svg>
