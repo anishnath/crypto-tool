@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#f3eee5"/>
+    </linearGradient>
+    <radialGradient id="accentGlow" cx="0.32" cy="0.5" r="0.42">
+      <stop offset="0%" stop-color="#15803d" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#15803d" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#15803d" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- Left composition: integral as the hero glyph, with satellite symbols -->
+  <g transform="translate(380 315)" font-family="'Instrument Serif', 'Times New Roman', Georgia, serif">
+    <!-- subtle ring -->
+    <circle r="220" fill="none" stroke="#15803d" stroke-opacity="0.18" stroke-width="1.5" stroke-dasharray="4 8"/>
+    <circle r="148" fill="none" stroke="#1c1917" stroke-opacity="0.08" stroke-width="1"/>
+
+    <!-- hero integral -->
+    <text x="0" y="80" text-anchor="middle" font-size="360" font-style="italic" fill="#15803d" font-weight="400">∫</text>
+
+    <!-- bounds on the integral -->
+    <text x="68" y="-55" font-size="46" font-style="italic" fill="#1c1917" fill-opacity="0.78">∞</text>
+    <text x="-50" y="155" font-size="46" font-style="italic" fill="#1c1917" fill-opacity="0.78">0</text>
+
+    <!-- satellite symbols on the orbit -->
+    <text x="-205" y="-95" text-anchor="middle" font-size="60" font-style="italic" fill="#1c1917" fill-opacity="0.62">Σ</text>
+    <text x="205" y="-110" text-anchor="middle" font-size="56" font-style="italic" fill="#1c1917" fill-opacity="0.62">π</text>
+    <text x="-220" y="120" text-anchor="middle" font-size="58" font-style="italic" fill="#1c1917" fill-opacity="0.62">√</text>
+    <text x="195" y="155" text-anchor="middle" font-size="54" font-style="italic" fill="#1c1917" fill-opacity="0.62">∂</text>
+    <text x="0" y="-200" text-anchor="middle" font-size="48" font-style="italic" fill="#1c1917" fill-opacity="0.55">∇</text>
+    <text x="0" y="240" text-anchor="middle" font-size="46" font-style="italic" fill="#1c1917" fill-opacity="0.55">≈</text>
+
+    <!-- tiny equation accents -->
+    <text x="-280" y="20" font-size="22" font-family="'JetBrains Mono', 'Courier New', monospace" fill="#1c1917" fill-opacity="0.34">x² + y² = r²</text>
+    <text x="170" y="25" font-size="22" font-family="'JetBrains Mono', 'Courier New', monospace" fill="#1c1917" fill-opacity="0.34">e^(iπ) + 1 = 0</text>
+  </g>
+
+  <!-- Right side: title block -->
+  <g transform="translate(720 200)" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif">
+    <!-- accent bar -->
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#15803d"/>
+
+    <!-- eyebrow -->
+    <text x="0" y="38" font-size="20" font-weight="600" fill="#15803d" letter-spacing="3">8GWIFI · MATH STUDIO</text>
+
+    <!-- title -->
+    <text x="0" y="118" font-size="78" font-weight="700" fill="#1c1917" font-family="'Instrument Serif', 'Times New Roman', Georgia, serif" font-style="italic">Math, solved</text>
+    <text x="0" y="194" font-size="78" font-weight="700" fill="#1c1917" font-family="'Instrument Serif', 'Times New Roman', Georgia, serif" font-style="italic">step by step.</text>
+
+    <!-- description -->
+    <text x="0" y="252" font-size="22" fill="#44403c" font-weight="400">Calculus · Algebra · Geometry · Statistics</text>
+    <text x="0" y="284" font-size="22" fill="#44403c" font-weight="400">AI photo scan · Practice worksheets · Free</text>
+
+    <!-- chip row -->
+    <g transform="translate(0 320)">
+      <g>
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#15803d" fill-opacity="0.1" stroke="#15803d" stroke-opacity="0.25" stroke-width="1"/>
+        <text x="74" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#15803d">QUADRATIC</text>
+      </g>
+      <g transform="translate(160 0)">
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#15803d" fill-opacity="0.1" stroke="#15803d" stroke-opacity="0.25" stroke-width="1"/>
+        <text x="74" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#15803d">POLYNOMIAL</text>
+      </g>
+      <g transform="translate(0 48)">
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#15803d" fill-opacity="0.1" stroke="#15803d" stroke-opacity="0.25" stroke-width="1"/>
+        <text x="74" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#15803d">INEQUALITY</text>
+      </g>
+      <g transform="translate(160 48)">
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#15803d" fill-opacity="0.1" stroke="#15803d" stroke-opacity="0.25" stroke-width="1"/>
+        <text x="74" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#15803d">SYSTEMS</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- bottom-right brand mark -->
+  <g transform="translate(1130 595)" text-anchor="end" font-family="'JetBrains Mono', 'Courier New', monospace">
+    <text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org/math</text>
+  </g>
+</svg>
