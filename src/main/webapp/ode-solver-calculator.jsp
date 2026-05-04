@@ -38,7 +38,7 @@
         <jsp:param name="educationalLevel" value="High School, AP Calculus, College, University, Graduate" />
         <jsp:param name="teaches" value="Ordinary differential equations, ODEs, initial value problems, separable equations, linear ODEs, Bernoulli equations, exact equations, homogeneous equations, higher-order differential equations, characteristic equations, direction fields, slope fields, solution verification, integrating factors, Cauchy-Euler equations, Laplace transform methods, power series solutions, Euler method" />
         <jsp:param name="howToSteps" value="Snap a photo OR type the ODE|Click the camera button to scan a problem from a photo or PDF (AI extracts the ODE and any initial conditions in one shot) OR type your equation directly using the visual MathLive editor with derivatives like y' (yp) and y'' (ypp).,Pick a mode|Choose 1st Order, Higher-Order (2nd-5th), or Direction Field. The mode-specific inputs appear automatically.,Optionally add initial conditions|Tick the IVP checkbox to enter y(x0)=y0 (and y'(x0)=y'0 for higher-order). The calculator solves the IVP exactly.,Click Solve|The calculator classifies the ODE (separable / linear / Bernoulli / exact / homogeneous / Cauchy-Euler) and shows a tutorial-grade solution with the matching method.,Review steps and graph|Switch to the Graph tab for the solution curve or direction field; Python tab for the editable SymPy code." />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
         <jsp:param name="toolFeatures" value="AI photo scan with step-by-step solver,MathLive visual ODE editor (Visual / Text toggle),y prime notation auto-normalized to calculator syntax,First-order ODE solver with classification,Higher-order ODE solver (2nd 3rd 4th 5th order),Direction field (slope field) plotter,Automatic ODE classification,Initial value problem (IVP) support,Solution verification,Interactive solution curve graphs,Live KaTeX math preview,Copy LaTeX Download PDF Share URL,Built-in Python compiler,1000+ ODE practice worksheet problems,Filter by 8+ question types and 4 difficulty levels,Dark mode no signup no limits free forever" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="Can I scan an ODE problem from a photo?" />
@@ -67,25 +67,25 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
 
     <!-- Shared site CSS -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
 
     <!-- Math shell — provides ALL ic-* classes (ic-hero, ic-result-card, ic-output-tabs, etc.) -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css">
 
     <!-- Tool-specific CSS — kept for the legacy ode-* mode toggle, IC fields, formula table styling -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ode-solver-calculator.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ode-solver-calculator.css">
 
     <!-- KaTeX + MathLive + image-to-math -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css">
 
     <style>
     /* Busy-spinner for the primary CTA — locks Solve while compute is in
@@ -499,8 +499,8 @@
 
     <script>window.ODE_CALC_CTX = "<%=request.getContextPath()%>";</script>
 
-    <script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
-    <script src="<%=request.getContextPath()%>/modern/js/ode-solver-calculator.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/ode-solver-calculator.js"></script>
 
     <jsp:include page="/math/partials/math-input-multi.jsp" />
 
