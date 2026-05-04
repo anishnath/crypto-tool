@@ -42,7 +42,7 @@
         <jsp:param name="educationalLevel" value="High School, AP Calculus, College, University, Graduate" />
         <jsp:param name="teaches" value="Partial differential equations, heat equation, wave equation, Laplace equation, Poisson equation, transport equation, Schrodinger equation, finite difference methods, boundary conditions, separation of variables, Fourier series, numerical stability, CFL condition, eigenvalue problems, Sturm-Liouville theory, d Alembert formula, Duhamel principle, Green functions" />
         <jsp:param name="howToSteps" value="Snap a photo OR pick PDE type|Click the camera button to scan a problem from a photo or PDF (AI extracts the PDE type and parameters) OR choose Heat, Wave, Laplace, Poisson, Transport, Schrodinger, or 1st-Order from the chip rail.,Set parameters and BCs|Enter coefficients (k, c, L, t_max), domain size, initial condition, and boundary conditions (Dirichlet, Neumann, Robin) from the dropdowns.,Click Solve|Compute the numerical solution with finite difference methods and view the step-by-step breakdown including stability analysis (CFL condition).,View result and visualize|Switch tabs for 3D surface, contour/heatmap, time evolution animation, or the editable Python (NumPy) code." />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
         <jsp:param name="toolFeatures" value="AI photo scan with step-by-step solver,7 PDE types in one page,Heat equation (1D/2D diffusion) solver,Wave equation solver with d Alembert,Laplace equation (steady-state) solver,Poisson equation solver,Transport advection equation solver,Time-independent Schrodinger equation solver,1st-order linear PDE analytical solver (SymPy),Dirichlet Neumann Robin boundary conditions with physical-meaning labels,Step-by-step solution with stability analysis,CFL Courant number,Interactive 3D surface plots,Contour heatmap visualization,Time evolution animation,Copy LaTeX Download PDF Share URL,2000+ PDE practice worksheet problems,Filter by 48 question types and 4 difficulty levels,Built-in Python compiler,Quick presets,Dark mode no signup no limits free forever" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="Can I scan a PDE problem from a photo?" />
@@ -74,18 +74,18 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
 
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
 
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/pde-solver-calculator.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/pde-solver-calculator.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css">
 
     <style>
     /* PDE-specific shell tweaks — group label styling for the chip rail */
@@ -622,8 +622,8 @@
 
     <script>window.PDE_CALC_CTX = "<%=request.getContextPath()%>";</script>
 
-    <script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
-    <script src="<%=request.getContextPath()%>/modern/js/pde-solver-calculator.js?v=<%=cacheVersion%>"></script>
+    <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/pde-solver-calculator.js"></script>
 
     <script>
     // ─────────────────────────────────────────────────────────────────────
