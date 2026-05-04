@@ -1,0 +1,55 @@
+{
+  "name": "numerics",
+  "worksheet_count": 1,
+  "total_questions": 1500,
+  "worksheets": [
+    {
+      "topic": "Significant Figures & Scientific Notation",
+      "description": "NCERT Class 8 (numbers, scientific notation), Class 11 chemistry & physics (significant figures in measurements, error analysis), and JEE/NEET-style multi-step lab problems.  Covers all 5 sig-fig rules, decimal-place rule for +/-, sig-fig rule for ×/÷, log sig-fig rule, scientific notation conversion, and uncertainty propagation.",
+      "total": 1500,
+      "type_count": 27,
+      "types": {
+        "scientific_with_n_sf": 130,
+        "round_to_n_sf": 124,
+        "round_decimal_small": 121,
+        "count_trapped_zeros": 111,
+        "count_scientific_notation": 108,
+        "count_with_decimal_zeros": 104,
+        "count_leading_zeros": 98,
+        "count_no_zeros": 93,
+        "add_subtract_dp": 76,
+        "count_ambiguous": 75,
+        "multiply_div_sf": 74,
+        "log_sig_figs": 70,
+        "ph_calc": 67,
+        "identify_more_precise": 63,
+        "area_volume_calc": 48,
+        "density_calc": 35,
+        "speed_or_unit_calc": 29,
+        "decimal_to_scientific": 12,
+        "round_with_carry": 10,
+        "scientific_to_decimal": 10,
+        "unit_conversion_sf": 8,
+        "divide_with_rounding": 7,
+        "subtract_loss_precision": 7,
+        "exact_vs_measured": 6,
+        "multistep_chem": 6,
+        "molarity_calc": 5,
+        "relative_uncertainty": 3
+      },
+      "difficulty": {
+        "basic": 652,
+        "medium": 407,
+        "hard": 276,
+        "scholar": 165
+      },
+      "has_figures": 0,
+      "size_bytes": 644826,
+      "warnings": [
+        "low-variety types (1): relative_uncertainty"
+      ],
+      "file": "significant_figures.json",
+      "url": "/worksheet/math/numerics/significant_figures.json"
+    }
+  ]
+}
