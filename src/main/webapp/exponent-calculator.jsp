@@ -311,6 +311,17 @@
                 <div class="tool-result-actions" id="ec-result-actions" style="display:none;gap:0.5rem;padding:1rem;border-top:1px solid var(--border);flex-wrap:wrap">
                     <button type="button" class="tool-action-btn" id="ec-copy-latex-btn">Copy LaTeX</button>
                     <button type="button" class="tool-action-btn" id="ec-share-btn">Share</button>
+                    <button type="button" class="tool-action-btn" id="ec-worksheet-btn-toolbar">Worksheet</button>
+                </div>
+
+                <!-- Practice worksheet CTA — 1,500-problem CAS-verified
+                     exponents bank covering all 8 laws + scientific notation
+                     + compound interest + IIT-JEE classics. -->
+                <div class="ic-worksheet-cta" style="padding:0.75rem 1rem;">
+                    <button type="button" class="tool-action-btn" id="ec-worksheet-btn"
+                            style="width:100%;font-weight:600;">
+                        Practice Worksheet &mdash; 1,500+ exponent &amp; power problems with answer key
+                    </button>
                 </div>
             </div>
         </div>
@@ -576,6 +587,39 @@
 <script src="<%=request.getContextPath()%>/js/exponent-calculator-render.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/exponent-calculator-export.js?v=<%=cacheVersion%>"></script>
 <script src="<%=request.getContextPath()%>/js/exponent-calculator-core.js?v=<%=cacheVersion%>"></script>
+
+<!-- ─── Practice worksheet — 1,500-problem CAS-verified exponents bank ─── -->
+<script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
+<script>
+(function () {
+    function openExponentWorksheet() {
+        if (!window.WorksheetEngine || typeof window.WorksheetEngine.open !== 'function') {
+            if (typeof ToolUtils !== 'undefined' && ToolUtils.showToast) {
+                ToolUtils.showToast('Worksheet engine not loaded', 2500, 'warning');
+            }
+            return;
+        }
+        window.WorksheetEngine.open({
+            jsonUrl: '<%=request.getContextPath()%>/worksheet/math/algebra/exponents.json',
+            title: 'Exponents & Powers',
+            accentColor: '#15803d',
+            branding: '8gwifi.org',
+            defaultCount: 20
+        });
+    }
+    function whenReady(fn) {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', fn);
+        } else { fn(); }
+    }
+    whenReady(function () {
+        var primary = document.getElementById('ec-worksheet-btn');
+        if (primary) primary.addEventListener('click', openExponentWorksheet);
+        var toolbar = document.getElementById('ec-worksheet-btn-toolbar');
+        if (toolbar) toolbar.addEventListener('click', openExponentWorksheet);
+    });
+})();
+</script>
 
 <%@ include file="modern/components/analytics.jsp" %>
 </body>

@@ -312,6 +312,16 @@
                             <div class="tool-result-actions" id="trig-result-actions">
                                 <button type="button" class="tool-action-btn" id="trig-copy-latex-btn">Copy LaTeX</button>
                                 <button type="button" class="tool-action-btn" id="trig-share-btn">Share</button>
+                                <button type="button" class="tool-action-btn" id="trig-worksheet-btn-toolbar">Worksheet</button>
+                            </div>
+
+                            <!-- Practice worksheet CTA — 1,500-problem CAS-verified
+                                 trigonometry bank with NCERT word problems and
+                                 IIT-JEE classics. Shared across all 3 trig calcs. -->
+                            <div class="ic-worksheet-cta">
+                                <button type="button" class="tool-action-btn" id="trig-worksheet-btn">
+                                    Practice Worksheet &mdash; 1,500+ trig problems with answer key
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -659,6 +669,39 @@
             }, { threshold: 0.15 });
             els.forEach(function (el) { io.observe(el); });
         }
+    })();
+    </script>
+
+    <!-- ─── Trigonometry practice worksheet (shared across all 3 trig calcs) ─── -->
+    <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
+    <script>
+    (function () {
+        function openTrigWorksheet() {
+            if (!window.WorksheetEngine || typeof window.WorksheetEngine.open !== 'function') {
+                if (typeof ToolUtils !== 'undefined' && ToolUtils.showToast) {
+                    ToolUtils.showToast('Worksheet engine not loaded', 2500, 'warning');
+                }
+                return;
+            }
+            window.WorksheetEngine.open({
+                jsonUrl: '<%=request.getContextPath()%>/worksheet/math/trigonometry/trigonometry.json',
+                title: 'Trigonometry',
+                accentColor: '#15803d',
+                branding: '8gwifi.org',
+                defaultCount: 20
+            });
+        }
+        function whenReady(fn) {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', fn);
+            } else { fn(); }
+        }
+        whenReady(function () {
+            var primary = document.getElementById('trig-worksheet-btn');
+            if (primary) primary.addEventListener('click', openTrigWorksheet);
+            var toolbar = document.getElementById('trig-worksheet-btn-toolbar');
+            if (toolbar) toolbar.addEventListener('click', openTrigWorksheet);
+        });
     })();
     </script>
 </body>

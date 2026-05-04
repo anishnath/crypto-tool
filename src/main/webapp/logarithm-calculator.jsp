@@ -32,7 +32,7 @@
         <jsp:param name="toolUrl" value="logarithm-calculator.jsp" />
         <jsp:param name="toolKeywords" value="logarithm calculator, logarithm calculator with steps, log equation solver, solve logarithmic equations, simplify logarithms, expand logarithms, condense logarithms, log calculator, ln calculator, natural log calculator, log base 2 calculator, log base 10 calculator, logarithm rules, change of base formula, log solver step by step free, logarithm worksheet, log worksheet with answers, logarithm practice problems, log worksheet generator, logarithm worksheet pdf, logarithm practice worksheet, log equations worksheet, condense logarithms worksheet, expand logarithms worksheet, natural log worksheet, log equations with answers, logarithm quiz generator, ai logarithm solver, photo math solver, scan logarithm from photo, ai math homework helper, logarithm photo solver, math problem photo scanner" />
         <jsp:param name="toolImage" value="math-studio-og.png" />
-        <jsp:param name="toolFeatures" value="Solve log equations step by step,Expand and condense using log rules,Simplify and evaluate expressions,2000+ practice worksheet problems,Printable worksheet with answer key,31 question types,4 difficulty levels,Interactive Plotly graph,Built-in Python SymPy compiler,AI-powered fallback for complex problems,AI photo scanner extracts logarithms from images,ln log log2 log10 any base,Copy LaTeX and share results,Live KaTeX preview,Photo math problem solver,Free with no signup" />
+        <jsp:param name="toolFeatures" value="Solve log equations step by step,Expand and condense using log rules,Simplify and evaluate expressions,CAS-powered solver with named log rules,2000+ practice worksheet problems,Printable worksheet with answer key,31 question types,4 difficulty levels,Interactive Plotly graph,Built-in Python compiler,AI-powered fallback for complex problems,AI photo scanner extracts logarithms from images,ln log log2 log10 any base,Copy LaTeX and share results,Live KaTeX preview,Photo math problem solver,Free with no signup" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="educationalLevel" value="High School, AP Precalculus, College Algebra, University" />
         <jsp:param name="teaches" value="Logarithms, Log Equations, Natural Logarithm, Change of Base, Logarithm Rules, Expand Logarithms, Condense Logarithms, Log Derivatives, Log Integrals" />
@@ -45,7 +45,7 @@
         <jsp:param name="faq4q" value="What is the difference between ln and log?" />
         <jsp:param name="faq4a" value="ln (natural logarithm) is log base e (approximately 2.71828). log typically means log base 10 in everyday use. This calculator accepts both: type ln(x) or log(x) for natural log, and log10(x) for common log base 10. Use log2(x) for binary log or logb(x, base) for any custom base." />
         <jsp:param name="faq5q" value="Is this logarithm calculator free?" />
-        <jsp:param name="faq5a" value="This logarithm calculator is completely free with no signup required. You get formula-based solving, AI step-by-step solutions, interactive graphs, a Python SymPy compiler, LaTeX export, and shareable URLs. Most computation runs in your browser for instant results." />
+        <jsp:param name="faq5a" value="This logarithm calculator is completely free with no signup required. You get formula-based solving, AI step-by-step solutions, interactive graphs, a Python compiler, LaTeX export, and shareable URLs. Most computation runs in your browser for instant results." />
         <jsp:param name="faq6q" value="Does this logarithm calculator include practice worksheets?" />
         <jsp:param name="faq6a" value="Yes. This calculator includes a built-in worksheet generator with over 2,000 logarithm practice problems. You can filter by 31 question types (solve equations, expand, condense, change of base, log derivatives, log integrals, word problems, inequalities, and more) and 4 difficulty levels (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key, perfect for exam prep, homework review, or classroom quizzes." />
         <jsp:param name="faq7q" value="What types of logarithm problems are in the worksheet?" />
@@ -442,11 +442,11 @@
                     <div class="ic-panel lc-panel" id="lc-panel-python" role="tabpanel">
                         <div class="tool-card" style="height:100%;display:flex;flex-direction:column;padding:0;">
                             <div style="display:flex;align-items:center;gap:0.6rem;padding:0.75rem 1rem;border-bottom:1px solid var(--ms-line, rgba(0,0,0,0.08));">
-                                <strong style="font-size:0.85rem;color:var(--ms-ink-soft, #44403c);">SymPy template</strong>
+                                <strong style="font-size:0.85rem;color:var(--ms-ink-soft, #44403c);">Python template</strong>
                                 <select id="lc-compiler-template">
-                                    <option value="sympy-solve">SymPy Solve</option>
-                                    <option value="sympy-simplify">SymPy Simplify</option>
-                                    <option value="sympy-expand">SymPy Expand</option>
+                                    <option value="sympy-solve">Solve</option>
+                                    <option value="sympy-simplify">Simplify</option>
+                                    <option value="sympy-expand">Expand</option>
                                 </select>
                             </div>
                             <div style="flex:1;min-height:0;">
@@ -529,11 +529,11 @@
             </div>
             <div class="ms-faq-item">
                 <button type="button" class="ms-faq-q">Is this logarithm calculator free?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
-                <div class="ms-faq-a">Completely free with no signup. You get formula-based solving, AI step-by-step solutions, interactive Plotly graphs, a Python SymPy compiler, LaTeX export, shareable URLs, and a 2,000-problem practice worksheet. Most computation runs in your browser for instant results.</div>
+                <div class="ms-faq-a">Completely free with no signup. You get formula-based solving, AI step-by-step solutions, interactive Plotly graphs, a Python compiler, LaTeX export, shareable URLs, and a 2,000-problem practice worksheet. Most computation runs in your browser for instant results.</div>
             </div>
             <div class="ms-faq-item">
                 <button type="button" class="ms-faq-q">Does this logarithm calculator include practice worksheets?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
-                <div class="ms-faq-a">Yes. Click the <strong>Practice Worksheet</strong> button to open the worksheet engine with over <strong>2,000 SymPy-verified problems</strong> across <strong>31 question types</strong> (solve equations, expand, condense, change of base, log derivatives/integrals, word problems, inequalities, and more) and <strong>4 difficulty levels</strong> (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key &mdash; perfect for exam prep, homework review, or classroom quizzes.</div>
+                <div class="ms-faq-a">Yes. Click the <strong>Practice Worksheet</strong> button to open the worksheet engine with over <strong>2,000 CAS-verified problems</strong> across <strong>31 question types</strong> (solve equations, expand, condense, change of base, log derivatives/integrals, word problems, inequalities, and more) and <strong>4 difficulty levels</strong> (basic, medium, hard, scholar). Each worksheet is randomly generated with a full answer key &mdash; perfect for exam prep, homework review, or classroom quizzes.</div>
             </div>
             <div class="ms-faq-item">
                 <button type="button" class="ms-faq-q">What types of logarithm problems are in the worksheet?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
@@ -1527,7 +1527,7 @@ except Exception as ex:
                 '<div style="font-size:0.78rem;font-weight:600;color:var(--ms-muted, #78716c);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">' +
                     '<span class="lc-badge">CAS</span> &nbsp; Computing&hellip;' +
                 '</div>' +
-                '<div style="font-size:0.85rem;">' + (msg || 'Sending to SymPy server-side engine.') + '</div>' +
+                '<div style="font-size:0.85rem;">' + (msg || 'Sending to the CAS engine.') + '</div>' +
             '</div>';
     }
 
@@ -1539,7 +1539,7 @@ except Exception as ex:
     function _sympyLogSolve(mode, raw, varName, onResult) {
         var code = _buildSympyCode(mode, raw, varName);
         if (!code) {
-            onResult({ ok: false, error: 'SymPy template missing.' });
+            onResult({ ok: false, error: 'CAS template missing.' });
             return;
         }
         var controller = new AbortController();
@@ -1577,7 +1577,7 @@ except Exception as ex:
             var payload;
             try { payload = JSON.parse(resMatch[1].trim()); }
             catch (e) {
-                onResult({ ok: false, error: 'Could not parse SymPy result.' });
+                onResult({ ok: false, error: 'Could not parse CAS result.' });
                 return;
             }
             var ext2 = stdout.match(/EXTRANEOUS:(.+)/);
@@ -1600,7 +1600,7 @@ except Exception as ex:
         .catch(function (err) {
             clearTimeout(timeoutId);
             var msg = err.name === 'AbortError'
-                ? 'SymPy request timed out (45s).'
+                ? 'CAS request timed out (45s).'
                 : (err.message || 'Network error');
             onResult({ ok: false, error: msg });
         });
@@ -1636,7 +1636,7 @@ except Exception as ex:
             resultActions.style.display = 'none';
             lastSolvedBy = 'sympy';
             lastExtraneous = payload.extraneous || [];
-            lastResult = { result: 'No real solution', method: payload.method || 'SymPy', raw: raw };
+            lastResult = { result: 'No real solution', method: payload.method || 'CAS', raw: raw };
             return;
         }
 
@@ -1654,7 +1654,7 @@ except Exception as ex:
             html += '<div style="font-size:0.95rem;color:var(--ms-accent, #15803d);font-family:var(--ms-font-mono, monospace);margin:0.4rem 0;">' +
                     String(payload.numeric).replace(/</g, '&lt;') + '</div>';
         }
-        html += '<div style="font-size:0.85rem;color:var(--ms-ink-soft, #44403c);margin-top:0.5rem;">' + (payload.method || 'SymPy') + '</div>';
+        html += '<div style="font-size:0.85rem;color:var(--ms-ink-soft, #44403c);margin-top:0.5rem;">' + (payload.method || 'CAS') + '</div>';
         html += '</div>';
 
         if (lastExtraneous.length) {
@@ -1686,7 +1686,7 @@ except Exception as ex:
         stepsArea.innerHTML = '';
         lastResult = {
             result: payload.plain,
-            method: payload.method || 'SymPy',
+            method: payload.method || 'CAS',
             raw: raw,
             steps: payload.steps || []   // rule-annotated steps for Show-Steps
         };
@@ -2183,8 +2183,8 @@ except Exception as ex:
         //    no nerdamer counterpart. ──────────────────────────────────
         if (currentMode === 'expand' || currentMode === 'condense' || currentMode === 'rewrite') {
             var pendingMsg = (currentMode === 'rewrite')
-                ? 'Converting notation with SymPy.'
-                : 'Applying log rules with SymPy.';
+                ? 'Converting notation with the CAS engine.'
+                : 'Applying log rules with the CAS engine.';
             _showSympyPending(pendingMsg);
             _sympyLogSolve(currentMode, raw, varSelect.value, function (payload) {
                 if (payload.ok) {
@@ -2207,7 +2207,7 @@ except Exception as ex:
         if (formulaResult && formulaResult.success) {
             // Detect the no-op fall-throughs and route to SymPy instead.
             if (/\(already /.test(formulaResult.method)) {
-                _showSympyPending('Trying SymPy for a deeper transform.');
+                _showSympyPending('Trying the CAS engine for a deeper transform.');
                 _sympyLogSolve(currentMode, raw, varSelect.value, function (payload) {
                     if (payload.ok && !payload.nosol) _renderSympyResult(payload, raw);
                     else _renderFormulaResult(formulaResult, raw); // accept "already" as-is
@@ -2227,7 +2227,7 @@ except Exception as ex:
                     if (filtered.valid.length === 0) {
                         // All nerdamer roots were extraneous — let SymPy
                         // decide.  Maybe it can find different real roots.
-                        _showSympyPending('Verifying with SymPy &mdash; nerdamer roots failed the domain check.');
+                        _showSympyPending('Verifying with the CAS engine &mdash; nerdamer roots failed the domain check.');
                         _sympyLogSolve('solve', raw, v, function (payload) {
                             if (payload.ok) _renderSympyResult(payload, raw);
                             else _renderFormulaResult(formulaResult, raw);
@@ -2252,7 +2252,7 @@ except Exception as ex:
 
         // Nerdamer found nothing — try SymPy before AI.  AI is slow and
         // unreliable; SymPy nails most algebraic log problems.
-        _showSympyPending('Computing with SymPy.');
+        _showSympyPending('Computing with the CAS engine.');
         _sympyLogSolve(currentMode, raw, varSelect.value, function (payload) {
             if (payload.ok) _renderSympyResult(payload, raw);
             else if (payload.error) requestAISolve(raw);
