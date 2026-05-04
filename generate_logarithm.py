@@ -1112,6 +1112,298 @@ def gen_log_taylor_series():
     return q_text, q_latex, ans_latex, ans_plain
 
 # ===========================================================================
+# NEW GENERATORS — close the audit gaps from the 25-problem reference list
+# ===========================================================================
+
+def gen_solve_log_multi_base():
+    """
+    Pattern (audit #16):  log_b1(x) + log_b2(x) + ... + log_bn(x) = c
+    where b1, b2, ... are powers of a common prime base.
+
+    Reduction:  log_b1(x) = log_b(x) / log_b(b1) = log_b(x) / k1.
+    So sum = log_b(x) · (1/k1 + 1/k2 + ...) = c
+        →   log_b(x) = c / S    →    x = b^(c/S)
+
+    We pick the common base b ∈ {2,3,5,7}, choose 2-4 power-of-b bases,
+    then choose the RHS c so that c/S is a clean integer or simple
+    rational — guarantees the answer is a clean closed form.
+    """
+    local_x = sp.Symbol('x', real=True, positive=True)
+    common_base = rc([2, 3, 5, 7])
+    n_terms = rc([2, 3, 4])
+
+    # Pick distinct exponents 1..4 to form bases b^k_i
+    ks = random.sample([1, 2, 3, 4], k=n_terms)
+    ks.sort()
+    bases = [common_base ** k for k in ks]
+
+    # Sum of 1/k for the equation log_b(x) · S = c
+    S = sum(sp.Rational(1, k) for k in ks)
+
+    # Pick a target log_b(x) value so x = b^value is clean
+    log_x_val = rc([1, 2, 3, 4, sp.Rational(1, 2), sp.Rational(3, 2), -1])
+    c = log_x_val * S
+
+    # Build LHS LaTeX
+    parts = []
+    for b in bases:
+        if b == common_base:
+            parts.append(f"\\log_{{{b}}} x")
+        else:
+            parts.append(f"\\log_{{{b}}} x")
+    lhs = " + ".join(parts)
+    q_latex = f"{lhs} = {sp.latex(c)}"
+
+    # Verify with SymPy
+    eq = sum(sp.log(local_x, b) for b in bases) - c
+    sols = sp.solve(eq, local_x)
+    if not sols:
+        return None
+    sol = sols[0]
+    # Sanity check: log_b(x) should equal log_x_val
+    check = sp.simplify(sp.log(sol, common_base) - log_x_val)
+    if check != 0:
+        return None
+
+    ans_latex = f"x = {sp.latex(sol)}"
+    ans_plain = f"x = {sol}"
+    q_text = ("Solve the multi-base logarithmic equation.  "
+              "Hint: convert each term to a common base using log_b(x) = log_a(x) / log_a(b).")
+    return q_text, q_latex, ans_latex, ans_plain
+
+
+def gen_solve_log_power():
+    """
+    Pattern (audit #17, #21):  x^(log_b(x)) = c · x^k
+
+    Take log_b of both sides:
+        (log_b(x))² = log_b(c) + k · log_b(x)
+    Let u = log_b(x):
+        u² - k·u - log_b(c) = 0
+
+    We construct by planting two clean roots u1, u2 (integers in {-2,-1,1,2,3}).
+    Then  x = b^u1  or  b^u2 — both valid (x > 0 always satisfies log domain).
+
+    Sum of roots = k     →   u1 + u2 = k
+    Product       = -log_b(c) → c = b^(-u1·u2)
+    """
+    local_x = sp.Symbol('x', real=True, positive=True)
+    base = rc([2, 3, 5, 10, 'e'])
+    log_str = "\\ln" if base == 'e' else f"\\log_{{{base}}}"
+
+    # Pick two distinct integer roots for u = log_b(x)
+    u1, u2 = random.sample([-2, -1, 1, 2, 3], k=2)
+    k = u1 + u2
+    c_exp = -u1 * u2  # c = base^c_exp
+
+    # Build c as a clean number when possible
+    base_sym = sp.E if base == 'e' else sp.Integer(base)
+    if c_exp >= 0 and base != 'e':
+        c_val = base_sym ** c_exp
+        c_str = str(int(c_val))
+    elif c_exp < 0 and base != 'e':
+        c_val = sp.Rational(1, base_sym ** abs(c_exp))
+        c_str = sp.latex(c_val)
+    else:  # base == 'e'
+        c_val = sp.E ** c_exp
+        c_str = sp.latex(c_val)
+
+    # Build the equation:  x^(log_b(x)) = c · x^k
+    if k == 0:
+        rhs_latex = f"{c_str}"
+    elif k == 1:
+        rhs_latex = f"{c_str} x"
+    else:
+        rhs_latex = f"{c_str} x^{{{k}}}"
+    q_latex = f"x^{{{log_str} x}} = {rhs_latex}"
+
+    # Verify with SymPy
+    eq = local_x ** sp.log(local_x, base_sym) - c_val * local_x ** k
+    sols = sp.solve(eq, local_x)
+    real_pos = [s for s in sols
+                if s.is_real and (s.is_positive if hasattr(s, 'is_positive') else True)]
+    expected = sorted([base_sym ** u1, base_sym ** u2], key=lambda s: float(s.evalf()))
+    if len(real_pos) < 2:
+        return None
+
+    sol_strs = [f"x = {sp.latex(s)}" for s in expected]
+    q_text = ("Solve the equation by taking the logarithm of both sides.  "
+              "The substitution u = log_b(x) reduces this to a quadratic.")
+    ans_latex = " \\quad \\text{or} \\quad ".join(sol_strs)
+    ans_plain = "  or  ".join([f"x = {s}" for s in expected])
+    return q_text, q_latex, ans_latex, ans_plain
+
+
+def gen_solve_log_iterated():
+    """
+    Pattern (audit #22):  log_b(log_b(...log_b(x)...)) = c   (n-deep nesting)
+
+    Solve outside-in:  innermost = b^c, peel back one level at a time.
+    With depth n and base b: x = b^(b^(b^...^c))  (tower of height n).
+
+    We restrict to depth 2 or 3 with small base + small c so the answer is
+    a tractable integer or modest power.  Depth 2 with b=2, c=2 gives
+    log_2(log_2(x)) = 2  →  log_2(x) = 4  →  x = 16.
+    """
+    local_x = sp.Symbol('x', real=True, positive=True)
+    base = rc([2, 3, 4, 5])
+    depth = rc([2, 3])
+    # Pick c so the tower stays under 10^6 — the cap below also rejects.
+    if depth == 2:
+        c = rc([0, 1, 2, 3, -1, -2])
+    else:
+        c = rc([0, 1, -1])
+
+    # Build the LHS LaTeX nested
+    log_open = f"\\log_{{{base}}}\\left("
+    inner = "x"
+    for _ in range(depth):
+        inner = log_open + inner + "\\right)"
+    q_latex = f"{inner} = {c}"
+
+    # Compute x by peeling back: layer_value starts at c, then exponentiate
+    val = sp.Integer(c)
+    for _ in range(depth):
+        val = sp.Integer(base) ** val
+    sol = val
+
+    # Cap absurd answers — `\log_3(\log_3(\log_3 x)) = 1` would need
+    # x = 3^(3^3) = 7.6 trillion, useless on a worksheet.  Reject and let
+    # the dispatcher retry with a different (depth, c, base) combination.
+    if int(sol) > 10**6:
+        return None
+
+    # Verify
+    check = sol
+    for _ in range(depth):
+        check = sp.log(check, base)
+    check = sp.simplify(check - c)
+    if check != 0:
+        return None
+
+    q_text = (f"Solve the {depth}-fold iterated logarithm equation.  "
+              "Work from the outside inward, exponentiating one level at a time.")
+    ans_latex = f"x = {sp.latex(sol)}"
+    ans_plain = f"x = {sol}"
+    return q_text, q_latex, ans_latex, ans_plain
+
+
+def gen_solve_base_variable_multi():
+    """
+    Pattern (audit #13):  log_k(a) + log_k(b) = c     →    k = (a·b)^(1/c)
+
+    Generalises the existing `solve_base_variable` (which only handles
+    single-term log_x(A) = B).  Here we have a SUM, solving for the
+    common base k.
+
+    To produce clean answers we pick c such that (a·b) is a perfect c-th
+    power.  Easiest: pick k_target ∈ {2,3,4,5,6}, c ∈ {2,3,4,5}, and
+    factor k^c into two factors a, b.
+    """
+    local_k = sp.Symbol('k', real=True, positive=True)
+    k_target = rc([2, 3, 4, 5, 6])
+    c = rc([2, 3, 4, 5])
+
+    product = k_target ** c
+
+    # Factor `product` into two factors a, b with 2 ≤ a < b ≤ product/2.
+    # Reject a == b (degenerate `log_k(a) + log_k(a)`) and a == 1 / b == product.
+    divisors = sp.divisors(product)
+    candidate_pairs = []
+    for d in divisors:
+        if d < 2: continue
+        other = product // d
+        if other < 2: continue
+        if d >= other: break  # require strict a < b — drops the a == b case
+        if other == product: continue  # a = 1 was already filtered, defensive
+        candidate_pairs.append((d, other))
+    if not candidate_pairs:
+        return None
+    a, b = rc(candidate_pairs)
+
+    q_latex = f"\\log_k({a}) + \\log_k({b}) = {c}"
+
+    # Verify
+    eq = sp.log(a, local_k) + sp.log(b, local_k) - c
+    sols = sp.solve(eq, local_k)
+    valid = [s for s in sols if s.is_real and s.is_positive and s != 1]
+    if k_target not in [int(v) if v.is_integer else None for v in valid if v is not None]:
+        # Try numerical match
+        match = any(abs(float(v.evalf()) - k_target) < 1e-9 for v in valid)
+        if not match:
+            return None
+
+    q_text = ("Find the value of the base k that satisfies the equation.  "
+              "Hint: combine the logs with the product rule, then solve k^c = ab.")
+    ans_latex = f"k = {k_target}"
+    ans_plain = f"k = {k_target}"
+    return q_text, q_latex, ans_latex, ans_plain
+
+
+def gen_word_problem_decibels():
+    """
+    Pattern (audit #15):  Sound intensity → decibels.
+        β = 10 · log_10(I / I_0)        (single-sound dB)
+        β2 - β1 = 10 · log_10(I2 / I1)  (relative dB)
+
+    Variants:
+      · "Sound A is N times more intense than sound B; find dB difference"
+        (the audit #15 form)
+      · "If sound is at β dB, what is its intensity ratio to threshold?"
+      · "Sound at β1 dB, intensity is doubled — new dB?"
+    """
+    v = rc(["intensity_ratio_to_db", "db_difference", "doubling"])
+
+    if v == "intensity_ratio_to_db":
+        # The audit #15 problem: Nx more intense
+        ratio = rc([10, 100, 1000, 10000, 50, 500, 25, 200, 5000])
+        delta_db = 10 * math.log10(ratio)
+        if abs(delta_db - round(delta_db)) < 1e-9:
+            delta_str = str(int(round(delta_db)))
+        else:
+            delta_str = f"{delta_db:.2f}"
+
+        # Embed the ratio in q_latex so dedup sees each instance as unique.
+        q_latex = (f"\\Delta \\beta = 10 \\log_{{10}}({ratio})")
+        q_text = (f"The intensity of sound is given by \\(\\beta = 10 \\log_{{10}}(I / I_0)\\) decibels.  "
+                  f"If one sound is {ratio} times more intense than another, find the difference in decibels.")
+        ans_latex = f"\\Delta \\beta = {delta_str}\\text{{ dB}}"
+        ans_plain = f"Δβ = {delta_str} dB"
+
+    elif v == "db_difference":
+        beta1 = rc([20, 30, 40, 50, 60, 70, 80])
+        delta = rc([10, 20, 30, 40])
+        beta2 = beta1 + delta
+        # I2 / I1 = 10^((beta2 - beta1) / 10)
+        ratio = 10 ** (delta / 10)
+        ratio_str = str(int(ratio)) if ratio == int(ratio) else f"{ratio:.2f}"
+        q_latex = (f"\\frac{{I_2}}{{I_1}} = 10^{{({beta2} - {beta1})/10}}")
+        q_text = (f"A quiet sound measures {beta1} dB and a louder sound measures {beta2} dB.  "
+                  "Using \\(\\beta_2 - \\beta_1 = 10 \\log_{10}(I_2/I_1)\\), find how many times "
+                  "more intense the louder sound is.")
+        ans_latex = f"\\frac{{I_2}}{{I_1}} = {ratio_str}\\text{{ times}}"
+        ans_plain = f"I2/I1 = {ratio_str} times"
+
+    else:  # doubling
+        beta1 = rc([30, 40, 50, 60, 70, 80])
+        n_doublings = rc([1, 2, 3, 4, 5])
+        ratio = 2 ** n_doublings
+        delta_db = 10 * math.log10(ratio)
+        beta2 = beta1 + delta_db
+        delta_str = f"{delta_db:.2f}"
+        beta2_str = f"{beta2:.2f}"
+        plural = "s" if n_doublings > 1 else ""
+
+        q_latex = (f"\\beta_2 = {beta1} + 10 \\log_{{10}}(2^{{{n_doublings}}})")
+        q_text = (f"A sound source measures {beta1} dB.  "
+                  f"If its intensity is doubled {n_doublings} time{plural}, what is the new decibel level?")
+        ans_latex = f"\\beta_2 \\approx {beta2_str}\\text{{ dB}}  \\quad (\\Delta = {delta_str}\\text{{ dB}})"
+        ans_plain = f"β2 ≈ {beta2_str} dB  (Δ = {delta_str} dB)"
+
+    return q_text, q_latex, ans_latex, ans_plain
+
+
+# ===========================================================================
 # DISPATCHER
 # ===========================================================================
 
@@ -1142,9 +1434,11 @@ DIFFICULTY_TYPES = {
         "solve_exp_different_bases",
         "solve_log_substitution",
         "solve_base_variable",
+        "solve_base_variable_multi",   # NEW: multi-term base-variable (audit #13)
         "system_of_logs",
         "find_inverse_function",
-        "word_problems"
+        "word_problems",
+        "word_problem_decibels"         # NEW: dB / sound intensity (audit #15)
     ],
     "scholar": [
         "solve_exp_quadratic",
@@ -1153,7 +1447,10 @@ DIFFICULTY_TYPES = {
         "log_integral",
         "logarithmic_differentiation",
         "log_limits",
-        "log_taylor_series"
+        "log_taylor_series",
+        "solve_log_multi_base",         # NEW: log_2 x + log_4 x + ... = c (audit #16)
+        "solve_log_power",              # NEW: x^(log_b x) = c·x^k (audit #17, #21)
+        "solve_log_iterated"            # NEW: log(log(...x)) = c (audit #22)
     ]
 }
 
@@ -1192,7 +1489,13 @@ def call_generator(q_type):
         "log_integral": gen_log_integral,
         "logarithmic_differentiation": gen_logarithmic_differentiation,
         "log_limits": gen_log_limits,
-        "log_taylor_series": gen_log_taylor_series
+        "log_taylor_series": gen_log_taylor_series,
+        # New types (audit gap fixes)
+        "solve_log_multi_base":      gen_solve_log_multi_base,
+        "solve_log_power":           gen_solve_log_power,
+        "solve_log_iterated":        gen_solve_log_iterated,
+        "solve_base_variable_multi": gen_solve_base_variable_multi,
+        "word_problem_decibels":     gen_word_problem_decibels
     }
     
     if q_type not in generators:

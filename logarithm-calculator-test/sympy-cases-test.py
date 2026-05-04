@@ -435,6 +435,86 @@ for label, raw, mode, var, expect_plain in [
     case(label, mode, raw, var=var, expect_plain=expect_plain)
 
 
+print('\n═══ STEPS line — pedagogical step-trace emitter ═══')
+# Each call to the SymPy template should emit a STEPS:json line alongside
+# RESULT (when steps are available).  Tests verify shape + key contents.
+
+def parse_steps(out):
+    """Return the list of step dicts emitted by the Python template."""
+    for line in out.splitlines():
+        if line.startswith('STEPS:'):
+            try:
+                return json.loads(line[len('STEPS:'):])
+            except json.JSONDecodeError:
+                return None
+    return None
+
+def case_steps(label, mode, raw, *, var='x',
+               expect_min_count=1, expect_rule_substring=None):
+    global _pass, _fail
+    out = run(mode, raw, var)
+    steps = parse_steps(out)
+    if steps is None:
+        _fail += 1
+        failures.append((label, [f'no STEPS line in output: {out[:120]!r}'], None))
+        print(f'  ✗  {label}\n      no STEPS line emitted')
+        return
+    if len(steps) < expect_min_count:
+        _fail += 1
+        failures.append((label, [f'expected ≥{expect_min_count} steps, got {len(steps)}'], None))
+        print(f'  ✗  {label} — only {len(steps)} step(s)')
+        return
+    # Each step must have rule, label, before_latex, after_latex keys
+    required = {"rule", "label", "before_latex", "after_latex"}
+    for i, s in enumerate(steps):
+        missing = required - set(s.keys())
+        if missing:
+            _fail += 1
+            failures.append((label, [f'step[{i}] missing keys: {missing}'], None))
+            print(f'  ✗  {label} — step {i} missing {missing}')
+            return
+    if expect_rule_substring:
+        all_rules = " ".join(s.get('rule', '') for s in steps)
+        if expect_rule_substring not in all_rules:
+            _fail += 1
+            failures.append((label, [f"expected rule substring {expect_rule_substring!r} in {all_rules!r}"], None))
+            print(f'  ✗  {label} — expected rule containing {expect_rule_substring!r}')
+            return
+    _pass += 1
+    print(f'  ✓  {label}  ({len(steps)} step(s))')
+
+
+# Expand mode steps
+case_steps('expand log(x²·y/z) → STEPS with quotient/product/power',
+    'expand', 'log(x^2*y/z)', expect_min_count=1, expect_rule_substring='LR_')
+case_steps('expand log(x³) → STEPS with power rule',
+    'expand', 'log(x^3)', expect_min_count=1, expect_rule_substring='LR_power')
+case_steps('expand log(xy) → STEPS with product rule',
+    'expand', 'log(x*y)', expect_min_count=1, expect_rule_substring='LR_product')
+
+# Condense mode steps
+case_steps('condense 2·log(x)+log(y) → STEPS with combine',
+    'condense', '2*log(x) + log(y)', expect_min_count=1, expect_rule_substring='LR_inverse')
+case_steps('condense log(x)-log(y) → STEPS with combine',
+    'condense', 'log(x) - log(y)', expect_min_count=1, expect_rule_substring='LR_inverse')
+
+# Solve mode steps (multi-step trace)
+case_steps('solve log(x)+log(x-2)=log(3) → ≥2 steps with domain check',
+    'solve', 'log(x)+log(x-2)=log(3)', expect_min_count=2,
+    expect_rule_substring='LR_solve')
+case_steps('solve log_2(x)=5 → ≥2 steps',
+    'solve', 'log2(x) = 5', expect_min_count=2,
+    expect_rule_substring='LR_solve')
+
+# Rewrite mode steps (always 2-step trace)
+case_steps('rewrite 5³=125 → 2 steps (identify → apply definition)',
+    'rewrite', '5^3 = 125', expect_min_count=2,
+    expect_rule_substring='LR_log_form')
+case_steps('rewrite log_5(125)=3 → 2 steps',
+    'rewrite', 'log_5(125) = 3', expect_min_count=2,
+    expect_rule_substring='LR_exp_form')
+
+
 # ─── Summary ─────────────────────────────────────────────────────────
 print('\n═══ Summary ═══')
 print(f'Total: {_pass} passed, {_fail} failed')
