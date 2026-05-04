@@ -121,7 +121,7 @@
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="vector-calculator.jsp" />
         <jsp:param name="toolKeywords" value="vector calculator, dot product calculator, cross product calculator, vector magnitude, angle between vectors, vector projection, unit vector calculator, vector addition, scalar multiplication, linear algebra calculator, 3D vector calculator" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
         <jsp:param name="toolFeatures" value="Add subtract and scale vectors,Dot product with step-by-step solution,Cross product using determinant method,Magnitude and unit vector computation,Angle between vectors,Vector projection and rejection,Parallelogram area calculation,Triple scalar product,Linear independence check,2D and 3D mode toggle,Interactive Plotly graph,Python NumPy code generation" />
         <jsp:param name="teaches" value="Vector arithmetic, dot product, cross product, vector projection, linear independence, parallelogram area, triple scalar product" />
         <jsp:param name="educationalLevel" value="High School, College, University" />
