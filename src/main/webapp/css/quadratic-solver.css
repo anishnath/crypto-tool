@@ -10,6 +10,36 @@
     --qs-light: rgba(124, 58, 237, 0.15);
 }
 
+/* ===== Empty-state example chips (math-studio shell) ===== */
+.qs-empty-chips {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.45rem 0.75rem;
+    align-items: center;
+    max-width: 420px;
+    margin: 1rem auto 0;
+    text-align: left;
+}
+.qs-empty-chips .qs-chip-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ms-muted, #78716c);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.qs-empty-chips .ic-example-chip {
+    justify-self: start;
+    text-align: left;
+    font-family: var(--ms-font-mono, JetBrains Mono, monospace);
+    font-size: 0.85rem;
+}
+.qs-empty-hint {
+    color: var(--ms-muted, #78716c);
+    font-size: 0.8rem;
+    margin: 1.25rem 0 0;
+    text-align: center;
+}
+
 /* ===== Form Type Toggle ===== */
 .qs-form-toggle {
     display: flex;

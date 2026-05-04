@@ -28,6 +28,36 @@ function fmtLeading(val, variable) {
     return fmt(val) + variable;
 }
 
+function gcd(a, b) {
+    a = Math.abs(a); b = Math.abs(b);
+    while (b) { var t = b; b = a % b; a = t; }
+    return a || 1;
+}
+
+// Recognize rational numbers up to denominator 12 (covers halves, thirds,
+// quarters, sixths, eighths, twelfths). Returns {num, den} in lowest terms,
+// or null when the value is genuinely irrational.
+function rationalize(n) {
+    if (!isFinite(n)) return null;
+    var sign = n < 0 ? -1 : 1;
+    var abs = Math.abs(n);
+    if (Math.abs(abs - Math.round(abs)) < 1e-6) return { num: sign * Math.round(abs), den: 1 };
+    for (var den = 2; den <= 12; den++) {
+        var num = abs * den;
+        if (Math.abs(num - Math.round(num)) < 1e-6) {
+            var n_int = Math.round(num);
+            var g = gcd(n_int, den);
+            return { num: sign * (n_int / g), den: den / g };
+        }
+    }
+    return null;
+}
+
+function fmtRational(rat) {
+    if (rat.den === 1) return String(rat.num);
+    return '\\frac{' + rat.num + '}{' + rat.den + '}';
+}
+
 function buildStepDOM(number, description, latex) {
     var step = document.createElement('div');
     step.className = 'qs-step';
@@ -162,17 +192,23 @@ function renderHorizontalSolution(result) {
     var v = result.vertex, f = result.focus;
     var html = '<div class="qs-result-section">';
     html += '<div class="qs-result-badge qs-badge-info">Horizontal Parabola</div>';
-    html += '<div class="qs-result-label">Standard Form</div>';
+    html += '<div class="qs-result-label">Standard Conic Form</div>';
     html += '<div class="qs-result-math" id="qs-horiz-std-math"></div>';
     html += '<div class="qs-result-detail" style="margin-top:0.5rem;">';
-    html += '<strong>Vertex S:</strong> (' + fmt(v.h) + ', ' + fmt(v.k) + ') &nbsp; ';
-    html += '<strong>Focus F:</strong> (' + fmt(f.x) + ', ' + fmt(f.y) + ') &nbsp; ';
-    html += '<strong>Directrix:</strong> x = ' + fmt(result.directrix) + ' &nbsp; ';
-    html += '<strong>Opens:</strong> ' + (result.opensRight ? 'Right' : 'Left');
+    html += '<strong>Vertex:</strong> (' + fmt(v.h) + ', ' + fmt(v.k) + ') &nbsp; ';
+    html += '<strong>Focus:</strong> (' + fmt(f.x) + ', ' + fmt(f.y) + ') &nbsp; ';
+    html += '<strong>Directrix:</strong> x = ' + fmt(result.directrix);
     html += '</div>';
     html += '<div class="qs-result-detail" style="margin-top:0.5rem;">';
-    html += '<strong>Parameter a (4p):</strong> ' + fmt(result.p) + ' &nbsp; ';
-    html += '<strong>Equation:</strong> (y ' + (v.k >= 0 ? '\u2212 ' + fmt(v.k) : '+ ' + fmt(-v.k)) + ')\u00B2 = ' + fmt(4 * result.p) + '(x ' + (v.h >= 0 ? '\u2212 ' + fmt(v.h) : '+ ' + fmt(-v.h)) + ')';
+    html += '<strong>Axis of symmetry:</strong> y = ' + fmt(v.k) + ' &nbsp; ';
+    html += '<strong>Opens:</strong> ' + (result.opensRight ? 'Right' : 'Left');
+    html += ' <span style="color:var(--text-muted);font-size:0.85em;">(a ' + (result.opensRight ? '&gt; 0' : '&lt; 0') + ')</span>';
+    html += '</div>';
+    html += '<div class="qs-result-detail" style="margin-top:0.5rem;">';
+    html += '<strong>p</strong> = ' + fmt(result.p) + ' &nbsp;';
+    html += '<span style="color:var(--text-muted);font-size:0.85em;">(focal distance)</span> &nbsp; ';
+    html += '<strong>4p</strong> = ' + fmt(4 * result.p) + ' &nbsp;';
+    html += '<span style="color:var(--text-muted);font-size:0.85em;">(coefficient in (y &minus; k)&sup2; = 4p(x &minus; h))</span>';
     html += '</div>';
     html += '</div>';
     return html;
@@ -197,7 +233,7 @@ function renderHorizontalSteps(result) {
         'x = ' + fmt(a) + 'y^2 ' + (b >= 0 ? '+' : '-') + ' ' + fmt(Math.abs(b)) + 'y ' + (c >= 0 ? '+' : '-') + ' ' + fmt(Math.abs(c))));
 
     var k = -b / (2 * a);
-    frag.appendChild(buildStepDOM(2, '<strong>Complete the square in y</strong>. Vertex y-coordinate: k = -b/(2a)',
+    frag.appendChild(buildStepDOM(2, '<strong>Vertex y-coordinate</strong> from k = &minus;b/(2a)',
         'k = \\frac{-(' + fmt(b) + ')}{2(' + fmt(a) + ')} = ' + fmt(k)));
 
     var h = c - (b * b) / (4 * a);
@@ -220,6 +256,24 @@ function renderInequality(result) {
     html += '<div class="qs-result-label">Solution Set</div>';
     html += '<div class="qs-result-math" id="qs-root-math"></div>';
     html += '<div class="qs-result-detail">' + result.intervalHtml + '</div>';
+
+    // Discriminant detail (parity with standard render)
+    html += '<div class="qs-result-detail" style="margin-top:0.5rem;">';
+    html += '<strong>Discriminant:</strong> &Delta; = ' + fmt(result.disc);
+    if (result.disc > 0) html += ' &gt; 0 (two real roots)';
+    else if (result.disc === 0) html += ' = 0 (one repeated root)';
+    else html += ' &lt; 0 (no real roots &mdash; parabola entirely on one side of x-axis)';
+    html += '</div>';
+
+    // Vertex + axis + opens
+    var h = -result.b / (2 * result.a);
+    var k = result.c - result.b * result.b / (4 * result.a);
+    html += '<div class="qs-result-detail" style="margin-top:0.5rem;">';
+    html += '<strong>Vertex:</strong> (' + fmt(h) + ', ' + fmt(k) + ') &nbsp; ';
+    html += '<strong>Axis:</strong> x = ' + fmt(h) + ' &nbsp; ';
+    html += '<strong>Opens:</strong> ' + (result.a > 0 ? 'Upward' : 'Downward');
+    html += '</div>';
+
     if (result.areaBetweenRoots !== undefined) {
         html += '<div class="qs-result-detail qs-area-box" style="margin-top:0.75rem;">';
         html += '<strong>Area under parabola</strong> (between roots): ';
@@ -346,7 +400,7 @@ function renderCompletingSquareSteps(result) {
 
 function renderFactoringSteps(result) {
     var a = result.a, b = result.b, c = result.c;
-    var disc = result.disc, roots = result.roots;
+    var roots = result.roots;
     var frag = document.createDocumentFragment();
 
     if (roots.type === 'complex') {
@@ -357,13 +411,26 @@ function renderFactoringSteps(result) {
         return frag;
     }
 
-    var isRational = function(n) { return Math.abs(n - Math.round(n)) < 0.0001; };
+    var rat1 = rationalize(roots.x1);
+    var rat2 = rationalize(roots.x2);
 
-    if (isRational(roots.x1) && isRational(roots.x2)) {
-        var r1 = Math.round(roots.x1), r2 = Math.round(roots.x2);
+    // Truly irrational roots (e.g. x = 1 ± √2) — factoring over the rationals
+    // is not possible. Tell the student to switch methods.
+    if (!rat1 || !rat2) {
+        var warn2 = document.createElement('div');
+        warn2.className = 'qs-error';
+        warn2.innerHTML = '<h4>Irrational Roots</h4><p>Roots are irrational: x&#8321; = ' + fmt(roots.x1) +
+            ', x&#8322; = ' + fmt(roots.x2) + '. Use the quadratic formula or completing the square instead &mdash; this equation does not factor over the rationals.</p>';
+        frag.appendChild(warn2);
+        return frag;
+    }
 
-        frag.appendChild(buildStepDOM(1, '<strong>Find two numbers</strong> that multiply to ac = ' + fmt(a * c) + ' and add to b = ' + fmt(b),
-            fmt(a * c) + ' = (' + fmt(-a * r1) + ')(' + fmt(-a * r2 / a) + '), \\quad ' + fmt(-a * r1) + ' + ' + fmt(-a * r2 / a) + ' = ' + fmt(b)));
+    // Both roots integer → classic AC method.
+    if (rat1.den === 1 && rat2.den === 1) {
+        var r1 = rat1.num, r2 = rat2.num;
+        frag.appendChild(buildStepDOM(1,
+            '<strong>Find two numbers</strong> that multiply to ac = ' + fmt(a * c) + ' and add to b = ' + fmt(b),
+            fmt(a * c) + ' = (' + fmt(-a * r1) + ')(' + fmt(-r2) + '), \\quad ' + fmt(-a * r1) + ' + ' + fmt(-r2) + ' = ' + fmt(b)));
 
         var r1Sign = r1 >= 0 ? '-' : '+';
         var r2Sign = r2 >= 0 ? '-' : '+';
@@ -372,12 +439,35 @@ function renderFactoringSteps(result) {
 
         frag.appendChild(buildStepDOM(3, '<strong>Set each factor to zero</strong>',
             'x = ' + fmt(r1) + ' \\quad \\text{or} \\quad x = ' + fmt(r2)));
-    } else {
-        var warn2 = document.createElement('div');
-        warn2.className = 'qs-error';
-        warn2.innerHTML = '<h4>Irrational Roots</h4><p>This equation does not factor neatly over the integers. Roots: x&#8321; = ' + fmt(roots.x1) + ', x&#8322; = ' + fmt(roots.x2) + '</p>';
-        frag.appendChild(warn2);
+        return frag;
     }
+
+    // At least one root is rational with a denominator (e.g. -3/2).
+    // Factor as (p₁x − q₁)(p₂x − q₂) where root q/p comes from factor (px − q).
+    // Leading coefficient p₁·p₂ should match a (any leftover scale stays out front).
+    var p1 = rat1.den, q1 = rat1.num;
+    var p2 = rat2.den, q2 = rat2.num;
+    var leadProd = p1 * p2;
+    var scale = a / leadProd;
+    var scaleLatex = (Math.abs(scale - 1) < 1e-9) ? '' : (Math.abs(scale + 1) < 1e-9 ? '-' : fmt(scale));
+
+    function factorLatex(p, q) {
+        var pStr = (p === 1) ? 'x' : fmt(p) + 'x';
+        var sign = (q >= 0) ? '-' : '+';
+        return pStr + ' ' + sign + ' ' + fmt(Math.abs(q));
+    }
+
+    frag.appendChild(buildStepDOM(1,
+        '<strong>Roots are rational</strong> &mdash; recognize them as fractions',
+        'x_1 = ' + fmtRational(rat1) + ', \\quad x_2 = ' + fmtRational(rat2)));
+
+    frag.appendChild(buildStepDOM(2,
+        '<strong>Factor as</strong> <em>(p&#8321;x &minus; q&#8321;)(p&#8322;x &minus; q&#8322;)</em> &mdash; for root q/p the factor is (px &minus; q)',
+        scaleLatex + '(' + factorLatex(p1, q1) + ')(' + factorLatex(p2, q2) + ') = 0'));
+
+    frag.appendChild(buildStepDOM(3, '<strong>Set each factor to zero</strong>',
+        factorLatex(p1, q1) + ' = 0 \\implies x = ' + fmtRational(rat1) +
+        ', \\quad ' + factorLatex(p2, q2) + ' = 0 \\implies x = ' + fmtRational(rat2)));
 
     return frag;
 }
@@ -385,30 +475,86 @@ function renderFactoringSteps(result) {
 function renderInequalitySteps(result) {
     var a = result.a, b = result.b, c = result.c;
     var roots = result.roots, op = result.operator;
+    var disc = result.disc;
     var frag = document.createDocumentFragment();
 
+    function fEval(x) { return a * x * x + b * x + c; }
+    function opHolds(v) {
+        if (op === '<')  return v <  0;
+        if (op === '<=') return v <= 0;
+        if (op === '>')  return v >  0;
+        if (op === '>=') return v >= 0;
+        return false;
+    }
+
+    // ── No real roots ── parabola entirely above or below the x-axis.
     if (roots.type === 'complex') {
-        var desc = a > 0 ? 'Parabola opens upward with no real roots.' : 'Parabola opens downward with no real roots.';
-        frag.appendChild(buildStepDOM(1, '<strong>Discriminant is negative</strong> &mdash; ' + desc, '\\Delta = ' + fmt(result.disc) + ' < 0'));
+        var allReal = (a > 0 && (op === '>' || op === '>=')) || (a < 0 && (op === '<' || op === '<='));
+        var desc = a > 0
+            ? 'Parabola opens upward with no real roots &mdash; lies entirely above the x-axis.'
+            : 'Parabola opens downward with no real roots &mdash; lies entirely below the x-axis.';
+        frag.appendChild(buildStepDOM(1,
+            '<strong>Discriminant is negative</strong> &mdash; ' + desc,
+            '\\Delta = ' + fmt(disc) + ' < 0'));
+        frag.appendChild(buildStepDOM(2,
+            '<strong>Test any x-value</strong> to confirm the sign of f(x)',
+            'f(0) = ' + fmt(fEval(0)) + ' \\;' + (fEval(0) > 0 ? '> 0' : '< 0')));
+        frag.appendChild(buildStepDOM(3, '<strong>Conclusion</strong>',
+            allReal ? 'x \\in \\mathbb{R} \\;\\text{(all real numbers)}' : '\\emptyset \\;\\text{(no solution)}'));
         return frag;
     }
 
     var x1 = Math.min(roots.x1, roots.x2);
     var x2 = Math.max(roots.x1, roots.x2);
 
-    frag.appendChild(buildStepDOM(1, '<strong>Find the roots</strong>',
+    // ── Step 1: roots
+    frag.appendChild(buildStepDOM(1,
+        '<strong>Find the roots</strong> of <em>' + fmtLeading(a, 'x^2') + ' ' + fmtCoeff(b, 'x') + ' ' + fmtCoeff(c, '') + ' = 0</em>',
         'x_1 = ' + fmt(x1) + ', \\quad x_2 = ' + fmt(x2)));
 
-    frag.appendChild(buildStepDOM(2, '<strong>Test intervals</strong>: The parabola opens ' + (a > 0 ? 'upward' : 'downward'),
-        '(-\\infty, ' + fmt(x1) + '), \\quad (' + fmt(x1) + ', ' + fmt(x2) + '), \\quad (' + fmt(x2) + ', +\\infty)'));
+    // ── Step 2: pick three test points (one per interval) and EVALUATE f(x).
+    var tL = Math.floor(x1) - 1;
+    var tMRaw = (x1 + x2) / 2;
+    var tM = Math.abs(tMRaw - Math.round(tMRaw)) < 1e-9 ? Math.round(tMRaw) : Number(tMRaw.toFixed(2));
+    var tR = Math.ceil(x2) + 1;
+    if (tL >= x1) tL = x1 - 1;
+    if (tR <= x2) tR = x2 + 1;
+    var fL = fEval(tL), fM = fEval(tM), fR = fEval(tR);
 
-    var signInfo;
-    if (a > 0) {
-        signInfo = 'Positive outside roots, negative between roots';
-    } else {
-        signInfo = 'Negative outside roots, positive between roots';
-    }
-    frag.appendChild(buildStepDOM(3, '<strong>Sign chart:</strong> ' + signInfo, null));
+    var checkL = opHolds(fL), checkM = opHolds(fM), checkR = opHolds(fR);
+    var testLatex = '\\begin{array}{lcl}' +
+        'f(' + fmt(tL) + ') &=& ' + fmt(fL) + (fL > 0 ? ' > 0' : (fL < 0 ? ' < 0' : ' = 0')) + (checkL ? ' \\;\\checkmark' : '') + ' \\\\ ' +
+        'f(' + fmt(tM) + ') &=& ' + fmt(fM) + (fM > 0 ? ' > 0' : (fM < 0 ? ' < 0' : ' = 0')) + (checkM ? ' \\;\\checkmark' : '') + ' \\\\ ' +
+        'f(' + fmt(tR) + ') &=& ' + fmt(fR) + (fR > 0 ? ' > 0' : (fR < 0 ? ' < 0' : ' = 0')) + (checkR ? ' \\;\\checkmark' : '') +
+        '\\end{array}';
+    frag.appendChild(buildStepDOM(2,
+        '<strong>Test one x-value from each interval</strong> &mdash; pick a point in <em>(&minus;&infin;, ' + fmt(x1) + ')</em>, <em>(' + fmt(x1) + ', ' + fmt(x2) + ')</em>, and <em>(' + fmt(x2) + ', +&infin;)</em>',
+        testLatex));
+
+    // ── Step 3: visible sign chart strip.
+    var sL = fL > 0 ? '+' : (fL < 0 ? '−' : '0');
+    var sM = fM > 0 ? '+' : (fM < 0 ? '−' : '0');
+    var sR = fR > 0 ? '+' : (fR < 0 ? '−' : '0');
+    var colorPos = '#15803d', colorNeg = '#dc2626';
+    var step3 = buildStepDOM(3, '<strong>Sign chart</strong>', null);
+    var chartHTML =
+        '<div class="qs-sign-chart" style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:0.5rem;align-items:center;text-align:center;margin:0.5rem 0;padding:0.75rem 0.5rem;background:var(--bg-secondary,#f5f5f4);border:1px solid var(--border,rgba(0,0,0,0.08));border-radius:0.5rem;font-family:var(--font-mono,monospace);font-size:1rem;">' +
+        '<span style="color:' + (fL > 0 ? colorPos : colorNeg) + ';font-weight:700;font-size:1.15rem;">(' + sL + ')</span>' +
+        '<span style="background:var(--qs-tool,#7c3aed);color:#fff;padding:0.2rem 0.5rem;border-radius:999px;font-size:0.8rem;font-weight:600;">x = ' + fmt(x1) + '</span>' +
+        '<span style="color:' + (fM > 0 ? colorPos : colorNeg) + ';font-weight:700;font-size:1.15rem;">(' + sM + ')</span>' +
+        '<span style="background:var(--qs-tool,#7c3aed);color:#fff;padding:0.2rem 0.5rem;border-radius:999px;font-size:0.8rem;font-weight:600;">x = ' + fmt(x2) + '</span>' +
+        '<span style="color:' + (fR > 0 ? colorPos : colorNeg) + ';font-weight:700;font-size:1.15rem;">(' + sR + ')</span>' +
+        '</div>';
+    var holder = document.createElement('div');
+    holder.innerHTML = chartHTML;
+    var content3 = step3.querySelector('.qs-step-content');
+    if (content3) content3.appendChild(holder.firstChild);
+    frag.appendChild(step3);
+
+    // ── Step 4: read the satisfying intervals.
+    frag.appendChild(buildStepDOM(4,
+        '<strong>Read the intervals</strong> where f(x) ' + (op === '>=' ? '&ge;' : op === '<=' ? '&le;' : op) + ' 0',
+        result.intervalLatex));
 
     return frag;
 }

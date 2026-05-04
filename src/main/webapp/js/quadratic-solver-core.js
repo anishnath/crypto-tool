@@ -911,10 +911,11 @@ function init() {
         btn.parentElement.classList.toggle('open');
     };
 
-    // Load from URL or auto-solve
+    // Load from URL or auto-solve (bridge-driven pages opt out of the
+    // 1+5+6 demo so the MathLive empty state isn't preempted).
     if (!loadFromURL()) {
         updatePreview();
-        setTimeout(solve, 300);
+        if (!window.__QS_BRIDGE_NO_AUTOSOLVE) setTimeout(solve, 300);
     }
 }
 
