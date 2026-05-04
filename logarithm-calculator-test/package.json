@@ -1,0 +1,14 @@
+{
+    "name": "logarithm-calculator-test",
+    "version": "1.0.0",
+    "description": "Test suite for logarithm-calculator.jsp — covers the input normalizer, the JS extraneous-solution filter, the SymPy power-engine template (expand_log, logcombine, simplify, solve with domain filter).",
+    "private": true,
+    "scripts": {
+        "test": "node logarithm-test.js",
+        "test:sympy": "python3 sympy-cases-test.py",
+        "test:all": "npm run test && npm run test:sympy"
+    },
+    "dependencies": {
+        "nerdamer": "1.1.13"
+    }
+}
