@@ -26,7 +26,7 @@
         <jsp:param name="educationalLevel" value="High School, College" />
         <jsp:param name="teaches" value="Calculus, differentiation, derivatives, chain rule, product rule" />
         <jsp:param name="howToSteps" value="Enter your function|Type your expression (e.g. x^2, sin(x), e^x) in the function input field,Select derivative order|Choose 1st, 2nd, 3rd, 4th, or 5th derivative,Click Differentiate|Click the button to compute the derivative,View steps &amp; graph|See step-by-step solution with rule identification, interactive graph, and optional point evaluation" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
         <jsp:param name="toolFeatures" value="Step-by-step with rule identification,1st through 5th derivatives,Live KaTeX preview,Interactive Plotly graph,Critical points detection,Point evaluation f prime(a),Download PDF,Copy LaTeX,Share URL,Python SymPy compiler,Dark mode" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="What is a derivative in calculus?" />
