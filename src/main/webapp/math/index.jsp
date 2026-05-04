@@ -9,7 +9,7 @@
         <jsp:param name="toolDescription" value="48 free math calculators with step-by-step solutions. Percentage, algebra, statistics, calculus, matrices, and more. All free, no signup." />
         <jsp:param name="toolUrl" value="math/" />
         <jsp:param name="toolKeywords" value="math calculator, online math tools, percentage calculator, quadratic solver, matrix calculator, integral calculator, derivative calculator, logarithm calculator, series calculator, limit calculator, step by step math, free math solver" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
         <jsp:param name="toolFeatures" value="48 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode,Mobile responsive,100% free" />
         <jsp:param name="teaches" value="Arithmetic, algebra, calculus, linear algebra, matrix operations, series and sequences, logarithms, exponents, percentages, statistics" />
         <jsp:param name="educationalLevel" value="Middle School, High School, Undergraduate" />
