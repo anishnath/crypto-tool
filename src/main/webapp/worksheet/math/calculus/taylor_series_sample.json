@@ -1,0 +1,56 @@
+{
+    "topic": "Taylor Series",
+    "description": "Practice worksheet for Taylor series expansions.",
+    "questions": [
+        {
+            "id": 1,
+            "difficulty": "basic",
+            "function_latex": "\\frac{1}{x + 1}",
+            "center_latex": "0",
+            "order": 3,
+            "question_text": "Find the Taylor series expansion of \\( f(x) = \\frac{1}{x + 1} \\) at center \\( a = 0 \\) up to order 3.",
+            "answer_latex": "- x^{3} + x^{2} - x + 1",
+            "answer_plain": "-x**3 + x**2 - x + 1"
+        },
+        {
+            "id": 2,
+            "difficulty": "basic",
+            "function_latex": "\\sqrt{x + 1}",
+            "center_latex": "0",
+            "order": 4,
+            "question_text": "Find the Taylor series expansion of \\( f(x) = \\sqrt{x + 1} \\) at center \\( a = 0 \\) up to order 4.",
+            "answer_latex": "- \\frac{5 x^{4}}{128} + \\frac{x^{3}}{16} - \\frac{x^{2}}{8} + \\frac{x}{2} + 1",
+            "answer_plain": "-5*x**4/128 + x**3/16 - x**2/8 + x/2 + 1"
+        },
+        {
+            "id": 3,
+            "difficulty": "medium",
+            "function_latex": "e^{x}",
+            "center_latex": "0",
+            "order": 4,
+            "question_text": "Find the Taylor series expansion of \\( f(x) = e^{x} \\) at center \\( a = 0 \\) up to order 4.",
+            "answer_latex": "\\frac{x^{4}}{24} + \\frac{x^{3}}{6} + \\frac{x^{2}}{2} + x + 1",
+            "answer_plain": "x**4/24 + x**3/6 + x**2/2 + x + 1"
+        },
+        {
+            "id": 4,
+            "difficulty": "medium",
+            "function_latex": "\\sin{\\left(x^{2} \\right)}",
+            "center_latex": "0",
+            "order": 5,
+            "question_text": "Find the Taylor series expansion of \\( f(x) = \\sin{\\left(x^{2} \\right)} \\) at center \\( a = 0 \\) up to order 5.",
+            "answer_latex": "x^{2}",
+            "answer_plain": "x**2"
+        },
+        {
+            "id": 5,
+            "difficulty": "hard",
+            "function_latex": "e^{x} \\sin{\\left(x \\right)}",
+            "center_latex": "0",
+            "order": 6,
+            "question_text": "Find the Taylor series expansion of \\( f(x) = e^{x} \\sin{\\left(x \\right)} \\) at center \\( a = 0 \\) up to order 6.",
+            "answer_latex": "- \\frac{x^{6}}{90} - \\frac{x^{5}}{30} + \\frac{x^{3}}{3} + x^{2} + x",
+            "answer_plain": "-x**6/90 - x**5/30 + x**3/3 + x**2 + x"
+        }
+    ]
+}
