@@ -502,6 +502,26 @@
             background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
             color: white;
         }
+        .icon-electronics {
+            background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);
+            color: white;
+        }
+        .icon-video {
+            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            color: white;
+        }
+        .icon-seo {
+            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+            color: white;
+        }
+        .icon-ctf {
+            background: linear-gradient(135deg, #434343 0%, #000000 100%);
+            color: white;
+        }
+        .icon-compiler {
+            background: linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%);
+            color: #1e293b;
+        }
 
         /* Footer */
         .page-footer {
@@ -685,6 +705,11 @@
                 <a href="#tools" class="category-pill">Mathematics</a>
                 <a href="#tools" class="category-pill">Chemistry</a>
                 <a href="#tools" class="category-pill">Finance</a>
+                <a href="#tools" class="category-pill">Electronics</a>
+                <a href="#tools" class="category-pill">Video AI</a>
+                <a href="#tools" class="category-pill">SEO Audits</a>
+                <a href="#tools" class="category-pill">CTF</a>
+                <a href="#tools" class="category-pill">Compilers</a>
             </div>
         </div>
     </section>
@@ -987,6 +1012,113 @@
                         <li><a href="inclined-plane-calculator.jsp" class="tool-link">Inclined Plane</a></li>
                         <li><a href="projectile-motion-simulator.jsp" class="tool-link">Projectile Motion</a></li>
                         <li><a href="molecular-geometry-calculator.jsp" class="tool-link">Molecular Geometry</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Electronics & Simulation -->
+            <div class="tool-card fade-in">
+                <div class="tool-card-header">
+                    <div class="tool-icon icon-electronics">⚡</div>
+                    <div>
+                        <h3 class="tool-title">Electronics & Simulation</h3>
+                    </div>
+                </div>
+                <p class="tool-description">Circuit simulator with AI, Arduino & ESP32 emulator, and digital logic simulator with truth tables and K-maps.</p>
+                <ul class="tool-links">
+                    <li><a href="electronics/index.jsp" class="tool-link">Electronics Hub</a></li>
+                    <li><a href="physics/labs/circuit-simulator.jsp" class="tool-link">Circuit Simulator (AI)</a></li>
+                    <li><a href="electronics/arduino-simulator.jsp" class="tool-link">Arduino & ESP32 Sim</a></li>
+                    <li><a href="electronics/logic-simulator.jsp" class="tool-link">Logic Gate Simulator</a></li>
+                </ul>
+            </div>
+
+            <!-- Video & Audio AI -->
+            <div class="tool-card fade-in">
+                <div class="tool-card-header">
+                    <div class="tool-icon icon-video">🎬</div>
+                    <div>
+                        <h3 class="tool-title">Video & Audio AI</h3>
+                    </div>
+                </div>
+                <p class="tool-description">AI video transcription and translation in 90+ languages. Export plain text, SRT, or VTT subtitles. No signup.</p>
+                <ul class="tool-links">
+                    <li><a href="video/index.jsp" class="tool-link">AI Video Transcription</a></li>
+                    <li><a href="video/index.jsp" class="tool-link">Translate to English</a></li>
+                    <li><a href="video/index.jsp" class="tool-link">Export SRT Subtitles</a></li>
+                    <li><a href="video/index.jsp" class="tool-link">Export VTT Subtitles</a></li>
+                </ul>
+            </div>
+
+            <!-- SEO & Web Audits -->
+            <div class="tool-card fade-in">
+                <div class="tool-card-header">
+                    <div class="tool-icon icon-seo">📊</div>
+                    <div>
+                        <h3 class="tool-title">SEO & Web Audits</h3>
+                    </div>
+                </div>
+                <p class="tool-description">Lighthouse audits with AI fix suggestions, AI SEO checker for 79+ issues, structured-data validator. Core Web Vitals & accessibility.</p>
+                <ul class="tool-links">
+                    <li><a href="seo/index.jsp" class="tool-link">SEO Tools Hub</a></li>
+                    <li><a href="seo/lighthouse.jsp" class="tool-link">Lighthouse Audit</a></li>
+                    <li><a href="seo/seo-checker.jsp" class="tool-link">AI SEO Checker</a></li>
+                    <li><a href="seo/structured-data.jsp" class="tool-link">Structured Data Test</a></li>
+                </ul>
+            </div>
+
+            <!-- CTF Challenge Generators -->
+            <div class="tool-card fade-in">
+                <div class="tool-card-header">
+                    <div class="tool-icon icon-ctf">🚩</div>
+                    <div>
+                        <h3 class="tool-title">CTF Challenge Generators</h3>
+                    </div>
+                </div>
+                <p class="tool-description">Capture-the-Flag practice generators for crypto, forensics, reverse engineering, RSA, and steganography. Parameterised difficulty.</p>
+                <ul class="tool-links">
+                    <li><a href="ctf/index.jsp" class="tool-link">CTF Hub</a></li>
+                    <li><a href="ctf/rsa-ctf-generator.jsp" class="tool-link">RSA CTF Generator</a></li>
+                    <li><a href="ctf/crypto-ctf-generator.jsp" class="tool-link">Crypto CTF Generator</a></li>
+                    <li><a href="ctf/forensic-ctf-generator.jsp" class="tool-link">Forensics CTF</a></li>
+                    <li><a href="ctf/re-ctf-generator.jsp" class="tool-link">Reverse Eng CTF</a></li>
+                    <li><a href="ctf/stego-ctf-generator.jsp" class="tool-link">Stego CTF</a></li>
+                </ul>
+            </div>
+
+            <!-- Online Code Compilers -->
+            <div class="tool-card fade-in">
+                <div class="tool-card-header">
+                    <div class="tool-icon icon-compiler">⌨️</div>
+                    <div>
+                        <h3 class="tool-title">Online Code Compilers</h3>
+                    </div>
+                </div>
+                <p class="tool-description">19 free browser-based compilers and runtimes — Python, Java, C, C++, JavaScript, Go, Rust, and more. No installs.</p>
+                <ul class="tool-links">
+                    <li><a href="online-compiler/index.jsp" class="tool-link">Compilers Hub</a></li>
+                    <li><a href="online-python-compiler/index.jsp" class="tool-link">Python</a></li>
+                    <li><a href="online-java-compiler/index.jsp" class="tool-link">Java</a></li>
+                    <li><a href="online-cpp-compiler/index.jsp" class="tool-link">C++</a></li>
+                    <li><a href="online-c-compiler/index.jsp" class="tool-link">C</a></li>
+                    <li><a href="online-javascript-compiler/index.jsp" class="tool-link">JavaScript</a></li>
+                </ul>
+                <button class="tool-more-btn" onclick="toggleToolMore(event, this, 'compilerMore')">View All →</button>
+                <div id="compilerMore" class="tool-more-content">
+                    <ul class="tool-links">
+                        <li><a href="online-go-compiler/index.jsp" class="tool-link">Go</a></li>
+                        <li><a href="online-rust-compiler/index.jsp" class="tool-link">Rust</a></li>
+                        <li><a href="online-typescript-compiler/index.jsp" class="tool-link">TypeScript</a></li>
+                        <li><a href="online-kotlin-compiler/index.jsp" class="tool-link">Kotlin</a></li>
+                        <li><a href="online-swift-compiler/index.jsp" class="tool-link">Swift</a></li>
+                        <li><a href="online-csharp-compiler/index.jsp" class="tool-link">C#</a></li>
+                        <li><a href="online-ruby-compiler/index.jsp" class="tool-link">Ruby</a></li>
+                        <li><a href="online-php-compiler/index.jsp" class="tool-link">PHP</a></li>
+                        <li><a href="online-scala-compiler/index.jsp" class="tool-link">Scala</a></li>
+                        <li><a href="online-dart-compiler/index.jsp" class="tool-link">Dart</a></li>
+                        <li><a href="online-r-compiler/index.jsp" class="tool-link">R</a></li>
+                        <li><a href="online-lua-compiler/index.jsp" class="tool-link">Lua</a></li>
+                        <li><a href="online-bash-compiler/index.jsp" class="tool-link">Bash</a></li>
                     </ul>
                 </div>
             </div>
