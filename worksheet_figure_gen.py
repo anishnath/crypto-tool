@@ -895,10 +895,387 @@ def generate_figure_for_system_equations(q_type, rec, entry_id, out_dir):
             var_y = rec.get("var_y")
             ans_x = rec.get("ans_x")
             ans_y = rec.get("ans_y")
-            
+
             return fig_system_intersection(eq1_lhs, eq1_rhs, eq2_lhs, eq2_rhs, var_x, var_y, ans_x, ans_y, out_dir, entry_id)
     except Exception as e:
         print(f"Error generating system graph: {e}")
         return None
 
+    return None
+
+
+# ───────────────────────────────────────────────────────────────────────
+# TRIGONOMETRY FIGURES
+# ───────────────────────────────────────────────────────────────────────
+
+def fig_right_triangle(opp, adj, hyp, angle_label, out_dir, qid,
+                       which_unknown=None):
+    """
+    Right triangle with legs `adj` (horizontal) and `opp` (vertical),
+    hypotenuse `hyp`.  `angle_label` is the symbol to mark at the
+    vertex between adj and hyp (e.g. 'θ').  `which_unknown` ∈
+    {'opp', 'adj', 'hyp', None} marks the unknown side with a '?'.
+    """
+    fig, ax = _create_fig()
+    ax.set_aspect('equal')
+    ax.set_xlim(-0.6, max(adj, 1) * 1.3)
+    ax.set_ylim(-0.6, max(opp, 1) * 1.3)
+    ax.axis('off')
+
+    # Triangle vertices: A (right angle, origin), B (right), C (top)
+    A = (0, 0)
+    B = (adj, 0)
+    C = (adj, opp)
+
+    # Edges
+    ax.plot([A[0], B[0]], [A[1], B[1]], color='#1c1917', linewidth=1.8)  # adj
+    ax.plot([B[0], C[0]], [B[1], C[1]], color='#1c1917', linewidth=1.8)  # opp
+    ax.plot([C[0], A[0]], [C[1], A[1]], color='#1c1917', linewidth=1.8)  # hyp
+
+    # Right-angle box at A
+    box_size = min(adj, opp) * 0.07
+    ax.plot([box_size, box_size, 0], [0, box_size, box_size],
+            color='#1c1917', linewidth=1.0)
+
+    # Side labels
+    def lbl(side, value, unknown):
+        return '?' if which_unknown == unknown else str(value)
+
+    ax.annotate(lbl(adj, adj, 'adj'), xy=(adj/2, -0.15),
+                ha='center', va='top', fontsize=11, color='#1c1917')
+    ax.annotate(lbl(opp, opp, 'opp'), xy=(adj + 0.15, opp/2),
+                ha='left', va='center', fontsize=11, color='#1c1917')
+    # Hypotenuse label — rotate along edge
+    hx, hy = adj/2, opp/2
+    ax.annotate(lbl(hyp, hyp, 'hyp'),
+                xy=(hx - 0.2, hy + 0.15),
+                ha='right', va='bottom', fontsize=11, color='#1c1917')
+
+    # Angle θ at vertex C (top) — between hyp and opp side
+    # Place label slightly below C, toward A
+    ax.annotate(angle_label, xy=(adj - 0.2, opp - 0.25),
+                ha='right', va='top', fontsize=13,
+                color='#15803d', fontweight='bold')
+
+    fname = f'right_triangle_{qid:03d}.svg'
+    return save_svg(fig, out_dir, fname)
+
+
+def fig_unit_circle(angle_rad, out_dir, qid, label_point=True):
+    """Unit circle with `angle_rad` marked, point on circle highlighted."""
+    import math
+    fig, ax = _create_fig()
+    ax.set_aspect('equal')
+    ax.set_xlim(-1.4, 1.4)
+    ax.set_ylim(-1.4, 1.4)
+    ax.axis('off')
+
+    # Axes
+    ax.axhline(0, color='#a8a29e', linewidth=0.8, zorder=1)
+    ax.axvline(0, color='#a8a29e', linewidth=0.8, zorder=1)
+
+    # Unit circle
+    theta = [t * 2 * math.pi / 200 for t in range(201)]
+    cx = [math.cos(t) for t in theta]
+    cy = [math.sin(t) for t in theta]
+    ax.plot(cx, cy, color='#1c1917', linewidth=1.2)
+
+    # Angle arc
+    arc_t = [t * angle_rad / 60 for t in range(61)] if angle_rad >= 0 else \
+            [t * angle_rad / 60 for t in range(60, -1, -1)]
+    arc_r = 0.25
+    ax.plot([arc_r * math.cos(t) for t in arc_t],
+            [arc_r * math.sin(t) for t in arc_t],
+            color='#15803d', linewidth=1.6)
+
+    # Terminal radius
+    px, py = math.cos(angle_rad), math.sin(angle_rad)
+    ax.plot([0, px], [0, py], color='#15803d', linewidth=1.6)
+
+    # Point on circle
+    if label_point:
+        ax.plot([px], [py], 'o', color='#15803d', markersize=7)
+        ax.annotate(f'({px:.3g}, {py:.3g})',
+                    xy=(px, py), xytext=(8, 8),
+                    textcoords='offset points',
+                    fontsize=10, color='#15803d')
+
+    # Angle label
+    mid_t = angle_rad / 2
+    ax.annotate(r'$\theta$', xy=(arc_r * 1.5 * math.cos(mid_t),
+                                  arc_r * 1.5 * math.sin(mid_t)),
+                fontsize=12, color='#15803d', fontweight='bold',
+                ha='center', va='center')
+
+    # Axis tick marks
+    for v in [-1, 1]:
+        ax.plot([v, v], [-0.04, 0.04], color='#1c1917', linewidth=0.8)
+        ax.plot([-0.04, 0.04], [v, v], color='#1c1917', linewidth=0.8)
+
+    fname = f'unit_circle_{qid:03d}.svg'
+    return save_svg(fig, out_dir, fname)
+
+
+def fig_height_distance(distance, height, angle_deg, scenario, out_dir, qid):
+    """
+    Height-and-distance NCERT word problem figure.
+    `scenario` ∈ {'elevation', 'depression'}.
+    Draws the observer, the object, and the line of sight with the angle.
+    """
+    fig, ax = _create_fig()
+    ax.set_aspect('equal')
+    pad_y = max(height, 1) * 0.2
+    pad_x = max(distance, 1) * 0.15
+    ax.set_xlim(-pad_x, distance + pad_x)
+    ax.set_ylim(-pad_y, height + pad_y)
+    ax.axis('off')
+
+    # Ground
+    ax.plot([-pad_x, distance + pad_x], [0, 0],
+            color='#a8a29e', linewidth=1.2)
+
+    # Object (vertical line at x = distance)
+    ax.plot([distance, distance], [0, height],
+            color='#1c1917', linewidth=2.5)
+
+    if scenario == 'elevation':
+        # Observer at origin looking up
+        observer = (0, 0)
+        target   = (distance, height)
+        ax.annotate('observer', xy=(0, -0.05),
+                    ha='center', va='top', fontsize=10,
+                    color='#1c1917')
+    else:  # depression
+        observer = (0, height)
+        target   = (distance, 0)
+        # Observer-side vertical
+        ax.plot([0, 0], [0, height], color='#1c1917', linewidth=2.5)
+        ax.annotate('observer', xy=(-0.1, height + 0.1),
+                    ha='right', va='bottom', fontsize=10,
+                    color='#1c1917')
+
+    # Line of sight
+    ax.plot([observer[0], target[0]], [observer[1], target[1]],
+            color='#15803d', linewidth=1.8, linestyle='--')
+
+    # Distance label (ground)
+    ax.annotate(f'{distance} m', xy=(distance/2, -pad_y * 0.5),
+                ha='center', va='top', fontsize=10, color='#1c1917')
+
+    # Height label (vertical)
+    ax.annotate(f'{height} m', xy=(distance + pad_x * 0.3,
+                                    height/2),
+                ha='left', va='center', fontsize=10, color='#1c1917')
+
+    # Angle arc near observer
+    import math
+    angle_rad = math.radians(angle_deg)
+    arc_r = min(distance, height) * 0.18
+    if scenario == 'elevation':
+        arc_t = [t * angle_rad / 30 for t in range(31)]
+        cx = [observer[0] + arc_r * math.cos(t) for t in arc_t]
+        cy = [observer[1] + arc_r * math.sin(t) for t in arc_t]
+    else:
+        arc_t = [-t * angle_rad / 30 for t in range(31)]
+        cx = [observer[0] + arc_r * math.cos(t) for t in arc_t]
+        cy = [observer[1] + arc_r * math.sin(t) for t in arc_t]
+    ax.plot(cx, cy, color='#15803d', linewidth=1.4)
+    # Angle label
+    mid_t = (-angle_rad if scenario == 'depression' else angle_rad) / 2
+    ax.annotate(f'{angle_deg}°',
+                xy=(observer[0] + arc_r * 1.5 * math.cos(mid_t),
+                    observer[1] + arc_r * 1.5 * math.sin(mid_t)),
+                fontsize=11, color='#15803d', fontweight='bold',
+                ha='center', va='center')
+
+    fname = f'height_distance_{qid:03d}.svg'
+    return save_svg(fig, out_dir, fname)
+
+
+def fig_general_triangle(side_a, side_b, side_c,
+                         angle_A_deg, angle_B_deg, angle_C_deg,
+                         labels, out_dir, qid):
+    """
+    General (oblique) triangle for law-of-sines / law-of-cosines.
+    `labels` is a dict telling which sides/angles to display:
+        e.g. {'a': '5', 'b': '7', 'C': '60°', 'A': '?', ...}
+    """
+    import math
+    fig, ax = _create_fig()
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    # Place vertices: A at origin, B on positive x-axis at (c, 0)
+    # C computed using the angle at A
+    a, b, c = side_a, side_b, side_c
+    A = (0, 0)
+    B = (c, 0)
+    angle_A_rad = math.radians(angle_A_deg)
+    C = (b * math.cos(angle_A_rad), b * math.sin(angle_A_rad))
+
+    # Plot triangle
+    ax.plot([A[0], B[0]], [A[1], B[1]], color='#1c1917', linewidth=1.8)
+    ax.plot([B[0], C[0]], [B[1], C[1]], color='#1c1917', linewidth=1.8)
+    ax.plot([C[0], A[0]], [C[1], A[1]], color='#1c1917', linewidth=1.8)
+
+    # Axis limits with padding
+    xs, ys = [A[0], B[0], C[0]], [A[1], B[1], C[1]]
+    pad = max(max(xs) - min(xs), max(ys) - min(ys)) * 0.18
+    ax.set_xlim(min(xs) - pad, max(xs) + pad)
+    ax.set_ylim(min(ys) - pad, max(ys) + pad)
+
+    # Vertex labels
+    ax.annotate('A', xy=A, xytext=(-12, -10), textcoords='offset points',
+                fontsize=12, fontweight='bold', color='#1c1917')
+    ax.annotate('B', xy=B, xytext=(8, -10), textcoords='offset points',
+                fontsize=12, fontweight='bold', color='#1c1917')
+    ax.annotate('C', xy=C, xytext=(0, 8), textcoords='offset points',
+                fontsize=12, fontweight='bold', color='#1c1917',
+                ha='center')
+
+    # Side labels (at midpoints, slightly outside)
+    def midpoint(P, Q): return ((P[0] + Q[0]) / 2, (P[1] + Q[1]) / 2)
+    side_pos = {
+        'a': midpoint(B, C),  # opposite A
+        'b': midpoint(A, C),  # opposite B
+        'c': midpoint(A, B),  # opposite C
+    }
+    for k, v in side_pos.items():
+        if k in labels:
+            ax.annotate(str(labels[k]), xy=v,
+                        xytext=(0, 6 if k == 'c' else 0),
+                        textcoords='offset points',
+                        fontsize=10, color='#15803d',
+                        fontweight='bold', ha='center', va='center')
+
+    # Angle labels (close to each vertex)
+    angle_pos = {
+        'A': (A[0] + 0.18, A[1] + 0.18),
+        'B': (B[0] - 0.25, B[1] + 0.18),
+        'C': (C[0], C[1] - 0.22),
+    }
+    for k, v in angle_pos.items():
+        if k in labels:
+            ax.annotate(str(labels[k]), xy=v, fontsize=10,
+                        color='#15803d', fontweight='bold',
+                        ha='center', va='center')
+
+    fname = f'triangle_{qid:03d}.svg'
+    return save_svg(fig, out_dir, fname)
+
+
+def fig_trig_wave(func_name, period_factor, amplitude, phase_shift,
+                   out_dir, qid):
+    """
+    Plot one period of a sinusoidal wave: A * func(B*x + C) where
+    func ∈ {'sin', 'cos'}, period = 2π/B, amplitude = A.
+    """
+    import math
+    fig, ax = _create_fig()
+    ax.axhline(0, color='#a8a29e', linewidth=0.8)
+    ax.axvline(0, color='#a8a29e', linewidth=0.8)
+
+    period = 2 * math.pi / period_factor
+    n = 400
+    xs = [-period * 1.1 + i * (2.2 * period / n) for i in range(n + 1)]
+
+    fn = math.sin if func_name == 'sin' else math.cos
+    ys = [amplitude * fn(period_factor * x + phase_shift) for x in xs]
+
+    ax.plot(xs, ys, color='#15803d', linewidth=1.8)
+
+    ax.set_xlim(-period * 1.1, period * 1.1)
+    ax.set_ylim(-amplitude * 1.5, amplitude * 1.5)
+
+    # Tick marks at ±π/2, ±π
+    for v in [-math.pi, -math.pi/2, math.pi/2, math.pi]:
+        if -period * 1.1 < v < period * 1.1:
+            ax.plot([v, v], [-0.07, 0.07], color='#1c1917', linewidth=0.8)
+
+    ax.set_xlabel('x', fontsize=10, color='#1c1917')
+    ax.set_ylabel(f'y = {amplitude}·{func_name}({period_factor}x'
+                  + (f' + {phase_shift:.2f}' if phase_shift else '') + ')',
+                  fontsize=10, color='#1c1917')
+
+    fname = f'trig_wave_{qid:03d}.svg'
+    return save_svg(fig, out_dir, fname)
+
+
+FIGURE_TYPES_TRIGONOMETRY = {
+    'right_triangle_basic',
+    'right_triangle_ratios',
+    'right_triangle_find_angle',
+    'right_triangle_real_world',
+    'pythagorean_identity',
+    'unit_circle_evaluate',
+    'unit_circle_quadrant_reference',
+    'height_distance_elevation',
+    'height_distance_depression',
+    'height_distance_two_angles',
+    'height_distance_aircraft',
+    'law_of_sines',
+    'law_of_cosines',
+    'triangle_sss_find_angle',
+    'triangle_area_sas',
+    'triangle_ssa_ambiguous',
+    'trig_graph_features',
+}
+
+
+def generate_figure_for_trigonometry(q_type, rec, entry_id, out_dir):
+    """Generate a figure for a trigonometry question if applicable."""
+    if q_type not in FIGURE_TYPES_TRIGONOMETRY:
+        return None
+    try:
+        if q_type in ('right_triangle_basic', 'right_triangle_ratios',
+                      'right_triangle_find_angle', 'right_triangle_real_world',
+                      'pythagorean_identity'):
+            opp = rec.get('opp')
+            adj = rec.get('adj')
+            hyp = rec.get('hyp')
+            unknown = rec.get('unknown')  # 'opp' / 'adj' / 'hyp' / None
+            if None in (opp, adj, hyp):
+                return None
+            return fig_right_triangle(
+                opp, adj, hyp, r'$\theta$', out_dir, entry_id, unknown)
+
+        if q_type in ('unit_circle_evaluate', 'unit_circle_quadrant_reference'):
+            angle = rec.get('angle_rad')
+            if angle is None:
+                return None
+            return fig_unit_circle(angle, out_dir, entry_id)
+
+        if q_type in ('height_distance_elevation', 'height_distance_depression',
+                       'height_distance_two_angles', 'height_distance_aircraft'):
+            distance = rec.get('distance')
+            height   = rec.get('height')
+            angle    = rec.get('angle_deg')
+            if None in (distance, height, angle):
+                return None
+            scenario = ('depression' if q_type == 'height_distance_depression'
+                        else 'elevation')
+            return fig_height_distance(distance, height, angle,
+                                       scenario, out_dir, entry_id)
+
+        if q_type in ('law_of_sines', 'law_of_cosines',
+                       'triangle_sss_find_angle', 'triangle_area_sas',
+                       'triangle_ssa_ambiguous'):
+            a = rec.get('side_a'); b = rec.get('side_b'); c = rec.get('side_c')
+            A = rec.get('angle_A_deg', 60)
+            B_ = rec.get('angle_B_deg', 60)
+            C  = rec.get('angle_C_deg', 60)
+            labels = rec.get('labels', {})
+            if None in (a, b, c):
+                return None
+            return fig_general_triangle(a, b, c, A, B_, C,
+                                        labels, out_dir, entry_id)
+
+        if q_type == 'trig_graph_features':
+            return fig_trig_wave(rec.get('func', 'sin'),
+                                  rec.get('period_factor', 1),
+                                  rec.get('amplitude', 1),
+                                  rec.get('phase_shift', 0),
+                                  out_dir, entry_id)
+    except Exception:
+        return None
     return None
