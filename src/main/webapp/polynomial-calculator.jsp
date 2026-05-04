@@ -27,13 +27,13 @@
         root SEO. See math/MIGRATION_TEMPLATE.md.
     --%>
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Polynomial Calculator with Steps - Factor, Roots, Division" />
-        <jsp:param name="toolDescription" value="Free polynomial calculator with step-by-step solutions. Add, subtract, multiply, divide, factor, find roots of any degree polynomial." />
+        <jsp:param name="toolName" value="Polynomial Calculator with Steps — AI Scan &amp; Worksheets" />
+        <jsp:param name="toolDescription" value="Free polynomial calculator with AI photo scan + 1,500 practice problems. Add, multiply, divide, factor any-degree polynomials with steps." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="polynomial-calculator.jsp" />
-        <jsp:param name="toolKeywords" value="polynomial calculator, polynomial calculator with steps, factor polynomial, polynomial long division calculator, find roots of polynomial, polynomial addition calculator, polynomial multiplication, polynomial solver, polynomial graphing calculator, algebra calculator, polynomial division with remainder" />
+        <jsp:param name="toolKeywords" value="polynomial calculator, polynomial calculator with steps, factor polynomial, polynomial long division calculator, find roots of polynomial, polynomial addition calculator, polynomial multiplication, polynomial solver, polynomial graphing calculator, algebra calculator, polynomial division with remainder, ai polynomial solver, photo math solver, scan polynomial from photo, ai math homework helper, polynomial photo solver, math problem photo scanner, polynomial worksheet, polynomial worksheet pdf, polynomial worksheet with answers, polynomial practice problems, factoring polynomials worksheet, polynomial worksheet for class 9, polynomial worksheet for class 10, printable polynomial worksheet, polynomial practice problems with answers" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Add subtract multiply divide polynomials,Step-by-step solutions with LaTeX rendering,Factor polynomials of any degree,Find all real and complex roots,Polynomial long division with remainder,Interactive graph with Plotly,Python code generation,LaTeX and share URL export" />
+        <jsp:param name="toolFeatures" value="Add subtract multiply divide polynomials,Step-by-step solutions with LaTeX rendering,Factor polynomials of any degree,Find all real and complex roots,Polynomial long division with remainder,Interactive graph with Plotly,Python code generation,LaTeX and share URL export,AI photo scanner extracts polynomials from images,1500+ SymPy-verified practice problems with answer key,26 problem types from basic to scholar level,Printable polynomial worksheet,Photo math problem solver,Auto-detect polynomial operation from image,Free with no signup or limits" />
         <jsp:param name="teaches" value="Polynomial arithmetic, polynomial long division, polynomial factoring, root finding, Rational Root Theorem, synthetic division" />
         <jsp:param name="educationalLevel" value="High School, College, University" />
         <jsp:param name="hasSteps" value="true" />
@@ -48,6 +48,12 @@
         <jsp:param name="faq4a" value="Yes. The Fundamental Theorem of Algebra guarantees a degree-n polynomial has exactly n roots (counted with multiplicity) over the complex numbers. Our calculator uses the Nerdamer algebra engine to find both real and complex roots. For example, x^2+1=0 returns the roots i and -i." />
         <jsp:param name="faq5q" value="What is the Rational Root Theorem?" />
         <jsp:param name="faq5a" value="The Rational Root Theorem states that any rational root p/q of a polynomial with integer coefficients must have p dividing the constant term and q dividing the leading coefficient. For x^3-6x^2+11x-6, possible rational roots are plus or minus 1, 2, 3, 6. Testing these finds roots at x=1, x=2, and x=3." />
+        <jsp:param name="faq6q" value="Can I take a photo of my polynomial homework to get the answer?" />
+        <jsp:param name="faq6a" value="Yes. Click the camera Scan button to upload a photo or take a picture of your polynomial problem. The AI extracts the polynomial(s) from the image, auto-detects the operation (factor, multiply, divide, etc.), and runs them through the calculator. Works for textbook pages, homework photos, or whiteboard captures." />
+        <jsp:param name="faq7q" value="Where can I find polynomial practice problems with answers?" />
+        <jsp:param name="faq7a" value="Click the Practice Worksheet button below the result panel for 1,500+ SymPy-verified polynomial problems with full answer keys. Problems are organized by 26 types and 4 difficulty levels (basic, medium, hard, scholar). Suitable for class 9, class 10, AP precalculus, and college algebra." />
+        <jsp:param name="faq8q" value="What types of problems are in the polynomial worksheet?" />
+        <jsp:param name="faq8a" value="26 types: addition, subtraction, multiplication including binomial expansion, long division, synthetic division, factoring (quadratic, special patterns, grouping, high-degree), Rational Root Theorem, polynomial from given roots, Vieta's symmetric functions, polynomial inequalities, partial fractions, and parametric problems (find k for factor, common-factor parameters, multi-divisibility, double roots, radical roots)." />
     </jsp:include>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="ctx" content="<%=request.getContextPath()%>" />
@@ -558,6 +564,18 @@
             <div class="ms-faq-item">
                 <button type="button" class="ms-faq-q">What is the Rational Root Theorem?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
                 <div class="ms-faq-a">The <strong>Rational Root Theorem</strong> states that any rational root <em>p/q</em> of a polynomial with integer coefficients must have <em>p</em> dividing the constant term and <em>q</em> dividing the leading coefficient. For <em>x&sup3; &minus; 6x&sup2; + 11x &minus; 6</em>, possible rational roots are &plusmn;1, &plusmn;2, &plusmn;3, &plusmn;6. Testing these finds roots at <em>x = 1, 2, 3</em>.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Can I take a photo of my polynomial homework to get the answer?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Yes. Click the <strong>&#128247; Scan</strong> button to upload a photo or take a picture of your polynomial problem. The <strong>AI extracts</strong> the polynomial(s) from the image, auto-detects the operation (factor, multiply, divide, etc.), and runs them through the calculator. Works for textbook pages, homework photos, or whiteboard captures.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Where can I find polynomial practice problems with answers?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Click the <strong>Practice Worksheet</strong> button below the result panel for <strong>1,500+ SymPy-verified polynomial problems</strong> with full answer keys. Problems are organized by 26 types and 4 difficulty levels (basic, medium, hard, scholar). Suitable for class 9, class 10, AP precalculus, and college algebra.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">What types of problems are in the polynomial worksheet?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a"><strong>26 types</strong>: addition, subtraction, multiplication (incl. binomial expansion), long division, synthetic division, factoring (quadratic, special patterns, grouping, high-degree), Rational Root Theorem, polynomial from given roots, Vieta's symmetric functions, polynomial inequalities, partial fractions, and parametric problems (find <em>k</em> for factor, common-factor parameters, multi-divisibility, double roots, radical roots).</div>
             </div>
         </div>
     </section>

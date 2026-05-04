@@ -19,13 +19,13 @@
         See math/MIGRATION_TEMPLATE.md.
     --%>
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Quadratic Formula Calculator — Step-by-Step Solutions" />
-        <jsp:param name="toolDescription" value="Free quadratic formula calculator. Solve ax²+bx+c=0 with steps. Printable practice worksheet with 50 problems and answer key for teachers. Quadratic formula, completing the square, factoring. Graph, PDF export." />
+        <jsp:param name="toolName" value="Quadratic Formula Calculator — AI Scan &amp; Worksheet" />
+        <jsp:param name="toolDescription" value="Free quadratic formula calculator with AI photo scan + 50-problem worksheet. Solve ax²+bx+c=0 with full steps, graph, factoring, and inequalities." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="quadratic-solver.jsp" />
-        <jsp:param name="toolKeywords" value="quadratic formula calculator, quadratic equation solver, quadratic equation worksheet, quadratic formula worksheet printable, algebra 2 quadratic worksheet, solve quadratic equation step by step, quadratic practice problems with answers, completing the square calculator, factoring quadratics calculator, vertex form calculator, discriminant calculator, parabola graph calculator" />
+        <jsp:param name="toolKeywords" value="quadratic formula calculator, quadratic equation solver, quadratic equation worksheet, quadratic formula worksheet printable, algebra 2 quadratic worksheet, solve quadratic equation step by step, quadratic practice problems with answers, completing the square calculator, factoring quadratics calculator, vertex form calculator, discriminant calculator, parabola graph calculator, ai quadratic solver, photo math solver, scan quadratic equation from photo, ai math homework helper, quadratic photo solver, math problem photo scanner, quadratic equation photo solver, quadratic worksheet pdf, quadratic worksheet for class 9, quadratic worksheet for class 10, printable quadratic worksheet" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Printable practice worksheet 50 problems with answer key,Quadratic formula with full substitution steps,Completing the square method,Factoring method,5 input forms including vertex factored and horizontal parabola,Quadratic inequality solver with interval notation,Interactive Plotly parabola graph,Discriminant and root classification,LaTeX export and PDF download,Shareable URLs" />
+        <jsp:param name="toolFeatures" value="AI photo scanner extracts quadratics from images,Printable practice worksheet 50 problems with answer key,Quadratic formula with full substitution steps,Completing the square method,Factoring method,5 input forms including vertex factored and horizontal parabola,Quadratic inequality solver with interval notation,Interactive Plotly parabola graph,Discriminant and root classification,LaTeX export and PDF download,Shareable URLs,Photo math problem solver,Auto-detect quadratic form from image,Free with no signup or limits" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="educationalLevel" value="High School, College" />
         <jsp:param name="teaches" value="quadratic equations, quadratic formula, discriminant, parabola, vertex form, completing the square, factoring" />
@@ -46,6 +46,10 @@
         <jsp:param name="faq7a" value="Yes. Type the equation as x = y² - 4y + 2 (using y on the right). The solver finds the vertex, focus, directrix, and axis of symmetry. You get a step-by-step derivation and interactive graph of the horizontal parabola." />
         <jsp:param name="faq8q" value="Where can I get a free quadratic equation worksheet with answers?" />
         <jsp:param name="faq8a" value="Click Worksheet in the result toolbar for a free 50-problem practice sheet (Easy, Medium, Hard). Each click generates new problems. The Answer Key is included for teachers. No signup, no download — print directly from your browser." />
+        <jsp:param name="faq9q" value="Can I scan a quadratic equation from a photo or textbook?" />
+        <jsp:param name="faq9a" value="Yes. Click the Scan button and upload (or drop in) a photo of a handwritten or printed quadratic equation. The AI vision model extracts the equation, fills the math field automatically, and detects the form (standard, vertex, factored, or inequality). Works on phone snapshots, textbook pages, whiteboard photos, and worksheet scans." />
+        <jsp:param name="faq10q" value="What grade levels and curricula does this cover?" />
+        <jsp:param name="faq10a" value="Covers Algebra 1 (factoring, basic quadratic formula), Algebra 2 (discriminant, complex roots, vertex form), Precalculus (parabola conic-section properties, horizontal parabolas), and college algebra. Aligned with Common Core HSA-REI.B.4 and CBSE/ICSE class 9-10 quadratic equations chapter. SAT, ACT, and JEE Mains practice covered." />
     </jsp:include>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="ctx" content="<%=request.getContextPath()%>" />
@@ -351,6 +355,14 @@
             <div class="ms-faq-item">
                 <button type="button" class="ms-faq-q">Where can I get a free quadratic equation worksheet with answers?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
                 <div class="ms-faq-a">Click <strong>Worksheet</strong> in the result toolbar for a free 50-problem practice sheet (Easy, Medium, Hard). Each click generates new problems. The Answer Key is included for teachers. No signup, no download &mdash; print directly from your browser.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Can I scan a quadratic equation from a photo or textbook?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Yes. Click the <strong>&#128247; Scan</strong> button and upload (or drop in) a photo of a handwritten or printed quadratic equation. The AI vision model extracts the equation, fills the math field automatically, and detects the form (standard, vertex, factored, or inequality). Works on phone snapshots, textbook pages, whiteboard photos, and worksheet scans.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">What grade levels and curricula does this cover?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Covers <strong>Algebra 1</strong> (factoring, basic quadratic formula), <strong>Algebra 2</strong> (discriminant, complex roots, vertex form), <strong>Precalculus</strong> (parabola conic-section properties, horizontal parabolas), and college algebra. Aligned with Common Core HSA-REI.B.4 and CBSE/ICSE class 9&ndash;10 quadratic equations chapter. SAT, ACT, and JEE Mains practice covered.</div>
             </div>
         </div>
     </section>

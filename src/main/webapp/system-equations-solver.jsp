@@ -22,13 +22,13 @@
         educationalLevel + teaches).
     --%>
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="System of Equations Solver — Step-by-Step" />
-        <jsp:param name="toolDescription" value="Solve any system of equations instantly — linear or nonlinear, 2&times;2 or 3&times;3. See full step-by-step work using Cramer&apos;s rule, Gaussian elimination, substitution, or matrix inversion. Free, no signup." />
+        <jsp:param name="toolName" value="System of Equations Solver — AI Scan &amp; 2,000 Worksheets" />
+        <jsp:param name="toolDescription" value="Free system of equations solver with AI photo scan + 2,000 practice problems. Solves 2x2-6x6 linear and nonlinear systems with full steps." />
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="system-equations-solver.jsp" />
-        <jsp:param name="toolKeywords" value="system of equations solver, solve system of equations, simultaneous equations solver, 2x2 system solver, 3x3 system solver, systems of equations step by step, cramer's rule calculator, gaussian elimination calculator, substitution method calculator, nonlinear system solver, linear system solver, solve simultaneous equations online, systems of equations calculator, algebra solver" />
+        <jsp:param name="toolKeywords" value="system of equations solver, solve system of equations, simultaneous equations solver, 2x2 system solver, 3x3 system solver, systems of equations step by step, cramer's rule calculator, gaussian elimination calculator, substitution method calculator, nonlinear system solver, linear system solver, solve simultaneous equations online, systems of equations calculator, algebra solver, ai system of equations solver, photo math solver, scan system of equations from photo, ai math homework helper, simultaneous equations photo solver, math problem photo scanner, system of equations worksheet, system of equations worksheet pdf, system of equations worksheet with answers, simultaneous equations worksheet, linear systems practice problems, 3x3 system worksheet, printable system of equations worksheet, system of equations practice problems with answers" />
         <jsp:param name="toolImage" value="system-equations-solver.svg" />
-        <jsp:param name="toolFeatures" value="Linear and nonlinear system solving,Step-by-step Cramer's rule with determinants,Gaussian elimination with row operation trace,Substitution method with full algebraic steps,Matrix inversion A-inverse times B,All-methods comparison mode,Interactive graph of intersection curves,500+ printable practice worksheets with answer keys" />
+        <jsp:param name="toolFeatures" value="Linear and nonlinear system solving,Step-by-step Cramer's rule with determinants,Gaussian elimination with row operation trace,Substitution method with full algebraic steps,Matrix inversion A-inverse times B,All-methods comparison mode,Interactive graph of intersection curves including 3D for 3x3,Solves up to 6x6 systems via SymPy,AI photo scanner extracts systems from images,2000+ SymPy-verified practice problems with answer key,24 problem types from basic to scholar level,Printable system of equations worksheet,Photo math problem solver,Auto-detect linear vs nonlinear from image,Free with no signup or limits" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="educationalLevel" value="High School, College, AP Precalculus, Linear Algebra" />
         <jsp:param name="teaches" value="Systems of equations, Cramer's rule, Gaussian elimination, matrix inversion, substitution method, nonlinear systems" />
@@ -43,6 +43,12 @@
         <jsp:param name="faq4a" value="Click the '+ Add equation' button below the equation inputs. Enter three equations with three variables (e.g. x, y, z). The solver automatically detects the 3x3 system and applies your chosen method." />
         <jsp:param name="faq5q" value="Does it show step-by-step work?" />
         <jsp:param name="faq5a" value="Yes — every linear method (Cramer's Rule, Gaussian Elimination, Substitution, Matrix Inversion) shows the complete solution trace: determinant expansions, row operations, substitution steps, and the final answer with verification. For nonlinear systems it shows the substitution path and residual check for each solution." />
+        <jsp:param name="faq6q" value="Can I scan a system of equations from a photo or textbook?" />
+        <jsp:param name="faq6a" value="Yes. Click the Scan button and upload (or drop in) a photo of handwritten or printed equations. The AI vision model extracts each equation, fills the rows automatically, and detects whether the system is linear or nonlinear. Works on phone snapshots, textbook pages, whiteboard photos, and worksheet scans." />
+        <jsp:param name="faq7q" value="Where is the system of equations practice worksheet?" />
+        <jsp:param name="faq7a" value="Click the 'Practice Worksheet — 2,000+ systems with answer key' button below the result. The worksheet engine generates printable problem sets across 4 difficulty tiers (basic, medium, hard, scholar) and 24 problem types — 2x2 and 3x3 linear, decimal coefficients, fractional, parameter-dependent, circuit/network-flow word problems, 4x4/5x5/6x6 systems, and more. Every problem and answer is SymPy-verified." />
+        <jsp:param name="faq8q" value="What grade levels and curricula does this cover?" />
+        <jsp:param name="faq8a" value="The problem set spans Algebra 1 (basic 2x2), Algebra 2 (3x3 and word problems), Precalculus (parameter analysis), AP Precalculus, and college Linear Algebra (4x4-6x6 systems, network flow, multi-parameter). Aligned with Common Core HSA-REI.C and CBSE/ICSE class 9-10 simultaneous equations. SAT, ACT, and JEE practice covered." />
     </jsp:include>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="ctx" content="<%=request.getContextPath()%>" />
@@ -766,6 +772,18 @@
             <div class="ms-faq-item">
                 <button type="button" class="ms-faq-q">Does it show step-by-step work?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
                 <div class="ms-faq-a">Yes &mdash; every linear method (Cramer's Rule, Gaussian Elimination, Substitution, Matrix Inversion) shows the complete trace: determinant expansions, row operations, substitution steps, and the final answer with verification. For nonlinear systems, the substitution path and residual check for each solution are shown.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Can I scan a system of equations from a photo or textbook?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Yes. Click the <strong>&#128247; Scan</strong> button and upload (or drop in) a photo of handwritten or printed equations. The AI vision model extracts each equation, fills the rows automatically, and detects whether the system is linear or nonlinear. Works on phone snapshots, textbook pages, whiteboard photos, and worksheet scans.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Where is the system of equations practice worksheet?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Click the <strong>Practice Worksheet &mdash; 2,000+ systems with answer key</strong> button below the result. The worksheet engine generates printable problem sets across 4 difficulty tiers (basic, medium, hard, scholar) and 24 problem types &mdash; 2&times;2 and 3&times;3 linear, decimal coefficients, fractional, parameter-dependent, circuit/network-flow word problems, 4&times;4/5&times;5/6&times;6 systems, and more. Every problem and answer is <em>SymPy-verified</em>.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">What grade levels and curricula does this cover?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">The problem set spans <strong>Algebra 1</strong> (basic 2&times;2), <strong>Algebra 2</strong> (3&times;3 and word problems), <strong>Precalculus</strong> (parameter analysis), <strong>AP Precalculus</strong>, and college <strong>Linear Algebra</strong> (4&times;4&ndash;6&times;6 systems, network flow, multi-parameter). Aligned with Common Core HSA-REI.C and CBSE/ICSE class 9&ndash;10 simultaneous equations. SAT, ACT, and JEE practice covered.</div>
             </div>
         </div>
     </section>
