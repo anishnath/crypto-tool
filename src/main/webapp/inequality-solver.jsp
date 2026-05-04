@@ -30,7 +30,7 @@
         <jsp:param name="toolUrl" value="inequality-solver.jsp" />
         <jsp:param name="toolKeywords" value="inequality solver, solve inequalities online, inequality calculator with steps, quadratic inequality solver, polynomial inequality calculator, rational inequality solver, absolute value inequality, interval notation calculator, sign chart method, inequality graphing calculator, solve inequalities step by step free, ai inequality solver, photo math solver, scan inequality from photo, ai math homework helper, inequality photo solver, math problem photo scanner, compound inequality calculator, set builder notation calculator" />
         <jsp:param name="toolImage" value="math-studio-og.png" />
-        <jsp:param name="toolFeatures" value="AI photo scanner extracts inequalities from images,Step-by-step sign chart method,Linear and quadratic inequalities,Polynomial inequality solver,Rational inequality solver,Absolute value inequalities,Compound inequalities,Interval notation output,Set-builder notation,Interactive number line,Function graph with solution shading,Download PDF,Copy LaTeX,Share via URL,Python SymPy compiler,Photo math problem solver,Auto-detect inequality type from image,Free with no signup or limits,Dark mode" />
+        <jsp:param name="toolFeatures" value="AI photo scanner extracts inequalities from images,Step-by-step sign chart method,Linear and quadratic inequalities,Polynomial inequality solver,Rational inequality solver,Absolute value inequalities,Compound inequalities,Interval notation output,Set-builder notation,Interactive number line,Function graph with solution shading,Download PDF,Copy LaTeX,Share via URL,Python compiler,Photo math problem solver,Auto-detect inequality type from image,1500+ practice worksheet problems,Printable worksheet with answer key,35 question types from basic to scholar,NCERT Class 11 word problems,IIT-JEE Advanced and Putnam-level problems,Free with no signup or limits,Dark mode" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="What types of inequalities can this solver handle?" />
         <jsp:param name="faq1a" value="This solver handles linear inequalities (2x+3>7), quadratic inequalities (x^2-4>=0), polynomial inequalities (x^3-x<0), rational inequalities ((x-1)/(x+2)>0), absolute value inequalities (|x-3|<5), and compound inequalities (1<2x+3<7). It finds all solutions using the sign chart method and presents results in interval notation and set-builder notation." />
@@ -48,6 +48,8 @@
         <jsp:param name="faq7a" value="Yes. Click the Scan button and upload (or drop in) a photo of a handwritten or printed inequality. The AI vision model extracts the inequality (preserving < ≤ > ≥ symbols and absolute-value bars), fills the math field automatically, and detects the inequality type. Works on phone snapshots, textbook pages, whiteboard photos, and worksheet scans." />
         <jsp:param name="faq8q" value="What grade levels and curricula does this cover?" />
         <jsp:param name="faq8a" value="Covers Algebra 1 (linear inequalities, compound), Algebra 2 (quadratic, polynomial, rational, absolute value), Precalculus (sign chart analysis), and college algebra. Aligned with Common Core HSA-REI.B.3 and HSA-CED.A.1, plus CBSE/ICSE class 9-11 inequalities chapters. SAT, ACT, and JEE Mains practice covered." />
+        <jsp:param name="faq9q" value="Where is the inequality practice worksheet?" />
+        <jsp:param name="faq9a" value="Click the Practice Worksheet — 1,500+ inequalities with answer key button below the result. The worksheet engine generates printable problem sets across 4 difficulty tiers (basic, medium, hard, scholar) and 35 problem types — linear (with parens, fractions, sign-flip), quadratic (factored and general), polynomial (cubic), rational, absolute-value (simple, complex, compound), log, exponential, system of linear inequalities, NCERT Class 11 word problems (IQ/mental-age, acid-mixing, rectangle perimeter, score threshold), and IIT-JEE Advanced / Putnam scholar problems (exp-quadratic substitution, log fractional base, nested logs, square-root inequalities, modulus-vs-modulus, AM-GM optimisation, Cauchy-Schwarz, Bernoulli's inequality). Every problem and answer is CAS-verified." />
     </jsp:include>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="ctx" content="<%=request.getContextPath()%>" />
@@ -355,6 +357,17 @@
                                 <button type="button" class="tool-action-btn" id="iq-copy-text-btn">Copy Text</button>
                                 <button type="button" class="tool-action-btn" id="iq-share-btn">Share</button>
                                 <button type="button" class="tool-action-btn" id="iq-download-pdf-btn">Download PDF</button>
+                                <button type="button" class="tool-action-btn" id="iq-worksheet-btn-toolbar">Worksheet</button>
+                            </div>
+
+                            <!-- Practice worksheet CTA (1,500 SymPy-verified problems
+                                 across 35 types: linear, quadratic, polynomial,
+                                 rational, abs-value, log, exp, system, NCERT word
+                                 problems, and IIT-JEE / Putnam scholar problems). -->
+                            <div class="ic-worksheet-cta">
+                                <button type="button" class="tool-action-btn" id="iq-worksheet-btn">
+                                    Practice Worksheet &mdash; 1,500+ inequalities with answer key
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -481,6 +494,10 @@
                 <button type="button" class="ms-faq-q">What grade levels and curricula does this cover?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
                 <div class="ms-faq-a">Covers <strong>Algebra 1</strong> (linear inequalities, compound), <strong>Algebra 2</strong> (quadratic, polynomial, rational, absolute value), <strong>Precalculus</strong> (sign chart analysis), and college algebra. Aligned with Common Core HSA-REI.B.3 and HSA-CED.A.1, plus CBSE/ICSE class 9&ndash;11 inequalities chapters. SAT, ACT, and JEE Mains practice covered.</div>
             </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Where is the inequality practice worksheet?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Click the <strong>Practice Worksheet &mdash; 1,500+ inequalities with answer key</strong> button below the result. The worksheet engine generates printable problem sets across 4 difficulty tiers (basic, medium, hard, scholar) and <strong>35 problem types</strong> &mdash; linear (with parens, fractions, sign-flip), quadratic (factored and general), polynomial (cubic), rational, absolute-value (simple, complex, compound), log, exponential, system of linear inequalities, NCERT Class 11 word problems (IQ/mental-age, acid-mixing, rectangle perimeter, score threshold), and IIT-JEE Advanced / Putnam scholar problems (exp-quadratic substitution, log fractional base, nested logs, square-root inequalities, modulus-vs-modulus, AM-GM optimisation, Cauchy-Schwarz, Bernoulli's inequality). Every problem and answer is <em>CAS-verified</em>.</div>
+            </div>
         </div>
     </section>
 
@@ -499,6 +516,42 @@
     <jsp:include page="/math/partials/math-libs.jsp" />
     <jsp:include page="/math/partials/inequality-solver-scripts.jsp" />
     <jsp:include page="/math/partials/math-input-setup.jsp" />
+
+    <!-- ─── Worksheet engine + button binding (uses the existing
+            worksheet/math/algebra/inequalities.json — 1,500+ problems
+            across 35 types).  Both the toolbar Worksheet button and
+            the prominent CTA route here. ─── -->
+    <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
+    <script>
+    (function () {
+        function openInequalityWorksheet() {
+            if (!window.WorksheetEngine || typeof window.WorksheetEngine.open !== 'function') {
+                if (typeof ToolUtils !== 'undefined' && ToolUtils.showToast) {
+                    ToolUtils.showToast('Worksheet engine not loaded', 2500, 'warning');
+                }
+                return;
+            }
+            window.WorksheetEngine.open({
+                jsonUrl: '<%=request.getContextPath()%>/worksheet/math/algebra/inequalities.json',
+                title: 'Inequalities',
+                accentColor: '#15803d',
+                branding: '8gwifi.org',
+                defaultCount: 20
+            });
+        }
+        function whenReady(fn) {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', fn);
+            } else { fn(); }
+        }
+        whenReady(function () {
+            var primary = document.getElementById('iq-worksheet-btn');
+            if (primary) primary.addEventListener('click', openInequalityWorksheet);
+            var toolbar = document.getElementById('iq-worksheet-btn-toolbar');
+            if (toolbar) toolbar.addEventListener('click', openInequalityWorksheet);
+        });
+    })();
+    </script>
 
 </body>
 </html>
