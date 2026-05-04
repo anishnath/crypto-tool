@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-05-04T20:07:02.453874+00:00",
+  "generated_at": "2026-05-04T20:16:08.748093+00:00",
   "schema_version": 1,
   "total_categories": 3,
-  "total_worksheets": 13,
-  "total_questions": 25979,
+  "total_worksheets": 14,
+  "total_questions": 27479,
   "categories": {
     "algebra": {
       "name": "algebra",
-      "worksheet_count": 4,
-      "total_questions": 7000,
+      "worksheet_count": 5,
+      "total_questions": 8500,
       "worksheets": [
         {
           "topic": "Inequalities",
@@ -165,6 +165,51 @@
           "warnings": [],
           "file": "polynomials.json",
           "url": "/worksheet/math/algebra/polynomials.json"
+        },
+        {
+          "topic": "Quadratic Equations",
+          "description": "NCERT Class 10 Ch 4 + Class 11 + JEE Mains/Advanced quadratic equations: factoring, formula, completing the square, discriminant analysis, Vieta's identities, parameter problems, transformed roots, biquadratic, and JEE-style olympiad classics.",
+          "total": 1500,
+          "type_count": 26,
+          "types": {
+            "sum_product_roots": 154,
+            "discriminant_compute": 140,
+            "transform_roots": 103,
+            "factor_with_lead": 101,
+            "common_root_two": 93,
+            "min_max_value": 92,
+            "write_from_vertex": 83,
+            "relation_alpha_beta": 75,
+            "vertex_form_convert": 73,
+            "complex_roots_explicit": 65,
+            "nature_of_roots": 61,
+            "word_age": 61,
+            "write_from_roots": 57,
+            "formula_real_roots": 56,
+            "factor_simple": 55,
+            "high_power_roots": 42,
+            "quadratic_in_disguise": 41,
+            "word_geometry": 30,
+            "parameter_equal_roots": 25,
+            "parameter_real_roots": 24,
+            "parameter_one_pos_one_neg": 20,
+            "complete_square_simple": 16,
+            "word_consecutive_int": 11,
+            "biquadratic": 10,
+            "putnam_classics": 6,
+            "word_speed": 6
+          },
+          "difficulty": {
+            "basic": 583,
+            "medium": 478,
+            "hard": 340,
+            "scholar": 99
+          },
+          "has_figures": 0,
+          "size_bytes": 556395,
+          "warnings": [],
+          "file": "quadratic.json",
+          "url": "/worksheet/math/algebra/quadratic.json"
         },
         {
           "topic": "Systems of Equations",
