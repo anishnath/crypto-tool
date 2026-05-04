@@ -667,6 +667,268 @@ def gen_nonlinear_system():
     return q_text, q_latex, ans_latex, ans_plain
 
 # ===========================================================================
+# ===========================================================================
+# EXTENDED GENERATORS — added to align with new solver capabilities
+# (decimals, subscripted vars, 5×5/6×6, multi-parameter, context-driven 4×4)
+#
+# Same SymPy-as-source-of-truth strategy as the rest of this file:
+#   · Build the system from planted integer solutions where possible
+#   · Verify with sp.linsolve / sp.solve before emitting
+#   · LaTeX always comes from sp.latex(...) — never hand-formatted
+# ===========================================================================
+
+def _verify_linear_solution(coeffs, rhs, vars_syms, planted):
+    """Returns True iff sp.linsolve agrees with the planted vector."""
+    eqs = [sum(coeffs[i][j] * vars_syms[j] for j in range(len(vars_syms))) - rhs[i]
+           for i in range(len(rhs))]
+    sols = list(sp.linsolve(eqs, vars_syms))
+    if not sols:
+        return False
+    sol_tuple = sols[0]
+    return all(sp.simplify(sol_tuple[k] - planted[k]) == 0 for k in range(len(planted)))
+
+
+def _format_system_lines(coeffs, rhs, vars_syms):
+    """Build LaTeX equation lines for the cases environment."""
+    lines = []
+    for i in range(len(rhs)):
+        lhs_expr = sum(coeffs[i][j] * vars_syms[j] for j in range(len(vars_syms)))
+        lines.append(f"{sp.latex(lhs_expr)} = {sp.latex(rhs[i])}")
+    return lines
+
+
+def gen_decimal_3x3():
+    """3×3 system with rational (½, ⅔, etc.) coefficients."""
+    halves = [sp.Rational(n, 2) for n in [-5, -3, -1, 1, 3, 5]]
+    pool = halves + [-4, -3, -2, -1, 1, 2, 3, 4]
+    syms = [x, y, z]
+
+    for _ in range(50):
+        ans = [random.randint(-3, 3) for _ in range(3)]
+        if ans == [0, 0, 0]:
+            continue
+        coeffs = [[rc(pool) for _ in range(3)] for _ in range(3)]
+        if sp.Matrix(coeffs).det() == 0:
+            continue
+        rhs = [sum(coeffs[i][j] * ans[j] for j in range(3)) for i in range(3)]
+        if not _verify_linear_solution(coeffs, rhs, syms, ans):
+            continue
+
+        q_latex = cases_latex(_format_system_lines(coeffs, rhs, syms))
+        q_text = "Solve the 3×3 system with rational coefficients."
+        ans_latex = f"({sp.latex(sp.sympify(ans[0]))}, {sp.latex(sp.sympify(ans[1]))}, {sp.latex(sp.sympify(ans[2]))})"
+        ans_plain = f"(x, y, z) = ({ans[0]}, {ans[1]}, {ans[2]})"
+        return q_text, q_latex, ans_latex, ans_plain
+    return None
+
+
+def gen_decimal_4x4():
+    """4×4 system with rational coefficients."""
+    halves = [sp.Rational(n, 2) for n in [-3, -1, 1, 3]]
+    pool = halves + [-3, -2, -1, 1, 2, 3]
+    syms = [x, y, z, w]
+
+    for _ in range(50):
+        ans = [random.randint(-2, 2) for _ in range(4)]
+        if ans == [0, 0, 0, 0]:
+            continue
+        coeffs = [[rc(pool) for _ in range(4)] for _ in range(4)]
+        if sp.Matrix(coeffs).det() == 0:
+            continue
+        rhs = [sum(coeffs[i][j] * ans[j] for j in range(4)) for i in range(4)]
+        if not _verify_linear_solution(coeffs, rhs, syms, ans):
+            continue
+
+        q_latex = cases_latex(_format_system_lines(coeffs, rhs, syms))
+        q_text = "Solve the 4×4 system with rational coefficients."
+        ans_latex = f"({', '.join(sp.latex(sp.sympify(v)) for v in ans)})"
+        ans_plain = f"(x, y, z, w) = ({', '.join(str(v) for v in ans)})"
+        return q_text, q_latex, ans_latex, ans_plain
+    return None
+
+
+def gen_circuit_problem():
+    """Kirchhoff-style 3×3 or 4×4 circuit. Variables: I_1, I_2, I_3 [I_4]."""
+    n = rc([3, 3, 4])  # bias toward 3x3 (more common in textbooks)
+    Is = sp.symbols(f'I_1 I_2 I_3 I_4'.split()[:n])
+
+    for _ in range(50):
+        ans = [random.randint(-3, 5) for _ in range(n)]
+        if all(a == 0 for a in ans):
+            continue
+        coeffs = [[rc([-3, -2, -1, 1, 2, 3]) for _ in range(n)] for _ in range(n)]
+        if sp.Matrix(coeffs).det() == 0:
+            continue
+        rhs = [sum(coeffs[i][j] * ans[j] for j in range(n)) for i in range(n)]
+        if not _verify_linear_solution(coeffs, rhs, Is, ans):
+            continue
+
+        q_latex = cases_latex(_format_system_lines(coeffs, rhs, Is))
+        q_text = (
+            f"In an electrical network, applying Kirchhoff's voltage and current laws "
+            f"yields the following system. Find the currents "
+            f"\\(" + ", ".join(sp.latex(I) for I in Is) + "\\) in amperes."
+        )
+        ans_latex = ", ".join(f"{sp.latex(Is[k])} = {ans[k]}" for k in range(n))
+        ans_plain = ", ".join(f"{Is[k].name} = {ans[k]}" for k in range(n))
+        return q_text, q_latex, ans_latex, ans_plain
+    return None
+
+
+def gen_lettered_system_4x4():
+    """4×4 with context-driven letter variables (P/Q/R/S, A/B/C/D, F_1..F_4)."""
+    context = rc([
+        ("economics", sp.symbols('P Q R S'),
+         "A company produces four goods. The supply-demand equilibrium equations are:",
+         "Find the equilibrium quantities of each good."),
+        ("chemistry",  sp.symbols('A B C D'),
+         "Four chemical solutions are mixed to obtain a required composition. "
+         "The mass-balance equations (in liters) are:",
+         "Find the volumes A, B, C, D (in liters)."),
+        ("nutrition",  sp.symbols('F_1 F_2 F_3 F_4'),
+         "A nutritionist combines four foods to meet daily nutrient targets "
+         "(protein, carbohydrate, fat, calories):",
+         "Find the amounts of each food (in servings)."),
+    ])
+    _ctx, syms, intro, ask = context
+
+    for _ in range(50):
+        ans = [random.randint(5, 25) for _ in range(4)]
+        coeffs = [[rc([-3, -2, -1, 1, 2, 3, 4, 5]) for _ in range(4)] for _ in range(4)]
+        if sp.Matrix(coeffs).det() == 0:
+            continue
+        rhs = [sum(coeffs[i][j] * ans[j] for j in range(4)) for i in range(4)]
+        if not _verify_linear_solution(coeffs, rhs, list(syms), ans):
+            continue
+
+        q_latex = cases_latex(_format_system_lines(coeffs, rhs, list(syms)))
+        q_text = f"{intro} {ask}"
+        ans_latex = ", ".join(f"{sp.latex(syms[k])} = {ans[k]}" for k in range(4))
+        ans_plain = ", ".join(f"{syms[k].name} = {ans[k]}" for k in range(4))
+        return q_text, q_latex, ans_latex, ans_plain
+    return None
+
+
+def gen_system_5x5():
+    """5×5 system with subscripted variables x_1, x_2, ..., x_5."""
+    xs = sp.symbols('x_1 x_2 x_3 x_4 x_5')
+
+    for _ in range(50):
+        ans = [random.randint(-2, 2) for _ in range(5)]
+        if all(a == 0 for a in ans):
+            continue
+        coeffs = [[rc([-2, -1, 1, 2]) for _ in range(5)] for _ in range(5)]
+        if sp.Matrix(coeffs).det() == 0:
+            continue
+        rhs = [sum(coeffs[i][j] * ans[j] for j in range(5)) for i in range(5)]
+        if not _verify_linear_solution(coeffs, rhs, list(xs), ans):
+            continue
+
+        q_latex = cases_latex(_format_system_lines(coeffs, rhs, list(xs)))
+        q_text = ("Solve the 5-variable linear system. Five hyperplanes in "
+                  "5-dimensional space intersect at a single point — find it.")
+        ans_latex = ", ".join(f"{sp.latex(xs[k])} = {ans[k]}" for k in range(5))
+        ans_plain = ", ".join(f"x_{k+1} = {ans[k]}" for k in range(5))
+        return q_text, q_latex, ans_latex, ans_plain
+    return None
+
+
+def gen_system_6x6():
+    """6×6 system. Scholar-tier — by hand impractical, but the solver supports it."""
+    xs = sp.symbols('x_1 x_2 x_3 x_4 x_5 x_6')
+
+    for _ in range(50):
+        ans = [random.randint(-2, 2) for _ in range(6)]
+        if all(a == 0 for a in ans):
+            continue
+        # Lean toward sparser matrices for readability at 6×6.
+        coeffs = [[rc([-2, -1, 0, 0, 1, 2]) for _ in range(6)] for _ in range(6)]
+        if sp.Matrix(coeffs).det() == 0:
+            continue
+        rhs = [sum(coeffs[i][j] * ans[j] for j in range(6)) for i in range(6)]
+        if not _verify_linear_solution(coeffs, rhs, list(xs), ans):
+            continue
+
+        q_latex = cases_latex(_format_system_lines(coeffs, rhs, list(xs)))
+        q_text = ("Solve the 6×6 linear system. (Hand methods are impractical at "
+                  "this size — use Gaussian elimination via SymPy or row reduction.)")
+        ans_latex = ", ".join(f"{sp.latex(xs[k])} = {ans[k]}" for k in range(6))
+        ans_plain = ", ".join(f"x_{k+1} = {ans[k]}" for k in range(6))
+        return q_text, q_latex, ans_latex, ans_plain
+    return None
+
+
+def gen_multi_param_3x3():
+    """3×3 with two symbolic parameters (k, m). Ask for consistency analysis."""
+    k_sym, m_sym = sp.symbols('k m')
+    sol_type = rc(["unique solution", "infinitely many solutions"])
+
+    # Construct: row1 = [1, 1, 1] = 5; rows 2,3 are scalar multiples of row1
+    # except for ONE coefficient replaced with k or m. Force the consistency
+    # condition to be 'k = ... and m = ...' for the chosen sol_type.
+    a1, b1, c1, d1 = 1, 1, 1, rc([3, 4, 5, 6, 7])
+    mult2 = rc([2, 3])
+    mult3 = rc([2, 3, 4])
+
+    # Place k in row2's z-coefficient and m in row3's y-coefficient.
+    # Consistency requires:
+    #   for "infinitely many":  k = mult2,  m = mult3
+    #   for "unique":           any other (k, m) — but we ask the
+    #                            student which combination yields unique.
+    if sol_type == "infinitely many solutions":
+        rhs2 = d1 * mult2
+        rhs3 = d1 * mult3
+        ans_latex = f"k = {mult2}, \\; m = {mult3}"
+        ans_plain = f"k = {mult2}, m = {mult3}"
+    else:  # "unique solution"
+        # k ≠ mult2 OR m ≠ mult3 — any specific values that break dependence.
+        new_k = mult2 + rc([-1, 1])
+        new_m = mult3 + rc([-1, 1])
+        rhs2 = a1 * mult2 * 1 + b1 * mult2 * 1 + new_k * 1  # planted x=y=z=1
+        rhs3 = a1 * mult3 * 1 + new_m * 1 + c1 * mult3 * 1
+        # Reset to clean form using parameters as coefficients:
+        ans_latex = f"k \\ne {mult2} \\text{{ or }} m \\ne {mult3}"
+        ans_plain = f"k != {mult2} or m != {mult3}"
+
+    eq1 = a1 * x + b1 * y + c1 * z - d1
+    eq2 = (a1 * mult2) * x + (b1 * mult2) * y + k_sym * z - rhs2
+    eq3 = (a1 * mult3) * x + m_sym * y + (c1 * mult3) * z - rhs3
+
+    q_latex = cases_latex([
+        f"{sp.latex(a1*x + b1*y + c1*z)} = {d1}",
+        f"{sp.latex((a1*mult2)*x + (b1*mult2)*y + k_sym*z)} = {rhs2}",
+        f"{sp.latex((a1*mult3)*x + m_sym*y + (c1*mult3)*z)} = {rhs3}",
+    ])
+    q_text = (f"Find values of \\(k\\) and \\(m\\) for which the system has "
+              f"{sol_type}.")
+    return q_text, q_latex, ans_latex, ans_plain
+
+
+def gen_network_flow_5x5():
+    """5-node network flow with conservation laws → 5×5 system. Scholar tier."""
+    # Variables: f_12, f_13, f_23, f_34, f_45 (5 flow rates, all positive)
+    syms = sp.symbols('f_{12} f_{13} f_{23} f_{34} f_{45}')
+
+    for _ in range(50):
+        ans = [random.randint(5, 30) for _ in range(5)]
+        coeffs = [[rc([-2, -1, 1, 2]) for _ in range(5)] for _ in range(5)]
+        if sp.Matrix(coeffs).det() == 0:
+            continue
+        rhs = [sum(coeffs[i][j] * ans[j] for j in range(5)) for i in range(5)]
+        if not _verify_linear_solution(coeffs, rhs, list(syms), ans):
+            continue
+
+        q_latex = cases_latex(_format_system_lines(coeffs, rhs, list(syms)))
+        q_text = ("Network-flow problem: 5 nodes connected by 5 directed edges. "
+                  "Conservation of flow at each node yields the system below. "
+                  "Solve for the flow rates \\(f_{ij}\\) (in units per second).")
+        ans_latex = ", ".join(f"{sp.latex(syms[k])} = {ans[k]}" for k in range(5))
+        ans_plain = ", ".join(f"f_{{{k+1}{k+2}}} = {ans[k]}" for k in range(5))
+        return q_text, q_latex, ans_latex, ans_plain
+    return None
+
+
+# ===========================================================================
 # DISPATCHER
 # ===========================================================================
 
@@ -683,18 +945,26 @@ DIFFICULTY_TYPES = {
         "system_3x3",
         "word_ticket_coin",
         "word_age_number",
-        "solve_by_graphing"
+        "solve_by_graphing",
+        "decimal_3x3",
+        "circuit_problem"
     ],
     "hard": [
         "word_mixture",
         "word_distance_rate",
         "word_investment",
-        "system_4x4"
+        "system_4x4",
+        "decimal_4x4",
+        "lettered_system_4x4",
+        "system_5x5"
     ],
     "scholar": [
         "cramers_rule_3x3",
         "find_k_parameter",
-        "nonlinear_system"
+        "nonlinear_system",
+        "system_6x6",
+        "multi_param_3x3",
+        "network_flow_5x5"
     ]
 }
 
@@ -718,7 +988,17 @@ def call_generator(q_type):
 
         "cramers_rule_3x3": gen_cramers_rule_3x3,
         "find_k_parameter": gen_find_k_parameter,
-        "nonlinear_system": gen_nonlinear_system
+        "nonlinear_system": gen_nonlinear_system,
+
+        # Extended generators (added to align with new solver capabilities)
+        "decimal_3x3": gen_decimal_3x3,
+        "decimal_4x4": gen_decimal_4x4,
+        "circuit_problem": gen_circuit_problem,
+        "lettered_system_4x4": gen_lettered_system_4x4,
+        "system_5x5": gen_system_5x5,
+        "system_6x6": gen_system_6x6,
+        "multi_param_3x3": gen_multi_param_3x3,
+        "network_flow_5x5": gen_network_flow_5x5
     }
 
     if q_type not in generators:

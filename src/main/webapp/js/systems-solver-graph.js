@@ -51,8 +51,31 @@ function _colors() {
         zeroline:    dark ? '#475569' : '#94a3b8',
         line1:       '#10b981',   // Emerald for equation 1
         line2:       '#3b82f6',   // Blue for equation 2
+        line3:       '#8b5cf6',   // Violet for equation 3 (3D)
         intersection:'#f59e0b'    // Amber for intersection point
     };
+}
+
+// 3D equation label: a*x + b*y + c*z = d
+function _eqLabel3(a, b, c, d) {
+    var parts = [];
+    var first = true;
+    function coeffStr(coef, varName) {
+        if (Math.abs(coef) < 1e-12) return;
+        var sign = '';
+        if (!first) sign = coef >= 0 ? ' + ' : ' - ';
+        else if (coef < 0) sign = '-';
+        var abs = Math.abs(coef);
+        var absStr = Math.abs(abs - Math.round(abs)) < 1e-9
+            ? String(Math.round(abs))
+            : parseFloat(abs.toFixed(4)).toString();
+        parts.push(sign + (absStr === '1' ? '' : absStr) + varName);
+        first = false;
+    }
+    coeffStr(a, 'x'); coeffStr(b, 'y'); coeffStr(c, 'z');
+    var lhs = parts.length ? parts.join('') : '0';
+    var dStr = Math.abs(d - Math.round(d)) < 1e-9 ? String(Math.round(d)) : parseFloat(d.toFixed(4)).toString();
+    return lhs + ' = ' + dStr;
 }
 
 // ==================== Equation label ====================
@@ -367,10 +390,154 @@ function clear(containerId) {
     container.innerHTML = '';
 }
 
+// ==================== 3x3 Draw — three planes in 3D ====================
+// Each row of (A | b) defines a plane: a·x + b·y + c·z = d. Three planes
+// generically intersect at a unique point (the system's solution). We
+// render each as a Plotly 'surface' over a square (x, y) domain centered
+// around the solution (or on [-10, 10]² when no unique intersection).
+//
+// Vertical-plane handling: when the z-coefficient c is ~0, the plane is
+// parallel to the z-axis. We render it as a line-strip of constant
+// (x, y) along the full z-range — Plotly's mesh3d would also work but
+// surface is simpler with a synthetic constant grid.
+function draw3x3(A, b, solution, vars, containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    if (!window.Plotly) {
+        _loadPlotly(function() { draw3x3(A, b, solution, vars, containerId); });
+        return;
+    }
+    vars = vars || ['x', 'y', 'z'];
+    var colors = _colors();
+
+    // Center the viewing box on the solution if it's a finite point;
+    // otherwise default to [-10, 10] in each axis.
+    var hasSol = Array.isArray(solution) && solution.length === 3 &&
+                 solution.every(function(v) { return isFinite(v); });
+    var cx = hasSol ? solution[0] : 0;
+    var cy = hasSol ? solution[1] : 0;
+    var cz = hasSol ? solution[2] : 0;
+    var halfRange = hasSol
+        ? Math.max(5, 1.5 * Math.max(Math.abs(cx), Math.abs(cy), Math.abs(cz), 1))
+        : 10;
+    var xMin = cx - halfRange, xMax = cx + halfRange;
+    var yMin = cy - halfRange, yMax = cy + halfRange;
+    var zMin = cz - halfRange, zMax = cz + halfRange;
+
+    var GRID = 12;
+    function buildPlane(rowA, d, rowColor, label) {
+        var aa = rowA[0], bb = rowA[1], cc = rowA[2];
+
+        // Build x, y grids
+        var xs = [], ys = [];
+        for (var i = 0; i <= GRID; i++) {
+            xs.push(xMin + (xMax - xMin) * i / GRID);
+            ys.push(yMin + (yMax - yMin) * i / GRID);
+        }
+
+        // Vertical plane (z-coefficient ~ 0): generate a tall ribbon along
+        // the line aa*x + bb*y = d in the xy-plane, swept up the z-axis.
+        if (Math.abs(cc) < 1e-9) {
+            // Need a line in xy: solve for one variable in terms of the other.
+            var lineX = [], lineY = [];
+            if (Math.abs(bb) >= Math.abs(aa)) {
+                // y = (d - aa*x) / bb
+                for (var i = 0; i <= GRID; i++) {
+                    var xv = xMin + (xMax - xMin) * i / GRID;
+                    lineX.push(xv); lineY.push((d - aa * xv) / bb);
+                }
+            } else {
+                // x = (d - bb*y) / aa
+                for (var j = 0; j <= GRID; j++) {
+                    var yv = yMin + (yMax - yMin) * j / GRID;
+                    lineX.push((d - bb * yv) / aa); lineY.push(yv);
+                }
+            }
+            // Build 2D z-matrix: same (x,y) line repeated at z values from zMin..zMax
+            var Z = [], Xs = [], Ys = [];
+            for (var k = 0; k <= GRID; k++) {
+                var zVal = zMin + (zMax - zMin) * k / GRID;
+                Z.push(lineX.map(function() { return zVal; }));
+            }
+            return {
+                type: 'surface',
+                x: lineX, y: lineY, z: Z,
+                colorscale: [[0, rowColor], [1, rowColor]],
+                showscale: false, opacity: 0.5,
+                name: label, hovertext: label,
+                contours: { z: { show: false } }
+            };
+        }
+
+        // Generic plane: z = (d - aa*x - bb*y) / cc
+        var zMatrix = [];
+        for (var i = 0; i <= GRID; i++) {
+            var row = [];
+            for (var j = 0; j <= GRID; j++) {
+                row.push((d - aa * xs[j] - bb * ys[i]) / cc);
+            }
+            zMatrix.push(row);
+        }
+        return {
+            type: 'surface',
+            x: xs, y: ys, z: zMatrix,
+            colorscale: [[0, rowColor], [1, rowColor]],
+            showscale: false, opacity: 0.5,
+            name: label, hovertext: label,
+            contours: { z: { show: false } }
+        };
+    }
+
+    var planeColors = [colors.line1, colors.line2, colors.line3];
+    var traces = [];
+    for (var p = 0; p < 3; p++) {
+        traces.push(buildPlane(A[p], b[p], planeColors[p], _eqLabel3(A[p][0], A[p][1], A[p][2], b[p])));
+    }
+
+    // Intersection point (if it exists and is finite).
+    if (hasSol) {
+        traces.push({
+            type: 'scatter3d', mode: 'markers+text',
+            x: [solution[0]], y: [solution[1]], z: [solution[2]],
+            marker: { color: colors.intersection, size: 6, symbol: 'diamond' },
+            text: ['(' + solution.map(function(v) {
+                return Math.abs(v - Math.round(v)) < 1e-9 ? Math.round(v) : parseFloat(v.toFixed(4));
+            }).join(', ') + ')'],
+            textposition: 'top center',
+            textfont: { color: colors.text, size: 11 },
+            name: 'Solution',
+            hoverinfo: 'name+x+y+z'
+        });
+    }
+
+    var layout = {
+        paper_bgcolor: colors.paper,
+        scene: {
+            xaxis: { title: vars[0], backgroundcolor: colors.bg, gridcolor: colors.grid, zerolinecolor: colors.zeroline, color: colors.text, range: [xMin, xMax] },
+            yaxis: { title: vars[1], backgroundcolor: colors.bg, gridcolor: colors.grid, zerolinecolor: colors.zeroline, color: colors.text, range: [yMin, yMax] },
+            zaxis: { title: vars[2], backgroundcolor: colors.bg, gridcolor: colors.grid, zerolinecolor: colors.zeroline, color: colors.text, range: [zMin, zMax] },
+            bgcolor: colors.bg,
+            camera: { eye: { x: 1.4, y: 1.4, z: 1.0 } }
+        },
+        font: { family: 'Inter, system-ui, sans-serif', color: colors.text, size: 12 },
+        showlegend: true,
+        legend: { x: 0, y: 1, bgcolor: 'rgba(0,0,0,0)', font: { size: 11 } },
+        margin: { t: 20, r: 10, b: 10, l: 10 }
+    };
+
+    container.innerHTML = '';
+    window.Plotly.newPlot(container, traces, layout, {
+        responsive: true, displayModeBar: true,
+        modeBarButtonsToRemove: ['lasso2d', 'select2d'],
+        displaylogo: false
+    });
+}
+
 // ==================== Exports ====================
 
 window.SystemsSolverGraph = {
     draw2x2: draw2x2,
+    draw3x3: draw3x3,
     drawNonlinear2: drawNonlinear2,
     clear: clear
 };

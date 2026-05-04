@@ -39,7 +39,10 @@ function $(id) {
 
 // ==================== Equation Input Management ====================
 
-var MAX_EQ = 3;
+// 2×2 and 3×3 use the JS-native Cramer / Gaussian / Substitution / Matrix
+// step renderers. 4×4–6×6 route through SymPy on the server (linsolve /
+// solve) via _sympyFallbackN(). _buildSympyResultHTML is already N-general.
+var MAX_EQ = 6;
 var MIN_EQ = 2;
 
 function getEquationStrings() {
@@ -71,14 +74,33 @@ function _makeEqRow(idx, val) {
     num.className = 'sy-sym-num';
     num.textContent = (idx + 1) + ':';
 
+    // Visible MathLive input (math-studio shell migration). The custom
+    // element upgrades once MathLive's ES module loads. We seed via
+    // setValue once the element is defined.
+    var mf = document.createElement('math-field');
+    mf.className = 'sy-sym-mathfield';
+    mf.setAttribute('aria-label', 'Equation ' + (idx + 1));
+    // Both attribute names — newer MathLive uses the first, older uses the
+    // second. Setting attributes here is the upgrade-time hint; we ALSO set
+    // the property post-upgrade in _seedMathField for reliability.
+    mf.setAttribute('math-virtual-keyboard-policy', 'manual');
+    mf.setAttribute('virtual-keyboard-mode', 'manual');
+    mf.setAttribute('smart-mode', 'on');
+    mf.setAttribute('smart-fence', 'on');
+    mf.setAttribute('smart-superscript', 'on');
+    mf.setAttribute('remove-extraneous-parentheses', 'on');
+    mf.setAttribute('placeholder', idx === 0 ? '2x + 3y = 8' : idx === 1 ? '4x - y = 2' : 'x + y + z = 6');
+
+    // Hidden plain-text twin — preserves the legacy contract: many code
+    // paths read .sy-eq-input.value. We mirror MathLive's ascii-math here
+    // on every input event so all those reads keep working unchanged.
     var input = document.createElement('input');
     input.type = 'text';
     input.className = 'sy-sym-input sy-eq-input';
-    input.value = val;
-    input.placeholder = idx === 0 ? 'e.g. 2x + 3y = 8' : idx === 1 ? 'e.g. 4x - y = 2' : 'e.g. x + y + z = 6';
-    input.setAttribute('aria-label', 'Equation ' + (idx + 1));
-    input.setAttribute('autocomplete', 'off');
-    input.setAttribute('spellcheck', 'false');
+    input.value = val || '';
+    input.setAttribute('aria-hidden', 'true');
+    input.setAttribute('tabindex', '-1');
+    input.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;';
 
     var removeBtn = document.createElement('button');
     removeBtn.type = 'button';
@@ -88,15 +110,40 @@ function _makeEqRow(idx, val) {
     removeBtn.setAttribute('data-eq-idx', idx);
     removeBtn.style.display = idx < MIN_EQ ? 'none' : '';
 
-    input.addEventListener('input', function() { _onEquationChange(); });
-    input.addEventListener('keydown', function(ev) {
-        if (ev.key === 'Enter') solve();
+    // Seed the math-field + lock the virtual-keyboard policy once it
+    // upgrades. The attribute alone isn't reliable when the element is
+    // created dynamically (MathLive may not observe the attribute set on
+    // the un-upgraded element); the property must be assigned post-upgrade.
+    function _seedMathField() {
+        if (typeof mf.setValue !== 'function') return;
+        try { mf.setValue(val || '', { format: 'ascii-math', silenceNotifications: true }); }
+        catch (e) {}
+        try { mf.mathVirtualKeyboardPolicy = 'manual'; } catch (e) {}
+        try { mf.virtualKeyboardMode = 'manual'; } catch (e) {} // older MathLive
+    }
+    if (window.customElements && customElements.whenDefined) {
+        customElements.whenDefined('math-field').then(_seedMathField);
+    } else {
+        _seedMathField();
+    }
+
+    // Mirror math-field → hidden .sy-eq-input on every keystroke.
+    mf.addEventListener('input', function() {
+        try {
+            var ascii = (typeof mf.getValue === 'function') ? (mf.getValue('ascii-math') || '') : '';
+            input.value = ascii;
+            _onEquationChange();
+        } catch (e) {}
+    });
+    mf.addEventListener('keydown', function(ev) {
+        if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); solve(); }
     });
     removeBtn.addEventListener('click', function() {
         removeEquation(parseInt(this.getAttribute('data-eq-idx')));
     });
 
     row.appendChild(num);
+    row.appendChild(mf);
     row.appendChild(input);
     row.appendChild(removeBtn);
     return row;
@@ -284,7 +331,7 @@ function classifySystem(equations) {
         .map(function(e) { return _normalizeEq(e); })
         .filter(function(e) { return e.trim() && e.indexOf('=') >= 0; });
     if (eqs.length < 2) return { _tooFew: true, eqs: eqs };
-    if (eqs.length > 3) return { _tooMany: true, eqs: eqs };
+    if (eqs.length > 6) return { _tooMany: true, eqs: eqs };
 
     if (!hasNerdamer()) {
         // Nerdamer not available — try basic fallback parser for simple linear equations
@@ -419,10 +466,12 @@ function switchMethod(method) {
 function _updateGraphTabVisibility() {
     var tabGraph = $('sy-tab-graph');
     if (!tabGraph) return;
-    var showLinear    = (state._size === 2 && state.method !== 'all' && state._A !== null);
+    // Linear 2×2: 2 lines in xy. Linear 3×3: 3 planes in xyz.
+    var showLinear2D  = (state._size === 2 && state.method !== 'all' && state._A !== null);
+    var showLinear3D  = (state._size === 3 && state.method !== 'all' && state._A !== null);
     var showNonlinear = (state._nlEqs !== null && state._nlVars !== null && state._nlVars.length === 2);
-    var show = showLinear || showNonlinear;
-    tabGraph.style.display = '';   // always visible — was hidden by old init code
+    var show = showLinear2D || showLinear3D || showNonlinear;
+    tabGraph.style.display = '';
     tabGraph.disabled = !show;
     if (!show && state.activeTab === 'graph') switchTab('result');
 }
@@ -622,43 +671,51 @@ function _stepDiv(num, title, latex, displayMode) {
 
 // ==================== Cramer Steps ====================
 
-function _cramerSteps2(A, b) {
+function _cramerSteps2(A, b, vars) {
+    vars = vars || (state && state._vars && state._vars.length === 2 ? state._vars : ['x', 'y']);
+    var v0 = vars[0], v1 = vars[1];
     var det = _det2(A), dx = _det2(_replaceCol(A, 0, b)), dy = _det2(_replaceCol(A, 1, b));
     var steps = [];
     steps.push(_stepDiv(1, 'Write coefficient matrix A and compute det(A)',
         'A = ' + _matrixLatex(A) + ', \\quad \\det(A) = ' + _fmtNum(det), true));
     if (Math.abs(det) < 1e-12) return steps;
-    steps.push(_stepDiv(2, 'Replace column 1 with b \u2192 A\u2093; compute det(A\u2093)',
-        'A_x = ' + _matrixLatex(_replaceCol(A, 0, b)) + ', \\quad \\det(A_x) = ' + _fmtNum(dx), true));
-    steps.push(_stepDiv(3, 'Replace column 2 with b \u2192 A\u1D67; compute det(A\u1D67)',
-        'A_y = ' + _matrixLatex(_replaceCol(A, 1, b)) + ', \\quad \\det(A_y) = ' + _fmtNum(dy), true));
+    steps.push(_stepDiv(2, 'Replace column 1 with b \u2014 call this A_1 (for ' + v0 + ')',
+        'A_1 = ' + _matrixLatex(_replaceCol(A, 0, b)) + ', \\quad \\det(A_1) = ' + _fmtNum(dx), true));
+    steps.push(_stepDiv(3, 'Replace column 2 with b \u2014 call this A_2 (for ' + v1 + ')',
+        'A_2 = ' + _matrixLatex(_replaceCol(A, 1, b)) + ', \\quad \\det(A_2) = ' + _fmtNum(dy), true));
     steps.push(_stepDiv(4, "Apply Cramer's Rule",
-        'x = \\frac{\\det(A_x)}{\\det(A)} = \\frac{' + _fmtNum(dx) + '}{' + _fmtNum(det) + '} = ' + _fmtNum(dx/det) +
-        ', \\quad y = \\frac{\\det(A_y)}{\\det(A)} = \\frac{' + _fmtNum(dy) + '}{' + _fmtNum(det) + '} = ' + _fmtNum(dy/det), true));
+        v0 + ' = \\frac{\\det(A_1)}{\\det(A)} = \\frac{' + _fmtNum(dx) + '}{' + _fmtNum(det) + '} = ' + _fmtNum(dx/det) +
+        ', \\quad ' + v1 + ' = \\frac{\\det(A_2)}{\\det(A)} = \\frac{' + _fmtNum(dy) + '}{' + _fmtNum(det) + '} = ' + _fmtNum(dy/det), true));
     return steps;
 }
 
-function _cramerSteps3(A, b) {
+function _cramerSteps3(A, b, vars) {
+    vars = vars || (state && state._vars && state._vars.length === 3 ? state._vars : ['x', 'y', 'z']);
+    var v0 = vars[0], v1 = vars[1], v2 = vars[2];
     var det = _det3(A);
     var dx = _det3(_replaceCol(A, 0, b)), dy = _det3(_replaceCol(A, 1, b)), dz = _det3(_replaceCol(A, 2, b));
     var steps = [];
     steps.push(_stepDiv(1, 'Compute det(A) using cofactor expansion', '\\det(A) = ' + _fmtNum(det), true));
     if (Math.abs(det) < 1e-12) return steps;
-    steps.push(_stepDiv(2, 'Replace col 1 \u2192 det(A\u2093)', '\\det(A_x) = ' + _fmtNum(dx), false));
-    steps.push(_stepDiv(3, 'Replace col 2 \u2192 det(A\u1D67)', '\\det(A_y) = ' + _fmtNum(dy), false));
-    steps.push(_stepDiv(4, 'Replace col 3 \u2192 det(A\u1D68)', '\\det(A_z) = ' + _fmtNum(dz), false));
+    steps.push(_stepDiv(2, 'Replace col 1 (for ' + v0 + ') \u2192 det(A_1)', '\\det(A_1) = ' + _fmtNum(dx), false));
+    steps.push(_stepDiv(3, 'Replace col 2 (for ' + v1 + ') \u2192 det(A_2)', '\\det(A_2) = ' + _fmtNum(dy), false));
+    steps.push(_stepDiv(4, 'Replace col 3 (for ' + v2 + ') \u2192 det(A_3)', '\\det(A_3) = ' + _fmtNum(dz), false));
     steps.push(_stepDiv(5, "Apply Cramer's Rule",
-        'x = \\frac{' + _fmtNum(dx) + '}{' + _fmtNum(det) + '} = ' + _fmtNum(dx/det) +
-        ', \\; y = \\frac{' + _fmtNum(dy) + '}{' + _fmtNum(det) + '} = ' + _fmtNum(dy/det) +
-        ', \\; z = \\frac{' + _fmtNum(dz) + '}{' + _fmtNum(det) + '} = ' + _fmtNum(dz/det), true));
+        v0 + ' = \\frac{' + _fmtNum(dx) + '}{' + _fmtNum(det) + '} = ' + _fmtNum(dx/det) +
+        ', \\; ' + v1 + ' = \\frac{' + _fmtNum(dy) + '}{' + _fmtNum(det) + '} = ' + _fmtNum(dy/det) +
+        ', \\; ' + v2 + ' = \\frac{' + _fmtNum(dz) + '}{' + _fmtNum(det) + '} = ' + _fmtNum(dz/det), true));
     return steps;
 }
 
 // ==================== Gaussian Steps ====================
 
-function _gaussianSteps(A, b) {
+function _gaussianSteps(A, b, varsOverride) {
     var n = A.length;
-    var vars = n === 2 ? ['x', 'y'] : ['x', 'y', 'z'];
+    // Prefer the user-detected variable names (Problem 4: I_1, I_2, I_3) over
+    // the historical x/y/z fallback. Caller can pass varsOverride; otherwise
+    // we read the live detected list off state._vars.
+    var vars = varsOverride || (state && state._vars && state._vars.length === n ? state._vars : null) ||
+               (n === 2 ? ['x', 'y'] : ['x', 'y', 'z']);
     var steps = [];
     var aug = [];
     for (var i = 0; i < n; i++) { aug[i] = A[i].slice(); aug[i].push(b[i]); }
@@ -693,23 +750,25 @@ function _gaussianSteps(A, b) {
 
 // ==================== Substitution Steps ====================
 
-function _substitutionSteps2(A, b) {
+function _substitutionSteps2(A, b, vars) {
+    vars = vars || (state && state._vars && state._vars.length === 2 ? state._vars : ['x', 'y']);
+    var v0 = vars[0], v1 = vars[1];
     var steps = [];
     var a = A[0][0], bc = A[0][1], c = b[0];
     var d = A[1][0], e2 = A[1][1], f = b[1];
 
     steps.push(_stepDiv(1, 'Write the system',
-        _buildEquationLatex(A[0], b[0], ['x','y']) + ' \\quad\\text{and}\\quad ' + _buildEquationLatex(A[1], b[1], ['x','y']), false));
+        _buildEquationLatex(A[0], b[0], vars) + ' \\quad\\text{and}\\quad ' + _buildEquationLatex(A[1], b[1], vars), false));
 
     if (Math.abs(a) > 1e-12) {
-        steps.push(_stepDiv(2, 'From equation 1, express x in terms of y',
-            'x = \\dfrac{' + _fmtNum(c) + (Math.abs(bc) > 1e-12 ? ' - ' + _fmtNum(bc) + 'y' : '') + '}{' + _fmtNum(a) + '}', true));
+        steps.push(_stepDiv(2, 'From equation 1, express ' + v0 + ' in terms of ' + v1,
+            v0 + ' = \\dfrac{' + _fmtNum(c) + (Math.abs(bc) > 1e-12 ? ' - ' + _fmtNum(bc) + v1 : '') + '}{' + _fmtNum(a) + '}', true));
         var denom = e2 - d * bc / a;
-        steps.push(_stepDiv(3, 'Substitute into equation 2 and solve for y',
-            _fmtNum(denom) + 'y = ' + _fmtNum(f - d * c / a), false));
+        steps.push(_stepDiv(3, 'Substitute into equation 2 and solve for ' + v1,
+            _fmtNum(denom) + v1 + ' = ' + _fmtNum(f - d * c / a), false));
     } else {
-        steps.push(_stepDiv(2, 'From equation 1, express y directly', 'y = \\dfrac{' + _fmtNum(c) + '}{' + _fmtNum(bc) + '}', true));
-        steps.push(_stepDiv(3, 'Substitute into equation 2 and solve for x', null, false));
+        steps.push(_stepDiv(2, 'From equation 1, express ' + v1 + ' directly', v1 + ' = \\dfrac{' + _fmtNum(c) + '}{' + _fmtNum(bc) + '}', true));
+        steps.push(_stepDiv(3, 'Substitute into equation 2 and solve for ' + v0, null, false));
     }
     steps.push(_stepDiv(4, 'Back-substitute to find both variables', null, false));
     return steps;
@@ -717,11 +776,15 @@ function _substitutionSteps2(A, b) {
 
 // ==================== Matrix Steps ====================
 
-function _matrixSteps(A, b) {
+function _matrixSteps(A, b, vars) {
+    vars = vars || (state && state._vars && state._vars.length === A.length ? state._vars : null);
     var n = A.length;
     var steps = [];
+    var xVecLatex = vars
+        ? '\\begin{pmatrix}' + vars.join(' \\\\ ') + '\\end{pmatrix}'
+        : '\\mathbf{x}';
     steps.push(_stepDiv(1, 'Express as matrix equation AX = b',
-        _matrixLatex(A) + ' \\mathbf{x} = ' + _matrixLatex(b.map(function(v) { return [v]; })), true));
+        _matrixLatex(A) + xVecLatex + ' = ' + _matrixLatex(b.map(function(v) { return [v]; })), true));
     var det = n === 2 ? _det2(A) : _det3(A);
     steps.push(_stepDiv(2, 'Verify A is invertible: det(A) \u2260 0', '\\det(A) = ' + _fmtNum(det), false));
     if (Math.abs(det) > 1e-12) {
@@ -1593,6 +1656,262 @@ function _sympyFallback(eqs, vars, container) {
     });
 }
 
+// ==================== Parameter / unknown classification ===============
+// When the equations contain symbols beyond a typical unknown set (e.g.
+// "a, b" in problem statements like  x + 2y + az = 10 ), treat those as
+// PARAMETERS to be held symbolic, and the rest as unknowns to solve for.
+// This unblocks problems like "solve in terms of a, b" without making
+// the user manually annotate which letters are parameters.
+var _UNKNOWN_LETTERS = ['x', 'y', 'z', 't', 'u', 'v', 'w', 'n', 'p', 'q', 'r', 's'];
+function _splitUnknownsAndParameters(allVars) {
+    var unknowns = [], params = [];
+    (allVars || []).forEach(function (v) {
+        // Subscripted single letters (I_1, x_2, a_3) → unknown by convention.
+        if (/^[a-zA-Z]_[a-zA-Z0-9]+$/.test(v)) { unknowns.push(v); return; }
+        if (_UNKNOWN_LETTERS.indexOf(v) >= 0) { unknowns.push(v); return; }
+        params.push(v);
+    });
+    return { unknowns: unknowns, params: params };
+}
+
+// ==================== SymPy fallback for N×N systems ====================
+// Used when:
+//   · System size > 3 (legacy Cramer/Substitution don't generalize)
+//   · Symbolic parameters detected (Problem 3: a, b in coefficients)
+//   · Method-N/A on size > 3 (Cramer/Substitution/Matrix → fallback w/ notice)
+// Sends the equations to /OneCompilerFunctionality?action=execute, which
+// runs SymPy server-side. linsolve handles linear; solve handles nonlinear
+// or parametric. _buildSympyResultHTML (already N-general) renders the
+// returned SOLS:[…] payload. STEPS:[…] payload is rendered alongside as a
+// row-reduction trace when generated (linear systems with no parameters).
+function _sympyFallbackN(eqs, vars, container, params) {
+    if (!eqs || !vars || vars.length < 2) return;
+    params = params || [];
+
+    // Pre-flight UI: spinner inside the result panel.
+    container.innerHTML =
+        '<div style="display:flex;align-items:center;gap:0.75rem;padding:1.5rem;color:var(--text-secondary);">' +
+        '<svg style="animation:spin 1s linear infinite;width:20px;height:20px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-opacity=".25"/><path d="M12 2a10 10 0 0 1 10 10" stroke="#10b981"/></svg>' +
+        '<span style="font-size:0.875rem;">Solving with SymPy (server-side)&hellip;</span>' +
+        '</div>';
+
+    // Build SymPy code.
+    // Each equation in standard form: LHS - RHS expressed in Python.
+    var pyExprs = [];
+    for (var i = 0; i < eqs.length; i++) {
+        var parsed = splitEquation(eqs[i]);
+        if (!parsed) continue;
+        pyExprs.push('(' + _toPython(parsed.lhs) + ')-(' + _toPython(parsed.rhs) + ')');
+    }
+    if (pyExprs.length < 2) return;
+
+    var unknownsStr = vars.join(' ');
+    var paramsStr = params.length ? params.join(' ') : '';
+    // hasParams signals to the Python side whether to skip the row-reduction
+    // step generation (parametric coefficients break numeric pivoting).
+    var code =
+        'from sympy import symbols, solve, linsolve, latex, N, sympify, Matrix, Rational, S\n' +
+        'import json, sys\n' +
+        'unknowns = list(symbols("' + unknownsStr + '", real=True))\n' +
+        (paramsStr ? 'params = list(symbols("' + paramsStr + '"))\n' : 'params = []\n') +
+        'ns = {str(s): s for s in unknowns + params}\n' +
+        'eq_strs = ' + JSON.stringify(pyExprs) + '\n' +
+        'try:\n' +
+        '    eqs = [sympify(s, locals=ns) for s in eq_strs]\n' +
+        'except Exception as e:\n' +
+        '    print("ERR:" + str(e)); sys.exit(0)\n' +
+        '\n' +
+        'def serialize(expr):\n' +
+        '    try:\n' +
+        '        num = str(float(N(expr, 9)))\n' +
+        '    except Exception:\n' +
+        '        num = "symbolic"\n' +
+        '    return {"sym": latex(expr), "num": num}\n' +
+        '\n' +
+        'results = []\n' +
+        '# Try linsolve first (fast linear path; handles parametric too).\n' +
+        'try:\n' +
+        '    sols_set = linsolve(eqs, unknowns)\n' +
+        '    if sols_set and len(sols_set) > 0:\n' +
+        '        for sol_tuple in sols_set:\n' +
+        '            item = {}\n' +
+        '            for i, v in enumerate(unknowns):\n' +
+        '                item[str(v)] = serialize(sol_tuple[i])\n' +
+        '            results.append(item)\n' +
+        'except Exception:\n' +
+        '    pass\n' +
+        '\n' +
+        '# Fallback to solve() for nonlinear or otherwise stuck cases.\n' +
+        'if not results:\n' +
+        '    try:\n' +
+        '        sols_list = solve(eqs, unknowns, dict=True)\n' +
+        '        for sol in sols_list:\n' +
+        '            item = {}\n' +
+        '            for v in unknowns:\n' +
+        '                if v in sol:\n' +
+        '                    item[str(v)] = serialize(sol[v])\n' +
+        '                else:\n' +
+        '                    item[str(v)] = {"sym": "free", "num": "free"}\n' +
+        '            results.append(item)\n' +
+        '    except Exception:\n' +
+        '        pass\n' +
+        '\n' +
+        'if results:\n' +
+        '    print("SOLS:" + json.dumps(results))\n' +
+        'else:\n' +
+        '    print("NOSOL")\n' +
+        '\n' +
+        '# Row-reduction step trace — only when system is purely numeric (no\n' +
+        '# parameters in coefficients) and linear. Provides the Gaussian work\n' +
+        '# that students expect for 4×4+ systems.\n' +
+        'if not params:\n' +
+        '    try:\n' +
+        '        # Build augmented [A|b] symbolically.\n' +
+        '        A = Matrix(len(eqs), len(unknowns), lambda i, j: eqs[i].coeff(unknowns[j]))\n' +
+        '        zeros_sub = [(u, 0) for u in unknowns]\n' +
+        '        b_vec = Matrix(len(eqs), 1, lambda i, _: -(eqs[i].subs(zeros_sub)))\n' +
+        '        M = A.row_join(b_vec)\n' +
+        '        steps = [{"title": "Augmented matrix [A|b]", "latex": latex(M)}]\n' +
+        '        n_rows, n_cols = M.shape[0], M.shape[1]\n' +
+        '        # Forward elimination (partial pivoting on absolute value).\n' +
+        '        for col in range(min(n_rows, n_cols - 1)):\n' +
+        '            pivot_row = col\n' +
+        '            for r in range(col + 1, n_rows):\n' +
+        '                if abs(M[r, col]) > abs(M[pivot_row, col]):\n' +
+        '                    pivot_row = r\n' +
+        '            if pivot_row != col and M[pivot_row, col] != 0:\n' +
+        '                M.row_swap(col, pivot_row)\n' +
+        '                steps.append({"title": f"Swap R{col+1} ↔ R{pivot_row+1}", "latex": latex(M)})\n' +
+        '            if M[col, col] == 0:\n' +
+        '                continue  # leave column as-is, advance\n' +
+        '            for r in range(col + 1, n_rows):\n' +
+        '                if M[r, col] != 0:\n' +
+        '                    factor = M[r, col] / M[col, col]\n' +
+        '                    for k in range(n_cols):\n' +
+        '                        M[r, k] = M[r, k] - factor * M[col, k]\n' +
+        '                    steps.append({\n' +
+        '                        "title": f"R{r+1} ← R{r+1} − ({latex(factor)})·R{col+1}",\n' +
+        '                        "latex": latex(M)\n' +
+        '                    })\n' +
+        '        steps.append({"title": "Back-substitute to read off the solution", "latex": ""})\n' +
+        '        print("STEPS:" + json.dumps(steps))\n' +
+        '    except Exception as e:\n' +
+        '        # Step trace is optional — never fail the whole solve over it.\n' +
+        '        pass\n';
+
+    var ctx = window.SYSTEMS_SOLVER_CTX || '';
+    var controller = new AbortController();
+    var timeoutId = setTimeout(function() { controller.abort(); }, 60000);
+
+    fetch(ctx + '/OneCompilerFunctionality?action=execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: 'python', version: '3.10', code: code }),
+        signal: controller.signal
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        clearTimeout(timeoutId);
+        var stdout = (data.Stdout || data.stdout || '').trim();
+        var stderr = (data.Stderr || data.stderr || '').trim();
+
+        if (stdout.indexOf('ERR:') === 0) {
+            container.innerHTML = '<div class="sy-warn-box"><strong>Could not parse the system.</strong> ' +
+                escapeHTML(stdout.slice(4)) + '</div>';
+            return;
+        }
+        if (stdout.indexOf('NOSOL') === 0) {
+            container.innerHTML = '<div class="sy-warn-box"><strong>No solution.</strong> ' +
+                'The system is inconsistent or has no real solution. Try Gaussian to see the row-echelon analysis.</div>';
+            return;
+        }
+        var solsMatch = stdout.match(/SOLS:([\s\S]*)/);
+        if (!solsMatch) {
+            container.innerHTML = '<div class="sy-warn-box"><strong>SymPy returned no result.</strong>' +
+                (stderr ? '<br><small>' + escapeHTML(stderr.split('\n').slice(-3).join('<br>')) + '</small>' : '') +
+                '</div>';
+            return;
+        }
+        // Strip STEPS:[…] block off the SOLS payload before parsing.
+        var solsRaw = solsMatch[1];
+        var stepsMatch = solsRaw.match(/\nSTEPS:([\s\S]*)$/);
+        var sympySteps = null;
+        if (stepsMatch) {
+            solsRaw = solsRaw.slice(0, stepsMatch.index);
+            try { sympySteps = JSON.parse(stepsMatch[1].trim()); } catch (e) { sympySteps = null; }
+        }
+        var sympySols;
+        try { sympySols = JSON.parse(solsRaw.trim()); } catch (e) { return; }
+        if (!sympySols || !sympySols.length) return;
+
+        // ── Compose the result panel ─────────────────────────────────────
+        var pieces = [];
+
+        // Fix #2: method-N/A notice when user picked a method we couldn't honor.
+        if (state.method && state.method !== 'gaussian' && state.method !== 'all' &&
+            (vars.length > 3 || eqs.length > 3)) {
+            var labels = { cramer: "Cramer's Rule", substitution: 'Substitution', matrix: 'Matrix Inverse' };
+            pieces.push(
+                '<div class="sy-warn-box sy-method-notice" style="margin-bottom:0.75rem;">' +
+                '<strong>' + (labels[state.method] || state.method) + '</strong> is impractical for ' +
+                'systems with more than 3 unknowns. Solved using SymPy linsolve (general N×N) instead.' +
+                '</div>'
+            );
+        }
+
+        // Fix #4: parameter badge when symbolic parameters were treated as such.
+        if (params && params.length) {
+            pieces.push(
+                '<div class="sy-warn-box sy-param-notice" style="margin-bottom:0.75rem;background:rgba(99,102,241,0.08);border-left:3px solid #6366f1;color:var(--text-primary);">' +
+                '<strong>Treating ' + params.map(function(p) { return '<code>' + escapeHTML(p) + '</code>'; }).join(', ') +
+                ' as parameter' + (params.length === 1 ? '' : 's') + '.</strong> ' +
+                'Solving for ' + vars.map(function(v) { return '<code>' + escapeHTML(v) + '</code>'; }).join(', ') +
+                ' in terms of ' + (params.length === 1 ? 'this parameter' : 'these parameters') + '.' +
+                '</div>'
+            );
+        }
+
+        // Main solution rendering (N-general).
+        pieces.push(_buildSympyResultHTML(eqs, vars, sympySols));
+
+        // Fix #3: row-reduction step trace, when SymPy emitted one.
+        if (sympySteps && sympySteps.length) {
+            var stepsHtml = '<div class="sy-steps-container" style="margin-top:1rem;">';
+            stepsHtml += '<div class="sy-steps-header" style="padding:0.55rem 1rem;background:rgba(16,185,129,0.08);color:#10b981;font-size:0.8rem;font-weight:600;border-radius:0.5rem 0.5rem 0 0;">Row-reduction trace (Gaussian elimination)</div>';
+            for (var si = 0; si < sympySteps.length; si++) {
+                var st = sympySteps[si];
+                var stepId = 'sy-rr-step-' + si;
+                stepsHtml += '<div class="sy-step-item" style="padding:0.7rem 1rem;border:1px solid var(--border,rgba(0,0,0,0.08));border-top:none;">';
+                stepsHtml += '<div class="sy-step-num" style="display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:50%;background:#10b981;color:#fff;font-size:0.7rem;font-weight:700;margin-right:0.5rem;">' + (si + 1) + '</div>';
+                stepsHtml += '<span style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);">' + escapeHTML(st.title || '') + '</span>';
+                if (st.latex) {
+                    stepsHtml += '<div id="' + stepId + '" data-latex="' + (st.latex || '').replace(/"/g, '&quot;') +
+                        '" data-display="true" class="sy-step-math" style="margin-top:0.4rem;overflow-x:auto;"></div>';
+                }
+                stepsHtml += '</div>';
+            }
+            stepsHtml += '</div>';
+            pieces.push(stepsHtml);
+        }
+
+        container.innerHTML = pieces.join('');
+        _katexify(container);
+    })
+    .catch(function(err) {
+        clearTimeout(timeoutId);
+        var msg = err.name === 'AbortError' ? 'Request timed out (60s).' : err.message;
+        container.innerHTML = '<div class="sy-warn-box"><strong>Could not solve.</strong> ' + msg + '</div>';
+    });
+}
+
+// Tiny HTML-escape helper (other helpers in this file use raw concatenation;
+// for SymPy stderr/error display we want to be safe).
+function escapeHTML(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 // Numbered step builder for nonlinear solutions
 function _nlStep(num, title, latex, displayMode) {
     var mathId = 'sy-nl-math-' + num + '-' + Date.now();
@@ -1616,11 +1935,11 @@ function _runSolver(A, b, method, size) {
     }
 }
 
-function _buildSteps(A, b, method, size) {
-    if (method === 'cramer')         return size === 2 ? _cramerSteps2(A, b) : _cramerSteps3(A, b);
-    if (method === 'gaussian')       return _gaussianSteps(A, b);
-    if (method === 'substitution' && size === 2) return _substitutionSteps2(A, b);
-    if (method === 'matrix')         return _matrixSteps(A, b);
+function _buildSteps(A, b, method, size, vars) {
+    if (method === 'cramer')         return size === 2 ? _cramerSteps2(A, b, vars) : _cramerSteps3(A, b, vars);
+    if (method === 'gaussian')       return _gaussianSteps(A, b, vars);
+    if (method === 'substitution' && size === 2) return _substitutionSteps2(A, b, vars);
+    if (method === 'matrix')         return _matrixSteps(A, b, vars);
     return [];
 }
 
@@ -1668,7 +1987,7 @@ function _doSolve(container) {
 
     if (info._tooMany) {
         container.innerHTML = '<div class="sy-warn-box"><strong>Too many equations.</strong> ' +
-            'This solver supports up to 3 equations. Remove the extra equation.</div>';
+            'This solver supports up to 6 equations. Remove the extra equation.</div>';
         _updateGraphTabVisibility();
         return;
     }
@@ -1683,6 +2002,31 @@ function _doSolve(container) {
     }
 
     var html = '';
+
+    // Symbolic-parameter detection (Problem 3): split detected vars into
+    // unknowns vs parameters. If parameters are present, route to SymPy
+    // even for "small" systems — the legacy linear solver needs numeric A,b.
+    var split = _splitUnknownsAndParameters(info.vars);
+    if (split.params.length > 0 && split.unknowns.length >= 2) {
+        state._A = null; state._b = null; state._vars = split.unknowns; state._size = split.unknowns.length;
+        state._nlEqs = null; state._nlVars = null; state._nlSolutions = null;
+        _sympyFallbackN(info.eqs, split.unknowns, container, split.params);
+        _updateGraphTabVisibility();
+        if (state.activeTab !== 'result') switchTab('result');
+        return;
+    }
+
+    // 4×4 / 5×5 / 6×6 — beyond legacy Cramer/Substitution scope.
+    // Route to SymPy server-side (linsolve handles linear, solve handles
+    // nonlinear or parametric). _buildSympyResultHTML is already N-general.
+    if (info.eqs.length > 3 || info.vars.length > 3) {
+        state._A = null; state._b = null; state._vars = info.vars; state._size = info.vars.length;
+        state._nlEqs = null; state._nlVars = null; state._nlSolutions = null;
+        _sympyFallbackN(info.eqs, info.vars, container);
+        _updateGraphTabVisibility();
+        if (state.activeTab !== 'result') switchTab('result');
+        return;
+    }
 
     if (info.isLinear && info.vars.length >= 2 && info.vars.length <= 3 && info.eqs.length === info.vars.length) {
         // Clear nonlinear state when switching to linear
@@ -1706,7 +2050,7 @@ function _doSolve(container) {
         } else {
             var solution = _runSolver(A, b, state.method, size);
             state.lastResult = { solution: solution };
-            var steps = _buildSteps(A, b, state.method, size);
+            var steps = _buildSteps(A, b, state.method, size, info.vars);
             html = _buildResultHTML(A, b, state.method, solution, steps, info.vars);
         }
     } else {
@@ -1758,8 +2102,11 @@ function drawGraph() {
             '<span style="font-size:0.875rem;">Rendering graph\u2026</span></div>';
     }
     if (state._A && state._size === 2) {
-        var solution = state.lastResult ? state.lastResult.solution : null;
-        G.draw2x2(state._A, state._b, solution, 'sy-graph-container');
+        var solution2 = state.lastResult ? state.lastResult.solution : null;
+        G.draw2x2(state._A, state._b, solution2, 'sy-graph-container');
+    } else if (state._A && state._size === 3 && typeof G.draw3x3 === 'function') {
+        var solution3 = state.lastResult ? state.lastResult.solution : null;
+        G.draw3x3(state._A, state._b, solution3, state._vars || ['x','y','z'], 'sy-graph-container');
     } else if (state._nlEqs && state._nlVars && state._nlVars.length === 2) {
         G.drawNonlinear2(state._nlEqs, state._nlVars, state._nlSolutions || [], 'sy-graph-container');
     } else {
@@ -1852,7 +2199,11 @@ function init() {
     // Restore URL params
     var restored = restoreFromUrl();
     if (!restored) {
-        state.equations = ['2x + 3y = 8', '4x - y = 2'];
+        // Math-studio shell: start with two EMPTY rows so the empty-state
+        // chip grid (in #sy-result-content) stays visible until the user
+        // types or picks an example. The chips drive subsequent state via
+        // window.SystemsSolverCore.loadExample().
+        state.equations = ['', ''];
     }
     if (state.method) switchMethod(state.method);
 
@@ -1869,13 +2220,14 @@ function init() {
     var tabResult = $('sy-tab-result');
     if (tabResult) tabResult.classList.add('active');
 
-    // Graph tab starts disabled (HTML attribute); _updateGraphTabVisibility controls it
-
-    // Auto-solve on load
-    setTimeout(function() {
-        _updatePreview();
-        solve();
-    }, 100);
+    // Auto-solve only when we have something to solve (URL restored). On
+    // an empty fresh visit, we keep the empty-state chips visible.
+    if (restored) {
+        setTimeout(function() {
+            _updatePreview();
+            solve();
+        }, 100);
+    }
 }
 
 // ==================== Exports ====================
@@ -1892,6 +2244,37 @@ window.SystemsSolverCore = {
     }
 };
 if (_prevTryNerdamer) window.SystemsSolverCore._tryNerdamer = _prevTryNerdamer;
+
+// Test-only exports — gated behind a flag so production never sees these.
+// Set window._SY_TEST_HOOK = true BEFORE loading this file (the test
+// harness in system-equations-test/require-core.js does that). The
+// __test bag exposes pure math helpers that are otherwise IIFE-private.
+if (typeof window === 'object' && window._SY_TEST_HOOK) {
+    window.SystemsSolverCore.__test = {
+        _solveGaussian: _solveGaussian,
+        _solveCramer2: _solveCramer2,
+        _solveCramer3: _solveCramer3,
+        _solveSubstitution2: _solveSubstitution2,
+        _det2: _det2,
+        _det3: _det3,
+        classifySystem: classifySystem,
+        detectVars: detectVars,
+        isLinearEquation: isLinearEquation,
+        splitEquation: splitEquation,
+        _normalizeEq: _normalizeEq,
+        _toPython: _toPython,
+        extractLinearSystem: extractLinearSystem,
+        _extractLinearFallback: _extractLinearFallback,
+        // Step renderers — Fix #1
+        _cramerSteps2: _cramerSteps2,
+        _cramerSteps3: _cramerSteps3,
+        _substitutionSteps2: _substitutionSteps2,
+        _matrixSteps: _matrixSteps,
+        _gaussianSteps: _gaussianSteps,
+        // Parameter classifier — Fix #4
+        _splitUnknownsAndParameters: _splitUnknownsAndParameters
+    };
+}
 
 })();
 

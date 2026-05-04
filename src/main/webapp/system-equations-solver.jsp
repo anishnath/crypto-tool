@@ -1,20 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
-<%
-    String cacheVersion = String.valueOf(System.currentTimeMillis());
-%>
+<% String v = String.valueOf(System.currentTimeMillis()); %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="googlebot" content="index,follow">
-    <meta name="resource-type" content="document">
-    <meta name="classification" content="tools">
-    <meta name="language" content="en">
-    <meta name="author" content="Anish Nath">
-    <meta name="context-path" content="<%=request.getContextPath()%>">
+    <%--
+        System of Equations Solver — migrated to math-studio shell.
 
+        Architecture:
+          · Each equation row is a <math-field> rendered by the legacy core's
+            (patched) _makeEqRow. Hidden .sy-eq-input twin per row preserves
+            the legacy text-input contract.
+          · Method pills carry .sy-method-btn class — core's existing handler
+            wires them directly.
+          · Solve / worksheet / share / latex buttons keep their sy-* IDs.
+          · Empty-state chips call window.SystemsSolverCore.loadExample(eqs).
+          · AI image-scan via image-to-math.js + system-of-equations prompt.
+
+        Absorbs linear-equations-solver.jsp (Cloudflare 301 handles redirect).
+
+        SEO ported VERBATIM from legacy (5 FAQ pairs + howToSteps +
+        educationalLevel + teaches).
+    --%>
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="System of Equations Solver — Step-by-Step" />
         <jsp:param name="toolDescription" value="Solve any system of equations instantly — linear or nonlinear, 2&times;2 or 3&times;3. See full step-by-step work using Cramer&apos;s rule, Gaussian elimination, substitution, or matrix inversion. Free, no signup." />
@@ -34,611 +40,754 @@
         <jsp:param name="faq3q" value="What does 'No Unique Solution — determinant is zero' mean?" />
         <jsp:param name="faq3a" value="When det(A) = 0, the system is either inconsistent (parallel lines, no solution) or dependent (same line, infinitely many solutions). Try Gaussian Elimination which identifies which case you have. If you entered a nonlinear equation, make sure Nerdamer loaded — check your browser console for script errors." />
         <jsp:param name="faq4q" value="How do I enter a 3×3 system?" />
-        <jsp:param name="faq4a" value="Click the '+ Add 3rd equation' button below the equation inputs. Enter three equations with three variables (e.g. x, y, z). The solver automatically detects the 3x3 system and applies your chosen method." />
+        <jsp:param name="faq4a" value="Click the '+ Add equation' button below the equation inputs. Enter three equations with three variables (e.g. x, y, z). The solver automatically detects the 3x3 system and applies your chosen method." />
         <jsp:param name="faq5q" value="Does it show step-by-step work?" />
         <jsp:param name="faq5a" value="Yes — every linear method (Cramer's Rule, Gaussian Elimination, Substitution, Matrix Inversion) shows the complete solution trace: determinant expansions, row operations, substitution steps, and the final answer with verification. For nonlinear systems it shows the substitution path and residual check for each solution." />
     </jsp:include>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="ctx" content="<%=request.getContextPath()%>" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://cdn.plot.ly">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
 
-    <!-- Critical inline CSS — eliminates render-blocking requests for LCP -->
-    <style>
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
-        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#fff}
-        :root{
-            --sy-tool:#10b981;--sy-tool-dark:#059669;--sy-gradient:linear-gradient(135deg,#10b981 0%,#34d399 100%);--sy-light:#d1fae5;
-            --bg-primary:#fff;--bg-secondary:#f8fafc;--bg-tertiary:#f1f5f9;
-            --text-primary:#0f172a;--text-secondary:#475569;--text-muted:#94a3b8;
-            --border:#e2e8f0;--font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-            --font-mono:'JetBrains Mono','Fira Code',Consolas,monospace;
-            --shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow-lg:0 10px 15px -3px rgba(0,0,0,0.1);
-            --radius-md:0.5rem;--radius-lg:0.75rem;
-            --z-dropdown:1000;--z-fixed:1030;--z-modal:1050;
-            --header-height-desktop:72px;--header-height-mobile:64px
-        }
-        [data-theme="dark"]{--sy-light:rgba(16,185,129,0.15);--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155}
-        [data-theme="dark"] body{background:var(--bg-primary);color:var(--text-primary)}
-        .modern-nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-fixed);background:var(--bg-primary);border-bottom:1px solid var(--border);height:var(--header-height-desktop)}
-        .tool-page-header{background:var(--bg-primary);border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;margin-top:72px}
-        .tool-page-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-        .tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary);margin:0}
-        .tool-page-badges{display:flex;gap:0.5rem;flex-wrap:wrap}
-        .tool-badge{display:inline-flex;align-items:center;padding:0.25rem 0.625rem;font-size:0.6875rem;font-weight:500;border-radius:9999px;background:var(--sy-light);color:var(--sy-tool)}
-        .tool-description-section{border-bottom:1px solid var(--border);padding:1.25rem 1.5rem}
-        .tool-description-inner{max-width:1600px;margin:0 auto}
-        .tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary)}
-        .tool-page-container{display:grid;grid-template-columns:minmax(180px,200px) minmax(0,1fr) 280px;gap:1rem;max-width:1600px;margin:0 auto;padding:1rem 1.5rem;min-height:calc(100vh - 180px)}
-        @media(max-width:1024px){.tool-page-container{grid-template-columns:minmax(170px,190px) minmax(0,1fr)}.tool-ads-column{display:none}}
-        @media(max-width:900px){.tool-page-container{grid-template-columns:1fr;display:flex;flex-direction:column}.tool-input-column{order:1}.tool-output-column{order:2;min-height:350px}}
-        .tool-input-column{position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 110px);overflow-y:auto}
-        .tool-card{background:var(--bg-primary);border:1px solid var(--border);border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
-        .tool-card-header{background:var(--sy-gradient);color:#fff;padding:0.625rem 0.875rem;font-weight:600;font-size:0.875rem}
-        .tool-card-body{padding:0.75rem}
-        .tool-form-label{display:block;font-weight:500;margin-bottom:0.375rem;color:var(--text-primary);font-size:0.8125rem}
-        .tool-form-hint{font-size:0.6875rem;color:var(--text-secondary);margin-top:0.25rem}
-        .tool-action-btn{width:100%;padding:0.75rem;font-weight:600;font-size:0.875rem;border:none;border-radius:0.5rem;cursor:pointer;background:var(--sy-gradient)!important;color:#fff;transition:opacity .15s}
-        .tool-action-btn:hover{opacity:.88}
-        .tool-result-header{display:flex;align-items:center;gap:0.5rem;padding:1rem 1.25rem;background:var(--bg-secondary);border-bottom:1px solid var(--border);border-radius:0.75rem 0.75rem 0 0}
-        .tool-result-header h4{margin:0;font-size:0.95rem;font-weight:600;color:var(--text-primary);flex:1}
-        .tool-result-content{padding:1.25rem;min-height:300px;overflow-y:auto}
-        .tool-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.5rem;color:var(--text-muted)}
-        .tool-empty-state h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem;color:var(--text-secondary)}
-        .tool-empty-state p{font-size:0.875rem;max-width:280px}
-        [data-theme="dark"] .tool-card{background:var(--bg-secondary);border-color:var(--border)}
-        [data-theme="dark"] .tool-result-header{background:var(--bg-tertiary)}
-        /* Size toggle */
-        .sy-size-toggle{display:flex;gap:0.375rem;background:var(--bg-tertiary);padding:0.25rem;border-radius:0.5rem}
-        .sy-size-btn{flex:1;padding:0.375rem 0.625rem;font-size:0.8125rem;font-weight:500;border:none;border-radius:0.375rem;cursor:pointer;background:transparent;color:var(--text-secondary);transition:all .15s}
-        .sy-size-btn.active{background:var(--sy-gradient);color:#fff;box-shadow:var(--shadow-sm)}
-        /* Method toggle */
-        .sy-method-toggle{display:flex;flex-wrap:wrap;gap:0.25rem;margin-top:0.25rem}
-        .sy-method-btn{padding:0.2rem 0.45rem;font-size:0.6875rem;font-weight:500;border:1px solid var(--border);border-radius:0.3rem;cursor:pointer;background:var(--bg-primary);color:var(--text-secondary);transition:all .15s;white-space:nowrap}
-        .sy-method-btn.active{background:var(--sy-gradient);color:#fff;border-color:transparent}
-        /* Equation row inputs */
-        .sy-eq-row{display:flex;align-items:center;gap:0.3rem;margin-bottom:0.5rem;flex-wrap:wrap}
-        .sy-eq-label{font-size:0.75rem;color:var(--text-secondary);min-width:3.5rem;font-weight:500}
-        .sy-coef-input{width:3.25rem;padding:0.3rem 0.375rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.8125rem;font-family:var(--font-mono);text-align:center;background:var(--bg-primary);color:var(--text-primary)}
-        .sy-coef-input:focus{outline:none;border-color:var(--sy-tool);box-shadow:0 0 0 2px rgba(16,185,129,0.2)}
-        .sy-eq-op{font-size:0.8125rem;color:var(--text-secondary);font-weight:600}
-        .sy-eq-var{font-size:0.8125rem;font-style:italic;color:var(--text-primary);font-weight:600}
-        /* Output tabs */
-        .sy-output-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg-secondary);border-radius:0.75rem 0.75rem 0 0;overflow:hidden}
-        .sy-output-tab{flex:1;padding:0.75rem 1rem;font-size:0.875rem;font-weight:500;border:none;background:transparent;cursor:pointer;color:var(--text-secondary);border-bottom:2px solid transparent;transition:all .15s}
-        .sy-output-tab.active{color:var(--sy-tool);border-bottom-color:var(--sy-tool);background:var(--bg-primary)}
-        .sy-output-tab:disabled{opacity:0.35;cursor:not-allowed}
-        /* Panels */
-        .sy-panel{display:none}
-        .sy-panel.active{display:block}
-        /* Toolbar buttons */
-        .sy-toolbar-btn{display:inline-flex;align-items:center;gap:0.3rem;padding:0.3rem 0.65rem;font-size:0.75rem;font-weight:500;border:1px solid var(--border);border-radius:0.375rem;cursor:pointer;background:var(--bg-primary);color:var(--text-secondary);transition:all .15s;white-space:nowrap}
-        .sy-toolbar-btn:hover{border-color:var(--sy-tool);color:var(--sy-tool)}
-        /* Worksheet button */
-        .sy-worksheet-btn{width:100%;padding:0.625rem 1rem;font-size:0.8125rem;font-weight:600;border:2px dashed var(--sy-tool);border-radius:0.5rem;cursor:pointer;background:var(--sy-light);color:var(--sy-tool-dark);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
-        .sy-worksheet-btn:hover{background:var(--sy-tool);color:#fff}
-        /* Python template buttons */
-        .sy-tpl-bar{display:flex;gap:0.5rem;flex-wrap:wrap;padding:0.75rem;border-bottom:1px solid var(--border);background:var(--bg-secondary)}
-        .sy-tpl-btn{padding:0.3rem 0.625rem;font-size:0.75rem;font-weight:500;border:1px solid var(--border);border-radius:0.375rem;cursor:pointer;background:var(--bg-primary);color:var(--text-secondary);transition:all .15s}
-        .sy-tpl-btn:hover{border-color:var(--sy-tool);color:var(--sy-tool)}
-        /* Graph note */
-        .sy-graph-note{font-size:0.8125rem;color:var(--text-muted);text-align:center;margin-top:0.75rem;padding:0.5rem;background:var(--bg-secondary);border-radius:0.375rem;border:1px solid var(--border)}
-        /* Animations */
-        .sy-anim{opacity:0;transform:translateY(16px);transition:opacity .45s ease,transform .45s ease}
-        .sy-anim.sy-visible{opacity:1;transform:none}
-        .sy-anim-d1{transition-delay:.05s}.sy-anim-d2{transition-delay:.12s}.sy-anim-d3{transition-delay:.19s}.sy-anim-d4{transition-delay:.26s}.sy-anim-d5{transition-delay:.33s}
-        /* Edu grid */
-        .sy-edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1rem}
-        .sy-edu-card{padding:1rem;background:var(--bg-secondary);border-radius:0.5rem;border-left:3px solid var(--sy-tool)}
-        .sy-edu-card h4{font-size:0.875rem;font-weight:600;margin-bottom:0.375rem;color:var(--text-primary)}
-        .sy-edu-card p{font-size:0.8125rem;color:var(--text-secondary);line-height:1.6;margin:0}
-        /* Methods grid */
-        .sy-methods-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;margin-top:1rem}
-        .sy-method-card{padding:1rem;background:var(--bg-secondary);border-radius:0.5rem;border:1px solid var(--border)}
-        .sy-method-card h4{font-size:0.875rem;font-weight:600;margin-bottom:0.5rem;color:var(--text-primary);display:flex;align-items:center;gap:0.5rem}
-        .sy-method-card p{font-size:0.8125rem;color:var(--text-secondary);line-height:1.6;margin:0}
-        .sy-method-tag{display:inline-block;font-size:0.625rem;font-weight:600;padding:0.125rem 0.4rem;border-radius:9999px;text-transform:uppercase;letter-spacing:.04em}
-        /* Solution type cards */
-        .sy-solution-types{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1rem}
-        .sy-sol-card{padding:1rem 1.125rem;border-radius:0.5rem;border:1px solid var(--border)}
-        .sy-sol-badge{display:inline-block;font-size:0.6875rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:9999px;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:.05em}
-        .sy-sol-card h4{font-size:0.875rem;font-weight:600;margin-bottom:0.375rem;color:var(--text-primary)}
-        .sy-sol-card p{font-size:0.8125rem;color:var(--text-secondary);line-height:1.6;margin:0}
-        /* Callout */
-        .sy-callout{display:flex;gap:0.75rem;padding:0.875rem 1rem;border-radius:0.5rem;margin-top:1rem;background:var(--sy-light);border:1px solid rgba(16,185,129,0.25)}
-        .sy-callout-icon{font-size:1.125rem;flex-shrink:0;line-height:1.5}
-        .sy-callout-text{font-size:0.8125rem;color:var(--text-secondary);line-height:1.6}
-        /* FAQ */
-        .faq-item{border-bottom:1px solid var(--border);padding:0.25rem 0}
-        .faq-question{width:100%;display:flex;align-items:center;justify-content:space-between;padding:0.875rem 0;font-size:0.9rem;font-weight:600;background:transparent;border:none;cursor:pointer;color:var(--text-primary);text-align:left;gap:0.5rem}
-        .faq-chevron{flex-shrink:0;transition:transform .25s}
-        .faq-answer{font-size:0.875rem;color:var(--text-secondary);line-height:1.7;padding:0 0 1rem;display:none}
-        .faq-item.open .faq-chevron{transform:rotate(180deg)}
-        .faq-item.open .faq-answer{display:block}
-        /* Symbolic equation inputs */
-        .sy-sym-row{display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem}
-        .sy-sym-num{font-size:0.6875rem;font-weight:700;color:var(--sy-tool);min-width:1.25rem;font-family:var(--font-mono);text-align:right}
-        .sy-sym-input{flex:1;padding:0.375rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.8125rem;font-family:var(--font-mono);background:var(--bg-primary);color:var(--text-primary);transition:border-color .15s}
-        .sy-sym-input:focus{outline:none;border-color:var(--sy-tool);box-shadow:0 0 0 2px rgba(16,185,129,0.2)}
-        .sy-sym-input.sy-input-error{border-color:#ef4444}
-        .sy-remove-eq-btn{width:1.5rem;height:1.5rem;border:1px solid var(--border);border-radius:0.375rem;background:transparent;color:var(--text-muted);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;padding:0;line-height:1}
-        .sy-remove-eq-btn:hover{border-color:#ef4444;color:#ef4444}
-        .sy-add-eq-btn{width:100%;padding:0.4rem 0.75rem;border:1px dashed var(--border);border-radius:0.375rem;background:transparent;color:var(--text-muted);cursor:pointer;font-size:0.8rem;transition:all .15s;margin-top:0.25rem;text-align:center}
-        .sy-add-eq-btn:hover{border-color:var(--sy-tool);color:var(--sy-tool);background:var(--sy-light)}
-        .sy-add-eq-btn:disabled{opacity:.4;cursor:not-allowed}
-        /* System type badge */
-        .sy-sys-badge{display:inline-flex;align-items:center;padding:0.15rem 0.5rem;border-radius:0.3rem;font-size:0.6875rem;font-weight:700;margin-left:0.5rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.04em}
-        .sy-sys-badge.linear{background:#d1fae5;color:#059669}
-        .sy-sys-badge.nonlinear{background:#fef3c7;color:#b45309}
-        /* Live preview */
-        .sy-preview{margin-top:0.5rem;padding:0.5rem 0.75rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.375rem;min-height:2.25rem;overflow-x:auto;text-align:center;font-size:0.9rem;display:none}
-        /* Answer chips */
-        .sy-chips{display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;margin:0.375rem 0 1rem}
-        .sy-chip{padding:0.375rem 1rem;background:var(--sy-light);border:1.5px solid rgba(16,185,129,0.35);border-radius:2rem;font-size:0.9rem;color:var(--sy-tool-dark);font-weight:700}
-        /* Collapsible steps */
-        .sy-steps-hdr{width:100%;display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0.75rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.375rem;font-size:0.8125rem;font-weight:600;cursor:pointer;color:var(--text-primary);margin:0.75rem 0 0;transition:background .15s}
-        .sy-steps-hdr:hover{background:var(--bg-tertiary)}
-        .sy-steps-hdr .sy-chev{transition:transform .2s;flex-shrink:0}
-        .sy-steps-hdr.open .sy-chev{transform:rotate(180deg)}
-        .sy-steps-body{margin-top:0.5rem;display:none}
-        .sy-steps-body.open{display:block}
-        /* Method section - dim when nonlinear */
-        .sy-method-section.sy-nonlinear-mode{opacity:.4;pointer-events:none}
-        /* Example chips */
-        .sy-example-chip{padding:0.2rem 0.55rem;font-size:0.7rem;font-weight:500;border:1px solid var(--border);border-radius:0.3rem;cursor:pointer;background:var(--bg-secondary);color:var(--text-secondary);transition:all .15s;white-space:nowrap;font-family:var(--font-mono)}
-        .sy-example-chip:hover{border-color:var(--sy-tool);color:var(--sy-tool);background:var(--sy-light)}
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=v%>">
 
-        /* ── Step items ── */
-        .sy-step-item{display:flex;gap:0.75rem;margin-bottom:0.875rem;align-items:flex-start}
-        .sy-step-num{min-width:1.75rem;height:1.75rem;border-radius:50%;background:var(--sy-gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0;box-shadow:0 1px 3px rgba(16,185,129,.3)}
-        .sy-step-body{flex:1;min-width:0}
-        .sy-step-title{font-size:0.8rem;color:var(--text-muted,#94a3b8);margin-bottom:0.3rem;line-height:1.4}
-        .sy-step-math{overflow-x:auto;padding:0.25rem 0}
-
-        /* ── Nonlinear step items (slightly bolder title) ── */
-        .sy-nl-step-num{flex-shrink:0;width:1.5rem;height:1.5rem;background:var(--sy-gradient);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:#fff;margin-top:0.1rem;box-shadow:0 1px 3px rgba(16,185,129,.3)}
-        .sy-nl-step-title{font-size:0.8125rem;font-weight:600;color:var(--text-primary,#0f172a);margin-bottom:0.25rem;line-height:1.5}
-
-        /* ── Solution count label ── */
-        .sy-sol-count{font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--sy-tool);margin-bottom:0.5rem;text-align:center}
-        .sy-sol-pair{display:flex;justify-content:center;gap:0.5rem;margin-bottom:0.375rem;flex-wrap:wrap}
-
-        /* ── System display header ── */
-        .sy-system-display{text-align:center;margin-bottom:1rem}
-
-        /* ── Verify section ── */
-        .sy-verify-section{margin-top:1rem;padding:0.75rem;background:var(--bg-secondary);border-radius:0.5rem;border:1px solid var(--border)}
-        .sy-verify-header{font-size:0.75rem;font-weight:700;color:var(--text-secondary);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem}
-        .sy-verify-num{width:1.5rem;height:1.5rem;background:var(--bg-tertiary,#f1f5f9);border:1px solid var(--border);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:var(--text-muted);flex-shrink:0}
-        .sy-verify-pair{font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin:0.375rem 0 0.2rem;padding-left:1.75rem}
-        .sy-verify-row{font-size:0.8125rem;padding-left:2rem;margin-bottom:0.2rem;display:flex;align-items:baseline;gap:0.375rem;flex-wrap:wrap}
-        .sy-verify-ok{color:#10b981}
-        .sy-verify-fail{color:#ef4444}
-        .sy-verify-code{font-size:0.75rem;background:var(--bg-primary,#fff);border:1px solid var(--border);padding:.1rem .35rem;border-radius:.25rem;font-family:var(--font-mono)}
-
-        /* ── Inline warning/info boxes ── */
-        .sy-warn-box{padding:0.875rem 1rem;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:0.5rem;color:#92400e;font-size:0.875rem;margin-bottom:0.75rem}
-        [data-theme="dark"] .sy-warn-box{background:rgba(245,158,11,.12);color:#fcd34d}
-
-        /* ── Method label strip ── */
-        .sy-method-label{display:inline-flex;align-items:center;gap:0.375rem;font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:0.2rem 0.6rem;border-radius:9999px;margin-bottom:0.75rem}
-        .sy-method-label.elim{background:#d1fae5;color:#065f46}
-        .sy-method-label.subst{background:#e0f2fe;color:#0369a1}
-        .sy-method-label.sympy{background:#ede9fe;color:#6d28d9}
-        [data-theme="dark"] .sy-method-label.elim{background:rgba(16,185,129,.15);color:#34d399}
-        [data-theme="dark"] .sy-method-label.subst{background:rgba(59,130,246,.15);color:#60a5fa}
-        [data-theme="dark"] .sy-method-label.sympy{background:rgba(139,92,246,.15);color:#a78bfa}
-        .sy-chip-approx{font-size:0.72rem;color:var(--text-muted);font-family:var(--font-mono);margin-left:0.25rem;align-self:center}
-
-        @keyframes spin{to{transform:rotate(360deg)}}
-    </style>
-
-    <!-- Non-blocking CSS (preload + noscript fallback) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/css/systems-solver.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/css/systems-solver.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    </noscript>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=v%>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
+
+    <style>
+        /* sy-* result rendering classes — the legacy render module emits
+           these. Pulled forward and tuned to math-studio tokens. */
+        .sy-sym-row {
+            display: flex; align-items: center; gap: 0.5rem;
+            margin-bottom: 0.6rem;
+        }
+        .sy-sym-row:last-child { margin-bottom: 0; }
+        .sy-sym-num {
+            min-width: 1.6rem;
+            font-size: 0.78rem; font-weight: 600;
+            color: var(--ms-muted, #78716c);
+            font-family: var(--ms-font-mono, JetBrains Mono, monospace);
+        }
+        .sy-sym-mathfield {
+            flex: 1;
+            min-height: 48px;
+            padding: 0.6rem 0.85rem;
+            font-size: 1.05rem;
+            border: 1.5px solid var(--ms-line-strong, rgba(0,0,0,0.14));
+            border-radius: var(--ms-radius, 14px);
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            color: var(--ms-ink, #1c1917);
+            transition: border-color 200ms, box-shadow 200ms, background 200ms;
+        }
+        .sy-sym-mathfield:focus-within {
+            border-color: var(--ms-accent, #15803d);
+            background: var(--ms-panel-bg, #fefdfb);
+            box-shadow: var(--ms-ring, 0 0 0 3px rgba(21,128,61,0.22));
+        }
+        .sy-remove-eq-btn {
+            flex-shrink: 0; width: 32px; height: 32px;
+            border: 1px solid var(--ms-line-strong, rgba(0,0,0,0.14));
+            border-radius: 50%;
+            background: transparent;
+            color: var(--ms-muted, #78716c);
+            font-size: 1.2rem; line-height: 1;
+            cursor: pointer;
+            transition: background 200ms, color 200ms, border-color 200ms;
+        }
+        .sy-remove-eq-btn:hover {
+            background: rgba(220, 38, 38, 0.08);
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+        .sy-add-eq-btn {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.45rem 0.85rem;
+            font-size: 0.82rem; font-weight: 500;
+            border: 1px dashed var(--ms-line-strong, rgba(0,0,0,0.14));
+            border-radius: var(--ms-radius-pill, 999px);
+            background: transparent;
+            color: var(--ms-ink-soft, #44403c);
+            cursor: pointer;
+            margin-top: 0.6rem;
+            transition: background 200ms, color 200ms, border-color 200ms;
+        }
+        .sy-add-eq-btn:hover {
+            background: var(--ms-accent-soft, rgba(21,128,61,0.08));
+            color: var(--ms-accent, #15803d);
+            border-color: var(--ms-accent, #15803d);
+        }
+        .sy-add-eq-btn:disabled {
+            opacity: 0.4; cursor: not-allowed;
+            background: transparent; color: var(--ms-muted, #78716c);
+            border-color: var(--ms-line, rgba(0,0,0,0.08));
+        }
+
+        /* Method pill bar */
+        .sy-method-bar {
+            display: flex; flex-wrap: wrap; gap: 0.35rem;
+            padding: 0.4rem 0.5rem;
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            border: 1px solid var(--ms-line, rgba(0,0,0,0.08));
+            border-radius: var(--ms-radius, 14px);
+            margin: 0.75rem 0;
+            align-items: center;
+        }
+        .sy-method-label {
+            font-size: 0.7rem; font-weight: 600;
+            color: var(--ms-muted, #78716c);
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin-right: 0.25rem;
+        }
+        .sy-method-btn {
+            flex: 0 1 auto;
+            padding: 0.4rem 0.7rem;
+            font-size: 0.78rem; font-weight: 500;
+            border: none;
+            border-radius: var(--ms-radius-pill, 999px);
+            background: transparent;
+            color: var(--ms-ink-soft, #44403c);
+            cursor: pointer;
+            font-family: var(--ms-font-sans, Inter, sans-serif);
+            transition: background 200ms, color 200ms;
+        }
+        .sy-method-btn:hover {
+            background: var(--ms-accent-soft, rgba(21,128,61,0.08));
+            color: var(--ms-accent, #15803d);
+        }
+        .sy-method-btn.active {
+            background: var(--ms-panel-bg, #fefdfb);
+            color: var(--ms-accent, #15803d);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+            font-weight: 600;
+        }
+
+        /* Live preview of the system */
+        #sy-preview {
+            margin: 0.6rem 0 0.4rem;
+            padding: 0.8rem 1rem;
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            border-radius: var(--ms-radius, 14px);
+            border: 1px solid var(--ms-line, rgba(0,0,0,0.08));
+            font-size: 1.05rem;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        /* Sys badge (e.g. "2×2 Linear") */
+        #sy-sys-badge {
+            display: inline-block;
+            padding: 0.2rem 0.55rem;
+            background: var(--ms-accent-soft, rgba(21,128,61,0.1));
+            color: var(--ms-accent, #15803d);
+            border-radius: var(--ms-radius-pill, 999px);
+            font-size: 0.7rem; font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Result section bits the legacy render emits */
+        .sy-result-section { padding: 1rem 1.25rem; }
+        .sy-steps-hdr {
+            display: block; width: 100%;
+            padding: 0.55rem 1rem;
+            background: var(--ms-accent-soft, rgba(21,128,61,0.08));
+            color: var(--ms-accent, #15803d);
+            font-size: 0.8rem; font-weight: 600;
+            border: none;
+            border-radius: var(--ms-radius-sm, 8px);
+            text-align: left;
+            cursor: pointer;
+            margin-top: 0.75rem;
+        }
+
+        /* CTA + Clear row */
+        .ic-hero-cta-row .ic-clear-btn {
+            padding: 0.5rem 0.9rem;
+            font-size: 0.82rem; font-weight: 500;
+            border: 1px solid var(--ms-line-strong, rgba(0,0,0,0.14));
+            border-radius: var(--ms-radius-pill, 999px);
+            background: transparent;
+            color: var(--ms-ink-soft, #44403c);
+            cursor: pointer;
+            font-family: var(--ms-font-sans, Inter, sans-serif);
+            transition: background 200ms, color 200ms, border-color 200ms;
+        }
+        .ic-hero-cta-row .ic-clear-btn:hover {
+            background: var(--ms-accent-soft, rgba(21,128,61,0.08));
+            color: var(--ms-accent, #15803d);
+            border-color: var(--ms-accent, #15803d);
+        }
+
+        /* Empty-state chip grid */
+        .qs-empty-chips {
+            display: grid; grid-template-columns: auto 1fr;
+            gap: 0.45rem 0.75rem; align-items: center;
+            max-width: 480px; margin: 1rem auto 0; text-align: left;
+        }
+        .qs-empty-chips .qs-chip-label {
+            font-size: 0.72rem; font-weight: 600;
+            color: var(--ms-muted, #78716c);
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .qs-empty-chips .ic-example-chip {
+            justify-self: start; text-align: left;
+            font-family: var(--ms-font-mono, JetBrains Mono, monospace);
+            font-size: 0.85rem;
+        }
+        .qs-empty-hint {
+            color: var(--ms-muted, #78716c);
+            font-size: 0.8rem; margin: 1.25rem 0 0; text-align: center;
+        }
+
+        /* ───── Result panel rendering — sy-* classes the legacy core
+                emits via _buildResultHTML / _buildSympyResultHTML /
+                _allMethodsHTML. Tuned to math-studio tokens so the look
+                matches integral / quadratic / polynomial result cards. ───── */
+
+        /* System display (the cases environment with the original equations) */
+        .sy-system-display {
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            border: 1px solid var(--ms-line, rgba(0,0,0,0.08));
+            border-radius: var(--ms-radius, 14px);
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.05rem;
+            overflow-x: auto;
+        }
+
+        /* The "2×2 Linear" / "Nonlinear System" badge above the display */
+        #sy-result-content .sy-sys-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: var(--ms-accent-soft, rgba(21,128,61,0.1));
+            color: var(--ms-accent, #15803d);
+            border-radius: var(--ms-radius-pill, 999px);
+            font-size: 0.7rem; font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        #sy-result-content .sy-sys-badge.nonlinear {
+            background: rgba(99,102,241,0.1);
+            color: #6366f1;
+        }
+
+        /* Solution badge — green dot + "Unique Solution" / "1 Solution Found" */
+        .sy-solution-badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.35rem 0.75rem;
+            background: var(--ms-accent-soft, rgba(21,128,61,0.1));
+            color: var(--ms-accent, #15803d);
+            border-radius: var(--ms-radius-pill, 999px);
+            font-size: 0.78rem; font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .sy-badge-dot {
+            width: 8px; height: 8px;
+            background: currentColor; border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Solution chips — "x = 1.5", "y = 2.3" pills + numerical-approx hint */
+        .sy-sol-count {
+            font-size: 0.72rem; font-weight: 600;
+            color: var(--ms-muted, #78716c);
+            text-align: center; margin: 0.75rem 0 0.5rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .sy-sol-pair {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            align-items: center;
+            gap: 0.4rem 0.75rem;
+            padding: 0.85rem 1rem;
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            border: 1px solid var(--ms-line, rgba(0,0,0,0.08));
+            border-radius: var(--ms-radius, 14px);
+            margin: 0.5rem 0 0.75rem;
+        }
+        .sy-chip {
+            display: inline-block;
+            padding: 0.4rem 0.7rem;
+            background: var(--ms-panel-bg, #fefdfb);
+            border: 1px solid var(--ms-line-strong, rgba(0,0,0,0.14));
+            border-radius: var(--ms-radius-sm, 8px);
+            font-family: var(--ms-font-mono, JetBrains Mono, monospace);
+            font-size: 0.95rem;
+            color: var(--ms-ink, #1c1917);
+        }
+        .sy-chip-approx {
+            font-size: 0.78rem;
+            color: var(--ms-muted, #78716c);
+            margin-left: 0.25rem;
+        }
+        .sy-chips {
+            display: flex; flex-wrap: wrap; gap: 0.4rem 0.6rem;
+        }
+
+        /* Method label — "Cramer's Rule", "Substitution", "Symbolic CAS" */
+        .sy-method-label {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: rgba(99,102,241,0.1);
+            color: #6366f1;
+            border-radius: var(--ms-radius-pill, 999px);
+            font-size: 0.7rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin: 0.5rem 0;
+        }
+        .sy-method-label.elim    { background: rgba(16,185,129,0.1); color: #10b981; }
+        .sy-method-label.subst   { background: rgba(59,130,246,0.1); color: #3b82f6; }
+        .sy-method-label.sympy   { background: rgba(139,92,246,0.1); color: #8b5cf6; }
+
+        /* Steps container — wraps the row-reduction trace + method-specific steps */
+        .sy-steps-container {
+            border: 1px solid var(--ms-line, rgba(0,0,0,0.08));
+            border-radius: var(--ms-radius, 14px);
+            overflow: hidden;
+            margin-top: 1rem;
+            background: var(--ms-panel-bg, #fefdfb);
+        }
+        .sy-steps-header {
+            padding: 0.65rem 1rem;
+            background: var(--ms-accent-soft, rgba(21,128,61,0.08));
+            color: var(--ms-accent, #15803d);
+            font-size: 0.78rem; font-weight: 600;
+            border-bottom: 1px solid var(--ms-line, rgba(0,0,0,0.08));
+        }
+        .sy-steps-body {
+            padding: 0.5rem 1rem 0.75rem;
+            max-height: 0; overflow: hidden;
+            transition: max-height 220ms ease-out, padding 220ms ease-out;
+        }
+        .sy-steps-body.open {
+            max-height: 9999px;
+            padding: 0.5rem 1rem 0.75rem;
+        }
+
+        /* Collapsible "Show Steps" toggle button */
+        .sy-steps-hdr {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.6rem 1rem;
+            background: var(--ms-accent-soft, rgba(21,128,61,0.08));
+            color: var(--ms-accent, #15803d);
+            font-size: 0.82rem; font-weight: 600;
+            border: 1px solid var(--ms-line, rgba(0,0,0,0.08));
+            border-radius: var(--ms-radius, 14px);
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            margin-top: 0.75rem;
+        }
+        .sy-steps-hdr:hover {
+            background: var(--ms-accent-soft, rgba(21,128,61,0.12));
+        }
+        .sy-steps-hdr.open {
+            border-radius: var(--ms-radius, 14px) var(--ms-radius, 14px) 0 0;
+            border-bottom: none;
+        }
+
+        /* Individual step item */
+        .sy-step-item {
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--ms-line, rgba(0,0,0,0.06));
+            display: flex; gap: 0.7rem; align-items: flex-start;
+        }
+        .sy-step-item:last-child { border-bottom: none; }
+        .sy-step-num {
+            flex-shrink: 0;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: var(--ms-accent, #15803d); color: #fff;
+            font-size: 0.7rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .sy-step-body { flex: 1; min-width: 0; }
+        .sy-step-title {
+            font-size: 0.78rem; font-weight: 600;
+            color: var(--ms-ink-soft, #44403c);
+            margin-bottom: 0.3rem;
+        }
+        .sy-step-math {
+            font-size: 0.95rem;
+            overflow-x: auto;
+            margin-top: 0.2rem;
+            padding: 0.2rem 0;
+        }
+        /* Nonlinear-specific step number — purple to differentiate */
+        .sy-nl-step-num {
+            flex-shrink: 0;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: #6366f1; color: #fff;
+            font-size: 0.7rem; font-weight: 700;
+            display: inline-flex; align-items: center; justify-content: center;
+            margin-right: 0.5rem;
+        }
+        .sy-nl-step-title {
+            font-size: 0.78rem; font-weight: 600;
+            color: var(--ms-ink-soft, #44403c);
+            margin-bottom: 0.3rem;
+        }
+
+        /* Numerical verification — the "✓ Eq 1: 2x+3y=8" sanity-check rows */
+        .sy-verify-section, .sy-verify-card {
+            margin-top: 1rem;
+            padding: 0.85rem 1rem;
+            background: rgba(16,185,129,0.05);
+            border: 1px solid rgba(16,185,129,0.2);
+            border-radius: var(--ms-radius, 14px);
+        }
+        .sy-verify-header {
+            font-size: 0.78rem; font-weight: 600;
+            color: var(--ms-ink-soft, #44403c);
+            margin-bottom: 0.5rem;
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .sy-verify-num {
+            color: #10b981;
+            font-size: 1.05rem;
+        }
+        .sy-verify-pair {
+            font-family: var(--ms-font-mono, JetBrains Mono, monospace);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            color: var(--ms-ink-soft, #44403c);
+        }
+        .sy-verify-row {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.82rem;
+            padding: 0.2rem 0;
+            color: var(--ms-ink-soft, #44403c);
+        }
+        .sy-verify-row.sy-verify-ok   > span:first-child { color: #15803d; font-weight: 700; }
+        .sy-verify-row.sy-verify-fail > span:first-child { color: #dc2626; font-weight: 700; }
+        .sy-verify-code {
+            font-family: var(--ms-font-mono, JetBrains Mono, monospace);
+            font-size: 0.82rem;
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            padding: 0.1rem 0.45rem;
+            border-radius: 4px;
+            color: var(--ms-ink, #1c1917);
+        }
+
+        /* Summary card (used by render module's lightweight summary view) */
+        .sy-summary-card {
+            background: var(--ms-panel-bg, #fefdfb);
+            border: 1px solid var(--ms-line, rgba(0,0,0,0.08));
+            border-radius: var(--ms-radius, 14px);
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .sy-summary-card-title {
+            font-size: 0.72rem; font-weight: 600;
+            color: var(--ms-muted, #78716c);
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .sy-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.5rem 1rem;
+        }
+        .sy-summary-result {
+            font-family: var(--ms-font-mono, JetBrains Mono, monospace);
+            font-size: 0.95rem;
+            color: var(--ms-ink, #1c1917);
+            padding: 0.4rem 0.7rem;
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            border-radius: var(--ms-radius-sm, 8px);
+            border-left: 3px solid var(--ms-accent, #15803d);
+        }
+
+        /* Warning / status boxes — used by SymPy pending, no-solution, etc. */
+        .sy-warn-box {
+            padding: 0.85rem 1rem;
+            background: rgba(245,158,11,0.08);
+            border: 1px solid rgba(245,158,11,0.3);
+            border-left: 3px solid #f59e0b;
+            border-radius: var(--ms-radius, 14px);
+            color: var(--ms-ink, #1c1917);
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin: 0.75rem 0;
+        }
+        .sy-warn-box strong { color: var(--ms-ink, #1c1917); }
+        .sy-sympy-pending {
+            background: var(--ms-panel-bg-soft, #faf8f4);
+            border-color: var(--ms-line, rgba(0,0,0,0.08));
+            border-left-color: var(--ms-accent, #15803d);
+        }
+        /* Method-N/A notice (Fix #2) — informational, not a warning */
+        .sy-method-notice {
+            background: rgba(139,92,246,0.08);
+            border-color: rgba(139,92,246,0.3);
+            border-left-color: #8b5cf6;
+        }
+        /* Parameter notice (Fix #4) — purple/indigo accent */
+        .sy-param-notice {
+            background: rgba(99,102,241,0.08) !important;
+            border: 1px solid rgba(99,102,241,0.25) !important;
+            border-left: 3px solid #6366f1 !important;
+        }
+        .sy-param-notice code {
+            font-family: var(--ms-font-mono, JetBrains Mono, monospace);
+            background: var(--ms-panel-bg, #fefdfb);
+            padding: 0.05rem 0.35rem;
+            border-radius: 3px;
+            color: var(--ms-ink, #1c1917);
+            font-size: 0.85em;
+        }
+
+        /* Chevron icon used by collapsibles */
+        .sy-chev {
+            transition: transform 220ms ease;
+            width: 14px; height: 14px;
+            flex-shrink: 0;
+        }
+        .sy-chev.open { transform: rotate(180deg); }
+
+        /* Spacing between consecutive sy-* sections inside the result panel */
+        #sy-result-content > * + * { margin-top: 0.5rem; }
+        #sy-result-content .sy-system-display + * { margin-top: 0.75rem; }
+    </style>
 </head>
-<body>
-<%@ include file="modern/components/nav-header.jsp" %>
+<body class="ms-body">
 
-<header class="tool-page-header">
-    <div class="tool-page-header-inner">
-        <div>
-            <h1 class="tool-page-title">System of Equations Solver</h1>
-            <nav class="tool-breadcrumbs">
-                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/math/">Math Tools</a> /
-                System of Equations Solver
-            </nav>
-        </div>
-        <div class="tool-page-badges">
-            <span class="tool-badge">Linear &amp; Nonlinear</span>
-            <span class="tool-badge">Step-by-Step</span>
-            <span class="tool-badge">Graph Included</span>
-            <span class="tool-badge">Free</span>
-        </div>
+    <%@ include file="modern/components/nav-header.jsp" %>
+
+    <jsp:include page="/math/partials/matter-bg.jsp" />
+
+    <div class="ms-hero">
+        <%@ include file="modern/ads/ad-hero-banner.jsp" %>
     </div>
-</header>
 
-<%@ include file="modern/ads/ad-in-content-top.jsp" %>
+    <main class="ms-main">
 
-<main class="tool-page-container">
-    <!-- ==================== INPUT COLUMN ==================== -->
-    <div class="tool-input-column">
-        <div class="tool-card">
-            <div class="tool-card-header" style="background:var(--sy-gradient);">System Solver</div>
-            <div class="tool-card-body">
+        <button type="button" id="msSidebarToggle" class="ms-sidebar-toggle" aria-label="Open math tools menu">
+            &#9776; Math tools
+        </button>
 
-                <!-- Symbolic Equation Inputs -->
-                <div class="tool-form-group" style="margin-bottom:0.625rem;">
-                    <label class="tool-form-label" style="margin-bottom:0.25rem;">
-                        Equations
-                        <span id="sy-sys-badge" class="sy-sys-badge" style="display:none;"></span>
-                    </label>
-                    <div id="sy-eq-list">
-                        <!-- Equation rows injected by JS -->
+        <% request.setAttribute("activeService", "system-equations"); %>
+        <jsp:include page="/math/partials/sidebar.jsp" />
+
+        <section class="ms-workspace">
+
+            <header class="ms-title">
+                <nav class="ms-crumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a>
+                    <span>/</span>
+                    <a href="<%=request.getContextPath()%>/math/">Math</a>
+                    <span>/</span>
+                    <span aria-current="page">System of Equations</span>
+                </nav>
+                <h1>System of Equations Solver &mdash; Cramer, Gaussian, Substitution, Matrix</h1>
+            </header>
+
+            <div class="ic-stack">
+
+                <!-- ═══ INPUT HERO ═══ -->
+                <div class="ic-hero" id="ic-hero">
+
+                    <div class="ic-hero-top">
+                        <div id="sy-sys-badge">2×2 Linear</div>
+                        <div class="ic-expr-label-actions" style="display:flex;gap:0.5rem;align-items:center;margin-left:auto;">
+                            <button type="button" class="ic-image-btn" id="sy-image-btn" title="Scan a system from an image">&#128247; Scan</button>
+                        </div>
                     </div>
-                    <button type="button" id="sy-add-eq-btn" class="sy-add-eq-btn">+ Add 3rd equation (3&times;3 system)</button>
-                    <div class="tool-form-hint" style="margin-top:0.375rem;">Type naturally: <code style="font-size:0.75rem;">2x + 3y = 8</code> or <code style="font-size:0.75rem;">x^2 + y = 5</code></div>
-                    <!-- Live KaTeX preview -->
-                    <div class="sy-preview" id="sy-preview"></div>
-                </div>
 
-                <!-- Examples -->
-                <div class="tool-form-group" style="margin-top:0.5rem;">
-                    <label class="tool-form-label" style="margin-bottom:0.25rem;">Examples</label>
-                    <div id="sy-examples" style="display:flex;flex-wrap:wrap;gap:0.3rem;"></div>
-                </div>
+                    <!-- Equation rows — the (patched) core renders MathLive
+                         rows into #sy-eq-list. Each row carries its hidden
+                         .sy-eq-input twin for legacy compatibility. -->
+                    <div id="sy-eq-list" class="ic-expr-wrap"></div>
 
-                <!-- Method Selector -->
-                <div class="tool-form-group sy-method-section" id="sy-method-section" style="margin-top:0.625rem;">
-                    <label class="tool-form-label" style="margin-bottom:0.25rem;">Method</label>
-                    <div class="sy-method-toggle" id="sy-method-toggle">
-                        <button type="button" class="sy-method-btn active" id="sy-method-cramer" data-method="cramer">Cramer&rsquo;s Rule</button>
-                        <button type="button" class="sy-method-btn" id="sy-method-gaussian" data-method="gaussian">Gaussian</button>
-                        <button type="button" class="sy-method-btn" id="sy-method-substitution" data-method="substitution">Substitution</button>
-                        <button type="button" class="sy-method-btn" id="sy-method-matrix" data-method="matrix">Matrix A&sup1;B</button>
-                        <button type="button" class="sy-method-btn" id="sy-method-all" data-method="all">All Methods</button>
-                    </div>
-                </div>
-
-                <!-- Solve Button -->
-                <div style="margin-top:0.625rem;">
-                    <button type="button" class="tool-action-btn" id="sy-solve-btn">
-                        Solve System
+                    <button type="button" id="sy-add-eq-btn" class="sy-add-eq-btn">
+                        <span aria-hidden="true">+</span> Add equation
                     </button>
+
+                    <!-- Method pills. Legacy core looks them up by ID
+                         `sy-method-{method}` (NOT class), so each carries
+                         that ID. The .sy-method-btn class is for styling. -->
+                    <div class="sy-method-bar" role="radiogroup" aria-label="Solution method">
+                        <span class="sy-method-label">Method</span>
+                        <button type="button" id="sy-method-cramer"       class="sy-method-btn active" data-method="cramer"       role="radio" aria-checked="true">Cramer</button>
+                        <button type="button" id="sy-method-gaussian"     class="sy-method-btn"        data-method="gaussian"     role="radio" aria-checked="false">Gaussian</button>
+                        <button type="button" id="sy-method-substitution" class="sy-method-btn"        data-method="substitution" role="radio" aria-checked="false">Substitution</button>
+                        <button type="button" id="sy-method-matrix"       class="sy-method-btn"        data-method="matrix"       role="radio" aria-checked="false">Matrix Inverse</button>
+                        <button type="button" id="sy-method-all"          class="sy-method-btn"        data-method="all"          role="radio" aria-checked="false">All Methods</button>
+                    </div>
+
+                    <!-- Live preview (KaTeX cases environment) -->
+                    <div id="sy-preview" style="display:none;"></div>
+
+                    <!-- Primary CTA + Clear -->
+                    <div class="ic-hero-cta-row">
+                        <button type="button" class="ic-hero-cta is-disabled" id="sy-solve-btn" aria-disabled="true">Solve System</button>
+                        <button type="button" class="ic-clear-btn" id="sy-clear-btn" title="Reset to a blank 2-equation system">Clear</button>
+                    </div>
                 </div>
 
-                <hr style="border:none;border-top:1px solid var(--border);margin:0.75rem 0">
+                <!-- ═══ RESULT CARD ═══ -->
+                <div class="ic-result-card">
+                    <div class="ic-output-tabs" role="tablist">
+                        <button type="button" id="sy-tab-result" class="ic-output-tab active" data-panel="result" role="tab" aria-selected="true">Result</button>
+                        <button type="button" id="sy-tab-graph"  class="ic-output-tab" data-panel="graph"  role="tab" aria-selected="false">Graph</button>
+                    </div>
 
-                <!-- Worksheet Generator -->
-                <div>
-                    <button type="button" class="sy-worksheet-btn" id="sy-worksheet-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;flex-shrink:0;">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                        </svg>
-                        Print Worksheet
-                    </button>
-                </div>
+                    <div class="ic-panel sy-panel active" id="sy-panel-result" role="tabpanel">
+                        <div class="tool-card tool-result-card">
+                            <div class="tool-result-content" id="sy-result-content">
+                                <div class="tool-empty-state ic-empty-state" id="sy-empty-state">
+                                    <div class="ic-empty-illustration">{ }</div>
+                                    <h3>Try a system</h3>
+                                    <div class="qs-empty-chips">
+                                        <span class="qs-chip-label">2×2 Linear</span>
+                                        <button type="button" class="ic-example-chip" data-eqs="2x + 3y = 8|4x - y = 2">2x+3y=8 · 4x−y=2</button>
 
-            </div>
-        </div>
-    </div>
+                                        <span class="qs-chip-label">3×3 Linear</span>
+                                        <button type="button" class="ic-example-chip" data-eqs="x + y + z = 6|2x - y + z = 3|x + 2y - z = 4">x+y+z=6 · …</button>
 
-    <!-- ==================== OUTPUT COLUMN ==================== -->
-    <div class="tool-output-column">
-        <!-- Tab bar -->
-        <div class="sy-output-tabs">
-            <button type="button" id="sy-tab-result" class="sy-output-tab active" data-panel="result">Result</button>
-            <button type="button" id="sy-tab-graph" class="sy-output-tab" data-panel="graph" disabled>Graph</button>
-        </div>
+                                        <span class="qs-chip-label">Circle + Line</span>
+                                        <button type="button" class="ic-example-chip" data-eqs="x^2 + y^2 = 25|x - y = 1">x²+y²=25 · x−y=1</button>
 
-        <!-- Result Panel -->
-        <div class="sy-panel active" id="sy-panel-result">
-            <div class="tool-card tool-result-card">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sy-tool);">
-                        <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
-                    </svg>
-                    <h4>Solution</h4>
-                    <button type="button" id="sy-copy-latex-btn" class="sy-toolbar-btn" title="Copy LaTeX">LaTeX</button>
-                    <button type="button" id="sy-share-btn" class="sy-toolbar-btn" title="Share">Share</button>
-                    <button type="button" id="sy-toolbar-worksheet-btn" class="sy-toolbar-btn" title="Worksheet">Worksheet</button>
-                </div>
-                <div class="tool-result-content" id="sy-result-content">
-                    <div class="tool-empty-state">
-                        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&#x1D4D0;</div>
-                        <h3>Enter coefficients and solve</h3>
-                        <p>Choose your system size and solving method, then click Solve to see step-by-step work.</p>
+                                        <span class="qs-chip-label">Parabola</span>
+                                        <button type="button" class="ic-example-chip" data-eqs="x^2 + y = 5|4x - y = 2">x²+y=5 · 4x−y=2</button>
+
+                                        <span class="qs-chip-label">Two Curves</span>
+                                        <button type="button" class="ic-example-chip" data-eqs="x^2 + y^2 = 7|x^2 + y = 5">x²+y²=7 · x²+y=5</button>
+
+                                        <span class="qs-chip-label">xy Product</span>
+                                        <button type="button" class="ic-example-chip" data-eqs="x*y = 6|x + y = 5">xy=6 · x+y=5</button>
+                                    </div>
+                                    <p class="qs-empty-hint">or type your own equations above</p>
+                                </div>
+                            </div>
+
+                            <div class="tool-result-actions">
+                                <button type="button" class="tool-action-btn" id="sy-copy-latex-btn">Copy LaTeX</button>
+                                <button type="button" class="tool-action-btn" id="sy-share-btn">Share</button>
+                                <button type="button" class="tool-action-btn" id="sy-toolbar-worksheet-btn">Worksheet</button>
+                            </div>
+
+                            <!-- Prominent worksheet CTA (matches limit / polynomial pattern).
+                                 The legacy core wires #sy-worksheet-btn → openWorksheet(),
+                                 which opens the WorksheetEngine modal with 2,000 problems
+                                 across 24 types (basic/medium/hard/scholar). -->
+                            <div class="ic-worksheet-cta">
+                                <button type="button" class="tool-action-btn" id="sy-worksheet-btn">
+                                    Practice Worksheet &mdash; 2,000+ systems with answer key
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ic-panel sy-panel" id="sy-panel-graph" role="tabpanel">
+                        <div class="tool-card" style="height:100%;display:flex;flex-direction:column;padding:0;">
+                            <div style="flex:1;min-height:380px;padding:0.75rem;">
+                                <div id="sy-graph-container" style="width:100%;height:100%;min-height:380px;"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Graph Panel -->
-        <div class="sy-panel" id="sy-panel-graph">
-            <div class="tool-card">
-                <div class="tool-card-header" style="background:var(--sy-gradient);">Graphical Solution</div>
-                <div class="tool-card-body" style="padding:0.5rem;">
-                    <div id="sy-graph-container" style="height:420px;"></div>
-                </div>
+            <div class="ms-inline-ad">
+                <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+            </div>
+
+            <section class="ic-learn" aria-label="Methods at a glance">
+                <article class="ic-learn-card">
+                    <span class="ic-learn-method">Cramer's Rule</span>
+                    <code class="ic-learn-formula">x<sub>i</sub> = det(A<sub>i</sub>) / det(A)</code>
+                </article>
+                <article class="ic-learn-card">
+                    <span class="ic-learn-method">Gaussian elimination</span>
+                    <code class="ic-learn-formula">augmented [A|b] &rarr; row echelon &rarr; back-substitute</code>
+                </article>
+                <article class="ic-learn-card">
+                    <span class="ic-learn-method">Matrix inverse</span>
+                    <code class="ic-learn-formula">x = A<sup>&minus;1</sup> b &nbsp;(when det(A) &ne; 0)</code>
+                </article>
+            </section>
+
+            <section class="ic-related-strip" style="margin-top:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.75rem;">
+                <a href="<%=request.getContextPath()%>/quadratic-solver.jsp" class="tool-card" style="padding:1rem;text-decoration:none;color:inherit;border-left:3px solid var(--ms-accent,#15803d);">
+                    <div style="font-size:0.72rem;font-weight:600;color:var(--ms-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem;">Single quadratic?</div>
+                    <div style="font-weight:600;">Quadratic Formula Calculator &rarr;</div>
+                    <div style="font-size:0.85rem;color:var(--ms-ink-soft);margin-top:0.2rem;">Vertex form, completing the square, factoring, and a 50-problem practice worksheet.</div>
+                </a>
+                <a href="<%=request.getContextPath()%>/inequality-solver.jsp" class="tool-card" style="padding:1rem;text-decoration:none;color:inherit;border-left:3px solid var(--ms-accent,#15803d);">
+                    <div style="font-size:0.72rem;font-weight:600;color:var(--ms-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem;">Inequality?</div>
+                    <div style="font-weight:600;">Inequality Solver &rarr;</div>
+                    <div style="font-size:0.85rem;color:var(--ms-ink-soft);margin-top:0.2rem;">Linear, polynomial, rational, absolute-value, and compound inequalities with sign chart.</div>
+                </a>
+            </section>
+
+        </section>
+
+        <aside class="ms-rail" aria-label="Advertisements">
+            <%@ include file="modern/ads/ad-ide-rail-top.jsp" %>
+            <%@ include file="modern/ads/ad-ide-rail-bottom.jsp" %>
+        </aside>
+    </main>
+
+    <!-- Visible FAQ — keep in sync with faqNq/faqNa jsp:params. -->
+    <section class="ms-faq-wrap" style="max-width:1440px;margin:2.5rem auto 0;padding:0 1.5rem;">
+        <h2 class="ms-faq-title" id="faqs">Frequently asked</h2>
+        <div class="ms-faq" aria-label="System of equations FAQ">
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Can this solver handle nonlinear equations like x&sup2; + y = 5?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Yes. The solver automatically detects nonlinear equations (containing <em>x&sup2;</em>, <em>xy</em>, <em>sqrt</em>, etc.) and switches to a symbolic substitution engine. It solves for all real intersection points, verifies each solution, and plots the curves on the Graph tab.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">What is the difference between Cramer's Rule and Gaussian Elimination?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a"><strong>Cramer's Rule</strong> computes each variable using determinants: <em>x<sub>i</sub> = det(A<sub>i</sub>) / det(A)</em>. Clean formula, ideal for 2×2 and 3×3 exams but doesn't scale beyond that. <strong>Gaussian Elimination</strong> applies row operations to the augmented matrix to reach row echelon form, then back-substitutes. Works for any size, and handles the <em>det = 0</em> case where Cramer's Rule fails.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">What does "No Unique Solution &mdash; determinant is zero" mean?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">When <em>det(A) = 0</em>, the system is either <strong>inconsistent</strong> (parallel lines, no solution) or <strong>dependent</strong> (same line, infinitely many solutions). Try Gaussian Elimination &mdash; it identifies which case you have. For nonlinear systems, make sure Nerdamer loaded (check the browser console).</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">How do I enter a 3×3 system?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Click the <strong>+ Add equation</strong> button below the equation rows. Enter three equations with three variables (e.g. <em>x</em>, <em>y</em>, <em>z</em>). The solver auto-detects the 3×3 system and applies your chosen method.</div>
+            </div>
+            <div class="ms-faq-item">
+                <button type="button" class="ms-faq-q">Does it show step-by-step work?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ms-faq-a">Yes &mdash; every linear method (Cramer's Rule, Gaussian Elimination, Substitution, Matrix Inversion) shows the complete trace: determinant expansions, row operations, substitution steps, and the final answer with verification. For nonlinear systems, the substitution path and residual check for each solution are shown.</div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- ==================== ADS COLUMN ==================== -->
-    <div class="tool-ads-column"><%@ include file="modern/ads/ad-three-column.jsp" %></div>
-</main>
+    <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+    <%@ include file="modern/components/analytics.jsp" %>
 
-<!-- Mobile Ad Fallback -->
-<div class="tool-mobile-ad-container">
-    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
-</div>
+    <%--
+        Canonical 3-partial load order:
+          1. math-libs                       — KaTeX, nerdamer (core+Algebra+Calculus),
+                                               Plotly loader, tool-utils, dark-mode,
+                                               search, image-to-math
+          2. system-equations-scripts        — Solve.js, worksheet-engine,
+                                               systems-solver-{render,graph,export,core},
+                                               math-studio wiring, image-scan init
+          3. math-input-setup                — MathLive ES module (the patched
+                                               _makeEqRow uses customElements.whenDefined
+                                               to seed each row when ML upgrades)
+    --%>
+    <jsp:include page="/math/partials/math-libs.jsp" />
+    <jsp:include page="/math/partials/system-equations-scripts.jsp" />
+    <jsp:include page="/math/partials/math-input-setup.jsp" />
 
-<!-- Related Tools -->
-<jsp:include page="modern/components/related-tools.jsp">
-    <jsp:param name="currentToolUrl" value="system-equations-solver.jsp"/>
-    <jsp:param name="keyword" value="algebra"/>
-    <jsp:param name="limit" value="6"/>
-</jsp:include>
-
-<!-- ========== BELOW-FOLD CONTENT ========== -->
-<section style="max-width:1200px;margin:1.5rem auto;padding:0 1.25rem;">
-
-    <!-- What does this tool do? -->
-    <div class="tool-card" style="padding:1.25rem 1.5rem;margin-bottom:1rem;">
-        <h2 style="font-size:1.125rem;font-weight:700;margin:0 0 0.75rem;color:var(--text-primary);">What Does This Tool Do?</h2>
-        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.7;margin:0 0 0.75rem;">
-            This solver accepts any system of 2 or 3 equations and finds all solutions — showing the <strong>complete step-by-step working</strong> just like a math teacher would present it.
-            Enter equations naturally (e.g. <code style="font-size:0.8rem;">2x + 3y = 8</code> or <code style="font-size:0.8rem;">x² + y² = 7</code>) and choose your preferred method.
-        </p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin-top:0.75rem;">
-            <div style="display:flex;gap:0.625rem;align-items:flex-start;">
-                <span style="font-size:1.25rem;line-height:1;">&#x2705;</span>
-                <div>
-                    <strong style="font-size:0.875rem;color:var(--text-primary);">Linear systems</strong>
-                    <p style="margin:0.15rem 0 0;font-size:0.8125rem;color:var(--text-secondary);">2&times;2 and 3&times;3 — Cramer&rsquo;s Rule, Gaussian elimination, substitution, matrix inversion</p>
-                </div>
-            </div>
-            <div style="display:flex;gap:0.625rem;align-items:flex-start;">
-                <span style="font-size:1.25rem;line-height:1;">&#x2705;</span>
-                <div>
-                    <strong style="font-size:0.875rem;color:var(--text-primary);">Nonlinear systems</strong>
-                    <p style="margin:0.15rem 0 0;font-size:0.8125rem;color:var(--text-secondary);">Circles, parabolas, products — finds all intersection points with elimination or substitution</p>
-                </div>
-            </div>
-            <div style="display:flex;gap:0.625rem;align-items:flex-start;">
-                <span style="font-size:1.25rem;line-height:1;">&#x2705;</span>
-                <div>
-                    <strong style="font-size:0.875rem;color:var(--text-primary);">Exact symbolic roots</strong>
-                    <p style="margin:0.15rem 0 0;font-size:0.8125rem;color:var(--text-secondary);">Answers shown as &radic;6, &minus;&radic;3, etc. — not just decimals</p>
-                </div>
-            </div>
-            <div style="display:flex;gap:0.625rem;align-items:flex-start;">
-                <span style="font-size:1.25rem;line-height:1;">&#x2705;</span>
-                <div>
-                    <strong style="font-size:0.875rem;color:var(--text-primary);">Graph of intersections</strong>
-                    <p style="margin:0.15rem 0 0;font-size:0.8125rem;color:var(--text-secondary);">Click the Graph tab — both curves plotted with the solution point highlighted</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick-reference: methods + solution types in one row -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(480px,1fr));gap:1rem;margin-bottom:1rem;">
-
-        <!-- Methods -->
-        <div class="tool-card" style="padding:1.25rem 1.5rem;">
-            <h2 style="font-size:1rem;font-weight:700;margin:0 0 0.875rem;color:var(--text-primary);">Solving Methods</h2>
-            <div style="display:flex;flex-direction:column;gap:0.5rem;">
-                <div style="display:flex;gap:0.75rem;align-items:flex-start;">
-                    <span style="flex-shrink:0;width:1.75rem;height:1.75rem;background:linear-gradient(135deg,#10b981,#34d399);border-radius:0.3rem;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.6875rem;font-weight:700;">D</span>
-                    <div><strong style="font-size:0.875rem;">Cramer&rsquo;s Rule</strong> <span style="font-size:0.75rem;color:var(--text-muted);">— 2&times;2 / 3&times;3</span><br><span style="font-size:0.8125rem;color:var(--text-secondary);">x&thinsp;=&thinsp;det(A<sub>x</sub>)/det(A). Clean formula ideal for exams; requires det(A)&thinsp;&ne;&thinsp;0.</span></div>
-                </div>
-                <div style="display:flex;gap:0.75rem;align-items:flex-start;">
-                    <span style="flex-shrink:0;width:1.75rem;height:1.75rem;background:linear-gradient(135deg,#3b82f6,#60a5fa);border-radius:0.3rem;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.6875rem;font-weight:700;">G</span>
-                    <div><strong style="font-size:0.875rem;">Gaussian Elimination</strong> <span style="font-size:0.75rem;color:var(--text-muted);">— any size</span><br><span style="font-size:0.8125rem;color:var(--text-secondary);">Row-reduces [A|b] to echelon form, then back-substitutes. Works even when det(A)&thinsp;=&thinsp;0.</span></div>
-                </div>
-                <div style="display:flex;gap:0.75rem;align-items:flex-start;">
-                    <span style="flex-shrink:0;width:1.75rem;height:1.75rem;background:linear-gradient(135deg,#f59e0b,#fcd34d);border-radius:0.3rem;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.6875rem;font-weight:700;">S</span>
-                    <div><strong style="font-size:0.875rem;">Substitution</strong> <span style="font-size:0.75rem;color:var(--text-muted);">— 2&times;2, nonlinear</span><br><span style="font-size:0.8125rem;color:var(--text-secondary);">Solves one equation for a variable, substitutes into the other. Also used for nonlinear systems.</span></div>
-                </div>
-                <div style="display:flex;gap:0.75rem;align-items:flex-start;">
-                    <span style="flex-shrink:0;width:1.75rem;height:1.75rem;background:linear-gradient(135deg,#8b5cf6,#a78bfa);border-radius:0.3rem;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.6875rem;font-weight:700;">M</span>
-                    <div><strong style="font-size:0.875rem;">Matrix A<sup>&minus;1</sup>B</strong> <span style="font-size:0.75rem;color:var(--text-muted);">— linear algebra</span><br><span style="font-size:0.8125rem;color:var(--text-secondary);">Computes A<sup>&minus;1</sup>, then X&thinsp;=&thinsp;A<sup>&minus;1</sup>B. Useful when solving multiple systems with the same A.</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Solution types -->
-        <div class="tool-card" style="padding:1.25rem 1.5rem;">
-            <h2 style="font-size:1rem;font-weight:700;margin:0 0 0.875rem;color:var(--text-primary);">Three Types of Solutions</h2>
-            <div style="display:flex;flex-direction:column;gap:0.625rem;">
-                <div style="padding:0.75rem;border-radius:0.375rem;background:var(--bg-secondary);border-left:3px solid #10b981;">
-                    <span style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#059669;">Unique Solution</span>
-                    <p style="margin:0.2rem 0 0;font-size:0.8125rem;color:var(--text-secondary);">det(A)&thinsp;&ne;&thinsp;0 — lines/planes meet at exactly one point. All methods give the same answer.</p>
-                </div>
-                <div style="padding:0.75rem;border-radius:0.375rem;background:var(--bg-secondary);border-left:3px solid #f59e0b;">
-                    <span style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#b45309;">Infinite Solutions</span>
-                    <p style="margin:0.2rem 0 0;font-size:0.8125rem;color:var(--text-secondary);">det(A)&thinsp;=&thinsp;0, consistent — equations are multiples of each other. One free variable parameterises the solution set.</p>
-                </div>
-                <div style="padding:0.75rem;border-radius:0.375rem;background:var(--bg-secondary);border-left:3px solid #ef4444;">
-                    <span style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#b91c1c;">No Solution</span>
-                    <p style="margin:0.2rem 0 0;font-size:0.8125rem;color:var(--text-secondary);">det(A)&thinsp;=&thinsp;0, inconsistent — parallel lines/planes. The augmented matrix has a row [0 … 0 | c], c&thinsp;&ne;&thinsp;0.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- FAQ -->
-    <div class="tool-card" style="padding:1.25rem 1.5rem;margin-bottom:1rem;">
-        <h2 style="font-size:1rem;font-weight:700;margin:0 0 0.5rem;" id="faqs">Frequently Asked Questions</h2>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Can this solver handle nonlinear equations like x² + y = 5?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Yes. The solver automatically detects equations containing x^2, x*y, sqrt(), etc. and switches to a symbolic substitution engine. It finds <strong>all real intersection points</strong>, verifies each solution numerically, and plots both curves on the Graph tab. Type either <code>x^2 + y = 5</code> or <code>x²+y=5</code> — Unicode superscripts are normalised automatically.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What is the difference between Cramer&rsquo;s Rule and Gaussian Elimination?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer"><strong>Cramer&rsquo;s Rule</strong> computes each variable using determinants: x = det(A<sub>x</sub>)/det(A). Gives a clean formula — great for 2×2/3×3 exams but fails when det(A) = 0. <strong>Gaussian Elimination</strong> applies row operations to the augmented matrix [A|b], reaches row echelon form, then back-substitutes. It works for any size system and handles the singular case where det(A) = 0. Use <em>All Methods</em> to see both side by side.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What does &ldquo;No Unique Solution — determinant is zero&rdquo; mean?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">det(A) = 0 means two things are possible: the system is <strong>inconsistent</strong> (parallel lines — no solution) or <strong>dependent</strong> (same line — infinitely many solutions). Switch to Gaussian Elimination to see which case applies. If you entered a nonlinear equation and still see this, the CAS library (Nerdamer) may not have loaded — check your browser console for script errors.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                How do I solve a 3&times;3 system?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Click <strong>+ Add 3rd equation</strong> in the input panel, then enter three equations with three variables (x, y, z). The solver detects the 3×3 system automatically. All methods except Substitution work for 3×3 systems. <em>All Methods</em> mode shows Cramer&rsquo;s Rule, Gaussian Elimination, and Matrix Inversion simultaneously.</div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Does it show step-by-step work?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Yes — every method shows the complete solution trace. Cramer&rsquo;s Rule expands each determinant. Gaussian Elimination lists every row operation. Substitution shows the algebraic substitution. Matrix Inversion shows A<sup>&minus;1</sup> and the multiplication. For nonlinear systems, the solve trace shows which equation was used as the pivot, the reduced polynomial, and residual verification for each solution.</div>
-        </div>
-    </div>
-
-</section>
-
-<!-- Support Section -->
-<%@ include file="modern/components/support-section.jsp" %>
-
-<!-- Footer -->
-<footer class="page-footer">
-    <div class="footer-content">
-        <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p>
-        <div class="footer-links">
-            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
-            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
-            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
-        </div>
-    </div>
-</footer>
-
-<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
-
-<!-- Scroll-triggered animations -->
-<script>
-(function(){
-    var els = document.querySelectorAll('.sy-anim');
-    if (!els.length) return;
-    if (!('IntersectionObserver' in window)) {
-        els.forEach(function(el){ el.classList.add('sy-visible'); });
-        return;
-    }
-    var obs = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){
-            if (e.isIntersecting) {
-                e.target.classList.add('sy-visible');
-                obs.unobserve(e.target);
-            }
-        });
-    }, { threshold: 0.15 });
-    els.forEach(function(el){ obs.observe(el); });
-})();
-
-function toggleFaq(btn) {
-    var item = btn.parentElement;
-    var isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item.open').forEach(function(i){ i.classList.remove('open'); });
-    if (!isOpen) item.classList.add('open');
-}
-
-// ==================== Example Chips ====================
-(function() {
-    var EXAMPLES = [
-        { label: '2×2 Linear',    eqs: ['2x + 3y = 8', '4x - y = 2'] },
-        { label: '3×3 Linear',    eqs: ['x + y + z = 6', '2x - y + z = 3', 'x + 2y - z = 4'] },
-        { label: 'Circle + Line', eqs: ['x^2 + y^2 = 25', 'x - y = 1'] },
-        { label: 'Parabola',      eqs: ['x^2 + y = 5', '4x - y = 2'] },
-        { label: 'Two Circles',   eqs: ['x^2 + y^2 = 7', 'x^2 + y = 5'] },
-        { label: 'xy Product',    eqs: ['x*y = 6', 'x + y = 5'] },
-        { label: 'Cubic + Circle', eqs: ['y = x^3', 'x^2 + y^2 = 5'] },
-    ];
-
-    function loadExample(example) {
-        var core = window.SystemsSolverCore;
-        if (core && core.loadExample) core.loadExample(example.eqs);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var container = document.getElementById('sy-examples');
-        if (!container) return;
-        EXAMPLES.forEach(function(ex) {
-            var btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'sy-example-chip';
-            btn.textContent = ex.label;
-            btn.title = ex.eqs.join(' | ');
-            btn.addEventListener('click', function() { loadExample(ex); });
-            container.appendChild(btn);
-        });
-    });
-})();
-</script>
-
-<!-- Core Scripts -->
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
-<script defer src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
-<script defer src="<%=request.getContextPath()%>/js/systems-solver-render.js?v=<%=cacheVersion%>"></script>
-<script defer src="<%=request.getContextPath()%>/js/systems-solver-graph.js?v=<%=cacheVersion%>"></script>
-<script defer src="<%=request.getContextPath()%>/js/systems-solver-export.js?v=<%=cacheVersion%>"></script>
-<!-- Nerdamer CAS: symbolic parsing, linearity detection, nonlinear solving -->
-<script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.min.js"></script>
-<script>window.SYSTEMS_SOLVER_CTX = "<%=request.getContextPath()%>";</script>
-<script defer src="<%=request.getContextPath()%>/js/systems-solver-core.js?v=<%=cacheVersion%>"></script>
-
-<%@ include file="modern/components/analytics.jsp" %>
 </body>
 </html>
