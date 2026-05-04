@@ -1,0 +1,67 @@
+{
+  "name": "trigonometry",
+  "worksheet_count": 1,
+  "total_questions": 1500,
+  "worksheets": [
+    {
+      "topic": "Trigonometry",
+      "description": "NCERT Class 10 (Intro + Heights & Distances), Class 11 (Trigonometric Functions), Class 12 (Inverse Trig), and JEE Mains/Advanced + IIT-level olympiad problems.  Covers function evaluation, identity proofs, equation solving, height-distance applications, and law of sines/cosines.  Most right-triangle and height-distance problems include a labelled SVG figure.",
+      "total": 1500,
+      "type_count": 39,
+      "types": {
+        "triangle_area_sas": 174,
+        "triangle_solve_aas": 135,
+        "sum_diff_angle_evaluate": 117,
+        "product_to_sum": 109,
+        "sum_to_product": 100,
+        "law_of_cosines": 97,
+        "triangle_ssa_ambiguous": 79,
+        "right_triangle_basic": 63,
+        "value_in_quadrant": 59,
+        "right_triangle_real_world": 56,
+        "evaluate_unit_circle": 46,
+        "law_of_sines": 45,
+        "double_angle_evaluate": 42,
+        "max_min_a_sin_b_cos": 30,
+        "height_distance_aircraft": 28,
+        "pythagorean_identity_quadrant": 28,
+        "height_distance_depression": 24,
+        "height_distance_elevation": 24,
+        "height_distance_two_angles": 24,
+        "complementary_angle": 23,
+        "solve_basic_equation": 23,
+        "inverse_trig_sum": 21,
+        "reciprocal_identity": 21,
+        "right_triangle_find_angle": 21,
+        "right_triangle_ratios": 21,
+        "unit_circle_evaluate": 16,
+        "unit_circle_quadrant_reference": 13,
+        "inverse_trig_evaluate": 11,
+        "iit_classics": 7,
+        "solve_quadratic_in_trig": 6,
+        "triangle_sss_find_angle": 6,
+        "exact_value_special": 5,
+        "prove_identity_advanced": 5,
+        "prove_identity_simple": 5,
+        "inverse_trig_advanced": 4,
+        "compound_angle_advanced": 3,
+        "multiple_angle_solve": 3,
+        "solve_with_factoring": 3,
+        "triangle_inequality_iit": 3
+      },
+      "difficulty": {
+        "basic": 372,
+        "medium": 617,
+        "hard": 442,
+        "scholar": 69
+      },
+      "has_figures": 94,
+      "size_bytes": 662195,
+      "warnings": [
+        "low-variety types (5): compound_angle_advanced, inverse_trig_advanced, multiple_angle_solve, solve_with_factoring, triangle_inequality_iit"
+      ],
+      "file": "trigonometry.json",
+      "url": "/worksheet/math/trigonometry/trigonometry.json"
+    }
+  ]
+}
