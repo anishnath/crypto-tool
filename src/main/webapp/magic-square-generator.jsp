@@ -173,6 +173,7 @@
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=cacheVersion%>">
     <noscript>
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
@@ -773,43 +774,45 @@
         [data-theme="dark"] .square-cell.anim-previous { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: white; }
     </style>
 </head>
-<body>
+<body class="ms-body">
     <!-- Navigation -->
     <%@ include file="modern/components/nav-header.jsp" %>
 
-    <!-- Page Header -->
-    <header class="tool-page-header">
-        <div class="tool-page-header-inner">
-            <div>
-                <h1 class="tool-page-title">Magic Square Generator</h1>
-                <nav class="tool-breadcrumbs">
-                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                    <a href="<%=request.getContextPath()%>/index.jsp#math">Math Tools</a> /
-                    Magic Square Generator
+    <!-- Decorative physics backdrop (shared across all math pages) -->
+    <jsp:include page="/math/partials/matter-bg.jsp" />
+
+    <!-- Hero banner ad -->
+    <div class="ms-hero">
+        <%@ include file="modern/ads/ad-hero-banner.jsp" %>
+    </div>
+
+    <!-- ────────── Math-studio shell ────────── -->
+    <main class="ms-main">
+
+        <button type="button" id="msSidebarToggle" class="ms-sidebar-toggle" aria-label="Open math tools menu">
+            &#9776; Math tools
+        </button>
+
+        <% request.setAttribute("activeService", "magic-square"); %>
+        <jsp:include page="/math/partials/sidebar.jsp" />
+
+        <section class="ms-workspace">
+
+            <header class="ms-title">
+                <nav class="ms-crumbs">
+                    <a href="<%=request.getContextPath()%>/index.jsp">Home</a>
+                    <span>/</span>
+                    <a href="<%=request.getContextPath()%>/math/">Math</a>
+                    <span>/</span>
+                    <span aria-current="page">Magic Square Generator</span>
                 </nav>
-            </div>
-            <div class="tool-page-badges">
-                <span class="tool-badge">Recreational Math</span>
-                <span class="tool-badge">Number Patterns</span>
-                <span class="tool-badge">Interactive</span>
-            </div>
-        </div>
-    </header>
+                <h1>Magic Square Generator &mdash; Build, Animate &amp; Verify</h1>
+            </header>
 
-    <!-- Tool Description -->
-    <section class="tool-description-section">
-        <div class="tool-description-inner">
-            <div class="tool-description-content">
-                <p>Generate magic squares from 3x3 to 9x9 with animated construction. Verify row, column, and diagonal sums with visual highlighting. Learn the Siamese, Strachey, and Conway LUX construction methods.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="tool-page-container">
-        <!-- ========== INPUT COLUMN ========== -->
-        <div class="tool-input-column">
-            <div class="tool-card">
+            <div class="ic-stack">
+                <!-- ========== INPUT COLUMN ========== -->
+                <div class="ic-hero">
+                    <div class="tool-card">
                 <!-- Tab Selection -->
                 <div class="tool-tabs" role="tablist">
                     <button type="button" class="tool-tab active" data-tab="generate" role="tab">
@@ -956,54 +959,48 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- ========== OUTPUT COLUMN ========== -->
-        <div class="tool-output-column">
-            <div class="tool-card tool-result-card">
-                <div class="tool-result-header">
-                    <span>&#128203;</span>
-                    <h4>Result</h4>
                 </div>
-                <div class="tool-result-content" id="displaySection">
-                    <div class="tool-empty-state" id="emptyState">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:0.75rem;opacity:0.4;">
-                            <rect x="3" y="3" width="7" height="7" rx="1"/>
-                            <rect x="14" y="3" width="7" height="7" rx="1"/>
-                            <rect x="3" y="14" width="7" height="7" rx="1"/>
-                            <rect x="14" y="14" width="7" height="7" rx="1"/>
-                        </svg>
-                        <h3>Magic Square</h3>
-                        <p>Select a size and click Generate to create your magic square.</p>
+
+                <!-- ========== OUTPUT COLUMN ========== -->
+                <div class="ic-result-card">
+                    <div class="tool-card tool-result-card">
+                        <div class="tool-result-header">
+                            <span>&#128203;</span>
+                            <h4>Result</h4>
+                        </div>
+                        <div class="tool-result-content" id="displaySection">
+                            <div class="tool-empty-state" id="emptyState">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:0.75rem;opacity:0.4;">
+                                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                                </svg>
+                                <h3>Magic Square</h3>
+                                <p>Select a size and click Generate to create your magic square.</p>
+                            </div>
+                        </div>
+                        <div class="tool-result-actions" id="resultActions">
+                            <button type="button" class="tool-action-btn" id="copyResultBtn">
+                                <span>&#128203;</span> Copy Text
+                            </button>
+                            <button type="button" class="tool-action-btn" id="downloadPngBtn">
+                                <span>&#128247;</span> Download PNG
+                            </button>
+                            <button type="button" class="tool-action-btn" id="shareUrlBtn">
+                                <span>&#128279;</span> Share URL
+                            </button>
+                            <button type="button" class="tool-action-btn" id="printWorksheetBtn" onclick="printWorksheet()" style="background:linear-gradient(135deg,#64748b,#475569);">
+                                <span>&#128424;</span> Print Worksheet
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="tool-result-actions" id="resultActions">
-                    <button type="button" class="tool-action-btn" id="copyResultBtn">
-                        <span>&#128203;</span> Copy Text
-                    </button>
-                    <button type="button" class="tool-action-btn" id="downloadPngBtn">
-                        <span>&#128247;</span> Download PNG
-                    </button>
-                    <button type="button" class="tool-action-btn" id="shareUrlBtn">
-                        <span>&#128279;</span> Share URL
-                    </button>
-                    <button type="button" class="tool-action-btn" id="printWorksheetBtn" onclick="printWorksheet()" style="background:linear-gradient(135deg,#64748b,#475569);">
-                        <span>&#128424;</span> Print Worksheet
-                    </button>
-                </div>
+            </div><%-- close .ic-stack --%>
+
+            <div class="ms-inline-ad">
+                <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
             </div>
-        </div>
-
-        <!-- ========== ADS COLUMN ========== -->
-        <div class="tool-ads-column">
-            <%@ include file="modern/ads/ad-three-column.jsp" %>
-        </div>
-    </main>
-
-    <!-- Mobile Ad Fallback -->
-    <div class="tool-mobile-ad-container">
-        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
-    </div>
 
     <!-- Related Math Tools -->
     <jsp:include page="modern/components/related-tools.jsp">
@@ -1161,20 +1158,16 @@
         </div>
     </section>
 
+        </section><%-- close .ms-workspace --%>
+
+        <aside class="ms-rail" aria-label="Advertisements">
+            <%@ include file="modern/ads/ad-ide-rail-top.jsp" %>
+            <%@ include file="modern/ads/ad-ide-rail-bottom.jsp" %>
+        </aside>
+    </main><%-- close .ms-main --%>
+
     <!-- Support Section -->
     <%@ include file="modern/components/support-section.jsp" %>
-
-    <!-- Footer -->
-    <footer class="page-footer">
-        <div class="footer-content">
-            <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
-            <div class="footer-links">
-                <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
-                <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
-                <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
-            </div>
-        </div>
-    </footer>
 
     <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
     <%@ include file="modern/components/analytics.jsp" %>

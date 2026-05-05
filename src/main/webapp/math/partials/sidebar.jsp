@@ -51,7 +51,7 @@
     </div>
 
     <!-- Everyday Math -->
-    <div class="ms-group<%= collapsedCls(activeService, "percentage", "sig-figs", "exponent", "logarithm", "24-game", "collatz") %>" data-group="everyday">
+    <div class="ms-group<%= collapsedCls(activeService, "percentage", "sig-figs", "exponent", "logarithm", "24-game", "collatz", "magic-square") %>" data-group="everyday">
         <button class="ms-group-header" type="button">Everyday <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/percentage-calculator.jsp" class="ms-item <%= "percentage".equals(activeService) ? "active" : "" %>">
@@ -71,6 +71,9 @@
             </a>
             <a href="<%= ctx %>/collatz-conjecture.jsp" class="ms-item <%= "collatz".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">3n+1</span> <span class="ms-item-label">Collatz Conjecture</span>
+            </a>
+            <a href="<%= ctx %>/magic-square-generator.jsp" class="ms-item <%= "magic-square".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#9744;</span> <span class="ms-item-label">Magic Square</span>
             </a>
         </div>
     </div>
