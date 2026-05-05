@@ -121,6 +121,7 @@
         <jsp:param name="toolName" value="<%=pageTitle%>" />
         <jsp:param name="toolCategory" value="Math Worksheets" />
         <jsp:param name="toolDescription" value="<%=pageDesc%>" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
         <jsp:param name="toolUrl" value="math/worksheet.jsp" />
         <jsp:param name="toolKeywords" value="math worksheet, practice problems, printable math, algebra worksheet, calculus worksheet, NCERT worksheet, JEE practice, sig fig worksheet, free practice, answer key, math pdf, math homework" />
         <jsp:param name="toolFeatures" value="33000+ problems,18 topics,Printable PDF,Filterable by type and difficulty,Full answer keys,Free no signup,SymPy verified" />
