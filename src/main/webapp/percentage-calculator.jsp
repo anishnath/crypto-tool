@@ -496,6 +496,18 @@
                             <div class="tool-result-actions" id="pc-result-actions" style="display:none;">
                                 <button type="button" class="tool-action-btn" id="pc-copy-latex-btn">Copy LaTeX</button>
                                 <button type="button" class="tool-action-btn" id="pc-share-btn">Share</button>
+                                <button type="button" class="tool-action-btn" id="pc-worksheet-btn-toolbar">Worksheet</button>
+                            </div>
+
+                            <!-- Practice worksheet CTA — 1,500-problem CAS-verified
+                                 percentages bank covering NCERT Class 7-8 commercial
+                                 math (profit/loss, discount, tax, CI, partnership)
+                                 plus alligation, geometry % change, JEE classics. -->
+                            <div class="ic-worksheet-cta" style="padding:0.75rem 1rem;">
+                                <button type="button" class="tool-action-btn" id="pc-worksheet-btn"
+                                        style="width:100%;font-weight:600;">
+                                    Practice Worksheet &mdash; 1,500+ percentage &amp; commercial-math problems with answer key
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -689,6 +701,39 @@
                 if (item) item.classList.toggle('open');
             });
         }
+    })();
+    </script>
+
+    <!-- ─── Practice worksheet — 1,500-problem CAS-verified percentages bank ─── -->
+    <script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=v%>"></script>
+    <script>
+    (function () {
+        function openPercentageWorksheet() {
+            if (!window.WorksheetEngine || typeof window.WorksheetEngine.open !== 'function') {
+                if (typeof ToolUtils !== 'undefined' && ToolUtils.showToast) {
+                    ToolUtils.showToast('Worksheet engine not loaded', 2500, 'warning');
+                }
+                return;
+            }
+            window.WorksheetEngine.open({
+                jsonUrl: '<%=request.getContextPath()%>/worksheet/math/algebra/percentages.json',
+                title: 'Percentages & Commercial Math',
+                accentColor: '#0e7490',
+                branding: '8gwifi.org',
+                defaultCount: 20
+            });
+        }
+        function whenReady(fn) {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', fn);
+            } else { fn(); }
+        }
+        whenReady(function () {
+            var primary = document.getElementById('pc-worksheet-btn');
+            if (primary) primary.addEventListener('click', openPercentageWorksheet);
+            var toolbar = document.getElementById('pc-worksheet-btn-toolbar');
+            if (toolbar) toolbar.addEventListener('click', openPercentageWorksheet);
+        });
     })();
     </script>
 
