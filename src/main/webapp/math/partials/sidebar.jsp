@@ -31,6 +31,10 @@
                 <span class="ms-item-icon">&#x2211;</span>
                 <span class="ms-item-label">Math Editor</span>
             </a>
+            <a href="<%= ctx %>/math/worksheet.jsp" class="ms-item <%= "worksheet".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#128218;</span>
+                <span class="ms-item-label">Practice Worksheets</span>
+            </a>
         </div>
     </div>
 
@@ -52,6 +56,9 @@
             </a>
             <a href="<%= ctx %>/24-game-solver.jsp" class="ms-item <%= "24-game".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">24</span> <span class="ms-item-label">24 Game Solver</span>
+            </a>
+            <a href="<%= ctx %>/collatz-conjecture.jsp" class="ms-item <%= "collatz".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">3n+1</span> <span class="ms-item-label">Collatz Conjecture</span>
             </a>
         </div>
     </div>
