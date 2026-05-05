@@ -14,6 +14,7 @@
 
 import {
     SOLVED_STATE, FACES, validateState, setSticker,
+    FACE_COLORS, PLACEMENTS, GRID_COLS, GRID_ROWS,
 } from './cube.js';
 import { parseMove, describeMove, stickerIndicesForFace } from './moves.js';
 import { decodeStateFromHash, shareUrl } from './share.js';
@@ -107,6 +108,7 @@ async function paint() {
             ? parseMove(ui.moves[ui.stepIndex]) : null;
     const highlight = upcomingMove ? stickerIndicesForFace(upcomingMove.face) : [];
 
+    ui.displayState = displayState;
     dom.net.update({
         state: displayState,
         editable: !ui.moves && !ui.solveBusy,
@@ -450,7 +452,7 @@ function togglePlay() {
 // Stroke + fill so the watermark stays readable against any cube color.
 function drawWatermark(ctx, w, h) {
     const text = '8gwifi.org/math/rubiks-cube-solver.jsp';
-    const fontSize = Math.max(11, Math.round(w / 48));
+    const fontSize = Math.max(11, Math.round(w / 60));
     ctx.save();
     ctx.font = `600 ${fontSize}px Inter, -apple-system, system-ui, sans-serif`;
     ctx.textAlign = 'right';
@@ -461,6 +463,30 @@ function drawWatermark(ctx, w, h) {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
     ctx.fillText(text, w - 10, h - 8);
     ctx.restore();
+}
+
+/** Draw the unfolded net into a 2D canvas region using PLACEMENTS + state.
+ *  Native net dims are GRID_COLS×GRID_ROWS×NET_STICKER_SIZE; `scale` resizes
+ *  to fit the host frame. */
+const NET_STICKER_SIZE = 40;
+const NET_STICKER_GAP = 2;
+const NET_RADIUS = 4;
+function drawNet(ctx, state, x, y, scale) {
+    if (!state || state.length !== 54) return;
+    const stroke = '#1e293b';
+    for (const p of PLACEMENTS) {
+        const sx = x + (p.col * NET_STICKER_SIZE + NET_STICKER_GAP / 2) * scale;
+        const sy = y + (p.row * NET_STICKER_SIZE + NET_STICKER_GAP / 2) * scale;
+        const size = (NET_STICKER_SIZE - NET_STICKER_GAP) * scale;
+        const r = NET_RADIUS * scale;
+        ctx.fillStyle = FACE_COLORS[state[p.index]] || '#888';
+        ctx.beginPath();
+        ctx.roundRect(sx, sy, size, size, r);
+        ctx.fill();
+        ctx.lineWidth = Math.max(1, scale * 0.8);
+        ctx.strokeStyle = stroke;
+        ctx.stroke();
+    }
 }
 
 /**
@@ -502,11 +528,25 @@ async function recordGif() {
     }
 
     const canvas = dom.cube3d.el;
+    // Compose [3D cube | unfolded net] side-by-side. Net is scaled so its
+    // native height (GRID_ROWS*NET_STICKER_SIZE) matches the cube canvas
+    // height; gap between the two panels is fixed in cube-pixel space.
+    const GAP = 24;
+    const PAD = 16;
+    const netNativeH = GRID_ROWS * NET_STICKER_SIZE;
+    const netNativeW = GRID_COLS * NET_STICKER_SIZE;
+    const netScale = canvas.height / netNativeH;
+    const netW = netNativeW * netScale;
+    const frameW = canvas.width + GAP + netW + PAD * 2;
+    const frameH = canvas.height + PAD * 2;
+    const netOffsetX = PAD + canvas.width + GAP;
+    const netOffsetY = PAD;
+
     const gif = new GIF({
         workers: 2,
         quality: 10,
-        width: canvas.width,
-        height: canvas.height,
+        width: Math.round(frameW),
+        height: Math.round(frameH),
         workerScript: workerBlobUrl,
     });
 
@@ -521,11 +561,14 @@ async function recordGif() {
     ui.recordingStatus = 'Capturing frames…';
     paint();
     const frameCanvas = document.createElement('canvas');
-    frameCanvas.width = canvas.width;
-    frameCanvas.height = canvas.height;
+    frameCanvas.width = Math.round(frameW);
+    frameCanvas.height = Math.round(frameH);
     const frameCtx = frameCanvas.getContext('2d');
     const captureInterval = setInterval(() => {
-        frameCtx.drawImage(canvas, 0, 0);
+        frameCtx.fillStyle = '#0f172a';
+        frameCtx.fillRect(0, 0, frameCanvas.width, frameCanvas.height);
+        frameCtx.drawImage(canvas, PAD, PAD);
+        drawNet(frameCtx, ui.displayState, netOffsetX, netOffsetY, netScale);
         drawWatermark(frameCtx, frameCanvas.width, frameCanvas.height);
         gif.addFrame(frameCtx, { delay: 50, copy: true });
     }, 50);
