@@ -415,6 +415,22 @@ function togglePlay() {
     maybeStartAutoPlay();
 }
 
+// Stroke + fill so the watermark stays readable against any cube color.
+function drawWatermark(ctx, w, h) {
+    const text = '8gwifi.org/math/pocket-cube-solver.jsp';
+    const fontSize = Math.max(11, Math.round(w / 48));
+    ctx.save();
+    ctx.font = `600 ${fontSize}px Inter, -apple-system, system-ui, sans-serif`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'bottom';
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.strokeText(text, w - 10, h - 8);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+    ctx.fillText(text, w - 10, h - 8);
+    ctx.restore();
+}
+
 /**
  * Record the solution playback as an animated GIF using gif.js.
  *
@@ -481,8 +497,14 @@ async function recordGif() {
     // Capture frames at 20 fps for the duration of playback.
     ui.recordingStatus = 'Capturing frames…';
     paint();
+    const frameCanvas = document.createElement('canvas');
+    frameCanvas.width = canvas.width;
+    frameCanvas.height = canvas.height;
+    const frameCtx = frameCanvas.getContext('2d');
     const captureInterval = setInterval(() => {
-        gif.addFrame(canvas, { delay: 50, copy: true });
+        frameCtx.drawImage(canvas, 0, 0);
+        drawWatermark(frameCtx, frameCanvas.width, frameCanvas.height);
+        gif.addFrame(frameCtx, { delay: 50, copy: true });
     }, 50);
 
     // Start auto-playback.
