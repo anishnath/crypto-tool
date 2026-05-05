@@ -440,9 +440,15 @@ async function recordGif() {
     paint();
 
     let GIF;
+    let workerBlobUrl;
     try {
         const mod = await import('https://esm.sh/gif.js@0.2.0');
         GIF = mod.default || mod.GIF || mod;
+        // The Worker constructor refuses cross-origin script URLs even when the
+        // response has permissive CORS headers, so fetch the worker source and
+        // hand it to gif.js as a same-origin blob URL.
+        const workerResp = await fetch('https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js');
+        workerBlobUrl = URL.createObjectURL(await workerResp.blob());
     } catch (err) {
         console.error('gif.js load failed:', err);
         ui.recording = false;
@@ -458,9 +464,7 @@ async function recordGif() {
         quality: 10,
         width: canvas.width,
         height: canvas.height,
-        // Cross-origin worker — both unpkg and jsdelivr serve gif.worker.js
-        // with permissive CORS headers, so this just works.
-        workerScript: 'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js',
+        workerScript: workerBlobUrl,
     });
 
     // Rewind to start of solution and force a fast playback so the recording
@@ -517,6 +521,7 @@ async function recordGif() {
         a.click();
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(url), 2000);
+        URL.revokeObjectURL(workerBlobUrl);
 
         ui.recording = false;
         ui.recordingStatus = null;
