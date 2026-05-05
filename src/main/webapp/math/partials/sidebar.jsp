@@ -7,8 +7,20 @@
         <jsp:include page="/math/partials/sidebar.jsp" />
 
     Mark the current tool so its row highlights and its group auto-expands.
-    Category open/close state is persisted in localStorage.
+    All OTHER groups render collapsed by default (no animation flash on
+    load); the inline script below restores the user's manually-opened
+    groups from localStorage on hydration.
 --%>
+<%!
+    /* Returns the literal class fragment " collapsed" when the active tool
+       does NOT live inside this group, otherwise "".  The keys passed in
+       must match the activeService values used by each <a class="ms-item">. */
+    private String collapsedCls(String activeService, String... keys) {
+        if (activeService == null) return " collapsed";
+        for (String k : keys) if (k.equals(activeService)) return "";
+        return " collapsed";
+    }
+%>
 <%
     String activeService = (String) request.getAttribute("activeService");
     if (activeService == null) activeService = "home";
@@ -39,7 +51,7 @@
     </div>
 
     <!-- Everyday Math -->
-    <div class="ms-group" data-group="everyday">
+    <div class="ms-group<%= collapsedCls(activeService, "percentage", "sig-figs", "exponent", "logarithm", "24-game", "collatz") %>" data-group="everyday">
         <button class="ms-group-header" type="button">Everyday <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/percentage-calculator.jsp" class="ms-item <%= "percentage".equals(activeService) ? "active" : "" %>">
@@ -64,7 +76,7 @@
     </div>
 
     <!-- Algebra -->
-    <div class="ms-group" data-group="algebra">
+    <div class="ms-group<%= collapsedCls(activeService, "quadratic", "system-equations", "inequality", "polynomial") %>" data-group="algebra">
         <button class="ms-group-header" type="button">Algebra <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/quadratic-solver.jsp" class="ms-item <%= "quadratic".equals(activeService) ? "active" : "" %>">
@@ -85,7 +97,7 @@
     </div>
 
     <!-- Calculus -->
-    <div class="ms-group" data-group="calculus">
+    <div class="ms-group<%= collapsedCls(activeService, "derivative", "integral-calculator", "limit", "series", "vector-calculus", "ode", "pde") %>" data-group="calculus">
         <button class="ms-group-header" type="button">Calculus <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/derivative-calculator.jsp" class="ms-item <%= "derivative".equals(activeService) ? "active" : "" %>">
@@ -113,7 +125,7 @@
     </div>
 
     <!-- Linear Algebra -->
-    <div class="ms-group" data-group="linear-algebra">
+    <div class="ms-group<%= collapsedCls(activeService, "matrix", "vector") %>" data-group="linear-algebra">
         <button class="ms-group-header" type="button">Linear Algebra <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/math/matrix-calculator.jsp" class="ms-item <%= "matrix".equals(activeService) ? "active" : "" %>">
@@ -126,7 +138,7 @@
     </div>
 
     <!-- Trigonometry -->
-    <div class="ms-group" data-group="trig">
+    <div class="ms-group<%= collapsedCls(activeService, "trig-fn", "trig-id", "trig-eq") %>" data-group="trig">
         <button class="ms-group-header" type="button">Trigonometry <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/trigonometric-function-calculator.jsp" class="ms-item <%= "trig-fn".equals(activeService) ? "active" : "" %>">
@@ -142,7 +154,7 @@
     </div>
 
     <!-- Statistics -->
-    <div class="ms-group" data-group="statistics">
+    <div class="ms-group<%= collapsedCls(activeService, "summary-stats", "mean-median-mode", "stddev", "variance", "percentile", "z-score", "normal-dist", "binomial-dist", "probability", "confidence", "hypothesis", "t-test", "chi-square", "anova", "correlation", "regression", "sample-size", "effect-size", "std-error", "outlier", "p-value") %>" data-group="statistics">
         <button class="ms-group-header" type="button">Statistics <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/summary-statistics-calculator.jsp" class="ms-item <%= "summary-stats".equals(activeService) ? "active" : "" %>">
@@ -212,7 +224,7 @@
     </div>
 
     <!-- Graphing -->
-    <div class="ms-group" data-group="graphing">
+    <div class="ms-group<%= collapsedCls(activeService, "graphing") %>" data-group="graphing">
         <button class="ms-group-header" type="button">Graphing <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/graphing-calculator.jsp" class="ms-item <%= "graphing".equals(activeService) ? "active" : "" %>">
@@ -244,7 +256,11 @@
         // Home group is header-less and always open.
         if (!g.querySelector('.ms-group-header')) return;
         if (id === activeGroupId) { g.classList.remove('collapsed'); return; }
-        if (collapsed[id]) g.classList.add('collapsed');
+        // Default state is COLLAPSED — keeps the sidebar tidy on first visit.
+        // localStorage only overrides this when the user has explicitly
+        // opened a group (stored as `false`).  Stored `true` and missing
+        // both collapse, so we just check for the explicit `false`.
+        if (collapsed[id] !== false) g.classList.add('collapsed');
     });
 
     sidebar.querySelectorAll('.ms-group-header').forEach(function (h) {
@@ -252,6 +268,8 @@
             var g = h.closest('.ms-group');
             g.classList.toggle('collapsed');
             var id = g.getAttribute('data-group');
+            // Persist BOTH states so we can distinguish "user opened this"
+            // from "never touched" (default collapsed).
             collapsed[id] = g.classList.contains('collapsed');
             try { localStorage.setItem(STORE_KEY, JSON.stringify(collapsed)); } catch (e) {}
         });
