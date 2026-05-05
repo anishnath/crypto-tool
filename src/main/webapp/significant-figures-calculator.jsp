@@ -599,6 +599,18 @@
                         <div class="tool-result-actions" id="resultActions">
                             <button type="button" class="tool-action-btn" id="copyResultBtn">&#128203; Copy text</button>
                             <button type="button" class="tool-action-btn" id="shareUrlBtn">&#128279; Share URL</button>
+                            <button type="button" class="tool-action-btn" id="sf-worksheet-btn-toolbar">&#128214; Worksheet</button>
+                        </div>
+
+                        <!-- Practice worksheet CTA — 1,500-problem sig-fig
+                             bank covering all 5 rules, scientific notation,
+                             arithmetic with sig-fig rounding rules, plus
+                             chemistry / physics / IIT-JEE problems. -->
+                        <div class="ic-worksheet-cta" style="padding:0.75rem 1rem;">
+                            <button type="button" class="tool-action-btn" id="sf-worksheet-btn"
+                                    style="width:100%;font-weight:600;">
+                                Practice Worksheet &mdash; 1,500+ sig-fig &amp; scientific-notation problems with answer key
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1752,6 +1764,39 @@
     document.querySelectorAll('.ms-faq-q').forEach(function (q) {
         q.addEventListener('click', function () { q.closest('.ms-faq-item').classList.toggle('open'); });
     });
+    </script>
+
+    <!-- ─── Practice worksheet — 1,500-problem sig-fig & scientific-notation bank ─── -->
+    <script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=cacheVersion%>"></script>
+    <script>
+    (function () {
+        function openSigFigWorksheet() {
+            if (!window.WorksheetEngine || typeof window.WorksheetEngine.open !== 'function') {
+                if (typeof ToolUtils !== 'undefined' && ToolUtils.showToast) {
+                    ToolUtils.showToast('Worksheet engine not loaded', 2500, 'warning');
+                }
+                return;
+            }
+            window.WorksheetEngine.open({
+                jsonUrl: '<%=request.getContextPath()%>/worksheet/math/numerics/significant_figures.json',
+                title: 'Significant Figures &amp; Scientific Notation',
+                accentColor: '#7c3aed',
+                branding: '8gwifi.org',
+                defaultCount: 20
+            });
+        }
+        function whenReady(fn) {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', fn);
+            } else { fn(); }
+        }
+        whenReady(function () {
+            var primary = document.getElementById('sf-worksheet-btn');
+            if (primary) primary.addEventListener('click', openSigFigWorksheet);
+            var toolbar = document.getElementById('sf-worksheet-btn-toolbar');
+            if (toolbar) toolbar.addEventListener('click', openSigFigWorksheet);
+        });
+    })();
     </script>
 </body>
 </html>
