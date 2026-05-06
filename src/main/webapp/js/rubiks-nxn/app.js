@@ -83,12 +83,36 @@ function validateRelaxed(state, faces, perFace) {
     return { ok: true };
 }
 
+/** Build a random scramble using single-face moves (no consecutive same-face,
+ *  WCA-style).  Returns the move list — caller applies them one-at-a-time
+ *  for animation. */
+function buildRandomMoves(allMoves, n) {
+    const moves = [];
+    let lastFace = '';
+    for (let i = 0; i < n; i++) {
+        let mv;
+        // Avoid same-face consecutives so the scramble looks meaningful.
+        do {
+            mv = allMoves[Math.floor(Math.random() * allMoves.length)];
+        } while (mv[0] === lastFace);
+        lastFace = mv[0];
+        moves.push(mv);
+    }
+    return moves;
+}
+
 const sizeAdapters = {
     3: {
         SOLVED:   SOLVED_3,
         validate: (s) => validateRelaxed(s, FACES_3, 9),
         apply:    (state, moves) => apply3cubejs(state, moves),
         random:   () => random3cubejs(),
+        // Generate a scramble move list (for animated play); fallback for 3×3
+        // is to compute via cubejs randomState then derive — too complex,
+        // so we synthesise from a fixed move alphabet.
+        randomMoves: () => buildRandomMoves(
+            ['U',"U'",'U2','R',"R'",'R2','F',"F'",'F2','D',"D'",'D2','L',"L'",'L2','B',"B'",'B2'],
+            20),
         mount:    mountNet3,
     },
     4: {
@@ -96,12 +120,9 @@ const sizeAdapters = {
         validate: (s) => validateRelaxed(s, FACES_4, 16),
         apply:    async (state, moves) => apply4sync(state, moves),
         random:   async () => {
-            const moves = [];
-            for (let i = 0; i < 30; i++) {
-                moves.push(ALL_MOVES_4[Math.floor(Math.random() * ALL_MOVES_4.length)]);
-            }
-            return apply4sync(SOLVED_4, moves);
+            return apply4sync(SOLVED_4, buildRandomMoves(ALL_MOVES_4, 30));
         },
+        randomMoves: () => buildRandomMoves(ALL_MOVES_4, 20),
         mount:    mountNet4,
     },
     5: {
@@ -111,13 +132,9 @@ const sizeAdapters = {
         random:   async () => {
             // Smaller scramble for 5×5 since the server-side IDA*
             // gets exponentially slower with scramble length.
-            const moves = [];
-            const n = 8;
-            for (let i = 0; i < n; i++) {
-                moves.push(ALL_MOVES_5[Math.floor(Math.random() * ALL_MOVES_5.length)]);
-            }
-            return apply5sync(SOLVED_5, moves);
+            return apply5sync(SOLVED_5, buildRandomMoves(ALL_MOVES_5, 8));
         },
+        randomMoves: () => buildRandomMoves(ALL_MOVES_5, 8),
         mount:    mountNet5,
     },
 };
@@ -219,7 +236,15 @@ export function bootstrap(ctx) {
         if (ui.editToggle) {
             ui.editToggle.classList.toggle('active', editMode);
             ui.editToggle.setAttribute('aria-pressed', String(editMode));
-            ui.editToggle.textContent = editMode ? '✏ Editing — click stickers' : '✏ Edit stickers';
+            // Update only the tooltip label's text — DON'T replace the
+            // whole button content (would clobber the SVG icon + span
+            // structure that the .rk-btn-icon style depends on).
+            const label = ui.editToggle.querySelector('.rk-label');
+            if (label) label.textContent = editMode ? 'Editing — click stickers' : 'Edit stickers';
+            // Also update the title attribute so the native browser
+            // tooltip stays in sync with the active state.
+            ui.editToggle.setAttribute('title',
+                editMode ? 'Editing — click stickers to cycle colours' : 'Toggle sticker editing');
         }
     }
 
@@ -290,6 +315,13 @@ export function bootstrap(ctx) {
         mountNet();
         mount3D();
         refreshEditable();
+        // Enable/disable wide-turn buttons based on size.  3×3 has no
+        // inner layer so wide turns are nonsensical; 4×4 / 5×5 have one.
+        const allowWide = size >= 4;
+        document.querySelectorAll('.rk-twist-btn[data-wide="1"]').forEach((b) => {
+            b.disabled = !allowWide;
+            b.title = allowWide ? b.dataset.move : 'Wide turns require 4×4 or larger';
+        });
         setStatus(size === 3 ? 'Ready · 3×3 (browser)'
         : size === 4 ? 'Ready · 4×4 (server)'
         : 'Ready · 5×5 (server)', 'ready');
@@ -298,15 +330,35 @@ export function bootstrap(ctx) {
 
     async function scramble() {
         clearSolution();
-        setStatus('Scrambling…', 'busy');
+        setStatus('Scrambling', 'busy');
         try {
-            state = await adapter.random();
+            // Generate the move list, then animate each move on the 3D
+            // scene + net.  For long scrambles (>15 moves) snap the rest
+            // after the first 12 to keep the UI snappy.
+            const moves = adapter.randomMoves
+                ? adapter.randomMoves()
+                : null;
+            if (moves && moves.length) {
+                state = adapter.SOLVED;
+                paintNet();   // start from solved
+                const ANIMATE_LIMIT = 15;
+                for (let i = 0; i < moves.length; i++) {
+                    state = await adapter.apply(state, [moves[i]]);
+                    if (i < ANIMATE_LIMIT) {
+                        await paintWithMove(moves[i]);    // animate
+                    }
+                }
+                if (moves.length > ANIMATE_LIMIT) paintNet();   // final snap for any tail
+            } else {
+                // Fallback: synchronous (3×3 cubejs path returns final state directly)
+                state = await adapter.random();
+                paintNet();
+            }
             originalState = state;
-            paintNet();
-            setBanner(`Scrambled ${size}×${size}. Click Solve.`, 'ok');
+            setBanner(`Scrambled ${size}×${size} with ${moves ? moves.length : '?'} moves. Click Solve.`, 'ok');
             setStatus(size === 3 ? 'Ready · 3×3 (browser)'
-        : size === 4 ? 'Ready · 4×4 (server)'
-        : 'Ready · 5×5 (server)', 'ready');
+                    : size === 4 ? 'Ready · 4×4 (server)'
+                    : 'Ready · 5×5 (server)', 'ready');
         } catch (err) {
             setBanner('Scramble failed: ' + (err.message || err), 'bad');
             setStatus('Idle', 'idle');
