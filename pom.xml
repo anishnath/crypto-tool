@@ -59,6 +59,9 @@
 						</goals>
 					</execution>
 				</executions>
+                <configuration>
+                    <sendJavaToScalac>false</sendJavaToScalac>
+                </configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
