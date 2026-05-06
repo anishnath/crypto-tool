@@ -17,14 +17,34 @@
         FE design adapts the reference React app.
     --%>
     <jsp:include page="../modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Free Rubik N×N Solver — 3×3, 4×4 and 5×5" />
-        <jsp:param name="toolCategory" value="Math Tools" />
-        <jsp:param name="toolDescription" value="Free Rubik's Cube N×N solver supporting 3×3 (Kociemba in-browser), 4×4 (server-side pure-Java pipeline), and 5×5 (8-stage reduction-method solver, pure Java). Scramble, twist, solve — step-by-step playback." />
+        <jsp:param name="toolName" value="Rubik's Cube Solver Online — 3x3, 4x4, 5x5, 6x6 and 7x7 (Animated 3D, Step-by-Step)" />
+        <jsp:param name="toolCategory" value="Puzzles" />
+        <jsp:param name="toolDescription" value="Free online Rubik's Cube solver for 3x3, 4x4, 5x5, 6x6 and 7x7 cubes. Enter your scramble — get a step-by-step solution with animated 3D playback. No signup, no ads in the way, works in any browser. Includes random scrambler, manual twist with WCA notation, and image-upload for net photos." />
         <jsp:param name="toolUrl" value="math/rubik-nxn-solver.jsp" />
         <jsp:param name="breadcrumbCategoryUrl" value="math/" />
-        <jsp:param name="toolKeywords" value="rubiks cube solver, 4x4 cube solver, 5x5 cube solver, NxN cube solver, professor cube solver, kociemba algorithm, rubiks revenge solver, cube reduction method, online cube solver, free cube solver, animated cube solver, rubiks cube tutorial" />
-        <jsp:param name="toolImage" value="math-studio-og.png" />
-        <jsp:param name="toolFeatures" value="Single page handles 3×3 / 4×4 / 5×5,Kociemba two-phase solver for 3×3 (browser),Full reduction-method pipeline for 4×4 (server),8-stage reduction-method pipeline for 5×5 (server),Step-by-step playback with Prev / Play / Next,Random scramble and reset,Manual twist controls,Move list breakdown by phase" />
+        <jsp:param name="toolKeywords" value="rubiks cube solver, rubik's cube solver, online rubiks cube solver, free rubiks cube solver, 3x3 cube solver, 4x4 cube solver, 5x5 cube solver, 6x6 cube solver, 7x7 cube solver, rubiks revenge solver, professor cube solver, big cube solver, NxN cube solver, animated cube solver, 3d rubiks cube simulator, rubiks cube scrambler, scramble generator, WCA scramble, cube notation, how to solve a rubiks cube, step by step rubiks cube solver, rubiks cube algorithm finder, rubiks cube simulator online, virtual rubiks cube, speedcubing tool, cube reduction method" />
+        <jsp:param name="toolImage" value="rubik-cube-solver-og.png" />
+        <jsp:param name="toolFeatures" value="Solves 3x3 / 4x4 / 5x5 / 6x6 / 7x7 — one tool every cube,Animated 3D cube — watch each face turn in real time,Step-by-step playback with Prev / Play / Next,Random scramble button (configurable length),Manual twist with full WCA notation (outer / wide / 3-layer),Upload net image — auto-detect colors via CIE Lab calibration,Click stickers to fix mis-detected colors,Pure browser UI — works offline after first load (3x3),Mobile-friendly responsive layout,No signup, no paywall, no algorithm timer overlay" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="teaches" value="Rubik's Cube notation (WCA), reduction method for big cubes, edge orientation, centres staging, Kociemba two-phase algorithm, group theory basics" />
+        <jsp:param name="educationalLevel" value="Beginner, Intermediate, Speedcuber" />
+        <jsp:param name="howToSteps" value="Pick your cube size|Click 3×3 / 4×4 / 5×5 / 6×6 / 7×7 in the size selector. The 3D cube and net resize instantly.,Enter your scramble|Three options: (a) click Random scramble for a fresh state, (b) click Upload net to detect colors from a photo, or (c) click stickers in Edit mode to set each colour by hand.,Click Solve|For 3×3 the solution is computed in the browser in under 100 ms. For 4×4 / 5×5 / 6×6 / 7×7 it's solved on our server in seconds. The solve splits into stages so you can see what each phase did.,Watch the solution|Press Play to auto-step through the moves with animation, or use Prev / Next to step manually. Click any move chip to jump to that position. ←/→ arrow keys also work.,Save or share|The current state lives in the URL fragment so you can bookmark it. Right-click the 3D cube to capture an image of any step." />
+        <jsp:param name="faq1q" value="What's the fastest way to solve a 3x3 Rubik's Cube?" />
+        <jsp:param name="faq1a" value="The mathematically fastest solution from any state is at most 20 face turns (God's Number, proved 2010). Speedcubers typically average 50–60 moves with the CFOP method (Cross, F2L, OLL, PLL); world-record averages are sub-5 seconds. This solver returns near-optimal solutions instantly using the Kociemba two-phase algorithm — typically 20–22 moves in standard WCA notation, which is shorter than what most human methods produce." />
+        <jsp:param name="faq2q" value="How do you scramble a 4x4 Rubik's Cube (Rubik's Revenge)?" />
+        <jsp:param name="faq2a" value="Standard WCA 4x4 scrambles are 40 moves long, mixing outer face turns (R, U, F, etc.) with wide turns (Rw, Uw, Fw). Click Random scramble in this tool — it generates a valid scramble using single and wide turns and animates each move on the 3D cube so you can copy it onto a real cube. Manual twist buttons let you input any WCA scramble character-by-character." />
+        <jsp:param name="faq3q" value="Can this solver handle 5x5, 6x6 and 7x7 cubes?" />
+        <jsp:param name="faq3a" value="Yes — all four big cubes (5x5 Professor's Cube, 6x6 V-Cube, 7x7 V-Cube) are fully supported. Big cubes use the reduction method: solve all face centres → pair the edge cubies → finish like a 3x3 with Kociemba. Solve times scale with size: 5x5 is usually a few seconds, 6x6 takes 5–30 seconds, 7x7 can take longer for hard scrambles." />
+        <jsp:param name="faq4q" value="What does WCA notation mean (R, R', R2, Rw, 3Rw)?" />
+        <jsp:param name="faq4a" value="WCA = World Cube Association — the official notation used in competitions. R = right face 90° clockwise (looking at it from outside). R' (R-prime) = 90° counter-clockwise. R2 = 180°. Rw = wide R = rotate the right face PLUS the slice next to it (2 layers); only on 4x4 and bigger. 3Rw = 3-layer wide right turn; only on 6x6 and bigger. Same pattern for U (Up), L (Left), D (Down), F (Front), B (Back)." />
+        <jsp:param name="faq5q" value="Is there a way to upload a photo of my cube and have it solved?" />
+        <jsp:param name="faq5a" value="Yes. Click Upload net and pick a flat unfolded-net image of your cube (the standard cross layout: U on top, then L F R B in a row, D on the bottom). The image parser auto-crops, samples each sticker's colour in CIE Lab space, and calibrates against the 6 face centres to handle palette drift. Misread stickers can be fixed with one click in Edit mode." />
+        <jsp:param name="faq6q" value="Does this work on a phone or only on desktop?" />
+        <jsp:param name="faq6a" value="Both. The 3D cube uses Three.js / WebGL which runs on every modern phone browser. The toolbar collapses to a single column on narrow screens. Drag with one finger to orbit the cube, pinch to zoom. Move-step playback and manual twist buttons work the same as desktop." />
+        <jsp:param name="faq7q" value="Do I need to install anything? Is it really free?" />
+        <jsp:param name="faq7a" value="No install — runs in any modern browser (Chrome, Firefox, Safari, Edge). Yes really free, no signup, no email required. The 3x3 solver runs entirely in your browser (your scramble never leaves your device). Bigger cubes (4x4 through 7x7) send the cube state to our server for solving and return the move list — no personal data, no tracking beyond standard analytics." />
+        <jsp:param name="faq8q" value="Can I share or save a specific scramble?" />
+        <jsp:param name="faq8a" value="Yes — the cube state is encoded in the URL after the # symbol. Bookmark or share that URL to reproduce the exact scramble. The fragment never leaves your browser (HTTP convention) so it's safe for tournament-prep scrambles you don't want logged." />
     </jsp:include>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -113,8 +133,22 @@
             gap: 0.5rem;
             margin-bottom: 0.85rem;
         }
-        .rk-toolbar > .rk-status { margin-left: auto; }
-        @media (max-width: 720px) { .rk-toolbar > .rk-status { margin-left: 0; } }
+        .rk-toolbar > .rk-status {
+            margin-left: auto;
+            min-width: 0;
+            max-width: 100%;
+        }
+        /* On narrow viewports, push the status pill to its own row so it
+           never overlaps the action buttons.  flex-basis:100% forces a
+           wrap; order:99 puts it last in the wrap order. */
+        @media (max-width: 900px) {
+            .rk-toolbar > .rk-status {
+                margin-left: 0;
+                flex-basis: 100%;
+                order: 99;
+                text-align: center;
+            }
+        }
 
         /* Segmented control container (replaces .rk-size-group + .rk-action-group). */
         .rk-segment, .rk-size-group, .rk-action-group {
@@ -207,10 +241,10 @@
         .rk-btn-icon.active { background: var(--ms-ink); color: var(--ms-panel-bg); }
         [data-theme="dark"] .rk-btn-icon.active { background: var(--rk-tool); color: #fff; }
 
-        /* Subtle dark tooltip — appears BELOW the button so it doesn't
-           collide with the title row above the toolbar.  Only one shows
-           at a time (hover / focus-visible).  Tall z-index so adjacent
-           segment buttons don't clip it. */
+        /* Subtle dark tooltip — appears BELOW the button on hover.
+           Hidden VERY firmly by default (visibility + opacity + clip)
+           so no CSS leakage from the parent stylesheet can ever leave
+           the text visible on the page. */
         .rk-btn-icon .rk-label {
             position: absolute;
             top: calc(100% + 6px);
@@ -223,16 +257,28 @@
             border-radius: 4px;
             white-space: nowrap;
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.1s;
+            transition: opacity 0.1s, visibility 0s 0.1s;
             z-index: 100;
             letter-spacing: 0.005em;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
         }
         .rk-btn-icon:hover .rk-label,
-        .rk-btn-icon:focus-visible .rk-label { opacity: 1; }
+        .rk-btn-icon:focus-visible .rk-label {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.1s, visibility 0s;
+        }
         /* Hovered button itself rises so its tooltip sits above neighbours. */
         .rk-btn-icon:hover, .rk-btn-icon:focus-visible { z-index: 100; }
+        /* On touch devices (no hover), disable the JS tooltip entirely
+           and rely on the native `title` attribute instead — touch users
+           get no hover state, so a "stuck open" tooltip is the failure
+           mode we're guarding against. */
+        @media (hover: none) {
+            .rk-btn-icon .rk-label { display: none !important; }
+        }
 
         .rk-status {
             font: 500 0.75rem var(--ms-font-sans);
@@ -428,17 +474,30 @@
 
         .rk-twist-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-            gap: 0.5rem 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+            gap: 0.5rem 1.25rem;
             box-sizing: border-box;
             max-width: 100%;
         }
+        /* Per-face row: face-label | 3 outer | sep | 3 wide(2L) | sep | 3 wide(3L) */
         .rk-twist-row {
             display: grid;
-            grid-template-columns: 1.8rem repeat(3, minmax(0, 1fr));
-            gap: 0.35rem;
+            grid-template-columns:
+                1.4rem
+                repeat(3, minmax(0, 1fr))
+                0.4rem
+                repeat(3, minmax(0, 1fr))
+                0.4rem
+                repeat(3, minmax(0, 1fr));
+            gap: 0.25rem;
             align-items: center;
             min-width: 0;
+        }
+        .rk-twist-sep {
+            width: 1px;
+            height: 65%;
+            background: var(--ms-line);
+            justify-self: center;
         }
         .rk-twist-face {
             font: 700 0.85rem var(--ms-font-mono);
@@ -466,6 +525,26 @@
             border-color: var(--rk-tool);
             color: var(--rk-tool);
             background: var(--rk-light);
+        }
+        .rk-twist-btn.wide {
+            background: var(--ms-panel-bg-soft);
+            color: var(--ms-ink-soft);
+            font-weight: 500;
+        }
+        .rk-twist-btn.wide3 {
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--ms-ink-soft);
+            font-weight: 500;
+            font-size: 0.72rem;     /* "3Uw2" is wider than "Uw2" */
+        }
+        .rk-twist-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        .rk-twist-btn:disabled:hover {
+            background: var(--ms-panel-bg-soft);
+            color: var(--ms-ink-soft);
+            border-color: var(--ms-line);
         }
         .rk-twist-wide-toggle {
             display: inline-flex; align-items: center; gap: 0.4rem;
@@ -506,7 +585,7 @@
                 <span>/</span>
                 <span aria-current="page">Rubik N×N Solver</span>
             </nav>
-            <h1>Rubik N&times;N Solver &mdash; 3&times;3, 4&times;4 and 5&times;5</h1>
+            <h1>Rubik N&times;N Solver &mdash; 3&times;3, 4&times;4, 5&times;5, 6&times;6 and 7&times;7</h1>
         </header>
 
         <div class="rk-card">
@@ -515,6 +594,8 @@
                     <button type="button" class="rk-size-btn active" data-size="3" role="tab" aria-selected="true">3&times;3</button>
                     <button type="button" class="rk-size-btn"        data-size="4" role="tab" aria-selected="false">4&times;4</button>
                     <button type="button" class="rk-size-btn"        data-size="5" role="tab" aria-selected="false">5&times;5</button>
+                    <button type="button" class="rk-size-btn"        data-size="6" role="tab" aria-selected="false">6&times;6</button>
+                    <button type="button" class="rk-size-btn"        data-size="7" role="tab" aria-selected="false">7&times;7</button>
                 </div>
                 <div class="rk-actions">
                     <input type="file" id="rk-file-input" accept="image/*" style="display:none;">
@@ -609,14 +690,26 @@
                     <% for (String f : faces) { %>
                     <div class="rk-twist-row">
                         <span class="rk-twist-face"><%=f%></span>
-                        <button type="button" class="rk-twist-btn" data-move="<%=f%>"  title="<%=f%>"><%=f%></button>
-                        <button type="button" class="rk-twist-btn" data-move="<%=f%>'" title="<%=f%>'"><%=f%>'</button>
-                        <button type="button" class="rk-twist-btn" data-move="<%=f%>2" title="<%=f%>2"><%=f%>2</button>
+                        <button type="button" class="rk-twist-btn"        data-move="<%=f%>"    title="<%=f%>"><%=f%></button>
+                        <button type="button" class="rk-twist-btn"        data-move="<%=f%>'"   title="<%=f%>'"><%=f%>'</button>
+                        <button type="button" class="rk-twist-btn"        data-move="<%=f%>2"   title="<%=f%>2"><%=f%>2</button>
+                        <span class="rk-twist-sep" aria-hidden="true"></span>
+                        <button type="button" class="rk-twist-btn wide"   data-move="<%=f%>w"   data-wide="1" title="<%=f%>w &mdash; 2 layers"><%=f%>w</button>
+                        <button type="button" class="rk-twist-btn wide"   data-move="<%=f%>w'"  data-wide="1" title="<%=f%>w'"><%=f%>w'</button>
+                        <button type="button" class="rk-twist-btn wide"   data-move="<%=f%>w2"  data-wide="1" title="<%=f%>w2"><%=f%>w2</button>
+                        <span class="rk-twist-sep" aria-hidden="true"></span>
+                        <button type="button" class="rk-twist-btn wide3"  data-move="3<%=f%>w"  data-wide3="1" title="3<%=f%>w &mdash; 3 layers (6&times;6+)">3<%=f%>w</button>
+                        <button type="button" class="rk-twist-btn wide3"  data-move="3<%=f%>w'" data-wide3="1" title="3<%=f%>w'">3<%=f%>w'</button>
+                        <button type="button" class="rk-twist-btn wide3"  data-move="3<%=f%>w2" data-wide3="1" title="3<%=f%>w2">3<%=f%>w2</button>
                     </div>
                     <% } %>
                 </div>
                 <p class="rk-hint">
-                    Standard WCA notation. Wide turns (<code>Uw</code>, <code>Rw'</code>) appear in the 4&times;4 solution automatically.
+                    Standard WCA notation.
+                    <strong>Outer</strong> (left, dark) — single layer, every size.
+                    <strong>Wide</strong> (middle, lighter — <code>Uw</code>) — 2 layers, 4&times;4+.
+                    <strong>3-layer wide</strong> (right, tinted — <code>3Uw</code>) — 3 layers, 6&times;6+ only.
+                    Buttons not applicable to the current size are greyed out.
                 </p>
             </div>
         </div>
@@ -717,7 +810,7 @@
                 </div>
                 <div class="ms-faq-item">
                     <div class="ms-faq-q">Are 6&times;6 and 7&times;7 supported?</div>
-                    <div class="ms-faq-a">Not yet, but the architecture is ready. The same engine + lookup-table infrastructure that powers 5&times;5 will extend to 6&times;6 and 7&times;7 once the per-size encoders + stages land. See <code>RUBIK_MIGRATION_GUIDE.md</code> in the repo.</div>
+                    <div class="ms-faq-a">Yes &mdash; both are now supported via the upstream Rubik solver service. The browser handles state, validation, scrambling, manual twists and the 3D animation; solving is forwarded to the server. Solve times scale with cube size: 6&times;6 typically takes 5&ndash;30&nbsp;seconds; 7&times;7 can take longer.</div>
                 </div>
             </div>
         </section>

@@ -27,7 +27,7 @@
         <jsp:param name="toolUrl" value="math/rubiks-cube-solver.jsp" />
         <jsp:param name="breadcrumbCategoryUrl" value="math/" />
         <jsp:param name="toolKeywords" value="rubiks cube solver, rubik's cube solver, online rubiks cube solver, free rubiks cube solver, 3d rubiks cube solver, animated rubiks cube, kociemba algorithm, 3x3 cube solver, rubik solver online, online cube solver, cube simulator, virtual rubiks cube, gods number, how to solve rubiks cube, rubiks cube algorithm, speedcubing solver, rubiks cube net parser, free cube simulator" />
-        <jsp:param name="toolImage" value="math-studio-og.png" />
+        <jsp:param name="toolImage" value="rubik-cube-solver-og.png" />
         <jsp:param name="toolFeatures" value="Image-to-state parser (CV pipeline with center-calibration in CIE Lab),Kociemba two-phase solver via cubejs (typically 20-22 moves),Click-to-edit cube net for fixing mis-detected stickers,3D animated cube with face-turn playback,Step-by-step navigation with auto-play (slow / normal / fast),Random scramble + reset + shareable URL,Drag-and-drop or paste image (Cmd+V) anywhere on the page,Keyboard nav (left right arrows + space),Dark mode" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="teaches" value="Rubik's Cube notation, Kociemba two-phase algorithm, cube state representation, group theory basics, recreational mathematics" />

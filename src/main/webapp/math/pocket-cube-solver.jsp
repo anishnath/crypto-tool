@@ -20,7 +20,7 @@
         <jsp:param name="toolUrl" value="math/pocket-cube-solver.jsp" />
         <jsp:param name="breadcrumbCategoryUrl" value="math/" />
         <jsp:param name="toolKeywords" value="2x2 cube solver, pocket cube solver, 2x2 rubiks cube solver, online 2x2 solver, free 2x2 solver, 2x2 cube algorithm, mini cube solver, 2x2x2 solver, pocket cube algorithm, beginner cube solver, optimal 2x2 solution, gods number 2x2, 2x2 rubiks cube online, 3d 2x2 solver, 2x2 cube simulator, how to solve 2x2 cube, 2x2 ortega method, easiest rubiks cube" />
-        <jsp:param name="toolImage" value="math-studio-og.png" />
+        <jsp:param name="toolImage" value="rubik-cube-solver-og.png" />
         <jsp:param name="toolFeatures" value="Optimal solver — every solution at most 11 moves (God's number for 2x2),Bidirectional BFS in vanilla JS — no external solver dependency,Click-to-edit cube net for fixing mis-detected stickers,Step-by-step solution playback with auto-play,18 manual move buttons (U/R/F/D/L/B with prime and double),Random scramble + reset + shareable URL,Drag-and-drop image upload,Keyboard nav (left right arrows + space)" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="teaches" value="2x2 Rubik's Cube notation, Pocket Cube solving, bidirectional BFS, recreational mathematics, basic group theory" />

@@ -1,7 +1,7 @@
 {
-  "version": "1.5",
-  "lastUpdated": "2026-04-22T00:00:00.000Z",
-  "totalTools": 426,
+  "version": "1.6",
+  "lastUpdated": "2026-05-07T00:00:00.000Z",
+  "totalTools": 427,
   "categories": [
     "Blockchain & Crypto",
     "CAD & 3D Design",
@@ -1712,6 +1712,13 @@
       "category": "Mathematics",
       "keywords": "roman numeral converter mathematics",
       "description": "Roman Numeral Converter - Free online mathematics tool"
+    },
+    {
+      "name": "Rubik's Cube Solver (3x3 / 4x4 / 5x5 / 6x6 / 7x7)",
+      "url": "math/rubik-nxn-solver.jsp",
+      "category": "Mathematics",
+      "keywords": "rubiks cube solver, rubik's cube solver, online rubiks cube solver, free rubiks cube solver, 3x3 cube solver, 4x4 cube solver, 5x5 cube solver, 6x6 cube solver, 7x7 cube solver, rubiks revenge solver, professor cube solver, big cube solver, NxN cube solver, animated cube solver, 3d rubiks cube simulator, rubiks cube scrambler, scramble generator, WCA scramble, cube notation, how to solve a rubiks cube, step by step rubiks cube solver, rubiks cube algorithm finder, virtual rubiks cube, speedcubing tool",
+      "description": "Free online Rubik's Cube solver for 3x3, 4x4, 5x5, 6x6 and 7x7. Animated 3D step-by-step solution, random scrambler, manual twist with WCA notation, and image-upload for net photos. No signup."
     },
     {
       "name": "Sample Size Calculator",
