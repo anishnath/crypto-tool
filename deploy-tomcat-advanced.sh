@@ -22,7 +22,7 @@ set -e  # Exit on error
 # Parse command line arguments
 SKIP_BACKUP=true
 SKIP_BUILD=false
-SKIP_TABLES=false
+SKIP_TABLES=true
 FORCE_TABLES=false
 HEALTH_CHECK_URL=""
 VERBOSE=false
