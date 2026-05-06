@@ -41,15 +41,24 @@ public class CubeSolverServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        // Build the centres pruning tables off the request path.  Done in a
-        // background thread so servlet startup isn't blocked — the first
-        // solve request will block briefly if init isn't done yet.
+        // Build the lookup tables off the request path.  Done in
+        // background threads so servlet startup isn't blocked — the
+        // first solve request will block briefly if init isn't done yet.
+        // 4×4 first since its tables are smaller and faster to warm.
         new Thread(new Runnable() {
             @Override public void run() {
                 try { Cube444Solver.warmUp(); }
                 catch (Throwable t) { t.printStackTrace(); }
             }
         }, "Cube444-warmup").start();
+        // 5×5 in parallel.  ~2 GB to download/mmap on first run; no-op if
+        // cache directory already populated.
+        new Thread(new Runnable() {
+            @Override public void run() {
+                try { Cube555Solver.warmUp(); }
+                catch (Throwable t) { t.printStackTrace(); }
+            }
+        }, "Cube555-warmup").start();
     }
 
     @Override
