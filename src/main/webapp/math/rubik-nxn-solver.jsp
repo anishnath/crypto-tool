@@ -4,26 +4,27 @@
 <html lang="en">
 <head>
     <%--
-        Rubik N×N Solver — single-page UX for 3×3 and 4×4.
+        Rubik N×N Solver — single-page UX for 3×3, 4×4, and 5×5.
 
         3×3 path: cubejs (Kociemba two-phase) in the browser, ~50 ms.
         4×4 path: full server pipeline (centres → orient → phase3 → phase4
                   → reduce → Kociemba), pure-Java port of the
-                  rubikscubennnsolver (Python+C) reference.  Hooked at
-                  /CubeSolverFunctionality.
+                  rubikscubennnsolver (Python+C) reference.
+        5×5 path: full server pipeline (LR + FB centres → EO → phase4 →
+                  phase5 → phase6 → reduce → Kociemba), 8-stage pure-Java
+                  port.  Hooked at /CubeSolverFunctionality.
 
-        FE design adapts the reference React app
-        /Users/anish/junk/Rubiks-Cube-Solver to the math-studio shell.
+        FE design adapts the reference React app.
     --%>
     <jsp:include page="../modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Free Rubik N×N Solver — 3×3 and 4×4" />
+        <jsp:param name="toolName" value="Free Rubik N×N Solver — 3×3, 4×4 and 5×5" />
         <jsp:param name="toolCategory" value="Math Tools" />
-        <jsp:param name="toolDescription" value="Free Rubik's Cube N×N solver supporting 3×3 (Kociemba in-browser) and 4×4 (server-side pure-Java pipeline). Scramble, twist, solve — step-by-step playback." />
+        <jsp:param name="toolDescription" value="Free Rubik's Cube N×N solver supporting 3×3 (Kociemba in-browser), 4×4 (server-side pure-Java pipeline), and 5×5 (8-stage reduction-method solver, pure Java). Scramble, twist, solve — step-by-step playback." />
         <jsp:param name="toolUrl" value="math/rubik-nxn-solver.jsp" />
         <jsp:param name="breadcrumbCategoryUrl" value="math/" />
-        <jsp:param name="toolKeywords" value="rubiks cube solver, 4x4 cube solver, NxN cube solver, kociemba algorithm, rubiks revenge solver, cube reduction method, online cube solver, free cube solver, animated cube solver, rubiks cube tutorial" />
+        <jsp:param name="toolKeywords" value="rubiks cube solver, 4x4 cube solver, 5x5 cube solver, NxN cube solver, professor cube solver, kociemba algorithm, rubiks revenge solver, cube reduction method, online cube solver, free cube solver, animated cube solver, rubiks cube tutorial" />
         <jsp:param name="toolImage" value="math-studio-og.png" />
-        <jsp:param name="toolFeatures" value="Single page handles 3×3 and 4×4,Kociemba two-phase solver for 3×3 (browser),Full reduction-method pipeline for 4×4 (server),Step-by-step playback with Prev / Play / Next,Random scramble and reset,Manual twist controls,Move list breakdown by phase" />
+        <jsp:param name="toolFeatures" value="Single page handles 3×3 / 4×4 / 5×5,Kociemba two-phase solver for 3×3 (browser),Full reduction-method pipeline for 4×4 (server),8-stage reduction-method pipeline for 5×5 (server),Step-by-step playback with Prev / Play / Next,Random scramble and reset,Manual twist controls,Move list breakdown by phase" />
     </jsp:include>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -206,10 +207,13 @@
         .rk-btn-icon.active { background: var(--ms-ink); color: var(--ms-panel-bg); }
         [data-theme="dark"] .rk-btn-icon.active { background: var(--rk-tool); color: #fff; }
 
-        /* Subtle dark tooltip on hover (no arrow — minimal) */
+        /* Subtle dark tooltip — appears BELOW the button so it doesn't
+           collide with the title row above the toolbar.  Only one shows
+           at a time (hover / focus-visible).  Tall z-index so adjacent
+           segment buttons don't clip it. */
         .rk-btn-icon .rk-label {
             position: absolute;
-            bottom: calc(100% + 4px);
+            top: calc(100% + 6px);
             left: 50%;
             transform: translateX(-50%);
             padding: 0.25rem 0.5rem;
@@ -221,11 +225,14 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.1s;
-            z-index: 5;
+            z-index: 100;
             letter-spacing: 0.005em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
         }
         .rk-btn-icon:hover .rk-label,
         .rk-btn-icon:focus-visible .rk-label { opacity: 1; }
+        /* Hovered button itself rises so its tooltip sits above neighbours. */
+        .rk-btn-icon:hover, .rk-btn-icon:focus-visible { z-index: 100; }
 
         .rk-status {
             font: 500 0.75rem var(--ms-font-sans);
@@ -499,7 +506,7 @@
                 <span>/</span>
                 <span aria-current="page">Rubik N×N Solver</span>
             </nav>
-            <h1>Rubik N&times;N Solver &mdash; 3&times;3 and 4&times;4</h1>
+            <h1>Rubik N&times;N Solver &mdash; 3&times;3, 4&times;4 and 5&times;5</h1>
         </header>
 
         <div class="rk-card">
@@ -507,6 +514,7 @@
                 <div class="rk-segment rk-size-group" role="tablist" aria-label="Cube size">
                     <button type="button" class="rk-size-btn active" data-size="3" role="tab" aria-selected="true">3&times;3</button>
                     <button type="button" class="rk-size-btn"        data-size="4" role="tab" aria-selected="false">4&times;4</button>
+                    <button type="button" class="rk-size-btn"        data-size="5" role="tab" aria-selected="false">5&times;5</button>
                 </div>
                 <div class="rk-actions">
                     <input type="file" id="rk-file-input" accept="image/*" style="display:none;">
@@ -671,26 +679,45 @@
                 our servlet, no external solver dependency. Typical solves take
                 5&ndash;40 seconds and produce 50&ndash;65 total moves.
             </p>
+            <p style="font:0.95rem/1.65 var(--ms-font-sans); color:var(--ms-ink-soft); margin:0 0 0.85rem;">
+                <strong>5&times;5</strong> (Professor's Cube) extends the reduction
+                method into <strong>8 stages</strong>:
+                LR-centres staging &rarr;
+                FB-centres staging &rarr;
+                edge orientation (24 wings + 12 midges) &rarr;
+                phase&nbsp;4 (stage 4 chosen edges) &rarr;
+                phase&nbsp;5 (pair the 4 edges + LFRB centres) &rarr;
+                phase&nbsp;6 (last 8 edges + all centres) &rarr;
+                reduce to 3&times;3 &rarr; Kociemba. Each phase combines multiple
+                pruning tables under IDA*&nbsp;with a max-cost heuristic; the largest
+                table (phase&nbsp;4) is 184&nbsp;MB compressed and accessed via
+                mmap'd binary search to keep RSS small. The whole pipeline is
+                pure&nbsp;Java &mdash; no Python or C runtime on the server.
+            </p>
         </section>
 
         <section class="rk-card" style="margin-top:1.25rem;">
             <h2 class="ms-section-title">Frequently asked questions</h2>
             <div class="ms-faq">
                 <div class="ms-faq-item">
-                    <div class="ms-faq-q">Why does 4&times;4 run on the server?</div>
-                    <div class="ms-faq-a">The reduction-method pipeline depends on ~60 MB of pre-computed pruning tables that we don't want every visitor to download. The Java implementation memory-maps the tables and runs IDA* over byte arrays at ~40 million nodes/second &mdash; well under a second per stage on warm tables.</div>
+                    <div class="ms-faq-q">Why do 4&times;4 and 5&times;5 run on the server?</div>
+                    <div class="ms-faq-a">Their reduction-method pipelines depend on hundreds of MB of pre-computed pruning tables that we don't want every visitor to download. The Java implementation memory-maps the tables and runs IDA* over byte arrays &mdash; well under a second per stage on warm tables for 4&times;4; a few seconds per stage on 5&times;5.</div>
                 </div>
                 <div class="ms-faq-item">
                     <div class="ms-faq-q">What notation does the solver use?</div>
-                    <div class="ms-faq-a">Standard WCA notation: U / D / L / R / F / B for outer faces; <code>Uw</code> / <code>Rw</code> / etc. for wide turns (used on 4&times;4). A bare letter is 90&deg; CW; <code>'</code> is CCW; <code>2</code> is 180&deg;.</div>
+                    <div class="ms-faq-a">Standard WCA notation: U / D / L / R / F / B for outer faces; <code>Uw</code> / <code>Rw</code> / etc. for wide turns (used on 4&times;4 and 5&times;5). A bare letter is 90&deg; CW; <code>'</code> is CCW; <code>2</code> is 180&deg;.</div>
+                </div>
+                <div class="ms-faq-item">
+                    <div class="ms-faq-q">How long does a 5&times;5 solve take?</div>
+                    <div class="ms-faq-a">First request after server startup downloads ~2&nbsp;GB of lookup tables and warms the JVM (one-time cost). After that, easy scrambles solve in seconds; harder ones (longer scramble or unfortunate wing-string choice) can take 30&ndash;60&nbsp;seconds. Solutions are typically 80&ndash;120 total moves across all 8 stages plus the final 3&times;3.</div>
                 </div>
                 <div class="ms-faq-item">
                     <div class="ms-faq-q">Do you have a 2&times;2 solver?</div>
                     <div class="ms-faq-a">Yes &mdash; the <a href="<%=request.getContextPath()%>/math/pocket-cube-solver.jsp" style="color:var(--rk-tool);text-decoration:underline;">2&times;2 Pocket Cube Solver</a> uses bidirectional BFS for provably optimal solutions in &le;11 moves.</div>
                 </div>
                 <div class="ms-faq-item">
-                    <div class="ms-faq-q">Are 5&times;5, 6&times;6, 7&times;7 supported?</div>
-                    <div class="ms-faq-a">Not yet. The Java engine is size-agnostic, but each size needs its own pruning tables wired up. 4&times;4 is the first cut; larger sizes are on the roadmap.</div>
+                    <div class="ms-faq-q">Are 6&times;6 and 7&times;7 supported?</div>
+                    <div class="ms-faq-a">Not yet, but the architecture is ready. The same engine + lookup-table infrastructure that powers 5&times;5 will extend to 6&times;6 and 7&times;7 once the per-size encoders + stages land. See <code>RUBIK_MIGRATION_GUIDE.md</code> in the repo.</div>
                 </div>
             </div>
         </section>
