@@ -51,7 +51,7 @@
     </div>
 
     <!-- Everyday Math -->
-    <div class="ms-group<%= collapsedCls(activeService, "percentage", "sig-figs", "exponent", "logarithm", "24-game", "collatz", "magic-square", "rubiks-cube", "pocket-cube") %>" data-group="everyday">
+    <div class="ms-group<%= collapsedCls(activeService, "percentage", "sig-figs", "exponent", "logarithm", "24-game", "collatz", "magic-square", "rubiks-cube", "pocket-cube", "rubik-nxn") %>" data-group="everyday">
         <button class="ms-group-header" type="button">Everyday <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/percentage-calculator.jsp" class="ms-item <%= "percentage".equals(activeService) ? "active" : "" %>">
@@ -80,6 +80,9 @@
             </a>
             <a href="<%= ctx %>/math/pocket-cube-solver.jsp" class="ms-item <%= "pocket-cube".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">2×2</span> <span class="ms-item-label">Pocket Cube (2×2)</span>
+            </a>
+            <a href="<%= ctx %>/math/rubik-nxn-solver.jsp" class="ms-item <%= "rubik-nxn".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">N×N</span> <span class="ms-item-label">Rubik N×N Solver</span>
             </a>
         </div>
     </div>
