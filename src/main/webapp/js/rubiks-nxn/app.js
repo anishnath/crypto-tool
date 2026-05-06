@@ -41,6 +41,28 @@ import {
 } from '../rubiks5/moves.js';
 import { mountCubeNet as mountNet5 } from '../rubiks5/cube-net.js';
 
+// 6×6
+import {
+    SOLVED_STATE as SOLVED_6,
+    FACES as FACES_6,
+} from '../rubiks6/cube.js';
+import {
+    applyMoves as apply6sync,
+    ALL_MOVES as ALL_MOVES_6,
+} from '../rubiks6/moves.js';
+import { mountCubeNet as mountNet6 } from '../rubiks6/cube-net.js';
+
+// 7×7
+import {
+    SOLVED_STATE as SOLVED_7,
+    FACES as FACES_7,
+} from '../rubiks7/cube.js';
+import {
+    applyMoves as apply7sync,
+    ALL_MOVES as ALL_MOVES_7,
+} from '../rubiks7/moves.js';
+import { mountCubeNet as mountNet7 } from '../rubiks7/cube-net.js';
+
 // Generic 3D + image parser
 import { mountCubeNxN } from './cube-3d-nxn.js';
 import { loadImageToBuffer, parseNet } from './parser.js';
@@ -136,6 +158,22 @@ const sizeAdapters = {
         },
         randomMoves: () => buildRandomMoves(ALL_MOVES_5, 8),
         mount:    mountNet5,
+    },
+    6: {
+        SOLVED:   SOLVED_6,
+        validate: (s) => validateRelaxed(s, FACES_6, 36),
+        apply:    async (state, moves) => apply6sync(state, moves),
+        random:   async () => apply6sync(SOLVED_6, buildRandomMoves(ALL_MOVES_6, 8)),
+        randomMoves: () => buildRandomMoves(ALL_MOVES_6, 8),
+        mount:    mountNet6,
+    },
+    7: {
+        SOLVED:   SOLVED_7,
+        validate: (s) => validateRelaxed(s, FACES_7, 49),
+        apply:    async (state, moves) => apply7sync(state, moves),
+        random:   async () => apply7sync(SOLVED_7, buildRandomMoves(ALL_MOVES_7, 8)),
+        randomMoves: () => buildRandomMoves(ALL_MOVES_7, 8),
+        mount:    mountNet7,
     },
 };
 
@@ -315,16 +353,21 @@ export function bootstrap(ctx) {
         mountNet();
         mount3D();
         refreshEditable();
-        // Enable/disable wide-turn buttons based on size.  3×3 has no
-        // inner layer so wide turns are nonsensical; 4×4 / 5×5 have one.
-        const allowWide = size >= 4;
+        // Enable/disable wide-turn buttons based on size.
+        //   3×3        — no wide of any kind
+        //   4×4 / 5×5  — 2-layer wide only
+        //   6×6 / 7×7  — 2-layer + 3-layer wide
+        const allowWide  = size >= 4;
+        const allowWide3 = size >= 6;
         document.querySelectorAll('.rk-twist-btn[data-wide="1"]').forEach((b) => {
             b.disabled = !allowWide;
             b.title = allowWide ? b.dataset.move : 'Wide turns require 4×4 or larger';
         });
-        setStatus(size === 3 ? 'Ready · 3×3 (browser)'
-        : size === 4 ? 'Ready · 4×4 (server)'
-        : 'Ready · 5×5 (server)', 'ready');
+        document.querySelectorAll('.rk-twist-btn[data-wide3="1"]').forEach((b) => {
+            b.disabled = !allowWide3;
+            b.title = allowWide3 ? b.dataset.move : '3-layer wide turns require 6×6 or larger';
+        });
+        setStatus(size === 3 ? 'Ready · 3×3 (browser)' : `Ready · ${size}×${size} (server)`, 'ready');
         setBanner(`Cube reset (${size}×${size}). Scramble, upload a net image, or twist — then click Solve.`, 'ok');
     }
 
@@ -497,8 +540,8 @@ export function bootstrap(ctx) {
 
     async function solve4x4() {
         setStatus('Solving', 'busy');
-        setBusy(true, 'Solving 4×4 on server',
-            'Pipeline: centres → orient → phase 3 → phase 4 → reduce → Kociemba. Adversarial scrambles can take 5–40 seconds.');
+        setBusy(true, 'Solving 4×4',
+            'Forwarded to the Rubik solver service. Adversarial scrambles can take 5–40 seconds.');
         const t0 = performance.now();
         const ctxPath = (document.querySelector('meta[name="ctx"]') || {}).content || '';
         const url = ctxPath + '/CubeSolverFunctionality?action=solve&size=4';
@@ -536,10 +579,51 @@ export function bootstrap(ctx) {
         };
     }
 
+    /** Generic server-side solve (sizes 4-7 all hit the same API now). */
+    async function solveServerSide(sz, busyTitle, busySub) {
+        setStatus('Solving', 'busy');
+        setBusy(true, busyTitle, busySub);
+        const t0 = performance.now();
+        const ctxPath = (document.querySelector('meta[name="ctx"]') || {}).content || '';
+        const url = ctxPath + '/CubeSolverFunctionality?action=solve&size=' + sz;
+        const resp = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ state }),
+        });
+        const json = await resp.json().catch(() => ({}));
+        const dt = Math.round(performance.now() - t0);
+        if (!resp.ok || json.error) {
+            throw new Error(json.error || ('HTTP ' + resp.status));
+        }
+        if (!json.solved) {
+            throw new Error('Solver gave up: ' + (json.stoppedAt || json.detail || 'unknown'));
+        }
+        const moves = json.moves || [];
+        const elapsedMs = json.elapsedMs || dt;
+        const parts = [];
+        const tally = (label, arr) => {
+            if (arr && arr.length) parts.push(`<span class="rk-piece">${label}: <strong>${arr.length}</strong></span>`);
+        };
+        tally('LR',      json.lrMoves);
+        tally('FB',      json.fbMoves);
+        tally('EO',      json.eoMoves);
+        tally('Phase 4', json.phase4Moves);
+        tally('Phase 5', json.phase5Moves);
+        tally('Phase 6', json.phase6Moves);
+        tally('Kociemba',json.reduceMoves);
+        return {
+            moves,
+            elapsedMs,
+            breakdown: parts.join(' '),
+            meta: `Solved in ${moves.length} moves · ${elapsedMs} ms · server`,
+        };
+    }
+
     async function solve5x5() {
         setStatus('Solving', 'busy');
-        setBusy(true, 'Solving 5×5 on server',
-            'Pipeline: LR → FB → EO → Phase 4 → Phase 5 → Phase 6 → reduce → Kociemba. ~15s for tiny scrambles; longer for harder ones.');
+        setBusy(true, 'Solving 5×5',
+            'Forwarded to the Rubik solver service. Typically a few seconds; harder scrambles can take longer.');
         const t0 = performance.now();
         const ctxPath = (document.querySelector('meta[name="ctx"]') || {}).content || '';
         const url = ctxPath + '/CubeSolverFunctionality?action=solve&size=5';
@@ -592,7 +676,10 @@ export function bootstrap(ctx) {
         try {
             const r = size === 3 ? await solve3x3()
                     : size === 4 ? await solve4x4()
-                    : await solve5x5();
+                    : size === 5 ? await solve5x5()
+                    : size === 6 ? await solveServerSide(6, 'Solving 6×6', 'Forwarded to the Rubik solver service.')
+                    : size === 7 ? await solveServerSide(7, 'Solving 7×7', 'Forwarded to the Rubik solver service.')
+                    : await solveServerSide(size, 'Solving ' + size + '×' + size, 'Forwarded to the Rubik solver service.');
             solution = r;
             stepIdx = 0;
             renderMoves(r.moves, r.breakdown, r.meta);
