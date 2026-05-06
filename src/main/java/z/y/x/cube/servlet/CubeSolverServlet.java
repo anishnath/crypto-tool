@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import z.y.x.cube.cube444.Cube444;
 import z.y.x.cube.cube444.Cube444Moves;
 import z.y.x.cube.cube444.Cube444Solver;
+import z.y.x.cube.cube555.Cube555;
+import z.y.x.cube.cube555.Cube555Moves;
+import z.y.x.cube.cube555.Cube555Solver;
 
 /**
  * HTTP entry point for the cube-solver service.
@@ -56,23 +59,31 @@ public class CubeSolverServlet extends HttpServlet {
         String size = req.getParameter("size");
 
         if (size == null) size = "4";
-        if (!"4".equals(size)) {
-            sendError(resp, 400, "size " + size + " not yet supported (only 4)");
+        if (!"4".equals(size) && !"5".equals(size)) {
+            sendError(resp, 400, "size " + size + " not yet supported (4 or 5)");
             return;
         }
 
         if ("solved".equals(action)) {
-            sendJson(resp, "{\"state\":\"" + Cube444.SOLVED + "\"}");
+            String solved = "5".equals(size) ? Cube555.SOLVED : Cube444.SOLVED;
+            sendJson(resp, "{\"state\":\"" + solved + "\"}");
             return;
         }
         if ("apply".equals(action)) {
             String state = req.getParameter("state");
             String moves = req.getParameter("moves");
             if (state == null) { sendError(resp, 400, "missing state"); return; }
-            Cube444.Validation v = Cube444.validate(state);
-            if (!v.ok) { sendError(resp, 400, v.reason); return; }
             try {
-                String result = Cube444Moves.applyMoves(state, moves);
+                String result;
+                if ("5".equals(size)) {
+                    Cube555.Validation v = Cube555.validate(state);
+                    if (!v.ok) { sendError(resp, 400, v.reason); return; }
+                    result = Cube555Moves.applyMoves(state, moves);
+                } else {
+                    Cube444.Validation v = Cube444.validate(state);
+                    if (!v.ok) { sendError(resp, 400, v.reason); return; }
+                    result = Cube444Moves.applyMoves(state, moves);
+                }
                 sendJson(resp, "{\"state\":\"" + result + "\"}");
             } catch (IllegalArgumentException ex) {
                 sendError(resp, 400, ex.getMessage());
@@ -87,17 +98,22 @@ public class CubeSolverServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String action = req.getParameter("action");
+        String size = req.getParameter("size");
+        if (size == null) size = "4";
         if (!"solve".equals(action)) {
             sendError(resp, 400, "POST only supports action=solve");
             return;
         }
 
         String body = readBody(req);
-        // Tiny ad-hoc JSON parse — sufficient for {"state":"…"}.  We don't
-        // pull in a JSON dependency just for this.
         String state = extractStringField(body, "state");
         if (state == null) {
             sendError(resp, 400, "missing 'state' field in request body");
+            return;
+        }
+
+        if ("5".equals(size)) {
+            handleSolve555(state, resp);
             return;
         }
 
@@ -123,6 +139,43 @@ public class CubeSolverServlet extends HttpServlet {
         sb.append("\"phase3Moves\":");  appendStringList(sb, r.phase3Moves);  sb.append(",");
         sb.append("\"phase4Moves\":");  appendStringList(sb, r.phase4Moves);  sb.append(",");
         sb.append("\"reduceMoves\":");  appendStringList(sb, r.reduceMoves);  sb.append(",");
+        sb.append("\"finalState\":\"").append(r.finalState).append("\",");
+        if (r.stoppedAt != null) {
+            sb.append("\"stoppedAt\":\"").append(escape(r.stoppedAt)).append("\"");
+        } else {
+            sb.append("\"stoppedAt\":null");
+        }
+        sb.append("}");
+        sendJson(resp, sb.toString());
+    }
+
+    /* ── 5×5 solve handler ─────────────────────────────────────── */
+
+    private void handleSolve555(String state, HttpServletResponse resp) throws IOException {
+        Cube555.Validation v = Cube555.validate(state);
+        if (!v.ok) { sendError(resp, 400, v.reason); return; }
+
+        Cube555Solver.Result r;
+        try {
+            r = Cube555Solver.solve(state);
+        } catch (Exception ex) {
+            sendError(resp, 500, "5x5 solver error: " + ex.getMessage());
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder(512);
+        sb.append("{");
+        sb.append("\"solved\":").append(r.solved).append(",");
+        sb.append("\"elapsedMs\":").append(r.elapsedMs).append(",");
+        sb.append("\"moveCount\":").append(r.moves.size()).append(",");
+        sb.append("\"moves\":");        appendStringList(sb, r.moves);       sb.append(",");
+        sb.append("\"lrMoves\":");      appendStringList(sb, r.lrMoves);     sb.append(",");
+        sb.append("\"fbMoves\":");      appendStringList(sb, r.fbMoves);     sb.append(",");
+        sb.append("\"eoMoves\":");      appendStringList(sb, r.eoMoves);     sb.append(",");
+        sb.append("\"phase4Moves\":");  appendStringList(sb, r.p4Moves);     sb.append(",");
+        sb.append("\"phase5Moves\":");  appendStringList(sb, r.p5Moves);     sb.append(",");
+        sb.append("\"phase6Moves\":");  appendStringList(sb, r.p6Moves);     sb.append(",");
+        sb.append("\"reduceMoves\":");  appendStringList(sb, r.reduceMoves); sb.append(",");
         sb.append("\"finalState\":\"").append(r.finalState).append("\",");
         if (r.stoppedAt != null) {
             sb.append("\"stoppedAt\":\"").append(escape(r.stoppedAt)).append("\"");
