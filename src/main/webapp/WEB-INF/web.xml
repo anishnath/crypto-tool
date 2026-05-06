@@ -732,4 +732,16 @@
         <url-pattern>/api/arduino/simulate/*</url-pattern>
     </servlet-mapping>
 
+    <!-- 4×4 Rubik's Cube Solver — port of rubikscubennnsolver (Python+C).
+         Currently size=4 only; sizes 2/3/5/6/7 will dispatch from the same
+         endpoint once their packages land. -->
+    <servlet>
+        <servlet-name>CubeSolverServlet</servlet-name>
+        <servlet-class>z.y.x.cube.servlet.CubeSolverServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CubeSolverServlet</servlet-name>
+        <url-pattern>/CubeSolverFunctionality</url-pattern>
+    </servlet-mapping>
+
 </web-app>
