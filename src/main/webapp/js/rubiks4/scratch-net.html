@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>4×4 cube-net.js scratch</title>
+    <style>
+        body {
+            font: 14px -apple-system, system-ui, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 24px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 18px; margin: 0 0 16px; color: #e2e8f0; }
+        .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+        button {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font: inherit;
+        }
+        button:hover { background: #334155; }
+        button.primary { background: #2563eb; border-color: #1d4ed8; }
+        button.primary:hover { background: #1d4ed8; }
+        #net { background: #1e293b; padding: 8px; border-radius: 6px; }
+        #log {
+            font-family: ui-monospace, SFMono-Regular, monospace;
+            font-size: 12px;
+            background: #020617;
+            color: #94a3b8;
+            padding: 10px;
+            border-radius: 4px;
+            min-height: 60px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .label { color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+    </style>
+</head>
+<body>
+    <h1>4×4 cube-net.js scratch</h1>
+    <p style="color:#94a3b8">
+        Visual sanity check for the 4×4 net renderer + move tables.  Click a sticker to cycle its
+        colour (only when “Editable” is on).  Each move button calls <code>applyMove()</code> and
+        repaints in place — no full re-render.
+    </p>
+
+    <div id="net"></div>
+
+    <div class="row">
+        <span class="label">Outer:</span>
+        <button data-move="U">U</button>
+        <button data-move="U'">U'</button>
+        <button data-move="R">R</button>
+        <button data-move="R'">R'</button>
+        <button data-move="F">F</button>
+        <button data-move="F'">F'</button>
+        <button data-move="D">D</button>
+        <button data-move="D'">D'</button>
+        <button data-move="L">L</button>
+        <button data-move="L'">L'</button>
+        <button data-move="B">B</button>
+        <button data-move="B'">B'</button>
+    </div>
+    <div class="row">
+        <span class="label">Wide:</span>
+        <button data-move="Uw">Uw</button>
+        <button data-move="Uw'">Uw'</button>
+        <button data-move="Rw">Rw</button>
+        <button data-move="Rw'">Rw'</button>
+        <button data-move="Fw">Fw</button>
+        <button data-move="Fw'">Fw'</button>
+        <button data-move="Dw">Dw</button>
+        <button data-move="Dw'">Dw'</button>
+        <button data-move="Lw">Lw</button>
+        <button data-move="Lw'">Lw'</button>
+        <button data-move="Bw">Bw</button>
+        <button data-move="Bw'">Bw'</button>
+    </div>
+    <div class="row">
+        <button id="reset">Reset (solved)</button>
+        <button id="scramble" class="primary">Scramble (25 moves)</button>
+        <button id="undo">Undo last</button>
+        <button id="toggle-edit">Editable: off</button>
+    </div>
+
+    <div class="label">State</div>
+    <div id="log"></div>
+
+    <script type="module">
+        import { SOLVED_STATE, setSticker } from './cube.js';
+        import { applyMove, ALL_MOVES, invertMoves } from './moves.js';
+        import { mountCubeNet } from './cube-net.js';
+
+        const host = document.getElementById('net');
+        const log = document.getElementById('log');
+
+        let state = SOLVED_STATE;
+        let history = [];     // moves applied since reset (for undo)
+        let editable = false;
+
+        const net = mountCubeNet(host, {
+            state,
+            editable,
+            onChange(idx, face) {
+                state = setSticker(state, idx, face);
+                rerender();
+            },
+        });
+
+        function rerender() {
+            net.update({ state, editable });
+            log.textContent = state;
+        }
+        rerender();
+
+        function play(move) {
+            state = applyMove(state, move);
+            history.push(move);
+            rerender();
+        }
+
+        document.querySelectorAll('button[data-move]').forEach((btn) => {
+            btn.addEventListener('click', () => play(btn.dataset.move));
+        });
+
+        document.getElementById('reset').addEventListener('click', () => {
+            state = SOLVED_STATE;
+            history = [];
+            rerender();
+        });
+
+        document.getElementById('scramble').addEventListener('click', () => {
+            const moves = [];
+            for (let i = 0; i < 25; i++) {
+                moves.push(ALL_MOVES[Math.floor(Math.random() * ALL_MOVES.length)]);
+            }
+            for (const m of moves) state = applyMove(state, m);
+            history.push(...moves);
+            rerender();
+        });
+
+        document.getElementById('undo').addEventListener('click', () => {
+            if (history.length === 0) return;
+            const last = history.pop();
+            const [inv] = invertMoves([last]);
+            state = applyMove(state, inv);
+            rerender();
+        });
+
+        const editBtn = document.getElementById('toggle-edit');
+        editBtn.addEventListener('click', () => {
+            editable = !editable;
+            editBtn.textContent = `Editable: ${editable ? 'on' : 'off'}`;
+            rerender();
+        });
+    </script>
+</body>
+</html>
