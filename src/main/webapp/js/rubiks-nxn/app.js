@@ -30,6 +30,17 @@ import {
 } from '../rubiks4/moves.js';
 import { mountCubeNet as mountNet4 } from '../rubiks4/cube-net.js';
 
+// 5×5
+import {
+    SOLVED_STATE as SOLVED_5,
+    FACES as FACES_5,
+} from '../rubiks5/cube.js';
+import {
+    applyMoves as apply5sync,
+    ALL_MOVES as ALL_MOVES_5,
+} from '../rubiks5/moves.js';
+import { mountCubeNet as mountNet5 } from '../rubiks5/cube-net.js';
+
 // Generic 3D + image parser
 import { mountCubeNxN } from './cube-3d-nxn.js';
 import { loadImageToBuffer, parseNet } from './parser.js';
@@ -92,6 +103,22 @@ const sizeAdapters = {
             return apply4sync(SOLVED_4, moves);
         },
         mount:    mountNet4,
+    },
+    5: {
+        SOLVED:   SOLVED_5,
+        validate: (s) => validateRelaxed(s, FACES_5, 25),
+        apply:    async (state, moves) => apply5sync(state, moves),
+        random:   async () => {
+            // Smaller scramble for 5×5 since the server-side IDA*
+            // gets exponentially slower with scramble length.
+            const moves = [];
+            const n = 8;
+            for (let i = 0; i < n; i++) {
+                moves.push(ALL_MOVES_5[Math.floor(Math.random() * ALL_MOVES_5.length)]);
+            }
+            return apply5sync(SOLVED_5, moves);
+        },
+        mount:    mountNet5,
     },
 };
 
@@ -263,7 +290,9 @@ export function bootstrap(ctx) {
         mountNet();
         mount3D();
         refreshEditable();
-        setStatus(size === 3 ? 'Ready · 3×3 (browser)' : 'Ready · 4×4 (server)', 'ready');
+        setStatus(size === 3 ? 'Ready · 3×3 (browser)'
+        : size === 4 ? 'Ready · 4×4 (server)'
+        : 'Ready · 5×5 (server)', 'ready');
         setBanner(`Cube reset (${size}×${size}). Scramble, upload a net image, or twist — then click Solve.`, 'ok');
     }
 
@@ -275,7 +304,9 @@ export function bootstrap(ctx) {
             originalState = state;
             paintNet();
             setBanner(`Scrambled ${size}×${size}. Click Solve.`, 'ok');
-            setStatus(size === 3 ? 'Ready · 3×3 (browser)' : 'Ready · 4×4 (server)', 'ready');
+            setStatus(size === 3 ? 'Ready · 3×3 (browser)'
+        : size === 4 ? 'Ready · 4×4 (server)'
+        : 'Ready · 5×5 (server)', 'ready');
         } catch (err) {
             setBanner('Scramble failed: ' + (err.message || err), 'bad');
             setStatus('Idle', 'idle');
@@ -453,6 +484,49 @@ export function bootstrap(ctx) {
         };
     }
 
+    async function solve5x5() {
+        setStatus('Solving', 'busy');
+        setBusy(true, 'Solving 5×5 on server',
+            'Pipeline: LR → FB → EO → Phase 4 → Phase 5 → Phase 6 → reduce → Kociemba. ~15s for tiny scrambles; longer for harder ones.');
+        const t0 = performance.now();
+        const ctxPath = (document.querySelector('meta[name="ctx"]') || {}).content || '';
+        const url = ctxPath + '/CubeSolverFunctionality?action=solve&size=5';
+        const resp = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ state }),
+        });
+        const json = await resp.json().catch(() => ({}));
+        const dt = Math.round(performance.now() - t0);
+        if (!resp.ok || json.error) {
+            throw new Error(json.error || ('HTTP ' + resp.status));
+        }
+        if (!json.solved) {
+            throw new Error('Solver gave up: ' + (json.stoppedAt || 'unknown'));
+        }
+        const moves = json.moves || [];
+        const elapsedMs = json.elapsedMs || dt;
+        const parts = [];
+        const tally = (label, arr) => {
+            if (arr && arr.length) {
+                parts.push(`<span class="rk-piece">${label}: <strong>${arr.length}</strong></span>`);
+            }
+        };
+        tally('LR',      json.lrMoves);
+        tally('FB',      json.fbMoves);
+        tally('EO',      json.eoMoves);
+        tally('Phase 4', json.phase4Moves);
+        tally('Phase 5', json.phase5Moves);
+        tally('Phase 6', json.phase6Moves);
+        tally('Kociemba',json.reduceMoves);
+        return {
+            moves,
+            elapsedMs,
+            breakdown: parts.join(' '),
+            meta: `Solved in ${moves.length} moves · ${elapsedMs} ms · server pipeline`,
+        };
+    }
+
     async function solve() {
         const v = adapter.validate(state);
         if (!v.ok) { setBanner('Invalid state: ' + v.reason, 'bad'); return; }
@@ -464,7 +538,9 @@ export function bootstrap(ctx) {
         clearSolution();
         originalState = state;
         try {
-            const r = size === 3 ? await solve3x3() : await solve4x4();
+            const r = size === 3 ? await solve3x3()
+                    : size === 4 ? await solve4x4()
+                    : await solve5x5();
             solution = r;
             stepIdx = 0;
             renderMoves(r.moves, r.breakdown, r.meta);
