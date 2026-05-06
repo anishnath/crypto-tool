@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+  <defs>
+    <!-- Background — deep slate matching the math-studio palette -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <!-- Brand accent — same indigo→violet as the live UI's gradient -->
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <!-- Subtle radial glow behind the cube to draw the eye -->
+    <radialGradient id="glow" cx="0.3" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Sticker drop shadow -->
+    <filter id="cubeShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <ellipse cx="380" cy="350" rx="500" ry="380" fill="url(#glow)"/>
+
+  <!-- ─── 3×3 isometric cube (left side) ─────────────────────────── -->
+  <g transform="translate(170,110)" filter="url(#cubeShadow)">
+    <!-- TOP face — yellow (D-side colour, looking down at U) -->
+    <g>
+      <!-- 3×3 grid of stickers; isometric projection -->
+      <!-- top face is a parallelogram tilted up -->
+      <g fill="#ffd500" stroke="#0f172a" stroke-width="3">
+        <polygon points="100,50  220,10   280,40  160,80"/>
+        <polygon points="220,10  340,-30  400,0   280,40"/>
+        <polygon points="340,-30 460,-70  520,-40 400,0"/>
+        <polygon points="160,80  280,40   340,70  220,110"/>
+        <polygon points="280,40  400,0    460,30  340,70"/>
+        <polygon points="400,0   520,-40  580,-10 460,30"/>
+        <polygon points="220,110 340,70   400,100 280,140"/>
+        <polygon points="340,70  460,30   520,60  400,100"/>
+        <polygon points="460,30  580,-10  640,20  520,60"/>
+      </g>
+    </g>
+
+    <!-- LEFT face — green (F looking at it) -->
+    <g fill="#009b48" stroke="#0f172a" stroke-width="3">
+      <polygon points="100,50  220,110 220,210 100,150"/>
+      <polygon points="220,110 340,170 340,270 220,210"/>
+      <polygon points="340,170 460,230 460,330 340,270"/>
+      <polygon points="100,150 220,210 220,310 100,250"/>
+      <polygon points="220,210 340,270 340,370 220,310"/>
+      <polygon points="340,270 460,330 460,430 340,370"/>
+      <polygon points="100,250 220,310 220,410 100,350"/>
+      <polygon points="220,310 340,370 340,470 220,410"/>
+      <polygon points="340,370 460,430 460,530 340,470"/>
+    </g>
+
+    <!-- RIGHT face — red (R looking at it) -->
+    <g fill="#b71234" stroke="#0f172a" stroke-width="3">
+      <polygon points="460,30  580,-10 580,90  460,130"/>
+      <polygon points="580,-10 700,-50 700,50  580,90"/>
+      <!-- middle row -->
+      <polygon points="460,130 580,90  580,190 460,230"/>
+      <polygon points="580,90  700,50  700,150 580,190"/>
+      <!-- bottom row -->
+      <polygon points="460,230 580,190 580,290 460,330"/>
+      <polygon points="580,190 700,150 700,250 580,290"/>
+      <!-- second row of right-front (continues down) -->
+      <polygon points="460,330 580,290 580,390 460,430"/>
+      <polygon points="580,290 700,250 700,350 580,390"/>
+      <polygon points="460,430 580,390 580,490 460,530"/>
+      <polygon points="580,390 700,350 700,450 580,490"/>
+    </g>
+
+    <!-- A few accent stickers in different colours to show "scrambled" -->
+    <polygon points="220,110 340,170 340,270 220,210" fill="#0046ad" stroke="#0f172a" stroke-width="3"/>
+    <polygon points="340,270 460,330 460,430 340,370" fill="#ff5800" stroke="#0f172a" stroke-width="3"/>
+    <polygon points="460,130 580,90  580,190 460,230" fill="#ffd500" stroke="#0f172a" stroke-width="3"/>
+    <polygon points="280,40  400,0   460,30  340,70" fill="#b71234" stroke="#0f172a" stroke-width="3"/>
+    <polygon points="580,190 700,150 700,250 580,290" fill="#ffffff" stroke="#0f172a" stroke-width="3"/>
+  </g>
+
+  <!-- ─── Headline + supporting copy (right side) ────────────────── -->
+  <g transform="translate(720,180)" fill="#f8fafc">
+    <!-- Mini-eyebrow chip -->
+    <g>
+      <rect x="0" y="0" rx="999" ry="999" width="178" height="36" fill="rgba(99,102,241,0.18)" stroke="#6366f1" stroke-width="1.5"/>
+      <text x="20" y="24" font-size="16" font-weight="600" fill="#a5b4fc" letter-spacing="0.04em">FREE · NO SIGNUP</text>
+    </g>
+
+    <!-- Main headline -->
+    <text x="0" y="105" font-size="72" font-weight="800" letter-spacing="-0.02em">Rubik's Cube</text>
+    <text x="0" y="180" font-size="72" font-weight="800" letter-spacing="-0.02em" fill="url(#accent)">Solver Online</text>
+
+    <!-- Sub-line: sizes -->
+    <g transform="translate(0,228)">
+      <rect x="0"   y="0" rx="10" ry="10" width="68"  height="40" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+      <text x="34"  y="27" font-size="18" font-weight="700" fill="#f8fafc" text-anchor="middle">3×3</text>
+      <rect x="78"  y="0" rx="10" ry="10" width="68"  height="40" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+      <text x="112" y="27" font-size="18" font-weight="700" fill="#f8fafc" text-anchor="middle">4×4</text>
+      <rect x="156" y="0" rx="10" ry="10" width="68"  height="40" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+      <text x="190" y="27" font-size="18" font-weight="700" fill="#f8fafc" text-anchor="middle">5×5</text>
+      <rect x="234" y="0" rx="10" ry="10" width="68"  height="40" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+      <text x="268" y="27" font-size="18" font-weight="700" fill="#f8fafc" text-anchor="middle">6×6</text>
+      <rect x="312" y="0" rx="10" ry="10" width="68"  height="40" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+      <text x="346" y="27" font-size="18" font-weight="700" fill="#f8fafc" text-anchor="middle">7×7</text>
+    </g>
+
+    <!-- Feature bullets -->
+    <g transform="translate(0,312)" font-size="22" fill="#cbd5e1">
+      <text x="0" y="0" font-weight="600" fill="#f8fafc">✓ Animated 3D step-by-step solution</text>
+      <text x="0" y="36" font-weight="600" fill="#f8fafc">✓ Random scramble · upload net image</text>
+      <text x="0" y="72" font-weight="600" fill="#f8fafc">✓ Manual twist with WCA notation</text>
+    </g>
+  </g>
+
+  <!-- Footer URL (cuber-trust signal) -->
+  <text x="600" y="600" font-size="20" font-weight="600" fill="#64748b" text-anchor="middle" letter-spacing="0.04em">8gwifi.org/math/rubik-nxn-solver</text>
+</svg>
