@@ -755,7 +755,7 @@
             <div class="rk-scramble-row">
                 <label for="rk-scramble-input" class="rk-scramble-label">Paste scramble or state</label>
                 <input type="text" id="rk-scramble-input" class="rk-scramble-input"
-                       placeholder="WCA notation (R U' L2 ...) or sticker state (URFDLB chars, 54/96/150/216/294 long)"
+                       placeholder="WCA notation (R U' L2 ...) or sticker state (URFDLB chars, 54/96/150/216/294/384 long)"
                        autocomplete="off" spellcheck="false" />
                 <button type="button" class="rk-btn" id="rk-scramble-apply">
                     <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 13 9 17 19 7"/></svg>

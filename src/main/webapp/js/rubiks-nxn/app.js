@@ -577,13 +577,13 @@ export function bootstrap(ctx) {
     /**
      * Detect whether the input is a CUBE STATE STRING rather than a
      * scramble in WCA notation.  States are pure [URFDLB] of length
-     * 6*N² for N in {3..7}; we can recognise them by character set
+     * 6*N² for N in {3..8}; we can recognise them by character set
      * + length.  Returns the inferred cube size, or 0 if not a state.
      */
     function detectStateInput(raw) {
         const clean = raw.replace(/\s+/g, '');
         if (!/^[URFDLB]+$/.test(clean)) return 0;     // contains non-state chars
-        for (let n = 3; n <= 7; n++) {
+        for (let n = 3; n <= 8; n++) {
             if (clean.length === 6 * n * n) return n;
         }
         return 0;

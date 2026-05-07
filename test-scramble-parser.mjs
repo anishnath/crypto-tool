@@ -106,7 +106,7 @@ function solvedState(N) {
          + 'D'.repeat(N*N) + 'L'.repeat(N*N) + 'B'.repeat(N*N);
 }
 
-for (const N of [3, 4, 5, 6, 7]) {
+for (const N of [3, 4, 5, 6, 7, 8]) {
     const ms = buildMoveSet(N);
     const solved = solvedState(N);
 
@@ -116,6 +116,7 @@ for (const N of [3, 4, 5, 6, 7]) {
     if (N >= 5) probes.push('3Rw', "3Rw'", '3Rw2', '4Rw');
     if (N >= 6) probes.push('5Rw');
     if (N >= 7) probes.push('6Rw');
+    if (N >= 8) probes.push('7Rw');
     probes.push('2R', '2L');
     if (N >= 5) probes.push('3R', '3L');
     if (N >= 7) probes.push('4R', '4L');
@@ -178,7 +179,7 @@ for (const [N, a, b, label] of EQ_CASES) {
 //   New B = old U  (U → B)
 // moves-builder isn't used on 3×3 (cubejs handles that), so probe N ≥ 4.
 console.log('\n── Cube rotation (x) sticker cycling ────────────');
-for (const N of [4, 5, 6, 7]) {
+for (const N of [4, 5, 6, 7, 8]) {
     const ms = buildMoveSet(N);
     const solved = solvedState(N);
     const after = ms.applyMoves(solved, ['x']);
@@ -198,7 +199,7 @@ for (const N of [4, 5, 6, 7]) {
 // And the L and R faces should still be all-L and all-R after x (they
 // stay in place; only their orientation changes).
 console.log('\n── Cube rotation (x) preserves R/L sticker counts ─');
-for (const N of [4, 5, 6, 7]) {
+for (const N of [4, 5, 6, 7, 8]) {
     const ms = buildMoveSet(N);
     const solved = solvedState(N);
     const after = ms.applyMoves(solved, ['x']);
