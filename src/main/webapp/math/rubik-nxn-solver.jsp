@@ -871,42 +871,14 @@
         </div>
 
         <section class="rk-card" style="margin-top:1.25rem;">
-            <h2 class="ms-section-title">How it works</h2>
-            <p style="font:0.95rem/1.65 var(--ms-font-sans); color:var(--ms-ink-soft); margin:0 0 0.85rem;">
-                <strong>3&times;3</strong> uses
-                <a href="https://github.com/ldez/cubejs" target="_blank" rel="noopener" style="color:var(--rk-tool);text-decoration:underline;">cubejs</a>,
-                a JavaScript port of Herbert Kociemba's two-phase algorithm.
-                Phase&nbsp;1 reaches the G1 subgroup using all 18 face turns; phase&nbsp;2
-                finishes with only U, D, R<sub>2</sub>, L<sub>2</sub>, F<sub>2</sub>, B<sub>2</sub>.
-                Solutions are typically 20&ndash;22 moves and complete in under 50 milliseconds
-                after a one-time pruning-table init (~3&nbsp;seconds, in your browser).
+            <h2 class="ms-section-title">Cubing guide &mdash; notation, algorithms &amp; solving</h2>
+            <p style="font:0.95rem/1.5 var(--ms-font-sans); color:var(--ms-ink-soft); margin:0 0 0.85rem;">
+                A visual, click-to-play reference. Open any tab below for notation, beginner method,
+                speedcubing (CFOP), big-cube reduction + parity, the algorithm library, or the cubing glossary.
+                Every move has a &#9654; button that animates on the live cube on the right.
+                Prefer a dedicated page? <a href="<%=request.getContextPath()%>/math/cubing-guide.jsp" style="color:var(--rk-tool);">Open the standalone guide &rarr;</a>
             </p>
-            <p style="font:0.95rem/1.65 var(--ms-font-sans); color:var(--ms-ink-soft); margin:0 0 0.85rem;">
-                <strong>4&times;4</strong> uses the
-                <em>reduction method</em>: solve all 24 centres &rarr; orient the 24 edge
-                wings &rarr; pair the 12 dedges (2 phases) &rarr; reduce the cube to a
-                3&times;3 view &rarr; finish with Kociemba. Each stage uses pre-computed
-                pruning tables (mmap'd from a remote mirror, ~60&nbsp;MB total) and IDA*
-                search. Ported from
-                <code>rubikscubennnsolver</code> (Python+C) to pure Java &mdash; runs on
-                our servlet, no external solver dependency. Typical solves take
-                5&ndash;40 seconds and produce 50&ndash;65 total moves.
-            </p>
-            <p style="font:0.95rem/1.65 var(--ms-font-sans); color:var(--ms-ink-soft); margin:0 0 0.85rem;">
-                <strong>5&times;5</strong> (Professor's Cube) extends the reduction
-                method into <strong>8 stages</strong>:
-                LR-centres staging &rarr;
-                FB-centres staging &rarr;
-                edge orientation (24 wings + 12 midges) &rarr;
-                phase&nbsp;4 (stage 4 chosen edges) &rarr;
-                phase&nbsp;5 (pair the 4 edges + LFRB centres) &rarr;
-                phase&nbsp;6 (last 8 edges + all centres) &rarr;
-                reduce to 3&times;3 &rarr; Kociemba. Each phase combines multiple
-                pruning tables under IDA*&nbsp;with a max-cost heuristic; the largest
-                table (phase&nbsp;4) is 184&nbsp;MB compressed and accessed via
-                mmap'd binary search to keep RSS small. The whole pipeline is
-                pure&nbsp;Java &mdash; no Python or C runtime on the server.
-            </p>
+            <jsp:include page="components/cubing-guide-body.jsp" />
         </section>
 
         <section class="rk-card" style="margin-top:1.25rem;">
