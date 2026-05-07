@@ -508,35 +508,9 @@
             <jsp:include page="components/cubing-guide-body.jsp" />
         </section>
 
-        <section class="rk-card" style="margin-top:1.25rem;">
-            <h2 class="ms-section-title">Frequently asked questions</h2>
-            <div class="ms-faq">
-                <div class="ms-faq-item">
-                    <div class="ms-faq-q">What is the Kociemba algorithm?</div>
-                    <div class="ms-faq-a">A two-phase Rubik's-Cube solver: phase 1 reaches the G1 subgroup (edges oriented, U/D-slice edges in place) using all 18 face turns; phase 2 finishes with only U, D, R<sub>2</sub>, L<sub>2</sub>, F<sub>2</sub>, B<sub>2</sub>. Pre-computed pruning tables make each phase efficient. Typical solutions are 20-22 moves; God's Number (the formal upper bound) is 20.</div>
-                </div>
-                <div class="ms-faq-item">
-                    <div class="ms-faq-q">What is God's Number?</div>
-                    <div class="ms-faq-a">God's Number is 20 — proven in 2010 by Rokicki, Kociemba, Davidson, and Dethridge using ~35 CPU-years of cluster compute. Every solvable Rubik's Cube state is reachable from solved in 20 face turns or fewer, in the half-turn metric.</div>
-                </div>
-                <div class="ms-faq-item">
-                    <div class="ms-faq-q">How does the image parser work?</div>
-                    <div class="ms-faq-a">It auto-crops to the non-background bounding box (background sampled from the image corners), divides into a 12 × 9 sticker grid, samples a small patch at each sticker's geometric center, converts to CIE Lab, and classifies against the six center stickers. Center calibration brute-forces the optimal 6-way assignment over all 720 permutations — robust to palette drift across renderers.</div>
-                </div>
-                <div class="ms-faq-item">
-                    <div class="ms-faq-q">What notation does the solver use?</div>
-                    <div class="ms-faq-a">Standard cube notation: U / D / L / R / F / B for the six faces. A bare letter is 90° clockwise (looking at the face from outside). An apostrophe means counter-clockwise (R'). A 2 means 180° (F<sub>2</sub>). Solutions are space-separated sequences.</div>
-                </div>
-                <div class="ms-faq-item">
-                    <div class="ms-faq-q">Is my cube state sent to a server?</div>
-                    <div class="ms-faq-a">No. Image parsing, solving, and rendering are all client-side JavaScript. The cubejs library loads from a CDN once. The shareable URL encodes the state in the URL fragment (after #), which is never sent to the server by HTTP convention.</div>
-                </div>
-                <div class="ms-faq-item">
-                    <div class="ms-faq-q">Do you have a 2×2 cube solver?</div>
-                    <div class="ms-faq-a">Yes — try the <a href="<%=request.getContextPath()%>/math/pocket-cube-solver.jsp" style="color:var(--rk-tool);text-decoration:underline;">2×2 Pocket Cube Solver</a>. It uses a bidirectional BFS solver written in vanilla JS (no external solver dependency, since cubejs is 3×3-only), and returns provably optimal solutions in ≤11 moves (God's Number for 2×2). Same animated 3D playback + GIF export, lighter footprint.</div>
-                </div>
-            </div>
-        </section>
+        <%-- Visible FAQ rendered from the same jsp:param values that
+             feed the JSON-LD FAQPage in seo-tool-page.jsp. --%>
+        <jsp:include page="../modern/components/visible-faq.jsp" />
     </section>
 
     <aside class="ms-rail" aria-label="Advertisements">

@@ -85,6 +85,10 @@
 
             <jsp:include page="components/cubing-guide-body.jsp" />
         </section>
+
+        <%-- Visible FAQ — same content as the JSON-LD FAQPage in
+             seo-tool-page.jsp.  Single source of truth. --%>
+        <jsp:include page="../modern/components/visible-faq.jsp" />
     </main>
 
     <jsp:include page="../footer_adsense.jsp" />

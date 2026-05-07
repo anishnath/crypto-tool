@@ -74,6 +74,28 @@ import {
 } from '../rubiks8/moves.js';
 import { mountCubeNet as mountNet8 } from '../rubiks8/cube-net.js';
 
+// 9×9
+import {
+    SOLVED_STATE as SOLVED_9,
+    FACES as FACES_9,
+} from '../rubiks9/cube.js';
+import {
+    applyMoves as apply9sync,
+    ALL_MOVES as ALL_MOVES_9,
+} from '../rubiks9/moves.js';
+import { mountCubeNet as mountNet9 } from '../rubiks9/cube-net.js';
+
+// 10×10
+import {
+    SOLVED_STATE as SOLVED_10,
+    FACES as FACES_10,
+} from '../rubiks10/cube.js';
+import {
+    applyMoves as apply10sync,
+    ALL_MOVES as ALL_MOVES_10,
+} from '../rubiks10/moves.js';
+import { mountCubeNet as mountNet10 } from '../rubiks10/cube-net.js';
+
 // Generic 3D + image parser
 import { mountCubeNxN } from './cube-3d-nxn.js';
 import { loadImageToBuffer, parseNet } from './parser.js';
@@ -221,6 +243,22 @@ const sizeAdapters = {
         randomMoves: () => buildRandomMoves(ALL_MOVES_8, 8),
         mount:    mountNet8,
     },
+    9: {
+        SOLVED:   SOLVED_9,
+        validate: (s) => validateRelaxed(s, FACES_9, 81),
+        apply:    async (state, moves) => apply9sync(state, moves),
+        random:   async () => apply9sync(SOLVED_9, buildRandomMoves(ALL_MOVES_9, 8)),
+        randomMoves: () => buildRandomMoves(ALL_MOVES_9, 8),
+        mount:    mountNet9,
+    },
+    10: {
+        SOLVED:   SOLVED_10,
+        validate: (s) => validateRelaxed(s, FACES_10, 100),
+        apply:    async (state, moves) => apply10sync(state, moves),
+        random:   async () => apply10sync(SOLVED_10, buildRandomMoves(ALL_MOVES_10, 8)),
+        randomMoves: () => buildRandomMoves(ALL_MOVES_10, 8),
+        mount:    mountNet10,
+    },
 };
 
 export function bootstrap(ctx) {
@@ -263,6 +301,8 @@ export function bootstrap(ctx) {
         // GIF recording
         recordBtn:      ctx.recordBtn,
         recordStatus:   ctx.recordStatus,
+        // PDF report download
+        pdfBtn:         ctx.pdfBtn,
     };
 
     let size = 3;
@@ -471,6 +511,9 @@ export function bootstrap(ctx) {
             // plain Xw (default wide-2) requires N ≥ 4
             if (/[URFDLB]w/.test(t) && minN < 4) minN = 4;
         }
+        if (minN >= 10) return 10;
+        if (minN >= 9) return 9;
+        if (minN >= 8) return 8;
         if (minN >= 7) return 7;
         if (minN >= 6) return 6;
         if (minN >= 5) return 5;
@@ -577,13 +620,13 @@ export function bootstrap(ctx) {
     /**
      * Detect whether the input is a CUBE STATE STRING rather than a
      * scramble in WCA notation.  States are pure [URFDLB] of length
-     * 6*N² for N in {3..8}; we can recognise them by character set
+     * 6*N² for N in {3..10}; we can recognise them by character set
      * + length.  Returns the inferred cube size, or 0 if not a state.
      */
     function detectStateInput(raw) {
         const clean = raw.replace(/\s+/g, '');
         if (!/^[URFDLB]+$/.test(clean)) return 0;     // contains non-state chars
-        for (let n = 3; n <= 8; n++) {
+        for (let n = 3; n <= 10; n++) {
             if (clean.length === 6 * n * n) return n;
         }
         return 0;
@@ -1267,6 +1310,282 @@ export function bootstrap(ctx) {
         gif.render();
     }
 
+    /**
+     * Build a step-by-step PDF solve report and trigger download.
+     *
+     * Pages produced:
+     *   1. Cover  — site branding, cube size, total moves, generation
+     *               timestamp, and the initial scrambled state as a
+     *               full-width cube net image.
+     *   2..N-1.   — Step grid (2 cols × 3 rows = 6 steps per page).
+     *               Each cell is a cube net image of the state AFTER
+     *               that move, with the move name and step number.
+     *   N.        — Solved state confirmation + summary.
+     *
+     * jsPDF is loaded on demand from esm.sh — the library is ~150 KB
+     * minified and only paid for when the user actually clicks PDF.
+     *
+     * Cube nets are rendered by mounting an off-screen instance of the
+     * size's mountCubeNet, updating its state for each step, then
+     * serialising the SVG to a high-res JPEG and embedding it.
+     */
+    let exportingPdf = false;
+    async function exportPdf() {
+        if (exportingPdf) return;
+        if (!solution || !solution.moves.length) {
+            setBanner('No solution to export. Click Solve first.', 'info');
+            return;
+        }
+        exportingPdf = true;
+        setRecordStatus('Loading PDF library…');
+
+        let jsPDF;
+        try {
+            const mod = await import('https://esm.sh/jspdf@2.5.1');
+            jsPDF = mod.jsPDF || (mod.default && mod.default.jsPDF) || mod.default;
+            if (!jsPDF) throw new Error('jsPDF export missing');
+        } catch (err) {
+            exportingPdf = false;
+            setRecordStatus(null);
+            setBanner('PDF library load failed: ' + (err.message || err), 'bad');
+            return;
+        }
+
+        // Mount an off-screen net for snapshot rendering.
+        const offHost = document.createElement('div');
+        offHost.style.cssText = 'position:fixed;left:-9999px;top:0;width:600px;background:white;padding:8px;';
+        document.body.appendChild(offHost);
+        const offNet = adapter.mount(offHost, { state: originalState });
+
+        // Snapshot helper: render the off-screen SVG to a JPEG dataURL.
+        async function snapshotState(stateStr) {
+            offNet.update({ state: stateStr });
+            await new Promise(r => requestAnimationFrame(r));
+            const svg = offHost.querySelector('svg');
+            if (!svg) return null;
+            const cloned = svg.cloneNode(true);
+            cloned.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            const vb = (cloned.getAttribute('viewBox') || '0 0 200 200').split(/\s+/).map(Number);
+            const w = vb[2], h = vb[3];
+            // White background for print friendliness.
+            const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            bg.setAttribute('x', '0'); bg.setAttribute('y', '0');
+            bg.setAttribute('width', String(w)); bg.setAttribute('height', String(h));
+            bg.setAttribute('fill', '#ffffff');
+            cloned.insertBefore(bg, cloned.firstChild);
+            const xml = new XMLSerializer().serializeToString(cloned);
+            const url = URL.createObjectURL(new Blob([xml], { type: 'image/svg+xml;charset=utf-8' }));
+            try {
+                const img = await new Promise((res, rej) => {
+                    const i = new Image();
+                    i.onload = () => res(i);
+                    i.onerror = () => rej(new Error('snapshot failed'));
+                    i.src = url;
+                });
+                // Render at 3× the SVG size for crisp print resolution.
+                const scale = 3;
+                const c = document.createElement('canvas');
+                c.width = Math.round(w * scale);
+                c.height = Math.round(h * scale);
+                const cctx = c.getContext('2d');
+                cctx.fillStyle = '#ffffff';
+                cctx.fillRect(0, 0, c.width, c.height);
+                cctx.drawImage(img, 0, 0, c.width, c.height);
+                return c.toDataURL('image/jpeg', 0.92);
+            } finally {
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // Plain-English explainer for ANY notation form (handles wide,
+        // inner-slice, middle-slice, cube-rotation — broader than the
+        // notation-line version above).
+        function describeMoveLong(token) {
+            if (!token) return '';
+            if (/^[xyz]['2]?$/.test(token)) {
+                const ax = { x: 'R-axis', y: 'U-axis', z: 'F-axis' }[token[0]];
+                const dir = token.slice(1) === "'" ? 'reverse' : token.slice(1) === '2' ? '180°' : 'forward';
+                return `Whole-cube rotation around ${ax} (${dir})`;
+            }
+            if (/^[MES]['2]?$/.test(token)) {
+                const slice = { M: 'middle (M)', E: 'equatorial (E)', S: 'standing (S)' }[token[0]];
+                const dir = token.slice(1) === "'" ? 'reverse' : token.slice(1) === '2' ? '180°' : 'CW';
+                return `${slice} slice ${dir}`;
+            }
+            const m = /^(\d?)([URFDLB])(w?)(['2]?)$/.exec(token);
+            if (!m) return '';
+            const n = m[1] ? parseInt(m[1], 10) : (m[3] === 'w' ? 2 : 1);
+            const wide = m[3] === 'w';
+            const layers = wide ? `${n}-layer wide` : (n > 1 ? `inner layer ${n}` : 'outer');
+            const faceName = { U: 'Up', R: 'Right', F: 'Front', D: 'Down', L: 'Left', B: 'Back' }[m[2]];
+            const dir = m[4] === "'" ? '90° CCW' : m[4] === '2' ? '180°' : '90° CW';
+            return `${faceName} ${layers} — ${dir}`;
+        }
+
+        const BRAND_TITLE  = "Rubik's Cube Solution Report";
+        const BRAND_FOOTER = '8gwifi.org/math/rubik-nxn-solver.jsp';
+        const PAGE_W = 210, PAGE_H = 297;     // A4 mm
+        const MARGIN = 15;
+        const HEADER_Y = 12;
+        const FOOTER_Y = PAGE_H - 8;
+
+        const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+        function drawHeader() {
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11);
+            doc.setTextColor(99, 102, 241);     // accent purple
+            doc.text(BRAND_TITLE, MARGIN, HEADER_Y);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(120, 120, 120);
+            doc.text(`${size}×${size} cube · ${solution.moves.length} moves`,
+                     PAGE_W - MARGIN, HEADER_Y, { align: 'right' });
+            doc.setDrawColor(220, 220, 220);
+            doc.line(MARGIN, HEADER_Y + 2, PAGE_W - MARGIN, HEADER_Y + 2);
+        }
+        function drawFooter(pageNum, totalPages) {
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(8);
+            doc.setTextColor(140, 140, 140);
+            doc.text(BRAND_FOOTER, MARGIN, FOOTER_Y);
+            doc.text(`Page ${pageNum} of ${totalPages}`,
+                     PAGE_W - MARGIN, FOOTER_Y, { align: 'right' });
+        }
+
+        try {
+            setRecordStatus('Rendering cover…');
+            // Cover page
+            drawHeader();
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(20);
+            doc.setTextColor(20, 20, 20);
+            doc.text(BRAND_TITLE, PAGE_W / 2, 32, { align: 'center' });
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(11);
+            doc.setTextColor(80, 80, 80);
+            doc.text(`${size}×${size} cube — solved in ${solution.moves.length} moves`,
+                     PAGE_W / 2, 41, { align: 'center' });
+            doc.setFontSize(9);
+            doc.setTextColor(140, 140, 140);
+            doc.text(`Generated ${new Date().toLocaleString()}`,
+                     PAGE_W / 2, 48, { align: 'center' });
+
+            // Initial scramble image (large, centered)
+            const initImg = await snapshotState(originalState);
+            if (initImg) {
+                const imgW = 140;
+                const svgVB = offHost.querySelector('svg').getAttribute('viewBox').split(/\s+/).map(Number);
+                const aspect = svgVB[3] / svgVB[2];
+                const imgH = imgW * aspect;
+                doc.addImage(initImg, 'JPEG', (PAGE_W - imgW) / 2, 60, imgW, imgH);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(11);
+                doc.setTextColor(40, 40, 40);
+                doc.text('Initial scrambled state', PAGE_W / 2, 65 + imgH + 5, { align: 'center' });
+            }
+
+            // Compute total page count: 1 cover + ceil(moves/6) step pages + 1 final
+            const STEPS_PER_PAGE = 6;
+            const stepPages = Math.ceil(solution.moves.length / STEPS_PER_PAGE);
+            const totalPages = 1 + stepPages + 1;
+            drawFooter(1, totalPages);
+
+            // Step pages — 2 cols × 3 rows grid
+            let s = originalState;
+            let onPage = 0;
+            let pageIdx = 1;
+            const cellW = (PAGE_W - 2 * MARGIN - 5) / 2;     // 2 cols, 5mm gutter
+            const cellH = (PAGE_H - 30 - 15) / 3;            // 3 rows, header + footer space
+            for (let i = 0; i < solution.moves.length; i++) {
+                if (onPage === 0) {
+                    doc.addPage();
+                    pageIdx++;
+                    drawHeader();
+                    setRecordStatus(`Rendering step page ${pageIdx - 1}/${stepPages}…`);
+                }
+                const move = solution.moves[i];
+                s = await adapter.apply(s, [move]);
+                const img = await snapshotState(s);
+
+                const col = onPage % 2;
+                const row = Math.floor(onPage / 2);
+                const x = MARGIN + col * (cellW + 5);
+                const y = 22 + row * cellH;
+
+                if (img) {
+                    // Fit the image into the cell preserving aspect ratio.
+                    const svgVB = offHost.querySelector('svg').getAttribute('viewBox').split(/\s+/).map(Number);
+                    const aspect = svgVB[3] / svgVB[2];
+                    const imgH = Math.min(cellH - 18, cellW * aspect);
+                    const imgW = imgH / aspect;
+                    doc.addImage(img, 'JPEG', x + (cellW - imgW) / 2, y, imgW, imgH);
+                }
+                // Step caption
+                const capY = y + cellH - 14;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(11);
+                doc.setTextColor(20, 20, 20);
+                doc.text(`Step ${i + 1}:  ${move}`, x + cellW / 2, capY, { align: 'center' });
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(110, 110, 110);
+                doc.text(describeMoveLong(move), x + cellW / 2, capY + 5, { align: 'center' });
+
+                onPage++;
+                if (onPage === STEPS_PER_PAGE) {
+                    drawFooter(pageIdx, totalPages);
+                    onPage = 0;
+                }
+            }
+            // If the last step page wasn't full, draw its footer now.
+            if (onPage > 0) drawFooter(pageIdx, totalPages);
+
+            // Final page — solved state
+            doc.addPage();
+            pageIdx++;
+            drawHeader();
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(18);
+            doc.setTextColor(20, 20, 20);
+            doc.text('Solved!', PAGE_W / 2, 32, { align: 'center' });
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(11);
+            doc.setTextColor(80, 80, 80);
+            doc.text(`${solution.moves.length} moves applied — every face uniform.`,
+                     PAGE_W / 2, 41, { align: 'center' });
+            const finalImg = await snapshotState(s);
+            if (finalImg) {
+                const imgW = 140;
+                const svgVB = offHost.querySelector('svg').getAttribute('viewBox').split(/\s+/).map(Number);
+                const aspect = svgVB[3] / svgVB[2];
+                const imgH = imgW * aspect;
+                doc.addImage(finalImg, 'JPEG', (PAGE_W - imgW) / 2, 55, imgW, imgH);
+            }
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(80, 80, 80);
+            doc.text('Print this report or share it with someone learning to cube.',
+                     PAGE_W / 2, PAGE_H - 30, { align: 'center' });
+            doc.setFontSize(9);
+            doc.setTextColor(99, 102, 241);
+            doc.textWithLink('Solve another scramble at ' + BRAND_FOOTER,
+                             PAGE_W / 2, PAGE_H - 23,
+                             { align: 'center', url: 'https://' + BRAND_FOOTER });
+            drawFooter(pageIdx, totalPages);
+
+            setRecordStatus('Saving…');
+            doc.save(`rubiks-${size}x${size}-solution-${Date.now()}.pdf`);
+            setBanner('PDF saved to your Downloads folder.', 'ok');
+        } catch (err) {
+            setBanner('PDF export failed: ' + (err.message || err), 'bad');
+        } finally {
+            document.body.removeChild(offHost);
+            exportingPdf = false;
+            setRecordStatus(null);
+        }
+    }
+
     async function downloadSampleNet() {
         // Mount a temporary off-screen renderer of the SOLVED state for `size`.
         const offHost = document.createElement('div');
@@ -1389,6 +1708,7 @@ export function bootstrap(ctx) {
     }
     if (ui.sampleBtn) ui.sampleBtn.addEventListener('click', downloadSampleNet);
     if (ui.recordBtn) ui.recordBtn.addEventListener('click', recordGif);
+    if (ui.pdfBtn)    ui.pdfBtn.addEventListener('click', exportPdf);
     if (ui.editToggle) {
         ui.editToggle.addEventListener('click', () => {
             editMode = !editMode;
