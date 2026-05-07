@@ -196,6 +196,9 @@ export function bootstrap(ctx) {
         solveBtn:       ctx.solveBtn,
         movesPanel:     ctx.movesPanel,
         movesList:      ctx.movesList,
+        notationLine:   ctx.notationLine,
+        scrambleInput:  ctx.scrambleInput,
+        scrambleApply:  ctx.scrambleApply,
         movesMeta:      ctx.movesMeta,
         movesBreakdown: ctx.movesBreakdown,
         playPrev:       ctx.playPrev,
@@ -303,6 +306,12 @@ export function bootstrap(ctx) {
         try {
             if (cube3d) { cube3d.dispose(); cube3d = null; }
             cube3d = await mountCubeNxN(ui.cube3dHost, size, state);
+            if (cube3d.setOnMove) {
+                cube3d.setOnMove((move) => {
+                    clearSolution();
+                    applyOne(move);
+                });
+            }
         } catch (err) {
             console.error('3D mount failed:', err);
             ui.cube3dHost.innerHTML =
@@ -337,6 +346,10 @@ export function bootstrap(ctx) {
         if (ui.playPlay) ui.playPlay.textContent = '▶ Play';
         if (ui.tbPlayback) ui.tbPlayback.style.display = 'none';
         if (ui.tbPlayLabel) ui.tbPlayLabel.textContent = 'Play';
+        if (ui.notationLine) {
+            ui.notationLine.classList.remove('active');
+            ui.notationLine.innerHTML = '';
+        }
     }
 
     function setSize(newSize) {
@@ -369,6 +382,197 @@ export function bootstrap(ctx) {
         });
         setStatus(size === 3 ? 'Ready · 3×3 (browser)' : `Ready · ${size}×${size} (server)`, 'ready');
         setBanner(`Cube reset (${size}×${size}). Scramble, upload a net image, or twist — then click Solve.`, 'ok');
+    }
+
+    /**
+     * Infer the minimum (and likely) cube size from the scramble tokens.
+     *   - has any "3Xw"   → 6×6 minimum; if >90 tokens, probably a 7×7 scramble
+     *   - has any "Xw"    → 4×4 minimum; if >50 tokens, probably a 5×5 scramble
+     *   - only outer      → keep current size (3×3 if currently 3, else 3 — but
+     *                       we don't auto-downgrade away from a bigger cube
+     *                       since the user might be doing a 4×4 alg drill on
+     *                       the 4×4 view)
+     * Returns the recommended size, or null if no change is needed.
+     */
+    function inferSizeFromScramble(tokens) {
+        const has3 = tokens.some(t => t.startsWith('3'));
+        const hasWide = tokens.some(t => /[URFDLB]w/.test(t));
+        if (has3) return tokens.length > 90 ? 7 : 6;
+        if (hasWide) return tokens.length > 50 ? 5 : 4;
+        // Only outer turns — fits any cube. If the user's currently on
+        // 3×3, stay there.  If they're on a bigger cube, also stay (they
+        // might be practising a 3-style alg on a bigger cube).
+        return null;
+    }
+
+    /**
+     * Tokenise a WCA scramble string.  Handles BOTH formats:
+     *   - whitespace-separated:   "R U R' U' F R F'"
+     *   - no spaces (smushed):    "RUR'U'FRF'"
+     *   - mixed:                  "Rw'D2  3Uw F2"
+     *
+     * WCA notation is unambiguous greedy: each token matches
+     * {@code 3?[URFDLB]w?['2]?} where '3' requires a 'w' (3-layer wide).
+     * Single-letter slice notation (lowercase r, u, etc.) is NOT
+     * supported — rejected as invalid.
+     *
+     * Returns the array of tokens, or {@code {error, atIndex}} if the
+     * string can't be fully consumed.
+     */
+    function tokenizeScramble(raw) {
+        // Strip common scramble-generator decorations first.
+        const clean = raw
+            .replace(/[,\[\]\(\)]/g, ' ')
+            .replace(/\b\d+\.\s*/g, ' ')
+            .replace(/\s+/g, '');               // collapse all whitespace
+
+        if (clean.length === 0) return { error: 'empty', atIndex: 0 };
+
+        // Token: either "3Xw" (3-layer-wide, w required) OR "X" optionally
+        // followed by "w" — then optional "'" or "2" suffix.
+        const TOKEN_RE = /3[URFDLB]w['2]?|[URFDLB]w?['2]?/g;
+        const tokens = [];
+        let cursor = 0;
+        let m;
+        while (cursor < clean.length && (m = TOKEN_RE.exec(clean)) !== null) {
+            if (m.index !== cursor) {
+                // Gap before this match → unparseable character.
+                return { error: 'unexpected character at position ' + cursor + ' ("' + clean[cursor] + '")', atIndex: cursor };
+            }
+            tokens.push(m[0]);
+            cursor = TOKEN_RE.lastIndex;
+        }
+        if (cursor !== clean.length) {
+            return { error: 'unexpected character at position ' + cursor + ' ("' + clean[cursor] + '")', atIndex: cursor };
+        }
+        return tokens;
+    }
+
+    /**
+     * Detect whether the input is a CUBE STATE STRING rather than a
+     * scramble in WCA notation.  States are pure [URFDLB] of length
+     * 6*N² for N in {3..7}; we can recognise them by character set
+     * + length.  Returns the inferred cube size, or 0 if not a state.
+     */
+    function detectStateInput(raw) {
+        const clean = raw.replace(/\s+/g, '');
+        if (!/^[URFDLB]+$/.test(clean)) return 0;     // contains non-state chars
+        for (let n = 3; n <= 7; n++) {
+            if (clean.length === 6 * n * n) return n;
+        }
+        return 0;
+    }
+
+    /** Apply a pasted cube state directly: validate, auto-switch size,
+     *  and paint without animation (states aren't sequences of moves). */
+    async function applyStateString(raw, n) {
+        clearSolution();
+        const clean = raw.replace(/\s+/g, '');
+        // Auto-switch to the size implied by the state length.
+        if (n !== size) {
+            setSize(n);
+        }
+        const v = adapter.validate(clean);
+        if (!v.ok) {
+            if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
+            setBanner(`Invalid ${n}×${n} state: ${v.reason}`, 'bad');
+            return;
+        }
+        state = clean;
+        originalState = state;
+        paintNet();
+        if (ui.scrambleInput) ui.scrambleInput.classList.remove('invalid');
+        setBanner(`Loaded ${n}×${n} state (${clean.length} stickers). Click Solve.`, 'ok');
+        setStatus(size === 3 ? 'Ready · 3×3 (browser)' : `Ready · ${size}×${size} (server)`, 'ready');
+    }
+
+    /**
+     * Parse a pasted/typed scramble string (with or without whitespace),
+     * AUTO-DETECT whether it's a CUBE STATE or WCA NOTATION, switch
+     * cube size if needed, then either load the state directly or apply
+     * each move sequentially with animation.
+     */
+    async function applyScrambleString(raw) {
+        clearSolution();
+        if (!raw || !raw.trim()) {
+            setBanner('Type or paste a scramble (e.g. "R U R\' U F2 D Lw") OR a full cube state (96 chars for 4×4).', 'info');
+            if (ui.scrambleInput) ui.scrambleInput.focus();
+            return;
+        }
+
+        // First check if input is a cube state (pure URFDLB letters at
+        // a recognised length).  States are common — cubers paste them
+        // from solver chains, scramble generators that emit state, etc.
+        const stateSize = detectStateInput(raw);
+        if (stateSize > 0) {
+            return applyStateString(raw, stateSize);
+        }
+
+        const parsed = tokenizeScramble(raw);
+        if (!Array.isArray(parsed)) {
+            // Tokenizer returned an error object.
+            if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
+            setBanner(`Could not parse scramble: ${parsed.error}. Use WCA notation: U R F D L B (+ optional w / ' / 2; e.g. Rw' or 3Uw2). Lowercase / slice (r, u, M, S, E) is not supported.`, 'bad');
+            return;
+        }
+        const tokens = parsed;
+        if (tokens.length === 0) {
+            setBanner('No moves found in the input.', 'bad');
+            return;
+        }
+
+        // Auto-detect cube size from notation.  Switch sizes if needed
+        // BEFORE applying the scramble so the moves go through the
+        // correct adapter (and the cube net + 3D scene rebuild for the
+        // new size).
+        const inferredSize = inferSizeFromScramble(tokens);
+        if (inferredSize && inferredSize !== size) {
+            // Don't auto-downgrade.  If the user is on 5×5 and pastes
+            // a 4×4 scramble, the 4×4 scramble plays fine on 5×5 too
+            // (only outer + Uw moves).  Only upgrade.
+            if (inferredSize > size) {
+                setBanner(`Auto-selected ${inferredSize}×${inferredSize} (the smallest cube that supports "${tokens.find(t => /3|w/.test(t)) || tokens[0]}").`, 'info');
+                setSize(inferredSize);
+            }
+        }
+        // Re-check size-specific constraints AFTER any auto-switch.
+        if (size === 3) {
+            const wide = tokens.find(t => t.includes('w'));
+            if (wide) {
+                if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
+                setBanner(`Wide turn "${wide}" needs 4×4 or larger. Switch size or remove it.`, 'bad');
+                return;
+            }
+        }
+        if (size <= 5) {
+            const w3 = tokens.find(t => t.startsWith('3'));
+            if (w3) {
+                if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
+                setBanner(`3-layer turn "${w3}" needs 6×6 or larger. Switch size or remove it.`, 'bad');
+                return;
+            }
+        }
+
+        // Apply with animation — same pattern as the random scramble flow.
+        setStatus('Applying scramble', 'busy');
+        try {
+            state = adapter.SOLVED;
+            paintNet();
+            const ANIMATE_LIMIT = 25;     // generous; typical WCA scrambles are 20-25 moves
+            for (let i = 0; i < tokens.length; i++) {
+                state = await adapter.apply(state, [tokens[i]]);
+                if (i < ANIMATE_LIMIT) await paintWithMove(tokens[i]);
+            }
+            if (tokens.length > ANIMATE_LIMIT) paintNet();
+            originalState = state;
+            setBanner(`Applied ${tokens.length}-move scramble. Click Solve.`, 'ok');
+            setStatus(size === 3 ? 'Ready · 3×3 (browser)' : `Ready · ${size}×${size} (server)`, 'ready');
+            if (ui.scrambleInput) ui.scrambleInput.classList.remove('invalid');
+        } catch (err) {
+            if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
+            setBanner('Apply failed: ' + (err.message || err), 'bad');
+            setStatus('Idle', 'idle');
+        }
     }
 
     async function scramble() {
@@ -443,7 +647,44 @@ export function bootstrap(ctx) {
             const txt = `${stepIdx} / ${solution.moves.length}`;
             if (ui.playStep) ui.playStep.textContent = `Step ${txt}`;
             if (ui.tbStep) ui.tbStep.textContent = txt;
+            updateNotationLine();
         }
+    }
+
+    /** Update the notation-explainer line above the playback strip with
+     *  the current move's notation + plain-English description.  Helps
+     *  cubers still learning WCA notation. */
+    function updateNotationLine() {
+        if (!ui.notationLine) return;
+        if (!solution || stepIdx === 0 || stepIdx > solution.moves.length) {
+            ui.notationLine.classList.remove('active');
+            ui.notationLine.innerHTML = '';
+            return;
+        }
+        // Show the move JUST APPLIED (stepIdx-1) and its description.
+        const mv = solution.moves[stepIdx - 1];
+        ui.notationLine.classList.add('active');
+        ui.notationLine.innerHTML =
+            `Step ${stepIdx} of ${solution.moves.length} — ` +
+            `<code>${escapeHtml(mv)}</code>` +
+            `<span class="rk-notation-desc">${escapeHtml(describeMove(mv))}</span>`;
+    }
+
+    /** Plain-English description of a WCA move token.  Generic for any
+     *  cube size — the syntax is the same. */
+    function describeMove(token) {
+        const m = /^(3?)([URFDLB])(w?)(['2]?)$/.exec(token || '');
+        if (!m) return '(unknown move)';
+        const layers = m[1] === '3' ? '3 layers' : (m[3] === 'w' ? '2 layers' : '1 layer');
+        const faceName = { U: 'Up', R: 'Right', F: 'Front', D: 'Down', L: 'Left', B: 'Back' }[m[2]];
+        const dir = m[4] === "'" ? '90° counter-clockwise'
+                  : m[4] === '2' ? '180°'
+                  : '90° clockwise';
+        return `${faceName} face — ${dir}, ${layers}`;
+    }
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
     async function jumpTo(idx) {
@@ -969,6 +1210,18 @@ export function bootstrap(ctx) {
         b.addEventListener('click', () => setSize(Number(b.dataset.size)));
     }
     if (ui.scrambleBtn) ui.scrambleBtn.addEventListener('click', scramble);
+    if (ui.scrambleApply) ui.scrambleApply.addEventListener('click', () => applyScrambleString(ui.scrambleInput && ui.scrambleInput.value));
+    if (ui.scrambleInput) {
+        ui.scrambleInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                applyScrambleString(ui.scrambleInput.value);
+            }
+        });
+        ui.scrambleInput.addEventListener('input', () => {
+            ui.scrambleInput.classList.remove('invalid');
+        });
+    }
     if (ui.resetBtn)    ui.resetBtn.addEventListener('click', reset);
     if (ui.solveBtn)    ui.solveBtn.addEventListener('click', solve);
     if (ui.playPrev)    ui.playPrev.addEventListener('click', () => step(-1));

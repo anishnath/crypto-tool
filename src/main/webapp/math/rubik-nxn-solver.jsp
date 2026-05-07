@@ -307,6 +307,67 @@
         .rk-status[data-state="busy"]::before { background: #f59e0b; animation: rk-pulse 1s ease-in-out infinite; }
         @keyframes rk-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
+        /* ── Scramble input row ────────────────────────────────────── */
+        .rk-scramble-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.85rem 0 0.65rem;
+        }
+        .rk-scramble-label {
+            font: 600 0.78rem var(--ms-font-sans);
+            color: var(--ms-muted);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .rk-scramble-input {
+            flex: 1;
+            min-width: 0;
+            height: 34px;
+            padding: 0 0.7rem;
+            font: 500 0.82rem var(--ms-font-mono);
+            color: var(--ms-ink);
+            background: var(--ms-panel-bg);
+            border: 1px solid var(--ms-line);
+            border-radius: 7px;
+            transition: border-color 0.12s, box-shadow 0.12s;
+        }
+        .rk-scramble-input:focus {
+            outline: none;
+            border-color: var(--rk-tool);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+        .rk-scramble-input.invalid {
+            border-color: #dc2626;
+            background: rgba(239, 68, 68, 0.04);
+        }
+        @media (max-width: 640px) {
+            .rk-scramble-row { flex-wrap: wrap; }
+            .rk-scramble-label { flex-basis: 100%; }
+        }
+
+        /* ── Notation explainer (shown above playback strip) ──────── */
+        .rk-notation-line {
+            font: 600 0.85rem var(--ms-font-sans);
+            color: var(--ms-ink);
+            margin: 0 0 0.6rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--rk-light);
+            border-left: 3px solid var(--rk-tool);
+            border-radius: 0 var(--ms-radius-sm) var(--ms-radius-sm) 0;
+            display: none;
+        }
+        .rk-notation-line.active { display: block; }
+        .rk-notation-line code {
+            font: 700 0.95rem var(--ms-font-mono);
+            color: var(--rk-tool-dark);
+            padding: 0.05rem 0.4rem;
+            background: var(--ms-panel-bg);
+            border-radius: 4px;
+            margin: 0 0.3rem;
+        }
+        .rk-notation-line .rk-notation-desc { color: var(--ms-ink-soft); font-weight: 500; }
+
         /* ── Spinner + animated thinking dots ── */
         .rk-spinner {
             display: inline-block;
@@ -652,6 +713,20 @@
                 <span class="rk-status" id="rk-status" role="status" aria-live="polite" data-state="idle">Ready &middot; 3&times;3</span>
             </div>
 
+            <%-- Scramble / state input — accepts WCA notation OR a full
+                 sticker-state string.  Auto-detects which one and
+                 auto-switches cube size to match. --%>
+            <div class="rk-scramble-row">
+                <label for="rk-scramble-input" class="rk-scramble-label">Paste scramble or state</label>
+                <input type="text" id="rk-scramble-input" class="rk-scramble-input"
+                       placeholder="WCA notation (R U' L2 ...) or sticker state (URFDLB chars, 54/96/150/216/294 long)"
+                       autocomplete="off" spellcheck="false" />
+                <button type="button" class="rk-btn" id="rk-scramble-apply">
+                    <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 13 9 17 19 7"/></svg>
+                    Apply
+                </button>
+            </div>
+
             <p class="rk-banner rk-banner-ok" id="rk-validation" role="status" aria-live="polite">
                 Pick a cube size, scramble, then click Solve.
                 3×3 solves in your browser; 4×4 runs on the server.
@@ -732,6 +807,12 @@
             <p class="rk-moves-meta" id="rk-moves-meta"></p>
             <div class="rk-moves-breakdown" id="rk-moves-breakdown"></div>
             <div class="rk-moves-list" id="rk-moves-list"></div>
+
+            <%-- Notation explainer — shows current move + plain-English description.
+                 Becomes visible (.active) as soon as a step is played; great for
+                 cubers still learning WCA notation. --%>
+            <p class="rk-notation-line" id="rk-notation-line" aria-live="polite"></p>
+
             <div class="rk-playback-strip">
                 <button type="button" class="rk-btn"               id="rk-play-prev">&larr; Prev</button>
                 <button type="button" class="rk-btn rk-btn-primary" id="rk-play-play">&#9654; Play</button>
@@ -851,6 +932,9 @@ bootstrap({
     movesMeta:      $('rk-moves-meta'),
     movesBreakdown: $('rk-moves-breakdown'),
     movesList:      $('rk-moves-list'),
+    notationLine:   $('rk-notation-line'),
+    scrambleInput:  $('rk-scramble-input'),
+    scrambleApply:  $('rk-scramble-apply'),
     playPrev:       $('rk-play-prev'),
     playPlay:       $('rk-play-play'),
     playNext:       $('rk-play-next'),
