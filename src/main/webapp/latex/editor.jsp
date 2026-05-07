@@ -134,8 +134,14 @@
       <span class="save-indicator" id="save-indicator"></span>
     </div>
     <div class="titlebar-right">
-      <button class="nav-btn" onclick="showProjectMenu()" id="btn-project-menu" title="Projects">&#9776; Projects</button>
-      <a href="<%=ctx%>/" class="nav-btn" style="text-decoration:none">8gwifi.org</a>
+      <button class="nav-btn-primary" onclick="newProject()" id="btn-new-project" title="Start a fresh project">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New&nbsp;project
+      </button>
+      <button class="nav-btn-secondary" onclick="showProjectMenu()" id="btn-project-menu" title="Open or manage saved projects">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Projects
+      </button>
     </div>
   </div>
 

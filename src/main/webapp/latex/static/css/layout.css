@@ -214,6 +214,60 @@
 
 .latex-app .nav-btn:hover { color: var(--text); background: var(--surface2); }
 
+/* Primary CTA — "+ New Project" — high contrast so first-time users find it */
+.latex-app .nav-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(79, 70, 229, 0.25), 0 0 0 1px rgba(99, 102, 241, 0.20) inset;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.latex-app .nav-btn-primary:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35), 0 0 0 1px rgba(99, 102, 241, 0.30) inset;
+  transform: translateY(-1px);
+}
+.latex-app .nav-btn-primary:active { transform: translateY(0); filter: brightness(0.96); }
+
+/* Secondary — "Projects" — visible button, not just text */
+.latex-app .nav-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  background: var(--surface2, #1e293b);
+  border: 1px solid var(--border, #334155);
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.latex-app .nav-btn-secondary:hover {
+  background: var(--surface3, #334155);
+  border-color: var(--accent, #6366f1);
+}
+[data-theme="light"] .latex-app .nav-btn-secondary {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #1e293b;
+}
+[data-theme="light"] .latex-app .nav-btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #6366f1;
+}
+
 /* ── MAIN LAYOUT ── */
 .latex-app .main {
   display: flex;

@@ -525,6 +525,8 @@ function onCompileError(data) {
 // ── File upload with validation and figure insertion ──
 var ALLOWED_EXTENSIONS = /\.(png|jpg|jpeg|gif|svg|eps|pdf|tex|bib|bst|cls|sty|csv|dat|txt)$/i;
 var IMAGE_EXTENSIONS = /\.(png|jpg|jpeg|gif|svg|eps|pdf)$/i;
+// Text-like extensions the user can edit in the CodeMirror pane
+var EDITABLE_TEXT_EXTENSIONS = /\.(tex|csv|tsv|dat|txt|bib|bst|cls|sty|md|json|yaml|yml|toml|pgf|tikz|sql|log|cfg|ini)$/i;
 var MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 function uploadFile(input) {
@@ -928,8 +930,8 @@ function selectFile(el) {
   // Image file — don't select, don't insert on click (use + button or context menu)
   if (IMAGE_EXTENSIONS.test(filename)) return;
 
-  // Non-tex, non-image files (bib, cls, etc.) — no content to edit
-  if (!/\.tex$/i.test(filename) && filename !== 'main.tex') return;
+  // Only open text-editable files in the editor (tex, csv, bib, etc.)
+  if (filename !== 'main.tex' && !EDITABLE_TEXT_EXTENSIONS.test(filename)) return;
 
   var items = document.querySelectorAll('.file-item');
   for (var i = 0; i < items.length; i++) items[i].classList.remove('active');
@@ -1065,8 +1067,11 @@ function newFile() {
   if (/[\/\\:*?"<>|]/.test(name)) { showErrorToast('Invalid filename'); return; }
   // Initialize with empty content so it's editable
   addFileToTree(name, false, '');
-  // Open it immediately
-  if (/\.tex$/i.test(name)) openFileInEditor(name);
+  // Open any text-editable file in the editor immediately so the user
+  // can paste/type content (covers .tex, .csv, .bib, .dat, .txt, etc.)
+  if (EDITABLE_TEXT_EXTENSIONS.test(name) || /\.tex$/i.test(name)) {
+    openFileInEditor(name);
+  }
 }
 
 function formatFileSize(bytes) {
