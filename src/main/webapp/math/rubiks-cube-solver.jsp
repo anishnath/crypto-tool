@@ -496,27 +496,16 @@
             <%@ include file="../modern/ads/ad-in-content-mid.jsp" %>
         </div>
 
-        <!-- Below-fold: explainer + FAQ -->
+        <!-- Below-fold: cubing guide + FAQ -->
         <section class="rk-card" style="margin-top:1.25rem;">
-            <h2 class="ms-section-title">How the solver works</h2>
-            <p style="font:0.95rem/1.65 var(--ms-font-sans); color:var(--ms-ink-soft); margin:0 0 0.85rem;">
-                The image parser auto-crops the unfolded net, samples a small patch at the
-                geometric center of each of the 54 stickers, and classifies them in CIE
-                <strong>Lab</strong> color space against the six center stickers. The center
-                calibration uses brute-force optimal 6-way assignment over all 720
-                permutations &mdash; robust to palette drift (e.g. Ruwix's yellow-shifted orange).
+            <h2 class="ms-section-title">Cubing guide &mdash; notation, algorithms &amp; solving</h2>
+            <p style="font:0.95rem/1.5 var(--ms-font-sans); color:var(--ms-ink-soft); margin:0 0 0.85rem;">
+                A visual, click-to-play reference. Open any tab below for notation, beginner method,
+                speedcubing (CFOP), big-cube reduction + parity, the algorithm library, or the cubing glossary.
+                Every move has a &#9654; button that animates on the live cube on the right.
+                Prefer a dedicated page? <a href="<%=request.getContextPath()%>/math/cubing-guide.jsp" style="color:var(--rk-tool);">Open the standalone guide &rarr;</a>
             </p>
-            <p style="font:0.95rem/1.65 var(--ms-font-sans); color:var(--ms-ink-soft); margin:0 0 0.85rem;">
-                The solver is <strong>cubejs</strong>, a JavaScript port of Herbert
-                Kociemba's <em>two-phase algorithm</em>. Phase 1 reaches the G1 subgroup
-                (edges oriented, U/D-slice edges in place) using all 18 face turns; phase 2
-                solves the rest using only U, D, R<sub>2</sub>, L<sub>2</sub>, F<sub>2</sub>,
-                B<sub>2</sub>. Pruning tables make each phase efficient. After a one-time
-                ~3-second initialisation, every solve completes in under 50 milliseconds and
-                returns 20-22 moves typically. <strong>God's Number</strong> for the 3×3
-                cube is 20 (Rokicki et al., 2010) &mdash; every solvable state is reachable
-                from solved in 20 face turns or fewer.
-            </p>
+            <jsp:include page="components/cubing-guide-body.jsp" />
         </section>
 
         <section class="rk-card" style="margin-top:1.25rem;">
