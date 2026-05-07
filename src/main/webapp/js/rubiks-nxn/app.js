@@ -63,6 +63,17 @@ import {
 } from '../rubiks7/moves.js';
 import { mountCubeNet as mountNet7 } from '../rubiks7/cube-net.js';
 
+// 8×8
+import {
+    SOLVED_STATE as SOLVED_8,
+    FACES as FACES_8,
+} from '../rubiks8/cube.js';
+import {
+    applyMoves as apply8sync,
+    ALL_MOVES as ALL_MOVES_8,
+} from '../rubiks8/moves.js';
+import { mountCubeNet as mountNet8 } from '../rubiks8/cube-net.js';
+
 // Generic 3D + image parser
 import { mountCubeNxN } from './cube-3d-nxn.js';
 import { loadImageToBuffer, parseNet } from './parser.js';
@@ -201,6 +212,14 @@ const sizeAdapters = {
         random:   async () => apply7sync(SOLVED_7, buildRandomMoves(ALL_MOVES_7, 8)),
         randomMoves: () => buildRandomMoves(ALL_MOVES_7, 8),
         mount:    mountNet7,
+    },
+    8: {
+        SOLVED:   SOLVED_8,
+        validate: (s) => validateRelaxed(s, FACES_8, 64),
+        apply:    async (state, moves) => apply8sync(state, moves),
+        random:   async () => apply8sync(SOLVED_8, buildRandomMoves(ALL_MOVES_8, 8)),
+        randomMoves: () => buildRandomMoves(ALL_MOVES_8, 8),
+        mount:    mountNet8,
     },
 };
 
