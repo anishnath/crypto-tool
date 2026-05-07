@@ -235,31 +235,7 @@ main() {
         log_info "Step 1: Skipping build (--skip-build flag set)"
     fi
 
-    # Step 1b: Cube lookup tables (idempotent — only downloads missing files).
-    # Done BEFORE Tomcat shutdown so any network issues don't extend
-    # downtime.  Default behaviour: skip if all files already cached.
-    if [ "$SKIP_TABLES" = true ]; then
-        log_info "Step 1b: Skipping cube-table download (--skip-tables flag set)"
-    elif [ ! -f "$CUBE_TABLE_DOWNLOADER" ]; then
-        log_warn "Step 1b: cube-table downloader not found at $CUBE_TABLE_DOWNLOADER"
-        log_warn "         Tables will be lazy-downloaded on first solve request."
-    else
-        log_info "Step 1b: Ensuring cube solver lookup tables are present..."
-        log_info "         Cache dir: $CUBE_TABLE_CACHE_DIR"
-        chmod +x "$CUBE_TABLE_DOWNLOADER" 2>/dev/null || true
-        DOWNLOADER_FLAGS="--cache-dir $CUBE_TABLE_CACHE_DIR"
-        if [ "$FORCE_TABLES" = true ]; then
-            DOWNLOADER_FLAGS="$DOWNLOADER_FLAGS --force"
-            log_info "         --force-tables set: re-downloading all tables"
-        fi
-        if "$CUBE_TABLE_DOWNLOADER" $DOWNLOADER_FLAGS; then
-            log_info "Cube lookup tables ready."
-        else
-            log_warn "Cube-table download had failures (exit $?). Solver may still"
-            log_warn "work for sizes whose tables succeeded; missing tables will"
-            log_warn "be lazy-downloaded by the JVM on first request (or fail)."
-        fi
-    fi
+
 
     # Step 2: Check prerequisites
     log_info "Step 2: Checking prerequisites..."
