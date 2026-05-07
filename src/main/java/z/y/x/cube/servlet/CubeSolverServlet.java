@@ -103,9 +103,11 @@ public class CubeSolverServlet extends HttpServlet {
             + (getApiKey().isEmpty() ? " (no API key set)" : " (API key configured)"));
     }
 
-    /** Cube sizes the upstream solver supports.  Stickers per face = N². */
+    /** Cube sizes the upstream solver supports.  Stickers per face = N².
+     *  8×8 is forwarded but not all upstream builds handle it — if not,
+     *  the upstream returns an error and the client surfaces it. */
     private static final int MIN_SIZE = 3;
-    private static final int MAX_SIZE = 7;
+    private static final int MAX_SIZE = 8;
 
     private static int parseSize(String raw) {
         if (raw == null) return 4;
@@ -146,7 +148,7 @@ public class CubeSolverServlet extends HttpServlet {
                     if (!v.ok) { sendError(resp, 400, v.reason); return; }
                     result = Cube444Moves.applyMoves(state, moves);
                 } else {
-                    // Sizes 3, 6, 7 — no Java move tables shipped.  Clients
+                    // Sizes 3, 6, 7, 8 — no Java move tables shipped.  Clients
                     // apply moves locally (rubiks{N}/moves.js or cubejs for 3×3).
                     sendError(resp, 400,
                         "size=" + n + " apply not supported server-side; apply moves client-side");
