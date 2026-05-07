@@ -500,6 +500,34 @@
             letter-spacing: 0.02em;
         }
         #rk-tb-step { margin-left: 0.35rem; }
+        .rk-help-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--rk-tool);
+            font: 600 0.78rem var(--ms-font-sans);
+            text-decoration: none;
+            padding: 0.3rem 0.55rem;
+            border: 1px solid transparent;
+            border-radius: 5px;
+        }
+        .rk-help-link:hover {
+            background: var(--rk-light);
+            border-color: var(--rk-tool);
+        }
+        .rk-help-link .rk-ic { width: 14px; height: 14px; }
+        .rk-tb-speed {
+            margin-left: 0.35rem;
+            height: 26px;
+            padding: 0 0.4rem;
+            font: 600 0.72rem var(--ms-font-mono);
+            color: var(--ms-text);
+            background: var(--ms-surface);
+            border: 1px solid var(--ms-line);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .rk-tb-speed:focus { outline: 2px solid var(--ms-accent); outline-offset: 1px; }
 
         /* ── Twist panel (collapsible, tiny when closed) ── */
         .rk-twist-card {
@@ -708,6 +736,13 @@
                             <span class="rk-label">Next</span>
                         </button>
                         <span class="rk-play-step" id="rk-tb-step">0 / 0</span>
+                        <select id="rk-tb-speed" class="rk-tb-speed" title="Animation speed" aria-label="Animation speed">
+                            <option value="0.5">0.5&times;</option>
+                            <option value="1" selected>1&times;</option>
+                            <option value="2">2&times;</option>
+                            <option value="3">3&times;</option>
+                            <option value="5">5&times;</option>
+                        </select>
                     </div>
                 </div>
                 <span class="rk-status" id="rk-status" role="status" aria-live="polite" data-state="idle">Ready &middot; 3&times;3</span>
@@ -725,6 +760,10 @@
                     <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 13 9 17 19 7"/></svg>
                     Apply
                 </button>
+                <a href="<%=request.getContextPath()%>/math/cubing-guide.jsp" class="rk-help-link" target="_blank" rel="noopener" title="Open notation guide in a new tab">
+                    <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    Notation guide
+                </a>
             </div>
 
             <p class="rk-banner rk-banner-ok" id="rk-validation" role="status" aria-live="polite">
@@ -945,6 +984,7 @@ bootstrap({
     tbPlayLabel:    $('rk-tb-play-label'),
     tbNext:         $('rk-tb-next'),
     tbStep:         $('rk-tb-step'),
+    tbSpeed:        $('rk-tb-speed'),
     recordBtn:      $('rk-record-btn'),
     recordStatus:   $('rk-record-status'),
 });

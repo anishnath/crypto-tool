@@ -11,6 +11,13 @@
  */
 
 import { FACE_INDEX_OFFSETS, TOTAL_STICKERS, FACES } from './cube.js';
+import { buildMoveSet } from '../rubiks-nxn/moves-builder.js';
+
+// Generic engine fallback for digit-prefix wide ("2Rw"), single inner-
+// slice ("2R", "3R"), and cube rotations ("x"/"y"/"z") — anything the
+// legacy regex rejects.  Verified to match this file's hand-rolled
+// tables for every notation already supported.
+const _builderSet = buildMoveSet(5);
 
 const FACE_NAMES = { U: 'Up', D: 'Down', L: 'Left', R: 'Right', F: 'Front', B: 'Back' };
 
@@ -176,8 +183,9 @@ add('B', CW_B_OUTER, CW_B_WIDE);
 
 export function permFor(move) {
     const p = PERMS[typeof move === 'string' ? move : move.raw];
-    if (!p) return null;
-    return p;
+    if (p) return p;
+    // Fallback to the generic engine for "2Rw", "3R", "x", etc.
+    return typeof move === 'string' ? _builderSet.permFor(move) : null;
 }
 
 export function applyMove(state, move) {

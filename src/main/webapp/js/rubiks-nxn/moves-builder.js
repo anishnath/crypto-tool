@@ -92,6 +92,17 @@ function applyFaceCwInPlace(perm, faceOff, N) {
     }
 }
 
+/** CCW face rotation (inverse of CW): dst = (r, c) ← src = (c, N-1-r). */
+function applyFaceCcwInPlace(perm, faceOff, N) {
+    for (let r = 0; r < N; r++) {
+        for (let c = 0; c < N; c++) {
+            const dst = faceOff + r * N + c;
+            const src = faceOff + c * N + (N - 1 - r);
+            perm[dst] = src;
+        }
+    }
+}
+
 /** Apply one ring cycle in place: shift each segment forward by one. */
 function applyRingInPlace(perm, ring) {
     const len = ring.length;
@@ -140,6 +151,32 @@ export function buildMoveSet(N) {
         return p;
     }
 
+    /** Single inner-slice CW perm: rotates ONLY layer `layerIdx` (0 = outer)
+     *  around `face`'s axis, leaving the face stickers themselves untouched
+     *  (the face only spins for the outer layer turn). */
+    function buildSliceCwPerm(face, layerIdx) {
+        const p = identityPerm(TOTAL_STICKERS);
+        // No applyFaceCwInPlace — inner slices don't rotate the outer face.
+        applyRingInPlace(p, ringIndicesForFace(face, layerIdx, N, FACE_OFFSETS));
+        return p;
+    }
+
+    /** Whole-cube rotation around `face`'s axis (x = R-axis, y = U-axis,
+     *  z = F-axis), CW from `face`'s outside view.  Equivalent to spinning
+     *  ALL N layers in the face direction, plus rotating the opposite
+     *  face's stickers CCW (so its in-plane orientation matches the new
+     *  global frame). */
+    function buildCubeRotationCw(face) {
+        const opp = { U: 'D', D: 'U', R: 'L', L: 'R', F: 'B', B: 'F' }[face];
+        const p = identityPerm(TOTAL_STICKERS);
+        applyFaceCwInPlace(p,  FACE_OFFSETS[face], N);
+        applyFaceCcwInPlace(p, FACE_OFFSETS[opp],  N);
+        for (let k = 0; k < N; k++) {
+            applyRingInPlace(p, ringIndicesForFace(face, k, N, FACE_OFFSETS));
+        }
+        return p;
+    }
+
     const PERMS = {};
     for (const f of FACES) {
         const cwOuter = buildCwPerm(f, 1);                    // single layer
@@ -151,16 +188,66 @@ export function buildMoveSet(N) {
         PERMS[f + "w'"]  = compose(compose(cwWide, cwWide, TOTAL_STICKERS), cwWide, TOTAL_STICKERS);
         PERMS[f + 'w2']  = compose(cwWide, cwWide, TOTAL_STICKERS);
     }
-    // 3-layer wide moves (3Uw, 3Rw, etc.) — only meaningful for N≥6
-    // (on N=4/5 there aren't 3 layers to rotate before hitting the
-    // opposite face).  Notation matches the cuber convention.
-    if (N >= 6) {
-        for (const f of FACES) {
-            const cw3 = buildCwPerm(f, 3);
-            PERMS['3' + f + 'w']   = cw3;
-            PERMS['3' + f + "w'"]  = compose(compose(cw3, cw3, TOTAL_STICKERS), cw3, TOTAL_STICKERS);
-            PERMS['3' + f + 'w2']  = compose(cw3, cw3, TOTAL_STICKERS);
+    // Multi-layer wide moves (nFw / nRw / …) for n in 3..N-1, per WCA
+    // Article 12a.  n=2 is identical to plain "Fw" (already generated
+    // above); we also alias "2Fw" to the same perm for explicit-prefix
+    // notation that some scramble generators emit.
+    for (const f of FACES) {
+        for (let n = 2; n <= N - 1; n++) {
+            const cw = buildCwPerm(f, n);
+            PERMS[`${n}${f}w`]   = cw;
+            PERMS[`${n}${f}w'`]  = compose(compose(cw, cw, TOTAL_STICKERS), cw, TOTAL_STICKERS);
+            PERMS[`${n}${f}w2`]  = compose(cw, cw, TOTAL_STICKERS);
         }
+    }
+
+    // Inner-slice (single-layer) notation: nF rotates ONLY the n-th layer
+    // from face F (1-indexed; n=1 == outer F, redundant with F).  Generated
+    // for n = 2 .. ceil(N/2) so each axis-aligned inner layer has at least
+    // one canonical name.  On odd N's the middle layer is reachable from
+    // either side (e.g. 3R == 3L' on N=5); we generate both.
+    //   This is SiGN notation, not strictly WCA — included for cuber
+    //   compatibility (and for our own drag-to-turn output).
+    const maxInnerN = Math.ceil(N / 2);
+    for (let n = 2; n <= maxInnerN; n++) {
+        for (const f of FACES) {
+            const cw = buildSliceCwPerm(f, n - 1);  // layerIdx is 0-based
+            PERMS[`${n}${f}`]   = cw;
+            PERMS[`${n}${f}'`]  = compose(compose(cw, cw, TOTAL_STICKERS), cw, TOTAL_STICKERS);
+            PERMS[`${n}${f}2`]  = compose(cw, cw, TOTAL_STICKERS);
+        }
+    }
+
+    // Lowercase wide aliases (u/r/f/d/l/b → Uw/Rw/…) per WCA Article
+    // 12a — common in algorithms and what cubejs accepts natively.
+    for (const f of FACES) {
+        const lf = f.toLowerCase();
+        PERMS[lf]         = PERMS[f + 'w'];
+        PERMS[lf + "'"]   = PERMS[f + "w'"];
+        PERMS[lf + '2']   = PERMS[f + 'w2'];
+    }
+
+    // 3×3 middle slices (M, E, S) — only meaningful for N=3 where there
+    // is a single unambiguous middle layer.  By convention M follows L
+    // (CW from L-view), E follows D, S follows F.
+    if (N === 3) {
+        const buildMid = (face) => buildSliceCwPerm(face, 1);
+        const cubeOf = (cw) => compose(compose(cw, cw, TOTAL_STICKERS), cw, TOTAL_STICKERS);
+        const sqOf   = (cw) => compose(cw, cw, TOTAL_STICKERS);
+        const M = buildMid('L'),  E = buildMid('D'),  S = buildMid('F');
+        PERMS['M']  = M;  PERMS["M'"] = cubeOf(M);  PERMS['M2'] = sqOf(M);
+        PERMS['E']  = E;  PERMS["E'"] = cubeOf(E);  PERMS['E2'] = sqOf(E);
+        PERMS['S']  = S;  PERMS["S'"] = cubeOf(S);  PERMS['S2'] = sqOf(S);
+    }
+
+    // Whole-cube rotations: x (around R), y (around U), z (around F).
+    // Per WCA Article 12a4 — direction matches the namesake face turn.
+    const ROT_AXIS = { x: 'R', y: 'U', z: 'F' };
+    for (const [letter, face] of Object.entries(ROT_AXIS)) {
+        const cw = buildCubeRotationCw(face);
+        PERMS[letter]        = cw;
+        PERMS[`${letter}'`]  = compose(compose(cw, cw, TOTAL_STICKERS), cw, TOTAL_STICKERS);
+        PERMS[`${letter}2`]  = compose(cw, cw, TOTAL_STICKERS);
     }
 
     const ALL_MOVES = [];
@@ -169,9 +256,16 @@ export function buildMoveSet(N) {
             for (const s of ['', "'", '2']) ALL_MOVES.push(f + w + s);
         }
     }
-    if (N >= 6) {
+    // 3-layer-and-deeper wide moves (n=3..N-1) — kept out of ALL_MOVES
+    // for n=2 (== plain "Fw"; already in the list).
+    for (let n = 3; n <= N - 1; n++) {
         for (const f of FACES) {
-            for (const s of ['', "'", '2']) ALL_MOVES.push('3' + f + 'w' + s);
+            for (const s of ['', "'", '2']) ALL_MOVES.push(`${n}${f}w${s}`);
+        }
+    }
+    for (let n = 2; n <= maxInnerN; n++) {
+        for (const f of FACES) {
+            for (const s of ['', "'", '2']) ALL_MOVES.push(`${n}${f}${s}`);
         }
     }
 

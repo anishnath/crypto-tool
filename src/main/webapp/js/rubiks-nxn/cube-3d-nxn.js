@@ -181,23 +181,173 @@ export async function mountCubeNxN(host, N, initialState) {
         }
         return out;
     }
-    function sliceForMove(face, wide) {
+    function sliceForMove(face, wide, prefix) {
         // Returns {axis, lo, hi} describing the cubies that rotate.
-        const layers = wide ? 2 : 1;
-        // outer layer is at ±off; wide adds the next inner layer at ±(off-1)
-        switch (face) {
-            case 'U': return { axis: 'y', lo:  off - (layers - 1), hi:  off };
-            case 'D': return { axis: 'y', lo: -off,                hi: -off + (layers - 1) };
-            case 'R': return { axis: 'x', lo:  off - (layers - 1), hi:  off };
-            case 'L': return { axis: 'x', lo: -off,                hi: -off + (layers - 1) };
-            case 'F': return { axis: 'z', lo:  off - (layers - 1), hi:  off };
-            case 'B': return { axis: 'z', lo: -off,                hi: -off + (layers - 1) };
+        // `prefix` is the "n" in "nR" / "nRw" notation (string or "").
+        // Middle slices (3×3 only — there's only one "middle" then).
+        if (face === 'M') return { axis: 'x', lo: 0, hi: 0 };
+        if (face === 'E') return { axis: 'y', lo: 0, hi: 0 };
+        if (face === 'S') return { axis: 'z', lo: 0, hi: 0 };
+        // Whole-cube rotations: every cubie rotates.
+        if (face === 'x') return { axis: 'x', lo: -off, hi: off };
+        if (face === 'y') return { axis: 'y', lo: -off, hi: off };
+        if (face === 'z') return { axis: 'z', lo: -off, hi: off };
+
+        const axis = (face === 'U' || face === 'D') ? 'y'
+                   : (face === 'R' || face === 'L') ? 'x' : 'z';
+        const positive = (face === 'U' || face === 'R' || face === 'F');
+        // Default counts: wide-w/o-prefix = 2 layers, non-wide = 1 layer.
+        const n = prefix ? parseInt(prefix, 10) : (wide ? 2 : 1);
+
+        if (wide) {
+            // Outer + n-1 layers inward (n total layers).
+            return positive
+                ? { axis, lo: off - (n - 1), hi: off }
+                : { axis, lo: -off,          hi: -off + (n - 1) };
         }
+        // Single-layer turn: only layer n-1 (0-indexed from `face`).
+        const v = positive ? (off - (n - 1)) : (-off + (n - 1));
+        return { axis, lo: v, hi: v };
     }
     function rotationSign(face) {
         // CW from outside the face = negative rotation around that face's
-        // outward-axis (right-hand rule).
-        return (face === 'U' || face === 'R' || face === 'F') ? -1 : 1;
+        // outward-axis (right-hand rule).  Conventions:
+        //   M follows L (+),  E follows D (+),  S follows F (−).
+        //   x/y/z follow R/U/F respectively (cube rotations).
+        return (face === 'U' || face === 'R' || face === 'F' || face === 'S'
+             || face === 'x' || face === 'y' || face === 'z') ? -1 : 1;
+    }
+
+    // ── highlight the moving slice ────────────────────────────────
+    // During a face turn, darken the non-moving cubies AND brighten
+    // the moving slice so the user's eye is drawn to exactly which
+    // layer is rotating.  Especially useful during solution playback
+    // so cubers can follow along with WCA notation they aren't fluent
+    // in yet.  We modulate `color` (multiplicative darken) and
+    // `emissive` (additive brighten) on each material — both are
+    // dynamic uniforms so no shader recompile is needed.
+    const DIM_FACTOR = 0.25;          // multiply non-slice colors by this
+    const HIGHLIGHT_EMISSIVE = 0x222222;
+    function snapshotMaterials() {
+        // Cache the original color of every face slot so we can restore.
+        // Lazy: only run once, on first highlight.
+        if (snapshotMaterials.done) return;
+        for (const c of cubies.values()) {
+            c._origColors = c.materials.map(m => m.color.getHex());
+        }
+        snapshotMaterials.done = true;
+    }
+    function setSliceHighlight(sliceArr) {
+        snapshotMaterials();
+        const inSlice = new Set(sliceArr);
+        for (const c of cubies.values()) {
+            // Re-snapshot on every highlight in case stickers were edited
+            // between turns (edit mode + manual paint).
+            c._origColors = c.materials.map(m => m.color.getHex());
+            const keep = inSlice.has(c);
+            for (let i = 0; i < c.materials.length; i++) {
+                const m = c.materials[i];
+                if (keep) {
+                    m.emissive.setHex(HIGHLIGHT_EMISSIVE);
+                } else {
+                    m.color.multiplyScalar(DIM_FACTOR);
+                    m.emissive.setHex(0x000000);
+                }
+            }
+        }
+    }
+    function clearHighlight() {
+        for (const c of cubies.values()) {
+            if (!c._origColors) continue;
+            for (let i = 0; i < c.materials.length; i++) {
+                c.materials[i].color.setHex(c._origColors[i]);
+                c.materials[i].emissive.setHex(0x000000);
+            }
+        }
+    }
+
+    // ── directional arrow for the upcoming face turn ──────────────
+    // A curved arrow (TorusGeometry partial arc + ConeGeometry head)
+    // floats just outside the moving face, showing direction at a
+    // glance.  Critical for accessibility (color-blind users can't
+    // rely on the dim/bright contrast alone).
+    const FACE_NORMALS = {
+        U: new THREE.Vector3(0,  1, 0),  D: new THREE.Vector3(0, -1, 0),
+        R: new THREE.Vector3(1,  0, 0),  L: new THREE.Vector3(-1, 0, 0),
+        F: new THREE.Vector3(0,  0, 1),  B: new THREE.Vector3(0,  0, -1),
+    };
+    const FACE_POSITIVE = { U: true, R: true, F: true, D: false, L: false, B: false };
+
+    function buildMoveArrow(face, turns) {
+        const ARROW_COLOR = 0xfff200;             // bright yellow, high-contrast
+        const radius = N * 0.30;
+        const tube = 0.05 * Math.max(1, N / 3);
+        const arc = (turns === 2 ? 1.2 : 0.7) * Math.PI;
+        const mat = new THREE.MeshBasicMaterial({
+            color: ARROW_COLOR, depthTest: false, transparent: true, opacity: 0.95,
+        });
+
+        const torusGeom = new THREE.TorusGeometry(radius, tube, 8, 48, arc);
+        const torus = new THREE.Mesh(torusGeom, mat);
+
+        // Arrowhead at the end of the arc.  Torus default sweeps CCW
+        // around its local +Z, starting at local +X.
+        const headLen = 0.40 * Math.max(1, N / 3);
+        const head = new THREE.Mesh(
+            new THREE.ConeGeometry(tube * 2.6, headLen, 14), mat);
+        const endX = radius * Math.cos(arc);
+        const endY = radius * Math.sin(arc);
+        head.position.set(endX, endY, 0);
+        // Cone default points +Y; we want it tangent to the arc at the
+        // end point.  Tangent direction at angle θ on a CCW circle is
+        // (−sin θ, cos θ, 0).  So rotate cone around local Z by `arc`.
+        head.rotation.z = arc;
+
+        const arrow = new THREE.Group();
+        arrow.add(torus);
+        arrow.add(head);
+        // Render arrows ABOVE the cube, ignoring depth.
+        torus.renderOrder = 999;
+        head.renderOrder = 999;
+
+        // Orient: align local +Z to the face's outward normal, position
+        // just outside the face.
+        const normal = FACE_NORMALS[face];
+        const quat = new THREE.Quaternion()
+            .setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
+        arrow.quaternion.copy(quat);
+        arrow.position.copy(normal).multiplyScalar(off + 0.55);
+
+        // Mirror the arc direction when it would otherwise point the
+        // wrong way.  Default torus arc sweeps CCW around local +Z.
+        // After orientation, that's CCW around the face's outward
+        // normal, which corresponds to the *prime* direction on
+        // positive-axis faces (U/R/F) and *non-prime* on negative-axis
+        // faces (D/L/B).  We want the arrow to point in the actual
+        // turn direction — flip when needed by negating local X.
+        const isPrime = turns < 0;
+        const positive = FACE_POSITIVE[face];
+        // Default arc direction matches: (positive face && isPrime) ||
+        // (!positive && !isPrime).  Flip in the opposite cases.
+        const defaultMatches = (positive && isPrime) || (!positive && !isPrime);
+        if (!defaultMatches) {
+            arrow.scale.x = -1;
+        }
+        return arrow;
+    }
+
+    function showMoveArrow(face, turns) {
+        const arrow = buildMoveArrow(face, turns);
+        scene.add(arrow);
+        return arrow;
+    }
+    function disposeArrow(arrow) {
+        if (!arrow) return;
+        scene.remove(arrow);
+        arrow.traverse((o) => {
+            if (o.geometry) o.geometry.dispose();
+            if (o.material) o.material.dispose();
+        });
     }
 
     let animating = null;   // current animation Promise (or null)
@@ -210,15 +360,16 @@ export async function mountCubeNxN(host, N, initialState) {
      */
     async function animateMove(move, newState, durationMs) {
         if (animating) await animating;     // serialise back-to-back moves
-        const m = /^([URFDLB])(w?)(['2]?)$/.exec(move || '');
+        const m = /^(\d*)([URFDLBMESxyz])(w?)(['2]?)$/.exec(move || '');
         if (!m) { setState(newState); return; }
-        const face = m[1];
-        const wide = m[2] === 'w';
-        const turns = m[3] === "'" ? -1 : m[3] === '2' ? 2 : 1;
+        const prefix = m[1];
+        const face = m[2];
+        const wide = m[3] === 'w';
+        const turns = m[4] === "'" ? -1 : m[4] === '2' ? 2 : 1;
         if (wide && N < 4) { setState(newState); return; }
 
         const dur = (durationMs == null ? 220 : durationMs) * (turns === 2 ? 1.4 : 1);
-        const { axis, lo, hi } = sliceForMove(face, wide);
+        const { axis, lo, hi } = sliceForMove(face, wide, prefix);
         const slice = cubiesInSlice(axis, lo, hi);
         if (slice.length === 0) { setState(newState); return; }
 
@@ -228,6 +379,18 @@ export async function mountCubeNxN(host, N, initialState) {
             scene.remove(c.mesh);
             group.add(c.mesh);
         }
+
+        // Whole-cube rotations (x/y/z) move every cubie, so the
+        // "dim everything else" highlight has nothing to dim and is
+        // skipped.  Same for the directional arrow — there's no
+        // single face anchor.
+        const isCubeRotation = (face === 'x' || face === 'y' || face === 'z');
+        if (!isCubeRotation) setSliceHighlight(slice);
+        // Skip the arrow for middle/inner slices and cube rotations.
+        const isInnerSlice = (face === 'M' || face === 'E' || face === 'S')
+            || (prefix && parseInt(prefix, 10) >= 2 && !wide);
+        const arrow = (isInnerSlice || isCubeRotation)
+            ? null : showMoveArrow(face, turns);
 
         const targetAngle = rotationSign(face) * turns * (Math.PI / 2);
 
@@ -247,6 +410,8 @@ export async function mountCubeNxN(host, N, initialState) {
                     scene.add(c.mesh);
                 }
                 scene.remove(group);
+                clearHighlight();
+                disposeArrow(arrow);
                 if (newState != null) setState(newState);
                 animating = null;
                 resolve();
@@ -306,9 +471,26 @@ export async function mountCubeNxN(host, N, initialState) {
     function layerToFaceChar(cubieXYZ, axisLetter) {
         const v = axisLetter === 'x' ? cubieXYZ.x
                  : axisLetter === 'y' ? cubieXYZ.y : cubieXYZ.z;
-        if (Math.abs(v - off) < EPS)  return axisLetter === 'x' ? 'R' : axisLetter === 'y' ? 'U' : 'F';
-        if (Math.abs(v + off) < EPS)  return axisLetter === 'x' ? 'L' : axisLetter === 'y' ? 'D' : 'B';
-        return null;     // middle slice — no outer face turn
+        const posFace = axisLetter === 'x' ? 'R' : axisLetter === 'y' ? 'U' : 'F';
+        const negFace = axisLetter === 'x' ? 'L' : axisLetter === 'y' ? 'D' : 'B';
+
+        // Layer index from each end (0 = outermost on that side).
+        const layerFromPos = Math.round(off - v);   // distance from +face
+        const layerFromNeg = Math.round(v + off);   // distance from -face
+        // Pick the closer face.  Ties (exact middle on odd N) favour the
+        // positive side by convention.
+        const useNeg = layerFromNeg < layerFromPos;
+        const face   = useNeg ? negFace : posFace;
+        const layer  = useNeg ? layerFromNeg : layerFromPos;
+
+        if (layer === 0) return face;       // outer face turn
+
+        // 3×3 middle layer → use M / E / S (more idiomatic than "2R" on a 3×3).
+        if (N === 3 && layer === 1) {
+            return axisLetter === 'x' ? 'M' : axisLetter === 'y' ? 'E' : 'S';
+        }
+        // Inner-slice notation: nF where n is 1-indexed layer count from F.
+        return `${layer + 1}${face}`;
     }
 
     function pickIntersection(clientX, clientY) {
@@ -403,7 +585,11 @@ export async function mountCubeNxN(host, N, initialState) {
         // (Each face's "CW from outside" is a -rotation around its
         // outward normal axis using right-hand rule — so we invert when
         // the rotation axis aligns with the face's normal direction.)
-        const facePositive = (faceChar === 'U' || faceChar === 'R' || faceChar === 'F');
+        // The face letter is the LAST char of `faceChar` (handles "2R",
+        // "3L", "M", etc.).  S/M/E follow F/L/D direction respectively.
+        const baseLetter = faceChar[faceChar.length - 1];
+        const facePositive = (baseLetter === 'U' || baseLetter === 'R' || baseLetter === 'F'
+                            || baseLetter === 'S');
         const axisPositive = (rotAxis.x + rotAxis.y + rotAxis.z) > 0;
         const prime = facePositive === axisPositive;       // empirically derived
         const move = prime ? faceChar + "'" : faceChar;

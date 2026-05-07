@@ -123,11 +123,38 @@ function buildRandomMoves(allMoves, n) {
     return moves;
 }
 
+// Map from our WCA notation to cubejs's accepted alphabet.  cubejs
+// (the 3×3 backend) refuses uppercase wide ("Rw") and digit-prefix
+// wide ("2Rw") — it only takes lowercase wide ("r") for those.  And
+// for SiGN single-inner-slice notation ("2R" = middle layer in R
+// direction), cubejs has no equivalent so we translate to the
+// matching M/E/S move (with sign flipped for axes whose middle slice
+// follows the opposite face's direction).
+const CUBEJS_SLICE_MAP = {
+    '2R':  "M'",  "2R'": 'M',   '2R2': 'M2',
+    '2L':  'M',   "2L'": "M'",  '2L2': 'M2',
+    '2U':  "E'",  "2U'": 'E',   '2U2': 'E2',
+    '2D':  'E',   "2D'": "E'",  '2D2': 'E2',
+    '2F':  'S',   "2F'": "S'",  '2F2': 'S2',
+    '2B':  "S'",  "2B'": 'S',   '2B2': 'S2',
+};
+function cubejsNormalize(moves) {
+    const arr = Array.isArray(moves) ? moves : [moves];
+    return arr.map(m => {
+        if (CUBEJS_SLICE_MAP[m]) return CUBEJS_SLICE_MAP[m];
+        // Strip explicit n=2 prefix on wide turns (2Rw == Rw).
+        let s = m.replace(/^2([URFDLB]w(?:['2])?)$/, '$1');
+        // Convert uppercase wide to cubejs's lowercase shorthand.
+        s = s.replace(/^([URFDLB])w/, (_, f) => f.toLowerCase());
+        return s;
+    });
+}
+
 const sizeAdapters = {
     3: {
         SOLVED:   SOLVED_3,
         validate: (s) => validateRelaxed(s, FACES_3, 9),
-        apply:    (state, moves) => apply3cubejs(state, moves),
+        apply:    (state, moves) => apply3cubejs(state, cubejsNormalize(moves)),
         random:   () => random3cubejs(),
         // Generate a scramble move list (for animated play); fallback for 3×3
         // is to compute via cubejs randomState then derive — too complex,
@@ -213,6 +240,7 @@ export function bootstrap(ctx) {
         tbPlayLabel:    ctx.tbPlayLabel,
         tbNext:         ctx.tbNext,
         tbStep:         ctx.tbStep,
+        tbSpeed:        ctx.tbSpeed,
         // GIF recording
         recordBtn:      ctx.recordBtn,
         recordStatus:   ctx.recordStatus,
@@ -327,11 +355,16 @@ export function bootstrap(ctx) {
         if (cube3d) cube3d.setState(state);
     }
 
+    // Animation speed multiplier (1× = 220 ms baseline).  Driven by the
+    // toolbar dropdown; persisted across moves until the user changes it.
+    let playSpeed = 1;
+    const BASE_DURATION_MS = 220;
+
     /** Net snap + 3D animated face-turn for a single move. */
     async function paintWithMove(move) {
         if (net) net.update({ state, highlightIndices: [] });
         if (cube3d && cube3d.animateMove) {
-            await cube3d.animateMove(move, state);
+            await cube3d.animateMove(move, state, BASE_DURATION_MS / playSpeed);
         } else if (cube3d) {
             cube3d.setState(state);
         }
@@ -395,13 +428,36 @@ export function bootstrap(ctx) {
      * Returns the recommended size, or null if no change is needed.
      */
     function inferSizeFromScramble(tokens) {
-        const has3 = tokens.some(t => t.startsWith('3'));
-        const hasWide = tokens.some(t => /[URFDLB]w/.test(t));
-        if (has3) return tokens.length > 90 ? 7 : 6;
-        if (hasWide) return tokens.length > 50 ? 5 : 4;
-        // Only outer turns — fits any cube. If the user's currently on
-        // 3×3, stay there.  If they're on a bigger cube, also stay (they
-        // might be practising a 3-style alg on a bigger cube).
+        // Per WCA Article 12a, n in nFw must satisfy 1 < n < N.  So the
+        // largest n we see places a HARD lower bound on N (N ≥ n + 1).
+        // Same logic for inner-slice nF (single-layer SiGN): the layer
+        // index n means there must be at least n layers from that face,
+        // so N ≥ 2n - 1.
+        let minN = 0;
+        for (const t of tokens) {
+            // nXw form (wide)
+            const w = /^(\d)[URFDLB]w/.exec(t);
+            if (w) {
+                const n = +w[1];
+                if (n + 1 > minN) minN = n + 1;
+                continue;
+            }
+            // nX form (single inner slice)
+            const s = /^(\d)[URFDLB]/.exec(t);
+            if (s) {
+                const n = +s[1];
+                if (2 * n - 1 > minN) minN = 2 * n - 1;
+                continue;
+            }
+            // plain Xw (default wide-2) requires N ≥ 4
+            if (/[URFDLB]w/.test(t) && minN < 4) minN = 4;
+        }
+        if (minN >= 7) return 7;
+        if (minN >= 6) return 6;
+        if (minN >= 5) return 5;
+        if (minN >= 4) return 4;
+        // Only outer turns / cube rotations — fits any cube. Stay on
+        // the user's current size.
         return null;
     }
 
@@ -411,39 +467,90 @@ export function bootstrap(ctx) {
      *   - no spaces (smushed):    "RUR'U'FRF'"
      *   - mixed:                  "Rw'D2  3Uw F2"
      *
-     * WCA notation is unambiguous greedy: each token matches
-     * {@code 3?[URFDLB]w?['2]?} where '3' requires a 'w' (3-layer wide).
-     * Single-letter slice notation (lowercase r, u, etc.) is NOT
-     * supported — rejected as invalid.
+     * WCA notation is unambiguous greedy.  Tokens accepted:
+     *   - outer/wide:    {@code [URFDLB]w?['2]?}
+     *   - 3-layer wide:  {@code 3[URFDLB]w['2]?}
+     *   - inner-slice:   {@code \d+[URFDLB]['2]?}  (e.g. 2R, 3L, 4U' — only
+     *                    valid for cubes large enough to contain that layer)
+     *   - 3×3 middle:    {@code [MES]['2]?}  (M, E, S, M', S2, …)
+     * Lowercase r/u/f slice shorthand is NOT supported.
      *
      * Returns the array of tokens, or {@code {error, atIndex}} if the
      * string can't be fully consumed.
      */
-    function tokenizeScramble(raw) {
-        // Strip common scramble-generator decorations first.
-        const clean = raw
-            .replace(/[,\[\]\(\)]/g, ' ')
-            .replace(/\b\d+\.\s*/g, ' ')
-            .replace(/\s+/g, '');               // collapse all whitespace
+    /**
+     * Self-heal a pasted scramble string before tokenizing.  Cleans up
+     * the messy reality of how scrambles get copied around the web:
+     *
+     *  - Unicode prime variants (U+2019 right-quote, U+2032 prime,
+     *    backtick, acute accent, …) → ASCII apostrophe `'`
+     *  - Various unicode dashes / non-breaking spaces (already handled
+     *    by `\s`) collapsed to plain whitespace
+     *  - Stray punctuation (commas, semicolons, periods, brackets,
+     *    quotes, ellipsis, bullets, "→", etc.) treated as separators
+     *  - Numbered list markers ("1.", "1)", "1:") stripped
+     *  - Lowercase wide shorthand: u → Uw, r → Rw, f → Fw, …
+     *  - Modifier-order normalisation: R'2 / R2' → R2 (both mean 180°)
+     *  - Double-prime cancellation: R'' → R, R''' → R', …
+     *
+     * Returns the cleaned, whitespace-stripped string ready for the
+     * greedy token regex.
+     */
+    function normalizeScrambleInput(raw) {
+        let s = raw;
+        // 1. Unicode prime / smart-quote variants → ASCII single quote.
+        s = s.replace(/[‘’‚‛′‵´`]/g, "'");
+        // 2. Unicode dashes / minus → plain ASCII hyphen (then to space).
+        s = s.replace(/[‐-―−]/g, '-');
+        // 3. Numbered list markers ("1.", "12)", "3:") → space.
+        s = s.replace(/\b\d+[\.\)\:]\s*/g, ' ');
+        // 4. Stray decorations / punctuation → space.
+        s = s.replace(/[,;\.\:·•…\[\]\(\)\{\}<>|\/\\\!@#\$%\^&\*=\+~\?"\-]/g, ' ');
+        // 5. Collapse whitespace.
+        s = s.replace(/\s+/g, ' ').trim();
+        // 6. Lowercase wide-turn shorthand → uppercase + "w" (u → Uw, rw → Rw, …).
+        s = s.replace(/([urfdlb])w?/g, (_, c) => c.toUpperCase() + 'w');
+        // 7. Reversed modifier order: R'2 or R2' → R2 (180° turns are
+        //    direction-symmetric, so both writings mean the same thing).
+        s = s.replace(/'2/g, '2').replace(/2'/g, '2');
+        // 8. Double-prime cancellation: pairs of '' cancel out.
+        s = s.replace(/''/g, '');
+        // NOTE: whitespace is intentionally preserved here so the
+        // tokenizer can use it as a token barrier — disambiguates
+        // inputs like "3Rw 2L" that would otherwise smush into
+        // "3Rw2L" and resolve greedily as "3Rw2 L" (wrong).
+        return s.trim();
+    }
 
+    function tokenizeScramble(raw) {
+        const clean = normalizeScrambleInput(raw);
         if (clean.length === 0) return { error: 'empty', atIndex: 0 };
 
-        // Token: either "3Xw" (3-layer-wide, w required) OR "X" optionally
-        // followed by "w" — then optional "'" or "2" suffix.
-        const TOKEN_RE = /3[URFDLB]w['2]?|[URFDLB]w?['2]?/g;
+        // Greedy within each whitespace-bounded chunk.  A token cannot
+        // span a space — so user-supplied spacing always wins over
+        // greedy aggregation.
+        // Token alternatives, longest-prefix first within each chunk:
+        //   nXw['2]?   any-layer wide turn (e.g. 2Rw, 3Rw2, 5Lw')
+        //   nX['2]?    single inner slice (SiGN, e.g. 2R, 3L)
+        //   Xw?['2]?   outer / default-wide (R, Rw, R2, Rw')
+        //   [MES]['2]? 3×3 middle slice
+        //   [xyz]['2]? whole-cube rotation
+        const TOKEN_RE = /\d[URFDLB]w['2]?|\d[URFDLB]['2]?|[URFDLB]w?['2]?|[MES]['2]?|[xyz]['2]?/g;
+        const chunks = clean.split(/\s+/).filter(Boolean);
         const tokens = [];
-        let cursor = 0;
-        let m;
-        while (cursor < clean.length && (m = TOKEN_RE.exec(clean)) !== null) {
-            if (m.index !== cursor) {
-                // Gap before this match → unparseable character.
-                return { error: 'unexpected character at position ' + cursor + ' ("' + clean[cursor] + '")', atIndex: cursor };
+        for (const chunk of chunks) {
+            let cursor = 0, m;
+            TOKEN_RE.lastIndex = 0;
+            while (cursor < chunk.length && (m = TOKEN_RE.exec(chunk)) !== null) {
+                if (m.index !== cursor) {
+                    return { error: `unexpected "${chunk[cursor]}" in "${chunk}"`, atIndex: cursor };
+                }
+                tokens.push(m[0]);
+                cursor = TOKEN_RE.lastIndex;
             }
-            tokens.push(m[0]);
-            cursor = TOKEN_RE.lastIndex;
-        }
-        if (cursor !== clean.length) {
-            return { error: 'unexpected character at position ' + cursor + ' ("' + clean[cursor] + '")', atIndex: cursor };
+            if (cursor !== chunk.length) {
+                return { error: `unexpected "${chunk[cursor]}" in "${chunk}"`, atIndex: cursor };
+            }
         }
         return tokens;
     }
@@ -512,7 +619,7 @@ export function bootstrap(ctx) {
         if (!Array.isArray(parsed)) {
             // Tokenizer returned an error object.
             if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
-            setBanner(`Could not parse scramble: ${parsed.error}. Use WCA notation: U R F D L B (+ optional w / ' / 2; e.g. Rw' or 3Uw2). Lowercase / slice (r, u, M, S, E) is not supported.`, 'bad');
+            setBanner(`Could not parse scramble: ${parsed.error}. Use WCA notation: U R F D L B (+ optional w / ' / 2). Examples: Rw' 3Uw2 4Rw 2L M' S2 x y' z2.`, 'bad');
             return;
         }
         const tokens = parsed;
@@ -536,19 +643,37 @@ export function bootstrap(ctx) {
             }
         }
         // Re-check size-specific constraints AFTER any auto-switch.
-        if (size === 3) {
-            const wide = tokens.find(t => t.includes('w'));
-            if (wide) {
+        // Each token is checked against the current cube size — a wide-n
+        // or inner-slice-n turn requires the cube to be deep enough.
+        for (const t of tokens) {
+            const w = /^(\d)[URFDLB]w/.exec(t);
+            if (w && +w[1] + 1 > size) {
                 if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
-                setBanner(`Wide turn "${wide}" needs 4×4 or larger. Switch size or remove it.`, 'bad');
+                setBanner(`"${t}" needs ${+w[1] + 1}×${+w[1] + 1} or larger. Switch size or remove it.`, 'bad');
                 return;
             }
-        }
-        if (size <= 5) {
-            const w3 = tokens.find(t => t.startsWith('3'));
-            if (w3) {
+            const s = /^(\d)[URFDLB]/.exec(t);
+            if (s && !w && 2 * +s[1] - 1 > size) {
                 if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
-                setBanner(`3-layer turn "${w3}" needs 6×6 or larger. Switch size or remove it.`, 'bad');
+                setBanner(`Inner slice "${t}" needs ${2 * +s[1] - 1}×${2 * +s[1] - 1} or larger. Switch size or remove it.`, 'bad');
+                return;
+            }
+            // On 3×3, n≤2 wide turns ("Rw", "2Rw") ARE valid — they're a
+            // "fat" 2-layer R turn (= cubejs's lowercase `r`).  Only reject
+            // n ≥ 3 wide turns (which would need a cube with ≥4 layers).
+            if (size === 3 && /[URFDLB]w/.test(t)) {
+                const w3 = /^(\d)[URFDLB]w/.exec(t);
+                const n = w3 ? +w3[1] : 2;
+                if (n > 2) {
+                    if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
+                    setBanner(`"${t}" (n=${n}) needs ${n + 1}×${n + 1} or larger. Switch size or remove it.`, 'bad');
+                    return;
+                }
+            }
+            if (size > 3 && /^[MES]/.test(t)) {
+                // M/E/S are 3×3-only by traditional convention.
+                if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
+                setBanner(`Middle slice "${t}" is only defined for 3×3. Use "${t.replace('M','2L').replace('E','2D').replace('S','2F')}" or switch to 3×3.`, 'bad');
                 return;
             }
         }
@@ -1230,6 +1355,10 @@ export function bootstrap(ctx) {
     if (ui.tbPrev)      ui.tbPrev.addEventListener('click', () => step(-1));
     if (ui.tbNext)      ui.tbNext.addEventListener('click', () => step(+1));
     if (ui.tbPlay)      ui.tbPlay.addEventListener('click', togglePlay);
+    if (ui.tbSpeed)     ui.tbSpeed.addEventListener('change', (e) => {
+        const v = parseFloat(e.target.value);
+        if (Number.isFinite(v) && v > 0) playSpeed = v;
+    });
 
     if (ui.uploadBtn && ui.fileInput) {
         ui.uploadBtn.addEventListener('click', () => ui.fileInput.click());

@@ -34,6 +34,14 @@
  */
 
 import { FACE_INDEX_OFFSETS, TOTAL_STICKERS, FACES } from './cube.js';
+import { buildMoveSet } from '../rubiks-nxn/moves-builder.js';
+
+// Generic engine fallback — handles digit-prefix wide turns ("2Rw"),
+// single inner-slice notation ("2R"), and whole-cube rotations
+// ("x"/"y"/"z") that the legacy parseMove regex rejects.  Verified
+// (2026-05) to produce identical states to the hand-rolled tables for
+// every notation the legacy code already supported.
+const _builderSet = buildMoveSet(4);
 
 const FACE_NAMES = {
     U: 'Up', D: 'Down', L: 'Left', R: 'Right', F: 'Front', B: 'Back',
@@ -267,10 +275,14 @@ for (const f of FACES) {
  *  centers/edges solvers to derive smaller per-stage perms. */
 export function permFor(move) {
     const m = typeof move === 'string' ? parseMove(move) : move;
-    if (!m) return null;
-    const layer = m.wide ? 'wide' : 'outer';
-    const table = m.turns === 1 ? CW : m.turns === -1 ? CCW : HALF;
-    return table[m.face][layer];
+    if (m) {
+        const layer = m.wide ? 'wide' : 'outer';
+        const table = m.turns === 1 ? CW : m.turns === -1 ? CCW : HALF;
+        return table[m.face][layer];
+    }
+    // Fallback to the generic engine for anything the legacy regex
+    // rejects: "2Rw", "3Rw2", "2R", "x", "y'", etc.
+    return typeof move === 'string' ? _builderSet.permFor(move) : null;
 }
 
 /** Apply a single move to a state string. */
