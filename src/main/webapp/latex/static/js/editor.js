@@ -71,7 +71,71 @@ var TEMPLATES = {
     '',
     '\\end{document}',
     ''
+  ].join('\n'),
+
+  andrews: [
+    '% Andrews Curves visualisation of the Fisher Iris dataset.',
+    '% iris.csv is auto-loaded into your project file tree when you pick this template.',
+    '% Compile and the curves render — three classes (setosa / versicolor / virginica)',
+    '% mapped to a single trigonometric projection.',
+    '',
+    '\\documentclass[border=10pt]{standalone}',
+    '\\usepackage{pgfplots}',
+    '\\usepackage{pgfplotstable}',
+    '\\pgfplotsset{compat=1.18}',
+    '',
+    '% Read the Iris dataset',
+    '\\pgfplotstableread[col sep=comma]{iris.csv}\\irisdata',
+    '',
+    '% Plot all rows in [#1, #2] using colour #3 — legend handled at the call site',
+    '\\newcommand{\\AndrewsCurves}[4]{%',
+    '  \\foreach \\i in {#1,...,#2} {%',
+    '    \\pgfplotstablegetelem{\\i}{sepal_length}\\of\\irisdata \\let\\sl\\pgfplotsretval',
+    '    \\pgfplotstablegetelem{\\i}{sepal_width}\\of\\irisdata  \\let\\sw\\pgfplotsretval',
+    '    \\pgfplotstablegetelem{\\i}{petal_length}\\of\\irisdata \\let\\pl\\pgfplotsretval',
+    '    \\pgfplotstablegetelem{\\i}{petal_width}\\of\\irisdata  \\let\\pw\\pgfplotsretval',
+    '    \\addplot+[no marks, #3, opacity=0.35]',
+    '      {\\sl/sqrt(2) + \\sw*sin(deg(x)) + \\pl*cos(deg(x)) + \\pw*sin(deg(2*x))};',
+    '  }',
+    '}',
+    '',
+    '\\begin{document}',
+    '\\begin{tikzpicture}',
+    '\\begin{axis}[',
+    '  width=14cm,',
+    '  height=8cm,',
+    '  domain=-pi:pi,',
+    '  samples=100,',
+    '  xlabel={$t$},',
+    '  ylabel={$f(t)$},',
+    '  xtick={-3.14159,-1.5708,0,1.5708,3.14159},',
+    '  xticklabels={$-\\pi$,$-\\pi/2$,$0$,$\\pi/2$,$\\pi$},',
+    '  grid=both,',
+    '  legend pos=outer north east,',
+    '  legend style={font=\\small}',
+    ']',
+    '',
+    '\\AndrewsCurves{0}{49}{blue}{}',
+    '\\addlegendentry{setosa}',
+    '',
+    '\\AndrewsCurves{50}{99}{red}{}',
+    '\\addlegendentry{versicolor}',
+    '',
+    '\\AndrewsCurves{100}{149}{green!60!black}{}',
+    '\\addlegendentry{virginica}',
+    '',
+    '\\end{axis}',
+    '\\end{tikzpicture}',
+    '\\end{document}',
+    ''
   ].join('\n')
+};
+
+// Some templates need companion data files preloaded into the project file
+// tree (so they compile without the user manually uploading them). Map of
+// template name -> list of filenames under /latex/static/data/.
+var TEMPLATE_COMPANION_FILES = {
+  andrews: ['iris.csv']
 };
 
 // ══════════════════════════════════════════════════════════════
@@ -889,7 +953,40 @@ function jumpToEditorLine(lineNum) {
 
 function loadTemplate(name) {
   var tmpl = TEMPLATES[name];
-  if (tmpl) setEditorContent(tmpl);
+  if (!tmpl) return;
+  setEditorContent(tmpl);
+
+  // If this template has companion data files (e.g. iris.csv for Andrews
+  // curves), fetch them from /latex/static/data/ and add to the file tree
+  // + fileContents so compile-time reupload picks them up automatically.
+  var files = TEMPLATE_COMPANION_FILES[name];
+  if (!files || !files.length) return;
+  if (!window.CONFIG || window.CONFIG.ctx == null) return;
+
+  files.forEach(function (filename) {
+    var url = window.CONFIG.ctx + '/latex/static/data/' + encodeURIComponent(filename);
+    fetch(url)
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function (content) {
+        if (typeof window.fileContents === 'object' && window.fileContents !== null) {
+          window.fileContents[filename] = content;
+        }
+        if (typeof window.addFileToTree === 'function') {
+          window.addFileToTree(filename, false, content);
+        }
+        if (typeof window.showSuccessToast === 'function') {
+          window.showSuccessToast('Loaded ' + filename + ' (' + content.length + ' bytes)');
+        }
+      })
+      .catch(function (err) {
+        if (typeof window.showWarningToast === 'function') {
+          window.showWarningToast('Could not auto-load ' + filename + ': ' + err.message + '. Upload it manually.');
+        }
+      });
+  });
 }
 
 function insertCommand(cmd) {
