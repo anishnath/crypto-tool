@@ -396,6 +396,16 @@
     boolean hasFaq6 = (faq6q != null && faq6a != null);
     boolean hasFaq7 = (faq7q != null && faq7a != null);
     boolean hasFaq8 = (faq8q != null && faq8a != null);
+
+    // Stash all FAQs on the request so sibling includes (e.g.
+    // visible-faq.jsp) can render the SAME content as visible HTML.
+    // Single source of truth — JSON-LD and visible FAQ stay in sync.
+    String[] _faqQs = { faq1q, faq2q, faq3q, faq4q, faq5q, faq6q, faq7q, faq8q };
+    String[] _faqAs = { faq1a, faq2a, faq3a, faq4a, faq5a, faq6a, faq7a, faq8a };
+    for (int _i = 0; _i < _faqQs.length; _i++) {
+        if (_faqQs[_i] != null) request.setAttribute("faq" + (_i + 1) + "q", _faqQs[_i]);
+        if (_faqAs[_i] != null) request.setAttribute("faq" + (_i + 1) + "a", _faqAs[_i]);
+    }
 %>
 <% if (hasFaq) { %>
 <script type="application/ld+json">
