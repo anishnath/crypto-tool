@@ -111,7 +111,6 @@
 <section class="latex-hero" id="latex-hero">
   <div class="latex-hero-content">
     <h1 class="latex-hero-title">Free AI LaTeX Editor with Built-in Math Solver</h1>
-    <p class="latex-hero-desc">Write, generate and compile LaTeX to PDF with AI. <strong>Solve integrals, derivatives &amp; limits inline</strong> with step-by-step working, plus <strong>chemistry rendering</strong> (Lewis / 2D / 3D), image-to-LaTeX and error fix — no signup.</p>
   </div>
   <div class="latex-hero-ad">
     <%@ include file="/modern/ads/ad-hero-banner.jsp" %>
