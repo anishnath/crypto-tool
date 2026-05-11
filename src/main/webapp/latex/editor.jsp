@@ -468,6 +468,7 @@
 <script src="<%=ctx%>/modern/js/integral-calculator-core.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/modern/js/limit-calculator-core.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/modern/js/derivative-calculator-core.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/modern/js/matrix-calculator-core.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/latex/static/js/math-insert.js?v=<%=jsV%>"></script>
 
 </body>

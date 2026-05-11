@@ -842,13 +842,31 @@ function showSelPopup(cm) {
   if (mathWrap && mathBtn && mathSep) {
     mathWrap.classList.remove('open'); // start collapsed
     if (mathDetected) {
+      // For matrix ops, show the concrete operation name (determinant /
+      // eigenvalues / …) — much more informative than a generic "matrix".
       var label = mathDetected.type === 'limit' ? 'limit' :
                   mathDetected.type === 'integral' ? 'integral' :
                   mathDetected.type === 'derivative' ? 'derivative' :
-                  mathDetected.type === 'series' ? 'series' : 'expression';
+                  mathDetected.type === 'series' ? 'series' :
+                  mathDetected.type === 'matrix'
+                    ? ((mathDetected.parsed && mathDetected.parsed.opLabel) || 'matrix')
+                    : 'expression';
       mathBtn.innerHTML = '&#931; Solve ' + label + ' <span class="sel-math-caret">&#9662;</span>';
       mathWrap.style.display = '';
       mathSep.style.display = '';
+      // Graph mode: limit/integral/derivative always render (pgfplots curve);
+      // matrix renders only when the op + matrix is 2D-visualizable (2x2,
+      // numeric, op has geometric meaning). canVisualize2D handles all that.
+      var graphBtn = selPopup.querySelector('[data-sel-action="solve-math"][data-math-mode="graph"]');
+      if (graphBtn) {
+        var canGraph = true;
+        if (mathDetected.type === 'matrix') {
+          canGraph = !!(window.MatrixCalculatorCore
+                        && window.MatrixCalculatorCore.canVisualize2D
+                        && window.MatrixCalculatorCore.canVisualize2D(mathDetected.parsed));
+        }
+        graphBtn.style.display = canGraph ? '' : 'none';
+      }
     } else {
       mathWrap.style.display = 'none';
       mathSep.style.display = 'none';

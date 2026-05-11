@@ -57,6 +57,16 @@
     return { start: m.index, end: text.length, raw: text.substring(m.index) };
   }
 
+  // Quick prefilter for a matrix expression — does the selection mention a
+  // matrix environment? Full op detection runs in MatrixCalculatorCore.
+  function findMatrix(text) {
+    if (!text) return null;
+    var re = /\\begin\{(?:pmatrix|bmatrix|matrix|vmatrix|Bmatrix|Vmatrix)\}/;
+    var m = text.match(re);
+    if (!m) return null;
+    return { start: 0, end: text.length, raw: text };
+  }
+
   function detect(selection) {
     if (!selection) return null;
     var s = selection.trim()
@@ -98,6 +108,16 @@
         return { type: 'derivative', latex: der.raw, originalSelection: selection };
       }
     }
+
+    // Matrix detection (\det A, A^{-1}, A^T, A·B, etc. — A is a \begin{…matrix…})
+    var mat = findMatrix(s);
+    if (mat) {
+      if (window.MatrixCalculatorCore && window.MatrixCalculatorCore.parseLatexMatrix) {
+        var mparsed = window.MatrixCalculatorCore.parseLatexMatrix(s);
+        if (mparsed) return { type: 'matrix', latex: s, originalSelection: selection, parsed: mparsed };
+      }
+      // No fallback — without the core we can't usefully solve a matrix op
+    }
     return null;
   }
 
@@ -129,6 +149,13 @@
     return window.DerivativeCalculatorCore.solveFromLatex(detected.latex, { withSteps: mode === 'steps' });
   }
 
+  function solveMatrix(detected, mode) {
+    if (!window.MatrixCalculatorCore || !window.MatrixCalculatorCore.solveFromLatex) {
+      return { ok: false, error: 'MatrixCalculatorCore not loaded' };
+    }
+    return window.MatrixCalculatorCore.solveFromLatex(detected.latex, { withSteps: mode === 'steps' });
+  }
+
   function appendResultInline(cm, anchorMark, detected, resultLatex) {
     var anchorPos = anchorMark ? anchorMark.find() : null;
     if (anchorMark) anchorMark.clear();
@@ -137,6 +164,32 @@
       cm.replaceRange(' = ' + resultLatex, pos, pos);
       cm.focus();
       return null;
+    }
+    // For matrix ops, display the operation name on the LHS rather than
+    // re-emitting the (potentially long) raw matrix expression.
+    var lhs;
+    if (detected.type === 'matrix' && detected.parsed) {
+      var p = detected.parsed;
+      lhs = (p.op === 'determinant')  ? '\\det(A)'
+          : (p.op === 'inverse')      ? 'A^{-1}'
+          : (p.op === 'transpose')    ? 'A^{T}'
+          : (p.op === 'trace')        ? '\\mathrm{tr}(A)'
+          : (p.op === 'rank')         ? '\\mathrm{rank}(A)'
+          : (p.op === 'rref')         ? '\\mathrm{RREF}(A)'
+          : (p.op === 'power')        ? ('A^{' + (p.n != null ? p.n : 'n') + '}')
+          : (p.op === 'eigenvalues')  ? '\\lambda'
+          : (p.op === 'eigenvectors') ? 'v'
+          : (p.op === 'charpoly')     ? 'p(\\lambda)'
+          : (p.op === 'add')          ? 'A + B'
+          : (p.op === 'subtract')     ? 'A - B'
+          : (p.op === 'multiply')     ? 'A \\cdot B'
+          :                              detected.latex;
+      var aBlock = '% A = ' + p.latexA;
+      var bBlock = p.latexB ? ('\n% B = ' + p.latexB) : '';
+      var content2 = '% Solve (' + (p.opLabel || p.op) + ')\n' +
+                     aBlock + bBlock + '\n' +
+                     '\\[ ' + lhs + ' = ' + resultLatex + ' \\]\n';
+      return window.SolutionsFile.append(cm, content2, { inputAnchor: anchorPos });
     }
     var content =
       '% Solve\n' +
@@ -166,10 +219,41 @@
     return lines.join('\n');
   }
 
-  function appendStepsBlock(cm, anchorMark, steps, methodLabel) {
+  // Matrix-friendly step formatter. Each step gets its own \[…\] display
+  // equation; we can't use align* because the matrix LaTeX itself contains
+  // `\\` row separators which would terminate align rows prematurely.
+  function buildMatrixStepsBlock(steps, methodLabel) {
+    var lines = ['', ''];
+    if (methodLabel) lines.push('\\noindent\\textbf{Solution (' + methodLabel + ')}');
+    lines.push('\\begin{enumerate}[leftmargin=*, label=\\textbf{\\arabic*.}]');
+    var n = steps.length;
+    for (var i = 0; i < n; i++) {
+      var s = steps[i];
+      var title = (s.title || '').replace(/&/g, '\\&').replace(/%/g, '\\%')
+                                 .replace(/_/g, '\\_').replace(/#/g, '\\#');
+      lines.push('  \\item \\textbf{' + title + '}');
+      // Step body as display math — matrix LaTeX with internal `\\` row
+      // separators renders correctly here.
+      lines.push('  \\[ ' + (s.latex || '') + ' \\]');
+    }
+    lines.push('\\end{enumerate}');
+    lines.push('');
+    return lines.join('\n');
+  }
+
+  function appendStepsBlock(cm, anchorMark, steps, methodLabel, type) {
     var anchorPos = anchorMark ? anchorMark.find() : null;
     if (anchorMark) anchorMark.clear();
-    var block = buildStepsBlock(steps, methodLabel);
+    // Matrix steps need a list-of-display-equations layout (see above);
+    // limits/integrals/derivatives use the align* layout.
+    var block;
+    if (type === 'matrix') {
+      // Make sure `enumitem` is in the preamble for [leftmargin=*, label=…]
+      ensurePreambleLines(cm, ['\\usepackage{enumitem}']);
+      block = buildMatrixStepsBlock(steps, methodLabel);
+    } else {
+      block = buildStepsBlock(steps, methodLabel);
+    }
     if (window.SolutionsFile && typeof window.SolutionsFile.append === 'function') {
       return window.SolutionsFile.append(cm, '% Solve with steps\n' + block,
                                          { inputAnchor: anchorPos });
@@ -416,19 +500,212 @@
     ].join('\n');
   }
 
+  // ── Matrix graph block (pgfplots geometric overlay) ──────────────────
+  //
+  // Draws the unit square (dotted gray) plus the image of it under the
+  // operation:
+  //   determinant / transpose / power → image of A applied to unit square
+  //   inverse                         → A applied (solid) + A^-1 applied (dashed)
+  //   eigenvectors                    → A applied + eigenvector arrows
+  //   multiply                        → B applied (dashed) + (AB) applied
+  //   add / subtract                  → A, B, and (A±B) overlaid
+  //
+  // Right-hand minipage shows A, B (if any), the result, and a one-line
+  // geometric caption.
+  function buildMatrixGraphBlock(parsed, result) {
+    if (!window.MatrixCalculatorCore) return null;
+    var MCC = window.MatrixCalculatorCore;
+    if (!MCC.canVisualize2D(parsed)) return null;
+
+    var fmt = function (n) {
+      if (!isFinite(n)) return '0';
+      return Math.abs(n) < 1e-9 ? '0' : (+n.toFixed(4)).toString();
+    };
+    var pathCoords = function (path) {
+      return path.map(function (p) { return '(' + fmt(p[0]) + ',' + fmt(p[1]) + ')'; }).join(' ');
+    };
+
+    var A = MCC.cellsToNumericMatrix(parsed.cellsA);
+    var B = parsed.cellsB ? MCC.cellsToNumericMatrix(parsed.cellsB) : null;
+    var op = parsed.op;
+    var sq = MCC.unitSquare();
+    var plotLines = [];
+    var legend = [];
+
+    // Unit reference shape — same on every viz.
+    plotLines.push('      \\addplot[gray, dashed, thick, fill=gray!10, fill opacity=0.35]');
+    plotLines.push('        coordinates {' + pathCoords(sq) + '};');
+    legend.push('Unit square');
+
+    if (op === 'determinant' || op === 'transpose' || op === 'eigenvectors') {
+      var Asq = MCC.transformPath(A, sq);
+      var dA = MCC.det2(A);
+      var primaryColor = (op === 'determinant' && dA < 0) ? 'red!70!black' : 'green!60!black';
+      var primaryFill  = (op === 'determinant' && dA < 0) ? 'red!30'       : 'green!40';
+      plotLines.push('      \\addplot[' + primaryColor + ', very thick, fill=' + primaryFill + ', fill opacity=0.45]');
+      plotLines.push('        coordinates {' + pathCoords(Asq) + '};');
+      legend.push('$A$ applied');
+
+      if (op === 'transpose') {
+        var At = [[A[0][0], A[1][0]], [A[0][1], A[1][1]]];
+        var Atsq = MCC.transformPath(At, sq);
+        plotLines.push('      \\addplot[cyan!60!black, very thick, dashed, fill=cyan!30, fill opacity=0.30]');
+        plotLines.push('        coordinates {' + pathCoords(Atsq) + '};');
+        legend.push('$A^{T}$ applied');
+      }
+      if (op === 'eigenvectors') {
+        var eig = MCC.eigen2(A);
+        if (eig) {
+          for (var i = 0; i < 2; i++) {
+            var v = eig.vectors[i]; var lam = eig.values[i];
+            var color = (i === 0) ? 'orange!80!black' : 'blue!70!black';
+            // Eigenvector v_i (length 1.5 for visibility)
+            plotLines.push('      \\addplot[' + color + ', ultra thick, -{Latex[length=3mm]}]');
+            plotLines.push('        coordinates {(0,0) (' + fmt(v[0]*1.5) + ',' + fmt(v[1]*1.5) + ')};');
+            legend.push('$v_{' + (i+1) + '}\\;(\\lambda=' + fmt(lam) + ')$');
+            // A v_i = λ v_i — dotted, shows it stays on the same line.
+            plotLines.push('      \\addplot[' + color + ', dotted, very thick]');
+            plotLines.push('        coordinates {(0,0) (' + fmt(v[0]*lam*1.5) + ',' + fmt(v[1]*lam*1.5) + ')};');
+            legend.push('$A v_{' + (i+1) + '}$');
+          }
+        }
+      }
+    }
+    else if (op === 'inverse') {
+      var Asq2 = MCC.transformPath(A, sq);
+      plotLines.push('      \\addplot[green!60!black, very thick, fill=green!40, fill opacity=0.40]');
+      plotLines.push('        coordinates {' + pathCoords(Asq2) + '};');
+      legend.push('$A$ applied');
+      var Ainv = MCC.inv2(A);
+      if (Ainv) {
+        var Aisq = MCC.transformPath(Ainv, sq);
+        plotLines.push('      \\addplot[red!70!black, very thick, dashed, fill=red!20, fill opacity=0.25]');
+        plotLines.push('        coordinates {' + pathCoords(Aisq) + '};');
+        legend.push('$A^{-1}$ applied');
+      }
+    }
+    else if (op === 'multiply') {
+      var Bsq = MCC.transformPath(B, sq);
+      var ABsq = MCC.transformPath(A, Bsq);
+      plotLines.push('      \\addplot[cyan!60!black, very thick, dashed, fill=cyan!30, fill opacity=0.30]');
+      plotLines.push('        coordinates {' + pathCoords(Bsq) + '};');
+      legend.push('$B$ applied');
+      plotLines.push('      \\addplot[green!60!black, very thick, fill=green!40, fill opacity=0.45]');
+      plotLines.push('        coordinates {' + pathCoords(ABsq) + '};');
+      legend.push('$(AB)$ applied');
+    }
+    else if (op === 'add' || op === 'subtract') {
+      var Asq3 = MCC.transformPath(A, sq);
+      var Bsq3 = MCC.transformPath(B, sq);
+      var Csq3 = MCC.transformPath(MCC.combine(A, B, op), sq);
+      plotLines.push('      \\addplot[green!60!black, thick, fill=green!20, fill opacity=0.25]');
+      plotLines.push('        coordinates {' + pathCoords(Asq3) + '};');
+      legend.push('$A$ applied');
+      plotLines.push('      \\addplot[cyan!60!black, thick, fill=cyan!20, fill opacity=0.25]');
+      plotLines.push('        coordinates {' + pathCoords(Bsq3) + '};');
+      legend.push('$B$ applied');
+      var sumColor = (op === 'add') ? 'violet!70!black' : 'purple!70!black';
+      var sumFill  = (op === 'add') ? 'violet!30'      : 'purple!30';
+      plotLines.push('      \\addplot[' + sumColor + ', very thick, fill=' + sumFill + ', fill opacity=0.45]');
+      plotLines.push('        coordinates {' + pathCoords(Csq3) + '};');
+      legend.push(op === 'add' ? '$(A+B)$ applied' : '$(A-B)$ applied');
+    }
+    else if (op === 'power') {
+      // Cap at 4 frames to keep the picture readable.
+      var n = Math.max(0, Math.min(Math.abs(parsed.n || 1), 4));
+      var current = sq.slice();
+      if (n === 0) {
+        plotLines.push('      \\addplot[green!60!black, very thick, fill=green!40, fill opacity=0.40]');
+        plotLines.push('        coordinates {' + pathCoords(sq) + '};');
+        legend.push('$A^{0} = I$');
+      } else {
+        for (var k = 1; k <= n; k++) {
+          current = MCC.transformPath(A, current);
+          var opacity = 0.20 + (k / n) * 0.30;
+          plotLines.push('      \\addplot[green!' + (40 + k*10) + '!black, very thick, fill=green!' + (40 + k*10) + ', fill opacity=' + opacity.toFixed(2) + ']');
+          plotLines.push('        coordinates {' + pathCoords(current) + '};');
+          legend.push('$A^{' + k + '}$ applied');
+        }
+      }
+    }
+
+    // Right minipage: matrix + result + geometric caption.
+    var caption = '';
+    var dA2 = MCC.det2(A);
+    if (op === 'determinant')      caption = 'Signed area of the parallelogram $=\\det A=' + fmt(dA2) + '$' + (dA2 < 0 ? '; negative $\\Rightarrow$ orientation reversed.' : '.');
+    else if (op === 'inverse')     caption = '$A^{-1}$ undoes $A$: applying both returns the unit square.';
+    else if (op === 'transpose')   caption = '$A$ and $A^{T}$ produce different shapes but the same (signed) area, since $\\det(A^{T})=\\det(A)$.';
+    else if (op === 'eigenvectors') caption = 'Each eigenvector $v_i$ stays on its own line under $A$; the dotted arrow shows $A v_i = \\lambda_i v_i$.';
+    else if (op === 'multiply')    caption = 'Order matters: $B$ is applied first (dashed), then $A$ on top, giving $AB$.';
+    else if (op === 'add')         caption = '$(A+B)$ acts on the unit square as the element-wise sum of $A$ and $B$.';
+    else if (op === 'subtract')    caption = '$(A-B)$ acts on the unit square as the element-wise difference of $A$ and $B$.';
+    else if (op === 'power')       caption = 'Each frame applies $A$ once more; capped at $n=' + Math.min(Math.abs(parsed.n||0), 4) + '$ for readability.';
+
+    var bMatrixLine = B
+      ? ', \\quad B = ' + parsed.latexB
+      : '';
+
+    var resultLatex = (result && result.resultLatex) ? result.resultLatex : '';
+
+    return [
+      '',
+      '',
+      '\\begin{figure}[H]',
+      '  \\centering',
+      '  \\begin{minipage}[c]{0.55\\textwidth}',
+      '    \\centering',
+      '    \\begin{tikzpicture}',
+      '      \\begin{axis}[',
+      '        width=\\linewidth, height=7cm,',
+      '        axis equal image, grid=both,',
+      '        axis lines=middle,',
+      '        xlabel={$x$}, ylabel={$y$},',
+      '        legend style={font=\\tiny, at={(0.5,-0.20)}, anchor=north, legend columns=2}',
+      '      ]'
+    ].concat(plotLines).concat([
+      '      \\legend{' + legend.map(function (s) { return s; }).join(', ') + '}',
+      '      \\end{axis}',
+      '    \\end{tikzpicture}',
+      '  \\end{minipage}\\hfill',
+      '  \\begin{minipage}[c]{0.42\\textwidth}',
+      '    \\small',
+      '    \\textbf{Matrix}\\\\',
+      '    $A = ' + parsed.latexA + bMatrixLine + '$',
+      '    \\par\\vspace{0.5em}',
+      '    \\textbf{Operation}\\\\',
+      '    ' + (parsed.opLabel || op),
+      '    \\par\\vspace{0.5em}',
+      '    \\textbf{Result}\\\\',
+      '    $\\displaystyle ' + resultLatex + '$',
+      '    \\par\\vspace{0.5em}',
+      '    \\textbf{Geometric meaning}\\\\',
+      '    ' + caption,
+      '  \\end{minipage}',
+      '  \\caption{Geometric interpretation of $' + (parsed.opLabel || op) + '$ on the unit square.}',
+      '\\end{figure}',
+      ''
+    ]).join('\n');
+  }
+
   function appendGraphBlock(cm, anchorMark, parsed, result, type) {
     // Auto-inject preamble packages into the MAIN document — they need to
     // be available when solutions.tex compiles via \input{solutions}.
-    ensurePreambleLines(cm, [
+    var preamble = [
       '\\usepackage{pgfplots}',
       '\\pgfplotsset{compat=1.18}',
       '\\usepackage{float}'
-    ]);
+    ];
+    if (type === 'matrix') {
+      // Eigenvector arrows use TikZ's `arrows.meta` library.
+      preamble.push('\\usetikzlibrary{arrows.meta}');
+    }
+    ensurePreambleLines(cm, preamble);
     var anchorPos = anchorMark ? anchorMark.find() : null;
     if (anchorMark) anchorMark.clear();
     var block;
     if (type === 'integral')        block = buildIntegralGraphBlock(parsed, result);
     else if (type === 'derivative') block = buildDerivativeGraphBlock(parsed, result);
+    else if (type === 'matrix')     block = buildMatrixGraphBlock(parsed, result);
     else                            block = buildLimitGraphBlock(parsed, result);
     if (!block) return null;
     if (window.SolutionsFile && typeof window.SolutionsFile.append === 'function') {
@@ -469,12 +746,36 @@
       var methodNote = solveResult.method ? ' [' + solveResult.method + ']' : '';
       var what = shortLabel();
       var newFile = null;
+      // Matrix ops: use sympySteps in steps mode; no pgfplots graph (matrix
+      // visualisations don't translate cleanly to pgfplots) — fall back to
+      // the inline result.
+      var steps = solveResult.steps && solveResult.steps.length
+        ? solveResult.steps
+        : (solveResult.sympySteps || []);
+
       if (mode === 'graph') {
-        newFile = appendGraphBlock(cm, anchorMark, solveResult.input, solveResult.result, detected.type);
-        toast('Success', 'Graph: ' + what + methodNote + (newFile ? ' → ' + newFile : ''));
-      } else if (mode === 'steps' && solveResult.steps && solveResult.steps.length > 0) {
-        newFile = appendStepsBlock(cm, anchorMark, solveResult.steps, solveResult.method);
-        toast('Success', solveResult.steps.length + ' steps for: ' + what + methodNote + (newFile ? ' → ' + newFile : ''));
+        // Matrix viz reads cells + op from detected.parsed; the second arg
+        // is the whole solveResult so the right-hand caption can show the
+        // result LaTeX. Limit/integral/derivative cores already package
+        // their plot inputs into solveResult.input/.result.
+        var graphInput = (detected.type === 'matrix')
+          ? detected.parsed
+          : solveResult.input;
+        var graphResult = (detected.type === 'matrix')
+          ? solveResult
+          : solveResult.result;
+        newFile = appendGraphBlock(cm, anchorMark, graphInput, graphResult, detected.type);
+        if (newFile === null && detected.type === 'matrix') {
+          // 2D-viz refused (3D matrix, symbolic cells, etc.) — fall back
+          // to the inline result so the user still gets *something*.
+          newFile = appendResultInline(cm, null, detected, solveResult.resultLatex);
+          toast('Warning', 'Geometric viz needs a 2x2 numeric matrix — inserted result instead');
+        } else {
+          toast('Success', 'Graph: ' + what + methodNote + (newFile ? ' → ' + newFile : ''));
+        }
+      } else if (mode === 'steps' && steps.length > 0) {
+        newFile = appendStepsBlock(cm, anchorMark, steps, solveResult.method, detected.type);
+        toast('Success', steps.length + ' steps for: ' + what + methodNote + (newFile ? ' → ' + newFile : ''));
       } else {
         newFile = appendResultInline(cm, anchorMark, detected, solveResult.resultLatex);
         toast('Success', 'Solved: ' + what + methodNote + (newFile ? ' → ' + newFile : ''));
@@ -486,6 +787,7 @@
       if (detected.type === 'limit')           pending = solveLimit(detected, mode);
       else if (detected.type === 'integral')   pending = solveIntegral(detected, mode);
       else if (detected.type === 'derivative') pending = solveDerivative(detected, mode);
+      else if (detected.type === 'matrix')     pending = solveMatrix(detected, mode);
       else { anchorMark.clear(); toast('Error', 'Unknown math type: ' + detected.type); return; }
     } catch (e) {
       anchorMark.clear();
