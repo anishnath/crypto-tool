@@ -23,3 +23,6 @@ target
 /gsc-pages/
 /limit-calculator-test/node_modules/
 /logarithm-calculator-test/node_modules/
+/.idea/
+/.searchapi/
+/.searchapi2/
