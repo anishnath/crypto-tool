@@ -12,176 +12,317 @@
       <stop offset="0%" stop-color="#818cf8"/>
       <stop offset="100%" stop-color="#6366f1"/>
     </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f8f8f4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6ee7b7" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#6ee7b7" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="4" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.35"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
 
   <!-- Background -->
   <rect width="1200" height="630" fill="url(#bg)"/>
 
-  <!-- Subtle grid pattern -->
-  <g opacity="0.03" stroke="#6ee7b7" stroke-width="0.5">
-    <line x1="0" y1="0" x2="0" y2="630"/><line x1="60" y1="0" x2="60" y2="630"/>
-    <line x1="120" y1="0" x2="120" y2="630"/><line x1="180" y1="0" x2="180" y2="630"/>
-    <line x1="240" y1="0" x2="240" y2="630"/><line x1="300" y1="0" x2="300" y2="630"/>
-    <line x1="360" y1="0" x2="360" y2="630"/><line x1="420" y1="0" x2="420" y2="630"/>
-    <line x1="480" y1="0" x2="480" y2="630"/><line x1="540" y1="0" x2="540" y2="630"/>
-    <line x1="600" y1="0" x2="600" y2="630"/><line x1="660" y1="0" x2="660" y2="630"/>
-    <line x1="720" y1="0" x2="720" y2="630"/><line x1="780" y1="0" x2="780" y2="630"/>
-    <line x1="840" y1="0" x2="840" y2="630"/><line x1="900" y1="0" x2="900" y2="630"/>
-    <line x1="960" y1="0" x2="960" y2="630"/><line x1="1020" y1="0" x2="1020" y2="630"/>
-    <line x1="1080" y1="0" x2="1080" y2="630"/><line x1="1140" y1="0" x2="1140" y2="630"/>
+  <!-- Soft grid -->
+  <g opacity="0.04" stroke="#6ee7b7" stroke-width="0.5">
     <line x1="0" y1="60" x2="1200" y2="60"/><line x1="0" y1="120" x2="1200" y2="120"/>
     <line x1="0" y1="180" x2="1200" y2="180"/><line x1="0" y1="240" x2="1200" y2="240"/>
     <line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="360" x2="1200" y2="360"/>
     <line x1="0" y1="420" x2="1200" y2="420"/><line x1="0" y1="480" x2="1200" y2="480"/>
-    <line x1="0" y1="540" x2="1200" y2="540"/>
+    <line x1="60"   y1="0" x2="60"   y2="630"/><line x1="120"  y1="0" x2="120"  y2="630"/>
+    <line x1="180"  y1="0" x2="180"  y2="630"/><line x1="240"  y1="0" x2="240"  y2="630"/>
+    <line x1="600"  y1="0" x2="600"  y2="630"/><line x1="900"  y1="0" x2="900"  y2="630"/>
+    <line x1="1080" y1="0" x2="1080" y2="630"/>
   </g>
 
-  <!-- Left side: Editor mockup -->
-  <g transform="translate(60, 80)">
-    <!-- Editor window frame -->
-    <rect width="500" height="470" rx="12" fill="#14151c" stroke="#2a2d3e" stroke-width="1.5"/>
-
-    <!-- Titlebar -->
-    <rect width="500" height="36" rx="12" fill="#1c1e28"/>
-    <rect y="24" width="500" height="12" fill="#1c1e28"/>
-    <circle cx="18" cy="18" r="5" fill="#f87171" opacity="0.8"/>
-    <circle cx="36" cy="18" r="5" fill="#fbbf24" opacity="0.8"/>
-    <circle cx="54" cy="18" r="5" fill="#34d399" opacity="0.8"/>
-    <text x="250" y="22" text-anchor="middle" fill="#8b8fa8" font-family="monospace" font-size="11">main.tex — LaTeX Editor</text>
-
-    <!-- Line numbers gutter -->
-    <rect x="0" y="36" width="38" height="434" fill="#1a1c26" rx="0"/>
-
-    <!-- Code lines -->
-    <g font-family="'JetBrains Mono', 'Fira Code', monospace" font-size="12.5">
-      <!-- Line numbers -->
-      <g fill="#555870" text-anchor="end">
-        <text x="32" y="62">1</text><text x="32" y="82">2</text>
-        <text x="32" y="102">3</text><text x="32" y="122">4</text>
-        <text x="32" y="142">5</text><text x="32" y="162">6</text>
-        <text x="32" y="182">7</text><text x="32" y="202">8</text>
-        <text x="32" y="222">9</text><text x="32" y="242">10</text>
-        <text x="32" y="262">11</text><text x="32" y="282">12</text>
-        <text x="32" y="302">13</text><text x="32" y="322">14</text>
-        <text x="32" y="342">15</text><text x="32" y="362">16</text>
-        <text x="32" y="382">17</text><text x="32" y="402">18</text>
-        <text x="32" y="422">19</text><text x="32" y="442">20</text>
-        <text x="32" y="462">21</text>
-      </g>
-
-      <!-- Code content -->
-      <g>
-        <!-- \documentclass -->
-        <text x="48" y="62"><tspan fill="#c084fc">\documentclass</tspan><tspan fill="#fde68a">[</tspan><tspan fill="#fb923c">12pt</tspan><tspan fill="#fde68a">]</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">article</tspan><tspan fill="#fde68a">}</tspan></text>
-        <!-- blank line 2 -->
-        <!-- \usepackage -->
-        <text x="48" y="102"><tspan fill="#c084fc">\usepackage</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">amsmath, amssymb</tspan><tspan fill="#fde68a">}</tspan></text>
-        <text x="48" y="122"><tspan fill="#c084fc">\usepackage</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">graphicx</tspan><tspan fill="#fde68a">}</tspan></text>
-        <!-- blank -->
-        <!-- \title -->
-        <text x="48" y="162"><tspan fill="#c084fc">\title</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#e2e4f0">My Document</tspan><tspan fill="#fde68a">}</tspan></text>
-        <text x="48" y="182"><tspan fill="#c084fc">\author</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#e2e4f0">Author Name</tspan><tspan fill="#fde68a">}</tspan></text>
-        <!-- blank -->
-        <!-- \begin{document} -->
-        <text x="48" y="222"><tspan fill="#c084fc">\begin</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">document</tspan><tspan fill="#fde68a">}</tspan></text>
-        <text x="48" y="242"><tspan fill="#c084fc">\maketitle</tspan></text>
-        <!-- blank -->
-        <!-- \section -->
-        <text x="48" y="282"><tspan fill="#c084fc">\section</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#e2e4f0">Introduction</tspan><tspan fill="#fde68a">}</tspan></text>
-        <text x="48" y="302"><tspan fill="#e2e4f0">The equation </tspan><tspan fill="#86efac">$E = mc^2$</tspan></text>
-        <text x="48" y="322"><tspan fill="#e2e4f0">is fundamental.</tspan></text>
-        <!-- blank -->
-        <!-- equation -->
-        <text x="48" y="362"><tspan fill="#c084fc">\begin</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">equation</tspan><tspan fill="#fde68a">}</tspan></text>
-        <text x="48" y="382"><tspan fill="#86efac">  \int_0^\infty e^{-x^2} dx</tspan></text>
-        <text x="48" y="402"><tspan fill="#c084fc">\end</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">equation</tspan><tspan fill="#fde68a">}</tspan></text>
-        <!-- blank -->
-        <text x="48" y="442"><tspan fill="#c084fc">\end</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">document</tspan><tspan fill="#fde68a">}</tspan></text>
-      </g>
-    </g>
-
-    <!-- Active line highlight -->
-    <rect x="38" y="370" width="462" height="20" fill="#6ee7b7" opacity="0.04"/>
-
-    <!-- Cursor blink -->
-    <rect x="310" y="372" width="2" height="16" fill="#6ee7b7" opacity="0.9"/>
-  </g>
-
-  <!-- Right side: PDF preview mockup -->
-  <g transform="translate(620, 80)">
-    <!-- PDF frame -->
-    <rect width="520" height="470" rx="12" fill="#f5f5f0" stroke="#d5d5cc" stroke-width="1.5"/>
-
-    <!-- Preview toolbar -->
-    <rect width="520" height="34" rx="12" fill="#eeeee8"/>
-    <rect y="22" width="520" height="12" fill="#eeeee8"/>
-    <text x="16" y="22" fill="#888" font-family="sans-serif" font-size="10" font-weight="600">PDF Preview</text>
-    <rect x="420" y="8" width="44" height="18" rx="4" fill="#059669"/>
-    <text x="442" y="21" text-anchor="middle" fill="white" font-family="sans-serif" font-size="9" font-weight="700">PDF</text>
-    <rect x="468" y="8" width="44" height="18" rx="4" fill="white" stroke="#ccc" stroke-width="0.5"/>
-    <text x="490" y="21" text-anchor="middle" fill="#666" font-family="sans-serif" font-size="9">Canvas</text>
-
-    <!-- Paper -->
-    <rect x="60" y="50" width="400" height="400" rx="2" fill="white" filter="drop-shadow(0 2px 8px rgba(0,0,0,0.1))"/>
-
-    <!-- Rendered document content -->
-    <g font-family="'Times New Roman', Georgia, serif" transform="translate(90, 90)">
-      <!-- Title -->
-      <text x="170" y="0" text-anchor="middle" fill="#1a1a1a" font-size="22" font-weight="bold">My Document</text>
-      <text x="170" y="22" text-anchor="middle" fill="#555" font-size="12">Author Name</text>
-
-      <!-- Horizontal rule -->
-      <line x1="40" y1="38" x2="300" y2="38" stroke="#ccc" stroke-width="0.5"/>
-
-      <!-- Section heading -->
-      <text x="0" y="70" fill="#1a1a1a" font-size="16" font-weight="bold">1  Introduction</text>
-
-      <!-- Body text -->
-      <text x="0" y="96" fill="#333" font-size="11">The equation <tspan font-style="italic">E = mc</tspan><tspan font-size="8" dy="-4">2</tspan><tspan dy="4"> is fundamental.</tspan></text>
-
-      <!-- Equation block -->
-      <rect x="20" y="120" width="300" height="50" rx="2" fill="#f8f8f5"/>
-      <g transform="translate(170, 152)" text-anchor="middle">
-        <text fill="#1a1a1a" font-size="18" font-style="italic">
-          <tspan font-size="26" dy="2">∫</tspan>
-          <tspan font-size="8" dx="-18" dy="10">0</tspan>
-          <tspan font-size="8" dx="-4" dy="-18">∞</tspan>
-          <tspan dx="4" dy="4" font-size="16">e</tspan>
-          <tspan font-size="10" dy="-8">−x²</tspan>
-          <tspan dy="8" font-size="16"> dx</tspan>
-        </text>
-      </g>
-      <text x="320" y="152" fill="#888" font-size="11">(1)</text>
-
-      <!-- More fake body lines -->
-      <rect x="0" y="190" width="320" height="8" rx="2" fill="#e0e0e0"/>
-      <rect x="0" y="206" width="280" height="8" rx="2" fill="#e0e0e0"/>
-      <rect x="0" y="222" width="300" height="8" rx="2" fill="#e0e0e0"/>
-      <rect x="0" y="238" width="200" height="8" rx="2" fill="#e0e0e0"/>
-
-      <rect x="0" y="264" width="310" height="8" rx="2" fill="#e0e0e0"/>
-      <rect x="0" y="280" width="260" height="8" rx="2" fill="#e0e0e0"/>
-      <rect x="0" y="296" width="290" height="8" rx="2" fill="#e0e0e0"/>
-    </g>
-  </g>
-
-  <!-- Arrow between editor and preview -->
-  <g transform="translate(572, 300)">
-    <rect x="-4" y="-18" width="38" height="36" rx="18" fill="#6ee7b7" opacity="0.15"/>
-    <path d="M0 0 L20 0 L14 -8 M20 0 L14 8" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  </g>
-
-  <!-- Bottom: branding bar -->
-  <rect y="570" width="1200" height="60" fill="#0a0b0f"/>
-
-  <!-- Tool name -->
-  <text x="80" y="605" fill="#6ee7b7" font-family="'Syne', sans-serif" font-size="20" font-weight="800">LaTeX Editor</text>
-  <text x="242" y="605" fill="#555870" font-family="sans-serif" font-size="14">|</text>
-  <text x="260" y="605" fill="#8b8fa8" font-family="sans-serif" font-size="14">Write, Compile, Download PDF — Free &amp; No Signup</text>
-
-  <!-- 8gwifi.org logo -->
-  <text x="1120" y="605" text-anchor="end" fill="#555870" font-family="'Syne', sans-serif" font-size="16" font-weight="700">8gwifi.org</text>
+  <!-- Glow behind the Σ Solve popup -->
+  <circle cx="350" cy="430" r="180" fill="url(#glow)"/>
 
   <!-- Top accent line -->
   <rect y="0" width="1200" height="3" fill="url(#accent)"/>
+
+  <!-- ─── HEADER ──────────────────────────────────────────────────────── -->
+  <g transform="translate(40, 38)">
+    <!-- Logomark Σ -->
+    <rect x="0" y="0" width="44" height="44" rx="10" fill="#0a0b0f" stroke="#6ee7b7" stroke-width="1.5"/>
+    <text x="22" y="32" text-anchor="middle" fill="#6ee7b7" font-family="'Inter', sans-serif" font-size="26" font-weight="800">Σ</text>
+
+    <text x="58" y="22" fill="#ffffff" font-family="'Inter', sans-serif" font-size="26" font-weight="800">AI LaTeX Editor</text>
+    <text x="58" y="44" fill="#8b8fa8" font-family="'Inter', sans-serif" font-size="13" font-weight="500">Solve math · render chemistry · build documents — all in your browser</text>
+  </g>
+
+  <!-- Top-right CTA pill -->
+  <g transform="translate(1000, 40)">
+    <rect width="160" height="40" rx="20" fill="#6ee7b7"/>
+    <text x="80" y="26" text-anchor="middle" fill="#0a0b0f" font-family="'Inter', sans-serif" font-size="14" font-weight="700">No signup · Free</text>
+  </g>
+
+  <!-- ─── LEFT: EDITOR with selection + Σ Solve popup ──────────────────── -->
+  <g transform="translate(40, 100)" filter="url(#softShadow)">
+    <!-- Window frame -->
+    <rect width="560" height="430" rx="12" fill="#14151c" stroke="#2a2d3e" stroke-width="1.5"/>
+
+    <!-- Titlebar -->
+    <rect width="560" height="34" rx="12" fill="#1c1e28"/>
+    <rect y="22" width="560" height="12" fill="#1c1e28"/>
+    <circle cx="18" cy="17" r="5" fill="#f87171" opacity="0.85"/>
+    <circle cx="36" cy="17" r="5" fill="#fbbf24" opacity="0.85"/>
+    <circle cx="54" cy="17" r="5" fill="#34d399" opacity="0.85"/>
+    <text x="280" y="21" text-anchor="middle" fill="#8b8fa8" font-family="monospace" font-size="11">main.tex — LaTeX Editor</text>
+
+    <!-- Gutter -->
+    <rect x="0" y="34" width="40" height="396" fill="#1a1c26"/>
+
+    <!-- Code -->
+    <g font-family="'JetBrains Mono', 'Fira Code', monospace" font-size="13">
+      <!-- Line numbers -->
+      <g fill="#555870" text-anchor="end">
+        <text x="32" y="62">1</text>
+        <text x="32" y="84">2</text>
+        <text x="32" y="106">3</text>
+        <text x="32" y="128">4</text>
+        <text x="32" y="150">5</text>
+        <text x="32" y="172">6</text>
+        <text x="32" y="194">7</text>
+        <text x="32" y="216">8</text>
+        <text x="32" y="238">9</text>
+        <text x="32" y="260">10</text>
+        <text x="32" y="282">11</text>
+        <text x="32" y="304">12</text>
+        <text x="32" y="326">13</text>
+        <text x="32" y="348">14</text>
+        <text x="32" y="370">15</text>
+      </g>
+
+      <!-- Selection highlight on the matrix expression (lines 7-10) -->
+      <rect x="52" y="180" width="490" height="92" rx="3" fill="#fbbf24" opacity="0.12"/>
+
+      <!-- Code content -->
+      <g>
+        <text x="52" y="62"><tspan fill="#c084fc">\documentclass</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">article</tspan><tspan fill="#fde68a">}</tspan></text>
+        <text x="52" y="84"><tspan fill="#c084fc">\usepackage</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">amsmath, amssymb</tspan><tspan fill="#fde68a">}</tspan></text>
+        <!-- blank 3 -->
+        <text x="52" y="128"><tspan fill="#c084fc">\begin</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">document</tspan><tspan fill="#fde68a">}</tspan></text>
+        <!-- blank 5 -->
+        <text x="52" y="172"><tspan fill="#e2e4f0">Compute the determinant:</tspan></text>
+        <text x="52" y="194"><tspan fill="#fde68a">\[</tspan> <tspan fill="#c084fc">\det</tspan> <tspan fill="#c084fc">\begin</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">pmatrix</tspan><tspan fill="#fde68a">}</tspan></text>
+        <text x="52" y="216"><tspan fill="#86efac">  2 &amp; 1 \\</tspan></text>
+        <text x="52" y="238"><tspan fill="#86efac">  1 &amp; 2</tspan></text>
+        <text x="52" y="260"><tspan fill="#c084fc">\end</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">pmatrix</tspan><tspan fill="#fde68a">}</tspan> <tspan fill="#fde68a">\]</tspan></text>
+        <!-- Inserted by solver -->
+        <text x="52" y="304"><tspan fill="#64748b">% Solve (determinant)</tspan></text>
+        <text x="52" y="326"><tspan fill="#c084fc">\input</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">solution-001</tspan><tspan fill="#fde68a">}</tspan> <tspan fill="#34d399">←</tspan> <tspan fill="#34d399">auto</tspan></text>
+        <!-- blank 14 -->
+        <text x="52" y="370"><tspan fill="#c084fc">\end</tspan><tspan fill="#fde68a">{</tspan><tspan fill="#67e8f9">document</tspan><tspan fill="#fde68a">}</tspan></text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ─── Σ Solve floating popup (overlapping editor) ──────────────────── -->
+  <g transform="translate(160, 380)" filter="url(#softShadow)">
+    <!-- Main pill -->
+    <rect width="260" height="44" rx="22" fill="#0a0b0f" stroke="#6ee7b7" stroke-width="1.5"/>
+    <text x="22" y="29" fill="#6ee7b7" font-family="'Inter', sans-serif" font-size="18" font-weight="800">Σ</text>
+    <text x="46" y="29" fill="#ffffff" font-family="'Inter', sans-serif" font-size="14" font-weight="700">Solve determinant</text>
+    <path d="M232 24 L240 32 L248 24" stroke="#6ee7b7" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+    <!-- Drop-down menu -->
+    <g transform="translate(0, 54)">
+      <rect width="260" height="118" rx="10" fill="#0a0b0f" stroke="#2a2d3e" stroke-width="1"/>
+      <!-- Item 1: Solve -->
+      <rect width="260" height="36" y="2" rx="8" fill="#1c1e28" opacity="0.6"/>
+      <text x="16" y="22" fill="#ffffff" font-family="'Inter', sans-serif" font-size="12" font-weight="700">Solve</text>
+      <text x="16" y="36" fill="#8b8fa8" font-family="'Inter', sans-serif" font-size="9">append result inline</text>
+      <!-- Item 2: Solve with steps -->
+      <text x="16" y="60" fill="#ffffff" font-family="'Inter', sans-serif" font-size="12" font-weight="700">Solve with steps</text>
+      <text x="16" y="74" fill="#8b8fa8" font-family="'Inter', sans-serif" font-size="9">insert worked solution</text>
+      <!-- Item 3: Show graph -->
+      <text x="16" y="98" fill="#ffffff" font-family="'Inter', sans-serif" font-size="12" font-weight="700">Show graph</text>
+      <text x="16" y="112" fill="#8b8fa8" font-family="'Inter', sans-serif" font-size="9">geometric viz · pgfplots</text>
+      <!-- Hover dot -->
+      <circle cx="244" cy="20" r="3" fill="#6ee7b7"/>
+    </g>
+  </g>
+
+  <!-- ─── RIGHT: OUTPUT — matrix viz + Lewis structure ────────────────── -->
+  <g transform="translate(620, 100)" filter="url(#softShadow)">
+    <!-- Paper-like preview frame -->
+    <rect width="540" height="430" rx="12" fill="url(#paper)" stroke="#d5d5cc" stroke-width="1.5"/>
+
+    <!-- Header tab -->
+    <rect width="540" height="32" rx="12" fill="#eeeee8"/>
+    <rect y="20" width="540" height="12" fill="#eeeee8"/>
+    <text x="16" y="20" fill="#888" font-family="'Inter', sans-serif" font-size="11" font-weight="600">solution-001.tex · rendered preview</text>
+    <rect x="450" y="6" width="80" height="20" rx="4" fill="#059669"/>
+    <text x="490" y="20" text-anchor="middle" fill="white" font-family="'Inter', sans-serif" font-size="10" font-weight="700">PDF</text>
+
+    <!-- Section title -->
+    <text x="24" y="62" fill="#1a1a1a" font-family="Georgia, serif" font-size="17" font-weight="bold">Solution (determinant)</text>
+
+    <!-- Step list -->
+    <g font-family="Georgia, serif" fill="#222">
+      <text x="24" y="92" font-size="12" font-weight="bold">1. Matrix</text>
+      <text x="40" y="112" font-size="13" font-style="italic">A = </text>
+      <!-- Matrix brackets -->
+      <g transform="translate(76, 96)">
+        <path d="M0 0 L0 28 M0 0 L4 0 M0 28 L4 28" stroke="#222" stroke-width="1.2" fill="none"/>
+        <path d="M40 0 L40 28 M40 0 L36 0 M40 28 L36 28" stroke="#222" stroke-width="1.2" fill="none"/>
+        <text x="10" y="13" font-size="12">2</text>
+        <text x="26" y="13" font-size="12">1</text>
+        <text x="10" y="26" font-size="12">1</text>
+        <text x="26" y="26" font-size="12">2</text>
+      </g>
+
+      <text x="24" y="142" font-size="12" font-weight="bold">2. 2×2 formula</text>
+      <text x="40" y="160" font-size="12" font-style="italic">det(A) = ad − bc</text>
+
+      <text x="24" y="184" font-size="12" font-weight="bold">3. Substitute</text>
+      <text x="40" y="202" font-size="12" font-style="italic">(2)(2) − (1)(1) = </text>
+      <text x="158" y="202" font-size="13" font-weight="bold" fill="#059669">3</text>
+    </g>
+
+    <!-- Separator -->
+    <line x1="24" y1="222" x2="516" y2="222" stroke="#e0e0e0" stroke-width="0.5"/>
+
+    <!-- ─── Geometric viz (pgfplots-style) ──────────────────────────── -->
+    <text x="24" y="248" fill="#1a1a1a" font-family="Georgia, serif" font-size="13" font-weight="bold">Geometric interpretation</text>
+
+    <!-- Axes (origin at 110, 380; 40px per unit) -->
+    <g transform="translate(50, 268)">
+      <!-- Grid -->
+      <g stroke="#e8e8e0" stroke-width="0.5">
+        <line x1="0" y1="0"   x2="200" y2="0"/>
+        <line x1="0" y1="30"  x2="200" y2="30"/>
+        <line x1="0" y1="60"  x2="200" y2="60"/>
+        <line x1="0" y1="90"  x2="200" y2="90"/>
+        <line x1="0" y1="120" x2="200" y2="120"/>
+        <line x1="0"   y1="0" x2="0"   y2="140"/>
+        <line x1="40"  y1="0" x2="40"  y2="140"/>
+        <line x1="80"  y1="0" x2="80"  y2="140"/>
+        <line x1="120" y1="0" x2="120" y2="140"/>
+        <line x1="160" y1="0" x2="160" y2="140"/>
+      </g>
+      <!-- Axes (origin at bottom-left, with offset 20 for negative range) -->
+      <line x1="0"   y1="120" x2="200" y2="120" stroke="#888" stroke-width="0.8"/>
+      <line x1="0"   y1="0"   x2="0"   y2="140" stroke="#888" stroke-width="0.8"/>
+      <!-- arrowheads -->
+      <path d="M200 120 L195 117 L195 123 Z" fill="#888"/>
+      <path d="M0 0 L-3 5 L3 5 Z" fill="#888"/>
+      <text x="195" y="135" fill="#666" font-family="'Inter', sans-serif" font-size="9">x</text>
+      <text x="6"   y="6"   fill="#666" font-family="'Inter', sans-serif" font-size="9">y</text>
+
+      <!-- Unit square (dotted gray) — corners (0,0),(1,0),(1,1),(0,1) at 40px/unit, y inverted -->
+      <polygon points="0,120 40,120 40,80 0,80"
+               fill="#94a3b8" fill-opacity="0.18"
+               stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+      <!-- Transformed parallelogram for A=[[2,1],[1,2]]:
+           (0,0)→(0,0), (1,0)→(2,1), (1,1)→(3,3), (0,1)→(1,2)
+           SVG y inverted, origin at (0,120): so point (x,y) → (x*40, 120-y*40) -->
+      <polygon points="0,120 80,80 120,0 40,40"
+               fill="#16a34a" fill-opacity="0.45"
+               stroke="#15803d" stroke-width="2"/>
+
+      <!-- Labels: original square + transformed -->
+      <text x="14" y="106" fill="#475569" font-family="'Inter', sans-serif" font-size="9" font-weight="600">unit</text>
+      <text x="62" y="42"  fill="#15803d" font-family="'Inter', sans-serif" font-size="10" font-weight="700">A · unit square</text>
+    </g>
+
+    <!-- Right side of viz: caption + chemistry preview -->
+    <g transform="translate(290, 268)">
+      <!-- Caption box -->
+      <rect width="220" height="62" rx="6" fill="#ecfdf5" stroke="#86efac" stroke-width="1"/>
+      <text x="12" y="20" fill="#065f46" font-family="'Inter', sans-serif" font-size="11" font-weight="700">det A = area of the parallelogram</text>
+      <text x="12" y="38" fill="#065f46" font-family="'Inter', sans-serif" font-size="11">= 3   (positive → orientation preserved)</text>
+      <text x="12" y="54" fill="#047857" font-family="'Inter', sans-serif" font-size="9" font-style="italic">also try: inverse, eigenvectors, A·B</text>
+
+      <!-- Chemistry mini-preview: Lewis H2O -->
+      <g transform="translate(0, 78)">
+        <rect width="220" height="62" rx="6" fill="#fefce8" stroke="#fde047" stroke-width="1"/>
+        <text x="12" y="18" fill="#713f12" font-family="'Inter', sans-serif" font-size="10" font-weight="700">⚛ Chemistry: \ce{H2O} → Lewis</text>
+        <!-- Tiny Lewis dot diagram -->
+        <g transform="translate(56, 42)" font-family="Georgia, serif">
+          <!-- left H -->
+          <text x="0" y="4" fill="#222" font-size="14" font-weight="bold">H</text>
+          <!-- bond -->
+          <line x1="14" y1="0" x2="36" y2="0" stroke="#444" stroke-width="1.5"/>
+          <!-- O with lone pairs -->
+          <text x="38" y="4" fill="#dc2626" font-size="14" font-weight="bold">O</text>
+          <!-- lone pairs above (4 dots) -->
+          <circle cx="44" cy="-12" r="1.4" fill="#222"/>
+          <circle cx="49" cy="-12" r="1.4" fill="#222"/>
+          <!-- lone pair below -->
+          <circle cx="44" cy="12" r="1.4" fill="#222"/>
+          <circle cx="49" cy="12" r="1.4" fill="#222"/>
+          <!-- bond -->
+          <line x1="55" y1="0" x2="77" y2="0" stroke="#444" stroke-width="1.5"/>
+          <!-- right H -->
+          <text x="79" y="4" fill="#222" font-size="14" font-weight="bold">H</text>
+        </g>
+        <text x="148" y="50" fill="#92400e" font-family="'Inter', sans-serif" font-size="9" font-style="italic">+ 2D · 3D</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ─── Connector arrow between editor and preview ──────────────────── -->
+  <g transform="translate(600, 313)">
+    <circle cx="0" cy="0" r="18" fill="#0a0b0f" stroke="#6ee7b7" stroke-width="1.5"/>
+    <path d="M-7 0 L7 0 M3 -5 L8 0 L3 5" stroke="#6ee7b7" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- ─── BOTTOM: Feature chips + brand ───────────────────────────────── -->
+  <g transform="translate(0, 552)">
+    <rect width="1200" height="78" fill="#0a0b0f"/>
+
+    <!-- Chips -->
+    <g transform="translate(40, 16)" font-family="'Inter', sans-serif" font-size="11" font-weight="600">
+      <!-- chip 1 -->
+      <g transform="translate(0,0)">
+        <rect width="138" height="28" rx="14" fill="#1c1e28" stroke="#6ee7b7" stroke-width="0.8"/>
+        <text x="14" y="18" fill="#6ee7b7">Σ Solve · 4 types</text>
+      </g>
+      <!-- chip 2 -->
+      <g transform="translate(150,0)">
+        <rect width="138" height="28" rx="14" fill="#1c1e28" stroke="#818cf8" stroke-width="0.8"/>
+        <text x="14" y="18" fill="#a5b4fc">Geometric viz</text>
+      </g>
+      <!-- chip 3 -->
+      <g transform="translate(300,0)">
+        <rect width="148" height="28" rx="14" fill="#1c1e28" stroke="#f59e0b" stroke-width="0.8"/>
+        <text x="14" y="18" fill="#fbbf24">Chemistry · Lewis/2D/3D</text>
+      </g>
+      <!-- chip 4 -->
+      <g transform="translate(460,0)">
+        <rect width="128" height="28" rx="14" fill="#1c1e28" stroke="#f472b6" stroke-width="0.8"/>
+        <text x="14" y="18" fill="#f9a8d4">Image → LaTeX</text>
+      </g>
+      <!-- chip 5 -->
+      <g transform="translate(600,0)">
+        <rect width="96" height="28" rx="14" fill="#1c1e28" stroke="#22d3ee" stroke-width="0.8"/>
+        <text x="14" y="18" fill="#67e8f9">AI Fix</text>
+      </g>
+      <!-- chip 6 -->
+      <g transform="translate(708,0)">
+        <rect width="124" height="28" rx="14" fill="#1c1e28" stroke="#34d399" stroke-width="0.8"/>
+        <text x="14" y="18" fill="#6ee7b7">9 templates</text>
+      </g>
+    </g>
+
+    <!-- Tagline -->
+    <text x="40" y="64" fill="#8b8fa8" font-family="'Inter', sans-serif" font-size="12">
+      Highlight any math or <tspan fill="#fde68a">\ce{…}</tspan> expression · solve or render inline · clean per-file output
+    </text>
+
+    <!-- Brand -->
+    <text x="1160" y="44" text-anchor="end" fill="#6ee7b7" font-family="'Inter', sans-serif" font-size="18" font-weight="800">8gwifi.org</text>
+    <text x="1160" y="64" text-anchor="end" fill="#8b8fa8" font-family="'Inter', sans-serif" font-size="11">/latex/editor.jsp</text>
+  </g>
 </svg>
