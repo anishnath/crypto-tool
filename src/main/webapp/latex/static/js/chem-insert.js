@@ -618,9 +618,11 @@
     var label = filename.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '-');
     var rows = buildPropRows(props);
     var mhchem = { name: 'mhchem', options: 'version=4' };
+    // graphicx is required for \includegraphics inside the figure block —
+    // many minimal demo docs omit it from the preamble.
     var needsPackages = (rows.length > 0)
-      ? ['booktabs', 'float', mhchem]
-      : ['float', mhchem];
+      ? ['graphicx', 'booktabs', 'float', mhchem]
+      : ['graphicx', 'float', mhchem];
 
     // Auto-inject required packages into the MAIN document's preamble
     ensurePackages(cm, needsPackages);
@@ -667,9 +669,29 @@
     var cfg = MODE_CONFIG[mode];
     if (!cfg) { toast('Error', 'Unknown render mode: ' + mode); return; }
 
-    // CodeMirror bookmark survives all subsequent edits (user typing, our package
-    // injection at top of file, etc). Insertion lands exactly where the user clicked.
-    var anchorMark = cm.setBookmark(cm.getCursor('to'));
+    // Anchor on the line where the matched \ce{...} actually lives — NOT
+    // on cm.getCursor('to'). If the user selected an entire \item body or
+    // their selection state shifted between popup-show and click, 'to' can
+    // land on a caption line above the formula, and the inserted figure
+    // ends up between caption text and the formula (breaking \\[2pt] etc.
+    // that bridge those lines). Walking from `from` to the matched ceRaw
+    // inside the selection text pins the anchor to the formula line itself.
+    var selFrom = cm.getCursor('from');
+    var selText = cm.getSelection() || '';
+    var ceMatchIdx = selText.indexOf(detected.ceRaw);
+    var anchorLine;
+    if (ceMatchIdx >= 0) {
+      var upToCeEnd = selText.substring(0, ceMatchIdx + detected.ceRaw.length);
+      var newlinesBefore = (upToCeEnd.match(/\n/g) || []).length;
+      anchorLine = selFrom.line + newlinesBefore;
+    } else {
+      // Fallback — selection-based detection without the substring (shouldn't
+      // happen since detect() reads from getSelection()), but be safe.
+      anchorLine = cm.getCursor('to').line;
+    }
+    if (anchorLine < 0) anchorLine = 0;
+    if (anchorLine >= cm.lineCount()) anchorLine = cm.lineCount() - 1;
+    var anchorMark = cm.setBookmark({ line: anchorLine, ch: cm.getLine(anchorLine).length });
 
     toast('Success', 'Rendering ' + detected.main + ' (' + cfg.label + ')…');
 
