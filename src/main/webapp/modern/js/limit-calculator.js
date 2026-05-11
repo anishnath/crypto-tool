@@ -20,6 +20,15 @@
 'use strict';
 var CTX=window.__LC_CTX||'';
 var normalizeExpr=(typeof LimitCalculatorCore!=='undefined'&&LimitCalculatorCore.normalizeExpr)?LimitCalculatorCore.normalizeExpr:function(e){return(e&&e.trim)?e.trim():'';};
+// Pure-compute helpers + step generator live in LimitCalculatorCore so the
+// LaTeX editor can solve limits inline. Local aliases keep this file's
+// existing call sites unchanged.
+var parsePoint=LimitCalculatorCore.parsePoint;
+var computeLimit=LimitCalculatorCore.compute;
+var splitFraction=LimitCalculatorCore.splitFraction;
+var exprToLatex=LimitCalculatorCore.exprToLatex;
+var pointToLatex=LimitCalculatorCore.pointToLatex;
+var generateLimitSteps=LimitCalculatorCore.generateSteps;
 var exprInput=document.getElementById('ic-expr');
 var previewEl=document.getElementById('lc-preview');
 var varSelect=document.getElementById('lc-var');
@@ -141,38 +150,8 @@ function updatePreview(){
     }
 }
 
-function exprToLatex(expr){
-    try{return nerdamer(expr).toTeX();}catch(e){
-        return expr.replace(/\*/g,' \\cdot ').replace(/sqrt\(/g,'\\sqrt{').replace(/\)/g,'}').replace(/\^(\w)/g,'^{$1}');
-    }
-}
 
-function pointToLatex(pt){
-    var p=pt.trim()
-        .replace(/\u221e/g,'infinity').replace(/\u03c0/g,'pi').replace(/\u2212/g,'-')
-        .replace(/\u2080/g,'0').replace(/\u2081/g,'1').replace(/\u2082/g,'2').replace(/\u2083/g,'3')
-        .replace(/\u2084/g,'4').replace(/\u2085/g,'5').replace(/\u2086/g,'6').replace(/\u2087/g,'7')
-        .replace(/\u2088/g,'8').replace(/\u2089/g,'9')
-        .toLowerCase();
-    if(p==='infinity'||p==='inf')return'\\infty';
-    if(p==='-infinity'||p==='-inf')return'-\\infty';
-    if(p==='pi')return'\\pi';
-    if(p==='e')return'e';
-    return pt;
-}
-
-function parsePoint(pt){
-    var p=pt.trim()
-        .replace(/\u03c0/g,'pi').replace(/\u221e/g,'infinity').replace(/\u2212/g,'-')
-        .replace(/\u00b2/g,'^2').replace(/\u00b3/g,'^3')
-        .toLowerCase();
-    if(p==='infinity'||p==='inf')return Infinity;
-    if(p==='-infinity'||p==='-inf')return -Infinity;
-    if(p==='pi')return Math.PI;
-    if(p==='e')return Math.E;
-    var val=parseFloat(p);
-    return isNaN(val)?null:val;
-}
+// parsePoint moved to LimitCalculatorCore.parsePoint (aliased above as parsePoint)
 
 // Main limit calculation
 calcBtn.addEventListener('click',doCalculateLimit);
@@ -296,167 +275,6 @@ function doCalculateLimit(){
     }
 }
 
-function computeLimit(expr,v,a,dir){
-    var result={value:null,method:'Numerical',form:null,approxTable:null,numApprox:null};
-
-    // Step 1: Try direct substitution
-    if(isFinite(a)){
-        try{
-            var scope={};scope[v]=a;
-            var val=nerdamer(expr).evaluate(scope);
-            var num=parseFloat(val.text('decimals'));
-            if(isFinite(num)){
-                result.value=num;result.method='Direct Substitution';
-                result.approxTable=buildApproxTable(expr,v,a,dir);
-                return result;
-            }
-        }catch(e){}
-    }
-
-    // Step 2: Detect indeterminate form for fractions
-    var fracParts=splitFraction(expr);
-    if(fracParts&&isFinite(a)){
-        var numVal=safeEval(fracParts.num,v,a);
-        var denVal=safeEval(fracParts.den,v,a);
-        if(numVal!==null&&denVal!==null){
-            if(Math.abs(numVal)<1e-10&&Math.abs(denVal)<1e-10)result.form='0/0';
-            else if(!isFinite(numVal)&&!isFinite(denVal))result.form='\u221E/\u221E';
-        }
-    }
-
-    // Step 3: Try algebraic simplification
-    try{
-        var simplified=nerdamer('simplify('+expr+')').text();
-        if(simplified!==expr&&isFinite(a)){
-            var scope2={};scope2[v]=a;
-            var val2=parseFloat(nerdamer(simplified).evaluate(scope2).text('decimals'));
-            if(isFinite(val2)){
-                result.value=val2;result.method='Algebraic Simplification';
-                result.approxTable=buildApproxTable(expr,v,a,dir);
-                return result;
-            }
-        }
-    }catch(e){}
-
-    // Step 4: L'Hopital for 0/0 or inf/inf
-    if(fracParts&&(result.form==='0/0'||result.form==='\u221E/\u221E')){
-        try{
-            var numExpr=fracParts.num;var denExpr=fracParts.den;
-            for(var iter=0;iter<3;iter++){
-                var numD=nerdamer('diff('+numExpr+','+v+')').text();
-                var denD=nerdamer('diff('+denExpr+','+v+')').text();
-                var newExpr='('+numD+')/('+denD+')';
-                var scope3={};scope3[v]=a;
-                var val3=parseFloat(nerdamer(newExpr).evaluate(scope3).text('decimals'));
-                if(isFinite(val3)){
-                    result.value=val3;result.method="L'H\u00F4pital's Rule";
-                    result.approxTable=buildApproxTable(expr,v,a,dir);
-                    return result;
-                }
-                numExpr=numD;denExpr=denD;
-            }
-        }catch(e){}
-    }
-
-    // Step 5: Known limits
-    var known=checkKnownLimits(expr,v,a);
-    if(known!==null){
-        result.value=known.value;result.method=known.method;
-        result.approxTable=buildApproxTable(expr,v,a,dir);
-        return result;
-    }
-
-    // Step 6: Numerical approximation
-    var approx=numericalLimit(expr,v,a,dir);
-    result.approxTable=approx.table;
-    if(approx.value!==null){
-        result.value=approx.value;
-        result.method='Numerical Approximation';
-        result.numApprox=approx;
-    }else if(approx.leftValue!==null&&approx.rightValue!==null){
-        if(dir==='left'){result.value=approx.leftValue;result.method='Numerical (Left)';}
-        else if(dir==='right'){result.value=approx.rightValue;result.method='Numerical (Right)';}
-        else{result.value='DNE';result.method='Does Not Exist';result.numApprox=approx;}
-    }else if(approx.leftValue!==null){
-        result.value=approx.leftValue;result.method='Numerical (Left)';
-    }else if(approx.rightValue!==null){
-        result.value=approx.rightValue;result.method='Numerical (Right)';
-    }else{
-        result.value='DNE';result.method='Does Not Exist';
-    }
-    return result;
-}
-
-function splitFraction(expr){
-    var depth=0;
-    for(var i=0;i<expr.length;i++){
-        if(expr[i]==='(')depth++;else if(expr[i]===')')depth--;
-        if(depth===0&&expr[i]==='/'&&i>0&&i<expr.length-1){
-            return{num:expr.substring(0,i),den:expr.substring(i+1)};
-        }
-    }
-    return null;
-}
-
-function safeEval(expr,v,a){
-    try{var scope={};scope[v]=a;return parseFloat(nerdamer(expr).evaluate(scope).text('decimals'));}catch(e){return null;}
-}
-
-function checkKnownLimits(expr,v,a){
-    var e=expr.replace(/\s/g,'').toLowerCase();
-    var vv=v.toLowerCase();
-    if((e==='sin('+vv+')/'+vv||e==='sin('+vv+')/('+vv+')')&&a===0)return{value:1,method:'Known Limit (sin(x)/x)'};
-    if((e==='(e^'+vv+'-1)/'+vv||e==='(e^('+vv+')-1)/'+vv||e==='(e^'+vv+'-1)/('+vv+')')&&a===0)return{value:1,method:'Known Limit ((e^x-1)/x)'};
-    if(e==='tan('+vv+')/'+vv&&a===0)return{value:1,method:'Known Limit (tan(x)/x)'};
-    if((e==='(1-cos('+vv+'))/'+vv+'^2'||e==='(1-cos('+vv+'))/('+vv+'^2)')&&a===0)return{value:0.5,method:'Known Limit ((1-cos(x))/x\u00B2)'};
-    return null;
-}
-
-function numericalLimit(expr,v,a,dir){
-    var table={left:[],right:[]};
-    var leftVals=[],rightVals=[];
-    if(isFinite(a)){
-        var offsets=[0.1,0.01,0.001,0.0001,0.00001];
-        if(dir!=='right'){
-            for(var i=0;i<offsets.length;i++){
-                var xv=a-offsets[i];var yv=safeEval(expr,v,xv);
-                table.left.push({x:xv,y:yv});
-                if(yv!==null&&isFinite(yv))leftVals.push(yv);
-            }
-        }
-        if(dir!=='left'){
-            for(var j=0;j<offsets.length;j++){
-                var xr=a+offsets[j];var yr=safeEval(expr,v,xr);
-                table.right.push({x:xr,y:yr});
-                if(yr!==null&&isFinite(yr))rightVals.push(yr);
-            }
-        }
-    }else{
-        var bigVals=a===Infinity?[10,100,1000,10000,100000]:[-10,-100,-1000,-10000,-100000];
-        for(var k=0;k<bigVals.length;k++){
-            var xb=bigVals[k];var yb=safeEval(expr,v,xb);
-            table.right.push({x:xb,y:yb});
-            if(yb!==null&&isFinite(yb))rightVals.push(yb);
-        }
-    }
-    var leftLim=convergeTo(leftVals);
-    var rightLim=convergeTo(rightVals);
-    var value=null;
-    if(dir==='left')value=leftLim;
-    else if(dir==='right')value=rightLim;
-    else if(leftLim!==null&&rightLim!==null&&Math.abs(leftLim-rightLim)<0.001)value=(leftLim+rightLim)/2;
-    else if(!isFinite(a))value=rightLim;
-    return{value:value,leftValue:leftLim,rightValue:rightLim,table:table};
-}
-
-function convergeTo(vals){
-    if(vals.length<2)return vals.length===1?vals[0]:null;
-    var last=vals[vals.length-1];
-    var prev=vals[vals.length-2];
-    if(Math.abs(last)>1e12)return last>0?Infinity:-Infinity;
-    if(Math.abs(last-prev)<0.01)return Math.round(last*1e8)/1e8;
-    return last;
-}
 
 // Display result
 function showResult(expr,v,ptStr,a,result){
@@ -507,10 +325,7 @@ function showResult(expr,v,ptStr,a,result){
     katex.render(valueLatex,document.getElementById('lc-r-value'),{displayMode:true,throwOnError:false});
 }
 
-function buildApproxTable(expr,v,a,dir){
-    return numericalLimit(expr,v,a,dir).table;
-}
-
+// buildApproxTable moved to LimitCalculatorCore.buildApproxTable
 function buildApproxTableHtml(table,a){
     var html='';
     if(table.left&&table.left.length>0){
@@ -576,68 +391,6 @@ window.showSteps=function(){
     });
 };
 
-function generateLimitSteps(ctx){
-    var steps=[];var expr=ctx.expr;var v=ctx.v;var a=ctx.a;var res=ctx.result;
-    var exprTeX=ctx.exprTeX;var arrow=ctx.arrow;
-
-    // Step 1: State the limit
-    steps.push({title:'State the limit',latex:'\\lim_{'+arrow+'}\\left['+exprTeX+'\\right]'});
-
-    if(res.method==='Direct Substitution'){
-        steps.push({title:'Try direct substitution: '+v+' = '+ctx.ptStr,latex:'f('+ctx.ptStr+') = '+ctx.valueLatex});
-        steps.push({title:'The function is defined at '+v+' = '+ctx.ptStr,latex:'\\lim_{'+arrow+'}'+exprTeX+' = '+ctx.valueLatex});
-        return steps;
-    }
-
-    if(res.form){
-        steps.push({title:'Direct substitution yields indeterminate form',latex:'\\text{Form: }'+escapeHtml(res.form)});
-    }
-
-    var frac=splitFraction(expr);
-    if(res.method==="L'H\u00F4pital's Rule"&&frac){
-        steps.push({title:"Apply L'H\u00F4pital's Rule: differentiate numerator and denominator",latex:"\\lim_{"+arrow+"}\\frac{f("+v+")}{g("+v+")} = \\lim_{"+arrow+"}\\frac{f'("+v+")}{g'("+v+")}"});
-        try{
-            var numD=nerdamer('diff('+frac.num+','+v+')');
-            var denD=nerdamer('diff('+frac.den+','+v+')');
-            steps.push({title:'Differentiate numerator',latex:"f'("+v+') = '+numD.toTeX()});
-            steps.push({title:'Differentiate denominator',latex:"g'("+v+') = '+denD.toTeX()});
-            steps.push({title:'Evaluate the new limit',latex:'\\lim_{'+arrow+'}\\frac{'+numD.toTeX()+'}{'+denD.toTeX()+'} = '+ctx.valueLatex});
-        }catch(e){
-            steps.push({title:'Evaluate after applying the rule',latex:'= '+ctx.valueLatex});
-        }
-        return steps;
-    }
-
-    if(res.method==='Algebraic Simplification'&&frac){
-        steps.push({title:'Simplify the expression algebraically',latex:'\\text{Factor and cancel common terms}'});
-        try{
-            var simplified=nerdamer('simplify('+expr+')').toTeX();
-            steps.push({title:'Simplified form',latex:simplified});
-        }catch(e){}
-        steps.push({title:'Substitute '+v+' = '+ctx.ptStr,latex:'= '+ctx.valueLatex});
-        return steps;
-    }
-
-    if(res.method&&res.method.indexOf('Known Limit')===0){
-        steps.push({title:'This is a known standard limit',latex:'\\lim_{'+arrow+'}'+exprTeX+' = '+ctx.valueLatex});
-        return steps;
-    }
-
-    // Numerical or DNE - show table approach
-    if(res.method==='Numerical Approximation'||res.method==='Does Not Exist'){
-        steps.push({title:'Use numerical approximation',latex:'\\text{Evaluate f('+v+') for values approaching '+ctx.ptStr+'}'});
-        if(res.numApprox&&res.numApprox.leftValue!==null&&res.numApprox.rightValue!==null){
-            var lv=typeof res.numApprox.leftValue==='number'?res.numApprox.leftValue.toFixed(4):String(res.numApprox.leftValue);
-            var rv=typeof res.numApprox.rightValue==='number'?res.numApprox.rightValue.toFixed(4):String(res.numApprox.rightValue);
-            steps.push({title:'Left-hand limit',latex:'\\lim_{'+v+'\\to '+pointToLatex(ctx.ptStr)+'^{-}} = '+lv});
-            steps.push({title:'Right-hand limit',latex:'\\lim_{'+v+'\\to '+pointToLatex(ctx.ptStr)+'^{+}} = '+rv});
-        }
-        steps.push({title:'Conclusion',latex:'\\lim_{'+arrow+'}'+exprTeX+' = '+ctx.valueLatex});
-        return steps;
-    }
-
-    return null;
-}
 
 function renderSteps(steps,method){
     var container=document.getElementById('lc-steps-area');
