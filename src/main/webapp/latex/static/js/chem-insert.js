@@ -619,21 +619,29 @@
     var rows = buildPropRows(props);
     var mhchem = { name: 'mhchem', options: 'version=4' };
     var needsPackages = (rows.length > 0)
-      ? ['booktabs', 'float', mhchem]   // booktabs for \toprule, float for [H], mhchem for \ce in caption/table
+      ? ['booktabs', 'float', mhchem]
       : ['float', mhchem];
 
-    // Add missing packages first; the anchor (a CodeMirror bookmark) auto-shifts.
+    // Auto-inject required packages into the MAIN document's preamble
     ensurePackages(cm, needsPackages);
-
-    var pos = anchorPos || cm.getCursor('to');
-    if (pos.line >= cm.lineCount()) pos.line = cm.lineCount() - 1;
-    var lineEnd = { line: pos.line, ch: cm.getLine(pos.line).length };
 
     var block = (rows.length > 0)
       ? buildSideBySideFigure(filename, ceRaw, modeLabel, label, rows)
       : buildSimpleFigure(filename, ceRaw, modeLabel, label);
+
+    // Route to a fresh solution-NNN.tex via the shared helper. Falls back
+    // to inline insertion if solutions-file.js isn't loaded.
+    if (window.SolutionsFile && typeof window.SolutionsFile.append === 'function') {
+      return window.SolutionsFile.append(cm,
+        '% ' + modeLabel + ' for ' + ceRaw + '\n' + block,
+        { inputAnchor: anchorPos });
+    }
+    var pos = anchorPos || cm.getCursor('to');
+    if (pos.line >= cm.lineCount()) pos.line = cm.lineCount() - 1;
+    var lineEnd = { line: pos.line, ch: cm.getLine(pos.line).length };
     cm.replaceRange(block, lineEnd, lineEnd);
     cm.focus();
+    return null;
   }
 
   // ── Public entry point ───────────────────────────────────────────────────
@@ -695,8 +703,8 @@
         if (mode === 'smiles' && capturedProps && capturedProps.formula) {
           ceForCaption = '\\ce{' + capturedProps.formula + '}';
         }
-        insertFigureBlock(cm, ceForCaption, fname, cfg.label, capturedProps, anchorPos);
-        toast('Success', 'Inserted ' + cfg.label + ' for ' + detected.main);
+        var newFile = insertFigureBlock(cm, ceForCaption, fname, cfg.label, capturedProps, anchorPos);
+        toast('Success', 'Inserted ' + cfg.label + ' for ' + detected.main + (newFile ? ' → ' + newFile : ''));
       })
       .catch(function (err) {
         if (anchorMark) anchorMark.clear();

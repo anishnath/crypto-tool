@@ -455,6 +455,53 @@
 .sel-popup .sel-mol-btn:hover { background: #059669; color: #fff; }
 .sel-popup .sel-mol-caret { font-size: 0.7em; opacity: 0.85; }
 
+/* Σ Solve — math inline solver dropdown */
+.sel-popup .sel-math-btn {
+  color: #fbbf24;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.sel-popup .sel-math-btn:hover { background: #d97706; color: #fff; }
+.sel-popup .sel-math-caret { font-size: 0.7em; opacity: 0.85; }
+
+.sel-math-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 240px;
+  background: var(--surface2, #1e293b);
+  border: 1px solid var(--border, #334155);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+  padding: 4px;
+  display: none;
+  z-index: 10000;
+}
+.sel-math-wrap.open .sel-math-menu { display: block; }
+.sel-math-menu button {
+  display: block; width: 100%; text-align: left;
+  background: transparent; border: 0; border-radius: 6px;
+  padding: 8px 10px; color: #e2e8f0; cursor: pointer;
+  font: inherit; line-height: 1.3;
+}
+.sel-math-menu button b { display: block; font-weight: 600; font-size: 0.85rem; color: #fbbf24; }
+.sel-math-menu button span { display: block; font-size: 0.72rem; opacity: 0.65; margin-top: 2px; }
+.sel-math-menu button:hover { background: rgba(251, 191, 36, 0.15); }
+.sel-math-menu button:hover b { color: #fcd34d; }
+
+[data-theme="light"] .sel-popup .sel-math-btn { color: #b45309; }
+[data-theme="light"] .sel-popup .sel-math-btn:hover { background: #b45309; color: #fff; }
+[data-theme="light"] .sel-math-menu {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 12px 28px rgba(15,23,42,0.12);
+}
+[data-theme="light"] .sel-math-menu button { color: #1e293b; }
+[data-theme="light"] .sel-math-menu button b { color: #b45309; }
+[data-theme="light"] .sel-math-menu button:hover { background: rgba(180, 83, 9, 0.10); }
+[data-theme="light"] .sel-math-menu button:hover b { color: #92400e; }
+
 /* Submenu — opens below the trigger */
 .sel-mol-menu {
   position: absolute;

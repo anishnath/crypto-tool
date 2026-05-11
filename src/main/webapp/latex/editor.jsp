@@ -24,15 +24,15 @@
 
 <!-- SEO -->
 <jsp:include page="/modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Free AI-Powered LaTeX Editor - Write, Fix and Compile Instantly" />
-    <jsp:param name="toolDescription" value="Free AI-powered online LaTeX editor with instant PDF compilation. AI fixes errors automatically, generates LaTeX from plain English, and rewrites text in academic style. Real-time preview, 170+ autocomplete commands, syntax highlighting. No signup required." />
+    <jsp:param name="toolName" value="Free AI LaTeX Editor with Built-in Math Solver - Integrals, Derivatives, Limits" />
+    <jsp:param name="toolDescription" value="Free AI-powered online LaTeX editor with a built-in math solver. Select any equation in your document and instantly solve integrals, derivatives, limits, and chemistry structures with step-by-step solutions inserted as LaTeX. AI fixes compilation errors, generates LaTeX from plain English, rewrites text in academic style. Real-time PDF preview, 170+ autocomplete commands. No signup required." />
     <jsp:param name="toolCategory" value="Developer Tools" />
     <jsp:param name="toolUrl" value="latex/editor.jsp" />
-    <jsp:param name="toolKeywords" value="ai latex editor, latex editor online, ai latex generator, online latex compiler, latex to pdf, free latex editor, overleaf alternative, ai latex error fix, natural language to latex, latex editor free, write latex online, ai powered latex, latex compiler online, latex pdf preview, latex syntax highlighting, ai academic writing" />
+    <jsp:param name="toolKeywords" value="latex math solver, ai latex editor, latex integral calculator, latex derivative calculator, latex limit calculator, solve equation in latex, step by step math latex, latex editor online, ai latex generator, online latex compiler, latex to pdf, free latex editor, overleaf alternative, ai latex error fix, natural language to latex, symbolic math latex, calculus in latex, integrate latex expression, differentiate latex expression, latex chemistry editor, lewis structure latex, mhchem editor, latex syntax highlighting, ai academic writing" />
     <jsp:param name="toolImage" value="latex-editor.svg" />
-    <jsp:param name="toolFeatures" value="AI error fix - automatically corrects LaTeX compilation errors,AI LaTeX generator - describe in English and get LaTeX code,AI rewrite - restyle text as formal academic or concise or expanded,Real-time PDF preview,LaTeX syntax highlighting,170+ autocomplete commands,Symbol picker with Greek Math and Arrows,Multiple templates (Article Report Beamer CV Letter),File upload for images,Download PDF and .tex source,Project save to localStorage,Dark and light theme support,No registration required" />
+    <jsp:param name="toolFeatures" value="Built-in math solver - select any equation and solve integrals derivatives and limits inline,Step-by-step solutions inserted as LaTeX with full working,Symbolic math engine - nerdamer plus SymPy backend for exact answers,Chemistry rendering - Lewis dot SMILES 2D and 3D geometry from \ce{} formulas,Generated work routed to per-solution files (solution-001.tex) so the main document stays clean,AI error fix - automatically corrects LaTeX compilation errors,AI LaTeX generator - describe in English and get LaTeX code,AI rewrite - restyle text as formal academic or concise or expanded,Image to LaTeX - drag a screenshot of an equation and get LaTeX source,Real-time PDF preview,LaTeX syntax highlighting,170+ autocomplete commands,Symbol picker with Greek Math and Arrows,Polished templates (Article Report Beamer CV Letter Chemistry Calculus),Voice to LaTeX dictation,Download PDF and .tex source,Project auto-save to localStorage,Dark and light theme support,No registration required" />
     <jsp:param name="hasSteps" value="true" />
-    <jsp:param name="howToSteps" value="Write or Generate LaTeX|Write LaTeX code with 170+ autocomplete commands or press Ctrl+Shift+A to describe what you want in plain English and let AI generate the LaTeX for you,Compile to PDF|Click Compile or press Ctrl+Enter to generate the PDF using pdfLaTeX. If there are errors the AI Fix button appears to correct them automatically,Preview and Download|Preview the PDF in the right pane then download the PDF or .tex source file. Select any text and click Rewrite to improve it with AI" />
+    <jsp:param name="howToSteps" value="Write or Generate LaTeX|Write LaTeX code with 170+ autocomplete commands or press Ctrl+Shift+A to describe what you want in plain English and let AI generate the LaTeX for you,Solve math inline|Select any integral derivative or limit in your document and click the Σ Solve button in the popup. The answer and full step-by-step working are inserted as LaTeX in a fresh solution file right next to your equation,Compile to PDF|Click Compile or press Ctrl+Enter to generate the PDF using pdfLaTeX. If there are errors the AI Fix button appears to correct them automatically,Preview and Download|Preview the PDF in the right pane then download the PDF or .tex source file. Select any text and click Rewrite to improve it with AI" />
     <jsp:param name="faq1q" value="What is this AI-powered LaTeX editor?" />
     <jsp:param name="faq1a" value="A free browser-based LaTeX editor with built-in AI that compiles documents to PDF in real-time. The AI can fix compilation errors automatically, generate LaTeX from plain English descriptions, and rewrite selected text in formal academic, concise, or expanded style." />
     <jsp:param name="faq2q" value="How does the AI LaTeX generator work?" />
@@ -45,6 +45,10 @@
     <jsp:param name="faq5a" value="Yes, all projects are auto-saved to your browser localStorage. You can create multiple projects, rename them, and switch between them from the Projects menu." />
     <jsp:param name="faq6q" value="Which LaTeX packages are supported?" />
     <jsp:param name="faq6a" value="The server runs a full TeX Live distribution so all standard packages like amsmath, graphicx, tikz, hyperref, booktabs, listings, and thousands more are available." />
+    <jsp:param name="faq7q" value="Can I solve math equations directly in the LaTeX editor?" />
+    <jsp:param name="faq7a" value="Yes. Select any integral, derivative, or limit expression (LaTeX or inline math) and a Σ Solve button appears in the popup. The editor recognises the operator, solves it symbolically with nerdamer (or the SymPy backend for harder cases), and inserts the result plus full step-by-step working as LaTeX directly into a fresh solution file. Side-by-side graphs are optional. Try the Calculus template for a worked example." />
+    <jsp:param name="faq8q" value="How is the math worked out — are the step-by-step solutions accurate?" />
+    <jsp:param name="faq8a" value="The editor uses two symbolic-math engines. Simple expressions run client-side through nerdamer for instant answers; trickier integrals (partial fractions, trig substitutions, integration by parts) are routed to a SymPy backend which produces textbook-quality step-by-step derivations. Derivatives use the product, quotient, and chain rules explicitly; limits try direct substitution, factoring, conjugate multiplication, and L'Hôpital's rule. Every step is shown as proper LaTeX so you can verify the working in your own PDF." />
 </jsp:include>
 
 <!-- Fonts -->
@@ -106,8 +110,8 @@
 <!-- ========== HERO SECTION — SEO heading + Ad placement ========== -->
 <section class="latex-hero" id="latex-hero">
   <div class="latex-hero-content">
-    <h1 class="latex-hero-title">Free AI-Powered LaTeX Editor</h1>
-    <p class="latex-hero-desc">Write, generate and compile LaTeX to PDF with AI. <strong>Built-in chemistry rendering</strong> (Lewis / 2D / 3D), image-to-LaTeX, error fix, no signup.</p>
+    <h1 class="latex-hero-title">Free AI LaTeX Editor with Built-in Math Solver</h1>
+    <p class="latex-hero-desc">Write, generate and compile LaTeX to PDF with AI. <strong>Solve integrals, derivatives &amp; limits inline</strong> with step-by-step working, plus <strong>chemistry rendering</strong> (Lewis / 2D / 3D), image-to-LaTeX and error fix — no signup.</p>
   </div>
   <div class="latex-hero-ad">
     <%@ include file="/modern/ads/ad-hero-banner.jsp" %>
@@ -304,13 +308,19 @@
   <div class="latex-about-inner">
     <span class="latex-about-eyebrow">More than a LaTeX editor</span>
     <h2 class="latex-about-title">What this editor does that others don't</h2>
-    <p class="latex-about-subtitle">A full LaTeX compiler with built-in chemistry rendering, AI assistance, and image-to-code conversion. Everything runs in your browser — no signup, no install, no Overleaf account.</p>
+    <p class="latex-about-subtitle">A full LaTeX compiler with a <strong>built-in symbolic math solver</strong>, chemistry rendering, AI assistance, and image-to-code conversion. Everything runs in your browser — no signup, no install, no Overleaf account.</p>
 
     <div class="latex-about-grid">
 
       <div class="latex-about-card">
+        <span class="latex-about-icon">&#931;</span>
+        <h3>Math solver <span class="latex-about-badge">New</span></h3>
+        <p>Select any <code>\int</code>, <code>\frac{d}{dx}</code> or <code>\lim</code> expression and hit <strong>Σ Solve</strong>. The answer and a full <strong>step-by-step derivation</strong> are inserted as LaTeX into a fresh <code>solution-001.tex</code>, right next to the equation. Powered by nerdamer + SymPy for partial fractions, trig substitutions, L'Hôpital, and more — optional side-by-side graph included.</p>
+      </div>
+
+      <div class="latex-about-card">
         <span class="latex-about-icon">&#9883;</span>
-        <h3>Chemistry rendering <span class="latex-about-badge">New</span></h3>
+        <h3>Chemistry rendering</h3>
         <p>Select any <code>\ce{H2O}</code> or <code>\ce{2H2 + O2 -&gt; 2H2O}</code> and choose <strong>Lewis dot</strong>, <strong>SMILES 2D</strong>, or <strong>3D geometry</strong>. The structure renders as an image with a property table (geometry, polarity, mol. weight, hybridization, etc.) inserted as a ready figure.</p>
       </div>
 
@@ -347,7 +357,7 @@
     </div>
 
     <p class="latex-about-cta">
-      Try the chemistry features: pick <strong><a href="#" onclick="document.getElementById('template-select').value='chemistry';loadTemplate('chemistry');return false;">Chemistry</a></strong> from the Templates dropdown for a worked-example doc.
+      Try it now: pick <strong><a href="#" onclick="document.getElementById('template-select').value='calculus';loadTemplate('calculus');return false;">Calculus</a></strong> from the Templates dropdown, select any integral or derivative, and hit <strong>Σ Solve</strong>. For chemistry, try the <strong><a href="#" onclick="document.getElementById('template-select').value='chemistry';loadTemplate('chemistry');return false;">Chemistry</a></strong> template.
     </p>
   </div>
 </section>
@@ -443,7 +453,22 @@
 <script src="<%=ctx%>/modern/js/speech-to-text.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/latex/static/js/ai.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/latex/static/js/image-to-latex.js?v=<%=jsV%>"></script>
+<!-- Generated content (Solve / Steps / Graph / chemistry figures) routes
+     through SolutionsFile so the main editor stays clean -->
+<script src="<%=ctx%>/latex/static/js/solutions-file.js?v=<%=jsV%>"></script>
 <script src="<%=ctx%>/latex/static/js/chem-insert.js?v=<%=jsV%>"></script>
+
+<!-- Math inline solver (Σ Solve in selection popup) — limits in v1.
+     nerdamer load order matches /math/partials/math-libs.jsp: core →
+     Algebra → Calculus. The Calculus plugin is required for diff() /
+     integrate() used inside the L'Hôpital path. -->
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+<script src="<%=ctx%>/modern/js/integral-calculator-core.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/modern/js/limit-calculator-core.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/modern/js/derivative-calculator-core.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/latex/static/js/math-insert.js?v=<%=jsV%>"></script>
 
 </body>
 </html>

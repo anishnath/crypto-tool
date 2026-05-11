@@ -1257,6 +1257,7 @@ window.prevError = prevError;
 window.insertUploadedFigure = insertUploadedFigure;
 window.addUploadedFile = addUploadedFile;
 window.addFileToTree = addFileToTree;
+window.reuploadFile = reuploadFile;
 window.switchBackToMain = switchBackToMain;
 
 // ── Mobile file drawer ──

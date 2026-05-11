@@ -22,6 +22,7 @@
       <option value="letter">Letter</option>
       <option value="cv">CV</option>
       <option value="chemistry">Chemistry</option>
+      <option value="calculus">Calculus</option>
       <option value="andrews">Andrews Curves (Iris)</option>
     </select>
   </div>

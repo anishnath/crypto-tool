@@ -495,6 +495,15 @@ function createSelPopup() {
     '    <button data-sel-action="render-mol" data-mol-mode="smiles" role="menuitem"><b>SMILES</b><span>render 2D from SMILES notation</span></button>' +
     '    <button data-sel-action="render-mol" data-mol-mode="3d" role="menuitem"><b>3D geometry</b><span>VSEPR shape, bond angles</span></button>' +
     '  </div>' +
+    '</div>' +
+    '<span class="sel-divider sel-math-sep" style="display:none"></span>' +
+    '<div class="sel-math-wrap" style="display:none;position:relative">' +
+    '  <button data-sel-action="solve-math-toggle" class="sel-math-btn" title="Solve this math expression inline">&#931; Solve <span class="sel-math-caret">&#9662;</span></button>' +
+    '  <div class="sel-math-menu" role="menu">' +
+    '    <button data-sel-action="solve-math" data-math-mode="simple" role="menuitem"><b>Solve</b><span>append &nbsp;= &lt;value&gt; &nbsp;inline</span></button>' +
+    '    <button data-sel-action="solve-math" data-math-mode="steps" role="menuitem"><b>Solve with steps</b><span>insert worked solution as align* block</span></button>' +
+    '    <button data-sel-action="solve-math" data-math-mode="graph" role="menuitem"><b>Show graph</b><span>pgfplots curve + result info, side-by-side</span></button>' +
+    '  </div>' +
     '</div>';
 
   selPopup.addEventListener('mousedown', function(e) { e.preventDefault(); }); // prevent deselection
@@ -508,6 +517,13 @@ function createSelPopup() {
       e.stopPropagation();
       var wrap = selPopup.querySelector('.sel-mol-wrap');
       if (wrap) wrap.classList.toggle('open');
+      return;
+    }
+    // Toggle the math Solve submenu (Solve / Solve with steps)
+    if (action === 'solve-math-toggle') {
+      e.stopPropagation();
+      var mwrap = selPopup.querySelector('.sel-math-wrap');
+      if (mwrap) mwrap.classList.toggle('open');
       return;
     }
 
@@ -526,6 +542,12 @@ function createSelPopup() {
       var mode = btn.getAttribute('data-mol-mode') || 'lewis';
       if (window.ChemInsert && selPopup._chemDetected) {
         window.ChemInsert.render(selPopup._chemDetected, mode);
+      }
+    }
+    else if (action === 'solve-math') {
+      var mathMode = btn.getAttribute('data-math-mode') || 'simple';
+      if (window.MathInsert && selPopup._mathDetected) {
+        window.MathInsert.solve(selPopup._mathDetected, mathMode);
       }
     }
   });
@@ -806,6 +828,30 @@ function showSelPopup(cm) {
     } else {
       molWrap.style.display = 'none';
       molSep.style.display = 'none';
+    }
+  }
+
+  // Toggle the math Solve dropdown when a \lim_{...} (etc.) is in the selection
+  var mathWrap = selPopup.querySelector('.sel-math-wrap');
+  var mathBtn = selPopup.querySelector('.sel-math-btn');
+  var mathSep = selPopup.querySelector('.sel-math-sep');
+  var mathDetected = (window.MathInsert && cm.getSelection())
+    ? window.MathInsert.detect(cm.getSelection())
+    : null;
+  selPopup._mathDetected = mathDetected;
+  if (mathWrap && mathBtn && mathSep) {
+    mathWrap.classList.remove('open'); // start collapsed
+    if (mathDetected) {
+      var label = mathDetected.type === 'limit' ? 'limit' :
+                  mathDetected.type === 'integral' ? 'integral' :
+                  mathDetected.type === 'derivative' ? 'derivative' :
+                  mathDetected.type === 'series' ? 'series' : 'expression';
+      mathBtn.innerHTML = '&#931; Solve ' + label + ' <span class="sel-math-caret">&#9662;</span>';
+      mathWrap.style.display = '';
+      mathSep.style.display = '';
+    } else {
+      mathWrap.style.display = 'none';
+      mathSep.style.display = 'none';
     }
   }
 
