@@ -236,9 +236,14 @@ function stopMonitoring() {
 }
 
 // ── Main compile ──
-function triggerCompile() {
+function triggerCompile(opts) {
+  opts = opts || {};
   clearTimeout(debounceTimer);
   stopMonitoring();
+  // Reset retry counter on a fresh user-initiated compile only — the
+  // recovery path passes { preserveRetries: true } so its in-flight count
+  // survives the retry call.
+  if (!opts.preserveRetries) resetMissingRetries();
 
   // If editing a sub-file, save it and wait for re-upload before compiling
   if (editingFile) {
@@ -491,10 +496,20 @@ function onCompileError(data) {
   var compileBtn = document.getElementById('btn-compile');
   if (compileBtn) compileBtn.classList.remove('compiling');
 
+  var msg = data.message || data.error || 'Compilation failed';
+
+  // Self-heal path: if the failure is a stale upload (server TTL expired
+  // the file), re-upload from local cache and retry once. tryRecover\u2026
+  // returns true when it has started recovery; we then skip the visible
+  // error so the user only sees the eventual success or a real failure.
+  if (tryRecoverMissingUpload(msg)) {
+    setCompileStatus('Recovering\u2026', 'compiling');
+    return;
+  }
+
   setCompileStatus('\u2715 Error', 'error');
   showPDFLoading(false);
 
-  var msg = data.message || data.error || 'Compilation failed';
   appendLogLine(msg, 'error');
   showErrorToast(msg);
 
@@ -1040,6 +1055,114 @@ function reuploadFile(filename, content, cb) {
     .catch(function() { if (cb) cb(); });
 }
 
+// Re-upload a binary file (PNG, JPG, PDF, etc.) from a data URL kept in
+// window.imageBlobs. reuploadFile() can't be used for binaries — it wraps
+// content as text/plain which corrupts non-text payloads.
+function reuploadBinaryFromDataUrl(filename, dataUrl, cb) {
+  fetch(dataUrl)
+    .then(function(r) { return r.blob(); })
+    .then(function(blob) {
+      var formData = new FormData();
+      formData.append('file', blob, filename);
+      return fetch(CONFIG.uploadUrl, { method: 'POST', body: formData });
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.fileId) {
+        var found = false;
+        for (var i = 0; i < uploadedFiles.length; i++) {
+          if (uploadedFiles[i].filename === filename) {
+            uploadedFiles[i].fileId = data.fileId; found = true; break;
+          }
+        }
+        if (!found) uploadedFiles.push({ fileId: data.fileId, filename: filename });
+      }
+      if (cb) cb(null);
+    })
+    .catch(function(err) { if (cb) cb(err || new Error('upload failed')); });
+}
+
+// ── Missing-upload recovery ──────────────────────────────────────────────
+//
+// When the user's tab sits idle past the server's upload TTL (default 60
+// min), uploaded files are swept from /tmp/latex-jobs/uploads/. The next
+// compile then errors with:
+//   "failed to copy upload <fileId>: open …: no such file or directory"
+// We catch that, look up the filename for the dead fileId, re-upload the
+// content from local cache (fileContents for text, window.imageBlobs for
+// binaries), and retry the compile once. Three retries max in case
+// multiple uploads expired in sequence — the server currently bails on the
+// first failure, so each retry recovers one file.
+var MISSING_UPLOAD_RE = /failed to copy upload ([0-9a-f-]+):[\s\S]*(?:no such file or directory|ENOENT)/i;
+var MAX_MISSING_RETRIES = 5;
+var missingRetryCount = 0;
+
+function resetMissingRetries() { missingRetryCount = 0; }
+
+// Returns true if we kicked off recovery (caller should NOT show the error
+// toast). Returns false if not recoverable — caller proceeds normally.
+function tryRecoverMissingUpload(errorMessage) {
+  if (!errorMessage) return false;
+  var m = errorMessage.match(MISSING_UPLOAD_RE);
+  if (!m) return false;
+  var staleId = m[1];
+
+  if (missingRetryCount >= MAX_MISSING_RETRIES) {
+    appendLogLine('Gave up after ' + MAX_MISSING_RETRIES +
+                  ' upload-recovery attempts — please re-upload manually.', 'error');
+    return false;
+  }
+
+  // Find the filename associated with this stale fileId
+  var entry = null;
+  for (var i = 0; i < uploadedFiles.length; i++) {
+    if (uploadedFiles[i].fileId === staleId) { entry = uploadedFiles[i]; break; }
+  }
+  if (!entry) {
+    appendLogLine('Server reported stale upload ' + staleId +
+                  ' but it is no longer tracked locally — cannot recover.', 'error');
+    return false;
+  }
+
+  var filename = entry.filename;
+  // Remove the dead entry so re-upload doesn't update it in place with the
+  // same (still-stale) reference if re-upload fails partway.
+  uploadedFiles = uploadedFiles.filter(function(f) { return f.fileId !== staleId; });
+
+  appendLogLine('Upload expired for "' + filename + '" — re-uploading and retrying…', 'info');
+  missingRetryCount++;
+
+  function afterRecover(err) {
+    if (err) {
+      appendLogLine('Recovery upload for "' + filename + '" failed: ' +
+                    (err.message || err), 'error');
+      showErrorToast('Could not re-upload "' + filename + '"');
+      return;
+    }
+    // Retry compile from the top — triggerCompile() will re-sync text
+    // sub-files automatically before sending. preserveRetries keeps the
+    // counter we just incremented so successive failures bail eventually.
+    setTimeout(function() { triggerCompile({ preserveRetries: true }); }, 50);
+  }
+
+  // Pick the right local source. Text sub-files live in fileContents;
+  // chemistry / image-to-LaTeX captures live as data URLs in window.imageBlobs.
+  if (typeof fileContents !== 'undefined' && fileContents[filename] != null) {
+    reuploadFile(filename, fileContents[filename], function() { afterRecover(null); });
+    return true;
+  }
+  if (window.imageBlobs && window.imageBlobs[filename]) {
+    reuploadBinaryFromDataUrl(filename, window.imageBlobs[filename], afterRecover);
+    return true;
+  }
+
+  // No local copy — cannot self-heal.
+  appendLogLine('No local copy of "' + filename +
+                '" cached in this tab — please re-upload via the file tree.', 'error');
+  showErrorToast('Upload "' + filename + '" expired; re-upload it from the file tree.');
+  return false;  // surface the original error too so the user sees it in context
+}
+
 function updateEditingIndicator() {
   var existing = document.getElementById('editing-indicator');
   if (!editingFile) {
@@ -1280,5 +1403,9 @@ window.closeMobileDrawer = closeMobileDrawer;
 window.showFileContextMenu = showFileContextMenu;
 window.fileContents = fileContents;
 window.uploadedFiles = uploadedFiles;
+// Exposed for the recovery test harness — also useful from devtools when
+// debugging "upload expired" cases manually.
+window._tryRecoverMissingUpload = tryRecoverMissingUpload;
+window._reuploadBinaryFromDataUrl = reuploadBinaryFromDataUrl;
 
 })();
