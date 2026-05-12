@@ -8,6 +8,7 @@
         <jsp:param name="toolCategory" value="Machine Learning" />
         <jsp:param name="toolDescription" value="Interactive PCA demo. Watch the principal components light up on a 3D point cloud, drop dimensions, and see how much variance you keep. Six datasets cover the cases where PCA shines and where it fails. Real numpy eigendecomposition in your browser. No signup." />
         <jsp:param name="toolUrl" value="ml/pca.jsp" />
+        <jsp:param name="toolImage" value="pca-og.png" />
         <jsp:param name="toolKeywords" value="pca visualizer, principal component analysis demo, pca eigendecomposition, dimensionality reduction, variance explained, scree plot, pca vs t-sne, pca swiss roll, pca isotropic sphere, ml from scratch, sklearn pca" />
         <jsp:param name="toolFeatures" value="6 datasets: noisy line/plane/anisotropic/sphere/swiss-roll/two-clusters,Two 3D Plotly panels: original with PC arrows + projected data,Scree plot of explained variance,Editable algorithm source via Pyodide,Standardize toggle,Variable target dimensions (1, 2, or 3),Math card with full Lagrangian derivation,Dark mode" />
         <jsp:param name="hasSteps" value="true" />
@@ -86,10 +87,10 @@
                         <a href="<%=request.getContextPath()%>/" style="color:inherit;">Home</a>
                         &middot;
                         <a href="<%=request.getContextPath()%>/ml/" style="color:inherit;">ML</a>
-                        &middot; Ch 2 · Clustering &amp; Reduction &middot; PCA
+                        &middot; Clustering &amp; Reduction &middot; PCA
                     </nav>
                 </div>
-                <span style="font:500 0.72rem var(--ms-font-mono);color:#4f46e5;padding:0.3rem 0.7rem;border-radius:var(--ms-radius-pill);background:rgba(79,70,229,0.10);">Ch 2 · Reduction</span>
+                <span style="font:500 0.72rem var(--ms-font-mono);color:#4f46e5;padding:0.3rem 0.7rem;border-radius:var(--ms-radius-pill);background:rgba(79,70,229,0.10);">Reduction</span>
             </div>
             <p style="margin:1rem 0 0;color:var(--ms-ink-soft);font:0.95rem/1.55 var(--ms-font-sans);max-width:72ch;">
                 <strong>Principal Component Analysis</strong> finds the directions along which your data varies the most &mdash; then lets you project onto a smaller subset of them, keeping signal and discarding redundancy. Watch the PC arrows appear on a 3D cloud on the left, and the projection (with the discarded dimensions collapsed to zero) on the right. Compare across six datasets to see where PCA shines and where it fails.

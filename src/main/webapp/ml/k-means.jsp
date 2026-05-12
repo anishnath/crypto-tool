@@ -8,6 +8,7 @@
         <jsp:param name="toolCategory" value="Machine Learning" />
         <jsp:param name="toolDescription" value="Interactive K-Means demo. Pick a dataset shape, set k, watch centroids drift to the means while points snap to their nearest cluster — one iteration at a time. See where K-means succeeds (blobs) and where it fails (moons, rings). Edit the algorithm. No signup." />
         <jsp:param name="toolUrl" value="ml/k-means.jsp" />
+        <jsp:param name="toolImage" value="k-means-og.png" />
         <jsp:param name="toolKeywords" value="k-means clustering, k-means visualizer, lloyd's algorithm, k-means++ initialization, unsupervised clustering demo, wcss inertia, voronoi tessellation, k-means moons, k-means rings, ml clustering from scratch, kmeans python interactive" />
         <jsp:param name="toolFeatures" value="6 datasets: blobs/anisotropic/unequal-size/unequal-variance/moons/rings,Live centroid + label animation,Voronoi shading,k-means++ vs random init,Inertia (WCSS) line chart,Editable algorithm source,Cluster legend,Dark mode" />
         <jsp:param name="hasSteps" value="true" />
@@ -80,10 +81,10 @@
                         <a href="<%=request.getContextPath()%>/" style="color:inherit;">Home</a>
                         &middot;
                         <a href="<%=request.getContextPath()%>/ml/" style="color:inherit;">ML</a>
-                        &middot; Ch 2 · Clustering &middot; K-Means
+                        &middot; Clustering &middot; K-Means
                     </nav>
                 </div>
-                <span style="font:500 0.72rem var(--ms-font-mono);color:#4f46e5;padding:0.3rem 0.7rem;border-radius:var(--ms-radius-pill);background:rgba(79,70,229,0.10);">Ch 2 · Clustering</span>
+                <span style="font:500 0.72rem var(--ms-font-mono);color:#4f46e5;padding:0.3rem 0.7rem;border-radius:var(--ms-radius-pill);background:rgba(79,70,229,0.10);">Clustering</span>
             </div>
             <p style="margin:1rem 0 0;color:var(--ms-ink-soft);font:0.95rem/1.55 var(--ms-font-sans);max-width:70ch;">
                 K-Means partitions data into <em>k</em> clusters by alternating two steps: assign each point to its nearest centroid, then move each centroid to the mean of its members. Watch the points snap to clusters and the centroids drift on the left, while the inertia (sum of squared distances) ticks down on the right &mdash; one iteration at a time. Swap datasets to see where K-means shines and where it visibly fails.

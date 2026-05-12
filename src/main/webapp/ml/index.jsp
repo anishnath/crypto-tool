@@ -312,8 +312,8 @@
             <h1>Machine learning, <em>visualized</em>.</h1>
             <p>Watch algorithms learn, step by step. Gradient descent rolling, K-means snapping, neural nets bending a decision boundary &mdash; every demo derives the math from first principles and shows the algorithm converging iteration by iteration.</p>
             <div class="ms-hero-stats">
-                <div class="ms-hero-stat"><strong>10</strong>algorithms</div>
-                <div class="ms-hero-stat"><strong>4</strong>chapters</div>
+                <div class="ms-hero-stat"><strong>8</strong>interactive demos</div>
+                <div class="ms-hero-stat"><strong>4</strong>topics</div>
                 <div class="ms-hero-stat"><strong>&infin;</strong>tweaks</div>
             </div>
         </div>
@@ -323,28 +323,28 @@
             <h2 class="ms-section-title">Curriculum <small>four chapters, derived from first principles</small></h2>
             <div class="ml-chapter-grid">
                 <a href="#ch1" class="ml-chapter-card">
-                    <div class="ml-chapter-eyebrow">Chapter 1</div>
+                    <div class="ml-chapter-eyebrow">Foundations</div>
                     <h3 class="ml-chapter-title">Optimization</h3>
                     <p class="ml-chapter-summary">How models learn at all. Gradient descent on a loss landscape, parameter updates iteration by iteration.</p>
                     <div class="ml-chapter-meta"><span>2 demos</span><span>~5 min</span></div>
                 </a>
                 <a href="#ch2" class="ml-chapter-card">
-                    <div class="ml-chapter-eyebrow">Chapter 2</div>
+                    <div class="ml-chapter-eyebrow">Unsupervised</div>
                     <h3 class="ml-chapter-title">Clustering &amp; Reduction</h3>
                     <p class="ml-chapter-summary">Unsupervised structure. K-means centroids snapping into place; PCA collapsing dimensions while preserving variance.</p>
                     <div class="ml-chapter-meta"><span>2 demos</span><span>~6 min</span></div>
                 </a>
                 <a href="#ch3" class="ml-chapter-card">
-                    <div class="ml-chapter-eyebrow">Chapter 3</div>
+                    <div class="ml-chapter-eyebrow">Supervised &middot; linear</div>
                     <h3 class="ml-chapter-title">Linear Models</h3>
                     <p class="ml-chapter-summary">The first classifiers. Perceptron flipping its boundary on every misclassified point; logistic regression sliding into a smooth sigmoid.</p>
                     <div class="ml-chapter-meta"><span>3 demos</span><span>~8 min</span></div>
                 </a>
                 <a href="#ch4" class="ml-chapter-card">
-                    <div class="ml-chapter-eyebrow">Chapter 4</div>
+                    <div class="ml-chapter-eyebrow">Deep</div>
                     <h3 class="ml-chapter-title">Neural Networks</h3>
-                    <p class="ml-chapter-summary">From perceptron to multi-layer. Watch backprop, weight transformations, and function approximation on a 2D toy problem.</p>
-                    <div class="ml-chapter-meta"><span>3 demos</span><span>~12 min</span></div>
+                    <p class="ml-chapter-summary">From perceptron to multi-layer. Visualize fully-connected, LeNet, and AlexNet-style architectures with SVG export.</p>
+                    <div class="ml-chapter-meta"><span>1 demo</span><span>~6 min</span></div>
                 </a>
             </div>
         </div>
@@ -355,7 +355,7 @@
 
         <!-- Chapter 1 -->
         <div class="ms-card" id="ch1">
-            <h2 class="ms-section-title">Ch 1 &middot; Optimization <small>how models actually learn</small></h2>
+            <h2 class="ms-section-title">Optimization <small>how models actually learn</small></h2>
             <div class="ms-tool-grid">
                 <a href="<%=request.getContextPath()%>/ml/gradient-descent.jsp" class="ms-tool-card">
                     <span class="ms-tool-pill">new</span>
@@ -371,7 +371,7 @@
 
         <!-- Chapter 2 -->
         <div class="ms-card" id="ch2">
-            <h2 class="ms-section-title">Ch 2 &middot; Clustering &amp; Reduction <small>finding structure without labels</small></h2>
+            <h2 class="ms-section-title">Clustering &amp; Reduction <small>finding structure without labels</small></h2>
             <div class="ms-tool-grid">
                 <a href="<%=request.getContextPath()%>/ml/k-means.jsp" class="ms-tool-card">
                     <span class="ms-tool-pill">new</span>
@@ -388,13 +388,13 @@
 
         <!-- Chapter 3 -->
         <div class="ms-card" id="ch3">
-            <h2 class="ms-section-title">Ch 3 &middot; Linear Models <small>the first classifiers</small></h2>
+            <h2 class="ms-section-title">Linear Models <small>the first classifiers</small></h2>
             <div class="ms-tool-grid">
-                <span class="ms-tool-card is-soon" title="Demo in progress">
-                    <span class="ms-tool-pill is-soon">soon</span>
+                <a href="<%=request.getContextPath()%>/ml/perceptron.jsp" class="ms-tool-card">
+                    <span class="ms-tool-pill">new</span>
                     <span class="ms-tool-card-icon">&#10138;</span>
-                    <span><span class="ms-tool-card-title">Perceptron</span><span class="ms-tool-card-sub">Decision boundary flips per mistake</span></span>
-                </span>
+                    <span><span class="ms-tool-card-title">Perceptron</span><span class="ms-tool-card-sub">3D decision plane rotates per mistake</span></span>
+                </a>
                 <a href="<%=request.getContextPath()%>/Logistic_Regression.jsp" class="ms-tool-card">
                     <span class="ms-tool-pill">existing</span>
                     <span class="ms-tool-card-icon">&sigma;</span>
@@ -410,20 +410,10 @@
 
         <!-- Chapter 4 -->
         <div class="ms-card" id="ch4">
-            <h2 class="ms-section-title">Ch 4 &middot; Neural Networks <small>and beyond linear</small></h2>
+            <h2 class="ms-section-title">Neural Networks <small>and beyond linear</small></h2>
             <div class="ms-tool-grid">
-                <span class="ms-tool-card is-soon" title="Demo in progress">
-                    <span class="ms-tool-pill is-soon">soon</span>
-                    <span class="ms-tool-card-icon">NN</span>
-                    <span><span class="ms-tool-card-title">Train an MLP</span><span class="ms-tool-card-sub">Backprop on a 2D classification toy</span></span>
-                </span>
-                <span class="ms-tool-card is-soon" title="Demo in progress">
-                    <span class="ms-tool-pill is-soon">soon</span>
-                    <span class="ms-tool-card-icon">W</span>
-                    <span><span class="ms-tool-card-title">Weight Visualization</span><span class="ms-tool-card-sub">Per-layer weights over training</span></span>
-                </span>
                 <a href="<%=request.getContextPath()%>/ml/nn-viz.jsp" class="ms-tool-card">
-                    <span class="ms-tool-pill">existing</span>
+                    <span class="ms-tool-pill">tool</span>
                     <span class="ms-tool-card-icon">&#9678;</span>
                     <span><span class="ms-tool-card-title">NN Architecture Viz</span><span class="ms-tool-card-sub">FCNN / LeNet / AlexNet, SVG export</span></span>
                 </a>

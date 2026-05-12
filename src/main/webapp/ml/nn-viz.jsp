@@ -26,6 +26,7 @@
         <jsp:param name="toolDescription" value="Create publication-ready neural network architecture diagrams. Visualize FCNN, CNN (LeNet), and deep networks (AlexNet) in 2D and 3D. Export as SVG. Free, no signup." />
         <jsp:param name="toolCategory" value="Machine Learning" />
         <jsp:param name="toolUrl" value="ml/nn-viz.jsp" />
+        <jsp:param name="toolImage" value="nn-architecture-og.png" />
         <jsp:param name="toolKeywords" value="neural network diagram, nn architecture visualizer, neural network svg, FCNN diagram, CNN architecture, LeNet visualizer, AlexNet 3D, deep learning diagram, network schematic, publication neural network, ml architecture tool" />
         <jsp:param name="toolFeatures" value="Three visualization modes: FCNN LeNet AlexNet,Publication-ready SVG export,Interactive zoom and pan,Customizable colors and styles,Dynamic layer add/remove,3D CNN visualization with Three.js,Dark mode support,No signup required" />
         <jsp:param name="hasSteps" value="true" />
