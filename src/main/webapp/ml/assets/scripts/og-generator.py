@@ -112,6 +112,33 @@ PAGES = [
         "color": "#8b5cf6",
         "color_soft": "rgba(139, 92, 246, 0.20)",
     },
+    {
+        "slug": "nn-playground-og",
+        "title": "Neural Network Playground,",
+        "title_em": "watch it learn",
+        "subtitle": "Build layers, pick activations, hit Play — backprop carves the decision boundary live.",
+        "section": "Neural Nets",
+        "color": "#8b5cf6",
+        "color_soft": "rgba(139, 92, 246, 0.20)",
+    },
+    {
+        "slug": "decision-tree-og",
+        "title": "Decision Trees,",
+        "title_em": "picked properly",
+        "subtitle": "K-fold CV, validation curves, ccp_alpha pruning, grid search heatmap — all in your browser.",
+        "section": "Model Selection",
+        "color": "#0ea5e9",
+        "color_soft": "rgba(14, 165, 233, 0.18)",
+    },
+    {
+        "slug": "cyclical-encoding-og",
+        "title": "Cyclical Features,",
+        "title_em": "on the circle",
+        "subtitle": "Hour, month, day-of-week — sin/cos on the unit circle preserves what raw integers break.",
+        "section": "Feature Engineering",
+        "color": "#f59e0b",
+        "color_soft": "rgba(245, 158, 11, 0.18)",
+    },
 ]
 
 

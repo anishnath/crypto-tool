@@ -101,12 +101,38 @@
     </div>
 
     <!-- Neural Networks -->
-    <div class="ms-group<%= collapsedCls(activeService, "nn-viz") %>" data-group="ch4-neural-networks">
+    <div class="ms-group<%= collapsedCls(activeService, "nn-viz", "nn-playground") %>" data-group="ch4-neural-networks">
         <button class="ms-group-header" type="button">Neural Networks <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/ml/nn-viz.jsp" class="ms-item <%= "nn-viz".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#9678;</span>
                 <span class="ms-item-label">NN Architecture Viz</span>
+            </a>
+            <a href="<%= ctx %>/neural_network_playground.jsp" class="ms-item <%= "nn-playground".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#9881;</span>
+                <span class="ms-item-label">NN Playground</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Trees & Selection -->
+    <div class="ms-group<%= collapsedCls(activeService, "decision-tree") %>" data-group="ch5-trees">
+        <button class="ms-group-header" type="button">Trees &amp; Selection <span class="ms-group-chevron">&#9662;</span></button>
+        <div class="ms-group-body">
+            <a href="<%= ctx %>/decision_tree_model_selection.jsp" class="ms-item <%= "decision-tree".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#8710;</span>
+                <span class="ms-item-label">Decision Tree Lab</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Feature Engineering -->
+    <div class="ms-group<%= collapsedCls(activeService, "cyclical-encoding") %>" data-group="ch6-feature-eng">
+        <button class="ms-group-header" type="button">Feature Engineering <span class="ms-group-chevron">&#9662;</span></button>
+        <div class="ms-group-body">
+            <a href="<%= ctx %>/cyclical_encoding_visualizer.jsp" class="ms-item <%= "cyclical-encoding".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#9711;</span>
+                <span class="ms-item-label">Cyclical Encoding</span>
             </a>
         </div>
     </div>

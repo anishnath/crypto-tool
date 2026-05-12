@@ -1,0 +1,479 @@
+/*
+ * neural-network-playground.css — page styles for the NN training playground.
+ *
+ * Big interactive page: network canvas + loss chart + KPIs + layer builder
+ * + activation selector + hyperparameter sliders + training controls +
+ * dataset presets.  Local prefix: .nnp-*  (mirrors .lr-*, .pn-* patterns).
+ */
+
+/* ── Demo card: canvas + loss + KPIs ───────────────────────── */
+.nnp-canvas-wrap {
+    position: relative;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    padding: 1rem;
+    box-shadow: var(--ms-shadow-sm);
+}
+.nnp-canvas-label {
+    font: 500 0.72rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.45rem;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.nnp-canvas-readout {
+    font: 500 0.74rem var(--ms-font-mono);
+    color: var(--ms-ink);
+    text-transform: none;
+    letter-spacing: 0;
+}
+.nnp-canvas-area {
+    position: relative;
+    width: 100%;
+    height: 460px;
+    background: var(--ms-panel-bg-soft);
+    border-radius: var(--ms-radius-sm);
+    overflow: hidden;
+}
+.nnp-canvas-area canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    cursor: crosshair;
+}
+.nnp-canvas-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 0.5rem;
+    margin-top: 0.55rem;
+}
+.nnp-legend {
+    display: flex; gap: 0.85rem; flex-wrap: wrap;
+    font: 500 0.78rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+}
+.nnp-legend-dot {
+    display: inline-block; width: 10px; height: 10px;
+    border-radius: 50%; margin-right: 0.3rem; vertical-align: middle;
+}
+.nnp-legend-dot.nnp-c0 { background: #ef4444; }
+.nnp-legend-dot.nnp-c1 { background: #22c55e; }
+
+.nnp-class-indicator {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.35rem 0.75rem;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-pill);
+    font: 500 0.82rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    cursor: pointer; user-select: none;
+}
+.nnp-class-indicator:hover { border-color: var(--ms-accent); }
+.nnp-class-indicator-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+}
+.nnp-class-indicator[data-class="0"] .nnp-class-indicator-dot { background: #ef4444; }
+.nnp-class-indicator[data-class="1"] .nnp-class-indicator-dot { background: #22c55e; }
+.nnp-class-indicator-hint {
+    font: 500 0.7rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    margin-left: 0.25rem;
+}
+
+.nnp-loss-wrap {
+    position: relative;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    padding: 1rem;
+    margin-top: 0.85rem;
+    box-shadow: var(--ms-shadow-sm);
+}
+.nnp-loss-area {
+    position: relative; width: 100%; height: 180px;
+}
+.nnp-loss-area canvas {
+    width: 100% !important; height: 100% !important;
+}
+
+/* ── KPI row ───────────────────────────────────────────────── */
+.nnp-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+}
+.nnp-kpi {
+    padding: 0.75rem 0.95rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    border-top: 3px solid #4f46e5;
+}
+.nnp-kpi-label {
+    font: 500 0.66rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+.nnp-kpi-value {
+    font: 600 1.4rem var(--ms-font-serif);
+    color: var(--ms-ink);
+    margin-top: 0.15rem;
+    letter-spacing: -0.01em;
+}
+
+/* ── Controls card: 2-column grid (architecture | hyperparams) */
+.nnp-controls-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+@media (max-width: 900px) {
+    .nnp-controls-grid { grid-template-columns: 1fr; }
+}
+.nnp-control-section h3 {
+    font: 500 0.78rem var(--ms-font-mono);
+    color: var(--ms-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.65rem;
+}
+
+/* ── Layer builder ─────────────────────────────────────────── */
+.nnp-layers {
+    display: flex; flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.65rem;
+}
+.nnp-layer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.65rem 0.85rem;
+    border-radius: var(--ms-radius-sm);
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+}
+.nnp-layer.is-input  { border-left: 3px solid #14b8a6; }
+.nnp-layer.is-hidden { border-left: 3px solid #4f46e5; }
+.nnp-layer.is-output { border-left: 3px solid #ec4899; }
+.nnp-layer-title {
+    font: 600 0.8rem var(--ms-font-sans);
+    color: var(--ms-ink);
+}
+.nnp-layer-neurons {
+    display: inline-flex; gap: 2px; flex-wrap: wrap;
+    margin: 0.2rem 0;
+}
+.nnp-neuron-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--ms-accent);
+    display: inline-block;
+}
+.nnp-layer-meta {
+    font: 500 0.7rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    margin-left: 0.35rem;
+}
+.nnp-layer-controls {
+    display: flex; align-items: center; gap: 0.35rem;
+}
+.nnp-layer-input {
+    width: 50px;
+    padding: 0.2rem 0.4rem;
+    font: 500 0.78rem var(--ms-font-mono);
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    text-align: center;
+    color: var(--ms-ink);
+}
+.nnp-layer-remove {
+    padding: 0.2rem 0.55rem;
+    font: 500 0.7rem var(--ms-font-mono);
+    background: rgba(239, 68, 68, 0.10);
+    color: #b91c1c;
+    border: 1px solid rgba(239, 68, 68, 0.30);
+    border-radius: var(--ms-radius-pill);
+    cursor: pointer;
+}
+.nnp-layer-remove:hover { background: rgba(239, 68, 68, 0.20); }
+.nnp-add-layer {
+    width: 100%;
+    padding: 0.55rem 0.85rem;
+    font: 500 0.82rem var(--ms-font-sans);
+    background: var(--ms-panel-bg);
+    color: var(--ms-accent);
+    border: 1px dashed var(--ms-accent-soft);
+    border-radius: var(--ms-radius-sm);
+    cursor: pointer;
+    transition: background var(--ms-transition);
+}
+.nnp-add-layer:hover {
+    background: var(--ms-accent-softer);
+    border-color: var(--ms-accent);
+}
+
+/* ── Activation chips + mini-graph ─────────────────────────── */
+.nnp-activations {
+    display: flex; gap: 0.4rem; flex-wrap: wrap;
+    margin-bottom: 0.6rem;
+}
+.nnp-activation-btn {
+    padding: 0.3rem 0.7rem;
+    font: 500 0.78rem var(--ms-font-mono);
+    background: var(--ms-panel-bg);
+    color: var(--ms-ink-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-pill);
+    cursor: pointer;
+    transition: all var(--ms-transition);
+}
+.nnp-activation-btn:hover {
+    border-color: var(--ms-accent);
+    color: var(--ms-accent);
+}
+.nnp-activation-btn.is-active {
+    background: var(--ms-accent-soft);
+    border-color: var(--ms-accent);
+    color: var(--ms-accent);
+    font-weight: 600;
+}
+.nnp-activation-graph {
+    width: 100%;
+    height: 100px;
+    background: var(--ms-panel-bg-soft);
+    border-radius: var(--ms-radius-sm);
+    display: block;
+}
+
+/* ── Hyperparameter sliders ────────────────────────────────── */
+.nnp-control {
+    display: flex; flex-direction: column; gap: 0.3rem;
+    margin-bottom: 0.85rem;
+}
+.nnp-control:last-child { margin-bottom: 0; }
+.nnp-control-label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font: 500 0.78rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+}
+.nnp-control-value {
+    font: 500 0.76rem var(--ms-font-mono);
+    color: var(--ms-accent);
+}
+.nnp-control input[type="range"] {
+    width: 100%;
+    appearance: none;
+    height: 4px;
+    background: var(--ms-accent-soft);
+    border-radius: var(--ms-radius-pill);
+    cursor: pointer;
+}
+.nnp-control input[type="range"]::-webkit-slider-thumb {
+    appearance: none; width: 16px; height: 16px;
+    background: var(--ms-accent); border-radius: 50%; cursor: pointer;
+}
+.nnp-control input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px; background: var(--ms-accent);
+    border-radius: 50%; border: none;
+}
+.nnp-control-checkbox {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    cursor: pointer;
+}
+.nnp-control-checkbox input { accent-color: var(--ms-accent); width: 16px; height: 16px; }
+
+/* ── Action row (Play / Reset) ─────────────────────────────── */
+.nnp-actions {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    margin-top: 0.85rem;
+}
+.nnp-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    font: 500 0.86rem var(--ms-font-sans);
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+    background: var(--ms-panel-bg);
+    color: var(--ms-ink);
+    cursor: pointer;
+    transition: transform var(--ms-transition), box-shadow var(--ms-transition);
+}
+.nnp-btn:hover { transform: translateY(-1px); box-shadow: var(--ms-shadow-sm); }
+.nnp-btn.is-play {
+    background: linear-gradient(135deg, #15803d, #22c55e);
+    color: #fff;
+    border-color: transparent;
+}
+.nnp-btn.is-play.is-running {
+    background: linear-gradient(135deg, #c2410c, #f97316);
+}
+.nnp-btn.is-warn {
+    background: var(--ms-panel-bg-soft);
+    color: #b45309;
+    border-color: rgba(245, 158, 11, 0.35);
+}
+
+/* ── Dataset preset cards ──────────────────────────────────── */
+.nnp-datasets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.65rem;
+}
+.nnp-dataset {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 0.7rem 0.8rem;
+    background: var(--ms-panel-bg);
+    border: 2px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    cursor: pointer;
+    transition: all var(--ms-transition);
+}
+.nnp-dataset:hover { border-color: var(--ms-accent); }
+.nnp-dataset.is-active {
+    border-color: var(--ms-accent);
+    background: var(--ms-accent-softer);
+}
+.nnp-dataset canvas {
+    width: 56px; height: 56px;
+    background: var(--ms-panel-bg-soft);
+    border-radius: var(--ms-radius-sm);
+}
+.nnp-dataset-label {
+    font: 500 0.8rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin-top: 0.4rem;
+}
+
+/* ── Math card ─────────────────────────────────────────────── */
+.nnp-math {
+    display: grid; grid-template-columns: 1fr; gap: 0.75rem;
+}
+.nnp-math-step {
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border-left: 3px solid var(--ms-accent);
+    border-radius: var(--ms-radius-sm);
+}
+.nnp-math-step h4 {
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.45rem;
+}
+.nnp-math-step p {
+    font: 0.86rem/1.55 var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    margin: 0;
+}
+.nnp-math-step .katex-display { margin: 0.5rem 0 0 !important; }
+
+/* ── Try this + chip strips ────────────────────────────────── */
+.nnp-try {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.75rem;
+}
+.nnp-try-item {
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+}
+.nnp-try-item h4 {
+    font: 500 0.88rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.3rem;
+}
+.nnp-try-item p {
+    font: 0.82rem/1.5 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0;
+}
+.nnp-try-item code {
+    font: 0.78rem var(--ms-font-mono);
+    color: var(--ms-accent);
+    background: var(--ms-accent-soft);
+    padding: 0.05rem 0.3rem;
+    border-radius: 3px;
+}
+.nnp-strip {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    align-items: center;
+    padding: 0.55rem 0.85rem;
+    margin: 0.65rem 0;
+    border-radius: var(--ms-radius-sm);
+    background: var(--ms-panel-bg-soft);
+    border-left: 3px solid var(--ms-line);
+}
+.nnp-strip-label {
+    font: 500 0.7rem var(--ms-font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ms-muted);
+    margin-right: 0.4rem;
+}
+.nnp-strip.is-watchout {
+    background: rgba(245, 158, 11, 0.05);
+    border-left-color: #f59e0b;
+}
+.nnp-strip.is-watchout .nnp-strip-label { color: #b45309; }
+[data-theme="dark"] .nnp-strip.is-watchout .nnp-strip-label { color: #fbbf24; }
+.nnp-strip.is-practice {
+    background: rgba(34, 197, 94, 0.04);
+    border-left-color: #15803d;
+}
+.nnp-strip.is-practice .nnp-strip-label { color: #15803d; }
+[data-theme="dark"] .nnp-strip.is-practice .nnp-strip-label { color: #86efac; }
+.nnp-tag {
+    display: inline-flex; align-items: center;
+    padding: 0.2rem 0.6rem;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-pill);
+    font: 500 0.76rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    white-space: nowrap;
+}
+.nnp-strip.is-practice .nnp-tag {
+    font-family: var(--ms-font-mono);
+    font-size: 0.74rem;
+    color: var(--ms-accent);
+    background: var(--ms-accent-softer);
+    border-color: var(--ms-accent-soft);
+}
+
+/* ── Collapsible (Theory & exercises) ──────────────────────── */
+details.nnp-collapse {
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+details.nnp-collapse > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.95rem 1.15rem;
+    font: 500 1rem var(--ms-font-serif);
+    color: var(--ms-ink);
+    display: flex; justify-content: space-between; align-items: center;
+    user-select: none;
+    letter-spacing: -0.01em;
+}
+details.nnp-collapse > summary::-webkit-details-marker { display: none; }
+details.nnp-collapse > summary::after {
+    content: '+';
+    font: 500 1.3rem var(--ms-font-mono);
+    color: var(--ms-muted);
+}
+details.nnp-collapse[open] > summary::after { content: '−'; }
+details.nnp-collapse > .nnp-collapse-body {
+    padding: 0 1.15rem 1.2rem;
+    border-top: 1px solid var(--ms-line);
+}
+details.nnp-collapse > .nnp-collapse-body > * + * { margin-top: 1.2rem; }
+details.nnp-collapse > .nnp-collapse-body > *:first-child { margin-top: 1.2rem; }

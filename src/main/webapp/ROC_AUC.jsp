@@ -1,546 +1,412 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: anish
-  Date: 18/10/25
-  Time: 12:00 pm
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<% String v = String.valueOf(System.currentTimeMillis()); %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <jsp:include page="modern/components/seo-tool-page.jsp">
+        <jsp:param name="toolName" value="ROC, AUC & Precision–Recall Curves Visualized" />
+        <jsp:param name="toolCategory" value="Machine Learning" />
+        <jsp:param name="toolDescription" value="Interactive ROC and PR curve demo. Drag the threshold slider to see the operating point move across the ROC, the confusion matrix shift, and precision/recall/F1 update live. Five preset datasets cover balanced, overlap, imbalanced, and near-perfect cases. No signup." />
+        <jsp:param name="toolUrl" value="ROC_AUC.jsp" />
+        <jsp:param name="toolImage" value="roc-auc-og.png" />
+        <jsp:param name="toolKeywords" value="roc curve, auc score, precision recall curve, threshold tuning, true positive rate, false positive rate, f1 score, confusion matrix, ml evaluation metrics, classification threshold" />
+        <jsp:param name="toolFeatures" value="Live operating-point marker on ROC curve tied to threshold slider,Precision-Recall curve with same marker,Confusion matrix updates as threshold moves,F1/precision/recall/accuracy KPIs,5 preset datasets including perfect-separation case,Same training mechanic as the Logistic Regression page,Dark mode" />
+        <jsp:param name="hasSteps" value="true" />
+        <jsp:param name="howToSteps" value="Train a model|Click Auto-train (or use the preset datasets) — the ROC and PR curves grow as the model learns to discriminate,Slide the threshold|Drag τ from 0.1 to 0.9 — the magenta operating-point marker moves along the ROC curve while the confusion matrix and precision/recall update,Read the AUC|The number doesn't change with τ — AUC summarizes ranking quality across all thresholds. AUC = 0.5 is random; AUC = 1.0 is perfect" />
+        <jsp:param name="faq1q" value="What does AUC actually measure?" />
+        <jsp:param name="faq1a" value="The probability that a random positive example is ranked higher than a random negative example. AUC = 1.0 means perfect ranking; AUC = 0.5 is random; below 0.5 means the model is anti-correlated (you'd do better flipping the predictions). Crucially, AUC is threshold-independent — it measures the model's ability to rank, not its accuracy at any single τ." />
+        <jsp:param name="faq2q" value="ROC AUC vs PR AUC?" />
+        <jsp:param name="faq2a" value="ROC AUC treats true negatives equally with true positives. On imbalanced data (e.g., 99/1 split), a model that predicts mostly the majority class can have a deceptively high ROC AUC — the FPR denominator is huge so even many false positives barely move the curve. PR AUC ignores true negatives entirely, so it stays sensitive to performance on the minority class. Rule of thumb: imbalanced data → look at PR AUC, not ROC AUC." />
+        <jsp:param name="faq3q" value="How do I pick the right threshold?" />
+        <jsp:param name="faq3a" value="Depends on which error is more expensive. If false positives are costly (e.g., flagging legit transactions as fraud), raise τ to suppress them. If false negatives are costly (e.g., missing cancer screenings), lower τ. F1 score balances both. For probability-calibrated outputs, τ = 0.5 is a starting point — but for many real problems, the optimal τ is found by maximizing F1 or by a cost-benefit analysis." />
+        <jsp:param name="faq4q" value="Why does the ROC curve look stepped?" />
+        <jsp:param name="faq4a" value="Each step corresponds to one training example changing its predicted class as the threshold sweeps past its predicted probability. With more data points, the curve becomes smoother. With fewer points it's blocky — useful for seeing the discrete nature of the sweep but cosmetically rougher." />
+    </jsp:include>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="ctx" content="<%=request.getContextPath()%>" />
 
-<!-- Meta Tags for SEO -->
-<meta name="description" content="Interactive ROC Curve, AUC, and Precision-Recall curve visualization tool. Learn about ROC-AUC metrics and PR curves with hands-on logistic regression demo.">
-<meta name="keywords" content="ROC curve, AUC, precision recall curve, PR curve, logistic regression, machine learning visualization, binary classification">
-<title>ROC, AUC & PR Curve Online – Free | 8gwifi.org</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<%@ include file="header-script.jsp"%>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/ml/css/roc-auc.css?v=<%=v%>">
 
-<!-- JSON-LD for SEO -->
-<script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "WebPage",
-  "name": "Interactive ROC, AUC & PR Curve",
-  "description": "Interactive tool for visualizing ROC curves, AUC metrics, and Precision-Recall curves with logistic regression",
-  "url": "https://8gwifi.org/ROC_AUC.jsp",
-  "keywords": "ROC curve, AUC, precision recall, PR curve, machine learning, binary classification, logistic regression"
-}
-</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin
+            onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<style>
-    /* Scoped styles for ROC/AUC demo - doesn't override site Bootstrap */
-    .roc-demo .chart-container {
-        background: #f8f9fa;
-        border: 2px solid #dee2e6;
-        border-radius: 8px;
-        padding: 20px;
-        margin: 15px 0;
-    }
-    .roc-demo .control-group {
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 6px;
-        padding: 15px;
-        margin: 10px 0;
-    }
-    .roc-demo .control-group label {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
-        font-weight: 500;
-    }
-    .roc-demo input[type=range] {
-        width: 100%;
-    }
-    .roc-demo input[type=number] {
-        width: 110px;
-    }
-    .roc-demo .kpi-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 10px;
-        margin: 15px 0;
-    }
-    .roc-demo .kpi-card {
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 6px;
-        padding: 12px;
-        text-align: center;
-    }
-    .roc-demo .kpi-label {
-        color: #6c757d;
-        font-size: 12px;
-        font-weight: 500;
-        margin-bottom: 5px;
-    }
-    .roc-demo .kpi-value {
-        font-family: 'Courier New', monospace;
-        font-size: 18px;
-        font-weight: bold;
-        color: #212529;
-    }
-    .roc-demo .legend {
-        display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
-        font-size: 13px;
-        margin: 10px 0;
-    }
-    .roc-demo .dot {
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        margin-right: 5px;
-    }
-    .roc-demo .dot.pos { background: #28a745; }
-    .roc-demo .dot.neg { background: #dc3545; }
-    .roc-demo .pill {
-        background: #e7f3ff;
-        border: 1px solid #b3d9ff;
-        padding: 2px 8px;
-        border-radius: 4px;
-        font-family: 'Courier New', monospace;
-        font-size: 13px;
-    }
-  </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <%@ include file="modern/ads/ad-init.jsp" %>
 </head>
-<%@ include file="body-script.jsp"%>
+<body class="ms-body">
 
-<h1 class="mt-4">Interactive ROC, AUC & Precision–Recall</h1>
-<p>Click the scatter plot to add points (toggle class with dropdown). Train a simple logistic model, then inspect ROC/AUC and PR curves. AUC summarizes ranking quality independent of a fixed threshold.</p>
+<jsp:include page="modern/components/nav-header.jsp" />
+<jsp:include page="/math/partials/matter-bg.jsp" />
 
-<%@ include file="footer_adsense.jsp"%>
-<hr>
-
-<div class="roc-demo">
-  <!-- All Charts on Left, All Controls on Right -->
-  <div class="row">
-    <!-- Left: All Charts Stacked -->
-    <div class="col-lg-8 mb-4">
-      <!-- Dataset & Model Chart -->
-      <div class="card mb-4">
-        <div class="card-header">
-          <h5 class="mb-0">Dataset & Model</h5>
-        </div>
-        <div class="card-body">
-          <div class="chart-container">
-            <div style="height: 400px;">
-              <canvas id="chartXY"></canvas>
-            </div>
-          </div>
-          <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
-            <div class="legend">
-              <span><span class="dot pos"></span> Class 1</span>
-              <span><span class="dot neg"></span> Class 0</span>
-              <span>Decision boundary <span class="pill">w₀x + w₁y + b = 0</span></span>
-            </div>
-            <div>
-              <button id="btnExportXY" class="btn btn-secondary btn-sm">Download PNG</button>
-              <button id="btnClear" class="btn btn-danger btn-sm">Clear points</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ROC Curve Chart -->
-      <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">ROC Curve</h5>
-          <button id="btnExportROC" class="btn btn-secondary btn-sm">Download PNG</button>
-        </div>
-        <div class="card-body">
-          <div class="chart-container">
-            <div style="height: 300px;">
-              <canvas id="chartROC"></canvas>
-            </div>
-          </div>
-          <div class="d-flex justify-content-between align-items-center mt-2">
-            <small class="text-muted">Each point = threshold. Diagonal = random (AUC 0.5)</small>
-          </div>
-        </div>
-      </div>
-
-      <!-- PR Curve Chart -->
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Precision–Recall Curve</h5>
-          <button id="btnExportPR" class="btn btn-secondary btn-sm">Download PNG</button>
-        </div>
-        <div class="card-body">
-          <div class="chart-container">
-            <div style="height: 300px;">
-              <canvas id="chartPR"></canvas>
-            </div>
-          </div>
-          <div class="d-flex justify-content-between align-items-center mt-2">
-            <small class="text-muted">PR is more informative on imbalanced data</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right: All Controls and Metrics -->
-    <div class="col-lg-4 mb-4">
-      <!-- Controls Card -->
-      <div class="card mb-3">
-        <div class="card-header">
-          <h5 class="mb-0">Controls</h5>
-        </div>
-        <div class="card-body">
-          <div class="control-group mb-2">
-            <label><span>w₀ (x weight)</span><input type="number" id="w0Num" step="0.1" value="1" class="form-control form-control-sm"></label>
-            <input type="range" id="w0" min="-5" max="5" step="0.01" value="1" class="form-range">
-          </div>
-          <div class="control-group mb-2">
-            <label><span>w₁ (y weight)</span><input type="number" id="w1Num" step="0.1" value="-1" class="form-control form-control-sm"></label>
-            <input type="range" id="w1" min="-5" max="5" step="0.01" value="-1" class="form-range">
-          </div>
-          <div class="control-group mb-2">
-            <label><span>b (bias)</span><input type="number" id="bNum" step="0.1" value="0" class="form-control form-control-sm"></label>
-            <input type="range" id="b" min="-5" max="5" step="0.01" value="0" class="form-range">
-          </div>
-          <div class="control-group mb-2">
-            <label><span>Learning rate η</span><input type="number" id="lrNum" step="0.001" value="0.1" class="form-control form-control-sm"></label>
-            <input type="range" id="lr" min="0.001" max="1" step="0.001" value="0.1" class="form-range">
-          </div>
-          <div class="control-group mb-3">
-            <label><span>Threshold τ</span><input type="number" id="thNum" step="0.01" value="0.5" class="form-control form-control-sm"></label>
-            <input type="range" id="th" min="0" max="1" step="0.01" value="0.5" class="form-range">
-          </div>
-          
-          <div class="d-grid gap-2 mb-3">
-            <button id="btnStep" class="btn btn-primary btn-sm">Train 1 step</button>
-            <button id="btnStep100" class="btn btn-primary btn-sm">Train 100 steps</button>
-            <button id="btnAuto" class="btn btn-success btn-sm">Auto-train ▶︎</button>
-            <button id="btnResetW" class="btn btn-warning btn-sm">Reset weights</button>
-          </div>
-          
-          <div class="mb-2">
-            <label for="classSel" class="form-label small">Add class:</label>
-            <select id="classSel" class="form-select form-select-sm">
-              <option value="1">Class 1 (green)</option>
-              <option value="0">Class 0 (red)</option>
-            </select>
-          </div>
-          
-          <div class="d-grid gap-2">
-            <button id="btnSeeds" class="btn btn-outline-primary btn-sm">Sample dataset</button>
-            <div class="btn-group" role="group">
-              <button id="btnBalanced" class="btn btn-outline-secondary btn-sm">Balanced</button>
-              <button id="btnOverlap" class="btn btn-outline-secondary btn-sm">Overlap</button>
-            </div>
-            <div class="btn-group" role="group">
-              <button id="btnImbalance" class="btn btn-outline-secondary btn-sm">Imbalanced</button>
-              <button id="btnXOR" class="btn btn-outline-secondary btn-sm">XOR</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Metrics Card -->
-      <div class="card">
-        <div class="card-header">
-          <h6 class="mb-0">Metrics</h6>
-        </div>
-        <div class="card-body p-2">
-          <div class="kpi-grid">
-            <div class="kpi-card"><div class="kpi-label">Log loss</div><div class="kpi-value" id="kLoss">—</div></div>
-            <div class="kpi-card"><div class="kpi-label">Accuracy</div><div class="kpi-value" id="kAcc">—</div></div>
-            <div class="kpi-card"><div class="kpi-label">ROC AUC</div><div class="kpi-value" id="kAUC">—</div></div>
-            <div class="kpi-card"><div class="kpi-label">PR AUC</div><div class="kpi-value" id="kAP">—</div></div>
-            <div class="kpi-card"><div class="kpi-label">N points</div><div class="kpi-value" id="kN">0</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="ms-hero">
+    <%@ include file="modern/ads/ad-hero-banner.jsp" %>
 </div>
 
-  <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    // helpers
-    const $ = s => document.querySelector(s);
-    const link = (a,b, on)=>{ a.addEventListener('input',()=>{ b.value=a.value; on&&on();}); b.addEventListener('input',()=>{ a.value=b.value; on&&on();}); };
-    const randn = ()=>{ let u=0,v=0; while(u===0)u=Math.random(); while(v===0)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); };
-    const sigmoid = z => 1/(1+Math.exp(-z));
+<main class="ms-main">
 
-    // model params
-    const w0=$('#w0'), w1=$('#w1'), b=$('#b');
-    const w0Num=$('#w0Num'), w1Num=$('#w1Num'), bNum=$('#bNum');
-    const th=$('#th'), thNum=$('#thNum');
-    const lr=$('#lr'), lrNum=$('#lrNum');
+    <button type="button" id="msSidebarToggle" class="ms-sidebar-toggle" aria-label="Open ML demos menu">
+        &#9776; ML demos
+    </button>
 
-    link(w0,w0Num, updateAll); link(w1,w1Num, updateAll); link(b,bNum, updateAll); link(th,thNum, updateAll); link(lr,lrNum);
+    <% request.setAttribute("activeService", "roc-auc"); %>
+    <jsp:include page="/ml/partials/sidebar.jsp" />
 
-    const classSel=$('#classSel');
-    const kLoss=$('#kLoss'), kAcc=$('#kAcc'), kN=$('#kN'), kAUC=$('#kAUC'), kAP=$('#kAP');
+    <section class="ms-workspace">
 
-    // charts
-    const ctxXY = document.getElementById('chartXY');
-    const ctxROC = document.getElementById('chartROC');
-    const ctxPR  = document.getElementById('chartPR');
+        <!-- Header -->
+        <div class="ms-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
+                <div>
+                    <h1 style="font:400 2rem/1.1 var(--ms-font-serif);margin:0 0 0.25rem;letter-spacing:-0.02em;">
+                        ROC, AUC &amp; PR, <em style="font-style:italic;color:#4f46e5;">visualized</em>
+                    </h1>
+                    <nav style="font:0.82rem var(--ms-font-mono);color:var(--ms-muted);">
+                        <a href="<%=request.getContextPath()%>/" style="color:inherit;">Home</a>
+                        &middot;
+                        <a href="<%=request.getContextPath()%>/ml/" style="color:inherit;">ML</a>
+                        &middot; Linear Models &middot; ROC &amp; AUC
+                    </nav>
+                </div>
+                <span style="font:500 0.72rem var(--ms-font-mono);color:#4f46e5;padding:0.3rem 0.7rem;border-radius:var(--ms-radius-pill);background:rgba(79,70,229,0.10);">Evaluation</span>
+            </div>
+            <p style="margin:0.85rem 0 0;color:var(--ms-ink-soft);font:0.92rem/1.55 var(--ms-font-sans);max-width:70ch;">
+                A trained classifier outputs probabilities; <strong>threshold</strong> turns those into class labels. ROC plots <strong>TPR vs FPR</strong> as &tau; sweeps from 0 to 1; PR plots <strong>precision vs recall</strong>. Drag the threshold slider below to move the magenta point on both curves. For training internals see <a href="<%=request.getContextPath()%>/Logistic_Regression.jsp" style="color:#4f46e5;">Logistic Regression &rarr;</a>.
+            </p>
+        </div>
 
-    let points = []; // {x,y,t}
+        <!-- ── Mega Evaluate card: AUC + curves + threshold + CM + KPIs ─ -->
+        <div class="ms-card">
+            <div class="ra-eval">
 
-    const chartXY = new Chart(ctxXY, {
-      type: 'scatter',
-      data: { datasets:[
-        {label:'Class 0', data:[], pointRadius:5, backgroundColor:'#dc3545'},
-        {label:'Class 1', data:[], pointRadius:5, backgroundColor:'#28a745'},
-        {label:'Decision boundary', type:'line', data:[], pointRadius:0, borderWidth:2, borderDash:[6,6], parsing:false, borderColor:'#0d6efd'}
-      ]},
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        scales:{ x:{ min:-5,max:5, ticks:{color:'#495057'}, grid:{color:'rgba(0,0,0,.1)'}},
-                 y:{ min:-5,max:5, ticks:{color:'#495057'}, grid:{color:'rgba(0,0,0,.1)'}}},
-        plugins:{ legend:{ labels:{ color:'#212529'} }, tooltip:{ callbacks:{ label:(c)=>`(${c.raw.x.toFixed(2)}, ${c.raw.y.toFixed(2)})` }}}
-      }
+                <!-- AUC headlines (compact) -->
+                <div class="ra-summary is-tight">
+                    <div class="ra-auc-card">
+                        <div class="ra-auc-card-label">ROC AUC</div>
+                        <div class="ra-auc-card-value" id="raKAUC">—</div>
+                        <div class="ra-auc-band is-random" id="raAUCBand"><span class="ra-auc-band-dot"></span><span id="raAUCBandText">awaiting data</span></div>
+                    </div>
+                    <div class="ra-auc-card is-pr">
+                        <div class="ra-auc-card-label">PR AUC (avg precision)</div>
+                        <div class="ra-auc-card-value" id="raKAP">—</div>
+                        <div class="ra-auc-band is-random" id="raAPBand"><span class="ra-auc-band-dot"></span><span id="raAPBandText">awaiting data</span></div>
+                    </div>
+                </div>
+
+                <!-- Curves side by side -->
+                <div class="ra-curves">
+                    <div class="ra-canvas-wrap">
+                        <div class="ra-canvas-label">
+                            <span>ROC curve &middot; TPR vs FPR</span>
+                            <span class="ra-canvas-readout" id="raOpLabel"></span>
+                        </div>
+                        <div class="ra-canvas-area">
+                            <canvas id="raChartROC" aria-label="ROC curve"></canvas>
+                        </div>
+                    </div>
+                    <div class="ra-canvas-wrap">
+                        <div class="ra-canvas-label">
+                            <span>Precision-Recall curve</span>
+                            <span class="ra-canvas-readout" id="raPrOpLabel"></span>
+                        </div>
+                        <div class="ra-canvas-area">
+                            <canvas id="raChartPR" aria-label="Precision-Recall curve"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Threshold control row (full width) -->
+                <div class="ra-eval-threshold">
+                    <div class="ra-control-group-head" style="margin-bottom:0.5rem;">
+                        <span class="ra-cgh-label">Threshold &tau;</span>
+                        <span class="ra-cgh-desc">&mdash; drag to move the magenta point on both curves &middot; the matrix below shifts with it</span>
+                    </div>
+                    <div class="ra-eval-threshold-row">
+                        <input type="range" id="raTh" min="0" max="1" step="0.005" value="0.5">
+                        <input type="number" id="raThNum" step="0.01" min="0" max="1" value="0.5">
+                    </div>
+                </div>
+
+                <!-- Results: CM + KPIs side by side -->
+                <div class="ra-eval-results">
+                    <div>
+                        <div class="ra-cm-label">Confusion matrix at &tau;</div>
+                        <div class="ra-cm">
+                            <div></div>
+                            <div class="ra-cm-header">Pred 0</div>
+                            <div class="ra-cm-header">Pred 1</div>
+                            <div class="ra-cm-row-label">Actual 0</div>
+                            <div class="ra-cm-cell is-correct" id="raCmTN">—</div>
+                            <div class="ra-cm-cell is-error"   id="raCmFP">—</div>
+                            <div class="ra-cm-row-label">Actual 1</div>
+                            <div class="ra-cm-cell is-error"   id="raCmFN">—</div>
+                            <div class="ra-cm-cell is-correct" id="raCmTP">—</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="ra-cm-label">Metrics at &tau;</div>
+                        <div class="ra-kpi-grid">
+                            <div class="ra-kpi"><div class="ra-kpi-label">Accuracy</div><div class="ra-kpi-value" id="raKAcc">—</div></div>
+                            <div class="ra-kpi"><div class="ra-kpi-label">Precision</div><div class="ra-kpi-value" id="raKPrec">—</div></div>
+                            <div class="ra-kpi"><div class="ra-kpi-label">Recall</div><div class="ra-kpi-value" id="raKRec">—</div></div>
+                            <div class="ra-kpi"><div class="ra-kpi-label">F1</div><div class="ra-kpi-value" id="raKF1">—</div></div>
+                            <div class="ra-kpi"><div class="ra-kpi-label">N points</div><div class="ra-kpi-value" id="raKN">0</div></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Secondary: dataset + boundary -->
+        <div class="ms-card">
+            <div class="ra-data">
+                <div class="ra-canvas-wrap">
+                    <div class="ra-canvas-label"><span>Dataset &amp; decision boundary</span></div>
+                    <div class="ra-canvas-area">
+                        <canvas id="raChartXY" aria-label="Dataset scatter with logistic boundary"></canvas>
+                    </div>
+                    <div class="ra-legend">
+                        <span><span class="ra-legend-dot ra-c0"></span>Class 0</span>
+                        <span><span class="ra-legend-dot ra-c1"></span>Class 1</span>
+                        <span><span class="ra-legend-dot ra-op"></span>Operating point</span>
+                    </div>
+                    <%-- Class indicator + cursor-hint --%>
+                    <div style="margin-top:0.6rem;">
+                        <button type="button" class="ra-class-indicator" id="raClassIndicator" data-class="1" aria-label="Click to switch class to add">
+                            <span class="ra-class-indicator-dot"></span>
+                            <span>Adding to <strong id="raClassIndicatorText">Class 1</strong></span>
+                            <span class="ra-class-indicator-hint">click to switch &middot; then click the chart to drop points</span>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <%-- Hidden state — replaced by the click-to-toggle class indicator. --%>
+                    <select id="raClassSel" style="display:none;"><option value="1" selected>Class 1</option><option value="0">Class 0</option></select>
+
+                    <div class="ra-control-group">
+                        <div class="ra-control-group-head">
+                            <span class="ra-cgh-label">Parameters</span>
+                            <span class="ra-cgh-desc">&mdash; what training learns</span>
+                        </div>
+                        <div class="ra-control-group-body">
+                            <div class="ra-control">
+                                <div class="ra-control-label"><span>w&#8320;</span><input type="number" id="raW0Num" step="0.1" value="1" style="width:70px;text-align:right;"></div>
+                                <input type="range" id="raW0" min="-5" max="5" step="0.01" value="1">
+                                <div class="ra-control-sublabel">slope along x</div>
+                            </div>
+                            <div class="ra-control">
+                                <div class="ra-control-label"><span>w&#8321;</span><input type="number" id="raW1Num" step="0.1" value="-1" style="width:70px;text-align:right;"></div>
+                                <input type="range" id="raW1" min="-5" max="5" step="0.01" value="-1">
+                                <div class="ra-control-sublabel">slope along y</div>
+                            </div>
+                            <div class="ra-control">
+                                <div class="ra-control-label"><span>b</span><input type="number" id="raBNum" step="0.1" value="0" style="width:70px;text-align:right;"></div>
+                                <input type="range" id="raB" min="-5" max="5" step="0.01" value="0">
+                                <div class="ra-control-sublabel">offset / intercept</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ra-control-group">
+                        <div class="ra-control-group-head">
+                            <span class="ra-cgh-label">Hyperparameter</span>
+                            <span class="ra-cgh-desc">&mdash; you set it</span>
+                        </div>
+                        <div class="ra-control-group-body">
+                            <div class="ra-control">
+                                <div class="ra-control-label"><span>&eta;</span><input type="number" id="raLrNum" step="0.001" value="0.1" style="width:70px;text-align:right;"></div>
+                                <input type="range" id="raLr" min="0.001" max="1" step="0.001" value="0.1">
+                                <div class="ra-control-sublabel">learning rate</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ra-actions">
+                        <button type="button" class="ra-btn is-primary" id="raBtnStep">Train 1 step</button>
+                        <button type="button" class="ra-btn is-primary" id="raBtnStep100">Train 100 steps</button>
+                        <button type="button" class="ra-btn" id="raBtnAuto">&#9656; Auto-train</button>
+                        <button type="button" class="ra-btn" id="raBtnResetW">Reset weights</button>
+                        <button type="button" class="ra-btn" id="raBtnClear">Clear points</button>
+                    </div>
+                    <div class="ra-preset-row">
+                        <span class="ra-preset-label">Preset</span>
+                        <button class="ra-preset" id="raPresetBlobs">two blobs</button>
+                        <button class="ra-preset" id="raPresetBalanced">balanced</button>
+                        <button class="ra-preset" id="raPresetOverlap">overlap</button>
+                        <button class="ra-preset" id="raPresetImbalanced">imbalanced</button>
+                        <button class="ra-preset" id="raPresetPerfect">near-perfect</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ms-inline-ad">
+            <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+        </div>
+
+        <!-- ── Theory & exercises — collapsed by default ─────── -->
+        <details class="ra-collapse">
+            <summary>Theory &amp; exercises &middot; math derivation, watch-outs, and ideas to try</summary>
+            <div class="ra-collapse-body">
+
+        <!-- Math card -->
+        <div>
+            <h2 style="font:500 1.25rem var(--ms-font-serif);color:var(--ms-ink);margin:0 0 1rem;letter-spacing:-0.015em;">The math, derived</h2>
+            <div class="ra-math">
+                <div class="ra-math-step">
+                    <h4>1. The four counts.</h4>
+                    <p>Pick a threshold $\tau$. For each example with probability $\hat{p}_i$ and label $t_i$, the predicted class is $\hat{y}_i = \mathbf{1}[\hat{p}_i \ge \tau]$. Tally:</p>
+                    $$ \text{TP, FP, FN, TN} \;=\; \text{counts of } (\hat{y},\, t) \in \{(1,1),(1,0),(0,1),(0,0)\} $$
+                </div>
+                <div class="ra-math-step">
+                    <h4>2. The two rates.</h4>
+                    <p>$$ \text{TPR (recall)} \;=\; \frac{TP}{TP + FN} \qquad \text{FPR} \;=\; \frac{FP}{FP + TN} \qquad \text{Precision} \;=\; \frac{TP}{TP + FP} $$</p>
+                    <p style="margin-top:0.4rem;">As $\tau$ falls, more examples are predicted positive &mdash; TPR rises (good!), FPR rises (bad), precision usually falls. The whole game is in the trade-off.</p>
+                </div>
+                <div class="ra-math-step">
+                    <h4>3. ROC AUC &mdash; sweep all thresholds.</h4>
+                    <p>Plot $(\text{FPR}(\tau),\, \text{TPR}(\tau))$ for every $\tau \in [0, 1]$. The area under the curve is</p>
+                    $$ \text{AUC} \;=\; \int_0^1 \text{TPR}(\text{FPR}^{-1}(u))\, du \;=\; \Pr\big[\,\hat{p}_{+} > \hat{p}_{-}\,\big] $$
+                    <p style="margin-top:0.4rem;">The last equality is the key intuition: AUC is the probability that a randomly chosen positive example is ranked higher than a randomly chosen negative one. <strong>Threshold-independent.</strong></p>
+                </div>
+                <div class="ra-math-step">
+                    <h4>4. PR AUC &mdash; the imbalance-aware sibling.</h4>
+                    <p>Plot precision vs recall as $\tau$ sweeps. PR AUC (a.k.a. <em>average precision</em>):</p>
+                    $$ \text{AP} \;=\; \sum_{i} \big(\text{recall}_i - \text{recall}_{i-1}\big)\,\text{precision}_i $$
+                    <p style="margin-top:0.4rem;">On a 99/1 imbalanced dataset, ROC AUC can be near 1.0 even when the classifier is barely better than majority-class. PR AUC stays sensitive because true negatives don&rsquo;t enter the formulas at all.</p>
+                </div>
+                <div class="ra-math-step">
+                    <h4>5. F1 &mdash; the harmonic mean.</h4>
+                    <p>If you have to pick one $\tau$, F1 combines precision and recall into a single score (penalizing extreme imbalances between the two):</p>
+                    $$ F_1 \;=\; \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}} $$
+                    <p style="margin-top:0.4rem;">Pick $\tau$ to maximize F1 when you don&rsquo;t have a domain-specific cost matrix for FP vs FN.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Try this -->
+        <div>
+            <h2 style="font:500 1.25rem var(--ms-font-serif);color:var(--ms-ink);margin:0 0 1rem;letter-spacing:-0.015em;">Try this</h2>
+            <div class="ra-try">
+                <div class="ra-try-item">
+                    <h4>Operating-point sweep</h4>
+                    <p>Slide <code>&tau;</code> from <code>0.05</code> to <code>0.95</code>. Watch the magenta dot trace the entire ROC curve. At <code>τ → 1</code>, FPR=0 and TPR=0 (predict nothing positive). At <code>τ → 0</code>, both are 1.</p>
+                </div>
+                <div class="ra-try-item">
+                    <h4>Imbalanced data → use PR</h4>
+                    <p>Hit <code>imbalanced</code>. Auto-train a bit. Notice ROC AUC stays high (~0.9+) while PR AUC dips. The PR view tells the truth about minority-class performance.</p>
+                </div>
+                <div class="ra-try-item">
+                    <h4>Find the F1-optimal threshold</h4>
+                    <p>On the <code>overlap</code> dataset after training, slide <code>&tau;</code> until F1 peaks. It&rsquo;s usually <em>not</em> 0.5 — depends on class balance and the cost of each error type.</p>
+                </div>
+                <div class="ra-try-item">
+                    <h4>Perfect separability</h4>
+                    <p>Hit <code>near-perfect</code> and Auto-train. ROC curve hugs the top-left, AUC ≈ 1.0. Confusion matrix shows zero (or near-zero) off-diagonals at <code>τ = 0.5</code>.</p>
+                </div>
+                <div class="ra-try-item">
+                    <h4>An "anti-classifier"</h4>
+                    <p>Hit <code>blobs</code>, then manually set <code>w&#8320; = -1, w&#8321; = -1, b = 0</code> (without training). ROC AUC drops below 0.5 — the model is anti-correlated with the truth. Inverting predictions would beat it.</p>
+                </div>
+                <div class="ra-try-item">
+                    <h4>Confusion-matrix sweep</h4>
+                    <p>At each <code>&tau;</code>, the four cells trade off. Lower τ: TP and FP up, TN and FN down. The four metrics in the KPI row each respond differently — F1 most stably, accuracy least.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chip strips -->
+        <div>
+            <h2 style="font:500 1.25rem var(--ms-font-serif);color:var(--ms-ink);margin:0 0 1rem;letter-spacing:-0.015em;">In one glance</h2>
+            <div class="ra-strip is-watchout">
+                <span class="ra-strip-label">&#9888;&#65039; Watch out</span>
+                <span class="ra-tag">ROC AUC on imbalanced data</span>
+                <span class="ra-tag">τ = 0.5 by default</span>
+                <span class="ra-tag">Single metric reporting</span>
+                <span class="ra-tag">No baseline</span>
+                <span class="ra-tag">Cherry-picked τ</span>
+            </div>
+            <div class="ra-strip is-practice">
+                <span class="ra-strip-label">&#128295; In practice</span>
+                <span class="ra-tag">roc_auc_score</span>
+                <span class="ra-tag">average_precision_score</span>
+                <span class="ra-tag">classification_report</span>
+                <span class="ra-tag">precision_recall_curve</span>
+                <span class="ra-tag">f1_score</span>
+            </div>
+        </div>
+
+            </div>
+        </details>
+
+        <!-- FAQ -->
+        <section class="ms-faq-wrap" style="max-width:100%;margin-top:0;padding:0;">
+            <h2 class="ms-faq-title" id="faqs">Frequently asked</h2>
+            <div class="ms-faq" aria-label="ROC/AUC FAQ">
+                <div class="ms-faq-item">
+                    <button class="ms-faq-q" type="button">
+                        What does AUC actually measure?
+                        <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="ms-faq-a">The probability that a randomly chosen positive example is ranked higher than a randomly chosen negative example. <strong>AUC = 1.0</strong> means perfect ranking; <strong>AUC = 0.5</strong> is random; below 0.5 means the model is anti-correlated (you&rsquo;d do better flipping the predictions). Crucially, AUC is <strong>threshold-independent</strong> &mdash; it measures the model&rsquo;s ability to rank, not its accuracy at any single τ.</div>
+                </div>
+                <div class="ms-faq-item">
+                    <button class="ms-faq-q" type="button">
+                        ROC AUC vs PR AUC &mdash; when do they disagree?
+                        <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="ms-faq-a">ROC AUC treats true negatives equally with true positives. On imbalanced data (e.g., 99/1 split), a model that predicts mostly the majority class can have a deceptively high ROC AUC &mdash; the FPR denominator is huge so even many false positives barely move the curve. <strong>PR AUC ignores true negatives entirely</strong>, so it stays sensitive to performance on the minority class. Rule of thumb: imbalanced data → look at PR AUC, not ROC AUC.</div>
+                </div>
+                <div class="ms-faq-item">
+                    <button class="ms-faq-q" type="button">
+                        How do I pick the right threshold?
+                        <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="ms-faq-a">Depends on which error is more expensive. If false positives are costly (flagging legit transactions as fraud), <strong>raise τ</strong>. If false negatives are costly (missing a cancer diagnosis), <strong>lower τ</strong>. F1 balances both. For calibrated probabilities, τ = 0.5 is a starting point &mdash; but for most real problems, the optimal τ is found by maximizing F1 or by a cost-benefit analysis.</div>
+                </div>
+                <div class="ms-faq-item">
+                    <button class="ms-faq-q" type="button">
+                        Why does the ROC curve look stepped?
+                        <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="ms-faq-a">Each step corresponds to one training example changing its predicted class as the threshold sweeps past its predicted probability. With <strong>more data points</strong>, the curve becomes smoother. With fewer points it&rsquo;s blocky &mdash; useful for seeing the discrete nature of the sweep but cosmetically rougher.</div>
+                </div>
+            </div>
+        </section>
+
+    </section>
+
+    <aside class="ms-rail" aria-label="Advertisements">
+        <%@ include file="modern/ads/ad-ide-rail-top.jsp" %>
+        <%@ include file="modern/ads/ad-ide-rail-bottom.jsp" %>
+    </aside>
+
+</main>
+
+<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+<%@ include file="modern/components/analytics.jsp" %>
+
+<script>
+    document.querySelectorAll('.ms-faq-q').forEach(function (q) {
+        q.addEventListener('click', function () {
+            q.closest('.ms-faq-item').classList.toggle('open');
+        });
     });
-
-    const chartROC = new Chart(ctxROC, {
-      type: 'line',
-      data: { datasets:[
-        {label:'ROC', data:[], pointRadius:2, borderWidth:2, fill:false, borderColor:'#0d6efd', backgroundColor:'#0d6efd'},
-        {label:'Random', data:[{x:0,y:0},{x:1,y:1}], pointRadius:0, borderDash:[6,6], borderWidth:1, borderColor:'#6c757d'}
-      ]},
-      options:{ responsive:true, maintainAspectRatio:false,
-        parsing:false,
-        scales:{ x:{ min:0,max:1, title:{display:true, text:'FPR', color:'#495057'}, ticks:{color:'#495057'}, grid:{color:'rgba(0,0,0,.1)'}},
-                 y:{ min:0,max:1, title:{display:true, text:'TPR', color:'#495057'}, ticks:{color:'#495057'}, grid:{color:'rgba(0,0,0,.1)'}}},
-        plugins:{ legend:{ labels:{ color:'#212529'} } }
-      }
-    });
-
-    const chartPR = new Chart(ctxPR, {
-      type: 'line',
-      data: { datasets:[ {label:'PR', data:[], pointRadius:2, borderWidth:2, fill:false, borderColor:'#198754', backgroundColor:'#198754'} ]},
-      options:{ responsive:true, maintainAspectRatio:false,
-        parsing:false,
-        scales:{ x:{ min:0,max:1, title:{display:true, text:'Recall', color:'#495057'}, ticks:{color:'#495057'}, grid:{color:'rgba(0,0,0,.1)'}},
-                 y:{ min:0,max:1, title:{display:true, text:'Precision', color:'#495057'}, ticks:{color:'#495057'}, grid:{color:'rgba(0,0,0,.1)'}}},
-        plugins:{ legend:{ labels:{ color:'#212529'} } }
-      }
-    });
-
-    // events: add point by clicking XY
-    ctxXY.addEventListener('click', (evt)=>{
-      const pos = Chart.helpers.getRelativePosition(evt, chartXY);
-      const x = chartXY.scales.x.getValueForPixel( chartXY.scales.x.left + pos.x * chartXY.width / chartXY.chartArea.width );
-      const y = chartXY.scales.y.getValueForPixel( chartXY.scales.y.top + pos.y * chartXY.height / chartXY.chartArea.height );
-      const t = Number(classSel.value);
-      points.push({x,y,t});
-      renderPoints(); updateAll();
-    });
-
-    // toolbar events
-    $('#btnClear').addEventListener('click', ()=>{ points=[]; renderPoints(); updateAll(); });
-    $('#btnExportXY').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href=chartXY.toBase64Image('image/png',1); a.download='xy.png'; a.click(); });
-    $('#btnExportROC').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href=chartROC.toBase64Image('image/png',1); a.download='roc.png'; a.click(); });
-    $('#btnExportPR').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href=chartPR.toBase64Image('image/png',1); a.download='pr.png'; a.click(); });
-
-    $('#btnResetW').addEventListener('click', ()=>{ w0.value=1; w1.value=-1; b.value=0; w0Num.value=1; w1Num.value=-1; bNum.value=0; updateAll(); });
-    $('#btnStep').addEventListener('click', ()=> stepGD(1));
-    $('#btnStep100').addEventListener('click', ()=> stepGD(100));
-
-    let auto=null;
-    $('#btnAuto').addEventListener('click', (e)=>{
-      if(auto){ clearInterval(auto); auto=null; e.target.textContent='Auto-train ▶︎'; return; }
-      e.target.textContent='Auto-train ⏸';
-      auto=setInterval(()=> stepGD(10), 120);
-    });
-
-    // original sample
-    $('#btnSeeds').addEventListener('click', ()=>{
-      generateBalanced();
-    });
-
-    // NEW dataset mode handlers
-    $('#btnBalanced').addEventListener('click', generateBalanced);
-    $('#btnOverlap').addEventListener('click', generateOverlap);
-    $('#btnImbalance').addEventListener('click', generateImbalance);
-    $('#btnXOR').addEventListener('click', generateXOR);
-
-    // ----- dataset generators -----
-    function generateBalanced(){
-      points=[];
-      for(let i=0;i<80;i++){ points.push({x: -1.8 + randn()*0.55, y: -1.2 + randn()*0.55, t:0}); }
-      for(let i=0;i<80;i++){ points.push({x:  1.6 + randn()*0.55, y:  1.1 + randn()*0.55, t:1}); }
-      renderPoints(); updateAll();
-    }
-
-    function generateOverlap(){
-      points=[];
-      for(let i=0;i<80;i++){ points.push({x: -0.8 + randn()*1.2, y: -0.8 + randn()*1.2, t:0}); }
-      for(let i=0;i<80;i++){ points.push({x:  0.8 + randn()*1.2, y:  0.8 + randn()*1.2, t:1}); }
-      renderPoints(); updateAll();
-    }
-
-    function generateImbalance(){
-      points=[];
-      for(let i=0;i<140;i++){ points.push({x: -1.2 + randn()*0.9, y: -1.0 + randn()*0.9, t:0}); }
-      for(let i=0;i<20;i++){  points.push({x:  1.4 + randn()*0.7, y:  1.2 + randn()*0.7, t:1}); }
-      renderPoints(); updateAll();
-    }
-
-    function generateXOR(){
-      points=[];
-      const n=50, s=0.45;
-      // negatives in (+,+) and (-,-)
-      for(let i=0;i<n;i++){ points.push({x:  1.3 + randn()*s, y:  1.3 + randn()*s, t:0}); }
-      for(let i=0;i<n;i++){ points.push({x: -1.3 + randn()*s, y: -1.3 + randn()*s, t:0}); }
-      // positives in (+,-) and (-,+)
-      for(let i=0;i<n;i++){ points.push({x:  1.3 + randn()*s, y: -1.3 + randn()*s, t:1}); }
-      for(let i=0;i<n;i++){ points.push({x: -1.3 + randn()*s, y:  1.3 + randn()*s, t:1}); }
-      renderPoints(); updateAll();
-    }
-
-    // ----- render & metrics -----
-    function renderPoints(){
-      const c0=points.filter(p=>p.t===0).map(p=>({x:p.x,y:p.y}));
-      const c1=points.filter(p=>p.t===1).map(p=>({x:p.x,y:p.y}));
-      chartXY.data.datasets[0].data=c0;
-      chartXY.data.datasets[1].data=c1;
-      kN.textContent=String(points.length);
-    }
-
-    function predict(p){ return sigmoid(Number(w0.value)*p.x + Number(w1.value)*p.y + Number(b.value)); }
-
-    function decisionLine(){
-      const w0v=Number(w0.value), w1v=Number(w1.value), bv=Number(b.value);
-      const xs=[-5,5];
-      let pts=[];
-      if(Math.abs(w1v) < 1e-9){ const x=-bv/(w0v||1e-9); pts=[{x, y:-5},{x, y:5}]; }
-      else { const y = x=>-(w0v/w1v)*x - bv/w1v; pts=[{x:xs[0], y:y(xs[0])},{x:xs[1], y:y(xs[1])}]; }
-      chartXY.data.datasets[2].data=pts;
-    }
-
-    function computeLossAcc(){
-      if(points.length===0){ kLoss.textContent='—'; kAcc.textContent='—'; return; }
-      let loss=0, correct=0; const tau=Number(th.value); const eps=1e-9;
-      for(const p of points){ const pr=predict(p); const t=p.t; loss += -(t*Math.log(pr+eps)+(1-t)*Math.log(1-pr+eps)); correct += ((pr>=tau)?1:0)===t; }
-      kLoss.textContent=loss.toFixed(4);
-      kAcc.textContent=(correct/points.length*100).toFixed(1)+'%';
-    }
-
-    function rocAndPR(){
-      if(points.length===0){ chartROC.data.datasets[0].data=[]; chartPR.data.datasets[0].data=[]; kAUC.textContent=kAP.textContent='—'; chartROC.update(); chartPR.update(); return; }
-      // collect scores
-      const arr = points.map(p=>({s:predict(p), y:p.t})).sort((a,b)=>b.s-a.s);
-      const P = arr.reduce((a,r)=>a+(r.y===1),0), N=arr.length-P;
-      // ROC sweep
-      let tp=0, fp=0, roc=[{x:0,y:0}];
-      for(const r of arr){ if(r.y===1) tp++; else fp++; roc.push({x:fp/N, y:tp/P}); }
-      // add (1,1) and integrate
-      roc.push({x:1,y:1});
-      roc.sort((a,b)=>a.x-b.x);
-      let auc=0; for(let i=1;i<roc.length;i++){ const dx=roc[i].x-roc[i-1].x; const avgY=(roc[i].y+roc[i-1].y)/2; auc += dx*avgY; }
-      chartROC.data.datasets[0].data=roc; kAUC.textContent=auc.toFixed(3);
-
-      // PR sweep (precision vs recall)
-      tp=0; fp=0; let pr=[];
-      for(let i=0;i<arr.length;i++){ if(arr[i].y===1) tp++; else fp++; const rec=tp/(P||1); const prec=tp/(tp+fp||1); pr.push({x:rec, y:prec}); }
-      pr.sort((a,b)=>a.x-b.x);
-      let ap=0; for(let i=1;i<pr.length;i++){ const dx=pr[i].x-pr[i-1].x; const avgY=(pr[i].y+pr[i-1].y)/2; ap += dx*avgY; }
-      chartPR.data.datasets[0].data=pr; kAP.textContent=ap.toFixed(3);
-
-      chartROC.update(); chartPR.update();
-    }
-
-    function updateAll(){ decisionLine(); computeLossAcc(); rocAndPR(); chartXY.update(); }
-
-    function stepGD(steps=1){
-      const eta=Number(lr.value);
-      for(let s=0;s<steps;s++){
-        if(points.length===0) break;
-        let g0=0,g1=0,gb=0;
-        for(const p of points){ const z=Number(w0.value)*p.x+Number(w1.value)*p.y+Number(b.value); const pr=sigmoid(z); const diff=pr-p.t; g0+=diff*p.x; g1+=diff*p.y; gb+=diff; }
-        g0/=points.length; g1/=points.length; gb/=points.length;
-        w0.value=Number(w0.value)-eta*g0; w1.value=Number(w1.value)-eta*g1; b.value=Number(b.value)-eta*gb;
-        w0Num.value=w0.value; w1Num.value=w1.value; bNum.value=b.value;
-      }
-      updateAll();
-    }
-
-    // initial render & tiny tests
-    renderPoints(); updateAll();
-    (function tests(){
-      try{
-        console.group('%cSelf-tests','color:#9fb3ff');
-        // Test 1: ROC monotonicity on seeded toy data
-        const toy=[{x:0,y:0,t:0},{x:1,y:1,t:1},{x:2,y:2,t:1},{x:-1,y:-1,t:0}];
-        const old=points.slice(); points=toy; const rocBefore=[]; const arr=points.map(p=>({s:predict(p),y:p.t})).sort((a,b)=>b.s-a.s); let P=arr.reduce((a,r)=>a+(r.y===1),0), N=arr.length-P; let tp=0,fp=0; rocBefore.push({x:0,y:0}); for(const r of arr){ if(r.y===1) tp++; else fp++; rocBefore.push({x:fp/N,y:tp/P}); } rocBefore.push({x:1,y:1}); let ok=true; for(let i=1;i<rocBefore.length;i++){ if(rocBefore[i].x<rocBefore[i-1].x) ok=false; } console.assert(ok,'ROC FPR non-decreasing');
-        // Test 2: AUC bounds
-        let auc=0; rocBefore.sort((a,b)=>a.x-b.x); for(let i=1;i<rocBefore.length;i++){ const dx=rocBefore[i].x-rocBefore[i-1].x; const avgY=(rocBefore[i].y+rocBefore[i-1].y)/2; auc+=dx*avgY; } console.assert(auc>=0 && auc<=1,'AUC within [0,1]');
-        // Test 3: PR values in [0,1]
-        tp=0; fp=0; const pr=[]; for(const r of arr){ if(r.y===1) tp++; else fp++; const rec=tp/(P||1); const prec=tp/(tp+fp||1); pr.push({x:rec,y:prec}); } const inRange=pr.every(p=>p.x>=0&&p.x<=1&&p.y>=0&&p.y<=1); console.assert(inRange,'PR in [0,1]');
-        points=old; updateAll();
-        console.groupEnd();
-      }catch(e){ console.error('Self-tests failed',e); }
-    })();
-
-    // default: balanced
-    generateBalanced();
-  });
-  </script>
-
-<hr>
-<div class="sharethis-inline-share-buttons"></div>
-<%@ include file="thanks.jsp"%>
-<%@ include file="addcomments.jsp"%>
-
-<!-- E-E-A-T: About & Learning Outcomes (ROC AUC) -->
-<section class="container my-4">
-  <div class="row"><div class="col-lg-12"><div class="card"><div class="card-body">
-    <h2 class="h6 mb-2">About This Tool & Methodology</h2>
-    <p>This module computes ROC curves by sweeping probability thresholds over predicted scores and true labels. It calculates TPR/FPR pairs, area under the curve (AUC) via trapezoidal rule, and can display class‑imbalance aware views (e.g., PR curve where available).</p>
-    <h3 class="h6 mt-2">Learning Outcomes</h3>
-    <ul class="mb-2">
-      <li>Interpret ROC curves and AUC across different thresholds.</li>
-      <li>Understand when ROC vs PR curves are appropriate (imbalance).</li>
-      <li>See how calibration and score distributions affect metrics.</li>
-    </ul>
-    <div class="row mt-2">
-      <div class="col-md-6"><h4 class="h6">Authorship & Review</h4><ul>
-        <li><strong>Author:</strong> 8gwifi.org engineering team</li>
-        <li><strong>Reviewed by:</strong> Anish Nath</li>
-        <li><strong>Last updated:</strong> 2025-11-19</li>
-      </ul></div>
-      <div class="col-md-6"><h4 class="h6">Trust & Privacy</h4><ul>
-        <li>All calculations happen in your browser; datasets are not uploaded.</li>
-      </ul></div>
-    </div>
-  </div></div></div></div>
-</section>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "ROC AUC",
-  "url": "https://8gwifi.org/ROC_AUC.jsp",
-  "dateModified": "2025-11-19",
-  "author": {"@type": "Organization", "name": "8gwifi.org", "url": "https://8gwifi.org"},
-  "reviewedBy": {"@type": "Person", "name": "Anish Nath"},
-  "publisher": {"@type": "Organization", "name": "8gwifi.org"}
-}
 </script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://8gwifi.org/"},
-    {"@type":"ListItem","position":2,"name":"ROC AUC","item":"https://8gwifi.org/ROC_AUC.jsp"}
-  ]
-}
-</script>
-
-</div>
-<%@ include file="body-close.jsp"%>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
+<script src="<%=request.getContextPath()%>/ml/js/roc-auc.js?v=<%=v%>" defer></script>
+</body>
+</html>
