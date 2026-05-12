@@ -1,0 +1,314 @@
+/*
+ * k-means.css — Page styles for the K-Means clustering demo.
+ *
+ * Shares the math-studio.css shell (.ms-* tokens, layout grid).  Local
+ * styles use the .km-* prefix and mostly mirror the .gd-* shape so the
+ * two demo pages feel like siblings.
+ */
+
+/* ── Two-panel canvas grid ──────────────────────────────────── */
+.km-demo {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 0.85rem;
+    align-items: stretch;
+}
+@media (max-width: 900px) {
+    .km-demo { grid-template-columns: 1fr; }
+}
+
+.km-canvas-wrap {
+    position: relative;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    overflow: hidden;
+    box-shadow: var(--ms-shadow-sm);
+}
+.km-canvas-wrap canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+}
+.km-canvas-label {
+    position: absolute; top: 0.65rem; left: 0.85rem;
+    font: 500 0.72rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--ms-panel-bg);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+}
+.km-canvas-readout {
+    position: absolute; bottom: 0.65rem; left: 0.85rem; right: 0.85rem;
+    display: flex; justify-content: space-between; gap: 0.5rem;
+    font: 500 0.74rem var(--ms-font-mono);
+    color: var(--ms-ink-soft);
+    pointer-events: none;
+}
+.km-canvas-readout span {
+    background: rgba(254, 253, 251, 0.85);
+    padding: 0.18rem 0.5rem;
+    border-radius: var(--ms-radius-sm);
+    backdrop-filter: blur(4px);
+}
+[data-theme="dark"] .km-canvas-readout span {
+    background: rgba(28, 25, 23, 0.75);
+}
+
+/* ── Cluster legend (above/below the canvases) ──────────────── */
+.km-legend {
+    display: flex; flex-wrap: wrap; gap: 0.6rem;
+    margin-top: 0.85rem;
+    padding: 0.55rem 0.85rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    font: 500 0.78rem var(--ms-font-mono);
+    color: var(--ms-muted);
+}
+.km-legend-chip {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+}
+.km-legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid #fff;
+    box-shadow: 0 0 0 1px var(--ms-line);
+}
+
+/* ── Controls strip ─────────────────────────────────────────── */
+.km-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.85rem;
+    padding: 1rem 1.1rem;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    margin-top: 0.85rem;
+}
+.km-control {
+    display: flex; flex-direction: column; gap: 0.35rem;
+}
+.km-control-wide {
+    grid-column: 1 / -1;
+}
+.km-dataset-story {
+    font: 0.78rem/1.4 var(--ms-font-sans);
+    color: var(--ms-muted);
+    font-style: italic;
+    margin-top: 0.1rem;
+}
+.km-control-label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font: 500 0.78rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+}
+.km-control-value {
+    font: 500 0.76rem var(--ms-font-mono);
+    color: var(--ms-accent);
+}
+.km-control input[type="range"] {
+    width: 100%;
+    appearance: none;
+    height: 4px;
+    background: var(--ms-accent-soft);
+    border-radius: var(--ms-radius-pill);
+    outline: none;
+    cursor: pointer;
+}
+.km-control input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px; height: 16px;
+    background: var(--ms-accent);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform var(--ms-transition);
+}
+.km-control input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px;
+    background: var(--ms-accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+.km-control input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.15); }
+.km-control select,
+.km-control input[type="number"] {
+    padding: 0.45rem 0.6rem;
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    outline: none;
+    transition: border-color var(--ms-transition), box-shadow var(--ms-transition);
+}
+.km-control select:focus,
+.km-control input[type="number"]:focus {
+    border-color: var(--ms-accent);
+    box-shadow: var(--ms-ring);
+}
+
+/* ── Action row ─────────────────────────────────────────────── */
+.km-actions {
+    display: flex; gap: 0.6rem; flex-wrap: wrap;
+    margin-top: 0.85rem;
+}
+.km-btn {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.55rem 1.1rem;
+    font: 500 0.86rem var(--ms-font-sans);
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+    background: var(--ms-panel-bg);
+    color: var(--ms-ink);
+    cursor: pointer;
+    transition: transform var(--ms-transition),
+                background var(--ms-transition),
+                box-shadow var(--ms-transition);
+}
+.km-btn:hover { transform: translateY(-1px); box-shadow: var(--ms-shadow-sm); }
+.km-btn:active { transform: translateY(0); }
+.km-btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
+.km-btn.is-primary {
+    background: linear-gradient(135deg, var(--ms-cta-start), var(--ms-cta-end));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 1px 3px var(--ms-cta-shadow);
+}
+.km-btn.is-primary:hover { box-shadow: 0 4px 12px var(--ms-cta-shadow); }
+.km-btn.is-busy { pointer-events: none; position: relative; }
+.km-btn.is-busy::after {
+    content: '';
+    width: 12px; height: 12px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: km-spin 0.7s linear infinite;
+}
+@keyframes km-spin { to { transform: rotate(360deg); } }
+
+/* ── Code panel ─────────────────────────────────────────────── */
+.km-code {
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    overflow: hidden;
+}
+.km-code-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.55rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border-bottom: 1px solid var(--ms-line);
+    font: 500 0.78rem var(--ms-font-mono);
+    color: var(--ms-muted);
+}
+.km-code-header .km-code-title {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+}
+.km-code-header .km-code-title::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--ms-accent);
+    box-shadow: 0 0 0 3px var(--ms-accent-soft);
+}
+.km-code-actions { display: flex; gap: 0.4rem; }
+.km-code-actions button {
+    font: 500 0.74rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    background: transparent;
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    padding: 0.25rem 0.6rem;
+    cursor: pointer;
+    transition: color var(--ms-transition), border-color var(--ms-transition);
+}
+.km-code-actions button:hover { color: var(--ms-accent); border-color: var(--ms-accent); }
+.km-code textarea {
+    display: block;
+    width: 100%;
+    min-height: 360px;
+    padding: 1rem 1.1rem;
+    font: 400 0.86rem/1.55 var(--ms-font-mono);
+    color: var(--ms-ink);
+    background: var(--ms-panel-bg);
+    border: 0;
+    outline: 0;
+    resize: vertical;
+    tab-size: 4;
+}
+
+/* ── Console (Python stdout/stderr) ─────────────────────────── */
+.km-console {
+    margin-top: 0.85rem;
+    background: #0c0a09;
+    color: #e7e5e4;
+    border-radius: var(--ms-radius-sm);
+    padding: 0.75rem 1rem;
+    font: 400 0.78rem/1.55 var(--ms-font-mono);
+    max-height: 200px;
+    overflow: auto;
+    border: 1px solid var(--ms-line);
+}
+.km-console:empty { display: none; }
+.km-console .km-err { color: #fca5a5; }
+
+/* ── Math derivation card ───────────────────────────────────── */
+.km-math {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+.km-math-step {
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border-left: 3px solid var(--ms-accent);
+    border-radius: var(--ms-radius-sm);
+}
+.km-math-step h4 {
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.45rem;
+}
+.km-math-step p {
+    font: 0.86rem/1.55 var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    margin: 0;
+}
+.km-math-step .katex-display { margin: 0.5rem 0 0 !important; }
+
+/* ── Exercises ──────────────────────────────────────────────── */
+.km-try {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.75rem;
+}
+.km-try-item {
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+}
+.km-try-item h4 {
+    font: 500 0.88rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.3rem;
+}
+.km-try-item p {
+    font: 0.82rem/1.5 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0;
+}
+.km-try-item code {
+    font: 0.78rem var(--ms-font-mono);
+    color: var(--ms-accent);
+    background: var(--ms-accent-soft);
+    padding: 0.05rem 0.3rem;
+    border-radius: 3px;
+}

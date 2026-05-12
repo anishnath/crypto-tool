@@ -1,0 +1,257 @@
+/*
+ * activation-functions.css — Page styles for /activation_function_explorer.jsp.
+ *
+ * Page lives at the legacy URL outside /ml/, but visually it's a Ch 1
+ * sibling of /ml/gradient-descent.jsp, so we use the same .ms-* shell
+ * tokens and add a thin .af-* layer for activation-specific UI.
+ */
+
+/* ── Two-panel canvas grid ──────────────────────────────────── */
+.af-demo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    align-items: stretch;
+}
+@media (max-width: 900px) {
+    .af-demo { grid-template-columns: 1fr; }
+}
+.af-canvas-wrap {
+    position: relative;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    overflow: hidden;
+    box-shadow: var(--ms-shadow-sm);
+}
+.af-canvas-wrap canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+}
+.af-canvas-label {
+    position: absolute; top: 0.65rem; left: 0.85rem;
+    font: 500 0.72rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--ms-panel-bg);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+}
+.af-canvas-readout {
+    position: absolute; bottom: 0.65rem; left: 0.85rem; right: 0.85rem;
+    display: flex; justify-content: space-between; gap: 0.5rem;
+    font: 500 0.74rem var(--ms-font-mono);
+    color: var(--ms-ink-soft);
+    pointer-events: none;
+}
+.af-canvas-readout span {
+    background: rgba(254, 253, 251, 0.85);
+    padding: 0.18rem 0.5rem;
+    border-radius: var(--ms-radius-sm);
+    backdrop-filter: blur(4px);
+}
+[data-theme="dark"] .af-canvas-readout span {
+    background: rgba(28, 25, 23, 0.75);
+}
+
+/* ── Chip-style activation toggles ──────────────────────────── */
+.af-chips {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin-top: 0.85rem;
+}
+.af-chip {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-pill);
+    font: 500 0.82rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    cursor: pointer;
+    user-select: none;
+    transition: all var(--ms-transition);
+}
+.af-chip:hover { transform: translateY(-1px); box-shadow: var(--ms-shadow-sm); }
+.af-chip.is-active {
+    background: var(--ms-accent-soft);
+    border-color: var(--ms-accent);
+    color: var(--ms-accent);
+}
+.af-chip-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--af-color, var(--ms-muted));
+    border: 1.5px solid #fff;
+    box-shadow: 0 0 0 1px var(--ms-line);
+    flex-shrink: 0;
+}
+
+/* ── Controls strip (parameters + domain) ───────────────────── */
+.af-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.85rem;
+    padding: 1rem 1.1rem;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    margin-top: 0.85rem;
+}
+.af-control {
+    display: flex; flex-direction: column; gap: 0.35rem;
+}
+.af-control.is-hidden { display: none; }
+.af-control-label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font: 500 0.78rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+}
+.af-control-value {
+    font: 500 0.76rem var(--ms-font-mono);
+    color: var(--ms-accent);
+}
+.af-control input[type="range"] {
+    width: 100%;
+    appearance: none;
+    height: 4px;
+    background: var(--ms-accent-soft);
+    border-radius: var(--ms-radius-pill);
+    outline: none;
+    cursor: pointer;
+}
+.af-control input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px; height: 16px;
+    background: var(--ms-accent);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform var(--ms-transition);
+}
+.af-control input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px;
+    background: var(--ms-accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+.af-control input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.15); }
+.af-control select,
+.af-control input[type="number"] {
+    padding: 0.45rem 0.6rem;
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    outline: none;
+    transition: border-color var(--ms-transition), box-shadow var(--ms-transition);
+}
+.af-control select:focus,
+.af-control input[type="number"]:focus {
+    border-color: var(--ms-accent);
+    box-shadow: var(--ms-ring);
+}
+
+/* ── Action row ─────────────────────────────────────────────── */
+.af-actions {
+    display: flex; gap: 0.6rem; flex-wrap: wrap;
+    margin-top: 0.85rem;
+}
+.af-btn {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.55rem 1.1rem;
+    font: 500 0.86rem var(--ms-font-sans);
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+    background: var(--ms-panel-bg);
+    color: var(--ms-ink);
+    cursor: pointer;
+    transition: transform var(--ms-transition),
+                background var(--ms-transition),
+                box-shadow var(--ms-transition);
+}
+.af-btn:hover { transform: translateY(-1px); box-shadow: var(--ms-shadow-sm); }
+.af-btn:active { transform: translateY(0); }
+
+/* ── Formula grid (the math card) ───────────────────────────── */
+.af-formula-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 0.85rem;
+}
+.af-formula-card {
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-left: 3px solid var(--af-color, var(--ms-accent));
+    border-radius: var(--ms-radius-sm);
+    padding: 0.85rem 1rem;
+}
+.af-formula-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 0.5rem; margin-bottom: 0.45rem;
+}
+.af-formula-title {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    font: 600 0.92rem var(--ms-font-sans);
+    color: var(--ms-ink);
+}
+.af-formula-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--af-color, var(--ms-accent));
+}
+.af-formula-range {
+    font: 500 0.72rem var(--ms-font-mono);
+    color: var(--ms-muted);
+}
+.af-formula-card .af-formula-row {
+    margin: 0.35rem 0;
+    font: 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+}
+.af-formula-card .af-formula-row .katex-display {
+    margin: 0.3rem 0 !important;
+    text-align: left !important;
+}
+.af-formula-card .af-formula-row .katex-display > .katex {
+    text-align: left !important;
+}
+.af-formula-note {
+    font: italic 0.78rem var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin-top: 0.4rem;
+}
+
+/* ── Try this exercises ─────────────────────────────────────── */
+.af-try {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.75rem;
+}
+.af-try-item {
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+}
+.af-try-item h4 {
+    font: 500 0.88rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.3rem;
+}
+.af-try-item p {
+    font: 0.82rem/1.5 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0;
+}
+.af-try-item code {
+    font: 0.78rem var(--ms-font-mono);
+    color: var(--ms-accent);
+    background: var(--ms-accent-soft);
+    padding: 0.05rem 0.3rem;
+    border-radius: 3px;
+}

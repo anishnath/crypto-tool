@@ -1,0 +1,926 @@
+/*
+ * ml-pipeline.css — page styles for the ML Pipeline wizard.
+ *
+ * Six-step flow: Dataset → EDA → Preprocess → Train → Evaluate → Deploy.
+ * Reuses .ms-* shell tokens; adds .mp-* layer for the step indicator,
+ * dataset/stat/model cards, progress bars, and the per-step teaching
+ * scaffolding (hero, definition, callouts, glossary, lifecycle).
+ */
+
+/* ── Per-step accent color system ───────────────────────────── */
+/* Each step block declares its color via data-color; child elements
+   pull from the local --mp-c / --mp-c-soft variables.  Step indicator
+   nodes use the same scheme. */
+.mp-step-content[data-color="indigo"], .mp-step[data-color="indigo"]  { --mp-c: #4f46e5; --mp-c-soft: rgba(79, 70, 229, 0.10); --mp-c-softer: rgba(79, 70, 229, 0.05); }
+.mp-step-content[data-color="teal"],   .mp-step[data-color="teal"]    { --mp-c: #14b8a6; --mp-c-soft: rgba(20, 184, 166, 0.12); --mp-c-softer: rgba(20, 184, 166, 0.05); }
+.mp-step-content[data-color="amber"],  .mp-step[data-color="amber"]   { --mp-c: #f59e0b; --mp-c-soft: rgba(245, 158, 11, 0.12); --mp-c-softer: rgba(245, 158, 11, 0.05); }
+.mp-step-content[data-color="violet"], .mp-step[data-color="violet"]  { --mp-c: #8b5cf6; --mp-c-soft: rgba(139, 92, 246, 0.12); --mp-c-softer: rgba(139, 92, 246, 0.05); }
+.mp-step-content[data-color="pink"],   .mp-step[data-color="pink"]    { --mp-c: #ec4899; --mp-c-soft: rgba(236, 72, 153, 0.12); --mp-c-softer: rgba(236, 72, 153, 0.05); }
+.mp-step-content[data-color="green"],  .mp-step[data-color="green"]   { --mp-c: #22c55e; --mp-c-soft: rgba(34, 197, 94, 0.12); --mp-c-softer: rgba(34, 197, 94, 0.05); }
+
+/* Tint the active step content card with a faint accent gradient */
+.mp-step-content.is-visible {
+    background: linear-gradient(180deg, var(--mp-c-softer), transparent 240px);
+    border-top: 3px solid var(--mp-c, var(--ms-accent));
+    padding-top: 1.4rem;
+    animation: mp-fade-in 0.4s var(--ms-ease);
+}
+@keyframes mp-fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Step hero (eyebrow + serif title + tagline) ────────────── */
+.mp-hero {
+    margin-bottom: 1.5rem;
+}
+.mp-eyebrow {
+    display: inline-block;
+    font: 500 0.72rem var(--ms-font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mp-c, var(--ms-accent));
+    margin-bottom: 0.55rem;
+}
+.mp-hero h2 {
+    font: 400 2.1rem/1.1 var(--ms-font-serif);
+    color: var(--ms-ink);
+    margin: 0 0 0.45rem;
+    letter-spacing: -0.02em;
+}
+.mp-hero h2 em {
+    font-style: italic;
+    color: var(--mp-c, var(--ms-accent));
+}
+.mp-tagline {
+    font: 1rem/1.5 var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    margin: 0;
+    max-width: 60ch;
+}
+
+/* ── Definition card — "What is this step?" ─────────────────── */
+.mp-def {
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    padding: 1.1rem 1.25rem;
+    margin: 1.25rem 0;
+}
+.mp-def h3 {
+    font: 500 0.9rem var(--ms-font-sans);
+    color: var(--mp-c, var(--ms-ink));
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.78rem;
+}
+.mp-def p {
+    font: 0.94rem/1.65 var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    margin: 0 0 0.4rem;
+}
+.mp-def p:last-child { margin-bottom: 0; }
+
+/* ── Inline callouts (why / pitfalls / in-practice) ─────────── */
+.mp-callout {
+    display: flex;
+    gap: 0.85rem;
+    padding: 0.95rem 1.1rem;
+    margin: 0.85rem 0;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-left: 3px solid var(--mp-c, var(--ms-accent));
+    border-radius: var(--ms-radius-sm);
+}
+.mp-callout-icon {
+    flex-shrink: 0;
+    font-size: 1.35rem;
+    line-height: 1.4;
+}
+.mp-callout-body {
+    font: 0.92rem/1.6 var(--ms-font-sans);
+    color: var(--ms-ink);
+}
+.mp-callout-body strong {
+    color: var(--mp-c, var(--ms-ink));
+}
+.mp-callout-body ul {
+    margin: 0.4rem 0 0;
+    padding-left: 1.2rem;
+}
+.mp-callout-body ul li {
+    margin: 0.2rem 0;
+    color: var(--ms-ink-soft);
+}
+.mp-callout-body code {
+    font: 0.85em var(--ms-font-mono);
+    background: var(--mp-c-soft);
+    color: var(--mp-c, var(--ms-accent));
+    padding: 0.05em 0.35em;
+    border-radius: 3px;
+}
+
+/* Variant: warning/pitfalls — subtle amber tint regardless of step color */
+.mp-callout.is-pitfall {
+    background: rgba(245, 158, 11, 0.04);
+    border-left-color: #f59e0b;
+}
+.mp-callout.is-pitfall .mp-callout-body strong { color: #b45309; }
+[data-theme="dark"] .mp-callout.is-pitfall .mp-callout-body strong { color: #fbbf24; }
+
+/* Variant: success/tip — subtle green tint */
+.mp-callout.is-practice {
+    background: rgba(34, 197, 94, 0.04);
+    border-left-color: #15803d;
+}
+.mp-callout.is-practice .mp-callout-body strong { color: #15803d; }
+[data-theme="dark"] .mp-callout.is-practice .mp-callout-body strong { color: #86efac; }
+
+/* ── Page-level intro panel (above the wizard) ──────────────── */
+.mp-intro {
+    background: linear-gradient(135deg, var(--ms-panel-bg), var(--ms-panel-bg-soft));
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-lg);
+    padding: 1.6rem 1.85rem;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.mp-intro::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.10), transparent 60%);
+    pointer-events: none;
+}
+.mp-intro h2 {
+    font: 500 1.4rem/1.2 var(--ms-font-serif);
+    color: var(--ms-ink);
+    margin: 0 0 0.6rem;
+    letter-spacing: -0.015em;
+}
+.mp-intro h2 em { font-style: italic; color: #4f46e5; }
+.mp-intro p {
+    font: 0.95rem/1.65 var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    margin: 0 0 0.6rem;
+    max-width: 75ch;
+}
+.mp-intro p:last-child { margin-bottom: 0; }
+
+/* ── Lifecycle diagram (6-stage cycle with feedback arrow) ──── */
+.mp-lifecycle {
+    margin-bottom: 1rem;
+}
+.mp-lifecycle-title {
+    font: 500 1.1rem var(--ms-font-serif);
+    color: var(--ms-ink);
+    margin: 0 0 0.4rem;
+}
+.mp-lifecycle-desc {
+    font: 0.88rem/1.55 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0 0 1rem;
+    max-width: 65ch;
+}
+.mp-lifecycle-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+}
+
+/* ── Bigger step indicator with icons ───────────────────────── */
+.mp-steps {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.3rem;
+    position: relative;
+}
+.mp-steps::before {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 28px; right: 28px;
+    height: 2px;
+    background: var(--ms-line);
+    z-index: 0;
+}
+.mp-step {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform var(--ms-transition);
+}
+.mp-step:hover { transform: translateY(-2px); }
+.mp-step-num {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--ms-panel-bg);
+    border: 2px solid var(--ms-line);
+    color: var(--ms-muted);
+    font-size: 1.15rem;
+    line-height: 1;
+    transition: all var(--ms-transition);
+    position: relative;
+}
+.mp-step-icon {
+    /* Emoji glyph centered inside the circle */
+    font-size: 1.05rem;
+    line-height: 1;
+}
+.mp-step:hover .mp-step-num {
+    border-color: var(--mp-c, var(--ms-accent));
+}
+.mp-step.is-active .mp-step-num {
+    background: var(--mp-c, var(--ms-accent));
+    border-color: var(--mp-c, var(--ms-accent));
+    box-shadow: 0 0 0 5px var(--mp-c-soft);
+    transform: scale(1.05);
+}
+.mp-step.is-completed .mp-step-num {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: #fff;
+}
+.mp-step-label {
+    display: block;
+    margin-top: 0.55rem;
+    font: 500 0.78rem var(--ms-font-sans);
+    color: var(--ms-muted);
+}
+.mp-step.is-active .mp-step-label {
+    color: var(--ms-ink);
+    font-weight: 600;
+}
+.mp-step.is-completed .mp-step-label {
+    color: var(--ms-ink-soft);
+}
+
+/* ── Step content card heading & nav ────────────────────────── */
+.mp-step-content { display: none; }
+.mp-step-content.is-visible { display: block; }
+/* Older mp-step-title (kept for back-compat — new code uses .mp-hero h2) */
+.mp-step-title {
+    font: 500 1.25rem var(--ms-font-serif);
+    color: var(--ms-ink);
+    margin: 0 0 0.35rem;
+    letter-spacing: -0.015em;
+}
+.mp-step-desc {
+    font: 0.88rem/1.55 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0 0 1rem;
+    max-width: 70ch;
+}
+.mp-step-nav {
+    display: flex; justify-content: space-between; gap: 0.6rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--ms-line);
+}
+
+.mp-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    font: 500 0.86rem var(--ms-font-sans);
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+    background: var(--ms-panel-bg);
+    color: var(--ms-ink);
+    cursor: pointer;
+    transition: transform var(--ms-transition),
+                background var(--ms-transition),
+                box-shadow var(--ms-transition);
+}
+.mp-btn:hover { transform: translateY(-1px); box-shadow: var(--ms-shadow-sm); }
+.mp-btn:active { transform: translateY(0); }
+.mp-btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.mp-btn.is-primary {
+    background: linear-gradient(135deg, var(--ms-cta-start), var(--ms-cta-end));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 1px 3px var(--ms-cta-shadow);
+}
+.mp-btn.is-primary:hover { box-shadow: 0 4px 12px var(--ms-cta-shadow); }
+.mp-btn.is-success {
+    background: linear-gradient(135deg, #15803d, #22c55e);
+    color: #fff;
+    border-color: transparent;
+}
+
+/* ── Step indicator strip ───────────────────────────────────── */
+.mp-steps {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    position: relative;
+}
+.mp-steps::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 24px; right: 24px;
+    height: 2px;
+    background: var(--ms-line);
+    z-index: 0;
+}
+.mp-step {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+.mp-step-num {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--ms-panel-bg);
+    border: 2px solid var(--ms-line);
+    color: var(--ms-muted);
+    font: 600 0.88rem var(--ms-font-mono);
+    transition: all var(--ms-transition);
+}
+.mp-step:hover .mp-step-num {
+    border-color: var(--ms-accent);
+    color: var(--ms-accent);
+}
+.mp-step.is-active .mp-step-num {
+    background: var(--ms-accent);
+    color: #fff;
+    border-color: var(--ms-accent);
+    box-shadow: 0 0 0 4px var(--ms-accent-soft);
+}
+.mp-step.is-completed .mp-step-num {
+    background: #22c55e;
+    color: #fff;
+    border-color: #22c55e;
+}
+.mp-step-label {
+    display: block;
+    margin-top: 0.45rem;
+    font: 500 0.78rem var(--ms-font-sans);
+    color: var(--ms-muted);
+}
+.mp-step.is-active .mp-step-label {
+    color: var(--ms-ink);
+    font-weight: 600;
+}
+.mp-step.is-completed .mp-step-label {
+    color: var(--ms-ink-soft);
+}
+
+/* ── Step content card heading & nav ────────────────────────── */
+.mp-step-content { display: none; }
+.mp-step-content.is-visible { display: block; }
+.mp-step-title {
+    font: 500 1.25rem var(--ms-font-serif);
+    color: var(--ms-ink);
+    margin: 0 0 0.35rem;
+    letter-spacing: -0.015em;
+}
+.mp-step-desc {
+    font: 0.88rem/1.55 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0 0 1rem;
+    max-width: 70ch;
+}
+.mp-step-nav {
+    display: flex; justify-content: space-between; gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.mp-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    font: 500 0.86rem var(--ms-font-sans);
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+    background: var(--ms-panel-bg);
+    color: var(--ms-ink);
+    cursor: pointer;
+    transition: transform var(--ms-transition),
+                background var(--ms-transition),
+                box-shadow var(--ms-transition);
+}
+.mp-btn:hover { transform: translateY(-1px); box-shadow: var(--ms-shadow-sm); }
+.mp-btn:active { transform: translateY(0); }
+.mp-btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.mp-btn.is-primary {
+    background: linear-gradient(135deg, var(--ms-cta-start), var(--ms-cta-end));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 1px 3px var(--ms-cta-shadow);
+}
+.mp-btn.is-primary:hover { box-shadow: 0 4px 12px var(--ms-cta-shadow); }
+.mp-btn.is-success {
+    background: linear-gradient(135deg, #15803d, #22c55e);
+    color: #fff;
+    border-color: transparent;
+}
+
+/* ── Step 1: dataset cards ──────────────────────────────────── */
+.mp-dataset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.85rem;
+}
+.mp-dataset-card {
+    border: 2px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    padding: 1.1rem 1rem;
+    cursor: pointer;
+    transition: transform var(--ms-transition),
+                border-color var(--ms-transition),
+                background var(--ms-transition),
+                box-shadow var(--ms-transition);
+    text-align: center;
+    background: var(--ms-panel-bg);
+}
+.mp-dataset-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--ms-accent);
+    box-shadow: var(--ms-shadow);
+}
+.mp-dataset-card.is-selected {
+    border-color: var(--ms-accent);
+    background: var(--ms-accent-soft);
+}
+.mp-dataset-emoji {
+    font-size: 2.25rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+.mp-dataset-title {
+    font: 600 1rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.25rem;
+}
+.mp-dataset-desc {
+    font: 0.78rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    margin: 0;
+}
+
+/* ── Step 2: stat heroes (giant numbers in serif) ───────────── */
+.mp-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.85rem;
+    margin: 0.5rem 0 1.25rem;
+}
+.mp-stat-card {
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-top: 3px solid var(--mp-c, #14b8a6);
+    border-radius: var(--ms-radius);
+    padding: 1.1rem 1.2rem;
+    text-align: left;
+    transition: transform var(--ms-transition), box-shadow var(--ms-transition);
+}
+.mp-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--ms-shadow);
+}
+.mp-stat-label {
+    font: 500 0.68rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.2rem;
+}
+.mp-stat-value {
+    font: 400 2.6rem/1.05 var(--ms-font-serif);
+    color: var(--ms-ink);
+    letter-spacing: -0.03em;
+}
+.mp-stat-suffix {
+    display: block;
+    font: 500 0.72rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    margin-top: 0.1rem;
+}
+
+/* ── Charts ─────────────────────────────────────────────────── */
+.mp-chart-wrap {
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    padding: 1rem;
+    height: 280px;
+    position: relative;
+}
+.mp-chart-wrap canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+.mp-chart-label {
+    font: 500 0.78rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+}
+.mp-chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+}
+@media (max-width: 768px) {
+    .mp-chart-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Step 3: preprocess controls ────────────────────────────── */
+.mp-pre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+@media (max-width: 768px) {
+    .mp-pre-grid { grid-template-columns: 1fr; }
+}
+.mp-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font: 500 0.88rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0.4rem 0;
+}
+.mp-checkbox input { accent-color: var(--ms-accent); width: 16px; height: 16px; }
+.mp-range-label {
+    display: flex; justify-content: space-between;
+    font: 500 0.8rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    margin-top: 0.85rem;
+    margin-bottom: 0.35rem;
+}
+.mp-range-label strong { color: var(--ms-accent); font: 500 0.8rem var(--ms-font-mono); }
+.mp-range {
+    width: 100%;
+    appearance: none;
+    height: 4px;
+    background: var(--ms-accent-soft);
+    border-radius: var(--ms-radius-pill);
+    cursor: pointer;
+}
+.mp-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px; height: 16px;
+    background: var(--ms-accent);
+    border-radius: 50%;
+}
+.mp-range::-moz-range-thumb {
+    width: 16px; height: 16px;
+    background: var(--ms-accent);
+    border-radius: 50%;
+    border: none;
+}
+.mp-summary {
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    padding: 0.85rem 1rem;
+}
+.mp-summary h4 {
+    font: 500 0.88rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.5rem;
+}
+.mp-summary p {
+    font: 0.86rem var(--ms-font-mono);
+    color: var(--ms-ink-soft);
+    margin: 0.2rem 0;
+}
+
+/* ── Step 4: model cards with progress bars ─────────────────── */
+.mp-train-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 0.85rem;
+    align-items: stretch;
+}
+@media (max-width: 768px) {
+    .mp-train-grid { grid-template-columns: 1fr; }
+}
+.mp-models {
+    display: flex; flex-direction: column;
+    gap: 0.5rem;
+}
+.mp-model-card {
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    transition: border-color var(--ms-transition), background var(--ms-transition);
+}
+.mp-model-card.is-best {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
+    box-shadow: 0 2px 12px rgba(245, 158, 11, 0.20);
+    position: relative;
+}
+.mp-model-card.is-best::before {
+    content: '🏆';
+    position: absolute;
+    top: -10px; right: -8px;
+    font-size: 1.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+.mp-model-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 0.4rem;
+}
+.mp-model-name {
+    font: 600 0.88rem var(--ms-font-sans);
+    color: var(--ms-ink);
+}
+.mp-model-acc {
+    font: 500 0.85rem var(--ms-font-mono);
+    color: var(--ms-muted);
+}
+.mp-progress {
+    height: 6px;
+    background: var(--ms-line);
+    border-radius: var(--ms-radius-pill);
+    overflow: hidden;
+}
+.mp-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ms-cta-start), var(--ms-cta-end));
+    width: 0%;
+    transition: width 0.3s var(--ms-ease);
+}
+
+/* ── Step 5: feature importance + best-model alert ──────────── */
+.mp-feat-row {
+    margin-bottom: 0.5rem;
+}
+.mp-feat-name {
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin-bottom: 0.25rem;
+}
+.mp-feat-bar-wrap {
+    height: 16px;
+    background: var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    overflow: hidden;
+    position: relative;
+}
+.mp-feat-bar {
+    height: 100%;
+    background: var(--ms-accent);
+    transition: width 0.3s var(--ms-ease);
+}
+.mp-feat-pct {
+    position: absolute; top: 0; right: 0.5rem;
+    line-height: 16px;
+    font: 500 0.72rem var(--ms-font-mono);
+    color: var(--ms-ink);
+}
+/* ── Step 5: trophy banner reveal ───────────────────────────── */
+.mp-best-alert {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(34, 197, 94, 0.08));
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: var(--ms-radius);
+    padding: 1.1rem 1.3rem;
+    margin-top: 1.25rem;
+    color: var(--ms-ink);
+    animation: mp-trophy-pop 0.55s var(--ms-ease);
+}
+.mp-best-alert::before {
+    content: '🏆';
+    font-size: 2.2rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 6px rgba(245, 158, 11, 0.4));
+    flex-shrink: 0;
+}
+.mp-best-alert-body {
+    display: flex; flex-direction: column;
+    gap: 0.15rem;
+}
+.mp-best-alert-label {
+    font: 500 0.7rem var(--ms-font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #b45309;
+}
+[data-theme="dark"] .mp-best-alert-label { color: #fbbf24; }
+.mp-best-alert-model {
+    font: 500 1.1rem var(--ms-font-serif);
+    color: var(--ms-ink);
+}
+@keyframes mp-trophy-pop {
+    0% { opacity: 0; transform: scale(0.95); }
+    60% { opacity: 1; transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* ── Step 6: deployment ─────────────────────────────────────── */
+.mp-deploy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+}
+@media (max-width: 768px) {
+    .mp-deploy-grid { grid-template-columns: 1fr; }
+}
+.mp-pred-input {
+    display: flex; flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+.mp-pred-input label {
+    font: 500 0.78rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+}
+.mp-pred-input input {
+    padding: 0.4rem 0.6rem;
+    font: 500 0.85rem var(--ms-font-mono);
+    color: var(--ms-ink);
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    outline: none;
+}
+.mp-pred-input input:focus {
+    border-color: var(--ms-accent);
+    box-shadow: var(--ms-ring);
+}
+.mp-pred-result {
+    margin-top: 0.85rem;
+    padding: 0.85rem 1rem;
+    background: rgba(79, 70, 229, 0.08);
+    border: 1px solid #4f46e5;
+    border-radius: var(--ms-radius-sm);
+    color: var(--ms-ink);
+    font: 500 0.92rem var(--ms-font-sans);
+    display: none;
+}
+.mp-pred-result.is-visible { display: block; }
+.mp-pred-result strong { color: #4f46e5; }
+[data-theme="dark"] .mp-pred-result strong { color: #a5b4fc; }
+
+/* ── Beyond-this-demo · reality check ───────────────────────── */
+.mp-reality-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.85rem;
+}
+.mp-reality-card {
+    padding: 1rem 1.15rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+}
+.mp-reality-card h4 {
+    font: 500 0.92rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.5rem;
+    display: flex; align-items: center; gap: 0.4rem;
+}
+.mp-reality-card h4::before {
+    content: '⚙';
+    color: #f59e0b;
+    font-size: 1.05rem;
+}
+.mp-reality-card p {
+    font: 0.86rem/1.55 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0;
+}
+.mp-reality-card code {
+    font: 0.78rem var(--ms-font-mono);
+    color: #4f46e5;
+    background: rgba(79, 70, 229, 0.08);
+    padding: 0.05em 0.35em;
+    border-radius: 3px;
+}
+[data-theme="dark"] .mp-reality-card code { color: #a5b4fc; background: rgba(165, 180, 252, 0.12); }
+
+/* ── Compact definition (replaces verbose .mp-def for most steps) ── */
+.mp-def-line {
+    font: 0.92rem/1.55 var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    border-left: 3px solid var(--mp-c, var(--ms-accent));
+    padding: 0.15rem 0 0.15rem 0.85rem;
+    margin: 1rem 0 1.25rem;
+    max-width: 70ch;
+}
+.mp-def-line strong { color: var(--mp-c, var(--ms-ink)); }
+
+/* ── Chip strip for pitfalls / in-practice (scan, don't read) ── */
+.mp-strip {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    align-items: center;
+    padding: 0.55rem 0.85rem;
+    margin: 0.65rem 0;
+    border-radius: var(--ms-radius-sm);
+    background: var(--ms-panel-bg-soft);
+    border-left: 3px solid var(--ms-line);
+}
+.mp-strip-label {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font: 500 0.7rem var(--ms-font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ms-muted);
+    margin-right: 0.4rem;
+    flex-shrink: 0;
+}
+.mp-strip.is-watchout {
+    background: rgba(245, 158, 11, 0.05);
+    border-left-color: #f59e0b;
+}
+.mp-strip.is-watchout .mp-strip-label { color: #b45309; }
+[data-theme="dark"] .mp-strip.is-watchout .mp-strip-label { color: #fbbf24; }
+.mp-strip.is-practice {
+    background: rgba(34, 197, 94, 0.04);
+    border-left-color: #15803d;
+}
+.mp-strip.is-practice .mp-strip-label { color: #15803d; }
+[data-theme="dark"] .mp-strip.is-practice .mp-strip-label { color: #86efac; }
+.mp-tag {
+    display: inline-flex; align-items: center;
+    padding: 0.2rem 0.6rem;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-pill);
+    font: 500 0.76rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    white-space: nowrap;
+}
+.mp-strip.is-practice .mp-tag {
+    font-family: var(--ms-font-mono);
+    font-size: 0.74rem;
+    color: var(--mp-c, var(--ms-accent));
+    background: var(--mp-c-softer, var(--ms-panel-bg));
+    border-color: var(--mp-c-soft, var(--ms-line));
+}
+
+/* ── Collapsible (details/summary) ───────────────────────────── */
+.mp-collapse {
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+}
+.mp-collapse > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.85rem 1.1rem;
+    font: 500 0.92rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    display: flex; justify-content: space-between; align-items: center;
+    user-select: none;
+}
+.mp-collapse > summary::-webkit-details-marker { display: none; }
+.mp-collapse > summary::after {
+    content: '+';
+    font: 500 1.3rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    transition: transform var(--ms-transition);
+}
+.mp-collapse[open] > summary::after { content: '−'; }
+.mp-collapse > .mp-collapse-body {
+    padding: 0 1.1rem 1rem;
+}
+
+/* ── Glossary ───────────────────────────────────────────────── */
+.mp-glossary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0.55rem 1rem;
+}
+.mp-term {
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--ms-line);
+}
+.mp-term:last-child { border-bottom: none; }
+.mp-term dt {
+    font: 600 0.88rem var(--ms-font-mono);
+    color: var(--ms-ink);
+    margin-bottom: 0.2rem;
+}
+.mp-term dd {
+    font: 0.84rem/1.55 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0;
+}

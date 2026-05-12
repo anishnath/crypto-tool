@@ -1,0 +1,369 @@
+/*
+ * pca.css — page styles for the PCA demo.
+ *
+ * Mirrors the .gd-* / .km-* patterns from gradient-descent.css and
+ * k-means.css.  Local prefix is .pca-*.
+ */
+
+/* ── Two 3D panels side by side ─────────────────────────────── */
+.pca-demo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    align-items: stretch;
+}
+@media (max-width: 900px) {
+    .pca-demo { grid-template-columns: 1fr; }
+}
+
+.pca-canvas-wrap {
+    position: relative;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    overflow: hidden;
+    box-shadow: var(--ms-shadow-sm);
+}
+.pca-3d {
+    width: 100%;
+    height: 100%;
+    min-height: 360px;
+}
+.pca-3d .modebar {
+    background: transparent !important;
+    opacity: 0.4;
+    transition: opacity var(--ms-transition);
+}
+.pca-canvas-wrap:hover .modebar { opacity: 1; }
+.pca-canvas-label {
+    position: absolute; top: 0.65rem; left: 0.85rem;
+    font: 500 0.72rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--ms-panel-bg);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+    z-index: 5;
+}
+.pca-canvas-readout {
+    position: absolute; bottom: 0.65rem; left: 0.85rem; right: 0.85rem;
+    display: flex; justify-content: space-between; gap: 0.5rem;
+    font: 500 0.74rem var(--ms-font-mono);
+    color: var(--ms-ink-soft);
+    pointer-events: none;
+    z-index: 5;
+}
+.pca-canvas-readout span {
+    background: rgba(254, 253, 251, 0.85);
+    padding: 0.18rem 0.5rem;
+    border-radius: var(--ms-radius-sm);
+    backdrop-filter: blur(4px);
+}
+[data-theme="dark"] .pca-canvas-readout span {
+    background: rgba(28, 25, 23, 0.75);
+}
+
+/* ── Scree plot (full-width below the 3D panels) ────────────── */
+.pca-scree-wrap {
+    position: relative;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    padding: 1rem 1.1rem;
+    margin-top: 0.85rem;
+    box-shadow: var(--ms-shadow-sm);
+}
+.pca-scree-label {
+    font: 500 0.72rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.45rem;
+}
+.pca-scree-canvas {
+    display: block;
+    width: 100%;
+    height: 120px;
+}
+
+/* ── Controls (mirrors .gd-controls) ────────────────────────── */
+.pca-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.85rem;
+    padding: 1rem 1.1rem;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    margin-top: 0.85rem;
+}
+.pca-control {
+    display: flex; flex-direction: column; gap: 0.35rem;
+}
+.pca-control-wide {
+    grid-column: 1 / -1;
+}
+.pca-dataset-story {
+    font: 0.78rem/1.4 var(--ms-font-sans);
+    color: var(--ms-muted);
+    font-style: italic;
+    margin-top: 0.1rem;
+}
+.pca-control-label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font: 500 0.78rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+}
+.pca-control-value {
+    font: 500 0.76rem var(--ms-font-mono);
+    color: var(--ms-accent);
+}
+.pca-control input[type="range"] {
+    width: 100%;
+    appearance: none;
+    height: 4px;
+    background: var(--ms-accent-soft);
+    border-radius: var(--ms-radius-pill);
+    cursor: pointer;
+}
+.pca-control input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px; height: 16px;
+    background: var(--ms-accent);
+    border-radius: 50%;
+    cursor: pointer;
+}
+.pca-control input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px;
+    background: var(--ms-accent);
+    border-radius: 50%;
+    border: none;
+}
+.pca-control select,
+.pca-control input[type="number"] {
+    padding: 0.45rem 0.6rem;
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    outline: none;
+}
+.pca-control select:focus,
+.pca-control input[type="number"]:focus {
+    border-color: var(--ms-accent);
+    box-shadow: var(--ms-ring);
+}
+.pca-control-checkbox {
+    display: flex; align-items: center; gap: 0.4rem;
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    cursor: pointer;
+}
+.pca-control-checkbox input { accent-color: var(--ms-accent); width: 16px; height: 16px; }
+
+/* ── Actions row ────────────────────────────────────────────── */
+.pca-actions {
+    display: flex; gap: 0.6rem; flex-wrap: wrap;
+    margin-top: 0.85rem;
+}
+.pca-btn {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.55rem 1.1rem;
+    font: 500 0.86rem var(--ms-font-sans);
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+    background: var(--ms-panel-bg);
+    color: var(--ms-ink);
+    cursor: pointer;
+    transition: transform var(--ms-transition), box-shadow var(--ms-transition);
+}
+.pca-btn:hover { transform: translateY(-1px); box-shadow: var(--ms-shadow-sm); }
+.pca-btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
+.pca-btn.is-primary {
+    background: linear-gradient(135deg, var(--ms-cta-start), var(--ms-cta-end));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 1px 3px var(--ms-cta-shadow);
+}
+.pca-btn.is-primary:hover { box-shadow: 0 4px 12px var(--ms-cta-shadow); }
+.pca-btn.is-busy { pointer-events: none; position: relative; }
+.pca-btn.is-busy::after {
+    content: '';
+    width: 12px; height: 12px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: pca-spin 0.7s linear infinite;
+}
+@keyframes pca-spin { to { transform: rotate(360deg); } }
+
+/* ── Code panel ─────────────────────────────────────────────── */
+.pca-code {
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    overflow: hidden;
+}
+.pca-code-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.55rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border-bottom: 1px solid var(--ms-line);
+    font: 500 0.78rem var(--ms-font-mono);
+    color: var(--ms-muted);
+}
+.pca-code-header .pca-code-title {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+}
+.pca-code-header .pca-code-title::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--ms-accent);
+    box-shadow: 0 0 0 3px var(--ms-accent-soft);
+}
+.pca-code-actions { display: flex; gap: 0.4rem; }
+.pca-code-actions button {
+    font: 500 0.74rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    background: transparent;
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    padding: 0.25rem 0.6rem;
+    cursor: pointer;
+}
+.pca-code-actions button:hover { color: var(--ms-accent); border-color: var(--ms-accent); }
+.pca-code textarea {
+    display: block;
+    width: 100%;
+    min-height: 360px;
+    padding: 1rem 1.1rem;
+    font: 400 0.86rem/1.55 var(--ms-font-mono);
+    color: var(--ms-ink);
+    background: var(--ms-panel-bg);
+    border: 0;
+    outline: 0;
+    resize: vertical;
+    tab-size: 4;
+}
+
+/* ── Console ────────────────────────────────────────────────── */
+.pca-console {
+    margin-top: 0.85rem;
+    background: #0c0a09;
+    color: #e7e5e4;
+    border-radius: var(--ms-radius-sm);
+    padding: 0.75rem 1rem;
+    font: 400 0.78rem/1.55 var(--ms-font-mono);
+    max-height: 200px;
+    overflow: auto;
+    border: 1px solid var(--ms-line);
+}
+.pca-console:empty { display: none; }
+.pca-console .pca-err { color: #fca5a5; }
+
+/* ── Math derivation card (5 steps) ─────────────────────────── */
+.pca-math {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+.pca-math-step {
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border-left: 3px solid var(--ms-accent);
+    border-radius: var(--ms-radius-sm);
+}
+.pca-math-step h4 {
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.45rem;
+}
+.pca-math-step p {
+    font: 0.86rem/1.55 var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    margin: 0;
+}
+.pca-math-step .katex-display { margin: 0.5rem 0 0 !important; }
+
+/* ── Try this exercises ─────────────────────────────────────── */
+.pca-try {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.75rem;
+}
+.pca-try-item {
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+}
+.pca-try-item h4 {
+    font: 500 0.88rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.3rem;
+}
+.pca-try-item p {
+    font: 0.82rem/1.5 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0;
+}
+.pca-try-item code {
+    font: 0.78rem var(--ms-font-mono);
+    color: var(--ms-accent);
+    background: var(--ms-accent-soft);
+    padding: 0.05rem 0.3rem;
+    border-radius: 3px;
+}
+
+/* ── Chip strips for watch-out / in-practice ─────────────────── */
+.pca-strip {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    align-items: center;
+    padding: 0.55rem 0.85rem;
+    margin: 0.65rem 0;
+    border-radius: var(--ms-radius-sm);
+    background: var(--ms-panel-bg-soft);
+    border-left: 3px solid var(--ms-line);
+}
+.pca-strip-label {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font: 500 0.7rem var(--ms-font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ms-muted);
+    margin-right: 0.4rem;
+    flex-shrink: 0;
+}
+.pca-strip.is-watchout {
+    background: rgba(245, 158, 11, 0.05);
+    border-left-color: #f59e0b;
+}
+.pca-strip.is-watchout .pca-strip-label { color: #b45309; }
+[data-theme="dark"] .pca-strip.is-watchout .pca-strip-label { color: #fbbf24; }
+.pca-strip.is-practice {
+    background: rgba(34, 197, 94, 0.04);
+    border-left-color: #15803d;
+}
+.pca-strip.is-practice .pca-strip-label { color: #15803d; }
+[data-theme="dark"] .pca-strip.is-practice .pca-strip-label { color: #86efac; }
+.pca-tag {
+    display: inline-flex; align-items: center;
+    padding: 0.2rem 0.6rem;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-pill);
+    font: 500 0.76rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    white-space: nowrap;
+}
+.pca-strip.is-practice .pca-tag {
+    font-family: var(--ms-font-mono);
+    font-size: 0.74rem;
+    color: var(--ms-accent);
+    background: var(--ms-accent-softer);
+    border-color: var(--ms-accent-soft);
+}

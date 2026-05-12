@@ -1,0 +1,314 @@
+/*
+ * gradient-descent.css — page-specific styles for the first Pyodide demo.
+ *
+ * Sits on top of math-studio.css.  All --ms-* tokens come from there;
+ * only the demo-specific layout (two-canvas grid, control strip,
+ * editable code panel) lives here.
+ */
+
+/* ── Demo panel: two canvases side by side ─────────────────── */
+.gd-demo {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 0.85rem;
+    align-items: stretch;
+}
+@media (max-width: 900px) {
+    .gd-demo { grid-template-columns: 1fr; }
+}
+
+.gd-canvas-wrap {
+    position: relative;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    overflow: hidden;
+    box-shadow: var(--ms-shadow-sm);
+}
+.gd-canvas-wrap canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+}
+
+/* Plotly 3D surface fills the wrapper.  Min-height matches canvas siblings
+   so the two-column layout stays balanced before/after Plotly boots. */
+.gd-surface-3d {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+}
+.gd-surface-3d .modebar {
+    /* Float the toolbar above the surface, fade it until hover. */
+    background: transparent !important;
+    opacity: 0.4;
+    transition: opacity var(--ms-transition);
+}
+.gd-surface-3d:hover .modebar { opacity: 1; }
+.gd-canvas-label {
+    position: absolute; top: 0.65rem; left: 0.85rem;
+    font: 500 0.72rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--ms-panel-bg);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+}
+.gd-canvas-readout {
+    position: absolute; bottom: 0.65rem; left: 0.85rem; right: 0.85rem;
+    display: flex; justify-content: space-between; gap: 0.5rem;
+    font: 500 0.74rem var(--ms-font-mono);
+    color: var(--ms-ink-soft);
+    pointer-events: none;
+}
+.gd-canvas-readout span {
+    background: rgba(254, 253, 251, 0.85);
+    padding: 0.18rem 0.5rem;
+    border-radius: var(--ms-radius-sm);
+    backdrop-filter: blur(4px);
+}
+[data-theme="dark"] .gd-canvas-readout span {
+    background: rgba(28, 25, 23, 0.75);
+}
+
+/* ── Controls strip ─────────────────────────────────────────── */
+.gd-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.85rem;
+    padding: 1rem 1.1rem;
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    margin-top: 0.85rem;
+}
+.gd-control {
+    display: flex; flex-direction: column; gap: 0.35rem;
+}
+/* Dataset cell spans the full row so the caption can sit beneath it. */
+.gd-control-wide {
+    grid-column: 1 / -1;
+}
+.gd-dataset-story {
+    font: 0.78rem/1.4 var(--ms-font-sans);
+    color: var(--ms-muted);
+    font-style: italic;
+    margin-top: 0.1rem;
+}
+.gd-control-label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font: 500 0.78rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+}
+.gd-control-value {
+    font: 500 0.76rem var(--ms-font-mono);
+    color: var(--ms-accent);
+}
+.gd-control input[type="range"] {
+    width: 100%;
+    appearance: none;
+    height: 4px;
+    background: var(--ms-accent-soft);
+    border-radius: var(--ms-radius-pill);
+    outline: none;
+    cursor: pointer;
+}
+.gd-control input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px; height: 16px;
+    background: var(--ms-accent);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform var(--ms-transition);
+}
+.gd-control input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px;
+    background: var(--ms-accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+.gd-control input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.15); }
+
+.gd-control select,
+.gd-control input[type="number"] {
+    padding: 0.45rem 0.6rem;
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    outline: none;
+    transition: border-color var(--ms-transition), box-shadow var(--ms-transition);
+}
+.gd-control select:focus,
+.gd-control input[type="number"]:focus {
+    border-color: var(--ms-accent);
+    box-shadow: var(--ms-ring);
+}
+
+/* ── Action row (Run / Reset) ───────────────────────────────── */
+.gd-actions {
+    display: flex; gap: 0.6rem; flex-wrap: wrap;
+    margin-top: 0.85rem;
+}
+.gd-btn {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.55rem 1.1rem;
+    font: 500 0.86rem var(--ms-font-sans);
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid var(--ms-line);
+    background: var(--ms-panel-bg);
+    color: var(--ms-ink);
+    cursor: pointer;
+    transition: transform var(--ms-transition),
+                background var(--ms-transition),
+                box-shadow var(--ms-transition);
+}
+.gd-btn:hover { transform: translateY(-1px); box-shadow: var(--ms-shadow-sm); }
+.gd-btn:active { transform: translateY(0); }
+.gd-btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
+.gd-btn.is-primary {
+    background: linear-gradient(135deg, var(--ms-cta-start), var(--ms-cta-end));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 1px 3px var(--ms-cta-shadow);
+}
+.gd-btn.is-primary:hover { box-shadow: 0 4px 12px var(--ms-cta-shadow); }
+.gd-btn.is-busy {
+    pointer-events: none;
+    position: relative;
+}
+.gd-btn.is-busy::after {
+    content: '';
+    width: 12px; height: 12px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: gd-spin 0.7s linear infinite;
+}
+@keyframes gd-spin { to { transform: rotate(360deg); } }
+
+/* ── Code panel ─────────────────────────────────────────────── */
+.gd-code {
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    overflow: hidden;
+}
+.gd-code-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.55rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border-bottom: 1px solid var(--ms-line);
+    font: 500 0.78rem var(--ms-font-mono);
+    color: var(--ms-muted);
+}
+.gd-code-header .gd-code-title {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+}
+.gd-code-header .gd-code-title::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--ms-accent);
+    box-shadow: 0 0 0 3px var(--ms-accent-soft);
+}
+.gd-code-actions { display: flex; gap: 0.4rem; }
+.gd-code-actions button {
+    font: 500 0.74rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    background: transparent;
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    padding: 0.25rem 0.6rem;
+    cursor: pointer;
+    transition: color var(--ms-transition), border-color var(--ms-transition);
+}
+.gd-code-actions button:hover { color: var(--ms-accent); border-color: var(--ms-accent); }
+
+.gd-code textarea {
+    display: block;
+    width: 100%;
+    min-height: 320px;
+    padding: 1rem 1.1rem;
+    font: 400 0.86rem/1.55 var(--ms-font-mono);
+    color: var(--ms-ink);
+    background: var(--ms-panel-bg);
+    border: 0;
+    outline: 0;
+    resize: vertical;
+    tab-size: 4;
+}
+
+/* ── Console (Python stdout/stderr) ─────────────────────────── */
+.gd-console {
+    margin-top: 0.85rem;
+    background: #0c0a09;
+    color: #e7e5e4;
+    border-radius: var(--ms-radius-sm);
+    padding: 0.75rem 1rem;
+    font: 400 0.78rem/1.55 var(--ms-font-mono);
+    max-height: 200px;
+    overflow: auto;
+    border: 1px solid var(--ms-line);
+}
+.gd-console:empty { display: none; }
+.gd-console .gd-err { color: #fca5a5; }
+
+/* ── Math derivation card ───────────────────────────────────── */
+.gd-math {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+.gd-math-step {
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border-left: 3px solid var(--ms-accent);
+    border-radius: var(--ms-radius-sm);
+}
+.gd-math-step h4 {
+    font: 500 0.85rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.45rem;
+}
+.gd-math-step p {
+    font: 0.86rem/1.55 var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+    margin: 0;
+}
+.gd-math-step .katex-display { margin: 0.5rem 0 0 !important; }
+
+/* ── Exercises ──────────────────────────────────────────────── */
+.gd-try {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.75rem;
+}
+.gd-try-item {
+    padding: 0.85rem 1rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+}
+.gd-try-item h4 {
+    font: 500 0.88rem var(--ms-font-sans);
+    color: var(--ms-ink);
+    margin: 0 0 0.3rem;
+}
+.gd-try-item p {
+    font: 0.82rem/1.5 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0;
+}
+.gd-try-item code {
+    font: 0.78rem var(--ms-font-mono);
+    color: var(--ms-accent);
+    background: var(--ms-accent-soft);
+    padding: 0.05rem 0.3rem;
+    border-radius: 3px;
+}
