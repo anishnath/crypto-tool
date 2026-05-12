@@ -8,6 +8,7 @@
         <jsp:param name="toolCategory" value="Machine Learning" />
         <jsp:param name="toolDescription" value="Interactive gradient descent demo. Watch the algorithm fit a regression line to a real dataset — slope and intercept update every epoch while the MSE surface shows the descent path. Edit the algorithm, change the learning rate, click anywhere on the (w, b) plane to re-seed. No signup." />
         <jsp:param name="toolUrl" value="ml/gradient-descent.jsp" />
+        <jsp:param name="toolImage" value="gradient-descent-og.png" />
         <jsp:param name="toolKeywords" value="gradient descent linear regression, gradient descent visualizer, mse gradient descent, fit a line gradient descent, slope intercept learning, learning rate demo, partial derivatives mse, ml regression from scratch, interactive optimizer, gradient descent from scratch, w b update rule" />
         <jsp:param name="toolFeatures" value="Linear regression on a real dataset,Live regression line + MSE surface,Editable algorithm source,Click-to-seed (w,b),Step-by-step derivation of ∂L/∂w and ∂L/∂b,Adjustable learning rate and epochs,Dark mode,100% free" />
         <jsp:param name="hasSteps" value="true" />
@@ -87,10 +88,10 @@
                         <a href="<%=request.getContextPath()%>/" style="color:inherit;">Home</a>
                         &middot;
                         <a href="<%=request.getContextPath()%>/ml/" style="color:inherit;">ML</a>
-                        &middot; Ch 1 · Optimization &middot; Gradient Descent
+                        &middot; Optimization &middot; Gradient Descent
                     </nav>
                 </div>
-                <span style="font:500 0.72rem var(--ms-font-mono);color:#4f46e5;padding:0.3rem 0.7rem;border-radius:var(--ms-radius-pill);background:rgba(79,70,229,0.10);">Ch 1 · Optimization</span>
+                <span style="font:500 0.72rem var(--ms-font-mono);color:#4f46e5;padding:0.3rem 0.7rem;border-radius:var(--ms-radius-pill);background:rgba(79,70,229,0.10);">Optimization</span>
             </div>
             <p style="margin:1rem 0 0;color:var(--ms-ink-soft);font:0.95rem/1.55 var(--ms-font-sans);max-width:70ch;">
                 Linear regression learns its slope and intercept by gradient descent. Watch the regression line tilt and shift to fit the data on the left, while the <code>(w, b)</code> marker descends the MSE surface on the right &mdash; one epoch at a time. Pick a different dataset to see what gradient descent learns (and where it struggles): clean linear, heavy noise, outliers, a saturating curve, growing variance, or two mixed populations.

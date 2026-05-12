@@ -51,9 +51,9 @@
         </div>
     </div>
 
-    <!-- Chapter 1 — Optimization -->
+    <!-- Optimization -->
     <div class="ms-group<%= collapsedCls(activeService, "gradient-descent", "activation-functions") %>" data-group="ch1-optimization">
-        <button class="ms-group-header" type="button">Ch 1 &middot; Optimization <span class="ms-group-chevron">&#9662;</span></button>
+        <button class="ms-group-header" type="button">Optimization <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/ml/gradient-descent.jsp" class="ms-item <%= "gradient-descent".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#8711;</span>
@@ -66,9 +66,9 @@
         </div>
     </div>
 
-    <!-- Chapter 2 — Clustering & Reduction -->
+    <!-- Clustering & Reduction -->
     <div class="ms-group<%= collapsedCls(activeService, "k-means", "pca") %>" data-group="ch2-clustering">
-        <button class="ms-group-header" type="button">Ch 2 &middot; Clustering &amp; Reduction <span class="ms-group-chevron">&#9662;</span></button>
+        <button class="ms-group-header" type="button">Clustering &amp; Reduction <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/ml/k-means.jsp" class="ms-item <%= "k-means".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">K</span>
@@ -81,15 +81,14 @@
         </div>
     </div>
 
-    <!-- Chapter 3 — Linear Models -->
+    <!-- Linear Models -->
     <div class="ms-group<%= collapsedCls(activeService, "perceptron", "logistic-regression", "roc-auc") %>" data-group="ch3-linear-models">
-        <button class="ms-group-header" type="button">Ch 3 &middot; Linear Models <span class="ms-group-chevron">&#9662;</span></button>
+        <button class="ms-group-header" type="button">Linear Models <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
-            <span class="ms-item ms-item-soon" data-soon="true" title="Coming soon — demo in progress">
+            <a href="<%= ctx %>/ml/perceptron.jsp" class="ms-item <%= "perceptron".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#10138;</span>
                 <span class="ms-item-label">Perceptron</span>
-                <span class="ms-item-pill">soon</span>
-            </span>
+            </a>
             <a href="<%= ctx %>/Logistic_Regression.jsp" class="ms-item <%= "logistic-regression".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#x222B;&sigma;</span>
                 <span class="ms-item-label">Logistic Regression</span>
@@ -101,20 +100,10 @@
         </div>
     </div>
 
-    <!-- Chapter 4 — Neural Networks -->
-    <div class="ms-group<%= collapsedCls(activeService, "nn-trainer", "weight-viz", "nn-viz") %>" data-group="ch4-neural-networks">
-        <button class="ms-group-header" type="button">Ch 4 &middot; Neural Networks <span class="ms-group-chevron">&#9662;</span></button>
+    <!-- Neural Networks -->
+    <div class="ms-group<%= collapsedCls(activeService, "nn-viz") %>" data-group="ch4-neural-networks">
+        <button class="ms-group-header" type="button">Neural Networks <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
-            <span class="ms-item ms-item-soon" data-soon="true" title="Coming soon — demo in progress">
-                <span class="ms-item-icon">NN</span>
-                <span class="ms-item-label">Train an MLP</span>
-                <span class="ms-item-pill">soon</span>
-            </span>
-            <span class="ms-item ms-item-soon" data-soon="true" title="Coming soon — demo in progress">
-                <span class="ms-item-icon">W</span>
-                <span class="ms-item-label">Weight Visualization</span>
-                <span class="ms-item-pill">soon</span>
-            </span>
             <a href="<%= ctx %>/ml/nn-viz.jsp" class="ms-item <%= "nn-viz".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#9678;</span>
                 <span class="ms-item-label">NN Architecture Viz</span>
