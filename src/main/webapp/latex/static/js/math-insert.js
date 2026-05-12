@@ -67,6 +67,15 @@
     return { start: 0, end: text.length, raw: text };
   }
 
+  // Quick prefilter for a runnable code block — any \begin{lstlisting}
+  // with a [language=…] option. Full parsing (multi-file grouping, alias
+  // resolution) runs in CodeRunnerCore.
+  function findCode(text) {
+    if (!text) return null;
+    if (text.indexOf('\\begin{lstlisting}') < 0) return null;
+    return { start: 0, end: text.length, raw: text };
+  }
+
   function detect(selection) {
     if (!selection) return null;
     var s = selection.trim()
@@ -118,6 +127,16 @@
       }
       // No fallback — without the core we can't usefully solve a matrix op
     }
+
+    // Code-block detection (\begin{lstlisting}[language=X]...). Multi-file
+    // groups are bundled by CodeRunnerCore.parseLatexCode.
+    var code = findCode(s);
+    if (code) {
+      if (window.CodeRunnerCore && window.CodeRunnerCore.parseLatexCode) {
+        var cparsed = window.CodeRunnerCore.parseLatexCode(s);
+        if (cparsed) return { type: 'code', latex: s, originalSelection: selection, parsed: cparsed };
+      }
+    }
     return null;
   }
 
@@ -154,6 +173,98 @@
       return { ok: false, error: 'MatrixCalculatorCore not loaded' };
     }
     return window.MatrixCalculatorCore.solveFromLatex(detected.latex, { withSteps: mode === 'steps' });
+  }
+
+  function solveCode(detected, mode) {
+    if (!window.CodeRunnerCore || !window.CodeRunnerCore.solveFromLatex) {
+      return { ok: false, error: 'CodeRunnerCore not loaded' };
+    }
+    return window.CodeRunnerCore.solveFromLatex(detected.latex, {});
+  }
+
+  // ── Code output block builder ────────────────────────────────────────
+  //
+  // Renders the captured stdout / stderr from a code run as a styled LaTeX
+  // block. Uses the `listings` package's lstlisting with the project's
+  // input / stdout / stderr styles (auto-injected if missing). Both stdout
+  // and stderr are shown when present; the metadata strip carries
+  // language · duration · exit code.
+  function escListing(s) {
+    // listings displays content verbatim, so backslashes etc. are fine.
+    // Only thing to clean: a stray `\end{lstlisting}` token would close
+    // our box early. Replace with a near-identical visually equivalent string.
+    return (s || '').replace(/\\end\{lstlisting\}/g, '\\end<<lstlisting>>');
+  }
+
+  function buildCodeOutputBlock(parsed, result) {
+    var lang = parsed.languageLabel || parsed.language;
+    var stdout = result.stdout || '';
+    var stderr = result.stderr || '';
+    var exit = (typeof result.exitCode === 'number') ? result.exitCode : 0;
+    var dur = result.duration ? (result.duration + 's') : '';
+    var meta = lang + (dur ? (' \\textperiodcentered\\ ' + dur) : '') +
+               ' \\textperiodcentered\\ exit ' + exit;
+    var lines = ['', ''];
+
+    var statusColor = (exit === 0) ? 'green!60!black' : 'red!60!black';
+    var statusLabel = (exit === 0) ? 'stdout' : ('stderr (exit ' + exit + ')');
+
+    lines.push('\\noindent\\textbf{\\textcolor{' + statusColor +
+               '}{$\\blacktriangleright$\\ Run}} ' +
+               '\\hfill {\\small\\itshape ' + meta + '}');
+
+    // stdout
+    if (stdout) {
+      lines.push('\\begin{lstlisting}[style=stdout]');
+      lines.push(escListing(stdout.replace(/\s+$/, '')));
+      lines.push('\\end{lstlisting}');
+    }
+    // stderr (if any — shown even when exit==0 if non-empty)
+    if (stderr) {
+      lines.push('');
+      lines.push('\\noindent{\\small\\textbf{\\textcolor{red!70!black}{stderr}}}');
+      lines.push('\\begin{lstlisting}[style=stderr]');
+      lines.push(escListing(stderr.replace(/\s+$/, '')));
+      lines.push('\\end{lstlisting}');
+    }
+    if (!stdout && !stderr) {
+      lines.push('\\noindent{\\small\\itshape (no output)}');
+    }
+    lines.push('');
+    return lines.join('\n');
+  }
+
+  // Preamble lines the code output requires.
+  // Style definitions are inserted ONCE per project (ensurePreambleLines
+  // de-dupes by `\lstdefinestyle{NAME}` prefix match).
+  var CODE_PREAMBLE = [
+    '\\usepackage{listings}',
+    '\\usepackage{xcolor}',
+    '\\usepackage{amssymb}',
+    '\\lstdefinestyle{input}{basicstyle=\\ttfamily\\small, backgroundcolor=\\color{gray!8}, frame=leftline, framerule=2pt, rulecolor=\\color{blue!60}, xleftmargin=10pt, framexleftmargin=8pt, breaklines=true}',
+    '\\lstdefinestyle{stdout}{basicstyle=\\ttfamily\\small, backgroundcolor=\\color{green!5}, frame=leftline, framerule=2pt, rulecolor=\\color{green!60!black}, xleftmargin=10pt, framexleftmargin=8pt, breaklines=true}',
+    '\\lstdefinestyle{stderr}{basicstyle=\\ttfamily\\small, backgroundcolor=\\color{red!5}, frame=leftline, framerule=2pt, rulecolor=\\color{red!60!black}, xleftmargin=10pt, framexleftmargin=8pt, breaklines=true}'
+  ];
+
+  function appendCodeOutputBlock(cm, anchorMark, detected, result) {
+    ensurePreambleLines(cm, CODE_PREAMBLE);
+    var anchorPos = anchorMark ? anchorMark.find() : null;
+    if (anchorMark) anchorMark.clear();
+    var block = buildCodeOutputBlock(detected.parsed, result);
+    if (window.SolutionsFile && typeof window.SolutionsFile.append === 'function') {
+      return window.SolutionsFile.append(cm,
+        '% Run output for ' + (detected.parsed.languageLabel || detected.parsed.language) +
+        (detected.parsed.isMulti ? (' (' + detected.parsed.files.length + ' files)') : '') +
+        '\n' + block,
+        { inputAnchor: anchorPos });
+    }
+    var pos = anchorPos || cm.getCursor('to');
+    var line = pos.line;
+    if (line >= cm.lineCount()) line = cm.lineCount() - 1;
+    var lineEnd = { line: line, ch: cm.getLine(line).length };
+    cm.replaceRange(block, lineEnd, lineEnd);
+    cm.focus();
+    return null;
   }
 
   function appendResultInline(cm, anchorMark, detected, resultLatex) {
@@ -746,6 +857,19 @@
       var methodNote = solveResult.method ? ' [' + solveResult.method + ']' : '';
       var what = shortLabel();
       var newFile = null;
+
+      // Code runner uses its own output-block builder (stdout / stderr boxes).
+      if (detected.type === 'code') {
+        newFile = appendCodeOutputBlock(cm, anchorMark, detected, solveResult);
+        var p = detected.parsed;
+        var label = (p.languageLabel || p.language) +
+                    (p.isMulti ? (' · ' + p.files.length + ' files') : '') +
+                    ' · exit ' + solveResult.exitCode +
+                    (solveResult.duration ? (' · ' + solveResult.duration + 's') : '');
+        var toastKind = solveResult.exitCode === 0 ? 'Success' : 'Warning';
+        toast(toastKind, '▶ Run: ' + label + (newFile ? ' → ' + newFile : ''));
+        return;
+      }
       // Matrix ops: use sympySteps in steps mode; no pgfplots graph (matrix
       // visualisations don't translate cleanly to pgfplots) — fall back to
       // the inline result.
@@ -782,12 +906,38 @@
       }
     }
 
+    // For code blocks, anchor on the LAST block in the multi-file group so
+    // the output lands after the whole group, not between blocks. The
+    // selection's 'to' cursor only sees the user's drag end, which may be
+    // before the group's last block.
+    if (detected.type === 'code' && detected.parsed && detected.parsed.blocks &&
+        detected.parsed.blocks.length) {
+      try {
+        var selFrom = cm.getCursor('from');
+        var selText = cm.getSelection() || '';
+        var lastBlock = detected.parsed.blocks[detected.parsed.blocks.length - 1];
+        // count newlines in the selection up to and including \end{lstlisting} of last block
+        var marker = '\\end{lstlisting}';
+        var lastEndIdx = selText.lastIndexOf(marker);
+        if (lastEndIdx >= 0) {
+          var upTo = selText.substring(0, lastEndIdx + marker.length);
+          var newlines = (upTo.match(/\n/g) || []).length;
+          var anchorLine = selFrom.line + newlines;
+          if (anchorLine < 0) anchorLine = 0;
+          if (anchorLine >= cm.lineCount()) anchorLine = cm.lineCount() - 1;
+          anchorMark.clear();
+          anchorMark = cm.setBookmark({ line: anchorLine, ch: cm.getLine(anchorLine).length });
+        }
+      } catch (e) { /* fall back to default anchor */ }
+    }
+
     var pending;
     try {
       if (detected.type === 'limit')           pending = solveLimit(detected, mode);
       else if (detected.type === 'integral')   pending = solveIntegral(detected, mode);
       else if (detected.type === 'derivative') pending = solveDerivative(detected, mode);
       else if (detected.type === 'matrix')     pending = solveMatrix(detected, mode);
+      else if (detected.type === 'code')       pending = solveCode(detected, mode);
       else { anchorMark.clear(); toast('Error', 'Unknown math type: ' + detected.type); return; }
     } catch (e) {
       anchorMark.clear();

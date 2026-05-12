@@ -844,29 +844,53 @@ function showSelPopup(cm) {
     if (mathDetected) {
       // For matrix ops, show the concrete operation name (determinant /
       // eigenvalues / …) — much more informative than a generic "matrix".
+      // For code blocks, the button becomes "▶ Run <Language>" with a
+      // multi-file suffix when applicable.
       var label = mathDetected.type === 'limit' ? 'limit' :
                   mathDetected.type === 'integral' ? 'integral' :
                   mathDetected.type === 'derivative' ? 'derivative' :
                   mathDetected.type === 'series' ? 'series' :
                   mathDetected.type === 'matrix'
                     ? ((mathDetected.parsed && mathDetected.parsed.opLabel) || 'matrix')
+                    : mathDetected.type === 'code'
+                    ? ((mathDetected.parsed && mathDetected.parsed.languageLabel) || 'code')
                     : 'expression';
-      mathBtn.innerHTML = '&#931; Solve ' + label + ' <span class="sel-math-caret">&#9662;</span>';
+      var btnPrefix = (mathDetected.type === 'code') ? '&#9654; Run ' : '&#931; Solve ';
+      var multiSuffix = (mathDetected.type === 'code' && mathDetected.parsed && mathDetected.parsed.isMulti)
+        ? ' <span style="opacity:0.7">(' + mathDetected.parsed.files.length + ' files)</span>'
+        : '';
+      mathBtn.innerHTML = btnPrefix + label + multiSuffix +
+        ' <span class="sel-math-caret">&#9662;</span>';
       mathWrap.style.display = '';
       mathSep.style.display = '';
       // Graph mode: limit/integral/derivative always render (pgfplots curve);
       // matrix renders only when the op + matrix is 2D-visualizable (2x2,
       // numeric, op has geometric meaning). canVisualize2D handles all that.
+      // Code blocks have no graph or steps mode — only a single "Run".
       var graphBtn = selPopup.querySelector('[data-sel-action="solve-math"][data-math-mode="graph"]');
-      if (graphBtn) {
-        var canGraph = true;
-        if (mathDetected.type === 'matrix') {
-          canGraph = !!(window.MatrixCalculatorCore
-                        && window.MatrixCalculatorCore.canVisualize2D
-                        && window.MatrixCalculatorCore.canVisualize2D(mathDetected.parsed));
+      var stepsBtn = selPopup.querySelector('[data-sel-action="solve-math"][data-math-mode="steps"]');
+      var simpleBtn = selPopup.querySelector('[data-sel-action="solve-math"][data-math-mode="simple"]');
+      var canGraph = true;
+      var showSteps = true;
+      if (mathDetected.type === 'matrix') {
+        canGraph = !!(window.MatrixCalculatorCore
+                      && window.MatrixCalculatorCore.canVisualize2D
+                      && window.MatrixCalculatorCore.canVisualize2D(mathDetected.parsed));
+      } else if (mathDetected.type === 'code') {
+        canGraph = false;
+        showSteps = false;
+        // Re-label the single visible item to "Run" for clarity.
+        if (simpleBtn) {
+          simpleBtn.innerHTML = '<b>Run</b><span>execute and insert stdout / stderr</span>';
         }
-        graphBtn.style.display = canGraph ? '' : 'none';
+      } else {
+        // Restore default Σ Solve label when switching back from a code block.
+        if (simpleBtn) {
+          simpleBtn.innerHTML = '<b>Solve</b><span>append &nbsp;= &lt;value&gt; &nbsp;inline</span>';
+        }
       }
+      if (graphBtn) graphBtn.style.display = canGraph ? '' : 'none';
+      if (stepsBtn) stepsBtn.style.display = showSteps ? '' : 'none';
     } else {
       mathWrap.style.display = 'none';
       mathSep.style.display = 'none';
