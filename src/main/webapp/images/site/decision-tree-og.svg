@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#f7f6f3"/>
+    </linearGradient>
+    <radialGradient id="accent" cx="0%" cy="0%" r="80%">
+      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#0ea5e9" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="accent2" cx="100%" cy="100%" r="60%">
+      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#accent)"/>
+  <rect width="1200" height="630" fill="url(#accent2)"/>
+
+  <!-- Top accent bar -->
+  <rect x="80" y="100" width="64" height="4" fill="#0ea5e9"/>
+
+  <!-- Eyebrow row -->
+  <text x="80" y="86" font-family="JetBrains Mono, ui-monospace, monospace"
+        font-size="15" letter-spacing="3" fill="#78716c" font-weight="500">
+    ML &#183; 8GWIFI.ORG
+  </text>
+  <text x="1120" y="86" font-family="JetBrains Mono, ui-monospace, monospace"
+        font-size="15" letter-spacing="3" fill="#0ea5e9" font-weight="500" text-anchor="end">
+    MODEL SELECTION
+  </text>
+
+  <!-- Title -->
+  <text x="80" y="318" font-family="Instrument Serif, Iowan Old Style, Georgia, serif"
+        font-size="92" font-weight="400" fill="#1c1917" letter-spacing="-2.5">
+    Decision Trees,
+  </text>
+  <text x="80" y="420" font-family="Instrument Serif, Iowan Old Style, Georgia, serif"
+        font-size="92" font-style="italic" fill="#0ea5e9" letter-spacing="-2.5">
+    picked properly.
+  </text>
+
+  <!-- Subtitle (auto-wrapped) -->
+  <text x="80" y="488" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#44403c" font-weight="500">
+    <tspan x="80" dy="0">K-fold CV, validation curves, ccp_alpha pruning, grid search</tspan>
+    <tspan x="80" dy="32">heatmap — all in your browser.</tspan>
+  </text>
+
+  <!-- Footer line + URL -->
+  <line x1="80" y1="572" x2="200" y2="572" stroke="#0ea5e9" stroke-width="2"/>
+  <text x="80" y="602" font-family="Inter, system-ui, sans-serif"
+        font-size="16" fill="#78716c" font-weight="500">
+    8gwifi.org/ml
+  </text>
+
+  <!-- Decorative side mark -->
+  <g transform="translate(1040, 540)" opacity="0.7">
+    <circle cx="0" cy="0" r="6" fill="#0ea5e9"/>
+    <circle cx="20" cy="0" r="6" fill="#0ea5e9" fill-opacity="0.5"/>
+    <circle cx="40" cy="0" r="6" fill="#0ea5e9" fill-opacity="0.25"/>
+  </g>
+</svg>
