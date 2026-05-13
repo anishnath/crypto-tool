@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#f3eee5"/>
+    </linearGradient>
+    <radialGradient id="accentGlow" cx="0.35" cy="0.5" r="0.55">
+      <stop offset="0%" stop-color="#2f7d54" stop-opacity="0.2"/>
+      <stop offset="55%" stop-color="#2f7d54" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#2f7d54" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/>
+    </pattern>
+    <!-- Cell shaded with light from upper-left to suggest 3D -->
+    <radialGradient id="cellShaded" cx="0.32" cy="0.28" r="0.92">
+      <stop offset="0%" stop-color="#ddf0d0" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#8ab37c" stop-opacity="0.78"/>
+      <stop offset="100%" stop-color="#3f6b3a" stop-opacity="0.62"/>
+    </radialGradient>
+    <radialGradient id="nucleus3d" cx="0.36" cy="0.32" r="0.78">
+      <stop offset="0%" stop-color="#c79aef" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#4a256b" stop-opacity="0.88"/>
+    </radialGradient>
+    <radialGradient id="mito3d" cx="0.3" cy="0.3" r="0.85">
+      <stop offset="0%" stop-color="#f2c19a" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#9b4a23" stop-opacity="0.9"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- Left: pseudo-3D cross-sectioned cell (the signature feature) -->
+  <g transform="translate(360 320)">
+    <!-- contact shadow ground -->
+    <ellipse cx="0" cy="232" rx="190" ry="22" fill="#1c1917" fill-opacity="0.16"/>
+
+    <!-- Cell main sphere -->
+    <circle r="220" fill="url(#cellShaded)" stroke="#2f7d54" stroke-opacity="0.65" stroke-width="3"/>
+    <!-- Specular highlight -->
+    <ellipse cx="-78" cy="-110" rx="56" ry="32" fill="#ffffff" fill-opacity="0.42" transform="rotate(-22)"/>
+    <!-- Slice cutaway (a horizontal cut showing interior) -->
+    <path d="M -220 30 Q 0 30 220 30 L 220 0 Q 0 0 -220 0 Z"
+          fill="#fbf7ee" fill-opacity="0.92" stroke="#2f7d54" stroke-opacity="0.4" stroke-width="2"/>
+    <!-- Slice handle indicator -->
+    <line x1="-260" y1="15" x2="-235" y2="15" stroke="#2f7d54" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="-270" cy="15" r="6" fill="#2f7d54"/>
+
+    <!-- Nucleus inside (3D shading) -->
+    <circle cx="-12" cy="-30" r="68" fill="url(#nucleus3d)"/>
+    <circle cx="2" cy="-44" r="16" fill="#e3c4f7" fill-opacity="0.92"/>
+
+    <!-- Mitochondria (3D shaded capsules) -->
+    <g transform="translate(75 80) rotate(30)">
+      <ellipse cx="0" cy="0" rx="48" ry="16" fill="url(#mito3d)"/>
+      <rect x="-32" y="-8" width="4" height="16" fill="#fff5e6" fill-opacity="0.5"/>
+      <rect x="-18" y="-8" width="4" height="16" fill="#fff5e6" fill-opacity="0.5"/>
+      <rect x="-4" y="-8" width="4" height="16" fill="#fff5e6" fill-opacity="0.5"/>
+      <rect x="10" y="-8" width="4" height="16" fill="#fff5e6" fill-opacity="0.5"/>
+      <rect x="24" y="-8" width="4" height="16" fill="#fff5e6" fill-opacity="0.5"/>
+    </g>
+    <g transform="translate(-105 95) rotate(-15)">
+      <ellipse cx="0" cy="0" rx="32" ry="11" fill="url(#mito3d)"/>
+    </g>
+
+    <!-- ER -->
+    <path d="M -150 -75 Q -110 -100 -75 -75 T 0 -75 T 80 -90"
+          fill="none" stroke="#ce785c" stroke-opacity="0.7" stroke-width="3.5" stroke-linecap="round"/>
+
+    <!-- Highlight ring (glowing organelle — the "click-to-select" affordance) -->
+    <circle cx="75" cy="80" r="58" fill="none" stroke="#2f7d54" stroke-opacity="0.9" stroke-width="2.5" stroke-dasharray="2 4"/>
+    <!-- callout line -->
+    <line x1="75" y1="80" x2="220" y2="135" stroke="#2f7d54" stroke-opacity="0.7" stroke-width="1.5"/>
+    <!-- callout label -->
+    <g transform="translate(225 125)">
+      <rect x="0" y="0" width="138" height="28" rx="4" fill="#2f7d54"/>
+      <text x="69" y="19" text-anchor="middle" font-size="13" font-weight="700" fill="#fbf7ee" font-family="'JetBrains Mono', monospace">MITOCHONDRION</text>
+    </g>
+  </g>
+
+  <!-- Right side: title block -->
+  <g transform="translate(720 184)" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif">
+    <!-- accent bar -->
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#2f7d54"/>
+
+    <!-- eyebrow -->
+    <text x="0" y="38" font-size="20" font-weight="600" fill="#2f7d54" letter-spacing="3">8GWIFI · CELL ATLAS 3D</text>
+
+    <!-- title -->
+    <text x="0" y="118" font-size="80" font-weight="700" fill="#1c1917" font-family="'Instrument Serif', 'Times New Roman', Georgia, serif" font-style="italic">Click any cell</text>
+    <text x="0" y="196" font-size="80" font-weight="700" fill="#1c1917" font-family="'Instrument Serif', 'Times New Roman', Georgia, serif" font-style="italic">apart, in 3D.</text>
+
+    <!-- description -->
+    <text x="0" y="254" font-size="22" fill="#44403c" font-weight="400">12 cells · 60+ organelles · cross-section slicer</text>
+    <text x="0" y="286" font-size="22" fill="#44403c" font-weight="400">Real microscopy · AI tutor · Free</text>
+
+    <!-- chip row -->
+    <g transform="translate(0 324)">
+      <g>
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#2f7d54" fill-opacity="0.1" stroke="#2f7d54" stroke-opacity="0.28" stroke-width="1"/>
+        <text x="74" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#2f7d54">ANIMAL</text>
+      </g>
+      <g transform="translate(160 0)">
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#2f7d54" fill-opacity="0.1" stroke="#2f7d54" stroke-opacity="0.28" stroke-width="1"/>
+        <text x="74" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#2f7d54">PLANT</text>
+      </g>
+      <g transform="translate(0 48)">
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#2f7d54" fill-opacity="0.1" stroke="#2f7d54" stroke-opacity="0.28" stroke-width="1"/>
+        <text x="74" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#2f7d54">NEURON</text>
+      </g>
+      <g transform="translate(160 48)">
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#2f7d54" fill-opacity="0.1" stroke="#2f7d54" stroke-opacity="0.28" stroke-width="1"/>
+        <text x="74" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#2f7d54">VIRUS</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- bottom-right brand mark -->
+  <g transform="translate(1130 595)" text-anchor="end" font-family="'JetBrains Mono', 'Courier New', monospace">
+    <text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org/biology/cell-atlas</text>
+  </g>
+</svg>
