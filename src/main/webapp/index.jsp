@@ -704,6 +704,7 @@
                 <a href="#tools" class="category-pill">Cryptography</a>
                 <a href="#tools" class="category-pill">Mathematics</a>
                 <a href="#tools" class="category-pill">Chemistry</a>
+                <a href="#tools" class="category-pill">Biology</a>
                 <a href="#tools" class="category-pill">Finance</a>
                 <a href="#tools" class="category-pill">Electronics</a>
                 <a href="#tools" class="category-pill">Video AI</a>
@@ -982,6 +983,21 @@
                         <li><a href="electrochemistry-calculator.jsp" class="tool-link">Electrochemistry</a></li>
                     </ul>
                 </div>
+            </div>
+
+            <!-- Biology -->
+            <div class="tool-card fade-in">
+                <div class="tool-card-header">
+                    <div class="tool-icon icon-biology">🧬</div>
+                    <div>
+                        <h3 class="tool-title">Biology</h3>
+                    </div>
+                </div>
+                <p class="tool-description">Cell Atlas 3D — 12 interactive cells with every organelle clickable, real microscopy photos, AI tutor, slicing-plane cross-section. Plant, animal, neuron, sperm, virus + 7 more.</p>
+                <ul class="tool-links">
+                    <li><a href="biology/" class="tool-link">All Biology Tools</a></li>
+                    <li><a href="biology/cell-atlas.jsp" class="tool-link">Cell Atlas 3D (12 cells)</a></li>
+                </ul>
             </div>
 
             <!-- Education & Science -->

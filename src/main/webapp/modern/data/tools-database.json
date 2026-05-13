@@ -1,8 +1,9 @@
 {
-  "version": "1.6",
-  "lastUpdated": "2026-05-07T00:00:00.000Z",
-  "totalTools": 427,
+  "version": "1.7",
+  "lastUpdated": "2026-05-13T00:00:00.000Z",
+  "totalTools": 445,
   "categories": [
+    "Biology",
     "Blockchain & Crypto",
     "CAD & 3D Design",
     "CTF & Challenges",
@@ -3133,6 +3134,20 @@
       "category": "Video & Audio AI",
       "keywords": "subtitle generator, add subtitles to video, video subtitle maker, auto subtitle generator, subtitle generator ai, burn subtitles into video, auto caption generator, tiktok captions, reels captions free, animated subtitles, video caption ai, submagic alternative, captions.ai alternative, free subtitle app, srt vtt export, word highlight subtitles, youtube shorts captions",
       "description": "Free AI subtitle generator — add animated TikTok-style captions to any video, style live in your browser, export a subtitled MP4 in minutes. No upload, no signup."
+    },
+    {
+      "name": "Cell Atlas 3D",
+      "url": "biology/cell-atlas.jsp",
+      "category": "Biology",
+      "keywords": "3d cell viewer cell atlas click organelle animal cell plant cell neuron bacteria virus sperm yeast cardiomyocyte red blood white blood epithelial muscle mitochondrion chloroplast nucleus golgi ribosome interactive cross-section slicer ai tutor microscopy photos nih 3d browser-only free",
+      "description": "Click any cell apart in 3D — 12 specimens, 60+ organelles, slicing-plane cross-section, AI biology tutor, matched microscopy photos. Free, browser-only, no signup."
+    },
+    {
+      "name": "Biology Tools (Hub)",
+      "url": "biology/",
+      "category": "Biology",
+      "keywords": "biology tools online interactive biology 3d cell viewer organelle viewer free biology learning click organelle cell biology browser-only no signup",
+      "description": "Free interactive 3D biology — Cell Atlas 3D (12 cells, every organelle clickable), AI tutor, real microscopy. DNA viewer, mitosis, Punnett, codon table on the roadmap."
     }
   ]
 }
