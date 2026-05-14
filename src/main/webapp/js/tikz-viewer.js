@@ -544,7 +544,16 @@ ${bodyTikz}
       }
     }
 
-    const input = editor ? editor.getValue() : $('tikzInput').value;
+    // Use the ORIGINAL (pre-sanitization) input — render() strips
+    // \usepackage, \documentclass, \begin{document}, \end{document} from
+    // the editor so client-side TikZJax can swallow the input. The server,
+    // however, NEEDS those lines: ParseRaw extracts \usepackage{...} into
+    // the wrapped template's preamble, and without that, packages like
+    // pgfplots aren't loaded — \begin{axis} and \pgfplotsset then error
+    // and latex emits a broken DVI which dvisvgm faithfully renders.
+    // Fall back to the editor only if we don't have an originalInput
+    // (e.g. when serverSideFallback is invoked without a prior render).
+    const input = originalInput || (editor ? editor.getValue() : $('tikzInput').value);
     if (!input || !input.trim()) {
       showLoading(false);
       return;
