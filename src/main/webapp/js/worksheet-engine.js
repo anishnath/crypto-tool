@@ -212,8 +212,21 @@ function injectStyles() {
         '@media print{',
         /* Ensure colors render in print (not washed out) */
         '  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}',
+        /* Reset dark-theme CSS variables for print so worksheets remain
+           readable when the user printed while in dark mode. Mirrors the
+           generic block in modern/css/dark-mode.css; duplicated here so
+           the engine works correctly on pages that don't load dark-mode.css. */
+        '  [data-theme="dark"]{',
+        '    --bg-primary:#fff!important;--bg-secondary:#fff!important;--bg-tertiary:#f5f5f5!important;',
+        '    --text-primary:#0f172a!important;--text-secondary:#334155!important;--text-muted:#64748b!important;',
+        '    --border:#cbd5e1!important;--border-light:#e2e8f0!important;--border-dark:#94a3b8!important;',
+        '  }',
+        /* Undo the dark-theme figure-image filter — inverted images
+           on a forced-white print background would otherwise render
+           white-on-white (invisible). */
+        '  [data-theme="dark"] .we-ws-q-figure-img{filter:none!important}',
         '  body>*:not(.we-ws-backdrop){display:none!important}',
-        '  .we-ws-backdrop{position:static!important;overflow:visible!important;z-index:auto!important;background:#fff!important}',
+        '  .we-ws-backdrop{position:static!important;overflow:visible!important;z-index:auto!important;background:#fff!important;color:#000!important}',
         '  .we-ws-topbar,.we-ws-ad{display:none!important}',
         '  .we-ws-container{padding:0.5rem 1rem;max-width:100%}',
         /* Header — strong black border, crisp fonts */

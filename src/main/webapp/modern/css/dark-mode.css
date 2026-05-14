@@ -311,3 +311,65 @@ a,
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
+/* ──────────────────────────────────────────────────────────────────
+   Print stylesheet — force light theme regardless of [data-theme]
+   ──────────────────────────────────────────────────────────────────
+   Without this block, printing (or "Save as PDF") while in dark
+   theme produces near-invisible light text on white paper: the
+   browser strips background colors for ink-saving but keeps the
+   text color, which in dark mode is a near-white #f1f5f9. The
+   result is unreadable on paper.
+
+   Fix: reset every dark-theme CSS variable to its light counterpart
+   inside @media print, and force html/body back to dark-on-white.
+   This auto-applies to every JSP that loads dark-mode.css, so the
+   worksheet engine, math calculators, biology tools, and any future
+   tool benefits without per-tool changes.
+
+   Also kills CSS transitions/animations during print — Chrome
+   occasionally snapshots mid-transition states which prints weird. */
+@media print {
+    [data-theme="dark"] {
+        --bg-primary:     #ffffff !important;
+        --bg-secondary:   #ffffff !important;
+        --bg-tertiary:    #f5f5f5 !important;
+        --bg-hover:       #f5f5f5 !important;
+        --text-primary:   #0f172a !important;
+        --text-secondary: #334155 !important;
+        --text-muted:     #64748b !important;
+        --text-inverse:   #ffffff !important;
+        --border:         #cbd5e1 !important;
+        --border-light:   #e2e8f0 !important;
+        --border-dark:    #94a3b8 !important;
+    }
+    /* Belt-and-suspenders: even if a rule sidesteps the vars and
+       inherits from html/body, it now starts from dark-on-white. */
+    [data-theme="dark"] html,
+    [data-theme="dark"] body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+    }
+    /* Generic per-element fallback: dark-themed surfaces commonly
+       set background:#1e293b or similar. Force their backgrounds
+       transparent in print so they don't carry a dark fill onto
+       white paper if the browser respects background printing. */
+    [data-theme="dark"] .breadcrumbs,
+    [data-theme="dark"] .tool-header,
+    [data-theme="dark"] .tool-main,
+    [data-theme="dark"] .tool-card,
+    [data-theme="dark"] .modern-nav,
+    [data-theme="dark"] .page-footer,
+    [data-theme="dark"] .hero,
+    [data-theme="dark"] .mobile-drawer,
+    [data-theme="dark"] .search-results {
+        background: #ffffff !important;
+        color: #0f172a !important;
+    }
+    /* Strip transitions and animations during print so the browser
+       doesn't snapshot an in-progress fade as the printable frame. */
+    *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
