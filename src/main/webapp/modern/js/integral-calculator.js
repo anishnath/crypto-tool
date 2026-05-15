@@ -238,10 +238,52 @@
         window.toggleFaq = function(btn) {
             btn.parentElement.classList.toggle('open');
         };
+        /** Convert postfix factorial (`x!`, `(x+1)!`) to prefix `factorial(...)`.
+            Postfix `!` is valid math notation but invalid Python syntax — without
+            this step, the generated `expr = simplify(x!)` throws SyntaxError. */
+        function convertFactorial(s) {
+            try { console.log('[IC-page] convertFactorial IN :', JSON.stringify(s)); } catch (_) {}
+            if (!s || s.indexOf('!') < 0) return s;
+            var out = '';
+            var i = 0;
+            while (i < s.length) {
+                var ch = s.charAt(i);
+                if (ch !== '!' || s.charAt(i + 1) === '=') {
+                    out += ch; i++;
+                    continue;
+                }
+                var prev = out.charAt(out.length - 1);
+                if (prev === ')') {
+                    var depth = 1, j = out.length - 2;
+                    while (j >= 0 && depth > 0) {
+                        if (out.charAt(j) === ')') depth++;
+                        else if (out.charAt(j) === '(') depth--;
+                        if (depth === 0) break;
+                        j--;
+                    }
+                    if (depth === 0 && j >= 0) {
+                        out = out.substring(0, j) + 'factorial' + out.substring(j);
+                        i++; continue;
+                    }
+                } else if (/[A-Za-z0-9_]/.test(prev)) {
+                    var k = out.length - 1;
+                    while (k >= 0 && /[A-Za-z0-9_]/.test(out.charAt(k))) k--;
+                    k++;
+                    var token = out.substring(k);
+                    out = out.substring(0, k) + 'factorial(' + token + ')';
+                    i++; continue;
+                }
+                out += ch; i++;
+            }
+            try { console.log('[IC-page] convertFactorial OUT:', JSON.stringify(out)); } catch (_) {}
+            return out;
+        }
+
         /** Convert nerdamer-style expr to Python/SymPy (e.g. e^x -> exp(x), ^ -> **) */
         function nerdamerToPython(expr) {
+            try { console.log('[IC-page] nerdamerToPython IN :', JSON.stringify(expr), '  BUILD-MARKER=page-v3-factorial-fix-2026-05-15'); } catch (_) {}
             // Known single-token functions — protect "sin(" so implicit-mul pass does not turn it into "sin*("
-            var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|Min|Max|frac|Sum|Rational|Product|Integral|Mod';
+            var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|Min|Max|frac|Sum|Rational|Product|Integral|Mod|factorial|gamma|Gamma|beta|erf';
             var py = (expr || '')
                 // e^func(args) → exp(func(args)):  e^sqrt(x+2) → exp(sqrt(x+2))
                 .replace(/e\^([a-zA-Z_]+\([^)]*\))/g, 'exp($1)')
@@ -254,6 +296,9 @@
                 .replace(/\bInfinity\b/g, 'oo')
                 // Insert * between digit and variable: 3x → 3*x, 2pi → 2*pi
                 .replace(/(\d)([a-zA-Z])/g, '$1*$2');
+            // Postfix factorial → prefix factorial(). MUST run after ^ and e^
+            // rewrites but BEFORE the closing-paren-implicit-mul step below.
+            py = convertFactorial(py);
             py = py.replace(new RegExp('\\b(' + FUNS + ')\\(', 'gi'), '\uE000$1\uE001(');
             py = py
                 // Insert * between closing paren and opening paren or variable: )(  )x
@@ -262,6 +307,7 @@
                 // Implicit multiplication: x(1+x**n) → x*(1+x**n) (required for valid SymPy)
                 .replace(/([a-zA-Z0-9])\(/g, '$1*(');
             py = py.replace(/\uE000(\w+)\uE001\(/g, '$1(');
+            try { console.log('[IC-page] nerdamerToPython OUT:', JSON.stringify(py)); } catch (_) {}
             return py;
         }
 
@@ -1033,13 +1079,41 @@
                     '    try:\n' +
                     '        from scipy.integrate import quad as _quad\n' +
                     '        from math import isfinite as _isf, inf as _inf\n' +
-                    '        _f = lambdify(' + v + ', expr, "numpy")\n' +
+                    '        # factorial(x) is integer-only under numpy lambdify; rewrite\n' +
+                    '        # to gamma(x+1) so the numeric quad path accepts floats.\n' +
+                    '        _expr_num = expr.rewrite(gamma) if expr.has(factorial) else expr\n' +
+                    '        _f = lambdify(' + v + ', _expr_num, modules=["scipy", "numpy"])\n' +
                     '        _val, _err = _quad(_f, float(' + a + '), float(' + b + '), limit=100)\n' +
                     '        if not _isf(_val) or (abs(_val) > 1e-10 and abs(_err/_val) > 0.01):\n' +
                     '            raise ValueError("divergent or unreliable")\n' +
                     '        print(\'NUMERIC:\' + str(_val))\n' +
                     '    except:\n' +
                     '        print(\'NUMERIC:NaN\')\n' +
+                    '    # Pedagogical steps for non-elementary definite integrals.\n' +
+                    '    # Factorial gets a specific gamma-rewrite walkthrough; other\n' +
+                    '    # cases fall back to "no closed form → numerical method".\n' +
+                    '    try:\n' +
+                    '        _st = []\n' +
+                    '        _a_tex = latex(sympify("' + a.replace(/"/g, '\\"') + '"))\n' +
+                    '        _b_tex = latex(sympify("' + b.replace(/"/g, '\\"') + '"))\n' +
+                    '        _st.append({"title":"Identify the integral","latex":"\\\\int_{" + _a_tex + "}^{" + _b_tex + "} " + latex(expr) + "\\\\,d' + v + '"})\n' +
+                    '        if expr.has(factorial):\n' +
+                    '            _gx = expr.rewrite(gamma)\n' +
+                    '            _st.append({"title":"Extend factorial to real numbers","latex":"' + v + '! = \\\\Gamma(' + v + '+1)\\\\quad\\\\text{(the Gamma function extends factorial to all real ' + v + '>0)}"})\n' +
+                    '            _st.append({"title":"Rewrite using the Gamma function","latex":latex(expr) + " = " + latex(_gx)})\n' +
+                    '            _st.append({"title":"No elementary antiderivative","latex":"\\\\int \\\\Gamma(' + v + '+1)\\\\,d' + v + '\\\\quad\\\\text{cannot be written in terms of standard elementary or special functions.}"})\n' +
+                    '            _st.append({"title":"Approximate the area numerically","latex":"\\\\text{Divide }[" + _a_tex + ",\\\\;" + _b_tex + "]\\\\text{ into many small slices, sum the area of each, and refine until the estimate stabilises.}"})\n' +
+                    '        else:\n' +
+                    '            _st.append({"title":"No elementary antiderivative","latex":"\\\\int " + latex(expr) + "\\\\,d' + v + '\\\\quad\\\\text{cannot be written in closed form using elementary functions.}"})\n' +
+                    '            _st.append({"title":"Approximate the area numerically","latex":"\\\\text{Divide }[" + _a_tex + ",\\\\;" + _b_tex + "]\\\\text{ into many small slices, sum the area of each, and refine until the estimate stabilises.}"})\n' +
+                    '        try:\n' +
+                    '            _st.append({"title":"Result","latex":latex(result) + "\\\\;\\\\approx\\\\;" + ("%.10g" % _val)})\n' +
+                    '        except Exception:\n' +
+                    '            pass\n' +
+                    '        print("NON_ELEMENTARY_STEPS:" + json.dumps(_st, separators=(",",":")))\n' +
+                    '        print("RULES:DontKnowRule")\n' +
+                    '    except Exception as _e:\n' +
+                    '        pass\n' +
                     'else:\n' +
                     '    # Has closed-form antiderivative — evaluate at bounds\n' +
                     '    result = integrate(expr, (' + v + ', ' + a + ', ' + b + '))\n' +

@@ -554,8 +554,63 @@ var SYMPY_NOT_SYMBOL_NAMES = ['exp','log','sin','cos','tan','sec','csc','cot',
     'pi','Sum','Product','Integral','oo','Rational','Mod','Max','Min',
     'min','max','Abs','re','im','gamma','factorial','floor','ceil','ceiling','sign','E'];
 
+/* Convert postfix factorial (`x!`, `(x+1)!`, `(x!)!`) to SymPy/nerdamer's
+   prefix `factorial(...)`. Postfix `!` is valid math notation but invalid
+   Python syntax — without this step, the generated SymPy code
+   `expr = simplify(x!)` throws SyntaxError before any solving begins.
+   Skips `!=` (inequality) so it doesn't mangle other code. */
+function convertFactorial(s) {
+    // DIAGNOSTIC LOG — remove once the cache issue is confirmed past us.
+    try { console.log('[IC] convertFactorial IN :', JSON.stringify(s)); } catch (_) {}
+    if (!s || s.indexOf('!') < 0) {
+        try { console.log('[IC] convertFactorial OUT (no-op):', JSON.stringify(s)); } catch (_) {}
+        return s;
+    }
+    var out = '';
+    var i = 0;
+    while (i < s.length) {
+        var ch = s.charAt(i);
+        if (ch !== '!' || s.charAt(i + 1) === '=') {
+            out += ch; i++;
+            continue;
+        }
+        var prev = out.charAt(out.length - 1);
+        if (prev === ')') {
+            // Walk back to the matching '(' through any nesting.
+            var depth = 1;
+            var j = out.length - 2;
+            while (j >= 0 && depth > 0) {
+                if (out.charAt(j) === ')') depth++;
+                else if (out.charAt(j) === '(') depth--;
+                if (depth === 0) break;
+                j--;
+            }
+            if (depth === 0 && j >= 0) {
+                out = out.substring(0, j) + 'factorial' + out.substring(j);
+                i++;
+                continue;
+            }
+        } else if (/[A-Za-z0-9_]/.test(prev)) {
+            // Walk back to the start of the identifier/number token.
+            var k = out.length - 1;
+            while (k >= 0 && /[A-Za-z0-9_]/.test(out.charAt(k))) k--;
+            k++;
+            var token = out.substring(k);
+            out = out.substring(0, k) + 'factorial(' + token + ')';
+            i++;
+            continue;
+        }
+        // Stray '!' with no operand — leave it for SymPy to error on
+        // (a clearer message than mangling silently).
+        out += ch; i++;
+    }
+    try { console.log('[IC] convertFactorial OUT:', JSON.stringify(out)); } catch (_) {}
+    return out;
+}
+
 function nerdamerToPython(expr) {
-    var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|Min|Max|frac|Sum|Rational|Product|Integral|Mod';
+    try { console.log('[IC] nerdamerToPython IN :', JSON.stringify(expr), '   BUILD-MARKER=v3-factorial-fix-2026-05-15'); } catch (_) {}
+    var FUNS = 'sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|coth|csch|sech|log|ln|sqrt|asin|acos|atan|asinh|acosh|atanh|exp|abs|floor|ceil|min|max|Min|Max|frac|Sum|Rational|Product|Integral|Mod|factorial|gamma|Gamma|beta|erf';
     var py = (expr || '')
         .replace(/e\^([a-zA-Z_]+\([^)]*\))/g, 'exp($1)')
         .replace(/e\^(\([^)]+\))/g, 'exp$1')
@@ -564,10 +619,16 @@ function nerdamerToPython(expr) {
         .replace(/\*\*\((\d+)\/(\d+)\)/g, '**(Rational($1,$2))')
         .replace(/\bInfinity\b/g, 'oo')
         .replace(/(\d)([a-zA-Z])/g, '$1*$2');
+    /* Postfix factorial → prefix factorial(). Must run AFTER the e^... and
+       ^ rewrites (otherwise `(x+1)!` could be touched mid-rewrite) but
+       BEFORE the closing-paren-then-letter implicit-mul step below
+       (which would turn `(x+1)!` into `(x+1)*!`). */
+    py = convertFactorial(py);
     py = py.replace(new RegExp('\\b(' + FUNS + ')\\(', 'gi'), '$1(');
     py = py.replace(/\)(\()/g, ')*$1')
            .replace(/\)([a-zA-Z])/g, ')*$1')
            .replace(/([a-zA-Z0-9])\(/g, '$1*(');
+    try { console.log('[IC] nerdamerToPython OUT:', JSON.stringify(py)); } catch (_) {}
     py = py.replace(/(\w+)\(/g, '$1(');
     return py;
 }

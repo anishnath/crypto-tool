@@ -6,14 +6,17 @@
   by /math/partials/math-libs.jsp + /math/partials/math-input-setup.jsp
   — include this file BETWEEN them in the tool page.
 --%>
+<% String icV = String.valueOf(System.currentTimeMillis()); %>
 
-<!-- integral-specific CAS core (depends on nerdamer loaded by math-libs.jsp) -->
-<script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js"></script>
+<!-- integral-specific CAS core (depends on nerdamer loaded by math-libs.jsp).
+     ?v=<timestamp> busts the browser cache when this file is edited; without
+     it, browsers happily keep the stale copy across deploys. -->
+<script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js?v=<%=icV%>"></script>
 
 <!-- integral worksheet engine (may later be generalised) -->
-<script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
+<script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=icV%>"></script>
 <script>window.INTEGRAL_CALC_CTX = "<%=request.getContextPath()%>";</script>
-<script src="<%=request.getContextPath()%>/modern/js/integral-calculator.js"></script>
+<script src="<%=request.getContextPath()%>/modern/js/integral-calculator.js?v=<%=icV%>"></script>
 
 <!-- image-to-math scanner init — prompt + handlers specific to integrals -->
 <script>
@@ -494,6 +497,15 @@
             'LATEX = re.sub(r"\\\\left\\s*([({\\\\[|])", r"\\1", LATEX)\n' +
             'LATEX = re.sub(r"\\\\right\\s*([)}\\\\]|])", r"\\1", LATEX)\n' +
             'LATEX = re.sub(r"\\\\(?:Big[lrg]?|bigl|bigr|Bigl|Bigr)\\s*", "", LATEX)\n' +
+            '# Informal infinity tokens → canonical \\infty.\n' +
+            '# Without this, parse_latex reads `inf` as 3 variables i·f·n\n' +
+            '# (because in math mode, bare letter sequences are products).\n' +
+            '# Same trap for `infty` (missing backslash) and `oo` (SymPy shorthand).\n' +
+            '# The negative lookbehind on \\\\ avoids double-escaping an already-\n' +
+            '# correct \\\\infty.\n' +
+            'LATEX = re.sub(r"(?<!\\\\)\\binf(ty)?\\b", r"\\\\infty", LATEX)\n' +
+            'LATEX = re.sub(r"\\boo\\b", r"\\\\infty", LATEX)\n' +
+            'LATEX = LATEX.replace("\\u221e", r"\\infty")\n' +
             'out = {"ok": False}\n' +
             'try:\n' +
             '    try:\n' +
