@@ -1699,6 +1699,12 @@ function updateMaterials(group, activeOrganelle, viewMode) {
         const baseColor = node.userData.baseColor;
         const active = id && id === activeOrganelle;
         const dimmed = viewMode === "focus" && !active;
+        const hidden = viewMode === "hide" && !active;
+
+        // Hide mode: truly invisible. node.visible=false also makes
+        // isPickable() in the raycaster skip this mesh, so clicks on empty
+        // space don't accidentally activate an invisible organelle.
+        node.visible = !hidden;
 
         mat.transparent = baseOpacity < 1 || dimmed;
         mat.opacity = dimmed ? Math.min(baseOpacity, 0.18) : baseOpacity;

@@ -1233,15 +1233,14 @@
         pushSceneState();
     });
 
-    // Hide Others = focus mode + cross-section (with the slicing plane at
-    // mid-cell so the interior is immediately visible). Distinct from Isolate.
+    // Hide Others = true hide mode. Non-active organelles drop to
+    // node.visible=false in the scene controller — they vanish, no longer
+    // raycast targets. Different from Isolate, which only dims them to 18%.
+    // Cross-section is no longer forced (was a workaround for translucent
+    // walls obscuring the view; with others truly hidden, the active
+    // organelle stands alone with nothing in front of it).
     hideBtn.addEventListener('click', function () {
-        state.viewMode = 'focus';
-        state.crossSection = true;
-        state.clipY = 0;
-        crossSectionInput.checked = true;
-        if (clipSlider) clipSlider.value = '0';
-        syncClipSliderVisibility();
+        state.viewMode = 'hide';
         renderStageTitle();
         pushSceneState();
     });
@@ -1751,7 +1750,7 @@
         var p = {
             c: state.selectedCellId,
             o: state.activeOrganelle,
-            m: state.viewMode === 'focus' ? 'f' : 'm',
+            m: state.viewMode === 'focus' ? 'f' : (state.viewMode === 'hide' ? 'h' : 'm'),
             x: state.crossSection ? '1' : '0',
             r: state.autoRotate ? '1' : '0',
             l: state.labelsVisible ? '1' : '0'
@@ -1781,7 +1780,12 @@
         return {
             selectedCellId: cellId,
             activeOrganelle: orgOk ? orgId : hit.defaultOrganelle,
-            viewMode: params.get('m') === 'f' ? 'focus' : 'mesh',
+            viewMode: (function () {
+                var m = params.get('m');
+                if (m === 'f') return 'focus';
+                if (m === 'h') return 'hide';
+                return 'mesh';
+            })(),
             crossSection: params.get('x') === '1',
             clipY: clipY,
             autoRotate: params.get('r') !== '0',
