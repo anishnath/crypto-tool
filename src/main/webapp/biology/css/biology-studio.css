@@ -1727,3 +1727,108 @@ body.bs-body {
     .ca-canvas-wrap { height: 320px; }
     .ca-stage-toolbar button, .ca-export-toolbar button { padding: 0 8px; font-size: 0.78rem; }
 }
+
+/* ──────────────────────────────────────────────────────────────────
+   Dark-theme defect patches
+   ──────────────────────────────────────────────────────────────────
+   Multiple surfaces use rgba(255,255,255, X%) veils on top of
+   var(--ca-paper) to create a "soft cream paper" feel in light mode.
+   In dark mode those white veils lighten the dark paper back to a
+   muddy gray, washing out the theme. The block below substitutes
+   dark-appropriate fills/gradients for those surfaces, and fixes
+   a handful of hardcoded ink-purple/ink-brown text colors that are
+   unreadable on the dark paper. */
+
+/* Panels — drop the white veil; use the paper variable alone */
+[data-theme="dark"] .ca-panel,
+[data-theme="dark"] .ca-stage-panel {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
+        var(--ca-paper-deep);
+}
+
+/* Panel-heading purple title — invisible on dark paper */
+[data-theme="dark"] .ca-panel-heading {
+    color: #c9bcff;
+    border-bottom-color: rgba(232, 220, 195, 0.14);
+}
+
+/* Mini-cell thumbnails (left rail) */
+[data-theme="dark"] .ca-mini-cell {
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 0 0 1px rgba(232, 220, 195, 0.08);
+}
+[data-theme="dark"] .ca-mini-cell.has-preview {
+    background:
+        radial-gradient(circle at 36% 22%, rgba(255, 255, 255, 0.08), transparent 35%),
+        #221d18;
+    box-shadow:
+        inset 0 0 0 1px rgba(232, 220, 195, 0.08),
+        0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Color-dot halo around the per-organelle indicator */
+[data-theme="dark"] .ca-color-dot {
+    box-shadow: 0 0 0 4px rgba(232, 220, 195, 0.08);
+}
+
+/* View-mode switcher buttons (Surface / Slice / X-ray etc.) */
+[data-theme="dark"] .ca-mode-switcher button {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(232, 220, 195, 0.10);
+}
+
+/* Lesson-focus / tutor-prompt body labels (the purple "FOCUS:" tag) */
+[data-theme="dark"] .ca-lesson-focus > span,
+[data-theme="dark"] .ca-tutor-prompt > span,
+[data-theme="dark"] .ca-tutor-output > span {
+    color: #c9bcff;
+}
+[data-theme="dark"] .ca-lesson-focus,
+[data-theme="dark"] .ca-tutor-prompt,
+[data-theme="dark"] .ca-lesson-focus + *,
+[data-theme="dark"] .ca-tutor-output {
+    border-color: rgba(232, 220, 195, 0.10);
+}
+
+/* Prompt-list hover state — was rgba(255,255,255,0.68) → blinding white */
+[data-theme="dark"] .ca-prompt-list button { border-color: rgba(232, 220, 195, 0.10); }
+[data-theme="dark"] .ca-prompt-list button:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--accent);
+}
+
+/* Occurrence-art decorative panel behind the "where you find it" art */
+[data-theme="dark"] .ca-occurrence-art {
+    background:
+        radial-gradient(circle at 78% 45%, rgba(232, 220, 195, 0.06), transparent 35%),
+        linear-gradient(135deg, var(--accent-soft), rgba(255, 255, 255, 0.02));
+}
+
+/* Micro-card procedural-preview placeholder — soften the bright stripes */
+[data-theme="dark"] .ca-micro-card > span {
+    background:
+        radial-gradient(circle at 20% 30%, var(--micro), transparent 18%),
+        radial-gradient(circle at 72% 40%, color-mix(in srgb, var(--micro) 66%, #d6cfc1), transparent 20%),
+        radial-gradient(circle at 50% 80%, color-mix(in srgb, var(--micro) 78%, #2a2520), transparent 22%),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.04) 0 8px, rgba(0, 0, 0, 0.12) 8px 16px),
+        color-mix(in srgb, var(--micro) 28%, #1a1714);
+}
+[data-theme="dark"] .ca-micro-card { border-color: rgba(232, 220, 195, 0.10); }
+
+/* Comparison columns — borders */
+[data-theme="dark"] .ca-comparison-columns section,
+[data-theme="dark"] .ca-compare-section {
+    border-color: rgba(232, 220, 195, 0.10);
+}
+
+/* Generic faint-brown borders used throughout the tool need a dark
+   counterpart so panels don't look borderless. The brown rgba is set
+   on dozens of rules; rather than patch each, swap them via filter
+   on these specific containers. */
+[data-theme="dark"] .ca-lesson-focus,
+[data-theme="dark"] .ca-prompt-list button,
+[data-theme="dark"] .ca-mode-switcher button,
+[data-theme="dark"] .ca-micro-card {
+    border-color: rgba(232, 220, 195, 0.10);
+}
