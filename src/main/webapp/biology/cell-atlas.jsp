@@ -208,7 +208,8 @@
                         </div>
 
                         <div class="ca-stage-toolbar">
-                            <button type="button" id="caRotateBtn" class="is-active" title="Toggle auto-rotation">&#8635; Rotate</button>
+                            <button type="button" id="caRotateBtn" title="Slowly spin the cell — pauses automatically when you click an organelle (R)">&#8635; Rotate</button>
+                            <button type="button" id="caLabelsBtn" title="Show name + color chip next to each organelle (L)">&#127991;&#65039; Labels</button>
                             <button type="button" id="caIsolateBtn" title="Dim non-active organelles">&#9678; Isolate</button>
                             <button type="button" id="caHideBtn" title="Isolate + make outer membrane transparent">&#128065; Hide Others</button>
                             <button type="button" id="caResetBtn" title="Reset camera + view mode">&#8634; Reset View</button>
@@ -221,6 +222,13 @@
                             <button type="button" id="caHelpBtn" title="Keyboard shortcuts (press ?)">&#9072; Shortcuts</button>
                             <button type="button" id="caGlbBtn" title="GLB export coming soon">&#128230; GLB</button>
                         </div>
+
+                        <%-- Numbered organelle legend — paired with the
+                             in-scene numbered pucks. Visibility tracks the
+                             Labels toolbar toggle. Clicking a legend item
+                             activates the matching organelle (same flow as
+                             clicking it in the side rail or on the puck). --%>
+                        <div class="ca-organelle-legend" id="caLegend" hidden></div>
                     </section>
 
                     <!-- Bottom row: microscope grid + compare -->
@@ -276,7 +284,7 @@
                         </div>
                     </section>
 
-                    <section class="ca-panel">
+                    <section class="ca-panel" id="caTutorPanel">
                         <div class="ca-panel-heading"><span>&#129504; AI Tutor</span></div>
 
                         <div class="ca-lesson-focus">
@@ -325,6 +333,13 @@
 
     </section>
 </main>
+
+<%-- Print handout — hidden onscreen, visible only in @media print. The
+     Print button calls renderPrintView() to populate this from the
+     currently-selected cell's data, then triggers window.print(). The
+     WebGL canvas prints blank otherwise (preserveDrawingBuffer:false),
+     so we hand the printer a data-driven reference page instead. --%>
+<aside class="ca-print-view" id="caPrintView" aria-hidden="true"></aside>
 
 <!-- Comparison modal -->
 <div class="ca-modal-layer" id="caModalLayer" role="dialog" aria-modal="true" aria-labelledby="caModalTitle">
@@ -418,7 +433,8 @@
         viewMode: 'mesh',
         crossSection: false,
         clipY: 0,
-        autoRotate: true,
+        autoRotate: false,
+        labelsVisible: false,
         favorites: new Set(['animal'])
     };
 
@@ -443,6 +459,7 @@
     var clipSliderWrap = $('caClipSliderWrap');
     var clipSlider = $('caClipY');
     var rotateBtn = $('caRotateBtn');
+    var labelsBtn = $('caLabelsBtn');
     var isolateBtn = $('caIsolateBtn');
     var hideBtn = $('caHideBtn');
     var resetBtn = $('caResetBtn');
@@ -465,6 +482,7 @@
     var tutorClearBtn = $('caTutorClearBtn');
     var promptList = $('caPromptList');
     var occArt = $('caOccArt');
+    var legendEl = $('caLegend');
     var occTitle = $('caOccTitle');
     var occBody = $('caOccBody');
     var microRow = $('caMicroRow');
@@ -490,6 +508,7 @@
     var railShowTabRight = $('caRailShowTabRight');
     var shareBtn = $('caShareBtn');
     var printBtn = $('caPrintBtn');
+    var printView = $('caPrintView');
     var helpBtn = $('caHelpBtn');
     var helpOverlay = $('caHelpOverlay');
     var helpClose = $('caHelpClose');
@@ -554,14 +573,111 @@
     function renderOrganelleList() {
         var cell = selectedCell();
         var html = '';
-        cell.organelles.forEach(function (org) {
+        cell.organelles.forEach(function (org, i) {
             var active = org.id === state.activeOrganelle;
             html += '<button type="button" class="ca-organelle-row' + (active ? ' is-active' : '') +
                     '" data-org-id="' + org.id + '" role="option" aria-selected="' + active + '">' +
                     '<span class="ca-color-dot" style="background:' + org.color + '"></span>' +
-                    '<span>' + org.name + '</span></button>';
+                    '<span>' + (i + 1) + '. ' + org.name + '</span></button>';
         });
         organelleList.innerHTML = html;
+    }
+
+    /* ===== Organelle legend (numbered pucks reference) ================
+       Listed below the stage when Labels toggle is on. Numbers match the
+       in-scene pucks (1-based, follows cell.organelles order). Clicking
+       an entry activates the matching organelle the same way the side
+       rail does. */
+    function renderLegend() {
+        if (!legendEl) return;
+        var cell = selectedCell();
+        var html = '';
+        cell.organelles.forEach(function (org, i) {
+            var active = org.id === state.activeOrganelle;
+            html += '<button type="button" class="ca-legend-item' + (active ? ' is-active' : '') +
+                    '" data-org-id="' + org.id + '" title="' + org.name + '">' +
+                    '<span class="ca-legend-num" style="background:' + org.color + '">' + (i + 1) + '</span>' +
+                    '<span class="ca-legend-name">' + org.name + '</span></button>';
+        });
+        legendEl.innerHTML = html;
+        legendEl.hidden = !state.labelsVisible;
+    }
+
+    /* ===== Print handout =============================================
+       Renders a textbook-style reference page from the selected cell's
+       data — pre-rendered hero PNG + numbered organelle entries with
+       attributes / notes / facts. The view is hidden onscreen via CSS;
+       only @media print exposes it. This avoids the blank-WebGL-canvas
+       problem (preserveDrawingBuffer:false clears the GL buffer before
+       the print snapshot) and produces something a teacher can hand out. */
+    function escapeHtml(s) {
+        if (s == null) return '';
+        return String(s)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    function renderPrintView() {
+        if (!printView) return;
+        var cell = selectedCell();
+        var html = '';
+
+        html += '<header class="ca-print-header">' +
+                '<h1>' + escapeHtml(cell.name) + '</h1>' +
+                '<p>' + escapeHtml(cell.type) + '</p>' +
+                '</header>';
+
+        html += '<section class="ca-print-hero">';
+        if (cell.renderImage && cell.renderImage.url) {
+            html += '<img src="' + escapeHtml(cell.renderImage.url) + '" alt="' +
+                    escapeHtml(cell.name) + ' render">';
+        }
+        if (cell.occurrence) {
+            html += '<div class="ca-print-occurrence">' +
+                    '<h3>' + escapeHtml(cell.occurrence.title || 'Where you find it') + '</h3>' +
+                    '<p>' + escapeHtml(cell.occurrence.body || '') + '</p>' +
+                    '</div>';
+        }
+        html += '</section>';
+
+        html += '<section class="ca-print-organelles">' +
+                '<h2>Organelle Reference</h2>';
+        cell.organelles.forEach(function (org, i) {
+            var attrsHtml = '';
+            (org.attributes || []).forEach(function (a) {
+                attrsHtml += '<div><dt>' + escapeHtml(a.label) +
+                             '</dt><dd>' + escapeHtml(a.value) + '</dd></div>';
+            });
+            html += '<article class="ca-print-organelle">' +
+                    '<header>' +
+                      '<span class="ca-print-num" style="background:' + escapeHtml(org.color) + '">' +
+                        (i + 1) +
+                      '</span>' +
+                      '<div>' +
+                        '<h3>' + escapeHtml(org.name) + '</h3>' +
+                        '<p>' + escapeHtml(org.subtitle || '') + '</p>' +
+                      '</div>' +
+                    '</header>';
+            if (attrsHtml) html += '<dl class="ca-print-attrs">' + attrsHtml + '</dl>';
+            if (org.note) html += '<p class="ca-print-note">' + escapeHtml(org.note) + '</p>';
+            if (org.fact) html += '<p class="ca-print-fact"><strong>Did you know?</strong> ' +
+                                  escapeHtml(org.fact) + '</p>';
+            html += '</article>';
+        });
+        html += '</section>';
+
+        html += '<footer class="ca-print-footer">';
+        var compareId = cell.comparison;
+        if (compareId) {
+            var compareCell = getCellById(compareId);
+            if (compareCell) {
+                html += '<p>Compare with: <strong>' + escapeHtml(compareCell.name) +
+                        '</strong></p>';
+            }
+        }
+        html += '<p class="ca-print-source">8gwifi.org · Cell Atlas 3D</p>';
+        html += '</footer>';
+
+        printView.innerHTML = html;
     }
 
     /* ===== Stage title + view-mode controls ========================== */
@@ -918,11 +1034,13 @@
         renderStageTitle();
         renderCellList();
         renderOrganelleList();
+        renderLegend();
         renderDetails();
         renderTutor();
         renderOccurrence();
         renderMicro();
         renderCompare();
+        renderPrintView();
     }
 
     /* ===== Scene wiring ============================================== */
@@ -934,7 +1052,8 @@
             viewMode: state.viewMode,
             crossSection: state.crossSection,
             clipY: state.clipY,
-            autoRotate: state.autoRotate
+            autoRotate: state.autoRotate,
+            labelsVisible: state.labelsVisible
         });
     }
 
@@ -967,13 +1086,29 @@
         crossSectionInput.checked = state.crossSection;
         if (clipSlider) clipSlider.value = String(state.clipY);
         syncClipSliderVisibility();
+        if (labelsBtn) labelsBtn.classList.toggle('is-active', state.labelsVisible);
+        if (rotateBtn) rotateBtn.classList.toggle('is-active', state.autoRotate);
 
         sceneController = window.BiologyCellScene.mount(canvas, {
             onProgress: onProgress,
             onPick: function (organelleId) {
+                // Surface the AI Tutor every click — the Reddit feedback was
+                // that users miss the right-rail context when picking parts.
+                // Reveal even if the same organelle is re-clicked, so users
+                // can jump back to the tutor view anytime.
+                revealTutorPanel();
+                // Auto-pause rotation on pick. The user is now reading about
+                // an organelle; a spinning cell makes labels hard to track
+                // and pushes the pick out of view. User can manually re-enable
+                // rotation via the Rotate button or `R` key.
+                if (state.autoRotate) {
+                    state.autoRotate = false;
+                    rotateBtn.classList.remove('is-active');
+                }
                 if (organelleId === state.activeOrganelle) return;
                 state.activeOrganelle = organelleId;
                 renderOrganelleList();
+                renderLegend();
                 renderDetails();
                 renderTutor();
                 pushSceneState();
@@ -1026,10 +1161,30 @@
         if (orgId === state.activeOrganelle) return;
         state.activeOrganelle = orgId;
         renderOrganelleList();
+        renderLegend();
         renderDetails();
         renderTutor();
         pushSceneState();
     });
+
+    /* Legend click — same activation flow as the side rail. Reveals the
+       tutor too so clicking a number jumps straight to the explanation. */
+    if (legendEl) {
+        legendEl.addEventListener('click', function (e) {
+            var item = e.target.closest('[data-org-id]');
+            if (!item) return;
+            var orgId = item.getAttribute('data-org-id');
+            revealTutorPanel();
+            if (orgId === state.activeOrganelle) return;
+            state.activeOrganelle = orgId;
+            renderOrganelleList();
+            renderLegend();
+            renderDetails();
+            renderTutor();
+            pushSceneState();
+            updateUrlState();
+        });
+    }
 
     modeSwitcher.addEventListener('click', function (e) {
         var btn = e.target.closest('button[data-mode]');
@@ -1057,6 +1212,18 @@
         state.autoRotate = !state.autoRotate;
         rotateBtn.classList.toggle('is-active', state.autoRotate);
         pushSceneState();
+    });
+
+    /* Labels — toggle the in-scene numbered pucks AND the side legend. */
+    function setLabelsVisible(on) {
+        state.labelsVisible = !!on;
+        labelsBtn.classList.toggle('is-active', state.labelsVisible);
+        if (legendEl) legendEl.hidden = !state.labelsVisible;
+        pushSceneState();
+    }
+    labelsBtn.addEventListener('click', function () {
+        setLabelsVisible(!state.labelsVisible);
+        updateUrlState();
     });
 
     // Isolate = enter focus mode without touching cross-section.
@@ -1551,6 +1718,32 @@
     if (railHideBtnRight) railHideBtnRight.addEventListener('click', function () { toggleRail('right', true);  });
     if (railShowTabRight) railShowTabRight.addEventListener('click', function () { toggleRail('right', false); });
 
+    /* revealTutorPanel — fired from the 3D scene's onPick. Expands the
+       right rail if it's been collapsed; only scrolls on layouts where
+       the rail is stacked under the stage (mobile / narrow viewports).
+       On desktop the rail sits side-by-side with the stage, so scrolling
+       would push the 3D viewer out of view — bad UX when the user is
+       picking organelles back-to-back. */
+    function revealTutorPanel() {
+        var wasHidden = grid.classList.contains('is-right-hidden');
+        if (wasHidden) toggleRail('right', false);
+
+        // 1100px matches the grid breakpoint where the layout flips from
+        // single-column (stage on top, rails stacked below) to 3-column
+        // (rails flanking the stage). Below this, scrolling helps; above
+        // it, scrolling hurts — just expanding the rail is enough.
+        if (window.innerWidth >= 1100) return;
+
+        var panel = document.getElementById('caTutorPanel');
+        if (!panel) return;
+        var run = function () {
+            try { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            catch (e) { panel.scrollIntoView(); }
+        };
+        if (wasHidden) requestAnimationFrame(function () { requestAnimationFrame(run); });
+        else run();
+    }
+
     /* ===== URL state ================================================
        Encodes the minimum needed to reproduce a view. `history.replaceState`
        keeps the bar in sync without polluting the back-button history. */
@@ -1560,7 +1753,8 @@
             o: state.activeOrganelle,
             m: state.viewMode === 'focus' ? 'f' : 'm',
             x: state.crossSection ? '1' : '0',
-            r: state.autoRotate ? '1' : '0'
+            r: state.autoRotate ? '1' : '0',
+            l: state.labelsVisible ? '1' : '0'
         };
         // Only include slice depth when it's non-default + cross-section is on —
         // keeps unsliced URLs short.
@@ -1590,7 +1784,8 @@
             viewMode: params.get('m') === 'f' ? 'focus' : 'mesh',
             crossSection: params.get('x') === '1',
             clipY: clipY,
-            autoRotate: params.get('r') !== '0'
+            autoRotate: params.get('r') !== '0',
+            labelsVisible: params.get('l') === '1'
         };
     }
     function buildShareUrl() {
@@ -1626,10 +1821,16 @@
         });
     }
 
-    /* ===== Print button — defers to window.print() (CSS handles
-       the printable layout via @media print). ======================== */
+    /* ===== Print button — populate the data-driven handout view, then
+       invoke the browser's print flow. The print stylesheet hides the
+       live UI and shows #caPrintView; window.print() snapshots that. */
     if (printBtn) {
-        printBtn.addEventListener('click', function () { window.print(); });
+        printBtn.addEventListener('click', function () {
+            renderPrintView();
+            // Defer one frame so the print-view DOM is laid out before
+            // the browser snapshots it for the print preview.
+            requestAnimationFrame(function () { window.print(); });
+        });
     }
 
     /* ===== Help overlay ============================================= */
@@ -1664,6 +1865,7 @@
         var next = (idx + delta + orgs.length) % orgs.length;
         state.activeOrganelle = orgs[next].id;
         renderOrganelleList();
+        renderLegend();
         renderDetails();
         renderTutor();
         pushSceneState();
@@ -1703,6 +1905,10 @@
                 state.autoRotate = !state.autoRotate;
                 rotateBtn.classList.toggle('is-active', state.autoRotate);
                 pushSceneState(); updateUrlState(); e.preventDefault();
+                break;
+            case 'l': case 'L':
+                setLabelsVisible(!state.labelsVisible);
+                updateUrlState(); e.preventDefault();
                 break;
             case 'f': case 'F':
                 state.viewMode = state.viewMode === 'focus' ? 'mesh' : 'focus';

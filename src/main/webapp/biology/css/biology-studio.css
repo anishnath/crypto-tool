@@ -1201,46 +1201,132 @@ body.bs-body {
 .ca-help-close:hover { background: rgba(0, 0, 0, 0.04); }
 [data-theme="dark"] .ca-help-close:hover { background: rgba(255, 255, 255, 0.06); }
 
-/* ─── Print stylesheet ───────────────────────────────────────────
-   Strips chrome and keeps just the 3D scene, organelle details, and
-   biology notes so teachers can hand the page out. */
+/* ─── Print handout ─────────────────────────────────────────────────
+   The Print button calls renderPrintView() to populate #caPrintView
+   from the selected cell's data, then invokes window.print(). This
+   block hides the entire live tool (including the WebGL canvas, which
+   prints blank anyway) and shows the data-driven handout instead. */
+
+/* Screen: print view is hidden — it only exists for the print snapshot. */
+.ca-print-view { display: none; }
+
 @media print {
-    body.bs-body { padding-top: 0 !important; background: #fff !important; }
+    /* Hide the live tool and every page chrome element. */
+    body.bs-body { padding-top: 0 !important; background: #fff !important; color: #111 !important; }
     .bs-hero, .bs-sidebar, .bs-sidebar-toggle, .bs-sidebar-backdrop,
-    .bs-faq-wrap, .ca-stage-toolbar, .ca-export-toolbar,
-    .ca-rail-show-tab, .ca-rail-collapse-btn, .ca-mode-switcher,
-    .ca-toggle-line, .ca-tutor-form, .ca-prompt-list,
-    .ca-bottom-grid, .ca-help-overlay, .ca-modal-layer,
-    .ca-toast, #adsense_top, .ad-container,
-    .modern-nav, .nav-header, footer {
+    .bs-faq-wrap, .modern-nav, .nav-header, footer,
+    .ca-tool-root, .ca-cell-grid, .ca-help-overlay, .ca-modal-layer,
+    .ca-toast, #adsense_top, .ad-container {
         display: none !important;
+    }
+
+    /* Show the handout. */
+    .ca-print-view {
+        display: block !important;
+        font: 12pt/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #111;
+        max-width: none;
+        margin: 0;
+        padding: 0 12mm;
     }
     .bs-main {
         display: block !important;
         padding: 0 !important; margin: 0 !important; max-width: 100% !important;
-    }
-    .ca-cell-grid {
-        grid-template-columns: 1fr !important;
-        gap: 14px !important;
-    }
-    .ca-tool-root {
-        padding: 0 !important;
-        border: 0 !important;
-        box-shadow: none !important;
         background: #fff !important;
     }
-    .ca-stage-panel, .ca-panel {
-        box-shadow: none !important;
-        border: 1px solid #ccc !important;
-        background: #fff !important;
+
+    /* Header. */
+    .ca-print-header { border-bottom: 2px solid #111; padding-bottom: 6mm; margin-bottom: 6mm; }
+    .ca-print-header h1 { margin: 0; font-size: 22pt; font-weight: 700; }
+    .ca-print-header p  { margin: 1mm 0 0; font-size: 11pt; color: #555; font-style: italic; }
+
+    /* Hero — pre-rendered PNG + occurrence blurb side-by-side. */
+    .ca-print-hero {
+        display: grid;
+        grid-template-columns: 60mm 1fr;
+        gap: 6mm;
+        margin-bottom: 8mm;
+        page-break-after: avoid;
+    }
+    .ca-print-hero img {
+        width: 60mm; height: auto; max-height: 60mm;
+        object-fit: contain;
+        border: 1px solid #ccc;
+        background: #fff;
+    }
+    .ca-print-occurrence h3 { margin: 0 0 2mm; font-size: 13pt; }
+    .ca-print-occurrence p  { margin: 0; font-size: 11pt; color: #333; }
+
+    /* Organelle section header. */
+    .ca-print-organelles > h2 {
+        font-size: 16pt; margin: 4mm 0 4mm;
+        border-bottom: 1px solid #888;
+        padding-bottom: 2mm;
+    }
+
+    /* Per-organelle entry — must not split across pages. */
+    .ca-print-organelle {
         page-break-inside: avoid;
+        margin-bottom: 5mm;
+        padding: 3mm 4mm;
+        border: 1px solid #ddd;
+        border-left: 4px solid #333;
     }
-    .ca-canvas-wrap {
-        height: 420px !important;
-        background: #fff !important;
+    .ca-print-organelle > header {
+        display: grid;
+        grid-template-columns: 10mm 1fr;
+        gap: 3mm;
+        align-items: center;
+        margin-bottom: 2mm;
     }
-    .ca-tutor-output { display: none; }
-    .ca-stage-title h2 { font-size: 1.6rem !important; }
+    .ca-print-num {
+        display: inline-grid; place-items: center;
+        width: 9mm; height: 9mm;
+        border-radius: 50%;
+        color: #fff;
+        font-weight: 700;
+        font-size: 12pt;
+        text-shadow: 0 0.5pt 0 rgba(0, 0, 0, 0.5);
+    }
+    .ca-print-organelle h3 { margin: 0; font-size: 12pt; }
+    .ca-print-organelle > header p { margin: 0; font-size: 10pt; color: #666; font-style: italic; }
+    .ca-print-attrs {
+        margin: 2mm 0;
+        font-size: 10pt;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1mm 4mm;
+    }
+    .ca-print-attrs > div { display: grid; grid-template-columns: 28mm 1fr; gap: 2mm; }
+    .ca-print-attrs dt { font-weight: 600; color: #555; }
+    .ca-print-attrs dd { margin: 0; color: #222; }
+    .ca-print-note { margin: 2mm 0 1.5mm; font-size: 10.5pt; }
+    .ca-print-fact {
+        margin: 1mm 0 0;
+        font-size: 10pt;
+        color: #444;
+        padding: 2mm 3mm;
+        background: #f5f3ec;
+        border-left: 2px solid #888;
+    }
+    .ca-print-fact strong { color: #111; }
+
+    /* Footer. */
+    .ca-print-footer {
+        margin-top: 8mm;
+        padding-top: 3mm;
+        border-top: 1px solid #aaa;
+        font-size: 9pt;
+        color: #666;
+    }
+    .ca-print-footer p { margin: 1mm 0; }
+    .ca-print-source { text-align: right; font-style: italic; }
+
+    /* Strip transitions and animations in print. */
+    *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+    }
 }
 
 /* Custom-prompt form. */
@@ -1726,6 +1812,73 @@ body.bs-body {
     .ca-stage-title h2 { font-size: 1.9rem; }
     .ca-canvas-wrap { height: 320px; }
     .ca-stage-toolbar button, .ca-export-toolbar button { padding: 0 8px; font-size: 0.78rem; }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Organelle Legend
+   ──────────────────────────────────────────────────────────────────
+   Sits below the stage toolbar, only visible when the Labels toggle
+   is on. Each item is a small numbered chip — the number matches the
+   in-scene puck on the 3D model. Clicking an entry activates that
+   organelle (same flow as side-rail click). */
+.ca-organelle-legend {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--ca-line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.ca-organelle-legend[hidden] { display: none; }
+
+.ca-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 6px;
+    cursor: pointer;
+    border: 1px solid rgba(84, 74, 58, 0.14);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.42);
+    color: inherit;
+    font: 500 0.88rem var(--bs-font-sans);
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+.ca-legend-item:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--ca-shadow-soft);
+    border-color: color-mix(in srgb, var(--accent) 40%, rgba(84, 74, 58, 0.14));
+}
+.ca-legend-item.is-active {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.ca-legend-num {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    color: #fffdf6;
+    font: 700 0.78rem var(--bs-font-sans);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+    box-shadow: inset 0 0 0 2px rgba(20, 18, 14, 0.18);
+}
+
+.ca-legend-name { line-height: 1; }
+
+[data-theme="dark"] .ca-legend-item {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(232, 220, 195, 0.10);
+}
+[data-theme="dark"] .ca-legend-item:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, rgba(232, 220, 195, 0.10));
+}
+[data-theme="dark"] .ca-legend-num {
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.35);
 }
 
 /* ──────────────────────────────────────────────────────────────────

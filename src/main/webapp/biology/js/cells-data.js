@@ -121,6 +121,84 @@
                     ],
                     note: "The cell wall gives plant cells their regular shape and protects the membrane beneath it.",
                     fact: "Cell walls help plants stand upright without a skeleton."
+                },
+                {
+                    id: "mitochondrion",
+                    name: "Mitochondrion",
+                    subtitle: "The energy converter",
+                    color: "#ce785c",
+                    attributes: [
+                        { label: "Size", value: "0.5 to 2 µm long" },
+                        { label: "Function", value: "Cellular respiration" },
+                        { label: "Visible in LM", value: "Rarely (specks)" }
+                    ],
+                    note: "Mitochondria release energy stored in sugars made by chloroplasts, supplying ATP for every reaction in the cell.",
+                    fact: "A leaf cell may carry hundreds of mitochondria alongside its chloroplasts."
+                },
+                {
+                    id: "er",
+                    name: "Endoplasmic Reticulum",
+                    subtitle: "The protein highway",
+                    color: "#d97757",
+                    attributes: [
+                        { label: "Type", value: "Rough + smooth" },
+                        { label: "Role", value: "Protein and lipid synthesis" },
+                        { label: "Connects to", value: "Nuclear envelope" }
+                    ],
+                    note: "The endoplasmic reticulum threads through the cytoplasm as a folded membrane network, folding proteins and building lipids.",
+                    fact: "Rough ER is studded with ribosomes; smooth ER has none."
+                },
+                {
+                    id: "ribosomes",
+                    name: "Ribosomes",
+                    subtitle: "The protein builders",
+                    color: "#a05f9f",
+                    attributes: [
+                        { label: "Size", value: "20 to 25 nm" },
+                        { label: "Location", value: "Cytoplasm + rough ER" },
+                        { label: "Role", value: "Translate mRNA" }
+                    ],
+                    note: "Ribosomes read genetic instructions from mRNA and string amino acids together into proteins. They float free or attach to the rough ER.",
+                    fact: "A single plant cell may contain millions of ribosomes."
+                },
+                {
+                    id: "golgi",
+                    name: "Golgi Apparatus",
+                    subtitle: "The shipping center",
+                    color: "#d49057",
+                    attributes: [
+                        { label: "Shape", value: "Stack of flattened sacs" },
+                        { label: "Role", value: "Sort and package proteins" },
+                        { label: "Output", value: "Cell wall material, vesicles" }
+                    ],
+                    note: "The Golgi receives proteins from the ER, modifies them, and ships them in vesicles. In plants it also assembles cell-wall polysaccharides.",
+                    fact: "Plant Golgi stacks are often called dictyosomes."
+                },
+                {
+                    id: "plasmaMembrane",
+                    name: "Plasma Membrane",
+                    subtitle: "The selective gate",
+                    color: "#b5cf95",
+                    attributes: [
+                        { label: "Structure", value: "Lipid bilayer" },
+                        { label: "Position", value: "Inside the cell wall" },
+                        { label: "Function", value: "Controls entry / exit" }
+                    ],
+                    note: "Under the rigid wall sits a thin lipid bilayer studded with proteins. It decides what crosses into and out of the cell.",
+                    fact: "The cell wall is rigid scaffolding; the real gatekeeper is the membrane underneath."
+                },
+                {
+                    id: "plasmodesmata",
+                    name: "Plasmodesmata",
+                    subtitle: "The plant-only channels",
+                    color: "#c2a87a",
+                    attributes: [
+                        { label: "Width", value: "~50 nm" },
+                        { label: "Cross", value: "The cell wall" },
+                        { label: "Function", value: "Cell-to-cell transport" }
+                    ],
+                    note: "Plasmodesmata are tiny channels that pierce the cell wall, linking the cytoplasm of neighboring plant cells so they can share water, nutrients, and signals.",
+                    fact: "Animal cells have no equivalent — plasmodesmata are unique to plants."
                 }
             ]
         },
@@ -209,6 +287,84 @@
                     ],
                     note: "Granules store molecules that help immune cells respond quickly to infection or inflammation.",
                     fact: "Some immune cells are named by how their granules stain."
+                },
+                {
+                    id: "mitochondrion",
+                    name: "Mitochondrion",
+                    subtitle: "The energy converter",
+                    color: "#ce785c",
+                    attributes: [
+                        { label: "Size", value: "0.5 to 2 µm long" },
+                        { label: "Role", value: "ATP production" },
+                        { label: "Why many?", value: "Immune cells are metabolically active" }
+                    ],
+                    note: "Immune cells burn through ATP during chemotaxis, engulfment, and burst respiration — they pack many mitochondria for the energy demand.",
+                    fact: "Activated neutrophils can multiply their oxygen use by 100x in seconds — the 'respiratory burst' that kills swallowed microbes."
+                },
+                {
+                    id: "er",
+                    name: "Endoplasmic Reticulum",
+                    subtitle: "The protein factory",
+                    color: "#d97757",
+                    attributes: [
+                        { label: "Type", value: "Rough + smooth" },
+                        { label: "Role", value: "Builds defense proteins" },
+                        { label: "Heavy in", value: "B cells, plasma cells" }
+                    ],
+                    note: "Rough ER is studded with ribosomes that translate mRNA into proteins. In B cells it's massively expanded — they're antibody factories.",
+                    fact: "A single plasma cell can secrete thousands of antibody molecules per second from its ER + Golgi assembly line."
+                },
+                {
+                    id: "ribosomes",
+                    name: "Ribosomes",
+                    subtitle: "The protein builders",
+                    color: "#a05f9f",
+                    attributes: [
+                        { label: "Size", value: "20 to 25 nm" },
+                        { label: "Location", value: "Cytoplasm + rough ER" },
+                        { label: "Role", value: "Translate mRNA into protein" }
+                    ],
+                    note: "Ribosomes string amino acids together to build the cytokines, antibodies, and enzymes the cell uses to fight pathogens.",
+                    fact: "Immune cells crank ribosomes up sharply when activated by an infection."
+                },
+                {
+                    id: "golgi",
+                    name: "Golgi Apparatus",
+                    subtitle: "The cytokine packager",
+                    color: "#d49057",
+                    attributes: [
+                        { label: "Shape", value: "Stack of flattened sacs" },
+                        { label: "Role", value: "Sort + ship signaling proteins" },
+                        { label: "Output", value: "Cytokine + antibody vesicles" }
+                    ],
+                    note: "The Golgi tags, glycosylates, and bundles proteins from the ER into vesicles. Immune cells use it to ship cytokines and antibodies out of the cell.",
+                    fact: "Cytokines released by Golgi vesicles can call thousands of other immune cells to a single infection site."
+                },
+                {
+                    id: "plasmaMembrane",
+                    name: "Plasma Membrane",
+                    subtitle: "The pathogen-sensor",
+                    color: "#b6c0e0",
+                    attributes: [
+                        { label: "Structure", value: "Lipid bilayer + receptors" },
+                        { label: "Function", value: "Detects pathogens, controls entry" },
+                        { label: "Special", value: "Forms pseudopodia for engulfment" }
+                    ],
+                    note: "The plasma membrane studs itself with pattern-recognition receptors that detect microbes, then bends inward to engulf them via phagocytosis.",
+                    fact: "Toll-like receptors on this membrane were the discovery that won the 2011 Nobel Prize in Medicine."
+                },
+                {
+                    id: "phagosome",
+                    name: "Phagosome",
+                    subtitle: "The pathogen prison",
+                    color: "#aa8c5a",
+                    attributes: [
+                        { label: "Contents", value: "Engulfed bacterium or debris" },
+                        { label: "Forms via", value: "Membrane wrapping (phagocytosis)" },
+                        { label: "Fate", value: "Fuses with lysosome → kills" }
+                    ],
+                    note: "When an immune cell wraps its membrane around a pathogen, the pinched-off vesicle is a phagosome. Lysosomes fuse with it to dump enzymes that digest the contents.",
+                    fact: "Phagocytosis was first described in 1882 by Élie Metchnikoff watching starfish larvae — it won him the 1908 Nobel Prize."
                 }
             ]
         },
@@ -268,6 +424,7 @@
                     name: "Axon",
                     subtitle: "The signal highway",
                     color: "#6b7dc6",
+                    labelPosition: [1.1, 0.2, 0.1],
                     attributes: [
                         { label: "Length", value: "µm to over 1 metre" },
                         { label: "Insulation", value: "Myelin sheath" },
@@ -281,6 +438,7 @@
                     name: "Soma",
                     subtitle: "The cell body",
                     color: "#7c52b7",
+                    labelPosition: [-0.1, 0.7, 0.1],
                     attributes: [
                         { label: "Contains", value: "Nucleus" },
                         { label: "Role", value: "Metabolic hub" },
@@ -294,6 +452,7 @@
                     name: "Dendrites",
                     subtitle: "The receiving branches",
                     color: "#7d9bcf",
+                    labelPosition: [-1.3, 1.0, 0.1],
                     attributes: [
                         { label: "Shape", value: "Branched" },
                         { label: "Role", value: "Input" },
@@ -301,6 +460,104 @@
                     ],
                     note: "Dendrites increase the surface area available for receiving signals from other cells.",
                     fact: "A single neuron can receive thousands of synaptic inputs."
+                },
+                {
+                    id: "nucleus",
+                    name: "Nucleus",
+                    subtitle: "The neuron's command center",
+                    color: "#7047a8",
+                    labelPosition: [-0.3, 0.4, 0.2],
+                    attributes: [
+                        { label: "Location", value: "Inside the soma" },
+                        { label: "Size", value: "5 to 10 µm" },
+                        { label: "Special", value: "Often a single prominent nucleolus" }
+                    ],
+                    note: "The nucleus sits at the center of the soma and produces the mRNA that codes for every protein the neuron uses — including ion channels, receptors, and neurotransmitter enzymes.",
+                    fact: "Mature neurons don't divide — the nucleus you have at birth is the same one you'll keep your whole life."
+                },
+                {
+                    id: "mitochondrion",
+                    name: "Mitochondrion",
+                    subtitle: "The neural power plant",
+                    color: "#ce785c",
+                    labelPosition: [-0.7, 0.55, 0.2],
+                    attributes: [
+                        { label: "Where", value: "Soma, axon, synapses" },
+                        { label: "Role", value: "ATP for ion pumps" },
+                        { label: "Why so many?", value: "Action potentials cost energy" }
+                    ],
+                    note: "Neurons spend more ATP than almost any other cell type — pumping sodium and potassium back across the membrane after every action potential. Mitochondria cluster especially densely at synapses.",
+                    fact: "Your brain is 2% of your body weight but burns 20% of your daily energy — mitochondria in neurons are the reason."
+                },
+                {
+                    id: "er",
+                    name: "Endoplasmic Reticulum (Nissl Bodies)",
+                    subtitle: "The neurotransmitter factory",
+                    color: "#d97757",
+                    labelPosition: [0.4, 0.55, 0.2],
+                    attributes: [
+                        { label: "Neuron name", value: "Nissl bodies" },
+                        { label: "Where", value: "Densely packed in the soma" },
+                        { label: "Role", value: "Builds receptors + enzymes" }
+                    ],
+                    note: "In neurons, rough ER and bound ribosomes cluster so densely in the soma that stained sections show distinct spots — Franz Nissl named them in 1894. They synthesize membrane channels, receptors, and the enzymes that make neurotransmitters.",
+                    fact: "Nissl bodies are confined to the soma and dendrites — never the axon. That's how neuroanatomists tell parts of a stained neuron apart."
+                },
+                {
+                    id: "golgi",
+                    name: "Golgi Apparatus",
+                    subtitle: "The vesicle shipper",
+                    color: "#d49057",
+                    labelPosition: [-0.05, 0.05, 0.2],
+                    attributes: [
+                        { label: "Where", value: "Soma, near the nucleus" },
+                        { label: "Role", value: "Packages receptors + neurotransmitter enzymes" },
+                        { label: "Output", value: "Vesicles to dendrites and axon" }
+                    ],
+                    note: "The Golgi receives proteins from the rough ER, sorts them, and packages them into vesicles destined for specific parts of the neuron — receptors travel to dendrites, neurotransmitter-making enzymes travel down the axon.",
+                    fact: "Camillo Golgi discovered both this organelle AND the silver-staining method that made the first neuron drawings possible — he won the 1906 Nobel Prize alongside Ramón y Cajal."
+                },
+                {
+                    id: "myelinSheath",
+                    name: "Myelin Sheath",
+                    subtitle: "The axon's insulation",
+                    color: "#bfd1df",
+                    labelPosition: [1.5, 0.5, 0.1],
+                    attributes: [
+                        { label: "Made by", value: "Schwann cells / oligodendrocytes" },
+                        { label: "Composition", value: "Lipid-rich wrapping" },
+                        { label: "Why?", value: "Speeds up signal conduction" }
+                    ],
+                    note: "Other glial cells wrap the axon in fatty layers that act as electrical insulation. Without myelin, neurons would conduct signals up to 100x slower.",
+                    fact: "Multiple sclerosis is the autoimmune destruction of myelin — and it's why MS patients lose motor control as conduction fails."
+                },
+                {
+                    id: "nodesOfRanvier",
+                    name: "Nodes of Ranvier",
+                    subtitle: "The signal-boosting gaps",
+                    color: "#e8a76a",
+                    labelPosition: [1.85, 0.7, 0.1],
+                    attributes: [
+                        { label: "Where", value: "Between myelin segments" },
+                        { label: "Length", value: "About 1 µm" },
+                        { label: "Role", value: "Saltatory conduction" }
+                    ],
+                    note: "The myelin sheath isn't continuous — small bare patches of axon appear between each Schwann cell. Action potentials 'jump' from one node to the next, dramatically speeding conduction.",
+                    fact: "Saltatory conduction (from Latin saltare, 'to leap') makes myelinated axons up to 100x faster than unmyelinated ones."
+                },
+                {
+                    id: "axonTerminal",
+                    name: "Axon Terminal",
+                    subtitle: "The signal sender",
+                    color: "#b46ac7",
+                    labelPosition: [2.2, 0.3, 0.1],
+                    attributes: [
+                        { label: "Where", value: "End of axon" },
+                        { label: "Contains", value: "Synaptic vesicles" },
+                        { label: "Role", value: "Releases neurotransmitter" }
+                    ],
+                    note: "When an action potential reaches the axon terminal, calcium pours in and synaptic vesicles fuse with the membrane, dumping neurotransmitter into the synaptic cleft. This is where one neuron talks to the next.",
+                    fact: "A single axon can have thousands of terminals — pyramidal neurons in your cortex form ~10,000 synapses each."
                 }
             ]
         },
@@ -388,6 +645,97 @@
                     ],
                     note: "The epithelial nucleus stores genetic information and changes position depending on tissue shape.",
                     fact: "Nuclear shape helps pathologists read tissue samples."
+                },
+                {
+                    id: "plasmaMembrane",
+                    name: "Plasma Membrane",
+                    subtitle: "The polarized boundary",
+                    color: "#d79baa",
+                    attributes: [
+                        { label: "Faces", value: "Apical + basolateral" },
+                        { label: "Made of", value: "Lipid bilayer + proteins" },
+                        { label: "Special", value: "Different proteins on each side" }
+                    ],
+                    note: "Epithelial cells are polarized — the apical (top) and basolateral (sides + bottom) faces of the plasma membrane carry different transporters and receptors. That's how intestinal cells absorb nutrients in one direction.",
+                    fact: "Glucose transporters on the apical side and Na+/K+ pumps on the basolateral side are what move sugar from your gut into your bloodstream."
+                },
+                {
+                    id: "mitochondrion",
+                    name: "Mitochondrion",
+                    subtitle: "The transport powerhouse",
+                    color: "#ce785c",
+                    attributes: [
+                        { label: "Length", value: "0.5 to 2 µm" },
+                        { label: "Why many?", value: "Active transport is ATP-hungry" },
+                        { label: "Heavy in", value: "Intestine, kidney epithelia" }
+                    ],
+                    note: "Cells that pump nutrients against gradients — intestinal villi, kidney tubules — pack mitochondria densely along their basolateral membranes to fuel the Na+/K+ pumps.",
+                    fact: "Kidney proximal tubule cells are so mitochondria-rich the EM images look like tessellated honeycomb."
+                },
+                {
+                    id: "er",
+                    name: "Endoplasmic Reticulum",
+                    subtitle: "The protein factory",
+                    color: "#d97757",
+                    attributes: [
+                        { label: "Type", value: "Rough + smooth" },
+                        { label: "Role", value: "Builds secreted proteins" },
+                        { label: "Notable in", value: "Goblet cells (mucus)" }
+                    ],
+                    note: "Secretory epithelia — goblet cells in the intestine, mucus cells in airways — have hugely expanded rough ER for protein production. The ER folds membrane proteins, mucins, and digestive enzymes.",
+                    fact: "A single goblet cell can be 80% ER by volume when it's actively churning out mucus."
+                },
+                {
+                    id: "ribosomes",
+                    name: "Ribosomes",
+                    subtitle: "The protein builders",
+                    color: "#a05f9f",
+                    attributes: [
+                        { label: "Type", value: "80S eukaryotic" },
+                        { label: "Location", value: "Cytoplasm + rough ER" },
+                        { label: "Role", value: "Translate mRNA into protein" }
+                    ],
+                    note: "Ribosomes string amino acids into proteins. Free ribosomes make cytoplasmic proteins; rough-ER-bound ribosomes make secreted and membrane proteins.",
+                    fact: "Epithelial turnover is fast — intestinal lining cells live only 3-5 days, so their ribosomes never stop."
+                },
+                {
+                    id: "golgi",
+                    name: "Golgi Apparatus",
+                    subtitle: "The polarity sorter",
+                    color: "#d49057",
+                    attributes: [
+                        { label: "Shape", value: "Flattened sac stack" },
+                        { label: "Role", value: "Sorts apical vs basolateral cargo" },
+                        { label: "Position", value: "Above the nucleus" }
+                    ],
+                    note: "The Golgi is the traffic-control point for epithelial polarity — it decides which membrane proteins go to the apical surface and which go to the basolateral side, packaging them into different vesicle types.",
+                    fact: "The Golgi tags each protein with a 'shipping address' lipid that targets it to one face or the other."
+                },
+                {
+                    id: "basementMembrane",
+                    name: "Basement Membrane",
+                    subtitle: "The anchor layer",
+                    color: "#a87f64",
+                    attributes: [
+                        { label: "What", value: "Extracellular protein mat" },
+                        { label: "Position", value: "Below the basal surface" },
+                        { label: "Made of", value: "Collagen IV + laminin" }
+                    ],
+                    note: "Epithelia don't float free — they sit on a thin sheet of structural proteins (collagen IV, laminin, fibronectin) that anchors them to the connective tissue below. It's the defining feature that separates epithelium from underlying stroma.",
+                    fact: "Most carcinomas (cancers from epithelial cells) only become invasive once they break through this basement membrane — pathologists watch for that breach to grade tumors."
+                },
+                {
+                    id: "desmosomes",
+                    name: "Desmosomes",
+                    subtitle: "The cell-to-cell rivets",
+                    color: "#c44b6e",
+                    attributes: [
+                        { label: "Where", value: "Lateral surfaces" },
+                        { label: "Role", value: "Mechanical anchoring" },
+                        { label: "Made of", value: "Cadherin proteins + keratin" }
+                    ],
+                    note: "Different from tight junctions — desmosomes are spot-weld connections that lock neighboring cells together against pulling forces. Densest in skin and heart muscle, where tissues stretch constantly.",
+                    fact: "In pemphigus vulgaris, antibodies attack desmosomes — skin cells stop sticking together and the skin literally peels off in sheets."
                 }
             ]
         },
@@ -452,6 +800,7 @@
                     name: "Nucleoid",
                     subtitle: "The naked genome",
                     color: "#7a43ad",
+                    labelPosition: [0.0, 0.3, 0.1],
                     attributes: [
                         { label: "Size", value: "About 1 µm region" },
                         { label: "Membrane", value: "None" },
@@ -465,6 +814,7 @@
                     name: "Cell Wall",
                     subtitle: "The protective shell",
                     color: "#55aa89",
+                    labelPosition: [0.0, 1.1, 0.1],
                     attributes: [
                         { label: "Material", value: "Peptidoglycan" },
                         { label: "Role", value: "Shape and defense" },
@@ -478,6 +828,7 @@
                     name: "Flagellum",
                     subtitle: "The swimming tail",
                     color: "#b87438",
+                    labelPosition: [-1.3, -0.4, 0.1],
                     attributes: [
                         { label: "Role", value: "Movement" },
                         { label: "Shape", value: "Helical filament" },
@@ -485,6 +836,76 @@
                     ],
                     note: "Some bacteria rotate flagella like tiny motors to move through liquid environments.",
                     fact: "Bacterial flagella are powered by ion gradients."
+                },
+                {
+                    id: "plasmaMembrane",
+                    name: "Plasma Membrane",
+                    subtitle: "The inner barrier",
+                    color: "#7ac6b8",
+                    labelPosition: [0.0, -0.85, 0.1],
+                    attributes: [
+                        { label: "Structure", value: "Lipid bilayer" },
+                        { label: "Position", value: "Inside the cell wall" },
+                        { label: "Function", value: "Selective transport + energy" }
+                    ],
+                    note: "Inside the rigid cell wall sits a thin lipid bilayer. Unlike eukaryotic cells, bacteria run their entire energy-generating respiratory chain on this membrane — they have no mitochondria.",
+                    fact: "Penicillin doesn't touch the membrane — it disrupts cell wall synthesis, which is why it's harmless to your own cells but lethal to bacteria."
+                },
+                {
+                    id: "ribosomes",
+                    name: "Ribosomes (70S)",
+                    subtitle: "The protein builders",
+                    color: "#a05f9f",
+                    labelPosition: [0.55, 0.4, 0.1],
+                    attributes: [
+                        { label: "Type", value: "70S (different from eukaryotic 80S)" },
+                        { label: "Subunits", value: "50S + 30S" },
+                        { label: "Role", value: "Translate mRNA" }
+                    ],
+                    note: "Bacterial ribosomes are smaller and structurally distinct from your own — which is precisely why many antibiotics work. Tetracycline, streptomycin, and erythromycin all target the 70S ribosome.",
+                    fact: "Mitochondria and chloroplasts contain 70S ribosomes too — evidence they descended from ancient bacteria swallowed by early eukaryotes."
+                },
+                {
+                    id: "plasmid",
+                    name: "Plasmid",
+                    subtitle: "The accessory DNA loop",
+                    color: "#d04c8a",
+                    labelPosition: [0.85, -0.2, 0.1],
+                    attributes: [
+                        { label: "Shape", value: "Small circular DNA" },
+                        { label: "Carries", value: "Antibiotic resistance genes" },
+                        { label: "Spread by", value: "Horizontal transfer" }
+                    ],
+                    note: "Separate from the main nucleoid chromosome, plasmids are small circular DNA molecules that bacteria can copy and pass to neighbors — including across species. This is how antibiotic resistance spreads through a population in days.",
+                    fact: "Every recombinant-DNA biotech tool you've heard of, from insulin production to CRISPR delivery, was built on bacterial plasmids."
+                },
+                {
+                    id: "pili",
+                    name: "Pili",
+                    subtitle: "The grappling hooks",
+                    color: "#c98f3e",
+                    labelPosition: [0.5, 0.95, 0.1],
+                    attributes: [
+                        { label: "Length", value: "1 to 10 µm" },
+                        { label: "Made of", value: "Pilin protein" },
+                        { label: "Role", value: "Adhesion + DNA transfer" }
+                    ],
+                    note: "Pili are hair-like surface fibers — shorter and thinner than the flagellum. Bacteria use them to stick to surfaces (yours included) and to swap plasmids directly with other cells through a specialized 'sex pilus'.",
+                    fact: "The reason a urinary tract infection sticks instead of getting flushed out is E. coli's adhesive pili gripping the bladder wall."
+                },
+                {
+                    id: "capsule",
+                    name: "Capsule",
+                    subtitle: "The slime shield",
+                    color: "#a8d3c4",
+                    labelPosition: [-0.7, 0.95, 0.1],
+                    attributes: [
+                        { label: "Material", value: "Polysaccharide slime" },
+                        { label: "Position", value: "Outside the cell wall" },
+                        { label: "Role", value: "Hides from immune system" }
+                    ],
+                    note: "Some bacteria coat themselves in a slippery polysaccharide layer that helps them evade white blood cells, resist drying out, and form biofilms on surfaces.",
+                    fact: "Streptococcus pneumoniae's capsule is what made it deadly before vaccines — without it, the bacterium is harmless because immune cells can grab it."
                 }
             ]
         },
@@ -549,6 +970,7 @@
                     name: "Mitochondrion",
                     subtitle: "The energy converter",
                     color: "#cf6f42",
+                    labelPosition: [0.7, 0.5, 0.2],
                     attributes: [
                         { label: "Length", value: "1 to 10 µm" },
                         { label: "Membrane", value: "Double" },
@@ -562,6 +984,7 @@
                     name: "Nucleus",
                     subtitle: "The command room",
                     color: "#7a49b0",
+                    labelPosition: [0.0, 0.6, 0.2],
                     attributes: [
                         { label: "Shape", value: "Rounded" },
                         { label: "Membrane", value: "Double" },
@@ -575,6 +998,7 @@
                     name: "Golgi Apparatus",
                     subtitle: "The packaging stack",
                     color: "#d49057",
+                    labelPosition: [-0.7, 0.4, 0.2],
                     attributes: [
                         { label: "Shape", value: "Flattened stacks" },
                         { label: "Role", value: "Modify and sort" },
@@ -582,6 +1006,76 @@
                     ],
                     note: "The Golgi apparatus modifies, sorts, and ships proteins and lipids to their destinations.",
                     fact: "Secretory cells often have a prominent Golgi apparatus."
+                },
+                {
+                    id: "plasmaMembrane",
+                    name: "Plasma Membrane",
+                    subtitle: "The selective boundary",
+                    color: "#9db6dc",
+                    labelPosition: [0.0, 1.0, 0.2],
+                    attributes: [
+                        { label: "Structure", value: "Lipid bilayer + proteins" },
+                        { label: "Role", value: "Controls entry / exit" },
+                        { label: "No wall", value: "Why animal cells are flexible" }
+                    ],
+                    note: "Without a rigid cell wall, the plasma membrane is the entire boundary of an animal cell. Studded with receptors, transporters, and ion channels, it decides what crosses in and out — and signals when neighbors come knocking.",
+                    fact: "The fluid-mosaic model proposed in 1972 — proteins floating in a lipid sea — is still how we describe this membrane today."
+                },
+                {
+                    id: "er",
+                    name: "Endoplasmic Reticulum",
+                    subtitle: "The protein highway",
+                    color: "#d97757",
+                    labelPosition: [0.3, 0.15, 0.2],
+                    attributes: [
+                        { label: "Type", value: "Rough + smooth" },
+                        { label: "Role", value: "Protein and lipid synthesis" },
+                        { label: "Connects to", value: "Nuclear envelope" }
+                    ],
+                    note: "An interconnected membrane network spreading out from the nuclear envelope. Rough ER (with bound ribosomes) builds proteins; smooth ER builds lipids and detoxifies drugs.",
+                    fact: "Liver cells are packed with smooth ER — it's how your liver neutralizes alcohol and most medications."
+                },
+                {
+                    id: "ribosomes",
+                    name: "Ribosomes (80S)",
+                    subtitle: "The protein builders",
+                    color: "#a05f9f",
+                    labelPosition: [0.5, -0.35, 0.2],
+                    attributes: [
+                        { label: "Type", value: "80S (60S + 40S subunits)" },
+                        { label: "Location", value: "Cytoplasm + rough ER" },
+                        { label: "Role", value: "Translate mRNA into protein" }
+                    ],
+                    note: "Eukaryotic ribosomes are larger than bacterial 70S ribosomes. Free ribosomes make cytoplasmic proteins; ribosomes bound to rough ER make proteins destined for secretion or membranes.",
+                    fact: "A single animal cell can carry millions of ribosomes — they make up roughly 25% of a cell's dry mass."
+                },
+                {
+                    id: "lysosome",
+                    name: "Lysosome",
+                    subtitle: "The waste digester",
+                    color: "#8b54b7",
+                    labelPosition: [-0.55, -0.45, 0.2],
+                    attributes: [
+                        { label: "Contents", value: "60+ digestive enzymes" },
+                        { label: "Internal pH", value: "About 4.5 (acidic)" },
+                        { label: "Animal-only", value: "Plants use vacuoles instead" }
+                    ],
+                    note: "Membrane-bound vesicles full of acidic enzymes that digest worn-out organelles, engulfed bacteria, and damaged proteins. They're the cell's recycling and waste-disposal plant.",
+                    fact: "Tay-Sachs disease, Pompe disease, and dozens of other inherited illnesses are 'lysosomal storage disorders' — failures of specific lysosomal enzymes."
+                },
+                {
+                    id: "centrosome",
+                    name: "Centrosome",
+                    subtitle: "The cell-division organizer",
+                    color: "#67b1c4",
+                    labelPosition: [0.0, -0.65, 0.2],
+                    attributes: [
+                        { label: "Made of", value: "Two perpendicular centrioles" },
+                        { label: "Role", value: "Microtubule organizing center" },
+                        { label: "Animal-only", value: "Plants lack centrioles" }
+                    ],
+                    note: "A pair of cylinder-shaped centrioles set at right angles, sitting near the nucleus. During mitosis they duplicate, move to opposite poles, and grow the spindle fibers that pull chromosomes apart.",
+                    fact: "Most plant cells divide without centrioles entirely — one of the cleanest visible differences between animal and plant cells."
                 }
             ]
         },
@@ -658,17 +1152,82 @@
                     fact: "Membrane signals reach deep into fibers through T tubules."
                 },
                 {
-                    id: "mitochondria",
-                    name: "Mitochondria",
+                    id: "mitochondrion",
+                    name: "Mitochondrion",
                     subtitle: "The endurance supply",
                     color: "#cf7042",
                     attributes: [
-                        { label: "Role", value: "Energy supply" },
-                        { label: "Position", value: "Between fibers" },
+                        { label: "Role", value: "ATP for contraction" },
+                        { label: "Position", value: "Between myofibrils" },
                         { label: "Density", value: "Activity dependent" }
                     ],
-                    note: "Muscle cells need many mitochondria because contraction consumes large amounts of ATP.",
-                    fact: "Endurance training can increase mitochondrial density."
+                    note: "Skeletal muscle packs mitochondria between myofibrils to fuel the millions of myosin power-strokes per contraction. Slow-twitch ('red') fibers carry many more than fast-twitch ('white') fibers.",
+                    fact: "Endurance training literally builds more mitochondria — that's why marathoners' muscles look darker than sprinters'."
+                },
+                {
+                    id: "nucleus",
+                    name: "Nucleus (multinucleated)",
+                    subtitle: "The many command centers",
+                    color: "#7a4aa2",
+                    attributes: [
+                        { label: "Count per cell", value: "Hundreds" },
+                        { label: "Position", value: "Near the sarcolemma" },
+                        { label: "Origin", value: "Fused myoblasts" }
+                    ],
+                    note: "Skeletal muscle fibers form when many myoblast cells fuse end-to-end into one giant cell — so the fiber carries hundreds of nuclei, lined up just beneath the sarcolemma. No other cell in your body works this way.",
+                    fact: "A single 30 cm muscle fiber from your thigh can carry over 3,000 nuclei."
+                },
+                {
+                    id: "tTubules",
+                    name: "T-Tubules",
+                    subtitle: "The signal-delivery tunnels",
+                    color: "#ead2a7",
+                    attributes: [
+                        { label: "What", value: "Sarcolemma invaginations" },
+                        { label: "Role", value: "Carry action potential deep" },
+                        { label: "Pair with", value: "Sarcoplasmic reticulum" }
+                    ],
+                    note: "Action potentials racing along the sarcolemma can't reach the inner myofibrils fast enough — so the membrane folds inward as T-tubules that dive between every sarcomere, delivering the electrical signal everywhere within microseconds.",
+                    fact: "Each myofibril is wrapped by T-tubules every ~2 µm, exactly where a sarcomere begins."
+                },
+                {
+                    id: "sarcoplasmicReticulum",
+                    name: "Sarcoplasmic Reticulum",
+                    subtitle: "The calcium reservoir",
+                    color: "#b9c7e9",
+                    attributes: [
+                        { label: "What", value: "Modified smooth ER" },
+                        { label: "Stores", value: "Ca²⁺ ions" },
+                        { label: "Releases when", value: "T-tubule fires" }
+                    ],
+                    note: "A network of membrane sleeves wrapping each myofibril, filled with calcium. When the T-tubule signal arrives, the SR dumps Ca²⁺ into the cytoplasm — calcium binds troponin and contraction fires.",
+                    fact: "Malignant hyperthermia (a fatal anesthesia reaction) is caused by a defective Ca²⁺ release channel in this membrane."
+                },
+                {
+                    id: "zDisc",
+                    name: "Z-Disc",
+                    subtitle: "The sarcomere boundary",
+                    color: "#e8a76a",
+                    attributes: [
+                        { label: "Spacing", value: "About 2 µm apart" },
+                        { label: "Anchors", value: "Actin filaments" },
+                        { label: "Visible", value: "The striations in EM" }
+                    ],
+                    note: "Each myofibril is built from repeating sarcomere units. The Z-discs are the protein-rich boundaries between units — they anchor the thin actin filaments. When the muscle contracts, neighboring Z-discs are pulled toward each other.",
+                    fact: "Z-disc-to-Z-disc distance is what microscopists count as 'sarcomere length' — it shortens from ~2.5 µm at rest to ~1.5 µm at full contraction."
+                },
+                {
+                    id: "ribosomes",
+                    name: "Ribosomes",
+                    subtitle: "The protein builders",
+                    color: "#a05f9f",
+                    attributes: [
+                        { label: "Type", value: "80S eukaryotic" },
+                        { label: "Role", value: "Builds actin, myosin, titin" },
+                        { label: "Spike during", value: "Hypertrophy" }
+                    ],
+                    note: "Muscle proteins turn over constantly — actin, myosin, and the giant titin filament are all built locally by ribosomes between the myofibrils. Strength training spikes ribosomal output for days.",
+                    fact: "Titin is the largest protein in the body — a single titin molecule spans an entire half-sarcomere and contains over 33,000 amino acids."
                 }
             ]
         },
@@ -718,7 +1277,7 @@
             ],
             organelles: [
                 {
-                    id: "membrane",
+                    id: "plasmaMembrane",
                     name: "Plasma Membrane",
                     subtitle: "The flexible envelope",
                     color: "#c8505a",
@@ -728,7 +1287,7 @@
                         { label: "Lifespan", value: "~120 days" }
                     ],
                     note: "The biconcave shape maximises surface area for oxygen exchange and lets the cell deform to squeeze through narrow capillaries.",
-                    fact: "Mature red blood cells are the only human cells without a nucleus."
+                    fact: "Mature red blood cells are the only human cells without a nucleus, mitochondria, ribosomes, ER, or Golgi — they eject everything during maturation."
                 },
                 {
                     id: "hemoglobin",
@@ -755,6 +1314,32 @@
                     ],
                     note: "A mesh of spectrin and actin under the membrane keeps the disc shape and lets the cell flex through capillaries without bursting.",
                     fact: "Defective spectrin causes hereditary spherocytosis — the cells become spheres and fragile."
+                },
+                {
+                    id: "surfaceAntigens",
+                    name: "Surface Antigens (ABO / Rh)",
+                    subtitle: "The blood-type markers",
+                    color: "#e8b95a",
+                    attributes: [
+                        { label: "Proteins", value: "Band 3, Glycophorin A/B" },
+                        { label: "Carbohydrates", value: "A, B, or H antigens" },
+                        { label: "Rh factor", value: "RhD protein (+ or −)" }
+                    ],
+                    note: "Sugar and protein decorations on the membrane define your blood type. Type A has the A antigen; Type B has B; Type AB has both; Type O has neither. RhD presence makes you positive. Mismatched transfusions trigger immune destruction of donor cells.",
+                    fact: "There are over 600 known blood-group antigens — ABO and Rh are just the two with the strongest transfusion reactions."
+                },
+                {
+                    id: "bpg",
+                    name: "2,3-BPG",
+                    subtitle: "The oxygen-release switch",
+                    color: "#7fc1c4",
+                    attributes: [
+                        { label: "Full name", value: "2,3-Bisphosphoglycerate" },
+                        { label: "Source", value: "Glycolysis side-branch" },
+                        { label: "Function", value: "Lowers O₂ affinity" }
+                    ],
+                    note: "A small molecule produced as a side product of glycolysis. It binds inside hemoglobin and pushes it toward the deoxygenated state — exactly when you want oxygen released at the tissues. Without 2,3-BPG, hemoglobin would never let go of its oxygen.",
+                    fact: "People living at high altitude crank out more 2,3-BPG so their hemoglobin offloads oxygen more easily — that's part of altitude acclimatization."
                 }
             ]
         },
@@ -849,6 +1434,58 @@
                     ],
                     note: "The flagellum beats in a wave-like motion driven by dynein motors walking along microtubule pairs. It's the longest part of the cell by far.",
                     fact: "A sperm flagellum beats roughly 10-20 times per second."
+                },
+                {
+                    id: "nucleus",
+                    name: "Nucleus (haploid)",
+                    subtitle: "The genetic payload",
+                    color: "#5a368e",
+                    attributes: [
+                        { label: "Ploidy", value: "Haploid (23 chromosomes)" },
+                        { label: "Packaging", value: "Protamines, not histones" },
+                        { label: "Density", value: "~6x normal chromatin" }
+                    ],
+                    note: "Sperm replace nearly all their histones with smaller protamines, compressing the DNA into a fraction of the normal volume. This dense, streamlined package is what fits inside the tiny head.",
+                    fact: "Disrupted protamine swap during sperm production is one of the leading molecular causes of male infertility."
+                },
+                {
+                    id: "mitochondrion",
+                    name: "Mitochondria (helical sheath)",
+                    subtitle: "The swimming engine",
+                    color: "#f0b074",
+                    attributes: [
+                        { label: "Arrangement", value: "Tight helical spiral" },
+                        { label: "Where", value: "Midpiece only" },
+                        { label: "Fate", value: "Destroyed after fertilisation" }
+                    ],
+                    note: "Sperm cram their mitochondria into a single tightly-wound helix around the midpiece — the most concentrated mitochondrial geometry in any human cell. Every ATP it produces feeds the flagellum.",
+                    fact: "When the egg detects a sperm's mitochondria after fertilisation, it tags them with ubiquitin for destruction — which is why mitochondrial DNA is inherited only from the mother."
+                },
+                {
+                    id: "centriole",
+                    name: "Proximal Centriole",
+                    subtitle: "The inherited microtubule seed",
+                    color: "#67b1c4",
+                    attributes: [
+                        { label: "Position", value: "Head-midpiece junction" },
+                        { label: "Role", value: "Builds the flagellum scaffold" },
+                        { label: "Inherited", value: "Egg gets this from the sperm" }
+                    ],
+                    note: "Sperm carry one functional centriole — the egg, surprisingly, has none of its own. After fertilisation, this paternal centriole seeds the first mitotic spindle of the new embryo. Without it the embryo cannot divide.",
+                    fact: "Mammalian eggs have lost their centrioles during evolution and rely entirely on the sperm to supply this single organelle."
+                },
+                {
+                    id: "plasmaMembrane",
+                    name: "Plasma Membrane",
+                    subtitle: "The streamlined envelope",
+                    color: "#a98ec8",
+                    attributes: [
+                        { label: "Coverage", value: "Whole cell" },
+                        { label: "Composition", value: "Lipid + receptor proteins" },
+                        { label: "Sensors", value: "Detect egg-released chemicals" }
+                    ],
+                    note: "A thin lipid bilayer wraps the entire sperm — head, midpiece, and flagellum. It's studded with receptors that detect chemical gradients released by the egg, helping the sperm find its way (chemotaxis).",
+                    fact: "Capacitation — the chemical transformation that makes a sperm competent to fertilise — happens entirely in this membrane on the swim through the female tract."
                 }
             ]
         },
@@ -942,6 +1579,71 @@
                     ],
                     note: "Yeast reproduces by budding: a smaller daughter pouches out from the parent, takes a copy of every organelle, then pinches off.",
                     fact: "A bud scar stays on the parent forever — researchers count scars to measure yeast age."
+                },
+                {
+                    id: "plasmaMembrane",
+                    name: "Plasma Membrane",
+                    subtitle: "The inner barrier",
+                    color: "#b88040",
+                    attributes: [
+                        { label: "Position", value: "Just inside the cell wall" },
+                        { label: "Composition", value: "Lipid bilayer with ergosterol" },
+                        { label: "Drug target", value: "Yes — antifungals bind ergosterol" }
+                    ],
+                    note: "Under the chitin wall sits a lipid bilayer. Yeast (and other fungi) use ergosterol instead of the cholesterol your cells use — which is exactly what antifungal drugs like fluconazole and amphotericin B exploit.",
+                    fact: "Polyene antifungals literally punch holes through fungal membranes by binding ergosterol; your cells survive because you use cholesterol, not ergosterol."
+                },
+                {
+                    id: "mitochondrion",
+                    name: "Mitochondrion",
+                    subtitle: "The fermenting engine",
+                    color: "#cf7042",
+                    attributes: [
+                        { label: "Role", value: "Aerobic respiration when O₂ is present" },
+                        { label: "Fallback", value: "Fermentation when O₂ is low" },
+                        { label: "Genome", value: "Own circular DNA" }
+                    ],
+                    note: "Yeast can switch between aerobic respiration (using mitochondria) and anaerobic fermentation (using glycolysis only). When oxygen runs low, fermentation kicks in and CO₂ + ethanol are the side products — bread rises and beer brews.",
+                    fact: "Yeast mitochondria were the first ever sequenced eukaryotic mitochondrial genome (1980)."
+                },
+                {
+                    id: "er",
+                    name: "Endoplasmic Reticulum",
+                    subtitle: "The membrane factory",
+                    color: "#d97757",
+                    attributes: [
+                        { label: "Type", value: "Continuous with nuclear envelope" },
+                        { label: "Role", value: "Builds new membrane lipids" },
+                        { label: "Notable in", value: "Wall-remodelling buds" }
+                    ],
+                    note: "The yeast ER builds new lipids and folds proteins. During budding, ER expands dramatically to keep up with the doubled membrane demand.",
+                    fact: "Yeast mutants where the ER fails are a major workhorse for understanding human ER stress diseases."
+                },
+                {
+                    id: "ribosomes",
+                    name: "Ribosomes",
+                    subtitle: "The protein builders",
+                    color: "#a05f9f",
+                    attributes: [
+                        { label: "Type", value: "80S eukaryotic" },
+                        { label: "Free or bound", value: "Both" },
+                        { label: "Use in research", value: "First eukaryote sequenced" }
+                    ],
+                    note: "Yeast ribosomes are eukaryotic 80S — much more similar to your own than to bacterial 70S. That's part of why yeast is the model organism of choice for studying human translation.",
+                    fact: "About a quarter of human disease genes have a recognisable yeast counterpart, often studied via mutated yeast ribosomes."
+                },
+                {
+                    id: "budScar",
+                    name: "Bud Scar",
+                    subtitle: "The lifetime record",
+                    color: "#b87438",
+                    attributes: [
+                        { label: "Composition", value: "Chitin ring" },
+                        { label: "Persists", value: "Forever on the mother" },
+                        { label: "Count = age", value: "One scar per daughter" }
+                    ],
+                    note: "When a daughter bud pinches off, the cell wall remodels and leaves a permanent chitin ring on the mother. Every yeast cell wears a record of every daughter it ever produced — like growth rings on a tree.",
+                    fact: "By staining bud scars with calcofluor, you can literally count the age of a yeast cell under a fluorescence microscope. Most cells max out at 20-30 scars before dying of replicative senescence."
                 }
             ]
         },
@@ -1041,6 +1743,71 @@
                     ],
                     note: "Intercalated discs glue cardiomyocytes together physically AND electrically — gap junctions let the action potential jump from cell to cell so the heart fires as one tissue.",
                     fact: "Mutations in disc proteins cause arrhythmogenic cardiomyopathy."
+                },
+                {
+                    id: "nucleus",
+                    name: "Nucleus (single, central)",
+                    subtitle: "The lone command center",
+                    color: "#7a49b0",
+                    attributes: [
+                        { label: "Count per cell", value: "Usually 1 (rarely 2)" },
+                        { label: "Position", value: "Central, between myofibrils" },
+                        { label: "Vs skeletal", value: "Skeletal has hundreds" }
+                    ],
+                    note: "Cardiomyocytes carry a single nucleus parked in the center of the cell — the cleanest visible difference from skeletal muscle (which fuses many myoblasts and ends up multinucleated). Some cardiomyocytes become binucleated in adults.",
+                    fact: "Adult human cardiomyocytes barely divide — your heart cells are mostly the same ones you were born with, kept alive for 80+ years."
+                },
+                {
+                    id: "tTubules",
+                    name: "T-Tubules",
+                    subtitle: "The voltage delivery network",
+                    color: "#ead2a7",
+                    attributes: [
+                        { label: "Cardiac vs skeletal", value: "Wider, more abundant" },
+                        { label: "Location", value: "At Z-discs, not A-I junctions" },
+                        { label: "Pair with", value: "SR cisterna → dyad" }
+                    ],
+                    note: "T-tubules are sarcolemma invaginations that carry the action potential deep into the cell. Cardiac T-tubules are bigger and appear at every Z-disc — different from skeletal muscle's narrower tubules at A-I junctions.",
+                    fact: "T-tubule loss is a hallmark of heart failure — losing them slows excitation-contraction coupling and weakens each beat."
+                },
+                {
+                    id: "sarcoplasmicReticulum",
+                    name: "Sarcoplasmic Reticulum",
+                    subtitle: "The calcium store",
+                    color: "#b9c7e9",
+                    attributes: [
+                        { label: "Architecture", value: "Dyad (1 SR + 1 T-tubule)" },
+                        { label: "Stores", value: "Ca²⁺ ions" },
+                        { label: "Releases via", value: "Ryanodine receptors" }
+                    ],
+                    note: "When the action potential arrives at a T-tubule, it opens calcium channels that trigger a much bigger Ca²⁺ release from the paired SR — the famous calcium-induced-calcium-release that drives every heartbeat.",
+                    fact: "Many anti-arrhythmic drugs work by tweaking the SR's ryanodine receptor — too much leak causes potentially fatal rhythm disturbances."
+                },
+                {
+                    id: "gapJunction",
+                    name: "Gap Junctions",
+                    subtitle: "The electrical bridge",
+                    color: "#e6c46a",
+                    attributes: [
+                        { label: "Position", value: "Inside intercalated discs" },
+                        { label: "Made of", value: "Connexin-43 pores" },
+                        { label: "Role", value: "Direct ion + signal passage" }
+                    ],
+                    note: "Tiny pores embedded in the intercalated disc — they let ions flow directly from one cardiomyocyte to the next, so the action potential spreads through the whole tissue in a fraction of a second. Without them, the heart can't beat in sync.",
+                    fact: "Connexin-43 mutations cause oculodentodigital dysplasia and several inherited heart-rhythm disorders."
+                },
+                {
+                    id: "ribosomes",
+                    name: "Ribosomes",
+                    subtitle: "The protein builders",
+                    color: "#a05f9f",
+                    attributes: [
+                        { label: "Type", value: "80S eukaryotic" },
+                        { label: "Output", value: "Actin, myosin, titin" },
+                        { label: "Replacement rate", value: "Days for sarcomere proteins" }
+                    ],
+                    note: "Sarcomere proteins turn over constantly — ribosomes between the myofibrils rebuild the contractile machinery to keep the heart running through billions of beats.",
+                    fact: "After a heart attack, the surviving cardiomyocytes hypertrophy: ribosomes go into overdrive making more sarcomere protein to compensate for the lost tissue."
                 }
             ]
         },
@@ -1127,6 +1894,32 @@
                     ],
                     note: "Viral genomes are tiny — often only a handful of genes. They code just enough to commandeer a host cell's machinery and make more virus.",
                     fact: "The smallest known viral genomes encode as few as 2 proteins."
+                },
+                {
+                    id: "envelope",
+                    name: "Envelope",
+                    subtitle: "The stolen membrane",
+                    color: "#e0b3d5",
+                    attributes: [
+                        { label: "Origin", value: "Stolen from host cell" },
+                        { label: "Composition", value: "Lipid bilayer + viral glycoproteins" },
+                        { label: "Found in", value: "Flu, HIV, SARS-CoV-2, herpes" }
+                    ],
+                    note: "Some viruses wrap themselves in a stolen piece of host-cell membrane as they exit. The envelope makes them more fragile to soap and alcohol — exactly what hand sanitizer does to coronavirus.",
+                    fact: "Naked viruses (no envelope) are tougher and often spread by fecal-oral route; enveloped viruses spread mostly through droplets and direct contact."
+                },
+                {
+                    id: "matrix",
+                    name: "Matrix Protein",
+                    subtitle: "The structural glue",
+                    color: "#9a4d8c",
+                    attributes: [
+                        { label: "Position", value: "Between envelope and capsid" },
+                        { label: "Role", value: "Structural scaffold" },
+                        { label: "Anchors", value: "Spikes to capsid" }
+                    ],
+                    note: "In enveloped viruses, a layer of matrix protein sits between the lipid envelope and the inner capsid. It anchors the spike proteins from underneath and holds the whole particle together during assembly and budding.",
+                    fact: "HIV's matrix protein (Gag-MA) is what tells the virus where to bud out of the infected cell — drug-targeting this is one anti-HIV strategy."
                 }
             ]
         }
