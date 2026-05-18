@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#f1eadc"/>
+    </linearGradient>
+
+    <radialGradient id="glow" cx="0.28" cy="0.55" r="0.55">
+      <stop offset="0%"   stop-color="#7047a8" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#7047a8" stop-opacity="0"/>
+    </radialGradient>
+
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/>
+    </pattern>
+
+    <!-- 3D-shaded base-pair spheres for the helix rungs -->
+    <radialGradient id="baseA" cx="0.35" cy="0.32" r="0.85">
+      <stop offset="0%" stop-color="#fdb1a3"/>
+      <stop offset="100%" stop-color="#b8362a"/>
+    </radialGradient>
+    <radialGradient id="baseT" cx="0.35" cy="0.32" r="0.85">
+      <stop offset="0%" stop-color="#fae08c"/>
+      <stop offset="100%" stop-color="#c2980a"/>
+    </radialGradient>
+    <radialGradient id="baseG" cx="0.35" cy="0.32" r="0.85">
+      <stop offset="0%" stop-color="#9fe5b8"/>
+      <stop offset="100%" stop-color="#1f8b4a"/>
+    </radialGradient>
+    <radialGradient id="baseC" cx="0.35" cy="0.32" r="0.85">
+      <stop offset="0%" stop-color="#9ec9ea"/>
+      <stop offset="100%" stop-color="#256da7"/>
+    </radialGradient>
+
+    <!-- Subtle drop shadow for the helix illustration -->
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" in="SourceAlpha"/>
+      <feOffset dx="0" dy="4" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.22"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!--
+    Helix illustration — left half.
+    Two sinusoidal backbones intersect over the vertical (y) axis.
+    A series of base-pair rungs with colored end spheres connects them.
+    Helix centerline at x=350, total height ~520.
+  -->
+  <g transform="translate(350, 315)" filter="url(#softShadow)">
+    <!-- Backbone curves: two sinusoids 180° out of phase, drawn from y=-250 to y=+250 -->
+    <!-- Strand 1 -->
+    <path d="
+      M -90 -250
+      C -45 -210, 90 -180, 90 -160
+      C 90 -140, -90 -120, -90 -100
+      C -90 -80, 90 -60, 90 -40
+      C 90 -20, -90 0, -90 20
+      C -90 40, 90 60, 90 80
+      C 90 100, -90 120, -90 140
+      C -90 160, 90 180, 90 200
+      C 90 220, -45 240, -90 250
+    " fill="none" stroke="#5b4e3c" stroke-width="9" stroke-linecap="round" opacity="0.78"/>
+    <!-- Strand 2 (anti-parallel mirror) -->
+    <path d="
+      M 90 -250
+      C 45 -210, -90 -180, -90 -160
+      C -90 -140, 90 -120, 90 -100
+      C 90 -80, -90 -60, -90 -40
+      C -90 -20, 90 0, 90 20
+      C 90 40, -90 60, -90 80
+      C -90 100, 90 120, 90 140
+      C 90 160, -90 180, -90 200
+      C -90 220, 45 240, 90 250
+    " fill="none" stroke="#5b4e3c" stroke-width="9" stroke-linecap="round" opacity="0.78"/>
+
+    <!--
+      Base-pair rungs.
+      Each rung connects strand 1 and strand 2 at a specific y. The
+      x-positions of the strands at that y follow the sinusoid; here
+      we approximate by sampling 10 evenly-spaced y values across the
+      ±250 range. Per A/T/G/C, the colored end-spheres are placed at
+      strand intersections.
+    -->
+    <!-- We'll compute strand x at each rung y from a known formula:
+         At y = -250  + 0 → strand 1 at x = -90, strand 2 at x = +90
+         At y = -160       → both meet near x = 90 / -90 (180° offset)
+         Simpler: alternate using actual computed positions for each step.
+         Rung sequence: A T G C A T G C A T (10 rungs for visual variety)
+    -->
+    <!-- Rung 1 — y=-230, strands near -65 ↔ +65 (mid-twist) -->
+    <line x1="-65" y1="-220" x2="65" y2="-220" stroke="#574e40" stroke-width="3" opacity="0.7"/>
+    <circle cx="-65" cy="-220" r="13" fill="url(#baseA)"/>
+    <circle cx=" 65" cy="-220" r="13" fill="url(#baseT)"/>
+
+    <!-- Rung 2 — y=-160, strands near +90 (front) and -90 (back) — mostly co-located -->
+    <line x1="80" y1="-160" x2="-80" y2="-160" stroke="#574e40" stroke-width="3" opacity="0.4"/>
+    <circle cx=" 80" cy="-160" r="13" fill="url(#baseG)"/>
+    <circle cx="-80" cy="-160" r="13" fill="url(#baseC)"/>
+
+    <!-- Rung 3 — y=-100, strands crossed back -->
+    <line x1="-80" y1="-100" x2="80" y2="-100" stroke="#574e40" stroke-width="3" opacity="0.4"/>
+    <circle cx="-80" cy="-100" r="13" fill="url(#baseT)"/>
+    <circle cx=" 80" cy="-100" r="13" fill="url(#baseA)"/>
+
+    <!-- Rung 4 — y=-40, strands at the wide point -->
+    <line x1="60" y1="-40" x2="-60" y2="-40" stroke="#574e40" stroke-width="3" opacity="0.7"/>
+    <circle cx=" 60" cy="-40" r="13" fill="url(#baseC)"/>
+    <circle cx="-60" cy="-40" r="13" fill="url(#baseG)"/>
+
+    <!-- Rung 5 — y=20, mid -->
+    <line x1="-65" y1="20" x2="65" y2="20" stroke="#574e40" stroke-width="3" opacity="0.7"/>
+    <circle cx="-65" cy="20" r="13" fill="url(#baseA)"/>
+    <circle cx=" 65" cy="20" r="13" fill="url(#baseT)"/>
+
+    <!-- Rung 6 — y=80, narrow (strands near same side) -->
+    <line x1="78" y1="80" x2="-78" y2="80" stroke="#574e40" stroke-width="3" opacity="0.4"/>
+    <circle cx=" 78" cy="80" r="13" fill="url(#baseG)"/>
+    <circle cx="-78" cy="80" r="13" fill="url(#baseC)"/>
+
+    <!-- Rung 7 — y=140 -->
+    <line x1="-80" y1="140" x2="80" y2="140" stroke="#574e40" stroke-width="3" opacity="0.4"/>
+    <circle cx="-80" cy="140" r="13" fill="url(#baseT)"/>
+    <circle cx=" 80" cy="140" r="13" fill="url(#baseA)"/>
+
+    <!-- Rung 8 — y=200 -->
+    <line x1="50" y1="200" x2="-50" y2="200" stroke="#574e40" stroke-width="3" opacity="0.7"/>
+    <circle cx=" 50" cy="200" r="13" fill="url(#baseC)"/>
+    <circle cx="-50" cy="200" r="13" fill="url(#baseG)"/>
+
+    <!-- Active-organelle style highlight on rung 5 — to suggest interactivity -->
+    <circle cx="-65" cy="20" r="20" fill="none" stroke="#7047a8" stroke-width="3" opacity="0.85"/>
+    <circle cx="-65" cy="20" r="28" fill="none" stroke="#7047a8" stroke-width="2" opacity="0.45"/>
+  </g>
+
+  <!-- Title block — right half -->
+  <g transform="translate(640, 200)">
+    <text x="0" y="0"
+          font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+          font-weight="800" font-size="76" fill="#1c1917"
+          letter-spacing="-0.02em">
+      3D DNA Viewer
+    </text>
+    <text x="0" y="56"
+          font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+          font-weight="500" font-size="30" fill="#5b4e3c"
+          letter-spacing="-0.01em">
+      Free online sequence analyzer
+    </text>
+
+    <!-- Feature list with small colored bullets -->
+    <g transform="translate(0, 110)">
+      <!-- Row 1 -->
+      <circle cx="14" cy="10" r="9" fill="#e74c3c"/>
+      <text x="34" y="16"
+            font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+            font-weight="600" font-size="22" fill="#1c1917">
+        Interactive 3D double helix
+      </text>
+
+      <!-- Row 2 -->
+      <circle cx="14" cy="55" r="9" fill="#f1c40f"/>
+      <text x="34" y="61"
+            font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+            font-weight="600" font-size="22" fill="#1c1917">
+        DNA → protein translation
+      </text>
+
+      <!-- Row 3 -->
+      <circle cx="14" cy="100" r="9" fill="#2ecc71"/>
+      <text x="34" y="106"
+            font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+            font-weight="600" font-size="22" fill="#1c1917">
+        Restriction enzyme cut sites
+      </text>
+
+      <!-- Row 4 -->
+      <circle cx="14" cy="145" r="9" fill="#3498db"/>
+      <text x="34" y="151"
+            font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+            font-weight="600" font-size="22" fill="#1c1917">
+        Compare sequences side-by-side
+      </text>
+    </g>
+
+    <!-- "Free · No signup" badge -->
+    <g transform="translate(0, 290)">
+      <rect x="0" y="0" rx="22" ry="22" width="320" height="44"
+            fill="#1c1917"/>
+      <text x="160" y="29"
+            text-anchor="middle"
+            font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+            font-weight="700" font-size="20" fill="#fefdfb"
+            letter-spacing="0.04em">
+        FREE · NO SIGNUP · BROWSER-ONLY
+      </text>
+    </g>
+  </g>
+
+  <!-- Bottom-left footer brand -->
+  <g transform="translate(50, 590)">
+    <text x="0" y="0"
+          font-family="ui-monospace, 'JetBrains Mono', Menlo, Consolas, monospace"
+          font-weight="600" font-size="16" fill="#5b4e3c"
+          letter-spacing="0.06em">
+      8gwifi.org / biology / dna-viewer
+    </text>
+  </g>
+
+  <!-- Decorative A T G C palette in the bottom-right -->
+  <g transform="translate(960, 545)" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-weight="700" font-size="20">
+    <circle cx="0"   cy="20" r="18" fill="#e74c3c"/>
+    <text   x="0"   y="27" text-anchor="middle" fill="#fff">A</text>
+    <circle cx="50"  cy="20" r="18" fill="#f1c40f"/>
+    <text   x="50"  y="27" text-anchor="middle" fill="#fff">T</text>
+    <circle cx="100" cy="20" r="18" fill="#2ecc71"/>
+    <text   x="100" y="27" text-anchor="middle" fill="#fff">G</text>
+    <circle cx="150" cy="20" r="18" fill="#3498db"/>
+    <text   x="150" y="27" text-anchor="middle" fill="#fff">C</text>
+  </g>
+</svg>
