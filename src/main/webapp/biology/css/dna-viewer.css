@@ -1,0 +1,815 @@
+/* ──────────────────────────────────────────────────────────────────
+   DNA Viewer 3D — page-specific styles
+   ──────────────────────────────────────────────────────────────────
+   Reuses the biology-studio shell (.bs-*, .ca-*) and only adds the
+   DNA-viewer-specific bits: tabs, sequence input, base-color chips,
+   PDB tab list, and the PDB mount container. */
+
+/* ---- View-mode tabs (Studio | Real Structure) ---- */
+.dna-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 16px;
+    border-bottom: 1px solid var(--ca-line);
+    padding-bottom: 12px;
+}
+.dna-tab {
+    cursor: pointer;
+    padding: 9px 18px;
+    border: 1px solid var(--ca-line);
+    border-radius: 999px;
+    background: var(--ca-paper-deep);
+    color: var(--ca-ink);
+    font: 600 0.94rem var(--bs-font-sans);
+    transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+.dna-tab:hover { border-color: color-mix(in srgb, var(--accent) 40%, var(--ca-line)); }
+.dna-tab.is-active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ---- Two-mode grid ----
+   .dna-grid carries .ca-cell-grid too, so the 3-column layout, rail-hide
+   classes (.is-left-hidden / .is-right-hidden), and show-tab positioning
+   all inherit from biology-studio.css for free. Only the PDB-grid
+   variant needs an override (no right rail, so 2 columns at desktop). */
+/* Stage panel needs position:relative so absolutely-positioned show-tabs
+   anchor to it. The biology-studio.css rule applies to .ca-cell-grid but
+   our show-tabs hang off the .ca-stage-panel inside; ensure positioning. */
+.dna-grid .ca-stage-panel { position: relative; }
+
+/* ---- Sequence input ---- */
+.dna-hint {
+    margin: 0 0 8px;
+    font-size: 0.84rem;
+    color: var(--ca-muted);
+}
+.dna-seq-input {
+    width: 100%;
+    min-height: 92px;
+    padding: 10px 12px;
+    border: 1px solid var(--ca-line);
+    border-radius: 8px;
+    background: var(--ca-paper-deep);
+    color: var(--ca-ink);
+    font: 600 0.95rem/1.45 ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    resize: vertical;
+    box-sizing: border-box;
+}
+.dna-seq-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.dna-seq-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0 6px;
+}
+.dna-mini-btn {
+    padding: 5px 11px;
+    cursor: pointer;
+    border: 1px solid var(--ca-line);
+    border-radius: 999px;
+    background: var(--ca-paper);
+    color: inherit;
+    font: 500 0.84rem var(--bs-font-sans);
+    transition: background 180ms ease, border-color 180ms ease;
+}
+.dna-mini-btn:hover {
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--ca-line));
+    background: var(--accent-soft);
+}
+.dna-mini-btn.is-active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.dna-seq-stats {
+    margin: 6px 0 0;
+    font: 500 0.85rem var(--bs-font-sans);
+    color: var(--ca-muted);
+}
+.dna-seq-noncanonical {
+    margin: 6px 0 0;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--accent-soft);
+    color: var(--ca-ink);
+    font: 500 0.82rem var(--bs-font-sans);
+    line-height: 1.4;
+}
+.dna-seq-noncanonical strong { color: var(--accent); }
+[data-theme="dark"] .dna-seq-noncanonical {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* ---- Workbench tabs (Input | Stats | Search | Compare) ----
+   Replaces the 3 stacked left-rail panels with a single tabbed panel.
+   Only the active tab's content is visible at a time. */
+.dna-rail-tabs {
+    display: flex;
+    gap: 2px;
+    margin: 0 -4px 14px;
+    padding: 0 0 0;
+    border-bottom: 1px solid var(--ca-line);
+}
+.dna-rail-tab {
+    flex: 1;
+    padding: 8px 6px;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    color: var(--ca-muted);
+    font: 600 0.84rem var(--bs-font-sans);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 180ms ease, border-color 180ms ease;
+}
+.dna-rail-tab:hover { color: var(--ca-ink); }
+.dna-rail-tab.is-active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+.dna-rail-tab-content[hidden] { display: none; }
+
+/* The legend-strip variant — small chips inline below the sequence
+   input, replacing the old separate Base Pairs panel. */
+.dna-bp-legend-inline {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--ca-line);
+}
+.dna-bp-legend-inline .dna-bp-chip {
+    padding: 4px 8px;
+    background: var(--ca-paper-deep);
+}
+.dna-bp-legend-divider {
+    display: inline-block;
+    width: 1px;
+    height: 16px;
+    margin: 0 2px;
+    background: var(--ca-line);
+    align-self: center;
+}
+.dna-bp-chip-gap b {
+    /* Gap chip: dashed-outline circle to signal "no rung at this position". */
+    background: transparent !important;
+    border: 1.5px dashed var(--ca-muted);
+    color: var(--ca-muted);
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* Gap entry in the per-base-pair legend strip (Labels toggle on).
+   Rendered as a non-clickable span instead of a button, dashed border
+   to match the inline color-key gap chip aesthetic. */
+.ca-legend-gap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 4px;
+    border-radius: 999px;
+    border: 1px dashed var(--ca-muted);
+    background: transparent;
+    color: var(--ca-muted);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+.ca-legend-num-gap {
+    background: transparent !important;
+    border: 1px dashed var(--ca-muted);
+    color: var(--ca-muted) !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* Compare hint shown when sequences aren't same-length. */
+.dna-compare-hint {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: var(--accent-soft);
+    border-radius: 8px;
+    color: var(--ca-ink);
+}
+.dna-compare-hint em { font-style: normal; font-weight: 600; color: var(--accent); }
+
+/* Disabled state for the mismatch button. */
+.dna-mini-btn[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+.dna-mini-btn[disabled]:hover { background: var(--ca-paper); border-color: var(--ca-line); }
+
+/* Common-motifs preset row inside the Search tab. */
+.dna-motif-presets {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 10px 0 0;
+}
+.dna-motif-presets-label {
+    font: 500 0.82rem var(--bs-font-sans);
+    color: var(--ca-muted);
+    margin-right: 2px;
+}
+
+/* ---- Analysis panel ---- */
+.dna-motif-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.dna-motif-label {
+    font: 600 0.84rem var(--bs-font-sans);
+    color: var(--ca-muted);
+}
+.dna-motif-input {
+    padding: 6px 10px;
+    border: 1px solid var(--ca-line);
+    border-radius: 8px;
+    background: var(--ca-paper-deep);
+    color: var(--ca-ink);
+    font: 600 0.92rem ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.dna-motif-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.dna-motif-clear {
+    width: 26px; height: 26px;
+    cursor: pointer;
+    border: 1px solid var(--ca-line);
+    border-radius: 50%;
+    background: var(--ca-paper);
+    color: var(--ca-muted);
+    font: 600 1rem var(--bs-font-sans);
+    line-height: 1;
+}
+.dna-motif-clear:hover { color: var(--accent); border-color: var(--accent); }
+.dna-motif-status {
+    margin: 0 0 12px;
+    font: 500 0.82rem var(--bs-font-sans);
+    color: var(--ca-muted);
+    min-height: 1.1em;
+}
+
+.dna-mismatch-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--ca-line);
+}
+.dna-mismatch-info {
+    font: 500 0.82rem var(--bs-font-sans);
+    color: var(--ca-muted);
+}
+
+.dna-stats { display: grid; gap: 10px; }
+.dna-stats-empty {
+    margin: 0;
+    color: var(--ca-muted);
+    font: italic 0.88rem var(--bs-font-sans);
+}
+.dna-stats-card {
+    padding: 10px 12px;
+    border: 1px solid var(--ca-line);
+    border-radius: 10px;
+    background: var(--ca-paper-deep);
+}
+[data-theme="dark"] .dna-stats-card {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(232, 220, 195, 0.10);
+}
+.dna-stats-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+.dna-stats-card-name {
+    font: 700 0.92rem var(--bs-font-sans);
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.dna-stats-card-attrs {
+    margin: 0 0 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px 8px;
+    font-size: 0.85rem;
+}
+.dna-stats-card-attrs > div { display: flex; flex-direction: column; }
+.dna-stats-card-attrs dt {
+    color: var(--ca-muted);
+    font: 500 0.74rem var(--bs-font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.dna-stats-card-attrs dd {
+    margin: 1px 0 0;
+    color: var(--ca-ink);
+    font: 600 0.92rem var(--bs-font-sans);
+}
+.dna-stats-card-attrs small { color: var(--ca-muted); font-weight: 400; }
+.dna-stats-card-protein {
+    font-size: 0.84rem;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(91, 78, 60, 0.18);
+    overflow-wrap: anywhere;
+}
+[data-theme="dark"] .dna-stats-card-protein {
+    border-top-color: rgba(232, 220, 195, 0.10);
+}
+.dna-stats-card-label {
+    color: var(--ca-muted);
+    font: 500 0.78rem var(--bs-font-sans);
+}
+.dna-stats-card-protein code {
+    font: 600 0.92rem ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    letter-spacing: 0.04em;
+    color: var(--ca-ink);
+}
+.dna-revcomp-btn {
+    font: 500 0.78rem var(--bs-font-sans);
+    padding: 4px 10px;
+}
+
+/* Per-sequence label inside the legend strip — separates each helix's
+   numbered chips from the next ("Seq 1:" | chips | "Seq 2:" | chips). */
+.dna-legend-seq-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px 4px 4px;
+    margin-left: 6px;
+    font: 700 0.82rem var(--bs-font-sans);
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.dna-legend-seq-label:first-child { margin-left: 0; }
+
+/* ---- Base-color chips ---- */
+.dna-bp-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.dna-bp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border: 1px solid var(--ca-line);
+    border-radius: 999px;
+    background: var(--ca-paper-deep);
+    color: var(--ca-ink);
+    font: 500 0.86rem var(--bs-font-sans);
+}
+.dna-bp-chip b {
+    display: inline-grid;
+    place-items: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--bp);
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+    font-weight: 800;
+    font-size: 0.82rem;
+    box-shadow: inset 0 0 0 2px rgba(20, 18, 14, 0.18);
+}
+
+/* ---- Linear (seqviz) tab ----
+   Single-column layout — seqviz brings its own UI chrome (toolbar,
+   ruler, color blocks), so we don't add our own left/right rails. */
+.dna-linear-grid {
+    grid-template-columns: 1fr !important;
+}
+.dna-linear-panel {
+    padding: 18px;
+}
+.dna-seqviz-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--ca-line);
+}
+.dna-seqviz-controls-label {
+    font: 600 0.88rem var(--bs-font-sans);
+    color: var(--ca-muted);
+    margin-right: 2px;
+}
+.dna-seqviz-controls-spacer { flex: 1; }
+.dna-seqviz-controls-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: 500 0.85rem var(--bs-font-sans);
+    color: var(--ca-ink);
+    cursor: pointer;
+}
+.dna-seqviz-controls-check input { cursor: pointer; }
+
+.dna-seqviz-mount-list {
+    display: grid;
+    gap: 14px;
+}
+
+/* Selection-info strip — appears when seqviz fires onSelection. */
+.dna-seqviz-selection {
+    margin: 0 0 12px;
+    padding: 8px 14px;
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    font: 600 0.92rem ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    color: var(--ca-ink);
+}
+[data-theme="dark"] .dna-seqviz-selection {
+    background: rgba(255, 255, 255, 0.04);
+}
+/* Enzyme dropdown — <details>/<summary> based for zero JS. */
+.dna-seqviz-enzymes {
+    position: relative;
+}
+.dna-seqviz-enzymes > summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 6px 14px 6px 12px;
+    border: 1px solid var(--ca-line);
+    border-radius: 999px;
+    background: var(--ca-paper);
+    color: inherit;
+    font: 500 0.84rem var(--bs-font-sans);
+    transition: border-color 180ms ease, background 180ms ease;
+}
+.dna-seqviz-enzymes > summary::-webkit-details-marker { display: none; }
+.dna-seqviz-enzymes > summary::after {
+    content: " ▾";
+    color: var(--ca-muted);
+    font-size: 0.78rem;
+    margin-left: 4px;
+}
+.dna-seqviz-enzymes > summary:hover { border-color: var(--accent); }
+.dna-seqviz-enzymes[open] > summary {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.dna-seqviz-enzyme-count {
+    color: var(--accent);
+    font-weight: 700;
+    margin-left: 2px;
+}
+.dna-seqviz-enzymes-grid {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px 12px;
+    padding: 12px 14px;
+    background: var(--ca-paper);
+    border: 1px solid var(--ca-line);
+    border-radius: 10px;
+    box-shadow: var(--ca-shadow);
+    min-width: 280px;
+}
+.dna-seqviz-enzymes-grid label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: 500 0.84rem var(--bs-font-sans);
+    cursor: pointer;
+    user-select: none;
+}
+.dna-seqviz-enzymes-grid input { cursor: pointer; }
+[data-theme="dark"] .dna-seqviz-enzymes > summary {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(232, 220, 195, 0.10);
+}
+[data-theme="dark"] .dna-seqviz-enzymes-grid {
+    background: #221d18;
+    border-color: rgba(232, 220, 195, 0.10);
+}
+
+.dna-seqviz-mount {
+    min-height: 520px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid var(--ca-line);
+    /* overflow:hidden was clipping seqviz's selection visuals. Use clip
+       on x-axis only (so internal scroll still works horizontally if
+       the sequence is wide) but allow y to overflow for tooltips/popovers. */
+    overflow-x: hidden;
+    overflow-y: visible;
+    position: relative;
+    /* Force user-select on seqviz's SVG content so click-drag selection
+       and text-copy work. Without this, inherited `user-select: none`
+       from ancestors (e.g. some shell components) silently blocks it. */
+    -webkit-user-select: text;
+    user-select: text;
+}
+.dna-seqviz-mount * {
+    -webkit-user-select: text;
+    user-select: text;
+}
+.dna-seqviz-mount-compact {
+    min-height: 220px;
+}
+
+/* ---- Multi-sequence layout (concentric SVG + optional linear stack) ---- */
+.dna-multi-layout {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: 1fr;
+}
+.dna-multi-layout.is-both {
+    grid-template-columns: 1fr;
+}
+@media (min-width: 1100px) {
+    .dna-multi-layout.is-both {
+        grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
+    }
+}
+.dna-circular-wrap {
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid var(--ca-line);
+    padding: 18px;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+[data-theme="dark"] .dna-circular-wrap { background: #1a1714; }
+.dna-circular-svg {
+    width: 100%;
+    height: auto;
+    max-width: 540px;
+    display: block;
+}
+.dna-circular-base { cursor: pointer; }
+.dna-circular-base:hover { opacity: 0.85; }
+.dna-circular-ring text { user-select: none; }
+
+.dna-linear-stack {
+    display: grid;
+    gap: 10px;
+}
+[data-theme="dark"] .dna-seqviz-mount {
+    background: #1a1714;
+}
+.dna-seqviz-empty {
+    margin: 0;
+    padding: 28px 18px;
+    text-align: center;
+    color: var(--ca-muted);
+    font: 500 0.92rem var(--bs-font-sans);
+}
+.dna-error {
+    margin: 0;
+    padding: 14px 16px;
+    color: #c44b6e;
+    font: 500 0.88rem var(--bs-font-sans);
+    background: rgba(196, 75, 110, 0.06);
+    border-left: 3px solid #c44b6e;
+    border-radius: 6px;
+}
+.dna-seqviz-credit {
+    margin: 12px 0 0;
+    font-size: 0.82rem;
+    color: var(--ca-muted);
+}
+.dna-seqviz-credit a { color: var(--accent); text-decoration: none; }
+.dna-seqviz-credit a:hover { text-decoration: underline; }
+.dna-seqviz-credit-fineprint {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.72rem;
+    color: var(--ca-muted);
+    opacity: 0.72;
+}
+
+/* ---- Dark-mode tweaks ---- */
+[data-theme="dark"] .dna-seq-input {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(232, 220, 195, 0.10);
+}
+[data-theme="dark"] .dna-mini-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(232, 220, 195, 0.10);
+}
+[data-theme="dark"] .dna-bp-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(232, 220, 195, 0.10);
+}
+[data-theme="dark"] .dna-tab {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(232, 220, 195, 0.10);
+}
+
+/* ---- Print handout — onscreen-hidden, print-only. The Print button
+   renders this from state via renderPrintView() then triggers
+   window.print(). WebGL prints blank so we ship a data-driven
+   analysis sheet instead. */
+
+.dna-print-view { display: none; }  /* hide onscreen */
+
+@media print {
+    /* Hide everything live. */
+    body.bs-body {
+        padding-top: 0 !important;
+        background: #fff !important;
+        color: #111 !important;
+    }
+    .bs-hero, .bs-sidebar, .bs-sidebar-toggle, .bs-sidebar-backdrop,
+    .bs-faq-wrap, .modern-nav, .nav-header, footer,
+    .ca-tool-root, .ca-cell-grid, .dna-grid,
+    .ca-help-overlay, .ca-modal-layer, .ca-toast,
+    #adsense_top, .ad-container, .bs-inline-ad {
+        display: none !important;
+    }
+    .bs-main {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        background: #fff !important;
+    }
+
+    /* Show the handout. */
+    .dna-print-view {
+        display: block !important;
+        font: 11pt/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #111;
+        max-width: none;
+        margin: 0;
+        padding: 0 12mm;
+    }
+
+    /* Header. */
+    .dna-print-header {
+        border-bottom: 2px solid #111;
+        padding-bottom: 4mm;
+        margin-bottom: 4mm;
+    }
+    .dna-print-header h1 { margin: 0; font-size: 18pt; font-weight: 700; }
+    .dna-print-header p  { margin: 1mm 0 0; font-size: 10pt; color: #666; }
+
+    .dna-print-summary {
+        padding: 3mm 4mm;
+        background: #f5f3ec;
+        border-left: 3px solid #888;
+        margin-bottom: 5mm;
+    }
+    .dna-print-summary p { margin: 0; font-size: 11pt; }
+
+    /* 3D helix screenshot — keep on one page, generous size. */
+    .dna-print-helix-img {
+        margin: 0 0 6mm;
+        page-break-inside: avoid;
+        text-align: center;
+    }
+    .dna-print-helix-img img {
+        max-width: 100%;
+        max-height: 90mm;
+        height: auto;
+        border: 1px solid #ccc;
+        background: #fff;
+    }
+    .dna-print-helix-img figcaption {
+        margin-top: 1.5mm;
+        font: italic 9pt -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #666;
+    }
+
+    /* Concentric SVG — also one page. */
+    .dna-print-concentric {
+        margin: 0 0 6mm;
+        page-break-inside: avoid;
+        text-align: center;
+    }
+    .dna-print-concentric svg {
+        max-width: 100%;
+        max-height: 90mm;
+        height: auto;
+    }
+    .dna-print-concentric figcaption {
+        margin-top: 1.5mm;
+        font: italic 9pt -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #666;
+    }
+
+    /* Per-sequence card. */
+    .dna-print-seq {
+        page-break-inside: avoid;
+        margin-bottom: 6mm;
+        padding: 4mm 5mm;
+        border: 1px solid #ccc;
+        border-left: 4px solid #333;
+    }
+    .dna-print-seq > header { margin-bottom: 3mm; }
+    .dna-print-seq h2 { margin: 0 0 2mm; font-size: 13pt; }
+    .dna-print-seq dl {
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2mm 6mm;
+        font-size: 10pt;
+    }
+    .dna-print-seq dl > div { display: flex; flex-direction: column; }
+    .dna-print-seq dt {
+        font-weight: 600;
+        color: #555;
+        font-size: 9pt;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+    .dna-print-seq dd { margin: 0; font-weight: 600; color: #222; }
+    .dna-print-seq dd small { color: #888; font-weight: 400; }
+    .dna-print-seq h3 {
+        margin: 3mm 0 1mm;
+        font-size: 10pt;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #555;
+    }
+    .dna-print-seq pre {
+        margin: 0;
+        padding: 2mm 3mm;
+        background: #f9f7f1;
+        border: 1px solid #ddd;
+        font: 10pt/1.4 ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+    .dna-print-protein {
+        background: #f3edf6 !important;
+        letter-spacing: 0.05em;
+    }
+    .dna-print-rc {
+        background: #f1f1f5 !important;
+    }
+
+    /* Motif & mismatch result cards. */
+    .dna-print-motif, .dna-print-mismatch {
+        page-break-inside: avoid;
+        margin-bottom: 4mm;
+        padding: 3mm 4mm;
+        border: 1px solid #ddd;
+        border-left: 3px solid #aaa;
+    }
+    .dna-print-motif h2, .dna-print-mismatch h2 {
+        margin: 0 0 1mm;
+        font-size: 11pt;
+    }
+    .dna-print-motif code {
+        font: 600 10pt ui-monospace, Menlo, Consolas, monospace;
+        background: #faf2cc;
+        padding: 0 4px;
+        border-radius: 3px;
+    }
+    .dna-print-motif ul, .dna-print-mismatch p {
+        margin: 1mm 0 0;
+        font-size: 10pt;
+    }
+    .dna-print-motif ul { padding-left: 4mm; }
+
+    .dna-print-footer {
+        margin-top: 6mm;
+        padding-top: 2mm;
+        border-top: 1px solid #aaa;
+        font-size: 9pt;
+        color: #666;
+        text-align: right;
+        font-style: italic;
+    }
+    .dna-print-footer p { margin: 0; }
+
+    /* Strip transitions in print. */
+    *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}

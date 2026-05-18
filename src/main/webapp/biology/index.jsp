@@ -80,13 +80,13 @@
             <h1>A quiet place for <em>biology</em>.</h1>
             <p>3D interactive cells, organelle-aware notes, and a growing set of learning tools. KaTeX-free for now &mdash; browser-only, no signup.</p>
             <div class="bs-hero-stats">
+                <div class="bs-hero-stat"><strong>2</strong>3D tools</div>
                 <div class="bs-hero-stat"><strong>12</strong>cell specimens</div>
-                <div class="bs-hero-stat"><strong>3</strong>NIH 3D models</div>
                 <div class="bs-hero-stat"><strong>free</strong>no signup</div>
             </div>
         </div>
 
-        <!-- Featured tool -->
+        <!-- Featured tools -->
         <div style="background: var(--bs-panel-bg); border:1px solid var(--bs-line); border-radius: var(--bs-radius); padding:1.5rem; box-shadow: var(--bs-shadow-sm);">
             <h2 class="bs-section-title">Featured</h2>
             <div class="bs-tool-grid">
@@ -95,6 +95,13 @@
                     <span>
                         <span class="bs-tool-card-title">Cell Atlas 3D</span>
                         <span class="bs-tool-card-sub">12 cells, organelle-aware 3D</span>
+                    </span>
+                </a>
+                <a href="<%=request.getContextPath()%>/biology/dna-viewer.jsp" class="bs-tool-card">
+                    <span class="bs-tool-card-icon">DNA</span>
+                    <span>
+                        <span class="bs-tool-card-title">DNA Viewer 3D</span>
+                        <span class="bs-tool-card-sub">Double helix from any sequence</span>
                     </span>
                 </a>
             </div>
@@ -108,11 +115,6 @@
                 <a href="https://github.com/anishnath/anishnath.github.io/issues" target="_blank" rel="noopener" style="color: var(--bs-accent);">GitHub</a>.
             </p>
             <div class="bs-tool-grid">
-                <span class="bs-tool-card is-stub">
-                    <span class="bs-tool-card-icon">DNA</span>
-                    <span><span class="bs-tool-card-title">DNA Viewer</span>
-                          <span class="bs-tool-card-sub">Double-helix + base pairs</span></span>
-                </span>
                 <span class="bs-tool-card is-stub">
                     <span class="bs-tool-card-icon">&#10070;</span>
                     <span><span class="bs-tool-card-title">Mitosis</span>

@@ -297,15 +297,21 @@
     </url>
     <url>
         <loc>https://8gwifi.org/biology/</loc>
-        <lastmod>2026-05-13</lastmod>
+        <lastmod>2026-05-19</lastmod>
         <changefreq>weekly</changefreq>
-        <priority>0.92</priority>
+        <priority>0.94</priority>
     </url>
     <url>
         <loc>https://8gwifi.org/biology/cell-atlas.jsp</loc>
         <lastmod>2026-05-13</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.95</priority>
+    </url>
+    <url>
+        <loc>https://8gwifi.org/biology/dna-viewer.jsp</loc>
+        <lastmod>2026-05-19</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.96</priority>
     </url>
     <url>
         <loc>https://8gwifi.org/math/worksheet.jsp</loc>

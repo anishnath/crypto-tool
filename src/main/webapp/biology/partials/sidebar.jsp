@@ -52,19 +52,18 @@
     </div>
 
     <!-- Cell Biology -->
-    <div class="bs-group<%= collapsedCls(activeService, "cell-atlas") %>" data-group="cell-biology">
+    <div class="bs-group<%= collapsedCls(activeService, "cell-atlas", "dna-viewer") %>" data-group="cell-biology">
         <button class="bs-group-header" type="button">Cell Biology <span class="bs-group-chevron">&#9662;</span></button>
         <div class="bs-group-body">
             <a href="<%= ctx %>/biology/cell-atlas.jsp" class="bs-item <%= "cell-atlas".equals(activeService) ? "active" : "" %>">
                 <span class="bs-item-icon">&#9678;</span>
                 <span class="bs-item-label">Cell Atlas 3D</span>
             </a>
-            <%-- Stubs for upcoming tools so the section communicates direction. --%>
-            <span class="bs-item-stub" title="Coming soon">
+            <a href="<%= ctx %>/biology/dna-viewer.jsp" class="bs-item <%= "dna-viewer".equals(activeService) ? "active" : "" %>">
                 <span class="bs-item-icon">DNA</span>
-                <span class="bs-item-label">DNA Viewer</span>
-                <span class="bs-item-soon">Soon</span>
-            </span>
+                <span class="bs-item-label">DNA Viewer 3D</span>
+            </a>
+            <%-- Stubs for upcoming tools so the section communicates direction. --%>
             <span class="bs-item-stub" title="Coming soon">
                 <span class="bs-item-icon">&#10070;</span>
                 <span class="bs-item-label">Mitosis Walkthrough</span>

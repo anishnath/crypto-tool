@@ -3143,11 +3143,18 @@
       "description": "Click any cell apart in 3D — 12 specimens, 60+ organelles, slicing-plane cross-section, AI biology tutor, matched microscopy photos. Free, browser-only, no signup."
     },
     {
-      "name": "Biology Tools (Hub)",
+      "name": "3D DNA Viewer — Sequence Analyzer",
+      "url": "biology/dna-viewer.jsp",
+      "category": "Biology",
+      "keywords": "3d dna viewer double helix 3d interactive dna model online dna sequence visualizer dna helix free dna viewer reverse complement online dna to protein translator translate dna amino acid codon translator gc content calculator melting temperature tm primer restriction enzyme finder ecori cut site bamhi hindiii find orf open reading frame motif search compare dna sequences alignment plasmid viewer fasta watson crick base pair adenine thymine guanine cytosine purine pyrimidine antiparallel iupac ambiguity rna no signup free snapgene alternative benchling alternative ai dna tutor browser only sequence analysis",
+      "description": "Free online DNA viewer & sequence analyzer. Paste any sequence → see a rotating 3D double helix, translate DNA to protein, find reverse complement, GC%, Tm, ORFs, restriction-enzyme cut sites (EcoRI, BamHI + 10), motif search, compare multiple sequences side-by-side. No signup, no install."
+    },
+    {
+      "name": "Biology Tools (Hub) — Free Online",
       "url": "biology/",
       "category": "Biology",
-      "keywords": "biology tools online interactive biology 3d cell viewer organelle viewer free biology learning click organelle cell biology browser-only no signup",
-      "description": "Free interactive 3D biology — Cell Atlas 3D (12 cells, every organelle clickable), AI tutor, real microscopy. DNA viewer, mitosis, Punnett, codon table on the roadmap."
+      "keywords": "free biology tools online interactive biology 3d cell viewer dna viewer sequence analyzer organelle viewer click organelle cell biology dna translation reverse complement restriction enzyme motif search free biology learning ai tutor browser-only no signup snapgene alternative benchling alternative",
+      "description": "Free interactive 3D biology tools — Cell Atlas 3D (12 cells, every organelle clickable, AI tutor) and 3D DNA Viewer (helix + sequence analyzer with translation, reverse complement, restriction enzymes, motif search, ORF finder). No signup, browser-only."
     }
   ]
 }
