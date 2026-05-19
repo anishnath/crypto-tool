@@ -1639,13 +1639,14 @@
     var VIEW_TAB_KEY = "biology.dna.viewTab";
     function persistViewTab(t) { try { localStorage.setItem(VIEW_TAB_KEY, t); } catch (e) {} }
     function getPersistedViewTab() {
-        // Migrate any legacy 'pdb' value (the Real Structure tab was
-        // removed) back to 'studio' so users with the old preference
-        // land on a working tab.
+        // Linear View is the default — it's the actual analysis surface
+        // that matches how DNA is worked with in industry (SnapGene,
+        // Benchling, etc.). 3D Helix is the visual alternative.
+        // Honor explicit 'studio' preference for returning users.
         try {
             var v = localStorage.getItem(VIEW_TAB_KEY);
-            return v === 'linear' ? 'linear' : 'studio';
-        } catch (e) { return 'studio'; }
+            return v === 'studio' ? 'studio' : 'linear';
+        } catch (e) { return 'linear'; }
     }
 
     function switchToTab(tab) {
@@ -1780,10 +1781,13 @@
                 renderTutorPrompts();
                 if (state.labelsVisible && labelsBtn) labelsBtn.classList.add('is-active');
                 if (state.autoRotate && rotateBtn)    rotateBtn.classList.add('is-active');
-                // Restore previously-active view-mode tab (3D Helix / Linear / Real Structure).
-                // Done after scene mount so the lazy-loaders see the right initial state.
+                // Restore previously-active view-mode tab. JSP starts
+                // with Linear active (new default); switch only if the
+                // user explicitly saved 'studio' from a previous session.
+                // Otherwise call switchToTab('linear') so the seqviz
+                // lazy-load fires properly for the default landing.
                 var savedTab = getPersistedViewTab();
-                if (savedTab !== 'studio') switchToTab(savedTab);
+                switchToTab(savedTab);
                 return;
             }
             tries++;

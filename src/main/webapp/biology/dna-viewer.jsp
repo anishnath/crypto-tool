@@ -117,18 +117,19 @@
                 </div>
             </header>
 
-            <%-- View mode tabs — two ways to look at the same DNA. --%>
+            <%-- View mode tabs — Linear View is the default (analysis surface);
+                 3D Helix is the visual alternative. --%>
             <div class="dna-tabs" role="tablist">
-                <button type="button" role="tab" id="dnaTabStudio" class="dna-tab is-active" aria-selected="true">
-                    3D Helix
-                </button>
-                <button type="button" role="tab" id="dnaTabLinear" class="dna-tab" aria-selected="false">
+                <button type="button" role="tab" id="dnaTabLinear" class="dna-tab is-active" aria-selected="true">
                     Linear View
+                </button>
+                <button type="button" role="tab" id="dnaTabStudio" class="dna-tab" aria-selected="false">
+                    3D Helix
                 </button>
             </div>
 
             <%-- ─────────── STUDIO MODE ─────────── --%>
-            <div class="dna-grid ca-cell-grid" id="dnaStudio">
+            <div class="dna-grid ca-cell-grid" id="dnaStudio" hidden>
 
                 <%-- Floating show-tabs — only visible when the matching rail is hidden.
                      Same pattern as Cell Atlas: position:absolute inside the grid,
@@ -345,7 +346,7 @@
             </div>
 
             <%-- ─────────── LINEAR (seqviz) MODE ─────────── --%>
-            <div class="dna-grid dna-linear-grid" id="dnaLinear" hidden>
+            <div class="dna-grid dna-linear-grid" id="dnaLinear">
                 <section class="ca-stage-panel dna-linear-panel">
                     <div class="ca-stage-title">
                         <h2>Linear DNA Map</h2>
