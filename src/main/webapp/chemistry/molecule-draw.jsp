@@ -78,37 +78,91 @@ s.onerror=function(){console.debug('Ad script blocked')};document.head.appendChi
 
 <style>
 /* ═══════════════════════════════════════════════════════
-   DESIGN TOKENS
+   DESIGN TOKENS — Alpine Meadow
+   ═══════════════════════════════════════════════════════
+   System: /systems/morphous-alpine-meadow/system.json
+   Light + dark palette using oklch() colors. The page defaults
+   to dark (data-theme="dark" on <html>); light kicks in via the
+   [data-theme="light"] selector below.
+
+   Existing CSS rules use legacy token names (--bg-*, --accent, etc.)
+   We keep those names as aliases pointing at the Alpine Meadow tokens
+   so the cascade works without per-rule edits.
    ═══════════════════════════════════════════════════════ */
 :root {
-  --bg-deep:       #060B14;
-  --bg-base:       #0B1120;
-  --bg-surface:    #111927;
-  --bg-elevated:   #172033;
-  --bg-card:       rgba(17, 25, 39, 0.75);
-  --border-subtle: rgba(16, 185, 129, 0.12);
-  --border-mid:    rgba(16, 185, 129, 0.25);
-  --border-bright: rgba(16, 185, 129, 0.5);
-  --accent:        #10b981;
-  --accent-bright: #34d399;
-  --accent-dim:    #059669;
-  --accent2:       #06b6d4;
-  --accent2-bright:#22d3ee;
-  --warn:          #f59e0b;
-  --error:         #ef4444;
-  --text-primary:  #e2e8f0;
-  --text-secondary:#94a3b8;
-  --text-muted:    #64748b;
-  --text-code:     #a5f3fc;
-  --glow-sm:       0 0 8px rgba(16,185,129,0.25);
-  --glow-md:       0 0 20px rgba(16,185,129,0.2), 0 0 40px rgba(16,185,129,0.1);
-  --glow-lg:       0 0 30px rgba(16,185,129,0.3), 0 0 60px rgba(16,185,129,0.15), 0 0 100px rgba(16,185,129,0.05);
-  --glass:         rgba(17, 25, 39, 0.6);
-  --glass-border:  rgba(255,255,255,0.06);
+  /* Alpine Meadow — dark mode (this is the page's default) */
+  --background: oklch(0.202 0.035 254.7);
+  --foreground: oklch(0.986 0.007 247.9);
+  --card: oklch(0.202 0.030 242.1);
+  --card-foreground: oklch(0.986 0.007 247.9);
+  --popover: oklch(0.202 0.030 242.1);
+  --popover-foreground: oklch(0.986 0.007 247.9);
+  --primary: oklch(0.523 0.135 144.2);
+  --primary-foreground: oklch(0.202 0.035 254.7);
+  --secondary: oklch(0.370 0.026 237.6);
+  --secondary-foreground: oklch(0.986 0.007 247.9);
+  --muted: oklch(0.370 0.026 237.6);
+  --muted-foreground: oklch(0.934 0.013 251.6);
+  --accent-am: oklch(0.802 0.101 238.2);
+  --accent-foreground: oklch(0.202 0.035 254.7);
+  --destructive: oklch(0.542 0.253 264.3);
+  --border-am: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.523 0.135 144.2);
+  --chart-1: oklch(0.523 0.135 144.2);
+  --chart-2: oklch(0.542 0.253 264.3);
+  --chart-3: oklch(0.802 0.101 238.2);
+  --chart-4: oklch(1.000 0.000 89.9);
+  --chart-5: oklch(0.869 0.020 252.9);
+  --sidebar: oklch(0.203 0.031 246.0);
+  --sidebar-foreground: oklch(0.986 0.007 247.9);
+  --sidebar-primary: oklch(0.523 0.135 144.2);
+  --sidebar-primary-foreground: oklch(0.202 0.035 254.7);
+  --sidebar-accent: oklch(0.370 0.026 237.6);
+  --sidebar-accent-foreground: oklch(0.986 0.007 247.9);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.523 0.135 144.2);
+
+  /* Legacy aliases — map existing tokens onto Alpine Meadow. */
+  --bg-deep:       var(--background);
+  --bg-base:       var(--background);
+  --bg-surface:    var(--card);
+  --bg-elevated:   var(--secondary);
+  --bg-card:       oklch(0.202 0.030 242.1 / 0.75);
+
+  --border-subtle: var(--border-am);
+  --border-mid:    oklch(0.523 0.135 144.2 / 0.30);
+  --border-bright: oklch(0.523 0.135 144.2 / 0.55);
+
+  /* Brand green stays consistent (matches --ring across both modes). */
+  --accent:        var(--ring);
+  --accent-bright: oklch(0.620 0.150 144.2);
+  --accent-dim:    oklch(0.420 0.115 144.2);
+  /* Secondary brand = Alpine Meadow's light-blue accent. */
+  --accent2:       var(--accent-am);
+  --accent2-bright:oklch(0.870 0.115 238.2);
+
+  --warn:          oklch(0.780 0.155 80);
+  --error:         var(--destructive);
+
+  --text-primary:  var(--foreground);
+  --text-secondary:var(--muted-foreground);
+  --text-muted:    oklch(0.660 0.020 250);
+  --text-code:     oklch(0.870 0.115 238.2);
+
+  --glow-sm:       0 0 8px  oklch(0.523 0.135 144.2 / 0.25);
+  --glow-md:       0 0 20px oklch(0.523 0.135 144.2 / 0.20), 0 0 40px  oklch(0.523 0.135 144.2 / 0.10);
+  --glow-lg:       0 0 30px oklch(0.523 0.135 144.2 / 0.30), 0 0 60px  oklch(0.523 0.135 144.2 / 0.15), 0 0 100px oklch(0.523 0.135 144.2 / 0.05);
+
+  --glass:         oklch(0.202 0.030 242.1 / 0.60);
+  --glass-border:  oklch(1 0 0 / 0.06);
+
   --radius-sm:     6px;
   --radius-md:     10px;
   --radius-lg:     16px;
   --radius-xl:     24px;
+  --radius:        0.5rem;
+
   --font-display:  'Sora', sans-serif;
   --font-body:     'DM Sans', sans-serif;
   --font-code:     'Fira Code', monospace;
@@ -116,23 +170,70 @@ s.onerror=function(){console.debug('Ad script blocked')};document.head.appendChi
 }
 
 [data-theme="light"] {
-  --bg-deep:       #f0f4f8;
-  --bg-base:       #f8fafc;
-  --bg-surface:    #ffffff;
-  --bg-elevated:   #ffffff;
-  --bg-card:       rgba(255,255,255,0.85);
-  --border-subtle: rgba(16,185,129,0.15);
-  --border-mid:    rgba(16,185,129,0.3);
-  --border-bright: rgba(16,185,129,0.6);
-  --glass:         rgba(255,255,255,0.7);
-  --glass-border:  rgba(0,0,0,0.06);
-  --text-primary:  #1e293b;
-  --text-secondary:#475569;
-  --text-muted:    #94a3b8;
-  --text-code:     #0e7490;
-  --glow-sm:       0 1px 3px rgba(0,0,0,0.08);
-  --glow-md:       0 4px 16px rgba(0,0,0,0.06);
-  --glow-lg:       0 8px 32px rgba(0,0,0,0.08);
+  /* Alpine Meadow — light mode */
+  --background: oklch(0.986 0.007 247.9);
+  --foreground: oklch(0.202 0.035 254.7);
+  --card: oklch(0.967 0.018 240.0);
+  --card-foreground: oklch(0.202 0.035 254.7);
+  --popover: oklch(0.967 0.018 240.0);
+  --popover-foreground: oklch(0.202 0.035 254.7);
+  --primary: oklch(0.542 0.253 264.3);
+  --primary-foreground: oklch(0.986 0.007 247.9);
+  --secondary: oklch(0.974 0.013 241.0);
+  --secondary-foreground: oklch(0.204 0.029 233.6);
+  --muted: oklch(0.972 0.014 244.7);
+  --muted-foreground: oklch(0.204 0.029 233.6);
+  --accent-am: oklch(0.802 0.101 238.2);
+  --accent-foreground: oklch(0.202 0.035 254.7);
+  --destructive: oklch(0.542 0.253 264.3);
+  --border-am: oklch(0.932 0.018 245.4);
+  --input: oklch(0.932 0.018 245.4);
+  --ring: oklch(0.523 0.135 144.2);
+  --chart-1: oklch(0.542 0.253 264.3);
+  --chart-2: oklch(0.523 0.135 144.2);
+  --chart-3: oklch(0.802 0.101 238.2);
+  --chart-4: oklch(1.000 0.000 89.9);
+  --chart-5: oklch(0.204 0.029 233.6);
+  --sidebar: oklch(0.974 0.014 238.0);
+  --sidebar-foreground: oklch(0.202 0.035 254.7);
+  --sidebar-primary: oklch(0.542 0.253 264.3);
+  --sidebar-primary-foreground: oklch(0.986 0.007 247.9);
+  --sidebar-accent: oklch(0.912 0.043 260.4);
+  --sidebar-accent-foreground: oklch(0.542 0.253 264.3);
+  --sidebar-border: oklch(0.932 0.018 245.4);
+  --sidebar-ring: oklch(0.523 0.135 144.2);
+
+  /* Legacy aliases — light theme overrides */
+  --bg-deep:       var(--background);
+  --bg-base:       var(--background);
+  --bg-surface:    var(--card);
+  --bg-elevated:   oklch(1 0 0);
+  --bg-card:       oklch(1 0 0 / 0.85);
+
+  --border-subtle: var(--border-am);
+  --border-mid:    oklch(0.523 0.135 144.2 / 0.30);
+  --border-bright: oklch(0.523 0.135 144.2 / 0.55);
+
+  --accent:        var(--ring);
+  --accent-bright: oklch(0.620 0.150 144.2);
+  --accent-dim:    oklch(0.420 0.115 144.2);
+  --accent2:       var(--accent-am);
+  --accent2-bright:oklch(0.870 0.115 238.2);
+
+  --warn:          oklch(0.780 0.155 80);
+  --error:         var(--destructive);
+
+  --text-primary:  var(--foreground);
+  --text-secondary:var(--muted-foreground);
+  --text-muted:    oklch(0.560 0.020 250);
+  --text-code:     oklch(0.420 0.135 238.2);
+
+  --glow-sm:       0 1px 3px  oklch(0.202 0.035 254.7 / 0.08);
+  --glow-md:       0 4px 16px oklch(0.202 0.035 254.7 / 0.06);
+  --glow-lg:       0 8px 32px oklch(0.202 0.035 254.7 / 0.08);
+
+  --glass:         oklch(1 0 0 / 0.70);
+  --glass-border:  oklch(0.202 0.035 254.7 / 0.06);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -149,17 +250,19 @@ body {
   overflow-x: hidden;
 }
 
-/* hex grid background */
+/* hex grid background — Alpine Meadow green tint (#2e9c5d, derived
+   from oklch(0.523 0.135 144.2)). Static SVG fill so it shows in both
+   themes at 3% opacity. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.03'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%232e9c5d' fill-opacity='0.03'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 0;
 }
 
-/* radial glow behind editor */
+/* radial glow behind editor — uses the Alpine Meadow ring green via oklch */
 body::after {
   content: '';
   position: fixed;
@@ -168,7 +271,7 @@ body::after {
   transform: translate(-50%, -50%);
   width: 900px;
   height: 600px;
-  background: radial-gradient(ellipse, rgba(16,185,129,0.06) 0%, transparent 70%);
+  background: radial-gradient(ellipse, oklch(0.523 0.135 144.2 / 0.06) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -343,7 +446,7 @@ body::after {
   font-size: 0.65rem;
   font-family: var(--font-code);
   color: var(--accent);
-  background: rgba(16,185,129,0.1);
+  background: oklch(0.523 0.135 144.2 / 0.10);
   padding: 2px 8px;
   border-radius: 99px;
   border: 1px solid var(--border-subtle);
@@ -380,7 +483,7 @@ body::after {
 }
 .input-field:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
+  box-shadow: 0 0 0 3px oklch(0.523 0.135 144.2 / 0.12);
 }
 .input-field::placeholder {
   color: var(--text-muted);
@@ -412,7 +515,7 @@ body::after {
 }
 .btn:hover {
   border-color: var(--accent);
-  background: rgba(16,185,129,0.08);
+  background: oklch(0.523 0.135 144.2 / 0.08);
   color: var(--accent-bright);
   box-shadow: var(--glow-sm);
 }
@@ -537,7 +640,7 @@ body::after {
   color: var(--accent-bright);
 }
 .tool-btn.active {
-  background: rgba(16,185,129,0.15);
+  background: oklch(0.523 0.135 144.2 / 0.15);
   border-color: var(--accent);
   color: var(--accent-bright);
 }
@@ -716,7 +819,7 @@ body::after {
   border-color: var(--accent);
   color: var(--accent-bright);
   box-shadow: var(--glow-sm);
-  background: rgba(16,185,129,0.06);
+  background: oklch(0.523 0.135 144.2 / 0.06);
 }
 .export-btn svg { width: 14px; height: 14px; }
 
@@ -749,7 +852,7 @@ body::after {
   color: var(--text-secondary);
 }
 .mode-btn.active {
-  background: rgba(16,185,129,0.15);
+  background: oklch(0.523 0.135 144.2 / 0.15);
   color: var(--accent-bright);
 }
 .mode-btn svg {
@@ -1153,15 +1256,15 @@ body::after {
     <div class="logo-hex">
       <svg viewBox="0 0 38 44" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M19 2L35 12v20L19 42 3 32V12L19 2z" stroke="url(#lg)" stroke-width="2" fill="none"/>
-        <circle cx="19" cy="14" r="3" fill="#10b981"/>
-        <circle cx="10" cy="24" r="3" fill="#06b6d4"/>
-        <circle cx="28" cy="24" r="3" fill="#10b981"/>
-        <circle cx="19" cy="34" r="2.5" fill="#06b6d4"/>
-        <line x1="19" y1="14" x2="10" y2="24" stroke="#10b981" stroke-width="1.5" opacity="0.5"/>
-        <line x1="19" y1="14" x2="28" y2="24" stroke="#10b981" stroke-width="1.5" opacity="0.5"/>
-        <line x1="10" y1="24" x2="19" y2="34" stroke="#06b6d4" stroke-width="1.5" opacity="0.5"/>
-        <line x1="28" y1="24" x2="19" y2="34" stroke="#06b6d4" stroke-width="1.5" opacity="0.5"/>
-        <defs><linearGradient id="lg" x1="3" y1="2" x2="35" y2="42"><stop stop-color="#10b981"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+        <circle cx="19" cy="14" r="3" fill="#2e9c5d"/>
+        <circle cx="10" cy="24" r="3" fill="#91c5db"/>
+        <circle cx="28" cy="24" r="3" fill="#2e9c5d"/>
+        <circle cx="19" cy="34" r="2.5" fill="#91c5db"/>
+        <line x1="19" y1="14" x2="10" y2="24" stroke="#2e9c5d" stroke-width="1.5" opacity="0.5"/>
+        <line x1="19" y1="14" x2="28" y2="24" stroke="#2e9c5d" stroke-width="1.5" opacity="0.5"/>
+        <line x1="10" y1="24" x2="19" y2="34" stroke="#91c5db" stroke-width="1.5" opacity="0.5"/>
+        <line x1="28" y1="24" x2="19" y2="34" stroke="#91c5db" stroke-width="1.5" opacity="0.5"/>
+        <defs><linearGradient id="lg" x1="3" y1="2" x2="35" y2="42"><stop stop-color="#2e9c5d"/><stop offset="1" stop-color="#91c5db"/></linearGradient></defs>
       </svg>
     </div>
     <div>
@@ -1171,7 +1274,7 @@ body::after {
   </div>
   <div class="header-actions">
     <button class="insert-into-doc-btn" id="insertIntoDocBtn"
-            style="display:none; background:linear-gradient(135deg,#10b981,#06b6d4); color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.85rem; transition:opacity 0.2s;"
+            style="display:none; background:linear-gradient(135deg,#2e9c5d,#91c5db); color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.85rem; transition:opacity 0.2s;"
             title="Send this molecule to the Math Editor document">
       &#x2934; Insert into Document
     </button>
