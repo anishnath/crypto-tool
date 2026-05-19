@@ -17,9 +17,107 @@
 
 <!-- Critical CSS -->
 <style>
+    /* ═══════════════════════════════════════════════════════
+       DESIGN TOKENS — Morphous Indigo Milkcap
+       System: /systems/morphous-indigo-milkcap/system.json
+       Light defaults at :root, dark via [data-theme="dark"].
+       Legacy aliases (--primary, --bg-primary, etc.) keep existing
+       site CSS (design-system.css, tool-page.css) working without
+       per-rule rewrites.
+       ═══════════════════════════════════════════════════════ */
+    :root {
+      /* Indigo Milkcap — light */
+      --background: oklch(0.971 0.007 247.9);
+      --foreground: oklch(0.183 0.031 263.4);
+      --card: oklch(0.981 0.005 258.3);
+      --card-foreground: oklch(0.183 0.031 263.4);
+      --popover: oklch(0.981 0.005 258.3);
+      --popover-foreground: oklch(0.183 0.031 263.4);
+      --primary-im: oklch(0.381 0.146 264.1);
+      --primary-foreground: oklch(0.981 0.005 258.3);
+      --secondary: oklch(0.929 0.015 260.7);
+      --secondary-foreground: oklch(0.225 0.061 264.4);
+      --muted: oklch(0.929 0.015 260.7);
+      --muted-foreground: oklch(0.372 0.039 257.3);
+      --accent: oklch(0.581 0.229 263.9);
+      --accent-foreground: oklch(0.981 0.005 258.3);
+      --destructive: oklch(0.446 0.052 336.5);
+      --border-im: oklch(0.883 0.020 260.2);
+      --input: oklch(0.883 0.020 260.2);
+      --ring: oklch(0.581 0.229 263.9);
+      --chart-1: oklch(0.381 0.146 264.1);
+      --chart-2: oklch(0.581 0.229 263.9);
+      --chart-3: oklch(0.371 0.062 159.3);
+      --chart-4: oklch(0.732 0.089 266.9);
+      --chart-5: oklch(0.496 0.054 150.0);
+      --sidebar: oklch(0.929 0.015 260.7);
+      --sidebar-foreground: oklch(0.183 0.031 263.4);
+      --sidebar-primary: oklch(0.381 0.146 264.1);
+      --sidebar-primary-foreground: oklch(0.981 0.005 258.3);
+      --sidebar-accent: oklch(0.827 0.034 255.2);
+      --sidebar-accent-foreground: oklch(0.381 0.146 264.1);
+      --sidebar-border: oklch(0.883 0.020 260.2);
+      --sidebar-ring: oklch(0.581 0.229 263.9);
+      --radius: 0.5rem;
+
+      /* Legacy aliases — what existing rules (and external CSS files)
+         expect. Mapped onto the Indigo Milkcap tokens above. */
+      --primary:        var(--primary-im);
+      --primary-dark:   oklch(0.300 0.130 264.1);
+      --bg-primary:     var(--background);
+      --bg-secondary:   var(--secondary);
+      --text-primary:   var(--foreground);
+      --text-secondary: var(--muted-foreground);
+      --border:         var(--border-im);
+    }
+
+    [data-theme="dark"] {
+      /* Indigo Milkcap — dark */
+      --background: oklch(0.183 0.031 263.4);
+      --foreground: oklch(0.981 0.005 258.3);
+      --card: oklch(0.225 0.061 264.4);
+      --card-foreground: oklch(0.981 0.005 258.3);
+      --popover: oklch(0.225 0.061 264.4);
+      --popover-foreground: oklch(0.981 0.005 258.3);
+      --primary-im: oklch(0.655 0.183 266.5);
+      --primary-foreground: oklch(0.183 0.031 263.4);
+      --secondary: oklch(0.260 0.040 161.8);
+      --secondary-foreground: oklch(0.981 0.005 258.3);
+      --muted: oklch(0.315 0.036 258.3);
+      --muted-foreground: oklch(0.827 0.034 255.2);
+      --accent: oklch(0.581 0.229 263.9);
+      --accent-foreground: oklch(0.981 0.005 258.3);
+      --destructive: oklch(0.446 0.052 336.5);
+      --border-im: oklch(1 0 0 / 12%);
+      --input: oklch(1 0 0 / 16%);
+      --ring: oklch(0.655 0.183 266.5);
+      --chart-1: oklch(0.655 0.183 266.5);
+      --chart-2: oklch(0.581 0.229 263.9);
+      --chart-3: oklch(0.496 0.054 150.0);
+      --chart-4: oklch(0.732 0.089 266.9);
+      --chart-5: oklch(0.775 0.035 143.9);
+      --sidebar: oklch(0.225 0.061 264.4);
+      --sidebar-foreground: oklch(0.981 0.005 258.3);
+      --sidebar-primary: oklch(0.655 0.183 266.5);
+      --sidebar-primary-foreground: oklch(0.183 0.031 263.4);
+      --sidebar-accent: oklch(0.314 0.081 264.3);
+      --sidebar-accent-foreground: oklch(0.981 0.005 258.3);
+      --sidebar-border: oklch(1 0 0 / 12%);
+      --sidebar-ring: oklch(0.655 0.183 266.5);
+
+      /* Legacy aliases — dark variants */
+      --primary:        var(--primary-im);
+      --primary-dark:   oklch(0.555 0.165 266.5);
+      --bg-primary:     var(--background);
+      --bg-secondary:   var(--card);
+      --text-primary:   var(--foreground);
+      --text-secondary: var(--muted-foreground);
+      --border:         var(--border-im);
+    }
+
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
-    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#f8fafc;margin:0}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1rem;line-height:1.5;color:oklch(0.183 0.031 263.4);background:oklch(0.971 0.007 247.9);margin:0}
 </style>
 
 <!-- SEO -->
@@ -289,23 +387,23 @@
 <style>
   .latex-about{padding:3rem 1.5rem;background:var(--bg-secondary,#f1f5f9);border-top:1px solid var(--border,#e2e8f0)}
   .latex-about-inner{max-width:1100px;margin:0 auto}
-  .latex-about-eyebrow{display:inline-block;font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#059669;background:rgba(5,150,105,0.10);padding:4px 10px;border-radius:999px;margin-bottom:0.6rem}
+  .latex-about-eyebrow{display:inline-block;font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:oklch(0.371 0.062 159.3);background:oklch(0.371 0.062 159.3 / 0.12);padding:4px 10px;border-radius:999px;margin-bottom:0.6rem}
   .latex-about-title{font-size:1.75rem;font-weight:700;color:var(--text-primary,#0f172a);margin:0 0 0.5rem}
   .latex-about-subtitle{font-size:1rem;color:var(--text-secondary,#475569);margin:0 0 2rem;max-width:720px;line-height:1.55}
   .latex-about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
   .latex-about-card{background:var(--bg-primary,#fff);border:1px solid var(--border,#e2e8f0);border-radius:12px;padding:1.25rem;position:relative;transition:transform 0.15s ease,box-shadow 0.15s ease}
-  .latex-about-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,23,42,0.06)}
+  .latex-about-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px oklch(0.183 0.031 263.4 / 0.06)}
   .latex-about-icon{font-size:1.6rem;line-height:1;margin-bottom:0.6rem;display:block}
   .latex-about-card h3{font-size:1rem;font-weight:600;color:var(--text-primary,#0f172a);margin:0 0 0.4rem;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}
   .latex-about-card p{font-size:0.85rem;color:var(--text-secondary,#475569);line-height:1.5;margin:0}
-  .latex-about-card code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.78rem;background:rgba(99,102,241,0.10);color:#4f46e5;padding:1px 5px;border-radius:4px}
-  .latex-about-badge{font-size:0.62rem;font-weight:700;letter-spacing:0.06em;color:#fff;background:linear-gradient(135deg,#10b981,#059669);padding:2px 7px;border-radius:6px;text-transform:uppercase}
+  .latex-about-card code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.78rem;background:oklch(0.581 0.229 263.9 / 0.12);color:oklch(0.381 0.146 264.1);padding:1px 5px;border-radius:4px}
+  .latex-about-badge{font-size:0.62rem;font-weight:700;letter-spacing:0.06em;color:#fff;background:linear-gradient(135deg,oklch(0.496 0.054 150.0),oklch(0.371 0.062 159.3));padding:2px 7px;border-radius:6px;text-transform:uppercase}
   .latex-about-cta{margin-top:1.75rem;font-size:0.9rem;color:var(--text-secondary,#475569)}
-  .latex-about-cta a{color:#4f46e5;font-weight:600;text-decoration:none}
+  .latex-about-cta a{color:oklch(0.381 0.146 264.1);font-weight:600;text-decoration:none}
   .latex-about-cta a:hover{text-decoration:underline}
-  [data-theme="dark"] .latex-about{background:#0f172a;border-top-color:#1e293b}
-  [data-theme="dark"] .latex-about-card{background:#1e293b;border-color:#334155}
-  [data-theme="dark"] .latex-about-card code{background:rgba(129,140,248,0.15);color:#a5b4fc}
+  [data-theme="dark"] .latex-about{background:oklch(0.183 0.031 263.4);border-top-color:oklch(0.225 0.061 264.4)}
+  [data-theme="dark"] .latex-about-card{background:oklch(0.225 0.061 264.4);border-color:oklch(1 0 0 / 12%)}
+  [data-theme="dark"] .latex-about-card code{background:oklch(0.655 0.183 266.5 / 0.18);color:oklch(0.732 0.089 266.9)}
 </style>
 <section class="latex-about" id="latex-about">
   <div class="latex-about-inner">
