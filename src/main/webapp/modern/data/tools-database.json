@@ -1,7 +1,7 @@
 {
-  "version": "1.7",
-  "lastUpdated": "2026-05-13T00:00:00.000Z",
-  "totalTools": 445,
+  "version": "1.8",
+  "lastUpdated": "2026-05-21T00:00:00.000Z",
+  "totalTools": 448,
   "categories": [
     "Biology",
     "Blockchain & Crypto",
@@ -1205,6 +1205,20 @@
       "category": "Mathematics",
       "keywords": "algebraic expression simplifier mathematics",
       "description": "Algebraic Expression Simplifier - Free online mathematics tool"
+    },
+    {
+      "name": "AIME Mock Test — Free Live Timed Practice",
+      "url": "math/amc/aime.jsp",
+      "category": "Mathematics",
+      "keywords": "AIME mock test, AIME practice, AIME simulator, free AIME test, AIME timed practice, AIME past problems, AIME solutions, AIME training, integer answers 0-999, AIME emulator, olympiad math practice, USAMO qualification, competition math",
+      "description": "Free AIME mock test: 15 real past problems, 3-hour timer, integer answers 0–999, full scoring + step-by-step solutions. Olympiad-prep practice in your browser."
+    },
+    {
+      "name": "AMC 10/12 Mock Test — Free Live Timed Practice",
+      "url": "math/amc/",
+      "category": "Mathematics",
+      "keywords": "AMC mock test, AMC 10 practice, AMC 12 practice, AMC simulator, free AMC test, online AMC emulator, AMC timed practice, AMC past problems, AMC solutions, AMC training, AMC competition math, AIME qualification, math olympiad prep, MAA AMC, 25 questions 75 minutes",
+      "description": "Free AMC 10/12 mock test: 25 real past problems, 75-min timer, official scoring (+6/+1.5/0), and step-by-step solutions. No signup, runs in your browser."
     },
     {
       "name": "ANOVA Calculator",

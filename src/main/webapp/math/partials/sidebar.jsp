@@ -149,6 +149,19 @@
         </div>
     </div>
 
+    <!-- Exams -->
+    <div class="ms-group<%= collapsedCls(activeService, "amc", "aime") %>" data-group="exams">
+        <button class="ms-group-header" type="button">Exams <span class="ms-group-chevron">&#9662;</span></button>
+        <div class="ms-group-body">
+            <a href="<%= ctx %>/math/amc/" class="ms-item <%= "amc".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">AMC</span> <span class="ms-item-label">AMC Mock Test</span>
+            </a>
+            <a href="<%= ctx %>/math/amc/aime.jsp" class="ms-item <%= "aime".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">AIME</span> <span class="ms-item-label">AIME Mock Test</span>
+            </a>
+        </div>
+    </div>
+
     <!-- Trigonometry -->
     <div class="ms-group<%= collapsedCls(activeService, "trig-fn", "trig-id", "trig-eq") %>" data-group="trig">
         <button class="ms-group-header" type="button">Trigonometry <span class="ms-group-chevron">&#9662;</span></button>
