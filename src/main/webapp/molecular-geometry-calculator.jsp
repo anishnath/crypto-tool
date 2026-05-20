@@ -57,6 +57,119 @@
     <%@ include file="modern/ads/ad-init.jsp" %>
 
     <style>
+        /* ═══════════════════════════════════════════════════════
+           DESIGN TOKENS — Morphous Chanterelle
+           System: /systems/morphous-chanterelle/system.json
+           Warm amber palette. Light at :root, dark via
+           [data-theme="dark"]. Legacy aliases (--primary,
+           --bg-primary, --text-primary, etc.) keep design-system.css
+           rules working without per-rule edits.
+           ═══════════════════════════════════════════════════════ */
+        :root {
+            /* Chanterelle — light */
+            --background: oklch(0.979 0.017 76.1);
+            --foreground: oklch(0.197 0.014 61.7);
+            --card: oklch(0.937 0.072 87.3);
+            --card-foreground: oklch(0.197 0.014 61.7);
+            --popover: oklch(0.937 0.072 87.3);
+            --popover-foreground: oklch(0.197 0.014 61.7);
+            --primary-ch: oklch(0.759 0.155 65.8);
+            --primary-foreground: oklch(0.979 0.017 76.1);
+            --secondary-ch: oklch(0.954 0.049 85.2);
+            --secondary-foreground: oklch(0.254 0.015 62.7);
+            --muted: oklch(0.948 0.057 86.1);
+            --muted-foreground: oklch(0.254 0.015 62.7);
+            --accent: oklch(0.860 0.127 77.7);
+            --accent-foreground: oklch(0.197 0.014 61.7);
+            --destructive: oklch(0.759 0.155 65.8);
+            --border-ch: oklch(0.786 0.067 80.2);
+            --input: oklch(0.786 0.067 80.2);
+            --ring: oklch(0.598 0.088 81.5);
+            --chart-1: oklch(0.759 0.155 65.8);
+            --chart-2: oklch(0.598 0.088 81.5);
+            --chart-3: oklch(0.860 0.127 77.7);
+            --chart-4: oklch(0.608 0.103 130.0);
+            --chart-5: oklch(0.254 0.015 62.7);
+            --sidebar: oklch(0.951 0.054 86.2);
+            --sidebar-foreground: oklch(0.197 0.014 61.7);
+            --sidebar-primary: oklch(0.759 0.155 65.8);
+            --sidebar-primary-foreground: oklch(0.979 0.017 76.1);
+            --sidebar-accent: oklch(0.915 0.083 84.3);
+            --sidebar-accent-foreground: oklch(0.759 0.155 65.8);
+            --sidebar-border: oklch(0.786 0.067 80.2);
+            --sidebar-ring: oklch(0.598 0.088 81.5);
+            --radius: 0.5rem;
+
+            /* Legacy aliases — what design-system.css + this tool expect. */
+            --primary:        var(--primary-ch);
+            --primary-dark:   oklch(0.598 0.088 81.5);
+            --primary-light:  oklch(0.860 0.127 77.7);
+            --bg-primary:     var(--background);
+            --bg-secondary:   var(--card);
+            --bg-tertiary:    var(--secondary-ch);
+            --bg-hover:       var(--card);
+            --text-primary:   var(--foreground);
+            --text-secondary: oklch(0.372 0.020 62.7);
+            --text-muted:     oklch(0.520 0.025 62.7);
+            --text-inverse:   var(--primary-foreground);
+            --border:         var(--border-ch);
+            --border-light:   oklch(0.886 0.040 80.2);
+            --border-dark:    oklch(0.686 0.062 80.2);
+        }
+
+        [data-theme="dark"] {
+            /* Chanterelle — dark */
+            --background: oklch(0.197 0.014 61.7);
+            --foreground: oklch(0.979 0.017 76.1);
+            --card: oklch(0.236 0.015 67.0);
+            --card-foreground: oklch(0.979 0.017 76.1);
+            --popover: oklch(0.236 0.015 67.0);
+            --popover-foreground: oklch(0.979 0.017 76.1);
+            --primary-ch: oklch(0.598 0.088 81.5);
+            --primary-foreground: oklch(0.197 0.014 61.7);
+            --secondary-ch: oklch(0.312 0.028 64.2);
+            --secondary-foreground: oklch(0.979 0.017 76.1);
+            --muted: oklch(0.312 0.028 64.2);
+            --muted-foreground: oklch(0.770 0.036 64.4);
+            --accent: oklch(0.860 0.127 77.7);
+            --accent-foreground: oklch(0.197 0.014 61.7);
+            --destructive: oklch(0.759 0.155 65.8);
+            --border-ch: oklch(1 0 0 / 12%);
+            --input: oklch(1 0 0 / 16%);
+            --ring: oklch(0.598 0.088 81.5);
+            --chart-1: oklch(0.598 0.088 81.5);
+            --chart-2: oklch(0.759 0.155 65.8);
+            --chart-3: oklch(0.860 0.127 77.7);
+            --chart-4: oklch(0.608 0.103 130.0);
+            --chart-5: oklch(0.497 0.064 61.2);
+            --sidebar: oklch(0.223 0.013 61.9);
+            --sidebar-foreground: oklch(0.979 0.017 76.1);
+            --sidebar-primary: oklch(0.598 0.088 81.5);
+            --sidebar-primary-foreground: oklch(0.197 0.014 61.7);
+            --sidebar-accent: oklch(0.312 0.028 64.2);
+            --sidebar-accent-foreground: oklch(0.979 0.017 76.1);
+            --sidebar-border: oklch(1 0 0 / 12%);
+            --sidebar-ring: oklch(0.598 0.088 81.5);
+
+            /* Legacy aliases — dark variants */
+            --primary:        var(--primary-ch);
+            --primary-dark:   oklch(0.497 0.064 61.2);
+            --primary-light:  oklch(0.759 0.155 65.8);
+            --bg-primary:     var(--background);
+            --bg-secondary:   var(--card);
+            --bg-tertiary:    var(--secondary-ch);
+            --bg-hover:       var(--card);
+            --text-primary:   var(--foreground);
+            --text-secondary: var(--muted-foreground);
+            --text-muted:     oklch(0.620 0.030 64.4);
+            --text-inverse:   var(--primary-foreground);
+            --border:         var(--border-ch);
+            --border-light:   oklch(1 0 0 / 16%);
+            --border-dark:    oklch(1 0 0 / 24%);
+        }
+
+        /* Page-specific brand overrides — make all brand surfaces use
+           the Chanterelle MG palette. */
         .tool-action-btn { background: var(--mg-gradient) !important; }
         .tool-badge { background: var(--mg-light); color: var(--mg-tool); }
     </style>
@@ -288,8 +401,8 @@
 <!-- Molecular Structure Tools -->
 <div style="max-width:1200px;margin:1.5rem auto;padding:0 1rem;display:flex;gap:10px;flex-wrap:wrap;">
   <span style="font-size:0.8rem;color:var(--text-secondary,#64748b);align-self:center;font-weight:600;">Also try &rarr;</span>
-  <a href="<%=request.getContextPath()%>/chemistry/molecule-draw.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,#f1f5f9);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,#1e293b);transition:all 0.2s;" onmouseover="this.style.borderColor='#10b981';this.style.boxShadow='0 2px 8px rgba(16,185,129,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x270D;</span> Molecule Draw <span style="font-size:0.6rem;font-weight:700;background:#d946ef;color:#fff;padding:1px 5px;border-radius:3px;">NEW</span></a>
-  <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,#f1f5f9);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,#1e293b);transition:all 0.2s;" onmouseover="this.style.borderColor='#2563eb';this.style.boxShadow='0 2px 8px rgba(37,99,235,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x1F517;</span> Lewis Structure Generator</a>
+  <a href="<%=request.getContextPath()%>/chemistry/molecule-draw.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,oklch(0.954 0.049 85.2));border:1px solid var(--border-color,oklch(0.786 0.067 80.2));border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,oklch(0.197 0.014 61.7));transition:all 0.2s;" onmouseover="this.style.borderColor='oklch(0.860 0.127 77.7)';this.style.boxShadow='0 2px 8px oklch(0.860 0.127 77.7 / 0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,oklch(0.860 0.127 77.7),oklch(0.860 0.127 77.7));color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x270D;</span> Molecule Draw <span style="font-size:0.6rem;font-weight:700;background:oklch(0.759 0.155 65.8);color:#fff;padding:1px 5px;border-radius:3px;">NEW</span></a>
+  <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,oklch(0.954 0.049 85.2));border:1px solid var(--border-color,oklch(0.786 0.067 80.2));border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,oklch(0.197 0.014 61.7));transition:all 0.2s;" onmouseover="this.style.borderColor='#2563eb';this.style.boxShadow='0 2px 8px rgba(37,99,235,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x1F517;</span> Lewis Structure Generator</a>
 </div>
 
 <!-- Related Tools -->
@@ -607,7 +720,7 @@ H&mdash;O&mdash;H</div>
             <span style="font-size:1.25rem;color:var(--text-muted);">&gt;</span>
             <span style="padding:0.375rem 0.75rem;background:#d97706;color:#fff;border-radius:0.375rem;font-size:0.8125rem;font-weight:600;">LP&ndash;BP</span>
             <span style="font-size:1.25rem;color:var(--text-muted);">&gt;</span>
-            <span style="padding:0.375rem 0.75rem;background:#059669;color:#fff;border-radius:0.375rem;font-size:0.8125rem;font-weight:600;">BP&ndash;BP</span>
+            <span style="padding:0.375rem 0.75rem;background:oklch(0.759 0.155 65.8);color:#fff;border-radius:0.375rem;font-size:0.8125rem;font-weight:600;">BP&ndash;BP</span>
             <span style="font-size:0.8125rem;color:var(--text-secondary);margin-left:0.5rem;">(strongest &rarr; weakest)</span>
         </div>
 
@@ -637,8 +750,8 @@ H&mdash;O&mdash;H</div>
         </p>
 
         <div class="mg-geom-grid">
-            <div class="mg-edu-card mg-anim mg-anim-d1" style="border-left:3px solid #059669;">
-                <h4><span style="color:#059669;">&#9679;</span> Linear (AX&#8322;)</h4>
+            <div class="mg-edu-card mg-anim mg-anim-d1" style="border-left:3px solid oklch(0.759 0.155 65.8);">
+                <h4><span style="color:oklch(0.759 0.155 65.8);">&#9679;</span> Linear (AX&#8322;)</h4>
                 <p>180&deg; &bull; sp &bull; CO&#8322;, BeCl&#8322;, HCN</p>
             </div>
             <div class="mg-edu-card mg-anim mg-anim-d2" style="border-left:3px solid #2563eb;">
@@ -729,7 +842,7 @@ H&mdash;O&mdash;H</div>
         <h3 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:1.25rem 0 0.5rem;">Quick Polarity Rules</h3>
         <div class="mg-anim mg-anim-d2" style="display:grid;gap:0.5rem;">
             <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.625rem 0.75rem;background:var(--bg-secondary);border-radius:0.5rem;">
-                <span style="background:#059669;color:#fff;border-radius:50%;width:1.5rem;height:1.5rem;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;">1</span>
+                <span style="background:oklch(0.759 0.155 65.8);color:#fff;border-radius:50%;width:1.5rem;height:1.5rem;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;">1</span>
                 <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.5;">No lone pairs on central atom + all identical terminal atoms = <strong>nonpolar</strong> (e.g., CH&#8324;, BF&#8323;, SF&#8326;)</p>
             </div>
             <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.625rem 0.75rem;background:var(--bg-secondary);border-radius:0.5rem;">
@@ -760,7 +873,7 @@ H&mdash;O&mdash;H</div>
                 <h4>Polarity &amp; Solubility</h4>
                 <p>CO&#8322; is linear and nonpolar (dissolves in oil), while H&#8322;O is bent and highly polar (universal solvent). Same atoms, different geometry, different properties.</p>
             </div>
-            <div class="mg-edu-card mg-anim mg-anim-d3" style="border-left:3px solid #059669;">
+            <div class="mg-edu-card mg-anim mg-anim-d3" style="border-left:3px solid oklch(0.759 0.155 65.8);">
                 <h4>Material Science</h4>
                 <p>Silicon&rsquo;s tetrahedral bonding (sp&sup3;) creates the diamond cubic crystal structure that makes semiconductor chips possible.</p>
             </div>
@@ -841,7 +954,7 @@ H&mdash;O&mdash;H</div>
         </h3>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
             <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#059669,#10b981);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;color:#fff;">&#9883;</div>
+                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,oklch(0.759 0.155 65.8),oklch(0.860 0.127 77.7));border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;color:#fff;">&#9883;</div>
                 <div>
                     <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Lewis Structure Generator</h4>
                     <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Draw Lewis structures with VSEPR shapes</p>
@@ -878,8 +991,8 @@ H&mdash;O&mdash;H</div>
         <h2 style="font-size:1.125rem;margin-bottom:0.75rem;">Practice NCERT Problems</h2>
         <p style="color:var(--text-secondary);margin-bottom:1rem;">Apply your molecular geometry knowledge to NCERT chemistry and physics problems:</p>
         <ul style="list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:0.75rem;">
-            <li><a href="exams/books/ncert/class-11/physics-part-1/index.jsp" style="display:inline-block;padding:0.5rem 1rem;background:var(--bg-secondary,#f1f5f9);border-radius:0.5rem;color:var(--text-primary);text-decoration:none;font-size:0.875rem;border:1px solid var(--border,#e2e8f0);">Class 11 Physics Part 1</a></li>
-            <li><a href="exams/books/ncert/class-12/physics-part-1/index.jsp" style="display:inline-block;padding:0.5rem 1rem;background:var(--bg-secondary,#f1f5f9);border-radius:0.5rem;color:var(--text-primary);text-decoration:none;font-size:0.875rem;border:1px solid var(--border,#e2e8f0);">Class 12 Physics Part 1</a></li>
+            <li><a href="exams/books/ncert/class-11/physics-part-1/index.jsp" style="display:inline-block;padding:0.5rem 1rem;background:var(--bg-secondary,oklch(0.954 0.049 85.2));border-radius:0.5rem;color:var(--text-primary);text-decoration:none;font-size:0.875rem;border:1px solid var(--border,oklch(0.786 0.067 80.2));">Class 11 Physics Part 1</a></li>
+            <li><a href="exams/books/ncert/class-12/physics-part-1/index.jsp" style="display:inline-block;padding:0.5rem 1rem;background:var(--bg-secondary,oklch(0.954 0.049 85.2));border-radius:0.5rem;color:var(--text-primary);text-decoration:none;font-size:0.875rem;border:1px solid var(--border,oklch(0.786 0.067 80.2));">Class 12 Physics Part 1</a></li>
         </ul>
     </div>
 </section>

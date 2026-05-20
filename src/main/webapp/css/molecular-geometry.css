@@ -1,13 +1,18 @@
-/* Molecular Geometry Calculator - Component Styles */
+/* Molecular Geometry Calculator - Component Styles
+   Theme: Morphous Chanterelle (warm amber/yellow palette) */
 
 :root {
-    --mg-tool: #059669;
-    --mg-tool-dark: #047857;
-    --mg-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    --mg-light: #ecfdf5;
+    /* Tool-specific brand — Chanterelle primary + ring */
+    --mg-tool:       oklch(0.759 0.155 65.8);                                 /* warm amber */
+    --mg-tool-dark:  oklch(0.598 0.088 81.5);                                 /* muted yellow-tan */
+    --mg-gradient:   linear-gradient(135deg, oklch(0.759 0.155 65.8) 0%, oklch(0.860 0.127 77.7) 100%);
+    --mg-light:      oklch(0.860 0.127 77.7 / 0.18);                          /* soft golden tint */
 }
 [data-theme="dark"] {
-    --mg-light: rgba(5, 150, 105, 0.15);
+    --mg-tool:       oklch(0.598 0.088 81.5);
+    --mg-tool-dark:  oklch(0.497 0.064 61.2);
+    --mg-gradient:   linear-gradient(135deg, oklch(0.598 0.088 81.5) 0%, oklch(0.860 0.127 77.7) 100%);
+    --mg-light:      oklch(0.598 0.088 81.5 / 0.18);
 }
 
 /* Narrower left column, wider center (3D viewer) — scoped to mg-tool-page only */
@@ -99,7 +104,7 @@
 .mg-input:focus {
     outline: none;
     border-color: var(--mg-tool);
-    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+    box-shadow: 0 0 0 2px oklch(0.598 0.088 81.5 / 0.10);
 }
 .mg-formula-input {
     text-align: left;
@@ -535,9 +540,9 @@
 }
 .mg-callout-icon { font-size: 1.25rem; flex-shrink: 0; }
 .mg-callout-text { font-size: 0.8125rem; line-height: 1.6; color: var(--text-secondary); }
-.mg-callout-insight { background: #ecfdf5; border-left: 3px solid #059669; }
+.mg-callout-insight { background: oklch(0.860 0.127 77.7 / 0.18); border-left: 3px solid oklch(0.759 0.155 65.8); }
 .mg-callout-tip { background: #fffbeb; border-left: 3px solid #d97706; }
-[data-theme="dark"] .mg-callout-insight { background: rgba(5, 150, 105, 0.1); }
+[data-theme="dark"] .mg-callout-insight { background: oklch(0.598 0.088 81.5 / 0.10); }
 [data-theme="dark"] .mg-callout-tip { background: rgba(217, 119, 6, 0.1); }
 
 /* ===== Notation Visual ===== */
@@ -568,7 +573,7 @@
     letter-spacing: 0.05em;
     margin-top: 0.25rem;
 }
-.mg-c-a { color: #059669; }
+.mg-c-a { color: oklch(0.759 0.155 65.8); }
 .mg-c-x { color: #2563eb; }
 .mg-c-e { color: #dc2626; }
 .mg-c-eq { color: var(--text-muted); }
@@ -630,7 +635,7 @@
     top: 0.5rem;
     bottom: 0.5rem;
     width: 2px;
-    background: linear-gradient(to bottom, var(--mg-tool) 0%, rgba(5,150,105,0.15) 100%);
+    background: linear-gradient(to bottom, var(--mg-tool) 0%, oklch(0.598 0.088 81.5 / 0.18) 100%);
 }
 .mg-process-step {
     position: relative;
@@ -679,14 +684,14 @@
 .mg-vstep {
     display: flex;
     gap: 0.75rem;
-    background: var(--bg-secondary, #f8fafc);
+    background: var(--bg-secondary, oklch(0.979 0.017 76.1));
     border-radius: 0.75rem;
     padding: 1rem;
-    border: 1px solid var(--border, #e2e8f0);
+    border: 1px solid var(--border, oklch(0.786 0.067 80.2));
     transition: box-shadow 0.3s;
 }
 .mg-vstep:hover {
-    box-shadow: 0 2px 12px rgba(5,150,105,0.1);
+    box-shadow: 0 2px 12px oklch(0.598 0.088 81.5 / 0.10);
 }
 .mg-vstep-num {
     width: 2rem;
@@ -718,7 +723,7 @@
 /* Step diagram area */
 .mg-vstep-diagram {
     background: var(--bg-primary, #fff);
-    border: 1px solid var(--border, #e2e8f0);
+    border: 1px solid var(--border, oklch(0.786 0.067 80.2));
     border-radius: 0.5rem;
     padding: 0.75rem;
     text-align: center;
@@ -753,7 +758,7 @@
     width: 2.25rem;
     height: 2.25rem;
     font-size: 1rem;
-    box-shadow: 0 0 0 3px rgba(5,150,105,0.2);
+    box-shadow: 0 0 0 3px oklch(0.759 0.155 65.8 / 0.20);
 }
 .mg-atom-h {
     background: #dbeafe;
@@ -890,7 +895,7 @@
 .mg-shape-right { grid-column: 5; grid-row: 5; background: #dbeafe; color: #2563eb; }
 .mg-shape-line {
     position: absolute;
-    background: var(--border, #cbd5e1);
+    background: var(--border, oklch(0.770 0.036 64.4));
     z-index: 1;
 }
 .mg-shape-line-tl { width: 2px; height: 2.5rem; top: 1.25rem; left: 3.75rem; transform: rotate(20deg); transform-origin: bottom center; }
@@ -1111,12 +1116,12 @@
 }
 .mg-compare-electron h4 { color: #2563eb; }
 .mg-compare-molecular {
-    background: rgba(5,150,105,0.08);
-    border: 1.5px solid rgba(5,150,105,0.2);
+    background: oklch(0.759 0.155 65.8 / 0.08);
+    border: 1.5px solid oklch(0.759 0.155 65.8 / 0.20);
 }
-.mg-compare-molecular h4 { color: #059669; }
+.mg-compare-molecular h4 { color: oklch(0.759 0.155 65.8); }
 [data-theme="dark"] .mg-compare-electron { background: rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.3); }
-[data-theme="dark"] .mg-compare-molecular { background: rgba(5,150,105,0.12); border-color: rgba(5,150,105,0.3); }
+[data-theme="dark"] .mg-compare-molecular { background: oklch(0.759 0.155 65.8 / 0.12); border-color: oklch(0.759 0.155 65.8 / 0.30); }
 
 /* ===== Angle Compression Visual ===== */
 .mg-angle-bar {
@@ -1153,7 +1158,7 @@
     color: #fff;
     white-space: nowrap;
 }
-.mg-angle-fill-ideal { background: linear-gradient(90deg, #059669, #10b981); }
+.mg-angle-fill-ideal { background: linear-gradient(90deg, oklch(0.759 0.155 65.8), oklch(0.860 0.127 77.7)); }
 .mg-angle-fill-lp1 { background: linear-gradient(90deg, #d97706, #f59e0b); }
 .mg-angle-fill-lp2 { background: linear-gradient(90deg, #dc2626, #ef4444); }
 .mg-angle-val {
@@ -1193,16 +1198,16 @@
     padding: 0.5rem 0;
 }
 .mg-polar-nonpolar {
-    background: rgba(5,150,105,0.08);
-    border: 1.5px solid rgba(5,150,105,0.2);
+    background: oklch(0.759 0.155 65.8 / 0.08);
+    border: 1.5px solid oklch(0.759 0.155 65.8 / 0.20);
 }
-.mg-polar-nonpolar h4 { color: #059669; }
+.mg-polar-nonpolar h4 { color: oklch(0.759 0.155 65.8); }
 .mg-polar-polar {
     background: rgba(37,99,235,0.08);
     border: 1.5px solid rgba(37,99,235,0.2);
 }
 .mg-polar-polar h4 { color: #2563eb; }
-[data-theme="dark"] .mg-polar-nonpolar { background: rgba(5,150,105,0.12); border-color: rgba(5,150,105,0.3); }
+[data-theme="dark"] .mg-polar-nonpolar { background: oklch(0.759 0.155 65.8 / 0.12); border-color: oklch(0.759 0.155 65.8 / 0.30); }
 [data-theme="dark"] .mg-polar-polar { background: rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.3); }
 
 /* ===== Section Numbering ===== */
@@ -1272,7 +1277,7 @@
 .mg-compare-input:focus {
     outline: none;
     border-color: var(--mg-tool);
-    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+    box-shadow: 0 0 0 2px oklch(0.598 0.088 81.5 / 0.10);
 }
 .mg-compare-go-btn {
     padding: 0.5rem 0.75rem;
