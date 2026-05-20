@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#f1eef9"/>
+    </linearGradient>
+    <radialGradient id="accentGlow" cx="0.3" cy="0.5" r="0.45">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.18"/>
+      <stop offset="55%" stop-color="#6366f1" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.05"/>
+    </pattern>
+    <linearGradient id="timerGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4338ca"/>
+    </linearGradient>
+    <linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ─── Left composition: timer ring + scorecard ─── -->
+  <g transform="translate(310 315)">
+    <!-- outer dashed orbit -->
+    <circle r="220" fill="none" stroke="#6366f1" stroke-opacity="0.16" stroke-width="1.5" stroke-dasharray="4 8"/>
+
+    <!-- big timer ring -->
+    <circle r="160" fill="#fefdfb" stroke="#e5e3f4" stroke-width="2"/>
+    <!-- partial-fill arc showing time elapsed (~57% — visually engaging) -->
+    <path d="M 0 -160 A 160 160 0 1 1 -149.4 57.3"
+          fill="none" stroke="url(#timerGrad)" stroke-width="20" stroke-linecap="round"/>
+    <!-- inner ring -->
+    <circle r="128" fill="none" stroke="#e5e3f4" stroke-width="1.5" stroke-dasharray="2 6"/>
+
+    <!-- big "75:00" -->
+    <g font-family="'JetBrains Mono','Roboto Mono','Courier New',monospace" text-anchor="middle">
+      <text y="-8" font-size="64" font-weight="700" fill="#4338ca" letter-spacing="-2">75:00</text>
+      <text y="34" font-size="20" font-weight="500" fill="#6b6280" letter-spacing="4">LIVE TIMER</text>
+    </g>
+
+    <!-- 5 MCQ choice bubbles, semicircle below the timer -->
+    <g transform="translate(0 200)">
+      <g>
+        <circle cx="-128" cy="0" r="22" fill="#fefdfb" stroke="#cdcaf2" stroke-width="2"/>
+        <text x="-128" y="6" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="18" font-weight="700" fill="#6b6280">A</text>
+      </g>
+      <g>
+        <circle cx="-64" cy="0" r="22" fill="#fefdfb" stroke="#cdcaf2" stroke-width="2"/>
+        <text x="-64" y="6" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="18" font-weight="700" fill="#6b6280">B</text>
+      </g>
+      <g>
+        <circle cx="0" cy="0" r="22" fill="url(#timerGrad)" stroke="#4338ca" stroke-width="2"/>
+        <text x="0" y="6" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="18" font-weight="700" fill="#fefdfb">C</text>
+      </g>
+      <g>
+        <circle cx="64" cy="0" r="22" fill="#fefdfb" stroke="#cdcaf2" stroke-width="2"/>
+        <text x="64" y="6" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="18" font-weight="700" fill="#6b6280">D</text>
+      </g>
+      <g>
+        <circle cx="128" cy="0" r="22" fill="#fefdfb" stroke="#cdcaf2" stroke-width="2"/>
+        <text x="128" y="6" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="18" font-weight="700" fill="#6b6280">E</text>
+      </g>
+    </g>
+
+    <!-- accent dots -->
+    <circle cx="180" cy="-180" r="6" fill="#a78bfa"/>
+    <circle cx="-220" cy="40" r="5" fill="#c4b5fd"/>
+    <circle cx="210" cy="170" r="4" fill="#a78bfa" fill-opacity="0.7"/>
+  </g>
+
+  <!-- ─── Right text composition ─── -->
+  <g transform="translate(680 130)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <!-- accent bar -->
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#6366f1"/>
+
+    <!-- eyebrow -->
+    <text x="0" y="36" font-size="20" font-weight="600" fill="#6366f1" letter-spacing="3">8GWIFI · MATH</text>
+
+    <!-- title -->
+    <text x="0" y="118" font-size="78" font-weight="700" fill="#1c1917"
+          font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">AMC 10 / 12</text>
+    <text x="0" y="194" font-size="78" font-weight="700" fill="#1c1917"
+          font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">Mock Test.</text>
+
+    <!-- description -->
+    <text x="0" y="252" font-size="22" fill="#44403c" font-weight="400">25 problems · 75-minute timer · official scoring</text>
+    <text x="0" y="284" font-size="22" fill="#44403c" font-weight="400">Real past papers · Step-by-step solutions · Free</text>
+
+    <!-- chip row -->
+    <g transform="translate(0 322)">
+      <g>
+        <rect x="0" y="0" width="120" height="36" rx="18" fill="#6366f1" fill-opacity="0.1" stroke="#6366f1" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="60" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#4338ca">MCQ A–E</text>
+      </g>
+      <g transform="translate(132 0)">
+        <rect x="0" y="0" width="160" height="36" rx="18" fill="#6366f1" fill-opacity="0.1" stroke="#6366f1" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="80" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#4338ca">+6 / +1.5 / 0</text>
+      </g>
+      <g transform="translate(304 0)">
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#6366f1" fill-opacity="0.1" stroke="#6366f1" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="74" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#4338ca">SOLUTIONS</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- bottom-right brand mark -->
+  <g transform="translate(1140 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace">
+    <text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org/math/amc</text>
+  </g>
+</svg>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#eee9f7"/>
+    </linearGradient>
+    <radialGradient id="accentGlow" cx="0.32" cy="0.5" r="0.45">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.20"/>
+      <stop offset="55%" stop-color="#7c3aed" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.05"/>
+    </pattern>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#5b21b6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ─── Left composition: 3-hour timer + boxed integer answer ─── -->
+  <g transform="translate(310 315)">
+    <!-- outer dashed orbit -->
+    <circle r="240" fill="none" stroke="#7c3aed" stroke-opacity="0.16" stroke-width="1.5" stroke-dasharray="4 8"/>
+
+    <!-- big timer ring -->
+    <circle r="170" fill="#fefdfb" stroke="#e3dcf0" stroke-width="2"/>
+    <!-- partial-fill arc — ~33% to suggest "fresh, lots of time left" -->
+    <path d="M 0 -170 A 170 170 0 0 1 147.2 85"
+          fill="none" stroke="url(#ringGrad)" stroke-width="22" stroke-linecap="round"/>
+    <!-- inner ring -->
+    <circle r="135" fill="none" stroke="#e3dcf0" stroke-width="1.5" stroke-dasharray="2 6"/>
+
+    <!-- big "3:00:00" -->
+    <g font-family="'JetBrains Mono','Roboto Mono','Courier New',monospace" text-anchor="middle">
+      <text y="-6" font-size="62" font-weight="700" fill="#5b21b6" letter-spacing="-2">3:00:00</text>
+      <text y="34" font-size="20" font-weight="500" fill="#6b5b80" letter-spacing="4">LIVE TIMER</text>
+    </g>
+
+    <!-- Boxed integer answer (AIME-style \boxed{007}) below the timer -->
+    <g transform="translate(0 220)">
+      <!-- LaTeX-style \boxed{} frame -->
+      <rect x="-110" y="-32" width="220" height="64" rx="6"
+            fill="#fefdfb" stroke="#7c3aed" stroke-width="3"/>
+      <text x="0" y="16" text-anchor="middle"
+            font-family="'JetBrains Mono','Roboto Mono','Courier New',monospace"
+            font-size="40" font-weight="700" fill="#5b21b6" letter-spacing="6">204</text>
+      <!-- subtle label -->
+      <text x="0" y="55" text-anchor="middle"
+            font-family="'Inter',sans-serif" font-size="14" font-weight="500"
+            fill="#6b5b80" letter-spacing="3">INTEGER · 0–999</text>
+    </g>
+
+    <!-- accent dots -->
+    <circle cx="200" cy="-180" r="6" fill="#a78bfa"/>
+    <circle cx="-230" cy="50" r="5" fill="#c4b5fd"/>
+    <circle cx="220" cy="180" r="4" fill="#a78bfa" fill-opacity="0.7"/>
+  </g>
+
+  <!-- ─── Right text composition ─── -->
+  <g transform="translate(680 130)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <!-- accent bar -->
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#7c3aed"/>
+
+    <!-- eyebrow -->
+    <text x="0" y="36" font-size="20" font-weight="600" fill="#7c3aed" letter-spacing="3">8GWIFI · MATH</text>
+
+    <!-- title -->
+    <text x="0" y="118" font-size="78" font-weight="700" fill="#1c1917"
+          font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">AIME</text>
+    <text x="0" y="194" font-size="78" font-weight="700" fill="#1c1917"
+          font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">Mock Test.</text>
+
+    <!-- description -->
+    <text x="0" y="252" font-size="22" fill="#44403c" font-weight="400">15 free-response problems · 3-hour timer</text>
+    <text x="0" y="284" font-size="22" fill="#44403c" font-weight="400">Integer answers 0–999 · Real past papers · Free</text>
+
+    <!-- chip row -->
+    <g transform="translate(0 322)">
+      <g>
+        <rect x="0" y="0" width="150" height="36" rx="18" fill="#7c3aed" fill-opacity="0.1" stroke="#7c3aed" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="75" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#5b21b6">INTEGER 0–999</text>
+      </g>
+      <g transform="translate(162 0)">
+        <rect x="0" y="0" width="156" height="36" rx="18" fill="#7c3aed" fill-opacity="0.1" stroke="#7c3aed" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="78" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#5b21b6">OLYMPIAD PREP</text>
+      </g>
+      <g transform="translate(330 0)">
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#7c3aed" fill-opacity="0.1" stroke="#7c3aed" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="74" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#5b21b6">SOLUTIONS</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- bottom-right brand mark -->
+  <g transform="translate(1140 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace">
+    <text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org/math/amc/aime</text>
+  </g>
+</svg>
