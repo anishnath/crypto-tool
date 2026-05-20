@@ -24,55 +24,185 @@
         /* Reset */
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#fff}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:oklch(0.183 0.031 263.4);background:#fff}
         *:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
-        /* Design tokens */
+        /* ═══════════════════════════════════════════════════════
+           DESIGN TOKENS — Morphous Indigo Milkcap
+           System: /systems/morphous-indigo-milkcap/system.json
+           Light defaults at :root, dark via [data-theme="dark"]
+           AND @media(prefers-color-scheme:dark) for system pref.
+           Legacy aliases (--primary, --bg-primary, --tool-primary…)
+           keep existing rules working without per-rule rewrites.
+           ═══════════════════════════════════════════════════════ */
         :root,:root[data-theme="light"]{
-            --primary:#6366f1;--primary-dark:#4f46e5;--primary-light:#818cf8;--primary-50:#eef2ff;--primary-100:#e0e7ff;
-            --bg-primary:#fff;--bg-secondary:#f8fafc;--bg-tertiary:#f1f5f9;--bg-hover:#f8fafc;
-            --text-primary:#0f172a;--text-secondary:#475569;--text-muted:#94a3b8;--text-inverse:#fff;
-            --border:#e2e8f0;--border-light:#f1f5f9;--border-dark:#cbd5e1;
-            --success:#10b981;--warning:#f59e0b;--error:#ef4444;--info:#3b82f6;
+            /* Indigo Milkcap — light */
+            --background: oklch(0.971 0.007 247.9);
+            --foreground: oklch(0.183 0.031 263.4);
+            --card: oklch(0.981 0.005 258.3);
+            --card-foreground: oklch(0.183 0.031 263.4);
+            --popover: oklch(0.981 0.005 258.3);
+            --popover-foreground: oklch(0.183 0.031 263.4);
+            --primary-im: oklch(0.381 0.146 264.1);
+            --primary-foreground: oklch(0.981 0.005 258.3);
+            --secondary-im: oklch(0.929 0.015 260.7);
+            --secondary-foreground: oklch(0.225 0.061 264.4);
+            --muted: oklch(0.929 0.015 260.7);
+            --muted-foreground: oklch(0.372 0.039 257.3);
+            --accent: oklch(0.581 0.229 263.9);
+            --accent-foreground: oklch(0.981 0.005 258.3);
+            --destructive: oklch(0.446 0.052 336.5);
+            --border-im: oklch(0.883 0.020 260.2);
+            --input: oklch(0.883 0.020 260.2);
+            --ring: oklch(0.581 0.229 263.9);
+            --chart-1: oklch(0.381 0.146 264.1);
+            --chart-2: oklch(0.581 0.229 263.9);
+            --chart-3: oklch(0.371 0.062 159.3);
+            --chart-4: oklch(0.732 0.089 266.9);
+            --chart-5: oklch(0.496 0.054 150.0);
+            --sidebar: oklch(0.929 0.015 260.7);
+            --sidebar-foreground: oklch(0.183 0.031 263.4);
+            --sidebar-primary: oklch(0.381 0.146 264.1);
+            --sidebar-primary-foreground: oklch(0.981 0.005 258.3);
+            --sidebar-accent: oklch(0.827 0.034 255.2);
+            --sidebar-accent-foreground: oklch(0.381 0.146 264.1);
+            --sidebar-border: oklch(0.883 0.020 260.2);
+            --sidebar-ring: oklch(0.581 0.229 263.9);
+
+            /* Legacy aliases — what existing rules expect. */
+            --primary:        var(--primary-im);
+            --primary-dark:   oklch(0.300 0.130 264.1);
+            --primary-light:  oklch(0.581 0.229 263.9);
+            --primary-50:     oklch(0.971 0.007 247.9);
+            --primary-100:    oklch(0.929 0.015 260.7);
+            --bg-primary:     var(--background);
+            --bg-secondary:   var(--card);
+            --bg-tertiary:    var(--secondary-im);
+            --bg-hover:       var(--card);
+            --text-primary:   var(--foreground);
+            --text-secondary: oklch(0.372 0.039 257.3);
+            --text-muted:     oklch(0.520 0.030 257.3);
+            --text-inverse:   var(--primary-foreground);
+            --border:         var(--border-im);
+            --border-light:   var(--secondary-im);
+            --border-dark:    oklch(0.770 0.020 260.2);
+            --success:        oklch(0.371 0.062 159.3);
+            --warning:        oklch(0.780 0.155 80);
+            --error:          var(--destructive);
+            --info:           var(--accent);
+
             --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
             --font-mono:'JetBrains Mono','Fira Code','SF Mono',Consolas,monospace;
             --text-xs:0.75rem;--text-sm:0.875rem;--text-base:1rem;--text-lg:1.125rem;--text-xl:1.25rem;--text-2xl:1.5rem;
             --leading-tight:1.25;--leading-normal:1.5;
             --font-normal:400;--font-medium:500;--font-semibold:600;--font-bold:700;
             --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;
-            --shadow-sm:0 1px 2px 0 rgba(0,0,0,0.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1);--shadow-lg:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1);
+            --shadow-sm:0 1px 2px 0 oklch(0.183 0.031 263.4 / 0.05);
+            --shadow-md:0 4px 6px -1px oklch(0.183 0.031 263.4 / 0.10),0 2px 4px -2px oklch(0.183 0.031 263.4 / 0.10);
+            --shadow-lg:0 10px 15px -3px oklch(0.183 0.031 263.4 / 0.10),0 4px 6px -4px oklch(0.183 0.031 263.4 / 0.10);
+            --radius:0.5rem;
             --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;--radius-full:9999px;
             --z-dropdown:1000;--z-sticky:1020;--z-fixed:1030;--z-modal-backdrop:1040;--z-modal:1050;
             --transition-fast:150ms ease-in-out;--transition-base:200ms ease-in-out;--transition-slow:300ms ease-in-out;
             --header-height-mobile:64px;--header-height-desktop:72px;--container-max-width:1280px;
-            --tool-primary:#667eea;--tool-primary-dark:#5a67d8;--tool-gradient:linear-gradient(135deg,#667eea 0%,#5a67d8 100%);--tool-light:#f0f4ff
+            /* Tool-level brand (used in toolbar gradients, badges). */
+            --tool-primary:      oklch(0.381 0.146 264.1);
+            --tool-primary-dark: oklch(0.300 0.130 264.1);
+            --tool-gradient:     linear-gradient(135deg, oklch(0.381 0.146 264.1) 0%, oklch(0.581 0.229 263.9) 100%);
+            --tool-light:        oklch(0.581 0.229 263.9 / 0.10);
         }
         @media(prefers-color-scheme:dark){
-            :root{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--bg-hover:#1e293b;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--border-light:#475569;--border-dark:#64748b}
+            :root{
+                --bg-primary:     oklch(0.183 0.031 263.4);
+                --bg-secondary:   oklch(0.225 0.061 264.4);
+                --bg-tertiary:    oklch(0.314 0.081 264.3);
+                --bg-hover:       oklch(0.225 0.061 264.4);
+                --text-primary:   oklch(0.981 0.005 258.3);
+                --text-secondary: oklch(0.827 0.034 255.2);
+                --text-muted:     oklch(0.660 0.025 257.3);
+                --border:         oklch(1 0 0 / 12%);
+                --border-light:   oklch(1 0 0 / 16%);
+                --border-dark:    oklch(1 0 0 / 24%);
+            }
         }
-        [data-theme="dark"]{--bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-tertiary:#334155;--bg-hover:#1e293b;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-muted:#94a3b8;--border:#334155;--border-light:#475569;--border-dark:#64748b;--tool-light:rgba(99,102,241,0.15)}
+        [data-theme="dark"]{
+            /* Indigo Milkcap — dark (full token override) */
+            --background: oklch(0.183 0.031 263.4);
+            --foreground: oklch(0.981 0.005 258.3);
+            --card: oklch(0.225 0.061 264.4);
+            --card-foreground: oklch(0.981 0.005 258.3);
+            --popover: oklch(0.225 0.061 264.4);
+            --popover-foreground: oklch(0.981 0.005 258.3);
+            --primary-im: oklch(0.655 0.183 266.5);
+            --primary-foreground: oklch(0.183 0.031 263.4);
+            --secondary-im: oklch(0.260 0.040 161.8);
+            --secondary-foreground: oklch(0.981 0.005 258.3);
+            --muted: oklch(0.315 0.036 258.3);
+            --muted-foreground: oklch(0.827 0.034 255.2);
+            --accent: oklch(0.581 0.229 263.9);
+            --accent-foreground: oklch(0.981 0.005 258.3);
+            --destructive: oklch(0.446 0.052 336.5);
+            --border-im: oklch(1 0 0 / 12%);
+            --input: oklch(1 0 0 / 16%);
+            --ring: oklch(0.655 0.183 266.5);
+            --chart-1: oklch(0.655 0.183 266.5);
+            --chart-2: oklch(0.581 0.229 263.9);
+            --chart-3: oklch(0.496 0.054 150.0);
+            --chart-4: oklch(0.732 0.089 266.9);
+            --chart-5: oklch(0.775 0.035 143.9);
+            --sidebar: oklch(0.225 0.061 264.4);
+            --sidebar-foreground: oklch(0.981 0.005 258.3);
+            --sidebar-primary: oklch(0.655 0.183 266.5);
+            --sidebar-primary-foreground: oklch(0.183 0.031 263.4);
+            --sidebar-accent: oklch(0.314 0.081 264.3);
+            --sidebar-accent-foreground: oklch(0.981 0.005 258.3);
+            --sidebar-border: oklch(1 0 0 / 12%);
+            --sidebar-ring: oklch(0.655 0.183 266.5);
+
+            /* Legacy aliases — dark variants */
+            --primary:        var(--primary-im);
+            --primary-dark:   oklch(0.555 0.165 266.5);
+            --primary-light:  oklch(0.732 0.089 266.9);
+            --primary-50:     oklch(0.314 0.081 264.3);
+            --primary-100:    oklch(0.225 0.061 264.4);
+            --bg-primary:     var(--background);
+            --bg-secondary:   var(--card);
+            --bg-tertiary:    oklch(0.314 0.081 264.3);
+            --bg-hover:       oklch(0.225 0.061 264.4);
+            --text-primary:   var(--foreground);
+            --text-secondary: var(--muted-foreground);
+            --text-muted:     oklch(0.660 0.025 257.3);
+            --text-inverse:   var(--primary-foreground);
+            --border:         var(--border-im);
+            --border-light:   oklch(1 0 0 / 16%);
+            --border-dark:    oklch(1 0 0 / 24%);
+            --tool-primary:      oklch(0.655 0.183 266.5);
+            --tool-primary-dark: oklch(0.555 0.165 266.5);
+            --tool-gradient:     linear-gradient(135deg, oklch(0.655 0.183 266.5) 0%, oklch(0.581 0.229 263.9) 100%);
+            --tool-light:        oklch(0.581 0.229 263.9 / 0.15);
+        }
         [data-theme="dark"] body{background-color:var(--bg-primary);color:var(--text-primary)}
         @media(min-width:768px){:root{--header-height-mobile:72px}}
 
         /* Nav header */
-        .modern-nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-fixed,1030);background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);box-shadow:var(--shadow-sm);height:var(--header-height-desktop,72px)}
+        .modern-nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-fixed,1030);background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,oklch(0.883 0.020 260.2));box-shadow:var(--shadow-sm);height:var(--header-height-desktop,72px)}
         .nav-container{max-width:1400px;margin:0 auto;padding:0 var(--space-4,1rem);display:flex;align-items:center;justify-content:space-between;height:100%}
         .nav-logo{display:flex;align-items:center;gap:var(--space-3,0.75rem);text-decoration:none;font-weight:700;font-size:var(--text-lg,1.125rem)}
         .nav-logo img{width:32px;height:32px;border-radius:var(--radius-md,0.5rem)}
-        .nav-logo span{background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;letter-spacing:-0.02em}
-        [data-theme="dark"] .nav-logo span{background:linear-gradient(135deg,#818cf8 0%,#a78bfa 50%,#f472b6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .nav-logo span{background:linear-gradient(135deg,oklch(0.381 0.146 264.1) 0%,oklch(0.581 0.229 263.9) 50%,oklch(0.732 0.089 266.9) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;letter-spacing:-0.02em}
+        [data-theme="dark"] .nav-logo span{background:linear-gradient(135deg,oklch(0.655 0.183 266.5) 0%,oklch(0.732 0.089 266.9) 50%,oklch(0.581 0.229 263.9) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
         .nav-items{display:flex;align-items:center;gap:var(--space-6,1.5rem);list-style:none;margin:0;padding:0}
-        .nav-link{color:var(--text-secondary,#475569);text-decoration:none;font-weight:500;font-size:var(--text-base,1rem);padding:var(--space-2,0.5rem) var(--space-3,0.75rem);border-radius:var(--radius-md,0.5rem);display:flex;align-items:center;gap:var(--space-2,0.5rem)}
+        .nav-link{color:var(--text-secondary,oklch(0.372 0.039 257.3));text-decoration:none;font-weight:500;font-size:var(--text-base,1rem);padding:var(--space-2,0.5rem) var(--space-3,0.75rem);border-radius:var(--radius-md,0.5rem);display:flex;align-items:center;gap:var(--space-2,0.5rem)}
         .nav-actions{display:flex;align-items:center;gap:var(--space-3,0.75rem)}
         .btn-nav{padding:var(--space-2,0.5rem) var(--space-4,1rem);border-radius:var(--radius-md,0.5rem);font-size:var(--text-sm,0.875rem);font-weight:500;text-decoration:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:var(--space-2,0.5rem);font-family:var(--font-sans)}
-        .btn-nav-primary{background:var(--primary,#6366f1);color:#fff}
-        .btn-nav-secondary{background:var(--bg-secondary,#f8fafc);color:var(--text-secondary,#475569);border:1px solid var(--border,#e2e8f0)}
+        .btn-nav-primary{background:var(--primary,oklch(0.581 0.229 263.9));color:#fff}
+        .btn-nav-secondary{background:var(--bg-secondary,oklch(0.971 0.007 247.9));color:var(--text-secondary,oklch(0.372 0.039 257.3));border:1px solid var(--border,oklch(0.883 0.020 260.2))}
         .mobile-menu-toggle,.mobile-search-toggle{display:none;background:none;border:none;padding:var(--space-2,0.5rem);cursor:pointer;color:var(--text-primary)}
         .mobile-menu-toggle{font-size:var(--text-xl,1.25rem);width:40px;height:40px;align-items:center;justify-content:center;border-radius:var(--radius-md,0.5rem)}
         .nav-search{position:relative;flex:1;max-width:500px;margin:0 var(--space-6,1.5rem)}
-        .search-input{width:100%;padding:var(--space-2,0.5rem) var(--space-10,2.5rem) var(--space-2,0.5rem) var(--space-4,1rem);border:2px solid var(--border,#e2e8f0);border-radius:var(--radius-full,9999px);font-size:var(--text-sm,0.875rem);background:var(--bg-secondary,#f8fafc);font-family:var(--font-sans)}
-        .search-icon{position:absolute;right:var(--space-4,1rem);top:50%;transform:translateY(-50%);color:var(--text-muted,#94a3b8);pointer-events:none}
+        .search-input{width:100%;padding:var(--space-2,0.5rem) var(--space-10,2.5rem) var(--space-2,0.5rem) var(--space-4,1rem);border:2px solid var(--border,oklch(0.883 0.020 260.2));border-radius:var(--radius-full,9999px);font-size:var(--text-sm,0.875rem);background:var(--bg-secondary,oklch(0.971 0.007 247.9));font-family:var(--font-sans)}
+        .search-icon{position:absolute;right:var(--space-4,1rem);top:50%;transform:translateY(-50%);color:var(--text-muted,oklch(0.660 0.025 257.3));pointer-events:none}
         @media(max-width:991px){
             .modern-nav{height:var(--header-height-mobile,64px)}
             .nav-container{padding:0 var(--space-3,0.75rem)}
@@ -84,19 +214,19 @@
         }
 
         /* Page header + breadcrumbs */
-        .tool-page-header{background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem;margin-top:72px}
+        .tool-page-header{background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,oklch(0.883 0.020 260.2));padding:1.25rem 1.5rem;margin-top:72px}
         .tool-page-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-        .tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary,#0f172a);margin:0}
+        .tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary,oklch(0.183 0.031 263.4));margin:0}
         .tool-page-badges{display:flex;gap:0.5rem;flex-wrap:wrap}
         .tool-badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.25rem 0.625rem;font-size:0.6875rem;font-weight:500;border-radius:9999px;background:var(--tool-light);color:var(--tool-primary)}
-        .tool-breadcrumbs{font-size:0.8125rem;color:var(--text-secondary,#475569);margin-top:0.5rem}
-        .tool-breadcrumbs a{color:var(--text-secondary,#475569);text-decoration:none}
+        .tool-breadcrumbs{font-size:0.8125rem;color:var(--text-secondary,oklch(0.372 0.039 257.3));margin-top:0.5rem}
+        .tool-breadcrumbs a{color:var(--text-secondary,oklch(0.372 0.039 257.3));text-decoration:none}
 
         /* Description section */
-        .tool-description-section{background:var(--tool-light);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem}
+        .tool-description-section{background:var(--tool-light);border-bottom:1px solid var(--border,oklch(0.883 0.020 260.2));padding:1.25rem 1.5rem}
         .tool-description-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:2rem}
         .tool-description-content{flex:1}
-        .tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary,#475569)}
+        .tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary,oklch(0.372 0.039 257.3))}
         @media(max-width:767px){.tool-description-section{padding:1rem}.tool-description-content p{font-size:0.875rem}}
 
         /* Three-column grid */
@@ -108,41 +238,41 @@
         .tool-ads-column{height:fit-content}
 
         /* Card + tabs + form (above-fold) */
-        .tool-card{background:var(--bg-primary,#fff);border:1px solid var(--border,#e2e8f0);border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+        .tool-card{background:var(--bg-primary,#fff);border:1px solid var(--border,oklch(0.883 0.020 260.2));border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
         .tool-card-header{background:var(--tool-gradient);color:#fff;padding:0.875rem 1rem;font-weight:600;font-size:0.9375rem;display:flex;align-items:center;gap:0.5rem}
         .tool-card-body{padding:1rem}
-        .tool-tabs{display:flex;gap:0.25rem;padding:0.5rem;background:var(--bg-secondary,#f8fafc);border-bottom:1px solid var(--border,#e2e8f0);overflow-x:auto;-webkit-overflow-scrolling:touch}
-        .tool-tab{padding:0.5rem 0.75rem;font-size:0.75rem;font-weight:500;border:none;background:transparent;color:var(--text-secondary,#475569);cursor:pointer;border-radius:0.375rem;white-space:nowrap;transition:all .15s}
+        .tool-tabs{display:flex;gap:0.25rem;padding:0.5rem;background:var(--bg-secondary,oklch(0.971 0.007 247.9));border-bottom:1px solid var(--border,oklch(0.883 0.020 260.2));overflow-x:auto;-webkit-overflow-scrolling:touch}
+        .tool-tab{padding:0.5rem 0.75rem;font-size:0.75rem;font-weight:500;border:none;background:transparent;color:var(--text-secondary,oklch(0.372 0.039 257.3));cursor:pointer;border-radius:0.375rem;white-space:nowrap;transition:all .15s}
         .tool-tab.active{background:var(--tool-primary);color:#fff}
         .tool-form-group{margin-bottom:0.875rem}
-        .tool-form-label{display:block;font-weight:500;margin-bottom:0.375rem;color:var(--text-primary,#0f172a);font-size:0.8125rem}
-        .tool-form-hint{font-size:0.6875rem;color:var(--text-secondary,#475569);margin-top:0.25rem}
+        .tool-form-label{display:block;font-weight:500;margin-bottom:0.375rem;color:var(--text-primary,oklch(0.183 0.031 263.4));font-size:0.8125rem}
+        .tool-form-hint{font-size:0.6875rem;color:var(--text-secondary,oklch(0.372 0.039 257.3));margin-top:0.25rem}
         .tool-action-btn{width:100%;padding:0.75rem;font-weight:600;font-size:0.875rem;border:none;border-radius:0.5rem;cursor:pointer;background:var(--tool-gradient);color:#fff;margin-top:1rem;transition:opacity .15s,transform .15s}
 
         /* Dark mode (above-fold elements) */
-        [data-theme="dark"] .tool-page-header{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}
-        [data-theme="dark"] .tool-page-title{color:var(--text-primary,#f1f5f9)}
-        [data-theme="dark"] .tool-breadcrumbs,[data-theme="dark"] .tool-breadcrumbs a{color:var(--text-secondary,#94a3b8)}
+        [data-theme="dark"] .tool-page-header{background:var(--bg-secondary,oklch(0.225 0.061 264.4));border-bottom-color:var(--border,oklch(0.314 0.081 264.3))}
+        [data-theme="dark"] .tool-page-title{color:var(--text-primary,oklch(0.929 0.015 260.7))}
+        [data-theme="dark"] .tool-breadcrumbs,[data-theme="dark"] .tool-breadcrumbs a{color:var(--text-secondary,oklch(0.660 0.025 257.3))}
         [data-theme="dark"] .tool-badge{background:var(--tool-light);color:var(--tool-primary)}
-        [data-theme="dark"] .tool-description-section{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}
-        [data-theme="dark"] .tool-description-content p{color:var(--text-secondary,#cbd5e1)}
-        [data-theme="dark"] .tool-card{background:var(--bg-secondary,#1e293b);border-color:var(--border,#334155)}
-        [data-theme="dark"] .tool-tabs{background:var(--bg-tertiary,#334155);border-bottom-color:var(--border,#475569)}
-        [data-theme="dark"] .tool-tab{color:var(--text-secondary,#94a3b8)}
+        [data-theme="dark"] .tool-description-section{background:var(--bg-secondary,oklch(0.225 0.061 264.4));border-bottom-color:var(--border,oklch(0.314 0.081 264.3))}
+        [data-theme="dark"] .tool-description-content p{color:var(--text-secondary,oklch(0.827 0.034 255.2))}
+        [data-theme="dark"] .tool-card{background:var(--bg-secondary,oklch(0.225 0.061 264.4));border-color:var(--border,oklch(0.314 0.081 264.3))}
+        [data-theme="dark"] .tool-tabs{background:var(--bg-tertiary,oklch(0.314 0.081 264.3));border-bottom-color:var(--border,oklch(0.372 0.039 257.3))}
+        [data-theme="dark"] .tool-tab{color:var(--text-secondary,oklch(0.660 0.025 257.3))}
         [data-theme="dark"] .tool-tab.active{background:var(--tool-primary);color:#fff}
-        [data-theme="dark"] .tool-form-label{color:var(--text-primary,#f1f5f9)}
-        [data-theme="dark"] .tool-action-btn{box-shadow:0 4px 12px rgba(99,102,241,0.3)}
+        [data-theme="dark"] .tool-form-label{color:var(--text-primary,oklch(0.929 0.015 260.7))}
+        [data-theme="dark"] .tool-action-btn{box-shadow:0 4px 12px oklch(0.581 0.229 263.9 / 0.30)}
 
         /* FAQ */
-        .faq-item{border:1px solid var(--border,#e2e8f0);border-radius:0.5rem;margin-bottom:0.5rem;overflow:hidden}
-        .faq-question{padding:0.75rem 1rem;font-weight:600;font-size:0.875rem;color:var(--text-primary,#0f172a);background:var(--bg-secondary,#f8fafc);border:none;width:100%;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;font-family:inherit;text-align:left}
-        .faq-answer{display:none;padding:0.75rem 1rem;font-size:0.875rem;color:var(--text-secondary,#475569);line-height:1.6;border-top:1px solid var(--border,#e2e8f0)}
+        .faq-item{border:1px solid var(--border,oklch(0.883 0.020 260.2));border-radius:0.5rem;margin-bottom:0.5rem;overflow:hidden}
+        .faq-question{padding:0.75rem 1rem;font-weight:600;font-size:0.875rem;color:var(--text-primary,oklch(0.183 0.031 263.4));background:var(--bg-secondary,oklch(0.971 0.007 247.9));border:none;width:100%;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;font-family:inherit;text-align:left}
+        .faq-answer{display:none;padding:0.75rem 1rem;font-size:0.875rem;color:var(--text-secondary,oklch(0.372 0.039 257.3));line-height:1.6;border-top:1px solid var(--border,oklch(0.883 0.020 260.2))}
         .faq-item.open .faq-answer{display:block}
         .faq-item.open .faq-chevron{transform:rotate(180deg)}
         .faq-chevron{transition:transform 0.2s;flex-shrink:0}
-        [data-theme="dark"] .faq-question{background:var(--bg-tertiary,#334155);color:var(--text-primary,#f1f5f9)}
-        [data-theme="dark"] .faq-answer{color:var(--text-secondary,#cbd5e1);border-top-color:var(--border,#334155)}
-        [data-theme="dark"] .faq-item{border-color:var(--border,#334155)}
+        [data-theme="dark"] .faq-question{background:var(--bg-tertiary,oklch(0.314 0.081 264.3));color:var(--text-primary,oklch(0.929 0.015 260.7))}
+        [data-theme="dark"] .faq-answer{color:var(--text-secondary,oklch(0.827 0.034 255.2));border-top-color:var(--border,oklch(0.314 0.081 264.3))}
+        [data-theme="dark"] .faq-item{border-color:var(--border,oklch(0.314 0.081 264.3))}
 
         /* Utility */
         .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
@@ -204,8 +334,8 @@
     <style>
         /* Lewis Structure Tool - Minimal overrides on three-column-tool.css */
         :root {
-            --tool-primary: #667eea;
-            --tool-primary-dark: #5a67d8;
+            --tool-primary: oklch(0.581 0.229 263.9);
+            --tool-primary-dark: oklch(0.381 0.146 264.1);
         }
 
         /* Labels - distinct from inputs */
@@ -213,7 +343,7 @@
             display: block;
             font-weight: 600;
             font-size: 0.8125rem;
-            color: var(--text-primary, #0f172a);
+            color: var(--text-primary, oklch(0.183 0.031 263.4));
             margin-bottom: 0.375rem;
             letter-spacing: 0.01em;
         }
@@ -221,7 +351,7 @@
         /* Hint text below inputs */
         .tool-hint {
             font-size: 0.6875rem;
-            color: var(--text-secondary, #64748b);
+            color: var(--text-secondary, oklch(0.520 0.030 257.3));
             margin: 0.25rem 0 0 0;
             line-height: 1.4;
         }
@@ -230,12 +360,12 @@
         .tool-input {
             width: 100%;
             padding: 0.5rem 0.75rem;
-            border: 1.5px solid var(--border, #e2e8f0);
+            border: 1.5px solid var(--border, oklch(0.883 0.020 260.2));
             border-radius: 0.5rem;
             font-size: 0.875rem;
             font-family: 'JetBrains Mono', 'SF Mono', monospace;
             background: var(--bg-primary, #fff);
-            color: var(--text-primary, #0f172a);
+            color: var(--text-primary, oklch(0.183 0.031 263.4));
             transition: border-color 0.15s, box-shadow 0.15s;
         }
 
@@ -246,24 +376,24 @@
         }
 
         .tool-input::placeholder {
-            color: #94a3b8;
+            color: oklch(0.660 0.025 257.3);
             font-family: 'Inter', sans-serif;
             font-style: italic;
             font-size: 0.8125rem;
         }
 
         [data-theme="dark"] .tool-label {
-            color: var(--text-primary, #e2e8f0);
+            color: var(--text-primary, oklch(0.883 0.020 260.2));
         }
 
         [data-theme="dark"] .tool-hint {
-            color: var(--text-secondary, #94a3b8);
+            color: var(--text-secondary, oklch(0.660 0.025 257.3));
         }
 
         [data-theme="dark"] .tool-input {
             background: rgba(255,255,255,0.05);
             border-color: rgba(255,255,255,0.15);
-            color: var(--text-primary, #e2e8f0);
+            color: var(--text-primary, oklch(0.883 0.020 260.2));
         }
 
         [data-theme="dark"] .tool-input:focus {
@@ -272,7 +402,7 @@
         }
 
         [data-theme="dark"] .tool-input::placeholder {
-            color: #64748b;
+            color: oklch(0.520 0.030 257.3);
         }
 
         /* Form group spacing */
@@ -300,13 +430,13 @@
             display: inline-block;
             padding: 0.15rem 0.5rem;
             margin: 0.125rem;
-            background: var(--bg-secondary, #f8fafc);
-            border: 1px solid var(--border, #e2e8f0);
+            background: var(--bg-secondary, oklch(0.971 0.007 247.9));
+            border: 1px solid var(--border, oklch(0.883 0.020 260.2));
             border-radius: 0.75rem;
             cursor: pointer;
             font-size: 0.75rem;
             font-weight: 500;
-            color: var(--text-primary, #0f172a);
+            color: var(--text-primary, oklch(0.183 0.031 263.4));
             transition: background 0.15s, color 0.15s, border-color 0.15s;
             line-height: 1.4;
         }
@@ -346,15 +476,15 @@
 
         /* ── AI name → formula block ── */
         .lewis-ai-group {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(99, 102, 241, 0.06));
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            background: linear-gradient(135deg, oklch(0.655 0.183 266.5 / 0.06), oklch(0.581 0.229 263.9 / 0.06));
+            border: 1px solid oklch(0.655 0.183 266.5 / 0.20);
             border-radius: 0.5rem;
             padding: 0.75rem;
             margin-bottom: 0.875rem;
         }
         [data-theme="dark"] .lewis-ai-group {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(99, 102, 241, 0.12));
-            border-color: rgba(139, 92, 246, 0.3);
+            background: linear-gradient(135deg, oklch(0.655 0.183 266.5 / 0.12), oklch(0.581 0.229 263.9 / 0.12));
+            border-color: oklch(0.655 0.183 266.5 / 0.30);
         }
         .lewis-ai-sparkle { font-size: 1em; }
         .lewis-ai-input-row {
@@ -368,7 +498,7 @@
             font-size: 0.8125rem;
             font-weight: 600;
             color: #fff;
-            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            background: linear-gradient(135deg, oklch(0.655 0.183 266.5), oklch(0.581 0.229 263.9));
             border: none;
             border-radius: 0.375rem;
             cursor: pointer;
@@ -475,7 +605,7 @@
             align-items: center;
             justify-content: center;
             background: var(--bg-primary, #fff);
-            border: 2px solid var(--border, #e2e8f0);
+            border: 2px solid var(--border, oklch(0.883 0.020 260.2));
             border-radius: 0.5rem;
             overflow: hidden;
             margin-bottom: 1rem;
@@ -488,7 +618,7 @@
         }
 
         [data-theme="dark"] .lewis-canvas-wrapper {
-            background: #1e293b;
+            background: oklch(0.225 0.061 264.4);
             border-color: rgba(255,255,255,0.1);
         }
 
@@ -517,7 +647,7 @@
             vertical-align: baseline;
             position: relative;
             bottom: -0.2em;
-            color: var(--tool-primary-dark, #5a67d8);
+            color: var(--tool-primary-dark, oklch(0.381 0.146 264.1));
         }
 
         .lewis-molecule-header .lewis-formula sup {
@@ -525,12 +655,12 @@
             vertical-align: baseline;
             position: relative;
             top: -0.55em;
-            color: var(--text-secondary, #64748b);
+            color: var(--text-secondary, oklch(0.520 0.030 257.3));
         }
 
         .lewis-molecule-header .lewis-molecule-meta {
             font-size: 0.8rem;
-            color: var(--text-secondary, #64748b);
+            color: var(--text-secondary, oklch(0.520 0.030 257.3));
             line-height: 1.4;
         }
 
@@ -549,7 +679,7 @@
 
         .lewis-info-card {
             padding: 0.75rem 0.625rem;
-            background: var(--bg-secondary, #f8fafc);
+            background: var(--bg-secondary, oklch(0.971 0.007 247.9));
             border-radius: 0.5rem;
             border-left: 3px solid var(--tool-primary);
             text-align: center;
@@ -566,7 +696,7 @@
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.6px;
-            color: var(--text-secondary, #64748b);
+            color: var(--text-secondary, oklch(0.520 0.030 257.3));
             margin-bottom: 0.3rem;
         }
 
@@ -602,7 +732,7 @@
         .lewis-chem {
             font-family: 'JetBrains Mono', monospace;
             font-weight: 600;
-            color: var(--text-primary, #0f172a);
+            color: var(--text-primary, oklch(0.183 0.031 263.4));
             letter-spacing: 0.01em;
         }
 
@@ -619,17 +749,17 @@
             vertical-align: baseline;
             position: relative;
             top: -0.5em;
-            color: var(--text-secondary, #64748b);
+            color: var(--text-secondary, oklch(0.520 0.030 257.3));
         }
 
         [data-theme="dark"] .lewis-chem {
-            color: var(--text-primary, #e2e8f0);
+            color: var(--text-primary, oklch(0.883 0.020 260.2));
         }
 
         /* Result value block */
         .lewis-result-value {
             padding: 0.625rem 0.875rem;
-            background: var(--bg-secondary, #f8fafc);
+            background: var(--bg-secondary, oklch(0.971 0.007 247.9));
             border-radius: 0.375rem;
             border-left: 3px solid var(--tool-primary);
             font-size: 0.9375rem;
@@ -652,7 +782,7 @@
         .lewis-result-label {
             font-weight: 600;
             font-size: 0.75rem;
-            color: var(--text-secondary, #64748b);
+            color: var(--text-secondary, oklch(0.520 0.030 257.3));
             margin-bottom: 0.375rem;
             text-transform: uppercase;
             letter-spacing: 0.4px;
@@ -679,7 +809,7 @@
 
         .lewis-fc-table td {
             padding: 0.5rem 0.75rem;
-            border-bottom: 1px solid var(--border, #e2e8f0);
+            border-bottom: 1px solid var(--border, oklch(0.883 0.020 260.2));
         }
 
         .lewis-fc-table td:first-child { font-weight: 600; }
@@ -735,8 +865,8 @@
             display: flex;
             gap: 0.5rem;
             padding: 1rem 1.25rem;
-            border-top: 1px solid var(--border, #e2e8f0);
-            background: var(--bg-secondary, #f8fafc);
+            border-top: 1px solid var(--border, oklch(0.883 0.020 260.2));
+            background: var(--bg-secondary, oklch(0.971 0.007 247.9));
             flex-wrap: wrap;
         }
 
@@ -744,7 +874,7 @@
             display: none;
             gap: 0.5rem;
             padding: 0 1.25rem 1rem 1.25rem;
-            background: var(--bg-secondary, #f8fafc);
+            background: var(--bg-secondary, oklch(0.971 0.007 247.9));
             border-radius: 0 0 0.75rem 0.75rem;
             flex-wrap: wrap;
         }
@@ -772,8 +902,8 @@
             align-items: center;
             gap: 0.5rem;
             padding: 1rem 1.25rem;
-            background: var(--bg-secondary, #f8fafc);
-            border-bottom: 1px solid var(--border, #e2e8f0);
+            background: var(--bg-secondary, oklch(0.971 0.007 247.9));
+            border-bottom: 1px solid var(--border, oklch(0.883 0.020 260.2));
             border-radius: 0.75rem 0.75rem 0 0;
         }
 
@@ -781,7 +911,7 @@
             margin: 0;
             font-size: 0.95rem;
             font-weight: 600;
-            color: var(--text-primary, #0f172a);
+            color: var(--text-primary, oklch(0.183 0.031 263.4));
         }
 
         .tool-result-content {
@@ -1294,9 +1424,9 @@
 
 <!-- Molecular Structure Tools -->
 <div style="max-width:1200px;margin:1.5rem auto;padding:0 1rem;display:flex;gap:10px;flex-wrap:wrap;">
-  <span style="font-size:0.8rem;color:var(--text-secondary,#64748b);align-self:center;font-weight:600;">Also try &rarr;</span>
-  <a href="<%=request.getContextPath()%>/chemistry/molecule-draw.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,#f1f5f9);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,#1e293b);transition:all 0.2s;" onmouseover="this.style.borderColor='#10b981';this.style.boxShadow='0 2px 8px rgba(16,185,129,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x270D;</span> Molecule Draw <span style="font-size:0.6rem;font-weight:700;background:#d946ef;color:#fff;padding:1px 5px;border-radius:3px;">NEW</span></a>
-  <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,#f1f5f9);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,#1e293b);transition:all 0.2s;" onmouseover="this.style.borderColor='#4f46e5';this.style.boxShadow='0 2px 8px rgba(79,70,229,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x1F4D0;</span> 3D Molecular Geometry</a>
+  <span style="font-size:0.8rem;color:var(--text-secondary,oklch(0.520 0.030 257.3));align-self:center;font-weight:600;">Also try &rarr;</span>
+  <a href="<%=request.getContextPath()%>/chemistry/molecule-draw.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,oklch(0.929 0.015 260.7));border:1px solid var(--border-color,oklch(0.883 0.020 260.2));border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,oklch(0.225 0.061 264.4));transition:all 0.2s;" onmouseover="this.style.borderColor='#10b981';this.style.boxShadow='0 2px 8px rgba(16,185,129,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x270D;</span> Molecule Draw <span style="font-size:0.6rem;font-weight:700;background:#d946ef;color:#fff;padding:1px 5px;border-radius:3px;">NEW</span></a>
+  <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,oklch(0.929 0.015 260.7));border:1px solid var(--border-color,oklch(0.883 0.020 260.2));border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,oklch(0.225 0.061 264.4));transition:all 0.2s;" onmouseover="this.style.borderColor='oklch(0.381 0.146 264.1)';this.style.boxShadow='0 2px 8px rgba(79,70,229,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,oklch(0.381 0.146 264.1),oklch(0.581 0.229 263.9));color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x1F4D0;</span> 3D Molecular Geometry</a>
 </div>
 
 <!-- Related Chemistry Tools -->
@@ -1312,8 +1442,8 @@
         <h2 style="font-size: 1.125rem; margin-bottom: 0.75rem;">Practice NCERT Problems</h2>
         <p style="color: var(--text-secondary); margin-bottom: 1rem;">Apply your Lewis structure knowledge to NCERT chemistry and physics problems:</p>
         <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.75rem;">
-            <li><a href="exams/books/ncert/class-11/physics-part-1/index.jsp" style="display: inline-block; padding: 0.5rem 1rem; background: var(--bg-secondary, #f1f5f9); border-radius: 0.5rem; color: var(--text-primary); text-decoration: none; font-size: 0.875rem; border: 1px solid var(--border, #e2e8f0);">Class 11 Physics Part 1</a></li>
-            <li><a href="exams/books/ncert/class-12/physics-part-1/index.jsp" style="display: inline-block; padding: 0.5rem 1rem; background: var(--bg-secondary, #f1f5f9); border-radius: 0.5rem; color: var(--text-primary); text-decoration: none; font-size: 0.875rem; border: 1px solid var(--border, #e2e8f0);">Class 12 Physics Part 1</a></li>
+            <li><a href="exams/books/ncert/class-11/physics-part-1/index.jsp" style="display: inline-block; padding: 0.5rem 1rem; background: var(--bg-secondary, oklch(0.929 0.015 260.7)); border-radius: 0.5rem; color: var(--text-primary); text-decoration: none; font-size: 0.875rem; border: 1px solid var(--border, oklch(0.883 0.020 260.2));">Class 11 Physics Part 1</a></li>
+            <li><a href="exams/books/ncert/class-12/physics-part-1/index.jsp" style="display: inline-block; padding: 0.5rem 1rem; background: var(--bg-secondary, oklch(0.929 0.015 260.7)); border-radius: 0.5rem; color: var(--text-primary); text-decoration: none; font-size: 0.875rem; border: 1px solid var(--border, oklch(0.883 0.020 260.2));">Class 12 Physics Part 1</a></li>
         </ul>
     </div>
 </section>
@@ -3919,8 +4049,8 @@
                     var emptyS = document.getElementById('emptyState');
                     if (emptyS) emptyS.style.display = 'none';
                     spinnerContainer.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:200px;gap:12px;">' +
-                        '<div style="width:36px;height:36px;border:3px solid var(--border-color,#e2e8f0);border-top-color:var(--primary,#6366f1);border-radius:50%;animation:lewis-spin 0.8s linear infinite;"></div>' +
-                        '<span style="color:var(--text-secondary,#64748b);font-size:0.875rem;">Analyzing structure\u2026</span></div>';
+                        '<div style="width:36px;height:36px;border:3px solid var(--border-color,oklch(0.883 0.020 260.2));border-top-color:var(--primary,oklch(0.581 0.229 263.9));border-radius:50%;animation:lewis-spin 0.8s linear infinite;"></div>' +
+                        '<span style="color:var(--text-secondary,oklch(0.520 0.030 257.3));font-size:0.875rem;">Analyzing structure\u2026</span></div>';
                     // Add spin animation if not already present
                     if (!document.getElementById('lewis-spin-style')) {
                         var styleEl = document.createElement('style');
@@ -3957,7 +4087,7 @@
                         // Build result info panel (same as other paths)
                         var pubHtml = '';
                         pubHtml += buildMoleculeHeader(formulaStr, charge);
-                        pubHtml += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#6366f1;">' +
+                        pubHtml += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:oklch(0.581 0.229 263.9);">' +
                             '\u2139\ufe0f <strong>Structure resolved from database.</strong> ' +
                             'Real connectivity data used for accurate bond placement.</div>';
 
@@ -4123,7 +4253,7 @@
 
             // Pattern-specific notes
             if (predefinedTemplate && !predefinedChain && predefinedTemplate.isResonanceTemplate) {
-                html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:#6366f1;">' +
+                html += '<div class="lewis-alert" style="margin-bottom:0.75rem;border-left-color:oklch(0.581 0.229 263.9);">' +
                     '\u2139\ufe0f <strong>Resonance structure:</strong> Showing one valid Lewis form. ' +
                     'Actual electrons are delocalized across equivalent bonds.' +
                     '</div>';
@@ -4869,7 +4999,7 @@
 
         // Build styled off-screen container
         var container = document.createElement('div');
-        container.style.cssText = 'position:absolute;left:-9999px;top:0;width:750px;padding:40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#0f172a;';
+        container.style.cssText = 'position:absolute;left:-9999px;top:0;width:750px;padding:40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:oklch(0.183 0.031 263.4);';
         document.body.appendChild(container);
 
         // Title
@@ -4883,36 +5013,36 @@
 
         // Formula label
         var formulaLabel = document.createElement('div');
-        formulaLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin-bottom:4px;';
+        formulaLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:oklch(0.520 0.030 257.3);margin-bottom:4px;';
         formulaLabel.textContent = 'Molecule';
         container.appendChild(formulaLabel);
         var formulaEl = document.createElement('div');
-        formulaEl.style.cssText = 'font-size:24px;font-weight:700;color:#0f172a;margin-bottom:20px;font-family:JetBrains Mono,monospace;';
+        formulaEl.style.cssText = 'font-size:24px;font-weight:700;color:oklch(0.183 0.031 263.4);margin-bottom:20px;font-family:JetBrains Mono,monospace;';
         formulaEl.textContent = formula;
         container.appendChild(formulaEl);
 
         // Canvas image
         var imgEl = document.createElement('img');
         imgEl.src = canvas.toDataURL('image/png');
-        imgEl.style.cssText = 'display:block;max-width:100%;margin:0 auto 20px;border:1px solid #e2e8f0;border-radius:8px;';
+        imgEl.style.cssText = 'display:block;max-width:100%;margin:0 auto 20px;border:1px solid oklch(0.883 0.020 260.2);border-radius:8px;';
         container.appendChild(imgEl);
 
         // Result text
         var resultEl = document.getElementById('resultDisplay');
         if (resultEl && resultEl.innerHTML) {
             var infoLabel = document.createElement('div');
-            infoLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin-bottom:8px;border-top:1px solid #e2e8f0;padding-top:16px;';
+            infoLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:oklch(0.520 0.030 257.3);margin-bottom:8px;border-top:1px solid oklch(0.883 0.020 260.2);padding-top:16px;';
             infoLabel.textContent = 'Analysis';
             container.appendChild(infoLabel);
             var infoClone = document.createElement('div');
-            infoClone.style.cssText = 'font-size:13px;color:#334155;line-height:1.7;';
+            infoClone.style.cssText = 'font-size:13px;color:oklch(0.314 0.081 264.3);line-height:1.7;';
             infoClone.textContent = currentResultText;
             container.appendChild(infoClone);
         }
 
         // Footer
         var footer = document.createElement('div');
-        footer.style.cssText = 'margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;display:flex;justify-content:space-between;';
+        footer.style.cssText = 'margin-top:24px;padding-top:12px;border-top:1px solid oklch(0.883 0.020 260.2);font-size:11px;color:oklch(0.660 0.025 257.3);display:flex;justify-content:space-between;';
         footer.innerHTML = '<span>Generated by 8gwifi.org Lewis Structure Generator</span><span>' + new Date().toLocaleDateString() + '</span>';
         container.appendChild(footer);
 
@@ -5127,7 +5257,7 @@
             if (chargeInput) chargeInput.value = savedCharge;
             if (savedFormula) try { generateLewis(); } catch (e) {}
 
-            var baseStyle = 'position:absolute;left:-9999px;top:0;width:750px;padding:30px 40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#0f172a;';
+            var baseStyle = 'position:absolute;left:-9999px;top:0;width:750px;padding:30px 40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:oklch(0.183 0.031 263.4);';
 
             // Page 1: Problems only
             var page1 = document.createElement('div');
@@ -5139,14 +5269,14 @@
             header.innerHTML = '<div style="font-size:22px;font-weight:700;color:#2563eb;">Lewis Structure Practice Worksheet</div>';
             page1.appendChild(header);
             var subtitle = document.createElement('div');
-            subtitle.style.cssText = 'text-align:center;font-size:12px;color:#64748b;margin-bottom:4px;';
+            subtitle.style.cssText = 'text-align:center;font-size:12px;color:oklch(0.520 0.030 257.3);margin-bottom:4px;';
             subtitle.textContent = '8gwifi.org \u2014 Chemistry Tools';
             page1.appendChild(subtitle);
             var studentLine = document.createElement('div');
             studentLine.style.cssText = 'display:flex;gap:24px;margin-bottom:6px;padding:8px 0;border-bottom:2px solid #2563eb;';
-            studentLine.innerHTML = '<div style="flex:1;font-size:12px;color:#64748b;">Name: ___________________________</div>' +
-                '<div style="font-size:12px;color:#64748b;">Date: ______________</div>' +
-                '<div style="font-size:12px;color:#64748b;">Score: ______ / ' + practiceProblems.length + '</div>';
+            studentLine.innerHTML = '<div style="flex:1;font-size:12px;color:oklch(0.520 0.030 257.3);">Name: ___________________________</div>' +
+                '<div style="font-size:12px;color:oklch(0.520 0.030 257.3);">Date: ______________</div>' +
+                '<div style="font-size:12px;color:oklch(0.520 0.030 257.3);">Score: ______ / ' + practiceProblems.length + '</div>';
             page1.appendChild(studentLine);
             var instr = document.createElement('div');
             instr.style.cssText = 'padding:8px 12px;background:#eff6ff;border-left:3px solid #2563eb;border-radius:4px;margin-bottom:10px;font-size:11px;color:#1e40af;line-height:1.5;';
@@ -5158,21 +5288,21 @@
             for (var i = 0; i < practiceProblems.length; i++) {
                 var p = practiceProblems[i];
                 var card = document.createElement('div');
-                card.style.cssText = 'border:1.5px solid #cbd5e1;border-radius:6px;padding:8px 10px;page-break-inside:avoid;';
+                card.style.cssText = 'border:1.5px solid oklch(0.827 0.034 255.2);border-radius:6px;padding:8px 10px;page-break-inside:avoid;';
                 card.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">' +
                     '<div style="display:flex;align-items:center;gap:6px;">' +
                     '<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#2563eb;color:#fff;font-size:10px;font-weight:700;">' + (i + 1) + '</span>' +
                     '<span style="font-size:15px;font-weight:700;font-family:JetBrains Mono,monospace;">' + p.formula + '</span></div>' +
-                    '<span style="font-size:10px;color:#94a3b8;font-style:italic;">' + p.name + '</span></div>' +
-                    '<div style="width:100%;height:100px;border:1px dashed #cbd5e1;border-radius:4px;background:#fafbfc;margin-bottom:6px;display:flex;align-items:center;justify-content:center;">' +
-                    '<span style="font-size:10px;color:#cbd5e1;">Draw Lewis Structure Here</span></div>' +
-                    '<div style="font-size:10px;color:#475569;line-height:1.8;">Total Valence e\u207b: ________&nbsp;&nbsp;&nbsp;&nbsp;Geometry: ________________&nbsp;&nbsp;&nbsp;&nbsp;Bond Angle: ________</div>' +
-                    '<div style="font-size:9px;color:#94a3b8;font-style:italic;margin-top:2px;">Hint: ' + p.hint + '</div>';
+                    '<span style="font-size:10px;color:oklch(0.660 0.025 257.3);font-style:italic;">' + p.name + '</span></div>' +
+                    '<div style="width:100%;height:100px;border:1px dashed oklch(0.827 0.034 255.2);border-radius:4px;background:#fafbfc;margin-bottom:6px;display:flex;align-items:center;justify-content:center;">' +
+                    '<span style="font-size:10px;color:oklch(0.827 0.034 255.2);">Draw Lewis Structure Here</span></div>' +
+                    '<div style="font-size:10px;color:oklch(0.372 0.039 257.3);line-height:1.8;">Total Valence e\u207b: ________&nbsp;&nbsp;&nbsp;&nbsp;Geometry: ________________&nbsp;&nbsp;&nbsp;&nbsp;Bond Angle: ________</div>' +
+                    '<div style="font-size:9px;color:oklch(0.660 0.025 257.3);font-style:italic;margin-top:2px;">Hint: ' + p.hint + '</div>';
                 grid.appendChild(card);
             }
             page1.appendChild(grid);
             var footer1 = document.createElement('div');
-            footer1.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;';
+            footer1.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid oklch(0.883 0.020 260.2);font-size:10px;color:oklch(0.660 0.025 257.3);';
             footer1.textContent = 'Generated by 8gwifi.org Lewis Structure Generator \u2014 ' + new Date().toLocaleDateString();
             page1.appendChild(footer1);
 
@@ -5185,7 +5315,7 @@
             akHeader.textContent = 'Answer Key (Teacher Use)';
             page2.appendChild(akHeader);
             var akNote = document.createElement('div');
-            akNote.style.cssText = 'font-size:10px;color:#64748b;margin-bottom:12px;';
+            akNote.style.cssText = 'font-size:10px;color:oklch(0.520 0.030 257.3);margin-bottom:12px;';
             akNote.textContent = 'Computed by same logic as the Lewis Structure Generator. Valence e\u207b = total valence electrons; Geometry = molecular geometry; Angle = bond angle around central atom.';
             page2.appendChild(akNote);
             var akGrid = document.createElement('div');
@@ -5197,7 +5327,7 @@
                 var g = (ans && ans.geometry) ? ans.geometry : '?';
                 var a = (ans && ans.angle) ? ans.angle : '?';
                 var cell = document.createElement('div');
-                cell.style.cssText = 'border:1px solid #e2e8f0;border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;';
+                cell.style.cssText = 'border:1px solid oklch(0.883 0.020 260.2);border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;';
                 var imgSrc = lewisImages[k];
                 if (imgSrc) {
                     var img = document.createElement('img');
@@ -5207,7 +5337,7 @@
                     cell.appendChild(img);
                 } else {
                     var plc = document.createElement('span');
-                    plc.style.cssText = 'font-size:10px;color:#94a3b8;';
+                    plc.style.cssText = 'font-size:10px;color:oklch(0.660 0.025 257.3);';
                     plc.textContent = '[Structure]';
                     cell.appendChild(plc);
                 }
@@ -5219,7 +5349,7 @@
             }
             page2.appendChild(akGrid);
             var footer2 = document.createElement('div');
-            footer2.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;';
+            footer2.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid oklch(0.883 0.020 260.2);font-size:10px;color:oklch(0.660 0.025 257.3);';
             footer2.textContent = 'Generated by 8gwifi.org Lewis Structure Generator \u2014 ' + new Date().toLocaleDateString();
             page2.appendChild(footer2);
 
