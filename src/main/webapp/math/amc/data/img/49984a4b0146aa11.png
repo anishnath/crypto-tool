@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>File:AIME 1992 Problem 12.png - AoPS Wiki</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"aZ8hIN0B55_-VMnm2DbvdgAAAkE","wgCanonicalNamespace":"File","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":6,"wgPageName":"File:AIME_1992_Problem_12.png","wgTitle":"AIME 1992 Problem 12.png","wgCurRevisionId":13841,"wgRevisionId":13841,"wgArticleId":4746,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"File:AIME_1992_Problem_12.png","wgRelevantArticleId":4746,"wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgRestrictionUpload":[]};
+RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.interface.helpers.styles":"ready","mediawiki.interface.helpers.linker.styles":"ready","mediawiki.action.view.filepage":"ready","filepage":"ready","skins.aopsp.css":"ready"};RLPAGEMODULES=["site","mediawiki.page.ready","skins.aopsp.js"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+}];});});</script>
+<link rel="stylesheet" href="/wiki/load.php?lang=en&amp;modules=filepage%7Cmediawiki.action.view.filepage%7Cmediawiki.interface.helpers.linker.styles%7Cmediawiki.interface.helpers.styles%7Cskins.aopsp.css&amp;only=styles&amp;skin=aopsp">
+<script async="" src="/wiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=aopsp"></script>
+<meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="/wiki/load.php?lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=aopsp">
+<meta name="generator" content="MediaWiki 1.44.2">
+<meta name="robots" content="max-image-preview:standard">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=1120">
+<link rel="search" type="application/opensearchdescription+xml" href="/wiki/rest.php/v1/search" title="AoPS Wiki (en)">
+<link rel="EditURI" type="application/rsd+xml" href="https://artofproblemsolving.com/wiki/api.php?action=rsd">
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-6 ns-subject page-File_AIME_1992_Problem_12_png rootpage-File_AIME_1992_Problem_12_png skin-aopsp action-view"><!DOCTYPE html>
+<html>
+	<head>
+		
+<script>AoPS = {
+	start_time : new Date().getTime()
+};</script>
+
+<script>
+	AoPS.bootstrap_data = [];
+	AoPS.bd = AoPS.bootstrap_data; // Alias!
+	AoPS.session = {"user_id":1,"platform_user_id":"","username":"Anonymous","avatar":"\/\/avatar.artofproblemsolving.com\/avatar_1.png?t=1","email":"","role":"","logged_in":false,"initialized":false,"needs_coppa_approval":false,"admin":false,"national_staff":false,"wikiname":"","hasFreeResourceAccess":false,"hasLimitedUsers":null,"has_new_parent_portal":false,"identifies_as_parent":false,"identifies_as_student":false,"ebooks":false,"classes":[],"classroom":false};
+	AoPS.bd.assetVersion = 1;
+	AoPS.bd.environment = 'production';
+	AoPS.protected_url = 'https://mediawiki.artofproblemsolving.com/';
+	AoPS.aops_url = 'https://artofproblemsolving.com/';
+	AoPS.academy_url = 'https://aopsacademy.org/';
+</script>
+		<!-- GA plugin and Enhanced Ecommerce -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-1905305-1', 'auto', {allowLinker: true}); // GA Property ID
+		ga('send', 'pageview');
+		</script>
+		<!-- End GA plugin and Enhanced Ecommerce -->
+		<!-- Google Tag Manager -->
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer', 'GTM-59JWRGZ')</script>
+		<!-- End Google Tag Manager -->
+
+		<link rel="apple-touch-icon" href="https://artofproblemsolving.com/apple-touch-icon.png">
+
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="initial-scale=1">
+		<meta name="referrer" content="origin">
+
+		<meta name="facebook-domain-verification" content="zmmwg7oqqsqvf8ihckwvzoo85b08gx" />
+
+		
+		<link rel="apple-touch-icon" href="https://assets.artofproblemsolving.com/images/apple-touch-icon.png">
+		<title>Art of Problem Solving</title>
+
+		
+		<link href="https://artofproblemsolving.com/assets/fonts/font-awesome/css/all.css" rel="stylesheet">
+
+		<link rel="stylesheet" href="https://artofproblemsolving.com/assets/css/sharedsite.css">
+		<link rel="stylesheet" href="https://artofproblemsolving.com/assets/css/navheader.css">
+		<link rel="stylesheet" href="https://artofproblemsolving.com/assets/css/footer.css">
+		<link rel="stylesheet" href="https://artofproblemsolving.com/assets/css/main-head.css">
+		<link rel="icon" href="https://artofproblemsolving.com/online-favicon.ico?v=2">
+
+		
+		<script>
+  if (!window.console) console = {log: function() {}, dir: function() {}};
+  $$ = function( selector ) { return document.getElementById( selector ); }
+</script>
+
+							<script src="//assets.artofproblemsolving.com/js/jquery360.min.js"></script>
+							<script src="//artofproblemsolving.com/assets/vendor/jquery/3.6.0/jquery-migrate.min.js"></script>
+					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          // customised options
+          // • auto-render specific keys, e.g.:
+          delimiters: [
+              {left: '[katex]', right: '[/katex]', display: false},
+			  {left: '[katex display=true]', right: '[/katex]', display: true} 
+          ],
+          // • rendering keys, e.g.:
+          throwOnError : false
+        });
+    });
+</script>
+
+<script>
+MathJax = {
+  tex: {
+	inlineMath: [['[mathjax]', '[/mathjax]'], ['\\(', '\\)']],
+	displayMath: [['[mathjax display=true]', '[/mathjax]']]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"> </script>
+
+							</head>
+		<body class="production mediawiki ltr sitedir-ltr ns-0 ns-subject skin-AopsP resources">
+
+					<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-59JWRGZ"
+			height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		
+		<div id="page-wrapper">
+			<!-- search:off -->
+			
+			<!-- The gray bar at top -->
+			<!-- see shared-site.css -->
+			<div id="top-bar" class="sharedsite-wrapper no-select">
+				<div class="sharedsitebar">
+					<a href="https://artofproblemsolving.com" class="mobile-title"></a>
+					<div class="sharedsite-links">
+						<a class="site-link main" href="https://artofproblemsolving.com/company">
+							Art of Problem Solving
+						</a>
+						<div class="site">
+							<a class="site-link selected" href="https://artofproblemsolving.com">
+								<img src="https://artofproblemsolving.com/assets/images/logos/icon-online.svg" class="site-icon">
+								<span class="site-name">AoPS Online</span>
+							</a>
+							<!-- Rich dropdown -->
+							<div class="site-dropdown-wrapper">
+								<div class="site-dropdown">
+									<div class="site-info">
+										<div class="site-logo">
+											<img src="https://artofproblemsolving.com/assets/images/logos/aops-online.svg"/>
+										</div>
+										<div class="site-snippet">
+											Math texts, online classes, and more
+											<br/>for students in grades 5-12.
+										</div>
+										<a target="_blank" class="site-visit aops-primary" href="https://artofproblemsolving.com">
+											Visit AoPS Online <span class="aops-font">‚</span>
+										</a>
+									</div>
+									<div class="site-quick-nav">
+										<a target="_blank" href="https://artofproblemsolving.com/store" class="btn btn-primary aops-btn">
+											Books for Grades 5-12
+										</a>
+										<a target="_blank" href="https://artofproblemsolving.com/school" class="btn btn-primary aops-btn">
+											Online Courses
+										</a>
+									</div>
+								</div>
+							</div>
+							<!-- End rich dropdown -->
+						</div>
+						<div class="site">
+							<a class="site-link" href="https://beastacademy.com">
+								<img src="https://artofproblemsolving.com/assets/images/logos/icon-ba.svg" class="site-icon">
+								<span class="site-name">Beast Academy</span>
+							</a>
+							<div class="site-dropdown-wrapper">
+								<div class="site-dropdown">
+									<div class="site-info">
+										<div class="site-logo">
+											<img src="https://artofproblemsolving.com/assets/images/logos/aops-ba.svg"/>
+										</div>
+										<div class="site-snippet">
+											Engaging math books and online learning
+											<br/>for students ages 6-13.
+										</div>
+										<a target="_blank" class="site-visit ba-primary" href="https://beastacademy.com">
+											Visit Beast Academy <span class="aops-font">‚</span>
+										</a>
+									</div>
+									<div class="site-quick-nav">
+										<a target="_blank" href="https://beastacademy.com/books" class="btn btn-primary ba-btn">
+											Books for Ages 6-13
+										</a>
+										<a target="_blank" href="https://beastacademy.com/online" class="btn btn-primary ba-btn">
+											Beast Academy Online
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="site">
+							<a class="site-link" href="https://aopsacademy.org">
+								<img src="https://artofproblemsolving.com/assets/images/logos/icon-academy.svg" class="site-icon">
+								<span class="site-name">AoPS Academy</span>
+							</a>
+							<div class="site-dropdown-wrapper">
+								<div class="site-dropdown">
+									<div class="site-info">
+										<div class="site-logo">
+											<img src="https://artofproblemsolving.com/assets/images/logos/aops-academy.svg"/>
+										</div>
+										<div class="site-snippet">
+											Small live classes for advanced math
+											<br/>and language arts learners in grades 2-12.
+										</div>
+										<a target="_blank" class="site-visit academy-primary" href="https://aopsacademy.org">
+											Visit AoPS Academy <span class="aops-font">‚</span>
+										</a>
+									</div>
+									<div class="site-quick-nav">
+										<a target="_blank" href="https://aopsacademy.org/campuses" class="btn btn-primary academy-btn">
+											Find a Physical Campus
+										</a>
+										<a target="_blank" href="https://virtual.aopsacademy.org" class="btn btn-primary academy-btn">
+											Visit the Virtual Campus
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div id="header-wrapper" class="no-select">
+				<div class="header-underlay">
+					<div id="header">
+
+						<!-- The white area where main menu options appear -->
+
+						<!-- The menu links -->
+						<div id="main-menubar">
+							<div class="menubar-content">
+								<div class="menubar-logo online">
+									<img class="menubar-hamburger" src="https://artofproblemsolving.com/assets/images/hamburger.svg"/>
+									<a class="logo-img-link" href="https://artofproblemsolving.com/online">
+										<img class="logo-img" src="https://artofproblemsolving.com/assets/images/logos/aops-online.svg"/>
+										<img class="logo-img-mobile" src="https://artofproblemsolving.com/assets/images/logos/aops-online-mobile.svg"/>
+										<img class="logo-img-small" src="https://artofproblemsolving.com/assets/images/logos/aops-online-mobile.svg"/>
+									</a>
+								</div>
+								<div class="menubar-links-outer">
+									<!-- The login links -->
+									<div class="menu-login-wrapper online">
+										<div class="menu-login-item">
+												<div 
+		id="header-login"
+		class="no-select not-signed-in"
+		style="display:flex">
+
+				<a class="online-login-button solid-rounded-button" style="color:white;" href="https://login.artofproblemsolving.com/login?application=wiki&redirect=https%3A%2F%2Fartofproblemsolving.com%2Fsignin%3FrequestedPage%3D%25252Fwiki%25252Findex.php%25252FFile%25253AAIME_1992_Problem_12.png">Sign&nbsp;In</a>
+
+		<div class="online-register-button">Register</div>
+	</div>
+										</div>
+
+										
+									</div>
+									<div class="menubar-labels online">
+										<div class="menubar-label school">
+											<div class="menubar-label-link-outer">
+												<a class="menubar-label-link" href="https://artofproblemsolving.com/school">
+													online school
+												</a>
+											</div>
+											<div class="menubar-dropdown">
+												<div class="triangle"></div>
+												<div class="dropdown-content">
+													<!-- These have IDs for A/B testing purposes. T27691 -->
+													<a id="online-school-menu-schedule" href="https://artofproblemsolving.com/school/schedule"> Class Schedule </a>
+													<a id="online-school-menu-recommmendations" href="https://artofproblemsolving.com/school/recommendations"> Recommendations </a>
+													<a id="online-school-menu-woot-courses" href="https://artofproblemsolving.com/school/woot?gtmlist=School_Nav"> Olympiad Courses </a>
+													<a id="online-school-menu-mathjams" href="https://artofproblemsolving.com/school/mathjams"> Free Sessions </a>
+												</div>
+											</div>
+										</div>
+										<div class="menubar-label store">
+											<div class="menubar-label-link-outer">
+												<a class="menubar-label-link" href="https://artofproblemsolving.com/store">
+													books<span class="menubar-link-ext">tore </span>
+												</a>
+											</div>
+											<div class="menubar-dropdown">
+												<div class="triangle"></div>
+												<div class="dropdown-content">
+													<a href="https://artofproblemsolving.com/store/list/aops-curriculum">AoPS Curriculum</a>
+													<a href="https://artofproblemsolving.com/store/list/beast-academy">Beast Academy</a>
+													<a href="https://artofproblemsolving.com/store/online">Online Books</a>
+													<a href="https://artofproblemsolving.com/store/recommendations">Recommendations</a>
+													<a href="https://artofproblemsolving.com/store/list/other-products">Other Books &amp; Gear</a>
+													<a href="https://artofproblemsolving.com/store/list/all-products">All Products</a>
+													<a href="https://artofproblemsolving.com/store/gift-certificates?gtmlist=Bookstore_Nav">Gift Certificates</a>
+												</div>
+											</div>
+										</div>
+										<div class="menubar-label community">
+											<div class="menubar-label-link-outer">
+												<a class="menubar-label-link" href="https://artofproblemsolving.com/community">
+													community
+												</a>
+											</div>
+											<div class="menubar-dropdown">
+												<div class="triangle"></div>
+												<div class="dropdown-content">
+																										<a data-cmty href="https://artofproblemsolving.com/community">Forums</a>
+													<a data-cmty href="https://artofproblemsolving.com/community/c13_contests">Contests</a>
+													<a data-cmty href="https://artofproblemsolving.com/community/search">Search</a>
+													<a data-cmty href="https://artofproblemsolving.com/community/faq">Help</a>
+																																						</div>
+											</div>
+										</div>
+										<div class="menubar-label resources">
+											<div class="menubar-label-link-outer">
+												<a class="menubar-label-link selected" href="https://artofproblemsolving.com/resources">
+													resources
+												</a>
+											</div>
+											<div class="menubar-dropdown">
+												<div class="triangle"></div>
+												<div class="dropdown-content">
+													<div class="dropdown-columns">
+														<div class="dropdown-category">
+															<span class="dropdown-category-label">math training & tools</span>
+															<a href="https://artofproblemsolving.com/alcumus">Alcumus</a>
+															<a href="https://artofproblemsolving.com/videos">Videos</a>
+															<a href="https://artofproblemsolving.com/ftw">For the Win!</a>
+															<a href="https://artofproblemsolving.com/mathcounts_trainer">MATHCOUNTS Trainer</a>
+															<a href="https://artofproblemsolving.com/contests/practice">AoPS Practice Contests</a>
+															<a href="https://artofproblemsolving.com/wiki/index.php?title=Main_Page">AoPS Wiki</a>
+															<a href="https://artofproblemsolving.com/texer">LaTeX TeXeR</a>
+															<a href="https://artofproblemsolving.com/polymath">MIT PRIMES/CrowdMath</a>
+															<a href="https://artofproblemsolving.com/keeplearning">Keep Learning</a>
+															<a href="https://beastacademy.com/all-ten">All Ten</a>
+																													</div>
+														<div class="dropdown-column">
+															<div class="dropdown-category category-in-column">
+																<span class="dropdown-category-label">contests on aops</span>
+																<a href="https://artofproblemsolving.com/contests/practice">Practice Math Contests</a>
+															</div>
+															<div class="dropdown-category category-in-column">
+																<span class="dropdown-category-label">news</span>
+																<a href="https://artofproblemsolving.com/blog">AoPS Blog</a>
+																<a href="https://artofproblemsolving.com/blog/webinars/aopswebinars">Webinars</a>
+															</div>
+														</div>
+													</div>
+													<div class="dropdown-view-more-link-container">
+														<a href="https://artofproblemsolving.com/resources" class="dropdown-view-more-link">view all <span class="aops-icon">0</span></a>
+													</div>
+												</div>
+											</div>
+										</div>
+																				<div class="menubar-label menu-login-item">
+												<div 
+		id="header-login"
+		class="no-select not-signed-in"
+		style="display:flex">
+
+				<a class="online-login-button solid-rounded-button" style="color:white;" href="https://login.artofproblemsolving.com/login?application=wiki&redirect=https%3A%2F%2Fartofproblemsolving.com%2Fsignin%3FrequestedPage%3D%25252Fwiki%25252Findex.php%25252FFile%25253AAIME_1992_Problem_12.png">Sign&nbsp;In</a>
+
+		<div class="online-register-button">Register</div>
+	</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+												<noscript>
+					<div class="infobar">JavaScript is not enabled. JavaScript is required to fully utilize the site.</div>
+				</noscript>
+
+									<div id="breadcrumbs-wrapper">
+						<div id="submenu-icon"></div>
+						<div id="breadcrumbs">
+														<!-- ignore-security-checks -->
+							<div class="title-wrapper"><div class="title"><a href="/wiki">AoPS Wiki</a></div></div>
+														<div class="crumb-wrapper">
+																										<span class="crumb crumb-1">
+																			<!-- ignore-security-checks -->
+										<a href="https://artofproblemsolving.com/resources">Resources</a>
+																		</span>
+																											<i class="aops-font aops-angle-double-right"></i>
+																		<span class="crumb crumb-2">
+																			<!-- ignore-security-checks -->
+										<a href="/wiki">Aops Wiki</a>
+																		</span>
+																											<i class="aops-font aops-angle-double-right"></i>
+																		<span class="crumb crumb-3">
+																			<span class="mw-page-title-namespace">File</span><span class="mw-page-title-separator">:</span><span class="mw-page-title-main">AIME 1992 Problem 12.png</span>																		</span>
+															</div>
+						</div>
+					</div>
+							</div>
+
+			<!-- /search:off -->
+
+<div id="main-content" class="left-navigation wiki">
+	<div id="side-column-wrapper">
+		<div id="side-column">
+						<div id="content-actions" class="menu open">
+				<div class="submenu">
+					<h1>Page</h1>
+					<div class="submenu-wrapper">
+						<span id="ca-nstab-image" class="selected mw-list-item"><a href="/wiki/index.php?title=File:AIME_1992_Problem_12.png" title="View the file page " accesskey="c">File</a></span><span id="ca-talk" class="new mw-list-item"><a href="/wiki/index.php?title=File_talk:AIME_1992_Problem_12.png&amp;action=edit&amp;redlink=1" rel="discussion" class="new" title="Discussion about the content page (page does not exist) " accesskey="t">Discussion</a></span><span id="ca-view" class="selected mw-list-item"><a href="/wiki/index.php?title=File:AIME_1992_Problem_12.png">Read</a></span><span id="ca-viewsource" class="mw-list-item"><a href="/wiki/index.php?title=File:AIME_1992_Problem_12.png&amp;action=edit" title="This page is protected.&#10;You can view its source " accesskey="e">View source</a></span><span id="ca-history" class="mw-list-item"><a href="/wiki/index.php?title=File:AIME_1992_Problem_12.png&amp;action=history" title="Past revisions of this page " accesskey="h">View history</a></span>					</div>
+				</div>
+			</div>
+			<div id="toolbox" class="menu open">
+				<div class="submenu">
+					<h1>Toolbox</h1>
+					<div class="submenu-wrapper">
+						<span id="n-recentchanges" class="mw-list-item"><a href="/wiki/index.php?title=Special:RecentChanges" title="A list of recent changes in the wiki " accesskey="r">Recent changes</a></span><span id="n-randompage" class="mw-list-item"><a href="/wiki/index.php?title=Special:Random" title="Load a random page " accesskey="x">Random page</a></span><span id="n-help" class="mw-list-item"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></span><span id="t-whatlinkshere" class="mw-list-item"><a href="/wiki/index.php?title=Special:WhatLinksHere/File:AIME_1992_Problem_12.png" title="A list of all wiki pages that link here " accesskey="j">What links here</a></span><span id="n-specialpages" class="mw-list-item"><a href="/wiki/index.php?title=Special:SpecialPages">Special pages</a></span>					</div>
+				</div>
+			</div>
+			
+			<div id="search" class="menu open">
+				<h1>Search</h1>
+				<div class="submenu-wrapper" style="margin-bottom:5px;">
+					<form action="/wiki/index.php" id="searchform" class="mw-search">
+						<input type="hidden" name="title" value="Special:Search">
+						<input type="search" name="search" placeholder="Search" value="" accesskey="f" id="searchInput">
+						<div style="margin:0 5px 5px 5px;text-align:right;"><input class="btn btn-primary searchButton" type="submit" name="fulltext" title="Search the pages for this text" id="mw-searchButton" value="Search"></div>
+					</form>
+				</div>
+			</div>
+
+			<!--
+			<div class="menu open">
+				<h1>Note</h1>
+				<div class="submenu-wrapper" style="padding:10px;color:#444;">
+					Please do not discuss the 2015 AMC 8 Competition on any website until November 25th.
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+
+	<div id="main-column" style="margin-top:10px">
+				<div class="page-wrapper">
+						<div id="mw-js-message" style="display:none;"></div>
+			<h1 id="firstHeading" class="firstHeading"><span class="mw-page-title-namespace">File</span><span class="mw-page-title-separator">:</span><span class="mw-page-title-main">AIME 1992 Problem 12.png</span></h1>
+
+						
+			<div class="mw-body">
+													<div id="contentSub"><div id="mw-content-subtitle"></div></div>
+								
+				<div id="mw-content-text" class="mw-body-content"><ul id="filetoc" role="navigation"><li><a href="#file">File</a></li>
+<li><a href="#filehistory">File history</a></li>
+<li><a href="#filelinks">File usage</a></li></ul><div class="fullImageLink" id="file"><a href="https://artofproblemsolving.com/wiki/images/c/c6/AIME_1992_Problem_12.png"><img alt="File:AIME 1992 Problem 12.png" src="https://artofproblemsolving.com/wiki/images/c/c6/AIME_1992_Problem_12.png?20070311023953" decoding="async" width="205" height="150"></a><div class="mw-filepage-resolutioninfo">No higher resolution available.</div></div>
+<div class="mw-content-ltr fullMedia" lang="en" dir="ltr"><p><bdi dir="ltr"><a href="https://artofproblemsolving.com/wiki/images/c/c6/AIME_1992_Problem_12.png" class="internal" title="AIME 1992 Problem 12.png">AIME_1992_Problem_12.png</a></bdi> <span class="fileInfo">(205 × 150 pixels, file size: 2 KB, MIME type: <span class="mime-type">image/png</span>)</span>
+</p></div><div id="mw-imagepage-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr">
+<!-- 
+NewPP limit report
+Cached time: 20260225161944
+Cache expiry: 86400
+Reduced expiry: false
+Complications: []
+CPU time usage: 0.000 seconds
+Real time usage: 0.000 seconds
+Preprocessor visited node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 0/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+
+<!-- Saved in parser cache with key wiki-wiki_:pcache:4746:|#|:idhash:canonical and timestamp 20260225161944 and revision id 13841. Rendering was triggered because: page-view
+ -->
+</div></div><h2 id="filehistory">File history</h2>
+<div id="mw-imagepage-section-filehistory">
+<p>Click on a date/time to view the file as it appeared at that time.
+</p>
+<table class="wikitable filehistory">
+<tr><th></th><th>Date/Time</th><th>Thumbnail</th><th>Dimensions</th><th>User</th><th>Comment</th></tr>
+<tr><td>current</td><td class="filehistory-selected" style="white-space: nowrap;"><a href="https://artofproblemsolving.com/wiki/images/c/c6/AIME_1992_Problem_12.png">22:39, 10 March 2007</a></td><td><a href="https://artofproblemsolving.com/wiki/images/c/c6/AIME_1992_Problem_12.png"><img alt="Thumbnail for version as of 22:39, 10 March 2007" src="https://artofproblemsolving.com/wiki/images/thumb/c/c6/AIME_1992_Problem_12.png/120px-AIME_1992_Problem_12.png?20070311023953" decoding="async" loading="lazy" width="120" height="88"></a></td><td>205 × 150 <span style="white-space: nowrap;">(2 KB)</span></td><td><a href="/wiki/index.php?title=User:Minsoens&amp;action=edit&amp;redlink=1" class="mw-userlink new" title="User:Minsoens (page does not exist)"><bdi>Minsoens</bdi></a><span style="white-space: nowrap;"> <span class="mw-usertoollinks">(<a href="/wiki/index.php?title=User_talk:Minsoens" class="mw-usertoollinks-talk" title="User talk:Minsoens">talk</a> | <a href="/wiki/index.php?title=Special:Contributions/Minsoens" class="mw-usertoollinks-contribs" title="Special:Contributions/Minsoens">contribs</a>)</span></span></td><td dir="ltr"></td></tr>
+</table>
+
+</div>
+<div class="mw-imagepage-upload-links"><p id="mw-imagepage-upload-disallowed">You cannot overwrite this file.</p></div><h2 id="filelinks">File usage</h2>
+<div id='mw-imagepage-section-linkstoimage'>
+<p>The following 2 pages use this file:
+</p><ul class="mw-imagepage-linkstoimage">
+<li class="mw-imagepage-linkstoimage-ns0"><a href="/wiki/index.php?title=1992_AIME_Problems" title="1992 AIME Problems">1992 AIME Problems</a></li>
+<li class="mw-imagepage-linkstoimage-ns0"><a href="/wiki/index.php?title=1992_AIME_Problems/Problem_12" title="1992 AIME Problems/Problem 12">1992 AIME Problems/Problem 12</a></li>
+</ul>
+</div>
+</div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="https://artofproblemsolving.com/wiki/index.php?title=File:AIME_1992_Problem_12.png&amp;oldid=13841">https://artofproblemsolving.com/wiki/index.php?title=File:AIME_1992_Problem_12.png&amp;oldid=13841</a>"</div>
+
+
+									<div class="catlinks"><div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div></div>
+				
+
+							</div>
+		</div>
+	</div>
+</div>
+
+<!-- search:off -->
+	<div class="clearfix"></div>
+
+	
+	<div id="main-footer" class="no-print">
+		<div class="footer-container">
+			<div class="footer-topRow">
+					<a href="https://artofproblemsolving.com/online">
+						<img class="footer-mainLogo"
+						src="https://artofproblemsolving.com/assets/images/logos/aops-online-footer.svg"/>
+					</a>
+					<div class="footer-wasc">
+						<span>
+							Art of Problem Solving is an
+							<br class="wasc-break"/>
+							<span class="footer-accredited">ACS WASC Accredited School</span>
+						</span>
+						<img class="footer-wascLogo"
+						src="https://artofproblemsolving.com/assets/images/logos/wasc.png"/>
+					</div>
+			</div>
+			<div class="footer-links">
+				<div class="footer-col">
+					<div class="footer-colHeader">aops programs</div>
+					<div><a class="link" href="https://artofproblemsolving.comonline">AoPS Online</a></div>
+					<div><a class="link" href="https://beastacademy.com">Beast Academy</a></div>
+					<div><a class="link" href="https://aopsacademy.org">AoPS Academy</a></div>
+				</div>
+
+				<div class="footer-col">
+					<div class="footer-colHeader">About</div>
+					<div><a class="link" href="https://artofproblemsolving.com/company/about">About AoPS</a></div>
+					<div><a class="link" href="https://artofproblemsolving.com/company/staff">Our Team</a></div>
+					<div><a class="link" href="https://artofproblemsolving.com/company/history">Our History</a></div>
+					<div><a class="link" href="https://artofproblemsolving.com/company/careers">Jobs</a></div>
+					<div><a class="link" href="https://artofproblemsolving.com/blog">AoPS Blog</a></div>
+				</div>
+
+				<div class="footer-col">
+					<div class="footer-colHeader" style="left:-1px;">Site Info</div>
+					<div><a class="link" href="https://artofproblemsolving.com/company/tos">Terms</a></div>
+					<div><a class="link" href="https://artofproblemsolving.com/company/privacy">Privacy</a></div>
+					<div><a class="link" href="https://artofproblemsolving.com/contact">Contact Us</a></div>
+				</div>
+
+				<div class="footer-col social">
+					<div class="footer-colHeader">follow us</div>
+					<div class="footer-social">
+						<a class="link" target="_blank" href="https://www.facebook.com/artofproblemsolving">
+							<img src="https://artofproblemsolving.com/assets/images/socialmedia/facebook.svg" class="sm-icon"/>
+						</a>
+						<a class="link" target="_blank" href="http://twitter.com/AoPSNews">
+							<img src="https://artofproblemsolving.com/assets/images/socialmedia/twitter.svg" class="sm-icon"/>
+						</a>
+						<a class="link" target="_blank" href="https://www.pinterest.com/artofproblemsolving/pins/">
+							<img src="https://artofproblemsolving.com/assets/images/socialmedia/pinterest.svg" class="sm-icon"/>
+						</a>
+					</div>
+				</div>
+				<div class="footer-col subscribe">
+					<div class="footer-colHeader">
+						Subscribe for news and updates
+					</div>
+					<form method="post" action="/mailinglist">
+						<input type="email" class="footer-email" placeholder="Enter e-mail" name="subscribe-email">
+						<input type="hidden" name="new-books" value="on">
+						<input type="hidden" name="classes" value="on">
+						<input type="hidden" name="mathjams" value="on">
+						<input type="submit" class="footer-submit" value="">
+						<div class="footer-submit-arrow">
+							<svg x="0px" y="0px" viewBox="0 0 289 289" enable-background="new 0 0 289 289">
+								<g>
+									<path class="arrow-fill" d="M121.5,220.5c-2.6,0-5.1-1-7.1-2.9c-3.9-3.9-3.9-10.2,0-14.1l58.9-58.9l-58.9-58.9c-3.9-3.9-3.9-10.2,0-14.1c3.9-3.9,10.2-3.9,14.1,0l66,66c3.9,3.9,3.9,10.2,0,14.1l-66,66C126.6,219.5,124.1,220.5,121.5,220.5z"/>
+								</g>
+							</svg>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="copyright">
+				<span>&copy; 2026 AoPS Incorporated
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div id="small-footer-wrapper">
+		<div class="footer-container">
+			<a href="https://artofproblemsolving.com/online">
+				<img class="footer-mainLogo"
+				src="https://artofproblemsolving.com/assets/images/logos/aops-online-footer.svg"/>
+			</a>
+			<div class="copyright">
+				&copy; 2026 Art of Problem Solving
+				<div class="copyright-links">
+					<a href="https://artofproblemsolving.com/company">About Us</a>
+					&nbsp;•&nbsp;
+					<a href="https://artofproblemsolving.com/contact">Contact Us</a>
+					&nbsp;•&nbsp;
+					<a href="https://artofproblemsolving.com/company/tos">Terms</a>
+					&nbsp;•&nbsp;
+					<a href="https://artofproblemsolving.com/company/privacy">Privacy</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<form id="registration-form" method="post" action="/user/register.php">
+	<input type="hidden" name="username" value="">
+	<input type="hidden" name="password" value="">
+	<input type="hidden" name="from-login" value="true">
+	</form>
+<div id="print-footer" class="printer">Copyright &copy; 2026 Art of Problem Solving</div>
+
+
+
+<div id="epicfail" class="aops-html-modal-epic-fail" style="display: none">
+	<div class="aops-html-modal-inner-epic-fail">
+		<div class="aops-html-modal-main-epic-fail">
+			<p>Something appears to not have loaded correctly.</p>
+		</div>
+		<div class="aops-html-modal-bottom-epic-fail">
+			<p><a onclick="location.reload(true);return false">Click to refresh</a>.</p>
+		</div>
+	</div>
+</div>
+<link rel="stylesheet" href="https://artofproblemsolving.com/assets/css/epic-fail.css">
+
+
+
+
+
+<!-- /search:off -->
+
+
+<!-- copied from contact page index, with edits -->
+<script id="footer-tpl-email-dialog" type="text/x-handlebars-template">
+	<div id="mail-dialog">
+		<h1>Email Art of Problem Solving</h1>
+		<p>
+			<input type="text" id="email" name="email" placeholder="Your email address">
+			<input type="text" id="subject" name="subject" placeholder="Subject of message">
+			<textarea id="message" name="message" placeholder="Enter your message"></textarea>
+			<div style="padding:5px 30px">
+				<input type="checkbox" id="email-copy" name="email_copy">
+				<label for="email-copy" id="email-copy-label">Send a copy to my email address.</label>
+			</div>
+			<div style="padding:5px 30px 20px">
+				<input id="footer-submit-btn" type="submit" class="btn btn-primary" value="Send">
+				<input id="footer-cancel-btn" type="submit" class="btn btn-default" value="Cancel">
+			</div>
+		</p>
+		<p id="email-error"></p>
+	</div>
+</script>
+
+
+<script id="footer-tpl-email-confirm" type="text/x-handlebars-template">
+	<div id="mail-dialog-confirm">
+		<h2>Email Sent</h2>
+		<p>Thank you for your email. We will respond to it soon.</p>
+	</div>
+</script>
+
+<!-- bing -->
+<script>(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"5105596"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");</script><noscript><img src="//bat.bing.com/action/0?ti=5105596&Ver=2" height="0" width="0" style="display:none; visibility: hidden;" /></noscript>
+
+</body>
+<!-- Cached 20260225161944 -->
+</html>
+
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":310,"wgPageParseReport":{"limitreport":{"cputime":"0.001","walltime":"0.001","ppvisitednodes":{"value":4,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":1,"limit":100},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20260225161944","ttl":86400,"transientcontent":false}}});});</script>
+</body>
+<!-- Cached 20260225161944 -->
+</html>

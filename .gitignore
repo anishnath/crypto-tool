@@ -26,3 +26,4 @@ target
 /.idea/
 /.searchapi/
 /.searchapi2/
+/src/main/webapp/math/amc/amc_aime.json

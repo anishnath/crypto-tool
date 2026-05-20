@@ -1,0 +1,1162 @@
+{
+  "version": 1,
+  "generated_at": "2026-05-21T03:59:26",
+  "shard_size": 500,
+  "total": 55884,
+  "buckets": {
+    "amc-real": {
+      "count": 2994,
+      "shard_count": 6,
+      "q_shards": [
+        {
+          "f": "amc-real-000.json",
+          "n": 500,
+          "b": 253032
+        },
+        {
+          "f": "amc-real-001.json",
+          "n": 500,
+          "b": 253779
+        },
+        {
+          "f": "amc-real-002.json",
+          "n": 500,
+          "b": 249019
+        },
+        {
+          "f": "amc-real-003.json",
+          "n": 500,
+          "b": 255614
+        },
+        {
+          "f": "amc-real-004.json",
+          "n": 500,
+          "b": 252194
+        },
+        {
+          "f": "amc-real-005.json",
+          "n": 494,
+          "b": 258496
+        }
+      ],
+      "s_shards": [
+        {
+          "f": "amc-real-000.json",
+          "n": 500,
+          "b": 806776
+        },
+        {
+          "f": "amc-real-001.json",
+          "n": 500,
+          "b": 798137
+        },
+        {
+          "f": "amc-real-002.json",
+          "n": 500,
+          "b": 791399
+        },
+        {
+          "f": "amc-real-003.json",
+          "n": 500,
+          "b": 789178
+        },
+        {
+          "f": "amc-real-004.json",
+          "n": 500,
+          "b": 802391
+        },
+        {
+          "f": "amc-real-005.json",
+          "n": 494,
+          "b": 800862
+        }
+      ]
+    },
+    "aime-real": {
+      "count": 695,
+      "shard_count": 2,
+      "q_shards": [
+        {
+          "f": "aime-real-000.json",
+          "n": 500,
+          "b": 223014
+        },
+        {
+          "f": "aime-real-001.json",
+          "n": 195,
+          "b": 85630
+        }
+      ],
+      "s_shards": [
+        {
+          "f": "aime-real-000.json",
+          "n": 500,
+          "b": 962469
+        },
+        {
+          "f": "aime-real-001.json",
+          "n": 195,
+          "b": 386396
+        }
+      ]
+    },
+    "practice": {
+      "count": 52195,
+      "shard_count": 105,
+      "q_shards": [
+        {
+          "f": "practice-000.json",
+          "n": 500,
+          "b": 251836
+        },
+        {
+          "f": "practice-001.json",
+          "n": 500,
+          "b": 242007
+        },
+        {
+          "f": "practice-002.json",
+          "n": 500,
+          "b": 250339
+        },
+        {
+          "f": "practice-003.json",
+          "n": 500,
+          "b": 246719
+        },
+        {
+          "f": "practice-004.json",
+          "n": 500,
+          "b": 238750
+        },
+        {
+          "f": "practice-005.json",
+          "n": 500,
+          "b": 241171
+        },
+        {
+          "f": "practice-006.json",
+          "n": 500,
+          "b": 246740
+        },
+        {
+          "f": "practice-007.json",
+          "n": 500,
+          "b": 238742
+        },
+        {
+          "f": "practice-008.json",
+          "n": 500,
+          "b": 240476
+        },
+        {
+          "f": "practice-009.json",
+          "n": 500,
+          "b": 241947
+        },
+        {
+          "f": "practice-010.json",
+          "n": 500,
+          "b": 239582
+        },
+        {
+          "f": "practice-011.json",
+          "n": 500,
+          "b": 238666
+        },
+        {
+          "f": "practice-012.json",
+          "n": 500,
+          "b": 240317
+        },
+        {
+          "f": "practice-013.json",
+          "n": 500,
+          "b": 246325
+        },
+        {
+          "f": "practice-014.json",
+          "n": 500,
+          "b": 240517
+        },
+        {
+          "f": "practice-015.json",
+          "n": 500,
+          "b": 244087
+        },
+        {
+          "f": "practice-016.json",
+          "n": 500,
+          "b": 242465
+        },
+        {
+          "f": "practice-017.json",
+          "n": 500,
+          "b": 240993
+        },
+        {
+          "f": "practice-018.json",
+          "n": 500,
+          "b": 243100
+        },
+        {
+          "f": "practice-019.json",
+          "n": 500,
+          "b": 242220
+        },
+        {
+          "f": "practice-020.json",
+          "n": 500,
+          "b": 245434
+        },
+        {
+          "f": "practice-021.json",
+          "n": 500,
+          "b": 231912
+        },
+        {
+          "f": "practice-022.json",
+          "n": 500,
+          "b": 247517
+        },
+        {
+          "f": "practice-023.json",
+          "n": 500,
+          "b": 239823
+        },
+        {
+          "f": "practice-024.json",
+          "n": 500,
+          "b": 241057
+        },
+        {
+          "f": "practice-025.json",
+          "n": 500,
+          "b": 236037
+        },
+        {
+          "f": "practice-026.json",
+          "n": 500,
+          "b": 244218
+        },
+        {
+          "f": "practice-027.json",
+          "n": 500,
+          "b": 244516
+        },
+        {
+          "f": "practice-028.json",
+          "n": 500,
+          "b": 237648
+        },
+        {
+          "f": "practice-029.json",
+          "n": 500,
+          "b": 247625
+        },
+        {
+          "f": "practice-030.json",
+          "n": 500,
+          "b": 242251
+        },
+        {
+          "f": "practice-031.json",
+          "n": 500,
+          "b": 246839
+        },
+        {
+          "f": "practice-032.json",
+          "n": 500,
+          "b": 244768
+        },
+        {
+          "f": "practice-033.json",
+          "n": 500,
+          "b": 242154
+        },
+        {
+          "f": "practice-034.json",
+          "n": 500,
+          "b": 245668
+        },
+        {
+          "f": "practice-035.json",
+          "n": 500,
+          "b": 237148
+        },
+        {
+          "f": "practice-036.json",
+          "n": 500,
+          "b": 240549
+        },
+        {
+          "f": "practice-037.json",
+          "n": 500,
+          "b": 235340
+        },
+        {
+          "f": "practice-038.json",
+          "n": 500,
+          "b": 241180
+        },
+        {
+          "f": "practice-039.json",
+          "n": 500,
+          "b": 245958
+        },
+        {
+          "f": "practice-040.json",
+          "n": 500,
+          "b": 245613
+        },
+        {
+          "f": "practice-041.json",
+          "n": 500,
+          "b": 239668
+        },
+        {
+          "f": "practice-042.json",
+          "n": 500,
+          "b": 235647
+        },
+        {
+          "f": "practice-043.json",
+          "n": 500,
+          "b": 243965
+        },
+        {
+          "f": "practice-044.json",
+          "n": 500,
+          "b": 239311
+        },
+        {
+          "f": "practice-045.json",
+          "n": 500,
+          "b": 240697
+        },
+        {
+          "f": "practice-046.json",
+          "n": 500,
+          "b": 243617
+        },
+        {
+          "f": "practice-047.json",
+          "n": 500,
+          "b": 248247
+        },
+        {
+          "f": "practice-048.json",
+          "n": 500,
+          "b": 237519
+        },
+        {
+          "f": "practice-049.json",
+          "n": 500,
+          "b": 243300
+        },
+        {
+          "f": "practice-050.json",
+          "n": 500,
+          "b": 245425
+        },
+        {
+          "f": "practice-051.json",
+          "n": 500,
+          "b": 238901
+        },
+        {
+          "f": "practice-052.json",
+          "n": 500,
+          "b": 233963
+        },
+        {
+          "f": "practice-053.json",
+          "n": 500,
+          "b": 237452
+        },
+        {
+          "f": "practice-054.json",
+          "n": 500,
+          "b": 236780
+        },
+        {
+          "f": "practice-055.json",
+          "n": 500,
+          "b": 249289
+        },
+        {
+          "f": "practice-056.json",
+          "n": 500,
+          "b": 242467
+        },
+        {
+          "f": "practice-057.json",
+          "n": 500,
+          "b": 233885
+        },
+        {
+          "f": "practice-058.json",
+          "n": 500,
+          "b": 242795
+        },
+        {
+          "f": "practice-059.json",
+          "n": 500,
+          "b": 247333
+        },
+        {
+          "f": "practice-060.json",
+          "n": 500,
+          "b": 249188
+        },
+        {
+          "f": "practice-061.json",
+          "n": 500,
+          "b": 248768
+        },
+        {
+          "f": "practice-062.json",
+          "n": 500,
+          "b": 250478
+        },
+        {
+          "f": "practice-063.json",
+          "n": 500,
+          "b": 247092
+        },
+        {
+          "f": "practice-064.json",
+          "n": 500,
+          "b": 241721
+        },
+        {
+          "f": "practice-065.json",
+          "n": 500,
+          "b": 245533
+        },
+        {
+          "f": "practice-066.json",
+          "n": 500,
+          "b": 239049
+        },
+        {
+          "f": "practice-067.json",
+          "n": 500,
+          "b": 236796
+        },
+        {
+          "f": "practice-068.json",
+          "n": 500,
+          "b": 237962
+        },
+        {
+          "f": "practice-069.json",
+          "n": 500,
+          "b": 249550
+        },
+        {
+          "f": "practice-070.json",
+          "n": 500,
+          "b": 238609
+        },
+        {
+          "f": "practice-071.json",
+          "n": 500,
+          "b": 244064
+        },
+        {
+          "f": "practice-072.json",
+          "n": 500,
+          "b": 248774
+        },
+        {
+          "f": "practice-073.json",
+          "n": 500,
+          "b": 247707
+        },
+        {
+          "f": "practice-074.json",
+          "n": 500,
+          "b": 237988
+        },
+        {
+          "f": "practice-075.json",
+          "n": 500,
+          "b": 239429
+        },
+        {
+          "f": "practice-076.json",
+          "n": 500,
+          "b": 239317
+        },
+        {
+          "f": "practice-077.json",
+          "n": 500,
+          "b": 239013
+        },
+        {
+          "f": "practice-078.json",
+          "n": 500,
+          "b": 248635
+        },
+        {
+          "f": "practice-079.json",
+          "n": 500,
+          "b": 242026
+        },
+        {
+          "f": "practice-080.json",
+          "n": 500,
+          "b": 241877
+        },
+        {
+          "f": "practice-081.json",
+          "n": 500,
+          "b": 242738
+        },
+        {
+          "f": "practice-082.json",
+          "n": 500,
+          "b": 240407
+        },
+        {
+          "f": "practice-083.json",
+          "n": 500,
+          "b": 239068
+        },
+        {
+          "f": "practice-084.json",
+          "n": 500,
+          "b": 238377
+        },
+        {
+          "f": "practice-085.json",
+          "n": 500,
+          "b": 243392
+        },
+        {
+          "f": "practice-086.json",
+          "n": 500,
+          "b": 244216
+        },
+        {
+          "f": "practice-087.json",
+          "n": 500,
+          "b": 240627
+        },
+        {
+          "f": "practice-088.json",
+          "n": 500,
+          "b": 232499
+        },
+        {
+          "f": "practice-089.json",
+          "n": 500,
+          "b": 245494
+        },
+        {
+          "f": "practice-090.json",
+          "n": 500,
+          "b": 244126
+        },
+        {
+          "f": "practice-091.json",
+          "n": 500,
+          "b": 238247
+        },
+        {
+          "f": "practice-092.json",
+          "n": 500,
+          "b": 242925
+        },
+        {
+          "f": "practice-093.json",
+          "n": 500,
+          "b": 236469
+        },
+        {
+          "f": "practice-094.json",
+          "n": 500,
+          "b": 237745
+        },
+        {
+          "f": "practice-095.json",
+          "n": 500,
+          "b": 243122
+        },
+        {
+          "f": "practice-096.json",
+          "n": 500,
+          "b": 244573
+        },
+        {
+          "f": "practice-097.json",
+          "n": 500,
+          "b": 247008
+        },
+        {
+          "f": "practice-098.json",
+          "n": 500,
+          "b": 246276
+        },
+        {
+          "f": "practice-099.json",
+          "n": 500,
+          "b": 233059
+        },
+        {
+          "f": "practice-100.json",
+          "n": 500,
+          "b": 250919
+        },
+        {
+          "f": "practice-101.json",
+          "n": 500,
+          "b": 242225
+        },
+        {
+          "f": "practice-102.json",
+          "n": 500,
+          "b": 242900
+        },
+        {
+          "f": "practice-103.json",
+          "n": 500,
+          "b": 241929
+        },
+        {
+          "f": "practice-104.json",
+          "n": 195,
+          "b": 96850
+        }
+      ],
+      "s_shards": [
+        {
+          "f": "practice-000.json",
+          "n": 500,
+          "b": 622619
+        },
+        {
+          "f": "practice-001.json",
+          "n": 500,
+          "b": 610801
+        },
+        {
+          "f": "practice-002.json",
+          "n": 500,
+          "b": 615589
+        },
+        {
+          "f": "practice-003.json",
+          "n": 500,
+          "b": 622951
+        },
+        {
+          "f": "practice-004.json",
+          "n": 500,
+          "b": 622092
+        },
+        {
+          "f": "practice-005.json",
+          "n": 500,
+          "b": 604627
+        },
+        {
+          "f": "practice-006.json",
+          "n": 500,
+          "b": 623950
+        },
+        {
+          "f": "practice-007.json",
+          "n": 500,
+          "b": 614746
+        },
+        {
+          "f": "practice-008.json",
+          "n": 500,
+          "b": 617308
+        },
+        {
+          "f": "practice-009.json",
+          "n": 500,
+          "b": 613849
+        },
+        {
+          "f": "practice-010.json",
+          "n": 500,
+          "b": 610854
+        },
+        {
+          "f": "practice-011.json",
+          "n": 500,
+          "b": 619307
+        },
+        {
+          "f": "practice-012.json",
+          "n": 500,
+          "b": 613187
+        },
+        {
+          "f": "practice-013.json",
+          "n": 500,
+          "b": 619849
+        },
+        {
+          "f": "practice-014.json",
+          "n": 500,
+          "b": 617321
+        },
+        {
+          "f": "practice-015.json",
+          "n": 500,
+          "b": 628220
+        },
+        {
+          "f": "practice-016.json",
+          "n": 500,
+          "b": 607975
+        },
+        {
+          "f": "practice-017.json",
+          "n": 500,
+          "b": 619045
+        },
+        {
+          "f": "practice-018.json",
+          "n": 500,
+          "b": 623810
+        },
+        {
+          "f": "practice-019.json",
+          "n": 500,
+          "b": 611973
+        },
+        {
+          "f": "practice-020.json",
+          "n": 500,
+          "b": 628937
+        },
+        {
+          "f": "practice-021.json",
+          "n": 500,
+          "b": 615109
+        },
+        {
+          "f": "practice-022.json",
+          "n": 500,
+          "b": 625354
+        },
+        {
+          "f": "practice-023.json",
+          "n": 500,
+          "b": 614472
+        },
+        {
+          "f": "practice-024.json",
+          "n": 500,
+          "b": 598464
+        },
+        {
+          "f": "practice-025.json",
+          "n": 500,
+          "b": 612079
+        },
+        {
+          "f": "practice-026.json",
+          "n": 500,
+          "b": 614622
+        },
+        {
+          "f": "practice-027.json",
+          "n": 500,
+          "b": 624262
+        },
+        {
+          "f": "practice-028.json",
+          "n": 500,
+          "b": 616175
+        },
+        {
+          "f": "practice-029.json",
+          "n": 500,
+          "b": 620647
+        },
+        {
+          "f": "practice-030.json",
+          "n": 500,
+          "b": 617161
+        },
+        {
+          "f": "practice-031.json",
+          "n": 500,
+          "b": 620183
+        },
+        {
+          "f": "practice-032.json",
+          "n": 500,
+          "b": 625403
+        },
+        {
+          "f": "practice-033.json",
+          "n": 500,
+          "b": 618161
+        },
+        {
+          "f": "practice-034.json",
+          "n": 500,
+          "b": 617983
+        },
+        {
+          "f": "practice-035.json",
+          "n": 500,
+          "b": 614351
+        },
+        {
+          "f": "practice-036.json",
+          "n": 500,
+          "b": 615549
+        },
+        {
+          "f": "practice-037.json",
+          "n": 500,
+          "b": 611083
+        },
+        {
+          "f": "practice-038.json",
+          "n": 500,
+          "b": 626176
+        },
+        {
+          "f": "practice-039.json",
+          "n": 500,
+          "b": 625132
+        },
+        {
+          "f": "practice-040.json",
+          "n": 500,
+          "b": 625977
+        },
+        {
+          "f": "practice-041.json",
+          "n": 500,
+          "b": 608889
+        },
+        {
+          "f": "practice-042.json",
+          "n": 500,
+          "b": 615342
+        },
+        {
+          "f": "practice-043.json",
+          "n": 500,
+          "b": 619046
+        },
+        {
+          "f": "practice-044.json",
+          "n": 500,
+          "b": 615087
+        },
+        {
+          "f": "practice-045.json",
+          "n": 500,
+          "b": 614525
+        },
+        {
+          "f": "practice-046.json",
+          "n": 500,
+          "b": 618428
+        },
+        {
+          "f": "practice-047.json",
+          "n": 500,
+          "b": 611678
+        },
+        {
+          "f": "practice-048.json",
+          "n": 500,
+          "b": 617002
+        },
+        {
+          "f": "practice-049.json",
+          "n": 500,
+          "b": 624879
+        },
+        {
+          "f": "practice-050.json",
+          "n": 500,
+          "b": 617794
+        },
+        {
+          "f": "practice-051.json",
+          "n": 500,
+          "b": 612949
+        },
+        {
+          "f": "practice-052.json",
+          "n": 500,
+          "b": 616284
+        },
+        {
+          "f": "practice-053.json",
+          "n": 500,
+          "b": 606613
+        },
+        {
+          "f": "practice-054.json",
+          "n": 500,
+          "b": 617003
+        },
+        {
+          "f": "practice-055.json",
+          "n": 500,
+          "b": 615601
+        },
+        {
+          "f": "practice-056.json",
+          "n": 500,
+          "b": 625633
+        },
+        {
+          "f": "practice-057.json",
+          "n": 500,
+          "b": 619729
+        },
+        {
+          "f": "practice-058.json",
+          "n": 500,
+          "b": 631557
+        },
+        {
+          "f": "practice-059.json",
+          "n": 500,
+          "b": 621666
+        },
+        {
+          "f": "practice-060.json",
+          "n": 500,
+          "b": 627325
+        },
+        {
+          "f": "practice-061.json",
+          "n": 500,
+          "b": 618305
+        },
+        {
+          "f": "practice-062.json",
+          "n": 500,
+          "b": 620353
+        },
+        {
+          "f": "practice-063.json",
+          "n": 500,
+          "b": 600277
+        },
+        {
+          "f": "practice-064.json",
+          "n": 500,
+          "b": 606446
+        },
+        {
+          "f": "practice-065.json",
+          "n": 500,
+          "b": 617773
+        },
+        {
+          "f": "practice-066.json",
+          "n": 500,
+          "b": 624211
+        },
+        {
+          "f": "practice-067.json",
+          "n": 500,
+          "b": 610328
+        },
+        {
+          "f": "practice-068.json",
+          "n": 500,
+          "b": 619101
+        },
+        {
+          "f": "practice-069.json",
+          "n": 500,
+          "b": 616896
+        },
+        {
+          "f": "practice-070.json",
+          "n": 500,
+          "b": 628885
+        },
+        {
+          "f": "practice-071.json",
+          "n": 500,
+          "b": 608017
+        },
+        {
+          "f": "practice-072.json",
+          "n": 500,
+          "b": 626097
+        },
+        {
+          "f": "practice-073.json",
+          "n": 500,
+          "b": 611967
+        },
+        {
+          "f": "practice-074.json",
+          "n": 500,
+          "b": 620854
+        },
+        {
+          "f": "practice-075.json",
+          "n": 500,
+          "b": 613993
+        },
+        {
+          "f": "practice-076.json",
+          "n": 500,
+          "b": 630574
+        },
+        {
+          "f": "practice-077.json",
+          "n": 500,
+          "b": 620915
+        },
+        {
+          "f": "practice-078.json",
+          "n": 500,
+          "b": 613058
+        },
+        {
+          "f": "practice-079.json",
+          "n": 500,
+          "b": 617935
+        },
+        {
+          "f": "practice-080.json",
+          "n": 500,
+          "b": 614877
+        },
+        {
+          "f": "practice-081.json",
+          "n": 500,
+          "b": 612840
+        },
+        {
+          "f": "practice-082.json",
+          "n": 500,
+          "b": 612123
+        },
+        {
+          "f": "practice-083.json",
+          "n": 500,
+          "b": 608877
+        },
+        {
+          "f": "practice-084.json",
+          "n": 500,
+          "b": 624221
+        },
+        {
+          "f": "practice-085.json",
+          "n": 500,
+          "b": 623483
+        },
+        {
+          "f": "practice-086.json",
+          "n": 500,
+          "b": 631379
+        },
+        {
+          "f": "practice-087.json",
+          "n": 500,
+          "b": 614470
+        },
+        {
+          "f": "practice-088.json",
+          "n": 500,
+          "b": 623038
+        },
+        {
+          "f": "practice-089.json",
+          "n": 500,
+          "b": 611610
+        },
+        {
+          "f": "practice-090.json",
+          "n": 500,
+          "b": 610831
+        },
+        {
+          "f": "practice-091.json",
+          "n": 500,
+          "b": 613473
+        },
+        {
+          "f": "practice-092.json",
+          "n": 500,
+          "b": 622196
+        },
+        {
+          "f": "practice-093.json",
+          "n": 500,
+          "b": 620048
+        },
+        {
+          "f": "practice-094.json",
+          "n": 500,
+          "b": 620824
+        },
+        {
+          "f": "practice-095.json",
+          "n": 500,
+          "b": 616754
+        },
+        {
+          "f": "practice-096.json",
+          "n": 500,
+          "b": 612535
+        },
+        {
+          "f": "practice-097.json",
+          "n": 500,
+          "b": 620489
+        },
+        {
+          "f": "practice-098.json",
+          "n": 500,
+          "b": 620586
+        },
+        {
+          "f": "practice-099.json",
+          "n": 500,
+          "b": 620223
+        },
+        {
+          "f": "practice-100.json",
+          "n": 500,
+          "b": 622836
+        },
+        {
+          "f": "practice-101.json",
+          "n": 500,
+          "b": 622657
+        },
+        {
+          "f": "practice-102.json",
+          "n": 500,
+          "b": 619927
+        },
+        {
+          "f": "practice-103.json",
+          "n": 500,
+          "b": 617039
+        },
+        {
+          "f": "practice-104.json",
+          "n": 195,
+          "b": 238296
+        }
+      ]
+    }
+  }
+}
