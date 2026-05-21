@@ -367,6 +367,12 @@
         <changefreq>weekly</changefreq>
         <priority>0.95</priority>
     </url>
+    <url>
+        <loc>https://8gwifi.org/math/olympiad/</loc>
+        <lastmod>2026-05-21</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.95</priority>
+    </url>
   <url>
     <loc>https://8gwifi.org/math-art-gallery.jsp</loc>
     <lastmod>2025-11-12</lastmod>

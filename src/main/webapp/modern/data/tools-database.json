@@ -1,7 +1,7 @@
 {
-  "version": "1.8",
-  "lastUpdated": "2026-05-21T00:00:00.000Z",
-  "totalTools": 448,
+  "version": "1.10",
+  "lastUpdated": "2026-05-21T17:00:00.000Z",
+  "totalTools": 449,
   "categories": [
     "Biology",
     "Blockchain & Crypto",
@@ -1559,6 +1559,13 @@
       "category": "Mathematics",
       "keywords": "mind reading number trick mathematics",
       "description": "Mind Reading Number Trick - Free online mathematics tool"
+    },
+    {
+      "name": "Math Olympiad Practice Problems with Solutions — Free, Stepwise, Online",
+      "url": "math/olympiad/",
+      "category": "Mathematics",
+      "keywords": "math olympiad problems with solutions, free olympiad math practice, math olympiad practice test online, math olympiad questions and answers, stepwise math solutions, IMO practice problems, USAMO prep, USAJMO prep, AIME practice problems, RMO problems with solutions, INMO problems with solutions, Pre-RMO practice, IMOTC, Putnam problems with solutions, math olympiad worksheet, math olympiad sample papers, olympiad math grade 9 grade 10 grade 11 grade 12, high school math olympiad, olympiad algebra problems, olympiad geometry problems, olympiad number theory problems, olympiad combinatorics problems, math olympiad printable, AoPS olympiad problems, math olympiad PDF alternative, competition math practice",
+      "description": "Free math olympiad practice with real past problems and step-by-step solutions. Covers AIME, USAMO, IMO, RMO, INMO, Pre-RMO, Putnam tracks. Untimed, smart answer-matching for fractions and radicals, print-ready walkthroughs. No signup."
     },
     {
       "name": "Monty Hall Simulator",

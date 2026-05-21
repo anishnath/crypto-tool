@@ -235,6 +235,14 @@ AOPS_SHORTCUTS = [
     (re.compile(r'\\divide(?![a-zA-Z])'), r'\\div'),
 ]
 
+# KaTeX doesn't support \renewcommand / \newcommand / \providecommand /
+# \DeclareMathOperator. Strip them so they don't break the surrounding
+# math block (e.g. \renewcommand{\arraystretch}{1.5} before a matrix).
+LATEX_MACRO_DEFS_RE = re.compile(
+    r'\\(?:renewcommand|newcommand|providecommand|DeclareMathOperator\*?)'
+    r'\s*\{[^{}]*\}\s*(?:\[[^\]]*\])?\s*\{[^{}]*\}'
+)
+
 # \text followed directly by lowercase letters (no brace) — broken in the
 # source (e.g. \textnoneofthese instead of \text{none of these}).  Wrap
 # the trailing letters in braces so KaTeX renders them as text. We can't
@@ -255,6 +263,31 @@ TABULAR_RE = re.compile(
     r'\\end\{tabular\}',
     re.DOTALL,
 )
+
+# Math envs where inner `$` delimiters are a scraping artifact — they
+# wrap cell contents even though the env is already in math mode.
+# KaTeX chokes on the orphan $ inside the array; we strip them after
+# the env is wrapped in $$.
+MATH_ENV_NAMES_PAT = (
+    r'(?:array|tabular|aligned|align\*?|cases|equation\*?|gather\*?|gathered'
+    r'|multline\*?|matrix|pmatrix|bmatrix|vmatrix|Bmatrix|Vmatrix|smallmatrix)'
+)
+MATH_ENV_BLOCK_RE = re.compile(
+    r'(\\begin\{' + MATH_ENV_NAMES_PAT + r'\}'
+    r'(?:\s*(?:\[[^\]]*\])?\s*\{[^{}]*\})?'
+    r'.*?'
+    r'\\end\{' + MATH_ENV_NAMES_PAT + r'\})',
+    re.DOTALL,
+)
+
+def strip_inner_dollars_in_math_envs(s):
+    """Strip stray `$` inside math environment bodies — scraping artifact
+       that breaks KaTeX (env is already in math mode)."""
+    if not s or '\\begin{' not in s:
+        return s
+    def _strip(m):
+        return m.group(1).replace('$', '')
+    return MATH_ENV_BLOCK_RE.sub(_strip, s)
 
 # Markdown image embeds + image-target links — for downloading remote
 # assets to data/img/ at generation time.
@@ -277,10 +310,14 @@ def clean_text(s: str) -> str:
     # Strip AoPS-wiki LaTeX shortcuts that KaTeX doesn't recognize.
     for pat, repl in AOPS_SHORTCUTS:
         s = pat.sub(repl, s)
+    # Strip \renewcommand / \newcommand definitions KaTeX can't parse.
+    s = LATEX_MACRO_DEFS_RE.sub('', s)
     # Fix malformed \textXYZ (no opening brace) → \text{XYZ}.
     s = fix_text_nobrace(s)
     # Convert tabular environments to array so KaTeX can render them.
     s = fix_tabular(s)
+    # Strip stray `$` inside math environment bodies (array, aligned, …).
+    s = strip_inner_dollars_in_math_envs(s)
     # Download remote figure images and replace with {{IMG:hash}} markers.
     if 'http' in s:
         s = substitute_images(s)

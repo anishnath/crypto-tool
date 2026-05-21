@@ -150,7 +150,7 @@
     </div>
 
     <!-- Exams -->
-    <div class="ms-group<%= collapsedCls(activeService, "amc", "aime") %>" data-group="exams">
+    <div class="ms-group<%= collapsedCls(activeService, "amc", "aime", "olympiad-practice") %>" data-group="exams">
         <button class="ms-group-header" type="button">Exams <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/math/amc/" class="ms-item <%= "amc".equals(activeService) ? "active" : "" %>">
@@ -158,6 +158,9 @@
             </a>
             <a href="<%= ctx %>/math/amc/aime.jsp" class="ms-item <%= "aime".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">AIME</span> <span class="ms-item-label">AIME Mock Test</span>
+            </a>
+            <a href="<%= ctx %>/math/olympiad/" class="ms-item <%= "olympiad-practice".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#9733;</span> <span class="ms-item-label">Olympiad Practice</span>
             </a>
         </div>
     </div>
