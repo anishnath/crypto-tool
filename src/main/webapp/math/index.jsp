@@ -4,11 +4,11 @@
 <html lang="en">
 <head>
     <jsp:include page="../modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Math Calculators - Free Online Step-by-Step Solvers" />
+        <jsp:param name="toolName" value="Free Math Calculators &amp; Exam Prep — Step-by-Step Solvers, AMC / AIME / Olympiad Practice" />
         <jsp:param name="toolCategory" value="Math Tools" />
-        <jsp:param name="toolDescription" value="48 free math calculators with step-by-step solutions. Percentage, algebra, statistics, calculus, matrices, and more. All free, no signup." />
+        <jsp:param name="toolDescription" value="Free math calculators with step-by-step solutions plus AMC 10/12 mock test, AIME mock test, and olympiad practice with stepwise walkthroughs (USAMO, IMO, RMO, INMO). No signup, runs in your browser." />
         <jsp:param name="toolUrl" value="math/" />
-        <jsp:param name="toolKeywords" value="math calculator, online math tools, percentage calculator, quadratic solver, matrix calculator, integral calculator, derivative calculator, logarithm calculator, series calculator, limit calculator, step by step math, free math solver" />
+        <jsp:param name="toolKeywords" value="math calculator, online math tools, percentage calculator, quadratic solver, matrix calculator, integral calculator, derivative calculator, logarithm calculator, series calculator, limit calculator, step by step math, free math solver, AMC mock test, AMC 10 practice, AMC 12 practice, AIME mock test, AIME practice problems, math olympiad practice, olympiad math problems with solutions, USAMO prep, IMO prep, RMO problems, INMO problems, Putnam problems, competition math, math contest practice" />
         <jsp:param name="toolImage" value="math-studio-og.png" />
         <jsp:param name="toolFeatures" value="48 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode,Mobile responsive,100% free" />
         <jsp:param name="teaches" value="Arithmetic, algebra, calculus, linear algebra, matrix operations, series and sequences, logarithms, exponents, percentages, statistics" />
@@ -18,7 +18,7 @@
         <jsp:param name="faq2q" value="Do the calculators show step-by-step solutions?" />
         <jsp:param name="faq2a" value="Yes, every calculator renders detailed step-by-step solutions using KaTeX math notation. Each step explains the formula applied and shows the intermediate calculation, so you learn the method, not just the answer." />
         <jsp:param name="faq3q" value="What math topics are covered?" />
-        <jsp:param name="faq3a" value="We cover everyday math (percentages, significant figures), algebra (quadratic equations, linear systems, inequalities), 21 statistics calculators (descriptive stats, hypothesis testing, regression, ANOVA), calculus (derivatives, integrals, limits), linear algebra (9 matrix calculators), trigonometry, logarithms, exponents, and Taylor series." />
+        <jsp:param name="faq3a" value="Everyday math (percentages, significant figures), algebra (quadratic equations, linear systems, inequalities), 21 statistics calculators (descriptive stats, hypothesis testing, regression, ANOVA), calculus (derivatives, integrals, limits), linear algebra (9 matrix calculators), trigonometry, logarithms, exponents, and Taylor series. Plus exam-prep emulators: AMC 10/12 mock test, AIME mock test, and an untimed Olympiad practice page with stepwise solutions covering USAMO, IMO, RMO, INMO, and Putnam-style problems." />
         <jsp:param name="faq4q" value="Can I share or export results from these math calculators?" />
         <jsp:param name="faq4a" value="Yes. Most calculators support copy-to-clipboard (plain text or LaTeX), a shareable URL that reproduces your inputs, and PDF download where applicable. You can embed formulas directly into papers, homework, or lecture slides." />
         <jsp:param name="faq5q" value="Do these math calculators work on mobile?" />
@@ -38,11 +38,11 @@
             "@context": "https://schema.org",
             "@type": "CollectionPage",
             "name": "Math Calculators",
-            "description": "48 free math calculators with step-by-step solutions covering percentages, algebra, statistics, calculus, linear algebra, trigonometry, and more.",
+            "description": "Free math calculators with step-by-step solutions covering percentages, algebra, statistics, calculus, linear algebra, trigonometry, and more — plus AMC 10/12, AIME, and Olympiad practice with stepwise walkthroughs.",
             "url": "https://8gwifi.org/math/",
             "mainEntity": {
                 "@type": "ItemList",
-                "numberOfItems": 49,
+                "numberOfItems": 52,
                 "itemListElement": [
                     {"@type": "ListItem", "position": 1, "name": "Percentage Calculator", "url": "https://8gwifi.org/percentage-calculator.jsp"},
                     {"@type": "ListItem", "position": 2, "name": "Exponent Calculator", "url": "https://8gwifi.org/exponent-calculator.jsp"},
@@ -92,7 +92,10 @@
                     {"@type": "ListItem", "position": 46, "name": "Standard Error Calculator", "url": "https://8gwifi.org/standard-error-calculator.jsp"},
                     {"@type": "ListItem", "position": 47, "name": "Outlier Detection Calculator", "url": "https://8gwifi.org/outlier-detection-calculator.jsp"},
                     {"@type": "ListItem", "position": 48, "name": "P-Value Calculator", "url": "https://8gwifi.org/p-value-calculator.jsp"},
-                    {"@type": "ListItem", "position": 49, "name": "Graphing Calculator", "url": "https://8gwifi.org/graphing-calculator.jsp"}
+                    {"@type": "ListItem", "position": 49, "name": "Graphing Calculator", "url": "https://8gwifi.org/graphing-calculator.jsp"},
+                    {"@type": "ListItem", "position": 50, "name": "AMC 10/12 Mock Test", "url": "https://8gwifi.org/math/amc/"},
+                    {"@type": "ListItem", "position": 51, "name": "AIME Mock Test", "url": "https://8gwifi.org/math/amc/aime.jsp"},
+                    {"@type": "ListItem", "position": 52, "name": "Olympiad Math Practice", "url": "https://8gwifi.org/math/olympiad/"}
                 ]
             }
         }
@@ -260,6 +263,32 @@
             </div>
         </div>
 
+        <!-- Exam-prep row — three landing pages for timed mocks + untimed
+             olympiad practice. Kept above-the-fold so users searching
+             "free AMC mock" or "olympiad math problems with solutions"
+             land here and convert. -->
+        <div class="ms-card">
+            <h2 class="ms-section-title">Exam Prep</h2>
+            <p style="color:var(--ms-muted); margin:0 0 0.85rem; font-size:0.9rem;">
+                Timed mock tests and untimed olympiad practice with
+                step-by-step solutions.
+            </p>
+            <div class="ms-tool-grid">
+                <a href="<%=request.getContextPath()%>/math/amc/" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">AMC</span>
+                    <span><span class="ms-tool-card-title">AMC 10 / 12 Mock</span><span class="ms-tool-card-sub">25 MCQ · 75 min · official scoring</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/math/amc/aime.jsp" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">AIME</span>
+                    <span><span class="ms-tool-card-title">AIME Mock</span><span class="ms-tool-card-sub">15 problems · 3 hr · integer 0–999</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/math/olympiad/" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#9733;</span>
+                    <span><span class="ms-tool-card-title">Olympiad Practice</span><span class="ms-tool-card-sub">USAMO · IMO · RMO · INMO · Putnam</span></span>
+                </a>
+            </div>
+        </div>
+
         <!-- In-content ad (mobile/tablet only; hidden on desktop where rail shows) -->
         <div class="ms-inline-ad">
             <%@ include file="../modern/ads/ad-in-content-mid.jsp" %>
@@ -296,6 +325,10 @@
                     <span class="ms-tool-card-icon">sin</span>
                     <span><span class="ms-tool-card-title">Trigonometry</span><span class="ms-tool-card-sub">3 tools</span></span>
                 </a>
+                <a href="#" onclick="document.querySelector('.ms-group[data-group=&quot;exams&quot;] .ms-group-header').click();document.querySelector('.ms-group[data-group=&quot;exams&quot;]').scrollIntoView({block:'center'});return false" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#127942;</span>
+                    <span><span class="ms-tool-card-title">Exam Prep</span><span class="ms-tool-card-sub">AMC · AIME · Olympiad</span></span>
+                </a>
             </div>
         </div>
 
@@ -323,7 +356,7 @@
                         What math topics are covered?
                         <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
-                    <div class="ms-faq-a">We cover <strong>everyday math</strong> (percentages, significant figures), <strong>algebra</strong> (quadratic equations, linear systems, inequalities), <strong>21 statistics calculators</strong> (descriptive stats, hypothesis testing, regression, ANOVA), <strong>calculus</strong> (derivatives, integrals, limits, Taylor series), <strong>linear algebra</strong> (9 matrix calculators), <strong>trigonometry</strong>, logarithms, exponents, and graphing.</div>
+                    <div class="ms-faq-a">We cover <strong>everyday math</strong> (percentages, significant figures), <strong>algebra</strong> (quadratic equations, linear systems, inequalities), <strong>21 statistics calculators</strong> (descriptive stats, hypothesis testing, regression, ANOVA), <strong>calculus</strong> (derivatives, integrals, limits, Taylor series), <strong>linear algebra</strong> (9 matrix calculators), <strong>trigonometry</strong>, logarithms, exponents, and graphing. Plus <strong>exam-prep emulators</strong>: <a href="<%=request.getContextPath()%>/math/amc/">AMC&nbsp;10/12 mock</a>, <a href="<%=request.getContextPath()%>/math/amc/aime.jsp">AIME mock</a>, and <a href="<%=request.getContextPath()%>/math/olympiad/">Olympiad practice</a> with stepwise solutions (USAMO, IMO, RMO, INMO, Putnam).</div>
                 </div>
                 <div class="ms-faq-item">
                     <button class="ms-faq-q" type="button">
