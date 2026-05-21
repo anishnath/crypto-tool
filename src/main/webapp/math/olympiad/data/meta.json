@@ -1,0 +1,826 @@
+{
+  "version": 1,
+  "generated_at": "2026-05-21T17:09:39",
+  "shard_size": 250,
+  "total": 20212,
+  "buckets": {
+    "olympiad-stepwise": {
+      "count": 20212,
+      "shard_count": 81,
+      "q_shards": [
+        {
+          "f": "olympiad-stepwise-000.json",
+          "n": 250,
+          "b": 69554
+        },
+        {
+          "f": "olympiad-stepwise-001.json",
+          "n": 250,
+          "b": 71400
+        },
+        {
+          "f": "olympiad-stepwise-002.json",
+          "n": 250,
+          "b": 66072
+        },
+        {
+          "f": "olympiad-stepwise-003.json",
+          "n": 250,
+          "b": 66452
+        },
+        {
+          "f": "olympiad-stepwise-004.json",
+          "n": 250,
+          "b": 68230
+        },
+        {
+          "f": "olympiad-stepwise-005.json",
+          "n": 250,
+          "b": 68954
+        },
+        {
+          "f": "olympiad-stepwise-006.json",
+          "n": 250,
+          "b": 69608
+        },
+        {
+          "f": "olympiad-stepwise-007.json",
+          "n": 250,
+          "b": 67437
+        },
+        {
+          "f": "olympiad-stepwise-008.json",
+          "n": 250,
+          "b": 64484
+        },
+        {
+          "f": "olympiad-stepwise-009.json",
+          "n": 250,
+          "b": 69221
+        },
+        {
+          "f": "olympiad-stepwise-010.json",
+          "n": 250,
+          "b": 67218
+        },
+        {
+          "f": "olympiad-stepwise-011.json",
+          "n": 250,
+          "b": 72117
+        },
+        {
+          "f": "olympiad-stepwise-012.json",
+          "n": 250,
+          "b": 67658
+        },
+        {
+          "f": "olympiad-stepwise-013.json",
+          "n": 250,
+          "b": 68836
+        },
+        {
+          "f": "olympiad-stepwise-014.json",
+          "n": 250,
+          "b": 70448
+        },
+        {
+          "f": "olympiad-stepwise-015.json",
+          "n": 250,
+          "b": 67624
+        },
+        {
+          "f": "olympiad-stepwise-016.json",
+          "n": 250,
+          "b": 70101
+        },
+        {
+          "f": "olympiad-stepwise-017.json",
+          "n": 250,
+          "b": 67353
+        },
+        {
+          "f": "olympiad-stepwise-018.json",
+          "n": 250,
+          "b": 64309
+        },
+        {
+          "f": "olympiad-stepwise-019.json",
+          "n": 250,
+          "b": 66898
+        },
+        {
+          "f": "olympiad-stepwise-020.json",
+          "n": 250,
+          "b": 70318
+        },
+        {
+          "f": "olympiad-stepwise-021.json",
+          "n": 250,
+          "b": 70209
+        },
+        {
+          "f": "olympiad-stepwise-022.json",
+          "n": 250,
+          "b": 68713
+        },
+        {
+          "f": "olympiad-stepwise-023.json",
+          "n": 250,
+          "b": 69742
+        },
+        {
+          "f": "olympiad-stepwise-024.json",
+          "n": 250,
+          "b": 66862
+        },
+        {
+          "f": "olympiad-stepwise-025.json",
+          "n": 250,
+          "b": 66698
+        },
+        {
+          "f": "olympiad-stepwise-026.json",
+          "n": 250,
+          "b": 64685
+        },
+        {
+          "f": "olympiad-stepwise-027.json",
+          "n": 250,
+          "b": 69834
+        },
+        {
+          "f": "olympiad-stepwise-028.json",
+          "n": 250,
+          "b": 67980
+        },
+        {
+          "f": "olympiad-stepwise-029.json",
+          "n": 250,
+          "b": 68576
+        },
+        {
+          "f": "olympiad-stepwise-030.json",
+          "n": 250,
+          "b": 68209
+        },
+        {
+          "f": "olympiad-stepwise-031.json",
+          "n": 250,
+          "b": 67437
+        },
+        {
+          "f": "olympiad-stepwise-032.json",
+          "n": 250,
+          "b": 66281
+        },
+        {
+          "f": "olympiad-stepwise-033.json",
+          "n": 250,
+          "b": 66012
+        },
+        {
+          "f": "olympiad-stepwise-034.json",
+          "n": 250,
+          "b": 70257
+        },
+        {
+          "f": "olympiad-stepwise-035.json",
+          "n": 250,
+          "b": 71173
+        },
+        {
+          "f": "olympiad-stepwise-036.json",
+          "n": 250,
+          "b": 68820
+        },
+        {
+          "f": "olympiad-stepwise-037.json",
+          "n": 250,
+          "b": 66506
+        },
+        {
+          "f": "olympiad-stepwise-038.json",
+          "n": 250,
+          "b": 68179
+        },
+        {
+          "f": "olympiad-stepwise-039.json",
+          "n": 250,
+          "b": 68331
+        },
+        {
+          "f": "olympiad-stepwise-040.json",
+          "n": 250,
+          "b": 67786
+        },
+        {
+          "f": "olympiad-stepwise-041.json",
+          "n": 250,
+          "b": 65106
+        },
+        {
+          "f": "olympiad-stepwise-042.json",
+          "n": 250,
+          "b": 68283
+        },
+        {
+          "f": "olympiad-stepwise-043.json",
+          "n": 250,
+          "b": 69750
+        },
+        {
+          "f": "olympiad-stepwise-044.json",
+          "n": 250,
+          "b": 64620
+        },
+        {
+          "f": "olympiad-stepwise-045.json",
+          "n": 250,
+          "b": 66672
+        },
+        {
+          "f": "olympiad-stepwise-046.json",
+          "n": 250,
+          "b": 72467
+        },
+        {
+          "f": "olympiad-stepwise-047.json",
+          "n": 250,
+          "b": 69319
+        },
+        {
+          "f": "olympiad-stepwise-048.json",
+          "n": 250,
+          "b": 70077
+        },
+        {
+          "f": "olympiad-stepwise-049.json",
+          "n": 250,
+          "b": 70668
+        },
+        {
+          "f": "olympiad-stepwise-050.json",
+          "n": 250,
+          "b": 68719
+        },
+        {
+          "f": "olympiad-stepwise-051.json",
+          "n": 250,
+          "b": 68183
+        },
+        {
+          "f": "olympiad-stepwise-052.json",
+          "n": 250,
+          "b": 66530
+        },
+        {
+          "f": "olympiad-stepwise-053.json",
+          "n": 250,
+          "b": 69233
+        },
+        {
+          "f": "olympiad-stepwise-054.json",
+          "n": 250,
+          "b": 69281
+        },
+        {
+          "f": "olympiad-stepwise-055.json",
+          "n": 250,
+          "b": 71823
+        },
+        {
+          "f": "olympiad-stepwise-056.json",
+          "n": 250,
+          "b": 71875
+        },
+        {
+          "f": "olympiad-stepwise-057.json",
+          "n": 250,
+          "b": 70047
+        },
+        {
+          "f": "olympiad-stepwise-058.json",
+          "n": 250,
+          "b": 69292
+        },
+        {
+          "f": "olympiad-stepwise-059.json",
+          "n": 250,
+          "b": 69229
+        },
+        {
+          "f": "olympiad-stepwise-060.json",
+          "n": 250,
+          "b": 72251
+        },
+        {
+          "f": "olympiad-stepwise-061.json",
+          "n": 250,
+          "b": 73145
+        },
+        {
+          "f": "olympiad-stepwise-062.json",
+          "n": 250,
+          "b": 71087
+        },
+        {
+          "f": "olympiad-stepwise-063.json",
+          "n": 250,
+          "b": 69986
+        },
+        {
+          "f": "olympiad-stepwise-064.json",
+          "n": 250,
+          "b": 64850
+        },
+        {
+          "f": "olympiad-stepwise-065.json",
+          "n": 250,
+          "b": 65116
+        },
+        {
+          "f": "olympiad-stepwise-066.json",
+          "n": 250,
+          "b": 66311
+        },
+        {
+          "f": "olympiad-stepwise-067.json",
+          "n": 250,
+          "b": 70096
+        },
+        {
+          "f": "olympiad-stepwise-068.json",
+          "n": 250,
+          "b": 65961
+        },
+        {
+          "f": "olympiad-stepwise-069.json",
+          "n": 250,
+          "b": 66919
+        },
+        {
+          "f": "olympiad-stepwise-070.json",
+          "n": 250,
+          "b": 67964
+        },
+        {
+          "f": "olympiad-stepwise-071.json",
+          "n": 250,
+          "b": 66842
+        },
+        {
+          "f": "olympiad-stepwise-072.json",
+          "n": 250,
+          "b": 67844
+        },
+        {
+          "f": "olympiad-stepwise-073.json",
+          "n": 250,
+          "b": 68791
+        },
+        {
+          "f": "olympiad-stepwise-074.json",
+          "n": 250,
+          "b": 68740
+        },
+        {
+          "f": "olympiad-stepwise-075.json",
+          "n": 250,
+          "b": 65152
+        },
+        {
+          "f": "olympiad-stepwise-076.json",
+          "n": 250,
+          "b": 64684
+        },
+        {
+          "f": "olympiad-stepwise-077.json",
+          "n": 250,
+          "b": 65895
+        },
+        {
+          "f": "olympiad-stepwise-078.json",
+          "n": 250,
+          "b": 69874
+        },
+        {
+          "f": "olympiad-stepwise-079.json",
+          "n": 250,
+          "b": 69468
+        },
+        {
+          "f": "olympiad-stepwise-080.json",
+          "n": 212,
+          "b": 59477
+        }
+      ],
+      "s_shards": [
+        {
+          "f": "olympiad-stepwise-000.json",
+          "n": 250,
+          "b": 296560
+        },
+        {
+          "f": "olympiad-stepwise-001.json",
+          "n": 250,
+          "b": 291470
+        },
+        {
+          "f": "olympiad-stepwise-002.json",
+          "n": 250,
+          "b": 291518
+        },
+        {
+          "f": "olympiad-stepwise-003.json",
+          "n": 250,
+          "b": 293038
+        },
+        {
+          "f": "olympiad-stepwise-004.json",
+          "n": 250,
+          "b": 306680
+        },
+        {
+          "f": "olympiad-stepwise-005.json",
+          "n": 250,
+          "b": 290352
+        },
+        {
+          "f": "olympiad-stepwise-006.json",
+          "n": 250,
+          "b": 278014
+        },
+        {
+          "f": "olympiad-stepwise-007.json",
+          "n": 250,
+          "b": 289766
+        },
+        {
+          "f": "olympiad-stepwise-008.json",
+          "n": 250,
+          "b": 291599
+        },
+        {
+          "f": "olympiad-stepwise-009.json",
+          "n": 250,
+          "b": 291618
+        },
+        {
+          "f": "olympiad-stepwise-010.json",
+          "n": 250,
+          "b": 288538
+        },
+        {
+          "f": "olympiad-stepwise-011.json",
+          "n": 250,
+          "b": 292306
+        },
+        {
+          "f": "olympiad-stepwise-012.json",
+          "n": 250,
+          "b": 281971
+        },
+        {
+          "f": "olympiad-stepwise-013.json",
+          "n": 250,
+          "b": 293090
+        },
+        {
+          "f": "olympiad-stepwise-014.json",
+          "n": 250,
+          "b": 305648
+        },
+        {
+          "f": "olympiad-stepwise-015.json",
+          "n": 250,
+          "b": 290431
+        },
+        {
+          "f": "olympiad-stepwise-016.json",
+          "n": 250,
+          "b": 294817
+        },
+        {
+          "f": "olympiad-stepwise-017.json",
+          "n": 250,
+          "b": 286551
+        },
+        {
+          "f": "olympiad-stepwise-018.json",
+          "n": 250,
+          "b": 291342
+        },
+        {
+          "f": "olympiad-stepwise-019.json",
+          "n": 250,
+          "b": 281734
+        },
+        {
+          "f": "olympiad-stepwise-020.json",
+          "n": 250,
+          "b": 299016
+        },
+        {
+          "f": "olympiad-stepwise-021.json",
+          "n": 250,
+          "b": 294961
+        },
+        {
+          "f": "olympiad-stepwise-022.json",
+          "n": 250,
+          "b": 297715
+        },
+        {
+          "f": "olympiad-stepwise-023.json",
+          "n": 250,
+          "b": 304492
+        },
+        {
+          "f": "olympiad-stepwise-024.json",
+          "n": 250,
+          "b": 285730
+        },
+        {
+          "f": "olympiad-stepwise-025.json",
+          "n": 250,
+          "b": 291483
+        },
+        {
+          "f": "olympiad-stepwise-026.json",
+          "n": 250,
+          "b": 276758
+        },
+        {
+          "f": "olympiad-stepwise-027.json",
+          "n": 250,
+          "b": 287167
+        },
+        {
+          "f": "olympiad-stepwise-028.json",
+          "n": 250,
+          "b": 293605
+        },
+        {
+          "f": "olympiad-stepwise-029.json",
+          "n": 250,
+          "b": 291505
+        },
+        {
+          "f": "olympiad-stepwise-030.json",
+          "n": 250,
+          "b": 298361
+        },
+        {
+          "f": "olympiad-stepwise-031.json",
+          "n": 250,
+          "b": 282594
+        },
+        {
+          "f": "olympiad-stepwise-032.json",
+          "n": 250,
+          "b": 293776
+        },
+        {
+          "f": "olympiad-stepwise-033.json",
+          "n": 250,
+          "b": 284044
+        },
+        {
+          "f": "olympiad-stepwise-034.json",
+          "n": 250,
+          "b": 295712
+        },
+        {
+          "f": "olympiad-stepwise-035.json",
+          "n": 250,
+          "b": 278000
+        },
+        {
+          "f": "olympiad-stepwise-036.json",
+          "n": 250,
+          "b": 276741
+        },
+        {
+          "f": "olympiad-stepwise-037.json",
+          "n": 250,
+          "b": 291757
+        },
+        {
+          "f": "olympiad-stepwise-038.json",
+          "n": 250,
+          "b": 293799
+        },
+        {
+          "f": "olympiad-stepwise-039.json",
+          "n": 250,
+          "b": 291275
+        },
+        {
+          "f": "olympiad-stepwise-040.json",
+          "n": 250,
+          "b": 286725
+        },
+        {
+          "f": "olympiad-stepwise-041.json",
+          "n": 250,
+          "b": 293495
+        },
+        {
+          "f": "olympiad-stepwise-042.json",
+          "n": 250,
+          "b": 308233
+        },
+        {
+          "f": "olympiad-stepwise-043.json",
+          "n": 250,
+          "b": 288578
+        },
+        {
+          "f": "olympiad-stepwise-044.json",
+          "n": 250,
+          "b": 299050
+        },
+        {
+          "f": "olympiad-stepwise-045.json",
+          "n": 250,
+          "b": 292220
+        },
+        {
+          "f": "olympiad-stepwise-046.json",
+          "n": 250,
+          "b": 291676
+        },
+        {
+          "f": "olympiad-stepwise-047.json",
+          "n": 250,
+          "b": 288657
+        },
+        {
+          "f": "olympiad-stepwise-048.json",
+          "n": 250,
+          "b": 284459
+        },
+        {
+          "f": "olympiad-stepwise-049.json",
+          "n": 250,
+          "b": 306721
+        },
+        {
+          "f": "olympiad-stepwise-050.json",
+          "n": 250,
+          "b": 292117
+        },
+        {
+          "f": "olympiad-stepwise-051.json",
+          "n": 250,
+          "b": 291295
+        },
+        {
+          "f": "olympiad-stepwise-052.json",
+          "n": 250,
+          "b": 302409
+        },
+        {
+          "f": "olympiad-stepwise-053.json",
+          "n": 250,
+          "b": 286748
+        },
+        {
+          "f": "olympiad-stepwise-054.json",
+          "n": 250,
+          "b": 283800
+        },
+        {
+          "f": "olympiad-stepwise-055.json",
+          "n": 250,
+          "b": 289264
+        },
+        {
+          "f": "olympiad-stepwise-056.json",
+          "n": 250,
+          "b": 297697
+        },
+        {
+          "f": "olympiad-stepwise-057.json",
+          "n": 250,
+          "b": 301164
+        },
+        {
+          "f": "olympiad-stepwise-058.json",
+          "n": 250,
+          "b": 294780
+        },
+        {
+          "f": "olympiad-stepwise-059.json",
+          "n": 250,
+          "b": 281610
+        },
+        {
+          "f": "olympiad-stepwise-060.json",
+          "n": 250,
+          "b": 323713
+        },
+        {
+          "f": "olympiad-stepwise-061.json",
+          "n": 250,
+          "b": 295095
+        },
+        {
+          "f": "olympiad-stepwise-062.json",
+          "n": 250,
+          "b": 287060
+        },
+        {
+          "f": "olympiad-stepwise-063.json",
+          "n": 250,
+          "b": 292713
+        },
+        {
+          "f": "olympiad-stepwise-064.json",
+          "n": 250,
+          "b": 284688
+        },
+        {
+          "f": "olympiad-stepwise-065.json",
+          "n": 250,
+          "b": 293803
+        },
+        {
+          "f": "olympiad-stepwise-066.json",
+          "n": 250,
+          "b": 283712
+        },
+        {
+          "f": "olympiad-stepwise-067.json",
+          "n": 250,
+          "b": 292546
+        },
+        {
+          "f": "olympiad-stepwise-068.json",
+          "n": 250,
+          "b": 287746
+        },
+        {
+          "f": "olympiad-stepwise-069.json",
+          "n": 250,
+          "b": 294068
+        },
+        {
+          "f": "olympiad-stepwise-070.json",
+          "n": 250,
+          "b": 289026
+        },
+        {
+          "f": "olympiad-stepwise-071.json",
+          "n": 250,
+          "b": 296518
+        },
+        {
+          "f": "olympiad-stepwise-072.json",
+          "n": 250,
+          "b": 295630
+        },
+        {
+          "f": "olympiad-stepwise-073.json",
+          "n": 250,
+          "b": 298620
+        },
+        {
+          "f": "olympiad-stepwise-074.json",
+          "n": 250,
+          "b": 293192
+        },
+        {
+          "f": "olympiad-stepwise-075.json",
+          "n": 250,
+          "b": 284274
+        },
+        {
+          "f": "olympiad-stepwise-076.json",
+          "n": 250,
+          "b": 289327
+        },
+        {
+          "f": "olympiad-stepwise-077.json",
+          "n": 250,
+          "b": 290784
+        },
+        {
+          "f": "olympiad-stepwise-078.json",
+          "n": 250,
+          "b": 295633
+        },
+        {
+          "f": "olympiad-stepwise-079.json",
+          "n": 250,
+          "b": 284598
+        },
+        {
+          "f": "olympiad-stepwise-080.json",
+          "n": 212,
+          "b": 242981
+        }
+      ]
+    }
+  }
+}

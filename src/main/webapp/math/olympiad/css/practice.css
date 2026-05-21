@@ -1,0 +1,384 @@
+/* practice.css — Olympiad untimed practice page.
+   Builds on the .xm-* design tokens already defined in /math/amc/css/exam.css
+   (loaded by the JSP first). The .op-* namespace covers the practice-specific
+   layout: header row, answer input, solution reveal, stat bar. */
+
+.op-card {
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius);
+    padding: 1.4rem 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* ── Top row: problem id + skip/next buttons ──────────────────────────── */
+.op-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.85rem;
+}
+.op-qid {
+    font: 600 0.78rem var(--ms-font-mono);
+    color: var(--ms-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.op-head-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* ── Result banner (correct / wrong / info) ──────────────────────────── */
+.op-banner {
+    margin: 0 0 1rem;
+    padding: 0.65rem 0.95rem;
+    font: 0.92rem/1.55 var(--ms-font-sans);
+    border-radius: var(--ms-radius-sm);
+    border: 1px solid transparent;
+}
+.op-banner-ok   { background: rgba(21, 128, 61, 0.10); color: var(--xm-ok);  border-color: rgba(21, 128, 61, 0.32); }
+.op-banner-bad  { background: rgba(185, 28, 28, 0.08); color: var(--xm-bad); border-color: rgba(185, 28, 28, 0.32); }
+.op-banner-info { background: var(--xm-accent-soft);    color: var(--xm-accent-dark); border-color: rgba(99, 102, 241, 0.32); }
+
+/* ── Problem body (KaTeX inside) ──────────────────────────────────────── */
+/* Distinct exam-question typography: serif body, larger size, big "Q." */
+/* badge in the gutter so the question reads like a real test paper.    */
+.op-problem {
+    position: relative;
+    padding: 0.4rem 0 0.4rem 2.6rem;
+    font: 1.1rem/1.75 'Charter','Bitstream Charter','Sitka Text','Cambria','Lora','Georgia',serif;
+    color: var(--ms-ink);
+    margin: 0 0 1.2rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.op-q-badge {
+    position: absolute;
+    left: 0;
+    top: 0.15rem;
+    font: 700 1.85rem/1 'Instrument Serif','Times New Roman','Cambria',Georgia,serif;
+    font-style: italic;
+    color: var(--xm-accent);
+    user-select: none;
+    letter-spacing: -0.02em;
+}
+
+/* ── Typewriter reveal on first render of a new problem ───────────────── */
+/* Adds .op-problem-typing for one render; flag flips to false in render() */
+/* so the animation never re-fires during Check/Peek/Reveal re-renders.    */
+.op-problem-typing {
+    /* clip-path with steps() gives the characteristic typewriter feel:    */
+    /* the visible region grows from 0%→100% in discrete steps instead of  */
+    /* smooth easing.                                                      */
+    animation: op-typewriter 1.4s steps(36, end) both;
+}
+.op-problem-typing .op-q-badge {
+    /* Badge ignores the clip animation and pops in cleanly before the     */
+    /* text starts streaming — feels like the question announces itself.   */
+    animation: op-q-pop 0.28s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+@keyframes op-typewriter {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0); }
+}
+@keyframes op-q-pop {
+    from { transform: scale(0.5) rotate(-12deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0);        opacity: 1; }
+}
+
+/* Users with reduced-motion preferences skip the typewriter and pop. */
+@media (prefers-reduced-motion: reduce) {
+    .op-problem-typing,
+    .op-problem-typing .op-q-badge {
+        animation: none !important;
+    }
+}
+.op-problem .katex { font-size: 1.04em; }
+.op-problem a { color: var(--xm-accent); text-decoration: none; border-bottom: 1px dotted; }
+
+/* Solution is sans-serif on purpose — makes it visually distinct from   */
+/* the problem statement so the two don't blur together.                 */
+.op-solution-body {
+    font: 0.95rem/1.65 var(--ms-font-sans);
+    color: var(--ms-ink);
+    white-space: pre-wrap;
+}
+
+/* Print button: same `.xm-btn` chrome but a touch tighter so it fits in */
+/* the header row alongside Skip / Next.                                 */
+.op-print-btn { padding-left: 0.7rem; padding-right: 0.85rem; }
+.op-print-btn span { margin-right: 0.25rem; }
+
+/* ── Answer entry row ─────────────────────────────────────────────────── */
+.op-answer-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 0 0 0.4rem;
+}
+.op-answer-row label {
+    font: 600 0.88rem var(--ms-font-sans);
+    color: var(--ms-ink-soft);
+}
+.op-answer-row input {
+    flex: 1 1 18rem;
+    font: 600 1rem var(--ms-font-mono);
+    padding: 0.55rem 0.8rem;
+    border: 1.5px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    background: var(--ms-panel-bg);
+    color: var(--ms-ink);
+}
+.op-answer-row input:focus {
+    outline: none;
+    border-color: var(--xm-accent);
+    box-shadow: 0 0 0 3px var(--xm-accent-soft);
+}
+
+/* Small hint below the input explaining what forms are accepted */
+.op-hint {
+    display: block;
+    font: 0.78rem/1.45 var(--ms-font-sans);
+    color: var(--ms-muted);
+    margin: 0 0 1rem;
+    padding: 0 0.1rem;
+}
+.op-hint code {
+    font-family: var(--ms-font-mono);
+    font-size: 0.85em;
+    background: var(--ms-panel-bg-soft);
+    padding: 0.05rem 0.35rem;
+    border: 1px solid var(--ms-line);
+    border-radius: 4px;
+    color: var(--ms-ink);
+}
+
+/* Peeked answer — rendered with KaTeX, shows the key without revealing  */
+/* the full walkthrough. Lets users compare their work on paper.         */
+.op-peeked {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    padding: 0.65rem 0.9rem;
+    margin: 0 0 1rem;
+    background: var(--xm-accent-soft);
+    border: 1px solid rgba(99, 102, 241, 0.32);
+    border-radius: var(--ms-radius-sm);
+}
+.op-peeked-label {
+    font: 700 0.78rem var(--ms-font-sans);
+    color: var(--xm-accent-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.op-peeked-tex .katex {
+    font-size: 1.15em !important;
+    color: var(--ms-ink);
+}
+
+/* ── Divider between problem/answer and the reveal section ───────────── */
+.op-divider {
+    border-top: 1px dashed var(--ms-line);
+    margin: 1.1rem 0;
+}
+
+/* ── Reveal button + solution card ────────────────────────────────────── */
+.op-reveal-btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+}
+.op-solution {
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    padding: 1rem 1.15rem 1.15rem;
+}
+.op-solution-head {
+    font: 700 0.78rem var(--ms-font-sans);
+    color: var(--xm-accent-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.7rem;
+}
+.op-solution-body {
+    font: 0.95rem/1.65 var(--ms-font-serif, Georgia, serif);
+    color: var(--ms-ink);
+    white-space: pre-wrap;
+}
+.op-solution-body .katex { font-size: 1.02em; }
+
+/* ── Stat bar below the card ──────────────────────────────────────────── */
+.op-statbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.2rem;
+    margin-top: 1rem;
+    padding: 0.85rem 1.1rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px solid var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+}
+.op-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+    min-width: 72px;
+}
+.op-stat-num {
+    font: 700 1.15rem var(--ms-font-mono);
+    color: var(--xm-accent-dark);
+    line-height: 1;
+}
+.op-stat-num strong {
+    color: var(--xm-ok);
+}
+.op-stat-lbl {
+    font: 0.7rem var(--ms-font-sans);
+    color: var(--ms-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.op-statbar #op-stats-reset {
+    margin-left: auto;
+}
+
+@media (max-width: 640px) {
+    .op-card { padding: 1.1rem 1rem; }
+    .op-answer-row input { flex-basis: 100%; }
+    .op-statbar { gap: 0.4rem 0.8rem; }
+    .op-stat { min-width: 60px; }
+    .op-stat-num { font-size: 1rem; }
+}
+
+/* ── Print-only branding (hidden on screen, shown on paper) ───────────── */
+.op-print-brand, .op-print-footer {
+    display: none;
+}
+
+/* ── @media print — hide everything except question + solution ───────── */
+@media print {
+    /* Page setup */
+    @page { margin: 0.7in 0.6in 0.8in; }
+
+    /* Hide site chrome */
+    body, html {
+        background: #fff !important;
+        color: #000 !important;
+    }
+    .ms-hero,
+    .ms-sidebar, .ms-sidebar-backdrop, .ms-sidebar-toggle,
+    .ms-rail, .ms-inline-ad,
+    .ms-title,                        /* breadcrumbs + h1 + hero chips */
+    .modern-nav, .modern-nav-header, header.modern-nav-header,
+    nav.modern-nav, .nav-header,      /* common nav classes */
+    .ad-hero-banner, .ad-sticky-footer, .ad-init,
+    .footer, footer,
+    .xm-toc, .xm-seo-section,         /* SEO body */
+    .op-head-actions,                 /* Print / Skip / Next buttons */
+    .op-answer-row,                   /* answer input + Check button */
+    .op-reveal-btn,                   /* "Reveal stepwise solution" CTA */
+    .op-statbar,                      /* session stat bar */
+    .op-divider,
+    .op-banner,                       /* correct/wrong banners */
+    .op-qid,                          /* dim id label — replaced by branding header */
+    #xm-share-host,
+    .xm-modal-backdrop {
+        display: none !important;
+    }
+
+    main.ms-main {
+        display: block !important;
+        max-width: 7in;
+        margin: 0 auto !important;
+        padding: 0 !important;
+    }
+    .ms-workspace { margin: 0 !important; padding: 0 !important; }
+
+    /* Branding header — only shown on paper */
+    .op-print-brand {
+        display: flex !important;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding-bottom: 0.4rem;
+        margin-bottom: 0.6rem;
+        border-bottom: 1.5px solid #000;
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+    .op-print-brand-mark {
+        font-weight: 700;
+        font-size: 11pt;
+        color: #000;
+        letter-spacing: 0.02em;
+    }
+    .op-print-brand-path {
+        font-family: 'JetBrains Mono', 'Courier New', monospace;
+        font-size: 9pt;
+        color: #555;
+    }
+
+    /* Question + solution body */
+    .op-card {
+        border: 0 !important;
+        background: #fff !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+    }
+    .op-problem {
+        padding-left: 2.2rem !important;
+        font: 11.5pt/1.55 'Charter', 'Cambria', Georgia, serif !important;
+        color: #000 !important;
+    }
+    .op-q-badge {
+        font: 700 italic 1.4rem 'Instrument Serif', Georgia, serif !important;
+        color: #000 !important;
+    }
+    .op-solution {
+        margin-top: 0.5rem !important;
+        padding: 0.5rem 0 0 !important;
+        border-top: 1px dashed #888 !important;
+        background: #fff !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+        border-bottom: 0 !important;
+    }
+    .op-solution-head {
+        color: #000 !important;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+    }
+    .op-solution-body {
+        font: 10.5pt/1.5 'Inter', sans-serif !important;
+        color: #000 !important;
+    }
+    .op-solution-body .katex { font-size: 10.5pt !important; }
+    .xm-diagram {
+        max-width: 100% !important;
+        page-break-inside: avoid;
+        border: 1px solid #888 !important;
+        background: #fff !important;
+    }
+
+    /* Branding footer — only shown on paper */
+    .op-print-footer {
+        display: block !important;
+        margin-top: 1.2rem;
+        padding-top: 0.45rem;
+        border-top: 1px solid #888;
+        font: 9pt 'Inter', sans-serif;
+        color: #555;
+        text-align: center;
+    }
+
+    /* Hide the running-document URL/page-number that browsers add */
+    a[href]::after { content: '' !important; }
+}

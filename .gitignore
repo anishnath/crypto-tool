@@ -27,3 +27,4 @@ target
 /.searchapi/
 /.searchapi2/
 /src/main/webapp/math/amc/amc_aime.json
+/src/main/webapp/math/olympiad/olympiad-math-stepwise-solutions-llama3-20k.json
