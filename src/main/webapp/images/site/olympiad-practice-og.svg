@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#e7f4f3"/>
+    </linearGradient>
+    <radialGradient id="accentGlow" cx="0.3" cy="0.5" r="0.45">
+      <stop offset="0%"   stop-color="#0d9488" stop-opacity="0.20"/>
+      <stop offset="55%"  stop-color="#0d9488" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#0d9488" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.05"/>
+    </pattern>
+    <linearGradient id="stepGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#134e4a"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ─── Left composition: stylised problem card with Q. + stepwise solution ─── -->
+  <g transform="translate(72 105)">
+    <!-- Card outline -->
+    <rect x="0" y="0" width="500" height="420" rx="14"
+          fill="#fefdfb" stroke="#cce7e4" stroke-width="1.5"/>
+    <!-- Subtle inner shadow line -->
+    <rect x="0" y="0" width="500" height="420" rx="14"
+          fill="none" stroke="#0d9488" stroke-opacity="0.08" stroke-width="3"/>
+
+    <!-- Q. badge -->
+    <text x="32" y="80" font-family="'Instrument Serif','Times New Roman',Georgia,serif"
+          font-style="italic" font-weight="700" font-size="46"
+          fill="#0d9488" letter-spacing="-0.02em">Q.</text>
+
+    <!-- Problem text — fake but legible -->
+    <g font-family="'Charter','Cambria','Georgia',serif" fill="#1c1917">
+      <text x="92" y="63" font-size="20">If</text>
+      <text x="120" y="63" font-size="22" font-style="italic">x²−5x+6=0,</text>
+      <text x="92" y="94" font-size="20">find the value of <tspan font-style="italic" dx="6">x²+1/x².</tspan></text>
+    </g>
+
+    <!-- Divider -->
+    <line x1="32" y1="120" x2="468" y2="120" stroke="#cce7e4" stroke-width="1" stroke-dasharray="4 4"/>
+
+    <!-- Stepwise solution label -->
+    <text x="32" y="148" font-family="'Inter',sans-serif" font-size="13" font-weight="700"
+          fill="#0d9488" letter-spacing="0.06em">STEPWISE SOLUTION</text>
+
+    <!-- Step pills -->
+    <g font-family="'Inter',sans-serif">
+      <!-- step 1 -->
+      <g transform="translate(32 172)">
+        <circle cx="14" cy="14" r="14" fill="url(#stepGrad)"/>
+        <text x="14" y="19" text-anchor="middle" font-size="13" font-weight="700" fill="#fefdfb">1</text>
+        <text x="40" y="19" font-size="16" fill="#1c1917">Factor:  (x−2)(x−3) = 0</text>
+      </g>
+      <!-- step 2 -->
+      <g transform="translate(32 212)">
+        <circle cx="14" cy="14" r="14" fill="url(#stepGrad)"/>
+        <text x="14" y="19" text-anchor="middle" font-size="13" font-weight="700" fill="#fefdfb">2</text>
+        <text x="40" y="19" font-size="16" fill="#1c1917">Roots:  x = 2 or x = 3</text>
+      </g>
+      <!-- step 3 -->
+      <g transform="translate(32 252)">
+        <circle cx="14" cy="14" r="14" fill="url(#stepGrad)"/>
+        <text x="14" y="19" text-anchor="middle" font-size="13" font-weight="700" fill="#fefdfb">3</text>
+        <text x="40" y="19" font-size="16" fill="#1c1917">Sub x = 2:  4 + 1/4 = 17/4</text>
+      </g>
+      <!-- step 4 (boxed) -->
+      <g transform="translate(32 292)">
+        <circle cx="14" cy="14" r="14" fill="url(#stepGrad)"/>
+        <text x="14" y="19" text-anchor="middle" font-size="13" font-weight="700" fill="#fefdfb">4</text>
+        <text x="40" y="19" font-size="16" fill="#1c1917">Sub x = 3:</text>
+        <!-- boxed answer -->
+        <rect x="135" y="0" width="100" height="28" rx="4" fill="#fefdfb" stroke="#0d9488" stroke-width="2"/>
+        <text x="185" y="19" text-anchor="middle" font-family="'JetBrains Mono','Roboto Mono',monospace"
+              font-size="14" font-weight="700" fill="#0d9488">82/9</text>
+      </g>
+    </g>
+
+    <!-- Footer with brand tag -->
+    <line x1="32" y1="350" x2="468" y2="350" stroke="#cce7e4" stroke-width="1" stroke-dasharray="4 4"/>
+    <g transform="translate(32 372)">
+      <text font-family="'JetBrains Mono','Roboto Mono',monospace" font-size="12"
+            fill="#0d9488" font-weight="600" opacity="0.75">8gwifi.org/math/olympiad</text>
+      <text x="436" font-family="'Inter',sans-serif" font-size="11" font-weight="500"
+            fill="#0d9488" text-anchor="end" letter-spacing="0.08em">PRINT-READY</text>
+    </g>
+  </g>
+
+  <!-- ─── Right text composition ─── -->
+  <g transform="translate(680 130)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <!-- accent bar -->
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#0d9488"/>
+
+    <!-- eyebrow -->
+    <text x="0" y="36" font-size="20" font-weight="600" fill="#0d9488" letter-spacing="3">8GWIFI · MATH</text>
+
+    <!-- title -->
+    <text x="0" y="118" font-size="68" font-weight="700" fill="#1c1917"
+          font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">Olympiad math,</text>
+    <text x="0" y="186" font-size="68" font-weight="700" fill="#1c1917"
+          font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">stepwise.</text>
+
+    <!-- description -->
+    <text x="0" y="240" font-size="20" fill="#44403c" font-weight="400">Real past olympiad problems with</text>
+    <text x="0" y="268" font-size="20" fill="#44403c" font-weight="400">numbered, motivated walkthroughs.</text>
+    <text x="0" y="296" font-size="20" fill="#44403c" font-weight="400">Untimed practice · free · in your browser.</text>
+
+    <!-- chip row -->
+    <g transform="translate(0 332)">
+      <g>
+        <rect x="0" y="0" width="120" height="32" rx="16" fill="#0d9488" fill-opacity="0.1" stroke="#0d9488" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="60" y="21" text-anchor="middle" font-size="12" font-weight="700" fill="#134e4a">AIME · USAMO</text>
+      </g>
+      <g transform="translate(132 0)">
+        <rect x="0" y="0" width="116" height="32" rx="16" fill="#0d9488" fill-opacity="0.1" stroke="#0d9488" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="58" y="21" text-anchor="middle" font-size="12" font-weight="700" fill="#134e4a">RMO · INMO</text>
+      </g>
+      <g transform="translate(260 0)">
+        <rect x="0" y="0" width="92" height="32" rx="16" fill="#0d9488" fill-opacity="0.1" stroke="#0d9488" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="46" y="21" text-anchor="middle" font-size="12" font-weight="700" fill="#134e4a">IMO PREP</text>
+      </g>
+      <g transform="translate(364 0)">
+        <rect x="0" y="0" width="86" height="32" rx="16" fill="#0d9488" fill-opacity="0.1" stroke="#0d9488" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="43" y="21" text-anchor="middle" font-size="12" font-weight="700" fill="#134e4a">PUTNAM</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- bottom-right brand mark -->
+  <g transform="translate(1140 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace">
+    <text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org/math/olympiad</text>
+  </g>
+</svg>
