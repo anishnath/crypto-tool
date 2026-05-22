@@ -1,7 +1,7 @@
 {
-  "version": "1.10",
-  "lastUpdated": "2026-05-21T17:00:00.000Z",
-  "totalTools": 449,
+  "version": "1.11",
+  "lastUpdated": "2026-05-22T00:00:00.000Z",
+  "totalTools": 451,
   "categories": [
     "Biology",
     "Blockchain & Crypto",
@@ -1538,6 +1538,20 @@
       "category": "Mathematics",
       "keywords": "math equation editor mathematics",
       "description": "Math Equation Editor - Free online mathematics tool"
+    },
+    {
+      "name": "JEE Mains 2025 Mock Test — Free Live Timed Papers",
+      "url": "math/iit/",
+      "category": "Mathematics",
+      "keywords": "JEE Mains mock test, JEE Main 2025 mock test, JEE Main 2025 question paper, JEE Mains 22 Jan 2025, JEE Mains 23 Jan 2025, JEE Mains 24 Jan 2025, JEE Mains 28 Jan 2025, JEE Mains 29 Jan 2025, JEE Mains shift 1 shift 2, JEE Mains answer key with solutions, JEE Mains live mock, IIT JEE practice online, JEE Mains official scoring +4 -1, JEE PYQ practice, JEE Mains previous year questions, JEE preparation free",
+      "description": "Free JEE Mains 2025 live mock tests — every shift, real 25-question paper, official +4/-1 scoring, stepwise solutions on submit. Plus untimed practice with thousands of historical problems."
+    },
+    {
+      "name": "JEE Mains Practice Problems with Solutions",
+      "url": "math/iit/practice.jsp",
+      "category": "Mathematics",
+      "keywords": "JEE Mains practice problems, JEE Mains practice with solutions, JEE math practice, JEE PYQ math, JEE Mains previous year questions, IIT JEE math online practice, JEE Mains topic-wise practice, JEE Mains free practice, JEE numerical type questions, JEE MCQ practice",
+      "description": "Free JEE Mains math practice with stepwise solutions. Real past problems, MCQ and numerical types, smart answer-matching for fractions and radicals, print-ready walkthroughs."
     },
     {
       "name": "Matrix Calculator with Steps & AI Image Scan",
