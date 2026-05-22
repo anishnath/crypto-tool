@@ -286,6 +286,14 @@
                     <span class="ms-tool-card-icon">&#9733;</span>
                     <span><span class="ms-tool-card-title">Olympiad Practice</span><span class="ms-tool-card-sub">USAMO · IMO · RMO · INMO · Putnam</span></span>
                 </a>
+                <a href="<%=request.getContextPath()%>/math/iit/" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">JEE</span>
+                    <span><span class="ms-tool-card-title">JEE Mains 2025 Mock</span><span class="ms-tool-card-sub">All 10 shifts · official +4 / −1 scoring</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/math/iit/practice.jsp" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#128214;</span>
+                    <span><span class="ms-tool-card-title">JEE Practice</span><span class="ms-tool-card-sub">Untimed · stepwise solutions</span></span>
+                </a>
             </div>
         </div>
 

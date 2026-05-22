@@ -150,7 +150,7 @@
     </div>
 
     <!-- Exams -->
-    <div class="ms-group<%= collapsedCls(activeService, "amc", "aime", "olympiad-practice") %>" data-group="exams">
+    <div class="ms-group<%= collapsedCls(activeService, "amc", "aime", "olympiad-practice", "jee-hub", "jee-practice", "jee-mock") %>" data-group="exams">
         <button class="ms-group-header" type="button">Exams <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/math/amc/" class="ms-item <%= "amc".equals(activeService) ? "active" : "" %>">
@@ -161,6 +161,12 @@
             </a>
             <a href="<%= ctx %>/math/olympiad/" class="ms-item <%= "olympiad-practice".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#9733;</span> <span class="ms-item-label">Olympiad Practice</span>
+            </a>
+            <a href="<%= ctx %>/math/iit/" class="ms-item <%= ("jee-hub".equals(activeService) || "jee-mock".equals(activeService)) ? "active" : "" %>">
+                <span class="ms-item-icon">JEE</span> <span class="ms-item-label">JEE Mains 2025 Mock</span>
+            </a>
+            <a href="<%= ctx %>/math/iit/practice.jsp" class="ms-item <%= "jee-practice".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#128214;</span> <span class="ms-item-label">JEE Practice</span>
             </a>
         </div>
     </div>
