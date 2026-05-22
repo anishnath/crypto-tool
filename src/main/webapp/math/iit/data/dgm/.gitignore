@@ -1,0 +1,6 @@
+# Debug artifacts from split_iit.py — diagram rebuild log + asy temps.
+# Only the rendered .svg files are committed.
+_failures.log
+*.asy
+*_.pdf
+*.eps

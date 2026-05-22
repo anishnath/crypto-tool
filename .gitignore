@@ -28,3 +28,6 @@ target
 /.searchapi2/
 /src/main/webapp/math/amc/amc_aime.json
 /src/main/webapp/math/olympiad/olympiad-math-stepwise-solutions-llama3-20k.json
+/src/main/webapp/math/olympiad/PROMO.md
+/src/main/webapp/math/iit/jee_mains_2025.json
+/src/main/webapp/math/iit/jee-neet.json

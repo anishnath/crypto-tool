@@ -1,0 +1,426 @@
+{
+  "version": 1,
+  "generated_at": "2026-05-22T21:33:31",
+  "shard_size": 200,
+  "total": 4765,
+  "buckets": {
+    "jee-2025-paper": {
+      "count": 250,
+      "shard_count": 10,
+      "shifts": [
+        {
+          "name": "JEE Main 2025 (22 Jan Shift 1)",
+          "slug": "22-jan-shift-1",
+          "q": "jee-2025-paper-22-jan-shift-1.json",
+          "s": "jee-2025-paper-22-jan-shift-1.json",
+          "n": 25
+        },
+        {
+          "name": "JEE Main 2025 (29 Jan Shift 2)",
+          "slug": "29-jan-shift-2",
+          "q": "jee-2025-paper-29-jan-shift-2.json",
+          "s": "jee-2025-paper-29-jan-shift-2.json",
+          "n": 25
+        },
+        {
+          "name": "JEE Main 2025 (22 Jan Shift 2)",
+          "slug": "22-jan-shift-2",
+          "q": "jee-2025-paper-22-jan-shift-2.json",
+          "s": "jee-2025-paper-22-jan-shift-2.json",
+          "n": 25
+        },
+        {
+          "name": "JEE Main 2025 (23 Jan Shift 1)",
+          "slug": "23-jan-shift-1",
+          "q": "jee-2025-paper-23-jan-shift-1.json",
+          "s": "jee-2025-paper-23-jan-shift-1.json",
+          "n": 25
+        },
+        {
+          "name": "JEE Main 2025 (23 Jan Shift 2)",
+          "slug": "23-jan-shift-2",
+          "q": "jee-2025-paper-23-jan-shift-2.json",
+          "s": "jee-2025-paper-23-jan-shift-2.json",
+          "n": 25
+        },
+        {
+          "name": "JEE Main 2025 (24 Jan Shift 1)",
+          "slug": "24-jan-shift-1",
+          "q": "jee-2025-paper-24-jan-shift-1.json",
+          "s": "jee-2025-paper-24-jan-shift-1.json",
+          "n": 25
+        },
+        {
+          "name": "JEE Main 2025 (24 Jan Shift 2)",
+          "slug": "24-jan-shift-2",
+          "q": "jee-2025-paper-24-jan-shift-2.json",
+          "s": "jee-2025-paper-24-jan-shift-2.json",
+          "n": 25
+        },
+        {
+          "name": "JEE Main 2025 (28 Jan Shift 1)",
+          "slug": "28-jan-shift-1",
+          "q": "jee-2025-paper-28-jan-shift-1.json",
+          "s": "jee-2025-paper-28-jan-shift-1.json",
+          "n": 25
+        },
+        {
+          "name": "JEE Main 2025 (28 Jan Shift 2)",
+          "slug": "28-jan-shift-2",
+          "q": "jee-2025-paper-28-jan-shift-2.json",
+          "s": "jee-2025-paper-28-jan-shift-2.json",
+          "n": 25
+        },
+        {
+          "name": "JEE Main 2025 (29 Jan Shift 1)",
+          "slug": "29-jan-shift-1",
+          "q": "jee-2025-paper-29-jan-shift-1.json",
+          "s": "jee-2025-paper-29-jan-shift-1.json",
+          "n": 25
+        }
+      ],
+      "q_shards": [
+        {
+          "f": "jee-2025-paper-22-jan-shift-1.json",
+          "n": 25,
+          "b": 8996
+        },
+        {
+          "f": "jee-2025-paper-29-jan-shift-2.json",
+          "n": 25,
+          "b": 10366
+        },
+        {
+          "f": "jee-2025-paper-22-jan-shift-2.json",
+          "n": 25,
+          "b": 9633
+        },
+        {
+          "f": "jee-2025-paper-23-jan-shift-1.json",
+          "n": 25,
+          "b": 10519
+        },
+        {
+          "f": "jee-2025-paper-23-jan-shift-2.json",
+          "n": 25,
+          "b": 9884
+        },
+        {
+          "f": "jee-2025-paper-24-jan-shift-1.json",
+          "n": 25,
+          "b": 9809
+        },
+        {
+          "f": "jee-2025-paper-24-jan-shift-2.json",
+          "n": 25,
+          "b": 9302
+        },
+        {
+          "f": "jee-2025-paper-28-jan-shift-1.json",
+          "n": 25,
+          "b": 10531
+        },
+        {
+          "f": "jee-2025-paper-28-jan-shift-2.json",
+          "n": 25,
+          "b": 9808
+        },
+        {
+          "f": "jee-2025-paper-29-jan-shift-1.json",
+          "n": 25,
+          "b": 10869
+        }
+      ],
+      "s_shards": [
+        {
+          "f": "jee-2025-paper-22-jan-shift-1.json",
+          "n": 25,
+          "b": 1001
+        },
+        {
+          "f": "jee-2025-paper-29-jan-shift-2.json",
+          "n": 25,
+          "b": 1001
+        },
+        {
+          "f": "jee-2025-paper-22-jan-shift-2.json",
+          "n": 25,
+          "b": 1001
+        },
+        {
+          "f": "jee-2025-paper-23-jan-shift-1.json",
+          "n": 25,
+          "b": 1001
+        },
+        {
+          "f": "jee-2025-paper-23-jan-shift-2.json",
+          "n": 25,
+          "b": 1001
+        },
+        {
+          "f": "jee-2025-paper-24-jan-shift-1.json",
+          "n": 25,
+          "b": 1001
+        },
+        {
+          "f": "jee-2025-paper-24-jan-shift-2.json",
+          "n": 25,
+          "b": 1001
+        },
+        {
+          "f": "jee-2025-paper-28-jan-shift-1.json",
+          "n": 25,
+          "b": 1001
+        },
+        {
+          "f": "jee-2025-paper-28-jan-shift-2.json",
+          "n": 25,
+          "b": 1001
+        },
+        {
+          "f": "jee-2025-paper-29-jan-shift-1.json",
+          "n": 25,
+          "b": 1001
+        }
+      ]
+    },
+    "jee-practice": {
+      "count": 4515,
+      "shard_count": 23,
+      "q_shards": [
+        {
+          "f": "jee-practice-000.json",
+          "n": 200,
+          "b": 77700
+        },
+        {
+          "f": "jee-practice-001.json",
+          "n": 200,
+          "b": 69561
+        },
+        {
+          "f": "jee-practice-002.json",
+          "n": 200,
+          "b": 71242
+        },
+        {
+          "f": "jee-practice-003.json",
+          "n": 200,
+          "b": 74858
+        },
+        {
+          "f": "jee-practice-004.json",
+          "n": 200,
+          "b": 73615
+        },
+        {
+          "f": "jee-practice-005.json",
+          "n": 200,
+          "b": 71973
+        },
+        {
+          "f": "jee-practice-006.json",
+          "n": 200,
+          "b": 76437
+        },
+        {
+          "f": "jee-practice-007.json",
+          "n": 200,
+          "b": 75558
+        },
+        {
+          "f": "jee-practice-008.json",
+          "n": 200,
+          "b": 70896
+        },
+        {
+          "f": "jee-practice-009.json",
+          "n": 200,
+          "b": 71513
+        },
+        {
+          "f": "jee-practice-010.json",
+          "n": 200,
+          "b": 72247
+        },
+        {
+          "f": "jee-practice-011.json",
+          "n": 200,
+          "b": 83753
+        },
+        {
+          "f": "jee-practice-012.json",
+          "n": 200,
+          "b": 73133
+        },
+        {
+          "f": "jee-practice-013.json",
+          "n": 200,
+          "b": 74948
+        },
+        {
+          "f": "jee-practice-014.json",
+          "n": 200,
+          "b": 72441
+        },
+        {
+          "f": "jee-practice-015.json",
+          "n": 200,
+          "b": 74916
+        },
+        {
+          "f": "jee-practice-016.json",
+          "n": 200,
+          "b": 80933
+        },
+        {
+          "f": "jee-practice-017.json",
+          "n": 200,
+          "b": 72068
+        },
+        {
+          "f": "jee-practice-018.json",
+          "n": 200,
+          "b": 74376
+        },
+        {
+          "f": "jee-practice-019.json",
+          "n": 200,
+          "b": 78496
+        },
+        {
+          "f": "jee-practice-020.json",
+          "n": 200,
+          "b": 73081
+        },
+        {
+          "f": "jee-practice-021.json",
+          "n": 200,
+          "b": 75334
+        },
+        {
+          "f": "jee-practice-022.json",
+          "n": 115,
+          "b": 39880
+        }
+      ],
+      "s_shards": [
+        {
+          "f": "jee-practice-000.json",
+          "n": 200,
+          "b": 158967
+        },
+        {
+          "f": "jee-practice-001.json",
+          "n": 200,
+          "b": 153153
+        },
+        {
+          "f": "jee-practice-002.json",
+          "n": 200,
+          "b": 175262
+        },
+        {
+          "f": "jee-practice-003.json",
+          "n": 200,
+          "b": 140490
+        },
+        {
+          "f": "jee-practice-004.json",
+          "n": 200,
+          "b": 166388
+        },
+        {
+          "f": "jee-practice-005.json",
+          "n": 200,
+          "b": 161337
+        },
+        {
+          "f": "jee-practice-006.json",
+          "n": 200,
+          "b": 162759
+        },
+        {
+          "f": "jee-practice-007.json",
+          "n": 200,
+          "b": 162004
+        },
+        {
+          "f": "jee-practice-008.json",
+          "n": 200,
+          "b": 158882
+        },
+        {
+          "f": "jee-practice-009.json",
+          "n": 200,
+          "b": 157431
+        },
+        {
+          "f": "jee-practice-010.json",
+          "n": 200,
+          "b": 168238
+        },
+        {
+          "f": "jee-practice-011.json",
+          "n": 200,
+          "b": 164663
+        },
+        {
+          "f": "jee-practice-012.json",
+          "n": 200,
+          "b": 154769
+        },
+        {
+          "f": "jee-practice-013.json",
+          "n": 200,
+          "b": 162033
+        },
+        {
+          "f": "jee-practice-014.json",
+          "n": 200,
+          "b": 159547
+        },
+        {
+          "f": "jee-practice-015.json",
+          "n": 200,
+          "b": 149247
+        },
+        {
+          "f": "jee-practice-016.json",
+          "n": 200,
+          "b": 167648
+        },
+        {
+          "f": "jee-practice-017.json",
+          "n": 200,
+          "b": 166543
+        },
+        {
+          "f": "jee-practice-018.json",
+          "n": 200,
+          "b": 176163
+        },
+        {
+          "f": "jee-practice-019.json",
+          "n": 200,
+          "b": 157142
+        },
+        {
+          "f": "jee-practice-020.json",
+          "n": 200,
+          "b": 163146
+        },
+        {
+          "f": "jee-practice-021.json",
+          "n": 200,
+          "b": 154428
+        },
+        {
+          "f": "jee-practice-022.json",
+          "n": 115,
+          "b": 96403
+        }
+      ]
+    }
+  }
+}
