@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#fdeed8"/>
+    </linearGradient>
+    <radialGradient id="accentGlow" cx="0.3" cy="0.5" r="0.45">
+      <stop offset="0%"   stop-color="#ea580c" stop-opacity="0.18"/>
+      <stop offset="55%"  stop-color="#ea580c" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#ea580c" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.05"/>
+    </pattern>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#9a3412"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ─── Left composition: scorecard mockup ─── -->
+  <g transform="translate(72 105)">
+    <!-- Card outline -->
+    <rect x="0" y="0" width="500" height="420" rx="14"
+          fill="#fefdfb" stroke="#fbd5b8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="500" height="420" rx="14"
+          fill="none" stroke="#ea580c" stroke-opacity="0.08" stroke-width="3"/>
+
+    <!-- Shift label -->
+    <text x="32" y="50" font-family="'Inter',sans-serif" font-size="13" font-weight="700"
+          fill="#ea580c" letter-spacing="0.08em">JEE MAIN 2025 · 22 JAN SHIFT 1</text>
+
+    <!-- Timer ring -->
+    <g transform="translate(110 170)">
+      <circle r="64" fill="#fefdfb" stroke="#fbd5b8" stroke-width="2"/>
+      <!-- ~52% progress arc -->
+      <path d="M 0 -64 A 64 64 0 1 1 -45.3 45.3"
+            fill="none" stroke="url(#ringGrad)" stroke-width="10" stroke-linecap="round"/>
+      <text y="-4" text-anchor="middle"
+            font-family="'JetBrains Mono','Roboto Mono',monospace"
+            font-size="22" font-weight="700" fill="#9a3412" letter-spacing="-0.5">1:24:18</text>
+      <text y="20" text-anchor="middle" font-family="'Inter',sans-serif"
+            font-size="9" font-weight="600" fill="#9a3412" letter-spacing="3">LIVE TIMER</text>
+    </g>
+
+    <!-- Score panel -->
+    <g transform="translate(210 110)">
+      <text font-family="'Inter',sans-serif" font-size="13" font-weight="700"
+            fill="#7c2d12" letter-spacing="0.05em">YOUR SCORE</text>
+      <text y="64" font-family="'Inter',sans-serif" font-size="56" font-weight="800"
+            fill="#9a3412">76<tspan font-size="22" font-weight="500" fill="#a8a29e"> / 100</tspan></text>
+
+      <!-- bar -->
+      <rect x="0" y="86" width="240" height="8" rx="4" fill="#f5e6d3"/>
+      <rect x="0" y="86" width="182" height="8" rx="4" fill="url(#ringGrad)"/>
+
+      <!-- breakdown chips -->
+      <g transform="translate(0 110)" font-family="'Inter',sans-serif" font-size="12">
+        <text font-weight="700" fill="#15803d">20 ✓</text>
+        <text x="50" font-weight="700" fill="#b91c1c">4 ✗</text>
+        <text x="92" font-weight="700" fill="#a8a29e">1 —</text>
+        <text x="135" font-weight="500" fill="#78716c">official +4 / −1 scoring</text>
+      </g>
+    </g>
+
+    <!-- Divider -->
+    <line x1="32" y1="280" x2="468" y2="280" stroke="#fbd5b8" stroke-width="1" stroke-dasharray="4 4"/>
+
+    <!-- Stepwise solution preview -->
+    <g font-family="'Inter',sans-serif">
+      <text x="32" y="306" font-size="13" font-weight="700"
+            fill="#ea580c" letter-spacing="0.06em">STEPWISE REVIEW</text>
+
+      <g transform="translate(32 326)">
+        <circle cx="14" cy="14" r="14" fill="url(#ringGrad)"/>
+        <text x="14" y="19" text-anchor="middle" font-size="13" font-weight="700" fill="#fefdfb">Q</text>
+        <text x="40" y="19" font-size="15" fill="#1c1917">Let a₁, a₅ = 28, a₂ + a₄ = 29.  a₆ = ?</text>
+      </g>
+      <g transform="translate(32 358)">
+        <text font-size="13" fill="#15803d" font-weight="600">✓ Correct: 784</text>
+        <text x="200" font-size="13" fill="#78716c">+ 4 marks</text>
+      </g>
+    </g>
+
+    <!-- Brand line -->
+    <line x1="32" y1="382" x2="468" y2="382" stroke="#fbd5b8" stroke-width="1" stroke-dasharray="4 4"/>
+    <g transform="translate(32 402)">
+      <text font-family="'JetBrains Mono','Roboto Mono',monospace" font-size="12"
+            fill="#ea580c" font-weight="600" opacity="0.75">8gwifi.org/math/iit</text>
+      <text x="436" font-family="'Inter',sans-serif" font-size="11" font-weight="500"
+            fill="#ea580c" text-anchor="end" letter-spacing="0.08em">REAL 2025 PAPERS</text>
+    </g>
+  </g>
+
+  <!-- ─── Right text composition ─── -->
+  <g transform="translate(680 130)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#ea580c"/>
+    <text x="0" y="36" font-size="20" font-weight="600" fill="#ea580c" letter-spacing="3">8GWIFI · MATH</text>
+
+    <text x="0" y="118" font-size="68" font-weight="700" fill="#1c1917"
+          font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">JEE Mains,</text>
+    <text x="0" y="186" font-size="68" font-weight="700" fill="#1c1917"
+          font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">live mock.</text>
+
+    <text x="0" y="240" font-size="20" fill="#44403c" font-weight="400">Every shift of the real JEE Main</text>
+    <text x="0" y="268" font-size="20" fill="#44403c" font-weight="400">2025 paper · 3-hour live timer</text>
+    <text x="0" y="296" font-size="20" fill="#44403c" font-weight="400">official scoring · stepwise solutions.</text>
+
+    <!-- chip row -->
+    <g transform="translate(0 332)">
+      <g>
+        <rect x="0" y="0" width="124" height="32" rx="16" fill="#ea580c" fill-opacity="0.1" stroke="#ea580c" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="62" y="21" text-anchor="middle" font-size="12" font-weight="700" fill="#9a3412">ALL 10 SHIFTS</text>
+      </g>
+      <g transform="translate(136 0)">
+        <rect x="0" y="0" width="142" height="32" rx="16" fill="#ea580c" fill-opacity="0.1" stroke="#ea580c" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="71" y="21" text-anchor="middle" font-size="12" font-weight="700" fill="#9a3412">+4 / −1 SCORING</text>
+      </g>
+      <g transform="translate(290 0)">
+        <rect x="0" y="0" width="98" height="32" rx="16" fill="#ea580c" fill-opacity="0.1" stroke="#ea580c" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="49" y="21" text-anchor="middle" font-size="12" font-weight="700" fill="#9a3412">MCQ + INT</text>
+      </g>
+      <g transform="translate(400 0)">
+        <rect x="0" y="0" width="78" height="32" rx="16" fill="#ea580c" fill-opacity="0.1" stroke="#ea580c" stroke-opacity="0.32" stroke-width="1"/>
+        <text x="39" y="21" text-anchor="middle" font-size="12" font-weight="700" fill="#9a3412">FREE</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- bottom-right brand mark -->
+  <g transform="translate(1140 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace">
+    <text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org/math/iit</text>
+  </g>
+</svg>
