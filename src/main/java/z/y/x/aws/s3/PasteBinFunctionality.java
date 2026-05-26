@@ -10,55 +10,61 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PasteBinFunctionality extends HttpServlet {
     private static final String BUCKET_NAME = "f81821f3";
     private static final long serialVersionUID = 2L;
     private static final String PAGE_NAME = "securebin.jsp" ;
 
+    // Allow-listed values for the create-secret form.
+    private static final Set<Long> ALLOWED_EXPIRY_SECONDS = new HashSet<Long>(Arrays.asList(
+            300L, 3600L, 86400L, 604800L));
+    private static final Set<Integer> ALLOWED_MAX_VIEWS = new HashSet<Integer>(Arrays.asList(
+            0, 1, 3, 5));
+    private static final long DEFAULT_EXPIRY_SECONDS = 86400L; // 24h
+    private static final int  DEFAULT_MAX_VIEWS      = 0;      // unlimited until expiry (legacy pastebin.jsp default)
+
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String shortcode = request.getParameter("shortcode");
-
 
         if (null == shortcode || shortcode.length() == 0) {
             response.sendRedirect(PAGE_NAME);
             return;
         }
 
-        HttpSession session = request.getSession(true);
         S3UrlShortner s3UrlShortner = new S3UrlShortner();
-        String fileName = s3UrlShortner.getfileName(shortcode);
+        String fileName = s3UrlShortner.resolveForView(shortcode);
 
-        if (fileName != null) {
-
-            System.out.println("fileName " + fileName);
-
-            S3PresignedUrlGenerator presignedUrlGenerator = new S3PresignedUrlGenerator();
-            boolean isFileExist = presignedUrlGenerator.isObjectExist(BUCKET_NAME, fileName);
-            if (isFileExist) {
-                s3UrlShortner.updateClickCount(shortcode);
-                String presignedUrl = presignedUrlGenerator.getPresignedUrl(BUCKET_NAME, fileName);
-                String jsonResponse = "{\"presignedUrl\":\"" + presignedUrl.toString() + "\"}";
-                response.getWriter().write(jsonResponse);
-
-            } else {
-                response.sendRedirect(request.getContextPath() + PAGE_NAME);
-            }
-
-        }else{
-            response.sendRedirect(request.getContextPath() + PAGE_NAME);
+        if (fileName == null) {
+            // Generic gone response. Don't distinguish expired vs burned vs invalid —
+            // that's a free oracle for shortcode-guessing.
+            response.setStatus(HttpServletResponse.SC_GONE);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"gone\"}");
+            return;
         }
+
+        S3PresignedUrlGenerator presignedUrlGenerator = new S3PresignedUrlGenerator();
+        String presignedUrl = presignedUrlGenerator.getPresignedUrl(BUCKET_NAME, fileName);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"presignedUrl\":\"" + presignedUrl + "\"}");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String contentType = "text/plain";
+        // Encrypted payloads from securebin.jsp are raw binary (iv || ciphertext).
+        // The legacy text-paste path in pastebin.jsp still POSTs text/plain via isEncrypted=false.
         String isEncrypted = request.getParameter("isEncrypted");
+        boolean isEncryptedFlag = "true".equalsIgnoreCase(isEncrypted);
+        String contentType = isEncryptedFlag ? "application/octet-stream" : "text/plain";
         String email = request.getParameter("email");
         String sendEmail = request.getParameter("sendEmail");
         String password = request.getParameter("password");
@@ -83,8 +89,11 @@ public class PasteBinFunctionality extends HttpServlet {
 
             final String fileName = generateFilename(isEncryptedBool);
 
+            long expirySeconds = parseExpirySeconds(request.getParameter("expirySeconds"));
+            int  maxViews      = parseMaxViews(request.getParameter("maxViews"));
+
             S3UrlShortner s3UrlShortner = new S3UrlShortner();
-            String shortCode = s3UrlShortner.getShortCode(fileName, email);
+            String shortCode = s3UrlShortner.createSecret(fileName, email, expirySeconds, maxViews);
 
             S3PresignedUrlGenerator s3PresignedUrlGenerator = new S3PresignedUrlGenerator();
             URL presignedRequest = s3PresignedUrlGenerator.createPresignedUrl(BUCKET_NAME, fileName, contentType,
@@ -191,6 +200,26 @@ public class PasteBinFunctionality extends HttpServlet {
                     }
                 }
             }
+        }
+    }
+
+    private static long parseExpirySeconds(String raw) {
+        if (raw == null || raw.isEmpty()) return DEFAULT_EXPIRY_SECONDS;
+        try {
+            long v = Long.parseLong(raw);
+            return ALLOWED_EXPIRY_SECONDS.contains(v) ? v : DEFAULT_EXPIRY_SECONDS;
+        } catch (NumberFormatException e) {
+            return DEFAULT_EXPIRY_SECONDS;
+        }
+    }
+
+    private static int parseMaxViews(String raw) {
+        if (raw == null || raw.isEmpty()) return DEFAULT_MAX_VIEWS;
+        try {
+            int v = Integer.parseInt(raw);
+            return ALLOWED_MAX_VIEWS.contains(v) ? v : DEFAULT_MAX_VIEWS;
+        } catch (NumberFormatException e) {
+            return DEFAULT_MAX_VIEWS;
         }
     }
 

@@ -58,11 +58,11 @@
     <div class="d-flex justify-content-between align-items-start flex-wrap mb-3">
         <div>
             <h1 class="mb-2"><i class="fas fa-eye"></i> View Shared Content</h1>
-            <p class="lead text-muted mb-0">Secure content sharing - available for 24 hours</p>
+            <p class="lead text-muted mb-0">One-time encrypted secret</p>
         </div>
         <div class="mt-2">
-            <span class="badge badge-warning badge-pill px-3 py-2"><i class="fas fa-clock"></i> 24-Hour Expiry</span>
-            <span class="badge badge-info badge-pill px-3 py-2 ml-2"><i class="fas fa-shield-alt"></i> Secure Sharing</span>
+            <span class="badge badge-warning badge-pill px-3 py-2"><i class="fas fa-fire"></i> Single-use by default</span>
+            <span class="badge badge-info badge-pill px-3 py-2 ml-2"><i class="fas fa-shield-alt"></i> E2E Encrypted</span>
         </div>
     </div>
 
@@ -71,31 +71,49 @@
         if (shortcode != null && !shortcode.isEmpty()) {
     %>
 
+    <!-- Reveal gate. Prevents mail-client link previewers (Outlook Safe Links,
+         Slack/iMessage/Gmail unfurl) from detonating a burn-on-read secret
+         before a human sees it. Resolve is triggered only on real click. -->
+    <div class="alert alert-warning border-warning mb-4" id="revealGate">
+        <div class="d-flex align-items-start">
+            <div class="mr-3" style="font-size: 2rem;">
+                <i class="fas fa-fire text-danger"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h5 class="mb-2"><strong>This may be a one-time secret</strong></h5>
+                <p class="mb-3">Opening it can consume the only available view. Confirm you're ready to read it now — don't open from a link preview, a mail-scanner sandbox, or a shared screen.</p>
+                <button id="revealBtn" type="button" class="btn btn-danger btn-lg">
+                    <i class="fas fa-unlock"></i> Click to reveal secret
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Info Banner -->
-    <div class="alert alert-info border-info mb-4" id="infoBanner">
+    <div class="alert alert-info border-info mb-4" id="infoBanner" style="display: none;">
         <div class="d-flex align-items-start">
             <div class="mr-3" style="font-size: 2rem;">
                 <i class="fas fa-info-circle"></i>
             </div>
             <div>
-                <h5 class="mb-2"><strong><i class="fas fa-clock"></i> 24-Hour Access Period</strong></h5>
-                <p class="mb-2">This content is available for <strong>24 hours</strong> and can be viewed multiple times within that period. It will automatically expire and be deleted after 24 hours.</p>
+                <h5 class="mb-2"><strong><i class="fas fa-shield-alt"></i> End-to-end encrypted</strong></h5>
+                <p class="mb-2">Decryption happens entirely in your browser. The server never sees the plaintext or the password.</p>
                 <hr class="my-2" style="opacity: 0.3;">
                 <div class="row small">
                     <div class="col-md-6">
-                        <p class="mb-1"><i class="fas fa-shield-alt"></i> <strong>Secure:</strong> Content processed client-side when encrypted</p>
-                        <p class="mb-0"><i class="fas fa-user-secret"></i> <strong>Private:</strong> No server-side logging of content</p>
+                        <p class="mb-1"><i class="fas fa-shield-alt"></i> <strong>Secure:</strong> AES-256-GCM, client-side</p>
+                        <p class="mb-0"><i class="fas fa-user-secret"></i> <strong>Private:</strong> Zero-knowledge architecture</p>
                     </div>
                     <div class="col-md-6">
-                        <p class="mb-1"><i class="fas fa-redo"></i> <strong>Multiple Views:</strong> Access anytime within 24 hours</p>
-                        <p class="mb-0"><i class="fas fa-key"></i> <strong>Password:</strong> Required for encrypted content only</p>
+                        <p class="mb-1"><i class="fas fa-fire"></i> <strong>One-shot by default:</strong> Burns after read</p>
+                        <p class="mb-0"><i class="fas fa-key"></i> <strong>Password required:</strong> Sent separately by sender</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" id="secretRow" style="display: none;">
         <div class="col-lg-8 mb-4">
             <div class="card shadow-lg h-100" id="secretCard">
                 <div class="card-header bg-white border-bottom">
@@ -118,8 +136,8 @@
                         <div class="d-flex align-items-center">
                             <i class="fas fa-check-circle fa-2x mr-3"></i>
                             <div>
-                                <strong>Content Successfully Loaded!</strong>
-                                <p class="mb-0 small">You can view this content multiple times within the 24-hour validity period. Copy or download if you need to save it permanently.</p>
+                                <strong>Secret decrypted.</strong>
+                                <p class="mb-0 small">Copy or download it now — this view may have been the only one. The link may no longer work.</p>
                             </div>
                         </div>
                     </div>
@@ -151,7 +169,7 @@
                 </div>
                 <div class="card-body">
                     <ul class="mb-0 pl-3 small">
-                        <li class="mb-2"><strong>24-Hour Access:</strong> Content available for 24 hours, can be viewed multiple times.</li>
+                        <li class="mb-2"><strong>Single-use by default:</strong> The link may stop working immediately after this view.</li>
                         <li class="mb-2"><strong>Use Copy Button:</strong> Avoid taking screenshots - they can leak sensitive data.</li>
                         <li class="mb-2"><strong>Verify Sender:</strong> Make sure you trust who sent you this link.</li>
                         <li class="mb-2"><strong>Secure Device:</strong> Only decrypt on a trusted, private device.</li>
@@ -170,7 +188,7 @@
                         <li class="mb-2">Enter the password (sent separately by sender)</li>
                         <li class="mb-2">Content decrypts <strong>in your browser</strong> using AES-256-GCM</li>
                         <li class="mb-2">Server never sees your plaintext content</li>
-                        <li class="mb-0">Content <strong>expires after 24 hours</strong> automatically</li>
+                        <li class="mb-0">Secret expires after the configured window or view cap is reached</li>
                     </ol>
                     <hr class="my-2">
                     <p class="small mb-0 text-muted"><i class="fas fa-info-circle"></i> True end-to-end encryption with zero-knowledge architecture.</p>
@@ -210,7 +228,7 @@
                     </div>
 
                     <div class="alert alert-info py-2 px-3 mb-0 small">
-                        <i class="fas fa-info-circle"></i> <strong>Note:</strong> You can view this content multiple times within the 24-hour validity period. Copy or download if needed.
+                        <i class="fas fa-info-circle"></i> <strong>Note:</strong> This link may be single-use. Copy or download the secret as soon as it appears.
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
@@ -228,69 +246,91 @@
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-        // Show loading state initially
-        $("#loadingState").show();
-        $("#decryptedText").hide();
-        $("#loadingMessage").text('Fetching encrypted secret from secure storage...');
+        var GENERIC_GONE_MSG = 'This link is no longer available.\n\nIt may have been viewed already, expired, or never existed.\n\nIf you still need the secret, ask the sender for a new link.';
 
-        // Use jQuery to make an AJAX request to the servlet
-        $.ajax({
-            type: "GET",
-            url: "pastebin",
-            data: {shortcode: '<%= shortcode %>'},
-            success: function (response) {
-                $("#loadingMessage").text('Validating secret...');
-                try {
-                    var jsonResponse = JSON.parse(response);
-                } catch (e) {
-                    $("#loadingState").hide();
-                    $("#decryptedText").show();
-                    $("#decryptedText").val('❌ Error: The given code is expired or invalid.\n\nThis secret may have already been viewed or has expired.\n\nPlease contact the sender for a new link.');
-                    $("#decryptedText").addClass('border-danger');
-                    return;
-                }
+        function showGoneError() {
+            $("#loadingState").hide();
+            $("#decryptedText").show();
+            $("#decryptedText").val(GENERIC_GONE_MSG);
+            $("#decryptedText").addClass('border-danger');
+        }
 
-                var presignedUrl = jsonResponse.presignedUrl;
-                var fileName = presignedUrl.split('/').pop();
+        // Gate the resolve call on a real user click. This blocks mail-client unfurlers
+        // (Outlook Safe Links, Slack/Gmail preview, etc.) from detonating burn-on-read secrets.
+        $(function() {
+            $("#revealBtn").on('click', function() {
+                $("#revealGate").hide();
+                $("#secretRow").show();
+                $("#infoBanner").show();
+                startResolve();
+            });
+        });
 
-                if (fileName.includes('ENC')) {
-                    // Show password modal for encrypted secrets
-                    $("#loadingState").hide();
-                    $('#passwordModal').modal('show');
+        function startResolve() {
+            $("#loadingState").show();
+            $("#decryptedText").hide();
+            $("#loadingMessage").text('Fetching encrypted secret from secure storage...');
 
-                    // Handle password submission
-                    $("#confirmPasswordBtn").off('click').on('click', function() {
-                        var password = $("#passwordInput").val();
-                        if (!password || password.trim() === '') {
-                            $("#passwordError").show().html('<i class="fas fa-exclamation-triangle"></i> <strong>Password Required</strong> - Please enter the password to decrypt the secret.');
+            $.ajax({
+                type: "GET",
+                url: "pastebin",
+                data: {shortcode: '<%= shortcode %>'},
+                success: function (response) {
+                    $("#loadingMessage").text('Validating secret...');
+                    // jQuery auto-parses when the server sets Content-Type: application/json,
+                    // so `response` may already be an object. Handle both shapes.
+                    var jsonResponse;
+                    if (typeof response === 'string') {
+                        try {
+                            jsonResponse = JSON.parse(response);
+                        } catch (e) {
+                            showGoneError();
                             return;
                         }
-                        $("#passwordError").hide();
-                        $('#passwordModal').modal('hide');
-                        $("#loadingState").show();
-                        $("#loadingMessage").text('Decrypting secret with AES-256-GCM...');
-                        fetchPresignedUrlContent(presignedUrl, password);
-                    });
+                    } else {
+                        jsonResponse = response;
+                    }
+                    if (!jsonResponse || !jsonResponse.presignedUrl) {
+                        showGoneError();
+                        return;
+                    }
 
-                    // Allow Enter key to submit
-                    $("#passwordInput").off('keypress').on('keypress', function(e) {
-                        if (e.which === 13) {
-                            $("#confirmPasswordBtn").click();
-                        }
-                    });
-                } else {
-                    $("#loadingMessage").text('Loading secret content...');
-                    fetchPresignedUrlContentNonEncrypted(presignedUrl);
+                    var presignedUrl = jsonResponse.presignedUrl;
+                    var fileName = presignedUrl.split('?')[0].split('/').pop();
+
+                    if (fileName.indexOf('ENC') !== -1) {
+                        $("#loadingState").hide();
+                        $('#passwordModal').modal('show');
+
+                        $("#confirmPasswordBtn").off('click').on('click', function() {
+                            var password = $("#passwordInput").val();
+                            if (!password || password.trim() === '') {
+                                $("#passwordError").show().html('<i class="fas fa-exclamation-triangle"></i> <strong>Password Required</strong> - Please enter the password to decrypt the secret.');
+                                return;
+                            }
+                            $("#passwordError").hide();
+                            $('#passwordModal').modal('hide');
+                            $("#loadingState").show();
+                            $("#loadingMessage").text('Decrypting secret with AES-256-GCM...');
+                            fetchPresignedUrlContent(presignedUrl, password);
+                        });
+
+                        $("#passwordInput").off('keypress').on('keypress', function(e) {
+                            if (e.which === 13) {
+                                $("#confirmPasswordBtn").click();
+                            }
+                        });
+                    } else {
+                        $("#loadingMessage").text('Loading secret content...');
+                        fetchPresignedUrlContentNonEncrypted(presignedUrl);
+                    }
+                },
+                error: function (error) {
+                    console.error("Resolve failed:", error && error.status);
+                    showGoneError();
                 }
-            },
-            error: function (error) {
-                console.error("Error:", error.responseText);
-                $("#loadingState").hide();
-                $("#decryptedText").show();
-                $("#decryptedText").val('❌ Error: The given code is expired or invalid.\n\nThis secret may have already been viewed or has expired.\n\nPlease contact the sender for a new link.');
-                $("#decryptedText").addClass('border-danger');
-            }
-        });
+            });
+        }
 
 
         function fetchPresignedUrlContentNonEncrypted(presignedUrl) {
@@ -328,22 +368,21 @@
         }
 
         function fetchPresignedUrlContent(presignedUrl, password) {
+            var fetchFailed = false;
             fetch(presignedUrl)
                 .then(function(response) {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        fetchFailed = true;
+                        throw new Error('fetch ' + response.status);
                     }
                     return response.arrayBuffer();
                 })
                 .then(function(buffer) {
                     $("#loadingMessage").text('Decrypting with AES-256-GCM...');
-                    var encryptedText = new TextDecoder().decode(buffer);
-                    return decryptText(encryptedText, password);
+                    // Server stores raw bytes: iv (12) || ciphertext.
+                    return decryptText(new Uint8Array(buffer), password);
                 })
                 .then(function(decryptedText) {
-                    console.log("✅ Decryption successful");
-
-                    // Hide loading, show success
                     $("#loadingState").hide();
                     $("#decryptedText").show().val(decryptedText);
                     $("#decryptedText").addClass('secret-revealed');
@@ -351,47 +390,41 @@
                     $("#infoBanner").slideUp();
                     $("#secretCard").addClass('border-success');
 
-                    // Auto-resize textarea
                     var lines = decryptedText.split('\n').length;
                     $("#decryptedText").attr("rows", Math.max(10, Math.min(lines + 2, 25)));
                 })
                 .catch(function(error) {
-                    console.error('Error decrypting content:', error);
+                    console.error('View failed:', error && error.message);
                     $("#loadingState").hide();
                     $("#decryptedText").show();
-                    $("#decryptedText").val('❌ Decryption Failed - Incorrect Password\n\nThe password you entered is incorrect.\n\nPlease check:\n• Password was copied correctly (watch for extra spaces)\n• You have the password from the sender\n• The secret has not expired\n\nContact the sender for the correct password or a new link.');
+                    if (fetchFailed) {
+                        // Couldn't pull ciphertext from S3 — treat as gone.
+                        $("#decryptedText").val(GENERIC_GONE_MSG);
+                    } else {
+                        // GCM auth failure — almost certainly wrong password.
+                        $("#decryptedText").val('Decryption failed.\n\nThe password is incorrect, or the link points at a corrupted secret.\n\nCheck the password from the sender (watch for trailing spaces) and try again.');
+                    }
                     $("#decryptedText").addClass('border-danger');
                 });
         }
 
-        function decryptText(encryptedText, password) {
-            // Decode the base64-encoded encrypted text
-            console.log(typeof (encryptedText) )
-            var uint8Array = new Uint8Array(atob(encryptedText).split(',').map(Number));
+        // uint8Array contains iv (12 bytes) || ciphertext+tag.
+        function decryptText(uint8Array, password) {
             return crypto.subtle.digest('SHA-256', new TextEncoder().encode(password))
                 .then(function (keyBuffer) {
                     return window.crypto.subtle.importKey(
-                        'raw',
-                        keyBuffer,
-                        'AES-GCM',
-                        true,
-                        ['decrypt']
+                        'raw', keyBuffer, 'AES-GCM', true, ['decrypt']
                     );
                 })
                 .then(function (key) {
-                    // Perform decryption
                     return crypto.subtle.decrypt(
-                        {name: 'AES-GCM', iv: uint8Array.slice(0,12)},
+                        {name: 'AES-GCM', iv: uint8Array.slice(0, 12)},
                         key,
-                        uint8Array.slice(12) // Exclude the IV from the encrypted buffer
+                        uint8Array.slice(12)
                     );
                 })
                 .then(function (decryptedBuffer) {
-                    // Convert the decrypted ArrayBuffer to string
                     return new TextDecoder().decode(decryptedBuffer);
-                })
-                .catch(function (error) {
-                    $("#decryptedText").val('Error decrypting text Wrong Password');
                 });
         }
 

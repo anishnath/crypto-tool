@@ -123,11 +123,13 @@
     /* localStorage stats                                                   */
     /* ──────────────────────────────────────────────────────────────────── */
 
-    var STATS_KEY = 'op.stats';
+    // localStorage key is parameterized via opts.statsKey so different
+    // practice pages (Olympiad, JEE, …) keep separate progress.
+    function statsKey() { return (state && state.opts && state.opts.statsKey) || 'op.stats'; }
 
     function loadStats() {
         try {
-            var raw = localStorage.getItem(STATS_KEY);
+            var raw = localStorage.getItem(statsKey());
             if (!raw) return defaultStats();
             var s = JSON.parse(raw);
             return Object.assign(defaultStats(), s);
@@ -137,10 +139,10 @@
         return { attempted: 0, correct: 0, wrong: 0, revealed: 0, streak: 0, bestStreak: 0 };
     }
     function saveStats() {
-        try { localStorage.setItem(STATS_KEY, JSON.stringify(state.stats)); } catch (e) {}
+        try { localStorage.setItem(statsKey(), JSON.stringify(state.stats)); } catch (e) {}
     }
     function resetStats() {
-        try { localStorage.removeItem(STATS_KEY); } catch (e) {}
+        try { localStorage.removeItem(statsKey()); } catch (e) {}
         state.stats = defaultStats();
     }
 
@@ -567,7 +569,8 @@
         if (existing) existing.remove();
 
         var url      = window.location.href.split('#')[0];
-        var shareTxt = 'Free olympiad math practice with stepwise solutions — try it, via @' + X_HANDLE;
+        var shareTxt = (state.opts && state.opts.shareText) ||
+                       'Free olympiad math practice with stepwise solutions — try it, via @' + X_HANDLE;
         var encTxt   = encodeURIComponent(shareTxt);
         var encUrl   = encodeURIComponent(url);
 
