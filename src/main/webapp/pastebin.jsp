@@ -74,9 +74,32 @@
 
     <%@ include file="modern/ads/ad-init.jsp" %>
 
-    <!-- Highlight.js (language auto-detection + syntax highlighting) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    <!-- Highlight.js (language auto-detection + syntax highlighting).
+         The two themes are loaded unconditionally; the inline script below toggles
+         their `disabled` flag based on the site's data-theme. The previous
+         `prefers-color-scheme` media gate followed the OS, not the in-app toggle,
+         so users with a dark-OS + site-toggled-to-light got dark text on a light
+         background (unreadable). -->
+    <link rel="stylesheet" id="hljs-light" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css">
+    <link rel="stylesheet" id="hljs-dark" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+    <script>
+    (function () {
+        var light = document.getElementById('hljs-light');
+        var dark  = document.getElementById('hljs-dark');
+        function apply(theme) {
+            // Resolve "auto"/null to the OS preference (matches dark-mode.js).
+            if (theme !== 'dark' && theme !== 'light') {
+                theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+            }
+            if (light) light.disabled = (theme === 'dark');
+            if (dark)  dark.disabled  = (theme !== 'dark');
+        }
+        apply(document.documentElement.getAttribute('data-theme'));
+        new MutationObserver(function () {
+            apply(document.documentElement.getAttribute('data-theme'));
+        }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    })();
+    </script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
     <style>
