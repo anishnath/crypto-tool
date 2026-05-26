@@ -97,14 +97,50 @@
 }
 .xm-problem .katex { font-size: 1.05em; }
 .xm-problem a { color: var(--xm-accent); text-decoration: none; border-bottom: 1px dotted; }
+
+/* Tighten the spacing between consecutive display-math blocks. KaTeX's
+   default `.katex-display` margin (1em top + 1em bottom = 2em between
+   adjacent blocks) plus the source's blank-line separators stack into a
+   huge vertical gap when a question lists multiple equations one after
+   another (e.g. C₁, C₂, C₃ system definitions). Halving the margin
+   makes the sequence read as a list, not a series of stand-alone blocks. */
+.xm-problem .katex-display,
+.op-problem .katex-display {
+    margin: 0.45em 0;
+}
+.xm-problem .katex-display + .katex-display,
+.op-problem .katex-display + .katex-display {
+    margin-top: 0.2em;
+}
 .xm-diagram {
     display: block;
-    max-width: min(420px, 100%);
-    margin: 0.85rem auto;
-    padding: 0.6rem;
+    max-width: min(640px, 100%);
+    width: auto;
+    margin: 1rem auto;
+    padding: 0.75rem;
     background: #fff;
     border: 1px solid var(--ms-line);
     border-radius: var(--ms-radius-sm);
+}
+
+/* Empty-solution panel — shown when the source paper has the correct  */
+/* option but no worked walkthrough (e.g. the 2025 JEE Mains papers).  */
+.xm-no-solution {
+    padding: 0.75rem 0.95rem;
+    background: var(--ms-panel-bg-soft);
+    border: 1px dashed var(--ms-line);
+    border-radius: var(--ms-radius-sm);
+    color: var(--ms-ink-soft);
+}
+.xm-no-solution p {
+    margin: 0 0 0.45rem;
+    font: 0.92rem/1.5 var(--ms-font-sans);
+}
+.xm-no-solution p:last-child { margin-bottom: 0; }
+.xm-no-solution a {
+    color: var(--xm-accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--xm-accent);
 }
 
 /* ── MCQ choices ──────────────────────────────────────────────────────── */
