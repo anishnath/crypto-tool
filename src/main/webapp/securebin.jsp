@@ -139,6 +139,14 @@
             line-height: 1.45;
             color: var(--text-secondary, #4b5563);
         }
+        /* Create mode: no description copy, so the ad uses the whole row. */
+        .tool-description-ad-full {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            min-height: 90px;
+        }
+        .tool-description-ad-full > * { width: 100%; max-width: 970px; }
         @media (max-width: 768px) {
             .tool-page-header { margin-top: var(--header-height-mobile, 64px); padding: 0.6rem 0.875rem 0.5rem; }
             .tool-description-section { padding: 0.5rem 0.875rem 0.625rem; }
@@ -167,18 +175,20 @@
 </header>
 
 <section class="tool-description-section">
+<% if (isViewMode) { %>
     <div class="tool-description-inner">
         <div class="tool-description-content">
-            <% if (isViewMode) { %>
             <p>One-time encrypted secret. Opening may consume the only view — don't open from a link preview.</p>
-            <% } else { %>
-            <p>AES-256-GCM in your browser. Burn-after-read by default. Server never sees plaintext.</p>
-            <% } %>
         </div>
         <div class="tool-description-ad">
             <%@ include file="modern/ads/ad-in-content-top.jsp" %>
         </div>
     </div>
+<% } else { %>
+    <div class="tool-description-ad tool-description-ad-full">
+        <%@ include file="modern/ads/ad-in-content-top.jsp" %>
+    </div>
+<% } %>
 </section>
 
 <main class="sb-layout">
