@@ -394,17 +394,47 @@
         if (!bk || !bk.q_shards || bk.q_shards.length === 0) {
             throw new Error('No shards for bucket ' + bucket);
         }
-        var idx = Math.floor(Math.random() * bk.q_shards.length);
-        var s = bk.q_shards[idx];
-        state.shardName = s.f;
-        var url = state.opts.dataBase + '/q/' + s.f;
-        return fetchJson(url).then(function (data) {
+        // shardOverride mode: load a specific shard by filename instead
+        // of picking randomly. Used by the JEE shift-wise mocks where the
+        // shard *is* the paper.
+        var fname = null;
+        if (state.opts.shardOverride) {
+            fname = state.opts.shardOverride;
+        } else if (state.opts.shiftSlug && bk.shifts) {
+            // shiftSlug → look up the matching shard in bk.shifts
+            for (var j = 0; j < bk.shifts.length; j++) {
+                if (bk.shifts[j].slug === state.opts.shiftSlug) {
+                    fname = bk.shifts[j].q;
+                    // Cache the human-readable name for downstream config
+                    state.opts.shiftFilter = bk.shifts[j].name;
+                    break;
+                }
+            }
+            if (!fname) throw new Error('No shard for shiftSlug=' + state.opts.shiftSlug);
+        } else {
+            var idx = Math.floor(Math.random() * bk.q_shards.length);
+            fname = bk.q_shards[idx].f;
+        }
+        state.shardName = fname;
+        return fetchJson(state.opts.dataBase + '/q/' + fname).then(function (data) {
             state.shard = data;
         });
     }
 
     function chooseSessionQuestions() {
         var pool = state.shard.slice();
+
+        // shiftFilter mode (used by JEE shift-wise mocks): pull exactly
+        // the records whose `sh` matches the configured shift name and
+        // serve them in original `qn` (question-number) order. No
+        // shuffle, no format filter — the paper IS the sequence.
+        if (state.opts.shiftFilter) {
+            pool = pool.filter(function (q) { return q.sh === state.opts.shiftFilter; });
+            pool.sort(function (a, b) { return (a.qn || 0) - (b.qn || 0); });
+            state.qs = pool;
+            return;
+        }
+
         shuffleInPlace(pool);
         var want = Math.min(state.opts.questions, pool.length);
         // Prefer the configured format if available
@@ -1019,9 +1049,25 @@
 
         var renderAfterDelay = function (sol) {
             setTimeout(function () {
-                host.innerHTML =
-                    '<span class="label">Solution</span>' +
-                    '<div>' + renderMath(sol) + '</div>';
+                var body;
+                if (sol && String(sol).trim().length > 0) {
+                    body = '<div>' + renderMath(sol) + '</div>';
+                } else {
+                    // The source paper ships only the correct option (the
+                    // 2025 JEE papers are like this). Don't shout
+                    // "unavailable" — point users at the practice page
+                    // where every problem DOES have a stepwise walkthrough.
+                    var practiceUrl = state.opts.practiceUrl || '';
+                    body =
+                        '<div class="xm-no-solution">' +
+                        '  <p>Official answer key only — this paper ships the correct option but not a detailed walkthrough.</p>' +
+                        (practiceUrl
+                          ? '  <p>For step-by-step solutions on similar problems, try the <a href="' +
+                            escHtml(practiceUrl) + '">untimed practice page</a>.</p>'
+                          : '') +
+                        '</div>';
+                }
+                host.innerHTML = '<span class="label">Solution</span>' + body;
                 host.setAttribute('data-loaded', '1');
                 host.removeAttribute('data-loading');
 
@@ -1036,7 +1082,7 @@
 
         var doRender = function (sols) {
             var byId = sols.reduce(function (m, x) { m[x.id] = x.sol; return m; }, {});
-            renderAfterDelay(byId[q.id] || '(solution unavailable)');
+            renderAfterDelay(byId[q.id] || '');
         };
         if (state.solCache[shardName]) {
             doRender(state.solCache[shardName]);
