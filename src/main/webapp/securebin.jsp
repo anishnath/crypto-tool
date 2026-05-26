@@ -21,24 +21,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <%--
+      SEO targets (per session 2026-05-26):
+        Title  : head query "one time secret" + "send password securely". 55 char visual.
+        Desc   : action-led, 149 char visual.
+        Keywords: head terms + intent variants + competitor steal (onetimesecret/privatebin alternative).
+        Features: benefit-led for WebApplication rich snippet.
+        HowTo   : verb-first steps for HowTo rich result.
+        FAQ x8 : verbatim Google PAA queries, answers 150-280 chars (rich-result band).
+      Note: JSP forbids comments inside <jsp:include> body — keep all commentary out here.
+    --%>
     <% if (!isViewMode) { %>
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <%-- Title aimed at top-volume query "one time secret" + "send password securely". 56 chars: in the 50-60 SEO sweet spot. --%>
         <jsp:param name="toolName" value="Free One-Time Secret - Send Passwords &amp; API Keys Safely" />
-        <%-- Description rebuilt for the 150-160 char CTR sweet spot, action verbs first. --%>
         <jsp:param name="toolDescription" value="Send passwords, API keys &amp; secrets via a one-time encrypted link. AES-256-GCM in your browser, burn-after-read, configurable expiry. Free, no signup." />
         <jsp:param name="toolCategory" value="Security" />
         <jsp:param name="toolUrl" value="securebin.jsp" />
-        <%-- Keywords blend (a) head terms: 'one time secret', 'send password securely', 'encrypted pastebin', 'burn after read'; (b) intent variants: 'share api key', 'self destructing note', 'temporary link', 'secure note'; (c) competitor steal: 'onetimesecret alternative', 'privatebin alternative'. --%>
         <jsp:param name="toolKeywords" value="one time secret, send password securely, share password online, encrypted pastebin, burn after read, self destructing note, send api key, share api key securely, secure note sharing, one time link, temporary secret, private paste, encrypted note, share credentials securely, anonymous paste, e2ee, end-to-end encryption, zero knowledge, aes-256-gcm, web crypto, onetimesecret alternative, privatebin alternative, share secret link" />
         <jsp:param name="toolImage" value="securebin.png" />
-        <%-- Lead the WebApplication featureList with benefits, not implementation jargon — Google surfaces these in rich snippets. --%>
         <jsp:param name="toolFeatures" value="One-time encrypted link for passwords and API keys,Burn-after-read by default (single view destroys the secret),AES-256-GCM client-side encryption in the browser,Zero-knowledge: server never sees plaintext or password,Configurable expiry from 5 minutes to 7 days,Configurable view cap (1 / 3 / 5 / unlimited),Separate URL and password for defense in depth,Free OneTimeSecret and PrivateBin alternative,No signup, no tracking, no email required" />
         <jsp:param name="hasSteps" value="true" />
-        <%-- HowTo steps in natural action phrasing so Google can use them for a How-To rich result. --%>
         <jsp:param name="howToSteps" value="Paste your secret|Type or paste the password API key or sensitive text into the editor,Set expiry and views|Pick how long the link stays alive (5 min to 7 days) and how many times it can be opened (1 to unlimited),Create the encrypted link|Click Create Encrypted Secret &mdash; your text is encrypted in the browser with AES-256-GCM and you get a one-time URL plus a random password,Share via separate channels|Send the URL by email and the password by Slack or SMS &mdash; splitting them means a single intercepted channel does not leak the secret,Recipient decrypts in browser|The recipient opens the link confirms the Reveal gate enters the password and reads the plaintext once &mdash; then the link is burned" />
-        <%-- FAQs target verbatim Google People-Also-Ask queries. Each answer is 150-250 chars
-             (rich-result sweet spot) and echoes the query terms to keep the snippet in scope. --%>
         <jsp:param name="faq1q" value="How do I send a password securely over email?" />
         <jsp:param name="faq1a" value="Don't put the password in the email itself. Use a one-time encrypted link: paste the password here, get a short URL and a separate random password, then email the URL and send the password through a different channel (Slack, SMS, phone). The link self-destructs after the first view." />
         <jsp:param name="faq2q" value="What is a one-time secret?" />
