@@ -151,8 +151,8 @@ export function createArduinoSimulatorAssistant(opts) {
         yearly: { name: 'Yearly', priceLabel: '', cadence: 'Billed yearly', badge: 'Best value' },
         features: [
           'Much higher monthly AI limits',
+          'Pro chat model tier',
           'No rate-limit waiting between requests',
-          'Priority access on Arduino & other tools',
         ],
       },
     },

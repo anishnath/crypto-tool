@@ -1028,6 +1028,20 @@ body.vca-no-select, body.vca-no-select * { user-select: none !important; }
   transform: translateY(1px);
 }
 
+.vca-apply-btn.is-ready {
+  animation: vca-apply-pulse 1.2s ease-in-out 2;
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--vca-primary) 35%, transparent);
+}
+
+@keyframes vca-apply-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--vca-primary) 35%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in oklch, var(--vca-primary) 18%, transparent);
+  }
+}
+
 .vca-apply-btn.is-applied {
   background: var(--vca-success-soft);
   border-color: var(--vca-success-border);
