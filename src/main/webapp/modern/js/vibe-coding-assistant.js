@@ -348,6 +348,59 @@ export function renderMarkdown(markdown) {
   return frag;
 }
 
+/** Human-readable label for fenced-code language tags. */
+function friendlyCodeLang(lang) {
+  const l = String(lang || '').toLowerCase();
+  if (l === 'latex' || l === 'tex') return 'LaTeX';
+  if (l === 'tikz') return 'TikZ';
+  if (l === 'cpp' || l === 'c++') return 'C++';
+  if (l === 'javascript' || l === 'js') return 'JavaScript';
+  if (l === 'python' || l === 'py') return 'Python';
+  return lang || 'text';
+}
+
+/**
+ * Wrap bare \\begin{env}...\\end{env} blocks in markdown fences when the model
+ * omits them — improves formatted code display after streaming completes.
+ */
+export function ensureFencedBlocks(text) {
+  const src = String(text ?? '');
+  if (!src.trim() || /```/.test(src)) return src;
+
+  const envRe = /\\begin\{([a-zA-Z*]+)\}[\s\S]*?\\end\{\1\}/g;
+  /** @type {{ kind: 'text'|'code', lang?: string, value: string }[]} */
+  const parts = [];
+  let last = 0;
+  let m;
+
+  while ((m = envRe.exec(src)) !== null) {
+    let start = m.index;
+    const beforeRaw = src.slice(last, start);
+    const libMatch = /(\\usetikzlibrary\{[^}]+\}\s*)+$/.exec(beforeRaw);
+    if (libMatch) start -= libMatch[0].length;
+
+    const prose = src.slice(last, start).trim();
+    if (prose) parts.push({ kind: 'text', value: prose });
+
+    const lang = m[1] === 'tikzpicture' ? 'latex' : 'latex';
+    parts.push({
+      kind: 'code',
+      lang,
+      value: src.slice(start, m.index + m[0].length).trim(),
+    });
+    last = m.index + m[0].length;
+  }
+
+  if (!parts.some((p) => p.kind === 'code')) return src;
+
+  const tail = src.slice(last).trim();
+  if (tail) parts.push({ kind: 'text', value: tail });
+
+  return parts.map((p) => (
+    p.kind === 'code' ? '```' + p.lang + '\n' + p.value + '\n```' : p.value
+  )).join('\n\n');
+}
+
 function buildCodeBlock(lang, code) {
   const wrap = document.createElement('div');
   wrap.className = 'vca-code-wrap';
@@ -357,7 +410,7 @@ function buildCodeBlock(lang, code) {
 
   const langLabel = document.createElement('span');
   langLabel.className = 'vca-code-lang';
-  langLabel.textContent = lang || 'text';
+  langLabel.textContent = friendlyCodeLang(lang);
 
   const copyBtn = document.createElement('button');
   copyBtn.type = 'button';
@@ -589,6 +642,7 @@ export class ToolAiAssistant {
     this.applyUi = opts.applyUi === 'separate' ? 'separate' : 'combined';
     this.getApplyLabel = opts.getApplyLabel;
     this.appliedLabel = opts.appliedLabel ?? 'Applied';
+    this.focusApplyOnComplete = opts.focusApplyOnComplete !== false;
     this.getQuickActions = opts.getQuickActions;
     this.onTurn = opts.onTurn;
     this.onError = opts.onError;
@@ -950,13 +1004,14 @@ export class ToolAiAssistant {
 
   _finalizeAssistantBubble(bubble, body, text) {
     bubble.removeAttribute('aria-busy');
+    const formatted = this.useMarkdown ? ensureFencedBlocks(text) : text;
     if (this.useMarkdown) {
       body.innerHTML = '';
-      body.appendChild(renderMarkdown(text));
+      body.appendChild(renderMarkdown(formatted));
     } else {
-      body.textContent = text;
+      body.textContent = formatted;
     }
-    this._maybeApplyButtons(bubble, text);
+    return this._maybeApplyButtons(bubble, formatted);
   }
 
   // ─── Apply-action UI ───────────────────────────────────────────────────────
@@ -984,20 +1039,31 @@ export class ToolAiAssistant {
 
   _maybeApplyButtons(msgEl, text) {
     const matched = this._collectMatchedActions(text);
-    console.log('[ToolAiAssistant] matched apply actions:',
-      matched.map((m) => m.action.id), { available: this.applyActions.map((a) => a.id) });
-    if (!matched.length) return;
+    if (!matched.length) return null;
 
     if (this.applyUi === 'separate') {
+      /** @type {HTMLButtonElement[]} */
+      const buttons = [];
       for (const item of matched) {
-        this._renderApplyButton(msgEl, [item], item.action.label);
+        buttons.push(this._renderApplyButton(msgEl, [item], item.action.label));
       }
-      return;
+      return buttons[0] || null;
     }
     const label = this.getApplyLabel
       ? this.getApplyLabel(matched)
       : this._defaultCombinedLabel(matched);
-    this._renderApplyButton(msgEl, matched, label);
+    return this._renderApplyButton(msgEl, matched, label);
+  }
+
+  _focusApplyButton(btn) {
+    if (!btn || !this.focusApplyOnComplete) return;
+    const row = btn.closest('.vca-apply-row');
+    requestAnimationFrame(() => {
+      row?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      btn.classList.add('is-ready');
+      btn.focus({ preventScroll: true });
+      window.setTimeout(() => btn.classList.remove('is-ready'), 2400);
+    });
   }
 
   _setApplyButtonLabel(btn, text) {
@@ -1050,6 +1116,7 @@ export class ToolAiAssistant {
     });
     row.appendChild(btn);
     msgEl.appendChild(row);
+    return btn;
   }
 
   // ─── Conversation building ─────────────────────────────────────────────────
@@ -1208,6 +1275,7 @@ export class ToolAiAssistant {
 
     const { bubble, body } = this._appendBubble('assistant', '', { streaming: true });
     this.abortCtrl = new AbortController();
+    let applyBtn = null;
 
     try {
       const full = await streamChat(
@@ -1230,9 +1298,10 @@ export class ToolAiAssistant {
       if (!reply) {
         throw new Error('AI returned an empty response. Try again or start a new conversation.');
       }
-      this._finalizeAssistantBubble(bubble, body, reply);
+      applyBtn = this._finalizeAssistantBubble(bubble, body, reply);
       this.history.push({ role: 'assistant', content: reply });
       this._saveHistory();
+      this._scroll();
       this.onTurn?.(text, reply);
     } catch (err) {
       bubble.classList.remove('streaming');
@@ -1257,7 +1326,11 @@ export class ToolAiAssistant {
       this._lastContextFingerprint = fp || this._lastContextFingerprint;
       this.abortCtrl = null;
       this._setBusy(false);
-      this._els.input.focus();
+      if (applyBtn) {
+        this._focusApplyButton(applyBtn);
+      } else {
+        this._els.input.focus();
+      }
     }
   }
 
@@ -1393,7 +1466,7 @@ export class ToolAiAssistant {
       if (reason === 'quota') {
         return { title: 'Monthly AI limit reached', sub: 'Sign in for a higher free limit, or upgrade to Pro.' };
       }
-      return { title: 'Sign in for more AI', sub: 'A free account unlocks a higher AI limit on Arduino tools.' };
+      return { title: 'Sign in for more AI', sub: 'A free account unlocks a higher monthly limit and a better AI model.' };
     }
     if (reason === 'rate') {
       return { title: 'You hit the free AI limit', sub: 'Upgrade to Pro for higher limits and no waiting between requests.' };
@@ -1401,7 +1474,7 @@ export class ToolAiAssistant {
     if (reason === 'quota') {
       return { title: 'Monthly AI limit reached', sub: 'Upgrade to Pro to keep generating, explaining, and fixing.' };
     }
-    return { title: 'Go Pro', sub: 'Higher monthly AI limits and priority access on Arduino tools.' };
+    return { title: 'Go Pro', sub: 'Get the highest monthly limits, Pro model tier, and priority access.' };
   }
 
   _renderBillingBar() {
@@ -1481,8 +1554,8 @@ export class ToolAiAssistant {
       ? cfg.features
       : [
         'Much higher monthly AI limits',
+        'Pro chat model tier',
         'No rate-limit waiting between requests',
-        'Priority access on Arduino & other tools',
       ];
     const monthly = {
       name: 'Monthly',
@@ -2096,4 +2169,5 @@ if (typeof window !== 'undefined') {
   window.compressOldAssistant = compressOldAssistant;
   window.stripContextPrefix = stripContextPrefix;
   window.renderMarkdown = renderMarkdown;
+  window.ensureFencedBlocks = ensureFencedBlocks;
 }
