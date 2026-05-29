@@ -7,13 +7,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
 String v = String.valueOf(System.currentTimeMillis());
-boolean useAiGateway = "true".equalsIgnoreCase(System.getenv("USE_AI_GATEWAY"));
-String aiUserId = "";
-if (session != null) {
-    Object oauthSub = session.getAttribute("oauth_user_sub");
-    if (oauthSub != null) aiUserId = oauthSub.toString();
-}
+request.setAttribute("aiToolId", "arduino-simulator");
 %>
+<%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -62,7 +58,7 @@ body{background:var(--ard-bg);color:var(--ard-text);font-family:'DM Sans',sans-s
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/electronics/css/arduino-simulator.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/vibe-coding-assistant.css">
+<%@ include file="../modern/components/ai-assistant-head.inc.jsp" %>
 
 <!-- wokwi-elements: defer (not needed for LCP, canvas renders after) -->
 <script defer src="https://unpkg.com/@wokwi/elements@0.48.3/dist/wokwi-elements.bundle.js"></script>
@@ -1452,11 +1448,9 @@ document.addEventListener('keydown', (e) => {
 updateButtonStates();
 
 // ── AI chat (generic core + Arduino adapter) ──
+<%@ include file="../modern/components/ai-assistant-boot.inc.jsp" %>
 const aiChat = createArduinoSimulatorAssistant({
-  ctx: '<%=request.getContextPath()%>',
-  aiUrl: '<%=request.getContextPath()%><%= useAiGateway ? "/ai-gateway" : "/ai" %>',
-  useGateway: <%= useAiGateway %>,
-  userId: '<%= aiUserId.replace("\\", "\\\\").replace("'", "\\'") %>',
+  ...aiAssistantBoot,
   fileManager,
   editor,
   componentPanel,

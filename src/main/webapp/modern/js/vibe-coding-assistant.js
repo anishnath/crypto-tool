@@ -42,7 +42,19 @@ const LEGACY_STORAGE_PREFIXES = ['tool_ai_', 'vibe_chat_'];
 const LAYOUT_SUFFIX = '_layout';
 const PREFS_SUFFIX = '_prefs';
 const DEFAULT_LAYOUT = Object.freeze({ x: null, y: null, w: null, h: null, collapsed: false });
+const PANEL_MIN_W = 360;
+const PANEL_MIN_H = 300;
 const DEFAULT_POLICY_PREFS = Object.freeze({ mode: 'fast', freshContext: true });
+
+/** Default tier → servlet when aiRouteMode is `tier` (e.g. USE_AI_GATEWAY=true on server). */
+function defaultAiRouteByTier(sitePrefersGateway) {
+  return {
+    guest: 'legacy',
+    free: 'gateway',
+    pro: 'gateway',
+    unknown: sitePrefersGateway ? 'gateway' : 'legacy',
+  };
+}
 const MODE_PROMPT_SUFFIX = Object.freeze({
   fast: '',
   explain: 'Explain briefly with rationale and trade-offs tied to the current code/circuit.',
@@ -490,10 +502,13 @@ export class ToolAiAssistant {
    * @param {string} opts.ctx
    * @param {string} [opts.aiUrl]
    * @param {boolean} [opts.useGateway]
-   * @param {'auto'|'gateway'|'legacy'} [opts.aiRouteMode] - per-tool route override.
-   *   auto (default): infer from aiUrl/useGateway.
+   * @param {'auto'|'gateway'|'legacy'|'tier'} [opts.aiRouteMode] - per-tool route override.
+   *   auto (default): infer from aiUrl/useGateway (static for the session).
    *   gateway: force /ai-gateway with gateway headers.
-   *   legacy: force /ai (old servlet) with no gateway headers.
+   *   legacy: force /ai (AIProxyServlet / Ollama) with no gateway headers.
+   *   tier: pick route from aiRouteByTier after billing tier is known (guest → legacy, logged-in → gateway by default).
+   * @param {Partial<Record<'guest'|'free'|'pro'|'unknown', 'gateway'|'legacy'>>} [opts.aiRouteByTier]
+   *   Per-tier route when aiRouteMode is tier. Tools may override individual tiers.
    * @param {string} [opts.userId]
    * @param {string} [opts.toolId]
    * @param {string} opts.systemPrompt
@@ -528,20 +543,26 @@ export class ToolAiAssistant {
    */
   constructor(opts) {
     this.ctx = opts.ctx || '';
+    this.userId = opts.userId || '';
     const mode = (opts.aiRouteMode || 'auto').toLowerCase();
-    this.aiRouteMode = ['auto', 'gateway', 'legacy'].includes(mode) ? mode : 'auto';
+    this.aiRouteMode = ['auto', 'gateway', 'legacy', 'tier'].includes(mode) ? mode : 'auto';
     const requestedUrl = opts.aiUrl || (this.ctx + (opts.useGateway ? '/ai-gateway' : '/ai'));
+    this._sitePrefersGateway = opts.useGateway === true || String(requestedUrl).includes('/ai-gateway');
+    this.aiRouteByTier = { ...defaultAiRouteByTier(this._sitePrefersGateway), ...(opts.aiRouteByTier || {}) };
     if (this.aiRouteMode === 'gateway') {
       this.aiUrl = this.ctx + '/ai-gateway';
       this.useGateway = true;
     } else if (this.aiRouteMode === 'legacy') {
       this.aiUrl = this.ctx + '/ai';
       this.useGateway = false;
+    } else if (this.aiRouteMode === 'tier') {
+      this.aiUrl = this.ctx + (this._sitePrefersGateway ? '/ai-gateway' : '/ai');
+      this.useGateway = this._sitePrefersGateway;
+      this._applyAiRouteForTier(this.userId ? 'free' : 'guest');
     } else {
       this.aiUrl = requestedUrl;
       this.useGateway = opts.useGateway === true || this.aiUrl.includes('/ai-gateway');
     }
-    this.userId = opts.userId || '';
     this.billing = opts.billing && opts.billing !== false
       ? {
         ctx: opts.billing.ctx || opts.ctx || '',
@@ -622,6 +643,9 @@ export class ToolAiAssistant {
             <div class="vca-title-row">
               <h3 class="vca-title" id="${titleId}"></h3>
               <span class="vca-tier" data-tier="" hidden></span>
+              <button type="button" class="vca-expand-hint" hidden aria-label="Expand assistant">
+                <span class="vca-expand-hint-icon" aria-hidden="true">▴</span> Expand
+              </button>
             </div>
             <p class="vca-subtitle"></p>
           </div>
@@ -654,6 +678,13 @@ export class ToolAiAssistant {
           </form>
           <footer class="vca-footer"></footer>
         </div>
+        <div class="vca-resize-handles" aria-hidden="true">
+          <div class="vca-resize vca-resize-n" data-dir="n" title="Resize height"></div>
+          <div class="vca-resize vca-resize-e" data-dir="e" title="Resize width"></div>
+          <div class="vca-resize vca-resize-s" data-dir="s" title="Resize height"></div>
+          <div class="vca-resize vca-resize-w" data-dir="w" title="Resize width"></div>
+          <div class="vca-resize vca-resize-se" data-dir="se" title="Resize"></div>
+        </div>
       </div>`;
     document.body.appendChild(backdrop);
 
@@ -669,12 +700,15 @@ export class ToolAiAssistant {
     $('.vca-input').placeholder = this.placeholder;
     $('.vca-input').maxLength = this.maxInputLength;
     $('.vca-footer').textContent = this.floating
-      ? (this.footerText + ' · Drag header to move')
+      ? (this.footerText + ' · Drag header to move · drag edges/corner to resize')
       : this.footerText;
 
     $('.vca-close').addEventListener('click', () => this.close());
     $('.vca-reset').addEventListener('click', () => this.reset({ notify: true }));
-    collapseBtn.addEventListener('click', () => this.toggleCollapse());
+    collapseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleCollapse();
+    });
     if (modeSelect) {
       modeSelect.value = this.prefs.mode;
       modeSelect.addEventListener('change', () => {
@@ -722,6 +756,7 @@ export class ToolAiAssistant {
       modal,
       header,
       tier: $('.vca-tier'),
+      expandHint: $('.vca-expand-hint'),
       billingBar,
       messages,
       quick: $('.vca-quick'),
@@ -735,6 +770,8 @@ export class ToolAiAssistant {
 
     if (this.floating) {
       this._setupDrag();
+      this._setupResize();
+      this._setupCollapsedExpand();
       this._onWindowResize = () => this._reclampPosition();
       window.addEventListener('resize', this._onWindowResize, { passive: true });
     }
@@ -963,17 +1000,24 @@ export class ToolAiAssistant {
     this._renderApplyButton(msgEl, matched, label);
   }
 
+  _setApplyButtonLabel(btn, text) {
+    const labelEl = btn.querySelector('.vca-apply-label');
+    if (labelEl) labelEl.textContent = text;
+    else btn.textContent = text;
+  }
+
   _renderApplyButton(msgEl, matched, label) {
     const row = document.createElement('div');
     row.className = 'vca-apply-row';
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'vca-apply-btn';
-    btn.textContent = label;
+    btn.innerHTML = '<span class="vca-apply-icon" aria-hidden="true">↓</span><span class="vca-apply-label"></span>';
+    btn.querySelector('.vca-apply-label').textContent = label;
     btn.addEventListener('click', async () => {
-      const original = btn.textContent;
+      const original = label;
       btn.disabled = true;
-      btn.textContent = 'Applying…';
+      this._setApplyButtonLabel(btn, 'Applying…');
       let failedAction = null;
       try {
         for (const { action, payload } of matched) {
@@ -981,7 +1025,9 @@ export class ToolAiAssistant {
           await action.apply(payload);
         }
         failedAction = null;
-        btn.textContent = this.appliedLabel;
+        this._setApplyButtonLabel(btn, this.appliedLabel);
+        const icon = btn.querySelector('.vca-apply-icon');
+        if (icon) icon.textContent = '✓';
       } catch (err) {
         console.error('[ToolAiAssistant] apply failed:',
           { actionId: failedAction?.id, err });
@@ -990,14 +1036,17 @@ export class ToolAiAssistant {
           `Apply failed${failedAction ? ` (${failedAction.id})` : ''}: ${detail}`,
           { kind: 'error', confidence: 'High' },
         );
-        btn.textContent = 'Failed — retry';
+        this._setApplyButtonLabel(btn, 'Failed — retry');
         btn.disabled = false;
         btn.dataset.failed = '1';
         btn.title = detail;
         setTimeout(() => {
-          if (btn.dataset.failed === '1') btn.textContent = original;
-        }, 2500);
+          if (btn.dataset.failed === '1') this._setApplyButtonLabel(btn, original);
+        }, 4000);
+        return;
       }
+      btn.disabled = true;
+      btn.classList.add('is-applied');
     });
     row.appendChild(btn);
     msgEl.appendChild(row);
@@ -1259,19 +1308,33 @@ export class ToolAiAssistant {
    */
   _setTier(tier) {
     const el = this._els?.tier;
-    if (!el) return;
-    const labels = { pro: 'Pro', free: 'Free', guest: 'Guest', unknown: '' };
-    const titles = {
-      pro: 'You are on the Pro plan',
-      free: 'Free plan — upgrade for higher AI limits',
-      guest: 'Not signed in — sign in or upgrade for more AI',
-      unknown: '',
-    };
-    const label = labels[tier] ?? '';
-    el.dataset.tier = tier;
-    el.textContent = label;
-    el.title = titles[tier] || '';
-    el.hidden = !label;
+    if (el) {
+      const labels = { pro: 'Pro', free: 'Free', guest: 'Guest', unknown: '' };
+      const titles = {
+        pro: 'You are on the Pro plan',
+        free: 'Free plan — upgrade for higher AI limits',
+        guest: 'Not signed in — sign in or upgrade for more AI',
+        unknown: '',
+      };
+      const label = labels[tier] ?? '';
+      el.dataset.tier = tier;
+      el.textContent = label;
+      el.title = titles[tier] || '';
+      el.hidden = !label;
+    }
+    this._applyAiRouteForTier(tier);
+  }
+
+  /**
+   * When aiRouteMode is tier, map billing tier → /ai vs /ai-gateway.
+   * @param {'pro'|'free'|'guest'|'unknown'} tier
+   */
+  _applyAiRouteForTier(tier) {
+    if (this.aiRouteMode !== 'tier') return;
+    const pick = this.aiRouteByTier[tier] || this.aiRouteByTier.unknown || 'legacy';
+    const useGateway = pick === 'gateway';
+    this.useGateway = useGateway;
+    this.aiUrl = this.ctx + (useGateway ? '/ai-gateway' : '/ai');
   }
 
   async _refreshBilling() {
@@ -1314,6 +1377,7 @@ export class ToolAiAssistant {
       this._renderBillingBar();
     } catch {
       // Keep last known tier on transient errors; default to nothing if never set.
+      this._setTier('unknown');
       bar.dataset.state = 'unknown';
       if (!stickyReason) bar.dataset.reason = 'idle';
       bar.hidden = false;
@@ -1397,7 +1461,7 @@ export class ToolAiAssistant {
     }
     if (e.target.closest('[data-billing-action="plans"]')) {
       e.preventDefault();
-      this._openPlanPicker();
+      await this._openPlanPicker();
       return;
     }
     const btn = e.target.closest('[data-billing-plan]');
@@ -1460,6 +1524,7 @@ export class ToolAiAssistant {
     if (p.badge) out.badge = p.badge;
     if (p.cadence) out.cadence = p.cadence;
     if (p.monthly_token_label) out.tokenLabel = p.monthly_token_label;
+    if (p.model_id) out.modelId = p.model_id;
     if (Array.isArray(p.features) && p.features.length) out.features = p.features;
     if (p.description) out.description = p.description;
     return out;
@@ -1470,7 +1535,9 @@ export class ToolAiAssistant {
    */
   async _loadPlans() {
     const toolId = this.toolId || this.billing?.toolId || '';
-    if (this._plansCatalog && this._plansCatalogTool === toolId) return;
+    if (this._plansCatalog && this._plansCatalogTool === toolId && this._plansCatalog.plans?.length) {
+      return;
+    }
     if (this._plansLoading) return;
     this._plansLoading = true;
     try {
@@ -1495,15 +1562,19 @@ export class ToolAiAssistant {
       const isPro = id === 'pro';
       const label = t.token_label
         || (t.monthly_token_limit ? `${Number(t.monthly_token_limit).toLocaleString()} / month` : '');
+      const model = t.model_id
+        ? `<span class="vca-plans-tier-model">${t.model_id}</span>`
+        : '';
       return `
         <div class="vca-plans-tier${isPro ? ' is-pro' : ''}" data-tier="${id}">
           <span class="vca-plans-tier-name">${t.display_name || t.plan_id || ''}</span>
           <span class="vca-plans-tier-tokens">${label}</span>
+          ${model}
         </div>`;
     }).join('');
     return `
-      <div class="vca-plans-compare" aria-label="AI token limits by tier">
-        <h4 class="vca-plans-compare-title">AI token limits</h4>
+      <div class="vca-plans-compare" aria-label="AI limits and models by tier">
+        <h4 class="vca-plans-compare-title">AI limits &amp; models</h4>
         <div class="vca-plans-tier-grid">${rows}</div>
       </div>`;
   }
@@ -1518,6 +1589,9 @@ export class ToolAiAssistant {
     const token = info.tokenLabel
       ? `<span class="vca-plan-tokens">${info.tokenLabel}</span>`
       : '';
+    const model = info.modelId
+      ? `<span class="vca-plan-model">${info.modelId} chat model</span>`
+      : '';
     const desc = info.description
       ? `<p class="vca-plan-desc">${info.description}</p>`
       : '';
@@ -1529,6 +1603,7 @@ export class ToolAiAssistant {
           <span class="vca-plan-name">Pro ${info.name}</span>
           ${price}
           ${token}
+          ${model}
           <span class="vca-plan-cadence">${info.cadence}</span>
         </div>
         ${desc}
@@ -1540,8 +1615,9 @@ export class ToolAiAssistant {
       </div>`;
   }
 
-  _openPlanPicker() {
+  async _openPlanPicker() {
     if (!this._els?.modal) return;
+    await this._loadPlans();
     const { monthly, yearly } = this._plansConfig();
     let overlay = this._els.plans;
     if (!overlay) {
@@ -1562,7 +1638,7 @@ export class ToolAiAssistant {
       <div class="vca-plans-sheet" role="dialog" aria-label="Choose a Pro plan">
         <button type="button" class="vca-plans-close" data-plans-close aria-label="Close">&times;</button>
         <h3 class="vca-plans-title">Upgrade to Pro</h3>
-        <p class="vca-plans-sub">Unlimited rate, higher monthly AI limits.</p>
+        <p class="vca-plans-sub">Higher Pro chat model, more monthly AI tokens, no rate-limit waits.</p>
         <div class="vca-plans-grid">
           ${this._planCardHTML('monthly', monthly, this._billingBusy)}
           ${this._planCardHTML('yearly', yearly, this._billingBusy)}
@@ -1573,14 +1649,6 @@ export class ToolAiAssistant {
     overlay.hidden = false;
     overlay.dataset.open = 'true';
     overlay.querySelector('.vca-plans-close')?.focus();
-
-    // First open with no Go data yet: fetch real names/prices, then re-render
-    // in place so the cards upgrade from local fallback to authoritative data.
-    if (!this._plansCatalog && !this._plansLoading) {
-      this._loadPlans().then(() => {
-        if (this._els?.plans?.dataset.open === 'true') this._openPlanPicker();
-      });
-    }
   }
 
   _closePlanPicker() {
@@ -1755,7 +1823,8 @@ export class ToolAiAssistant {
 
   _applyLayout() {
     if (!this._els) return;
-    const { modal, collapseBtn } = this._els;
+    const { modal, collapseBtn, header, expandHint } = this._els;
+    const collapsed = !!this.layout.collapsed;
     if (this.floating) {
       if (this.layout.x != null && this.layout.y != null) {
         modal.style.left = this.layout.x + 'px';
@@ -1763,7 +1832,29 @@ export class ToolAiAssistant {
         modal.style.right = 'auto';
         modal.style.bottom = 'auto';
       }
-      modal.dataset.collapsed = this.layout.collapsed ? 'true' : 'false';
+      modal.dataset.collapsed = collapsed ? 'true' : 'false';
+      const userSized = !collapsed && (this.layout.w != null || this.layout.h != null);
+      modal.dataset.userSized = userSized ? 'true' : 'false';
+      if (userSized) {
+        if (this.layout.w != null) modal.style.width = this.layout.w + 'px';
+        if (this.layout.h != null) modal.style.height = this.layout.h + 'px';
+      } else if (!collapsed) {
+        modal.style.width = '';
+        modal.style.height = '';
+      } else {
+        modal.style.width = '';
+        modal.style.height = '';
+      }
+    }
+    if (header) {
+      if (this.floating && collapsed) {
+        header.title = 'Click or hover to expand · drag header to move';
+      } else {
+        header.title = this.floating ? 'Drag to move · drag edges/corner to resize' : '';
+      }
+    }
+    if (expandHint) {
+      expandHint.hidden = !(this.floating && this.layout.collapsed);
     }
     if (collapseBtn) {
       const collapsed = !!this.layout.collapsed;
@@ -1776,10 +1867,27 @@ export class ToolAiAssistant {
 
   _reclampPosition() {
     if (!this._els || !this.floating) return;
-    if (this.layout.x == null || this.layout.y == null) return;
     const { modal } = this._els;
-    const maxLeft = Math.max(0, window.innerWidth - modal.offsetWidth);
-    const maxTop = Math.max(0, window.innerHeight - 80);
+    const collapsed = !!this.layout.collapsed;
+    const maxW = Math.max(PANEL_MIN_W, window.innerWidth - 8);
+    const maxH = Math.max(PANEL_MIN_H, window.innerHeight - 8);
+
+    if (!collapsed && (this.layout.w != null || this.layout.h != null)) {
+      let w = this.layout.w ?? modal.offsetWidth;
+      let h = this.layout.h ?? modal.offsetHeight;
+      w = Math.min(maxW, Math.max(PANEL_MIN_W, w));
+      h = Math.min(maxH, Math.max(PANEL_MIN_H, h));
+      this.layout.w = w;
+      this.layout.h = h;
+      modal.style.width = w + 'px';
+      modal.style.height = h + 'px';
+    }
+
+    if (this.layout.x == null || this.layout.y == null) return;
+    const width = modal.offsetWidth;
+    const height = modal.offsetHeight;
+    const maxLeft = Math.max(0, window.innerWidth - width);
+    const maxTop = Math.max(0, window.innerHeight - Math.min(height, 80));
     const nx = Math.min(maxLeft, Math.max(0, this.layout.x));
     const ny = Math.min(maxTop, Math.max(0, this.layout.y));
     if (nx !== this.layout.x || ny !== this.layout.y) {
@@ -1791,23 +1899,144 @@ export class ToolAiAssistant {
     }
   }
 
+  /** Pin modal to left/top before drag or resize (from default bottom/right anchor). */
+  _ensureLayoutPosition() {
+    if (!this._els || !this.floating) return;
+    const { modal } = this._els;
+    if (this.layout.x != null && this.layout.y != null) return;
+    const rect = modal.getBoundingClientRect();
+    this.layout.x = Math.round(rect.left);
+    this.layout.y = Math.round(rect.top);
+    modal.style.left = this.layout.x + 'px';
+    modal.style.top = this.layout.y + 'px';
+    modal.style.right = 'auto';
+    modal.style.bottom = 'auto';
+  }
+
+  _panelSizeLimits() {
+    return {
+      minW: PANEL_MIN_W,
+      minH: PANEL_MIN_H,
+      maxW: Math.max(PANEL_MIN_W, window.innerWidth - 8),
+      maxH: Math.max(PANEL_MIN_H, window.innerHeight - 8),
+    };
+  }
+
+  _setupResize() {
+    if (!this._els || !this.floating) return;
+    const { modal } = this._els;
+    modal.querySelectorAll('.vca-resize').forEach((handle) => {
+      handle.addEventListener('pointerdown', (e) => {
+        if (this.layout.collapsed) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const dir = handle.dataset.dir || 'se';
+        this._ensureLayoutPosition();
+        const startX = e.clientX;
+        const startY = e.clientY;
+        const startW = modal.offsetWidth;
+        const startH = modal.offsetHeight;
+        const startLeft = this.layout.x ?? modal.getBoundingClientRect().left;
+        const startTop = this.layout.y ?? modal.getBoundingClientRect().top;
+        const pointerId = e.pointerId;
+        modal.classList.add('vca-resizing');
+        document.body.classList.add('vca-no-select');
+        try { handle.setPointerCapture(pointerId); } catch { /* ignore */ }
+
+        const onMove = (ev) => {
+          const dx = ev.clientX - startX;
+          const dy = ev.clientY - startY;
+          const { minW, minH, maxW, maxH } = this._panelSizeLimits();
+          let w = startW;
+          let h = startH;
+          let x = startLeft;
+          let y = startTop;
+
+          if (dir === 'e' || dir === 'se') w = startW + dx;
+          if (dir === 'w') { w = startW - dx; x = startLeft + dx; }
+          if (dir === 's' || dir === 'se') h = startH + dy;
+          if (dir === 'n') { h = startH - dy; y = startTop + dy; }
+
+          w = Math.min(maxW, Math.max(minW, w));
+          h = Math.min(maxH, Math.max(minH, h));
+
+          if (dir === 'w') x = startLeft + startW - w;
+          if (dir === 'n') y = startTop + startH - h;
+
+          x = Math.max(0, Math.min(window.innerWidth - w, x));
+          y = Math.max(0, Math.min(window.innerHeight - h, y));
+
+          this.layout.w = Math.round(w);
+          this.layout.h = Math.round(h);
+          this.layout.x = Math.round(x);
+          this.layout.y = Math.round(y);
+          this._applyLayout();
+        };
+
+        const onUp = () => {
+          modal.classList.remove('vca-resizing');
+          document.body.classList.remove('vca-no-select');
+          try { handle.releasePointerCapture(pointerId); } catch { /* ignore */ }
+          handle.removeEventListener('pointermove', onMove);
+          handle.removeEventListener('pointerup', onUp);
+          handle.removeEventListener('pointercancel', onUp);
+          this._saveLayout();
+        };
+
+        handle.addEventListener('pointermove', onMove);
+        handle.addEventListener('pointerup', onUp);
+        handle.addEventListener('pointercancel', onUp);
+      });
+    });
+  }
+
+  _isHeaderInteractiveTarget(target) {
+    return !!target?.closest?.(
+      'button, .vca-icon-btn, input, textarea, select, option, label, a, .vca-policy',
+    );
+  }
+
+  /** Reliable click/tap expand when minimized (hover peek alone is CSS-only and temporary). */
+  _setupCollapsedExpand() {
+    if (!this._els) return;
+    const { header, expandHint } = this._els;
+    header.addEventListener('click', (e) => {
+      if (!this.floating || !this.layout.collapsed) return;
+      if (e.target.closest(
+        '.vca-expand-hint, button, .vca-icon-btn, input, textarea, select, option, label, a, .vca-policy',
+      )) return;
+      this.toggleCollapse(false);
+    });
+    if (expandHint) {
+      expandHint.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (this.floating && this.layout.collapsed) this.toggleCollapse(false);
+      });
+    }
+  }
+
   _setupDrag() {
     if (!this._els) return;
     const { header, modal } = this._els;
     let dragging = false;
+    let moved = false;
     let startX = 0, startY = 0, startLeft = 0, startTop = 0, pointerId = -1;
 
     const onDown = (e) => {
       if (e.button !== undefined && e.button !== 0) return;
+      if (e.target.closest('.vca-resize')) return;
       // Interactive controls inside header should not initiate drag.
-      if (e.target.closest('button, .vca-icon-btn, input, textarea, select, option, label, a')) return;
+      if (e.target.closest('button, .vca-icon-btn, input, textarea, select, option, label, a, .vca-policy')) return;
+      this._ensureLayoutPosition();
       const rect = modal.getBoundingClientRect();
       startX = e.clientX; startY = e.clientY;
       startLeft = rect.left; startTop = rect.top;
       dragging = true;
+      moved = false;
       pointerId = e.pointerId;
       try { header.setPointerCapture(pointerId); } catch { /* ignore */ }
       header.classList.add('vca-dragging');
+      modal.classList.add('vca-dragging');
       document.body.classList.add('vca-no-select');
       e.preventDefault();
     };
@@ -1815,6 +2044,7 @@ export class ToolAiAssistant {
       if (!dragging) return;
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
+      if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
       const maxLeft = Math.max(0, window.innerWidth - modal.offsetWidth);
       const maxTop = Math.max(0, window.innerHeight - 60);
       const nx = Math.min(maxLeft, Math.max(0, startLeft + dx));
@@ -1826,13 +2056,20 @@ export class ToolAiAssistant {
       this.layout.x = nx;
       this.layout.y = ny;
     };
-    const onUp = () => {
+    const onUp = (e) => {
       if (!dragging) return;
+      const wasCollapsed = !!this.layout.collapsed;
       dragging = false;
       try { header.releasePointerCapture(pointerId); } catch { /* ignore */ }
       header.classList.remove('vca-dragging');
+      modal.classList.remove('vca-dragging');
       document.body.classList.remove('vca-no-select');
       this._saveLayout();
+      // Tap/click on minimized bar (not a drag) → persist expand.
+      if (!moved && wasCollapsed && e?.target
+          && !this._isHeaderInteractiveTarget(e.target)) {
+        this.toggleCollapse(false);
+      }
     };
 
     header.addEventListener('pointerdown', onDown);

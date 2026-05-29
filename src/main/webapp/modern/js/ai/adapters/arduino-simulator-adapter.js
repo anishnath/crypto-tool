@@ -78,6 +78,7 @@ export function createArduinoSimulatorAssistant(opts) {
     aiUrl,
     useGateway,
     aiRouteMode,
+    aiRouteByTier,
     userId,
     fileManager,
     editor,
@@ -135,6 +136,7 @@ export function createArduinoSimulatorAssistant(opts) {
     aiUrl,
     useGateway,
     aiRouteMode,
+    aiRouteByTier,
     userId,
     billing: {
       enabled: true,

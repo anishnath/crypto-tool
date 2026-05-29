@@ -201,7 +201,7 @@ public class AIGatewayProxyServlet extends HttpServlet {
     }
 
     private static boolean useGatewayEnabled() {
-        return "true".equalsIgnoreCase(System.getenv("USE_AI_GATEWAY"));
+        return AiGatewayConfig.isGatewayEnabled();
     }
 
     @Override
