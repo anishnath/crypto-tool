@@ -1,0 +1,10 @@
+name = "llm-gateway"
+compatibility_date = "2024-05-01"
+workers_dev = true
+
+# Shared D1 with exam-marker; LLM tables use llm_ prefix (see db/SCHEMA.md)
+[[d1_databases]]
+binding = "DB"
+database_name = "exam-marker-db"
+database_id = "b146fd57-6fcc-4847-8b3f-17a9e747758b"
+migrations_dir = "migrations"

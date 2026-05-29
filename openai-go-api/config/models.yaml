@@ -1,0 +1,81 @@
+# Layer 2: model catalog
+# modalities:
+#   chat      -> POST /v1/chat/completions
+#   responses -> POST /v1/responses (required for *-pro OpenAI models)
+#   tts       -> not wired yet (skipped by sanity)
+
+default_model: gpt-5.4-mini
+
+models:
+  # OpenAI — standard models (chat + responses)
+  - id: gpt-5.5
+    provider: openai
+    modalities: [chat, responses]
+
+  - id: gpt-5.4
+    provider: openai
+    modalities: [chat, responses]
+
+  - id: gpt-5.4-mini
+    provider: openai
+    modalities: [chat, responses]
+
+  - id: gpt-5.4-nano
+    provider: openai
+    modalities: [chat, responses]
+
+  # OpenAI Pro — Responses API only (not supported on /v1/chat/completions)
+  - id: gpt-5.5-pro
+    provider: openai
+    modalities: [responses]
+
+  - id: gpt-5.4-pro
+    provider: openai
+    modalities: [responses]
+
+  # MiMo — chat
+  - id: mimo-v2.5-pro
+    provider: mimo
+    modalities: [chat]
+    enabled: true
+
+  - id: mimo-v2-pro
+    provider: mimo
+    modalities: [chat]
+    enabled: true
+
+  - id: mimo-v2.5
+    provider: mimo
+    modalities: [chat]
+    enabled: true
+
+  - id: mimo-v2-omni
+    provider: mimo
+    modalities: [chat]
+    enabled: true
+
+  - id: mimo-v2-flash
+    provider: mimo
+    modalities: [chat]
+    enabled: true
+
+  # MiMo TTS — enable when /v1/tts is implemented
+  - id: mimo-v2.5-tts
+    provider: mimo
+    modalities: [tts]
+    enabled: false
+
+  - id: mimo-v2.5-tts-voicedesign
+    provider: mimo
+    modalities: [tts]
+    enabled: false
+
+  - id: mimo-v2.5-tts-voiceclone
+    provider: mimo
+    modalities: [tts]
+    enabled: false
+
+  - id: mimo-v2-tts
+    provider: mimo
+    modalities: [tts]
+    enabled: false

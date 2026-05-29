@@ -31,3 +31,4 @@ target
 /src/main/webapp/math/olympiad/PROMO.md
 /src/main/webapp/math/iit/jee_mains_2025.json
 /src/main/webapp/math/iit/jee-neet.json
+/openai-go-api/.env.prod

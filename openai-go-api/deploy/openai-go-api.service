@@ -1,0 +1,27 @@
+[Unit]
+Description=8gwifi OpenAI Go API Gateway (billing + LLM proxy)
+Documentation=file:/opt/openai-go-api/README.deploy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/opt/openai-go-api
+EnvironmentFile=-/opt/openai-go-api/.env
+ExecStart=/opt/openai-go-api/bin/server
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+
+# Logs: journalctl -u openai-go-api -f
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=openai-go-api
+
+LimitNOFILE=65536
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

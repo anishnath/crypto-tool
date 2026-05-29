@@ -1,0 +1,8 @@
+.env
+.env.prod
+bin/
+.wrangler/
+*.exe
+*.test
+*.out
+/node_modules/
