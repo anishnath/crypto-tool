@@ -32,6 +32,10 @@ type D1Store struct {
 	aiPlansMu     sync.RWMutex
 	aiPlans       map[string]aiPlanEntry
 	aiPlansExpiry time.Time
+
+	toolTierMu      sync.RWMutex
+	toolTierModels  map[toolTierModelKey]string
+	toolTierExpiry  time.Time
 }
 
 func NewD1Store(cfg D1Config) (*D1Store, error) {

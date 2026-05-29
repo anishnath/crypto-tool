@@ -47,6 +47,7 @@ type PlanInfo struct {
 	Badge              string   `json:"badge,omitempty"`
 	MonthlyTokenLimit  int64    `json:"monthly_token_limit,omitempty"`
 	MonthlyTokenLabel  string   `json:"monthly_token_label,omitempty"`
+	ModelID            string   `json:"model_id,omitempty"`
 	Features           []string `json:"features,omitempty"`
 }
 
@@ -612,6 +613,7 @@ func (s *Service) buildPlansCatalog(ctx context.Context, toolID string) (*PlansC
 		if rec, ok := s.d1.GetAIPlan(ctx, aiPlanID); ok {
 			p.MonthlyTokenLimit = rec.MonthlyTokenLimit
 			p.MonthlyTokenLabel = formatTokenLimit(rec.MonthlyTokenLimit) + " / month"
+			p.ModelID = strings.TrimSpace(rec.ModelID)
 			if len(rec.Features) > 0 {
 				p.Features = append([]string(nil), rec.Features...)
 			}
@@ -644,7 +646,9 @@ func (s *Service) buildPlansCatalog(ctx context.Context, toolID string) (*PlansC
 			}
 		}
 		if len(p.Features) == 0 && p.MonthlyTokenLimit > 0 {
-			p.Features = defaultProFeatures(p.MonthlyTokenLimit)
+			p.Features = defaultProFeatures(p.MonthlyTokenLimit, p.ModelID)
+		} else if p.ModelID != "" {
+			p.Features = ensureModelFeature(p.Features, p.ModelID)
 		}
 		plans = append(plans, p)
 	}
@@ -838,16 +842,35 @@ func defaultAITiers() []AITierInfo {
 	}
 }
 
-func defaultProFeatures(tokenLimit int64) []string {
+func defaultProFeatures(tokenLimit int64, modelID string) []string {
 	label := formatTokenLimit(tokenLimit)
 	if label == "" {
 		label = "Higher"
 	}
-	return []string{
+	feats := []string{
 		label + " AI tokens per month",
 		"No rate-limit waiting between requests",
-		"Priority access on Arduino & other tools",
+		"Priority access on all tools",
 	}
+	return ensureModelFeature(feats, modelID)
+}
+
+func ensureModelFeature(features []string, modelID string) []string {
+	modelID = strings.TrimSpace(modelID)
+	if modelID == "" {
+		return features
+	}
+	needle := strings.ToLower(modelID)
+	for _, f := range features {
+		if strings.Contains(strings.ToLower(f), needle) {
+			return features
+		}
+	}
+	label := modelID + " Pro chat model"
+	if strings.Contains(strings.ToLower(modelID), "mini") || strings.Contains(strings.ToLower(modelID), "nano") {
+		label = modelID + " chat model"
+	}
+	return append([]string{label}, features...)
 }
 
 func formatTokenLimit(n int64) string {

@@ -361,6 +361,8 @@ make d1-migrate-remote
 | `0008` | `features_json` on **ai_plans**; link `billing_plans.ai_plan_id` |
 | `0009` | `tool_id` on **billing_plans** (per-tool pricing) |
 | `0010` | `model_id` on **ai_plans** (tier model routing) |
+| `0011` | `tool_tier_models` (per-tool free/pro model overrides) |
+| `0012` | Pro catalog copy — `ai_plans` features + model marketing |
 
 Column-level detail: [`db/SUBSCRIPTIONS.md`](../db/SUBSCRIPTIONS.md).
 
