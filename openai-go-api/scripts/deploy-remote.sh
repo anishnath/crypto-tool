@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build locally (make build-linux), rsync artifacts to EC2, install systemd unit, restart.
+# Build locally (make build-linux), upload artifacts to EC2, install systemd unit, restart.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -23,11 +23,15 @@ echo "==> Deploying to ${REMOTE_HOST}:${REMOTE_DIR}"
 # Remote layout + ownership (ec2-user runs the service)
 ssh "$REMOTE_HOST" "sudo mkdir -p '${REMOTE_DIR}/bin' '${REMOTE_DIR}/config' && sudo chown -R ec2-user:ec2-user '${REMOTE_DIR}'"
 
+echo "==> Stop service before binary upload (avoids scp failure on locked ExecStart path)"
+ssh "$REMOTE_HOST" "if systemctl is-active --quiet ${SERVICE_NAME} 2>/dev/null; then sudo systemctl stop ${SERVICE_NAME}; fi" || true
+
 echo "==> Upload binary, config, env"
-scp -q "$BIN_LINUX" "${REMOTE_HOST}:${REMOTE_DIR}/bin/server"
+scp -q "$BIN_LINUX" "${REMOTE_HOST}:${REMOTE_DIR}/bin/server.new"
+ssh "$REMOTE_HOST" "mv -f '${REMOTE_DIR}/bin/server.new' '${REMOTE_DIR}/bin/server' && chmod 755 '${REMOTE_DIR}/bin/server'"
 scp -q config/models.yaml "${REMOTE_HOST}:${REMOTE_DIR}/config/models.yaml"
 scp -q "$ENV_PROD" "${REMOTE_HOST}:${REMOTE_DIR}/.env"
-ssh "$REMOTE_HOST" "chmod 755 '${REMOTE_DIR}/bin/server' && chmod 600 '${REMOTE_DIR}/.env'"
+ssh "$REMOTE_HOST" "chmod 600 '${REMOTE_DIR}/.env'"
 
 echo "==> Install systemd unit"
 scp -q deploy/openai-go-api.service "${REMOTE_HOST}:/tmp/${SERVICE_NAME}.service"
