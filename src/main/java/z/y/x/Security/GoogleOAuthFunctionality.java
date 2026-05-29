@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import z.y.x.billing.UserProvisioning;
+
 /**
  * Google OAuth Servlet - Handles Google OAuth 2.0 authentication flow
  * @author Anish Nath
@@ -130,11 +132,43 @@ public class GoogleOAuthFunctionality extends HttpServlet {
                 redirectPath = "/";
             }
         }
-        // Ensure it starts with /
-        if (!redirectPath.startsWith("/")) {
-            redirectPath = "/" + redirectPath;
+        return normalizeRedirectPath(redirectPath, request.getContextPath());
+    }
+
+    /**
+     * Normalize a post-auth redirect target into a context-relative path.
+     *
+     * The callback always re-prepends {@code contextPath}, so the stored path must
+     * NOT already contain it (otherwise the context root is doubled, e.g.
+     * {@code /app/app/page.jsp}). Also guards against open-redirects by rejecting
+     * absolute URLs and protocol-relative ("//host") values.
+     */
+    private static String normalizeRedirectPath(String redirectPath, String contextPath) {
+        if (redirectPath == null || redirectPath.trim().isEmpty()) {
+            return "/";
         }
-        return redirectPath;
+        String p = redirectPath.trim();
+
+        // Reject absolute / protocol-relative URLs (open-redirect protection).
+        String lower = p.toLowerCase();
+        if (lower.startsWith("http://") || lower.startsWith("https://") || p.startsWith("//")) {
+            return "/";
+        }
+
+        if (!p.startsWith("/")) {
+            p = "/" + p;
+        }
+
+        // Strip a leading context path if the caller already included it.
+        if (contextPath != null && !contextPath.isEmpty() && !"/".equals(contextPath)) {
+            if (p.equals(contextPath)) {
+                return "/";
+            }
+            if (p.startsWith(contextPath + "/")) {
+                p = p.substring(contextPath.length());
+            }
+        }
+        return p.isEmpty() ? "/" : p;
     }
     
     @Override
@@ -358,6 +392,13 @@ public class GoogleOAuthFunctionality extends HttpServlet {
                                     session.setAttribute(SESSION_USER_EMAIL, emailValue.toString());
                                     System.out.println("OAuth: Stored userEmail: " + emailValue.toString());
                                 }
+                            }
+                            if (visitorId != null) {
+                                String email = userInfo.containsKey("email")
+                                        ? String.valueOf(userInfo.get("email")) : null;
+                                String name = userInfo.containsKey("name")
+                                        ? String.valueOf(userInfo.get("name")) : null;
+                                UserProvisioning.upsertGoogleUser(visitorId, email, name);
                             }
                         } else {
                             System.out.println("OAuth: fetchUserInfo returned null");
@@ -597,10 +638,9 @@ public class GoogleOAuthFunctionality extends HttpServlet {
             }
         }
         
-        // Ensure redirectPath starts with / (consistent with getRedirectPath method)
-        if (!redirectPath.startsWith("/")) {
-            redirectPath = "/" + redirectPath;
-        }
+        // Normalize (strip any already-included context path + open-redirect guard),
+        // consistent with getRedirectPath; the URL below re-prepends contextPath.
+        redirectPath = normalizeRedirectPath(redirectPath, request.getContextPath());
         
         // Clear session
         session.removeAttribute(SESSION_ACCESS_TOKEN);
