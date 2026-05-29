@@ -55,6 +55,10 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("GET /v1/billing/status", api.BillingStatus)
 	mux.HandleFunc("POST /v1/billing/users/upsert", api.BillingUpsertUser)
 
+	// Per-tool generation history (opt-in tools only — currently TikZ viewer)
+	mux.HandleFunc("GET /v1/tools/tikz/generations/recent", api.ToolTikzGenerationsRecent)
+	mux.HandleFunc("POST /v1/tools/tikz/generations", api.ToolTikzGenerationsSave)
+
 	return middleware.Logging(mux)
 }
 

@@ -29,10 +29,11 @@ make remote
 This will:
 
 1. `GOOS=linux GOARCH=amd64` build → `bin/server-linux`
-2. `scp` binary, `config/models.yaml`, `.env.prod` → `/opt/openai-go-api/`
-3. Install `deploy/openai-go-api.service` → `/etc/systemd/system/`
-4. `systemctl enable --now openai-go-api`
-5. Curl `GET /health` on the remote
+2. Stop `openai-go-api` if running (Linux locks the running binary)
+3. Upload to `bin/server.new`, atomically replace `bin/server`, plus `config/models.yaml` and `.env.prod` → `/opt/openai-go-api/`
+4. Install `deploy/openai-go-api.service` → `/etc/systemd/system/`
+5. `systemctl enable --now openai-go-api`
+6. Curl `GET /health` on the remote
 
 ## Remote layout
 
@@ -89,6 +90,8 @@ Dodo webhook stays on Tomcat: `https://8gwifi.org/api/dodo/webhook` — not this
 
 | Issue | Fix |
 |-------|-----|
+| `scp: dest open .../bin/server: Failure` | Service was running — redeploy with `make remote` (script stops service first) or `make remote-restart` after manual upload |
+| Plans API returns `{"plans":[],"ai_tiers":[]}` | Go checkout disabled — set `DODO_PAYMENTS_API_KEY` + `DODO_PRODUCT_PRO_*` in `/opt/openai-go-api/.env`, then `make remote-restart` |
 | `missing .env.prod` | `cp .env.prod.example .env.prod` and fill secrets |
 | Service fails start | `make remote-logs` — often missing API key or D1 token |
 | Tomcat can't reach Go | Confirm `AI_GATEWAY=http://127.0.0.1:8084` and `ss -lntp \| grep 8084` on EC2 |
