@@ -21,8 +21,102 @@
     <style>
         *{box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
-        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#f8fafc;margin:0}
-        :root{--primary:#6366f1;--primary-dark:#4f46e5;--bg-primary:#fff;--bg-secondary:#f8fafc;--text-primary:#0f172a;--text-secondary:#475569;--border:#e2e8f0}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1rem;line-height:1.5;color:oklch(0.292 0.046 164.9);background:oklch(0.982 0.006 137.8);margin:0}
+
+        /* Wildflower Meadow
+           System definition: /systems/morphous-wildflower-meadow/system.json
+           Prompt records: /systems/morphous-wildflower-meadow/prompts.json
+           Design-system references:
+           light: /systems/morphous-wildflower-meadow/design-system-light.png
+           dark: /systems/morphous-wildflower-meadow/design-system-dark.png
+        */
+        :root {
+            --background: oklch(0.982 0.006 137.8);
+            --foreground: oklch(0.292 0.046 164.9);
+            --card: oklch(1.000 0.000 89.9);
+            --card-foreground: oklch(0.292 0.046 164.9);
+            --popover: oklch(1.000 0.000 89.9);
+            --popover-foreground: oklch(0.292 0.046 164.9);
+            --primary: oklch(0.605 0.215 27.7);
+            --primary-foreground: oklch(0.982 0.006 137.8);
+            --secondary: oklch(0.993 0.003 128.5);
+            --secondary-foreground: oklch(0.292 0.046 164.9);
+            --muted: oklch(0.996 0.003 128.5);
+            --muted-foreground: oklch(0.292 0.046 164.9);
+            --accent: oklch(0.536 0.190 259.9);
+            --accent-foreground: oklch(0.292 0.046 164.9);
+            --destructive: oklch(0.605 0.215 27.7);
+            --border: oklch(0.977 0.004 134.8);
+            --input: oklch(0.977 0.004 134.8);
+            --ring: oklch(0.876 0.171 91.7);
+            --chart-1: oklch(0.605 0.215 27.7);
+            --chart-2: oklch(0.876 0.171 91.7);
+            --chart-3: oklch(0.536 0.190 259.9);
+            --chart-4: oklch(0.560 0.114 155.7);
+            --chart-5: oklch(0.292 0.046 164.9);
+            --sidebar: oklch(0.993 0.002 145.6);
+            --sidebar-foreground: oklch(0.292 0.046 164.9);
+            --sidebar-primary: oklch(0.605 0.215 27.7);
+            --sidebar-primary-foreground: oklch(0.982 0.006 137.8);
+            --sidebar-accent: oklch(0.945 0.023 20.9);
+            --sidebar-accent-foreground: oklch(0.605 0.215 27.7);
+            --sidebar-border: oklch(0.977 0.004 134.8);
+            --sidebar-ring: oklch(0.876 0.171 91.7);
+            --radius: 0.5rem;
+
+            /* Legacy aliases used by inline rules below */
+            --primary-dark: oklch(0.486 0.190 27.7);
+            --bg-primary: var(--card);
+            --bg-secondary: var(--background);
+            --bg-tertiary: var(--muted);
+            --text-primary: var(--foreground);
+            --text-secondary: oklch(0.446 0.037 164.7);
+            --text-muted: oklch(0.560 0.040 164.7);
+        }
+
+        .dark,
+        [data-theme="dark"] {
+            --background: oklch(0.292 0.046 164.9);
+            --foreground: oklch(0.982 0.006 137.8);
+            --card: oklch(0.292 0.046 164.9);
+            --card-foreground: oklch(0.982 0.006 137.8);
+            --popover: oklch(0.292 0.046 164.9);
+            --popover-foreground: oklch(0.982 0.006 137.8);
+            --primary: oklch(0.876 0.171 91.7);
+            --primary-foreground: oklch(0.292 0.046 164.9);
+            --secondary: oklch(0.446 0.037 164.7);
+            --secondary-foreground: oklch(0.982 0.006 137.8);
+            --muted: oklch(0.446 0.037 164.7);
+            --muted-foreground: oklch(0.959 0.009 134.9);
+            --accent: oklch(0.536 0.190 259.9);
+            --accent-foreground: oklch(0.292 0.046 164.9);
+            --destructive: oklch(0.605 0.215 27.7);
+            --border: oklch(1 0 0 / 12%);
+            --input: oklch(1 0 0 / 16%);
+            --ring: oklch(0.876 0.171 91.7);
+            --chart-1: oklch(0.876 0.171 91.7);
+            --chart-2: oklch(0.605 0.215 27.7);
+            --chart-3: oklch(0.536 0.190 259.9);
+            --chart-4: oklch(0.560 0.114 155.7);
+            --chart-5: oklch(0.934 0.013 130.8);
+            --sidebar: oklch(0.292 0.046 164.9);
+            --sidebar-foreground: oklch(0.982 0.006 137.8);
+            --sidebar-primary: oklch(0.876 0.171 91.7);
+            --sidebar-primary-foreground: oklch(0.292 0.046 164.9);
+            --sidebar-accent: oklch(0.446 0.037 164.7);
+            --sidebar-accent-foreground: oklch(0.982 0.006 137.8);
+            --sidebar-border: oklch(1 0 0 / 12%);
+            --sidebar-ring: oklch(0.876 0.171 91.7);
+            --radius: 0.5rem;
+
+            --primary-dark: oklch(0.760 0.171 91.7);
+            --bg-primary: var(--card);
+            --bg-secondary: var(--background);
+            --bg-tertiary: var(--muted);
+            --text-primary: var(--foreground);
+            --text-secondary: oklch(0.959 0.009 134.9);
+            --text-muted: oklch(0.820 0.020 134.9);
+        }
     </style>
 
     <!-- SEO -->
@@ -73,17 +167,20 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <style>
-        /* TikZ Tool Theme Variables */
+        /* TikZ Tool Theme Variables — mapped to Wildflower Meadow */
         :root {
-            --tool-primary: #6366f1;
-            --tool-primary-dark: #4f46e5;
-            --tool-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            --tool-light: #f0f4ff;
+            --tool-primary: var(--primary);
+            --tool-primary-dark: var(--primary-dark);
+            --tool-accent: var(--accent);
+            --tool-ring: var(--ring);
+            --tool-gradient: linear-gradient(135deg, oklch(0.605 0.215 27.7) 0%, oklch(0.486 0.190 27.7) 100%);
+            --tool-light: oklch(0.945 0.023 20.9);
         }
 
+        .dark,
         [data-theme="dark"] {
-            --tool-gradient: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-            --tool-light: rgba(99, 102, 241, 0.15);
+            --tool-gradient: linear-gradient(135deg, oklch(0.876 0.171 91.7) 0%, oklch(0.760 0.171 91.7) 100%);
+            --tool-light: oklch(0.446 0.037 164.7 / 60%);
         }
 
         /* CodeMirror Container */
@@ -181,11 +278,12 @@
         /* AI Generator Panel */
         .tikz-ai-panel {
             padding: 0.625rem 0.875rem 0.5rem;
-            border-bottom: 1px solid var(--border, #e2e8f0);
-            background: linear-gradient(135deg, #f5f3ff 0%, #eff6ff 100%);
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, oklch(0.993 0.002 145.6) 0%, oklch(0.945 0.023 20.9) 100%);
         }
+        .dark .tikz-ai-panel,
         [data-theme="dark"] .tikz-ai-panel {
-            background: linear-gradient(135deg, #1e1b4b22 0%, #1e3a5f22 100%);
+            background: linear-gradient(135deg, oklch(0.446 0.037 164.7 / 35%) 0%, oklch(0.292 0.046 164.9 / 35%) 100%);
         }
         .tikz-ai-row {
             display: flex;
@@ -276,8 +374,8 @@
             text-align: left;
         }
         .tikz-recent-card:hover {
-            border-color: var(--tool-primary, #6366f1);
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.12);
+            border-color: var(--tool-primary);
+            box-shadow: 0 2px 8px oklch(0.605 0.215 27.7 / 18%);
         }
         .tikz-recent-thumb {
             aspect-ratio: 4 / 3;
@@ -431,7 +529,7 @@
         }
 
         .tikz-hint code {
-            background: rgba(99, 102, 241, 0.1);
+            background: oklch(0.605 0.215 27.7 / 12%);
             padding: 0.125rem 0.375rem;
             border-radius: 0.25rem;
             font-size: 0.75rem;
@@ -441,15 +539,16 @@
         .tikz-error {
             display: none;
             padding: 0.75rem 1rem;
-            background: #fef2f2;
-            border-left: 3px solid #ef4444;
-            color: #991b1b;
+            background: oklch(0.945 0.023 20.9);
+            border-left: 3px solid var(--destructive);
+            color: oklch(0.420 0.180 27.7);
             font-size: 0.8125rem;
         }
 
+        .dark .tikz-error,
         [data-theme="dark"] .tikz-error {
-            background: rgba(239, 68, 68, 0.1);
-            color: #fca5a5;
+            background: oklch(0.605 0.215 27.7 / 15%);
+            color: oklch(0.860 0.110 27.7);
         }
 
         /* Viewer container */
@@ -693,20 +792,131 @@
         }
 
         .tool-content-section code {
-            background: rgba(99, 102, 241, 0.1);
+            background: oklch(0.605 0.215 27.7 / 12%);
             padding: 0.125rem 0.375rem;
             border-radius: 0.25rem;
             font-size: 0.875rem;
-            color: var(--tool-primary, #6366f1);
+            color: var(--tool-primary);
         }
 
+        .dark .tool-content-section .tool-card,
         [data-theme="dark"] .tool-content-section .tool-card {
-            background: var(--bg-secondary, #1e293b);
-            border-color: var(--border, #334155);
+            background: var(--card);
+            border-color: var(--border);
         }
 
+        .dark .tool-highlight-box,
         [data-theme="dark"] .tool-highlight-box {
-            background: rgba(99, 102, 241, 0.1);
+            background: oklch(0.876 0.171 91.7 / 15%);
+        }
+
+        /* Compact page header — more room for tool + ads */
+        .tool-page-header {
+            padding: 0.5rem 1rem !important;
+            min-height: 0 !important;
+            background: linear-gradient(135deg, oklch(0.993 0.002 145.6) 0%, oklch(0.982 0.006 137.8) 100%);
+            border-bottom: 1px solid var(--border);
+        }
+        .tool-page-header-inner {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            padding: 0 !important;
+            margin: 0 auto !important;
+            max-width: 1400px;
+        }
+        .tool-page-header-inner > div:first-child {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            min-width: 0;
+        }
+        .tool-page-title {
+            font-size: 1.05rem !important;
+            font-weight: 700 !important;
+            margin: 0 !important;
+            line-height: 1.25 !important;
+            letter-spacing: -0.01em;
+            color: var(--foreground);
+        }
+        .tool-breadcrumbs {
+            font-size: 0.72rem !important;
+            line-height: 1.25 !important;
+            margin: 0 !important;
+            color: var(--text-secondary);
+        }
+        .tool-breadcrumbs a {
+            color: var(--tool-primary);
+            text-decoration: none;
+        }
+        .tool-breadcrumbs a:hover { text-decoration: underline; }
+        .tool-header-pitch {
+            font-size: 0.72rem;
+            line-height: 1.25;
+            color: var(--text-secondary);
+            padding-left: 0.6rem;
+            margin-left: 0.6rem;
+            border-left: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .tool-header-pitch a {
+            color: var(--tool-primary);
+            font-weight: 600;
+            text-decoration: none;
+            margin-left: 0.25rem;
+        }
+        .tool-header-pitch a:hover { text-decoration: underline; }
+        @media (max-width: 640px) {
+            .tool-header-pitch {
+                display: block;
+                padding-left: 0;
+                margin-left: 0;
+                border-left: none;
+                white-space: normal;
+                margin-top: 0.15rem;
+            }
+        }
+        .tool-page-badges {
+            display: flex;
+            gap: 0.3rem;
+            margin-left: auto;
+            flex-wrap: wrap;
+        }
+        .tool-badge {
+            padding: 0.12rem 0.45rem !important;
+            font-size: 0.68rem !important;
+            line-height: 1.3 !important;
+            border-radius: 9999px !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: oklch(0.945 0.023 20.9);
+            color: var(--tool-primary);
+            border: 1px solid oklch(0.605 0.215 27.7 / 18%);
+            font-weight: 600;
+        }
+        .dark .tool-badge,
+        [data-theme="dark"] .tool-badge {
+            background: oklch(0.876 0.171 91.7 / 15%);
+            color: var(--tool-primary);
+            border-color: oklch(0.876 0.171 91.7 / 30%);
+        }
+        .tool-badge svg { width: 10px; height: 10px; }
+        @media (max-width: 640px) {
+            .tool-page-title { font-size: 0.95rem !important; }
+            .tool-page-badges { margin-left: 0; }
+        }
+
+        /* Description section also compacted */
+        .tool-description-section {
+            padding: 0.5rem 1rem !important;
+        }
+        .tool-description-content p {
+            font-size: 0.82rem !important;
+            line-height: 1.5 !important;
+            margin: 0 !important;
         }
 
         [data-theme="dark"] .tool-section-title,
@@ -736,25 +946,21 @@
                 <h1 class="tool-page-title">TikZ Viewer & Editor</h1>
                 <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
                     <a href="<%=request.getContextPath()%>/">Home</a> /
-                    <a href="<%=request.getContextPath()%>/index.jsp#devops">Devops Tools</a> /
+                    <a href="<%=request.getContextPath()%>/latex/editor.jsp">Full LaTeX Editor</a> /
                     <span>TikZ Viewer</span>
                 </nav>
-            </div>
-            <div class="tool-page-badges">
-                <span class="tool-badge"><svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg> Free</span>
-                <span class="tool-badge"><svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg> No Login</span>
-                <span class="tool-badge"><svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/></svg> Math</span>
+                <span class="tool-header-pitch">
+                    Need full LaTeX docs?
+                    <a href="<%=request.getContextPath()%>/latex/editor.jsp">Try LaTeX Editor Online &rarr;</a>
+                </span>
             </div>
         </div>
     </header>
 
-    <!-- Description + Ad Section -->
+    <!-- Top Ad Slot -->
     <section class="tool-description-section">
         <div class="tool-description-inner">
-            <div class="tool-description-content">
-                <p>Create LaTeX TikZ diagrams instantly in your browser. Render, edit, and export to PNG/SVG/PDF with real-time preview, syntax highlighting, and 26+ example templates. No installation required! Need full document compilation? Try our <a href="<%=request.getContextPath()%>/latex/editor.jsp" style="color:var(--tool-primary);font-weight:600;">LaTeX Editor Online</a>.</p>
-            </div>
-            <div class="tool-description-ad">
+            <div class="tool-description-ad" style="width:100%;">
                 <%@ include file="modern/ads/ad-in-content-top.jsp" %>
             </div>
         </div>
@@ -771,35 +977,18 @@
                     TikZ Editor
                 </div>
 
-                <!-- AI + Image to TikZ -->
-                <div class="tikz-ai-panel">
-                    <div class="tikz-ai-row">
-                        <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="flex-shrink:0;color:var(--primary)"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062Zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a24.767 24.767 0 0 1-1.873-.183.25.25 0 0 0-.114.484c.4.187.048.54.396.54.306 0 .567-.211.636-.507l.893-.87.918.887a.25.25 0 1 0 .348-.357l-.918-.888.92-.899a.25.25 0 0 0-.07-.375Z"/><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z"/></svg>
-                        <span style="flex:1;font-size:0.82rem;color:var(--text-secondary);">Describe diagrams in plain English — generate, edit, and explain TikZ</span>
-                        <button id="btnTikzAI" class="tool-btn tool-btn-primary tikz-ai-btn" type="button" title="AI assistant (Ctrl+Shift+A)">
-                            AI Assistant
-                        </button>
-                    </div>
-                    <!-- Image to TikZ -->
-                    <div class="tikz-ai-row" style="margin-top:0.5rem;">
-                        <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="flex-shrink:0;color:var(--primary)"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>
-                        <label class="tikz-img-label" style="flex:1;cursor:pointer;">
-                            <span id="tikz-img-filename" style="font-size:0.8rem;color:var(--text-secondary);">Drop or choose an image to convert to TikZ</span>
-                            <input type="file" id="tikz-img-input" accept="image/*" style="display:none;" />
-                        </label>
-                        <button id="tikz-img-btn" class="tool-btn tool-btn-primary tikz-ai-btn" type="button" disabled>
-                            Convert
-                        </button>
-                    </div>
-                    <div id="tikz-img-hint" class="tikz-ai-hint" style="display:none;"></div>
-                    <div id="tikz-img-progress" class="tikz-img-progress">
-                        <div class="tikz-img-progress-bar"><div id="tikz-img-progress-fill" class="tikz-img-progress-fill"></div></div>
-                        <div class="tikz-img-progress-text"><span id="tikz-img-progress-label">Analyzing image...</span><span id="tikz-img-progress-time">~3 min</span></div>
-                    </div>
-                    <div id="tikz-recents" class="tikz-recents" hidden>
-                        <div class="tikz-recents-header">Recent AI diagrams</div>
-                        <div id="tikz-recents-grid" class="tikz-recents-grid"></div>
-                    </div>
+                <!-- Image-to-TikZ progress + recents (button is in the output toolbar) -->
+                <input type="file" id="tikz-img-input" accept="image/*" style="display:none;" />
+                <button id="tikz-img-btn" type="button" hidden></button>
+                <span id="tikz-img-filename" hidden></span>
+                <div id="tikz-img-hint" class="tikz-ai-hint" style="display:none;"></div>
+                <div id="tikz-img-progress" class="tikz-img-progress">
+                    <div class="tikz-img-progress-bar"><div id="tikz-img-progress-fill" class="tikz-img-progress-fill"></div></div>
+                    <div class="tikz-img-progress-text"><span id="tikz-img-progress-label">Analyzing image...</span><span id="tikz-img-progress-time">~3 min</span></div>
+                </div>
+                <div id="tikz-recents" class="tikz-recents" hidden style="padding:0.5rem 0.875rem;">
+                    <div class="tikz-recents-header">Recent AI diagrams</div>
+                    <div id="tikz-recents-grid" class="tikz-recents-grid"></div>
                 </div>
 
                 <!-- Toolbar -->
@@ -906,6 +1095,17 @@
 
                 <!-- Export Actions -->
                 <div class="tool-actions-bar">
+                    <button id="btnTikzAI" class="tool-btn tool-btn-sm tool-btn-primary" type="button" title="AI assistant (Ctrl+Shift+A)" aria-label="Open AI assistant">
+                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062Zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a24.767 24.767 0 0 1-1.873-.183.25.25 0 0 0-.114.484c.4.187.048.54.396.54.306 0 .567-.211.636-.507l.893-.87.918.887a.25.25 0 1 0 .348-.357l-.918-.888.92-.899a.25.25 0 0 0-.07-.375Z"/><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z"/></svg>
+                        AI Assistant
+                    </button>
+                    <button id="btn-img-to-tikz" class="tool-btn tool-btn-sm" type="button" title="Convert image to TikZ" aria-label="Convert image to TikZ">
+                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>
+                        Image → TikZ
+                    </button>
+
+                    <span class="tool-actions-divider"></span>
+
                     <button id="btn-png" class="tool-btn tool-btn-sm" aria-label="Export PNG">
                         <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>
                         PNG
@@ -1189,17 +1389,23 @@
             imgHint.style.display = msg ? 'block' : 'none';
         }
 
+        const toolbarImgBtn = document.getElementById('btn-img-to-tikz');
+        if (toolbarImgBtn) {
+            toolbarImgBtn.addEventListener('click', function() { imgInput.click(); });
+        }
+
         imgInput.addEventListener('change', function(e) {
             const file = e.target.files && e.target.files[0];
             if (!file) return;
             if (file.size > 10 * 1024 * 1024) { showImgHint('Image too large. Max 10MB.', true); return; }
-            imgFilename.textContent = file.name + ' (' + (file.size / 1024).toFixed(0) + 'KB)';
+            if (imgFilename) imgFilename.textContent = file.name + ' (' + (file.size / 1024).toFixed(0) + 'KB)';
             const reader = new FileReader();
             reader.onload = function(ev) {
                 const dataUrl = ev.target.result;
                 imgBase64 = dataUrl.split(',')[1];
                 imgBtn.disabled = false;
                 showImgHint('', false);
+                imgBtn.click();
             };
             reader.readAsDataURL(file);
         });
