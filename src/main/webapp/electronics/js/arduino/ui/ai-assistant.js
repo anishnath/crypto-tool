@@ -6,7 +6,8 @@
  *   2. AI Fix     — send compile errors + code → get corrected code
  *   3. AI Explain — explain selected code, full sketch, or current circuit
  *
- * Uses the generic /ai proxy endpoint (AIProxyServlet → Ollama).
+ * Uses POST /ai (Ollama via AIProxyServlet) or POST /ai-gateway (Go gateway via AIGatewayProxyServlet).
+ * Gateway mode requires X-Anonymous-Id or X-User-Id (see openai-go-api/README.md).
  * All system prompts include the component catalog and Wokwi diagram format
  * so the AI generates valid, importable circuits.
  */
@@ -146,10 +147,27 @@ Be concise — focus on actionable fixes.`;
 
 const AI_TIMEOUT_MS = 180000; // 180s — generate (code+circuit) needs more time
 
+/** Stable guest id for AI gateway quota (see openai-go-api/README.md). */
+function getAnonymousId() {
+  const key = 'llm_anonymous_id';
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : 'anon-' + Date.now() + '-' + Math.random().toString(36).slice(2, 11);
+    localStorage.setItem(key, id);
+  }
+  return id;
+}
+
 export class AIAssistant {
   /**
    * @param {object} opts
    * @param {string} opts.ctx - context path (for /ai URL)
+   * @param {string} [opts.aiUrl] - optional explicit AI endpoint URL (overrides ctx + '/ai')
+   * @param {boolean} [opts.useGateway] - when true, send gateway identity headers (X-Anonymous-Id / X-User-Id)
+   * @param {string} [opts.userId] - logged-in Google user id (users.id) when available
+   * @param {string} [opts.toolId] - tool path for gateway analytics (default: electronics/arduino-simulator)
    * @param {Function} opts.getCode - returns current editor code
    * @param {Function} opts.setCode - sets editor code
    * @param {Function} opts.getSelection - returns selected text
@@ -160,7 +178,11 @@ export class AIAssistant {
    * @param {Function} opts.logOutput - log message to output panel
    */
   constructor(opts) {
-    this.aiUrl = opts.ctx + '/ai';
+    this.aiUrl = opts.aiUrl || (opts.ctx + '/ai');
+    this.useGateway = opts.useGateway === true
+      || (opts.aiUrl && String(opts.aiUrl).includes('/ai-gateway'));
+    this.userId = opts.userId || '';
+    this.toolId = opts.toolId || 'electronics/arduino-simulator';
     this.getCode = opts.getCode;
     this.setCode = opts.setCode;
     this.getSelection = opts.getSelection;
@@ -376,14 +398,14 @@ export class AIAssistant {
     try {
       const res = await fetch(this.aiUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this._aiHeaders(),
         body: JSON.stringify(payload),
         signal: this.abortCtrl.signal
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || 'AI request failed (' + res.status + ')');
+        throw new Error(data.error || data.hint || 'AI request failed (' + res.status + ')');
       }
 
       const reader = res.body.getReader();
@@ -545,6 +567,19 @@ export class AIAssistant {
   // HTTP helpers
   // ══════════════════════════════════════════════
 
+  /** Headers for AI gateway (identity + tool id per openai-go-api README). */
+  _aiHeaders() {
+    const headers = { 'Content-Type': 'application/json' };
+    if (!this.useGateway) return headers;
+    if (this.userId) {
+      headers['X-User-Id'] = this.userId;
+    } else {
+      headers['X-Anonymous-Id'] = getAnonymousId();
+    }
+    if (this.toolId) headers['X-Tool-Id'] = this.toolId;
+    return headers;
+  }
+
   async _request(payload) {
     if (this.abortCtrl) this.abortCtrl.abort();
     this.abortCtrl = new AbortController();
@@ -555,7 +590,7 @@ export class AIAssistant {
     try {
       const res = await fetch(this.aiUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this._aiHeaders(),
         body: JSON.stringify(payload),
         signal: this.abortCtrl.signal
       });
@@ -564,7 +599,7 @@ export class AIAssistant {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || 'AI request failed (' + res.status + ')');
+        throw new Error(data.error || data.hint || 'AI request failed (' + res.status + ')');
       }
 
       const data = await res.json();
@@ -585,14 +620,14 @@ export class AIAssistant {
 
     const res = await fetch(this.aiUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: this._aiHeaders(),
       body: JSON.stringify(payload),
       signal: this.abortCtrl.signal
     });
 
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
-      throw new Error(data.error || 'AI request failed');
+      throw new Error(data.error || data.hint || 'AI request failed');
     }
 
     const reader = res.body.getReader();
@@ -613,7 +648,6 @@ export class AIAssistant {
           const obj = JSON.parse(trimmed);
           if (obj.message && obj.message.content) {
             accumulated += obj.message.content;
-            // Update output panel with accumulated text
             this.logOutput('🤖 ' + accumulated, true);
           }
           if (obj.done === true) return;

@@ -3,40 +3,80 @@
    Inspired by Velxio, adapted to our design system
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Theme Variables ── */
-:root, [data-theme="dark"] {
-  --ard-bg: #111318;
-  --ard-panel: #1a1d24;
-  --ard-panel-deep: #14171c;
-  --ard-border: #2d3139;
-  --ard-text: #e2e8f0;
-  --ard-muted: #64748b;
-  --ard-accent: #06b6d4;
-  --ard-editor-bg: #1e1e1e;
-  --ard-serial-bg: #0d1117;
-  --ard-serial-text: #22c55e;
-  --ard-tab-active: #1e1e1e;
-  --ard-tab-inactive: #252830;
-  --ard-success: #22c55e;
-  --ard-error: #ef4444;
-  --ard-warning: #f59e0b;
-}
+/* ── Lupine design tokens (Morphous) ── */
 [data-theme="light"] {
-  --ard-bg: #f8fafc;
-  --ard-panel: #ffffff;
-  --ard-panel-deep: #f1f5f9;
-  --ard-border: #e2e8f0;
-  --ard-text: #1e293b;
-  --ard-muted: #64748b;
-  --ard-accent: #0891b2;
-  --ard-editor-bg: #ffffff;
-  --ard-serial-bg: #f8fafc;
-  --ard-serial-text: #1e293b;
-  --ard-tab-active: #ffffff;
-  --ard-tab-inactive: #f1f5f9;
-  --ard-success: #16a34a;
-  --ard-error: #dc2626;
-  --ard-warning: #d97706;
+  --background: oklch(0.986 0.003 286.4);
+  --foreground: oklch(0.208 0.040 265.8);
+  --card: oklch(0.973 0.007 124.4);
+  --card-foreground: oklch(0.208 0.040 265.8);
+  --primary: oklch(0.457 0.215 277.0);
+  --primary-foreground: oklch(0.986 0.003 286.4);
+  --secondary: oklch(0.978 0.003 128.5);
+  --secondary-foreground: oklch(0.181 0.033 256.7);
+  --muted: oklch(0.977 0.004 134.8);
+  --muted-foreground: oklch(0.181 0.033 256.7);
+  --accent: oklch(0.585 0.204 277.1);
+  --accent-foreground: oklch(0.208 0.040 265.8);
+  --border: oklch(0.968 0.004 286.3);
+  --input: oklch(0.968 0.004 286.3);
+  --ring: oklch(0.627 0.170 149.2);
+  --radius: 0.5rem;
+  --ard-bg: var(--background);
+  --ard-panel: var(--card);
+  --ard-panel-deep: var(--secondary);
+  --ard-border: var(--border);
+  --ard-text: var(--foreground);
+  --ard-muted: var(--muted-foreground);
+  --ard-accent: var(--primary);
+  --ard-accent-secondary: var(--accent);
+  --ard-editor-bg: oklch(0.995 0.002 286.4);
+  --ard-serial-bg: var(--muted);
+  --ard-serial-text: oklch(0.35 0.12 150);
+  --ard-tab-active: var(--card);
+  --ard-tab-inactive: var(--secondary);
+  --ard-success: oklch(0.627 0.170 149.2);
+  --ard-error: oklch(0.55 0.22 25);
+  --ard-warning: oklch(0.72 0.14 85);
+  --ard-accent-soft: color-mix(in oklch, var(--ard-accent) 12%, transparent);
+  --ard-accent-strong: color-mix(in oklch, var(--ard-accent) 22%, transparent);
+  --ard-ring: var(--ring);
+}
+[data-theme="dark"] {
+  --background: oklch(0.208 0.040 265.8);
+  --foreground: oklch(0.986 0.003 286.4);
+  --card: oklch(0.190 0.034 258.3);
+  --card-foreground: oklch(0.986 0.003 286.4);
+  --primary: oklch(0.627 0.170 149.2);
+  --primary-foreground: oklch(0.208 0.040 265.8);
+  --secondary: oklch(0.382 0.026 264.2);
+  --secondary-foreground: oklch(0.986 0.003 286.4);
+  --muted: oklch(0.382 0.026 264.2);
+  --muted-foreground: oklch(0.976 0.009 292.8);
+  --accent: oklch(0.585 0.204 277.1);
+  --accent-foreground: oklch(0.208 0.040 265.8);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.627 0.170 149.2);
+  --radius: 0.5rem;
+  --ard-bg: var(--background);
+  --ard-panel: var(--card);
+  --ard-panel-deep: oklch(0.175 0.036 260);
+  --ard-border: var(--border);
+  --ard-text: var(--foreground);
+  --ard-muted: var(--muted-foreground);
+  --ard-accent: var(--primary);
+  --ard-accent-secondary: var(--accent);
+  --ard-editor-bg: oklch(0.165 0.032 258);
+  --ard-serial-bg: oklch(0.145 0.028 258);
+  --ard-serial-text: var(--primary);
+  --ard-tab-active: var(--ard-editor-bg);
+  --ard-tab-inactive: var(--secondary);
+  --ard-success: var(--primary);
+  --ard-error: oklch(0.704 0.191 22.2);
+  --ard-warning: oklch(0.82 0.12 85);
+  --ard-accent-soft: color-mix(in oklch, var(--ard-accent) 14%, transparent);
+  --ard-accent-strong: color-mix(in oklch, var(--ard-accent) 24%, transparent);
+  --ard-ring: var(--ring);
 }
 
 /* ── Reset ── */
@@ -112,7 +152,7 @@ body {
 .ard-mtab.active {
   color: var(--ard-accent);
   border-bottom-color: var(--ard-accent);
-  background: rgba(6,182,212,.06);
+  background: var(--ard-accent-soft);
 }
 .ard-mtab svg { width: 14px; height: 14px; }
 
@@ -160,7 +200,7 @@ body {
   background: transparent; color: var(--ard-accent); font: 600 14px sans-serif;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
-.ard-fe-new:hover { background: rgba(6,182,212,.1); }
+.ard-fe-new:hover { background: var(--ard-accent-soft); }
 .ard-fe-list { flex: 1; overflow-y: auto; padding: 4px 0; }
 .ard-fe-file {
   display: flex; align-items: center; gap: 6px; padding: 5px 10px;
@@ -168,7 +208,7 @@ body {
   transition: background .1s; position: relative;
 }
 .ard-fe-file:hover { background: rgba(255,255,255,.04); }
-.ard-fe-file.active { background: rgba(6,182,212,.08); color: var(--ard-text); }
+.ard-fe-file.active { background: var(--ard-accent-soft); color: var(--ard-text); }
 .ard-fe-icon {
   width: 16px; text-align: center; font: 600 10px 'Fira Code', monospace;
   color: var(--ard-accent); flex-shrink: 0;
@@ -232,11 +272,11 @@ body {
 .ard-tb-run.running:hover { background: rgba(239,68,68,.22); }
 .ard-tb-stop { color: var(--ard-error); border-color: rgba(239,68,68,.3); }
 .ard-tb-compile {
-  background: rgba(6,182,212,.12);
-  border-color: var(--ard-accent);
+  background: var(--ard-accent-soft);
+  border-color: color-mix(in oklch, var(--ard-accent) 40%, transparent);
   color: var(--ard-accent);
 }
-.ard-tb-compile:hover { background: rgba(6,182,212,.22); }
+.ard-tb-compile:hover { background: var(--ard-accent-strong); }
 .ard-tb-compile.compiling { pointer-events: none; opacity: .7; }
 .ard-tb-compile.compiling .ard-tb-icon { display: none; }
 .ard-tb-compile.compiling .ard-spinner { display: block; }
@@ -252,8 +292,8 @@ body {
 /* Disabled buttons */
 .ard-tb-btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
 .ard-tb-toggle.active {
-  background: rgba(6,182,212,.12);
-  border-color: var(--ard-accent);
+  background: var(--ard-accent-soft);
+  border-color: color-mix(in oklch, var(--ard-accent) 40%, transparent);
   color: var(--ard-accent);
 }
 .ard-tb-sep {
@@ -283,6 +323,67 @@ body {
   outline: none;
 }
 .ard-examples-select:focus { border-color: var(--ard-accent); }
+
+/* Light theme contrast tuning for top controls:
+   compile/run/examples/AI/output/board/component/share/diagram/theme */
+[data-theme="light"] .ard-tb-btn {
+  background: oklch(0.995 0.002 286.4);
+  border-color: oklch(0.82 0.01 255);
+  color: oklch(0.22 0.03 258);
+}
+[data-theme="light"] .ard-tb-btn:hover:not(:disabled) {
+  background: oklch(0.965 0.008 260);
+  border-color: oklch(0.74 0.018 252);
+  color: oklch(0.18 0.03 256);
+}
+[data-theme="light"] .ard-tb-toggle.active {
+  background: color-mix(in oklch, var(--ard-accent) 14%, white);
+  border-color: color-mix(in oklch, var(--ard-accent) 46%, oklch(0.82 0.01 255));
+  color: color-mix(in oklch, var(--ard-accent) 80%, black);
+}
+[data-theme="light"] .ard-tb-compile {
+  background: color-mix(in oklch, var(--ard-accent) 14%, white);
+  border-color: color-mix(in oklch, var(--ard-accent) 46%, oklch(0.82 0.01 255));
+  color: color-mix(in oklch, var(--ard-accent) 82%, black);
+}
+[data-theme="light"] .ard-tb-run {
+  background: color-mix(in oklch, var(--ard-success) 14%, white);
+  border-color: color-mix(in oklch, var(--ard-success) 52%, oklch(0.82 0.01 255));
+  color: color-mix(in oklch, var(--ard-success) 88%, black);
+}
+[data-theme="light"] .ard-tb-run:hover:not(:disabled) {
+  background: color-mix(in oklch, var(--ard-success) 24%, white);
+}
+[data-theme="light"] .ard-tb-stop {
+  background: color-mix(in oklch, var(--ard-error) 10%, white);
+  border-color: color-mix(in oklch, var(--ard-error) 45%, oklch(0.82 0.01 255));
+  color: color-mix(in oklch, var(--ard-error) 84%, black);
+}
+[data-theme="light"] .ard-tb-ai {
+  background: color-mix(in oklch, var(--ard-accent-secondary) 14%, white) !important;
+  border-color: color-mix(in oklch, var(--ard-accent-secondary) 50%, oklch(0.82 0.01 255)) !important;
+  color: color-mix(in oklch, var(--ard-accent-secondary) 88%, black) !important;
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--ard-accent-secondary) 28%, white);
+}
+[data-theme="light"] .ard-examples-select,
+[data-theme="light"] .ard-board-select,
+[data-theme="light"] .ard-speed-select {
+  background: oklch(0.995 0.002 286.4);
+  border-color: oklch(0.82 0.01 255);
+  color: oklch(0.22 0.03 258);
+}
+[data-theme="light"] .ard-examples-select:hover,
+[data-theme="light"] .ard-board-select:hover,
+[data-theme="light"] .ard-speed-select:hover {
+  background: oklch(0.965 0.008 260);
+  border-color: oklch(0.74 0.018 252);
+}
+[data-theme="light"] .ard-examples-select:focus,
+[data-theme="light"] .ard-board-select:focus,
+[data-theme="light"] .ard-speed-select:focus {
+  border-color: color-mix(in oklch, var(--ard-accent) 70%, black);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--ard-accent) 20%, transparent);
+}
 
 /* File Tabs (32px) */
 .ard-file-tabs {
@@ -547,7 +648,7 @@ body {
 }
 .ard-board-wrap { overflow: visible; z-index: 4; /* above wires, below components */ }
 .ard-component-item:hover {
-  box-shadow: 0 0 12px rgba(6,182,212,0.2);
+  box-shadow: 0 0 12px color-mix(in oklch, var(--ard-accent) 28%, transparent);
 }
 .ard-component-label {
   font: 10px 'Fira Code', monospace;
@@ -584,8 +685,8 @@ body {
   position: absolute;
   bottom: 12px; left: 50%;
   transform: translateX(-50%);
-  background: rgba(6,182,212,0.9);
-  color: #fff;
+  background: color-mix(in oklch, var(--ard-accent) 88%, var(--foreground));
+  color: var(--primary-foreground, #fff);
   padding: 6px 18px;
   border-radius: 20px;
   font: 600 12px 'DM Sans', sans-serif;
@@ -679,7 +780,7 @@ body {
   font: 600 11px 'DM Sans', sans-serif;
   cursor: pointer;
 }
-.ard-serial-send:hover { background: rgba(6,182,212,.08); }
+.ard-serial-send:hover { background: var(--ard-accent-soft); }
 
 /* ── Ad Units ── */
 .ad-ard-below {
@@ -792,17 +893,23 @@ body {
 
 /* AI toolbar buttons */
 .ard-tb-ai {
-  background: rgba(129,140,248,.12) !important;
-  color: #a5b4fc !important;
+  background: color-mix(in oklch, var(--ard-accent-secondary) 16%, transparent) !important;
+  border-color: color-mix(in oklch, var(--ard-accent-secondary) 42%, transparent) !important;
+  color: var(--ard-accent-secondary) !important;
   font-weight: 600;
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--ard-ring) 22%, transparent);
 }
-.ard-tb-ai:hover { background: rgba(129,140,248,.22) !important; }
+.ard-tb-ai:hover {
+  background: color-mix(in oklch, var(--ard-accent-secondary) 26%, transparent) !important;
+}
 
 .ard-tb-aifix {
-  background: rgba(239,68,68,.1) !important;
-  color: #f87171 !important;
+  background: color-mix(in oklch, var(--ard-error) 12%, transparent) !important;
+  color: var(--ard-error) !important;
 }
-.ard-tb-aifix:hover { background: rgba(239,68,68,.18) !important; }
+.ard-tb-aifix:hover {
+  background: color-mix(in oklch, var(--ard-error) 20%, transparent) !important;
+}
 
 /* AI status indicator (beside compile status) */
 .ard-ai-status {
@@ -810,7 +917,7 @@ body {
   align-items: center;
   gap: 6px;
   font: 11px 'Fira Code', monospace;
-  color: #a5b4fc;
+  color: var(--ard-accent-secondary);
   margin-right: 8px;
   animation: ardAiPulse 1.5s ease-in-out infinite;
 }
@@ -883,7 +990,7 @@ body {
   outline: none;
   transition: border-color .15s;
 }
-.ard-ai-input:focus { border-color: #818cf8; }
+.ard-ai-input:focus { border-color: var(--ard-accent-secondary); box-shadow: 0 0 0 2px color-mix(in oklch, var(--ard-ring) 35%, transparent); }
 .ard-ai-input::placeholder { color: var(--ard-muted); }
 
 .ard-ai-modal-footer {
@@ -900,18 +1007,14 @@ body {
 
 .ard-ai-submit {
   padding: 8px 20px;
-  border-radius: 7px;
+  border-radius: var(--radius, 0.5rem);
   border: none;
-  background: #818cf8;
-  color: #fff;
+  background: var(--ard-accent-secondary);
+  color: var(--accent-foreground, #fff);
   font: 600 13px 'DM Sans', sans-serif;
   cursor: pointer;
-  transition: background .15s;
+  transition: background .15s, filter .15s;
 }
-.ard-ai-submit:hover { background: #6d6ff0; }
+.ard-ai-submit:hover { filter: brightness(1.08); }
 
-/* Light theme overrides */
-[data-theme="light"] .ard-ai-modal { background: #fff; }
-[data-theme="light"] .ard-ai-input { background: #f8f9fb; }
-[data-theme="light"] .ard-tb-ai { background: rgba(99,102,241,.08) !important; color: #6366f1 !important; }
-[data-theme="light"] .ard-tb-aifix { background: rgba(220,38,38,.08) !important; color: #dc2626 !important; }
+[data-theme="light"] .ard-ai-input { background: var(--secondary); }

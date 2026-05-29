@@ -1,5 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<% String v = String.valueOf(System.currentTimeMillis()); %>
+<%-- isELIgnored="true": this page emits ES2015+ JS template literals ( `${var}` )
+     for the AI seedContext. Without ignoring EL, Tomcat silently evaluates
+     `${board}` / `${sketchName || 'sketch.ino'}` / `${sketch}` etc. as
+     JSP EL expressions at render time, stripping the values to empty strings
+     (and `false` for the OR fallback). No JSP EL is used anywhere in this
+     page nor in its static includes (nav-header.jsp, setupad.jsp). --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+String v = String.valueOf(System.currentTimeMillis());
+boolean useAiGateway = "true".equalsIgnoreCase(System.getenv("USE_AI_GATEWAY"));
+String aiUserId = "";
+if (session != null) {
+    Object oauthSub = session.getAttribute("oauth_user_sub");
+    if (oauthSub != null) aiUserId = oauthSub.toString();
+}
+%>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -27,7 +41,7 @@
 </jsp:include>
 <!-- Critical CSS inlined for fast LCP -->
 <style>
-:root,[data-theme="dark"]{--ard-bg:#111318;--ard-panel:#1a1d24;--ard-panel-deep:#14171c;--ard-border:#2d3139;--ard-text:#e2e8f0;--ard-muted:#64748b;--ard-accent:#06b6d4;--ard-editor-bg:#1e1e1e;--ard-success:#22c55e;--ard-error:#ef4444;--header-height-desktop:72px}
+[data-theme="dark"]{--ard-bg:oklch(0.208 0.040 265.8);--ard-panel:oklch(0.190 0.034 258.3);--ard-panel-deep:oklch(0.175 0.036 260);--ard-border:oklch(1 0 0 / 12%);--ard-text:oklch(0.986 0.003 286.4);--ard-muted:oklch(0.976 0.009 292.8);--ard-accent:oklch(0.627 0.170 149.2);--ard-editor-bg:oklch(0.165 0.032 258);--ard-success:oklch(0.627 0.170 149.2);--ard-error:oklch(0.704 0.191 22.2);--header-height-desktop:72px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--ard-bg);color:var(--ard-text);font-family:'DM Sans',sans-serif;margin:0;overflow:hidden}
 .ard-app{display:flex;flex-direction:column;height:100vh;padding-top:var(--header-height-desktop)}
@@ -48,6 +62,7 @@ body{background:var(--ard-bg);color:var(--ard-text);font-family:'DM Sans',sans-s
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/electronics/css/arduino-simulator.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/vibe-coding-assistant.css">
 
 <!-- wokwi-elements: defer (not needed for LCP, canvas renders after) -->
 <script defer src="https://unpkg.com/@wokwi/elements@0.48.3/dist/wokwi-elements.bundle.js"></script>
@@ -122,14 +137,8 @@ body{background:var(--ard-bg);color:var(--ard-text);font-family:'DM Sans',sans-s
           <option value="">&#9733; Examples</option>
         </select>
         <div class="ard-tb-sep"></div>
-        <button class="ard-tb-btn ard-tb-ai" id="btnAI" title="AI: Generate project from description (Ctrl+Shift+A)">
+        <button class="ard-tb-btn ard-tb-ai" id="btnAI" title="AI assistant — chat, generate, fix, explain (Ctrl+Shift+A)">
           <span>&#10024; AI</span>
-        </button>
-        <button class="ard-tb-btn ard-tb-aifix" id="btnAIFix" title="AI: Fix compile errors" style="display:none">
-          <span>&#128295; Fix</span>
-        </button>
-        <button class="ard-tb-btn" id="btnAIExplain" title="AI: Explain code or circuit">
-          <span>&#128161; Explain</span>
         </button>
         <div class="ard-tb-sep"></div>
         <button class="ard-tb-btn ard-tb-toggle" id="btnOutput"><span>Output</span></button>
@@ -298,7 +307,7 @@ import { FileExplorer } from '<%=request.getContextPath()%>/electronics/js/ardui
 import { exportDiagram, importDiagram, downloadDiagram, openDiagramFile } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/diagram.js';
 import { DiagramSync } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/diagram-sync.js';
 import { PiTerminal } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/pi-terminal.js';
-import { AIAssistant } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/ai-assistant.js';
+import { createArduinoSimulatorAssistant } from '<%=request.getContextPath()%>/modern/js/ai/adapters/arduino-simulator-adapter.js';
 
 // ── DOM refs ──
 const btnCompile = document.getElementById('btnCompile');
@@ -781,7 +790,6 @@ async function compile(showPanel = true) {
           logOutput('  Line ' + (e.line || '?') + ': ' + e.message, 'error');
         }
         // Show AI Fix button
-        document.getElementById('btnAIFix').style.display = '';
       }
       if (data.warnings && data.warnings.length) {
         for (const w of data.warnings) {
@@ -795,7 +803,6 @@ async function compile(showPanel = true) {
 
     // Success
     lastCompileErrors = '';
-    document.getElementById('btnAIFix').style.display = 'none';
     const fmt = data.outputFormat || 'hex';
     lastCompiledHex = data.hex || data.uf2 || data.bin || data.jobId || null;
     logOutput('Compiled in ' + elapsed + 's (' + fmt.toUpperCase() + ')', 'success');
@@ -1444,93 +1451,39 @@ document.addEventListener('keydown', (e) => {
 // Initial button states
 updateButtonStates();
 
-// ── AI Assistant ──
-const aiAssistant = new AIAssistant({
+// ── AI chat (generic core + Arduino adapter) ──
+const aiChat = createArduinoSimulatorAssistant({
   ctx: '<%=request.getContextPath()%>',
-  getCode: () => editor.getCode(),
-  setCode: (code) => {
-    // Update sketch.ino content without resetting the file list
-    // (loadFiles would destroy diagram.json during streaming)
-    fileManager.files[0].content = code;
-    if (fileManager.activeIndex === 0) {
-      editor.setCode(code);
-    }
-  },
-  getSelection: () => {
-    const m = editor._editor;
-    return m ? m.getModel().getValueInRange(m.getSelection()) : '';
-  },
-  getBoard: () => document.getElementById('boardSelect').value,
-  loadPreset: async (preset) => {
-    const targetBoard = preset.board || 'arduino:avr:uno';
-    const boardSelect = document.getElementById('boardSelect');
-    if (boardSelect.value !== targetBoard) {
-      boardSelect.value = targetBoard;
-      await switchBoard(targetBoard);
-    }
-    stopRunner();
-    wireManager.clear();
-    selection.deselect();
+  aiUrl: '<%=request.getContextPath()%><%= useAiGateway ? "/ai-gateway" : "/ai" %>',
+  useGateway: <%= useAiGateway %>,
+  userId: '<%= aiUserId.replace("\\", "\\\\").replace("'", "\\'") %>',
+  fileManager,
+  editor,
+  componentPanel,
+  wireManager,
+  diagramSync,
+  stopRunner,
+  selection,
+  exportDiagram,
+  getLastCompileErrors: () => lastCompileErrors,
+  logOutput,
+});
+aiChat.mount();
+document.getElementById('btnAI').addEventListener('click', () => aiChat.open());
 
-    // Build file list: always sketch.ino, add diagram.json if AI generated a circuit
-    const files = [{ name: 'sketch.ino', content: preset.code }];
-    if (preset.diagram && preset.diagram.parts) {
-      files.push({ name: 'diagram.json', content: JSON.stringify(preset.diagram, null, 2) });
-    }
-    fileManager.loadFiles(files);
+if (new URLSearchParams(window.location.search).get('checkout') === '1') {
+  const u = new URL(window.location.href);
+  u.searchParams.delete('checkout');
+  window.history.replaceState({}, '', u.pathname + u.search + u.hash);
+  aiChat.open('Payment received — Pro activates shortly after Dodo confirms. Ask AI when ready.', false);
+}
 
-    // Import diagram onto canvas
-    if (preset.diagram && preset.diagram.parts) {
-      try {
-        const result = await importDiagram(preset.diagram, componentPanel, wireManager, simCanvas, async (fqbn) => {
-          boardSelect.value = fqbn;
-          await switchBoard(fqbn);
-        });
-        if (result.errors && result.errors.length) {
-          for (const err of result.errors) {
-            logOutput('  ⚠ Diagram: ' + err, 'warning');
-          }
-        }
-        logOutput('  Canvas: ' + result.partsLoaded + ' components, ' + result.wiresLoaded + ' wires loaded');
-      } catch (e) {
-        logOutput('Circuit import failed: ' + e.message, 'warning');
-      }
-    }
-  },
-  getErrors: () => lastCompileErrors,
-  getDiagram: () => {
-    try {
-      const boardEl = document.getElementById('arduinoBoard');
-      const boardTag = boardEl?.tagName?.toLowerCase() || 'wokwi-arduino-uno';
-      return exportDiagram(boardTag, 'board', { x: 0, y: 0 }, componentPanel.components, wireManager.wires);
-    } catch (e) { return null; }
-  },
-  logOutput: (text, replace) => {
-    if (replace) {
-      // Replace last line (for streaming updates)
-      const last = outputContent.lastElementChild;
-      if (last && last.dataset.aiStream) {
-        last.textContent = text;
-        outputContent.scrollTop = outputContent.scrollHeight;
-        return;
-      }
-    }
-    const line = document.createElement('div');
-    if (replace) line.dataset.aiStream = '1';
-    line.textContent = text;
-    outputContent.appendChild(line);
-    outputContent.scrollTop = outputContent.scrollHeight;
-    // Ensure output panel is visible
-    outputPanel.style.display = 'flex';
-    outputPanel.style.height = outputPanel.style.height || '180px';
-    btnOutput.classList.add('active');
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+    e.preventDefault();
+    aiChat.open();
   }
 });
-
-// Wire AI toolbar buttons
-document.getElementById('btnAI').addEventListener('click', () => aiAssistant.openPrompt());
-document.getElementById('btnAIFix').addEventListener('click', () => aiAssistant.fix());
-document.getElementById('btnAIExplain').addEventListener('click', () => aiAssistant.explain());
 
 // ── Board Switcher ──
 const BOARD_TAGS = {
@@ -1569,9 +1522,12 @@ async function switchBoard(fqbn) {
   if (isRP2040(fqbn)) await loadRP2040Modules();
   if (isPi(fqbn)) await import('<%=request.getContextPath()%>/electronics/js/arduino/ui/pi3-board.js');
 
-  // Stop simulation and clear stale compile result
+  // Stop simulation and clear stale compile state. lastCompileErrors must
+  // also be cleared so the AI "Explain" / chat seedContext doesn't surface
+  // errors from a previous board after the user switches.
   stopRunner();
   lastCompiledHex = null;
+  lastCompileErrors = '';
   updateButtonStates();
 
   // Swap board SVG element

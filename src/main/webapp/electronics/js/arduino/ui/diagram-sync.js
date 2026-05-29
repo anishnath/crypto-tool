@@ -76,10 +76,13 @@ export class DiagramSync {
       if (this._syncing) return;
       this._syncing = true;
       try {
-        const json = JSON.stringify(this._buildDiagram(), null, 2);
         const fm = this.fileManager;
         const idx = fm.files.findIndex(f => f.name === DIAGRAM_FILENAME);
         if (idx < 0) return;
+
+        const fresh = this._buildDiagram();
+        const merged = this._mergePreservedParts(fresh, fm.files[idx].content);
+        const json = JSON.stringify(merged, null, 2);
 
         fm.files[idx].content = json;
         fm.files[idx].modified = true;
@@ -92,6 +95,36 @@ export class DiagramSync {
         this._syncing = false;
       }
     }, 200);
+  }
+
+  /**
+   * Merge canvas-derived diagram with parts the canvas can't render but were
+   * present in the previous diagram.json (e.g. AI-supplied `wokwi-resistor`).
+   * Also keeps connections that reference any preserved part id.
+   */
+  _mergePreservedParts(fresh, previousJson) {
+    if (!previousJson) return fresh;
+    let prev;
+    try { prev = JSON.parse(previousJson); } catch { return fresh; }
+    if (!prev || !Array.isArray(prev.parts)) return fresh;
+
+    const renderedIds = new Set((fresh.parts || []).map(p => p.id));
+    const preservedParts = prev.parts.filter(p => p && p.id && !renderedIds.has(p.id));
+    if (!preservedParts.length) return fresh;
+
+    const preservedIds = new Set(preservedParts.map(p => p.id));
+    const preservedConnections = (prev.connections || []).filter((c) => {
+      if (!Array.isArray(c) || c.length < 2) return false;
+      const startId = String(c[0] ?? '').split(':')[0];
+      const endId = String(c[1] ?? '').split(':')[0];
+      return preservedIds.has(startId) || preservedIds.has(endId);
+    });
+
+    return {
+      ...fresh,
+      parts: [...(fresh.parts || []), ...preservedParts],
+      connections: [...(fresh.connections || []), ...preservedConnections],
+    };
   }
 
   /** Editor → canvas: parse diagram.json and rebuild canvas (debounced) */
@@ -166,6 +199,75 @@ export class DiagramSync {
         }
       }
     };
+  }
+
+  /**
+   * Programmatically load a Wokwi diagram (e.g. from the AI assistant) without
+   * letting the canvas→editor sync overwrite the canonical JSON.
+   *
+   * The supplied object is preserved as the source of truth for diagram.json,
+   * even if some part types are unknown to the canvas importer.
+   *
+   * @param {object} diagram - parsed Wokwi diagram ({ parts, connections, ... })
+   * @param {{ focusTab?: boolean }} [opts]
+   * @returns {Promise<{ partsLoaded: number, wiresLoaded: number, errors: string[] }>}
+   */
+  async applyExternalDiagram(diagram, opts = {}) {
+    const { focusTab = false } = opts;
+    const fm = this.fileManager;
+
+    console.log('[DiagramSync] applyExternalDiagram start',
+      { parts: diagram?.parts?.length ?? 0, connections: diagram?.connections?.length ?? 0 });
+
+    // Pause both sync directions so we don't race ourselves.
+    clearTimeout(this._canvasDebounceTimer);
+    clearTimeout(this._debounceTimer);
+    const wasSyncing = this._syncing;
+    this._syncing = true;
+
+    let result = { partsLoaded: 0, wiresLoaded: 0, errors: [] };
+    try {
+      result = await importDiagram(
+        diagram,
+        this.componentPanel,
+        this.wireManager,
+        this.canvas,
+        this.switchBoardFn,
+      );
+
+      const json = JSON.stringify(diagram, null, 2);
+      let idx = fm.files.findIndex(f => f.name === DIAGRAM_FILENAME);
+      if (idx < 0) {
+        fm.files.push({ name: DIAGRAM_FILENAME, content: json, modified: true });
+        idx = fm.files.length - 1;
+      } else {
+        fm.files[idx].content = json;
+        fm.files[idx].modified = true;
+      }
+
+      // Reflect content in the editor if the diagram.json tab is already active,
+      // otherwise just keep the file's content as the source of truth.
+      if (fm.activeIndex === idx) {
+        fm.editor.setCode(json);
+      } else if (focusTab) {
+        fm.switchTo(idx);
+      }
+      if (fm.onChange) fm.onChange();
+      console.log('[DiagramSync] external diagram applied',
+        { parts: diagram.parts?.length ?? 0, connections: diagram.connections?.length ?? 0, bytes: json.length, importErrors: result.errors });
+    } catch (err) {
+      console.error('[DiagramSync] applyExternalDiagram failed:', err);
+      throw err;
+    } finally {
+      // Defer release past the debounce window so any straggler hook firings
+      // from importDiagram don't immediately resync from the (possibly partial)
+      // canvas state.
+      setTimeout(() => {
+        clearTimeout(this._canvasDebounceTimer);
+        this._syncing = wasSyncing;
+      }, 250);
+    }
+    return result;
   }
 
   /** Hook into canvas changes — update diagram.json when components/wires change */

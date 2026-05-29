@@ -48,19 +48,19 @@ public class VideoServiceServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         String clientIp = getClientIp(req);
-        Bucket bucket = resolveBucket(clientIp);
-        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
-        if (!probe.isConsumed()) {
-            long waitSeconds = Math.max(1, probe.getNanosToWaitForRefill() / 1_000_000_000);
-            log.warning("VideoService rate-limit BLOCKED IP=" + clientIp);
-            resp.setContentType("application/json");
-            resp.setStatus(429);
-            resp.setHeader("Retry-After", String.valueOf(waitSeconds));
-            resp.getWriter().write("{\"error\":\"Rate limit exceeded. Try again in "
-                    + waitSeconds + " seconds.\",\"retryAfter\":" + waitSeconds + "}");
-            return;
-        }
-        resp.setHeader("X-RateLimit-Remaining", String.valueOf(probe.getRemainingTokens()));
+//        Bucket bucket = resolveBucket(clientIp);
+//        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+//        if (!probe.isConsumed()) {
+//            long waitSeconds = Math.max(1, probe.getNanosToWaitForRefill() / 1_000_000_000);
+//            log.warning("VideoService rate-limit BLOCKED IP=" + clientIp);
+//            resp.setContentType("application/json");
+//            resp.setStatus(429);
+//            resp.setHeader("Retry-After", String.valueOf(waitSeconds));
+//            resp.getWriter().write("{\"error\":\"Rate limit exceeded. Try again in "
+//                    + waitSeconds + " seconds.\",\"retryAfter\":" + waitSeconds + "}");
+//            return;
+//        }
+//        resp.setHeader("X-RateLimit-Remaining", String.valueOf(probe.getRemainingTokens()));
 
         String action = req.getParameter("action");
         if (action == null) action = "transcribe";
