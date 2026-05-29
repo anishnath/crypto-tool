@@ -1,0 +1,915 @@
+/* Morphous Abalone — Vibe Coding Assistant (scoped chat theme) */
+
+.vca-backdrop {
+  --vca-background: oklch(0.209 0.017 216.6);
+  --vca-foreground: oklch(0.979 0.003 264.5);
+  --vca-card: oklch(0.197 0.020 207.3);
+  --vca-card-foreground: oklch(0.979 0.003 264.5);
+  --vca-primary: oklch(0.797 0.095 185.2);
+  --vca-primary-foreground: oklch(0.209 0.017 216.6);
+  --vca-secondary: oklch(0.324 0.020 206.4);
+  --vca-muted-foreground: oklch(0.866 0.007 219.6);
+  --vca-accent: oklch(0.838 0.072 5.7);
+  --vca-accent-foreground: oklch(0.209 0.017 216.6);
+  --vca-destructive: oklch(0.704 0.191 22.2);
+  --vca-border: oklch(1 0 0 / 12%);
+  --vca-input: oklch(1 0 0 / 16%);
+  --vca-ring: oklch(0.797 0.095 185.2);
+  --vca-radius: 0.5rem;
+  --vca-primary-soft: color-mix(in oklch, var(--vca-primary) 18%, transparent);
+  --vca-primary-border: color-mix(in oklch, var(--vca-primary) 38%, transparent);
+  --vca-accent-soft: color-mix(in oklch, var(--vca-accent) 14%, transparent);
+  --vca-destructive-soft: color-mix(in oklch, var(--vca-destructive) 14%, transparent);
+  --vca-destructive-border: color-mix(in oklch, var(--vca-destructive) 32%, transparent);
+  --vca-success: oklch(0.797 0.095 185.2);
+  --vca-success-soft: color-mix(in oklch, var(--vca-success) 18%, transparent);
+  --vca-success-border: color-mix(in oklch, var(--vca-success) 42%, transparent);
+
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  background: color-mix(in oklch, var(--vca-background) 72%, black);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* Floating mode: don't block the parent page; modal positions itself. */
+.vca-backdrop[data-floating="true"] {
+  background: transparent;
+  backdrop-filter: none;
+  padding: 0;
+  pointer-events: none;
+}
+
+[data-theme="light"] .vca-backdrop {
+  --vca-background: oklch(0.979 0.003 264.5);
+  --vca-foreground: oklch(0.209 0.017 216.6);
+  --vca-card: oklch(0.933 0.007 260.7);
+  --vca-card-foreground: oklch(0.209 0.017 216.6);
+  --vca-primary: oklch(0.654 0.110 193.2);
+  --vca-primary-foreground: oklch(0.979 0.003 264.5);
+  --vca-secondary: oklch(0.952 0.006 264.5);
+  --vca-muted-foreground: oklch(0.191 0.022 205.9);
+  --vca-accent: oklch(0.838 0.072 5.7);
+  --vca-accent-foreground: oklch(0.209 0.017 216.6);
+  --vca-destructive: oklch(0.636 0.208 25.3);
+  --vca-border: oklch(0.860 0.009 232.4);
+  --vca-input: oklch(0.860 0.009 232.4);
+  --vca-ring: oklch(0.797 0.095 185.2);
+  --vca-success: oklch(0.654 0.110 193.2);
+
+  background: color-mix(in oklch, var(--vca-foreground) 18%, transparent);
+}
+
+.vca-backdrop.open {
+  display: flex;
+}
+
+/* Floating backdrop uses `block`, not `flex`, because the modal positions
+   itself with `position: fixed` and we don't want the centered-flex layout. */
+.vca-backdrop[data-floating="true"].open {
+  display: block;
+}
+
+.vca-modal {
+  width: min(560px, 100%);
+  max-height: min(85vh, 720px);
+  display: flex;
+  flex-direction: column;
+  background: var(--vca-card);
+  color: var(--vca-card-foreground);
+  border: 1px solid var(--vca-border);
+  border-radius: calc(var(--vca-radius) + 4px);
+  box-shadow:
+    0 24px 48px color-mix(in oklch, var(--vca-background) 55%, transparent),
+    0 0 0 1px color-mix(in oklch, var(--vca-ring) 12%, transparent);
+  overflow: hidden;
+}
+
+.vca-backdrop[data-floating="true"] .vca-modal {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: clamp(320px, 38vw, 560px);
+  max-height: min(75vh, 720px);
+  pointer-events: auto;
+  /* Smooth collapse/expand transition. */
+  transition: max-height 180ms ease, width 180ms ease;
+}
+
+/* Collapsed state: hide body, keep just the draggable header bar. */
+.vca-backdrop[data-floating="true"] .vca-modal[data-collapsed="true"] {
+  width: clamp(220px, 24vw, 320px);
+  max-height: 56px;
+}
+.vca-backdrop[data-floating="true"] .vca-modal[data-collapsed="true"] .vca-body { display: none; }
+.vca-backdrop[data-floating="true"] .vca-modal[data-collapsed="true"] .vca-subtitle { display: none; }
+.vca-backdrop[data-floating="true"] .vca-modal[data-collapsed="true"] .vca-header { padding: 8px 12px; border-bottom: 0; }
+
+.vca-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.vca-billing-bar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--vca-border);
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklch, var(--vca-primary) 14%, var(--vca-card)),
+      var(--vca-card));
+  flex-shrink: 0;
+  animation: vca-billing-in 180ms ease-out;
+}
+
+@keyframes vca-billing-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.vca-billing-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.vca-billing-badge {
+  flex-shrink: 0;
+  font: 700 10px/1 'Sora', system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: var(--vca-primary);
+  color: var(--vca-primary-foreground);
+  text-transform: uppercase;
+}
+
+.vca-billing-copy { min-width: 0; }
+
+.vca-billing-title {
+  margin: 0;
+  font: 600 13px/1.3 'Sora', system-ui, sans-serif;
+  color: var(--vca-foreground);
+}
+
+.vca-billing-sub {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--vca-muted-foreground);
+}
+
+.vca-billing-sub em {
+  font-style: normal;
+  color: var(--vca-success);
+  font-weight: 600;
+}
+
+.vca-billing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.vca-billing-btn {
+  appearance: none;
+  border: 1px solid var(--vca-border);
+  border-radius: calc(var(--vca-radius) - 2px);
+  padding: 7px 13px;
+  font: 600 12px/1.2 system-ui, sans-serif;
+  cursor: pointer;
+  background: var(--vca-secondary);
+  color: var(--vca-foreground);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 120ms ease, border-color 120ms ease, transform 60ms ease;
+}
+
+.vca-billing-btn:hover:not(:disabled) {
+  border-color: var(--vca-primary-border);
+  background: var(--vca-primary-soft);
+}
+
+.vca-billing-btn:active:not(:disabled) { transform: translateY(1px); }
+
+.vca-billing-btn-primary {
+  background: var(--vca-primary);
+  color: var(--vca-primary-foreground);
+  border-color: transparent;
+  box-shadow: 0 1px 2px color-mix(in oklch, var(--vca-primary) 40%, transparent);
+}
+
+.vca-billing-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  background: var(--vca-primary);
+}
+
+.vca-billing-btn-ghost {
+  background: transparent;
+}
+
+.vca-billing-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.vca-billing-dismiss {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--vca-muted-foreground);
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.vca-billing-dismiss:hover {
+  background: color-mix(in oklch, var(--vca-foreground) 12%, transparent);
+  color: var(--vca-foreground);
+}
+
+.vca-msg.system.is-warn {
+  border-color: var(--vca-primary-border);
+  background: var(--vca-primary-soft);
+  color: var(--vca-foreground);
+}
+
+/* ── Plan picker overlay ───────────────────────────────────────────────── */
+.vca-plans {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: color-mix(in oklch, var(--vca-background) 70%, black);
+  backdrop-filter: blur(3px);
+  border-radius: inherit;
+  animation: vca-billing-in 150ms ease-out;
+}
+
+.vca-plans[hidden] { display: none; }
+
+.vca-plans-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  max-height: 100%;
+  overflow-y: auto;
+  background: var(--vca-card);
+  border: 1px solid var(--vca-border);
+  border-radius: var(--vca-radius);
+  padding: 18px 18px 16px;
+  box-shadow: 0 18px 48px color-mix(in oklch, black 45%, transparent);
+}
+
+.vca-plans-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--vca-muted-foreground);
+  font-size: 20px;
+  line-height: 1;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.vca-plans-close:hover { background: color-mix(in oklch, var(--vca-foreground) 12%, transparent); color: var(--vca-foreground); }
+
+.vca-plans-title {
+  margin: 0;
+  font: 700 18px/1.2 'Sora', system-ui, sans-serif;
+  color: var(--vca-foreground);
+}
+
+.vca-plans-sub {
+  margin: 4px 0 14px;
+  font-size: 13px;
+  color: var(--vca-muted-foreground);
+}
+
+.vca-plans-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.vca-plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 14px 14px;
+  border: 1px solid var(--vca-border);
+  border-radius: calc(var(--vca-radius) - 1px);
+  background: var(--vca-background);
+}
+
+.vca-plan-card[data-plan="yearly"] {
+  border-color: var(--vca-primary-border);
+  background: var(--vca-primary-soft);
+}
+
+.vca-plan-ribbon {
+  position: absolute;
+  top: -9px;
+  right: 12px;
+  font: 700 9px/1 'Sora', system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--vca-primary);
+  color: var(--vca-primary-foreground);
+}
+
+.vca-plan-head { display: flex; flex-direction: column; gap: 2px; }
+
+.vca-plan-name {
+  font: 600 14px/1.2 'Sora', system-ui, sans-serif;
+  color: var(--vca-foreground);
+}
+
+.vca-plan-price {
+  font: 700 22px/1.1 'Sora', system-ui, sans-serif;
+  color: var(--vca-foreground);
+}
+
+.vca-plan-price-pending {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vca-muted-foreground);
+}
+
+.vca-plan-tokens {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: 4px;
+  font: 600 11px/1 'Sora', system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--vca-primary) 14%, transparent);
+  color: var(--vca-primary);
+  border: 1px solid var(--vca-primary-border);
+}
+
+.vca-plan-desc {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--vca-muted-foreground);
+}
+
+.vca-plan-cadence {
+  font-size: 11px;
+  color: var(--vca-muted-foreground);
+}
+
+.vca-plan-feats {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.vca-plan-feats li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--vca-muted-foreground);
+}
+
+.vca-plan-feats li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--vca-success);
+  font-weight: 700;
+}
+
+.vca-plan-choose { width: 100%; text-align: center; }
+
+.vca-plans-compare {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--vca-border);
+  border-radius: calc(var(--vca-radius) - 1px);
+  background: color-mix(in oklch, var(--vca-muted) 35%, transparent);
+}
+
+.vca-plans-compare-title {
+  margin: 0 0 8px;
+  font: 600 12px/1.2 'Sora', system-ui, sans-serif;
+  color: var(--vca-foreground);
+}
+
+.vca-plans-tier-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.vca-plans-tier {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--vca-background);
+  border: 1px solid var(--vca-border);
+}
+
+.vca-plans-tier.is-pro {
+  border-color: var(--vca-primary-border);
+  background: var(--vca-primary-soft);
+}
+
+.vca-plans-tier-name {
+  font: 600 11px/1.2 'Sora', system-ui, sans-serif;
+  color: var(--vca-foreground);
+}
+
+.vca-plans-tier-tokens {
+  font-size: 11px;
+  color: var(--vca-muted-foreground);
+}
+
+.vca-plans-note {
+  margin: 12px 0 0;
+  font-size: 11px;
+  text-align: center;
+  color: var(--vca-muted-foreground);
+}
+
+@media (max-width: 480px) {
+  .vca-plans-grid { grid-template-columns: 1fr; }
+  .vca-plans-tier-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .vca-billing-bar { flex-direction: column; align-items: stretch; }
+  .vca-billing-actions { justify-content: stretch; }
+  .vca-billing-actions .vca-billing-btn { flex: 1; text-align: center; }
+}
+
+.vca-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--vca-border);
+  background: color-mix(in oklch, var(--vca-primary) 6%, var(--vca-card));
+  flex-shrink: 0;
+}
+
+/* Drag affordance — only in floating mode. */
+.vca-backdrop[data-floating="true"] .vca-header {
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+.vca-backdrop[data-floating="true"] .vca-header.vca-dragging { cursor: grabbing; }
+
+/* Buttons inside the header keep pointer cursor + don't initiate drag. */
+.vca-backdrop[data-floating="true"] .vca-header .vca-icon-btn { cursor: pointer; }
+
+/* Lock text selection while dragging anywhere. */
+body.vca-no-select, body.vca-no-select * { user-select: none !important; }
+
+.vca-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.vca-title {
+  margin: 0;
+  font: 600 16px/1.3 'Sora', system-ui, sans-serif;
+  color: var(--vca-foreground);
+}
+
+.vca-tier {
+  flex-shrink: 0;
+  font: 700 10px/1 'Sora', system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.vca-tier[data-tier="pro"] {
+  background: var(--vca-primary);
+  color: var(--vca-primary-foreground);
+}
+
+.vca-tier[data-tier="free"] {
+  background: var(--vca-secondary);
+  color: var(--vca-muted-foreground);
+  border-color: var(--vca-border);
+}
+
+.vca-tier[data-tier="guest"] {
+  background: transparent;
+  color: var(--vca-muted-foreground);
+  border-color: var(--vca-border);
+}
+
+.vca-subtitle {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--vca-muted-foreground);
+}
+
+.vca-header-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.vca-policy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.vca-policy-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--vca-muted-foreground);
+}
+
+.vca-mode {
+  border: 1px solid var(--vca-border);
+  border-radius: 6px;
+  background: var(--vca-card);
+  color: var(--vca-card-foreground);
+  font-size: 11px;
+  padding: 2px 6px;
+}
+
+.vca-fresh-toggle {
+  accent-color: var(--vca-primary);
+}
+
+.vca-icon-btn {
+  background: transparent;
+  border: 1px solid var(--vca-border);
+  color: var(--vca-card-foreground);
+  border-radius: var(--vca-radius);
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.vca-icon-btn:hover {
+  background: var(--vca-primary-soft);
+  border-color: var(--vca-primary-border);
+}
+
+.vca-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 200px;
+  background: var(--vca-background);
+}
+
+.vca-msg {
+  max-width: 92%;
+  padding: 8px 12px;
+  border-radius: calc(var(--vca-radius) + 2px);
+  font-size: 13px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.vca-msg-body {
+  white-space: pre-wrap;
+}
+
+.vca-msg.user {
+  align-self: flex-end;
+  background: var(--vca-primary-soft);
+  border: 1px solid var(--vca-primary-border);
+  color: var(--vca-foreground);
+}
+
+.vca-msg.assistant {
+  align-self: flex-start;
+  background: var(--vca-card);
+  border: 1px solid var(--vca-border);
+  color: var(--vca-card-foreground);
+}
+
+.vca-msg.assistant .vca-msg-body {
+  white-space: normal;
+}
+
+.vca-msg.system {
+  align-self: center;
+  font-size: 12px;
+  padding: 6px 12px;
+  max-width: 80%;
+  text-align: center;
+}
+
+.vca-msg.system.is-info {
+  color: var(--vca-muted-foreground);
+  background: color-mix(in oklch, var(--vca-primary) 10%, transparent);
+  border: 1px solid color-mix(in oklch, var(--vca-primary) 22%, transparent);
+}
+
+.vca-msg.system.is-error {
+  color: var(--vca-destructive);
+  background: var(--vca-destructive-soft);
+  border: 1px solid var(--vca-destructive-border);
+}
+
+.vca-msg.streaming .vca-msg-body::after {
+  content: ' ▋';
+  color: var(--vca-primary);
+  animation: vca-blink 0.8s step-end infinite;
+}
+
+/* ── Markdown ─────────────────────────────────────────────── */
+.vca-md > * + * { margin-top: 8px; }
+.vca-md p { margin: 0; }
+.vca-md h3, .vca-md h4, .vca-md h5 {
+  margin: 12px 0 4px;
+  font: 600 14px/1.3 'Sora', system-ui, sans-serif;
+  color: var(--vca-foreground);
+}
+.vca-md h4 { font-size: 13px; }
+.vca-md h5 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--vca-muted-foreground); }
+.vca-md ul, .vca-md ol { margin: 4px 0 4px 18px; padding: 0; }
+.vca-md li { margin: 2px 0; }
+.vca-md code {
+  font: 12px/1.5 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: color-mix(in oklch, var(--vca-primary) 10%, transparent);
+  border: 1px solid color-mix(in oklch, var(--vca-primary) 22%, transparent);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.vca-md a {
+  color: var(--vca-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Fenced code blocks ───────────────────────────────────── */
+.vca-code-wrap {
+  border: 1px solid var(--vca-border);
+  border-radius: var(--vca-radius);
+  background: color-mix(in oklch, var(--vca-background) 65%, var(--vca-card));
+  overflow: hidden;
+}
+.vca-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px 4px 10px;
+  background: color-mix(in oklch, var(--vca-primary) 8%, var(--vca-card));
+  border-bottom: 1px solid var(--vca-border);
+}
+.vca-code-lang {
+  font: 600 10px/1 'Fira Code', ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vca-muted-foreground);
+}
+.vca-code-copy {
+  font: 11px/1 'DM Sans', system-ui, sans-serif;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--vca-border);
+  background: transparent;
+  color: var(--vca-muted-foreground);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.vca-code-copy:hover {
+  background: var(--vca-primary-soft);
+  border-color: var(--vca-primary-border);
+  color: var(--vca-foreground);
+}
+.vca-code {
+  margin: 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+  font: 12px/1.55 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--vca-foreground);
+  background: transparent;
+  white-space: pre;
+  tab-size: 2;
+}
+.vca-code code {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+}
+
+@keyframes vca-blink {
+  50% { opacity: 0; }
+}
+
+.vca-apply-row {
+  margin-top: 8px;
+}
+
+.vca-apply-btn {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: var(--vca-radius);
+  border: 1px solid var(--vca-success-border);
+  background: var(--vca-success-soft);
+  color: var(--vca-primary);
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.vca-apply-btn:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.vca-apply-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.vca-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 16px 8px;
+  background: var(--vca-background);
+}
+
+.vca-quick-btn {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--vca-border);
+  background: var(--vca-card);
+  color: var(--vca-muted-foreground);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.vca-quick-btn:hover {
+  border-color: var(--vca-primary-border);
+  background: var(--vca-primary-soft);
+  color: var(--vca-foreground);
+}
+
+.vca-input-row {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--vca-border);
+  background: var(--vca-card);
+}
+
+.vca-input {
+  flex: 1;
+  resize: none;
+  min-height: 40px;
+  max-height: 120px;
+  padding: 8px 10px;
+  border-radius: var(--vca-radius);
+  border: 1px solid var(--vca-input);
+  background: var(--vca-secondary);
+  color: var(--vca-card-foreground);
+  font: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.vca-input::placeholder {
+  color: var(--vca-muted-foreground);
+}
+
+.vca-input:focus {
+  outline: none;
+  border-color: var(--vca-ring);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--vca-ring) 28%, transparent);
+}
+
+.vca-send {
+  align-self: flex-end;
+  padding: 8px 14px;
+  border-radius: var(--vca-radius);
+  border: none;
+  background: var(--vca-primary);
+  color: var(--vca-primary-foreground);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, filter 0.15s, transform 0.1s;
+  min-width: 64px;
+}
+
+.vca-send:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.vca-send:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.vca-send[data-mode="stop"] {
+  background: var(--vca-destructive);
+  color: var(--vca-primary-foreground);
+}
+
+.vca-send:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vca-footer {
+  padding: 4px 16px 10px;
+  font-size: 11px;
+  color: var(--vca-muted-foreground);
+  background: var(--vca-card);
+  text-align: right;
+}
+
+.vca-header-text { min-width: 0; }
+.vca-header-text .vca-title,
+.vca-header-text .vca-subtitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .vca-modal { width: 100%; max-height: 100vh; border-radius: 0; }
+  .vca-backdrop { padding: 0; }
+  .vca-msg { max-width: 96%; }
+
+  /* Floating panel on mobile: full width, pinned to bottom, rounded top only. */
+  .vca-backdrop[data-floating="true"] .vca-modal {
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0;
+    top: auto !important;
+    width: 100%;
+    max-height: 75vh;
+    border-radius: calc(var(--vca-radius) + 6px) calc(var(--vca-radius) + 6px) 0 0;
+  }
+  .vca-backdrop[data-floating="true"] .vca-modal[data-collapsed="true"] {
+    width: 100%;
+    max-height: 52px;
+  }
+  .vca-policy {
+    width: 100%;
+    justify-content: flex-start;
+    margin-left: 0;
+    margin-top: 6px;
+  }
+  .vca-header {
+    flex-wrap: wrap;
+  }
+}
