@@ -862,6 +862,14 @@ ${bodyTikz}
       onZoom: function() { updateZoomLabel(); }
     });
     updateZoomLabel();
+    try {
+      document.dispatchEvent(new CustomEvent('tikz:rendered', {
+        detail: {
+          svg: svgMarkup,
+          code: editor ? editor.getValue() : ($('tikzInput') ? $('tikzInput').value : ''),
+        },
+      }));
+    } catch (_) { /* ignore */ }
   }
 
   // Get the current SVG from the output div
@@ -921,14 +929,38 @@ ${bodyTikz}
     if (panZoomInstance) { panZoomInstance.resetZoom(); panZoomInstance.fit(); panZoomInstance.center(); updateZoomLabel(); }
   }
 
+  function formatTikzCode(code) {
+    code = String(code || '').replace(/\r\n|\r/g, '\n').replace(/[ \t]+/g, ' ').trim();
+    code = code.replace(/;\s*/g, ';\n');
+    const CMDS = /(?<![\[,])\s*(\\(?:node|draw|fill(?:draw)?|path|clip|coordinate|foreach|tikzset))\b/g;
+    code = code.replace(CMDS, '\n$1');
+    code = code.replace(/\s*(\\begin\{)/g, '\n$1');
+    code = code.replace(/\s*(\\end\{)/g, '\n$1');
+
+    const lines = code.split('\n');
+    let depth = 0;
+    const INDENT = '  ';
+    const result = [];
+
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line) continue;
+      if (/^\\end\{/.test(line)) depth = Math.max(0, depth - 1);
+      result.push(INDENT.repeat(depth) + line);
+      if (/^\\begin\{/.test(line)) depth += 1;
+    }
+    return result.join('\n');
+  }
+
   function loadExample(code, preamble = '') {
     const combined = (preamble ? preamble + '\n\n' : '') + code;
     if (editor) { suppressAuto = true; editor.setValue(combined); suppressAuto = false; } else { $('tikzInput').value = combined; }
     render();
   }
 
-  // Expose for AI generate panel
+  // Expose for AI assistant + image-to-TikZ panel
   window.tikzLoadCode = loadExample;
+  window.tikzFormatCode = formatTikzCode;
 
   function populateExamples() {
     const menu = $('examples-menu');
