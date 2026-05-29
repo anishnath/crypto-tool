@@ -618,6 +618,16 @@
         <url-pattern>/ai</url-pattern>
     </servlet-mapping>
 
+    <!-- AI Gateway Proxy — forwards to Go gateway (OpenAI-compatible) -->
+    <servlet>
+        <servlet-name>AIGatewayProxyServlet</servlet-name>
+        <servlet-class>z.y.x.ai.AIGatewayProxyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AIGatewayProxyServlet</servlet-name>
+        <url-pattern>/ai-gateway</url-pattern>
+    </servlet-mapping>
+
     <!-- Video Studio — transcribe / translate / future video services (Whisper-backed) -->
     <servlet>
         <servlet-name>VideoServiceServlet</servlet-name>
@@ -730,6 +740,28 @@
     <servlet-mapping>
         <servlet-name>ArduinoSimulateServlet</servlet-name>
         <url-pattern>/api/arduino/simulate/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Billing — proxy to Go gateway (D1 + Dodo logic lives in openai-go-api) -->
+    <servlet>
+        <servlet-name>BillingGatewayProxyServlet</servlet-name>
+        <servlet-class>z.y.x.billing.BillingGatewayProxyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BillingGatewayProxyServlet</servlet-name>
+        <url-pattern>/api/dodo/webhook</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BillingGatewayProxyServlet</servlet-name>
+        <url-pattern>/api/dodo/checkout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BillingGatewayProxyServlet</servlet-name>
+        <url-pattern>/api/billing/status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BillingGatewayProxyServlet</servlet-name>
+        <url-pattern>/api/billing/plans</url-pattern>
     </servlet-mapping>
 
     <!-- 4×4 Rubik's Cube Solver — port of rubikscubennnsolver (Python+C).

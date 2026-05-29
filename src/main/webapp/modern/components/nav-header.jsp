@@ -3,6 +3,32 @@
     Modern Navigation Header
     Mobile-first, no Bootstrap dependency
 --%>
+<%
+    String navUserSub = null;
+    String navUserEmail = null;
+    if (session != null) {
+        Object subObj = session.getAttribute("oauth_user_sub");
+        Object emailObj = session.getAttribute("oauth_user_email");
+        if (subObj != null) navUserSub = subObj.toString();
+        if (emailObj != null) navUserEmail = emailObj.toString();
+    }
+    boolean navLoggedIn = (navUserSub != null && !navUserSub.isEmpty()) || (navUserEmail != null && !navUserEmail.isEmpty());
+    String navRedirectPath = request.getRequestURI();
+    String navContextPath = request.getContextPath();
+    if (navContextPath != null && !navContextPath.isEmpty() && navRedirectPath.startsWith(navContextPath)) {
+        navRedirectPath = navRedirectPath.substring(navContextPath.length());
+        if (navRedirectPath.isEmpty()) {
+            navRedirectPath = "/";
+        }
+    }
+    if (request.getQueryString() != null && !request.getQueryString().isEmpty()) {
+        navRedirectPath += "?" + request.getQueryString();
+    }
+    String navLoginUrl = request.getContextPath() + "/GoogleOAuthFunctionality?action=login&redirect_path="
+            + java.net.URLEncoder.encode(navRedirectPath, "UTF-8");
+    String navLogoutUrl = request.getContextPath() + "/GoogleOAuthFunctionality?action=logout&redirect_path="
+            + java.net.URLEncoder.encode(navRedirectPath, "UTF-8");
+%>
 
 <nav class="modern-nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
@@ -68,6 +94,23 @@
 
         <!-- Action Buttons -->
         <div class="nav-actions">
+            <% if (navLoggedIn) { %>
+            <a href="<%=navLogoutUrl%>"
+               class="btn-nav btn-nav-secondary"
+               title="Logout"
+               aria-label="Logout">
+                <span>👤</span>
+                <span class="nav-text">Logout</span>
+            </a>
+            <% } else { %>
+            <a href="<%=navLoginUrl%>"
+               class="btn-nav btn-nav-primary"
+               title="Login with Google"
+               aria-label="Login with Google">
+                <span>🔐</span>
+                <span class="nav-text">Login</span>
+            </a>
+            <% } %>
             <a href="https://buymeacoffee.com/8gwifi.org" 
                target="_blank" 
                rel="noopener" 
@@ -187,6 +230,17 @@
         <!-- Support -->
         <div class="drawer-section">
             <h3 class="drawer-section-title">Support</h3>
+            <% if (navLoggedIn) { %>
+            <a href="<%=navLogoutUrl%>" class="drawer-link">
+                <span class="drawer-link-icon">👤</span>
+                <span>Logout</span>
+            </a>
+            <% } else { %>
+            <a href="<%=navLoginUrl%>" class="drawer-link">
+                <span class="drawer-link-icon">🔐</span>
+                <span>Login with Google</span>
+            </a>
+            <% } %>
             <a href="https://buymeacoffee.com/8gwifi.org" target="_blank" rel="noopener" class="drawer-link">
                 <span class="drawer-link-icon">☕</span>
                 <span>Buy me a coffee</span>
