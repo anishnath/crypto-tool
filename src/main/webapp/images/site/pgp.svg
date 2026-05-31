@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" font-family="'Inter','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <!-- Deep indigo → purple background (matches pgpencdec.jsp tab gradient) -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="55%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#581c87"/>
+    </linearGradient>
+
+    <!-- Brand gradient (matches #667eea → #764ba2 used elsewhere on the page) -->
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+
+    <!-- Public key — teal/emerald -->
+    <linearGradient id="pubKey" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#0ea5a4"/>
+    </linearGradient>
+
+    <!-- Private key — amber/red (secret) -->
+    <linearGradient id="privKey" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+
+    <!-- Hex grid pattern (subtle ciphertext feel) -->
+    <pattern id="hex" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
+      <polygon points="30,2 58,18 58,50 30,66 2,50 2,18"
+               fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+
+    <!-- Soft glow behind the lock -->
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.6"/>
+      <stop offset="60%" stop-color="#6366f1" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#1e1b4b" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Drop shadow for the lock body -->
+    <filter id="ds" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="6"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#hex)"/>
+
+  <!-- Streaming ciphertext columns (left + right) -->
+  <g font-family="'JetBrains Mono','Courier New',monospace" font-size="14" fill="#ffffff" fill-opacity="0.10" letter-spacing="2">
+    <text x="40"  y="80">9f3a c1d2 7e8b 4f10</text>
+    <text x="40"  y="110">0b6e 8a52 c399 1f4a</text>
+    <text x="40"  y="140">e22d 715c b08a 3fe9</text>
+    <text x="40"  y="170">a134 0c7f d56b 1e23</text>
+    <text x="40"  y="200">7b9e 4ad8 ff01 c4b6</text>
+    <text x="40"  y="230">22ce 88a0 5d14 9bf7</text>
+    <text x="40"  y="540">3eaa f018 cc92 7d51</text>
+    <text x="40"  y="570">b07c 14e3 9a8d 65ff</text>
+
+    <text x="900" y="80">cafe babe dead beef</text>
+    <text x="900" y="110">5e9c 1a42 8b77 d0f5</text>
+    <text x="900" y="140">37ab e6c1 4d59 80fa</text>
+    <text x="900" y="170">11cd 8e2b 0f73 a649</text>
+    <text x="900" y="200">d1f8 36ac 7050 22be</text>
+    <text x="900" y="540">88fa 2719 ce4b 5d03</text>
+    <text x="900" y="570">a017 ff5e 3c0b 718d</text>
+  </g>
+
+  <!-- Soft purple glow behind the lock -->
+  <circle cx="600" cy="320" r="280" fill="url(#glow)"/>
+
+  <!-- Crossed keys behind the lock -->
+  <g transform="translate(600,320)" filter="url(#ds)">
+    <!-- Public key (rotated -25°, teal, behind-left) -->
+    <g transform="rotate(-25) translate(-150,-2)">
+      <circle cx="0" cy="0" r="34" fill="none" stroke="url(#pubKey)" stroke-width="14"/>
+      <rect x="34" y="-7" width="160" height="14" rx="3" fill="url(#pubKey)"/>
+      <rect x="160" y="-7" width="12" height="28" rx="2" fill="url(#pubKey)"/>
+      <rect x="180" y="-7" width="12" height="22" rx="2" fill="url(#pubKey)"/>
+      <text x="-7" y="6" font-size="18" font-weight="700" fill="#0f172a" font-family="'JetBrains Mono',monospace">P</text>
+    </g>
+    <!-- Private key (rotated +25°, amber/red, behind-right) -->
+    <g transform="rotate(25) translate(-150,-2)">
+      <circle cx="0" cy="0" r="34" fill="none" stroke="url(#privKey)" stroke-width="14"/>
+      <rect x="34" y="-7" width="160" height="14" rx="3" fill="url(#privKey)"/>
+      <rect x="160" y="-7" width="12" height="28" rx="2" fill="url(#privKey)"/>
+      <rect x="180" y="-7" width="12" height="22" rx="2" fill="url(#privKey)"/>
+      <text x="-7" y="6" font-size="18" font-weight="700" fill="#0f172a" font-family="'JetBrains Mono',monospace">S</text>
+    </g>
+  </g>
+
+  <!-- Center: stylized padlock (shackle + body) -->
+  <g transform="translate(600,320)" filter="url(#ds)">
+    <!-- Shackle -->
+    <path d="M -55 -45 L -55 -75 A 55 55 0 0 1 55 -75 L 55 -45"
+          fill="none" stroke="#e0e7ff" stroke-width="18" stroke-linecap="round"/>
+    <!-- Body -->
+    <rect x="-90" y="-50" width="180" height="140" rx="20" fill="url(#brand)" stroke="#c7d2fe" stroke-width="2"/>
+    <!-- Keyhole -->
+    <circle cx="0" cy="5" r="14" fill="#1e1b4b"/>
+    <rect x="-5" y="5" width="10" height="32" rx="2" fill="#1e1b4b"/>
+    <!-- "PGP" wordmark on the lock body -->
+    <text x="0" y="78" text-anchor="middle" font-size="26" font-weight="800" fill="#ffffff" letter-spacing="6">PGP</text>
+  </g>
+
+  <!-- Headline -->
+  <text x="600" y="500" text-anchor="middle" font-size="62" font-weight="800" fill="#ffffff" letter-spacing="-1">
+    Encrypt &amp; Decrypt
+  </text>
+
+  <!-- Subhead / spec line -->
+  <text x="600" y="545" text-anchor="middle" font-size="22" font-weight="500" fill="#c7d2fe" letter-spacing="3">
+    OPENPGP · RFC 4880 · RSA + AES-256
+  </text>
+
+  <!-- Bottom-left feature pills -->
+  <g font-size="14" font-weight="600" font-family="'Inter',sans-serif">
+    <g transform="translate(60,580)">
+      <rect width="118" height="28" rx="14" fill="#10b981" fill-opacity="0.18" stroke="#10b981" stroke-opacity="0.5"/>
+      <text x="59" y="19" text-anchor="middle" fill="#6ee7b7">In-browser</text>
+    </g>
+    <g transform="translate(190,580)">
+      <rect width="140" height="28" rx="14" fill="#a78bfa" fill-opacity="0.18" stroke="#a78bfa" stroke-opacity="0.5"/>
+      <text x="70" y="19" text-anchor="middle" fill="#ddd6fe">No data stored</text>
+    </g>
+    <g transform="translate(342,580)">
+      <rect width="138" height="28" rx="14" fill="#f59e0b" fill-opacity="0.18" stroke="#f59e0b" stroke-opacity="0.5"/>
+      <text x="69" y="19" text-anchor="middle" fill="#fcd34d">Python compiler</text>
+    </g>
+  </g>
+
+  <!-- Bottom-right brand -->
+  <g transform="translate(1140,595)" text-anchor="end" font-size="16" font-weight="700" font-family="'Inter',sans-serif">
+    <text fill="#ffffff" fill-opacity="0.85">8gwifi.org</text>
+    <text y="20" font-size="12" font-weight="400" fill="#a5b4fc">pgpencdec.jsp</text>
+  </g>
+</svg>
