@@ -777,6 +777,40 @@
         <url-pattern>/api/tools/tikz/generations</url-pattern>
     </servlet-mapping>
 
+    <!-- PGP JSON API (chat-native AI operations) -->
+    <servlet>
+        <servlet-name>PgpApiServlet</servlet-name>
+        <servlet-class>z.y.x.Security.PgpApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PgpApiServlet</servlet-name>
+        <url-pattern>/api/pgp/generate-keys</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PgpApiServlet</servlet-name>
+        <url-pattern>/api/pgp/encrypt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PgpApiServlet</servlet-name>
+        <url-pattern>/api/pgp/decrypt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PgpApiServlet</servlet-name>
+        <url-pattern>/api/pgp/sign</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PgpApiServlet</servlet-name>
+        <url-pattern>/api/pgp/verify</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PgpApiServlet</servlet-name>
+        <url-pattern>/api/pgp/verify-file</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PgpApiServlet</servlet-name>
+        <url-pattern>/api/pgp/dump</url-pattern>
+    </servlet-mapping>
+
     <!-- 4×4 Rubik's Cube Solver — port of rubikscubennnsolver (Python+C).
          Currently size=4 only; sizes 2/3/5/6/7 will dispatch from the same
          endpoint once their packages land. -->
