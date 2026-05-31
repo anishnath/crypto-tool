@@ -1,3 +1,12 @@
+/**
+ * Unified PGP AI adapter — used by both pgpencdec.jsp and pgpkeyfunction.jsp.
+ *
+ * Both pages now share the same 4-tab UI (Encrypt, Decrypt, Generate Keys, Inspect/Dump)
+ * via modern/components/pgp-tool-input-tabs.inc.jsp, so a single assistant config serves both.
+ *
+ * The chat handler (intent router → plan merge → operation execution) lives here too —
+ * any helper module can import handlePgpChatSend if needed.
+ */
 import { VibeCodingAssistant } from '../assistant-core.js';
 import {
   analyzePgpIntent,
@@ -26,15 +35,15 @@ You help with OpenPGP (RFC 4880) concepts on this page.
 For explain-only questions: answer clearly in plain language.
 Do NOT output fake keys or ciphertext — operations run separately via the tool API.`;
 
-const PAGE_LAYOUT_NOTE = `This is a single-page tool with four input tabs and one output panel:
+const PAGE_LAYOUT_NOTE = `This is a single-page PGP tool with four input tabs and one output panel:
   • Encrypt Message — paste plaintext + recipient public key.
   • Decrypt Message — paste PGP message + private key + passphrase.
   • Generate Keys — identity + passphrase + cipher (AES-256 default) + RSA size (2048 default).
   • Inspect / Dump — paste any armored block to see RFC 4880 packet structure.
-Output panel has buttons: Copy, Download, Email (sends the encrypted result), Share (URL).
+Output panel has buttons: Copy, Download, Email (sends the encrypted result on the encrypt tab), Share (URL).
 When suggesting next steps, name the tab or button by these exact labels.`;
 
-export function createPgpEncDecAssistant(opts) {
+export function createPgpAssistant(opts) {
   const { ctx, aiUrl, useGateway, aiRouteMode, aiRouteByTier, userId } = opts;
 
   const assistant = new VibeCodingAssistant({
@@ -58,14 +67,14 @@ export function createPgpEncDecAssistant(opts) {
         ],
       },
     },
-    toolId: 'cryptography/pgp-encdec',
+    toolId: 'cryptography/pgp',
     title: 'PGP AI',
-    subtitle: 'Say what you want in plain language — generate, encrypt, sign, verify, or ask.',
-    placeholder: 'Try anything: "make keys for me@example.com", "encrypt hello with my pubkey"...',
-    footerText: 'Operations use real OpenPGP crypto · keys never sent to AI',
+    subtitle: 'Say what you want in plain language — generate, encrypt, decrypt, sign, inspect, or ask.',
+    placeholder: 'Try: "keys for me@example.com", "encrypt hello with my pubkey", "what is RSA?"',
+    footerText: 'Operations use real OpenPGP crypto · private keys never sent to AI',
     historyTurns: 8,
     sanitizeForAi: redactPgpForAi,
-    systemPrompt: `You are an expert OpenPGP assistant on an online PGP tool.
+    systemPrompt: `You are an expert OpenPGP assistant on an in-browser PGP tool.
 Never ask the user to paste private keys into chat. Crypto operations run via the tool API.
 ${PAGE_LAYOUT_NOTE}
 ${EXPLAIN_PROMPT_SUFFIX}`,
@@ -84,7 +93,7 @@ ${EXPLAIN_PROMPT_SUFFIX}`,
   return assistant;
 }
 
-async function handlePgpChatSend(userText, ai, ctx) {
+export async function handlePgpChatSend(userText, ai, ctx) {
   const pageSnapshot = buildPgpSeedContext();
   const formContext = readPgpFormContext();
   const priorHistory = ai.history.slice(-10);

@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "cryptography/pgp");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,6 +66,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/pgp-tool.css?v=<%=cacheVersion%>">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -76,6 +79,7 @@
     </noscript>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -480,6 +484,10 @@
         .pgp-output-tab:hover:not(.active){background:var(--border)}
         [data-theme="dark"] .pgp-output-tab{background:rgba(255,255,255,0.05)}
         [data-theme="dark"] .pgp-output-tab.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff}
+        /* AI Assistant button — sits in the tab bar but opens a modal, not a panel */
+        .pgp-ai-tab{flex:0 0 auto;padding:0.5rem 0.9rem;background:linear-gradient(135deg,#10b981 0%,#0ea5a4 100%);color:#fff;border-right:1.5px solid var(--border);display:inline-flex;align-items:center;justify-content:center;gap:0.25rem}
+        .pgp-ai-tab:hover{filter:brightness(1.08);color:#fff;background:linear-gradient(135deg,#10b981 0%,#0ea5a4 100%)}
+        [data-theme="dark"] .pgp-ai-tab{background:linear-gradient(135deg,#10b981 0%,#0ea5a4 100%);color:#fff}
         .pgp-panel{display:none;flex:1;min-height:0}.pgp-panel.active{display:flex;flex-direction:column}
         #pgk-panel-output .tool-result-card{flex:1}
         #pgk-panel-python{min-height:540px}
@@ -553,42 +561,66 @@
     <!-- Navigation -->
     <%@ include file="modern/components/nav-header.jsp" %>
 
-    <!-- Page Header -->
+    <!-- Page Header (compact) -->
+    <style>
+        .tool-page-header{padding:0.5rem 1rem !important;min-height:0 !important;border-bottom:1px solid var(--border)}
+        .tool-page-header-inner{display:flex !important;align-items:center !important;gap:0.75rem;flex-wrap:wrap;padding:0 !important;margin:0 auto !important;max-width:1400px}
+        .tool-page-header-inner > div:first-child{display:flex;align-items:baseline;gap:0.75rem;flex-wrap:wrap;min-width:0}
+        .tool-page-title{font-size:1.05rem !important;font-weight:700 !important;margin:0 !important;line-height:1.25 !important;letter-spacing:-0.01em}
+        .tool-breadcrumbs{font-size:0.72rem !important;line-height:1.25 !important;margin:0 !important;color:var(--text-secondary)}
+        .tool-breadcrumbs a{color:#667eea;text-decoration:none}
+        .tool-breadcrumbs a:hover{text-decoration:underline}
+        .pgk-header-pitch{font-size:0.72rem;line-height:1.25;color:var(--text-secondary);padding-left:0.6rem;margin-left:0.6rem;border-left:1px solid var(--border);white-space:nowrap}
+        .pgk-header-pitch strong{color:var(--text-primary);font-weight:600}
+        .pgk-header-pitch a{color:#667eea;font-weight:600;text-decoration:none;margin-left:0.25rem}
+        .pgk-header-pitch a:hover{text-decoration:underline}
+        .tool-page-badges{display:flex;gap:0.3rem;margin-left:auto;flex-wrap:wrap}
+        .tool-page-badges .tool-badge{padding:0.12rem 0.45rem !important;font-size:0.66rem !important;line-height:1.3 !important;border-radius:9999px !important;font-weight:600;background:rgba(102,126,234,0.10);color:#667eea;border:1px solid rgba(102,126,234,0.25)}
+        [data-theme="dark"] .tool-page-badges .tool-badge{background:rgba(102,126,234,0.18);color:#a5b4fc;border-color:rgba(102,126,234,0.35)}
+        .tool-description-section{display:none}
+        /* Reorder tabs on this page: Generate Keys first (matches page's SEO intent) */
+        .tool-tabs{display:flex}
+        .tool-tab[data-mode="genkey"]{order:0}
+        .tool-tab[data-mode="encrypt"]{order:1}
+        .tool-tab[data-mode="decrypt"]{order:2}
+        .tool-tab[data-mode="dump"]{order:3}
+        @media (max-width:640px){
+            .tool-page-title{font-size:0.95rem !important}
+            .pgk-header-pitch{display:block;padding-left:0;margin-left:0;border-left:none;white-space:normal;margin-top:0.15rem}
+            .tool-page-badges{margin-left:0}
+        }
+    </style>
     <header class="tool-page-header">
         <div class="tool-page-header-inner">
             <div>
                 <h1 class="tool-page-title">PGP Key Generator</h1>
-                <nav class="tool-breadcrumbs">
+                <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                     <a href="<%=request.getContextPath()%>/index.jsp#cryptography">Cryptography</a> /
                     <a href="<%=request.getContextPath()%>/pgpencdec.jsp">PGP Tools</a> /
                     Key Generator
                 </nav>
+                <span class="pgk-header-pitch"><strong>RSA 2048/4096 PGP keys in-browser</strong> &mdash; need encrypt/decrypt? <a href="<%=request.getContextPath()%>/pgpencdec.jsp">PGP Tool &rarr;</a></span>
             </div>
             <div class="tool-page-badges">
                 <span class="tool-badge">OpenPGP RFC 4880</span>
-                <span class="tool-badge">RSA 2048-4096 bit</span>
+                <span class="tool-badge">RSA 2048-4096</span>
                 <span class="tool-badge">Python Compiler</span>
                 <span class="tool-badge">No Data Stored</span>
             </div>
         </div>
     </header>
 
-    <!-- Tool Description -->
-    <section class="tool-description-section">
-        <div class="tool-description-inner">
-            <div class="tool-description-content">
-                <p>Free online PGP key pair generator implementing OpenPGP standard (RFC 4880). Generate RSA public/private keys with multiple cipher options (AES-256, TWOFISH, BLOWFISH). Choose 2048 or 4096-bit key sizes. Run PGP key generation Python code in your browser. No data retained.</p>
-            </div>
-        </div>
-    </section>
-
     <!-- Main Content -->
     <main class="tool-page-container">
         <!-- ========== INPUT COLUMN (Compact) ========== -->
         <div class="tool-input-column">
             <div class="tool-card">
-                <form id="pgkForm" method="POST" enctype="application/x-www-form-urlencoded">
+                <%@ include file="modern/components/pgp-tool-input-tabs.inc.jsp" %>
+            </div>
+        </div>
+        <!-- HIDDEN: legacy keygen form below — replaced by shared include. Will remove fully on next pass. -->
+        <div style="display:none" aria-hidden="true"><form id="legacyPgkForm-removed" method="POST" enctype="application/x-www-form-urlencoded">
                     <input type="hidden" name="methodName" id="methodName" value="GENERATE_PGEP_KEY">
                     <input type="hidden" name="j_csrf" value="<%=request.getSession().getId() %>">
                     <input type="hidden" id="email" name="email" value="">
@@ -682,14 +714,16 @@
                             &#128231; Email
                         </button>
                     </div>
-                </form>
-            </div>
-        </div>
+                </form></div>
 
         <!-- ========== OUTPUT COLUMN ========== -->
         <div class="tool-output-column">
             <!-- Tab bar -->
             <div class="pgp-output-tabs">
+                <button id="btnPgpAI" type="button" class="pgp-output-tab pgp-ai-tab" title="AI assistant (Ctrl+Shift+A)" aria-label="Open AI assistant">
+                    <svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:4px;"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062Z"/><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z"/></svg>
+                    AI Assistant
+                </button>
                 <button type="button" class="pgp-output-tab active" data-panel="output">Output</button>
                 <button type="button" class="pgp-output-tab" data-panel="python">&#9654; Try It Live</button>
             </div>
@@ -1341,6 +1375,29 @@
     window.toggleFaq = function(btn) {
         btn.parentElement.classList.toggle('open');
     };
+    </script>
+
+    <!-- Shared PGP tabs module (Encrypt / Decrypt / Generate Keys / Inspect-Dump) -->
+    <script type="module">
+    import { initPgpToolTabs } from '<%=request.getContextPath()%>/modern/js/pgp/pgp-tool-tabs.js?v=<%=cacheVersion%>';
+    // Start on Generate Keys since this is the dedicated keygen page.
+    initPgpToolTabs({ initialMode: 'genkey' });
+    </script>
+
+    <script type="module">
+    <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
+    import { createPgpAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/pgp-adapter.js';
+
+    const pgpAi = createPgpAssistant({ ...aiAssistantBoot });
+    pgpAi.mount();
+    document.getElementById('btnPgpAI')?.addEventListener('click', () => pgpAi.open());
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        pgpAi.open();
+      }
+    });
     </script>
 
     <!-- All JSON-LD schemas generated by seo-tool-page.jsp -->

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
-    request.setAttribute("aiToolId", "cryptography/pgp-encdec");
+    request.setAttribute("aiToolId", "cryptography/pgp");
 %>
 <%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
@@ -1895,9 +1895,9 @@ gpg --sign --encrypt --armor --recipient alice@example.com message.txt</div>
 
     <script type="module">
     <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
-    import { createPgpEncDecAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/pgp-encdec-adapter.js';
+    import { createPgpAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/pgp-adapter.js';
 
-    const pgpAi = createPgpEncDecAssistant({ ...aiAssistantBoot });
+    const pgpAi = createPgpAssistant({ ...aiAssistantBoot });
     pgpAi.mount();
     document.getElementById('btnPgpAI')?.addEventListener('click', () => pgpAi.open());
 
