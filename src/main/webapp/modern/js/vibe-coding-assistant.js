@@ -586,6 +586,10 @@ export class ToolAiAssistant {
    * @param {string[]} [opts.codeLangs]
    * @param {Function} [opts.getQuickActions]
    * @param {Function} [opts.onTurn]
+   * @param {(userText: string, assistant: ToolAiAssistant) => boolean|Promise<boolean>} [opts.onSend]
+   *   When returns true, default streaming send is skipped (tool handled the turn).
+   * @param {(content: string) => string} [opts.sanitizeForAi]
+   *   Strip secrets from history/context before sending to AI endpoints (tool-specific).
    * @param {Function} [opts.onError]
    * @param {boolean} [opts.markdown] - render Markdown in assistant bubbles (default true)
    * @param {number} [opts.maxInputLength] - clamp textarea input (default 8000)
@@ -645,6 +649,8 @@ export class ToolAiAssistant {
     this.focusApplyOnComplete = opts.focusApplyOnComplete !== false;
     this.getQuickActions = opts.getQuickActions;
     this.onTurn = opts.onTurn;
+    this.onSend = typeof opts.onSend === 'function' ? opts.onSend : null;
+    this.sanitizeForAi = typeof opts.sanitizeForAi === 'function' ? opts.sanitizeForAi : null;
     this.onError = opts.onError;
     this.useMarkdown = opts.markdown !== false;
     this.maxInputLength = Math.max(1, opts.maxInputLength ?? 8000);
@@ -1148,12 +1154,18 @@ export class ToolAiAssistant {
     try { return (this.seedContext() || '').trim(); } catch { return ''; }
   }
 
+  _sanitizeAiText(text) {
+    const raw = String(text ?? '');
+    return this.sanitizeForAi ? this.sanitizeForAi(raw) : raw;
+  }
+
   _buildMessages(userText, state, forceReset = false) {
     const trimmedUser = String(userText ?? '').trim();
     const msgs = [{ role: 'system', content: this._effectiveSystemPrompt() }];
 
     const priorHistory = this.history.slice(0, -1);
-    const snapshot = state != null ? state : this._readState();
+    const rawSnapshot = state != null ? state : this._readState();
+    const snapshot = this._sanitizeAiText(rawSnapshot).trim();
     const intent = forceReset ? 'reset' : this._classifyIntent(trimmedUser, priorHistory, snapshot);
     const freshOnly = this.policyFreshContextEnabled && this.prefs.freshContext;
 
@@ -1165,8 +1177,8 @@ export class ToolAiAssistant {
     msgs.push({
       role: 'user',
       content: haveContext
-        ? `[CURRENT CONTEXT]\n${snapshot}\n\n[USER]\n${trimmedUser}`
-        : trimmedUser,
+        ? `[CURRENT CONTEXT]\n${snapshot}\n\n[USER]\n${this._sanitizeAiText(trimmedUser)}`
+        : this._sanitizeAiText(trimmedUser),
     });
     return msgs;
   }
@@ -1211,6 +1223,8 @@ export class ToolAiAssistant {
       let content = String(turn.content ?? '').trim();
       if (!content) continue;
       if (turn.role !== 'user' && turn.role !== 'assistant') continue;
+      content = this._sanitizeAiText(content).trim();
+      if (!content) continue;
       if (turn.role === 'assistant') {
         try {
           content = this.compressTurn(content, ageFromEnd.get(i) ?? 0, 'assistant') || content;
@@ -1240,6 +1254,23 @@ export class ToolAiAssistant {
     this._setBusy(true);
     this._els.input.value = '';
     this._autoResize(this._els.input);
+
+    if (this.onSend) {
+      try {
+        const handled = await this.onSend(text, this);
+        if (handled) {
+          this._setBusy(false);
+          this._els.input.focus();
+          return;
+        }
+      } catch (err) {
+        this._renderSystemBubble(this._formatError(err), { kind: 'error', confidence: 'High' });
+        this.onError?.(err);
+        this._setBusy(false);
+        this._els.input.focus();
+        return;
+      }
+    }
 
     this.history.push({ role: 'user', content: text });
     this._appendBubble('user', text, { streaming: false });

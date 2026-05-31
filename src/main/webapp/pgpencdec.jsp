@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "cryptography/pgp-encdec");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,6 +68,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -334,6 +337,24 @@
         .pgp-output-tab:hover:not(.active){background:var(--border)}
         [data-theme="dark"] .pgp-output-tab{background:rgba(255,255,255,0.05)}
         [data-theme="dark"] .pgp-output-tab.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff}
+        /* AI Assistant button — sits in the tab bar but acts as a modal trigger, not a tab */
+        .pgp-ai-tab{flex:0 0 auto;padding:0.5rem 0.9rem;background:linear-gradient(135deg,#10b981 0%,#0ea5a4 100%);color:#fff;border-right:1.5px solid var(--border);display:inline-flex;align-items:center;justify-content:center;gap:0.25rem}
+        .pgp-ai-tab:hover{filter:brightness(1.08);color:#fff;background:linear-gradient(135deg,#10b981 0%,#0ea5a4 100%)}
+        [data-theme="dark"] .pgp-ai-tab{background:linear-gradient(135deg,#10b981 0%,#0ea5a4 100%);color:#fff}
+
+        /* Generate Keys form */
+        .pgk-options-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:0.4rem;margin-top:0.35rem;margin-bottom:0.75rem}
+        .pgk-option-label{display:flex;align-items:center;gap:0.35rem;padding:0.4rem 0.55rem;border:1px solid var(--border);border-radius:0.4rem;font-size:0.78rem;cursor:pointer;background:var(--bg-secondary);transition:all .12s;font-weight:500;color:var(--text-primary)}
+        .pgk-option-label:hover{border-color:#667eea}
+        .pgk-option-label input[type=radio]{margin:0}
+        .pgk-option-label.selected{border-color:#667eea;background:rgba(102,126,234,0.10);box-shadow:inset 0 0 0 1px rgba(102,126,234,0.35)}
+        .pgk-badge-rec,.pgk-badge-legacy,.pgk-badge-weak{font-size:0.6rem;font-weight:700;padding:0.05rem 0.35rem;border-radius:9999px;letter-spacing:0.04em;text-transform:uppercase;margin-left:auto}
+        .pgk-badge-rec{background:#10b98122;color:#047857}
+        .pgk-badge-legacy{background:#f59e0b22;color:#b45309}
+        .pgk-badge-weak{background:#ef444422;color:#b91c1c}
+        [data-theme="dark"] .pgk-option-label{background:rgba(255,255,255,0.04);color:var(--text-primary)}
+        [data-theme="dark"] .pgk-option-label.selected{background:rgba(102,126,234,0.18)}
+        .pgk-section-label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-top:0.6rem;margin-bottom:0.1rem}
         .pgp-panel{display:none;flex:1;min-height:0}.pgp-panel.active{display:flex;flex-direction:column}
         #pgp-panel-output .tool-result-card{flex:1}
         #pgp-panel-python{min-height:540px}
@@ -376,16 +397,38 @@
     <!-- Navigation -->
     <%@ include file="modern/components/nav-header.jsp" %>
 
-    <!-- Page Header -->
+    <!-- Page Header (compact) -->
+    <style>
+        .tool-page-header{padding:0.5rem 1rem !important;min-height:0 !important;border-bottom:1px solid var(--border)}
+        .tool-page-header-inner{display:flex !important;align-items:center !important;gap:0.75rem;flex-wrap:wrap;padding:0 !important;margin:0 auto !important;max-width:1400px}
+        .tool-page-header-inner > div:first-child{display:flex;align-items:baseline;gap:0.75rem;flex-wrap:wrap;min-width:0}
+        .tool-page-title{font-size:1.05rem !important;font-weight:700 !important;margin:0 !important;line-height:1.25 !important;letter-spacing:-0.01em}
+        .tool-breadcrumbs{font-size:0.72rem !important;line-height:1.25 !important;margin:0 !important;color:var(--text-secondary)}
+        .tool-breadcrumbs a{color:#667eea;text-decoration:none}
+        .tool-breadcrumbs a:hover{text-decoration:underline}
+        .pgp-header-pitch{font-size:0.72rem;line-height:1.25;color:var(--text-secondary);padding-left:0.6rem;margin-left:0.6rem;border-left:1px solid var(--border);white-space:nowrap}
+        .pgp-header-pitch strong{color:var(--text-primary);font-weight:600}
+        .tool-page-badges{display:flex;gap:0.3rem;margin-left:auto;flex-wrap:wrap}
+        .tool-page-badges .tool-badge{padding:0.12rem 0.45rem !important;font-size:0.66rem !important;line-height:1.3 !important;border-radius:9999px !important;font-weight:600;background:rgba(102,126,234,0.10);color:#667eea;border:1px solid rgba(102,126,234,0.25)}
+        [data-theme="dark"] .tool-page-badges .tool-badge{background:rgba(102,126,234,0.18);color:#a5b4fc;border-color:rgba(102,126,234,0.35)}
+        .tool-description-section{padding:0.4rem 1rem !important}
+        .tool-description-content p{font-size:0.78rem !important;line-height:1.5 !important;margin:0 !important;color:var(--text-secondary)}
+        @media (max-width:640px){
+            .tool-page-title{font-size:0.95rem !important}
+            .pgp-header-pitch{display:block;padding-left:0;margin-left:0;border-left:none;white-space:normal;margin-top:0.15rem}
+            .tool-page-badges{margin-left:0}
+        }
+    </style>
     <header class="tool-page-header">
         <div class="tool-page-header-inner">
             <div>
                 <h1 class="tool-page-title">PGP Encryption & Decryption</h1>
-                <nav class="tool-breadcrumbs">
+                <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                     <a href="<%=request.getContextPath()%>/index.jsp#cryptography">Cryptography</a> /
                     PGP Tool
                 </nav>
+                <span class="pgp-header-pitch"><strong>Encrypt &amp; decrypt PGP in-browser</strong> — RSA + AES-256, no data stored.</span>
             </div>
             <div class="tool-page-badges">
                 <span class="tool-badge">OpenPGP RFC 4880</span>
@@ -396,11 +439,10 @@
         </div>
     </header>
 
-    <!-- Tool Description -->
     <section class="tool-description-section">
         <div class="tool-description-inner">
-            <div class="tool-description-content">
-                <p>Free online PGP encrypt and decrypt tool with a built-in Python compiler. Encrypt messages with the recipient's public key, decrypt with your private key and passphrase, and run PGP Python code directly in your browser. Share encrypted messages via URL or email. No data stored, no software to install.</p>
+            <div class="tool-description-ad" style="width:100%;">
+                <%@ include file="modern/ads/ad-in-content-top.jsp" %>
             </div>
         </div>
     </section>
@@ -417,6 +459,12 @@
                     </button>
                     <button type="button" class="tool-tab" data-mode="decrypt" role="tab">
                         <span>&#128275;</span> Decrypt Message
+                    </button>
+                    <button type="button" class="tool-tab" data-mode="genkey" role="tab">
+                        <span>&#128273;</span> Generate Keys
+                    </button>
+                    <button type="button" class="tool-tab" data-mode="dump" role="tab">
+                        <span>&#128269;</span> Inspect / Dump
                     </button>
                 </div>
 
@@ -539,6 +587,89 @@ lQH+BFojjHkBBACJghEFJ0kOeHnvpp5ADbI8r2ZtkLAtbBiARKZsiW4dsVrpbify
                         </div>
                     </div>
                 </form>
+
+                <!-- ========== GENERATE KEYS SECTION (separate form) ========== -->
+                <form id="pgkForm" method="POST" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="methodName" value="GENERATE_PGEP_KEY">
+                    <input type="hidden" name="j_csrf" value="<%=request.getSession().getId() %>">
+                    <input type="hidden" name="email" value="">
+
+                    <div id="genkeySection" class="tool-form-section">
+                        <div class="tool-input-card" style="max-width:none;">
+                            <div class="tool-input-card-header">
+                                <span class="tool-input-card-icon">&#128273;</span>
+                                <h4>Generate PGP Key Pair</h4>
+                            </div>
+
+                            <div class="tool-form-group">
+                                <label class="tool-label" for="pgk_identity">Identity <span class="tool-badge tool-badge-info">Required</span></label>
+                                <p class="tool-hint">Name or email address (e.g., <code>alice@example.com</code>)</p>
+                                <input type="text" class="tool-input" id="pgk_identity" name="p_identity" placeholder="alice@example.com" autocomplete="off">
+                            </div>
+
+                            <div class="tool-form-group">
+                                <label class="tool-label" for="pgk_passpharse">Passphrase <span class="tool-badge tool-badge-info">Required</span></label>
+                                <p class="tool-hint">Protects the private key (min 8 characters recommended)</p>
+                                <input type="password" class="tool-input" id="pgk_passpharse" name="p_passpharse" placeholder="Strong passphrase" autocomplete="new-password">
+                            </div>
+
+                            <div class="pgk-section-label">&#128274; Cipher Algorithm</div>
+                            <div class="pgk-options-grid" id="pgkCipherGrid">
+                                <label class="pgk-option-label selected"><input type="radio" name="cipherparameter" value="AES_256" checked><span>AES-256</span><span class="pgk-badge-rec">REC</span></label>
+                                <label class="pgk-option-label"><input type="radio" name="cipherparameter" value="AES_192"><span>AES-192</span></label>
+                                <label class="pgk-option-label"><input type="radio" name="cipherparameter" value="AES_128"><span>AES-128</span></label>
+                                <label class="pgk-option-label"><input type="radio" name="cipherparameter" value="TWOFISH"><span>TWOFISH</span></label>
+                                <label class="pgk-option-label"><input type="radio" name="cipherparameter" value="BLOWFISH"><span>BLOWFISH</span><span class="pgk-badge-legacy">Legacy</span></label>
+                                <label class="pgk-option-label"><input type="radio" name="cipherparameter" value="CAST5"><span>CAST5</span><span class="pgk-badge-legacy">Legacy</span></label>
+                                <label class="pgk-option-label"><input type="radio" name="cipherparameter" value="TRIPLE_DES"><span>3DES</span><span class="pgk-badge-legacy">Legacy</span></label>
+                            </div>
+
+                            <div class="pgk-section-label">&#128207; RSA Key Size</div>
+                            <div class="pgk-options-grid" id="pgkKeysizeGrid">
+                                <label class="pgk-option-label selected"><input type="radio" name="p_keysize" value="2048" checked><span>2048-bit</span><span class="pgk-badge-rec">REC</span></label>
+                                <label class="pgk-option-label"><input type="radio" name="p_keysize" value="4096"><span>4096-bit</span></label>
+                                <label class="pgk-option-label"><input type="radio" name="p_keysize" value="1024"><span>1024-bit</span><span class="pgk-badge-weak">Weak</span></label>
+                            </div>
+
+                            <div class="tool-info-box">&#128161; Keys are generated server-side via CSRNG and never stored. Save the private key locally — losing it means losing access.</div>
+
+                            <div class="tool-form-actions">
+                                <button type="button" class="tool-action-btn" id="genkeyBtn">
+                                    &#128273; Generate Key Pair
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- ========== INSPECT / DUMP SECTION ========== -->
+                <form id="pgpDumpForm" method="POST" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="methodName" value="PGP_DUMP">
+
+                    <div id="dumpSection" class="tool-form-section">
+                        <div class="tool-input-card" style="max-width:none;">
+                            <div class="tool-input-card-header">
+                                <span class="tool-input-card-icon">&#128269;</span>
+                                <h4>Decode PGP Packet Structure</h4>
+                            </div>
+                            <div class="tool-form-group">
+                                <label class="tool-label" for="p_dump">PGP Block <span class="tool-badge tool-badge-info">Required</span></label>
+                                <p class="tool-hint">Paste a public/private key, PGP message, or signature block. The server parses it per RFC 4880 and shows packet tags, algorithms, key sizes, and fingerprints.</p>
+                                <textarea class="tool-textarea auto-resize" id="p_dump" name="p_dump" placeholder="-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: ...
+
+mQENBF...
+-----END PGP PUBLIC KEY BLOCK-----"></textarea>
+                                <div class="tool-info-box">&#128161; Accepted blocks: <code>PGP PUBLIC KEY BLOCK</code>, <code>PGP PRIVATE KEY BLOCK</code>, <code>PGP MESSAGE</code>, <code>PGP SIGNATURE</code>.</div>
+                            </div>
+                            <div class="tool-form-actions">
+                                <button type="button" class="tool-action-btn" id="dumpBtn">
+                                    &#128270; Inspect Packets
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -546,6 +677,10 @@ lQH+BFojjHkBBACJghEFJ0kOeHnvpp5ADbI8r2ZtkLAtbBiARKZsiW4dsVrpbify
         <div class="tool-output-column">
             <!-- Tab bar -->
             <div class="pgp-output-tabs">
+                <button id="btnPgpAI" type="button" class="pgp-output-tab pgp-ai-tab" title="AI assistant (Ctrl+Shift+A)" aria-label="Open AI assistant">
+                    <svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:4px;"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062Z"/><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z"/></svg>
+                    AI Assistant
+                </button>
                 <button type="button" class="pgp-output-tab active" data-panel="output">Output</button>
                 <button type="button" class="pgp-output-tab" data-panel="python">&#9654; Try It Live</button>
             </div>
@@ -1063,16 +1198,231 @@ gpg --sign --encrypt --armor --recipient alice@example.com message.txt</div>
             if (mode === 'encrypt') {
                 $('#encryptSection').addClass('active');
                 $('#encryptdecrypt').val('encrypt');
-            } else {
+            } else if (mode === 'decrypt') {
                 $('#decryptSection').addClass('active');
                 $('#encryptdecrypt').val('decrypt');
+            } else if (mode === 'genkey') {
+                $('#genkeySection').addClass('active');
+            } else if (mode === 'dump') {
+                $('#dumpSection').addClass('active');
             }
-            resetOutput();
+            resetOutput(mode);
         }
 
-        function resetOutput() {
-            const isEncrypt = $('#encryptdecrypt').val() === 'encrypt';
+        // ========== KEYGEN: radio selection styling ==========
+        $('#pgkCipherGrid, #pgkKeysizeGrid').on('change', 'input[type=radio]', function() {
+            const $grp = $(this).closest('.pgk-options-grid');
+            $grp.find('.pgk-option-label').removeClass('selected');
+            $(this).closest('.pgk-option-label').addClass('selected');
+        });
+
+        // ========== KEYGEN: submit ==========
+        $('#genkeyBtn').on('click', function() {
+            const identity = $('#pgk_identity').val().trim();
+            const passphrase = $('#pgk_passpharse').val();
+            const cipher = $('input[name="cipherparameter"]:checked').val();
+            const keysize = $('input[name="p_keysize"]:checked').val();
+
+            const errors = [];
+            if (!identity) errors.push('Identity is required (name or email).');
+            if (!/^[a-z0-9@. ]+$/i.test(identity)) errors.push('Identity may only contain letters, digits, spaces, @, and .');
+            if (!passphrase) errors.push('Passphrase is required.');
+
+            if (errors.length) {
+                if (typeof ToolUtils !== 'undefined') {
+                    ToolUtils.showError('Validation Failed', '#output', errors);
+                } else {
+                    $('#output').html('<div class="tool-alert tool-alert-error">' + errors.join('<br>') + '</div>');
+                }
+                return;
+            }
+
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.showLoading('Generating ' + keysize + '-bit RSA key pair (' + cipher + ')... up to ~30s for 4096-bit', '#output');
+            } else {
+                $('#output').html('<div style="text-align:center;padding:2rem;">Generating keys...</div>');
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: 'PGPFunctionality',
+                data: $('#pgkForm').serialize(),
+                success: function(msg) {
+                    let modernMsg = msg
+                        .replace(/<font[^>]*color\s*=\s*["']green["'][^>]*>/gi, '<div class="tool-alert tool-alert-success">')
+                        .replace(/<font[^>]*color\s*=\s*["']red["'][^>]*>/gi, '<div class="tool-alert tool-alert-error">');
+                    const closeCount = (modernMsg.match(/<div class="tool-alert/g) || []).length;
+                    for (let i = 0; i < closeCount; i++) modernMsg = modernMsg.replace('</font>', '</div>');
+
+                    $('#output').empty().append(modernMsg);
+
+                    // Attach copy/download buttons to each generated key textarea
+                    $('#output textarea').each(function(idx) {
+                        const ta = $(this);
+                        const taId = 'pgk_keyout_' + idx;
+                        ta.attr('id', taId);
+                        const isPriv = (ta.val() || '').indexOf('PRIVATE') !== -1;
+                        const filename = isPriv ? 'pgp_private_key.asc' : 'pgp_public_key.asc';
+                        const actions = $(
+                            '<div style="display:flex;gap:0.5rem;margin:0.4rem 0 1rem;">' +
+                              '<button type="button" class="tool-btn tool-btn-sm pgk-out-copy" data-target="' + taId + '">&#128203; Copy</button>' +
+                              '<button type="button" class="tool-btn tool-btn-sm pgk-out-dl" data-target="' + taId + '" data-filename="' + filename + '">&#8681; Download</button>' +
+                            '</div>'
+                        );
+                        ta.after(actions);
+                    });
+
+                    const ok = modernMsg.indexOf('tool-alert-error') === -1 && modernMsg.indexOf('System Error') === -1;
+                    if (ok && typeof ToolUtils !== 'undefined') {
+                        ToolUtils.showToast('Key pair generated for ' + identity, 3000, 'success');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    if (typeof ToolUtils !== 'undefined') {
+                        ToolUtils.showError(error || 'Key generation failed', '#output', ['Check your connection and retry', '4096-bit keys may take 20-40 seconds']);
+                    } else {
+                        $('#output').html('<div class="tool-alert tool-alert-error">Key generation failed. Try again.</div>');
+                    }
+                }
+            });
+        });
+
+        // Copy / Download delegated handlers for generated keys
+        $(document).on('click', '.pgk-out-copy', function() {
+            const txt = $('#' + $(this).data('target')).val();
+            if (!txt) return;
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.copyToClipboard(txt, { showToast: true, toastMessage: 'Key copied to clipboard!' });
+            } else {
+                const ta = document.getElementById($(this).data('target'));
+                ta.select(); document.execCommand('copy');
+            }
+        });
+        $(document).on('click', '.pgk-out-dl', function() {
+            const txt = $('#' + $(this).data('target')).val();
+            const filename = $(this).data('filename') || 'pgp_key.asc';
+            if (!txt) return;
+            if (typeof ToolUtils !== 'undefined' && ToolUtils.downloadAsFile) {
+                ToolUtils.downloadAsFile(txt, filename, { showToast: true, toastMessage: filename + ' downloaded' });
+            } else {
+                const blob = new Blob([txt], { type: 'application/pgp-keys' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob); a.download = filename; a.click();
+                URL.revokeObjectURL(a.href);
+            }
+        });
+
+        // ========== PGP DUMP / INSPECT: submit ==========
+        $('#dumpBtn').on('click', function() {
+            const raw = $('#p_dump').val();
+            if (!raw || !raw.trim()) {
+                if (typeof ToolUtils !== 'undefined') {
+                    ToolUtils.showError('Missing Input', '#output', ['Paste a PGP key, message, or signature block.']);
+                } else {
+                    $('#output').html('<div class="tool-alert tool-alert-error">Paste a PGP block to inspect.</div>');
+                }
+                return;
+            }
+
+            const hasMarker = /-----BEGIN PGP (PUBLIC KEY BLOCK|PRIVATE KEY BLOCK|MESSAGE|SIGNATURE)-----/.test(raw);
+            if (!hasMarker) {
+                if (typeof ToolUtils !== 'undefined') {
+                    ToolUtils.showError('Invalid PGP Format', '#output', ['Input must include a BEGIN/END PGP armor block.']);
+                } else {
+                    $('#output').html('<div class="tool-alert tool-alert-error">Input must include a BEGIN/END PGP armor block.</div>');
+                }
+                return;
+            }
+
+            if (typeof ToolUtils !== 'undefined') {
+                ToolUtils.showLoading('Parsing PGP packets...', '#output');
+            } else {
+                $('#output').html('<div style="text-align:center;padding:2rem;">Parsing...</div>');
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: 'PGPFunctionality',
+                data: $('#pgpDumpForm').serialize(),
+                success: function(msg) {
+                    let modernMsg = msg
+                        .replace(/<font[^>]*color\s*=\s*["']green["'][^>]*>/gi, '<div class="tool-alert tool-alert-success">')
+                        .replace(/<font[^>]*color\s*=\s*["']red["'][^>]*>/gi, '<div class="tool-alert tool-alert-error">');
+                    const closeCount = (modernMsg.match(/<div class="tool-alert/g) || []).length;
+                    for (let i = 0; i < closeCount; i++) modernMsg = modernMsg.replace('</font>', '</div>');
+
+                    $('#output').empty().append(modernMsg);
+
+                    // Attach Copy button to the dumped packet textarea
+                    $('#output textarea').each(function(idx) {
+                        const ta = $(this);
+                        const taId = 'pgp_dump_out_' + idx;
+                        ta.attr('id', taId);
+                        const actions = $(
+                            '<div style="display:flex;gap:0.5rem;margin:0.4rem 0 1rem;">' +
+                              '<button type="button" class="tool-btn tool-btn-sm pgk-out-copy" data-target="' + taId + '">&#128203; Copy</button>' +
+                              '<button type="button" class="tool-btn tool-btn-sm pgk-out-dl" data-target="' + taId + '" data-filename="pgp_packet_dump.txt">&#8681; Download</button>' +
+                            '</div>'
+                        );
+                        ta.after(actions);
+                    });
+
+                    const ok = modernMsg.indexOf('tool-alert-error') === -1 && modernMsg.indexOf('alert-danger') === -1 && modernMsg.indexOf('System Error') === -1;
+                    if (ok && typeof ToolUtils !== 'undefined') {
+                        ToolUtils.showToast('PGP packets parsed', 2500, 'success');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    if (typeof ToolUtils !== 'undefined') {
+                        ToolUtils.showError(error || 'Failed to parse PGP block', '#output', ['Verify the block is complete (BEGIN + END markers)', 'Check your connection']);
+                    } else {
+                        $('#output').html('<div class="tool-alert tool-alert-error">Failed to parse PGP block.</div>');
+                    }
+                }
+            });
+        });
+
+        function resetOutput(modeOverride) {
+            const mode = modeOverride || ($('.tool-tab.active').data('mode')) || ($('#encryptdecrypt').val());
             var html;
+
+            if (mode === 'genkey') {
+                html = '<div class="tool-empty-state" id="pgpEmptyState">' +
+                    '<div class="pgp-flow" id="pgpFlow">' +
+                    '<div class="pgp-flow-mode">PGP Key Generation</div>' +
+                    '<div class="pgp-flow-row">' +
+                      '<div class="pgp-flow-box pgp-flow-plaintext">Identity + Passphrase</div>' +
+                      '<div class="pgp-flow-arrow"><div class="pgp-flow-arrow-line"></div><div class="pgp-flow-arrow-dot"></div><div class="pgp-flow-arrow-head"></div></div>' +
+                      '<div class="pgp-flow-box pgp-flow-engine">RSA Keygen<div class="pgp-flow-engine-label">CSRNG</div></div>' +
+                      '<div class="pgp-flow-arrow"><div class="pgp-flow-arrow-line"></div><div class="pgp-flow-arrow-dot" style="animation-delay:1s;"></div><div class="pgp-flow-arrow-head"></div></div>' +
+                      '<div class="pgp-flow-box pgp-flow-ciphertext" style="font-size:0.625rem;">Key Pair</div>' +
+                    '</div>' +
+                    '<p class="pgp-flow-caption">Enter an identity + passphrase, pick cipher and key size, then click Generate.</p>' +
+                    '</div></div>';
+                $('#output').html(html);
+                $('#resultActions').removeClass('visible');
+                return;
+            }
+
+            if (mode === 'dump') {
+                html = '<div class="tool-empty-state" id="pgpEmptyState">' +
+                    '<div class="pgp-flow" id="pgpFlow">' +
+                    '<div class="pgp-flow-mode">PGP Packet Inspector</div>' +
+                    '<div class="pgp-flow-row">' +
+                      '<div class="pgp-flow-box pgp-flow-ciphertext" style="font-size:0.65rem;">PGP Block</div>' +
+                      '<div class="pgp-flow-arrow"><div class="pgp-flow-arrow-line"></div><div class="pgp-flow-arrow-dot"></div><div class="pgp-flow-arrow-head"></div></div>' +
+                      '<div class="pgp-flow-box pgp-flow-engine">RFC 4880 Parser<div class="pgp-flow-engine-label">pgpdump</div></div>' +
+                      '<div class="pgp-flow-arrow"><div class="pgp-flow-arrow-line"></div><div class="pgp-flow-arrow-dot" style="animation-delay:1s;"></div><div class="pgp-flow-arrow-head"></div></div>' +
+                      '<div class="pgp-flow-box pgp-flow-plaintext">Packets</div>' +
+                    '</div>' +
+                    '<p class="pgp-flow-caption">Paste any armored PGP block to see packet tags, algorithm IDs, key sizes, and fingerprints.</p>' +
+                    '</div></div>';
+                $('#output').html(html);
+                $('#resultActions').removeClass('visible');
+                return;
+            }
+
+            const isEncrypt = (mode === 'encrypt');
 
             if (isEncrypt) {
                 html = '<div class="tool-empty-state" id="pgpEmptyState">' +
@@ -1194,31 +1544,57 @@ gpg --sign --encrypt --armor --recipient alice@example.com message.txt</div>
             });
         });
 
-        // ========== SEND EMAIL ==========
+        // ========== SEND EMAIL (AJAX — keeps user on the page) ==========
         $('#sendEmail').on('click', function() {
             const text = getResultText();
-            if (text) {
-                $("#pgp_message").val(text);
-            }
-
             if (!text || text.trim() === '') {
                 ToolUtils.showToast('Encrypt the message first', 3000, 'warning');
                 return;
             }
 
-            const email = prompt("Please enter recipient's email address:");
+            const email = prompt("Send the encrypted message to which email address?");
             if (!email) return;
 
             const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-            if (email.match(validRegex)) {
-                $("#methodName").val("PGP_SEND_ENCRYPTION_EMAIL");
-                $("#email").val(email);
-                $('#pgpForm').delay(200).submit();
-                $("#methodName").val("PGP_ENCRYPTION_DECRYPTION");
-                ToolUtils.showToast('Sending encrypted message...', 2000, 'info');
-            } else {
+            if (!validRegex.test(email)) {
                 ToolUtils.showToast('Invalid email address', 3000, 'error');
+                return;
             }
+
+            const $btn = $(this);
+            const originalLabel = $btn.html();
+            $btn.prop('disabled', true).html('<span>&#9203;</span> Sending...');
+            ToolUtils.showToast('Sending encrypted message...', 2000, 'info');
+
+            $.ajax({
+                type: 'POST',
+                url: 'PGPFunctionality',
+                data: {
+                    methodName: 'PGP_SEND_ENCRYPTION_EMAIL',
+                    j_csrf: $('input[name="j_csrf"]', '#pgpForm').val(),
+                    email: email,
+                    pgp_message: text,
+                    p_cmsg: $('#p_cmsg').val() || ''
+                },
+                success: function(msg) {
+                    const lower = (msg || '').toLowerCase();
+                    const ok = lower.indexOf('successfully') !== -1 && lower.indexOf('invalid') === -1;
+                    if (ok) {
+                        ToolUtils.showToast('Encrypted message sent to ' + email, 4000, 'success');
+                    } else {
+                        const reason = lower.indexOf('invalid email') !== -1 ? 'Server rejected the email address'
+                                     : lower.indexOf('csrf') !== -1 ? 'Session expired — refresh and try again'
+                                     : 'Email delivery failed';
+                        ToolUtils.showToast(reason, 4000, 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    ToolUtils.showToast(error || 'Email delivery failed', 4000, 'error');
+                },
+                complete: function() {
+                    $btn.prop('disabled', false).html(originalLabel);
+                }
+            });
         });
 
         // ========== BUTTON HANDLERS ==========
@@ -1515,6 +1891,22 @@ gpg --sign --encrypt --armor --recipient alice@example.com message.txt</div>
 
     // Set initial active tab style
     document.querySelector('.pgp-code-tab.active').style.color = '#4ec9b0';
+    </script>
+
+    <script type="module">
+    <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
+    import { createPgpEncDecAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/pgp-encdec-adapter.js';
+
+    const pgpAi = createPgpEncDecAssistant({ ...aiAssistantBoot });
+    pgpAi.mount();
+    document.getElementById('btnPgpAI')?.addEventListener('click', () => pgpAi.open());
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        pgpAi.open();
+      }
+    });
     </script>
 
     <!-- All JSON-LD schemas (WebApplication, BreadcrumbList, HowTo, FAQ) generated by seo-tool-page.jsp -->
