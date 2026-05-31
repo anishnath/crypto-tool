@@ -1,0 +1,88 @@
+/* Shared PGP tool styles — used by pgpencdec.jsp and pgpkeyfunction.jsp via pgp-tool-input-tabs.inc.jsp */
+
+/* Tab panel visibility — only the .active section renders */
+.tool-form-section { display: none; padding: 1.25rem; }
+.tool-form-section.active { display: block; }
+
+.pgk-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 0.4rem;
+    margin-top: 0.35rem;
+    margin-bottom: 0.75rem;
+}
+
+.pgk-option-label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 0.4rem;
+    font-size: 0.78rem;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    transition: all .12s;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.pgk-option-label:hover { border-color: #667eea; }
+.pgk-option-label input[type=radio] { margin: 0; }
+
+.pgk-option-label.selected {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.10);
+    box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.35);
+}
+
+.pgk-badge-rec,
+.pgk-badge-legacy,
+.pgk-badge-weak {
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.05rem 0.35rem;
+    border-radius: 9999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-left: auto;
+}
+
+.pgk-badge-rec    { background: #10b98122; color: #047857; }
+.pgk-badge-legacy { background: #f59e0b22; color: #b45309; }
+.pgk-badge-weak   { background: #ef444422; color: #b91c1c; }
+
+[data-theme="dark"] .pgk-option-label { background: rgba(255, 255, 255, 0.04); color: var(--text-primary); }
+[data-theme="dark"] .pgk-option-label.selected { background: rgba(102, 126, 234, 0.18); }
+
+.pgk-section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    margin-top: 0.6rem;
+    margin-bottom: 0.1rem;
+}
+
+/* AI Assistant button styling — sits in the tab bar but opens modal, not panel */
+.pgp-ai-tab {
+    flex: 0 0 auto;
+    padding: 0.5rem 0.9rem;
+    background: linear-gradient(135deg, #10b981 0%, #0ea5a4 100%);
+    color: #fff;
+    border-right: 1.5px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+.pgp-ai-tab:hover {
+    filter: brightness(1.08);
+    color: #fff;
+    background: linear-gradient(135deg, #10b981 0%, #0ea5a4 100%);
+}
+[data-theme="dark"] .pgp-ai-tab {
+    background: linear-gradient(135deg, #10b981 0%, #0ea5a4 100%);
+    color: #fff;
+}
