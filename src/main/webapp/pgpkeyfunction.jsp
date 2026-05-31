@@ -62,20 +62,20 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/pgp-tool.css?v=<%=cacheVersion%>">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/pgp-tool.css">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
     </noscript>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
@@ -611,6 +611,15 @@
         </div>
     </header>
 
+
+    <section class="tool-description-section">
+        <div class="tool-description-inner">
+            <div class="tool-description-ad" style="width:100%;">
+                <%@ include file="modern/ads/ad-in-content-top.jsp" %>
+            </div>
+        </div>
+    </section>
+
     <!-- Main Content -->
     <main class="tool-page-container">
         <!-- ========== INPUT COLUMN (Compact) ========== -->
@@ -964,9 +973,9 @@
     <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
     <%@ include file="modern/components/analytics.jsp" %>
 
-    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
 
     <!-- Email Modal -->
     <div class="pgk-modal-overlay" id="emailModal">
@@ -1379,7 +1388,7 @@
 
     <!-- Shared PGP tabs module (Encrypt / Decrypt / Generate Keys / Inspect-Dump) -->
     <script type="module">
-    import { initPgpToolTabs } from '<%=request.getContextPath()%>/modern/js/pgp/pgp-tool-tabs.js?v=<%=cacheVersion%>';
+    import { initPgpToolTabs } from '<%=request.getContextPath()%>/modern/js/pgp/pgp-tool-tabs.js';
     // Start on Generate Keys since this is the dedicated keygen page.
     initPgpToolTabs({ initialMode: 'genkey' });
     </script>
