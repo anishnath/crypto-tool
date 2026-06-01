@@ -12,6 +12,7 @@ public class sshpojo implements Serializable {
 	
 	private String publicKey;
 	private String privateKey;
+	private String privateKeyPpk;
 	private String algo;
 	private String fingerprint;
 	private int keySize;
@@ -38,6 +39,18 @@ public class sshpojo implements Serializable {
 
 	public void setPrivateKey(String privateKey) {
 		this.privateKey = privateKey;
+	}
+
+
+
+	public String getPrivateKeyPpk() {
+		return privateKeyPpk;
+	}
+
+
+
+	public void setPrivateKeyPpk(String privateKeyPpk) {
+		this.privateKeyPpk = privateKeyPpk;
 	}
 
 

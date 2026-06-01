@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 public class SSHFunctionality extends HttpServlet {
     private static final long serialVersionUID = 2L;
     private static final String METHOD_GENERATE_SSHKEYGEN = "GENERATE_SSHKEYGEN";
+    private static final String METHOD_CONVERT_SSH_KEY    = "CONVERT_SSH_KEY";
 
 
 
@@ -191,6 +192,11 @@ public class SSHFunctionality extends HttpServlet {
                 urlParameters.add(new BasicNameValuePair("p_algo", algo));
                 urlParameters.add(new BasicNameValuePair("p_passphrase", passphrase));
 
+                // Opt-in: also produce PuTTY .ppk alongside the OpenSSH key.
+                String includePpk = request.getParameter("include_ppk");
+                if ("true".equalsIgnoreCase(includePpk) || "on".equalsIgnoreCase(includePpk)) {
+                    urlParameters.add(new BasicNameValuePair("p_include_ppk", "true"));
+                }
 
                 post.setEntity(new UrlEncodedFormEntity(urlParameters));
                 post.addHeader("accept", "application/json");
@@ -229,6 +235,10 @@ public class SSHFunctionality extends HttpServlet {
                     successResponse.setMessage(sshpojo.getPublicKey());  // Public key
                     successResponse.setBase64Encoded(sshpojo.getPrivateKey());  // Private key
                     successResponse.setHexEncoded(sshpojo.getFingerprint());  // Fingerprint
+                    // Optional: PuTTY .ppk format if the user requested it
+                    if (sshpojo.getPrivateKeyPpk() != null && sshpojo.getPrivateKeyPpk().length() > 0) {
+                        successResponse.setPrivateKeyPpk(sshpojo.getPrivateKeyPpk());
+                    }
 
                     // Store keys in session for potential email sending
                     request.getSession().setAttribute("ssh_private_key", sshpojo.getPrivateKey());
@@ -314,6 +324,90 @@ public class SSHFunctionality extends HttpServlet {
 
         }
 
+
+        if (METHOD_CONVERT_SSH_KEY.equals(methodName)) {
+            // User pasted a private key — proxy to crypto-ws /ssh/convert and return the .ppk.
+            String privateKey = request.getParameter("p_private_key");
+            String passphrase = request.getParameter("p_passphrase");
+
+            Gson gson = new Gson();
+
+            if (privateKey == null || privateKey.trim().length() == 0) {
+                EncodedMessage err = new EncodedMessage();
+                err.setSuccess(false);
+                err.setOperation("convert");
+                err.setErrorMessage("Private key is required. Paste an OpenSSH or PEM-encoded key.");
+                out.println(gson.toJson(err));
+                return;
+            }
+
+            if (passphrase != null && passphrase.length() > 256) {
+                EncodedMessage err = new EncodedMessage();
+                err.setSuccess(false);
+                err.setOperation("convert");
+                err.setErrorMessage("Passphrase too long (max 256 characters).");
+                out.println(gson.toJson(err));
+                return;
+            }
+
+            try {
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "ssh/convert";
+                HttpPost post = new HttpPost(url1);
+                post.addHeader("accept", "application/json");
+
+                List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+                urlParameters.add(new BasicNameValuePair("p_private_key", privateKey));
+                urlParameters.add(new BasicNameValuePair("p_passphrase", passphrase == null ? "" : passphrase));
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+                HttpResponse response1 = httpClient.execute(post);
+                int status = response1.getStatusLine().getStatusCode();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(response1.getEntity().getContent()));
+                StringBuilder content = new StringBuilder();
+                String line;
+                while (null != (line = br.readLine())) {
+                    content.append(line);
+                }
+                String body = content.toString();
+
+                if (status != 200) {
+                    // Backend returns plain-text error message on 400; surface it directly.
+                    EncodedMessage err = new EncodedMessage();
+                    err.setSuccess(false);
+                    err.setOperation("convert");
+                    err.setErrorMessage(body == null || body.length() == 0
+                            ? "Conversion failed (backend status " + status + ")"
+                            : body);
+                    out.println(gson.toJson(err));
+                    return;
+                }
+
+                sshpojo sshpojo = gson.fromJson(body, sshpojo.class);
+                if (sshpojo == null || sshpojo.getPrivateKeyPpk() == null || sshpojo.getPrivateKeyPpk().length() == 0) {
+                    EncodedMessage err = new EncodedMessage();
+                    err.setSuccess(false);
+                    err.setOperation("convert");
+                    err.setErrorMessage("Conversion succeeded but no PPK was returned.");
+                    out.println(gson.toJson(err));
+                    return;
+                }
+
+                EncodedMessage ok = new EncodedMessage();
+                ok.setSuccess(true);
+                ok.setOperation("convert");
+                ok.setPrivateKeyPpk(sshpojo.getPrivateKeyPpk());
+                out.println(gson.toJson(ok));
+
+            } catch (Exception ex) {
+                EncodedMessage err = new EncodedMessage();
+                err.setSuccess(false);
+                err.setOperation("convert");
+                err.setErrorMessage("System error: " + ex.getMessage());
+                out.println(gson.toJson(err));
+            }
+        }
 
     }
 

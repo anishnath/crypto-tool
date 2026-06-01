@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "security/ssh-keygen");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,6 +72,7 @@
     </noscript>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <!-- Tool-specific styles -->
     <style>
@@ -90,6 +93,10 @@
         .rsa-output-tab:hover:not(.active){background:var(--bg-tertiary)}
         [data-theme="dark"] .rsa-output-tab{background:var(--bg-tertiary)}
         [data-theme="dark"] .rsa-output-tab.active{background:var(--tool-gradient);color:#fff}
+        /* AI Assistant button — modal trigger, NOT a panel tab (no rsa-output-tab class) */
+        .rsa-ai-tab{flex:0 0 auto;padding:0.5rem 0.9rem;font-weight:600;font-size:0.8125rem;border:none;border-right:1.5px solid var(--border);cursor:pointer;font-family:var(--font-sans);background:linear-gradient(135deg,#10b981 0%,#0ea5a4 100%);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:0.25rem;transition:all .15s}
+        .rsa-ai-tab:hover{filter:brightness(1.08);color:#fff;background:linear-gradient(135deg,#10b981 0%,#0ea5a4 100%)}
+        [data-theme="dark"] .rsa-ai-tab{background:linear-gradient(135deg,#10b981 0%,#0ea5a4 100%);color:#fff}
         .rsa-panel{display:none;flex:1;min-height:0}.rsa-panel.active{display:flex;flex-direction:column}
         .terminal-block{background:#1e1e1e;border-radius:0.5rem;overflow:hidden;margin-bottom:0.75rem}
         .terminal-header{background:#323232;color:#d4d4d4;padding:0.5rem 0.75rem;font-size:0.75rem;display:flex;justify-content:space-between;align-items:center}
@@ -164,36 +171,56 @@
 <body>
     <%@ include file="modern/components/nav-header.jsp" %>
 
-    <!-- Page Header -->
+    <!-- Page Header (compact) -->
+    <style>
+        .tool-page-header{padding:0.5rem 1rem !important;min-height:0 !important;border-bottom:1px solid var(--border)}
+        .tool-page-header-inner{display:flex !important;align-items:center !important;gap:0.75rem;flex-wrap:wrap;padding:0 !important;margin:0 auto !important;max-width:1400px}
+        .tool-page-header-inner > div:first-child{display:flex;align-items:baseline;gap:0.75rem;flex-wrap:wrap;min-width:0}
+        .tool-page-title{font-size:1.05rem !important;font-weight:700 !important;margin:0 !important;line-height:1.25 !important;letter-spacing:-0.01em}
+        .tool-breadcrumbs{font-size:0.72rem !important;line-height:1.25 !important;margin:0 !important;color:var(--text-secondary)}
+        .tool-breadcrumbs a{color:var(--tool-primary,#667eea);text-decoration:none}
+        .tool-breadcrumbs a:hover{text-decoration:underline}
+        .ssh-header-pitch{font-size:0.72rem;line-height:1.25;color:var(--text-secondary);padding-left:0.6rem;margin-left:0.6rem;border-left:1px solid var(--border);white-space:nowrap}
+        .ssh-header-pitch strong{color:var(--text-primary);font-weight:600}
+        .ssh-header-pitch a{color:var(--tool-primary,#667eea);font-weight:600;text-decoration:none;margin-left:0.25rem}
+        .ssh-header-pitch a:hover{text-decoration:underline}
+        .tool-page-badges{display:flex;gap:0.3rem;margin-left:auto;flex-wrap:wrap}
+        .tool-page-badges .tool-badge{padding:0.12rem 0.45rem !important;font-size:0.66rem !important;line-height:1.3 !important;border-radius:9999px !important;font-weight:600;background:rgba(102,126,234,0.10);color:var(--tool-primary,#667eea);border:1px solid rgba(102,126,234,0.25)}
+        [data-theme="dark"] .tool-page-badges .tool-badge{background:rgba(102,126,234,0.18);color:#a5b4fc;border-color:rgba(102,126,234,0.35)}
+        .tool-description-section{padding:0.4rem 1rem !important}
+        .tool-description-content p{font-size:0.78rem !important;line-height:1.5 !important;margin:0 !important;color:var(--text-secondary)}
+        @media (max-width:640px){
+            .tool-page-title{font-size:0.95rem !important}
+            .ssh-header-pitch{display:block;padding-left:0;margin-left:0;border-left:none;white-space:normal;margin-top:0.15rem}
+            .tool-page-badges{margin-left:0}
+        }
+    </style>
     <header class="tool-page-header">
         <div class="tool-page-header-inner">
             <div>
                 <h1 class="tool-page-title">SSH Key Generator</h1>
                 <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                    <a href="<%=request.getContextPath()%>/index.jsp#security">Security & PKI</a> /
+                    <a href="<%=request.getContextPath()%>/index.jsp#security">Security &amp; PKI</a> /
                     <span>SSH Keygen</span>
                 </nav>
+                <span class="ssh-header-pitch"><strong>ED25519 / RSA SSH keys in-browser</strong> &mdash; <a href="#ssh-documentation">How to use &rarr;</a></span>
             </div>
             <div class="tool-page-badges">
-                <span class="tool-badge">Free</span>
                 <span class="tool-badge">ED25519</span>
                 <span class="tool-badge">GitHub</span>
                 <span class="tool-badge">GitLab</span>
                 <span class="tool-badge">AWS</span>
                 <span class="tool-badge">Azure</span>
-                <span class="tool-badge">No Login</span>
+                <span class="tool-badge">No Data Stored</span>
             </div>
         </div>
     </header>
 
-    <!-- Description + Ad (text on top, dedicated ad placement below for desktop) -->
-    <section class="tool-description-section tool-description-stacked">
+    <!-- Top Ad Slot -->
+    <section class="tool-description-section">
         <div class="tool-description-inner">
-            <div class="tool-description-content">
-                <p>Generate SSH key pairs for <strong>GitHub</strong>, <strong>GitLab</strong>, <strong>AWS</strong>, <strong>Azure</strong>. Works on Windows, Mac, Linux. ED25519 (recommended) or RSA 2048/4096. <strong>Browser-based, client-side</strong>—no signup, no data stored. Download .pem/.pub, copy, email, or run ssh-keygen in the Bash tab. <a href="#ssh-documentation" class="tool-doc-link">How to generate SSH key →</a></p>
-            </div>
-            <div class="tool-description-ad-below">
+            <div class="tool-description-ad" style="width:100%;">
                 <%@ include file="modern/ads/ad-in-content-top.jsp" %>
             </div>
         </div>
@@ -282,12 +309,51 @@
                             <input class="tool-input" type="password" id="passphrase" name="passphrase" placeholder="Encrypts private key">
                         </div>
 
+                        <!-- PuTTY .ppk opt-in -->
+                        <div class="tool-form-group" style="margin-top:0.25rem;">
+                            <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.875rem;">
+                                <input type="checkbox" id="include_ppk" name="include_ppk" value="true" style="margin:0;">
+                                <span>Also produce <code style="background:var(--bg-secondary);padding:0.1rem 0.3rem;border-radius:0.25rem;font-size:0.8rem;">.ppk</code> for PuTTY / WinSCP / Pageant</span>
+                            </label>
+                            <div id="ed25519-ppk-hint" style="display:none;margin-top:0.4rem;padding:0.5rem 0.65rem;font-size:0.75rem;line-height:1.4;background:rgba(245,158,11,0.08);border-left:3px solid #f59e0b;border-radius:0.25rem;color:var(--text-secondary);">
+                                <strong>Note:</strong> ED25519 <code>.ppk</code> files require <strong>PuTTY 0.78+</strong> (Oct 2022) to open. For older PuTTY, generate an RSA 4096 key instead.
+                            </div>
+                        </div>
+
                         <!-- Actions -->
                         <div class="tool-form-group">
                             <button type="button" class="tool-action-btn" id="generatessh-keys">Generate SSH Keys</button>
                             <button type="button" class="tool-action-btn" style="background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);margin-top:0.5rem;" id="genkeypairemail">Email Keys</button>
                         </div>
                     </form>
+
+                    <!-- Convert: existing key → .ppk (collapsible) -->
+                    <details class="ssh-convert-card" style="margin-top:1rem;border-top:1px solid var(--border);padding-top:0.75rem;">
+                        <summary style="cursor:pointer;font-weight:600;font-size:0.875rem;list-style:none;display:flex;align-items:center;gap:0.5rem;color:var(--tool-primary);">
+                            <span style="font-size:1rem;">⇄</span>
+                            Convert your own key to <code style="background:var(--bg-secondary);padding:0.1rem 0.3rem;border-radius:0.25rem;font-size:0.8rem;">.ppk</code>
+                            <span style="margin-left:auto;font-size:0.7rem;color:var(--text-secondary);font-weight:400;">already have an OpenSSH / PEM key?</span>
+                        </summary>
+                        <div style="margin-top:0.75rem;">
+                            <form id="convertForm">
+                                <input type="hidden" name="methodName" value="CONVERT_SSH_KEY">
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label" for="convertPrivateKey">Private key (OpenSSH or PEM)</label>
+                                    <textarea class="tool-input" id="convertPrivateKey" name="p_private_key" rows="8"
+                                              placeholder="-----BEGIN OPENSSH PRIVATE KEY-----&#10;...&#10;-----END OPENSSH PRIVATE KEY-----&#10;&#10;or any &#10;-----BEGIN RSA/DSA/EC PRIVATE KEY-----&#10;..."
+                                              style="font-family:monospace;font-size:0.75rem;"></textarea>
+                                </div>
+                                <div class="tool-form-group">
+                                    <label class="tool-form-label" for="convertPassphrase">Passphrase (if the key is encrypted)</label>
+                                    <input class="tool-input" type="password" id="convertPassphrase" name="p_passphrase" placeholder="Leave empty if unencrypted">
+                                </div>
+                                <div class="tool-form-group">
+                                    <button type="button" class="tool-action-btn" id="convertBtn">Convert to .ppk</button>
+                                </div>
+                                <div id="convertError" style="display:none;margin-top:0.5rem;padding:0.5rem 0.65rem;font-size:0.75rem;background:#fef2f2;color:#991b1b;border-left:3px solid #ef4444;border-radius:0.25rem;"></div>
+                            </form>
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>
@@ -295,6 +361,10 @@
         <!-- OUTPUT COLUMN -->
         <div class="tool-output-column">
             <div class="rsa-output-tabs">
+                <button id="btnSshAI" type="button" class="rsa-ai-tab" title="AI assistant (Ctrl+Shift+A)" aria-label="Open AI assistant">
+                    <svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:4px;"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062Z"/><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z"/></svg>
+                    AI Assistant
+                </button>
                 <button type="button" class="rsa-output-tab active" data-panel="keys">Keys</button>
                 <button type="button" class="rsa-output-tab" data-panel="cli">ssh-keygen &amp; test</button>
             </div>
@@ -604,6 +674,16 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub user@hostname
         else if (which === 'dsakeysize') setKeysize(1024);
     }
 
+    // Show the ED25519+PuTTY-0.78 hint only when both conditions match.
+    function updatePpkHint() {
+        var hint = $id('ed25519-ppk-hint');
+        if (!hint) return;
+        var algoEl = document.querySelector('input[name="sshalgo"]:checked');
+        var ppkEl = $id('include_ppk');
+        var show = algoEl && algoEl.value === 'ED25519' && ppkEl && ppkEl.checked;
+        hint.style.display = show ? 'block' : 'none';
+    }
+
     document.querySelectorAll('input[name="sshalgo"]').forEach(function(r) {
         r.addEventListener('change', function() {
             document.querySelectorAll('.ssh-algo-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -613,8 +693,69 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub user@hostname
             else if (v === 'RSA') showKeysize('rsakeysize');
             else if (v === 'ECDSA') showKeysize('ecdsakeysize');
             else if (v === 'DSA') showKeysize('dsakeysize');
+            updatePpkHint();
         });
     });
+    if ($id('include_ppk')) $id('include_ppk').addEventListener('change', updatePpkHint);
+
+    // ─── Convert existing key → .ppk ──────────────────────────────────────
+    function showConvertError(msg) {
+        var el = $id('convertError');
+        if (!el) return;
+        el.textContent = msg;
+        el.style.display = 'block';
+    }
+    function hideConvertError() {
+        var el = $id('convertError');
+        if (el) el.style.display = 'none';
+    }
+
+    function doConvert() {
+        hideConvertError();
+        var key = $id('convertPrivateKey').value;
+        if (!key || !key.trim()) {
+            showConvertError('Paste a private key first.');
+            return;
+        }
+        if (!/-----BEGIN .* PRIVATE KEY-----/.test(key)) {
+            showConvertError('That doesn\'t look like a private key block. Expected -----BEGIN OPENSSH PRIVATE KEY----- or -----BEGIN RSA/DSA/EC PRIVATE KEY-----.');
+            return;
+        }
+
+        if (typeof ToolUtils !== 'undefined') ToolUtils.showLoading('Converting to .ppk...', '#output');
+        else output.innerHTML = '<div style="text-align:center;padding:2rem;">Converting...</div>';
+
+        var fd = new FormData($id('convertForm'));
+        fetch('<%=request.getContextPath()%>/SSHFunctionality', {
+            method: 'POST',
+            body: new URLSearchParams(fd)
+        }).then(function(r) { return r.json(); }).then(function(data) {
+            output.innerHTML = '';
+            if (data.success && data.privateKeyPpk) {
+                var html = '<div style="padding:0.75rem;background:var(--tool-light);border-radius:0.5rem;margin-bottom:1rem;">';
+                html += '<strong>Converted to PuTTY .ppk</strong><br><span style="font-size:0.75rem;color:var(--text-secondary);">Passphrase (if any) was carried over from the input key.</span>';
+                html += '</div>';
+                html += '<div class="tool-form-group"><label class="tool-form-label">PuTTY Private Key <span style="color:#7c3aed;">.ppk</span></label>';
+                html += '<textarea id="ppkKeyOutput" readonly class="tool-input" rows="10" style="font-family:monospace;font-size:0.75rem;"></textarea>';
+                html += '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem;">';
+                html += '<button type="button" class="tool-action-btn" style="padding:0.5rem;" onclick="sshCopyKey(\'ppkKeyOutput\',true)">Copy .ppk</button>';
+                html += '<button type="button" class="tool-action-btn" style="padding:0.5rem;background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);" onclick="sshDownloadKey(\'ppkKeyOutput\',\'converted.ppk\')">Download .ppk</button>';
+                html += '</div></div>';
+                output.innerHTML = html;
+                $id('ppkKeyOutput').value = data.privateKeyPpk;
+                if (emptyState) emptyState.style.display = 'none';
+                if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Converted!', 2000, 'success');
+            } else {
+                var err = data.errorMessage || 'Conversion failed';
+                showConvertError(err);
+                output.innerHTML = '<div style="padding:1rem;background:#fef2f2;border:1px solid #fecaca;border-radius:0.5rem;color:#991b1b;">' + err + '</div>';
+            }
+        }).catch(function(err) {
+            showConvertError('Network error. Please try again.');
+            output.innerHTML = '<div style="padding:1rem;background:#fef2f2;border:1px solid #fecaca;border-radius:0.5rem;color:#991b1b;">Network error.</div>';
+        });
+    }
+    if ($id('convertBtn')) $id('convertBtn').addEventListener('click', doConvert);
 
     document.querySelectorAll('.ssh-keysize-btn').forEach(function(lbl) {
         lbl.addEventListener('click', function() {
@@ -648,6 +789,7 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub user@hostname
                 var privateKey = data.base64Encoded || '';
                 var publicKey = data.message || '';
                 var emailStatus = data.iv || '';
+                var ppkKey = data.privateKeyPpk || '';
                 var baseName = (algo === 'RSA') ? 'id_rsa' : (algo === 'ECDSA') ? 'id_ecdsa' : (algo === 'DSA') ? 'id_dsa' : 'id_ed25519';
                 var html = '<div style="padding:0.75rem;background:var(--tool-light);border-radius:0.5rem;margin-bottom:1rem;">';
                 html += '<strong>Algorithm:</strong> ' + (typeof ToolUtils !== 'undefined' ? ToolUtils.escapeHtml(algo) : algo) + (keySize ? ' (' + keySize + '-bit)' : '') + '<br>';
@@ -667,9 +809,19 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub user@hostname
                 html += '<button type="button" class="tool-action-btn" style="padding:0.5rem;background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);" onclick="sshDownloadKey(\'publicKeyOutput\',\'' + baseName + '.pub\')">Download .pub</button>';
                 html += '<button type="button" class="tool-action-btn" style="padding:0.5rem;background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);" onclick="sshShareKeys()">Share URL</button>';
                 html += '</div></div>';
+                // PuTTY .ppk card — only when user opted in and backend converted successfully
+                if (ppkKey) {
+                    html += '<div class="tool-form-group"><label class="tool-form-label">PuTTY Private Key <span style="color:#7c3aed;">.ppk</span></label>';
+                    html += '<textarea id="ppkKeyOutput" readonly class="tool-input" rows="8" style="font-family:monospace;font-size:0.75rem;"></textarea>';
+                    html += '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem;">';
+                    html += '<button type="button" class="tool-action-btn" style="padding:0.5rem;" onclick="sshCopyKey(\'ppkKeyOutput\',true)">Copy .ppk</button>';
+                    html += '<button type="button" class="tool-action-btn" style="padding:0.5rem;background:transparent;border:1.5px solid var(--tool-primary);color:var(--tool-primary);" onclick="sshDownloadKey(\'ppkKeyOutput\',\'' + baseName + '.ppk\')">Download .ppk</button>';
+                    html += '</div></div>';
+                }
                 output.innerHTML = html;
                 $id('privateKeyOutput').value = privateKey;
                 $id('publicKeyOutput').value = publicKey;
+                if (ppkKey && $id('ppkKeyOutput')) { $id('ppkKeyOutput').value = ppkKey; }
                 if (emptyState) emptyState.style.display = 'none';
                 if (emailStatus && typeof ToolUtils !== 'undefined') ToolUtils.showToast('Keys sent!', 2000, 'success');
             } else {
@@ -768,6 +920,8 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub user@hostname
     var sshCliLoaded = false;
     document.querySelectorAll('.rsa-output-tab').forEach(function(btn) {
         btn.addEventListener('click', function() {
+            // Buttons without data-panel (e.g. the AI Assistant modal trigger) opt out.
+            if (!this.dataset.panel) return;
             document.querySelectorAll('.rsa-output-tab').forEach(function(b) { b.classList.remove('active'); });
             document.querySelectorAll('.rsa-panel').forEach(function(p) { p.classList.remove('active'); });
             this.classList.add('active');
@@ -844,7 +998,69 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub user@hostname
             $id('publicKeyOutput').value = sharedPub;
         }
     }
+
+    // ─── Programmatic API for the AI adapter (ssh-adapter.js) ──────────────────
+    // Sets the form values + triggers the same code path the Generate button uses.
+    // Bypasses click handlers (which expect a real user-event context) so it's safe
+    // to call from outside the IIFE.
+    window.sshGenerate = function(config) {
+        config = config || {};
+        var algo = String(config.algorithm || '').toUpperCase();
+        if (algo !== 'ED25519' && algo !== 'RSA' && algo !== 'ECDSA' && algo !== 'DSA') {
+            console.warn('[sshGenerate] invalid algorithm', config.algorithm);
+            return false;
+        }
+
+        var radio = document.querySelector('input[name="sshalgo"][value="' + algo + '"]');
+        if (radio) {
+            radio.checked = true;
+            document.querySelectorAll('.ssh-algo-btn').forEach(function(b) { b.classList.remove('active'); });
+            var card = radio.closest('.ssh-algo-btn');
+            if (card) card.classList.add('active');
+        }
+
+        var blockMap = { ED25519: 'ed25519keysize', RSA: 'rsakeysize', ECDSA: 'ecdsakeysize', DSA: 'dsakeysize' };
+        showKeysize(blockMap[algo]);  // also sets a sensible default keysize
+
+        if (config.keysize) {
+            var allowed = { ED25519: ['256'], RSA: ['1024','2048','4096'], ECDSA: ['256','384','521'], DSA: ['1024'] };
+            var ks = String(config.keysize);
+            if (allowed[algo].indexOf(ks) >= 0) {
+                setKeysize(ks);
+                var block = $id(blockMap[algo]);
+                if (block) {
+                    block.querySelectorAll('.ssh-keysize-btn').forEach(function(b) {
+                        b.classList.toggle('active', b.getAttribute('data-size') === ks);
+                    });
+                }
+            }
+        }
+
+        if (typeof config.comment === 'string' && config.comment.trim()) {
+            var c = $id('ssh_comment');
+            if (c) c.value = config.comment.trim();
+        }
+
+        doSubmit();
+        return true;
+    };
 })();
+    </script>
+
+    <script type="module">
+    <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
+    import { createSshAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/ssh-adapter.js';
+
+    const sshAi = createSshAssistant({ ...aiAssistantBoot });
+    sshAi.mount();
+    document.getElementById('btnSshAI')?.addEventListener('click', () => sshAi.open());
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        sshAi.open();
+      }
+    });
     </script>
 </body>
 </html>
