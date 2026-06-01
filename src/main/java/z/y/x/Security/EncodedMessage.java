@@ -39,6 +39,7 @@ public class EncodedMessage {
 	private String sharedSecret;        // HMAC shared secret (Base64 encoded)
 	private String privateKey;          // Private key (PEM format)
 	private String publicKey;           // Public key (PEM format)
+	private String privateKeyPpk;       // SSH private key in PuTTY .ppk format (optional)
 
 	// Key conversion fields
 	private String convertedKey;        // Converted key (PEM format)
@@ -424,6 +425,14 @@ public class EncodedMessage {
 
 	public void setPublicKey(String publicKey) {
 		this.publicKey = publicKey;
+	}
+
+	public String getPrivateKeyPpk() {
+		return privateKeyPpk;
+	}
+
+	public void setPrivateKeyPpk(String privateKeyPpk) {
+		this.privateKeyPpk = privateKeyPpk;
 	}
 
 	public String getConvertedKey() {
