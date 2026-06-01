@@ -149,6 +149,21 @@
             letter-spacing: -0.02em;
         }
 
+        .hero-legal {
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            margin: 0.5rem auto 1rem;
+            color: rgba(255,255,255,0.78);
+            max-width: 720px;
+        }
+        .hero-legal-link {
+            color: #ffffff;
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .hero-legal-link:hover { color: #fef08a; }
+
         .hero-subtitle {
             font-size: clamp(1.125rem, 2.5vw, 1.5rem);
             font-weight: 400;
@@ -671,7 +686,15 @@
         <div class="hero-content">
             <h1 class="hero-title">Free Online Tools</h1>
             <p class="hero-subtitle">Professional-grade tools for cryptography, networking, DevOps, mathematics, finance, chemistry, and more. All free, all online, no registration.</p>
-            
+
+            <!-- Above-the-fold legal links — required by Google OAuth verification policy -->
+            <p class="hero-legal">
+                By using this site you agree to our
+                <a href="<%=request.getContextPath()%>/privacy.jsp" class="hero-legal-link" rel="privacy-policy">Privacy Policy</a>
+                and
+                <a href="<%=request.getContextPath()%>/terms.jsp" class="hero-legal-link">Terms of Use</a>.
+            </p>
+
             <div class="hero-stats">
                 <div class="stat-item">
                     <span class="stat-number">200+</span>
