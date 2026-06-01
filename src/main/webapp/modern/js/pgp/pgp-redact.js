@@ -52,6 +52,14 @@ function redactPgpFences(text) {
       if (/BEGIN PGP/i.test(inner)) {
         return '```\n[PGP material redacted — available in session]\n```';
       }
+      // PGP packet dump output: fenced block listing packet fields
+      // (e.g. "Key ID:", "Encoded:", "Fingerprint:", "Bit Strength:").
+      // The full Encoded hex is up to ~600 chars and serves no purpose to the AI —
+      // the deterministic dump already ran. Redact the same way armored blocks are.
+      if (/^\s*(Key ID|Fingerprint|Algorithm|Encoded|Bit Strength|Creation Time)\s*:/im.test(inner)
+          && /(Encoded|Fingerprint|Key ID)\s*:/i.test(inner)) {
+        return '```\n[PGP packet dump on file in this session — not sent to AI]\n```';
+      }
       return match;
     },
   );
