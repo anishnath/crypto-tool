@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" font-family="'Inter','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <!-- Deep emerald background (matches the page's #059669 brand) -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#022c22"/>
+      <stop offset="55%" stop-color="#064e3b"/>
+      <stop offset="100%" stop-color="#0f766e"/>
+    </linearGradient>
+
+    <!-- Brand gradient -->
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+
+    <!-- OpenSSH output color -->
+    <linearGradient id="openssh" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <!-- PuTTY .ppk color (amber — distinct visual identity) -->
+    <linearGradient id="putty" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+
+    <!-- Hex grid pattern (subtle background) -->
+    <pattern id="hex" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
+      <polygon points="30,2 58,18 58,50 30,66 2,50 2,18"
+               fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+
+    <!-- Glow behind the central key -->
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.45"/>
+      <stop offset="60%" stop-color="#10b981" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#022c22" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Drop shadow -->
+    <filter id="ds" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="6"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#hex)"/>
+
+  <!-- Faint terminal-ish ciphertext columns -->
+  <g font-family="'JetBrains Mono','Courier New',monospace" font-size="13" fill="#ffffff" fill-opacity="0.10" letter-spacing="1">
+    <text x="40"  y="80">$ ssh-keygen -t ed25519</text>
+    <text x="40"  y="105">$ chmod 600 ~/.ssh/id_ed25519</text>
+    <text x="40"  y="130">$ ssh-copy-id user@host</text>
+    <text x="40"  y="540">SHA256:twR9Zz86ErTKIzwhX8zpQG</text>
+    <text x="40"  y="565">88:b0:c7:1a:de:fa:91:5c:7d:81</text>
+
+    <text x="880" y="80">PuTTY-User-Key-File-3</text>
+    <text x="880" y="105">Encryption: aes256-cbc</text>
+    <text x="880" y="130">Comment: alice@laptop</text>
+    <text x="880" y="540">.ppk · .pem · .pub · OpenSSH</text>
+    <text x="880" y="565">0x988d045a238c790104008982</text>
+  </g>
+
+  <!-- Soft emerald glow behind the key -->
+  <circle cx="600" cy="295" r="270" fill="url(#glow)"/>
+
+  <!-- Central stylized key -->
+  <g transform="translate(600,295)" filter="url(#ds)">
+    <!-- Key bow (rounded ring with keyhole inside) -->
+    <circle cx="-90" cy="0" r="62" fill="none" stroke="url(#brand)" stroke-width="20"/>
+    <circle cx="-90" cy="0" r="14" fill="#022c22"/>
+    <circle cx="-90" cy="0" r="6" fill="url(#brand)"/>
+    <!-- Key shaft -->
+    <rect x="-40" y="-12" width="200" height="24" rx="3" fill="url(#brand)"/>
+    <!-- Key teeth -->
+    <rect x="140"  y="-12" width="14" height="38" rx="2" fill="url(#brand)"/>
+    <rect x="165"  y="-12" width="14" height="28" rx="2" fill="url(#brand)"/>
+    <!-- "SSH" wordmark on the shaft -->
+    <text x="50" y="6" text-anchor="middle" font-size="20" font-weight="800" fill="#022c22" letter-spacing="4">SSH</text>
+  </g>
+
+  <!-- Output 1 pill — OpenSSH (left side, just above the key glow's bottom edge) -->
+  <g transform="translate(120,455)" filter="url(#ds)">
+    <rect width="290" height="60" rx="14" fill="#022c22" fill-opacity="0.55" stroke="url(#openssh)" stroke-width="2"/>
+    <circle cx="34" cy="30" r="16" fill="url(#openssh)"/>
+    <text x="34" y="36" text-anchor="middle" font-size="18" font-weight="800" fill="#022c22">~/</text>
+    <text x="62" y="26" font-size="15" font-weight="700" fill="#ffffff">OpenSSH private + public</text>
+    <text x="62" y="48" font-size="12" fill="#a7f3d0" font-family="'JetBrains Mono',monospace">id_ed25519 · id_ed25519.pub · .pem</text>
+  </g>
+
+  <!-- Output 2 pill — PuTTY .ppk (right side) -->
+  <g transform="translate(790,455)" filter="url(#ds)">
+    <rect width="290" height="60" rx="14" fill="#022c22" fill-opacity="0.55" stroke="url(#putty)" stroke-width="2"/>
+    <circle cx="34" cy="30" r="16" fill="url(#putty)"/>
+    <text x="34" y="36" text-anchor="middle" font-size="14" font-weight="800" fill="#022c22">.ppk</text>
+    <text x="62" y="26" font-size="15" font-weight="700" fill="#ffffff">PuTTY · WinSCP · Pageant</text>
+    <text x="62" y="48" font-size="12" fill="#fde68a" font-family="'JetBrains Mono',monospace">id_ed25519.ppk · auto-converted</text>
+  </g>
+
+  <!-- Headline -->
+  <text x="600" y="125" text-anchor="middle" font-size="20" font-weight="600" fill="#a7f3d0" letter-spacing="6" text-transform="uppercase">FREE · IN-BROWSER · NO SIGNUP</text>
+
+  <!-- Tool name -->
+  <text x="600" y="80" text-anchor="middle" font-size="46" font-weight="800" fill="#ffffff" letter-spacing="-1">SSH Key Generator</text>
+
+  <!-- Algorithm row + AI Assistant badge — slim row centered above the bottom pills -->
+  <g font-size="14" font-weight="600" font-family="'Inter',sans-serif">
+    <g transform="translate(345,402)">
+      <rect width="105" height="30" rx="15" fill="#10b981" fill-opacity="0.20" stroke="#10b981" stroke-opacity="0.6"/>
+      <text x="52" y="20" text-anchor="middle" fill="#a7f3d0">ED25519</text>
+    </g>
+    <g transform="translate(460,402)">
+      <rect width="105" height="30" rx="15" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-opacity="0.45"/>
+      <text x="52" y="20" text-anchor="middle" fill="#a7f3d0">RSA 4096</text>
+    </g>
+    <g transform="translate(575,402)">
+      <rect width="105" height="30" rx="15" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-opacity="0.45"/>
+      <text x="52" y="20" text-anchor="middle" fill="#a7f3d0">ECDSA</text>
+    </g>
+    <g transform="translate(690,402)">
+      <rect width="105" height="30" rx="15" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-opacity="0.45"/>
+      <text x="52" y="20" text-anchor="middle" fill="#a7f3d0">DSA</text>
+    </g>
+    <!-- AI badge — distinct (cyan) -->
+    <g transform="translate(805,402)">
+      <rect width="50" height="30" rx="15" fill="#06b6d4" fill-opacity="0.22" stroke="#06b6d4" stroke-opacity="0.55"/>
+      <text x="25" y="20" text-anchor="middle" fill="#a5f3fc">AI</text>
+    </g>
+  </g>
+
+  <!-- Use-case footer text (centered) -->
+  <text x="600" y="575" text-anchor="middle" font-size="17" font-weight="500" fill="#d1fae5" letter-spacing="0.5">
+    For GitHub · GitLab · AWS · Azure · GCP · DigitalOcean
+  </text>
+
+  <!-- Bottom-right brand -->
+  <g transform="translate(1140,610)" text-anchor="end" font-size="14" font-weight="700" font-family="'Inter',sans-serif">
+    <text fill="#ffffff" fill-opacity="0.9">8gwifi.org</text>
+  </g>
+  <g transform="translate(60,610)" font-size="11" font-weight="400" font-family="'JetBrains Mono',monospace">
+    <text fill="#6ee7b7" fill-opacity="0.7">/sshfunctions.jsp</text>
+  </g>
+</svg>

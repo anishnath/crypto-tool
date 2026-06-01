@@ -29,26 +29,26 @@
 
     <!-- SEO -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="SSH Key Generator Online - ED25519, RSA for GitHub, GitLab, AWS" />
-        <jsp:param name="toolDescription" value="Free SSH key generator for GitHub, GitLab, AWS, Azure. Browser-based, works on Windows Mac Linux. ED25519 or RSA. No signup, client-side. Download .pem/.pub." />
-        <jsp:param name="toolCategory" value="Security & PKI" />
+        <jsp:param name="toolName" value="Free SSH Key Generator &amp; PuTTY .ppk Converter Online (ED25519, RSA)" />
+        <jsp:param name="toolDescription" value="Generate SSH keys (ED25519, RSA 4096, ECDSA) and convert OpenSSH/PEM keys to PuTTY .ppk format online. Free, browser-based, for GitHub, AWS, GitLab. AI SSH tutor included." />
+        <jsp:param name="toolCategory" value="Security &amp; PKI" />
         <jsp:param name="toolUrl" value="sshfunctions.jsp" />
-        <jsp:param name="toolKeywords" value="ssh key generator online, generate ssh key github, ssh key gitlab, ssh key aws, ed25519 ssh key, rsa 2048 4096, create ssh key windows mac, openssh key generator, ssh-keygen online, ssh fingerprint, putty key generator, ssh key download, id_ed25519 id_rsa, authorized_keys" />
-        <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="ED25519 RSA ECDSA DSA,Use for GitHub GitLab AWS Azure,Download .pem and .pub files,Browser-based client-side no signup,Works on Windows Mac Linux,Bash executor with ssh-keygen,Fingerprint display,Copy and email keys,OpenSSH format,No data stored" />
+        <jsp:param name="toolKeywords" value="ssh key generator, ssh key generator online, generate ssh key online, ssh-keygen online, puttygen online, online puttygen alternative, convert openssh to ppk, openssh to ppk online, pem to ppk online, pem to ppk converter, ssh key to ppk, convert ssh key for putty, ed25519 ssh key generator, ed25519 generator online, rsa 4096 ssh key, rsa 2048 ssh key, ecdsa ssh key, ssh key for github, github ssh key generator, ssh key for aws ec2, aws ssh key generator, ssh key for gitlab, ssh key for azure vm, ssh key for digitalocean, id_ed25519 generator, id_rsa generator, authorized_keys, ssh fingerprint sha256, ssh key generator no download, browser ssh key tool, ssh tutor ai, ssh assistant chat, online ssh help, putty key generator online, winscp ssh key, pageant ssh key" />
+        <jsp:param name="toolImage" value="ssh-keygen.png" />
+        <jsp:param name="toolFeatures" value="Generate SSH keys: ED25519 (recommended) RSA 2048/4096 ECDSA P-256/P-384/P-521 DSA,Convert OpenSSH and PEM private keys to PuTTY .ppk format (no puttygen install needed),AI SSH tutor: ask about ssh-keygen sshd_config authorized_keys port forwarding troubleshooting,Works for GitHub GitLab Bitbucket AWS EC2 Azure VM GCP Compute Engine DigitalOcean,Output OpenSSH (id_ed25519 id_rsa) and PuTTY .ppk in a single click,SHA-256 fingerprint and algorithm metadata display,Optional passphrase protection applied uniformly across all output formats,Copy to clipboard and download as .pem .pub .ppk files,Email the generated key pair to yourself (optional),Browser-based with client-side rendering — no signup no data stored,Compatible with PuTTY 0.78+ for ED25519 and PuTTY 0.75+ for PPK v3,Works on Windows macOS Linux — paste output into ~/.ssh/ or PuTTYgen,SSH AI assistant answers in plain English with command-first responses" />
         <jsp:param name="hasSteps" value="true" />
-        <jsp:param name="faq1q" value="What is the most secure SSH key algorithm?" />
-        <jsp:param name="faq1a" value="ED25519 is recommended for new SSH keys. It offers 128-bit security (equivalent to RSA 3072-bit), faster operations, smaller key sizes, and resistance to timing attacks. RSA 4096-bit is a solid alternative for compatibility." />
-        <jsp:param name="faq2q" value="Should I use a passphrase for my SSH key?" />
-        <jsp:param name="faq2a" value="Yes. A passphrase adds an extra layer of encryption to your private key. Use ssh-agent to avoid typing it repeatedly during active sessions." />
-        <jsp:param name="faq3q" value="How do I copy my SSH public key to a server?" />
-        <jsp:param name="faq3a" value="Use ssh-copy-id: ssh-copy-id -i ~/.ssh/id_ed25519.pub user@hostname. Or manually append your public key to ~/.ssh/authorized_keys on the server." />
-        <jsp:param name="faq4q" value="What is an SSH key fingerprint?" />
-        <jsp:param name="faq4a" value="The fingerprint is a short hash (e.g. SHA256:...) of your public key. Use ssh-keygen -lf ~/.ssh/id_ed25519.pub to display it. Verify fingerprints when connecting to new servers." />
-        <jsp:param name="faq5q" value="How do I download my SSH keys?" />
-        <jsp:param name="faq5a" value="After generating keys, click 'Download .pem' for the private key or 'Download .pub' for the public key. Files are saved with algorithm-specific names (id_ed25519, id_rsa, etc.)." />
-        <jsp:param name="faq6q" value="How do I add my SSH key to GitHub?" />
-        <jsp:param name="faq6a" value="Generate your key above, then copy the public key. In GitHub: Settings → SSH and GPG keys → New SSH key → paste the key and save. Use the same key for GitLab, Bitbucket, and SSH servers." />
+        <jsp:param name="faq1q" value="What is the best SSH key algorithm to use in 2026?" />
+        <jsp:param name="faq1a" value="ED25519 is the default for new SSH keys: fast, 256-bit (≈ RSA 3072 strength), short public keys, immune to RNG-quality issues, and supported by every modern server (OpenSSH 6.5+ from 2014). Use RSA 4096 only for legacy systems that don't accept ED25519. ECDSA only for FIPS compliance. Never generate DSA — it was removed entirely in OpenSSH 9.8 (2024)." />
+        <jsp:param name="faq2q" value="How do I convert an OpenSSH or PEM key to PuTTY .ppk format?" />
+        <jsp:param name="faq2a" value="Use the 'Convert your own key to .ppk' section on this page: paste your OpenSSH or PEM private key, enter the passphrase if it's encrypted, click Convert. The .ppk appears with Copy and Download buttons. No need to install PuTTYgen — the conversion runs server-side. Works for ED25519, RSA, ECDSA, and DSA keys." />
+        <jsp:param name="faq3q" value="Do I need to install PuTTY or PuTTYgen to get a .ppk file?" />
+        <jsp:param name="faq3a" value="No. Tick the 'Also produce .ppk for PuTTY / WinSCP / Pageant' checkbox before generating — you'll get both the OpenSSH key (.pem / .pub) and the PuTTY .ppk file in a single response. If you already have a key, use the Convert section to transform it. ED25519 .ppk files require PuTTY 0.78+ to open; for older PuTTY versions, generate an RSA 4096 key instead." />
+        <jsp:param name="faq4q" value="How do I add my SSH key to GitHub, GitLab, AWS EC2, or Azure?" />
+        <jsp:param name="faq4a" value="Generate your key above and copy the public key (starts with ssh-ed25519, ssh-rsa, ecdsa-sha2-*). GitHub: Settings → SSH and GPG keys → New SSH key. GitLab: Preferences → SSH Keys → Add new key. Bitbucket: Personal settings → SSH keys → Add key. AWS EC2: import the key pair in the EC2 console or use ssh-copy-id once you can reach the instance. Azure: Networking → Public SSH key during provisioning, or run az vm user update." />
+        <jsp:param name="faq5q" value="Should I use a passphrase for my SSH private key?" />
+        <jsp:param name="faq5a" value="Yes. A passphrase encrypts the private key on disk so a stolen file alone can't be used to authenticate. Use ssh-agent (ssh-add ~/.ssh/id_ed25519) so you only type it once per session. On macOS, ssh-add --apple-use-keychain persists across reboots. On this tool, the same passphrase is applied uniformly to the OpenSSH key, the PEM, and the PPK — so any format works with the password you choose." />
+        <jsp:param name="faq6q" value="Is this SSH key generator safe — are keys stored or logged?" />
+        <jsp:param name="faq6a" value="Keys are generated server-side using cryptographically secure random number generation (CSRNG), returned to your browser over HTTPS, and never persisted to disk or logs on our infrastructure. For maximum trust with highly sensitive applications, generate keys offline with ssh-keygen on your own machine. Private key material is also never sent to the built-in AI assistant — only public-key metadata (algorithm, fingerprint) is shown to it." />
     </jsp:include>
 
     <!-- Fonts -->
