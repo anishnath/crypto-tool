@@ -811,6 +811,31 @@
         <url-pattern>/api/pgp/dump</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>RsaApiServlet</servlet-name>
+        <servlet-class>z.y.x.Security.RsaApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RsaApiServlet</servlet-name>
+        <url-pattern>/api/rsa/generate-keys</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RsaApiServlet</servlet-name>
+        <url-pattern>/api/rsa/encrypt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RsaApiServlet</servlet-name>
+        <url-pattern>/api/rsa/decrypt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RsaApiServlet</servlet-name>
+        <url-pattern>/api/rsa/sign</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RsaApiServlet</servlet-name>
+        <url-pattern>/api/rsa/verify</url-pattern>
+    </servlet-mapping>
+
     <!-- 4×4 Rubik's Cube Solver — port of rubikscubennnsolver (Python+C).
          Currently size=4 only; sizes 2/3/5/6/7 will dispatch from the same
          endpoint once their packages land. -->
