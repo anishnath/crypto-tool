@@ -105,15 +105,12 @@
          Regenerate after editing any source: scripts/build-css-bundle.sh -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page-bundle.css">
     <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Deferred CSS bundle (30 KB): ads + dark-mode + footer
+         Async-loaded via media="print" onload swap — doesn't block LCP.
+         Combines what was 3 separate async <link> tags into 1 request. -->
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/tool-page-deferred.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page-deferred.css">
     </noscript>
 
     <!-- LCP optimization: defer ad-init.jsp to bottom of body.
