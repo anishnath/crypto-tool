@@ -1501,7 +1501,7 @@
 
     <script type="module">
     <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
-    import { createTikzViewerAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/tikz-viewer-adapter.js';
+    import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
     import {
       recordAppliedTikzGeneration,
       onTikzRendered,
@@ -1534,25 +1534,12 @@
       sectionEl: document.getElementById('tikz-recents'),
     });
 
-    const aiChat = createTikzViewerAssistant({
-      ...aiAssistantBoot,
-      recordAppliedGeneration: recordGen,
-    });
-    aiChat.mount();
-    document.getElementById('btnTikzAI')?.addEventListener('click', () => aiChat.open());
-
-    if (new URLSearchParams(window.location.search).get('checkout') === '1') {
-      const u = new URL(window.location.href);
-      u.searchParams.delete('checkout');
-      window.history.replaceState({}, '', u.pathname + u.search + u.hash);
-      aiChat.open('Payment received — Pro activates shortly after Dodo confirms. Ask AI when ready.', false);
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-        e.preventDefault();
-        aiChat.open();
-      }
+    wireLazyAssistant({
+      moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/tikz-viewer-adapter.js',
+      exportName: 'createTikzViewerAssistant',
+      buttonId: 'btnTikzAI',
+      boot: aiAssistantBoot,
+      extraOpts: () => ({ recordAppliedGeneration: recordGen }),
     });
     </script>
 

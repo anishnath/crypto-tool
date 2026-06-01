@@ -1395,17 +1395,13 @@
 
     <script type="module">
     <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
-    import { createPgpAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/pgp-adapter.js';
+    import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
 
-    const pgpAi = createPgpAssistant({ ...aiAssistantBoot });
-    pgpAi.mount();
-    document.getElementById('btnPgpAI')?.addEventListener('click', () => pgpAi.open());
-
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-        e.preventDefault();
-        pgpAi.open();
-      }
+    wireLazyAssistant({
+      moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/pgp-adapter.js',
+      exportName: 'createPgpAssistant',
+      buttonId: 'btnPgpAI',
+      boot: aiAssistantBoot,
     });
     </script>
 

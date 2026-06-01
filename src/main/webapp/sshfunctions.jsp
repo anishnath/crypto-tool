@@ -1049,17 +1049,13 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub user@hostname
 
     <script type="module">
     <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
-    import { createSshAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/ssh-adapter.js';
+    import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
 
-    const sshAi = createSshAssistant({ ...aiAssistantBoot });
-    sshAi.mount();
-    document.getElementById('btnSshAI')?.addEventListener('click', () => sshAi.open());
-
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-        e.preventDefault();
-        sshAi.open();
-      }
+    wireLazyAssistant({
+      moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/ssh-adapter.js',
+      exportName: 'createSshAssistant',
+      buttonId: 'btnSshAI',
+      boot: aiAssistantBoot,
     });
     </script>
 </body>

@@ -6,6 +6,31 @@
 
 /** Max wait for read-only billing GETs; avoids blocking page open on slow gateway. */
 const BILLING_READ_TIMEOUT_MS = 5000;
+/** Browser cache for plan catalog (matches Go in-memory TTL). */
+const PLANS_CACHE_TTL_MS = 60 * 60 * 1000;
+const PLANS_CACHE_PREFIX = 'billing_plans_v1_';
+
+function plansCacheKey(ctx, toolId) {
+  return PLANS_CACHE_PREFIX + String(ctx || '') + '|' + String(toolId || '');
+}
+
+function readPlansCache(ctx, toolId) {
+  try {
+    const raw = sessionStorage.getItem(plansCacheKey(ctx, toolId));
+    if (!raw) return null;
+    const { ts, data } = JSON.parse(raw);
+    if (!data || Date.now() - ts > PLANS_CACHE_TTL_MS) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function writePlansCache(ctx, toolId, data) {
+  try {
+    sessionStorage.setItem(plansCacheKey(ctx, toolId), JSON.stringify({ ts: Date.now(), data }));
+  } catch { /* quota / private mode */ }
+}
 
 function joinUrl(ctx, path) {
   const base = String(ctx || '').replace(/\/$/, '');
@@ -83,8 +108,10 @@ export async function fetchBillingStatus(ctx) {
  */
 export async function fetchPlans(ctx, opts = {}) {
   const empty = { plans: [], ai_tiers: [] };
+  const toolId = String(opts.toolId || '').trim();
+  const cached = readPlansCache(ctx, toolId);
+  if (cached) return cached;
   try {
-    const toolId = String(opts.toolId || '').trim();
     const qs = toolId ? `?tool=${encodeURIComponent(toolId)}` : '';
     const res = await fetchWithTimeout(joinUrl(ctx, `/api/billing/plans${qs}`), {
       method: 'GET',
@@ -93,12 +120,14 @@ export async function fetchPlans(ctx, opts = {}) {
     });
     if (!res.ok) return empty;
     const data = await res.json().catch(() => ({}));
-    return {
+    const out = {
       plans: Array.isArray(data.plans) ? data.plans : [],
       ai_tiers: Array.isArray(data.ai_tiers) ? data.ai_tiers : [],
       tool_id: data.tool_id || toolId || '',
       pricing_scope: data.pricing_scope || 'global',
     };
+    if (out.plans.length) writePlansCache(ctx, toolId, out);
+    return out;
   } catch {
     return empty;
   }

@@ -303,7 +303,7 @@ import { FileExplorer } from '<%=request.getContextPath()%>/electronics/js/ardui
 import { exportDiagram, importDiagram, downloadDiagram, openDiagramFile } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/diagram.js';
 import { DiagramSync } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/diagram-sync.js';
 import { PiTerminal } from '<%=request.getContextPath()%>/electronics/js/arduino/ui/pi-terminal.js';
-import { createArduinoSimulatorAssistant } from '<%=request.getContextPath()%>/modern/js/ai/adapters/arduino-simulator-adapter.js';
+import { wireLazyAssistant } from '<%=request.getContextPath()%>/modern/js/ai/lazy-assistant.js';
 
 // ── DOM refs ──
 const btnCompile = document.getElementById('btnCompile');
@@ -1447,36 +1447,25 @@ document.addEventListener('keydown', (e) => {
 // Initial button states
 updateButtonStates();
 
-// ── AI chat (generic core + Arduino adapter) ──
+// ── AI chat (lazy-loaded on first open) ──
 <%@ include file="../modern/components/ai-assistant-boot.inc.jsp" %>
-const aiChat = createArduinoSimulatorAssistant({
-  ...aiAssistantBoot,
-  fileManager,
-  editor,
-  componentPanel,
-  wireManager,
-  diagramSync,
-  stopRunner,
-  selection,
-  exportDiagram,
-  getLastCompileErrors: () => lastCompileErrors,
-  logOutput,
-});
-aiChat.mount();
-document.getElementById('btnAI').addEventListener('click', () => aiChat.open());
-
-if (new URLSearchParams(window.location.search).get('checkout') === '1') {
-  const u = new URL(window.location.href);
-  u.searchParams.delete('checkout');
-  window.history.replaceState({}, '', u.pathname + u.search + u.hash);
-  aiChat.open('Payment received — Pro activates shortly after Dodo confirms. Ask AI when ready.', false);
-}
-
-document.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-    e.preventDefault();
-    aiChat.open();
-  }
+wireLazyAssistant({
+  moduleUrl: '<%=request.getContextPath()%>/modern/js/ai/adapters/arduino-simulator-adapter.js',
+  exportName: 'createArduinoSimulatorAssistant',
+  buttonId: 'btnAI',
+  boot: aiAssistantBoot,
+  extraOpts: () => ({
+    fileManager,
+    editor,
+    componentPanel,
+    wireManager,
+    diagramSync,
+    stopRunner,
+    selection,
+    exportDiagram,
+    getLastCompileErrors: () => lastCompileErrors,
+    logOutput,
+  }),
 });
 
 // ── Board Switcher ──

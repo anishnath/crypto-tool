@@ -12,16 +12,19 @@
 
     <script type="module">
     <%@ include file="../modern/components/ai-assistant-boot.inc.jsp" %>
-    import { createGenericToolAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/generic-tool-adapter.js';
+    import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
 
-    const ai = createGenericToolAssistant({
-      ...aiAssistantBoot,
-      title: 'SEO AI',
-      systemPrompt: 'You help with SEO analysis.',
-      seedContext: () => document.getElementById('input').value,
+    wireLazyAssistant({
+      moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/generic-tool-adapter.js',
+      exportName: 'createGenericToolAssistant',
+      buttonId: 'btnAI',
+      boot: aiAssistantBoot,
+      extraOpts: () => ({
+        title: 'SEO AI',
+        systemPrompt: 'You help with SEO analysis.',
+        seedContext: () => document.getElementById('input').value,
+      }),
     });
-    ai.mount();
-    document.getElementById('btnAI')?.addEventListener('click', () => ai.open());
     </script>
 --%><%@ page import="z.y.x.ai.AiAssistantPageSupport" %><%
 AiAssistantPageSupport.ensurePageVars(pageContext);

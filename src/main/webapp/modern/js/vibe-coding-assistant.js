@@ -847,7 +847,12 @@ export class ToolAiAssistant {
     if (!this._els) this.mount();
     this._previouslyFocused = document.activeElement;
     this._renderQuickActions();
-    if (this.billing?.enabled) this._refreshBilling();
+    if (this.billing?.enabled) {
+      const loggedIn = !!(this.billing.userId || this.userId);
+      // Guests: set tier locally only — skip billing JS/network until upgrade/rate-limit.
+      if (loggedIn) void this._refreshBilling();
+      else this._setTier('guest');
+    }
     this._els.backdrop.classList.add('open');
     // Reopening always expands the panel for visibility; user can collapse again.
     if (this.layout.collapsed) this.toggleCollapse(false);
@@ -1466,7 +1471,6 @@ export class ToolAiAssistant {
       if (!stickyReason) bar.dataset.reason = 'idle';
       bar.hidden = !stickyReason;
       this._renderBillingBar();
-      this._loadPlans();
       return;
     }
     try {
@@ -1481,7 +1485,6 @@ export class ToolAiAssistant {
         bar.dataset.state = 'free';
         if (!stickyReason) bar.dataset.reason = 'idle';
         bar.hidden = false;
-        this._loadPlans();
         // Resume a checkout the user started before signing in.
         const pending = this._consumePendingPlan();
         if (pending) {
