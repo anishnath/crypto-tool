@@ -418,8 +418,14 @@
 })();
 </script>
 
+<%-- Pages can opt out of the 2 default nav scripts by setting
+     request.setAttribute("navBundled", "true") BEFORE including this file.
+     They are then expected to load modern/js/tool-page-bundle.js themselves
+     (which contains categories-menu.js + recent-tools.js + 3 more). --%>
+<% if (!"true".equals(String.valueOf(request.getAttribute("navBundled")))) { %>
 <!-- Categories Menu Script -->
 <script src="<%=request.getContextPath()%>/modern/js/categories-menu.js" defer onerror="console.warn('categories-menu.js failed to load')"></script>
 
 <!-- Recent Tools Tracking -->
 <script src="<%=request.getContextPath()%>/modern/js/recent-tools.js" defer onerror="console.warn('recent-tools.js failed to load')"></script>
+<% } %>
