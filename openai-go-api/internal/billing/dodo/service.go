@@ -17,18 +17,39 @@ import (
 	"github.com/anish/crypto-tool/openai-go-api/internal/billing"
 )
 
+const (
+	// Full plan-picker payload (D1 + optional Dodo fill-in).
+	plansCatalogCacheTTL = time.Hour
+	// Live Dodo product name/price — changes rarely; avoid API on every catalog rebuild.
+	dodoProductCacheTTL     = 24 * time.Hour
+	dodoProductFailCacheTTL = 5 * time.Minute
+)
+
 // Service handles Dodo webhooks, checkout, and D1 subscription state.
 type Service struct {
 	d1  *billing.D1Store
 	cfg Config
 	api *dodopayments.Client
 
-	plansMu     sync.Mutex
-	plansCache  map[string]*plansCacheEntry
+	plansMu      sync.Mutex
+	plansCache   map[string]*plansCacheEntry
+	productCache map[string]*dodoProductCacheEntry
 }
 
 type plansCacheEntry struct {
 	catalog *PlansCatalog
+	expiry  time.Time
+}
+
+type dodoProductSnapshot struct {
+	name      string
+	recurring bool
+	price     int64
+	currency  string
+}
+
+type dodoProductCacheEntry struct {
+	product *dodoProductSnapshot // nil when the last fetch failed
 	expiry  time.Time
 }
 
@@ -530,7 +551,7 @@ func (s *Service) PlansCatalog(ctx context.Context, toolID string) (*PlansCatalo
 	}
 	s.plansCache[cacheKey] = &plansCacheEntry{
 		catalog: catalog,
-		expiry:  time.Now().Add(10 * time.Minute),
+		expiry:  time.Now().Add(plansCatalogCacheTTL),
 	}
 	s.plansMu.Unlock()
 	return catalog, nil
@@ -546,6 +567,63 @@ func (s *Service) ListPlans(ctx context.Context, toolID string) ([]PlanInfo, err
 		return nil, nil
 	}
 	return catalog.Plans, nil
+}
+
+// getDodoProduct returns name/price for a Dodo product id, with a long-lived in-memory cache.
+func (s *Service) getDodoProduct(ctx context.Context, productID string) (*dodoProductSnapshot, error) {
+	productID = strings.TrimSpace(productID)
+	if productID == "" {
+		return nil, errors.New("empty product id")
+	}
+	if s.api == nil {
+		return nil, errors.New("dodo api not configured")
+	}
+
+	s.plansMu.Lock()
+	if s.productCache != nil {
+		if entry, ok := s.productCache[productID]; ok && time.Now().Before(entry.expiry) {
+			if entry.product == nil {
+				s.plansMu.Unlock()
+				return nil, errors.New("dodo product fetch failed (cached)")
+			}
+			snap := *entry.product
+			s.plansMu.Unlock()
+			return &snap, nil
+		}
+	}
+	s.plansMu.Unlock()
+
+	prod, err := s.api.Products.Get(ctx, productID)
+	var snap *dodoProductSnapshot
+	expiry := time.Now().Add(dodoProductCacheTTL)
+	if err != nil {
+		expiry = time.Now().Add(dodoProductFailCacheTTL)
+	} else if prod == nil {
+		err = errors.New("dodo product not found")
+		expiry = time.Now().Add(dodoProductFailCacheTTL)
+	} else {
+		snap = &dodoProductSnapshot{
+			name:      prod.Name,
+			recurring: prod.IsRecurring,
+			price:     prod.Price.Price,
+			currency:  string(prod.Price.Currency),
+		}
+	}
+
+	s.plansMu.Lock()
+	if s.productCache == nil {
+		s.productCache = map[string]*dodoProductCacheEntry{}
+	}
+	s.productCache[productID] = &dodoProductCacheEntry{product: snap, expiry: expiry}
+	s.plansMu.Unlock()
+
+	if snap == nil {
+		if err == nil {
+			err = errors.New("dodo product not found")
+		}
+		return nil, err
+	}
+	return snap, nil
 }
 
 func (s *Service) buildPlansCatalog(ctx context.Context, toolID string) (*PlansCatalog, error) {
@@ -626,22 +704,22 @@ func (s *Service) buildPlansCatalog(ctx context.Context, toolID string) (*PlansC
 			}
 		}
 
-		// Fill any gaps the DB didn't specify from the live Dodo product.
-		if (p.Name == "" || p.PriceLabel == "") && s.api != nil && sp.productID != "" {
-			prod, err := s.api.Products.Get(ctx, sp.productID)
+		// Fill any gaps the DB didn't specify from Dodo (cached; skipped when DB has name + price).
+		if (p.Name == "" || p.PriceLabel == "") && sp.productID != "" {
+			prod, err := s.getDodoProduct(ctx, sp.productID)
 			if err != nil {
 				slog.Warn("dodo plans: product fetch failed", "product_id", sp.productID, "error", err.Error())
 			} else if prod != nil {
-				p.Recurring = prod.IsRecurring
+				p.Recurring = prod.recurring
 				if p.Name == "" {
-					p.Name = prod.Name
+					p.Name = prod.name
 				}
 				if !o.hasAmount {
-					p.PriceAmount = prod.Price.Price
-					p.Currency = string(prod.Price.Currency)
+					p.PriceAmount = prod.price
+					p.Currency = prod.currency
 				}
 				if p.PriceLabel == "" {
-					p.PriceLabel = formatMoney(prod.Price.Price, string(prod.Price.Currency))
+					p.PriceLabel = formatMoney(prod.price, prod.currency)
 				}
 			}
 		}

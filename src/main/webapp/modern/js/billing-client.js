@@ -4,6 +4,9 @@
  *   POST {ctx}/api/dodo/checkout
  */
 
+/** Max wait for read-only billing GETs; avoids blocking page open on slow gateway. */
+const BILLING_READ_TIMEOUT_MS = 5000;
+
 function joinUrl(ctx, path) {
   const base = String(ctx || '').replace(/\/$/, '');
   const p = path.startsWith('/') ? path : `/${path}`;
@@ -22,6 +25,16 @@ function relativeToContext(ctx, path) {
     p = p.slice(base.length) || '/';
   }
   return p.startsWith('/') ? p : `/${p}`;
+}
+
+async function fetchWithTimeout(url, init = {}, ms = BILLING_READ_TIMEOUT_MS) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ms);
+  try {
+    return await fetch(url, { ...init, signal: ctrl.signal });
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function loginUrl(ctx, redirectPath) {
@@ -53,7 +66,7 @@ async function parseJson(res, ctx) {
  * Returns null when not logged in (401).
  */
 export async function fetchBillingStatus(ctx) {
-  const res = await fetch(joinUrl(ctx, '/api/billing/status'), {
+  const res = await fetchWithTimeout(joinUrl(ctx, '/api/billing/status'), {
     method: 'GET',
     credentials: 'same-origin',
     headers: { Accept: 'application/json' },
@@ -73,7 +86,7 @@ export async function fetchPlans(ctx, opts = {}) {
   try {
     const toolId = String(opts.toolId || '').trim();
     const qs = toolId ? `?tool=${encodeURIComponent(toolId)}` : '';
-    const res = await fetch(joinUrl(ctx, `/api/billing/plans${qs}`), {
+    const res = await fetchWithTimeout(joinUrl(ctx, `/api/billing/plans${qs}`), {
       method: 'GET',
       credentials: 'same-origin',
       headers: { Accept: 'application/json' },

@@ -51,6 +51,18 @@ Dodo (internet)
 
 **Rule of thumb:** If it affects **money or SKU**, touch Dodo + `billing_plans.product_id`. If it affects **AI usage or model**, touch `ai_plans`. If it affects **what the upgrade modal shows**, touch both.
 
+### Go caching (`GET /v1/billing/plans`)
+
+| Layer | TTL | Notes |
+|-------|-----|-------|
+| Full catalog (per `tool_id`) | **1 hour** | In-memory; D1 `billing_plans` + `ai_plans` |
+| Dodo product name/price | **24 hours** | Only when DB rows lack `name` or `price_label` |
+| Failed Dodo product fetch | **5 minutes** | Avoids hammering Dodo on outage |
+
+**Skip Dodo entirely:** set `name`, `price_label` (or `price_amount` + `currency`) on `billing_plans` — Go uses DB values and never calls `Products.Get`.
+
+Restart Go or wait for TTL after changing Dodo prices or D1 display copy.
+
 ---
 
 ## 3. AI tiers (guest / free / pro)

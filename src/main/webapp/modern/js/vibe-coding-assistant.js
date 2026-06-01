@@ -838,7 +838,7 @@ export class ToolAiAssistant {
     this._applyLayout();
 
     this._renderHistory();
-    if (this.billing?.enabled) this._refreshBilling();
+    // Billing status/plans load on first open(), not mount(), so tool pages stay fast.
     return this;
   }
 
