@@ -849,9 +849,8 @@ export class ToolAiAssistant {
     this._renderQuickActions();
     if (this.billing?.enabled) {
       const loggedIn = !!(this.billing.userId || this.userId);
-      // Guests: set tier locally only — skip billing JS/network until upgrade/rate-limit.
       if (loggedIn) void this._refreshBilling();
-      else this._setTier('guest');
+      else void this._refreshGuestBilling();
     }
     this._els.backdrop.classList.add('open');
     // Reopening always expands the panel for visibility; user can collapse again.
@@ -1455,6 +1454,27 @@ export class ToolAiAssistant {
     const useGateway = pick === 'gateway';
     this.useGateway = useGateway;
     this.aiUrl = this.ctx + (useGateway ? '/ai-gateway' : '/ai');
+  }
+
+  /**
+   * Guest billing UI on open: show sign-in bar immediately (sync), load billing-client in background.
+   * Does not block the panel or page — network runs after open() returns.
+   */
+  _refreshGuestBilling() {
+    if (!this.billing?.enabled || !this._els?.billingBar) return;
+    const bar = this._els.billingBar;
+    if (bar.dataset.dismissed === 'true') {
+      this._setTier('guest');
+      return;
+    }
+    const stickyReason = bar.dataset.reason && bar.dataset.reason !== 'idle';
+    this._billingStatus = null;
+    this._setTier('guest');
+    bar.dataset.state = 'guest';
+    if (!stickyReason) bar.dataset.reason = 'idle';
+    bar.hidden = false;
+    this._renderBillingBar();
+    void this._ensureBillingClient().then(() => this._renderBillingBar());
   }
 
   async _refreshBilling() {
