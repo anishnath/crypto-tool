@@ -33,7 +33,6 @@
  */
 
 import { streamChat } from './llm-client.js';
-import { fetchBillingStatus, fetchPlans, startCheckout, loginUrl } from './billing-client.js';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -684,6 +683,8 @@ export class ToolAiAssistant {
     this._lastContextFingerprint = '';
     /** @type {?{ backdrop: HTMLDivElement, modal: HTMLDivElement, header: HTMLElement, messages: HTMLDivElement, quick: HTMLDivElement, input: HTMLTextAreaElement, sendBtn: HTMLButtonElement, collapseBtn: HTMLButtonElement, modeSelect: HTMLSelectElement|null, freshToggle: HTMLInputElement|null }} */
     this._els = null;
+    /** @type {Promise<typeof import('./billing-client.js')>|null} */
+    this._billingClientMod = null;
   }
 
   // ─── Lifecycle ─────────────────────────────────────────────────────────────
@@ -1391,6 +1392,14 @@ export class ToolAiAssistant {
     return err?.status === 429 || err?.code === 'rate_limited';
   }
 
+  /** Lazy-load billing fetch helpers (not needed until open / upgrade). */
+  async _ensureBillingClient() {
+    if (!this._billingClientMod) {
+      this._billingClientMod = import('./billing-client.js');
+    }
+    return this._billingClientMod;
+  }
+
   /** Surface the upgrade card after a quota/rate-limit hit. */
   _showUpgradePrompt(err) {
     if (!this.billing?.enabled || !this._els?.billingBar) return;
@@ -1402,8 +1411,10 @@ export class ToolAiAssistant {
     bar.dataset.dismissed = '';
     bar.dataset.state = loggedIn ? 'free' : 'guest';
     bar.hidden = false;
-    this._renderBillingBar();
-    bar.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
+    void this._ensureBillingClient().then(() => {
+      this._renderBillingBar();
+      bar.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
+    });
   }
 
   /**
@@ -1443,6 +1454,7 @@ export class ToolAiAssistant {
 
   async _refreshBilling() {
     if (!this.billing?.enabled || !this._els?.billingBar) return;
+    const { fetchBillingStatus } = await this._ensureBillingClient();
     const bar = this._els.billingBar;
     const ctx = this.billing.ctx || this.ctx;
     const loggedIn = !!(this.billing.userId || this.userId);
@@ -1514,7 +1526,14 @@ export class ToolAiAssistant {
     const ctx = this.billing.ctx || this.ctx;
     const state = bar.dataset.state || 'unknown';
     const reason = bar.dataset.reason || 'idle';
-    const login = loginUrl(ctx);
+    const loginMod = this._billingClientMod;
+    const login = loginMod
+      ? loginMod.then((m) => m.loginUrl(ctx))
+      : Promise.resolve(`${String(ctx || '').replace(/\/$/, '')}/GoogleOAuthFunctionality?action=login`);
+    void login.then((loginHref) => this._renderBillingBarInner(bar, state, reason, loginHref));
+  }
+
+  _renderBillingBarInner(bar, state, reason, login) {
     const busy = this._billingBusy;
 
     if (state === 'pro') {
@@ -1645,6 +1664,7 @@ export class ToolAiAssistant {
     if (this._plansLoading) return;
     this._plansLoading = true;
     try {
+      const { fetchPlans } = await this._ensureBillingClient();
       this._plansCatalog = await fetchPlans(this.billing?.ctx || this.ctx, { toolId })
         || { plans: [], ai_tiers: [] };
       this._plansCatalogTool = toolId;
@@ -1801,6 +1821,7 @@ export class ToolAiAssistant {
 
   async _startBillingCheckout(plan) {
     const ctx = this.billing?.ctx || this.ctx;
+    const { loginUrl, startCheckout } = await this._ensureBillingClient();
     const loggedIn = !!(this.billing?.userId || this.userId);
     if (!loggedIn) {
       // Save selection, sign in, then resume checkout automatically on return.

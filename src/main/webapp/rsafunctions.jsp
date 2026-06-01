@@ -928,16 +928,38 @@
 
     <script type="module">
     <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
-    import { createRsaAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/rsa/rsa-ai.js';
+    const rsaAiModule = '<%= request.getAttribute("aiCtx") %>/modern/js/rsa/rsa-ai.js';
+    let rsaAi = null;
+    let rsaAiReady = null;
 
-    const rsaAi = createRsaAssistant({ ...aiAssistantBoot });
-    rsaAi.mount();
-    document.getElementById('btnRsaAI')?.addEventListener('click', () => rsaAi.open());
+    function ensureRsaAi() {
+      if (rsaAi) return Promise.resolve(rsaAi);
+      if (!rsaAiReady) {
+        rsaAiReady = import(rsaAiModule).then(({ createRsaAssistant }) => {
+          rsaAi = createRsaAssistant({ ...aiAssistantBoot });
+          rsaAi.mount();
+          return rsaAi;
+        });
+      }
+      return rsaAiReady;
+    }
+
+    async function openRsaAi() {
+      const btn = document.getElementById('btnRsaAI');
+      btn?.setAttribute('aria-busy', 'true');
+      try {
+        (await ensureRsaAi()).open();
+      } finally {
+        btn?.removeAttribute('aria-busy');
+      }
+    }
+
+    document.getElementById('btnRsaAI')?.addEventListener('click', () => { openRsaAi(); });
 
     document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
         e.preventDefault();
-        rsaAi.open();
+        openRsaAi();
       }
     });
     </script>
