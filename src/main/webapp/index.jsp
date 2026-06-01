@@ -715,6 +715,152 @@
         </div>
     </section>
 
+    <!-- About this application — addresses Google OAuth verification homepage requirement -->
+    <section id="about" class="about-app" aria-labelledby="about-heading">
+        <div class="about-inner">
+            <h2 id="about-heading" class="about-title">About 8gwifi.org</h2>
+            <p class="about-lead">
+                <strong>8gwifi.org</strong> is a free online suite of <strong>200+ professional developer, security, and study tools</strong> — all in one site, all in your browser. We exist to give engineers, students, sysadmins, and security folks a single place to encrypt messages with PGP, generate SSH keys, decode JWTs, debug TLS certificates, compute subnet masks, run math/chemistry/physics calculators, prep for AMC/IIT/SAT exams, render TikZ/LaTeX, and dozens of other small tasks that would otherwise need a separate desktop app or login-walled SaaS.
+            </p>
+
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="about-card-icon">🛠️</div>
+                    <h3 class="about-card-title">What this app does</h3>
+                    <ul class="about-card-list">
+                        <li><strong>Cryptography &amp; PKI:</strong> PGP encrypt/decrypt, SSH/RSA/ECDSA key generation, X.509 certificate parsing, JWT signing &amp; debugging.</li>
+                        <li><strong>Networking &amp; DevOps:</strong> DNS lookup, subnet calculator, port checker, Kubernetes YAML generator, base64/JSON/YAML converters.</li>
+                        <li><strong>Math, Chemistry, Physics, Biology:</strong> step-by-step calculators, simulators, exam prep for AMC, AIME, IIT/JEE, SAT.</li>
+                        <li><strong>Finance, SEO, CTF, Compilers:</strong> EMI/compound interest, site audits, capture-the-flag puzzles, Python/Java/JS execution.</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <div class="about-card-icon">🔐</div>
+                    <h3 class="about-card-title">Why we ask for Google sign-in</h3>
+                    <p>Sign-in is <strong>completely optional</strong>. Every tool works without it. You only need to sign in if you want to use the built-in <strong>AI Assistant</strong> features (e.g., PGP AI on the encrypt/decrypt page, SSH AI on the key-generator page).</p>
+                    <p><strong>What we read from your Google account when you sign in:</strong></p>
+                    <ul class="about-card-list">
+                        <li><code>email</code> — to identify your AI-usage account so quotas, billing, and chat history stay attached to you across sessions.</li>
+                        <li><code>profile</code> (name + picture) — to personalize the chat UI (e.g., show your name on your messages).</li>
+                        <li><code>openid</code> — the standard identity assertion used to perform the sign-in.</li>
+                    </ul>
+                    <p><strong>What we never request:</strong> Gmail, Google Drive, Google Calendar, Contacts, YouTube, or any other scope. We only ask for the minimum that lets the AI Assistant know who you are.</p>
+                </div>
+            </div>
+
+            <div class="about-trust">
+                <strong>No data resold. No spam.</strong> Your Google-derived email is used solely for AI-feature account identification and billing. We never sell it, never share it, and never use it for marketing.
+                Full details: <a href="<%=request.getContextPath()%>/privacy.jsp">Privacy Policy</a> · <a href="<%=request.getContextPath()%>/terms.jsp">Terms of Use</a> · <a href="<%=request.getContextPath()%>/contactus.jsp">Contact</a>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .about-app {
+            padding: 2.5rem 1rem;
+            background: var(--bg-primary, #ffffff);
+            border-bottom: 1px solid var(--border, #e2e8f0);
+        }
+        .about-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .about-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin: 0 0 0.6rem;
+            letter-spacing: -0.02em;
+            color: var(--text-primary, #0f172a);
+        }
+        .about-lead {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary, #475569);
+            margin: 0 0 1.5rem;
+            max-width: 900px;
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; }
+        }
+        .about-card {
+            padding: 1.25rem;
+            background: var(--bg-secondary, #f8fafc);
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 0.75rem;
+        }
+        .about-card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.4rem;
+        }
+        .about-card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0 0 0.6rem;
+            color: var(--text-primary, #0f172a);
+        }
+        .about-card p {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--text-secondary, #475569);
+            margin: 0 0 0.6rem;
+        }
+        .about-card-list {
+            list-style: disc;
+            padding-left: 1.1rem;
+            margin: 0;
+            font-size: 0.875rem;
+            line-height: 1.55;
+        }
+        .about-card-list li {
+            margin: 0.25rem 0;
+            color: var(--text-secondary, #475569);
+        }
+        .about-card-list li strong {
+            color: var(--text-primary, #0f172a);
+        }
+        .about-card-list code {
+            background: rgba(99,102,241,0.10);
+            padding: 0.05rem 0.3rem;
+            border-radius: 0.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            color: var(--text-primary, #0f172a);
+        }
+        .about-trust {
+            margin-top: 0.5rem;
+            padding: 0.85rem 1rem;
+            background: rgba(16,185,129,0.08);
+            border-left: 4px solid #10b981;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            line-height: 1.55;
+            color: var(--text-secondary, #475569);
+        }
+        .about-trust strong {
+            color: #047857;
+        }
+        .about-trust a {
+            color: var(--primary, #6366f1);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .about-trust a:hover { text-decoration: underline; }
+        [data-theme="dark"] .about-app {
+            background: var(--bg-secondary, #1e293b);
+        }
+        [data-theme="dark"] .about-card {
+            background: rgba(255,255,255,0.03);
+        }
+        [data-theme="dark"] .about-trust strong { color: #34d399; }
+    </style>
+
     <!-- In-Content Ad -->
     <%@ include file="modern/ads/ad-in-content-top.jsp" %>
 
@@ -1150,8 +1296,11 @@
     <!-- Footer -->
     <footer class="page-footer">
         <div class="footer-content">
-            <p class="footer-text">© 2024 8gwifi.org - Free Online Tools</p>
+            <p class="footer-text">© 2026 8gwifi.org — Free Online Tools</p>
             <div class="footer-links">
+                <a href="<%=request.getContextPath()%>/privacy.jsp" class="footer-link">Privacy Policy</a>
+                <a href="<%=request.getContextPath()%>/terms.jsp" class="footer-link">Terms of Use</a>
+                <a href="<%=request.getContextPath()%>/contactus.jsp" class="footer-link">Contact</a>
                 <a href="exams/books/ncert/index.jsp" class="footer-link">NCERT Solutions</a>
                 <a href="tutorials/" class="footer-link">Tutorials</a>
                 <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
