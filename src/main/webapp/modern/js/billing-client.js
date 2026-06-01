@@ -4,8 +4,10 @@
  *   POST {ctx}/api/dodo/checkout
  */
 
-/** Max wait for read-only billing GETs; avoids blocking page open on slow gateway. */
-const BILLING_READ_TIMEOUT_MS = 5000;
+/** Max wait for billing status GET (lightweight; runs on logged-in open). */
+const BILLING_STATUS_TIMEOUT_MS = 10000;
+/** Max wait for plan catalog GET (“See Pro plans”); cold Go + Dodo can be slow on first hit. */
+const BILLING_PLANS_TIMEOUT_MS = 20000;
 /** Browser cache for plan catalog (matches Go in-memory TTL). */
 const PLANS_CACHE_TTL_MS = 60 * 60 * 1000;
 const PLANS_CACHE_PREFIX = 'billing_plans_v1_';
@@ -52,7 +54,7 @@ function relativeToContext(ctx, path) {
   return p.startsWith('/') ? p : `/${p}`;
 }
 
-async function fetchWithTimeout(url, init = {}, ms = BILLING_READ_TIMEOUT_MS) {
+async function fetchWithTimeout(url, init = {}, ms = BILLING_STATUS_TIMEOUT_MS) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ms);
   try {
@@ -117,7 +119,7 @@ export async function fetchPlans(ctx, opts = {}) {
       method: 'GET',
       credentials: 'same-origin',
       headers: { Accept: 'application/json' },
-    });
+    }, BILLING_PLANS_TIMEOUT_MS);
     if (!res.ok) return empty;
     const data = await res.json().catch(() => ({}));
     const out = {

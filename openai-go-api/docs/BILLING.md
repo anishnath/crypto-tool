@@ -59,6 +59,8 @@ Dodo (internet)
 | Dodo product name/price | **24 hours** | Only when DB rows lack `name` or `price_label` |
 | Failed Dodo product fetch | **5 minutes** | Avoids hammering Dodo on outage |
 
+**Browser client (`billing-client.js`):** status GET **10s** abort; plans GET (**See Pro plans**) **20s** abort; plans cached **1h** in `sessionStorage`. Tomcat proxy socket **60s** to Go.
+
 **Skip Dodo entirely:** set `name`, `price_label` (or `price_amount` + `currency`) on `billing_plans` — Go uses DB values and never calls `Products.Get`.
 
 Restart Go or wait for TTL after changing Dodo prices or D1 display copy.
