@@ -100,24 +100,33 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
     <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
     </noscript>
 
-    <%@ include file="modern/ads/ad-init.jsp" %>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- LCP optimization: defer ad-init.jsp + jQuery to bottom of body.
+         Tiny stub here so per-ad-container lazy-load observers can safely
+         queue googletag.cmd / stpd.que pushes before the real scripts arrive.
+         Preconnect hints let TLS handshakes run in parallel with LCP paint. -->
+    <link rel="preconnect" href="https://securepubads.g.doubleclick.net" crossorigin>
+    <link rel="preconnect" href="https://stpd.cloud" crossorigin>
+    <link rel="preconnect" href="https://code.jquery.com" crossorigin>
+    <script>
+        window.googletag = window.googletag || { cmd: [] };
+        window.stpd = window.stpd || { que: [] };
+    </script>
 
     <style>
         /* RSA Tool - Compact input, spacious output */
@@ -886,9 +895,20 @@
     <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
     <%@ include file="modern/components/analytics.jsp" %>
 
-    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-    <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+    <!-- LCP/INP: jQuery loaded AFTER body content has painted.
+         Page script below uses $(document).ready(), so it waits for jQuery
+         to attach $ to window before its callback fires. -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- LCP/INP: ad-init.jsp moved from <head> to body end.
+         gpt.js + stpd.cloud loaders now race against page idle, not LCP.
+         The googletag/stpd stubs at top of <head> let per-ad observers
+         safely queue calls in the meantime. -->
+    <%@ include file="modern/ads/ad-init.jsp" %>
+
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+    <script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
 
     <!-- Share URL Modal -->
     <div class="rsa-modal-overlay" id="shareModal">
