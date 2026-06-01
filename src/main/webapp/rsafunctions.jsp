@@ -470,6 +470,9 @@
     </style>
 </head>
 <body>
+    <%-- Opt out of nav-header's 2 default scripts (categories-menu.js + recent-tools.js);
+         the bundled tool-page-bundle.js at body end carries them instead. --%>
+    <% request.setAttribute("navBundled", "true"); %>
     <%@ include file="modern/components/nav-header.jsp" %>
 
     <!-- Page Header (compact) -->
@@ -893,9 +896,12 @@
 
     <%@ include file="modern/ads/ad-init.jsp" %>
 
-    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
-    <script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
+    <!-- Single bundle replaces 5 separate scripts:
+         tool-utils + dark-mode + categories-menu + recent-tools + search.
+         categories-menu and recent-tools used to be loaded by nav-header.jsp;
+         we set request "navBundled"=true above so nav-header skips them.
+         Regenerate via scripts/build-js-bundle.sh after editing any source. -->
+    <script src="<%=request.getContextPath()%>/modern/js/tool-page-bundle.js" defer></script>
 
     <!-- Share URL Modal -->
     <div class="rsa-modal-overlay" id="shareModal">
