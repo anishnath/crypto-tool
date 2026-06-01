@@ -467,22 +467,47 @@
 <body>
     <%@ include file="modern/components/nav-header.jsp" %>
 
+    <!-- Page Header (compact) -->
+    <style>
+        .tool-page-header{padding:0.5rem 1rem !important;min-height:0 !important;border-bottom:1px solid var(--border)}
+        .tool-page-header-inner{display:flex !important;align-items:center !important;gap:0.75rem;flex-wrap:wrap;padding:0 !important;margin:0 auto !important;max-width:1400px}
+        .tool-page-header-inner > div:first-child{display:flex;align-items:baseline;gap:0.75rem;flex-wrap:wrap;min-width:0}
+        .tool-page-title{font-size:1.05rem !important;font-weight:700 !important;margin:0 !important;line-height:1.25 !important;letter-spacing:-0.01em}
+        .tool-breadcrumbs{font-size:0.72rem !important;line-height:1.25 !important;margin:0 !important;color:var(--text-secondary)}
+        .tool-breadcrumbs a{color:var(--tool-primary,#667eea);text-decoration:none}
+        .tool-breadcrumbs a:hover{text-decoration:underline}
+        .rsa-header-pitch{font-size:0.72rem;line-height:1.25;color:var(--text-secondary);padding-left:0.6rem;margin-left:0.6rem;border-left:1px solid var(--border);white-space:nowrap}
+        .rsa-header-pitch strong{color:var(--text-primary);font-weight:600}
+        .rsa-header-pitch a{color:var(--tool-primary,#667eea);font-weight:600;text-decoration:none;margin-left:0.25rem}
+        .rsa-header-pitch a:hover{text-decoration:underline}
+        .tool-page-badges{display:flex;gap:0.3rem;margin-left:auto;flex-wrap:wrap}
+        .tool-page-badges .tool-badge{padding:0.12rem 0.45rem !important;font-size:0.66rem !important;line-height:1.3 !important;border-radius:9999px !important;font-weight:600;background:rgba(102,126,234,0.10);color:var(--tool-primary,#667eea);border:1px solid rgba(102,126,234,0.25)}
+        [data-theme="dark"] .tool-page-badges .tool-badge{background:rgba(102,126,234,0.18);color:#a5b4fc;border-color:rgba(102,126,234,0.35)}
+        .tool-description-section{padding:0.4rem 1rem !important}
+        .tool-description-content p{font-size:0.78rem !important;line-height:1.5 !important;margin:0 !important;color:var(--text-secondary)}
+        @media (max-width:640px){
+            .tool-page-title{font-size:0.95rem !important}
+            .rsa-header-pitch{display:block;padding-left:0;margin-left:0;border-left:none;white-space:normal;margin-top:0.15rem}
+            .tool-page-badges{margin-left:0}
+        }
+    </style>
     <header class="tool-page-header">
         <div class="tool-page-header-inner">
             <div>
-                <h1 class="tool-page-title">RSA Encryption & Decryption Online - Key Generator, Sign & Verify</h1>
-                <nav class="tool-breadcrumbs">
+                <h1 class="tool-page-title">RSA Encryption &amp; Decryption</h1>
+                <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
                     <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
                     <a href="<%=request.getContextPath()%>/index.jsp#cryptography">Cryptography</a> /
-                    RSA Encryption Tool
+                    <span>RSA</span>
                 </nav>
+                <span class="rsa-header-pitch"><strong>RSA encrypt / decrypt / sign / verify in-browser</strong> &mdash; 2048/4096-bit, OAEP, SHA256withRSA, no data stored.</span>
             </div>
             <div class="tool-page-badges">
-                <span class="tool-badge">2048 & 4096-bit Keys</span>
+                <span class="tool-badge">2048 / 4096-bit</span>
                 <span class="tool-badge">OAEP SHA-256</span>
-                <span class="tool-badge">Sign & Verify</span>
-                <span class="tool-badge">Instant Key Gen</span>
-                <span class="tool-badge">Try It Live (Python)</span>
+                <span class="tool-badge">Sign &amp; Verify</span>
+                <span class="tool-badge">Instant Keygen</span>
+                <span class="tool-badge">Python Compiler</span>
                 <span class="tool-badge">No Data Stored</span>
             </div>
         </div>
@@ -490,8 +515,8 @@
 
     <section class="tool-description-section">
         <div class="tool-description-inner">
-            <div class="tool-description-content">
-                <p>Encrypt, decrypt, sign and verify with RSA online. Generate 2048 or 4096-bit key pairs instantly (no page reload), encrypt with OAEP SHA-256 or PKCS1, create digital signatures with SHA256withRSA, and swap between encrypt/decrypt in one click. Includes a built-in Python compiler with RSA code templates. Free, no signup, no data stored.</p>
+            <div class="tool-description-ad" style="width:100%;">
+                <%@ include file="modern/ads/ad-in-content-top.jsp" %>
             </div>
         </div>
     </section>
