@@ -11,6 +11,7 @@
 <%@ page import="z.y.x.r.LoadPropertyFileFunctionality" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "cryptography/rsa-functions");
 
     String pubKey = "";
     String privKey = "";
@@ -44,6 +45,7 @@
     if ("2048".equals(checkedKey)) { k3 = true; }
     if ("4096".equals(checkedKey)) { k4 = true; }
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,7 +70,7 @@
     </style>
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="RSA Encryption Decryption Online - Key Generator & Sign" />
+        <jsp:param name="toolName" value="RSA Encryption Decryption Online - Key Generator &amp; Sign" />
         <jsp:param name="toolDescription" value="Free online RSA encryption and decryption tool. Generate 2048 or 4096-bit key pairs instantly, encrypt with OAEP SHA-256, sign and verify with SHA256withRSA. Instant key generation, one-click encrypt-decrypt swap, built-in Python compiler. No signup, no data stored." />
         <jsp:param name="toolCategory" value="Cryptography" />
         <jsp:param name="toolUrl" value="rsafunctions.jsp" />
@@ -102,6 +104,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -258,6 +261,9 @@
         .rsa-output-tab:hover:not(.active) { background: var(--border); }
         [data-theme="dark"] .rsa-output-tab { background: rgba(255,255,255,0.05); }
         [data-theme="dark"] .rsa-output-tab.active { background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); color: #fff; }
+        .rsa-ai-tab { flex: 0 0 auto; padding: 0.5rem 0.9rem; background: linear-gradient(135deg,#10b981 0%,#0ea5a4 100%); color: #fff; border-right: 1.5px solid var(--border); display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; }
+        .rsa-ai-tab:hover { filter: brightness(1.08); color: #fff; background: linear-gradient(135deg,#10b981 0%,#0ea5a4 100%); }
+        [data-theme="dark"] .rsa-ai-tab { background: linear-gradient(135deg,#10b981 0%,#0ea5a4 100%); color: #fff; }
         .rsa-panel { display: none; flex: 1; min-height: 0; }
         .rsa-panel.active { display: flex; flex-direction: column; }
         #rsa-panel-python { min-height: 540px; }
@@ -613,6 +619,10 @@
         <!-- ========== OUTPUT COLUMN ========== -->
         <div class="tool-output-column">
             <div class="rsa-output-tabs">
+                <button id="btnRsaAI" type="button" class="rsa-output-tab rsa-ai-tab" title="AI assistant (Ctrl+Shift+A)" aria-label="Open AI assistant">
+                    <svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:4px;"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062Z"/><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z"/></svg>
+                    AI Assistant
+                </button>
                 <button type="button" class="rsa-output-tab active" data-panel="output">Output</button>
                 <button type="button" class="rsa-output-tab" data-panel="python">&#9654; Try It Live</button>
             </div>
@@ -1517,6 +1527,22 @@
     });
 
     window.toggleFaq = function(btn) { btn.parentElement.classList.toggle('open'); };
+    </script>
+
+    <script type="module">
+    <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
+    import { createRsaAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/rsa-adapter.js';
+
+    const rsaAi = createRsaAssistant({ ...aiAssistantBoot });
+    rsaAi.mount();
+    document.getElementById('btnRsaAI')?.addEventListener('click', () => rsaAi.open());
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        rsaAi.open();
+      }
+    });
     </script>
 </body>
 </html>
