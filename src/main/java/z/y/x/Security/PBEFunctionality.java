@@ -362,6 +362,14 @@ public class PBEFunctionality extends HttpServlet {
                 }
 
                 final String[] cipherparameter = request.getParameterValues("cipherparameternew");
+                if (cipherparameter == null || cipherparameter.length == 0) {
+                    EncodedMessage errorResponse = new EncodedMessage();
+                    errorResponse.setSuccess(false);
+                    errorResponse.setOperation("pbe");
+                    errorResponse.setErrorMessage("At least one PBE algorithm is required (cipherparameternew)");
+                    out.println(gson.toJson(errorResponse));
+                    return;
+                }
 
                 HttpClient client = HttpClientBuilder.create().build();
                 HttpPost post = new HttpPost(url1);

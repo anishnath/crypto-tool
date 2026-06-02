@@ -76,7 +76,7 @@ public class NTRUFunctionality extends HttpServlet {
     }
 
     /**
-     * Handle NTRU key pair generation
+     * Handle NTRU key pair generation (JSON for API/AJAX; JSP forward for classic form POST).
      */
     private void handleKeyGeneration(HttpServletRequest request, HttpServletResponse response, String keysize)
             throws ServletException, IOException {
@@ -84,6 +84,7 @@ public class NTRUFunctionality extends HttpServlet {
         String password = request.getParameter("password");
         String salt = request.getParameter("salt");
         String ntruparam = request.getParameter("ntruparam");
+        boolean jsonClient = wantsJsonResponse(request);
 
         request.getSession().setAttribute("errorMsg", "");
 
@@ -92,9 +93,9 @@ public class NTRUFunctionality extends HttpServlet {
             String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("epn") + "ntru/generatekeypair";
             HttpPost post = new HttpPost(url1);
             List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-            urlParameters.add(new BasicNameValuePair("p_password", password));
+            urlParameters.add(new BasicNameValuePair("p_password", password != null ? password : ""));
             urlParameters.add(new BasicNameValuePair("p_ntru", ntruparam));
-            urlParameters.add(new BasicNameValuePair("p_salt", salt));
+            urlParameters.add(new BasicNameValuePair("p_salt", salt != null ? salt : ""));
 
             post.setEntity(new UrlEncodedFormEntity(urlParameters));
             post.addHeader("accept", "application/json");
@@ -103,11 +104,14 @@ public class NTRUFunctionality extends HttpServlet {
 
             if (response1.getStatusLine().getStatusCode() != 200) {
                 String errorContent = readResponseContent(response1);
-                if (response1.getStatusLine().getStatusCode() == 404) {
-                    request.getSession().setAttribute("errorMsg", errorContent);
-                } else {
-                    request.getSession().setAttribute("errorMsg", "SYSTEM Error Please Try Later If Problem Persist raise the feature request");
+                String errMsg = response1.getStatusLine().getStatusCode() == 404
+                        ? errorContent
+                        : "SYSTEM Error Please Try Later If Problem Persist raise the feature request";
+                if (jsonClient) {
+                    writeJson(response, gson.toJson(NTRUResponse.error("keygen", ntruparam, errMsg)));
+                    return;
                 }
+                request.getSession().setAttribute("errorMsg", errMsg);
                 request.getSession().setAttribute("pubkey", "");
                 request.getSession().setAttribute("privKey", "");
                 request.getSession().setAttribute("ntru", ntruparam);
@@ -118,17 +122,44 @@ public class NTRUFunctionality extends HttpServlet {
             String content = readResponseContent(response1);
             ntrupojo encodedMessage = gson.fromJson(content, ntrupojo.class);
 
+            if (jsonClient) {
+                writeJson(response, gson.toJson(NTRUResponse.keyGenSuccess(
+                        encodedMessage.getPublickey(),
+                        encodedMessage.getPrivatekey(),
+                        ntruparam)));
+                return;
+            }
+
             request.getSession().setAttribute("pubkey", encodedMessage.getPublickey());
             request.getSession().setAttribute("privKey", encodedMessage.getPrivatekey());
             request.getSession().setAttribute("ntru", ntruparam);
             forwardToJsp(request, response);
 
         } catch (Exception e) {
+            if (jsonClient) {
+                writeJson(response, gson.toJson(NTRUResponse.error("keygen", ntruparam, "Error: " + e.getMessage())));
+                return;
+            }
             request.getSession().setAttribute("pubkey", null);
             request.getSession().setAttribute("privKey", null);
             request.getSession().setAttribute("keysize", keysize);
             forwardToJsp(request, response);
         }
+    }
+
+    private static boolean wantsJsonResponse(HttpServletRequest request) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            return true;
+        }
+        return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+    }
+
+    private static void writeJson(HttpServletResponse response, String json) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
     }
 
     /**
