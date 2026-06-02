@@ -206,6 +206,114 @@ def fix_text_nobrace(s: str) -> str:
         return s
     return TEXT_NOBRACE_RE.sub(r'\\text{\1}', s)
 
+# ── Plain-TeX → KaTeX (mirror of split_iit.py — keep in sync) ───────────
+def _balanced_brace_replace(s, opener, replacement_fn):
+    out = []
+    i = 0
+    while i < len(s):
+        idx = s.find(opener, i)
+        if idx < 0: out.append(s[i:]); break
+        out.append(s[i:idx])
+        depth = 1; j = idx + len(opener); start = j
+        while j < len(s) and depth > 0:
+            c = s[j]
+            if c == '{': depth += 1
+            elif c == '}': depth -= 1
+            j += 1
+        if depth == 0:
+            out.append(replacement_fn(s[start:j-1])); i = j
+        else:
+            out.append(s[idx:]); break
+    return ''.join(out)
+
+PLAIN_TEX_ENVS = [
+    ('pmatrix', 'pmatrix'), ('bmatrix', 'bmatrix'),
+    ('Bmatrix', 'Bmatrix'), ('vmatrix', 'vmatrix'),
+    ('Vmatrix', 'Vmatrix'), ('matrix',  'matrix'),
+    ('cases',   'cases'),   ('eqalign', 'aligned'),
+    ('displaylines', 'gathered'),
+]
+PLAIN_TEX_LIMITS_RE = re.compile(r'\\(int|sum|prod|oint|iint|iiint|coprod|bigcap|bigcup|bigvee|bigwedge|bigoplus|bigotimes|bigodot|biguplus|bigsqcup)_\\limits')
+PLAIN_TEX_CR_RE     = re.compile(r'\\cr(?![a-zA-Z])')
+PLAIN_TEX_ROOT_HEAD_RE = re.compile(r'\\root\s*(\d+|\{[^{}]*\})\s*\\of\s*')
+
+def fix_plain_tex_root(s):
+    if not s or '\\root' not in s: return s
+    out = []; i = 0
+    while i < len(s):
+        m = PLAIN_TEX_ROOT_HEAD_RE.search(s, i)
+        if not m: out.append(s[i:]); break
+        out.append(s[i:m.start()])
+        n = m.group(1).strip('{}'); j = m.end()
+        if j < len(s) and s[j] == '{':
+            depth = 1; k = j + 1
+            while k < len(s) and depth > 0:
+                if s[k] == '{': depth += 1
+                elif s[k] == '}': depth -= 1
+                k += 1
+            if depth == 0:
+                out.append('\\sqrt[' + n + ']{' + s[j+1:k-1] + '}'); i = k
+            else:
+                out.append(s[m.start():]); break
+        else:
+            k = j
+            while k < len(s) and s[k] not in ' \t\n\\{}': k += 1
+            out.append('\\sqrt[' + n + ']{' + s[j:k] + '}'); i = k
+    return ''.join(out)
+
+DOUBLE_DOLLAR_INLINE_RE = re.compile(r'\$\$([^$\n]+?)\$\$')
+
+MERGE_ORPHAN_ENV_RE = re.compile(
+    r'\$([^$\n]+?)\$\s*\$*\s*'
+    r'(\\begin\{[A-Za-z]+\*?\}.*?\\end\{[A-Za-z]+\*?\})'
+    r'\s*\$+',
+    re.DOTALL
+)
+def merge_orphan_inline_env(s):
+    if not s or '\\begin{' not in s: return s
+    return MERGE_ORPHAN_ENV_RE.sub(r'$$\1 \2$$', s)
+
+def collapse_intra_paragraph_whitespace(s):
+    if not s: return s
+    s = re.sub(r'\n{3,}', '\n\n', s)
+    paras = re.split(r'\n{2,}', s)
+    paras = [re.sub(r'\n', ' ', p)  for p in paras]
+    paras = [re.sub(r' {2,}', ' ', p) for p in paras]
+    paras = [p for p in paras if p.strip()]
+    return '\n\n'.join(paras).strip()
+
+def fix_inline_displaymath(s):
+    if not s or '$$' not in s: return s
+    out = []; last = 0
+    for m in DOUBLE_DOLLAR_INLINE_RE.finditer(s):
+        out.append(s[last:m.start()])
+        content = m.group(1)
+        before = s[m.start() - 1] if m.start() > 0 else '\n'
+        after  = s[m.end()] if m.end() < len(s) else '\n'
+        has_env = '\\begin{' in content
+        if (before != '\n' or after != '\n') and not has_env:
+            out.append('$' + content + '$')
+        else:
+            out.append(m.group(0))
+        last = m.end()
+    out.append(s[last:])
+    return ''.join(out)
+
+def fix_plain_tex(s):
+    if not s: return s
+    for plain_name, latex_name in PLAIN_TEX_ENVS:
+        opener = '\\' + plain_name + '{'
+        if opener in s:
+            s = _balanced_brace_replace(
+                s, opener,
+                lambda content, env=latex_name:
+                    '\\begin{' + env + '} ' + content + ' \\end{' + env + '}'
+            )
+    s = PLAIN_TEX_CR_RE.sub(r'\\\\', s)
+    s = PLAIN_TEX_LIMITS_RE.sub(r'\\\1\\limits_', s)
+    s = fix_plain_tex_root(s)
+    return s
+
 # --- Text cleanup: normalize LaTeX delimiters to $ / $$ so the JS-side
 #     KaTeX renderer (which only recognizes $-style math) picks them up. ---
 #
@@ -307,6 +415,8 @@ def clean_text(s: str) -> str:
     # Collapse accidental $$$$ runs that the wrap can produce when an
     # environment was already inside a \[ … \] block (now $$).
     s = re.sub(r'\${4,}', '$$', s)
+    # Repair `$X$$$\begin{Y}…\end{Y}$$` orphan-inline-then-env source mistakes.
+    s = merge_orphan_inline_env(s)
     # Strip AoPS-wiki LaTeX shortcuts that KaTeX doesn't recognize.
     for pat, repl in AOPS_SHORTCUTS:
         s = pat.sub(repl, s)
@@ -314,6 +424,10 @@ def clean_text(s: str) -> str:
     s = LATEX_MACRO_DEFS_RE.sub('', s)
     # Fix malformed \textXYZ (no opening brace) → \text{XYZ}.
     s = fix_text_nobrace(s)
+    # Plain-TeX constructs (\matrix{}, \cr, \int_\limits) → LaTeX/KaTeX.
+    s = fix_plain_tex(s)
+    # Convert mid-sentence $$X$$ to inline $X$ to avoid line-breaking.
+    s = fix_inline_displaymath(s)
     # Convert tabular environments to array so KaTeX can render them.
     s = fix_tabular(s)
     # Strip stray `$` inside math environment bodies (array, aligned, …).
@@ -327,6 +441,8 @@ def clean_text(s: str) -> str:
     # SHA-1 so reruns + duplicate blocks skip the work.
     if '[asy]' in s.lower():
         s = substitute_asy(s)
+    # Final pass: collapse single newlines and multi-spaces within paragraphs.
+    s = collapse_intra_paragraph_whitespace(s)
     return s
 
 # Normalize a free-response answer string. AMC items that were misclassified
