@@ -149,10 +149,17 @@ public class AIProxyServlet extends HttpServlet {
         String xff = req.getHeader("X-Forwarded-For");
         if (xff != null && !xff.isEmpty()) {
             String ip = xff.split(",")[0].trim();
-            if (!ip.isEmpty()) return ip;
+            if (!ip.isEmpty()) {
+                log.info("AI rate-limit: IP source=X-Forwarded-For value=" + ip + " (fullXFF=" + xff + ")");
+                return ip;
+            }
         }
         String realIp = req.getHeader("X-Real-IP");
-        if (realIp != null && !realIp.isEmpty()) return realIp.trim();
+        if (realIp != null && !realIp.isEmpty()) {
+            log.info("AI rate-limit: IP source=X-Real-IP value=" + realIp.trim());
+            return realIp.trim();
+        }
+        log.info("AI rate-limit: IP source=remoteAddr value=" + req.getRemoteAddr());
         return req.getRemoteAddr();
     }
 
@@ -165,7 +172,8 @@ public class AIProxyServlet extends HttpServlet {
         Bucket bucket = resolveBucket(clientIp);
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
 
-        log.fine("AI rate-limit: IP=" + clientIp + " remaining=" + probe.getRemainingTokens() + " consumed=" + probe.isConsumed());
+        log.info("AI rate-limit: IP=" + clientIp + " remaining=" + probe.getRemainingTokens()
+                + " consumed=" + probe.isConsumed() + " activeBuckets=" + buckets.size());
 
         if (!probe.isConsumed()) {
             log.warning("AI rate-limit: BLOCKED IP=" + clientIp);
