@@ -394,73 +394,15 @@ public class ECFunctionality extends HttpServlet {
 
         if (EC_GENERATE_KEYPAIR_ECDSA.equals(methodName)) {
             final String ec_param = request.getParameter("ecparam");
-
-            Gson gson = new Gson();
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "ec/generateABkp/" + ec_param;
-
-            //System.out.println(url1);
-
-            HttpGet getRequest = new HttpGet(url1);
-            getRequest.addHeader("accept", "application/json");
-
-            HttpResponse response1 = httpClient.execute(getRequest);
-
-            if (response1.getStatusLine().getStatusCode() != 200) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                return;
-            }
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(
-                            (response1.getEntity().getContent())
-                    )
-            );
-
-            StringBuilder content = new StringBuilder();
-            String line;
-            while (null != (line = br.readLine())) {
-                content.append(line);
-            }
-            ecpojo ecpojo = gson.fromJson(content.toString(), ecpojo.class);
-            session.setAttribute("ecpojo", ecpojo);
-            response.sendRedirect("ecsignverify.jsp");
+            handleEcKeyGeneration(request, response, ec_param, true, "ecsignverify.jsp");
+            return;
         }
 
 
         if (EC_GENERATE_KEYPAIR.equals(methodName)) {
             final String ec_param = request.getParameter("ecparam");
-
-            Gson gson = new Gson();
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "ec/generateABkp/" + ec_param;
-
-            //System.out.println(url1);
-
-            HttpGet getRequest = new HttpGet(url1);
-            getRequest.addHeader("accept", "application/json");
-
-            HttpResponse response1 = httpClient.execute(getRequest);
-
-            if (response1.getStatusLine().getStatusCode() != 200) {
-                addHorizontalLine(out);
-                out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                return;
-            }
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(
-                            (response1.getEntity().getContent())
-                    )
-            );
-
-            StringBuilder content = new StringBuilder();
-            String line;
-            while (null != (line = br.readLine())) {
-                content.append(line);
-            }
-            ecpojo ecpojo = gson.fromJson(content.toString(), ecpojo.class);
-            session.setAttribute("ecpojo", ecpojo);
-            response.sendRedirect("ecfunctions.jsp");
+            handleEcKeyGeneration(request, response, ec_param, false, "ecfunctions.jsp");
+            return;
         }
 
 
@@ -644,6 +586,76 @@ public class ECFunctionality extends HttpServlet {
 
     private void addHorizontalLine(PrintWriter out) {
         out.println("<hr>");
+    }
+
+    private void handleEcKeyGeneration(HttpServletRequest request, HttpServletResponse response,
+                                       String ecParam, boolean ecdsa, String redirectJsp)
+            throws IOException {
+        boolean jsonClient = wantsJsonResponse(request);
+        Gson gson = new Gson();
+        HttpSession session = request.getSession(true);
+
+        try {
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "ec/generateABkp/" + ecParam;
+            HttpGet getRequest = new HttpGet(url1);
+            getRequest.addHeader("accept", "application/json");
+
+            HttpResponse response1 = httpClient.execute(getRequest);
+
+            if (response1.getStatusLine().getStatusCode() != 200) {
+                String errMsg = "SYSTEM Error Please Try Later If Problem Persist raise the feature request";
+                if (jsonClient) {
+                    writeJson(response, gson.toJson(ECResponse.error(ecParam, errMsg)));
+                    return;
+                }
+                PrintWriter out = response.getWriter();
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> " + errMsg + " </font>");
+                return;
+            }
+
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(response1.getEntity().getContent()));
+            StringBuilder content = new StringBuilder();
+            String line;
+            while (null != (line = br.readLine())) {
+                content.append(line);
+            }
+            ecpojo ecpojo = gson.fromJson(content.toString(), ecpojo.class);
+            session.setAttribute("ecpojo", ecpojo);
+
+            if (jsonClient) {
+                Object payload = ecdsa
+                        ? ECResponse.keyGenEcdsaSuccess(ecpojo, ecParam)
+                        : ECResponse.keyGenEcdhSuccess(ecpojo, ecParam);
+                writeJson(response, gson.toJson(payload));
+                return;
+            }
+
+            response.sendRedirect(redirectJsp);
+        } catch (Exception e) {
+            if (jsonClient) {
+                writeJson(response, gson.toJson(ECResponse.error(ecParam, "Error: " + e.getMessage())));
+                return;
+            }
+            throw new IOException(e);
+        }
+    }
+
+    private static boolean wantsJsonResponse(HttpServletRequest request) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            return true;
+        }
+        return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+    }
+
+    private static void writeJson(HttpServletResponse response, String json) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
     }
 
 }

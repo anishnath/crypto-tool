@@ -59,49 +59,8 @@ public class DSAFunctionality extends HttpServlet {
 
         String keysize = request.getParameter("keysize");
         if (keysize != null && keysize.trim().length() > 0) {
-            try {
-
-                Gson gson = new Gson();
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") +  "dsa/" + keysize;
-
-                //System.out.println(url1);
-
-                HttpGet getRequest = new HttpGet(url1);
-                getRequest.addHeader("accept", "application/json");
-
-                HttpResponse response1 = httpClient.execute(getRequest);
-
-                if (response1.getStatusLine().getStatusCode() != 200) {
-                    addHorizontalLine(out);
-                    out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                    return;
-                }
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(
-                                (response1.getEntity().getContent())
-                        )
-                );
-
-                StringBuilder content = new StringBuilder();
-                String line;
-                while (null != (line = br.readLine())) {
-                    content.append(line);
-                }
-                pgppojo pgppojo = gson.fromJson(content.toString(), pgppojo.class);
-
-                request.getSession().setAttribute("pubkey", pgppojo.getPubliceKey());
-                request.getSession().setAttribute("privKey", pgppojo.getPrivateKey());
-                request.getSession().setAttribute("keysize", keysize);
-                String nextJSP = "/dsafunctions.jsp";
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-                dispatcher.forward(request, response);
-
-
-                return;
-            } catch (Exception ex) {
-                //DO NOTHING
-            }
+            handleDsaKeyGeneration(request, response, keysize.trim());
+            return;
         }
         //System.out.println(keysize);
         // System.out.println("asdas");
@@ -478,6 +437,75 @@ public class DSAFunctionality extends HttpServlet {
 
     }
 
+
+    private void handleDsaKeyGeneration(HttpServletRequest request, HttpServletResponse response, String keysize)
+            throws IOException, ServletException {
+        boolean jsonClient = wantsJsonResponse(request);
+        Gson gson = new Gson();
+        try {
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "dsa/" + keysize;
+            HttpGet getRequest = new HttpGet(url1);
+            getRequest.addHeader("accept", "application/json");
+
+            HttpResponse response1 = httpClient.execute(getRequest);
+
+            if (response1.getStatusLine().getStatusCode() != 200) {
+                String errMsg = "SYSTEM Error Please Try Later If Problem Persist raise the feature request";
+                if (jsonClient) {
+                    writeJson(response, gson.toJson(KeyGenResponse.error(keysize, errMsg)));
+                    return;
+                }
+                PrintWriter out = response.getWriter();
+                addHorizontalLine(out);
+                out.println("<font size=\"2\" color=\"red\"> " + errMsg + " </font>");
+                return;
+            }
+
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(response1.getEntity().getContent()));
+            StringBuilder content = new StringBuilder();
+            String line;
+            while (null != (line = br.readLine())) {
+                content.append(line);
+            }
+            pgppojo keys = gson.fromJson(content.toString(), pgppojo.class);
+
+            request.getSession().setAttribute("pubkey", keys.getPubliceKey());
+            request.getSession().setAttribute("privKey", keys.getPrivateKey());
+            request.getSession().setAttribute("keysize", keysize);
+
+            if (jsonClient) {
+                writeJson(response, gson.toJson(KeyGenResponse.success(
+                        keysize, keys.getPubliceKey(), keys.getPrivateKey())));
+                return;
+            }
+
+            String nextJSP = "/dsafunctions.jsp";
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+            dispatcher.forward(request, response);
+        } catch (Exception ex) {
+            if (jsonClient) {
+                writeJson(response, gson.toJson(KeyGenResponse.error(keysize, "Error: " + ex.getMessage())));
+                return;
+            }
+        }
+    }
+
+    private static boolean wantsJsonResponse(HttpServletRequest request) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            return true;
+        }
+        return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+    }
+
+    private static void writeJson(HttpServletResponse response, String json) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+    }
 
     private void addHorizontalLine(PrintWriter out) {
         out.println("<hr>");

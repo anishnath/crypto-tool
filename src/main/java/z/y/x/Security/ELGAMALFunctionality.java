@@ -40,57 +40,9 @@ public class ELGAMALFunctionality extends HttpServlet {
 
         String keysize = request.getParameter("keysize");
 
-        int keys = 160;
         if (keysize != null && keysize.trim().length() > 0) {
-            try {
-                try {
-                    keys = Integer.parseInt(keysize);
-                } catch (NumberFormatException w) {
-                    keys = 160;
-                }
-
-                if (keys > 512) {
-                    keys = 160;
-                }
-
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-                String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "elgamal/" + keysize;
-
-                HttpGet getRequest = new HttpGet(url1);
-                getRequest.addHeader("accept", "application/json");
-
-                HttpResponse response1 = httpClient.execute(getRequest);
-
-                if (response1.getStatusLine().getStatusCode() != 200) {
-                    response.setContentType("text/html");
-                    PrintWriter out = response.getWriter();
-                    out.println("<font size=\"2\" color=\"red\"> SYSTEM Error Please Try Later If Problem Persist raise the feature request </font>");
-                    return;
-                }
-
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader((response1.getEntity().getContent()))
-                );
-
-                StringBuilder content = new StringBuilder();
-                String line;
-                while (null != (line = br.readLine())) {
-                    content.append(line);
-                }
-                elgamlpojo elgamlpojo = gson.fromJson(content.toString(), elgamlpojo.class);
-
-                request.getSession().setAttribute("pubkey", elgamlpojo.getPublicKey());
-                request.getSession().setAttribute("privKey", elgamlpojo.getPrivateKey());
-                request.getSession().setAttribute("keysize", keysize);
-
-                String nextJSP = "/elgamalfunctions.jsp";
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-                dispatcher.forward(request, response);
-
-                return;
-            } catch (Exception ex) {
-                // DO NOTHING
-            }
+            handleElGamalKeyGeneration(request, response, keysize.trim());
+            return;
         }
     }
 
@@ -237,6 +189,75 @@ public class ELGAMALFunctionality extends HttpServlet {
         } catch (Exception e) {
             out.println(gson.toJson(ElGamalResponse.error("decrypt", "Decryption failed: " + e.getMessage())));
         }
+    }
+
+    private void handleElGamalKeyGeneration(HttpServletRequest request, HttpServletResponse response, String keysize)
+            throws IOException, ServletException {
+        boolean jsonClient = wantsJsonResponse(request);
+        try {
+            int bits = 160;
+            try {
+                bits = Integer.parseInt(keysize);
+            } catch (NumberFormatException ignored) {
+                bits = 160;
+            }
+            if (bits > 512) {
+                bits = 160;
+                keysize = "160";
+            }
+
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            String url1 = LoadPropertyFileFunctionality.getConfigProperty().get("ep") + "elgamal/" + keysize;
+            HttpGet getRequest = new HttpGet(url1);
+            getRequest.addHeader("accept", "application/json");
+
+            HttpResponse response1 = httpClient.execute(getRequest);
+
+            if (response1.getStatusLine().getStatusCode() != 200) {
+                String errMsg = "SYSTEM Error Please Try Later If Problem Persist raise the feature request";
+                if (jsonClient) {
+                    writeJson(response, gson.toJson(KeyGenResponse.error(keysize, errMsg)));
+                    return;
+                }
+                response.setContentType("text/html");
+                PrintWriter out = response.getWriter();
+                out.println("<font size=\"2\" color=\"red\"> " + errMsg + " </font>");
+                return;
+            }
+
+            elgamlpojo keys = gson.fromJson(readResponse(response1), elgamlpojo.class);
+            request.getSession().setAttribute("pubkey", keys.getPublicKey());
+            request.getSession().setAttribute("privKey", keys.getPrivateKey());
+            request.getSession().setAttribute("keysize", keysize);
+
+            if (jsonClient) {
+                writeJson(response, gson.toJson(KeyGenResponse.success(
+                        keysize, keys.getPublicKey(), keys.getPrivateKey())));
+                return;
+            }
+
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/elgamalfunctions.jsp");
+            dispatcher.forward(request, response);
+        } catch (Exception ex) {
+            if (jsonClient) {
+                writeJson(response, gson.toJson(KeyGenResponse.error(keysize, "Error: " + ex.getMessage())));
+            }
+        }
+    }
+
+    private static boolean wantsJsonResponse(HttpServletRequest request) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            return true;
+        }
+        return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+    }
+
+    private static void writeJson(HttpServletResponse response, String json) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
     }
 
     /**
