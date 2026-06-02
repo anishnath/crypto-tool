@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "htpasswd");
+request.setAttribute("aiToolId", "cryptography/htpasswd");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,6 +90,7 @@
     </script>
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <style>
         :root {
@@ -245,6 +251,32 @@
             border-radius: 6px;
             border: 1px solid #e2e8f0;
         }
+        .htpasswd-learn-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.35rem;
+        }
+        .htpasswd-learn-chip {
+            border: 1px solid rgba(124, 58, 237, 0.35);
+            background: var(--theme-light);
+            color: #5b21b6;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+        }
+        .htpasswd-learn-chip:hover {
+            background: #ede9fe;
+            border-color: var(--theme-primary);
+            color: var(--theme-primary);
+        }
+        .htpasswd-learn-chip i {
+            opacity: 0.85;
+            margin-right: 0.2rem;
+        }
     </style>
 </head>
 <%@ include file="body-script.jsp"%>
@@ -333,7 +365,22 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn w-100" id="generateBtn" style="background: var(--theme-gradient); color: white; font-weight: 600;">
+                    <div class="form-section mb-0">
+                        <div class="form-section-title"><i class="fas fa-lightbulb me-1"></i>Learn &amp; try with AI</div>
+                        <p class="small text-muted mb-2 mb-md-1">Tap a topic — opens the AI assistant with a ready prompt (Ctrl+Shift+A).</p>
+                        <div class="htpasswd-learn-chips" id="htpasswdLearnChips" role="toolbar" aria-label="htpasswd learning prompts">
+                            <button type="button" class="htpasswd-learn-chip" data-ai-prompt="Generate htpasswd for user &quot;admin&quot; password &quot;secret&quot; with bcrypt" data-ai-send="true"><i class="fas fa-bolt"></i>Generate bcrypt</button>
+                            <button type="button" class="htpasswd-learn-chip" data-ai-prompt="How do I add a new user to an existing .htpasswd file on Apache and Nginx? Show the htpasswd -b command and the line format (username:hash)." data-ai-send="true"><i class="fas fa-user-plus"></i>How to add user</button>
+                            <button type="button" class="htpasswd-learn-chip" data-ai-prompt="How do I create a brand-new .htpasswd file with htpasswd -c? Explain when to use -c vs appending without -c." data-ai-send="true"><i class="fas fa-file-alt"></i>Create new file</button>
+                            <button type="button" class="htpasswd-learn-chip" data-ai-prompt="Show a minimal Nginx location block using auth_basic, auth_basic_user_file, and where the htpasswd line goes." data-ai-send="true"><i class="fas fa-server"></i>Nginx setup</button>
+                            <button type="button" class="htpasswd-learn-chip" data-ai-prompt="Show minimal Apache AuthType Basic, AuthUserFile, and Require valid-user configuration." data-ai-send="true"><i class="fas fa-server"></i>Apache setup</button>
+                            <button type="button" class="htpasswd-learn-chip" data-ai-prompt="For htpasswd, compare bcrypt ($2y$) vs SHA-512 ($6$) — which should I use in 2025 and why?" data-ai-send="true"><i class="fas fa-balance-scale"></i>bcrypt vs SHA-512</button>
+                            <button type="button" class="htpasswd-learn-chip" data-ai-prompt="Explain htpasswd hash prefixes $2y$, $apr1$, $5$, $6$, and {SHA} in plain English." data-ai-send="true"><i class="fas fa-info-circle"></i>Prefix meanings</button>
+                            <button type="button" class="htpasswd-learn-chip" data-ai-prompt="What is htpasswd used for in Apache and Nginx?" data-ai-send="true"><i class="fas fa-question-circle"></i>What is htpasswd?</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn w-100 mt-3" id="generateBtn" style="background: var(--theme-gradient); color: white; font-weight: 600;">
                         <i class="fas fa-cogs me-2"></i>Generate htpasswd
                     </button>
                 </form>
@@ -589,6 +636,17 @@
             $(this).addClass('active');
         });
 
+        // Learning chips → AI assistant
+        $('#htpasswdLearnChips').on('click', '.htpasswd-learn-chip', function() {
+            var prompt = $(this).attr('data-ai-prompt') || '';
+            var send = $(this).attr('data-ai-send') !== 'false';
+            if (window.cryptoToolAssistant && typeof window.cryptoToolAssistant.open === 'function') {
+                window.cryptoToolAssistant.open(prompt, send);
+            } else {
+                document.getElementById('btnCryptoAI')?.click();
+            }
+        });
+
         // Generate form submission
         $('#htpasswdForm').submit(function(event) {
             event.preventDefault();
@@ -669,6 +727,27 @@
             });
         });
     });
+
+    window.renderHtpasswdFromApi = function(response) {
+        if (!response) return;
+        if (!response.success) {
+            showToast(response.errorMessage || 'Error generating htpasswd');
+            return;
+        }
+        lastPassword = $('#password').val();
+        lastUsername = response.username || $('#username').val();
+        lastHashes = {};
+        if (response.htpasswdEntries) {
+            response.htpasswdEntries.forEach(function(entry) {
+                lastHashes[entry.algorithm] = entry.fullEntry;
+            });
+        }
+        var html = renderHtpasswdResult(response);
+        lastResult = html;
+        $('#resultPlaceholder').hide();
+        $('#resultContent').html(html).show();
+        $('#copyBtn').show();
+    };
 
     function renderHtpasswdResult(response) {
         var html = '';
@@ -872,4 +951,5 @@
     }
 </script>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>
