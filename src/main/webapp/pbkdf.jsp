@@ -7,7 +7,10 @@
     byte[] salt = new byte[16];
     new SecureRandom().nextBytes(salt);
     String defaultSalt = new String(Base64.encodeBase64(salt));
+    request.setAttribute("aiCryptoToolKey", "pbkdf");
+    request.setAttribute("aiToolId", "cryptography/pbkdf");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -424,6 +427,7 @@
         [data-theme="dark"] .audit-header{background:var(--bg-tertiary);border-bottom-color:var(--border)}
         [data-theme="dark"] .audit-details{background:rgba(255,255,255,0.03)}
     </style>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 </head>
 <body>
     <!-- Navigation -->
@@ -1463,6 +1467,20 @@ openssl enc -aes-256-cbc -pbkdf2 -iter 600000 \
         return names[algo] || algo;
     }
 
+    window.renderPbkdfKeyResults = function(response) {
+        if (!response || !response.success) {
+            showError(response && response.errorMessage ? response.errorMessage : 'Key derivation failed');
+            return;
+        }
+        lastResults = response.results || [];
+        lastParams = {
+            salt: response.salt,
+            iterations: response.iterations,
+            keyLength: response.keyLengthBytes
+        };
+        renderKeyResults(lastResults, '0');
+    };
+
     function renderKeyResults(results, duration) {
         var html = '';
 
@@ -1697,5 +1715,6 @@ openssl enc -aes-256-cbc -pbkdf2 -iter 600000 \
         item.classList.toggle('open');
     }
     </script>
+    <%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 </body>
 </html>

@@ -1,3 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "dsa");
+request.setAttribute("aiToolId", "cryptography/dsa");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <%@ page import="com.google.gson.Gson" %>
 <%@ page import="org.apache.http.impl.client.DefaultHttpClient" %>
 <%@ page import="org.apache.http.client.methods.HttpGet" %>
@@ -47,6 +53,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<%@ include file="header-script.jsp"%>
+	<%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
 	<%
 		String pubKey = "";
@@ -423,6 +430,7 @@
 </ol>
 <%@ include file="addcomments.jsp"%>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 </div>
 
 <%@ include file="body-close.jsp"%>

@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "ntru");
+request.setAttribute("aiToolId", "cryptography/ntru");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -164,6 +169,7 @@
     <meta name="twitter:creator" content="@anish2good">
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <%
         String pubKey = "";
@@ -1173,4 +1179,5 @@ ntru_decrypt(enc, &amp;kp, &amp;NTRU_DEFAULT_PARAMS_128_BITS, dec, &amp;dec_len)
     });
 </script>
 </div>
+    <%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

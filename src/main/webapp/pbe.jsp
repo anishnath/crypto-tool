@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "pbe");
+request.setAttribute("aiToolId", "cryptography/pbe");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -134,6 +139,7 @@
     </script>
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <style>
         :root {
@@ -1763,4 +1769,5 @@ $('#codeSamplesBody').on('show.bs.collapse shown.bs.collapse', function() {
 });
 </script>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

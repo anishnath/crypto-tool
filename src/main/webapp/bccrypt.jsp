@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "bcrypt");
+request.setAttribute("aiToolId", "cryptography/bcrypt");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,6 +66,7 @@
     </script>
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <style>
         :root {
@@ -829,4 +835,5 @@ bcrypt.checkpw(password, hash)</code></pre>
     }
 </script>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

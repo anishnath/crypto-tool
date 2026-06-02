@@ -3,7 +3,10 @@
 <%
     // Cache busting for development
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiCryptoToolKey", "cipher");
+    request.setAttribute("aiToolId", "cryptography/cipher");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -890,6 +893,7 @@
             }
 		}
 	</script>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 </head>
 
 <body>
@@ -1344,5 +1348,6 @@
             }
         %>
 </script>
+    <%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 </body>
 </html>

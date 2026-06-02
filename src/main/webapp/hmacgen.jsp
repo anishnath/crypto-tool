@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "hmac");
+request.setAttribute("aiToolId", "cryptography/hmac");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <div lang="en">
 <head>
@@ -25,6 +30,7 @@
     <link rel="canonical" href="https://8gwifi.org/hmacgen.jsp">
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <!-- JSON-LD EEAT / WebApplication + FAQ + Breadcrumbs -->
     <script type="application/ld+json">
@@ -716,6 +722,7 @@ console.log(hmac);</code></pre>
 
     <div class="sharethis-inline-share-buttons"></div>
     <%@ include file="thanks.jsp"%>
+    <%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
     <%@ include file="addcomments.jsp"%>
 </div>
 

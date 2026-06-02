@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "jws-gen");
+request.setAttribute("aiToolId", "cryptography/jws-gen");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -189,13 +194,40 @@
     <meta name="language" content="en"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
+    <style>
+        .jwsgen-learn-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.35rem; }
+        .jwsgen-learn-chip {
+            border: 1px solid rgba(40, 167, 69, 0.4);
+            background: #e8f5e9;
+            color: #155724;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .jwsgen-learn-chip:hover { background: #c8e6c9; border-color: #28a745; }
+        .jwsgen-learn-chip i { margin-right: 0.2rem; opacity: 0.85; }
+    </style>
 
     <script type="text/javascript">
         // Store last response for download/share
         var lastJwsResponse = null;
 
         $(document).ready(function() {
+
+            $('#jwsgenLearnChips').on('click', '.jwsgen-learn-chip', function() {
+                var prompt = $(this).attr('data-ai-prompt') || '';
+                var send = $(this).attr('data-ai-send') !== 'false';
+                if (window.cryptoToolAssistant && typeof window.cryptoToolAssistant.open === 'function') {
+                    window.cryptoToolAssistant.open(prompt, send);
+                } else {
+                    document.getElementById('btnCryptoAI')?.click();
+                }
+            });
 
             // Form submission handler
             $('#form').submit(function (event) {
@@ -674,6 +706,20 @@
   "iat": 1516239022
 }</textarea>
 
+                    <div class="mt-3 mb-2">
+                        <label class="small font-weight-bold text-muted mb-1"><i class="fas fa-lightbulb"></i> Learn &amp; try with AI</label>
+                        <p class="small text-muted mb-2 mb-md-1">Tutorial prompts — opens AI and can generate a signed JWS on this page (Ctrl+Shift+A).</p>
+                        <div class="jwsgen-learn-chips" id="jwsgenLearnChips" role="toolbar" aria-label="JWS generator learning prompts">
+                            <button type="button" class="jwsgen-learn-chip" data-ai-prompt="Generate JWS for payload {&quot;sub&quot;:&quot;1234567890&quot;,&quot;name&quot;:&quot;John Doe&quot;,&quot;iat&quot;:1516239022} with HS256" data-ai-send="true"><i class="fas fa-bolt"></i>HS256 JWT</button>
+                            <button type="button" class="jwsgen-learn-chip" data-ai-prompt="Generate JWS with RS256 for {&quot;sub&quot;:&quot;api-client&quot;,&quot;scope&quot;:&quot;read write&quot;}" data-ai-send="true"><i class="fas fa-bolt"></i>RS256 JWT</button>
+                            <button type="button" class="jwsgen-learn-chip" data-ai-prompt="When should I use HS256 vs RS256 for JWT signing? Compare symmetric vs asymmetric on this generator page." data-ai-send="true"><i class="fas fa-balance-scale"></i>HS256 vs RS256</button>
+                            <button type="button" class="jwsgen-learn-chip" data-ai-prompt="Explain common JWT registered claims (iss, sub, aud, exp, nbf, iat, jti) with a short example payload." data-ai-send="true"><i class="fas fa-list-alt"></i>JWT claims</button>
+                            <button type="button" class="jwsgen-learn-chip" data-ai-prompt="What is a JSON Web Signature (JWS) and how does it relate to JWT?" data-ai-send="true"><i class="fas fa-question-circle"></i>What is JWS?</button>
+                            <button type="button" class="jwsgen-learn-chip" data-ai-prompt="What is the difference between this JWS Generator (auto key) and the JWS Sign page (your own key)?" data-ai-send="true"><i class="fas fa-exchange-alt"></i>Gen vs Sign</button>
+                            <button type="button" class="jwsgen-learn-chip" data-ai-prompt="After generating a JWS here, how do I verify the signature on jwsverify.jsp?" data-ai-send="true"><i class="fas fa-check-double"></i>Verify next</button>
+                        </div>
+                    </div>
+
                     <div class="form-group mt-3 mb-0">
                         <button type="submit" class="btn btn-primary btn-block btn-lg">
                             <i class="fas fa-signature"></i> Generate JWS Keys & Sign
@@ -1118,4 +1164,5 @@
 
 </div>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

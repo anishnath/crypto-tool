@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "argon2");
+request.setAttribute("aiToolId", "cryptography/argon2");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,6 +66,7 @@
     </script>
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <style>
         :root {
@@ -940,6 +946,12 @@ const valid = await argon2.verify(hash, "password");</code></pre>
         $('body').append(toast);
         setTimeout(function() { toast.fadeOut(function() { toast.remove(); }); }, 2000);
     }
+
+    window.generateArgon2Hash = generateHash;
+    window.verifyArgon2Password = verifyPassword;
+    window.selectArgon2Variant = selectVariant;
+    window.applyArgon2Preset = applyPreset;
 </script>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

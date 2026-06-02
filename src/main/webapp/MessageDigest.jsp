@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "message-digest");
+request.setAttribute("aiToolId", "cryptography/message-digest");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <div>
 <head>
@@ -128,6 +133,7 @@
     <link rel="canonical" href="https://8gwifi.org/MessageDigest.jsp">
     
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <%
         String[] validList = { "md2","md4","ripemd128","sha","sha-1","sha-224","sha-256","sha-384","sha-512","sha-512/224","sha-512/256","sha3-224","sha3-256","sha3-384","sha3-512","ripemd160","ripemd256","ripemd320","sm3","skein-1024-1024","skein-1024-384","skein-1024-512","skein-256-128","skein-256-160","skein-256-224","skein-256-256","skein-512-128","skein-512-160","skein-512-224","skein-512-256","skein-512-384","skein-512-512","tiger","whirlpool","blake2b-160","blake2b-256","blake2b-384","blake2b-512","dstu7564-256","dstu7564-384","dstu7564-512","gost3411","gost3411-2012-256","gost3411-2012-512","keccak-224","keccak-256","keccak-288","keccak-384","keccak-512",
@@ -1100,6 +1106,7 @@
         </div>
     </div>
 
+    <%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
     <%@ include file="addcomments.jsp"%>
     <%@ include file="footer_adsense.jsp"%>
 

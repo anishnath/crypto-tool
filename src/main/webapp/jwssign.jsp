@@ -1,5 +1,10 @@
 <%@ page import="java.util.UUID" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "jws-sign");
+request.setAttribute("aiToolId", "cryptography/jws-sign");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,6 +34,24 @@
     <link rel="canonical" href="https://8gwifi.org/jwssign.jsp">
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
+
+    <style>
+        .jwssign-learn-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.35rem; }
+        .jwssign-learn-chip {
+            border: 1px solid rgba(0, 123, 255, 0.35);
+            background: #e7f1ff;
+            color: #004085;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .jwssign-learn-chip:hover { background: #cce5ff; border-color: #007bff; }
+        .jwssign-learn-chip i { margin-right: 0.2rem; opacity: 0.85; }
+    </style>
 
     <!-- JSON-LD: WebApplication Schema -->
     <script type="application/ld+json">
@@ -234,9 +257,96 @@
         // Store last successful response for download/share
         var lastJwsResponse = null;
 
+        function escapeHtml(text) {
+            if (!text) return '';
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(text));
+            return div.innerHTML;
+        }
+
+        function renderJwsSignFromApi(response) {
+            $('#output').empty();
+            lastJwsResponse = null;
+
+            if (!response || !response.success) {
+                var errorMsg = (response && response.errorMessage) ? response.errorMessage : 'Unknown error occurred';
+                var errHtml = '<div class="alert alert-danger">';
+                errHtml += '<h5><i class="fas fa-exclamation-triangle"></i> Signing Failed</h5>';
+                if (response && response.algorithm) {
+                    errHtml += '<p><small>Algorithm: ' + escapeHtml(response.algorithm) + '</small></p>';
+                }
+                errHtml += '<p>' + escapeHtml(errorMsg) + '</p></div>';
+                $('#output').html(errHtml);
+                return;
+            }
+
+            lastJwsResponse = response;
+
+            var html = '<div class="alert alert-success">';
+            html += '<h5><i class="fas fa-check-circle"></i> JWS Signed Successfully</h5>';
+            html += '<small>Algorithm: <strong>' + escapeHtml(response.algorithm || 'N/A') + '</strong></small>';
+            html += '</div>';
+
+            if (response.jwsHeader) {
+                html += '<div class="form-group">';
+                html += '<label><strong><i class="fas fa-file-code text-info"></i> JWS Header</strong></label>';
+                html += '<textarea id="jwsHeaderOutput" readonly class="form-control" rows="3" style="font-family: monospace; font-size: 12px;"></textarea>';
+                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="jwsHeaderOutput"><i class="fas fa-copy"></i> Copy</button>';
+                html += '</div>';
+            }
+            if (response.jwsSerialize) {
+                html += '<div class="form-group">';
+                html += '<label><strong><i class="fas fa-key text-success"></i> JWS Compact Serialization</strong></label>';
+                html += '<textarea id="jwsSerializeOutput" readonly class="form-control" rows="5" style="font-family: monospace; font-size: 11px; word-break: break-all;"></textarea>';
+                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="jwsSerializeOutput"><i class="fas fa-copy"></i> Copy</button>';
+                html += '</div>';
+            }
+            if (response.jwsSignature) {
+                html += '<div class="form-group">';
+                html += '<label><strong><i class="fas fa-signature text-warning"></i> Signature (Base64URL)</strong></label>';
+                html += '<textarea id="jwsSignatureOutput" readonly class="form-control" rows="3" style="font-family: monospace; font-size: 11px;"></textarea>';
+                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="jwsSignatureOutput"><i class="fas fa-copy"></i> Copy</button>';
+                html += '</div>';
+            }
+
+            html += '<hr><div class="btn-group" role="group">';
+            html += '<button type="button" class="btn btn-primary" id="downloadJson"><i class="fas fa-download"></i> Download JSON</button>';
+            html += '<button type="button" class="btn btn-info" id="shareUrl"><i class="fas fa-share-alt"></i> Share URL</button>';
+            html += '<a href="jwsverify.jsp" class="btn btn-success"><i class="fas fa-check-double"></i> Verify Signature</a>';
+            html += '</div>';
+
+            $('#output').html(html);
+
+            if (response.jwsHeader) {
+                var formattedHeader = response.jwsHeader;
+                try { formattedHeader = JSON.stringify(JSON.parse(response.jwsHeader), null, 2); } catch (e) {}
+                $('#jwsHeaderOutput').val(formattedHeader);
+            }
+            if (response.jwsSerialize) $('#jwsSerializeOutput').val(response.jwsSerialize);
+            if (response.jwsSignature) $('#jwsSignatureOutput').val(response.jwsSignature);
+
+            $('.copy-btn').off('click').on('click', function() {
+                copyToClipboard($('#' + $(this).data('target')).val(), this);
+            });
+            $('#downloadJson').off('click').on('click', function() { downloadJwsJson(); });
+            $('#shareUrl').off('click').on('click', function() { generateShareUrl(); });
+        }
+
+        window.renderJwsSignFromApi = renderJwsSignFromApi;
+
         $(document).ready(function() {
 
             $("#key1").hide();
+
+            $('#jwssignLearnChips').on('click', '.jwssign-learn-chip', function() {
+                var prompt = $(this).attr('data-ai-prompt') || '';
+                var send = $(this).attr('data-ai-send') !== 'false';
+                if (window.cryptoToolAssistant && typeof window.cryptoToolAssistant.open === 'function') {
+                    window.cryptoToolAssistant.open(prompt, send);
+                } else {
+                    document.getElementById('btnCryptoAI')?.click();
+                }
+            });
 
             // Algorithm click handlers - show/hide appropriate input fields
             $('#HS256, #HS384, #HS512').click(function(event) {
@@ -278,100 +388,7 @@
                     dataType: 'json',
                     success: function(response) {
                         console.log('Received JSON response:', response);
-                        $('#output').empty();
-                        lastJwsResponse = null;
-
-                        if(response.success) {
-                            lastJwsResponse = response;
-
-                            var html = '<div class="alert alert-success">';
-                            html += '<h5><i class="fas fa-check-circle"></i> JWS Signed Successfully</h5>';
-                            html += '<small>Algorithm: <strong>' + (response.algorithm || 'N/A') + '</strong></small>';
-                            html += '</div>';
-
-                            // JWS Header
-                            if(response.jwsHeader) {
-                                var formattedHeader = response.jwsHeader;
-                                try {
-                                    formattedHeader = JSON.stringify(JSON.parse(response.jwsHeader), null, 2);
-                                } catch(e) {}
-                                html += '<div class="form-group">';
-                                html += '<label><strong><i class="fas fa-file-code text-info"></i> JWS Header</strong></label>';
-                                html += '<textarea id="jwsHeaderOutput" readonly class="form-control" rows="3" style="font-family: monospace; font-size: 12px;"></textarea>';
-                                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="jwsHeaderOutput"><i class="fas fa-copy"></i> Copy</button>';
-                                html += '</div>';
-                            }
-
-                            // JWS Serialized (compact form)
-                            if(response.jwsSerialize) {
-                                html += '<div class="form-group">';
-                                html += '<label><strong><i class="fas fa-key text-success"></i> JWS Compact Serialization</strong></label>';
-                                html += '<textarea id="jwsSerializeOutput" readonly class="form-control" rows="5" style="font-family: monospace; font-size: 11px; word-break: break-all;"></textarea>';
-                                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="jwsSerializeOutput"><i class="fas fa-copy"></i> Copy</button>';
-                                html += '</div>';
-                            }
-
-                            // JWS Signature
-                            if(response.jwsSignature) {
-                                html += '<div class="form-group">';
-                                html += '<label><strong><i class="fas fa-signature text-warning"></i> Signature (Base64URL)</strong></label>';
-                                html += '<textarea id="jwsSignatureOutput" readonly class="form-control" rows="3" style="font-family: monospace; font-size: 11px;"></textarea>';
-                                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="jwsSignatureOutput"><i class="fas fa-copy"></i> Copy</button>';
-                                html += '</div>';
-                            }
-
-                            // Action buttons
-                            html += '<hr>';
-                            html += '<div class="btn-group" role="group">';
-                            html += '<button type="button" class="btn btn-primary" id="downloadJson"><i class="fas fa-download"></i> Download JSON</button>';
-                            html += '<button type="button" class="btn btn-info" id="shareUrl"><i class="fas fa-share-alt"></i> Share URL</button>';
-                            html += '<a href="jwsverify.jsp" class="btn btn-success"><i class="fas fa-check-double"></i> Verify Signature</a>';
-                            html += '</div>';
-
-                            $('#output').html(html);
-
-                            // Set values
-                            if(response.jwsHeader) {
-                                var formattedHeader = response.jwsHeader;
-                                try { formattedHeader = JSON.stringify(JSON.parse(response.jwsHeader), null, 2); } catch(e) {}
-                                $('#jwsHeaderOutput').val(formattedHeader);
-                            }
-                            if(response.jwsSerialize) {
-                                $('#jwsSerializeOutput').val(response.jwsSerialize);
-                            }
-                            if(response.jwsSignature) {
-                                $('#jwsSignatureOutput').val(response.jwsSignature);
-                            }
-
-                            // Attach copy handlers
-                            $('.copy-btn').off('click').on('click', function() {
-                                var targetId = $(this).data('target');
-                                var text = $('#' + targetId).val();
-                                copyToClipboard(text, this);
-                            });
-
-                            // Download JSON handler
-                            $('#downloadJson').off('click').on('click', function() {
-                                downloadJwsJson();
-                            });
-
-                            // Share URL handler
-                            $('#shareUrl').off('click').on('click', function() {
-                                generateShareUrl();
-                            });
-
-                        } else {
-                            // Error response
-                            var errorMsg = response.errorMessage || 'Unknown error occurred';
-                            var html = '<div class="alert alert-danger">';
-                            html += '<h5><i class="fas fa-exclamation-triangle"></i> Signing Failed</h5>';
-                            if(response.algorithm) {
-                                html += '<p><small>Algorithm: ' + response.algorithm + '</small></p>';
-                            }
-                            html += '<p>' + errorMsg + '</p>';
-                            html += '</div>';
-                            $('#output').html(html);
-                        }
+                        renderJwsSignFromApi(response);
                     },
                     error: function(xhr, status, error) {
                         console.error('AJAX error:', {status: xhr.status, error: error, responseText: xhr.responseText});
@@ -607,6 +624,19 @@
                         <label for="key"><strong><i class="fas fa-lock text-danger"></i> Private Key (PEM)</strong></label>
                         <textarea class="form-control" name="key" id="key" rows="8" style="font-family: monospace; font-size: 11px;"></textarea>
                         <small class="form-text text-muted">RSA or EC private key in PEM format. Sample keys provided when you select an algorithm.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small font-weight-bold text-muted mb-1"><i class="fas fa-lightbulb"></i> Learn &amp; try with AI</label>
+                        <p class="small text-muted mb-2">Keys stay on the form — AI uses the page engine to sign (Ctrl+Shift+A).</p>
+                        <div class="jwssign-learn-chips" id="jwssignLearnChips" role="toolbar" aria-label="JWS sign learning prompts">
+                            <button type="button" class="jwssign-learn-chip" data-ai-prompt="Sign the JSON payload on the form with HS256 using the shared secret on the form" data-ai-send="true"><i class="fas fa-bolt"></i>Sign HS256</button>
+                            <button type="button" class="jwssign-learn-chip" data-ai-prompt="Select RS256, use the sample RSA private key on the form, and sign the JSON payload on the form" data-ai-send="true"><i class="fas fa-bolt"></i>Sign RS256</button>
+                            <button type="button" class="jwssign-learn-chip" data-ai-prompt="What is the difference between jwssign.jsp (my key) and jwsgen.jsp (auto-generated key)?" data-ai-send="true"><i class="fas fa-exchange-alt"></i>Sign vs Generator</button>
+                            <button type="button" class="jwssign-learn-chip" data-ai-prompt="What shared secret length does HS256/HS384/HS512 require on this sign page?" data-ai-send="true"><i class="fas fa-key"></i>HMAC secret size</button>
+                            <button type="button" class="jwssign-learn-chip" data-ai-prompt="What PEM private key format does RS256 and ES256 expect on this page?" data-ai-send="true"><i class="fas fa-lock"></i>PEM format</button>
+                            <button type="button" class="jwssign-learn-chip" data-ai-prompt="After signing here, how do I verify the JWS on jwsverify.jsp?" data-ai-send="true"><i class="fas fa-check-double"></i>Verify next</button>
+                        </div>
                     </div>
 
                     <hr>
@@ -852,4 +882,5 @@
 
 </div>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

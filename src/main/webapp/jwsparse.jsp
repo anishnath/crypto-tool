@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "jws-parse");
+request.setAttribute("aiToolId", "cryptography/jws-parse");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,6 +33,7 @@
     <link rel="canonical" href="https://8gwifi.org/jwsparse.jsp">
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <!-- JSON-LD: WebApplication Schema -->
     <script type="application/ld+json">
@@ -179,22 +185,179 @@
 }
 </script>
 
+    <style>
+        .jws-learn-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.35rem; }
+        .jws-learn-chip {
+            border: 1px solid rgba(0, 123, 255, 0.35);
+            background: #e7f1ff;
+            color: #004085;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .jws-learn-chip:hover { background: #cce5ff; border-color: #007bff; }
+        .jws-learn-chip i { margin-right: 0.2rem; opacity: 0.85; }
+    </style>
+
     <script type="text/javascript">
 
-        // Store last successful response for download
         var lastParseResponse = null;
+        var JWS_PARSE_STORAGE_KEY = 'crypto-jws-parse-token';
+
+        function persistJwsTokenInSession(token) {
+            var t = (token || '').trim();
+            if (!t) return;
+            try { sessionStorage.setItem(JWS_PARSE_STORAGE_KEY, t); } catch (e) { /* private mode */ }
+        }
+
+        function loadJwsTokenFromSession() {
+            try {
+                var stored = sessionStorage.getItem(JWS_PARSE_STORAGE_KEY);
+                if (stored && !$('#serialized').val().trim()) {
+                    $('#serialized').val(stored);
+                }
+            } catch (e) { /* ignore */ }
+        }
+
+        function renderJwsParseFromApi(response) {
+            $('#output').empty();
+            lastParseResponse = null;
+
+            if (!response || !response.success) {
+                var errorMsg = (response && response.errorMessage) ? response.errorMessage : 'Unknown error occurred';
+                var errHtml = '<div class="alert alert-danger">';
+                errHtml += '<h5><i class="fas fa-exclamation-triangle"></i> Parsing Failed</h5>';
+                errHtml += '<p>' + escapeHtml(errorMsg) + '</p>';
+                errHtml += '</div>';
+                $('#output').html(errHtml);
+                return;
+            }
+
+            lastParseResponse = response;
+
+            var html = '<div class="alert alert-success">';
+            html += '<h5><i class="fas fa-check-circle"></i> JWS Parsed Successfully</h5>';
+            html += '</div>';
+
+            if (response.jwsHeader) {
+                html += '<div class="form-group">';
+                html += '<label><strong><i class="fas fa-file-code text-primary"></i> Header</strong></label>';
+                html += '<textarea id="headerOutput" readonly class="form-control" rows="3" style="font-family: monospace; font-size: 12px;"></textarea>';
+                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="headerOutput"><i class="fas fa-copy"></i> Copy</button>';
+                html += '</div>';
+            }
+
+            if (response.jwsPayload) {
+                html += '<div class="form-group">';
+                html += '<label><strong><i class="fas fa-file-alt text-success"></i> Payload</strong></label>';
+                html += '<textarea id="payloadOutput" readonly class="form-control" rows="8" style="font-family: monospace; font-size: 12px;"></textarea>';
+                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="payloadOutput"><i class="fas fa-copy"></i> Copy</button>';
+                html += '</div>';
+            }
+
+            if (response.jwsSignature) {
+                html += '<div class="form-group">';
+                html += '<label><strong><i class="fas fa-signature text-warning"></i> Signature (Base64URL)</strong></label>';
+                html += '<textarea id="signatureOutput" readonly class="form-control" rows="3" style="font-family: monospace; font-size: 11px;"></textarea>';
+                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="signatureOutput"><i class="fas fa-copy"></i> Copy</button>';
+                html += '</div>';
+            }
+
+            var hasJwtClaims = response.issuer || response.subject || response.jwtId ||
+                response.expirationTime || response.notBeforeTime || response.issueTime || response.audienceSize;
+
+            if (hasJwtClaims) {
+                html += '<hr><h5><i class="fas fa-list-alt text-info"></i> JWT Registered Claims</h5>';
+                html += '<div class="table-responsive"><table class="table table-sm table-bordered">';
+                html += '<thead class="thead-light"><tr><th>Claim</th><th>Value</th></tr></thead><tbody>';
+                if (response.issuer) html += '<tr><td><code>iss</code> (Issuer)</td><td>' + escapeHtml(response.issuer) + '</td></tr>';
+                if (response.subject) html += '<tr><td><code>sub</code> (Subject)</td><td>' + escapeHtml(response.subject) + '</td></tr>';
+                if (response.audienceSize) html += '<tr><td><code>aud</code> (Audience)</td><td>' + escapeHtml(response.audienceSize) + '</td></tr>';
+                if (response.expirationTime) html += '<tr><td><code>exp</code> (Expiration)</td><td>' + escapeHtml(response.expirationTime) + '</td></tr>';
+                if (response.notBeforeTime) html += '<tr><td><code>nbf</code> (Not Before)</td><td>' + escapeHtml(response.notBeforeTime) + '</td></tr>';
+                if (response.issueTime) html += '<tr><td><code>iat</code> (Issued At)</td><td>' + escapeHtml(response.issueTime) + '</td></tr>';
+                if (response.jwtId) html += '<tr><td><code>jti</code> (JWT ID)</td><td>' + escapeHtml(response.jwtId) + '</td></tr>';
+                html += '</tbody></table></div>';
+            }
+
+            var hasJweComponents = response.encryptedKey || response.iv || response.cipherText || response.authTag;
+            if (hasJweComponents) {
+                html += '<hr><h5><i class="fas fa-lock text-danger"></i> JWE Components (Encrypted Token)</h5>';
+                if (response.encryptedKey) {
+                    html += '<div class="form-group"><label><strong>Encrypted Key</strong></label>';
+                    html += '<textarea readonly class="form-control" rows="2" style="font-family: monospace; font-size: 11px;">' + escapeHtml(response.encryptedKey) + '</textarea></div>';
+                }
+                if (response.iv) {
+                    html += '<div class="form-group"><label><strong>Initialization Vector (IV)</strong></label>';
+                    html += '<input type="text" readonly class="form-control" style="font-family: monospace;" value="' + escapeHtml(response.iv) + '"></div>';
+                }
+                if (response.cipherText) {
+                    html += '<div class="form-group"><label><strong>Cipher Text</strong></label>';
+                    html += '<textarea readonly class="form-control" rows="3" style="font-family: monospace; font-size: 11px;">' + escapeHtml(response.cipherText) + '</textarea></div>';
+                }
+                if (response.authTag) {
+                    html += '<div class="form-group"><label><strong>Authentication Tag</strong></label>';
+                    html += '<input type="text" readonly class="form-control" style="font-family: monospace;" value="' + escapeHtml(response.authTag) + '"></div>';
+                }
+            }
+
+            html += '<hr><div class="btn-group" role="group">';
+            html += '<button type="button" class="btn btn-primary" id="downloadJson"><i class="fas fa-download"></i> Download JSON</button>';
+            html += '<button type="button" class="btn btn-info" id="shareUrl"><i class="fas fa-share-alt"></i> Share URL</button>';
+            html += '<a href="jwsverify.jsp" class="btn btn-success"><i class="fas fa-check-double"></i> Verify Signature</a>';
+            html += '</div>';
+
+            $('#output').html(html);
+
+            if (response.jwsHeader) {
+                var formattedHeader = response.jwsHeader;
+                try { formattedHeader = JSON.stringify(JSON.parse(response.jwsHeader), null, 2); } catch (e) {}
+                $('#headerOutput').val(formattedHeader);
+            }
+            if (response.jwsPayload) {
+                var formattedPayload = response.jwsPayload;
+                try { formattedPayload = JSON.stringify(JSON.parse(response.jwsPayload), null, 2); } catch (e) {}
+                $('#payloadOutput').val(formattedPayload);
+            }
+            if (response.jwsSignature) {
+                $('#signatureOutput').val(response.jwsSignature);
+            }
+
+            $('.copy-btn').off('click').on('click', function() {
+                copyToClipboard($('#' + $(this).data('target')).val(), this);
+            });
+            $('#downloadJson').off('click').on('click', function() { downloadParsedJson(); });
+            $('#shareUrl').off('click').on('click', function() { generateShareUrl(); });
+        }
+
+        window.renderJwsParseFromApi = renderJwsParseFromApi;
 
         $(document).ready(function() {
+            loadJwsTokenFromSession();
+            persistJwsTokenInSession($('#serialized').val());
 
-            // Real-time parsing on input
             var parseTimeout;
             $('#serialized').on('input', function() {
+                persistJwsTokenInSession($(this).val());
                 clearTimeout(parseTimeout);
                 parseTimeout = setTimeout(function() {
                     if ($('#serialized').val().trim().length > 0) {
                         $('#form').submit();
                     }
                 }, 500);
+            });
+
+            $('#jwsLearnChips').on('click', '.jws-learn-chip', function() {
+                var prompt = $(this).attr('data-ai-prompt') || '';
+                var send = $(this).attr('data-ai-send') !== 'false';
+                if (window.cryptoToolAssistant && typeof window.cryptoToolAssistant.open === 'function') {
+                    window.cryptoToolAssistant.open(prompt, send);
+                } else {
+                    document.getElementById('btnCryptoAI')?.click();
+                }
             });
 
             $('#form').submit(function(event) {
@@ -207,170 +370,7 @@
                     dataType: 'json',
                     success: function(response) {
                         console.log('Received JSON response:', response);
-                        $('#output').empty();
-                        lastParseResponse = null;
-
-                        if(response.success) {
-                            lastParseResponse = response;
-
-                            var html = '<div class="alert alert-success">';
-                            html += '<h5><i class="fas fa-check-circle"></i> JWS Parsed Successfully</h5>';
-                            html += '</div>';
-
-                            // Header
-                            if(response.jwsHeader) {
-                                var formattedHeader = response.jwsHeader;
-                                try {
-                                    formattedHeader = JSON.stringify(JSON.parse(response.jwsHeader), null, 2);
-                                } catch(e) {}
-                                html += '<div class="form-group">';
-                                html += '<label><strong><i class="fas fa-file-code text-primary"></i> Header</strong></label>';
-                                html += '<textarea id="headerOutput" readonly class="form-control" rows="3" style="font-family: monospace; font-size: 12px;"></textarea>';
-                                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="headerOutput"><i class="fas fa-copy"></i> Copy</button>';
-                                html += '</div>';
-                            }
-
-                            // Payload
-                            if(response.jwsPayload) {
-                                var formattedPayload = response.jwsPayload;
-                                try {
-                                    formattedPayload = JSON.stringify(JSON.parse(response.jwsPayload), null, 2);
-                                } catch(e) {}
-                                html += '<div class="form-group">';
-                                html += '<label><strong><i class="fas fa-file-alt text-success"></i> Payload</strong></label>';
-                                html += '<textarea id="payloadOutput" readonly class="form-control" rows="8" style="font-family: monospace; font-size: 12px;"></textarea>';
-                                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="payloadOutput"><i class="fas fa-copy"></i> Copy</button>';
-                                html += '</div>';
-                            }
-
-                            // Signature
-                            if(response.jwsSignature) {
-                                html += '<div class="form-group">';
-                                html += '<label><strong><i class="fas fa-signature text-warning"></i> Signature (Base64URL)</strong></label>';
-                                html += '<textarea id="signatureOutput" readonly class="form-control" rows="3" style="font-family: monospace; font-size: 11px;"></textarea>';
-                                html += '<button type="button" class="btn btn-sm btn-outline-primary mt-1 copy-btn" data-target="signatureOutput"><i class="fas fa-copy"></i> Copy</button>';
-                                html += '</div>';
-                            }
-
-                            // JWT Claims Section (if any claims present)
-                            var hasJwtClaims = response.issuer || response.subject || response.jwtId ||
-                                              response.expirationTime || response.notBeforeTime || response.issueTime || response.audienceSize;
-
-                            if(hasJwtClaims) {
-                                html += '<hr>';
-                                html += '<h5><i class="fas fa-list-alt text-info"></i> JWT Registered Claims</h5>';
-                                html += '<div class="table-responsive"><table class="table table-sm table-bordered">';
-                                html += '<thead class="thead-light"><tr><th>Claim</th><th>Value</th></tr></thead><tbody>';
-
-                                if(response.issuer) {
-                                    html += '<tr><td><code>iss</code> (Issuer)</td><td>' + escapeHtml(response.issuer) + '</td></tr>';
-                                }
-                                if(response.subject) {
-                                    html += '<tr><td><code>sub</code> (Subject)</td><td>' + escapeHtml(response.subject) + '</td></tr>';
-                                }
-                                if(response.audienceSize) {
-                                    html += '<tr><td><code>aud</code> (Audience)</td><td>' + escapeHtml(response.audienceSize) + '</td></tr>';
-                                }
-                                if(response.expirationTime) {
-                                    html += '<tr><td><code>exp</code> (Expiration)</td><td>' + escapeHtml(response.expirationTime) + '</td></tr>';
-                                }
-                                if(response.notBeforeTime) {
-                                    html += '<tr><td><code>nbf</code> (Not Before)</td><td>' + escapeHtml(response.notBeforeTime) + '</td></tr>';
-                                }
-                                if(response.issueTime) {
-                                    html += '<tr><td><code>iat</code> (Issued At)</td><td>' + escapeHtml(response.issueTime) + '</td></tr>';
-                                }
-                                if(response.jwtId) {
-                                    html += '<tr><td><code>jti</code> (JWT ID)</td><td>' + escapeHtml(response.jwtId) + '</td></tr>';
-                                }
-
-                                html += '</tbody></table></div>';
-                            }
-
-                            // JWE Components (if encrypted)
-                            var hasJweComponents = response.encryptedKey || response.iv || response.cipherText || response.authTag;
-
-                            if(hasJweComponents) {
-                                html += '<hr>';
-                                html += '<h5><i class="fas fa-lock text-danger"></i> JWE Components (Encrypted Token)</h5>';
-
-                                if(response.encryptedKey) {
-                                    html += '<div class="form-group">';
-                                    html += '<label><strong>Encrypted Key</strong></label>';
-                                    html += '<textarea readonly class="form-control" rows="2" style="font-family: monospace; font-size: 11px;">' + escapeHtml(response.encryptedKey) + '</textarea>';
-                                    html += '</div>';
-                                }
-                                if(response.iv) {
-                                    html += '<div class="form-group">';
-                                    html += '<label><strong>Initialization Vector (IV)</strong></label>';
-                                    html += '<input type="text" readonly class="form-control" style="font-family: monospace;" value="' + escapeHtml(response.iv) + '">';
-                                    html += '</div>';
-                                }
-                                if(response.cipherText) {
-                                    html += '<div class="form-group">';
-                                    html += '<label><strong>Cipher Text</strong></label>';
-                                    html += '<textarea readonly class="form-control" rows="3" style="font-family: monospace; font-size: 11px;">' + escapeHtml(response.cipherText) + '</textarea>';
-                                    html += '</div>';
-                                }
-                                if(response.authTag) {
-                                    html += '<div class="form-group">';
-                                    html += '<label><strong>Authentication Tag</strong></label>';
-                                    html += '<input type="text" readonly class="form-control" style="font-family: monospace;" value="' + escapeHtml(response.authTag) + '">';
-                                    html += '</div>';
-                                }
-                            }
-
-                            // Action buttons
-                            html += '<hr>';
-                            html += '<div class="btn-group" role="group">';
-                            html += '<button type="button" class="btn btn-primary" id="downloadJson"><i class="fas fa-download"></i> Download JSON</button>';
-                            html += '<button type="button" class="btn btn-info" id="shareUrl"><i class="fas fa-share-alt"></i> Share URL</button>';
-                            html += '<a href="jwsverify.jsp" class="btn btn-success"><i class="fas fa-check-double"></i> Verify Signature</a>';
-                            html += '</div>';
-
-                            $('#output').html(html);
-
-                            // Set values
-                            if(response.jwsHeader) {
-                                var formattedHeader = response.jwsHeader;
-                                try { formattedHeader = JSON.stringify(JSON.parse(response.jwsHeader), null, 2); } catch(e) {}
-                                $('#headerOutput').val(formattedHeader);
-                            }
-                            if(response.jwsPayload) {
-                                var formattedPayload = response.jwsPayload;
-                                try { formattedPayload = JSON.stringify(JSON.parse(response.jwsPayload), null, 2); } catch(e) {}
-                                $('#payloadOutput').val(formattedPayload);
-                            }
-                            if(response.jwsSignature) {
-                                $('#signatureOutput').val(response.jwsSignature);
-                            }
-
-                            // Attach copy handlers
-                            $('.copy-btn').off('click').on('click', function() {
-                                var targetId = $(this).data('target');
-                                var text = $('#' + targetId).val();
-                                copyToClipboard(text, this);
-                            });
-
-                            // Download JSON handler
-                            $('#downloadJson').off('click').on('click', function() {
-                                downloadParsedJson();
-                            });
-
-                            // Share URL handler
-                            $('#shareUrl').off('click').on('click', function() {
-                                generateShareUrl();
-                            });
-
-                        } else {
-                            // Error response
-                            var errorMsg = response.errorMessage || 'Unknown error occurred';
-                            var html = '<div class="alert alert-danger">';
-                            html += '<h5><i class="fas fa-exclamation-triangle"></i> Parsing Failed</h5>';
-                            html += '<p>' + errorMsg + '</p>';
-                            html += '</div>';
-                            $('#output').html(html);
-                        }
+                        renderJwsParseFromApi(response);
                     },
                     error: function(xhr, status, error) {
                         console.error('AJAX error:', {status: xhr.status, error: error, responseText: xhr.responseText});
@@ -557,7 +557,19 @@
                     <div class="form-group">
                         <label for="serialized"><strong><i class="fas fa-key text-info"></i> JWS Serialized Token</strong></label>
                         <textarea class="form-control" name="serialized" id="serialized" rows="12" style="font-family: monospace; font-size: 11px;" placeholder="Paste your JWS/JWT token here...">eyJhbGciOiJIUzI1NiJ9.ew0KICAic3ViIjogIjEyMzQ1Njc4OTAiLA0KICAibmFtZSI6ICJBbmlzaCBOYXRoIiwNCiAgImlhdCI6IDE1MTYyMzkwMjINCn0.9tFLrurxXWKBDh317ly24fP03We-uzSZtPf7Yqy_oSw</textarea>
-                        <small class="form-text text-muted">Format: header.payload.signature (Base64URL encoded)</small>
+                        <small class="form-text text-muted">Format: header.payload.signature (Base64URL encoded). Token is kept in this session for AI (not sent to the model).</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small font-weight-bold text-muted mb-1"><i class="fas fa-lightbulb"></i> Learn &amp; try with AI</label>
+                        <div class="jws-learn-chips" id="jwsLearnChips" role="toolbar" aria-label="JWS learning prompts">
+                            <button type="button" class="jws-learn-chip" data-ai-prompt="Parse and decode the JWS/JWT token on the form" data-ai-send="true"><i class="fas fa-bolt"></i>Decode token</button>
+                            <button type="button" class="jws-learn-chip" data-ai-prompt="Parse the token on the form, then explain the JWT registered claims (iss, sub, aud, exp, iat) in plain English." data-ai-send="true"><i class="fas fa-list-alt"></i>Explain claims</button>
+                            <button type="button" class="jws-learn-chip" data-ai-prompt="Parse the token on the form and tell me if it is expired based on the exp claim." data-ai-send="true"><i class="fas fa-clock"></i>Expired?</button>
+                            <button type="button" class="jws-learn-chip" data-ai-prompt="What is the difference between parsing a JWT and verifying its signature?" data-ai-send="true"><i class="fas fa-question-circle"></i>Parse vs verify</button>
+                            <button type="button" class="jws-learn-chip" data-ai-prompt="Explain JWS compact serialization (header.payload.signature) and Base64URL encoding." data-ai-send="true"><i class="fas fa-book"></i>JWS format</button>
+                            <button type="button" class="jws-learn-chip" data-ai-prompt="How do I verify this JWS signature after parsing? Which key do I need for HS256 vs RS256?" data-ai-send="true"><i class="fas fa-check-double"></i>Verify next</button>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-block btn-lg">
@@ -714,4 +726,5 @@
 
 </div>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

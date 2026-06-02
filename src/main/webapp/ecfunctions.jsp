@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "ec");
+request.setAttribute("aiToolId", "cryptography/ec");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <%@ page import="z.y.x.Security.ecpojo" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -311,6 +316,7 @@
     </script>
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <style>
         .key-card {
@@ -1323,4 +1329,5 @@ function escapeHtml(text) {
 }
 </script>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

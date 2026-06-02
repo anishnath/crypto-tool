@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "elgamal");
+request.setAttribute("aiToolId", "cryptography/elgamal");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <%@ page import="com.google.gson.Gson" %>
 <%@ page import="org.apache.http.impl.client.DefaultHttpClient" %>
 <%@ page import="org.apache.http.client.methods.HttpGet" %>
@@ -167,6 +172,7 @@
     </script>
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <style>
         :root {
@@ -620,6 +626,8 @@
             // Auto-scroll to result on mobile
             scrollToResult();
         }
+
+        window.renderElGamalResult = renderResult;
 
         function debounce(func, wait) {
             var timeout;
@@ -1403,5 +1411,6 @@ public_key = key.publickey()
 </button>
 
 <%@ include file="footer_adsense.jsp"%>
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 </div>
 <%@ include file="body-close.jsp"%>

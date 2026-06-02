@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "scrypt");
+request.setAttribute("aiToolId", "cryptography/scrypt");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,6 +66,7 @@
     </script>
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <style>
         :root {
@@ -701,6 +707,25 @@ crypto.scrypt(password, salt, 32,
         });
     });
 
+    window.renderScryptFromApi = function(response) {
+        if (!response) return;
+        var html = renderScryptResult(response);
+        $('#resultPlaceholder').hide();
+        $('#resultContent').html(html).show();
+        if (response.success && response.hash) {
+            lastHash = response.hash;
+            lastPassword = $('#password').val();
+            lastSalt = $('#salt').val();
+            lastParams = {
+                n: response.cpuCost || parseInt($('#workparam').val(), 10),
+                r: response.memoryCost || parseInt($('#memoryparam').val(), 10),
+                p: response.parallelization || parseInt($('#parallelizationparam').val(), 10),
+                len: response.keyLength || parseInt($('#length').val(), 10)
+            };
+            $('#copyBtn').show();
+        }
+    };
+
     function renderScryptResult(response) {
         var html = '';
 
@@ -941,4 +966,5 @@ crypto.scrypt(password, salt, 32,
     }
 </script>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

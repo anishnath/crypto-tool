@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "jwk");
+request.setAttribute("aiToolId", "cryptography/jwk");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -124,9 +129,61 @@
 	<link rel="canonical" href="https://8gwifi.org/jwkfunctions.jsp">
 	
 	<%@ include file="header-script.jsp"%>
+	<%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
+
+	<style>
+		.jwk-learn-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.35rem; }
+		.jwk-learn-chip {
+			border: 1px solid rgba(0, 123, 255, 0.35);
+			background: #e7f1ff;
+			color: #004085;
+			font-size: 0.72rem;
+			font-weight: 600;
+			padding: 0.3rem 0.65rem;
+			border-radius: 999px;
+			cursor: pointer;
+		}
+		.jwk-learn-chip:hover { background: #cce5ff; }
+		.jwk-learn-chip i { margin-right: 0.2rem; }
+	</style>
 
 	<script type="text/javascript">
+		function renderJwkGenFromApi(response) {
+			$('#output').empty();
+			if (!response || !response.success) {
+				var errorMsg = (response && response.errorMessage) ? response.errorMessage : 'Unknown error';
+				$('#output').html('<div class="alert alert-danger"><h5>Error</h5><p>' + errorMsg + '</p></div>');
+				return;
+			}
+			var jwkOutput = response.message || '';
+			var formattedJWK = jwkOutput;
+			try {
+				formattedJWK = JSON.stringify(JSON.parse(jwkOutput), null, 2);
+			} catch (e) { /* raw */ }
+			var html = '<div class="alert alert-success"><h5><i class="fas fa-check-circle"></i> JWK Generated Successfully</h5></div>';
+			html += '<div class="form-group"><label><strong>Generated JWK</strong></label>';
+			html += '<textarea id="jwkOutput" readonly class="form-control" rows="20" style="font-family: monospace; font-size: 12px;"></textarea>';
+			html += '<div class="mt-2"><button type="button" class="btn btn-sm btn-primary copy-jwk"><i class="fas fa-copy"></i> Copy</button>';
+			html += '<a href="jwkconvertfunctions.jsp" class="btn btn-sm btn-info ml-2"><i class="fas fa-exchange-alt"></i> Convert to PEM</a></div></div>';
+			$('#output').html(html);
+			$('#jwkOutput').val(formattedJWK);
+			$('.copy-jwk').off('click').on('click', function() {
+				copyToClipboard($('#jwkOutput').val(), this);
+			});
+		}
+		window.renderJwkGenFromApi = renderJwkGenFromApi;
+
 		$(document).ready(function() {
+
+			$('#jwkLearnChips').on('click', '.jwk-learn-chip', function() {
+				var prompt = $(this).attr('data-ai-prompt') || '';
+				var send = $(this).attr('data-ai-send') !== 'false';
+				if (window.cryptoToolAssistant && typeof window.cryptoToolAssistant.open === 'function') {
+					window.cryptoToolAssistant.open(prompt, send);
+				} else {
+					document.getElementById('btnCryptoAI')?.click();
+				}
+			});
 
 			$('#submit').click(function(event) {
 				$('#form').delay(200).submit()
@@ -142,53 +199,7 @@
 					dataType: 'json',
 					success : function(response) {
 						console.log('Received JSON response:', response);
-						$('#output').empty();
-
-						if(response.success) {
-							// Success - display generated JWK
-							var jwkOutput = response.message || '';
-							
-							// Format JSON nicely
-							var formattedJWK = '';
-							try {
-								var jwkObj = JSON.parse(jwkOutput);
-								formattedJWK = JSON.stringify(jwkObj, null, 2);
-							} catch(e) {
-								formattedJWK = jwkOutput;
-							}
-
-							var html = '<div class="alert alert-success">';
-							html += '<h5><i class="fas fa-check-circle"></i> JWK Generated Successfully</h5>';
-							html += '</div>';
-
-							html += '<div class="form-group">';
-							html += '<label><strong><i class="fas fa-code text-info"></i> Generated JSON Web Key (JWK)</strong></label>';
-							html += '<textarea id="jwkOutput" readonly class="form-control" rows="20" style="font-family: monospace; font-size: 12px;"></textarea>';
-							html += '<div class="mt-2">';
-							html += '<button type="button" class="btn btn-sm btn-primary copy-jwk"><i class="fas fa-copy"></i> Copy JWK</button>';
-							html += '<a href="jwkconvertfunctions.jsp" class="btn btn-sm btn-info ml-2"><i class="fas fa-exchange-alt"></i> Convert to PEM</a>';
-							html += '</div>';
-							html += '</div>';
-
-							$('#output').html(html);
-
-							// Set formatted JSON value
-							$('#jwkOutput').val(formattedJWK);
-
-							// Attach copy handler
-							$('.copy-jwk').off('click').on('click', function() {
-								var text = $('#jwkOutput').val();
-								copyToClipboard(text, this);
-							});
-						} else {
-							// Error
-							var errorMsg = response.errorMessage || 'Unknown error occurred';
-							var html = '<div class="alert alert-danger">';
-							html += '<h5><i class="fas fa-exclamation-triangle"></i> Error</h5>';
-							html += '<p>' + errorMsg + '</p>';
-							html += '</div>';
-							$('#output').html(html);
-						}
+						renderJwkGenFromApi(response);
 					},
 					error: function(xhr, status, error) {
 						console.error('AJAX error:', {status: xhr.status, error: error, responseText: xhr.responseText});
@@ -417,6 +428,17 @@
 
 					<hr>
 
+					<div class="mb-3">
+						<label class="small font-weight-bold text-muted mb-1"><i class="fas fa-lightbulb"></i> Learn &amp; try with AI</label>
+						<div class="jwk-learn-chips" id="jwkLearnChips" role="toolbar">
+							<button type="button" class="jwk-learn-chip" data-ai-prompt="Generate a P-256 EC JWK (param 5)" data-ai-send="true"><i class="fas fa-bolt"></i>P-256</button>
+							<button type="button" class="jwk-learn-chip" data-ai-prompt="Generate Ed25519 JWK (param 9)" data-ai-send="true"><i class="fas fa-bolt"></i>Ed25519</button>
+							<button type="button" class="jwk-learn-chip" data-ai-prompt="What is a JSON Web Key (JWK) and how is it used with JWT?" data-ai-send="true"><i class="fas fa-question-circle"></i>What is JWK?</button>
+							<button type="button" class="jwk-learn-chip" data-ai-prompt="How do I convert a generated JWK to PEM on jwkconvertfunctions.jsp?" data-ai-send="true"><i class="fas fa-exchange-alt"></i>Convert to PEM</button>
+							<button type="button" class="jwk-learn-chip" data-ai-prompt="Explain JWK generator param numbers 1–17 (RSA, EC, Ed25519, HMAC, AES)." data-ai-send="true"><i class="fas fa-list"></i>Param list</button>
+						</div>
+					</div>
+
 					<div class="form-group mb-0">
 						<button type="button" class="btn btn-primary btn-block btn-lg" id="submit" name="Generate JSON Web Keys">
 							<i class="fas fa-key"></i> Generate JWK
@@ -570,4 +592,5 @@
 
 </div>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

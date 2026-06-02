@@ -1,3 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "ec-sign-verify");
+request.setAttribute("aiToolId", "cryptography/ec-sign-verify");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <%@ page import="z.y.x.Security.RSAUtil" %>
 <%@ page import="java.security.KeyPair" %>
 <%@ page import="z.y.x.Security.ecpojo" %>
@@ -8,7 +14,6 @@
 <%@ page import="java.io.BufferedReader" %>
 <%@ page import="java.io.InputStreamReader" %>
 <%@ page import="z.y.x.r.LoadPropertyFileFunctionality" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,6 +43,7 @@
     <link rel="canonical" href="https://8gwifi.org/ecsignverify.jsp">
 
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <!-- JSON-LD: WebApplication Schema -->
     <script type="application/ld+json">
@@ -1192,6 +1198,7 @@ openssl ecparam -name prime256v1 -genkey -noout -out p256-key.pem</code></pre>
 <%@ include file="footer_adsense.jsp"%>
 <%@ include file="addcomments.jsp"%>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 </div>
 
 <%@ include file="body-close.jsp"%>

@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "jws-verify");
+request.setAttribute("aiToolId", "cryptography/jws-verify");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -140,12 +145,71 @@
     <meta name="googlebot" content="index,follow"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%@ include file="header-script.jsp"%>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
+    <style>
+        .jwsverify-learn-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.35rem; }
+        .jwsverify-learn-chip {
+            border: 1px solid rgba(0, 123, 255, 0.35);
+            background: #e7f1ff;
+            color: #004085;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            cursor: pointer;
+        }
+        .jwsverify-learn-chip:hover { background: #cce5ff; border-color: #007bff; }
+        .jwsverify-learn-chip i { margin-right: 0.2rem; }
+    </style>
 
     <script type="text/javascript">
+        function escapeHtml(text) {
+            if (!text) return '';
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(text));
+            return div.innerHTML;
+        }
+
+        function renderJwsVerifyFromApi(response) {
+            $('#output').empty();
+            if (!response || !response.success) {
+                var err = (response && response.errorMessage) ? response.errorMessage : 'Verification failed';
+                $('#output').html('<div class="alert alert-danger"><h5>Verification Error</h5><p>' + escapeHtml(err) + '</p></div>');
+                return;
+            }
+            var isValid = response.message === 'VALID';
+            var html = '';
+            if (isValid) {
+                html = '<div class="alert alert-success">';
+                html += '<h4 class="alert-heading"><i class="fas fa-check-circle fa-2x"></i> SIGNATURE VALID</h4><hr>';
+                html += '<p class="mb-0"><i class="fas fa-shield-alt"></i> ' + escapeHtml(response.jwsState || '') + '</p>';
+                html += '<p class="small text-muted mt-2 mb-0">The JWS signature has been cryptographically verified.</p></div>';
+                html += '<div class="card border-success mt-3"><div class="card-header bg-success text-white">Verification Details</div>';
+                html += '<div class="card-body"><p><strong>Status:</strong> <span class="badge badge-success">Valid</span></p>';
+                html += '<p><strong>Token:</strong></p><textarea readonly class="form-control" rows="3" style="font-family: monospace; font-size: 11px;">' + escapeHtml(response.jwsSerialize || '') + '</textarea></div></div>';
+            } else {
+                html = '<div class="alert alert-danger">';
+                html += '<h4 class="alert-heading"><i class="fas fa-times-circle fa-2x"></i> SIGNATURE INVALID</h4><hr>';
+                html += '<p class="mb-0"><i class="fas fa-exclamation-triangle"></i> ' + escapeHtml(response.jwsState || '') + '</p>';
+                html += '<ul class="small mt-2 mb-0"><li>Wrong key</li><li>Token tampered</li><li>Algorithm mismatch</li></ul></div>';
+            }
+            $('#output').html(html);
+        }
+        window.renderJwsVerifyFromApi = renderJwsVerifyFromApi;
+
         $(document).ready(function() {
 
-            // Form submission handler
+            $('#jwsverifyLearnChips').on('click', '.jwsverify-learn-chip', function() {
+                var prompt = $(this).attr('data-ai-prompt') || '';
+                var send = $(this).attr('data-ai-send') !== 'false';
+                if (window.cryptoToolAssistant && typeof window.cryptoToolAssistant.open === 'function') {
+                    window.cryptoToolAssistant.open(prompt, send);
+                } else {
+                    document.getElementById('btnCryptoAI')?.click();
+                }
+            });
+
             $('#form').submit(function (event) {
                 event.preventDefault();
                 $('#output').html('<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> Verifying JWS signature...</div>');
@@ -156,54 +220,7 @@
                     data: $("#form").serialize(),
                     dataType: 'json',
                     success: function(response) {
-                        $('#output').empty();
-
-                        if (response.success) {
-                            var isValid = response.message === 'VALID';
-                            var html = '';
-
-                            if (isValid) {
-                                html = '<div class="alert alert-success">';
-                                html += '<h4 class="alert-heading"><i class="fas fa-check-circle fa-2x"></i> SIGNATURE VALID</h4>';
-                                html += '<hr>';
-                                html += '<p class="mb-0"><i class="fas fa-shield-alt"></i> ' + response.jwsState + '</p>';
-                                html += '<p class="small text-muted mt-2 mb-0">The JWS signature has been cryptographically verified. The token integrity is confirmed.</p>';
-                                html += '</div>';
-
-                                // Show verification details
-                                html += '<div class="card border-success mt-3">';
-                                html += '<div class="card-header bg-success text-white"><i class="fas fa-info-circle"></i> Verification Details</div>';
-                                html += '<div class="card-body">';
-                                html += '<p><strong>Status:</strong> <span class="badge badge-success">Valid</span></p>';
-                                html += '<p><strong>Token:</strong></p>';
-                                html += '<textarea readonly class="form-control" rows="3" style="font-family: monospace; font-size: 11px;">' + response.jwsSerialize + '</textarea>';
-                                html += '</div>';
-                                html += '</div>';
-                            } else {
-                                html = '<div class="alert alert-danger">';
-                                html += '<h4 class="alert-heading"><i class="fas fa-times-circle fa-2x"></i> SIGNATURE INVALID</h4>';
-                                html += '<hr>';
-                                html += '<p class="mb-0"><i class="fas fa-exclamation-triangle"></i> ' + response.jwsState + '</p>';
-                                html += '<p class="small mt-2 mb-0">The signature does not match. Possible reasons:</p>';
-                                html += '<ul class="small mb-0">';
-                                html += '<li>Wrong key (shared secret or public key)</li>';
-                                html += '<li>Token has been modified/tampered</li>';
-                                html += '<li>Algorithm mismatch</li>';
-                                html += '<li>Key encoding issues</li>';
-                                html += '</ul>';
-                                html += '</div>';
-                            }
-
-                            $('#output').html(html);
-
-                        } else {
-                            // Error case
-                            var html = '<div class="alert alert-danger">';
-                            html += '<h5><i class="fas fa-exclamation-triangle"></i> Verification Error</h5>';
-                            html += '<p>' + response.errorMessage + '</p>';
-                            html += '</div>';
-                            $('#output').html(html);
-                        }
+                        renderJwsVerifyFromApi(response);
                     },
                     error: function(xhr, status, error) {
                         console.error('AJAX error:', {status: xhr.status, error: error, responseText: xhr.responseText});
@@ -298,8 +315,19 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="serialized"><strong>JWS Compact Serialization</strong> <span class="text-danger">*</span></label>
-                        <small class="form-text text-muted mb-2">Paste your JWS/JWT token (header.payload.signature)</small>
+                        <small class="form-text text-muted mb-2">Paste your JWS/JWT token (header.payload.signature). Kept in session for AI (not sent to the model).</small>
                         <textarea class="form-control" name="serialized" id="serialized" rows="6" style="font-family: monospace; font-size: 12px;" placeholder="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U">eyJhbGciOiJIUzI1NiJ9.ew0KICAic3ViIjogIjEyMzQ1Njc4OTAiLA0KICAibmFtZSI6ICJBbmlzaCBOYXRoIiwNCiAgImlhdCI6IDE1MTYyMzkwMjINCn0.9tFLrurxXWKBDh317ly24fP03We-uzSZtPf7Yqy_oSw</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small font-weight-bold text-muted mb-1"><i class="fas fa-lightbulb"></i> Learn &amp; try with AI</label>
+                        <div class="jwsverify-learn-chips" id="jwsverifyLearnChips" role="toolbar">
+                            <button type="button" class="jwsverify-learn-chip" data-ai-prompt="Verify the JWS/JWT token on the form using the keys on the form" data-ai-send="true"><i class="fas fa-bolt"></i>Verify token</button>
+                            <button type="button" class="jwsverify-learn-chip" data-ai-prompt="Verify the token on the form with the HMAC shared secret on the form" data-ai-send="true"><i class="fas fa-key"></i>Verify HS256</button>
+                            <button type="button" class="jwsverify-learn-chip" data-ai-prompt="What is the difference between parsing a JWT on jwsparse.jsp and verifying it here?" data-ai-send="true"><i class="fas fa-question-circle"></i>Parse vs verify</button>
+                            <button type="button" class="jwsverify-learn-chip" data-ai-prompt="For HS256 vs RS256 tokens, which field should I use — shared secret or public key PEM?" data-ai-send="true"><i class="fas fa-balance-scale"></i>Which key?</button>
+                            <button type="button" class="jwsverify-learn-chip" data-ai-prompt="Explain step by step: I generated a JWS on jwsgen.jsp — how do I verify it on jwsverify.jsp? Do not run verification or generate a new token." data-ai-send="true"><i class="fas fa-link"></i>After jwsgen</button>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-lg btn-block">
@@ -538,4 +566,5 @@ MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQAUv/w4x...
 
 </div>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>

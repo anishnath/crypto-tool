@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+request.setAttribute("aiCryptoToolKey", "jwk-convert");
+request.setAttribute("aiToolId", "cryptography/jwk-convert");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <%@ page import="z.y.x.Security.RSAUtil" %>
 <%@ page import="java.security.KeyPair" %>
 <!DOCTYPE html>
@@ -175,27 +180,30 @@
 	<link rel="canonical" href="https://8gwifi.org/jwkconvertfunctions.jsp">
 	
 	<%@ include file="header-script.jsp"%>
+	<%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
+
+	<style>
+		.jwkconv-learn-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.35rem; }
+		.jwkconv-learn-chip {
+			border: 1px solid rgba(0, 123, 255, 0.35);
+			background: #e7f1ff;
+			color: #004085;
+			font-size: 0.72rem;
+			font-weight: 600;
+			padding: 0.3rem 0.65rem;
+			border-radius: 999px;
+			cursor: pointer;
+		}
+		.jwkconv-learn-chip:hover { background: #cce5ff; }
+		.jwkconv-learn-chip i { margin-right: 0.2rem; }
+	</style>
 
 	<script type="text/javascript">
-		$(document).ready(function() {
+		function renderJwkConvertFromApi(response) {
+			console.log('Received JSON response:', response);
+			$('#output').empty();
 
-			$('#submit').click(function(event) {
-				$('#form').delay(200).submit()
-			});
-
-			$('#form').submit(function(event) {
-				$('#output').html('<img src="images/712.GIF"> loading...');
-				event.preventDefault();
-				$.ajax({
-					type : "POST",
-					url : "JWKFunctionality",
-					data : $("#form").serialize(),
-					dataType: 'json',
-					success : function(response) {
-						console.log('Received JSON response:', response);
-						$('#output').empty();
-
-						if(response.success) {
+			if(response.success) {
 							// Success - display converted keys
 							var operation = response.operation || 'convert';
 							var algorithm = response.algorithm || '';
@@ -430,6 +438,35 @@
 							html += '</div>';
 							$('#output').html(html);
 						}
+		}
+		window.renderJwkConvertFromApi = renderJwkConvertFromApi;
+
+		$(document).ready(function() {
+
+			$('#jwkconvLearnChips').on('click', '.jwkconv-learn-chip', function() {
+				var prompt = $(this).attr('data-ai-prompt') || '';
+				var send = $(this).attr('data-ai-send') !== 'false';
+				if (window.cryptoToolAssistant && typeof window.cryptoToolAssistant.open === 'function') {
+					window.cryptoToolAssistant.open(prompt, send);
+				} else {
+					document.getElementById('btnCryptoAI')?.click();
+				}
+			});
+
+			$('#submit').click(function(event) {
+				$('#form').delay(200).submit()
+			});
+
+			$('#form').submit(function(event) {
+				$('#output').html('<img src="images/712.GIF"> loading...');
+				event.preventDefault();
+				$.ajax({
+					type : "POST",
+					url : "JWKFunctionality",
+					data : $("#form").serialize(),
+					dataType: 'json',
+					success : function(response) {
+						renderJwkConvertFromApi(response);
 					},
 					error: function(xhr, status, error) {
 						console.error('AJAX error:', {status: xhr.status, error: error, responseText: xhr.responseText});
@@ -704,6 +741,17 @@
 					</div>
 
 					<hr>
+
+					<div class="mb-3">
+						<label class="small font-weight-bold text-muted mb-1"><i class="fas fa-lightbulb"></i> Learn &amp; try with AI</label>
+						<div class="jwkconv-learn-chips" id="jwkconvLearnChips" role="toolbar">
+							<button type="button" class="jwkconv-learn-chip" data-ai-prompt="Convert the JWK in the input field to PEM (JWK-to-PEM)" data-ai-send="true"><i class="fas fa-bolt"></i>JWK → PEM</button>
+							<button type="button" class="jwkconv-learn-chip" data-ai-prompt="Convert the PEM key in the input field to JWK (PEM-to-JWK)" data-ai-send="true"><i class="fas fa-bolt"></i>PEM → JWK</button>
+							<button type="button" class="jwkconv-learn-chip" data-ai-prompt="What is the difference between JWK and PEM, and when should I use each?" data-ai-send="true"><i class="fas fa-question-circle"></i>JWK vs PEM</button>
+							<button type="button" class="jwkconv-learn-chip" data-ai-prompt="I generated a JWK on jwkfunctions.jsp — how do I get PEM here?" data-ai-send="true"><i class="fas fa-link"></i>After jwkfunctions</button>
+							<button type="button" class="jwkconv-learn-chip" data-ai-prompt="Which conversion direction supports EC keys vs RSA only?" data-ai-send="true"><i class="fas fa-balance-scale"></i>EC vs RSA</button>
+						</div>
+					</div>
 
 					<div class="form-group mb-0">
 						<button type="button" class="btn btn-primary btn-block btn-lg" id="submit" name="Generate JSON Web Keys">
@@ -1207,4 +1255,5 @@
 <%@ include file="footer_adsense.jsp"%>
 </div>
 
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp"%>
 <%@ include file="body-close.jsp"%>
