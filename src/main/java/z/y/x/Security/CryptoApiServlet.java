@@ -46,10 +46,21 @@ public class CryptoApiServlet extends HttpServlet {
     }
 
     static String buildAppBaseUrl(HttpServletRequest req) {
+        String ctx = req.getContextPath();
+        // Prod-behind-Cloudflare: the internal hop must NOT re-enter Cloudflare via the
+        // public hostname (it has no cf_clearance → 403 challenge). Set LEGACY_BASE_URL to a
+        // loopback origin, e.g. http://127.0.0.1:8080 or https://127.0.0.1:8443, so the call
+        // stays on this box. Unset (local dev) → derive from the request as before.
+        String override = System.getenv("LEGACY_BASE_URL");
+        if (override != null && !override.isEmpty()) {
+            if (override.endsWith("/")) {
+                override = override.substring(0, override.length() - 1);
+            }
+            return override + ctx;
+        }
         String scheme = req.getScheme();
         int port = req.getServerPort();
         String host = req.getServerName();
-        String ctx = req.getContextPath();
         boolean def = ("http".equals(scheme) && port == 80) || ("https".equals(scheme) && port == 443);
         return scheme + "://" + host + (def ? "" : ":" + port) + ctx;
     }
