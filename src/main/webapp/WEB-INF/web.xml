@@ -836,6 +836,15 @@
         <url-pattern>/api/rsa/verify</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>CryptoApiServlet</servlet-name>
+        <servlet-class>z.y.x.Security.CryptoApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CryptoApiServlet</servlet-name>
+        <url-pattern>/api/crypto/execute</url-pattern>
+    </servlet-mapping>
+
     <!-- 4×4 Rubik's Cube Solver — port of rubikscubennnsolver (Python+C).
          Currently size=4 only; sizes 2/3/5/6/7 will dispatch from the same
          endpoint once their packages land. -->
