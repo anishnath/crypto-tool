@@ -88,7 +88,7 @@ function renderTikzRecents(items, gridEl, sectionEl, signedIn) {
   if (header) {
     header.textContent = signedIn
       ? 'Recent diagrams — yours first, then community'
-      : 'Recent community diagrams — yours appear first when you create one';
+      : 'Recent community diagrams';
   }
 
   for (const item of items) {
