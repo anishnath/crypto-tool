@@ -661,6 +661,7 @@ export class ToolAiAssistant {
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
     this.floating = opts.floating !== false;
+    this.floatingCorner = opts.floatingCorner === 'left' ? 'left' : 'right';
     this.persistLayout = opts.persistLayout !== false;
     this.policyControls = opts.policyControls !== false;
     this.policyModeEnabled = opts.modeSelector !== false;
@@ -695,7 +696,10 @@ export class ToolAiAssistant {
     const titleId = `vca-title-${this.instanceId}`;
     const backdrop = document.createElement('div');
     backdrop.className = 'vca-backdrop';
-    if (this.floating) backdrop.dataset.floating = 'true';
+    if (this.floating) {
+      backdrop.dataset.floating = 'true';
+      backdrop.dataset.corner = this.floatingCorner;
+    }
     backdrop.setAttribute('role', 'presentation');
     backdrop.innerHTML = `
       <div class="vca-modal" role="dialog" aria-modal="${this.floating ? 'false' : 'true'}" aria-labelledby="${titleId}">
