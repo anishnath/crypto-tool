@@ -11,11 +11,21 @@ Use this guide whenever you add AI support to a new tool page.
 ```text
 modern/js/ai/
 ├── assistant-core.js                 # Stable entrypoint for generic assistant core
+├── lazy-assistant.js                 # Lazy-load wiring (click / shortcut / checkout)
 ├── adapters/
 │   ├── arduino-simulator-adapter.js  # Example tool adapter
 │   ├── generic-tool-adapter.js       # Minimal adapter for new tools
+│   ├── pgp-adapter.js
+│   ├── ssh-adapter.js
+│   ├── tikz-viewer-adapter.js
 │   └── <new-tool>-adapter.js         # Your new tool adapter
 └── README.md
+
+modern/js/rsa/
+└── rsa-ai.js                         # RSA-only bundled assistant (same lazy pattern)
+
+modern/js/crypto/
+└── crypto-tools-ai.js                  # Single bundled module (20 crypto JSP pages, RSA pattern)
 ```
 
 `assistant-core.js` re-exports the generic implementation from `vibe-coding-assistant.js`:
@@ -24,7 +34,7 @@ modern/js/ai/
 - `applyExtractors`
 - shared helpers
 
-Tool pages should import from `modern/js/ai/*` instead of importing `vibe-coding-assistant.js` directly.
+Tool pages should import adapters via **`wireLazyAssistant()`** (see **Lazy loading** below), not eager `import` + `mount()` on page load.
 
 ---
 
@@ -37,6 +47,7 @@ Shared fragments under `modern/components/` wire gateway env flags, OAuth user i
 | `ai-assistant-vars.inc.jsp` | Top of JSP (once) | Server vars from `AiAssistantPageSupport` |
 | `ai-assistant-head.inc.jsp` | `<head>` | Assistant stylesheet |
 | `ai-assistant-boot.inc.jsp` | Inside `<script type="module">` | `const aiAssistantBoot = { … }` |
+| `ai-crypto-assistant.inc.jsp` | Before `</body>` on crypto tool pages | FAB + lazy `crypto-tools-ai.js` (requires `aiCryptoToolKey`) |
 
 Optional request attributes (set before `vars` include):
 
@@ -44,6 +55,111 @@ Optional request attributes (set before `vars` include):
 |-----------|---------|---------|
 | `aiToolId` | `""` | Billing + localStorage key |
 | `aiBillingEnabled` | `true` | Enable billing bar / tier routing |
+
+---
+
+## Lazy loading (required for tool pages)
+
+**Do not** eager-load adapters on page load (`import …` + `ai.mount()` at top level). That pulls in ~125KB of modules (`adapter` → `assistant-core` → `vibe-coding-assistant` → `llm-client`, and billing when needed) and slows LCP on every visit.
+
+Use `wireLazyAssistant()` from `lazy-assistant.js` instead. It:
+
+- **`import()`** the adapter module on first open (button click or **Ctrl+Shift+A**)
+- **Prefetch** on first `pointerenter` over the AI button (warms cache before click)
+- Handle **`?checkout=1`** return from Dodo (auto-open with welcome message)
+- Set **`aria-busy`** on the trigger button while loading
+
+### What loads when
+
+| Phase | Network / JS |
+|-------|----------------|
+| Page load | `lazy-assistant.js` (~2KB), `aiAssistantBoot` inline, assistant CSS |
+| First AI open | Adapter + `vibe-coding-assistant.js` + `llm-client.js` |
+| Guest open | Sign-in bar shown immediately; `billing-client.js` loads async (non-blocking) |
+| Logged-in open | `fetchBillingStatus` async; “Go Pro” bar when not premium |
+| Plan picker | `GET /api/billing/plans` (cached 1h in `sessionStorage` + 1h on Go) |
+
+### Pages using lazy load today
+
+| Page | Module | Export | Button |
+|------|--------|--------|--------|
+| `rsafunctions.jsp` | `rsa/rsa-ai.js` | `createRsaAssistant` | `btnRsaAI` |
+| `pgpencdec.jsp`, `pgpkeyfunction.jsp` | `adapters/pgp-adapter.js` | `createPgpAssistant` | `btnPgpAI` |
+| `sshfunctions.jsp` | `adapters/ssh-adapter.js` | `createSshAssistant` | `btnSshAI` |
+| `tikz-viewer.jsp` | `adapters/tikz-viewer-adapter.js` | `createTikzViewerAssistant` | `btnTikzAI` |
+| `arduino-simulator.jsp` | `adapters/arduino-simulator-adapter.js` | `createArduinoSimulatorAssistant` | `btnAI` |
+| **Unified crypto tools** (see below) | `crypto/crypto-tools-ai.js` | `createCryptoToolAssistant` | `btnCryptoAI` |
+
+### Unified crypto tools AI (20 pages)
+
+One servlet + one bundled JS module covers hash, HMAC, cipher, KDF, and asymmetric tool pages. Per-page behavior is keyed by `aiCryptoToolKey` inside `crypto-tools-ai.js`.
+
+| JSP | Registry key (`aiCryptoToolKey`) |
+|-----|----------------------------------|
+| `MessageDigest.jsp` | `message-digest` |
+| `hmacgen.jsp` | `hmac` |
+| `CipherFunctions.jsp` | `cipher` |
+| `pbkdf.jsp` | `pbkdf` |
+| `pbe.jsp` | `pbe` |
+| `bccrypt.jsp` | `bcrypt` |
+| `scrypt.jsp` | `scrypt` |
+| `argon2.jsp` | `argon2` (explain-only; hashing is client WASM) |
+| `htpasswd.jsp` | `htpasswd` |
+| `ecfunctions.jsp` | `ec` |
+| `ecsignverify.jsp` | `ec-sign-verify` |
+| `elgamalfunctions.jsp` | `elgamal` |
+| `dsafunctions.jsp` | `dsa` |
+| `ntrufunctions.jsp` | `ntru` |
+| `jwsgen.jsp` | `jws-gen` |
+| `jwssign.jsp` | `jws-sign` |
+| `jwsparse.jsp` | `jws-parse` |
+| `jwsverify.jsp` | `jws-verify` |
+| `jwkfunctions.jsp` | `jwk` |
+| `jwkconvertfunctions.jsp` | `jwk-convert` |
+
+**JSP wiring** (three includes + floating FAB):
+
+```jsp
+<%
+request.setAttribute("aiCryptoToolKey", "message-digest");
+request.setAttribute("aiToolId", "cryptography/message-digest");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
+<!-- head -->
+<%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
+<!-- before </body> -->
+<%@ include file="modern/components/ai-crypto-assistant.inc.jsp" %>
+```
+
+`ai-crypto-assistant.inc.jsp` calls `wireLazyAssistant` with `extraOpts: () => ({ toolKey: '…' })`.
+
+**Backend API:** `POST /api/crypto/execute` (`CryptoApiServlet` → `CryptoBackendClient`) forwards to legacy form servlets (`/MDFunctionality`, `/CipherFunctionality`, etc.).
+
+**Load chain on first AI open (crypto pages):**
+
+```text
+lazy-assistant.js → crypto-tools-ai.js → assistant-core.js → vibe-coding-assistant.js → llm-client.js
+```
+
+Previously this was 6+ crypto-specific modules plus the same core chain. The bundle keeps one HTTP fetch for crypto logic (same pattern as `rsa/rsa-ai.js`).
+
+Request shape:
+
+```json
+{ "tool": "message-digest", "operation": "hash", "params": { "text": "hello", "algorithms": ["SHA-256"] } }
+```
+
+**Limits:** DSA file-upload flows stay on the page; Argon2 server ops are explain-only; ElGamal keygen may need the page form for some paths. JWS/JWK backends use `/JWSFunctionality` and `/JWKFunctionality` (JSON responses).
+
+**UX / routing (end user):**
+- Conceptual questions → generic chat (`explain` / `looksLikeExplainOnly` — no duplicate user bubble).
+- Ambiguous requests → `clarify` with a plain-language question (not forced into explain).
+- Action requests → intent router → `/api/crypto/execute` → form submit updates page output.
+- Page-specific system prompt and placeholder (in `crypto-tools-ai.js`).
+
+**Backend fixes in `CryptoBackendClient`:** PBE decrypt uses legacy param `decryprt`; PBE multi-algorithm via `cipherparameternew`; bcrypt/scrypt verify use `CALCULATE_*` + `hash` param; htpasswd verify uses `hash`; EC sign field name swap; JWS sign no longer maps PEM `key` as HMAC secret; `wrapLegacy` sets `ok:false` when `success` or `errorMessage` indicates failure.
+
+**Tool keys (JWS/JWK):** `jws-gen`, `jws-sign`, `jws-parse`, `jws-verify`, `jwk`, `jwk-convert` — operations `generate`, `sign`, `parse`, `verify`, `convert`.
 
 ### Minimal new tool page
 
@@ -59,39 +175,68 @@ request.setAttribute("aiToolId", "my-tool");
   <%@ include file="../modern/components/ai-assistant-head.inc.jsp" %>
 </head>
 <body>
-  <button type="button" id="btnAI">AI</button>
+  <button type="button" id="btnAI" title="AI assistant (Ctrl+Shift+A)">AI</button>
 
   <script type="module">
   <%@ include file="../modern/components/ai-assistant-boot.inc.jsp" %>
-  import { createGenericToolAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/generic-tool-adapter.js';
+  import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
 
-  const ai = createGenericToolAssistant({
-    ...aiAssistantBoot,
-    title: 'My Tool AI',
-    systemPrompt: 'You help users with this tool.',
-    seedContext: () => document.getElementById('input')?.value || '',
+  wireLazyAssistant({
+    moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/generic-tool-adapter.js',
+    exportName: 'createGenericToolAssistant',
+    buttonId: 'btnAI',
+    boot: aiAssistantBoot,
+    extraOpts: () => ({
+      title: 'My Tool AI',
+      systemPrompt: 'You help users with this tool.',
+      seedContext: () => document.getElementById('input')?.value || '',
+    }),
   });
-  ai.mount();
-  document.getElementById('btnAI')?.addEventListener('click', () => ai.open());
   </script>
 </body>
 </html>
 ```
 
+### `wireLazyAssistant` options
+
+```javascript
+wireLazyAssistant({
+  moduleUrl: '…/adapters/my-tool-adapter.js',  // required — ES module URL
+  exportName: 'createMyToolAssistant',          // required — factory export name
+  buttonId: 'btnAI',                            // trigger button id
+  boot: aiAssistantBoot,                        // from ai-assistant-boot.inc.jsp
+  extraOpts: () => ({ /* deps */ }),            // merged into factory opts at first load
+  onReady: (ai) => { /* after mount */ },       // optional
+  checkoutMessage: '…',                         // optional — false to disable ?checkout=1 auto-open
+  prefetchOnHover: true,                        // optional — default true
+});
+```
+
+Returns `{ ensure, open, getInstance }` if the page needs programmatic access after first load.
+
 ### Tool-specific adapter (Arduino pattern)
 
 ```javascript
 <%@ include file="../modern/components/ai-assistant-boot.inc.jsp" %>
-import { createArduinoSimulatorAssistant } from '…/arduino-simulator-adapter.js';
+import { wireLazyAssistant } from '…/lazy-assistant.js';
 
-const aiChat = createArduinoSimulatorAssistant({
-  ...aiAssistantBoot,
-  fileManager,
-  editor,
-  // …tool deps
+wireLazyAssistant({
+  moduleUrl: '…/arduino-simulator-adapter.js',
+  exportName: 'createArduinoSimulatorAssistant',
+  buttonId: 'btnAI',
+  boot: aiAssistantBoot,
+  extraOpts: () => ({
+    fileManager,
+    editor,
+    componentPanel,
+    // …tool deps (must exist before first open)
+  }),
 });
-aiChat.mount();
 ```
+
+### RSA bundled module
+
+RSA uses a single `rsa/rsa-ai.js` (api, session, router, executor, adapter) with the same lazy pattern — no separate `adapters/rsa-adapter.js`.
 
 Env vars (`USE_AI_GATEWAY`, `FREE_USE_AI_GATEWAY`) are read server-side — no JSP edits to switch routes.
 
@@ -131,9 +276,8 @@ When adding AI support to a new tool:
 2. Export factory function:
    - `create<ToolName>Assistant(opts)`
 3. In tool JSP/JS page:
-   - import adapter
-   - instantiate assistant via adapter factory
-   - mount + bind open shortcut/button
+   - `wireLazyAssistant({ moduleUrl, exportName, buttonId, boot, extraOpts })`
+   - do **not** call `mount()` on page load
 4. Keep page wiring thin:
    - pass dependencies into adapter via `opts`
 5. Add route mode if needed:
@@ -282,7 +426,7 @@ Use `gateway` or `legacy` for tools that must never switch (e.g. always Ollama e
 
 ### Arduino simulator
 
-Uses JSP includes + `createArduinoSimulatorAssistant({ ...aiAssistantBoot, … })`. Adapter hardcodes `toolId: 'electronics/arduino-simulator'` for billing.
+Uses JSP includes + `wireLazyAssistant()` with `extraOpts` for `fileManager`, `editor`, etc. Adapter hardcodes `toolId: 'electronics/arduino-simulator'` for billing.
 
 ---
 
@@ -366,6 +510,10 @@ Keep a fallback path for single-file responses.
 4. **Adapter grows too large**
    - Split adapter internals into helper modules if logic exceeds manageable size.
 
+5. **Eager AI load on page visit**
+   - Never `import` adapter + `mount()` at module top level — use `wireLazyAssistant()`.
+   - Verify DevTools Network: no `vibe-coding-assistant.js` until first AI open.
+
 ---
 
 ## Minimal Adapter Template
@@ -403,8 +551,9 @@ export function createMyToolAssistant(opts) {
 
 ## Final Review Before Shipping
 
-- [ ] Adapter file created under `modern/js/ai/adapters/`
-- [ ] Tool page imports adapter (not core directly)
+- [ ] Adapter file created under `modern/js/ai/adapters/` (or bundled module like `rsa/rsa-ai.js`)
+- [ ] Tool page uses `wireLazyAssistant()` — no eager adapter import on load
+- [ ] Network tab: AI script chain appears only after open (or hover prefetch)
 - [ ] Context is accurate after major UI state changes
 - [ ] Apply action(s) are safe and deterministic
 - [ ] Route mode chosen correctly (`auto` / `gateway` / `legacy` / `tier`)
