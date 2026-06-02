@@ -8,10 +8,15 @@ import com.google.gson.JsonParser;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
+import javax.net.ssl.SSLContext;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +33,27 @@ import java.util.Set;
 public final class CryptoBackendClient {
 
     private static final Gson GSON = new Gson();
+
+    /**
+     * HTTP client for the internal hop to the local Tomcat connector (loopback).
+     * The origin may present a self-signed / expired cert on its HTTPS connector,
+     * so this client trusts any cert. It is ONLY used for same-host origin calls
+     * to other servlets in this JVM — never for outbound/public traffic.
+     */
+    private static final CloseableHttpClient INTERNAL_CLIENT = buildTrustAllClient();
+
+    private static CloseableHttpClient buildTrustAllClient() {
+        try {
+            SSLContext ssl = SSLContextBuilder.create()
+                    .loadTrustMaterial(null, (chain, authType) -> true)
+                    .build();
+            return HttpClients.custom()
+                    .setSSLSocketFactory(new SSLConnectionSocketFactory(ssl, NoopHostnameVerifier.INSTANCE))
+                    .build();
+        } catch (Exception e) {
+            return HttpClients.createDefault();
+        }
+    }
 
     private CryptoBackendClient() {
     }
@@ -632,7 +658,7 @@ public final class CryptoBackendClient {
         String url = appBase + servletPath + "?" + paramName + "=" + encoded;
         org.apache.http.client.methods.HttpGet get = new org.apache.http.client.methods.HttpGet(url);
         get.addHeader("Accept", "application/json, text/plain, */*");
-        org.apache.http.HttpResponse response = HttpClientBuilder.create().build().execute(get);
+        org.apache.http.HttpResponse response = INTERNAL_CLIENT.execute(get);
         int code = response.getStatusLine().getStatusCode();
         String body = response.getEntity() != null
                 ? EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8)
@@ -649,7 +675,7 @@ public final class CryptoBackendClient {
         HttpPost post = new HttpPost(url);
         post.setEntity(new UrlEncodedFormEntity(form, StandardCharsets.UTF_8));
         post.addHeader("Accept", "application/json, text/plain, */*");
-        org.apache.http.HttpResponse response = HttpClientBuilder.create().build().execute(post);
+        org.apache.http.HttpResponse response = INTERNAL_CLIENT.execute(post);
         int code = response.getStatusLine().getStatusCode();
         String body = response.getEntity() != null
                 ? EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8)
