@@ -100,6 +100,13 @@
   transition: max-height 180ms ease, width 180ms ease, height 180ms ease;
 }
 
+/* Crypto tools: FAB is bottom-left — open panel on the same side (away from anchor ads). */
+.vca-backdrop[data-floating="true"][data-corner="left"] .vca-modal {
+  left: max(24px, env(safe-area-inset-left, 0px));
+  right: auto;
+  bottom: max(24px, env(safe-area-inset-bottom, 0px));
+}
+
 .vca-backdrop[data-floating="true"] .vca-modal.vca-resizing,
 .vca-backdrop[data-floating="true"] .vca-modal.vca-dragging {
   transition: none;

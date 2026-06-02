@@ -2728,6 +2728,7 @@ export function createCryptoToolAssistant(opts) {
     aiRouteMode: opts.aiRouteMode,
     aiRouteByTier: opts.aiRouteByTier,
     userId: opts.userId,
+    floatingCorner: 'left',
     billing: {
       enabled: opts.billing?.enabled !== false,
       ctx: opts.billing?.ctx || ctx,
