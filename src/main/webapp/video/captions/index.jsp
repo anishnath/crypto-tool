@@ -165,6 +165,20 @@
                                 <!-- buttons injected by captions.js -->
                             </div>
 
+                            <p class="vs-card-title" style="margin-top:1.25rem;">Font</p>
+                            <select class="cap-select" id="cap-font" aria-label="Caption font">
+                                <!-- options injected by captions.js -->
+                            </select>
+
+                            <div class="cap-range-head" style="margin-top:1rem;">
+                                <p class="vs-card-title" style="margin:0;">Font size</p>
+                                <span class="cap-range-val" id="cap-fontsize-val">56</span>
+                            </div>
+                            <input type="range" class="cap-range" id="cap-fontsize"
+                                   min="20" max="120" step="2" value="56"
+                                   aria-label="Caption font size" />
+                            <p class="cap-hint">Captions auto-wrap to fit the video width. Shrink the size if a line still feels too big.</p>
+
                             <p class="vs-card-title" style="margin-top:1.25rem;">Position</p>
                             <div class="cap-radio-row" role="radiogroup">
                                 <label><input type="radio" name="cap-pos" value="top"> Top</label>
@@ -194,6 +208,9 @@
                                 <button type="button" style="background:#22d3ee" data-color="#22d3ee" aria-label="Cyan"></button>
                                 <button type="button" style="background:#f472b6" data-color="#f472b6" aria-label="Pink"></button>
                                 <button type="button" style="background:#a3e635" data-color="#a3e635" aria-label="Lime"></button>
+                                <label class="cap-swatch-custom" title="Custom text color">
+                                    <input type="color" id="cap-color-custom" value="#ffffff" aria-label="Custom text color" />
+                                </label>
                             </div>
 
                             <p class="vs-card-title" style="margin-top:1rem;">Highlight color</p>
@@ -203,6 +220,9 @@
                                 <button type="button" style="background:#f472b6" data-hlcolor="#f472b6" aria-label="Pink"></button>
                                 <button type="button" style="background:#a3e635" data-hlcolor="#a3e635" aria-label="Lime"></button>
                                 <button type="button" style="background:#f97316" data-hlcolor="#f97316" aria-label="Orange"></button>
+                                <label class="cap-swatch-custom" title="Custom highlight color">
+                                    <input type="color" id="cap-hlcolor-custom" value="#fde047" aria-label="Custom highlight color" />
+                                </label>
                             </div>
                         </aside>
                     </div>

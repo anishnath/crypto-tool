@@ -10,7 +10,8 @@
  *     file:    File,                  – original video (stays local)
  *     chunks:  [{start,end,words[]}], – caption lines
  *     words:   [...]                  – full flat word list (unused today, kept for future)
- *     style:   {font,fontSize,color,hlColor,outline,outlineWidth,shadow,uppercase,maxWords,position,highlight},
+ *     style:   {font,fontSize,color,hlColor,outline,outlineWidth,shadow,uppercase,maxWords,position,highlight,
+ *               exportFamily,exportUrl}, // exportFamily/exportUrl: selected burn-in font (null → DejaVu Sans)
  *     video:   HTMLVideoElement,       – source of intrinsic width/height
  *     ui: {
  *       setState(name),                – 'empty'|'loading'|'editor'|'exporting'
@@ -85,6 +86,33 @@
         });
     }
 
+    // Selected-font cache, keyed by URL, so picking a font and exporting twice
+    // doesn't re-download the TTF.
+    var selectedFontCache = {};
+
+    // Fetch the user-selected font's TTF (for the burn-in). Resolves to the
+    // bytes, or null on any failure — callers fall back to DejaVu Sans so a
+    // network hiccup never produces a blank-caption MP4 (libass silently
+    // renders nothing if it can't locate the named font).
+    function fetchSelectedFont(url) {
+        if (!url) return Promise.resolve(null);
+        if (selectedFontCache[url]) return Promise.resolve(selectedFontCache[url]);
+        return fetch(url, { mode: 'cors', cache: 'force-cache' })
+            .then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.arrayBuffer();
+            })
+            .then(function (buf) {
+                selectedFontCache[url] = new Uint8Array(buf);
+                return selectedFontCache[url];
+            })
+            .catch(function (err) {
+                console.warn('[captions] selected font failed, using DejaVu fallback:', url,
+                             err && err.message ? err.message : err);
+                return null;
+            });
+    }
+
     // ffmpeg.wasm's internal Web Worker resolves relative URLs against a blob
     // origin, which falls back to file:// (blocked by the browser). We must
     // hand it a fully-qualified absolute URL.
@@ -130,12 +158,13 @@
     // coloured highlights. Keeping the script format identical to what pro
     // video tools use means the exported MP4 matches our canvas preview
     // pixel-for-pixel in structure (layout, timing, word grouping).
-    function buildAss(chunks, style, videoW, videoH) {
-        // Always force the bundled font — style.font may request "Anton" /
-        // "Inter" etc. which libass cannot resolve inside the wasm sandbox.
-        // Stylistic differences (size, weight, case, colour, highlight) still
-        // come through via the ASS style block and dialogue text.
-        var fontName = ASS_FONT_NAME;
+    function buildAss(chunks, style, videoW, videoH, fontName) {
+        // `fontName` is resolved by the caller: the selected font's embedded
+        // family name when its TTF was successfully written into the FS, else
+        // the bundled DejaVu Sans fallback. Either way the file is present in
+        // fontsdir so libass can find it. Stylistic differences (size, weight,
+        // case, colour, highlight) come through the ASS style block + text.
+        fontName = fontName || ASS_FONT_NAME;
         var primary = toAssColor(style.color);
         var secondary = toAssColor(style.hlColor || style.color);
         var outline = toAssColor(style.outline || '#000000');
@@ -152,6 +181,10 @@
             'PlayResX: ' + videoW,
             'PlayResY: ' + videoH,
             'ScaledBorderAndShadow: yes',
+            // WrapStyle 0 = smart wrapping: libass breaks any line wider than
+            // PlayResX minus the L/R margins so captions never run off-frame,
+            // matching the canvas preview's word-wrap.
+            'WrapStyle: 0',
             '',
             '[V4+ Styles]',
             'Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding',
@@ -212,12 +245,6 @@
         return ('&H00' + b + g + r).toUpperCase();
     }
 
-    function primaryFont(fontStack) {
-        // Pull the first quoted family name, e.g. "Anton" from `"Anton", "Bebas Neue", ...`
-        var m = fontStack.match(/"([^"]+)"/);
-        return m ? m[1] : 'Arial';
-    }
-
     // ── Main export function exposed on window ───────────────────────
     window.CaptionExport = function (opts) {
         if (running) return;
@@ -253,24 +280,38 @@
         var videoW = video.videoWidth  || 1280;
         var videoH = video.videoHeight || 720;
 
+        // Resolved by the font step below: the selected font's family name when
+        // its TTF lands in the FS, else DejaVu Sans.
+        var resolvedFontName = ASS_FONT_NAME;
+        var SELECTED_FONT_FILE = 'SelectedFont.ttf';
+
         initFFmpeg(function (msg) { metaText(ui.meta, msg); })
             .then(function () {
                 if (cancelRequested) throw new Error('Cancelled');
                 metaText(ui.meta, 'Preparing caption style…');
-                return fetchFontBytes();
+                // Always have DejaVu on hand as the fallback; fetch the chosen
+                // face alongside it (null if none selected or the fetch fails).
+                return Promise.all([fetchFontBytes(), fetchSelectedFont(style.exportUrl)]);
             })
-            .then(function (fontBuf) {
-                // Write the font into the ffmpeg virtual FS so libass can find it.
-                // The filename matches the font's internal family name so
-                // `fontsdir=.` + `Fontname: DejaVu Sans` resolve correctly.
-                try { ffmpeg.FS('writeFile', FONT_FILE, fontBuf); } catch (e) {}
+            .then(function (fonts) {
+                // libass scans every font in `fontsdir` and indexes them by the
+                // family name in each TTF's name table, so the filename is
+                // arbitrary — what matters is that the file is present and the
+                // ASS `Fontname` matches a scanned family.
+                try { ffmpeg.FS('writeFile', FONT_FILE, fonts[0]); } catch (e) {}
+                if (fonts[1] && style.exportFamily) {
+                    try {
+                        ffmpeg.FS('writeFile', SELECTED_FONT_FILE, fonts[1]);
+                        resolvedFontName = style.exportFamily;
+                    } catch (e) {}
+                }
                 if (cancelRequested) throw new Error('Cancelled');
                 metaText(ui.meta, 'Reading your video…');
                 return file.arrayBuffer();
             })
             .then(function (buf) {
                 ffmpeg.FS('writeFile', inputName, new Uint8Array(buf));
-                var ass = buildAss(chunks, style, videoW, videoH);
+                var ass = buildAss(chunks, style, videoW, videoH, resolvedFontName);
                 ffmpeg.FS('writeFile', assName, new TextEncoder().encode(ass));
                 metaText(ui.meta, 'Adding captions to your video…');
                 if (cancelRequested) throw new Error('Cancelled');

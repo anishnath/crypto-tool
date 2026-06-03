@@ -22,6 +22,91 @@
     var INIT_URL = CTX + '/video-service?action=caption-init';
     var MAX_BASE64_BYTES = 33_500_000;  // must mirror VideoServiceServlet limit
 
+    // ── Font catalog ──────────────────────────────────────────────────
+    // One entry per selectable font. `stack` is the CSS family used by the
+    // canvas preview (so it must be a real loadable web/system font).
+    // `exportFamily` + `exportUrl` are what the burn-in needs: the TTF is
+    // fetched into ffmpeg's virtual FS and libass renders with `exportFamily`
+    // (which must match the font's *embedded* family name). Entries with a
+    // null exportUrl fall back to the bundled DejaVu Sans in the export — the
+    // preview still uses the requested family, the MP4 uses DejaVu. That keeps
+    // the export bullet-proof (libass silently renders nothing if it can't
+    // find the named font) while still letting people preview any style.
+    //
+    // `googleFamily` is the family token appended to a lazily-injected Google
+    // Fonts <link> so the canvas preview actually has the font to draw with.
+    var FONT_CDN = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/';
+    var FONTS = {
+        'anton': {
+            label: 'Anton (bold display)',
+            stack: '"Anton", "Bebas Neue", Impact, sans-serif',
+            weight: '400', letterSpacing: '0.02em',
+            googleFamily: 'Anton',
+            exportFamily: 'Anton',
+            exportUrl: FONT_CDN + 'anton/Anton-Regular.ttf'
+        },
+        'bebas': {
+            label: 'Bebas Neue (tall caps)',
+            stack: '"Bebas Neue", Impact, sans-serif',
+            weight: '400', letterSpacing: '0.04em',
+            googleFamily: 'Bebas+Neue',
+            exportFamily: 'Bebas Neue',
+            exportUrl: FONT_CDN + 'bebasneue/BebasNeue-Regular.ttf'
+        },
+        'poppins': {
+            label: 'Poppins (rounded)',
+            stack: '"Poppins", system-ui, sans-serif',
+            weight: '700', letterSpacing: '0',
+            googleFamily: 'Poppins:wght@400;600;700',
+            exportFamily: 'Poppins',
+            exportUrl: FONT_CDN + 'poppins/Poppins-Bold.ttf'
+        },
+        'inter': {
+            label: 'Inter (clean sans)',
+            stack: '"Inter", system-ui, sans-serif',
+            weight: '600', letterSpacing: '0',
+            googleFamily: 'Inter:wght@400;600;700',
+            exportFamily: null,            // → DejaVu Sans in the export
+            exportUrl: null
+        },
+        'classic': {
+            label: 'Classic (Impact)',
+            stack: 'Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif',
+            weight: '900', letterSpacing: '0.02em',
+            googleFamily: null,            // system font, nothing to load
+            exportFamily: null,            // → DejaVu Sans in the export
+            exportUrl: null
+        }
+    };
+    var FONT_KEYS = ['anton', 'bebas', 'poppins', 'inter', 'classic'];
+
+    // Lazily inject one Google Fonts stylesheet covering every web font in the
+    // catalog. Done on editor entry (not page load) so it never competes with
+    // the ad/analytics stack for the initial paint. Returns a promise that
+    // resolves once the browser reports the fonts ready (best-effort).
+    var fontsLinkInjected = false;
+    function ensureWebFonts() {
+        if (!fontsLinkInjected) {
+            fontsLinkInjected = true;
+            var families = FONT_KEYS
+                .map(function (k) { return FONTS[k].googleFamily; })
+                .filter(Boolean)
+                .map(function (f) { return 'family=' + f; })
+                .join('&');
+            if (families) {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = 'https://fonts.googleapis.com/css2?' + families + '&display=swap';
+                document.head.appendChild(link);
+            }
+        }
+        // Redraw once each chosen face is actually decoded — fillText would
+        // otherwise paint the fallback until the web font lands.
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () { drawCaption(); });
+        }
+    }
+
     // ── Style presets ─────────────────────────────────────────────────
     // Each preset is a baseline style. The user can override fields via
     // the controls panel; `styleState` below is the merged, live state.
@@ -29,6 +114,7 @@
         'tiktok': {
             name: 'TikTok',
             thumb: 'BOLD',
+            fontKey: 'anton',
             font: '"Anton", "Bebas Neue", Impact, sans-serif',
             fontSize: 56,
             weight: '900',
@@ -46,6 +132,7 @@
         'podcast': {
             name: 'Podcast',
             thumb: 'Clean',
+            fontKey: 'inter',
             font: '"Inter", system-ui, sans-serif',
             fontSize: 34,
             weight: '600',
@@ -63,6 +150,7 @@
         'minimal': {
             name: 'Minimal',
             thumb: 'minimal',
+            fontKey: 'inter',
             font: '"Inter", system-ui, sans-serif',
             fontSize: 28,
             weight: '500',
@@ -83,6 +171,7 @@
         'karaoke-pop': {
             name: 'Karaoke Pop',
             thumb: 'WORD',
+            fontKey: 'anton',
             font: '"Anton", "Bebas Neue", Impact, sans-serif',
             fontSize: 78,
             weight: '900',
@@ -99,7 +188,22 @@
         }
     };
 
-    var styleState = Object.assign({}, PRESETS.tiktok);
+    // Apply a font-catalog entry onto a style object in place: sets the CSS
+    // stack used for the preview plus the export-only fields (exportFamily /
+    // exportUrl) that captions-export.js reads off `style`. Weight and letter
+    // spacing follow the font's natural look. Returns the style for chaining.
+    function applyFont(state, key) {
+        var f = FONTS[key] || FONTS.anton;
+        state.fontKey      = FONTS[key] ? key : 'anton';
+        state.font         = f.stack;
+        state.weight       = f.weight;
+        state.letterSpacing = f.letterSpacing;
+        state.exportFamily = f.exportFamily;   // null → DejaVu in export
+        state.exportUrl    = f.exportUrl;       // null → DejaVu in export
+        return state;
+    }
+
+    var styleState = applyFont(Object.assign({}, PRESETS.tiktok), PRESETS.tiktok.fontKey);
 
     // ── Session state ─────────────────────────────────────────────────
     var selectedFile = null;    // original video File
@@ -131,6 +235,11 @@
         editToggle:     document.getElementById('cap-edit-toggle'),
         editHint:       document.getElementById('cap-transcript-hint'),
         presets:        document.getElementById('cap-presets'),
+        fontSelect:     document.getElementById('cap-font'),
+        fontSize:       document.getElementById('cap-fontsize'),
+        fontSizeVal:    document.getElementById('cap-fontsize-val'),
+        colorCustom:    document.getElementById('cap-color-custom'),
+        hlColorCustom:  document.getElementById('cap-hlcolor-custom'),
         reset:          document.getElementById('cap-reset'),
         exportBtn:      document.getElementById('cap-export'),
         stateExporting: document.getElementById('cap-exporting'),
@@ -202,6 +311,12 @@
     // ── File selection ───────────────────────────────────────────────
     el.fileInput.addEventListener('change', function (e) {
         var f = e.target.files && e.target.files[0];
+        // Clear the input value right after capturing the file. A file input
+        // won't fire 'change' if the same value is re-selected, so without this
+        // a user who hits an error (transcribe failure, "too long", etc.) can't
+        // retry the SAME file — picking it again is a no-op and they're forced
+        // to refresh the page. Resetting here makes every re-pick fire again.
+        e.target.value = '';
         if (f) handleFile(f);
     });
     ['dragenter', 'dragover'].forEach(function (ev) {
@@ -372,6 +487,8 @@
         recomputeChunks();
         renderStrip();
         renderPresets();
+        renderFontOptions();
+        ensureWebFonts();
         updateTranscriptHint();
         setupCanvasSizing();
         bindControls();
@@ -700,7 +817,8 @@
             b.appendChild(thumb);
             b.appendChild(name);
             b.addEventListener('click', function () {
-                styleState = Object.assign({}, PRESETS[key]);
+                styleState = applyFont(Object.assign({}, PRESETS[key]), PRESETS[key].fontKey);
+                ensureWebFonts();
                 syncControlsToStyle();
                 recomputeChunks();
                 renderStrip();
@@ -716,6 +834,19 @@
         });
     }
 
+    // Populate the font <select> from the catalog (once per editor entry).
+    function renderFontOptions() {
+        if (!el.fontSelect) return;
+        el.fontSelect.innerHTML = '';
+        FONT_KEYS.forEach(function (key) {
+            var opt = document.createElement('option');
+            opt.value = key;
+            opt.textContent = FONTS[key].label;
+            el.fontSelect.appendChild(opt);
+        });
+        el.fontSelect.value = styleState.fontKey || 'anton';
+    }
+
     // Reflect current styleState into the radios / swatches / segmented
     function syncControlsToStyle() {
         document.querySelectorAll('input[name="cap-pos"]').forEach(function (r) {
@@ -727,12 +858,30 @@
         document.querySelectorAll('.cap-seg-row button').forEach(function (b) {
             b.classList.toggle('active', Number(b.dataset.words) === styleState.maxWords);
         });
-        document.querySelectorAll('.cap-swatch-row button[data-color]').forEach(function (b) {
-            b.classList.toggle('active', b.dataset.color.toLowerCase() === (styleState.color || '').toLowerCase());
+        if (el.fontSelect) el.fontSelect.value = styleState.fontKey || 'anton';
+        if (el.fontSize) {
+            el.fontSize.value = styleState.fontSize;
+            if (el.fontSizeVal) el.fontSizeVal.textContent = String(styleState.fontSize);
+        }
+        syncColorSwatches('data-color', styleState.color, el.colorCustom);
+        syncColorSwatches('data-hlcolor', styleState.hlColor, el.hlColorCustom);
+    }
+
+    // Highlight the swatch matching `value`; if none match, light up the
+    // custom picker instead and seed it with the current colour.
+    function syncColorSwatches(attr, value, customInput) {
+        var v = (value || '').toLowerCase();
+        var matched = false;
+        document.querySelectorAll('.cap-swatch-row button[' + attr + ']').forEach(function (b) {
+            var hit = b.getAttribute(attr).toLowerCase() === v;
+            b.classList.toggle('active', hit);
+            if (hit) matched = true;
         });
-        document.querySelectorAll('.cap-swatch-row button[data-hlcolor]').forEach(function (b) {
-            b.classList.toggle('active', b.dataset.hlcolor.toLowerCase() === (styleState.hlColor || '').toLowerCase());
-        });
+        if (customInput) {
+            var wrap = customInput.closest('.cap-swatch-custom');
+            if (wrap) wrap.classList.toggle('active', !matched && !!v);
+            if (!matched && v) customInput.value = v;
+        }
     }
 
     // Bind control inputs — each change mutates styleState and re-draws.
@@ -756,19 +905,52 @@
         document.querySelectorAll('.cap-swatch-row button[data-color]').forEach(function (b) {
             b.addEventListener('click', function () {
                 styleState.color = b.dataset.color;
-                document.querySelectorAll('.cap-swatch-row button[data-color]').forEach(function (x) { x.classList.remove('active'); });
-                b.classList.add('active');
+                syncColorSwatches('data-color', styleState.color, el.colorCustom);
                 drawCaption();
             });
         });
         document.querySelectorAll('.cap-swatch-row button[data-hlcolor]').forEach(function (b) {
             b.addEventListener('click', function () {
                 styleState.hlColor = b.dataset.hlcolor;
-                document.querySelectorAll('.cap-swatch-row button[data-hlcolor]').forEach(function (x) { x.classList.remove('active'); });
-                b.classList.add('active');
+                syncColorSwatches('data-hlcolor', styleState.hlColor, el.hlColorCustom);
                 drawCaption();
             });
         });
+
+        // Font picker — swaps the preview face and the export TTF in one go.
+        if (el.fontSelect) {
+            el.fontSelect.addEventListener('change', function () {
+                applyFont(styleState, el.fontSelect.value);
+                ensureWebFonts();
+                drawCaption();
+            });
+        }
+
+        // Font-size slider — live, in 720p-normalised px (drawCaption and the
+        // ASS export both scale this by the real video height).
+        if (el.fontSize) {
+            el.fontSize.addEventListener('input', function () {
+                styleState.fontSize = Number(el.fontSize.value) || styleState.fontSize;
+                if (el.fontSizeVal) el.fontSizeVal.textContent = String(styleState.fontSize);
+                drawCaption();
+            });
+        }
+
+        // Custom colour pickers — any hex, beyond the fixed swatches.
+        if (el.colorCustom) {
+            el.colorCustom.addEventListener('input', function () {
+                styleState.color = el.colorCustom.value;
+                syncColorSwatches('data-color', styleState.color, el.colorCustom);
+                drawCaption();
+            });
+        }
+        if (el.hlColorCustom) {
+            el.hlColorCustom.addEventListener('input', function () {
+                styleState.hlColor = el.hlColorCustom.value;
+                syncColorSwatches('data-hlcolor', styleState.hlColor, el.hlColorCustom);
+                drawCaption();
+            });
+        }
 
         el.reset.addEventListener('click', resetAll);
         el.exportBtn.addEventListener('click', startExport);
@@ -838,47 +1020,75 @@
         var chunk = chunks[idx];
 
         // Font sizing scales with canvas internal height (which is video height × DPR),
-        // so TikTok Bold looks consistent across 720p/1080p sources and hi-DPI screens.
+        // so the caption looks consistent across 720p/1080p sources and hi-DPI screens.
         var dpr = Number(el.canvas.dataset.dpr || 1);
         var fontPx = Math.max(18 * dpr, styleState.fontSize * H / 720);
-        ctx.font = styleState.weight + ' ' + fontPx + 'px ' + styleState.font;
+        function setFont() { ctx.font = styleState.weight + ' ' + fontPx + 'px ' + styleState.font; }
+        setFont();
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
 
-        // Assemble line text (maybe uppercased)
+        // Assemble word list (maybe uppercased)
         var display = chunk.words.map(function (w) {
             return styleState.uppercase ? (w.word || '').toUpperCase() : w.word;
         });
-        var line = display.join(' ');
 
-        // Position
-        var y;
-        if (styleState.position === 'top')      y = H * 0.14;
-        else if (styleState.position === 'middle') y = H * 0.5;
-        else                                       y = H * 0.82;
+        // Captions must never exceed the frame. Keep them inside ~90% of the
+        // width: wrap onto multiple lines, and if a *single* word is still too
+        // wide to wrap (wrapping can't break mid-word), shrink the type until
+        // it fits. The export mirrors this — libass auto-wraps via WrapStyle.
+        var maxWidth = W * 0.9;
+        var widest = 0;
+        display.forEach(function (s) { widest = Math.max(widest, ctx.measureText(s).width); });
+        if (widest > maxWidth && widest > 0) {
+            fontPx = Math.max(12 * dpr, fontPx * (maxWidth / widest));
+            setFont();
+        }
 
-        // Word-pop highlight: find the active word in the chunk
+        var spaceW = ctx.measureText(' ').width;
+        var widths = display.map(function (s) { return ctx.measureText(s).width; });
+
+        // Greedy word-wrap. Each item keeps its index within the chunk so the
+        // active-word highlight still lands on the correct word post-wrap.
+        var lines = [];
+        var cur = [], curW = 0;
+        for (var i = 0; i < display.length; i++) {
+            var addW = (cur.length ? spaceW : 0) + widths[i];
+            if (cur.length && curW + addW > maxWidth) {
+                lines.push({ items: cur, width: curW });
+                cur = []; curW = 0;
+                addW = widths[i];
+            }
+            cur.push({ i: i, text: display[i], width: widths[i] });
+            curW += addW;
+        }
+        if (cur.length) lines.push({ items: cur, width: curW });
+
+        // Word-pop / karaoke highlight: find the active word in the chunk
         var activeWord = -1;
         if (styleState.highlight !== 'off') {
-            for (var i = 0; i < chunk.words.length; i++) {
-                if (t >= chunk.words[i].start && t <= chunk.words[i].end + 0.02) {
-                    activeWord = i; break;
+            for (var k = 0; k < chunk.words.length; k++) {
+                if (t >= chunk.words[k].start && t <= chunk.words[k].end + 0.02) {
+                    activeWord = k; break;
                 }
             }
         }
 
-        // Measure each word for karaoke / pop precision
-        var spaceW = ctx.measureText(' ').width;
-        var widths = display.map(function (s) { return ctx.measureText(s).width; });
-        var totalW = widths.reduce(function (a, b) { return a + b; }, 0) + spaceW * (display.length - 1);
-        var startX = (W - totalW) / 2;
+        // Vertical placement of the wrapped block (top / middle / bottom anchor).
+        var lineH = fontPx * 1.18;
+        var firstY;
+        if (styleState.position === 'top')         firstY = H * 0.10 + lineH / 2;
+        else if (styleState.position === 'middle') firstY = H * 0.5 - (lines.length - 1) * lineH / 2;
+        else                                       firstY = H * 0.90 - lineH / 2 - (lines.length - 1) * lineH;
 
-        // Outline pass
+        // Outline pass (no shadow)
         if (styleState.outline && styleState.outlineWidth > 0) {
             ctx.strokeStyle = styleState.outline;
             ctx.lineWidth = styleState.outlineWidth;
             ctx.lineJoin = 'round';
-            drawLine(ctx, display, widths, spaceW, startX, y, null, 'stroke', activeWord);
+            lines.forEach(function (ln, li) {
+                drawLine(ctx, ln, spaceW, firstY + li * lineH, null, 'stroke', activeWord);
+            });
         }
         // Shadow (soft)
         if (styleState.shadow) {
@@ -888,33 +1098,39 @@
         }
         // Fill pass
         ctx.fillStyle = styleState.color;
-        drawLine(ctx, display, widths, spaceW, startX, y, styleState.hlColor, 'fill', activeWord);
+        lines.forEach(function (ln, li) {
+            drawLine(ctx, ln, spaceW, firstY + li * lineH, styleState.hlColor, 'fill', activeWord);
+        });
         ctx.shadowColor = 'transparent';
         ctx.shadowBlur = 0;
         ctx.shadowOffsetY = 0;
     }
 
-    function drawLine(ctx, display, widths, spaceW, startX, y, hlColor, mode, activeWord) {
-        var x = startX;
-        for (var i = 0; i < display.length; i++) {
-            var isActive = i === activeWord;
+    // Draw one wrapped line, centred horizontally. `activeWord` is the index
+    // within the chunk (matched against each item's `.i`) so the highlight
+    // tracks the right word no matter which line it wrapped onto.
+    function drawLine(ctx, line, spaceW, y, hlColor, mode, activeWord) {
+        var x = (el.canvas.width - line.width) / 2;
+        line.items.forEach(function (item) {
+            var cx = x + item.width / 2;
+            var isActive = item.i === activeWord;
             if (mode === 'fill' && isActive && hlColor && styleState.highlight !== 'off') {
                 ctx.save();
                 ctx.fillStyle = hlColor;
                 if (styleState.highlight === 'pop') {
-                    ctx.translate(x + widths[i] / 2, y);
+                    ctx.translate(cx, y);
                     ctx.scale(1.12, 1.12);
-                    ctx.translate(-(x + widths[i] / 2), -y);
+                    ctx.translate(-cx, -y);
                 }
-                ctx.fillText(display[i], x + widths[i] / 2, y);
+                ctx.fillText(item.text, cx, y);
                 ctx.restore();
             } else if (mode === 'stroke') {
-                ctx.strokeText(display[i], x + widths[i] / 2, y);
+                ctx.strokeText(item.text, cx, y);
             } else {
-                ctx.fillText(display[i], x + widths[i] / 2, y);
+                ctx.fillText(item.text, cx, y);
             }
-            x += widths[i] + spaceW;
-        }
+            x += item.width + spaceW;
+        });
     }
 
     // Highlight the edit-mode row under the playhead.
