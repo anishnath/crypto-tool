@@ -18,8 +18,8 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://8gwifi.org">
-    <meta property="og:title" content="8gwifi.org - Free Online Tools | 200+ Professional Tools">
-    <meta property="og:description" content="Free online tools for professionals, students, and developers: Cryptography, Network diagnostics, DevOps, Data Converters, Mathematics, Finance, Chemistry, and 200+ more. All free, secure, client-side. No registration.">
+    <meta property="og:title" content="8gwifi.org — 200+ Free Online Tools in One App">
+    <meta property="og:description" content="A free all-in-one multi-tool app: 200+ tools for security &amp; cryptography, networking &amp; DevOps, mathematics, physics, chemistry, biology, electronics simulators, finance, and exam prep (olympiads, AMC/AIME, IIT-JEE, SAT). All free, secure, in your browser. No registration.">
     <meta property="og:image" content="https://8gwifi.org/images/site/logo.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -29,8 +29,8 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://8gwifi.org">
-    <meta name="twitter:title" content="8gwifi.org - Free Online Tools">
-    <meta name="twitter:description" content="200+ free online tools for professionals, students, and developers. Cryptography, Network, DevOps, Mathematics, Finance, Chemistry, and more. All free, secure, client-side.">
+    <meta name="twitter:title" content="8gwifi.org — 200+ Free Online Tools in One App">
+    <meta name="twitter:description" content="A free all-in-one multi-tool app: 200+ tools for security, networking &amp; DevOps, math, physics, chemistry, biology, electronics simulators, finance, and exam prep (olympiads, AMC/AIME, IIT-JEE, SAT). All free, in your browser.">
     <meta name="twitter:image" content="https://8gwifi.org/images/site/logo.png">
     <meta name="twitter:site" content="@anish2good">
     <meta name="twitter:creator" content="@anish2good">
