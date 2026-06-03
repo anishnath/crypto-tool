@@ -925,7 +925,7 @@
     <header class="tool-header">
         <div class="tool-header-container">
             <div class="tool-header-content">
-                <h1 class="tool-page-title">AES Encryption Tool Online - Encrypt & Decrypt Free</h1>
+                <h1 class="tool-page-title">AES Encryption Tool Online - Encrypt & Decrypt</h1>
 <%--                <p class="tool-page-description">Free online cipher encryption tool supporting 100+ algorithms (AES-256, DES, Blowfish, ChaCha20). Encrypt and decrypt messages securely with client-side processing. No registration required.</p>--%>
 		</div>
 		</div>
