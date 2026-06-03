@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="k5l9OPcSV01yURjfTQ1v1I_6sPq7cSiwdVM76VaJwM8" />
-    <title>8gwifi.org - Free Online Tools | 200+ Professional Tools</title>
+    <title>8gwifi.org — 200+ Free Online Tools in One App | Security, Science, Math &amp; Exam Prep</title>
 
     <!-- Comprehensive SEO Meta Tags -->
-    <meta name="title" content="8gwifi.org - Free Online Tools | 200+ Professional Tools">
-    <meta name="description" content="Free online tools for professionals, students, and developers: Cryptography (AES, RSA, PGP encryption), Network tools (DNS, port scanner), DevOps (Kubernetes, Docker), Data Converters (Base64, JSON, YAML), Mathematics calculators, Finance tools (EMI, compound interest), Chemistry tools, and 200+ more. All free, secure, client-side processing. No registration required.">
-    <meta name="keywords" content="online tools, free tools, cryptography tools, encryption online, AES encryption, network tools, subnet calculator, DNS lookup, devops tools, kubernetes generator, base64 encoder, json beautifier, math calculator, finance calculator, chemistry tools, EMI calculator, compound interest calculator, free online tools, client-side tools">
+    <meta name="title" content="8gwifi.org — 200+ Free Online Tools in One App | Security, Science, Math &amp; Exam Prep">
+    <meta name="description" content="8gwifi.org is a free all-in-one multi-tool app with 200+ online tools: cryptography &amp; security (AES, RSA, PGP, JWT), networking &amp; DevOps (DNS, subnet, Kubernetes), mathematics, physics, chemistry, biology, electronics circuit &amp; logic simulators, finance calculators, and exam prep for olympiads, AMC/AIME, IIT-JEE &amp; SAT. All free, secure, runs in your browser. No registration required.">
+    <meta name="keywords" content="online tools, free tools, all-in-one tools, multi-tool app, cryptography tools, encryption online, AES encryption, PGP, JWT debugger, network tools, subnet calculator, DNS lookup, devops tools, kubernetes generator, base64 encoder, json beautifier, math calculator, physics calculator, chemistry tools, biology tools, electronics simulator, circuit simulator, logic gate simulator, finance calculator, EMI calculator, olympiad math, AMC AIME, IIT JEE, SAT prep, free online tools, client-side tools">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow">
     <link rel="canonical" href="https://8gwifi.org">
@@ -163,6 +163,26 @@
             text-underline-offset: 2px;
         }
         .hero-legal-link:hover { color: #fef08a; }
+
+        .hero-purpose {
+            max-width: 760px;
+            margin: 0 auto 1.25rem;
+            padding: 1rem 1.25rem;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 12px;
+            text-align: left;
+        }
+        .hero-purpose p {
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.92);
+            margin: 0;
+        }
+        .hero-purpose-links {
+            margin-top: 0.6rem !important;
+            font-weight: 600;
+        }
 
         .hero-subtitle {
             font-size: clamp(1.125rem, 2.5vw, 1.5rem);
@@ -684,8 +704,14 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Free Online Tools</h1>
-            <p class="hero-subtitle">Professional-grade tools for cryptography, networking, DevOps, mathematics, finance, chemistry, and more. All free, all online, no registration.</p>
+            <h1 class="hero-title">8gwifi.org &mdash; 200+ Free Online Tools in One App</h1>
+            <p class="hero-subtitle"><strong>8gwifi.org is a free all-in-one multi-tool web app</strong> with 200+ tools that run right in your browser &mdash; cryptography &amp; security, DevOps &amp; networking, mathematics, physics, chemistry, biology, electronics, finance, and exam prep for olympiads, AMC/AIME, IIT/JEE &amp; SAT. Most tools work instantly, with no account at all.</p>
+
+            <!-- Above-the-fold application purpose + Google data use — Google OAuth verification homepage requirement -->
+            <div class="hero-purpose">
+                <p><strong>Optional &ldquo;Sign in with Google&rdquo;</strong> unlocks the built-in <strong>AI Assistant</strong> features (e.g. PGP&nbsp;AI and SSH&nbsp;AI). When you choose to sign in, we use only your basic Google profile &mdash; your <strong>email</strong>, <strong>name</strong>, and <strong>profile picture</strong> &mdash; solely to identify your account so your AI usage, quota, and billing follow you between visits. We never request Gmail, Drive, Calendar, or Contacts, and we never sell or share your data.</p>
+                <p class="hero-purpose-links"><a href="#about" class="hero-legal-link">How this app works &amp; uses your data &darr;</a></p>
+            </div>
 
             <!-- Above-the-fold legal links — required by Google OAuth verification policy -->
             <p class="hero-legal">
@@ -741,9 +767,9 @@
     <!-- About this application — addresses Google OAuth verification homepage requirement -->
     <section id="about" class="about-app" aria-labelledby="about-heading">
         <div class="about-inner">
-            <h2 id="about-heading" class="about-title">About 8gwifi.org</h2>
+            <h2 id="about-heading" class="about-title">About this application &mdash; features &amp; how it uses Google data</h2>
             <p class="about-lead">
-                <strong>8gwifi.org</strong> is a free online suite of <strong>200+ professional developer, security, and study tools</strong> — all in one site, all in your browser. We exist to give engineers, students, sysadmins, and security folks a single place to encrypt messages with PGP, generate SSH keys, decode JWTs, debug TLS certificates, compute subnet masks, run math/chemistry/physics calculators, prep for AMC/IIT/SAT exams, render TikZ/LaTeX, and dozens of other small tasks that would otherwise need a separate desktop app or login-walled SaaS.
+                <strong>8gwifi.org</strong> is a free, all-in-one <strong>multi-tool web app</strong> bringing together <strong>200+ tools across security, engineering, science, and education</strong> — all on one site, all in your browser. We exist to give developers, students, teachers, sysadmins, scientists, and security folks a single place to encrypt messages with PGP, generate SSH/TLS keys, decode JWTs, compute subnet masks, design &amp; simulate electronics circuits, balance chemistry equations, model biology and physics, run math calculators, prep for olympiads and AMC/AIME/IIT-JEE/SAT exams, render TikZ/LaTeX, and dozens of other tasks that would otherwise need a separate desktop app or a login-walled SaaS.
             </p>
 
             <div class="about-grid">
@@ -751,10 +777,11 @@
                     <div class="about-card-icon">🛠️</div>
                     <h3 class="about-card-title">What this app does</h3>
                     <ul class="about-card-list">
-                        <li><strong>Cryptography &amp; PKI:</strong> PGP encrypt/decrypt, SSH/RSA/ECDSA key generation, X.509 certificate parsing, JWT signing &amp; debugging.</li>
+                        <li><strong>Cryptography &amp; Security:</strong> PGP encrypt/decrypt, SSH/RSA/ECDSA key generation, X.509 certificate parsing, JWT signing &amp; debugging, CTF puzzles.</li>
                         <li><strong>Networking &amp; DevOps:</strong> DNS lookup, subnet calculator, port checker, Kubernetes YAML generator, base64/JSON/YAML converters.</li>
-                        <li><strong>Math, Chemistry, Physics, Biology:</strong> step-by-step calculators, simulators, exam prep for AMC, AIME, IIT/JEE, SAT.</li>
-                        <li><strong>Finance, SEO, CTF, Compilers:</strong> EMI/compound interest, site audits, capture-the-flag puzzles, Python/Java/JS execution.</li>
+                        <li><strong>Science &amp; Electronics:</strong> chemistry equation balancing &amp; molecule drawing, physics &amp; biology models, circuit design and logic-gate / Arduino simulators.</li>
+                        <li><strong>Mathematics &amp; Exam Prep:</strong> step-by-step calculators plus practice for olympiads, AMC/AIME, IIT/JEE and SAT.</li>
+                        <li><strong>Finance, SEO &amp; Compilers:</strong> EMI/compound-interest calculators, site audits, and in-browser Python/Java/JS execution.</li>
                     </ul>
                 </div>
 
