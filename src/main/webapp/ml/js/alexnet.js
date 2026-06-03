@@ -63,6 +63,12 @@ function AlexNet(container) {
     var controls;
     var animId;
 
+    // ── Forward-sweep animation state ──
+    var forwardTimer = null;
+    var activeTweens = [];
+    var animGeneration = 0;
+    var layerMeshes = [];   // box meshes in draw order (conv layers, then dense layers)
+
     // ── Pyramid geometry helper (replaces deprecated THREE.Geometry) ──
 
     function createPyramidGeometry(baseVerts, summit) {
@@ -132,6 +138,24 @@ function AlexNet(container) {
 
     function animate() {
         animId = requestAnimationFrame(animate);
+
+        // Advance forward-sweep tweens
+        if (activeTweens.length) {
+            var now = performance.now();
+            for (var i = activeTweens.length - 1; i >= 0; i--) {
+                var tw = activeTweens[i];
+                if (now < tw.start) continue;   // still in stagger delay
+                var t = (now - tw.start) / tw.duration;
+                if (t >= 1) {
+                    tw.apply(1);
+                    activeTweens.splice(i, 1);
+                    if (tw.onDone) tw.onDone();
+                } else {
+                    tw.apply(t);
+                }
+            }
+        }
+
         sprites.children.forEach(function(sprite) {
             sprite.quaternion.copy(camera.quaternion);
         });
@@ -158,6 +182,11 @@ function AlexNet(container) {
         depthFn = function(depth) { return logDepth ? (Math.log(depth) * depthScale) : (depth * depthScale); };
         widthFn = function(width) { return logWidth ? (Math.log(width) * widthScale) : (width * widthScale); };
         convFn = function(conv) { return logConvSize ? (Math.log(conv) * convScale) : (conv * convScale); };
+
+        // Cancel any in-flight pulses (their meshes are about to be removed) and
+        // rebuild the ordered list of layer boxes for the forward sweep.
+        cancelTweens();
+        layerMeshes = [];
 
         clearThree(scene);
 
@@ -186,6 +215,7 @@ function AlexNet(container) {
             var layer_object = new THREE.Mesh(layer_geometry, box_material);
             layer_object.position.set(0, 0, layer_offsets[index]);
             layers.add(layer_object);
+            layerMeshes.push(layer_object);
 
             // Edges
             var layer_edges_geometry = new THREE.EdgesGeometry(layer_geometry);
@@ -245,6 +275,7 @@ function AlexNet(container) {
             var layer_object = new THREE.Mesh(layer_geometry, box_material);
             layer_object.position.set(0, 0, layer_offsets[architecture.length + index]);
             layers.add(layer_object);
+            layerMeshes.push(layer_object);
 
             var layer_edges_geometry = new THREE.EdgesGeometry(layer_geometry);
             var layer_edges_object = new THREE.LineSegments(layer_edges_geometry, line_material);
@@ -324,9 +355,77 @@ function AlexNet(container) {
     var ro = new ResizeObserver(onResize);
     ro.observe(el);
 
+    // ── Forward-sweep animation ──
+
+    // Restore every pulsing mesh to the shared material and clear the tween queue.
+    function cancelTweens() {
+        activeTweens.forEach(function(tw) { if (tw.onDone) tw.onDone(); });
+        activeTweens = [];
+    }
+
+    // Pulse a single layer box: highlight then fade back, using its own cloned
+    // material so layers light up independently of the shared box_material.
+    function pulseMesh(mesh, startDelay, duration, color) {
+        var baseColor = new THREE.Color(color1);
+        var hiColor = new THREE.Color(color);
+        var baseOpacity = rectOpacity;
+        var hiOpacity = Math.min(1, rectOpacity + 0.45);
+        var mat = box_material.clone();
+        mesh.material = mat;
+        activeTweens.push({
+            start: performance.now() + startDelay,
+            duration: duration,
+            apply: function(t) {
+                var p = Math.sin(t * Math.PI);   // 0 -> 1 -> 0
+                mat.color.copy(baseColor).lerp(hiColor, p);
+                mat.opacity = baseOpacity + (hiOpacity - baseOpacity) * p;
+            },
+            onDone: function() {
+                mesh.material = box_material;
+                if (mat.dispose) mat.dispose();
+            }
+        });
+    }
+
+    function animateForward(opts) {
+        opts = opts || {};
+        var speed = opts.speed || 1;
+        var color = opts.color || '#6366f1';
+        var loop = opts.loop;
+        var onComplete = opts.onComplete;
+
+        animGeneration++;
+        var myGen = animGeneration;
+        cancelTweens();
+
+        var meshes = layerMeshes.slice();
+        if (!meshes.length) { if (onComplete) onComplete(); return; }
+
+        var stepDur = 600 / speed;
+        var stagger = stepDur * 0.55;
+        meshes.forEach(function(mesh, i) {
+            pulseMesh(mesh, i * stagger, stepDur, color);
+        });
+
+        var total = (meshes.length - 1) * stagger + stepDur;
+        if (forwardTimer) clearTimeout(forwardTimer);
+        forwardTimer = setTimeout(function() {
+            if (myGen !== animGeneration) return;
+            if (loop) { animateForward(opts); }
+            else if (onComplete) onComplete();
+        }, total + 50);
+    }
+
+    function stopAnimation() {
+        animGeneration++;
+        if (forwardTimer) { clearTimeout(forwardTimer); forwardTimer = null; }
+        cancelTweens();
+    }
+
     // ── Destroy ──
 
     function destroy() {
+        stopAnimation();
         if (animId) { cancelAnimationFrame(animId); animId = null; }
         if (controls) { controls.dispose(); }
         ro.disconnect();
@@ -339,6 +438,8 @@ function AlexNet(container) {
         redraw: redraw,
         restartRenderer: restartRenderer,
         style: style,
+        animateForward: animateForward,
+        stopAnimation: stopAnimation,
         destroy: destroy
     };
 }
