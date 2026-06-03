@@ -582,15 +582,27 @@ var NNAnimation = (function() {
         } else if (vizMode === 'lenet') {
             animateLeNet(viz, animMode);
         } else if (vizMode === 'alexnet') {
-            // Basic layer pulse for 3D
-            playing = false;
-            updateButton();
+            // Sequential layer pulse through the 3D volumes
+            if (viz && viz.animateForward) {
+                viz.animateForward({
+                    speed: speed,
+                    color: FWD_COLOR,
+                    loop: looping,
+                    onComplete: function() { playing = false; updateButton(); }
+                });
+            } else {
+                playing = false;
+                updateButton();
+            }
         }
     }
 
     function stop(viz) {
         playing = false;
         generation++;  // invalidate any in-flight callbacks
+
+        // Stop the 3D forward sweep (AlexNet) if present
+        if (viz && typeof viz.stopAnimation === 'function') { viz.stopAnimation(); }
 
         // Clear ALL pending timers
         animTimers.forEach(function(t) { clearTimeout(t); });
