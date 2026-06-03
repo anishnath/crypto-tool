@@ -6,9 +6,12 @@
 <%
     String navUserSub = null;
     String navUserEmail = null;
-    if (session != null) {
-        Object subObj = session.getAttribute("oauth_user_sub");
-        Object emailObj = session.getAttribute("oauth_user_email");
+    // Use request.getSession(false) rather than the implicit `session` object so this
+    // component works even when including pages declare session="false" (e.g. onecompiler.jsp).
+    javax.servlet.http.HttpSession navSession = request.getSession(false);
+    if (navSession != null) {
+        Object subObj = navSession.getAttribute("oauth_user_sub");
+        Object emailObj = navSession.getAttribute("oauth_user_email");
         if (subObj != null) navUserSub = subObj.toString();
         if (emailObj != null) navUserEmail = emailObj.toString();
     }
