@@ -27,13 +27,15 @@
         html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
         body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:#0f172a;background:#fff;margin:0}
         :root{--primary:#6366f1;--bg-primary:#fff;--bg-secondary:#f8fafc;--text-primary:#0f172a;--text-secondary:#475569;--border:#e2e8f0}
-        .tool-header{background:transparent;padding:2rem 1.5rem;border-bottom:none}
-        .tool-header-container{max-width:1200px;margin:0 auto}
-        .tool-header-content{text-align:left;padding:0}
-        .tool-page-title{margin-bottom:0.5rem;text-align:left;font-size:2rem;font-weight:700;color:#0f172a}
-        .tool-page-description{font-size:1rem;margin-bottom:1rem;text-align:left;max-width:100%}
-        .breadcrumbs{background:#f8fafc;padding:1rem 1.5rem;border-bottom:1px solid #e2e8f0;margin-top:72px}
-        .breadcrumbs-container{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:0.5rem;font-size:0.875rem}
+        .tool-header{background:transparent;padding:0.35rem 1.5rem;border-bottom:1px solid var(--border)}
+        .tool-header-container{max-width:1400px;margin:0 auto}
+        .tool-header-content{display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;text-align:left;padding:0}
+        .tool-page-title{margin:0;font-size:1.05rem;font-weight:700;line-height:1.25;letter-spacing:-0.01em;color:#0f172a;white-space:nowrap}
+        .tool-page-description{font-size:0.72rem;line-height:1.3;margin:0;color:var(--text-secondary);padding-left:0.6rem;border-left:1px solid var(--border);flex:1 1 14rem;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .tool-meta{display:flex;gap:0.3rem;flex-wrap:wrap;align-items:center;margin-left:auto}
+        @media (max-width:640px){.tool-page-title{font-size:0.95rem;white-space:normal}.tool-page-description{padding-left:0;border-left:none;flex-basis:100%}.tool-meta{margin-left:0}}
+        .breadcrumbs{background:#f8fafc;padding:0.3rem 1.5rem;border-bottom:1px solid #e2e8f0;margin-top:72px}
+        .breadcrumbs-container{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:0.5rem;font-size:0.72rem}
         .cipher-form-card{background:#fff;border:1px solid #e2e8f0;border-radius:1rem;padding:2.5rem;margin-bottom:3rem;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
         .form-single-column{display:flex;flex-direction:column;gap:2.5rem;max-width:700px;margin:0 auto}
         @media (min-width:992px){.form-single-column{max-width:100%}}
@@ -189,21 +191,21 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
     
     <!-- Critical CSS - Load Immediately -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/cipher-tool-page.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/cipher-tool-page.css">
     
     <!-- Non-Critical CSS - Deferred (Below the fold or not needed for initial render) -->
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
     </noscript>
 
     <!-- Ad System Initialization -->
@@ -924,13 +926,7 @@
         <div class="tool-header-container">
             <div class="tool-header-content">
                 <h1 class="tool-page-title">AES Encryption Tool Online - Encrypt & Decrypt Free</h1>
-                <p class="tool-page-description">Free online cipher encryption tool supporting 100+ algorithms (AES-256, DES, Blowfish, ChaCha20). Encrypt and decrypt messages securely with client-side processing. No registration required.</p>
-                <div class="tool-meta">
-                    <span class="tool-category-badge">Encryption Tools</span>
-                    <span class="tool-badge">✓ Free</span>
-                    <span class="tool-badge">🔒 Secure</span>
-                    <span class="tool-badge">⚡ Client-Side</span>
-		</div>
+<%--                <p class="tool-page-description">Free online cipher encryption tool supporting 100+ algorithms (AES-256, DES, Blowfish, ChaCha20). Encrypt and decrypt messages securely with client-side processing. No registration required.</p>--%>
 		</div>
 		</div>
     </header>
@@ -1120,14 +1116,14 @@
 						<option value="TNEPRES">Tnepres (Serpent Reversed)</option>
 					</optgroup>
 				</select>
-				<small class="form-text" style="margin-top: 0.5rem; display: block;">
-					<strong>Quick Guide:</strong>
-					⭐ <strong>Recommended</strong> for most uses |
-					🔐 <strong>AES</strong> = Industry standard |
-					🔑 <strong>PBE</strong> = Use password instead of hex key |
-					⚠️ <strong>Legacy</strong> = Old systems only |
-					🚫 <strong>Deprecated</strong> = Insecure
-				</small>
+<%--				<small class="form-text" style="margin-top: 0.5rem; display: block;">--%>
+<%--					<strong>Quick Guide:</strong>--%>
+<%--					⭐ <strong>Recommended</strong> for most uses |--%>
+<%--					🔐 <strong>AES</strong> = Industry standard |--%>
+<%--					🔑 <strong>PBE</strong> = Use password instead of hex key |--%>
+<%--					⚠️ <strong>Legacy</strong> = Old systems only |--%>
+<%--					🚫 <strong>Deprecated</strong> = Insecure--%>
+<%--				</small>--%>
 			</div>
 
                             <!-- Step 2: Message -->
@@ -1246,7 +1242,7 @@
 </div>
 
             <!-- In-Content Ad (Mid) -->
-            <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+<%--            <%@ include file="modern/ads/ad-in-content-mid.jsp" %>--%>
             
             <!-- Learning Content -->
             <!-- Temporarily disabled - causing ERR_INCOMPLETE_CHUNKED_ENCODING -->
@@ -1275,7 +1271,7 @@
     <!-- Footer -->
     <footer class="page-footer">
         <div class="footer-content">
-            <p class="footer-text">© 2024 8gwifi.org - Free Online Tools</p>
+            <p class="footer-text">© 2026 8gwifi.org - Free Online Tools</p>
             <div class="footer-links">
                 <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
                 <a href="tutorials/" class="footer-link">Tutorials</a>
@@ -1295,9 +1291,9 @@
 
     <!-- Scripts -->
     <!-- Common Tool Utilities (MUST be loaded first) -->
-    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>" defer onerror="console.warn('tool-utils.js failed to load')"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js" defer onerror="console.warn('tool-utils.js failed to load')"></script>
     <script src="<%=request.getContextPath()%>/modern/js/search.js?v=2.1&t=<%=cacheVersion%>" defer onerror="console.warn('search.js failed to load')"></script>
-    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer onerror="console.warn('dark-mode.js failed to load')"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer onerror="console.warn('dark-mode.js failed to load')"></script>
     
     <!-- Fallback for deferred CSS loading -->
     <script>
