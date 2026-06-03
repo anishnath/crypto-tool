@@ -303,6 +303,35 @@ body.ms-body {
 .ms-inline-ad { margin: var(--ms-gap) 0; }
 @media (min-width: 1280px) { .ms-inline-ad { display: none; } }
 
+/* ── Sidebar header (hide chevron sits here, desktop only) ──────── */
+.ms-sidebar-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 6px 6px;
+    margin-bottom: 2px;
+}
+.ms-sidebar-title {
+    font: 600 10.5px var(--ms-font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ms-muted);
+}
+.ms-sidebar-hide-btn {
+    display: none; /* shown only on desktop via media query below */
+    place-items: center;
+    width: 26px; height: 26px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    color: var(--ms-muted);
+    border-radius: 6px;
+    transition: background var(--ms-transition), color var(--ms-transition);
+}
+.ms-sidebar-hide-btn:hover {
+    background: var(--ms-accent-softer);
+    color: var(--ms-accent);
+}
+.ms-sidebar-hide-btn svg { width: 16px; height: 16px; }
+
 /* ── Mobile drawer ──────────────────────────────────────────────── */
 .ms-sidebar-toggle {
     display: none;
@@ -338,6 +367,38 @@ body.ms-body {
     }
     .ms-sidebar.open { transform: translateX(0); }
     .ms-sidebar-backdrop.open { display: block; }
+}
+
+/* ── Desktop sidebar hide ───────────────────────────────────────
+   When the user clicks the chevron, .is-sidebar-hidden lands on
+   .ms-main. The first grid track drops, the workspace gets the
+   full width (the right rail stays in the 3-col layout), and the
+   existing ms-sidebar-toggle (display:none on desktop by default)
+   flips on so the user has a way back. Persisted in localStorage as
+   math.ms.sidebarHidden. */
+@media (min-width: 1024px) {
+    .ms-sidebar-hide-btn { display: grid; }
+    .ms-main.is-sidebar-hidden {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .ms-main.is-sidebar-hidden .ms-sidebar { display: none; }
+    .ms-main.is-sidebar-hidden .ms-sidebar-toggle {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        margin-bottom: 0.5rem;
+        /* Sit as a full-row banner above the workspace+rail, sized to
+           its own content (justify-self:start stops the grid stretching
+           it across the wide column). Without the column span the toggle
+           would claim the 1fr track and squeeze the workspace into the
+           rail-width column. */
+        grid-column: 1 / -1;
+        justify-self: start;
+        align-self: start;
+    }
+}
+@media (min-width: 1280px) {
+    .ms-main.is-sidebar-hidden {
+        grid-template-columns: minmax(0, 1fr) var(--ms-rail-w);
+    }
 }
 
 /* ═══════════════════════════════════════════════════════════════════

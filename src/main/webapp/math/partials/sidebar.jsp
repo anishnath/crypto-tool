@@ -28,6 +28,19 @@
 %>
 <aside class="ms-sidebar" id="msSidebar" aria-label="Math tools">
 
+    <%-- Header bar with hide chevron (desktop only). On mobile the drawer
+         is opened/closed via the msSidebarToggle outside the aside, so this
+         chevron is hidden there. --%>
+    <div class="ms-sidebar-header">
+        <span class="ms-sidebar-title">Math</span>
+        <button type="button" class="ms-sidebar-hide-btn" id="msSidebarHideBtn"
+                aria-label="Hide sidebar to widen the page" title="Hide sidebar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="15 6 9 12 15 18"></polyline>
+            </svg>
+        </button>
+    </div>
+
     <label class="ms-sidebar-search">
         <input type="search" id="msSidebarSearch" placeholder="Search 48+ tools…" autocomplete="off" />
     </label>
@@ -326,16 +339,47 @@
         });
     }
 
-    // Mobile drawer
-    var toggle = document.getElementById('msSidebarToggle');
+    // Mobile drawer (always) + desktop hide/show via the same toggle button.
+    var toggle  = document.getElementById('msSidebarToggle');
+    var hideBtn = document.getElementById('msSidebarHideBtn');
+    var main    = document.querySelector('.ms-main');
+    var SIDEBAR_HIDDEN_KEY = 'math.ms.sidebarHidden';
+
+    function safeGet(k)    { try { return localStorage.getItem(k); } catch (e) { return null; } }
+    function safeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+    // Restore the desktop "hidden" state on load. Mobile drawer never
+    // sticks across reloads — that would surprise users on a phone.
+    if (main && safeGet(SIDEBAR_HIDDEN_KEY) === '1') {
+        main.classList.add('is-sidebar-hidden');
+    }
+
+    function isMobileLayout() {
+        return window.matchMedia && window.matchMedia('(max-width: 1023px)').matches;
+    }
+
     if (toggle && backdrop) {
         function closeDrawer () { sidebar.classList.remove('open'); backdrop.classList.remove('open'); }
         toggle.addEventListener('click', function () {
-            sidebar.classList.add('open'); backdrop.classList.add('open');
+            if (isMobileLayout()) {
+                // Mobile: open the slide-in drawer.
+                sidebar.classList.add('open'); backdrop.classList.add('open');
+            } else if (main) {
+                // Desktop: bring the sidebar column back.
+                main.classList.remove('is-sidebar-hidden');
+                safeSet(SIDEBAR_HIDDEN_KEY, '0');
+            }
         });
         backdrop.addEventListener('click', closeDrawer);
         sidebar.querySelectorAll('.ms-item').forEach(function (a) {
             a.addEventListener('click', closeDrawer);
+        });
+    }
+
+    if (hideBtn && main) {
+        hideBtn.addEventListener('click', function () {
+            main.classList.add('is-sidebar-hidden');
+            safeSet(SIDEBAR_HIDDEN_KEY, '1');
         });
     }
 })();
