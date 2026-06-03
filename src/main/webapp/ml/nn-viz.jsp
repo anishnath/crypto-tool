@@ -123,7 +123,7 @@
                 <!-- Action bar -->
                 <div class="nn-action-bar">
                     <button class="nn-play-btn" id="nn-play-btn" onclick="nnPlay()"><span class="nn-play-icon">&#9654;</span> Forward Pass</button>
-                    <button class="nn-download-btn" onclick="nnDownload()">Download SVG</button>
+                    <button class="nn-download-btn" onclick="nnDownload()" title="Download SVG" aria-label="Download SVG"><svg class="nn-download-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></button>
                     <button class="nn-record-btn" id="nn-record-btn" onclick="nnRecord()"><span class="nn-rec-dot"></span> Record GIF</button>
                 </div>
                 <div class="nn-gif-status" id="nn-gif-status" style="display:none;"></div>

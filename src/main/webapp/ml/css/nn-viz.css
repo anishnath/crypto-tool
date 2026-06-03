@@ -486,16 +486,17 @@
 .nn-download-btn {
     display: inline-flex;
     align-items: center;
-    padding: 0.45rem 1rem;
+    justify-content: center;
+    padding: 0.45rem;
     background: #f1f5f9;
     color: #475569;
     border: 1px solid #cbd5e1;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 500;
+    line-height: 0;
     transition: all 0.2s;
 }
+.nn-download-icon { display: block; }
 .nn-download-btn:hover {
     background: #e2e8f0;
     color: #1e293b;
