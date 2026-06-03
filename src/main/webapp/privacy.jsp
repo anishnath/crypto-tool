@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
-    String effectiveDate = "2026-06-01";
+    String effectiveDate = "2026-06-03";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -209,6 +209,7 @@
                 <li><a href="#third-parties">Third-party services</a></li>
                 <li><a href="#server-logs">Server logs &amp; retention</a></li>
                 <li><a href="#email">Email features</a></li>
+                <li><a href="#google-signin">Sign in with Google &amp; Google user data</a></li>
                 <li><a href="#your-rights">Your rights</a></li>
                 <li><a href="#children">Children's privacy</a></li>
                 <li><a href="#changes">Changes to this policy</a></li>
@@ -223,7 +224,7 @@
 
             <section id="summary">
                 <h2>1. Summary</h2>
-                <p>8gwifi.org is a free collection of online cryptography, security, and developer tools. We're built around a strict principle: <strong>process now, store nothing</strong>. This page explains exactly what data is and isn't collected when you use the site, who we share information with, and how to exercise your rights.</p>
+                <p>8gwifi.org is a free collection of online cryptography, security, and developer tools. We're built around a strict principle: <strong>process now, store nothing</strong>. The one deliberate exception is the <strong>optional</strong> "Sign in with Google" feature — when (and only when) you choose to sign in, we keep a small account record so features and entitlements follow you between visits. That is documented in full in <a href="#google-signin">§8</a>. This page explains exactly what data is and isn't collected when you use the site, who we share information with, and how to exercise your rights.</p>
             </section>
 
             <section id="what-we-collect">
@@ -252,7 +253,7 @@
                     <li><strong>Passphrases</strong> — used during the request only; not stored, not logged.</li>
                     <li><strong>Plaintext messages</strong> sent through encrypt/decrypt tools.</li>
                     <li><strong>Uploaded files</strong> are processed in memory or in tempfiles deleted in a <code>finally</code> block immediately after use.</li>
-                    <li><strong>Account information</strong> — we don't have user accounts, sign-ups, or profiles for the core tool catalog. (Some optional features may require sign-in via a third-party identity provider; if so, those are described in-context on that page.)</li>
+                    <li><strong>Account information</strong> — the core tool catalog needs no account, sign-up, or profile. The only exception is the optional "Sign in with Google" feature, which creates a minimal account record (Google account ID, email, name). What that accesses, how it's used, and how to delete it is documented in full in <a href="#google-signin">§8</a>.</li>
                     <li><strong>Browser fingerprints</strong> beyond the User-Agent string in standard server logs.</li>
                 </ul>
             </section>
@@ -274,6 +275,7 @@
                     <li><strong>Cloudflare</strong> — CDN and DDoS protection. Sees request metadata (IP, URL).</li>
                     <li><strong>Google Analytics</strong> — aggregate visitor metrics.</li>
                     <li><strong>Google AdSense</strong> — advertising; cookie-based personalization unless you opt out.</li>
+                    <li><strong>Sign in with Google (Google Identity / OAuth 2.0)</strong> — optional authentication. Only invoked if you click "Sign in with Google". See <a href="#google-signin">§8</a> for the exact scopes, data, and retention.</li>
                     <li><strong>Mail relay</strong> — the optional "email my key" feature delivers via a standard SMTP relay. The recipient address you type is processed only to send that one email. We don't add it to any list.</li>
                 </ul>
                 <p>Each third party has its own privacy policy, and we don't control what they collect once a request reaches them.</p>
@@ -288,11 +290,80 @@
             <section id="email">
                 <h2>7. Email features</h2>
                 <p>A small number of tools offer to email the result to you (e.g. "Email my SSH key pair"). When you opt in, the recipient address and the result content are transmitted to our SMTP relay for delivery and are not stored on our side after dispatch. We never add your address to any newsletter or marketing list.</p>
-                <p>If you receive an unexpected email from us, please contact us at the address in §11 — we treat that as an abuse report.</p>
+                <p>If you receive an unexpected email from us, please contact us at the address in §12 — we treat that as an abuse report.</p>
+            </section>
+
+            <section id="google-signin">
+                <h2>8. Sign in with Google &amp; Google user data</h2>
+                <p>8gwifi.org offers an <strong>optional</strong> "Sign in with Google" button so that account-based features (saved preferences, AI tool usage and quota, and billing/entitlements) can follow you between visits. The vast majority of the site works with no sign-in at all. This section documents exactly how the application accesses, uses, stores, and shares Google user data, consistent with the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a> (including the Limited Use requirements) and the <a href="https://developers.google.com/terms" target="_blank" rel="noopener noreferrer">Google APIs Terms of Service</a>.</p>
+
+                <h3>Scopes we request</h3>
+                <p>When you choose to sign in, we request only these standard OAuth scopes. We do <strong>not</strong> request access to Gmail, Drive, Calendar, Contacts, or any other sensitive or restricted scope:</p>
+                <ul>
+                    <li><code>openid</code> — to authenticate you and obtain a stable Google account identifier.</li>
+                    <li><code>https://www.googleapis.com/auth/userinfo.email</code> — your Google account email address.</li>
+                    <li><code>https://www.googleapis.com/auth/userinfo.profile</code> — your basic profile (name, and profile picture/locale where Google provides them).</li>
+                </ul>
+
+                <h3>Google user data we access</h3>
+                <p>From Google's userinfo endpoint we receive, and may retain, only the following:</p>
+                <ul>
+                    <li>Your <strong>Google account ID</strong> (the <code>sub</code>/<code>id</code> value — a stable, opaque identifier).</li>
+                    <li>Your <strong>email address</strong>.</li>
+                    <li>Your <strong>name</strong> (and, transiently, profile picture and locale where Google returns them).</li>
+                </ul>
+
+                <h3>How we use, process, and handle it</h3>
+                <p>We use Google user data for a single purpose: <strong>to authenticate you and operate your 8gwifi.org account</strong> (saved preferences, AI tool usage and quota, and billing/entitlements). The table below states, for each item of Google user data, exactly how it is used, processed, and handled, and the purpose for that use:</p>
+                <table style="width:100%;border-collapse:collapse;margin:0 0 0.75rem;font-size:0.875rem;">
+                    <thead>
+                        <tr style="text-align:left;border-bottom:2px solid var(--border);">
+                            <th style="padding:0.4rem 0.5rem;">Google user data</th>
+                            <th style="padding:0.4rem 0.5rem;">How it is used, processed &amp; handled</th>
+                            <th style="padding:0.4rem 0.5rem;">Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:0.4rem 0.5rem;"><strong>Google account ID</strong> (<code>sub</code>/<code>id</code>)</td>
+                            <td style="padding:0.4rem 0.5rem;">Received over HTTPS from Google's userinfo endpoint, held in your server-side session, and written to your account record as the primary key that identifies you.</td>
+                            <td style="padding:0.4rem 0.5rem;">To recognise you as a returning user and link your preferences, usage quota, and entitlements to a stable identifier (rather than your email, which can change).</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:0.4rem 0.5rem;"><strong>Email address</strong></td>
+                            <td style="padding:0.4rem 0.5rem;">Received over HTTPS, held in your server-side session, and stored on your account record.</td>
+                            <td style="padding:0.4rem 0.5rem;">To display which account you are signed in to and to contact you about your account and billing/entitlements.</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:0.4rem 0.5rem;"><strong>Name</strong> (and, transiently, profile picture/locale)</td>
+                            <td style="padding:0.4rem 0.5rem;">Received over HTTPS, held in your server-side session, and stored on your account record. Profile picture/locale are used only in-session and not persisted.</td>
+                            <td style="padding:0.4rem 0.5rem;">To personalise the signed-in experience (e.g. greeting you by name in the interface).</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Google user data is processed only on our own servers and within our own billing/account infrastructure. We do <strong>not</strong> use it for any purpose other than the ones stated above. In particular, we do <strong>not</strong> use Google user data to serve advertising, we do <strong>not</strong> sell, rent, or trade it, and we do <strong>not</strong> use it to develop, train, or improve generalized artificial-intelligence or machine-learning models.</p>
+
+                <h3>How we store and retain it</h3>
+                <ul>
+                    <li><strong>Tokens.</strong> Your OAuth access token and refresh token are held in your server-side session only. They are never written to our logs and are discarded when you log out or your session expires.</li>
+                    <li><strong>Account record.</strong> Your Google account ID, email, and name are stored in our account database (written through our billing service) so your account persists between visits. This is the one place we deliberately retain data tied to you; everything else on the site follows the "process now, store nothing" principle described above.</li>
+                </ul>
+
+                <h3>Sharing</h3>
+                <p>We do not share Google user data with third parties except as strictly necessary to operate the service — our own hosting/CDN and billing infrastructure acting as processors on our behalf — or where required by law. Google user data is never transferred for advertising purposes and is never sold.</p>
+
+                <h3>Revoking access and deleting your data</h3>
+                <ul>
+                    <li>You can revoke 8gwifi.org's access to your Google account at any time from your <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer">Google Account permissions page</a>.</li>
+                    <li>To delete your account record and the associated Google user data from our systems, email us at the address in <a href="#contact">§12</a> and we will remove it.</li>
+                </ul>
+
+                <h3>Limited Use</h3>
+                <p>8gwifi.org's use of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>, including the <strong>Limited Use</strong> requirements. We request only the scopes listed above, use the data solely for the user-facing features described in this section, and do not transfer it to others for serving ads, training generalized/AI models, or any purpose unrelated to providing or improving these features.</p>
             </section>
 
             <section id="your-rights">
-                <h2>8. Your rights</h2>
+                <h2>9. Your rights</h2>
                 <p>Because the site doesn't maintain user profiles or persist tool inputs, there is typically nothing on file to request, correct, or delete. That said, you have the right to:</p>
                 <ul>
                     <li><strong>Access</strong> — ask whether we hold any personal data tied to you. (For 99% of visitors the answer is "only the rolling 90-day request logs, by IP".)</li>
@@ -300,21 +371,21 @@
                     <li><strong>Object</strong> — withdraw from analytics/ads via the opt-out links in §4.</li>
                     <li><strong>Lodge a complaint</strong> with the data protection authority in your jurisdiction (GDPR, CCPA, etc.).</li>
                 </ul>
-                <p>Send any rights-related request to the email address in §11. We aim to respond within 30 days.</p>
+                <p>Send any rights-related request to the email address in §12. We aim to respond within 30 days.</p>
             </section>
 
             <section id="children">
-                <h2>9. Children's privacy</h2>
+                <h2>10. Children's privacy</h2>
                 <p>The site is not directed at children under 13 (or 16 in some jurisdictions). We do not knowingly collect personal information from children. If you believe a child has provided personal information through the site, contact us and we will delete it.</p>
             </section>
 
             <section id="changes">
-                <h2>10. Changes to this policy</h2>
+                <h2>11. Changes to this policy</h2>
                 <p>We may update this policy from time to time — typically when we add a new feature that handles user data differently. The "Effective" date at the top reflects the most recent update. Material changes will be announced on the site for at least 14 days before they take effect.</p>
             </section>
 
             <section id="contact">
-                <h2>11. Contact</h2>
+                <h2>12. Contact</h2>
                 <div class="legal-contact-card">
                     <p style="margin-bottom:0.4rem;">For privacy questions, data requests, or anything related to this policy:</p>
                     <ul style="margin-bottom:0;">
