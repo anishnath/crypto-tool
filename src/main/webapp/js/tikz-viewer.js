@@ -861,6 +861,14 @@ ${bodyTikz}
       zoomScaleSensitivity: 0.3,
       onZoom: function() { updateZoomLabel(); }
     });
+    // Re-fit once the flex layout has settled so the diagram uses the full box
+    requestAnimationFrame(function() {
+      if (!panZoomInstance) return;
+      panZoomInstance.resize();
+      panZoomInstance.fit();
+      panZoomInstance.center();
+      updateZoomLabel();
+    });
     updateZoomLabel();
     try {
       document.dispatchEvent(new CustomEvent('tikz:rendered', {

@@ -253,10 +253,11 @@
             pointer-events: none;
         }
 
-        /* Inline SVG output — svg-pan-zoom needs explicit dimensions */
+        /* Inline SVG output — grows to fill the viewer container */
         #svg-output {
             width: 100%;
-            height: 450px;
+            flex: 1;
+            min-height: 350px;
             overflow: hidden;
             position: relative;
             background: #ffffff;
@@ -551,9 +552,12 @@
             color: oklch(0.860 0.110 27.7);
         }
 
-        /* Viewer container */
+        /* Viewer container — fills the full height of the output wrapper */
         .tikz-viewer-container {
             position: relative;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
             min-height: 350px;
             background: #ffffff;
             border-radius: 0 0 0.75rem 0.75rem;
