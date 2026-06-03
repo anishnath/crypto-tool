@@ -146,7 +146,7 @@
                     <div class="nn-ctrl-row">
                         <input type="checkbox" id="nn-loop"><label for="nn-loop">Loop</label>
                     </div>
-                    <div class="nn-ctrl-row">
+                    <div class="nn-ctrl-row" id="nn-heatmap-row">
                         <input type="checkbox" id="nn-heatmap"><label for="nn-heatmap">Activation heatmap</label>
                     </div>
                     <div class="nn-ctrl-row nn-dropout-row" style="display:none;">

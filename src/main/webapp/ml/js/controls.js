@@ -51,8 +51,47 @@
         else if (mode === 'lenet') { initLeNet(); }
         else if (mode === 'alexnet') { initAlexNet(); }
 
+        updateAnimUIForMode(mode);
         populatePresets();
         updateStatus();
+    }
+
+    // Only expose the animation modes / options each mode actually supports.
+    //   FCNN    — forward, backprop, training, dropout (+ activation heatmap)
+    //   LeNet   — forward, backprop
+    //   AlexNet — forward (sequential 3D layer sweep)
+    function updateAnimUIForMode(mode) {
+        var allowed = mode === 'fcnn' ? ['forward', 'backprop', 'training', 'dropout']
+                    : mode === 'lenet' ? ['forward', 'backprop']
+                    : ['forward'];
+
+        var modeSel = document.getElementById('nn-anim-mode');
+        if (modeSel) {
+            Array.prototype.forEach.call(modeSel.options, function(opt) {
+                var ok = allowed.indexOf(opt.value) !== -1;
+                opt.hidden = !ok;
+                opt.disabled = !ok;
+            });
+            // Reset to a supported mode if the current one isn't available here
+            if (allowed.indexOf(modeSel.value) === -1) {
+                modeSel.value = 'forward';
+                if (typeof NNAnimation !== 'undefined') NNAnimation.setMode('forward');
+            }
+            // Hide the whole selector when there's only one choice (AlexNet)
+            var modeRow = modeSel.closest('.nn-ctrl-row');
+            if (modeRow) modeRow.style.display = allowed.length > 1 ? 'flex' : 'none';
+        }
+
+        // Activation heatmap is FCNN-only
+        var hmRow = document.getElementById('nn-heatmap-row');
+        if (hmRow) hmRow.style.display = mode === 'fcnn' ? 'flex' : 'none';
+
+        // Keep the mode-specific extra rows in sync with the (possibly reset) mode
+        var curMode = modeSel ? modeSel.value : 'forward';
+        var dropRow = document.querySelector('.nn-dropout-row');
+        var trainRow = document.querySelector('.nn-training-row');
+        if (dropRow) dropRow.style.display = curMode === 'dropout' ? 'flex' : 'none';
+        if (trainRow) trainRow.style.display = curMode === 'training' ? 'flex' : 'none';
     }
 
     // ── FCNN ──
