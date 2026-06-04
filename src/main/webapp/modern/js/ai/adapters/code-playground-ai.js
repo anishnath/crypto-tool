@@ -42,11 +42,15 @@ function langMentionedInText(t, lang) {
   return false;
 }
 
+// Verbs that signal the user actually wants code written/changed (vs. chatting).
+const CODEGEN_RE = /\b(make|write|implement|code|create|generate|build|gen|fix|debug|solve|refactor|optimi[sz]e|improve|add|append|insert|remove|delete|convert|translate|port|rewrite|change|modify|update|replace|comment|annotate|set|show me|give me|hello world)\b/;
+
 function inferTargetLangs(userText, panes, activePaneId) {
   const t = String(userText || '').toLowerCase();
   const langs = panes.map((p) => p.lang);
   if (!langs.length) return [];
 
+  // Explicit scoping always wins — honour it even without a codegen verb.
   if (/\b(all|both|every|each)\b/.test(t)
     && /\b(pane|panes|side|sides|language|languages|editors?)\b/.test(t)) {
     return [...langs];
@@ -66,9 +70,13 @@ function inferTargetLangs(userText, panes, activePaneId) {
     if (active) return [active.lang];
   }
 
+  // No explicit scope: only offer to apply when this reads like a code request.
+  // Pure chat / explain / compare questions → no apply target (prose only).
+  if (!CODEGEN_RE.test(t)) return [];
+
   if (langs.length === 1) return langs;
 
-  // Multi-pane generic requests (e.g. "bubble sort") → apply all matching blocks
+  // Multi-pane code request with no explicit scope → apply all matching blocks
   return [...langs];
 }
 
@@ -114,10 +122,14 @@ function formatSeedContext(snapshot) {
     `Playground: ${snapshot.panes.length} pane(s), layout: ${snapshot.layout || 'columns'}`,
   ];
   for (const p of snapshot.panes) {
-    const active = p.id === snapshot.activePaneId ? ' **ACTIVE**' : '';
+    const isActive = p.id === snapshot.activePaneId;
+    const active = isActive ? ' **ACTIVE**' : '';
     const code = String(p.code || '').trim();
-    const excerpt = code.length > 6000
-      ? code.slice(0, 6000) + '\n… [truncated]'
+    // Full code for the pane the user is working in; short excerpt for the rest
+    // (keeps cross-language awareness without re-sending every editor in full).
+    const cap = isActive ? 4000 : 1200;
+    const excerpt = code.length > cap
+      ? code.slice(0, cap) + '\n… [truncated]'
       : code || '(empty)';
     lines.push('', `--- Pane ${p.index} (${p.lang}) id=${p.id}${active} ---`, excerpt);
   }
