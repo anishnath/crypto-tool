@@ -1,0 +1,58 @@
+% Standalone supplementary document — open in the file tree and click Compile.
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{hyperref}
+
+\title{\textbf{Supplementary Information}\\[4pt]
+       \large Reproducible Multi-File \LaTeX{} Workflows}
+\author{First Author \and Second Author}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Overview}
+This PDF is built from \texttt{supplement.tex} alone.
+The main manuscript lives in \texttt{main.tex}; conference slides in \texttt{slides.tex}.
+All three share \texttt{references.bib}.
+
+\section{Extended experimental results}
+Table~\ref{tab:extended} reports per-seed metrics omitted from the main paper for brevity.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Extended benchmark (five seeds).}
+  \label{tab:extended}
+  \begin{tabular}{@{}lccc@{}}
+    \toprule
+    \textbf{Seed} & \textbf{Accuracy} & \textbf{F1} & \textbf{Time (s)} \\
+    \midrule
+    1 & 0.908 & 0.891 & 44 \\
+    2 & 0.917 & 0.902 & 41 \\
+    3 & 0.911 & 0.895 & 46 \\
+    4 & 0.919 & 0.904 & 42 \\
+    5 & 0.914 & 0.898 & 43 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Additional related work}
+We include further citations for reproducibility tooling~%
+\cite{example2021survey,example2025toolkit} and publishing practice~%
+\cite{example2022conference}.
+
+\section{Proof sketch}
+For completeness, the regularised objective from the main text satisfies
+$\nabla_\theta \mathcal{L} = \frac{2}{N} X^\top (X\theta - y) + 2\lambda\theta$ under standard assumptions.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

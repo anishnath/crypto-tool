@@ -210,10 +210,7 @@
 <%@ include file="/modern/components/nav-header.jsp" %>
 
 <!-- ========== HERO SECTION — SEO heading + Ad placement ========== -->
-<section class="latex-hero" id="latex-hero">
-  <div class="latex-hero-content">
-    <h1 class="latex-hero-title">Free AI LaTeX Editor with Math Solver &amp; Run Code</h1>
-  </div>
+<section class="latex-hero latex-hero-slim" id="latex-hero">
   <div class="latex-hero-ad">
     <%@ include file="/modern/ads/ad-hero-banner.jsp" %>
   </div>
@@ -246,6 +243,10 @@
       <button class="nav-btn-secondary" onclick="showProjectMenu()" id="btn-project-menu" title="Open or manage saved projects">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
         Projects
+      </button>
+      <button class="nav-btn-secondary" onclick="openAbout()" id="btn-about" title="About this editor — features &amp; what makes it different">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="8" r="0.6" fill="currentColor"/></svg>
+        About
       </button>
     </div>
   </div>
@@ -404,9 +405,29 @@
   [data-theme="dark"] .latex-about{background:oklch(0.183 0.031 263.4);border-top-color:oklch(0.225 0.061 264.4)}
   [data-theme="dark"] .latex-about-card{background:oklch(0.225 0.061 264.4);border-color:oklch(1 0 0 / 12%)}
   [data-theme="dark"] .latex-about-card code{background:oklch(0.655 0.183 266.5 / 0.18);color:oklch(0.732 0.089 266.9)}
+
+  /* ── Slim hero: ad strip only (H1 moved into the About modal) ── */
+  .latex-hero-slim{padding:6px 20px;min-height:0}
+  .latex-hero-slim .latex-hero-ad{width:100%}
+
+  /* ── About as a modal overlay (opened by the About button) ── */
+  .latex-about-overlay{position:fixed;inset:0;z-index:1000;background:oklch(0.183 0.031 263.4 / 0.55);backdrop-filter:blur(2px);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow-y:auto;overscroll-behavior:contain}
+  .latex-about-overlay[hidden]{display:none}
+  .latex-about-overlay .latex-about{border-top:none;border-radius:16px;max-width:1000px;width:100%;margin:auto;padding:2.25rem 2rem 2.5rem;position:relative;box-shadow:0 24px 70px oklch(0.183 0.031 263.4 / 0.45);animation:latexAboutIn .18s ease}
+  @keyframes latexAboutIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .latex-about-h1{font-size:1.55rem;font-weight:800;color:var(--text-primary,#0f172a);margin:0 0 0.75rem;line-height:1.2}
+  .latex-about-close{position:absolute;top:12px;right:14px;width:34px;height:34px;border:none;border-radius:9px;background:var(--bg-secondary,#f1f5f9);color:var(--text-secondary,#475569);font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s}
+  .latex-about-close:hover{background:oklch(0.581 0.229 263.9 / 0.12);color:var(--text-primary,#0f172a)}
+  [data-theme="dark"] .latex-about-overlay{background:oklch(0 0 0 / 0.6)}
+  [data-theme="dark"] .latex-about-h1{color:#fff}
+  [data-theme="dark"] .latex-about-close{background:oklch(0.225 0.061 264.4);color:oklch(0.732 0.089 266.9)}
+  body.latex-about-open{overflow:hidden}
 </style>
-<section class="latex-about" id="latex-about">
+<div class="latex-about-overlay" id="latex-about-overlay" hidden onclick="if(event.target===this)closeAbout()">
+<section class="latex-about" id="latex-about" role="dialog" aria-modal="true" aria-labelledby="latex-about-h1">
+  <button class="latex-about-close" onclick="closeAbout()" aria-label="Close about" title="Close">&times;</button>
   <div class="latex-about-inner">
+    <h1 class="latex-about-h1" id="latex-about-h1">Free AI LaTeX Editor with Math Solver &amp; Run Code</h1>
     <span class="latex-about-eyebrow">More than a LaTeX editor</span>
     <h2 class="latex-about-title">What this editor does that others don't</h2>
     <p class="latex-about-subtitle">A full LaTeX compiler with an <strong>inline code runner (20 languages)</strong>, <strong>built-in symbolic math solver</strong>, chemistry rendering, AI assistance, and image-to-code conversion. Everything runs in your browser — no signup, no install, no Overleaf account.</p>
@@ -468,28 +489,19 @@
     </p>
   </div>
 </section>
-
-<!-- Related Tools (below the fold — user scrolls past editor to see) -->
-<jsp:include page="/modern/components/related-tools.jsp">
-    <jsp:param name="currentToolUrl" value="editor"/>
-    <jsp:param name="category" value="Developer Tools"/>
-    <jsp:param name="limit" value="6"/>
-</jsp:include>
-
-<!-- Support Section -->
-<%@ include file="/modern/components/support-section.jsp" %>
+</div>
 
 <!-- Footer -->
-<footer class="page-footer">
-    <div class="footer-content">
-        <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p>
-        <div class="footer-links">
-            <a href="<%=ctx%>/index.jsp" class="footer-link">Home</a>
-            <a href="<%=ctx%>/tutorials/" class="footer-link">Tutorials</a>
-            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
-        </div>
-    </div>
-</footer>
+<%--<footer class="page-footer">--%>
+<%--    <div class="footer-content">--%>
+<%--        <p class="footer-text">&copy; 2025 8gwifi.org - Free Online Tools</p>--%>
+<%--        <div class="footer-links">--%>
+<%--            <a href="<%=ctx%>/index.jsp" class="footer-link">Home</a>--%>
+<%--            <a href="<%=ctx%>/tutorials/" class="footer-link">Tutorials</a>--%>
+<%--            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>--%>
+<%--        </div>--%>
+<%--    </div>--%>
+<%--</footer>--%>
 
 <%@ include file="/modern/ads/ad-sticky-footer.jsp" %>
 <%@ include file="/modern/components/analytics.jsp" %>
@@ -531,6 +543,28 @@
     try { localStorage.setItem(HERO_DISMISSED_KEY, '1'); } catch(e) {}
     measureHero();
   };
+
+  // ── About modal (feature grid + SEO H1 live here now) ──
+  window.openAbout = function() {
+    var ov = document.getElementById('latex-about-overlay');
+    if (!ov) return;
+    ov.hidden = false;
+    document.body.classList.add('latex-about-open');
+    var c = ov.querySelector('.latex-about-close');
+    if (c) c.focus();
+  };
+  window.closeAbout = function() {
+    var ov = document.getElementById('latex-about-overlay');
+    if (!ov) return;
+    ov.hidden = true;
+    document.body.classList.remove('latex-about-open');
+  };
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      var ov = document.getElementById('latex-about-overlay');
+      if (ov && !ov.hidden) closeAbout();
+    }
+  });
 
   // Restore dismissed state
   try {

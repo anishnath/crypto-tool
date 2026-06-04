@@ -32,11 +32,37 @@ function ensureToastContainer() {
   return toastContainer;
 }
 
+// Compiler warnings/errors can be thousands of lines — a toast must stay short.
+// Keep the first few meaningful lines; the full text still lands in the log panel.
+var TOAST_MAX_LINES = 3;
+var TOAST_MAX_CHARS = 240;
+function trimToastMessage(message) {
+  var msg = String(message == null ? '' : message);
+  var lines = msg.split(/\r?\n/);
+  var kept = [];
+  for (var i = 0; i < lines.length && kept.length < TOAST_MAX_LINES; i++) {
+    var t = lines[i].trim();
+    if (t) kept.push(t);
+  }
+  var out = kept.join('\n');
+  var omittedLines = lines.length - kept.length;
+  var truncated = omittedLines > 0;
+  if (out.length > TOAST_MAX_CHARS) {
+    out = out.slice(0, TOAST_MAX_CHARS).replace(/\s+\S*$/, '') + '…';
+    truncated = true;
+  }
+  if (truncated) {
+    out += '\n…(truncated — see the log panel for full output)';
+  }
+  return out;
+}
+
 function showToast(message, type) {
   var container = ensureToastContainer();
   var toast = document.createElement('div');
   toast.className = 'toast ' + (type || 'info');
-  toast.textContent = message;
+  toast.style.whiteSpace = 'pre-line';
+  toast.textContent = trimToastMessage(message);
   container.appendChild(toast);
   setTimeout(function() {
     if (toast.parentNode) toast.parentNode.removeChild(toast);
@@ -212,6 +238,8 @@ function onEditorChange() {
     updateCompileButton();
   }
 
+  if (editingFile) refreshEditingIndicator();
+
   debounceTimer = setTimeout(triggerCompile, DEBOUNCE_MS);
 }
 
@@ -235,6 +263,49 @@ function stopMonitoring() {
   clearTimeout(pollTimer); pollTimer = null;
 }
 
+// ── Compile root: main.tex by default; standalone sub-files compile as themselves ──
+
+function isStandaloneLaTeXDocument(source) {
+  if (!source || !source.trim()) return false;
+  return /\\documentclass(\s|\[|\{)/i.test(source) &&
+         /\\begin\s*\{document\}/i.test(source);
+}
+
+function syncEditorToFileContents() {
+  var cm = window.editorInstance;
+  if (!cm || !editingFile) return;
+  fileContents[editingFile] = cm.getValue();
+}
+
+function getMainTexSource() {
+  if (editingFile && mainTexContent != null) return mainTexContent;
+  return window.getEditorContent ? window.getEditorContent() : '';
+}
+
+/** Which source + label to send to the compiler for the next build. */
+function resolveCompileRoot() {
+  syncEditorToFileContents();
+
+  var rootFile = 'main.tex';
+  var source = getMainTexSource();
+  var compilesActiveStandalone = false;
+
+  if (editingFile && editingFile !== 'main.tex') {
+    var active = fileContents[editingFile];
+    if (active != null && isStandaloneLaTeXDocument(active)) {
+      source = active;
+      rootFile = editingFile;
+      compilesActiveStandalone = true;
+    }
+  }
+
+  return {
+    source: source,
+    rootFile: rootFile,
+    compilesActiveStandalone: compilesActiveStandalone
+  };
+}
+
 // ── Main compile ──
 function triggerCompile(opts) {
   opts = opts || {};
@@ -245,39 +316,13 @@ function triggerCompile(opts) {
   // survives the retry call.
   if (!opts.preserveRetries) resetMissingRetries();
 
-  // If editing a sub-file, save it and wait for re-upload before compiling
-  if (editingFile) {
-    var cm = window.editorInstance;
-    var pendingFile = editingFile;
-    var pendingContent = cm ? cm.getValue() : '';
-    if (cm) fileContents[pendingFile] = pendingContent;
-
-    // Restore main.tex into editor
-    if (cm && mainTexContent != null) {
-      cm.setValue(mainTexContent);
-      mainTexContent = null;
-    }
-    editingFile = null;
-    updateEditorTab('main.tex');
-    updateEditingIndicator();
-    var items = document.querySelectorAll('.file-item');
-    items.forEach(function(el) {
-      el.classList.toggle('active', el.getAttribute('data-file') === 'main.tex');
-    });
-
-    // Upload then compile — don't compile until upload completes
-    setCompileStatus('Saving ' + pendingFile + '...', 'compiling');
-    reuploadFile(pendingFile, pendingContent, function() {
-      doCompile();
-    });
-    return;
-  }
-
+  syncEditorToFileContents();
   doCompile();
 }
 
 function doCompile() {
-  var source = window.getEditorContent();
+  var resolved = resolveCompileRoot();
+  var source = resolved.source;
   if (!source || !source.trim()) {
     showErrorToast('No LaTeX source to compile');
     return;
@@ -291,18 +336,30 @@ function doCompile() {
   hasCompiledOnce = true;
   isDirty = false;
 
-  setCompileStatus('Compiling...', 'compiling');
+  if (resolved.rootFile === 'main.tex') {
+    setCompileStatus('Compiling main.tex...', 'compiling');
+    if (editingFile && !resolved.compilesActiveStandalone && /\.tex$/i.test(editingFile)) {
+      appendLogLine(
+        editingFile + ' is not a full document — compiling main.tex (use \\input in main to include it)',
+        'info'
+      );
+    }
+  } else {
+    setCompileStatus('Compiling ' + resolved.rootFile + '...', 'compiling');
+  }
+
   showPDFLoading(true);
   clearErrorMarkers();
   if (typeof window.clearErrorWidgets === 'function') window.clearErrorWidgets();
   clearLogPanel();
+
+  appendLogLine('Root document: ' + resolved.rootFile, 'info');
 
   var compileBtn = document.getElementById('btn-compile');
   if (compileBtn) compileBtn.classList.add('compiling');
   updateCompileButton();
 
   // Re-upload all sub-files from local content to get fresh fileIds.
-  // Clear stale entries first — rebuild entirely from fresh uploads.
   var filesToUpload = [];
   for (var fname in fileContents) {
     if (fileContents.hasOwnProperty(fname)) {
@@ -311,7 +368,6 @@ function doCompile() {
   }
 
   if (filesToUpload.length > 0) {
-    // Wipe only .tex sub-file entries — preserve image/binary uploads
     for (var wi = uploadedFiles.length - 1; wi >= 0; wi--) {
       if (fileContents[uploadedFiles[wi].filename]) {
         uploadedFiles.splice(wi, 1);
@@ -323,15 +379,16 @@ function doCompile() {
     filesToUpload.forEach(function(f) {
       reuploadFile(f, fileContents[f], function() {
         pending--;
-        if (pending <= 0) sendCompile(source);
+        if (pending <= 0) sendCompile(source, resolved.rootFile);
       });
     });
   } else {
-    sendCompile(source);
+    sendCompile(source, resolved.rootFile);
   }
 }
 
-function sendCompile(source) {
+function sendCompile(source, rootFile) {
+  rootFile = rootFile || 'main.tex';
   appendLogLine('Sending source to compiler...', 'info');
   if (uploadedFiles.length > 0) {
     appendLogLine('Attaching ' + uploadedFiles.length + ' uploaded file(s)', 'info');
@@ -588,10 +645,16 @@ function uploadFile(input) {
     return res.json();
   })
   .then(function(data) {
+    if (data.jobId && !data.fileId) {
+      throw new Error('Upload returned a compile jobId — check api= in 8gwifi.prop (expected fileId)');
+    }
     var fname = data.filename || file.name;
     var fid = data.fileId;
+    if (!fid) {
+      throw new Error('Upload succeeded but no fileId was returned');
+    }
 
-    appendLogLine('Uploaded: ' + fname + (fid ? ' (id: ' + fid.substring(0, 8) + '...)' : ''), 'success');
+    appendLogLine('Uploaded: ' + fname + ' (id: ' + fid.substring(0, 8) + '...)', 'success');
     showSuccessToast('File uploaded: ' + fname);
 
     // Track for compile
@@ -599,8 +662,17 @@ function uploadFile(input) {
       uploadedFiles.push({ fileId: fid, filename: fname });
     }
 
-    // Add to file tree with insert action for images
-    addFileToTree(fname, isImage);
+    // Add to file tree; keep local text for .bib / .cls / .sty so users can edit in-editor
+    if (!isImage && EDITABLE_TEXT_EXTENSIONS.test(fname)) {
+      file.text().then(function (text) {
+        fileContents[fname] = text;
+        addFileToTree(fname, false, text);
+      }).catch(function () {
+        addFileToTree(fname, isImage);
+      });
+    } else {
+      addFileToTree(fname, isImage);
+    }
 
     // Auto-insert \includegraphics for image files
     if (isImage) {
@@ -1004,6 +1076,10 @@ function openFileInEditor(filename) {
   updateEditingIndicator();
 }
 
+function refreshEditingIndicator() {
+  if (typeof updateEditingIndicator === 'function') updateEditingIndicator();
+}
+
 function switchBackToMain() {
   var cm = window.editorInstance;
   if (!cm || !editingFile) return;
@@ -1177,8 +1253,22 @@ function updateEditingIndicator() {
     var editorPane = document.querySelector('.editor-pane');
     if (editorPane) editorPane.insertBefore(existing, editorPane.firstChild);
   }
+
+  var activeContent = fileContents[editingFile];
+  var cm = window.editorInstance;
+  if (cm && editingFile) activeContent = cm.getValue();
+
+  var compileHint = '';
+  if (/\.tex$/i.test(editingFile)) {
+    if (isStandaloneLaTeXDocument(activeContent)) {
+      compileHint = '<span class="ei-hint">Compile builds this file</span>';
+    } else {
+      compileHint = '<span class="ei-hint">Compile builds main.tex</span>';
+    }
+  }
+
   existing.innerHTML =
-    '<span>Editing: <strong>' + editingFile + '</strong></span>' +
+    '<span class="ei-left">Editing: <strong>' + editingFile + '</strong> ' + compileHint + '</span>' +
     '<button class="ei-back" onclick="switchBackToMain()">&#8592; main.tex</button>';
 }
 
@@ -1405,7 +1495,7 @@ window.fileContents = fileContents;
 window.uploadedFiles = uploadedFiles;
 // Exposed for the recovery test harness — also useful from devtools when
 // debugging "upload expired" cases manually.
-window._tryRecoverMissingUpload = tryRecoverMissingUpload;
-window._reuploadBinaryFromDataUrl = reuploadBinaryFromDataUrl;
+window.isStandaloneLaTeXDocument = isStandaloneLaTeXDocument;
+window.resolveCompileRoot = resolveCompileRoot;
 
 })();

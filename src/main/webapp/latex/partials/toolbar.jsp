@@ -26,6 +26,8 @@
       <option value="linearalgebra">Linear Algebra</option>
       <option value="runcode">Run Code</option>
       <option value="andrews">Andrews Curves (Iris)</option>
+      <option value="journalbib">Modern Article (BibTeX)</option>
+      <option value="multiproject">Research Bundle (3 PDFs)</option>
     </select>
   </div>
 

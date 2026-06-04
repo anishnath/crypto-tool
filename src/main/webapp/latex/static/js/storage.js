@@ -137,13 +137,13 @@ function rebuildFileTree(project) {
     }
   }
 
-  // Re-add uploaded images not in fileContents
+  // Re-add uploaded binaries not stored in fileContents
   if (project.uploadedFiles) {
     var IMAGE_EXT = /\.(png|jpg|jpeg|gif|svg|eps|pdf)$/i;
     for (var j = 0; j < project.uploadedFiles.length; j++) {
       var uf = project.uploadedFiles[j];
-      if (IMAGE_EXT.test(uf.filename) && !(project.fileContents && project.fileContents[uf.filename])) {
-        if (typeof window.addFileToTree === 'function') {
+      if (!(project.fileContents && project.fileContents[uf.filename])) {
+        if (IMAGE_EXT.test(uf.filename) && typeof window.addFileToTree === 'function') {
           window.addFileToTree(uf.filename, true);
         }
       }

@@ -416,7 +416,15 @@
   font-size: 11px; color: var(--accent2, #818cf8);
   flex-shrink: 0;
 }
+.editing-indicator .ei-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
 .editing-indicator strong { color: var(--text); }
+.ei-hint {
+  font-size: 10px; font-weight: 500; opacity: 0.85;
+  padding: 1px 7px; border-radius: 999px;
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--accent2, #818cf8);
+  white-space: nowrap;
+}
 .ei-back {
   background: var(--accent2, #818cf8); color: #fff;
   border: none; font-size: 11px; font-weight: 500;

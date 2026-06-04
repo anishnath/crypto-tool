@@ -1,0 +1,76 @@
+% Standalone Beamer deck — open in the file tree and click Compile.
+\documentclass[11pt,aspectratio=169]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\title[Multi-file \LaTeX]{Reproducible Research in Practice}
+\subtitle{Paper, supplement \& slides from one project}
+\author{First Author \and Second Author}
+\institute{University of Example}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Why multiple PDFs in one project?}
+  \begin{itemize}
+    \item \textbf{Main paper} — journal or conference article (\texttt{main.tex})
+    \item \textbf{Supplementary PDF} — extended tables, proofs (\texttt{supplement.tex})
+    \item \textbf{Slides} — talk deck for the same work (\texttt{slides.tex})
+    \item \textbf{Shared assets} — one \texttt{references.bib}, figures, data files
+  \end{itemize}
+  \vfill
+  \small One \textbf{Compile} button: open the file you want, then compile.
+\end{frame}
+
+\begin{frame}{Workflow}
+  \begin{enumerate}
+    \item Edit \texttt{main.tex}, \texttt{supplement.tex}, or \texttt{slides.tex}
+    \item Banner shows \emph{Compile builds this file} for standalone \texttt{.tex}
+    \item Server runs pdfLaTeX + BibTeX when needed
+    \item Preview updates for \textbf{that} document only
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Results at a glance}
+  \begin{table}
+    \centering
+    \begin{tabular}{lcc}
+      \toprule
+      Method & Accuracy & Time (s) \\
+      \midrule
+      Baseline & 0.82 & 118 \\
+      Proposed & \textbf{0.91} & \textbf{43} \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  \vfill
+  \footnotesize Details in the supplement; see~\cite{example2024methods}.
+\end{frame}
+
+\begin{frame}{References}
+  \footnotesize
+  \bibliographystyle{IEEEtran}
+  \bibliography{references}
+\end{frame}
+
+\begin{frame}
+  \centering
+  \Large Questions?
+  \vfill
+  \small \url{https://example.org}
+\end{frame}
+
+\end{document}

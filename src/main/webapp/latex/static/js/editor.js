@@ -912,6 +912,280 @@ var TEMPLATES = {
     ''
   ].join('\n'),
 
+  // Multi-file article + references.bib (auto-loaded). BibTeX runs on compile.
+  journalbib: [
+    '% =============================================================================',
+    '%  Modern article with external bibliography (references.bib in file tree).',
+    '%  Default: Compile builds main.tex. Add other .tex files via \\input{} or create',
+    '%  a standalone file (\\documentclass + \\begin{document}) — open it and Compile',
+    '%  builds that file instead (same button, no extra action).',
+    '% =============================================================================',
+    '',
+    '\\documentclass[11pt,a4paper]{article}',
+    '',
+    '\\usepackage[utf8]{inputenc}',
+    '\\usepackage[T1]{fontenc}',
+    '\\usepackage[margin=1in, headheight=14pt]{geometry}',
+    '\\usepackage{microtype}',
+    '\\usepackage{amsmath,amssymb}',
+    '\\usepackage{graphicx}',
+    '\\usepackage{booktabs}',
+    '\\usepackage{siunitx}',
+    '\\usepackage{enumitem}',
+    '\\usepackage{authblk}',
+    '\\usepackage{xcolor}',
+    '\\usepackage{tikz}',
+    '\\usepackage[colorlinks=true, linkcolor=blue!55!black, citecolor=teal!70!black,',
+    '            urlcolor=blue!60!black]{hyperref}',
+    '\\usepackage[capitalize,noabbrev]{cleveref}',
+    '',
+    '\\hypersetup{pdftitle={Modern Article Template}, pdfauthor={First Author}}',
+    '',
+    '\\title{\\textbf{Designing Reproducible Research Articles\\\\[4pt]}',
+    '       \\large \\textit{A Modern \\LaTeX{} + BibTeX Starter Template}}',
+    '',
+    '\\author[1]{First Author\\thanks{Corresponding author. \\texttt{first.author@university.edu}}}',
+    '\\author[2]{Second Author}',
+    '\\author[1]{Third Author}',
+    '\\affil[1]{Department of Computer Science, University of Example}',
+    '\\affil[2]{Institute for Applied Research}',
+    '',
+    '\\date{\\today}',
+    '',
+    '\\begin{document}',
+    '\\maketitle',
+    '',
+    '% ── Abstract ────────────────────────────────────────────────────────────',
+    '\\begin{abstract}',
+    '\\noindent',
+    'This template demonstrates a polished, submission-ready article layout with',
+    'numbered citations managed in \\texttt{references.bib}. The abstract should',
+    'state the \\textbf{problem}, \\textbf{method}, \\textbf{principal findings}, and',
+    '\\textbf{implications} in roughly 150--250 words. All citation keys live in the',
+    'companion bibliography file---edit that file from the project tree and recompile.',
+    '\\end{abstract}',
+    '',
+    '\\vspace{0.4em}',
+    '\\noindent\\textbf{Keywords:} \\LaTeX, BibTeX, reproducible research, scientific writing',
+    '',
+    '% ── 1. Introduction ───────────────────────────────────────────────────────',
+    '\\section{Introduction}',
+    '\\label{sec:intro}',
+    '',
+    'Scholarly writing increasingly depends on reproducible toolchains that separate',
+    'manuscript source, bibliographic data, and build automation~\\cite{example2024methods,example2023textbook}.',
+    'This document shows how to structure a modern article in the editor while keeping',
+    'references maintainable in a dedicated \\texttt{.bib} file.',
+    '',
+    '\\paragraph{Contributions.}',
+    'The template illustrates:',
+    '\\begin{enumerate}[noitemsep, label=\\textbf{\\arabic*.}, leftmargin=*]',
+    '  \\item A clean title block with affiliations and a corresponding-author footnote.',
+    '  \\item Cross-references via \\texttt{\\textbackslash label} / \\texttt{\\textbackslash ref} and \\cref{sec:methods,tab:results,fig:workflow}.',
+    '  \\item IEEE-style numbered citations from \\texttt{references.bib}~\\cite{example2022conference,example2021survey}.',
+    '  \\item Tables and figures that compile without extra uploads (optional images via the file tree).',
+    '\\end{enumerate}',
+    '',
+    '\\paragraph{Organisation.}',
+    '\\Cref{sec:related} summarises prior work. \\Cref{sec:methods} outlines the approach.',
+    '\\Cref{sec:results} reports evaluation results and \\cref{sec:conclusion} concludes.',
+    '',
+    '% ── 2. Related work ───────────────────────────────────────────────────────',
+    '\\section{Related Work}',
+    '\\label{sec:related}',
+    '',
+    'Reference managers and \\LaTeX{}-centric workflows are surveyed in~\\cite{example2021survey}.',
+    'Our setup follows the multi-file pattern advocated for collaborative projects~\\cite{example2024methods}',
+    'and aligns with reproducible publishing practices~\\cite{example2022conference}.',
+    'Open tooling complements formal write-ups~\\cite{example2025toolkit}.',
+    '',
+    '% ── 3. Methods ────────────────────────────────────────────────────────────',
+    '\\section{Methods}',
+    '\\label{sec:methods}',
+    '',
+    'Let $x \\in \\mathbb{R}^n$ denote observations and $y \\in \\mathbb{R}$ a scalar response.',
+    'We minimise the regularised objective',
+    '\\begin{equation}',
+    '  \\mathcal{L}(\\theta) = \\frac{1}{N}\\sum_{i=1}^{N}\\bigl(y_i - f_\\theta(x_i)\\bigr)^2',
+    '  + \\lambda \\lVert \\theta \\rVert_2^2,',
+    '  \\label{eq:loss}',
+    '\\end{equation}',
+    'where $\\lambda > 0$ controls model complexity. \\Cref{eq:loss} is optimised with',
+    'stochastic gradient descent; implementation notes appear in the supplementary material.',
+    '',
+    '\\begin{figure}[htbp]',
+    '  \\centering',
+    '  \\begin{tikzpicture}',
+    '    \\draw[fill=teal!8, draw=teal!50, thick, rounded corners=2pt] (0,0) rectangle (10,3.2);',
+    '    \\node[align=center, text width=8.5cm] at (5,1.6) {',
+    '      \\textbf{Workflow diagram placeholder}\\\\[6pt]',
+    '      \\small main.tex $\\rightarrow$ compile $\\rightarrow$ PDF\\\\',
+    '      \\small references.bib $\\rightarrow$ BibTeX $\\rightarrow$ bibliography',
+    '    };',
+    '  \\end{tikzpicture}',
+    '  \\caption{High-level build pipeline for a multi-file \\LaTeX{} project with BibTeX.}',
+    '  \\label{fig:workflow}',
+    '\\end{figure}',
+    '',
+    'Figure~\\ref{fig:workflow} situates the manuscript and bibliography in the compile flow.',
+    '',
+    '% ── 4. Results ────────────────────────────────────────────────────────────',
+    '\\section{Results and Discussion}',
+    '\\label{sec:results}',
+    '',
+    'We compare a baseline pipeline against the proposed configuration on a standard benchmark.',
+    'Table~\\ref{tab:results} reports accuracy and wall-clock time; the proposed method improves',
+    'both metrics while keeping variance low across five random seeds.',
+    '',
+    '\\begin{table}[htbp]',
+    '  \\centering',
+    '  \\caption{Benchmark comparison (mean $\\pm$ std over five runs).}',
+    '  \\label{tab:results}',
+    '  \\begin{tabular}{@{}lcc@{}}',
+    '    \\toprule',
+    '    \\textbf{Method} & \\textbf{Accuracy} & \\textbf{Time (s)} \\\\',
+    '    \\midrule',
+    '    Baseline  & $0.821 \\pm 0.014$ & \\num{118} \\\\',
+    '    Proposed  & $\\mathbf{0.914 \\pm 0.009}$ & \\textbf{\\num{43}} \\\\',
+    '    \\bottomrule',
+    '  \\end{tabular}',
+    '\\end{table}',
+    '',
+    'The gain is consistent with earlier reports on toolchain integration~\\cite{example2023textbook}.',
+    'Limitations include a single domain and modest sample size; we leave broader studies to future work.',
+    '',
+    '% ── 5. Conclusion ─────────────────────────────────────────────────────────',
+    '\\section{Conclusion}',
+    '\\label{sec:conclusion}',
+    '',
+    'We presented a modern article skeleton with external BibTeX references, cross-links, and',
+    'publishable typography. Replace the placeholder text, extend \\texttt{references.bib} with your',
+    'sources, and compile to obtain a fully referenced PDF.',
+    '',
+    '\\section*{Acknowledgements}',
+    'We thank collaborators and reviewers for feedback. Funding acknowledgements belong here when required.',
+    '',
+    '% Must match references.bib filename (omit .bib extension).',
+    '\\bibliographystyle{IEEEtran}',
+    '\\bibliography{references}',
+    '',
+    '\\end{document}',
+    ''
+  ].join('\n'),
+
+  // Real-world bundle: main paper + standalone supplement + Beamer slides + shared .bib
+  multiproject: [
+    '% =============================================================================',
+    '%  RESEARCH BUNDLE — three independent PDFs, one project (common in academia):',
+    '%    main.tex       → journal / conference article (this file)',
+    '%    supplement.tex → supplementary information PDF',
+    '%    slides.tex     → Beamer talk deck',
+    '%    references.bib → shared bibliography',
+    '%  Open any .tex in the file tree; Compile builds that file if it is standalone.',
+    '% =============================================================================',
+    '',
+    '\\documentclass[11pt,a4paper]{article}',
+    '',
+    '\\usepackage[utf8]{inputenc}',
+    '\\usepackage[T1]{fontenc}',
+    '\\usepackage[margin=1in, headheight=14pt]{geometry}',
+    '\\usepackage{microtype}',
+    '\\usepackage{amsmath,amssymb}',
+    '\\usepackage{graphicx}',
+    '\\usepackage{booktabs}',
+    '\\usepackage{siunitx}',
+    '\\usepackage{enumitem}',
+    '\\usepackage{authblk}',
+    '\\usepackage{xcolor}',
+    '\\usepackage{tikz}',
+    '\\usepackage[colorlinks=true, linkcolor=blue!55!black, citecolor=teal!70!black,',
+    '            urlcolor=blue!60!black]{hyperref}',
+    '\\usepackage[capitalize,noabbrev]{cleveref}',
+    '',
+    '\\title{\\textbf{Reproducible Multi-File \\LaTeX{} Workflows\\\\[4pt]}',
+    '       \\large \\textit{Main manuscript --- see also supplement.tex and slides.tex}}',
+    '',
+    '\\author[1]{First Author\\thanks{Corresponding author. \\texttt{first.author@university.edu}}}',
+    '\\author[2]{Second Author}',
+    '\\affil[1]{Department of Computer Science, University of Example}',
+    '\\affil[2]{Institute for Applied Research}',
+    '',
+    '\\date{\\today}',
+    '',
+    '\\begin{document}',
+    '\\maketitle',
+    '',
+    '\\begin{abstract}',
+    'Researchers routinely ship a \\textbf{main paper}, a \\textbf{supplementary PDF}, and',
+    '\\textbf{conference slides} from the same project. This template models that layout:',
+    'each \\texttt{.tex} file is a full document you can compile separately, while',
+    '\\texttt{references.bib} is shared. Extended results and proofs appear in the supplement;',
+    'the slide deck summarises the talk version of this work.',
+    '\\end{abstract}',
+    '',
+    '\\noindent\\textbf{Keywords:} reproducible research, multi-file \\LaTeX, BibTeX, scientific publishing',
+    '',
+    '\\section{Introduction}',
+    '\\label{sec:intro}',
+    'Publishing workflows often require distinct deliverables from one codebase~\\cite{example2024methods,example2023textbook}.',
+    'Journals request a concise article; reviewers may ask for supplementary material;',
+    'conferences expect a slide deck derived from the same results~\\cite{example2022conference}.',
+    '',
+    '\\paragraph{Files in this project.}',
+    '\\begin{itemize}[noitemsep, leftmargin=*]',
+    '  \\item \\textbf{main.tex} (here) --- primary manuscript with core claims and main table.',
+    '  \\item \\textbf{supplement.tex} --- extended experiments and extra citations.',
+    '  \\item \\textbf{slides.tex} --- 16:9 Beamer deck; open it and Compile for talk PDF.',
+    '  \\item \\textbf{references.bib} --- one bibliography for all three documents.',
+    '\\end{itemize}',
+    '',
+    '\\section{Methods}',
+    '\\label{sec:methods}',
+    'We minimise $\\mathcal{L}(\\theta)$ as in standard regularised regression~\\cite{example2021survey}.',
+    'Implementation details and seed-level metrics are deferred to the supplement.',
+    '',
+    '\\section{Results}',
+    '\\label{sec:results}',
+    'Table~\\ref{tab:main-results} shows headline numbers; full tables live in \\texttt{supplement.tex}.',
+    '',
+    '\\begin{table}[htbp]',
+    '  \\centering',
+    '  \\caption{Main results (summary). See supplement for per-seed breakdown.}',
+    '  \\label{tab:main-results}',
+    '  \\begin{tabular}{@{}lcc@{}}',
+    '    \\toprule',
+    '    \\textbf{Method} & \\textbf{Accuracy} & \\textbf{Time (s)} \\\\',
+    '    \\midrule',
+    '    Baseline  & \\num{0.821} & \\num{118} \\\\',
+    '    Proposed  & \\textbf{\\num{0.914}} & \\textbf{\\num{43}} \\\\',
+    '    \\bottomrule',
+    '  \\end{tabular}',
+    '\\end{table}',
+    '',
+    '\\begin{figure}[htbp]',
+    '  \\centering',
+    '  \\begin{tikzpicture}',
+    '    \\draw[fill=teal!8, draw=teal!45, thick, rounded corners=2pt] (0,0) rectangle (10,2.8);',
+    '    \\node[align=center] at (5,1.4) {',
+    '      \\textbf{Three PDFs, one project}\\\\[4pt]',
+    '      \\small main \\textbar\\ supplement \\textbar\\ slides',
+    '    };',
+    '  \\end{tikzpicture}',
+    '  \\caption{Typical deliverable bundle for a single study.}',
+    '  \\label{fig:bundle}',
+    '\\end{figure}',
+    '',
+    '\\section{Conclusion}',
+    'Replace this text with your contribution. Open \\texttt{slides.tex} or \\texttt{supplement.tex}',
+    'from the file tree and compile each to preview its own PDF.',
+    '',
+    '\\bibliographystyle{IEEEtran}',
+    '\\bibliography{references}',
+    '',
+    '\\end{document}',
+    ''
+  ].join('\n'),
+
   calculus: [
     '% Calculus and Sigma Solve --- a hands-on guide.',
     '% This template is both a calculus reference and a tutorial for the',
@@ -1578,7 +1852,9 @@ var TEMPLATES = {
 // tree (so they compile without the user manually uploading them). Map of
 // template name -> list of filenames under /latex/static/data/.
 var TEMPLATE_COMPANION_FILES = {
-  andrews: ['iris.csv']
+  andrews: ['iris.csv'],
+  journalbib: ['references.bib'],
+  multiproject: ['supplement.tex', 'slides.tex', 'references.bib']
 };
 
 // ══════════════════════════════════════════════════════════════
@@ -2394,17 +2670,43 @@ function jumpToEditorLine(lineNum) {
   }, 1500);
 }
 
+function clearProjectFilesForTemplate() {
+  var fileList = document.getElementById('file-list');
+  if (fileList) {
+    var items = fileList.querySelectorAll('.file-item');
+    for (var i = 0; i < items.length; i++) {
+      var f = items[i].getAttribute('data-file');
+      if (f && f !== 'main.tex') items[i].remove();
+    }
+  }
+  if (typeof window.fileContents === 'object' && window.fileContents) {
+    for (var k in window.fileContents) {
+      if (window.fileContents.hasOwnProperty(k)) delete window.fileContents[k];
+    }
+  }
+  if (typeof window.uploadedFiles !== 'undefined' && window.uploadedFiles) {
+    window.uploadedFiles.length = 0;
+  }
+  window.imageBlobs = {};
+  if (typeof window.editingFile !== 'undefined') window.editingFile = null;
+  if (typeof window.updateEditorTab === 'function') window.updateEditorTab('main.tex');
+}
+
 function loadTemplate(name) {
   var tmpl = TEMPLATES[name];
   if (!tmpl) return;
   setEditorContent(tmpl);
 
-  // If this template has companion data files (e.g. iris.csv for Andrews
-  // curves), fetch them from /latex/static/data/ and add to the file tree
-  // + fileContents so compile-time reupload picks them up automatically.
+  // Companion files (e.g. references.bib, iris.csv) — fetched from /latex/static/data/.
   var files = TEMPLATE_COMPANION_FILES[name];
   if (!files || !files.length) return;
   if (!window.CONFIG || window.CONFIG.ctx == null) return;
+
+  clearProjectFilesForTemplate();
+
+  var isBundle = name === 'multiproject';
+  var pending = files.length;
+  var loaded = 0;
 
   files.forEach(function (filename) {
     var url = window.CONFIG.ctx + '/latex/static/data/' + encodeURIComponent(filename);
@@ -2414,13 +2716,18 @@ function loadTemplate(name) {
         return res.text();
       })
       .then(function (content) {
+        loaded++;
         if (typeof window.fileContents === 'object' && window.fileContents !== null) {
           window.fileContents[filename] = content;
         }
         if (typeof window.addFileToTree === 'function') {
           window.addFileToTree(filename, false, content);
         }
-        if (typeof window.showSuccessToast === 'function') {
+        if (isBundle && loaded === pending && typeof window.showSuccessToast === 'function') {
+          window.showSuccessToast(
+            'Research bundle ready: main.tex, supplement.tex, slides.tex, references.bib. Open any .tex and Compile.'
+          );
+        } else if (!isBundle && typeof window.showSuccessToast === 'function') {
           window.showSuccessToast('Loaded ' + filename + ' (' + content.length + ' bytes)');
         }
       })
