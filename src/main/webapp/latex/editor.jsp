@@ -503,7 +503,7 @@
 <%--    </div>--%>
 <%--</footer>--%>
 
-<%@ include file="/modern/ads/ad-sticky-footer.jsp" %>
+<%--<%@ include file="/modern/ads/ad-sticky-footer.jsp" %>--%>
 <%@ include file="/modern/components/analytics.jsp" %>
 
 <!-- System JS -->
@@ -586,18 +586,18 @@
 
 <!-- App JS -->
 <%  long jsV = System.currentTimeMillis(); %>
-<script src="<%=ctx%>/latex/static/js/storage.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/latex/static/js/symbols.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/latex/static/js/editor.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/latex/static/js/preview.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/latex/static/js/compile.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/modern/js/speech-to-text.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/latex/static/js/ai.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/latex/static/js/image-to-latex.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/latex/static/js/storage.js"></script>
+<script src="<%=ctx%>/latex/static/js/symbols.js"></script>
+<script src="<%=ctx%>/latex/static/js/editor.js"></script>
+<script src="<%=ctx%>/latex/static/js/preview.js"></script>
+<script src="<%=ctx%>/latex/static/js/compile.js"></script>
+<script src="<%=ctx%>/modern/js/speech-to-text.js"></script>
+<script src="<%=ctx%>/latex/static/js/ai.js"></script>
+<script src="<%=ctx%>/latex/static/js/image-to-latex.js"></script>
 <!-- Generated content (Solve / Steps / Graph / chemistry figures) routes
      through SolutionsFile so the main editor stays clean -->
-<script src="<%=ctx%>/latex/static/js/solutions-file.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/latex/static/js/chem-insert.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/latex/static/js/solutions-file.js"></script>
+<script src="<%=ctx%>/latex/static/js/chem-insert.js"></script>
 
 <!-- Math inline solver (Σ Solve in selection popup) — limits in v1.
      nerdamer load order matches /math/partials/math-libs.jsp: core →
@@ -606,12 +606,12 @@
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
-<script src="<%=ctx%>/modern/js/integral-calculator-core.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/modern/js/limit-calculator-core.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/modern/js/derivative-calculator-core.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/modern/js/matrix-calculator-core.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/modern/js/code-runner-core.js?v=<%=jsV%>"></script>
-<script src="<%=ctx%>/latex/static/js/math-insert.js?v=<%=jsV%>"></script>
+<script src="<%=ctx%>/modern/js/integral-calculator-core.js"></script>
+<script src="<%=ctx%>/modern/js/limit-calculator-core.js"></script>
+<script src="<%=ctx%>/modern/js/derivative-calculator-core.js"></script>
+<script src="<%=ctx%>/modern/js/matrix-calculator-core.js"></script>
+<script src="<%=ctx%>/modern/js/code-runner-core.js"></script>
+<script src="<%=ctx%>/latex/static/js/math-insert.js"></script>
 
 </body>
 </html>
