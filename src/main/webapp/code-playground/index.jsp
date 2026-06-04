@@ -369,9 +369,9 @@
     </div>
 
     <!-- In-content leaderboard ad: directly after the H1 hero -->
-    <div class="pp-ad">
-        <%@ include file="/modern/ads/ad-in-content-top.jsp" %>
-    </div>
+<%--    <div class="pp-ad">--%>
+<%--        <%@ include file="/modern/ads/ad-in-content-top.jsp" %>--%>
+<%--    </div>--%>
 
     <!-- Shared stdin: feeds the same input to every pane -->
     <div class="pp-stdin" id="sharedStdinBar">
@@ -391,7 +391,22 @@
         var SNIP_API = CTX + '/OneCompilerFunctionality';
         var MAX_PANES = 4;
         var MIN_PANE_PX = 220;
-        var LANG_CYCLE = ['python','javascript','go','java','cpp','rust','ruby','php','typescript','c'];
+        // Fallback order if the languages API is unreachable. The live list is
+        // fetched from the servlet on load (see loadSupportedLangs) so new
+        // languages appear in the "Add pane" cycle automatically.
+        var LANG_CYCLE = ['python','javascript','go','java','cpp','rust','ruby','php','typescript','c','haskell'];
+        var supportedLangs = LANG_CYCLE.slice();
+
+        function loadSupportedLangs() {
+            fetch(SNIP_API + '?action=languages')
+                .then(function(r){ return r.json(); })
+                .then(function(data){
+                    var arr = Array.isArray(data) ? data : (data && data.languages) || [];
+                    var names = arr.map(function(l){ return String(l.name || '').toLowerCase(); }).filter(Boolean);
+                    if (names.length) supportedLangs = names;
+                })
+                .catch(function(){ /* keep fallback */ });
+        }
 
         // UTF-8 safe base64 (matches the embed's encode/decode scheme)
         function b64enc(s) { try { return btoa(unescape(encodeURIComponent(s))); } catch (e) { return ''; } }
@@ -519,6 +534,7 @@
 
         // ---- Init from URL ----
         (function init() {
+            loadSupportedLangs(); // refresh the "Add pane" cycle from the live API
             var p = new URLSearchParams(location.search);
             if (p.get('theme') === 'light') setTheme('light');
             if (p.get('layout') === 'rows') setLayout('rows');
@@ -568,10 +584,11 @@
         function nextUnusedLang() {
             var used = [];
             panesEl.querySelectorAll('.pane').forEach(function(p){ used.push(p.dataset.lang); });
-            for (var i = 0; i < LANG_CYCLE.length; i++) {
-                if (used.indexOf(LANG_CYCLE[i]) === -1) return LANG_CYCLE[i];
+            var list = (supportedLangs && supportedLangs.length) ? supportedLangs : LANG_CYCLE;
+            for (var i = 0; i < list.length; i++) {
+                if (used.indexOf(list[i]) === -1) return list[i];
             }
-            return 'python';
+            return list[0] || 'python';
         }
 
         function addPane(lang, skipResetGrow, opts) {
