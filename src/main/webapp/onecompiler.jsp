@@ -1742,6 +1742,9 @@
                             <button class="ide-toolbar-btn" onclick="downloadCode()" title="Download">
                                 <i class="fas fa-download"></i><span>Download</span>
                             </button>
+                            <a class="ide-toolbar-btn" href="<%=request.getContextPath()%>/code-playground/<% if (request.getAttribute("preferredLanguage") != null) { %>?panes=<%= request.getAttribute("preferredLanguage") %>,javascript<% } %>" title="Compare languages and versions side by side in the Code Playground">
+                                <i class="fas fa-code-compare"></i><span>Compare</span>
+                            </a>
                         </div>
 
                         <!-- Main Content -->
@@ -2016,6 +2019,29 @@
                                     title="Online Java Compiler">Java</a>, <a href="/online-cpp-compiler/"
                                     title="Online C++ Compiler">C++</a>, JavaScript, Go, Rust, and many more
                                 languages. No installation required.</p>
+                        </div>
+
+                        <!-- Compare / Code Playground (internal link) -->
+                        <%
+                            String cpLang = (String) request.getAttribute("preferredLanguage");
+                            String cpLabel = (cpLang != null && !cpLang.isEmpty())
+                                ? (cpLang.substring(0, 1).toUpperCase() + cpLang.substring(1)) : null;
+                            String cpHref = request.getContextPath() + "/code-playground/"
+                                + (cpLang != null && !cpLang.isEmpty() ? ("?panes=" + cpLang + ",javascript") : "");
+                        %>
+                        <div class="ide-info-card">
+                            <h2><i class="fas fa-code-compare"></i> Compare Languages Side by Side</h2>
+                            <% if (cpLabel != null) { %>
+                            <p>Want to see how <strong><%= cpLabel %></strong> stacks up against another language?
+                                Open the <a href="<%= cpHref %>" title="Compare programming languages side by side">Code Playground</a>
+                                to run <%= cpLabel %> next to Python, Go, Rust, or any language &mdash; each pane picks its own
+                                language and version, and you run them together.</p>
+                            <% } else { %>
+                            <p>Run several languages at once in the
+                                <a href="<%= cpHref %>" title="Compare programming languages side by side">Code Playground</a>:
+                                a split-screen where each pane picks its own language and version, so you can compare
+                                Python, Java, Go, C++, Rust and more side by side.</p>
+                            <% } %>
                         </div>
 
                         <!-- Supported Languages -->

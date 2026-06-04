@@ -64,6 +64,20 @@
             color: var(--primary);
         }
 
+        /* Language / version pickers (picker mode) */
+        .embed-select {
+            background: var(--bg-dark);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            font-size: 12px;
+            padding: 2px 6px;
+            max-width: 130px;
+            cursor: pointer;
+        }
+        .embed-select:hover { border-color: var(--primary); }
+        .embed-select:focus { outline: none; border-color: var(--primary); }
+
         .embed-title {
             font-size: 12px;
             color: var(--text);
@@ -114,6 +128,35 @@
             overflow: hidden;
         }
 
+        /* Standard input panel */
+        .embed-stdin {
+            display: none;
+            flex: 0 0 auto;
+            border-top: 1px solid var(--border);
+            background: var(--bg-darker);
+        }
+        .embed-stdin.show { display: block; }
+        .embed-stdin-label {
+            display: block;
+            font-size: 10px;
+            color: var(--text);
+            opacity: .6;
+            padding: 4px 10px 0;
+            letter-spacing: .5px;
+        }
+        .embed-stdin textarea {
+            width: 100%;
+            height: 56px;
+            resize: vertical;
+            background: var(--bg-dark);
+            color: var(--text);
+            border: none;
+            padding: 6px 10px 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            outline: none;
+        }
+
         #editor {
             width: 100%;
             height: 100%;
@@ -121,16 +164,40 @@
 
         /* Output */
         .embed-output {
-            height: 100px;
+            height: 140px;
+            min-height: 60px;
             background: var(--bg-dark);
             border-top: 1px solid var(--border);
             display: flex;
             flex-direction: column;
+            flex: 0 0 auto;
         }
 
         .embed-output.hidden {
             display: none;
         }
+
+        /* Drag handle to resize the output panel up / down */
+        .embed-output-resizer {
+            height: 8px;
+            flex: 0 0 auto;
+            cursor: ns-resize;
+            background: var(--bg-darker);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            touch-action: none;
+        }
+        .embed-output-resizer::before {
+            content: '';
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            width: 34px; height: 3px;
+            border-radius: 2px;
+            background: #5a5a5a;
+        }
+        .embed-output-resizer:hover::before { background: var(--primary); }
+        body.oc-resizing { cursor: ns-resize; user-select: none; }
 
         .embed-output-header {
             height: 24px;
@@ -214,10 +281,15 @@
                     <i class="fas fa-code"></i>
                     <span id="langName">Python</span>
                 </div>
+                <select id="langSelect" class="embed-select" style="display:none" onchange="onLangChange()" title="Language"></select>
+                <select id="versionSelect" class="embed-select" style="display:none" onchange="onVersionChange()" title="Version"></select>
                 <span class="embed-title" id="snippetTitle"></span>
             </div>
             <div class="embed-header-right">
                 <span class="readonly-badge" id="readonlyBadge" style="display:none;">Read-only</span>
+                <button class="embed-btn" id="stdinBtn" style="display:none" onclick="toggleStdin()" title="Standard input (stdin)">
+                    <i class="fas fa-keyboard"></i> Input
+                </button>
                 <button class="embed-btn run" id="runBtn" onclick="runCode()">
                     <i class="fas fa-play"></i> Run
                 </button>
@@ -232,8 +304,15 @@
             <div id="editor"></div>
         </div>
 
+        <!-- Standard input (stdin) -->
+        <div class="embed-stdin" id="stdinPanel">
+            <span class="embed-stdin-label">STDIN</span>
+            <textarea id="stdinInput" placeholder="Standard input fed to your program (one value per line)..."></textarea>
+        </div>
+
         <!-- Output -->
         <div class="embed-output hidden" id="outputPanel">
+            <div class="embed-output-resizer" id="outputResizer" title="Drag to resize output"></div>
             <div class="embed-output-header">
                 <div class="embed-output-title">
                     <i class="fas fa-terminal"></i> Output
@@ -264,6 +343,8 @@
         var snippetId = null;
         var isReadonly = false;
         var isRunning = false;
+        var languages = [];
+        var API = 'OneCompilerFunctionality';
 
         var monacoLangMap = {
             'python': 'python', 'java': 'java', 'c': 'c', 'cpp': 'cpp',
@@ -278,10 +359,14 @@
         snippetId = params.get('s');
         var codeParam = params.get('c');
         var langParam = params.get('lang');
+        var versionParam = params.get('version');
         var themeParam = params.get('theme');
         isReadonly = params.get('readonly') === 'true';
         var hideOutput = params.get('hideOutput') === 'true';
         var autorun = params.get('autorun') === 'true';
+        // Picker mode: show language + version dropdowns so each instance is a
+        // self-sufficient mini-IDE. Used by the /compare split-screen shell.
+        var pickerMode = params.get('picker') === 'true';
 
         // Apply theme
         if (themeParam === 'light') {
@@ -308,6 +393,8 @@
                 padding: { top: 8 }
             });
 
+            if (versionParam) currentVersion = versionParam;
+
             // Load content
             if (snippetId) {
                 loadSnippet(snippetId);
@@ -317,6 +404,16 @@
                 currentLang = langParam;
                 updateLang(langParam);
                 editor.setValue('// Write your code here');
+            }
+
+            // Picker mode: reveal the language + version dropdowns and fetch the
+            // language list so the user can switch freely inside this pane.
+            if (pickerMode) {
+                document.getElementById('langName').style.display = 'none';
+                document.getElementById('langSelect').style.display = '';
+                document.getElementById('versionSelect').style.display = '';
+                document.getElementById('stdinBtn').style.display = '';
+                loadLanguages(!snippetId && !codeParam);
             }
 
             // Keyboard shortcut
@@ -390,6 +487,94 @@
             var monacoLang = monacoLangMap[lang] || 'plaintext';
             monaco.editor.setModelLanguage(editor.getModel(), monacoLang);
             document.getElementById('langName').textContent = lang.charAt(0).toUpperCase() + lang.slice(1);
+            var sel = document.getElementById('langSelect');
+            if (sel && sel.options.length) sel.value = lang;
+        }
+
+        // ---- Picker mode: language + version dropdowns -----------------------
+        function loadLanguages(loadStarter) {
+            fetch(API + '?action=languages')
+                .then(function(r) { return r.json(); })
+                .then(function(data) { languages = Array.isArray(data) ? data : []; onLanguagesReady(loadStarter); })
+                .catch(function() {
+                    languages = [
+                        { name: 'python', default_version: '' }, { name: 'javascript', default_version: '' },
+                        { name: 'java', default_version: '' }, { name: 'cpp', default_version: '' },
+                        { name: 'c', default_version: '' }, { name: 'go', default_version: '' },
+                        { name: 'rust', default_version: '' }, { name: 'ruby', default_version: '' },
+                        { name: 'php', default_version: '' }, { name: 'typescript', default_version: '' }
+                    ];
+                    onLanguagesReady(loadStarter);
+                });
+        }
+
+        function onLanguagesReady(loadStarter) {
+            var sel = document.getElementById('langSelect');
+            sel.innerHTML = '';
+            languages.forEach(function(lang) {
+                var opt = document.createElement('option');
+                opt.value = lang.name;
+                opt.textContent = lang.name.charAt(0).toUpperCase() + lang.name.slice(1);
+                if (lang.name === currentLang) opt.selected = true;
+                sel.appendChild(opt);
+            });
+            updateVersionSelect(currentLang);
+            if (versionParam) {
+                document.getElementById('versionSelect').value = versionParam;
+                currentVersion = versionParam;
+            }
+            if (loadStarter) loadTemplate();
+        }
+
+        function updateVersionSelect(langName) {
+            var sel = document.getElementById('versionSelect');
+            sel.innerHTML = '<option value="">Default</option>';
+            var lang = languages.find(function(l) { return l.name === langName; });
+            if (lang && lang.versions) {
+                lang.versions.forEach(function(v) {
+                    var ver = typeof v === 'object' ? v.version : v;
+                    var opt = document.createElement('option');
+                    opt.value = ver; opt.textContent = ver;
+                    sel.appendChild(opt);
+                });
+            }
+            if (lang && lang.default_version) {
+                sel.value = lang.default_version;
+                currentVersion = lang.default_version;
+            } else {
+                currentVersion = '';
+            }
+        }
+
+        function onLangChange() {
+            currentLang = document.getElementById('langSelect').value;
+            updateLang(currentLang);
+            updateVersionSelect(currentLang);
+            loadTemplate();
+            // Tell the parent shell so a shared "compare" link reflects this pane.
+            try { window.parent.postMessage({ type: 'compare-lang', lang: currentLang }, '*'); } catch (e) {}
+        }
+
+        function onVersionChange() {
+            currentVersion = document.getElementById('versionSelect').value;
+        }
+
+        function loadTemplate() {
+            fetch(API + '?action=template&lang=' + encodeURIComponent(currentLang))
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    var defaults = {
+                        'python': 'print("Hello, World!")',
+                        'java': 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
+                        'cpp': '#include <iostream>\nint main() {\n    std::cout << "Hello, World!" << std::endl;\n    return 0;\n}',
+                        'c': '#include <stdio.h>\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}',
+                        'javascript': 'console.log("Hello, World!");',
+                        'go': 'package main\nimport "fmt"\nfunc main() {\n    fmt.Println("Hello, World!")\n}',
+                        'rust': 'fn main() {\n    println!("Hello, World!");\n}'
+                    };
+                    editor.setValue(data.template || defaults[currentLang] || '// Write your code here');
+                })
+                .catch(function() { editor.setValue('// Write your code here'); });
         }
 
         function runCode() {
@@ -397,6 +582,8 @@
             isRunning = true;
 
             var code = editor.getValue();
+            var stdinEl = document.getElementById('stdinInput');
+            var stdin = stdinEl ? stdinEl.value : '';
             var runBtn = document.getElementById('runBtn');
             var outputPanel = document.getElementById('outputPanel');
             var outputContent = document.getElementById('outputContent');
@@ -415,7 +602,8 @@
                 body: JSON.stringify({
                     language: currentLang,
                     version: currentVersion || undefined,
-                    code: code
+                    code: code,
+                    input: stdin || undefined
                 })
             })
             .then(function(r) { return r.json(); })
@@ -451,6 +639,79 @@
         function hideOutput() {
             document.getElementById('outputPanel').classList.add('hidden');
         }
+
+        function toggleStdin() {
+            document.getElementById('stdinPanel').classList.toggle('show');
+        }
+
+        // Drag the output panel up / down to resize it (mouse + touch).
+        (function() {
+            var resizer = document.getElementById('outputResizer');
+            var panel = document.getElementById('outputPanel');
+            if (!resizer || !panel) return;
+            var startY, startH;
+            function onMove(e) {
+                var container = document.querySelector('.embed-container');
+                var max = container.clientHeight - 110;
+                var h = startH - (e.clientY - startY); // drag up => taller
+                if (h < 60) h = 60;
+                if (h > max) h = max;
+                panel.style.height = h + 'px';
+                if (editor) editor.layout();
+            }
+            function onUp(e) {
+                document.body.classList.remove('oc-resizing');
+                try { resizer.releasePointerCapture(e.pointerId); } catch (_) {}
+                resizer.removeEventListener('pointermove', onMove);
+                resizer.removeEventListener('pointerup', onUp);
+                resizer.removeEventListener('pointercancel', onUp);
+            }
+            resizer.addEventListener('pointerdown', function(e) {
+                e.preventDefault();
+                startY = e.clientY;
+                startH = panel.offsetHeight;
+                document.body.classList.add('oc-resizing');
+                try { resizer.setPointerCapture(e.pointerId); } catch (_) {}
+                resizer.addEventListener('pointermove', onMove);
+                resizer.addEventListener('pointerup', onUp);
+                resizer.addEventListener('pointercancel', onUp);
+            });
+        })();
+
+        // Allow the parent /compare shell to drive this pane (run-all, theme).
+        window.addEventListener('message', function(e) {
+            var msg = e.data || {};
+            if (msg.type === 'compare-run') {
+                runCode();
+            } else if (msg.type === 'compare-stdin') {
+                var el = document.getElementById('stdinInput');
+                if (el) {
+                    el.value = msg.value || '';
+                    document.getElementById('stdinPanel').classList.toggle('show', !!msg.value);
+                }
+            } else if (msg.type === 'compare-theme') {
+                if (msg.theme === 'light') {
+                    document.body.classList.add('light');
+                    if (editor) monaco.editor.setTheme('vs');
+                } else {
+                    document.body.classList.remove('light');
+                    if (editor) monaco.editor.setTheme('vs-dark');
+                }
+            } else if (msg.type === 'compare-get-code' && editor) {
+                try {
+                    window.parent.postMessage({
+                        type: 'compare-code',
+                        requestId: msg.requestId,
+                        code: editor.getValue(),
+                        lang: currentLang,
+                        version: currentVersion || ''
+                    }, '*');
+                } catch (err) { /* cross-origin */ }
+            } else if (msg.type === 'compare-set-code' && editor && msg.code != null) {
+                editor.setValue(String(msg.code));
+                if (editor.layout) editor.layout();
+            }
+        });
 
         function openInFull() {
             var url = 'https://8gwifi.org/onecompiler.jsp';
