@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="'SF Mono','Menlo','Consolas','DejaVu Sans Mono',monospace">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b1b27"/>
+      <stop offset="1" stop-color="#141417"/>
+    </linearGradient>
+    <linearGradient id="logo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#007acc"/>
+      <stop offset="1" stop-color="#6f42c1"/>
+    </linearGradient>
+    <linearGradient id="run" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1f9d55"/>
+      <stop offset="1" stop-color="#2bb673"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="none"/>
+
+  <!-- ===== Top bar ===== -->
+  <rect x="0" y="0" width="1200" height="96" fill="#23232b"/>
+  <rect x="0" y="95" width="1200" height="1" fill="#34343f"/>
+
+  <!-- Logo -->
+  <rect x="40" y="26" width="46" height="46" rx="11" fill="url(#logo)"/>
+  <text x="63" y="59" font-size="24" fill="#ffffff" text-anchor="middle" font-weight="700">&#8644;</text>
+
+  <!-- Title -->
+  <text x="102" y="48" font-size="30" fill="#ffffff" font-weight="700" font-family="-apple-system,'Segoe UI',Roboto,sans-serif">Code Playground</text>
+  <text x="103" y="74" font-size="16" fill="#9a9aa6" font-family="-apple-system,'Segoe UI',Roboto,sans-serif">Run programming languages &amp; versions side by side</text>
+
+  <!-- Run all button -->
+  <rect x="1004" y="30" width="156" height="40" rx="9" fill="url(#run)"/>
+  <path d="M1034 41 L1034 59 L1048 50 Z" fill="#ffffff"/>
+  <text x="1058" y="56" font-size="17" fill="#ffffff" font-weight="600" font-family="-apple-system,'Segoe UI',Roboto,sans-serif">Run all</text>
+
+  <!-- ===== Panes ===== -->
+  <!-- Pane geometry: x = 40, 419, 798 ; width 361 ; y 122..566 -->
+
+  <!-- Pane 1: Python -->
+  <g>
+    <rect x="40" y="122" width="361" height="444" rx="12" fill="#252530"/>
+    <rect x="40" y="122" width="361" height="38" rx="12" fill="#2e2e3a"/>
+    <rect x="40" y="148" width="361" height="12" fill="#2e2e3a"/>
+    <circle cx="66" cy="141" r="6" fill="#4b8bbe"/>
+    <text x="82" y="146" font-size="15" fill="#d6d6e0">main.py</text>
+    <rect x="300" y="129" width="86" height="24" rx="6" fill="#1c1c24"/>
+    <text x="343" y="146" font-size="13" fill="#9fd0ff" text-anchor="middle">Python 3.12</text>
+    <!-- code -->
+    <text font-size="16.5" xml:space="preserve">
+      <tspan x="66" y="200" fill="#c586c0">def <tspan fill="#dcdcaa">greet</tspan><tspan fill="#cccccc">(name):</tspan></tspan>
+      <tspan x="90" y="228" fill="#c586c0">return <tspan fill="#ce9178">f"Hello, {name}!"</tspan></tspan>
+      <tspan x="66" y="270" fill="#dcdcaa">print<tspan fill="#cccccc">(</tspan><tspan fill="#dcdcaa">greet</tspan><tspan fill="#cccccc">(</tspan><tspan fill="#ce9178">"World"</tspan><tspan fill="#cccccc">))</tspan></tspan>
+    </text>
+    <!-- output -->
+    <rect x="56" y="496" width="329" height="54" rx="8" fill="#16161c"/>
+    <text x="72" y="518" font-size="12" fill="#6f6f7a">OUTPUT</text>
+    <text x="72" y="539" font-size="15" fill="#4ec9b0">Hello, World!</text>
+  </g>
+
+  <!-- Pane 2: Go -->
+  <g>
+    <rect x="419" y="122" width="361" height="444" rx="12" fill="#252530"/>
+    <rect x="419" y="122" width="361" height="38" rx="12" fill="#2e2e3a"/>
+    <rect x="419" y="148" width="361" height="12" fill="#2e2e3a"/>
+    <circle cx="445" cy="141" r="6" fill="#00add8"/>
+    <text x="461" y="146" font-size="15" fill="#d6d6e0">main.go</text>
+    <rect x="697" y="129" width="68" height="24" rx="6" fill="#1c1c24"/>
+    <text x="731" y="146" font-size="13" fill="#9fe9ff" text-anchor="middle">Go 1.26</text>
+    <text font-size="16.5" xml:space="preserve">
+      <tspan x="445" y="200" fill="#c586c0">package <tspan fill="#cccccc">main</tspan></tspan>
+      <tspan x="445" y="228" fill="#c586c0">import <tspan fill="#ce9178">"fmt"</tspan></tspan>
+      <tspan x="445" y="270" fill="#569cd6">func <tspan fill="#dcdcaa">main</tspan><tspan fill="#cccccc">() {</tspan></tspan>
+      <tspan x="469" y="298" fill="#cccccc">fmt.<tspan fill="#dcdcaa">Println</tspan>(<tspan fill="#ce9178">"Hello, World!"</tspan>)</tspan>
+      <tspan x="445" y="326" fill="#cccccc">}</tspan>
+    </text>
+    <rect x="435" y="496" width="329" height="54" rx="8" fill="#16161c"/>
+    <text x="451" y="518" font-size="12" fill="#6f6f7a">OUTPUT</text>
+    <text x="451" y="539" font-size="15" fill="#4ec9b0">Hello, World!</text>
+  </g>
+
+  <!-- Pane 3: Rust -->
+  <g>
+    <rect x="798" y="122" width="361" height="444" rx="12" fill="#252530"/>
+    <rect x="798" y="122" width="361" height="38" rx="12" fill="#2e2e3a"/>
+    <rect x="798" y="148" width="361" height="12" fill="#2e2e3a"/>
+    <circle cx="824" cy="141" r="6" fill="#dea584"/>
+    <text x="840" y="146" font-size="15" fill="#d6d6e0">main.rs</text>
+    <rect x="1068" y="129" width="80" height="24" rx="6" fill="#1c1c24"/>
+    <text x="1108" y="146" font-size="13" fill="#ffcba6" text-anchor="middle">Rust 1.78</text>
+    <text font-size="16.5" xml:space="preserve">
+      <tspan x="824" y="200" fill="#569cd6">fn <tspan fill="#dcdcaa">main</tspan><tspan fill="#cccccc">() {</tspan></tspan>
+      <tspan x="848" y="228" fill="#dcdcaa">println!<tspan fill="#cccccc">(</tspan><tspan fill="#ce9178">"Hello, World!"</tspan><tspan fill="#cccccc">);</tspan></tspan>
+      <tspan x="824" y="256" fill="#cccccc">}</tspan>
+    </text>
+    <rect x="814" y="496" width="329" height="54" rx="8" fill="#16161c"/>
+    <text x="830" y="518" font-size="12" fill="#6f6f7a">OUTPUT</text>
+    <text x="830" y="539" font-size="15" fill="#4ec9b0">Hello, World!</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="600" y="600" font-size="16" fill="#7a7a86" text-anchor="middle" font-family="-apple-system,'Segoe UI',Roboto,sans-serif">8gwifi.org &#183; free online code playground &#183; no setup, runs in your browser</text>
+</svg>
