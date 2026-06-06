@@ -385,6 +385,9 @@
     <div class="drag-shield" id="dragShield"></div>
     <div class="pp-toast" id="toast"></div>
 
+    <!-- Shared copy/toast helpers (ToolUtils) -->
+    <script src="<%=ctx%>/modern/js/tool-utils.js"></script>
+
     <script>
         var CTX = '<%=ctx%>';
         var EMBED = CTX + '/onecompiler-embed.jsp';
@@ -856,11 +859,16 @@
         }
 
         function copyLink(url, msg) {
-            var done = function(){ toast(msg); };
+            // Use the shared ToolUtils copy helper (toast + support popup).
+            if (window.ToolUtils && ToolUtils.copyToClipboard) {
+                ToolUtils.copyToClipboard(url, { toastMessage: msg, showSupportPopup: true, toolName: 'Code Playground' });
+                return;
+            }
+            // Fallback if tool-utils.js hasn't loaded — use our own toast, never a prompt().
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(url).then(done, function(){ prompt('Copy this link:', url); });
+                navigator.clipboard.writeText(url).then(function(){ toast(msg); }, function(){ toast('Copy failed — link: ' + url); });
             } else {
-                prompt('Copy this link:', url);
+                toast('Copy failed — link: ' + url);
             }
         }
 
