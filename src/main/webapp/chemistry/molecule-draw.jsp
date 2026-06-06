@@ -10,7 +10,7 @@
     <jsp:param name="toolDescription" value="Draw molecular structures online with our free interactive editor. Supports SMILES input, MOL file export, SVG/PNG download, reaction drawing, and real-time molecular property calculation. No signup needed." />
     <jsp:param name="toolUrl" value="chemistry/molecule-draw.jsp" />
     <jsp:param name="toolKeywords" value="molecule drawer, molecular structure editor, draw molecules online, SMILES to structure, MOL file editor, chemical structure drawing, reaction editor, molecular weight calculator, SVG molecule export, free chemistry tool" />
-    <jsp:param name="toolImage" value="molecule-draw.svg" />
+    <jsp:param name="toolImage" value="molecule-draw.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="chemistry/" />
     <jsp:param name="toolFeatures" value="Interactive molecular structure drawing,SMILES notation input and conversion,MOL V2/V3 file import and export,SVG and PNG molecule image export,Real-time molecular formula and weight,Reaction drawing mode with RXN export,12 pre-built common molecule templates,24 configurable render options,Atom and bond number display,Symmetry and stereochemistry visualization,Dark and light theme support,Keyboard shortcuts for power users,No registration required,100% client-side processing" />
     <jsp:param name="educationalLevel" value="High School, Undergraduate, Graduate" />
@@ -1887,6 +1887,29 @@ async function initApp() {
 
     // Hide loading
     $('loadingOverlay').classList.add('hidden');
+
+    // Preload a structure passed in the URL — e.g. the "Open in editor" link
+    // from Formula → Structure (chemistry/formula-to-molecule.jsp) sends
+    // ?smiles=<encoded SMILES>. Reaction SMILES (containing ">>") loads in
+    // reaction mode; everything else loads as a molecule.
+    try {
+      const initialSmiles = new URLSearchParams(window.location.search).get('smiles');
+      if (initialSmiles) {
+        if (initialSmiles.indexOf('>>') !== -1) {
+          try {
+            const rxn = OCL.Reaction.fromSmiles(initialSmiles);
+            switchMode('reaction');
+            editor.setReaction(rxn);
+            updateReactionOutput(rxn);
+            const rin = $('rxnSmilesInput'); if (rin) rin.value = initialSmiles;
+            toast('Loaded reaction from link');
+          } catch (e) { toast('Invalid reaction SMILES in link'); }
+        } else {
+          const sin = $('smilesInput'); if (sin) sin.value = initialSmiles;
+          loadMoleculeFromSmiles(initialSmiles, 'structure from link');
+        }
+      }
+    } catch (e) { /* malformed URL — ignore */ }
 
   } catch (err) {
     console.error('Failed to load OpenChemLib:', err);

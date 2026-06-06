@@ -935,9 +935,30 @@
                 width: 100%;
             }
         }
+
+        /* ── Embed mode (?embed=1) — used when this tool is shown inside a modal
+              iframe on other pages. Hides page chrome so only the tool itself
+              renders. Presentation only; the Lewis engine is untouched. ── */
+        .lewis-embed .modern-nav,
+        .lewis-embed header.tool-page-header,
+        .lewis-embed .tool-description-section,
+        .lewis-embed .tool-ads-column,
+        .lewis-embed .tool-mobile-ad-container,
+        .lewis-embed .related-tools-section,
+        .lewis-embed footer.page-footer,
+        .lewis-embed .sticky-footer-ad,
+        .lewis-embed .ad-sticky-footer { display: none !important; }
+        .lewis-embed main.tool-page-container { padding-top: 1rem; grid-template-columns: minmax(0,1fr) minmax(0,1.4fr); }
+        .lewis-embed body, .lewis-embed { background: var(--bg, #fff); }
+        @media(max-width:900px){ .lewis-embed main.tool-page-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
+<script>
+    // Embed mode: when loaded as ?embed=1 (e.g. inside a modal iframe on another
+    // page), tag the document so the chrome-hiding CSS applies before paint.
+    try { if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('lewis-embed'); } catch (e) {}
+</script>
 <!-- Navigation -->
 <%@ include file="modern/components/nav-header.jsp" %>
 
