@@ -1,7 +1,7 @@
 {
-  "version": "1.11",
-  "lastUpdated": "2026-05-22T00:00:00.000Z",
-  "totalTools": 452,
+  "version": "1.12",
+  "lastUpdated": "2026-06-06T00:00:00.000Z",
+  "totalTools": 453,
   "categories": [
     "Biology",
     "Blockchain & Crypto",
@@ -2203,6 +2203,13 @@
       "category": "Chemistry",
       "keywords": "molar mass calculator chemistry chemistry",
       "description": "Molar Mass Calculator - Free online chemistry tool"
+    },
+    {
+      "name": "Molecular Formula to Structure & 3D Viewer",
+      "url": "chemistry/formula-to-molecule.jsp",
+      "category": "Chemistry",
+      "keywords": "molecular formula to structure, formula to structure, chemical formula to structure, formula to smiles, smiles from formula, draw molecule from formula, structure from molecular formula, molecular structure viewer, 3d molecule viewer online, lewis structure from formula, formula to molecule, what does a molecule look like",
+      "description": "Turn a chemical formula like C6H12O6 into molecules: 2D & 3D structures, Lewis dot diagrams and SMILES, plus equation balancing and product prediction."
     },
     {
       "name": "Molecule Draw - Structure Editor",
