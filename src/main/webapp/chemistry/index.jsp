@@ -10,7 +10,7 @@
         <jsp:param name="toolDescription" value="A quiet place for chemistry: draw molecules, turn a formula into structures, balance equations, explore the periodic table, electron configuration, Lewis structures, 3D VSEPR geometry, stoichiometry, molarity and more. Free, browser-based, no signup." />
         <jsp:param name="toolUrl" value="chemistry/" />
         <jsp:param name="toolKeywords" value="chemistry tools, online chemistry, molecule drawer, formula to structure, equation balancer, periodic table, electron configuration, Lewis structure, molecular geometry, VSEPR, stoichiometry, molar mass, molarity, dilution, thermochemistry, electrochemistry, SMILES editor" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="chemistry-studio-og.png" />
         <jsp:param name="toolFeatures" value="Molecule structure editor,Formula to structure,Chemical equation balancer,Periodic table,Electron configuration,Lewis structures,3D VSEPR geometry,Stoichiometry,Molar mass,Molarity and dilution,Thermochemistry,Electrochemistry,Free and instant,No registration" />
         <jsp:param name="faq1q" value="Are these chemistry tools free to use?" />
         <jsp:param name="faq1a" value="Yes, every chemistry tool here is completely free — no registration, no payment, no limits. Use them for homework, exams, or professional work." />
