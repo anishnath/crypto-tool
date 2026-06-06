@@ -351,6 +351,7 @@
             'csharp': 'csharp', 'javascript': 'javascript', 'typescript': 'typescript',
             'go': 'go', 'rust': 'rust', 'php': 'php', 'ruby': 'ruby',
             'swift': 'swift', 'kotlin': 'kotlin', 'scala': 'scala',
+            'haskell': 'haskell', 'r': 'r', 'perl': 'perl', 'lua': 'lua',
             'bash': 'shell', 'sh': 'shell', 'shell': 'shell'
         };
 
