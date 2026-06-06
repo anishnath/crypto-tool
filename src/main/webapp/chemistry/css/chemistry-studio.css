@@ -1,0 +1,1742 @@
+/* chemistry-studio.css — standalone 'A quiet place for chemistry' studio.
+   Layout + components derived from math-studio.css (cs- prefix), indigo accent.
+   Long-term home for chemistry page styling as more pages migrate here. */
+/*
+ * math-studio.css — editorial-calm layout shell for all math/ tool pages.
+ *
+ * Design direction (2026):
+ *   · Warm zinc/stone neutrals instead of cold slate/gray — reads as "paper"
+ *   · Soft multi-layer shadows replace hard 1px borders (panels float,
+ *     don't cage)
+ *   · Serif display (Instrument Serif) for H1/hero titles, Inter for body
+ *   · Generous radii (14–18px cards, 24px pill toggles) — less clinical
+ *   · Spring-easing transitions (cubic-bezier(0.2, 0.8, 0.2, 1))
+ *   · OKLCH-friendly accent — consistent lightness in dark mode
+ *   · Bento-style card groupings for learning content
+ *
+ * Grid (unchanged):
+ *     [ sidebar 264 ]  [ workspace flex ]  [ rail 300  (≥1280px only) ]
+ */
+
+:root {
+    /* Spacing / sizing */
+    --cs-sidebar-w: 272px;
+    --cs-rail-w: 300px;
+    --cs-gap: 1.5rem;
+    --cs-radius-sm: 8px;
+    --cs-radius: 14px;
+    --cs-radius-lg: 20px;
+    --cs-radius-pill: 999px;
+
+    /* Neutrals — warm zinc/stone, not cold gray */
+    --cs-page-bg: #f7f6f3;
+    --cs-panel-bg: #fefdfb;
+    --cs-panel-bg-soft: #faf8f4;
+    --cs-ink: #1c1917;
+    --cs-ink-soft: #44403c;
+    --cs-muted: #78716c;
+    --cs-line: rgba(28, 25, 23, 0.08);
+    --cs-line-strong: rgba(28, 25, 23, 0.14);
+
+    /* Accent — forest/sage (ink-friendly, printable, reads as "study") */
+    --cs-accent: #15803d;
+    --cs-accent-hover: #166534;
+    --cs-accent-soft: rgba(21, 128, 61, 0.08);
+    --cs-accent-softer: rgba(21, 128, 61, 0.04);
+    --cs-accent-ring: rgba(21, 128, 61, 0.22);
+
+    /* CTA gradient — green family, stays in the accent palette.  Two-stop
+       so the button has a subtle dimension without a chromatic clash. */
+    --cs-cta-start: #15803d;
+    --cs-cta-end: #22c55e;
+    --cs-cta-shadow: rgba(21, 128, 61, 0.22);
+
+    /* Shadows — multi-layer for a "paper on desk" feel */
+    --cs-shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.04),
+                    0 1px 3px rgba(28, 25, 23, 0.06);
+    --cs-shadow: 0 1px 3px rgba(28, 25, 23, 0.05),
+                 0 4px 12px rgba(28, 25, 23, 0.06);
+    --cs-shadow-lg: 0 2px 6px rgba(28, 25, 23, 0.05),
+                    0 12px 32px rgba(28, 25, 23, 0.08);
+    --cs-ring: 0 0 0 3px var(--cs-accent-ring);
+
+    /* Transitions */
+    --cs-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --cs-transition: 200ms var(--cs-ease);
+
+    /* Typography */
+    --cs-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --cs-font-serif: 'Instrument Serif', 'Fraunces', 'Cambria', Georgia, serif;
+    --cs-font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+}
+
+[data-theme="dark"] {
+    --cs-page-bg: #0c0a09;
+    --cs-panel-bg: #1c1917;
+    --cs-panel-bg-soft: #292524;
+    --cs-ink: #f5f5f4;
+    --cs-ink-soft: #d6d3d1;
+    --cs-muted: #a8a29e;
+    --cs-line: rgba(245, 245, 244, 0.08);
+    --cs-line-strong: rgba(245, 245, 244, 0.14);
+
+    --cs-accent: #4ade80;
+    --cs-accent-hover: #86efac;
+    --cs-accent-soft: rgba(74, 222, 128, 0.1);
+    --cs-accent-softer: rgba(74, 222, 128, 0.05);
+    --cs-accent-ring: rgba(74, 222, 128, 0.28);
+
+    --cs-cta-start: #16a34a;
+    --cs-cta-end: #4ade80;
+    --cs-cta-shadow: rgba(74, 222, 128, 0.28);
+
+    --cs-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --cs-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3);
+    --cs-shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Body / page offset ─────────────────────────────────────────── */
+body.cs-body {
+    padding-top: var(--header-height-desktop, 72px);
+    background: var(--cs-page-bg);
+    color: var(--cs-ink);
+    font-family: var(--cs-font-sans);
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* The matter.js host is positioned absolute inside the body so it
+       scrolls with the page but stays behind all interactive content. */
+    position: relative;
+}
+
+/* ── Matter.js decorative backdrop ─────────────────────────────────
+   A soft physics scene behind the title + hero area.  Canvas is
+   absolute-positioned and masked to fade into the page below the
+   top ~720 px so the result card + learning band sit on a plain
+   background.  Other math tool pages inherit this by including
+   /math/partials/matter-bg.jsp. */
+.cs-matter-host {
+    position: absolute;
+    top: var(--header-height-desktop, 72px);
+    left: 0; right: 0;
+    height: 720px;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+    /* Fade toward transparency near the bottom so the scene dissolves
+       into the page.  Masked both native + webkit for Safari parity. */
+    -webkit-mask-image: linear-gradient(to bottom,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 45%,
+        rgba(0, 0, 0, 0.65) 75%,
+        rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to bottom,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 45%,
+        rgba(0, 0, 0, 0.65) 75%,
+        rgba(0, 0, 0, 0) 100%);
+}
+.cs-matter-host canvas { display: block; }
+
+@media (max-width: 899px) {
+    .cs-matter-host {
+        top: var(--header-height-mobile, 64px);
+        height: 520px;
+    }
+}
+
+/* Every interactive layer sits above the backdrop. */
+.cs-hero, .cs-main { position: relative; z-index: 1; }
+.cs-sidebar, .cs-rail { z-index: 5; }
+
+/* Respect the user's motion preference — hide the canvas entirely so
+   it doesn't waste pixels. */
+@media (prefers-reduced-motion: reduce) {
+    .cs-matter-host { display: none; }
+}
+@media (max-width: 899px) {
+    body.cs-body { padding-top: var(--header-height-mobile, 64px); }
+}
+
+/* ── Hero ad band (full-width above the grid) ──────────────────── */
+.cs-hero { max-width: 1440px; margin: 1rem auto; padding: 0 var(--cs-gap); }
+
+/* ── Three-column grid ──────────────────────────────────────────── */
+.cs-main {
+    max-width: 1440px;
+    margin: 1rem auto 3rem;
+    padding: 0 var(--cs-gap) 2rem;
+    display: grid;
+    grid-template-columns: var(--cs-sidebar-w) minmax(0, 1fr);
+    gap: var(--cs-gap);
+    align-items: start;
+}
+@media (min-width: 1280px) {
+    .cs-main {
+        grid-template-columns: var(--cs-sidebar-w) minmax(0, 1fr) var(--cs-rail-w);
+    }
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────── */
+.cs-sidebar {
+    background: var(--cs-panel-bg);
+    border-radius: var(--cs-radius);
+    padding: 0.75rem 0.5rem;
+    position: sticky;
+    top: calc(var(--header-height-desktop, 72px) + 12px);
+    max-height: calc(100vh - var(--header-height-desktop, 72px) - 28px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    box-shadow: var(--cs-shadow-sm);
+    border: 1px solid var(--cs-line);
+}
+
+.cs-sidebar-search {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.45rem 0.7rem;
+    margin: 0.25rem 0.25rem 0.6rem;
+    background: var(--cs-panel-bg-soft);
+    border: 1px solid transparent;
+    border-radius: var(--cs-radius-sm);
+    transition: border-color var(--cs-transition),
+                background var(--cs-transition);
+}
+.cs-sidebar-search:focus-within {
+    border-color: var(--cs-accent);
+    background: var(--cs-panel-bg);
+    box-shadow: var(--cs-ring);
+}
+.cs-sidebar-search input {
+    flex: 1; min-width: 0;
+    border: none; background: none; outline: none;
+    font: 13px var(--cs-font-sans);
+    color: var(--cs-ink);
+}
+.cs-sidebar-search::before {
+    content: ''; width: 14px; height: 14px; flex-shrink: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2378716c' stroke-width='1.8'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 3 3'/%3E%3C/svg%3E");
+    background-size: contain; background-repeat: no-repeat;
+}
+
+.cs-group { margin-bottom: 0.15rem; }
+.cs-group-header {
+    display: flex; align-items: center; gap: 0.45rem;
+    width: 100%; padding: 0.5rem 0.65rem;
+    background: none; border: none;
+    font: 600 10.5px var(--cs-font-sans);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--cs-muted);
+    cursor: pointer;
+    border-radius: var(--cs-radius-sm);
+    transition: background var(--cs-transition), color var(--cs-transition);
+    text-align: left;
+}
+.cs-group-header:hover { background: var(--cs-accent-softer); color: var(--cs-ink); }
+.cs-group-chevron {
+    margin-left: auto; transition: transform var(--cs-transition);
+    font-size: 9px; color: var(--cs-muted);
+}
+.cs-group.collapsed .cs-group-chevron { transform: rotate(-90deg); }
+
+.cs-group-body {
+    display: flex; flex-direction: column;
+    padding: 0.15rem 0 0.25rem;
+    overflow: hidden;
+    max-height: 2400px;
+    transition: max-height 0.28s var(--cs-ease);
+}
+.cs-group.collapsed .cs-group-body { max-height: 0; padding: 0; }
+
+.cs-item {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0.42rem 0.65rem;
+    margin: 1px 0;
+    border-radius: var(--cs-radius-sm);
+    text-decoration: none;
+    color: var(--cs-ink);
+    font: 500 13.5px var(--cs-font-sans);
+    line-height: 1.25;
+    transition: background var(--cs-transition), color var(--cs-transition);
+}
+.cs-item:hover { background: var(--cs-accent-softer); color: var(--cs-accent); }
+.cs-item.active {
+    background: var(--cs-accent-soft);
+    color: var(--cs-accent);
+    font-weight: 600;
+}
+.cs-item-icon {
+    width: 24px; height: 24px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 6px; font-size: 12.5px;
+    background: var(--cs-panel-bg-soft);
+    color: var(--cs-ink-soft);
+    font-family: var(--cs-font-serif);
+    font-weight: 400;
+    transition: background var(--cs-transition), color var(--cs-transition);
+}
+.cs-item:hover .cs-item-icon { background: var(--cs-accent-soft); color: var(--cs-accent); }
+.cs-item.active .cs-item-icon { background: var(--cs-accent); color: #fff; }
+
+/* ── Workspace (middle column) ──────────────────────────────────── */
+.cs-workspace {
+    display: flex; flex-direction: column;
+    gap: var(--cs-gap);
+    min-width: 0;
+}
+.cs-card {
+    background: var(--cs-panel-bg);
+    border-radius: var(--cs-radius);
+    padding: 1.75rem;
+    box-shadow: var(--cs-shadow-sm);
+    border: 1px solid var(--cs-line);
+}
+
+/* ── Right rail ─────────────────────────────────────────────────── */
+.cs-rail {
+    position: sticky;
+    top: calc(var(--header-height-desktop, 72px) + 12px);
+    max-height: calc(100vh - var(--header-height-desktop, 72px) - 28px);
+    overflow-y: auto;
+    display: none;
+    flex-direction: column; gap: 1rem;
+    scrollbar-width: thin;
+}
+@media (min-width: 1280px) { .cs-rail { display: flex; } }
+
+.cs-inline-ad { margin: var(--cs-gap) 0; }
+@media (min-width: 1280px) { .cs-inline-ad { display: none; } }
+
+/* ── Sidebar header (hide chevron sits here, desktop only) ──────── */
+.cs-sidebar-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 6px 6px;
+    margin-bottom: 2px;
+}
+.cs-sidebar-title {
+    font: 600 10.5px var(--cs-font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cs-muted);
+}
+.cs-sidebar-hide-btn {
+    display: none; /* shown only on desktop via media query below */
+    place-items: center;
+    width: 26px; height: 26px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    color: var(--cs-muted);
+    border-radius: 6px;
+    transition: background var(--cs-transition), color var(--cs-transition);
+}
+.cs-sidebar-hide-btn:hover {
+    background: var(--cs-accent-softer);
+    color: var(--cs-accent);
+}
+.cs-sidebar-hide-btn svg { width: 16px; height: 16px; }
+
+/* ── Mobile drawer ──────────────────────────────────────────────── */
+.cs-sidebar-toggle {
+    display: none;
+    padding: 0.55rem 0.9rem;
+    background: var(--cs-panel-bg);
+    border: 1px solid var(--cs-line);
+    border-radius: var(--cs-radius-sm);
+    box-shadow: var(--cs-shadow-sm);
+    font: 500 13px var(--cs-font-sans);
+    color: var(--cs-ink);
+    cursor: pointer;
+    transition: transform var(--cs-transition), box-shadow var(--cs-transition);
+}
+.cs-sidebar-toggle:hover { transform: translateY(-1px); box-shadow: var(--cs-shadow); }
+
+.cs-sidebar-backdrop {
+    display: none; position: fixed; inset: 0;
+    background: rgba(12, 10, 9, 0.55);
+    backdrop-filter: blur(3px);
+    z-index: 99;
+}
+
+@media (max-width: 1023px) {
+    .cs-main { grid-template-columns: minmax(0, 1fr); }
+    .cs-sidebar-toggle { display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
+    .cs-sidebar {
+        position: fixed; top: 0; left: 0; bottom: 0;
+        width: 300px; max-height: none;
+        border-radius: 0; z-index: 100;
+        transform: translateX(-102%);
+        transition: transform 0.25s var(--cs-ease);
+        box-shadow: 4px 0 32px rgba(0, 0, 0, 0.25);
+    }
+    .cs-sidebar.open { transform: translateX(0); }
+    .cs-sidebar-backdrop.open { display: block; }
+}
+
+/* ── Desktop sidebar hide ───────────────────────────────────────
+   When the user clicks the chevron, .is-sidebar-hidden lands on
+   .cs-main. The first grid track drops, the workspace gets the
+   full width (the right rail stays in the 3-col layout), and the
+   existing ms-sidebar-toggle (display:none on desktop by default)
+   flips on so the user has a way back. Persisted in localStorage as
+   math.ms.sidebarHidden. */
+@media (min-width: 1024px) {
+    .cs-sidebar-hide-btn { display: grid; }
+    .cs-main.is-sidebar-hidden {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .cs-main.is-sidebar-hidden .cs-sidebar { display: none; }
+    .cs-main.is-sidebar-hidden .cs-sidebar-toggle {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        margin-bottom: 0.5rem;
+        /* Sit as a full-row banner above the workspace+rail, sized to
+           its own content (justify-self:start stops the grid stretching
+           it across the wide column). Without the column span the toggle
+           would claim the 1fr track and squeeze the workspace into the
+           rail-width column. */
+        grid-column: 1 / -1;
+        justify-self: start;
+        align-self: start;
+    }
+}
+@media (min-width: 1280px) {
+    .cs-main.is-sidebar-hidden {
+        grid-template-columns: minmax(0, 1fr) var(--cs-rail-w);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Stacked calculator layout (.ic-stack)
+   Reference pattern for math calculator pages.
+   ═══════════════════════════════════════════════════════════════════ */
+.ic-stack {
+    display: flex; flex-direction: column;
+    gap: var(--cs-gap);
+    min-width: 0;
+}
+
+/* ── Input hero ─────────────────────────────────────────────────── */
+.ic-hero {
+    background: var(--cs-panel-bg);
+    border-radius: var(--cs-radius-lg);
+    padding: 1.5rem 1.75rem;
+    box-shadow: var(--cs-shadow-sm);
+    border: 1px solid var(--cs-line);
+    position: relative;
+    overflow: hidden;
+}
+/* Subtle brand gradient on the top edge */
+.ic-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cs-accent) 0%, var(--cs-cta-start) 50%, var(--cs-cta-end) 100%);
+    opacity: 0.7;
+}
+/* Note: deliberately NOT sticky on desktop.  A sticky hero + long
+   chip rows pushes the result card below the fold, so on click
+   users see "nothing happens".  Normal flow keeps input and result
+   both comfortably visible on a typical 900+ px viewport. */
+
+.ic-hero-top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+
+.ic-hero-top .ic-mode-toggle {
+    display: inline-flex; gap: 2px;
+    background: var(--cs-panel-bg-soft);
+    padding: 3px; border-radius: var(--cs-radius-pill);
+    border: 1px solid var(--cs-line);
+}
+.ic-hero-top .ic-mode-btn {
+    padding: 5px 14px; border: none; background: transparent;
+    color: var(--cs-muted);
+    font: 600 12px var(--cs-font-sans);
+    cursor: pointer; border-radius: var(--cs-radius-pill);
+    transition: color var(--cs-transition), background var(--cs-transition);
+}
+.ic-hero-top .ic-mode-btn:hover:not(.active) { color: var(--cs-ink); }
+.ic-hero-top .ic-mode-btn.active {
+    background: var(--cs-panel-bg);
+    color: var(--cs-accent);
+    box-shadow: var(--cs-shadow-sm);
+}
+.ic-hero-label-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 0.45rem; gap: 0.75rem;
+}
+.ic-hero-label-row .ic-expr-label {
+    font: 600 0.78rem var(--cs-font-sans);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--cs-muted); margin: 0;
+}
+
+.ic-hero .ic-expr-wrap { margin: 0; }
+
+/* ── Math-input contract: visibility rules for the Visual/Text toggle ──
+   These rules are the shared "display one input at a time" logic.
+   Originally in modern/css/integral-calculator.css; promoted here so
+   EVERY math tool that includes math-input-setup.jsp gets the correct
+   initial paint without also needing integral-calculator.css.
+
+   Visual mode (default) → text input hidden, math-field visible.
+   Text mode             → math-field hidden, text input visible.
+   No mode attribute yet → behaves as Visual. */
+.ic-expr-wrap[data-input-mode="visual"] #ic-expr,
+.ic-expr-wrap[data-input-mode="visual"] #ic-autocomplete,
+.ic-expr-wrap:not([data-input-mode]) #ic-expr,
+.ic-expr-wrap:not([data-input-mode]) #ic-autocomplete {
+    display: none;
+}
+.ic-expr-wrap[data-input-mode="text"] #ic-mathfield {
+    display: none;
+}
+
+/* Single morphing hint line: only the span matching the current mode
+   is shown.  Same default-to-visual behaviour as the inputs above. */
+.ic-expr-wrap .ic-expr-hint > span { display: none; }
+.ic-expr-wrap[data-input-mode="visual"] .ic-expr-hint .ic-hint-visual,
+.ic-expr-wrap:not([data-input-mode]) .ic-expr-hint .ic-hint-visual,
+.ic-expr-wrap[data-input-mode="text"] .ic-expr-hint .ic-hint-text {
+    display: inline;
+}
+
+/* The math-field's own `display` property is controlled by the rules
+   above + the mode attribute the IIFE sets on .ic-expr-wrap.  We ONLY
+   override visual styling in the block below — never the display
+   property — otherwise the mode toggle stops hiding one input. */
+.ic-hero .ic-mathfield {
+    min-height: 56px;
+    padding: 0.85rem 1.1rem;
+    font-size: 1.2rem;
+    border: 1.5px solid var(--cs-line-strong);
+    border-radius: var(--cs-radius);
+    background: var(--cs-panel-bg-soft);
+    color: var(--cs-ink);
+    transition: border-color var(--cs-transition),
+                box-shadow var(--cs-transition),
+                background var(--cs-transition);
+}
+.ic-hero .ic-mathfield:focus-within {
+    border-color: var(--cs-accent);
+    background: var(--cs-panel-bg);
+    box-shadow: var(--cs-ring);
+}
+.ic-hero #ic-expr {
+    min-height: 48px;
+    padding: 0.7rem 0.95rem;
+    font: 15px var(--cs-font-mono);
+    border: 1.5px solid var(--cs-line-strong);
+    border-radius: var(--cs-radius);
+    background: var(--cs-panel-bg-soft);
+    color: var(--cs-ink);
+    width: 100%;
+    transition: border-color var(--cs-transition), box-shadow var(--cs-transition), background var(--cs-transition);
+}
+.ic-hero #ic-expr:focus {
+    outline: none;
+    border-color: var(--cs-accent);
+    background: var(--cs-panel-bg);
+    box-shadow: var(--cs-ring);
+}
+.ic-hero .ic-expr-hint { font-size: 0.76rem; margin-top: 0.4rem; color: var(--cs-muted); }
+.ic-hero .ic-expr-hint code {
+    background: var(--cs-panel-bg-soft);
+    padding: 1px 5px; border-radius: 4px;
+    font: 11px var(--cs-font-mono);
+    color: var(--cs-ink-soft);
+}
+
+/* Live preview strip — ONLY useful in Text mode.  In Visual mode the
+   <math-field> IS the WYSIWYG preview, so an extra "Preview" block
+   just duplicates what the user just typed.  We hide it by default
+   and reveal only when the IIFE flips the mode to text.
+
+   The IIFE sets data-input-mode on both .ic-expr-wrap (always) and on
+   the closest .tool-card-body OR the wrap's parentNode (fallback).
+   In our hero markup the parentNode IS .ic-hero, so we target that. */
+.ic-hero .ic-preview-strip {
+    margin-top: 0.65rem; padding: 0.7rem 0.9rem;
+    background: var(--cs-accent-softer);
+    border-left: 3px solid var(--cs-accent);
+    border-radius: 0 var(--cs-radius-sm) var(--cs-radius-sm) 0;
+    font-size: 0.95rem;
+    color: var(--cs-ink);
+    min-height: 2.25em;
+    display: none;  /* hidden by default (visual mode is the default) */
+    align-items: center;
+    gap: 0.6rem;
+}
+.ic-hero[data-input-mode="text"] .ic-preview-strip { display: flex; }
+.ic-hero .ic-preview-label {
+    color: var(--cs-muted);
+    font: 600 0.7rem var(--cs-font-sans);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    flex-shrink: 0;
+}
+
+/* Variable + bounds grid */
+.ic-hero-params {
+    display: grid;
+    grid-template-columns: minmax(110px, 180px);
+    gap: 0.75rem;
+    margin-top: 1rem;
+    align-items: end;
+    transition: grid-template-columns 0.25s var(--cs-ease);
+}
+.ic-hero-params.visible {
+    grid-template-columns: minmax(110px, 180px) 1fr 1fr;
+}
+@media (max-width: 480px) {
+    .ic-hero-params.visible { grid-template-columns: 1fr 1fr; }
+    .ic-hero-params.visible > .tool-form-group:first-child { grid-column: 1 / -1; }
+}
+.ic-hero-params .tool-form-group { margin: 0; }
+.ic-hero-params label {
+    display: block;
+    font: 600 0.72rem var(--cs-font-sans);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--cs-muted); margin-bottom: 0.3rem;
+}
+.ic-hero-params .tool-select,
+.ic-hero-params .tool-input {
+    width: 100%;
+    padding: 0.55rem 0.8rem;
+    border: 1.5px solid var(--cs-line-strong);
+    border-radius: var(--cs-radius-sm);
+    background: var(--cs-panel-bg-soft);
+    font: 14px var(--cs-font-sans);
+    color: var(--cs-ink);
+    transition: border-color var(--cs-transition), box-shadow var(--cs-transition), background var(--cs-transition);
+}
+.ic-hero-params .tool-select:focus,
+.ic-hero-params .tool-input:focus {
+    outline: none;
+    border-color: var(--cs-accent);
+    background: var(--cs-panel-bg);
+    box-shadow: var(--cs-ring);
+}
+.ic-hero-params .ic-bounds-group { display: none; }
+.ic-hero-params.visible .ic-bounds-group { display: block; }
+
+/* ── Button hierarchy (single source of truth) ──────────────────────
+   Tier 1 (primary):    solid accent pill, white text  — Integrate, Worksheet
+   Tier 2 (secondary):  ghost accent pill              — Copy LaTeX, Share, Show Steps, …
+   Tier 3 (toggles):    segment-pill card              — Indef/Def, Visual/Text, tabs
+   Tier 4 (reveal):     text-only toggle               — Syntax, Examples summary
+
+   All share: pill radius, same horizontal padding scale (0.5–0.6 rem
+   vertical, 1–1.5 rem horizontal), same spring transition.  Hierarchy
+   comes from FILL vs OUTLINE, not from size or gradient. */
+
+/* Tier 1 (primary): identical size/shape to Tier 2 ghost pills —
+   the only difference is fill color.  That's what makes the family
+   feel unified: one pill geometry, two fill states. */
+/* CTA + inline warning row.  The warning slot sits to the right of the
+   Integrate button and fills in only when validation fails (e.g. empty
+   input).  It shakes once so the user notices, then clears on the next
+   keystroke or successful submit. */
+.ic-hero-cta-row {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+.ic-hero-warn {
+    font: 500 0.82rem var(--cs-font-sans);
+    color: #b91c1c;
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity var(--cs-transition), transform var(--cs-transition);
+}
+.ic-hero-warn.show {
+    opacity: 1;
+    transform: none;
+    animation: ms-shake 0.35s var(--cs-ease);
+}
+[data-theme="dark"] .ic-hero-warn { color: #fca5a5; }
+@keyframes ms-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+.ic-hero-cta {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--cs-accent);
+    color: #fff;
+    border: 1px solid var(--cs-accent);
+    border-radius: var(--cs-radius-pill);
+    font: 500 0.82rem var(--cs-font-sans);
+    letter-spacing: 0;
+    cursor: pointer;
+    transition: background var(--cs-transition),
+                border-color var(--cs-transition),
+                transform 0.1s var(--cs-ease);
+}
+.ic-hero-cta:hover {
+    background: var(--cs-accent-hover);
+    border-color: var(--cs-accent-hover);
+    transform: translateY(-1px);
+}
+.ic-hero-cta:active { transform: translateY(0); }
+
+/* Disabled state — button has no value to act on yet.  Faded, muted,
+   cursor indicates "not available".  We use a class (not the native
+   disabled attribute) so the button still renders with hover/focus
+   affordances during transition; pointer-events:none fully blocks
+   clicks until valid input arrives. */
+.ic-hero-cta.is-disabled,
+.ic-hero-cta.is-disabled:hover {
+    background: var(--cs-panel-bg-soft);
+    color: var(--cs-muted);
+    border-color: var(--cs-line-strong);
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none;
+    box-shadow: none;
+}
+
+/* In-flight: spinner + dim + no pointer events.  Still keeps same
+   size and color family, just disabled. */
+.ic-hero-cta.is-busy {
+    pointer-events: none;
+    opacity: 0.7;
+    cursor: wait;
+    transform: none !important;
+}
+.ic-hero-cta.is-busy::after {
+    content: '';
+    display: inline-block;
+    width: 12px; height: 12px;
+    margin-left: 0.55rem;
+    vertical-align: -1px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: ms-spin 0.7s linear infinite;
+}
+@keyframes ms-spin { to { transform: rotate(360deg); } }
+
+/* Method-grouped examples — collapsed by default via native <details>.
+   Summary styled as a discreet text toggle matching Syntax help. */
+.ic-hero-methods {
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px dashed var(--cs-line);
+}
+.ic-hero-methods > .ic-hero-methods-summary {
+    /* Hide the default triangle marker — we render our own chevron. */
+    list-style: none;
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.35rem 0;
+    cursor: pointer;
+    color: var(--cs-muted);
+    font: 600 0.78rem var(--cs-font-sans);
+    transition: color var(--cs-transition);
+}
+.ic-hero-methods > .ic-hero-methods-summary::-webkit-details-marker { display: none; }
+.ic-hero-methods > .ic-hero-methods-summary::marker { content: ''; }
+.ic-hero-methods > .ic-hero-methods-summary:hover { color: var(--cs-accent); }
+.ic-hero-methods-chevron {
+    margin-left: auto;
+    width: 14px; height: 14px;
+    transition: transform 0.18s var(--cs-ease);
+}
+.ic-hero-methods[open] .ic-hero-methods-chevron { transform: rotate(180deg); }
+
+.ic-hero-methods-body {
+    display: flex; flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding: 0.85rem 0.95rem;
+    background: var(--cs-panel-bg-soft);
+    border-radius: var(--cs-radius-sm);
+}
+
+.ic-method-row {
+    display: flex; align-items: center; gap: 0.5rem;
+    overflow-x: auto; scrollbar-width: thin;
+    white-space: nowrap;
+}
+.ic-method-row::-webkit-scrollbar { height: 4px; }
+.ic-method-row::-webkit-scrollbar-thumb { background: var(--cs-line-strong); border-radius: 2px; }
+.ic-method-label {
+    flex-shrink: 0;
+    font: 600 0.7rem var(--cs-font-sans);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--cs-muted);
+    min-width: 5.5rem;
+}
+.ic-hero .ic-example-chip {
+    flex-shrink: 0;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--cs-line-strong);
+    border-radius: var(--cs-radius-pill);
+    background: var(--cs-panel-bg);
+    color: var(--cs-ink);
+    font: 500 13px var(--cs-font-mono);
+    cursor: pointer;
+    transition: border-color var(--cs-transition), background var(--cs-transition), color var(--cs-transition);
+}
+.ic-hero .ic-example-chip:hover {
+    border-color: var(--cs-accent);
+    background: var(--cs-accent-softer);
+    color: var(--cs-accent);
+}
+
+/* Collapsible syntax help */
+.ic-hero-syntax {
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px dashed var(--cs-line);
+}
+.ic-hero-syntax .ic-syntax-toggle {
+    display: flex; align-items: center; gap: 0.4rem;
+    width: 100%;
+    padding: 0.35rem 0;
+    background: none; border: none; cursor: pointer;
+    color: var(--cs-muted);
+    font: 600 0.78rem var(--cs-font-sans);
+    text-align: left;
+    transition: color var(--cs-transition);
+}
+.ic-hero-syntax .ic-syntax-toggle:hover { color: var(--cs-accent); }
+.ic-hero-syntax .ic-syntax-chevron {
+    margin-left: auto; width: 14px; height: 14px;
+    transition: transform 0.18s var(--cs-ease);
+}
+.ic-hero-syntax .ic-syntax-content.open + .ic-syntax-toggle .ic-syntax-chevron,
+.ic-hero-syntax .ic-syntax-toggle + .ic-syntax-content.open .ic-syntax-chevron { transform: rotate(180deg); }
+.ic-hero-syntax .ic-syntax-content {
+    display: none;
+    margin-top: 0.7rem;
+    padding: 0.85rem 1rem;
+    background: var(--cs-panel-bg-soft);
+    border-radius: var(--cs-radius-sm);
+    font: 0.82rem var(--cs-font-sans);
+    color: var(--cs-muted);
+    line-height: 1.65;
+}
+.ic-hero-syntax .ic-syntax-content.open { display: block; }
+.ic-hero-syntax .ic-syntax-content code {
+    background: var(--cs-panel-bg);
+    padding: 1px 5px; border-radius: 4px;
+    font: 11.5px var(--cs-font-mono);
+    color: var(--cs-ink-soft);
+    border: 1px solid var(--cs-line);
+}
+
+/* ── Result card ────────────────────────────────────────────────── */
+.ic-result-card {
+    background: var(--cs-panel-bg);
+    border-radius: var(--cs-radius-lg);
+    min-height: 440px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--cs-shadow-sm);
+    border: 1px solid var(--cs-line);
+}
+
+/* Tab bar — same pill segment control the Indef/Def + Visual/Text
+   toggles use.  One design language: all segmented UI feels related. */
+.ic-stack .ic-output-tabs {
+    display: inline-flex;
+    gap: 2px;
+    margin: 0.85rem 0.85rem 0;
+    padding: 3px;
+    background: var(--cs-panel-bg-soft);
+    border: 1px solid var(--cs-line);
+    border-radius: var(--cs-radius-pill);
+    align-self: flex-start;
+}
+.ic-stack .ic-output-tab {
+    padding: 5px 14px;
+    background: transparent;
+    border: none;
+    color: var(--cs-muted);
+    font: 600 12px var(--cs-font-sans);
+    cursor: pointer;
+    border-radius: var(--cs-radius-pill);
+    transition: color var(--cs-transition), background var(--cs-transition);
+}
+.ic-stack .ic-output-tab:hover:not(.active) { color: var(--cs-ink); }
+.ic-stack .ic-output-tab.active {
+    background: var(--cs-panel-bg);
+    color: var(--cs-accent);
+    box-shadow: var(--cs-shadow-sm);
+}
+
+.ic-stack .ic-panel {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: none;
+    padding: 1.5rem;
+}
+.ic-stack .ic-panel.active { display: flex; flex-direction: column; }
+.ic-stack .ic-panel > .tool-card {
+    flex: 1; margin: 0;
+    box-shadow: none; border: none; padding: 0; background: transparent;
+}
+
+/* Result action buttons — both three-column-tool.css AND
+   integral-calculator.css set `.tool-action-btn { width: 100%;
+   background: gradient; margin-top: 1rem }` — those win on any tie
+   and there are two of them, so we use `!important` on the properties
+   that need to be guaranteed uniform across the four siblings.  The
+   rest of the styling (border, radius, hover) is regular — higher
+   specificity is enough there. */
+.ic-result-card .tool-result-actions {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    padding: 0.9rem 0 0;
+    margin: 0.9rem 0 0;
+    border-top: 1px solid var(--cs-line);
+}
+.ic-result-card .tool-result-actions .tool-action-btn,
+.ic-result-card .tool-result-actions .tool-action-btn:hover {
+    width: auto !important;
+    margin-top: 0 !important;
+}
+.ic-result-card .tool-result-actions .tool-action-btn {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    background: var(--cs-panel-bg-soft) !important;
+    color: var(--cs-ink-soft) !important;
+    border: 1px solid var(--cs-line-strong);
+    border-radius: var(--cs-radius-pill);
+    font: 500 0.82rem var(--cs-font-sans);
+    cursor: pointer;
+    box-shadow: none !important;
+    transform: none;
+    transition: color var(--cs-transition),
+                background var(--cs-transition),
+                border-color var(--cs-transition),
+                transform var(--cs-transition) !important;
+}
+.ic-result-card .tool-result-actions .tool-action-btn:hover {
+    background: var(--cs-accent-softer) !important;
+    border-color: var(--cs-accent);
+    color: var(--cs-accent) !important;
+    transform: translateY(-1px) !important;
+    opacity: 1 !important;
+}
+
+/* Worksheet CTA — Tier-1 primary, same solid-accent pill as Integrate. */
+.ic-result-card .ic-worksheet-cta {
+    padding: 1rem 0 0;
+    margin: 1rem 0 0;
+    border-top: 1px solid var(--cs-line);
+}
+.ic-result-card .ic-worksheet-cta .tool-action-btn {
+    width: auto !important;
+    display: inline-block !important;
+    margin-top: 0 !important;
+    padding: 0.5rem 1rem !important;
+    background: var(--cs-accent) !important;
+    color: #fff !important;
+    border: 1px solid var(--cs-accent) !important;
+    border-radius: var(--cs-radius-pill) !important;
+    font: 500 0.82rem var(--cs-font-sans) !important;
+    cursor: pointer;
+    box-shadow: none !important;
+    transition: background var(--cs-transition),
+                border-color var(--cs-transition),
+                transform 0.1s var(--cs-ease) !important;
+}
+.ic-result-card .ic-worksheet-cta .tool-action-btn:hover {
+    background: var(--cs-accent-hover) !important;
+    border-color: var(--cs-accent-hover) !important;
+    transform: translateY(-1px) !important;
+    opacity: 1 !important;
+}
+
+/* Icon button ("Scan from image") in the hero top row */
+.ic-hero .ic-image-btn {
+    padding: 0.45rem 0.85rem;
+    background: var(--cs-panel-bg-soft);
+    border: 1px solid var(--cs-line-strong);
+    border-radius: var(--cs-radius-pill);
+    font: 500 12px var(--cs-font-sans);
+    color: var(--cs-ink-soft);
+    cursor: pointer;
+    transition: color var(--cs-transition), background var(--cs-transition), border-color var(--cs-transition);
+}
+.ic-hero .ic-image-btn:hover {
+    color: var(--cs-accent);
+    border-color: var(--cs-accent);
+    background: var(--cs-accent-softer);
+}
+
+/* Visual/Text pill toggle (matches Indef/Def look) */
+.ic-hero .ic-input-mode-toggle {
+    display: inline-flex; gap: 2px;
+    background: var(--cs-panel-bg-soft);
+    padding: 3px; border-radius: var(--cs-radius-pill);
+    border: 1px solid var(--cs-line);
+}
+.ic-hero .ic-input-mode-btn {
+    padding: 5px 12px; border: none; background: transparent;
+    color: var(--cs-muted);
+    font: 600 11.5px var(--cs-font-sans);
+    cursor: pointer; border-radius: var(--cs-radius-pill);
+    transition: color var(--cs-transition), background var(--cs-transition);
+}
+.ic-hero .ic-input-mode-btn:hover:not(.active) { color: var(--cs-ink); }
+.ic-hero .ic-input-mode-btn.active {
+    background: var(--cs-panel-bg);
+    color: var(--cs-accent);
+    box-shadow: var(--cs-shadow-sm);
+}
+
+/* Remove the big empty-state 🔧 illustration that three-column-tool.css
+   inserts (SVG icon 60×60 px).  Our 2026 empty state uses a large serif
+   ∫ glyph — two illustrations fighting for attention. */
+.ic-stack .tool-empty-state svg { display: none; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   Result content — injected by integral-calculator.js after Integrate.
+   The shared script writes classes like .ic-result-math, .ic-method-badge,
+   .ic-steps-btn etc. that integral-calculator.css styles with the legacy
+   indigo/purple `--tool-*` variables.  We re-skin every one of those
+   inside the new .ic-result-card scope so clicking Integrate doesn't
+   reveal a totally different color palette.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Main result wrapper */
+.ic-result-card .ic-result-math {
+    padding: 1.75rem 0 0;
+    text-align: center;
+}
+.ic-result-card .ic-result-math .katex-display {
+    margin: 0.5rem 0;
+    overflow-x: auto; overflow-y: hidden;
+}
+
+/* Section labels ("Integral", "Result", …) */
+.ic-result-card .ic-result-label {
+    font: 600 0.7rem var(--cs-font-sans) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cs-muted) !important;
+    margin-bottom: 0.45rem !important;
+}
+
+/* The primary KaTeX output (F(x) + C) */
+.ic-result-card .ic-result-main {
+    font-size: 1.4rem !important;
+    padding: 1.2rem 0 !important;
+    color: var(--cs-ink) !important;
+}
+
+/* Definite-integral numeric value strip — was purple gradient card,
+   now a subtle accent-tinted panel so it reads as "the number" without
+   stealing focus from the symbolic result above. */
+.ic-result-card .ic-result-numeric {
+    background: var(--cs-accent-soft) !important;
+    color: var(--cs-accent) !important;
+    padding: 1rem 1.25rem !important;
+    border-radius: var(--cs-radius) !important;
+    border: 1px solid var(--cs-accent-ring);
+    font: 600 1.3rem var(--cs-font-mono) !important;
+    margin: 0.9rem 0 !important;
+}
+
+/* Detail box that wraps the method badge */
+.ic-result-card .ic-result-detail {
+    background: transparent !important;
+    border: none !important;
+    padding: 0.25rem 0 0 !important;
+    margin-top: 1rem !important;
+}
+
+/* Method badge ("u-substitution", "Power rule", etc.) */
+.ic-result-card .ic-method-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    background: var(--cs-accent-soft) !important;
+    color: var(--cs-accent) !important;
+    padding: 0.25rem 0.75rem !important;
+    border-radius: var(--cs-radius-pill) !important;
+    border: 1px solid var(--cs-accent-ring);
+    font: 600 0.72rem var(--cs-font-sans) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Show Steps button — matches the secondary pill-ghost buttons */
+.ic-result-card .ic-steps-btn {
+    margin-top: 1rem !important;
+    padding: 0.55rem 1.1rem !important;
+    border: 1px solid var(--cs-accent) !important;
+    background: transparent !important;
+    color: var(--cs-accent) !important;
+    border-radius: var(--cs-radius-pill) !important;
+    font: 600 0.82rem var(--cs-font-sans) !important;
+    transition: background var(--cs-transition), color var(--cs-transition) !important;
+}
+.ic-result-card .ic-steps-btn:hover {
+    background: var(--cs-accent) !important;
+    color: #fff !important;
+}
+.ic-result-card .ic-steps-btn.loading {
+    opacity: 0.65 !important;
+    pointer-events: none;
+}
+
+/* Steps panel (revealed after "Show Steps") */
+.ic-result-card .ic-steps-container {
+    margin-top: 1.1rem !important;
+    border: 1px solid var(--cs-line) !important;
+    border-radius: var(--cs-radius) !important;
+    overflow: hidden;
+    background: var(--cs-panel-bg-soft);
+    text-align: left;
+}
+.ic-result-card .ic-steps-header {
+    padding: 0.7rem 1.1rem !important;
+    background: var(--cs-accent-soft) !important;
+    border-bottom: 1px solid var(--cs-line) !important;
+    color: var(--cs-accent) !important;
+    font: 600 0.78rem var(--cs-font-sans) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.ic-result-card .ic-step {
+    padding: 0.9rem 1.1rem !important;
+    border-bottom: 1px solid var(--cs-line) !important;
+    display: flex; gap: 0.9rem;
+    align-items: flex-start;
+}
+.ic-result-card .ic-step:last-child { border-bottom: none !important; }
+.ic-result-card .ic-step-num {
+    width: 26px !important; height: 26px !important;
+    background: var(--cs-accent) !important;
+    color: #fff !important;
+    font: 700 0.72rem var(--cs-font-sans) !important;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.ic-result-card .ic-step-title {
+    font: 600 0.75rem var(--cs-font-sans) !important;
+    color: var(--cs-ink-soft) !important;
+    margin-bottom: 0.35rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.ic-result-card .ic-step-math {
+    font-size: 1.02rem !important;
+    color: var(--cs-ink) !important;
+}
+.ic-result-card .ic-step-math .katex-display {
+    margin: 0 !important;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Step-by-step (from the SymPy steps path) — same classes rendered
+   with a slightly different wrapper pattern.  Re-using our tokens. */
+.ic-result-card .ic-result-step {
+    padding: 0.85rem 0 !important;
+    border-bottom: 1px solid var(--cs-line) !important;
+}
+.ic-result-card .ic-result-step:last-child { border-bottom: none !important; }
+.ic-result-card .ic-result-step-title {
+    font: 600 0.72rem var(--cs-font-sans) !important;
+    color: var(--cs-muted) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem !important;
+}
+
+/* Error state — yellow/amber was jarring, use a softer warning tone */
+.ic-result-card .ic-error {
+    background: #fef7ed !important;
+    border: 1px solid #fdba74 !important;
+    border-radius: var(--cs-radius) !important;
+    padding: 1.25rem !important;
+    color: #9a3412 !important;
+    text-align: left;
+}
+.ic-result-card .ic-error h4 {
+    font: 600 0.92rem var(--cs-font-sans) !important;
+    margin: 0 0 0.5rem !important;
+}
+.ic-result-card .ic-error ul {
+    margin: 0.5rem 0 0 !important;
+    font-size: 0.85rem !important;
+    line-height: 1.65;
+}
+[data-theme="dark"] .ic-result-card .ic-error {
+    background: rgba(251, 146, 60, 0.08) !important;
+    border-color: rgba(251, 146, 60, 0.3) !important;
+    color: #fdba74 !important;
+}
+
+/* ── Derivative-tool aliases — same styling as ic-result-* twins.
+   Added during the derivative-calculator migration so the extracted
+   derivative-calculator.js (which uses dc-result-* classes) lands in the
+   same 2026 visual language.  Rename in the JS later if we do a DRY
+   pass; for now these parallel rules keep the scope of the migration
+   contained. ─────────────────────────────────────────────────────── */
+.ic-result-card .dc-result-math   { padding: 1.75rem 0 0; text-align: center; }
+.ic-result-card .dc-result-math .katex-display { margin: 0.5rem 0; overflow-x: auto; overflow-y: hidden; }
+.ic-result-card .dc-result-label {
+    font: 600 0.7rem var(--cs-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--cs-muted) !important;
+    margin-bottom: 0.45rem !important;
+}
+.ic-result-card .dc-result-main  { font-size: 1.4rem !important; padding: 1.2rem 0 !important; color: var(--cs-ink) !important; }
+.ic-result-card .dc-result-numeric {
+    background: var(--cs-accent-soft) !important; color: var(--cs-accent) !important;
+    padding: 1rem 1.25rem !important; border-radius: var(--cs-radius) !important;
+    border: 1px solid var(--cs-accent-ring);
+    font: 600 1.3rem var(--cs-font-mono) !important; margin: 0.9rem 0 !important;
+}
+.ic-result-card .dc-result-detail { background: transparent !important; border: none !important; padding: 0.25rem 0 0 !important; margin-top: 1rem !important; }
+.ic-result-card .dc-method-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    background: var(--cs-accent-soft) !important; color: var(--cs-accent) !important;
+    padding: 0.25rem 0.75rem !important; border-radius: var(--cs-radius-pill) !important;
+    border: 1px solid var(--cs-accent-ring);
+    font: 600 0.72rem var(--cs-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.05em;
+}
+.ic-result-card .dc-intermediate {
+    background: var(--cs-panel-bg-soft) !important;
+    border: 1px solid var(--cs-line) !important;
+    border-radius: var(--cs-radius) !important;
+    padding: 0.85rem 1rem !important;
+    margin-top: 0.75rem !important;
+    text-align: center;
+}
+.ic-result-card .dc-intermediate-label {
+    font: 600 0.68rem var(--cs-font-sans) !important;
+    color: var(--cs-muted) !important;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 0.35rem !important;
+}
+.ic-result-card .dc-steps-btn {
+    margin-top: 1rem !important;
+    padding: 0.55rem 1.1rem !important;
+    border: 1px solid var(--cs-accent) !important;
+    background: transparent !important; color: var(--cs-accent) !important;
+    border-radius: var(--cs-radius-pill) !important;
+    font: 600 0.82rem var(--cs-font-sans) !important;
+    transition: background var(--cs-transition), color var(--cs-transition) !important;
+}
+.ic-result-card .dc-steps-btn:hover { background: var(--cs-accent) !important; color: #fff !important; }
+.ic-result-card .dc-steps-container {
+    margin-top: 1.1rem !important;
+    border: 1px solid var(--cs-line) !important;
+    border-radius: var(--cs-radius) !important;
+    overflow: hidden; background: var(--cs-panel-bg-soft); text-align: left;
+}
+.ic-result-card .dc-steps-header {
+    padding: 0.7rem 1.1rem !important;
+    background: var(--cs-accent-soft) !important;
+    border-bottom: 1px solid var(--cs-line) !important;
+    color: var(--cs-accent) !important;
+    font: 600 0.78rem var(--cs-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.06em;
+}
+.ic-result-card .dc-step {
+    padding: 0.9rem 1.1rem !important;
+    border-bottom: 1px solid var(--cs-line) !important;
+    display: flex; gap: 0.9rem; align-items: flex-start;
+}
+.ic-result-card .dc-step:last-child { border-bottom: none !important; }
+.ic-result-card .dc-step-num {
+    width: 26px !important; height: 26px !important;
+    background: var(--cs-accent) !important; color: #fff !important;
+    font: 700 0.72rem var(--cs-font-sans) !important;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.ic-result-card .dc-step-title {
+    font: 600 0.75rem var(--cs-font-sans) !important;
+    color: var(--cs-ink-soft) !important;
+    margin-bottom: 0.35rem !important;
+    text-transform: uppercase; letter-spacing: 0.04em;
+}
+.ic-result-card .dc-step-math    { font-size: 1.02rem !important; color: var(--cs-ink) !important; }
+.ic-result-card .dc-step-math .katex-display { margin: 0 !important; display: inline-block; white-space: nowrap; }
+.ic-result-card .dc-error {
+    background: #fef7ed !important;
+    border: 1px solid #fdba74 !important;
+    border-radius: var(--cs-radius) !important;
+    padding: 1.25rem !important;
+    color: #9a3412 !important;
+    text-align: left;
+}
+[data-theme="dark"] .ic-result-card .dc-error {
+    background: rgba(251, 146, 60, 0.08) !important;
+    border-color: rgba(251, 146, 60, 0.3) !important;
+    color: #fdba74 !important;
+}
+
+/* Derivative order toggle — same pill-segment pattern as the ic-mode-toggle */
+.ic-hero .dc-order-toggle {
+    display: inline-flex; gap: 2px;
+    background: var(--cs-panel-bg-soft);
+    padding: 3px; border-radius: var(--cs-radius-pill);
+    border: 1px solid var(--cs-line);
+}
+.ic-hero .dc-order-btn {
+    padding: 5px 12px; border: none; background: transparent;
+    color: var(--cs-muted);
+    font: 600 12px var(--cs-font-sans);
+    cursor: pointer; border-radius: var(--cs-radius-pill);
+    transition: color var(--cs-transition), background var(--cs-transition);
+}
+.ic-hero .dc-order-btn:hover:not(.active) { color: var(--cs-ink); }
+.ic-hero .dc-order-btn.active {
+    background: var(--cs-panel-bg);
+    color: var(--cs-accent);
+    box-shadow: var(--cs-shadow-sm);
+}
+
+/* ── Limit-tool aliases — same styling as ic-result-* twins.
+   Added during the limit-calculator migration.  Same pattern as the
+   dc-* block above; keeps the JS unchanged.  ──────────────────── */
+.ic-result-card .lc-result-math   { padding: 1.75rem 0 0; text-align: center; }
+.ic-result-card .lc-result-math .katex-display { margin: 0.5rem 0; overflow-x: auto; overflow-y: hidden; }
+.ic-result-card .lc-result-label {
+    font: 600 0.7rem var(--cs-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--cs-muted) !important;
+    margin-bottom: 0.45rem !important;
+}
+.ic-result-card .lc-result-main  { font-size: 1.4rem !important; padding: 1.2rem 0 !important; color: var(--cs-ink) !important; }
+.ic-result-card .lc-result-numeric {
+    background: var(--cs-accent-soft) !important; color: var(--cs-accent) !important;
+    padding: 1rem 1.25rem !important; border-radius: var(--cs-radius) !important;
+    border: 1px solid var(--cs-accent-ring);
+    font: 600 1.3rem var(--cs-font-mono) !important; margin: 0.9rem 0 !important;
+}
+.ic-result-card .lc-result-detail { background: transparent !important; border: none !important; padding: 0.25rem 0 0 !important; margin-top: 1rem !important; }
+.ic-result-card .lc-method-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    background: var(--cs-accent-soft) !important; color: var(--cs-accent) !important;
+    padding: 0.25rem 0.75rem !important; border-radius: var(--cs-radius-pill) !important;
+    border: 1px solid var(--cs-accent-ring);
+    font: 600 0.72rem var(--cs-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.05em;
+}
+.ic-result-card .lc-steps-btn {
+    margin-top: 1rem !important;
+    padding: 0.55rem 1.1rem !important;
+    border: 1px solid var(--cs-accent) !important;
+    background: transparent !important; color: var(--cs-accent) !important;
+    border-radius: var(--cs-radius-pill) !important;
+    font: 600 0.82rem var(--cs-font-sans) !important;
+    transition: background var(--cs-transition), color var(--cs-transition) !important;
+}
+.ic-result-card .lc-steps-btn:hover { background: var(--cs-accent) !important; color: #fff !important; }
+.ic-result-card .lc-steps-container {
+    margin-top: 1.1rem !important;
+    border: 1px solid var(--cs-line) !important;
+    border-radius: var(--cs-radius) !important;
+    overflow: hidden; background: var(--cs-panel-bg-soft); text-align: left;
+}
+.ic-result-card .lc-steps-header {
+    padding: 0.7rem 1.1rem !important;
+    background: var(--cs-accent-soft) !important;
+    border-bottom: 1px solid var(--cs-line) !important;
+    color: var(--cs-accent) !important;
+    font: 600 0.78rem var(--cs-font-sans) !important;
+    text-transform: uppercase; letter-spacing: 0.06em;
+}
+.ic-result-card .lc-step {
+    padding: 0.9rem 1.1rem !important;
+    border-bottom: 1px solid var(--cs-line) !important;
+    display: flex; gap: 0.9rem; align-items: flex-start;
+}
+.ic-result-card .lc-step:last-child { border-bottom: none !important; }
+.ic-result-card .lc-step-num {
+    width: 26px !important; height: 26px !important;
+    background: var(--cs-accent) !important; color: #fff !important;
+    font: 700 0.72rem var(--cs-font-sans) !important;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.ic-result-card .lc-step-title {
+    font: 600 0.75rem var(--cs-font-sans) !important;
+    color: var(--cs-ink-soft) !important;
+    margin-bottom: 0.35rem !important;
+    text-transform: uppercase; letter-spacing: 0.04em;
+}
+.ic-result-card .lc-step-math    { font-size: 1.02rem !important; color: var(--cs-ink) !important; }
+.ic-result-card .lc-step-math .katex-display { margin: 0 !important; display: inline-block; white-space: nowrap; }
+.ic-result-card .lc-error {
+    background: #fef7ed !important;
+    border: 1px solid #fdba74 !important;
+    border-radius: var(--cs-radius) !important;
+    padding: 1.25rem !important;
+    color: #9a3412 !important;
+    text-align: left;
+}
+[data-theme="dark"] .ic-result-card .lc-error {
+    background: rgba(251, 146, 60, 0.08) !important;
+    border-color: rgba(251, 146, 60, 0.3) !important;
+    color: #fdba74 !important;
+}
+
+/* Limit direction toggle — left / right / two-sided pill segment.
+   Same pattern as Indef/Def + 1st/2nd/3rd derivative-order toggles. */
+.ic-hero .lc-dir-toggle {
+    display: inline-flex; gap: 2px;
+    background: var(--cs-panel-bg-soft);
+    padding: 3px; border-radius: var(--cs-radius-pill);
+    border: 1px solid var(--cs-line);
+}
+.ic-hero .lc-dir-btn {
+    padding: 5px 12px; border: none; background: transparent;
+    color: var(--cs-muted);
+    font: 600 12px var(--cs-font-sans);
+    cursor: pointer; border-radius: var(--cs-radius-pill);
+    transition: color var(--cs-transition), background var(--cs-transition);
+}
+.ic-hero .lc-dir-btn:hover:not(.active) { color: var(--cs-ink); }
+.ic-hero .lc-dir-btn.active {
+    background: var(--cs-panel-bg);
+    color: var(--cs-accent);
+    box-shadow: var(--cs-shadow-sm);
+}
+
+/* Spinner used by loading states */
+.ic-result-card .ic-spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: ms-spin 0.7s linear infinite;
+    vertical-align: -2px;
+    margin-right: 0.35rem;
+}
+
+/* Empty state — friendly, descriptive */
+.ic-empty-state {
+    padding: 3rem 1.5rem !important;
+    text-align: center;
+}
+.ic-empty-illustration {
+    font-family: var(--cs-font-serif);
+    font-size: 5.5rem;
+    line-height: 1;
+    color: var(--cs-accent);
+    opacity: 0.45;
+    margin-bottom: 0.5rem;
+}
+.ic-empty-state h3 {
+    font: 400 1.5rem var(--cs-font-serif);
+    margin: 0 0 0.5rem;
+    color: var(--cs-ink);
+}
+.ic-empty-state p {
+    max-width: 420px; margin: 0 auto;
+    color: var(--cs-muted); font-size: 0.92rem;
+    line-height: 1.6;
+}
+.ic-empty-preview {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 1rem;
+    padding: 0.4rem 0.85rem;
+    background: var(--cs-accent-softer);
+    color: var(--cs-accent);
+    border-radius: var(--cs-radius-pill);
+    font: 600 0.78rem var(--cs-font-sans);
+}
+
+/* ── FAQ accordion (shared across math tool + index pages) ─────
+   Matches the 2026 editorial tone: no cards, just type with a
+   hairline between items.  Chevron rotates on open. */
+.cs-faq {
+    background: var(--cs-panel-bg);
+    border: 1px solid var(--cs-line);
+    border-radius: var(--cs-radius);
+    padding: 0.5rem 1.25rem;
+    box-shadow: var(--cs-shadow-sm);
+}
+.cs-faq-title {
+    font: 400 1.35rem var(--cs-font-serif);
+    letter-spacing: -0.015em;
+    color: var(--cs-ink);
+    margin: 0.75rem 0 0.25rem;
+}
+.cs-faq-item { border-bottom: 1px solid var(--cs-line); }
+.cs-faq-item:last-child { border-bottom: none; }
+.cs-faq-q {
+    width: 100%; background: none; border: none; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: 1rem 0;
+    font: 500 0.98rem var(--cs-font-sans);
+    color: var(--cs-ink); text-align: left;
+    transition: color var(--cs-transition);
+}
+.cs-faq-q:hover { color: var(--cs-accent); }
+.cs-faq-chevron {
+    width: 16px; height: 16px;
+    color: var(--cs-muted);
+    transition: transform var(--cs-transition);
+    flex-shrink: 0;
+}
+.cs-faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s var(--cs-ease), padding 0.3s var(--cs-ease);
+    color: var(--cs-ink-soft); line-height: 1.65;
+    font-size: 0.93rem; padding: 0;
+}
+.cs-faq-item.open .cs-faq-a { max-height: 700px; padding: 0 0 1rem; }
+.cs-faq-item.open .cs-faq-chevron { transform: rotate(180deg); color: var(--cs-accent); }
+
+/* ── Methods reference band ─────────────────────────────────────
+   Supporting content — intentionally lighter than the hero/result.
+   Borderless, flat, one-line formulas. Reads as a reference strip,
+   not a third pane competing with the tool. */
+.ic-learn {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+@media (max-width: 899px) { .ic-learn { grid-template-columns: 1fr; } }
+.ic-learn-card {
+    background: transparent;
+    border: 1px dashed var(--cs-line);
+    border-radius: var(--cs-radius-sm);
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: border-color var(--cs-transition), background var(--cs-transition);
+}
+.ic-learn-card:hover {
+    border-color: var(--cs-line-strong);
+    background: var(--cs-panel-bg-soft);
+}
+.ic-learn-method {
+    font: 600 0.68rem var(--cs-font-sans);
+    color: var(--cs-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.ic-learn-formula {
+    font: 0.88rem var(--cs-font-mono);
+    color: var(--cs-ink);
+    padding: 0;
+    background: none;
+    border: none;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* ── Slim title row — no card, just type ───────────────────────── */
+.cs-title { padding: 0.25rem 0.25rem 0.5rem; }
+.cs-crumbs {
+    display: flex; align-items: center; gap: 0.35rem;
+    font: 0.78rem var(--cs-font-sans);
+    color: var(--cs-muted);
+    margin-bottom: 0.15rem;
+}
+.cs-crumbs a {
+    color: var(--cs-muted);
+    text-decoration: none;
+    transition: color var(--cs-transition);
+}
+.cs-crumbs a:hover { color: var(--cs-accent); }
+.cs-crumbs span[aria-current="page"] { color: var(--cs-ink); font-weight: 500; }
+.cs-title h1 {
+    margin: 0;
+    font: 400 2rem var(--cs-font-serif);
+    color: var(--cs-ink);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+@media (max-width: 899px) { .cs-title h1 { font-size: 1.5rem; } }
+
+/* ── Mobile trims ───────────────────────────────────────────────── */
+@media (max-width: 899px) {
+    .ic-hero { position: static !important; padding: 1.15rem; }
+    .ic-hero .ic-mathfield { min-height: 46px !important; font-size: 1.05rem !important; }
+    .ic-result-card { min-height: 340px; }
+    .ic-stack .ic-panel { padding: 1rem; }
+    .cs-tool-header { padding: 1.15rem; }
+    .cs-tool-header h1 { font-size: 1.4rem; }
+}
+
+/* ── .mml-pair — generic Visual/Text math input pair ────────────────
+   Used by tools that wire MathLive via /math/partials/math-input-multi.jsp
+   (series-calculator, vector-calculus-calculator).  The single-pair tools
+   (integral / derivative / limit) use the older #ic-mathfield + #ic-expr
+   ID-scoped rules above instead.
+
+   Visual mode → text input + autocomplete dropdown hidden, math-field shown.
+   Text mode   → math-field hidden, text input shown.
+   No mode set → behaves as Visual.                                        */
+.mml-pair { position: relative; }
+.mml-pair[data-input-mode="visual"] .mml-text,
+.mml-pair[data-input-mode="visual"] .mml-text-extra,
+.mml-pair:not([data-input-mode]) .mml-text,
+.mml-pair:not([data-input-mode]) .mml-text-extra {
+    display: none !important;
+}
+.mml-pair[data-input-mode="text"] .mml-mathfield {
+    display: none !important;
+}
+
+.mml-mathfield {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    padding: 0.65rem 0.9rem;
+    font-size: 1.05rem;
+    border: 1.5px solid var(--cs-line-strong, #cbd5e1);
+    border-radius: 0.5rem;
+    background: var(--cs-panel-bg-soft, #fafafa);
+    color: var(--cs-ink, #0f172a);
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.mml-mathfield:focus-within {
+    outline: none;
+    border-color: var(--cs-accent, #15803d);
+    background: var(--cs-panel-bg, #fff);
+    box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12);
+}
+[data-theme="dark"] .mml-mathfield {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border, #334155);
+    color: var(--text-primary, #f1f5f9);
+}
+
+/* When .mml-pair is dropped inside vector-calc's flex .vc-vector-field-group
+   (label badge + input row), claim the remaining horizontal space — the
+   legacy rule `.vc-vector-field-group .tool-input { flex: 1 }` doesn't
+   reach the now-nested input. */
+.vc-vector-field-group > .mml-pair { flex: 1; min-width: 0; }
+.vc-vector-field-group > .mml-pair .mml-mathfield { min-height: 44px; padding: 0.55rem 0.8rem; font-size: 1rem; }
+.vc-vector-field-group > .mml-pair .mml-text { width: 100%; }
+
+/* Print styles — teachers & students printing results ───────── */
+@media print {
+    body.cs-body {
+        padding-top: 0 !important;
+        background: #fff !important; color: #000 !important;
+    }
+    .modern-nav,
+    .cs-sidebar,
+    .cs-rail,
+    .cs-hero,
+    .cs-inline-ad,
+    .cs-sidebar-toggle,
+    .cs-sidebar-backdrop,
+    .ad-lab-sticky,
+    .ad-hero-banner,
+    [class*="ad-"],
+    .ic-hero-methods,
+    .ic-hero-syntax,
+    .ic-output-tabs,
+    .tool-result-actions,
+    #ic-worksheet-btn,
+    footer { display: none !important; }
+    .cs-main { grid-template-columns: 1fr !important; margin: 0; padding: 0; }
+    .ic-hero, .ic-result-card, .cs-tool-header, .ic-learn-card {
+        box-shadow: none !important; border: 1px solid #000 !important;
+        page-break-inside: avoid;
+    }
+    .ic-hero::before { display: none !important; }
+    .ic-panel { display: block !important; }
+    .ic-panel:not(.active) { display: none !important; }  /* only print active tab */
+    a { color: #000 !important; text-decoration: none; }
+    h1, h2, h3 { font-family: Georgia, serif !important; }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ---- hub components (cards, hero, faq) ---- */
+        /* Index-specific: hero banner + featured-tool cards.
+           All tokens come from math-studio.css; no duplication. */
+        .cs-hero-banner {
+            position: relative; overflow: hidden;
+            background:
+                    radial-gradient(circle at 10% 0%, rgba(21, 128, 61, 0.18), transparent 45%),
+                    radial-gradient(circle at 90% 100%, rgba(79, 70, 229, 0.12), transparent 50%),
+                    var(--cs-panel-bg);
+            color: var(--cs-ink);
+            padding: 2.25rem 2.25rem 2rem;
+            border-radius: var(--cs-radius-lg);
+            border: 1px solid var(--cs-line);
+            box-shadow: var(--cs-shadow);
+        }
+        .cs-hero-banner h1 {
+            font: 400 2.4rem/1.1 var(--cs-font-serif);
+            margin: 0 0 0.4rem;
+            letter-spacing: -0.02em;
+        }
+        .cs-hero-banner h1 em { font-style: italic; color: var(--cs-accent); }
+        .cs-hero-banner p { font: 1.02rem var(--cs-font-sans); color: var(--cs-ink-soft); margin: 0 0 1.5rem; max-width: 56ch; }
+        .cs-hero-stats { display: flex; gap: 2.25rem; flex-wrap: wrap; }
+        .cs-hero-stat { font: 500 0.82rem var(--cs-font-sans); color: var(--cs-muted); }
+        .cs-hero-stat strong {
+            display: block;
+            font: 400 1.65rem var(--cs-font-serif);
+            color: var(--cs-ink);
+            margin-bottom: 2px;
+            letter-spacing: -0.015em;
+        }
+
+        .cs-section-title {
+            font: 500 1.25rem var(--cs-font-serif);
+            color: var(--cs-ink);
+            margin: 0 0 1rem;
+            letter-spacing: -0.015em;
+        }
+
+        .cs-tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 0.85rem;
+        }
+        .cs-tool-card {
+            display: flex; align-items: center; gap: 0.85rem;
+            padding: 1rem 1.1rem;
+            background: var(--cs-panel-bg);
+            border: 1px solid var(--cs-line);
+            border-radius: var(--cs-radius);
+            text-decoration: none; color: var(--cs-ink);
+            transition: transform var(--cs-transition),
+            border-color var(--cs-transition),
+            box-shadow var(--cs-transition);
+        }
+        .cs-tool-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--cs-accent);
+            box-shadow: var(--cs-shadow);
+        }
+        .cs-tool-card-icon {
+            width: 40px; height: 40px; flex-shrink: 0;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: var(--cs-radius-sm);
+            font: 1.1rem var(--cs-font-serif);
+            background: var(--cs-accent-soft);
+            color: var(--cs-accent);
+        }
+        .cs-tool-card:hover .cs-tool-card-icon {
+            background: var(--cs-accent); color: #fff;
+        }
+        .cs-tool-card-title { font: 600 0.95rem var(--cs-font-sans); display: block; margin-bottom: 2px; }
+        .cs-tool-card-sub { font: 0.8rem var(--cs-font-sans); color: var(--cs-muted); }
+
+        /* .cs-faq-* styles now live in math-studio.css (shared with tool pages) */
+
+/* ---- chemistry accent (indigo) ---- */
+:root{--cs-accent:#6d5efc;--cs-accent-hover:#5848e0;--cs-accent-soft:rgba(109,94,252,.08);--cs-accent-softer:rgba(109,94,252,.04);--cs-accent-ring:rgba(109,94,252,.22);}
+[data-theme="dark"]{--cs-accent:#8b7bff;--cs-accent-hover:#a99cff;--cs-accent-soft:rgba(139,123,255,.12);--cs-accent-softer:rgba(139,123,255,.05);--cs-accent-ring:rgba(139,123,255,.28);}

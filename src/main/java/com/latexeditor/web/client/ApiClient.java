@@ -159,8 +159,16 @@ public class ApiClient {
      * Uploads a file as multipart/form-data.
      */
     public UploadResponse upload(byte[] fileBytes, String filename) throws ApiException, IOException {
-        String url = baseUrl + "/api/latex/upload";
+        String body = postMultipartUpload(baseUrl + "/api/latex/upload", fileBytes, filename);
+        if (body == null) {
+            // Standalone latex-api may only expose POST /api/upload
+            body = postMultipartUpload(baseUrl + "/api/upload", fileBytes, filename);
+        }
+        return parseUploadResponse(body);
+    }
 
+    private String postMultipartUpload(String url, byte[] fileBytes, String filename)
+            throws ApiException, IOException {
         CloseableHttpClient client = HttpClients.createDefault();
         try {
             HttpPost post = new HttpPost(url);
@@ -175,14 +183,31 @@ public class ApiClient {
             int status = response.getStatusLine().getStatusCode();
             String body = readBody(response);
 
+            if (status == 404) {
+                return null;
+            }
             if (status >= 400) {
                 throw new ApiException(status >= 500 ? 502 : status, body);
             }
-
-            return JsonUtil.fromJson(body, UploadResponse.class);
+            return body;
         } finally {
             client.close();
         }
+    }
+
+    private static UploadResponse parseUploadResponse(String body) throws ApiException {
+        if (body == null || body.isEmpty()) {
+            throw new ApiException(502, "Empty upload response from API");
+        }
+        if (body.contains("\"jobId\"") && !body.contains("\"fileId\"")) {
+            throw new ApiException(502,
+                    "Upload hit the compile endpoint (got jobId). Check api= in 8gwifi.prop points to the LaTeX API.");
+        }
+        UploadResponse result = JsonUtil.fromJson(body, UploadResponse.class);
+        if (result == null || result.getFileId() == null || result.getFileId().isEmpty()) {
+            throw new ApiException(502, "Invalid upload response: " + body);
+        }
+        return result;
     }
 
     /**
