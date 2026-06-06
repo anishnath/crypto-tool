@@ -6,14 +6,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="../modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Molecular Formula to Structure — Draw, Balance & Explore" />
+    <jsp:param name="toolName" value="Molecular Formula to Structure &amp; 3D Viewer" />
     <jsp:param name="toolCategory" value="Chemistry" />
-    <jsp:param name="toolDescription" value="Enter a molecular formula like C10H14N2 to see matching compounds with their SMILES and 2D/3D structures, balance equations, and predict reaction products. Free, instant, no signup." />
+    <jsp:param name="toolDescription" value="Turn a chemical formula like C6H12O6 into molecules: see 2D &amp; 3D structures, Lewis dot diagrams and SMILES, plus balance equations and predict products." />
     <jsp:param name="toolUrl" value="chemistry/formula-to-molecule.jsp" />
-    <jsp:param name="toolKeywords" value="molecular formula to structure, formula to smiles, pubchem formula search, formula to molecule, C10H14N2 structure, draw molecule from formula, chemistry lookup, smiles from formula" />
-    <jsp:param name="toolImage" value="molecule-draw.svg" />
+    <jsp:param name="toolKeywords" value="molecular formula to structure, formula to structure, chemical formula to structure, formula to smiles, smiles from formula, draw molecule from formula, structure from molecular formula, molecular structure viewer, 3d molecule viewer online, lewis structure from formula, formula to molecule, what does a molecule look like" />
+    <jsp:param name="toolImage" value="formula-to-structure-og.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="chemistry/" />
     <jsp:param name="educationalLevel" value="High School, Undergraduate" />
+    <jsp:param name="teaches" value="Molecular structure, Lewis structures, SMILES notation, chemical formulas, balancing equations" />
+    <jsp:param name="toolFeatures" value="2D structure from any molecular formula,Interactive 3D molecular model,Lewis dot structure,SMILES output with one-click copy,Balance chemical equations,Predict reaction products,Download structure images" />
+    <jsp:param name="hasSteps" value="true" />
+    <jsp:param name="howToSteps" value="Enter a formula|Type a molecular formula like C6H12O6 or H2O — or a full equation to balance,See matching structures|Each matching compound appears with its 2D structure and SMILES,Explore in 3D and Lewis|Open the interactive 3D model or the Lewis dot structure for any result,Copy or download|Copy the SMILES string or download the structure image" />
+    <jsp:param name="faq1q" value="How do I find a molecule's structure from its chemical formula?" />
+    <jsp:param name="faq1a" value="Type a molecular formula such as C6H12O6, C10H14N2 or H2O. The tool instantly shows every matching compound with its 2D structure, an interactive 3D model, the Lewis dot structure, and the SMILES string." />
+    <jsp:param name="faq2q" value="Can one molecular formula have more than one structure?" />
+    <jsp:param name="faq2a" value="Yes. Many formulas are shared by several compounds called isomers — for example C2H6O is both ethanol and dimethyl ether. The tool lists each matching compound so you can compare them." />
+    <jsp:param name="faq3q" value="Can I view and rotate the molecule in 3D?" />
+    <jsp:param name="faq3a" value="Yes. Click 3D on any result for an interactive model you can rotate and zoom, switch between ball-and-stick, space-filling and wireframe, toggle hydrogens, animate it, and download the coordinates." />
+    <jsp:param name="faq4q" value="What is SMILES and how do I copy it?" />
+    <jsp:param name="faq4a" value="SMILES is a compact text notation for a molecule's structure. Every result shows its SMILES string with a one-click copy button so you can paste it into other chemistry software." />
+    <jsp:param name="faq5q" value="Can it balance chemical equations and predict products?" />
+    <jsp:param name="faq5a" value="Yes. Enter a full equation with an equals sign, like Fe + Cl2 = FeCl3, to balance it — or type just the reactants, like C + O2, to predict and balance the products." />
+    <jsp:param name="faq6q" value="Is the tool free?" />
+    <jsp:param name="faq6a" value="Yes. It is completely free, runs in your browser, and needs no signup." />
 </jsp:include>
 <!-- "Quiet place" studio fonts (Inter + Instrument Serif), plus Fira Code for formulas -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -187,6 +203,60 @@
   <div class="cs-inline-ad" style="margin-top:24px;">
     <%@ include file="/modern/ads/ad-in-content-mid.jsp" %>
   </div>
+
+  <!-- Visible FAQ — mirrors the FAQ JSON-LD emitted by seo-tool-page.jsp above.
+       Google requires FAQ structured data to correspond to on-page content. -->
+  <section class="cs-faq-wrap" style="max-width:100%;margin-top:28px;padding:0;">
+    <h2 class="cs-faq-title" id="faqs">Frequently asked</h2>
+    <div class="cs-faq" aria-label="Formula to Structure FAQ">
+      <div class="cs-faq-item">
+        <button class="cs-faq-q" type="button">How do I find a molecule's structure from its chemical formula?
+          <svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="cs-faq-a">Type a molecular formula such as <code>C6H12O6</code>, <code>C10H14N2</code> or <code>H2O</code>. The tool instantly shows every matching compound with its 2D structure, an interactive 3D model, the Lewis dot structure, and the SMILES string.</div>
+      </div>
+      <div class="cs-faq-item">
+        <button class="cs-faq-q" type="button">Can one molecular formula have more than one structure?
+          <svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="cs-faq-a">Yes. Many formulas are shared by several compounds called isomers &mdash; for example <code>C2H6O</code> is both ethanol and dimethyl ether. The tool lists each matching compound so you can compare them.</div>
+      </div>
+      <div class="cs-faq-item">
+        <button class="cs-faq-q" type="button">Can I view and rotate the molecule in 3D?
+          <svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="cs-faq-a">Yes. Click <strong>3D</strong> on any result for an interactive model you can rotate and zoom, switch between ball-and-stick, space-filling and wireframe, toggle hydrogens, animate it, and download the coordinates.</div>
+      </div>
+      <div class="cs-faq-item">
+        <button class="cs-faq-q" type="button">What is SMILES and how do I copy it?
+          <svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="cs-faq-a">SMILES is a compact text notation for a molecule's structure. Every result shows its SMILES string with a one-click copy button so you can paste it into other chemistry software.</div>
+      </div>
+      <div class="cs-faq-item">
+        <button class="cs-faq-q" type="button">Can it balance chemical equations and predict products?
+          <svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="cs-faq-a">Yes. Enter a full equation with an equals sign, like <code>Fe + Cl2 = FeCl3</code>, to balance it &mdash; or type just the reactants, like <code>C + O2</code>, to predict and balance the products.</div>
+      </div>
+      <div class="cs-faq-item">
+        <button class="cs-faq-q" type="button">Is the tool free?
+          <svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="cs-faq-a">Yes. It is completely free, runs in your browser, and needs no signup.</div>
+      </div>
+    </div>
+  </section>
+  <script>
+    (function () {
+      document.querySelectorAll('.cs-faq-q').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var item = btn.closest('.cs-faq-item');
+          if (item) item.classList.toggle('open');
+        });
+      });
+    })();
+  </script>
 </div>
   </section>
 
