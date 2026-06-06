@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#f3eee5"/>
+    </linearGradient>
+    <radialGradient id="accentGlow" cx="0.32" cy="0.5" r="0.42">
+      <stop offset="0%" stop-color="#6d5efc" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#6d5efc" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#6d5efc" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/>
+    </pattern>
+    <radialGradient id="sphereC" cx="0.35" cy="0.3" r="0.75">
+      <stop offset="0%" stop-color="#9b8dff"/>
+      <stop offset="100%" stop-color="#4b3fb0"/>
+    </radialGradient>
+    <radialGradient id="sphereO" cx="0.35" cy="0.3" r="0.75">
+      <stop offset="0%" stop-color="#ff9a9a"/>
+      <stop offset="100%" stop-color="#c0392b"/>
+    </radialGradient>
+    <radialGradient id="nucleus" cx="0.38" cy="0.34" r="0.72">
+      <stop offset="0%" stop-color="#b6a9ff"/>
+      <stop offset="100%" stop-color="#5b4fd6"/>
+    </radialGradient>
+    <linearGradient id="flask" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8b7bff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#6d5efc" stop-opacity="0.42"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ── Left composition: atom + benzene + flask ── -->
+  <g transform="translate(360 315)">
+    <!-- Bohr-style electron orbits around the whole scene -->
+    <circle r="238" fill="none" stroke="#6d5efc" stroke-opacity="0.16" stroke-width="1.5" stroke-dasharray="4 8"/>
+    <ellipse rx="232" ry="92" fill="none" stroke="#6d5efc" stroke-opacity="0.22" stroke-width="1.5" transform="rotate(28)"/>
+    <ellipse rx="232" ry="92" fill="none" stroke="#6d5efc" stroke-opacity="0.18" stroke-width="1.5" transform="rotate(-32)"/>
+    <!-- electrons riding the orbits -->
+    <circle cx="205" cy="108" r="8" fill="url(#nucleus)" transform="rotate(28)"/>
+    <circle cx="-205" cy="-108" r="7" fill="url(#nucleus)" transform="rotate(-32)"/>
+    <circle cx="-228" cy="20" r="6" fill="url(#nucleus)"/>
+
+    <!-- faint element symbols (periodic hint) -->
+    <g font-family="'Inter',sans-serif" fill="#1c1917" fill-opacity="0.16" font-weight="700">
+      <text x="-200" y="-150" font-size="40">N</text>
+      <text x="170" y="-120" font-size="34">H</text>
+      <text x="150" y="170" font-size="38">O</text>
+    </g>
+
+    <!-- benzene ring with 3D-sphere atoms + an -OH (Lewis dots) -->
+    <g transform="translate(-12 -20)">
+      <g stroke="#5b4fd6" stroke-width="4.5" stroke-linecap="round">
+        <polygon points="0,-92 79.7,-46 79.7,46 0,92 -79.7,46 -79.7,-46" fill="none" stroke-opacity="0.85"/>
+        <polygon points="0,-64 55.4,-32 55.4,32 0,64 -55.4,32 -55.4,-32" fill="none" stroke-opacity="0.4"/>
+        <line x1="79.7" y1="-46" x2="140" y2="-80"/>
+      </g>
+      <g>
+        <circle cx="0" cy="-92" r="15" fill="url(#sphereC)"/>
+        <circle cx="79.7" cy="-46" r="15" fill="url(#sphereC)"/>
+        <circle cx="79.7" cy="46" r="15" fill="url(#sphereC)"/>
+        <circle cx="0" cy="92" r="15" fill="url(#sphereC)"/>
+        <circle cx="-79.7" cy="46" r="15" fill="url(#sphereC)"/>
+        <circle cx="-79.7" cy="-46" r="15" fill="url(#sphereC)"/>
+      </g>
+      <circle cx="140" cy="-80" r="16" fill="url(#sphereO)"/>
+      <g fill="#1c1917" fill-opacity="0.6">
+        <circle cx="140" cy="-104" r="3.6"/>
+        <circle cx="152" cy="-101" r="3.6"/>
+        <circle cx="163" cy="-68" r="3.6"/>
+        <circle cx="163" cy="-56" r="3.6"/>
+      </g>
+    </g>
+
+    <!-- small Erlenmeyer flask, lower-left -->
+    <g transform="translate(-150 120)">
+      <path d="M -16 -34 L -16 -10 L -40 38 Q -44 50 -30 50 L 30 50 Q 44 50 40 38 L 16 -10 L 16 -34 Z"
+            fill="url(#flask)" stroke="#5b4fd6" stroke-opacity="0.7" stroke-width="3" stroke-linejoin="round"/>
+      <line x1="-22" y1="-34" x2="22" y2="-34" stroke="#5b4fd6" stroke-opacity="0.7" stroke-width="3" stroke-linecap="round"/>
+      <path d="M -33 22 L 33 22 L 30 38 Q 30 44 22 44 L -22 44 Q -30 44 -30 38 Z" fill="#6d5efc" fill-opacity="0.45"/>
+      <circle cx="-6" cy="14" r="3" fill="#6d5efc" fill-opacity="0.5"/>
+      <circle cx="10" cy="4" r="2.4" fill="#6d5efc" fill-opacity="0.4"/>
+    </g>
+  </g>
+
+  <!-- ── Right: title block ── -->
+  <g transform="translate(720 178)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#6d5efc"/>
+    <text x="0" y="38" font-size="20" font-weight="600" fill="#6d5efc" letter-spacing="3">8GWIFI · CHEMISTRY</text>
+
+    <text x="0" y="118" font-size="76" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">A quiet place</text>
+    <text x="0" y="192" font-size="76" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">for chemistry.</text>
+
+    <text x="0" y="250" font-size="22" fill="#44403c" font-weight="400">Structures · Lewis · 3D VSEPR · reactions</text>
+    <text x="0" y="282" font-size="22" fill="#44403c" font-weight="400">Periodic · molar mass · molarity · free</text>
+
+    <g transform="translate(0 318)">
+      <g>
+        <rect x="0" y="0" width="172" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28" stroke-width="1"/>
+        <text x="86" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#5b4fd6">FORMULA → STRUCTURE</text>
+      </g>
+      <g transform="translate(184 0)">
+        <rect x="0" y="0" width="118" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28" stroke-width="1"/>
+        <text x="59" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#5b4fd6">BALANCER</text>
+      </g>
+      <g transform="translate(0 48)">
+        <rect x="0" y="0" width="118" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28" stroke-width="1"/>
+        <text x="59" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#5b4fd6">3D VSEPR</text>
+      </g>
+      <g transform="translate(130 48)">
+        <rect x="0" y="0" width="160" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28" stroke-width="1"/>
+        <text x="80" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#5b4fd6">PERIODIC TABLE</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- brand -->
+  <g transform="translate(1130 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace">
+    <text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org/chemistry</text>
+  </g>
+</svg>
