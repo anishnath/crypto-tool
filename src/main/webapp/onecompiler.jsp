@@ -2284,6 +2284,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                         'go': '.go', 'rust': '.rs', 'php': '.php', 'ruby': '.rb',
                         'swift': '.swift', 'kotlin': '.kt', 'scala': '.scala',
                         'r': '.r', 'lua': '.lua', 'bash': '.sh', 'dart': '.dart',
+                        'perl': '.pl', 'haskell': '.hs',
                         'test': '.sh'
                     };
 
@@ -2490,6 +2491,7 @@ print("Welcome to 8gwifi.org Online Compiler")
                             javascript: "// Node.js JavaScript example\nconsole.log('Hello, World!');\n",
                             typescript: "// TypeScript example\nconsole.log('ok-ts');\n",
                             ruby: "# Ruby example\nputs 'Hello, World!'\n",
+                            perl: "# Perl example\nuse strict;\nuse warnings;\n\nprint \"Hello, World!\\n\";\n",
                             php: "<?php\\n// PHP example\\necho 'Hello, World!';\\n",
                             go: "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, World!\")\n}\n",
                             java: "public class Main {\n  public static void main(String[] args) {\n    System.out.println(\"Hello, World!\");\n  }\n}\n",
