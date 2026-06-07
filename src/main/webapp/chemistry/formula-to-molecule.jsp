@@ -23,7 +23,7 @@
     <jsp:param name="faq2q" value="Can one molecular formula have more than one structure?" />
     <jsp:param name="faq2a" value="Yes. Many formulas are shared by several compounds called isomers — for example C2H6O is both ethanol and dimethyl ether. The tool lists each matching compound so you can compare them." />
     <jsp:param name="faq3q" value="Can I view and rotate the molecule in 3D?" />
-    <jsp:param name="faq3a" value="Yes. Click 3D on any result for an interactive model you can rotate and zoom, switch between ball-and-stick, space-filling and wireframe, toggle hydrogens, animate it, and download the coordinates." />
+    <jsp:param name="faq3a" value="Yes. Click 3D on any result for an interactive model you can rotate and zoom, switch between ball-and-stick, space-filling and wireframe, toggle hydrogens, animate it, and download it as a PNG image or as coordinates (SDF, JSON, XML)." />
     <jsp:param name="faq4q" value="What is SMILES and how do I copy it?" />
     <jsp:param name="faq4a" value="SMILES is a compact text notation for a molecule's structure. Every result shows its SMILES string with a one-click copy button so you can paste it into other chemistry software." />
     <jsp:param name="faq5q" value="Can it balance chemical equations and predict products?" />
@@ -135,6 +135,8 @@
   .m3d-fmt b{color:var(--text);font-weight:600}
   .m3d-downloads button{font-size:.72rem;padding:4px 9px;border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:6px;cursor:pointer}
   .m3d-downloads button:hover{border-color:var(--accent);color:var(--accent)}
+  .m3d-img{padding-right:16px;border-right:1px solid var(--border)}
+  .m3d-img button{border-color:var(--accent);color:var(--accent)}
   /* Composition equation modal */
   .eq-overlay{position:fixed;inset:0;z-index:1000;background:rgba(5,7,12,.7);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
   .eq-overlay[hidden]{display:none}
@@ -225,7 +227,7 @@
         <button class="cs-faq-q" type="button">Can I view and rotate the molecule in 3D?
           <svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
-        <div class="cs-faq-a">Yes. Click <strong>3D</strong> on any result for an interactive model you can rotate and zoom, switch between ball-and-stick, space-filling and wireframe, toggle hydrogens, animate it, and download the coordinates.</div>
+        <div class="cs-faq-a">Yes. Click <strong>3D</strong> on any result for an interactive model you can rotate and zoom, switch between ball-and-stick, space-filling and wireframe, toggle hydrogens, animate it, and download it as a PNG image or as coordinates (SDF, JSON, XML).</div>
       </div>
       <div class="cs-faq-item">
         <button class="cs-faq-q" type="button">What is SMILES and how do I copy it?
@@ -295,13 +297,14 @@
     </div>
     <div id="mol3d-viewer" class="mol3d-viewer"></div>
     <div class="m3d-downloads" id="m3d-downloads">
-      <span class="m3d-dl-label">Download coordinates:</span>
+      <span class="m3d-fmt m3d-img"><b>Image</b> <button type="button" id="m3d-png">⬇ Download PNG</button></span>
+      <span class="m3d-dl-label">Coordinates:</span>
       <span class="m3d-fmt"><b>SDF</b> <button type="button" data-dl-fmt="SDF" data-act="save">Save</button> <button type="button" data-dl-fmt="SDF" data-act="display">Display</button></span>
       <span class="m3d-fmt"><b>JSON</b> <button type="button" data-dl-fmt="JSON" data-act="save">Save</button> <button type="button" data-dl-fmt="JSON" data-act="display">Display</button></span>
       <span class="m3d-fmt"><b>XML</b> <button type="button" data-dl-fmt="XML" data-act="save">Save</button> <button type="button" data-dl-fmt="XML" data-act="display">Display</button></span>
       <span class="m3d-fmt"><b>ASNT</b> <button type="button" data-dl-fmt="ASNT" data-act="save">Save</button> <button type="button" data-dl-fmt="ASNT" data-act="display">Display</button></span>
     </div>
-    <p class="eq-note">Interactive 3D model — drag to rotate, scroll to zoom. Switch representation, toggle hydrogens, animate, or download the coordinates.</p>
+    <p class="eq-note">Interactive 3D model — drag to rotate, scroll to zoom. Switch representation, toggle hydrogens, animate, download the view as a PNG image, or grab the coordinates.</p>
   </div>
 </div>
 
@@ -876,6 +879,16 @@
     } catch (e) { /* network */ }
   }
   function m3dDisplay(fmt) { window.open(m3dRecordUrl(fmt), '_blank', 'noopener'); }
+  // Snapshot the current 3D view as a PNG (3Dmol's pngURI; canvas fallback).
+  function m3dDownloadImage() {
+    if (!m3dViewer) return;
+    let uri = '';
+    try { m3dViewer.render(); uri = m3dViewer.pngURI(); } catch (e) {}
+    if (!uri) {
+      try { const cv = $('mol3d-viewer').querySelector('canvas'); if (cv) uri = cv.toDataURL('image/png'); } catch (e) {}
+    }
+    if (uri) triggerDownload(uri, (m3dCid ? 'molecule-' + m3dCid : 'molecule') + '-3d.png');
+  }
 
   // ── Rasterise an inline <svg> to a PNG download ──
   function svgElToPng(svgEl, filename, scale) {
@@ -1101,6 +1114,7 @@
   }));
   $('m3d-h').addEventListener('change', m3dApply);
   $('m3d-spin').addEventListener('change', () => { if (m3dViewer) m3dViewer.spin($('m3d-spin').checked ? 'y' : false); });
+  $('m3d-png').addEventListener('click', m3dDownloadImage);
   $('m3d-downloads').addEventListener('click', (e) => {
     const btn = e.target.closest('[data-dl-fmt]'); if (!btn) return;
     const fmt = btn.getAttribute('data-dl-fmt');
