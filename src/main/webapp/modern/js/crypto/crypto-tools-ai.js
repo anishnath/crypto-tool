@@ -2156,10 +2156,21 @@ function resolveMissingFields(plan, profile) {
         need('message', 'message (or ciphertext for decrypt)');
         need('secretKey', 'secret key (hex)');
         need('algorithm', 'cipher algorithm');
+      } else if (profile.tool === 'fernet') {
+        need('message', plan.intent === 'decrypt' ? 'Fernet token' : 'plaintext message');
+        need('key', 'Fernet key (base64url)');
+      } else if (profile.tool === 'pbe') {
+        need('message', 'message');
+        need('password', 'password');
+        need('algorithm', 'algorithm');
       } else {
         need('message', 'message');
-        if (profile.tool === 'pbe') need('password', 'password');
         need('algorithm', 'algorithm');
+      }
+      break;
+    case 'generate_key':
+      if (profile.tool !== 'fernet') {
+        missing.push('unsupported generate_key for this tool');
       }
       break;
     case 'derive':
