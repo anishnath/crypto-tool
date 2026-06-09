@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e2428"/>
+      <stop offset="1" stop-color="#081316"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2dd4bf"/>
+      <stop offset="1" stop-color="#0e8f96"/>
+    </linearGradient>
+    <linearGradient id="tealflat" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#16b8be"/>
+      <stop offset="1" stop-color="#0e8f96"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.0" r="0.9">
+      <stop offset="0" stop-color="#14b8a6" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#14b8a6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="420" fill="url(#glow)"/>
+
+  <!-- ===== Top bar ===== -->
+  <rect x="0" y="0" width="1200" height="96" fill="#102e33"/>
+  <rect x="0" y="95" width="1200" height="1" fill="#1f4248"/>
+
+  <!-- Logo: teal rounded square with envelope -->
+  <rect x="40" y="25" width="46" height="46" rx="12" fill="url(#teal)"/>
+  <rect x="51" y="39" width="24" height="18" rx="3" fill="none" stroke="#ffffff" stroke-width="2.4"/>
+  <path d="M51.5 41 L63 50 L74.5 41" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Title -->
+  <text x="102" y="47" font-size="30" fill="#ffffff" font-weight="700">Temporary Email</text>
+  <text x="103" y="74" font-size="16" fill="#9fc2c6">Free disposable inbox &#183; no registration &#183; receive mail in real time</text>
+
+  <!-- Auto-refresh badge -->
+  <rect x="1012" y="30" width="148" height="38" rx="9" fill="#0f3b40" stroke="#1f5a60"/>
+  <circle cx="1042" cy="49" r="5" fill="#2dd4bf"/>
+  <text x="1058" y="54" font-size="15" fill="#bfeef0" font-weight="600">Auto-refresh 30s</text>
+
+  <!-- ===== Address card ===== -->
+  <rect x="40" y="124" width="1120" height="96" rx="16" fill="#13262b" stroke="#23454b"/>
+  <text x="66" y="156" font-size="13" fill="#5e8186" font-weight="700" letter-spacing="1.5">YOUR TEMP ADDRESS</text>
+  <text x="66" y="195" font-size="27" font-weight="700" font-family="'SF Mono','Menlo','Consolas',monospace">
+    <tspan fill="#eafafb">quiet-fox-8472</tspan><tspan fill="#2dd4bf">@goodbanners.xyz</tspan>
+  </text>
+  <!-- Copy button -->
+  <rect x="996" y="148" width="138" height="48" rx="11" fill="url(#tealflat)"/>
+  <rect x="1020" y="164" width="13" height="15" rx="2.5" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <rect x="1024" y="160" width="13" height="15" rx="2.5" fill="#0e8f96" stroke="#ffffff" stroke-width="2"/>
+  <text x="1052" y="178" font-size="17" fill="#ffffff" font-weight="700">Copy</text>
+
+  <!-- ===== Inbox header ===== -->
+  <text x="42" y="270" font-size="22" fill="#ffffff" font-weight="700">Inbox</text>
+  <circle cx="120" cy="263" r="5" fill="#2dd4bf"/>
+  <text x="134" y="269" font-size="15" fill="#7fb0b4">3 new messages</text>
+
+  <!-- ===== Message cards ===== -->
+  <!-- Card 1 -->
+  <g>
+    <rect x="40" y="288" width="1120" height="84" rx="13" fill="#13262b" stroke="#23454b"/>
+    <circle cx="40" cy="330" r="4" fill="#2dd4bf"/>
+    <circle cx="90" cy="330" r="25" fill="url(#teal)"/>
+    <text x="90" y="337" font-size="19" fill="#06222a" text-anchor="middle" font-weight="700">GH</text>
+    <text x="134" y="323" font-size="19" fill="#eafafb" font-weight="700">GitHub</text>
+    <text x="134" y="349" font-size="16" fill="#8aa6ab">[GitHub] Please verify your email address</text>
+    <text x="1118" y="320" font-size="14" fill="#5e8186" text-anchor="end">2:14 PM</text>
+    <path d="M1100 343 l8 8 l8 -8" fill="none" stroke="#3f6168" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Card 2 -->
+  <g>
+    <rect x="40" y="384" width="1120" height="84" rx="13" fill="#13262b" stroke="#23454b"/>
+    <circle cx="40" cy="426" r="4" fill="#2dd4bf"/>
+    <circle cx="90" cy="426" r="25" fill="url(#teal)"/>
+    <text x="90" y="433" font-size="19" fill="#06222a" text-anchor="middle" font-weight="700">NF</text>
+    <text x="134" y="419" font-size="19" fill="#eafafb" font-weight="700">Netflix</text>
+    <text x="134" y="445" font-size="16" fill="#8aa6ab">Your sign-in code is 884213</text>
+    <text x="1118" y="416" font-size="14" fill="#5e8186" text-anchor="end">1:58 PM</text>
+    <path d="M1100 439 l8 8 l8 -8" fill="none" stroke="#3f6168" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Card 3 -->
+  <g>
+    <rect x="40" y="480" width="1120" height="84" rx="13" fill="#13262b" stroke="#23454b"/>
+    <circle cx="90" cy="522" r="25" fill="url(#teal)"/>
+    <text x="90" y="529" font-size="19" fill="#06222a" text-anchor="middle" font-weight="700">FG</text>
+    <text x="134" y="515" font-size="19" fill="#eafafb" font-weight="700">Figma</text>
+    <text x="134" y="541" font-size="16" fill="#8aa6ab">Confirm your account to get started</text>
+    <text x="1118" y="512" font-size="14" fill="#5e8186" text-anchor="end">1:30 PM</text>
+    <path d="M1100 535 l8 8 l8 -8" fill="none" stroke="#3f6168" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Footer -->
+  <text x="600" y="604" font-size="16" fill="#5e8186" text-anchor="middle">8gwifi.org &#183; free temporary email &#183; catch verification codes &amp; sign-up mail instantly</text>
+</svg>
