@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <% String v = String.valueOf(System.currentTimeMillis()); %>
 <%
-    // AI_LEGACY=true → use legacy CFExamMarkerFunctionality (OpenAI). Default: local /ai (Ollama)
-    String aiLegacy = System.getenv("AI_LEGACY");
-    boolean useLocalAI = !"true".equalsIgnoreCase(aiLegacy);
+    request.setAttribute("aiToolId", "electronics/logic-simulator");
 %>
+<%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -69,6 +68,7 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/electronics/css/logic-simulator.css">
+<%@ include file="../modern/components/ai-assistant-head.inc.jsp" %>
 
 <!-- Ads: defer to not block LCP -->
 <script>
@@ -109,27 +109,6 @@ window.addEventListener('load', function() {
 </div>
 
 <div class="lg-app" id="logicApp">
-
-  <!-- AI Panel (hidden by default, opens below toolbar) -->
-  <div class="lg-ai-panel" id="aiPanel">
-    <div class="lg-ai-bar">
-      <input type="text" class="lg-ai-input" id="aiInput" placeholder="Describe a logic circuit... e.g. &quot;half adder with XOR and AND&quot;" maxlength="500" autocomplete="off">
-      <button class="lg-ai-btn" id="aiGenerate">Generate</button>
-      <button class="lg-ai-close" id="aiClose" title="Close">&times;</button>
-      <span class="lg-ai-status" id="aiStatus"></span>
-    </div>
-    <div class="lg-ai-examples">
-      <span class="lg-ai-label">Try:</span>
-      <button class="lg-ai-chip" data-prompt="AND gate with two input switches and LED output">AND + LED</button>
-      <button class="lg-ai-chip" data-prompt="Half adder with XOR for sum and AND for carry">Half Adder</button>
-      <button class="lg-ai-chip" data-prompt="XOR gate built from 4 NAND gates">XOR from NAND</button>
-      <button class="lg-ai-chip" data-prompt="D flip-flop with clock source and LED on Q output">D-FF + Clock</button>
-      <button class="lg-ai-chip" data-prompt="4-bit binary counter with clock, enable, and 4 LEDs">4-bit Counter</button>
-      <button class="lg-ai-chip" data-prompt="2 to 1 multiplexer with select switch and output LED">2:1 MUX</button>
-      <button class="lg-ai-chip" data-prompt="SR latch using SR flip-flop with set and reset inputs">SR Latch</button>
-      <button class="lg-ai-chip" data-prompt="3-input majority voter using AND and OR gates">Majority Gate</button>
-    </div>
-  </div>
 
   <!-- Toolbar -->
   <div class="lg-toolbar" id="toolbar">
@@ -192,7 +171,7 @@ window.addEventListener('load', function() {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 2 12 2-6h4"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         <span>Timing</span>
       </button>
-      <button class="lg-tb-btn" id="btnAI" title="AI: describe a circuit in plain English">
+      <button type="button" class="lg-tb-btn" id="btnAI" title="AI assistant — generate circuits or explain logic (Ctrl+Shift+A)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v1h1a3 3 0 010 6h-1v1a4 4 0 01-8 0v-1H7a3 3 0 010-6h1V6a4 4 0 014-4z"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M9 14h6"/></svg>
         <span>AI</span>
       </button>
@@ -811,277 +790,6 @@ document.addEventListener('DOMContentLoaded', function () {
     analysisPanel.style.display = 'none';
   });
 
-  /* ── AI Circuit Generation ── */
-  const aiPanel  = document.getElementById('aiPanel');
-  const aiInput  = document.getElementById('aiInput');
-  const aiBtn    = document.getElementById('aiGenerate');
-  const aiStatus = document.getElementById('aiStatus');
-
-  function setAiStatus(msg, cls) {
-    aiStatus.textContent = msg;
-    aiStatus.className = 'lg-ai-status' + (cls ? ' ' + cls : '');
-  }
-
-  // Toggle panel
-  document.getElementById('btnAI').addEventListener('click', () => {
-    aiPanel.classList.toggle('open');
-    if (aiPanel.classList.contains('open')) aiInput.focus();
-  });
-  document.getElementById('aiClose').addEventListener('click', () => {
-    aiPanel.classList.remove('open');
-  });
-
-  // Example chips fill the input
-  document.querySelectorAll('.lg-ai-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      aiInput.value = chip.dataset.prompt;
-      aiInput.focus();
-    });
-  });
-
-  // Enter key triggers generate
-  aiInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !aiBtn.disabled) generateLogicCircuit();
-  });
-  aiBtn.addEventListener('click', generateLogicCircuit);
-
-  // AI backend selection: injected from server-side env variable
-  const USE_LOCAL_AI = <%= useLocalAI %>;
-
-  // System prompt for local AI (Ollama) — derived from source code analysis of all component types
-  const LOGIC_AI_SYSTEM = `You are an expert digital logic designer. Generate a circuit for the 8gwifi.org Logic Gate Simulator.
-
-## Output Format
-Return ONLY a JSON object (no markdown, no text, no code fences):
-{"name":"Short name","description":"One sentence","components":[{"type":"TYPE","x":<int>,"y":<int>,"attrs":{}}],"wires":[{"from":<idx>,"fromPort":<port>,"to":<idx>,"toPort":<port>}]}
-
-## Component Types & Port Indices
-
-### Gates
-Default 2 inputs. Ports: [in0=0, in1=1, out=2]. For N-input gate use attrs:{"inputs":N} — ports become [in0..inN-1, out=N].
-AND, OR, NAND, NOR, XOR, XNOR — 2-input: ports 0,1=in, 2=out. 3-input: ports 0,1,2=in, 3=out.
-NOT — ports: [in=0, out=1]
-BUFFER — ports: [in=0, out=1]
-
-### I/O Pins
-INPUT — [out=0]. attrs:{"label":"A","state":0}
-OUTPUT — [in=0]. attrs:{"label":"Q"}
-CLOCK — [out=0]. attrs:{"state":0,"period":500}
-CONSTANT — [out=0]. attrs:{"value":1} (0=LOW, 1=HIGH)
-PROBE — [in=0]
-
-### Interactive
-LED — [in=0]. attrs:{"color":"#22c55e"} (green). Other colors: "#ef4444"=red, "#3b82f6"=blue, "#eab308"=yellow
-BUTTON — [out=0] (momentary push)
-SWITCH — [out=0] (toggle)
-
-### Memory (rising-edge triggered)
-SR_FF — [S=0, CLK=1, R=2, Q=3, Q'=4]
-D_FF — [D=0, CLK=1, CLR=2, Q=3, Q'=4]
-JK_FF — [J=0, CLK=1, K=2, Q=3, Q'=4]
-T_FF — [T=0, CLK=1, Q=2, Q'=3]
-REGISTER — [D0=0,D1=1,D2=2,D3=3, CLK=4, CLR=5, Q0=6,Q1=7,Q2=8,Q3=9]
-COUNTER — [CLK=0, EN=1, CLR=2, Q0=3,Q1=4,Q2=5,Q3=6, OVF=7]
-
-### Arithmetic & Plexers
-ADDER — [A=0, B=1, Cin=2, S=3, Cout=4]
-SUBTRACTOR — [A=0, B=1, Bin=2, D=3, Bout=4]
-COMPARATOR — [A=0, B=1, A>B=2, A=B=3, A<B=4]
-MUX — [D0=0, D1=1, SEL=2, Y=3]
-DEMUX — [D=0, SEL=1, Y0=2, Y1=3]
-DECODER — [A0=0, A1=1, Y0=2, Y1=3, Y2=4, Y3=5]
-
-### Displays
-SEVEN_SEG — [a=0,b=1,c=2,d=3,e=4,f=5,g=6] all inputs
-HEX_DISPLAY — [D0=0,D1=1,D2=2,D3=3] all inputs
-LED_BAR — [L0-L7] indices 0-7, all inputs
-
-### Wiring
-TUNNEL_SRC — [in=0]. attrs:{"label":"bus_name"} (named bus source)
-TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receives from matching TUNNEL_SRC)
-
-## Wiring Rules
-- from/to = zero-based component index. fromPort/toPort = port index within that component
-- Wires go from OUTPUT ports to INPUT ports ONLY
-- 2-input gate output is port 2. NOT/BUFFER output is port 1. N-input gate output is port N
-- INPUT/CLOCK/SWITCH/BUTTON/CONSTANT output = port 0
-- OUTPUT/LED/PROBE input = port 0
-- One input port receives at most one wire (fan-out from output is OK)
-
-## Layout
-- 80px grid. Inputs left x=-160..-80, gates middle x=-40..120, outputs right x=160..240
-- Vertical spacing 40-60px. y range -120 to 120. Keep compact
-
-## Examples
-
-### AND gate
-{"name":"AND Gate","description":"Simple AND gate with two inputs","components":[{"type":"INPUT","x":-120,"y":-20,"attrs":{"label":"A","state":0}},{"type":"INPUT","x":-120,"y":20,"attrs":{"label":"B","state":0}},{"type":"AND","x":0,"y":0,"attrs":{}},{"type":"OUTPUT","x":120,"y":0,"attrs":{"label":"Q"}}],"wires":[{"from":0,"fromPort":0,"to":2,"toPort":0},{"from":1,"fromPort":0,"to":2,"toPort":1},{"from":2,"fromPort":2,"to":3,"toPort":0}]}
-
-### 3-input OR gate
-{"name":"3-Input OR","description":"OR gate with 3 inputs","components":[{"type":"INPUT","x":-120,"y":-40,"attrs":{"label":"A","state":0}},{"type":"INPUT","x":-120,"y":0,"attrs":{"label":"B","state":0}},{"type":"INPUT","x":-120,"y":40,"attrs":{"label":"C","state":0}},{"type":"OR","x":0,"y":0,"attrs":{"inputs":3}},{"type":"OUTPUT","x":120,"y":0,"attrs":{"label":"Y"}}],"wires":[{"from":0,"fromPort":0,"to":3,"toPort":0},{"from":1,"fromPort":0,"to":3,"toPort":1},{"from":2,"fromPort":0,"to":3,"toPort":2},{"from":3,"fromPort":3,"to":4,"toPort":0}]}
-
-### D flip-flop with clock and LED
-{"name":"D-FF + LED","description":"D flip-flop with clock showing Q on LED","components":[{"type":"INPUT","x":-120,"y":-16,"attrs":{"label":"D","state":0}},{"type":"CLOCK","x":-120,"y":0,"attrs":{"state":0,"period":500}},{"type":"CONSTANT","x":-120,"y":16,"attrs":{"value":0}},{"type":"D_FF","x":0,"y":0,"attrs":{}},{"type":"LED","x":120,"y":-8,"attrs":{"color":"#22c55e"}},{"type":"OUTPUT","x":120,"y":8,"attrs":{"label":"Q'"}}],"wires":[{"from":0,"fromPort":0,"to":3,"toPort":0},{"from":1,"fromPort":0,"to":3,"toPort":1},{"from":2,"fromPort":0,"to":3,"toPort":2},{"from":3,"fromPort":3,"to":4,"toPort":0},{"from":3,"fromPort":4,"to":5,"toPort":0}]}
-
-## CRITICAL
-1. Output ONLY valid JSON — no markdown, no explanation, no code fences
-2. Every circuit MUST have at least one INPUT or CLOCK and one OUTPUT or LED
-3. All wires: output port → input port. Port indices MUST match the spec above
-4. For N-input gates: output port index = N (not 2). Include attrs:{"inputs":N} when N>2
-5. Respond with ONLY the JSON object`;
-
-  async function generateLogicCircuit() {
-    const desc = aiInput.value.trim();
-    if (!desc) { setAiStatus('Enter a description', 'error'); return; }
-
-    aiBtn.disabled = true;
-    aiInput.disabled = true;
-    setAiStatus('Generating circuit...', 'loading');
-
-    const startTime = Date.now();
-
-    try {
-      let data;
-
-      if (USE_LOCAL_AI) {
-        // ── Local AI path (/ai endpoint — Ollama, streaming for longer timeout) ──
-        const resp = await fetch('<%=request.getContextPath()%>/ai', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            messages: [
-              { role: 'system', content: LOGIC_AI_SYSTEM },
-              { role: 'user', content: desc }
-            ],
-            stream: true
-          }),
-        });
-
-        if (resp.status === 429) {
-          setAiStatus('Rate limit — try again later', 'error');
-          return;
-        }
-        if (!resp.ok) {
-          const err = await resp.json().catch(() => ({}));
-          setAiStatus(err.error || 'AI error (' + resp.status + ')', 'error');
-          return;
-        }
-
-        // Read NDJSON stream — accumulate content chunks
-        let text = '';
-        const reader = resp.body.getReader();
-        const decoder = new TextDecoder();
-        let tokenCount = 0;
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          // Each line is a JSON object: {"message":{"content":"..."}, "done":false}
-          const lines = chunk.split('\n').filter(l => l.trim());
-          for (const line of lines) {
-            try {
-              const obj = JSON.parse(line);
-              if (obj.message && obj.message.content) {
-                text += obj.message.content;
-                tokenCount++;
-                // Update status with token count every 10 tokens
-                if (tokenCount % 10 === 0) {
-                  setAiStatus('Generating... ' + tokenCount + ' tokens', 'loading');
-                }
-              }
-              if (obj.response) {
-                text += obj.response;
-              }
-            } catch (e) { /* skip non-JSON lines */ }
-          }
-        }
-
-        if (!text) { setAiStatus('AI returned empty response', 'error'); return; }
-
-        // Clean: strip markdown fences if AI included them
-        text = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-
-        setAiStatus('Parsing circuit...', 'loading');
-
-        try {
-          data = JSON.parse(text);
-        } catch (parseErr) {
-          console.error('AI JSON parse error:', parseErr, '\nRaw:', text);
-          setAiStatus('AI returned invalid JSON. Try a simpler description.', 'error');
-          return;
-        }
-
-      } else {
-        // ── Legacy path (CFExamMarkerFunctionality — OpenAI via CF Workers) ──
-        const resp = await fetch('<%=request.getContextPath()%>/CFExamMarkerFunctionality?action=logic_generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ description: desc }),
-        });
-
-        if (resp.status === 429) {
-          const d = await resp.json().catch(() => ({}));
-          setAiStatus(d.message || 'Rate limit — try again later', 'error');
-          return;
-        }
-        if (!resp.ok) {
-          const d = await resp.json().catch(() => ({}));
-          setAiStatus(d.error || d.message || 'Error (' + resp.status + ')', 'error');
-          return;
-        }
-
-        data = await resp.json();
-      }
-
-      // ── Common: build circuit from data ──
-      if (!data.components || !data.components.length) {
-        setAiStatus('AI returned empty circuit. Try a more specific description.', 'error');
-        return;
-      }
-
-      // Clear current circuit
-      [...circuit.components.keys()].forEach(id => circuit.removeComponent(id));
-
-      // Build components
-      const compMap = [];
-      for (const cd of data.components) {
-        const typeDef = ALL_TYPES[cd.type];
-        if (!typeDef) { console.warn('AI: unknown type', cd.type); compMap.push(null); continue; }
-        const comp = circuit.addComponent(typeDef, cd.x || 0, cd.y || 0, cd.attrs || {});
-        compMap.push(comp);
-      }
-
-      // Wire them
-      let wireCount = 0;
-      if (data.wires) {
-        for (const w of data.wires) {
-          const fromComp = compMap[w.from];
-          const toComp = compMap[w.to];
-          if (!fromComp || !toComp) continue;
-          if (circuit.addWire(fromComp.id, w.fromPort, toComp.id, w.toPort)) wireCount++;
-        }
-      }
-
-      canvas.fitContent();
-      saveSnapshot();
-
-      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-      const warn = data.warnings && data.warnings.length ? ' \u26A0 ' + data.warnings.length + ' warnings' : '';
-      const src = USE_LOCAL_AI ? ' (local AI)' : '';
-      setAiStatus('"' + (data.name || 'Circuit') + '" \u2014 ' + data.components.length + ' parts, ' + wireCount + ' wires in ' + elapsed + 's' + warn + src, 'success');
-
-      if (data.warnings && data.warnings.length) console.warn('AI warnings:', data.warnings);
-
-    } catch (e) {
-      setAiStatus('Failed: ' + e.message, 'error');
-    } finally {
-      aiBtn.disabled = false;
-      aiInput.disabled = false;
-    }
-  }
-
   /* Expression → Circuit */
   document.getElementById('btnSynthesize').addEventListener('click', () => {
     const expr = prompt('Boolean expression (e.g., A\u00B7B + \u00ACC):', '');
@@ -1433,6 +1141,124 @@ TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receive
   project.setTypeRegistry(ALL_TYPES);
   project.addCircuit('main', circuit);
 
+  /* ── AI assistant shell (modern VibeCodingAssistant adapter) ── */
+  function getActiveCircuit() {
+    return canvas.circuit || project.getActive() || circuit;
+  }
+
+  function circuitToAiFormat(c) {
+    const components = [];
+    const idToIdx = new Map();
+    let idx = 0;
+    for (const comp of c.components.values()) {
+      idToIdx.set(comp.id, idx++);
+      const attrs = Object.assign({}, comp.attrs);
+      delete attrs._inner;
+      delete attrs._innerIn;
+      delete attrs._innerOut;
+      components.push({ type: comp.type, x: comp.x, y: comp.y, attrs: attrs });
+    }
+    const wires = [];
+    for (const w of c.wires.values()) {
+      const from = idToIdx.get(w.fromCompId);
+      const to = idToIdx.get(w.toCompId);
+      if (from === undefined || to === undefined) continue;
+      wires.push({ from: from, fromPort: w.fromPortIdx, to: to, toPort: w.toPortIdx });
+    }
+    return { components: components, wires: wires };
+  }
+
+  function buildCircuitSummary(c) {
+    const counts = {};
+    for (const comp of c.components.values()) {
+      counts[comp.type] = (counts[comp.type] || 0) + 1;
+    }
+    const parts = Object.keys(counts).sort().map(function(t) { return counts[t] + '\u00d7 ' + t; });
+    return parts.length ? 'Parts: ' + parts.join(', ') : '';
+  }
+
+  var _logicSnapCache = null;
+
+  function refreshLogicSnapshot() {
+    var c = getActiveCircuit();
+    var aiFmt = circuitToAiFormat(c);
+    var jsonStr = '';
+    try {
+      var payload = { name: project.activeName };
+      if (aiFmt.components.length) {
+        payload.components = aiFmt.components;
+        payload.wires = aiFmt.wires;
+      }
+      jsonStr = JSON.stringify(payload);
+      if (jsonStr.length > 12000) jsonStr = jsonStr.slice(0, 12000) + '\u2026 [truncated]';
+    } catch (e) { jsonStr = ''; }
+    _logicSnapCache = {
+      circuitName: project.activeName,
+      componentCount: c.components.size,
+      wireCount: c.wires.size,
+      summary: buildCircuitSummary(c),
+      circuitJson: c.components.size ? jsonStr : ''
+    };
+    return Promise.resolve(_logicSnapCache);
+  }
+
+  function buildCircuitFromAiData(data) {
+    var c = getActiveCircuit();
+    [...c.components.keys()].forEach(function(id) { c.removeComponent(id); });
+    var compMap = [];
+    for (var i = 0; i < data.components.length; i++) {
+      var cd = data.components[i];
+      var typeDef = ALL_TYPES[cd.type];
+      if (!typeDef) { console.warn('AI: unknown type', cd.type); compMap.push(null); continue; }
+      compMap.push(c.addComponent(typeDef, cd.x || 0, cd.y || 0, cd.attrs || {}));
+    }
+    var wireCount = 0;
+    if (data.wires) {
+      for (var j = 0; j < data.wires.length; j++) {
+        var w = data.wires[j];
+        var fromComp = compMap[w.from];
+        var toComp = compMap[w.to];
+        if (!fromComp || !toComp) continue;
+        if (c.addWire(fromComp.id, w.fromPort, toComp.id, w.toPort)) wireCount++;
+      }
+    }
+    canvas.fitContent();
+    saveSnapshot();
+    refreshLogicSnapshot();
+    return {
+      applied: true,
+      name: data.name || 'Circuit',
+      components: data.components.length,
+      wires: wireCount,
+      warnings: data.warnings || []
+    };
+  }
+
+  window.logicShell = {
+    getSnapshot: function() {
+      if (!_logicSnapCache) refreshLogicSnapshot();
+      return _logicSnapCache || {
+        circuitName: project.activeName,
+        componentCount: 0,
+        wireCount: 0,
+        summary: '',
+        circuitJson: ''
+      };
+    },
+    refreshSnapshot: refreshLogicSnapshot,
+    applyAiCircuit: function(data) {
+      if (!data || !data.components || !data.components.length) {
+        return { applied: false, error: 'AI returned empty circuit.' };
+      }
+      try {
+        return buildCircuitFromAiData(data);
+      } catch (e) {
+        return { applied: false, error: e.message || String(e) };
+      }
+    }
+  };
+  refreshLogicSnapshot();
+
   // Tab rendering
   function renderTabs() {
     const tabsEl = document.getElementById('circuitTabs');
@@ -1465,6 +1291,7 @@ TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receive
     canvas.setCircuit(newCircuit);
     canvas.fitContent();
     renderTabs();
+    refreshLogicSnapshot();
   }
 
   document.getElementById('btnAddCircuit').addEventListener('click', () => {
@@ -1592,6 +1419,18 @@ TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receive
 
 <!-- Analytics -->
 <%@ include file="../modern/components/analytics.jsp" %>
+
+<script type="module">
+<%@ include file="../modern/components/ai-assistant-boot.inc.jsp" %>
+import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
+
+window.logicAssistant = wireLazyAssistant({
+  moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/logic-simulator-ai.js',
+  exportName: 'createLogicSimulatorAssistant',
+  buttonId: 'btnAI',
+  boot: aiAssistantBoot,
+});
+</script>
 
 </body>
 </html>
