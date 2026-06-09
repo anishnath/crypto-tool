@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%
+request.setAttribute("aiCryptoToolKey", "fernet");
+request.setAttribute("aiToolId", "cryptography/fernet");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <%@page import="z.y.x.Security.fernetpojo"%>
 <%@ page import="com.google.gson.Gson" %>
 <%@ page import="org.apache.http.impl.client.DefaultHttpClient" %>
@@ -91,21 +96,26 @@
             .btn-nav .nav-text{display:none}
         }
 
-        /* Page header + breadcrumbs */
-        .tool-page-header{background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem;margin-top:72px}
-        .tool-page-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-        .tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary,#0f172a);margin:0}
-        .tool-page-badges{display:flex;gap:0.5rem;flex-wrap:wrap}
-        .tool-badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.25rem 0.625rem;font-size:0.6875rem;font-weight:500;border-radius:9999px;background:var(--tool-light);color:var(--tool-primary)}
-        .tool-breadcrumbs{font-size:0.8125rem;color:var(--text-secondary,#475569);margin-top:0.5rem}
-        .tool-breadcrumbs a{color:var(--text-secondary,#475569);text-decoration:none}
+        /* Page header + breadcrumbs (compact) */
+        .tool-page-header{background:linear-gradient(135deg,var(--bg-secondary,#f8fafc) 0%,var(--bg-primary,#fff) 100%);border-bottom:1px solid var(--border,#e2e8f0);padding:0.5rem 1rem;margin-top:72px;min-height:0}
+        .tool-page-header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;padding:0}
+        .tool-page-header-inner>div:first-child{display:flex;align-items:baseline;gap:0.75rem;flex-wrap:wrap;min-width:0}
+        .tool-page-title{font-size:1.05rem;font-weight:700;color:var(--text-primary,#0f172a);margin:0;line-height:1.25;letter-spacing:-0.01em}
+        .tool-breadcrumbs{font-size:0.72rem;color:var(--text-secondary,#475569);margin:0;line-height:1.25}
+        .tool-breadcrumbs a{color:var(--tool-primary);text-decoration:none}
+        .tool-breadcrumbs a:hover{text-decoration:underline}
+        .tool-header-pitch{font-size:0.72rem;line-height:1.25;color:var(--text-secondary);padding-left:0.6rem;margin-left:0.6rem;border-left:1px solid var(--border);white-space:nowrap}
+        .tool-header-pitch a{color:var(--tool-primary);font-weight:600;text-decoration:none;margin-left:0.25rem}
+        .tool-header-pitch a:hover{text-decoration:underline}
+        .tool-page-badges{display:flex;gap:0.3rem;margin-left:auto;flex-wrap:wrap}
+        .tool-badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.12rem 0.45rem;font-size:0.68rem;line-height:1.3;font-weight:600;border-radius:9999px;background:var(--tool-light);color:var(--tool-primary)}
+        @media(max-width:640px){.tool-header-pitch{display:block;padding-left:0;margin-left:0;border-left:none;white-space:normal;margin-top:0.15rem}.tool-page-title{font-size:0.95rem}.tool-page-badges{margin-left:0}}
 
-        /* Description section */
-        .tool-description-section{background:var(--tool-light);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem}
+        /* Description section = top ad slot (compact) */
+        .tool-description-section{background:var(--bg-secondary,#f8fafc);border-bottom:1px solid var(--border,#e2e8f0);padding:0.5rem 1rem}
         .tool-description-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:2rem}
-        .tool-description-content{flex:1}
-        .tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary,#475569)}
-        @media(max-width:767px){.tool-description-section{padding:1rem}.tool-description-content p{font-size:0.875rem}}
+        .tool-description-ad{width:100%}
+        @media(max-width:767px){.tool-description-section{padding:0.5rem}}
 
         /* Three-column grid */
         .tool-page-container{display:grid;grid-template-columns:minmax(320px,400px) minmax(0,1fr) 300px;gap:1.5rem;max-width:1600px;margin:0 auto;padding:1.5rem;min-height:calc(100vh - 180px)}
@@ -144,7 +154,6 @@
         [data-theme="dark"] .tool-breadcrumbs,[data-theme="dark"] .tool-breadcrumbs a{color:var(--text-secondary,#94a3b8)}
         [data-theme="dark"] .tool-badge{background:var(--tool-light);color:var(--tool-primary)}
         [data-theme="dark"] .tool-description-section{background:var(--bg-secondary,#1e293b);border-bottom-color:var(--border,#334155)}
-        [data-theme="dark"] .tool-description-content p{color:var(--text-secondary,#cbd5e1)}
         [data-theme="dark"] .tool-card{background:var(--bg-secondary,#1e293b);border-color:var(--border,#334155)}
         [data-theme="dark"] .tool-form-label{color:var(--text-primary,#f1f5f9)}
         [data-theme="dark"] .tool-action-btn{box-shadow:0 4px 12px rgba(139,92,246,0.3)}
@@ -164,7 +173,7 @@
         <jsp:param name="toolCategory" value="Cryptography" />
         <jsp:param name="toolUrl" value="fernet.jsp" />
         <jsp:param name="toolKeywords" value="fernet encryption online, fernet decryption online, generate fernet key, fernet token, AES-128-CBC, HMAC-SHA256, base64url key, python fernet, cryptography fernet, fernet encrypt decrypt, symmetric encryption online, fernet key generator, fernet token decoder, authenticated encryption" />
-        <jsp:param name="toolImage" value="logo.png" />
+        <jsp:param name="toolImage" value="fernet-og.png" />
         <jsp:param name="toolFeatures" value="Generate Fernet keys (base64url),Encrypt plaintext to Fernet tokens,Decrypt Fernet tokens to plaintext,AES-128-CBC with HMAC-SHA256,Token structure breakdown (version/IV/timestamp/HMAC),Copy and share results,Works with Python cryptography library,No data stored on server" />
         <jsp:param name="hasSteps" value="false" />
         <jsp:param name="faq1q" value="What is a Fernet key and how is it formatted?" />
@@ -233,6 +242,7 @@
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
     </noscript>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
 
@@ -782,6 +792,21 @@
         [data-theme="dark"] .fernet-output-tab.active { background: var(--tool-gradient); color: #fff; }
         [data-theme="dark"] .fernet-output-tab:hover:not(.active) { background: rgba(255,255,255,0.08); }
 
+        .fernet-learn-chips {
+            display: flex; flex-wrap: wrap; gap: 0.4rem;
+            margin: 0.75rem 0 0.25rem;
+        }
+        .fernet-learn-chip {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            padding: 0.3rem 0.55rem; font-size: 0.68rem; font-weight: 600;
+            border-radius: 999px; border: 1px solid var(--border);
+            background: var(--bg-secondary); color: var(--text-secondary);
+            cursor: pointer; transition: background 0.12s, border-color 0.12s;
+        }
+        .fernet-learn-chip:hover {
+            background: var(--tool-light); border-color: var(--tool-primary); color: var(--tool-primary);
+        }
+
         .fernet-panel { display: none; flex: 1; min-height: 0; }
         .fernet-panel.active { display: flex; flex-direction: column; }
 
@@ -837,6 +862,10 @@
                     <a href="<%=request.getContextPath()%>/index.jsp#cryptography">Cryptography</a> /
                     Fernet
                 </nav>
+                <span class="tool-header-pitch">
+                    Authenticated AES-128-CBC
+                    <a href="https://cryptography.io/en/latest/fernet/" target="_blank" rel="noopener">Fernet spec &rarr;</a>
+                </span>
             </div>
             <div class="tool-page-badges">
                 <span class="tool-badge">AES-128-CBC</span>
@@ -847,11 +876,11 @@
         </div>
     </header>
 
-    <!-- Tool Description -->
+    <!-- Top Ad Slot -->
     <section class="tool-description-section">
         <div class="tool-description-inner">
-            <div class="tool-description-content">
-                <p>Generate Fernet keys, encrypt plaintext to tokens, and decrypt tokens back to text. Run Python Fernet code directly in your browser. AES-128-CBC + HMAC-SHA256. No data stored.</p>
+            <div class="tool-description-ad" style="width:100%;">
+                <%@ include file="modern/ads/ad-in-content-top.jsp" %>
             </div>
         </div>
     </section>
@@ -895,6 +924,15 @@
 
                     <!-- Submit -->
                     <button type="button" class="tool-action-btn" id="submitBtn">Encrypt Message</button>
+
+                    <div class="fernet-learn-chips" id="fernetLearnChips" role="toolbar" aria-label="Fernet learning prompts">
+                        <button type="button" class="fernet-learn-chip" data-ai-prompt='Encrypt "Hello World" with the key on the form' data-ai-send="true">Encrypt demo</button>
+                        <button type="button" class="fernet-learn-chip" data-ai-prompt="Generate a new Fernet key" data-ai-send="true">Generate key</button>
+                        <button type="button" class="fernet-learn-chip" data-ai-prompt="What is Fernet encryption and how does it differ from raw AES?" data-ai-send="true">What is Fernet?</button>
+                        <button type="button" class="fernet-learn-chip" data-ai-prompt="Explain the Fernet token structure (version, timestamp, IV, ciphertext, HMAC)." data-ai-send="true">Token format</button>
+                        <button type="button" class="fernet-learn-chip" data-ai-prompt="Show a minimal Python cryptography.fernet encrypt/decrypt example." data-ai-send="true">Python example</button>
+                        <button type="button" class="fernet-learn-chip" data-ai-prompt="How is a Fernet key formatted (base64url, 32 bytes)?" data-ai-send="true">Key format</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1241,6 +1279,7 @@ print(<code>"Decrypted:"</code>, f.decrypt(token).decode())</div>
     'use strict';
 
     var currentMode = 'encrypt';
+    window.fernetCurrentMode = currentMode;
     var lastResponseTimestamp = null;
     var modeBtns = document.querySelectorAll('.fernet-mode-btn');
     var messageLabel = document.getElementById('messageLabel');
@@ -1287,6 +1326,7 @@ print(<code>"Decrypted:"</code>, f.decrypt(token).decode())</div>
             if (mode === currentMode) return;
 
             currentMode = mode;
+            window.fernetCurrentMode = mode;
             modeBtns.forEach(function(b) { b.classList.remove('active'); });
             this.classList.add('active');
 
@@ -1346,6 +1386,51 @@ print(<code>"Decrypted:"</code>, f.decrypt(token).decode())</div>
         displaySection.innerHTML = html;
         resultActions.classList.add('visible');
     }
+
+    function escHtml(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function fieldBlock(label, value, rows) {
+        if (value == null || value === '') return '';
+        var r = rows || 1;
+        return '<h4 class="mt-4" style="margin:0.75rem 0 0.35rem;font-size:0.8125rem;font-weight:600;">' + escHtml(label) + '</h4>'
+            + '<textarea class="tool-input" readonly rows="' + r + '" style="width:100%;margin-bottom:0.25rem;">' + escHtml(value) + '</textarea>';
+    }
+
+    window.renderFernetFromApi = function(data, intent) {
+        if (!data) { showError('No result from Fernet API.'); return; }
+        if (intent === 'generate_key' && data.key) {
+            document.getElementById('privatekeyparam').value = data.key;
+            renderResult('<p style="color:var(--text-secondary);font-size:0.875rem;">New Fernet key generated and filled in the key field.</p>'
+                + fieldBlock('Fernet Key', data.key, 2));
+            return;
+        }
+        if (intent === 'encrypt' || data.token || data.serialize) {
+            var html = fieldBlock('Fernet Token', data.token || data.serialize, 5);
+            html += fieldBlock('Version', data.version, 1);
+            html += fieldBlock('Initial Vector', data.iv, 1);
+            html += fieldBlock('Time Stamp', data.timestamp, 1);
+            if (data.keyEcho) html += fieldBlock('Key', data.keyEcho, 1);
+            renderResult(html);
+            return;
+        }
+        if (intent === 'decrypt' || data.plaintext || data.msg) {
+            renderResult(fieldBlock('Decrypted Message', data.plaintext || data.msg, 5));
+            return;
+        }
+        showError(data.error || data.errorMessage || 'Fernet operation failed.');
+    };
+
+    document.getElementById('fernetLearnChips').addEventListener('click', function(e) {
+        var chip = e.target.closest('.fernet-learn-chip');
+        if (!chip) return;
+        var prompt = chip.getAttribute('data-ai-prompt') || '';
+        var send = chip.getAttribute('data-ai-send') === 'true';
+        if (window.cryptoToolAssistant && prompt) {
+            window.cryptoToolAssistant.open(prompt, send);
+        }
+    });
 
     submitBtn.addEventListener('click', function() {
         var keyVal = document.getElementById('privatekeyparam').value.trim();
@@ -1690,5 +1775,7 @@ print(<code>"Decrypted:"</code>, f.decrypt(token).decode())</div>
 
     })();
     </script>
+
+    <%@ include file="modern/components/ai-crypto-assistant.inc.jsp" %>
 </body>
 </html>

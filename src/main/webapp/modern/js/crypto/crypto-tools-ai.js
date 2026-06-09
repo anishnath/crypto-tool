@@ -140,6 +140,44 @@ const CRYPTO_TOOLS = {
       { label: 'Explain modes', prompt: 'Explain AES-GCM vs CBC for encryption.', sendImmediately: true },
     ],
   },
+  fernet: {
+    tool: 'fernet',
+    toolId: 'cryptography/fernet',
+    title: 'Fernet AI',
+    subtitle: 'Generate keys, encrypt, and decrypt Python-compatible Fernet tokens.',
+    operations: ['encrypt', 'decrypt', 'generate_key', 'explain'],
+    readForm: () => ({
+      key: document.getElementById('privatekeyparam')?.value || '',
+      message: document.getElementById('message')?.value || '',
+      mode: window.fernetCurrentMode || 'encrypt',
+      keyOnForm: !!(document.getElementById('privatekeyparam')?.value || '').trim(),
+      messageOnForm: !!(document.getElementById('message')?.value || '').trim(),
+    }),
+    applyToForm: (params) => {
+      if (params.key) {
+        const el = document.getElementById('privatekeyparam');
+        if (el) el.value = params.key;
+      }
+      if (params.message) {
+        const el = document.getElementById('message');
+        if (el) el.value = params.message;
+      }
+      const mode = params.mode
+        || (params.intent === 'decrypt' ? 'decrypt' : params.intent === 'encrypt' ? 'encrypt' : '');
+      if (mode && window.fernetCurrentMode !== mode) {
+        const btn = document.querySelector(`.fernet-mode-btn[data-mode="${mode}"]`);
+        if (btn) btn.click();
+      }
+    },
+    quickActions: [
+      { label: 'Encrypt', prompt: 'Encrypt "Hello World" with the Fernet key on the form', sendImmediately: true },
+      { label: 'Generate key', prompt: 'Generate a new Fernet key', sendImmediately: true },
+      { label: 'What is Fernet?', prompt: 'What is Fernet encryption and how does it differ from raw AES?', sendImmediately: true },
+      { label: 'Token format', prompt: 'Explain the Fernet token structure (version, timestamp, IV, ciphertext, HMAC).', sendImmediately: true },
+      { label: 'Python example', prompt: 'Show a minimal Python cryptography.fernet encrypt/decrypt example.', sendImmediately: true },
+      { label: 'Key format', prompt: 'How is a Fernet key formatted (base64url, 32 bytes)?', sendImmediately: true },
+    ],
+  },
   pbkdf: {
     tool: 'pbkdf',
     toolId: 'cryptography/pbkdf',
@@ -1364,6 +1402,10 @@ function redactFormForAi(form) {
     if (out[k]) out[k] = FORM_REDACTED;
   }
   if (out.serialized) out.serialized = redactJwsSerialized(out.serialized);
+  if (out.message && /^gAAAAA/i.test(String(out.message).trim())) {
+    const len = String(out.message).trim().length;
+    out.message = `[Fernet token on form — ${len} chars]`;
+  }
   return out;
 }
 // --- utils ---
@@ -1445,7 +1487,13 @@ function buildPageSystemPrompt(profile) {
 
 **JWK Convert**
 - Key material in the input textarea is never sent to the AI.
-- Use intent **convert**; leave input empty when keyMaterialOnForm is true — client reads the form.` : ''}`;
+- Use intent **convert**; leave input empty when keyMaterialOnForm is true — client reads the form.` : ''}${profile.tool === 'fernet' ? `
+
+**Fernet**
+- Fernet keys are base64url (32 bytes). Keys on the form are redacted in [FORM STATE] — say "use the key on the form" when relevant.
+- **encrypt** needs plaintext message + key; **decrypt** needs Fernet token + same key; **generate_key** creates a new key (filled on the form).
+- Leave key "" when keyOnForm is true — the client merges the real key. Same for message when messageOnForm is true.
+- Tokens are Python \`cryptography.fernet\` compatible (AES-128-CBC + HMAC-SHA256).` : ''}`;
 }
 
 function placeholderForProfile(profile) {
@@ -1453,6 +1501,7 @@ function placeholderForProfile(profile) {
     'message-digest': 'e.g. Hash "hello world" with SHA-256',
     hmac: 'e.g. HMAC-SHA256 of "data" with my secret key',
     cipher: 'e.g. Encrypt this text with AES-256-GCM',
+    fernet: 'e.g. Encrypt "hello" with the key on the form',
     pbkdf: 'e.g. Derive a 32-byte key with PBKDF2-HMAC-SHA256',
     pbe: 'e.g. Encrypt my message with PBEWITHMD5ANDDES',
     bcrypt: 'e.g. Hash password "test" with cost 12',
@@ -1495,6 +1544,7 @@ function operationHints(profile) {
     'message-digest': 'hash — digest text with one or more algorithms (SHA-256, MD5, etc.)',
     hmac: 'hmac — keyed hash; needs text + secret key + algorithms[] (exact macchoices ids from page; NOT plain SHA-256)',
     cipher: 'encrypt | decrypt — params: message, secretKey (hex), algorithm (exact select value)',
+    fernet: 'encrypt | decrypt — message (plaintext or token), key (base64url); generate_key — new Fernet key',
     pbe: 'encrypt | decrypt — message, password, rounds; algorithm e.g. PBEWITHHMACSHA256ANDAES_256',
     pbkdf: 'derive — key derivation; needs password, salt, rounds, algorithm(s)',
     bcrypt: 'hash — bcrypt password hash with cost; verify — check password against hash field',
@@ -1888,6 +1938,9 @@ function buildRouterPrompt(profile) {
   const htpasswdRule = profile.tool === 'htpasswd'
     ? '\n8. htpasswd generate: username, password, optional algorithm (bcrypt|sha512|sha256|apr). Server returns all formats; UI highlights requested algorithm. Params: username, password, algorithm.'
     : '';
+  const fernetRule = profile.tool === 'fernet'
+    ? '\n8. Fernet: encrypt needs message + key; decrypt needs token in message + key; generate_key needs no params. Leave key "" if keyOnForm; leave message "" if messageOnForm. Params: message, key, mode (encrypt|decrypt).'
+    : '';
   const jwsParseRule = profile.tool === 'jws-parse'
     ? '\n8. JWS parse: intent parse. If jwsTokenOnForm is true, set serialized to "" (empty) — the client loads the real token from the page. Never copy the redacted FORM STATE summary into serialized. If user pastes eyJ… in chat, you may set serialized to that token only.'
     : '';
@@ -1931,7 +1984,7 @@ RULES:
 4. JWS algorithms: HS256, HS384, HS512, RS256, RS384, RS512, PS256, PS384, PS512, ES256, ES384, ES512.
 5. If user pasted a JWT/JWS dot-separated token on a parse page → intent parse, param serialized.
 6. List missing human-readable fields in missing[]; friendly clarify_message if intent is clarify.
-7. Do NOT invent digests, ciphertext, signatures, or keys.${hmacAlgoRule}${cipherAlgoRule}${ntruAlgoRule}${ecCurveRule}${pbeAlgoRule}${argon2Rule}${elgamalRule}${scryptRule}${htpasswdRule}${jwsParseRule}${jwsSignRule}${jwsVerifyRule}${jwkGenRule}${jwkConvertRule}`;
+7. Do NOT invent digests, ciphertext, signatures, or keys.${hmacAlgoRule}${cipherAlgoRule}${fernetRule}${ntruAlgoRule}${ecCurveRule}${pbeAlgoRule}${argon2Rule}${elgamalRule}${scryptRule}${htpasswdRule}${jwsParseRule}${jwsSignRule}${jwsVerifyRule}${jwkGenRule}${jwkConvertRule}`;
 }
 
 function normalizeIntent(plan, profile, userText) {
@@ -1982,6 +2035,7 @@ function inferIntent(userText, profile) {
   if (ops.has('decrypt') && /\bdecrypt/.test(t)) return 'decrypt';
   if (ops.has('convert') && /\bconvert\b/.test(t)) return 'convert';
   if (ops.has('derive') && /\b(derive|pbkdf)/.test(t)) return 'derive';
+  if (ops.has('generate_key') && /\b(generate|create|new)\b.*\b(fernet\s*)?key\b/.test(t)) return 'generate_key';
   if (ops.has('generate_keys') && /\b(generate|create).*(key|pair)/.test(t)) return 'generate_keys';
   if (ops.has('generate') && (/\b(generate|create)\b/.test(t) || /\bhtpasswd\b/.test(t))) return 'generate';
   if (ops.has('hmac') && /\bhmac\b/.test(t)) return 'hmac';
@@ -2321,6 +2375,29 @@ function formatCryptoResult(data, plan, profile) {
   if (data.hash && (profile.tool === 'bcrypt' || profile.tool === 'argon2')) {
     return fence(profile.tool === 'argon2' ? 'Argon2 hash' : 'Hash', data.hash);
   }
+  if (profile.tool === 'fernet') {
+    if (data.key && !data.token && !data.plaintext && !data.msg) {
+      return [
+        '**Fernet key generated** — copied to the key field on the page.',
+        '',
+        fence('Key (base64url)', data.key),
+      ].join('\n');
+    }
+    if (data.token || data.serialize) {
+      const lines = [
+        '**Fernet token ready** — full output is on the page.',
+        '',
+        fence('Token', data.token || data.serialize),
+      ];
+      if (data.version) lines.push('', `- Version: \`${data.version}\``);
+      if (data.iv) lines.push(`- IV: \`${data.iv}\``);
+      if (data.timestamp) lines.push(`- Timestamp: \`${data.timestamp}\``);
+      return lines.join('\n');
+    }
+    if (data.plaintext || data.msg) {
+      return fence('Decrypted plaintext', data.plaintext || data.msg);
+    }
+  }
   if (profile.tool === 'htpasswd' && data.htpasswdEntries?.length) {
     const pref = plan.params?.algorithm || plan.params?.algo || 'bcrypt';
     const entries = pickHtpasswdEntries(data, pref);
@@ -2410,6 +2487,12 @@ async function executeCryptoPlan(ctx, plan, profile, userText = '') {
   if (params.publicKey && !params.publickey) params.publickey = params.publicKey;
   if (params.plaintext && !params.message) params.message = params.plaintext;
   if (params.message && !params.plaintext && profile.tool === 'cipher') params.plaintext = params.message;
+  if (profile.tool === 'fernet') {
+    if (params.key && !params.privatekeyparam) params.privatekeyparam = params.key;
+    if (!params.key && params.privatekeyparam) params.key = params.privatekeyparam;
+    if (plan.intent === 'decrypt' && !params.mode) params.mode = 'decrypt';
+    if (plan.intent === 'encrypt' && !params.mode) params.mode = 'encrypt';
+  }
   normalizeCommonCryptoParams(params, profile);
   if (profile.tool === 'cipher') normalizeCipherParams(params, userText);
   if (profile.tool === 'elgamal') normalizeElgamalParams(params);
@@ -2591,6 +2674,20 @@ async function executeCryptoPlan(ctx, plan, profile, userText = '') {
   }
 
   if (
+    profile.tool === 'fernet'
+    && (plan.intent === 'encrypt' || plan.intent === 'decrypt' || plan.intent === 'generate_key')
+    && data.ok !== false
+    && typeof window.renderFernetFromApi === 'function'
+  ) {
+    if (data.key && plan.intent === 'generate_key') {
+      params.key = data.key;
+      profile.applyToForm?.({ ...params, intent: plan.intent });
+    }
+    window.renderFernetFromApi(data, plan.intent);
+    return { ok: true, data, markdown: formatCryptoResult(data, plan, profile) };
+  }
+
+  if (
     profile.tool === 'htpasswd'
     && (plan.intent === 'generate' || plan.intent === 'verify')
     && data.success !== false
@@ -2647,6 +2744,9 @@ function triggerFormSubmit(profile, plan) {
     return;
   }
   if (profile.tool === 'htpasswd' && (plan.intent === 'generate' || plan.intent === 'verify')) {
+    return;
+  }
+  if (profile.tool === 'fernet' && (plan.intent === 'encrypt' || plan.intent === 'decrypt' || plan.intent === 'generate_key')) {
     return;
   }
   if (profile.tool === 'jws-parse' && plan.intent === 'parse') {

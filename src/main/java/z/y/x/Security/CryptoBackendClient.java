@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -26,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import z.y.x.r.LoadPropertyFileFunctionality;
 
 /**
  * Dispatches unified crypto AI operations to existing legacy servlets (form POST).
@@ -111,6 +113,8 @@ public final class CryptoBackendClient {
                     return execJwk(appBaseUrl, operation, params);
                 case "jwk-convert":
                     return execJwkConvert(appBaseUrl, operation, params);
+                case "fernet":
+                    return execFernet(appBaseUrl, operation, params);
                 default:
                     return err("Unknown tool: " + tool);
             }
@@ -295,6 +299,112 @@ public final class CryptoBackendClient {
             }
         }
         return candidates.length > 0 && candidates[0] != null ? candidates[0].trim() : "";
+    }
+
+    // ─── Fernet (authenticated AES-128-CBC + HMAC-SHA256) ─────────────────────
+
+    private static JsonObject execFernet(String base, String op, JsonObject p) throws Exception {
+        if ("generate_key".equals(op) || "genkey".equals(op)) {
+            String raw = forwardEpGet("fernet/genkey");
+            fernetpojo obj = GSON.fromJson(raw, fernetpojo.class);
+            if (obj == null || obj.getKey() == null || obj.getKey().trim().isEmpty()) {
+                return err("Fernet key generation failed");
+            }
+            JsonObject out = new JsonObject();
+            out.addProperty("ok", true);
+            out.addProperty("key", obj.getKey());
+            return out;
+        }
+        if (!"encrypt".equals(op) && !"decrypt".equals(op)) {
+            return err("fernet supports: encrypt, decrypt, generate_key");
+        }
+        String key = firstNonEmpty(
+                jsonString(p, "key"),
+                jsonString(p, "privatekeyparam"),
+                jsonString(p, "secretKey"));
+        String message = firstNonEmpty(
+                jsonString(p, "message"),
+                jsonString(p, "plaintext"),
+                jsonString(p, "text"),
+                jsonString(p, "token"));
+        if (key.isEmpty()) {
+            return err("key is required");
+        }
+        if (message.isEmpty()) {
+            return err("message is required");
+        }
+        List<NameValuePair> form = new ArrayList<>();
+        if ("encrypt".equals(op)) {
+            form.add(new BasicNameValuePair("p_msg", message));
+            form.add(new BasicNameValuePair("p_secretkey", key));
+            String raw = forwardEpPost("fernet/encrypt", form);
+            fernetpojo obj = GSON.fromJson(raw, fernetpojo.class);
+            if (obj == null || obj.getSerialize() == null || obj.getSerialize().trim().isEmpty()) {
+                return err("Fernet encryption failed");
+            }
+            JsonObject out = new JsonObject();
+            out.addProperty("ok", true);
+            out.addProperty("mode", "encrypt");
+            out.addProperty("token", obj.getSerialize());
+            out.addProperty("serialize", obj.getSerialize());
+            if (obj.getVersion() != null) out.addProperty("version", obj.getVersion());
+            if (obj.getIv() != null) out.addProperty("iv", obj.getIv());
+            if (obj.getTimestapmp() != null) out.addProperty("timestamp", obj.getTimestapmp());
+            if (obj.getKey() != null) out.addProperty("keyEcho", obj.getKey());
+            if (obj.getHmac() != null) out.addProperty("hmac", obj.getHmac());
+            return out;
+        }
+        form.add(new BasicNameValuePair("p_ftoken", message));
+        form.add(new BasicNameValuePair("p_secretkey", key));
+        String raw = forwardEpPost("fernet/decrypt", form);
+        fernetpojo obj = GSON.fromJson(raw, fernetpojo.class);
+        if (obj == null || obj.getMsg() == null) {
+            return err("Fernet decryption failed");
+        }
+        JsonObject out = new JsonObject();
+        out.addProperty("ok", true);
+        out.addProperty("mode", "decrypt");
+        out.addProperty("plaintext", obj.getMsg());
+        out.addProperty("msg", obj.getMsg());
+        return out;
+    }
+
+    private static String forwardEpGet(String path) throws Exception {
+        String ep = LoadPropertyFileFunctionality.getConfigProperty().get("ep");
+        if (ep == null || ep.trim().isEmpty()) {
+            throw new IllegalStateException("Crypto endpoint (ep) is not configured");
+        }
+        String url = ep + path;
+        HttpGet get = new HttpGet(url);
+        get.addHeader("accept", "application/json");
+        org.apache.http.HttpResponse response = INTERNAL_CLIENT.execute(get);
+        int code = response.getStatusLine().getStatusCode();
+        String body = response.getEntity() != null
+                ? EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8)
+                : "";
+        if (code < 200 || code >= 300) {
+            throw new IllegalStateException("Fernet service HTTP " + code + (body.isEmpty() ? "" : ": " + body));
+        }
+        return body;
+    }
+
+    private static String forwardEpPost(String path, List<NameValuePair> form) throws Exception {
+        String ep = LoadPropertyFileFunctionality.getConfigProperty().get("ep");
+        if (ep == null || ep.trim().isEmpty()) {
+            throw new IllegalStateException("Crypto endpoint (ep) is not configured");
+        }
+        String url = ep + path;
+        HttpPost post = new HttpPost(url);
+        post.setEntity(new UrlEncodedFormEntity(form, StandardCharsets.UTF_8));
+        org.apache.http.HttpResponse response = INTERNAL_CLIENT.execute(post);
+        int code = response.getStatusLine().getStatusCode();
+        String body = response.getEntity() != null
+                ? EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8)
+                : "";
+        if (code < 200 || code >= 300) {
+            throw new IllegalStateException("Fernet service HTTP " + code + (body.isEmpty() ? "" : ": " + body));
+        }
+        return body;
     }
 
     // ─── Symmetric cipher / PBE ───────────────────────────────────────────────
