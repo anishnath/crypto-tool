@@ -321,6 +321,15 @@
         @media (prefers-reduced-motion: reduce) {
             * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
         }
+
+        /* Compact page header (keeps the 72px fixed-nav offset from three-column-tool.css) */
+        .tool-page-header { padding: 0.5rem 1rem; min-height: 0; }
+        .tool-page-header-inner { align-items: center; gap: 0.5rem 0.75rem; max-width: 1400px; }
+        .tool-page-title { font-size: 1.05rem; line-height: 1.25; letter-spacing: -0.01em; }
+        .tool-breadcrumbs { font-size: 0.72rem; line-height: 1.25; margin-top: 0.1rem; }
+        .tool-page-badges { gap: 0.3rem; }
+        .tool-badge { padding: 0.12rem 0.45rem; font-size: 0.68rem; line-height: 1.3; font-weight: 600; }
+        @media (max-width: 640px) { .tool-page-title { font-size: 0.95rem; } }
     </style>
 </head>
 <body>
