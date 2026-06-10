@@ -49,6 +49,12 @@
                 <span class="vs-sidebar-label">Auto-Captions</span>
             </a>
         </li>
+        <li class="vs-sidebar-item <%= "resize".equals(activeService) ? "active" : "" %>" data-service="resize" role="tab">
+            <a href="<%= ctx %>/video-resizer.jsp" class="vs-sidebar-link">
+                <span class="vs-sidebar-icon">&#128208;</span>
+                <span class="vs-sidebar-label">Resize &amp; Crop</span>
+            </a>
+        </li>
         <li class="vs-sidebar-item disabled" aria-disabled="true">
             <span class="vs-sidebar-icon">&#128196;</span>
             <span class="vs-sidebar-label">Summarize Video</span>
