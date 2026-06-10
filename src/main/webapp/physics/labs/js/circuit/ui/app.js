@@ -1329,15 +1329,7 @@ export class CircuitApp {
     } else if (action === 'toggleConventional') {
       this.renderer.conventionalCurrent = !this.renderer.conventionalCurrent;
     } else if (action === 'toggleAI') {
-      const panel = this.wrap.querySelector('#aiPanel');
-      if (panel) {
-        const isOpen = panel.classList.contains('open');
-        panel.classList.toggle('open');
-        if (!isOpen) {
-          const inp = panel.querySelector('#aiInput');
-          if (inp) inp.focus();
-        }
-      }
+      window.circuitAssistant?.open?.();
     } else if (action === 'toggleScope') {
       if (this._scopeWrap) {
         const isVisible = this._scopeWrap.style.display !== 'none';
