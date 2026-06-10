@@ -3,7 +3,7 @@
     // High-CTR SEO Meta Tags
     String seoTitle = "150+ Mental Math Tricks — Multiply, Divide & Calculate Instantly";
     String seoDescription = "Free mental math shortcuts that actually work. Multiply 2-digit numbers in seconds, calculate percentages instantly, square any number ending in 5. Interactive practice with step-by-step breakdowns.";
-    String canonicalUrl = "https://8gwifi.org/exams/quick-math/";
+    String canonicalUrl = "https://8gwifi.org/math/quick-math/";
 
     request.setAttribute("pageTitle", seoTitle);
     request.setAttribute("pageDescription", seoDescription);
@@ -152,7 +152,7 @@
 
     request.setAttribute("extraHeadContent", extraHead.toString());
 %>
-<%@ include file="../components/header.jsp" %>
+<%@ include file="/exams/components/header.jsp" %>
 
             <!-- Load Quick Math Core (split into base + topic bundles) -->
             <script src="<%=request.getContextPath()%>/exams/js/quick-math-core-base.js"></script>
@@ -200,7 +200,7 @@
             </section>
 
             <!-- Ad Banner -->
-            <%@ include file="../components/ad-leaderboard.jsp" %>
+            <%@ include file="/exams/components/ad-leaderboard.jsp" %>
 
                 <!-- Main Content -->
                 <section class="page-section">
@@ -1441,4 +1441,4 @@
                     }
                 </style>
 
-                <%@ include file="../components/footer.jsp" %>
+                <%@ include file="/exams/components/footer.jsp" %>

@@ -24,7 +24,7 @@
         }
 
         try {
-            String jsonPath = context.getRealPath("/exams/quick-math/topics-seo.json");
+            String jsonPath = context.getRealPath("/math/quick-math/topics-seo.json");
             String jsonContent = new String(Files.readAllBytes(Paths.get(jsonPath)), "UTF-8");
             fullData = new org.json.JSONObject(jsonContent);
 
@@ -183,7 +183,7 @@
         quickMath.put("@type", "ListItem");
         quickMath.put("position", 2);
         quickMath.put("name", "Quick Math");
-        quickMath.put("item", "https://8gwifi.org/exams/quick-math/");
+        quickMath.put("item", "https://8gwifi.org/math/quick-math/");
         items.put(quickMath);
 
         // Current Topic
@@ -209,9 +209,9 @@
     public String getCanonicalUrl(String topicId, ServletContext context) {
         org.json.JSONObject topic = getTopicSEO(topicId, context);
         if (topic != null) {
-            return topic.optString("canonical", "https://8gwifi.org/exams/quick-math/practice.jsp?topic=" + topicId);
+            return topic.optString("canonical", "https://8gwifi.org/math/quick-math/practice.jsp?topic=" + topicId);
         }
-        return "https://8gwifi.org/exams/quick-math/practice.jsp?topic=" + topicId;
+        return "https://8gwifi.org/math/quick-math/practice.jsp?topic=" + topicId;
     }
 
     /**

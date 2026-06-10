@@ -10,7 +10,7 @@
     String seoDescription = "Free interactive mental math practice with step-by-step breakdowns. Multiply, divide, and calculate faster in your head.";
     String seoH1 = "Mental Math Practice";
     String extraHead = "";
-    String canonicalUrl = "https://8gwifi.org/exams/quick-math/practice.jsp";
+    String canonicalUrl = "https://8gwifi.org/math/quick-math/practice.jsp";
 
     // Load SEO data if topic is present
     org.json.JSONObject topicSEO = null;
@@ -40,39 +40,73 @@
         extraHead += "\n" + generateBreadcrumbJSONLD(topicParam, seoH1, "");
     }
 
-    // Set page attributes for header.jsp
-    request.setAttribute("pageTitle", seoTitle);
-    request.setAttribute("pageDescription", seoDescription);
-    request.setAttribute("extraHeadContent", extraHead);
-    request.setAttribute("canonicalUrl", canonicalUrl);
 %>
-<%@ include file="../components/header.jsp" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <title><%= seoTitle %></title>
+    <meta name="description" content="<%= seoDescription %>">
+    <link rel="canonical" href="<%= canonicalUrl %>">
+    <%= extraHead %>
+<% if (extraHead == null || extraHead.trim().isEmpty()) { /* no topic-specific social tags — use the branded default */ %>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<%= seoTitle %>">
+    <meta property="og:description" content="<%= seoDescription %>">
+    <meta property="og:url" content="<%= canonicalUrl %>">
+    <meta property="og:image" content="https://8gwifi.org/images/site/quick-math-og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= seoTitle %>">
+    <meta name="twitter:image" content="https://8gwifi.org/images/site/quick-math-og.png">
+<% } %>
+
+    <!-- Quick Math tool styles (ported into the math CSS family) -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/quick-math.css">
+
+    <!-- Math studio shell -->
+    <%@ include file="/math/partials/studio-head.jsp" %>
+</head>
+
+<% request.setAttribute("activeService", "quick-math-practice"); %>
+<%@ include file="/math/partials/studio-open.jsp" %>
+
+    <header class="ms-title">
+        <nav class="ms-crumbs">
+            <a href="<%=request.getContextPath()%>/index.jsp">Home</a><span>/</span>
+            <a href="<%=request.getContextPath()%>/math/">Math</a><span>/</span>
+            <a href="<%=request.getContextPath()%>/math/quick-math/">Quick Math</a><span>/</span>
+            <span aria-current="page"><%= seoH1 %></span>
+        </nav>
+        <h1><%= seoH1 %></h1>
+    </header>
 
 <!-- Load Quick Math Core (split into base + topic bundles) -->
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-core-base.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-addition.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-multiplication.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-division.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-roots.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-percentages.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-algebra.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-probability.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-trains.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-streams.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-alligation.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-trigonometry.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-data.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-series.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-mensuration.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-surds.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-profit.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-simple-interest.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-misc.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-permcomb.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-advanced.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-boats-partnership.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-hcf-sets.js"></script>
-<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-number-patterns.js"></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-core-base.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-addition.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-multiplication.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-division.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-roots.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-percentages.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-algebra.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-probability.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-trains.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-streams.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-alligation.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-trigonometry.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-data.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-series.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-mensuration.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-surds.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-profit.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-simple-interest.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-misc.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-permcomb.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-advanced.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-boats-partnership.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-hcf-sets.js" defer></script>
+<script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-number-patterns.js" defer></script>
 
 <!-- Chalk Font -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,30 +125,18 @@
     </nav>
 
     <div class="grid layout-grid">
-        <!-- Left Sidebar / Ads (Desktop only) -->
-        <aside class="left-sidebar-col">
-            <%@ include file="../components/ad-sidebar-left.jsp" %>
-        </aside>
+        <%-- Ads handled by the studio shell (ms-rail / hero / sticky) --%>
 
         <!-- Main Practice Area -->
         <div class="practice-col">
 
-            <!-- Intro / Learn Card -->
-            <div class="card mb-6">
-                <header class="mb-4">
-                    <h1 id="topic-title" class="section-title"><%= seoH1 %></h1>
-                    <p id="topic-desc" class="text-secondary"><%= seoDescription %></p>
-                </header>
+            <!-- Topic intro -->
+            <header class="mb-4">
+                <h1 id="topic-title" class="section-title"><%= seoH1 %></h1>
+                <p id="topic-desc" class="text-secondary"><%= seoDescription %></p>
+            </header>
 
-                <div class="learn-section">
-                    <h3 class="text-lg font-bold mb-2">How it works:</h3>
-                    <div id="visualizer-container" class="visualizer-box">
-                        <!-- Visual content injected via JS -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Game Card -->
+            <!-- Practice game (primary, above the fold) -->
             <div class="card bg-highlight">
                 <div class="game-header">
                     <div class="stat-box">
@@ -122,12 +144,20 @@
                         <div id="streak-display" class="stat-value">0</div>
                     </div>
                     <div class="stat-box">
+                        <span class="text-muted">Best Streak</span>
+                        <div id="best-streak-display" class="stat-value">0</div>
+                    </div>
+                    <div class="stat-box">
                         <span class="text-muted">Time</span>
                         <div id="timer-display" class="stat-value">0.0s</div>
                     </div>
                     <div class="stat-box">
-                        <span class="text-muted">Best</span>
+                        <span class="text-muted">Best Time</span>
                         <div id="best-time-display" class="stat-value stat-best">--</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="text-muted">Accuracy</span>
+                        <div id="accuracy-display" class="stat-value">--</div>
                     </div>
                 </div>
 
@@ -135,11 +165,12 @@
                     <div id="question-text" class="question-display">Ready?</div>
 
                     <div class="input-group">
-                        <input type="text" id="answer-input" class="game-input" placeholder="?" autocomplete="off">
+                        <input type="text" id="answer-input" class="game-input" placeholder="?"
+                               autocomplete="off" autofocus aria-label="Your answer">
                         <button id="check-btn" class="btn btn-primary btn-game">Check</button>
                     </div>
 
-                    <div id="feedback-msg" class="feedback-message"></div>
+                    <div id="feedback-msg" class="feedback-message" role="status" aria-live="polite"></div>
                 </div>
 
                 <!-- Mini Performance Chart -->
@@ -155,15 +186,34 @@
 
                 <div class="game-controls mt-4">
                     <button id="next-btn" class="btn btn-secondary btn-sm" style="display:none;">Next Question &rarr;</button>
+                    <button id="skip-btn" class="btn btn-secondary btn-sm" type="button" title="New question (resets the timer)">Skip &rarr;</button>
+                    <button id="reset-btn" class="btn btn-secondary btn-sm" type="button" title="Restart the session (keeps your best records)">&#8635; Reset</button>
+                    <button id="share-btn" class="btn btn-secondary btn-sm" type="button">&#128279; Share result</button>
+                    <div id="share-menu" class="share-menu" hidden>
+                        <a id="share-x"  class="share-chip" target="_blank" rel="noopener">X / Twitter</a>
+                        <a id="share-wa" class="share-chip" target="_blank" rel="noopener">WhatsApp</a>
+                        <a id="share-tg" class="share-chip" target="_blank" rel="noopener">Telegram</a>
+                        <a id="share-li" class="share-chip" target="_blank" rel="noopener">LinkedIn</a>
+                        <button id="share-copy" class="share-chip" type="button">Copy link</button>
+                        <button id="share-card" class="share-chip" type="button">&#128247; Result card (PNG)</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Worked example (secondary, collapsible) -->
+            <details class="card mt-6 learn-details" open>
+                <summary class="learn-summary">How it works — see a worked example</summary>
+                <div class="learn-section">
+                    <div id="visualizer-container" class="visualizer-box">
+                        <!-- Visual content injected via JS -->
+                    </div>
+                </div>
+            </details>
+
         </div>
 
-        <!-- Sidebar / Ads -->
+        <!-- Sidebar -->
         <div class="sidebar-col">
-            <%@ include file="../components/ad-sidebar.jsp" %>
-
             <div class="card mt-6">
                 <h3 class="text-base font-bold mb-2">More Tricks</h3>
                 <div id="related-topics" class="related-list">
@@ -511,6 +561,43 @@
             bestTimeDisplay.innerText = bestTime.toFixed(1) + 's';
         }
 
+        // Best streak (persisted) + session accuracy
+        let totalAttempts = 0, totalCorrect = 0, bestStreak = 0;
+        const bestStreakDisplay = document.getElementById('best-streak-display');
+        const accuracyDisplay   = document.getElementById('accuracy-display');
+        const streakKey = 'quickmath-beststreak-' + topicId;
+        bestStreak = parseInt(localStorage.getItem(streakKey) || '0', 10);
+        if (bestStreakDisplay) bestStreakDisplay.innerText = bestStreak;
+
+        function updateAccuracy() {
+            if (!accuracyDisplay) return;
+            accuracyDisplay.innerText = totalAttempts
+                ? Math.round((totalCorrect / totalAttempts) * 100) + '%'
+                : '--';
+        }
+
+        // Persist the live session per-topic so streak/accuracy/chart survive a
+        // reload — cleared only by Reset.
+        const sessionKey = 'quickmath-session-' + topicId;
+        function saveSession() {
+            try {
+                localStorage.setItem(sessionKey, JSON.stringify({ streak, totalAttempts, totalCorrect, answerTimes }));
+            } catch (e) {}
+        }
+        (function restoreSession() {
+            try {
+                const raw = localStorage.getItem(sessionKey);
+                if (!raw) return;
+                const s = JSON.parse(raw);
+                streak = s.streak || 0;
+                totalAttempts = s.totalAttempts || 0;
+                totalCorrect = s.totalCorrect || 0;
+                answerTimes = Array.isArray(s.answerTimes) ? s.answerTimes : [];
+                streakDisplay.innerText = streak;
+                updateAccuracy();              // chart redraws via renderChart() during init
+            } catch (e) {}
+        })();
+
         function startTimer() {
             startTime = performance.now();
             timerInterval = setInterval(() => {
@@ -583,8 +670,10 @@
             if (!val) return;
 
             const isCorrect = topic.checkAnswer(val, currentQuestion.answer);
+            totalAttempts++;
 
             if (isCorrect) {
+                totalCorrect++;
                 const solveTime = stopTimer();
                 const isNewBest = updateBestTime(solveTime);
                 addAnswerTime(solveTime);
@@ -593,6 +682,15 @@
                 feedback.className = 'feedback-message feedback-correct';
                 streak++;
                 streakDisplay.innerText = streak;
+                if (streak > bestStreak) {
+                    bestStreak = streak;
+                    if (bestStreakDisplay) {
+                        bestStreakDisplay.innerText = bestStreak;
+                        bestStreakDisplay.style.animation = 'none'; bestStreakDisplay.offsetHeight;
+                        bestStreakDisplay.style.animation = 'pulse 0.5s ease';
+                    }
+                    localStorage.setItem(streakKey, bestStreak.toString());
+                }
                 isAnswered = true;
                 checkBtn.disabled = true;
 
@@ -610,12 +708,158 @@
                 ansInput.focus({ preventScroll: true });
                 ansInput.select();
             }
+            updateAccuracy();
+            saveSession();
         }
 
         checkBtn.addEventListener('click', handleCheck);
         ansInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleCheck(); });
         renderChart();
         loadQuestion();
+
+        // ---- Skip / Reset controls ----
+        function resetSession() {
+            streak = 0; streakDisplay.innerText = '0';
+            totalAttempts = 0; totalCorrect = 0; updateAccuracy();
+            answerTimes = []; renderChart();
+            try { localStorage.removeItem(sessionKey); } catch (e) {}
+            loadQuestion();   // fresh question, timer reset, input focused
+        }
+        document.getElementById('skip-btn')?.addEventListener('click', () => loadQuestion());
+        document.getElementById('reset-btn')?.addEventListener('click', resetSession);
+
+        // ---- Share result to social channels ----
+        (function setupShare() {
+            const shareBtn  = document.getElementById('share-btn');
+            const shareMenu = document.getElementById('share-menu');
+            if (!shareBtn) return;
+
+            const topicName = (document.getElementById('topic-title')?.textContent || 'mental math').trim();
+            const pageUrl   = window.location.href.split('#')[0];
+
+            function stats() {
+                return {
+                    acc:    totalAttempts ? Math.round((totalCorrect / totalAttempts) * 100) : 0,
+                    bt:     bestTime != null ? bestTime.toFixed(1) + 's' : '—',
+                    streak: streak,
+                    best:   bestStreak
+                };
+            }
+            function shareText() {
+                const s = stats();
+                return 'I’m drilling ' + topicName + ' on 8gwifi.org — 🔥 streak ' + s.streak +
+                       ' (best ' + s.best + '), ⚡ best time ' + s.bt + ', 🎯 ' + s.acc + '% accuracy. Try it:';
+            }
+
+            function buildLinks() {
+                const t = shareText(), u = pageUrl;
+                const et = encodeURIComponent(t), eu = encodeURIComponent(u);
+                const set = (id, href) => { const a = document.getElementById(id); if (a) a.href = href; };
+                set('share-x',  'https://twitter.com/intent/tweet?text=' + et + '&url=' + eu);
+                set('share-wa', 'https://wa.me/?text=' + encodeURIComponent(t + ' ' + u));
+                set('share-tg', 'https://t.me/share/url?url=' + eu + '&text=' + et);
+                set('share-li', 'https://www.linkedin.com/sharing/share-offsite/?url=' + eu);
+            }
+
+            // ---- Result-card image (canvas → 1080×1080 PNG) ----
+            function roundRect(x, rx, ry, w, h, r) {
+                x.beginPath();
+                x.moveTo(rx + r, ry);
+                x.arcTo(rx + w, ry, rx + w, ry + h, r);
+                x.arcTo(rx + w, ry + h, rx, ry + h, r);
+                x.arcTo(rx, ry + h, rx, ry, r);
+                x.arcTo(rx, ry, rx + w, ry, r);
+                x.closePath();
+            }
+            function drawCard() {
+                const W = 1080, H = 1080, cv = document.createElement('canvas');
+                cv.width = W; cv.height = H;
+                const x = cv.getContext('2d');
+                x.fillStyle = '#faf8f4'; x.fillRect(0, 0, W, H);
+                x.fillStyle = '#15803d'; x.fillRect(0, 0, W, 156);
+                x.textBaseline = 'middle'; x.fillStyle = '#ffffff';
+                x.font = '700 50px Inter, system-ui, sans-serif';
+                x.fillText('8gwifi · Quick Math', 72, 84);
+
+                x.textBaseline = 'alphabetic'; x.fillStyle = '#1c1917';
+                x.font = '800 66px Inter, system-ui, sans-serif';
+                const words = topicName.split(' '); let line = ''; const lines = [];
+                for (const w of words) {
+                    const test = line ? line + ' ' + w : w;
+                    if (x.measureText(test).width > W - 144 && line) { lines.push(line); line = w; }
+                    else line = test;
+                }
+                lines.push(line);
+                const shown = lines.slice(0, 2);
+                shown.forEach((ln, i) => x.fillText(ln, 72, 286 + i * 78));
+                x.fillStyle = '#78716c'; x.font = '400 34px Inter, system-ui, sans-serif';
+                x.fillText('Mental math speed drill', 72, 286 + shown.length * 78 + 18);
+
+                const s = stats(), top = 524;
+                const tiles = [
+                    ['🔥', String(s.streak), 'Streak'],
+                    ['🏆', String(s.best),   'Best streak'],
+                    ['⚡', s.bt,              'Best time'],
+                    ['🎯', s.acc + '%',       'Accuracy']
+                ];
+                tiles.forEach((t, i) => {
+                    const tx = 72 + (i % 2) * 484, ty = top + ((i / 2) | 0) * 214, tw = 452, th = 188;
+                    x.fillStyle = '#ffffff'; roundRect(x, tx, ty, tw, th, 24); x.fill();
+                    x.strokeStyle = 'rgba(28,25,23,0.10)'; x.lineWidth = 2; roundRect(x, tx, ty, tw, th, 24); x.stroke();
+                    x.font = '400 46px Inter, system-ui, sans-serif'; x.fillStyle = '#1c1917';
+                    x.fillText(t[0], tx + 32, ty + 74);
+                    x.font = '800 74px Inter, system-ui, sans-serif'; x.fillStyle = '#15803d';
+                    x.fillText(t[1], tx + 104, ty + 86);
+                    x.font = '700 28px Inter, system-ui, sans-serif'; x.fillStyle = '#78716c';
+                    x.fillText(t[2].toUpperCase(), tx + 34, ty + 142);
+                });
+
+                x.fillStyle = '#15803d'; x.font = '600 36px Inter, system-ui, sans-serif';
+                x.fillText('Practice free → 8gwifi.org/math/quick-math', 72, 1014);
+                return cv;
+            }
+            async function cardBlob() {
+                if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+                return new Promise(res => drawCard().toBlob(res, 'image/png'));
+            }
+            function downloadCard(blob) {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'quickmath-result.png';
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+            }
+
+            shareBtn.addEventListener('click', async () => {
+                const t = shareText(), u = pageUrl;
+                // Best path: native share WITH the result-card image (mobile / supported browsers)
+                try {
+                    const blob = await cardBlob();
+                    const file = new File([blob], 'quickmath-result.png', { type: 'image/png' });
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({ files: [file], text: t + ' ' + u, title: '8gwifi Quick Math' });
+                        return;
+                    }
+                } catch (e) { /* cancelled or unsupported — fall back to the channel menu */ }
+                buildLinks();
+                shareMenu.hidden = !shareMenu.hidden;
+            });
+
+            const copyBtn = document.getElementById('share-copy');
+            if (copyBtn) copyBtn.addEventListener('click', () => {
+                navigator.clipboard?.writeText(shareText() + ' ' + pageUrl);
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 1500);
+            });
+
+            const cardBtn = document.getElementById('share-card');
+            if (cardBtn) cardBtn.addEventListener('click', async () => {
+                cardBtn.textContent = 'Rendering…';
+                try { downloadCard(await cardBlob()); cardBtn.textContent = '📷 Saved!'; }
+                catch (e) { cardBtn.textContent = '📷 Result card (PNG)'; }
+                setTimeout(() => { cardBtn.textContent = '📷 Result card (PNG)'; }, 1800);
+            });
+        })();
 
         // Populate Related Topics
         function loadRelatedTopics() {
@@ -735,4 +979,4 @@
 }
 </style>
 
-<%@ include file="../components/footer.jsp" %>
+<%@ include file="/math/partials/studio-close.jsp" %>
