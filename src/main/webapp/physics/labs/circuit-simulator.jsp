@@ -15,7 +15,7 @@
     <jsp:param name="toolDescription" value="Build circuits with AI: type a description and get a working circuit instantly. Or draw your own with 60 component types. Live animated current flow, voltage colors, oscilloscope. 108 built-in circuits. 100% browser-based, free, no signup." />
     <jsp:param name="toolUrl" value="physics/labs/circuit-simulator.jsp" />
     <jsp:param name="toolKeywords" value="AI circuit generator, circuit simulator online free, AI build circuit, text to circuit, electronic circuit builder, circuit design tool, SPICE simulator, RC circuit, voltage divider, diode rectifier, transistor amplifier, op-amp circuit, logic gate simulator, JFET, Darlington, comparator, Schmitt trigger, Ohm's law, KVL, KCL, oscilloscope" />
-    <jsp:param name="toolImage" value="circuit-simulator-og.svg" />
+    <jsp:param name="toolImage" value="circuit-simulator-og.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="physics/" />
     <jsp:param name="educationalLevel" value="High School, Undergraduate, AP Physics, IB Physics, Engineering" />
     <jsp:param name="teaches" value="circuit analysis, Ohm's law, Kirchhoff's voltage law, Kirchhoff's current law, voltage dividers, series parallel circuits, RC time constant, RL circuits, RLC resonance, diode rectification, BJT amplifiers, MOSFET switching, op-amp circuits, logic gates, flip-flops, digital electronics" />
