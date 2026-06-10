@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <% String v = String.valueOf(System.currentTimeMillis()); %>
+<%
+    request.setAttribute("aiToolId", "physics/labs/circuit-simulator");
+%>
+<%@ include file="../../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -41,8 +45,7 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-vision-modal.css?v=<%=v%>" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-progress-bar.css?v=<%=v%>" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ai-chat-modal.css?v=<%=v%>" media="print" onload="this.media='all'">
+<%@ include file="../../modern/components/ai-assistant-head.inc.jsp" %>
 
 <!-- GPT Ads: defer to after LCP -->
 <script>
@@ -123,51 +126,6 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 .ckt-header strong{color:var(--ckt-text);font-weight:600}
 
 /* Toolbar */
-/* AI panel — hidden by default, opened from menu bar "🤖 AI" button */
-.ckt-ai-panel{display:none;flex-direction:column;flex-shrink:0}
-.ckt-ai-panel.open{display:flex}
-.ckt-ai-bar{display:flex;align-items:center;gap:8px;padding:4px 12px;background:linear-gradient(90deg,rgba(99,102,241,.08),rgba(6,182,212,.08));border-bottom:1px solid var(--ckt-border);flex-shrink:0;height:36px;font:12px 'DM Sans',sans-serif}
-.ckt-ai-input{flex:1;min-width:0;padding:4px 10px;border:1px solid rgba(99,102,241,.3);border-radius:6px;background:rgba(0,0,0,.2);color:var(--ckt-text);font:12px 'DM Sans',sans-serif;outline:none;transition:border-color .2s}
-.ckt-ai-input:focus{border-color:#6366f1}
-.ckt-ai-input::placeholder{color:var(--ckt-muted);font-size:11px}
-.ckt-ai-btn{padding:4px 14px;border:none;border-radius:6px;background:#6366f1;color:#fff;font:600 12px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:background .15s}
-.ckt-ai-btn:hover{background:#4f46e5}
-.ckt-ai-btn:disabled{opacity:.5;cursor:wait}
-.ckt-ai-img-btn{padding:4px 8px;border:1px solid rgba(99,102,241,.35);border-radius:6px;background:transparent;color:#a5b4fc;font-size:14px;cursor:pointer;line-height:1;transition:all .15s}
-.ckt-ai-img-btn:hover{background:rgba(99,102,241,.15);color:#c7d2fe;border-color:#6366f1}
-.ckt-ai-progress-slot{padding:0 12px}
-.ckt-ai-progress-slot:empty{display:none}
-/* Stage-2 overlay shown after vision completes, while text→netlist runs */
-.ckt-stage2{position:fixed;inset:0;background:rgba(8,10,14,.72);display:none;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(2px)}
-.ckt-stage2.open{display:flex}
-.ckt-stage2-card{width:min(92vw,480px);background:#151821;border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5);color:var(--ckt-text);font:13px 'DM Sans',sans-serif}
-.ckt-stage2-step{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#a5b4fc;margin-bottom:6px}
-.ckt-stage2-title{font:600 16px 'Sora',sans-serif;margin:0 0 4px}
-.ckt-stage2-subtitle{color:var(--ckt-muted);margin:0 0 14px;font-size:12px}
-.ckt-stage2-desc{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:6px;padding:10px 12px;font-size:12px;line-height:1.45;color:#cbd5e1;max-height:110px;overflow:auto;margin-bottom:14px}
-.ckt-stage2-progress{margin-bottom:14px}
-.ckt-stage2-actions{display:flex;justify-content:flex-end}
-.ckt-stage2-cancel{padding:6px 14px;border:1px solid rgba(148,163,184,.3);border-radius:6px;background:transparent;color:var(--ckt-muted);font:500 12px 'DM Sans',sans-serif;cursor:pointer}
-.ckt-stage2-cancel:hover{color:#ef4444;border-color:#ef4444}
-/* Unlock / contact notice (AI bar + stage-2 overlay use the same look) */
-.ckt-ai-upsell{padding:3px 12px;background:rgba(99,102,241,.05);border-bottom:1px solid var(--ckt-border);color:var(--ckt-muted);font:11px 'DM Sans',sans-serif;display:flex;align-items:center;gap:6px}
-.ckt-ai-upsell a{color:#a5b4fc;text-decoration:none;font-weight:500}
-.ckt-ai-upsell a:hover{color:#c7d2fe;text-decoration:underline}
-.ckt-stage2-upsell{margin-top:4px;padding:8px 10px;background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:6px;font-size:11px;color:var(--ckt-muted)}
-.ckt-stage2-upsell a{color:#a5b4fc;text-decoration:none;font-weight:500}
-.ckt-stage2-upsell a:hover{text-decoration:underline}
-.ckt-ai-close{padding:2px 8px;border:none;background:transparent;color:var(--ckt-muted);font-size:16px;cursor:pointer;line-height:1}
-.ckt-ai-close:hover{color:#ef4444}
-.ckt-ai-status{font-size:11px;white-space:nowrap;flex-shrink:0;min-width:0;overflow:hidden;text-overflow:ellipsis}
-.ckt-ai-status.loading{color:#a78bfa}
-.ckt-ai-status.success{color:#22c55e}
-.ckt-ai-status.error{color:#ef4444}
-.ckt-ai-status.warning{color:#f59e0b}
-.ckt-ai-examples{display:flex;align-items:center;gap:6px;padding:3px 12px;background:rgba(99,102,241,.04);border-bottom:1px solid var(--ckt-border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
-.ckt-ai-examples::-webkit-scrollbar{display:none}
-.ckt-ai-examples-label{color:var(--ckt-muted);font:11px 'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0}
-.ckt-ai-chip{padding:2px 10px;border:1px solid rgba(99,102,241,.25);border-radius:12px;background:transparent;color:#a5b4fc;font:11px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
-.ckt-ai-chip:hover{background:rgba(99,102,241,.15);border-color:#6366f1;color:#c7d2fe}
 /* Canvas toast notification */
 .ckt-toast{position:absolute;top:12px;left:50%;transform:translateX(-50%) translateY(-20px);padding:8px 20px;border-radius:8px;font:600 13px 'DM Sans',sans-serif;z-index:200;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 16px rgba(0,0,0,.3)}
 .ckt-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -215,9 +173,6 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
   .ckt-tb-slider{width:50px}
   .ckt-tb-label{display:none}
   .ckt-tb-info{display:none}
-  .ckt-ai-examples{display:none}
-  .ckt-ai-input{font-size:16px}
-  .ckt-ai-bar{height:auto;padding:6px 8px}
   .circuit-menu-ai{font-size:11px;padding:4px 6px}
 }
 </style>
@@ -250,36 +205,6 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
     <span class="ckt-tb-value" id="valCurrentSpeed">50%</span>
     <div class="ckt-tb-sep"></div>
     <span class="ckt-tb-info" id="circuitInfo">t = 0.000s</span>
-  </div>
-
-  <!-- AI Circuit Generator (panel hidden by default) -->
-  <div class="ckt-ai-panel" id="aiPanel">
-    <div class="ckt-ai-bar" id="aiBar">
-      <input type="text" class="ckt-ai-input" id="aiInput" placeholder="Describe a circuit... e.g. &quot;inverting op-amp with gain -10&quot;" maxlength="500" autocomplete="off">
-      <button class="ckt-ai-btn" id="aiGenerate">Generate</button>
-      <button class="ckt-ai-img-btn" id="aiFromImage" title="Upload a circuit image (schematic, sketch, photo)" aria-label="Generate from image">📷</button>
-      <button class="ckt-ai-img-btn" id="aiChat" title="Chat about your current circuit" aria-label="Chat with AI">💬</button>
-      <button class="ckt-ai-close" id="aiClose" title="Close">&times;</button>
-      <span class="ckt-ai-status" id="aiStatus"></span>
-    </div>
-    <div class="ckt-ai-progress-slot" id="aiProgressSlot"></div>
-    <div class="ckt-ai-examples" id="aiExamples">
-      <span class="ckt-ai-examples-label">Try:</span>
-      <button class="ckt-ai-chip" data-prompt="LED with 330 ohm resistor powered by 5V">LED Circuit</button>
-      <button class="ckt-ai-chip" data-prompt="Voltage divider with 10k and 5k resistors, 9V battery">Voltage Divider</button>
-      <button class="ckt-ai-chip" data-prompt="RC low-pass filter, R=10k, C=100nF, AC source at 1kHz">RC Filter</button>
-      <button class="ckt-ai-chip" data-prompt="Inverting op-amp amplifier with gain of -10, 1kHz AC input">Op-Amp Inverter</button>
-      <button class="ckt-ai-chip" data-prompt="NPN BJT switch driving LED, base through 10k from 5V, Vcc=9V">BJT Switch</button>
-      <button class="ckt-ai-chip" data-prompt="Half-wave rectifier with diode, 100uF smoothing cap, 1k load">Rectifier</button>
-      <button class="ckt-ai-chip" data-prompt="Zener regulator: 12V input, 5.1V zener, 470 ohm series resistor">Zener Regulator</button>
-      <button class="ckt-ai-chip" data-prompt="RLC series resonance: R=100, L=10mH, C=10nF, AC source">RLC Resonance</button>
-      <button class="ckt-ai-chip" data-prompt="SR latch using two cross-coupled NAND gates">SR Latch</button>
-      <button class="ckt-ai-chip" data-prompt="D flip-flop with 2Hz clock input">D Flip-Flop</button>
-    </div>
-    <div class="ckt-ai-upsell">
-      <span>💎 Want higher limits / faster AI? Contact</span>
-      <a href="https://x.com/anish2good" target="_blank" rel="noopener noreferrer">@anish2good on X</a>
-    </div>
   </div>
 
   <div class="ckt-main">
@@ -321,29 +246,11 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
   <div id="ad_lab_sticky"></div>
 </div>
 
-<!-- Stage-2 overlay: shown after vision completes, while qwen builds the netlist -->
-<div class="ckt-stage2" id="stage2Overlay" role="dialog" aria-modal="true" aria-labelledby="stage2Title">
-  <div class="ckt-stage2-card">
-    <div class="ckt-stage2-step">Step 2 of 2</div>
-    <h3 class="ckt-stage2-title" id="stage2Title">Building circuit from image…</h3>
-    <p class="ckt-stage2-subtitle">Translating the description into a simulator netlist. Typical time ~4 min.</p>
-    <div class="ckt-stage2-desc" id="stage2Desc"></div>
-    <div class="ckt-stage2-progress" id="stage2ProgressSlot"></div>
-    <div class="ckt-stage2-upsell">
-      💎 Want higher limits / faster AI? Contact
-      <a href="https://x.com/anish2good" target="_blank" rel="noopener noreferrer">@anish2good on X</a>.
-    </div>
-    <div class="ckt-stage2-actions">
-      <button type="button" class="ckt-stage2-cancel" id="stage2Cancel">Hide</button>
-    </div>
-  </div>
-</div>
-
 <script type="module">
 import { CircuitApp } from './js/circuit/ui/app.js';
-import { AI_SYSTEM_PROMPT, buildUserPrompt, CIRCUIT_VISION_PROMPT, buildVisionUserPrompt, CIRCUIT_CHAT_PROMPT } from './js/circuit/ai-prompt.js';
-import { parseNetlist, formatNetlist } from './js/circuit/netlist.js';
-import { validateCircuitInput } from './js/circuit/validation.js';
+import { CIRCUIT_VISION_PROMPT, buildVisionUserPrompt } from './js/circuit/ai-prompt.js';
+import { formatNetlist } from './js/circuit/netlist.js';
+import { netlistTextToElements } from './js/circuit/circuit-ai-engine.js';
 const app = new CircuitApp(document.getElementById('circuitApp'));
 
 // Hide hint after first component placed
@@ -388,323 +295,105 @@ function showCanvasToast(message, type, duration) {
   }, duration || 4000);
 }
 
-// ── AI Circuit Generator ──
-const aiPanel = document.getElementById('aiPanel');
-const aiClose = document.getElementById('aiClose');
-const aiInput = document.getElementById('aiInput');
-const aiBtn = document.getElementById('aiGenerate');
-const aiImgBtn = document.getElementById('aiFromImage');
-const aiChatBtn = document.getElementById('aiChat');
-const aiStatus = document.getElementById('aiStatus');
-const aiProgressSlot = document.getElementById('aiProgressSlot');
-const stage2Overlay = document.getElementById('stage2Overlay');
-const stage2Desc = document.getElementById('stage2Desc');
-const stage2ProgressSlot = document.getElementById('stage2ProgressSlot');
-const stage2Cancel = document.getElementById('stage2Cancel');
+// ── AI assistant shell (VibeCodingAssistant adapter) ──
 const AI_CTX = '<%=request.getContextPath()%>';
+let _circuitSnapCache = null;
 
-// Close button
-aiClose.addEventListener('click', () => {
-  aiPanel.classList.remove('open');
-});
-
-function setAiStatus(text, cls) {
-  aiStatus.textContent = text;
-  aiStatus.className = 'ckt-ai-status' + (cls ? ' ' + cls : '');
+function buildCircuitSummary(elements) {
+  const counts = {};
+  for (const el of elements) {
+    counts[el.type] = (counts[el.type] || 0) + 1;
+  }
+  const parts = Object.keys(counts).sort().map((t) => counts[t] + '× ' + t);
+  return parts.length ? 'Parts: ' + parts.join(', ') : '';
 }
 
-// Shared stage-2: description → elements (throws user-facing errors).
-// Used by both the text-prompt path and the image → vision → text chain.
-async function descriptionToElements(desc) {
-  const resp = await fetch(AI_CTX + '/ai', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      stream: false,
-      messages: [
-        { role: 'system', content: AI_SYSTEM_PROMPT },
-        { role: 'user',   content: buildUserPrompt(desc) },
-      ],
-    }),
-  });
-
-  if (resp.status === 429) throw new Error('Rate limit — try again later');
-  if (resp.status === 401) throw new Error('Auth error — please reload');
-  if (!resp.ok) {
-    const data = await resp.json().catch(() => ({}));
-    throw new Error(data.error || 'Server error (' + resp.status + ')');
-  }
-
-  const data = await resp.json();
-  const content = (data?.message?.content ?? data?.response ?? '').trim();
-  if (!content) throw new Error('Empty response from AI');
-  if (/^error\s+unclear_request\b/i.test(content)) {
-    throw new Error('AI could not understand the request — try rewording');
-  }
-
-  let elements;
+function refreshCircuitSnapshot() {
   try {
-    elements = parseNetlist(content).elements;
-  } catch (err) {
-    console.error('netlist parse failed. raw content:\n' + content);
-    throw new Error('Could not parse AI output — try rewording');
-  }
-
-  // Auto-insert source / ground if missing.
-  const types = elements.map(e => e.type);
-  if (!types.some(t => ['dc-voltage','ac-voltage','dc-current','clock'].includes(t))) {
-    elements.unshift({ type: 'dc-voltage', x1: 0, y1: 6, x2: 0, y2: 0, params: { voltage: 5 } });
-  }
-  if (!types.includes('ground')) {
-    let maxY = 0;
-    for (const e of elements) { maxY = Math.max(maxY, e.y1 || 0, e.y2 || 0); }
-    elements.push({ type: 'ground', x1: 0, y1: maxY, x2: 0, y2: maxY });
-  }
-  return elements;
-}
-
-// Phases for the text → netlist call.  Typical cold-start is ~4 min, warm
-// runs are 10–30 s — AIProgressBar will complete smoothly either way because
-// the fill clamps at 95 % until success triggers the jump to 100 %.
-const CIRCUIT_PROGRESS_PHASES = [
-  { pct: 10, ms: 3000,   label: 'Sending description...' },
-  { pct: 25, ms: 20000,  label: 'Planning circuit...' },
-  { pct: 45, ms: 60000,  label: 'Placing components...' },
-  { pct: 65, ms: 120000, label: 'Wiring connections...' },
-  { pct: 80, ms: 180000, label: 'Finalizing netlist...' },
-  { pct: 90, ms: 220000, label: 'Almost done...' },
-];
-const CIRCUIT_PROGRESS_ESTIMATE_MS = 240000; // 4 min
-
-function attachCircuitProgress() {
-  if (!window.AIProgressBar || !aiProgressSlot) return null;
-  const bar = window.AIProgressBar.attach(aiProgressSlot, {
-    estimatedMs: CIRCUIT_PROGRESS_ESTIMATE_MS,
-    phases: CIRCUIT_PROGRESS_PHASES,
-  });
-  bar.start();
-  return bar;
-}
-
-// Opens the centered "Step 2 of 2" overlay with the same AIProgressBar so the
-// user sees continuity between the vision modal closing and the circuit
-// appearing.  Returns a handle mirroring AIProgressBar: {stop, destroy}.
-function openStage2Overlay(description) {
-  if (!stage2Overlay) return null;
-  if (stage2Desc) {
-    const preview = (description || '').slice(0, 280);
-    stage2Desc.textContent = preview + ((description || '').length > 280 ? '…' : '');
-  }
-  // Clear any residue from a previous run.
-  if (stage2ProgressSlot) stage2ProgressSlot.innerHTML = '';
-  stage2Overlay.classList.add('open');
-
-  let bar = null;
-  if (window.AIProgressBar && stage2ProgressSlot) {
-    bar = window.AIProgressBar.attach(stage2ProgressSlot, {
-      estimatedMs: CIRCUIT_PROGRESS_ESTIMATE_MS,
-      phases: CIRCUIT_PROGRESS_PHASES,
-    });
-    bar.start();
-  }
-  return {
-    stop: (ok) => { if (bar) bar.stop(ok); },
-    destroy: () => {
-      if (bar) bar.destroy();
-      stage2Overlay.classList.remove('open');
-    },
-  };
-}
-
-// "Hide" just dismisses the overlay — the underlying fetch keeps running,
-// the result still loads into the simulator when it arrives.
-if (stage2Cancel) {
-  stage2Cancel.addEventListener('click', () => stage2Overlay.classList.remove('open'));
-}
-
-// Text path — user types a description.
-async function generateCircuit() {
-  const desc = aiInput.value.trim();
-  if (!desc) { setAiStatus('Enter a description', 'error'); return; }
-
-  const valErr = validateCircuitInput(desc);
-  if (valErr) { setAiStatus(valErr, 'error'); return; }
-
-  aiBtn.disabled = true;
-  aiInput.disabled = true;
-  if (aiImgBtn) aiImgBtn.disabled = true;
-  setAiStatus('Generating circuit...', 'loading');
-
-  const progress = attachCircuitProgress();
-  const t0 = Date.now();
-  try {
-    const elements = await descriptionToElements(desc);
-    app.loadFromElements(elements);
-    const time = ((Date.now() - t0) / 1000).toFixed(1) + 's';
-    const statusMsg = 'Circuit (' + elements.length + ' elements) in ' + time;
-    setAiStatus('✓ ' + statusMsg, 'success');
-    showCanvasToast('✓ ' + statusMsg, 'success', 3000);
-    if (progress) progress.stop(true);
+    const elements = app._serializeCircuit().elements;
+    const netlist = elements.length ? formatNetlist(elements) : '';
+    _circuitSnapCache = {
+      elementCount: elements.length,
+      summary: buildCircuitSummary(elements),
+      netlist,
+    };
   } catch (e) {
-    console.error('AI circuit error:', e);
-    if (e.name === 'TypeError' && String(e.message).includes('fetch')) {
-      setAiStatus('Network error — check connection', 'error');
-    } else {
-      setAiStatus(e.message || 'Unknown error', 'error');
+    _circuitSnapCache = { elementCount: 0, summary: '', netlist: '' };
+  }
+  return Promise.resolve(_circuitSnapCache);
+}
+
+window.circuitShell = {
+  getSnapshot() {
+    if (!_circuitSnapCache) refreshCircuitSnapshot();
+    return _circuitSnapCache || { elementCount: 0, summary: '', netlist: '' };
+  },
+  refreshSnapshot: refreshCircuitSnapshot,
+  applyNetlist(text, opts = {}) {
+    try {
+      const elements = netlistTextToElements(text, opts);
+      app.loadFromElements(elements);
+      refreshCircuitSnapshot();
+      showCanvasToast('✓ Circuit loaded (' + elements.length + ' elements)', 'success', 3000);
+      return { applied: true, elementCount: elements.length };
+    } catch (e) {
+      return { applied: false, error: e.message || String(e) };
     }
-    if (progress) progress.stop(false);
-  } finally {
-    if (progress) setTimeout(() => progress.destroy(), 1500);
-    aiBtn.disabled = false;
-    aiInput.disabled = false;
-    if (aiImgBtn) aiImgBtn.disabled = false;
-    aiInput.focus();
-  }
-}
-
-// Image path — opens AIVisionModal (gemma vision), chains to qwen text model
-// to produce the netlist.  Mirrors the video/captions + 3D-modeler pattern:
-// phased AIProgressBar timer, server-chosen model, no client-side model field.
-function generateFromImage() {
-  if (typeof window.AIVisionModal === 'undefined') {
-    setAiStatus('Image module still loading — try again in a moment', 'error');
-    return;
-  }
-  // Two-stage UX: vision ~2 min + circuit ~4 min = ~6 min total.
-  // Use shorter vision phases than the AIVisionModal default (6 min), then
-  // hand off to the same 4-min AIProgressBar the text path uses.
-  window.AIVisionModal.open({
-    title: 'Image to Circuit',
-    subtitle: 'Upload a schematic, sketch, or photo — AI will rebuild it as a simulator circuit. Typical total time ~6 min.',
-    ctx: AI_CTX,
-    systemPrompt: CIRCUIT_VISION_PROMPT,
-    userPrompt: buildVisionUserPrompt(),
-    estimatedMs: 120000,
-    footerHtml: '💎 Want higher limits / faster AI? Contact <a href="https://x.com/anish2good" target="_blank" rel="noopener noreferrer">@anish2good on X</a>.',
-    phases: [
-      { pct: 12, ms: 3000,   label: 'Uploading image...' },
-      { pct: 28, ms: 15000,  label: 'Reading components...' },
-      { pct: 50, ms: 40000,  label: 'Tracing connections...' },
-      { pct: 70, ms: 75000,  label: 'Describing circuit...' },
-      { pct: 88, ms: 105000, label: 'Almost done...' },
-    ],
-    // Vision description is prose, not code — don't strip anything.
-    cleanCode: (raw) => (raw || '').trim(),
-    onResult: async (description) => {
-      // Vision models often wrap the sentinel (backticks, quotes, periods).
-      // Treat any short response containing `not_a_circuit` as the sentinel.
-      const trimmed = (description || '').trim();
-      if (trimmed.length < 50 && /not_a_circuit/i.test(trimmed)) {
-        setAiStatus('Image does not appear to be a circuit', 'error');
-        showCanvasToast('This image does not look like a circuit', 'warning', 5000);
-        return;
-      }
-
-      // Stage 2: text → netlist.  Show the centered overlay so the user sees
-      // continuity after the vision modal closes (they get to read the
-      // description while the circuit is being built).
-      aiBtn.disabled = true;
-      aiInput.disabled = true;
-      if (aiImgBtn) aiImgBtn.disabled = true;
-      setAiStatus('Building circuit from image...', 'loading');
-
-      const progress = openStage2Overlay(description);
-      const t0 = Date.now();
-      try {
-        const elements = await descriptionToElements(description);
-        app.loadFromElements(elements);
-        const time = ((Date.now() - t0) / 1000).toFixed(1) + 's';
-        const statusMsg = 'Circuit (' + elements.length + ' elements) in ' + time;
-        setAiStatus('✓ ' + statusMsg, 'success');
-        showCanvasToast('✓ Circuit from image ready', 'success', 3000);
-        if (progress) progress.stop(true);
-      } catch (err) {
-        console.error('image→circuit stage 2 error:', err);
-        setAiStatus(err.message || 'Failed to build circuit', 'error');
-        if (progress) progress.stop(false);
-      } finally {
-        if (progress) setTimeout(() => progress.destroy(), 1500);
-        aiBtn.disabled = false;
-        aiInput.disabled = false;
-        if (aiImgBtn) aiImgBtn.disabled = false;
-      }
-    },
-    onError: (msg) => {
-      setAiStatus(msg, 'error');
-    },
-  });
-}
-
-// Chat path — conversational AI over the current circuit.  Uses the shared
-// AIChatModal component; the modal is tool-agnostic, domain logic lives
-// here: seedContext returns the current circuit as a netlist, and the
-// registered `netlist` toolBlock wires the "Load this circuit" button
-// back into app.loadFromElements.
-function openChat() {
-  if (typeof window.AIChatModal === 'undefined') {
-    setAiStatus('Chat module still loading — try again in a moment', 'error');
-    return;
-  }
-  window.AIChatModal.open({
-    title: 'Circuit Assistant',
-    subtitle: 'Ask questions, request fixes, iterate on your circuit.',
-    ctx: AI_CTX,
-    systemPrompt: CIRCUIT_CHAT_PROMPT,
-    placeholder: 'e.g. "why is there no current flowing?" or "change the LED to red and add a switch"',
-    estimatedMs: 180000,
-    historyTurns: 3,
-    stream: true,
-    // Snapshot current circuit state for every turn — the AI sees exactly
-    // what the user sees, including any edits made between messages.
-    seedContext: () => {
-      try {
-        const elements = app._serializeCircuit().elements;
-        if (!elements.length) return '(empty canvas)';
-        return formatNetlist(elements);
-      } catch (e) {
-        return '(circuit serialization unavailable)';
-      }
-    },
-    toolBlocks: {
-      netlist: {
-        label: 'Load this circuit',
-        // Claim fences even when the model forgets the `netlist` language
-        // tag — content sniff: first non-blank line starts with a known
-        // element type.  parseNetlist will still succeed on the actual
-        // Apply since it's whitespace-tolerant.
-        detect: (content) => {
-          const line = (content.split('\n').find(l => l.trim()) || '').trim();
-          if (!line) return false;
-          const firstToken = line.split(/\s+/)[0];
-          return /^(wire|ground|resistor|capacitor|polarized-cap|inductor|switch|push-switch|spdt-switch|fuse|lamp|dc-voltage|ac-voltage|dc-current|clock|led|diode|zener|bjt-npn|bjt-pnp|mosfet-n|mosfet-p|jfet-n|jfet-p|opamp|comparator|schmitt|schmitt-inv|555-timer|monostable|relay|and-gate|or-gate|nand-gate|nor-gate|xor-gate|not-gate|d-flipflop|sr-flipflop|jk-flipflop|counter|shift-register|mux|demux|half-adder|full-adder|logic-input|logic-output|transmission-line|vco|ideal-switch|vcvs|vccs|ccvs|cccs|ammeter|voltmeter|seven-seg|darlington-npn|darlington-pnp)$/.test(firstToken);
+  },
+  openFromImage() {
+    if (typeof window.AIVisionModal === 'undefined') {
+      showCanvasToast('Image module still loading — try again in a moment', 'warning', 4000);
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+      window.AIVisionModal.open({
+        title: 'Image to Circuit',
+        subtitle: 'Upload a schematic, sketch, or photo — AI describes it, then Circuit AI builds the netlist.',
+        ctx: AI_CTX,
+        systemPrompt: CIRCUIT_VISION_PROMPT,
+        userPrompt: buildVisionUserPrompt(),
+        estimatedMs: 120000,
+        phases: [
+          { pct: 12, ms: 3000, label: 'Uploading image...' },
+          { pct: 28, ms: 15000, label: 'Reading components...' },
+          { pct: 50, ms: 40000, label: 'Tracing connections...' },
+          { pct: 70, ms: 75000, label: 'Describing circuit...' },
+          { pct: 88, ms: 105000, label: 'Almost done...' },
+        ],
+        cleanCode: (raw) => (raw || '').trim(),
+        onResult: async (description) => {
+          const trimmed = (description || '').trim();
+          if (trimmed.length < 50 && /not_a_circuit/i.test(trimmed)) {
+            showCanvasToast('This image does not look like a circuit', 'warning', 5000);
+            resolve();
+            return;
+          }
+          const prompt = 'Build a complete simulator circuit from this image description:\n\n' + description;
+          if (window.circuitAssistant) {
+            await window.circuitAssistant.open(prompt, true);
+          }
+          resolve();
         },
-        apply: (content) => {
-          const parsed = parseNetlist(content);
-          app.loadFromElements(parsed.elements);
-          showCanvasToast('✓ Circuit updated from chat', 'success', 3000);
+        onError: (msg) => {
+          showCanvasToast(msg || 'Vision failed', 'error', 5000);
+          resolve();
         },
-      },
-    },
-    footerHtml: '💎 Want higher limits / faster AI? Contact <a href="https://x.com/anish2good" target="_blank" rel="noopener noreferrer">@anish2good on X</a>.',
-    onError: (msg) => console.warn('[AIChatModal]', msg),
-  });
-}
+      });
+    });
+  },
+};
 
-aiBtn.addEventListener('click', generateCircuit);
-aiInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generateCircuit(); }
-});
-if (aiImgBtn) aiImgBtn.addEventListener('click', generateFromImage);
-if (aiChatBtn) aiChatBtn.addEventListener('click', openChat);
+refreshCircuitSnapshot();
+</script>
 
-// Example chips — click to fill input (user presses Enter or Generate to submit)
-document.querySelectorAll('.ckt-ai-chip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    aiInput.value = chip.dataset.prompt;
-    aiInput.focus();
-    aiInput.select();
-    setAiStatus('Press Enter or click Generate', '');
-  });
+<script type="module">
+<%@ include file="../../modern/components/ai-assistant-boot.inc.jsp" %>
+import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
+
+window.circuitAssistant = wireLazyAssistant({
+  moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/circuit-simulator-ai.js',
+  exportName: 'createCircuitSimulatorAssistant',
+  boot: aiAssistantBoot,
 });
 </script>
 
@@ -722,9 +411,7 @@ document.querySelectorAll('.ckt-ai-chip').forEach(chip => {
   }
 })();
 </script>
-<script src="<%=request.getContextPath()%>/modern/js/ai-progress-bar.js?v=<%=v%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/ai-vision-modal.js?v=<%=v%>" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/ai-chat-modal.js?v=<%=v%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
 <%@ include file="../../modern/components/analytics.jsp" %>
 </body>
