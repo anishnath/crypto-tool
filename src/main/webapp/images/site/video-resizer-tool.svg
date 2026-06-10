@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f1320"/>
+      <stop offset="1" stop-color="#120c15"/>
+    </linearGradient>
+    <linearGradient id="coral" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f093fb"/>
+      <stop offset="1" stop-color="#f5576c"/>
+    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd0a6"/>
+      <stop offset="0.5" stop-color="#f5836c"/>
+      <stop offset="1" stop-color="#7c3b6e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.0" r="0.9">
+      <stop offset="0" stop-color="#f5576c" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#f5576c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="430" fill="url(#glow)"/>
+
+  <!-- ===== Top bar ===== -->
+  <rect x="0" y="0" width="1200" height="96" fill="#281622"/>
+  <rect x="0" y="95" width="1200" height="1" fill="#43273a"/>
+
+  <!-- Logo: coral rounded square with video-camera -->
+  <rect x="40" y="25" width="46" height="46" rx="12" fill="url(#coral)"/>
+  <rect x="51" y="42" width="17" height="13" rx="2.5" fill="#ffffff"/>
+  <path d="M70 44 L77 41 L77 56 L70 53 Z" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="102" y="47" font-size="30" fill="#ffffff" font-weight="700">Video Resizer &amp; Cropper</text>
+  <text x="103" y="74" font-size="16" fill="#e7c3d3">Resize &amp; crop for Reels, TikTok, Shorts &#183; 9:16 &#183; 1:1 &#183; 16:9 &#183; no watermark</text>
+
+  <!-- Badge -->
+  <rect x="1004" y="30" width="156" height="38" rx="9" fill="#3a1f30" stroke="#5e3450"/>
+  <circle cx="1032" cy="49" r="5" fill="#f48fb1"/>
+  <text x="1048" y="54" font-size="15" fill="#ffd9e6" font-weight="600">100% in-browser</text>
+
+  <!-- ============ LEFT CARD: upload + presets ============ -->
+  <rect x="40" y="126" width="470" height="406" rx="14" fill="#241525" stroke="#3d2438"/>
+  <rect x="40" y="126" width="470" height="46" rx="14" fill="#d83f57"/>
+  <rect x="40" y="158" width="470" height="14" fill="#d83f57"/>
+  <path d="M62 152 v-7 m0 -7 l-4 4 m4 -4 l4 4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M57 154 h10" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <text x="80" y="156" font-size="17" fill="#ffffff" font-weight="700">Upload &amp; Presets</text>
+
+  <!-- Upload dropzone -->
+  <rect x="66" y="200" width="418" height="118" rx="10" fill="#2c1a2c" stroke="#f5576c" stroke-width="2" stroke-dasharray="7 6"/>
+  <g stroke="#f5576c" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M275 252 v-22 m0 0 l-9 9 m9 -9 l9 9"/>
+    <path d="M260 262 h30"/>
+  </g>
+  <text x="275" y="288" font-size="15" fill="#f3d7e2" text-anchor="middle" font-weight="600">Drop a video here</text>
+  <text x="275" y="307" font-size="12" fill="#a98ba0" text-anchor="middle">MP4 &#183; MOV &#183; AVI &#183; WEBM &#183; MKV &#183; up to 500MB</text>
+
+  <!-- Presets -->
+  <text x="66" y="350" font-size="12" fill="#a98ba0" font-weight="700" letter-spacing="1.2">SOCIAL PRESETS</text>
+  <g>
+    <!-- Instagram Reel 9:16 (active) -->
+    <rect x="66" y="360" width="204" height="56" rx="9" fill="#3a2036" stroke="#f5576c" stroke-width="1.5"/>
+    <rect x="82" y="374" width="16" height="28" rx="2" fill="url(#coral)"/>
+    <text x="110" y="384" font-size="13" fill="#ffd9e6" font-weight="700">Instagram Reel</text>
+    <text x="110" y="402" font-size="11" fill="#a98ba0">1080&#215;1920 &#183; 9:16</text>
+    <!-- TikTok 9:16 -->
+    <rect x="280" y="360" width="204" height="56" rx="9" fill="#2c1a2c" stroke="#3d2438"/>
+    <rect x="296" y="374" width="16" height="28" rx="2" fill="#9a6a86"/>
+    <text x="324" y="384" font-size="13" fill="#f0dbe6" font-weight="700">TikTok</text>
+    <text x="324" y="402" font-size="11" fill="#a98ba0">1080&#215;1920 &#183; 9:16</text>
+    <!-- YouTube 16:9 -->
+    <rect x="66" y="424" width="204" height="56" rx="9" fill="#2c1a2c" stroke="#3d2438"/>
+    <rect x="80" y="385" width="0" height="0"/>
+    <rect x="80" y="442" width="28" height="16" rx="2" fill="#9a6a86"/>
+    <text x="116" y="448" font-size="13" fill="#f0dbe6" font-weight="700">YouTube</text>
+    <text x="116" y="466" font-size="11" fill="#a98ba0">1920&#215;1080 &#183; 16:9</text>
+    <!-- IG Post 1:1 -->
+    <rect x="280" y="424" width="204" height="56" rx="9" fill="#2c1a2c" stroke="#3d2438"/>
+    <rect x="296" y="442" width="20" height="20" rx="2" fill="#9a6a86"/>
+    <text x="326" y="448" font-size="13" fill="#f0dbe6" font-weight="700">Instagram Post</text>
+    <text x="326" y="466" font-size="11" fill="#a98ba0">1080&#215;1080 &#183; 1:1</text>
+  </g>
+  <text x="66" y="508" font-size="12" fill="#8a6f82">+ YouTube Short, Stories, Facebook, X — and custom W&#215;H</text>
+
+  <!-- ============ RIGHT CARD: preview / crop ============ -->
+  <rect x="534" y="126" width="626" height="406" rx="14" fill="#241525" stroke="#3d2438"/>
+  <rect x="534" y="126" width="626" height="46" rx="14" fill="#d83f57"/>
+  <rect x="534" y="158" width="626" height="14" fill="#d83f57"/>
+  <rect x="560" y="142" width="16" height="11" rx="2" fill="#fff"/>
+  <path d="M578 144 L583 142 L583 153 L578 151 Z" fill="#fff"/>
+  <text x="588" y="156" font-size="17" fill="#ffffff" font-weight="700">Preview — crop 16:9 &#8594; 9:16</text>
+
+  <!-- Preview box: a 16:9 sunset scene with a 9:16 crop frame -->
+  <rect x="560" y="200" width="574" height="222" rx="10" fill="#0d0a12"/>
+  <!-- scene -->
+  <rect x="560" y="200" width="574" height="222" fill="url(#sky)"/>
+  <circle cx="760" cy="296" r="34" fill="#ffe1a8" opacity="0.95"/>
+  <path d="M560 360 q90 -42 180 -10 q120 44 240 -6 q110 -40 154 -2 V422 H560 Z" fill="#3a1f33" opacity="0.85"/>
+  <path d="M560 388 q140 -30 280 4 q150 36 294 -8 V422 H560 Z" fill="#26141f"/>
+  <!-- dim the area outside the 9:16 crop -->
+  <rect x="560" y="200" width="232" height="222" fill="rgba(8,6,12,0.62)"/>
+  <rect x="902" y="200" width="232" height="222" fill="rgba(8,6,12,0.62)"/>
+  <!-- 9:16 crop frame -->
+  <rect x="792" y="212" width="110" height="198" fill="none" stroke="#f5576c" stroke-width="3"/>
+  <g fill="#f5576c">
+    <rect x="787" y="207" width="10" height="10"/><rect x="897" y="207" width="10" height="10"/>
+    <rect x="787" y="405" width="10" height="10"/><rect x="897" y="405" width="10" height="10"/>
+  </g>
+  <rect x="822" y="392" width="50" height="20" rx="5" fill="#f5576c"/>
+  <text x="847" y="406" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="700">9:16</text>
+  <rect x="572" y="212" width="86" height="20" rx="5" fill="rgba(0,0,0,0.45)"/>
+  <text x="582" y="226" font-size="11" fill="#ffe1e9" font-weight="600">16:9 SOURCE</text>
+
+  <!-- Aspect-ratio chips -->
+  <g font-size="13" font-weight="700">
+    <rect x="560" y="438" width="58" height="30" rx="8" fill="url(#coral)"/>
+    <text x="589" y="458" fill="#fff" text-anchor="middle">9:16</text>
+    <rect x="626" y="438" width="52" height="30" rx="8" fill="#2c1a2c" stroke="#3d2438"/>
+    <text x="652" y="458" fill="#d9bccb" text-anchor="middle">1:1</text>
+    <rect x="686" y="438" width="58" height="30" rx="8" fill="#2c1a2c" stroke="#3d2438"/>
+    <text x="715" y="458" fill="#d9bccb" text-anchor="middle">16:9</text>
+    <rect x="752" y="438" width="52" height="30" rx="8" fill="#2c1a2c" stroke="#3d2438"/>
+    <text x="778" y="458" fill="#d9bccb" text-anchor="middle">4:5</text>
+    <rect x="812" y="438" width="52" height="30" rx="8" fill="#2c1a2c" stroke="#3d2438"/>
+    <text x="838" y="458" fill="#d9bccb" text-anchor="middle">4:3</text>
+  </g>
+
+  <!-- dimension transform -->
+  <g font-family="'SF Mono','Menlo','Consolas',monospace">
+    <text x="892" y="458" font-size="14" fill="#a98ba0">1920&#215;1080</text>
+    <text x="1010" y="458" font-size="15" fill="#f5576c" font-weight="700">&#8594;</text>
+    <text x="1030" y="458" font-size="14" fill="#ffd9e6" font-weight="700">1080&#215;1920</text>
+  </g>
+
+  <!-- process / download row -->
+  <rect x="560" y="486" width="360" height="34" rx="8" fill="url(#coral)"/>
+  <text x="740" y="508" font-size="14" fill="#fff" text-anchor="middle" font-weight="700">Resize &amp; Crop Video</text>
+  <rect x="930" y="486" width="204" height="34" rx="8" fill="#1f7a44"/>
+  <text x="1032" y="508" font-size="14" fill="#fff" text-anchor="middle" font-weight="700">Download</text>
+
+  <!-- Footer -->
+  <text x="600" y="604" font-size="16" fill="#8a6f82" text-anchor="middle">8gwifi.org &#183; free online video resizer &#183; in-browser, private, no watermark</text>
+</svg>
