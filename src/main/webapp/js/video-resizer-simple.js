@@ -6,7 +6,7 @@ let processedVideoBlob = null;
 let currentAspectRatio = null;
 let isAspectRatioLocked = true;
 let currentQuality = 'medium';
-let currentFormat = 'webm'; // 'webm' or 'mp4'
+let currentFormat = 'mp4'; // 'mp4' (default) or 'webm'; falls back to WebM if MP4 recording is unsupported
 let mediaRecorder = null;
 let recordedChunks = [];
 
