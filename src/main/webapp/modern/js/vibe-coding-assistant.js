@@ -1529,22 +1529,26 @@ export class ToolAiAssistant {
   }
 
   _billingCopy(state, reason) {
+    // Single source of truth for the bar's price line. Hardcoded on purpose so
+    // the first screen never blocks on a plans fetch — keep in sync with the
+    // monthly Pro plan if pricing changes.
+    const price = '$3/mo';
     if (state === 'guest') {
       if (reason === 'rate') {
-        return { title: 'You hit the free AI limit', sub: 'Sign in for more free requests, or go Pro for the highest limits and no waiting.' };
+        return { title: 'You hit the free AI limit', sub: `Sign in free for more requests — or go Pro (${price}) for the highest limits and zero waiting.` };
       }
       if (reason === 'quota') {
-        return { title: 'Monthly AI limit reached', sub: 'Sign in for a higher free limit, or upgrade to Pro.' };
+        return { title: 'Monthly AI limit reached', sub: `Sign in free for a higher limit — or go Pro (${price}) to keep generating, explaining, and fixing.` };
       }
-      return { title: 'Sign in for more AI', sub: 'A free account unlocks a higher monthly limit and a better AI model.' };
+      return { title: 'Sign in for more free AI', sub: 'A free account unlocks higher monthly limits, the Pro chat model, and faster responses.' };
     }
     if (reason === 'rate') {
-      return { title: 'You hit the free AI limit', sub: 'Upgrade to Pro for higher limits and no waiting between requests.' };
+      return { title: 'You hit the free AI limit', sub: `Go Pro for ${price} — higher limits and no waiting between requests.` };
     }
     if (reason === 'quota') {
-      return { title: 'Monthly AI limit reached', sub: 'Upgrade to Pro to keep generating, explaining, and fixing.' };
+      return { title: 'Monthly AI limit reached', sub: `Go Pro for ${price} to keep generating, explaining, and fixing — cancel anytime.` };
     }
-    return { title: 'Go Pro', sub: 'Get the highest monthly limits, Pro model tier, and priority access.' };
+    return { title: 'Get the most out of AI', sub: `Go Pro for ${price}: highest monthly limits, Pro model tier, and priority access.` };
   }
 
   _renderBillingBar() {
