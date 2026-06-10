@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f1d36"/>
+      <stop offset="1" stop-color="#0a1120"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="kpibar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="clicksFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="uniqFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#06b6d4" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#06b6d4" stop-opacity="0.02"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.0" r="0.9">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="430" fill="url(#glow)"/>
+
+  <!-- ===== Top bar ===== -->
+  <rect x="0" y="0" width="1200" height="96" fill="#13243f"/>
+  <rect x="0" y="95" width="1200" height="1" fill="#243a5e"/>
+
+  <!-- Logo: blue rounded square with link/chain -->
+  <rect x="40" y="25" width="46" height="46" rx="12" fill="url(#blue)"/>
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round">
+    <path d="M58 54 a7 7 0 0 1 0 -10 l4 -4"/>
+    <path d="M68 42 a7 7 0 0 1 0 10 l-4 4"/>
+    <path d="M59 53 l8 -8"/>
+  </g>
+
+  <!-- Title -->
+  <text x="102" y="47" font-size="30" fill="#ffffff" font-weight="700">URL Shortener &amp; Link Analytics</text>
+  <text x="103" y="74" font-size="16" fill="#a8c0e6">Create short links &#183; track clicks &#183; auto QR codes &#183; no signup required</text>
+
+  <!-- Badge -->
+  <rect x="1006" y="30" width="154" height="38" rx="9" fill="#16335c" stroke="#2c5290"/>
+  <circle cx="1034" cy="49" r="5" fill="#38bdf8"/>
+  <text x="1050" y="54" font-size="15" fill="#cfe2ff" font-weight="600">Real-time stats</text>
+
+  <!-- ============ LEFT CARD: shorten ============ -->
+  <rect x="40" y="126" width="556" height="406" rx="14" fill="#152844" stroke="#26405f"/>
+  <rect x="40" y="126" width="556" height="46" rx="14" fill="#1d4ed8"/>
+  <rect x="40" y="158" width="556" height="14" fill="#1d4ed8"/>
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round">
+    <path d="M64 152 a4 4 0 0 1 0 -6 l3 -3"/>
+    <path d="M71 143 a4 4 0 0 1 0 6 l-3 3"/>
+  </g>
+  <text x="84" y="156" font-size="17" fill="#ffffff" font-weight="700">Shorten a URL</text>
+
+  <!-- Long URL field -->
+  <text x="66" y="216" font-size="12" fill="#7f9bc4" font-weight="700" letter-spacing="1.2">LONG URL</text>
+  <rect x="66" y="224" width="504" height="44" rx="9" fill="#101d33" stroke="#27405f"/>
+  <text x="84" y="251" font-size="14.5" fill="#cdddf5" font-family="'SF Mono','Menlo','Consolas',monospace">https://example.com/spring-sale/landing?utm=...</text>
+
+  <!-- Shorten button -->
+  <rect x="66" y="286" width="504" height="46" rx="11" fill="url(#blue)"/>
+  <g fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round">
+    <path d="M250 312 a5 5 0 0 1 0 -7 l3 -3"/>
+    <path d="M260 302 a5 5 0 0 1 0 7 l-3 3"/>
+  </g>
+  <text x="278" y="315" font-size="16" fill="#ffffff" font-weight="700">Shorten URL</text>
+
+  <!-- Result -->
+  <text x="66" y="364" font-size="12" fill="#7f9bc4" font-weight="700" letter-spacing="1.2">SHORT URL</text>
+  <rect x="66" y="372" width="504" height="122" rx="11" fill="#101d33" stroke="#27405f"/>
+  <text x="84" y="402" font-size="18" fill="#7eb0ff" font-weight="700" font-family="'SF Mono','Menlo','Consolas',monospace">8gwifi.org/r/abc1234</text>
+
+  <!-- action chips -->
+  <rect x="84" y="418" width="64" height="30" rx="7" fill="#1b2f4e" stroke="#2c476e"/>
+  <text x="116" y="438" font-size="13" fill="#bcd2f2" text-anchor="middle" font-weight="600">Copy</text>
+  <rect x="156" y="418" width="64" height="30" rx="7" fill="#1b2f4e" stroke="#2c476e"/>
+  <text x="188" y="438" font-size="13" fill="#bcd2f2" text-anchor="middle" font-weight="600">Open</text>
+  <rect x="228" y="418" width="72" height="30" rx="7" fill="#1b2f4e" stroke="#2c476e"/>
+  <text x="264" y="438" font-size="13" fill="#bcd2f2" text-anchor="middle" font-weight="600">Share</text>
+  <text x="84" y="476" font-size="12.5" fill="#7f9bc4">Code auto-filled into Analytics &#8594;</text>
+
+  <!-- QR motif -->
+  <rect x="466" y="384" width="92" height="92" rx="8" fill="#ffffff"/>
+  <g fill="#0f1d36">
+    <!-- finder patterns -->
+    <rect x="476" y="394" width="22" height="22" rx="3"/><rect x="481" y="399" width="12" height="12" fill="#ffffff"/><rect x="484" y="402" width="6" height="6" fill="#0f1d36"/>
+    <rect x="526" y="394" width="22" height="22" rx="3"/><rect x="531" y="399" width="12" height="12" fill="#ffffff"/><rect x="534" y="402" width="6" height="6" fill="#0f1d36"/>
+    <rect x="476" y="444" width="22" height="22" rx="3"/><rect x="481" y="449" width="12" height="12" fill="#ffffff"/><rect x="484" y="452" width="6" height="6" fill="#0f1d36"/>
+    <!-- modules -->
+    <rect x="506" y="396" width="5" height="5"/><rect x="516" y="396" width="5" height="5"/>
+    <rect x="502" y="406" width="5" height="5"/><rect x="512" y="406" width="5" height="5"/><rect x="522" y="406" width="5" height="5"/>
+    <rect x="506" y="416" width="5" height="5"/><rect x="540" y="420" width="5" height="5"/>
+    <rect x="506" y="428" width="5" height="5"/><rect x="516" y="428" width="5" height="5"/><rect x="528" y="428" width="5" height="5"/><rect x="540" y="428" width="5" height="5"/>
+    <rect x="506" y="440" width="5" height="5"/><rect x="522" y="440" width="5" height="5"/><rect x="534" y="440" width="5" height="5"/>
+    <rect x="510" y="450" width="5" height="5"/><rect x="520" y="450" width="5" height="5"/><rect x="540" y="450" width="5" height="5"/>
+    <rect x="506" y="460" width="5" height="5"/><rect x="516" y="460" width="5" height="5"/><rect x="530" y="460" width="5" height="5"/><rect x="540" y="460" width="5" height="5"/>
+  </g>
+
+  <!-- ============ RIGHT CARD: analytics ============ -->
+  <rect x="620" y="126" width="540" height="406" rx="14" fill="#152844" stroke="#26405f"/>
+  <rect x="620" y="126" width="540" height="46" rx="14" fill="#1d4ed8"/>
+  <rect x="620" y="158" width="540" height="14" fill="#1d4ed8"/>
+  <g fill="#ffffff">
+    <rect x="646" y="148" width="4" height="6"/><rect x="652" y="144" width="4" height="10"/><rect x="658" y="140" width="4" height="14"/>
+  </g>
+  <text x="672" y="156" font-size="17" fill="#ffffff" font-weight="700">Analytics</text>
+
+  <!-- KPI row -->
+  <g>
+    <rect x="646" y="194" width="114" height="68" rx="9" fill="#101d33" stroke="#27405f"/>
+    <rect x="646" y="194" width="114" height="3" fill="url(#kpibar)"/>
+    <text x="658" y="226" font-size="20" fill="#eaf2ff" font-weight="700" font-family="'SF Mono','Menlo','Consolas',monospace">12,480</text>
+    <text x="658" y="248" font-size="11" fill="#7f9bc4" font-weight="600">ALL-TIME CLICKS</text>
+
+    <rect x="770" y="194" width="114" height="68" rx="9" fill="#101d33" stroke="#27405f"/>
+    <rect x="770" y="194" width="114" height="3" fill="url(#kpibar)"/>
+    <text x="782" y="226" font-size="20" fill="#eaf2ff" font-weight="700" font-family="'SF Mono','Menlo','Consolas',monospace">3,201</text>
+    <text x="782" y="248" font-size="11" fill="#7f9bc4" font-weight="600">UNIQUE VISITORS</text>
+
+    <rect x="894" y="194" width="114" height="68" rx="9" fill="#101d33" stroke="#27405f"/>
+    <rect x="894" y="194" width="114" height="3" fill="url(#kpibar)"/>
+    <text x="906" y="226" font-size="20" fill="#eaf2ff" font-weight="700" font-family="'SF Mono','Menlo','Consolas',monospace">842</text>
+    <text x="906" y="248" font-size="11" fill="#7f9bc4" font-weight="600">30-DAY CLICKS</text>
+
+    <rect x="1018" y="194" width="116" height="68" rx="9" fill="#101d33" stroke="#27405f"/>
+    <rect x="1018" y="194" width="116" height="3" fill="url(#kpibar)"/>
+    <text x="1030" y="226" font-size="20" fill="#eaf2ff" font-weight="700" font-family="'SF Mono','Menlo','Consolas',monospace">37</text>
+    <text x="1030" y="248" font-size="11" fill="#7f9bc4" font-weight="600">COUNTRIES</text>
+  </g>
+
+  <!-- Chart -->
+  <text x="646" y="290" font-size="12" fill="#7f9bc4" font-weight="700" letter-spacing="1.2">CLICKS OVER TIME</text>
+  <rect x="646" y="298" width="488" height="156" rx="10" fill="#101d33" stroke="#27405f"/>
+  <!-- gridlines -->
+  <g stroke="#1e3252" stroke-width="1">
+    <line x1="662" y1="345" x2="1118" y2="345"/>
+    <line x1="662" y1="385" x2="1118" y2="385"/>
+    <line x1="662" y1="425" x2="1118" y2="425"/>
+  </g>
+  <!-- clicks area + line -->
+  <polygon fill="url(#clicksFill)" points="660,405 711,390 762,397 813,375 864,363 915,370 966,345 1017,353 1068,330 1119,317 1119,438 660,438"/>
+  <polyline fill="none" stroke="#3b82f6" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" points="660,405 711,390 762,397 813,375 864,363 915,370 966,345 1017,353 1068,330 1119,317"/>
+  <!-- uniques area + line -->
+  <polygon fill="url(#uniqFill)" points="660,417 711,408 762,413 813,399 864,392 915,396 966,381 1017,386 1068,372 1119,365 1119,438 660,438"/>
+  <polyline fill="none" stroke="#06b6d4" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" points="660,417 711,408 762,413 813,399 864,392 915,396 966,381 1017,386 1068,372 1119,365"/>
+
+  <!-- legend -->
+  <circle cx="668" cy="478" r="5" fill="#3b82f6"/><text x="680" y="482" font-size="12.5" fill="#a8c0e6">Clicks</text>
+  <circle cx="744" cy="478" r="5" fill="#06b6d4"/><text x="756" y="482" font-size="12.5" fill="#a8c0e6">Unique visitors</text>
+  <text x="1118" y="482" font-size="12.5" fill="#7f9bc4" text-anchor="end">Top: US &#183; IN &#183; DE &#183; GB</text>
+
+  <rect x="646" y="498" width="488" height="14" rx="0" fill="none"/>
+
+  <!-- Footer -->
+  <text x="600" y="604" font-size="16" fill="#6f86ad" text-anchor="middle">8gwifi.org &#183; free URL shortener &#183; short links, click analytics &amp; QR codes, no signup</text>
+</svg>
