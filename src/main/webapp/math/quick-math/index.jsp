@@ -18,13 +18,13 @@
     extraHead.append("<meta property=\"og:url\" content=\"").append(canonicalUrl).append("\">\n");
     extraHead.append("<meta property=\"og:type\" content=\"website\">\n");
     extraHead.append("<meta property=\"og:site_name\" content=\"8gwifi.org\">\n");
-    extraHead.append("<meta property=\"og:image\" content=\"https://8gwifi.org/exams/images/exams-practice-og.svg\">\n");
+    extraHead.append("<meta property=\"og:image\" content=\"https://8gwifi.org/images/site/quick-math-og.png\">\n");
 
     // Twitter Card Tags
     extraHead.append("<meta name=\"twitter:card\" content=\"summary_large_image\">\n");
     extraHead.append("<meta name=\"twitter:title\" content=\"").append(seoTitle).append("\">\n");
     extraHead.append("<meta name=\"twitter:description\" content=\"").append(seoDescription).append("\">\n");
-    extraHead.append("<meta name=\"twitter:image\" content=\"https://8gwifi.org/exams/images/exams-practice-og.svg\">\n");
+    extraHead.append("<meta name=\"twitter:image\" content=\"https://8gwifi.org/images/site/quick-math-og.png\">\n");
 
     // Additional SEO Meta Tags
     extraHead.append("<meta name=\"keywords\" content=\"mental math tricks, speed math, fast calculation, math shortcuts, mental arithmetic, multiplication tricks, percentage shortcuts, mental calculation, math speed tricks, number sense, rapid math techniques\">\n");
@@ -102,7 +102,7 @@
     extraHead.append("  \"@type\": \"BreadcrumbList\",\n");
     extraHead.append("  \"itemListElement\": [\n");
     extraHead.append("    {\"@type\": \"ListItem\", \"position\": 1, \"name\": \"Home\", \"item\": \"https://8gwifi.org/\"},\n");
-    extraHead.append("    {\"@type\": \"ListItem\", \"position\": 2, \"name\": \"Exams\", \"item\": \"https://8gwifi.org/exams/\"},\n");
+    extraHead.append("    {\"@type\": \"ListItem\", \"position\": 2, \"name\": \"Math\", \"item\": \"https://8gwifi.org/math/\"},\n");
     extraHead.append("    {\"@type\": \"ListItem\", \"position\": 3, \"name\": \"Quick Math\"}\n");
     extraHead.append("  ]\n");
     extraHead.append("}\n");
@@ -152,33 +152,62 @@
 
     request.setAttribute("extraHeadContent", extraHead.toString());
 %>
-<%@ include file="/exams/components/header.jsp" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <title><%= seoTitle %></title>
+    <meta name="description" content="<%= seoDescription %>">
+    <link rel="canonical" href="<%= canonicalUrl %>">
+    <%= extraHead %>
+
+    <!-- Quick Math hub styling (exams core classes + ported tool styles) -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/css/exams.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/quick-math.css">
+
+    <!-- Math studio shell -->
+    <%@ include file="/math/partials/studio-head.jsp" %>
+</head>
+
+<% request.setAttribute("activeService", "quick-math"); %>
+<%@ include file="/math/partials/studio-open.jsp" %>
+
+    <header class="ms-title">
+        <nav class="ms-crumbs">
+            <a href="<%=request.getContextPath()%>/index.jsp">Home</a><span>/</span>
+            <a href="<%=request.getContextPath()%>/math/">Math</a><span>/</span>
+            <span aria-current="page">Quick Math</span>
+        </nav>
+    </header>
 
             <!-- Load Quick Math Core (split into base + topic bundles) -->
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-core-base.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-addition.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-multiplication.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-division.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-roots.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-percentages.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-algebra.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-probability.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-trains.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-streams.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-alligation.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-trigonometry.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-data.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-series.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-mensuration.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-surds.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-profit.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-simple-interest.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-misc.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-permcomb.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-advanced.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-boats-partnership.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-hcf-sets.js"></script>
-            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-number-patterns.js"></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-core-base.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-addition.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-multiplication.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-division.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-roots.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-percentages.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-algebra.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-probability.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-trains.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-streams.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-alligation.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-trigonometry.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-data.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-series.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-mensuration.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-surds.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-profit.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-simple-interest.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-misc.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-permcomb.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-advanced.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-boats-partnership.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-hcf-sets.js" defer></script>
+            <script src="<%=request.getContextPath()%>/exams/js/quick-math-topics-number-patterns.js" defer></script>
 
             <!-- Hero Section -->
             <section class="hero">
@@ -200,7 +229,7 @@
             </section>
 
             <!-- Ad Banner -->
-            <%@ include file="/exams/components/ad-leaderboard.jsp" %>
+            <%-- ads via studio shell --%>
 
                 <!-- Main Content -->
                 <section class="page-section">
@@ -1441,4 +1470,4 @@
                     }
                 </style>
 
-                <%@ include file="/exams/components/footer.jsp" %>
+                <%@ include file="/math/partials/studio-close.jsp" %>

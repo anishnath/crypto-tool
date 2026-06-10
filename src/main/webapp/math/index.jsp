@@ -95,7 +95,8 @@
                     {"@type": "ListItem", "position": 49, "name": "Graphing Calculator", "url": "https://8gwifi.org/graphing-calculator.jsp"},
                     {"@type": "ListItem", "position": 50, "name": "AMC 10/12 Mock Test", "url": "https://8gwifi.org/math/amc/"},
                     {"@type": "ListItem", "position": 51, "name": "AIME Mock Test", "url": "https://8gwifi.org/math/amc/aime.jsp"},
-                    {"@type": "ListItem", "position": 52, "name": "Olympiad Math Practice", "url": "https://8gwifi.org/math/olympiad/"}
+                    {"@type": "ListItem", "position": 52, "name": "Olympiad Math Practice", "url": "https://8gwifi.org/math/olympiad/"},
+                    {"@type": "ListItem", "position": 53, "name": "Quick Math Drills", "url": "https://8gwifi.org/math/quick-math/"}
                 ]
             }
         }
@@ -293,6 +294,10 @@
                 <a href="<%=request.getContextPath()%>/math/iit/practice.jsp" class="ms-tool-card">
                     <span class="ms-tool-card-icon">&#128214;</span>
                     <span><span class="ms-tool-card-title">JEE Practice</span><span class="ms-tool-card-sub">Untimed · stepwise solutions</span></span>
+                </a>
+                <a href="<%=request.getContextPath()%>/math/quick-math/" class="ms-tool-card">
+                    <span class="ms-tool-card-icon">&#9889;</span>
+                    <span><span class="ms-tool-card-title">Quick Math Drills</span><span class="ms-tool-card-sub">Mental-math speed drills · 30+ topics</span></span>
                 </a>
             </div>
         </div>
