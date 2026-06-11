@@ -1,0 +1,89 @@
+/* ============================================================
+   Math Memory — studio-light theme.
+   The games are driven by two token systems: --mm-* (shared
+   math-memory-base.css) and --neon-* (each page's inline :root).
+   Redefining both on .ms-body (a closer ancestor than :root) flips
+   the whole neon-dark arcade look to the studio's light palette,
+   regardless of stylesheet order. Bright neons are darkened so they
+   stay legible as text/borders on a light surface.
+   ============================================================ */
+.ms-body {
+    /* ---- base.css surfaces + accents ---- */
+    --mm-bg-dark:   var(--ms-page-bg, #f7f6f3);
+    --mm-bg-card:   var(--ms-panel-bg, #fefdfb);
+    --mm-bg-border: var(--ms-line, rgba(28,25,23,0.12));
+    --mm-ink:       var(--ms-ink, #1c1917);
+    --mm-ink-soft:  var(--ms-ink-soft, #44403c);
+    --mm-primary:   #7c3aed;
+    --mm-secondary: #0e7490;
+    --mm-accent:    #db2777;
+    --mm-success:   #15803d;
+    --mm-warning:   #b45309;
+    --mm-error:     #dc2626;
+    --mm-orange:    #c2410c;
+    --mm-glow-primary:   0 1px 3px rgba(28,25,23,0.06);
+    --mm-glow-secondary: 0 1px 3px rgba(28,25,23,0.06);
+    --mm-glow-success:   0 1px 3px rgba(28,25,23,0.06);
+
+    /* ---- per-page --neon-* accents (darkened for light bg) ---- */
+    --neon-purple: #7c3aed;  --neon-violet: #6d28d9;  --neon-indigo: #4f46e5;
+    --neon-cyan:   #0e7490;  --neon-sky:    #0369a1;  --neon-blue:   #1d4ed8;
+    --neon-sapphire:#1d4ed8; --neon-teal:   #0f766e;
+    --neon-pink:   #db2777;  --neon-fuchsia:#c026d3;  --neon-rose:   #e11d48;
+    --neon-green:  #15803d;  --neon-emerald:#047857;  --neon-lime:   #4d7c0f;
+    --neon-yellow: #b45309;  --neon-gold:   #b45309;  --neon-solar:  #b45309;
+    --neon-orange: #c2410c;  --neon-flame:  #dc2626;  --neon-red:    #dc2626;
+    --neon-dark:   var(--ms-panel-bg-soft, #faf8f4);
+}
+
+/* Default workspace text is dark ink (games hardcoded light text for the old
+   dark theme; base.css's `color:white` now resolves via --mm-ink — see the
+   white→token rewrite in math-memory-base.css). */
+.ms-workspace { color: var(--ms-ink); }
+
+/* Kill the dark page texture/gradient the games painted on <body>. */
+.ms-body.ms-body { background-image: none; }
+
+/* ---- Third token set (--arcade-*) + the .game-page dark wrapper ----
+   Every game defines its own --arcade-dark/card/border and paints a dark
+   gradient on .game-page (with a fixed ::before texture). Remap the tokens
+   and let the studio's light surface show through. */
+.ms-body {
+    --arcade-dark:   var(--ms-page-bg, #f7f6f3);
+    --arcade-card:   var(--ms-panel-bg, #fefdfb);
+    --arcade-border: var(--ms-line, rgba(28,25,23,0.12));
+    --glow-multi:    0 1px 3px rgba(28,25,23,0.06);
+}
+.ms-workspace .game-page { background: transparent; min-height: 0; }
+.ms-workspace .game-page::before { display: none; }
+
+/* ---- Game-selection cards on the hub: clean studio card look ----
+   (light panel, 1px hairline, soft studio shadow; subtle per-game accent
+   on the top bar + hover border instead of the heavy neon drop-glow). */
+.ms-workspace .game-card {
+    background: var(--ms-panel-bg);
+    border: 1px solid var(--ms-line);
+    box-shadow: var(--ms-shadow-sm, 0 1px 2px rgba(28,25,23,0.05));
+    color: var(--ms-ink);
+}
+.ms-workspace .game-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--card-accent, var(--ms-accent));
+    box-shadow: var(--ms-shadow-lg, 0 8px 22px rgba(28,25,23,0.12));
+}
+
+/* ---- Difficulty selector buttons: readable in every state ----
+   (.diff-btn base was light-bg; the inline `:hover{color:white}` made hover
+   text vanish on the light theme). Light base + dark text; accent fill +
+   white text on hover/active. */
+.ms-workspace .diff-btn {
+    background: var(--ms-panel-bg);
+    border: 1.5px solid var(--ms-line-strong, rgba(28,25,23,0.14));
+    color: var(--ms-ink-soft, #44403c);
+}
+.ms-workspace .diff-btn:hover,
+.ms-workspace .diff-btn.active {
+    background: linear-gradient(135deg, var(--ms-cta-start, #15803d), var(--ms-cta-end, #22c55e));
+    border-color: var(--ms-accent, #15803d);
+    color: #fff;
+}
