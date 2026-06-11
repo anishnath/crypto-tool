@@ -5,7 +5,31 @@
             application); String extraHead=generateHeadContent(pageKey, application) + generateJsonLd(pageKey, application); request.setAttribute("pageTitle",
             seoTitle); request.setAttribute("pageDescription", seoDescription); request.setAttribute("canonicalUrl",
             canonicalUrl); request.setAttribute("extraHeadContent", extraHead); %>
-            <%@ include file="../components/header.jsp" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <title><%= seoTitle %></title>
+    <meta name="description" content="<%= seoDescription %>">
+    <link rel="canonical" href="<%= canonicalUrl %>">
+    <%= extraHead %>
+    <%@ include file="/math/partials/studio-head.jsp" %>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-memory-studio.css">
+</head>
+
+<% request.setAttribute("activeService", "math-memory"); %>
+<%@ include file="/math/partials/studio-open.jsp" %>
+
+    <header class="ms-title">
+        <nav class="ms-crumbs">
+            <a href="<%=request.getContextPath()%>/index.jsp">Home</a><span>/</span>
+            <a href="<%=request.getContextPath()%>/math/">Math</a><span>/</span>
+            <span aria-current="page">Math Memory</span>
+        </nav>
+    </header>
+
 
                 <!-- Neon Arcade Theme Styles -->
                 <style>
@@ -94,7 +118,7 @@
 
                     .memory-hero-subtitle {
                         font-size: var(--text-lg);
-                        color: rgba(255, 255, 255, 0.7);
+                        color: rgba(28, 25, 23, 0.7);
                         max-width: 600px;
                         margin: 0 auto;
                         line-height: 1.6;
@@ -126,7 +150,7 @@
 
                     .memory-stat-label {
                         font-size: var(--text-sm);
-                        color: rgba(255, 255, 255, 0.5);
+                        color: rgba(28, 25, 23, 0.5);
                         text-transform: uppercase;
                         letter-spacing: 1px;
                     }
@@ -146,7 +170,7 @@
                         border-radius: var(--radius-xl);
                         padding: var(--space-6);
                         text-decoration: none;
-                        color: white;
+                        color: var(--mm-ink, #1c1917);
                         position: relative;
                         overflow: hidden;
                         transition: all 0.3s ease;
@@ -274,13 +298,13 @@
                     .game-card-title {
                         font-size: var(--text-xl);
                         font-weight: 700;
-                        color: white;
+                        color: var(--mm-ink, #1c1917);
                         margin-bottom: var(--space-2);
                     }
 
                     .game-card-desc {
                         font-size: var(--text-sm);
-                        color: rgba(255, 255, 255, 0.6);
+                        color: rgba(28, 25, 23, 0.6);
                         line-height: 1.6;
                         flex: 1;
                     }
@@ -351,7 +375,7 @@
                         top: var(--space-4);
                         right: var(--space-4);
                         background: rgba(255, 255, 255, 0.1);
-                        color: rgba(255, 255, 255, 0.5);
+                        color: rgba(28, 25, 23, 0.5);
                         font-size: var(--text-xs);
                         padding: 4px 10px;
                         border-radius: 20px;
@@ -377,7 +401,7 @@
                     .section-title {
                         font-size: var(--text-2xl);
                         font-weight: 700;
-                        color: white;
+                        color: var(--mm-ink, #1c1917);
                         text-align: center;
                         margin-bottom: var(--space-6);
                     }
@@ -401,13 +425,13 @@
                     .benefit-title {
                         font-size: var(--text-base);
                         font-weight: 600;
-                        color: white;
+                        color: var(--mm-ink, #1c1917);
                         margin-bottom: var(--space-2);
                     }
 
                     .benefit-desc {
                         font-size: var(--text-sm);
-                        color: rgba(255, 255, 255, 0.5);
+                        color: rgba(28, 25, 23, 0.5);
                     }
 
                     /* Responsive */
@@ -517,14 +541,14 @@
 
                         <!-- Ad: Leaderboard -->
                         <div class="ad-container-centered">
-                            <%@ include file="../components/ad-leaderboard.jsp" %>
+                <%-- ad via studio shell --%>
                         </div>
 
                         <!-- Breadcrumb -->
                         <nav class="breadcrumb" aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
                             <a href="<%=request.getContextPath()%>/exams/"
-                                style="color: rgba(255,255,255,0.6);">Exams</a>
-                            <span class="breadcrumb-separator" style="color: rgba(255,255,255,0.3);">/</span>
+                                style="color: rgba(28, 25, 23, 0.6);">Exams</a>
+                            <span class="breadcrumb-separator" style="color: rgba(28, 25, 23, 0.3);">/</span>
                             <span style="color: var(--neon-cyan);">Math Memory</span>
                         </nav>
 
@@ -534,7 +558,7 @@
                                 <!-- Games Grid -->
                                 <div class="games-grid">
                                     <!-- Match Master -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/match.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/match.jsp"
                                         class="game-card" data-game="match">
                                         <div class="game-card-icon">&#127183;</div>
                                         <h2 class="game-card-title">Match Master</h2>
@@ -555,7 +579,7 @@
                                     </a>
 
                                     <!-- Sequence Solver -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/sequence.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/sequence.jsp"
                                         class="game-card" data-game="sequence">
                                         <div class="game-card-icon">&#128290;</div>
                                         <h2 class="game-card-title">Sequence Solver</h2>
@@ -576,7 +600,7 @@
                                     </a>
 
                                     <!-- Flash Math -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/flash.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/flash.jsp"
                                         class="game-card" data-game="flash">
                                         <div class="game-card-icon">&#9889;</div>
                                         <h2 class="game-card-title">Flash Math</h2>
@@ -597,7 +621,7 @@
                                     </a>
 
                                     <!-- Grid Genius -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/grid.jsp" class="game-card"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/grid.jsp" class="game-card"
                                         data-game="grid">
                                         <div class="game-card-icon">&#127922;</div>
                                         <h2 class="game-card-title">Grid Genius</h2>
@@ -618,7 +642,7 @@
                                     </a>
 
                                     <!-- Speed Round -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/speed-round.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/speed-round.jsp"
                                         class="game-card" data-game="speed">
                                         <div class="game-card-icon">&#128293;</div>
                                         <h2 class="game-card-title">Speed Round</h2>
@@ -639,7 +663,7 @@
                                     </a>
 
                                     <!-- Hidden Order -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/hidden-order.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/hidden-order.jsp"
                                         class="game-card" data-game="hidden-order">
                                         <div class="game-card-icon">&#128302;</div>
                                         <h2 class="game-card-title">Hidden Order</h2>
@@ -660,7 +684,7 @@
                                     </a>
 
                                     <!-- Rapid Recall -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/recall.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/recall.jsp"
                                         class="game-card" data-game="recall">
                                         <div class="game-card-icon">&#129505;</div>
                                         <h2 class="game-card-title">Rapid Recall</h2>
@@ -681,7 +705,7 @@
                                     </a>
 
                                     <!-- Mental Trail -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/mental-trail.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/mental-trail.jsp"
                                         class="game-card" data-game="mental-trail">
                                         <div class="game-card-icon">&#129699;</div>
                                         <h2 class="game-card-title">Mental Trail</h2>
@@ -702,7 +726,7 @@
                                     </a>
 
                                     <!-- Equation Echo -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/equation-echo.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/equation-echo.jsp"
                                         class="game-card" data-game="equation-echo">
                                         <div class="game-card-icon">&#8747;</div>
                                         <h2 class="game-card-title">Equation Echo</h2>
@@ -723,7 +747,7 @@
                                     </a>
 
                                     <!-- Symbol Sums -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/symbol-sums.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/symbol-sums.jsp"
                                         class="game-card" data-game="symbol-sums">
                                         <div class="game-card-icon">&#128302;</div>
                                         <h2 class="game-card-title">Symbol Sums</h2>
@@ -744,7 +768,7 @@
                                     </a>
 
                                     <!-- Matrix Memory -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/matrix-memory.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/matrix-memory.jsp"
                                         class="game-card" data-game="matrix-memory">
                                         <div class="game-card-icon">&#128160;</div>
                                         <h2 class="game-card-title">Matrix Memory</h2>
@@ -766,7 +790,7 @@
                                     </a>
 
                                     <!-- Binary Blitz -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/binary-blitz.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/binary-blitz.jsp"
                                         class="game-card" data-game="binary-blitz">
                                         <div class="game-card-icon">&#10100;</div>
                                         <h2 class="game-card-title">Binary Blitz</h2>
@@ -787,7 +811,7 @@
                                     </a>
 
                                     <!-- Color Code -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/color-code.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/color-code.jsp"
                                         class="game-card" data-game="color-code">
                                         <div class="game-card-icon">&#127912;</div>
                                         <h2 class="game-card-title">Color Code</h2>
@@ -808,7 +832,7 @@
                                     </a>
 
                                     <!-- Spin Logic -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/spin-logic.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/spin-logic.jsp"
                                         class="game-card" data-game="spin-logic">
                                         <div class="game-card-icon">&#9881;</div>
                                         <h2 class="game-card-title">Spin Logic</h2>
@@ -829,7 +853,7 @@
                                     </a>
 
                                     <!-- Path Finder -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/path-finder.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/path-finder.jsp"
                                         class="game-card" data-game="path-finder">
                                         <div class="game-card-icon">&#10547;</div>
                                         <h2 class="game-card-title">Path Finder</h2>
@@ -850,7 +874,7 @@
                                     </a>
 
                                     <!-- Shape Count -->
-                                    <a href="<%=request.getContextPath()%>/exams/math-memory/shape-count.jsp"
+                                    <a href="<%=request.getContextPath()%>/math/math-memory/shape-count.jsp"
                                         class="game-card" data-game="shape-count">
                                         <div class="game-card-icon">&#9650;</div>
                                         <h2 class="game-card-title">Shape Count</h2>
@@ -874,7 +898,7 @@
 
                             <!-- Sidebar with Ads (Desktop) -->
                             <aside class="memory-sidebar">
-                                <%@ include file="../components/ad-sidebar.jsp" %>
+                <%-- ad via studio shell --%>
                             </aside>
                         </div><!-- /memory-layout -->
 
@@ -907,7 +931,7 @@
 
                         <!-- Ad: Footer Leaderboard -->
                         <div class="ad-container-centered" style="margin-top: var(--space-8);">
-                            <%@ include file="../components/ad-leaderboard.jsp" %>
+                <%-- ad via studio shell --%>
                         </div>
 
                     </div>
@@ -920,7 +944,7 @@
     "@type": "WebPage",
     "name": "Math Memory Games - Brain Training",
     "description": "Free math memory games to boost mental calculation and recall. Match problems, memorize sequences, grid challenges.",
-    "url": "https://8gwifi.org/exams/math-memory/",
+    "url": "https://8gwifi.org/math/math-memory/",
     "isPartOf": {
         "@type": "WebSite",
         "name": "8gwifi.org",
@@ -936,24 +960,24 @@
     "name": "Math Memory Games",
     "numberOfItems": 16,
     "itemListElement": [
-        {"@type": "ListItem", "position": 1, "name": "Match Master", "url": "https://8gwifi.org/exams/math-memory/match.jsp"},
-        {"@type": "ListItem", "position": 2, "name": "Sequence Solver", "url": "https://8gwifi.org/exams/math-memory/sequence.jsp"},
-        {"@type": "ListItem", "position": 3, "name": "Flash Math", "url": "https://8gwifi.org/exams/math-memory/flash.jsp"},
-        {"@type": "ListItem", "position": 4, "name": "Grid Genius", "url": "https://8gwifi.org/exams/math-memory/grid.jsp"},
-        {"@type": "ListItem", "position": 5, "name": "Speed Round", "url": "https://8gwifi.org/exams/math-memory/speed-round.jsp"},
-        {"@type": "ListItem", "position": 6, "name": "Hidden Order", "url": "https://8gwifi.org/exams/math-memory/hidden-order.jsp"},
-        {"@type": "ListItem", "position": 7, "name": "Rapid Recall", "url": "https://8gwifi.org/exams/math-memory/recall.jsp"},
-        {"@type": "ListItem", "position": 8, "name": "Mental Trail", "url": "https://8gwifi.org/exams/math-memory/mental-trail.jsp"},
-        {"@type": "ListItem", "position": 9, "name": "Equation Echo", "url": "https://8gwifi.org/exams/math-memory/equation-echo.jsp"},
-        {"@type": "ListItem", "position": 10, "name": "Symbol Sums", "url": "https://8gwifi.org/exams/math-memory/symbol-sums.jsp"},
-        {"@type": "ListItem", "position": 11, "name": "Matrix Memory", "url": "https://8gwifi.org/exams/math-memory/matrix-memory.jsp"},
-        {"@type": "ListItem", "position": 12, "name": "Binary Blitz", "url": "https://8gwifi.org/exams/math-memory/binary-blitz.jsp"},
-        {"@type": "ListItem", "position": 13, "name": "Color Code", "url": "https://8gwifi.org/exams/math-memory/color-code.jsp"},
-        {"@type": "ListItem", "position": 14, "name": "Spin Logic", "url": "https://8gwifi.org/exams/math-memory/spin-logic.jsp"},
-        {"@type": "ListItem", "position": 15, "name": "Path Finder", "url": "https://8gwifi.org/exams/math-memory/path-finder.jsp"},
-        {"@type": "ListItem", "position": 16, "name": "Shape Count", "url": "https://8gwifi.org/exams/math-memory/shape-count.jsp"}
+        {"@type": "ListItem", "position": 1, "name": "Match Master", "url": "https://8gwifi.org/math/math-memory/match.jsp"},
+        {"@type": "ListItem", "position": 2, "name": "Sequence Solver", "url": "https://8gwifi.org/math/math-memory/sequence.jsp"},
+        {"@type": "ListItem", "position": 3, "name": "Flash Math", "url": "https://8gwifi.org/math/math-memory/flash.jsp"},
+        {"@type": "ListItem", "position": 4, "name": "Grid Genius", "url": "https://8gwifi.org/math/math-memory/grid.jsp"},
+        {"@type": "ListItem", "position": 5, "name": "Speed Round", "url": "https://8gwifi.org/math/math-memory/speed-round.jsp"},
+        {"@type": "ListItem", "position": 6, "name": "Hidden Order", "url": "https://8gwifi.org/math/math-memory/hidden-order.jsp"},
+        {"@type": "ListItem", "position": 7, "name": "Rapid Recall", "url": "https://8gwifi.org/math/math-memory/recall.jsp"},
+        {"@type": "ListItem", "position": 8, "name": "Mental Trail", "url": "https://8gwifi.org/math/math-memory/mental-trail.jsp"},
+        {"@type": "ListItem", "position": 9, "name": "Equation Echo", "url": "https://8gwifi.org/math/math-memory/equation-echo.jsp"},
+        {"@type": "ListItem", "position": 10, "name": "Symbol Sums", "url": "https://8gwifi.org/math/math-memory/symbol-sums.jsp"},
+        {"@type": "ListItem", "position": 11, "name": "Matrix Memory", "url": "https://8gwifi.org/math/math-memory/matrix-memory.jsp"},
+        {"@type": "ListItem", "position": 12, "name": "Binary Blitz", "url": "https://8gwifi.org/math/math-memory/binary-blitz.jsp"},
+        {"@type": "ListItem", "position": 13, "name": "Color Code", "url": "https://8gwifi.org/math/math-memory/color-code.jsp"},
+        {"@type": "ListItem", "position": 14, "name": "Spin Logic", "url": "https://8gwifi.org/math/math-memory/spin-logic.jsp"},
+        {"@type": "ListItem", "position": 15, "name": "Path Finder", "url": "https://8gwifi.org/math/math-memory/path-finder.jsp"},
+        {"@type": "ListItem", "position": 16, "name": "Shape Count", "url": "https://8gwifi.org/math/math-memory/shape-count.jsp"}
     ]
 }
 </script>
 
-                <%@ include file="../components/footer.jsp" %>
+                <%@ include file="/math/partials/studio-close.jsp" %>

@@ -1,30 +1,54 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ include file="seo-helper.jsp" %>
-        <% String pageKey="shape-count" ; String seoTitle=getSEOTitle(pageKey, application); String
+        <% String pageKey="color-code" ; String seoTitle=getSEOTitle(pageKey, application); String
             seoDescription=getMetaDescription(pageKey, application); String canonicalUrl=getCanonicalUrl(pageKey,
             application); String extraHead=generateHeadContent(pageKey, application) + generateJsonLd(pageKey, application); request.setAttribute("pageTitle",
             seoTitle); request.setAttribute("pageDescription", seoDescription); request.setAttribute("canonicalUrl",
             canonicalUrl); request.setAttribute("extraHeadContent", extraHead); %>
-            <%@ include file="../components/header.jsp" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <title><%= seoTitle %></title>
+    <meta name="description" content="<%= seoDescription %>">
+    <link rel="canonical" href="<%= canonicalUrl %>">
+    <%= extraHead %>
+    <%@ include file="/math/partials/studio-head.jsp" %>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-memory-studio.css">
+</head>
+
+<% request.setAttribute("activeService", "math-memory"); %>
+<%@ include file="/math/partials/studio-open.jsp" %>
+
+    <header class="ms-title">
+        <nav class="ms-crumbs">
+            <a href="<%=request.getContextPath()%>/index.jsp">Home</a><span>/</span>
+            <a href="<%=request.getContextPath()%>/math/">Math</a><span>/</span>
+            <span aria-current="page">Math Memory</span>
+        </nav>
+    </header>
+
 
                 <!-- Shared CSS -->
-                <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/css/math-memory-base.css">
+                <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-memory-base.css">
 
                 <!-- Core JS -->
                 <script src="<%=request.getContextPath()%>/exams/js/math-memory-core.js"></script>
 
                 <style>
                     :root {
-                        --neon-indigo: #6366f1;
-                        --neon-purple: #a855f7;
-                        --arcade-dark: #0f0c29;
-                        --arcade-card: #181340;
-                        --arcade-border: #302b63;
-                        --glow-shape: 0 0 20px rgba(99, 102, 241, 0.4);
+                        --neon-orange: #f97316;
+                        --neon-cyan: #06b6d4;
+                        --arcade-dark: #0f0a1e;
+                        --arcade-card: #1a1333;
+                        --arcade-border: #2d2255;
+                        --glow-multi: 0 0 20px rgba(255, 255, 255, 0.3);
                     }
 
                     .game-page {
-                        background: linear-gradient(135deg, var(--arcade-dark) 0%, #24243e 100%);
+                        background: linear-gradient(135deg, var(--arcade-dark) 0%, #1c1917 50%, var(--arcade-dark) 100%);
                         min-height: 100vh;
                         padding-bottom: var(--space-8);
                     }
@@ -37,8 +61,7 @@
                         right: 0;
                         bottom: 0;
                         background-image:
-                            radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
-                            radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+                            radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
                         pointer-events: none;
                         z-index: 0;
                     }
@@ -74,7 +97,7 @@
                     .game-title h1 {
                         font-size: var(--text-2xl);
                         font-weight: 700;
-                        background: linear-gradient(135deg, var(--neon-indigo), var(--neon-purple));
+                        background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6);
                         -webkit-background-clip: text;
                         -webkit-text-fill-color: transparent;
                         background-clip: text;
@@ -85,17 +108,17 @@
                         display: flex;
                         align-items: center;
                         gap: var(--space-2);
-                        color: rgba(255, 255, 255, 0.6);
+                        color: rgba(28, 25, 23, 0.6);
                         text-decoration: none;
                         font-size: var(--text-sm);
                         transition: color 0.2s;
                     }
 
                     .game-back:hover {
-                        color: var(--neon-indigo);
+                        color: white;
                     }
 
-                    /* Stats */
+                    /* Stats Bar */
                     .stats-bar {
                         display: flex;
                         justify-content: center;
@@ -116,18 +139,18 @@
                     .stat-value {
                         font-size: var(--text-2xl);
                         font-weight: 700;
-                        color: var(--neon-indigo);
-                        text-shadow: var(--glow-shape);
+                        color: var(--neon-cyan);
+                        text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
                     }
 
                     .stat-label {
                         font-size: var(--text-xs);
-                        color: rgba(255, 255, 255, 0.5);
+                        color: rgba(28, 25, 23, 0.5);
                         text-transform: uppercase;
                         letter-spacing: 1px;
                     }
 
-                    /* Difficulty */
+                    /* Difficulty Selector */
                     .difficulty-selector {
                         display: flex;
                         justify-content: center;
@@ -140,7 +163,7 @@
                         border: 2px solid var(--arcade-border);
                         border-radius: var(--radius-md);
                         background: var(--arcade-card);
-                        color: rgba(255, 255, 255, 0.7);
+                        color: rgba(28, 25, 23, 0.7);
                         font-size: var(--text-sm);
                         font-weight: 600;
                         cursor: pointer;
@@ -148,14 +171,14 @@
                     }
 
                     .diff-btn:hover {
-                        border-color: var(--neon-indigo);
+                        border-color: var(--neon-orange);
                         color: white;
                     }
 
                     .diff-btn.active {
-                        border-color: var(--neon-indigo);
-                        color: var(--neon-indigo);
-                        box-shadow: var(--glow-shape);
+                        border-color: var(--neon-orange);
+                        color: var(--neon-orange);
+                        box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
                     }
 
                     /* Game Area */
@@ -163,7 +186,7 @@
                         background: var(--arcade-card);
                         border: 2px solid var(--arcade-border);
                         border-radius: var(--radius-xl);
-                        min-height: 500px;
+                        min-height: 450px;
                         padding: var(--space-6);
                         display: flex;
                         flex-direction: column;
@@ -171,63 +194,55 @@
                         justify-content: center;
                         position: relative;
                         box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-                        overflow: hidden;
                     }
 
-                    /* Shapes Container */
-                    .shapes-container {
-                        position: absolute;
-                        top: 20px;
-                        left: 20px;
-                        right: 20px;
-                        bottom: 20px;
-                        overflow: hidden;
+                    /* Legend */
+                    .color-legend {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        gap: var(--space-4);
+                        margin-bottom: var(--space-8);
                     }
 
-                    .game-shape {
-                        position: absolute;
+                    .color-item {
+                        width: 60px;
+                        height: 80px;
+                        border-radius: var(--radius-lg);
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        font-weight: 700;
-                        font-size: 1.25rem;
-                        color: white;
-                        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-                        transition: transform 0.3s;
-                        animation: floatIn 0.5s ease-out;
+                        font-size: 2rem;
+                        font-weight: 800;
+                        color: rgba(0, 0, 0, 0.7);
+                        border: 2px solid rgba(255, 255, 255, 0.1);
+                        transition: all 0.3s;
                     }
 
-                    .shape-circle {
-                        border-radius: 50%;
+                    .color-item.values-obscured {
+                        color: transparent;
                     }
 
-                    .shape-square {
-                        border-radius: 4px;
-                    }
-
-                    .shape-triangle {
-                        width: 0 !important;
-                        height: 0 !important;
-                        border-left: 30px solid transparent;
-                        border-right: 30px solid transparent;
-                        border-bottom: 50px solid;
-                        background: transparent !important;
-                        box-shadow: none;
+                    /* Challenge */
+                    .challenge-seq {
                         display: flex;
-                        align-items: flex-end;
+                        gap: var(--space-2);
+                        margin-bottom: var(--space-6);
+                        height: 80px;
+                        align-items: center;
+                        width: 100%;
                         justify-content: center;
                     }
 
-                    .shape-triangle span {
-                        transform: translateY(25px);
-                        /* Position number inside triangle */
-                        font-size: 1rem;
-                        position: absolute;
+                    .seq-block {
                         width: 60px;
-                        text-align: center;
+                        height: 60px;
+                        border-radius: var(--radius-md);
+                        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+                        animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                     }
 
-                    @keyframes floatIn {
+                    @keyframes popIn {
                         from {
                             transform: scale(0);
                             opacity: 0;
@@ -239,50 +254,41 @@
                         }
                     }
 
-                    /* Input */
-                    .answer-section {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        gap: var(--space-4);
-                        animation: slideUp 0.3s;
-                        z-index: 10;
+                    /* Keypad */
+                    .numpad {
+                        display: grid;
+                        grid-template-columns: repeat(5, 1fr);
+                        gap: var(--space-3);
+                        max-width: 400px;
                     }
 
-                    .question-text {
-                        font-size: 1.5rem;
-                        color: white;
-                        text-align: center;
-                        margin-bottom: var(--space-2);
-                    }
-
-                    .answer-input {
-                        background: rgba(0, 0, 0, 0.3);
-                        border: 2px solid var(--arcade-border);
-                        border-radius: var(--radius-md);
+                    .num-btn {
+                        background: rgba(255, 255, 255, 0.1);
+                        border: 1px solid var(--arcade-border);
+                        border-radius: var(--radius-lg);
                         padding: var(--space-3);
                         font-size: 1.5rem;
                         color: white;
-                        width: 150px;
-                        text-align: center;
-                        outline: none;
-                        transition: border-color 0.2s;
-                    }
-
-                    .answer-input:focus {
-                        border-color: var(--neon-indigo);
-                    }
-
-                    .submit-btn {
-                        padding: var(--space-3) var(--space-6);
-                        background: var(--neon-indigo);
-                        border: none;
-                        border-radius: var(--radius-md);
-                        color: white;
-                        font-size: 1.1rem;
-                        font-weight: 700;
                         cursor: pointer;
-                        box-shadow: var(--glow-shape);
+                        transition: all 0.1s;
+                    }
+
+                    .num-btn:hover {
+                        background: rgba(255, 255, 255, 0.2);
+                    }
+
+                    .num-btn:active {
+                        transform: scale(0.95);
+                    }
+
+                    /* Input Display */
+                    .code-display {
+                        font-size: 2rem;
+                        letter-spacing: 5px;
+                        color: var(--mm-ink, #1c1917);
+                        margin-bottom: var(--space-6);
+                        min-height: 40px;
+                        font-family: 'Courier New', monospace;
                     }
 
                     /* Timer Bar */
@@ -292,39 +298,41 @@
                         left: 0;
                         right: 0;
                         height: 4px;
-                        background: var(--neon-purple);
+                        background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981, #3b82f6);
                         width: 0%;
                     }
 
                     /* States */
-                    .state-title {
-                        font-size: 2.5rem;
-                        color: white;
-                        margin-bottom: var(--space-4);
-                        font-weight: 800;
+                    .state-message {
                         text-align: center;
                     }
 
+                    .state-title {
+                        font-size: 2.5rem;
+                        color: var(--mm-ink, #1c1917);
+                        margin-bottom: var(--space-4);
+                        font-weight: 800;
+                    }
+
                     .state-desc {
-                        color: rgba(255, 255, 255, 0.7);
+                        color: rgba(28, 25, 23, 0.7);
                         margin-bottom: var(--space-6);
                         font-size: 1.1rem;
                         max-width: 500px;
                         margin-left: auto;
                         margin-right: auto;
-                        text-align: center;
                     }
 
                     .action-btn {
                         padding: var(--space-3) var(--space-8);
-                        border: 2px solid var(--neon-indigo);
+                        border: 2px solid var(--neon-cyan);
                         border-radius: var(--radius-full);
-                        background: var(--neon-indigo);
-                        color: white;
+                        background: var(--neon-cyan);
+                        color: var(--arcade-dark);
                         font-size: 1.2rem;
                         font-weight: 700;
                         cursor: pointer;
-                        box-shadow: var(--glow-shape);
+                        box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
                         transition: transform 0.2s;
                     }
 
@@ -356,7 +364,7 @@
 
                     .win-content {
                         background: var(--arcade-card);
-                        border: 2px solid var(--neon-indigo);
+                        border: 2px solid var(--neon-cyan);
                         border-radius: var(--radius-xl);
                         padding: var(--space-8);
                         text-align: center;
@@ -395,12 +403,12 @@
                     <div class="game-container">
                         <!-- Ad: Top Leaderboard -->
                         <div class="ad-container-top desktop-only">
-                            <%@ include file="../components/ad-leaderboard.jsp" %>
+                <%-- ad via studio shell --%>
                         </div>
 
                         <!-- Header -->
                         <div class="game-header">
-                            <a href="<%=request.getContextPath()%>/exams/math-memory/" class="game-back">
+                            <a href="<%=request.getContextPath()%>/math/math-memory/" class="game-back">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -408,8 +416,8 @@
                                 Back
                             </a>
                             <div class="game-title">
-                                <span class="game-title-icon">&#9650;</span>
-                                <h1>Shape Count</h1>
+                                <span class="game-title-icon">&#127912;</span>
+                                <h1>Color Code</h1>
                             </div>
                             <div style="width: 60px;"></div>
                         </div>
@@ -445,12 +453,11 @@
                         <div class="game-area tex2jax_ignore" id="gameArea">
                             <div class="timer-bar" id="timerBar"></div>
 
-                            <div class="state-desc" id="introView">
-                                <div class="state-title">Selective Focus</div>
-                                <p>
-                                    Shapes with numbers will appear briefly.<br>
-                                    Memorize the sum of numbers for specific shapes<br>
-                                    (e.g. Sum of Circles).
+                            <div class="state-message" id="introView">
+                                <div class="state-title">Crack the Color Code</div>
+                                <p class="state-desc">
+                                    Each number will be assigned a unique color.<br>
+                                    Memorize the legend. Then decode the color sequence.
                                 </p>
                                 <button class="action-btn" id="startBtn">Start Game</button>
                             </div>
@@ -458,7 +465,7 @@
 
                         <!-- Mobile Ad -->
                         <div class="ad-container-bottom mobile-only">
-                            <%@ include file="../components/ad-leaderboard.jsp" %>
+                <%-- ad via studio shell --%>
                         </div>
                     </div>
                 </div>
@@ -466,12 +473,12 @@
                 <!-- Win Modal -->
                 <div class="win-modal" id="winModal">
                     <div class="win-content">
-                        <div style="font-size:4rem; margin-bottom:1rem;">&#127919;</div>
-                        <h2 style="font-size:2rem; font-weight:700; color:white; margin-bottom:1rem;">Sharp Eye!</h2>
-                        <div style="font-size:3rem; font-weight:700; color:var(--neon-indigo); margin-bottom:0.5rem;"
+                        <div style="font-size:4rem; margin-bottom:1rem;">&#127881;</div>
+                        <h2 style="font-size:2rem; font-weight:700; color:white; margin-bottom:1rem;">Spectrum Solved!</h2>
+                        <div style="font-size:3rem; font-weight:700; color:var(--neon-cyan); margin-bottom:0.5rem;"
                             id="finalScore">0</div>
-                        <div style="color:#aaa; margin-bottom:2rem;">Total Score</div>
-                        <div id="finalTime" style="color:#aaa; margin-bottom:2rem;"></div>
+                        <div style="color: var(--ms-muted, #78716c); margin-bottom:1rem;">Total Score</div>
+                        <div id="finalTime" style="color: var(--ms-muted, #78716c); margin-bottom:2rem;"></div>
                         <div style="display:flex; gap:var(--space-3); justify-content:center;">
                             <button class="action-btn" id="playAgainBtn">Play Again</button>
                             <button class="game-btn" id="shareBtn">Share</button>
@@ -481,17 +488,21 @@
 
                 <!-- Toast -->
                 <div class="game-toast" id="gameToast"></div>
-
-                <%@ include file="../components/ad-anchor.jsp" %>
+                <%-- ad via studio shell --%>
 
                     <script>
                         (function () {
                             // Config
                             const CONFIG = {
-                                easy: { count: 5, shapes: ['circle', 'square'], showTime: 2000, points: 100 },
-                                medium: { count: 8, shapes: ['circle', 'square', 'triangle'], showTime: 3000, points: 150 },
-                                hard: { count: 12, shapes: ['circle', 'square', 'triangle'], showTime: 4000, points: 200 }
+                                easy: { items: 3, seqLen: 3, showTime: 3000, points: 100 },
+                                medium: { items: 5, seqLen: 4, showTime: 4000, points: 150 },
+                                hard: { items: 7, seqLen: 5, showTime: 5000, points: 200 }
                             };
+
+                            const COLORS = [
+                                '#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981',
+                                '#06b6d4', '#3b82f6', '#8b5cf6', '#d946ef', '#f43f5e'
+                            ];
 
                             // State
                             let difficulty = 'easy';
@@ -499,8 +510,9 @@
                             let maxRounds = 10;
                             let score = 0;
                             let streak = 0;
-                            let currentShapesLineup = []; // { type: 'circle', val: 5 }
-                            let targetShapeType = 'circle';
+                            let currentMap = []; // Array of { num: 1, color: '#...' }
+                            let currentSeq = []; // Array of integers matching currentMap indices
+                            let userSeq = '';
                             let gameStartTime = null;
                             let totalGameTime = 0;
 
@@ -530,25 +542,19 @@
                                     startGame();
                                 });
                                 document.getElementById('shareBtn').addEventListener('click', shareScore);
-
-                                gameArea.addEventListener('keypress', (e) => {
-                                    if (e.key === 'Enter' && e.target.classList.contains('answer-input')) {
-                                        checkAnswer();
-                                    }
-                                });
                             }
 
                             function loadHighScore() {
-                                const hs = MathMemory.storage.getHighScore('shape-count', difficulty);
+                                const hs = MathMemory.storage.getHighScore('color-code', difficulty);
                                 document.getElementById('highScore').textContent = hs > 0 ? hs : '-';
                             }
 
                             function resetGame() {
-                                gameStartTime = Date.now();
-                                totalGameTime = 0;
                                 round = 1;
                                 score = 0;
                                 streak = 0;
+                                gameStartTime = Date.now();
+                                totalGameTime = 0;
                                 updateStats();
                                 if (gameArea.querySelector('#introView')) return;
 
@@ -556,11 +562,11 @@
                                 gameArea.appendChild(timerBar);
 
                                 const intro = document.createElement('div');
-                                intro.className = 'state-desc';
+                                intro.className = 'state-message';
                                 intro.id = 'introView';
                                 intro.innerHTML = `
-             <div class="state-title">Selective Focus</div>
-            <p>Shapes with numbers will appear briefly. Pay attention to everything.</p>
+            <div class="state-title">Crack the Color Code</div>
+            <p class="state-desc">Each number will be assigned a unique color. Memorize the legend.</p>
             <button class="action-btn" id="startBtnReset">Start Game</button>
         `;
                                 gameArea.appendChild(intro);
@@ -588,51 +594,37 @@
                                 }
 
                                 const cfg = CONFIG[difficulty];
-                                // Generate Lineup
-                                currentShapesLineup = [];
-                                const width = gameArea.clientWidth - 100;
-                                const height = gameArea.clientHeight - 100;
+                                // Generate Map
+                                currentMap = [];
+                                const usedNums = new Set();
+                                const shuffledColors = [...COLORS].sort(() => Math.random() - 0.5).slice(0, cfg.items);
 
-                                for (let i = 0; i < cfg.count; i++) {
-                                    const type = cfg.shapes[Math.floor(Math.random() * cfg.shapes.length)];
-                                    const val = Math.floor(Math.random() * 9) + 1;
-                                    const x = Math.floor(Math.random() * width) + 20;
-                                    const y = Math.floor(Math.random() * height) + 20;
-                                    const color = getRandomColor();
-
-                                    currentShapesLineup.push({ type, val, x, y, color });
+                                for (let i = 0; i < cfg.items; i++) {
+                                    let num;
+                                    do { num = Math.floor(Math.random() * 9) + 1; } while (usedNums.has(num));
+                                    usedNums.add(num);
+                                    currentMap.push({ num, color: shuffledColors[i] });
                                 }
 
-                                // Pick target
-                                targetShapeType = cfg.shapes[Math.floor(Math.random() * cfg.shapes.length)];
+                                // Generate Target Sequence
+                                currentSeq = [];
+                                for (let i = 0; i < cfg.seqLen; i++) {
+                                    currentSeq.push(currentMap[Math.floor(Math.random() * cfg.items)]);
+                                }
 
                                 renderStudyPhase();
-                            }
-
-                            function getRandomColor() {
-                                const colors = ['#f43f5e', '#ec4899', '#d946ef', '#a855f7', '#8b5cf6', '#6366f1', '#3b82f6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#84cc16', '#eab308', '#f59e0b', '#f97316', '#ef4444'];
-                                return colors[Math.floor(Math.random() * colors.length)];
                             }
 
                             function renderStudyPhase() {
                                 const cfg = CONFIG[difficulty];
 
-                                let html = '<div class="shapes-container">';
-                                for (let i = 0; i < currentShapesLineup.length; i++) {
-                                    const item = currentShapesLineup[i];
-                                    let style = 'left: ' + item.x + 'px; top: ' + item.y + 'px; width: 60px; height: 60px;';
-                                    let content = item.val;
+                                let html = '<div class="color-legend">';
+                                currentMap.sort((a, b) => a.num - b.num); // nice order for legend? or random?
+                                // Random is harder. Sorted is easier. Let's sort by Number for study phase so it's a "Legend".
 
-                                    if (item.type === 'triangle') {
-                                        // Triangles are CSS borders
-                                        style = 'left: ' + item.x + 'px; top: ' + item.y + 'px; border-bottom-color: ' + item.color;
-                                        content = '<span>' + item.val + '</span>';
-                                    } else {
-                                        style += 'background: ' + item.color;
-                                    }
-
-                                    html += '<div class="game-shape shape-' + item.type + '" style="' + style + '">' + content + '</div>';
-                                }
+                                currentMap.forEach(item => {
+                                    html += '<div class="color-item" style="background-color: ' + item.color + '">' + item.num + '</div>';
+                                });
                                 html += '</div>';
 
                                 gameArea.innerHTML = html;
@@ -644,49 +636,106 @@
                                 setTimeout(() => { timerBar.style.width = '0%'; }, 50);
 
                                 setTimeout(() => {
-                                    renderQuestionPhase();
+                                    renderActionPhase();
                                 }, cfg.showTime);
                             }
 
-                            function renderQuestionPhase() {
-                                gameArea.innerHTML = '';
+                            function renderActionPhase() {
+                                // Hide Numbers in Legend (use values-obscured to avoid global .hidden CSS)
+                                const items = gameArea.querySelectorAll('.color-item');
+                                items.forEach(item => item.classList.add('values-obscured'));
 
-                                const typeDisplay = targetShapeType.charAt(0).toUpperCase() + targetShapeType.slice(1) + 's';
+                                // Show Challenge Sequence
+                                let seqHtml = '';
+                                for (let i = 0; i < currentSeq.length; i++) {
+                                    seqHtml += '<div class="seq-block" style="background-color:' + currentSeq[i].color + '"></div>';
+                                }
 
-                                const html =
-                                    '<div class="answer-section">' +
-                                    '<div class="question-text">' +
-                                    'Sum of numbers inside<br>' +
-                                    '<span style="color:var(--neon-indigo); font-weight:700">' + typeDisplay + '</span>?' +
+                                let numpadHtml = '';
+                                for (let n = 0; n <= 9; n++) {
+                                    let val = (n === 9) ? 0 : n + 1; // 1-9 then 0? Original code was [1..9, 0]
+                                    let displayNum = (n === 9) ? 0 : n + 1;
+
+                                    // Actually original map was [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+                                    let nu = (n === 9) ? 0 : n + 1;
+                                    numpadHtml += '<button class="num-btn" data-val="' + nu + '">' + nu + '</button>';
+                                }
+
+                                // Resetting to simple array loop to match original exact logic
+                                numpadHtml = '';
+                                const keypadNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+                                for (let i = 0; i < keypadNums.length; i++) {
+                                    numpadHtml += '<button class="num-btn" data-val="' + keypadNums[i] + '">' + keypadNums[i] + '</button>';
+                                }
+
+                                let html =
+                                    '<div class="state-desc" style="margin-bottom:1rem">Decode the Sequence</div>' +
+                                    '<div class="challenge-seq">' +
+                                    seqHtml +
                                     '</div>' +
-                                    '<input type="number" class="answer-input" id="answerInput" placeholder="Sum" autofocus>' +
-                                    '<button class="submit-btn" id="submitBtn">Check</button>' +
+                                    '<div class="code-display" id="codeDisplay">_ _ _</div>' +
+                                    '<div class="numpad">' +
+                                    numpadHtml +
+                                    '<button class="num-btn" data-val="back" style="grid-column: span 2">&#9003;</button>' +
+                                    '<button class="num-btn" data-val="enter" style="grid-column: span 3; background: var(--neon-cyan); color:black; font-weight:700">Submit</button>' +
                                     '</div>';
 
-                                gameArea.innerHTML = html;
-                                setTimeout(() => document.getElementById('answerInput').focus(), 100);
-                                document.getElementById('submitBtn').addEventListener('click', checkAnswer);
+                                // Let's keep the legend (hidden numbers) to verify colors if needed? Or remove it to make it harder (Pure recall)?
+                                // Let's keep the legend (colors visible, numbers hidden).
+
+                                const legendHtml = gameArea.querySelector('.color-legend').outerHTML;
+                                gameArea.innerHTML = legendHtml + html;
+                                gameArea.querySelector('.color-legend').querySelectorAll('.color-item').forEach(el => el.classList.add('values-obscured'));
+
+                                updateDisplay('_');
+
+                                userSeq = '';
+
+                                gameArea.querySelectorAll('.num-btn').forEach(btn => {
+                                    btn.addEventListener('click', () => handleInput(btn.dataset.val));
+                                });
+                            }
+
+                            function updateDisplay() {
+                                const len = currentSeq.length;
+                                let str = userSeq.split('').join(' ');
+                                while (str.length / 2 < len) str += ' _';
+                                document.getElementById('codeDisplay').textContent = str;
+                            }
+
+                            function handleInput(val) {
+                                if (val === 'enter') {
+                                    checkAnswer();
+                                    return;
+                                }
+
+                                if (val === 'back') {
+                                    userSeq = userSeq.slice(0, -1);
+                                } else {
+                                    if (userSeq.length < currentSeq.length) {
+                                        userSeq += val;
+                                    }
+                                }
+                                updateDisplay();
                             }
 
                             function checkAnswer() {
-                                const input = document.getElementById('answerInput');
-                                if (!input.value) return;
+                                if (userSeq.length !== currentSeq.length) return;
 
-                                const userVal = parseInt(input.value);
+                                const correctSeq = currentSeq.map(s => s.num).join('');
 
-                                const sum = currentShapesLineup
-                                    .filter(item => item.type === targetShapeType)
-                                    .reduce((acc, curr) => acc + curr.val, 0);
-
-                                if (userVal === sum) {
+                                if (userSeq === correctSeq) {
                                     streak++;
                                     const points = CONFIG[difficulty].points + (streak * 10);
                                     score += points;
-                                    MathMemory.ui.showToast('Correct! +' + points, 'success');
+                                    MathMemory.ui.showToast('Decoded! +' + points, 'success');
                                 } else {
                                     streak = 0;
-                                    MathMemory.ui.showToast('Wrong! Sum was ' + sum, 'error');
+                                    MathMemory.ui.showToast('Error! Code was ' + correctSeq, 'error');
                                 }
+
+                                // Reveal Legend
+                                gameArea.querySelectorAll('.color-item').forEach(el => el.classList.remove('values-obscured'));
 
                                 updateStats();
 
@@ -694,20 +743,20 @@
                                     round++;
                                     updateStats();
                                     startRound();
-                                }, 1500);
+                                }, 2000);
                             }
 
                             function endGame() {
                                 totalGameTime = Math.floor((Date.now() - gameStartTime) / 1000);
                                 document.getElementById('finalScore').textContent = score;
                                 document.getElementById('finalTime').textContent = 'Time: ' + MathMemory.ui.formatTime(totalGameTime);
-                                MathMemory.storage.setHighScore('shape-count', difficulty, score);
+                                MathMemory.storage.setHighScore('color-code', difficulty, score);
                                 winModal.classList.add('active');
                                 if (score > 0) MathMemory.ui.confetti();
                             }
 
                             function shareScore() {
-                                MathMemory.share.share('shape-count', 'Shape Count', score, difficulty, {
+                                MathMemory.share.share('color-code', 'Color Code', score, difficulty, {
                                     time: totalGameTime,
                                     rounds: maxRounds,
                                     streak: streak

@@ -23,7 +23,7 @@
         }
 
         try {
-            String jsonPath = context.getRealPath("/exams/math-memory/seo-data.json");
+            String jsonPath = context.getRealPath("/math/math-memory/seo-data.json");
             File file = new File(jsonPath);
             if (file.exists()) {
                 String jsonContent = new String(Files.readAllBytes(Paths.get(jsonPath)), "UTF-8");
@@ -81,9 +81,9 @@
     public String getCanonicalUrl(String pageKey, ServletContext context) {
         org.json.JSONObject pageData = getPageSEO(pageKey, context);
         if (pageData != null) {
-            return pageData.optString("canonical", "https://8gwifi.org/exams/math-memory/");
+            return pageData.optString("canonical", "https://8gwifi.org/math/math-memory/");
         }
-        return "https://8gwifi.org/exams/math-memory/";
+        return "https://8gwifi.org/math/math-memory/";
     }
 
     /**
@@ -208,13 +208,13 @@
             StringBuilder indexJson = new StringBuilder();
             appendOrganizationJsonLd(indexJson);
             appendWebSiteJsonLd(indexJson);
-            appendBreadcrumbJsonLd(indexJson, "Math Memory Games", "https://8gwifi.org/exams/math-memory/");
+            appendBreadcrumbJsonLd(indexJson, "Math Memory Games", "https://8gwifi.org/math/math-memory/");
             return indexJson.toString();
         }
 
         String title = pageData.optString("title", "Math Memory Game");
         String description = pageData.optString("description", "Train your brain with math memory games.");
-        String canonical = pageData.optString("canonical", "https://8gwifi.org/exams/math-memory/" + pageKey + ".jsp");
+        String canonical = pageData.optString("canonical", "https://8gwifi.org/math/math-memory/" + pageKey + ".jsp");
         String gameName = getGameDisplayName(pageKey);
 
         StringBuilder json = new StringBuilder();
@@ -251,7 +251,7 @@
         json.append("  \"isPartOf\": {\n");
         json.append("    \"@type\": \"WebSite\",\n");
         json.append("    \"name\": \"Math Memory Games\",\n");
-        json.append("    \"url\": \"https://8gwifi.org/exams/math-memory/\"\n");
+        json.append("    \"url\": \"https://8gwifi.org/math/math-memory/\"\n");
         json.append("  }\n");
         json.append("}\n");
         json.append("</script>\n");
@@ -279,7 +279,7 @@
         json.append("  \"@context\": \"https://schema.org\",\n");
         json.append("  \"@type\": \"WebSite\",\n");
         json.append("  \"name\": \"Math Memory Games\",\n");
-        json.append("  \"url\": \"https://8gwifi.org/exams/math-memory/\",\n");
+        json.append("  \"url\": \"https://8gwifi.org/math/math-memory/\",\n");
         json.append("  \"publisher\": {\n");
         json.append("    \"@type\": \"Organization\",\n");
         json.append("    \"name\": \"8gwifi.org\",\n");
@@ -305,7 +305,7 @@
         json.append("      \"@type\": \"ListItem\",\n");
         json.append("      \"position\": 2,\n");
         json.append("      \"name\": \"Math Memory Games\",\n");
-        json.append("      \"item\": \"https://8gwifi.org/exams/math-memory/\"\n");
+        json.append("      \"item\": \"https://8gwifi.org/math/math-memory/\"\n");
         json.append("    },\n");
         json.append("    {\n");
         json.append("      \"@type\": \"ListItem\",\n");

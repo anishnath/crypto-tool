@@ -64,7 +64,7 @@
     </div>
 
     <!-- Everyday Math -->
-    <div class="ms-group<%= collapsedCls(activeService, "percentage", "sig-figs", "exponent", "logarithm", "24-game", "collatz", "magic-square", "rubiks-cube", "pocket-cube", "rubik-nxn") %>" data-group="everyday">
+    <div class="ms-group<%= collapsedCls(activeService, "percentage", "sig-figs", "exponent", "logarithm", "24-game", "collatz", "magic-square", "rubiks-cube", "pocket-cube", "rubik-nxn", "quick-math", "math-memory") %>" data-group="everyday">
         <button class="ms-group-header" type="button">Everyday <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/percentage-calculator.jsp" class="ms-item <%= "percentage".equals(activeService) ? "active" : "" %>">
@@ -96,6 +96,12 @@
             </a>
             <a href="<%= ctx %>/math/rubik-nxn-solver.jsp" class="ms-item <%= "rubik-nxn".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">N×N</span> <span class="ms-item-label">Rubik N×N Solver</span>
+            </a>
+            <a href="<%= ctx %>/math/quick-math/" class="ms-item <%= "quick-math".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#9889;</span> <span class="ms-item-label">Quick Math</span>
+            </a>
+            <a href="<%= ctx %>/math/math-memory/" class="ms-item <%= "math-memory".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#129504;</span> <span class="ms-item-label">Math Memory</span>
             </a>
         </div>
     </div>
@@ -163,7 +169,7 @@
     </div>
 
     <!-- Exams -->
-    <div class="ms-group<%= collapsedCls(activeService, "amc", "aime", "olympiad-practice", "jee-hub", "jee-practice", "jee-mock", "quick-math") %>" data-group="exams">
+    <div class="ms-group<%= collapsedCls(activeService, "amc", "aime", "olympiad-practice", "jee-hub", "jee-practice", "jee-mock") %>" data-group="exams">
         <button class="ms-group-header" type="button">Exams <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/math/amc/" class="ms-item <%= "amc".equals(activeService) ? "active" : "" %>">
@@ -180,9 +186,6 @@
             </a>
             <a href="<%= ctx %>/math/iit/practice.jsp" class="ms-item <%= "jee-practice".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#128214;</span> <span class="ms-item-label">JEE Practice</span>
-            </a>
-            <a href="<%= ctx %>/math/quick-math/" class="ms-item <%= "quick-math".equals(activeService) ? "active" : "" %>">
-                <span class="ms-item-icon">&#9889;</span> <span class="ms-item-label">Quick Math</span>
             </a>
         </div>
     </div>

@@ -5,10 +5,34 @@
             application); String extraHead=generateHeadContent(pageKey, application) + generateJsonLd(pageKey, application); request.setAttribute("pageTitle",
             seoTitle); request.setAttribute("pageDescription", seoDescription); request.setAttribute("canonicalUrl",
             canonicalUrl); request.setAttribute("extraHeadContent", extraHead); %>
-            <%@ include file="../components/header.jsp" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <title><%= seoTitle %></title>
+    <meta name="description" content="<%= seoDescription %>">
+    <link rel="canonical" href="<%= canonicalUrl %>">
+    <%= extraHead %>
+    <%@ include file="/math/partials/studio-head.jsp" %>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-memory-studio.css">
+</head>
+
+<% request.setAttribute("activeService", "math-memory"); %>
+<%@ include file="/math/partials/studio-open.jsp" %>
+
+    <header class="ms-title">
+        <nav class="ms-crumbs">
+            <a href="<%=request.getContextPath()%>/index.jsp">Home</a><span>/</span>
+            <a href="<%=request.getContextPath()%>/math/">Math</a><span>/</span>
+            <span aria-current="page">Math Memory</span>
+        </nav>
+    </header>
+
 
                 <!-- Shared CSS -->
-                <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/css/math-memory-base.css">
+                <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-memory-base.css">
 
                 <!-- Core JS -->
                 <script src="<%=request.getContextPath()%>/exams/js/math-memory-core.js"></script>
@@ -90,7 +114,7 @@
                         display: flex;
                         align-items: center;
                         gap: var(--space-2);
-                        color: rgba(255, 255, 255, 0.6);
+                        color: rgba(28, 25, 23, 0.6);
                         text-decoration: none;
                         font-size: var(--text-sm);
                         transition: color 0.2s;
@@ -127,7 +151,7 @@
 
                     .stat-label {
                         font-size: var(--text-xs);
-                        color: rgba(255, 255, 255, 0.5);
+                        color: rgba(28, 25, 23, 0.5);
                         text-transform: uppercase;
                         letter-spacing: 1px;
                     }
@@ -145,7 +169,7 @@
                         border: 2px solid var(--arcade-border);
                         border-radius: var(--radius-md);
                         background: var(--arcade-card);
-                        color: rgba(255, 255, 255, 0.7);
+                        color: rgba(28, 25, 23, 0.7);
                         font-size: var(--text-sm);
                         font-weight: 600;
                         cursor: pointer;
@@ -377,7 +401,7 @@
                     }
 
                     .win-subtitle {
-                        color: rgba(255, 255, 255, 0.6);
+                        color: rgba(28, 25, 23, 0.6);
                         margin-bottom: var(--space-6);
                     }
 
@@ -400,7 +424,7 @@
 
                     .win-stat-label {
                         font-size: var(--text-sm);
-                        color: rgba(255, 255, 255, 0.5);
+                        color: rgba(28, 25, 23, 0.5);
                     }
 
                     .new-record {
@@ -422,7 +446,7 @@
                         border: 1px solid var(--arcade-border);
                         border-radius: var(--radius-lg);
                         padding: var(--space-3) var(--space-6);
-                        color: white;
+                        color: var(--mm-ink, #1c1917);
                         font-weight: 500;
                         opacity: 0;
                         visibility: hidden;
@@ -540,12 +564,12 @@
                     <div class="game-container">
                         <!-- Ad: Top Leaderboard (Desktop) -->
                         <div class="ad-container-top desktop-only">
-                            <%@ include file="../components/ad-leaderboard.jsp" %>
+                <%-- ad via studio shell --%>
                         </div>
 
                         <!-- Header -->
                         <div class="game-header">
-                            <a href="<%=request.getContextPath()%>/exams/math-memory/" class="game-back">
+                            <a href="<%=request.getContextPath()%>/math/math-memory/" class="game-back">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -598,13 +622,13 @@
 
                         <!-- Ad: Mobile Leaderboard (shown below game) -->
                         <div class="ad-container-bottom mobile-only">
-                            <%@ include file="../components/ad-leaderboard.jsp" %>
+                <%-- ad via studio shell --%>
                         </div>
                     </div>
                 </div>
 
                 <!-- Mobile Anchor Ad -->
-                <%@ include file="../components/ad-anchor.jsp" %>
+                <%-- ad via studio shell --%>
 
                     <!-- Win Modal -->
                     <div class="win-modal" id="winModal">
@@ -873,4 +897,4 @@
                         })();
                     </script>
 
-                    <%@ include file="../components/footer.jsp" %>
+                    <%@ include file="/math/partials/studio-close.jsp" %>

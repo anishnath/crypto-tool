@@ -281,6 +281,8 @@
   "sameAs": [
     "https://twitter.com/anish2good"
   ],
+  "privacyPolicy": "<%= baseUrl %>/privacy.jsp",
+  "termsOfService": "<%= baseUrl %>/terms.jsp",
   "potentialAction": {
     "@type": "SearchAction",
     "target": {
@@ -909,6 +911,8 @@
   "sameAs": [
     "https://twitter.com/anish2good"
   ],
+  "privacyPolicy": "<%= baseUrl %>/privacy.jsp",
+  "termsOfService": "<%= baseUrl %>/terms.jsp",
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "Customer Service",

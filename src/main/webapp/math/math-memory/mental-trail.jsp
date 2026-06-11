@@ -1,30 +1,54 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ include file="seo-helper.jsp" %>
-        <% String pageKey="recall" ; String seoTitle=getSEOTitle(pageKey, application); String
+        <% String pageKey="mental-trail" ; String seoTitle=getSEOTitle(pageKey, application); String
             seoDescription=getMetaDescription(pageKey, application); String canonicalUrl=getCanonicalUrl(pageKey,
             application); String extraHead=generateHeadContent(pageKey, application) + generateJsonLd(pageKey, application); request.setAttribute("pageTitle",
             seoTitle); request.setAttribute("pageDescription", seoDescription); request.setAttribute("canonicalUrl",
             canonicalUrl); request.setAttribute("extraHeadContent", extraHead); %>
-            <%@ include file="../components/header.jsp" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index,follow">
+    <title><%= seoTitle %></title>
+    <meta name="description" content="<%= seoDescription %>">
+    <link rel="canonical" href="<%= canonicalUrl %>">
+    <%= extraHead %>
+    <%@ include file="/math/partials/studio-head.jsp" %>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-memory-studio.css">
+</head>
+
+<% request.setAttribute("activeService", "math-memory"); %>
+<%@ include file="/math/partials/studio-open.jsp" %>
+
+    <header class="ms-title">
+        <nav class="ms-crumbs">
+            <a href="<%=request.getContextPath()%>/index.jsp">Home</a><span>/</span>
+            <a href="<%=request.getContextPath()%>/math/">Math</a><span>/</span>
+            <span aria-current="page">Math Memory</span>
+        </nav>
+    </header>
+
 
                 <!-- Shared CSS -->
-                <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/css/math-memory-base.css">
+                <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-memory-base.css">
 
                 <!-- Core JS -->
                 <script src="<%=request.getContextPath()%>/exams/js/math-memory-core.js"></script>
 
                 <style>
                     :root {
-                        --neon-pink: #ec4899;
-                        --neon-purple: #ab20fd;
+                        --neon-gold: #fbbf24;
+                        --neon-red: #ef4444;
                         --arcade-dark: #0f0a1e;
                         --arcade-card: #1a1333;
                         --arcade-border: #2d2255;
-                        --glow-pink: 0 0 20px rgba(236, 72, 153, 0.5);
+                        --glow-gold: 0 0 20px rgba(251, 191, 36, 0.5);
                     }
 
                     .game-page {
-                        background: linear-gradient(135deg, var(--arcade-dark) 0%, #1a0a2e 50%, var(--arcade-dark) 100%);
+                        background: linear-gradient(135deg, var(--arcade-dark) 0%, #1e110a 50%, var(--arcade-dark) 100%);
                         min-height: 100vh;
                         padding-bottom: var(--space-8);
                     }
@@ -37,7 +61,8 @@
                         right: 0;
                         bottom: 0;
                         background-image:
-                            radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+                            repeating-linear-gradient(45deg, rgba(251, 191, 36, 0.03) 0, rgba(251, 191, 36, 0.03) 1px, transparent 0, transparent 50%);
+                        background-size: 30px 30px;
                         pointer-events: none;
                         z-index: 0;
                     }
@@ -73,7 +98,7 @@
                     .game-title h1 {
                         font-size: var(--text-2xl);
                         font-weight: 700;
-                        background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+                        background: linear-gradient(135deg, var(--neon-gold), var(--neon-red));
                         -webkit-background-clip: text;
                         -webkit-text-fill-color: transparent;
                         background-clip: text;
@@ -84,14 +109,14 @@
                         display: flex;
                         align-items: center;
                         gap: var(--space-2);
-                        color: rgba(255, 255, 255, 0.6);
+                        color: rgba(28, 25, 23, 0.6);
                         text-decoration: none;
                         font-size: var(--text-sm);
                         transition: color 0.2s;
                     }
 
                     .game-back:hover {
-                        color: var(--neon-pink);
+                        color: var(--neon-gold);
                     }
 
                     /* Stats Bar */
@@ -115,13 +140,13 @@
                     .stat-value {
                         font-size: var(--text-2xl);
                         font-weight: 700;
-                        color: var(--neon-pink);
-                        text-shadow: var(--glow-pink);
+                        color: var(--neon-gold);
+                        text-shadow: var(--glow-gold);
                     }
 
                     .stat-label {
                         font-size: var(--text-xs);
-                        color: rgba(255, 255, 255, 0.5);
+                        color: rgba(28, 25, 23, 0.5);
                         text-transform: uppercase;
                         letter-spacing: 1px;
                     }
@@ -139,7 +164,7 @@
                         border: 2px solid var(--arcade-border);
                         border-radius: var(--radius-md);
                         background: var(--arcade-card);
-                        color: rgba(255, 255, 255, 0.7);
+                        color: rgba(28, 25, 23, 0.7);
                         font-size: var(--text-sm);
                         font-weight: 600;
                         cursor: pointer;
@@ -147,14 +172,14 @@
                     }
 
                     .diff-btn:hover {
-                        border-color: var(--neon-pink);
+                        border-color: var(--neon-gold);
                         color: white;
                     }
 
                     .diff-btn.active {
-                        border-color: var(--neon-pink);
-                        color: var(--neon-pink);
-                        box-shadow: var(--glow-pink);
+                        border-color: var(--neon-gold);
+                        color: var(--neon-gold);
+                        box-shadow: var(--glow-gold);
                     }
 
                     /* Game Area */
@@ -172,141 +197,173 @@
                         box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
                     }
 
-                    /* Numbers Display */
-                    .numbers-container {
-                        display: flex;
-                        flex-wrap: wrap;
-                        justify-content: center;
-                        gap: var(--space-4);
-                        max-width: 700px;
-                    }
-
-                    .number-card {
-                        width: 80px;
-                        height: 80px;
-                        background: linear-gradient(135deg, #2d2255, var(--arcade-card));
-                        border: 2px solid rgba(236, 72, 153, 0.3);
-                        border-radius: var(--radius-lg);
+                    /* Step Display */
+                    .step-container {
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        font-size: 2rem;
-                        font-weight: 700;
-                        color: white;
-                        transition: transform 0.3s;
-                        animation: fadeIn 0.5s ease-out;
-                    }
-
-                    .number-card:hover {
-                        transform: translateY(-5px);
-                        border-color: var(--neon-pink);
-                    }
-
-                    /* Question Phase */
-                    .question-container {
-                        text-align: center;
+                        height: 300px;
                         width: 100%;
                     }
 
-                    .question-text {
+                    .step-content {
+                        font-size: 6rem;
+                        font-weight: 800;
+                        color: var(--mm-ink, #1c1917);
+                        text-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+                        animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    }
+
+                    .step-operator {
+                        color: var(--neon-gold);
+                        margin-right: var(--space-4);
+                    }
+
+                    .step-number {
+                        color: var(--mm-ink, #1c1917);
+                    }
+
+                    @keyframes zoomIn {
+                        from {
+                            transform: scale(0.5);
+                            opacity: 0;
+                        }
+
+                        to {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    @keyframes fadeOut {
+                        to {
+                            transform: scale(1.2);
+                            opacity: 0;
+                        }
+                    }
+
+                    /* Answer Phase */
+                    .answer-phase {
+                        text-align: center;
+                        width: 100%;
+                        max-width: 400px;
+                        animation: slideUp 0.4s ease-out;
+                    }
+
+                    .answer-label {
                         font-size: 1.5rem;
+                        color: var(--mm-ink, #1c1917);
+                        margin-bottom: var(--space-6);
+                    }
+
+                    .numpad {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: var(--space-3);
+                        margin-bottom: var(--space-6);
+                    }
+
+                    .num-btn {
+                        background: rgba(255, 255, 255, 0.05);
+                        border: 1px solid var(--arcade-border);
+                        border-radius: var(--radius-lg);
+                        padding: var(--space-4);
+                        font-size: 1.5rem;
+                        font-weight: 600;
+                        color: white;
+                        cursor: pointer;
+                        transition: all 0.1s;
+                    }
+
+                    .num-btn:hover {
+                        background: rgba(251, 191, 36, 0.1);
+                        border-color: var(--neon-gold);
+                    }
+
+                    .num-btn:active {
+                        transform: scale(0.95);
+                    }
+
+                    .answer-display {
+                        background: rgba(0, 0, 0, 0.3);
+                        border: 2px solid var(--neon-gold);
+                        border-radius: var(--radius-lg);
+                        padding: var(--space-4);
+                        font-size: 2.5rem;
+                        font-weight: 700;
                         color: white;
                         margin-bottom: var(--space-6);
-                        font-weight: 600;
-                        line-height: 1.4;
+                        min-height: 80px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        letter-spacing: 2px;
                     }
 
-                    .options-grid {
-                        display: grid;
-                        grid-template-columns: repeat(2, 1fr);
-                        gap: var(--space-4);
-                        max-width: 500px;
-                        margin: 0 auto;
-                    }
-
-                    .option-btn {
+                    .submit-btn {
+                        width: 100%;
                         padding: var(--space-4);
-                        background: rgba(255, 255, 255, 0.05);
-                        border: 2px solid var(--arcade-border);
+                        background: var(--neon-gold);
+                        border: none;
                         border-radius: var(--radius-lg);
-                        color: white;
+                        color: var(--arcade-dark);
                         font-size: 1.25rem;
-                        font-weight: 600;
+                        font-weight: 700;
                         cursor: pointer;
-                        transition: all 0.2s;
+                        transition: transform 0.2s;
+                        box-shadow: var(--glow-gold);
                     }
 
-                    .option-btn:hover {
-                        background: rgba(236, 72, 153, 0.1);
-                        border-color: var(--neon-pink);
+                    .submit-btn:hover {
+                        transform: scale(1.02);
                     }
 
-                    .option-btn.correct {
-                        background: #22c55e;
-                        border-color: #22c55e;
+                    @keyframes slideUp {
+                        from {
+                            opacity: 0;
+                            transform: translateY(20px);
+                        }
+
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
                     }
 
-                    .option-btn.wrong {
-                        background: #ef4444;
-                        border-color: #ef4444;
-                    }
-
-                    /* Timer */
-                    .timer-bar {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        height: 4px;
-                        background: var(--neon-pink);
-                        transition: width 1s linear;
-                        width: 0%;
-                    }
-
-                    /* Ready/States */
+                    /* Intro/States */
                     .state-message {
                         text-align: center;
                     }
 
                     .state-title {
                         font-size: 2.5rem;
-                        color: white;
+                        color: var(--mm-ink, #1c1917);
                         margin-bottom: var(--space-4);
                         font-weight: 800;
                     }
 
                     .state-desc {
-                        color: rgba(255, 255, 255, 0.7);
+                        color: rgba(28, 25, 23, 0.7);
                         margin-bottom: var(--space-6);
                         font-size: 1.1rem;
+                        line-height: 1.6;
                     }
 
-                    .action-btn {
+                    .start-btn {
                         padding: var(--space-3) var(--space-8);
-                        border: 2px solid var(--neon-pink);
+                        border: 2px solid var(--neon-gold);
                         border-radius: var(--radius-full);
-                        background: var(--neon-pink);
-                        color: white;
+                        background: var(--neon-gold);
+                        color: var(--arcade-dark);
                         font-size: 1.2rem;
                         font-weight: 700;
                         cursor: pointer;
-                        box-shadow: var(--glow-pink);
+                        box-shadow: var(--glow-gold);
                         transition: transform 0.2s;
                     }
 
-                    .action-btn:hover {
+                    .start-btn:hover {
                         transform: scale(1.05);
-                    }
-
-                    @keyframes fadeIn {
-                        from {
-                            opacity: 0;
-                            transform: scale(0.8);
-                        }
-
-                        to {
-                            opacity: 1;
-                            transform: scale(1);
-                        }
                     }
 
                     /* Win Modal */
@@ -333,7 +390,7 @@
 
                     .win-content {
                         background: var(--arcade-card);
-                        border: 2px solid var(--neon-pink);
+                        border: 2px solid var(--neon-gold);
                         border-radius: var(--radius-xl);
                         padding: var(--space-8);
                         text-align: center;
@@ -345,6 +402,23 @@
 
                     .win-modal.active .win-content {
                         transform: scale(1);
+                    }
+
+                    /* Progress Bar */
+                    .progress-bar-container {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 6px;
+                        background: rgba(255, 255, 255, 0.1);
+                    }
+
+                    .progress-bar {
+                        height: 100%;
+                        background: var(--neon-gold);
+                        width: 0%;
+                        transition: width 0.3s;
                     }
 
                     /* Ad Containers */
@@ -371,10 +445,6 @@
                         .mobile-only {
                             display: none;
                         }
-
-                        .options-grid {
-                            grid-template-columns: repeat(2, 1fr);
-                        }
                     }
                 </style>
 
@@ -382,12 +452,12 @@
                     <div class="game-container">
                         <!-- Ad: Top Leaderboard -->
                         <div class="ad-container-top desktop-only">
-                            <%@ include file="../components/ad-leaderboard.jsp" %>
+                <%-- ad via studio shell --%>
                         </div>
 
                         <!-- Header -->
                         <div class="game-header">
-                            <a href="<%=request.getContextPath()%>/exams/math-memory/" class="game-back">
+                            <a href="<%=request.getContextPath()%>/math/math-memory/" class="game-back">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -395,8 +465,8 @@
                                 Back
                             </a>
                             <div class="game-title">
-                                <span class="game-title-icon">&#129505;</span>
-                                <h1>Rapid Recall</h1>
+                                <span class="game-title-icon">&#129699;</span>
+                                <h1>Mental Trail</h1>
                             </div>
                             <div style="width: 60px;"></div>
                         </div>
@@ -430,22 +500,23 @@
 
                         <!-- Game Area -->
                         <div class="game-area tex2jax_ignore" id="gameArea">
-                            <div class="timer-bar" id="timerBar"></div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="progressBar"></div>
+                            </div>
 
-                            <!-- Views are injected here -->
                             <div class="state-message" id="introView">
-                                <div class="state-title">Ready to Recall?</div>
+                                <div class="state-title">Follow the Trail</div>
                                 <p class="state-desc">
-                                    Study the numbers shown. Answer the question after they disappear.<br>
-                                    Questions can range from "Lowest Number" to "Count of Even Numbers".
+                                    A starting number will appear, followed by a series of operations.<br>
+                                    Keep the running total in your head. Enter the final result.
                                 </p>
-                                <button class="action-btn" id="startBtn">Start Game</button>
+                                <button class="start-btn" id="startBtn">Start Game</button>
                             </div>
                         </div>
 
                         <!-- Mobile Ad -->
                         <div class="ad-container-bottom mobile-only">
-                            <%@ include file="../components/ad-leaderboard.jsp" %>
+                <%-- ad via studio shell --%>
                         </div>
                     </div>
                 </div>
@@ -453,13 +524,13 @@
                 <!-- Win Modal -->
                 <div class="win-modal" id="winModal">
                     <div class="win-content">
-                        <div style="font-size:4rem; margin-bottom:1rem;">&#127881;</div>
-                        <h2 style="font-size:2rem; font-weight:700; color:white; margin-bottom:1rem;">Game Finished!
+                        <div style="font-size:4rem; margin-bottom:1rem;">&#127942;</div>
+                        <h2 style="font-size:2rem; font-weight:700; color:white; margin-bottom:1rem;">Trail Completed!
                         </h2>
-                        <div style="font-size:3rem; font-weight:700; color:var(--neon-pink); margin-bottom:0.5rem;"
+                        <div style="font-size:3rem; font-weight:700; color:var(--neon-gold); margin-bottom:0.5rem;"
                             id="finalScore">0</div>
-                        <div style="color:#aaa; margin-bottom:2rem;">Total Score</div>
-                        <div id="finalTime" style="color:#aaa; margin-bottom:2rem;"></div>
+                        <div style="color: var(--ms-muted, #78716c); margin-bottom:2rem;">Total Score</div>
+                        <div id="finalTime" style="color: var(--ms-muted, #78716c); margin-bottom:2rem;"></div>
                         <div style="display:flex; gap:var(--space-3); justify-content:center;">
                             <button class="action-btn" id="playAgainBtn">Play Again</button>
                             <button class="game-btn" id="shareBtn">Share</button>
@@ -469,20 +540,16 @@
 
                 <!-- Toast -->
                 <div class="game-toast" id="gameToast"></div>
-
-                <%@ include file="../components/ad-anchor.jsp" %>
+                <%-- ad via studio shell --%>
 
                     <script>
                         (function () {
                             // Config
                             const CONFIG = {
-                                easy: { count: 4, showTime: 3000, points: 100 },
-                                medium: { count: 6, showTime: 4000, points: 150 },
-                                hard: { count: 8, showTime: 5000, points: 200 }
+                                easy: { steps: 3, speed: 2000, points: 100, ops: ['+', '-'], maxNum: 10 },
+                                medium: { steps: 5, speed: 1500, points: 200, ops: ['+', '-', 'x'], maxNum: 15 },
+                                hard: { steps: 8, speed: 1200, points: 300, ops: ['+', '-', 'x'], maxNum: 20 }
                             };
-
-                            // Limits for random numbers
-                            const NUM_LIMIT = { easy: 20, medium: 50, hard: 100 };
 
                             // State
                             let difficulty = 'easy';
@@ -490,8 +557,8 @@
                             let maxRounds = 10;
                             let score = 0;
                             let streak = 0;
-                            let currentNumbers = [];
-                            let currentQuestion = null;
+                            let currentTotal = 0;
+                            let inputBuffer = '';
                             let gameStartTime = null;
                             let totalGameTime = 0;
 
@@ -500,7 +567,7 @@
                             const scoreDisplay = document.getElementById('scoreDisplay');
                             const roundDisplay = document.getElementById('roundDisplay');
                             const streakDisplay = document.getElementById('streakDisplay');
-                            const timerBar = document.getElementById('timerBar');
+                            const progressBar = document.getElementById('progressBar');
                             const winModal = document.getElementById('winModal');
                             const diffButtons = document.querySelectorAll('.diff-btn');
 
@@ -527,7 +594,7 @@
                             }
 
                             function loadHighScore() {
-                                const hs = MathMemory.storage.getHighScore('recall', difficulty);
+                                const hs = MathMemory.storage.getHighScore('mental-trail', difficulty);
                                 document.getElementById('highScore').textContent = hs > 0 ? hs : '-';
                             }
 
@@ -538,18 +605,18 @@
                                 score = 0;
                                 streak = 0;
                                 updateStats();
-                                // Don't clear view if just resetting difficulty in intro, but do if playing again
                                 if (gameArea.querySelector('#introView')) return;
 
-                                // Restore intro
                                 gameArea.innerHTML = '';
+                                gameArea.appendChild(progressBar.parentElement); // Restore progress bar container
+
                                 const intro = document.createElement('div');
                                 intro.className = 'state-message';
                                 intro.id = 'introView';
                                 intro.innerHTML = `
-            <div class="state-title">Ready to Recall?</div>
-            <p class="state-desc">Study the numbers shown. Answer the question after they disappear.</p>
-            <button class="action-btn" id="startBtnReset">Start Game</button>
+            <div class="state-title">Follow the Trail</div>
+            <p class="state-desc">A starting number will appear, followed by a series of operations.</p>
+            <button class="start-btn" id="startBtnReset">Start Game</button>
         `;
                                 gameArea.appendChild(intro);
                                 document.getElementById('startBtnReset').addEventListener('click', startGame);
@@ -575,162 +642,148 @@
                                     return;
                                 }
 
-                                // 1. Generate Numbers
+                                // Generate Trail
                                 const cfg = CONFIG[difficulty];
-                                const maxVal = NUM_LIMIT[difficulty];
-                                currentNumbers = [];
-                                for (let i = 0; i < cfg.count; i++) {
-                                    currentNumbers.push(Math.floor(Math.random() * maxVal) + 1);
-                                }
+                                let steps = [];
 
-                                // 2. Show Numbers View
-                                renderNumbers(currentNumbers);
+                                // Initial Number
+                                let current = Math.floor(Math.random() * cfg.maxNum) + 1;
+                                steps.push({ type: 'start', val: current, text: current });
 
-                                // 3. Timer for memorization
-                                timerBar.style.width = '100%';
-                                timerBar.style.transition = 'width ' + cfg.showTime + 'ms linear';
+                                for (let i = 0; i < cfg.steps; i++) {
+                                    const op = cfg.ops[Math.floor(Math.random() * cfg.ops.length)];
+                                    let val = Math.floor(Math.random() * 10) + 1;
 
-                                // Force reflow
-                                timerBar.offsetHeight;
-
-                                setTimeout(() => { timerBar.style.width = '0%'; }, 50);
-
-                                setTimeout(() => {
-                                    generateQuestionAndOptions();
-                                }, cfg.showTime);
-                            }
-
-                            function renderNumbers(nums) {
-                                let html = '<div class="numbers-container">';
-                                nums.forEach(n => {
-                                    html += '<div class="number-card">' + n + '</div>';
-                                });
-                                html += '</div>';
-                                gameArea.innerHTML = html;
-                                gameArea.appendChild(timerBar); // Keep timer bar
-                            }
-
-                            function generateQuestionAndOptions() {
-                                // Types of questions: Max, Min, Count Even, Count Odd, Was X present?, Position (if ordered?) - let's stick to set properties
-                                const types = ['max', 'min', 'count_even', 'count_odd', 'sum'];
-                                // Remove 'sum' for hard levels maybe? Or keep it for fewer numbers? Sum is hard for 8 random numbers.
-                                // Let's filter types based on difficulty
-                                let availTypes = ['max', 'min', 'count_even', 'count_odd'];
-                                if (difficulty === 'easy') availTypes.push('sum');
-
-                                // Special: Contains X
-                                if (Math.random() > 0.7) availTypes = ['contains'];
-
-                                const type = availTypes[Math.floor(Math.random() * availTypes.length)];
-
-                                let question = "";
-                                let answer = 0;
-                                let options = [];
-
-                                switch (type) {
-                                    case 'max':
-                                        question = "What was the LARGEST number?";
-                                        answer = Math.max(...currentNumbers);
-                                        break;
-                                    case 'min':
-                                        question = "What was the SMALLEST number?";
-                                        answer = Math.min(...currentNumbers);
-                                        break;
-                                    case 'count_even':
-                                        question = "How many EVEN numbers were there?";
-                                        answer = currentNumbers.filter(n => n % 2 === 0).length;
-                                        break;
-                                    case 'count_odd':
-                                        question = "How many ODD numbers were there?";
-                                        answer = currentNumbers.filter(n => n % 2 !== 0).length;
-                                        break;
-                                    case 'sum':
-                                        question = "What was the SUM of all numbers?";
-                                        answer = currentNumbers.reduce((a, b) => a + b, 0);
-                                        break;
-                                    case 'contains':
-                                        // 50% chance to pick a number that was there
-                                        const isPresent = Math.random() > 0.5;
-                                        if (isPresent) {
-                                            answer = currentNumbers[Math.floor(Math.random() * currentNumbers.length)];
-                                        } else {
-                                            // Pick a number NOT in the set
-                                            do {
-                                                answer = Math.floor(Math.random() * NUM_LIMIT[difficulty]) + 1;
-                                            } while (currentNumbers.includes(answer));
+                                    // Logic to keep numbers reasonable
+                                    if (op === 'x') {
+                                        val = Math.floor(Math.random() * 3) + 2; // only x2, x3, x4
+                                        // Avoid getting too huge
+                                        if (current > 50) {
+                                            // Change to subtraction if too big
+                                            steps.push({ type: 'op', val: 5, text: '- 5', apply: (x) => x - 5 });
+                                            current -= 5;
+                                            continue;
                                         }
-                                        question = 'Was the number ' + answer + ' present?';
-                                        answer = isPresent ? "Yes" : "No"; // Answer is string here
-                                        break;
-                                }
-
-                                // Generate Options
-                                options = generateOptions(answer, type);
-
-                                renderQuestion(question, options, answer);
-                            }
-
-                            function generateOptions(correct, type) {
-                                if (type === 'contains') return ["Yes", "No"];
-
-                                let opts = new Set([correct]);
-                                while (opts.size < 4) {
-                                    let offset = Math.floor(Math.random() * 10) - 5;
-                                    if (offset === 0) offset = 1;
-                                    let val = correct + offset;
-
-                                    if (type === 'count_even' || type === 'count_odd') {
-                                        // Counts are small non-negative integers
-                                        val = Math.max(0, val);
-                                    } else {
-                                        val = Math.max(1, val);
                                     }
-                                    opts.add(val);
+                                    if (op === '-') {
+                                        // simple heuristic to avoid negative if desired, or allow them
+                                        // Let's allow simple negatives but generally try to keep positive for Easy
+                                        if (difficulty === 'easy' && current < val) val = Math.floor(Math.random() * current);
+                                    }
+
+                                    let applyFn;
+                                    let text = op + ' ' + val;
+
+                                    switch (op) {
+                                        case '+': applyFn = (x) => x + val; current += val; break;
+                                        case '-': applyFn = (x) => x - val; current -= val; break;
+                                        case 'x': applyFn = (x) => x * val; current *= val; break;
+                                    }
+
+                                    steps.push({ type: 'op', val: val, text: text, apply: applyFn });
                                 }
-                                return Array.from(opts).sort(() => Math.random() - 0.5);
+
+                                currentTotal = current;
+                                playTrail(steps, cfg.speed);
                             }
 
-                            function renderQuestion(text, options, correctAnswer) {
-                                let html =
-                                    '<div class="question-container">' +
-                                    '<div class="timer-bar" style="width:0; opacity:0;"></div>' +
-                                    '<div class="question-text">' + text + '</div>' +
-                                    '<div class="options-grid">' +
-                                    options.map(opt => '<button class="option-btn" data-val="' + opt + '">' + opt + '</button>').join('') +
+                            function playTrail(steps, speed) {
+                                // Clear area
+                                gameArea.innerHTML = '';
+                                gameArea.appendChild(progressBar.parentElement);
+                                progressBar.style.width = '0%';
+
+                                let i = 0;
+
+                                function showStep() {
+                                    if (i >= steps.length) {
+                                        showInput();
+                                        return;
+                                    }
+
+                                    const step = steps[i];
+                                    const el = document.createElement('div');
+                                    el.className = 'step-container';
+                                    el.innerHTML = '<div class="step-content">' + step.text + '</div>';
+
+                                    gameArea.appendChild(el);
+
+                                    // Progress
+                                    progressBar.style.width = ((i + 1) / steps.length * 100) + '%';
+
+                                    // Animate out
+                                    setTimeout(() => {
+                                        el.style.animation = 'fadeOut 0.2s ease-in forwards';
+                                        setTimeout(() => {
+                                            el.remove();
+                                            // Inter-stimulus interval (blank screen)
+                                            setTimeout(() => {
+                                                i++;
+                                                showStep();
+                                            }, 200); // 200ms blank
+                                        }, 200);
+                                    }, speed);
+                                }
+
+                                showStep();
+                            }
+
+                            function showInput() {
+                                inputBuffer = '';
+                                gameArea.innerHTML =
+                                    '<div class="answer-phase">' +
+                                    '<div class="answer-label">What is the result?</div>' +
+                                    '<div class="answer-display" id="answerDisplay">?</div>' +
+                                    '<div class="numpad">' +
+                                    '<button class="num-btn" data-key="1">1</button>' +
+                                    '<button class="num-btn" data-key="2">2</button>' +
+                                    '<button class="num-btn" data-key="3">3</button>' +
+                                    '<button class="num-btn" data-key="4">4</button>' +
+                                    '<button class="num-btn" data-key="5">5</button>' +
+                                    '<button class="num-btn" data-key="6">6</button>' +
+                                    '<button class="num-btn" data-key="7">7</button>' +
+                                    '<button class="num-btn" data-key="8">8</button>' +
+                                    '<button class="num-btn" data-key="9">9</button>' +
+                                    '<button class="num-btn" data-key="-">-</button>' +
+                                    '<button class="num-btn" data-key="0">0</button>' +
+                                    '<button class="num-btn" data-key="back">&#9003;</button>' +
                                     '</div>' +
+                                    '<button class="submit-btn" id="submitAnswer">Submit</button>' +
                                     '</div>';
-                                gameArea.innerHTML = html;
+                                gameArea.appendChild(progressBar.parentElement);
 
-                                // Add listeners
-                                gameArea.querySelectorAll('.option-btn').forEach(btn => {
-                                    btn.addEventListener('click', () => handleAnswer(btn, correctAnswer));
+                                document.querySelectorAll('.num-btn').forEach(btn => {
+                                    btn.addEventListener('click', () => handleInput(btn.dataset.key));
                                 });
+
+                                document.getElementById('submitAnswer').addEventListener('click', checkAnswer);
                             }
 
-                            function handleAnswer(btn, correct) {
-                                const val = btn.dataset.val;
-                                // Check if string "Yes"/"No" or number
-                                const isCorrect = val == correct; // loose equality for string/number match if data-val converts
+                            function handleInput(key) {
+                                if (key === 'back') {
+                                    inputBuffer = inputBuffer.slice(0, -1);
+                                } else {
+                                    if (inputBuffer.length < 5) inputBuffer += key;
+                                }
+                                document.getElementById('answerDisplay').textContent = inputBuffer || '?';
+                            }
 
-                                if (isCorrect) {
-                                    btn.classList.add('correct');
+                            function checkAnswer() {
+                                const val = parseInt(inputBuffer);
+                                if (isNaN(val)) return;
+
+                                if (val === currentTotal) {
                                     streak++;
                                     const points = CONFIG[difficulty].points + (streak * 10);
                                     score += points;
                                     MathMemory.ui.showToast('Correct! +' + points, 'success');
                                 } else {
-                                    btn.classList.add('wrong');
-                                    // Highlight correct
-                                    gameArea.querySelectorAll('.option-btn').forEach(b => {
-                                        if (b.dataset.val == correct) b.classList.add('correct');
-                                    });
                                     streak = 0;
-                                    MathMemory.ui.showToast('Wrong!', 'error');
+                                    MathMemory.ui.showToast('Wrong! It was ' + currentTotal, 'error');
                                 }
 
                                 updateStats();
 
-                                // Next round delay
                                 setTimeout(() => {
                                     round++;
                                     updateStats();
@@ -742,13 +795,13 @@
                                 totalGameTime = Math.floor((Date.now() - gameStartTime) / 1000);
                                 document.getElementById('finalScore').textContent = score;
                                 document.getElementById('finalTime').textContent = 'Time: ' + MathMemory.ui.formatTime(totalGameTime);
-                                MathMemory.storage.setHighScore('recall', difficulty, score);
+                                MathMemory.storage.setHighScore('mental-trail', difficulty, score);
                                 winModal.classList.add('active');
                                 if (score > 0) MathMemory.ui.confetti();
                             }
 
                             function shareScore() {
-                                MathMemory.share.share('recall', 'Recall', score, difficulty, {
+                                MathMemory.share.share('mental-trail', 'Mental Trail', score, difficulty, {
                                     time: totalGameTime,
                                     rounds: maxRounds,
                                     streak: streak
