@@ -69,7 +69,7 @@
     <%@ include file="/math/partials/studio-head.jsp" %>
 </head>
 
-<% request.setAttribute("activeService", "quick-math-practice"); %>
+<% request.setAttribute("activeService", "quick-math"); %>
 <%@ include file="/math/partials/studio-open.jsp" %>
 
     <header class="ms-title">
@@ -225,42 +225,24 @@
 </div>
 
 <style>
+    /* Single column inside the studio workspace. The old exams layout used a
+       multi-column grid with minmax(700–800px) middle columns + 160/250px
+       rails — that minimum (≈1110px+) overflowed the narrower studio workspace
+       and broke the page once the ad rail was present. The workspace IS the
+       column now, so keep it single-column and let the studio rail handle ads. */
     .layout-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: var(--space-6);
+        max-width: 860px;
+        margin: 0 auto;
     }
+    .left-sidebar-col { display: none; }
 
-    /* Hide left sidebar on mobile/tablet */
-    .left-sidebar-col {
-        display: none;
-    }
-
-    @media (min-width: 992px) {
-        .layout-grid {
-            grid-template-columns: 3fr 1fr;
-        }
-    }
-
-    /* 3-column layout on large screens */
-    @media (min-width: 1400px) {
-        .layout-grid {
-            grid-template-columns: 160px minmax(700px, 1fr) 250px;
-        }
-        .left-sidebar-col {
-            display: block;
-            position: sticky;
-            top: 80px;
-            height: fit-content;
-        }
-    }
-
-    /* Even wider middle on very large screens */
-    @media (min-width: 1600px) {
-        .layout-grid {
-            grid-template-columns: 160px minmax(800px, 1fr) 280px;
-        }
-    }
+    /* Studio ms-title already provides the page H1 + breadcrumbs (deploy-safe
+       here so it holds even if quick-math.css hasn't refreshed in cache). */
+    .breadcrumb { display: none; }
+    #topic-title { display: none; }
 
     .mb-6 { margin-bottom: var(--space-6); }
     .mb-4 { margin-bottom: var(--space-4); }

@@ -163,10 +163,9 @@
     <link rel="canonical" href="<%= canonicalUrl %>">
     <%= extraHead %>
 
-    <!-- Quick Math hub styling (exams core classes + ported tool styles) -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/tutorials/assets/css/fonts.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/css/exams.css">
+    <!-- Quick Math hub — studio-native styling (no exams.css dependency) -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/quick-math.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/quick-math-hub.css">
 
     <!-- Math studio shell -->
     <%@ include file="/math/partials/studio-head.jsp" %>
