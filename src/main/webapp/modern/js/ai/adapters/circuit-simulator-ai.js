@@ -105,7 +105,7 @@ export function createCircuitSimulatorAssistant(opts) {
     ],
     getApplyLabel: (matched) => {
       const m = matched.find((x) => x.action.id === 'netlist');
-      const count = m?.payload ? netlistTextToElements(m.payload, { autoSourceGround: false }).length : 0;
+      const count = m?.payload ? netlistTextToElements(m.payload, { autoRepair: false }).elements.length : 0;
       return count ? `Load circuit (${count} elements)` : 'Load circuit on canvas';
     },
     onSend: async (userText) => {

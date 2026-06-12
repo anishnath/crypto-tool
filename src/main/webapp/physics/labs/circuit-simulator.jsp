@@ -331,11 +331,27 @@ window.circuitShell = {
   refreshSnapshot: refreshCircuitSnapshot,
   applyNetlist(text, opts = {}) {
     try {
-      const elements = netlistTextToElements(text, opts);
+      const { elements, repairs, validation } = netlistTextToElements(text, opts);
+      if (!validation.valid && !opts.force) {
+        const msg = validation.errors[0] || 'Circuit topology invalid';
+        showCanvasToast(msg, 'error', 6000);
+        return { applied: false, error: msg, validation, repairs };
+      }
       app.loadFromElements(elements);
       refreshCircuitSnapshot();
-      showCanvasToast('✓ Circuit loaded (' + elements.length + ' elements)', 'success', 3000);
-      return { applied: true, elementCount: elements.length };
+      let toast = '✓ Circuit loaded (' + elements.length + ' elements)';
+      if (repairs.length) {
+        toast += ' · auto-wired ' + repairs.length + ' connection(s)';
+        console.info('[Circuit AI repair]', repairs);
+      }
+      showCanvasToast(toast, repairs.length ? 'info' : 'success', 4000);
+      if (validation.warnings.length) {
+        setTimeout(() => {
+          showCanvasToast(validation.warnings[0], 'warning', 6000);
+        }, 500);
+        console.warn('[Circuit AI warnings]', validation.warnings);
+      }
+      return { applied: true, elementCount: elements.length, repairs, validation };
     } catch (e) {
       return { applied: false, error: e.message || String(e) };
     }
