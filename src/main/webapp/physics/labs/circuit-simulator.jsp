@@ -187,7 +187,7 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
   <!-- Page header -->
   <div class="ckt-header">
     <h1>Circuit Simulator with AI</h1>
-    <p>Describe a circuit and AI builds it, or draw your own with 60 components. Live current animation, voltage colors, oscilloscope. <strong>108 built-in circuits</strong> &amp; <strong>AI generator</strong>. <a href="#" id="cktLearnMore">How to use &darr;</a></p>
+      <p>Describe a circuit and AI builds it, or draw your own with 60 components. Live current animation, voltage colors, oscilloscope. <strong>108 built-in circuits</strong>. Powered by <a href="https://www.falstad.com/circuit/" target="_blank">Falstad Circuit Simulation</a>.</p>
   </div>
 
   <!-- Menu bar injected by menus.js -->
