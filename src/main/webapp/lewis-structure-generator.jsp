@@ -1106,7 +1106,7 @@
         .lewis-embed .modern-nav,
         .lewis-embed .cs-title,
         .lewis-embed .tool-description-section,
-        .lewis-embed .tool-mobile-ad-container,
+        .lewis-embed .cs-inline-ad,
         .lewis-embed .related-tools-section,
         .lewis-embed footer.page-footer,
         .lewis-embed .sticky-footer-ad,
@@ -1382,8 +1382,8 @@
     </div>
 </div>
 
-<!-- Mobile Ad Fallback -->
-<div class="tool-mobile-ad-container">
+<!-- In-content ad (mobile; hidden ≥1280px when the side rail takes over) -->
+<div class="cs-inline-ad">
     <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
 </div>
 
