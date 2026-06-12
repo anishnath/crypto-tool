@@ -47,7 +47,6 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
