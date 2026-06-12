@@ -39,6 +39,8 @@
 <link rel="stylesheet" href="<%=ctx%>/modern/css/footer.css">
 <link rel="stylesheet" href="<%=ctx%>/modern/css/search.css">
 
+<%@ include file="modern/ads/ad-init.jsp" %>
+
 <style>
     /* ════════════════════════════════════════════════════════════════
        Periodic Table — a web port of periodic-table-cli (terminal viewer).
@@ -340,7 +342,7 @@
     </aside>
 </main>
 
-<%@ include file="modern/components/support-section.jsp" %>
+<%--<%@ include file="modern/components/support-section.jsp" %>--%>
 <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
 
 <script src="<%=ctx%>/modern/js/dark-mode.js" defer></script>

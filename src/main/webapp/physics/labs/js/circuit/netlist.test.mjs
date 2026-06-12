@@ -85,6 +85,42 @@ check('f → frequency',   aliased[3].params.frequency === 60);
 check('vz → vz',         aliased[4].params.vz === 5.1);
 check('beta → beta',     aliased[5].params.beta === 100);
 
+// ── 6. Topology validate + repair (AI broken netlists) ──
+console.log('\n── topology repair ──');
+import { validateCircuitTopology, repairCircuitTopology } from './circuit-topology.js';
+import { netlistTextToElements } from './circuit-ai-engine.js';
+
+const brokenLed = parseNetlist(`resistor 0 0 4 0 r=330
+led 4 0 8 0
+`).elements;
+const brokenVal = validateCircuitTopology(brokenLed);
+check('broken LED netlist fails validation', !brokenVal.valid);
+
+const repaired = repairCircuitTopology(brokenLed);
+const fixedVal = validateCircuitTopology(repaired.elements);
+check('repaired LED netlist validates', fixedVal.valid);
+check('repair adds source', repaired.elements.some(e => e.type === 'dc-voltage'));
+check('repair adds ground', repaired.elements.some(e => e.type === 'ground'));
+check('repair adds wires', repaired.elements.filter(e => e.type === 'wire').length >= 2);
+
+const verticalLed = parseNetlist(`resistor 0 0 4 0 r=220
+led 4 0 4 4
+`).elements;
+const vFixed = repairCircuitTopology(verticalLed);
+check('vertical LED branch repairs', validateCircuitTopology(vFixed.elements).valid);
+
+const good = parseNetlist(`dc-voltage 0 4 0 0 v=5
+resistor 0 0 4 0 r=220
+led 4 0 4 4
+wire 4 4 0 4
+ground 0 4
+`).elements;
+check('good preset validates without repair', validateCircuitTopology(good).valid);
+
+const prepared = netlistTextToElements(`resistor 0 0 4 0 r=330\nled 4 0 8 0\n`);
+check('netlistTextToElements returns validation', prepared.validation.valid);
+check('netlistTextToElements auto-repairs', prepared.repairs.length > 0);
+
 // ── summary ──
 console.log(`\n─ ${pass}/${pass + fail} passed ─`);
 process.exit(fail ? 1 : 0);
