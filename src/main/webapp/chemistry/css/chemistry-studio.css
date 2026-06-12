@@ -1740,3 +1740,10 @@ body.cs-body {
 /* ---- chemistry accent (indigo) ---- */
 :root{--cs-accent:#6d5efc;--cs-accent-hover:#5848e0;--cs-accent-soft:rgba(109,94,252,.08);--cs-accent-softer:rgba(109,94,252,.04);--cs-accent-ring:rgba(109,94,252,.22);}
 [data-theme="dark"]{--cs-accent:#8b7bff;--cs-accent-hover:#a99cff;--cs-accent-soft:rgba(139,123,255,.12);--cs-accent-softer:rgba(139,123,255,.05);--cs-accent-ring:rgba(139,123,255,.28);}
+
+/* ── Tools that bring their OWN multi-column layout (input/output/ads, e.g.
+   the three-column-tool.css pages) — keep cs-main 2-column (sidebar + full
+   workspace) and drop the studio rail, so the tool's grid isn't nested inside
+   a narrow workspace column and there's no duplicate ad rail. ── */
+body.cs-fulltool .cs-main { grid-template-columns: var(--cs-sidebar-w) minmax(0, 1fr); }
+body.cs-fulltool .cs-rail { display: none; }
