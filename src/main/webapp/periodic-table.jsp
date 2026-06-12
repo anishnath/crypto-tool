@@ -6,13 +6,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <jsp:include page="modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Interactive Periodic Table" />
+    <jsp:param name="toolName" value="Interactive Periodic Table of Elements" />
     <jsp:param name="toolCategory" value="Chemistry" />
-    <jsp:param name="toolDescription" value="A terminal-style interactive periodic table of all 118 elements. Browse families and electron blocks, color the table by 20 properties (atomic mass, electronegativity, radius, density, melting point and more), search, and navigate with the keyboard." />
+    <jsp:param name="toolDescription" value="Explore all 118 elements on a fast interactive periodic table. Click any element for its properties — atomic mass, electron configuration, electronegativity, melting and boiling points and more — colour the table by 20 periodic trends, view a 3D atom model, compare elements side by side, and search instantly." />
     <jsp:param name="toolUrl" value="periodic-table.jsp" />
-    <jsp:param name="toolKeywords" value="periodic table, interactive periodic table, periodic table of elements, element properties, electron configuration, atomic mass, electronegativity, periodic trends, atomic radius, ionization energy, element families, chemistry reference" />
+    <jsp:param name="toolKeywords" value="periodic table, interactive periodic table, periodic table of elements, element properties, electron configuration, atomic mass, electronegativity, periodic trends, atomic radius, ionization energy, element families, electron blocks, bohr model, chemistry reference" />
     <jsp:param name="toolImage" value="periodic-table-og.png" />
     <jsp:param name="breadcrumbCategoryUrl" value="chemistry/" />
+    <jsp:param name="teaches" value="periodic table, chemical elements, electron configuration, periodic trends, atomic structure, element families, electron blocks" />
+    <jsp:param name="educationalLevel" value="High School, Undergraduate" />
+    <jsp:param name="hasSteps" value="true" />
+    <jsp:param name="howToSteps" value="Find an element|Click any of the 118 elements on the table, or type a name, symbol or atomic number in the search box,Read its properties|The panel shows atomic mass, electron configuration, electronegativity, melting and boiling points, density and more — plus an animated 3D atom model,Visualise a trend|Use the Color by control (or the / key) to shade the whole table by atomic radius, electronegativity, ionization energy and 17 other properties,Compare elements|Turn on Compare and pin up to four elements to see their Bohr models and key properties side by side" />
+    <jsp:param name="faq1q" value="What is the periodic table?" />
+    <jsp:param name="faq1a" value="The periodic table arranges all 118 known chemical elements by increasing atomic number into rows called periods and columns called groups. Elements in the same group share similar chemical behaviour because they have the same number of valence electrons. This interactive version lets you click any element for its full properties and colour the whole table by any periodic trend." />
+    <jsp:param name="faq2q" value="How do I read the periodic table?" />
+    <jsp:param name="faq2a" value="Each cell shows the element's atomic number (the number of protons) and its chemical symbol. Across a period from left to right the atomic number increases by one each step; down a group from top to bottom elements gain an electron shell. Metals sit on the left and centre, non-metals on the upper right, and the metalloids form the staircase between them." />
+    <jsp:param name="faq3q" value="What are periodic trends?" />
+    <jsp:param name="faq3a" value="Periodic trends are repeating patterns in element properties. Atomic radius increases down a group and decreases across a period, while electronegativity and ionization energy do the opposite. Pick any property in the Color by control to shade the table from low (blue) to high (red) and see the trend at a glance." />
+    <jsp:param name="faq4q" value="What do the element families and electron blocks mean?" />
+    <jsp:param name="faq4a" value="Families such as alkali metals, halogens and noble gases group elements with similar chemistry, while the s, p, d and f blocks tell you which electron sub-shell the outermost electrons occupy. Click any family or block below the table to highlight its elements and read a description." />
+    <jsp:param name="faq5q" value="Can I compare elements or see a 3D atom?" />
+    <jsp:param name="faq5a" value="Yes. Selecting an element shows an animated 3D atom model with the nucleus and electrons orbiting in their shells. Turn on Compare mode to pin up to four elements and view their Bohr diagrams and key properties side by side, with the highest value in each row highlighted." />
+    <jsp:param name="faq6q" value="Is the interactive periodic table free?" />
+    <jsp:param name="faq6a" value="Yes. It is completely free, runs entirely in your browser, needs no signup, and works on both desktop and mobile." />
 </jsp:include>
 
 <link rel="stylesheet" href="<%=ctx%>/modern/css/design-system.css">
@@ -158,6 +174,20 @@
     @media (prefers-reduced-motion: reduce){ .ptv-bohr .be { animation:none; } }
 
     .ptv-note { font-size:0.7rem; color:var(--cs-muted); margin:0.6rem 0 0; }
+
+    /* Below-fold content (light studio context) */
+    .pt-seo { display:flex; flex-direction:column; gap:1rem; margin-top:1.25rem; }
+    .pt-seo-card { background:var(--cs-panel-bg); border:1px solid var(--cs-line); border-radius:var(--cs-radius-lg); box-shadow:var(--cs-shadow-sm); padding:1.5rem 1.6rem; }
+    .pt-seo-card h2 { font:400 1.4rem var(--cs-font-serif); color:var(--cs-ink); margin:0 0 0.6rem; }
+    .pt-seo-card h3 { font:600 0.95rem var(--cs-font-sans); color:var(--cs-ink); margin:1rem 0 0.4rem; }
+    .pt-seo-card p, .pt-seo-card li { color:var(--cs-ink-soft); font-size:0.93rem; line-height:1.7; }
+    .pt-seo-card ul, .pt-seo-card ol { margin:0.4rem 0 0; padding-left:1.2rem; }
+    .pt-seo-card li { margin-bottom:0.4rem; }
+    .pt-seo-card kbd { background:var(--cs-panel-bg-soft); border:1px solid var(--cs-line-strong); border-radius:4px; padding:0 5px; font:0.8em var(--cs-font-mono); color:var(--cs-ink-soft); }
+    .pt-seo-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.7rem; margin-top:0.6rem; }
+    .pt-seo-item { border-left:3px solid var(--sc,var(--cs-accent)); background:var(--cs-panel-bg-soft); border-radius:var(--cs-radius-sm); padding:0.7rem 0.9rem; }
+    .pt-seo-item h4 { font:600 0.85rem var(--cs-font-sans); color:var(--cs-ink); margin:0 0 0.3rem; }
+    .pt-seo-item p { font-size:0.8rem; color:var(--cs-muted); line-height:1.55; margin:0; }
     .ptv-note a { color:var(--cs-accent); }
 </style>
 </head>
@@ -183,7 +213,7 @@
         <a href="<%=ctx%>/chemistry/">Chemistry</a> /
         <span aria-current="page">Periodic Table</span>
     </nav>
-    <h1>Interactive Periodic Table</h1>
+    <h1>Interactive Periodic Table of Elements</h1>
 </div>
 
 <div class="ic-stack">
@@ -243,6 +273,64 @@
     </div>
 
 </div>
+
+<!-- ===== Below-the-fold content (SEO / reference) ===== -->
+<section class="pt-seo">
+    <div class="pt-seo-card">
+        <h2>What is the periodic table?</h2>
+        <p>The <strong>periodic table of elements</strong> arranges all <strong>118 known chemical elements</strong> by increasing <strong>atomic number</strong> into horizontal rows called <strong>periods</strong> and vertical columns called <strong>groups</strong>. First published by Dmitri Mendeleev in 1869, its power is that elements line up by recurring chemical behaviour: members of the same group have the same number of <strong>valence electrons</strong>, so they react in similar ways. Metals occupy the left and centre, non-metals the upper right, and the <em>metalloids</em> form the staircase between them.</p>
+        <h3>How to read it</h3>
+        <p>Each cell shows an element's <strong>atomic number</strong> (its proton count) and its one- or two-letter <strong>symbol</strong>. Moving left to right across a period, the atomic number rises by one at each step and a new electron is added to the same outer shell; moving down a group, each element adds a whole new shell. The two detached rows beneath the table are the <strong>lanthanides</strong> (57–71) and <strong>actinides</strong> (89–103), the f-block elements pulled out to keep the chart compact.</p>
+    </div>
+
+    <div class="pt-seo-card">
+        <h2>Periodic trends you can visualise</h2>
+        <p>Use the <strong>Color by</strong> control (or the <kbd>/</kbd> key) to shade the whole table by any of 20 properties, from low (blue) to high (red), so the underlying <strong>periodic trends</strong> jump out:</p>
+        <ul>
+            <li><strong>Atomic radius</strong> increases down a group (more shells) and decreases across a period (stronger nuclear pull).</li>
+            <li><strong>Electronegativity</strong> and <strong>ionization energy</strong> do the opposite — rising across a period and falling down a group.</li>
+            <li><strong>Atomic mass, density, melting and boiling points, specific heat</strong> and more each reveal their own pattern across the chart.</li>
+        </ul>
+    </div>
+
+    <div class="pt-seo-card">
+        <h2>Element families</h2>
+        <p>Families group elements that behave alike. Click any family below the table to highlight its members.</p>
+        <div class="pt-seo-grid" id="ptSeoFamilies"></div>
+    </div>
+
+    <div class="pt-seo-card">
+        <h2>Electron blocks: s, p, d and f</h2>
+        <p>An element's block tells you which electron sub-shell its outermost electrons occupy — a quick guide to its chemistry.</p>
+        <div class="pt-seo-grid" id="ptSeoBlocks"></div>
+    </div>
+
+    <div class="pt-seo-card">
+        <h2>How to use this interactive periodic table</h2>
+        <ol>
+            <li><strong>Find an element</strong> — click any cell, or type a name, symbol or atomic number in the search box (it also matches families and blocks).</li>
+            <li><strong>Read its properties</strong> — the panel lists atomic mass, electron configuration, electronegativity, melting and boiling points, density and more, with an animated <strong>3D atom model</strong>.</li>
+            <li><strong>Visualise a trend</strong> — switch the <strong>Color by</strong> mode (or press <kbd>/</kbd> and <kbd>\</kbd>) to recolour the table by any property.</li>
+            <li><strong>Compare elements</strong> — turn on <strong>Compare</strong> and pin up to four elements to see their Bohr diagrams and key numbers side by side.</li>
+        </ol>
+    </div>
+
+    <h2 class="cs-faq-title" id="faqs">Frequently asked questions</h2>
+    <div class="cs-faq" aria-label="Periodic table FAQ">
+        <div class="cs-faq-item"><button class="cs-faq-q" type="button">What is the periodic table?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="cs-faq-a">The periodic table arranges all 118 known chemical elements by increasing atomic number into rows called periods and columns called groups. Elements in the same group share similar chemical behaviour because they have the same number of valence electrons.</div></div>
+        <div class="cs-faq-item"><button class="cs-faq-q" type="button">How do I read the periodic table?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="cs-faq-a">Each cell shows the element's atomic number (the proton count) and its chemical symbol. Across a period the atomic number increases by one each step; down a group elements gain an electron shell. Metals sit on the left and centre, non-metals on the upper right, with metalloids on the staircase between them.</div></div>
+        <div class="cs-faq-item"><button class="cs-faq-q" type="button">What are periodic trends?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="cs-faq-a">Periodic trends are repeating patterns in element properties. Atomic radius increases down a group and decreases across a period, while electronegativity and ionization energy do the opposite. Pick any property in the Color by control to shade the table from low (blue) to high (red).</div></div>
+        <div class="cs-faq-item"><button class="cs-faq-q" type="button">What do the element families and electron blocks mean?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="cs-faq-a">Families such as alkali metals, halogens and noble gases group elements with similar chemistry, while the s, p, d and f blocks tell you which electron sub-shell the outermost electrons occupy. Click any family or block below the table to highlight its elements.</div></div>
+        <div class="cs-faq-item"><button class="cs-faq-q" type="button">Can I compare elements or see a 3D atom?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="cs-faq-a">Yes. Selecting an element shows an animated 3D atom model with the nucleus and electrons orbiting in their shells. Compare mode lets you pin up to four elements and view their Bohr diagrams and key properties side by side, highest value highlighted.</div></div>
+        <div class="cs-faq-item"><button class="cs-faq-q" type="button">Is the interactive periodic table free?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="cs-faq-a">Yes. It is completely free, runs entirely in your browser, needs no signup, and works on desktop and mobile.</div></div>
+    </div>
+</section>
 
     </section>
 
@@ -649,6 +737,20 @@
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
 
   // ── init ────────────────────────────────────────────────────────────
+  // ── below-fold content: family + block descriptions (from PT_DATA) + FAQ ──
+  (function () {
+    var ff = document.getElementById('ptSeoFamilies'), bb = document.getElementById('ptSeoBlocks');
+    if (ff) ff.innerHTML = Object.keys(FAMILY_COLORS).map(function (k) {
+      var f = FAM[k] || {}; return '<div class="pt-seo-item" style="--sc:' + FAMILY_COLORS[k] + '"><h4>' + esc(f.name || k) + '</h4><p>' + esc(f.description || '') + '</p></div>';
+    }).join('');
+    if (bb) bb.innerHTML = ['s-shell','p-shell','d-shell','f-shell'].map(function (k) {
+      var s = SH[k] || {}; return '<div class="pt-seo-item" style="--sc:' + BLOCK_COLORS[k] + '"><h4>' + esc(s.name || k) + '</h4><p>' + esc(s.description || '') + '</p></div>';
+    }).join('');
+    document.querySelectorAll('.cs-faq-q').forEach(function (btn) {
+      btn.addEventListener('click', function () { var it = btn.closest('.cs-faq-item'); if (it) it.classList.toggle('open'); });
+    });
+  })();
+
   applyMode();
   select(1, false);
 })();
