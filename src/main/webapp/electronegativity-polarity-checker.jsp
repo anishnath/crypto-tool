@@ -44,59 +44,107 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/electronegativity-polarity.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/electronegativity-polarity.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/chemistry/css/chemistry-studio.css">
 
     <%@ include file="modern/ads/ad-init.jsp" %>
 
     <style>
-        .tool-action-btn { background: var(--ep-gradient) !important; }
-        .tool-badge { background: var(--ep-light); color: var(--ep-tool); }
+        /* FULL CHEMISTRY-STUDIO MIGRATION — remap the ep-* palette to studio
+           indigo + paper tokens and host the tool in the stacked layout
+           (.ic-stack → .ic-hero input + .ep-output-stack result cards). This
+           <style> loads after electronegativity-polarity.css so it wins. */
+        body.cs-body{
+            --ep-tool: var(--cs-accent);
+            --ep-tool-dark: var(--cs-accent-hover);
+            --ep-gradient: linear-gradient(135deg, var(--cs-accent) 0%, var(--cs-accent-hover) 100%);
+            --ep-light: var(--cs-accent-soft);
+            --primary: var(--cs-accent);
+            --bg-primary: var(--cs-panel-bg);
+            --bg-secondary: var(--cs-panel-bg-soft);
+            --bg-tertiary: var(--cs-panel-bg-soft);
+            --bg-hover: var(--cs-accent-softer);
+            --card: var(--cs-panel-bg);
+            --text-primary: var(--cs-ink);
+            --foreground: var(--cs-ink);
+            --text-secondary: var(--cs-ink-soft);
+            --text-muted: var(--cs-muted);
+            --border: var(--cs-line);
+        }
+        /* Buttons → solid studio accent pill */
+        .ic-hero .tool-action-btn, .ep-output-stack .tool-action-btn{
+            background: var(--cs-accent) !important; color:#fff; border:1px solid var(--cs-accent);
+            border-radius: var(--cs-radius-pill); box-shadow:none; font:600 0.82rem var(--cs-font-sans);
+            width:auto; margin-top:0; padding:0.55rem 1.05rem;
+            transition: background var(--cs-transition), transform 0.1s var(--cs-ease);
+        }
+        .ic-hero .tool-action-btn:hover, .ep-output-stack .tool-action-btn:hover{ background:var(--cs-accent-hover) !important; transform:translateY(-1px); opacity:1; }
+        .ic-hero #ep-clear-btn, .ic-hero #ep-en-table-btn, .ep-output-stack #ep-share-btn{
+            background: var(--cs-panel-bg-soft) !important; color: var(--cs-ink-soft) !important; border:1px solid var(--cs-line-strong) !important;
+        }
+        .ic-hero #ep-clear-btn:hover, .ic-hero #ep-en-table-btn:hover, .ep-output-stack #ep-share-btn:hover{ background:var(--cs-accent-softer) !important; color:var(--cs-accent) !important; border-color:var(--cs-accent) !important; }
+        /* Inputs */
+        .ic-hero .ep-input, .ep-output-stack .ep-search-input{
+            border:1.5px solid var(--cs-line-strong); border-radius:var(--cs-radius-sm);
+            background:var(--cs-panel-bg-soft); color:var(--cs-ink); font:15px var(--cs-font-sans);
+        }
+        .ic-hero .ep-input:focus, .ep-output-stack .ep-search-input:focus{ outline:none; border-color:var(--cs-accent); background:var(--cs-panel-bg); box-shadow:var(--cs-ring); }
+        .ic-hero .ep-input-label, .ic-hero .tool-form-label{ color:var(--cs-muted); font:600 0.72rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.05em; }
+        .ic-hero .ep-input-hint{ color:var(--cs-muted); font-size:0.76rem; }
+        /* Example chips → studio pills */
+        .ic-hero .ep-example-chip{
+            border:1px solid var(--cs-line-strong); border-radius:var(--cs-radius-pill);
+            background:var(--cs-panel-bg); color:var(--cs-ink); font:500 12.5px var(--cs-font-mono); cursor:pointer; padding:0.35rem 0.7rem;
+            transition:border-color var(--cs-transition), background var(--cs-transition), color var(--cs-transition);
+        }
+        .ic-hero .ep-example-chip:hover{ border-color:var(--cs-accent); background:var(--cs-accent-softer); color:var(--cs-accent); }
+        /* Output: tabs above per-panel studio cards */
+        .ic-stack .ep-output-stack{ display:flex; flex-direction:column; gap:0.85rem; min-width:0; }
+        .ep-output-stack .ep-output-tabs{ display:inline-flex; gap:2px; padding:3px; margin:0; align-self:flex-start; width:auto; background:var(--cs-panel-bg-soft); border:1px solid var(--cs-line); border-radius:var(--cs-radius-pill); }
+        .ep-output-stack .ep-output-tab{ border:none; background:transparent; color:var(--cs-muted); font:600 12.5px var(--cs-font-sans); cursor:pointer; padding:6px 14px; border-radius:var(--cs-radius-pill); transition:color var(--cs-transition), background var(--cs-transition); }
+        .ep-output-stack .ep-output-tab.active{ background:var(--cs-panel-bg); color:var(--cs-accent); box-shadow:var(--cs-shadow-sm); }
+        .ep-output-stack .ep-panel>.tool-card{ background:var(--cs-panel-bg); border:1px solid var(--cs-line); border-radius:var(--cs-radius-lg); box-shadow:var(--cs-shadow-sm); overflow:hidden; }
+        .ep-output-stack .tool-result-header svg{ color:var(--cs-accent) !important; }
+        .ep-output-stack .tool-result-header h4{ margin:0; font:600 0.72rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.08em; color:var(--cs-muted); }
+        .ep-output-stack .tool-result-actions{ border-top:1px solid var(--cs-line) !important; }
+        .ep-output-stack .tool-empty-state h3{ font:400 1.5rem var(--cs-font-serif); color:var(--cs-ink); }
+        .ep-output-stack .tool-empty-state p{ color:var(--cs-muted); }
     </style>
 </head>
-<body>
+<body class="cs-body">
 <%@ include file="modern/components/nav-header.jsp" %>
 
-<header class="tool-page-header">
-    <div class="tool-page-header-inner">
-        <div>
-            <h1 class="tool-page-title">Electronegativity &amp; Polarity Checker</h1>
-            <nav class="tool-breadcrumbs">
-                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp">Chemistry Tools</a> /
-                Polarity Checker
-            </nav>
-        </div>
-        <div class="tool-page-badges">
-            <span class="tool-badge">EN Heatmap</span>
-            <span class="tool-badge">3D Viewer</span>
-            <span class="tool-badge">30 Molecules</span>
-            <span class="tool-badge">Dipole Arrows</span>
-        </div>
-    </div>
-</header>
+<div class="cs-hero">
+    <%@ include file="modern/ads/ad-hero-banner.jsp" %>
+</div>
 
-<section class="tool-description-section" style="background:var(--ep-light);">
-    <div class="tool-description-inner">
-        <div class="tool-description-content">
-            <p>Free <strong>electronegativity &amp; molecular polarity</strong> checker with <strong>3D visualization</strong>. Enter any <strong>chemical formula</strong> or molecule name to see <strong>EN differences</strong>, bond types, and an instant <strong>POLAR / NONPOLAR verdict</strong> with reasoning. Explore <strong>EN heatmaps</strong>, <strong>partial charge maps</strong>, and <strong>bond dipole arrows</strong> on interactive 3D models.</p>
-        </div>
-    </div>
-</section>
+<main class="cs-main">
+    <button type="button" id="csSidebarToggle" class="cs-sidebar-toggle" aria-label="Open chemistry tools menu">&#9776; Chemistry tools</button>
+    <% request.setAttribute("activeService", "electronegativity"); %>
+    <jsp:include page="/chemistry/partials/sidebar.jsp" />
 
-<main class="tool-page-container">
-    <!-- ==================== INPUT COLUMN ==================== -->
-    <div class="tool-input-column">
-        <div class="tool-card">
-            <div class="tool-card-header" style="background:var(--ep-gradient);">Polarity Analysis</div>
-            <div class="tool-card-body">
+    <section class="cs-workspace">
+
+<!-- Slim studio title -->
+<div class="cs-title">
+    <nav class="cs-crumbs" aria-label="Breadcrumb">
+        <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+        <a href="<%=request.getContextPath()%>/chemistry/">Chemistry</a> /
+        <span aria-current="page">Electronegativity &amp; Polarity</span>
+    </nav>
+    <h1>Electronegativity &amp; Polarity Checker</h1>
+</div>
+
+<div class="ic-stack">
+    <!-- ==================== INPUT (hero) ==================== -->
+    <div class="ic-hero">
 
                 <!-- Formula Input -->
                 <div class="tool-form-group">
@@ -136,12 +184,10 @@
                         <button type="button" class="ep-example-chip" data-formula="XeF4">XeF&#8324;</button>
                     </div>
                 </div>
-            </div>
-        </div>
     </div>
 
-    <!-- ==================== OUTPUT COLUMN ==================== -->
-    <div class="tool-output-column">
+    <!-- ==================== OUTPUT (tabs + result cards) ==================== -->
+    <div class="ep-output-stack">
         <!-- Tab bar -->
         <div class="ep-output-tabs">
             <button type="button" class="ep-output-tab active" data-panel="result">Result</button>
@@ -230,23 +276,12 @@
         </div>
     </div>
 
-    <!-- ==================== ADS COLUMN ==================== -->
-    <div class="tool-ads-column">
-        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
-    </div>
-</main>
-
-<!-- Mobile Ad Fallback -->
-<div class="tool-mobile-ad-container">
-    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
 </div>
 
-<!-- Related Tools -->
-<jsp:include page="modern/components/related-tools.jsp">
-    <jsp:param name="currentToolUrl" value="electronegativity-polarity-checker.jsp"/>
-    <jsp:param name="keyword" value="chemistry"/>
-    <jsp:param name="limit" value="6"/>
-</jsp:include>
+<!-- In-content ad (mobile; hidden ≥1280px when the side rail takes over) -->
+<div class="cs-inline-ad">
+    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+</div>
 
 <!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
 <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
@@ -481,56 +516,20 @@
     </div>
 </section>
 
-<!-- Explore More Chemistry Tools -->
-<section style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
-    <div class="tool-card" style="padding:1.5rem 2rem;">
-        <h3 style="font-size:1.15rem;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.5rem;color:var(--text-primary);">
-            Explore More Chemistry Tools
-        </h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
-            <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#059669,#10b981);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;color:#fff;">&#9883;</div>
-                <div>
-                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">3D Molecular Geometry</h4>
-                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">VSEPR shapes with interactive 3D models</p>
-                </div>
-            </a>
-            <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#059669,#10b981);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;color:#fff;">&#9883;</div>
-                <div>
-                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Lewis Structure Generator</h4>
-                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Draw Lewis structures with VSEPR shapes</p>
-                </div>
-            </a>
-            <a href="<%=request.getContextPath()%>/chemical-equation-balancer.jsp" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.75rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-                <div style="width:3rem;height:3rem;background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#fff;font-weight:700;">&#8652;</div>
-                <div>
-                    <h4 style="font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Chemical Equation Balancer</h4>
-                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.4;">Balance chemical equations step by step</p>
-                </div>
-            </a>
-        </div>
-    </div>
-</section>
+    </section>
+
+    <aside class="cs-rail" aria-label="Advertisements">
+        <%@ include file="/modern/ads/ad-ide-rail-top.jsp" %>
+        <%@ include file="/modern/ads/ad-ide-rail-bottom.jsp" %>
+    </aside>
+</main>
 
 <!-- Support Section -->
 <%@ include file="modern/components/support-section.jsp" %>
 
-<!-- Footer -->
-<footer class="page-footer">
-    <div class="footer-content">
-        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
-        <div class="footer-links">
-            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
-            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
-            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
-        </div>
-    </div>
-</footer>
-
 <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=cacheVersion%>" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=cacheVersion%>" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
 
 <!-- Scroll-triggered animations -->
 <script>
@@ -555,10 +554,10 @@
 
 <!-- Core Scripts -->
 <script src="https://3Dmol.org/build/3Dmol-min.js" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/electronegativity-polarity-sdf-cache.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/electronegativity-polarity-render.js?v=<%=cacheVersion%>"></script>
-<script src="<%=request.getContextPath()%>/js/electronegativity-polarity-core.js?v=<%=cacheVersion%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
+<script src="<%=request.getContextPath()%>/js/electronegativity-polarity-sdf-cache.js"></script>
+<script src="<%=request.getContextPath()%>/js/electronegativity-polarity-render.js"></script>
+<script src="<%=request.getContextPath()%>/js/electronegativity-polarity-core.js"></script>
 
 <%@ include file="modern/components/analytics.jsp" %>
 </body>
