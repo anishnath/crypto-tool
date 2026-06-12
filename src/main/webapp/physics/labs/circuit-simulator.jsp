@@ -118,9 +118,9 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
 .circuit-ctx-menu{position:fixed;z-index:1100}
 
 /* Page header */
-.ckt-header{padding:6px 16px;background:var(--ckt-panel);border-bottom:1px solid var(--ckt-border);flex-shrink:0}
-.ckt-header h1{font:700 16px/1.3 'Sora',sans-serif;color:var(--ckt-text);margin:0}
-.ckt-header p{font:13px/1.4 'DM Sans',sans-serif;color:var(--ckt-muted);margin:2px 0 0;max-width:800px}
+.ckt-header{padding:6px 16px;background:var(--ckt-panel);border-bottom:1px solid var(--ckt-border);flex-shrink:0;display:flex;align-items:baseline;gap:10px;min-width:0;overflow:hidden}
+.ckt-header h1{font:700 16px/1.3 'Sora',sans-serif;color:var(--ckt-text);margin:0;flex-shrink:0;white-space:nowrap}
+.ckt-header p{font:13px/1.3 'DM Sans',sans-serif;color:var(--ckt-muted);margin:0;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ckt-header p a{color:var(--ckt-accent);text-decoration:none}
 .ckt-header p a:hover{text-decoration:underline}
 .ckt-header strong{color:var(--ckt-text);font-weight:600}
@@ -187,7 +187,7 @@ body{background:var(--ckt-bg);color:var(--ckt-text);font-family:'DM Sans',sans-s
   <!-- Page header -->
   <div class="ckt-header">
     <h1>Circuit Simulator with AI</h1>
-      <p>Describe a circuit and AI builds it, or draw your own with 60 components. Live current animation, voltage colors, oscilloscope. <strong>108 built-in circuits</strong>. Powered by <a href="https://www.falstad.com/circuit/" target="_blank">Falstad Circuit Simulation</a>.</p>
+    <p>Describe a circuit and AI builds it, or draw your own with 60 components. Live current animation, voltage colors, oscilloscope. <strong>108 built-in circuits</strong>. Powered by <a href="https://www.falstad.com/circuit/" target="_blank" rel="noopener noreferrer">Falstad Circuit Simulation</a>.</p>
   </div>
 
   <!-- Menu bar injected by menus.js -->
