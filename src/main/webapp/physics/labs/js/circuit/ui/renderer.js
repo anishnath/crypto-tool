@@ -148,6 +148,38 @@ DRAW['dc-voltage'] = (ctx, elm, showValues) => {
   if (showValues) drawLabel(ctx, (gx1 + gx2) / 2, (gy1 + gy2) / 2, siFormat(elm.voltage, 'V'), -18);
 };
 
+/** AC Voltage Source — circle with sine wave */
+DRAW['ac-voltage'] = (ctx, elm, showValues) => {
+  const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
+  const cx = (gx1 + gx2) / 2 * G, cy = (gy1 + gy2) / 2 * G;
+  const r = 10;
+
+  drawLead(ctx, gx1, gy1, cx / G, cy / G, elm.volts[0], elm.volts[0]);
+  drawLead(ctx, cx / G, cy / G, gx2, gy2, elm.volts[1], elm.volts[1]);
+
+  ctx.strokeStyle = '#e2e8f0';
+  ctx.lineWidth = SHAPE_WIDTH;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = '#22c55e';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let i = -8; i <= 8; i++) {
+    const x = cx + i, y = cy + Math.sin(i * 0.8) * 4;
+    i === -8 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  if (showValues) {
+    const vp = elm.peakVoltage ?? elm.voltage ?? 5;
+    const f = elm.frequency ?? 60;
+    const fLabel = f >= 1000 ? (f / 1000).toFixed(f % 1000 === 0 ? 0 : 1) + 'kHz' : f + 'Hz';
+    drawLabel(ctx, (gx1 + gx2) / 2, (gy1 + gy2) / 2, siFormat(vp, 'V') + ' ' + fLabel, -18);
+  }
+};
+
 /** DC Current Source — circle with arrow */
 DRAW['dc-current'] = (ctx, elm) => {
   const [gx1, gy1] = elm.gridPos[0], [gx2, gy2] = elm.gridPos[1];
