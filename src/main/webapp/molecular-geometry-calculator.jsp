@@ -490,8 +490,8 @@
     </div>
 </div>
 
-<!-- Mobile Ad Fallback -->
-<div class="tool-mobile-ad-container">
+<!-- In-content ad (mobile; hidden ≥1280px when the side rail takes over) -->
+<div class="cs-inline-ad">
     <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
 </div>
 
