@@ -24,7 +24,7 @@
         /* Reset */
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:oklch(0.183 0.031 263.4);background:#fff}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:1rem;line-height:1.5;color:#1e293b;background:#fff}
         *:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
@@ -39,22 +39,22 @@
         :root,:root[data-theme="light"]{
             /* Indigo Milkcap — light */
             --background: oklch(0.971 0.007 247.9);
-            --foreground: oklch(0.183 0.031 263.4);
+            --foreground: #1e293b;
             --card: oklch(0.981 0.005 258.3);
-            --card-foreground: oklch(0.183 0.031 263.4);
+            --card-foreground: #1e293b;
             --popover: oklch(0.981 0.005 258.3);
-            --popover-foreground: oklch(0.183 0.031 263.4);
+            --popover-foreground: #1e293b;
             --primary-im: oklch(0.381 0.146 264.1);
             --primary-foreground: oklch(0.981 0.005 258.3);
             --secondary-im: oklch(0.929 0.015 260.7);
             --secondary-foreground: oklch(0.225 0.061 264.4);
             --muted: oklch(0.929 0.015 260.7);
-            --muted-foreground: oklch(0.372 0.039 257.3);
+            --muted-foreground: #475569;
             --accent: oklch(0.581 0.229 263.9);
             --accent-foreground: oklch(0.981 0.005 258.3);
             --destructive: oklch(0.446 0.052 336.5);
-            --border-im: oklch(0.883 0.020 260.2);
-            --input: oklch(0.883 0.020 260.2);
+            --border-im: #e2e8f0;
+            --input: #e2e8f0;
             --ring: oklch(0.581 0.229 263.9);
             --chart-1: oklch(0.381 0.146 264.1);
             --chart-2: oklch(0.581 0.229 263.9);
@@ -62,12 +62,12 @@
             --chart-4: oklch(0.732 0.089 266.9);
             --chart-5: oklch(0.496 0.054 150.0);
             --sidebar: oklch(0.929 0.015 260.7);
-            --sidebar-foreground: oklch(0.183 0.031 263.4);
+            --sidebar-foreground: #1e293b;
             --sidebar-primary: oklch(0.381 0.146 264.1);
             --sidebar-primary-foreground: oklch(0.981 0.005 258.3);
-            --sidebar-accent: oklch(0.827 0.034 255.2);
+            --sidebar-accent: #cbd5e1;
             --sidebar-accent-foreground: oklch(0.381 0.146 264.1);
-            --sidebar-border: oklch(0.883 0.020 260.2);
+            --sidebar-border: #e2e8f0;
             --sidebar-ring: oklch(0.581 0.229 263.9);
 
             /* Legacy aliases — what existing rules expect. */
@@ -81,8 +81,8 @@
             --bg-tertiary:    var(--secondary-im);
             --bg-hover:       var(--card);
             --text-primary:   var(--foreground);
-            --text-secondary: oklch(0.372 0.039 257.3);
-            --text-muted:     oklch(0.520 0.030 257.3);
+            --text-secondary: #475569;
+            --text-muted:     #64748b;
             --text-inverse:   var(--primary-foreground);
             --border:         var(--border-im);
             --border-light:   var(--secondary-im);
@@ -114,13 +114,13 @@
         }
         @media(prefers-color-scheme:dark){
             :root{
-                --bg-primary:     oklch(0.183 0.031 263.4);
+                --bg-primary:     #1e293b;
                 --bg-secondary:   oklch(0.225 0.061 264.4);
-                --bg-tertiary:    oklch(0.314 0.081 264.3);
+                --bg-tertiary:    #334155;
                 --bg-hover:       oklch(0.225 0.061 264.4);
                 --text-primary:   oklch(0.981 0.005 258.3);
-                --text-secondary: oklch(0.827 0.034 255.2);
-                --text-muted:     oklch(0.660 0.025 257.3);
+                --text-secondary: #cbd5e1;
+                --text-muted:     #94a3b8;
                 --border:         oklch(1 0 0 / 12%);
                 --border-light:   oklch(1 0 0 / 16%);
                 --border-dark:    oklch(1 0 0 / 24%);
@@ -128,18 +128,18 @@
         }
         [data-theme="dark"]{
             /* Indigo Milkcap — dark (full token override) */
-            --background: oklch(0.183 0.031 263.4);
+            --background: #1e293b;
             --foreground: oklch(0.981 0.005 258.3);
             --card: oklch(0.225 0.061 264.4);
             --card-foreground: oklch(0.981 0.005 258.3);
             --popover: oklch(0.225 0.061 264.4);
             --popover-foreground: oklch(0.981 0.005 258.3);
             --primary-im: oklch(0.655 0.183 266.5);
-            --primary-foreground: oklch(0.183 0.031 263.4);
+            --primary-foreground: #1e293b;
             --secondary-im: oklch(0.260 0.040 161.8);
             --secondary-foreground: oklch(0.981 0.005 258.3);
             --muted: oklch(0.315 0.036 258.3);
-            --muted-foreground: oklch(0.827 0.034 255.2);
+            --muted-foreground: #cbd5e1;
             --accent: oklch(0.581 0.229 263.9);
             --accent-foreground: oklch(0.981 0.005 258.3);
             --destructive: oklch(0.446 0.052 336.5);
@@ -154,8 +154,8 @@
             --sidebar: oklch(0.225 0.061 264.4);
             --sidebar-foreground: oklch(0.981 0.005 258.3);
             --sidebar-primary: oklch(0.655 0.183 266.5);
-            --sidebar-primary-foreground: oklch(0.183 0.031 263.4);
-            --sidebar-accent: oklch(0.314 0.081 264.3);
+            --sidebar-primary-foreground: #1e293b;
+            --sidebar-accent: #334155;
             --sidebar-accent-foreground: oklch(0.981 0.005 258.3);
             --sidebar-border: oklch(1 0 0 / 12%);
             --sidebar-ring: oklch(0.655 0.183 266.5);
@@ -164,15 +164,15 @@
             --primary:        var(--primary-im);
             --primary-dark:   oklch(0.555 0.165 266.5);
             --primary-light:  oklch(0.732 0.089 266.9);
-            --primary-50:     oklch(0.314 0.081 264.3);
+            --primary-50:     #334155;
             --primary-100:    oklch(0.225 0.061 264.4);
             --bg-primary:     var(--background);
             --bg-secondary:   var(--card);
-            --bg-tertiary:    oklch(0.314 0.081 264.3);
+            --bg-tertiary:    #334155;
             --bg-hover:       oklch(0.225 0.061 264.4);
             --text-primary:   var(--foreground);
             --text-secondary: var(--muted-foreground);
-            --text-muted:     oklch(0.660 0.025 257.3);
+            --text-muted:     #94a3b8;
             --text-inverse:   var(--primary-foreground);
             --border:         var(--border-im);
             --border-light:   oklch(1 0 0 / 16%);
@@ -186,23 +186,23 @@
         @media(min-width:768px){:root{--header-height-mobile:72px}}
 
         /* Nav header */
-        .modern-nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-fixed,1030);background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,oklch(0.883 0.020 260.2));box-shadow:var(--shadow-sm);height:var(--header-height-desktop,72px)}
+        .modern-nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-fixed,1030);background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);box-shadow:var(--shadow-sm);height:var(--header-height-desktop,72px)}
         .nav-container{max-width:1400px;margin:0 auto;padding:0 var(--space-4,1rem);display:flex;align-items:center;justify-content:space-between;height:100%}
         .nav-logo{display:flex;align-items:center;gap:var(--space-3,0.75rem);text-decoration:none;font-weight:700;font-size:var(--text-lg,1.125rem)}
         .nav-logo img{width:32px;height:32px;border-radius:var(--radius-md,0.5rem)}
         .nav-logo span{background:linear-gradient(135deg,oklch(0.381 0.146 264.1) 0%,oklch(0.581 0.229 263.9) 50%,oklch(0.732 0.089 266.9) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;letter-spacing:-0.02em}
         [data-theme="dark"] .nav-logo span{background:linear-gradient(135deg,oklch(0.655 0.183 266.5) 0%,oklch(0.732 0.089 266.9) 50%,oklch(0.581 0.229 263.9) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
         .nav-items{display:flex;align-items:center;gap:var(--space-6,1.5rem);list-style:none;margin:0;padding:0}
-        .nav-link{color:var(--text-secondary,oklch(0.372 0.039 257.3));text-decoration:none;font-weight:500;font-size:var(--text-base,1rem);padding:var(--space-2,0.5rem) var(--space-3,0.75rem);border-radius:var(--radius-md,0.5rem);display:flex;align-items:center;gap:var(--space-2,0.5rem)}
+        .nav-link{color:var(--text-secondary,#475569);text-decoration:none;font-weight:500;font-size:var(--text-base,1rem);padding:var(--space-2,0.5rem) var(--space-3,0.75rem);border-radius:var(--radius-md,0.5rem);display:flex;align-items:center;gap:var(--space-2,0.5rem)}
         .nav-actions{display:flex;align-items:center;gap:var(--space-3,0.75rem)}
         .btn-nav{padding:var(--space-2,0.5rem) var(--space-4,1rem);border-radius:var(--radius-md,0.5rem);font-size:var(--text-sm,0.875rem);font-weight:500;text-decoration:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:var(--space-2,0.5rem);font-family:var(--font-sans)}
         .btn-nav-primary{background:var(--primary,oklch(0.581 0.229 263.9));color:#fff}
-        .btn-nav-secondary{background:var(--bg-secondary,oklch(0.971 0.007 247.9));color:var(--text-secondary,oklch(0.372 0.039 257.3));border:1px solid var(--border,oklch(0.883 0.020 260.2))}
+        .btn-nav-secondary{background:var(--bg-secondary,oklch(0.971 0.007 247.9));color:var(--text-secondary,#475569);border:1px solid var(--border,#e2e8f0)}
         .mobile-menu-toggle,.mobile-search-toggle{display:none;background:none;border:none;padding:var(--space-2,0.5rem);cursor:pointer;color:var(--text-primary)}
         .mobile-menu-toggle{font-size:var(--text-xl,1.25rem);width:40px;height:40px;align-items:center;justify-content:center;border-radius:var(--radius-md,0.5rem)}
         .nav-search{position:relative;flex:1;max-width:500px;margin:0 var(--space-6,1.5rem)}
-        .search-input{width:100%;padding:var(--space-2,0.5rem) var(--space-10,2.5rem) var(--space-2,0.5rem) var(--space-4,1rem);border:2px solid var(--border,oklch(0.883 0.020 260.2));border-radius:var(--radius-full,9999px);font-size:var(--text-sm,0.875rem);background:var(--bg-secondary,oklch(0.971 0.007 247.9));font-family:var(--font-sans)}
-        .search-icon{position:absolute;right:var(--space-4,1rem);top:50%;transform:translateY(-50%);color:var(--text-muted,oklch(0.660 0.025 257.3));pointer-events:none}
+        .search-input{width:100%;padding:var(--space-2,0.5rem) var(--space-10,2.5rem) var(--space-2,0.5rem) var(--space-4,1rem);border:2px solid var(--border,#e2e8f0);border-radius:var(--radius-full,9999px);font-size:var(--text-sm,0.875rem);background:var(--bg-secondary,oklch(0.971 0.007 247.9));font-family:var(--font-sans)}
+        .search-icon{position:absolute;right:var(--space-4,1rem);top:50%;transform:translateY(-50%);color:var(--text-muted,#94a3b8);pointer-events:none}
         @media(max-width:991px){
             .modern-nav{height:var(--header-height-mobile,64px)}
             .nav-container{padding:0 var(--space-3,0.75rem)}
@@ -214,65 +214,87 @@
         }
 
         /* Page header + breadcrumbs */
-        .tool-page-header{background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,oklch(0.883 0.020 260.2));padding:1.25rem 1.5rem;margin-top:72px}
+        .tool-page-header{background:var(--bg-primary,#fff);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem;margin-top:72px}
         .tool-page-header-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-        .tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary,oklch(0.183 0.031 263.4));margin:0}
+        .tool-page-title{font-size:1.5rem;font-weight:700;color:var(--text-primary,#1e293b);margin:0}
         .tool-page-badges{display:flex;gap:0.5rem;flex-wrap:wrap}
         .tool-badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.25rem 0.625rem;font-size:0.6875rem;font-weight:500;border-radius:9999px;background:var(--tool-light);color:var(--tool-primary)}
-        .tool-breadcrumbs{font-size:0.8125rem;color:var(--text-secondary,oklch(0.372 0.039 257.3));margin-top:0.5rem}
-        .tool-breadcrumbs a{color:var(--text-secondary,oklch(0.372 0.039 257.3));text-decoration:none}
+        .tool-breadcrumbs{font-size:0.8125rem;color:var(--text-secondary,#475569);margin-top:0.5rem}
+        .tool-breadcrumbs a{color:var(--text-secondary,#475569);text-decoration:none}
 
         /* Description section */
-        .tool-description-section{background:var(--tool-light);border-bottom:1px solid var(--border,oklch(0.883 0.020 260.2));padding:1.25rem 1.5rem}
+        .tool-description-section{background:var(--tool-light);border-bottom:1px solid var(--border,#e2e8f0);padding:1.25rem 1.5rem}
         .tool-description-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:2rem}
         .tool-description-content{flex:1}
-        .tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary,oklch(0.372 0.039 257.3))}
+        .tool-description-content p{margin:0;font-size:0.9375rem;line-height:1.6;color:var(--text-secondary,#475569)}
         @media(max-width:767px){.tool-description-section{padding:1rem}.tool-description-content p{font-size:0.875rem}}
 
-        /* Three-column grid */
-        .tool-page-container{display:grid;grid-template-columns:minmax(320px,400px) 1fr 300px;gap:1.5rem;max-width:1600px;margin:0 auto;padding:1.5rem;min-height:calc(100vh - 180px)}
-        @media(max-width:1024px){.tool-page-container{grid-template-columns:minmax(300px,380px) 1fr}.tool-ads-column{display:none}}
-        @media(max-width:900px){.tool-page-container{grid-template-columns:1fr;gap:1rem;display:flex;flex-direction:column}.tool-input-column{position:relative;top:auto;max-height:none;overflow-y:visible;order:1}.tool-output-column{display:flex!important;min-height:350px;order:2}.tool-ads-column{order:3}}
-        .tool-input-column{position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 110px);overflow-y:auto}
-        .tool-output-column{display:flex;flex-direction:column;gap:1rem}
-        .tool-ads-column{height:fit-content}
+        /* Layout now comes from the chemistry studio's stacked pattern
+           (.ic-stack → .ic-hero input + .ic-result-card results below),
+           defined in chemistry-studio.css and re-skinned in the 2nd
+           <style> block (which loads after all <link>s, so it wins over
+           three-column-tool.css). No .tool-page-container grid here. */
+
+        /* Compact input: one prominent formula field, charge + Generate inline */
+        .lewis-primary-row{display:flex;gap:0.5rem;align-items:stretch;flex-wrap:wrap}
+        .lewis-formula-input{flex:1 1 220px;min-width:0}
+        .lewis-charge-input{flex:0 0 5rem;width:5rem;text-align:center}
+        .lewis-generate-btn.tool-action-btn{flex:0 0 auto;width:auto;margin-top:0;padding:0.75rem 1.1rem;white-space:nowrap}
+        @media(max-width:520px){.lewis-primary-row{flex-direction:column}.lewis-charge-input{width:100%;flex-basis:auto;text-align:left}.lewis-generate-btn.tool-action-btn{width:100%}}
+
+        /* Collapsed sections (examples, AI) — keep input tidy */
+        details.lewis-collapse{border:1px solid var(--border,#e2e8f0);border-radius:0.5rem;margin-bottom:0.75rem;background:var(--bg-secondary,oklch(0.985 0.005 247.9))}
+        details.lewis-collapse>summary{list-style:none;cursor:pointer;padding:0.625rem 0.875rem;font-size:0.8125rem;font-weight:600;color:var(--text-primary,#1e293b);display:flex;align-items:center;gap:0.375rem;user-select:none}
+        details.lewis-collapse>summary::-webkit-details-marker{display:none}
+        details.lewis-collapse>summary::after{content:"\25be";margin-left:auto;font-size:0.75rem;opacity:0.55;transition:transform .15s}
+        details.lewis-collapse[open]>summary::after{transform:rotate(180deg)}
+        details.lewis-collapse[open]>summary{border-bottom:1px solid var(--border,#e2e8f0)}
+        details.lewis-collapse>*:not(summary){padding-left:0.875rem;padding-right:0.875rem}
+        details.lewis-collapse>summary+*{padding-top:0.75rem}
+        details.lewis-collapse>*:not(summary):last-child{padding-bottom:0.875rem}
+        details.lewis-collapse.lewis-ai-group{padding:0}
+        .lewis-example-pills{padding-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.375rem}
+        .tool-action-btn-secondary.tool-action-btn{background:var(--bg-secondary,oklch(0.971 0.007 247.9))!important;color:var(--text-secondary,#475569);border:1px solid var(--border,#e2e8f0)}
+        [data-theme="dark"] details.lewis-collapse{background:rgba(255,255,255,0.03);border-color:var(--border,#334155)}
+        [data-theme="dark"] details.lewis-collapse>summary{color:var(--text-primary,oklch(0.929 0.015 260.7))}
+        [data-theme="dark"] .tool-action-btn-secondary.tool-action-btn{background:var(--bg-tertiary,#334155)!important;color:var(--text-secondary,#cbd5e1);border-color:var(--border,#475569)}
 
         /* Card + tabs + form (above-fold) */
-        .tool-card{background:var(--bg-primary,#fff);border:1px solid var(--border,oklch(0.883 0.020 260.2));border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+        .tool-card{background:var(--bg-primary,#fff);border:1px solid var(--border,#e2e8f0);border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
         .tool-card-header{background:var(--tool-gradient);color:#fff;padding:0.875rem 1rem;font-weight:600;font-size:0.9375rem;display:flex;align-items:center;gap:0.5rem}
         .tool-card-body{padding:1rem}
-        .tool-tabs{display:flex;gap:0.25rem;padding:0.5rem;background:var(--bg-secondary,oklch(0.971 0.007 247.9));border-bottom:1px solid var(--border,oklch(0.883 0.020 260.2));overflow-x:auto;-webkit-overflow-scrolling:touch}
-        .tool-tab{padding:0.5rem 0.75rem;font-size:0.75rem;font-weight:500;border:none;background:transparent;color:var(--text-secondary,oklch(0.372 0.039 257.3));cursor:pointer;border-radius:0.375rem;white-space:nowrap;transition:all .15s}
+        .tool-tabs{display:flex;gap:0.25rem;padding:0.5rem;background:var(--bg-secondary,oklch(0.971 0.007 247.9));border-bottom:1px solid var(--border,#e2e8f0);overflow-x:auto;-webkit-overflow-scrolling:touch}
+        .tool-tab{padding:0.5rem 0.75rem;font-size:0.75rem;font-weight:500;border:none;background:transparent;color:var(--text-secondary,#475569);cursor:pointer;border-radius:0.375rem;white-space:nowrap;transition:all .15s}
         .tool-tab.active{background:var(--tool-primary);color:#fff}
         .tool-form-group{margin-bottom:0.875rem}
-        .tool-form-label{display:block;font-weight:500;margin-bottom:0.375rem;color:var(--text-primary,oklch(0.183 0.031 263.4));font-size:0.8125rem}
-        .tool-form-hint{font-size:0.6875rem;color:var(--text-secondary,oklch(0.372 0.039 257.3));margin-top:0.25rem}
+        .tool-form-label{display:block;font-weight:500;margin-bottom:0.375rem;color:var(--text-primary,#1e293b);font-size:0.8125rem}
+        .tool-form-hint{font-size:0.6875rem;color:var(--text-secondary,#475569);margin-top:0.25rem}
         .tool-action-btn{width:100%;padding:0.75rem;font-weight:600;font-size:0.875rem;border:none;border-radius:0.5rem;cursor:pointer;background:var(--tool-gradient);color:#fff;margin-top:1rem;transition:opacity .15s,transform .15s}
 
         /* Dark mode (above-fold elements) */
-        [data-theme="dark"] .tool-page-header{background:var(--bg-secondary,oklch(0.225 0.061 264.4));border-bottom-color:var(--border,oklch(0.314 0.081 264.3))}
+        [data-theme="dark"] .tool-page-header{background:var(--bg-secondary,oklch(0.225 0.061 264.4));border-bottom-color:var(--border,#334155)}
         [data-theme="dark"] .tool-page-title{color:var(--text-primary,oklch(0.929 0.015 260.7))}
-        [data-theme="dark"] .tool-breadcrumbs,[data-theme="dark"] .tool-breadcrumbs a{color:var(--text-secondary,oklch(0.660 0.025 257.3))}
+        [data-theme="dark"] .tool-breadcrumbs,[data-theme="dark"] .tool-breadcrumbs a{color:var(--text-secondary,#94a3b8)}
         [data-theme="dark"] .tool-badge{background:var(--tool-light);color:var(--tool-primary)}
-        [data-theme="dark"] .tool-description-section{background:var(--bg-secondary,oklch(0.225 0.061 264.4));border-bottom-color:var(--border,oklch(0.314 0.081 264.3))}
-        [data-theme="dark"] .tool-description-content p{color:var(--text-secondary,oklch(0.827 0.034 255.2))}
-        [data-theme="dark"] .tool-card{background:var(--bg-secondary,oklch(0.225 0.061 264.4));border-color:var(--border,oklch(0.314 0.081 264.3))}
-        [data-theme="dark"] .tool-tabs{background:var(--bg-tertiary,oklch(0.314 0.081 264.3));border-bottom-color:var(--border,oklch(0.372 0.039 257.3))}
-        [data-theme="dark"] .tool-tab{color:var(--text-secondary,oklch(0.660 0.025 257.3))}
+        [data-theme="dark"] .tool-description-section{background:var(--bg-secondary,oklch(0.225 0.061 264.4));border-bottom-color:var(--border,#334155)}
+        [data-theme="dark"] .tool-description-content p{color:var(--text-secondary,#cbd5e1)}
+        [data-theme="dark"] .tool-card{background:var(--bg-secondary,oklch(0.225 0.061 264.4));border-color:var(--border,#334155)}
+        [data-theme="dark"] .tool-tabs{background:var(--bg-tertiary,#334155);border-bottom-color:var(--border,#475569)}
+        [data-theme="dark"] .tool-tab{color:var(--text-secondary,#94a3b8)}
         [data-theme="dark"] .tool-tab.active{background:var(--tool-primary);color:#fff}
         [data-theme="dark"] .tool-form-label{color:var(--text-primary,oklch(0.929 0.015 260.7))}
         [data-theme="dark"] .tool-action-btn{box-shadow:0 4px 12px oklch(0.581 0.229 263.9 / 0.30)}
 
         /* FAQ */
-        .faq-item{border:1px solid var(--border,oklch(0.883 0.020 260.2));border-radius:0.5rem;margin-bottom:0.5rem;overflow:hidden}
-        .faq-question{padding:0.75rem 1rem;font-weight:600;font-size:0.875rem;color:var(--text-primary,oklch(0.183 0.031 263.4));background:var(--bg-secondary,oklch(0.971 0.007 247.9));border:none;width:100%;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;font-family:inherit;text-align:left}
-        .faq-answer{display:none;padding:0.75rem 1rem;font-size:0.875rem;color:var(--text-secondary,oklch(0.372 0.039 257.3));line-height:1.6;border-top:1px solid var(--border,oklch(0.883 0.020 260.2))}
+        .faq-item{border:1px solid var(--border,#e2e8f0);border-radius:0.5rem;margin-bottom:0.5rem;overflow:hidden}
+        .faq-question{padding:0.75rem 1rem;font-weight:600;font-size:0.875rem;color:var(--text-primary,#1e293b);background:var(--bg-secondary,oklch(0.971 0.007 247.9));border:none;width:100%;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;font-family:inherit;text-align:left}
+        .faq-answer{display:none;padding:0.75rem 1rem;font-size:0.875rem;color:var(--text-secondary,#475569);line-height:1.6;border-top:1px solid var(--border,#e2e8f0)}
         .faq-item.open .faq-answer{display:block}
         .faq-item.open .faq-chevron{transform:rotate(180deg)}
         .faq-chevron{transition:transform 0.2s;flex-shrink:0}
-        [data-theme="dark"] .faq-question{background:var(--bg-tertiary,oklch(0.314 0.081 264.3));color:var(--text-primary,oklch(0.929 0.015 260.7))}
-        [data-theme="dark"] .faq-answer{color:var(--text-secondary,oklch(0.827 0.034 255.2));border-top-color:var(--border,oklch(0.314 0.081 264.3))}
-        [data-theme="dark"] .faq-item{border-color:var(--border,oklch(0.314 0.081 264.3))}
+        [data-theme="dark"] .faq-question{background:var(--bg-tertiary,#334155);color:var(--text-primary,oklch(0.929 0.015 260.7))}
+        [data-theme="dark"] .faq-answer{color:var(--text-secondary,#cbd5e1);border-top-color:var(--border,#334155)}
+        [data-theme="dark"] .faq-item{border-color:var(--border,#334155)}
 
         /* Utility */
         .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
@@ -327,6 +349,8 @@
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
     </noscript>
 
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/chemistry/css/chemistry-studio.css?v=<%=cacheVersion%>">
+
     <%@ include file="modern/ads/ad-init.jsp" %>
 
     <!-- jQuery not needed - page uses vanilla JS, tool-utils.js has vanilla fallbacks -->
@@ -338,12 +362,83 @@
             --tool-primary-dark: oklch(0.381 0.146 264.1);
         }
 
+        /* ════════════════════════════════════════════════════════════
+           2026 STUDIO RE-SKIN
+           Hosts the Lewis tool inside the chemistry studio's stacked
+           layout: .ic-stack → .ic-hero (input) on top, .ic-result-card
+           (results) below. Re-skins the legacy .tool-* shell with the
+           --cs-* design tokens. This block lives in the 2nd <style>,
+           which loads AFTER three-column-tool.css, so it wins on ties.
+           ════════════════════════════════════════════════════════════ */
+        /* Tabs → studio pill segment control */
+        .ic-hero .tool-tabs{display:inline-flex;gap:2px;margin:0 0 1.35rem;padding:3px;background:var(--cs-panel-bg-soft);border:1px solid var(--cs-line);border-radius:var(--cs-radius-pill);overflow-x:auto}
+        .ic-hero .tool-tab{padding:6px 14px;border:none;background:transparent;color:var(--cs-muted);font:600 12.5px var(--cs-font-sans);cursor:pointer;border-radius:var(--cs-radius-pill);display:inline-flex;align-items:center;gap:0.4rem;white-space:nowrap;transition:color var(--cs-transition),background var(--cs-transition)}
+        .ic-hero .tool-tab:hover:not(.active){color:var(--cs-ink)}
+        .ic-hero .tool-tab.active{background:var(--cs-panel-bg);color:var(--cs-accent);box-shadow:var(--cs-shadow-sm)}
+
+        /* Labels + inputs */
+        .ic-hero .tool-label{display:block;font:600 0.74rem var(--cs-font-sans);text-transform:uppercase;letter-spacing:0.05em;color:var(--cs-muted);margin-bottom:0.4rem}
+        .ic-hero .tool-input{width:100%;padding:0.6rem 0.85rem;border:1.5px solid var(--cs-line-strong);border-radius:var(--cs-radius-sm);background:var(--cs-panel-bg-soft);font:15px var(--cs-font-sans);color:var(--cs-ink);transition:border-color var(--cs-transition),box-shadow var(--cs-transition),background var(--cs-transition)}
+        .ic-hero .tool-input:focus{outline:none;border-color:var(--cs-accent);background:var(--cs-panel-bg);box-shadow:var(--cs-ring)}
+        .ic-hero .tool-hint{font-size:0.76rem;color:var(--cs-muted);line-height:1.5}
+        /* The formula field is the hero input — bigger, mono */
+        .ic-hero .lewis-formula-input{font:16px var(--cs-font-mono);min-height:48px}
+
+        /* Primary actions → solid accent pill */
+        .ic-hero #generateLewisBtn,
+        .ic-hero #predictVSEPRBtn,
+        .ic-hero #calcFormalBtn{width:auto;margin-top:0;padding:0.6rem 1.25rem;background:var(--cs-accent);color:#fff;border:1px solid var(--cs-accent);border-radius:var(--cs-radius-pill);font:600 0.85rem var(--cs-font-sans);box-shadow:none;cursor:pointer;transition:background var(--cs-transition),transform 0.1s var(--cs-ease)}
+        .ic-hero #generateLewisBtn:hover,
+        .ic-hero #predictVSEPRBtn:hover,
+        .ic-hero #calcFormalBtn:hover{background:var(--cs-accent-hover);transform:translateY(-1px);opacity:1}
+        .ic-hero .tool-form-actions{display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.5rem}
+        /* Secondary action (Practice Sheet) → ghost accent pill */
+        .ic-hero #practiceSheetBtn.tool-action-btn{width:auto;margin-top:0;padding:0.6rem 1.25rem;background:transparent!important;color:var(--cs-accent);border:1px solid var(--cs-accent);border-radius:var(--cs-radius-pill);font:600 0.85rem var(--cs-font-sans);box-shadow:none}
+        .ic-hero #practiceSheetBtn.tool-action-btn:hover{background:var(--cs-accent-soft)!important;color:var(--cs-accent);transform:translateY(-1px);opacity:1}
+
+        /* Example chips → studio pills */
+        .ic-hero .lewis-example-pill{display:inline-block;padding:0.35rem 0.7rem;border:1px solid var(--cs-line-strong);border-radius:var(--cs-radius-pill);background:var(--cs-panel-bg);color:var(--cs-ink);font:500 12.5px var(--cs-font-mono);cursor:pointer;line-height:1.3;transition:border-color var(--cs-transition),background var(--cs-transition),color var(--cs-transition)}
+        .ic-hero .lewis-example-pill:hover{border-color:var(--cs-accent);background:var(--cs-accent-softer);color:var(--cs-accent)}
+        .ic-hero .lewis-example-pill.generic{border-style:dashed}
+
+        /* Collapsibles inherit studio tokens */
+        .ic-hero details.lewis-collapse{border-color:var(--cs-line);background:var(--cs-panel-bg-soft);border-radius:var(--cs-radius-sm)}
+        .ic-hero details.lewis-collapse>summary{color:var(--cs-ink)}
+        .ic-hero details.lewis-collapse[open]>summary{border-bottom-color:var(--cs-line)}
+
+        /* Compact field grid — VSEPR + Formal Charge tabs */
+        .ic-hero .lewis-field-grid{display:flex;flex-wrap:wrap;gap:0.7rem;align-items:flex-end}
+        .ic-hero .lewis-field{display:flex;flex-direction:column;gap:0.3rem;flex:0 1 auto}
+        .ic-hero .lewis-field-grow{flex:1 1 130px;min-width:120px}
+        .ic-hero .lewis-field .tool-label{margin:0;font-size:0.68rem}
+        .ic-hero .lewis-num{width:6rem;text-align:center}
+        .ic-hero .lewis-field-grid #predictVSEPRBtn,
+        .ic-hero .lewis-field-grid #calcFormalBtn{margin:0}
+
+        /* Cross-link card (3D geometry) → studio surface */
+        .ic-hero .lewis-related-link{display:flex;align-items:center;gap:0.75rem;margin-top:1rem;padding:0.7rem 0.9rem;background:var(--cs-panel-bg-soft);border:1px solid var(--cs-line);border-radius:var(--cs-radius);text-decoration:none;color:var(--cs-ink);transition:border-color var(--cs-transition),background var(--cs-transition)}
+        .ic-hero .lewis-related-link:hover{border-color:var(--cs-accent);background:var(--cs-accent-softer)}
+        .ic-hero .lewis-related-link strong{font-size:0.875rem}
+        .ic-hero .lewis-related-link p{margin:0.2rem 0 0;font-size:0.8rem;color:var(--cs-muted)}
+        .ic-hero .lewis-related-icon{width:2rem;height:2rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:var(--cs-radius-sm);font-size:0.85rem;font-weight:700;color:#fff;background:linear-gradient(135deg,#059669,#10b981)}
+
+        /* Result card internals */
+        .ic-result-card .tool-result-header{display:flex;align-items:center;gap:0.5rem;padding:1.2rem 1.5rem 0;color:var(--cs-muted)}
+        .ic-result-card .tool-result-header h4{margin:0;font:600 0.72rem var(--cs-font-sans);text-transform:uppercase;letter-spacing:0.08em;color:var(--cs-muted)}
+        .ic-result-card .tool-result-content{padding:1.25rem 1.5rem;flex:1 1 auto;min-height:0}
+        .ic-result-card .tool-result-actions{padding:0.9rem 1.5rem;margin:0;border-top:1px solid var(--cs-line)}
+        /* Keep the thematic atom glyph in the empty state (studio hides
+           tool svgs by default for the ∫ pages — we want ours). */
+        .ic-stack .ic-result-card .tool-empty-state svg{display:inline-block;color:var(--cs-accent)}
+        .ic-result-card .tool-empty-state h3{font:400 1.5rem var(--cs-font-serif);color:var(--cs-ink);margin:0 0 0.4rem}
+        .ic-result-card .tool-empty-state p{color:var(--cs-muted);max-width:420px;margin:0 auto}
+
         /* Labels - distinct from inputs */
         .tool-label {
             display: block;
             font-weight: 600;
             font-size: 0.8125rem;
-            color: var(--text-primary, oklch(0.183 0.031 263.4));
+            color: var(--text-primary, #1e293b);
             margin-bottom: 0.375rem;
             letter-spacing: 0.01em;
         }
@@ -351,7 +446,7 @@
         /* Hint text below inputs */
         .tool-hint {
             font-size: 0.6875rem;
-            color: var(--text-secondary, oklch(0.520 0.030 257.3));
+            color: var(--text-secondary, #64748b);
             margin: 0.25rem 0 0 0;
             line-height: 1.4;
         }
@@ -360,12 +455,12 @@
         .tool-input {
             width: 100%;
             padding: 0.5rem 0.75rem;
-            border: 1.5px solid var(--border, oklch(0.883 0.020 260.2));
+            border: 1.5px solid var(--border, #e2e8f0);
             border-radius: 0.5rem;
             font-size: 0.875rem;
             font-family: 'JetBrains Mono', 'SF Mono', monospace;
             background: var(--bg-primary, #fff);
-            color: var(--text-primary, oklch(0.183 0.031 263.4));
+            color: var(--text-primary, #1e293b);
             transition: border-color 0.15s, box-shadow 0.15s;
         }
 
@@ -376,24 +471,24 @@
         }
 
         .tool-input::placeholder {
-            color: oklch(0.660 0.025 257.3);
+            color: #94a3b8;
             font-family: 'Inter', sans-serif;
             font-style: italic;
             font-size: 0.8125rem;
         }
 
         [data-theme="dark"] .tool-label {
-            color: var(--text-primary, oklch(0.883 0.020 260.2));
+            color: var(--text-primary, #e2e8f0);
         }
 
         [data-theme="dark"] .tool-hint {
-            color: var(--text-secondary, oklch(0.660 0.025 257.3));
+            color: var(--text-secondary, #94a3b8);
         }
 
         [data-theme="dark"] .tool-input {
             background: rgba(255,255,255,0.05);
             border-color: rgba(255,255,255,0.15);
-            color: var(--text-primary, oklch(0.883 0.020 260.2));
+            color: var(--text-primary, #e2e8f0);
         }
 
         [data-theme="dark"] .tool-input:focus {
@@ -402,7 +497,7 @@
         }
 
         [data-theme="dark"] .tool-input::placeholder {
-            color: oklch(0.520 0.030 257.3);
+            color: #64748b;
         }
 
         /* Form group spacing */
@@ -431,12 +526,12 @@
             padding: 0.15rem 0.5rem;
             margin: 0.125rem;
             background: var(--bg-secondary, oklch(0.971 0.007 247.9));
-            border: 1px solid var(--border, oklch(0.883 0.020 260.2));
+            border: 1px solid var(--border, #e2e8f0);
             border-radius: 0.75rem;
             cursor: pointer;
             font-size: 0.75rem;
             font-weight: 500;
-            color: var(--text-primary, oklch(0.183 0.031 263.4));
+            color: var(--text-primary, #1e293b);
             transition: background 0.15s, color 0.15s, border-color 0.15s;
             line-height: 1.4;
         }
@@ -605,7 +700,7 @@
             align-items: center;
             justify-content: center;
             background: var(--bg-primary, #fff);
-            border: 2px solid var(--border, oklch(0.883 0.020 260.2));
+            border: 2px solid var(--border, #e2e8f0);
             border-radius: 0.5rem;
             overflow: hidden;
             margin-bottom: 1rem;
@@ -655,12 +750,12 @@
             vertical-align: baseline;
             position: relative;
             top: -0.55em;
-            color: var(--text-secondary, oklch(0.520 0.030 257.3));
+            color: var(--text-secondary, #64748b);
         }
 
         .lewis-molecule-header .lewis-molecule-meta {
             font-size: 0.8rem;
-            color: var(--text-secondary, oklch(0.520 0.030 257.3));
+            color: var(--text-secondary, #64748b);
             line-height: 1.4;
         }
 
@@ -696,7 +791,7 @@
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.6px;
-            color: var(--text-secondary, oklch(0.520 0.030 257.3));
+            color: var(--text-secondary, #64748b);
             margin-bottom: 0.3rem;
         }
 
@@ -732,7 +827,7 @@
         .lewis-chem {
             font-family: 'JetBrains Mono', monospace;
             font-weight: 600;
-            color: var(--text-primary, oklch(0.183 0.031 263.4));
+            color: var(--text-primary, #1e293b);
             letter-spacing: 0.01em;
         }
 
@@ -749,11 +844,11 @@
             vertical-align: baseline;
             position: relative;
             top: -0.5em;
-            color: var(--text-secondary, oklch(0.520 0.030 257.3));
+            color: var(--text-secondary, #64748b);
         }
 
         [data-theme="dark"] .lewis-chem {
-            color: var(--text-primary, oklch(0.883 0.020 260.2));
+            color: var(--text-primary, #e2e8f0);
         }
 
         /* Result value block */
@@ -782,7 +877,7 @@
         .lewis-result-label {
             font-weight: 600;
             font-size: 0.75rem;
-            color: var(--text-secondary, oklch(0.520 0.030 257.3));
+            color: var(--text-secondary, #64748b);
             margin-bottom: 0.375rem;
             text-transform: uppercase;
             letter-spacing: 0.4px;
@@ -809,7 +904,7 @@
 
         .lewis-fc-table td {
             padding: 0.5rem 0.75rem;
-            border-bottom: 1px solid var(--border, oklch(0.883 0.020 260.2));
+            border-bottom: 1px solid var(--border, #e2e8f0);
         }
 
         .lewis-fc-table td:first-child { font-weight: 600; }
@@ -860,12 +955,81 @@
         .lewis-fc-result.positive { color: #ef4444; background: rgba(239,68,68,0.1); }
         .lewis-fc-result.negative { color: #3b82f6; background: rgba(59,130,246,0.1); }
 
+        /* ── Result content re-skin (studio tokens) ──────────────────
+           The JS injects .lewis-* result markup (analysis cards, badges,
+           labels, alerts). Re-skin it inside .ic-result-card so the output
+           matches the studio. --cs-* tokens auto-adapt to dark mode; placed
+           after the base .lewis-* defs so it wins on source order. */
+        .ic-result-card .lewis-molecule-header{
+            background:var(--cs-accent-softer);
+            border:1px solid var(--cs-line);
+            border-radius:var(--cs-radius);
+            padding:0.85rem 1.1rem;
+        }
+        [data-theme="dark"] .ic-result-card .lewis-molecule-header{
+            background:var(--cs-accent-softer);border-color:var(--cs-line);
+        }
+        .ic-result-card .lewis-molecule-header .lewis-formula{color:var(--cs-accent);font-family:var(--cs-font-mono)}
+        .ic-result-card .lewis-molecule-header .lewis-formula sub{color:var(--cs-accent)}
+        .ic-result-card .lewis-molecule-header .lewis-formula sup{color:var(--cs-muted)}
+        .ic-result-card .lewis-molecule-header .lewis-molecule-meta{color:var(--cs-muted)}
+
+        .ic-result-card .lewis-info-card{
+            background:var(--cs-panel-bg-soft);
+            border-left:3px solid var(--cs-accent);
+            border-radius:var(--cs-radius-sm);
+        }
+        .ic-result-card .lewis-info-card:hover{box-shadow:var(--cs-shadow-sm)}
+        .ic-result-card .lewis-info-card strong{color:var(--cs-muted)}
+        .ic-result-card .lewis-info-card span{color:var(--cs-accent);font-family:var(--cs-font-mono)}
+
+        .ic-result-card .lewis-badge{
+            background:var(--cs-accent);
+            border-radius:var(--cs-radius-pill);
+            box-shadow:none;
+            font:600 0.8rem var(--cs-font-sans);
+        }
+        .ic-result-card .lewis-badge.polar,
+        .ic-result-card .lewis-badge.nonpolar{box-shadow:none}
+
+        .ic-result-card .lewis-result-label{color:var(--cs-muted)}
+        .ic-result-card .lewis-result-label::before{background:var(--cs-accent)}
+        .ic-result-card .lewis-result-value{
+            background:var(--cs-panel-bg-soft);
+            border-left:3px solid var(--cs-accent);
+            border-radius:var(--cs-radius-sm);
+            color:var(--cs-ink);
+        }
+        .ic-result-card .lewis-chem{color:var(--cs-ink)}
+        .ic-result-card .lewis-chem sub{color:var(--cs-accent)}
+        .ic-result-card .lewis-chem sup{color:var(--cs-muted)}
+
+        .ic-result-card .lewis-fc-table td{border-bottom:1px solid var(--cs-line);color:var(--cs-ink)}
+
+        .ic-result-card .lewis-alert{
+            background:var(--cs-accent-softer);
+            border:1px solid var(--cs-accent-ring);
+            border-left:3px solid var(--cs-accent);
+            border-radius:var(--cs-radius-sm);
+            color:var(--cs-ink-soft);
+        }
+        [data-theme="dark"] .ic-result-card .lewis-alert{
+            background:var(--cs-accent-softer);color:var(--cs-ink-soft);
+        }
+        .ic-result-card .lewis-alert strong{color:var(--cs-ink)}
+        .ic-result-card .lewis-alert-warning{
+            background:rgba(251,191,36,0.12);
+            border-color:rgba(251,191,36,0.35);
+            border-left-color:#f59e0b;
+            color:var(--cs-ink-soft);
+        }
+
         /* Result actions bar */
         .tool-result-actions-practice {
             display: flex;
             gap: 0.5rem;
             padding: 1rem 1.25rem;
-            border-top: 1px solid var(--border, oklch(0.883 0.020 260.2));
+            border-top: 1px solid var(--border, #e2e8f0);
             background: var(--bg-secondary, oklch(0.971 0.007 247.9));
             flex-wrap: wrap;
         }
@@ -903,7 +1067,7 @@
             gap: 0.5rem;
             padding: 1rem 1.25rem;
             background: var(--bg-secondary, oklch(0.971 0.007 247.9));
-            border-bottom: 1px solid var(--border, oklch(0.883 0.020 260.2));
+            border-bottom: 1px solid var(--border, #e2e8f0);
             border-radius: 0.75rem 0.75rem 0 0;
         }
 
@@ -911,7 +1075,7 @@
             margin: 0;
             font-size: 0.95rem;
             font-weight: 600;
-            color: var(--text-primary, oklch(0.183 0.031 263.4));
+            color: var(--text-primary, #1e293b);
         }
 
         .tool-result-content {
@@ -940,20 +1104,27 @@
               iframe on other pages. Hides page chrome so only the tool itself
               renders. Presentation only; the Lewis engine is untouched. ── */
         .lewis-embed .modern-nav,
-        .lewis-embed header.tool-page-header,
+        .lewis-embed .cs-title,
         .lewis-embed .tool-description-section,
-        .lewis-embed .tool-ads-column,
         .lewis-embed .tool-mobile-ad-container,
         .lewis-embed .related-tools-section,
         .lewis-embed footer.page-footer,
         .lewis-embed .sticky-footer-ad,
-        .lewis-embed .ad-sticky-footer { display: none !important; }
-        .lewis-embed main.tool-page-container { padding-top: 1rem; grid-template-columns: minmax(0,1fr) minmax(0,1.4fr); }
+        .lewis-embed .ad-sticky-footer,
+        .lewis-embed .cs-hero,
+        .lewis-embed .cs-rail,
+        .lewis-embed .cs-sidebar,
+        .lewis-embed .cs-sidebar-toggle { display: none !important; }
+        .lewis-embed .cs-main { display: block; }
+        .lewis-embed .cs-workspace { padding: 0; }
+        /* Side-by-side in an iframe insert (wider context), stacked on the page. */
+        .lewis-embed .ic-stack { display: grid; gap: 1rem; padding-top: 1rem; grid-template-columns: minmax(0,1fr) minmax(0,1.4fr); }
+        .lewis-embed .ic-hero::before { display: none; }
         .lewis-embed body, .lewis-embed { background: var(--bg, #fff); }
-        @media(max-width:900px){ .lewis-embed main.tool-page-container { grid-template-columns: 1fr; } }
+        @media(max-width:900px){ .lewis-embed .ic-stack { grid-template-columns: 1fr; } }
     </style>
 </head>
-<body>
+<body class="cs-body">
 <script>
     // Embed mode: when loaded as ?embed=1 (e.g. inside a modal iframe on another
     // page), tag the document so the chrome-hiding CSS applies before paint.
@@ -962,40 +1133,31 @@
 <!-- Navigation -->
 <%@ include file="modern/components/nav-header.jsp" %>
 
-<!-- Page Header -->
-<header class="tool-page-header">
-    <div class="tool-page-header-inner">
-        <div>
-            <h1 class="tool-page-title">AI Lewis Structure Generator &amp; VSEPR Calculator</h1>
-            <nav class="tool-breadcrumbs">
-                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/chemical-equation-balancer.jsp">Chemistry</a> /
-                Lewis Structure Generator
-            </nav>
-        </div>
-        <div class="tool-page-badges">
-            <span class="tool-badge">AI-Powered</span>
-            <span class="tool-badge">Lewis Dot Diagrams</span>
-            <span class="tool-badge">VSEPR Theory</span>
-            <span class="tool-badge">Molecular Visualization</span>
-        </div>
-    </div>
-</header>
+<div class="cs-hero">
+    <%@ include file="modern/ads/ad-hero-banner.jsp" %>
+</div>
 
-<!-- Tool Description -->
-<section class="tool-description-section">
-    <div class="tool-description-inner">
-        <div class="tool-description-content">
-            <p><strong>Describe any molecule in plain English</strong> ("acetic acid", "a bent molecule", "expanded octet example") and let AI convert it to a formula &mdash; or type the formula directly. Our chemistry engine then draws the Lewis dot structure, predicts VSEPR geometry, and calculates bond angles, formal charges, and polarity. <strong>Free printable practice worksheet</strong>&mdash;each click generates a random 12-molecule sheet from 80+ options (H&#8322;O, CO&#8322;, NH&#8323;, O&#8322;, N&#8322;, XeF&#8322;, IF&#8325;, and more). No signup required.</p>
-        </div>
-    </div>
-</section>
+<main class="cs-main">
+    <button type="button" id="csSidebarToggle" class="cs-sidebar-toggle" aria-label="Open chemistry tools menu">&#9776; Chemistry tools</button>
+    <% request.setAttribute("activeService", "lewis"); %>
+    <jsp:include page="/chemistry/partials/sidebar.jsp" />
 
-<!-- Main Content -->
-<main class="tool-page-container">
-    <!-- ========== INPUT COLUMN ========== -->
-    <div class="tool-input-column">
-        <div class="tool-card">
+    <section class="cs-workspace">
+
+<!-- Slim studio title — editorial tone, no card -->
+<div class="cs-title">
+    <nav class="cs-crumbs" aria-label="Breadcrumb">
+        <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+        <a href="<%=request.getContextPath()%>/chemistry/">Chemistry</a> /
+        <span aria-current="page">Lewis Structure</span>
+    </nav>
+    <h1>Lewis Structure Generator &amp; VSEPR Calculator</h1>
+</div>
+
+<!-- Studio stacked layout: input hero on top, results card below -->
+<div class="ic-stack">
+    <!-- ========== INPUT (hero) ========== -->
+    <div class="ic-hero">
             <!-- Tab Selection -->
             <div class="tool-tabs" role="tablist">
                 <button type="button" class="tool-tab active" data-tab="lewis" role="tab">
@@ -1011,44 +1173,23 @@
 
             <!-- ========== Tab 1: Lewis Structure ========== -->
             <div id="lewisSection" class="tool-form-section active">
-                <!-- AI: Describe the molecule in English -->
-                <div class="tool-form-group lewis-ai-group">
-                    <label class="tool-label">
-                        <span class="lewis-ai-sparkle">&#x2728;</span> Describe the molecule (AI)
-                    </label>
-                    <div class="lewis-ai-input-row">
-                        <input type="text" class="tool-input lewis-ai-input" id="lewisAiInput"
-                            placeholder="e.g., acetic acid, a bent molecule, expanded octet example">
-                        <button type="button" class="lewis-ai-btn" id="lewisAiBtn" title="Convert to formula">
-                            <span class="lewis-ai-btn-label">Ask AI</span>
-                            <span class="lewis-ai-btn-spinner" style="display:none;"></span>
-                        </button>
-                    </div>
-                    <div class="lewis-ai-status" id="lewisAiStatus" style="display:none;"></div>
-                    <div class="lewis-ai-preview" id="lewisAiPreview" style="display:none;">
-                        <div class="lewis-ai-preview-row">
-                            <span class="lewis-ai-preview-label">AI parsed as:</span>
-                            <span class="lewis-ai-preview-formula" id="lewisAiPreviewFormula"></span>
-                            <span class="lewis-ai-preview-charge" id="lewisAiPreviewCharge"></span>
-                        </div>
-                        <div class="lewis-ai-preview-actions">
-                            <button type="button" class="lewis-ai-confirm" id="lewisAiConfirm">Use this &rarr;</button>
-                            <button type="button" class="lewis-ai-reject" id="lewisAiReject">Edit</button>
-                        </div>
-                        <div class="lewis-ai-preview-note" id="lewisAiPreviewNote"></div>
-                    </div>
-                    <p class="tool-hint" style="margin-top:0.375rem;">Describe by name ("water"), common name ("baking soda"), or property ("no lone pairs", "expanded octet"). The engine verifies the chemistry — if AI picks a poor example, the drawing will show it.</p>
-                </div>
-
+                <!-- Primary input: one formula field + charge + generate -->
                 <div class="tool-form-group">
                     <label class="tool-label">Molecular Formula</label>
-                    <input type="text" class="tool-input" id="molecularFormula" placeholder="e.g., H2O, CO2, NH3, or ML2 (generic)">
-                    <p class="tool-hint" style="margin-top:0.25rem;">Enter formula like H2O, CO2, NH3, or generic notation (ML2, AX3, MX4)</p>
+                    <div class="lewis-primary-row">
+                        <input type="text" class="tool-input lewis-formula-input" id="molecularFormula" placeholder="e.g., H2O, CO2, NH3, or ML2 (generic)">
+                        <input type="number" class="tool-input lewis-charge-input" id="molecularCharge" value="0" title="Charge (for ions): +1, -1, -2 …" aria-label="Charge">
+                        <button type="button" class="tool-action-btn lewis-generate-btn" id="generateLewisBtn">
+                            &#9883; Generate
+                        </button>
+                    </div>
+                    <p class="tool-hint" style="margin-top:0.375rem;">Formula like H2O, CO2, NH3, or generic notation (ML2, AX3, MX4). Charge box is for ions: +1 NH&#8324;&#8314;, &minus;1 CN&#8315;, &minus;2 CO&#8323;&#178;&#8315;.</p>
                 </div>
 
-                <div class="tool-form-group">
-                    <label class="tool-label" style="margin-bottom:0.25rem;">Quick Examples</label>
-                    <div>
+                <!-- Quick examples (collapsed) -->
+                <details class="lewis-collapse">
+                    <summary>Quick examples</summary>
+                    <div class="lewis-example-pills">
                         <span class="lewis-example-pill" data-formula="H2O">H&#8322;O</span>
                         <span class="lewis-example-pill" data-formula="CO2">CO&#8322;</span>
                         <span class="lewis-example-pill" data-formula="NH3">NH&#8323;</span>
@@ -1074,19 +1215,37 @@
                         <span class="lewis-example-pill generic" data-formula="AX3">AX&#8323;</span>
                         <span class="lewis-example-pill generic" data-formula="MX4">MX&#8324;</span>
                     </div>
-                </div>
+                </details>
 
-                <div class="tool-form-group">
-                    <label class="tool-label">Charge (optional)</label>
-                    <input type="number" class="tool-input" id="molecularCharge" value="0" placeholder="0" style="max-width:120px;">
-                    <p class="tool-hint" style="margin-top:0.25rem;">For ions: +1 for NH&#8324;&#8314;, -1 for CN&#8315;, -2 for CO&#8323;&#178;&#8315;, -3 for PO&#8324;&#179;&#8315;</p>
-                </div>
+                <!-- AI: Describe the molecule in English (collapsed) -->
+                <details class="lewis-collapse lewis-ai-group">
+                    <summary><span class="lewis-ai-sparkle">&#x2728;</span> Describe in plain English (AI)</summary>
+                    <div class="lewis-ai-input-row">
+                        <input type="text" class="tool-input lewis-ai-input" id="lewisAiInput"
+                            placeholder="e.g., acetic acid, a bent molecule, expanded octet example">
+                        <button type="button" class="lewis-ai-btn" id="lewisAiBtn" title="Convert to formula">
+                            <span class="lewis-ai-btn-label">Ask AI</span>
+                            <span class="lewis-ai-btn-spinner" style="display:none;"></span>
+                        </button>
+                    </div>
+                    <div class="lewis-ai-status" id="lewisAiStatus" style="display:none;"></div>
+                    <div class="lewis-ai-preview" id="lewisAiPreview" style="display:none;">
+                        <div class="lewis-ai-preview-row">
+                            <span class="lewis-ai-preview-label">AI parsed as:</span>
+                            <span class="lewis-ai-preview-formula" id="lewisAiPreviewFormula"></span>
+                            <span class="lewis-ai-preview-charge" id="lewisAiPreviewCharge"></span>
+                        </div>
+                        <div class="lewis-ai-preview-actions">
+                            <button type="button" class="lewis-ai-confirm" id="lewisAiConfirm">Use this &rarr;</button>
+                            <button type="button" class="lewis-ai-reject" id="lewisAiReject">Edit</button>
+                        </div>
+                        <div class="lewis-ai-preview-note" id="lewisAiPreviewNote"></div>
+                    </div>
+                    <p class="tool-hint" style="margin-top:0.375rem;">Describe by name ("water"), common name ("baking soda"), or property ("no lone pairs", "expanded octet"). The engine verifies the chemistry — if AI picks a poor example, the drawing will show it.</p>
+                </details>
 
                 <div class="tool-form-actions">
-                    <button type="button" class="tool-action-btn" id="generateLewisBtn">
-                        &#9883; Generate Lewis Structure
-                    </button>
-                    <button type="button" class="tool-action-btn" id="practiceSheetBtn" title="Generate a printable practice worksheet">
+                    <button type="button" class="tool-action-btn tool-action-btn-secondary" id="practiceSheetBtn" title="Generate a printable practice worksheet">
                         <span>&#128218;</span> Practice Sheet
                     </button>
                 </div>
@@ -1094,25 +1253,30 @@
 
             <!-- ========== Tab 2: VSEPR Predictor ========== -->
             <div id="vseprSection" class="tool-form-section">
+                <!-- Compact: central atom + steric number inline, Predict beside -->
                 <div class="tool-form-group">
-                    <label class="tool-label">Central Atom</label>
-                    <input type="text" class="tool-input" id="centralAtom" placeholder="e.g., C, N, O, S" style="max-width:120px;">
+                    <label class="tool-label" style="margin-bottom:0.45rem;">Geometry from steric number</label>
+                    <div class="lewis-field-grid">
+                        <div class="lewis-field lewis-field-grow">
+                            <label class="tool-label" for="centralAtom">Central atom</label>
+                            <input type="text" class="tool-input" id="centralAtom" placeholder="C, N, O, S">
+                        </div>
+                        <div class="lewis-field">
+                            <label class="tool-label" for="bondingPairs">Bonds</label>
+                            <input type="number" class="tool-input lewis-num" id="bondingPairs" min="1" max="7" value="4">
+                        </div>
+                        <div class="lewis-field">
+                            <label class="tool-label" for="lonePairs">Lone pairs</label>
+                            <input type="number" class="tool-input lewis-num" id="lonePairs" min="0" max="4" value="0">
+                        </div>
+                        <button type="button" class="tool-action-btn" id="predictVSEPRBtn">&#11042; Predict</button>
+                    </div>
+                    <p class="tool-hint" style="margin-top:0.45rem;">Count each single, double, and triple bond as one bonding region.</p>
                 </div>
 
-                <div class="tool-form-group">
-                    <label class="tool-label">Bonding Electron Pairs (Bonds)</label>
-                    <input type="number" class="tool-input" id="bondingPairs" min="1" max="7" value="4" style="max-width:120px;">
-                    <p class="tool-hint" style="margin-top:0.25rem;">Count single, double, and triple bonds as 1 bonding region each</p>
-                </div>
-
-                <div class="tool-form-group">
-                    <label class="tool-label">Lone Electron Pairs</label>
-                    <input type="number" class="tool-input" id="lonePairs" min="0" max="4" value="0" style="max-width:120px;">
-                </div>
-
-                <div class="tool-form-group">
-                    <label class="tool-label" style="margin-bottom:0.25rem;">Quick VSEPR Examples</label>
-                    <div>
+                <details class="lewis-collapse">
+                    <summary>Quick VSEPR examples</summary>
+                    <div class="lewis-example-pills">
                         <span class="lewis-example-pill" data-vsepr="2,0">2B-0LP (Linear)</span>
                         <span class="lewis-example-pill" data-vsepr="3,0">3B-0LP (Trig. Planar)</span>
                         <span class="lewis-example-pill" data-vsepr="2,1">2B-1LP (Bent ~120&deg;)</span>
@@ -1128,66 +1292,54 @@
                         <span class="lewis-example-pill" data-vsepr="4,2">4B-2LP (Square Planar)</span>
                         <span class="lewis-example-pill" data-vsepr="7,0">7B-0LP (Pent. Bipyramidal)</span>
                     </div>
-                </div>
+                </details>
 
-                <div class="tool-form-actions">
-                    <button type="button" class="tool-action-btn" id="predictVSEPRBtn">
-                        &#11042; Predict Geometry
-                    </button>
-                </div>
-
-                <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" class="lewis-related-link" style="display:flex;align-items:center;gap:0.75rem;margin-top:1rem;padding:0.75rem 1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:0.5rem;text-decoration:none;color:var(--text-primary);font-size:0.875rem;transition:all 0.2s;" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='var(--bg-secondary)'">
-                    <span style="width:2rem;height:2rem;background:linear-gradient(135deg,#059669,#10b981);border-radius:0.375rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;color:#fff;">3D</span>
+                <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" class="lewis-related-link">
+                    <span class="lewis-related-icon">3D</span>
                     <div>
                         <strong>3D Molecular Geometry Calculator</strong>
-                        <p style="margin:0.25rem 0 0;font-size:0.8125rem;color:var(--text-secondary);">Interactive 3D models, PubChem coordinates, rotate & zoom molecules</p>
+                        <p>Interactive 3D models, PubChem coordinates, rotate &amp; zoom molecules</p>
                     </div>
                 </a>
             </div>
 
             <!-- ========== Tab 3: Formal Charge ========== -->
             <div id="formalSection" class="tool-form-section">
-                <div class="lewis-alert" style="margin-bottom:1rem;">
-                    <strong>Formula:</strong> Formal Charge = (Valence e&#8315;) - (Non-bonding e&#8315;) - (Bonding e&#8315; / 2)
-                </div>
+                <details class="lewis-collapse">
+                    <summary>&#9874; Formal charge formula</summary>
+                    <p style="margin:0;font-size:0.85rem;color:var(--cs-ink-soft);line-height:1.6;">Formal Charge = (Valence e&#8315;) &minus; (Non-bonding e&#8315;) &minus; (Bonding e&#8315; &divide; 2)</p>
+                </details>
 
+                <!-- Compact: the four per-atom inputs inline, Calculate beside -->
                 <div class="tool-form-group">
-                    <label class="tool-label">Atom</label>
-                    <input type="text" class="tool-input" id="formalAtom" placeholder="e.g., C, N, O" style="max-width:120px;">
-                    <p class="tool-hint" style="margin-top:0.25rem;">Type an element symbol &mdash; valence electrons auto-fill below</p>
-                </div>
-
-                <div class="tool-form-group">
-                    <label class="tool-label">Valence Electrons</label>
-                    <input type="number" class="tool-input" id="formalValence" min="1" max="8" placeholder="auto-filled" style="max-width:120px;">
-                    <p class="tool-hint" style="margin-top:0.25rem;">C=4, N=5, O=6, H=1 (auto-filled from atom above)</p>
-                </div>
-
-                <div class="tool-form-group">
-                    <label class="tool-label">Non-bonding Electrons (Lone Pairs x 2)</label>
-                    <input type="number" class="tool-input" id="formalNonBonding" min="0" placeholder="Number of non-bonding electrons" style="max-width:120px;">
-                </div>
-
-                <div class="tool-form-group">
-                    <label class="tool-label">Bonding Electrons</label>
-                    <input type="number" class="tool-input" id="formalBonding" min="0" placeholder="Single=2, Double=4, Triple=6" style="max-width:120px;">
-                    <p class="tool-hint" style="margin-top:0.25rem;">Single bond = 2, Double = 4, Triple = 6</p>
-                </div>
-
-                <div class="tool-form-actions">
-                    <button type="button" class="tool-action-btn" id="calcFormalBtn">
-                        &#9874; Calculate Formal Charge
-                    </button>
+                    <label class="tool-label" style="margin-bottom:0.45rem;">Per-atom inputs</label>
+                    <div class="lewis-field-grid">
+                        <div class="lewis-field">
+                            <label class="tool-label" for="formalAtom">Atom</label>
+                            <input type="text" class="tool-input lewis-num" id="formalAtom" placeholder="C, N, O">
+                        </div>
+                        <div class="lewis-field">
+                            <label class="tool-label" for="formalValence">Valence e&#8315;</label>
+                            <input type="number" class="tool-input lewis-num" id="formalValence" min="1" max="8" placeholder="auto">
+                        </div>
+                        <div class="lewis-field">
+                            <label class="tool-label" for="formalNonBonding">Non-bonding e&#8315;</label>
+                            <input type="number" class="tool-input lewis-num" id="formalNonBonding" min="0" placeholder="0">
+                        </div>
+                        <div class="lewis-field">
+                            <label class="tool-label" for="formalBonding">Bonding e&#8315;</label>
+                            <input type="number" class="tool-input lewis-num" id="formalBonding" min="0" placeholder="2 / 4 / 6">
+                        </div>
+                        <button type="button" class="tool-action-btn" id="calcFormalBtn">&#9874; Calculate</button>
+                    </div>
+                    <p class="tool-hint" style="margin-top:0.45rem;">Type an element and its valence e&#8315; auto-fills. Bonding e&#8315;: single = 2, double = 4, triple = 6.</p>
                 </div>
             </div>
 
             <!-- Learn content is in the below-the-fold educational sections -->
-        </div>
     </div>
-
-    <!-- ========== OUTPUT COLUMN ========== -->
-    <div class="tool-output-column">
-        <div class="tool-card tool-result-card">
+    <!-- ========== RESULT (below input) ========== -->
+    <div class="ic-result-card">
             <div class="tool-result-header">
                 <span>&#128203;</span>
                 <h4>Result</h4>
@@ -1220,21 +1372,15 @@
                 <button type="button" class="tool-action-btn" id="downloadPngBtn">
                     <span>&#8681;</span> Download PNG
                 </button>
-                <button type="button" class="tool-action-btn" id="copyResultBtn" style="background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border);">
+                <button type="button" class="tool-action-btn" id="copyResultBtn">
                     <span>&#128203;</span> Copy
                 </button>
-                <button type="button" class="tool-action-btn" id="shareUrlBtn" style="background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border);">
+                <button type="button" class="tool-action-btn" id="shareUrlBtn">
                     <span>&#128279;</span> Share
                 </button>
             </div>
-        </div>
     </div>
-
-    <!-- ========== ADS COLUMN ========== -->
-    <div class="tool-ads-column">
-        <%@ include file="modern/ads/ad-three-column.jsp" %>
-    </div>
-</main>
+</div>
 
 <!-- Mobile Ad Fallback -->
 <div class="tool-mobile-ad-container">
@@ -1445,17 +1591,10 @@
 
 <!-- Molecular Structure Tools -->
 <div style="max-width:1200px;margin:1.5rem auto;padding:0 1rem;display:flex;gap:10px;flex-wrap:wrap;">
-  <span style="font-size:0.8rem;color:var(--text-secondary,oklch(0.520 0.030 257.3));align-self:center;font-weight:600;">Also try &rarr;</span>
-  <a href="<%=request.getContextPath()%>/chemistry/molecule-draw.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,oklch(0.929 0.015 260.7));border:1px solid var(--border-color,oklch(0.883 0.020 260.2));border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,oklch(0.225 0.061 264.4));transition:all 0.2s;" onmouseover="this.style.borderColor='#10b981';this.style.boxShadow='0 2px 8px rgba(16,185,129,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x270D;</span> Molecule Draw <span style="font-size:0.6rem;font-weight:700;background:#d946ef;color:#fff;padding:1px 5px;border-radius:3px;">NEW</span></a>
-  <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,oklch(0.929 0.015 260.7));border:1px solid var(--border-color,oklch(0.883 0.020 260.2));border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,oklch(0.225 0.061 264.4));transition:all 0.2s;" onmouseover="this.style.borderColor='oklch(0.381 0.146 264.1)';this.style.boxShadow='0 2px 8px rgba(79,70,229,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,oklch(0.381 0.146 264.1),oklch(0.581 0.229 263.9));color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x1F4D0;</span> 3D Molecular Geometry</a>
+  <span style="font-size:0.8rem;color:var(--text-secondary,#64748b);align-self:center;font-weight:600;">Also try &rarr;</span>
+  <a href="<%=request.getContextPath()%>/chemistry/molecule-draw.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,oklch(0.929 0.015 260.7));border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,oklch(0.225 0.061 264.4));transition:all 0.2s;" onmouseover="this.style.borderColor='#10b981';this.style.boxShadow='0 2px 8px rgba(16,185,129,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x270D;</span> Molecule Draw <span style="font-size:0.6rem;font-weight:700;background:#d946ef;color:#fff;padding:1px 5px;border-radius:3px;">NEW</span></a>
+  <a href="<%=request.getContextPath()%>/molecular-geometry-calculator.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,oklch(0.929 0.015 260.7));border:1px solid var(--border-color,#e2e8f0);border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,oklch(0.225 0.061 264.4));transition:all 0.2s;" onmouseover="this.style.borderColor='oklch(0.381 0.146 264.1)';this.style.boxShadow='0 2px 8px rgba(79,70,229,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,oklch(0.381 0.146 264.1),oklch(0.581 0.229 263.9));color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x1F4D0;</span> 3D Molecular Geometry</a>
 </div>
-
-<!-- Related Chemistry Tools -->
-<jsp:include page="modern/components/related-tools.jsp">
-    <jsp:param name="currentToolUrl" value="lewis-structure-generator.jsp"/>
-    <jsp:param name="keyword" value="chemistry"/>
-    <jsp:param name="limit" value="6"/>
-</jsp:include>
 
 <!-- Practice NCERT Problems -->
 <section style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
@@ -1463,8 +1602,8 @@
         <h2 style="font-size: 1.125rem; margin-bottom: 0.75rem;">Practice NCERT Problems</h2>
         <p style="color: var(--text-secondary); margin-bottom: 1rem;">Apply your Lewis structure knowledge to NCERT chemistry and physics problems:</p>
         <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.75rem;">
-            <li><a href="exams/books/ncert/class-11/physics-part-1/index.jsp" style="display: inline-block; padding: 0.5rem 1rem; background: var(--bg-secondary, oklch(0.929 0.015 260.7)); border-radius: 0.5rem; color: var(--text-primary); text-decoration: none; font-size: 0.875rem; border: 1px solid var(--border, oklch(0.883 0.020 260.2));">Class 11 Physics Part 1</a></li>
-            <li><a href="exams/books/ncert/class-12/physics-part-1/index.jsp" style="display: inline-block; padding: 0.5rem 1rem; background: var(--bg-secondary, oklch(0.929 0.015 260.7)); border-radius: 0.5rem; color: var(--text-primary); text-decoration: none; font-size: 0.875rem; border: 1px solid var(--border, oklch(0.883 0.020 260.2));">Class 12 Physics Part 1</a></li>
+            <li><a href="exams/books/ncert/class-11/physics-part-1/index.jsp" style="display: inline-block; padding: 0.5rem 1rem; background: var(--bg-secondary, oklch(0.929 0.015 260.7)); border-radius: 0.5rem; color: var(--text-primary); text-decoration: none; font-size: 0.875rem; border: 1px solid var(--border, #e2e8f0);">Class 11 Physics Part 1</a></li>
+            <li><a href="exams/books/ncert/class-12/physics-part-1/index.jsp" style="display: inline-block; padding: 0.5rem 1rem; background: var(--bg-secondary, oklch(0.929 0.015 260.7)); border-radius: 0.5rem; color: var(--text-primary); text-decoration: none; font-size: 0.875rem; border: 1px solid var(--border, #e2e8f0);">Class 12 Physics Part 1</a></li>
         </ul>
     </div>
 </section>
@@ -1506,20 +1645,16 @@
     </div>
 </section>
 
+    </section>
+
+    <aside class="cs-rail" aria-label="Advertisements">
+        <%@ include file="/modern/ads/ad-ide-rail-top.jsp" %>
+        <%@ include file="/modern/ads/ad-ide-rail-bottom.jsp" %>
+    </aside>
+</main>
+
 <!-- Support Section -->
 <%@ include file="modern/components/support-section.jsp" %>
-
-<!-- Footer -->
-<footer class="page-footer">
-    <div class="footer-content">
-        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
-        <div class="footer-links">
-            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
-            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
-            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
-        </div>
-    </div>
-</footer>
 
 <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
 <%@ include file="modern/components/analytics.jsp" %>
@@ -4070,8 +4205,8 @@
                     var emptyS = document.getElementById('emptyState');
                     if (emptyS) emptyS.style.display = 'none';
                     spinnerContainer.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:200px;gap:12px;">' +
-                        '<div style="width:36px;height:36px;border:3px solid var(--border-color,oklch(0.883 0.020 260.2));border-top-color:var(--primary,oklch(0.581 0.229 263.9));border-radius:50%;animation:lewis-spin 0.8s linear infinite;"></div>' +
-                        '<span style="color:var(--text-secondary,oklch(0.520 0.030 257.3));font-size:0.875rem;">Analyzing structure\u2026</span></div>';
+                        '<div style="width:36px;height:36px;border:3px solid var(--border-color,#e2e8f0);border-top-color:var(--primary,oklch(0.581 0.229 263.9));border-radius:50%;animation:lewis-spin 0.8s linear infinite;"></div>' +
+                        '<span style="color:var(--text-secondary,#64748b);font-size:0.875rem;">Analyzing structure\u2026</span></div>';
                     // Add spin animation if not already present
                     if (!document.getElementById('lewis-spin-style')) {
                         var styleEl = document.createElement('style');
@@ -5020,7 +5155,7 @@
 
         // Build styled off-screen container
         var container = document.createElement('div');
-        container.style.cssText = 'position:absolute;left:-9999px;top:0;width:750px;padding:40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:oklch(0.183 0.031 263.4);';
+        container.style.cssText = 'position:absolute;left:-9999px;top:0;width:750px;padding:40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#1e293b;';
         document.body.appendChild(container);
 
         // Title
@@ -5034,36 +5169,36 @@
 
         // Formula label
         var formulaLabel = document.createElement('div');
-        formulaLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:oklch(0.520 0.030 257.3);margin-bottom:4px;';
+        formulaLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin-bottom:4px;';
         formulaLabel.textContent = 'Molecule';
         container.appendChild(formulaLabel);
         var formulaEl = document.createElement('div');
-        formulaEl.style.cssText = 'font-size:24px;font-weight:700;color:oklch(0.183 0.031 263.4);margin-bottom:20px;font-family:JetBrains Mono,monospace;';
+        formulaEl.style.cssText = 'font-size:24px;font-weight:700;color:#1e293b;margin-bottom:20px;font-family:JetBrains Mono,monospace;';
         formulaEl.textContent = formula;
         container.appendChild(formulaEl);
 
         // Canvas image
         var imgEl = document.createElement('img');
         imgEl.src = canvas.toDataURL('image/png');
-        imgEl.style.cssText = 'display:block;max-width:100%;margin:0 auto 20px;border:1px solid oklch(0.883 0.020 260.2);border-radius:8px;';
+        imgEl.style.cssText = 'display:block;max-width:100%;margin:0 auto 20px;border:1px solid #e2e8f0;border-radius:8px;';
         container.appendChild(imgEl);
 
         // Result text
         var resultEl = document.getElementById('resultDisplay');
         if (resultEl && resultEl.innerHTML) {
             var infoLabel = document.createElement('div');
-            infoLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:oklch(0.520 0.030 257.3);margin-bottom:8px;border-top:1px solid oklch(0.883 0.020 260.2);padding-top:16px;';
+            infoLabel.style.cssText = 'font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin-bottom:8px;border-top:1px solid #e2e8f0;padding-top:16px;';
             infoLabel.textContent = 'Analysis';
             container.appendChild(infoLabel);
             var infoClone = document.createElement('div');
-            infoClone.style.cssText = 'font-size:13px;color:oklch(0.314 0.081 264.3);line-height:1.7;';
+            infoClone.style.cssText = 'font-size:13px;color:#334155;line-height:1.7;';
             infoClone.textContent = currentResultText;
             container.appendChild(infoClone);
         }
 
         // Footer
         var footer = document.createElement('div');
-        footer.style.cssText = 'margin-top:24px;padding-top:12px;border-top:1px solid oklch(0.883 0.020 260.2);font-size:11px;color:oklch(0.660 0.025 257.3);display:flex;justify-content:space-between;';
+        footer.style.cssText = 'margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;display:flex;justify-content:space-between;';
         footer.innerHTML = '<span>Generated by 8gwifi.org Lewis Structure Generator</span><span>' + new Date().toLocaleDateString() + '</span>';
         container.appendChild(footer);
 
@@ -5278,7 +5413,7 @@
             if (chargeInput) chargeInput.value = savedCharge;
             if (savedFormula) try { generateLewis(); } catch (e) {}
 
-            var baseStyle = 'position:absolute;left:-9999px;top:0;width:750px;padding:30px 40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:oklch(0.183 0.031 263.4);';
+            var baseStyle = 'position:absolute;left:-9999px;top:0;width:750px;padding:30px 40px;background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#1e293b;';
 
             // Page 1: Problems only
             var page1 = document.createElement('div');
@@ -5290,14 +5425,14 @@
             header.innerHTML = '<div style="font-size:22px;font-weight:700;color:#2563eb;">Lewis Structure Practice Worksheet</div>';
             page1.appendChild(header);
             var subtitle = document.createElement('div');
-            subtitle.style.cssText = 'text-align:center;font-size:12px;color:oklch(0.520 0.030 257.3);margin-bottom:4px;';
+            subtitle.style.cssText = 'text-align:center;font-size:12px;color:#64748b;margin-bottom:4px;';
             subtitle.textContent = '8gwifi.org \u2014 Chemistry Tools';
             page1.appendChild(subtitle);
             var studentLine = document.createElement('div');
             studentLine.style.cssText = 'display:flex;gap:24px;margin-bottom:6px;padding:8px 0;border-bottom:2px solid #2563eb;';
-            studentLine.innerHTML = '<div style="flex:1;font-size:12px;color:oklch(0.520 0.030 257.3);">Name: ___________________________</div>' +
-                '<div style="font-size:12px;color:oklch(0.520 0.030 257.3);">Date: ______________</div>' +
-                '<div style="font-size:12px;color:oklch(0.520 0.030 257.3);">Score: ______ / ' + practiceProblems.length + '</div>';
+            studentLine.innerHTML = '<div style="flex:1;font-size:12px;color:#64748b;">Name: ___________________________</div>' +
+                '<div style="font-size:12px;color:#64748b;">Date: ______________</div>' +
+                '<div style="font-size:12px;color:#64748b;">Score: ______ / ' + practiceProblems.length + '</div>';
             page1.appendChild(studentLine);
             var instr = document.createElement('div');
             instr.style.cssText = 'padding:8px 12px;background:#eff6ff;border-left:3px solid #2563eb;border-radius:4px;margin-bottom:10px;font-size:11px;color:#1e40af;line-height:1.5;';
@@ -5309,21 +5444,21 @@
             for (var i = 0; i < practiceProblems.length; i++) {
                 var p = practiceProblems[i];
                 var card = document.createElement('div');
-                card.style.cssText = 'border:1.5px solid oklch(0.827 0.034 255.2);border-radius:6px;padding:8px 10px;page-break-inside:avoid;';
+                card.style.cssText = 'border:1.5px solid #cbd5e1;border-radius:6px;padding:8px 10px;page-break-inside:avoid;';
                 card.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">' +
                     '<div style="display:flex;align-items:center;gap:6px;">' +
                     '<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#2563eb;color:#fff;font-size:10px;font-weight:700;">' + (i + 1) + '</span>' +
                     '<span style="font-size:15px;font-weight:700;font-family:JetBrains Mono,monospace;">' + p.formula + '</span></div>' +
-                    '<span style="font-size:10px;color:oklch(0.660 0.025 257.3);font-style:italic;">' + p.name + '</span></div>' +
-                    '<div style="width:100%;height:100px;border:1px dashed oklch(0.827 0.034 255.2);border-radius:4px;background:#fafbfc;margin-bottom:6px;display:flex;align-items:center;justify-content:center;">' +
-                    '<span style="font-size:10px;color:oklch(0.827 0.034 255.2);">Draw Lewis Structure Here</span></div>' +
-                    '<div style="font-size:10px;color:oklch(0.372 0.039 257.3);line-height:1.8;">Total Valence e\u207b: ________&nbsp;&nbsp;&nbsp;&nbsp;Geometry: ________________&nbsp;&nbsp;&nbsp;&nbsp;Bond Angle: ________</div>' +
-                    '<div style="font-size:9px;color:oklch(0.660 0.025 257.3);font-style:italic;margin-top:2px;">Hint: ' + p.hint + '</div>';
+                    '<span style="font-size:10px;color:#94a3b8;font-style:italic;">' + p.name + '</span></div>' +
+                    '<div style="width:100%;height:100px;border:1px dashed #cbd5e1;border-radius:4px;background:#fafbfc;margin-bottom:6px;display:flex;align-items:center;justify-content:center;">' +
+                    '<span style="font-size:10px;color:#cbd5e1;">Draw Lewis Structure Here</span></div>' +
+                    '<div style="font-size:10px;color:#475569;line-height:1.8;">Total Valence e\u207b: ________&nbsp;&nbsp;&nbsp;&nbsp;Geometry: ________________&nbsp;&nbsp;&nbsp;&nbsp;Bond Angle: ________</div>' +
+                    '<div style="font-size:9px;color:#94a3b8;font-style:italic;margin-top:2px;">Hint: ' + p.hint + '</div>';
                 grid.appendChild(card);
             }
             page1.appendChild(grid);
             var footer1 = document.createElement('div');
-            footer1.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid oklch(0.883 0.020 260.2);font-size:10px;color:oklch(0.660 0.025 257.3);';
+            footer1.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;';
             footer1.textContent = 'Generated by 8gwifi.org Lewis Structure Generator \u2014 ' + new Date().toLocaleDateString();
             page1.appendChild(footer1);
 
@@ -5336,7 +5471,7 @@
             akHeader.textContent = 'Answer Key (Teacher Use)';
             page2.appendChild(akHeader);
             var akNote = document.createElement('div');
-            akNote.style.cssText = 'font-size:10px;color:oklch(0.520 0.030 257.3);margin-bottom:12px;';
+            akNote.style.cssText = 'font-size:10px;color:#64748b;margin-bottom:12px;';
             akNote.textContent = 'Computed by same logic as the Lewis Structure Generator. Valence e\u207b = total valence electrons; Geometry = molecular geometry; Angle = bond angle around central atom.';
             page2.appendChild(akNote);
             var akGrid = document.createElement('div');
@@ -5348,7 +5483,7 @@
                 var g = (ans && ans.geometry) ? ans.geometry : '?';
                 var a = (ans && ans.angle) ? ans.angle : '?';
                 var cell = document.createElement('div');
-                cell.style.cssText = 'border:1px solid oklch(0.883 0.020 260.2);border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;';
+                cell.style.cssText = 'border:1px solid #e2e8f0;border-radius:6px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;';
                 var imgSrc = lewisImages[k];
                 if (imgSrc) {
                     var img = document.createElement('img');
@@ -5358,7 +5493,7 @@
                     cell.appendChild(img);
                 } else {
                     var plc = document.createElement('span');
-                    plc.style.cssText = 'font-size:10px;color:oklch(0.660 0.025 257.3);';
+                    plc.style.cssText = 'font-size:10px;color:#94a3b8;';
                     plc.textContent = '[Structure]';
                     cell.appendChild(plc);
                 }
@@ -5370,7 +5505,7 @@
             }
             page2.appendChild(akGrid);
             var footer2 = document.createElement('div');
-            footer2.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid oklch(0.883 0.020 260.2);font-size:10px;color:oklch(0.660 0.025 257.3);';
+            footer2.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;';
             footer2.textContent = 'Generated by 8gwifi.org Lewis Structure Generator \u2014 ' + new Date().toLocaleDateString();
             page2.appendChild(footer2);
 

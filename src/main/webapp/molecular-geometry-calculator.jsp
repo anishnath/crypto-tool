@@ -53,6 +53,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/molecular-geometry.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/chemistry/css/chemistry-studio.css">
 
     <%@ include file="modern/ads/ad-init.jsp" %>
 
@@ -168,57 +169,169 @@
             --border-dark:    oklch(1 0 0 / 24%);
         }
 
-        /* Page-specific brand overrides — make all brand surfaces use
-           the Chanterelle MG palette. */
-        .tool-action-btn { background: var(--mg-gradient) !important; }
-        .tool-badge { background: var(--mg-light); color: var(--mg-tool); }
+        /* ════════════════════════════════════════════════════════════
+           FULL CHEMISTRY-STUDIO MIGRATION (matches lewis-structure-generator)
+           Stacked .ic-stack → .ic-hero (input) + tabs/.mg-panel cards below.
+           Re-theme the Chanterelle/amber tokens to the studio indigo + paper
+           palette so every mg-* component inherits the studio look — and the
+           PDF builders' var(--token) refs resolve to hex/rgba (no oklch for
+           html2canvas). This <style> loads after molecular-geometry.css.
+           ════════════════════════════════════════════════════════════ */
+        body.cs-body{
+            --mg-tool: var(--cs-accent);
+            --mg-tool-dark: var(--cs-accent-hover);
+            --mg-gradient: linear-gradient(135deg, var(--cs-accent) 0%, var(--cs-accent-hover) 100%);
+            --mg-light: var(--cs-accent-soft);
+            --primary: var(--cs-accent);
+            --primary-ch: var(--cs-accent);
+            --primary-dark: var(--cs-accent-hover);
+            --primary-light: var(--cs-accent);
+            --accent: var(--cs-accent-soft);
+            --ring: var(--cs-accent-ring);
+            --bg-primary: var(--cs-panel-bg);
+            --bg-secondary: var(--cs-panel-bg-soft);
+            --bg-tertiary: var(--cs-panel-bg-soft);
+            --bg-hover: var(--cs-accent-softer);
+            --card: var(--cs-panel-bg);
+            --text-primary: var(--cs-ink);
+            --foreground: var(--cs-ink);
+            --text-secondary: var(--cs-ink-soft);
+            --text-muted: var(--cs-muted);
+            --muted-foreground: var(--cs-muted);
+            --border: var(--cs-line);
+            --border-light: var(--cs-line);
+            --border-dark: var(--cs-line-strong);
+        }
+
+        /* Buttons → solid studio accent pill */
+        .ic-hero .tool-action-btn,
+        .mg-output-stack .tool-action-btn{
+            background: var(--cs-accent) !important; color:#fff; border:1px solid var(--cs-accent);
+            border-radius: var(--cs-radius-pill); box-shadow:none; font:600 0.82rem var(--cs-font-sans);
+            width:auto; margin-top:0; padding:0.55rem 1.05rem;
+            transition: background var(--cs-transition), transform 0.1s var(--cs-ease);
+        }
+        .ic-hero .tool-action-btn:hover,
+        .mg-output-stack .tool-action-btn:hover{ background:var(--cs-accent-hover) !important; transform:translateY(-1px); opacity:1; }
+        /* Secondary (Clear / Chart / Practice / Share) → ghost pill */
+        .ic-hero #mg-clear-btn,
+        .ic-hero #mg-download-chart-btn,
+        .ic-hero #mg-practice-btn,
+        .mg-output-stack #mg-share-btn{
+            background: var(--cs-panel-bg-soft) !important; color: var(--cs-ink-soft) !important;
+            border:1px solid var(--cs-line-strong) !important;
+        }
+        .ic-hero #mg-clear-btn:hover,
+        .ic-hero #mg-download-chart-btn:hover,
+        .ic-hero #mg-practice-btn:hover,
+        .mg-output-stack #mg-share-btn:hover{ background: var(--cs-accent-softer) !important; color: var(--cs-accent) !important; border-color: var(--cs-accent) !important; }
+
+        /* Mode toggle + output tabs → studio pill segment */
+        .ic-hero .mg-mode-toggle,
+        .mg-output-stack .mg-output-tabs{
+            display:inline-flex; gap:2px; padding:3px; margin:0 0 1rem;
+            background:var(--cs-panel-bg-soft); border:1px solid var(--cs-line);
+            border-radius:var(--cs-radius-pill); align-self:flex-start; width:auto;
+        }
+        .ic-hero .mg-mode-btn,
+        .mg-output-stack .mg-output-tab{
+            border:none; background:transparent; color:var(--cs-muted);
+            font:600 12.5px var(--cs-font-sans); cursor:pointer; padding:6px 14px;
+            border-radius:var(--cs-radius-pill); transition:color var(--cs-transition), background var(--cs-transition);
+        }
+        .ic-hero .mg-mode-btn.active,
+        .mg-output-stack .mg-output-tab.active{
+            background:var(--cs-panel-bg); color:var(--cs-accent); box-shadow:var(--cs-shadow-sm);
+        }
+
+        /* Inputs */
+        .ic-hero .mg-input,
+        .ic-hero .mg-formula-input,
+        .mg-output-stack .mg-compare-input,
+        .mg-output-stack .mg-search-input{
+            border:1.5px solid var(--cs-line-strong); border-radius:var(--cs-radius-sm);
+            background:var(--cs-panel-bg-soft); color:var(--cs-ink); font:15px var(--cs-font-sans);
+        }
+        .ic-hero .mg-input:focus,
+        .ic-hero .mg-formula-input:focus,
+        .mg-output-stack .mg-compare-input:focus,
+        .mg-output-stack .mg-search-input:focus{
+            outline:none; border-color:var(--cs-accent); background:var(--cs-panel-bg); box-shadow:var(--cs-ring);
+        }
+        .ic-hero .mg-input-label,
+        .ic-hero .tool-form-label{ color:var(--cs-muted); font:600 0.72rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.05em; }
+        .ic-hero .mg-input-hint{ color:var(--cs-muted); font-size:0.76rem; }
+
+        /* Example chips + compare presets → studio pills */
+        .ic-hero .mg-example-chip,
+        .mg-output-stack .mg-compare-preset{
+            border:1px solid var(--cs-line-strong); border-radius:var(--cs-radius-pill);
+            background:var(--cs-panel-bg); color:var(--cs-ink); font:500 12.5px var(--cs-font-mono);
+            cursor:pointer; padding:0.35rem 0.7rem;
+            transition:border-color var(--cs-transition), background var(--cs-transition), color var(--cs-transition);
+        }
+        .ic-hero .mg-example-chip:hover,
+        .mg-output-stack .mg-compare-preset:hover{ border-color:var(--cs-accent); background:var(--cs-accent-softer); color:var(--cs-accent); }
+
+        /* Output: tabs above per-panel studio cards */
+        .ic-stack .mg-output-stack{ display:flex; flex-direction:column; gap:0.85rem; min-width:0; }
+        .mg-output-stack .mg-panel>.tool-card{
+            background:var(--cs-panel-bg); border:1px solid var(--cs-line);
+            border-radius:var(--cs-radius-lg); box-shadow:var(--cs-shadow-sm); overflow:hidden;
+        }
+        .mg-output-stack .tool-result-header h4{ margin:0; font:600 0.72rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.08em; color:var(--cs-muted); }
+        .mg-output-stack .tool-result-header svg{ color:var(--cs-accent) !important; }
+        .mg-output-stack .tool-result-actions{ border-top:1px solid var(--cs-line) !important; }
+        .mg-output-stack .tool-empty-state h3{ font:400 1.5rem var(--cs-font-serif); color:var(--cs-ink); }
+        .mg-output-stack .tool-empty-state p{ color:var(--cs-muted); }
     </style>
 </head>
-<body>
+<body class="cs-body">
 <%@ include file="modern/components/nav-header.jsp" %>
 
-<header class="tool-page-header">
-    <div class="tool-page-header-inner">
-        <div>
-            <h1 class="tool-page-title">3D Molecular Geometry Calculator</h1>
-            <nav class="tool-breadcrumbs">
-                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp">Chemistry Tools</a> /
-                3D Molecular Geometry
-            </nav>
-        </div>
-        <div class="tool-page-badges">
-            <span class="tool-badge">Interactive 3D</span>
-            <span class="tool-badge">VSEPR Theory</span>
-            <span class="tool-badge">54+ Molecules</span>
-            <span class="tool-badge">Compare</span>
-        </div>
-    </div>
-</header>
+<div class="cs-hero">
+    <%@ include file="modern/ads/ad-hero-banner.jsp" %>
+</div>
 
-<section class="tool-description-section" style="background:var(--mg-light);">
-    <div class="tool-description-inner">
-        <div class="tool-description-content">
-            <p>Free <strong>interactive 3D molecular geometry</strong> tool using <strong>VSEPR theory</strong> with real <strong>PubChem coordinates</strong>. Enter any <strong>chemical formula</strong> or molecule name to explore <strong>molecular shapes</strong> in 3D &mdash; rotate, zoom, and see <strong>lone pairs</strong> as translucent lobes. <strong>Compare molecules</strong> side-by-side, download <strong>PDF with 3D snapshots</strong>, and generate <strong>practice worksheets</strong>.</p>
-        </div>
-    </div>
-</section>
+<main class="cs-main">
+    <button type="button" id="csSidebarToggle" class="cs-sidebar-toggle" aria-label="Open chemistry tools menu">&#9776; Chemistry tools</button>
+    <% request.setAttribute("activeService", "geometry"); %>
+    <jsp:include page="/chemistry/partials/sidebar.jsp" />
 
-<main class="tool-page-container mg-tool-page">
-    <!-- ==================== INPUT COLUMN ==================== -->
-    <div class="tool-input-column">
-        <div class="tool-card">
-            <div class="tool-card-header" style="background:var(--mg-gradient);">VSEPR Analysis</div>
-            <div class="tool-card-body">
+    <section class="cs-workspace">
+
+<!-- Slim studio title — editorial tone, no card -->
+<div class="cs-title">
+    <nav class="cs-crumbs" aria-label="Breadcrumb">
+        <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
+        <a href="<%=request.getContextPath()%>/chemistry/">Chemistry</a> /
+        <span aria-current="page">3D Molecular Geometry</span>
+    </nav>
+    <h1>3D Molecular Geometry Calculator</h1>
+</div>
+
+<!-- Studio stacked layout: input hero on top, results below -->
+<div class="ic-stack">
+    <!-- ==================== INPUT (hero) ==================== -->
+    <div class="ic-hero">
 
                 <!-- Mode Toggle -->
                 <div class="mg-mode-toggle">
-                    <button type="button" class="mg-mode-btn active" data-mode="pairs">By Pairs</button>
-                    <button type="button" class="mg-mode-btn" data-mode="formula">By Formula</button>
+                    <button type="button" class="mg-mode-btn active" data-mode="formula">By Formula</button>
+                    <button type="button" class="mg-mode-btn" data-mode="pairs">By Pairs</button>
+                </div>
+
+                <!-- By Formula Form -->
+                <div class="mg-mode-form active" id="mg-form-formula">
+                    <div class="tool-form-group">
+                        <label class="mg-input-label" for="mg-formula">Chemical Formula</label>
+                        <input type="text" class="mg-input mg-formula-input" id="mg-formula" placeholder="e.g., CH4, H2O, Methane, Water">
+                        <div class="mg-input-hint">Enter a formula (CH4, NH3, SF6, NH4+) or molecule name (Methane, Water, Ammonia).</div>
+                    </div>
                 </div>
 
                 <!-- By Pairs Form -->
-                <div class="mg-mode-form active" id="mg-form-pairs">
+                <div class="mg-mode-form" id="mg-form-pairs">
                     <div class="mg-input-row">
                         <div class="mg-input-group">
                             <label class="mg-input-label" for="mg-bp">Bonding Pairs (BP)</label>
@@ -230,15 +343,6 @@
                         </div>
                     </div>
                     <div class="mg-input-hint">Atoms bonded to central atom (BP) and lone electron pairs (LP)</div>
-                </div>
-
-                <!-- By Formula Form -->
-                <div class="mg-mode-form" id="mg-form-formula">
-                    <div class="tool-form-group">
-                        <label class="mg-input-label" for="mg-formula">Chemical Formula</label>
-                        <input type="text" class="mg-input mg-formula-input" id="mg-formula" placeholder="e.g., CH4, H2O, Methane, Water">
-                        <div class="mg-input-hint">Enter a formula (CH4, NH3, SF6, NH4+) or molecule name (Methane, Water, Ammonia).</div>
-                    </div>
                 </div>
 
                 <!-- Action Buttons -->
@@ -273,12 +377,10 @@
                         <button type="button" class="mg-example-chip" data-example="if7">IF&#8327;</button>
                     </div>
                 </div>
-            </div>
-        </div>
     </div>
 
-    <!-- ==================== OUTPUT COLUMN ==================== -->
-    <div class="tool-output-column">
+    <!-- ==================== OUTPUT (tabs + result cards) ==================== -->
+    <div class="mg-output-stack">
         <!-- Tab bar -->
         <div class="mg-output-tabs">
             <button type="button" class="mg-output-tab active" data-panel="result">Result</button>
@@ -386,12 +488,7 @@
         </div>
 
     </div>
-
-    <!-- ==================== ADS COLUMN ==================== -->
-    <div class="tool-ads-column">
-        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
-    </div>
-</main>
+</div>
 
 <!-- Mobile Ad Fallback -->
 <div class="tool-mobile-ad-container">
@@ -404,13 +501,6 @@
   <a href="<%=request.getContextPath()%>/chemistry/molecule-draw.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,oklch(0.954 0.049 85.2));border:1px solid var(--border-color,oklch(0.786 0.067 80.2));border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,oklch(0.197 0.014 61.7));transition:all 0.2s;" onmouseover="this.style.borderColor='oklch(0.860 0.127 77.7)';this.style.boxShadow='0 2px 8px oklch(0.860 0.127 77.7 / 0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,oklch(0.860 0.127 77.7),oklch(0.860 0.127 77.7));color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x270D;</span> Molecule Draw <span style="font-size:0.6rem;font-weight:700;background:oklch(0.759 0.155 65.8);color:#fff;padding:1px 5px;border-radius:3px;">NEW</span></a>
   <a href="<%=request.getContextPath()%>/lewis-structure-generator.jsp" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-secondary,oklch(0.954 0.049 85.2));border:1px solid var(--border-color,oklch(0.786 0.067 80.2));border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:600;color:var(--text-primary,oklch(0.197 0.014 61.7));transition:all 0.2s;" onmouseover="this.style.borderColor='#2563eb';this.style.boxShadow='0 2px 8px rgba(37,99,235,0.15)'" onmouseout="this.style.borderColor='';this.style.boxShadow=''"><span style="background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;">&#x1F517;</span> Lewis Structure Generator</a>
 </div>
-
-<!-- Related Tools -->
-<jsp:include page="modern/components/related-tools.jsp">
-    <jsp:param name="currentToolUrl" value="molecular-geometry-calculator.jsp"/>
-    <jsp:param name="keyword" value="chemistry"/>
-    <jsp:param name="limit" value="6"/>
-</jsp:include>
 
 <!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
 <section class="tool-expertise-section" style="max-width:1200px;margin:2rem auto;padding:0 1rem;">
@@ -997,20 +1087,16 @@ H&mdash;O&mdash;H</div>
     </div>
 </section>
 
+    </section>
+
+    <aside class="cs-rail" aria-label="Advertisements">
+        <%@ include file="/modern/ads/ad-ide-rail-top.jsp" %>
+        <%@ include file="/modern/ads/ad-ide-rail-bottom.jsp" %>
+    </aside>
+</main>
+
 <!-- Support Section -->
 <%@ include file="modern/components/support-section.jsp" %>
-
-<!-- Footer -->
-<footer class="page-footer">
-    <div class="footer-content">
-        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
-        <div class="footer-links">
-            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
-            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
-            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
-        </div>
-    </div>
-</footer>
 
 <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
