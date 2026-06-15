@@ -276,9 +276,10 @@ H2: 3 g</textarea>
 '        coef=rcoef[sp]; a=amounts.get(sp)',
 '        if not a:',
 '            rows.append({"sp":sp,"coef":coef,"given":None,"molar":round(molar[sp],3)}); continue',
+'        if a["val"]<=0: raise ValueError("Amount of " + sp + " must be greater than zero")',
 '        mol = a["val"]/molar[sp] if a["unit"]=="g" else a["val"]',
 '        ext = mol/coef; extents[sp]=ext',
-'        rows.append({"sp":sp,"coef":coef,"given":a["val"],"unit":a["unit"],"mol":round(mol,5),"ext":round(ext,6),"molar":round(molar[sp],3)})',
+'        rows.append({"sp":sp,"coef":coef,"given":a["val"],"unit":a["unit"],"mol":round(mol,5),"ext":round(ext,5),"molar":round(molar[sp],3)})',
 '    if not extents: raise ValueError("Enter at least one reactant amount")',
 '    lim=min(extents, key=extents.get); xi=extents[lim]',
 '    tcoef=pcoef.get(target) or rcoef.get(target)',
@@ -287,11 +288,13 @@ H2: 3 g</textarea>
 '    for row in rows:',
 '        if row.get("mol") is not None:',
 '            lm = row["mol"] - xi*row["coef"]',
-'            row["left_mol"]=round(max(0.0, lm),5); row["left_g"]=round(max(0.0, lm)*molar[row["sp"]],4)',
+'            row["used"]=round(xi*row["coef"],5); row["left_mol"]=round(max(0.0, lm),5); row["left_g"]=round(max(0.0, lm)*molar[row["sp"]],4)',
 '            row["limiting"]=(row["sp"]==lim)',
+'    prod_yield=[{"sp":x["sp"],"mol":round(xi*x["n"],5),"g":round(xi*x["n"]*molar[x["sp"]],4)} for x in pl]',
 '    out={"ok":True,"reactants":rl,"products":pl,"limiting":lim,"target":target,',
-'         "th_mol":round(th_mol,5),"th_mass":round(th_mass,4),"molar_target":round(molar[target],3),"rows":rows}',
+'         "th_mol":round(th_mol,5),"th_mass":round(th_mass,4),"molar_target":round(molar[target],3),"rows":rows,"prod_yield":prod_yield}',
 '    if actual:',
+'        if actual["val"]<0: raise ValueError("Actual yield cannot be negative")',
 '        am=actual["val"]/molar[target] if actual["unit"]=="g" else actual["val"]',
 '        out["actual_mol"]=round(am,5); out["pct_yield"]=(round(100*am/th_mol,2) if th_mol else None)',
 '    res=out',
@@ -328,16 +331,34 @@ H2: 3 g</textarea>
   function render(res) {
     $('lrShareBtn').style.display = '';
     var h = '<div class="lr-eqn">' + side(res.reactants) + ' <span class="op">→</span> ' + side(res.products) + '</div>';
-    h += '<div class="lr-verdict">Limiting reagent: <b>' + pretty(res.limiting) + '</b> — it is used up first and sets the maximum yield.</div>';
-    h += '<div class="lr-stats">' + stat('Theoretical yield', res.th_mass + ' g') + stat('= moles ' + pretty(res.target), res.th_mol) + stat('molar mass ' + pretty(res.target), res.molar_target + ' g/mol');
+    h += '<div class="lr-verdict">Limiting reagent: <b>' + pretty(res.limiting) + '</b> — it has the smallest <em>moles ÷ coefficient</em> ratio, so it runs out first and sets the maximum yield.</div>';
+
+    h += '<div class="lr-stats">' + stat('Theoretical yield of ' + pretty(res.target), res.th_mass + ' g') + stat('moles of ' + pretty(res.target), res.th_mol + ' mol') + stat('molar mass ' + pretty(res.target), res.molar_target + ' g/mol');
     if (res.pct_yield != null) h += stat('Percent yield', res.pct_yield + '%');
     h += '</div>';
-    h += '<table class="lr-tbl"><thead><tr><th>Reactant</th><th>Coef</th><th>Given</th><th>Moles</th><th>Excess left</th><th></th></tr></thead><tbody>';
+    if (res.pct_yield != null && res.pct_yield > 100)
+      h += '<p class="lr-hint" style="color:#9a3412;">⚠ Percent yield above 100% is physically impossible — re-check the actual yield, the molar mass, or whether the product was fully dried/pure.</p>';
+
+    // ── how the limiting reagent was decided ──
+    h += '<p class="lr-eq-label" style="margin-top:1.2rem;">Limiting reagent — the decision</p>';
+    h += '<table class="lr-tbl"><thead><tr><th>Reactant</th><th>Coef</th><th>Amount</th><th>Moles</th><th>mol ÷ coef</th><th>Excess left</th><th></th></tr></thead><tbody>';
     h += res.rows.map(function (r) {
-      if (r.given == null) return '<tr><td><strong>' + pretty(r.sp) + '</strong></td><td class="n">' + r.coef + '</td><td colspan="3" style="color:var(--cs-muted)">no amount given (assumed excess)</td><td></td></tr>';
-      return '<tr class="' + (r.limiting ? 'lim' : '') + '"><td><strong>' + pretty(r.sp) + '</strong></td><td class="n">' + r.coef + '</td><td class="n">' + r.given + ' ' + r.unit + '</td><td class="n">' + r.mol + ' mol</td><td class="n">' + (r.limiting ? '0' : r.left_g + ' g') + '</td><td>' + (r.limiting ? '<span class="lr-badge">limiting</span>' : '') + '</td></tr>';
+      if (r.given == null) return '<tr><td><strong>' + pretty(r.sp) + '</strong></td><td class="n">' + r.coef + '</td><td colspan="4" style="color:var(--cs-muted)">no amount given — assumed in excess</td><td></td></tr>';
+      return '<tr class="' + (r.limiting ? 'lim' : '') + '"><td><strong>' + pretty(r.sp) + '</strong></td><td class="n">' + r.coef + '</td><td class="n">' + r.given + ' ' + r.unit + '</td><td class="n">' + r.mol + '</td><td class="n"><strong>' + r.ext + '</strong></td><td class="n">' + (r.limiting ? '0' : r.left_g + ' g') + '</td><td>' + (r.limiting ? '<span class="lr-badge">smallest → limiting</span>' : '') + '</td></tr>';
     }).join('');
     h += '</tbody></table>';
+
+    // ── theoretical yield of every product ──
+    if (res.prod_yield && res.prod_yield.length) {
+      h += '<p class="lr-eq-label" style="margin-top:1.2rem;">Theoretical yield of every product (at 100% reaction)</p>';
+      h += '<table class="lr-tbl"><thead><tr><th>Product</th><th>Moles formed</th><th>Mass</th></tr></thead><tbody>';
+      h += res.prod_yield.map(function (p) {
+        return '<tr class="' + (p.sp === res.target ? 'lim' : '') + '"><td><strong>' + pretty(p.sp) + '</strong></td><td class="n">' + p.mol + ' mol</td><td class="n">' + p.g + ' g</td></tr>';
+      }).join('');
+      h += '</tbody></table>';
+    }
+
+    h += '<p class="lr-hint">Excess amounts left over and product yields assume the reaction proceeds to completion (100%). Real reactions reach the percent yield shown above.</p>';
     bodyEl.innerHTML = h;
   }
 
