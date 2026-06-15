@@ -95,6 +95,8 @@
     }
     .ec-card-head { display:flex; align-items:center; gap:0.5rem; margin:0 0 1rem; }
     .ec-card-head h2 { margin:0; font:600 0.72rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.08em; color:var(--cs-muted); }
+    .ec-share { margin-left:auto; border:1px solid var(--cs-line-strong); background:var(--cs-panel-bg); color:var(--cs-ink-soft); border-radius:var(--cs-radius-pill); padding:0.3rem 0.85rem; font:600 0.72rem var(--cs-font-sans); cursor:pointer; transition:border-color var(--cs-transition), color var(--cs-transition); }
+    .ec-share:hover { border-color:var(--cs-accent); color:var(--cs-accent); }
 
     .ec-eqn { font:1.5rem var(--cs-font-serif); color:var(--cs-ink); line-height:1.55; text-align:center; padding:0.5rem 0; }
     .ec-eqn .ec-op { color:var(--cs-accent); margin:0 0.4rem; font-weight:600; }
@@ -223,7 +225,7 @@
 
     <!-- ===== Analysis (balanced + n) ===== -->
     <div class="ec-card" id="ecAnalysisCard" style="display:none;">
-        <div class="ec-card-head"><span style="color:var(--cs-accent);">&#9883;</span><h2>Balanced reaction</h2></div>
+        <div class="ec-card-head"><span style="color:var(--cs-accent);">&#9883;</span><h2>Balanced reaction</h2><button type="button" id="ecShareBtn" class="ec-share" style="display:none;">&#128279; Share</button></div>
         <div id="ecAnalysisBody"></div>
     </div>
 
@@ -538,6 +540,7 @@
       current = res;
       renderAnalysis(res);
       buildCell(res); buildNernst(res);
+      document.getElementById('ecShareBtn').style.display = '';
     }).catch(function(e){
       aBody.innerHTML = '<div class="ec-err"><strong>Backend error.</strong> ' + esc(e.message || e) + '</div>';
     }).then(function(){ btn.disabled = false; btn.innerHTML = old; });
@@ -770,8 +773,23 @@
   function fmtSig(x, sig){ if (!isFinite(x)) return '∞'; if (x === 0) return '0'; var a = Math.abs(x); if (a >= 1e5 || a < 1e-3) return x.toExponential(Math.max(0, sig - 1)); return (+x.toPrecision(sig)).toString(); }
   function fmtK(K){ if (!isFinite(K)) return '∞'; if (K >= 1e6 || (K < 1e-3 && K > 0)) return K.toExponential(2); return (+K.toPrecision(4)).toString(); }
 
+  // ── share (tool-utils): encode the equation + medium into a URL ─────
+  document.getElementById('ecShareBtn').addEventListener('click', function(){
+    if (typeof ToolUtils === 'undefined' || !ToolUtils.shareResult) return;
+    ToolUtils.shareResult(elEq.value, { paramName:'eq', encode:true, extraParams:{ medium: document.getElementById('ecMedium').value }, copyToClipboard:true, showSupportPopup:true, toolName:'Electrochemistry Calculator' });
+  });
+  function loadFromUrl(){
+    var q = new URLSearchParams(location.search), eq = q.get('eq');
+    if (!eq) return;
+    if (q.get('enc') === 'base64'){ try { eq = decodeURIComponent(escape(atob(eq))); } catch (e) { return; } }
+    elEq.value = eq;
+    var med = q.get('medium'); if (med) document.getElementById('ecMedium').value = med;
+    renderPreview(); analyze();
+  }
+
   renderRef('');
   renderPreview();
+  loadFromUrl();
 })();
 </script>
 </body>
