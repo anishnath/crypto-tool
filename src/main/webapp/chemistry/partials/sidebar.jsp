@@ -86,7 +86,7 @@
     </div>
 
     <!-- Reactions & Stoichiometry -->
-    <div class="cs-group<%= collapsedCls(activeService, "balancer", "stoichiometry", "molar-mass") %>" data-group="reactions">
+    <div class="cs-group<%= collapsedCls(activeService, "balancer", "stoichiometry", "molar-mass", "empirical") %>" data-group="reactions">
         <button class="cs-group-header" type="button">Reactions &amp; Stoichiometry <span class="cs-group-chevron">&#9662;</span></button>
         <div class="cs-group-body">
             <a href="<%= ctx %>/chemical-equation-balancer.jsp" class="cs-item <%= activeCls(activeService, "balancer") %>">
@@ -98,15 +98,21 @@
             <a href="<%= ctx %>/molar-mass-calculator.jsp" class="cs-item <%= activeCls(activeService, "molar-mass") %>">
                 <span class="cs-item-icon">&#8721;m</span><span class="cs-item-label">Molar Mass</span>
             </a>
+            <a href="<%= ctx %>/empirical-formula-calculator.jsp" class="cs-item <%= activeCls(activeService, "empirical") %>">
+                <span class="cs-item-icon">&#8473;</span><span class="cs-item-label">Empirical &amp; % Composition</span>
+            </a>
         </div>
     </div>
 
     <!-- Solutions & Energy -->
-    <div class="cs-group<%= collapsedCls(activeService, "molarity", "unit-converter", "thermo", "electro") %>" data-group="solutions">
+    <div class="cs-group<%= collapsedCls(activeService, "molarity", "unit-converter", "thermo", "electro", "equilibrium") %>" data-group="solutions">
         <button class="cs-group-header" type="button">Solutions &amp; Energy <span class="cs-group-chevron">&#9662;</span></button>
         <div class="cs-group-body">
             <a href="<%= ctx %>/molarity-dilution-calculator.jsp" class="cs-item <%= activeCls(activeService, "molarity") %>">
                 <span class="cs-item-icon">&#9219;</span><span class="cs-item-label">Molarity &amp; Dilution</span>
+            </a>
+            <a href="<%= ctx %>/equilibrium-ph-calculator.jsp" class="cs-item <%= activeCls(activeService, "equilibrium") %>">
+                <span class="cs-item-icon">&#8652;</span><span class="cs-item-label">Equilibrium &amp; pH</span>
             </a>
             <a href="<%= ctx %>/unit-converter-chemistry.jsp" class="cs-item <%= activeCls(activeService, "unit-converter") %>">
                 <span class="cs-item-icon">&#8644;</span><span class="cs-item-label">Unit Converter</span>
