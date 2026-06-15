@@ -1,1029 +1,371 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<% String ctx = request.getContextPath(); %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Limiting Reagent Calculator - Find Limiting Reactant & Theoretical Yield</title>
-    <meta name="description" content="Free limiting reagent calculator. Find the limiting reactant, excess reagent, theoretical yield, and percent yield for any chemical reaction. Perfect for chemistry students and stoichiometry problems.">
-    <meta name="keywords" content="limiting reagent calculator, limiting reactant calculator, stoichiometry calculator, theoretical yield calculator, excess reagent calculator, chemistry calculator">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<jsp:include page="modern/components/seo-tool-page.jsp">
+    <jsp:param name="toolName" value="Limiting Reagent &amp; Percent Yield Calculator" />
+    <jsp:param name="toolCategory" value="Chemistry" />
+    <jsp:param name="toolDescription" value="Enter a reaction and the amounts of each reactant to find the limiting reagent, the theoretical yield of any product (in moles and grams), the excess left over, and the percent yield. The equation is balanced and molar masses computed with chempy." />
+    <jsp:param name="toolUrl" value="limiting-reagent-calculator.jsp" />
+    <jsp:param name="toolKeywords" value="limiting reagent calculator, limiting reactant calculator, percent yield calculator, theoretical yield calculator, excess reagent, stoichiometry calculator, moles to grams reaction, how much product is formed, limiting reagent and percent yield" />
+    <jsp:param name="toolImage" value="limiting-reagent-og.png" />
+    <jsp:param name="breadcrumbCategoryUrl" value="chemistry/" />
+    <jsp:param name="teaches" value="limiting reagent, theoretical yield, percent yield, excess reactant, stoichiometry, mole ratios" />
+    <jsp:param name="educationalLevel" value="High School, Undergraduate" />
+    <jsp:param name="hasSteps" value="true" />
+    <jsp:param name="howToSteps" value="Write the reaction|Type the equation, e.g. N2 + H2 = NH3 (it is balanced automatically),Enter the amounts|Give how much of each reactant you have, in grams or moles,Calculate|The tool converts to moles, divides by the coefficients, and the smallest result is the limiting reagent — it then gives the theoretical yield and the excess left over,Add an actual yield|Optionally enter the actual mass or moles obtained to get the percent yield" />
+    <jsp:param name="faq1q" value="How do you find the limiting reagent?" />
+    <jsp:param name="faq1a" value="Convert the amount of each reactant to moles, then divide each by its coefficient in the balanced equation. The reactant with the smallest result runs out first and is the limiting reagent — it determines how much product can form. The others are in excess." />
+    <jsp:param name="faq2q" value="How do you calculate theoretical yield?" />
+    <jsp:param name="faq2a" value="From the limiting reagent, use the mole ratio of the balanced equation to find the moles of product, then multiply by the product's molar mass to get the theoretical yield in grams. For example with H2 limiting in N2 + 3H2 → 2NH3, moles of NH3 = (moles H2 ÷ 3) × 2." />
+    <jsp:param name="faq3q" value="What is percent yield?" />
+    <jsp:param name="faq3a" value="Percent yield = (actual yield ÷ theoretical yield) × 100. The theoretical yield is the maximum amount of product the limiting reagent could make; the actual yield is what you really obtained. A percent yield below 100% is normal because of side reactions, losses, and incomplete reactions." />
+    <jsp:param name="faq4q" value="What is the difference between limiting and excess reagent?" />
+    <jsp:param name="faq4a" value="The limiting reagent is completely used up and caps the amount of product. An excess reagent is left over after the reaction finishes. This tool reports how much of each excess reactant remains, in both moles and grams." />
+    <jsp:param name="faq5q" value="Can I enter amounts in moles instead of grams?" />
+    <jsp:param name="faq5a" value="Yes. Write each amount with its unit, for example N2: 0.5 mol or H2: 3 g. Grams are converted to moles using exact molar masses; moles are used directly." />
+    <jsp:param name="faq6q" value="Is this limiting reagent calculator free?" />
+    <jsp:param name="faq6a" value="Yes. It is completely free, needs no signup, and balances the equation and computes molar masses with the open-source chempy library." />
+</jsp:include>
 
-    <!-- Open Graph tags -->
-    <meta property="og:title" content="Limiting Reagent Calculator - Stoichiometry Tool">
-    <meta property="og:description" content="Calculate limiting reactant, excess reagent, and theoretical yield for chemical reactions. Free chemistry calculator with step-by-step solutions.">
-    <meta property="og:type" content="website">
+<link rel="stylesheet" href="<%=ctx%>/modern/css/design-system.css">
+<link rel="stylesheet" href="<%=ctx%>/modern/css/navigation.css">
+<link rel="stylesheet" href="<%=ctx%>/chemistry/css/chemistry-studio.css">
+<link rel="stylesheet" href="<%=ctx%>/modern/css/ads.css">
+<link rel="stylesheet" href="<%=ctx%>/modern/css/dark-mode.css">
+<link rel="stylesheet" href="<%=ctx%>/modern/css/footer.css">
+<link rel="stylesheet" href="<%=ctx%>/modern/css/search.css">
 
-    <!-- Schema.org structured data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Limiting Reagent Calculator",
-        "description": "Calculate limiting reactant, excess reagent, theoretical yield, and percent yield for chemical reactions",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "Any",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "featureList": "Limiting reagent identification, Excess reagent calculation, Theoretical yield, Percent yield, Step-by-step solutions"
-    }
-    </script>
+<%@ include file="modern/ads/ad-init.jsp" %>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .lr-eq-label { font:600 0.78rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.06em; color:var(--cs-muted); margin:0 0 0.45rem; }
+    .lr-eq-row { display:flex; gap:0.5rem; align-items:stretch; flex-wrap:wrap; }
+    .lr-eq-input { flex:1 1 280px; min-width:0; min-height:48px; padding:0.7rem 0.95rem; border:1.5px solid var(--cs-line-strong); border-radius:var(--cs-radius); background:var(--cs-panel-bg-soft); color:var(--cs-ink); font:16px var(--cs-font-mono); transition:border-color var(--cs-transition), box-shadow var(--cs-transition); }
+    .lr-eq-input:focus { outline:none; border-color:var(--cs-accent); background:var(--cs-panel-bg); box-shadow:var(--cs-ring); }
+    .lr-fields { display:flex; flex-wrap:wrap; gap:0.7rem 1rem; align-items:flex-end; margin-top:0.85rem; }
+    .lr-field { display:flex; flex-direction:column; gap:0.3rem; }
+    .lr-field label { font:600 0.68rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.05em; color:var(--cs-muted); }
+    .lr-input, .lr-area, .lr-sel { padding:0.55rem 0.8rem; border:1.5px solid var(--cs-line-strong); border-radius:var(--cs-radius-sm); background:var(--cs-panel-bg-soft); color:var(--cs-ink); font:14px var(--cs-font-sans); transition:border-color var(--cs-transition), box-shadow var(--cs-transition); }
+    .lr-input:focus, .lr-area:focus, .lr-sel:focus { outline:none; border-color:var(--cs-accent); background:var(--cs-panel-bg); box-shadow:var(--cs-ring); }
+    .lr-input.num { width:7rem; text-align:center; }
+    .lr-area { width:100%; min-height:80px; font-family:var(--cs-font-mono); font-size:14px; resize:vertical; }
+    .lr-hint { font-size:0.78rem; color:var(--cs-muted); line-height:1.5; margin:0.6rem 0 0; }
+    .lr-hint code { font:12px var(--cs-font-mono); background:var(--cs-panel-bg-soft); padding:1px 5px; border-radius:4px; color:var(--cs-ink-soft); }
+    .lr-btn { display:inline-flex; align-items:center; gap:0.4rem; padding:0.6rem 1.25rem; border-radius:var(--cs-radius-pill); background:var(--cs-accent); color:#fff; border:1px solid var(--cs-accent); font:600 0.85rem var(--cs-font-sans); cursor:pointer; transition:background var(--cs-transition), transform 0.1s var(--cs-ease); }
+    .lr-btn:hover { background:var(--cs-accent-hover); transform:translateY(-1px); } .lr-btn:disabled { opacity:0.6; cursor:wait; transform:none; }
+    .lr-cta { margin-top:1rem; }
+    .lr-ex { background:none; border:1px solid var(--cs-line-strong); color:var(--cs-ink-soft); border-radius:var(--cs-radius-pill); padding:0.35rem 0.7rem; font:500 12px var(--cs-font-mono); cursor:pointer; }
+    .lr-ex:hover { border-color:var(--cs-accent); color:var(--cs-accent); background:var(--cs-accent-softer); }
+    .lr-chips { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.85rem; }
+    .lr-preview { margin-top:0.55rem; min-height:1.5em; font:1.25rem var(--cs-font-serif); color:var(--cs-ink); }
+    .lr-preview .op { color:var(--cs-accent); margin:0 0.3rem; }
 
-    <style>
-        .example-reaction {
-            display: inline-block;
-            padding: 6px 12px;
-            margin: 3px;
-            background: #f3f4f6;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
-        .example-reaction:hover {
-            background: #e5e7eb;
-            border-color: #9ca3af;
-        }
-        .limiting-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            background: #dc2626;
-            color: white;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        .excess-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            background: #2563eb;
-            color: white;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        .yield-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            background: #059669;
-            color: white;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        .reagent-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
-        }
-        .reagent-info-item {
-            background: #f9fafb;
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 3px solid #6366f1;
-        }
-        .reagent-info-item strong {
-            display: block;
-            color: #4b5563;
-            margin-bottom: 4px;
-            font-size: 0.85rem;
-        }
-        .reagent-info-item span {
-            font-size: 1rem;
-            color: #111827;
-            font-weight: 600;
-        }
-        .reaction-display {
-            background: #f3f4f6;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 1rem;
-            text-align: center;
-            font-weight: 600;
-            color: #1f2937;
-            border: 1px solid #e5e7eb;
-            margin: 10px 0;
-        }
-        .formula-box {
-            background: #f9fafb;
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 3px solid #6366f1;
-            margin: 10px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-        .step-box {
-            background: #fef3c7;
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 3px solid #f59e0b;
-            margin: 10px 0;
-        }
-        .step-box strong {
-            color: #92400e;
-        }
-        .min-h-result {
-            min-height: 200px;
-        }
-        .sticky-side {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 80px;
-            max-height: calc(100vh - 100px);
-        }
-        .sticky-side .card-body {
-            overflow-y: auto;
-            max-height: calc(100vh - 150px);
-        }
-    </style>
+    .lr-card { background:var(--cs-panel-bg); border:1px solid var(--cs-line); border-radius:var(--cs-radius-lg); box-shadow:var(--cs-shadow-sm); padding:1.5rem; overflow:hidden; }
+    .lr-card-head { display:flex; align-items:center; gap:0.5rem; margin:0 0 1rem; }
+    .lr-card-head h2 { margin:0; font:600 0.72rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.08em; color:var(--cs-muted); }
+    .lr-share { margin-left:auto; border:1px solid var(--cs-line-strong); background:var(--cs-panel-bg); color:var(--cs-ink-soft); border-radius:var(--cs-radius-pill); padding:0.3rem 0.85rem; font:600 0.72rem var(--cs-font-sans); cursor:pointer; }
+    .lr-share:hover { border-color:var(--cs-accent); color:var(--cs-accent); }
+    .lr-eqn { font:1.4rem var(--cs-font-serif); color:var(--cs-ink); text-align:center; padding:0.4rem 0; }
+    .lr-eqn .op { color:var(--cs-accent); margin:0 0.35rem; } .lr-eqn .coef { color:var(--cs-muted); }
+    .lr-verdict { margin-top:1rem; padding:0.8rem 1rem; border-radius:var(--cs-radius); background:var(--cs-accent-softer); border:1px solid var(--cs-accent-ring); border-left:3px solid var(--cs-accent); font:0.92rem var(--cs-font-sans); color:var(--cs-ink); }
+    .lr-verdict b { color:var(--cs-accent); }
+    .lr-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:0.75rem; margin-top:1rem; }
+    .lr-stat { padding:0.75rem 0.7rem; background:var(--cs-panel-bg-soft); border-radius:var(--cs-radius-sm); border-left:3px solid var(--cs-accent); text-align:center; }
+    .lr-stat .k { display:block; font:600 0.62rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.05em; color:var(--cs-muted); margin-bottom:0.3rem; }
+    .lr-stat .v { font:700 1.2rem var(--cs-font-mono); color:var(--cs-ink); }
+    table.lr-tbl { width:100%; border-collapse:collapse; margin-top:1rem; font-size:0.85rem; }
+    table.lr-tbl th { text-align:left; padding:0.45rem 0.6rem; font:600 0.64rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.04em; color:var(--cs-muted); border-bottom:1px solid var(--cs-line); }
+    table.lr-tbl td { padding:0.45rem 0.6rem; border-bottom:1px dotted var(--cs-line); color:var(--cs-ink); }
+    table.lr-tbl td.n { font-family:var(--cs-font-mono); }
+    table.lr-tbl tr.lim td { background:var(--cs-accent-softer); }
+    .lr-badge { display:inline-block; font:600 0.6rem var(--cs-font-sans); text-transform:uppercase; letter-spacing:0.05em; color:#fff; background:var(--cs-accent); border-radius:var(--cs-radius-pill); padding:1px 7px; }
+    .lr-err { padding:1rem 1.1rem; border-radius:var(--cs-radius); background:#fef7ed; border:1px solid #fdba74; color:#9a3412; font-size:0.9rem; }
+    [data-theme="dark"] .lr-err { background:rgba(251,146,60,0.08); border-color:rgba(251,146,60,0.3); color:#fdba74; }
+    .lr-spin { display:inline-block; width:13px; height:13px; border:2px solid rgba(255,255,255,0.45); border-top-color:#fff; border-radius:50%; animation:lr-spin 0.7s linear infinite; }
+    @keyframes lr-spin { to { transform:rotate(360deg); } }
 
-    <%@ include file="header-script.jsp"%>
+    .pt-seo { display:flex; flex-direction:column; gap:1rem; margin-top:1.25rem; }
+    .pt-seo-card { background:var(--cs-panel-bg); border:1px solid var(--cs-line); border-radius:var(--cs-radius-lg); box-shadow:var(--cs-shadow-sm); padding:1.5rem 1.6rem; }
+    .pt-seo-card h2 { font:400 1.4rem var(--cs-font-serif); color:var(--cs-ink); margin:0 0 0.6rem; }
+    .pt-seo-card p, .pt-seo-card li { color:var(--cs-ink-soft); font-size:0.93rem; line-height:1.7; }
+    .pt-seo-card ol { margin:0.4rem 0 0; padding-left:1.2rem; }
+    .pt-seo-card code { font:0.86em var(--cs-font-mono); background:var(--cs-panel-bg-soft); padding:1px 5px; border-radius:4px; color:var(--cs-ink-soft); }
+</style>
 </head>
+<body class="cs-body">
+<%@ include file="modern/components/nav-header.jsp" %>
 
-<%@ include file="body-script.jsp"%>
+<div class="cs-hero">
+    <%@ include file="modern/ads/ad-hero-banner.jsp" %>
+</div>
 
-<%@ include file="chem-menu-nav.jsp"%>
+<main class="cs-main">
+    <button type="button" id="csSidebarToggle" class="cs-sidebar-toggle" aria-label="Open chemistry tools menu">&#9776; Chemistry tools</button>
+    <% request.setAttribute("activeService", "limiting"); %>
+    <jsp:include page="/chemistry/partials/sidebar.jsp" />
 
-<div class="container mt-4">
+    <section class="cs-workspace">
 
-    <h1 class="mb-3">Limiting Reagent Calculator</h1>
-    <p class="lead mb-4">Calculate the limiting reactant, excess reagent, theoretical yield, and percent yield for chemical reactions.</p>
+<div class="cs-title">
+    <nav class="cs-crumbs" aria-label="Breadcrumb">
+        <a href="<%=ctx%>/index.jsp">Home</a> /
+        <a href="<%=ctx%>/chemistry/">Chemistry</a> /
+        <span aria-current="page">Limiting Reagent &amp; Yield</span>
+    </nav>
+    <h1>Limiting Reagent &amp; Percent Yield Calculator</h1>
+</div>
 
-    <div class="row">
-        <div class="col-lg-7 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="basic-tab" data-toggle="tab" href="#basic" role="tab">
-                                <i class="fas fa-calculator"></i> Basic Calculator
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="advanced-tab" data-toggle="tab" href="#advanced" role="tab">
-                                <i class="fas fa-chart-line"></i> With Yields
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="learn-tab" data-toggle="tab" href="#learn" role="tab">
-                                <i class="fas fa-book"></i> Learn
-                            </a>
-                        </li>
-                    </ul>
+<div class="ic-stack">
 
-                    <div class="tab-content">
-                        <!-- Tab 1: Basic Calculator -->
-                        <div class="tab-pane fade show active" id="basic" role="tabpanel">
-                            <h4 class="mt-3">Limiting Reagent Calculator</h4>
+    <div class="ic-hero">
+        <p class="lr-eq-label">Reaction</p>
+        <div class="lr-eq-row">
+            <input type="text" class="lr-eq-input" id="lrEq" spellcheck="false" autocomplete="off" placeholder="e.g. N2 + H2 = NH3" value="N2 + H2 = NH3">
+        </div>
+        <div class="lr-preview" id="lrPreview"></div>
 
-                            <div class="form-group">
-                                <label>Balanced Chemical Equation</label>
-                                <input type="text" class="form-control" id="basicEquation" placeholder="e.g., 2H2 + O2 → 2H2O">
-                                <small class="help-text">Enter a balanced equation with coefficients. Supports: →, ⇌, =, ==</small>
-                            </div>
-
-                            <div class="alert alert-info">
-                                <small><strong>💡 How it works:</strong> Enter your equation above and press Tab/Enter. Input fields will be generated automatically with molar masses calculated!</small>
-                            </div>
-
-                            <!-- Dynamic input fields will be generated here -->
-                            <div id="dynamicReactantFields"></div>
-
-                            <button class="btn btn-primary" onclick="calculateBasic()">
-                                <i class="fas fa-calculator"></i> Calculate Limiting Reagent
-                            </button>
-                            <button class="btn btn-outline-secondary ml-2" onclick="clearBasic()">
-                                <i class="fas fa-eraser"></i> Clear
-                            </button>
-
-                            <div class="form-group">
-                                <label>Common Reactions (Click to load)</label>
-
-                                <!-- Easy Reactions -->
-                                <h6 class="mt-3 mb-2" style="font-size: 0.9rem; color: #059669;"><i class="fas fa-star"></i> Easy - Synthesis & Decomposition</h6>
-                                <div class="mb-2">
-                                    <span class="example-reaction" onclick="setBasicExample('2H2 + O2 → 2H2O')">💧 Water synthesis</span>
-                                    <span class="example-reaction" onclick="setBasicExample('2Na + Cl2 → 2NaCl')">🧂 Sodium chloride</span>
-                                    <span class="example-reaction" onclick="setBasicExample('2Mg + O2 → 2MgO')">Magnesium oxide</span>
-                                    <span class="example-reaction" onclick="setBasicExample('H2 + Cl2 → 2HCl')">Hydrogen chloride</span>
-                                    <span class="example-reaction" onclick="setBasicExample('2KClO3 → 2KCl + 3O2')">Potassium chlorate decomp</span>
-                                    <span class="example-reaction" onclick="setBasicExample('CaCO3 → CaO + CO2')">Limestone decomp</span>
-                                </div>
-
-                                <!-- Medium Reactions -->
-                                <h6 class="mt-3 mb-2" style="font-size: 0.9rem; color: #2563eb;"><i class="fas fa-star"></i><i class="fas fa-star"></i> Medium - Combustion & Single Replacement</h6>
-                                <div class="mb-2">
-                                    <span class="example-reaction" onclick="setBasicExample('CH4 + 2O2 → CO2 + 2H2O')">🔥 Methane combustion</span>
-                                    <span class="example-reaction" onclick="setBasicExample('C3H8 + 5O2 → 3CO2 + 4H2O')">Propane combustion</span>
-                                    <span class="example-reaction" onclick="setBasicExample('2C8H18 + 25O2 → 16CO2 + 18H2O')">Octane combustion</span>
-                                    <span class="example-reaction" onclick="setBasicExample('C2H5OH + 3O2 → 2CO2 + 3H2O')">Ethanol combustion</span>
-                                    <span class="example-reaction" onclick="setBasicExample('Zn + 2HCl → ZnCl2 + H2')">Zinc + acid</span>
-                                    <span class="example-reaction" onclick="setBasicExample('Fe + CuSO4 → FeSO4 + Cu')">Iron + copper sulfate</span>
-                                    <span class="example-reaction" onclick="setBasicExample('Mg + 2AgNO3 → Mg(NO3)2 + 2Ag')">Magnesium + silver nitrate</span>
-                                </div>
-
-                                <!-- Hard Reactions -->
-                                <h6 class="mt-3 mb-2" style="font-size: 0.9rem; color: #dc2626;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> Hard - Double Replacement & Complex</h6>
-                                <div class="mb-2">
-                                    <span class="example-reaction" onclick="setBasicExample('AgNO3 + NaCl → AgCl + NaNO3')">Precipitation (AgCl)</span>
-                                    <span class="example-reaction" onclick="setBasicExample('BaCl2 + Na2SO4 → BaSO4 + 2NaCl')">Barium sulfate ppt</span>
-                                    <span class="example-reaction" onclick="setBasicExample('Pb(NO3)2 + 2KI → PbI2 + 2KNO3')">Lead iodide ppt</span>
-                                    <span class="example-reaction" onclick="setBasicExample('Ca(OH)2 + 2HCl → CaCl2 + 2H2O')">Neutralization</span>
-                                    <span class="example-reaction" onclick="setBasicExample('H2SO4 + 2NaOH → Na2SO4 + 2H2O')">Acid-base titration</span>
-                                    <span class="example-reaction" onclick="setBasicExample('3Ca(OH)2 + 2H3PO4 → Ca3(PO4)2 + 6H2O')">Phosphoric acid + calcium</span>
-                                </div>
-
-                                <!-- Industrial/Advanced -->
-                                <h6 class="mt-3 mb-2" style="font-size: 0.9rem; color: #7c3aed;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> Very Hard - Industrial & Redox</h6>
-                                <div class="mb-2">
-                                    <span class="example-reaction" onclick="setBasicExample('N2 + 3H2 → 2NH3')">⚗️ Haber Process</span>
-                                    <span class="example-reaction" onclick="setBasicExample('4NH3 + 5O2 → 4NO + 6H2O')">Ostwald Process</span>
-                                    <span class="example-reaction" onclick="setBasicExample('2SO2 + O2 → 2SO3')">Contact Process</span>
-                                    <span class="example-reaction" onclick="setBasicExample('4FeS2 + 11O2 → 2Fe2O3 + 8SO2')">Pyrite roasting</span>
-                                    <span class="example-reaction" onclick="setBasicExample('2Al + 3CuO → Al2O3 + 3Cu')">🔥 Thermite reaction</span>
-                                    <span class="example-reaction" onclick="setBasicExample('Fe2O3 + 3CO → 2Fe + 3CO2')">Iron ore reduction</span>
-                                    <span class="example-reaction" onclick="setBasicExample('4Fe + 3O2 + 6H2O → 4Fe(OH)3')">Rust formation</span>
-                                    <span class="example-reaction" onclick="setBasicExample('C6H12O6 + 6O2 → 6CO2 + 6H2O')">Glucose combustion</span>
-                                </div>
-
-                                <!-- Organic Chemistry -->
-                                <h6 class="mt-3 mb-2" style="font-size: 0.9rem; color: #ea580c;"><i class="fas fa-flask"></i> Organic Chemistry</h6>
-                                <div class="mb-2">
-                                    <span class="example-reaction" onclick="setBasicExample('C2H4 + H2O → C2H5OH')">Ethanol synthesis</span>
-                                    <span class="example-reaction" onclick="setBasicExample('C2H4 + Br2 → C2H4Br2')">Bromination of ethene</span>
-                                    <span class="example-reaction" onclick="setBasicExample('CH3COOH + C2H5OH → CH3COOC2H5 + H2O')">Esterification</span>
-                                    <span class="example-reaction" onclick="setBasicExample('C6H6 + 3H2 → C6H12')">Benzene hydrogenation</span>
-                                    <span class="example-reaction" onclick="setBasicExample('2C4H10 + 13O2 → 8CO2 + 10H2O')">Butane combustion</span>
-                                </div>
-
-                                <!-- Complex Multi-step -->
-                                <h6 class="mt-3 mb-2" style="font-size: 0.9rem; color: #be123c;"><i class="fas fa-flask"></i><i class="fas fa-flask"></i> Expert - Multiple Products</h6>
-                                <div class="mb-2">
-                                    <span class="example-reaction" onclick="setBasicExample('C7H6O2 + C4H6O3 → C9H8O4 + C2H4O2')">Aspirin synthesis</span>
-                                    <span class="example-reaction" onclick="setBasicExample('3Cu + 8HNO3 → 3Cu(NO3)2 + 2NO + 4H2O')">Copper + nitric acid</span>
-                                    <span class="example-reaction" onclick="setBasicExample('KMnO4 + 5FeSO4 + 8H2SO4 → K2SO4 + 2MnSO4 + 5Fe2(SO4)3 + 8H2O')">Permanganate titration</span>
-                                    <span class="example-reaction" onclick="setBasicExample('2KMnO4 + 16HCl → 2KCl + 2MnCl2 + 5Cl2 + 8H2O')">Permanganate + HCl</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Tab 2: Advanced with Yields -->
-                        <div class="tab-pane fade" id="advanced" role="tabpanel">
-                            <h4 class="mt-3">Calculate with Actual & Percent Yield</h4>
-
-                            <div class="alert alert-info">
-                                <strong><i class="fas fa-info-circle"></i> Note:</strong>
-                                First calculate theoretical yield, then enter actual yield to find percent yield.
-                            </div>
-
-                            <div class="form-group">
-                                <label>Theoretical Yield (from previous calculation)</label>
-                                <input type="number" step="any" class="form-control" id="advTheoYield" placeholder="Enter theoretical yield">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Actual Yield (experimental result)</label>
-                                <input type="number" step="any" class="form-control" id="advActualYield" placeholder="Enter actual yield obtained">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Unit</label>
-                                <select class="form-control" id="advUnit">
-                                    <option value="g">grams (g)</option>
-                                    <option value="mol">moles (mol)</option>
-                                    <option value="kg">kilograms (kg)</option>
-                                    <option value="mg">milligrams (mg)</option>
-                                </select>
-                            </div>
-
-                            <button class="btn btn-primary" onclick="calculateAdvanced()">
-                                <i class="fas fa-percentage"></i> Calculate Percent Yield
-                            </button>
-                            <button class="btn btn-outline-secondary ml-2" onclick="clearAdvanced()">
-                                <i class="fas fa-eraser"></i> Clear
-                            </button>
-                        </div>
-
-                        <!-- Tab 3: Learn -->
-                        <div class="tab-pane fade" id="learn" role="tabpanel">
-                            <div class="learn-section">
-                                <h5><i class="fas fa-book-open"></i> Understanding Limiting Reagents</h5>
-
-                                <h6>What is a Limiting Reagent?</h6>
-                                <p>The <strong>limiting reagent</strong> (or limiting reactant) is the reactant that is completely consumed first in a chemical reaction. It determines the maximum amount of product that can be formed.</p>
-
-                                <div class="formula-box">
-                                    <strong>Key Concept:</strong><br>
-                                    The reactant that produces the LEAST amount of product is the limiting reagent.
-                                </div>
-
-                                <h6>Step-by-Step Process</h6>
-
-                                <div class="step-box">
-                                    <strong>Step 1:</strong> Write the balanced chemical equation<br>
-                                    Example: 2H₂ + O₂ → 2H₂O
-                                </div>
-
-                                <div class="step-box">
-                                    <strong>Step 2:</strong> Convert all given amounts to moles<br>
-                                    • If given grams: moles = grams ÷ molar mass<br>
-                                    • If given moles: use directly
-                                </div>
-
-                                <div class="step-box">
-                                    <strong>Step 3:</strong> Calculate mole ratio for each reactant<br>
-                                    • Divide moles available by coefficient in balanced equation<br>
-                                    • The reactant with the SMALLEST ratio is the limiting reagent
-                                </div>
-
-                                <div class="step-box">
-                                    <strong>Step 4:</strong> Calculate theoretical yield<br>
-                                    • Use moles of limiting reagent<br>
-                                    • Apply stoichiometry from balanced equation<br>
-                                    • Convert to desired unit (g, mol, etc.)
-                                </div>
-
-                                <div class="step-box">
-                                    <strong>Step 5:</strong> Calculate excess reagent remaining<br>
-                                    • Determine how much was used based on limiting reagent<br>
-                                    • Subtract from initial amount
-                                </div>
-
-                                <h6>Example Problem</h6>
-                                <div class="alert alert-info">
-                                    <strong>Problem:</strong> 4.0 g of H₂ reacts with 32.0 g of O₂. Find the limiting reagent and theoretical yield of H₂O.<br><br>
-
-                                    <strong>Balanced equation:</strong> 2H₂ + O₂ → 2H₂O<br><br>
-
-                                    <strong>Step 1 - Convert to moles:</strong><br>
-                                    • H₂: 4.0 g ÷ 2.016 g/mol = 1.98 mol<br>
-                                    • O₂: 32.0 g ÷ 32.00 g/mol = 1.00 mol<br><br>
-
-                                    <strong>Step 2 - Calculate mole ratios:</strong><br>
-                                    • H₂: 1.98 mol ÷ 2 = 0.99<br>
-                                    • O₂: 1.00 mol ÷ 1 = 1.00<br><br>
-
-                                    <strong>Result:</strong> H₂ is the limiting reagent (smallest ratio)<br><br>
-
-                                    <strong>Step 3 - Theoretical yield:</strong><br>
-                                    • From equation: 2 mol H₂ → 2 mol H₂O<br>
-                                    • So: 1.98 mol H₂ → 1.98 mol H₂O<br>
-                                    • Mass: 1.98 mol × 18.015 g/mol = 35.7 g H₂O
-                                </div>
-
-                                <h6>Percent Yield</h6>
-                                <p>Percent yield compares actual yield (what you got in the lab) to theoretical yield (maximum possible):</p>
-
-                                <div class="formula-box">
-                                    <strong>Percent Yield Formula:</strong><br>
-                                    % Yield = (Actual Yield ÷ Theoretical Yield) × 100%
-                                </div>
-
-                                <p><strong>Why is percent yield less than 100%?</strong></p>
-                                <ul>
-                                    <li>Incomplete reactions</li>
-                                    <li>Side reactions producing unwanted products</li>
-                                    <li>Product lost during purification/transfer</li>
-                                    <li>Measurement errors</li>
-                                </ul>
-
-                                <h6>Common Mistakes to Avoid</h6>
-                                <ul>
-                                    <li>❌ Forgetting to balance the equation first</li>
-                                    <li>❌ Using grams instead of moles for comparison</li>
-                                    <li>❌ Not dividing by stoichiometric coefficients</li>
-                                    <li>❌ Assuming the reactant with less mass is limiting</li>
-                                    <li>✅ Always convert to moles and use mole ratios!</li>
-                                </ul>
-
-                                <h6>Real-World Applications</h6>
-                                <ul>
-                                    <li><strong>Industrial Chemistry:</strong> Minimize waste by using excess of cheaper reactant</li>
-                                    <li><strong>Pharmaceutical Manufacturing:</strong> Calculate exact amounts needed for drug synthesis</li>
-                                    <li><strong>Environmental Chemistry:</strong> Predict pollutant formation in combustion</li>
-                                    <li><strong>Food Chemistry:</strong> Optimize ingredient ratios in recipes</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="lr-field" style="width:100%;margin-top:0.85rem;">
+            <label for="lrAmt">Amounts of reactants — one per line, <code>species: value g</code> or <code>mol</code></label>
+            <textarea class="lr-area" id="lrAmt">N2: 14 g
+H2: 3 g</textarea>
         </div>
 
-        <!-- Results Column -->
-        <div class="col-lg-5 mb-4">
-            <div class="card shadow-sm sticky-side">
-                <div class="card-body">
-                    <h5 class="card-title">Results</h5>
-                    <div id="resultDisplay" class="min-h-result">
-                        <p class="text-muted text-center">
-                            <i class="fas fa-info-circle fa-2x mb-2"></i><br>
-                            Enter reactant amounts and click Calculate to see results
-                        </p>
-                    </div>
-
-                    <!-- Action buttons (initially hidden) -->
-                    <div id="actionButtons" style="display:none;" class="mt-3">
-                        <button class="btn btn-sm btn-outline-primary btn-block" onclick="shareURL()">
-                            <i class="fas fa-share-alt"></i> Share URL
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary btn-block" onclick="copyResult()">
-                            <i class="fas fa-copy"></i> Copy Results
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary btn-block" onclick="exportPDF()">
-                            <i class="fas fa-file-pdf"></i> Export PDF (Coming Soon!)
-                        </button>
-                    </div>
-
-                    <!-- Share URL Display -->
-                    <div id="shareURLDisplay" style="display: none; margin-top: 15px; padding: 15px; background: #f0f9ff; border: 2px solid #3b82f6; border-radius: 8px;">
-                        <div style="font-size: 0.9rem; color: #1e40af; margin-bottom: 8px; font-weight: 600;">
-                            <i class="fas fa-link"></i> Shareable URL:
-                        </div>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <input type="text" id="shareURLInput" readonly class="form-control" style="font-size: 0.85rem; font-family: monospace;">
-                            <button class="btn btn-primary btn-sm" onclick="copyShareURL()" style="white-space: nowrap;">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="lr-fields">
+            <div class="lr-field"><label for="lrTarget">Product to track (optional)</label><input type="text" class="lr-input" id="lrTarget" placeholder="default: first product" style="width:11rem;"></div>
+            <div class="lr-field"><label for="lrActual">Actual yield (optional)</label>
+                <div style="display:flex;gap:0.3rem;">
+                    <input type="number" class="lr-input num" id="lrActual" step="0.0001" placeholder="for % yield" style="width:6.5rem;">
+                    <select class="lr-sel" id="lrActualUnit"><option value="g">g</option><option value="mol">mol</option></select>
+                </div></div>
         </div>
+
+        <div class="lr-chips">
+            <button type="button" class="lr-ex" data-eq="N2 + H2 = NH3" data-amt="N2: 14 g&#10;H2: 3 g">Haber (NH₃)</button>
+            <button type="button" class="lr-ex" data-eq="C3H8 + O2 = CO2 + H2O" data-amt="C3H8: 10 g&#10;O2: 10 g">propane combustion</button>
+            <button type="button" class="lr-ex" data-eq="Fe2O3 + Al = Fe + Al2O3" data-amt="Fe2O3: 50 g&#10;Al: 25 g">thermite</button>
+            <button type="button" class="lr-ex" data-eq="AgNO3 + NaCl = AgCl + NaNO3" data-amt="AgNO3: 0.1 mol&#10;NaCl: 0.05 mol">precipitation</button>
+        </div>
+
+        <div class="lr-cta"><button type="button" class="lr-btn" id="lrSolve">&#9878; Find limiting reagent</button></div>
     </div>
+
+    <div class="lr-card" id="lrResultCard" style="display:none;">
+        <div class="lr-card-head"><span style="color:var(--cs-accent);">&#9878;</span><h2>Result</h2><button type="button" id="lrShareBtn" class="lr-share" style="display:none;">&#128279; Share</button></div>
+        <div id="lrResultBody"></div>
+    </div>
+
+    <div class="cs-inline-ad">
+        <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
+    </div>
+
+    <section class="pt-seo">
+        <div class="pt-seo-card">
+            <h2>Finding the limiting reagent — the method</h2>
+            <ol>
+                <li><strong>Balance</strong> the equation to get the mole ratios.</li>
+                <li><strong>Convert each reactant to moles</strong> (grams ÷ molar mass, or use the moles directly).</li>
+                <li><strong>Divide each by its coefficient.</strong> The smallest result is the <strong>limiting reagent</strong> — it runs out first.</li>
+                <li><strong>Theoretical yield:</strong> use the limiting reagent's moles and the mole ratio to find moles of product, then × molar mass for grams.</li>
+                <li><strong>Percent yield:</strong> (actual ÷ theoretical) × 100. Whatever isn't the limiting reagent is left over in <strong>excess</strong>.</li>
+            </ol>
+            <p>This tool balances with <strong>chempy</strong> and uses exact molar masses, then shows the limiting reagent, the excess left over, the theoretical yield, and the percent yield.</p>
+        </div>
+        <div class="pt-seo-card">
+            <h2 class="cs-faq-title" id="faqs" style="font-family:var(--cs-font-serif);">Frequently asked</h2>
+            <div class="cs-faq" aria-label="Limiting reagent FAQ">
+                <div class="cs-faq-item"><button class="cs-faq-q" type="button">How do you find the limiting reagent?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                    <div class="cs-faq-a">Convert each reactant to moles, divide by its coefficient in the balanced equation, and the smallest value is the limiting reagent — it caps the product. The rest are in excess.</div></div>
+                <div class="cs-faq-item"><button class="cs-faq-q" type="button">How do you calculate theoretical yield?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                    <div class="cs-faq-a">From the limiting reagent's moles, apply the mole ratio to get moles of product, then multiply by the product's molar mass for grams.</div></div>
+                <div class="cs-faq-item"><button class="cs-faq-q" type="button">What is percent yield?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                    <div class="cs-faq-a">Percent yield = (actual yield ÷ theoretical yield) × 100. Below 100% is normal due to losses and side reactions.</div></div>
+                <div class="cs-faq-item"><button class="cs-faq-q" type="button">Can I enter moles instead of grams?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                    <div class="cs-faq-a">Yes — write the unit, e.g. <code>N2: 0.5 mol</code> or <code>H2: 3 g</code>.</div></div>
+                <div class="cs-faq-item"><button class="cs-faq-q" type="button">Is it free?<svg class="cs-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                    <div class="cs-faq-a">Yes — free, no signup, balanced and computed with the open-source chempy library.</div></div>
+            </div>
+        </div>
+    </section>
+
 </div>
 
+    </section>
+
+    <aside class="cs-rail" aria-label="Advertisements">
+        <%@ include file="/modern/ads/ad-ide-rail-top.jsp" %>
+        <%@ include file="/modern/ads/ad-ide-rail-bottom.jsp" %>
+    </aside>
+</main>
+
+<%@ include file="modern/components/support-section.jsp" %>
+<%@ include file="modern/ads/ad-sticky-footer.jsp" %>
+
+<script src="<%=ctx%>/modern/js/dark-mode.js" defer></script>
+<script src="<%=ctx%>/modern/js/search.js" defer></script>
+<script src="<%=ctx%>/modern/js/tool-utils.js"></script>
 <script>
-    let currentResult = '';
-    let parsedEquationData = null;
+(function () {
+  "use strict";
+  var RUN = '<%=ctx%>/OneCompilerFunctionality';
+  function $(id) { return document.getElementById(id); }
 
-    // Periodic table data for molar mass calculation (IUPAC 2021 values)
-    const ELEMENTS = {
-        'H': 1.008, 'He': 4.003, 'Li': 6.941, 'Be': 9.012, 'B': 10.81, 'C': 12.01, 'N': 14.01, 'O': 16.00,
-        'F': 19.00, 'Ne': 20.18, 'Na': 22.99, 'Mg': 24.31, 'Al': 26.98, 'Si': 28.09, 'P': 30.97, 'S': 32.07,
-        'Cl': 35.45, 'Ar': 39.95, 'K': 39.10, 'Ca': 40.08, 'Sc': 44.96, 'Ti': 47.87, 'V': 50.94, 'Cr': 52.00,
-        'Mn': 54.94, 'Fe': 55.85, 'Co': 58.93, 'Ni': 58.69, 'Cu': 63.55, 'Zn': 65.39, 'Ga': 69.72, 'Ge': 72.61,
-        'As': 74.92, 'Se': 78.96, 'Br': 79.90, 'Kr': 83.80, 'Rb': 85.47, 'Sr': 87.62, 'Y': 88.91, 'Zr': 91.22,
-        'Nb': 92.91, 'Mo': 95.94, 'Tc': 98.0, 'Ru': 101.1, 'Rh': 102.9, 'Pd': 106.4, 'Ag': 107.9, 'Cd': 112.4,
-        'In': 114.8, 'Sn': 118.7, 'Sb': 121.8, 'Te': 127.6, 'I': 126.9, 'Xe': 131.3, 'Cs': 132.9, 'Ba': 137.3,
-        'La': 138.9, 'Ce': 140.1, 'Pr': 140.9, 'Nd': 144.2, 'Pm': 145.0, 'Sm': 150.4, 'Eu': 152.0, 'Gd': 157.3,
-        'Tb': 158.9, 'Dy': 162.5, 'Ho': 164.9, 'Er': 167.3, 'Tm': 168.9, 'Yb': 173.0, 'Lu': 175.0, 'Hf': 178.5,
-        'Ta': 180.9, 'W': 183.8, 'Re': 186.2, 'Os': 190.2, 'Ir': 192.2, 'Pt': 195.1, 'Au': 197.0, 'Hg': 200.6,
-        'Tl': 204.4, 'Pb': 207.2, 'Bi': 209.0, 'Po': 209.0, 'At': 210.0, 'Rn': 222.0, 'Fr': 223.0, 'Ra': 226.0,
-        'Ac': 227.0, 'Th': 232.0, 'Pa': 231.0, 'U': 238.0, 'Np': 237.0, 'Pu': 244.0
-    };
+  function cleanSp(t) { return t.trim().replace(/\s+/g, '').replace(/^\d+(?=[A-Za-z(])/, ''); }
+  function parseEquation(raw) {
+    var s = String(raw).replace(/→|⟶|->|=>/g, '=').trim();
+    if (s.indexOf('=') === -1) return null;
+    var parts = s.split('='); if (parts.length !== 2) return null;
+    function side(t) { return t.split(/\s+\+\s+/).map(cleanSp).filter(Boolean); }
+    var reac = side(parts[0]), prod = side(parts[1]);
+    return (reac.length && prod.length) ? { reac:reac, prod:prod } : null;
+  }
+  function pretty(sp) { return String(sp).replace(/(\d+)/g, '<sub>$1</sub>'); }
 
-    // Calculate molar mass from chemical formula
-    function calculateMolarMass(formula) {
-        let mass = 0;
-        // Match element symbols with optional counts and handle parentheses
-        const regex = /([A-Z][a-z]?)(\d*)|(\()([^)]+)(\))(\d*)/g;
-        let match;
+  var elEq = $('lrEq'), elPrev = $('lrPreview');
+  function renderPreview() {
+    var p = parseEquation(elEq.value);
+    elPrev.innerHTML = p ? (p.reac.map(pretty).join(' <span class="op">+</span> ') + ' <span class="op">→</span> ' + p.prod.map(pretty).join(' <span class="op">+</span> ')) : '';
+  }
+  elEq.addEventListener('input', renderPreview);
 
-        while ((match = regex.exec(formula)) !== null) {
-            if (match[1]) {
-                // Simple element
-                const element = match[1];
-                const count = match[2] ? parseInt(match[2]) : 1;
-                if (ELEMENTS[element]) {
-                    mass += ELEMENTS[element] * count;
-                }
-            } else if (match[4]) {
-                // Group in parentheses
-                const groupFormula = match[4];
-                const groupCount = match[6] ? parseInt(match[6]) : 1;
-                mass += calculateMolarMass(groupFormula) * groupCount;
-            }
-        }
-        return mass;
-    }
+  document.addEventListener('click', function (e) {
+    var c = e.target.closest('.lr-ex'); if (!c) return;
+    elEq.value = c.getAttribute('data-eq'); $('lrAmt').value = c.getAttribute('data-amt'); $('lrTarget').value = ''; $('lrActual').value = '';
+    renderPreview();
+  });
 
-    // Check if equation is balanced
-    function isEquationBalanced(parsed) {
-        const elementCount = {};
-
-        // Count elements in reactants
-        parsed.reactants.forEach(r => {
-            const elements = countElements(r.formula);
-            for (const elem in elements) {
-                elementCount[elem] = (elementCount[elem] || 0) + (elements[elem] * r.coefficient);
-            }
-        });
-
-        // Subtract elements in products
-        parsed.products.forEach(p => {
-            const elements = countElements(p.formula);
-            for (const elem in elements) {
-                elementCount[elem] = (elementCount[elem] || 0) - (elements[elem] * p.coefficient);
-            }
-        });
-
-        // Check if all counts are zero
-        for (const elem in elementCount) {
-            if (Math.abs(elementCount[elem]) > 0.001) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // Count elements in a formula
-    function countElements(formula) {
-        const elements = {};
-        const regex = /([A-Z][a-z]?)(\d*)|(\()([^)]+)(\))(\d*)/g;
-        let match;
-
-        while ((match = regex.exec(formula)) !== null) {
-            if (match[1]) {
-                const element = match[1];
-                const count = match[2] ? parseInt(match[2]) : 1;
-                elements[element] = (elements[element] || 0) + count;
-            } else if (match[4]) {
-                const groupFormula = match[4];
-                const groupCount = match[6] ? parseInt(match[6]) : 1;
-                const groupElements = countElements(groupFormula);
-                for (const elem in groupElements) {
-                    elements[elem] = (elements[elem] || 0) + (groupElements[elem] * groupCount);
-                }
-            }
-        }
-        return elements;
-    }
-
-    // Parse chemical equation to extract coefficients and formulas
-    function parseEquation(equation) {
-        // Normalize arrows
-        equation = equation.replace(/⇌|<=>|<-->|==|=/g, '→');
-
-        const parts = equation.split('→');
-        if (parts.length !== 2) return null;
-
-        const reactantsStr = parts[0].trim();
-        const productsStr = parts[1].trim();
-
-        function parseSpecies(speciesStr) {
-            const species = [];
-            // Split by + sign first, then parse each species
-            const speciesList = speciesStr.split('+').map(s => s.trim()).filter(s => s.length > 0);
-
-            speciesList.forEach(spec => {
-                // Match coefficient and formula separately
-                const match = spec.match(/^(\d*\.?\d+)?\s*(.+)$/);
-                if (match) {
-                    const coefficient = match[1] ? parseFloat(match[1]) : 1;
-                    const formula = match[2] ? match[2].trim() : '';
-
-                    if (formula) {
-                        species.push({
-                            coefficient: coefficient,
-                            formula: formula,
-                            molarMass: calculateMolarMass(formula)
-                        });
-                    }
-                }
-            });
-
-            return species;
-        }
-
-        const reactants = parseSpecies(reactantsStr);
-        const products = parseSpecies(productsStr);
-
-        if (reactants.length === 0 || products.length === 0) return null;
-
-        return {
-            reactants: reactants,
-            products: products,
-            original: equation
-        };
-    }
-
-    // Convert units to grams
-    function convertToGrams(amount, unit) {
-        const conversions = {
-            'g': 1,
-            'kg': 1000,
-            'mg': 0.001,
-            'mol': 1 // will be handled separately with molar mass
-        };
-        return amount * (conversions[unit] || 1);
-    }
-
-    // Generate dynamic input fields based on parsed equation
-    function generateDynamicFields(parsed) {
-        const container = document.getElementById('dynamicReactantFields');
-        if (!container) return;
-
-        let html = '<h6 class="mt-3">Reactant Amounts</h6>';
-
-        parsed.reactants.forEach((reactant, index) => {
-            html += `
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            <strong>${reactant.formula}</strong>
-                            <span class="badge badge-info ml-2">MM: ${reactant.molarMass.toFixed(3)} g/mol</span>
-                        </h6>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Amount</label>
-                                    <input type="number" step="any" class="form-control" id="reactant${index}Amount" placeholder="Enter amount">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Unit</label>
-                                    <select class="form-control" id="reactant${index}Unit">
-                                        <option value="g">grams (g)</option>
-                                        <option value="mol">moles (mol)</option>
-                                        <option value="kg">kilograms (kg)</option>
-                                        <option value="mg">milligrams (mg)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-        html += '<h6 class="mt-3">Select Product to Calculate</h6>';
-        html += '<select class="form-control mb-3" id="selectedProduct">';
-        parsed.products.forEach((product, index) => {
-            html += `<option value="${index}">${product.formula} (MM: ${product.molarMass.toFixed(3)} g/mol)</option>`;
-        });
-        html += '</select>';
-
-        container.innerHTML = html;
-        parsedEquationData = parsed;
-    }
-
-    // Calculate basic limiting reagent (now supports 3+ reactants!)
-    function calculateBasic() {
-        const equation = document.getElementById('basicEquation').value.trim();
-
-        if (!equation) {
-            alert('Please enter a chemical equation');
-            return;
-        }
-
-        // Parse equation
-        const parsed = parseEquation(equation);
-        if (!parsed || parsed.reactants.length < 1) {
-            alert('Please enter a valid chemical equation');
-            return;
-        }
-
-        // Check if equation is balanced
-        if (!isEquationBalanced(parsed)) {
-            const confirmCalc = confirm('⚠️ Warning: This equation does not appear to be balanced!\n\nAtom counts don\'t match on both sides.\n\nDo you want to continue anyway?');
-            if (!confirmCalc) return;
-        }
-
-        // Collect reactant amounts
-        const reactantData = [];
-        for (let i = 0; i < parsed.reactants.length; i++) {
-            const amount = parseFloat(document.getElementById(`reactant${i}Amount`).value);
-            const unit = document.getElementById(`reactant${i}Unit`).value;
-
-            if (isNaN(amount) || amount <= 0) {
-                alert(`Please enter a valid amount for ${parsed.reactants[i].formula}`);
-                return;
-            }
-
-            // Convert to moles
-            let moles;
-            if (unit === 'mol') {
-                moles = amount;
-            } else {
-                const grams = convertToGrams(amount, unit);
-                moles = grams / parsed.reactants[i].molarMass;
-            }
-
-            reactantData.push({
-                formula: parsed.reactants[i].formula,
-                coefficient: parsed.reactants[i].coefficient,
-                molarMass: parsed.reactants[i].molarMass,
-                initialAmount: amount,
-                unit: unit,
-                moles: moles,
-                ratio: moles / parsed.reactants[i].coefficient
-            });
-        }
-
-        // Find limiting reagent
-        let limitingIndex = 0;
-        let minRatio = reactantData[0].ratio;
-        for (let i = 1; i < reactantData.length; i++) {
-            if (reactantData[i].ratio < minRatio) {
-                minRatio = reactantData[i].ratio;
-                limitingIndex = i;
-            }
-        }
-
-        const limitingReagent = reactantData[limitingIndex];
-
-        // Calculate excess reagents
-        const excessReagents = [];
-        for (let i = 0; i < reactantData.length; i++) {
-            if (i !== limitingIndex) {
-                const required = (limitingReagent.moles / limitingReagent.coefficient) * reactantData[i].coefficient;
-                const remaining = reactantData[i].moles - required;
-                const remainingGrams = remaining * reactantData[i].molarMass;
-                excessReagents.push({
-                    formula: reactantData[i].formula,
-                    remaining: remaining,
-                    remainingGrams: remainingGrams
-                });
-            }
-        }
-
-        // Calculate theoretical yields for selected product
-        const selectedProductIndex = parseInt(document.getElementById('selectedProduct').value);
-        const selectedProduct = parsed.products[selectedProductIndex];
-
-        const productMoles = (limitingReagent.moles / limitingReagent.coefficient) * selectedProduct.coefficient;
-        const theoreticalYield = productMoles * selectedProduct.molarMass;
-
-        // Calculate all products
-        const allProducts = parsed.products.map(product => {
-            const moles = (limitingReagent.moles / limitingReagent.coefficient) * product.coefficient;
-            const mass = moles * product.molarMass;
-            return {
-                formula: product.formula,
-                moles: moles,
-                mass: mass
-            };
-        });
-
-        // Build result HTML
-        let resultHTML = `
-            <div class="result-section">
-                <h6><strong>Equation:</strong></h6>
-                <div class="reaction-display">${equation}</div>
-
-                ${!isEquationBalanced(parsed) ? '<div class="alert alert-warning mb-2"><small>⚠️ Equation may not be balanced</small></div>' : '<div class="alert alert-success mb-2"><small>✓ Equation is balanced</small></div>'}
-
-                <h6 class="mt-3"><strong>Reactant Moles:</strong></h6>
-                <div class="reagent-info">
-                    ${reactantData.map(r => `
-                        <div class="reagent-info-item">
-                            <strong>${r.formula}</strong>
-                            <span>${r.moles.toFixed(4)} mol</span>
-                        </div>
-                    `).join('')}
-                </div>
-
-                <h6 class="mt-3"><strong>Limiting Reagent:</strong></h6>
-                <div class="mb-2">
-                    <span class="limiting-badge">${limitingReagent.formula}</span>
-                </div>
-                <small>Mole ratios: ${reactantData.map(r => `${r.formula}: ${r.ratio.toFixed(4)}`).join(' | ')}</small>
-
-                ${excessReagents.length > 0 ? `
-                    <h6 class="mt-3"><strong>Excess Reagents Remaining:</strong></h6>
-                    ${excessReagents.map(e => `
-                        <div class="mb-2">
-                            <span class="excess-badge">${e.formula}: ${e.remainingGrams.toFixed(3)} g (${e.remaining.toFixed(4)} mol)</span>
-                        </div>
-                    `).join('')}
-                ` : ''}
-
-                <h6 class="mt-3"><strong>Theoretical Yields:</strong></h6>
-                ${allProducts.map((p, idx) => `
-                    <div class="mb-2">
-                        <span class="yield-badge ${idx === selectedProductIndex ? 'font-weight-bold' : ''}">${p.formula}: ${p.mass.toFixed(3)} g (${p.moles.toFixed(4)} mol)${idx === selectedProductIndex ? ' ⭐' : ''}</span>
-                    </div>
-                `).join('')}
-
-                <div class="alert alert-info mt-3">
-                    <strong>Summary:</strong><br>
-                    • Limiting reagent: <strong>${limitingReagent.formula}</strong><br>
-                    • Theoretical yield of ${selectedProduct.formula}: <strong>${theoreticalYield.toFixed(3)} g</strong><br>
-                    ${excessReagents.length > 0 ? '• ' + excessReagents.map(e => `${e.remainingGrams.toFixed(2)} g ${e.formula} left over`).join('<br>• ') : ''}
-                </div>
-            </div>
-        `;
-
-        currentResult = resultHTML;
-        document.getElementById('resultDisplay').innerHTML = resultHTML;
-        document.getElementById('actionButtons').style.display = 'block';
-
-        // Auto-populate advanced tab with theoretical yield
-        document.getElementById('advTheoYield').value = theoreticalYield.toFixed(3);
-    }
-
-    // Parse equation when user enters it
-    document.getElementById('basicEquation').addEventListener('blur', function() {
-        const equation = this.value.trim();
-        if (equation) {
-            const parsed = parseEquation(equation);
-            if (parsed) {
-                generateDynamicFields(parsed);
-            }
-        }
+  function parseAmounts() {
+    var out = {};
+    $('lrAmt').value.split('\n').forEach(function (line) {
+      var i = line.indexOf(':'); if (i < 0) return;
+      var sp = cleanSp(line.slice(0, i)); var rest = line.slice(i + 1).trim();
+      var m = rest.match(/-?\d+(\.\d+)?/); if (!sp || !m) return;
+      out[sp] = { val: parseFloat(m[0]), unit: /mol/i.test(rest) ? 'mol' : 'g' };
     });
+    return out;
+  }
+  function payloadFor() {
+    var p = parseEquation(elEq.value) || { reac:[], prod:[] };
+    var pay = { reac:p.reac, prod:p.prod, amounts: parseAmounts(), target: $('lrTarget').value.trim() };
+    var av = parseFloat($('lrActual').value);
+    if (!isNaN(av)) pay.actual = { val: av, unit: $('lrActualUnit').value };
+    return pay;
+  }
 
-    // Calculate percent yield
-    function calculateAdvanced() {
-        const theoYield = parseFloat(document.getElementById('advTheoYield').value);
-        const actualYield = parseFloat(document.getElementById('advActualYield').value);
-        const unit = document.getElementById('advUnit').value;
+  // ── Python (chempy: balance + molar masses) — validated locally ─────
+  function buildCode(p) {
+    return [
+'import json',
+'from chempy import balance_stoichiometry, Substance',
+'P = json.loads(r"""' + JSON.stringify(p) + '""")',
+'reac=P["reac"]; prod=P["prod"]; amounts=P["amounts"]',
+'target=P.get("target") or (prod[0] if prod else None); actual=P.get("actual")',
+'res={}',
+'try:',
+'    if not reac or not prod: raise ValueError("Write a reaction with = (reactants = products)")',
+'    r,p=balance_stoichiometry(set(reac), set(prod))',
+'    rl=[{"sp":k,"n":int(r[k])} for k in r if int(r[k])!=0]',
+'    pl=[{"sp":k,"n":int(p[k])} for k in p if int(p[k])!=0]',
+'    molar={sp: Substance.from_formula(sp).mass for sp in set(list(r)+list(p))}',
+'    rcoef={x["sp"]:x["n"] for x in rl}; pcoef={x["sp"]:x["n"] for x in pl}',
+'    extents={}; rows=[]',
+'    for sp in [x["sp"] for x in rl]:',
+'        coef=rcoef[sp]; a=amounts.get(sp)',
+'        if not a:',
+'            rows.append({"sp":sp,"coef":coef,"given":None,"molar":round(molar[sp],3)}); continue',
+'        mol = a["val"]/molar[sp] if a["unit"]=="g" else a["val"]',
+'        ext = mol/coef; extents[sp]=ext',
+'        rows.append({"sp":sp,"coef":coef,"given":a["val"],"unit":a["unit"],"mol":round(mol,5),"ext":round(ext,6),"molar":round(molar[sp],3)})',
+'    if not extents: raise ValueError("Enter at least one reactant amount")',
+'    lim=min(extents, key=extents.get); xi=extents[lim]',
+'    tcoef=pcoef.get(target) or rcoef.get(target)',
+'    if not tcoef: raise ValueError("Product \'" + str(target) + "\' is not in the reaction")',
+'    th_mol=xi*tcoef; th_mass=th_mol*molar[target]',
+'    for row in rows:',
+'        if row.get("mol") is not None:',
+'            lm = row["mol"] - xi*row["coef"]',
+'            row["left_mol"]=round(max(0.0, lm),5); row["left_g"]=round(max(0.0, lm)*molar[row["sp"]],4)',
+'            row["limiting"]=(row["sp"]==lim)',
+'    out={"ok":True,"reactants":rl,"products":pl,"limiting":lim,"target":target,',
+'         "th_mol":round(th_mol,5),"th_mass":round(th_mass,4),"molar_target":round(molar[target],3),"rows":rows}',
+'    if actual:',
+'        am=actual["val"]/molar[target] if actual["unit"]=="g" else actual["val"]',
+'        out["actual_mol"]=round(am,5); out["pct_yield"]=(round(100*am/th_mol,2) if th_mol else None)',
+'    res=out',
+'except Exception as e:',
+'    res={"ok":False,"error":type(e).__name__+": "+str(e)}',
+'print("RESULT:"+json.dumps(res))'
+    ].join('\n');
+  }
+  function run(p) {
+    return fetch(RUN + '?action=execute', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ language:'python', version:'3.11', code: buildCode(p) }) })
+      .then(function (r) { return r.json(); }).then(function (d) {
+        var out = (d.Stdout || d.stdout || d.Output || '').toString();
+        var m = out.match(/RESULT:(\{[\s\S]*\})/);
+        if (!m) throw new Error((d.Stderr || d.stderr || out || 'No output').toString().slice(0, 400));
+        return JSON.parse(m[1]);
+      });
+  }
 
-        if (isNaN(theoYield) || isNaN(actualYield)) {
-            alert('Please enter both theoretical and actual yield');
-            return;
-        }
+  var card = $('lrResultCard'), bodyEl = $('lrResultBody'), btn = $('lrSolve');
+  btn.addEventListener('click', function () {
+    var p = payloadFor();
+    card.style.display = ''; btn.disabled = true; var old = btn.innerHTML; btn.innerHTML = '<span class="lr-spin"></span> Solving…';
+    bodyEl.innerHTML = '<p class="lr-hint">Balancing &amp; computing with chempy…</p>';
+    run(p).then(function (res) {
+      if (!res.ok) { bodyEl.innerHTML = '<div class="lr-err"><strong>Could not solve.</strong> ' + esc(res.error || '') + '</div>'; return; }
+      render(res);
+    }).catch(function (e) { bodyEl.innerHTML = '<div class="lr-err"><strong>Backend error.</strong> ' + esc(e.message || e) + '</div>'; })
+      .then(function () { btn.disabled = false; btn.innerHTML = old; });
+  });
 
-        if (actualYield > theoYield) {
-            alert('Warning: Actual yield cannot be greater than theoretical yield! Please check your values.');
-        }
+  function side(arr) { return arr.map(function (x) { return '<span class="coef">' + (x.n > 1 ? x.n + ' ' : '') + '</span>' + pretty(x.sp); }).join('<span class="op">+</span>'); }
+  function stat(k, v) { return '<div class="lr-stat"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>'; }
 
-        const percentYield = (actualYield / theoYield) * 100;
+  function render(res) {
+    $('lrShareBtn').style.display = '';
+    var h = '<div class="lr-eqn">' + side(res.reactants) + ' <span class="op">→</span> ' + side(res.products) + '</div>';
+    h += '<div class="lr-verdict">Limiting reagent: <b>' + pretty(res.limiting) + '</b> — it is used up first and sets the maximum yield.</div>';
+    h += '<div class="lr-stats">' + stat('Theoretical yield', res.th_mass + ' g') + stat('= moles ' + pretty(res.target), res.th_mol) + stat('molar mass ' + pretty(res.target), res.molar_target + ' g/mol');
+    if (res.pct_yield != null) h += stat('Percent yield', res.pct_yield + '%');
+    h += '</div>';
+    h += '<table class="lr-tbl"><thead><tr><th>Reactant</th><th>Coef</th><th>Given</th><th>Moles</th><th>Excess left</th><th></th></tr></thead><tbody>';
+    h += res.rows.map(function (r) {
+      if (r.given == null) return '<tr><td><strong>' + pretty(r.sp) + '</strong></td><td class="n">' + r.coef + '</td><td colspan="3" style="color:var(--cs-muted)">no amount given (assumed excess)</td><td></td></tr>';
+      return '<tr class="' + (r.limiting ? 'lim' : '') + '"><td><strong>' + pretty(r.sp) + '</strong></td><td class="n">' + r.coef + '</td><td class="n">' + r.given + ' ' + r.unit + '</td><td class="n">' + r.mol + ' mol</td><td class="n">' + (r.limiting ? '0' : r.left_g + ' g') + '</td><td>' + (r.limiting ? '<span class="lr-badge">limiting</span>' : '') + '</td></tr>';
+    }).join('');
+    h += '</tbody></table>';
+    bodyEl.innerHTML = h;
+  }
 
-        let resultHTML = `
-            <div class="result-section">
-                <h6><strong>Yield Calculation</strong></h6>
+  // ── share (tool-utils) ──────────────────────────────────────────────
+  function b64(s) { return btoa(unescape(encodeURIComponent(s))); }
+  function unb64(s) { try { return decodeURIComponent(escape(atob(s))); } catch (e) { return ''; } }
+  $('lrShareBtn').addEventListener('click', function () {
+    if (typeof ToolUtils === 'undefined' || !ToolUtils.shareResult) return;
+    var ex = { amt: b64($('lrAmt').value) };
+    if ($('lrTarget').value.trim()) ex.t = $('lrTarget').value.trim();
+    if ($('lrActual').value) { ex.ay = $('lrActual').value; ex.au = $('lrActualUnit').value; }
+    ToolUtils.shareResult(elEq.value, { paramName:'eq', encode:true, extraParams: ex, copyToClipboard:true, showSupportPopup:true, toolName:'Limiting Reagent Calculator' });
+  });
+  function loadFromUrl() {
+    var q = new URLSearchParams(location.search), eq = q.get('eq'); if (!eq) return;
+    if (q.get('enc') === 'base64') { try { eq = decodeURIComponent(escape(atob(eq))); } catch (e) { return; } }
+    elEq.value = eq;
+    if (q.get('amt')) $('lrAmt').value = unb64(q.get('amt'));
+    if (q.get('t')) $('lrTarget').value = q.get('t');
+    if (q.get('ay')) { $('lrActual').value = q.get('ay'); if (q.get('au')) $('lrActualUnit').value = q.get('au'); }
+    renderPreview(); btn.click();
+  }
 
-                <div class="reagent-info">
-                    <div class="reagent-info-item">
-                        <strong>Theoretical Yield</strong>
-                        <span>${theoYield.toFixed(3)} ${unit}</span>
-                    </div>
-                    <div class="reagent-info-item">
-                        <strong>Actual Yield</strong>
-                        <span>${actualYield.toFixed(3)} ${unit}</span>
-                    </div>
-                </div>
-
-                <div class="result-label">Percent Yield:</div>
-                <div class="result-value">
-                    <span class="yield-badge">${percentYield.toFixed(2)}%</span>
-                </div>
-
-                <div class="alert ${percentYield >= 80 ? 'alert-success' : percentYield >= 50 ? 'alert-warning' : 'alert-danger'} mt-3">
-                    <strong>Interpretation:</strong><br>
-                    ${percentYield >= 90 ? '🌟 Excellent yield! Very efficient reaction.' :
-                      percentYield >= 80 ? '✅ Good yield. This is typical for many reactions.' :
-                      percentYield >= 50 ? '⚠️ Moderate yield. Some optimization may be needed.' :
-                      '❌ Low yield. Check reaction conditions, purity, or side reactions.'}
-                </div>
-
-                <div class="formula-box mt-3">
-                    <strong>Formula Used:</strong><br>
-                    % Yield = (Actual Yield ÷ Theoretical Yield) × 100%<br>
-                    % Yield = (${actualYield.toFixed(3)} ÷ ${theoYield.toFixed(3)}) × 100%<br>
-                    % Yield = ${percentYield.toFixed(2)}%
-                </div>
-            </div>
-        `;
-
-        currentResult = resultHTML;
-        document.getElementById('resultDisplay').innerHTML = resultHTML;
-        document.getElementById('actionButtons').style.display = 'block';
-    }
-
-    // Set example
-    function setBasicExample(equation) {
-        document.getElementById('basicEquation').value = equation;
-
-        // Parse equation and generate dynamic fields
-        const parsed = parseEquation(equation);
-        if (parsed) {
-            generateDynamicFields(parsed);
-
-            // Auto-fill with example amounts (1 gram for each reactant)
-            setTimeout(() => {
-                parsed.reactants.forEach((reactant, index) => {
-                    const amountInput = document.getElementById(`reactant${index}Amount`);
-                    if (amountInput) {
-                        amountInput.value = 10; // 10 grams as default
-                    }
-                });
-            }, 100);
-        }
-    }
-
-    // Clear functions
-    function clearBasic() {
-        document.getElementById('basicEquation').value = '';
-        document.getElementById('dynamicReactantFields').innerHTML = '';
-        parsedEquationData = null;
-        document.getElementById('resultDisplay').innerHTML = '<p class="text-muted text-center"><i class="fas fa-info-circle fa-2x mb-2"></i><br>Enter equation and input amounts to calculate</p>';
-        document.getElementById('actionButtons').style.display = 'none';
-    }
-
-    function clearAdvanced() {
-        document.getElementById('advTheoYield').value = '';
-        document.getElementById('advActualYield').value = '';
-        document.getElementById('resultDisplay').innerHTML = '<p class="text-muted text-center"><i class="fas fa-info-circle fa-2x mb-2"></i><br>Enter values and click Calculate</p>';
-        document.getElementById('actionButtons').style.display = 'none';
-    }
-
-    // Copy result
-    function copyResult() {
-        const resultDiv = document.getElementById('resultDisplay');
-        const text = resultDiv.innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            alert('Result copied to clipboard!');
-        }).catch(err => {
-            console.error('Could not copy text: ', err);
-        });
-    }
-
-    // Share URL
-    function shareURL() {
-        const equation = document.getElementById('basicEquation').value.trim();
-
-        if (!equation) {
-            alert('Please enter a chemical equation first!');
-            return;
-        }
-
-        const params = new URLSearchParams();
-        params.set('eq', equation);
-        params.set('r1', document.getElementById('basicR1Amount').value);
-        params.set('r2', document.getElementById('basicR2Amount').value);
-        params.set('u1', document.getElementById('basicR1Unit').value);
-        params.set('u2', document.getElementById('basicR2Unit').value);
-        params.set('mm1', document.getElementById('basicR1MM').value);
-        params.set('mm2', document.getElementById('basicR2MM').value);
-        params.set('mmp', document.getElementById('basicPMM').value);
-
-        const baseURL = window.location.origin + window.location.pathname;
-        const shareableURL = `${baseURL}?${params.toString()}`;
-
-        document.getElementById('shareURLInput').value = shareableURL;
-        document.getElementById('shareURLDisplay').style.display = 'block';
-
-        setTimeout(() => {
-            document.getElementById('shareURLDisplay').scrollIntoView({behavior: 'smooth', block: 'nearest'});
-        }, 100);
-    }
-
-    // Copy shareable URL
-    function copyShareURL() {
-        const urlInput = document.getElementById('shareURLInput');
-        urlInput.select();
-        urlInput.setSelectionRange(0, 99999);
-
-        navigator.clipboard.writeText(urlInput.value).then(() => {
-            const button = event.target.closest('button');
-            const originalHTML = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-check"></i> Copied!';
-            button.classList.remove('btn-primary');
-            button.classList.add('btn-success');
-
-            setTimeout(() => {
-                button.innerHTML = originalHTML;
-                button.classList.remove('btn-success');
-                button.classList.add('btn-primary');
-            }, 2000);
-        }).catch(err => {
-            document.execCommand('copy');
-            alert('URL copied to clipboard!');
-        });
-    }
-
-    // Load parameters from URL
-    window.addEventListener('DOMContentLoaded', function() {
-        const params = new URLSearchParams(window.location.search);
-
-        if (params.has('eq')) {
-            document.getElementById('basicEquation').value = params.get('eq');
-            if (params.has('r1')) document.getElementById('basicR1Amount').value = params.get('r1');
-            if (params.has('r2')) document.getElementById('basicR2Amount').value = params.get('r2');
-            if (params.has('u1')) document.getElementById('basicR1Unit').value = params.get('u1');
-            if (params.has('u2')) document.getElementById('basicR2Unit').value = params.get('u2');
-            if (params.has('mm1')) document.getElementById('basicR1MM').value = params.get('mm1');
-            if (params.has('mm2')) document.getElementById('basicR2MM').value = params.get('mm2');
-            if (params.has('mmp')) document.getElementById('basicPMM').value = params.get('mmp');
-
-            // Auto-calculate if all parameters present
-            if (params.has('r1') && params.has('r2') && params.has('mm1') && params.has('mm2') && params.has('mmp')) {
-                calculateBasic();
-            }
-        }
-    });
-
-    // Export PDF placeholder
-    function exportPDF() {
-        alert('PDF export feature coming soon!');
-    }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
+  document.querySelectorAll('.cs-faq-q').forEach(function (b) { b.addEventListener('click', function () { var it = b.closest('.cs-faq-item'); if (it) it.classList.toggle('open'); }); });
+  renderPreview();
+  loadFromUrl();
+})();
 </script>
-
-<%@ include file="thanks.jsp"%>
-<hr>
-<%@ include file="addcomments.jsp"%>
-</div>
-<%@ include file="footer_adsense.jsp"%>
-<%@ include file="body-close.jsp"%>
+</body>
+</html>
