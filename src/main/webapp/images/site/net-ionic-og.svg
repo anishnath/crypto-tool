@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#f3eee5"/>
+    </linearGradient>
+    <radialGradient id="accentGlow" cx="0.30" cy="0.52" r="0.45">
+      <stop offset="0%" stop-color="#6d5efc" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#6d5efc" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#6d5efc" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/>
+    </pattern>
+    <radialGradient id="sphereCat" cx="0.36" cy="0.30" r="0.75">
+      <stop offset="0%" stop-color="#b6a9ff"/>
+      <stop offset="100%" stop-color="#4b3fb0"/>
+    </radialGradient>
+    <radialGradient id="sphereAn" cx="0.36" cy="0.30" r="0.75">
+      <stop offset="0%" stop-color="#8fe9cf"/>
+      <stop offset="100%" stop-color="#159068"/>
+    </radialGradient>
+    <radialGradient id="sphereSolid" cx="0.36" cy="0.30" r="0.8">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#c2c8d4"/>
+    </radialGradient>
+    <linearGradient id="flask" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8b7bff" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#6d5efc" stop-opacity="0.34"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ── Left: precipitation scene ── -->
+  <!-- faint atmosphere ring -->
+  <circle cx="300" cy="330" r="262" fill="none" stroke="#6d5efc" stroke-opacity="0.12" stroke-width="1.5" stroke-dasharray="3 10"/>
+
+  <!-- struck-through spectator ions (the tool's signature step) -->
+  <g font-family="'Inter',-apple-system,sans-serif" font-weight="700">
+    <g transform="translate(96 150)">
+      <text font-size="36" fill="#1c1917" fill-opacity="0.24">Na⁺</text>
+      <line x1="-4" y1="-11" x2="58" y2="-11" stroke="#ef4444" stroke-opacity="0.55" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(404 122)">
+      <text font-size="36" fill="#1c1917" fill-opacity="0.24">NO₃⁻</text>
+      <line x1="-4" y1="-11" x2="78" y2="-11" stroke="#ef4444" stroke-opacity="0.55" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- reacting ions above the beaker: Ag⁺ + Cl⁻ -->
+  <g font-family="'Inter',-apple-system,sans-serif">
+    <circle cx="248" cy="196" r="39" fill="url(#sphereCat)"/>
+    <text x="248" y="205" text-anchor="middle" font-size="25" font-weight="700" fill="#ffffff">Ag⁺</text>
+    <text x="300" y="208" text-anchor="middle" font-size="46" font-weight="700" fill="#6d5efc">+</text>
+    <circle cx="352" cy="196" r="35" fill="url(#sphereAn)"/>
+    <text x="352" y="204" text-anchor="middle" font-size="23" font-weight="700" fill="#ffffff">Cl⁻</text>
+  </g>
+  <!-- arrow down into beaker -->
+  <path d="M 300 238 L 300 268 M 289 256 L 300 270 L 311 256" fill="none" stroke="#6d5efc" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- beaker -->
+  <path d="M 208 286 L 218 484 Q 218 504 238 504 L 362 504 Q 382 504 382 484 L 392 286"
+        fill="url(#flask)" stroke="#5b4fd6" stroke-opacity="0.75" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M 208 286 L 197 277 M 392 286 L 403 277" stroke="#5b4fd6" stroke-opacity="0.75" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="214" y1="318" x2="386" y2="318" stroke="#6d5efc" stroke-opacity="0.45" stroke-width="3"/>
+
+  <!-- falling precipitate specks -->
+  <g fill="url(#sphereSolid)" stroke="#aab1c0" stroke-opacity="0.5" stroke-width="1">
+    <circle cx="292" cy="356" r="10"/>
+    <circle cx="320" cy="388" r="8"/>
+    <circle cx="282" cy="404" r="7"/>
+  </g>
+  <!-- settled precipitate pile -->
+  <g fill="url(#sphereSolid)" stroke="#aab1c0" stroke-opacity="0.55" stroke-width="1">
+    <circle cx="268" cy="476" r="26"/>
+    <circle cx="305" cy="486" r="30"/>
+    <circle cx="342" cy="476" r="24"/>
+    <circle cx="298" cy="456" r="22"/>
+    <circle cx="330" cy="458" r="17"/>
+  </g>
+  <text x="300" y="546" text-anchor="middle" font-size="24" font-weight="700" fill="#5b4fd6" font-family="'Inter',-apple-system,sans-serif">AgCl (s) ↓</text>
+
+  <!-- ── Right: title block ── -->
+  <g transform="translate(648 168)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#6d5efc"/>
+    <text x="0" y="38" font-size="20" font-weight="600" fill="#6d5efc" letter-spacing="3">8GWIFI · CHEMISTRY</text>
+
+    <text x="0" y="120" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">Net ionic</text>
+    <text x="0" y="194" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">equations.</text>
+
+    <text x="0" y="252" font-size="22" fill="#44403c">Molecular → complete ionic → net ionic.</text>
+    <text x="0" y="284" font-size="22" fill="#44403c">Spectator ions · precipitates · solubility rules.</text>
+
+    <g transform="translate(0 320)" font-size="14" font-weight="600" fill="#5b4fd6">
+      <g>
+        <rect x="0" y="0" width="120" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+        <text x="60" y="24" text-anchor="middle">NET IONIC</text>
+      </g>
+      <g transform="translate(132 0)">
+        <rect x="0" y="0" width="172" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+        <text x="86" y="24" text-anchor="middle">SPECTATOR IONS</text>
+      </g>
+      <g transform="translate(0 48)">
+        <rect x="0" y="0" width="138" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+        <text x="69" y="24" text-anchor="middle">PRECIPITATE</text>
+      </g>
+      <g transform="translate(150 48)">
+        <rect x="0" y="0" width="186" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+        <text x="93" y="24" text-anchor="middle">SOLUBILITY RULES</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- brand -->
+  <g transform="translate(1130 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace">
+    <text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org · net ionic equation calculator</text>
+  </g>
+</svg>

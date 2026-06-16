@@ -83,6 +83,9 @@
             <a class="dropdown-item" href="empirical-formula-calculator.jsp">
               <i class="fas fa-superscript text-warning"></i> Empirical & Molecular Formula
             </a>
+            <a class="dropdown-item" href="net-ionic-equation-calculator.jsp">
+              <i class="fas fa-exchange-alt text-warning"></i> Net Ionic Equation
+            </a>
             <a class="dropdown-item" href="titration-calculator.jsp">
               <i class="fas fa-vial text-warning"></i> Titration Calculator
             </a>
