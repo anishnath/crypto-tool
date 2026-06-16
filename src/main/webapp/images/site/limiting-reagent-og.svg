@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fefdfb"/><stop offset="100%" stop-color="#f3eee5"/></linearGradient>
+    <radialGradient id="accentGlow" cx="0.30" cy="0.52" r="0.45"><stop offset="0%" stop-color="#6d5efc" stop-opacity="0.16"/><stop offset="55%" stop-color="#6d5efc" stop-opacity="0.05"/><stop offset="100%" stop-color="#6d5efc" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/></pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/><rect width="1200" height="630" fill="url(#grid)"/><rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ── Left: yield gauge + limiting/excess ── -->
+  <circle cx="300" cy="320" r="262" fill="none" stroke="#6d5efc" stroke-opacity="0.12" stroke-width="1.5" stroke-dasharray="3 10"/>
+  <!-- reaction caption -->
+  <text x="300" y="150" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="30" font-weight="700" fill="#1c1917" fill-opacity="0.8">N₂ + 3H₂ → 2NH₃</text>
+  <!-- yield donut (82%) -->
+  <circle cx="300" cy="318" r="86" fill="none" stroke="#6d5efc" stroke-opacity="0.14" stroke-width="26"/>
+  <circle cx="300" cy="318" r="86" fill="none" stroke="#6d5efc" stroke-width="26" stroke-linecap="round" stroke-dasharray="443 540" transform="rotate(-90 300 318)"/>
+  <text x="300" y="318" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="62" font-weight="700" fill="#1c1917">82%</text>
+  <text x="300" y="352" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="20" font-weight="600" fill="#5b4fd6" letter-spacing="2">PERCENT YIELD</text>
+  <!-- limiting / excess chips -->
+  <g font-family="'Inter',-apple-system,sans-serif" font-size="17" font-weight="700">
+    <g transform="translate(150 452)">
+      <rect width="142" height="44" rx="22" fill="#ef4444" fill-opacity="0.1" stroke="#ef4444" stroke-opacity="0.45"/>
+      <circle cx="26" cy="22" r="9" fill="#ef4444"/><text x="46" y="28" fill="#b32626">H₂ limiting</text>
+    </g>
+    <g transform="translate(312 452)">
+      <rect width="138" height="44" rx="22" fill="#159068" fill-opacity="0.1" stroke="#159068" stroke-opacity="0.45"/>
+      <circle cx="26" cy="22" r="9" fill="#159068"/><text x="46" y="28" fill="#0f6f50">N₂ excess</text>
+    </g>
+  </g>
+
+  <!-- ── Right: title block ── -->
+  <g transform="translate(648 168)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#6d5efc"/>
+    <text x="0" y="38" font-size="20" font-weight="600" fill="#6d5efc" letter-spacing="3">8GWIFI · CHEMISTRY</text>
+    <text x="0" y="120" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">Limiting</text>
+    <text x="0" y="194" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">reagent.</text>
+    <text x="0" y="252" font-size="22" fill="#44403c">Find the limiting reactant, theoretical and</text>
+    <text x="0" y="284" font-size="22" fill="#44403c">percent yield from any reaction. Free.</text>
+    <g transform="translate(0 320)" font-size="14" font-weight="600" fill="#5b4fd6">
+      <g><rect width="166" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="83" y="24" text-anchor="middle">LIMITING REAGENT</text></g>
+      <g transform="translate(178 0)"><rect width="172" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="86" y="24" text-anchor="middle">THEORETICAL YIELD</text></g>
+      <g transform="translate(0 48)"><rect width="96" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="48" y="24" text-anchor="middle">% YIELD</text></g>
+      <g transform="translate(108 48)"><rect width="92" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="46" y="24" text-anchor="middle">EXCESS</text></g>
+    </g>
+  </g>
+  <g transform="translate(1130 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace"><text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org · limiting reagent &amp; percent yield</text></g>
+</svg>

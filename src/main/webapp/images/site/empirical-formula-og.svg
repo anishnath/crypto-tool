@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fefdfb"/><stop offset="100%" stop-color="#f3eee5"/></linearGradient>
+    <radialGradient id="accentGlow" cx="0.30" cy="0.52" r="0.45"><stop offset="0%" stop-color="#6d5efc" stop-opacity="0.16"/><stop offset="55%" stop-color="#6d5efc" stop-opacity="0.05"/><stop offset="100%" stop-color="#6d5efc" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/></pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/><rect width="1200" height="630" fill="url(#grid)"/><rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ── Left: % composition bar → formula ── -->
+  <circle cx="300" cy="320" r="262" fill="none" stroke="#6d5efc" stroke-opacity="0.12" stroke-width="1.5" stroke-dasharray="3 10"/>
+  <text x="300" y="158" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="20" font-weight="600" fill="#5b4fd6" letter-spacing="2">PERCENT COMPOSITION</text>
+  <!-- stacked bar: C 40.0 / H 6.7 / O 53.3 -->
+  <g>
+    <rect x="100" y="186" width="160" height="56" rx="6" fill="#6d5efc"/>
+    <rect x="262" y="186" width="28"  height="56"      fill="#159068"/>
+    <rect x="292" y="186" width="208" height="56" rx="6" fill="#d98c2e"/>
+    <text x="180" y="222" text-anchor="middle" font-family="'Inter',sans-serif" font-size="22" font-weight="700" fill="#fff">C</text>
+    <text x="276" y="222" text-anchor="middle" font-family="'Inter',sans-serif" font-size="16" font-weight="700" fill="#fff">H</text>
+    <text x="396" y="222" text-anchor="middle" font-family="'Inter',sans-serif" font-size="22" font-weight="700" fill="#fff">O</text>
+  </g>
+  <g font-family="'Inter',sans-serif" font-size="16" font-weight="600" fill="#44403c" text-anchor="middle">
+    <text x="180" y="266">40.0%</text><text x="276" y="290">6.7%</text><text x="396" y="266">53.3%</text>
+  </g>
+  <!-- arrow down -->
+  <path d="M 300 312 L 300 344 M 289 332 L 300 346 L 311 332" fill="none" stroke="#6d5efc" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- empirical -> molecular -->
+  <g font-family="'Inter',-apple-system,sans-serif" text-anchor="middle">
+    <rect x="158" y="368" width="128" height="58" rx="14" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.3"/>
+    <text x="222" y="397" font-size="28" font-weight="700" fill="#1c1917">CH₂O</text>
+    <text x="222" y="416" font-size="12" font-weight="600" fill="#5b4fd6" letter-spacing="1">EMPIRICAL</text>
+    <text x="312" y="405" font-size="30" font-weight="700" fill="#6d5efc">→</text>
+    <rect x="338" y="368" width="160" height="58" rx="14" fill="#6d5efc" fill-opacity="0.16" stroke="#6d5efc" stroke-opacity="0.4"/>
+    <text x="418" y="397" font-size="28" font-weight="700" fill="#1c1917">C₆H₁₂O₆</text>
+    <text x="418" y="416" font-size="12" font-weight="600" fill="#5b4fd6" letter-spacing="1">MOLECULAR</text>
+  </g>
+  <text x="300" y="476" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="18" fill="#44403c" fill-opacity="0.8">÷ smallest → ratio → × multiplier</text>
+
+  <!-- ── Right: title block ── -->
+  <g transform="translate(648 168)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#6d5efc"/>
+    <text x="0" y="38" font-size="20" font-weight="600" fill="#6d5efc" letter-spacing="3">8GWIFI · CHEMISTRY</text>
+    <text x="0" y="120" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">Empirical</text>
+    <text x="0" y="194" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">formula.</text>
+    <text x="0" y="252" font-size="22" fill="#44403c">Percent composition → empirical →</text>
+    <text x="0" y="284" font-size="22" fill="#44403c">molecular formula. Combustion analysis.</text>
+    <g transform="translate(0 320)" font-size="14" font-weight="600" fill="#5b4fd6">
+      <g><rect width="112" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="56" y="24" text-anchor="middle">EMPIRICAL</text></g>
+      <g transform="translate(124 0)"><rect width="156" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="78" y="24" text-anchor="middle">% COMPOSITION</text></g>
+      <g transform="translate(0 48)"><rect width="122" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="61" y="24" text-anchor="middle">MOLECULAR</text></g>
+      <g transform="translate(134 48)"><rect width="134" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="67" y="24" text-anchor="middle">COMBUSTION</text></g>
+    </g>
+  </g>
+  <g transform="translate(1130 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace"><text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org · empirical &amp; molecular formula</text></g>
+</svg>

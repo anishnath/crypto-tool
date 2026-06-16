@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fefdfb"/><stop offset="100%" stop-color="#f3eee5"/></linearGradient>
+    <radialGradient id="accentGlow" cx="0.30" cy="0.52" r="0.45"><stop offset="0%" stop-color="#6d5efc" stop-opacity="0.16"/><stop offset="55%" stop-color="#6d5efc" stop-opacity="0.05"/><stop offset="100%" stop-color="#6d5efc" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/></pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/><rect width="1200" height="630" fill="url(#grid)"/><rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ── Left: the mole map (grams → mol → mol → grams) ── -->
+  <circle cx="300" cy="320" r="262" fill="none" stroke="#6d5efc" stroke-opacity="0.12" stroke-width="1.5" stroke-dasharray="3 10"/>
+  <text x="300" y="150" text-anchor="middle" font-family="'Inter',sans-serif" font-size="18" font-weight="600" fill="#5b4fd6" letter-spacing="3">THE MOLE MAP</text>
+  <g font-family="'Inter',-apple-system,sans-serif" font-size="20" font-weight="700" text-anchor="middle">
+    <!-- chips -->
+    <g><rect x="118" y="196" width="134" height="52" rx="14" fill="#6d5efc" fill-opacity="0.12" stroke="#6d5efc" stroke-opacity="0.32"/><text x="185" y="228" fill="#1c1917">grams A</text></g>
+    <g><rect x="348" y="196" width="134" height="52" rx="14" fill="#6d5efc" fill-opacity="0.12" stroke="#6d5efc" stroke-opacity="0.32"/><text x="415" y="228" fill="#1c1917">moles A</text></g>
+    <g><rect x="348" y="392" width="134" height="52" rx="14" fill="#6d5efc" fill-opacity="0.12" stroke="#6d5efc" stroke-opacity="0.32"/><text x="415" y="424" fill="#1c1917">moles B</text></g>
+    <g><rect x="118" y="392" width="134" height="52" rx="14" fill="#6d5efc" fill-opacity="0.18" stroke="#6d5efc" stroke-opacity="0.45"/><text x="185" y="424" fill="#1c1917">grams B</text></g>
+  </g>
+  <g stroke="#6d5efc" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- grams A -> moles A -->
+    <path d="M 252 222 L 342 222 M 330 214 L 344 222 L 330 230"/>
+    <!-- moles A -> moles B (down) -->
+    <path d="M 415 248 L 415 386 M 407 374 L 415 388 L 423 374"/>
+    <!-- moles B -> grams B (left) -->
+    <path d="M 348 418 L 258 418 M 270 410 L 256 418 L 270 426"/>
+  </g>
+  <g font-family="'JetBrains Mono',monospace" font-size="14" fill="#44403c" fill-opacity="0.85">
+    <text x="297" y="208" text-anchor="middle">÷ molar mass</text>
+    <text x="430" y="320" text-anchor="start">× mole</text>
+    <text x="430" y="338" text-anchor="start">ratio</text>
+    <text x="303" y="446" text-anchor="middle">× molar mass</text>
+  </g>
+
+  <!-- ── Right: title block ── -->
+  <g transform="translate(648 168)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#6d5efc"/>
+    <text x="0" y="38" font-size="20" font-weight="600" fill="#6d5efc" letter-spacing="3">8GWIFI · CHEMISTRY</text>
+    <text x="0" y="120" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">Stoichiometry</text>
+    <text x="0" y="194" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">made simple.</text>
+    <text x="0" y="252" font-size="22" fill="#44403c">Grams ↔ moles ↔ molecules, limiting</text>
+    <text x="0" y="284" font-size="22" fill="#44403c">reactant, yield, from a balanced equation.</text>
+    <g transform="translate(0 320)" font-size="14" font-weight="600" fill="#5b4fd6">
+      <g><rect width="178" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="89" y="24" text-anchor="middle">MOLE CONVERSIONS</text></g>
+      <g transform="translate(190 0)"><rect width="104" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="52" y="24" text-anchor="middle">LIMITING</text></g>
+      <g transform="translate(0 48)"><rect width="96" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="48" y="24" text-anchor="middle">% YIELD</text></g>
+      <g transform="translate(108 48)"><rect width="150" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="75" y="24" text-anchor="middle">FROM EQUATION</text></g>
+    </g>
+  </g>
+  <g transform="translate(1130 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace"><text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org · stoichiometry calculator</text></g>
+</svg>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fefdfb"/><stop offset="100%" stop-color="#f3eee5"/></linearGradient>
+    <radialGradient id="accentGlow" cx="0.30" cy="0.52" r="0.45"><stop offset="0%" stop-color="#6d5efc" stop-opacity="0.16"/><stop offset="55%" stop-color="#6d5efc" stop-opacity="0.05"/><stop offset="100%" stop-color="#6d5efc" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/></pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/><rect width="1200" height="630" fill="url(#grid)"/><rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ── Left: galvanic cell ── -->
+  <circle cx="300" cy="330" r="262" fill="none" stroke="#6d5efc" stroke-opacity="0.12" stroke-width="1.5" stroke-dasharray="3 10"/>
+  <text x="290" y="120" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="20" font-weight="700" fill="#5b4fd6">E°cell = +1.10 V</text>
+
+  <!-- external wire + voltmeter -->
+  <g fill="none" stroke="#44403c" stroke-width="4" stroke-linecap="round">
+    <path d="M180 244 L180 168 L256 168"/>
+    <path d="M324 168 L400 168 L400 244"/>
+  </g>
+  <circle cx="290" cy="168" r="32" fill="#fefdfb" stroke="#44403c" stroke-width="4"/>
+  <text x="290" y="178" text-anchor="middle" font-family="'Inter',sans-serif" font-size="26" font-weight="700" fill="#44403c">V</text>
+  <!-- electron-flow arrows (anode -> cathode) -->
+  <g font-family="'Inter',sans-serif" font-size="16" font-weight="700" fill="#6d5efc">
+    <text x="222" y="152" text-anchor="middle">e⁻</text>
+    <text x="358" y="152" text-anchor="middle">e⁻</text>
+    <g stroke="#6d5efc" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M236 168 L246 168 M242 164 L247 168 L242 172"/>
+      <path d="M334 168 L344 168 M340 164 L345 168 L340 172"/>
+    </g>
+  </g>
+
+  <!-- beakers -->
+  <path d="M120 300 L132 452 Q132 470 150 470 L210 470 Q228 470 228 452 L240 300" fill="none" stroke="#5b4fd6" stroke-opacity="0.7" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M340 300 L352 452 Q352 470 370 470 L430 470 Q448 470 448 452 L460 300" fill="none" stroke="#5b4fd6" stroke-opacity="0.7" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- liquids -->
+  <path d="M127 340 L132 452 Q132 470 150 470 L210 470 Q228 470 228 452 L233 340 Z" fill="#6d5efc" fill-opacity="0.18"/>
+  <path d="M347 340 L352 452 Q352 470 370 470 L430 470 Q448 470 448 452 L453 340 Z" fill="#c87f4a" fill-opacity="0.20"/>
+
+  <!-- salt bridge -->
+  <path d="M225 360 L225 318 Q225 306 237 306 L343 306 Q355 306 355 318 L355 360" fill="none" stroke="#d9b36a" stroke-opacity="0.75" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="290" y="440" text-anchor="middle" font-family="'Inter',sans-serif" font-size="14" font-weight="600" fill="#8a6a25" fill-opacity="0.8">salt bridge</text>
+
+  <!-- electrodes -->
+  <rect x="172" y="246" width="16" height="200" rx="3" fill="#9aa3b2"/>
+  <rect x="392" y="246" width="16" height="200" rx="3" fill="#c87f4a"/>
+
+  <!-- labels -->
+  <g font-family="'Inter',sans-serif" text-anchor="middle">
+    <text x="180" y="502" font-size="18" font-weight="700" fill="#1c1917">Zn · anode (−)</text>
+    <text x="400" y="502" font-size="18" font-weight="700" fill="#1c1917">Cu · cathode (+)</text>
+  </g>
+
+  <!-- ── Right: title block ── -->
+  <g transform="translate(648 168)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#6d5efc"/>
+    <text x="0" y="38" font-size="20" font-weight="600" fill="#6d5efc" letter-spacing="3">8GWIFI · CHEMISTRY</text>
+    <text x="0" y="120" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">Electro-</text>
+    <text x="0" y="194" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">chemistry.</text>
+    <text x="0" y="252" font-size="22" fill="#44403c">Balance redox, cell potential (E°cell),</text>
+    <text x="0" y="284" font-size="22" fill="#44403c">the Nernst equation &amp; electron transfer.</text>
+    <g transform="translate(0 320)" font-size="14" font-weight="600" fill="#5b4fd6">
+      <g><rect width="84" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="42" y="24" text-anchor="middle">REDOX</text></g>
+      <g transform="translate(96 0)"><rect width="166" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="83" y="24" text-anchor="middle">CELL POTENTIAL</text></g>
+      <g transform="translate(0 48)"><rect width="98" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="49" y="24" text-anchor="middle">NERNST</text></g>
+      <g transform="translate(110 48)"><rect width="124" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="62" y="24" text-anchor="middle">BALANCING</text></g>
+    </g>
+  </g>
+  <g transform="translate(1130 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace"><text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org · electrochemistry calculator</text></g>
+</svg>

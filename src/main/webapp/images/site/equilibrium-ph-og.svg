@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fefdfb"/><stop offset="100%" stop-color="#f3eee5"/></linearGradient>
+    <radialGradient id="accentGlow" cx="0.30" cy="0.52" r="0.45"><stop offset="0%" stop-color="#6d5efc" stop-opacity="0.16"/><stop offset="55%" stop-color="#6d5efc" stop-opacity="0.05"/><stop offset="100%" stop-color="#6d5efc" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/></pattern>
+    <linearGradient id="phscale" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e23b3b"/><stop offset="22%" stop-color="#e8902e"/><stop offset="44%" stop-color="#ddd23a"/>
+      <stop offset="50%" stop-color="#4bb34b"/><stop offset="72%" stop-color="#3b86e8"/><stop offset="100%" stop-color="#7b3be8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/><rect width="1200" height="630" fill="url(#grid)"/><rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <!-- ── Left: equilibrium + pH scale ── -->
+  <circle cx="300" cy="320" r="262" fill="none" stroke="#6d5efc" stroke-opacity="0.12" stroke-width="1.5" stroke-dasharray="3 10"/>
+  <!-- equilibrium expression -->
+  <g font-family="'Inter',-apple-system,sans-serif" text-anchor="middle">
+    <text x="300" y="205" font-size="36" font-weight="700" fill="#1c1917" fill-opacity="0.85">HA &#8652; H⁺ + A⁻</text>
+  </g>
+  <!-- big equilibrium harpoons -->
+  <g stroke="#6d5efc" stroke-width="5" stroke-linecap="round" fill="none">
+    <path d="M 215 250 L 385 250 M 372 240 L 388 250"/>
+    <path d="M 385 274 L 215 274 M 228 284 L 212 274"/>
+  </g>
+  <!-- pH scale strip -->
+  <rect x="100" y="350" width="400" height="44" rx="22" fill="url(#phscale)"/>
+  <g font-family="'JetBrains Mono',monospace" font-size="16" font-weight="600" fill="#44403c">
+    <text x="100" y="424" text-anchor="start">0</text>
+    <text x="300" y="424" text-anchor="middle">7</text>
+    <text x="500" y="424" text-anchor="end">14</text>
+  </g>
+  <text x="300" y="338" text-anchor="middle" font-family="'Inter',sans-serif" font-size="18" font-weight="600" fill="#5b4fd6" letter-spacing="3">pH SCALE</text>
+  <!-- pointer at pH 4.74 (x = 100 + 4.74/14*400 = 235) -->
+  <g transform="translate(235 0)">
+    <path d="M 0 338 L -11 322 L 11 322 Z" fill="#1c1917"/>
+    <rect x="-44" y="288" width="88" height="32" rx="8" fill="#1c1917"/>
+    <text x="0" y="310" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="17" font-weight="700" fill="#fff">pH 4.74</text>
+  </g>
+
+  <!-- ── Right: title block ── -->
+  <g transform="translate(648 168)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#6d5efc"/>
+    <text x="0" y="38" font-size="20" font-weight="600" fill="#6d5efc" letter-spacing="3">8GWIFI · CHEMISTRY</text>
+    <text x="0" y="120" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">Equilibrium</text>
+    <text x="0" y="194" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">&amp; pH.</text>
+    <text x="0" y="252" font-size="22" fill="#44403c">Weak acids &amp; bases, buffers, Ksp,</text>
+    <text x="0" y="284" font-size="22" fill="#44403c">titration curves — solved with chempy.</text>
+    <g transform="translate(0 320)" font-size="14" font-weight="600" fill="#5b4fd6">
+      <g><rect width="172" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="86" y="24" text-anchor="middle">WEAK ACID / BASE</text></g>
+      <g transform="translate(184 0)"><rect width="92" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="46" y="24" text-anchor="middle">BUFFER</text></g>
+      <g transform="translate(0 48)"><rect width="74" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="37" y="24" text-anchor="middle">Ksp</text></g>
+      <g transform="translate(86 48)"><rect width="118" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/><text x="59" y="24" text-anchor="middle">TITRATION</text></g>
+    </g>
+  </g>
+  <g transform="translate(1130 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace"><text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org · equilibrium &amp; pH calculator</text></g>
+</svg>
