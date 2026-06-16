@@ -45,7 +45,11 @@
                 {"@type": "ListItem", "position": 11, "name": "Molarity & Dilution", "url": "https://8gwifi.org/molarity-dilution-calculator.jsp"},
                 {"@type": "ListItem", "position": 12, "name": "Chemistry Unit Converter", "url": "https://8gwifi.org/unit-converter-chemistry.jsp"},
                 {"@type": "ListItem", "position": 13, "name": "Thermochemistry Calculator", "url": "https://8gwifi.org/thermochemistry-calculator.jsp"},
-                {"@type": "ListItem", "position": 14, "name": "Electrochemistry Calculator", "url": "https://8gwifi.org/electrochemistry-calculator.jsp"}
+                {"@type": "ListItem", "position": 14, "name": "Electrochemistry Calculator", "url": "https://8gwifi.org/electrochemistry-calculator.jsp"},
+                {"@type": "ListItem", "position": 15, "name": "Limiting Reagent & Percent Yield Calculator", "url": "https://8gwifi.org/limiting-reagent-calculator.jsp"},
+                {"@type": "ListItem", "position": 16, "name": "Net Ionic Equation Calculator", "url": "https://8gwifi.org/net-ionic-equation-calculator.jsp"},
+                {"@type": "ListItem", "position": 17, "name": "Empirical & Molecular Formula Calculator", "url": "https://8gwifi.org/empirical-formula-calculator.jsp"},
+                {"@type": "ListItem", "position": 18, "name": "Equilibrium & pH Calculator", "url": "https://8gwifi.org/equilibrium-ph-calculator.jsp"}
             ]
         }
     }
@@ -160,10 +164,25 @@
                     <span><span class="cs-tool-card-title">Stoichiometry</span>
                           <span class="cs-tool-card-sub">Moles, mass, limiting reagent</span></span>
                 </a>
+                <a href="<%=ctx%>/limiting-reagent-calculator.jsp" class="cs-tool-card">
+                    <span class="cs-tool-card-icon">&#37;</span>
+                    <span><span class="cs-tool-card-title">Limiting Reagent &amp; Yield</span>
+                          <span class="cs-tool-card-sub">Limiting reactant, % yield</span></span>
+                </a>
+                <a href="<%=ctx%>/net-ionic-equation-calculator.jsp" class="cs-tool-card">
+                    <span class="cs-tool-card-icon">&#8651;</span>
+                    <span><span class="cs-tool-card-title">Net Ionic Equation</span>
+                          <span class="cs-tool-card-sub">Spectators, precipitate</span></span>
+                </a>
                 <a href="<%=ctx%>/molar-mass-calculator.jsp" class="cs-tool-card">
                     <span class="cs-tool-card-icon">&#9878;m</span>
                     <span><span class="cs-tool-card-title">Molar Mass</span>
                           <span class="cs-tool-card-sub">Molecular weight from formula</span></span>
+                </a>
+                <a href="<%=ctx%>/empirical-formula-calculator.jsp" class="cs-tool-card">
+                    <span class="cs-tool-card-icon">&#8473;</span>
+                    <span><span class="cs-tool-card-title">Empirical &amp; % Composition</span>
+                          <span class="cs-tool-card-sub">% composition, molecular formula</span></span>
                 </a>
             </div>
         </div>
@@ -181,6 +200,11 @@
                     <span class="cs-tool-card-icon">&#9219;</span>
                     <span><span class="cs-tool-card-title">Molarity &amp; Dilution</span>
                           <span class="cs-tool-card-sub">C&#8321;V&#8321; = C&#8322;V&#8322;, concentration</span></span>
+                </a>
+                <a href="<%=ctx%>/equilibrium-ph-calculator.jsp" class="cs-tool-card">
+                    <span class="cs-tool-card-icon">&#8652;</span>
+                    <span><span class="cs-tool-card-title">Equilibrium &amp; pH</span>
+                          <span class="cs-tool-card-sub">Weak acid/base, buffer, Ksp</span></span>
                 </a>
                 <a href="<%=ctx%>/unit-converter-chemistry.jsp" class="cs-tool-card">
                     <span class="cs-tool-card-icon">&#8644;</span>
