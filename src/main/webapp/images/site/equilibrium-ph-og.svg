@@ -29,7 +29,6 @@
     <text x="300" y="424" text-anchor="middle">7</text>
     <text x="500" y="424" text-anchor="end">14</text>
   </g>
-  <text x="300" y="338" text-anchor="middle" font-family="'Inter',sans-serif" font-size="18" font-weight="600" fill="#5b4fd6" letter-spacing="3">pH SCALE</text>
   <!-- pointer at pH 4.74 (x = 100 + 4.74/14*400 = 235) -->
   <g transform="translate(235 0)">
     <path d="M 0 338 L -11 322 L 11 322 Z" fill="#1c1917"/>
