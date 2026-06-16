@@ -86,7 +86,7 @@
     </div>
 
     <!-- Reactions & Stoichiometry -->
-    <div class="cs-group<%= collapsedCls(activeService, "balancer", "stoichiometry", "molar-mass", "empirical", "limiting") %>" data-group="reactions">
+    <div class="cs-group<%= collapsedCls(activeService, "balancer", "stoichiometry", "molar-mass", "empirical", "limiting", "net-ionic") %>" data-group="reactions">
         <button class="cs-group-header" type="button">Reactions &amp; Stoichiometry <span class="cs-group-chevron">&#9662;</span></button>
         <div class="cs-group-body">
             <a href="<%= ctx %>/chemical-equation-balancer.jsp" class="cs-item <%= activeCls(activeService, "balancer") %>">
@@ -97,6 +97,9 @@
             </a>
             <a href="<%= ctx %>/limiting-reagent-calculator.jsp" class="cs-item <%= activeCls(activeService, "limiting") %>">
                 <span class="cs-item-icon">&#9878;%</span><span class="cs-item-label">Limiting Reagent &amp; Yield</span>
+            </a>
+            <a href="<%= ctx %>/net-ionic-equation-calculator.jsp" class="cs-item <%= activeCls(activeService, "net-ionic") %>">
+                <span class="cs-item-icon">&#8651;</span><span class="cs-item-label">Net Ionic Equation</span>
             </a>
             <a href="<%= ctx %>/molar-mass-calculator.jsp" class="cs-item <%= activeCls(activeService, "molar-mass") %>">
                 <span class="cs-item-icon">&#8721;m</span><span class="cs-item-label">Molar Mass</span>
