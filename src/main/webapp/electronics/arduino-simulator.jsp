@@ -8,6 +8,7 @@
 <%
 String v = String.valueOf(System.currentTimeMillis());
 request.setAttribute("aiToolId", "arduino-simulator");
+request.setAttribute("aiRequireSignIn", "true");
 %>
 <%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>

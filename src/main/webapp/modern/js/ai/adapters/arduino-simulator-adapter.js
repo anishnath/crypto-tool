@@ -140,6 +140,7 @@ export function createArduinoSimulatorAssistant(opts) {
     userId,
     billing: {
       enabled: true,
+      requireSignIn: opts.billing?.requireSignIn === true,
       ctx,
       userId: userId || '',
       // Plan name + price come live from the Go API (/api/billing/plans, which
