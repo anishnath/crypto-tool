@@ -125,7 +125,7 @@
             <input type="text" class="nie-eq-input" id="nieEq" spellcheck="false" autocomplete="off" placeholder="e.g. AgNO3 + NaCl = AgCl + NaNO3" value="AgNO3 + NaCl = AgCl + NaNO3">
         </div>
         <div class="nie-preview" id="niePreview"></div>
-        <p class="nie-hint">Write reactants <code>=</code> products (it is balanced for you). States are predicted from solubility rules. Strong acids/bases and soluble salts are split into ions; weak acids, water, gases, and solids stay molecular.</p>
+        <p class="nie-hint">Type formulas with ordinary numbers — e.g. <code>Na2CO3</code> (no subscripts to type); the preview above shows how it was read. Write reactants <code>=</code> products and it is balanced for you. States come from solubility rules: strong acids/bases and soluble salts split into ions; weak acids, water, gases, and solids stay molecular.</p>
 
         <div class="nie-chips">
             <button type="button" class="nie-ex" data-eq="AgNO3 + NaCl = AgCl + NaNO3">AgCl precipitate</button>
@@ -215,9 +215,13 @@
   var RUN = '<%=ctx%>/OneCompilerFunctionality';
   function $(id) { return document.getElementById(id); }
 
+  // Tolerate pasted pretty-printed formulas: unicode subscripts/superscripts → plain ASCII.
+  var SUBSUP = { '₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9',
+                 '⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁺':'+','⁻':'-' };
+  function normUnicode(s) { return String(s).replace(/[₀-₉⁰¹²³⁴-⁹⁺⁻]/g, function (c) { return SUBSUP[c] || ''; }); }
   function cleanSp(t) { return t.trim().replace(/\s+/g, '').replace(/^\d+(?=[A-Za-z(])/, ''); }
   function parseEquation(raw) {
-    var s = String(raw).replace(/→|⟶|->|=>/g, '=').trim();
+    var s = normUnicode(raw).replace(/→|⟶|->|=>/g, '=').trim();
     if (s.indexOf('=') === -1) return null;
     var parts = s.split('='); if (parts.length !== 2) return null;
     function side(t) { return t.split(/\s+\+\s+/).map(cleanSp).filter(Boolean); }
