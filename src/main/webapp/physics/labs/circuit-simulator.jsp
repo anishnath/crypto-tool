@@ -2,6 +2,7 @@
 <% String v = String.valueOf(System.currentTimeMillis()); %>
 <%
     request.setAttribute("aiToolId", "physics/labs/circuit-simulator");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
 <%@ include file="../../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>

@@ -37,6 +37,7 @@ String aiBootUrlPath = (String) request.getAttribute("aiUrlPath");
 String aiBootToolId = AiAssistantPageSupport.escapeJs(
     AiAssistantPageSupport.param(pageContext, "aiToolId", ""));
 boolean aiBootBilling = AiAssistantPageSupport.paramBool(pageContext, "aiBillingEnabled", true);
+boolean aiBootRequireSignIn = AiAssistantPageSupport.paramBool(pageContext, "aiRequireSignIn", false);
 %>
 const aiAssistantBoot = {
   ctx: '<%= aiBootCtx %>',
@@ -52,6 +53,7 @@ const aiAssistantBoot = {
   toolId: '<%= aiBootToolId %>',
   billing: {
     enabled: <%= aiBootBilling %>,
+    requireSignIn: <%= aiBootRequireSignIn %>,
     ctx: '<%= aiBootCtx %>',
     userId: '<%= aiBootUserIdJs %>',
   },

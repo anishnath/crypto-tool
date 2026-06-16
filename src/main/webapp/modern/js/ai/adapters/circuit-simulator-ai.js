@@ -60,6 +60,7 @@ export function createCircuitSimulatorAssistant(opts) {
     userId,
     billing: {
       enabled: true,
+      requireSignIn: opts.billing?.requireSignIn === true,
       ctx,
       userId: userId || '',
       plans: {

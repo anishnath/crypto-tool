@@ -624,6 +624,7 @@ export class ToolAiAssistant {
         ctx: opts.billing.ctx || opts.ctx || '',
         userId: opts.billing.userId ?? opts.userId ?? '',
         enabled: opts.billing.enabled !== false,
+        requireSignIn: opts.billing.requireSignIn === true,
       }
       : null;
     this._billingStatus = null;
@@ -865,7 +866,13 @@ export class ToolAiAssistant {
       this._autoResize(this._els.input);
     }
     this._els.input.focus();
-    if (autoSend && prefill) this._send();
+    if (autoSend && prefill) {
+      if (this._blockGuestSend(String(prefill))) {
+        /* keep prefill in input */
+      } else {
+        this._send();
+      }
+    }
     return this;
   }
 
@@ -1255,10 +1262,36 @@ export class ToolAiAssistant {
 
   // ─── Sending ───────────────────────────────────────────────────────────────
 
+  _isLoggedIn() {
+    return !!(this.billing?.userId || this.userId);
+  }
+
+  /** When requireSignIn is set, guests cannot send (legacy /ai still reachable otherwise). */
+  _blockGuestSend(restoreText = '') {
+    if (!this.billing?.requireSignIn || this._isLoggedIn()) return false;
+    if (restoreText && this._els?.input) {
+      this._els.input.value = restoreText;
+      this._autoResize(this._els.input);
+    }
+    if (this.billing.enabled && this._els?.billingBar) {
+      this._refreshGuestBilling();
+    }
+    this._renderSystemBubble(
+      'Sign in with Google to use AI on this tool.',
+      { kind: 'info', confidence: 'High' },
+    );
+    return true;
+  }
+
   async _send() {
     if (!this._els || this.busy) return;
     const text = this._els.input.value.trim();
     if (!text) return;
+
+    if (this._blockGuestSend(text)) {
+      this._els.input.focus();
+      return;
+    }
 
     this._setBusy(true);
     this._els.input.value = '';

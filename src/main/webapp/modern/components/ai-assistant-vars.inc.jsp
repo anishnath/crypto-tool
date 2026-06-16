@@ -5,6 +5,7 @@
   Optional page/request attributes (set before this include):
     aiToolId            — billing + localStorage key (default "")
     aiBillingEnabled    — "true" | "false" (default true)
+    aiRequireSignIn     — "true" | "false" (default false) — block AI send for guests
 
   Usage:
     <% request.setAttribute("aiToolId", "my-tool"); %>
