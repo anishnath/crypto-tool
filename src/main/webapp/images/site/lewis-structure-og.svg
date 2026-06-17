@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fefdfb"/>
+      <stop offset="100%" stop-color="#f3eee5"/>
+    </linearGradient>
+    <radialGradient id="accentGlow" cx="0.30" cy="0.5" r="0.45">
+      <stop offset="0%" stop-color="#6d5efc" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#6d5efc" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#6d5efc" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1c1917" stroke-width="0.5" stroke-opacity="0.045"/>
+    </pattern>
+    <radialGradient id="sphereO" cx="0.35" cy="0.3" r="0.75">
+      <stop offset="0%" stop-color="#ff9a9a"/>
+      <stop offset="100%" stop-color="#c0392b"/>
+    </radialGradient>
+    <radialGradient id="sphereH" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0%" stop-color="#f2f0fb"/>
+      <stop offset="100%" stop-color="#b8b4d6"/>
+    </radialGradient>
+    <radialGradient id="sphereN" cx="0.35" cy="0.3" r="0.75">
+      <stop offset="0%" stop-color="#9b8dff"/>
+      <stop offset="100%" stop-color="#4b3fb0"/>
+    </radialGradient>
+    <radialGradient id="domainGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#6d5efc" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#6d5efc" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#accentGlow)"/>
+
+  <g transform="translate(340 315)">
+    <circle r="248" fill="url(#domainGlow)"/>
+    <ellipse rx="240" ry="118" fill="none" stroke="#6d5efc" stroke-opacity="0.18" stroke-width="1.5" stroke-dasharray="4 8"/>
+    <ellipse rx="240" ry="118" fill="none" stroke="#6d5efc" stroke-opacity="0.14" stroke-width="1.5" stroke-dasharray="4 8" transform="rotate(60)"/>
+    <ellipse rx="240" ry="118" fill="none" stroke="#6d5efc" stroke-opacity="0.14" stroke-width="1.5" stroke-dasharray="4 8" transform="rotate(-60)"/>
+
+    <g transform="translate(0 -228)">
+      <rect x="-168" y="-38" width="336" height="76" rx="38" fill="#fefdfb" stroke="#6d5efc" stroke-opacity="0.5" stroke-width="2"/>
+      <text x="-24" y="11" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="28" font-weight="600" fill="#1c1917">acetic acid</text>
+      <circle cx="118" cy="0" r="15" fill="none" stroke="#6d5efc" stroke-width="3.2"/>
+      <line x1="129" y1="11" x2="144" y2="26" stroke="#6d5efc" stroke-width="3.2" stroke-linecap="round"/>
+    </g>
+
+    <g stroke="#6d5efc" stroke-opacity="0.55" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="0" y1="-172" x2="0" y2="-118"/>
+      <polyline points="-13,-133 0,-118 13,-133"/>
+    </g>
+
+    <g transform="translate(0 18)">
+      <g stroke="#5b4fd6" stroke-width="5" stroke-linecap="round">
+        <line x1="-92" y1="52" x2="-18" y2="-8"/>
+        <line x1="92" y1="52" x2="18" y2="-8"/>
+      </g>
+
+      <g fill="#1c1917" fill-opacity="0.68">
+        <circle cx="-34" cy="-58" r="4.2"/>
+        <circle cx="-18" cy="-72" r="4.2"/>
+        <circle cx="34" cy="-58" r="4.2"/>
+        <circle cx="18" cy="-72" r="4.2"/>
+      </g>
+
+      <circle cx="0" cy="-8" r="22" fill="url(#sphereO)"/>
+      <text x="0" y="-1" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="18" font-weight="700" fill="#ffffff">O</text>
+      <circle cx="-92" cy="52" r="16" fill="url(#sphereH)"/>
+      <text x="-92" y="58" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="14" font-weight="700" fill="#4b3fb0">H</text>
+      <circle cx="92" cy="52" r="16" fill="url(#sphereH)"/>
+      <text x="92" y="58" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="14" font-weight="700" fill="#4b3fb0">H</text>
+
+      <path d="M -52 18 A 58 58 0 0 1 52 18" fill="none" stroke="#6d5efc" stroke-opacity="0.55" stroke-width="2.5"/>
+      <text x="0" y="44" text-anchor="middle" font-family="'JetBrains Mono','Courier New',monospace" font-size="18" font-weight="600" fill="#5b4fd6">104.5&#176;</text>
+    </g>
+
+    <g transform="translate(148 118) scale(0.72)">
+      <g stroke="#5b4fd6" stroke-width="5" stroke-linecap="round" stroke-opacity="0.75">
+        <line x1="0" y1="-28" x2="-68" y2="48"/>
+        <line x1="0" y1="-28" x2="68" y2="48"/>
+        <line x1="0" y1="-28" x2="0" y2="72"/>
+      </g>
+      <g fill="#1c1917" fill-opacity="0.55">
+        <circle cx="0" cy="-58" r="3.8"/>
+        <circle cx="14" cy="-54" r="3.8"/>
+      </g>
+      <circle cx="0" cy="-28" r="20" fill="url(#sphereN)"/>
+      <text x="0" y="-21" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="16" font-weight="700" fill="#ffffff">N</text>
+      <circle cx="-68" cy="48" r="14" fill="url(#sphereH)"/>
+      <text x="-68" y="53" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="12" font-weight="700" fill="#4b3fb0">H</text>
+      <circle cx="68" cy="48" r="14" fill="url(#sphereH)"/>
+      <text x="68" y="53" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="12" font-weight="700" fill="#4b3fb0">H</text>
+      <circle cx="0" cy="72" r="14" fill="url(#sphereH)"/>
+      <text x="0" y="77" text-anchor="middle" font-family="'Inter',-apple-system,sans-serif" font-size="12" font-weight="700" fill="#4b3fb0">H</text>
+    </g>
+
+    <g font-family="'Inter',-apple-system,sans-serif" font-size="15" font-weight="600">
+      <rect x="-118" y="168" width="108" height="32" rx="16" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+      <text x="-64" y="190" text-anchor="middle" fill="#5b4fd6">BENT</text>
+      <rect x="18" y="168" width="156" height="32" rx="16" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+      <text x="96" y="190" text-anchor="middle" fill="#5b4fd6">TRIGONAL PYRAMIDAL</text>
+    </g>
+  </g>
+
+  <g transform="translate(668 168)" font-family="'Inter',-apple-system,BlinkMacSystemFont,sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="#6d5efc"/>
+    <text x="0" y="38" font-size="20" font-weight="600" fill="#6d5efc" letter-spacing="3">8GWIFI &#183; CHEMISTRY</text>
+
+    <text x="0" y="120" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">Lewis</text>
+    <text x="0" y="194" font-size="74" font-weight="700" fill="#1c1917" font-family="'Instrument Serif','Times New Roman',Georgia,serif" font-style="italic">structures.</text>
+
+    <text x="0" y="252" font-size="22" fill="#44403c">AI name-to-formula &#183; dot diagrams &#183; VSEPR.</text>
+    <text x="0" y="284" font-size="22" fill="#44403c">Formal charges &#183; bond angles &#183; polarity.</text>
+
+    <g transform="translate(0 320)" font-size="14" font-weight="600" fill="#5b4fd6">
+      <g>
+        <rect x="0" y="0" width="88" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+        <text x="44" y="24" text-anchor="middle">VSEPR</text>
+      </g>
+      <g transform="translate(100 0)">
+        <rect x="0" y="0" width="148" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+        <text x="74" y="24" text-anchor="middle">FORMAL CHARGE</text>
+      </g>
+      <g transform="translate(260 0)">
+        <rect x="0" y="0" width="132" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+        <text x="66" y="24" text-anchor="middle">BOND ANGLES</text>
+      </g>
+      <g transform="translate(0 48)">
+        <rect x="0" y="0" width="108" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+        <text x="54" y="24" text-anchor="middle">AI INPUT</text>
+      </g>
+      <g transform="translate(120 48)">
+        <rect x="0" y="0" width="156" height="36" rx="18" fill="#6d5efc" fill-opacity="0.1" stroke="#6d5efc" stroke-opacity="0.28"/>
+        <text x="78" y="24" text-anchor="middle">PRACTICE SHEET</text>
+      </g>
+    </g>
+  </g>
+
+  <g transform="translate(1130 595)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace">
+    <text font-size="16" fill="#1c1917" fill-opacity="0.55" font-weight="500">8gwifi.org &#183; lewis structure generator</text>
+  </g>
+</svg>
