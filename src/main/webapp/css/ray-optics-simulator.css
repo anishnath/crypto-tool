@@ -364,6 +364,20 @@
 }
 .rs-btn-accent:hover { filter: brightness(1.1); }
 
+.rs-btn-ai {
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-color: transparent;
+  font-weight: 600;
+}
+.rs-btn-ai:hover {
+  filter: brightness(1.08);
+  border-color: transparent;
+}
+[data-theme="dark"] .rs-btn-ai {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
 /* ═══════════════════════════════════════
    LENS PRESCRIPTION MODAL
    ═══════════════════════════════════════ */

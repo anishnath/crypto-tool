@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "physics/ray-optics-simulator");
 %>
+<%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,6 +59,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/ray-optics-simulator.css">
+    <%@ include file="../modern/components/ai-assistant-head.inc.jsp" %>
 
     <%@ include file="../modern/ads/ad-init.jsp" %>
 </head>
@@ -84,7 +87,7 @@
         <div class="rs-canvas-card">
 
             <!-- H1 (compact, inside toolbar area for SEO) -->
-            <h1 style="font-size:0.8125rem;font-weight:600;margin:0;padding:0.375rem 0.75rem 0;color:var(--text-primary,#0f172a);">Ray Optics Simulator <span style="font-weight:400;font-size:0.6875rem;color:var(--text-secondary,#64748b);">&mdash; mirrors, lenses, prisms, beam splitters &amp; gratings</span></h1>
+            <h1 style="font-size:0.8125rem;font-weight:600;margin:0;padding:0.375rem 0.75rem 0;color:var(--text-primary,#0f172a);">Ray Optics Simulator <span style="font-weight:400;font-size:0.6875rem;color:var(--text-secondary,#64748b);">&mdash; AI scene builder · mirrors, lenses, prisms, beam splitters &amp; gratings</span></h1>
 
             <!-- Toolbar -->
             <div class="rs-toolbar">
@@ -173,6 +176,8 @@
                 <button id="rs-redo-btn" class="rs-btn" title="Redo (Ctrl+Shift+Z)">&#x21AA;</button>
 
                 <div style="flex:1;"></div>
+
+                <button id="btnRayOpticsAI" class="rs-btn rs-btn-ai" type="button" title="AI assistant — generate scenes or ask about optics (Ctrl+Shift+A)">&#10024; AI</button>
 
                 <button id="rs-prescription-btn" class="rs-btn rs-btn-accent" title="Import lens prescription from patent/paper data">Lens Rx</button>
                 <button id="rs-import-btn" class="rs-btn" title="Import scene from JSON">Import</button>
@@ -553,6 +558,80 @@ document.addEventListener('DOMContentLoaded', function () {
         RayUI.refreshAll();
         rxOverlay.style.display = 'none';
     });
+});
+
+// ── AI assistant shell (VibeCodingAssistant adapter) ──
+let _raySnapCache = null;
+
+function buildRaySummary(objects) {
+    var counts = {};
+    for (var i = 0; i < (objects || []).length; i++) {
+        var o = objects[i];
+        if (!o || !o.type) continue;
+        counts[o.type] = (counts[o.type] || 0) + 1;
+    }
+    return Object.keys(counts).sort().map(function (t) {
+        return counts[t] + '\u00d7 ' + t;
+    }).join(', ');
+}
+
+function refreshRaySnapshot() {
+    try {
+        var data = RayUI.exportSceneData();
+        _raySnapCache = {
+            objectCount: data && data.objects ? data.objects.length : 0,
+            summary: data && data.objects ? buildRaySummary(data.objects) : '',
+            sceneJson: data ? JSON.stringify(data) : '',
+        };
+    } catch (e) {
+        _raySnapCache = { objectCount: 0, summary: '', sceneJson: '' };
+    }
+    return Promise.resolve(_raySnapCache);
+}
+
+window.rayOpticsShell = {
+    getSnapshot: function () {
+        if (!_raySnapCache) refreshRaySnapshot();
+        return _raySnapCache || { objectCount: 0, summary: '', sceneJson: '' };
+    },
+    refreshSnapshot: refreshRaySnapshot,
+    applyScene: function (payload) {
+        try {
+            if (!payload || !payload.objects || !payload.objects.length) {
+                throw new Error('Scene must include at least one object.');
+            }
+            var normalized = {
+                scene: payload.scene || {},
+                objects: payload.objects.map(function (o) {
+                    var c = Object.assign({}, o);
+                    delete c.id;
+                    return c;
+                }),
+            };
+            var result = RayUI.importSceneData(normalized);
+            refreshRaySnapshot();
+            if (window.ToolUtils && ToolUtils.showToast) {
+                ToolUtils.showToast('\u2713 Scene loaded (' + result.objectCount + ' objects)', 3000, 'success');
+            }
+            return result;
+        } catch (e) {
+            return { applied: false, error: e.message || String(e) };
+        }
+    },
+};
+
+refreshRaySnapshot();
+</script>
+
+<script type="module">
+<%@ include file="../modern/components/ai-assistant-boot.inc.jsp" %>
+import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
+
+window.rayOpticsAssistant = wireLazyAssistant({
+  moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/ray-optics-simulator-ai.js',
+  exportName: 'createRayOpticsSimulatorAssistant',
+  buttonId: 'btnRayOpticsAI',
+  boot: aiAssistantBoot,
 });
 </script>
 

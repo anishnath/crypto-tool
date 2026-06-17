@@ -7,6 +7,8 @@
   // verbatim for two whitelisted endpoints — the client owns the polling loop.
   private static final String PUG = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/";
   private static final String PROPS = "/property/IsomericSMILES,CanonicalSMILES/JSON";
+  // Compact property set for the on-hover detail popover (one small JSON, not the heavy pug_view).
+  private static final String DETAIL = "/property/IUPACName,MolecularFormula,MolecularWeight,XLogP,ExactMass,TPSA,Complexity,Charge,HBondDonorCount,HBondAcceptorCount,RotatableBondCount,HeavyAtomCount,InChIKey/JSON";
 
   private String fetch(String urlStr, javax.servlet.http.HttpServletResponse resp) throws IOException {
     HttpURLConnection conn = null;
@@ -37,6 +39,7 @@
   String formula = request.getParameter("formula");
   String listkey = request.getParameter("listkey");
   String name    = request.getParameter("name");
+  String cid     = request.getParameter("cid");
   String body;
 
   try {
@@ -48,6 +51,14 @@
       } else {
         body = fetch(PUG + "name/" + URLEncoder.encode(name, "UTF-8")
                 + "/property/MolecularFormula,IsomericSMILES,CanonicalSMILES/JSON", response);
+      }
+    } else if ("props".equals(action)) {
+      // Compound detail for the hover popover, by CID.
+      if (cid == null || !cid.matches("^[0-9]{1,12}$")) {
+        response.setStatus(400);
+        body = "{\"Fault\":{\"Code\":\"PROXY.BadRequest\",\"Message\":\"Invalid CID\"}}";
+      } else {
+        body = fetch(PUG + "cid/" + cid + DETAIL, response);
       }
     } else if ("listkey".equals(action)) {
       if (listkey == null || !listkey.matches("^[0-9]{1,40}$")) {

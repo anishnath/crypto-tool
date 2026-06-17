@@ -91,6 +91,18 @@
   .card .row{display:flex;gap:8px;flex-wrap:wrap}
   .mini{font-size:.78rem;padding:6px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
   .mini:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+  /* Compound detail popover (PubChem computed properties, on hover / tap ⓘ) */
+  .mol-pop{position:fixed;z-index:1200;width:300px;max-width:calc(100vw - 24px);background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:12px 14px;font-size:.82rem;color:var(--text);opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;pointer-events:none}
+  .mol-pop.show{opacity:1;transform:none}
+  .mol-pop h4{margin:0 0 2px;font-size:.9rem;font-weight:700;color:var(--text)}
+  .mol-pop h4 .formula-sub{font-family:'Fira Code',ui-monospace,monospace}
+  .mol-pop .pop-name{font-size:.8rem;color:var(--accent);margin:0 0 8px;word-break:break-word;line-height:1.35}
+  .mol-pop table{width:100%;border-collapse:collapse}
+  .mol-pop td{padding:2px 0;vertical-align:top}
+  .mol-pop td.k{color:var(--text2);padding-right:10px;white-space:nowrap}
+  .mol-pop td.v{text-align:right;font-family:'Fira Code',ui-monospace,monospace;word-break:break-all}
+  .mol-pop .pop-foot{margin-top:8px;font-size:.7rem;color:var(--text2)}
+  .mol-pop .pop-load{display:flex;align-items:center;gap:8px;color:var(--text2)}
   .note{margin-top:26px;font-size:.8rem;color:var(--text2);border-top:1px solid var(--border);padding-top:14px}
   .spin{display:inline-block;width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
   @keyframes sp{to{transform:rotate(360deg)}}
@@ -720,6 +732,7 @@
   }
 
   function renderResults(props, fromCache) {
+    if (typeof hidePop === 'function') hidePop(true);
     const results = $('results');
     results.innerHTML = '';
     const shown = props.slice(0, MAX_RESULTS);
@@ -749,6 +762,7 @@
         '<div class="cid">CID <a href="https://pubchem.ncbi.nlm.nih.gov/compound/' + cid + '" target="_blank" rel="noopener">' + cid + '</a></div>' +
         '<div class="smi"></div>' +
         '<div class="row">' +
+          (cid ? '<button class="mini" data-info="1">ⓘ Details</button>' : '') +
           (cid ? '<button class="mini" data-3d="' + cid + '">🧊 3D</button>' : '') +
           (mf ? '<button class="mini" data-lewis="' + encodeURIComponent(mf) + '">•• Lewis</button>' : '') +
           '<button class="mini" data-dl="1">⬇ Image</button>' +
@@ -757,6 +771,7 @@
           '<a class="mini" href="' + EDITOR + '?smiles=' + encodeURIComponent(smi) + '" target="_blank" rel="noopener">✎ Open in editor</a>' +
         '</div>';
       card.querySelector('.smi').textContent = smi || conn || '(none)';
+      if (cid) { card.addEventListener('mouseenter', cardEnter); card.addEventListener('mouseleave', cardLeave); }
       results.appendChild(card);
     });
 
@@ -764,7 +779,110 @@
     setStatus('Found <strong>' + props.length + '</strong> compound' + (props.length !== 1 ? 's' : '') + ' for that formula' + more + '.');
   }
 
+  // ── Compound detail popover (PubChem computed properties; hover / tap ⓘ) ──
+  // In-memory cache, hydrated from / persisted to localStorage so a CID pulled
+  // once is never looked up again (30-day TTL, capped at DETAIL_MAX compounds).
+  const detailCache = {};
+  const DETAIL_STORE = 'f2m.pubchem.props.v1';
+  const DETAIL_TTL = 30 * 24 * 3600 * 1000;
+  const DETAIL_MAX = 400;
+  function detailStoreRead() { try { return JSON.parse(localStorage.getItem(DETAIL_STORE) || '{}') || {}; } catch (e) { return {}; } }
+  function detailStoreWrite(m) { try { localStorage.setItem(DETAIL_STORE, JSON.stringify(m)); } catch (e) {} }
+  (function hydrateDetailCache() {
+    const m = detailStoreRead(), now = Date.now(); let changed = false;
+    for (const cid in m) {
+      if (!m[cid] || (now - m[cid].t) > DETAIL_TTL) { delete m[cid]; changed = true; continue; }
+      detailCache[cid] = m[cid].d;
+    }
+    if (changed) detailStoreWrite(m);
+  })();
+  function detailStoreSave(cid, d) {
+    const m = detailStoreRead();
+    m[cid] = { t: Date.now(), d: d };
+    const keys = Object.keys(m);
+    if (keys.length > DETAIL_MAX) {                          // evict the oldest entries
+      keys.sort((a, b) => (m[a].t || 0) - (m[b].t || 0));
+      for (let i = 0; i < keys.length - DETAIL_MAX; i++) delete m[keys[i]];
+    }
+    detailStoreWrite(m);
+  }
+  let popEl = null, popTimer = null, popSticky = false, popCard = null;
+  function ensurePop() {
+    if (!popEl) { popEl = document.createElement('div'); popEl.className = 'mol-pop'; document.body.appendChild(popEl); }
+    return popEl;
+  }
+  function popSub(f) { return String(f || '').replace(/(\d+)/g, '<sub>$1</sub>'); }
+  function escP(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+  function positionPop(card) {
+    const el = ensurePop(), r = card.getBoundingClientRect(), w = 300, gap = 12;
+    let left = r.right + gap, top = r.top;
+    if (left + w > window.innerWidth - 8) left = r.left - gap - w;                 // flip left
+    if (left < 8) { left = Math.min(Math.max(8, r.left), window.innerWidth - w - 8); top = r.bottom + gap; } // drop below
+    top = Math.max(8, Math.min(top, window.innerHeight - 8 - el.offsetHeight));
+    el.style.left = left + 'px'; el.style.top = top + 'px';
+  }
+  function renderPop(d, cid) {
+    const rows = [
+      ['Molar mass', d.MolecularWeight ? d.MolecularWeight + ' g/mol' : '—'],
+      ['Exact mass', d.ExactMass ? (+d.ExactMass).toFixed(4) + ' Da' : '—'],
+      ['XLogP', d.XLogP != null ? d.XLogP : '—'],
+      ['H-bond donors', d.HBondDonorCount != null ? d.HBondDonorCount : '—'],
+      ['H-bond acceptors', d.HBondAcceptorCount != null ? d.HBondAcceptorCount : '—'],
+      ['Rotatable bonds', d.RotatableBondCount != null ? d.RotatableBondCount : '—'],
+      ['TPSA', d.TPSA != null ? d.TPSA + ' Å²' : '—'],
+      ['Heavy atoms', d.HeavyAtomCount != null ? d.HeavyAtomCount : '—'],
+      ['Formal charge', d.Charge != null ? d.Charge : '—'],
+      ['Complexity', d.Complexity != null ? d.Complexity : '—'],
+      ['InChIKey', d.InChIKey || '—']
+    ];
+    ensurePop().innerHTML =
+      '<h4><span class="formula-sub">' + popSub(d.MolecularFormula || lastFormula || '') + '</span> · CID ' + escP(cid) + '</h4>' +
+      (d.IUPACName ? '<div class="pop-name">' + escP(d.IUPACName) + '</div>' : '') +
+      '<table>' + rows.map((r) => '<tr><td class="k">' + r[0] + '</td><td class="v">' + escP(r[1]) + '</td></tr>').join('') + '</table>' +
+      '<div class="pop-foot">Source: PubChem · computed properties</div>';
+  }
+  async function loadDetail(cid) {
+    if (detailCache[cid]) return detailCache[cid];
+    const r = await fetch(PROXY + '?action=props&cid=' + encodeURIComponent(cid), { headers: { 'Accept': 'application/json' } });
+    const j = await r.json();
+    const d = j && j.PropertyTable && j.PropertyTable.Properties && j.PropertyTable.Properties[0];
+    if (!d) throw new Error('no data');
+    detailCache[cid] = d;
+    detailStoreSave(cid, d);
+    return d;
+  }
+  async function showPop(card, sticky) {
+    const cid = card.dataset.cid;
+    if (!cid) return;
+    popCard = card; popSticky = !!sticky;
+    const el = ensurePop();
+    if (detailCache[cid]) renderPop(detailCache[cid], cid);
+    else el.innerHTML = '<div class="pop-load"><span class="spin"></span>Loading CID ' + escP(cid) + '…</div>';
+    positionPop(card); el.classList.add('show');
+    if (!detailCache[cid]) {
+      try { const d = await loadDetail(cid); if (popCard === card) { renderPop(d, cid); positionPop(card); } }
+      catch (err) { if (popCard === card) el.innerHTML = '<div class="pop-load">Details unavailable right now.</div>'; }
+    }
+  }
+  function hidePop(force) {
+    if (popSticky && !force) return;
+    popSticky = false; popCard = null;
+    if (popEl) popEl.classList.remove('show');
+  }
+  function cardEnter(e) {
+    const card = e.currentTarget; clearTimeout(popTimer);
+    if (detailCache[card.dataset.cid]) showPop(card, false);          // already pulled → show instantly, no lookup
+    else popTimer = setTimeout(() => showPop(card, false), 200);      // uncached → small delay before the network fetch
+  }
+  function cardLeave() { clearTimeout(popTimer); if (!popSticky) hidePop(); }
+
   function onResultsClick(e) {
+    const infoBtn = e.target.closest('[data-info]');
+    if (infoBtn) {
+      const card = infoBtn.closest('.card');
+      if (card) { (popSticky && popCard === card) ? hidePop(true) : showPop(card, true); }
+      return;
+    }
     const copyBtn = e.target.closest('[data-copy]');
     if (copyBtn) {
       const smi = decodeURIComponent(copyBtn.getAttribute('data-copy'));
@@ -1097,6 +1215,10 @@
   });
   // Results actions (delegated once — copy / view composition)
   $('results').addEventListener('click', onResultsClick);
+  // Dismiss the sticky detail popover on outside-click; drop it on scroll/resize (avoids stale position).
+  document.addEventListener('click', (e) => { if (popSticky && !e.target.closest('.mol-pop') && !e.target.closest('[data-info]')) hidePop(true); });
+  window.addEventListener('scroll', () => hidePop(true), true);
+  window.addEventListener('resize', () => hidePop(true));
   // Composition modal
   $('eq-close').addEventListener('click', closeComposition);
   $('eq-overlay').addEventListener('click', (e) => { if (e.target === $('eq-overlay')) closeComposition(); });

@@ -557,34 +557,58 @@
     reader.onload = function (e) {
       try {
         var data = JSON.parse(e.target.result);
-        if (!data.objects) throw new Error('No objects');
-        saveUndo();
-        // Restore scene properties
-        if (data.scene) {
-          scene.width = data.scene.width || scene.width;
-          scene.height = data.scene.height || scene.height;
-          scene.rayMode = data.scene.rayMode || 'rays';
-          scene.fresnelEnabled = !!data.scene.fresnelEnabled;
-          scene.backgroundN = data.scene.backgroundN || 1;
-          scene.showGrid = !!data.scene.showGrid;
-          scene.gridSize = data.scene.gridSize || 50;
-        }
-        scene.objects = [];
-        for (var i = 0; i < data.objects.length; i++) {
-          var obj = S.createObject(data.objects[i]);
-          if (obj) scene.objects.push(obj);
-        }
-        selectedId = null;
-        fitViewport();
-        syncSettingsUI();
-        updateObjBar();
-        refreshAll();
+        importSceneData(data);
       } catch (err) {
         console.warn('Import failed:', err);
         alert('Invalid scene file.');
       }
     };
     reader.readAsText(file);
+  }
+
+  function exportSceneData() {
+    if (!scene) return null;
+    return {
+      scene: {
+        rayMode: scene.rayMode || 'rays',
+        fresnelEnabled: !!scene.fresnelEnabled,
+        backgroundN: scene.backgroundN || 1,
+        showGrid: !!scene.showGrid,
+        gridSize: scene.gridSize || 50
+      },
+      objects: serializeObjects()
+    };
+  }
+
+  function importSceneData(data) {
+    if (!data || !data.objects || !data.objects.length) {
+      throw new Error('Scene must include at least one object.');
+    }
+    saveUndo();
+    if (data.scene) {
+      if (data.scene.width) scene.width = data.scene.width;
+      if (data.scene.height) scene.height = data.scene.height;
+      scene.rayMode = data.scene.rayMode || 'rays';
+      scene.fresnelEnabled = !!data.scene.fresnelEnabled;
+      scene.backgroundN = data.scene.backgroundN || 1;
+      scene.showGrid = data.scene.showGrid !== undefined ? !!data.scene.showGrid : scene.showGrid;
+      scene.gridSize = data.scene.gridSize || scene.gridSize || 50;
+    }
+    scene.objects = [];
+    for (var i = 0; i < data.objects.length; i++) {
+      var obj = S.createObject(data.objects[i]);
+      if (obj) scene.objects.push(obj);
+    }
+    if (!scene.objects.length) throw new Error('No valid optical objects.');
+    selectedId = null;
+    constructing = null;
+    ghostPos = null;
+    fitViewport();
+    syncSettingsUI();
+    updateObjBar();
+    refreshAll();
+    updateUndoButtons();
+    return { applied: true, objectCount: scene.objects.length };
   }
 
   /* ================================================================
@@ -1121,6 +1145,8 @@
     getScene: function () { return scene; },
     loadPreset: loadPreset,
     refreshAll: refreshAll,
+    exportSceneData: exportSceneData,
+    importSceneData: importSceneData,
     getViewport: function () { return viewport; },
     getHandles: getHandles,
     undo: undo,
