@@ -2,6 +2,7 @@
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
     request.setAttribute("aiToolId", "physics/ray-optics-simulator");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
 <%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
@@ -22,7 +23,7 @@
         <jsp:param name="toolUrl" value="physics/ray-optics-simulator.jsp" />
         <jsp:param name="breadcrumbCategoryUrl" value="physics" />
         <jsp:param name="toolKeywords" value="ray optics simulator, 2D ray tracing, online optics tool, mirror simulator, lens simulator, prism rainbow, Snell's law calculator, Fresnel equations, total internal reflection, beam splitter, diffraction grating, GRIN lens, optical bench, light simulator, refraction simulator, reflection simulator" />
-        <jsp:param name="toolImage" value="ray-optics-simulator.svg" />
+        <jsp:param name="toolImage" value="ray-optics-simulator-og.png" />
         <jsp:param name="toolFeatures" value="Freeform 2D ray tracing with drag-and-drop objects,19 optical elements: mirrors lenses prisms beam splitters gratings,Snell's law refraction with total internal reflection,Fresnel partial reflection for realistic beam splitting,Cauchy dispersion for rainbow and chromatic effects,Diffraction grating with multiple orders,GRIN gradient-index media simulation,Extended ray and image point detection,Pan zoom and rotate with mouse or touch,22 built-in presets including telescope microscope prism rainbow retroreflector and camera obscura,Dark mode support,Export as PNG" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Choose a preset or start blank|Select from 22 presets like Prism Rainbow Telescope Microscope Retroreflector or Camera Obscura or build from scratch,Add optical elements|Use the Add dropdown to place mirrors lenses prisms beam splitters gratings blockers and light sources,Arrange the scene|Drag objects to position them and rotate by dragging the rotation handle. Edit properties in the bar below the canvas,Adjust settings|Toggle Fresnel reflections enable the grid change ray mode to see extended rays and image points,Analyze and export|Pan and zoom to explore your optical system then export as PNG to save your design" />
