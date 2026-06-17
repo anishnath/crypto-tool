@@ -452,6 +452,24 @@
     return { applied: true, surfaceCount: design.surfaces.length };
   }
 
+  function loadDesign(newDesign) {
+    if (!newDesign) throw new Error('No design.');
+    design = newDesign;
+    selectedSurface = -1;
+    refreshAll();
+    return { applied: true, surfaceCount: design.surfaces.length };
+  }
+
+  function importPrescriptionText(text, opts) {
+    var Rx = win.ODPrescription;
+    if (!Rx) throw new Error('Prescription module not loaded.');
+    var result = Rx.importPrescription(text, opts || {});
+    if (result.error || !result.design) {
+      throw new Error(result.error || 'Prescription import failed.');
+    }
+    return loadDesign(result.design);
+  }
+
   /* ================================================================
    *  EXPORT
    * ================================================================ */
@@ -463,6 +481,8 @@
     refreshAll: refreshAll,
     exportDesignObject: exportDesignObject,
     importDesignData: importDesignData,
+    loadDesign: loadDesign,
+    importPrescriptionText: importPrescriptionText,
     selectSurface: function (idx) { selectedSurface = idx; refreshAll(); }
   };
 

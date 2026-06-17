@@ -374,6 +374,8 @@
             <button class="rs-rx-ex-btn" id="od-rx-ex-cooke">Cooke Triplet</button>
             <button class="rs-rx-ex-btn" id="od-rx-ex-aspheric">Aspheric (K)</button>
             <button class="rs-rx-ex-btn" id="od-rx-ex-patent">US11125971B2</button>
+            <button class="rs-rx-ex-btn" id="od-rx-ex-patent786">US7869142B2</button>
+            <button class="rs-rx-ex-btn" id="od-rx-ex-patent7g">US20140211324</button>
         </div>
         <textarea id="od-rx-input" class="rs-rx-input" rows="10" placeholder="Surface&#9;Radius&#9;Thickness&#9;n&#9;Abbe&#10;S1&#9;61.47&#9;6.0&#9;1.517&#9;64.2&#10;S2&#9;-43.47&#9;2.5&#9;1.620&#9;36.4&#10;S3&#9;-124.6&#9;90.0"></textarea>
         <div class="rs-rx-settings">
@@ -535,7 +537,9 @@ document.addEventListener('DOMContentLoaded', function () {
         'od-rx-ex-doublet':  'EXAMPLE_DOUBLET',
         'od-rx-ex-cooke':    'EXAMPLE_COOKE_TRIPLET',
         'od-rx-ex-aspheric': 'EXAMPLE_ASPHERIC',
-        'od-rx-ex-patent':   'EXAMPLE_US11125971B2'
+        'od-rx-ex-patent':   'EXAMPLE_US11125971B2',
+        'od-rx-ex-patent786': 'EXAMPLE_US7869142B2',
+        'od-rx-ex-patent7g':  'EXAMPLE_US20140211324'
     };
     Object.keys(rxExamples).forEach(function (id) {
         document.getElementById(id).addEventListener('click', function () {
@@ -642,6 +646,25 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (e) {
                 return { applied: false, error: e.message || String(e) };
             }
+        },
+        applyPrescription: function (text, opts) {
+            try {
+                var result = ODUI.importPrescriptionText(text, opts || { aperture: 12.5 });
+                refreshOdSnapshot();
+                if (window.ToolUtils && ToolUtils.showToast) {
+                    ToolUtils.showToast('\u2713 Prescription loaded (' + result.surfaceCount + ' surfaces)', 3000, 'success');
+                }
+                return result;
+            } catch (e) {
+                return { applied: false, error: e.message || String(e) };
+            }
+        },
+        applyPatentId: function (id) {
+            var table = window.ODPrescription && ODPrescription.getPatentTable(id);
+            if (!table) return { applied: false, error: 'Unknown patent: ' + id };
+            var aperture = (id && String(id).indexOf('7869142') >= 0) ? 2.5
+                : (String(id).indexOf('20140211324') >= 0 ? 2.9 : 12.5);
+            return this.applyPrescription(table, { aperture: aperture });
         },
     };
 

@@ -284,6 +284,53 @@
         'S10\tL6\tAspheric\t7.802\t3.474\t1.54\t55.7\n' +
         'S11\t\tAspheric\t186.940\t0.400\t\t\n';
 
+    /** US7869142B2 Embodiment 1 — 4 plastic mobile camera, f=4.91 mm F/2.8 */
+    var EXAMPLE_US7869142B2 =
+        'Surface\tLabel\tType\tRadius\tThickness\tn\tAbbe\n' +
+        'ST\tAperture\tStop\tInfinity\t-0.122\t\t\n' +
+        'S1\tL1\tAspheric\t2.01425\t0.721\t1.544\t55.9\n' +
+        'S2\t\tAspheric\t-18.76480\t0.100\t\t\n' +
+        'S3\tL2\tAspheric\t-46.86700\t0.550\t1.632\t23.4\n' +
+        'S4\t\tAspheric\t4.69770\t0.937\t\t\n' +
+        'S5\tL3\tAspheric\t-2.09486\t0.556\t1.530\t55.8\n' +
+        'S6\t\tAspheric\t-2.37611\t0.070\t\t\n' +
+        'S7\tL4\tAspheric\t1.85930\t0.972\t1.530\t55.8\n' +
+        'S8\t\tAspheric\t1.57766\t0.700\t\t\n' +
+        'S9\tIR\tGlass\tInfinity\t0.300\t1.517\t64.2\n' +
+        'S10\t\tGlass\tInfinity\t0.622\t\t\n';
+
+    /** US20140211324A1 Example 1 — 7-element compact imaging lens, f=4.54 mm F/1.64 */
+    var EXAMPLE_US20140211324 =
+        'Surface\tLabel\tType\tRadius\tThickness\tn\tAbbe\n' +
+        'S1\tL1\tAspheric\t1.902\t0.415\t1.5346\t56.16\n' +
+        'S2\t\tAspheric\t2.154\t0.372\t\t\n' +
+        'ST\tStop\tPlane\tInfinity\t-0.310\t\t\n' +
+        'S4\tL2\tAspheric\t2.804\t0.835\t1.5346\t56.16\n' +
+        'S5\t\tAspheric\t-4.629\t0.025\t\t\n' +
+        'S6\tL3\tAspheric\t2.635\t0.281\t1.6355\t23.91\n' +
+        'S7\t\tAspheric\t1.229\t0.215\t\t\n' +
+        'S8\tL4\tAspheric\t10.737\t0.390\t1.5346\t56.16\n' +
+        'S9\t\tAspheric\t-6.667\t0.504\t\t\n' +
+        'S10\tL5\tAspheric\t-2.053\t0.475\t1.6355\t23.91\n' +
+        'S11\t\tAspheric\t-2.334\t0.033\t\t\n' +
+        'S12\tL6\tAspheric\t2.335\t0.392\t1.5438\t55.57\n' +
+        'S13\t\tAspheric\t5.444\t0.504\t\t\n' +
+        'S14\tL7\tAspheric\t-4.682\t0.300\t1.5438\t55.57\n' +
+        'S15\t\tAspheric\t4.277\t0.060\t\t\n' +
+        'S16\tCover\tGlass\tInfinity\t0.300\t1.5168\t64.19\n' +
+        'S17\t\tGlass\tInfinity\t0.711\t\t\n';
+
+    /** Classic Cooke triplet (Taylor-Hobson style prescription) */
+    var EXAMPLE_COOKETAYLOR1913 =
+        'Surface\tRadius\tThickness\tn\tAbbe\n' +
+        'S1\t26.1\t4.0\t1.611\t58.9\n' +
+        'S2\t-198.0\t2.0\t\t\n' +
+        'ST\tInfinity\t2.0\t\t\n' +
+        'S3\t-20.5\t1.0\t1.603\t38.0\n' +
+        'S4\t21.3\t4.0\t\t\n' +
+        'S5\t128.0\t3.5\t1.611\t58.9\n' +
+        'S6\t-28.6\t45.0\t\t\n';
+
     var EXAMPLE_DOUBLET =
         'Surface\tRadius\tThickness\tn\tAbbe\n' +
         'S1\t61.47\t6.0\t1.517\t64.2\n' +
@@ -310,12 +357,41 @@
         'S1\t25.0\t4.0\t1.517\t64.2\t-0.5\n' +
         'S2\t-25.0\t50.0\t\t\t-1.0\n';
 
+    var PATENT_TABLES = {
+        'US11125971B2': EXAMPLE_US11125971B2,
+        'US7869142B2': EXAMPLE_US7869142B2,
+        'US20140211324': EXAMPLE_US20140211324,
+        'COOKE1913': EXAMPLE_COOKETAYLOR1913
+    };
+
+    var PATENT_CATALOG = [
+        { id: 'US11125971B2', title: '6-element smartphone wide', surfaces: 11, note: 'Plastic aspherics, stop mid-stack' },
+        { id: 'US7869142B2', title: '4-element mobile camera', surfaces: 10, note: 'f≈4.9 mm F/2.8, IR filter' },
+        { id: 'US20140211324', title: '7-element fast compact', surfaces: 17, note: 'f≈4.5 mm F/1.64, +++−+−− layout' },
+        { id: 'COOKE1913', title: 'Classic Cooke triplet', surfaces: 7, note: 'Photographic anastigmat' }
+    ];
+
+    function getPatentTable(id) {
+        if (!id) return null;
+        var key = String(id).toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (key.indexOf('US11125971') === 0) return PATENT_TABLES.US11125971B2;
+        if (key.indexOf('US7869142') === 0) return PATENT_TABLES.US7869142B2;
+        if (key.indexOf('US20140211324') === 0) return PATENT_TABLES.US20140211324;
+        if (key === 'COOKE1913' || key === 'COOKE') return PATENT_TABLES.COOKE1913;
+        return PATENT_TABLES[id] || PATENT_TABLES[key] || null;
+    }
+
     win.ODPrescription = {
         parseTable: parseTable,
         buildDesign: buildDesign,
         findMaterial: findMaterial,
         importPrescription: importPrescription,
+        getPatentTable: getPatentTable,
+        PATENT_CATALOG: PATENT_CATALOG,
         EXAMPLE_US11125971B2: EXAMPLE_US11125971B2,
+        EXAMPLE_US7869142B2: EXAMPLE_US7869142B2,
+        EXAMPLE_US20140211324: EXAMPLE_US20140211324,
+        EXAMPLE_COOKETAYLOR1913: EXAMPLE_COOKETAYLOR1913,
         EXAMPLE_DOUBLET: EXAMPLE_DOUBLET,
         EXAMPLE_COOKE_TRIPLET: EXAMPLE_COOKE_TRIPLET,
         EXAMPLE_SINGLET: EXAMPLE_SINGLET,
