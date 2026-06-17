@@ -2,6 +2,7 @@
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
     request.setAttribute("aiToolId", "math/tikz-viewer");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
 <%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
