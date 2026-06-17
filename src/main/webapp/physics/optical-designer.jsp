@@ -187,6 +187,7 @@
                             <option value="chromatic">Chromatic Aberration</option>
                         </select>
                         <div style="flex:1;"></div>
+                        <span class="od-canvas-hint" title="Scroll to zoom, drag to pan, double-click to reset">Scroll zoom · Drag pan</span>
                         <button class="od-toolbar-btn" id="od-export-svg" title="Download as SVG">SVG</button>
                         <button class="od-toolbar-btn" id="od-export-png" title="Download as PNG">PNG</button>
                         <button class="od-toolbar-btn" id="od-share-btn" title="Share design URL">Share</button>

@@ -3,6 +3,7 @@
  * ES5 IIFE, depends on ODModel + ODTrace
  *
  * Exports:  window.ODRender
+ *   .computeCrossSectionFit(cw, ch, design)
  *   .paintCrossSection(canvas, design, opts)
  *   .paintSpotDiagram(canvas, design, opts)
  *   .paintRayAberration(canvas, design, opts)
@@ -53,12 +54,58 @@
    *  2D CROSS-SECTION VIEW
    * ================================================================ */
 
+  /** Auto-fit transform for the cross-section view (used by UI pan/zoom). */
+  function computeCrossSectionFit(cw, ch, design) {
+    var totalLen = design.totalLength();
+    if (totalLen <= 0) totalLen = 100;
+    var maxAp = design.maxAperture();
+    if (maxAp <= 0) maxAp = 25;
+
+    var objDist = design.objectDistance;
+    var preLenZ = 0;
+    var objCompressed = false;
+    if (isFinite(objDist)) {
+      var maxPreLen = totalLen * 0.35;
+      if (objDist <= maxPreLen) {
+        preLenZ = objDist;
+      } else {
+        preLenZ = maxPreLen;
+        objCompressed = true;
+      }
+    } else {
+      preLenZ = totalLen * 0.12;
+    }
+
+    var fullZRange = preLenZ + totalLen;
+    var marginL = 0.06, marginR = 0.06;
+    var marginTB = 0.10;
+    var usableW = cw * (1 - marginL - marginR);
+    var usableH = ch * (1 - 2 * marginTB);
+    var scaleX = usableW / fullZRange;
+    var scaleY = usableH / (maxAp * 2);
+    var baseScale = Math.min(scaleX, scaleY);
+
+    return {
+      baseOx: cw * marginL + preLenZ * baseScale,
+      baseOy: ch / 2,
+      baseScale: baseScale,
+      preLenZ: preLenZ,
+      totalLen: totalLen,
+      maxAp: maxAp,
+      objCompressed: objCompressed,
+      marginTB: marginTB,
+      objDist: objDist,
+      usableW: usableW
+    };
+  }
+
   /**
    * @param {HTMLCanvasElement} canvas
    * @param {Design} design
    * @param {object} [opts]
    *   .selectedSurface — index of highlighted surface (-1 for none)
    *   .wavelength      — override center wavelength
+   *   .viewport        — { oz, oy, zoom } pan/zoom overlay on auto-fit
    */
   function paintCrossSection(canvas, design, opts) {
     opts = opts || {};
@@ -78,53 +125,27 @@
     }
 
     var wavelength = opts.wavelength || design.wavelengthCenter;
-
-    /* ---- Compute scale ---- */
-    var totalLen = design.totalLength();
-    if (totalLen <= 0) totalLen = 100;
-    var maxAp = design.maxAperture();
-    if (maxAp <= 0) maxAp = 25;
-
-    // For finite conjugate, show some object space before the lens
-    var objDist = design.objectDistance;
-    var preLenZ = 0; // how much z space before z=0 to show
-    var objCompressed = false; // true when obj space is compressed (break shown)
-    if (isFinite(objDist)) {
-      var maxPreLen = totalLen * 0.35;
-      if (objDist <= maxPreLen) {
-        preLenZ = objDist;
-      } else {
-        // Compressed: allocate fixed space, draw break indicator later
-        preLenZ = maxPreLen;
-        objCompressed = true;
-      }
-    } else {
-      // Collimated: show a small pre-lens region for incoming rays
-      preLenZ = totalLen * 0.12;
-    }
-    var fullZRange = preLenZ + totalLen;
-
-    var marginL = 0.06, marginR = 0.06;
-    var marginTB = 0.10;
-    var usableW = cw * (1 - marginL - marginR);
-    var usableH = ch * (1 - 2 * marginTB);
-
-    var scaleX = usableW / fullZRange;
-    var scaleY = usableH / (maxAp * 2);
-    var scale = Math.min(scaleX, scaleY);
-
-    // Transform: z=0 (first surface vertex) at preLenZ offset from left
-    var ox = cw * marginL + preLenZ * scale;
-    var oy = ch / 2;
+    var vp = opts.viewport || { oz: 0, oy: 0, zoom: 1 };
+    var fit = computeCrossSectionFit(cw, ch, design);
+    var totalLen = fit.totalLen;
+    var maxAp = fit.maxAp;
+    var preLenZ = fit.preLenZ;
+    var objCompressed = fit.objCompressed;
+    var objDist = fit.objDist;
+    var marginTB = fit.marginTB;
+    var effScale = fit.baseScale * vp.zoom;
 
     function toCanvas(zOpt, yOpt) {
-      return { x: ox + zOpt * scale, y: oy - yOpt * scale };
+      return {
+        x: fit.baseOx + (zOpt - vp.oz) * effScale,
+        y: fit.baseOy - (yOpt - vp.oy) * effScale
+      };
     }
 
     /* ---- Grid ---- */
     c.strokeStyle = col.grid;
     c.lineWidth = 1;
-    var gridStep = niceGridStep(totalLen, usableW / 60);
+    var gridStep = niceGridStep(totalLen, fit.usableW / 60);
     for (var gz = 0; gz <= totalLen; gz += gridStep) {
       var gp = toCanvas(gz, 0);
       c.beginPath(); c.moveTo(gp.x, marginTB * ch); c.lineTo(gp.x, ch * (1-marginTB)); c.stroke();
@@ -288,13 +309,14 @@
         var breakH = 6;
         c.strokeStyle = col.text;
         c.lineWidth = 1.5;
+        var axisY = toCanvas(0, 0).y;
         c.beginPath();
-        c.moveTo(breakX - 2, oy);
-        c.lineTo(breakX, oy - breakH);
-        c.lineTo(breakX + breakW * 0.33, oy + breakH);
-        c.lineTo(breakX + breakW * 0.66, oy - breakH);
-        c.lineTo(breakX + breakW, oy + breakH);
-        c.lineTo(breakX + breakW + 2, oy);
+        c.moveTo(breakX - 2, axisY);
+        c.lineTo(breakX, axisY - breakH);
+        c.lineTo(breakX + breakW * 0.33, axisY + breakH);
+        c.lineTo(breakX + breakW * 0.66, axisY - breakH);
+        c.lineTo(breakX + breakW, axisY + breakH);
+        c.lineTo(breakX + breakW + 2, axisY);
         c.stroke();
       }
     }
@@ -626,6 +648,7 @@
    * ================================================================ */
 
   win.ODRender = {
+    computeCrossSectionFit: computeCrossSectionFit,
     paintCrossSection:     paintCrossSection,
     paintSpotDiagram:      paintSpotDiagram,
     paintRayAberration:    paintRayAberration,

@@ -290,6 +290,13 @@
     width: 100%;
     height: 450px;
     display: block;
+    touch-action: none;
+}
+.od-canvas-hint {
+    font-size: 0.6875rem;
+    color: var(--text-secondary, #64748b);
+    white-space: nowrap;
+    user-select: none;
 }
 .od-canvas-toolbar {
     display: flex;

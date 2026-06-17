@@ -18,6 +18,11 @@
   var selectedSurface = -1;
   var currentView = 'cross-section';  // 'cross-section' | 'spot' | 'aberration' | 'chromatic'
   var rafPending = false;
+  var viewport = { oz: 0, oy: 0, zoom: 1 };
+  var panning = null;
+
+  var MIN_ZOOM = 0.25;
+  var MAX_ZOOM = 20;
 
   /* ---- DOM refs (set during init) ---- */
   var els = {};
@@ -102,6 +107,7 @@
     // View mode
     if (els.viewSel) els.viewSel.addEventListener('change', function () {
       currentView = this.value;
+      updateCanvasCursor();
       scheduleRepaint();
     });
 
@@ -141,6 +147,7 @@
           try {
             design = M.Design.fromJSON(ev.target.result);
             selectedSurface = -1;
+            resetViewport();
             refreshAll();
           } catch (err) {
             alert('Invalid design file: ' + err.message);
@@ -153,12 +160,97 @@
 
     // PNG/SVG/Share handled by ToolUtils in JSP inline script
 
+    // Canvas pan/zoom (cross-section views)
+    if (canvas) {
+      canvas.addEventListener('mousedown', onCanvasMouseDown);
+      canvas.addEventListener('mousemove', onCanvasMouseMove);
+      canvas.addEventListener('mouseup', onCanvasMouseUp);
+      canvas.addEventListener('mouseleave', onCanvasMouseUp);
+      canvas.addEventListener('wheel', onCanvasWheel, { passive: false });
+      canvas.addEventListener('dblclick', onCanvasDblClick);
+      updateCanvasCursor();
+    }
+
     // Canvas resize
     var resizeTimer = null;
     window.addEventListener('resize', function () {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(function () { scheduleRepaint(); }, 100);
     });
+  }
+
+  function isViewportView() {
+    return currentView === 'cross-section' || currentView === 'chromatic';
+  }
+
+  function resetViewport() {
+    viewport.oz = 0;
+    viewport.oy = 0;
+    viewport.zoom = 1;
+  }
+
+  function updateCanvasCursor() {
+    if (!canvas) return;
+    canvas.style.cursor = isViewportView() ? (panning ? 'grabbing' : 'grab') : 'default';
+  }
+
+  function getCanvasMousePos(e) {
+    var rect = canvas.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+
+  function getCrossSectionFit() {
+    if (!canvas || !design) return null;
+    return R.computeCrossSectionFit(canvas.offsetWidth, canvas.offsetHeight, design);
+  }
+
+  function onCanvasMouseDown(e) {
+    if (!isViewportView() || e.button !== 0 || !design) return;
+    var mp = getCanvasMousePos(e);
+    panning = { startMX: mp.x, startMY: mp.y, startOZ: viewport.oz, startOY: viewport.oy };
+    updateCanvasCursor();
+    e.preventDefault();
+  }
+
+  function onCanvasMouseMove(e) {
+    if (!panning || !design) return;
+    var mp = getCanvasMousePos(e);
+    var fit = getCrossSectionFit();
+    if (!fit) return;
+    var denom = fit.baseScale * viewport.zoom;
+    viewport.oz = panning.startOZ - (mp.x - panning.startMX) / denom;
+    viewport.oy = panning.startOY + (mp.y - panning.startMY) / denom;
+    scheduleRepaint();
+    e.preventDefault();
+  }
+
+  function onCanvasMouseUp() {
+    if (!panning) return;
+    panning = null;
+    updateCanvasCursor();
+  }
+
+  function onCanvasWheel(e) {
+    if (!isViewportView() || !design) return;
+    e.preventDefault();
+    var mp = getCanvasMousePos(e);
+    var fit = getCrossSectionFit();
+    if (!fit) return;
+
+    var zUnder = viewport.oz + (mp.x - fit.baseOx) / (fit.baseScale * viewport.zoom);
+    var yUnder = viewport.oy - (mp.y - fit.baseOy) / (fit.baseScale * viewport.zoom);
+    var ns = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, viewport.zoom * (e.deltaY < 0 ? 1.1 : 0.9)));
+    viewport.oz = zUnder - (mp.x - fit.baseOx) / (fit.baseScale * ns);
+    viewport.oy = yUnder + (mp.y - fit.baseOy) / (fit.baseScale * ns);
+    viewport.zoom = ns;
+    scheduleRepaint();
+  }
+
+  function onCanvasDblClick(e) {
+    if (!isViewportView()) return;
+    e.preventDefault();
+    resetViewport();
+    scheduleRepaint();
   }
 
   function onEnvChange() {
@@ -386,6 +478,7 @@
     design = M.PRESETS[name]();
     design.applyAutofocus();
     selectedSurface = -1;
+    resetViewport();
     refreshAll();
   }
 
@@ -405,9 +498,11 @@
   function repaint() {
     if (!canvas || !design) return;
 
+    var crossOpts = { selectedSurface: selectedSurface, viewport: viewport };
+
     switch (currentView) {
       case 'cross-section':
-        R.paintCrossSection(canvas, design, { selectedSurface: selectedSurface });
+        R.paintCrossSection(canvas, design, crossOpts);
         break;
       case 'spot':
         var spotAngles = [0];
@@ -426,7 +521,7 @@
         R.paintRayAberration(canvas, design, { fieldAngles: abAngles });
         break;
       case 'chromatic':
-        R.paintCrossSection(canvas, design, { selectedSurface: selectedSurface });
+        R.paintCrossSection(canvas, design, crossOpts);
         if (els.chromContainer) R.paintChromaticTable(els.chromContainer, design);
         break;
     }
@@ -448,6 +543,7 @@
   function importDesignData(data) {
     design = M.Design.fromJSON(data);
     selectedSurface = -1;
+    resetViewport();
     refreshAll();
     return { applied: true, surfaceCount: design.surfaces.length };
   }
@@ -456,6 +552,7 @@
     if (!newDesign) throw new Error('No design.');
     design = newDesign;
     selectedSurface = -1;
+    resetViewport();
     refreshAll();
     return { applied: true, surfaceCount: design.surfaces.length };
   }
@@ -483,7 +580,8 @@
     importDesignData: importDesignData,
     loadDesign: loadDesign,
     importPrescriptionText: importPrescriptionText,
-    selectSurface: function (idx) { selectedSurface = idx; refreshAll(); }
+    selectSurface: function (idx) { selectedSurface = idx; refreshAll(); },
+    resetViewport: resetViewport
   };
 
 })(window);
