@@ -440,6 +440,18 @@
     scheduleRepaint();
   }
 
+  function exportDesignObject() {
+    if (!design) return null;
+    return JSON.parse(design.toJSON());
+  }
+
+  function importDesignData(data) {
+    design = M.Design.fromJSON(data);
+    selectedSurface = -1;
+    refreshAll();
+    return { applied: true, surfaceCount: design.surfaces.length };
+  }
+
   /* ================================================================
    *  EXPORT
    * ================================================================ */
@@ -449,6 +461,8 @@
     getDesign: function () { return design; },
     loadPreset: loadPreset,
     refreshAll: refreshAll,
+    exportDesignObject: exportDesignObject,
+    importDesignData: importDesignData,
     selectSurface: function (idx) { selectedSurface = idx; refreshAll(); }
   };
 

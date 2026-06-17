@@ -71,6 +71,16 @@
     border-color: transparent;
 }
 .od-toolbar-btn-accent:hover { filter: brightness(1.1); color: #fff; }
+.od-toolbar-btn-ai {
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-color: transparent;
+  font-weight: 600;
+}
+.od-toolbar-btn-ai:hover { filter: brightness(1.08); color: #fff; border-color: transparent; }
+[data-theme="dark"] .od-toolbar-btn-ai {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
 .od-toolbar-btn-danger {
     color: #dc2626;
     border-color: #fca5a5;

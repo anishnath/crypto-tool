@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "physics/optical-designer");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +23,7 @@
         <jsp:param name="toolUrl" value="physics/optical-designer.jsp" />
         <jsp:param name="breadcrumbCategoryUrl" value="physics" />
         <jsp:param name="toolKeywords" value="optical designer, lens design tool, free ray tracing software, online lens design, optics calculator, spot diagram tool, ABCD matrix calculator, Sellmeier equation calculator, achromatic doublet design, Cooke triplet designer, Petzval lens calculator, chromatic aberration calculator, focal length calculator, optical engineering tool, aspherical lens design, refractive index calculator, lens aberration analysis, optical system simulator" />
-        <jsp:param name="toolImage" value="optical-designer.svg" />
+        <jsp:param name="toolImage" value="optical-designer-og.png" />
         <jsp:param name="toolFeatures" value="Multi-surface sequential ray tracing,Sellmeier refractive index for 15+ materials,ABCD paraxial matrix analysis,Spot diagram with RMS and Airy disk,Ray aberration plots,Chromatic aberration analysis,6 preset designs (singlet to 13-surface),Conic surfaces (sphere parabola hyperbola ellipse),Autofocus (paraxial and marginal),JSON import/export and PNG export,Dark mode support" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="howToSteps" value="Choose a preset or build from scratch|Select a preset like Achromatic Doublet or Cooke Triplet to start with or add surfaces manually,Edit the surface table|Set radius of curvature aperture thickness material and conic constant for each surface in the interactive table,Adjust environment|Set beam radius field of view wavelengths and autofocus mode to match your design requirements,Analyze results|Switch between cross-section spot diagram ray aberration and chromatic views to evaluate your design" />
@@ -59,6 +62,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/optical-designer.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/ray-optics-simulator.css">
+    <%@ include file="../modern/components/ai-assistant-head.inc.jsp" %>
 
     <%@ include file="../modern/ads/ad-init.jsp" %>
 </head>
@@ -103,6 +107,7 @@
                 <div class="od-toolbar">
                     <button class="od-toolbar-btn od-toolbar-btn-primary" id="od-add-surface" title="Add surface after selection">+ Add</button>
                     <button class="od-toolbar-btn od-toolbar-btn-danger" id="od-remove-surface" title="Remove selected surface">- Remove</button>
+                    <button class="od-toolbar-btn od-toolbar-btn-ai" id="btnOpticalDesignerAI" type="button" title="AI assistant — generate designs or ask about optics (Ctrl+Shift+A)">&#10024; AI</button>
                     <div style="flex:1;"></div>
                     <button class="od-toolbar-btn od-toolbar-btn-accent" id="od-rx-btn" title="Import lens prescription from patent/paper data">Lens Rx</button>
                     <button class="od-toolbar-btn" id="od-export-json" title="Save design as JSON">Export</button>
@@ -592,6 +597,67 @@ document.addEventListener('DOMContentLoaded', function () {
         ODUI.refreshAll();
         rxOverlay.style.display = 'none';
     });
+
+    // ── AI assistant shell ──
+    var _odSnapCache = null;
+
+    function buildOdSummary(data) {
+        if (!data || !data.surfaces) return '';
+        var mats = {};
+        for (var i = 0; i < data.surfaces.length; i++) {
+            var m = data.surfaces[i].material || '?';
+            mats[m] = (mats[m] || 0) + 1;
+        }
+        return Object.keys(mats).sort().map(function (k) { return mats[k] + '\u00d7 ' + k; }).join(', ');
+    }
+
+    function refreshOdSnapshot() {
+        try {
+            var data = ODUI.exportDesignObject();
+            _odSnapCache = {
+                surfaceCount: data && data.surfaces ? data.surfaces.length : 0,
+                summary: buildOdSummary(data),
+                designJson: data ? JSON.stringify(data) : '',
+            };
+        } catch (e) {
+            _odSnapCache = { surfaceCount: 0, summary: '', designJson: '' };
+        }
+        return Promise.resolve(_odSnapCache);
+    }
+
+    window.opticalDesignerShell = {
+        getSnapshot: function () {
+            if (!_odSnapCache) refreshOdSnapshot();
+            return _odSnapCache || { surfaceCount: 0, summary: '', designJson: '' };
+        },
+        refreshSnapshot: refreshOdSnapshot,
+        applyDesign: function (payload) {
+            try {
+                var result = ODUI.importDesignData(payload);
+                refreshOdSnapshot();
+                if (window.ToolUtils && ToolUtils.showToast) {
+                    ToolUtils.showToast('\u2713 Design loaded (' + result.surfaceCount + ' surfaces)', 3000, 'success');
+                }
+                return result;
+            } catch (e) {
+                return { applied: false, error: e.message || String(e) };
+            }
+        },
+    };
+
+    refreshOdSnapshot();
+});
+</script>
+
+<script type="module">
+<%@ include file="../modern/components/ai-assistant-boot.inc.jsp" %>
+import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
+
+window.opticalDesignerAssistant = wireLazyAssistant({
+  moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/optical-designer-ai.js',
+  exportName: 'createOpticalDesignerAssistant',
+  buttonId: 'btnOpticalDesignerAI',
+  boot: aiAssistantBoot,
 });
 </script>
 
