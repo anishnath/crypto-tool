@@ -50,6 +50,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="ctx" content="<%=request.getContextPath()%>" />
 
+    <%-- Capture a shared cube state from the URL (?s=… or #s=…) BEFORE any
+         other script runs — the cubing-guide tab script rewrites the hash to
+         #tab=… on load, which would otherwise wipe a #s= share link. --%>
+    <script>
+        (function () {
+            var m = location.search.match(/[?&]s=([URFDLBurfdlb]+)/)
+                 || location.hash.match(/[#&]s=([URFDLBurfdlb]+)/);
+            window.__RK_SHARE = m ? m[1].toUpperCase() : '';
+        })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://esm.sh">
@@ -101,24 +112,67 @@
             margin: 0 0 0.75rem;
             letter-spacing: -0.01em;
         }
-        #rk-net-host {
+        /* ── One canvas: three views on top, solution below ───────────
+           A single panel surface (.rk-stage-card). The views grid splits into
+           three columns by thin dividers (3→2→1 up by real width); the
+           solution appears under them on the same surface once Solve runs. */
+        .rk-stage-card {
+            position: relative;
             background: var(--ms-panel-bg-soft);
+            border: 1px solid var(--ms-line);
             border-radius: var(--ms-radius-sm);
-            padding: 0.6rem;
-            text-align: center;
             overflow: hidden;
         }
-        #rk-net-host svg { margin: 0 auto; max-width: 100%; height: auto; max-height: 280px; }
-        #rk-cube3d-host {
-            width: 100%;
-            height: 280px;
-            background: var(--ms-panel-bg-soft);
-            border-radius: var(--ms-radius-sm);
-            cursor: grab;
-            overflow: hidden;
+        .rk-views {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0;
+            align-items: stretch;
         }
+
+        .rk-view {
+            margin: 0; min-width: 0;
+            display: flex; flex-direction: column; gap: 0.4rem;
+            padding: 0.7rem 0.85rem;
+            border-left: 1px solid var(--ms-line);   /* divider between views */
+        }
+        .rk-view:first-child { border-left: 0; }
+        .rk-view-cap {
+            font: 600 0.8rem var(--ms-font-sans); color: var(--ms-ink);
+            letter-spacing: -0.01em;
+        }
+        .rk-view-cap span { font-weight: 500; color: var(--ms-muted); }
+
+        /* each view fills an equal-height region of the shared canvas */
+        .rk-view > div {
+            flex: 1;
+            height: clamp(280px, 44vh, 520px);
+            overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #rk-cube3d-host { width: 100%; cursor: grab; }
         #rk-cube3d-host:active { cursor: grabbing; }
         #rk-cube3d-host canvas { display: block; width: 100% !important; height: 100% !important; }
+
+        #rk-trefoil-host { width: 100%; color: var(--ms-ink); }  /* rings use currentColor */
+        #rk-trefoil-host svg { display: block; width: 100%; height: 100%; }
+
+        #rk-net-host { width: 100%; padding: 0.25rem; box-sizing: border-box; text-align: center; }
+        #rk-net-host svg { margin: 0 auto; max-width: 100%; max-height: 100%; height: auto; }
+
+        /* Solution section sitting on the same canvas, below the views. */
+        .rk-solution {
+            border-top: 1px solid var(--ms-line);
+            padding: 0.9rem 1rem 1rem;
+            background: var(--ms-panel-bg);
+        }
+        .rk-solution-head {
+            display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+        .rk-solution-title { margin: 0; font: 600 0.95rem var(--ms-font-serif); color: var(--ms-ink); }
+        .rk-solution .rk-moves-meta { margin: 0; }
+        .rk-stage-tip { margin: 0; padding: 0.55rem 1rem 0.7rem; }
 
         /* ─────────────────────────────────────────────────────────
            Toolbar — clean Linear/Vercel-style: borderless icons in
@@ -439,14 +493,6 @@
         .rk-banner-bad  { background: rgba(239, 68, 68, 0.08);  color: #b91c1c;             border-color: rgba(239,68,68,0.3); }
         .rk-banner-info { background: rgba(99, 102, 241, 0.12); color: var(--rk-tool-dark); border-color: rgba(99,102,241,0.4); }
 
-        .rk-stage {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            gap: 1.25rem;
-            align-items: start;
-        }
-        @media (max-width: 880px) { .rk-stage { grid-template-columns: 1fr; } }
-
         .rk-moves-list {
             display: flex; flex-wrap: wrap; gap: 0.3rem;
             margin: 0.5rem 0 0.85rem;
@@ -718,6 +764,10 @@
                             <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
                             <span class="rk-label">Reset</span>
                         </button>
+                        <button type="button" class="rk-btn rk-btn-icon" id="rk-share-btn" aria-label="Copy a shareable link to this cube state" title="Copy a shareable link to this cube state">
+                            <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                            <span class="rk-label">Share</span>
+                        </button>
                     </div>
 
                     <%-- Group 3: solve + inline playback (visible only after a solve) --%>
@@ -783,16 +833,57 @@
             </div>
         </div>
 
-        <div class="rk-stage" style="margin-top:1.25rem;">
-            <div class="rk-card">
-                <h2 class="rk-card-title">Cube net &mdash; click stickers to fix colours (Edit mode)</h2>
-                <div id="rk-net-host" aria-label="Cube net"></div>
-                <p class="rk-hint">Tip: paste (&#8984;V) or drag-and-drop a net image anywhere on the page.</p>
+        <%-- One stage, all three visualizations side by side and animating in
+             lock-step (app.js drives net + 3D + trefoil together) so you can
+             correlate the same move across all three. Wraps 3→2→1 as width
+             drops; the sidebar is hidden on this page to make room. --%>
+        <div class="rk-stage-card" style="margin-top:1.25rem;">
+            <div class="rk-views">
+                <figure class="rk-view">
+                    <figcaption class="rk-view-cap">3D Cube <span>&middot; drag to orbit / turn a face</span></figcaption>
+                    <div id="rk-cube3d-host" aria-label="3D cube preview"></div>
+                </figure>
+                <figure class="rk-view">
+                    <figcaption class="rk-view-cap">Trefoil <span>&middot; turns slide along the rings</span></figcaption>
+                    <div id="rk-trefoil-host" aria-label="2D trefoil cube projection"></div>
+                </figure>
+                <figure class="rk-view">
+                    <figcaption class="rk-view-cap">Net <span>&middot; click stickers to edit</span></figcaption>
+                    <div id="rk-net-host" aria-label="Cube net"></div>
+                </figure>
             </div>
-            <div class="rk-card">
-                <h2 class="rk-card-title">3D preview &mdash; drag to orbit</h2>
-                <div id="rk-cube3d-host" aria-label="3D cube preview"></div>
+
+            <%-- Solution lives on the canvas: it appears under the three views
+                 (same surface) once Solve runs. All IDs are wired in app.js. --%>
+            <div class="rk-solution" id="rk-moves-panel" style="display:none;">
+                <div class="rk-solution-head">
+                    <h2 class="rk-solution-title">Solution</h2>
+                    <p class="rk-moves-meta" id="rk-moves-meta"></p>
+                </div>
+                <div class="rk-moves-breakdown" id="rk-moves-breakdown"></div>
+                <div class="rk-moves-list" id="rk-moves-list"></div>
+
+                <%-- Notation explainer — current move + plain-English description. --%>
+                <p class="rk-notation-line" id="rk-notation-line" aria-live="polite"></p>
+
+                <div class="rk-playback-strip">
+                    <button type="button" class="rk-btn"                id="rk-play-prev">&larr; Prev</button>
+                    <button type="button" class="rk-btn rk-btn-primary" id="rk-play-play">&#9654; Play</button>
+                    <button type="button" class="rk-btn"                id="rk-play-next">Next &rarr;</button>
+                    <button type="button" class="rk-btn"                id="rk-record-btn" title="Record solution playback as an animated GIF" style="margin-left:auto;">
+                        <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/></svg>
+                        Record GIF
+                    </button>
+                    <button type="button" class="rk-btn"                id="rk-pdf-btn" title="Download a step-by-step solve report as PDF">
+                        <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+                        Download PDF
+                    </button>
+                    <span class="rk-play-step" id="rk-play-step"></span>
+                </div>
+                <p class="rk-record-status" id="rk-record-status" style="display:none; margin:0.55rem 0 0; font:600 0.78rem var(--ms-font-mono); color:var(--rk-tool-dark); padding:0.4rem 0.7rem; background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.3); border-radius:var(--ms-radius-sm);"></p>
             </div>
+
+            <p class="rk-hint rk-stage-tip">Tip: paste (&#8984;V) or drag-and-drop a net image anywhere on the page &middot; &larr;/&rarr; to step, space to play. All three views show the same cube.</p>
         </div>
 
         <div class="rk-card rk-twist-card" id="rk-twist-panel" style="margin-top:1.25rem;">
@@ -844,35 +935,6 @@
         });
         </script>
 
-        <div class="rk-card" id="rk-moves-panel" style="margin-top:1.25rem; display:none;">
-            <h2 class="rk-card-title">Solution</h2>
-            <p class="rk-moves-meta" id="rk-moves-meta"></p>
-            <div class="rk-moves-breakdown" id="rk-moves-breakdown"></div>
-            <div class="rk-moves-list" id="rk-moves-list"></div>
-
-            <%-- Notation explainer — shows current move + plain-English description.
-                 Becomes visible (.active) as soon as a step is played; great for
-                 cubers still learning WCA notation. --%>
-            <p class="rk-notation-line" id="rk-notation-line" aria-live="polite"></p>
-
-            <div class="rk-playback-strip">
-                <button type="button" class="rk-btn"               id="rk-play-prev">&larr; Prev</button>
-                <button type="button" class="rk-btn rk-btn-primary" id="rk-play-play">&#9654; Play</button>
-                <button type="button" class="rk-btn"               id="rk-play-next">Next &rarr;</button>
-                <button type="button" class="rk-btn"               id="rk-record-btn" title="Record solution playback as an animated GIF" style="margin-left:auto;">
-                    <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/></svg>
-                    Record GIF
-                </button>
-                <button type="button" class="rk-btn"               id="rk-pdf-btn" title="Download a step-by-step solve report as PDF">
-                    <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
-                    Download PDF
-                </button>
-                <span class="rk-play-step" id="rk-play-step"></span>
-            </div>
-            <p class="rk-record-status" id="rk-record-status" style="display:none; margin:0.55rem 0 0; font:600 0.78rem var(--ms-font-mono); color:var(--rk-tool-dark); padding:0.4rem 0.7rem; background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.3); border-radius:var(--ms-radius-sm);"></p>
-            <p class="rk-hint">Tip: &larr; / &rarr; to step, space to play / pause. Click any move to jump.</p>
-        </div>
-
         <div class="ms-inline-ad">
             <%@ include file="../modern/ads/ad-in-content-mid.jsp" %>
         </div>
@@ -914,6 +976,7 @@ const $ = (id) => document.getElementById(id);
 bootstrap({
     netHost:        $('rk-net-host'),
     cube3dHost:     $('rk-cube3d-host'),
+    trefoilHost:    $('rk-trefoil-host'),
     fileInput:      $('rk-file-input'),
     uploadBtn:      $('rk-upload-btn'),
     sampleBtn:      $('rk-sample-btn'),
@@ -925,6 +988,7 @@ bootstrap({
     validation:     $('rk-validation'),
     scrambleBtn:    $('rk-scramble-btn'),
     resetBtn:       $('rk-reset-btn'),
+    shareBtn:       $('rk-share-btn'),
     solveBtn:       $('rk-solve-btn'),
     movesPanel:     $('rk-moves-panel'),
     movesMeta:      $('rk-moves-meta'),
