@@ -213,18 +213,10 @@
         </div>
     </section>
 
-    <!-- Related Tools -->
-    <jsp:include page="/modern/components/related-tools.jsp">
-        <jsp:param name="currentToolUrl" value="seo/seo-checker.jsp"/>
-        <jsp:param name="category" value="SEO &amp; Web Audits"/>
-        <jsp:param name="limit" value="6"/>
-    </jsp:include>
-
-    <%@ include file="../modern/components/support-section.jsp" %>
 
     <footer class="page-footer">
         <div class="footer-content">
-            <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
+            <p class="footer-text">&copy; 2026 8gwifi.org - SEO Online Tools</p>
             <div class="footer-links">
                 <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
                 <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
@@ -234,7 +226,7 @@
     </footer>
 
 <%--    <%@ include file="../modern/ads/ad-side-rails.jsp" %>--%>
-    <%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
+<%--    <%@ include file="../modern/ads/ad-sticky-footer.jsp" %>--%>
     <%@ include file="../modern/components/analytics.jsp" %>
 
     <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js" defer></script>
