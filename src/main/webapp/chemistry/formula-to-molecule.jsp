@@ -112,6 +112,7 @@
   .breakdown .bd-label{font-size:.72rem;color:var(--text2);font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.05em}
   .breakdown .bd-formula{font-weight:700;color:var(--text)}
   .breakdown .bd-arrow{color:var(--text2)}
+  .breakdown .bd-note{font-size:.72rem;color:var(--text2);font-family:'DM Sans',sans-serif;font-style:italic;flex-basis:100%;cursor:help}
   .breakdown .bd-parts{color:var(--accent2);font-weight:600}
   /* Balanced-equation result card */
   .eqn-card{grid-column:1 / -1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 18px;text-align:center}
@@ -288,7 +289,7 @@
       <button class="mini eq-dl" id="eq-dl" type="button">⬇ Download image</button>
     </div>
     <div class="eq-row" id="eq-row"></div>
-    <p class="eq-note">Balanced formation from elements (each element in its standard state). For most organic compounds this is a <em>formal</em> equation — correct by atom balance, but not how the compound is actually synthesised.</p>
+    <p class="eq-note">This is the <em>formal</em> formation-from-elements reaction — each element in its standard state forming the compound. It is the basis of the standard enthalpy of formation (&Delta;H&deg;f) and is correct by atom balance, but it is usually <em>not</em> how the compound is actually synthesised (e.g. Ca(OH)&#8322; is really made from CaO + H&#8322;O, not from Ca + H&#8322; + O&#8322;).</p>
   </div>
 </div>
 
@@ -454,8 +455,9 @@
       lastReactants = res.reactants;
       lastProducts = res.products;
       el.innerHTML =
-        '<span class="bd-label">Formation from elements</span>' +
-        '<span class="bd-parts">' + eqString(res.reactants, res.products) + '</span>';
+        '<span class="bd-label">Formal formation (&Delta;H&deg;f)</span>' +
+        '<span class="bd-parts">' + eqString(res.reactants, res.products) + '</span>' +
+        '<span class="bd-note" title="This is the standard enthalpy-of-formation reaction: elements in their standard states forming 1 unit of the compound. It is balanced by atom count, but is generally not how the compound is actually made.">&#9432; atom-balanced formation reaction — not a real synthesis route</span>';
     })
     .catch(() => { el.hidden = true; });
   }
