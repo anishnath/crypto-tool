@@ -5,9 +5,12 @@
     request.setAttribute("aiCryptoToolKey", "message-digest");  // registry key
     request.setAttribute("aiToolId", "cryptography/message-digest");  // billing (optional, derived if omitted)
 
+  AI requires Google sign-in (aiRequireSignIn) for all pages using this include.
+
   Also requires ai-assistant-vars.inc.jsp at top of page and ai-assistant-head.inc.jsp in <head>.
 --%><%@ page import="z.y.x.ai.AiAssistantPageSupport" %><%
 AiAssistantPageSupport.ensurePageVars(pageContext);
+request.setAttribute("aiRequireSignIn", "true");
 String cryptoToolKey = AiAssistantPageSupport.param(pageContext, "aiCryptoToolKey", "");
 if (request.getAttribute("aiToolId") == null || "".equals(String.valueOf(request.getAttribute("aiToolId")).trim())) {
   if (!cryptoToolKey.isEmpty()) {
