@@ -104,15 +104,94 @@ var SeoAiFixClient = (function () {
   }
 
   function formatError(err) {
-    if (err && err.status === 429) {
-      return 'AI rate limit reached. Try again in a minute.';
-    }
-    if (err && (err.status === 402 || err.code === 'ai_quota_exceeded')) {
+    if (err && err.message) return err.message;
+    return 'AI service unavailable';
+  }
+
+  function isQuotaExceeded(err) {
+    return !!(err && (err.status === 402 || err.code === 'ai_quota_exceeded'));
+  }
+
+  function isRateLimited(err) {
+    return !!(err && (err.status === 429 || err.code === 'rate_limited'));
+  }
+
+  function isLimitError(err) {
+    return isQuotaExceeded(err) || isRateLimited(err);
+  }
+
+  function limitMessage(err) {
+    if (err && err.message) return err.message;
+    if (isRateLimited(err)) return 'AI rate limit reached. Try again in a minute.';
+    if (isQuotaExceeded(err)) {
       return isLoggedIn()
         ? 'Monthly AI limit reached. Upgrade to Pro for more requests.'
-        : 'AI limit reached. Sign in for a higher limit or try again later.';
+        : 'AI limit reached. Sign in for a higher limit, or upgrade to Pro.';
     }
-    return (err && err.message) ? err.message : 'AI service unavailable';
+    return formatError(err);
+  }
+
+  function quotaDetail(err) {
+    var q = err && err.quota;
+    if (!q || q.is_unlimited) return '';
+    if (q.tokens_limit) {
+      return 'Used ' + Number(q.tokens_used || 0).toLocaleString()
+        + ' / ' + Number(q.tokens_limit).toLocaleString() + ' tokens this month.';
+    }
+    return '';
+  }
+
+  function startProCheckout() {
+    var ctx = ctxPath();
+    if (!isLoggedIn()) {
+      window.location.href = loginHref();
+      return Promise.resolve();
+    }
+    var returnPath = window.location.pathname + window.location.search;
+    var cancelPath = returnPath;
+    var sep = returnPath.indexOf('?') >= 0 ? '&' : '?';
+    if (returnPath.indexOf('checkout=') < 0) {
+      returnPath += sep + 'checkout=1';
+    }
+    return fetch(ctx + '/api/dodo/checkout', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        plan: 'monthly',
+        tool_id: boot().toolId || '',
+        return_path: returnPath,
+        cancel_path: cancelPath
+      })
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        if (!r.ok) {
+          var msg = data.error || data.hint || ('Checkout failed (' + r.status + ')');
+          if (r.status === 401) {
+            window.location.href = loginHref();
+            return;
+          }
+          throw new Error(msg);
+        }
+        if (!data.checkout_url) throw new Error('Checkout URL missing');
+        window.location.href = data.checkout_url;
+      });
+    });
+  }
+
+  function wireUpgrade(containerEl, cssPrefix) {
+    var btn = containerEl.querySelector('[data-seo-ai-upgrade]');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      if (btn.disabled) return;
+      btn.disabled = true;
+      btn.textContent = 'Starting checkout…';
+      startProCheckout().catch(function (e) {
+        btn.disabled = false;
+        btn.textContent = 'Upgrade to Pro';
+        showError(containerEl, e.message || 'Checkout failed', cssPrefix, null);
+      });
+    });
   }
 
   function wireDismiss(containerEl) {
@@ -138,12 +217,49 @@ var SeoAiFixClient = (function () {
     wireDismiss(containerEl);
   }
 
-  function showError(containerEl, message, cssPrefix) {
+  function showError(containerEl, message, cssPrefix, err) {
+    if (err && isLimitError(err)) {
+      showLimitError(containerEl, err, cssPrefix);
+      return;
+    }
     var prefix = cssPrefix || 'seo-ai-fix';
     containerEl.innerHTML =
-      '<div class="' + prefix + '-error">' + escapeHtml(message) +
-      ' <button type="button" class="' + prefix + '-close" data-seo-ai-dismiss>Dismiss</button></div>';
+      '<div class="' + prefix + '-error seo-ai-fix-error-panel">' +
+      '  <p class="seo-ai-fix-error-msg">' + escapeHtml(message) + '</p>' +
+      '  <div class="seo-ai-fix-signin-actions">' +
+      '    <button type="button" class="seo-ai-fix-dismiss" data-seo-ai-dismiss>Dismiss</button>' +
+      '  </div>' +
+      '</div>';
     wireDismiss(containerEl);
+  }
+
+  function showLimitError(containerEl, err, cssPrefix) {
+    var prefix = cssPrefix || 'seo-ai-fix';
+    var loggedIn = isLoggedIn();
+    var detail = quotaDetail(err);
+    var hint = (err && err.hint) ? String(err.hint) : '';
+    var sub = detail || hint;
+
+    var actions = '';
+    if (loggedIn) {
+      actions =
+        '<button type="button" class="seo-ai-fix-upgrade-btn" data-seo-ai-upgrade>Upgrade to Pro</button>';
+    } else {
+      actions =
+        '<a class="seo-ai-fix-signin-link" href="' + escapeHtml(loginHref()) + '">Sign in with Google</a>' +
+        '<button type="button" class="seo-ai-fix-upgrade-btn" data-seo-ai-upgrade>Upgrade to Pro</button>';
+    }
+    actions += '<button type="button" class="seo-ai-fix-dismiss" data-seo-ai-dismiss>Dismiss</button>';
+
+    containerEl.style.display = 'block';
+    containerEl.innerHTML =
+      '<div class="' + prefix + '-error seo-ai-fix-error-panel seo-ai-fix-limit">' +
+      '  <p class="seo-ai-fix-error-msg">' + escapeHtml(limitMessage(err)) + '</p>' +
+      (sub ? '<p class="seo-ai-fix-error-sub">' + escapeHtml(sub) + '</p>' : '') +
+      '  <div class="seo-ai-fix-signin-actions">' + actions + '</div>' +
+      '</div>';
+    wireDismiss(containerEl);
+    wireUpgrade(containerEl, prefix);
   }
 
   /**
@@ -203,6 +319,9 @@ var SeoAiFixClient = (function () {
             var err = new Error(data.error || data.hint || ('AI request failed (' + r.status + ')'));
             err.status = r.status;
             err.code = data.code;
+            err.hint = data.hint;
+            err.quota = data.quota;
+            err.upgrade = data.upgrade === true;
             throw err;
           }
           return data;
@@ -230,7 +349,7 @@ var SeoAiFixClient = (function () {
           triggerBtn.disabled = false;
           triggerBtn.textContent = buttonLabel;
         }
-        showError(containerEl, formatError(err), cssPrefix);
+        showError(containerEl, formatError(err), cssPrefix, err);
       });
   }
 

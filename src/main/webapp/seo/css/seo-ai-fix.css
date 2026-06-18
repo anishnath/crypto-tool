@@ -38,3 +38,36 @@
   font-size: 0.75rem;
   cursor: pointer;
 }
+.seo-ai-fix-error-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.seo-ai-fix-error-msg {
+  margin: 0;
+}
+.seo-ai-fix-error-sub {
+  margin: 0;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+.seo-ai-fix-upgrade-btn {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+.seo-ai-fix-upgrade-btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+.seo-ai-fix-upgrade-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
