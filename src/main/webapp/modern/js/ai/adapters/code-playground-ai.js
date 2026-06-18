@@ -153,6 +153,7 @@ export function createCodePlaygroundAssistant(opts) {
     userId,
     billing: {
       enabled: true,
+      requireSignIn: opts.billing?.requireSignIn === true,
       ctx,
       userId: userId || '',
       plans: {

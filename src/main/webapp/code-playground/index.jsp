@@ -2,6 +2,7 @@
 <%
     String ctx = request.getContextPath();
     request.setAttribute("aiToolId", "developer-tools/code-playground");
+    request.setAttribute("aiRequireSignIn", "true");
 
     // Auth state for the logo + login/logout button (mirrors nav-header.jsp).
     // Use getSession(false) so it works under session="false".
