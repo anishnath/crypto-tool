@@ -12,6 +12,7 @@
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
     request.setAttribute("aiToolId", "cryptography/rsa-functions");
+    request.setAttribute("aiRequireSignIn", "true");
 
     String pubKey = "";
     String privKey = "";
