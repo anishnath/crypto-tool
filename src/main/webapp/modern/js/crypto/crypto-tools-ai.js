@@ -2842,6 +2842,7 @@ export function createCryptoToolAssistant(opts) {
     floatingCorner: 'left',
     billing: {
       enabled: opts.billing?.enabled !== false,
+      requireSignIn: opts.billing?.requireSignIn === true,
       ctx: opts.billing?.ctx || ctx,
       userId: opts.billing?.userId || opts.userId || '',
     },
