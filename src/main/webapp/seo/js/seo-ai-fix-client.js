@@ -125,8 +125,8 @@ var SeoAiFixClient = (function () {
     if (isRateLimited(err)) return 'AI rate limit reached. Try again in a minute.';
     if (isQuotaExceeded(err)) {
       return isLoggedIn()
-        ? 'Monthly AI limit reached. Upgrade to Pro for more requests.'
-        : 'AI limit reached. Sign in for a higher limit, or upgrade to Pro.';
+        ? 'You\'ve used your free AI Fix quota. Go Pro for 10× more AI + 20,000 page scans per site — just $3/mo.'
+        : 'AI limit reached. Sign in free for more — or go Pro ($3/mo) for 20,000 page scans & 10× AI fixes.';
     }
     return formatError(err);
   }
@@ -159,7 +159,7 @@ var SeoAiFixClient = (function () {
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({
         plan: 'monthly',
-        tool_id: boot().toolId || '',
+        tool_id: boot().toolId || 'seo/pro',
         return_path: returnPath,
         cancel_path: cancelPath
       })
@@ -188,7 +188,7 @@ var SeoAiFixClient = (function () {
       btn.textContent = 'Starting checkout…';
       startProCheckout().catch(function (e) {
         btn.disabled = false;
-        btn.textContent = 'Upgrade to Pro';
+        btn.textContent = 'Upgrade to Pro — $3/mo';
         showError(containerEl, e.message || 'Checkout failed', cssPrefix, null);
       });
     });
@@ -243,11 +243,11 @@ var SeoAiFixClient = (function () {
     var actions = '';
     if (loggedIn) {
       actions =
-        '<button type="button" class="seo-ai-fix-upgrade-btn" data-seo-ai-upgrade>Upgrade to Pro</button>';
+        '<button type="button" class="seo-ai-fix-upgrade-btn" data-seo-ai-upgrade>Upgrade to Pro — $3/mo</button>';
     } else {
       actions =
         '<a class="seo-ai-fix-signin-link" href="' + escapeHtml(loginHref()) + '">Sign in with Google</a>' +
-        '<button type="button" class="seo-ai-fix-upgrade-btn" data-seo-ai-upgrade>Upgrade to Pro</button>';
+        '<button type="button" class="seo-ai-fix-upgrade-btn" data-seo-ai-upgrade>Go Pro — $3/mo</button>';
     }
     actions += '<button type="button" class="seo-ai-fix-dismiss" data-seo-ai-dismiss>Dismiss</button>';
 
@@ -353,10 +353,80 @@ var SeoAiFixClient = (function () {
       });
   }
 
+  var BANNER_CTA_HTML = 'Upgrade to Pro<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function isProSubscriber(data) {
+    return !!(data && (data.is_premium === true || data.is_premium === 'true'));
+  }
+
+  function fetchBillingPremium() {
+    return fetch(ctxPath() + '/api/billing/status', {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json' }
+    }).then(function (r) {
+      if (r.status === 401) return false;
+      if (!r.ok) return false;
+      return r.json().then(function (data) {
+        return isProSubscriber(data);
+      });
+    }).catch(function () {
+      return false;
+    });
+  }
+
+  function updatePricingBannerVisibility(banner) {
+    fetchBillingPremium().then(function (isPro) {
+      banner.hidden = isPro;
+    });
+  }
+
+  function wirePricingBanner(banner) {
+    var cta = banner.querySelector('[data-seo-pro-upgrade]');
+    if (cta) {
+      cta.addEventListener('click', function () {
+        if (cta.disabled) return;
+        cta.disabled = true;
+        cta.textContent = 'Starting checkout…';
+        startProCheckout().catch(function (err) {
+          cta.disabled = false;
+          cta.innerHTML = BANNER_CTA_HTML;
+          alert(err.message || 'Could not start checkout. Please try again.');
+        });
+      });
+    }
+  }
+
+  function initPricingBanner() {
+    var banner = document.getElementById('seo-pro-banner');
+    if (!banner) return;
+
+    /* Clear legacy dismiss flag — banner stays until Pro upgrade */
+    try { localStorage.removeItem('seo_pro_banner_dismissed'); } catch (e) { /* ignore */ }
+
+    wirePricingBanner(banner);
+    updatePricingBannerVisibility(banner);
+
+    /* Re-check after checkout return or bfcache back-navigation */
+    window.addEventListener('pageshow', function () {
+      updatePricingBannerVisibility(banner);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPricingBanner);
+  } else {
+    initPricingBanner();
+  }
+
   return {
     requestFix: requestFix,
     renderMarkdown: renderMarkdown,
-    escapeHtml: escapeHtml
+    escapeHtml: escapeHtml,
+    startProCheckout: startProCheckout,
+    isLoggedIn: isLoggedIn,
+    ctxPath: ctxPath,
+    initPricingBanner: initPricingBanner
   };
 
 })();

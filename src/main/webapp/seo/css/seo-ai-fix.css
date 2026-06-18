@@ -71,3 +71,236 @@
   opacity: 0.7;
   cursor: wait;
 }
+
+/* SEO Pro pricing announcement banner */
+.seo-pro-banner {
+  position: relative;
+  z-index: 2;
+  padding: 0 1rem 0;
+  margin: 0.75rem auto 0.25rem;
+  max-width: 980px;
+  animation: seo-pro-banner-in 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.seo-pro-banner[hidden] {
+  display: none !important;
+}
+
+@keyframes seo-pro-banner-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.seo-pro-banner-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.25rem 1.75rem;
+  align-items: center;
+  padding: 1.125rem 1.375rem 1.125rem 1.5rem;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  background:
+    radial-gradient(ellipse 120% 80% at 0% 0%, rgba(99, 102, 241, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 100% 100%, rgba(236, 72, 153, 0.14) 0%, transparent 50%),
+    linear-gradient(135deg, #0f172a 0%, #1e1b4b 42%, #312e81 100%);
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+}
+
+.seo-pro-banner-glow {
+  position: absolute;
+  top: -40%;
+  right: 8%;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+.seo-pro-banner-content { position: relative; min-width: 0; }
+
+.seo-pro-banner-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.seo-pro-banner-badge {
+  display: inline-flex;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.45);
+}
+
+.seo-pro-banner-launch {
+  display: inline-flex;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fde68a;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+}
+
+.seo-pro-banner-title {
+  margin: 0 0 0.375rem;
+  font-size: clamp(1.05rem, 2.2vw, 1.3125rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+}
+
+.seo-pro-banner-title strong {
+  font-weight: 800;
+  background: linear-gradient(90deg, #c4b5fd, #f9a8d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.seo-pro-banner-sub {
+  margin: 0 0 0.625rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #cbd5e1;
+  max-width: 36rem;
+}
+
+.seo-pro-banner-perks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seo-pro-banner-perks li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.seo-pro-banner-perks li::before {
+  content: '✓';
+  font-size: 0.625rem;
+  color: #86efac;
+  font-weight: 800;
+}
+
+.seo-pro-banner-cta-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex-shrink: 0;
+  padding-right: 0.25rem;
+}
+
+.seo-pro-banner-price {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.seo-pro-banner-price-val {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.seo-pro-banner-price-unit {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-top: 0.55rem;
+  margin-left: 0.1rem;
+}
+
+.seo-pro-banner-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 168px;
+  padding: 0.65rem 1.125rem;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 48%, #ec4899 100%);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+
+.seo-pro-banner-cta:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.16) inset;
+  filter: brightness(1.05);
+}
+
+.seo-pro-banner-cta:active:not(:disabled) { transform: translateY(0); }
+.seo-pro-banner-cta:disabled { opacity: 0.75; cursor: wait; }
+.seo-pro-banner-cta svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+.seo-pro-banner-trust {
+  margin: 0.45rem 0 0;
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: #64748b;
+  letter-spacing: 0.02em;
+}
+
+.seo-pro-banner--compact { padding-top: 0.5rem; }
+.seo-pro-banner--compact .seo-pro-banner-inner { padding: 0.875rem 1.125rem; }
+
+.seo-pro-banner--idx {
+  max-width: 900px;
+  padding: 0 2rem 0.5rem;
+  margin-top: -1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .seo-pro-banner-inner {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem 1rem 1.125rem;
+  }
+  .seo-pro-banner-cta-block { width: 100%; padding-right: 0; }
+  .seo-pro-banner-cta { width: 100%; }
+}
+
+[data-theme="dark"] .seo-pro-banner-inner {
+  border-color: rgba(129, 140, 248, 0.35);
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+}

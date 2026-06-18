@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "seo/structured-data");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,6 +46,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/seo/css/structured-data.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/seo/css/seo-ai-fix.css">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -70,6 +74,9 @@
             <span class="current">Structured Data Test</span>
         </div>
     </nav>
+
+    <% request.setAttribute("seoProBannerVariant", "compact"); %>
+    <%@ include file="../modern/components/seo-pro-pricing-banner.inc.jsp" %>
 
     <!-- ═══════════════════════════════════════════════
          STATE: INPUT
@@ -193,6 +200,8 @@
 
     <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js" defer></script>
     <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
+    <%@ include file="../modern/components/seo-ai-boot.inc.jsp" %>
+    <script src="<%=request.getContextPath()%>/seo/js/seo-ai-fix-client.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/seo/js/structured-data-tests.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/seo/js/structured-data-ai.js?v=<%=cacheVersion%>" defer></script>
     <script src="<%=request.getContextPath()%>/seo/js/structured-data.js?v=<%=cacheVersion%>" defer></script>

@@ -99,6 +99,9 @@
         </div>
     </nav>
 
+    <% request.setAttribute("seoProBannerVariant", "compact"); %>
+    <%@ include file="../modern/components/seo-pro-pricing-banner.inc.jsp" %>
+
     <!-- ═══════════════════════════════════════════════
          STATE: INPUT — Hero with audit form
          ═══════════════════════════════════════════════ -->
