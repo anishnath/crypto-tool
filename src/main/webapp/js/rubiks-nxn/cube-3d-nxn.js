@@ -614,13 +614,41 @@ export async function mountCubeNxN(host, N, initialState) {
     renderer.domElement.addEventListener('pointerleave', onPointerUp);
     renderer.domElement.style.touchAction = 'none';   // allow drag on touch devices
 
+    // Smoothly orbit the camera so `face` faces the viewer (used when a sticker
+    // is edited on the net, to show which part of the cube it is).  OrbitControls
+    // derives its spherical state from camera.position each update(), so simply
+    // tweening the position sticks.
+    let camAnim = 0;
+    function showFace(face) {
+        const n = FACE_NORMALS[face];
+        if (!n) return;
+        const dist = camera.position.length() || (camDist * 1.6);
+        const target = n.clone().multiplyScalar(dist);
+        // gentle tilt so the face reads as 3-D rather than edge-on flat
+        if (face === 'U' || face === 'D') { target.x += dist * 0.18; target.z += dist * 0.40; }
+        else { target.y += dist * 0.34; }
+        target.setLength(dist);
+        const start = camera.position.clone();
+        const t0 = performance.now(), dur = 460;
+        cancelAnimationFrame(camAnim);
+        const stepCam = (now) => {
+            const t = Math.min(1, (now - t0) / dur);
+            const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+            camera.position.lerpVectors(start, target, e);
+            if (t < 1) camAnim = requestAnimationFrame(stepCam);
+        };
+        camAnim = requestAnimationFrame(stepCam);
+    }
+
     return {
         setState,
         animateMove,
         setOnMove,
+        showFace,
         get canvas() { return renderer.domElement; },
         dispose() {
             alive = false;
+            cancelAnimationFrame(camAnim);
             ro.disconnect();
             controls.dispose();
             renderer.dispose();

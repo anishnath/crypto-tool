@@ -98,6 +98,7 @@ import { mountCubeNet as mountNet10 } from '../rubiks10/cube-net.js';
 
 // Generic 3D + image parser
 import { mountCubeNxN } from './cube-3d-nxn.js';
+import { mountTrefoil } from './cube-trefoil-nxn.js';
 import { loadImageToBuffer, parseNet } from './parser.js';
 
 const FACES = ['U', 'R', 'F', 'D', 'L', 'B'];
@@ -266,6 +267,7 @@ export function bootstrap(ctx) {
         sizeBtns:       Array.from(document.querySelectorAll('.rk-size-btn')),
         netHost:        ctx.netHost,
         cube3dHost:     ctx.cube3dHost,
+        trefoilHost:    ctx.trefoilHost,
         fileInput:      ctx.fileInput,
         uploadBtn:      ctx.uploadBtn,
         sampleBtn:      ctx.sampleBtn,
@@ -277,6 +279,7 @@ export function bootstrap(ctx) {
         validation:     ctx.validation,
         scrambleBtn:    ctx.scrambleBtn,
         resetBtn:       ctx.resetBtn,
+        shareBtn:       ctx.shareBtn,
         solveBtn:       ctx.solveBtn,
         movesPanel:     ctx.movesPanel,
         movesList:      ctx.movesList,
@@ -312,6 +315,7 @@ export function bootstrap(ctx) {
     let net = null;
     let cube3d = null;
     let cube3dPending = false;                 // mountCubeNxN is async — gate concurrent mounts
+    let trefoil = null;                        // 2-D trefoil projection (third view)
     let solution = null;                       // {moves, breakdown, meta, elapsedMs}
     let stepIdx = 0;                           // moves applied to `state` from `originalState`
     let playing = false;
@@ -354,6 +358,10 @@ export function bootstrap(ctx) {
                 clearSolution();
                 paintNet();
                 validateBanner();
+                // Orbit the 3-D cube to the face that was just edited, so it's
+                // obvious which part of the cube the net sticker maps to.
+                const f = ['U', 'R', 'F', 'D', 'L', 'B'][Math.floor(idx / (size * size))];
+                if (cube3d && cube3d.showFace && f) cube3d.showFace(f);
             },
             highlightIndices: [],
         });
@@ -393,6 +401,11 @@ export function bootstrap(ctx) {
         try {
             if (cube3d) { cube3d.dispose(); cube3d = null; }
             cube3d = await mountCubeNxN(ui.cube3dHost, size, state);
+            // `state` may have changed while the (async) mount was in flight —
+            // e.g. a shared cube applied from the URL on load.  Re-sync so the
+            // 3-D cube matches the net/trefoil instead of showing the stale
+            // state captured when mountCubeNxN was called.
+            cube3d.setState(state);
             if (cube3d.setOnMove) {
                 cube3d.setOnMove((move) => {
                     clearSolution();
@@ -409,9 +422,25 @@ export function bootstrap(ctx) {
         }
     }
 
+    // Mount (or remount) the 2-D trefoil projection.  Synchronous (pure SVG),
+    // so unlike mount3D it needs no pending-gate.
+    function mountTref() {
+        if (!ui.trefoilHost) return;
+        if (trefoil) { trefoil.dispose(); trefoil = null; }
+        try {
+            trefoil = mountTrefoil(ui.trefoilHost, size, state);
+        } catch (err) {
+            console.error('Trefoil mount failed:', err);
+            ui.trefoilHost.innerHTML =
+                '<div style="padding:1rem;color:var(--ms-muted);font:0.85rem var(--ms-font-sans);">' +
+                'Trefoil view unavailable: ' + (err.message || err) + '</div>';
+        }
+    }
+
     function paintNet() {
         if (net) net.update({ state, highlightIndices: [] });
         if (cube3d) cube3d.setState(state);
+        if (trefoil) trefoil.setState(state);
     }
 
     // Animation speed multiplier (1× = 220 ms baseline).  Driven by the
@@ -422,11 +451,14 @@ export function bootstrap(ctx) {
     /** Net snap + 3D animated face-turn for a single move. */
     async function paintWithMove(move) {
         if (net) net.update({ state, highlightIndices: [] });
-        if (cube3d && cube3d.animateMove) {
-            await cube3d.animateMove(move, state, BASE_DURATION_MS / playSpeed);
-        } else if (cube3d) {
-            cube3d.setState(state);
-        }
+        const dur = BASE_DURATION_MS / playSpeed;
+        // Animate the 3-D cube and the 2-D trefoil in lock-step (both ride the
+        // same move + post-move state), then await whichever takes longer.
+        const anims = [];
+        if (cube3d && cube3d.animateMove) anims.push(cube3d.animateMove(move, state, dur));
+        else if (cube3d) cube3d.setState(state);
+        if (trefoil) anims.push(trefoil.animateMove(move, state, dur));
+        if (anims.length) await Promise.all(anims);
     }
 
     function clearSolution() {
@@ -457,6 +489,7 @@ export function bootstrap(ctx) {
         editMode = false;
         mountNet();
         mount3D();
+        mountTref();
         refreshEditable();
         // Enable/disable wide-turn buttons based on size.
         //   3×3        — no wide of any kind
@@ -655,6 +688,55 @@ export function bootstrap(ctx) {
         setStatus(size === 3 ? 'Ready · 3×3 (browser)' : `Ready · ${size}×${size} (server)`, 'ready');
     }
 
+    // ── Share / restore the cube state via a URL ──────────────────────────────
+    // The whole sticker state is just URFDLB letters, so it rides safely in the
+    // URL hash.  Anyone opening (or pasting) the link gets the exact cube.
+    function shareLinkForState(s) {
+        // Use a query param, NOT the hash — the cubing-guide tabs own the hash
+        // (#tab=…) and rewrite it on load, which would wipe a #s= link.
+        return location.origin + location.pathname + '?s=' + s + (location.hash || '');
+    }
+
+    async function shareState() {
+        const link = shareLinkForState(state);
+        // Reflect it in the address bar so the page itself is now shareable too.
+        try { history.replaceState(null, '', '?s=' + state + (location.hash || '')); } catch (e) {}
+        try {
+            await navigator.clipboard.writeText(link);
+            setBanner('Shareable link copied — open it (or paste it above) to load this exact cube.', 'ok');
+        } catch (e) {
+            // Clipboard unavailable (non-secure context / denied): surface the
+            // link in the paste box so the user can copy it by hand.
+            if (ui.scrambleInput) {
+                ui.scrambleInput.value = link;
+                ui.scrambleInput.focus();
+                ui.scrambleInput.select();
+            }
+            setBanner('Copy this link to share this cube: ' + link, 'info');
+        }
+    }
+
+    // Pull a state out of a share link (…#s=<state>) or return a bare pasted
+    // state, upper-cased.  Returns '' worth of garbage if neither.
+    function extractStateCandidate(text) {
+        const m = String(text || '').match(/[#?&]s=([URFDLBurfdlb]+)/);
+        return (m ? m[1] : String(text || '').trim()).toUpperCase();
+    }
+
+    // Restore a shared cube (called once on load).  Prefer the value captured
+    // by the inline <head> script (taken before the cubing-guide tab script
+    // rewrites the hash); fall back to the live query string / hash.
+    function applyStateFromUrl() {
+        let raw = ((typeof window !== 'undefined' && window.__RK_SHARE) || '').toUpperCase();
+        if (detectStateInput(raw) === 0) raw = extractStateCandidate(location.search);
+        if (detectStateInput(raw) === 0) raw = extractStateCandidate(location.hash);
+        const n = detectStateInput(raw);
+        if (n > 0) {
+            applyStateString(raw, n);
+            setBanner(`Loaded a shared ${n}×${n} cube from the link. Click Solve.`, 'ok');
+        }
+    }
+
     /**
      * Parse a pasted/typed scramble string (with or without whitespace),
      * AUTO-DETECT whether it's a CUBE STATE or WCA NOTATION, switch
@@ -668,6 +750,10 @@ export function bootstrap(ctx) {
             if (ui.scrambleInput) ui.scrambleInput.focus();
             return;
         }
+
+        // Accept a pasted SHARE LINK (…#s=<state>) — pull the state out of it.
+        const linkMatch = raw.match(/[#?&]s=([URFDLBurfdlb]+)/);
+        if (linkMatch) raw = linkMatch[1].toUpperCase();
 
         // First check if input is a cube state (pure URFDLB letters at
         // a recognised length).  States are common — cubers paste them
@@ -740,11 +826,12 @@ export function bootstrap(ctx) {
             }
         }
 
-        // Apply with animation — same pattern as the random scramble flow.
+        // Apply the moves ON TOP of the current cube (cumulative), matching the
+        // manual twist buttons — so re-applying advances the cube each time
+        // instead of restarting from solved.  (Pasting a full scramble onto a
+        // solved cube behaves the same as before.)
         setStatus('Applying scramble', 'busy');
         try {
-            state = adapter.SOLVED;
-            paintNet();
             const ANIMATE_LIMIT = 25;     // generous; typical WCA scrambles are 20-25 moves
             for (let i = 0; i < tokens.length; i++) {
                 state = await adapter.apply(state, [tokens[i]]);
@@ -752,7 +839,7 @@ export function bootstrap(ctx) {
             }
             if (tokens.length > ANIMATE_LIMIT) paintNet();
             originalState = state;
-            setBanner(`Applied ${tokens.length}-move scramble. Click Solve.`, 'ok');
+            setBanner(`Applied ${tokens.length} move${tokens.length === 1 ? '' : 's'}. Click Solve.`, 'ok');
             setStatus(size === 3 ? 'Ready · 3×3 (browser)' : `Ready · ${size}×${size} (server)`, 'ready');
             if (ui.scrambleInput) ui.scrambleInput.classList.remove('invalid');
         } catch (err) {
@@ -1168,16 +1255,27 @@ export function bootstrap(ctx) {
         }
     }
 
-    async function rasterizeNet(targetH) {
-        // Snapshot the current net SVG to a Canvas at the requested height.
-        const svg = ui.netHost && ui.netHost.querySelector('svg');
+    /**
+     * Snapshot any of the live view SVGs (net or trefoil) to a Canvas at the
+     * requested height, on a dark card background.  `inkColor`, when given,
+     * resolves the trefoil ring guides (stroke="currentColor") to a visible
+     * tint on the dark backdrop.
+     */
+    async function rasterizeSvgHost(host, targetH, inkColor) {
+        const svg = host && host.querySelector('svg');
         if (!svg) return null;
         const cloned = svg.cloneNode(true);
         cloned.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         const vb = (cloned.getAttribute('viewBox') || '0 0 200 200').split(/\s+/).map(Number);
-        const w = vb[2], h = vb[3];
+        const x0 = vb[0], y0 = vb[1], w = vb[2], h = vb[3];
+        // Pin an explicit pixel size so the SVG rasterises regardless of its
+        // width/height="100%" layout attributes.
+        cloned.setAttribute('width', String(w));
+        cloned.setAttribute('height', String(h));
+        if (inkColor) cloned.style.color = inkColor;
         const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        bg.setAttribute('x', '0'); bg.setAttribute('y', '0');
+        // Cover the full viewBox — the trefoil's origin is negative.
+        bg.setAttribute('x', String(x0)); bg.setAttribute('y', String(y0));
         bg.setAttribute('width', String(w)); bg.setAttribute('height', String(h));
         bg.setAttribute('fill', '#0f172a');
         cloned.insertBefore(bg, cloned.firstChild);
@@ -1187,7 +1285,7 @@ export function bootstrap(ctx) {
             const img = await new Promise((res, rej) => {
                 const i = new Image();
                 i.onload = () => res(i);
-                i.onerror = () => rej(new Error('Net rasterise failed'));
+                i.onerror = () => rej(new Error('SVG rasterise failed'));
                 i.src = url;
             });
             const scale = targetH / h;
@@ -1200,6 +1298,8 @@ export function bootstrap(ctx) {
             URL.revokeObjectURL(url);
         }
     }
+    const rasterizeNet     = (targetH) => rasterizeSvgHost(ui.netHost, targetH, null);
+    const rasterizeTrefoil = (targetH) => rasterizeSvgHost(ui.trefoilHost, targetH, '#94a3b8');
 
     function drawWatermark(ctx, w, h) {
         const mark = '8gwifi.org/math/rubik-nxn-solver.jsp';
@@ -1247,10 +1347,14 @@ export function bootstrap(ctx) {
 
         const cubeCanvas = cube3d.canvas;
         const cubeW = cubeCanvas.width, cubeH = cubeCanvas.height;
-        const netCanvas = await rasterizeNet(cubeH);
-        const netW = netCanvas ? netCanvas.width : 0;
+        // Composite all three views (3D | trefoil | net) — matches the on-page
+        // canvas.  Panel widths are constant (same viewBox + height each frame).
+        const trefoilProbe = await rasterizeTrefoil(cubeH);
+        const netProbe = await rasterizeNet(cubeH);
+        const trefW = trefoilProbe ? trefoilProbe.width : 0;
+        const netW = netProbe ? netProbe.width : 0;
         const GAP = 24, PAD = 16;
-        const frameW = cubeW + GAP + netW + PAD * 2;
+        const frameW = cubeW + (trefW ? GAP + trefW : 0) + (netW ? GAP + netW : 0) + PAD * 2;
         const frameH = cubeH + PAD * 2;
 
         const gif = new GIF({
@@ -1267,11 +1371,14 @@ export function bootstrap(ctx) {
         let captureAlive = true;
         const captureLoop = (async () => {
             while (captureAlive) {
-                const liveNet = await rasterizeNet(cubeH);
+                const liveTref = trefW ? await rasterizeTrefoil(cubeH) : null;
+                const liveNet  = netW  ? await rasterizeNet(cubeH)     : null;
                 fctx.fillStyle = '#0f172a';
                 fctx.fillRect(0, 0, frameCanvas.width, frameCanvas.height);
-                fctx.drawImage(cubeCanvas, PAD, PAD);
-                if (liveNet) fctx.drawImage(liveNet, PAD + cubeW + GAP, PAD);
+                let x = PAD;
+                fctx.drawImage(cubeCanvas, x, PAD); x += cubeW + GAP;
+                if (liveTref) { fctx.drawImage(liveTref, x, PAD); x += trefW + GAP; }
+                if (liveNet)  { fctx.drawImage(liveNet, x, PAD); }
                 drawWatermark(fctx, frameCanvas.width, frameCanvas.height);
                 gif.addFrame(fctx, { delay: 60, copy: true });
                 await new Promise((r) => setTimeout(r, 60));
@@ -1684,8 +1791,21 @@ export function bootstrap(ctx) {
         ui.scrambleInput.addEventListener('input', () => {
             ui.scrambleInput.classList.remove('invalid');
         });
+        // Paste a share link OR a full state into the box → it fills normally,
+        // then auto-applies (no Apply click needed). Scrambles are left for the
+        // user to Apply/Enter as before.
+        ui.scrambleInput.addEventListener('paste', () => {
+            setTimeout(() => {
+                const candidate = extractStateCandidate(ui.scrambleInput.value || '');
+                if (detectStateInput(candidate) > 0) {
+                    ui.scrambleInput.value = candidate;   // normalise to the clean state
+                    applyScrambleString(candidate);
+                }
+            }, 0);
+        });
     }
     if (ui.resetBtn)    ui.resetBtn.addEventListener('click', reset);
+    if (ui.shareBtn)    ui.shareBtn.addEventListener('click', shareState);
     if (ui.solveBtn)    ui.solveBtn.addEventListener('click', solve);
     if (ui.playPrev)    ui.playPrev.addEventListener('click', () => step(-1));
     if (ui.playNext)    ui.playNext.addEventListener('click', () => step(+1));
@@ -1723,12 +1843,26 @@ export function bootstrap(ctx) {
         if (f && /^image\//.test(f.type)) { e.preventDefault(); handleImageFile(f); }
     });
     document.addEventListener('paste', (e) => {
-        const items = e.clipboardData && e.clipboardData.items;
-        if (!items) return;
-        for (const it of items) {
+        const cd = e.clipboardData;
+        if (!cd) return;
+        // 1) Pasted net image.
+        for (const it of (cd.items || [])) {
             if (it.kind === 'file' && /^image\//.test(it.type)) {
                 const f = it.getAsFile();
-                if (f) { e.preventDefault(); handleImageFile(f); break; }
+                if (f) { e.preventDefault(); handleImageFile(f); return; }
+            }
+        }
+        // 2) Pasted SHARE LINK (…#s=<state>) or a bare state string anywhere on
+        //    the page → apply it.  The scramble box has its own paste handler
+        //    (below), so let it fill normally instead of intercepting here.
+        if (e.target === ui.scrambleInput) return;
+        const text = cd.getData && cd.getData('text');
+        if (text) {
+            const candidate = extractStateCandidate(text);
+            if (detectStateInput(candidate) > 0) {
+                e.preventDefault();
+                if (ui.scrambleInput) ui.scrambleInput.value = candidate;
+                applyScrambleString(candidate);
             }
         }
     });
@@ -1752,4 +1886,5 @@ export function bootstrap(ctx) {
     });
 
     setSize(3);
+    applyStateFromUrl();   // restore a shared cube if the link carries one
 }
