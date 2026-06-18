@@ -1,0 +1,40 @@
+/* Shared sign-in gate for inline SEO AI Fix panels */
+.seo-ai-fix-signin {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  background: rgba(14, 165, 233, 0.08);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+.seo-ai-fix-signin p {
+  margin: 0 0 0.625rem;
+}
+.seo-ai-fix-signin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.seo-ai-fix-signin-link {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  background: #0ea5e9;
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+.seo-ai-fix-signin-link:hover {
+  filter: brightness(1.08);
+}
+.seo-ai-fix-dismiss {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+}

@@ -1,4 +1,4 @@
-/* SEO AI Fix Suggestions — Uses /ai proxy to generate actionable fixes */
+/* SEO AI Fix Suggestions — inline fix via shared SeoAiFixClient */
 
 'use strict';
 
@@ -23,7 +23,6 @@ var SeoAI = (function() {
         if (pageData.words) parts.push('Word count: ' + pageData.words);
         if (pageData.robots) parts.push('Robots: ' + pageData.robots);
 
-        // Images context for image-related issues
         if (issueType.indexOf('IMAGE') !== -1 || issueType.indexOf('ALT') !== -1 || issueType.indexOf('IMG') !== -1) {
             if (pageData.images && pageData.images.length > 0) {
                 var imgSample = pageData.images.slice(0, 5).map(function(img) {
@@ -39,90 +38,24 @@ var SeoAI = (function() {
     }
 
     function requestFix(issueType, pageData, containerEl) {
-        var meta = (typeof getIssueMeta === 'function') ? getIssueMeta(issueType) : { title: issueType, desc: '' };
-
-        // Disable the button that triggered this
-        var triggerBtn = containerEl.parentNode ? containerEl.parentNode.querySelector('.seo-ai-fix-btn') : null;
-        if (triggerBtn) {
-            triggerBtn.disabled = true;
-            triggerBtn.textContent = 'Analyzing...';
+        if (typeof SeoAiFixClient === 'undefined') {
+            console.error('SeoAiFixClient not loaded');
+            return;
         }
+        var meta = (typeof getIssueMeta === 'function') ? getIssueMeta(issueType) : { title: issueType, desc: '' };
+        var triggerBtn = containerEl.parentNode ? containerEl.parentNode.querySelector('.seo-ai-fix-btn') : null;
 
-        // Show loading state
-        containerEl.innerHTML = '<div class="seo-ai-loading"><span class="seo-ai-spinner"></span> AI is analyzing this issue...</div>';
-        containerEl.style.display = 'block';
-
-        var prompt = buildPrompt(issueType, meta, pageData);
-
-        var ctx = document.querySelector('meta[name="ctx"]');
-        var ctxPath = ctx ? ctx.getAttribute('content') : '';
-
-        fetch(ctxPath + '/ai', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [
-                    { role: 'system', content: SYSTEM_PROMPT },
-                    { role: 'user', content: prompt }
-                ],
-                stream: false
-            })
-        })
-        .then(function(r) {
-            if (r.status === 429) throw new Error('AI rate limit reached. Try again in a minute.');
-            if (!r.ok) throw new Error('AI service unavailable');
-            return r.json();
-        })
-        .then(function(data) {
-            var text = '';
-            // Ollama response format
-            if (data.message && data.message.content) {
-                text = data.message.content;
-            } else if (data.response) {
-                text = data.response;
-            } else if (data.choices && data.choices[0]) {
-                text = data.choices[0].message ? data.choices[0].message.content : (data.choices[0].text || '');
-            }
-
-            if (!text) throw new Error('Empty AI response');
-
-            if (triggerBtn) { triggerBtn.disabled = false; triggerBtn.textContent = 'AI Fix Suggestion'; }
-
-            containerEl.innerHTML =
-                '<div class="seo-ai-response">' +
-                '  <div class="seo-ai-header"><span class="seo-ai-badge">AI Fix</span></div>' +
-                '  <div class="seo-ai-body">' + renderMarkdown(text) + '</div>' +
-                '  <button class="seo-ai-close" onclick="this.closest(\'.seo-ai-response\').parentNode.style.display=\'none\'">Dismiss</button>' +
-                '</div>';
-        })
-        .catch(function(err) {
-            if (triggerBtn) { triggerBtn.disabled = false; triggerBtn.textContent = 'AI Fix Suggestion'; }
-
-            containerEl.innerHTML =
-                '<div class="seo-ai-error">' + escapeHtml(err.message) +
-                ' <button class="seo-ai-close" onclick="this.closest(\'.seo-ai-error\').parentNode.style.display=\'none\'">Dismiss</button></div>';
+        SeoAiFixClient.requestFix({
+            systemPrompt: SYSTEM_PROMPT,
+            userPrompt: buildPrompt(issueType, meta, pageData),
+            containerEl: containerEl,
+            triggerBtn: triggerBtn,
+            buttonLabel: 'AI Fix Suggestion',
+            analyzingLabel: 'Analyzing...',
+            badgeLabel: 'AI Fix',
+            cssPrefix: 'seo-ai',
+            loadingHtml: '<div class="seo-ai-loading"><span class="seo-ai-spinner"></span> AI is analyzing this issue...</div>'
         });
-    }
-
-    // Simple markdown → HTML (code blocks, inline code, bold, line breaks)
-    function renderMarkdown(text) {
-        var html = escapeHtml(text);
-        // Code blocks: ```...```
-        html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre class="seo-ai-code"><code>$2</code></pre>');
-        // Inline code: `...`
-        html = html.replace(/`([^`]+)`/g, '<code class="seo-ai-inline">$1</code>');
-        // Bold: **...**
-        html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-        // Line breaks
-        html = html.replace(/\n/g, '<br>');
-        return html;
-    }
-
-    function escapeHtml(str) {
-        if (!str) return '';
-        var div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
     }
 
     return {
