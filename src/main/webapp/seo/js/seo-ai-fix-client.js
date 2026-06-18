@@ -353,7 +353,7 @@ var SeoAiFixClient = (function () {
       });
   }
 
-  var BANNER_CTA_HTML = 'Upgrade to Pro<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var BANNER_CTA_HTML = 'Upgrade &mdash; $3/mo<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   function isProSubscriber(data) {
     return !!(data && (data.is_premium === true || data.is_premium === 'true'));

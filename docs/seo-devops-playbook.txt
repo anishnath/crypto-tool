@@ -173,6 +173,56 @@ Next Targets / How To Continue
 6) Validate with Google’s Rich Results Test and check for CTR improvements in GSC.
 
 
+Sharing Services Guidance (PGP Upload, SecureBin, Pastebin, Share File, Temp Email, Short URL)
+---------------------------------------------------------------------------------------------
+Pages: pgp-upload.jsp, securebin.jsp, pastebin.jsp, share-file.jsp, temp-email.jsp, short.jsp
+
+- Titles (examples; keep “– Free | 8gwifi.org”):
+  - PGP Upload: "PGP Encrypted File Transfer Online – Free | 8gwifi.org"
+  - SecureBin: "Encrypted Pastebin – Secure Secret Sharing (24‑Hour, E2EE) – Free | 8gwifi.org"
+  - Pastebin: "Pastebin Online – Free | 8gwifi.org"
+  - Share File: "Secure File Transfer Online – Free | 8gwifi.org"
+  - Temp Email: "Temporary Email Online – Free Disposable Inbox | 8gwifi.org"
+  - Short URL: "URL Shortener Online – Free | 8gwifi.org"
+
+- Descriptions: Mention core value + privacy traits (client‑side, no login, expiry) + key features in one line.
+
+- Canonical: Use a static absolute URL, not request.getRequestURL().
+  - Example: <link rel="canonical" href="https://8gwifi.org/temp-email.jsp">
+
+- OG/Twitter Images: Prefer existing per‑tool image; otherwise fallback to logo.png.
+  - Known good files: pgp-upload.png, securebin.png, pastebin.png, file-encrypt.png, short.png, logo.png
+
+- JSON‑LD:
+  - WebApplication (required): include name, description, url, applicationCategory, operatingSystem, offers.price=0, author, datePublished/dateModified, and featureList.
+  - FAQPage (recommended): 3–5 Q&As matching visible on‑page FAQs.
+  - HowTo (optional, when clear steps exist): e.g., "How to shorten a URL" or "How to send encrypted files with PGP".
+  - WebPage + Breadcrumb (optional): adds context/navigation.
+
+- Security/Privacy Disclosures:
+  - For crypto tools (PGP, SecureBin, Pastebin with encryption), state "Client‑side encryption" and "No server‑side storage" where applicable.
+  - For Temp Email: absolute canonical and OG url; do not promise privacy beyond the nature of disposable email.
+
+- Visible Content: Mirror FAQ content that appears in JSON‑LD. Avoid JSON‑only FAQs.
+
+- H1 Alignment: Ensure H1 echoes primary intent and matches title phrasing.
+
+- Badges (optional): "Free • No signup • Client‑side • 24‑hour expiry • QR codes • Real‑time" where relevant.
+
+Verification
+------------
+- Check image existence for Sharing Services:
+    rg -n "og:image|twitter:image" src/main/webapp/{pgp-upload.jsp,securebin.jsp,pastebin.jsp,share-file.jsp,temp-email.jsp,short.jsp} \
+      | sed -E 's/.*images\/site\///' | awk -F '"' '{print $1}' | sed -E 's/.*://' | sort -u > .sharing_images.txt
+    while read -r img; do [ -z "$img" ] && continue; \
+      if [ -f src/main/webapp/images/site/$img ]; then echo OK $img; else echo MISS $img; fi; \
+    done < .sharing_images.txt
+
+- Quick consistency checks:
+    rg -n "<title>|canonical|og:title|og:url|@type\\": \\"FAQPage|@type\\": \\"WebApplication" \
+      src/main/webapp/{pgp-upload.jsp,securebin.jsp,pastebin.jsp,share-file.jsp,temp-email.jsp,short.jsp}
+
+
 Notes
 -----
 - Keep content user‑first; avoid keyword stuffing or duplicated FAQs.
