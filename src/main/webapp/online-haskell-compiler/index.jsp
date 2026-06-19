@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "AI Haskell Compiler - Run, Fix & Explain Haskell Code Free");
+request.setAttribute("pageTitle", "Online Haskell Compiler - Run Haskell Free");
 request.setAttribute("pageDescription", "Run Haskell online with a fast, free compiler and IDE. Write, execute, and share Haskell (GHC) code with stdin and multi-file support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-haskell-compiler/");
 request.setAttribute("preferredLanguage", "haskell");

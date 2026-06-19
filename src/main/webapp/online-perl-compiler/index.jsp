@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "AI Perl Compiler - Run, Fix & Explain Perl Code Free");
+request.setAttribute("pageTitle", "Online Perl Compiler - Run Perl Online Free");
 request.setAttribute("pageDescription", "Run Perl online with a fast, free compiler and IDE. Write, execute, and share Perl code with Perl 5.42.0 and 5.40.3, stdin, and core modules. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-perl-compiler/");
 request.setAttribute("preferredLanguage", "perl");

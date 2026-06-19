@@ -25,6 +25,61 @@
     String toolUrlPath = pageUrl.replace("https://8gwifi.org/", "");
     // If a wrapper page set language-specific FAQs, skip generic FAQs to avoid duplicate FAQPage JSON-LD
     boolean hasLanguageFaq = (request.getAttribute("languageFaqJsonLd") != null);
+
+    // Per-language SEO content (differentiates each /online-X-compiler/ page so they are not near-duplicates)
+    String ocLang = (request.getAttribute("preferredLanguage") != null)
+        ? ((String) request.getAttribute("preferredLanguage")).toLowerCase() : "python";
+    String[] ocExample = ocLangExample(ocLang);   // [displayName, escapedHelloWorldCode]
+    String ocLangName = ocExample[0];
+    String ocExampleCode = ocExample[1];
+%>
+<%!
+    // Returns {displayName, HTML-escaped Hello-World snippet} for a language slug.
+    private String[] ocLangExample(String lang) {
+        if (lang == null) lang = "python";
+        switch (lang) {
+            case "c": return new String[]{"C",
+                "#include &lt;stdio.h&gt;\n\nint main(void) {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}"};
+            case "cpp": case "c++": return new String[]{"C++",
+                "#include &lt;iostream&gt;\n\nint main() {\n    std::cout &lt;&lt; \"Hello, World!\" &lt;&lt; std::endl;\n    return 0;\n}"};
+            case "csharp": case "c#": return new String[]{"C#",
+                "using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine(\"Hello, World!\");\n    }\n}"};
+            case "java": return new String[]{"Java",
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}"};
+            case "javascript": case "js": case "nodejs": return new String[]{"JavaScript",
+                "function greet(name) {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet(\"World\"));"};
+            case "typescript": case "ts": return new String[]{"TypeScript",
+                "function greet(name: string): string {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet(\"World\"));"};
+            case "go": case "golang": return new String[]{"Go",
+                "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, World!\")\n}"};
+            case "rust": return new String[]{"Rust",
+                "fn main() {\n    println!(\"Hello, World!\");\n}"};
+            case "ruby": return new String[]{"Ruby",
+                "def greet(name)\n  \"Hello, #{name}!\"\nend\n\nputs greet(\"World\")"};
+            case "php": return new String[]{"PHP",
+                "&lt;?php\nfunction greet($name) {\n    return \"Hello, $name!\";\n}\n\necho greet(\"World\");"};
+            case "swift": return new String[]{"Swift",
+                "func greet(_ name: String) -&gt; String {\n    return \"Hello, \\(name)!\"\n}\n\nprint(greet(\"World\"))"};
+            case "kotlin": return new String[]{"Kotlin",
+                "fun main() {\n    println(\"Hello, World!\")\n}"};
+            case "scala": return new String[]{"Scala",
+                "object Main extends App {\n  println(\"Hello, World!\")\n}"};
+            case "dart": return new String[]{"Dart",
+                "void main() {\n  print('Hello, World!');\n}"};
+            case "r": return new String[]{"R",
+                "greet &lt;- function(name) {\n  paste0(\"Hello, \", name, \"!\")\n}\n\nprint(greet(\"World\"))"};
+            case "lua": return new String[]{"Lua",
+                "local function greet(name)\n  return \"Hello, \" .. name .. \"!\"\nend\n\nprint(greet(\"World\"))"};
+            case "bash": case "shell": return new String[]{"Bash",
+                "#!/bin/bash\ngreet() {\n  echo \"Hello, $1!\"\n}\n\ngreet \"World\""};
+            case "perl": return new String[]{"Perl",
+                "use strict;\nuse warnings;\n\nsub greet { return \"Hello, $_[0]!\"; }\nprint greet(\"World\"), \"\\n\";"};
+            case "haskell": return new String[]{"Haskell",
+                "main :: IO ()\nmain = putStrLn \"Hello, World!\""};
+            default: return new String[]{"Python",
+                "def greet(name):\n    return f\"Hello, {name}!\"\n\nprint(greet(\"World\"))"};
+        }
+    }
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -1994,7 +2049,11 @@
                     <div class="ide-description-inner">
                         <div class="ide-description-content">
                             <h2><%= (request.getAttribute("h1Text") != null) ? request.getAttribute("h1Text") : "Free Online Compiler - Run Code in 60+ Programming Languages" %></h2>
+                            <% if (request.getAttribute("preferredLanguage") != null) { %>
+                            <p>Write, compile, and run <strong><%= ocLangName %></strong> code instantly in your browser. This free online <%= ocLangName %> compiler needs no installation or signup &mdash; just type your <%= ocLangName %> program, click Run, and see the output. Supports stdin, multi&#8209;file projects, shareable snippet URLs, and AI help to generate, fix, and explain <%= ocLangName %> code.</p>
+                            <% } else { %>
                             <p>Write, compile, and run code instantly in your browser. Our free online compiler supports <strong>60+ programming languages</strong> including Python, Java, C++, JavaScript, Go, Rust, and many more. No installation required.</p>
+                            <% } %>
                         </div>
                     </div>
                 </section>
@@ -2163,20 +2222,11 @@
                                 content!</p>
                         </div>
 
-                        <!-- Code Example -->
+                        <!-- Code Example (language-specific) -->
                         <div class="ide-info-card full-width">
-                            <h2><i class="fas fa-file-code"></i> Example: Hello World in Python</h2>
-                            <pre class="ide-code-example"><code># Simple Python example - try it above!
-def greet(name):
-    return f"Hello, {name}!"
-
-print(greet("World"))
-print("Welcome to 8gwifi.org Online Compiler")
-
-# Output:
-# Hello, World!
-# Welcome to 8gwifi.org Online Compiler</code></pre>
-                            <p>Copy this code into the editor above and click <strong>Run</strong> to see it in action!</p>
+                            <h2><i class="fas fa-file-code"></i> Example: Hello World in <%= ocLangName %></h2>
+                            <pre class="ide-code-example"><code><%= ocExampleCode %></code></pre>
+                            <p>Copy this <%= ocLangName %> snippet into the editor above and click <strong>Run</strong> to execute it instantly &mdash; no setup required.</p>
                         </div>
 
                         <!-- Popular Online Compilers -->

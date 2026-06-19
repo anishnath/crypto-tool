@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <%
-request.setAttribute("pageTitle", "AI Bash Shell - Run, Fix & Explain Bash Scripts Free");
+request.setAttribute("pageTitle", "Online Bash Compiler - Run Bash Online Free");
 request.setAttribute("pageDescription", "Run Bash scripts online with a free shell environment. Write, execute, and share Bash code with stdin support. No setup required.");
 request.setAttribute("pageUrl", "https://8gwifi.org/online-bash-compiler/");
 request.setAttribute("preferredLanguage", "bash");
