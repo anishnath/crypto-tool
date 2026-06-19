@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
-<% String v = String.valueOf(System.currentTimeMillis()); %>
+<%
+    String v = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "math/rubik-nxn");
+    request.setAttribute("aiRequireSignIn", "true");
+%>
+<%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,6 +91,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=v%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=v%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=v%>">
+    <%@ include file="../modern/components/ai-assistant-head.inc.jsp" %>
 
     <style>
         :root {
@@ -270,6 +276,17 @@
             background: var(--rk-tool-dark);
             border-color: var(--rk-tool-dark);
             color: #fff;
+        }
+        .rk-btn-ai {
+            background: var(--rk-gradient);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 1px 2px rgba(99, 102, 241, 0.25);
+        }
+        .rk-btn-ai:hover:not(:disabled) {
+            filter: brightness(1.08);
+            color: #fff;
+            border-color: transparent;
         }
 
         /* Icon-only button (lives inside a segment) */
@@ -768,6 +785,7 @@
                             <svg class="rk-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                             <span class="rk-label">Share</span>
                         </button>
+                        <button type="button" class="rk-btn rk-btn-ai" id="btnRubikCoach" title="Cubing Coach — notation, methods, algorithm demos (Ctrl+Shift+A)" aria-label="AI Cubing Coach">&#10024; Coach</button>
                     </div>
 
                     <%-- Group 3: solve + inline playback (visible only after a solve) --%>
@@ -973,7 +991,7 @@ import { bootstrap } from '<%=request.getContextPath()%>/js/rubiks-nxn/app.js?v=
 
 const $ = (id) => document.getElementById(id);
 
-bootstrap({
+window.rubikShell = bootstrap({
     netHost:        $('rk-net-host'),
     cube3dHost:     $('rk-cube3d-host'),
     trefoilHost:    $('rk-trefoil-host'),
@@ -1011,6 +1029,18 @@ bootstrap({
     recordBtn:      $('rk-record-btn'),
     pdfBtn:         $('rk-pdf-btn'),
     recordStatus:   $('rk-record-status'),
+});
+</script>
+
+<script type="module">
+<%@ include file="../modern/components/ai-assistant-boot.inc.jsp" %>
+import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
+
+window.rubikCoach = wireLazyAssistant({
+  moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/rubik-nxn-adapter.js',
+  exportName: 'createRubikNxnAssistant',
+  buttonId: 'btnRubikCoach',
+  boot: aiAssistantBoot,
 });
 </script>
 

@@ -791,39 +791,11 @@ export function bootstrap(ctx) {
             }
         }
         // Re-check size-specific constraints AFTER any auto-switch.
-        // Each token is checked against the current cube size — a wide-n
-        // or inner-slice-n turn requires the cube to be deep enough.
-        for (const t of tokens) {
-            const w = /^(\d)[URFDLB]w/.exec(t);
-            if (w && +w[1] + 1 > size) {
-                if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
-                setBanner(`"${t}" needs ${+w[1] + 1}×${+w[1] + 1} or larger. Switch size or remove it.`, 'bad');
-                return;
-            }
-            const s = /^(\d)[URFDLB]/.exec(t);
-            if (s && !w && 2 * +s[1] - 1 > size) {
-                if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
-                setBanner(`Inner slice "${t}" needs ${2 * +s[1] - 1}×${2 * +s[1] - 1} or larger. Switch size or remove it.`, 'bad');
-                return;
-            }
-            // On 3×3, n≤2 wide turns ("Rw", "2Rw") ARE valid — they're a
-            // "fat" 2-layer R turn (= cubejs's lowercase `r`).  Only reject
-            // n ≥ 3 wide turns (which would need a cube with ≥4 layers).
-            if (size === 3 && /[URFDLB]w/.test(t)) {
-                const w3 = /^(\d)[URFDLB]w/.exec(t);
-                const n = w3 ? +w3[1] : 2;
-                if (n > 2) {
-                    if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
-                    setBanner(`"${t}" (n=${n}) needs ${n + 1}×${n + 1} or larger. Switch size or remove it.`, 'bad');
-                    return;
-                }
-            }
-            if (size > 3 && /^[MES]/.test(t)) {
-                // M/E/S are 3×3-only by traditional convention.
-                if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
-                setBanner(`Middle slice "${t}" is only defined for 3×3. Use "${t.replace('M','2L').replace('E','2D').replace('S','2F')}" or switch to 3×3.`, 'bad');
-                return;
-            }
+        const sizeErr = validateTokensForCurrentSize(tokens);
+        if (sizeErr) {
+            if (ui.scrambleInput) ui.scrambleInput.classList.add('invalid');
+            setBanner(sizeErr, 'bad');
+            return;
         }
 
         // Apply the moves ON TOP of the current cube (cumulative), matching the
@@ -1887,4 +1859,113 @@ export function bootstrap(ctx) {
 
     setSize(3);
     applyStateFromUrl();   // restore a shared cube if the link carries one
+
+    /** @returns {string|null} Human-readable error, or null if valid for current size. */
+    function validateTokensForCurrentSize(tokens) {
+        for (const t of tokens) {
+            const w = /^(\d)[URFDLB]w/.exec(t);
+            if (w && +w[1] + 1 > size) {
+                return `"${t}" needs ${+w[1] + 1}×${+w[1] + 1} or larger. Switch size or remove it.`;
+            }
+            const s = /^(\d)[URFDLB]/.exec(t);
+            if (s && !w && 2 * +s[1] - 1 > size) {
+                return `Inner slice "${t}" needs ${2 * +s[1] - 1}×${2 * +s[1] - 1} or larger. Switch size or remove it.`;
+            }
+            if (size === 3 && /[URFDLB]w/.test(t)) {
+                const w3 = /^(\d)[URFDLB]w/.exec(t);
+                const n = w3 ? +w3[1] : 2;
+                if (n > 2) {
+                    return `"${t}" (n=${n}) needs ${n + 1}×${n + 1} or larger. Switch size or remove it.`;
+                }
+            }
+            if (size > 3 && /^[MES]/.test(t)) {
+                return `Middle slice "${t}" is only defined for 3×3. Use "${t.replace('M', '2L').replace('E', '2D').replace('S', '2F')}" or switch to 3×3.`;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Apply a WCA move sequence for AI teaching demos (never used for solves).
+     * @param {string} raw
+     * @param {{ fromSolved?: boolean, maxMoves?: number }} [opts]
+     */
+    async function applyTeachingMoves(raw, opts = {}) {
+        const maxMoves = opts.maxMoves ?? 50;
+        const fromSolved = opts.fromSolved !== false;
+
+        clearSolution();
+        if (!raw || !String(raw).trim()) {
+            throw new Error('No moves to apply.');
+        }
+
+        if (fromSolved) {
+            state = adapter.SOLVED;
+            originalState = state;
+            paintNet();
+        }
+
+        const parsed = tokenizeScramble(raw);
+        if (!Array.isArray(parsed)) {
+            throw new Error(parsed.error || 'Could not parse WCA notation.');
+        }
+        const tokens = parsed;
+        if (tokens.length === 0) {
+            throw new Error('No moves found in the sequence.');
+        }
+        if (tokens.length > maxMoves) {
+            throw new Error(`Sequence too long (${tokens.length} moves; max ${maxMoves}).`);
+        }
+
+        const inferredSize = inferSizeFromScramble(tokens);
+        if (inferredSize && inferredSize > size) {
+            setSize(inferredSize);
+        }
+
+        const sizeErr = validateTokensForCurrentSize(tokens);
+        if (sizeErr) {
+            throw new Error(sizeErr);
+        }
+
+        setStatus('Applying demo', 'busy');
+        try {
+            const ANIMATE_LIMIT = 25;
+            for (let i = 0; i < tokens.length; i++) {
+                state = await adapter.apply(state, [tokens[i]]);
+                if (i < ANIMATE_LIMIT) await paintWithMove(tokens[i]);
+            }
+            if (tokens.length > ANIMATE_LIMIT) paintNet();
+            originalState = state;
+            setBanner(`Coach demo: ${tokens.length} move${tokens.length === 1 ? '' : 's'} applied on the cube.`, 'ok');
+            setStatus(size === 3 ? 'Ready · 3×3 (browser)' : `Ready · ${size}×${size} (server)`, 'ready');
+            return { applied: true, moveCount: tokens.length };
+        } catch (err) {
+            setStatus('Idle', 'idle');
+            throw err;
+        }
+    }
+
+    function getCoachContext() {
+        const guideTab = document.querySelector('.cg-tab.active');
+        return {
+            size,
+            sizeLabel: `${size}×${size}`,
+            status: ui.statusEl?.textContent?.trim() || '',
+            banner: ui.validation?.textContent?.trim() || '',
+            scrambleInput: ui.scrambleInput?.value?.trim() || '',
+            editMode: !!editMode,
+            hasSolution: !!(solution && solution.moves?.length),
+            solutionMoveCount: solution?.moves?.length || 0,
+            playbackStep: stepIdx,
+            playbackTotal: solution?.moves?.length || 0,
+            activeGuideTab: guideTab?.dataset?.tab || null,
+        };
+    }
+
+    return {
+        getCoachContext,
+        applyTeachingMoves,
+        resetToSolved: reset,
+        setCubeSize: setSize,
+    };
 }
