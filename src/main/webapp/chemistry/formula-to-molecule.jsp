@@ -285,7 +285,7 @@
 <div class="eq-overlay" id="eq-overlay" hidden>
   <div class="eq-modal">
     <button class="eq-close" id="eq-close" aria-label="Close">&times;</button>
-    <div class="eq-title">Composition of <span id="eq-formula"></span>
+    <div class="eq-title">Formal formation of <span id="eq-formula"></span> <span style="font-weight:400;color:var(--text2);font-size:.9rem;">(&Delta;H&deg;f reaction)</span>
       <button class="mini eq-dl" id="eq-dl" type="button">⬇ Download image</button>
     </div>
     <div class="eq-row" id="eq-row"></div>
@@ -768,7 +768,7 @@
           (cid ? '<button class="mini" data-3d="' + cid + '">🧊 3D</button>' : '') +
           (mf ? '<button class="mini" data-lewis="' + encodeURIComponent(mf) + '">•• Lewis</button>' : '') +
           '<button class="mini" data-dl="1">⬇ Image</button>' +
-          '<button class="mini" data-comp="' + encodeURIComponent(smi) + '">⚗ View composition</button>' +
+          '<button class="mini" data-comp="' + encodeURIComponent(smi) + '" title="The formal formation-from-elements reaction (basis of the standard enthalpy of formation, ΔH°f) — not a synthesis route">⚗ Formation (ΔH°f)</button>' +
           '<button class="mini" data-copy="' + encodeURIComponent(smi) + '">📋 Copy SMILES</button>' +
           '<a class="mini" href="' + EDITOR + '?smiles=' + encodeURIComponent(smi) + '" target="_blank" rel="noopener">✎ Open in editor</a>' +
         '</div>';
@@ -1215,7 +1215,7 @@
   document.querySelectorAll('.chip').forEach((c) => {
     c.addEventListener('click', () => { $('formula').value = c.getAttribute('data-f'); search(); });
   });
-  // Results actions (delegated once — copy / view composition)
+  // Results actions (delegated once — copy / formation (ΔH°f) diagram)
   $('results').addEventListener('click', onResultsClick);
   // Dismiss the sticky detail popover on outside-click; drop it on scroll/resize (avoids stale position).
   document.addEventListener('click', (e) => { if (popSticky && !e.target.closest('.mol-pop') && !e.target.closest('[data-info]')) hidePop(true); });
