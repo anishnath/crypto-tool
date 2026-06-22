@@ -111,6 +111,7 @@ export function createLatexEditorAssistant(opts) {
     placeholder: 'e.g. "Fix my compile error" or "Add a 3×3 matrix equation"',
     footerText: 'Apply inserts at cursor or replaces selection · Ctrl+Shift+A',
     historyTurns: 8,
+    contextValidator: false,
     systemPrompt: LATEX_EDITOR_CHAT_PROMPT,
     seedContext: () => {
       shell()?.syncEditor?.();

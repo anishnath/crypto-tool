@@ -517,7 +517,6 @@ function onCompileDone(jobId, warning) {
   if (warning) {
     setCompileStatus('\u2713 Compiled (with warnings)', 'done');
     appendLogLine('Warning: ' + warning, 'warn');
-    showWarningToast(warning);
   } else {
     setCompileStatus('\u2713 Compiled', 'done');
   }
