@@ -2,6 +2,15 @@
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
 
+    String aiToolId = "developer-tools/online-compiler";
+    if (request.getAttribute("preferredLanguage") != null) {
+        aiToolId = "developer-tools/online-" + ((String) request.getAttribute("preferredLanguage")).toLowerCase() + "-compiler";
+    }
+    request.setAttribute("aiToolId", aiToolId);
+    request.setAttribute("aiRequireSignIn", "true");
+%>
+<%@ include file="/modern/components/ai-assistant-vars.inc.jsp" %>
+<%
     // 301 redirect for direct access to onecompiler.jsp
     String uri = request.getRequestURI();
     if (uri != null && uri.endsWith("/onecompiler.jsp")) {
@@ -151,6 +160,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ide-page.css?v=<%=cacheVersion%>">
+    <%@ include file="/modern/components/ai-assistant-head.inc.jsp" %>
 
     <!-- Deferred CSS -->
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -1080,7 +1090,7 @@
                     background: #555;
                 }
 
-                /* ── AI Styles ── */
+                /* ── AI toolbar buttons ── */
                 .oc-ai-btn {
                     background: rgba(129,140,248,0.12) !important;
                     color: #a5b4fc !important;
@@ -1089,212 +1099,6 @@
                 .oc-ai-btn:hover {
                     background: rgba(129,140,248,0.22) !important;
                 }
-
-                .oc-ai-tab {
-                    color: #a5b4fc !important;
-                }
-                .oc-ai-tab.active {
-                    color: #c4b5fd !important;
-                    border-bottom-color: #818cf8 !important;
-                }
-
-                .oc-ai-status {
-                    color: #a5b4fc !important;
-                    animation: ocAiPulse 1.5s ease-in-out infinite;
-                }
-                @keyframes ocAiPulse {
-                    0%, 100% { opacity: 0.6; }
-                    50% { opacity: 1; }
-                }
-
-                /* AI Prompt Modal */
-                .oc-ai-modal-overlay {
-                    display: none;
-                    position: fixed;
-                    top: 0; left: 0; right: 0; bottom: 0;
-                    background: rgba(0,0,0,0.6);
-                    z-index: 1000;
-                    align-items: center;
-                    justify-content: center;
-                    backdrop-filter: blur(2px);
-                }
-                .oc-ai-modal {
-                    width: 480px;
-                    max-width: 92vw;
-                    background: var(--oc-bg-darker);
-                    border: 1px solid var(--oc-border);
-                    border-radius: 10px;
-                    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-                    overflow: hidden;
-                }
-                .oc-ai-modal-header {
-                    padding: 12px 16px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    border-bottom: 1px solid var(--oc-border);
-                    color: var(--oc-text-bright);
-                    font-size: 14px;
-                    font-weight: 600;
-                }
-                .oc-ai-modal-close {
-                    background: none;
-                    border: none;
-                    color: var(--oc-text);
-                    font-size: 20px;
-                    cursor: pointer;
-                    width: 28px;
-                    height: 28px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 4px;
-                }
-                .oc-ai-modal-close:hover {
-                    background: var(--oc-bg-sidebar);
-                    color: var(--oc-text-bright);
-                }
-                .oc-ai-modal-body {
-                    padding: 14px 16px;
-                }
-                .oc-ai-input {
-                    width: 100%;
-                    background: var(--oc-bg-dark);
-                    border: 1px solid var(--oc-border);
-                    border-radius: 6px;
-                    padding: 10px 12px;
-                    color: var(--oc-text-bright);
-                    font-size: 13px;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-                    line-height: 1.5;
-                    resize: none;
-                    outline: none;
-                }
-                .oc-ai-input:focus {
-                    border-color: #818cf8;
-                }
-                .oc-ai-input::placeholder {
-                    color: #666;
-                }
-                .oc-ai-modal-footer {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    margin-top: 10px;
-                }
-                .oc-ai-hint {
-                    font-size: 11px;
-                    color: #666;
-                }
-                .oc-ai-submit {
-                    padding: 7px 18px;
-                    border-radius: 6px;
-                    border: none;
-                    background: #818cf8;
-                    color: white;
-                    font-size: 12px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                }
-                .oc-ai-submit:hover {
-                    background: #6d6ff0;
-                }
-
-                /* AI Spinner in pane */
-                .oc-ai-spinner-wrap {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    padding: 10px 14px;
-                    color: #a5b4fc;
-                    font-size: 13px;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-                    border-bottom: 1px solid var(--oc-border);
-                    background: rgba(129,140,248,0.05);
-                }
-                .oc-ai-spinner-wrap i {
-                    font-size: 16px;
-                }
-
-                /* AI Editor overlay — shows on top of Monaco while generating */
-                .oc-ai-editor-overlay {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: rgba(30,30,30,0.7);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 10px;
-                    color: #a5b4fc;
-                    font-size: 14px;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-                    z-index: 5;
-                    backdrop-filter: blur(2px);
-                    pointer-events: none;
-                }
-                .oc-ai-editor-overlay i {
-                    font-size: 18px;
-                }
-
-                /* Make editor container position relative for overlay */
-                .ide-editor-container {
-                    position: relative;
-                }
-
-                /* AI Stop button in pane */
-                .oc-ai-stop-btn {
-                    position: absolute;
-                    bottom: 8px;
-                    right: 12px;
-                    padding: 5px 14px;
-                    border-radius: 5px;
-                    border: 1px solid var(--oc-border);
-                    background: var(--oc-bg-sidebar);
-                    color: var(--oc-text);
-                    font-size: 11px;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    gap: 5px;
-                    z-index: 5;
-                }
-                .oc-ai-stop-btn:hover {
-                    background: var(--oc-border);
-                    color: var(--oc-text-bright);
-                }
-
-                /* AI Apply action button */
-                .oc-ai-action-btn {
-                    margin: 10px 12px;
-                    padding: 7px 16px;
-                    border-radius: 5px;
-                    border: 1px solid rgba(129,140,248,0.3);
-                    background: rgba(129,140,248,0.1);
-                    color: #a5b4fc;
-                    font-size: 12px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 6px;
-                }
-                .oc-ai-action-btn:hover {
-                    background: rgba(129,140,248,0.2);
-                }
-                .oc-ai-action-btn:disabled {
-                    opacity: 0.5;
-                    cursor: default;
-                    color: var(--oc-success);
-                    border-color: rgba(78,201,176,0.3);
-                }
-
-                /* AI Fix button visibility in toolbar */
                 #aiFixBtn {
                     background: rgba(244,135,113,0.12) !important;
                     color: #f48771 !important;
@@ -1302,7 +1106,6 @@
                 #aiFixBtn:hover {
                     background: rgba(244,135,113,0.22) !important;
                 }
-
                 @media (max-width: 768px) {
                     .oc-ai-btn span,
                     #aiFixBtn span {
@@ -1772,13 +1575,13 @@
 
                             <div class="toolbar-divider"></div>
 
-                            <button class="ide-toolbar-btn oc-ai-btn" onclick="toggleAIPrompt()" title="AI: Generate code from description (Ctrl+Shift+A)">
+                            <button type="button" class="ide-toolbar-btn oc-ai-btn" id="btnOneCompilerAI" title="AI assistant — generate, fix, explain (Ctrl+Shift+A)">
                                 <i class="fas fa-wand-magic-sparkles"></i><span>AI</span>
                             </button>
-                            <button class="ide-toolbar-btn" id="aiFixBtn" onclick="aiFixError()" title="AI: Fix errors in your code" style="display:none">
+                            <button type="button" class="ide-toolbar-btn" id="aiFixBtn" onclick="openAIFix()" title="AI: Fix errors in your code" style="display:none">
                                 <i class="fas fa-wrench"></i><span>AI Fix</span>
                             </button>
-                            <button class="ide-toolbar-btn" onclick="aiExplainCode()" title="AI: Explain selected code or full code">
+                            <button type="button" class="ide-toolbar-btn" onclick="openAIExplain()" title="AI: Explain selected code or full code">
                                 <i class="fas fa-lightbulb"></i><span>Explain</span>
                             </button>
 
@@ -1811,10 +1614,6 @@
                                 </div>
                                 <div class="ide-editor-container">
                                     <div id="codeEditor"></div>
-                                    <div class="oc-ai-editor-overlay" id="aiEditorOverlay" style="display:none">
-                                        <i class="fas fa-spinner fa-spin"></i>
-                                        <span id="aiEditorOverlayText">AI generating...</span>
-                                    </div>
                                 </div>
                             </div>
 
@@ -1836,9 +1635,6 @@
                                             onclick="switchPanel('problems')">
                                             Problems<span id="problemsBadge" class="badge"
                                                 style="display:none;">0</span>
-                                        </button>
-                                        <button class="ide-panel-tab oc-ai-tab" data-panel="ai" onclick="switchPanel('ai')">
-                                            <i class="fas fa-wand-magic-sparkles"></i> AI
                                         </button>
                                     </div>
                                     <div class="ide-panel-actions">
@@ -1862,16 +1658,6 @@
                                     <div class="ide-panel-pane" id="problemsPane">
                                         <div class="output-content system">No problems detected.</div>
                                     </div>
-                                    <div class="ide-panel-pane" id="aiPane">
-                                        <div id="aiSpinner" class="oc-ai-spinner-wrap" style="display:none">
-                                            <i class="fas fa-spinner fa-spin"></i>
-                                            <span id="aiSpinnerText">AI generating...</span>
-                                        </div>
-                                        <div id="aiPaneContent" class="output-content system">// AI responses will appear here</div>
-                                        <button id="aiStopBtn" class="oc-ai-stop-btn" onclick="cancelAI()" style="display:none">
-                                            <i class="fas fa-stop"></i> Stop generating
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1886,9 +1672,6 @@
                             </div>
                             <div class="status-item" id="statusExec">
                                 <i class="fas fa-check-circle"></i> Ready
-                            </div>
-                            <div class="status-item oc-ai-status" id="statusAI" style="display:none">
-                                <i class="fas fa-wand-magic-sparkles"></i> <span id="statusAIText">AI generating...</span>
                             </div>
                             <div class="status-spacer"></div>
                             <div class="status-item" id="statusTime"></div>
@@ -1962,25 +1745,6 @@
                                     <i class="fas fa-info-circle"></i> First share your code to get a snippet ID, then
                                     embed it.
                                 </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- AI Prompt Modal -->
-                    <div class="oc-ai-modal-overlay" id="aiPromptModal" onclick="closeAIPrompt(event)">
-                        <div class="oc-ai-modal" onclick="event.stopPropagation()">
-                            <div class="oc-ai-modal-header">
-                                <span><i class="fas fa-wand-magic-sparkles"></i> AI Code Generator</span>
-                                <button class="oc-ai-modal-close" onclick="closeAIPrompt()">&times;</button>
-                            </div>
-                            <div class="oc-ai-modal-body">
-                                <textarea id="aiPromptInput" class="oc-ai-input" rows="3"
-                                    placeholder="Describe what you want... e.g. &quot;merge sort function&quot; or &quot;HTTP server that returns JSON&quot;"
-                                    onkeydown="handleAIPromptKey(event)"></textarea>
-                                <div class="oc-ai-modal-footer">
-                                    <span class="oc-ai-hint">Enter to generate &middot; Esc to close &middot; Uses <span id="aiLangLabel">Python</span></span>
-                                    <button class="oc-ai-submit" onclick="submitAIGenerate()"><i class="fas fa-play"></i> Generate</button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -2530,6 +2294,93 @@
                             return { name: f.name, content: f.content };
                         });
                     }
+
+                    function syncEditorToFiles() {
+                        if (editor && files[activeFileIndex]) {
+                            files[activeFileIndex].content = editor.getValue();
+                        }
+                    }
+
+                    function getOutputSnapshot() {
+                        var outputEl = document.getElementById('outputContent');
+                        var text = outputEl ? (outputEl.textContent || '') : '';
+                        var isError = outputEl && (
+                            outputEl.classList.contains('stderr')
+                            || text.indexOf('Error') !== -1
+                            || text.indexOf('error') !== -1
+                            || text.indexOf('Traceback') !== -1
+                            || text.indexOf('Exception') !== -1
+                        );
+                        return { text: text, isError: !!isError };
+                    }
+
+                    window.ocShell = {
+                        syncEditor: syncEditorToFiles,
+                        getSnapshot: function () {
+                            syncEditorToFiles();
+                            var out = getOutputSnapshot();
+                            var selection = '';
+                            if (editor) {
+                                selection = editor.getModel().getValueInRange(editor.getSelection()).trim();
+                            }
+                            return {
+                                language: currentLanguage,
+                                languageVersion: currentVersion || '',
+                                code: editor ? editor.getValue() : '',
+                                selection: selection,
+                                stdin: document.getElementById('stdinInput') ? document.getElementById('stdinInput').value : '',
+                                compilerArgs: document.getElementById('compilerArgs') ? document.getElementById('compilerArgs').value : '',
+                                output: out.text,
+                                outputIsError: out.isError,
+                                files: files.map(function (f) { return { name: f.name, content: f.content }; }),
+                                activeFile: files[activeFileIndex] ? files[activeFileIndex].name : '',
+                            };
+                        },
+                        applyCode: function (content) {
+                            if (!editor) return { applied: false, error: 'Editor not ready' };
+                            var code = String(content || '');
+                            editor.setValue(code);
+                            syncEditorToFiles();
+                            return { applied: true, file: files[activeFileIndex] ? files[activeFileIndex].name : 'main' };
+                        },
+                    };
+
+                    function openAIFix() {
+                        if (!window.ocCompilerAssistant) return;
+                        var lang = currentLanguage || 'code';
+                        window.ocCompilerAssistant.open(
+                            'Fix the errors from my last Run output. Return the complete corrected ' + lang + ' source in one ```' + lang + ' fenced block.',
+                            true
+                        );
+                    }
+
+                    function openAIExplain() {
+                        if (!window.ocCompilerAssistant) return;
+                        var selection = '';
+                        if (editor) {
+                            selection = editor.getModel().getValueInRange(editor.getSelection()).trim();
+                        }
+                        var prompt = selection
+                            ? 'Explain what this selected code does:\n\n```' + (currentLanguage || '') + '\n' + selection + '\n```\n\nNo code changes.'
+                            : 'Explain what my current code does. If there are errors in the output pane, explain those too. No code changes unless I ask.';
+                        window.ocCompilerAssistant.open(prompt, true);
+                    }
+
+                    function hookExecuteForAIFix() {
+                        var observer = new MutationObserver(function () {
+                            var outputEl = document.getElementById('outputContent');
+                            var aiFixBtn = document.getElementById('aiFixBtn');
+                            if (outputEl && aiFixBtn) {
+                                var snap = getOutputSnapshot();
+                                aiFixBtn.style.display = snap.isError ? '' : 'none';
+                            }
+                        });
+                        var outputEl = document.getElementById('outputContent');
+                        if (outputEl) {
+                            observer.observe(outputEl, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+                        }
+                    }
+                    hookExecuteForAIFix();
 
                     // Initialize Monaco
                     require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
@@ -3358,402 +3209,23 @@
                             e.preventDefault();
                             executeCode();
                         }
-                        // Ctrl+Shift+A — AI prompt
-                        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
-                            e.preventDefault();
-                            toggleAIPrompt();
-                        }
-                        // Escape — cancel AI generation
-                        if (e.key === 'Escape' && aiAbortCtrl) {
-                            cancelAI();
-                        }
                     });
 
                     loadFromURL();
 
-                    // ══════════════════════════════════════════════
-                    // AI FUNCTIONALITY
-                    // ══════════════════════════════════════════════
-
-                    var AI_URL = '<%= request.getContextPath() %>/ai';
-                    var aiAbortCtrl = null;
-                    var AI_TIMEOUT_MS = 90000;
-                    var aiBusy = false;
-
-                    // ── System prompts ──
-
-                    var AI_SYS_GENERATE = 'You are an expert programmer. Generate code in {LANG}. '
-                      + 'Return ONLY valid {LANG} code. No markdown fences, no explanation, no commentary. '
-                      + 'The code must be complete and runnable.';
-
-                    var AI_SYS_FIX = 'You are an expert programmer. The user ran {LANG} code and got an error. '
-                      + 'Fix the code. Return ONLY the complete corrected {LANG} code. '
-                      + 'No markdown fences, no explanation, no commentary.';
-
-                    var AI_SYS_EXPLAIN = 'You are an expert programmer and teacher. '
-                      + 'Explain the following {LANG} code clearly and concisely. '
-                      + 'Use short paragraphs. Mention what it does, key logic, and any issues.';
-
-                    var AI_SYS_EXPLAIN_ERROR = 'You are an expert programmer and teacher. '
-                      + 'The user ran {LANG} code and got the following error. '
-                      + 'Explain what the error means, why it happened, and how to fix it. Be concise.';
-
-                    function aiSysPrompt(template) {
-                        var lang = currentLanguage || 'code';
-                        return template.replace(/\{LANG\}/g, lang);
-                    }
-
-                    function buildAIPayload(systemPrompt, userContent, stream) {
-                        return {
-                            messages: [
-                                { role: 'system', content: systemPrompt },
-                                { role: 'user', content: userContent }
-                            ],
-                            stream: !!stream
-                        };
-                    }
-
-                    // ── NDJSON streaming ──
-
-                    function streamAI(payload, callbacks) {
-                        if (aiAbortCtrl) aiAbortCtrl.abort();
-                        aiAbortCtrl = new AbortController();
-
-                        var onToken = callbacks.onToken || function() {};
-                        var onDone  = callbacks.onDone  || function() {};
-                        var onError = callbacks.onError || function() {};
-
-                        var timeoutId = setTimeout(function() { aiAbortCtrl.abort(); onError('Request timed out'); }, AI_TIMEOUT_MS);
-
-                        fetch(AI_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload),
-                            signal: aiAbortCtrl.signal
-                        })
-                        .then(function(res) {
-                            if (!res.ok) {
-                                return res.json().then(function(d) {
-                                    throw new Error(d.error || 'AI request failed (' + res.status + ')');
-                                });
-                            }
-                            var reader = res.body.getReader();
-                            var decoder = new TextDecoder();
-                            var buffer = '';
-
-                            function processChunk(result) {
-                                if (result.done) return;
-                                buffer += decoder.decode(result.value, { stream: true });
-                                var lines = buffer.split('\n');
-                                buffer = lines.pop();
-                                for (var i = 0; i < lines.length; i++) {
-                                    var line = lines[i].trim();
-                                    if (!line) continue;
-                                    try {
-                                        var obj = JSON.parse(line);
-                                        if (obj.message && obj.message.content) onToken(obj.message.content);
-                                        if (obj.done === true) return;
-                                    } catch(e) {}
-                                }
-                                return reader.read().then(processChunk);
-                            }
-                            return reader.read().then(processChunk);
-                        })
-                        .then(function() { clearTimeout(timeoutId); onDone(); })
-                        .catch(function(err) {
-                            clearTimeout(timeoutId);
-                            if (err.name === 'AbortError') return;
-                            onError(err.message || 'AI request failed');
-                        });
-                    }
-
-                    function requestAI(payload, callback) {
-                        if (aiAbortCtrl) aiAbortCtrl.abort();
-                        aiAbortCtrl = new AbortController();
-                        payload.stream = false;
-
-                        var timeoutId = setTimeout(function() { aiAbortCtrl.abort(); callback('Request timed out', null); }, AI_TIMEOUT_MS);
-
-                        fetch(AI_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload),
-                            signal: aiAbortCtrl.signal
-                        })
-                        .then(function(res) {
-                            if (!res.ok) return res.json().then(function(d) { throw new Error(d.error || 'Failed'); });
-                            return res.json();
-                        })
-                        .then(function(data) {
-                            clearTimeout(timeoutId);
-                            var content = (data.message && data.message.content) ? data.message.content : '';
-                            callback(null, content);
-                        })
-                        .catch(function(err) {
-                            clearTimeout(timeoutId);
-                            if (err.name === 'AbortError') return;
-                            callback(err.message, null);
-                        });
-                    }
-
-                    // ── AI Generate (NL → Code) ──
-
-                    function toggleAIPrompt() {
-                        var modal = document.getElementById('aiPromptModal');
-                        if (modal.style.display === 'flex') {
-                            modal.style.display = 'none';
-                        } else {
-                            modal.style.display = 'flex';
-                            var label = document.getElementById('aiLangLabel');
-                            if (label) label.textContent = currentLanguage || 'code';
-                            var input = document.getElementById('aiPromptInput');
-                            if (input) { input.value = ''; input.focus(); }
-                        }
-                    }
-
-                    function closeAIPrompt(e) {
-                        if (e && e.target !== document.getElementById('aiPromptModal')) return;
-                        document.getElementById('aiPromptModal').style.display = 'none';
-                    }
-
-                    function handleAIPromptKey(e) {
-                        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitAIGenerate(); }
-                        else if (e.key === 'Escape') { closeAIPrompt(); }
-                    }
-
-                    function submitAIGenerate() {
-                        var input = document.getElementById('aiPromptInput');
-                        var desc = input ? input.value.trim() : '';
-                        if (!desc) return;
-                        closeAIPrompt();
-                        aiGenerate(desc);
-                    }
-
-                    function aiGenerate(description) {
-                        if (aiBusy) { alert('AI is busy. Cancel or wait.'); return; }
-                        aiBusy = true;
-                        showAIStatus(true, 'Generating code...');
-
-                        // Clear editor and stream directly into it
-                        editor.setValue('');
-                        var model = editor.getModel();
-                        var accumulated = '';
-
-                        streamAI(buildAIPayload(aiSysPrompt(AI_SYS_GENERATE), description, true), {
-                            onToken: function(token) {
-                                accumulated += token;
-                                // Get current end position and insert token there
-                                var lastLine = model.getLineCount();
-                                var lastCol = model.getLineMaxColumn(lastLine);
-                                var range = new monaco.Range(lastLine, lastCol, lastLine, lastCol);
-                                editor.executeEdits('ai', [{ range: range, text: token }]);
-                                // Scroll to bottom
-                                editor.revealLine(model.getLineCount());
-                            },
-                            onDone: function() {
-                                showAIStatus(false);
-                                // Clean markdown fences if model included them
-                                var clean = cleanCodeResponse(editor.getValue());
-                                if (clean !== editor.getValue()) editor.setValue(clean);
-                            },
-                            onError: function(err) {
-                                showAIStatus(false);
-                                switchPanel('ai');
-                                setAIPane('Error: ' + err, false);
-                            }
-                        });
-                    }
-
-                    // ── AI Fix Error ──
-
-                    function aiFixError() {
-                        if (aiBusy) { alert('AI is busy. Cancel or wait.'); return; }
-                        aiBusy = true;
-                        var code = editor ? editor.getValue() : '';
-                        var stderr = document.getElementById('outputContent').textContent || '';
-                        if (!stderr || stderr.indexOf('Error') === -1 && stderr.indexOf('error') === -1) {
-                            alert('No errors to fix. Run your code first.');
-                            return;
-                        }
-
-                        showAIStatus(true, 'Fixing errors...');
-
-                        // Clear editor and stream fixed code directly into it
-                        editor.setValue('');
-                        var model = editor.getModel();
-                        var userContent = 'Error output:\n' + stderr + '\n\nCode:\n' + code;
-                        var accumulated = '';
-
-                        streamAI(buildAIPayload(aiSysPrompt(AI_SYS_FIX), userContent, true), {
-                            onToken: function(token) {
-                                accumulated += token;
-                                var lastLine = model.getLineCount();
-                                var lastCol = model.getLineMaxColumn(lastLine);
-                                var range = new monaco.Range(lastLine, lastCol, lastLine, lastCol);
-                                editor.executeEdits('ai', [{ range: range, text: token }]);
-                                editor.revealLine(model.getLineCount());
-                            },
-                            onDone: function() {
-                                showAIStatus(false);
-                                var clean = cleanCodeResponse(editor.getValue());
-                                if (clean !== editor.getValue()) editor.setValue(clean);
-                            },
-                            onError: function(err) {
-                                showAIStatus(false);
-                                switchPanel('ai');
-                                setAIPane('Error: ' + err, false);
-                            }
-                        });
-                    }
-
-                    // ── AI Explain Code / Error ──
-
-                    function aiExplainCode() {
-                        if (aiBusy) { alert('AI is busy. Cancel or wait.'); return; }
-                        aiBusy = true;
-                        var selection = editor ? editor.getModel().getValueInRange(editor.getSelection()) : '';
-                        var code = selection || (editor ? editor.getValue() : '');
-                        var stderr = document.getElementById('outputContent').textContent || '';
-
-                        // If there's an error in output, explain the error
-                        var hasError = stderr && (stderr.indexOf('Error') !== -1 || stderr.indexOf('error') !== -1 || stderr.indexOf('Traceback') !== -1);
-                        var systemPrompt, userContent;
-
-                        if (hasError && !selection) {
-                            systemPrompt = aiSysPrompt(AI_SYS_EXPLAIN_ERROR);
-                            userContent = 'Error:\n' + stderr + '\n\nCode:\n' + code;
-                        } else {
-                            systemPrompt = aiSysPrompt(AI_SYS_EXPLAIN);
-                            userContent = code;
-                        }
-
-                        switchPanel('ai');
-                        setAIPane('', true);
-                        showAIStatus(true, hasError && !selection ? 'Explaining error...' : 'Explaining code...');
-
-                        var accumulated = '';
-                        streamAI(buildAIPayload(systemPrompt, userContent, true), {
-                            onToken: function(token) {
-                                accumulated += token;
-                                setAIPaneText(accumulated);
-                            },
-                            onDone: function() { showAIStatus(false); },
-                            onError: function(err) {
-                                showAIStatus(false);
-                                appendAIPaneText('\n\nError: ' + err, 'stderr');
-                            }
-                        });
-                    }
-
-                    // ── Cancel ──
-
-                    function cancelAI() {
-                        if (aiAbortCtrl) { aiAbortCtrl.abort(); aiAbortCtrl = null; }
-                        aiBusy = false;
-                        showAIStatus(false);
-                        document.getElementById('aiStopBtn').style.display = 'none';
-                    }
-
-                    // ── AI Pane helpers ──
-
-                    function setAIPane(text, showStop) {
-                        var el = document.getElementById('aiPaneContent');
-                        el.textContent = text || '';
-                        el.className = 'output-content system';
-                        document.getElementById('aiStopBtn').style.display = showStop ? '' : 'none';
-                        // Remove any existing action buttons
-                        var existing = document.querySelectorAll('.oc-ai-action-btn');
-                        for (var i = 0; i < existing.length; i++) existing[i].remove();
-                    }
-
-                    function showAISpinner(show, text) {
-                        var spinner = document.getElementById('aiSpinner');
-                        var spinnerText = document.getElementById('aiSpinnerText');
-                        if (spinner) {
-                            spinner.style.display = show ? '' : 'none';
-                            if (spinnerText && text) spinnerText.textContent = text;
-                        }
-                    }
-
-                    function setAIPaneText(text) {
-                        var el = document.getElementById('aiPaneContent');
-                        el.textContent = text;
-                        el.className = 'output-content stdout';
-                        el.scrollTop = el.scrollHeight;
-                        // Scroll parent too
-                        var pane = document.getElementById('aiPane');
-                        if (pane) pane.scrollTop = pane.scrollHeight;
-                    }
-
-                    function appendAIPaneText(text, cls) {
-                        var el = document.getElementById('aiPaneContent');
-                        el.textContent += text;
-                        if (cls) el.className = 'output-content ' + cls;
-                    }
-
-                    function appendAIAction(label, onClick) {
-                        document.getElementById('aiStopBtn').style.display = 'none';
-                        var pane = document.getElementById('aiPane');
-                        var btn = document.createElement('button');
-                        btn.className = 'oc-ai-action-btn';
-                        btn.innerHTML = '<i class="fas fa-check"></i> ' + label;
-                        btn.onclick = function() {
-                            onClick();
-                            btn.textContent = 'Applied!';
-                            btn.disabled = true;
-                        };
-                        pane.appendChild(btn);
-                    }
-
-                    function showAIStatus(show, text) {
-                        if (!show) aiBusy = false;
-                        var el = document.getElementById('statusAI');
-                        var txt = document.getElementById('statusAIText');
-                        if (show) {
-                            el.style.display = '';
-                            if (txt) txt.textContent = text || 'AI generating...';
-                        } else {
-                            el.style.display = 'none';
-                        }
-                        showAISpinner(show, text);
-                        // Editor overlay
-                        var overlay = document.getElementById('aiEditorOverlay');
-                        var overlayText = document.getElementById('aiEditorOverlayText');
-                        if (overlay) {
-                            overlay.style.display = show ? '' : 'none';
-                            if (overlayText && text) overlayText.textContent = text;
-                        }
-                    }
-
-                    function cleanCodeResponse(text) {
-                        text = text.replace(/^```[a-zA-Z]*\s*\n?/i, '');
-                        text = text.replace(/\n?```\s*$/i, '');
-                        return text.trim();
-                    }
-
-                    // Show/hide AI Fix button based on errors in output
-                    var origExecuteFinally = null;
-                    function hookExecuteForAIFix() {
-                        // After each execution, check if there are errors and show/hide AI Fix btn
-                        var observer = new MutationObserver(function() {
-                            var outputEl = document.getElementById('outputContent');
-                            var aiFixBtn = document.getElementById('aiFixBtn');
-                            if (outputEl && aiFixBtn) {
-                                var text = outputEl.textContent || '';
-                                var isError = outputEl.classList.contains('stderr') ||
-                                    text.indexOf('Error') !== -1 || text.indexOf('error') !== -1 ||
-                                    text.indexOf('Traceback') !== -1 || text.indexOf('Exception') !== -1;
-                                aiFixBtn.style.display = isError ? '' : 'none';
-                            }
-                        });
-                        var outputEl = document.getElementById('outputContent');
-                        if (outputEl) {
-                            observer.observe(outputEl, { childList: true, characterData: true, subtree: true });
-                        }
-                    }
-                    hookExecuteForAIFix();
-
                 </script>
+
+    <script type="module">
+<%@ include file="/modern/components/ai-assistant-boot.inc.jsp" %>
+import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
+
+window.ocCompilerAssistant = wireLazyAssistant({
+  moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/onecompiler-ai.js',
+  exportName: 'createOneCompilerAssistant',
+  buttonId: 'btnOneCompilerAI',
+  boot: aiAssistantBoot,
+});
+    </script>
 
     <!-- Sticky Footer Ad -->
     <%@ include file="/modern/ads/ad-sticky-footer.jsp" %>
