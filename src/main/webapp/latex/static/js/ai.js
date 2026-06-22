@@ -1,24 +1,58 @@
 (function() {
 'use strict';
 
-var AI_URL = CONFIG.ctx + '/ai';
 var aiAbortController = null;
-var AI_TIMEOUT_MS = 90000; // 90s client-side timeout
+var AI_TIMEOUT_MS = 90000;
 var aiBusy = false;
 
-// ── LaTeX-specific system prompts (client-side, not in servlet) ──
+function aiBoot() {
+  return window.latexAiBoot || {};
+}
+
+function transportOpts() {
+  var b = aiBoot();
+  var ctx = (typeof CONFIG !== 'undefined' && CONFIG.ctx) ? CONFIG.ctx : '';
+  return {
+    aiUrl: b.aiUrl || (ctx + '/ai'),
+    useGateway: b.useGateway === true,
+    userId: b.userId || '',
+    toolId: b.toolId || '',
+  };
+}
+
+function ensureAiAccess() {
+  var b = aiBoot();
+  if (b.billing && b.billing.requireSignIn && !(b.userId || '')) {
+    if (typeof window.showWarningToast === 'function') window.showWarningToast('Sign in to use AI');
+    if (window.latexAssistant && typeof window.latexAssistant.open === 'function') {
+      window.latexAssistant.open('', false);
+    }
+    return false;
+  }
+  return true;
+}
+
+function handleAiError(err, onError) {
+  if (err && err.name === 'AbortError') return;
+  var msg = (err && err.message) ? err.message : 'AI request failed';
+  if (err && (err.status === 401 || err.status === 403)) {
+    msg = 'Sign in required';
+    if (window.latexAssistant && typeof window.latexAssistant.open === 'function') {
+      window.latexAssistant.open('', false);
+    }
+  } else if (err && err.upgrade && typeof window.showWarningToast === 'function') {
+    window.showWarningToast(msg);
+  }
+  onError(msg);
+}
+
+// ── LaTeX-specific system prompts (inline flows) ──
 
 var SYSTEM_FIX_ERROR =
     'You are a LaTeX expert. Given a LaTeX compilation error and the surrounding source code, '
   + 'return ONLY the corrected LaTeX code for the affected lines. '
   + 'Do not include markdown fences, explanations, or commentary. '
   + 'Preserve all surrounding code exactly. Only fix the error.';
-
-var SYSTEM_NL_TO_LATEX =
-    'Convert the user\'s natural language description into LaTeX code. '
-  + 'Return ONLY valid LaTeX code. No markdown fences, no explanation, no commentary. '
-  + 'If the description implies math, wrap in appropriate math environment. '
-  + 'If it implies a structure (table, figure, list), use the correct LaTeX environment.';
 
 var SYSTEM_REWRITE =
     'Rewrite the following LaTeX text. Keep ALL LaTeX commands, environments, labels, '
@@ -31,7 +65,6 @@ var REWRITE_STYLES = {
   expand: ' Expand the text with more detail and explanation.'
 };
 
-// Build Ollama-compatible payload with system + user messages
 function buildPayload(systemPrompt, userContent, stream) {
   return {
     messages: [
@@ -42,35 +75,36 @@ function buildPayload(systemPrompt, userContent, stream) {
   };
 }
 
-// ══════════════════════════════════════════════════════════════
-// NDJSON STREAMING READER
-// Reads fetch response body as NDJSON, calls onToken for each
-// content delta, onDone when stream ends.
-// ══════════════════════════════════════════════════════════════
-
 function streamAI(payload, callbacks) {
+  if (!ensureAiAccess()) {
+    if (callbacks.onError) callbacks.onError('Sign in required');
+    return;
+  }
+  var T = window.latexAiTransport;
+  if (!T || typeof T.streamChat !== 'function') {
+    if (callbacks.onError) callbacks.onError('AI transport not ready');
+    return;
+  }
+
   if (aiAbortController) aiAbortController.abort();
   aiAbortController = new AbortController();
 
-  var onToken  = callbacks.onToken  || function() {};
-  var onDone   = callbacks.onDone   || function() {};
-  var onError  = callbacks.onError  || function() {};
+  var onToken = callbacks.onToken || function() {};
+  var onDone  = callbacks.onDone  || function() {};
+  var onError = callbacks.onError || function() {};
+  var opts = transportOpts();
 
-  var timeoutId = setTimeout(function() { aiAbortController.abort(); onError('Request timed out'); }, AI_TIMEOUT_MS);
+  var timeoutId = setTimeout(function() {
+    aiAbortController.abort();
+    onError('Request timed out');
+  }, AI_TIMEOUT_MS);
 
-  fetch(AI_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-    signal: aiAbortController.signal
-  })
-  .then(function(res) {
-    if (!res.ok) {
-      return res.json().then(function(data) {
-        throw new Error(data.error || 'AI request failed (' + res.status + ')');
-      });
-    }
-    return readNDJSON(res.body, onToken);
+  T.streamChat(opts.aiUrl, payload, {
+    useGateway: opts.useGateway,
+    userId: opts.userId,
+    toolId: opts.toolId,
+    signal: aiAbortController.signal,
+    onDelta: function(delta) { onToken(delta); }
   })
   .then(function() {
     clearTimeout(timeoutId);
@@ -78,81 +112,44 @@ function streamAI(payload, callbacks) {
   })
   .catch(function(err) {
     clearTimeout(timeoutId);
-    if (err.name === 'AbortError') return;
-    onError(err.message || 'AI request failed');
+    handleAiError(err, onError);
   });
 }
 
-function readNDJSON(body, onToken) {
-  var reader = body.getReader();
-  var decoder = new TextDecoder();
-  var buffer = '';
-
-  function processChunk(result) {
-    if (result.done) return;
-
-    buffer += decoder.decode(result.value, { stream: true });
-    var lines = buffer.split('\n');
-    buffer = lines.pop(); // keep incomplete last line in buffer
-
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i].trim();
-      if (!line) continue;
-      try {
-        var obj = JSON.parse(line);
-        if (obj.message && obj.message.content) {
-          onToken(obj.message.content);
-        }
-        if (obj.done === true) return;
-      } catch (e) {
-        // skip malformed lines
-      }
-    }
-
-    return reader.read().then(processChunk);
+function requestAI(payload, callback) {
+  if (!ensureAiAccess()) {
+    callback('Sign in required', null);
+    return;
+  }
+  var T = window.latexAiTransport;
+  if (!T || typeof T.chat !== 'function') {
+    callback('AI transport not ready', null);
+    return;
   }
 
-  return reader.read().then(processChunk);
-}
-
-// ══════════════════════════════════════════════════════════════
-// NON-STREAMING REQUEST
-// ══════════════════════════════════════════════════════════════
-
-function requestAI(payload, callback) {
   if (aiAbortController) aiAbortController.abort();
   aiAbortController = new AbortController();
+  var opts = transportOpts();
 
-  var timeoutId = setTimeout(function() { aiAbortController.abort(); callback('Request timed out', null); }, AI_TIMEOUT_MS);
+  var timeoutId = setTimeout(function() {
+    aiAbortController.abort();
+    callback('Request timed out', null);
+  }, AI_TIMEOUT_MS);
 
-  payload.stream = false;
-
-  fetch(AI_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+  T.chat(opts.aiUrl, payload, {
+    useGateway: opts.useGateway,
+    userId: opts.userId,
+    toolId: opts.toolId,
     signal: aiAbortController.signal
   })
-  .then(function(res) {
-    if (!res.ok) {
-      return res.json().then(function(data) {
-        throw new Error(data.error || 'AI request failed (' + res.status + ')');
-      });
-    }
-    return res.json();
-  })
-  .then(function(data) {
+  .then(function(content) {
     clearTimeout(timeoutId);
-    var content = '';
-    if (data.message && data.message.content) {
-      content = data.message.content;
-    }
-    callback(null, content);
+    callback(null, content || '');
   })
   .catch(function(err) {
     clearTimeout(timeoutId);
-    if (err.name === 'AbortError') return;
-    callback(err.message || 'AI request failed', null);
+    if (err && err.name === 'AbortError') return;
+    handleAiError(err, function(msg) { callback(msg, null); });
   });
 }
 
@@ -161,6 +158,7 @@ function requestAI(payload, callback) {
 // ══════════════════════════════════════════════════════════════
 
 function fixError(errorMsg, lineNum) {
+  if (!ensureAiAccess()) return;
   if (aiBusy) { if (typeof window.showWarningToast === 'function') window.showWarningToast('AI is busy'); return; }
   if (!window.editorInstance) return;
   var cm = window.editorInstance;
@@ -231,48 +229,7 @@ function resetFixButton(widget) {
 }
 
 // ══════════════════════════════════════════════════════════════
-// NL → LATEX — streaming, inserts at cursor
-// ══════════════════════════════════════════════════════════════
-
-function nlToLatex(description) {
-  if (aiBusy) { if (typeof window.showWarningToast === 'function') window.showWarningToast('AI is busy'); return; }
-  if (!window.editorInstance || !description || !description.trim()) return;
-  var cm = window.editorInstance;
-  var insertPos = cm.getCursor();
-
-  // Track where we're inserting so streaming tokens append correctly
-  var currentPos = { line: insertPos.line, ch: insertPos.ch };
-
-  showAIIndicator(true);
-
-  streamAI(buildPayload(SYSTEM_NL_TO_LATEX, description, true), {
-    onToken: function(token) {
-      cm.replaceRange(token, currentPos);
-      // Advance position by the inserted text
-      var lines = token.split('\n');
-      if (lines.length === 1) {
-        currentPos = { line: currentPos.line, ch: currentPos.ch + token.length };
-      } else {
-        currentPos = {
-          line: currentPos.line + lines.length - 1,
-          ch: lines[lines.length - 1].length
-        };
-      }
-    },
-    onDone: function() {
-      showAIIndicator(false);
-      cm.focus();
-      if (typeof window.showSuccessToast === 'function') window.showSuccessToast('LaTeX inserted');
-    },
-    onError: function(err) {
-      showAIIndicator(false);
-      if (typeof window.showErrorToast === 'function') window.showErrorToast('AI error: ' + err);
-    }
-  });
-}
-
-// ══════════════════════════════════════════════════════════════
-// REWRITE SELECTION — streaming, replaces selection
+// REWRITE SELECTION — streaming diff review (selection popup / toolbar)
 // ══════════════════════════════════════════════════════════════
 
 function rewriteSelection(style) {
@@ -294,70 +251,7 @@ function cancelAI() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// AI PROMPT POPUP — floating input for NL→LaTeX
-// ══════════════════════════════════════════════════════════════
-
-var aiPromptVisible = false;
-
-function toggleAIPrompt() {
-  var popup = document.getElementById('ai-prompt-popup');
-  if (!popup) return;
-
-  aiPromptVisible = !aiPromptVisible;
-  if (aiPromptVisible) {
-    popup.classList.add('visible');
-    var input = document.getElementById('ai-prompt-input');
-    if (input) {
-      input.value = '';
-      input.focus();
-    }
-  } else {
-    popup.classList.remove('visible');
-    if (window.editorInstance) window.editorInstance.focus();
-  }
-}
-
-function submitAIPrompt() {
-  var input = document.getElementById('ai-prompt-input');
-  if (!input) return;
-  var text = input.value.trim();
-  if (!text) return;
-
-  toggleAIPrompt(); // close popup
-  nlToLatex(text);
-}
-
-function handleAIPromptKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    submitAIPrompt();
-  } else if (e.key === 'Escape') {
-    toggleAIPrompt();
-  }
-}
-
-// ══════════════════════════════════════════════════════════════
-// REWRITE MENU
-// ══════════════════════════════════════════════════════════════
-
-function showRewriteMenu() {
-  var cm = window.editorInstance;
-  if (!cm) return;
-
-  var selection = cm.getSelection();
-  if (!selection || !selection.trim()) {
-    if (typeof window.showWarningToast === 'function') window.showWarningToast('Select text to rewrite');
-    return;
-  }
-
-  var menu = document.getElementById('ai-rewrite-menu');
-  if (!menu) return;
-
-  menu.classList.toggle('visible');
-}
-
-// ══════════════════════════════════════════════════════════════
-// AI INDICATOR (status bar)
+// AI INDICATOR (status bar + overlay)
 // ══════════════════════════════════════════════════════════════
 
 function showAIIndicator(show) {
@@ -407,15 +301,8 @@ function cleanLatexResponse(text) {
   return text.trim();
 }
 
-// Close AI prompt on outside click
+// Close selection popup on outside click
 document.addEventListener('click', function(e) {
-  var popup = document.getElementById('ai-prompt-popup');
-  if (popup && popup.classList.contains('visible')) {
-    if (!popup.contains(e.target) && !e.target.closest('#btn-ai-prompt')) {
-      aiPromptVisible = false;
-      popup.classList.remove('visible');
-    }
-  }
   var menu = document.getElementById('ai-rewrite-menu');
   if (menu && menu.classList.contains('visible')) {
     if (!menu.contains(e.target) && !e.target.closest('#btn-ai-rewrite')) {
@@ -424,15 +311,8 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Keyboard shortcuts
+// Escape cancels in-progress inline AI generation
 document.addEventListener('keydown', function(e) {
-  // Ctrl+Shift+A to toggle AI prompt
-  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
-    e.preventDefault();
-    toggleAIPrompt();
-    return;
-  }
-  // Escape to cancel in-progress AI generation
   if (e.key === 'Escape' && aiAbortController) {
     cancelAI();
   }
@@ -567,6 +447,7 @@ function doSelAction(systemPrompt) {
 var activeDiff = null; // tracks current diff state
 
 function streamWithDiff(systemPrompt) {
+  if (!ensureAiAccess()) return;
   if (aiBusy) { if (typeof window.showWarningToast === 'function') window.showWarningToast('AI is busy'); return; }
   var cm = window.editorInstance;
   if (!cm) return;
@@ -944,9 +825,10 @@ document.addEventListener('mousedown', function(e) {
 function initVoiceToLatex() {
   if (typeof SpeechToText === 'undefined') return;
 
+  var ctx = (typeof CONFIG !== 'undefined' && CONFIG.ctx) ? CONFIG.ctx : '';
   SpeechToText.init({
     buttonId: 'btn-voice',
-    aiUrl: AI_URL,
+    aiUrl: ctx + '/ai',
     onResult: function(text) {
       // Insert transcribed text directly at cursor
       if (!window.editorInstance) return;
@@ -963,14 +845,10 @@ function initVoiceToLatex() {
 
 initVoiceToLatex();
 
-// Expose globally
+// Expose globally (inline flows + compile error widgets)
 window.fixError = fixError;
-window.nlToLatex = nlToLatex;
 window.rewriteSelection = rewriteSelection;
 window.cancelAI = cancelAI;
-window.toggleAIPrompt = toggleAIPrompt;
-window.submitAIPrompt = submitAIPrompt;
-window.handleAIPromptKey = handleAIPromptKey;
-window.showRewriteMenu = showRewriteMenu;
+window.ensureLatexAiAccess = ensureAiAccess;
 
 })();

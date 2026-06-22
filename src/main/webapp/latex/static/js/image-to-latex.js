@@ -242,9 +242,22 @@
 
         var mode = overlay.querySelector('input[name="itl-mode"]:checked').value;
 
+        if (typeof window.ensureLatexAiAccess === 'function' && !window.ensureLatexAiAccess()) return;
+
+        var headers = { 'Content-Type': 'application/json' };
+        var T = window.latexAiTransport;
+        var opts = window.latexAiBoot || {};
+        if (T && T.buildHeaders) {
+            Object.assign(headers, T.buildHeaders({
+                useGateway: opts.useGateway === true,
+                userId: opts.userId || '',
+                toolId: opts.toolId || '',
+            }));
+        }
+
         fetch(AI_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             body: JSON.stringify({ image: imageData.base64, mode: mode, stream: true }),
             signal: abortCtrl.signal
         })

@@ -2,7 +2,10 @@
 <%
     String ctx = request.getContextPath();
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "latex/editor");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="/modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -184,6 +187,7 @@
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/toolbar.css?v=<%=cssV%>"/>
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/image-to-latex.css?v=<%=cssV%>"/>
 <link rel="stylesheet" href="<%=ctx%>/modern/css/speech-to-text.css?v=<%=cssV%>"/>
+<%@ include file="/modern/components/ai-assistant-head.inc.jsp" %>
 
 <%@ include file="/modern/ads/ad-init.jsp" %>
 
@@ -336,32 +340,6 @@
   <span id="fab-icon">&#128196;</span>
   <span class="fab-label" id="fab-label">Preview</span>
 </button>
-
-<!-- AI Prompt popup -->
-<div class="ai-prompt-popup" id="ai-prompt-popup">
-  <div class="ai-prompt-header">
-    <span class="ai-prompt-icon">&#10024;</span>
-    <span class="ai-prompt-title">Describe LaTeX to generate</span>
-    <span class="ai-prompt-close" onclick="toggleAIPrompt()">&times;</span>
-  </div>
-  <div class="ai-prompt-body">
-    <textarea id="ai-prompt-input" class="ai-prompt-input" rows="3"
-      placeholder="e.g. &quot;3x3 identity matrix&quot; or &quot;table comparing sorting algorithms&quot;"
-      onkeydown="handleAIPromptKey(event)"></textarea>
-    <div class="ai-prompt-actions">
-      <span class="ai-prompt-hint">Enter to submit &middot; Esc to close</span>
-      <button class="ai-prompt-submit" onclick="submitAIPrompt()">Generate &#8594;</button>
-    </div>
-  </div>
-</div>
-
-<!-- AI Rewrite menu -->
-<div class="ai-rewrite-menu" id="ai-rewrite-menu">
-  <div class="ai-rw-header">Rewrite selection as...</div>
-  <button class="ai-rw-item" onclick="rewriteSelection('formal'); document.getElementById('ai-rewrite-menu').classList.remove('visible')">&#127891; Formal Academic</button>
-  <button class="ai-rw-item" onclick="rewriteSelection('concise'); document.getElementById('ai-rewrite-menu').classList.remove('visible')">&#9986; Concise</button>
-  <button class="ai-rw-item" onclick="rewriteSelection('expand'); document.getElementById('ai-rewrite-menu').classList.remove('visible')">&#128214; Expand with Detail</button>
-</div>
 
 <!-- Symbol picker popup (fixed position, outside app flow) -->
 <div class="symbol-picker" id="symbol-picker">
@@ -591,9 +569,25 @@
 <script src="<%=ctx%>/latex/static/js/editor.js"></script>
 <script src="<%=ctx%>/latex/static/js/preview.js"></script>
 <script src="<%=ctx%>/latex/static/js/compile.js"></script>
+<script src="<%=ctx%>/latex/static/js/latex-shell.js?v=<%=jsV%>"></script>
+<script type="module">
+<%@ include file="/modern/components/ai-assistant-boot.inc.jsp" %>
+import { streamChat, chat, buildHeaders } from '<%= request.getAttribute("aiCtx") %>/modern/js/llm-client.js';
+import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
+
+window.latexAiBoot = aiAssistantBoot;
+window.latexAiTransport = { streamChat, chat, buildHeaders };
+
+window.latexAssistant = wireLazyAssistant({
+  moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/latex-editor-ai.js',
+  exportName: 'createLatexEditorAssistant',
+  buttonId: 'btn-ai-prompt',
+  boot: aiAssistantBoot,
+});
+</script>
 <script src="<%=ctx%>/modern/js/speech-to-text.js"></script>
-<script src="<%=ctx%>/latex/static/js/ai.js"></script>
-<script src="<%=ctx%>/latex/static/js/image-to-latex.js"></script>
+<script defer src="<%=ctx%>/latex/static/js/ai.js?v=<%=jsV%>"></script>
+<script defer src="<%=ctx%>/latex/static/js/image-to-latex.js?v=<%=jsV%>"></script>
 <!-- Generated content (Solve / Steps / Graph / chemistry figures) routes
      through SolutionsFile so the main editor stays clean -->
 <script src="<%=ctx%>/latex/static/js/solutions-file.js"></script>
