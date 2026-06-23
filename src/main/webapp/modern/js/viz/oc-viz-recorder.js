@@ -15,6 +15,20 @@
     var workerBlobUrl = null;
     var html2canvasFn = null;
     var recording = false;
+    var assetBaseCache = null;
+
+    // Same-origin /modern/js/vendor/ path, derived from this script's own <src>
+    // (avoids any dependency on JSP-injected globals or external CDNs).
+    function assetBase() {
+        if (assetBaseCache) return assetBaseCache;
+        var s = document.querySelector('script[src*="oc-viz-recorder.js"]');
+        if (s && s.src) {
+            assetBaseCache = s.src.replace(/viz\/oc-viz-recorder\.js.*$/, 'vendor/');
+        } else {
+            assetBaseCache = 'modern/js/vendor/';
+        }
+        return assetBaseCache;
+    }
 
     function getHtml2CanvasFn() {
         if (typeof html2canvasFn === 'function') return html2canvasFn;
@@ -24,14 +38,40 @@
         return null;
     }
 
+    // Monaco's AMD loader defines a global `define` (with .amd). gif.js / html2canvas are
+    // UMD: they'd register as anonymous AMD modules instead of setting window.GIF /
+    // window.html2canvas — which both breaks the global AND throws "Can only have one
+    // anonymous define call per script file". Suppress `define` while a UMD script runs so
+    // it takes the browser-global branch. Ref-counted so concurrent loads don't race.
+    var amdDepth = 0;
+    var amdSavedDefine;
+    function suppressAmd() {
+        if (amdDepth++ === 0) {
+            amdSavedDefine = global.define;
+            if (typeof global.define !== 'undefined') {
+                try { global.define = undefined; } catch (e) { /* ignore */ }
+            }
+        }
+    }
+    function restoreAmd() {
+        if (--amdDepth <= 0) {
+            amdDepth = 0;
+            if (typeof amdSavedDefine !== 'undefined') {
+                try { global.define = amdSavedDefine; } catch (e) { /* ignore */ }
+            }
+        }
+    }
+
     function loadScript(src) {
         return new Promise(function (resolve, reject) {
             var s = document.createElement('script');
             s.src = src;
             s.async = true;
-            s.crossOrigin = 'anonymous';
-            s.onload = function () { resolve(); };
-            s.onerror = function () { reject(new Error('Failed to load ' + src)); };
+            // No crossOrigin: same-origin vendor files don't need it, and setting it on a
+            // CDN script can fail when a non-CORS copy is already cached.
+            suppressAmd();
+            s.onload = function () { restoreAmd(); resolve(); };
+            s.onerror = function () { restoreAmd(); reject(new Error('Failed to load ' + src)); };
             document.head.appendChild(s);
         });
     }
@@ -74,7 +114,14 @@
             html2canvasFn = existing;
             return Promise.resolve(existing);
         }
-        return loadHtml2CanvasFromScript(0).catch(function () {
+        // Local vendor copy first; fall back to CDN / ESM only if it's missing.
+        return loadScript(assetBase() + 'html2canvas.min.js').then(function () {
+            var fn = getHtml2CanvasFn();
+            if (fn) { html2canvasFn = fn; return fn; }
+            throw new Error('local html2canvas missing');
+        }).catch(function () {
+            return loadHtml2CanvasFromScript(0);
+        }).catch(function () {
             return loadHtml2CanvasEsm();
         }).then(function (fn) {
             if (typeof fn !== 'function') {
@@ -88,14 +135,15 @@
         if (gifJsLoaded && workerBlobUrl) {
             return Promise.resolve(global.GIF);
         }
-        return loadScript('https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js').then(function () {
+        // Local vendor copy; the worker is loaded directly as a same-origin URL
+        // (no fetch+blob needed, which removes a common failure point).
+        return loadScript(assetBase() + 'gif.js').then(function () {
+            if (typeof global.GIF !== 'function') {
+                throw new Error('GIF encoder failed to load');
+            }
             gifJsLoaded = true;
-            return fetch('https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js')
-                .then(function (r) { return r.blob(); })
-                .then(function (blob) {
-                    workerBlobUrl = URL.createObjectURL(blob);
-                    return global.GIF;
-                });
+            workerBlobUrl = assetBase() + 'gif.worker.js';
+            return global.GIF;
         });
     }
 
@@ -117,21 +165,40 @@
         return indices;
     }
 
-    function drawWatermark(ctx, w, h) {
-        var mark = '8gwifi.org';
+    // Source-URL badge baked into every frame, so a shared GIF shows where it came from.
+    function drawWatermark(ctx, w, h, brand) {
+        var url = brand || '8gwifi.org';
+        var domain = url.split('/')[0];
+        var rest = url.slice(domain.length);
         ctx.save();
-        ctx.font = '500 11px ui-monospace, monospace';
-        ctx.textAlign = 'right';
-        ctx.textBaseline = 'bottom';
-        var tw = ctx.measureText(mark).width;
-        ctx.fillStyle = 'rgba(0,0,0,0.45)';
-        ctx.fillRect(w - tw - 14, h - 20, tw + 10, 16);
-        ctx.fillStyle = '#e5e7eb';
-        ctx.fillText(mark, w - 9, h - 7);
+        var fs = Math.max(13, Math.round(h * 0.024));
+        ctx.font = '600 ' + fs + 'px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace';
+        var padX = Math.round(fs * 0.7);
+        var padY = Math.round(fs * 0.5);
+        var tw = ctx.measureText(url).width;
+        var bw = tw + padX * 2;
+        var bh = fs + padY * 2;
+        var bx = w - bw - Math.round(fs * 0.6);
+        var by = h - bh - Math.round(fs * 0.6);
+        ctx.fillStyle = 'rgba(15, 15, 20, 0.78)';
+        if (ctx.roundRect) {
+            ctx.beginPath();
+            ctx.roundRect(bx, by, bw, bh, Math.round(bh * 0.3));
+            ctx.fill();
+        } else {
+            ctx.fillRect(bx, by, bw, bh);
+        }
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        var ty = by + bh / 2;
+        ctx.fillStyle = '#a5b4fc';            // brand domain
+        ctx.fillText(domain, bx + padX, ty);
+        ctx.fillStyle = '#e5e7eb';            // /online-…-compiler path
+        ctx.fillText(rest, bx + padX + ctx.measureText(domain).width, ty);
         ctx.restore();
     }
 
-    function captureElement(h2c, el) {
+    function captureElement(h2c, el, brand) {
         if (typeof h2c !== 'function') {
             return Promise.reject(new Error('html2canvas is not a function'));
         }
@@ -142,7 +209,7 @@
             logging: false
         }).then(function (canvas) {
             var ctx = canvas.getContext('2d');
-            drawWatermark(ctx, canvas.width, canvas.height);
+            drawWatermark(ctx, canvas.width, canvas.height, brand);
             return canvas;
         });
     }
@@ -197,7 +264,7 @@
                 chain = chain.then(function () {
                     opts.player.goTo(idx);
                     return wait(80).then(function () {
-                        return captureElement(h2c, opts.captureEl);
+                        return captureElement(h2c, opts.captureEl, opts.brand);
                     }).then(function (canvas) {
                         frames.push(canvas);
                         onStatus('Capturing frames… ' + (i + 1) + ' / ' + indices.length);

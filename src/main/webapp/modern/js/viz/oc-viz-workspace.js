@@ -297,6 +297,59 @@
             if (els.detachBtn) els.detachBtn.disabled = active;
         }
 
+        var recordCode = { panel: null, rows: null, body: null, lastLine: -1 };
+
+        function buildRecordCodePanel(code) {
+            var panel = document.createElement('div');
+            panel.className = 'viz-record-code';
+            var title = el('div', 'viz-record-code-title', 'Code');
+            panel.appendChild(title);
+            var body = el('div', 'viz-record-code-body');
+            var rows = [];
+            String(code || '').split('\n').forEach(function (text, i) {
+                var row = el('div', 'viz-record-code-line');
+                row.appendChild(el('span', 'viz-record-code-num', String(i + 1)));
+                row.appendChild(el('span', 'viz-record-code-src', text.length ? text : ' '));
+                body.appendChild(row);
+                rows.push(row);
+            });
+            panel.appendChild(body);
+            recordCode.panel = panel;
+            recordCode.rows = rows;
+            recordCode.body = body;
+            recordCode.lastLine = -1;
+            return panel;
+        }
+
+        function setRecordCodeLine(line) {
+            if (!recordCode.rows) return;
+            var ln = parseInt(line, 10);
+            if (recordCode.lastLine === ln) return;
+            var prev = recordCode.rows[recordCode.lastLine - 1];
+            if (prev) prev.classList.remove('is-active');
+            var row = (ln >= 1) ? recordCode.rows[ln - 1] : null;
+            if (row) {
+                row.classList.add('is-active');
+                recordCode.body.scrollTop = Math.max(0, row.offsetTop - recordCode.body.clientHeight / 2);
+            }
+            recordCode.lastLine = ln;
+        }
+
+        function el(tag, cls, text) {
+            var node = document.createElement(tag);
+            if (cls) node.className = cls;
+            if (text != null) node.textContent = text;
+            return node;
+        }
+
+        function teardownRecordCode() {
+            if (recordCode.panel && recordCode.panel.parentNode) {
+                recordCode.panel.parentNode.removeChild(recordCode.panel);
+            }
+            if (els.captureRoot) els.captureRoot.classList.remove('viz-recording-with-code');
+            recordCode = { panel: null, rows: null, body: null, lastLine: -1 };
+        }
+
         function recordVisualizationGif() {
             if (recording || (global.OcViz.isVizRecording && global.OcViz.isVizRecording())) return;
             if (!player || !player.getCount()) {
@@ -306,12 +359,28 @@
             var lang = 'viz';
             var payload = getRunPayload();
             if (payload && payload.language) lang = payload.language;
+
+            // Add a synced code panel into the captured region so the GIF shows code + viz.
+            var codeText = (config.editor && config.editor.getValue) ? config.editor.getValue()
+                : (payload && payload.code) || '';
+            if (els.captureRoot && codeText) {
+                var panel = buildRecordCodePanel(codeText);
+                els.captureRoot.insertBefore(panel, els.captureRoot.firstChild);
+                els.captureRoot.classList.add('viz-recording-with-code');
+                if (player.getIndex) setRecordCodeLine(lastStepLine());
+            }
+
+            var brand = (lang === 'java' || lang === 'python')
+                ? '8gwifi.org/online-' + lang + '-compiler'
+                : '8gwifi.org';
+
             setRecordUi(true, 'Preparing…');
             global.OcViz.recordGif({
                 captureEl: els.captureRoot || els.stage,
                 player: player,
                 stepCount: player.getCount(),
                 frameDelayMs: player.getSpeedMs ? player.getSpeedMs() : 300,
+                brand: brand,
                 filename: 'algorithm-viz-' + lang + '-' + Date.now() + '.gif',
                 ensureStageTab: function () { switchModalTab('stage'); },
                 onStatus: function (text) { setRecordUi(!!text, text); }
@@ -319,7 +388,14 @@
                 alert(err.message || String(err));
             }).finally(function () {
                 setRecordUi(false, null);
+                teardownRecordCode();
             });
+        }
+
+        function lastStepLine() {
+            if (!lastSteps || !player) return null;
+            var s = lastSteps[player.getIndex ? player.getIndex() : 0];
+            return s ? s.line : null;
         }
 
         function updatePlaybackUi(idx, total, playing) {
@@ -341,6 +417,7 @@
         function onPlayerStep(idx, step, total) {
             global.OcViz.renderStep(els.stage, step);
             highlightLine(step && step.line);
+            if (recordCode.panel) setRecordCodeLine(step && step.line);
             if (els.stepCard && step) {
                 if (step.line != null && step.line > 0) {
                     els.stepCard.innerHTML = '<i class="fas fa-location-arrow"></i> Executing line <strong>' + step.line + '</strong> in editor';
@@ -379,6 +456,7 @@
             setEditorVizMode(true);
             if (els.btn) els.btn.classList.add('is-active');
             switchModalTab('stage');
+            if (typeof config.onPaneToggle === 'function') config.onPaneToggle(true);
         }
 
         function closePane() {
@@ -389,6 +467,7 @@
             if (player) player.pause();
             clearLineHighlight();
             setEditorVizMode(false);
+            if (typeof config.onPaneToggle === 'function') config.onPaneToggle(false);
         }
 
         function setVizLog(text) {

@@ -41,8 +41,21 @@
     String[] ocExample = ocLangExample(ocLang);   // [displayName, escapedHelloWorldCode]
     String ocLangName = ocExample[0];
     String ocExampleCode = ocExample[1];
+
+    // Algorithm visualization UI: Java + Python only (or generic compiler with client-side gating)
+    String preferredLangAttr = (String) request.getAttribute("preferredLanguage");
+    boolean ocVizUiEnabled = isVizUiEnabledForPage(preferredLangAttr);
 %>
 <%!
+    /** Viz UI loads on Java/Python pages and the generic multi-language compiler (client gates by selection). */
+    private boolean isVizUiEnabledForPage(String preferredLang) {
+        if (preferredLang == null || preferredLang.isEmpty()) {
+            return true;
+        }
+        String lang = preferredLang.toLowerCase();
+        return "java".equals(lang) || "python".equals(lang);
+    }
+
     // Returns {displayName, HTML-escaped Hello-World snippet} for a language slug.
     private String[] ocLangExample(String lang) {
         if (lang == null) lang = "python";
@@ -160,6 +173,9 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ide-page.css?v=<%=cacheVersion%>">
+    <% if (ocVizUiEnabled) { %>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/viz-workspace.css?v=<%=cacheVersion%>">
+    <% } %>
     <%@ include file="/modern/components/ai-assistant-head.inc.jsp" %>
 
     <!-- Deferred CSS -->
@@ -1113,6 +1129,28 @@
                     }
                 }
 
+                <% if (ocVizUiEnabled) { %>
+                /* Viz execution line in Monaco (see also viz-workspace.css) */
+                .viz-line-highlight {
+                    background: rgba(99, 102, 241, 0.28) !important;
+                    border-left: 3px solid #818cf8 !important;
+                }
+                .viz-line-gutter {
+                    background: #6366f1 !important;
+                    width: 4px !important;
+                    margin-left: 3px;
+                }
+                .viz-exec-glyph {
+                    background: #6366f1;
+                    border-radius: 50%;
+                    width: 10px !important;
+                    height: 10px !important;
+                    margin-left: 6px;
+                    margin-top: 6px;
+                    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.35);
+                }
+                <% } %>
+
                 /* Embed Modal */
                 .embed-modal-overlay {
                     display: none;
@@ -1572,6 +1610,11 @@
                             <button id="runBtn" class="ide-toolbar-btn run-btn" onclick="executeCode()">
                                 <i class="fas fa-play"></i><span>Run</span>
                             </button>
+                            <% if (ocVizUiEnabled) { %>
+                            <button id="vizBtn" class="ide-toolbar-btn viz-btn" type="button" title="Visualize algorithm (Ctrl+Shift+V)"<% if (preferredLangAttr == null) { %> style="display:none"<% } %>>
+                                <i class="fas fa-project-diagram"></i><span>Visualize</span>
+                            </button>
+                            <% } %>
 
                             <div class="toolbar-divider"></div>
 
@@ -1606,16 +1649,62 @@
                         </div>
 
                         <!-- Main Content -->
-                        <div class="ide-main">
-                            <!-- Editor Section -->
-                            <div class="ide-editor-section">
-                                <div class="ide-editor-tabs" id="fileTabs">
-                                    <!-- File tabs rendered dynamically -->
+                        <div class="ide-main" id="ideMain">
+                            <% if (ocVizUiEnabled) { %>
+                            <div class="ide-code-viz-row" id="ideCodeVizRow">
+                                <div class="ide-editor-section">
+                                    <div class="ide-editor-tabs" id="fileTabs"></div>
+                                    <div class="ide-editor-container">
+                                        <div id="codeEditor"></div>
+                                    </div>
                                 </div>
+                                <div class="viz-split-handle" id="vizSplitHandle" aria-hidden="true" title="Drag to resize"></div>
+                                <div class="viz-pane-dock" id="vizPaneDock" aria-hidden="true">
+                                    <div id="vizShell" class="viz-shell viz-mode-attached" hidden>
+                                        <div class="viz-shell-header" id="vizShellHeader">
+                                            <h3 id="vizShellTitle"><i class="fas fa-project-diagram"></i> Visualization</h3>
+                                            <div class="viz-shell-actions">
+                                                <button type="button" class="viz-shell-action" id="vizAttachBtn" title="Attach to editor pane" hidden><i class="fas fa-columns"></i></button>
+                                                <button type="button" class="viz-shell-action" id="vizDetachBtn" title="Detach to floating panel"><i class="fas fa-up-right-from-square"></i></button>
+                                                <button type="button" class="viz-shell-action viz-shell-close" id="vizCloseBtn" title="Close visualization">&times;</button>
+                                            </div>
+                                        </div>
+                                        <div class="viz-shell-tabs">
+                                            <button type="button" class="viz-shell-tab active" data-viz-tab="stage">Visualization</button>
+                                            <button type="button" class="viz-shell-tab" data-viz-tab="templates">Templates</button>
+                                            <button type="button" class="viz-shell-tab" data-viz-tab="log">Log</button>
+                                            <button type="button" class="viz-shell-tab" data-viz-tab="help">Help</button>
+                                        </div>
+                                        <div class="viz-shell-body">
+                                            <div class="viz-shell-pane active" data-viz-pane="stage">
+                                                <div class="viz-capture-root" id="vizCaptureRoot">
+                                                    <div class="viz-step-card" id="vizStepCard"></div>
+                                                    <div class="viz-stage" id="vizStage"></div>
+                                                </div>
+                                                <div class="viz-playback" id="vizPlayback"></div>
+                                                <p class="viz-record-status" id="vizRecordStatus" hidden></p>
+                                            </div>
+                                            <div class="viz-shell-pane" data-viz-pane="templates">
+                                                <div id="vizTemplatesContent" class="viz-tpl-panel">Loading templates…</div>
+                                            </div>
+                                            <div class="viz-shell-pane" data-viz-pane="log">
+                                                <div id="vizLogContent" class="ide-viz-log">// Viz command log appears here after Visualize</div>
+                                            </div>
+                                            <div class="viz-shell-pane" data-viz-pane="help">
+                                                <div id="vizHelpContent" class="viz-help-panel">Loading visualization help…</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } else { %>
+                            <div class="ide-editor-section">
+                                <div class="ide-editor-tabs" id="fileTabs"></div>
                                 <div class="ide-editor-container">
                                     <div id="codeEditor"></div>
                                 </div>
                             </div>
+                            <% } %>
 
                             <!-- Resize Handle -->
                             <div class="resize-handle" id="resizeHandle"></div>
@@ -1676,7 +1765,7 @@
                             <div class="status-spacer"></div>
                             <div class="status-item" id="statusTime"></div>
                             <div class="status-item">
-                                <i class="fas fa-keyboard"></i> Ctrl+Enter to run
+                                <i class="fas fa-keyboard"></i> Ctrl+Enter run<% if (ocVizUiEnabled) { %> · Ctrl+Shift+V visualize<% } %>
                             </div>
                         </div>
                     </div><!-- End IDE Workspace -->
@@ -1748,6 +1837,13 @@
                             </div>
                         </div>
                     </div>
+
+                    <% if (ocVizUiEnabled) { %>
+                    <!-- Visualization floating host (shell moves here when detached) -->
+                    <div class="viz-modal-overlay" id="vizModal" aria-hidden="true">
+                        <div class="viz-float-host" id="vizFloatHost"></div>
+                    </div>
+                    <% } %>
 
                     <!-- Share Modal -->
                     <div class="share-modal-overlay" id="shareModal" onclick="closeShareModal(event)">
@@ -2050,6 +2146,15 @@
 
                 <!-- Monaco Editor -->
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+                <% if (ocVizUiEnabled) { %>
+                <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-templates.js?v=<%=cacheVersion%>"></script>
+                <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-api.js?v=<%=cacheVersion%>"></script>
+                <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-parser.js?v=<%=cacheVersion%>"></script>
+                <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-render.js?v=<%=cacheVersion%>"></script>
+                <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-player.js?v=<%=cacheVersion%>"></script>
+                <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-recorder.js?v=<%=cacheVersion%>"></script>
+                <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-workspace.js?v=<%=cacheVersion%>"></script>
+                <% } %>
 
                 <script>
                     // Allow wrapper pages to set a preferred language before initialization
@@ -2065,6 +2170,11 @@
                     }
                     // Root-relative API base to avoid path issues under subdirectories
                     var API_BASE = '<%= request.getContextPath() %>/OneCompilerFunctionality';
+                    var vizWorkspace = null;
+                    <% if (ocVizUiEnabled) { %>
+                    var VIZ_API_BASE = '<%= request.getContextPath() %>/OneCompilerVizFunctionality';
+                    var OC_VIZ_SUPPORTED_LANGS = ["java", "python"];
+                    <% } %>
                     var currentVersion = '';
                     var isRunning = false;
                     var panelMinimized = false;
@@ -2426,6 +2536,7 @@
 
                         // Initialize files
                         initFiles(currentLanguage);
+                        <% if (ocVizUiEnabled) { %>initVizWorkspace();<% } %>
                         files[0].content = editor.getValue();
                         renderFileTabs();
 
@@ -2452,6 +2563,11 @@
                             if (newHeight >= 100 && newHeight <= 400) {
                                 panel.style.height = newHeight + 'px';
                                 originalPanelHeight = newHeight;
+                                // Dragging means the panel is no longer collapsed; keep state honest
+                                // so closing the viz pane won't override the user's manual size.
+                                panelMinimized = false;
+                                var icon = document.getElementById('panelToggleIcon');
+                                if (icon) icon.className = 'fas fa-chevron-down';
                             }
                         });
 
@@ -2480,16 +2596,19 @@
 
                     // Switch panel tabs
                     function switchPanel(panel) {
+                        var pane = document.getElementById(panel + 'Pane');
+                        if (!pane) return;
+
                         document.querySelectorAll('.ide-panel-tab').forEach(function (tab) {
                             tab.classList.remove('active');
                             if (tab.dataset.panel === panel) tab.classList.add('active');
                         });
 
-                        document.querySelectorAll('.ide-panel-pane').forEach(function (pane) {
-                            pane.classList.remove('active');
+                        document.querySelectorAll('.ide-panel-pane').forEach(function (p) {
+                            p.classList.remove('active');
                         });
 
-                        document.getElementById(panel + 'Pane').classList.add('active');
+                        pane.classList.add('active');
                     }
 
                     // Load languages
@@ -2605,7 +2724,65 @@
 
                         updateVersionSelect(lang);
                         loadTemplate();
+
+                        if (vizWorkspace) {
+                            vizWorkspace.updateLanguage(lang);
+                        }
                     }
+
+                    <% if (ocVizUiEnabled) { %>
+                    function getVizExecutePayload() {
+                        if (editor && files[activeFileIndex]) {
+                            files[activeFileIndex].content = editor.getValue();
+                        }
+                        var apiFiles = getFilesForApi();
+                        return {
+                            language: currentLanguage,
+                            version: currentVersion || undefined,
+                            files: apiFiles.length > 1 ? apiFiles : undefined,
+                            code: apiFiles.length <= 1 ? apiFiles[0].content : undefined
+                        };
+                    }
+
+                    function initVizWorkspace() {
+                        if (!window.OcViz || !window.OcViz.createWorkspace) return;
+                        vizWorkspace = window.OcViz.createWorkspace({
+                            apiBase: VIZ_API_BASE,
+                            editor: editor,
+                            initialLanguage: currentLanguage,
+                            supportedLanguages: OC_VIZ_SUPPORTED_LANGS,
+                            getExecutePayload: getVizExecutePayload,
+                            setEditorCode: function (code) {
+                                if (!editor) return;
+                                editor.setValue(code);
+                                if (files[activeFileIndex]) files[activeFileIndex].content = code;
+                            },
+                            onPaneToggle: function (open) {
+                                // Collapse the output panel when viz opens so the editor+viz
+                                // get full height; restore it on close. The resize handle still works.
+                                var panel = document.getElementById('bottomPanel');
+                                var icon = document.getElementById('panelToggleIcon');
+                                if (!panel) return;
+                                if (open && !panelMinimized) {
+                                    panel.style.height = '35px';
+                                    if (icon) icon.className = 'fas fa-chevron-up';
+                                    panelMinimized = true;
+                                } else if (!open && panelMinimized) {
+                                    panel.style.height = (originalPanelHeight || 200) + 'px';
+                                    if (icon) icon.className = 'fas fa-chevron-down';
+                                    panelMinimized = false;
+                                }
+                            }
+                        });
+                        vizWorkspace.init();
+                    }
+
+                    function executeVisualize() {
+                        if (vizWorkspace) {
+                            vizWorkspace.runVisualize();
+                        }
+                    }
+                    <% } %>
 
                     function loadTemplate() {
                         var template = '';
@@ -3209,6 +3386,15 @@
                             e.preventDefault();
                             executeCode();
                         }
+                        <% if (ocVizUiEnabled) { %>
+                        if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'V' || e.key === 'v')) {
+                            var vizBtn = document.getElementById('vizBtn');
+                            if (vizBtn && vizBtn.style.display !== 'none') {
+                                e.preventDefault();
+                                executeVisualize();
+                            }
+                        }
+                        <% } %>
                     });
 
                     loadFromURL();

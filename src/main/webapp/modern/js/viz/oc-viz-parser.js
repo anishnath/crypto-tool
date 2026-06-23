@@ -103,6 +103,14 @@
             return;
         }
 
+        if (method === 'destroy') {
+            if (key) {
+                delete states[key];
+                delete meta[key];
+            }
+            return;
+        }
+
         if (!key || !states[key]) {
             return;
         }

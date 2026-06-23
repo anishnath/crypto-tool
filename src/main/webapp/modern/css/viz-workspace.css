@@ -499,6 +499,79 @@
     opacity: 0.8;
 }
 
+/* ── Code+viz composite shown only while recording a GIF ── */
+.viz-capture-root.viz-recording-with-code {
+    display: grid;
+    grid-template-columns: minmax(300px, 0.95fr) minmax(0, 1.05fr);
+    grid-template-rows: auto 1fr;
+    gap: 12px;
+    width: 940px;
+    max-width: none;
+    background: #1a1a1a;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.viz-capture-root.viz-recording-with-code .viz-record-code { grid-column: 1; grid-row: 1 / 3; }
+.viz-capture-root.viz-recording-with-code .viz-step-card { grid-column: 2; grid-row: 1; }
+.viz-capture-root.viz-recording-with-code .viz-stage { grid-column: 2; grid-row: 2; }
+
+.viz-record-code {
+    background: #1e1e1e;
+    border: 1px solid var(--oc-border, #333);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.viz-record-code-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--oc-text, #9ca3af);
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--oc-border, #333);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.viz-record-code-body {
+    overflow: hidden;
+    max-height: 380px;
+    padding: 6px 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.viz-record-code-line {
+    display: flex;
+    padding: 0 10px;
+    white-space: pre;
+}
+
+.viz-record-code-num {
+    color: #6b7280;
+    min-width: 26px;
+    text-align: right;
+    margin-right: 12px;
+    user-select: none;
+}
+
+.viz-record-code-src {
+    color: #d4d4d4;
+}
+
+.viz-record-code-line.is-active {
+    background: rgba(99, 102, 241, 0.22);
+    box-shadow: inset 3px 0 0 #6366f1;
+}
+
+.viz-record-code-line.is-active .viz-record-code-src {
+    color: #fff;
+}
+
 /* Call stack */
 .viz-stack-list {
     list-style: none;
