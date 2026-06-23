@@ -580,6 +580,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>OneCompilerVizFunctionality</servlet-name>
+        <servlet-class>z.y.x.onecompiler.OneCompilerVizFunctionality</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OneCompilerVizFunctionality</servlet-name>
+        <url-pattern>/OneCompilerVizFunctionality</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>GoogleOAuthFunctionality</servlet-name>
         <servlet-class>z.y.x.Security.GoogleOAuthFunctionality</servlet-class>
     </servlet>
