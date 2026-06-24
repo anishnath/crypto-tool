@@ -2151,6 +2151,7 @@
                 <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-api.js?v=<%=cacheVersion%>"></script>
                 <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-parser.js?v=<%=cacheVersion%>"></script>
                 <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-render.js?v=<%=cacheVersion%>"></script>
+                <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-concurrency.js?v=<%=cacheVersion%>"></script>
                 <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-player.js?v=<%=cacheVersion%>"></script>
                 <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-recorder.js?v=<%=cacheVersion%>"></script>
                 <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-workspace.js?v=<%=cacheVersion%>"></script>

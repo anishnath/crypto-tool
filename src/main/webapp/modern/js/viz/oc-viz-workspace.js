@@ -13,6 +13,11 @@
         var player = null;
         var lastResult = null;
         var lastSteps = null;
+        var vizMode = 'ds';      // 'ds' (data structures) | 'concurrency' (swim lanes)
+        var concModel = null;
+        var lastRunCode = null;  // editor code at the last Visualize run (staleness check)
+        var staleBannerEl = null;
+        var staleTimer = null;
         var open = false;
         var recording = false;
         var isAttached = true;
@@ -415,6 +420,19 @@
         }
 
         function onPlayerStep(idx, step, total) {
+            if (vizMode === 'concurrency' && concModel) {
+                global.OcViz.renderConcStep(els.stage, concModel, idx);
+                var ev = concModel.events[idx];
+                highlightLine(ev && ev.line);
+                if (recordCode.panel) setRecordCodeLine(ev && ev.line);
+                if (els.stepCard && ev) {
+                    els.stepCard.innerHTML = (ev.line && ev.line > 0)
+                        ? '<i class="fas fa-location-arrow"></i> Line <strong>' + ev.line + '</strong> · ' + escapeHtml(ev.type)
+                        : escapeHtml(ev.type);
+                }
+                updatePlaybackUi(idx, total, player && player.isPlaying());
+                return;
+            }
             global.OcViz.renderStep(els.stage, step);
             highlightLine(step && step.line);
             if (recordCode.panel) setRecordCodeLine(step && step.line);
@@ -469,6 +487,7 @@
             if (els.btn) els.btn.classList.remove('is-active');
             if (player) player.pause();
             clearLineHighlight();
+            hideStaleBanner();
             setEditorVizMode(false);
             if (typeof config.onPaneToggle === 'function') config.onPaneToggle(false);
         }
@@ -585,6 +604,41 @@
                 : '<i class="fas fa-project-diagram"></i> <span>Visualize</span>';
         }
 
+        // ── Staleness: when the editor changes after a run, prompt to re-visualize ──
+        function showStaleBanner() {
+            if (!els.stage || !els.stage.parentNode) return;
+            if (staleBannerEl) { staleBannerEl.style.display = ''; }
+            else {
+                var bar = document.createElement('div');
+                bar.className = 'viz-stale-banner';
+                bar.innerHTML = '<span><i class="fas fa-pen"></i> Code changed since this run.</span>' +
+                    '<button type="button" class="viz-stale-rerun"><i class="fas fa-rotate-right"></i> Re-visualize</button>';
+                bar.querySelector('.viz-stale-rerun').addEventListener('click', function () { runVisualize(); });
+                els.stage.parentNode.insertBefore(bar, els.stage);
+                staleBannerEl = bar;
+            }
+            if (els.btn) els.btn.classList.add('viz-btn-stale');
+        }
+
+        function hideStaleBanner() {
+            if (staleBannerEl) staleBannerEl.style.display = 'none';
+            if (els.btn) els.btn.classList.remove('viz-btn-stale');
+        }
+
+        function markStaleIfChanged() {
+            if (!open || recording) return;
+            var payload = getRunPayload();
+            var code = payload && payload.code;
+            if (code == null) return; // multi-file run: skip staleness tracking
+            if (lastRunCode != null && code !== lastRunCode) showStaleBanner();
+            else hideStaleBanner();
+        }
+
+        function scheduleStaleCheck() {
+            if (staleTimer) clearTimeout(staleTimer);
+            staleTimer = setTimeout(markStaleIfChanged, 250);
+        }
+
         function setStageLoading() {
             if (els.stage) {
                 els.stage.innerHTML =
@@ -603,7 +657,7 @@
             var payload = getRunPayload();
             if (!payload) return Promise.resolve();
             if (!isVizLanguage(payload.language)) {
-                alert('Visualization is available for Java and Python only.');
+                alert('Visualization is available for Java, Python and Go only.');
                 return Promise.resolve();
             }
             if (payload.files && payload.files.length > 1) {
@@ -611,9 +665,22 @@
                 return Promise.resolve();
             }
             openPane();
+            lastRunCode = payload.code != null ? payload.code : null;
+            hideStaleBanner();
             setLoading(true);
             setStageLoading();
             return api.execute(payload).then(function (data) {
+                if (global.OcViz.isConcurrency && global.OcViz.isConcurrency(data)) {
+                    vizMode = 'concurrency';
+                    concModel = global.OcViz.buildConcSteps(data);
+                    var out = concModel.stdout && concModel.stdout.length
+                        ? concModel.stdout.join('\n') : '(no console output)';
+                    setVizLog('--- console ---\n' + out);
+                    loadSteps(concModel.steps, data);
+                    return data;
+                }
+                vizMode = 'ds';
+                concModel = null;
                 setVizLog(global.OcViz.formatVizLog(data.commands || []));
                 if (data.stderr) {
                     setVizLog((els.vizLog ? els.vizLog.textContent : '') + '\n\n--- stderr ---\n' + data.stderr);
@@ -737,6 +804,9 @@
                 els.stage.innerHTML = '<div class="viz-stage-empty">Click <strong>Visualize</strong> to trace algorithm execution step by step.</div>';
             }
             if (els.btn) els.btn.addEventListener('click', runVisualize);
+            if (config.editor && typeof config.editor.onDidChangeModelContent === 'function') {
+                config.editor.onDidChangeModelContent(scheduleStaleCheck);
+            }
             initShellHandlers();
             var lang0 = config.initialLanguage || 'python';
             updateButtonVisibility(lang0);

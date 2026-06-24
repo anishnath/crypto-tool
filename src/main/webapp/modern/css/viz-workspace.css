@@ -1002,3 +1002,123 @@
     line-height: 1.45;
     color: var(--oc-text, #9aa0a6);
 }
+
+/* ===== Concurrency swim-lane renderer ===== */
+.viz-conc-wrap {
+    max-height: 460px;
+    overflow: auto;
+    background: var(--oc-bg-dark, #1e1e1e);
+    border-radius: 8px;
+}
+
+.viz-conc-svg { display: block; }
+
+.viz-conc-life { stroke: #3a3a42; stroke-width: 1.5; stroke-dasharray: 2 4; }
+
+.viz-conc-head { fill: #26262e; stroke: #3a3a42; stroke-width: 1; }
+.viz-conc-head-running { stroke: #6366f1; fill: rgba(99, 102, 241, 0.18); }
+.viz-conc-head-blocked { stroke: #f59e0b; fill: rgba(245, 158, 11, 0.18); }
+.viz-conc-head-done    { stroke: #4b5563; fill: #20232b; }
+.viz-conc-head-idle    { fill: #20232b; }
+
+.viz-conc-lane-label {
+    fill: #e5e7eb;
+    font: 600 12px ui-sans-serif, system-ui, sans-serif;
+    text-anchor: middle;
+}
+
+.viz-conc-block { fill: rgba(245, 158, 11, 0.22); }
+.viz-conc-block-open {
+    fill: rgba(245, 158, 11, 0.40);
+    animation: vizConcPulseFill 1.2s ease-in-out infinite;
+}
+
+.viz-conc-msg { stroke: #cbd5e1; stroke-width: 1.6; }
+.viz-conc-msg-active { stroke: #f59e0b; stroke-width: 2.4; }
+.viz-conc-msg-label {
+    fill: #9ca3af;
+    font: 11px ui-monospace, Menlo, monospace;
+    text-anchor: middle;
+}
+
+.viz-conc-pulse { fill: rgba(245, 158, 11, 0.30); animation: vizConcPulse 1.1s ease-out infinite; }
+
+.viz-conc-caption {
+    fill: #e5e7eb;
+    font: 600 12px ui-monospace, Menlo, monospace;
+}
+
+@keyframes vizConcPulse {
+    0% { r: 8; opacity: 0.7; }
+    100% { r: 15; opacity: 0; }
+}
+@keyframes vizConcPulseFill {
+    0%, 100% { fill-opacity: 0.40; }
+    50% { fill-opacity: 0.7; }
+}
+
+.viz-conc-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 8px 4px 2px;
+    font-size: 11px;
+    color: #9ca3af;
+}
+.viz-conc-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.viz-conc-legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.viz-conc-legend .vc-leg-block { background: rgba(245, 158, 11, 0.4); }
+
+[data-theme="light"] .viz-conc-wrap { background: #fff; }
+[data-theme="light"] .viz-conc-life { stroke: #cbd5e1; }
+[data-theme="light"] .viz-conc-head { fill: #f1f5f9; stroke: #cbd5e1; }
+[data-theme="light"] .viz-conc-lane-label,
+[data-theme="light"] .viz-conc-caption { fill: #1e293b; }
+[data-theme="light"] .viz-conc-msg { stroke: #475569; }
+
+/* ===== "Code changed — re-visualize" banner ===== */
+.viz-stale-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 7px 12px;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fde68a;
+    background: rgba(245, 158, 11, 0.14);
+    border-top: 1px solid rgba(245, 158, 11, 0.4);
+    border-bottom: 1px solid rgba(245, 158, 11, 0.4);
+    flex-shrink: 0;
+}
+
+.viz-stale-banner span { display: inline-flex; align-items: center; gap: 6px; }
+
+.viz-stale-rerun {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: #f59e0b;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.viz-stale-rerun:hover { background: #d97706; }
+
+/* Toolbar Visualize button nudges attention when the run is stale. */
+.viz-btn.viz-btn-stale {
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.6);
+    animation: vizBtnStale 1.4s ease-in-out infinite;
+}
+@keyframes vizBtnStale {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.55); }
+    50% { box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25); }
+}
+
+[data-theme="light"] .viz-stale-banner { color: #92400e; background: #fef3c7; }
