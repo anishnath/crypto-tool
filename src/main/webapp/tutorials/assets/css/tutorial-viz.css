@@ -1,0 +1,114 @@
+/* Inline tutorial visualizer — pairs with the shared viz-workspace.css (tracers). */
+
+.code-block[data-viz-lang],
+.tutorial-viz[data-viz-lang] {
+    position: relative;
+}
+
+.tv-viz-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #6366f1;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    opacity: 0.92;
+}
+
+.tv-viz-btn:hover { opacity: 1; }
+.tv-viz-btn.is-open { background: #4b5563; }
+.tv-viz-ico { font-size: 10px; }
+
+.tv-viz {
+    margin: 12px 0 20px;
+    border: 1px solid #2a2a30;
+    border-radius: 10px;
+    background: #14141a;
+    overflow: hidden;
+}
+
+.tv-viz-status {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #cbd5e1;
+    background: #1b1b22;
+    border-bottom: 1px solid #2a2a30;
+}
+
+.tv-viz-body {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.15fr);
+    gap: 12px;
+    padding: 12px;
+    align-items: start;
+}
+
+@media (max-width: 720px) {
+    .tv-viz-body { grid-template-columns: 1fr; }
+}
+
+/* code panel */
+.tv-viz-code {
+    position: relative; /* makes row offsetTop relative to this panel, so auto-scroll centers correctly */
+    max-height: 320px;
+    overflow: auto;
+    background: #1e1e1e;
+    border: 1px solid #2a2a30;
+    border-radius: 8px;
+    padding: 6px 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+/* min-width: max-content makes each row as wide as its content, so the
+   active-line highlight spans the full line even when the panel scrolls
+   horizontally (instead of being clipped at the visible right edge). */
+.tv-viz-line { display: flex; padding: 0 10px; white-space: pre; min-width: max-content; }
+.tv-viz-num { color: #6b7280; min-width: 26px; text-align: right; margin-right: 12px; user-select: none; position: sticky; left: 0; background: inherit; }
+.tv-viz-src { color: #d4d4d4; }
+.tv-viz-line.is-active { background: rgba(99, 102, 241, 0.28); box-shadow: inset 3px 0 0 #6366f1; }
+.tv-viz-line.is-active .tv-viz-num { background: #2a2d4a; color: #c7d2fe; }
+.tv-viz-line.is-active .tv-viz-src { color: #fff; }
+
+/* controls */
+.tv-viz-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-top: 1px solid #2a2a30;
+    background: #1b1b22;
+}
+
+.tv-viz-controls button {
+    min-width: 30px;
+    height: 28px;
+    border: 1px solid #3a3a42;
+    background: #26262e;
+    color: #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.tv-viz-controls button:hover { background: #32323c; }
+.tv-viz-scrub { flex: 1; min-width: 60px; accent-color: #6366f1; }
+.tv-viz-step { font-size: 11px; color: #9ca3af; min-width: 78px; text-align: right; }
+
+/* light theme */
+[data-theme="light"] .tv-viz { background: #f8fafc; border-color: #e2e8f0; }
+[data-theme="light"] .tv-viz-status,
+[data-theme="light"] .tv-viz-controls { background: #eef2ff; border-color: #e2e8f0; color: #334155; }
+[data-theme="light"] .tv-viz-code { background: #fff; border-color: #e2e8f0; }
+[data-theme="light"] .tv-viz-src { color: #1e293b; }
+[data-theme="light"] .tv-viz-controls button { background: #fff; border-color: #cbd5e1; color: #1e293b; }

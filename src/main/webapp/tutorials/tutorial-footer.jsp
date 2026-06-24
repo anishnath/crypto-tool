@@ -21,3 +21,9 @@
 
 <%-- Social Popup (Engagement-based) --%>
 <%@ include file="social-popup.jsp" %>
+
+<%-- Inline algorithm visualizer: pages opt in with request.setAttribute("enableViz", true)
+     and tag a code block with data-viz-lang="go|python|java". Assets load only when enabled. --%>
+<% if (request.getAttribute("enableViz") != null) { %>
+<%@ include file="tutorial-viz.inc.jsp" %>
+<% } %>

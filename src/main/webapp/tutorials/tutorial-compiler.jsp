@@ -123,6 +123,9 @@
     String collapsible = request.getParameter("collapsible");
     boolean isCollapsible = (collapsible != null && collapsible.equals("true"));
 
+    // Algorithm visualization is available for the languages with a viz engine.
+    boolean vizSupported = "python".equals(language) || "java".equals(language) || "go".equals(language);
+
     // Escape the initial code for JavaScript (used in reset function)
     String escapedCode = displayCode
             .replace("\\", "\\\\")
@@ -162,6 +165,16 @@
                                 <path d="M3 3v5h5"></path>
                             </svg>
                         </button>
+                        <% if (vizSupported) { %>
+                        <button class="compiler-btn compiler-btn-viz" id="<%= editorId %>-viz-btn"
+                            onclick="visualizeCompiler('<%= editorId %>')" title="Animate this code step by step">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="6" cy="6" r="2"></circle><circle cx="18" cy="6" r="2"></circle>
+                                <circle cx="12" cy="18" r="2"></circle><path d="M7.5 7.5 11 16M16.5 7.5 13 16"></path>
+                            </svg>
+                            <span>Visualize</span>
+                        </button>
+                        <% } %>
                         <button class="compiler-btn compiler-btn-primary" id="<%= editorId %>-run-btn"
                             onclick="runCompiler('<%= editorId %>')">
                             <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
@@ -399,6 +412,21 @@
                     .compiler-btn-primary.running {
                         background: var(--warning, #f59e0b);
                     }
+
+                    .compiler-btn-viz {
+                        background: rgba(99, 102, 241, 0.15);
+                        color: #818cf8;
+                        border: 1px solid rgba(99, 102, 241, 0.4);
+                    }
+
+                    .compiler-btn-viz:hover {
+                        background: rgba(99, 102, 241, 0.28);
+                        color: #c7d2fe;
+                    }
+
+                    .compiler-btn-viz svg { width: 14px; height: 14px; }
+
+                    .tv-viz-mount { margin-top: 12px; }
 
                     /* Editor Area */
                     .compiler-editor {
@@ -1128,6 +1156,63 @@
                                     runBtn.classList.remove('running');
                                     runBtn.innerHTML = '<svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Run</span>';
                                 });
+                        };
+
+                        // ===== Algorithm visualization (lazy-loads the viz modules on first use) =====
+                        var VIZ_CTX = '<%= request.getContextPath() %>';
+                        function ensureVizLoaded(cb) {
+                            if (window.OcVizTutorial && window.OcVizTutorial.visualize) { cb(); return; }
+                            window.__tvVizQueue = window.__tvVizQueue || [];
+                            window.__tvVizQueue.push(cb);
+                            if (window.__tvVizLoading) return;
+                            window.__tvVizLoading = true;
+                            window.OC_VIZ_BASE = VIZ_CTX + '/OneCompilerVizFunctionality';
+                            ['/modern/css/viz-workspace.css', '/tutorials/assets/css/tutorial-viz.css'].forEach(function (h) {
+                                var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = VIZ_CTX + h; document.head.appendChild(l);
+                            });
+                            var scripts = [
+                                '/modern/js/viz/oc-viz-api.js',
+                                '/modern/js/viz/oc-viz-parser.js',
+                                '/modern/js/viz/oc-viz-render.js',
+                                '/modern/js/viz/oc-viz-player.js',
+                                '/tutorials/assets/js/tutorial-viz.js'
+                            ];
+                            (function next(i) {
+                                if (i >= scripts.length) {
+                                    (window.__tvVizQueue || []).forEach(function (f) { try { f(); } catch (e) { } });
+                                    window.__tvVizQueue = [];
+                                    return;
+                                }
+                                var s = document.createElement('script');
+                                s.src = VIZ_CTX + scripts[i];
+                                s.onload = function () { next(i + 1); };
+                                s.onerror = function () { next(i + 1); };
+                                document.head.appendChild(s);
+                            })(0);
+                        }
+
+                        window.visualizeCompiler = window.visualizeCompiler || function (id) {
+                            var container = document.getElementById(id + '-container');
+                            if (!container) return;
+                            var existing = container.querySelector('.tv-viz-mount');
+                            if (existing) { // toggle off
+                                if (existing._ctrl) existing._ctrl.destroy();
+                                existing.parentNode.removeChild(existing);
+                                return;
+                            }
+                            var editor = window.codeMirrorEditors && window.codeMirrorEditors[id];
+                            var code = editor ? editor.getValue() : (document.getElementById(id + '-code') || {}).value || '';
+                            var lang = container.dataset.language;
+                            ensureVizLoaded(function () {
+                                if (!window.OcVizTutorial) return;
+                                var mount = document.createElement('div');
+                                mount.className = 'tv-viz-mount';
+                                var out = document.getElementById(id + '-output-container');
+                                if (out && out.parentNode) out.parentNode.insertBefore(mount, out.nextSibling);
+                                else container.appendChild(mount);
+                                mount._ctrl = window.OcVizTutorial.visualize(lang, code, mount);
+                                if (mount.scrollIntoView) mount.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            });
                         };
 
                         // Reset
