@@ -1174,6 +1174,7 @@
                                 '/modern/js/viz/oc-viz-api.js',
                                 '/modern/js/viz/oc-viz-parser.js',
                                 '/modern/js/viz/oc-viz-render.js',
+                                '/modern/js/viz/oc-viz-concurrency.js',
                                 '/modern/js/viz/oc-viz-player.js',
                                 '/tutorials/assets/js/tutorial-viz.js'
                             ];
