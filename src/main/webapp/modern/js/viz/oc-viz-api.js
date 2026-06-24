@@ -27,6 +27,9 @@
             }
             return '3.10';
         }
+        if (language === 'go') {
+            return '1.26';
+        }
         return runVersion || '';
     }
 

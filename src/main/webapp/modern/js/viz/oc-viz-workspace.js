@@ -4,7 +4,7 @@
 (function (global) {
     'use strict';
 
-    var DEFAULT_VIZ_LANGS = ['java', 'python'];
+    var DEFAULT_VIZ_LANGS = ['java', 'python', 'go'];
     var DOCK_PREF_KEY = 'oc-viz-dock-mode';
 
     function createWorkspace(config) {
@@ -370,7 +370,7 @@
                 if (player.getIndex) setRecordCodeLine(lastStepLine());
             }
 
-            var brand = (lang === 'java' || lang === 'python')
+            var brand = (lang === 'java' || lang === 'python' || lang === 'go')
                 ? '8gwifi.org/online-' + lang + '-compiler'
                 : '8gwifi.org';
 

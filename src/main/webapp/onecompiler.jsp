@@ -47,13 +47,13 @@
     boolean ocVizUiEnabled = isVizUiEnabledForPage(preferredLangAttr);
 %>
 <%!
-    /** Viz UI loads on Java/Python pages and the generic multi-language compiler (client gates by selection). */
+    /** Viz UI loads on Java/Python/Go pages and the generic multi-language compiler (client gates by selection). */
     private boolean isVizUiEnabledForPage(String preferredLang) {
         if (preferredLang == null || preferredLang.isEmpty()) {
             return true;
         }
         String lang = preferredLang.toLowerCase();
-        return "java".equals(lang) || "python".equals(lang);
+        return "java".equals(lang) || "python".equals(lang) || "go".equals(lang);
     }
 
     // Returns {displayName, HTML-escaped Hello-World snippet} for a language slug.
@@ -2173,7 +2173,7 @@
                     var vizWorkspace = null;
                     <% if (ocVizUiEnabled) { %>
                     var VIZ_API_BASE = '<%= request.getContextPath() %>/OneCompilerVizFunctionality';
-                    var OC_VIZ_SUPPORTED_LANGS = ["java", "python"];
+                    var OC_VIZ_SUPPORTED_LANGS = ["java", "python", "go"];
                     <% } %>
                     var currentVersion = '';
                     var isRunning = false;
