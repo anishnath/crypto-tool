@@ -231,6 +231,84 @@
 
     var graphMarkerSeq = 0;
 
+    var GRAPH_GAPX = 84, GRAPH_GAPY = 78, GRAPH_M = 34;
+
+    // Textbook layout: a path (singly/doubly/circular list) lays out horizontally;
+    // a rooted tree lays out tidily (left child left, right child right); anything
+    // else (adjacency graphs, DAGs) returns null so the engine's own coords are used.
+    function layoutGraph(nodeList, edges) {
+        var ids = nodeList.map(function (n) { return n.id; });
+        if (!ids.length) return null;
+        var idSet = {}; ids.forEach(function (id) { idSet[id] = true; });
+        var SEP = ' ';
+        var dirOut = {}, dirIndeg = {}, und = {}, pairSet = {};
+        ids.forEach(function (id) { dirOut[id] = []; dirIndeg[id] = 0; und[id] = {}; });
+        edges.forEach(function (e) {
+            if (idSet[e.from] && idSet[e.to]) pairSet[e.from + SEP + e.to] = true;
+        });
+        edges.forEach(function (e) {
+            if (!idSet[e.from] || !idSet[e.to]) return;
+            dirOut[e.from].push(e.to);
+            // a reverse edge of a bidirectional pair (doubly's prev) isn't a structural parent
+            if (!pairSet[e.to + SEP + e.from]) dirIndeg[e.to]++;
+            und[e.from][e.to] = true; und[e.to][e.from] = true;
+        });
+        var pos = {};
+
+        // ── Path (linked list, incl. doubly & circular) ──
+        var deg = {}, total = 0;
+        ids.forEach(function (id) { deg[id] = Object.keys(und[id]).length; total += deg[id]; });
+        var ends = ids.filter(function (id) { return deg[id] === 1; });
+        var connected = (function () {           // single connected component?
+            var seen = {}, stack = [ids[0]], c = 0;
+            while (stack.length) { var u = stack.pop(); if (seen[u]) continue; seen[u] = true; c++; Object.keys(und[u]).forEach(function (v) { if (!seen[v]) stack.push(v); }); }
+            return c === ids.length;
+        })();
+        var maxDeg = ids.reduce(function (m, id) { return Math.max(m, deg[id]); }, 0);
+        // A simple path (2 endpoints) is unambiguously a list. A cycle (no endpoints)
+        // is only a circular list if every node has exactly one out-edge — otherwise
+        // it's a graph (e.g. a triangle a->b,a->c,b->c is a 3-cycle but not a list).
+        var allOut1 = ids.every(function (id) { return dirOut[id].length === 1; });
+        var isPath = connected && maxDeg <= 2 && (ends.length === 2 || (ends.length === 0 && allOut1));
+        if (ids.length === 1) { pos[ids[0]] = { x: GRAPH_M, y: GRAPH_M }; return pos; }
+        if (isPath) {
+            var start = ends.length ? ends[0] : ids[0];   // ends.length 0 => cycle
+            var order = [], seen = {}, cur = start, prev = null;
+            while (cur != null && !seen[cur]) {
+                seen[cur] = true; order.push(cur);
+                var nbrs = Object.keys(und[cur]).filter(function (v) { return v !== prev && !seen[v]; });
+                prev = cur; cur = nbrs.length ? nbrs[0] : null;
+            }
+            if (order.length === ids.length) {
+                order.forEach(function (id, i) { pos[id] = { x: GRAPH_M + i * GRAPH_GAPX, y: GRAPH_M + 16 }; });
+                return pos;
+            }
+        }
+
+        // ── Rooted tree (each node ≤1 structural parent, has a root) ──
+        var treeLike = ids.every(function (id) { return dirIndeg[id] <= 1; });
+        var roots = ids.filter(function (id) { return dirIndeg[id] === 0; });
+        if (treeLike && roots.length >= 1) {
+            var depth = {}, visited = {}, leaf = 0, ok = true;
+            function place(id, d) {
+                if (visited[id]) { ok = false; return; }
+                visited[id] = true; depth[id] = d;
+                // structural children: forward targets not yet placed, with a single parent
+                var kids = dirOut[id].filter(function (t) { return !visited[t] && dirIndeg[t] === 1; });
+                if (!kids.length) { pos[id] = { x: GRAPH_M + leaf * GRAPH_GAPX, y: GRAPH_M + d * GRAPH_GAPY }; leaf++; return; }
+                var mid = Math.floor(kids.length / 2);
+                for (var i = 0; i < mid; i++) place(kids[i], d + 1);
+                pos[id] = { x: GRAPH_M + leaf * GRAPH_GAPX, y: GRAPH_M + d * GRAPH_GAPY }; leaf++;
+                for (var j = mid; j < kids.length; j++) place(kids[j], d + 1);
+                var xs = kids.map(function (k) { return pos[k] ? pos[k].x : null; }).filter(function (x) { return x != null; });
+                if (xs.length) pos[id].x = (Math.min.apply(null, xs) + Math.max.apply(null, xs)) / 2;
+            }
+            roots.forEach(function (r) { if (!visited[r]) place(r, 0); });
+            if (ok && Object.keys(pos).length === ids.length) return pos;
+        }
+        return null;  // general graph → use engine coords
+    }
+
     function renderGraph(state, title) {
         var panel = el('div', 'viz-tracer-panel');
         panel.appendChild(el('div', 'viz-tracer-title', title || 'Graph'));
@@ -244,12 +322,15 @@
             return panel;
         }
 
-        var positions = {};
-        nodeList.forEach(function (n, i) {
-            var x = n.x != null ? n.x : 40 + (i % 4) * 60;
-            var y = n.y != null ? n.y : 30 + Math.floor(i / 4) * 50;
-            positions[n.id] = { x: x, y: y };
-        });
+        var positions = layoutGraph(nodeList, state.edges || []);
+        if (!positions) {  // general graph → engine-provided coords
+            positions = {};
+            nodeList.forEach(function (n, i) {
+                var x = n.x != null ? n.x : 40 + (i % 4) * 60;
+                var y = n.y != null ? n.y : 30 + Math.floor(i / 4) * 50;
+                positions[n.id] = { x: x, y: y };
+            });
+        }
         var maxX = 0, maxY = 0;
         Object.keys(positions).forEach(function (k) {
             if (positions[k].x > maxX) maxX = positions[k].x;
@@ -277,18 +358,36 @@
         defs.appendChild(marker);
         svg.appendChild(defs);
 
+        var R = 16;
+        var edgeKey = {};
+        (state.edges || []).forEach(function (e) { edgeKey[e.from + ' ' + e.to] = true; });
         (state.edges || []).forEach(function (e) {
             var a = positions[e.from];
             var b = positions[e.to];
             if (!a || !b) return;
-            var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('class', 'viz-graph-edge');
-            line.setAttribute('marker-end', 'url(#' + markerId + ')');
-            line.setAttribute('x1', a.x);
-            line.setAttribute('y1', a.y);
-            line.setAttribute('x2', b.x);
-            line.setAttribute('y2', b.y);
-            svg.appendChild(line);
+            var dx = b.x - a.x, dy = b.y - a.y, len = Math.sqrt(dx * dx + dy * dy) || 1;
+            var ux = dx / len, uy = dy / len;
+            // trim endpoints to the node circle so the arrowhead points *at* the node
+            var ax = a.x + ux * R, ay = a.y + uy * R, bx = b.x - ux * R, by = b.y - uy * R;
+            var bidir = !!edgeKey[e.to + ' ' + e.from];   // reverse edge exists (doubly's prev)
+            var long = len > GRAPH_GAPX * 1.6;            // spans past neighbours (e.g. circular wrap)
+            var elEdge;
+            if (bidir || long) {
+                // curve so opposite edges of a pair separate into two distinct arrows
+                var side = bidir ? (e.from < e.to ? 1 : -1) : 1;
+                var off = (bidir ? 16 : Math.min(len * 0.22, 46)) * side;
+                var mx = (ax + bx) / 2 + (-uy) * off, my = (ay + by) / 2 + ux * off;
+                elEdge = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                elEdge.setAttribute('d', 'M' + ax + ',' + ay + ' Q' + mx + ',' + my + ' ' + bx + ',' + by);
+                elEdge.setAttribute('fill', 'none');
+            } else {
+                elEdge = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                elEdge.setAttribute('x1', ax); elEdge.setAttribute('y1', ay);
+                elEdge.setAttribute('x2', bx); elEdge.setAttribute('y2', by);
+            }
+            elEdge.setAttribute('class', 'viz-graph-edge');
+            elEdge.setAttribute('marker-end', 'url(#' + markerId + ')');
+            svg.appendChild(elEdge);
         });
 
         nodeList.forEach(function (n) {
@@ -460,4 +559,5 @@
 
     global.OcViz = global.OcViz || {};
     global.OcViz.renderStep = renderStep;
+    global.OcViz._layoutGraph = layoutGraph;  // exposed for tests
 }(typeof window !== 'undefined' ? window : this));

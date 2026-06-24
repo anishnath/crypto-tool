@@ -14,6 +14,7 @@
     "demo:playground-python-java": "node record-code-playground-python-java.js",
     "demo:playground-js-typescript": "node record-code-playground-js-typescript.js",
     "demo:chemistry-formula": "node record-chemistry-formula-to-molecule.js",
+    "demo:periodic-table": "node record-periodic-table.js",
     "demo:playground-bash-perl": "node record-code-playground-bash-perl.js",
     "demo:playground-cpp-c": "node record-code-playground-cpp-c.js",
     "demo:all": "node record-math-demo.js && node record-slash-demo.js && node record-drawing-demo.js",
