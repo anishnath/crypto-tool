@@ -37,6 +37,15 @@ public class OneCompilerVizFunctionality extends HttpServlet {
     /** Viz runs Docker containers; allow same headroom as compile/run. */
     private static final int READ_TIMEOUT = 120000;
 
+    /**
+     * In-memory cache for GET metadata responses (languages, capabilities,
+     * language_capabilities, metadata). These change only on a backend deploy, so
+     * we cache successful responses forever — the cache is cleared only when the
+     * server (JVM) restarts.
+     */
+    private static final java.util.concurrent.ConcurrentHashMap<String, UpstreamResponse> GET_CACHE =
+            new java.util.concurrent.ConcurrentHashMap<>();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -138,9 +147,19 @@ public class OneCompilerVizFunctionality extends HttpServlet {
 
     private void proxyGet(String path, String query, HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        String cacheKey = (query == null || query.isEmpty()) ? path : path + "?" + query;
+        UpstreamResponse cached = GET_CACHE.get(cacheKey);
+        if (cached != null) {
+            sendJsonResponse(response, cached.statusCode, cached.body);
+            return;
+        }
         String url = vizUrl(path, query);
         try {
             UpstreamResponse upstream = makeGetRequest(url);
+            // Cache only successful responses (errors are transient — don't pin them).
+            if (upstream.statusCode >= 200 && upstream.statusCode < 300) {
+                GET_CACHE.put(cacheKey, upstream);
+            }
             sendJsonResponse(response, upstream.statusCode, upstream.body);
         } catch (IOException e) {
             sendError(response, HttpServletResponse.SC_BAD_GATEWAY,
