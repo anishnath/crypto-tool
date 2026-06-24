@@ -436,9 +436,12 @@
                 if (els.stage) {
                     els.stage.innerHTML = '<div class="viz-stage-empty">No visualization steps were returned.</div>';
                 }
+                if (els.stepCard) els.stepCard.textContent = '';
+                setPlaybackDisabled(true);
                 updatePlaybackUi(0, 0, false);
                 return;
             }
+            setPlaybackDisabled(false);
             player = global.OcViz.createPlayer({
                 steps: steps,
                 onStep: onPlayerStep,
@@ -582,6 +585,20 @@
                 : '<i class="fas fa-project-diagram"></i> <span>Visualize</span>';
         }
 
+        function setStageLoading() {
+            if (els.stage) {
+                els.stage.innerHTML =
+                    '<div class="viz-stage-empty viz-stage-loading">' +
+                    '<div class="viz-spinner" aria-hidden="true"></div>' +
+                    '<div class="viz-loading-title">Tracing execution…</div>' +
+                    '<div class="viz-loading-sub">Compiling and instrumenting your code. First run can take 10–20s.</div>' +
+                    '</div>';
+            }
+            if (els.stepCard) els.stepCard.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing visualization…';
+            setPlaybackDisabled(true);
+            updatePlaybackUi(0, 0, false);
+        }
+
         function runVisualize() {
             var payload = getRunPayload();
             if (!payload) return Promise.resolve();
@@ -595,6 +612,7 @@
             }
             openPane();
             setLoading(true);
+            setStageLoading();
             return api.execute(payload).then(function (data) {
                 setVizLog(global.OcViz.formatVizLog(data.commands || []));
                 if (data.stderr) {
@@ -609,6 +627,7 @@
                 if (els.stage) {
                     els.stage.innerHTML = '<div class="viz-stage-empty">' + escapeHtml(err.message || String(err)) + '</div>';
                 }
+                if (els.stepCard) els.stepCard.textContent = '';
                 switchModalTab('log');
             }).finally(function () {
                 setLoading(false);

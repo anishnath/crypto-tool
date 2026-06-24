@@ -330,6 +330,44 @@
     padding: 2rem 1rem;
 }
 
+/* Processing indicator shown while the engine compiles/instruments the code. */
+.viz-stage-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 3rem 1rem;
+}
+
+.viz-spinner {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 3px solid rgba(99, 102, 241, 0.25);
+    border-top-color: #6366f1;
+    animation: viz-spin 0.8s linear infinite;
+}
+
+@keyframes viz-spin {
+    to { transform: rotate(360deg); }
+}
+
+.viz-loading-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--oc-text-strong, #e5e7eb);
+}
+
+.viz-loading-sub {
+    font-size: 12px;
+    color: var(--oc-text, #9ca3af);
+    max-width: 320px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .viz-spinner { animation-duration: 2s; }
+}
+
 .viz-tracer-panel {
     background: var(--oc-bg-dark, #1e1e1e);
     border: 1px solid var(--oc-border, #333);
