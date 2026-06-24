@@ -3,7 +3,7 @@
       <div class="container">
         <!-- Brand -->
         <a class="navbar-brand" href="index.jsp" aria-label="8gwifi.org Home">
-          <img src="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/images/8gwifiorg-logos_white.png" width="30" height="30" alt="8gwifi.org logo" class="d-inline-block align-top">
+          <img src="https://cdn.jsdelivr.net/gh/anishnath/crypto-tool@master/src/main/webapp/images/site/logo.png" width="30" height="30" alt="8gwifi.org logo" class="d-inline-block align-top">
           8gwifi.org
         </a>
 
