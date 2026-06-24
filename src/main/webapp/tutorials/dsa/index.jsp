@@ -345,6 +345,25 @@
                                                             </div>
                                     </div>
                                 </div>
+
+                                <!-- Community: Trending on Reddit (DSA) -->
+                                <section class="card" aria-labelledby="reddit-dsa-heading" style="margin-top: var(--space-8);">
+                                    <h3 id="reddit-dsa-heading" style="margin: 0 0 var(--space-2) 0;">Community: Trending on Reddit</h3>
+                                    <p style="margin: 0 0 var(--space-3) 0; color: var(--text-secondary); font-size: var(--text-sm);">
+                                        Curated from r/algorithms, r/leetcode, and r/compsci (top this week).
+                                    </p>
+
+                                    <div id="reddit-dsa-widget" style="display: grid; gap: var(--space-2);">
+                                        <div id="reddit-dsa-status" style="color: var(--text-muted);">Fetching latest posts…</div>
+                                        <ul id="reddit-dsa-list" style="list-style: none; padding: 0; margin: 0;"></ul>
+                                    </div>
+
+                                    <div style="margin-top: var(--space-3); display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                                        <a href="https://www.reddit.com/r/algorithms/top/?t=week" target="_blank" rel="noopener noreferrer" class="button button-secondary">r/algorithms</a>
+                                        <a href="https://www.reddit.com/r/leetcode/top/?t=week" target="_blank" rel="noopener noreferrer" class="button button-secondary">r/leetcode</a>
+                                        <a href="https://www.reddit.com/r/compsci/top/?t=week" target="_blank" rel="noopener noreferrer" class="button button-secondary">r/compsci</a>
+                                    </div>
+                                </section>
                             </article>
                     </main>
 
@@ -353,6 +372,108 @@
 
             <script src="<%=request.getContextPath()%>/tutorials/assets/js/progress.js"></script>
             <script src="<%=request.getContextPath()%>/tutorials/assets/js/tutorial-core.js?v=4"></script>
-        </body>
+            <script>
+            (function () {
+                const container = document.getElementById('reddit-dsa-widget');
+                if (!container) return;
 
+                const statusEl = document.getElementById('reddit-dsa-status');
+                const listEl = document.getElementById('reddit-dsa-list');
+                const subreddits = ['algorithms', 'leetcode', 'compsci'];
+                const limitPerSub = 5; // small to keep it snappy
+                const totalLimit = 10;
+
+                function fmtTimeAgo(utcSeconds) {
+                    try {
+                        const diff = Date.now() / 1000 - utcSeconds;
+                        const mins = Math.floor(diff / 60);
+                        if (mins < 60) return mins + 'm ago';
+                        const hrs = Math.floor(mins / 60);
+                        if (hrs < 24) return hrs + 'h ago';
+                        const days = Math.floor(hrs / 24);
+                        return days + 'd ago';
+                    } catch (e) { return ''; }
+                }
+
+                function render(posts) {
+                    listEl.innerHTML = '';
+                    posts.forEach(p => {
+                        const li = document.createElement('li');
+                        li.style.padding = 'var(--space-2)';
+                        li.style.borderRadius = 'var(--radius-sm)';
+                        li.style.background = 'var(--bg-secondary)';
+
+                        li.innerHTML = `
+                            <a href="${p.url}" target="_blank" rel="noopener noreferrer" style="color: var(--link-color); text-decoration: none; font-weight: 600;">
+                                ${p.title}
+                            </a>
+                            <div style="color: var(--text-muted); font-size: var(--text-xs); margin-top: var(--space-1);">
+                                <span>r/${p.subreddit}</span>
+                                <span> • </span>
+                                <span>${p.score} upvotes</span>
+                                <span> • </span>
+                                <span>${p.num_comments} comments</span>
+                                <span> • </span>
+                                <span>${fmtTimeAgo(p.created_utc)}</span>
+                            </div>
+                        `;
+                        listEl.appendChild(li);
+                    });
+                }
+
+                async function fetchSub(sub) {
+                    const url = `https://www.reddit.com/r/${sub}/top.json?t=week&limit=${limitPerSub}`;
+                    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    return res.json();
+                }
+
+                (async function load() {
+                    try {
+                        const results = await Promise.allSettled(subreddits.map(fetchSub));
+                        const posts = [];
+                        const seen = new Set();
+                        for (const r of results) {
+                            if (r.status !== 'fulfilled') continue;
+                            const items = (r.value && r.value.data && r.value.data.children) || [];
+                            for (const it of items) {
+                                const d = it.data || {};
+                                const permalink = d.permalink || '';
+                                if (!permalink || seen.has(permalink)) continue;
+                                seen.add(permalink);
+                                posts.push({
+                                    title: d.title || 'Untitled',
+                                    url: (d.url_overridden_by_dest && /^https?:\/\//.test(d.url_overridden_by_dest)) ? d.url_overridden_by_dest : ('https://www.reddit.com' + permalink),
+                                    permalink: 'https://www.reddit.com' + permalink,
+                                    score: d.score || 0,
+                                    subreddit: d.subreddit || 'reddit',
+                                    created_utc: d.created_utc || 0,
+                                    num_comments: d.num_comments || 0
+                                });
+                            }
+                        }
+
+                        // Sort by score desc; fallback created time
+                        posts.sort((a, b) => (b.score - a.score) || (b.created_utc - a.created_utc));
+                        const top = posts.slice(0, totalLimit);
+
+                        if (statusEl) statusEl.remove();
+                        if (top.length === 0) {
+                            const empty = document.createElement('div');
+                            empty.style.color = 'var(--text-muted)';
+                            empty.textContent = 'No recent posts found.';
+                            container.appendChild(empty);
+                        } else {
+                            render(top);
+                        }
+                    } catch (err) {
+                        if (statusEl) {
+                            statusEl.style.color = 'var(--warning)';
+                            statusEl.textContent = 'Unable to load Reddit posts. They may be blocked by CORS or network policy.';
+                        }
+                    }
+                })();
+            })();
+            </script>
+        </body>
         </html>
