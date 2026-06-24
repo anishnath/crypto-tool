@@ -991,10 +991,13 @@
                     <div class="tikz-img-progress-bar"><div id="tikz-img-progress-fill" class="tikz-img-progress-fill"></div></div>
                     <div class="tikz-img-progress-text"><span id="tikz-img-progress-label">Analyzing image...</span><span id="tikz-img-progress-time">~3 min</span></div>
                 </div>
+                <%-- TEMPORARILY DISABLED: recents panel (paired with the commented-out
+                     initTikzRecentsPanel call near </body>).
                 <div id="tikz-recents" class="tikz-recents" hidden style="padding:0.5rem 0.875rem;">
                     <div class="tikz-recents-header">Recent AI diagrams</div>
                     <div id="tikz-recents-grid" class="tikz-recents-grid"></div>
                 </div>
+                --%>
 
                 <!-- Toolbar -->
                 <div class="tool-actions-bar">
@@ -1525,13 +1528,15 @@
       );
     });
 
-    recentsPanel = initTikzRecentsPanel({
-      ctx: aiAssistantBoot.ctx,
-      userId: aiAssistantBoot.userId,
-      signedIn: Boolean(aiAssistantBoot.userId),
-      gridEl: document.getElementById('tikz-recents-grid'),
-      sectionEl: document.getElementById('tikz-recents'),
-    });
+    // TEMPORARILY DISABLED: recents panel fetches saved tikz requests on page load.
+    // recentsPanel stays null; all other uses are guarded with ?. so this is safe.
+    // recentsPanel = initTikzRecentsPanel({
+    //   ctx: aiAssistantBoot.ctx,
+    //   userId: aiAssistantBoot.userId,
+    //   signedIn: Boolean(aiAssistantBoot.userId),
+    //   gridEl: document.getElementById('tikz-recents-grid'),
+    //   sectionEl: document.getElementById('tikz-recents'),
+    // });
 
     wireLazyAssistant({
       moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/tikz-viewer-adapter.js',
