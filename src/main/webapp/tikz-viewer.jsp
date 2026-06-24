@@ -1166,12 +1166,6 @@
         <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
     </div>
 
-    <!-- Related Tools -->
-    <jsp:include page="modern/components/related-tools.jsp">
-        <jsp:param name="currentToolUrl" value="tikz-viewer.jsp"/>
-        <jsp:param name="category" value="Mathematics"/>
-        <jsp:param name="limit" value="6"/>
-    </jsp:include>
 
     <!-- About TikZ Viewer Section -->
     <section class="tool-content-section">
