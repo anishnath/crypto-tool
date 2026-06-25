@@ -53,7 +53,7 @@
             return true;
         }
         String lang = preferredLang.toLowerCase();
-        return "java".equals(lang) || "python".equals(lang) || "go".equals(lang) || "cpp".equals(lang);
+        return "java".equals(lang) || "python".equals(lang) || "go".equals(lang) || "cpp".equals(lang) || "rust".equals(lang);
     }
 
     // Returns {displayName, HTML-escaped Hello-World snippet} for a language slug.
@@ -219,6 +219,18 @@
                     --toolbar-height: 40px;
                     --panel-height: 280px;
                     --header-bar-height: 90px;
+                }
+
+                /* Light theme (nav toggle sets <html data-theme="light">).
+                   Re-themes the IDE chrome + editor area; the visualizer reads
+                   these same --oc-* vars so it follows automatically. */
+                [data-theme="light"] {
+                    --oc-bg-dark: #ffffff;
+                    --oc-bg-darker: #f3f3f3;
+                    --oc-bg-sidebar: #ececed;
+                    --oc-border: #d4d4d4;
+                    --oc-text: #444444;
+                    --oc-text-bright: #1a1a1a;
                 }
 
                 body {
@@ -1595,9 +1607,9 @@
 
                             <div class="toolbar-divider"></div>
 
-                            <button class="ide-toolbar-btn" onclick="loadTemplate()" title="Load Template">
-                                <i class="fas fa-file-code"></i><span>Template</span>
-                            </button>
+<%--                            <button class="ide-toolbar-btn" onclick="loadTemplate()" title="Load Template">--%>
+<%--                                <i class="fas fa-file-code"></i><span>Template</span>--%>
+<%--                            </button>--%>
                             <button class="ide-toolbar-btn" onclick="formatCode()" title="Format Code">
                                 <i class="fas fa-align-left"></i><span>Format</span>
                             </button>
@@ -2174,7 +2186,7 @@
                     var vizWorkspace = null;
                     <% if (ocVizUiEnabled) { %>
                     var VIZ_API_BASE = '<%= request.getContextPath() %>/OneCompilerVizFunctionality';
-                    var OC_VIZ_SUPPORTED_LANGS = ["java", "python", "go", "cpp"];
+                    var OC_VIZ_SUPPORTED_LANGS = ["java", "python", "go", "cpp", "rust"];
                     <% } %>
                     var currentVersion = '';
                     var isRunning = false;
@@ -2524,7 +2536,7 @@
                         editor = monaco.editor.create(document.getElementById('codeEditor'), {
                             value: initValue,
                             language: initMonacoLang,
-                            theme: 'vs-dark',
+                            theme: (document.documentElement.getAttribute('data-theme') === 'light' ? 'vs' : 'vs-dark'),
                             fontSize: 14,
                             minimap: { enabled: false },
                             automaticLayout: true,
@@ -2534,6 +2546,19 @@
                             tabSize: 4,
                             padding: { top: 8 }
                         });
+
+                        // Keep the editor (and thus the visualizer, which reads
+                        // the same --oc-* theme vars) in sync with the nav theme.
+                        (function () {
+                            function applyEditorTheme() {
+                                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                                monaco.editor.setTheme(light ? 'vs' : 'vs-dark');
+                            }
+                            applyEditorTheme();
+                            new MutationObserver(applyEditorTheme).observe(document.documentElement, {
+                                attributes: true, attributeFilter: ['data-theme']
+                            });
+                        })();
 
                         // Initialize files
                         initFiles(currentLanguage);

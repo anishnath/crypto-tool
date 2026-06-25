@@ -33,6 +33,9 @@
         if (language === 'cpp' || language === 'c++') {
             return 'clang';
         }
+        if (language === 'rust') {
+            return 'stable';
+        }
         return runVersion || '';
     }
 

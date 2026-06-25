@@ -45,7 +45,108 @@
     </jsp:include>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="<%=ctx%>/modern/css/ads.css">
+    <link rel="stylesheet" href="<%=ctx%>/modern/css/viz-workspace.css">
     <%@ include file="/modern/components/ai-assistant-head.inc.jsp" %>
+    <style>
+        /* ---- Polyglot template picker + visualizer overlay ---- */
+        .pp-overlay {
+            position: fixed; inset: 0; z-index: 9000; display: none;
+            background: rgba(0,0,0,.62); padding: 24px;
+            overflow: auto;
+        }
+        .pp-overlay.show { display: block; }
+        .pp-sheet {
+            max-width: 1100px; margin: 0 auto; background: var(--bar);
+            border: 1px solid var(--border); border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.5);
+        }
+        .pp-sheet-head {
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 18px; border-bottom: 1px solid var(--border);
+        }
+        .pp-sheet-head h2 { font-size: 15px; color: var(--text-bright); margin-right: auto; }
+        .pp-sheet-head .sub { font-size: 12px; color: var(--text-dim); }
+        .pp-sheet-close {
+            background: none; border: none; color: var(--text-dim); cursor: pointer;
+            font-size: 16px; padding: 6px 8px; border-radius: 6px;
+        }
+        .pp-sheet-close:hover { background: var(--border); color: var(--text-bright); }
+        .pp-sheet-body { padding: 16px 18px; }
+
+        /* Template cards */
+        .tpl-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 12px;
+        }
+        .tpl-card {
+            text-align: left; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 10px; padding: 12px 13px; cursor: pointer; color: var(--text);
+            transition: border-color .12s, transform .12s;
+        }
+        .tpl-card:hover { border-color: var(--primary); transform: translateY(-1px); }
+        .tpl-card .t { font-size: 13.5px; font-weight: 600; color: var(--text-bright); display: flex; align-items: center; gap: 7px; }
+        .tpl-card .d { font-size: 12px; color: var(--text-dim); margin: 6px 0 9px; line-height: 1.45; }
+        .tpl-badge {
+            display: inline-block; font-size: 10.5px; padding: 1px 7px; border-radius: 999px;
+            border: 1px solid var(--border); color: var(--text-dim);
+        }
+        .tpl-badge.viz { border-color: #2e7d32; color: #58c46a; }
+        .tpl-card .langs { font-size: 11px; color: var(--text-dim); }
+
+        /* Visualizer grid: one card per viz-capable pane */
+        .viz-grid {
+            display: grid; gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        }
+        .viz-card {
+            display: flex; flex-direction: column; min-height: 440px;
+            background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+            overflow: hidden;
+        }
+        .viz-card-head {
+            display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+            border-bottom: 1px solid var(--border); font-size: 12.5px; color: var(--text-bright);
+        }
+        .viz-card-head .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+        .viz-card-head .st { margin-left: auto; font-size: 11px; color: var(--text-dim); }
+        .viz-card-body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+        /* Synced code trace: the line that produced the current step lights up */
+        .cp-code {
+            max-height: 210px; overflow: auto; padding: 6px 0;
+            font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            background: var(--bar); border-bottom: 1px solid var(--border);
+        }
+        .cp-ln { display: flex; padding: 0 10px; }
+        .cp-num {
+            flex: 0 0 26px; width: 26px; text-align: right; margin-right: 12px;
+            color: var(--text-dim); opacity: .55; user-select: none;
+        }
+        .cp-tx { white-space: pre; color: var(--text); }
+        .cp-ln.active { background: rgba(0, 122, 204, .20); box-shadow: inset 3px 0 0 var(--primary); }
+        .cp-ln.active .cp-num { opacity: 1; color: var(--primary-hi); }
+        .cp-ln.active .cp-tx { color: var(--text-bright); }
+        .viz-card .viz-stage { flex: 1 1 auto; padding: 10px; overflow: auto; min-height: 150px; }
+        .viz-stage-empty { color: var(--text-dim); font-size: 12.5px; padding: 16px; text-align: center; }
+        .viz-bar {
+            display: flex; align-items: center; gap: 10px; justify-content: center;
+            padding: 12px; margin-top: 14px; border-top: 1px solid var(--border);
+        }
+        .viz-bar button {
+            background: var(--bg); border: 1px solid var(--border); color: var(--text);
+            border-radius: 7px; padding: 7px 11px; cursor: pointer; font-size: 13px;
+        }
+        .viz-bar button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+        .viz-bar button:hover { border-color: var(--primary); }
+        .viz-bar .step-count { font-size: 12px; color: var(--text-dim); min-width: 92px; text-align: center; }
+        .viz-skip { font-size: 12px; color: var(--text-dim); margin-top: 10px; }
+
+        /* Per-pane "visualize this pane" button in the pane header */
+        .pane-viz {
+            background: none; border: none; color: var(--text-dim); cursor: pointer;
+            font-size: 12px; padding: 2px 7px; border-radius: 6px;
+        }
+        .pane-viz:hover { background: var(--border); color: var(--primary); }
+    </style>
 
     <!-- LCP optimization: defer ad-init.jsp to bottom of body. Tiny stub here so
          the per-ad lazy-load observer can safely queue googletag.cmd / stpd.que
@@ -339,6 +440,12 @@
             <button class="pp-btn" id="addPaneBtn" onclick="addPane()" title="Add another pane">
                 <i class="fas fa-plus"></i> <span class="label-collapse">Add pane</span>
             </button>
+            <button class="pp-btn" id="tplBtn" onclick="openTemplates()" title="Fill every pane with the same algorithm">
+                <i class="fas fa-shapes"></i> <span class="label-collapse">Templates</span>
+            </button>
+            <button class="pp-btn" id="vizAllBtn" onclick="visualizeAll()" title="Visualize every supported pane side by side">
+                <i class="fas fa-diagram-project"></i> <span class="label-collapse">Visualize</span>
+            </button>
             <button class="pp-btn" id="layoutBtn" onclick="toggleLayout()" title="Switch between columns and rows">
                 <i class="fas fa-table-columns" id="layoutIcon"></i> <span class="label-collapse" id="layoutLabel">Columns</span>
             </button>
@@ -388,6 +495,14 @@
 
     <!-- Shared copy/toast helpers (ToolUtils) -->
     <script src="<%=ctx%>/modern/js/tool-utils.js"></script>
+
+    <!-- Visualization engine modules (reused from the IDE) + polyglot templates -->
+    <script src="<%=ctx%>/modern/js/viz/oc-viz-api.js"></script>
+    <script src="<%=ctx%>/modern/js/viz/oc-viz-parser.js"></script>
+    <script src="<%=ctx%>/modern/js/viz/oc-viz-render.js"></script>
+    <script src="<%=ctx%>/modern/js/viz/oc-viz-concurrency.js"></script>
+    <script src="<%=ctx%>/modern/js/viz/oc-viz-player.js"></script>
+    <script src="<%=ctx%>/code-playground/cp-templates.js"></script>
 
     <script>
         var CTX = '<%=ctx%>';
@@ -622,14 +737,19 @@
             head.innerHTML =
                 '<span class="pane-dot"></span>' +
                 '<span class="pane-label">Pane</span>' +
+                '<button type="button" class="pane-viz" title="Visualize this pane"><i class="fas fa-diagram-project"></i></button>' +
                 '<button type="button" class="pane-close" title="Close pane"><i class="fas fa-xmark"></i></button>';
             head.addEventListener('click', function(e) {
-                if (e.target.closest('.pane-close')) return;
+                if (e.target.closest('.pane-close') || e.target.closest('.pane-viz')) return;
                 setActivePane(pane);
             });
             head.querySelector('.pane-close').addEventListener('click', function(e) {
                 e.stopPropagation();
                 removePane(pane);
+            });
+            head.querySelector('.pane-viz').addEventListener('click', function(e) {
+                e.stopPropagation();
+                visualizePane(paneId);
             });
 
             var iframe = document.createElement('iframe');
@@ -702,6 +822,11 @@
                 var lbl = p.querySelector('.pane-label');
                 var name = p.dataset.lang ? (p.dataset.lang.charAt(0).toUpperCase() + p.dataset.lang.slice(1)) : '';
                 lbl.textContent = 'Pane ' + i + (name ? ' · ' + name : '');
+                var vb = p.querySelector('.pane-viz');
+                if (vb) {
+                    var supported = window.CPPolyglot && CPPolyglot.isVizLang(canonLang(p.dataset.lang));
+                    vb.style.display = supported ? '' : 'none';
+                }
             });
         }
 
@@ -881,6 +1006,277 @@
             clearTimeout(toastTimer);
             toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
         }
+    </script>
+
+    <!-- Polyglot template picker -->
+    <div class="pp-overlay" id="tplOverlay">
+        <div class="pp-sheet">
+            <div class="pp-sheet-head">
+                <h2>Polyglot templates</h2>
+                <span class="sub">Fills every open pane with the same algorithm</span>
+                <button class="pp-sheet-close" onclick="closeTpl()" aria-label="Close"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="pp-sheet-body">
+                <div class="tpl-grid" id="tplGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Side-by-side visualizer -->
+    <div class="pp-overlay" id="vizOverlay">
+        <div class="pp-sheet">
+            <div class="pp-sheet-head">
+                <h2>Visualizer</h2>
+                <span class="sub">Stepping every supported pane together</span>
+                <button class="pp-sheet-close" onclick="closeViz()" aria-label="Close"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="pp-sheet-body">
+                <div class="viz-grid" id="vizGrid"></div>
+                <div class="viz-skip" id="vizSkip"></div>
+                <div class="viz-bar">
+                    <button onclick="vizStep(-1)" title="Step back"><i class="fas fa-backward-step"></i></button>
+                    <button class="primary" id="vizPlayPause" onclick="vizToggle()" title="Play / pause"><i class="fas fa-play"></i></button>
+                    <button onclick="vizStep(1)" title="Step forward"><i class="fas fa-forward-step"></i></button>
+                    <span class="step-count" id="vizStepCount">Step 0 / 0</span>
+                    <button id="vizSpeed" onclick="vizCycleSpeed()" title="Playback speed">1&times;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---- Polyglot templates + side-by-side visualization ----
+        var VIZ_API = CTX + '/OneCompilerVizFunctionality';
+        var vizPlayer = null;
+        var vizStates = [];
+
+        function escapeHtmlPP(s) {
+            return String(s).replace(/[&<>"]/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+            });
+        }
+        function capWord(s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); }
+
+        // ---- Template picker ----
+        function openTemplates() {
+            var grid = document.getElementById('tplGrid');
+            grid.innerHTML = '';
+            var tpls = (window.CPPolyglot && CPPolyglot.templates) || [];
+            tpls.forEach(function (t) {
+                var langs = Object.keys(t.code);
+                var card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'tpl-card';
+                card.innerHTML =
+                    '<div class="t"><i class="fas fa-shapes"></i>' + escapeHtmlPP(t.title) + '</div>' +
+                    '<div class="d">' + escapeHtmlPP(t.desc) + '</div>' +
+                    '<div><span class="tpl-badge viz">' + escapeHtmlPP(t.category) + '</span> ' +
+                    '<span class="langs">' + langs.length + ' languages</span></div>';
+                card.onclick = function () { applyTemplate(t.id); };
+                grid.appendChild(card);
+            });
+            document.getElementById('tplOverlay').classList.add('show');
+        }
+        function closeTpl() { document.getElementById('tplOverlay').classList.remove('show'); }
+
+        function applyTemplate(id) {
+            var tpl = window.CPPolyglot && CPPolyglot.get(id);
+            if (!tpl) return;
+            // Refresh dataset.lang from each iframe, then push each pane its variant.
+            refreshPaneCodesAsync().then(function () {
+                var applied = 0, vizCount = 0, skipped = [];
+                panesEl.querySelectorAll('.pane').forEach(function (p) {
+                    var lang = canonLang(p.dataset.lang);
+                    var code = tpl.code[lang];
+                    var iframe = p.querySelector('iframe');
+                    if (code && iframe) {
+                        try {
+                            iframe.contentWindow.postMessage({ type: 'compare-set-code', code: code }, '*');
+                            paneCodeCache[p.dataset.paneId] = { code: code, lang: lang, version: (paneCodeCache[p.dataset.paneId] || {}).version || '' };
+                            applied++;
+                            if (CPPolyglot.isVizLang(lang)) vizCount++;
+                        } catch (e) { /* cross-origin */ }
+                    } else if (skipped.indexOf(lang) < 0) {
+                        skipped.push(lang);
+                    }
+                });
+                closeTpl();
+                var msg = 'Applied "' + tpl.title + '" to ' + applied + ' pane' + (applied !== 1 ? 's' : '');
+                if (vizCount) msg += ' · ' + vizCount + ' can visualize';
+                if (skipped.length) msg += ' · no ' + skipped.join('/') + ' variant';
+                toast(msg);
+            });
+        }
+
+        // ---- Side-by-side visualization ----
+        function vizCapableList() {
+            return getPaneSnapshotList().filter(function (p) {
+                return window.CPPolyglot && CPPolyglot.isVizLang(p.lang);
+            });
+        }
+
+        function visualizeAll() {
+            if (!window.OcViz) { toast('Visualizer is still loading — try again in a moment.'); return; }
+            refreshPaneCodesAsync().then(function () {
+                var all = getPaneSnapshotList();
+                var list = all.filter(function (p) { return CPPolyglot.isVizLang(p.lang); });
+                if (!list.length) {
+                    toast('No supported panes — open Python, Java, Go, C++ or Rust.');
+                    return;
+                }
+                var others = all.filter(function (p) { return !CPPolyglot.isVizLang(p.lang); })
+                    .map(function (p) { return capWord(p.lang); });
+                openVizOverlay(list, others);
+            });
+        }
+
+        // Visualize a single pane independently (per-pane header button).
+        function visualizePane(paneId) {
+            if (!window.OcViz) { toast('Visualizer is still loading — try again in a moment.'); return; }
+            refreshPaneCodesAsync().then(function () {
+                var list = getPaneSnapshotList().filter(function (p) { return p.id === paneId; });
+                if (!list.length) return;
+                if (!CPPolyglot.isVizLang(list[0].lang)) {
+                    toast(capWord(list[0].lang) + ' has no visualizer.');
+                    return;
+                }
+                openVizOverlay(list, []);
+            });
+        }
+
+        function buildCodeLines(code) {
+            var lines = String(code || '').replace(/\n$/, '').split('\n');
+            return lines.map(function (ln, i) {
+                return '<div class="cp-ln" data-ln="' + (i + 1) + '">' +
+                    '<span class="cp-num">' + (i + 1) + '</span>' +
+                    '<span class="cp-tx">' + (escapeHtmlPP(ln) || ' ') + '</span></div>';
+            }).join('');
+        }
+
+        // Highlight the line that produced the current step + scroll it into view.
+        function setActiveLine(s, ln) {
+            if (s.activeLn === ln) return;
+            if (s.lastLineEl) s.lastLineEl.classList.remove('active');
+            s.lastLineEl = null;
+            if (ln && ln > 0 && s.codeEl) {
+                var el = s.codeEl.querySelector('.cp-ln[data-ln="' + ln + '"]');
+                if (el) {
+                    el.classList.add('active');
+                    el.scrollIntoView({ block: 'nearest' });
+                    s.lastLineEl = el;
+                }
+            }
+            s.activeLn = ln;
+        }
+
+        function openVizOverlay(list, others) {
+            var grid = document.getElementById('vizGrid');
+            grid.innerHTML = '';
+            vizStates = list.map(function (p) {
+                var card = document.createElement('div');
+                card.className = 'viz-card';
+                card.innerHTML =
+                    '<div class="viz-card-head"><span class="dot"></span>Pane ' + p.index + ' · ' + capWord(p.lang) +
+                    '<span class="st">running…</span></div>' +
+                    '<div class="viz-card-body">' +
+                    '<div class="cp-code">' + buildCodeLines(p.code) + '</div>' +
+                    '<div class="viz-stage"><div class="viz-stage-empty">Compiling &amp; tracing…</div></div>' +
+                    '</div>';
+                grid.appendChild(card);
+                return { pane: p, codeEl: card.querySelector('.cp-code'), stage: card.querySelector('.viz-stage'),
+                         statusEl: card.querySelector('.st'), mode: null, steps: null, concModel: null, len: 0,
+                         activeLn: -1, lastLineEl: null };
+            });
+            var skip = document.getElementById('vizSkip');
+            skip.textContent = (others && others.length)
+                ? ('No visualization for ' + others.join(', ') + ' — those panes still run from their own Run button.')
+                : '';
+            document.getElementById('vizOverlay').classList.add('show');
+
+            var api = OcViz.createApiClient(VIZ_API);
+            var jobs = vizStates.map(function (s) {
+                var version = OcViz.resolveVizVersion(s.pane.lang);
+                return api.execute({ language: s.pane.lang, version: version, code: s.pane.code })
+                    .then(function (data) {
+                        if (OcViz.isConcurrency && OcViz.isConcurrency(data)) {
+                            s.mode = 'conc';
+                            s.concModel = OcViz.buildConcSteps(data);
+                            s.len = (s.concModel.steps && s.concModel.steps.length) || 0;
+                        } else {
+                            s.mode = 'ds';
+                            var parsed = OcViz.buildSteps(data.commands || []);
+                            s.steps = parsed.steps || [];
+                            s.len = s.steps.length;
+                        }
+                        s.statusEl.textContent = s.len + ' steps';
+                        if (!s.len) s.stage.innerHTML = '<div class="viz-stage-empty">No steps.</div>';
+                    })
+                    .catch(function (err) {
+                        s.mode = 'err'; s.len = 0;
+                        s.statusEl.textContent = 'error';
+                        s.stage.innerHTML = '<div class="viz-stage-empty">' + escapeHtmlPP(err.message || String(err)) + '</div>';
+                    });
+            });
+            Promise.all(jobs).then(function () { startMasterPlayer(); });
+        }
+
+        function vizRenderAt(i) {
+            var maxLen = 0;
+            vizStates.forEach(function (s) { if (s.len > maxLen) maxLen = s.len; });
+            vizStates.forEach(function (s) {
+                var line = -1;
+                if (s.mode === 'ds' && s.steps && s.steps.length) {
+                    var step = s.steps[Math.min(i, s.steps.length - 1)];
+                    OcViz.renderStep(s.stage, step);
+                    line = step && step.line;
+                } else if (s.mode === 'conc' && s.concModel && s.len) {
+                    var idx = Math.min(i, s.len - 1);
+                    OcViz.renderConcStep(s.stage, s.concModel, idx);
+                    var ev = s.concModel.events && s.concModel.events[idx];
+                    line = ev && ev.line;
+                }
+                setActiveLine(s, line);
+            });
+            var cnt = document.getElementById('vizStepCount');
+            if (cnt) cnt.textContent = 'Step ' + (maxLen ? Math.min(i, maxLen - 1) + 1 : 0) + ' / ' + maxLen;
+            var pb = document.getElementById('vizPlayPause');
+            if (pb) pb.innerHTML = (vizPlayer && vizPlayer.isPlaying()) ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+        }
+
+        function startMasterPlayer() {
+            var maxLen = 0;
+            vizStates.forEach(function (s) { if (s.len > maxLen) maxLen = s.len; });
+            if (vizPlayer) { vizPlayer.destroy(); vizPlayer = null; }
+            if (maxLen <= 0) { vizRenderAt(0); return; }
+            vizPlayer = OcViz.createPlayer({
+                steps: new Array(maxLen),
+                onStep: function (i) { vizRenderAt(i); },
+                onPlayingChange: function () { vizRenderAt(vizPlayer.getIndex()); }
+            });
+            vizRenderAt(0);
+        }
+
+        function vizToggle() { if (vizPlayer) vizPlayer.togglePlay(); }
+        function vizStep(d) { if (!vizPlayer) return; if (d < 0) vizPlayer.stepBack(); else vizPlayer.stepForward(); }
+        function vizCycleSpeed() {
+            if (!vizPlayer) return;
+            var n = (vizPlayer.getSpeedIndex() + 1) % vizPlayer.SPEEDS.length;
+            vizPlayer.setSpeed(n);
+            document.getElementById('vizSpeed').innerHTML = vizPlayer.SPEEDS[n].label;
+        }
+        function closeViz() {
+            document.getElementById('vizOverlay').classList.remove('show');
+            if (vizPlayer) { vizPlayer.pause(); }
+        }
+
+        // Backdrop click + Escape close both overlays.
+        ['tplOverlay', 'vizOverlay'].forEach(function (oid) {
+            var el = document.getElementById(oid);
+            el.addEventListener('click', function (e) { if (e.target === el) el.classList.remove('show'); });
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { closeTpl(); closeViz(); }
+        });
     </script>
 
     <%-- Analytics + ad system (deferred to end of body for LCP) --%>

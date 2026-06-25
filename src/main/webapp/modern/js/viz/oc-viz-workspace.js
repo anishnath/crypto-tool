@@ -4,7 +4,7 @@
 (function (global) {
     'use strict';
 
-    var DEFAULT_VIZ_LANGS = ['java', 'python', 'go', 'cpp'];
+    var DEFAULT_VIZ_LANGS = ['java', 'python', 'go', 'cpp', 'rust'];
     var DOCK_PREF_KEY = 'oc-viz-dock-mode';
 
     function createWorkspace(config) {
@@ -657,7 +657,7 @@
             var payload = getRunPayload();
             if (!payload) return Promise.resolve();
             if (!isVizLanguage(payload.language)) {
-                alert('Visualization is available for Java, Python, Go and C++ only.');
+                alert('Visualization is available for Java, Python, Go, C++ and Rust only.');
                 return Promise.resolve();
             }
             if (payload.files && payload.files.length > 1) {
