@@ -590,7 +590,7 @@ export class ToolAiAssistant {
    * @param {(content: string) => string} [opts.sanitizeForAi]
    *   Strip secrets from history/context before sending to AI endpoints (tool-specific).
    * @param {Function} [opts.onError]
-   * @param {(body: HTMLElement, bubble: HTMLElement) => void} [opts.onAssistantRender]
+   * @param {(body: HTMLElement, bubble: HTMLElement, rawText: string) => void} [opts.onAssistantRender]
    *   Called after an assistant bubble is finalized (markdown applied). Use for MathJax/KaTeX, etc.
    * @param {boolean} [opts.markdown] - render Markdown in assistant bubbles (default true)
    * @param {number} [opts.maxInputLength] - clamp textarea input (default 8000)
@@ -1037,7 +1037,7 @@ export class ToolAiAssistant {
       body.textContent = formatted;
     }
     const applyBtn = this._maybeApplyButtons(bubble, formatted);
-    this.onAssistantRender?.(body, bubble);
+    this.onAssistantRender?.(body, bubble, formatted);
     return applyBtn;
   }
 

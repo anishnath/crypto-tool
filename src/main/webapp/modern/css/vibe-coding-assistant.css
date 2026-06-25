@@ -1070,6 +1070,18 @@ body.vca-no-select, body.vca-no-select * { user-select: none !important; }
   cursor: default;
 }
 
+.vca-apply-row-multi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vca-apply-row-multi .vca-apply-btn {
+  flex: 0 1 auto;
+  padding: 6px 10px;
+  font-size: 11.5px;
+}
+
 .vca-quick {
   display: flex;
   flex-wrap: wrap;
