@@ -10,11 +10,12 @@ var R = window.MolGeomRender;
 // ==================== State ====================
 
 var state = {
-    mode: 'pairs',
+    mode: 'formula',
     bp: 4,
     lp: 0,
     formula: '',
-    lastFormula: '' // tracks the formula used for last result (for Lewis link + PDF)
+    lastFormula: '', // tracks the formula used for last result (for Lewis link + PDF)
+    lastResultText: ''
 };
 
 // ==================== Helpers ====================
@@ -58,6 +59,96 @@ function switchMode(mode) {
     }
 }
 
+// ==================== Result text (Chemistry AI context) ====================
+
+function scrapeResultExcerpt() {
+    var el = $('mg-result-content');
+    if (!el) return '';
+    var t = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
+    return t.length > 40 ? t.slice(0, 4000) : '';
+}
+
+function buildPairsResultText(bp, lp, data) {
+    if (!data) return '';
+    return [
+        '3D Molecular Geometry (By Pairs)',
+        'Bonding pairs: ' + bp,
+        'Lone pairs: ' + lp,
+        'VSEPR notation: ' + data.notation,
+        'Electron geometry: ' + data.electronGeom,
+        'Molecular shape: ' + data.molecularGeom,
+        'Bond angle: ' + data.angle,
+        'Hybridization: ' + data.hybridization,
+        data.description ? 'Description: ' + data.description : ''
+    ].filter(Boolean).join('\n');
+}
+
+function buildFormulaResultText(formula, ret) {
+    var lines = ['3D Molecular Geometry (By Formula)', 'Input: ' + formula];
+    if (ret && ret.geometry && ret.name) {
+        lines.push('Name: ' + ret.name);
+        lines.push('Formula: ' + (ret.display || ret.formula || formula));
+        lines.push('Molecular shape: ' + ret.geometry);
+        lines.push('Bond angle: ' + ret.angle);
+        lines.push('Hybridization: ' + ret.hybridization);
+        lines.push('Bonding pairs: ' + ret.bp);
+        lines.push('Lone pairs: ' + ret.lp);
+    } else if (ret && ret.centralAtom != null) {
+        lines.push('Central atom: ' + ret.centralAtom);
+        lines.push('Bonding pairs: ' + ret.bondingPairs);
+        lines.push('Lone pairs: ' + ret.lonePairs);
+        if (ret.totalValence != null) lines.push('Total valence e-: ' + ret.totalValence);
+        if (ret.charge) lines.push('Charge: ' + ret.charge);
+        if (ret.multiCenter) {
+            lines.push('Multi-center molecule, IHD: ' + ret.ihd);
+            if (ret.centers && ret.centers.length) {
+                lines.push('Centers: ' + ret.centers.map(function(c) {
+                    return c.label + ' (' + c.diagram + ')';
+                }).join('; '));
+            }
+        } else if (ret.data) {
+            lines.push('VSEPR: ' + ret.data.notation);
+            lines.push('Molecular shape: ' + ret.data.molecularGeom);
+            lines.push('Bond angle: ' + ret.data.angle);
+            lines.push('Hybridization: ' + ret.data.hybridization);
+        }
+    }
+    if (lines.length <= 2) {
+        var excerpt = scrapeResultExcerpt();
+        if (excerpt) lines.push('Result excerpt: ' + excerpt);
+    }
+    return lines.join('\n');
+}
+
+function buildCompareResultText(v1, v2, mol1, mol2) {
+    var lines = ['3D Molecular Geometry (Compare)', 'Molecule A: ' + (v1 || '(none)'), 'Molecule B: ' + (v2 || '(none)')];
+    if (mol1) {
+        lines.push('', 'A — ' + mol1.name + ' (' + (mol1.display || mol1.formula) + ')',
+            'Shape: ' + mol1.geometry, 'Angle: ' + mol1.angle, 'Hybridization: ' + mol1.hybridization,
+            'BP: ' + mol1.bp + ', LP: ' + mol1.lp);
+    }
+    if (mol2) {
+        lines.push('', 'B — ' + mol2.name + ' (' + (mol2.display || mol2.formula) + ')',
+            'Shape: ' + mol2.geometry, 'Angle: ' + mol2.angle, 'Hybridization: ' + mol2.hybridization,
+            'BP: ' + mol2.bp + ', LP: ' + mol2.lp);
+    }
+    if (!mol1 && !mol2) {
+        var excerpt = scrapeResultExcerpt();
+        if (excerpt) lines.push('', 'Compare excerpt: ' + excerpt);
+    }
+    return lines.join('\n');
+}
+
+function formulaWithCharge(formula, charge) {
+    var f = String(formula || '').trim();
+    if (!f) return f;
+    var ch = parseInt(charge, 10);
+    if (isNaN(ch) || ch === 0) return f;
+    if (/[+-]\d*$/.test(f) || /[+-]$/.test(f)) return f;
+    if (ch > 0) return f + (ch === 1 ? '+' : '+' + ch);
+    return f + (ch === -1 ? '-' : '(' + ch + '-)');
+}
+
 // ==================== Calculate ====================
 
 function calculate() {
@@ -73,17 +164,20 @@ function calculate() {
     if (state.mode === 'pairs') {
         state.bp = intVal('mg-bp', 4);
         state.lp = intVal('mg-lp', 0);
-        R.renderByPairs(container, state.bp, state.lp);
+        var pairData = R.renderByPairs(container, state.bp, state.lp);
+        state.lastResultText = buildPairsResultText(state.bp, state.lp, pairData);
         // No specific formula for pairs mode — hide Lewis link
         updateLewisLink('');
     } else if (state.mode === 'formula') {
         var formulaEl = $('mg-formula');
         state.formula = formulaEl ? formulaEl.value.trim() : '';
         if (!state.formula) {
+            state.lastResultText = '';
             R.showError(container, 'Please enter a chemical formula.');
             return;
         }
-        R.renderByFormula(container, state.formula);
+        var formulaRet = R.renderByFormula(container, state.formula);
+        state.lastResultText = buildFormulaResultText(state.formula, formulaRet);
         updateLewisLink(state.formula);
     } else if (state.mode === 'database') {
         return;
@@ -110,7 +204,8 @@ function loadMolecule(formula) {
         if (empty) empty.style.display = 'none';
         var actions = $('mg-result-actions');
         if (actions) actions.style.display = 'flex';
-        R.renderByFormula(container, formula);
+        var ret = R.renderByFormula(container, formula);
+        state.lastResultText = buildFormulaResultText(formula, ret);
         updateLewisLink(formula);
     }
     // Switch to result tab
@@ -172,7 +267,8 @@ function clearAll() {
     if (actions) actions.style.display = 'none';
 
     updateLewisLink('');
-    switchMode('pairs');
+    state.lastResultText = '';
+    switchMode('formula');
 }
 
 // ==================== URL State ====================
@@ -713,6 +809,8 @@ function runCompare() {
     if (diff) {
         R.renderCompareDiff(diff, mol1, mol2);
     }
+
+    state.lastResultText = buildCompareResultText(v1, v2, mol1, mol2);
 }
 
 // ==================== Initialization ====================
@@ -847,6 +945,54 @@ function init() {
         // default state ready
     }
 }
+
+window.mgGetContext = function mgGetContext() {
+    var activeModeBtn = document.querySelector('.mg-mode-btn.active');
+    var activeOutputTab = document.querySelector('.mg-output-tab.active');
+    return {
+        tool: 'molecular-geometry-calculator',
+        inputMode: activeModeBtn ? activeModeBtn.getAttribute('data-mode') : state.mode,
+        outputPanel: activeOutputTab ? activeOutputTab.getAttribute('data-panel') : 'result',
+        formula: ($('mg-formula') || {}).value || '',
+        bondingPairs: intVal('mg-bp', 4),
+        lonePairs: intVal('mg-lp', 0),
+        compare1: ($('mg-cmp-1') || {}).value || '',
+        compare2: ($('mg-cmp-2') || {}).value || '',
+        resultSummary: state.lastResultText || ''
+    };
+};
+
+window.mgApplyFormula = function mgApplyFormula(formula, charge, opts) {
+    opts = opts || {};
+    var f = formulaWithCharge(formula, charge);
+    if (!f) return { applied: false, error: 'Empty formula' };
+
+    switchMode('formula');
+    state.mode = 'formula';
+    var formulaEl = $('mg-formula');
+    if (formulaEl) formulaEl.value = f;
+    state.formula = f;
+
+    var tabs = document.querySelectorAll('.mg-output-tab');
+    var panels = document.querySelectorAll('.mg-panel');
+    for (var t = 0; t < tabs.length; t++) {
+        tabs[t].classList.toggle('active', tabs[t].getAttribute('data-panel') === 'result');
+    }
+    for (var p = 0; p < panels.length; p++) {
+        panels[p].classList.toggle('active', panels[p].id === 'mg-panel-result');
+    }
+
+    if (opts.autoGenerate !== false) {
+        calculate();
+    } else if (formulaEl) {
+        formulaEl.focus();
+    }
+
+    if (typeof ToolUtils !== 'undefined') {
+        ToolUtils.showToast('Formula applied — calculating geometry…', 1800);
+    }
+    return { applied: true, formula: f };
+};
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

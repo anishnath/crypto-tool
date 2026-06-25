@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "chemistry-ai");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -243,6 +246,16 @@
         .mg-output-stack .mg-output-tab.active{
             background:var(--cs-panel-bg); color:var(--cs-accent); box-shadow:var(--cs-shadow-sm);
         }
+        .ic-hero .mg-hero-mode-row{display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin-bottom:1rem}
+        .ic-hero .mg-hero-mode-row .mg-mode-toggle{margin-bottom:0}
+        .ic-hero .chemistry-ai-tab-btn{
+            flex:0 0 auto;padding:6px 14px;border:1px solid rgba(99,102,241,0.45);border-radius:var(--cs-radius-pill);
+            background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.1));color:var(--cs-accent);
+            font:600 12.5px var(--cs-font-sans);cursor:pointer;display:inline-flex;align-items:center;gap:0.35rem;
+            white-space:nowrap;transition:background var(--cs-transition),transform 0.1s var(--cs-ease),box-shadow var(--cs-transition)
+        }
+        .ic-hero .chemistry-ai-tab-btn:hover{background:rgba(99,102,241,0.18);transform:translateY(-1px);box-shadow:0 2px 8px rgba(99,102,241,0.15)}
+        .ic-hero .chemistry-ai-tab-btn[aria-busy="true"]{opacity:0.75;cursor:wait}
 
         /* Inputs */
         .ic-hero .mg-input,
@@ -285,6 +298,7 @@
         .mg-output-stack .tool-empty-state h3{ font:400 1.5rem var(--cs-font-serif); color:var(--cs-ink); }
         .mg-output-stack .tool-empty-state p{ color:var(--cs-muted); }
     </style>
+    <%@ include file="modern/components/chemistry-ai-head.inc.jsp" %>
 </head>
 <body class="cs-body">
 <%@ include file="modern/components/nav-header.jsp" %>
@@ -316,9 +330,14 @@
     <div class="ic-hero">
 
                 <!-- Mode Toggle -->
+                <div class="mg-hero-mode-row">
                 <div class="mg-mode-toggle">
                     <button type="button" class="mg-mode-btn active" data-mode="formula">By Formula</button>
                     <button type="button" class="mg-mode-btn" data-mode="pairs">By Pairs</button>
+                </div>
+                <button type="button" class="chemistry-ai-tab-btn" id="btnChemistryAI" title="Chemistry AI tutor — explains VSEPR results; 3D is rendered by the program (Ctrl+Shift+A)">
+                    &#10024; AI
+                </button>
                 </div>
 
                 <!-- By Formula Form -->
@@ -1217,5 +1236,11 @@ H&mdash;O&mdash;H</div>
     }
 })();
 </script>
+<%
+    request.setAttribute("chemistryAiButtonId", "btnChemistryAI");
+    request.setAttribute("chemistryAiProfile", "/modern/js/ai/adapters/chemistry-profiles/molecular-geometry.js");
+    request.setAttribute("chemistryAiProfileExport", "configureMolecularGeometryChemistryShell");
+%>
+<%@ include file="modern/components/chemistry-ai-boot.inc.jsp" %>
 </body>
 </html>
