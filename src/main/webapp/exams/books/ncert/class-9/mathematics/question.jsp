@@ -156,6 +156,7 @@
 
 <!-- NCERT Books CSS -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/books/ncert/ncert-books.css">
+<%@ include file="../../ncert-ai-head.inc.jsp" %>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -782,7 +783,10 @@
 
             // Question Section
             html += '<div class="question-section">';
-            html += '<div class="section-label">Question ' + currentQuestion.question_number + '</div>';
+            html += '<div class="section-label section-label-row">';
+            html += '<span>Question ' + currentQuestion.question_number + '</span>';
+            html += '<button type="button" class="ncert-ai-q-btn" onclick="window.ncertOpenAI && window.ncertOpenAI()">&#10024; AI</button>';
+            html += '</div>';
             html += '<div class="question-text-main">' + formatTextWithLineBreaks(currentQuestion.question_latex || currentQuestion.question_plain) + '</div>';
             html += '</div>';
 
@@ -861,6 +865,18 @@
             }
 
             container.innerHTML = html;
+
+            if (window.ncertEmitContext) {
+                window.ncertEmitContext({
+                    pageType: 'question',
+                    bookClass: 'class-9',
+                    bookPart: 'mathematics',
+                    subjectLabel: 'Mathematics',
+                    chapterNum: CHAPTER_NUM,
+                    chapterName: CHAPTER_NAME,
+                    question: currentQuestion
+                });
+            }
 
             // Render MathJax
             if (window.MathJax && window.MathJax.typesetPromise) {
@@ -984,4 +1000,5 @@ function injectQASchema(q) {
 })();
 </script>
 
+<%@ include file="../../ncert-ai-boot.inc.jsp" %>
 <%@ include file="../../../../components/footer.jsp" %>

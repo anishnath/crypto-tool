@@ -590,6 +590,8 @@ export class ToolAiAssistant {
    * @param {(content: string) => string} [opts.sanitizeForAi]
    *   Strip secrets from history/context before sending to AI endpoints (tool-specific).
    * @param {Function} [opts.onError]
+   * @param {(body: HTMLElement, bubble: HTMLElement) => void} [opts.onAssistantRender]
+   *   Called after an assistant bubble is finalized (markdown applied). Use for MathJax/KaTeX, etc.
    * @param {boolean} [opts.markdown] - render Markdown in assistant bubbles (default true)
    * @param {number} [opts.maxInputLength] - clamp textarea input (default 8000)
    * @param {boolean} [opts.floating] - render as a non-blocking, draggable, collapsible
@@ -652,6 +654,7 @@ export class ToolAiAssistant {
     this.onSend = typeof opts.onSend === 'function' ? opts.onSend : null;
     this.sanitizeForAi = typeof opts.sanitizeForAi === 'function' ? opts.sanitizeForAi : null;
     this.onError = opts.onError;
+    this.onAssistantRender = typeof opts.onAssistantRender === 'function' ? opts.onAssistantRender : null;
     this.useMarkdown = opts.markdown !== false;
     this.maxInputLength = Math.max(1, opts.maxInputLength ?? 8000);
 
@@ -1033,7 +1036,9 @@ export class ToolAiAssistant {
     } else {
       body.textContent = formatted;
     }
-    return this._maybeApplyButtons(bubble, formatted);
+    const applyBtn = this._maybeApplyButtons(bubble, formatted);
+    this.onAssistantRender?.(body, bubble);
+    return applyBtn;
   }
 
   // ─── Apply-action UI ───────────────────────────────────────────────────────

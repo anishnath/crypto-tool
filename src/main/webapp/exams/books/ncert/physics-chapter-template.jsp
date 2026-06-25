@@ -11,6 +11,7 @@
 
                 <!-- NCERT Books CSS -->
                 <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/books/ncert/ncert-books.css">
+                <%@ include file="ncert-ai-head.inc.jsp" %>
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
@@ -1285,6 +1286,14 @@
 
                                 // Render exercises
                                 var html = '';
+                                window.ncertChapterMeta = {
+                                    bookClass: BOOK_CLASS,
+                                    bookPart: BOOK_PART,
+                                    subjectLabel: 'Physics',
+                                    chapterNum: CHAPTER_NUM,
+                                    chapterName: CHAPTER_NAME
+                                };
+                                window.ncertQuestionRegistry = {};
                                 var exerciseKeys = Object.keys(exercises).sort(function (a, b) {
                                     var partsA = a.match(/(\d+)/g) || [0];
                                     var partsB = b.match(/(\d+)/g) || [0];
@@ -1309,6 +1318,7 @@
 
                                     questions.forEach(function (q, qIdx) {
                                         var qId = 'q_' + exIdx + '_' + qIdx;
+                                        window.ncertQuestionRegistry[qId] = q;
                                         var diffClass = q.difficulty < 0.4 ? 'easy' : (q.difficulty < 0.7 ? 'medium' : 'hard');
                                         var diffLabel = q.difficulty < 0.4 ? 'Easy' : (q.difficulty < 0.7 ? 'Medium' : 'Hard');
                                         var typeClass = q.type.toLowerCase().replace(/\s+/g, '');
@@ -1394,6 +1404,7 @@
                                         var questionPageUrl = buildQuestionSlug(q) + '.jsp';
 
                                         html += '<div class="solution-toggle">';
+                                        html += '<button type="button" class="toggle-btn ncert-ai-q-btn" onclick="ncertOpenQuestionAI(\'' + qId + '\')">&#10024; AI</button>';
                                         if (q.hint) {
                                             html += '<button class="toggle-btn" onclick="toggleHint(\'' + qId + '\')">Show Hint</button>';
                                         }
@@ -1476,6 +1487,18 @@
                                 });
 
                                 container.innerHTML = html;
+
+                                if (window.ncertEmitContext) {
+                                    window.ncertEmitContext({
+                                        pageType: 'chapter',
+                                        bookClass: BOOK_CLASS,
+                                        bookPart: BOOK_PART,
+                                        subjectLabel: 'Physics',
+                                        chapterNum: CHAPTER_NUM,
+                                        chapterName: CHAPTER_NAME,
+                                        questionCount: chapterQuestions.length
+                                    });
+                                }
 
                                 // Re-render MathJax
                                 function renderMath() {
@@ -1888,4 +1911,5 @@
                     })();
                 </script>
 
+                <%@ include file="ncert-ai-boot.inc.jsp" %>
                 <%@ include file="../../components/footer.jsp" %>

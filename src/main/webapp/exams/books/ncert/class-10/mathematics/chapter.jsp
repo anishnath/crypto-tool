@@ -55,6 +55,7 @@
 
 <!-- NCERT Books CSS -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/exams/books/ncert/ncert-books.css">
+<%@ include file="../../ncert-ai-head.inc.jsp" %>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -953,6 +954,14 @@
 
             // Render exercises
             var html = '';
+            window.ncertChapterMeta = {
+                bookClass: 'class-10',
+                bookPart: 'mathematics',
+                subjectLabel: 'Mathematics',
+                chapterNum: CHAPTER_NUM,
+                chapterName: CHAPTER_NAME
+            };
+            window.ncertQuestionRegistry = {};
             var exerciseKeys = Object.keys(exercises).sort();
             var questionIndex = 0;
 
@@ -968,6 +977,7 @@
 
                 questions.forEach(function(q, qIdx) {
                     var qId = 'q_' + exIdx + '_' + qIdx;
+                    window.ncertQuestionRegistry[qId] = q;
                     var diffClass = q.difficulty < 0.4 ? 'easy' : (q.difficulty < 0.7 ? 'medium' : 'hard');
                     var diffLabel = q.difficulty < 0.4 ? 'Easy' : (q.difficulty < 0.7 ? 'Medium' : 'Hard');
                     var typeClass = q.type.toLowerCase().replace(/\s+/g, '');
@@ -1016,6 +1026,7 @@
                     var questionPageUrl = buildQuestionSlug(q) + '.jsp';
 
                     html += '<div class="solution-toggle">';
+                    html += '<button type="button" class="toggle-btn ncert-ai-q-btn" onclick="ncertOpenQuestionAI(\'' + qId + '\')">&#10024; AI</button>';
                     if (q.hint) {
                         html += '<button class="toggle-btn" onclick="toggleHint(\'' + qId + '\')">Show Hint</button>';
                     }
@@ -1086,6 +1097,18 @@
             });
 
             container.innerHTML = html;
+
+            if (window.ncertEmitContext) {
+                window.ncertEmitContext({
+                    pageType: 'chapter',
+                    bookClass: 'class-10',
+                    bookPart: 'mathematics',
+                    subjectLabel: 'Mathematics',
+                    chapterNum: CHAPTER_NUM,
+                    chapterName: CHAPTER_NAME,
+                    questionCount: chapterQuestions.length
+                });
+            }
 
             // Re-render MathJax - wait for it to be fully loaded
             function renderMath() {
@@ -1339,4 +1362,5 @@ function generateFAQSchema(questions) {
 })();
 </script>
 
+<%@ include file="../../ncert-ai-boot.inc.jsp" %>
 <%@ include file="../../../../components/footer.jsp" %>
