@@ -108,7 +108,14 @@
             border-bottom: 1px solid var(--border); font-size: 12.5px; color: var(--text-bright);
         }
         .viz-card-head .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
-        .viz-card-head .st { margin-left: auto; font-size: 11px; color: var(--text-dim); }
+        .viz-card-head .viz-ops {
+            margin-left: auto; font-size: 11px; font-variant-numeric: tabular-nums;
+            color: var(--text-dim); display: inline-flex; gap: 9px;
+        }
+        .viz-card-head .viz-ops b { color: var(--text-bright); font-weight: 600; }
+        .viz-card-head .viz-ops .rd b { color: #f59e0b; }
+        .viz-card-head .viz-ops .wr b { color: #22c55e; }
+        .viz-card-head .st { margin-left: 12px; font-size: 11px; color: var(--text-dim); }
         .viz-card-body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
         /* Synced code trace: the line that produced the current step lights up */
         .cp-code {
@@ -1177,6 +1184,7 @@
                 card.className = 'viz-card';
                 card.innerHTML =
                     '<div class="viz-card-head"><span class="dot"></span>Pane ' + p.index + ' · ' + capWord(p.lang) +
+                    '<span class="viz-ops" title="reads / comparisons · writes / updates"></span>' +
                     '<span class="st">running…</span></div>' +
                     '<div class="viz-card-body">' +
                     '<div class="cp-code">' + buildCodeLines(p.code) + '</div>' +
@@ -1184,8 +1192,8 @@
                     '</div>';
                 grid.appendChild(card);
                 return { pane: p, codeEl: card.querySelector('.cp-code'), stage: card.querySelector('.viz-stage'),
-                         statusEl: card.querySelector('.st'), mode: null, steps: null, concModel: null, len: 0,
-                         activeLn: -1, lastLineEl: null };
+                         statusEl: card.querySelector('.st'), opsEl: card.querySelector('.viz-ops'),
+                         mode: null, steps: null, concModel: null, len: 0, activeLn: -1, lastLineEl: null };
             });
             var skip = document.getElementById('vizSkip');
             skip.textContent = (others && others.length)
@@ -1226,14 +1234,22 @@
             vizStates.forEach(function (s) {
                 var line = -1;
                 if (s.mode === 'ds' && s.steps && s.steps.length) {
-                    var step = s.steps[Math.min(i, s.steps.length - 1)];
+                    var di = Math.min(i, s.steps.length - 1);
+                    var step = s.steps[di];
                     OcViz.renderStep(s.stage, step);
                     line = step && step.line;
+                    if (s.opsEl) {
+                        s.opsEl.innerHTML = '<span class="rd">reads <b>' + (step.reads || 0) + '</b></span>' +
+                            '<span class="wr">writes <b>' + (step.writes || 0) + '</b></span>';
+                    }
+                    if (s.statusEl) s.statusEl.textContent = (di + 1) + '/' + s.len;
                 } else if (s.mode === 'conc' && s.concModel && s.len) {
                     var idx = Math.min(i, s.len - 1);
                     OcViz.renderConcStep(s.stage, s.concModel, idx);
                     var ev = s.concModel.events && s.concModel.events[idx];
                     line = ev && ev.line;
+                    if (s.opsEl) s.opsEl.textContent = (idx + 1) + ' events';
+                    if (s.statusEl) s.statusEl.textContent = (idx + 1) + '/' + s.len;
                 }
                 setActiveLine(s, line);
             });
@@ -1269,7 +1285,7 @@
             if (vizPlayer) { vizPlayer.pause(); }
         }
 
-        // Backdrop click + Escape close both overlays.
+        // Backdrop click + Escape close the overlays.
         ['tplOverlay', 'vizOverlay'].forEach(function (oid) {
             var el = document.getElementById(oid);
             el.addEventListener('click', function (e) { if (e.target === el) el.classList.remove('show'); });
