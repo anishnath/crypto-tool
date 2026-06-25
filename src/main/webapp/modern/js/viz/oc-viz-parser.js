@@ -196,13 +196,20 @@
         var steps = [];
         var lastLine = null;
         var dirty = false;
+        // Operation counters derived straight from the command stream:
+        // a `select` is a read/compare, a `patch` is a write/update. Cumulative
+        // per step, so the player can show running totals + empirical Big-O.
+        var reads = 0;
+        var writes = 0;
 
         function snapshot() {
             var snap = {
                 line: lastLine,
                 rootKey: meta.__rootKey || null,
                 tracers: cloneState(states),
-                meta: JSON.parse(JSON.stringify(meta))
+                meta: JSON.parse(JSON.stringify(meta)),
+                reads: reads,
+                writes: writes
             };
             steps.push(snap);
             dirty = false;
@@ -219,6 +226,11 @@
                     snapshot();
                 }
                 return;
+            }
+            if (cmd.method === 'select') {
+                reads++;
+            } else if (cmd.method === 'patch') {
+                writes++;
             }
             applyCommand(cmd, meta, states);
             dirty = true;
@@ -238,13 +250,20 @@
         };
     }
 
+    // Compare visual state only (not the op counters), so a step that merely
+    // bumps reads/writes without changing what's drawn still collapses exactly
+    // as before — counts ride along on the surviving step.
+    function stepStateKey(s) {
+        return JSON.stringify({ line: s.line, rootKey: s.rootKey, tracers: s.tracers, meta: s.meta });
+    }
+
     function dedupeConsecutiveSteps(steps) {
         if (!steps || steps.length < 2) {
             return steps || [];
         }
         var out = [steps[0]];
         for (var i = 1; i < steps.length; i++) {
-            if (JSON.stringify(steps[i]) !== JSON.stringify(out[out.length - 1])) {
+            if (stepStateKey(steps[i]) !== stepStateKey(out[out.length - 1])) {
                 out.push(steps[i]);
             }
         }

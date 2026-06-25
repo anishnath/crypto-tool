@@ -437,11 +437,14 @@
             highlightLine(step && step.line);
             if (recordCode.panel) setRecordCodeLine(step && step.line);
             if (els.stepCard && step) {
-                if (step.line != null && step.line > 0) {
-                    els.stepCard.innerHTML = '<i class="fas fa-location-arrow"></i> Executing line <strong>' + step.line + '</strong> in editor';
-                } else {
-                    els.stepCard.textContent = '';
-                }
+                var lineHtml = (step.line != null && step.line > 0)
+                    ? '<i class="fas fa-location-arrow"></i> Executing line <strong>' + step.line + '</strong>'
+                    : '';
+                var opsHtml = (step.reads != null)
+                    ? '<span class="viz-ops-inline" title="reads / comparisons · writes / updates">reads <b>' +
+                        step.reads + '</b> · writes <b>' + step.writes + '</b></span>'
+                    : '';
+                els.stepCard.innerHTML = lineHtml + (lineHtml && opsHtml ? ' · ' : '') + opsHtml;
             }
             updatePlaybackUi(idx, total, player && player.isPlaying());
         }

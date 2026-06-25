@@ -759,6 +759,14 @@
     color: #e0e7ff;
 }
 
+/* Live operation counter (reads = select, writes = patch) */
+.viz-ops-inline {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+    color: var(--oc-text, #9ca3af);
+}
+.viz-ops-inline b { color: var(--oc-text-bright, #e5e7eb); font-weight: 600; }
+
 .ide-toolbar-btn.viz-btn {
     border: 1px solid #6366f1;
     color: #a5b4fc;
