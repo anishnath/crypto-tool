@@ -780,6 +780,18 @@
     background: rgba(99, 102, 241, 0.25);
 }
 
+/* Light theme: #a5b4fc text washes out on white — use a readable indigo. */
+[data-theme="light"] .ide-toolbar-btn.viz-btn {
+    color: #4338ca;
+    border-color: #6366f1;
+}
+[data-theme="light"] .ide-toolbar-btn.viz-btn:hover:not(:disabled) {
+    background: rgba(99, 102, 241, 0.12);
+}
+[data-theme="light"] .ide-toolbar-btn.viz-btn.is-active {
+    background: rgba(99, 102, 241, 0.18);
+}
+
 .ide-viz-log {
     font-family: ui-monospace, monospace;
     font-size: 12px;

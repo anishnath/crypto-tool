@@ -1,0 +1,243 @@
+/* Rust ownership renderer (oc-ownership.js) — permissions + interpreter views.
+   Modeled on Aquascope's editor styling. Theme-aware via [data-theme]. */
+
+.viz-ownership {
+    --aq-read: #ff9500;
+    --aq-write: #0c7bdc;
+    --aq-own: #dc0055;
+    --aq-gain: #1a7f37;
+    --aq-loss: #8a8f99;
+    --ownb-bg: #0f1117;
+    --ownb-fg: #e6e6e6;
+    --ownb-panel: #1a1f29;
+    --ownb-border: #2a313e;
+    --ownb-muted: #9aa3b2;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ownb-fg);
+    overflow: auto;
+    padding: 4px 2px 24px;
+}
+[data-theme="light"] .viz-ownership {
+    --ownb-bg: #ffffff;
+    --ownb-fg: #1f2328;
+    --ownb-panel: #f6f8fa;
+    --ownb-border: #e2e6ea;
+    --ownb-muted: #5a6472;
+}
+
+.own-section { margin-bottom: 22px; }
+.own-h { font-size: 14px; margin: 6px 4px 10px; font-weight: 600; }
+.own-sub-h { color: var(--ownb-muted); font-weight: 400; font-size: 12.5px; }
+.own-pane-cap { margin: 4px 4px 12px; }
+
+/* sub-tabs (Permissions | Runtime memory) */
+.own-subtabs { display: flex; gap: 4px; margin: 4px 2px 14px; border-bottom: 1px solid var(--ownb-border); }
+.own-subtab {
+    background: transparent; border: 0; border-bottom: 2px solid transparent;
+    color: var(--ownb-muted); padding: 7px 12px; cursor: pointer;
+    font-size: 13px; font-weight: 600; margin-bottom: -1px;
+}
+.own-subtab:hover { color: var(--ownb-fg); }
+.own-subtab.active { color: var(--ownb-fg); border-bottom-color: var(--aq-write); }
+
+.own-empty, .own-loading {
+    padding: 16px; color: var(--ownb-muted); font-size: 13px;
+    display: flex; gap: 10px; align-items: center;
+}
+.own-loading .viz-spinner { width: 18px; height: 18px; }
+
+/* ---------- permissions code view ---------- */
+.own-perm-view {
+    font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; line-height: 1.85;
+    background: var(--ownb-bg); border: 1px solid var(--ownb-border);
+    border-radius: 8px; padding: 10px 2px; overflow-x: auto;
+}
+.own-line {
+    display: grid;
+    grid-template-columns: 2.6em 1fr auto;
+    align-items: center; column-gap: 10px;
+    padding: 0 12px; white-space: pre;
+}
+.own-line:hover { background: rgba(127, 127, 127, 0.07); }
+.own-ln { color: var(--ownb-muted); text-align: right; user-select: none; font-size: 11.5px; }
+.own-code { white-space: pre; }
+.own-steps { justify-self: end; white-space: nowrap; }
+
+/* permission letters */
+.own-perm {
+    font-weight: 800; font-size: 11.5px; padding: 0 1px;
+}
+.own-read { color: var(--aq-read); }
+.own-write { color: var(--aq-write); }
+.own-own { color: var(--aq-own); }
+.own-missing { opacity: 0.6; text-decoration: line-through; text-decoration-thickness: 2px; }
+
+/* inline boundary marker at a use site */
+.own-stack {
+    display: inline-flex; gap: 1px; vertical-align: baseline;
+    margin: 0 1px; padding: 0 3px; border-radius: 4px;
+    background: rgba(127, 127, 127, 0.12);
+}
+
+/* ---------- step tables (the floating boxes) ---------- */
+.own-step-widget { display: inline-flex; align-items: flex-start; gap: 4px; }
+.own-step-toggle {
+    cursor: pointer; color: var(--ownb-muted); font-weight: 700;
+    user-select: none; padding: 0 2px;
+}
+.own-step-box { display: inline-flex; gap: 6px; }
+.own-step-table {
+    border-collapse: collapse;
+    background: var(--ownb-panel); border: 1px solid var(--ownb-border);
+    border-radius: 6px; font-size: 11.5px; overflow: hidden;
+}
+.own-step-table td {
+    padding: 1px 5px; border: 1px solid var(--ownb-border);
+    text-align: center; font-family: "SFMono-Regular", Menlo, monospace;
+}
+.own-path { color: var(--ownb-fg); font-weight: 600; text-align: left !important; }
+.own-event { color: var(--ownb-muted); min-width: 1.4em; }
+.own-evt { font-weight: 700; }
+.own-evt-borrow { color: var(--aq-write); }
+.own-evt-move { color: var(--aq-own); }
+.own-evt-init, .own-evt-reinit { color: var(--aq-gain); }
+.own-pc { min-width: 2.1em; }
+.own-add { color: var(--aq-gain); font-weight: 800; }
+.own-na { color: var(--aq-loss); }
+.own-sub { position: relative; }
+.own-sub::after {
+    content: ""; position: absolute; left: -1px; right: -1px; top: 50%;
+    height: 2px; background: var(--aq-loss); transform: translateY(-50%);
+}
+
+.own-legend {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    margin-top: 12px; padding: 0 6px;
+    font-size: 12px; color: var(--ownb-muted);
+}
+
+/* ---------- interpreter (stack/heap) ---------- */
+.own-ub {
+    margin: 4px 4px 12px; padding: 8px 12px; border-radius: 6px;
+    background: rgba(220, 0, 85, 0.12); border: 1px solid var(--aq-own);
+    color: var(--aq-own); font-weight: 600; font-size: 13px;
+}
+/* vertical L1..Ln steps, each a Stack box + Heap box with drawn arrows */
+.mv-steps { display: flex; flex-direction: column; gap: 26px;
+    font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12.5px; }
+.mv-step { position: relative; padding-left: 4px; }
+.mv-lk {
+    display: inline-block; border: 1px solid rgba(107, 70, 216, 0.35); border-radius: 5px;
+    padding: 1px 7px; font-size: 11.5px; color: #6b46d8;
+    background: rgba(107, 70, 216, 0.14); font-weight: 800;
+}
+.mv-lk-line { margin-left: 8px; font-size: 11.5px; color: var(--ownb-muted); }
+.mv-step-row { position: relative; display: flex; align-items: flex-start; gap: 64px; }
+
+.mv-mem {
+    border: 1px dashed var(--ownb-border); border-radius: 8px;
+    padding: 10px 12px; min-width: 110px;
+}
+.mv-mem-h { font-weight: 700; font-size: 13px; margin-bottom: 8px; }
+.mv-frame-name { color: var(--ownb-muted); margin-bottom: 4px; }
+.mv-empty-frame { color: var(--ownb-muted); }
+
+.mv-locals { border-collapse: collapse; }
+.mv-locals td { border: 1px solid var(--ownb-border); padding: 3px 8px; vertical-align: middle; }
+.mv-name { color: var(--ownb-fg); font-weight: 600; }
+.mv-lval { color: var(--ownb-fg); min-width: 2.4em; }
+.mv-moved { opacity: 0.5; }
+.mv-moved .mv-name, .mv-moved .mv-lval { text-decoration: line-through; }
+
+.mv-heap-cell { border: 1px solid var(--ownb-border); border-radius: 4px;
+    padding: 3px 8px; display: inline-block; }
+.mv-arr { display: inline-flex; }
+.mv-acell { border: 1px solid var(--ownb-border); padding: 1px 6px; margin: -1px 0 -1px -1px; }
+.mv-acell:first-child { margin-left: 0; }
+.mv-ell { padding: 1px 4px; color: var(--ownb-muted); }
+
+/* the pointer source dot (arrow starts here) */
+.mv-dot { color: var(--aq-write); font-weight: 700; padding-left: 4px; }
+.mv-ptr { color: var(--aq-write); font-weight: 600; }
+.mv-freed { color: var(--aq-own); font-weight: 700; }
+.mv-prim { color: var(--aq-write); }
+.mv-field { color: var(--ownb-muted); }
+.mv-adt { color: var(--ownb-fg); }
+
+/* arrow overlay */
+.mv-arrows { position: absolute; left: 0; top: 0; pointer-events: none;
+    overflow: visible; color: var(--ownb-muted); }
+
+/* ===== permission overlay painted on the Monaco editor (inline + glyph only —
+   this embedding does not render Monaco injected text).
+   These elements live inside the Monaco DOM (outside .viz-ownership), so colors
+   are theme-keyed off the document's [data-theme]: bright on dark, deep on light. */
+:root {
+    --ow-read: #ffb454;   /* orange */
+    --ow-write: #54a8ff;  /* blue   */
+    --ow-own: #ff6fa5;    /* pink   */
+    --ow-miss: #ff6b6b;   /* red    */
+    --ow-borrow: #54a8ff;
+    --ow-step: #b79cff;
+    --ow-rule: rgba(255, 255, 255, 0.32);
+}
+[data-theme="light"] {
+    --ow-read: #b85c00;
+    --ow-write: #0a63b8;
+    --ow-own: #c4005a;
+    --ow-miss: #d10038;
+    --ow-borrow: #0c7bdc;
+    --ow-step: #6b46d8;
+    --ow-rule: rgba(0, 0, 0, 0.38);
+}
+
+/* permission use-site: subtle underline; hover shows R/W/O held/missing */
+.own-mark { border-bottom: 1px dotted var(--ow-rule); }
+/* a required permission is missing here (use-after-move/free) — red & loud */
+.own-mark-missing {
+    border-bottom: 2px solid var(--ow-miss) !important;
+    background: color-mix(in srgb, var(--ow-miss) 18%, transparent) !important;
+    border-radius: 2px;
+}
+/* borrow region underline */
+.own-mark-borrow { border-bottom: 2px solid var(--ow-borrow); }
+
+/* R/W/O letters at use-sites via CSS ::after content (renders where Monaco
+   injected text does not). One decoration per expected permission. */
+.own-a::after {
+    font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+    font-weight: 800; font-size: 0.8em; letter-spacing: 0.5px;
+    padding: 0 0.5px; vertical-align: baseline;
+}
+.own-a-first::after { margin-left: 4px; }
+.own-a-read::after  { content: "R"; color: var(--ow-read); }
+.own-a-write::after { content: "W"; color: var(--ow-write); }
+.own-a-own::after   { content: "O"; color: var(--ow-own); }
+.own-a-read-miss::after  { content: "R"; color: var(--ow-miss); text-decoration: line-through; }
+.own-a-write-miss::after { content: "W"; color: var(--ow-miss); text-decoration: line-through; }
+.own-a-own-miss::after   { content: "O"; color: var(--ow-miss); text-decoration: line-through; }
+
+/* permission-change marker in the glyph margin; hover shows the table */
+.own-step-glyph { cursor: help; }
+.own-step-glyph::before {
+    content: "⊞"; color: var(--ow-step);
+    font-weight: 800; font-size: 13px; margin-left: 2px;
+}
+
+/* flash a line when a runtime step is clicked in the pane */
+.own-flash { background: color-mix(in srgb, var(--ow-step) 26%, transparent); transition: background 1s ease-out; }
+
+/* runtime step cards are clickable → jump to their source line */
+.mv-step { cursor: pointer; border-radius: 6px; }
+.mv-step:hover { background: rgba(107, 70, 216, 0.08); }
+
+/* the toggle bar above the runtime view in the Ownership pane */
+.own-overlay-bar {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    margin: 2px 2px 14px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--ownb-border);
+    font-size: 13px;
+}
+.own-toggle { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--ownb-fg); }
+.own-overlay-hint { color: var(--ownb-muted); font-size: 12px; }

@@ -36,6 +36,9 @@
         if (language === 'rust') {
             return 'stable';
         }
+        if (language === 'rust-ownership') {
+            return '0.3.7';
+        }
         return runVersion || '';
     }
 

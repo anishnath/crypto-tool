@@ -42,9 +42,17 @@
             vizLog: document.getElementById('vizLogContent'),
             helpPanel: document.getElementById('vizHelpContent'),
             templates: document.getElementById('vizTemplatesContent'),
+            ownership: document.getElementById('vizOwnership'),
+            ownTab: document.querySelector('.viz-tab-ownership'),
             shellTabs: document.querySelectorAll('.viz-shell-tab'),
             shellPanes: document.querySelectorAll('.viz-shell-pane')
         };
+
+        var currentLang = config.initialLanguage || 'python';
+        var lastOwnCode = null;   // code at the last ownership run (cache key)
+        var ownLoaded = false;
+        var ownOverlay = null;    // Monaco permission overlay (lazy)
+        var ownShowPerms = true;  // paint permissions on the editor
 
         var templatesForLang = [];
 
@@ -62,6 +70,8 @@
         }
 
         function updateButtonVisibility(lang) {
+            currentLang = lang;
+            updateOwnershipTab(lang);
             if (!els.btn) return;
             var show = isVizLanguage(lang);
             els.btn.style.display = show ? '' : 'none';
@@ -220,6 +230,106 @@
             els.shellPanes.forEach(function (pane) {
                 pane.classList.toggle('active', pane.getAttribute('data-viz-pane') === name);
             });
+            if (name === 'ownership') ensureOwnership();
+            else if (ownOverlay) ownOverlay.setVisible(false); // hide perm overlay off-tab
+        }
+
+        // Show the Ownership tab only for Rust (it runs a different engine).
+        function updateOwnershipTab(lang) {
+            if (els.ownTab) els.ownTab.hidden = (lang !== 'rust');
+            if (lang !== 'rust') {
+                if (ownOverlay) ownOverlay.clear();
+                // If we leave Rust while Ownership is the active tab, fall back to stage.
+                if (els.ownTab && els.ownTab.classList.contains('active')) switchModalTab('stage');
+            }
+        }
+
+        function ownMessage(html) {
+            if (els.ownership) els.ownership.innerHTML = '<div class="own-empty">' + html + '</div>';
+        }
+
+        // Lazily create the Monaco permission overlay (paints R/W/O on the editor).
+        function getOverlay() {
+            if (ownOverlay) return ownOverlay;
+            if (global.OcOwnershipOverlay && config.editor && global.monaco) {
+                ownOverlay = global.OcOwnershipOverlay.create({ editor: config.editor, monaco: global.monaco });
+            }
+            return ownOverlay;
+        }
+
+        // Pane = the overlay toggle + the runtime (stack/heap) view. Permissions
+        // live on the editor, so the code is not duplicated here.
+        function renderOwnershipPane(ownership) {
+            els.ownership.innerHTML =
+                '<div class="own-overlay-bar">' +
+                '<label class="own-toggle"><input type="checkbox" id="ownShowPermsCb"' +
+                (ownShowPerms ? ' checked' : '') + '> Highlight permissions on the code</label>' +
+                '<span class="own-overlay-hint">Use-sites underlined (red = permission missing) · hover for R/W/O · ⊞ in the gutter = changes · click a step below to jump</span>' +
+                '</div><div id="ownRuntimeBody"></div>';
+            var cb = els.ownership.querySelector('#ownShowPermsCb');
+            if (cb) cb.addEventListener('change', function () {
+                ownShowPerms = cb.checked;
+                var ov = getOverlay();
+                if (ov) ov.setVisible(ownShowPerms);
+            });
+            var body = els.ownership.querySelector('#ownRuntimeBody');
+            global.OcOwnership.renderRuntime(body, ownership);
+            // Click a runtime step → jump to its source line in the editor.
+            if (body) body.addEventListener('click', function (e) {
+                var step = e.target.closest && e.target.closest('.mv-step[data-line]');
+                var ov = getOverlay();
+                if (step && ov) ov.reveal(parseInt(step.getAttribute('data-line'), 10));
+            });
+        }
+
+        // Lazily run the rust-ownership engine. Cached on code; the permission
+        // layer is painted onto the editor and the pane shows the runtime view.
+        function ensureOwnership() {
+            if (!els.ownership || !global.OcOwnership) return;
+            var payload = getRunPayload();
+            if (!payload || payload.language !== 'rust') {
+                ownMessage('Ownership analysis is available for Rust only.');
+                return;
+            }
+            if (payload.files && payload.files.length > 1) {
+                ownMessage('Multi-file ownership is not supported yet — use a single <code>main.rs</code>.');
+                return;
+            }
+            var code = payload.code != null ? payload.code
+                : (payload.files && payload.files[0] ? payload.files[0].content : '');
+            var ov = getOverlay();
+            if (ownLoaded && code === lastOwnCode) {        // cached — just re-show overlay
+                if (ov && ownShowPerms && ov.hasData()) ov.setVisible(true);
+                return;
+            }
+            lastOwnCode = code;
+            ownLoaded = false;
+            els.ownership.innerHTML =
+                '<div class="own-loading"><div class="viz-spinner" aria-hidden="true"></div>' +
+                '<div>Analyzing ownership… (first run pulls the toolchain — up to ~30s)</div></div>';
+            api.execute({ language: 'rust-ownership', code: code }).then(function (data) {
+                ownLoaded = true;
+                if (data && data.ownership) {
+                    if (ov && ownShowPerms) ov.apply(code, data.ownership);
+                    renderOwnershipPane(data.ownership);
+                } else {
+                    ownMessage('No ownership analysis returned' +
+                        (data && data.stderr ? ':<pre>' + escapeHtml(data.stderr) + '</pre>' : '.'));
+                }
+            }).catch(function (err) {
+                ownLoaded = false;
+                ownMessage('Error: ' + escapeHtml(err && err.message || String(err)));
+            });
+        }
+
+        // When the editor changes, the painted permissions no longer line up —
+        // clear them and force a re-run next time the Ownership tab is opened.
+        function invalidateOwnershipOnEdit() {
+            if (ownOverlay && ownOverlay.hasData() && config.editor &&
+                config.editor.getValue() !== ownOverlay.analyzedCode()) {
+                ownOverlay.clear();
+                ownLoaded = false;
+            }
         }
 
         function renderPlaybackControls() {
@@ -491,6 +601,7 @@
             if (player) player.pause();
             clearLineHighlight();
             hideStaleBanner();
+            if (ownOverlay) ownOverlay.setVisible(false); // unpaint permissions
             setEditorVizMode(false);
             if (typeof config.onPaneToggle === 'function') config.onPaneToggle(false);
         }
@@ -808,7 +919,10 @@
             }
             if (els.btn) els.btn.addEventListener('click', runVisualize);
             if (config.editor && typeof config.editor.onDidChangeModelContent === 'function') {
-                config.editor.onDidChangeModelContent(scheduleStaleCheck);
+                config.editor.onDidChangeModelContent(function () {
+                    scheduleStaleCheck();
+                    invalidateOwnershipOnEdit();
+                });
             }
             initShellHandlers();
             var lang0 = config.initialLanguage || 'python';

@@ -175,6 +175,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ide-page.css?v=<%=cacheVersion%>">
     <% if (ocVizUiEnabled) { %>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/viz-workspace.css?v=<%=cacheVersion%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/oc-ownership.css?v=<%=cacheVersion%>">
     <% } %>
     <%@ include file="/modern/components/ai-assistant-head.inc.jsp" %>
 
@@ -1134,6 +1135,21 @@
                 #aiFixBtn:hover {
                     background: rgba(244,135,113,0.22) !important;
                 }
+                /* Light theme: the lavender/salmon text washes out on white — deepen it. */
+                [data-theme="light"] .oc-ai-btn {
+                    background: rgba(99,102,241,0.12) !important;
+                    color: #4338ca !important;
+                }
+                [data-theme="light"] .oc-ai-btn:hover {
+                    background: rgba(99,102,241,0.20) !important;
+                }
+                [data-theme="light"] #aiFixBtn {
+                    background: rgba(217,83,79,0.12) !important;
+                    color: #c0392b !important;
+                }
+                [data-theme="light"] #aiFixBtn:hover {
+                    background: rgba(217,83,79,0.20) !important;
+                }
                 @media (max-width: 768px) {
                     .oc-ai-btn span,
                     #aiFixBtn span {
@@ -1683,6 +1699,7 @@
                                         </div>
                                         <div class="viz-shell-tabs">
                                             <button type="button" class="viz-shell-tab active" data-viz-tab="stage">Visualization</button>
+                                            <button type="button" class="viz-shell-tab viz-tab-ownership" data-viz-tab="ownership" hidden>Ownership</button>
                                             <button type="button" class="viz-shell-tab" data-viz-tab="templates">Templates</button>
                                             <button type="button" class="viz-shell-tab" data-viz-tab="log">Log</button>
                                             <button type="button" class="viz-shell-tab" data-viz-tab="help">Help</button>
@@ -1704,6 +1721,9 @@
                                             </div>
                                             <div class="viz-shell-pane" data-viz-pane="help">
                                                 <div id="vizHelpContent" class="viz-help-panel">Loading visualization help…</div>
+                                            </div>
+                                            <div class="viz-shell-pane" data-viz-pane="ownership">
+                                                <div id="vizOwnership" class="viz-ownership">Click <strong>Ownership</strong> to see Rust permissions &amp; runtime memory.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -2166,6 +2186,8 @@
                 <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-concurrency.js?v=<%=cacheVersion%>"></script>
                 <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-player.js?v=<%=cacheVersion%>"></script>
                 <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-recorder.js?v=<%=cacheVersion%>"></script>
+                <script src="<%=request.getContextPath()%>/modern/js/viz/oc-ownership.js?v=<%=cacheVersion%>"></script>
+                <script src="<%=request.getContextPath()%>/modern/js/viz/oc-ownership-overlay.js?v=<%=cacheVersion%>"></script>
                 <script src="<%=request.getContextPath()%>/modern/js/viz/oc-viz-workspace.js?v=<%=cacheVersion%>"></script>
                 <% } %>
 
