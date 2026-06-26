@@ -2214,7 +2214,17 @@
                     var isRunning = false;
                     var panelMinimized = false;
                     var originalPanelHeight = 280;
-                    var loadedFromURL = false;
+                    // Detect a shared-code URL synchronously, before Monaco's async
+                    // require() callback runs. The initial template load in
+                    // loadLanguages() is gated on this flag; if it were only set later
+                    // (inside loadFromURL) a callback-ordering race could let the default
+                    // template clobber a just-loaded shared snippet.
+                    var loadedFromURL = (function () {
+                        try {
+                            var sp = new URLSearchParams(window.location.search);
+                            return !!(sp.get('s') || sp.get('c') || sp.get('b64'));
+                        } catch (e) { return false; }
+                    })();
 
                     // Multi-file state
                     var files = [];
@@ -2554,7 +2564,12 @@
                             bash: "#!/usr/bin/env bash\necho \"Hello, World!\"\n",
                             test: "#!/usr/bin/env bash\necho \"Hello, World!\"\n"
                         };
-                        var initValue = initialSamples[currentLanguage] || '// Write your ' + (currentLanguage || 'code') + ' code here\n';
+                        // When loading shared code from the URL, start blank so the
+                        // default sample never flashes (and never lingers if the snippet
+                        // fetch is slow). loadFromURL()/loadSnippet() fills it in.
+                        var initValue = loadedFromURL
+                            ? '// Loading shared code…\n'
+                            : (initialSamples[currentLanguage] || '// Write your ' + (currentLanguage || 'code') + ' code here\n');
                         editor = monaco.editor.create(document.getElementById('codeEditor'), {
                             value: initValue,
                             language: initMonacoLang,
@@ -3356,6 +3371,10 @@
                             .then(function (data) {
                                 if (data.error) {
                                     document.getElementById('statusExec').innerHTML = '<i class="fas fa-times-circle"></i> Snippet not found';
+                                    // Snippet is gone/invalid: drop the guard and fall back to the
+                                    // default template so the editor isn't stuck on the placeholder.
+                                    loadedFromURL = false;
+                                    waitForEditor(function () { loadTemplate(); });
                                     return;
                                 }
 
@@ -3415,6 +3434,8 @@
                             })
                             .catch(function (err) {
                                 document.getElementById('statusExec').innerHTML = '<i class="fas fa-times-circle"></i> Load failed';
+                                loadedFromURL = false;
+                                waitForEditor(function () { loadTemplate(); });
                             });
                     }
 
