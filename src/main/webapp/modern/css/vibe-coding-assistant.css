@@ -1082,6 +1082,172 @@ body.vca-no-select, body.vca-no-select * { user-select: none !important; }
   font-size: 11.5px;
 }
 
+/* Math AI — inline engine results in chat */
+.vca-math-results {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--vca-border, rgba(148, 163, 184, 0.35));
+}
+
+.vca-math-result-card {
+  border-radius: 10px;
+  border: 1px solid var(--vca-border, rgba(148, 163, 184, 0.35));
+  background: var(--vca-surface-2, rgba(248, 250, 252, 0.85));
+  overflow: hidden;
+}
+
+.vca-math-result-card.is-computing {
+  opacity: 0.92;
+}
+
+.vca-math-result-card.is-error {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.vca-math-result-head {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--vca-muted, #64748b);
+  background: rgba(99, 102, 241, 0.06);
+  border-bottom: 1px solid var(--vca-border, rgba(148, 163, 184, 0.25));
+}
+
+.vca-math-result-body {
+  padding: 10px 12px;
+}
+
+.vca-math-result-status {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--vca-muted, #64748b);
+  font-style: italic;
+}
+
+.vca-math-result-error {
+  margin: 0;
+  font-size: 12.5px;
+  color: #dc2626;
+}
+
+.vca-math-result-method {
+  margin: 6px 0 0;
+  font-size: 11.5px;
+  color: var(--vca-muted, #64748b);
+}
+
+.vca-math-eq {
+  overflow-x: auto;
+  font-size: 1.05em;
+}
+
+.vca-math-steps {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.vca-math-steps summary {
+  cursor: pointer;
+  color: var(--vca-accent, #6366f1);
+  font-weight: 500;
+  user-select: none;
+}
+
+.vca-math-steps ol {
+  margin: 8px 0 0;
+  padding-left: 1.1rem;
+}
+
+.vca-math-step-title {
+  display: block;
+  font-weight: 600;
+  font-size: 11.5px;
+  margin-bottom: 2px;
+  color: var(--vca-text, #0f172a);
+}
+
+.vca-math-step-math {
+  display: block;
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.vca-math-solve-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 10px 10px;
+  border-top: 1px solid var(--vca-border, rgba(148, 163, 184, 0.25));
+  background: rgba(99, 102, 241, 0.04);
+}
+
+.vca-math-solve-chip {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  background: var(--vca-background, #fff);
+  color: var(--vca-text, #0f172a);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, transform 0.12s;
+  white-space: nowrap;
+}
+
+.vca-math-solve-chip:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.55);
+}
+
+.vca-math-solve-chip.is-active,
+.vca-math-solve-chip:active:not(:disabled) {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #6366f1;
+}
+
+.vca-math-solve-chip:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.vca-math-result-card.is-question .vca-math-problem {
+  font-size: 1.15em;
+  padding: 4px 0 2px;
+  text-align: center;
+}
+
+.vca-math-result-card.is-question .vca-math-problem .katex-display {
+  margin: 0.35em 0;
+}
+
+.vca-math-graph {
+  width: 100%;
+  min-height: 240px;
+  margin: 8px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--vca-border, rgba(148, 163, 184, 0.25));
+}
+
+.vca-math-eq-answer {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--vca-border, rgba(148, 163, 184, 0.3));
+}
+
+.vca-math-steps-list {
+  margin: 8px 0 0;
+  padding-left: 1.1rem;
+  font-size: 12px;
+}
+
 .vca-quick {
   display: flex;
   flex-wrap: wrap;

@@ -56,6 +56,101 @@ export function loadKatex() {
 }
 
 /**
+ * Fix SymPy / JSON LaTeX quirks before KaTeX (backslash loss, empty \\mathrm, etc.).
+ * @param {string} s
+ */
+function repairSympyLatex(s) {
+  let out = s;
+  /* Collapse JSON double-backslashes */
+  out = out.replace(/\\\\/g, '\\');
+  /* Erroneous \\text{mathrm} from partial command loss */
+  out = out.replace(/\\text\{\s*mathrm\s*\}/gi, '');
+  /* Restore \\mathrm when the backslash was dropped */
+  out = out.replace(/(?<![\\a-zA-Z])mathrm\{/gi, '\\mathrm{');
+  /* SymPy differentials: "mathrm d" or "mathrm{d}" without leading \\ */
+  out = out.replace(/(?<![\\a-zA-Z])mathrm\s*d(?![a-zA-Z])/gi, '\\mathrm{d}');
+  /* Stray empty \\mathrm or \\mathrm glued to numbers in fractions */
+  out = out.replace(/\\mathrm\{\s*\}/g, '');
+  out = out.replace(/\\frac\{(\d+)\\mathrm\}\{(\d+)\}/g, '\\frac{$1}{$2}');
+  out = out.replace(/(\d)\\mathrm(?=[\s\}])/g, '$1');
+  /* Restore common commands when \\ was lost (not already escaped) */
+  out = out.replace(
+    /(?<![\\a-zA-Z])(frac|left|right|sin|cos|tan|sec|csc|cot|log|ln|sqrt|int|sum|pi|infty|theta|cdot|quad|displaystyle)(?=[\s\{(\[])/g,
+    '\\$1',
+  );
+  /* Thin-space differential. Handle the already-escaped "\, dx" first so the
+     bare-comma rule below never sees it and prepends a second backslash
+     (which would create "\\,\mathrm{d}x" — a KaTeX line break). */
+  out = out.replace(/\\,\s*d([a-zA-Z])\b/g, '\\,\\mathrm{d}$1');
+  /* Bare "<comma> d x" with no preceding backslash → \,\mathrm{d}x */
+  out = out.replace(/(?<!\\),\s*d([a-zA-Z])\b/g, '\\,\\mathrm{d}$1');
+  return out;
+}
+
+/**
+ * Normalize SymPy / JSON LaTeX for KaTeX (same rules as integral-calculator.js).
+ * Collapses double-backslashes so \\mathrm → \mathrm, etc.
+ * @param {string} latex
+ * @returns {string}
+ */
+export function prepareLatexForKatex(latex) {
+  if (!latex || typeof latex !== 'string') return latex;
+  let s = repairSympyLatex(latex);
+  /* Bare pi/inf tokens (not already \\pi) — e.g. bounds "pi/2" from AI */
+  s = s.replace(/(?<![\\a-zA-Z])pi\s*\/\s*(\d+)(?![a-zA-Z])/gi, '\\frac{\\pi}{$1}');
+  s = s.replace(/(?<![\\a-zA-Z])pi(?![a-zA-Z/])/gi, '\\pi');
+  s = s.replace(/(?<![\\a-zA-Z])oo(?![a-zA-Z])/g, '\\infty');
+  s = s.replace(/(?<![\\a-zA-Z])inf(ty)?(?![a-zA-Z])/gi, '\\infty');
+  const hasLatex = /\\|[\^_]|\{[^}]*\}/.test(s);
+  if (!hasLatex) {
+    return `\\text{${s.replace(/\\/g, '\\\\').replace(/}/g, '\\}')}}`;
+  }
+  s = s.replace(/((?:[A-Za-z]{2,} ){2,}[A-Za-z]{2,})/g, '\\text{$1}');
+  s = s.replace(/^([A-Z][a-z]+)\\ /g, '\\text{$1} ');
+  return s;
+}
+
+/**
+ * @param {string} bound
+ * @returns {string}
+ */
+export function normalizeBoundLatex(bound) {
+  let s = String(bound ?? '').trim();
+  if (!s) return s;
+  if (/\\/.test(s)) return s;
+  s = s.replace(/\boo\b/g, '\\infty');
+  s = s.replace(/\binf(ty)?\b/gi, '\\infty');
+  s = s.replace(/\bpi\s*\/\s*(\d+)\b/gi, '\\frac{\\pi}{$1}');
+  s = s.replace(/\bpi\b/gi, '\\pi');
+  if (/^\d+\s*\/\s*\d+$/.test(s)) {
+    const [a, b] = s.split('/').map((x) => x.trim());
+    return `\\frac{${a}}{${b}}`;
+  }
+  return s;
+}
+
+export function createMathSlotEl(latex, display = true) {
+  const el = document.createElement('div');
+  el.className = 'vca-math-slot';
+  el.dataset.latex = latex || '';
+  el.dataset.display = display ? 'true' : 'false';
+  return el;
+}
+
+/**
+ * @param {HTMLElement} parent
+ * @param {string} latex
+ * @param {string} [extraClass]
+ */
+export function appendEqSlot(parent, latex, extraClass = '') {
+  const wrap = document.createElement('div');
+  wrap.className = `vca-math-eq ${extraClass}`.trim();
+  wrap.appendChild(createMathSlotEl(latex, true));
+  parent.appendChild(wrap);
+  return wrap;
+}
+
+/**
  * @param {string} tex
  * @param {boolean} [displayMode]
  * @returns {string}
@@ -64,7 +159,7 @@ export function renderTeX(tex, displayMode = false) {
   const katex = typeof window !== 'undefined' ? window.katex : null;
   if (!katex) return escHtml(tex);
   try {
-    return katex.renderToString(String(tex ?? '').trim(), {
+    return katex.renderToString(prepareLatexForKatex(String(tex ?? '').trim()), {
       throwOnError: false,
       displayMode: !!displayMode,
       strict: 'ignore',
@@ -73,6 +168,48 @@ export function renderTeX(tex, displayMode = false) {
   } catch {
     return `<code>${escHtml(tex)}</code>`;
   }
+}
+
+/**
+ * Render prepared LaTeX into a DOM element (engine steps / SymPy output).
+ * @param {HTMLElement|null|undefined} el
+ * @param {string} latex
+ * @param {boolean} [displayMode]
+ */
+export function renderLatexIntoElement(el, latex, displayMode = true) {
+  if (!el || !latex) return;
+  const katex = typeof window !== 'undefined' ? window.katex : null;
+  if (!katex) {
+    el.textContent = latex;
+    return;
+  }
+  try {
+    katex.render(prepareLatexForKatex(latex), el, {
+      displayMode: !!displayMode,
+      throwOnError: false,
+      strict: 'ignore',
+    });
+  } catch {
+    el.textContent = latex;
+  }
+}
+
+/**
+ * Typeset all `.vca-math-slot` placeholders under root (data-latex attribute).
+ * @param {HTMLElement|null|undefined} root
+ * @returns {Promise<void>}
+ */
+export async function typesetMathSlots(root) {
+  if (!root) return;
+  await loadKatex();
+  root.querySelectorAll('.vca-math-slot').forEach((el) => {
+    let latex = el.dataset.latex || el.getAttribute('data-latex') || '';
+    if (latex.includes('%')) {
+      try { latex = decodeURIComponent(latex); } catch (_) { /* keep raw */ }
+    }
+    const display = (el.dataset.display || el.getAttribute('data-display')) !== 'false';
+    renderLatexIntoElement(/** @type {HTMLElement} */ (el), latex, display);
+  });
 }
 
 /**

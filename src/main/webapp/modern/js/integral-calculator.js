@@ -2491,6 +2491,17 @@
             prepareLatexForKatex: prepareLatexForKatex
         };
 
+        window.icGetContext = function icGetContext() {
+            return {
+                mode: currentMode,
+                variable: varSelect.value,
+                expr: exprInput.value.trim(),
+                lower: lowerInput.value.trim(),
+                upper: upperInput.value.trim(),
+                resultSummary: lastResultText || ''
+            };
+        };
+
         loadFromUrl();
 
     }());

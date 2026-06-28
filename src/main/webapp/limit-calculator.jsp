@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <% String v = String.valueOf(System.currentTimeMillis()); %>
+<%
+    request.setAttribute("aiToolId", "math-ai");
+    request.setAttribute("aiRequireSignIn", "true");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,6 +72,24 @@
 
     <!-- Image-to-math + KaTeX + MathLive -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=v%>">
+
+    <%@ include file="modern/components/math-ai-head.inc.jsp" %>
+
+    <style>
+        .ic-hero .math-ai-tab-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid rgba(99,102,241,0.35);
+            background: rgba(99,102,241,0.08); color: var(--ms-text, #1e1b4b); font-size: 0.8125rem;
+            font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+            white-space: nowrap;
+        }
+        .ic-hero .math-ai-tab-btn:hover {
+            background: rgba(99,102,241,0.18); transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(99,102,241,0.15);
+        }
+        .ic-hero .math-ai-tab-btn[aria-busy="true"] { opacity: 0.75; cursor: wait; }
+    </style>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
@@ -127,6 +150,7 @@
                                 </button>
                             </div>
                             <button type="button" class="ic-image-btn" id="lc-image-btn" title="Scan limit problems from image">&#128247; Scan</button>
+                            <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Math AI — lim, d/dx, ∫ in chat (Ctrl+Shift+A)">&#10024; AI</button>
                         </div>
                     </div>
 
@@ -497,5 +521,12 @@
         });
     })();
     </script>
+<%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
+<%
+    request.setAttribute("mathAiButtonId", "btnMathAI");
+    request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+    request.setAttribute("mathAiProfileExport", "configureLimitMathShell");
+%>
+<%@ include file="modern/components/math-ai-boot.inc.jsp" %>
 </body>
 </html>
