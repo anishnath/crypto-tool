@@ -46,6 +46,14 @@
 }
 .own-loading .viz-spinner { width: 18px; height: 18px; }
 
+.own-credit {
+    margin: 14px 4px 4px; padding-top: 10px;
+    border-top: 1px solid var(--ownb-border, rgba(127, 127, 127, 0.25));
+    color: var(--ownb-muted); font-size: 11.5px; line-height: 1.5;
+}
+.own-credit a { color: var(--aq-write); text-decoration: none; }
+.own-credit a:hover { text-decoration: underline; }
+
 /* ---------- permissions code view ---------- */
 .own-perm-view {
     font-family: "SFMono-Regular", Menlo, Consolas, monospace;

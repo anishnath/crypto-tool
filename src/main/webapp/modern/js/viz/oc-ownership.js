@@ -456,6 +456,14 @@
         scheduleArrows(container);
     }
 
+    // Credit: this view is modeled on Brown PLT's Aquascope. Shown on every
+    // render so it survives the innerHTML rewrites below.
+    var OWN_CREDIT =
+        '<div class="own-credit">Ownership view powered by ' +
+        '<a href="https://cel.cs.brown.edu/aquascope/" target="_blank" rel="noopener noreferrer">Aquascope</a>' +
+        ' (Brown PLT) — see the paper ' +
+        '<a href="https://cel.cs.brown.edu/paper/ownership-conceptual-model/" target="_blank" rel="noopener noreferrer">A Conceptual Model of Rust Ownership</a>.</div>';
+
     function render(container, code, ownership) {
         var bodies = okBodies(ownership);
         var interp = normInterp(ownership && ownership.interpreter);
@@ -463,7 +471,7 @@
 
         if (!bodies.length && !hasInterp) {
             container.innerHTML = '<div class="own-empty">No ownership analysis returned. ' +
-                'Aquascope needs code that compiles (a <code>fn main</code>).</div>';
+                'Aquascope needs code that compiles (a <code>fn main</code>).</div>' + OWN_CREDIT;
             return;
         }
 
@@ -485,7 +493,7 @@
                 renderInterpreter(interp) + '</div>'
             : '';
 
-        container.innerHTML = tabs + permsPane + runtimePane;
+        container.innerHTML = tabs + permsPane + runtimePane + OWN_CREDIT;
 
         var runtimeEl = container.querySelector('.own-subpane[data-own-pane="runtime"]');
         var redraw = function () { if (runtimeEl && !runtimeEl.hidden) drawArrows(runtimeEl); };
