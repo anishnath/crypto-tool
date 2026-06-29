@@ -2417,7 +2417,179 @@
         }
     ];
 
-    var TEMPLATES = { java: JAVA, python: PYTHON, go: GO, c: CC, cpp: CPP, javascript: JSL, typescript: TS, rust: RUST };
+    var LUA = [
+        {
+            category: 'Array',
+            title: 'Bubble sort',
+            tracer: 'Array1DTracer',
+            desc: 'Adjacent-swap sort on a table — the array animates as values are swapped (1-based indices).',
+            code: lines(
+                'local function bubble(a, n)',
+                '    for i = 1, n - 1 do',
+                '        for j = 1, n - i do',
+                '            if a[j] > a[j + 1] then',
+                '                a[j], a[j + 1] = a[j + 1], a[j]',
+                '            end',
+                '        end',
+                '    end',
+                'end',
+                'local arr = {5, 2, 9, 1, 7, 3}',
+                'bubble(arr, #arr)',
+                'print(table.concat(arr, " "))')
+        },
+        {
+            category: 'Array',
+            title: 'Binary search',
+            tracer: 'Array1DTracer',
+            desc: 'Halve the lo/hi window on a sorted table until the target is found.',
+            code: lines(
+                'local a = {1, 3, 5, 7, 9, 11, 13, 15}',
+                'local target = 11',
+                'local lo, hi, found = 1, #a, -1',
+                'while lo <= hi do',
+                '    local mid = (lo + hi) // 2',
+                '    if a[mid] == target then found = mid; break',
+                '    elseif a[mid] < target then lo = mid + 1',
+                '    else hi = mid - 1 end',
+                'end',
+                'print("index=" .. found)')
+        },
+        {
+            category: 'Recursion',
+            title: 'Quicksort',
+            tracer: 'Array1DTracer',
+            desc: 'In-place quicksort — watch partitions swap and the recursion call stack grow.',
+            code: lines(
+                'local function quicksort(a, lo, hi)',
+                '    if lo < hi then',
+                '        local pivot = a[hi]',
+                '        local i = lo - 1',
+                '        for j = lo, hi - 1 do',
+                '            if a[j] <= pivot then',
+                '                i = i + 1',
+                '                a[i], a[j] = a[j], a[i]',
+                '            end',
+                '        end',
+                '        a[i + 1], a[hi] = a[hi], a[i + 1]',
+                '        local p = i + 1',
+                '        quicksort(a, lo, p - 1)',
+                '        quicksort(a, p + 1, hi)',
+                '    end',
+                'end',
+                'local arr = {9, 3, 7, 1, 8, 2, 6, 5}',
+                'quicksort(arr, 1, #arr)',
+                'print(table.concat(arr, " "))')
+        },
+        {
+            category: '2D array',
+            title: 'Matrix transpose',
+            tracer: 'Array2DTracer',
+            desc: 'Swap m[i][j] with m[j][i] above the diagonal — a nested table animates as a matrix.',
+            code: lines(
+                'local m = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}',
+                'for i = 1, 3 do',
+                '    for j = i + 1, 3 do',
+                '        m[i][j], m[j][i] = m[j][i], m[i][j]',
+                '    end',
+                'end',
+                'print("transposed")')
+        },
+        {
+            category: 'Map',
+            title: 'Two Sum (hash table)',
+            tracer: 'MapTracer',
+            desc: 'Classic LeetCode #1 — a table used as a hash map records seen values.',
+            code: lines(
+                'local function twoSum(nums, target)',
+                '    local seen = {}',
+                '    for i = 1, #nums do',
+                '        local need = target - nums[i]',
+                '        if seen[need] then return seen[need], i end',
+                '        seen[nums[i]] = i',
+                '    end',
+                '    return -1, -1',
+                'end',
+                'local nums = {2, 7, 11, 15}',
+                'local a, b = twoSum(nums, 9)',
+                'print(a .. "," .. b)')
+        },
+        {
+            category: 'Map',
+            title: 'Frequency count',
+            tracer: 'MapTracer',
+            desc: 'Tally occurrences in a table used as a map — freq[x] = (freq[x] or 0) + 1.',
+            code: lines(
+                'local data = {3, 1, 4, 1, 5, 9, 2, 6, 1}',
+                'local freq = {}',
+                'for i = 1, #data do',
+                '    local x = data[i] % 3',
+                '    freq[x] = (freq[x] or 0) + 1',
+                'end',
+                'print("done")')
+        },
+        {
+            category: 'Recursion',
+            title: 'Fibonacci (call stack)',
+            tracer: 'CallStackTracer',
+            desc: 'Naive recursive Fibonacci — watch the call stack grow and unwind.',
+            code: lines(
+                'local function fib(n)',
+                '    if n < 2 then return n end',
+                '    return fib(n - 1) + fib(n - 2)',
+                'end',
+                'print("fib(6)=" .. fib(6))')
+        },
+        {
+            category: 'List',
+            title: 'Linked list reversal',
+            tracer: 'GraphTracer',
+            desc: 'Build a singly linked list of { val, next } tables, then reverse it in place — the graph re-links as it goes.',
+            code: lines(
+                'local function node(v) return { val = v, next = nil } end',
+                'local head = node(1)',
+                'head.next = node(2)',
+                'head.next.next = node(3)',
+                'local prev = nil',
+                'local cur = head',
+                'while cur ~= nil do',
+                '    local nxt = cur.next',
+                '    cur.next = prev',
+                '    prev = cur',
+                '    cur = nxt',
+                'end',
+                'local out = {}',
+                'local p = prev',
+                'while p ~= nil do out[#out + 1] = p.val; p = p.next end',
+                'print(table.concat(out, " "))')
+        },
+        {
+            category: 'Tree',
+            title: 'BST insert + inorder',
+            tracer: 'GraphTracer',
+            desc: 'Recursively insert into a binary search tree of { val, left, right } tables; inorder prints sorted.',
+            code: lines(
+                'local function insert(root, v)',
+                '    if root == nil then return { val = v, left = nil, right = nil } end',
+                '    if v < root.val then root.left = insert(root.left, v)',
+                '    else root.right = insert(root.right, v) end',
+                '    return root',
+                'end',
+                'local function inorder(root, out)',
+                '    if root == nil then return end',
+                '    inorder(root.left, out)',
+                '    out[#out + 1] = root.val',
+                '    inorder(root.right, out)',
+                'end',
+                'local root = nil',
+                'local vals = {5, 3, 8, 1, 4}',
+                'for i = 1, #vals do root = insert(root, vals[i]) end',
+                'local out = {}',
+                'inorder(root, out)',
+                'print(table.concat(out, " "))')
+        }
+    ];
+
+    var TEMPLATES = { java: JAVA, python: PYTHON, go: GO, c: CC, cpp: CPP, javascript: JSL, typescript: TS, lua: LUA, rust: RUST };
 
     function getTemplates(lang) {
         return TEMPLATES[lang] || [];

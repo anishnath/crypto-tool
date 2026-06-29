@@ -39,6 +39,9 @@
         if (language === 'javascript' || language === 'js' || language === 'nodejs') {
             return '20';
         }
+        if (language === 'lua') {
+            return '5.4';
+        }
         if (language === 'cpp' || language === 'c++') {
             return 'clang';
         }
