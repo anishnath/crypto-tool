@@ -42,6 +42,9 @@
         if (language === 'lua') {
             return '5.4';
         }
+        if (language === 'csharp' || language === 'c#') {
+            return '8';
+        }
         if (language === 'cpp' || language === 'c++') {
             return 'clang';
         }

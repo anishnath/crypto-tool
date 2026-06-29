@@ -2589,7 +2589,182 @@
         }
     ];
 
-    var TEMPLATES = { java: JAVA, python: PYTHON, go: GO, c: CC, cpp: CPP, javascript: JSL, typescript: TS, lua: LUA, rust: RUST };
+    var CSHARP = [
+        {
+            category: 'Array',
+            title: 'Quicksort',
+            tracer: 'Array1DTracer',
+            desc: 'In-place quicksort on an int[] — partition swaps animate and the recursion call stack grows.',
+            code: lines(
+                'using System;',
+                'class Program {',
+                '    static void QS(int[] a, int lo, int hi){',
+                '        if(lo<hi){ int pivot=a[hi]; int i=lo-1;',
+                '            for(int j=lo;j<hi;j++) if(a[j]<=pivot){ i++; int t=a[i]; a[i]=a[j]; a[j]=t; }',
+                '            int t2=a[i+1]; a[i+1]=a[hi]; a[hi]=t2; int p=i+1; QS(a,lo,p-1); QS(a,p+1,hi);',
+                '        }',
+                '    }',
+                '    static void Main(){ int[] a={9,3,7,1,8,2,6,5}; QS(a,0,a.Length-1); Console.WriteLine(string.Join(" ",a)); }',
+                '}')
+        },
+        {
+            category: 'Map',
+            title: 'Two Sum',
+            tracer: 'MapTracer',
+            desc: 'LeetCode #1 — a Dictionary records seen values; the array and map animate together.',
+            code: lines(
+                'using System; using System.Collections.Generic;',
+                'class Program {',
+                '    static int[] TwoSum(int[] nums, int target){',
+                '        var seen = new Dictionary<int,int>();',
+                '        for(int i=0;i<nums.Length;i++){',
+                '            int need = target - nums[i];',
+                '            if(seen.ContainsKey(need)) return new int[]{seen[need], i};',
+                '            seen[nums[i]] = i;',
+                '        }',
+                '        return new int[]{-1,-1};',
+                '    }',
+                '    static void Main(){ var r = TwoSum(new int[]{2,7,11,15}, 9); Console.WriteLine(r[0]+","+r[1]); }',
+                '}')
+        },
+        {
+            category: '2D array',
+            title: 'Matrix transpose',
+            tracer: 'Array2DTracer',
+            desc: 'Swap m[i,j] with m[j,i] above the diagonal — a rectangular int[,] animates.',
+            code: lines(
+                'using System;',
+                'class Program { static void Main(){',
+                '    int[,] m = {{1,2,3},{4,5,6},{7,8,9}};',
+                '    for(int i=0;i<3;i++) for(int j=i+1;j<3;j++){ int t=m[i,j]; m[i,j]=m[j,i]; m[j,i]=t; }',
+                '    Console.WriteLine("transposed");',
+                '}}')
+        },
+        {
+            category: 'Set',
+            title: 'Counting array (a[i]++)',
+            tracer: 'Array1DTracer',
+            desc: 'Tally values with count[data[i]]++ — increment is a read-modify-write.',
+            code: lines(
+                'using System;',
+                'class Program { static void Main(){',
+                '    int[] data = {2,0,1,2,1,0,2,1};',
+                '    int[] count = new int[3];',
+                '    for(int i=0;i<data.Length;i++) count[data[i]]++;',
+                '    Console.WriteLine(string.Join(",", count));',
+                '}}')
+        },
+        {
+            category: 'Stack / queue',
+            title: 'Valid parentheses (Stack)',
+            tracer: 'Array1DTracer',
+            desc: 'Push opening brackets, pop on closing — the Stack contents animate.',
+            code: lines(
+                'using System; using System.Collections.Generic;',
+                'class Program { static void Main(){',
+                '    string s = "(()[]{})"; var st = new Stack<int>(); bool ok=true;',
+                '    var map = new Dictionary<char,char>{ {\')\',\'(\'},{\']\',\'[\'},{\'}\',\'{\'} };',
+                '    foreach(char c in s){',
+                '        if(c==\'(\'||c==\'[\'||c==\'{\') st.Push((int)c);',
+                '        else { if(st.Count==0 || st.Pop()!=(int)map[c]){ ok=false; break; } }',
+                '    }',
+                '    Console.WriteLine(ok && st.Count==0 ? "valid" : "invalid");',
+                '}}')
+        },
+        {
+            category: 'Stack / queue',
+            title: 'BFS (Queue + HashSet)',
+            tracer: 'Array2DTracer',
+            desc: 'Breadth-first traversal of a jagged adjacency list using a Queue and a visited HashSet.',
+            code: lines(
+                'using System; using System.Collections.Generic;',
+                'class Program { static void Main(){',
+                '    int[][] g = new int[][]{ new int[]{1,2}, new int[]{3}, new int[]{3,4}, new int[]{5}, new int[]{5}, new int[]{} };',
+                '    var visited = new HashSet<int>(); var q = new Queue<int>(); var order = new List<int>();',
+                '    q.Enqueue(0);',
+                '    while(q.Count>0){ int n=q.Dequeue(); if(visited.Contains(n)) continue; visited.Add(n); order.Add(n);',
+                '        foreach(int nb in g[n]) if(!visited.Contains(nb)) q.Enqueue(nb); }',
+                '    Console.WriteLine(string.Join(" ", order));',
+                '}}')
+        },
+        {
+            category: 'List',
+            title: 'Reverse linked list',
+            tracer: 'GraphTracer',
+            desc: 'LeetCode #206 — build a ListNode chain and reverse it in place; the graph re-links as it goes.',
+            code: lines(
+                'using System;',
+                'class ListNode { public int val; public ListNode next; public ListNode(int v){ val=v; next=null; } }',
+                'class Program { static void Main(){',
+                '    ListNode head = new ListNode(1); head.next = new ListNode(2); head.next.next = new ListNode(3);',
+                '    ListNode prev = null; ListNode cur = head;',
+                '    while(cur != null){ ListNode nxt = cur.next; cur.next = prev; prev = cur; cur = nxt; }',
+                '    var sb = new System.Text.StringBuilder();',
+                '    for(ListNode p = prev; p != null; p = p.next) sb.Append(p.val + " ");',
+                '    Console.WriteLine(sb.ToString().Trim());',
+                '}}')
+        },
+        {
+            category: 'Tree',
+            title: 'BST insert + inorder',
+            tracer: 'GraphTracer',
+            desc: 'Recursively insert into a binary search tree of TreeNode; inorder traversal prints sorted.',
+            code: lines(
+                'using System; using System.Collections.Generic;',
+                'class TreeNode { public int val; public TreeNode left; public TreeNode right; public TreeNode(int v){ val=v; } }',
+                'class Program {',
+                '    static TreeNode Insert(TreeNode root, int v){',
+                '        if(root==null) return new TreeNode(v);',
+                '        if(v < root.val) root.left = Insert(root.left, v); else root.right = Insert(root.right, v);',
+                '        return root;',
+                '    }',
+                '    static void Inorder(TreeNode root, List<int> outl){ if(root==null) return; Inorder(root.left,outl); outl.Add(root.val); Inorder(root.right,outl); }',
+                '    static void Main(){',
+                '        TreeNode root = null; int[] vals={5,3,8,1,4};',
+                '        foreach(int v in vals) root = Insert(root, v);',
+                '        var o = new List<int>(); Inorder(root, o); Console.WriteLine(string.Join(" ", o));',
+                '    }',
+                '}')
+        },
+        {
+            category: 'Concurrency',
+            title: 'Mutex counter',
+            tracer: 'Concurrency',
+            desc: 'Two threads increment a shared counter under a lock — swim lanes show the lock hand-off.',
+            code: lines(
+                'using System; using System.Threading;',
+                'class Program {',
+                '    static object gate = new object();',
+                '    static int counter = 0;',
+                '    static void Worker(){ for(int i=0;i<3;i++){ lock(gate){ counter++; } } }',
+                '    static void Main(){',
+                '        Thread t1 = new Thread(Worker); Thread t2 = new Thread(Worker);',
+                '        t1.Start(); t2.Start(); t1.Join(); t2.Join();',
+                '        Console.WriteLine("counter=" + counter);',
+                '    }',
+                '}')
+        },
+        {
+            category: 'Concurrency',
+            title: 'Deadlock (detected)',
+            tracer: 'Concurrency',
+            desc: 'Two threads take two locks in opposite order — the watchdog catches the circular wait (~5s) and shows both lanes parked mid-acquire.',
+            code: lines(
+                'using System; using System.Threading;',
+                'class Program {',
+                '    static object a = new object(); static object b = new object();',
+                '    static void A(){ lock(a){ Thread.Sleep(50); lock(b){ } } }',
+                '    static void B(){ lock(b){ Thread.Sleep(50); lock(a){ } } }',
+                '    static void Main(){',
+                '        Thread t1 = new Thread(A); Thread t2 = new Thread(B);',
+                '        t1.Start(); t2.Start(); t1.Join(); t2.Join();',
+                '        Console.WriteLine("done");',
+                '    }',
+                '}')
+        }
+    ];
+
+    var TEMPLATES = { java: JAVA, python: PYTHON, go: GO, c: CC, cpp: CPP, javascript: JSL, typescript: TS, lua: LUA, csharp: CSHARP, rust: RUST };
 
     function getTemplates(lang) {
         return TEMPLATES[lang] || [];
