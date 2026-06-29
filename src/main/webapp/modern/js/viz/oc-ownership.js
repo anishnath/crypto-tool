@@ -446,13 +446,13 @@
         var interp = normInterp(ownership && ownership.interpreter);
         if (!interp || !interp.steps.length) {
             container.innerHTML = '<div class="own-empty">No runtime trace for this program ' +
-                '(it may not allocate, or did not compile).</div>';
+                '(it may not allocate, or did not compile).</div>' + OWN_CREDIT;
             return;
         }
         container.innerHTML =
             '<div class="own-sub-h own-pane-cap">Stack &amp; heap as the program runs (Miri). ' +
             'Arrows point from a value to its heap allocation.</div>' +
-            renderInterpreter(interp);
+            renderInterpreter(interp) + OWN_CREDIT;
         scheduleArrows(container);
     }
 
