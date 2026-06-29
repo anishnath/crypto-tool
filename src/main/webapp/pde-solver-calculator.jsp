@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "math-ai");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,6 +35,7 @@
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
     <meta name="googlebot" content="index,follow">
     <meta name="author" content="Anish Nath">
+    <meta name="ctx" content="<%=request.getContextPath()%>" />
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="PDE Solver Calculator with Steps + AI Photo Scan" />
@@ -176,6 +180,22 @@
     @keyframes pde-cta-spin { to { transform: rotate(360deg); } }
     </style>
 
+    <%@ include file="modern/components/math-ai-head.inc.jsp" %>
+    <style>
+        .ic-hero .math-ai-tab-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid rgba(99,102,241,0.35);
+            background: rgba(99,102,241,0.08); color: var(--ms-text, #1e1b4b); font-size: 0.8125rem;
+            font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+            white-space: nowrap;
+        }
+        .ic-hero .math-ai-tab-btn:hover {
+            background: rgba(99,102,241,0.18); transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(99,102,241,0.15);
+        }
+        .ic-hero .math-ai-tab-btn[aria-busy="true"] { opacity: 0.75; cursor: wait; }
+    </style>
+
     <%@ include file="modern/ads/ad-init.jsp" %>
 </head>
 <body class="ms-body">
@@ -221,7 +241,10 @@
                     <!-- Top row: title + Scan button -->
                     <div class="ic-hero-top">
                         <div style="font-size:0.92rem;color:var(--ms-muted);font-weight:600;">Choose a PDE type below.</div>
-                        <button type="button" class="ic-image-btn" id="pde-scan-btn" title="Scan PDE problems from image or PDF">&#128247; Scan</button>
+                        <div class="ic-expr-label-actions" style="display:flex;gap:0.5rem;align-items:center;">
+                            <button type="button" class="ic-image-btn" id="pde-scan-btn" title="Scan PDE problems from image or PDF">&#128247; Scan</button>
+                            <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Math AI — PDE tutor + solve ∫, d/dx, lim, ODE in chat (Ctrl+Shift+A)">&#10024; AI</button>
+                        </div>
                     </div>
 
                     <!-- Quick win #1: PDE chip rail with category groupings -->
@@ -614,13 +637,17 @@
     <%--
         Script load order:
           1. math-libs                  — KaTeX, plotly loader, image-to-math, tool-utils, dark-mode, search
-          2. pde-solver-calculator.js   — existing controller (unchanged; reads pde-* IDs)
-          3. worksheet-engine.js        — practice worksheet
-          4. inline scan + worksheet wiring + quick wins (live preview, URL autofill)
+          2. math-calculus-cores        — shared CAS engines for Math AI chat (∫, d/dx, lim, ODE)
+          3. pde-solver-calculator.js   — page controller (reads pde-* IDs)
+          4. worksheet-engine.js        — practice worksheet
+          5. inline scan + worksheet wiring + quick wins (live preview, URL autofill)
     --%>
     <jsp:include page="/math/partials/math-libs.jsp" />
 
     <script>window.PDE_CALC_CTX = "<%=request.getContextPath()%>";</script>
+
+    <%-- Shared math engines for Math AI chat (page PDE solve stays in pde-solver-calculator.js) --%>
+    <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
 
     <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
     <script src="<%=request.getContextPath()%>/modern/js/pde-solver-calculator.js"></script>
@@ -814,5 +841,13 @@
         });
     })();
     </script>
+
+    <%-- Generic Math AI — PDE tutor + chat engines for ∫, d/dx, lim, ODE --%>
+    <%
+        request.setAttribute("mathAiButtonId", "btnMathAI");
+        request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+        request.setAttribute("mathAiProfileExport", "configurePdeMathShell");
+    %>
+    <%@ include file="modern/components/math-ai-boot.inc.jsp" %>
 </body>
 </html>

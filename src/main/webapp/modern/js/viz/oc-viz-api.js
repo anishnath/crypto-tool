@@ -30,6 +30,9 @@
         if (language === 'go') {
             return '1.26';
         }
+        if (language === 'c') {
+            return 'clang';
+        }
         if (language === 'cpp' || language === 'c++') {
             return 'clang';
         }

@@ -32,6 +32,18 @@ function getLimitCore() {
     : window.LimitCalculatorCore;
 }
 
+function getOdeCore() {
+  return typeof ODECalculatorCore !== 'undefined'
+    ? ODECalculatorCore
+    : window.ODECalculatorCore;
+}
+
+function getPdeCore() {
+  return typeof PDECalculatorCore !== 'undefined'
+    ? PDECalculatorCore
+    : window.PDECalculatorCore;
+}
+
 /** @param {object} core */
 async function solveFromCore(core, latex, withSteps) {
   if (!core?.solveFromLatex) {
@@ -149,6 +161,96 @@ export async function solveLimitTask(task, mode = 'simple') {
 }
 
 /**
+ * Solve an ODE in-chat by calling the SAME SymPy backbone the ODE page uses
+ * (ODECalculatorCore.solveTask → build SymPy → /OneCompilerFunctionality →
+ * parse). Returns exactly what the page returns — no second engine.
+ * @param {import('./math-action-extract.js').MathActionTask} task
+ * @param {MathSolveMode} mode
+ */
+export async function solveOdeTask(task, mode = 'simple') {
+  const core = getOdeCore();
+  if (!core?.solveTask) {
+    return { ok: false, error: 'ODE engine (ODECalculatorCore) not loaded.', mode, problemLatex: '' };
+  }
+  if (!task?.rhs && !task?.expr) {
+    return { ok: false, error: 'No differential equation provided.', mode, problemLatex: '' };
+  }
+
+  const problemLatex = taskToSolveLatex(task);
+
+  let r;
+  try {
+    r = await core.solveTask(task);
+  } catch (err) {
+    return { ok: false, error: err?.message || 'ODE solve failed.', mode, problemLatex };
+  }
+
+  if (!r || !r.ok) {
+    return { ok: false, error: r?.error || 'Could not solve this ODE.', mode, problemLatex };
+  }
+
+  const cls = r.classification ? r.classification.split(',')[0].trim().replace(/_/g, ' ') : '';
+  const method = cls ? cls : 'Symbolic ODE solver';
+
+  return {
+    ok: true,
+    mode,
+    action: 'ode',
+    resultLatex: r.resultLatex || '',
+    method,
+    steps: r.steps || [],
+    input: {
+      variable: 'x',
+      plotX: r.plotX || [],
+      plotY: r.plotY || [],
+      verified: r.verified,
+    },
+    result: { value: r.resultLatex || '', verified: r.verified },
+    problemLatex,
+  };
+}
+
+/**
+ * Solve a PDE in-chat via the same NumPy/SymPy backbone as the PDE Solver page.
+ * @param {import('./math-action-extract.js').MathActionTask} task
+ * @param {MathSolveMode} mode
+ */
+export async function solvePdeTask(task, mode = 'simple') {
+  const core = getPdeCore();
+  if (!core?.solveTask) {
+    return { ok: false, error: 'PDE engine (PDECalculatorCore) not loaded.', mode, problemLatex: '' };
+  }
+
+  const problemLatex = taskToSolveLatex(task);
+
+  let r;
+  try {
+    r = await core.solveTask(task);
+  } catch (err) {
+    return { ok: false, error: err?.message || 'PDE solve failed.', mode, problemLatex };
+  }
+
+  if (!r || !r.ok) {
+    return { ok: false, error: r?.error || 'Could not solve this PDE.', mode, problemLatex };
+  }
+
+  const steps = mode === 'steps' ? (r.steps || []) : [];
+
+  return {
+    ok: true,
+    mode,
+    action: 'pde',
+    resultLatex: r.resultLatex || r.text || '',
+    method: r.method || 'Finite Difference',
+    steps,
+    verified: r.verified,
+    meta: r.meta || {},
+    result: { value: r.resultLatex || r.text || '', verified: r.verified },
+    problemLatex,
+  };
+}
+
+/**
  * @param {import('./math-action-extract.js').MathActionTask} task
  * @param {object} [shell]
  * @param {MathSolveMode} [mode]
@@ -157,6 +259,8 @@ export async function computeTaskInChat(task, _shell, mode = 'simple') {
   const action = task?.action || 'integral';
   if (action === 'derivative') return solveDerivativeTask(task, mode);
   if (action === 'limit') return solveLimitTask(task, mode);
+  if (action === 'ode') return solveOdeTask(task, mode);
+  if (action === 'pde') return solvePdeTask(task, mode);
   return solveIntegralTask(task, mode);
 }
 
@@ -451,6 +555,41 @@ export function renderLimitGraphInChat(plotEl, parsed, result) {
   });
 }
 
+/**
+ * Plot the ODE solution curve y(x) using the SymPy-sampled PLOT_X/PLOT_Y
+ * arrays returned by the engine (general solutions use C=1; IVPs use the
+ * fitted constants — exactly like the page's Graph tab).
+ * @param {HTMLElement} plotEl
+ * @param {object} parsed
+ */
+export function renderOdeGraphInChat(plotEl, parsed) {
+  if (!plotEl) return Promise.resolve(false);
+  const xs = parsed?.plotX;
+  const ys = parsed?.plotY;
+  if (!Array.isArray(xs) || !xs.length || !Array.isArray(ys) || !ys.length) {
+    plotEl.innerHTML = '<p class="vca-math-result-method">No solution curve available to plot for this equation.</p>';
+    return Promise.resolve(false);
+  }
+
+  return ensurePlotly(plotEl, () => {
+    const v = parsed.variable || 'x';
+    const traces = [{
+      x: xs,
+      y: ys,
+      type: 'scatter',
+      mode: 'lines',
+      name: `y(${v})`,
+      line: { color: '#4f46e5', width: 2.5 },
+    }];
+
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    window.Plotly.newPlot(plotEl, traces, plotlyLayout(v, isDark), {
+      responsive: true,
+      displayModeBar: false,
+    });
+  });
+}
+
 function escapeHtml(s) {
   return String(s ?? '')
     .replace(/&/g, '&amp;')
@@ -473,6 +612,19 @@ function chipActionsForTask(task) {
       { mode: 'simple', label: 'Solve', title: 'Evaluate limit (same as Σ Solve)' },
       { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step limit' },
       { mode: 'graph', label: 'Show graph', title: 'Plot f(x) near the limit point' },
+    ];
+  }
+  if (action === 'ode') {
+    return [
+      { mode: 'simple', label: 'Solve', title: 'Solve the differential equation' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step solution' },
+      { mode: 'graph', label: 'Show graph', title: 'Plot the solution curve y(x)' },
+    ];
+  }
+  if (action === 'pde') {
+    return [
+      { mode: 'simple', label: 'Solve', title: 'Numerical/analytical PDE solve (same as page)' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step breakdown' },
     ];
   }
   return [
@@ -501,6 +653,11 @@ export async function renderChatResultCard(card, task, result) {
 
   const problem = taskToDisplayLatex(task);
   const answer = result.resultLatex || '';
+  // ODE solutions are already a full equation ("y = …"), so don't fuse them as
+  // "problem = answer"; integrals/derivatives/limits read better fused.
+  const isOde = (task.action || result.action) === 'ode';
+  const isPde = (task.action || result.action) === 'pde';
+  const answerEq = isOde || isPde ? answer : `${problem} = ${answer}`;
 
   body.replaceChildren();
 
@@ -511,7 +668,7 @@ export async function renderChatResultCard(card, task, result) {
     graph.className = 'vca-math-graph';
     graph.dataset.mathGraph = '1';
     body.appendChild(graph);
-    if (answer) appendEqSlot(body, `${problem} = ${answer}`, 'vca-math-eq-answer');
+    if (answer) appendEqSlot(body, answerEq, 'vca-math-eq-answer');
   } else if (result.mode === 'steps' && Array.isArray(result.steps) && result.steps.length > 0) {
     appendEqSlot(body, problem);
     appendMethod(body, result.method);
@@ -530,7 +687,24 @@ export async function renderChatResultCard(card, task, result) {
       ol.appendChild(li);
     });
     body.appendChild(ol);
-    appendEqSlot(body, `${problem} = ${answer}`, 'vca-math-eq-answer');
+    appendEqSlot(body, answerEq, 'vca-math-eq-answer');
+  } else if (isOde || isPde) {
+    appendEqSlot(body, problem);
+    if (answer) appendEqSlot(body, answer, 'vca-math-eq-answer');
+    appendMethod(body, result.method);
+    if (isPde && result.meta && (result.meta.STABLE || result.meta.CFL || result.meta.R)) {
+      const metaBits = [];
+      if (result.meta.R) metaBits.push(`r = ${result.meta.R}`);
+      if (result.meta.CFL) metaBits.push(`CFL = ${result.meta.CFL}`);
+      if (result.meta.STABLE === 'True') metaBits.push('stable');
+      else if (result.meta.STABLE === 'False') metaBits.push('unstable');
+      if (metaBits.length) {
+        const p = document.createElement('p');
+        p.className = 'vca-math-result-method';
+        p.textContent = metaBits.join(' · ');
+        body.appendChild(p);
+      }
+    }
   } else {
     appendEqSlot(body, `${problem} = ${answer}`);
     appendMethod(body, result.method);
@@ -544,6 +718,7 @@ export async function renderChatResultCard(card, task, result) {
       const action = task.action || result.action || 'integral';
       if (action === 'derivative') void renderDerivativeGraphInChat(plotEl, result.input, result.result);
       else if (action === 'limit') void renderLimitGraphInChat(plotEl, result.input, result.result);
+      else if (action === 'ode') void renderOdeGraphInChat(plotEl, result.input);
       else void renderIntegralGraphInChat(plotEl, result.input);
     }
   }

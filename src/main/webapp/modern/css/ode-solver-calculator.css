@@ -508,6 +508,11 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
+.ode-bvp-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+    font-weight: 400;
+}
 
 /* ===== Separator ===== */
 .ode-sep {

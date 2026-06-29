@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "math-ai");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,6 +130,22 @@
     .ode-result-detail:has(.ode-method-badge + .ode-classify-badge + .ode-verified-badge) { display: none !important; }
     </style>
 
+    <%@ include file="modern/components/math-ai-head.inc.jsp" %>
+    <style>
+        .ic-hero .math-ai-tab-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid rgba(99,102,241,0.35);
+            background: rgba(99,102,241,0.08); color: var(--ms-text, #1e1b4b); font-size: 0.8125rem;
+            font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+            white-space: nowrap;
+        }
+        .ic-hero .math-ai-tab-btn:hover {
+            background: rgba(99,102,241,0.18); transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(99,102,241,0.15);
+        }
+        .ic-hero .math-ai-tab-btn[aria-busy="true"] { opacity: 0.75; cursor: wait; }
+    </style>
+
     <%@ include file="modern/ads/ad-init.jsp" %>
 </head>
 <body class="ms-body">
@@ -186,6 +205,7 @@
                                 </button>
                             </div>
                             <button type="button" class="ic-image-btn" id="ode-scan-btn" title="Scan ODE problems from image or PDF">&#128247; Scan</button>
+                            <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Math AI — solve ODEs, ∫, d/dx, lim in chat (Ctrl+Shift+A)">&#10024; AI</button>
                         </div>
                     </div>
 
@@ -255,6 +275,27 @@
                                 <input type="text" class="tool-input tool-input-mono" id="ode-second-ic-dy0" value="0">
                             </div>
                             <div id="ode-extra-ic-fields"></div>
+                        </div>
+                        <div class="ode-ic-row ode-second-bvp-row" id="ode-second-bvp-row" style="margin-top:0.4rem;">
+                            <input type="checkbox" id="ode-second-bvp-check"> <label for="ode-second-bvp-check">Boundary conditions <em>y(x&#8320;)=y&#8320;</em>, <em>y(x&#8321;)=y&#8321;</em> <span class="ode-bvp-hint">(2nd order only)</span></label>
+                        </div>
+                        <div class="ode-ic-fields" id="ode-second-bvp-fields">
+                            <div class="tool-form-group">
+                                <label class="tool-form-label" for="ode-second-bvp-x0">x&#8320;</label>
+                                <input type="text" class="tool-input tool-input-mono" id="ode-second-bvp-x0" value="0">
+                            </div>
+                            <div class="tool-form-group">
+                                <label class="tool-form-label" for="ode-second-bvp-y0">y(x&#8320;)</label>
+                                <input type="text" class="tool-input tool-input-mono" id="ode-second-bvp-y0" value="0">
+                            </div>
+                            <div class="tool-form-group">
+                                <label class="tool-form-label" for="ode-second-bvp-x1">x&#8321;</label>
+                                <input type="text" class="tool-input tool-input-mono" id="ode-second-bvp-x1" value="1">
+                            </div>
+                            <div class="tool-form-group">
+                                <label class="tool-form-label" for="ode-second-bvp-y1">y(x&#8321;)</label>
+                                <input type="text" class="tool-input tool-input-mono" id="ode-second-bvp-y1" value="0">
+                            </div>
                         </div>
                     </div>
 
@@ -490,14 +531,19 @@
     <%--
         Script load order:
           1. math-libs                  — KaTeX, plotly loader, image-to-math, tool-utils, dark-mode, search
-          2. ode-solver-calculator.js   — existing controller (unchanged; reads ode-* IDs)
-          3. worksheet-engine.js        — practice worksheet
-          4. math-input-multi           — MathLive Visual/Text on the 3 ODE expression inputs (.mml-pair)
-          5. inline scan + worksheet wiring + quick-win normalizers
+          2. math-calculus-cores        — ODECalculatorCore (+ integral/derivative/limit cores) — the
+                                          shared SymPy/CAS engines used by BOTH this page and the Math AI chat
+          3. ode-solver-calculator.js   — page controller (delegates codegen + parsing to ODECalculatorCore)
+          4. worksheet-engine.js        — practice worksheet
+          5. math-input-multi           — MathLive Visual/Text on the 3 ODE expression inputs (.mml-pair)
+          6. inline scan + worksheet wiring + quick-win normalizers
     --%>
     <jsp:include page="/math/partials/math-libs.jsp" />
 
     <script>window.ODE_CALC_CTX = "<%=request.getContextPath()%>";</script>
+
+    <%-- Shared math engines (single source of truth for page + AI chat) --%>
+    <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
 
     <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
     <script src="<%=request.getContextPath()%>/modern/js/ode-solver-calculator.js"></script>
@@ -555,6 +601,8 @@
             if (!s) return s;
 
             // ── Layer (a): derivative notation ──
+            // MathLive LaTeX primes (y^{\prime\prime}) — must run before y' rules
+            s = s.replace(/\\prime/g, "'");
             s = s.replace(/d\^?5y\s*\/\s*dx\^?5/g, 'y5');
             s = s.replace(/d\^?4y\s*\/\s*dx\^?4/g, 'y4');
             s = s.replace(/d\^?3y\s*\/\s*dx\^?3/g, 'yppp');
@@ -570,6 +618,16 @@
             s = s.replace(/y\u2032\u2032\u2032/g, 'yppp');
             s = s.replace(/y\u2032\u2032/g, 'ypp');
             s = s.replace(/y\u2032/g, 'yp');
+            // y^(''), y^{''} after \prime → ' (MathLive visual mode)
+            s = s.replace(/y\s*\^?\s*[\({]\s*('+\s*)+[\)}]/g, function (m) {
+                var n = (m.match(/'/g) || []).length;
+                if (n >= 5) return 'y5';
+                if (n === 4) return 'y4';
+                if (n === 3) return 'yppp';
+                if (n === 2) return 'ypp';
+                if (n === 1) return 'yp';
+                return 'y';
+            });
             // MathLive Visual mode renders multiplication as \cdot — strip it
             s = s.replace(/\\cdot/g, '*');
             s = s.replace(/\\times/g, '*');
@@ -578,6 +636,9 @@
             s = s.replace(/[\u2212\u2013\u2014]/g, '-');  // U+2212 minus, en-dash, em-dash
             s = s.replace(/[\u00D7\u22C5\u2219]/g, '*');  // ×, ⋅, ∙
             s = s.replace(/[\u00F7\u2215]/g, '/');         // ÷, ∕
+
+            // Full homogeneous equation pasted into the RHS field: y''+2y'+y=0
+            s = s.replace(/=\s*0+\s*$/g, '');
 
             // Strip ALL internal whitespace before tokenization — otherwise
             // "x y" looks like two tokens to the legacy parser.
@@ -896,5 +957,13 @@
         });
     })();
     </script>
+
+    <%-- Generic Math AI — chat reuses the same engines loaded above (ODE via SymPy backbone) --%>
+    <%
+        request.setAttribute("mathAiButtonId", "btnMathAI");
+        request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+        request.setAttribute("mathAiProfileExport", "configureOdeMathShell");
+    %>
+    <%@ include file="modern/components/math-ai-boot.inc.jsp" %>
 </body>
 </html>

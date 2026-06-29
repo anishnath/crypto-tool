@@ -21,6 +21,13 @@
     var secondICx0        = document.getElementById('ode-second-ic-x0');
     var secondICy0        = document.getElementById('ode-second-ic-y0');
     var secondICdy0       = document.getElementById('ode-second-ic-dy0');
+    var secondBvpRow      = document.getElementById('ode-second-bvp-row');
+    var secondBvpCheck    = document.getElementById('ode-second-bvp-check');
+    var secondBvpFields   = document.getElementById('ode-second-bvp-fields');
+    var secondBvpX0       = document.getElementById('ode-second-bvp-x0');
+    var secondBvpY0       = document.getElementById('ode-second-bvp-y0');
+    var secondBvpX1       = document.getElementById('ode-second-bvp-x1');
+    var secondBvpY1       = document.getElementById('ode-second-bvp-y1');
 
     var fieldInput        = document.getElementById('ode-field-expr');
     var fieldXmin         = document.getElementById('ode-field-xmin');
@@ -387,7 +394,24 @@
         });
     });
 
-    // ========== IC Checkboxes ==========
+    // ========== IC / BVP Checkboxes ==========
+    function clearSecondIvp() {
+        if (!secondICCheck) return;
+        secondICCheck.checked = false;
+        if (secondICFields) secondICFields.classList.remove('open');
+    }
+
+    function clearSecondBvp() {
+        if (!secondBvpCheck) return;
+        secondBvpCheck.checked = false;
+        if (secondBvpFields) secondBvpFields.classList.remove('open');
+    }
+
+    function syncSecondConditionUI() {
+        if (secondBvpRow) secondBvpRow.style.display = currentOrder === 2 ? '' : 'none';
+        if (currentOrder !== 2) clearSecondBvp();
+    }
+
     if (firstICCheck) {
         firstICCheck.addEventListener('change', function() {
             firstICFields.classList.toggle('open', this.checked);
@@ -395,7 +419,14 @@
     }
     if (secondICCheck) {
         secondICCheck.addEventListener('change', function() {
+            if (this.checked) clearSecondBvp();
             secondICFields.classList.toggle('open', this.checked);
+        });
+    }
+    if (secondBvpCheck) {
+        secondBvpCheck.addEventListener('change', function() {
+            if (this.checked) clearSecondIvp();
+            if (secondBvpFields) secondBvpFields.classList.toggle('open', this.checked);
         });
     }
     if (fieldCurveCheck) {
@@ -505,6 +536,7 @@
                 }
             }
         }
+        syncSecondConditionUI();
     }
 
     // ========== Output Tabs ==========
@@ -583,7 +615,8 @@
         { label: "resonance", rhs: '-y+cos(x)', ic: false },
         { label: "const forcing", rhs: '-4*y+8', ic: true, x0: '0', y0: '0', dy0: '0' },
         { label: "y''-y=e\u02E3", rhs: 'y+exp(x)', ic: false },
-        { label: "y''+y=sin(x)", rhs: '-y+sin(x)', ic: true, x0: '0', y0: '1', dy0: '0' }
+        { label: "y''+y=sin(x)", rhs: '-y+sin(x)', ic: true, x0: '0', y0: '1', dy0: '0' },
+        { label: "BVP y''+\u03C0\u00B2y=0", rhs: '-pi**2*y', bvp: true, x0: '0', y0: '0', x1: '1', y1: '0' }
     ];
     var fieldExamples = [
         { label: 'x+y', rhs: 'x+y' },
@@ -683,14 +716,23 @@
             var ex = pool[Math.floor(Math.random() * pool.length)];
             secondOrderInput.value = ex.rhs;
             if (ex.ic) {
+                clearSecondBvp();
                 secondICCheck.checked = true;
                 secondICFields.classList.add('open');
                 secondICx0.value = ex.x0 || '0';
                 secondICy0.value = ex.y0 || '0';
                 secondICdy0.value = ex.dy0 || '0';
+            } else if (ex.bvp) {
+                clearSecondIvp();
+                secondBvpCheck.checked = true;
+                secondBvpFields.classList.add('open');
+                secondBvpX0.value = ex.x0 || '0';
+                secondBvpY0.value = ex.y0 || '0';
+                secondBvpX1.value = ex.x1 || '1';
+                secondBvpY1.value = ex.y1 || '0';
             } else {
-                secondICCheck.checked = false;
-                secondICFields.classList.remove('open');
+                clearSecondIvp();
+                clearSecondBvp();
             }
         } else {
             var ex = randomField[Math.floor(Math.random() * randomField.length)];
@@ -718,6 +760,7 @@
             for (var i = 0; i < exArr.length; i++) {
                 var ex = exArr[i];
                 html += '<button type="button" class="ode-example-chip" data-rhs="' + escapeHtml(ex.rhs) + '"'
+                    + (ex.bvp ? ' data-bvp="1" data-x0="' + ex.x0 + '" data-y0="' + ex.y0 + '" data-x1="' + ex.x1 + '" data-y1="' + ex.y1 + '"' : '')
                     + (ex.ic ? ' data-ic="1" data-x0="' + ex.x0 + '" data-y0="' + ex.y0 + '" data-dy0="' + (ex.dy0 || '0') + '"' : '')
                     + '>' + escapeHtml(ex.label) + '</button>';
             }
@@ -748,15 +791,24 @@
             }
         } else if (currentMode === 'second') {
             secondOrderInput.value = rhs;
-            if (chip.getAttribute('data-ic') === '1') {
+            if (chip.getAttribute('data-bvp') === '1') {
+                clearSecondIvp();
+                secondBvpCheck.checked = true;
+                secondBvpFields.classList.add('open');
+                secondBvpX0.value = chip.getAttribute('data-x0') || '0';
+                secondBvpY0.value = chip.getAttribute('data-y0') || '0';
+                secondBvpX1.value = chip.getAttribute('data-x1') || '1';
+                secondBvpY1.value = chip.getAttribute('data-y1') || '0';
+            } else if (chip.getAttribute('data-ic') === '1') {
+                clearSecondBvp();
                 secondICCheck.checked = true;
                 secondICFields.classList.add('open');
                 secondICx0.value = chip.getAttribute('data-x0') || '0';
                 secondICy0.value = chip.getAttribute('data-y0') || '0';
                 secondICdy0.value = chip.getAttribute('data-dy0') || '0';
             } else {
-                secondICCheck.checked = false;
-                secondICFields.classList.remove('open');
+                clearSecondIvp();
+                clearSecondBvp();
             }
         } else {
             fieldInput.value = rhs;
@@ -781,9 +833,14 @@
     bindPreviewInput(secondICx0);
     bindPreviewInput(secondICy0);
     bindPreviewInput(secondICdy0);
-    // Also update preview when IC checkboxes toggle
+    bindPreviewInput(secondBvpX0);
+    bindPreviewInput(secondBvpY0);
+    bindPreviewInput(secondBvpX1);
+    bindPreviewInput(secondBvpY1);
+    // Also update preview when IC/BVP checkboxes toggle
     if (firstICCheck) firstICCheck.addEventListener('change', function() { updatePreview(); });
     if (secondICCheck) secondICCheck.addEventListener('change', function() { updatePreview(); });
+    if (secondBvpCheck) secondBvpCheck.addEventListener('change', function() { updatePreview(); });
 
     function buildLeibnizLHS(order) {
         if (order === 1) return '\\frac{dy}{dx}';
@@ -837,6 +894,12 @@
                         icVals.push(el ? el.value.trim() || '0' : '0');
                     }
                     latex += ',\\quad ' + buildICLatex(n, x0, icVals);
+                } else if (secondBvpCheck && secondBvpCheck.checked && currentOrder === 2) {
+                    var bx0 = secondBvpX0.value.trim() || '0';
+                    var by0 = secondBvpY0.value.trim() || '0';
+                    var bx1 = secondBvpX1.value.trim() || '1';
+                    var by1 = secondBvpY1.value.trim() || '0';
+                    latex += ',\\quad y(' + bx0 + ')=' + by0 + ',\\; y(' + bx1 + ')=' + by1;
                 }
             } else {
                 var expr = normalizeExpr(fieldInput.value.trim());
@@ -852,299 +915,64 @@
         }
     }
 
-    // ========== Build SymPy Code ==========
-    function buildSympyCode(mode) {
-        var code = 'from sympy import *\nimport json, numpy as np\n\n';
-        code += 'x = symbols("x")\n';
-        code += 'y = Function("y")\n\n';
-
+    // ========== Build SymPy spec (codegen delegated to ODECalculatorCore) ==========
+    function buildOdeSpec(mode) {
         if (mode === 'first') {
-            var rhs = exprToPython(normalizeExpr(firstOrderInput.value.trim()));
-            var hasIC = firstICCheck.checked;
-            var x0 = firstICx0.value.trim() || '0';
-            var y0 = firstICy0.value.trim() || '0';
-
-            code += '_ns = {"x": x, "y": y(x), "sin": sin, "cos": cos, "tan": tan, "exp": exp, "log": log, "sqrt": sqrt, "pi": pi, "e": E, "asin": asin, "acos": acos, "atan": atan, "sinh": sinh, "cosh": cosh, "tanh": tanh, "Abs": Abs}\n';
-            code += 'rhs_expr = eval("' + rhs.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '", {"__builtins__": {}}, _ns)\n';
-            code += 'ode = Eq(y(x).diff(x), rhs_expr)\n\n';
-
-            code += 'try:\n';
-            code += '    classification = classify_ode(ode, y(x))\n';
-            code += '    cls_str = ", ".join(classification[:3]) if len(classification) > 3 else ", ".join(classification)\n';
-            code += 'except:\n';
-            code += '    cls_str = "unknown"\n\n';
-
-            if (hasIC) {
-                code += 'try:\n';
-                code += '    sol = dsolve(ode, y(x), ics={y(' + x0 + '): ' + y0 + '})\n';
-                code += 'except:\n';
-                code += '    try:\n';
-                code += '        sol_gen = dsolve(ode, y(x))\n';
-                code += '        C1 = symbols("C1")\n';
-                code += '        eq = sol_gen.rhs.subs(x, ' + x0 + ') - ' + y0 + '\n';
-                code += '        c1_val = solve(eq, C1)\n';
-                code += '        if c1_val:\n';
-                code += '            sol = Eq(y(x), sol_gen.rhs.subs(C1, c1_val[0]))\n';
-                code += '        else:\n';
-                code += '            sol = sol_gen\n';
-                code += '    except Exception as e:\n';
-                code += '        print("ERROR:" + str(e))\n';
-                code += '        import sys; sys.exit(0)\n\n';
-            } else {
-                code += 'try:\n';
-                code += '    sol = dsolve(ode, y(x))\n';
-                code += 'except Exception as e:\n';
-                code += '    print("ERROR:" + str(e))\n';
-                code += '    import sys; sys.exit(0)\n\n';
-            }
-
-            code += 'try:\n';
-            code += '    verified = checkodesol(ode, sol)[0]\n';
-            code += 'except:\n';
-            code += '    verified = False\n\n';
-
-            code += 'print("RESULT:" + latex(sol))\n';
-            code += 'print("TEXT:" + str(sol))\n';
-            code += 'print("CLASSIFY:" + cls_str)\n';
-            code += 'print("VERIFIED:" + str(verified))\n';
-            code += 'print("ODE:" + latex(ode))\n\n';
-
-            // Steps
-            code += 'steps = []\n';
-            code += 'steps.append({"title": "Given ODE", "latex": latex(ode)})\n';
-            code += 'steps.append({"title": "Classification", "latex": "\\\\text{" + cls_str.replace("_", " ") + "}"})\n';
-            if (hasIC) {
-                code += 'steps.append({"title": "Initial condition", "latex": "y(' + x0 + ') = ' + y0 + '"})\n';
-            }
-            code += 'steps.append({"title": "Solution", "latex": latex(sol)})\n';
-            code += 'steps.append({"title": "Verification", "latex": "\\\\text{Verified: " + str(verified) + "}"})\n';
-            code += 'print("STEPS:" + json.dumps(steps))\n\n';
-
-            // Plot data
-            code += 'try:\n';
-            code += '    from sympy import lambdify\n';
-            code += '    C1 = symbols("C1")\n';
-            code += '    sol_rhs = sol.rhs\n';
-            code += '    if C1 in sol_rhs.free_symbols:\n';
-            code += '        sol_rhs = sol_rhs.subs(C1, 1)\n';
-            code += '    f_num = lambdify(x, sol_rhs, modules=["numpy"])\n';
-            code += '    x_vals = np.linspace(-5, 5, 300)\n';
-            code += '    y_vals = np.array([float(f_num(xi)) if np.isfinite(f_num(xi)) else float("nan") for xi in x_vals])\n';
-            code += '    y_vals = np.clip(y_vals, -50, 50)\n';
-            code += '    mask = np.isfinite(y_vals)\n';
-            code += '    print("PLOT_X:" + json.dumps(x_vals[mask].tolist()))\n';
-            code += '    print("PLOT_Y:" + json.dumps(y_vals[mask].tolist()))\n';
-            code += 'except Exception as e:\n';
-            code += '    print("PLOT_X:[]")\n';
-            code += '    print("PLOT_Y:[]")\n';
-
-        } else if (mode === 'second') {
-            var n = currentOrder;
-            var rhs = exprToPython(normalizeExpr(secondOrderInput.value.trim()));
-            var hasIC = secondICCheck.checked;
-            var x0 = secondICx0.value.trim() || '0';
-            var y0 = secondICy0.value.trim() || '0';
-            var dy0 = secondICdy0.value.trim() || '0';
-
-            // Build namespace with derivative aliases based on order
-            var nsEntries = '"x": x, "y": y(x), "yp": y(x).diff(x)';
-            if (n >= 2) nsEntries += ', "ypp": y(x).diff(x, 2)';
-            if (n >= 3) nsEntries += ', "yppp": y(x).diff(x, 3)';
-            if (n >= 4) nsEntries += ', "y4": y(x).diff(x, 4)';
-            if (n >= 5) nsEntries += ', "y5": y(x).diff(x, 5)';
-            nsEntries += ', "sin": sin, "cos": cos, "tan": tan, "exp": exp, "log": log, "sqrt": sqrt, "pi": pi, "e": E, "asin": asin, "acos": acos, "atan": atan, "sinh": sinh, "cosh": cosh, "tanh": tanh, "Abs": Abs';
-            code += '_ns = {' + nsEntries + '}\n';
-            code += 'rhs_expr = eval("' + rhs.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '", {"__builtins__": {}}, _ns)\n';
-            code += 'ode = Eq(y(x).diff(x, ' + n + '), rhs_expr)\n\n';
-
-            code += 'try:\n';
-            code += '    classification = classify_ode(ode, y(x))\n';
-            code += '    cls_str = ", ".join(classification[:3]) if len(classification) > 3 else ", ".join(classification)\n';
-            code += 'except:\n';
-            code += '    cls_str = "unknown"\n\n';
-
-            if (hasIC) {
-                // Build ICS dict
-                var icsDict = 'y(' + x0 + '): ' + y0;
-                icsDict += ', y(x).diff(x).subs(x, ' + x0 + '): ' + dy0;
-                for (var i = 2; i < n; i++) {
-                    var el = document.getElementById('ode-second-ic-d' + i + 'y0');
-                    var val = el ? el.value.trim() || '0' : '0';
-                    icsDict += ', y(x).diff(x, ' + i + ').subs(x, ' + x0 + '): ' + val;
+            return {
+                mode: 'first',
+                rhs: firstOrderInput.value.trim(),
+                ic: {
+                    has: firstICCheck.checked,
+                    x0: firstICx0.value.trim(),
+                    y0: firstICy0.value.trim()
                 }
-
-                code += 'try:\n';
-                code += '    sol = dsolve(ode, y(x), ics={' + icsDict + '})\n';
-                code += 'except:\n';
-                code += '    try:\n';
-                code += '        sol_gen = dsolve(ode, y(x))\n';
-                // Build constants list
-                var cSyms = [];
-                for (var ci = 1; ci <= n; ci++) cSyms.push('C' + ci);
-                code += '        ' + cSyms.join(', ') + ' = symbols("' + cSyms.join(' ') + '")\n';
-                // Build equations for each IC
-                code += '        eq_ic = []\n';
-                code += '        eq_ic.append(sol_gen.rhs.subs(x, ' + x0 + ') - ' + y0 + ')\n';
-                code += '        eq_ic.append(diff(sol_gen.rhs, x).subs(x, ' + x0 + ') - ' + dy0 + ')\n';
-                for (var i = 2; i < n; i++) {
-                    var el = document.getElementById('ode-second-ic-d' + i + 'y0');
-                    var val = el ? el.value.trim() || '0' : '0';
-                    code += '        eq_ic.append(diff(sol_gen.rhs, x, ' + i + ').subs(x, ' + x0 + ') - ' + val + ')\n';
-                }
-                code += '        consts = solve(eq_ic, [' + cSyms.join(', ') + '])\n';
-                code += '        if consts:\n';
-                code += '            sol = Eq(y(x), sol_gen.rhs.subs(consts))\n';
-                code += '        else:\n';
-                code += '            sol = sol_gen\n';
-                code += '    except Exception as e:\n';
-                code += '        print("ERROR:" + str(e))\n';
-                code += '        import sys; sys.exit(0)\n\n';
-            } else {
-                code += 'try:\n';
-                code += '    sol = dsolve(ode, y(x))\n';
-                code += 'except Exception as e:\n';
-                code += '    print("ERROR:" + str(e))\n';
-                code += '    import sys; sys.exit(0)\n\n';
-            }
-
-            code += 'try:\n';
-            code += '    verified = checkodesol(ode, sol)[0]\n';
-            code += 'except:\n';
-            code += '    verified = False\n\n';
-
-            code += 'print("RESULT:" + latex(sol))\n';
-            code += 'print("TEXT:" + str(sol))\n';
-            code += 'print("CLASSIFY:" + cls_str)\n';
-            code += 'print("VERIFIED:" + str(verified))\n';
-            code += 'print("ODE:" + latex(ode))\n';
-            code += 'print("ORDER:' + n + '")\n\n';
-
-            // Steps
-            code += 'steps = []\n';
-            code += 'steps.append({"title": "Given ODE", "latex": latex(ode)})\n';
-            code += 'steps.append({"title": "Classification", "latex": "\\\\text{" + cls_str.replace("_", " ") + "}"})\n';
-            if (hasIC) {
-                var icLatexParts = ['y(' + x0 + ') = ' + y0, "y\\'(" + x0 + ') = ' + dy0];
-                for (var i = 2; i < n; i++) {
-                    var el = document.getElementById('ode-second-ic-d' + i + 'y0');
-                    var val = el ? el.value.trim() || '0' : '0';
-                    if (i === 2) icLatexParts.push("y\\'\\'(" + x0 + ') = ' + val);
-                    else if (i === 3) icLatexParts.push("y\\'\\'\\'(" + x0 + ') = ' + val);
-                    else icLatexParts.push('y^{(' + i + ')}(' + x0 + ') = ' + val);
-                }
-                code += 'steps.append({"title": "Initial conditions", "latex": "' + icLatexParts.join(',\\\\; ') + '"})\n';
-            }
-            code += 'steps.append({"title": "Solution", "latex": latex(sol)})\n';
-            code += 'steps.append({"title": "Verification", "latex": "\\\\text{Verified: " + str(verified) + "}"})\n';
-            code += 'print("STEPS:" + json.dumps(steps))\n\n';
-
-            // Plot data
-            code += 'try:\n';
-            code += '    from sympy import lambdify\n';
-            var cSymsPlot = [];
-            for (var ci = 1; ci <= n; ci++) cSymsPlot.push('C' + ci);
-            code += '    ' + cSymsPlot.join(', ') + ' = symbols("' + cSymsPlot.join(' ') + '")\n';
-            code += '    sol_rhs = sol.rhs\n';
-            for (var ci = 0; ci < cSymsPlot.length; ci++) {
-                var cName = cSymsPlot[ci];
-                var defaultVal = ci === 0 ? '1' : '0';
-                code += '    if ' + cName + ' in sol_rhs.free_symbols:\n';
-                code += '        sol_rhs = sol_rhs.subs(' + cName + ', ' + defaultVal + ')\n';
-            }
-            code += '    f_num = lambdify(x, sol_rhs, modules=["numpy"])\n';
-            code += '    x_vals = np.linspace(-5, 5, 300)\n';
-            code += '    y_vals = np.array([float(f_num(xi)) if np.isfinite(f_num(xi)) else float("nan") for xi in x_vals])\n';
-            code += '    y_vals = np.clip(y_vals, -50, 50)\n';
-            code += '    mask = np.isfinite(y_vals)\n';
-            code += '    print("PLOT_X:" + json.dumps(x_vals[mask].tolist()))\n';
-            code += '    print("PLOT_Y:" + json.dumps(y_vals[mask].tolist()))\n';
-            code += 'except Exception as e:\n';
-            code += '    print("PLOT_X:[]")\n';
-            code += '    print("PLOT_Y:[]")\n';
-
-        } else {
-            // Direction field mode
-            var rhs = exprToPython(normalizeExpr(fieldInput.value.trim()));
-            var xmin = parseFloat(fieldXmin.value) || -5;
-            var xmax = parseFloat(fieldXmax.value) || 5;
-            var ymin = parseFloat(fieldYmin.value) || -5;
-            var ymax = parseFloat(fieldYmax.value) || 5;
-            var hasCurve = fieldCurveCheck.checked;
-            var cx0 = fieldCurveX0.value.trim() || '0';
-            var cy0 = fieldCurveY0.value.trim() || '0';
-
-            code += 'from sympy import Symbol\n';
-            code += 'y_sym = Symbol("y")\n';
-            code += '_ns = {"x": x, "y": y_sym, "sin": sin, "cos": cos, "tan": tan, "exp": exp, "log": log, "sqrt": sqrt, "pi": pi, "e": E, "asin": asin, "acos": acos, "atan": atan, "Abs": Abs}\n';
-            code += 'rhs_expr = eval("' + rhs.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '", {"__builtins__": {}}, _ns)\n\n';
-
-            code += 'f_num = lambdify((x, y_sym), rhs_expr, modules=["numpy"])\n\n';
-
-            code += 'N = 20\n';
-            code += 'x_grid = np.linspace(' + xmin + ', ' + xmax + ', N)\n';
-            code += 'y_grid = np.linspace(' + ymin + ', ' + ymax + ', N)\n';
-            code += 'X, Y = np.meshgrid(x_grid, y_grid)\n';
-            code += 'try:\n';
-            code += '    U = np.ones_like(X)\n';
-            code += '    V = np.vectorize(lambda xi, yi: float(f_num(xi, yi)))(X, Y)\n';
-            code += '    mag = np.sqrt(U**2 + V**2)\n';
-            code += '    mag[mag == 0] = 1\n';
-            code += '    U = U / mag\n';
-            code += '    V = V / mag\n';
-            code += '    V = np.clip(V, -10, 10)\n';
-            code += '    U = np.clip(U, -10, 10)\n';
-            code += 'except Exception as e:\n';
-            code += '    print("ERROR:" + str(e))\n';
-            code += '    import sys; sys.exit(0)\n\n';
-
-            code += 'print("FIELD_X:" + json.dumps(X.flatten().tolist()))\n';
-            code += 'print("FIELD_Y:" + json.dumps(Y.flatten().tolist()))\n';
-            code += 'print("FIELD_U:" + json.dumps(U.flatten().tolist()))\n';
-            code += 'print("FIELD_V:" + json.dumps(V.flatten().tolist()))\n';
-
-            if (hasCurve) {
-                code += '\n# Solution curve via Euler method\n';
-                code += 'try:\n';
-                code += '    cx0, cy0 = ' + cx0 + ', ' + cy0 + '\n';
-                code += '    dt = 0.05\n';
-                code += '    curve_x, curve_y = [cx0], [cy0]\n';
-                code += '    # Forward\n';
-                code += '    xc, yc = cx0, cy0\n';
-                code += '    for _ in range(200):\n';
-                code += '        try:\n';
-                code += '            s = float(f_num(xc, yc))\n';
-                code += '            if not np.isfinite(s) or abs(s) > 1e6: break\n';
-                code += '        except: break\n';
-                code += '        xc += dt\n';
-                code += '        yc += dt * s\n';
-                code += '        if abs(yc) > 50 or xc > ' + xmax + ': break\n';
-                code += '        curve_x.append(xc)\n';
-                code += '        curve_y.append(yc)\n';
-                code += '    # Backward\n';
-                code += '    xc, yc = cx0, cy0\n';
-                code += '    bx, by = [], []\n';
-                code += '    for _ in range(200):\n';
-                code += '        try:\n';
-                code += '            s = float(f_num(xc, yc))\n';
-                code += '            if not np.isfinite(s) or abs(s) > 1e6: break\n';
-                code += '        except: break\n';
-                code += '        xc -= dt\n';
-                code += '        yc -= dt * s\n';
-                code += '        if abs(yc) > 50 or xc < ' + xmin + ': break\n';
-                code += '        bx.insert(0, xc)\n';
-                code += '        by.insert(0, yc)\n';
-                code += '    curve_x = bx + curve_x\n';
-                code += '    curve_y = by + curve_y\n';
-                code += '    print("CURVE_X:" + json.dumps(curve_x))\n';
-                code += '    print("CURVE_Y:" + json.dumps(curve_y))\n';
-                code += 'except Exception as e:\n';
-                code += '    pass\n';
-            }
-
-            code += '\nprint("RESULT:Direction field computed")\n';
-            code += 'print("TEXT:dy/dx = ' + rhs.replace(/"/g, '\\"') + '")\n';
+            };
         }
-        return code;
+        if (mode === 'second') {
+            var extra = [];
+            for (var ei = 2; ei < currentOrder; ei++) {
+                var eel = document.getElementById('ode-second-ic-d' + ei + 'y0');
+                extra.push(eel ? eel.value.trim() : '0');
+            }
+            return {
+                mode: 'second',
+                order: currentOrder,
+                rhs: secondOrderInput.value.trim(),
+                ic: {
+                    has: secondICCheck.checked && !(secondBvpCheck && secondBvpCheck.checked),
+                    x0: secondICx0.value.trim(),
+                    y0: secondICy0.value.trim(),
+                    dy0: secondICdy0.value.trim(),
+                    extra: extra
+                },
+                bvp: {
+                    has: !!(secondBvpCheck && secondBvpCheck.checked && currentOrder === 2),
+                    x0: secondBvpX0 ? secondBvpX0.value.trim() : '0',
+                    y0: secondBvpY0 ? secondBvpY0.value.trim() : '0',
+                    x1: secondBvpX1 ? secondBvpX1.value.trim() : '1',
+                    y1: secondBvpY1 ? secondBvpY1.value.trim() : '0'
+                }
+            };
+        }
+        return {
+            mode: 'field',
+            rhs: fieldInput.value.trim(),
+            field: {
+                xmin: fieldXmin.value, xmax: fieldXmax.value,
+                ymin: fieldYmin.value, ymax: fieldYmax.value,
+                curve: {
+                    has: fieldCurveCheck.checked,
+                    x0: fieldCurveX0.value.trim(),
+                    y0: fieldCurveY0.value.trim()
+                }
+            }
+        };
+    }
+
+    // The SymPy program is generated by ODECalculatorCore so this page and the
+    // Math AI chat run the IDENTICAL solver (single source of truth).
+    function buildSympyCode(mode) {
+        return ODECalculatorCore.buildSympyCode(buildOdeSpec(mode));
     }
 
     // ========== Compute ==========
@@ -1176,7 +1004,7 @@
         var mode = currentMode;
 
         var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, 90000);
+        var timeoutId = setTimeout(function() { controller.abort(); }, 40000);
 
         fetch((window.ODE_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
             method: 'POST',
@@ -1211,62 +1039,29 @@
 
     // ========== Parse & Display Result ==========
     function parseAndShowResult(mode, stdout) {
-        var stepsMatch = stdout.match(/STEPS:(\[[\s\S]*?\])(?=\n|$)/);
-        var steps = [];
-        try { if (stepsMatch) steps = JSON.parse(stepsMatch[1]); } catch(e) {}
-
-        var rMatch = stdout.match(/RESULT:([^\n]*)/);
-        var tMatch = stdout.match(/TEXT:([^\n]*)/);
-        var result = rMatch ? rMatch[1].trim() : '';
-        var text = tMatch ? tMatch[1].trim() : result;
+        // Output parsing is delegated to ODECalculatorCore so the page and the
+        // Math AI chat read the engine result identically (single source).
+        var parsed = ODECalculatorCore.parseResult(mode, stdout);
+        if (!parsed.ok) { showError(parsed.error || 'Computation failed. Check your input.'); return; }
 
         if (mode === 'first' || mode === 'second') {
-            var classifyMatch = stdout.match(/CLASSIFY:([^\n]*)/);
-            var verifiedMatch = stdout.match(/VERIFIED:([^\n]*)/);
-            var classify = classifyMatch ? classifyMatch[1].trim() : '';
-            var verified = verifiedMatch ? verifiedMatch[1].trim() === 'True' : false;
+            showODEResult(parsed.resultLatex, parsed.text, parsed.classification, parsed.verified, parsed.steps, mode);
 
-            showODEResult(result, text, classify, verified, steps, mode);
-
-            // Graph: solution curve
-            var plotXMatch = stdout.match(/PLOT_X:(\[[\s\S]*?\])(?=\n|$)/);
-            var plotYMatch = stdout.match(/PLOT_Y:(\[[\s\S]*?\])(?=\n|$)/);
-            var plotX = [], plotY = [];
-            try { if (plotXMatch) plotX = JSON.parse(plotXMatch[1]); } catch(e) {}
-            try { if (plotYMatch) plotY = JSON.parse(plotYMatch[1]); } catch(e) {}
-
-            if (plotX.length > 0) {
-                pendingGraph = { type: 'solution', x: plotX, y: plotY };
+            if (parsed.plotX && parsed.plotX.length > 0) {
+                pendingGraph = { type: 'solution', x: parsed.plotX, y: parsed.plotY };
                 if (graphHint) graphHint.style.display = 'none';
                 var graphPanel = document.getElementById('ode-panel-graph');
                 if (graphPanel.classList.contains('active')) {
-                    loadPlotly(function() { renderGraph(pendingGraph); });
+                    loadPlotly(function () { renderGraph(pendingGraph); });
                 }
             }
         } else {
-            // Direction field
-            showFieldResult(text, stdout);
+            showFieldResult(parsed.text, stdout);
 
-            var fxMatch = stdout.match(/FIELD_X:(\[[\s\S]*?\])(?=\n|$)/);
-            var fyMatch = stdout.match(/FIELD_Y:(\[[\s\S]*?\])(?=\n|$)/);
-            var fuMatch = stdout.match(/FIELD_U:(\[[\s\S]*?\])(?=\n|$)/);
-            var fvMatch = stdout.match(/FIELD_V:(\[[\s\S]*?\])(?=\n|$)/);
-            var fieldX = [], fieldY = [], fieldU = [], fieldV = [];
-            try { if (fxMatch) fieldX = JSON.parse(fxMatch[1]); } catch(e) {}
-            try { if (fyMatch) fieldY = JSON.parse(fyMatch[1]); } catch(e) {}
-            try { if (fuMatch) fieldU = JSON.parse(fuMatch[1]); } catch(e) {}
-            try { if (fvMatch) fieldV = JSON.parse(fvMatch[1]); } catch(e) {}
-
-            var curveXMatch = stdout.match(/CURVE_X:(\[[\s\S]*?\])(?=\n|$)/);
-            var curveYMatch = stdout.match(/CURVE_Y:(\[[\s\S]*?\])(?=\n|$)/);
-            var curveX = [], curveY = [];
-            try { if (curveXMatch) curveX = JSON.parse(curveXMatch[1]); } catch(e) {}
-            try { if (curveYMatch) curveY = JSON.parse(curveYMatch[1]); } catch(e) {}
-
-            if (fieldX.length > 0) {
-                pendingGraph = { type: 'field', fx: fieldX, fy: fieldY, fu: fieldU, fv: fieldV, curveX: curveX, curveY: curveY };
+            var fld = parsed.field || {};
+            if (fld.x && fld.x.length > 0) {
+                pendingGraph = { type: 'field', fx: fld.x, fy: fld.y, fu: fld.u, fv: fld.v, curveX: fld.curveX, curveY: fld.curveY };
                 if (graphHint) graphHint.style.display = 'none';
-                // Auto-switch to graph tab for direction fields
                 var graphTab = document.querySelector('.ode-output-tab[data-panel="graph"]');
                 if (graphTab) graphTab.click();
             }
@@ -1680,7 +1475,13 @@
         } else if (currentMode === 'second') {
             params.f = secondOrderInput.value;
             params.order = currentOrder;
-            if (secondICCheck.checked) {
+            if (secondBvpCheck && secondBvpCheck.checked) {
+                params.bvp = '1';
+                params.x0 = secondBvpX0.value;
+                params.y0 = secondBvpY0.value;
+                params.x1 = secondBvpX1.value;
+                params.y1 = secondBvpY1.value;
+            } else if (secondICCheck.checked) {
                 params.ic = '1'; params.x0 = secondICx0.value; params.y0 = secondICy0.value; params.dy0 = secondICdy0.value;
                 for (var i = 2; i < currentOrder; i++) {
                     var el = document.getElementById('ode-second-ic-d' + i + 'y0');
@@ -1724,7 +1525,16 @@
                     updateHigherOrderUI();
                 }
                 if (f) secondOrderInput.value = f;
-                if (urlParams.get('ic') === '1') {
+                if (urlParams.get('bvp') === '1') {
+                    clearSecondIvp();
+                    secondBvpCheck.checked = true;
+                    secondBvpFields.classList.add('open');
+                    secondBvpX0.value = urlParams.get('x0') || '0';
+                    secondBvpY0.value = urlParams.get('y0') || '0';
+                    secondBvpX1.value = urlParams.get('x1') || '1';
+                    secondBvpY1.value = urlParams.get('y1') || '0';
+                } else if (urlParams.get('ic') === '1') {
+                    clearSecondBvp();
                     secondICCheck.checked = true;
                     secondICFields.classList.add('open');
                     secondICx0.value = urlParams.get('x0') || '0';

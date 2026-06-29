@@ -7,6 +7,8 @@ import {
   solveDerivativeTask,
   solveIntegralTask,
   solveLimitTask,
+  solveOdeTask,
+  solvePdeTask,
 } from '../../math-chat-compute.js';
 import { icApplyIntegralTask } from './integral-calculator.js';
 
@@ -29,6 +31,18 @@ const FOCUS_CHIPS = {
     ['lim (1+1/x)ˣ', 'Find the limit of (1 + 1/x)^x as x approaches infinity.'],
     ['lim (eˣ−1)/x', 'Find the limit of (e^x - 1)/x as x approaches 0.'],
     ['lim⁺ 1/x', 'Find the limit of 1/x as x approaches 0 from the right.'],
+  ],
+  ode: [
+    ["y' = -2x·y", 'Solve the ODE y\' = -2*x*y.'],
+    ["y' + 2y = x", 'Solve the linear ODE y\' + 2y = x.'],
+    ["y'' + y = 0", 'Solve y\'\' + y = 0 with y(0)=1, y\'(0)=0.'],
+    ["y'' + 2y' + y = 0", 'Solve y\'\' + 2y\' + y = 0.'],
+  ],
+  pde: [
+    ['Heat u_t = k u_xx', 'Solve the heat equation with k=1, L=1, tmax=0.5, sin IC, Dirichlet BC.'],
+    ['Wave u_tt = c² u_xx', 'Solve the wave equation with c=1, L=1, tmax=2, sin IC, fixed ends.'],
+    ['1st-order linear PDE', 'Solve a u_x + b u_y + c u = 0 with a=1, b=1, c=1, g=0.'],
+    ['Classify a PDE', 'Explain whether u_xx + 2 u_xy + u_yy = 0 is elliptic, parabolic, or hyperbolic. No solve block needed.'],
   ],
 };
 
@@ -71,6 +85,8 @@ export function configureGenericMathShell(opts = {}) {
       if (task.action === 'integral') return solveIntegralTask(task, mode);
       if (task.action === 'derivative') return solveDerivativeTask(task, mode);
       if (task.action === 'limit') return solveLimitTask(task, mode);
+      if (task.action === 'ode') return solveOdeTask(task, mode);
+      if (task.action === 'pde') return solvePdeTask(task, mode);
       return Promise.resolve({ ok: false, error: 'Unknown action.', mode });
     },
 
@@ -90,9 +106,11 @@ export function configureGenericMathShell(opts = {}) {
     },
 
     getContext() {
+      if (typeof window.pdeGetContext === 'function') return window.pdeGetContext();
       if (typeof window.icGetContext === 'function') return window.icGetContext();
       if (typeof window.dcGetContext === 'function') return window.dcGetContext();
       if (typeof window.lcGetContext === 'function') return window.lcGetContext();
+      if (typeof window.odeGetContext === 'function') return window.odeGetContext();
       return null;
     },
 
@@ -105,13 +123,25 @@ export function configureGenericMathShell(opts = {}) {
       if (pageHint) lines.push(`Page: ${pageHint}`);
 
       if (snap) {
-        lines.push(
-          `Mode: ${snap.mode || '(n/a)'}`,
-          `Variable: ${snap.variable || 'x'}`,
-          `Expression: ${snap.expr || snap.integrand || '(empty)'}`,
-        );
-        if (snap.mode === 'definite') {
-          lines.push(`Bounds: [${snap.lower ?? '?'}, ${snap.upper ?? '?'}]`);
+        if (snap.toolType === 'pde') {
+          lines.push(`PDE type: ${snap.mode || '(n/a)'}`);
+          if (snap.params && typeof snap.params === 'object') {
+            Object.keys(snap.params).forEach((key) => {
+              const val = snap.params[key];
+              if (val != null && String(val).trim() !== '') {
+                lines.push(`${key}: ${String(val).slice(0, 200)}`);
+              }
+            });
+          }
+        } else {
+          lines.push(
+            `Mode: ${snap.mode || '(n/a)'}`,
+            `Variable: ${snap.variable || 'x'}`,
+            `Expression: ${snap.expr || snap.integrand || '(empty)'}`,
+          );
+          if (snap.mode === 'definite') {
+            lines.push(`Bounds: [${snap.lower ?? '?'}, ${snap.upper ?? '?'}]`);
+          }
         }
         if (snap.resultSummary) {
           lines.push('', 'Page calculator result:', snap.resultSummary.slice(0, 4000));
@@ -133,7 +163,7 @@ export function configureGenericMathShell(opts = {}) {
       }
 
       if (!lines.length) {
-        return '(Paste calculus problems in chat — integral, derivative, or limit — then Solve / Steps / Graph.)';
+        return '(Paste a math problem — integral, derivative, limit, ODE, or PDE — then Solve / Steps / Graph in chat.)';
       }
       return lines.join('\n');
     },
@@ -142,14 +172,23 @@ export function configureGenericMathShell(opts = {}) {
       return focusQuickActions(this.focus || focus);
     },
 
-    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, and **limit** problems regardless of which calculator page the student is on. The chat engines are the same as the LaTeX editor **Σ Solve**.
+    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, and **PDE** problems regardless of which calculator page the student is on. Every computation runs in the chat via the deterministic JS engines (same as the LaTeX editor **Σ Solve**) — never compute the answer yourself.
 
-**Do not** refuse a derivative because the page title says Integral Calculator — output \`\`\`derivative\`\`\` and let the engine compute.
+**Student-facing language:** Never mention SymPy, NumPy, Python, OneCompiler, or other backend libraries in replies. Say "the solver", "step-by-step engine", "numerical method", or "symbolic method" instead.
+
+**Do not** refuse a problem because the page title says Integral Calculator — output the matching block (\`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`) and let the engine compute.
 
 **Textbook KaTeX in prose (required):** mirror every problem in \`$$\\displaystyle...$$\`:
 - Integral: \`$$\\displaystyle\\int \\sin(3x)\\,\\mathrm{d}x$$\`
 - Derivative: \`$$\\displaystyle\\frac{\\mathrm{d}}{\\mathrm{d}x}\\left[\\, x^{3}\\sin x \\,\\right]$$\`
 - Limit: \`$$\\displaystyle\\lim\\limits_{x \\to 0} \\frac{\\sin x}{x}$$\`
+- ODE: \`$$\\displaystyle \\frac{\\mathrm{d}y}{\\mathrm{d}x} = -2xy$$\`
+- PDE: \`$$\\displaystyle u_t = k\\, u_{xx}$$\`
+
+**Teach vs solve (PDE)**
+- **Teach only** (classification, separation-of-variables outline, BC meaning, CFL intuition): prose + KaTeX, **no** \`\`\`pde\`\`\` block.
+- **Solve** (user says solve/compute/simulate, or gives numeric params): emit \`\`\`pde\`\`\` with \`mode\` + params below so **Solve / Solve with steps** chips appear.
+- **Mixed** (e.g. "explain then solve"): brief teaching prose, then one \`\`\`pde\`\`\` block with inferred defaults for any missing params (state assumptions in prose).
 
 **Block formats**
 
@@ -175,12 +214,124 @@ point: 0
 direction: two-sided
 \`\`\`
 
-Prefer \`raw:\` with full LaTeX when the user pasted \\int, \\frac{d}{dx}, or \\lim.
+ODE — give the **right-hand side after isolating the highest derivative** (use \`yp\` for y', \`ypp\` for y'', \`yppp\` for y''', \`y4\`/\`y5\` for 4th/5th):
+\`\`\`ode
+rhs: -2*x*y
+order: 1
+variable: x
+ic: y(0)=1
+\`\`\`
+Second order with initial conditions:
+\`\`\`ode
+rhs: -y
+order: 2
+ic: y(0)=1; y'(0)=0
+\`\`\`
+The ODE block runs the **same solver as the ODE Solver page** — it handles separable, linear, Bernoulli, exact, homogeneous, Cauchy-Euler, and constant-coefficient ODEs up to 5th order, with or without initial conditions, and verifies the result. A solve takes ~1–3s. If no closed form is found, the engine returns an error — then suggest rephrasing or the on-page solver.
 
-JSON batch: \`{"tasks":[{"action":"derivative",...},{"action":"limit",...}]}\`
+PDE — set \`mode\` to one of \`heat\` | \`wave\` | \`laplace\` | \`poisson\` | \`transport\` | \`schrodinger\` | \`linear1\`, then mode-specific params:
 
-Each block gets **Solve / Solve with steps / Show graph** chips in chat.`,
+| mode | params | notes |
+|------|--------|-------|
+| heat | k, L, tmax, ic, bc | ic: sin \\| gauss \\| step; bc: dirichlet \\| neumann \\| robin \\| periodic |
+| wave | c, L, tmax, ic, bc | bc: dirichlet \\| neumann \\| mixed |
+| laplace | nx, ny, bc | bc: dirichlet \\| mixed \\| neumann_top \\| robin |
+| poisson | nx, ny, source, bc | source: const \\| gaussian \\| sin \\| dipole |
+| transport | c, L, tmax, ic, scheme | scheme: upwind \\| lax_wendroff \\| lax_friedrichs |
+| schrodinger | L, potential, nstates | potential: infinite_well \\| harmonic \\| finite_well \\| double_well |
+| linear1 | a, b, c, g | Symbolic (method of characteristics); g is source expression |
+
+Heat example:
+\`\`\`pde
+mode: heat
+k: 1
+L: 1
+tmax: 0.5
+ic: sin
+bc: dirichlet
+\`\`\`
+Wave example:
+\`\`\`pde
+mode: wave
+c: 1
+L: 1
+tmax: 2
+ic: sin
+bc: dirichlet
+\`\`\`
+Laplace example:
+\`\`\`pde
+mode: laplace
+nx: 20
+ny: 20
+bc: dirichlet
+\`\`\`
+1st-order linear (symbolic):
+\`\`\`pde
+mode: linear1
+a: 1
+b: 1
+c: 1
+g: 0
+\`\`\`
+The PDE block runs the **same solver as the PDE Solver page** (finite-difference for heat/wave/Laplace/Poisson/transport/Schrödinger; symbolic for linear1). Each block gets **Solve / Solve with steps** chips (~2–10s). Numerical modes return stability metadata (r, CFL) in steps — do not invent those numbers in prose.
+
+Prefer \`raw:\` with full LaTeX for PDE/ODE when the user pasted notation. For \`\`\`math-action\`\`\` use \`action: pde\` plus the fields above.
+
+JSON batch: \`{"tasks":[{"action":"pde","mode":"heat","k":"1","L":"1","ic":"sin","bc":"dirichlet"}]}\` or \`{"pdes":[{...}]}\``,
   };
+}
+
+/** ODE Solver page — ODE-focused chips; chat still handles all calculus types. */
+export function configureOdeMathShell() {
+  configureGenericMathShell({
+    focus: 'ode',
+    pageLabel: 'ODE Solver',
+    pageHint: 'ODE Solver (chat solves ODEs, ∫, d/dx, lim deterministically)',
+    panelTitle: 'Math AI',
+    subtitle: 'Solve ODEs & calculus in chat',
+    placeholder: "Paste y' = …, y'' + … = 0, ∫, d/dx, or lim problems — then Solve / Steps / Graph…",
+    footerText: 'Ctrl+Shift+A · deterministic JS engines',
+  });
+}
+
+/** PDE Solver page — PDE tutor chips; chat handles ∫, d/dx, lim, ODE; numerical PDE on page. */
+export function configurePdeMathShell() {
+  configureGenericMathShell({
+    focus: 'pde',
+    pageLabel: 'PDE Solver',
+    pageHint: 'PDE Solver (chat solves PDEs numerically + ∫, d/dx, lim, ODE)',
+    panelTitle: 'Math AI',
+    subtitle: 'Solve PDEs & calculus in chat',
+    placeholder: 'Paste heat/wave/Laplace PDE params, ∫, d/dx, lim, or ODE — then Solve / Steps…',
+    footerText: 'Ctrl+Shift+A · same PDE engine as page Solve',
+  });
+
+  const extra = `
+
+**PDE Solver page — tutor + engine router**
+
+You wear two hats; pick from the user's wording:
+
+1. **Teacher** — classification (elliptic/parabolic/hyperbolic), separation of variables, Fourier series, physical meaning of BCs, CFL/stability intuition, when to use heat vs wave vs Laplace. Use KaTeX prose only; **no** solve block unless they also want to run the calculator.
+
+2. **Solver** — when they say *solve*, *compute*, *simulate*, *find numeric solution*, or give concrete parameters: emit \`\`\`pde\`\`\` (see param table in promptExtra) so **Solve / Solve with steps** chips appear. Mirror [CURRENT CONTEXT] page params when the student says "solve what I have on the page".
+
+**Defaults when params are missing** (state in prose): heat k=1, L=1, tmax=0.5, ic=sin, bc=dirichlet; wave c=1, L=1, tmax=2; laplace/poisson nx=20, ny=20; transport c=1, L=2, scheme=upwind.
+
+**After separation of variables** produces ODEs in X(t) or X(x), emit \`\`\`ode\`\`\` blocks for those factors — do not hand-solve them in prose.
+
+**KaTeX examples for PDE prose:**
+- Heat: \`$$\\displaystyle u_t = k\\, u_{xx}$$\`
+- Wave: \`$$\\displaystyle u_{tt} = c^2 u_{xx}$$\`
+- Laplace: \`$$\\displaystyle u_{xx} + u_{yy} = 0$$\`
+- Classification: \`$$\\displaystyle B^2 - 4AC \\quad \\text{for } Au_{xx}+Bu_{xy}+Cu_{yy}+\\cdots=0$$\`
+
+Route **integral**, **derivative**, **limit**, **ODE**, and **PDE** with the existing blocks — same engines as other math pages. Never name implementation libraries (SymPy, NumPy, Python, etc.) in replies to the student.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
 }
 
 /** Integral Calculator page — integral-focused chips; chat still handles all types. */

@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%--
-  Derivative + limit CAS cores for Generic Math AI.
-  integral-calculator-core.js is usually loaded by the page tool scripts already.
+  CAS cores for the Generic Math AI (integral · derivative · limit · ODE · PDE).
+  Safe to include on any math page: re-loading a core just re-assigns its window
+  global (pure-function IIFE). Loading the integral core here guarantees the
+  derivative/limit/ODE cores have normalizeExpr/latexBodyToExpr available even on
+  pages whose own tool scripts don't pull it in (e.g. the ODE solver page).
 --%><% String mccV = String.valueOf(System.currentTimeMillis()); %>
+<script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/derivative-calculator-core.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/limit-calculator-core.js?v=<%=mccV%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/ode-calculator-core.js?v=<%=mccV%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/pde-calculator-core.js?v=<%=mccV%>"></script>

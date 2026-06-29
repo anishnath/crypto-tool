@@ -133,7 +133,7 @@
     function latexToAscii(s) {
         if (!s) return s;
         // Trim outer $ delimiters if present
-        s = s.replace(/^\s*\$+\s*|\s*\$+\s*$/g, '');
+        s = s.replace(/^\s*[$]+\s*|\s*[$]+\s*$/g, '');
 
         // Iterate so nested constructs unwrap fully (e.g. \frac inside
         // \frac, \left( inside \frac{}{} arguments, etc.).
@@ -147,6 +147,8 @@
             s = s.replace(/\\cdot\b/g, '*');
             s = s.replace(/\\times\b/g, '*');
             s = s.replace(/\\div\b/g, '/');
+            // MathLive prime notation: y^{\prime\prime} → y'' before brace flattening
+            s = s.replace(/\\prime/g, "'");
             s = s.replace(/\\pm\b/g, '+-');
             s = s.replace(/\\mp\b/g, '-+');
             // \left( \right) — collapse to bare brackets

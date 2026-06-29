@@ -5,13 +5,58 @@
  */
 import { normalizeBoundLatex, prepareLatexForKatex } from '../katex-render.js';
 
-export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit'];
+export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde'];
+
+const PDE_MODES = new Set(['heat', 'wave', 'laplace', 'poisson', 'transport', 'schrodinger', 'linear1']);
+
+/** Map lowercase fence keys → canonical PDE param names (kv parser lowercases keys). */
+const PDE_KV_TO_PARAM = {
+  k: 'k',
+  l: 'L',
+  tmax: 'tmax',
+  ic: 'ic',
+  bc: 'bc',
+  c: 'c',
+  nx: 'nx',
+  ny: 'ny',
+  source: 'source',
+  scheme: 'scheme',
+  potential: 'potential',
+  nstates: 'nstates',
+  a: 'a',
+  b: 'b',
+  g: 'g',
+};
+
+function copyPdeParamsFromKv(target, kv) {
+  Object.entries(PDE_KV_TO_PARAM).forEach(([kvKey, paramKey]) => {
+    if (kv[kvKey] != null && String(kv[kvKey]).trim() !== '') {
+      target[paramKey] = String(kv[kvKey]).trim();
+    }
+  });
+}
+
+/** Canonical PDE param names (JSON / task objects). */
+export const PDE_PARAM_KEYS = [...new Set(Object.values(PDE_KV_TO_PARAM))];
+
+function inferPdeModeFromRaw(raw) {
+  const s = String(raw || '').toLowerCase();
+  if (/u_\s*\{?\s*tt\s*\}?|u_tt|d\^2u\s*\/\s*dt\^2/.test(s)) return 'wave';
+  if (/u_\s*\{?\s*t\s*\}?|u_t|du\s*\/\s*dt/.test(s) && /u_\s*\{?\s*xx\s*\}?|u_xx/.test(s)) return 'heat';
+  if (/u_\s*\{?\s*t\s*\}?|u_t/.test(s) && /u_\s*\{?\s*x\s*\}?|u_x/.test(s) && !/u_\s*\{?\s*xx/.test(s)) return 'transport';
+  if (/\\nabla\^2|\\Delta\s*u|u_\s*\{?\s*xx\s*\}?.*u_\s*\{?\s*yy/.test(s) && /f\s*\(|=\s*f/.test(s)) return 'poisson';
+  if (/\\nabla\^2|\\Delta\s*u|u_\s*\{?\s*xx\s*\}?.*u_\s*\{?\s*yy/.test(s)) return 'laplace';
+  if (/\\psi|schrodinger|schroedinger|hamiltonian/.test(s)) return 'schrodinger';
+  if (/u_\s*\{?\s*x\s*\}?.*u_\s*\{?\s*y\s*\}?|a\s*u_\s*x/.test(s)) return 'linear1';
+  return null;
+}
 
 const ACTION_FENCE_LANGS = new Set([
-  'integral', 'derivative', 'limit', 'math-action', 'math', 'mathintent',
+  'integral', 'derivative', 'limit', 'ode', 'pde', 'dsolve', 'differential',
+  'math-action', 'math', 'mathintent',
 ]);
 
-/** @typedef {'integral'|'derivative'|'limit'} CalculusAction */
+/** @typedef {'integral'|'derivative'|'limit'|'ode'|'pde'} CalculusAction */
 
 /**
  * @typedef {Object} MathActionTask
@@ -26,7 +71,12 @@ const ACTION_FENCE_LANGS = new Set([
  * @property {number|string} [order]
  * @property {string} [point]
  * @property {'two-sided'|'left'|'right'|'both'} [direction]
+ * @property {string} [rhs]
+ * @property {string} [func]
+ * @property {{x0?:string,y0?:string,dy0?:string}} [ics]
  * @property {string} [label]
+ * @property {string} [mode]
+ * @property {Record<string, string>} [params]
  */
 
 function detectAction(obj, fenceLang) {
@@ -34,13 +84,50 @@ function detectAction(obj, fenceLang) {
   if (action === 'integrate') action = 'integral';
   if (action === 'differentiate' || action === 'diff') action = 'derivative';
   if (action === 'lim') action = 'limit';
+  if (action === 'dsolve' || action === 'differential' || action === 'differentialequation') action = 'ode';
+  if (action === 'pdesolve' || action === 'partial') action = 'pde';
   if (CALCULUS_ACTIONS.includes(action)) return /** @type {CalculusAction} */ (action);
-  if (obj?.integrand || (obj?.raw && /\\int\b/.test(String(obj.raw)))) return 'integral';
-  if (obj?.order != null || (obj?.raw && /\\frac\s*\{\s*d/.test(String(obj.raw)))) return 'derivative';
-  if (obj?.point != null || obj?.limitPoint != null || (obj?.raw && /\\lim\b/.test(String(obj.raw)))) return 'limit';
+  const modeHint = String(obj?.mode || obj?.pdeType || obj?.pde || '').toLowerCase();
+  if (PDE_MODES.has(modeHint)) return 'pde';
+  // ODE markers: y'/y'' notation, dy/dx with an "=", or an rhs+order pairing.
+  const raw = String(obj?.raw || obj?.latex || '');
+  if (obj?.rhs != null || (raw && /=/.test(raw) && /(y''|y'|\\frac\s*\{\s*d\s*y\s*\}|dy\s*\/\s*dx)/.test(raw))) return 'ode';
+  if (raw && inferPdeModeFromRaw(raw)) return 'pde';
+  if (PDE_PARAM_KEYS.some((k) => obj?.[k] != null && String(obj[k]).trim() !== '')) {
+    if (obj?.k != null || obj?.tmax != null || obj?.ic != null || obj?.bc != null
+      || obj?.nx != null || obj?.potential != null || obj?.scheme != null) return 'pde';
+  }
+  if (obj?.integrand || (raw && /\\int\b/.test(raw))) return 'integral';
+  if (obj?.order != null || (raw && /\\frac\s*\{\s*d/.test(raw))) return 'derivative';
+  if (obj?.point != null || obj?.limitPoint != null || (raw && /\\lim\b/.test(raw))) return 'limit';
   if (obj?.expr && obj?.point != null) return 'limit';
   if (obj?.expr && !obj?.integrand) return 'derivative';
   return null;
+}
+
+/**
+ * Parse initial conditions like "y(0)=1", "y'(0)=0", "y(0)=1; y'(0)=0"
+ * into { x0, y0, dy0 }. Also honours explicit x0/y0/dy0 fields.
+ */
+function parseIcs(obj) {
+  const ics = {};
+  if (obj.x0 != null) ics.x0 = String(obj.x0).trim();
+  if (obj.y0 != null) ics.y0 = String(obj.y0).trim();
+  if (obj.dy0 != null) ics.dy0 = String(obj.dy0).trim();
+
+  const raw = String(obj.ic || obj.ics || obj.initial || obj.conditions || '').trim();
+  if (raw) {
+    const parts = raw.split(/[;,\n]+/).map((p) => p.trim()).filter(Boolean);
+    for (const p of parts) {
+      // y'(x0) = v  → derivative condition
+      let m = p.match(/y\s*'\s*\(\s*([^)]*)\)\s*=\s*(.+)/i);
+      if (m) { ics.x0 = ics.x0 ?? m[1].trim(); ics.dy0 = m[2].trim(); continue; }
+      // y(x0) = v   → value condition
+      m = p.match(/y\s*\(\s*([^)]*)\)\s*=\s*(.+)/i);
+      if (m) { ics.x0 = ics.x0 ?? m[1].trim(); ics.y0 = m[2].trim(); continue; }
+    }
+  }
+  return (ics.x0 != null && (ics.y0 != null || ics.dy0 != null)) ? ics : null;
 }
 
 /**
@@ -92,6 +179,53 @@ export function normalizeCalculusTask(obj, fenceLang) {
     return task;
   }
 
+  if (action === 'ode') {
+    const rhs = String(obj.rhs || obj.expr || obj.body || obj.equation || '').trim();
+    if (!raw && !rhs) return null;
+    if (rhs) task.rhs = rhs;
+    task.func = String(obj.func || obj.y || 'y').trim() || 'y';
+    const order = obj.order != null && obj.order !== '' ? parseInt(String(obj.order), 10) : null;
+    if (Number.isFinite(order) && order > 0) {
+      task.order = order;
+    } else {
+      // Fallback when the model omits `order:` — infer the highest derivative
+      // from the raw equation / rhs markers (prefer the explicit order field).
+      const probe = `${raw} ${rhs}`;
+      if (/y''''|y'{4}|d\^?4y|\by4\b/.test(probe)) task.order = 4;
+      else if (/y'''|y'{3}|d\^?3y|\byppp\b/.test(probe)) task.order = 3;
+      else if (/y''|\bypp\b|d\^?2y/.test(probe)) task.order = 2;
+      else task.order = 1;
+    }
+    const ics = parseIcs(obj);
+    if (ics) task.ics = ics;
+    return task;
+  }
+
+  if (action === 'pde') {
+    let mode = String(obj.mode || obj.pdeType || obj.pde || '').toLowerCase();
+    if (!PDE_MODES.has(mode) && raw) {
+      const inferred = inferPdeModeFromRaw(raw);
+      if (inferred) mode = inferred;
+    }
+    task.mode = PDE_MODES.has(mode) ? mode : 'heat';
+    /** @type {Record<string, string>} */
+    const params = {};
+    PDE_PARAM_KEYS.forEach((key) => {
+      if (obj[key] != null && String(obj[key]).trim() !== '') {
+        params[key] = String(obj[key]).trim();
+      }
+    });
+    if (obj.params && typeof obj.params === 'object') {
+      Object.keys(obj.params).forEach((key) => {
+        if (obj.params[key] != null && String(obj.params[key]).trim() !== '') {
+          params[key] = String(obj.params[key]).trim();
+        }
+      });
+    }
+    task.params = params;
+    return task;
+  }
+
   // limit
   const expr = String(obj.expr || obj.body || obj.function || '').trim();
   if (!raw && !expr) return null;
@@ -131,20 +265,33 @@ export function parseCalculusBlockContent(content, fenceLang) {
     if (!bareLine && !line.includes(':')) bareLine = line;
   }
 
-  return normalizeCalculusTask({
+  const fence = String(fenceLang || '').toLowerCase();
+  const pdeModeHint = String(kv.mode || kv.pdetype || kv.pde || '').toLowerCase();
+  const isPdeFence = fence === 'pde' || PDE_MODES.has(pdeModeHint);
+
+  /** @type {Record<string, unknown>} */
+  const payload = {
     action: kv.action || kv.kind || fenceLang,
     raw: kv.raw || kv.latex || kv.display,
     integrand: kv.integrand || kv.body || kv.function,
     expr: kv.expr || kv.expression || kv.body || kv.function || bareLine,
+    rhs: kv.rhs || kv.equation,
+    func: kv.func || kv.y,
     variable: kv.variable || kv.var || 'x',
-    mode: kv.mode || kv.type,
-    lower: kv.lower || kv.a,
-    upper: kv.upper || kv.b,
+    mode: kv.mode || kv.pdetype || kv.pde || kv.type,
+    lower: isPdeFence ? kv.lower : (kv.lower || kv.a),
+    upper: isPdeFence ? kv.upper : (kv.upper || kv.b),
     order: kv.order,
     point: kv.point || kv.limitpoint || kv.to,
     direction: kv.direction || kv.dir,
+    ic: kv.ic || kv.ics || kv.initial || kv.conditions,
+    x0: kv.x0,
+    y0: kv.y0,
+    dy0: kv.dy0,
     label: kv.label || kv.name,
-  }, fenceLang);
+  };
+  copyPdeParamsFromKv(payload, kv);
+  return normalizeCalculusTask(payload, fenceLang);
 }
 
 function tasksFromJson(data) {
@@ -164,6 +311,10 @@ function tasksFromJson(data) {
   }
   if (Array.isArray(data.integrals)) {
     data.integrals.forEach((t) => push({ ...t, action: 'integral' }));
+    return out;
+  }
+  if (Array.isArray(data.pdes)) {
+    data.pdes.forEach((t) => push({ ...t, action: 'pde' }));
     return out;
   }
   if (Array.isArray(data)) {
@@ -255,6 +406,64 @@ function differentialLatex(v) {
   return `\\,\\mathrm{d}${v}`;
 }
 
+/** Textbook LaTeX for an ODE: LHS derivative = RHS (with y'/y'' rendered). */
+function odeEquationLatex(task) {
+  const v = task.variable || 'x';
+  const order = Number(task.order) || 1;
+  let rhs = String(task.rhs || task.expr || '').trim();
+
+  // Render RHS via nerdamer with yp/ypp protected as placeholder symbols.
+  const tmp = rhs.replace(/ypp/g, 'ODEdd').replace(/yp/g, 'ODEd');
+  let rhsTeX = exprToBodyLatex(tmp)
+    .replace(/ODEdd/g, "y''")
+    .replace(/ODEd/g, "y'");
+
+  const lhs = order === 1
+    ? `\\frac{\\mathrm{d}y}{\\mathrm{d}${v}}`
+    : `\\frac{\\mathrm{d}^{${order}}y}{\\mathrm{d}${v}^{${order}}}`;
+  return `${lhs} = ${rhsTeX}`;
+}
+
+const PDE_MODE_LATEX = {
+  heat: 'u_t = k\\, u_{xx}',
+  wave: 'u_{tt} = c^2\\, u_{xx}',
+  laplace: 'u_{xx} + u_{yy} = 0',
+  poisson: '\\nabla^2 u = f(x,y)',
+  transport: 'u_t + c\\, u_x = 0',
+  schrodinger: '-\\frac{\\hbar^2}{2m}\\psi\'\'(x) + V(x)\\psi = E\\psi',
+  linear1: 'a\\, u_x + b\\, u_y + c\\, u = G(x,y)',
+};
+
+/** Textbook LaTeX for a PDE task card. */
+function pdeProblemLatex(task) {
+  const mode = String(task.mode || 'heat').toLowerCase();
+  if (task.raw) return prepareLatexForKatex(task.raw.trim());
+  const base = PDE_MODE_LATEX[mode] || 'u_t = k u_{xx}';
+  const p = task.params || {};
+  const bits = [];
+  if (mode === 'heat' || mode === 'wave' || mode === 'transport') {
+    if (p.k != null && mode === 'heat') bits.push(`k=${p.k}`);
+    if (p.c != null && (mode === 'wave' || mode === 'transport')) bits.push(`c=${p.c}`);
+    if (p.L != null) bits.push(`L=${p.L}`);
+    if (p.ic) bits.push(`\\text{IC: ${p.ic}}`);
+    if (p.bc) bits.push(`\\text{BC: ${p.bc}}`);
+  } else if (mode === 'laplace' || mode === 'poisson') {
+    if (p.nx != null) bits.push(`${p.nx}\\times${p.ny || p.nx}`);
+    if (p.bc) bits.push(`\\text{BC: ${p.bc}}`);
+    if (p.source && mode === 'poisson') bits.push(`\\text{source: ${p.source}}`);
+  } else if (mode === 'schrodinger') {
+    if (p.L != null) bits.push(`L=${p.L}`);
+    if (p.potential) bits.push(`V=${p.potential.replace(/_/g, '\\_')}`);
+    if (p.nstates) bits.push(`${p.nstates}\\text{ states}`);
+  } else if (mode === 'linear1') {
+    if (p.a != null) bits.push(`a=${p.a}`);
+    if (p.b != null) bits.push(`b=${p.b}`);
+    if (p.c != null) bits.push(`c=${p.c}`);
+    if (p.g != null) bits.push(`G=${p.g}`);
+  }
+  return bits.length ? `${base}, \\quad ${bits.join(',\\; ')}` : base;
+}
+
 /**
  * Normalize textbook LaTeX into the plain form the *CalculatorCore parsers expect.
  * The cores understand `\, dx` / `\frac{d}{dx}` / `\lim_{...}` but NOT `\mathrm{d}x`,
@@ -290,6 +499,12 @@ export function sanitizeLatexForEngine(latex) {
  * @param {MathActionTask} task
  */
 export function taskToSolveLatex(task) {
+  if (task.action === 'pde') return task.raw ? task.raw.trim() : pdeProblemLatex(task);
+
+  // ODE is solved via the SymPy backbone (ODECalculatorCore.solveTask), not a
+  // single-latex engine call; return the equation form for callers/logging.
+  if (task.action === 'ode') return task.raw ? task.raw.trim() : odeEquationLatex(task);
+
   if (task.raw) return sanitizeLatexForEngine(task.raw.trim());
 
   const v = task.variable || 'x';
@@ -325,6 +540,15 @@ export function taskToSolveLatex(task) {
  * @param {MathActionTask} task
  */
 export function taskToDisplayLatex(task) {
+  if (task.action === 'pde') {
+    return ensureDisplayStyle(pdeProblemLatex(task));
+  }
+
+  if (task.action === 'ode') {
+    const eq = task.raw ? prepareLatexForKatex(task.raw.trim()) : odeEquationLatex(task);
+    return ensureDisplayStyle(eq);
+  }
+
   if (task.raw) return ensureDisplayStyle(prepareLatexForKatex(task.raw.trim()));
 
   const v = task.variable || 'x';
@@ -372,6 +596,24 @@ export function formatMathActionLabel(task, index) {
   }
   if (task.action === 'limit') {
     return `${n}Limit`;
+  }
+  if (task.action === 'ode') {
+    const o = Number(task.order) > 1 ? ` · order ${task.order}` : '';
+    const ivp = task.ics ? ' · IVP' : '';
+    return `${n}Differential equation${o}${ivp}`;
+  }
+  if (task.action === 'pde') {
+    const names = {
+      heat: 'Heat equation',
+      wave: 'Wave equation',
+      laplace: 'Laplace equation',
+      poisson: 'Poisson equation',
+      transport: 'Transport equation',
+      schrodinger: 'Schrödinger equation',
+      linear1: '1st-order linear PDE',
+    };
+    const mode = String(task.mode || 'heat').toLowerCase();
+    return `${n}${names[mode] || 'PDE'}`;
   }
   return `${n}${task.mode === 'definite' ? 'Definite integral' : 'Integral'}`;
 }
