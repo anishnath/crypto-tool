@@ -124,7 +124,7 @@
     boolean isCollapsible = (collapsible != null && collapsible.equals("true"));
 
     // Algorithm visualization is available for the languages with a viz engine.
-    boolean vizSupported =  "rust".equals(language) || "python".equals(language) || "java".equals(language) || "go".equals(language);
+    boolean vizSupported = "typescript".equals(language) || "lua".equals(language) || "rust".equals(language) || "python".equals(language) || "java".equals(language) || "go".equals(language);
 
     // Escape the initial code for JavaScript (used in reset function)
     String escapedCode = displayCode
