@@ -991,8 +991,7 @@
 
             container.innerHTML = html;
 
-            if (window.ncertEmitContext) {
-                window.ncertEmitContext({
+            var chapterCtx = {
                     pageType: 'chapter',
                     bookClass: 'class-9',
                     bookPart: 'mathematics',
@@ -1000,7 +999,10 @@
                     chapterNum: CHAPTER_NUM,
                     chapterName: CHAPTER_NAME,
                     questionCount: chapterQuestions.length
-                });
+            };
+            window.ncertPageContext = chapterCtx;
+            if (window.ncertEmitContext) {
+                window.ncertEmitContext(chapterCtx);
             }
 
             // Re-render MathJax - wait for it to be fully loaded

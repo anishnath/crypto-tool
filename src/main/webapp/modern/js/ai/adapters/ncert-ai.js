@@ -52,13 +52,21 @@ function normalizeContext(raw) {
 }
 
 function ensureNcertShell() {
-  if (window.ncertShell) return;
+  if (window.ncertShell) {
+    if (window.ncertPageContext) {
+      window.ncertShell.setContext(window.ncertPageContext);
+    }
+    return;
+  }
 
   let pageContext = { pageType: 'unknown' };
 
   window.ncertShell = {
     setContext(ctx) {
       pageContext = normalizeContext(ctx);
+      if (ctx && typeof ctx === 'object') {
+        window.ncertPageContext = ctx;
+      }
     },
     getSnapshot() {
       return { ...pageContext };
@@ -68,6 +76,10 @@ function ensureNcertShell() {
   document.addEventListener('ncert:context-ready', (e) => {
     window.ncertShell?.setContext?.(e.detail);
   });
+
+  if (window.ncertPageContext) {
+    pageContext = normalizeContext(window.ncertPageContext);
+  }
 }
 
 ensureNcertShell();
@@ -180,6 +192,13 @@ function formatSeedContext(snap) {
   return lines.join('\n');
 }
 
+function currentSnapshot() {
+  const snap = window.ncertShell?.getSnapshot?.();
+  if (snap?.pageType && snap.pageType !== 'unknown') return snap;
+  if (window.ncertPageContext) return normalizeContext(window.ncertPageContext);
+  return snap;
+}
+
 function buildQuickActions(snap) {
   const chip = (label, prompt) => ({ label, prompt, sendImmediately: true });
 
@@ -247,8 +266,8 @@ export function createNcertAssistant(opts) {
     historyTurns: 8,
     contextValidator: false,
     systemPrompt: buildNcertPrompt(subjectLabel),
-    seedContext: () => formatSeedContext(shell()?.getSnapshot?.()),
-    getQuickActions: () => buildQuickActions(shell()?.getSnapshot?.()),
+    seedContext: () => formatSeedContext(currentSnapshot()),
+    getQuickActions: () => buildQuickActions(currentSnapshot()),
     onAssistantRender: (body) => typesetNcertMath(body),
   });
 }
@@ -265,6 +284,9 @@ function warnToast(msg) {
  */
 export function installNcertOpenAI(assistantApi, boot) {
   window.ncertOpenAI = async function ncertOpenAI(prefill, autoSend) {
+    if (window.ncertPageContext && window.ncertShell?.setContext) {
+      window.ncertShell.setContext(window.ncertPageContext);
+    }
     if (boot?.billing?.requireSignIn && !(boot.userId || '')) {
       warnToast('Sign in to use AI');
     }
@@ -274,5 +296,6 @@ export function installNcertOpenAI(assistantApi, boot) {
 
 /** Publish page context from inline loaders (available before module loads). */
 export function emitNcertContext(detail) {
-  document.dispatchEvent(new CustomEvent('ncert:context-ready', { detail }));
+  window.ncertPageContext = detail || {};
+  document.dispatchEvent(new CustomEvent('ncert:context-ready', { detail: window.ncertPageContext }));
 }

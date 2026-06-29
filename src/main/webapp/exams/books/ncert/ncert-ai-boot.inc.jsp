@@ -70,13 +70,6 @@ if (request.getAttribute("aiRequireSignIn") == null) {
 .vca-msg-body .katex { font-size: 1.05em; }
 </style>
 <script>
-window.ncertQuestionRegistry = window.ncertQuestionRegistry || {};
-window.ncertChapterMeta = null;
-
-window.ncertEmitContext = function (detail) {
-    document.dispatchEvent(new CustomEvent('ncert:context-ready', { detail: detail || {} }));
-};
-
 /** Open AI for a specific question on chapter listing pages. */
 window.ncertOpenQuestionAI = function (qId, prefill, autoSend) {
     var q = window.ncertQuestionRegistry[qId];

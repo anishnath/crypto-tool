@@ -987,8 +987,7 @@
 
             container.innerHTML = html;
 
-            if (window.ncertEmitContext) {
-                window.ncertEmitContext({
+            var questionCtx = {
                     pageType: 'question',
                     bookClass: 'class-12',
                     bookPart: 'mathematics-part-1',
@@ -996,7 +995,10 @@
                     chapterNum: CHAPTER_NUM,
                     chapterName: CHAPTER_NAME,
                     question: currentQuestion
-                });
+            };
+            window.ncertPageContext = questionCtx;
+            if (window.ncertEmitContext) {
+                window.ncertEmitContext(questionCtx);
             }
 
             // Render MathJax

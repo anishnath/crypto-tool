@@ -2271,7 +2271,153 @@
         }
     ];
 
-    var TEMPLATES = { java: JAVA, python: PYTHON, go: GO, c: CC, cpp: CPP, typescript: TS, rust: RUST };
+    var JSL = [
+        {
+            category: 'Array',
+            title: 'Bubble sort',
+            tracer: 'Array1DTracer',
+            desc: 'Classic adjacent-swap sort on an array — watch comparisons and swaps.',
+            code: lines(
+                'function bubble(a, n) {',
+                '    for (let i = 0; i < n - 1; i++) {',
+                '        for (let j = 0; j < n - 1 - i; j++) {',
+                '            if (a[j] > a[j + 1]) {',
+                '                let t = a[j];',
+                '                a[j] = a[j + 1];',
+                '                a[j + 1] = t;',
+                '            }',
+                '        }',
+                '    }',
+                '}',
+                'let arr = [5, 2, 9, 1, 6, 3];',
+                'bubble(arr, arr.length);',
+                'console.log(arr.join(" "));')
+        },
+        {
+            category: 'Array',
+            title: 'Binary search',
+            tracer: 'Array1DTracer',
+            desc: 'Halve the lo/hi window on a sorted array until the target is found.',
+            code: lines(
+                'let a = [1, 3, 5, 7, 9, 11, 13];',
+                'let target = 9, lo = 0, hi = a.length - 1, found = -1;',
+                'while (lo <= hi) {',
+                '    let mid = (lo + hi) >> 1;',
+                '    if (a[mid] === target) { found = mid; break; }',
+                '    else if (a[mid] < target) lo = mid + 1;',
+                '    else hi = mid - 1;',
+                '}',
+                'console.log("index=" + found);')
+        },
+        {
+            category: '2D array',
+            title: 'Matrix transpose',
+            tracer: 'Array2DTracer',
+            desc: 'Swap m[i][j] with m[j][i] above the diagonal — a 2D array animates.',
+            code: lines(
+                'let m = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];',
+                'for (let i = 0; i < 3; i++) {',
+                '    for (let j = i + 1; j < 3; j++) {',
+                '        let t = m[i][j];',
+                '        m[i][j] = m[j][i];',
+                '        m[j][i] = t;',
+                '    }',
+                '}',
+                'console.log("transposed");')
+        },
+        {
+            category: 'Map',
+            title: 'Frequency count',
+            tracer: 'MapTracer',
+            desc: 'Tally occurrences with map.set(x, (map.get(x) || 0) + 1) — set and get animate.',
+            code: lines(
+                'let freq = new Map();',
+                'let data = [3, 1, 4, 1, 5, 9, 2, 6, 1];',
+                'for (let i = 0; i < data.length; i++) {',
+                '    let x = data[i] % 3;',
+                '    freq.set(x, (freq.get(x) || 0) + 1);',
+                '}',
+                'console.log("done");')
+        },
+        {
+            category: 'Set',
+            title: 'Deduplicate',
+            tracer: 'Array1DTracer',
+            desc: 'Insert into a Set to collect distinct values — the set renders its contents.',
+            code: lines(
+                'let seen = new Set();',
+                'let data = [4, 2, 4, 7, 2, 9, 7];',
+                'for (let i = 0; i < data.length; i++) seen.add(data[i]);',
+                'console.log("distinct=" + seen.size);')
+        },
+        {
+            category: 'Recursion',
+            title: 'Fibonacci (call stack)',
+            tracer: 'CallStackTracer',
+            desc: 'Naive recursive Fibonacci — watch the call stack grow and unwind.',
+            code: lines(
+                'function fib(n) {',
+                '    if (n < 2) return n;',
+                '    return fib(n - 1) + fib(n - 2);',
+                '}',
+                'console.log("fib(6)=" + fib(6));')
+        },
+        {
+            category: 'Counting',
+            title: 'Counting sort (a[i]++)',
+            tracer: 'Array1DTracer',
+            desc: 'Tally values with count[x]++ — increment is a read-modify-write.',
+            code: lines(
+                'let data = [2, 0, 1, 2, 1, 0, 2, 1];',
+                'let count = [0, 0, 0];',
+                'for (let i = 0; i < data.length; i++) {',
+                '    count[data[i]]++;',
+                '}',
+                'console.log(count.join(","));')
+        },
+        {
+            category: 'List',
+            title: 'Linked list traversal',
+            tracer: 'GraphTracer',
+            desc: 'Build a singly linked list of {val, next} nodes, then sum it — nodes light up on each value read.',
+            code: lines(
+                'let head = { val: 1, next: null };',
+                'head.next = { val: 2, next: null };',
+                'head.next.next = { val: 3, next: null };',
+                'let sum = 0;',
+                'for (let p = head; p !== null; p = p.next) {',
+                '    sum += p.val;',
+                '}',
+                'console.log("sum=" + sum);')
+        },
+        {
+            category: 'Tree',
+            title: 'BST insert + inorder',
+            tracer: 'GraphTracer',
+            desc: 'Recursively insert into a binary search tree of {val, left, right}; inorder prints sorted.',
+            code: lines(
+                'function insert(root, v) {',
+                '    if (root === null) return { val: v, left: null, right: null };',
+                '    if (v < root.val) root.left = insert(root.left, v);',
+                '    else root.right = insert(root.right, v);',
+                '    return root;',
+                '}',
+                'function inorder(root, out) {',
+                '    if (root === null) return;',
+                '    inorder(root.left, out);',
+                '    out.push(root.val);',
+                '    inorder(root.right, out);',
+                '}',
+                'let root = null;',
+                'let vals = [5, 3, 8, 1, 4];',
+                'for (let i = 0; i < vals.length; i++) root = insert(root, vals[i]);',
+                'let out = [];',
+                'inorder(root, out);',
+                'console.log(out.join(" "));')
+        }
+    ];
+
+    var TEMPLATES = { java: JAVA, python: PYTHON, go: GO, c: CC, cpp: CPP, javascript: JSL, typescript: TS, rust: RUST };
 
     function getTemplates(lang) {
         return TEMPLATES[lang] || [];

@@ -1064,8 +1064,7 @@
 
             container.innerHTML = html;
 
-            if (window.ncertEmitContext) {
-                window.ncertEmitContext({
+            var chapterCtx = {
                     pageType: 'chapter',
                     bookClass: 'class-12',
                     bookPart: 'mathematics-part-1',
@@ -1073,7 +1072,10 @@
                     chapterNum: CHAPTER_NUM,
                     chapterName: CHAPTER_NAME,
                     questionCount: chapterQuestions.length
-                });
+            };
+            window.ncertPageContext = chapterCtx;
+            if (window.ncertEmitContext) {
+                window.ncertEmitContext(chapterCtx);
             }
 
             // Re-render MathJax

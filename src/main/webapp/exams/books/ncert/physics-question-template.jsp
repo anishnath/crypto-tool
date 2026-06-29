@@ -1369,16 +1369,18 @@
 
                                     container.innerHTML = html;
 
+                                    var questionCtx = {
+                                        pageType: 'question',
+                                        bookClass: BOOK_CLASS,
+                                        bookPart: BOOK_PART,
+                                        subjectLabel: 'Physics',
+                                        chapterNum: CHAPTER_NUM,
+                                        chapterName: CHAPTER_NAME,
+                                        question: currentQuestion
+                                    };
+                                    window.ncertPageContext = questionCtx;
                                     if (window.ncertEmitContext) {
-                                        window.ncertEmitContext({
-                                            pageType: 'question',
-                                            bookClass: BOOK_CLASS,
-                                            bookPart: BOOK_PART,
-                                            subjectLabel: 'Physics',
-                                            chapterNum: CHAPTER_NUM,
-                                            chapterName: CHAPTER_NAME,
-                                            question: currentQuestion
-                                        });
+                                        window.ncertEmitContext(questionCtx);
                                     }
 
                                     // Render MathJax

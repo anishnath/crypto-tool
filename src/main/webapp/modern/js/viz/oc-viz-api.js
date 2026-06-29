@@ -36,6 +36,9 @@
         if (language === 'typescript' || language === 'ts') {
             return '5.3';
         }
+        if (language === 'javascript' || language === 'js' || language === 'nodejs') {
+            return '20';
+        }
         if (language === 'cpp' || language === 'c++') {
             return 'clang';
         }
