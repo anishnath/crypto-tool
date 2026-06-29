@@ -121,14 +121,25 @@
     };
 
     // ========== Mode Toggle ==========
+    var heroTitle = document.getElementById('vc-hero-title');
+    var modeLabels = { gradient: 'Gradient', divergence: 'Divergence', curl: 'Curl' };
+
+    function updateHeroTitle(mode) {
+        if (heroTitle) heroTitle.textContent = modeLabels[mode] || 'Gradient';
+    }
+
     var modeBtns = document.querySelectorAll('.vc-mode-btn');
     modeBtns.forEach(function(btn) {
         btn.addEventListener('click', function() {
             var mode = this.getAttribute('data-mode');
             if (mode === currentMode) return;
             currentMode = mode;
-            modeBtns.forEach(function(b) { b.classList.remove('active'); });
+            modeBtns.forEach(function(b) {
+                b.classList.remove('active');
+                b.setAttribute('aria-checked', 'false');
+            });
             this.classList.add('active');
+            this.setAttribute('aria-checked', 'true');
             if (mode === 'gradient') {
                 scalarWrap.style.display = '';
                 vectorWrap.style.display = 'none';
@@ -136,6 +147,7 @@
                 scalarWrap.style.display = 'none';
                 vectorWrap.style.display = '';
             }
+            updateHeroTitle(mode);
             updatePreview();
             updateExamples();
         });
@@ -338,6 +350,15 @@
 
     // ========== Build SymPy Code ==========
     function buildSympyCode(mode) {
+        if (typeof window.VCCalculatorCore !== 'undefined' && window.VCCalculatorCore.buildCode) {
+            return window.VCCalculatorCore.buildCode({
+                mode: mode,
+                scalar: scalarInput ? scalarInput.value.trim() : '',
+                fx: fxInput ? fxInput.value.trim() : '',
+                fy: fyInput ? fyInput.value.trim() : '',
+                fz: fzInput ? fzInput.value.trim() : '',
+            });
+        }
         var code = 'from sympy import symbols, diff, latex, simplify, sin, cos, tan, exp, log, sqrt, pi, sec, csc, cot, sinh, cosh, tanh, asin, acos, atan, Abs\n';
         code += 'import json, numpy as np\n';
         code += 'x, y, z = symbols("x y z")\n\n';
@@ -477,6 +498,7 @@
         }
 
         // Show loading
+        pendingGraph = null;
         resultActions.classList.remove('visible');
         resultContent.innerHTML = '<div style="text-align:center;padding:2rem;">' +
             '<div class="vc-spinner" style="width:24px;height:24px;border-width:3px;margin:0 auto 1rem;"></div>' +
@@ -544,9 +566,14 @@
                 pendingGraph = { data: plotData, mode: mode };
                 if (graphHint) graphHint.style.display = 'none';
                 var graphPanel = document.getElementById('vc-panel-graph');
-                if (graphPanel.classList.contains('active')) {
+                if (graphPanel && graphPanel.classList.contains('active')) {
                     loadPlotly(function() { renderGraph(pendingGraph); });
                 }
+            } else if (graphHint) {
+                graphHint.style.display = '';
+                graphHint.textContent = mode === 'gradient'
+                    ? 'Could not sample gradient field for 3D plot — result is still valid in Result tab.'
+                    : 'Could not sample curl field for 3D plot — result is still valid in Result tab.';
             }
         } else {
             // divergence - scalar result
@@ -556,6 +583,10 @@
             var text = tMatch ? tMatch[1].trim() : result;
 
             showScalarResult(result, text, steps);
+            if (graphHint) {
+                graphHint.style.display = '';
+                graphHint.textContent = 'Compute a gradient or curl to see its 3D vector field.';
+            }
         }
 
         resultActions.classList.add('visible');
@@ -687,16 +718,19 @@
 
         var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
-        var trace = {
-            type: 'cone',
-            x: xs, y: ys, z: zs,
-            u: us, v: vs, w: ws,
-            colorscale: 'Portland',
-            sizemode: 'absolute',
-            sizeref: 1,
-            showscale: true,
-            colorbar: { title: 'Magnitude', tickfont: { color: isDark ? '#cbd5e1' : '#475569' }, titlefont: { color: isDark ? '#cbd5e1' : '#475569' } }
-        };
+        var trace = (typeof window.VCCalculatorCore !== 'undefined' && window.VCCalculatorCore.buildPlotlyConeTrace)
+            ? window.VCCalculatorCore.buildPlotlyConeTrace(xs, ys, zs, us, vs, ws, { isDark: isDark })
+            : {
+                type: 'cone',
+                x: xs, y: ys, z: zs,
+                u: us, v: vs, w: ws,
+                colorscale: 'Portland',
+                sizemode: 'scaled',
+                sizeref: 0.45,
+                anchor: 'tail',
+                showscale: true,
+                colorbar: { title: 'Magnitude', tickfont: { color: isDark ? '#cbd5e1' : '#475569' }, titlefont: { color: isDark ? '#cbd5e1' : '#475569' } }
+            };
 
         var layout = {
             margin: { t: 30, r: 20, b: 30, l: 20 },
@@ -980,5 +1014,25 @@
             }
         }
     } catch(e) {}
+
+    window.vcGetContext = function vcGetContext() {
+        var resultSummary = '';
+        if (resultContent && resultContent.textContent) {
+            resultSummary = resultContent.textContent.replace(/\s+/g, ' ').trim().slice(0, 4000);
+        }
+        var ctx = {
+            toolType: 'vectorCalculus',
+            mode: currentMode,
+            resultSummary: resultSummary,
+        };
+        if (currentMode === 'gradient') {
+            ctx.scalar = (scalarInput && scalarInput.value) || '';
+        } else {
+            ctx.fx = (fxInput && fxInput.value) || '';
+            ctx.fy = (fyInput && fyInput.value) || '';
+            ctx.fz = (fzInput && fzInput.value) || '';
+        }
+        return ctx;
+    };
 
 })();

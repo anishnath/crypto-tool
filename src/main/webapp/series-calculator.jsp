@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "math-ai");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +33,7 @@
     <meta name="language" content="en">
     <meta name="author" content="Anish Nath">
     <meta name="context-path" content="<%=request.getContextPath()%>">
+    <meta name="ctx" content="<%=request.getContextPath()%>">
 
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Taylor Series Calculator &bull; Steps" />
@@ -77,12 +81,11 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
 
     <!-- Math shell -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=cacheVersion%>">
 
-    <!-- Tool-specific CSS (sc-* widgets, mode toggles, palettes, edu cards) -->
+    <!-- Tool-specific CSS (sc-* widgets, palettes, edu cards) -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/series-calculator.css?v=<%=cacheVersion%>">
 
     <!-- KaTeX + MathLive + image-to-math -->
@@ -90,6 +93,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=cacheVersion%>">
+
+    <%@ include file="modern/components/math-ai-head.inc.jsp" %>
+    <style>
+        .ic-hero .math-ai-tab-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid rgba(99,102,241,0.35);
+            background: rgba(99,102,241,0.08); color: var(--ms-text, #1e1b4b); font-size: 0.8125rem;
+            font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+            white-space: nowrap;
+        }
+        .ic-hero .math-ai-tab-btn:hover {
+            background: rgba(99,102,241,0.18); transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(99,102,241,0.15);
+        }
+        .ic-hero .math-ai-tab-btn[aria-busy="true"] { opacity: 0.75; cursor: wait; }
+    </style>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
 </head>
@@ -122,202 +141,175 @@
                     <span>/</span>
                     <span aria-current="page">Series</span>
                 </nav>
-                <h1>Taylor &amp; Maclaurin Series Calculator</h1>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+                    <h1 style="margin:0;">Taylor &amp; Maclaurin Series Calculator</h1>
+                    <a href="#worksheet" id="sc-header-worksheet-link" style="font-size:0.85rem;color:var(--ms-accent,#2563eb);text-decoration:none;font-weight:600;border:1px solid var(--ms-accent,#2563eb);padding:0.3rem 0.7rem;border-radius:9999px;white-space:nowrap;">&#128221; Practice worksheet</a>
+                </div>
             </header>
 
-            <%-- Two-column input/output grid (no separate ads column — rail handles ads). --%>
-            <div class="tool-page-container" style="grid-template-columns:minmax(300px,400px) minmax(0,1fr); max-width:none; padding:0; margin:0; min-height:0;">
+            <div class="ic-stack">
 
-                <!-- ==================== INPUT COLUMN ==================== -->
-                <div class="tool-input-column">
-                    <div class="tool-card">
-                        <div class="tool-card-header" style="background:var(--sc-gradient);">Series Expansion</div>
-                        <div class="tool-card-body">
+                <!-- ═══ INPUT HERO ═══ -->
+                <div class="ic-hero" id="sc-hero" data-input-mode="visual">
 
-                            <!-- Mode Toggle -->
-                            <div class="tool-form-group" style="margin-bottom:0.75rem;">
-                                <label class="tool-form-label">Mode</label>
-                                <div class="sc-mode-toggle" id="sc-mode-toggle">
-                                    <button type="button" class="sc-mode-btn active" data-mode="expansion">Series Expansion</button>
-                                    <button type="button" class="sc-mode-btn" data-mode="remainder">Error Bound</button>
-                                    <button type="button" class="sc-mode-btn" data-mode="integral">Integral Approx</button>
-                                    <button type="button" class="sc-mode-btn" data-mode="limit">Limit Eval</button>
-                                </div>
-                            </div>
-
-                            <!-- Series Type Toggle -->
-                            <div class="tool-form-group" style="margin-bottom:0.5rem;" id="sc-type-toggle-group">
-                                <label class="tool-form-label">Series Type</label>
-                                <div class="sc-type-toggle">
-                                    <button type="button" class="sc-type-btn active" data-type="maclaurin">Maclaurin (a=0)</button>
-                                    <button type="button" class="sc-type-btn" data-type="taylor">Taylor (custom a)</button>
-                                </div>
-                            </div>
-
-                            <!-- Function Input — MathLive Visual + Text fallback -->
-                            <div class="tool-form-group">
-                                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
-                                    <label class="tool-form-label" for="sc-func-input" style="margin-bottom:0;">Function f(x)</label>
-                                    <div style="display:flex;gap:0.5rem;align-items:center;">
-                                        <div class="ic-input-mode-toggle" data-mml-toggle role="radiogroup" aria-label="Input mode" style="display:inline-flex;border:1px solid var(--border);border-radius:9999px;padding:2px;background:var(--bg-secondary);">
-                                            <button type="button" class="ic-input-mode-btn active" data-input-mode="visual" role="radio" aria-checked="true" title="Write math visually" style="padding:0.2rem 0.6rem;border:none;background:transparent;font-size:0.7rem;font-weight:600;cursor:pointer;border-radius:9999px;">&fnof; Visual</button>
-                                            <button type="button" class="ic-input-mode-btn" data-input-mode="text" role="radio" aria-checked="false" title="Type plain text" style="padding:0.2rem 0.6rem;border:none;background:transparent;font-size:0.7rem;font-weight:600;cursor:pointer;border-radius:9999px;font-family:var(--font-mono);">&lt;/&gt; Text</button>
-                                        </div>
-                                        <button type="button" id="sc-image-btn" title="Scan series problems from image or PDF" style="padding:0.25rem 0.625rem;border-radius:9999px;border:1.5px solid var(--primary);background:transparent;color:var(--primary);font-size:0.75rem;font-weight:600;cursor:pointer;">&#128247; Scan</button>
-                                    </div>
-                                </div>
-                                <div class="sc-func-input-wrap mml-pair">
-                                    <math-field class="mml-mathfield" aria-label="Function for series expansion"
-                                                placeholder="e^x"
-                                                smart-mode="on" smart-fence="on" smart-superscript="on"
-                                                remove-extraneous-parentheses="on"></math-field>
-                                    <input type="text" class="sc-func-input mml-text" id="sc-func-input" placeholder="e.g., e^x, sin(x), cos(x), ln(1+x)" value="e^x" autocomplete="off" spellcheck="false">
-                                    <div class="sc-func-autocomplete mml-text-extra" id="sc-func-autocomplete"></div>
-                                </div>
-                                <!-- Function Palette -->
-                                <div class="sc-func-palette" id="sc-func-palette">
-                                    <button type="button" class="sc-palette-btn" data-insert="sin(" title="sine">sin</button>
-                                    <button type="button" class="sc-palette-btn" data-insert="cos(" title="cosine">cos</button>
-                                    <button type="button" class="sc-palette-btn" data-insert="tan(" title="tangent">tan</button>
-                                    <button type="button" class="sc-palette-btn" data-insert="e^(" title="exponential">e<sup>x</sup></button>
-                                    <button type="button" class="sc-palette-btn" data-insert="ln(" title="natural log">ln</button>
-                                    <button type="button" class="sc-palette-btn" data-insert="log(" title="logarithm">log</button>
-                                    <button type="button" class="sc-palette-btn" data-insert="sqrt(" title="square root">&radic;</button>
-                                    <button type="button" class="sc-palette-btn" data-insert="^" title="power">x<sup>n</sup></button>
-                                    <button type="button" class="sc-palette-btn" data-insert="pi" title="pi">&pi;</button>
-                                    <button type="button" class="sc-palette-btn" data-insert="(" title="open paren">(</button>
-                                    <button type="button" class="sc-palette-btn" data-insert=")" title="close paren">)</button>
-                                    <button type="button" class="sc-palette-btn" data-insert="1/(" title="reciprocal">1/x</button>
-                                </div>
-                                <div class="tool-form-hint">Click buttons above or type directly. Use ^ for powers, e.g. x^2</div>
-                                <!-- Quick Examples -->
-                                <div class="sc-examples" style="margin-top:0.375rem;">
-                                    <button type="button" class="sc-example-chip" data-example="exp">e^x</button>
-                                    <button type="button" class="sc-example-chip" data-example="sin">sin(x)</button>
-                                    <button type="button" class="sc-example-chip" data-example="cos">cos(x)</button>
-                                    <button type="button" class="sc-example-chip" data-example="ln">ln(1+x)</button>
-                                    <button type="button" class="sc-example-chip" data-example="geo">1/(1-x)</button>
-                                    <button type="button" class="sc-example-chip" data-example="sqrt">&radic;(1+x)</button>
-                                    <button type="button" class="sc-example-chip" data-example="tan">tan(x)</button>
-                                    <button type="button" class="sc-example-chip" data-example="taylor">sin(x) @ &pi;</button>
-                                </div>
-                            </div>
-
-                            <!-- Parameters -->
-                            <div class="sc-param-row">
-                                <div class="sc-param-group" id="sc-center-group" style="display:none;">
-                                    <label class="sc-param-label" for="sc-center-point">Center (a)</label>
-                                    <input type="text" class="sc-param-input" id="sc-center-point" placeholder="e.g., 0, 1, pi" value="0">
-                                </div>
-                                <div class="sc-param-group">
-                                    <label class="sc-param-label" for="sc-num-terms">Terms (n)</label>
-                                    <input type="number" class="sc-param-input" id="sc-num-terms" min="1" max="20" value="5">
-                                </div>
-                            </div>
-
-                            <!-- Remainder Mode Inputs -->
-                            <div class="sc-mode-inputs" id="sc-remainder-inputs" style="display:none">
-                                <div class="sc-param-row">
-                                    <div class="sc-param-group">
-                                        <label class="sc-param-label" for="sc-eval-point">Evaluate at x =</label>
-                                        <input type="text" class="sc-param-input" id="sc-eval-point" placeholder="e.g., 0.5, 1, pi/4" value="0.5">
-                                    </div>
-                                </div>
-                                <div class="tool-form-hint">Computes the Lagrange remainder bound |R<sub>n</sub>(x)| for the Taylor polynomial.</div>
-                            </div>
-
-                            <!-- Integral Mode Inputs -->
-                            <div class="sc-mode-inputs" id="sc-integral-inputs" style="display:none">
-                                <div class="sc-param-row">
-                                    <div class="sc-param-group">
-                                        <label class="sc-param-label" for="sc-int-lower">Lower bound</label>
-                                        <input type="text" class="sc-param-input" id="sc-int-lower" placeholder="e.g., 0" value="0">
-                                    </div>
-                                    <div class="sc-param-group">
-                                        <label class="sc-param-label" for="sc-int-upper">Upper bound</label>
-                                        <input type="text" class="sc-param-input" id="sc-int-upper" placeholder="e.g., 1" value="1">
-                                    </div>
-                                </div>
-                                <div class="tool-form-hint">Approximates &int;f(x)dx by integrating the Taylor polynomial term-by-term.</div>
-                            </div>
-
-                            <!-- Limit Mode Inputs -->
-                            <div class="sc-mode-inputs" id="sc-limit-inputs" style="display:none">
-                                <div class="sc-param-row">
-                                    <div class="sc-param-group">
-                                        <label class="sc-param-label" for="sc-limit-expr">Full expression</label>
-                                        <input type="text" class="sc-func-input" id="sc-limit-expr" placeholder="e.g., sin(x)/x, (e^x-1)/x" value="sin(x)/x" autocomplete="off" spellcheck="false">
-                                    </div>
-                                    <div class="sc-param-group">
-                                        <label class="sc-param-label" for="sc-limit-point">x &rarr;</label>
-                                        <input type="text" class="sc-param-input" id="sc-limit-point" placeholder="e.g., 0, inf" value="0">
-                                    </div>
-                                </div>
-                                <div class="tool-form-hint">Evaluates limits by substituting Taylor expansions and simplifying.</div>
-                            </div>
-
-                            <!-- Live Preview -->
-                            <div class="tool-form-group" style="margin-top:0.75rem;">
-                                <label class="tool-form-label">Series Preview</label>
-                                <div class="sc-preview" id="sc-preview"></div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div style="display:flex;gap:0.5rem;">
-                                <button type="button" class="tool-action-btn" id="sc-solve-btn" data-mml-submit style="flex:1">Calculate Series</button>
-                                <button type="button" class="tool-action-btn" id="sc-clear-btn" style="flex:0;min-width:60px;background:var(--bg-secondary)!important;color:var(--text-secondary);border:1px solid var(--border)">Clear</button>
-                            </div>
-
-                            <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">
-
-                            <!-- Worksheet Generator -->
-                            <div>
-                                <label class="tool-form-label">Worksheet Generator</label>
-                                <p style="font-size:0.75rem;color:var(--text-muted);margin:0 0 0.5rem;">
-                                    Generate a printable practice worksheet with random questions and answer key.
-                                </p>
-                                <button type="button" class="sc-worksheet-btn" id="sc-worksheet-btn">
-                                    Print Worksheet
+                    <div class="ic-hero-top">
+                        <div class="sc-mode-toggle ic-mode-toggle" id="sc-mode-toggle" role="radiogroup" aria-label="Series calculator mode">
+                            <button type="button" class="sc-mode-btn ic-mode-btn active" data-mode="expansion" role="radio" aria-checked="true">Expansion</button>
+                            <button type="button" class="sc-mode-btn ic-mode-btn" data-mode="remainder" role="radio" aria-checked="false">Error Bound</button>
+                            <button type="button" class="sc-mode-btn ic-mode-btn" data-mode="integral" role="radio" aria-checked="false">Integral</button>
+                            <button type="button" class="sc-mode-btn ic-mode-btn" data-mode="limit" role="radio" aria-checked="false">Limit</button>
+                        </div>
+                        <div class="ic-expr-label-actions" style="display:flex;gap:0.5rem;align-items:center;">
+                            <div class="ic-input-mode-toggle" data-mml-toggle role="radiogroup" aria-label="Input mode">
+                                <button type="button" class="ic-input-mode-btn active" data-input-mode="visual" role="radio" aria-checked="true" title="Write math visually">
+                                    <span aria-hidden="true" style="font-family:'Times New Roman',serif;font-style:italic;">&fnof;</span><span class="ic-mode-label"> Visual</span>
+                                </button>
+                                <button type="button" class="ic-input-mode-btn" data-input-mode="text" role="radio" aria-checked="false" title="Type plain text">
+                                    <span aria-hidden="true" style="font-family:var(--font-mono,monospace);">&lt;/&gt;</span><span class="ic-mode-label"> Text</span>
                                 </button>
                             </div>
+                            <button type="button" class="ic-image-btn" id="sc-image-btn" title="Scan series problems from image or PDF">&#128247; Scan</button>
+                            <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Math AI — series tutor + ∫, d/dx, lim in chat (Ctrl+Shift+A)">&#10024; AI</button>
                         </div>
+                    </div>
+
+                    <div class="ic-hero-label-row">
+                        <span class="ic-expr-label" id="sc-hero-title">Series Expansion</span>
+                    </div>
+
+                    <!-- Series Type (Maclaurin / Taylor) -->
+                    <div class="tool-form-group" style="margin-bottom:0.65rem;" id="sc-type-toggle-group">
+                        <div class="sc-type-toggle sc-type-toggle-hero">
+                            <button type="button" class="sc-type-btn active" data-type="maclaurin">Maclaurin (a=0)</button>
+                            <button type="button" class="sc-type-btn" data-type="taylor">Taylor (custom a)</button>
+                        </div>
+                    </div>
+
+                    <!-- Function Input -->
+                    <div class="tool-form-group sc-func-group">
+                        <div class="sc-func-input-wrap mml-pair ic-expr-wrap">
+                            <math-field class="mml-mathfield ic-mathfield" aria-label="Function for series expansion"
+                                        placeholder="e^x"
+                                        smart-mode="on" smart-fence="on" smart-superscript="on"
+                                        remove-extraneous-parentheses="on"></math-field>
+                            <input type="text" class="sc-func-input mml-text tool-input tool-input-mono" id="sc-func-input" placeholder="e.g., e^x, sin(x), cos(x), ln(1+x)" value="e^x" autocomplete="off" spellcheck="false">
+                            <div class="sc-func-autocomplete mml-text-extra" id="sc-func-autocomplete"></div>
+                        </div>
+                        <div class="sc-func-palette" id="sc-func-palette">
+                            <button type="button" class="sc-palette-btn" data-insert="sin(" title="sine">sin</button>
+                            <button type="button" class="sc-palette-btn" data-insert="cos(" title="cosine">cos</button>
+                            <button type="button" class="sc-palette-btn" data-insert="tan(" title="tangent">tan</button>
+                            <button type="button" class="sc-palette-btn" data-insert="e^(" title="exponential">e<sup>x</sup></button>
+                            <button type="button" class="sc-palette-btn" data-insert="ln(" title="natural log">ln</button>
+                            <button type="button" class="sc-palette-btn" data-insert="log(" title="logarithm">log</button>
+                            <button type="button" class="sc-palette-btn" data-insert="sqrt(" title="square root">&radic;</button>
+                            <button type="button" class="sc-palette-btn" data-insert="^" title="power">x<sup>n</sup></button>
+                            <button type="button" class="sc-palette-btn" data-insert="pi" title="pi">&pi;</button>
+                            <button type="button" class="sc-palette-btn" data-insert="(" title="open paren">(</button>
+                            <button type="button" class="sc-palette-btn" data-insert=")" title="close paren">)</button>
+                            <button type="button" class="sc-palette-btn" data-insert="1/(" title="reciprocal">1/x</button>
+                        </div>
+                        <div class="sc-examples ic-hero-examples">
+                            <button type="button" class="sc-example-chip ic-example-chip" data-example="exp">e^x</button>
+                            <button type="button" class="sc-example-chip ic-example-chip" data-example="sin">sin(x)</button>
+                            <button type="button" class="sc-example-chip ic-example-chip" data-example="cos">cos(x)</button>
+                            <button type="button" class="sc-example-chip ic-example-chip" data-example="ln">ln(1+x)</button>
+                            <button type="button" class="sc-example-chip ic-example-chip" data-example="geo">1/(1-x)</button>
+                            <button type="button" class="sc-example-chip ic-example-chip" data-example="sqrt">&radic;(1+x)</button>
+                            <button type="button" class="sc-example-chip ic-example-chip" data-example="tan">tan(x)</button>
+                            <button type="button" class="sc-example-chip ic-example-chip" data-example="taylor">sin(x) @ &pi;</button>
+                        </div>
+                    </div>
+
+                    <!-- Mode-specific inputs -->
+                    <div class="sc-mode-inputs" id="sc-remainder-inputs" style="display:none">
+                        <div class="sc-param-row ic-hero-params visible">
+                            <div class="sc-param-group tool-form-group">
+                                <label class="sc-param-label" for="sc-eval-point">Evaluate at x =</label>
+                                <input type="text" class="sc-param-input tool-input tool-input-mono" id="sc-eval-point" placeholder="e.g., 0.5, 1, pi/4" value="0.5">
+                            </div>
+                        </div>
+                        <div class="tool-form-hint">Computes the Lagrange remainder bound |R<sub>n</sub>(x)| for the Taylor polynomial.</div>
+                    </div>
+
+                    <div class="sc-mode-inputs" id="sc-integral-inputs" style="display:none">
+                        <div class="sc-param-row ic-hero-params visible">
+                            <div class="sc-param-group tool-form-group">
+                                <label class="sc-param-label" for="sc-int-lower">Lower bound</label>
+                                <input type="text" class="sc-param-input tool-input tool-input-mono" id="sc-int-lower" placeholder="e.g., 0" value="0">
+                            </div>
+                            <div class="sc-param-group tool-form-group">
+                                <label class="sc-param-label" for="sc-int-upper">Upper bound</label>
+                                <input type="text" class="sc-param-input tool-input tool-input-mono" id="sc-int-upper" placeholder="e.g., 1" value="1">
+                            </div>
+                        </div>
+                        <div class="tool-form-hint">Approximates &int;f(x)dx by integrating the Taylor polynomial term-by-term.</div>
+                    </div>
+
+                    <div class="sc-mode-inputs" id="sc-limit-inputs" style="display:none">
+                        <div class="sc-param-row ic-hero-params visible">
+                            <div class="sc-param-group tool-form-group" style="grid-column:span 2;">
+                                <label class="sc-param-label" for="sc-limit-expr">Full expression</label>
+                                <input type="text" class="sc-func-input tool-input tool-input-mono" id="sc-limit-expr" placeholder="e.g., sin(x)/x, (e^x-1)/x" value="sin(x)/x" autocomplete="off" spellcheck="false">
+                            </div>
+                            <div class="sc-param-group tool-form-group">
+                                <label class="sc-param-label" for="sc-limit-point">x &rarr;</label>
+                                <input type="text" class="sc-param-input tool-input tool-input-mono" id="sc-limit-point" placeholder="e.g., 0, inf" value="0">
+                            </div>
+                        </div>
+                        <div class="tool-form-hint">Evaluates limits by substituting Taylor expansions and simplifying.</div>
+                    </div>
+
+                    <!-- Parameters: center + terms -->
+                    <div class="sc-param-row ic-hero-params visible" id="sc-expansion-params">
+                        <div class="sc-param-group tool-form-group" id="sc-center-group" style="display:none;">
+                            <label class="sc-param-label" for="sc-center-point">Center (a)</label>
+                            <input type="text" class="sc-param-input tool-input tool-input-mono" id="sc-center-point" placeholder="e.g., 0, 1, pi" value="0">
+                        </div>
+                        <div class="sc-param-group tool-form-group">
+                            <label class="sc-param-label" for="sc-num-terms">Terms (n)</label>
+                            <input type="number" class="sc-param-input tool-input tool-input-mono" id="sc-num-terms" min="1" max="20" value="5">
+                        </div>
+                    </div>
+
+                    <div class="ic-preview-strip">
+                        <span class="ic-preview-label">Preview</span>
+                        <div class="sc-preview ic-preview" id="sc-preview"></div>
+                    </div>
+
+                    <div class="ic-hero-cta-row">
+                        <button type="button" class="ic-hero-cta" id="sc-solve-btn" data-mml-submit>Calculate Series</button>
+                        <button type="button" class="tool-action-btn" id="sc-clear-btn" style="background:var(--ms-panel-bg-soft);color:var(--ms-muted);border:1px solid var(--ms-line);">Clear</button>
+                    </div>
+
+                    <div class="ic-worksheet-cta">
+                        <button type="button" class="tool-action-btn sc-worksheet-btn" id="sc-worksheet-btn">Print Worksheet</button>
                     </div>
                 </div>
 
-                <!-- ==================== OUTPUT COLUMN ==================== -->
-                <div class="tool-output-column">
-                    <!-- Tab bar -->
-                    <div class="sc-output-tabs">
-                        <button type="button" class="sc-output-tab active" data-panel="result">Result</button>
-                        <button type="button" class="sc-output-tab" data-panel="graph">Graph</button>
-                        <button type="button" class="sc-output-tab" data-panel="python">Python Compiler</button>
+                <!-- ═══ RESULT CARD ═══ -->
+                <div class="ic-result-card">
+                    <div class="ic-output-tabs sc-output-tabs" role="tablist">
+                        <button type="button" class="ic-output-tab sc-output-tab active" data-panel="result" role="tab" aria-selected="true">Result</button>
+                        <button type="button" class="ic-output-tab sc-output-tab" data-panel="graph" role="tab" aria-selected="false">Graph</button>
+                        <button type="button" class="ic-output-tab sc-output-tab" data-panel="python" role="tab" aria-selected="false">Python Compiler</button>
                     </div>
 
-                    <!-- Result Panel -->
-                    <div class="sc-panel active" id="sc-panel-result">
+                    <div class="ic-panel sc-panel active" id="sc-panel-result" role="tabpanel">
                         <div class="sc-result-scroll-container">
                             <div class="tool-card tool-result-card">
-                                <div class="tool-result-header">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
-                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                                    </svg>
-                                    <h4>Series Expansion</h4>
-                                </div>
                                 <div class="tool-result-content" id="sc-result-content">
-                                    <div class="tool-empty-state" id="sc-empty-state">
-                                        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&Sigma;</div>
+                                    <div class="tool-empty-state ic-empty-state" id="sc-empty-state">
+                                        <div class="ic-empty-illustration">&Sigma;</div>
                                         <h3>Enter a function</h3>
                                         <p>Calculate Taylor or Maclaurin series expansion with step-by-step solutions.</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Step-by-Step CTA Button -->
                             <div id="sc-steps-cta" style="display:none;margin-top:1rem;">
                                 <button type="button" class="sc-steps-toggle-btn" id="sc-steps-toggle-btn">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;">
-                                        <path d="M9 5l7 7-7 7"/>
-                                    </svg>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M9 5l7 7-7 7"/></svg>
                                     Show Step-by-Step Solution
                                 </button>
                             </div>
@@ -325,45 +317,26 @@
                             <div id="sc-convergence-area" style="margin-top:0.5rem"></div>
                         </div>
 
-                        <!-- Sticky action toolbar -->
-                        <div class="sc-result-toolbar" id="sc-result-actions" style="display:none">
+                        <div class="sc-result-toolbar tool-result-actions" id="sc-result-actions" style="display:none">
                             <div class="sc-toolbar-group">
-                                <button type="button" class="sc-toolbar-btn" id="sc-download-pdf-btn" title="Download as PDF">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                    PDF
-                                </button>
+                                <button type="button" class="sc-toolbar-btn tool-action-btn" id="sc-download-pdf-btn" title="Download as PDF">PDF</button>
                             </div>
                             <div class="sc-toolbar-sep"></div>
                             <div class="sc-toolbar-group">
-                                <button type="button" class="sc-toolbar-btn" id="sc-share-btn" title="Copy share link">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                                    Share
-                                </button>
+                                <button type="button" class="sc-toolbar-btn tool-action-btn" id="sc-share-btn" title="Copy share link">Share</button>
                             </div>
                             <div class="sc-toolbar-sep"></div>
                             <div class="sc-toolbar-group">
-                                <button type="button" class="sc-toolbar-btn" id="sc-toolbar-worksheet-btn" title="Generate practice worksheet">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                                    Worksheet
-                                </button>
+                                <button type="button" class="sc-toolbar-btn tool-action-btn" id="sc-toolbar-worksheet-btn" title="Generate practice worksheet">Worksheet</button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Graph Panel -->
-                    <div class="sc-panel" id="sc-panel-graph">
+                    <div class="ic-panel sc-panel" id="sc-panel-graph" role="tabpanel">
                         <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
-                            <div class="tool-result-header">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
-                                    <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-                                </svg>
-                                <h4>Convergence Graph</h4>
-                            </div>
                             <div style="flex:1;min-height:0;padding:0.75rem;">
                                 <div id="sc-graph-container"></div>
                                 <p id="sc-graph-hint" style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">Calculate a series to see the function vs approximation graph.</p>
-
-                                <!-- Term Slider -->
                                 <div class="sc-slider-group">
                                     <span class="sc-slider-label">Terms:</span>
                                     <input type="range" class="sc-slider" id="sc-term-slider" min="1" max="20" value="5">
@@ -373,14 +346,10 @@
                         </div>
                     </div>
 
-                    <!-- Python Compiler Panel -->
-                    <div class="sc-panel" id="sc-panel-python">
+                    <div class="ic-panel sc-panel" id="sc-panel-python" role="tabpanel">
                         <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
-                            <div class="tool-result-header">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--sc-tool);">
-                                    <polygon points="5 3 19 12 5 21 5 3"/>
-                                </svg>
-                                <h4>Python Compiler</h4>
+                            <div class="tool-result-header" style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1rem;border-bottom:1px solid var(--border);">
+                                <h4 style="margin:0;font-size:0.9375rem;">Python Compiler</h4>
                                 <select id="sc-compiler-template" style="margin-left:auto;padding:0.3rem 0.5rem;border:1px solid var(--border);border-radius:0.375rem;font-size:0.75rem;font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;">
                                     <option value="sympy-series">Series Expansion</option>
                                     <option value="numpy-approx">Numeric Approximation</option>
@@ -552,10 +521,22 @@
           3. math-input-multi           — MathLive ES module + Visual/Text mode toggle (reads DOM)
     --%>
     <jsp:include page="/math/partials/math-libs.jsp" />
+    <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
     <jsp:include page="/math/partials/series-calculator-scripts.jsp" />
     <jsp:include page="/math/partials/math-input-multi.jsp" />
 
-    <!-- Scroll-triggered animations for sc-anim educational cards -->
+    <script>
+    (function () {
+        var link = document.getElementById('sc-header-worksheet-link');
+        if (!link) return;
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            var btn = document.getElementById('sc-worksheet-btn');
+            if (btn) btn.click();
+        });
+    })();
+    </script>
+
     <script>
     (function(){
         var els = document.querySelectorAll('.sc-anim');
@@ -584,5 +565,12 @@
         });
     })();
     </script>
+
+    <%
+        request.setAttribute("mathAiButtonId", "btnMathAI");
+        request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+        request.setAttribute("mathAiProfileExport", "configureSeriesMathShell");
+    %>
+    <%@ include file="modern/components/math-ai-boot.inc.jsp" %>
 </body>
 </html>

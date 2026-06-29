@@ -44,6 +44,12 @@ function getPdeCore() {
     : window.PDECalculatorCore;
 }
 
+function getVcCore() {
+  return typeof VCCalculatorCore !== 'undefined'
+    ? VCCalculatorCore
+    : window.VCCalculatorCore;
+}
+
 /** @param {object} core */
 async function solveFromCore(core, latex, withSteps) {
   if (!core?.solveFromLatex) {
@@ -251,6 +257,65 @@ export async function solvePdeTask(task, mode = 'simple') {
 }
 
 /**
+ * Solve gradient / divergence / curl in-chat via the same SymPy backbone as the VC page.
+ * @param {import('./math-action-extract.js').MathActionTask} task
+ * @param {MathSolveMode} mode
+ */
+export async function solveVectorCalculusTask(task, mode = 'simple') {
+  const core = getVcCore();
+  if (!core?.solveTask) {
+    return { ok: false, error: 'Vector calculus engine (VCCalculatorCore) not loaded.', mode, problemLatex: '' };
+  }
+
+  const problemLatex = taskToSolveLatex(task);
+
+  let r;
+  try {
+    r = await core.solveTask(task);
+  } catch (err) {
+    return { ok: false, error: err?.message || 'Vector calculus solve failed.', mode, problemLatex };
+  }
+
+  if (!r || !r.ok) {
+    return { ok: false, error: r?.error || 'Could not compute this vector calculus problem.', mode, problemLatex };
+  }
+
+  const vcMode = String(r.mode || task.mode || 'gradient').toLowerCase();
+  const steps = mode === 'steps' ? (r.steps || []) : [];
+
+  if (mode === 'graph') {
+    if (vcMode === 'divergence') {
+      return {
+        ok: false,
+        error: '3D vector field graph is available for gradient and curl only (divergence is a scalar).',
+        mode,
+        problemLatex,
+      };
+    }
+    if (!Array.isArray(r.plotData) || r.plotData.length === 0) {
+      return {
+        ok: false,
+        error: 'Could not sample the vector field for a 3D plot. Try a simpler expression.',
+        mode,
+        problemLatex,
+      };
+    }
+  }
+
+  return {
+    ok: true,
+    mode,
+    action: 'vectorCalculus',
+    resultLatex: r.resultLatex || '',
+    method: r.method || 'Symbolic vector calculus solver',
+    steps,
+    input: { plotData: r.plotData || [], vcMode },
+    result: { value: r.resultLatex || '' },
+    problemLatex,
+  };
+}
+
+/**
  * @param {import('./math-action-extract.js').MathActionTask} task
  * @param {object} [shell]
  * @param {MathSolveMode} [mode]
@@ -261,6 +326,7 @@ export async function computeTaskInChat(task, _shell, mode = 'simple') {
   if (action === 'limit') return solveLimitTask(task, mode);
   if (action === 'ode') return solveOdeTask(task, mode);
   if (action === 'pde') return solvePdeTask(task, mode);
+  if (action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
   return solveIntegralTask(task, mode);
 }
 
@@ -590,6 +656,90 @@ export function renderOdeGraphInChat(plotEl, parsed) {
   });
 }
 
+/**
+ * 3D cone plot of a gradient or curl vector field (same sampling as the VC page).
+ * @param {HTMLElement} plotEl
+ * @param {{ plotData?: number[][], vcMode?: string }} input
+ */
+export function renderVectorCalculusGraphInChat(plotEl, input) {
+  const data = input?.plotData;
+  if (!plotEl || !Array.isArray(data) || data.length === 0) return Promise.resolve(false);
+
+  return ensurePlotly(plotEl, () => {
+    const xs = [];
+    const ys = [];
+    const zs = [];
+    const us = [];
+    const vs = [];
+    const ws = [];
+    for (let i = 0; i < data.length; i++) {
+      const p = data[i];
+      xs.push(p[0]);
+      ys.push(p[1]);
+      zs.push(p[2]);
+      us.push(p[3]);
+      vs.push(p[4]);
+      ws.push(p[5]);
+    }
+
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    plotEl.style.minHeight = '320px';
+
+    const core = typeof VCCalculatorCore !== 'undefined' ? VCCalculatorCore : window.VCCalculatorCore;
+    const trace = core?.buildPlotlyConeTrace
+      ? core.buildPlotlyConeTrace(xs, ys, zs, us, vs, ws, { isDark, colorbarFontSize: 10 })
+      : {
+          type: 'cone',
+          x: xs,
+          y: ys,
+          z: zs,
+          u: us,
+          v: vs,
+          w: ws,
+          colorscale: 'Portland',
+          sizemode: 'scaled',
+          sizeref: 0.45,
+          anchor: 'tail',
+          showscale: true,
+          colorbar: {
+            title: 'Magnitude',
+            tickfont: { color: isDark ? '#cbd5e1' : '#475569', size: 10 },
+            titlefont: { color: isDark ? '#cbd5e1' : '#475569', size: 10 },
+          },
+        };
+
+    const layout = {
+      margin: { t: 28, r: 8, b: 8, l: 8 },
+      height: 320,
+      scene: {
+        xaxis: {
+          title: 'x',
+          gridcolor: isDark ? '#334155' : '#e2e8f0',
+          color: isDark ? '#cbd5e1' : '#475569',
+        },
+        yaxis: {
+          title: 'y',
+          gridcolor: isDark ? '#334155' : '#e2e8f0',
+          color: isDark ? '#cbd5e1' : '#475569',
+        },
+        zaxis: {
+          title: 'z',
+          gridcolor: isDark ? '#334155' : '#e2e8f0',
+          color: isDark ? '#cbd5e1' : '#475569',
+        },
+        bgcolor: isDark ? '#1e293b' : '#fff',
+      },
+      paper_bgcolor: isDark ? '#1e293b' : '#fff',
+      font: { family: 'Inter, sans-serif', size: 11, color: isDark ? '#cbd5e1' : '#475569' },
+    };
+
+    window.Plotly.newPlot(plotEl, [trace], layout, {
+      responsive: true,
+      displayModeBar: false,
+    });
+  });
+}
+
 function escapeHtml(s) {
   return String(s ?? '')
     .replace(/&/g, '&amp;')
@@ -627,6 +777,21 @@ function chipActionsForTask(task) {
       { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step breakdown' },
     ];
   }
+  if (action === 'vectorCalculus') {
+    const chips = [
+      { mode: 'simple', label: 'Solve', title: 'Compute ∇ / ∇· / ∇× (same as page)' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step partial derivatives' },
+    ];
+    const vcMode = String(task?.mode || 'gradient').toLowerCase();
+    if (vcMode === 'gradient' || vcMode === 'curl') {
+      chips.push({
+        mode: 'graph',
+        label: 'Show 3D graph',
+        title: 'Plot vector field cones (same as page 3D Graph tab)',
+      });
+    }
+    return chips;
+  }
   return [
     { mode: 'simple', label: 'Solve', title: 'Compute the integral (same as Σ Solve)' },
     { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step solution' },
@@ -657,7 +822,8 @@ export async function renderChatResultCard(card, task, result) {
   // "problem = answer"; integrals/derivatives/limits read better fused.
   const isOde = (task.action || result.action) === 'ode';
   const isPde = (task.action || result.action) === 'pde';
-  const answerEq = isOde || isPde ? answer : `${problem} = ${answer}`;
+  const isVc = (task.action || result.action) === 'vectorCalculus';
+  const answerEq = isOde || isPde || isVc ? answer : `${problem} = ${answer}`;
 
   body.replaceChildren();
 
@@ -719,6 +885,7 @@ export async function renderChatResultCard(card, task, result) {
       if (action === 'derivative') void renderDerivativeGraphInChat(plotEl, result.input, result.result);
       else if (action === 'limit') void renderLimitGraphInChat(plotEl, result.input, result.result);
       else if (action === 'ode') void renderOdeGraphInChat(plotEl, result.input);
+      else if (action === 'vectorCalculus') void renderVectorCalculusGraphInChat(plotEl, result.input);
       else void renderIntegralGraphInChat(plotEl, result.input);
     }
   }

@@ -5,7 +5,9 @@
  */
 import { normalizeBoundLatex, prepareLatexForKatex } from '../katex-render.js';
 
-export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde'];
+export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus'];
+
+const VC_MODES = new Set(['gradient', 'divergence', 'curl', 'grad', 'div', 'nabla']);
 
 const PDE_MODES = new Set(['heat', 'wave', 'laplace', 'poisson', 'transport', 'schrodinger', 'linear1']);
 
@@ -53,10 +55,12 @@ function inferPdeModeFromRaw(raw) {
 
 const ACTION_FENCE_LANGS = new Set([
   'integral', 'derivative', 'limit', 'ode', 'pde', 'dsolve', 'differential',
+  'vectorcalculus', 'vector-calculus', 'vc', 'vector_calculus',
+  'gradient', 'divergence', 'curl',
   'math-action', 'math', 'mathintent',
 ]);
 
-/** @typedef {'integral'|'derivative'|'limit'|'ode'|'pde'} CalculusAction */
+/** @typedef {'integral'|'derivative'|'limit'|'ode'|'pde'|'vectorCalculus'} CalculusAction */
 
 /**
  * @typedef {Object} MathActionTask
@@ -79,6 +83,14 @@ const ACTION_FENCE_LANGS = new Set([
  * @property {Record<string, string>} [params]
  */
 
+function inferVcModeFromRaw(raw) {
+  const s = String(raw || '');
+  if (/\\nabla\s*\\cdot|\\nabla\s*\.\s*\\mathbf|\\bdivergence\b/i.test(s)) return 'divergence';
+  if (/\\nabla\s*\\times|\\nabla\s*×|\\bcurl\b/i.test(s)) return 'curl';
+  if (/\\nabla\s*f|\\nabla\s*\(|\\bgradient\b/i.test(s)) return 'gradient';
+  return null;
+}
+
 function detectAction(obj, fenceLang) {
   let action = String(obj?.action || obj?.kind || obj?.type || fenceLang || '').toLowerCase();
   if (action === 'integrate') action = 'integral';
@@ -86,11 +98,24 @@ function detectAction(obj, fenceLang) {
   if (action === 'lim') action = 'limit';
   if (action === 'dsolve' || action === 'differential' || action === 'differentialequation') action = 'ode';
   if (action === 'pdesolve' || action === 'partial') action = 'pde';
+  if (action === 'vectorcalculus' || action === 'vector-calculus' || action === 'vc' || action === 'vector_calculus') {
+    action = 'vectorCalculus';
+  }
+  if (action === 'grad' || action === 'nabla') action = 'gradient';
+  if (action === 'div') action = 'divergence';
+  if (action === 'gradient' || action === 'divergence' || action === 'curl') {
+    action = 'vectorCalculus';
+  }
   if (CALCULUS_ACTIONS.includes(action)) return /** @type {CalculusAction} */ (action);
   const modeHint = String(obj?.mode || obj?.pdeType || obj?.pde || '').toLowerCase();
   if (PDE_MODES.has(modeHint)) return 'pde';
-  // ODE markers: y'/y'' notation, dy/dx with an "=", or an rhs+order pairing.
+  if (VC_MODES.has(modeHint) || obj?.scalar != null || obj?.fx != null || obj?.fy != null || obj?.fz != null) {
+    if (obj?.scalar != null || obj?.fx != null || obj?.fy != null || obj?.fz != null || VC_MODES.has(modeHint)) {
+      return 'vectorCalculus';
+    }
+  }
   const raw = String(obj?.raw || obj?.latex || '');
+  if (inferVcModeFromRaw(raw)) return 'vectorCalculus';
   if (obj?.rhs != null || (raw && /=/.test(raw) && /(y''|y'|\\frac\s*\{\s*d\s*y\s*\}|dy\s*\/\s*dx)/.test(raw))) return 'ode';
   if (raw && inferPdeModeFromRaw(raw)) return 'pde';
   if (PDE_PARAM_KEYS.some((k) => obj?.[k] != null && String(obj[k]).trim() !== '')) {
@@ -226,6 +251,24 @@ export function normalizeCalculusTask(obj, fenceLang) {
     return task;
   }
 
+  if (action === 'vectorCalculus') {
+    let vcMode = String(obj.mode || '').toLowerCase();
+    const fence = String(fenceLang || '').toLowerCase();
+    if (['gradient', 'divergence', 'curl'].includes(fence)) vcMode = fence;
+    if (!vcMode && raw) {
+      const inferred = inferVcModeFromRaw(raw);
+      if (inferred) vcMode = inferred;
+    }
+    if (vcMode === 'grad' || vcMode === 'nabla') vcMode = 'gradient';
+    if (vcMode === 'div') vcMode = 'divergence';
+    task.mode = ['gradient', 'divergence', 'curl'].includes(vcMode) ? vcMode : 'gradient';
+    task.scalar = String(obj.scalar ?? obj.f ?? (task.mode === 'gradient' ? (obj.expr || obj.body || obj.function) : '') ?? '').trim();
+    task.fx = String(obj.fx ?? obj.Fx ?? '').trim();
+    task.fy = String(obj.fy ?? obj.Fy ?? '').trim();
+    task.fz = String(obj.fz ?? obj.Fz ?? '').trim();
+    return task;
+  }
+
   // limit
   const expr = String(obj.expr || obj.body || obj.function || '').trim();
   if (!raw && !expr) return null;
@@ -277,6 +320,10 @@ export function parseCalculusBlockContent(content, fenceLang) {
     expr: kv.expr || kv.expression || kv.body || kv.function || bareLine,
     rhs: kv.rhs || kv.equation,
     func: kv.func || kv.y,
+    scalar: kv.scalar || kv.f,
+    fx: kv.fx,
+    fy: kv.fy,
+    fz: kv.fz,
     variable: kv.variable || kv.var || 'x',
     mode: kv.mode || kv.pdetype || kv.pde || kv.type,
     lower: isPdeFence ? kv.lower : (kv.lower || kv.a),
@@ -315,6 +362,14 @@ function tasksFromJson(data) {
   }
   if (Array.isArray(data.pdes)) {
     data.pdes.forEach((t) => push({ ...t, action: 'pde' }));
+    return out;
+  }
+  if (Array.isArray(data.vectorCalculus)) {
+    data.vectorCalculus.forEach((t) => push({ ...t, action: 'vectorCalculus' }));
+    return out;
+  }
+  if (Array.isArray(data.vc)) {
+    data.vc.forEach((t) => push({ ...t, action: 'vectorCalculus' }));
     return out;
   }
   if (Array.isArray(data)) {
@@ -464,6 +519,22 @@ function pdeProblemLatex(task) {
   return bits.length ? `${base}, \\quad ${bits.join(',\\; ')}` : base;
 }
 
+/** Textbook LaTeX for a vector calculus task card. */
+function vectorCalculusProblemLatex(task) {
+  const mode = String(task.mode || 'gradient').toLowerCase();
+  if (task.raw) return prepareLatexForKatex(task.raw.trim());
+  if (mode === 'gradient') {
+    const f = wrapCalculusBody(exprToBodyLatex(task.scalar || task.expr || ''));
+    return `\\nabla f = \\nabla\\left(${f}\\right)`;
+  }
+  const fx = exprToBodyLatex(task.fx || '0');
+  const fy = exprToBodyLatex(task.fy || '0');
+  const fz = exprToBodyLatex(task.fz || '0');
+  const field = `\\mathbf{F} = ${fx}\\,\\hat{\\mathbf{i}} + ${fy}\\,\\hat{\\mathbf{j}} + ${fz}\\,\\hat{\\mathbf{k}}`;
+  if (mode === 'divergence') return `\\nabla \\cdot \\mathbf{F}, \\quad ${field}`;
+  return `\\nabla \\times \\mathbf{F}, \\quad ${field}`;
+}
+
 /**
  * Normalize textbook LaTeX into the plain form the *CalculatorCore parsers expect.
  * The cores understand `\, dx` / `\frac{d}{dx}` / `\lim_{...}` but NOT `\mathrm{d}x`,
@@ -501,8 +572,11 @@ export function sanitizeLatexForEngine(latex) {
 export function taskToSolveLatex(task) {
   if (task.action === 'pde') return task.raw ? task.raw.trim() : pdeProblemLatex(task);
 
-  // ODE is solved via the SymPy backbone (ODECalculatorCore.solveTask), not a
-  // single-latex engine call; return the equation form for callers/logging.
+  if (task.action === 'vectorCalculus') {
+    return task.raw ? task.raw.trim() : vectorCalculusProblemLatex(task);
+  }
+
+  // ODE is solved via the SymPy backbone
   if (task.action === 'ode') return task.raw ? task.raw.trim() : odeEquationLatex(task);
 
   if (task.raw) return sanitizeLatexForEngine(task.raw.trim());
@@ -542,6 +616,10 @@ export function taskToSolveLatex(task) {
 export function taskToDisplayLatex(task) {
   if (task.action === 'pde') {
     return ensureDisplayStyle(pdeProblemLatex(task));
+  }
+
+  if (task.action === 'vectorCalculus') {
+    return ensureDisplayStyle(vectorCalculusProblemLatex(task));
   }
 
   if (task.action === 'ode') {
@@ -614,6 +692,11 @@ export function formatMathActionLabel(task, index) {
     };
     const mode = String(task.mode || 'heat').toLowerCase();
     return `${n}${names[mode] || 'PDE'}`;
+  }
+  if (task.action === 'vectorCalculus') {
+    const names = { gradient: 'Gradient', divergence: 'Divergence', curl: 'Curl' };
+    const mode = String(task.mode || 'gradient').toLowerCase();
+    return `${n}${names[mode] || 'Vector calculus'}`;
   }
   return `${n}${task.mode === 'definite' ? 'Definite integral' : 'Integral'}`;
 }

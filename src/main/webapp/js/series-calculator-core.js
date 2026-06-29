@@ -377,7 +377,7 @@ function switchMode(mode) {
 
     // Hide main function input in limit mode (it has its own expression input)
     var funcInputEl = $('sc-func-input');
-    var funcInputGroup = funcInputEl ? funcInputEl.closest('.tool-form-group') : null;
+    var funcInputGroup = funcInputEl ? funcInputEl.closest('.sc-func-group') : null;
     if (funcInputGroup) funcInputGroup.style.display = (mode === 'limit') ? 'none' : '';
 
     // Update button text
@@ -387,11 +387,11 @@ function switchMode(mode) {
         solveBtn.textContent = labels[mode] || 'Calculate';
     }
 
-    // Update card header
-    var cardHeader = document.querySelector('.tool-card-header');
-    if (cardHeader) {
+    // Update hero title
+    var heroTitle = $('sc-hero-title');
+    if (heroTitle) {
         var headers = { expansion: 'Series Expansion', remainder: 'Error Bound', integral: 'Integral Approximation', limit: 'Limit Evaluation' };
-        cardHeader.textContent = headers[mode] || 'Series Expansion';
+        heroTitle.textContent = headers[mode] || 'Series Expansion';
     }
 
     // Update compiler dropdown based on mode
@@ -1532,6 +1532,23 @@ function init() {
         // Preload Plotly
         G.loadPlotly();
     }
+
+    window.scGetContext = function scGetContext() {
+        var resultEl = $('sc-result-content');
+        var resultSummary = '';
+        if (resultEl && resultEl.textContent) {
+            resultSummary = resultEl.textContent.replace(/\s+/g, ' ').trim().slice(0, 4000);
+        }
+        return {
+            toolType: 'series',
+            mode: state.mode,
+            seriesType: state.seriesType,
+            expr: ($('sc-func-input') && $('sc-func-input').value) || state.funcInput || '',
+            center: ($('sc-center-point') && $('sc-center-point').value) || String(state.center),
+            terms: ($('sc-num-terms') && $('sc-num-terms').value) || String(state.numTerms),
+            resultSummary: resultSummary,
+        };
+    };
 }
 
 // ==================== DOM Ready ====================

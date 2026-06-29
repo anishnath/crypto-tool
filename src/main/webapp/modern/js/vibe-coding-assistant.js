@@ -43,7 +43,11 @@ const PREFS_SUFFIX = '_prefs';
 const DEFAULT_LAYOUT = Object.freeze({ x: null, y: null, w: null, h: null, collapsed: false });
 const PANEL_MIN_W = 360;
 const PANEL_MIN_H = 300;
-const DEFAULT_POLICY_PREFS = Object.freeze({ mode: 'fast', freshContext: true });
+const DEFAULT_POLICY_PREFS = Object.freeze({
+  mode: 'fast',
+  /** true = each send omits prior chat turns (UI label "Remember chat" unchecked). */
+  freshContext: true,
+});
 
 /** Default tier → servlet when aiRouteMode is `tier` (e.g. USE_AI_GATEWAY=true on server). */
 function defaultAiRouteByTier(sitePrefersGateway) {
@@ -727,9 +731,9 @@ export class ToolAiAssistant {
                 <option value="strict">Strict</option>
               </select>
             </label>
-            <label class="vca-policy-item" ${this.policyFreshContextEnabled ? '' : 'hidden'}>
-              <input type="checkbox" class="vca-fresh-toggle" />
-              <span>Fresh context</span>
+            <label class="vca-policy-item vca-remember-chat" ${this.policyFreshContextEnabled ? '' : 'hidden'} title="When on, the AI sees earlier messages in this chat. When off, each message is handled on its own (page context is still included).">
+              <input type="checkbox" class="vca-fresh-toggle" aria-label="Remember chat" />
+              <span>Remember chat</span>
             </label>
           </div>
           <div class="vca-header-actions">
@@ -786,9 +790,10 @@ export class ToolAiAssistant {
       });
     }
     if (freshToggle) {
-      freshToggle.checked = !!this.prefs.freshContext;
+      // UI is inverted: checked = include prior turns; internal freshContext = opposite.
+      freshToggle.checked = !this.prefs.freshContext;
       freshToggle.addEventListener('change', () => {
-        this.prefs.freshContext = !!freshToggle.checked;
+        this.prefs.freshContext = !freshToggle.checked;
         this._savePrefs();
       });
     }

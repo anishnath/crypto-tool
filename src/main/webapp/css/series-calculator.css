@@ -16,7 +16,10 @@
     border: 1.5px solid var(--border);
     border-radius: 0.5rem;
     overflow: hidden;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
+}
+.sc-type-toggle-hero {
+    max-width: 28rem;
 }
 .sc-type-btn {
     flex: 1;
@@ -41,7 +44,44 @@
 [data-theme="dark"] .sc-type-btn { background: var(--bg-tertiary); }
 [data-theme="dark"] .sc-type-btn.active { background: var(--sc-gradient); color: #fff; }
 
-/* ===== Mode Toggle ===== */
+/* ===== Mode Toggle — horizontal pill rail in ic-hero (matches limit/integral) ===== */
+.ic-hero-top .sc-mode-toggle {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    grid-template-columns: unset;
+    background: var(--ms-panel-bg-soft, var(--bg-secondary));
+    padding: 3px;
+    border-radius: var(--ms-radius-pill, 9999px);
+    border: 1px solid var(--ms-line, var(--border));
+}
+.ic-hero-top .sc-mode-btn {
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: nowrap;
+    border: none;
+    border-radius: var(--ms-radius-pill, 9999px);
+    background: transparent;
+    color: var(--ms-muted, var(--text-muted));
+}
+.ic-hero-top .sc-mode-btn::before,
+.ic-hero-top .sc-mode-btn::after {
+    display: none;
+}
+.ic-hero-top .sc-mode-btn.active {
+    background: var(--ms-panel-bg, #fff);
+    color: var(--sc-tool, var(--ms-accent));
+    box-shadow: var(--ms-shadow-sm, 0 1px 2px rgba(0,0,0,0.06));
+    border-color: transparent;
+}
+.ic-hero-top .sc-mode-btn:hover:not(.active) {
+    color: var(--ms-ink, var(--text-secondary));
+    background: var(--ms-panel-bg-soft, var(--bg-tertiary));
+}
+
+/* Legacy vertical grid (fallback if not in ic-hero-top) */
 .sc-mode-toggle {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -449,6 +489,26 @@
 .sc-param-group {
     flex: 1;
     min-width: 0;
+}
+.ic-hero .sc-param-row.ic-hero-params {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.ic-hero-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+}
+.ic-hero .sc-preview {
+    flex: 1;
+    min-width: 0;
+}
+.ic-hero .sc-func-group {
+    margin-bottom: 0.5rem;
 }
 .sc-param-label {
     display: block;

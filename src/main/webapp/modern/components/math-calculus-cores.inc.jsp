@@ -10,3 +10,4 @@
 <script src="<%=request.getContextPath()%>/modern/js/limit-calculator-core.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/ode-calculator-core.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/pde-calculator-core.js?v=<%=mccV%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/vc-calculator-core.js?v=<%=mccV%>"></script>

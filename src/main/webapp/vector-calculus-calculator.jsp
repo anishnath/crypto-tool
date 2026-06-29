@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "math-ai");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,8 +33,8 @@
     <meta name="classification" content="tools">
     <meta name="language" content="en">
     <meta name="author" content="Anish Nath">
-
-    <!-- SEO -->
+    <meta name="context-path" content="<%=request.getContextPath()%>">
+    <meta name="ctx" content="<%=request.getContextPath()%>">
     <jsp:include page="modern/components/seo-tool-page.jsp">
         <jsp:param name="toolName" value="Vector Calculus Calculator - Gradient, Divergence, Curl with Steps" />
         <jsp:param name="toolDescription" value="Free online vector calculus calculator. Compute gradient, divergence, and curl of scalar and vector fields with detailed step-by-step solutions. Features 3D vector field visualization, LaTeX output, built-in Python compiler, and 1500+ printable practice problems covering vectors, dot product, cross product, vector functions, derivatives, and integrals. No signup required." />
@@ -72,7 +75,6 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=cacheVersion%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=cacheVersion%>">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css?v=<%=cacheVersion%>">
 
     <!-- Math shell -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=cacheVersion%>">
@@ -85,6 +87,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=cacheVersion%>">
+
+    <%@ include file="modern/components/math-ai-head.inc.jsp" %>
+    <style>
+        .ic-hero .math-ai-tab-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid rgba(99,102,241,0.35);
+            background: rgba(99,102,241,0.08); color: var(--ms-text, #1e1b4b); font-size: 0.8125rem;
+            font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+            white-space: nowrap;
+        }
+        .ic-hero .math-ai-tab-btn:hover {
+            background: rgba(99,102,241,0.18); transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(99,102,241,0.15);
+        }
+        .ic-hero .math-ai-tab-btn[aria-busy="true"] { opacity: 0.75; cursor: wait; }
+    </style>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
 </head>
@@ -117,187 +135,164 @@
                     <span>/</span>
                     <span aria-current="page">Vector Calculus</span>
                 </nav>
-                <h1>Vector Calculus Calculator</h1>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+                    <h1 style="margin:0;">Vector Calculus Calculator</h1>
+                    <a href="#worksheet" id="vc-header-worksheet-link" style="font-size:0.85rem;color:var(--ms-accent,#2563eb);text-decoration:none;font-weight:600;border:1px solid var(--ms-accent,#2563eb);padding:0.3rem 0.7rem;border-radius:9999px;white-space:nowrap;">&#128221; Practice worksheet</a>
+                </div>
             </header>
 
-            <%-- Two-column input/output grid (no separate ads column — rail handles ads). --%>
-            <div class="tool-page-container" style="grid-template-columns:minmax(300px,400px) minmax(0,1fr); max-width:none; padding:0; margin:0; min-height:0;">
+            <div class="ic-stack">
 
-                <!-- ========== INPUT COLUMN ========== -->
-                <div class="tool-input-column">
-                    <div class="tool-card">
-                        <div class="tool-card-header">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                                <path d="M2 17l10 5 10-5"/>
-                                <path d="M2 12l10 5 10-5"/>
-                            </svg>
-                            Vector Calculus
+                <!-- ═══ INPUT HERO ═══ -->
+                <div class="ic-hero" id="vc-hero" data-input-mode="visual">
+
+                    <div class="ic-hero-top">
+                        <div class="vc-mode-toggle ic-mode-toggle" id="vc-mode-toggle" role="radiogroup" aria-label="Vector calculus mode">
+                            <button type="button" class="vc-mode-btn ic-mode-btn active" data-mode="gradient" role="radio" aria-checked="true">Gradient</button>
+                            <button type="button" class="vc-mode-btn ic-mode-btn" data-mode="divergence" role="radio" aria-checked="false">Divergence</button>
+                            <button type="button" class="vc-mode-btn ic-mode-btn" data-mode="curl" role="radio" aria-checked="false">Curl</button>
                         </div>
-                        <div class="tool-card-body">
-                            <!-- Mode toggle -->
-                            <div class="vc-mode-toggle">
-                                <button type="button" class="vc-mode-btn active" data-mode="gradient">Gradient</button>
-                                <button type="button" class="vc-mode-btn" data-mode="divergence">Divergence</button>
-                                <button type="button" class="vc-mode-btn" data-mode="curl">Curl</button>
-                            </div>
-
-                            <!-- Visual/Text mode toggle + Scan button — shared across scalar AND Fx/Fy/Fz -->
-                            <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap;">
-                                <span class="tool-form-label" style="margin-bottom:0;">Input</span>
-                                <div style="display:flex;gap:0.5rem;align-items:center;">
-                                    <div class="ic-input-mode-toggle" data-mml-toggle role="radiogroup" aria-label="Input mode" style="display:inline-flex;border:1px solid var(--border);border-radius:9999px;padding:2px;background:var(--bg-secondary);">
-                                        <button type="button" class="ic-input-mode-btn active" data-input-mode="visual" role="radio" aria-checked="true" title="Write math visually" style="padding:0.2rem 0.6rem;border:none;background:transparent;font-size:0.7rem;font-weight:600;cursor:pointer;border-radius:9999px;">&fnof; Visual</button>
-                                        <button type="button" class="ic-input-mode-btn" data-input-mode="text" role="radio" aria-checked="false" title="Type plain text" style="padding:0.2rem 0.6rem;border:none;background:transparent;font-size:0.7rem;font-weight:600;cursor:pointer;border-radius:9999px;font-family:var(--font-mono);">&lt;/&gt; Text</button>
-                                    </div>
-                                    <button type="button" id="vc-image-btn" title="Scan vector calculus problems from image or PDF" style="padding:0.25rem 0.625rem;border-radius:9999px;border:1.5px solid var(--primary);background:transparent;color:var(--primary);font-size:0.75rem;font-weight:600;cursor:pointer;">&#128247; Scan</button>
-                                </div>
-                            </div>
-
-                            <!-- Scalar field input (gradient mode) — MathLive Visual + Text -->
-                            <div id="vc-scalar-wrap">
-                                <div class="tool-form-group">
-                                    <label class="tool-form-label" for="vc-scalar-expr">Scalar field f(x, y, z)</label>
-                                    <div class="mml-pair">
-                                        <math-field class="mml-mathfield" aria-label="Scalar field for gradient"
-                                                    placeholder="x^2+y^2+z^2"
-                                                    smart-mode="on" smart-fence="on" smart-superscript="on"></math-field>
-                                        <input type="text" class="tool-input tool-input-mono mml-text" id="vc-scalar-expr" placeholder="e.g. x^2 + y^2 + z^2" autocomplete="off" spellcheck="false">
-                                    </div>
-                                    <span class="tool-form-hint">Enter a function of x, y, z</span>
-                                </div>
-                            </div>
-
-                            <!-- Vector field inputs (divergence/curl mode) — three MathLive pairs -->
-                            <div id="vc-vector-wrap" style="display:none;">
-                                <div class="vc-vector-fields">
-                                    <div class="vc-vector-field-group">
-                                        <span class="vc-vector-field-label">F<sub>x</sub></span>
-                                        <div class="mml-pair">
-                                            <math-field class="mml-mathfield" aria-label="Fx component"
-                                                        placeholder="x^2 y"
-                                                        smart-mode="on" smart-fence="on" smart-superscript="on"></math-field>
-                                            <input type="text" class="tool-input tool-input-mono mml-text" id="vc-fx" placeholder="e.g. x^2*y" autocomplete="off" spellcheck="false">
-                                        </div>
-                                    </div>
-                                    <div class="vc-vector-field-group">
-                                        <span class="vc-vector-field-label">F<sub>y</sub></span>
-                                        <div class="mml-pair">
-                                            <math-field class="mml-mathfield" aria-label="Fy component"
-                                                        placeholder="y z"
-                                                        smart-mode="on" smart-fence="on" smart-superscript="on"></math-field>
-                                            <input type="text" class="tool-input tool-input-mono mml-text" id="vc-fy" placeholder="e.g. y*z" autocomplete="off" spellcheck="false">
-                                        </div>
-                                    </div>
-                                    <div class="vc-vector-field-group">
-                                        <span class="vc-vector-field-label">F<sub>z</sub></span>
-                                        <div class="mml-pair">
-                                            <math-field class="mml-mathfield" aria-label="Fz component"
-                                                        placeholder="x z^2"
-                                                        smart-mode="on" smart-fence="on" smart-superscript="on"></math-field>
-                                            <input type="text" class="tool-input tool-input-mono mml-text" id="vc-fz" placeholder="e.g. x*z^2" autocomplete="off" spellcheck="false">
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="tool-form-hint" style="display:block;margin-top:0.25rem;">Enter components of vector field <strong>F</strong> = F<sub>x</sub><strong>i</strong> + F<sub>y</sub><strong>j</strong> + F<sub>z</sub><strong>k</strong></span>
-                            </div>
-
-                            <!-- Live preview -->
-                            <div class="tool-form-group" style="margin-top:0.875rem;">
-                                <label class="tool-form-label">Live Preview</label>
-                                <div class="vc-preview" id="vc-preview">
-                                    <span style="color:var(--text-muted);font-size:0.8125rem;">Type a scalar field above&hellip;</span>
-                                </div>
-                            </div>
-
-                            <!-- Action buttons -->
-                            <div class="vc-action-row">
-                                <button type="button" class="tool-action-btn vc-compute-btn" id="vc-compute-btn" data-mml-submit>Compute</button>
-                                <button type="button" class="vc-random-btn" id="vc-random-btn" title="Random example">&#127922; Random</button>
-                            </div>
-
-                            <hr class="vc-sep">
-
-                            <!-- Quick examples -->
-                            <div class="tool-form-group">
-                                <label class="tool-form-label">Quick Examples</label>
-                                <div class="vc-examples" id="vc-examples"></div>
-                            </div>
-
-                            <hr class="vc-sep">
-
-                            <!-- Syntax help (collapsible) -->
-                            <div id="vc-syntax-wrap">
-                                <button type="button" class="vc-syntax-toggle" id="vc-syntax-btn">
-                                    Syntax Help
-                                    <svg class="vc-syntax-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        <div class="ic-expr-label-actions" style="display:flex;gap:0.5rem;align-items:center;">
+                            <div class="ic-input-mode-toggle" data-mml-toggle role="radiogroup" aria-label="Input mode">
+                                <button type="button" class="ic-input-mode-btn active" data-input-mode="visual" role="radio" aria-checked="true" title="Write math visually">
+                                    <span aria-hidden="true" style="font-family:'Times New Roman',serif;font-style:italic;">&fnof;</span><span class="ic-mode-label"> Visual</span>
                                 </button>
-                                <div class="vc-syntax-content" id="vc-syntax-content">
-                                    x^2 &nbsp;&nbsp; y^3 &nbsp;&nbsp; z^2<br>
-                                    sin(x) &nbsp;&nbsp; cos(y) &nbsp;&nbsp; tan(z)<br>
-                                    e^x &nbsp;&nbsp; e^(x*y) &nbsp;&nbsp; exp(z)<br>
-                                    log(x) = ln(x) &nbsp;&nbsp; sqrt(x)<br>
-                                    x*y &nbsp;&nbsp; x*y*z &nbsp;&nbsp; 3*x^2<br>
-                                    <strong>Multiplication:</strong> Use * explicitly: <code>x*y</code> not <code>xy</code><br>
-                                    <strong>Powers:</strong> <code>x^2</code> or <code>x^(2/3)</code><br>
-                                    <strong>Constants:</strong> pi, e
+                                <button type="button" class="ic-input-mode-btn" data-input-mode="text" role="radio" aria-checked="false" title="Type plain text">
+                                    <span aria-hidden="true" style="font-family:var(--font-mono,monospace);">&lt;/&gt;</span><span class="ic-mode-label"> Text</span>
+                                </button>
+                            </div>
+                            <button type="button" class="ic-image-btn" id="vc-image-btn" title="Scan vector calculus problems from image or PDF">&#128247; Scan</button>
+                            <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Math AI — ∇ tutor + ∫, d/dx, lim in chat (Ctrl+Shift+A)">&#10024; AI</button>
+                        </div>
+                    </div>
+
+                    <div class="ic-hero-label-row">
+                        <span class="ic-expr-label" id="vc-hero-title">Gradient</span>
+                    </div>
+
+                    <!-- Scalar field input (gradient mode) -->
+                    <div id="vc-scalar-wrap">
+                        <div class="tool-form-group">
+                            <label class="tool-form-label" for="vc-scalar-expr">Scalar field f(x, y, z)</label>
+                            <div class="mml-pair ic-expr-wrap">
+                                <math-field class="mml-mathfield ic-mathfield" aria-label="Scalar field for gradient"
+                                            placeholder="x^2+y^2+z^2"
+                                            smart-mode="on" smart-fence="on" smart-superscript="on"></math-field>
+                                <input type="text" class="tool-input tool-input-mono mml-text" id="vc-scalar-expr" placeholder="e.g. x^2 + y^2 + z^2" autocomplete="off" spellcheck="false">
+                            </div>
+                            <span class="tool-form-hint">Enter a function of x, y, z</span>
+                        </div>
+                    </div>
+
+                    <!-- Vector field inputs (divergence/curl mode) -->
+                    <div id="vc-vector-wrap" style="display:none;">
+                        <div class="vc-vector-fields">
+                            <div class="vc-vector-field-group">
+                                <span class="vc-vector-field-label">F<sub>x</sub></span>
+                                <div class="mml-pair ic-expr-wrap">
+                                    <math-field class="mml-mathfield ic-mathfield" aria-label="Fx component"
+                                                placeholder="x^2 y"
+                                                smart-mode="on" smart-fence="on" smart-superscript="on"></math-field>
+                                    <input type="text" class="tool-input tool-input-mono mml-text" id="vc-fx" placeholder="e.g. x^2*y" autocomplete="off" spellcheck="false">
+                                </div>
+                            </div>
+                            <div class="vc-vector-field-group">
+                                <span class="vc-vector-field-label">F<sub>y</sub></span>
+                                <div class="mml-pair ic-expr-wrap">
+                                    <math-field class="mml-mathfield ic-mathfield" aria-label="Fy component"
+                                                placeholder="y z"
+                                                smart-mode="on" smart-fence="on" smart-superscript="on"></math-field>
+                                    <input type="text" class="tool-input tool-input-mono mml-text" id="vc-fy" placeholder="e.g. y*z" autocomplete="off" spellcheck="false">
+                                </div>
+                            </div>
+                            <div class="vc-vector-field-group">
+                                <span class="vc-vector-field-label">F<sub>z</sub></span>
+                                <div class="mml-pair ic-expr-wrap">
+                                    <math-field class="mml-mathfield ic-mathfield" aria-label="Fz component"
+                                                placeholder="x z^2"
+                                                smart-mode="on" smart-fence="on" smart-superscript="on"></math-field>
+                                    <input type="text" class="tool-input tool-input-mono mml-text" id="vc-fz" placeholder="e.g. x*z^2" autocomplete="off" spellcheck="false">
                                 </div>
                             </div>
                         </div>
+                        <span class="tool-form-hint" style="display:block;margin-top:0.25rem;">Enter components of vector field <strong>F</strong> = F<sub>x</sub><strong>i</strong> + F<sub>y</sub><strong>j</strong> + F<sub>z</sub><strong>k</strong></span>
+                    </div>
+
+                    <div class="ic-preview-strip">
+                        <span class="ic-preview-label">Preview</span>
+                        <div class="vc-preview ic-preview" id="vc-preview">
+                            <span style="color:var(--text-muted);font-size:0.8125rem;">Type a scalar field above&hellip;</span>
+                        </div>
+                    </div>
+
+                    <div class="ic-hero-cta-row">
+                        <button type="button" class="ic-hero-cta vc-compute-btn" id="vc-compute-btn" data-mml-submit>Compute</button>
+                        <button type="button" class="vc-random-btn" id="vc-random-btn" title="Random example">&#127922; Random</button>
+                    </div>
+
+                    <div class="tool-form-group" style="margin-top:0.75rem;">
+                        <label class="tool-form-label">Quick Examples</label>
+                        <div class="vc-examples ic-hero-examples" id="vc-examples"></div>
+                    </div>
+
+                    <div id="vc-syntax-wrap" style="margin-top:0.5rem;">
+                        <button type="button" class="vc-syntax-toggle" id="vc-syntax-btn">
+                            Syntax Help
+                            <svg class="vc-syntax-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="vc-syntax-content" id="vc-syntax-content">
+                            x^2 &nbsp;&nbsp; y^3 &nbsp;&nbsp; z^2<br>
+                            sin(x) &nbsp;&nbsp; cos(y) &nbsp;&nbsp; tan(z)<br>
+                            e^x &nbsp;&nbsp; e^(x*y) &nbsp;&nbsp; exp(z)<br>
+                            log(x) = ln(x) &nbsp;&nbsp; sqrt(x)<br>
+                            x*y &nbsp;&nbsp; x*y*z &nbsp;&nbsp; 3*x^2<br>
+                            <strong>Multiplication:</strong> Use * explicitly: <code>x*y</code> not <code>xy</code><br>
+                            <strong>Powers:</strong> <code>x^2</code> or <code>x^(2/3)</code><br>
+                            <strong>Constants:</strong> pi, e
+                        </div>
+                    </div>
+
+                    <div class="ic-worksheet-cta">
+                        <button type="button" class="tool-action-btn" id="vc-worksheet-hero-btn">Print Worksheet</button>
                     </div>
                 </div>
 
-                <!-- ========== OUTPUT COLUMN ========== -->
-                <div class="tool-output-column">
-                    <!-- Tab bar -->
-                    <div class="vc-output-tabs">
-                        <button type="button" class="vc-output-tab active" data-panel="result">Result</button>
-                        <button type="button" class="vc-output-tab" data-panel="graph">3D Graph</button>
-                        <button type="button" class="vc-output-tab" data-panel="python">Python Compiler</button>
+                <!-- ═══ RESULT CARD ═══ -->
+                <div class="ic-result-card">
+                    <div class="ic-output-tabs vc-output-tabs" role="tablist">
+                        <button type="button" class="ic-output-tab vc-output-tab active" data-panel="result" role="tab" aria-selected="true">Result</button>
+                        <button type="button" class="ic-output-tab vc-output-tab" data-panel="graph" role="tab" aria-selected="false">3D Graph</button>
+                        <button type="button" class="ic-output-tab vc-output-tab" data-panel="python" role="tab" aria-selected="false">Python Compiler</button>
                     </div>
 
-                    <!-- Result Panel -->
-                    <div class="vc-panel active" id="vc-panel-result">
+                    <div class="ic-panel vc-panel active" id="vc-panel-result" role="tabpanel">
                         <div class="tool-card tool-result-card">
-                            <div class="tool-result-header">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);">
-                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                                </svg>
-                                <h4>Result</h4>
-                            </div>
                             <div class="tool-result-content" id="vc-result-content">
-                                <div class="tool-empty-state" id="vc-empty-state">
-                                    <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">&#8711;</div>
+                                <div class="tool-empty-state ic-empty-state" id="vc-empty-state">
+                                    <div class="ic-empty-illustration">&#8711;</div>
                                     <h3>Enter a field and click Compute</h3>
                                     <p>Compute gradient, divergence, or curl with step-by-step solutions.</p>
                                 </div>
                             </div>
-                            <div class="tool-result-actions" id="vc-result-actions">
-                                <button type="button" class="tool-action-btn" id="vc-copy-latex-btn">
-                                    <span>&#128203;</span> Copy LaTeX
-                                </button>
-                                <button type="button" class="tool-action-btn" id="vc-download-pdf-btn">
-                                    <span>&#128196;</span> Download PDF
-                                </button>
-                                <button type="button" class="tool-action-btn" id="vc-share-btn">
-                                    <span>&#128279;</span> Share
-                                </button>
-                                <button type="button" class="tool-action-btn" id="vc-worksheet-btn">
-                                    <span>&#128218;</span> Print Worksheet
-                                </button>
-                            </div>
+                        </div>
+                        <div class="tool-result-actions vc-result-toolbar" id="vc-result-actions">
+                            <button type="button" class="tool-action-btn" id="vc-copy-latex-btn">
+                                <span>&#128203;</span> Copy LaTeX
+                            </button>
+                            <button type="button" class="tool-action-btn" id="vc-download-pdf-btn">
+                                <span>&#128196;</span> Download PDF
+                            </button>
+                            <button type="button" class="tool-action-btn" id="vc-share-btn">
+                                <span>&#128279;</span> Share
+                            </button>
+                            <button type="button" class="tool-action-btn" id="vc-worksheet-btn">
+                                <span>&#128218;</span> Print Worksheet
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Graph Panel -->
-                    <div class="vc-panel" id="vc-panel-graph">
+                    <div class="ic-panel vc-panel" id="vc-panel-graph" role="tabpanel">
                         <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
-                            <div class="tool-result-header">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);">
-                                    <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-                                </svg>
-                                <h4>3D Vector Field</h4>
-                            </div>
                             <div style="flex:1;min-height:0;padding:0.75rem;">
                                 <div id="vc-graph-container"></div>
                                 <p id="vc-graph-hint" style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">Compute a gradient or curl to see its 3D vector field.</p>
@@ -305,15 +300,8 @@
                         </div>
                     </div>
 
-                    <!-- Python Compiler Panel -->
-                    <div class="vc-panel" id="vc-panel-python">
+                    <div class="ic-panel vc-panel" id="vc-panel-python" role="tabpanel">
                         <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
-                            <div class="tool-result-header">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);">
-                                    <polygon points="5 3 19 12 5 21 5 3"/>
-                                </svg>
-                                <h4>Python Compiler</h4>
-                            </div>
                             <div style="flex:1;min-height:0;">
                                 <iframe id="vc-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
                             </div>
@@ -437,8 +425,23 @@
                                                   (4 pairs: scalar + Fx + Fy + Fz)
     --%>
     <jsp:include page="/math/partials/math-libs.jsp" />
+    <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
     <jsp:include page="/math/partials/vector-calculus-calculator-scripts.jsp" />
     <jsp:include page="/math/partials/math-input-multi.jsp" />
+
+    <script>
+    (function () {
+        var link = document.getElementById('vc-header-worksheet-link');
+        var heroBtn = document.getElementById('vc-worksheet-hero-btn');
+        var mainBtn = document.getElementById('vc-worksheet-btn');
+        function clickWorksheet(e) {
+            if (e) e.preventDefault();
+            if (mainBtn) mainBtn.click();
+        }
+        if (link) link.addEventListener('click', clickWorksheet);
+        if (heroBtn) heroBtn.addEventListener('click', clickWorksheet);
+    })();
+    </script>
 
     <script>
     // FAQ accordion
@@ -450,5 +453,12 @@
         });
     })();
     </script>
+
+    <%
+        request.setAttribute("mathAiButtonId", "btnMathAI");
+        request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+        request.setAttribute("mathAiProfileExport", "configureVectorCalculusMathShell");
+    %>
+    <%@ include file="modern/components/math-ai-boot.inc.jsp" %>
 </body>
 </html>
