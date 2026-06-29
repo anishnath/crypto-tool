@@ -662,8 +662,13 @@ function buildSympySymbolsDecl(v, pyExpr) {
 
 function _ctxPath() {
     if (typeof window === 'undefined') return '';
-    return window.INTEGRAL_CALC_CTX ||
-           (window.CONFIG && window.CONFIG.ctx) || '';
+    return window.MATH_CALC_CTX ||
+           window.INTEGRAL_CALC_CTX ||
+           (window.CONFIG && window.CONFIG.ctx) ||
+           (function () {
+               var meta = document.querySelector && document.querySelector('meta[name="ctx"]');
+               return meta && meta.content ? meta.content : '';
+           })();
 }
 
 // Async SymPy solve. Returns a Promise resolving to

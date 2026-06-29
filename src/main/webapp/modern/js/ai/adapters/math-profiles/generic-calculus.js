@@ -227,6 +227,8 @@ export function configureGenericMathShell(opts = {}) {
 
 **Do not** refuse a problem because the page title says Integral Calculator — output the matching block (\`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`, \`\`\`matrix\`\`\`) and let the engine compute.
 
+**Cross-topic examples:** On the Integral page (or any page), "show me matrix multiplication" → \`\`\`matrix\`\`\` block with \`op: multiply\`, \`matrixA:\`, \`matrixB:\` (pmatrix LaTeX). "Find det of …" → \`\`\`matrix\`\`\` with \`op: determinant\`. Never answer with only \`\`\`latex\`\`\` copy-paste blocks.
+
 **Textbook KaTeX in prose (required):** mirror every problem in \`$$\\displaystyle...$$\`:
 - Integral: \`$$\\displaystyle\\int \\sin(3x)\\,\\mathrm{d}x$$\`
 - Derivative: \`$$\\displaystyle\\frac{\\mathrm{d}}{\\mathrm{d}x}\\left[\\, x^{3}\\sin x \\,\\right]$$\`
@@ -388,9 +390,20 @@ export function configureIntegralMathShell() {
   configureGenericMathShell({
     focus: 'integral',
     pageLabel: 'Integral Calculator',
-    pageHint: 'Integral Calculator (page UI syncs integrals only; chat handles ∫, d/dx, lim)',
-    placeholder: 'Paste ∫, d/dx, or lim problems — then Solve / Steps / Graph in chat…',
+    pageHint: 'Integral Calculator (page UI syncs integrals only; chat handles ∫, d/dx, lim, matrix, ODE, PDE, ∇)',
+    placeholder: 'Paste ∫, d/dx, lim, matrix, ODE… — Solve / Steps / Graph in chat…',
   });
+
+  const extra = `
+
+**Integral Calculator page — cross-topic routing (CRITICAL)**
+The on-page calculator only integrates, but **Math AI engines are generic**. When the user asks about **matrices** (det, inverse, A·B, eigenvalues, …), **derivatives**, **limits**, **ODEs**, **PDEs**, or **vector calculus** — emit the correct \`\`\`matrix\`\`\`, \`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, or \`\`\`vectorCalculus\`\`\` block. **Never** refuse or reply "this page is for integrals only."
+
+**"Show me an example"** (matrix multiplication, det, inverse, …): one intro sentence + **one** \`\`\`matrix\`\`\` block with concrete pmatrix values so **Solve / Solve with steps / Show visualize** chips appear. Do **not** use \`\`\`latex\`\`\` code fences for matrices.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
 }
 
 /** Derivative Calculator page — derivative-focused chips; chat still handles all types. */
@@ -538,7 +551,7 @@ You wear two hats; pick from the user's wording:
 
 1. **Teacher** — matrix concepts (determinant as area/volume scaling, inverse meaning, eigenvalues/eigenvectors, rank, RREF, multiplication rules). Use KaTeX prose; **no** solve block unless they also want something computed.
 
-2. **Solver** — when they say *solve*, *compute*, *find*, *generate practice problems*, or give concrete matrices: emit one \`\`\`matrix\`\`\` block **per problem** so **Solve / Solve with steps** chips appear. Use LaTeX \`\\begin{pmatrix}...\\end{pmatrix}\` in \`matrixA:\` / \`matrixB:\` fields.
+2. **Solver** — when they say *solve*, *compute*, *find*, *generate practice problems*, or give concrete matrices: emit one \`\`\`matrix\`\`\` block **per problem** so **Solve / Solve with steps** chips appear (and **Show visualize** when matrices are numeric 2×2 or 3×3 on det, inverse, transpose, eigenvectors, power, multiply, add, subtract). Use LaTeX \`\\begin{pmatrix}...\\end{pmatrix}\` in \`matrixA:\` / \`matrixB:\` fields.
 
 **Supported ops (op: field)**
 determinant, inverse, transpose, trace, rank, rref, power (needs \`n:\`), eigenvalues, eigenvectors, charpoly, add, subtract, multiply

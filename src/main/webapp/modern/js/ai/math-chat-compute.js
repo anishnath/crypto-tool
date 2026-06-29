@@ -56,6 +56,20 @@ function getMatrixCore() {
     : window.MatrixCalculatorCore;
 }
 
+/** @param {import('./math-action-extract.js').MathActionTask} task */
+function matrixCanVisualize(task) {
+  const core = getMatrixCore();
+  if (!core?.parseTask) return false;
+  if (typeof core.canVisualizeTask === 'function') return core.canVisualizeTask(task);
+  const parsed = core.parseTask(task);
+  if (!parsed) return false;
+  if (typeof core.canVisualize === 'function') {
+    return core.canVisualize(parsed.op, parsed.cellsA, parsed.cellsB);
+  }
+  if (typeof core.canVisualize2D === 'function') return core.canVisualize2D(parsed);
+  return false;
+}
+
 /** @param {object} core */
 async function solveFromCore(core, latex, withSteps) {
   if (!core?.solveFromLatex) {
@@ -333,6 +347,46 @@ export async function solveMatrixTask(task, mode = 'simple') {
   }
 
   const problemLatex = taskToSolveLatex(task);
+
+  if (mode === 'graph') {
+    if (!core.buildPlotlyPlot || !core.canVisualizeTask) {
+      return {
+        ok: false,
+        error: 'Matrix visualization module not loaded.',
+        mode,
+        problemLatex,
+      };
+    }
+    if (!core.canVisualizeTask(task)) {
+      return {
+        ok: false,
+        error: 'Visualization needs 2×2 or 3×3 numeric matrices on det, inverse, transpose, eigenvectors (2D only), power, multiply, add, or subtract.',
+        mode,
+        problemLatex,
+      };
+    }
+    const plot = core.buildPlotlyPlot(task);
+    if (!plot) {
+      return {
+        ok: false,
+        error: 'Could not build matrix visualization for this problem.',
+        mode,
+        problemLatex,
+      };
+    }
+    return {
+      ok: true,
+      mode: 'graph',
+      action: 'matrix',
+      resultLatex: '',
+      method: 'Geometric visualization',
+      steps: [],
+      input: plot,
+      result: {},
+      problemLatex,
+    };
+  }
+
   const withSteps = mode === 'steps';
 
   let r;
@@ -463,6 +517,45 @@ function ensurePlotly(plotEl, drawFn) {
     }
     drawFn();
     resolve(true);
+  });
+}
+
+/**
+ * Unit square / unit cube overlay (same as Matrix Calculator Visualize tab).
+ * @param {HTMLElement} plotEl
+ * @param {{ traces?: object[], layout?: object, caption?: string, dim?: number }} input
+ */
+export function renderMatrixGraphInChat(plotEl, input) {
+  if (!plotEl || !Array.isArray(input?.traces) || input.traces.length === 0) {
+    return Promise.resolve(false);
+  }
+
+  return ensurePlotly(plotEl, () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const core = getMatrixCore();
+    const layout = core?.applyMatrixPlotDarkTheme
+      ? core.applyMatrixPlotDarkTheme(input.layout, isDark)
+      : input.layout;
+
+    plotEl.style.minHeight = input.dim === 3 ? '320px' : '280px';
+
+    if (input.caption) {
+      const cap = document.createElement('p');
+      cap.className = 'vca-math-result-method';
+      cap.textContent = input.caption;
+      plotEl.appendChild(cap);
+    }
+
+    const chart = document.createElement('div');
+    chart.className = 'vca-math-graph-canvas';
+    chart.style.minHeight = input.dim === 3 ? '280px' : '240px';
+    plotEl.appendChild(chart);
+
+    window.Plotly.newPlot(chart, input.traces, layout, {
+      responsive: true,
+      displayModeBar: false,
+      displaylogo: false,
+    });
   });
 }
 
@@ -847,10 +940,18 @@ function chipActionsForTask(task) {
     return chips;
   }
   if (action === 'matrix') {
-    return [
+    const chips = [
       { mode: 'simple', label: 'Solve', title: 'Compute the matrix operation (same as page Calculate)' },
       { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step matrix solution' },
     ];
+    if (matrixCanVisualize(task)) {
+      chips.push({
+        mode: 'graph',
+        label: 'Show graph',
+        title: 'Unit square/cube overlay (same as page Visualize tab)',
+      });
+    }
+    return chips;
   }
   return [
     { mode: 'simple', label: 'Solve', title: 'Compute the integral (same as Σ Solve)' },
@@ -946,6 +1047,7 @@ export async function renderChatResultCard(card, task, result) {
       else if (action === 'limit') void renderLimitGraphInChat(plotEl, result.input, result.result);
       else if (action === 'ode') void renderOdeGraphInChat(plotEl, result.input);
       else if (action === 'vectorCalculus') void renderVectorCalculusGraphInChat(plotEl, result.input);
+      else if (action === 'matrix') void renderMatrixGraphInChat(plotEl, result.input);
       else void renderIntegralGraphInChat(plotEl, result.input);
     }
   }

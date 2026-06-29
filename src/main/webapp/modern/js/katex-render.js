@@ -60,8 +60,16 @@ export function loadKatex() {
  * @param {string} s
  */
 function repairSympyLatex(s) {
-  let out = s;
-  /* Collapse JSON double-backslashes */
+  /** Protect matrix environments — row separators need \\\\; collapse breaks KaTeX. */
+  const matrixSlots = [];
+  let out = s.replace(
+    /\\begin\{(pmatrix|bmatrix|matrix|vmatrix|Bmatrix|Vmatrix)\}[\s\S]*?\\end\{(?:pmatrix|bmatrix|matrix|vmatrix|Bmatrix|Vmatrix)\}/g,
+    (block) => {
+      matrixSlots.push(block);
+      return `\x00MAT${matrixSlots.length - 1}\x00`;
+    },
+  );
+  /* Collapse JSON double-backslashes outside matrices */
   out = out.replace(/\\\\/g, '\\');
   /* Erroneous \\text{mathrm} from partial command loss */
   out = out.replace(/\\text\{\s*mathrm\s*\}/gi, '');
@@ -84,6 +92,7 @@ function repairSympyLatex(s) {
   out = out.replace(/\\,\s*d([a-zA-Z])\b/g, '\\,\\mathrm{d}$1');
   /* Bare "<comma> d x" with no preceding backslash → \,\mathrm{d}x */
   out = out.replace(/(?<!\\),\s*d([a-zA-Z])\b/g, '\\,\\mathrm{d}$1');
+  out = out.replace(/\x00MAT(\d+)\x00/g, (_, i) => matrixSlots[Number(i)] ?? '');
   return out;
 }
 
@@ -96,6 +105,10 @@ function repairSympyLatex(s) {
 export function prepareLatexForKatex(latex) {
   if (!latex || typeof latex !== 'string') return latex;
   let s = repairSympyLatex(latex);
+  const core = typeof window !== 'undefined' ? window.MatrixCalculatorCore : null;
+  if (core?.repairMatrixLatex) {
+    s = core.repairMatrixLatex(s);
+  }
   /* Bare pi/inf tokens (not already \\pi) — e.g. bounds "pi/2" from AI */
   s = s.replace(/(?<![\\a-zA-Z])pi\s*\/\s*(\d+)(?![a-zA-Z])/gi, '\\frac{\\pi}{$1}');
   s = s.replace(/(?<![\\a-zA-Z])pi(?![a-zA-Z/])/gi, '\\pi');

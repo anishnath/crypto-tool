@@ -5,6 +5,7 @@
   derivative/limit/ODE cores have normalizeExpr/latexBodyToExpr available even on
   pages whose own tool scripts don't pull it in (e.g. the ODE solver page).
 --%><% String mccV = String.valueOf(System.currentTimeMillis()); %>
+<script>window.MATH_CALC_CTX = "<%=request.getContextPath()%>";</script>
 <script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/derivative-calculator-core.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/limit-calculator-core.js?v=<%=mccV%>"></script>
@@ -12,3 +13,4 @@
 <script src="<%=request.getContextPath()%>/modern/js/pde-calculator-core.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/vc-calculator-core.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/matrix-calculator-core.js?v=<%=mccV%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/matrix-calculator-viz.js?v=<%=mccV%>"></script>

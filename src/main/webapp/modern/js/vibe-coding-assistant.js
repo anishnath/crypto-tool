@@ -362,9 +362,20 @@ function friendlyCodeLang(lang) {
   return lang || 'text';
 }
 
+/** LaTeX environments that should stay in prose for KaTeX (Math AI), not become copy-paste code blocks. */
+const KATEX_MATH_ENVS = new Set([
+  'pmatrix', 'bmatrix', 'matrix', 'vmatrix', 'Vmatrix', 'Bmatrix',
+  'cases', 'align', 'aligned', 'gather', 'gathered', 'equation', 'equation*',
+  'split', 'multline', 'array',
+]);
+
+/** Diagram / document envs that should become fenced code when the model omits backticks. */
+const FENCE_AS_CODE_ENVS = new Set(['tikzpicture', 'tikzcd', 'circuitikz', 'pgfpicture']);
+
 /**
  * Wrap bare \\begin{env}...\\end{env} blocks in markdown fences when the model
  * omits them — improves formatted code display after streaming completes.
+ * Math environments (pmatrix, etc.) are left in prose for KaTeX typesetting.
  */
 export function ensureFencedBlocks(text) {
   const src = String(text ?? '');
@@ -377,6 +388,9 @@ export function ensureFencedBlocks(text) {
   let m;
 
   while ((m = envRe.exec(src)) !== null) {
+    const envName = m[1];
+    if (KATEX_MATH_ENVS.has(envName)) continue;
+
     let start = m.index;
     const beforeRaw = src.slice(last, start);
     const libMatch = /(\\usetikzlibrary\{[^}]+\}\s*)+$/.exec(beforeRaw);
@@ -385,10 +399,14 @@ export function ensureFencedBlocks(text) {
     const prose = src.slice(last, start).trim();
     if (prose) parts.push({ kind: 'text', value: prose });
 
-    const lang = m[1] === 'tikzpicture' ? 'latex' : 'latex';
+    if (!FENCE_AS_CODE_ENVS.has(envName)) {
+      last = m.index + m[0].length;
+      continue;
+    }
+
     parts.push({
       kind: 'code',
-      lang,
+      lang: 'latex',
       value: src.slice(start, m.index + m[0].length).trim(),
     });
     last = m.index + m[0].length;

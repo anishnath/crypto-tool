@@ -62,11 +62,17 @@
     var prefixes = [
       { re: /^\\det\s+/i,                                                                  op: 'determinant'  },
       { re: /^(?:\\tr|tr|trace)\s+/i,                                                      op: 'trace'        },
+      { re: /^\\operatorname\s*\{\s*tr\s*\}/i,                                             op: 'trace'        },
       { re: /^rank\s+/i,                                                                   op: 'rank'         },
+      { re: /^\\operatorname\s*\{\s*rank\s*\}/i,                                           op: 'rank'         },
       { re: /^(?:rref|gauss[\s-]*jordan|reduced[\s-]*row[\s-]*echelon|row[\s-]*echelon)\s+/i, op: 'rref'      },
+      { re: /^\\operatorname\s*\{\s*RREF\s*\}/i,                                           op: 'rref'         },
       { re: /^eigen\s*values?\s+/i,                                                        op: 'eigenvalues'  },
+      { re: /^\\operatorname\s*\{\s*eigenvalues\s*\}/i,                                   op: 'eigenvalues'  },
       { re: /^(?:eigen\s*vectors?|diagonali[sz]e)\s+/i,                                    op: 'eigenvectors' },
-      { re: /^(?:char(?:acteristic)?\s*poly(?:nomial)?)\s+/i,                              op: 'charpoly'     }
+      { re: /^\\operatorname\s*\{\s*eigenvectors\s*\}/i,                                   op: 'eigenvectors' },
+      { re: /^(?:char(?:acteristic)?\s*poly(?:nomial)?)\s+/i,                              op: 'charpoly'     },
+      { re: /^\\operatorname\s*\{\s*char\\,poly\s*\}/i,                                    op: 'charpoly'     }
     ];
     for (var i = 0; i < prefixes.length; i++) {
       var pm = s.match(prefixes[i].re);
@@ -423,8 +429,13 @@
   }
 
   function ctxPath() {
-    if (typeof window !== 'undefined' && window.CONFIG && window.CONFIG.ctx) return window.CONFIG.ctx;
-    if (typeof window !== 'undefined' && window.__MC_CTX) return window.__MC_CTX;
+    if (typeof window === 'undefined') return '';
+    if (window.MATH_CALC_CTX) return window.MATH_CALC_CTX;
+    if (window.__MC_CTX) return window.__MC_CTX;
+    if (window.INTEGRAL_CALC_CTX) return window.INTEGRAL_CALC_CTX;
+    if (window.CONFIG && window.CONFIG.ctx) return window.CONFIG.ctx;
+    var meta = document.querySelector && document.querySelector('meta[name="ctx"]');
+    if (meta && meta.content) return meta.content;
     return '';
   }
 
@@ -472,13 +483,10 @@
     });
   }
 
-  // ── Geometric helpers for 2D visualization ──────────────────────────
-  // Mirror the dedicated calculator page's geometry routines so the
-  // editor's pgfplots/TikZ block draws the same picture (unit square +
-  // transformed parallelogram + optional overlays).
-  var VISUALIZABLE_OPS_2D = ['determinant', 'inverse', 'transpose',
-                             'eigenvectors', 'power', 'multiply',
-                             'add', 'subtract'];
+  // ── Geometric visualization eligibility (2×2 and 3×3 numeric) ─────────
+  var VISUALIZABLE_OPS = ['determinant', 'inverse', 'transpose', 'eigenvectors',
+    'power', 'multiply', 'add', 'subtract'];
+  var VISUALIZABLE_OPS_2D = VISUALIZABLE_OPS.slice();
 
   function isNumericCells(cells) {
     if (!cells || !cells.length) return false;
@@ -501,17 +509,26 @@
   }
 
   // Can we draw a 2D pgfplots picture for this parsed expression?
-  function canVisualize2D(parsed) {
-    if (!parsed) return false;
-    if (VISUALIZABLE_OPS_2D.indexOf(parsed.op) === -1) return false;
-    if (parsed.dimA.rows !== 2 || parsed.dimA.cols !== 2) return false;
-    if (!isNumericCells(parsed.cellsA)) return false;
-    if (OPS[parsed.op].binary) {
-      if (!parsed.cellsB) return false;
-      if (parsed.cellsB.length !== 2 || parsed.cellsB[0].length !== 2) return false;
-      if (!isNumericCells(parsed.cellsB)) return false;
+  function canVisualize(op, cellsA, cellsB) {
+    if (VISUALIZABLE_OPS.indexOf(op) === -1) return false;
+    if (!cellsA) return false;
+    var rows = cellsA.length;
+    var cols = cellsA[0] ? cellsA[0].length : 0;
+    if (rows !== cols) return false;
+    if (rows !== 2 && rows !== 3) return false;
+    if (op === 'eigenvectors' && rows === 3) return false;
+    if (!isNumericCells(cellsA)) return false;
+    if (OPS[op].binary) {
+      if (!cellsB || !isNumericCells(cellsB)) return false;
+      if (cellsB.length !== rows || cellsB[0].length !== cols) return false;
     }
     return true;
+  }
+
+  function canVisualize2D(parsed) {
+    if (!parsed) return false;
+    if (!canVisualize(parsed.op, parsed.cellsA, parsed.cellsB)) return false;
+    return parsed.dimA && parsed.dimA.rows === 2 && parsed.dimA.cols === 2;
   }
 
   function applyMat2(M, v) {
@@ -557,28 +574,163 @@
     return { values: lams, vectors: [vecFor(lams[0]), vecFor(lams[1])] };
   }
 
+  function rowsToPmatrix(rows) {
+    if (!rows || !rows.length) return '';
+    return '\\begin{pmatrix}'
+      + rows.map(function (r) { return r.join(' & '); }).join('\\\\')
+      + '\\end{pmatrix}';
+  }
+
+  /** True when s is already a LaTeX matrix environment. */
+  function isProperMatrixLatex(s) {
+    return /\\begin\{(?:pmatrix|bmatrix|matrix|vmatrix|Bmatrix|Vmatrix)\}/.test(String(s || ''));
+  }
+
+  /**
+   * Rebuild every matrix environment from parsed cells so row separators are
+   * correct for KaTeX (\\\\ in JS string). Fixes AI/chat backslash loss:
+   * \begin{pmatrix}4 & 7\2 & 6\end{pmatrix} → proper pmatrix.
+   */
+  function repairMatrixLatex(s) {
+    if (s == null) return '';
+    var str = String(s);
+    if (!isProperMatrixLatex(str)) return str;
+    return str.replace(
+      /\\begin\{(pmatrix|bmatrix|matrix|vmatrix|Bmatrix|Vmatrix)\}([\s\S]*?)\\end\{(pmatrix|bmatrix|matrix|vmatrix|Bmatrix|Vmatrix)\}/g,
+      function (full, envOpen, _body, envClose) {
+        if (envOpen !== envClose) return full;
+        var cells = parseMatrixCells(full);
+        if (!cells || !cells.length) return full;
+        return '\\begin{' + envOpen + '}'
+          + cells.map(function (r) { return r.join(' & '); }).join('\\\\')
+          + '\\end{' + envClose + '}';
+      }
+    );
+  }
+
+  /**
+   * Convert AI/chat shorthand like "(2 1 \\ 5 3)" or "[[2,1],[5,3]]" to pmatrix LaTeX.
+   * Existing pmatrix blocks are parsed and rebuilt (fixes single-\\ row separators).
+   */
+  function normalizeMatrixLatex(s) {
+    if (s == null) return '';
+    var t = String(s).trim();
+    if (!t) return t;
+    if (isProperMatrixLatex(t)) return repairMatrixLatex(t);
+
+    /* [[2,1],[5,3]] or [[2, 1], [5, 3]] */
+    if (/^\[\s*\[/.test(t)) {
+      try {
+        var parsed = JSON.parse(t.replace(/'/g, '"'));
+        if (Array.isArray(parsed) && parsed.length && parsed.every(function (row) { return Array.isArray(row); })) {
+          return rowsToPmatrix(parsed.map(function (row) {
+            return row.map(function (c) { return String(c).trim(); });
+          }));
+        }
+      } catch (e1) { /* fall through to bracket split */ }
+      var inner = t.replace(/^\[\s*/, '').replace(/\s*\]\s*$/, '');
+      var rowStrs = inner.split(/\]\s*,\s*\[/);
+      var parsedRows = rowStrs.map(function (rs) {
+        rs = rs.replace(/^\[/, '').replace(/\]$/, '');
+        return rs.split(/,/).map(function (c) { return c.trim(); }).filter(Boolean);
+      }).filter(function (r) { return r.length; });
+      if (parsedRows.length >= 1) {
+        var w0 = parsedRows[0].length;
+        if (parsedRows.every(function (r) { return r.length === w0; })) return rowsToPmatrix(parsedRows);
+      }
+    }
+
+    /* Strip one pair of outer parens/brackets: (2 1 \ 5 3) */
+    var body = t;
+    if (/^\(\s*[\s\S]+\s*\)$/.test(body)) body = body.slice(1, -1).trim();
+    else if (/^\[\s*[\s\S]+\s*\]$/.test(body) && body.indexOf('[') === body.lastIndexOf('[')) {
+      body = body.slice(1, -1).trim();
+    }
+
+    var rowParts = null;
+    if (/\\/.test(body)) rowParts = body.split(/\\+/);
+    else if (/;/.test(body)) rowParts = body.split(/\s*;\s*/);
+
+    if (rowParts && rowParts.length >= 2) {
+      rowParts = rowParts.map(function (r) { return r.trim(); }).filter(Boolean);
+      var matrix = rowParts.map(function (row) {
+        if (/,/.test(row)) return row.split(/\s*,\s*/).map(function (c) { return c.trim(); }).filter(Boolean);
+        return row.split(/\s+/).filter(Boolean);
+      });
+      var cols = matrix[0].length;
+      if (cols >= 1 && matrix.every(function (r) { return r.length === cols; })) {
+        return rowsToPmatrix(matrix);
+      }
+    }
+
+    return t;
+  }
+
+  /**
+   * Normalize full matrix expressions (raw field) — shorthand parens, det/eigenvalues prefixes.
+   */
+  function normalizeMatrixExpression(expr) {
+    if (expr == null) return '';
+    var s = String(expr).trim();
+    if (!s) return s;
+    if (isProperMatrixLatex(s)) return repairMatrixLatex(s);
+
+    /* Replace ( row \ row ) shorthand anywhere in the string */
+    s = s.replace(/\(\s*([^()]*?\\[^()]*?)\s*\)/g, function (match, inner) {
+      var pm = normalizeMatrixLatex('(' + inner + ')');
+      return pm.indexOf('\\begin{pmatrix}') === 0 ? pm : match;
+    });
+
+    if (!isProperMatrixLatex(s)) {
+      var whole = normalizeMatrixLatex(s);
+      if (isProperMatrixLatex(whole)) s = whole;
+    }
+
+    s = s.replace(/\bdet\b/g, '\\det');
+    s = s.replace(/\btrace\b/g, '\\operatorname{tr}');
+    s = s.replace(/\beigenvalues\b/gi, '\\operatorname{eigenvalues}');
+    s = s.replace(/\beigenvectors\b/gi, '\\operatorname{eigenvectors}');
+    s = s.replace(/\bchar\s*poly\b/gi, '\\operatorname{char\\,poly}');
+    return repairMatrixLatex(s);
+  }
+
+  function normalizeMatrixTask(task) {
+    if (!task || typeof task !== 'object') return task;
+    var out = {};
+    Object.keys(task).forEach(function (k) { out[k] = task[k]; });
+    if (out.matrixA) out.matrixA = normalizeMatrixLatex(out.matrixA);
+    if (out.matrix_a) out.matrix_a = normalizeMatrixLatex(out.matrix_a);
+    if (out.matrixB) out.matrixB = normalizeMatrixLatex(out.matrixB);
+    if (out.matrix_b) out.matrix_b = normalizeMatrixLatex(out.matrix_b);
+    if (out.raw) out.raw = normalizeMatrixExpression(out.raw);
+    return out;
+  }
+
   function buildLatexFromTask(task) {
     if (!task) return '';
-    if (task.raw) return String(task.raw).trim();
+    task = normalizeMatrixTask(task);
+    if (task.raw) return normalizeMatrixExpression(String(task.raw).trim());
     var op = String(task.op || task.operation || 'determinant').toLowerCase();
     var A = String(task.matrixA || task.matrix_a || task.latexA || '').trim();
     var B = String(task.matrixB || task.matrix_b || task.latexB || '').trim();
     var n = task.n != null && task.n !== '' ? parseInt(String(task.n), 10) : 2;
     if (!A) return '';
+    A = normalizeMatrixLatex(A);
+    if (B) B = normalizeMatrixLatex(B);
     switch (op) {
       case 'determinant': case 'det': return '\\det ' + A;
       case 'inverse': return A + '^{-1}';
       case 'transpose': return A + '^{T}';
-      case 'trace': case 'tr': return '\\tr ' + A;
-      case 'rank': return 'rank\\,' + A;
-      case 'rref': return 'rref\\,' + A;
-      case 'eigenvalues': return 'eigenvalues\\,' + A;
-      case 'eigenvectors': return 'eigenvectors\\,' + A;
-      case 'charpoly': case 'characteristic': return 'charpoly\\,' + A;
+      case 'trace': case 'tr': return '\\operatorname{tr}' + A;
+      case 'rank': return '\\operatorname{rank}' + A;
+      case 'rref': return '\\operatorname{RREF}' + A;
+      case 'eigenvalues': return '\\operatorname{eigenvalues}' + A;
+      case 'eigenvectors': return '\\operatorname{eigenvectors}' + A;
+      case 'charpoly': case 'characteristic': return '\\operatorname{char\\,poly}' + A;
       case 'power': return A + '^{' + (Number.isFinite(n) ? n : 2) + '}';
       case 'add': return B ? A + ' + ' + B : A;
       case 'subtract': case 'sub': return B ? A + ' - ' + B : A;
-      case 'multiply': case 'mul': return B ? A + ' ' + B : A;
+      case 'multiply': case 'mul': return B ? A + ' \\cdot ' + B : A;
       default: return A;
     }
   }
@@ -592,6 +744,24 @@
     return solveFromLatex(latex, { withSteps: !!(opts.withSteps || opts.mode === 'steps') });
   }
 
+  /** Parse a matrix task object into { op, cellsA, cellsB, n, ... } (no SymPy call). */
+  function parseTask(task) {
+    if (!task) return null;
+    task = normalizeMatrixTask(task);
+    var latex = buildLatexFromTask(task);
+    if (!latex) return null;
+    var parsed = parseLatexMatrix(latex);
+    if (!parsed) return null;
+    if (task.n != null && task.n !== '' && parsed.n == null) parsed.n = task.n;
+    return parsed;
+  }
+
+  function canVisualizeTask(task) {
+    var parsed = parseTask(task);
+    if (!parsed) return false;
+    return canVisualize(parsed.op, parsed.cellsA, parsed.cellsB);
+  }
+
   if (typeof window !== 'undefined') {
     window.MatrixCalculatorCore = {
       OPS: OPS,
@@ -599,10 +769,17 @@
       parseMatrixCells: parseMatrixCells,
       parseMatrixDims: parseMatrixDims,
       detectOp: detectOp,
+      normalizeMatrixLatex: normalizeMatrixLatex,
+      normalizeMatrixExpression: normalizeMatrixExpression,
+      normalizeMatrixTask: normalizeMatrixTask,
+      repairMatrixLatex: repairMatrixLatex,
       buildLatexFromTask: buildLatexFromTask,
+      parseTask: parseTask,
       solveFromLatex: solveFromLatex,
       solveTask: solveTask,
-      // Geometry helpers (used by the editor's graph-block builder)
+      // Geometry helpers (used by the editor's graph-block builder + Math AI chat)
+      canVisualize: canVisualize,
+      canVisualizeTask: canVisualizeTask,
       canVisualize2D: canVisualize2D,
       isNumericCells: isNumericCells,
       cellsToNumericMatrix: cellsToNumericMatrix,

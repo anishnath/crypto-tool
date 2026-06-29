@@ -3,7 +3,7 @@
  * JavaScript engines compute; the model only parses intent into structured blocks.
  */
 import { ToolAiAssistant } from '../assistant-core.js';
-import { typesetKatexWhenReady, typesetMathSlots } from '../../katex-render.js';
+import { createMathSlotEl, typesetKatexWhenReady, typesetMathSlots } from '../../katex-render.js';
 import { CALCULUS_ACTIONS, extractMathActions } from '../math-action-extract.js';
 import { createCalculusQuestionCard } from '../math-chat-compute.js';
 
@@ -50,7 +50,8 @@ Use [CURRENT CONTEXT] for live page inputs (PDE type, parameters, last page resu
 **When the user asks to explain or learn (no new computation)**
 - Tutor in clear prose with KaTeX (\`$$\\displaystyle...$$\`).
 - Cover concepts: PDE classification (elliptic / parabolic / hyperbolic), separation of variables, Fourier series, BCs (Dirichlet / Neumann / Robin), CFL stability, method choice.
-- **Do not** emit a solve block unless they also want to run the engine or you are setting up a follow-up they can click Solve on.
+- **Do not** emit a solve block for pure theory with no concrete expression to run.
+- **Exception — "show me an example" / "demonstrate" / "walk through an example":** when you give **specific** matrices, integrands, ODEs, etc., always emit the matching solver block (\`\`\`matrix\`\`\`, \`\`\`integral\`\`\`, …) so **Solve / Solve with steps / Show visualize** chips appear. One short intro sentence, then the block. This applies on **every** calculator page (Integral, Derivative, …) — page title does not limit topic.
 - Use [CURRENT CONTEXT] and prior chat engine results — do not recalculate what the engine already returned.
 
 **Display math in prose (required when setting up a problem)**
@@ -75,6 +76,15 @@ Vector calculus (gradient example):
 
 Matrix (determinant example):
 \`$$\\displaystyle \\det\\begin{pmatrix}1 & 2\\\\3 & 4\\end{pmatrix}$$\`
+
+Matrix multiplication example (user: "show me matrix multiplication"):
+- Prose: one sentence, then **one** \`\`\`matrix\`\`\` block (never split matrices into separate \`\`\`latex\`\`\` fences):
+\`\`\`matrix
+op: multiply
+matrixA: \\begin{pmatrix}1 & 2\\\\3 & 4\\end{pmatrix}
+matrixB: \\begin{pmatrix}5 & 6\\\\7 & 8\\end{pmatrix}
+\`\`\`
+- Mirror in prose: \`$$\\displaystyle \\begin{pmatrix}1 & 2\\\\3 & 4\\end{pmatrix}\\begin{pmatrix}5 & 6\\\\7 & 8\\end{pmatrix}$$\`
 
 Use \`\\mathrm{d}x\` for ODE/integral differentials, \`\\displaystyle\`, \`\\lim\\limits\`, and \`\\left[\\, ... \\,\\right]\` for derivatives.
 
@@ -131,8 +141,9 @@ JSON batch: \`{"matrix":[{"op":"determinant","matrixA":"..."},{"op":"inverse","m
 
 **Do not**
 - Output final answers as your own work when a solve block applies.
-- Refuse ODE/PDE because the page title mentions integrals or PDEs.
-- Skip structured blocks when the user clearly wants something computed.
+- Refuse matrix/derivative/limit/ODE/PDE/vector problems because the open page is Integral Calculator (or any other single-topic page).
+- Skip structured blocks when the user clearly wants something computed or asks for a **concrete example**.
+- Use \`\`\`latex\`\`\` or \`\`\`tex\`\`\` fenced blocks in Math AI chat — they render as copy-paste code, not typeset math. Use \`$$...$$\` for display KaTeX and \`\`\`matrix\`\`\` / \`\`\`integral\`\`\` / etc. for engine blocks.
 - Emit a \`\`\`pde\`\`\` block for pure conceptual questions with no parameters to run (teach in prose instead).
 - Mention SymPy, NumPy, Python, OneCompiler, or other backend libraries in replies — use "the solver" or "step-by-step engine" instead.
 ${extra}
@@ -195,6 +206,23 @@ function attachCalculusCards(bubble, rawText) {
   void typesetMathSlots(container);
 }
 
+/** When the model wrongly emits ```latex``` pmatrix blocks, render them as KaTeX instead of code UI. */
+function promoteLatexMatrixBlocks(body) {
+  if (!body) return;
+  body.querySelectorAll('.vca-code-wrap').forEach((wrap) => {
+    const lang = (wrap.querySelector('.vca-code-lang')?.textContent || '').trim().toLowerCase();
+    if (lang !== 'latex' && lang !== 'tex') return;
+    const codeEl = wrap.querySelector('code, pre, .vca-code');
+    const code = (codeEl?.textContent || '').trim();
+    if (!/^\\begin\{(?:p|b|v|V|B)?matrix\}/i.test(code)) return;
+
+    const slotWrap = document.createElement('div');
+    slotWrap.className = 'vca-math-eq';
+    slotWrap.appendChild(createMathSlotEl(`\\displaystyle ${code}`, true));
+    wrap.replaceWith(slotWrap);
+  });
+}
+
 /**
  * @param {object} opts — aiAssistantBoot + optional mathShell overrides
  */
@@ -232,7 +260,9 @@ export function createMathAssistant(opts) {
     seedContext: () => formatSeedContext(getSnapshot(), shell()),
     getQuickActions: () => buildQuickActions(getSnapshot(), shell()),
     onAssistantRender: (body, bubble, rawText) => {
+      promoteLatexMatrixBlocks(body);
       void typesetKatexWhenReady(body);
+      void typesetMathSlots(body);
       if (bubble && rawText) attachCalculusCards(bubble, rawText);
     },
   });

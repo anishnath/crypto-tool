@@ -317,6 +317,13 @@ export function normalizeCalculusTask(obj, fenceLang) {
     if (matrixA) task.matrixA = matrixA;
     if (matrixB) task.matrixB = matrixB;
     if (obj.n != null && obj.n !== '') task.n = parseInt(String(obj.n), 10);
+    const core = typeof window !== 'undefined' ? window.MatrixCalculatorCore : null;
+    if (core?.normalizeMatrixTask) {
+      const norm = core.normalizeMatrixTask(task);
+      if (norm.matrixA) task.matrixA = norm.matrixA;
+      if (norm.matrixB) task.matrixB = norm.matrixB;
+      if (norm.raw) task.raw = norm.raw;
+    }
     if (!raw && !matrixA) return null;
     return task;
   }
@@ -446,6 +453,52 @@ function tasksFromJson(data) {
 }
 
 /**
+ * Fallback when the model emits ```latex``` pmatrix blocks instead of ```matrix``` solver blocks.
+ * @param {string} src
+ * @returns {MathActionTask[]}
+ */
+function extractMatrixTasksFromLatexFences(src) {
+  const text = String(src ?? '');
+  /** @type {string[]} */
+  const matrices = [];
+  const fenceRe = /```(?:latex|tex)\s*\n([\s\S]*?)```/gi;
+  let m;
+  while ((m = fenceRe.exec(text)) !== null) {
+    const body = m[1].trim();
+    if (/\\begin\{(?:p|b|v|V|B)?matrix\}/i.test(body)) matrices.push(body);
+  }
+  if (!matrices.length) return [];
+
+  const lower = text.toLowerCase();
+  /** @type {Record<string, string>|null} */
+  let raw = null;
+
+  if (matrices.length >= 2) {
+    let op = 'multiply';
+    if (/subtract|minus\b|difference/.test(lower)) op = 'subtract';
+    else if (/add|plus\b|sum of two matrices/.test(lower)) op = 'add';
+    else if (!/multip|matrix product|dot product|·|times\b/.test(lower) && /matrix/.test(lower)) {
+      op = 'multiply';
+    }
+    raw = { action: 'matrix', op, matrixA: matrices[0], matrixB: matrices[1] };
+  } else {
+    let op = 'determinant';
+    if (/inverse|invert|\^{-1}/.test(lower)) op = 'inverse';
+    else if (/transpose|\^t\b|\^\{?t\}?/i.test(lower)) op = 'transpose';
+    else if (/eigenvector/.test(lower)) op = 'eigenvectors';
+    else if (/eigenvalue|characteristic|char\s*poly/.test(lower)) op = 'eigenvalues';
+    else if (/trace|\btr\b/.test(lower)) op = 'trace';
+    else if (/rank/.test(lower)) op = 'rank';
+    else if (/rref|row reduce/.test(lower)) op = 'rref';
+    else if (/power|\^n|\^k/.test(lower)) op = 'power';
+    raw = { action: 'matrix', op, matrixA: matrices[0] };
+  }
+
+  const task = normalizeCalculusTask(raw, 'matrix');
+  return task ? [task] : [];
+}
+
+/**
  * @param {string} text
  * @returns {MathActionTask[]}
  */
@@ -480,6 +533,10 @@ export function extractMathActions(text) {
       const parsed = parseCalculusBlockContent(body, lang);
       if (parsed) add(parsed);
     }
+  }
+
+  if (!found.some((t) => t.action === 'matrix')) {
+    extractMatrixTasksFromLatexFences(src).forEach(add);
   }
 
   return found;
@@ -601,24 +658,34 @@ function vectorCalculusProblemLatex(task) {
 
 /** Textbook LaTeX for a matrix task card. */
 function matrixProblemLatex(task) {
-  if (task.raw) return prepareLatexForKatex(task.raw.trim());
   const core = typeof window !== 'undefined' ? window.MatrixCalculatorCore : null;
-  if (core?.buildLatexFromTask) {
-    return prepareLatexForKatex(core.buildLatexFromTask(task));
+  const t = core?.normalizeMatrixTask ? core.normalizeMatrixTask(task) : task;
+  if (t.raw) {
+    const raw = core?.normalizeMatrixExpression
+      ? core.normalizeMatrixExpression(t.raw.trim())
+      : t.raw.trim();
+    return prepareLatexForKatex(raw);
   }
-  const op = String(task.op || 'determinant').toLowerCase();
-  const A = String(task.matrixA || task.latexA || '').trim();
-  const B = String(task.matrixB || task.latexB || '').trim();
+  if (core?.buildLatexFromTask) {
+    return prepareLatexForKatex(core.buildLatexFromTask(t));
+  }
+  const op = String(t.op || 'determinant').toLowerCase();
+  const A = String(t.matrixA || t.latexA || '').trim();
+  const B = String(t.matrixB || t.latexB || '').trim();
   if (!A) return '';
-  if (op === 'determinant' || op === 'det') return `\\det\\left(${A}\\right)`;
-  if (op === 'inverse') return `${A}^{-1}`;
-  if (op === 'transpose') return `${A}^{T}`;
-  if (op === 'trace' || op === 'tr') return `\\operatorname{tr}\\left(${A}\\right)`;
-  if (op === 'multiply' || op === 'mul') return B ? `${A}${B}` : A;
-  if (op === 'add') return B ? `${A} + ${B}` : A;
-  if (op === 'subtract' || op === 'sub') return B ? `${A} - ${B}` : A;
-  if (op === 'power') return `${A}^{${task.n != null ? task.n : 2}}`;
-  return A;
+  const Apx = core?.normalizeMatrixLatex ? core.normalizeMatrixLatex(A) : A;
+  const Bpx = B && core?.normalizeMatrixLatex ? core.normalizeMatrixLatex(B) : B;
+  if (op === 'determinant' || op === 'det') return `\\det ${Apx}`;
+  if (op === 'inverse') return `${Apx}^{-1}`;
+  if (op === 'transpose') return `${Apx}^{T}`;
+  if (op === 'trace' || op === 'tr') return `\\operatorname{tr}${Apx}`;
+  if (op === 'multiply' || op === 'mul') return Bpx ? `${Apx}${Bpx}` : Apx;
+  if (op === 'add') return Bpx ? `${Apx} + ${Bpx}` : Apx;
+  if (op === 'subtract' || op === 'sub') return Bpx ? `${Apx} - ${Bpx}` : Apx;
+  if (op === 'power') return `${Apx}^{${t.n != null ? t.n : 2}}`;
+  if (op === 'eigenvalues') return `\\operatorname{eigenvalues}${Apx}`;
+  if (op === 'eigenvectors') return `\\operatorname{eigenvectors}${Apx}`;
+  return Apx;
 }
 
 /**
