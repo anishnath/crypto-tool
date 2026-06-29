@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
-<% String v = String.valueOf(System.currentTimeMillis()); %>
+<% String v = String.valueOf(System.currentTimeMillis());
+   request.setAttribute("aiToolId", "math-ai");
+   request.setAttribute("aiRequireSignIn", "true");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,6 +78,17 @@
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
+    <%@ include file="modern/components/math-ai-head.inc.jsp" %>
+    <style>
+    .ic-expr-label-actions .math-ai-tab-btn {
+        display: inline-flex; align-items: center; gap: 0.35rem;
+        appearance: none; border: 1px solid var(--ms-accent, #15803d);
+        background: var(--ms-panel-bg, #fff); color: var(--ms-accent, #15803d);
+        font: 600 0.78rem/1 var(--ms-font, system-ui);
+        padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer;
+    }
+    .ic-expr-label-actions .math-ai-tab-btn:hover { background: rgba(21, 128, 61, 0.08); }
+    </style>
 
     <style>
         /* iq-* result rendering classes — pulled forward from legacy and
@@ -272,6 +287,7 @@
                                 </button>
                             </div>
                             <button type="button" class="ic-image-btn" id="iq-image-btn" title="Scan an inequality from an image">&#128247; Scan</button>
+                            <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Math AI — solve in chat (Ctrl+Shift+A)">&#10024; AI</button>
                         </div>
                     </div>
 
@@ -552,6 +568,14 @@
         });
     })();
     </script>
+
+    <%@ include file="/modern/components/algebra-cores.inc.jsp" %>
+    <%
+        request.setAttribute("mathAiButtonId", "btnMathAI");
+        request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+        request.setAttribute("mathAiProfileExport", "configureInequalityMathShell");
+    %>
+    <%@ include file="/modern/components/math-ai-boot.inc.jsp" %>
 
 </body>
 </html>

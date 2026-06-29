@@ -919,6 +919,93 @@ function init() {
     }
 }
 
+function solveFromExpr(expr, opts) {
+    opts = opts || {};
+    var Bridge = window.QuadraticInputBridge;
+    if (!Bridge || typeof Bridge.parse !== 'function') {
+        return { ok: false, error: 'QuadraticInputBridge not loaded.' };
+    }
+    return computeFromParsed(Bridge.parse(expr), opts.method);
+}
+
+/** Headless solve — same math as page Solve, no DOM. Used by Algebra AI chat. */
+function computeFromParsed(parsed, method) {
+    if (!parsed || parsed.error) {
+        return { ok: false, error: (parsed && parsed.error) || 'Could not parse quadratic.' };
+    }
+    var a = parsed.a, b = parsed.b, c = parsed.c;
+    if (!a || a === 0) {
+        return { ok: false, error: 'Coefficient \'a\' must be non-zero for a quadratic.' };
+    }
+
+    if (parsed.form === 'horizontal') {
+        var horiz = solveHorizontal(a, b, c);
+        var h = horiz.vertex, f = horiz.focus;
+        var resultText = 'Vertex (' + R.fmt(h.h) + ', ' + R.fmt(h.k) + '), Focus (' + R.fmt(f.x) + ', ' + R.fmt(f.y) + ')';
+        var resultLatex = 'V=(' + R.fmt(h.h) + ',\\,' + R.fmt(h.k) + '),\\; F=(' + R.fmt(f.x) + ',\\,' + R.fmt(f.y) + ')';
+        return {
+            ok: true,
+            action: 'quadratic',
+            resultText: resultText,
+            resultLatex: resultLatex,
+            method: 'Horizontal parabola (page engine)',
+            input: { form: 'horizontal', a: a, b: b, c: c },
+        };
+    }
+
+    var disc = b * b - 4 * a * c;
+    var roots = calculateRoots(a, b, c);
+    var result = {
+        a: a, b: b, c: c,
+        disc: disc,
+        roots: roots,
+        method: method || 'all',
+        formType: parsed.form,
+        isInequality: parsed.form === 'inequality',
+        operator: parsed.op,
+    };
+
+    if (result.isInequality) {
+        var ineq = solveInequalityResult(a, b, c, roots, parsed.op);
+        result.intervalLatex = ineq.intervalLatex;
+        result.intervalHtml = ineq.intervalHtml;
+        return {
+            ok: true,
+            action: 'quadratic',
+            resultText: ineq.intervalHtml,
+            resultLatex: ineq.intervalLatex,
+            method: 'Quadratic inequality (page engine)',
+            input: { form: 'inequality', a: a, b: b, c: c, op: parsed.op },
+        };
+    }
+
+    var resultLatex;
+    if (roots.type === 'real') {
+        if (disc > 0) {
+            resultLatex = 'x_1 = ' + R.fmt(roots.x1) + ', \\quad x_2 = ' + R.fmt(roots.x2);
+        } else {
+            resultLatex = 'x = ' + R.fmt(roots.x1);
+        }
+    } else {
+        resultLatex = 'x = ' + R.fmt(roots.real) + ' \\pm ' + R.fmt(roots.imag) + 'i';
+    }
+
+    return {
+        ok: true,
+        action: 'quadratic',
+        resultText: resultLatex.replace(/\\quad/g, ', ').replace(/\\pm/g, '±'),
+        resultLatex: resultLatex,
+        method: 'Quadratic formula (page engine)',
+        input: { form: parsed.form, a: a, b: b, c: c },
+        result: result,
+    };
+}
+
+window.QuadraticSolverCore = {
+    solveFromExpr: solveFromExpr,
+    computeFromParsed: computeFromParsed,
+};
+
 // ==================== Init ====================
 
 if (document.readyState === 'loading') {

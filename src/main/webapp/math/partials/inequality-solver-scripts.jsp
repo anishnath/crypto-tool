@@ -1074,5 +1074,49 @@
             }, 350);
         }
     });
+
+    /** Headless solve for Algebra AI — same parse + sign-chart engine as page Solve. */
+    window.InequalitySolverCore = {
+        solveFromRaw: function (raw, varName, opts) {
+            opts = opts || {};
+            var v = varName || 'x';
+            if (!raw || !String(raw).trim()) {
+                return { ok: false, error: 'Missing inequality.' };
+            }
+            try {
+                var parsed = parseInequality(String(raw).trim());
+                var solution = solveInequality(parsed, v);
+                if (solution.intervals) {
+                    solution.isEmpty = solution.intervals.length === 0;
+                    solution.isAllReals = solution.intervals.length === 1
+                        && solution.intervals[0].left === -Infinity
+                        && solution.intervals[0].right === Infinity;
+                }
+                var resultLatex = formatIntervalLatex(solution.intervals);
+                var resultText = formatInterval(solution.intervals);
+                var steps = [];
+                if (opts.withSteps) {
+                    steps.push({ title: 'Write the inequality', latex: inequalityToLatex(String(raw).trim()) });
+                    var mainExpr = parsed.type === 'standard' ? parsed.expr
+                        : (parsed.parts ? parsed.parts[0].expr : String(raw).trim());
+                    var mainOp = parsed.type === 'standard' ? parsed.op
+                        : (parsed.parts ? parsed.parts[0].op : '>');
+                    var opLatex = mainOp === '>=' ? '\\geq' : mainOp === '<=' ? '\\leq' : mainOp;
+                    steps.push({ title: 'Solution set', latex: resultLatex });
+                }
+                return {
+                    ok: true,
+                    action: 'inequality',
+                    resultText: resultText,
+                    resultLatex: resultLatex,
+                    method: 'Sign-chart inequality solver (page engine)',
+                    steps: steps,
+                    input: { raw: String(raw).trim(), variable: v },
+                };
+            } catch (err) {
+                return { ok: false, error: err.message || 'Could not solve inequality.' };
+            }
+        },
+    };
 })();
 </script>

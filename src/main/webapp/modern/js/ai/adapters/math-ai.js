@@ -4,7 +4,7 @@
  */
 import { ToolAiAssistant } from '../assistant-core.js';
 import { createMathSlotEl, typesetKatexWhenReady, typesetMathSlots } from '../../katex-render.js';
-import { CALCULUS_ACTIONS, extractMathActions } from '../math-action-extract.js';
+import { MATH_ACTIONS, CALCULUS_ACTIONS, extractMathActions } from '../math-action-extract.js';
 import { createCalculusQuestionCard } from '../math-chat-compute.js';
 
 function getShell() {
@@ -24,9 +24,9 @@ function buildMathPrompt(shell) {
   const extra = shell.promptExtra ? `\n${shell.promptExtra}\n` : '';
   const supported = Array.isArray(shell.supportedActions) && shell.supportedActions.length
     ? shell.supportedActions.join(', ')
-    : CALCULUS_ACTIONS.join(', ');
+    : MATH_ACTIONS.join(', ');
 
-  return `You are a **Generic Math AI intent assistant** for **${toolName}** on 8gwifi.org.
+  return `You are a **Generic Math AI intent assistant** for **${toolName}** on 8gwifi.org — one unified router for all math tools (calculus, linear algebra, algebra) and the future **standalone Math AI** page.
 
 **Critical:** You do **NOT** compute final answers yourself. You interpret the user's request (LaTeX, broken English, informal ASCII), detect the problem type, and output structured blocks. The student uses **Solve / Solve with steps / Show graph** chips in chat — the same engines as the LaTeX editor's **Σ Solve** and the on-page calculators.
 
@@ -43,7 +43,11 @@ Use [CURRENT CONTEXT] for live page inputs (PDE type, parameters, last page resu
    - **pde** (u_t, u_xx, heat/wave/Laplace/Poisson/transport/Schrödinger, 1st-order linear a u_x + b u_y + …)
    - **vectorCalculus** (∇f gradient, ∇·F divergence, ∇×F curl — scalar or Fx/Fy/Fz components)
    - **matrix** (det, inverse, transpose, trace, rank, RREF, A^n, eigenvalues/eigenvectors, A±B, A·B)
-2. Output the matching fenced block (\`\`\`integral\`\`\`, \`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`, or \`\`\`matrix\`\`\`). Prefer full LaTeX in \`raw:\` when the user gave notation.
+   - **quadratic** (ax²+bx+c=0, factored/vertex form, horizontal parabola)
+   - **system** (2+ equations in x,y,…)
+   - **inequality** (<, >, <=, >=, compound, rational)
+   - **polynomial** (add/subtract/multiply/divide, factor, roots, evaluate, expand)
+2. Output the matching fenced block (\`\`\`integral\`\`\`, \`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`, \`\`\`matrix\`\`\`, \`\`\`quadratic\`\`\`, \`\`\`system\`\`\`, \`\`\`inequality\`\`\`, or \`\`\`polynomial\`\`\`). Prefer full LaTeX in \`raw:\` when the user gave notation.
 3. **Always mirror each problem in prose as textbook display math** (KaTeX \`$$...$$\`) — see formats below.
 4. Never give the final numerical answer or closed-form solution in prose — the engine computes when the student clicks a chip.
 
@@ -135,13 +139,37 @@ matrixA: \\begin{pmatrix}1 & 2\\\\3 & 4\\end{pmatrix}
 \`\`\`
 Binary ops: \`matrixB:\` + \`op: multiply|add|subtract\`. Power: \`op: power\`, \`n: 3\`. Or \`raw: \\det \\begin{pmatrix}...\\end{pmatrix}\`.
 
-Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|matrix\` plus fields below.
+Quadratic:
+\`\`\`quadratic
+raw: x^2 + 5x + 6 = 0
+variable: x
+\`\`\`
+
+System:
+\`\`\`system
+eq1: 2x + 3y = 8
+eq2: x - y = 1
+\`\`\`
+
+Inequality:
+\`\`\`inequality
+raw: x^2 - 5x + 6 < 0
+variable: x
+\`\`\`
+
+Polynomial:
+\`\`\`polynomial
+op: factor
+p: x^3 - 6x^2 + 11x - 6
+\`\`\`
+
+Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|matrix|quadratic|system|inequality|polynomial\` plus fields below.
 
 JSON batch: \`{"matrix":[{"op":"determinant","matrixA":"..."},{"op":"inverse","matrixA":"..."}]}\`
 
 **Do not**
 - Output final answers as your own work when a solve block applies.
-- Refuse matrix/derivative/limit/ODE/PDE/vector problems because the open page is Integral Calculator (or any other single-topic page).
+- Refuse matrix/derivative/limit/ODE/PDE/vector/**algebra** problems because the open page title differs — output the matching block and let the engine compute.
 - Skip structured blocks when the user clearly wants something computed or asks for a **concrete example**.
 - Use \`\`\`latex\`\`\` or \`\`\`tex\`\`\` fenced blocks in Math AI chat — they render as copy-paste code, not typeset math. Use \`$$...$$\` for display KaTeX and \`\`\`matrix\`\`\` / \`\`\`integral\`\`\` / etc. for engine blocks.
 - Emit a \`\`\`pde\`\`\` block for pure conceptual questions with no parameters to run (teach in prose instead).
@@ -153,7 +181,7 @@ ${extra}
 function formatSeedContext(snap, shell) {
   if (typeof shell.formatContext === 'function') return shell.formatContext(snap);
   if (!snap) {
-    return '(Paste a math problem — integral, derivative, limit, ODE, or PDE — then Solve / Steps / Graph in chat.)';
+    return '(Paste any math problem — ∫, lim, ODE, matrix, quadratic, system, inequality, polynomial — then Solve / Steps / Graph in chat.)';
   }
   if (typeof snap === 'string') return snap.slice(0, 6000);
   try {
@@ -166,10 +194,10 @@ function formatSeedContext(snap, shell) {
 function defaultQuickActions() {
   const chip = (label, prompt) => ({ label, prompt, sendImmediately: true });
   return [
-    chip('∫ x² dx', 'Integrate x^2 with respect to x.'),
-    chip("d/dx (x³ sin x)", 'Differentiate x^3 * sin(x) with respect to x.'),
-    chip('lim (sin x)/x', 'Find the limit of sin(x)/x as x approaches 0.'),
-    chip('∫₀¹ eˣ dx', 'Evaluate the definite integral of e^x from 0 to 1.'),
+    chip("Don't get it", 'Explain what this math topic means in plain language — notation, goal, and how to read the answer. Prose + KaTeX only.'),
+    chip('Which method?', 'Which technique or formula should I use for a problem like mine? Strategy and reasoning only — no full worked solution.'),
+    chip('Exam tip', 'Classroom exam tips for this topic: common mistakes, partial credit, and how to write answers clearly.'),
+    chip('Show example', 'Give one concrete example with the matching solver block (```integral```, ```derivative```, ```limit```, ```matrix```, ```quadratic```, etc.) so I can click Solve. One intro sentence, then the block.'),
   ];
 }
 
@@ -199,7 +227,7 @@ function attachCalculusCards(bubble, rawText) {
   bubble.appendChild(container);
 
   tasks.forEach((task, i) => {
-    if (!CALCULUS_ACTIONS.includes(task.action)) return;
+    if (!MATH_ACTIONS.includes(task.action)) return;
     container.appendChild(createCalculusQuestionCard(task, i, shell));
   });
 
@@ -251,7 +279,7 @@ export function createMathAssistant(opts) {
     floatingCorner: 'right',
     toolId: opts.toolId || 'math-ai',
     title: shell().panelTitle || 'Math AI',
-    subtitle: shell().subtitle || 'Generic calculus intent router',
+    subtitle: shell().subtitle || 'Calculus · algebra · linear algebra — solve in chat',
     placeholder: shell().placeholder || 'Paste ∫, d/dx, or lim problems (LaTeX, ASCII, or English)…',
     footerText: shell().footerText || 'Ctrl+Shift+A · Σ Solve in chat: Solve · Steps · Graph',
     historyTurns: 8,

@@ -4,8 +4,17 @@
  * Fences: ```integral```, ```derivative```, ```limit```, ```math-action```, ```json```
  */
 import { normalizeBoundLatex, prepareLatexForKatex } from '../katex-render.js';
+import {
+  ALGEBRA_ACTIONS,
+  extractAlgebraActions,
+  formatAlgebraActionLabel,
+  taskToDisplayLatex as algebraTaskToDisplayLatex,
+} from './algebra-action-extract.js';
 
 export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'matrix'];
+export { ALGEBRA_ACTIONS };
+/** All Math AI intents — calculus, linear algebra, algebra (standalone Math AI page uses full set). */
+export const MATH_ACTIONS = [...CALCULUS_ACTIONS, ...ALGEBRA_ACTIONS];
 
 const VC_MODES = new Set(['gradient', 'divergence', 'curl', 'grad', 'div', 'nabla']);
 
@@ -539,6 +548,14 @@ export function extractMathActions(text) {
     extractMatrixTasksFromLatexFences(src).forEach(add);
   }
 
+  extractAlgebraActions(src).forEach((task) => {
+    if (!task || !ALGEBRA_ACTIONS.includes(task.action)) return;
+    const key = JSON.stringify(task);
+    if (seen.has(key)) return;
+    seen.add(key);
+    found.push(task);
+  });
+
   return found;
 }
 
@@ -771,6 +788,10 @@ export function taskToSolveLatex(task) {
  * @param {MathActionTask} task
  */
 export function taskToDisplayLatex(task) {
+  if (ALGEBRA_ACTIONS.includes(task?.action)) {
+    return algebraTaskToDisplayLatex(task);
+  }
+
   if (task.action === 'pde') {
     return ensureDisplayStyle(pdeProblemLatex(task));
   }
@@ -828,6 +849,10 @@ export function taskToDisplayLatex(task) {
 export function formatMathActionLabel(task, index) {
   const n = typeof index === 'number' ? `#${index + 1} ` : '';
   if (task.label) return task.label;
+
+  if (ALGEBRA_ACTIONS.includes(task.action)) {
+    return formatAlgebraActionLabel(task, index);
+  }
 
   if (task.action === 'derivative') {
     const o = Number(task.order) > 1 ? ` · order ${task.order}` : '';

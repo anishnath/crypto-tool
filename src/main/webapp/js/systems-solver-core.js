@@ -2241,7 +2241,78 @@ window.SystemsSolverCore = {
         renderEquationInputs();
         _onEquationChange();
         solve();
-    }
+    },
+    /** Headless solve for Algebra AI — reuses classifySystem + linear solvers + nerdamer fallback. */
+    solveFromEquations: function(eqs, opts) {
+        opts = opts || {};
+        var method = opts.method || 'gaussian';
+        var normalized = (eqs || []).map(_normalizeEq).map(function (s) { return String(s || '').trim(); }).filter(Boolean);
+        if (normalized.length < 2) {
+            return Promise.resolve({ ok: false, error: 'Need at least two equations.' });
+        }
+
+        var info = classifySystem(normalized);
+        if (!info || info._tooFew) {
+            return Promise.resolve({ ok: false, error: 'Enter valid equations with an equals sign.' });
+        }
+        if (info._tooMany) {
+            return Promise.resolve({ ok: false, error: 'This solver supports up to 6 equations.' });
+        }
+
+        if (info.isLinear && info.vars.length >= 2 && info.vars.length <= 3 && info.eqs.length === info.vars.length) {
+            var extracted = info._useFallback
+                ? _extractLinearFallback(info.eqs, info.vars)
+                : extractLinearSystem(info.eqs, info.vars);
+            if (!extracted) {
+                return Promise.resolve({ ok: false, error: 'Could not extract linear coefficients.' });
+            }
+            var sol = _runSolver(extracted.A, extracted.b, method, info.vars.length);
+            if (!sol) {
+                return Promise.resolve({ ok: false, error: 'No unique solution (singular system).' });
+            }
+            var parts = [];
+            for (var i = 0; i < info.vars.length; i++) {
+                parts.push(info.vars[i] + ' = ' + _fmtSolNum(sol[i]));
+            }
+            var resultText = parts.join(', ');
+            var steps = opts.withSteps ? [{ title: 'System solution', latex: resultText }] : [];
+            return Promise.resolve({
+                ok: true,
+                action: 'system',
+                resultText: resultText,
+                resultLatex: resultText,
+                method: 'System solver (' + method + ', page engine)',
+                steps: steps,
+                input: { equations: normalized, variables: info.vars, method: method },
+            });
+        }
+
+        if (!hasNerdamer()) {
+            return Promise.resolve({ ok: false, error: 'Math engine not loaded.' });
+        }
+        try {
+            var forms = info.eqs.map(function (eq) {
+                var parts = splitEquation(eq);
+                if (!parts) throw new Error('Invalid equation: ' + eq);
+                return '(' + parts.lhs + ')-(' + parts.rhs + ')';
+            });
+            var solN = solveWithNerdamer(forms, info.vars);
+            if (!solN) {
+                return Promise.resolve({ ok: false, error: 'Could not solve this system (try the page for SymPy fallback).' });
+            }
+            var text = solN.text();
+            return Promise.resolve({
+                ok: true,
+                action: 'system',
+                resultText: text,
+                resultLatex: text,
+                method: 'Symbolic system solver (page nerdamer path)',
+                input: { equations: normalized, variables: info.vars },
+            });
+        } catch (err) {
+            return Promise.resolve({ ok: false, error: err.message || 'System solve failed.' });
+        }
+    },
 };
 if (_prevTryNerdamer) window.SystemsSolverCore._tryNerdamer = _prevTryNerdamer;
 

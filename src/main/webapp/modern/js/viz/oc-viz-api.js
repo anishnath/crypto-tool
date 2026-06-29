@@ -33,6 +33,9 @@
         if (language === 'c') {
             return 'clang';
         }
+        if (language === 'typescript' || language === 'ts') {
+            return '5.3';
+        }
         if (language === 'cpp' || language === 'c++') {
             return 'clang';
         }

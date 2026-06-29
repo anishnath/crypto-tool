@@ -53,7 +53,7 @@
             return true;
         }
         String lang = preferredLang.toLowerCase();
-        return "java".equals(lang) || "python".equals(lang) || "go".equals(lang) || "c".equals(lang) || "cpp".equals(lang) || "rust".equals(lang);
+        return "java".equals(lang) || "python".equals(lang) || "go".equals(lang) || "c".equals(lang) || "cpp".equals(lang) || "typescript".equals(lang) || "rust".equals(lang);
     }
 
     // Returns {displayName, HTML-escaped Hello-World snippet} for a language slug.
@@ -2208,7 +2208,7 @@
                     var vizWorkspace = null;
                     <% if (ocVizUiEnabled) { %>
                     var VIZ_API_BASE = '<%= request.getContextPath() %>/OneCompilerVizFunctionality';
-                    var OC_VIZ_SUPPORTED_LANGS = ["java", "python", "go", "c", "cpp", "rust"];
+                    var OC_VIZ_SUPPORTED_LANGS = ["java", "python", "go", "c", "cpp", "typescript", "rust"];
                     <% } %>
                     var currentVersion = '';
                     var isRunning = false;

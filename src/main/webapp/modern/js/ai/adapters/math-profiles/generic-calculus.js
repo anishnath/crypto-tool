@@ -2,7 +2,7 @@
  * Generic Math AI — calculus shell (integral, derivative, limit).
  * Page tool UI is optional context; engines run in chat regardless of current page.
  */
-import { CALCULUS_ACTIONS, formatMathActionLabel } from '../../math-action-extract.js';
+import { MATH_ACTIONS, CALCULUS_ACTIONS, formatMathActionLabel } from '../../math-action-extract.js';
 import {
   solveDerivativeTask,
   solveIntegralTask,
@@ -12,64 +12,117 @@ import {
   solveVectorCalculusTask,
   solveMatrixTask,
 } from '../../math-chat-compute.js';
+import { solveAlgebraTask } from '../../algebra-chat-compute.js';
 import { icApplyIntegralTask } from './integral-calculator.js';
 
-/** Page-focused quick-action example chips. `sendImmediately` runs the example on click. */
-const FOCUS_CHIPS = {
-  integral: [
-    ['∫ x² dx', 'Integrate x^2 with respect to x.'],
-    ['∫ sin(3x) dx', 'Integrate sin(3*x) with respect to x.'],
-    ['∫₀¹ eˣ dx', 'Evaluate the definite integral of e^x from 0 to 1.'],
-    ['∫ x·ln x dx', 'Integrate x*ln(x) with respect to x.'],
-  ],
-  derivative: [
-    ['d/dx (x³ sin x)', 'Differentiate x^3 * sin(x) with respect to x.'],
-    ['d/dx (eˣ/x)', 'Differentiate e^x / x with respect to x.'],
-    ['d/dx √(x²+1)', 'Differentiate sqrt(x^2 + 1) with respect to x.'],
-    ['d²/dx² (x⁴)', 'Find the second derivative of x^4 with respect to x.'],
-  ],
-  limit: [
-    ['lim (sin x)/x', 'Find the limit of sin(x)/x as x approaches 0.'],
-    ['lim (1+1/x)ˣ', 'Find the limit of (1 + 1/x)^x as x approaches infinity.'],
-    ['lim (eˣ−1)/x', 'Find the limit of (e^x - 1)/x as x approaches 0.'],
-    ['lim⁺ 1/x', 'Find the limit of 1/x as x approaches 0 from the right.'],
-  ],
-  ode: [
-    ["y' = -2x·y", 'Solve the ODE y\' = -2*x*y.'],
-    ["y' + 2y = x", 'Solve the linear ODE y\' + 2y = x.'],
-    ["y'' + y = 0", 'Solve y\'\' + y = 0 with y(0)=1, y\'(0)=0.'],
-    ["y'' + 2y' + y = 0", 'Solve y\'\' + 2y\' + y = 0.'],
-  ],
-  pde: [
-    ['Heat u_t = k u_xx', 'Solve the heat equation with k=1, L=1, tmax=0.5, sin IC, Dirichlet BC.'],
-    ['Wave u_tt = c² u_xx', 'Solve the wave equation with c=1, L=1, tmax=2, sin IC, fixed ends.'],
-    ['1st-order linear PDE', 'Solve a u_x + b u_y + c u = 0 with a=1, b=1, c=1, g=0.'],
-    ['Classify a PDE', 'Explain whether u_xx + 2 u_xy + u_yy = 0 is elliptic, parabolic, or hyperbolic. No solve block needed.'],
-  ],
-  series: [
-    ['Maclaurin e^x', 'Find the Maclaurin series for e^x through degree 6 and explain each coefficient.'],
-    ['Radius of convergence', 'What is the radius of convergence for ln(1+x)? Show the ratio or root test.'],
-    ['Lagrange error bound', 'Bound |R_n(0.5)| for e^x using a 4-term Maclaurin polynomial centered at 0.'],
-    ['lim via series', 'Evaluate lim x→0 (sin x)/x using a Taylor expansion — then verify with a limit block.'],
-  ],
-  vectorCalculus: [
-    ['∇f for x²+y²+z²', 'Compute the gradient of f(x,y,z) = x^2 + y^2 + z^2. Emit a ```vectorCalculus``` block so Solve chips appear.'],
-    ['∇·F', 'Compute the divergence of F = (x^2, y*z, x*z^2). Emit a ```vectorCalculus``` block.'],
-    ['∇×F', 'Compute the curl of F = (-y, x, 0). Emit a ```vectorCalculus``` block.'],
-    ['Generate 3 problems', 'Generate 3 vector calculus practice problems (one gradient, one divergence, one curl). Emit one ```vectorCalculus``` block per problem with expressions like x^2+y^2+z^2 or x^2*y^2*z^2. Do NOT solve in prose — chips run the engine.'],
-  ],
-  matrix: [
-    ['det 3×3', 'Find the determinant of [[1,2,3],[4,5,6],[7,8,10]]. Emit a ```matrix``` block so Solve chips appear.'],
-    ['A⁻¹ 2×2', 'Find the inverse of [[4,7],[2,6]]. Emit a ```matrix``` block.'],
-    ['A·B', 'Multiply [[1,2],[3,4]] by [[5,6],[7,8]]. Emit a ```matrix``` block with op: multiply.'],
-    ['Generate 3 problems', 'Generate 3 matrix practice problems (det, inverse, eigenvalues). Emit one ```matrix``` block per problem. Do NOT solve in prose — chips run the engine.'],
-  ],
-};
+/** Tutor-first quick-action chips. One "Show example" may emit a solver block; others are prose/teaching. */
+const chip = (label, prompt) => ({ label, prompt, sendImmediately: true });
 
-function focusQuickActions(focus) {
-  const set = FOCUS_CHIPS[focus] || FOCUS_CHIPS.integral;
-  return set.map(([label, prompt]) => ({ label, prompt, sendImmediately: true }));
+function ctxSnippet(snap, keys) {
+  if (!snap || typeof snap !== 'object') return '';
+  for (const k of keys) {
+    const v = snap[k];
+    if (v == null) continue;
+    if (Array.isArray(v) && v.length) return String(v.join('; ')).slice(0, 140);
+    if (String(v).trim()) return String(v).slice(0, 140);
+  }
+  return '';
 }
+
+function buildFocusQuickActions(focus, snap) {
+  const s = snap || {};
+  const integralExpr = ctxSnippet(s, ['integrand', 'expr']);
+  const derivExpr = ctxSnippet(s, ['expr', 'integrand']);
+  const limitExpr = ctxSnippet(s, ['expr']);
+  const odeExpr = ctxSnippet(s, ['equation', 'expr', 'rhs']);
+  const quadExpr = ctxSnippet(s, ['expr', 'raw']);
+  const ineqExpr = ctxSnippet(s, ['expr', 'raw']);
+  const polyP = ctxSnippet(s, ['p1', 'p', 'expr']);
+  const eqs = ctxSnippet(s, ['equations']);
+  const ctx = (line) => (line ? ` Current page input: ${line}.` : '');
+
+  const sets = {
+    integral: [
+      chip("Don't get it", `Explain integrals in plain language — indefinite vs definite, notation, and what the answer means.${ctx(integralExpr)} Prose + KaTeX only; no solve block unless I ask.`),
+      chip('Which technique?', `Which integration technique should I try first for this type of integrand (substitution, parts, partial fractions, trig)? Strategy and reasoning only — no full worked solution.${ctx(integralExpr)}`),
+      chip('Exam tip', 'Exam tips for integration: common mistakes, when to simplify first, and how to write +C and bounds for partial credit.'),
+      chip('Show example', 'Give one classic integral example with a ```integral``` block so I can click Solve. One short intro sentence, then the block.'),
+    ],
+    derivative: [
+      chip("Don't get it", `Explain derivatives in plain language — rate of change, Leibniz notation, and how to read d/dx.${ctx(derivExpr)} Prose + KaTeX only.`),
+      chip('Which rule?', `Which differentiation rules apply here (power, product, quotient, chain)? Strategy only — do not give the final derivative.${ctx(derivExpr)}`),
+      chip('Exam tip', 'Exam tips for derivatives: product vs chain rule pitfalls, implicit differentiation checks, and notation graders expect.'),
+      chip('Show example', 'Give one clear derivative example with a ```derivative``` block so I can click Solve. One intro sentence, then the block.'),
+    ],
+    limit: [
+      chip("Don't get it", `Explain limits in plain language — what "x approaches a" means and one-sided vs two-sided limits.${ctx(limitExpr)} Prose + KaTeX only.`),
+      chip('Which approach?', `For a limit like mine, should I try direct substitution, factoring, L'Hôpital, or a series? Outline the strategy without computing the final value.${ctx(limitExpr)}`),
+      chip('Exam tip', 'Exam tips for limits: indeterminate forms, when L\'Hôpital applies, and how to justify each step for partial credit.'),
+      chip('Show example', 'Give one standard limit example with a ```limit``` block so I can click Solve. One intro sentence, then the block.'),
+    ],
+    ode: [
+      chip("Don't get it", `Explain ODEs in plain language — order, initial conditions, and what a general vs particular solution means.${ctx(odeExpr)} Prose + KaTeX only.`),
+      chip('Which method?', `For an ODE like mine, is it separable, linear, exact, or need an integrating factor? Name the method and first step only — no full solution.${ctx(odeExpr)}`),
+      chip('Exam tip', 'Exam tips for ODEs: checking ICs, writing the general solution before applying conditions, and common sign errors.'),
+      chip('Show example', 'Give one ODE example with a ```ode``` block so I can click Solve. One intro sentence, then the block.'),
+    ],
+    pde: [
+      chip("Don't get it", 'Explain PDEs in plain language — classification (elliptic/parabolic/hyperbolic), boundary vs initial conditions, and what the heat/wave/Laplace models represent. Prose + KaTeX only.'),
+      chip('Which method?', 'For a PDE like heat or wave, outline separation of variables or finite-difference intuition — teaching only, no ```pde``` solve block unless I ask to compute.'),
+      chip('Exam tip', 'Exam tips for PDEs: naming BC types, stability/CFL intuition, and how to set up a well-posed problem statement.'),
+      chip('Show example', 'Give one concrete PDE setup with a ```pde``` block (heat or wave with numeric params) so I can click Solve. Brief intro, then the block.'),
+    ],
+    series: [
+      chip("Don't get it", 'Explain Taylor/Maclaurin series in plain language — coefficients, radius of convergence, and when a series approximation is useful. Prose + KaTeX only.'),
+      chip('Which test?', 'How do I pick between ratio test, root test, or known series for convergence? Strategy for a series problem like mine — no full expansion unless I ask.'),
+      chip('Exam tip', 'Exam tips for series: Lagrange error bound wording, center vs Maclaurin, and common radius-of-convergence mistakes.'),
+      chip('Show example', 'Give one Taylor/Maclaurin walkthrough for e^x or sin(x) through degree 4. Prose + KaTeX; add a ```limit``` block only if you want me to verify a related limit.'),
+    ],
+    vectorCalculus: [
+      chip("Don't get it", 'Explain gradient, divergence, and curl in plain language — what each operator measures geometrically. Prose + KaTeX only.'),
+      chip('Which operator?', 'When should I use ∇, ∇·, or ∇× for a vector field problem? Decision guide with one tiny example — no full computation unless I ask.'),
+      chip('Exam tip', 'Exam tips for vector calculus: notation for div/curl, conservative fields, and common component-sign errors.'),
+      chip('Show example', 'Give one vector calculus example (gradient, div, or curl) with a ```vectorCalculus``` block so I can click Solve. One intro sentence, then the block.'),
+    ],
+    matrix: [
+      chip("Don't get it", 'Explain matrix operations in plain language — determinant, inverse, eigenvalues, and when each is used. Prose + KaTeX only.'),
+      chip('Which operation?', 'For a matrix task like mine, which operation or method fits (row reduction, cofactor expansion, eigen decomposition)? Strategy only — no final numbers unless I ask.'),
+      chip('Exam tip', 'Exam tips for linear algebra: row-echelon vs inverse method, dimension checks for multiply, and how to state "no inverse" correctly.'),
+      chip('Show example', 'Give one matrix example (det, inverse, or multiply) with a ```matrix``` block so I can click Solve. One intro sentence, then the block.'),
+    ],
+    quadratic: [
+      chip("Don't get it", `Explain quadratic equations in plain language — roots, discriminant, vertex, and what the calculator shows.${ctx(quadExpr)} Prose + KaTeX only.`),
+      chip('Which method?', `When should I factor vs use the quadratic formula vs complete the square? Strategy for my type of equation — no full worked answer.${ctx(quadExpr)}`),
+      chip('Exam tip', 'Exam tips for quadratics: discriminant cases, exact vs decimal roots, and writing quadratic inequalities in interval notation.'),
+      chip('Show example', 'Give one quadratic example with a ```quadratic``` block so I can click Solve. One intro sentence, then the block.'),
+    ],
+    system: [
+      chip("Don't get it", `Explain systems of equations in plain language — substitution vs elimination, linear vs nonlinear, and what "no solution" means.${ctx(eqs)} Prose + KaTeX only.`),
+      chip('Which method?', `For a system like mine, should I use substitution, elimination/Cramer, or graphing? Pick a method and outline the first step only.${ctx(eqs)}`),
+      chip('Exam tip', 'Exam tips for systems: checking solutions, dependent vs inconsistent systems, and how to write ordered-pair answers.'),
+      chip('Show example', 'Give one 2×2 linear system with a ```system``` block (eq1/eq2 lines) so I can click Solve. One intro sentence, then the block.'),
+    ],
+    inequality: [
+      chip("Don't get it", `Explain solving inequalities in plain language — sign charts, open vs closed endpoints, and interval notation.${ctx(ineqExpr)} Prose + KaTeX only.`),
+      chip('Which approach?', `For an inequality like mine, should I use a sign chart, test points, or algebraic isolation? Outline the strategy without the final solution set.${ctx(ineqExpr)}`),
+      chip('Exam tip', 'Exam tips for inequalities: flipping the sign when multiplying by negatives, rational inequalities, and writing ∪ interval notation.'),
+      chip('Show example', 'Give one inequality example with an ```inequality``` block so I can click Solve. One intro sentence, then the block.'),
+    ],
+    polynomial: [
+      chip("Don't get it", `Explain polynomial operations in plain language — factoring patterns, long division, and the Rational Root Theorem.${ctx(polyP)} Prose + KaTeX only.`),
+      chip('Which technique?', `For a polynomial like mine, should I factor, use synthetic division, or apply RRT? Strategy only — no full factorization unless I ask.${ctx(polyP)}`),
+      chip('Exam tip', 'Exam tips for polynomials: factoring order, remainder theorem checks, and stating roots with multiplicity.'),
+      chip('Show example', 'Give one polynomial example (factor or divide) with a ```polynomial``` block so I can click Solve. One intro sentence, then the block.'),
+    ],
+  };
+
+  return sets[focus] || sets.integral;
+}
+
+const FOCUS_KEYS = new Set([
+  'integral', 'derivative', 'limit', 'ode', 'pde', 'series',
+  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial',
+]);
 
 /**
  * @param {object} [opts]
@@ -78,7 +131,7 @@ function focusQuickActions(focus) {
 export function configureGenericMathShell(opts = {}) {
   const pageLabel = opts.pageLabel || opts.toolName || '8gwifi.org Math';
   const pageHint = opts.pageHint || '';
-  const focus = FOCUS_CHIPS[opts.focus] ? opts.focus : 'integral';
+  const focus = FOCUS_KEYS.has(opts.focus) ? opts.focus : 'integral';
 
   window.mathShell = {
     toolName: pageLabel,
@@ -87,7 +140,7 @@ export function configureGenericMathShell(opts = {}) {
     subtitle: opts.subtitle || 'Parse calculus · Σ Solve in chat',
     placeholder: opts.placeholder || 'Paste ∫, d/dx, or lim problems (LaTeX, ASCII, or English)…',
     footerText: opts.footerText || 'Ctrl+Shift+A · same engines as LaTeX editor Σ Solve',
-    supportedActions: opts.supportedActions || CALCULUS_ACTIONS.slice(),
+    supportedActions: opts.supportedActions || MATH_ACTIONS.slice(),
     batchDelayMs: 120,
     chatComputeEnabled: true,
     syncToCalculator: false,
@@ -95,7 +148,7 @@ export function configureGenericMathShell(opts = {}) {
     formatActionLabel: formatMathActionLabel,
 
     computeInChat(task, mode = 'simple') {
-      if (!task?.action || !CALCULUS_ACTIONS.includes(task.action)) {
+      if (!task?.action || !MATH_ACTIONS.includes(task.action)) {
         return Promise.resolve({
           ok: false,
           error: `Unsupported action: ${task?.action || 'unknown'}`,
@@ -109,7 +162,7 @@ export function configureGenericMathShell(opts = {}) {
       if (task.action === 'pde') return solvePdeTask(task, mode);
       if (task.action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
       if (task.action === 'matrix') return solveMatrixTask(task, mode);
-      return Promise.resolve({ ok: false, error: 'Unknown action.', mode });
+      return solveAlgebraTask(task, mode);
     },
 
     async executeTask(task) {
@@ -128,6 +181,10 @@ export function configureGenericMathShell(opts = {}) {
     },
 
     getContext() {
+      if (typeof window.qsGetContext === 'function') return window.qsGetContext();
+      if (typeof window.syGetContext === 'function') return window.syGetContext();
+      if (typeof window.iqGetContext === 'function') return window.iqGetContext();
+      if (typeof window.polyGetContext === 'function') return window.polyGetContext();
       if (typeof window.mcGetContext === 'function') return window.mcGetContext();
       if (typeof window.vcGetContext === 'function') return window.vcGetContext();
       if (typeof window.scGetContext === 'function') return window.scGetContext();
@@ -182,6 +239,19 @@ export function configureGenericMathShell(opts = {}) {
           if (snap.matrixA) lines.push(`Matrix A: ${String(snap.matrixA).slice(0, 400)}`);
           if (snap.matrixB) lines.push(`Matrix B: ${String(snap.matrixB).slice(0, 400)}`);
           if (snap.n != null) lines.push(`Exponent n: ${snap.n}`);
+        } else if (snap.toolType === 'quadratic' || snap.toolType === 'inequality') {
+          lines.push(`Expression: ${snap.expr || '(empty)'}`);
+          if (snap.method) lines.push(`Method: ${snap.method}`);
+          if (snap.variable) lines.push(`Variable: ${snap.variable}`);
+        } else if (snap.toolType === 'system') {
+          lines.push(`Method: ${snap.method || 'gaussian'}`);
+          if (Array.isArray(snap.equations)) {
+            snap.equations.forEach((eq, i) => lines.push(`  eq${i + 1}: ${eq}`));
+          }
+        } else if (snap.toolType === 'polynomial') {
+          lines.push(`Operation: ${snap.op || 'factor'}`);
+          if (snap.p1) lines.push(`P(x): ${String(snap.p1).slice(0, 200)}`);
+          if (snap.p2) lines.push(`Q(x): ${String(snap.p2).slice(0, 200)}`);
         } else {
           lines.push(
             `Mode: ${snap.mode || '(n/a)'}`,
@@ -212,16 +282,16 @@ export function configureGenericMathShell(opts = {}) {
       }
 
       if (!lines.length) {
-        return '(Paste a math problem — integral, derivative, limit, ODE, PDE, or vector calculus — then Solve / Steps / Graph in chat.)';
+        return '(Paste any math problem — ∫, lim, ODE, matrix, quadratic, system, inequality, polynomial — then Solve / Steps / Graph in chat.)';
       }
       return lines.join('\n');
     },
 
-    getQuickActions() {
-      return focusQuickActions(this.focus || focus);
+    getQuickActions(snap) {
+      return buildFocusQuickActions(this.focus || focus, snap);
     },
 
-    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, **PDE**, **vectorCalculus** (∇, ∇·, ∇×), and **matrix** (det, inverse, eigenvalues, A·B, …) problems regardless of which calculator page the student is on. Every computation runs in the chat via the deterministic JS engines (same as the LaTeX editor **Σ Solve**) — never compute the answer yourself.
+    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, **PDE**, **vectorCalculus** (∇, ∇·, ∇×), **matrix** (det, inverse, eigenvalues, A·B, …), **quadratic**, **system**, **inequality**, and **polynomial** problems regardless of which calculator page the student is on. Every computation runs in chat via the same JS engines as the on-page calculators — never compute the answer yourself.
 
 **Student-facing language:** Never mention SymPy, NumPy, Python, OneCompiler, or other backend libraries in replies. Say "the solver", "step-by-step engine", "numerical method", or "symbolic method" instead.
 
@@ -591,4 +661,112 @@ Never name implementation libraries (SymPy, Python, OneCompiler, etc.) in replie
   if (window.mathShell) {
     window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
   }
+}
+
+function registerContextGetter(name, fn) {
+  if (typeof window !== 'undefined') window[name] = fn;
+}
+
+/** Quadratic Solver — algebra focus on unified Math AI. */
+export function configureQuadraticMathShell() {
+  configureGenericMathShell({
+    focus: 'quadratic',
+    pageLabel: 'Quadratic Formula Calculator',
+    pageHint: 'Quadratic Solver — equations & quadratic inequalities',
+    panelTitle: 'Math AI',
+    subtitle: 'Quadratic + full math router in chat',
+    placeholder: 'Ask about quadratics — or paste ∫, matrix, systems, inequalities…',
+  });
+  registerContextGetter('qsGetContext', () => {
+    const exprEl = document.getElementById('ic-expr');
+    const methodEl = document.getElementById('qs-method');
+    return {
+      toolType: 'quadratic',
+      expr: exprEl?.value?.trim() || '',
+      method: methodEl?.value || 'all',
+    };
+  });
+}
+
+/** System of Equations — unified Math AI. */
+export function configureSystemMathShell() {
+  configureGenericMathShell({
+    focus: 'system',
+    pageLabel: 'System of Equations Solver',
+    pageHint: 'Systems — linear & nonlinear',
+    panelTitle: 'Math AI',
+    subtitle: 'Systems + full math router in chat',
+    placeholder: 'Paste a system — or ask about ∫, matrix, quadratics…',
+  });
+  registerContextGetter('syGetContext', () => {
+    const inputs = document.querySelectorAll('.sy-eq-input');
+    const eqs = [];
+    inputs.forEach((el) => { const v = el.value?.trim(); if (v) eqs.push(v); });
+    const activeMethod = document.querySelector('.sy-method-btn.active');
+    return {
+      toolType: 'system',
+      equations: eqs,
+      method: activeMethod?.getAttribute('data-method') || 'cramer',
+    };
+  });
+}
+
+/** Inequality Solver — unified Math AI. */
+export function configureInequalityMathShell() {
+  configureGenericMathShell({
+    focus: 'inequality',
+    pageLabel: 'Inequality Solver',
+    pageHint: 'Inequalities — sign chart, interval notation',
+    panelTitle: 'Math AI',
+    subtitle: 'Inequalities + full math router in chat',
+    placeholder: 'Paste an inequality — or ask about ∫, matrix, quadratics…',
+  });
+  registerContextGetter('iqGetContext', () => {
+    const exprEl = document.getElementById('ic-expr') || document.getElementById('iq-expr');
+    const varEl = document.getElementById('iq-var');
+    return {
+      toolType: 'inequality',
+      expr: exprEl?.value?.trim() || '',
+      variable: varEl?.value || 'x',
+    };
+  });
+}
+
+/** Polynomial Calculator — unified Math AI. */
+export function configurePolynomialMathShell() {
+  configureGenericMathShell({
+    focus: 'polynomial',
+    pageLabel: 'Polynomial Calculator',
+    pageHint: 'Polynomials — factor, divide, roots',
+    panelTitle: 'Math AI',
+    subtitle: 'Polynomials + full math router in chat',
+    placeholder: 'Factor or multiply polynomials — or paste ∫, matrix…',
+  });
+  registerContextGetter('polyGetContext', () => {
+    const p1 = document.getElementById('ic-expr') || document.getElementById('poly-p1');
+    const p2 = document.getElementById('poly-p2');
+    const modeBtn = document.querySelector('.poly-bridge-op.active, .poly-mode-btn.active');
+    return {
+      toolType: 'polynomial',
+      op: modeBtn?.getAttribute('data-mode') || 'add',
+      p1: p1?.value?.trim() || '',
+      p2: p2?.value?.trim() || '',
+    };
+  });
+}
+
+/**
+ * Standalone Math AI page profile — neutral focus, all MATH_ACTIONS.
+ * Use on a dedicated math-ai.jsp that loads all engine script bundles.
+ */
+export function configureStandaloneMathShell() {
+  configureGenericMathShell({
+    focus: 'integral',
+    pageLabel: '8gwifi.org Math AI',
+    pageHint: 'Standalone Math AI — all topics',
+    panelTitle: 'Math AI',
+    subtitle: '∫ · lim · ODE · PDE · matrix · algebra — solve in chat',
+    placeholder: 'Paste any math problem: calculus, linear algebra, quadratics, systems…',
+    footerText: 'Ctrl+Shift+A · unified Math AI · Solve · Steps · Graph',
+  });
 }

@@ -5,12 +5,14 @@ import {
   formatMathActionLabel,
   taskToDisplayLatex,
   taskToSolveLatex,
+  ALGEBRA_ACTIONS,
 } from './math-action-extract.js';
 import {
   appendEqSlot,
   createMathSlotEl,
   typesetMathSlots,
 } from '../katex-render.js';
+import { solveAlgebraTask } from './algebra-chat-compute.js';
 
 /** @typedef {'simple'|'steps'|'graph'} MathSolveMode */
 
@@ -435,6 +437,7 @@ export async function computeTaskInChat(task, _shell, mode = 'simple') {
   if (action === 'pde') return solvePdeTask(task, mode);
   if (action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
   if (action === 'matrix') return solveMatrixTask(task, mode);
+  if (ALGEBRA_ACTIONS.includes(action)) return solveAlgebraTask(task, mode);
   return solveIntegralTask(task, mode);
 }
 
@@ -953,6 +956,12 @@ function chipActionsForTask(task) {
     }
     return chips;
   }
+  if (ALGEBRA_ACTIONS.includes(action)) {
+    return [
+      { mode: 'simple', label: 'Solve', title: 'Compute answer (same engine as page calculator)' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step solution in chat' },
+    ];
+  }
   return [
     { mode: 'simple', label: 'Solve', title: 'Compute the integral (same as Σ Solve)' },
     { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step solution' },
@@ -978,13 +987,16 @@ export async function renderChatResultCard(card, task, result) {
   }
 
   const problem = taskToDisplayLatex(task);
-  const answer = result.resultLatex || '';
-  // ODE solutions are already a full equation ("y = …"), so don't fuse them as
-  // "problem = answer"; integrals/derivatives/limits read better fused.
-  const isOde = (task.action || result.action) === 'ode';
-  const isPde = (task.action || result.action) === 'pde';
-  const isVc = (task.action || result.action) === 'vectorCalculus';
-  const answerEq = isOde || isPde || isVc ? answer : `${problem} = ${answer}`;
+  const answer = result.resultLatex || result.resultText || '';
+  const action = task.action || result.action;
+  const isOde = action === 'ode';
+  const isPde = action === 'pde';
+  const isVc = action === 'vectorCalculus';
+  const isAlgebraInterval = action === 'inequality'
+    || (action === 'quadratic' && /[<>=]|\\in|\\emptyset|cup|∪/.test(answer));
+  const isAlgebraSystem = action === 'system';
+  const fuseAnswer = !isOde && !isPde && !isVc && !isAlgebraInterval && !isAlgebraSystem;
+  const answerEq = fuseAnswer ? `${problem} = ${answer}` : answer;
 
   body.replaceChildren();
 
@@ -1014,7 +1026,10 @@ export async function renderChatResultCard(card, task, result) {
       ol.appendChild(li);
     });
     body.appendChild(ol);
-    appendEqSlot(body, answerEq, 'vca-math-eq-answer');
+    if (answer) {
+      const ansLatex = fuseAnswer ? `${problem} = ${answer}` : (isAlgebraSystem || isAlgebraInterval ? `\\text{Solution: }${answer}` : answer);
+      appendEqSlot(body, ansLatex, 'vca-math-eq-answer');
+    }
   } else if (isOde || isPde) {
     appendEqSlot(body, problem);
     if (answer) appendEqSlot(body, answer, 'vca-math-eq-answer');
@@ -1032,6 +1047,10 @@ export async function renderChatResultCard(card, task, result) {
         body.appendChild(p);
       }
     }
+  } else if (isAlgebraInterval || isAlgebraSystem) {
+    appendEqSlot(body, problem);
+    if (answer) appendEqSlot(body, `\\text{Solution: }${answer}`, 'vca-math-eq-answer');
+    appendMethod(body, result.method);
   } else {
     appendEqSlot(body, `${problem} = ${answer}`);
     appendMethod(body, result.method);
