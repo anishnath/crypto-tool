@@ -760,6 +760,7 @@
        ───────────────────────────────────────────────────────────────── */
     var BUSY = false;
     var SAFETY_TIMER = null;
+    var lastPageResult = null;
 
     function lock() {
         if (BUSY) return false;
@@ -829,6 +830,11 @@
 
             renderResult(resultLatex, resultText);
             renderSteps(stepsArr);
+            lastPageResult = {
+                op: eff.op,
+                resultLatex: resultLatex,
+                resultText: resultText
+            };
             /* Visualize tab is always present.  Render whatever we can
                for the current op; the function shows a friendly "not
                available" message when canVisualize() returns false. */
@@ -1792,6 +1798,26 @@
             onSolveAll: solveBatch
         });
     }
+
+    /* ─────────────────────────────────────────────────────────────────
+       Math AI page context — mirrors active op + matrices on the page.
+       ───────────────────────────────────────────────────────────────── */
+    window.mcGetContext = function () {
+        var def = OPS[currentOp] || OPS[DEFAULT_OP];
+        var snap = {
+            toolType: 'matrix',
+            op: currentOp,
+            matrixA: getLatex(els.matrixA) || '',
+            matrixB: def.binary ? (getLatex(els.matrixB) || '') : '',
+            n: def.needsExponent && els.exponent
+                ? (parseInt(els.exponent.value, 10) || 2)
+                : null
+        };
+        if (lastPageResult && (lastPageResult.resultText || lastPageResult.resultLatex)) {
+            snap.resultSummary = String(lastPageResult.resultText || lastPageResult.resultLatex).slice(0, 4000);
+        }
+        return snap;
+    };
 
     /* ─────────────────────────────────────────────────────────────────
        Boot — read ?op= from URL, seed math-fields with empty templates,

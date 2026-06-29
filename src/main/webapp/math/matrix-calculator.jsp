@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "math-ai");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,6 +89,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css">
+
+    <%@ include file="../modern/components/math-ai-head.inc.jsp" %>
+    <style>
+    .mc-card-tools .math-ai-tab-btn {
+        display: inline-flex; align-items: center; gap: 0.35rem;
+        appearance: none; border: 1px solid var(--ms-accent, #15803d);
+        background: var(--ms-panel-bg, #fff); color: var(--ms-accent, #15803d);
+        font: 600 0.78rem/1 var(--ms-font, system-ui);
+        padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer;
+    }
+    .mc-card-tools .math-ai-tab-btn:hover {
+        background: var(--ms-accent, #15803d); color: #fff;
+    }
+    .mc-card-tools .math-ai-tab-btn[aria-busy="true"] { opacity: 0.75; cursor: wait; }
+    </style>
 
     <%@ include file="../modern/ads/ad-init.jsp" %>
 
@@ -477,6 +495,7 @@
                             <button type="button" class="mc-icon-btn" id="mc-reset-a" title="Reset to zeros">&#8634; Reset</button>
                             <button type="button" class="mc-icon-btn" id="mc-random-a" title="Fill with random integers">&#127922; Random</button>
                             <button type="button" class="mc-icon-btn" id="mc-scan-btn" title="Scan a matrix problem from image or PDF" style="border-color:var(--ms-accent,#15803d);color:var(--ms-accent,#15803d);">&#128247; Scan</button>
+                            <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Math AI — matrix tutor + solver in chat (Ctrl+Shift+A)">&#10024; AI</button>
                         </div>
                     </div>
                     <math-field id="mc-matrix-a" class="mc-mathfield"
@@ -765,6 +784,7 @@
     <!-- Context for OneCompiler iframe + Python tab. -->
     <script>window.__MC_CTX = '<%=request.getContextPath()%>';</script>
 
+    <%@ include file="../modern/components/math-calculus-cores.inc.jsp" %>
     <script src="<%=request.getContextPath()%>/modern/js/matrix-calculator.js"></script>
 
     <!-- Reusable Print Worksheet engine (config modal → KaTeX-rendered
@@ -804,5 +824,12 @@
         });
     })();
     </script>
+
+    <%
+        request.setAttribute("mathAiButtonId", "btnMathAI");
+        request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+        request.setAttribute("mathAiProfileExport", "configureMatrixMathShell");
+    %>
+    <%@ include file="../modern/components/math-ai-boot.inc.jsp" %>
 </body>
 </html>

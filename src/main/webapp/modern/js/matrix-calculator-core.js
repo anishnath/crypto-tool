@@ -557,6 +557,41 @@
     return { values: lams, vectors: [vecFor(lams[0]), vecFor(lams[1])] };
   }
 
+  function buildLatexFromTask(task) {
+    if (!task) return '';
+    if (task.raw) return String(task.raw).trim();
+    var op = String(task.op || task.operation || 'determinant').toLowerCase();
+    var A = String(task.matrixA || task.matrix_a || task.latexA || '').trim();
+    var B = String(task.matrixB || task.matrix_b || task.latexB || '').trim();
+    var n = task.n != null && task.n !== '' ? parseInt(String(task.n), 10) : 2;
+    if (!A) return '';
+    switch (op) {
+      case 'determinant': case 'det': return '\\det ' + A;
+      case 'inverse': return A + '^{-1}';
+      case 'transpose': return A + '^{T}';
+      case 'trace': case 'tr': return '\\tr ' + A;
+      case 'rank': return 'rank\\,' + A;
+      case 'rref': return 'rref\\,' + A;
+      case 'eigenvalues': return 'eigenvalues\\,' + A;
+      case 'eigenvectors': return 'eigenvectors\\,' + A;
+      case 'charpoly': case 'characteristic': return 'charpoly\\,' + A;
+      case 'power': return A + '^{' + (Number.isFinite(n) ? n : 2) + '}';
+      case 'add': return B ? A + ' + ' + B : A;
+      case 'subtract': case 'sub': return B ? A + ' - ' + B : A;
+      case 'multiply': case 'mul': return B ? A + ' ' + B : A;
+      default: return A;
+    }
+  }
+
+  function solveTask(task, opts) {
+    opts = opts || {};
+    var latex = buildLatexFromTask(task);
+    if (!latex) {
+      return Promise.resolve({ ok: false, error: 'Missing matrix expression (need op + matrixA or raw LaTeX).' });
+    }
+    return solveFromLatex(latex, { withSteps: !!(opts.withSteps || opts.mode === 'steps') });
+  }
+
   if (typeof window !== 'undefined') {
     window.MatrixCalculatorCore = {
       OPS: OPS,
@@ -564,7 +599,9 @@
       parseMatrixCells: parseMatrixCells,
       parseMatrixDims: parseMatrixDims,
       detectOp: detectOp,
+      buildLatexFromTask: buildLatexFromTask,
       solveFromLatex: solveFromLatex,
+      solveTask: solveTask,
       // Geometry helpers (used by the editor's graph-block builder)
       canVisualize2D: canVisualize2D,
       isNumericCells: isNumericCells,

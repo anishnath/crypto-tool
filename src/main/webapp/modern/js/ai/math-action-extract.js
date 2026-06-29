@@ -5,9 +5,15 @@
  */
 import { normalizeBoundLatex, prepareLatexForKatex } from '../katex-render.js';
 
-export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus'];
+export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'matrix'];
 
 const VC_MODES = new Set(['gradient', 'divergence', 'curl', 'grad', 'div', 'nabla']);
+
+const MATRIX_OPS = new Set([
+  'determinant', 'det', 'inverse', 'transpose', 'trace', 'tr', 'rank', 'rref',
+  'power', 'eigenvalues', 'eigenvectors', 'charpoly', 'characteristic',
+  'add', 'subtract', 'sub', 'multiply', 'mul',
+]);
 
 const PDE_MODES = new Set(['heat', 'wave', 'laplace', 'poisson', 'transport', 'schrodinger', 'linear1']);
 
@@ -57,10 +63,11 @@ const ACTION_FENCE_LANGS = new Set([
   'integral', 'derivative', 'limit', 'ode', 'pde', 'dsolve', 'differential',
   'vectorcalculus', 'vector-calculus', 'vc', 'vector_calculus',
   'gradient', 'divergence', 'curl',
+  'matrix', 'matrices', 'linearalgebra', 'linear-algebra',
   'math-action', 'math', 'mathintent',
 ]);
 
-/** @typedef {'integral'|'derivative'|'limit'|'ode'|'pde'|'vectorCalculus'} CalculusAction */
+/** @typedef {'integral'|'derivative'|'limit'|'ode'|'pde'|'vectorCalculus'|'matrix'} CalculusAction */
 
 /**
  * @typedef {Object} MathActionTask
@@ -91,6 +98,21 @@ function inferVcModeFromRaw(raw) {
   return null;
 }
 
+function inferMatrixOpFromRaw(raw) {
+  const s = String(raw || '');
+  if (/\\det\b/i.test(s)) return 'determinant';
+  if (/\^\s*\{?\s*-\s*1\s*\}?/i.test(s)) return 'inverse';
+  if (/\^\s*\{?\s*T\s*\}?/i.test(s)) return 'transpose';
+  if (/\\tr\b|\btrace\b/i.test(s)) return 'trace';
+  if (/\brank\b/i.test(s)) return 'rank';
+  if (/\brref\b|gauss[\s-]*jordan/i.test(s)) return 'rref';
+  if (/eigen\s*values?/i.test(s)) return 'eigenvalues';
+  if (/eigen\s*vectors?|diagonali[sz]e/i.test(s)) return 'eigenvectors';
+  if (/char(?:acteristic)?\s*poly/i.test(s)) return 'charpoly';
+  if (/\\begin\{(?:pmatrix|bmatrix|matrix)/.test(s)) return 'determinant';
+  return null;
+}
+
 function detectAction(obj, fenceLang) {
   let action = String(obj?.action || obj?.kind || obj?.type || fenceLang || '').toLowerCase();
   if (action === 'integrate') action = 'integral';
@@ -101,12 +123,20 @@ function detectAction(obj, fenceLang) {
   if (action === 'vectorcalculus' || action === 'vector-calculus' || action === 'vc' || action === 'vector_calculus') {
     action = 'vectorCalculus';
   }
+  if (action === 'matrices' || action === 'linearalgebra' || action === 'linear-algebra') action = 'matrix';
   if (action === 'grad' || action === 'nabla') action = 'gradient';
   if (action === 'div') action = 'divergence';
   if (action === 'gradient' || action === 'divergence' || action === 'curl') {
     action = 'vectorCalculus';
   }
   if (CALCULUS_ACTIONS.includes(action)) return /** @type {CalculusAction} */ (action);
+  const matrixOpHint = String(obj.op || obj.operation || '').toLowerCase();
+  if (MATRIX_OPS.has(matrixOpHint)) return 'matrix';
+  const fence = String(fenceLang || '').toLowerCase();
+  if (fence === 'matrix' || fence === 'matrices') return 'matrix';
+  if (obj.matrixA != null || obj.matrix_a != null || obj.matrixB != null || obj.matrix_b != null) {
+    return 'matrix';
+  }
   const modeHint = String(obj?.mode || obj?.pdeType || obj?.pde || '').toLowerCase();
   if (PDE_MODES.has(modeHint)) return 'pde';
   if (VC_MODES.has(modeHint) || obj?.scalar != null || obj?.fx != null || obj?.fy != null || obj?.fz != null) {
@@ -116,6 +146,7 @@ function detectAction(obj, fenceLang) {
   }
   const raw = String(obj?.raw || obj?.latex || '');
   if (inferVcModeFromRaw(raw)) return 'vectorCalculus';
+  if (inferMatrixOpFromRaw(raw)) return 'matrix';
   if (obj?.rhs != null || (raw && /=/.test(raw) && /(y''|y'|\\frac\s*\{\s*d\s*y\s*\}|dy\s*\/\s*dx)/.test(raw))) return 'ode';
   if (raw && inferPdeModeFromRaw(raw)) return 'pde';
   if (PDE_PARAM_KEYS.some((k) => obj?.[k] != null && String(obj[k]).trim() !== '')) {
@@ -269,6 +300,27 @@ export function normalizeCalculusTask(obj, fenceLang) {
     return task;
   }
 
+  if (action === 'matrix') {
+    let op = String(obj.op || obj.operation || '').toLowerCase();
+    if (!op && raw) {
+      const inferred = inferMatrixOpFromRaw(raw);
+      if (inferred) op = inferred;
+    }
+    if (op === 'det') op = 'determinant';
+    if (op === 'tr') op = 'trace';
+    if (op === 'sub') op = 'subtract';
+    if (op === 'mul') op = 'multiply';
+    if (op === 'characteristic') op = 'charpoly';
+    task.op = MATRIX_OPS.has(op) ? op : 'determinant';
+    const matrixA = String(obj.matrixA ?? obj.matrix_a ?? obj.latexA ?? '').trim();
+    const matrixB = String(obj.matrixB ?? obj.matrix_b ?? obj.latexB ?? '').trim();
+    if (matrixA) task.matrixA = matrixA;
+    if (matrixB) task.matrixB = matrixB;
+    if (obj.n != null && obj.n !== '') task.n = parseInt(String(obj.n), 10);
+    if (!raw && !matrixA) return null;
+    return task;
+  }
+
   // limit
   const expr = String(obj.expr || obj.body || obj.function || '').trim();
   if (!raw && !expr) return null;
@@ -324,6 +376,10 @@ export function parseCalculusBlockContent(content, fenceLang) {
     fx: kv.fx,
     fy: kv.fy,
     fz: kv.fz,
+    op: kv.op || kv.operation,
+    matrixA: kv.matrixa || kv.matrix_a || kv.latexa,
+    matrixB: kv.matrixb || kv.matrix_b || kv.latexb,
+    n: kv.n || kv.exponent,
     variable: kv.variable || kv.var || 'x',
     mode: kv.mode || kv.pdetype || kv.pde || kv.type,
     lower: isPdeFence ? kv.lower : (kv.lower || kv.a),
@@ -370,6 +426,14 @@ function tasksFromJson(data) {
   }
   if (Array.isArray(data.vc)) {
     data.vc.forEach((t) => push({ ...t, action: 'vectorCalculus' }));
+    return out;
+  }
+  if (Array.isArray(data.matrix)) {
+    data.matrix.forEach((t) => push({ ...t, action: 'matrix' }));
+    return out;
+  }
+  if (Array.isArray(data.matrices)) {
+    data.matrices.forEach((t) => push({ ...t, action: 'matrix' }));
     return out;
   }
   if (Array.isArray(data)) {
@@ -535,6 +599,28 @@ function vectorCalculusProblemLatex(task) {
   return `\\nabla \\times \\mathbf{F}, \\quad ${field}`;
 }
 
+/** Textbook LaTeX for a matrix task card. */
+function matrixProblemLatex(task) {
+  if (task.raw) return prepareLatexForKatex(task.raw.trim());
+  const core = typeof window !== 'undefined' ? window.MatrixCalculatorCore : null;
+  if (core?.buildLatexFromTask) {
+    return prepareLatexForKatex(core.buildLatexFromTask(task));
+  }
+  const op = String(task.op || 'determinant').toLowerCase();
+  const A = String(task.matrixA || task.latexA || '').trim();
+  const B = String(task.matrixB || task.latexB || '').trim();
+  if (!A) return '';
+  if (op === 'determinant' || op === 'det') return `\\det\\left(${A}\\right)`;
+  if (op === 'inverse') return `${A}^{-1}`;
+  if (op === 'transpose') return `${A}^{T}`;
+  if (op === 'trace' || op === 'tr') return `\\operatorname{tr}\\left(${A}\\right)`;
+  if (op === 'multiply' || op === 'mul') return B ? `${A}${B}` : A;
+  if (op === 'add') return B ? `${A} + ${B}` : A;
+  if (op === 'subtract' || op === 'sub') return B ? `${A} - ${B}` : A;
+  if (op === 'power') return `${A}^{${task.n != null ? task.n : 2}}`;
+  return A;
+}
+
 /**
  * Normalize textbook LaTeX into the plain form the *CalculatorCore parsers expect.
  * The cores understand `\, dx` / `\frac{d}{dx}` / `\lim_{...}` but NOT `\mathrm{d}x`,
@@ -574,6 +660,10 @@ export function taskToSolveLatex(task) {
 
   if (task.action === 'vectorCalculus') {
     return task.raw ? task.raw.trim() : vectorCalculusProblemLatex(task);
+  }
+
+  if (task.action === 'matrix') {
+    return task.raw ? task.raw.trim() : matrixProblemLatex(task);
   }
 
   // ODE is solved via the SymPy backbone
@@ -620,6 +710,10 @@ export function taskToDisplayLatex(task) {
 
   if (task.action === 'vectorCalculus') {
     return ensureDisplayStyle(vectorCalculusProblemLatex(task));
+  }
+
+  if (task.action === 'matrix') {
+    return ensureDisplayStyle(matrixProblemLatex(task));
   }
 
   if (task.action === 'ode') {
@@ -697,6 +791,16 @@ export function formatMathActionLabel(task, index) {
     const names = { gradient: 'Gradient', divergence: 'Divergence', curl: 'Curl' };
     const mode = String(task.mode || 'gradient').toLowerCase();
     return `${n}${names[mode] || 'Vector calculus'}`;
+  }
+  if (task.action === 'matrix') {
+    const names = {
+      determinant: 'Determinant', inverse: 'Inverse', transpose: 'Transpose', trace: 'Trace',
+      rank: 'Rank', rref: 'RREF', power: 'Matrix power', eigenvalues: 'Eigenvalues',
+      eigenvectors: 'Eigenvectors', charpoly: 'Characteristic polynomial',
+      add: 'Matrix addition', subtract: 'Matrix subtraction', multiply: 'Matrix multiplication',
+    };
+    const op = String(task.op || 'determinant').toLowerCase();
+    return `${n}${names[op] || 'Matrix'}`;
   }
   return `${n}${task.mode === 'definite' ? 'Definite integral' : 'Integral'}`;
 }

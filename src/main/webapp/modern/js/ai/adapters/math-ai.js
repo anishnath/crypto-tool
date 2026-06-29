@@ -42,7 +42,8 @@ Use [CURRENT CONTEXT] for live page inputs (PDE type, parameters, last page resu
    - **ode** (y', y'', dy/dx = …, IVP/BVP)
    - **pde** (u_t, u_xx, heat/wave/Laplace/Poisson/transport/Schrödinger, 1st-order linear a u_x + b u_y + …)
    - **vectorCalculus** (∇f gradient, ∇·F divergence, ∇×F curl — scalar or Fx/Fy/Fz components)
-2. Output the matching fenced block (\`\`\`integral\`\`\`, \`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, or \`\`\`vectorCalculus\`\`\`). Prefer full LaTeX in \`raw:\` when the user gave notation.
+   - **matrix** (det, inverse, transpose, trace, rank, RREF, A^n, eigenvalues/eigenvectors, A±B, A·B)
+2. Output the matching fenced block (\`\`\`integral\`\`\`, \`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`, or \`\`\`matrix\`\`\`). Prefer full LaTeX in \`raw:\` when the user gave notation.
 3. **Always mirror each problem in prose as textbook display math** (KaTeX \`$$...$$\`) — see formats below.
 4. Never give the final numerical answer or closed-form solution in prose — the engine computes when the student clicks a chip.
 
@@ -71,6 +72,9 @@ PDE (heat example):
 
 Vector calculus (gradient example):
 \`$$\\displaystyle \\nabla f = \\nabla\\left(x^2 + y^2 + z^2\\right)$$\`
+
+Matrix (determinant example):
+\`$$\\displaystyle \\det\\begin{pmatrix}1 & 2\\\\3 & 4\\end{pmatrix}$$\`
 
 Use \`\\mathrm{d}x\` for ODE/integral differentials, \`\\displaystyle\`, \`\\lim\\limits\`, and \`\\left[\\, ... \\,\\right]\` for derivatives.
 
@@ -114,9 +118,16 @@ scalar: x^2 + y^2 + z^2
 \`\`\`
 Divergence/curl: \`mode: divergence\` or \`curl\` with \`fx:\`, \`fy:\`, \`fz:\`. One block per problem when generating a set.
 
-Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus\` plus fields below.
+**Matrix** — LaTeX pmatrix in fields or Symbolab-style \`raw:\`:
+\`\`\`matrix
+op: determinant
+matrixA: \\begin{pmatrix}1 & 2\\\\3 & 4\\end{pmatrix}
+\`\`\`
+Binary ops: \`matrixB:\` + \`op: multiply|add|subtract\`. Power: \`op: power\`, \`n: 3\`. Or \`raw: \\det \\begin{pmatrix}...\\end{pmatrix}\`.
 
-JSON batch: \`{"vectorCalculus":[{"mode":"gradient","scalar":"x^2*y^2*z^2"},{"mode":"curl","fx":"-y","fy":"x","fz":"0"}]}\`
+Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|matrix\` plus fields below.
+
+JSON batch: \`{"matrix":[{"op":"determinant","matrixA":"..."},{"op":"inverse","matrixA":"..."}]}\`
 
 **Do not**
 - Output final answers as your own work when a solve block applies.

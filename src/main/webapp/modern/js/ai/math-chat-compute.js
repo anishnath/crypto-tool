@@ -50,6 +50,12 @@ function getVcCore() {
     : window.VCCalculatorCore;
 }
 
+function getMatrixCore() {
+  return typeof MatrixCalculatorCore !== 'undefined'
+    ? MatrixCalculatorCore
+    : window.MatrixCalculatorCore;
+}
+
 /** @param {object} core */
 async function solveFromCore(core, latex, withSteps) {
   if (!core?.solveFromLatex) {
@@ -316,6 +322,53 @@ export async function solveVectorCalculusTask(task, mode = 'simple') {
 }
 
 /**
+ * Solve matrix ops in-chat via MatrixCalculatorCore (same SymPy engine as the page).
+ * @param {import('./math-action-extract.js').MathActionTask} task
+ * @param {MathSolveMode} mode
+ */
+export async function solveMatrixTask(task, mode = 'simple') {
+  const core = getMatrixCore();
+  if (!core?.solveTask && !core?.solveFromLatex) {
+    return { ok: false, error: 'Matrix engine (MatrixCalculatorCore) not loaded.', mode, problemLatex: '' };
+  }
+
+  const problemLatex = taskToSolveLatex(task);
+  const withSteps = mode === 'steps';
+
+  let r;
+  try {
+    r = core.solveTask
+      ? await core.solveTask(task, { withSteps, mode })
+      : await solveFromCore(core, problemLatex, withSteps);
+  } catch (err) {
+    return { ok: false, error: err?.message || 'Matrix solve failed.', mode, problemLatex };
+  }
+
+  if (!r || !r.ok) {
+    return { ok: false, error: r?.error || 'Could not compute this matrix problem.', mode, problemLatex };
+  }
+
+  const steps = withSteps
+    ? (r.sympySteps || r.steps || []).map((s) => ({
+      title: s.title || 'Step',
+      latex: s.latex || '',
+    }))
+    : [];
+
+  return {
+    ok: true,
+    mode,
+    action: 'matrix',
+    resultLatex: r.resultLatex || '',
+    method: r.method || r.opLabel || 'Matrix solver',
+    steps,
+    input: r.input || null,
+    result: { value: r.value || r.resultText || r.resultLatex || '' },
+    problemLatex,
+  };
+}
+
+/**
  * @param {import('./math-action-extract.js').MathActionTask} task
  * @param {object} [shell]
  * @param {MathSolveMode} [mode]
@@ -327,6 +380,7 @@ export async function computeTaskInChat(task, _shell, mode = 'simple') {
   if (action === 'ode') return solveOdeTask(task, mode);
   if (action === 'pde') return solvePdeTask(task, mode);
   if (action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
+  if (action === 'matrix') return solveMatrixTask(task, mode);
   return solveIntegralTask(task, mode);
 }
 
@@ -791,6 +845,12 @@ function chipActionsForTask(task) {
       });
     }
     return chips;
+  }
+  if (action === 'matrix') {
+    return [
+      { mode: 'simple', label: 'Solve', title: 'Compute the matrix operation (same as page Calculate)' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step matrix solution' },
+    ];
   }
   return [
     { mode: 'simple', label: 'Solve', title: 'Compute the integral (same as Σ Solve)' },

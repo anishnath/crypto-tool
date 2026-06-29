@@ -10,6 +10,7 @@ import {
   solveOdeTask,
   solvePdeTask,
   solveVectorCalculusTask,
+  solveMatrixTask,
 } from '../../math-chat-compute.js';
 import { icApplyIntegralTask } from './integral-calculator.js';
 
@@ -57,6 +58,12 @@ const FOCUS_CHIPS = {
     ['∇×F', 'Compute the curl of F = (-y, x, 0). Emit a ```vectorCalculus``` block.'],
     ['Generate 3 problems', 'Generate 3 vector calculus practice problems (one gradient, one divergence, one curl). Emit one ```vectorCalculus``` block per problem with expressions like x^2+y^2+z^2 or x^2*y^2*z^2. Do NOT solve in prose — chips run the engine.'],
   ],
+  matrix: [
+    ['det 3×3', 'Find the determinant of [[1,2,3],[4,5,6],[7,8,10]]. Emit a ```matrix``` block so Solve chips appear.'],
+    ['A⁻¹ 2×2', 'Find the inverse of [[4,7],[2,6]]. Emit a ```matrix``` block.'],
+    ['A·B', 'Multiply [[1,2],[3,4]] by [[5,6],[7,8]]. Emit a ```matrix``` block with op: multiply.'],
+    ['Generate 3 problems', 'Generate 3 matrix practice problems (det, inverse, eigenvalues). Emit one ```matrix``` block per problem. Do NOT solve in prose — chips run the engine.'],
+  ],
 };
 
 function focusQuickActions(focus) {
@@ -101,6 +108,7 @@ export function configureGenericMathShell(opts = {}) {
       if (task.action === 'ode') return solveOdeTask(task, mode);
       if (task.action === 'pde') return solvePdeTask(task, mode);
       if (task.action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
+      if (task.action === 'matrix') return solveMatrixTask(task, mode);
       return Promise.resolve({ ok: false, error: 'Unknown action.', mode });
     },
 
@@ -120,6 +128,7 @@ export function configureGenericMathShell(opts = {}) {
     },
 
     getContext() {
+      if (typeof window.mcGetContext === 'function') return window.mcGetContext();
       if (typeof window.vcGetContext === 'function') return window.vcGetContext();
       if (typeof window.scGetContext === 'function') return window.scGetContext();
       if (typeof window.pdeGetContext === 'function') return window.pdeGetContext();
@@ -168,6 +177,11 @@ export function configureGenericMathShell(opts = {}) {
               `F_z: ${snap.fz || '0'}`,
             );
           }
+        } else if (snap.toolType === 'matrix') {
+          lines.push(`Page operation: ${snap.op || 'determinant'}`);
+          if (snap.matrixA) lines.push(`Matrix A: ${String(snap.matrixA).slice(0, 400)}`);
+          if (snap.matrixB) lines.push(`Matrix B: ${String(snap.matrixB).slice(0, 400)}`);
+          if (snap.n != null) lines.push(`Exponent n: ${snap.n}`);
         } else {
           lines.push(
             `Mode: ${snap.mode || '(n/a)'}`,
@@ -207,11 +221,11 @@ export function configureGenericMathShell(opts = {}) {
       return focusQuickActions(this.focus || focus);
     },
 
-    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, **PDE**, and **vectorCalculus** (∇, ∇·, ∇×) problems regardless of which calculator page the student is on. Every computation runs in the chat via the deterministic JS engines (same as the LaTeX editor **Σ Solve**) — never compute the answer yourself.
+    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, **PDE**, **vectorCalculus** (∇, ∇·, ∇×), and **matrix** (det, inverse, eigenvalues, A·B, …) problems regardless of which calculator page the student is on. Every computation runs in the chat via the deterministic JS engines (same as the LaTeX editor **Σ Solve**) — never compute the answer yourself.
 
 **Student-facing language:** Never mention SymPy, NumPy, Python, OneCompiler, or other backend libraries in replies. Say "the solver", "step-by-step engine", "numerical method", or "symbolic method" instead.
 
-**Do not** refuse a problem because the page title says Integral Calculator — output the matching block (\`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`) and let the engine compute.
+**Do not** refuse a problem because the page title says Integral Calculator — output the matching block (\`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`, \`\`\`matrix\`\`\`) and let the engine compute.
 
 **Textbook KaTeX in prose (required):** mirror every problem in \`$$\\displaystyle...$$\`:
 - Integral: \`$$\\displaystyle\\int \\sin(3x)\\,\\mathrm{d}x$$\`
@@ -498,6 +512,68 @@ Mirror [CURRENT CONTEXT] when they say "compute what I have on the page" — or 
 - Divergence: \`$$\\displaystyle \\nabla \\cdot \\mathbf{F} = \\frac{\\partial F_x}{\\partial x}+\\frac{\\partial F_y}{\\partial y}+\\frac{\\partial F_z}{\\partial z}$$\`
 
 Never name implementation libraries (SymPy, NumPy, Python, OneCompiler, etc.) in replies to the student.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
+}
+
+/** Matrix Calculator — linear algebra tutor + matrix solver in chat. */
+export function configureMatrixMathShell() {
+  configureGenericMathShell({
+    focus: 'matrix',
+    pageLabel: 'Matrix Calculator',
+    pageHint: 'Matrix Calculator (13 ops on page; chat handles matrix + ∫, d/dx, lim, ODE)',
+    panelTitle: 'Math AI',
+    subtitle: 'Matrix tutor + linear algebra solver in chat',
+    placeholder: 'Ask about det, inverse, eigenvalues — or paste ∫, d/dx, lim…',
+    footerText: 'Ctrl+Shift+A · page calculator + chat engines',
+  });
+
+  const extra = `
+
+**Matrix Calculator page — tutor + engine router**
+
+You wear two hats; pick from the user's wording:
+
+1. **Teacher** — matrix concepts (determinant as area/volume scaling, inverse meaning, eigenvalues/eigenvectors, rank, RREF, multiplication rules). Use KaTeX prose; **no** solve block unless they also want something computed.
+
+2. **Solver** — when they say *solve*, *compute*, *find*, *generate practice problems*, or give concrete matrices: emit one \`\`\`matrix\`\`\` block **per problem** so **Solve / Solve with steps** chips appear. Use LaTeX \`\\begin{pmatrix}...\\end{pmatrix}\` in \`matrixA:\` / \`matrixB:\` fields.
+
+**Supported ops (op: field)**
+determinant, inverse, transpose, trace, rank, rref, power (needs \`n:\`), eigenvalues, eigenvectors, charpoly, add, subtract, multiply
+
+**Block format**
+
+Determinant:
+\`\`\`matrix
+op: determinant
+matrixA: \\begin{pmatrix}1 & 2\\\\3 & 4\\end{pmatrix}
+\`\`\`
+
+Inverse:
+\`\`\`matrix
+op: inverse
+matrixA: \\begin{pmatrix}4 & 7\\\\2 & 6\\end{pmatrix}
+\`\`\`
+
+Multiply:
+\`\`\`matrix
+op: multiply
+matrixA: \\begin{pmatrix}1 & 2\\\\3 & 4\\end{pmatrix}
+matrixB: \\begin{pmatrix}5 & 6\\\\7 & 8\\end{pmatrix}
+\`\`\`
+
+Symbolab-style raw also OK:
+\`\`\`matrix
+raw: \\det \\begin{pmatrix}1 & 2 & 3\\\\4 & 5 & 6\\\\7 & 8 & 10\\end{pmatrix}
+\`\`\`
+
+JSON batch: \`{"matrix":[{"op":"determinant","matrixA":"\\\\begin{pmatrix}1&2\\\\3&4\\\\end{pmatrix}"},{"op":"inverse","matrixA":"..."}]}\`
+
+Mirror [CURRENT CONTEXT] when they say "compute what I have on the page" — or emit a block from context fields.
+
+Never name implementation libraries (SymPy, Python, OneCompiler, etc.) in replies to the student.`;
 
   if (window.mathShell) {
     window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
