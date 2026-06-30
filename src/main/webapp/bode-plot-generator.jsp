@@ -1,12 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
-    String cacheVersion = String.valueOf(System.currentTimeMillis());
+    String v = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "math-ai");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="ctx" content="<%=request.getContextPath()%>" />
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="resource-type" content="document">
@@ -14,15 +18,10 @@
     <meta name="language" content="en">
     <meta name="author" content="Anish Nath">
 
-    <!-- Resource Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="https://cdn.plot.ly">
-
-    <!-- Bode Plot Generator styles -->
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/bode-plot-generator.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/bode-plot-generator.css"></noscript>
 
     <!-- SEO -->
     <jsp:include page="modern/components/seo-tool-page.jsp">
@@ -31,8 +30,8 @@
         <jsp:param name="toolCategory" value="Math Tools" />
         <jsp:param name="toolUrl" value="bode-plot-generator.jsp" />
         <jsp:param name="toolKeywords" value="bode plot generator, bode plot calculator, transfer function plotter, magnitude plot, phase plot, frequency response, control systems, bode diagram, gain margin, phase margin, stability analysis" />
-        <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Bode magnitude and phase plots,Transfer function analysis with steps,Zeros and poles identification,Common transfer functions table,Interactive dual-subplot Plotly graphs,Zeros-Poles-Gain input mode,Live KaTeX math preview,Copy LaTeX output,Built-in Python compiler with SymPy,Quick examples for each mode,Dark mode support,Free and no signup required" />
+        <jsp:param name="toolImage" value="math-studio-og.png" />
+        <jsp:param name="toolFeatures" value="Bode magnitude and phase plots,Transfer function analysis with steps,Zeros and poles identification,Common transfer functions table,Interactive dual-subplot Plotly graphs,Zeros-Poles-Gain input mode,Live KaTeX math preview,Copy LaTeX output,Built-in Python compiler with SymPy,Quick examples for each mode,Math AI tutor in chat,Dark mode support,Free and no signup required" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="faq1q" value="What is a Bode plot?" />
         <jsp:param name="faq1a" value="A Bode plot is a graphical representation of a system's frequency response. It consists of two plots: the magnitude plot showing |H(jw)| in decibels versus log frequency, and the phase plot showing the phase angle of H(jw) in degrees versus log frequency. Bode plots are essential for analyzing stability and performance of control systems." />
@@ -48,165 +47,139 @@
         <jsp:param name="faq6a" value="Yes, this Bode plot generator is completely free with no signup required. You get symbolic computation via SymPy, step-by-step analysis, interactive Plotly graphs, LaTeX export, and a built-in Python compiler." />
     </jsp:include>
 
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
 
-    <!-- CSS - all async -->
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/design-system.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/navigation.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
-    </noscript>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/design-system.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=v%>">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/bode-plot-generator.css?v=<%=v%>">
+
+    <%@ include file="modern/components/math-ai-head.inc.jsp" %>
+
+    <style>
+        .ic-hero .math-ai-tab-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid rgba(99,102,241,0.35);
+            background: rgba(99,102,241,0.08); color: var(--ms-text, #1e1b4b); font-size: 0.8125rem;
+            font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+            white-space: nowrap;
+        }
+        .ic-hero .math-ai-tab-btn:hover {
+            background: rgba(99,102,241,0.18); transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(99,102,241,0.15);
+        }
+        .ic-hero .math-ai-tab-btn[aria-busy="true"] { opacity: 0.75; cursor: wait; }
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 
     <%@ include file="modern/ads/ad-init.jsp" %>
 
-    <!-- KaTeX -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-
 </head>
-<body>
-<!-- Navigation -->
+<body class="ms-body">
+
 <%@ include file="modern/components/nav-header.jsp" %>
+<jsp:include page="/math/partials/matter-bg.jsp" />
 
-<!-- Page Header -->
-<header class="tool-page-header">
-    <div class="tool-page-header-inner">
-        <div>
-            <h1 class="tool-page-title">Bode Plot Generator</h1>
-            <nav class="tool-breadcrumbs">
-                <a href="<%=request.getContextPath()%>/index.jsp">Home</a> /
-                <a href="<%=request.getContextPath()%>/math">Math Tools</a> /
-                Bode Plot Generator
+<div class="ms-hero">
+    <%@ include file="modern/ads/ad-hero-banner.jsp" %>
+</div>
+
+<main class="ms-main">
+
+    <button type="button" id="msSidebarToggle" class="ms-sidebar-toggle" aria-label="Open math tools menu">
+        &#9776; Math tools
+    </button>
+
+    <% request.setAttribute("activeService", "bode"); %>
+    <jsp:include page="/math/partials/sidebar.jsp" />
+
+    <section class="ms-workspace">
+
+        <header class="ms-title">
+            <nav class="ms-crumbs">
+                <a href="<%=request.getContextPath()%>/index.jsp">Home</a>
+                <span>/</span>
+                <a href="<%=request.getContextPath()%>/math/">Math</a>
+                <span>/</span>
+                <span aria-current="page">Bode Plot</span>
             </nav>
-        </div>
-        <div class="tool-page-badges">
-            <span class="tool-badge">Step-by-Step</span>
-            <span class="tool-badge">Magnitude &amp; Phase</span>
-            <span class="tool-badge">Symbolic CAS</span>
-            <span class="tool-badge">Free &middot; No Signup</span>
-        </div>
-    </div>
-</header>
+            <h1>Bode Plot Generator</h1>
+            <p class="ms-subtitle">Magnitude &amp; phase for H(s) &middot; step-by-step analysis &middot; gain &amp; phase margin</p>
+        </header>
 
-<!-- Tool Description -->
-<section class="tool-description-section">
-    <div class="tool-description-inner">
-        <div class="tool-description-content">
-            <p>Generate <strong>Bode magnitude and phase plots</strong> for any transfer function H(s) with <strong>step-by-step analysis</strong>. Features zeros/poles identification, common transfer functions reference table, interactive dual-subplot graphs, and a built-in Python compiler. Essential for control systems, filter design, and stability analysis.</p>
-        </div>
-    </div>
-</section>
+        <div class="ic-stack">
 
-<!-- Main Content -->
-<main class="tool-page-container">
-    <!-- ========== INPUT COLUMN ========== -->
-    <div class="tool-input-column">
-        <div class="tool-card">
-            <div class="tool-card-header">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                    <path d="M2 17l10 5 10-5"/>
-                    <path d="M2 12l10 5 10-5"/>
-                </svg>
-                Bode Plot Generator
-            </div>
-            <div class="tool-card-body">
-                <!-- Mode toggle -->
-                <div class="bp-mode-toggle">
-                    <button type="button" class="bp-mode-btn active" data-mode="transfer">H(s) Transfer Function</button>
-                    <button type="button" class="bp-mode-btn" data-mode="zpk">Zeros-Poles-Gain</button>
+            <!-- ═══ INPUT HERO (stacked above result — same as Integral/Limit) ═══ -->
+            <div class="ic-hero ic-hero--compact" id="bp-hero">
+                <div class="ic-hero-top">
+                    <div class="bp-mode-toggle" role="radiogroup" aria-label="Input mode">
+                        <button type="button" class="bp-mode-btn active" data-mode="transfer" role="radio" aria-checked="true">H(s)</button>
+                        <button type="button" class="bp-mode-btn" data-mode="zpk" role="radio" aria-checked="false">ZPK</button>
+                    </div>
+                    <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Math AI — Bode tutor + calculus in chat (Ctrl+Shift+A)">&#10024; AI</button>
                 </div>
 
-                <!-- AI: Describe in English -->
-                <div class="tool-form-group bp-ai-group">
-                    <label class="tool-form-label bp-ai-label">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;vertical-align:-2px;"><path d="M12 2a4 4 0 014 4v1h1a3 3 0 010 6h-1v1a4 4 0 01-8 0v-1H7a3 3 0 010-6h1V6a4 4 0 014-4z"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/></svg>
-                        AI &mdash; describe in plain English
-                    </label>
-                    <div class="bp-ai-row">
-                        <input type="text" class="tool-input" id="bp-ai-input" placeholder="e.g. PID controller with Kp=10, Ki=5, Kd=2" autocomplete="off" spellcheck="false">
-                        <button type="button" class="bp-ai-btn" id="bp-ai-btn">Generate H(s)</button>
+                <div class="bp-hero-core">
+                    <!-- Transfer function mode -->
+                    <div id="bp-tf-wrap" class="bp-mode-panel">
+                        <label class="bp-field-label" for="bp-tf-expr">H(s)</label>
+                        <input type="text" class="tool-input tool-input-mono bp-main-input" id="bp-tf-expr" placeholder="e.g. 1/(s^2+2*s+1)" autocomplete="off" spellcheck="false">
                     </div>
-                    <div class="bp-ai-status" id="bp-ai-status" style="display:none;"></div>
-                    <div class="bp-ai-examples">
-                        <button type="button" class="bp-ai-chip" data-prompt="second order low pass filter with cutoff at 10 rad/s and damping 0.7">2nd order LPF</button>
-                        <button type="button" class="bp-ai-chip" data-prompt="PID controller with Kp=10, Ki=5, Kd=2">PID controller</button>
-                        <button type="button" class="bp-ai-chip" data-prompt="lead compensator with 10x gain, zero at s=-1, pole at s=-10">Lead compensator</button>
-                        <button type="button" class="bp-ai-chip" data-prompt="RC low pass filter with R=1kohm and C=1uF">RC filter</button>
-                        <button type="button" class="bp-ai-chip" data-prompt="notch filter that rejects 60 Hz with Q=10">60Hz notch</button>
+
+                    <!-- ZPK mode -->
+                    <div id="bp-zpk-wrap" class="bp-mode-panel" style="display:none;">
+                        <div class="bp-zpk-grid">
+                            <div class="bp-zpk-field">
+                                <label class="bp-field-label" for="bp-zpk-zeros">Zeros</label>
+                                <input type="text" class="tool-input tool-input-mono" id="bp-zpk-zeros" placeholder="-1, -2" autocomplete="off" spellcheck="false">
+                            </div>
+                            <div class="bp-zpk-field">
+                                <label class="bp-field-label" for="bp-zpk-poles">Poles</label>
+                                <input type="text" class="tool-input tool-input-mono" id="bp-zpk-poles" placeholder="0, -10" autocomplete="off" spellcheck="false">
+                            </div>
+                            <div class="bp-zpk-field bp-zpk-field--gain">
+                                <label class="bp-field-label" for="bp-zpk-gain">Gain K</label>
+                                <input type="text" class="tool-input tool-input-mono" id="bp-zpk-gain" placeholder="1" value="1" autocomplete="off" spellcheck="false">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bp-preview-strip">
+                        <span class="bp-preview-label">Preview</span>
+                        <div class="bp-preview" id="bp-preview">
+                            <span class="bp-preview-placeholder">Type above&hellip;</span>
+                        </div>
+                    </div>
+
+                    <div class="ic-hero-cta-row bp-hero-cta-row">
+                        <button type="button" class="ic-hero-cta" id="bp-compute-btn">Generate Bode Plot</button>
+                        <button type="button" class="bp-random-btn" id="bp-random-btn" title="Random example">&#127922;</button>
                     </div>
                 </div>
 
-                <!-- Transfer function mode input -->
-                <div id="bp-tf-wrap">
-                    <div class="tool-form-group">
-                        <label class="tool-form-label" for="bp-tf-expr">H(s) &mdash; transfer function</label>
-                        <input type="text" class="tool-input tool-input-mono" id="bp-tf-expr" placeholder="e.g. 1/(s^2+2*s+1)" autocomplete="off" spellcheck="false">
-                        <span class="tool-form-hint">Enter a rational function of s, or use AI above</span>
+                <details class="ic-hero-methods" id="bp-examples-wrap">
+                    <summary class="ic-hero-methods-summary">
+                        <span>Quick examples</span>
+                        <svg class="ic-hero-methods-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="ic-hero-methods-body bp-examples-body">
+                        <div class="bp-examples" id="bp-examples"></div>
                     </div>
-                </div>
+                </details>
 
-                <!-- ZPK mode input -->
-                <div id="bp-zpk-wrap" style="display:none;">
-                    <div class="tool-form-group">
-                        <label class="tool-form-label" for="bp-zpk-zeros">Zeros (comma-separated)</label>
-                        <input type="text" class="tool-input tool-input-mono" id="bp-zpk-zeros" placeholder="e.g. -1, -2" autocomplete="off" spellcheck="false">
-                        <span class="tool-form-hint">Leave empty for no zeros</span>
-                    </div>
-                    <div class="tool-form-group" style="margin-top:0.5rem;">
-                        <label class="tool-form-label" for="bp-zpk-poles">Poles (comma-separated)</label>
-                        <input type="text" class="tool-input tool-input-mono" id="bp-zpk-poles" placeholder="e.g. 0, -10" autocomplete="off" spellcheck="false">
-                        <span class="tool-form-hint">Use j for imaginary: -5+8.66j</span>
-                    </div>
-                    <div class="tool-form-group" style="margin-top:0.5rem;">
-                        <label class="tool-form-label" for="bp-zpk-gain">Gain K</label>
-                        <input type="text" class="tool-input tool-input-mono" id="bp-zpk-gain" placeholder="e.g. 10" value="1" autocomplete="off" spellcheck="false">
-                    </div>
-                </div>
-
-                <!-- Live preview -->
-                <div class="tool-form-group" style="margin-top:0.875rem;">
-                    <label class="tool-form-label">Live Preview</label>
-                    <div class="bp-preview" id="bp-preview">
-                        <span style="color:var(--text-muted);font-size:0.8125rem;">Type a transfer function above&hellip;</span>
-                    </div>
-                </div>
-
-                <!-- Action buttons -->
-                <div class="bp-action-row">
-                    <button type="button" class="tool-action-btn bp-compute-btn" id="bp-compute-btn">Generate Bode Plot</button>
-                    <button type="button" class="bp-random-btn" id="bp-random-btn" title="Random example">&#127922; Random</button>
-                </div>
-
-                <hr class="bp-sep">
-
-                <!-- Quick examples -->
-                <div class="tool-form-group">
-                    <label class="tool-form-label">Quick Examples</label>
-                    <div class="bp-examples" id="bp-examples"></div>
-                </div>
-
-                <hr class="bp-sep">
-
-                <!-- Common Transfer Functions (collapsible) -->
-                <div id="bp-tf-table-wrap">
-                    <button type="button" class="bp-tf-toggle" id="bp-tf-btn">
-                        Common Transfer Functions
-                        <svg class="bp-tf-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                    </button>
-                    <div class="bp-tf-content" id="bp-tf-content">
+                <details class="ic-hero-methods" id="bp-tf-table-wrap">
+                    <summary class="ic-hero-methods-summary">
+                        <span>Common transfer functions</span>
+                        <svg class="ic-hero-methods-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="ic-hero-methods-body">
                         <table class="bp-tf-table">
                             <thead><tr><th>System</th><th>H(s)</th><th>Type</th></tr></thead>
                             <tbody>
@@ -221,123 +194,75 @@
                             </tbody>
                         </table>
                     </div>
+                </details>
+
+                <details class="ic-hero-methods" id="bp-syntax-wrap">
+                    <summary class="ic-hero-methods-summary">
+                        <span>Syntax help</span>
+                        <svg class="ic-hero-methods-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="ic-hero-methods-body bp-syntax-body">
+                        s^2 &nbsp; (s+1)^2 &nbsp; s^3 &nbsp; 1/(s+1) &nbsp; s/(s^2+1) &nbsp; 10*(s+1)/(s*(s+10))<br>
+                        <strong>Multiply:</strong> <code>2*s</code> not <code>2s</code> &nbsp; <strong>Powers:</strong> <code>s^2</code> &nbsp; <strong>Imaginary:</strong> <code>-5+8.66j</code>
+                    </div>
+                </details>
+            </div><!-- /.ic-hero -->
+
+            <!-- ═══ RESULT CARD ═══ -->
+            <div class="ic-result-card">
+                <div class="ic-output-tabs" role="tablist">
+                    <button type="button" class="ic-output-tab active" data-panel="result" role="tab" aria-selected="true">Result</button>
+                    <button type="button" class="ic-output-tab" data-panel="graph" role="tab" aria-selected="false">Bode Plot</button>
+                    <button type="button" class="ic-output-tab" data-panel="python" role="tab" aria-selected="false">Python Compiler</button>
                 </div>
 
-                <hr class="bp-sep">
-
-                <!-- Syntax help (collapsible) -->
-                <div id="bp-syntax-wrap">
-                    <button type="button" class="bp-syntax-toggle" id="bp-syntax-btn">
-                        Syntax Help
-                        <svg class="bp-syntax-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                    </button>
-                    <div class="bp-syntax-content" id="bp-syntax-content">
-                        s^2 &nbsp;&nbsp; (s+1)^2 &nbsp;&nbsp; s^3<br>
-                        1/(s+1) &nbsp;&nbsp; s/(s^2+1)<br>
-                        10*(s+1)/(s*(s+10))<br>
-                        <strong>Multiplication:</strong> Use * explicitly: <code>2*s</code> not <code>2s</code><br>
-                        <strong>Powers:</strong> <code>s^2</code> or <code>(s+1)^2</code><br>
-                        <strong>Grouping:</strong> Use parentheses for clarity
+                <!-- Result Panel -->
+                <div class="ic-panel active" id="bp-panel-result" role="tabpanel">
+                    <div class="tool-card tool-result-card">
+                        <div class="tool-result-content" id="bp-result-content">
+                            <div class="tool-empty-state" id="bp-empty-state">
+                                <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">H(s)</div>
+                                <h3>Enter a transfer function and click Generate</h3>
+                                <p>Generate Bode magnitude and phase plots with step-by-step analysis.</p>
+                            </div>
+                        </div>
+                        <div class="tool-result-actions" id="bp-result-actions">
+                            <button type="button" class="tool-action-btn" id="bp-copy-latex-btn">Copy LaTeX</button>
+                            <button type="button" class="tool-action-btn" id="bp-download-pdf-btn">Download PDF</button>
+                            <button type="button" class="tool-action-btn" id="bp-share-btn">Share</button>
+                            <button type="button" class="tool-action-btn" id="bp-worksheet-btn">Print Worksheet</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- ========== OUTPUT COLUMN ========== -->
-    <div class="tool-output-column">
-        <!-- Tab bar -->
-        <div class="bp-output-tabs">
-            <button type="button" class="bp-output-tab active" data-panel="result">Result</button>
-            <button type="button" class="bp-output-tab" data-panel="graph">Bode Plot</button>
-            <button type="button" class="bp-output-tab" data-panel="python">Python Compiler</button>
-        </div>
-
-        <!-- Result Panel -->
-        <div class="bp-panel active" id="bp-panel-result">
-            <div class="tool-card tool-result-card">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                    </svg>
-                    <h4>Result</h4>
-                </div>
-                <div class="tool-result-content" id="bp-result-content">
-                    <div class="tool-empty-state" id="bp-empty-state">
-                        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5;">H(s)</div>
-                        <h3>Enter a transfer function and click Generate</h3>
-                        <p>Generate Bode magnitude and phase plots with step-by-step analysis.</p>
+                <!-- Graph Panel -->
+                <div class="ic-panel" id="bp-panel-graph" role="tabpanel">
+                    <div class="tool-card" style="height:100%;display:flex;flex-direction:column;padding:0;">
+                        <div style="flex:1;min-height:360px;padding:0.75rem;">
+                            <div id="bp-graph-container" style="width:100%;height:100%;min-height:360px;"></div>
+                            <p id="bp-graph-hint" style="text-align:center;font-size:0.8rem;color:var(--ms-muted);margin-top:0.5rem;">Generate a Bode plot to see the magnitude and phase diagrams.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="tool-result-actions" id="bp-result-actions">
-                    <button type="button" class="tool-action-btn" id="bp-copy-latex-btn">
-                        <span>&#128203;</span> Copy LaTeX
-                    </button>
-                    <button type="button" class="tool-action-btn" id="bp-download-pdf-btn">
-                        <span>&#128196;</span> Download PDF
-                    </button>
-                    <button type="button" class="tool-action-btn" id="bp-share-btn">
-                        <span>&#128279;</span> Share
-                    </button>
-                    <button type="button" class="tool-action-btn" id="bp-worksheet-btn">
-                        <span>&#128218;</span> Print Worksheet
-                    </button>
+
+                <!-- Python Compiler Panel -->
+                <div class="ic-panel" id="bp-panel-python" role="tabpanel">
+                    <div class="tool-card" style="height:100%;display:flex;flex-direction:column;padding:0;">
+                        <div style="flex:1;min-height:0;">
+                            <iframe id="bp-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </div><!-- /.ic-result-card -->
+        </div><!-- /.ic-stack -->
+
+        <!-- In-content ad (mobile/tablet) -->
+        <div class="ms-inline-ad">
+            <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
         </div>
-
-        <!-- Graph Panel -->
-        <div class="bp-panel" id="bp-panel-graph">
-            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);">
-                        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-                    </svg>
-                    <h4>Bode Plot &mdash; Magnitude &amp; Phase</h4>
-                </div>
-                <div style="flex:1;min-height:0;padding:0.75rem;">
-                    <div id="bp-graph-container"></div>
-                    <p id="bp-graph-hint" style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">Generate a Bode plot to see the magnitude and phase diagrams.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Python Compiler Panel -->
-        <div class="bp-panel" id="bp-panel-python">
-            <div class="tool-card" style="height:100%;display:flex;flex-direction:column;">
-                <div class="tool-result-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;color:var(--tool-primary);">
-                        <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    <h4>Python Compiler</h4>
-                </div>
-                <div style="flex:1;min-height:0;">
-                    <iframe id="bp-compiler-iframe" loading="lazy" style="width:100%;height:100%;min-height:480px;border:none;display:block;"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== ADS COLUMN ========== -->
-    <div class="tool-ads-column">
-        <%@ include file="modern/ads/ad-three-column.jsp" %>
-    </div>
-</main>
-
-<!-- Mobile Ad Fallback -->
-<div class="tool-mobile-ad-container">
-    <%@ include file="modern/ads/ad-in-content-mid.jsp" %>
-</div>
-
-<!-- Related Tools -->
-<jsp:include page="modern/components/related-tools.jsp">
-    <jsp:param name="currentToolUrl" value="bode-plot-generator.jsp"/>
-    <jsp:param name="keyword" value="calculus"/>
-    <jsp:param name="limit" value="6"/>
-</jsp:include>
 
 <!-- ========== BELOW-FOLD EDUCATIONAL CONTENT ========== -->
-<section class="tool-expertise-section" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+<section class="tool-expertise-section ms-below-fold" style="max-width: 100%; margin: 2rem 0 0; padding: 0;">
 
     <!-- What is a Bode Plot? -->
     <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
@@ -397,57 +322,41 @@
     </div>
 
     <!-- FAQ Section -->
-    <div class="tool-card" style="padding: 2rem; margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.25rem; margin-bottom: 1rem;" id="faqs">Frequently Asked Questions</h2>
+    <section class="ms-faq-wrap" style="margin-top:1.5rem;">
+        <h2 class="ms-faq-title" id="faqs">Frequently asked</h2>
+        <div class="ms-faq" aria-label="Bode plot FAQ">
 
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What is a Bode plot?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">A Bode plot is a graphical representation of a system's frequency response. It consists of two plots: the magnitude plot showing |H(jw)| in decibels versus log frequency, and the phase plot showing the phase angle of H(jw) in degrees versus log frequency. Bode plots are essential for analyzing stability and performance of control systems.</div>
+        <div class="ms-faq-item">
+            <button type="button" class="ms-faq-q">What is a Bode plot?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="ms-faq-a">A Bode plot is a graphical representation of a system's frequency response. It consists of two plots: the magnitude plot showing |H(j&omega;)| in decibels versus log frequency, and the phase plot showing the phase angle of H(j&omega;) in degrees versus log frequency. Bode plots are essential for analyzing stability and performance of control systems.</div>
         </div>
 
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                How do you read a Bode plot?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">On a Bode plot, the x-axis is frequency on a logarithmic scale. The magnitude plot (top) shows gain in dB - positive values mean amplification, negative values mean attenuation. The phase plot (bottom) shows phase shift in degrees. Key features include the -3dB bandwidth, gain crossover frequency, and phase margin.</div>
+        <div class="ms-faq-item">
+            <button type="button" class="ms-faq-q">How do you read a Bode plot?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="ms-faq-a">On a Bode plot, the x-axis is frequency on a logarithmic scale. The magnitude plot (top) shows gain in dB — positive values mean amplification, negative values mean attenuation. The phase plot (bottom) shows phase shift in degrees. Key features include the &minus;3 dB bandwidth, gain crossover frequency, and phase margin.</div>
         </div>
 
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What is gain and phase margin?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Gain margin is the amount of gain increase (in dB) needed to make the system unstable, measured at the phase crossover frequency (where phase = -180 degrees). Phase margin is the additional phase lag needed for instability, measured at the gain crossover frequency (where magnitude = 0 dB). Both should be positive for a stable system.</div>
+        <div class="ms-faq-item">
+            <button type="button" class="ms-faq-q">What is gain and phase margin?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="ms-faq-a">Gain margin is the amount of gain increase (in dB) needed to make the system unstable, measured at the phase crossover frequency (where phase = &minus;180&deg;). Phase margin is the additional phase lag needed for instability, measured at the gain crossover frequency (where magnitude = 0 dB). Both should be positive for a stable system.</div>
         </div>
 
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                How does pole location affect the Bode plot?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Each pole contributes -20 dB/decade slope to the magnitude plot and -90 degrees to the phase. A pole at s = -a creates a corner frequency at w = a, where the magnitude starts rolling off. Complex conjugate poles can create a resonance peak near the natural frequency, with the peak height depending on the damping ratio.</div>
+        <div class="ms-faq-item">
+            <button type="button" class="ms-faq-q">How does pole location affect the Bode plot?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="ms-faq-a">Each pole contributes &minus;20 dB/decade slope to the magnitude plot and &minus;90&deg; to the phase. A pole at s = &minus;a creates a corner frequency at &omega; = a, where the magnitude starts rolling off. Complex conjugate poles can create a resonance peak near the natural frequency.</div>
         </div>
 
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Bode plot vs Nyquist plot?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">A Bode plot shows magnitude and phase separately as functions of frequency on two subplots. A Nyquist plot shows the frequency response as a single curve in the complex plane (real vs imaginary parts). Bode plots are easier to sketch by hand and read gain/phase margins, while Nyquist plots are better for analyzing encirclement-based stability criteria.</div>
+        <div class="ms-faq-item">
+            <button type="button" class="ms-faq-q">Bode plot vs Nyquist plot?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="ms-faq-a">A Bode plot shows magnitude and phase separately as functions of frequency on two subplots. A Nyquist plot shows the frequency response as a single curve in the complex plane. Bode plots are easier to sketch by hand and read gain/phase margins; Nyquist plots suit encirclement-based stability criteria.</div>
         </div>
 
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Is this Bode plot tool free?
-                <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">Yes, this Bode plot generator is completely free with no signup required. You get symbolic computation via SymPy, step-by-step analysis, interactive Plotly graphs, LaTeX export, and a built-in Python compiler.</div>
+        <div class="ms-faq-item">
+            <button type="button" class="ms-faq-q">Is this Bode plot tool free?<svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+            <div class="ms-faq-a">Yes — completely free with no signup. You get step-by-step analysis, interactive Plotly graphs, LaTeX export, Math AI tutor, and a built-in Python compiler.</div>
         </div>
-    </div>
+        </div>
+    </section>
 </section>
 
 <!-- Explore More Math -->
@@ -485,17 +394,13 @@
 <!-- Support Section -->
 <%@ include file="modern/components/support-section.jsp" %>
 
-<!-- Footer -->
-<footer class="page-footer">
-    <div class="footer-content">
-        <p class="footer-text">&copy; 2024 8gwifi.org - Free Online Tools</p>
-        <div class="footer-links">
-            <a href="<%=request.getContextPath()%>/index.jsp" class="footer-link">Home</a>
-            <a href="<%=request.getContextPath()%>/tutorials/" class="footer-link">Tutorials</a>
-            <a href="https://twitter.com/anish2good" target="_blank" rel="noopener" class="footer-link">Twitter</a>
-        </div>
-    </div>
-</footer>
+    </section><!-- /.ms-workspace -->
+
+    <aside class="ms-rail" aria-label="Advertisements">
+        <%@ include file="modern/ads/ad-ide-rail-top.jsp" %>
+        <%@ include file="modern/ads/ad-ide-rail-bottom.jsp" %>
+    </aside>
+</main>
 
 <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
 <%@ include file="modern/components/analytics.jsp" %>
@@ -518,9 +423,28 @@
 <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js"></script>
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/categories-menu.js" defer></script>
 
 <script>window.BP_CALC_CTX = "<%=request.getContextPath()%>";</script>
-<script src="<%=request.getContextPath()%>/modern/js/bode-plot-generator.js"></script>
+<script src="<%=request.getContextPath()%>/modern/js/bode-calculator-core.js?v=<%=v%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/bode-plot-generator.js?v=<%=v%>"></script>
 
+<script>
+(function () {
+    document.querySelectorAll('.ms-faq-q').forEach(function (q) {
+        q.addEventListener('click', function () {
+            q.closest('.ms-faq-item').classList.toggle('open');
+        });
+    });
+})();
+</script>
+
+<%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
+<%
+    request.setAttribute("mathAiButtonId", "btnMathAI");
+    request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+    request.setAttribute("mathAiProfileExport", "configureBodeMathShell");
+%>
+<%@ include file="modern/components/math-ai-boot.inc.jsp" %>
 </body>
 </html>

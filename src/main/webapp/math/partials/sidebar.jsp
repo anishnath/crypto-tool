@@ -285,6 +285,22 @@
             </a>
         </div>
     </div>
+
+    <!-- Control &amp; Signals -->
+    <div class="ms-group<%= collapsedCls(activeService, "bode", "laplace", "convolution") %>" data-group="control">
+        <button class="ms-group-header" type="button">Control &amp; Signals <span class="ms-group-chevron">&#9662;</span></button>
+        <div class="ms-group-body">
+            <a href="<%= ctx %>/bode-plot-generator.jsp" class="ms-item <%= "bode".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">H(s)</span> <span class="ms-item-label">Bode Plot</span>
+            </a>
+            <a href="<%= ctx %>/laplace-transform-calculator.jsp" class="ms-item <%= "laplace".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#8466;</span> <span class="ms-item-label">Laplace Transform</span>
+            </a>
+            <a href="<%= ctx %>/convolution-calculator.jsp" class="ms-item <%= "convolution".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#8727;</span> <span class="ms-item-label">Convolution</span>
+            </a>
+        </div>
+    </div>
 </aside>
 
 <div class="ms-sidebar-backdrop" id="msSidebarBackdrop"></div>

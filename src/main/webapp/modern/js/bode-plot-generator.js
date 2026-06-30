@@ -114,8 +114,8 @@
     });
 
     // ========== Output Tabs ==========
-    var tabBtns = document.querySelectorAll('.bp-output-tab');
-    var panels  = document.querySelectorAll('.bp-panel');
+    var tabBtns = document.querySelectorAll('.ic-output-tab');
+    var panels  = document.querySelectorAll('.ic-panel');
     tabBtns.forEach(function(btn) {
         btn.addEventListener('click', function() {
             var panel = this.getAttribute('data-panel');
@@ -133,20 +133,6 @@
             }
         });
     });
-
-    // ========== Collapsible toggles ==========
-    function setupToggle(btnId, contentId) {
-        var btn = document.getElementById(btnId);
-        var content = document.getElementById(contentId);
-        if (!btn || !content) return;
-        btn.addEventListener('click', function() {
-            content.classList.toggle('open');
-            var chevron = btn.querySelector('svg');
-            if (chevron) chevron.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : '';
-        });
-    }
-    setupToggle('bp-syntax-btn', 'bp-syntax-content');
-    setupToggle('bp-tf-btn', 'bp-tf-content');
 
     // ========== Render Common Transfer Functions Table ==========
     var tfData = [
@@ -259,7 +245,7 @@
             if (currentMode === 'transfer') {
                 var expr = normalizeExpr(tfInput.value.trim());
                 if (!expr) {
-                    previewEl.innerHTML = '<span style="color:var(--text-muted);font-size:0.8125rem;">Type a transfer function H(s) above\u2026</span>';
+                    previewEl.innerHTML = '<span class="bp-preview-placeholder">Type above\u2026</span>';
                     return;
                 }
                 latex = 'H(s) = ' + exprToLatex(expr);
@@ -268,101 +254,18 @@
                 var p = zpkPolesInput.value.trim();
                 var k = zpkGainInput.value.trim() || '1';
                 if (!p && !z) {
-                    previewEl.innerHTML = '<span style="color:var(--text-muted);font-size:0.8125rem;">Enter zeros, poles, and gain\u2026</span>';
+                    previewEl.innerHTML = '<span class="bp-preview-placeholder">Enter zeros, poles, gain\u2026</span>';
                     return;
                 }
                 latex = 'H(s) = ' + k + ' \\cdot \\frac{' + (z ? '\\prod(s - z_i)' : '1') + '}{' + (p ? '\\prod(s - p_i)' : '1') + '}';
             }
             katex.render(latex, previewEl, { displayMode: true, throwOnError: false });
         } catch (e) {
-            previewEl.innerHTML = '<span style="color:var(--text-muted);font-size:0.8125rem;">Invalid expression</span>';
+            previewEl.innerHTML = '<span class="bp-preview-placeholder">Invalid expression</span>';
         }
     }
 
-    // ========== Build SymPy Code ==========
-    function buildSympyCode(mode) {
-        var code = 'from sympy import symbols, fraction, cancel, Poly, solve, latex, simplify, sqrt, pi, exp, log, Rational\n';
-        code += 'import numpy as np\nimport json\n\n';
-        code += 's = symbols("s")\n\n';
-
-        if (mode === 'transfer') {
-            var expr = exprToPython(normalizeExpr(tfInput.value.trim()));
-            code += 'expr = ' + expr + '\n\n';
-        } else {
-            var zeros = zpkZerosInput.value.trim();
-            var poles = zpkPolesInput.value.trim();
-            var gain = zpkGainInput.value.trim() || '1';
-            code += 'K = ' + gain + '\n';
-            code += 'num_expr = K\n';
-            if (zeros) {
-                var zarr = zeros.split(',');
-                for (var i = 0; i < zarr.length; i++) {
-                    code += 'num_expr = num_expr * (s - (' + zarr[i].trim() + '))\n';
-                }
-            }
-            code += 'den_expr = 1\n';
-            if (poles) {
-                var parr = poles.split(',');
-                for (var i = 0; i < parr.length; i++) {
-                    code += 'den_expr = den_expr * (s - (' + parr[i].trim() + '))\n';
-                }
-            }
-            code += 'from sympy import expand\n';
-            code += 'expr = expand(num_expr) / expand(den_expr)\n\n';
-        }
-
-        // Get numerator and denominator coefficients
-        code += 'num, den = fraction(cancel(expr))\n';
-        code += 'num_poly = Poly(num, s)\n';
-        code += 'den_poly = Poly(den, s)\n';
-        code += 'num_coeffs = [complex(c) for c in num_poly.all_coeffs()]\n';
-        code += 'den_coeffs = [complex(c) for c in den_poly.all_coeffs()]\n\n';
-
-        // Frequency sweep
-        code += 'w = np.logspace(-2, 4, 500)\n';
-        code += 'jw = 1j * w\n\n';
-
-        // Evaluate H(jw)
-        code += 'num_val = np.polyval(num_coeffs, jw)\n';
-        code += 'den_val = np.polyval(den_coeffs, jw)\n';
-        code += 'H = num_val / den_val\n\n';
-
-        code += 'mag_db = 20 * np.log10(np.abs(H) + 1e-30)\n';
-        code += 'phase_deg = np.degrees(np.unwrap(np.angle(H)))\n\n';
-
-        // Zeros and poles
-        code += 'zeros = solve(num, s)\n';
-        code += 'poles = solve(den, s)\n\n';
-
-        // Output
-        code += 'print("RESULT:" + latex(expr))\n';
-        code += 'print("TEXT:" + str(expr))\n';
-        code += 'print("ZEROS:" + json.dumps([str(z) for z in zeros]))\n';
-        code += 'print("POLES:" + json.dumps([str(p) for p in poles]))\n\n';
-
-        // Steps
-        code += 'steps = []\n';
-        code += 'steps.append({"title": "Given transfer function", "latex": "H(s) = " + latex(expr)})\n';
-        code += 'steps.append({"title": "Factor numerator and denominator", "latex": "\\\\text{Numerator: } " + latex(num) + ", \\\\quad \\\\text{Denominator: } " + latex(den)})\n';
-        code += 'if zeros:\n';
-        code += '    steps.append({"title": "Zeros (roots of numerator)", "latex": "s = " + ", ".join([latex(z) for z in zeros])})\n';
-        code += 'else:\n';
-        code += '    steps.append({"title": "Zeros", "latex": "\\\\text{None}"})\n';
-        code += 'steps.append({"title": "Poles (roots of denominator)", "latex": "s = " + ", ".join([latex(p) for p in poles])})\n';
-        code += 'steps.append({"title": "System order", "latex": "\\\\text{Order } " + str(den_poly.degree())})\n';
-        code += 'steps.append({"title": "Bode magnitude", "latex": "|H(j\\\\omega)|_{\\\\text{dB}} = 20 \\\\log_{10}|H(j\\\\omega)|"})\n';
-        code += 'steps.append({"title": "Bode phase", "latex": "\\\\angle H(j\\\\omega) = \\\\arg(H(j\\\\omega))"})\n';
-        code += 'print("STEPS:" + json.dumps(steps))\n\n';
-
-        // Plot data
-        code += 'print("PLOT_W:" + json.dumps(w.tolist()))\n';
-        code += 'print("PLOT_MAG:" + json.dumps(mag_db.tolist()))\n';
-        code += 'print("PLOT_PHASE:" + json.dumps(phase_deg.tolist()))\n';
-
-        return code;
-    }
-
-    // ========== Compute ==========
+    // ========== Compute (delegates to BodeCalculatorCore) ==========
     computeBtn.addEventListener('click', doCompute);
     tfInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') doCompute(); });
 
@@ -384,78 +287,43 @@
             '<p style="color:var(--text-secondary);font-size:0.9375rem;">Computing Bode plot...</p></div>';
         if (emptyState) emptyState.style.display = 'none';
 
-        var code = buildSympyCode(currentMode);
+        var core = window.BodeCalculatorCore;
+        if (!core || !core.solve) {
+            showError('Bode engine failed to load.');
+            return;
+        }
 
-        var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, 90000);
+        var spec = {
+            mode: currentMode === 'zpk' ? 'zpk' : 'transfer',
+            transferFunction: tfInput.value.trim(),
+            zeros: zpkZerosInput.value.trim(),
+            poles: zpkPolesInput.value.trim(),
+            gain: zpkGainInput.value.trim() || '1'
+        };
 
-        fetch((window.BP_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ language: 'python', version: '3.10', code: code }),
-            signal: controller.signal
-        })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            clearTimeout(timeoutId);
-            var stdout = (data.Stdout || data.stdout || '').trim();
-            var stderr = (data.Stderr || data.stderr || '').trim();
-
-            if (!stdout || (stderr && /error|exception|traceback/i.test(stderr) && !stdout)) {
-                showError(stderr || 'Computation failed. Check your expression syntax.');
-                return;
-            }
-
-            var errMatch = stdout.match(/ERROR:(.+)/);
-            if (errMatch) {
-                showError(errMatch[1].trim());
-                return;
-            }
-
-            parseAndShowResult(stdout);
-        })
-        .catch(function(err) {
-            clearTimeout(timeoutId);
-            showError(err.name === 'AbortError' ? 'Request timed out' : err.message);
-        });
+        core.solve(spec, { ctx: window.BP_CALC_CTX || '' })
+            .then(function(r) {
+                if (!r || !r.ok) {
+                    showError(r && r.error ? r.error : 'Computation failed.');
+                    return;
+                }
+                applyComputeResult(r);
+            })
+            .catch(function(err) {
+                showError(err && err.message ? err.message : String(err));
+            });
     }
 
-    // ========== Parse & Display Result ==========
-    function parseAndShowResult(stdout) {
-        var stepsMatch = stdout.match(/STEPS:(\[[\s\S]*?\])(?=\nPLOT|$)/);
-        var plotWMatch = stdout.match(/PLOT_W:(\[[\s\S]*?\])/);
-        var plotMagMatch = stdout.match(/PLOT_MAG:(\[[\s\S]*?\])/);
-        var plotPhaseMatch = stdout.match(/PLOT_PHASE:(\[[\s\S]*?\])/);
-        var steps = [];
-        try { if (stepsMatch) steps = JSON.parse(stepsMatch[1]); } catch(e) {}
-        var plotW = [], plotMag = [], plotPhase = [];
-        try { if (plotWMatch) plotW = JSON.parse(plotWMatch[1]); } catch(e) {}
-        try { if (plotMagMatch) plotMag = JSON.parse(plotMagMatch[1]); } catch(e) {}
-        try { if (plotPhaseMatch) plotPhase = JSON.parse(plotPhaseMatch[1]); } catch(e) {}
-
-        var rMatch = stdout.match(/RESULT:([^\n]*)/);
-        var tMatch = stdout.match(/TEXT:([^\n]*)/);
-        var zMatch = stdout.match(/ZEROS:(\[[^\n]*\])/);
-        var pMatch = stdout.match(/POLES:(\[[^\n]*\])/);
-
-        var result = rMatch ? rMatch[1].trim() : '0';
-        var text = tMatch ? tMatch[1].trim() : result;
-        var zeros = [];
-        var poles = [];
-        try { if (zMatch) zeros = JSON.parse(zMatch[1]); } catch(e) {}
-        try { if (pMatch) poles = JSON.parse(pMatch[1]); } catch(e) {}
-
-        showResult(result, text, zeros, poles, steps);
-
-        if (plotW.length > 0 && plotMag.length > 0) {
-            pendingGraph = { w: plotW, mag: plotMag, phase: plotPhase };
+    function applyComputeResult(r) {
+        showResult(r.resultLatex, r.resultText, r.zeros || [], r.poles || [], r.steps || []);
+        if (r.plotW && r.plotW.length > 0 && r.plotMag && r.plotMag.length > 0) {
+            pendingGraph = { w: r.plotW, mag: r.plotMag, phase: r.plotPhase };
             if (graphHint) graphHint.style.display = 'none';
             var graphPanel = document.getElementById('bp-panel-graph');
-            if (graphPanel.classList.contains('active')) {
+            if (graphPanel && graphPanel.classList.contains('active')) {
                 loadPlotly(function() { renderGraph(pendingGraph); });
             }
         }
-
         resultActions.classList.add('visible');
     }
 
@@ -551,67 +419,11 @@
         if (!window.Plotly || !cfg || !cfg.w || cfg.w.length === 0) return;
         var container = document.getElementById('bp-graph-container');
         var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-
-        var magTrace = {
-            x: cfg.w,
-            y: cfg.mag,
-            type: 'scatter',
-            mode: 'lines',
-            line: { color: '#dc2626', width: 2.5 },
-            name: '|H(j\u03C9)| dB',
-            xaxis: 'x',
-            yaxis: 'y'
-        };
-
-        var phaseTrace = {
-            x: cfg.w,
-            y: cfg.phase,
-            type: 'scatter',
-            mode: 'lines',
-            line: { color: '#2563eb', width: 2.5 },
-            name: '\u2220H(j\u03C9)\u00B0',
-            xaxis: 'x2',
-            yaxis: 'y2'
-        };
-
-        var layout = {
-            grid: { rows: 2, columns: 1, pattern: 'independent', roworder: 'top to bottom' },
-            margin: { t: 30, r: 30, b: 50, l: 70 },
-            xaxis: {
-                type: 'log',
-                title: '',
-                gridcolor: isDark ? '#334155' : '#e2e8f0',
-                color: isDark ? '#cbd5e1' : '#475569',
-                zerolinecolor: isDark ? '#475569' : '#94a3b8'
-            },
-            yaxis: {
-                title: 'Magnitude (dB)',
-                gridcolor: isDark ? '#334155' : '#e2e8f0',
-                color: isDark ? '#cbd5e1' : '#475569',
-                zerolinecolor: isDark ? '#475569' : '#94a3b8',
-                domain: [0.55, 1]
-            },
-            xaxis2: {
-                type: 'log',
-                title: '\u03C9 (rad/s)',
-                gridcolor: isDark ? '#334155' : '#e2e8f0',
-                color: isDark ? '#cbd5e1' : '#475569',
-                zerolinecolor: isDark ? '#475569' : '#94a3b8'
-            },
-            yaxis2: {
-                title: 'Phase (\u00B0)',
-                gridcolor: isDark ? '#334155' : '#e2e8f0',
-                color: isDark ? '#cbd5e1' : '#475569',
-                zerolinecolor: isDark ? '#475569' : '#94a3b8',
-                domain: [0, 0.42]
-            },
-            paper_bgcolor: isDark ? '#1e293b' : '#fff',
-            plot_bgcolor: isDark ? '#1e293b' : '#fff',
-            font: { family: 'Inter, sans-serif', size: 12, color: isDark ? '#cbd5e1' : '#475569' },
-            showlegend: false
-        };
-
-        Plotly.newPlot(container, [magTrace, phaseTrace], layout, { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'] });
+        var core = window.BodeCalculatorCore;
+        var traces = core && core.buildPlotTraces ? core.buildPlotTraces(cfg) : [];
+        var layout = core && core.bodePlotLayout ? core.bodePlotLayout(isDark) : {};
+        if (layout.height) layout.height = 480;
+        Plotly.newPlot(container, traces, layout, { responsive: true, displayModeBar: false });
     }
 
     // ========== Python Compiler ==========
@@ -850,112 +662,5 @@
             }
         }
     } catch(e) {}
-
-    // ========== AI: Describe in English → H(s) ==========
-    var aiInput = document.getElementById('bp-ai-input');
-    var aiBtn = document.getElementById('bp-ai-btn');
-    var aiStatus = document.getElementById('bp-ai-status');
-
-    var AI_SYSTEM = 'You are a control systems expert. Given a plain-English description of a system, filter, or controller, output ONLY the transfer function H(s) as a mathematical expression using s as the variable. Use * for multiplication, ^ for powers, and parentheses for grouping. Output ONLY the expression — no explanation, no text, no markdown, no H(s)= prefix. Examples:\n' +
-        'Input: "PID controller with Kp=10 Ki=5 Kd=2"\nOutput: 2*s^2+10*s+5)/s\n' +
-        'Input: "second order low pass filter cutoff 10 rad/s damping 0.7"\nOutput: 100/(s^2+14*s+100)\n' +
-        'Input: "lead compensator gain 10 zero at -1 pole at -10"\nOutput: 10*(s+1)/(s+10)\n' +
-        'Input: "RC low pass R=1000 C=0.000001"\nOutput: 1/(0.001*s+1)\n' +
-        'Input: "integrator"\nOutput: 1/s\n' +
-        'RESPOND WITH ONLY THE EXPRESSION. No text before or after.';
-
-    function setAiStatus(msg, cls) {
-        if (!aiStatus) return;
-        aiStatus.textContent = msg;
-        aiStatus.className = 'bp-ai-status ' + (cls || '');
-        aiStatus.style.display = msg ? 'block' : 'none';
-    }
-
-    if (aiBtn && aiInput) {
-        aiBtn.addEventListener('click', function() { generateFromAI(); });
-        aiInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !aiBtn.disabled) generateFromAI();
-        });
-
-        // Example chips
-        document.querySelectorAll('.bp-ai-chip').forEach(function(chip) {
-            chip.addEventListener('click', function() {
-                aiInput.value = chip.getAttribute('data-prompt');
-                aiInput.focus();
-            });
-        });
-    }
-
-    function generateFromAI() {
-        var desc = aiInput.value.trim();
-        if (!desc) { setAiStatus('Enter a description', 'error'); return; }
-
-        aiBtn.disabled = true;
-        aiBtn.textContent = 'Thinking...';
-        setAiStatus('AI is generating the transfer function...', 'loading');
-
-        var ctx = window.BP_CALC_CTX || '';
-
-        fetch(ctx + '/ai', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [
-                    { role: 'system', content: AI_SYSTEM },
-                    { role: 'user', content: desc }
-                ],
-                stream: false
-            })
-        })
-        .then(function(r) {
-            if (r.status === 429) throw new Error('Rate limit — try again in a minute');
-            if (!r.ok) throw new Error('AI unavailable');
-            return r.json();
-        })
-        .then(function(data) {
-            var text = '';
-            if (data.message && data.message.content) text = data.message.content;
-            else if (data.response) text = data.response;
-            else if (data.choices && data.choices[0]) {
-                text = data.choices[0].message ? data.choices[0].message.content : (data.choices[0].text || '');
-            }
-
-            if (!text) throw new Error('Empty AI response');
-
-            // Clean: strip markdown, H(s)= prefix, whitespace
-            text = text.replace(/```[a-z]*\s*/gi, '').replace(/```/g, '').trim();
-            text = text.replace(/^H\(s\)\s*=\s*/i, '').trim();
-            text = text.replace(/^Transfer function:\s*/i, '').trim();
-            // Remove any lines that aren't math
-            var lines = text.split('\n').filter(function(l) {
-                return l.trim() && !l.match(/^[A-Za-z ]{10,}/); // skip long English lines
-            });
-            text = lines[0] || text.split('\n')[0];
-            text = text.trim();
-
-            if (!text || text.length > 200) throw new Error('AI returned invalid expression');
-
-            // Fill the H(s) input and switch to transfer function mode
-            if (currentMode !== 'transfer') {
-                document.querySelector('.bp-mode-btn[data-mode="transfer"]').click();
-            }
-            tfInput.value = text;
-            tfInput.dispatchEvent(new Event('input', { bubbles: true }));
-
-            setAiStatus('Generated: ' + text, 'success');
-
-            // Auto-compute
-            setTimeout(function() {
-                computeBtn.click();
-            }, 300);
-        })
-        .catch(function(err) {
-            setAiStatus(err.message, 'error');
-        })
-        .finally(function() {
-            aiBtn.disabled = false;
-            aiBtn.textContent = 'Generate H(s)';
-        });
-    }
 
 })();

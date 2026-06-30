@@ -43,11 +43,12 @@ Use [CURRENT CONTEXT] for live page inputs (PDE type, parameters, last page resu
    - **pde** (u_t, u_xx, heat/wave/Laplace/Poisson/transport/Schrödinger, 1st-order linear a u_x + b u_y + …)
    - **vectorCalculus** (∇f gradient, ∇·F divergence, ∇×F curl — scalar or Fx/Fy/Fz components)
    - **matrix** (det, inverse, transpose, trace, rank, RREF, A^n, eigenvalues/eigenvectors, A±B, A·B)
+   - **bode** (H(s) transfer function → magnitude & phase Bode plot, zeros/poles)
    - **quadratic** (ax²+bx+c=0, factored/vertex form, horizontal parabola)
    - **system** (2+ equations in x,y,…)
    - **inequality** (<, >, <=, >=, compound, rational)
    - **polynomial** (add/subtract/multiply/divide, factor, roots, evaluate, expand)
-2. Output the matching fenced block (\`\`\`integral\`\`\`, \`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`, \`\`\`matrix\`\`\`, \`\`\`quadratic\`\`\`, \`\`\`system\`\`\`, \`\`\`inequality\`\`\`, or \`\`\`polynomial\`\`\`). Prefer full LaTeX in \`raw:\` when the user gave notation.
+2. Output the matching fenced block (\`\`\`integral\`\`\`, \`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`, \`\`\`matrix\`\`\`, \`\`\`bode\`\`\`, \`\`\`quadratic\`\`\`, \`\`\`system\`\`\`, \`\`\`inequality\`\`\`, or \`\`\`polynomial\`\`\`). Prefer full LaTeX in \`raw:\` when the user gave notation.
 3. **Always mirror each problem in prose as textbook display math** (KaTeX \`$$...$$\`) — see formats below.
 4. Never give the final numerical answer or closed-form solution in prose — the engine computes when the student clicks a chip.
 
@@ -163,7 +164,20 @@ op: factor
 p: x^3 - 6x^2 + 11x - 6
 \`\`\`
 
-Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|matrix|quadratic|system|inequality|polynomial\` plus fields below.
+**Bode plot** — transfer function or ZPK (same engine as Bode Plot Generator page):
+\`\`\`bode
+transferFunction: 1/(s+1)
+\`\`\`
+Or:
+\`\`\`bode
+inputMode: zpk
+zeros: -1
+poles: 0, -10
+gain: 10
+\`\`\`
+Mirror in prose: \`$$\\displaystyle H(s) = \\frac{1}{s+1}$$\`
+
+Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|matrix|bode|quadratic|system|inequality|polynomial\` plus fields below.
 
 JSON batch: \`{"matrix":[{"op":"determinant","matrixA":"..."},{"op":"inverse","matrixA":"..."}]}\`
 
@@ -181,7 +195,7 @@ ${extra}
 function formatSeedContext(snap, shell) {
   if (typeof shell.formatContext === 'function') return shell.formatContext(snap);
   if (!snap) {
-    return '(Paste any math problem — ∫, lim, ODE, matrix, quadratic, system, inequality, polynomial — then Solve / Steps / Graph in chat.)';
+    return '(Paste any math problem — ∫, lim, ODE, matrix, Bode H(s), quadratic, system, inequality, polynomial — then Solve / Steps / Graph in chat.)';
   }
   if (typeof snap === 'string') return snap.slice(0, 6000);
   try {
@@ -197,7 +211,7 @@ function defaultQuickActions() {
     chip("Don't get it", 'Explain what this math topic means in plain language — notation, goal, and how to read the answer. Prose + KaTeX only.'),
     chip('Which method?', 'Which technique or formula should I use for a problem like mine? Strategy and reasoning only — no full worked solution.'),
     chip('Exam tip', 'Classroom exam tips for this topic: common mistakes, partial credit, and how to write answers clearly.'),
-    chip('Show example', 'Give one concrete example with the matching solver block (```integral```, ```derivative```, ```limit```, ```matrix```, ```quadratic```, etc.) so I can click Solve. One intro sentence, then the block.'),
+    chip('Show example', 'Give one concrete example with the matching solver block (```integral```, ```derivative```, ```limit```, ```matrix```, ```bode```, ```quadratic```, etc.) so I can click Solve. One intro sentence, then the block.'),
   ];
 }
 

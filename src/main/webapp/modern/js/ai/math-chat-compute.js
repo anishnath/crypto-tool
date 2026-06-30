@@ -58,6 +58,12 @@ function getMatrixCore() {
     : window.MatrixCalculatorCore;
 }
 
+function getBodeCore() {
+  return typeof BodeCalculatorCore !== 'undefined'
+    ? BodeCalculatorCore
+    : window.BodeCalculatorCore;
+}
+
 /** @param {import('./math-action-extract.js').MathActionTask} task */
 function matrixCanVisualize(task) {
   const core = getMatrixCore();
@@ -425,6 +431,48 @@ export async function solveMatrixTask(task, mode = 'simple') {
 }
 
 /**
+ * Bode plot in-chat via BodeCalculatorCore (same SymPy backbone as the page).
+ * @param {import('./math-action-extract.js').MathActionTask} task
+ * @param {MathSolveMode} mode
+ */
+export async function solveBodeTask(task, mode = 'simple') {
+  const core = getBodeCore();
+  if (!core?.solveTask) {
+    return { ok: false, error: 'Bode engine (BodeCalculatorCore) not loaded.', mode, problemLatex: '' };
+  }
+
+  const problemLatex = taskToDisplayLatex(task);
+  let r;
+  try {
+    r = await core.solveTask(task);
+  } catch (err) {
+    return { ok: false, error: err?.message || 'Bode computation failed.', mode, problemLatex };
+  }
+
+  if (!r || !r.ok) {
+    return { ok: false, error: r?.error || 'Could not compute this Bode plot.', mode, problemLatex };
+  }
+
+  const steps = mode === 'steps' ? (r.steps || []) : [];
+  const resultLatex = r.resultLatex ? `H(s) = ${r.resultLatex}` : '';
+
+  return {
+    ok: true,
+    mode,
+    action: 'bode',
+    resultLatex,
+    resultText: r.resultText || '',
+    method: 'Bode plot engine (SymPy + NumPy)',
+    steps,
+    zeros: r.zeros || [],
+    poles: r.poles || [],
+    input: mode === 'graph' ? { w: r.plotW, mag: r.plotMag, phase: r.plotPhase } : undefined,
+    result: { value: resultLatex },
+    problemLatex,
+  };
+}
+
+/**
  * @param {import('./math-action-extract.js').MathActionTask} task
  * @param {object} [shell]
  * @param {MathSolveMode} [mode]
@@ -437,6 +485,7 @@ export async function computeTaskInChat(task, _shell, mode = 'simple') {
   if (action === 'pde') return solvePdeTask(task, mode);
   if (action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
   if (action === 'matrix') return solveMatrixTask(task, mode);
+  if (action === 'bode') return solveBodeTask(task, mode);
   if (ALGEBRA_ACTIONS.includes(action)) return solveAlgebraTask(task, mode);
   return solveIntegralTask(task, mode);
 }
@@ -807,6 +856,58 @@ export function renderOdeGraphInChat(plotEl, parsed) {
 }
 
 /**
+ * Dual-subplot Bode magnitude & phase (same engine output as the page Graph tab).
+ * @param {HTMLElement} plotEl
+ * @param {{ w?: number[], mag?: number[], phase?: number[] }} input
+ */
+export function renderBodeGraphInChat(plotEl, input) {
+  if (!plotEl || !Array.isArray(input?.w) || !input.w.length || !Array.isArray(input?.mag) || !input.mag.length) {
+    if (plotEl) {
+      plotEl.innerHTML = '<p class="vca-math-result-method">No Bode plot data available for this transfer function.</p>';
+    }
+    return Promise.resolve(false);
+  }
+
+  const loadPlotly = () => new Promise((resolve) => {
+    if (window.Plotly) { resolve(true); return; }
+    if (typeof window.loadPlotly === 'function') {
+      window.loadPlotly(() => resolve(!!window.Plotly));
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = 'https://cdn.plot.ly/plotly-2.27.0.min.js';
+    s.onload = () => resolve(!!window.Plotly);
+    s.onerror = () => resolve(false);
+    document.head.appendChild(s);
+  });
+
+  return loadPlotly().then((ok) => {
+    if (!ok || !window.Plotly) return false;
+    const core = getBodeCore();
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const layout = core?.bodePlotLayout
+      ? core.bodePlotLayout(isDark)
+      : { margin: { t: 28, r: 16, b: 44, l: 56 }, height: 420 };
+    const traces = core?.buildPlotTraces
+      ? core.buildPlotTraces(input)
+      : [
+          { x: input.w, y: input.mag, type: 'scatter', mode: 'lines', line: { color: '#dc2626', width: 2.5 } },
+          { x: input.w, y: input.phase, type: 'scatter', mode: 'lines', line: { color: '#2563eb', width: 2.5 } },
+        ];
+    const chart = document.createElement('div');
+    chart.className = 'vca-math-graph-canvas';
+    chart.style.minHeight = '420px';
+    plotEl.appendChild(chart);
+    window.Plotly.newPlot(chart, traces, layout, {
+      responsive: true,
+      displayModeBar: false,
+      displaylogo: false,
+    });
+    return true;
+  });
+}
+
+/**
  * 3D cone plot of a gradient or curl vector field (same sampling as the VC page).
  * @param {HTMLElement} plotEl
  * @param {{ plotData?: number[][], vcMode?: string }} input
@@ -956,6 +1057,13 @@ function chipActionsForTask(task) {
     }
     return chips;
   }
+  if (action === 'bode') {
+    return [
+      { mode: 'simple', label: 'Solve', title: 'Compute H(s), zeros & poles (same Bode engine)' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step Bode analysis' },
+      { mode: 'graph', label: 'Show Bode plot', title: 'Magnitude & phase diagrams in chat' },
+    ];
+  }
   if (ALGEBRA_ACTIONS.includes(action)) {
     return [
       { mode: 'simple', label: 'Solve', title: 'Compute answer (same engine as page calculator)' },
@@ -992,10 +1100,11 @@ export async function renderChatResultCard(card, task, result) {
   const isOde = action === 'ode';
   const isPde = action === 'pde';
   const isVc = action === 'vectorCalculus';
+  const isBode = action === 'bode';
   const isAlgebraInterval = action === 'inequality'
     || (action === 'quadratic' && /[<>=]|\\in|\\emptyset|cup|∪/.test(answer));
   const isAlgebraSystem = action === 'system';
-  const fuseAnswer = !isOde && !isPde && !isVc && !isAlgebraInterval && !isAlgebraSystem;
+  const fuseAnswer = !isOde && !isPde && !isVc && !isBode && !isAlgebraInterval && !isAlgebraSystem;
   const answerEq = fuseAnswer ? `${problem} = ${answer}` : answer;
 
   body.replaceChildren();
@@ -1051,6 +1160,22 @@ export async function renderChatResultCard(card, task, result) {
     appendEqSlot(body, problem);
     if (answer) appendEqSlot(body, `\\text{Solution: }${answer}`, 'vca-math-eq-answer');
     appendMethod(body, result.method);
+  } else if (isBode) {
+    appendEqSlot(body, problem);
+    if (answer) appendEqSlot(body, answer, 'vca-math-eq-answer');
+    if (Array.isArray(result.zeros) && result.zeros.length) {
+      const p = document.createElement('p');
+      p.className = 'vca-math-result-method';
+      p.textContent = `Zeros: ${result.zeros.join(', ')}`;
+      body.appendChild(p);
+    }
+    if (Array.isArray(result.poles) && result.poles.length) {
+      const p = document.createElement('p');
+      p.className = 'vca-math-result-method';
+      p.textContent = `Poles: ${result.poles.join(', ')}`;
+      body.appendChild(p);
+    }
+    appendMethod(body, result.method);
   } else {
     appendEqSlot(body, `${problem} = ${answer}`);
     appendMethod(body, result.method);
@@ -1067,6 +1192,7 @@ export async function renderChatResultCard(card, task, result) {
       else if (action === 'ode') void renderOdeGraphInChat(plotEl, result.input);
       else if (action === 'vectorCalculus') void renderVectorCalculusGraphInChat(plotEl, result.input);
       else if (action === 'matrix') void renderMatrixGraphInChat(plotEl, result.input);
+      else if (action === 'bode') void renderBodeGraphInChat(plotEl, result.input);
       else void renderIntegralGraphInChat(plotEl, result.input);
     }
   }

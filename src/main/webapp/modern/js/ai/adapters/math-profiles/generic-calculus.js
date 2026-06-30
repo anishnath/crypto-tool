@@ -11,6 +11,7 @@ import {
   solvePdeTask,
   solveVectorCalculusTask,
   solveMatrixTask,
+  solveBodeTask,
 } from '../../math-chat-compute.js';
 import { solveAlgebraTask } from '../../algebra-chat-compute.js';
 import { icApplyIntegralTask } from './integral-calculator.js';
@@ -38,6 +39,7 @@ function buildFocusQuickActions(focus, snap) {
   const quadExpr = ctxSnippet(s, ['expr', 'raw']);
   const ineqExpr = ctxSnippet(s, ['expr', 'raw']);
   const polyP = ctxSnippet(s, ['p1', 'p', 'expr']);
+  const tfExpr = ctxSnippet(s, ['transferFunction', 'expr']);
   const eqs = ctxSnippet(s, ['equations']);
   const ctx = (line) => (line ? ` Current page input: ${line}.` : '');
 
@@ -114,6 +116,12 @@ function buildFocusQuickActions(focus, snap) {
       chip('Exam tip', 'Exam tips for polynomials: factoring order, remainder theorem checks, and stating roots with multiplicity.'),
       chip('Show example', 'Give one polynomial example (factor or divide) with a ```polynomial``` block so I can click Solve. One intro sentence, then the block.'),
     ],
+    bode: [
+      chip("Don't get it", `Explain Bode plots in plain language — magnitude vs phase, dB scale, and what H(jω) means.${ctx(tfExpr)} Prose + KaTeX only.`),
+      chip('Gain & phase margin', 'How do I read gain margin and phase margin from a Bode plot? Explain crossover frequencies and stability — no numbers unless from my transfer function.'),
+      chip('Poles & zeros', 'How do pole and zero locations shape the magnitude and phase curves? Outline corner frequencies and ±20 dB/decade slopes for my type of H(s).'),
+      chip('Show example', 'Give one transfer-function Bode example with a ```bode``` block so I can click Solve / Show Bode plot. One intro sentence, then the block.'),
+    ],
   };
 
   return sets[focus] || sets.integral;
@@ -121,7 +129,7 @@ function buildFocusQuickActions(focus, snap) {
 
 const FOCUS_KEYS = new Set([
   'integral', 'derivative', 'limit', 'ode', 'pde', 'series',
-  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial',
+  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode',
 ]);
 
 /**
@@ -162,6 +170,7 @@ export function configureGenericMathShell(opts = {}) {
       if (task.action === 'pde') return solvePdeTask(task, mode);
       if (task.action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
       if (task.action === 'matrix') return solveMatrixTask(task, mode);
+      if (task.action === 'bode') return solveBodeTask(task, mode);
       return solveAlgebraTask(task, mode);
     },
 
@@ -181,6 +190,7 @@ export function configureGenericMathShell(opts = {}) {
     },
 
     getContext() {
+      if (typeof window.bpGetContext === 'function') return window.bpGetContext();
       if (typeof window.qsGetContext === 'function') return window.qsGetContext();
       if (typeof window.syGetContext === 'function') return window.syGetContext();
       if (typeof window.iqGetContext === 'function') return window.iqGetContext();
@@ -252,6 +262,15 @@ export function configureGenericMathShell(opts = {}) {
           lines.push(`Operation: ${snap.op || 'factor'}`);
           if (snap.p1) lines.push(`P(x): ${String(snap.p1).slice(0, 200)}`);
           if (snap.p2) lines.push(`Q(x): ${String(snap.p2).slice(0, 200)}`);
+        } else if (snap.toolType === 'bode') {
+          lines.push(`Input mode: ${snap.mode || 'transfer'}`);
+          if (snap.mode === 'zpk') {
+            if (snap.zeros) lines.push(`Zeros: ${snap.zeros}`);
+            if (snap.poles) lines.push(`Poles: ${snap.poles}`);
+            if (snap.gain) lines.push(`Gain K: ${snap.gain}`);
+          } else if (snap.transferFunction) {
+            lines.push(`H(s): ${String(snap.transferFunction).slice(0, 400)}`);
+          }
         } else {
           lines.push(
             `Mode: ${snap.mode || '(n/a)'}`,
@@ -291,7 +310,7 @@ export function configureGenericMathShell(opts = {}) {
       return buildFocusQuickActions(this.focus || focus, snap);
     },
 
-    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, **PDE**, **vectorCalculus** (∇, ∇·, ∇×), **matrix** (det, inverse, eigenvalues, A·B, …), **quadratic**, **system**, **inequality**, and **polynomial** problems regardless of which calculator page the student is on. Every computation runs in chat via the same JS engines as the on-page calculators — never compute the answer yourself.
+    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, **PDE**, **vectorCalculus** (∇, ∇·, ∇×), **matrix** (det, inverse, eigenvalues, A·B, …), **bode** (H(s) Bode magnitude/phase), **quadratic**, **system**, **inequality**, and **polynomial** problems regardless of which calculator page the student is on. Every computation runs in chat via the same JS engines as the on-page calculators — never compute the answer yourself.
 
 **Student-facing language:** Never mention SymPy, NumPy, Python, OneCompiler, or other backend libraries in replies. Say "the solver", "step-by-step engine", "numerical method", or "symbolic method" instead.
 
@@ -665,6 +684,58 @@ Never name implementation libraries (SymPy, Python, OneCompiler, etc.) in replie
 
 function registerContextGetter(name, fn) {
   if (typeof window !== 'undefined') window[name] = fn;
+}
+
+/** Bode Plot Generator — control-systems tutor chips; chat handles ∫, ODE, matrix, etc. */
+export function configureBodeMathShell() {
+  configureGenericMathShell({
+    focus: 'bode',
+    pageLabel: 'Bode Plot Generator',
+    pageHint: 'Bode Plot — H(s) magnitude & phase, gain/phase margin',
+    panelTitle: 'Math AI',
+    subtitle: 'Bode tutor + full math router in chat',
+    placeholder: 'Ask about Bode plots, H(s), stability — or paste ∫, ODE, matrix problems…',
+    footerText: 'Ctrl+Shift+A · page Bode engine + chat solvers',
+  });
+
+  const extra = `
+
+**Bode Plot page — tutor + engine router**
+
+1. **Teacher** — Bode magnitude/phase, corner frequencies, asymptotic slopes (±20 dB/decade per pole/zero), gain & phase margin, PID/lead-lag intuition. Use KaTeX prose; mirror [CURRENT CONTEXT] H(s) when present.
+
+2. **Solver** — for concrete H(s) or ZPK problems emit a \`\`\`bode\`\`\` block so **Solve / Solve with steps / Show Bode plot** chips appear. Same SymPy engine as the page — never invent plot data in prose.
+
+Example:
+\`\`\`bode
+transferFunction: 1/(s^2 + 2*s + 1)
+\`\`\`
+Or ZPK:
+\`\`\`bode
+inputMode: zpk
+zeros: -1
+poles: 0, -10
+gain: 10
+\`\`\`
+
+For other math ( ∫, ODE, matrix, … ) use the matching block type on any page.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
+
+  registerContextGetter('bpGetContext', () => {
+    const modeEl = document.querySelector('.bp-mode-btn.active');
+    const mode = modeEl?.getAttribute('data-mode') || 'transfer';
+    return {
+      toolType: 'bode',
+      mode,
+      transferFunction: document.getElementById('bp-tf-expr')?.value?.trim() || '',
+      zeros: document.getElementById('bp-zpk-zeros')?.value?.trim() || '',
+      poles: document.getElementById('bp-zpk-poles')?.value?.trim() || '',
+      gain: document.getElementById('bp-zpk-gain')?.value?.trim() || '1',
+    };
+  });
 }
 
 /** Quadratic Solver — algebra focus on unified Math AI. */

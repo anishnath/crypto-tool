@@ -11,7 +11,7 @@ import {
   taskToDisplayLatex as algebraTaskToDisplayLatex,
 } from './algebra-action-extract.js';
 
-export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'matrix'];
+export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'matrix', 'bode'];
 export { ALGEBRA_ACTIONS };
 /** All Math AI intents — calculus, linear algebra, algebra (standalone Math AI page uses full set). */
 export const MATH_ACTIONS = [...CALCULUS_ACTIONS, ...ALGEBRA_ACTIONS];
@@ -73,10 +73,11 @@ const ACTION_FENCE_LANGS = new Set([
   'vectorcalculus', 'vector-calculus', 'vc', 'vector_calculus',
   'gradient', 'divergence', 'curl',
   'matrix', 'matrices', 'linearalgebra', 'linear-algebra',
+  'bode', 'bodeplot', 'transferfunction', 'transfer-function',
   'math-action', 'math', 'mathintent',
 ]);
 
-/** @typedef {'integral'|'derivative'|'limit'|'ode'|'pde'|'vectorCalculus'|'matrix'} CalculusAction */
+/** @typedef {'integral'|'derivative'|'limit'|'ode'|'pde'|'vectorCalculus'|'matrix'|'bode'} CalculusAction */
 
 /**
  * @typedef {Object} MathActionTask
@@ -133,6 +134,9 @@ function detectAction(obj, fenceLang) {
     action = 'vectorCalculus';
   }
   if (action === 'matrices' || action === 'linearalgebra' || action === 'linear-algebra') action = 'matrix';
+  if (action === 'bodeplot' || action === 'bode-diagram' || action === 'transferfunction' || action === 'transfer-function') {
+    action = 'bode';
+  }
   if (action === 'grad' || action === 'nabla') action = 'gradient';
   if (action === 'div') action = 'divergence';
   if (action === 'gradient' || action === 'divergence' || action === 'curl') {
@@ -142,6 +146,13 @@ function detectAction(obj, fenceLang) {
   const matrixOpHint = String(obj.op || obj.operation || '').toLowerCase();
   if (MATRIX_OPS.has(matrixOpHint)) return 'matrix';
   const fence = String(fenceLang || '').toLowerCase();
+  if (fence === 'bode' || fence === 'bodeplot' || fence === 'transferfunction' || fence === 'transfer-function') {
+    return 'bode';
+  }
+  if (obj.transferFunction != null || obj.transfer_function != null || obj.hs != null || obj.Hs != null) {
+    return 'bode';
+  }
+  if ((obj.zeros != null || obj.poles != null) && (fence === 'bode' || obj.gain != null)) return 'bode';
   if (fence === 'matrix' || fence === 'matrices') return 'matrix';
   if (obj.matrixA != null || obj.matrix_a != null || obj.matrixB != null || obj.matrix_b != null) {
     return 'matrix';
@@ -154,6 +165,7 @@ function detectAction(obj, fenceLang) {
     }
   }
   const raw = String(obj?.raw || obj?.latex || '');
+  if (/H\s*\(\s*s\s*\)|transfer function|bode plot/i.test(raw) && /[=\/\^]|\\frac/.test(raw)) return 'bode';
   if (inferVcModeFromRaw(raw)) return 'vectorCalculus';
   if (inferMatrixOpFromRaw(raw)) return 'matrix';
   if (obj?.rhs != null || (raw && /=/.test(raw) && /(y''|y'|\\frac\s*\{\s*d\s*y\s*\}|dy\s*\/\s*dx)/.test(raw))) return 'ode';
@@ -337,6 +349,28 @@ export function normalizeCalculusTask(obj, fenceLang) {
     return task;
   }
 
+  if (action === 'bode') {
+    let inputMode = String(obj.inputMode || obj.input_mode || obj.bodeMode || '').toLowerCase();
+    if (!inputMode) {
+      const modeHint = String(obj.mode || '').toLowerCase();
+      if (modeHint === 'zpk' || modeHint === 'zeros-poles-gain') inputMode = 'zpk';
+      else if (modeHint === 'transfer' || modeHint === 'transfer-function') inputMode = 'transfer';
+      else if (obj.zeros != null || obj.poles != null) inputMode = 'zpk';
+      else inputMode = 'transfer';
+    }
+    task.inputMode = inputMode === 'zpk' ? 'zpk' : 'transfer';
+    const tf = String(
+      obj.transferFunction || obj.transfer_function || obj.hs || obj.Hs || obj.expr || obj.function || '',
+    ).trim();
+    if (tf) task.transferFunction = tf;
+    if (obj.zeros != null) task.zeros = String(obj.zeros).trim();
+    if (obj.poles != null) task.poles = String(obj.poles).trim();
+    if (obj.gain != null && String(obj.gain).trim() !== '') task.gain = String(obj.gain).trim();
+    if (!raw && task.inputMode === 'transfer' && !task.transferFunction) return null;
+    if (!raw && task.inputMode === 'zpk' && !task.zeros && !task.poles && !task.transferFunction) return null;
+    return task;
+  }
+
   // limit
   const expr = String(obj.expr || obj.body || obj.function || '').trim();
   if (!raw && !expr) return null;
@@ -396,6 +430,11 @@ export function parseCalculusBlockContent(content, fenceLang) {
     matrixA: kv.matrixa || kv.matrix_a || kv.latexa,
     matrixB: kv.matrixb || kv.matrix_b || kv.latexb,
     n: kv.n || kv.exponent,
+    transferFunction: kv.transferfunction || kv.transfer_function || kv.hs,
+    zeros: kv.zeros,
+    poles: kv.poles,
+    gain: kv.gain || kv.k,
+    inputMode: kv.inputmode || kv.input_mode || kv.bodemode,
     variable: kv.variable || kv.var || 'x',
     mode: kv.mode || kv.pdetype || kv.pde || kv.type,
     lower: isPdeFence ? kv.lower : (kv.lower || kv.a),
@@ -446,6 +485,10 @@ function tasksFromJson(data) {
   }
   if (Array.isArray(data.matrix)) {
     data.matrix.forEach((t) => push({ ...t, action: 'matrix' }));
+    return out;
+  }
+  if (Array.isArray(data.bode)) {
+    data.bode.forEach((t) => push({ ...t, action: 'bode' }));
     return out;
   }
   if (Array.isArray(data.matrices)) {
@@ -617,6 +660,20 @@ function odeEquationLatex(task) {
   return `${lhs} = ${rhsTeX}`;
 }
 
+function bodeProblemLatex(task) {
+  if (task.raw) return prepareLatexForKatex(String(task.raw).trim());
+  const inputMode = task.inputMode || (task.mode === 'zpk' ? 'zpk' : 'transfer');
+  if (inputMode === 'zpk') {
+    const k = task.gain || '1';
+    const z = task.zeros ? `z=\\{${String(task.zeros).replace(/,/g, ',\\,')}\\}` : 'z=\\varnothing';
+    const p = task.poles ? `p=\\{${String(task.poles).replace(/,/g, ',\\,')}\\}` : 'p=\\varnothing';
+    return `H(s)\\ \\text{from ZPK:}\\ K=${k},\\ ${z},\\ ${p}`;
+  }
+  const tf = String(task.transferFunction || task.expr || '').trim();
+  const body = exprToBodyLatex(tf);
+  return `H(s) = ${body}`;
+}
+
 const PDE_MODE_LATEX = {
   heat: 'u_t = k\\, u_{xx}',
   wave: 'u_{tt} = c^2\\, u_{xx}',
@@ -753,6 +810,8 @@ export function taskToSolveLatex(task) {
   // ODE is solved via the SymPy backbone
   if (task.action === 'ode') return task.raw ? task.raw.trim() : odeEquationLatex(task);
 
+  if (task.action === 'bode') return task.raw ? task.raw.trim() : bodeProblemLatex(task);
+
   if (task.raw) return sanitizeLatexForEngine(task.raw.trim());
 
   const v = task.variable || 'x';
@@ -807,6 +866,10 @@ export function taskToDisplayLatex(task) {
   if (task.action === 'ode') {
     const eq = task.raw ? prepareLatexForKatex(task.raw.trim()) : odeEquationLatex(task);
     return ensureDisplayStyle(eq);
+  }
+
+  if (task.action === 'bode') {
+    return ensureDisplayStyle(bodeProblemLatex(task));
   }
 
   if (task.raw) return ensureDisplayStyle(prepareLatexForKatex(task.raw.trim()));
@@ -893,6 +956,9 @@ export function formatMathActionLabel(task, index) {
     };
     const op = String(task.op || 'determinant').toLowerCase();
     return `${n}${names[op] || 'Matrix'}`;
+  }
+  if (task.action === 'bode') {
+    return `${n}Bode plot`;
   }
   return `${n}${task.mode === 'definite' ? 'Definite integral' : 'Integral'}`;
 }
