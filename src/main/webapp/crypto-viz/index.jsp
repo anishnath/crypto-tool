@@ -179,6 +179,8 @@
     </style>
 </head>
 <body>
+<%@ include file="/modern/components/analytics.jsp" %>
+<%@ include file="/modern/ads/ad-init.jsp" %>
     <script>window.CV_CTX = '<%= ctx %>';</script>
 
     <!-- top bar -->
@@ -263,8 +265,7 @@
         </section>
     </div>
     <%-- Analytics + ad system (deferred to end of body for LCP) --%>
-    <%@ include file="/modern/components/analytics.jsp" %>
-    <%@ include file="/modern/ads/ad-init.jsp" %>
+
     <script src="<%=ctx%>/crypto-viz/crypto-viz.js"></script>
 </body>
 </html>
