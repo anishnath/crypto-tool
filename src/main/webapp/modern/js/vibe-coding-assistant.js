@@ -46,7 +46,7 @@ const PANEL_MIN_H = 300;
 const DEFAULT_POLICY_PREFS = Object.freeze({
   mode: 'fast',
   /** true = each send omits prior chat turns (UI label "Remember chat" unchecked). */
-  freshContext: true,
+  freshContext: false,
 });
 
 /** Default tier → servlet when aiRouteMode is `tier` (e.g. USE_AI_GATEWAY=true on server). */
@@ -974,7 +974,9 @@ export class ToolAiAssistant {
       const parsed = JSON.parse(raw);
       return {
         mode: ['fast', 'explain', 'strict'].includes(parsed?.mode) ? parsed.mode : 'fast',
-        freshContext: parsed?.freshContext !== false,
+        freshContext: typeof parsed?.freshContext === 'boolean'
+          ? parsed.freshContext
+          : DEFAULT_POLICY_PREFS.freshContext,
       };
     } catch {
       return { ...DEFAULT_POLICY_PREFS };
