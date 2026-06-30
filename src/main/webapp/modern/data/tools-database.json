@@ -1,7 +1,7 @@
 {
-  "version": "1.12",
-  "lastUpdated": "2026-06-06T00:00:00.000Z",
-  "totalTools": 453,
+  "version": "1.13",
+  "lastUpdated": "2026-06-30T00:00:00.000Z",
+  "totalTools": 454,
   "categories": [
     "Biology",
     "Blockchain & Crypto",
@@ -456,6 +456,13 @@
       "category": "Developer Tools",
       "keywords": "code playground compare programming languages side by side run code online polyglot playground multiple languages versions python java go cpp rust javascript typescript split screen",
       "description": "Run multiple programming languages and versions side by side. Pick a language and version per pane, write code, and run them together - no setup."
+    },
+    {
+      "name": "Crypto Visualizer (AES & SHA-256)",
+      "url": "/crypto-viz/",
+      "category": "Cryptography",
+      "keywords": "crypto visualizer aes sha256 encryption hash step by step",
+      "description": "See how AES-128 and SHA-256 work, step by step."
     },
     {
       "name": "Random String Generator",

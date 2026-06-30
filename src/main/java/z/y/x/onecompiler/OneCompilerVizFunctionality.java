@@ -29,6 +29,10 @@ import z.y.x.r.LoadPropertyFileFunctionality;
  *
  * POST:
  * - action=execute — body: { language, version?, code?, files? }
+ *
+ * Crypto-visualization passthrough (OneCompiler {@code /crypto/*}, separate from {@code /viz/*}):
+ * - GET  action=crypto_algorithms — catalog/form-schema for the FE
+ * - GET/POST action=crypto_trace — body/query: { algorithm, mode, message, key }
  */
 public class OneCompilerVizFunctionality extends HttpServlet {
 
@@ -68,6 +72,13 @@ public class OneCompilerVizFunctionality extends HttpServlet {
             case "language_capabilities":
                 proxyLanguageCapabilities(request, response);
                 break;
+            case "crypto_algorithms":
+                // Catalog rarely changes (backend deploy) — reuse the GET cache.
+                proxyCryptoGet("algorithms", null, response);
+                break;
+            case "crypto_trace":
+                proxyCryptoTraceGet(request, response);
+                break;
             default:
                 sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Unknown GET action: " + action);
         }
@@ -84,6 +95,11 @@ public class OneCompilerVizFunctionality extends HttpServlet {
 
         if ("execute".equalsIgnoreCase(action)) {
             proxyExecute(request, response);
+            return;
+        }
+
+        if ("crypto_trace".equalsIgnoreCase(action)) {
+            proxyCryptoTracePost(request, response);
             return;
         }
 
@@ -143,6 +159,74 @@ public class OneCompilerVizFunctionality extends HttpServlet {
             sendError(response, HttpServletResponse.SC_BAD_GATEWAY,
                     "Failed to run visualization: " + e.getMessage());
         }
+    }
+
+    /** GET passthrough to {@code /crypto/<path>} (cached like the other viz metadata). */
+    private void proxyCryptoGet(String path, String query, HttpServletResponse response) throws IOException {
+        String cacheKey = "crypto/" + ((query == null || query.isEmpty()) ? path : path + "?" + query);
+        UpstreamResponse cached = GET_CACHE.get(cacheKey);
+        if (cached != null) {
+            sendJsonResponse(response, cached.statusCode, cached.body);
+            return;
+        }
+        try {
+            UpstreamResponse upstream = makeGetRequest(cryptoUrl(path, query));
+            if (upstream.statusCode >= 200 && upstream.statusCode < 300) {
+                GET_CACHE.put(cacheKey, upstream);
+            }
+            sendJsonResponse(response, upstream.statusCode, upstream.body);
+        } catch (IOException e) {
+            sendError(response, HttpServletResponse.SC_BAD_GATEWAY, "Crypto API request failed: " + e.getMessage());
+        }
+    }
+
+    /** GET /crypto/trace — forwards algorithm/mode/message/key as query params (never cached). */
+    private void proxyCryptoTraceGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        StringBuilder q = new StringBuilder();
+        appendParam(q, "algorithm", request.getParameter("algorithm"));
+        appendParam(q, "mode", request.getParameter("mode"));
+        appendParam(q, "message", request.getParameter("message"));
+        appendParam(q, "key", request.getParameter("key"));
+        try {
+            UpstreamResponse upstream = makeGetRequest(cryptoUrl("trace", q.length() == 0 ? null : q.toString()));
+            sendJsonResponse(response, upstream.statusCode, upstream.body);
+        } catch (IOException e) {
+            sendError(response, HttpServletResponse.SC_BAD_GATEWAY, "Crypto trace failed: " + e.getMessage());
+        }
+    }
+
+    /** POST /crypto/trace — forwards the JSON body verbatim. */
+    private void proxyCryptoTracePost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String body = readRequestBody(request);
+        if (body == null || body.isEmpty()) {
+            sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Request body is required");
+            return;
+        }
+        try {
+            UpstreamResponse upstream = makePostRequest(cryptoUrl("trace", null), body);
+            sendJsonResponse(response, upstream.statusCode, upstream.body);
+        } catch (IOException e) {
+            sendError(response, HttpServletResponse.SC_BAD_GATEWAY, "Crypto trace failed: " + e.getMessage());
+        }
+    }
+
+    private void appendParam(StringBuilder q, String name, String value) {
+        if (value == null || value.isEmpty()) {
+            return;
+        }
+        if (q.length() > 0) {
+            q.append('&');
+        }
+        q.append(name).append('=').append(urlEncode(value));
+    }
+
+    private String cryptoUrl(String path, String query) {
+        StringBuilder url = new StringBuilder();
+        url.append(ensureTrailingSlash(getApiBase())).append("crypto/").append(path);
+        if (query != null && !query.isEmpty()) {
+            url.append('?').append(query);
+        }
+        return url.toString();
     }
 
     private void proxyGet(String path, String query, HttpServletRequest request, HttpServletResponse response)
