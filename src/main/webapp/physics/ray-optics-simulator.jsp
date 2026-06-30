@@ -391,7 +391,7 @@
         </div>
     </div>
 </footer>
-<%@ include file="../modern/ads/ad-sticky-footer.jsp" %>
+<%--<%@ include file="../modern/ads/ad-sticky-footer.jsp" %>--%>
 
 <!-- ===== SCRIPTS ===== -->
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js"></script>
