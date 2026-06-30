@@ -2,7 +2,7 @@
  * Laplace Transform — shared core (SymPy via OneCompiler).
  * Used by laplace-transform-calculator.js and Generic Math AI chat.
  *
- * Browser: window.LaplaceCalculatorCore. Node: module.exports.
+ * Browser: window.LaplaceCalculatorCore. Node: module.exports. 2023-04-22.
  */
 'use strict';
 
