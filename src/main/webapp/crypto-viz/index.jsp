@@ -17,6 +17,16 @@
         <jsp:param name="toolFeatures" value="See how AES-128 encrypts and decrypts step by step,Visualize the AES key schedule (round-key expansion),Animated SubBytes / ShiftRows / MixColumns / AddRoundKey,See how SHA-256 hashes - message schedule plus 64 compression rounds,Driven by the real reference implementation - nothing re-implemented or faked,Play, scrub and step through every operation" />
     </jsp:include>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- LCP optimization: ad-init.jsp is deferred to the bottom of body. Tiny stub here so
+         the per-ad lazy-load observer can safely queue googletag.cmd / stpd.que pushes before
+         the real GPT script arrives. (No ad slots on the page yet — ready for when they're added.) -->
+    <link rel="preconnect" href="https://securepubads.g.doubleclick.net" crossorigin>
+    <link rel="preconnect" href="https://stpd.cloud" crossorigin>
+    <script>
+        window.googletag = window.googletag || { cmd: [] };
+        window.stpd = window.stpd || { que: [] };
+    </script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
@@ -179,8 +189,6 @@
     </style>
 </head>
 <body>
-<%@ include file="/modern/components/analytics.jsp" %>
-<%@ include file="/modern/ads/ad-init.jsp" %>
     <script>window.CV_CTX = '<%= ctx %>';</script>
 
     <!-- top bar -->
@@ -264,8 +272,10 @@
             </div>
         </section>
     </div>
-    <%-- Analytics + ad system (deferred to end of body for LCP) --%>
-
     <script src="<%=ctx%>/crypto-viz/crypto-viz.js"></script>
+
+    <%-- Analytics + ad system (deferred to end of body for LCP) --%>
+    <%@ include file="/modern/components/analytics.jsp" %>
+    <%@ include file="/modern/ads/ad-init.jsp" %>
 </body>
 </html>
