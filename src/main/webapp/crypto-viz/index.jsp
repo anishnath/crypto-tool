@@ -146,6 +146,7 @@
         .cv-hl-expand { background: #7e57c233; border-color: #7e57c2; }
         .cv-hl-round { background: #2aa19833; border-color: #2aa198; }
         .cv-hl-add { background: #d4694f33; border-color: var(--hl-emit-b); }
+        .cv-hl-feistel { background: #e0833a33; border-color: #e0833a; }
         /* column labels (a..h, H0..H7) above a words panel */
         .cv-collabels { display: grid; gap: 4px; margin-bottom: 3px; }
         .cv-collabel { text-align: center; font-size: 10px; color: var(--text-dim); }
@@ -158,7 +159,7 @@
         .cv-op-xor { background: var(--hl-xor-b); } .cv-op-sub { background: var(--hl-sub-b); }
         .cv-op-permute { background: var(--hl-permute-b); } .cv-op-mix { background: var(--hl-mix-b); }
         .cv-op-load { background: #8a8a8a; } .cv-op-emit { background: var(--hl-emit-b); }
-        .cv-op-expand { background: #7e57c2; } .cv-op-round { background: #2aa198; } .cv-op-add { background: var(--hl-emit-b); }
+        .cv-op-expand { background: #7e57c2; } .cv-op-round { background: #2aa198; } .cv-op-add { background: var(--hl-emit-b); } .cv-op-feistel { background: #e0833a; }
         #cvStepTitle { font-size: 15px; color: var(--text-bright); font-weight: 600; }
         #cvFormula { font-family: monospace; font-size: 12.5px; color: var(--primary-hi); background: var(--bg); border-radius: 6px; padding: 7px 10px; margin: 8px 0; display: inline-block; }
         #cvExplain { font-size: 13px; color: var(--text); line-height: 1.55; }

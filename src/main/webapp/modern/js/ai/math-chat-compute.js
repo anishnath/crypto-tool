@@ -64,6 +64,12 @@ function getBodeCore() {
     : window.BodeCalculatorCore;
 }
 
+function getLaplaceCore() {
+  return typeof LaplaceCalculatorCore !== 'undefined'
+    ? LaplaceCalculatorCore
+    : window.LaplaceCalculatorCore;
+}
+
 /** @param {import('./math-action-extract.js').MathActionTask} task */
 function matrixCanVisualize(task) {
   const core = getMatrixCore();
@@ -473,6 +479,54 @@ export async function solveBodeTask(task, mode = 'simple') {
 }
 
 /**
+ * Laplace transform in-chat via LaplaceCalculatorCore (same SymPy backbone as the page).
+ * @param {import('./math-action-extract.js').MathActionTask} task
+ * @param {MathSolveMode} mode
+ */
+export async function solveLaplaceTask(task, mode = 'simple') {
+  const core = getLaplaceCore();
+  if (!core?.solveTask) {
+    return { ok: false, error: 'Laplace engine (LaplaceCalculatorCore) not loaded.', mode, problemLatex: '' };
+  }
+
+  const problemLatex = taskToDisplayLatex(task);
+  const transformMode = String(task.mode || task.laplaceMode || 'forward').toLowerCase();
+  const isInverse = /inverse|ilaplace|inv/.test(transformMode);
+
+  let r;
+  try {
+    r = await core.solveTask(task);
+  } catch (err) {
+    return { ok: false, error: err?.message || 'Laplace computation failed.', mode, problemLatex };
+  }
+
+  if (!r || !r.ok) {
+    return { ok: false, error: r?.error || 'Could not compute this Laplace transform.', mode, problemLatex };
+  }
+
+  const steps = mode === 'steps' ? (r.steps || []) : [];
+  const symbol = isInverse ? '\\mathcal{L}^{-1}\\{F(s)\\}' : '\\mathcal{L}\\{f(t)\\}';
+  const resultLatex = r.resultLatex ? `${symbol} = ${r.resultLatex}` : '';
+
+  return {
+    ok: true,
+    mode,
+    action: 'laplace',
+    resultLatex,
+    resultText: r.resultText || '',
+    method: isInverse ? 'Inverse Laplace transform (SymPy CAS)' : 'Forward Laplace transform (SymPy CAS)',
+    steps,
+    convergence: r.convergence || null,
+    transformMode: isInverse ? 'inverse' : 'forward',
+    input: mode === 'graph' && Array.isArray(r.plotX) && r.plotX.length
+      ? { x: r.plotX, y: r.plotY }
+      : undefined,
+    result: { value: resultLatex },
+    problemLatex,
+  };
+}
+
+/**
  * @param {import('./math-action-extract.js').MathActionTask} task
  * @param {object} [shell]
  * @param {MathSolveMode} [mode]
@@ -486,6 +540,7 @@ export async function computeTaskInChat(task, _shell, mode = 'simple') {
   if (action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
   if (action === 'matrix') return solveMatrixTask(task, mode);
   if (action === 'bode') return solveBodeTask(task, mode);
+  if (action === 'laplace') return solveLaplaceTask(task, mode);
   if (ALGEBRA_ACTIONS.includes(action)) return solveAlgebraTask(task, mode);
   return solveIntegralTask(task, mode);
 }
@@ -908,6 +963,62 @@ export function renderBodeGraphInChat(plotEl, input) {
 }
 
 /**
+ * Time-domain f(t) plot after Laplace transform (same engine output as the page Graph tab).
+ * @param {HTMLElement} plotEl
+ * @param {{ x?: number[], y?: number[] }} input
+ */
+export function renderLaplaceGraphInChat(plotEl, input) {
+  if (!plotEl || !Array.isArray(input?.x) || !input.x.length || !Array.isArray(input?.y) || !input.y.length) {
+    if (plotEl) {
+      plotEl.innerHTML = '<p class="vca-math-result-method">No time-domain plot available for this transform.</p>';
+    }
+    return Promise.resolve(false);
+  }
+
+  const loadPlotly = () => new Promise((resolve) => {
+    if (window.Plotly) { resolve(true); return; }
+    if (typeof window.loadPlotly === 'function') {
+      window.loadPlotly(() => resolve(!!window.Plotly));
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = 'https://cdn.plot.ly/plotly-2.27.0.min.js';
+    s.onload = () => resolve(!!window.Plotly);
+    s.onerror = () => resolve(false);
+    document.head.appendChild(s);
+  });
+
+  return loadPlotly().then((ok) => {
+    if (!ok || !window.Plotly) return false;
+    const core = getLaplaceCore();
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const layout = core?.timePlotLayout
+      ? core.timePlotLayout(isDark)
+      : { margin: { t: 28, r: 16, b: 44, l: 56 }, height: 320 };
+    const traces = core?.buildPlotTraces
+      ? core.buildPlotTraces(input)
+      : [{
+          x: input.x,
+          y: input.y,
+          type: 'scatter',
+          mode: 'lines',
+          line: { color: '#0891b2', width: 2.5 },
+          name: 'f(t)',
+        }];
+    const chart = document.createElement('div');
+    chart.className = 'vca-math-graph-canvas';
+    chart.style.minHeight = '320px';
+    plotEl.appendChild(chart);
+    window.Plotly.newPlot(chart, traces, layout, {
+      responsive: true,
+      displayModeBar: false,
+      displaylogo: false,
+    });
+    return true;
+  });
+}
+
+/**
  * 3D cone plot of a gradient or curl vector field (same sampling as the VC page).
  * @param {HTMLElement} plotEl
  * @param {{ plotData?: number[][], vcMode?: string }} input
@@ -1064,6 +1175,14 @@ function chipActionsForTask(task) {
       { mode: 'graph', label: 'Show Bode plot', title: 'Magnitude & phase diagrams in chat' },
     ];
   }
+  if (action === 'laplace') {
+    const isInverse = /inverse|ilaplace|inv/.test(String(task?.mode || task?.laplaceMode || ''));
+    return [
+      { mode: 'simple', label: 'Solve', title: isInverse ? 'Compute inverse Laplace (same page engine)' : 'Compute forward Laplace (same page engine)' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step Laplace transform' },
+      { mode: 'graph', label: 'Show graph', title: 'Plot f(t) in the time domain' },
+    ];
+  }
   if (ALGEBRA_ACTIONS.includes(action)) {
     return [
       { mode: 'simple', label: 'Solve', title: 'Compute answer (same engine as page calculator)' },
@@ -1101,10 +1220,11 @@ export async function renderChatResultCard(card, task, result) {
   const isPde = action === 'pde';
   const isVc = action === 'vectorCalculus';
   const isBode = action === 'bode';
+  const isLaplace = action === 'laplace';
   const isAlgebraInterval = action === 'inequality'
     || (action === 'quadratic' && /[<>=]|\\in|\\emptyset|cup|∪/.test(answer));
   const isAlgebraSystem = action === 'system';
-  const fuseAnswer = !isOde && !isPde && !isVc && !isBode && !isAlgebraInterval && !isAlgebraSystem;
+  const fuseAnswer = !isOde && !isPde && !isVc && !isBode && !isLaplace && !isAlgebraInterval && !isAlgebraSystem;
   const answerEq = fuseAnswer ? `${problem} = ${answer}` : answer;
 
   body.replaceChildren();
@@ -1176,6 +1296,16 @@ export async function renderChatResultCard(card, task, result) {
       body.appendChild(p);
     }
     appendMethod(body, result.method);
+  } else if (isLaplace) {
+    appendEqSlot(body, problem);
+    if (answer) appendEqSlot(body, answer, 'vca-math-eq-answer');
+    if (result.convergence && result.convergence !== 'True' && result.convergence !== 'None' && result.transformMode !== 'inverse') {
+      const p = document.createElement('p');
+      p.className = 'vca-math-result-method';
+      p.textContent = `ROC: Re(s) > ${result.convergence}`;
+      body.appendChild(p);
+    }
+    appendMethod(body, result.method);
   } else {
     appendEqSlot(body, `${problem} = ${answer}`);
     appendMethod(body, result.method);
@@ -1193,6 +1323,7 @@ export async function renderChatResultCard(card, task, result) {
       else if (action === 'vectorCalculus') void renderVectorCalculusGraphInChat(plotEl, result.input);
       else if (action === 'matrix') void renderMatrixGraphInChat(plotEl, result.input);
       else if (action === 'bode') void renderBodeGraphInChat(plotEl, result.input);
+      else if (action === 'laplace') void renderLaplaceGraphInChat(plotEl, result.input);
       else void renderIntegralGraphInChat(plotEl, result.input);
     }
   }

@@ -15,4 +15,5 @@
 <script src="<%=request.getContextPath()%>/modern/js/matrix-calculator-core.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/matrix-calculator-viz.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/bode-calculator-core.js?v=<%=mccV%>"></script>
+<script src="<%=request.getContextPath()%>/modern/js/laplace-calculator-core.js?v=<%=mccV%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/algebra-solver-core.js?v=<%=mccV%>"></script>

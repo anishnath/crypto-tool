@@ -23,7 +23,7 @@
   var OP_LABELS = {
     load: 'Load', expand: 'Expand schedule', sub: 'Substitute (S-box)',
     permute: 'Permute', mix: 'Mix', xor: 'Add round key',
-    round: 'Compression round', add: 'Add to state', emit: 'Output'
+    round: 'Compression round', add: 'Add to state', feistel: 'Feistel round', emit: 'Output'
   };
 
   // ---- tiny DOM helpers -----------------------------------------------------
@@ -339,29 +339,24 @@
     var tgt = panelsById[s.target];
     var accent = 'cv-hl-' + op;
 
-    if (op === 'xor' && s.operands) {
-      s.operands.forEach(function (o) {
-        if (o.panel && o.values) setPanel(o.panel, o.values);
-        var P = panelsById[o.panel];
-        if (P) flashAll(P, 'cv-hl-operand');
-      });
-      if (tgt) flashAll(tgt, accent);
-    } else if (op === 'sub' && s.operands) {
-      // highlight the s-box lookups
+    // Generic operand highlighting — works for ANY op that references other
+    // panels: AES round key (values) + S-box lookups, SHA K[t]/W[t], Blowfish P[i].
+    if (s.operands) {
       s.operands.forEach(function (o) {
         var P = panelsById[o.panel];
-        if (P && o.lookups) o.lookups.forEach(function (lk) {
+        if (!P) return;
+        if (o.values) { setPanel(o.panel, o.values); flashAll(P, 'cv-hl-operand'); }
+        if (o.lookups) o.lookups.forEach(function (lk) {
           if (P.cells[lk.row] && P.cells[lk.row][lk.col]) P.cells[lk.row][lk.col].classList.add('cv-hl-lookup');
         });
       });
-      if (tgt) flashAll(tgt, accent);
-    } else if (op === 'permute' && s.detail) {
-      // mark cells that moved
+    }
+
+    // Target-panel highlight by op.
+    if (op === 'permute' && s.detail) {
       if (tgt) s.detail.forEach(function (d) {
         var to = d.to; if (to && tgt.cells[to[0]] && tgt.cells[to[0]][to[1]]) tgt.cells[to[0]][to[1]].classList.add(accent);
       });
-    } else if (op === 'mix' && s.detail) {
-      if (tgt) flashAll(tgt, accent);
     } else if (op === 'expand') {
       // highlight just the row derived this step (newRow>=0), else the whole panel
       if (tgt && s.newRow != null && s.newRow >= 0 && tgt.cells[s.newRow]) {
@@ -425,6 +420,12 @@
       var line = s.detail.map(function (d) { return 'H' + d.idx + '=' + d.old + '+' + d.add + '=' + d.result; });
       dt.appendChild(el('div', 'cv-detail-line', line.slice(0, 4).join('   ')));
       dt.appendChild(el('div', 'cv-detail-line', line.slice(4).join('   ')));
+    } else if (s.op === 'feistel' && s.detail) {
+      var fd = s.detail[0];
+      dt.appendChild(el('div', 'cv-detail-line', 'L ⊕ P = ' + fd.xl + '   → into F'));
+      dt.appendChild(el('div', 'cv-detail-line',
+        'S0[' + fd.a + ']=' + fd.s0 + '   S1[' + fd.b + ']=' + fd.s1 + '   S2[' + fd.c + ']=' + fd.s2 + '   S3[' + fd.d + ']=' + fd.s3));
+      dt.appendChild(el('div', 'cv-detail-line', 'F = ((S0+S1) ⊕ S2) + S3 = ' + fd.f + '   → R ⊕= F, then swap'));
     }
   }
 

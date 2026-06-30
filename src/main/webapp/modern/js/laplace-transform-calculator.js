@@ -111,8 +111,9 @@
             var mode = this.getAttribute('data-mode');
             if (mode === currentMode) return;
             currentMode = mode;
-            modeBtns.forEach(function(b) { b.classList.remove('active'); });
+            modeBtns.forEach(function(b) { b.classList.remove('active'); b.setAttribute('aria-checked', 'false'); });
             this.classList.add('active');
+            this.setAttribute('aria-checked', 'true');
             if (mode === 'forward') {
                 forwardWrap.style.display = '';
                 inverseWrap.style.display = 'none';
@@ -126,8 +127,8 @@
     });
 
     // ========== Output Tabs ==========
-    var tabBtns = document.querySelectorAll('.lt-output-tab');
-    var panels  = document.querySelectorAll('.lt-panel');
+    var tabBtns = document.querySelectorAll('.ic-output-tab');
+    var panels  = document.querySelectorAll('.ic-panel');
     tabBtns.forEach(function(btn) {
         btn.addEventListener('click', function() {
             var panel = this.getAttribute('data-panel');
@@ -145,19 +146,6 @@
             }
         });
     });
-
-    // ========== Collapsible toggles ==========
-    function setupToggle(btnId, contentId) {
-        var btn = document.getElementById(btnId);
-        var content = document.getElementById(contentId);
-        btn.addEventListener('click', function() {
-            content.classList.toggle('open');
-            var chevron = btn.querySelector('svg');
-            chevron.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : '';
-        });
-    }
-    setupToggle('lt-syntax-btn', 'lt-syntax-content');
-    setupToggle('lt-pairs-btn', 'lt-pairs-content');
 
     // ========== Render Laplace Pairs Table ==========
     var pairsData = [
@@ -291,100 +279,8 @@
         }
     }
 
-    // ========== Build SymPy Code ==========
-    function buildSympyCode(mode) {
-        var code = 'from sympy import symbols, laplace_transform, inverse_laplace_transform, apart, simplify, latex, sin, cos, tan, exp, log, sqrt, pi, sinh, cosh, tanh, Heaviside, DiracDelta, factorial, oo\n';
-        code += 'from sympy import Function, Rational\n';
-        code += 'import json, numpy as np\n';
-        code += 't = symbols("t", positive=True)\n';
-        code += 's = symbols("s")\n';
-        code += 'a, w, n = symbols("a w n", positive=True)\n\n';
-
-        if (mode === 'forward') {
-            var expr = exprToPython(normalizeExpr(forwardInput.value.trim()));
-            // DiracDelta needs t without positive=True (otherwise SymPy evals delta(t)→0)
-            code += 'f_expr_str = "' + expr.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"\n';
-            code += 'if "DiracDelta" in f_expr_str:\n';
-            code += '    t_dd = symbols("t")\n';
-            code += '    f_dd = eval(f_expr_str, {"t": t_dd, "s": s, "sin": sin, "cos": cos, "tan": tan, "exp": exp, "log": log, "sqrt": sqrt, "pi": pi, "sinh": sinh, "cosh": cosh, "tanh": tanh, "Heaviside": Heaviside, "DiracDelta": DiracDelta, "factorial": factorial})\n';
-            code += '    F, a_conv, cond = laplace_transform(f_dd, t_dd, s)\n';
-            code += '    F = simplify(F)\n';
-            code += '    f = f_dd.subs(t_dd, t)\n';
-            code += 'else:\n';
-            code += '    f = ' + expr + '\n';
-            code += '    try:\n';
-            code += '        F, a_conv, cond = laplace_transform(f, t, s)\n';
-            code += '        F = simplify(F)\n';
-            code += '    except Exception as e:\n';
-            code += '        print("ERROR:" + str(e))\n';
-            code += '        import sys; sys.exit(0)\n\n';
-            // Results
-            code += 'print("RESULT:" + latex(F))\n';
-            code += 'print("TEXT:" + str(F))\n';
-            code += 'print("CONVERGENCE:" + str(a_conv))\n\n';
-            // Steps
-            code += 'steps = []\n';
-            code += 'steps.append({"title": "Given function", "latex": "f(t) = " + latex(f)})\n';
-            code += 'steps.append({"title": "Definition of Laplace transform", "latex": r"\\\\mathcal{L}\\\\{f(t)\\\\} = \\\\int_0^{\\\\infty} f(t) \\\\, e^{-st} \\\\, dt"})\n';
-            code += 'steps.append({"title": "Identify transform type", "latex": "\\\\text{Apply standard Laplace pair or theorem}"})\n';
-            code += 'steps.append({"title": "Apply Laplace transform", "latex": "F(s) = " + latex(F)})\n';
-            code += 'if a_conv is not None and str(a_conv) != "True":\n';
-            code += '    steps.append({"title": "Region of convergence", "latex": "\\\\text{Re}(s) > " + latex(a_conv)})\n';
-            code += 'steps.append({"title": "Final result", "latex": r"\\\\boxed{\\\\mathcal{L}\\\\{" + latex(f) + r"\\\\} = " + latex(F) + r"}"})\n';
-            code += 'print("STEPS:" + json.dumps(steps))\n\n';
-            // Plot data (plot f(t) for forward mode)
-            code += 'try:\n';
-            code += '    from sympy import lambdify, Piecewise\n';
-            code += '    f_num = lambdify(t, f, modules=["numpy", {"Heaviside": lambda x: np.heaviside(x, 0.5), "DiracDelta": lambda x: np.where(np.abs(x) < 0.01, 50.0, 0.0)}])\n';
-            code += '    t_vals = np.linspace(0, 10, 200)\n';
-            code += '    y_vals = np.array([float(f_num(ti)) if np.isfinite(f_num(ti)) else 0.0 for ti in t_vals])\n';
-            code += '    y_vals = np.clip(y_vals, -1e6, 1e6)\n';
-            code += '    print("PLOT_X:" + json.dumps(t_vals.tolist()))\n';
-            code += '    print("PLOT_Y:" + json.dumps(y_vals.tolist()))\n';
-            code += 'except:\n';
-            code += '    print("PLOT_X:[]")\n';
-            code += '    print("PLOT_Y:[]")\n';
-        } else {
-            // Inverse mode
-            var expr = exprToPython(normalizeExpr(inverseInput.value.trim()));
-            code += 'F_raw = ' + expr + '\n';
-            code += 'try:\n';
-            code += '    F_pf = apart(F_raw, s)\n';
-            code += 'except:\n';
-            code += '    F_pf = F_raw\n\n';
-            code += 'try:\n';
-            code += '    f = inverse_laplace_transform(F_pf, s, t, noconds=True)\n';
-            code += '    f = simplify(f)\n';
-            code += 'except Exception as e:\n';
-            code += '    print("ERROR:" + str(e))\n';
-            code += '    import sys; sys.exit(0)\n\n';
-            // Results
-            code += 'print("RESULT:" + latex(f))\n';
-            code += 'print("TEXT:" + str(f))\n\n';
-            // Steps
-            code += 'steps = []\n';
-            code += 'steps.append({"title": "Given F(s)", "latex": "F(s) = " + latex(F_raw)})\n';
-            code += 'if F_pf != F_raw:\n';
-            code += '    steps.append({"title": "Partial fraction decomposition", "latex": "F(s) = " + latex(F_pf)})\n';
-            code += 'steps.append({"title": "Apply inverse Laplace transform", "latex": r"\\\\mathcal{L}^{-1}\\\\{F(s)\\\\} = " + latex(f)})\n';
-            code += 'if "Heaviside" in str(f):\n';
-            code += '    steps.append({"title": "Note: Heaviside step function", "latex": r"\\\\theta(t) = 1 \\\\text{ for } t \\\\geq 0, \\\\; 0 \\\\text{ for } t < 0"})\n';
-            code += 'steps.append({"title": "Final result", "latex": r"\\\\boxed{\\\\mathcal{L}^{-1}\\\\{" + latex(F_raw) + r"\\\\} = " + latex(f) + r"}"})\n';
-            code += 'print("STEPS:" + json.dumps(steps))\n\n';
-            // Plot data (plot f(t) for inverse mode)
-            code += 'try:\n';
-            code += '    from sympy import lambdify\n';
-            code += '    f_num = lambdify(t, f, modules=["numpy", {"Heaviside": lambda x: np.heaviside(x, 0.5), "DiracDelta": lambda x: np.where(np.abs(x) < 0.01, 50.0, 0.0)}])\n';
-            code += '    t_vals = np.linspace(0, 10, 200)\n';
-            code += '    y_vals = np.array([float(f_num(ti)) if np.isfinite(f_num(ti)) else 0.0 for ti in t_vals])\n';
-            code += '    y_vals = np.clip(y_vals, -1e6, 1e6)\n';
-            code += '    print("PLOT_X:" + json.dumps(t_vals.tolist()))\n';
-            code += '    print("PLOT_Y:" + json.dumps(y_vals.tolist()))\n';
-            code += 'except:\n';
-            code += '    print("PLOT_X:[]")\n';
-            code += '    print("PLOT_Y:[]")\n';
-        }
-        return code;
+    function getCore() {
+        return window.LaplaceCalculatorCore;
     }
 
     // ========== Compute ==========
@@ -406,62 +302,35 @@
             '<p style="color:var(--text-secondary);font-size:0.9375rem;">Computing ' + modeLabel + '...</p></div>';
         if (emptyState) emptyState.style.display = 'none';
 
-        var code = buildSympyCode(currentMode);
-        var mode = currentMode;
+        var core = getCore();
+        if (!core || typeof core.solve !== 'function') {
+            showError('Laplace engine not loaded.');
+            return;
+        }
 
-        var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, 90000);
+        var spec = { mode: currentMode };
+        if (currentMode === 'forward') spec.forwardExpr = inputVal;
+        else spec.inverseExpr = inputVal;
 
-        fetch((window.LT_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ language: 'python', version: '3.10', code: code }),
-            signal: controller.signal
-        })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            clearTimeout(timeoutId);
-            var stdout = (data.Stdout || data.stdout || '').trim();
-            var stderr = (data.Stderr || data.stderr || '').trim();
-
-            if (!stdout || (stderr && /error|exception|traceback/i.test(stderr) && !stdout)) {
-                showError(stderr || 'Computation failed. Check your expression syntax.');
+        core.solve(spec).then(function(parsed) {
+            if (!parsed || !parsed.ok) {
+                showError((parsed && parsed.error) || 'Computation failed. Check your expression syntax.');
                 return;
             }
-
-            // Check for explicit ERROR
-            var errMatch = stdout.match(/ERROR:(.+)/);
-            if (errMatch) {
-                showError(errMatch[1].trim());
-                return;
-            }
-
-            parseAndShowResult(mode, stdout);
-        })
-        .catch(function(err) {
-            clearTimeout(timeoutId);
-            showError(err.name === 'AbortError' ? 'Request timed out' : err.message);
+            parseAndShowResult(currentMode, parsed);
+        }).catch(function(err) {
+            showError(err && err.message ? err.message : String(err));
         });
     }
 
     // ========== Parse & Display Result ==========
-    function parseAndShowResult(mode, stdout) {
-        var stepsMatch = stdout.match(/STEPS:(\[[\s\S]*?\])(?=\nPLOT|$)/);
-        var plotXMatch = stdout.match(/PLOT_X:(\[[\s\S]*?\])/);
-        var plotYMatch = stdout.match(/PLOT_Y:(\[[\s\S]*?\])/);
-        var steps = [];
-        try { if (stepsMatch) steps = JSON.parse(stepsMatch[1]); } catch(e) {}
-        var plotX = [], plotY = [];
-        try { if (plotXMatch) plotX = JSON.parse(plotXMatch[1]); } catch(e) {}
-        try { if (plotYMatch) plotY = JSON.parse(plotYMatch[1]); } catch(e) {}
-
-        var rMatch = stdout.match(/RESULT:([^\n]*)/);
-        var tMatch = stdout.match(/TEXT:([^\n]*)/);
-        var cMatch = stdout.match(/CONVERGENCE:([^\n]*)/);
-
-        var result = rMatch ? rMatch[1].trim() : '0';
-        var text = tMatch ? tMatch[1].trim() : result;
-        var convergence = cMatch ? cMatch[1].trim() : null;
+    function parseAndShowResult(mode, parsed) {
+        var result = parsed.resultLatex || '0';
+        var text = parsed.resultText || result;
+        var convergence = parsed.convergence || null;
+        var steps = parsed.steps || [];
+        var plotX = parsed.plotX || [];
+        var plotY = parsed.plotY || [];
 
         showResult(mode, result, text, convergence, steps);
 
@@ -571,36 +440,26 @@
         if (!window.Plotly || !cfg || !cfg.x || cfg.x.length === 0) return;
         var container = document.getElementById('lt-graph-container');
         var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        var core = getCore();
+        var traces = core && core.buildPlotTraces
+            ? core.buildPlotTraces(cfg)
+            : [{
+                x: cfg.x,
+                y: cfg.y,
+                type: 'scatter',
+                mode: 'lines',
+                line: { color: '#0891b2', width: 2.5 },
+                name: 'f(t)'
+            }];
+        var layout = core && core.timePlotLayout
+            ? core.timePlotLayout(isDark)
+            : {
+                margin: { t: 30, r: 20, b: 50, l: 60 },
+                xaxis: { title: 't' },
+                yaxis: { title: 'f(t)' }
+            };
 
-        var trace = {
-            x: cfg.x,
-            y: cfg.y,
-            type: 'scatter',
-            mode: 'lines',
-            line: { color: '#0891b2', width: 2.5 },
-            name: 'f(t)'
-        };
-
-        var layout = {
-            margin: { t: 30, r: 20, b: 50, l: 60 },
-            xaxis: {
-                title: 't',
-                gridcolor: isDark ? '#334155' : '#e2e8f0',
-                color: isDark ? '#cbd5e1' : '#475569',
-                zerolinecolor: isDark ? '#475569' : '#94a3b8'
-            },
-            yaxis: {
-                title: 'f(t)',
-                gridcolor: isDark ? '#334155' : '#e2e8f0',
-                color: isDark ? '#cbd5e1' : '#475569',
-                zerolinecolor: isDark ? '#475569' : '#94a3b8'
-            },
-            paper_bgcolor: isDark ? '#1e293b' : '#fff',
-            plot_bgcolor: isDark ? '#1e293b' : '#fff',
-            font: { family: 'Inter, sans-serif', size: 12, color: isDark ? '#cbd5e1' : '#475569' }
-        };
-
-        Plotly.newPlot(container, [trace], layout, { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'] });
+        Plotly.newPlot(container, traces, layout, { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'] });
     }
 
     // ========== Python Compiler ==========

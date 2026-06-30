@@ -11,7 +11,7 @@ import {
   taskToDisplayLatex as algebraTaskToDisplayLatex,
 } from './algebra-action-extract.js';
 
-export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'matrix', 'bode'];
+export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'matrix', 'bode', 'laplace'];
 export { ALGEBRA_ACTIONS };
 /** All Math AI intents — calculus, linear algebra, algebra (standalone Math AI page uses full set). */
 export const MATH_ACTIONS = [...CALCULUS_ACTIONS, ...ALGEBRA_ACTIONS];
@@ -74,10 +74,11 @@ const ACTION_FENCE_LANGS = new Set([
   'gradient', 'divergence', 'curl',
   'matrix', 'matrices', 'linearalgebra', 'linear-algebra',
   'bode', 'bodeplot', 'transferfunction', 'transfer-function',
+  'laplace-transform', 'laplacetransform', 'inverse-laplace', 'inverse-laplace-transform', 'ilaplace', 'laplace',
   'math-action', 'math', 'mathintent',
 ]);
 
-/** @typedef {'integral'|'derivative'|'limit'|'ode'|'pde'|'vectorCalculus'|'matrix'|'bode'} CalculusAction */
+/** @typedef {'integral'|'derivative'|'limit'|'ode'|'pde'|'vectorCalculus'|'matrix'|'bode'|'laplace'} CalculusAction */
 
 /**
  * @typedef {Object} MathActionTask
@@ -123,6 +124,22 @@ function inferMatrixOpFromRaw(raw) {
   return null;
 }
 
+function isLaplaceTransformIntent(obj, fenceLang) {
+  const fence = String(fenceLang || '').toLowerCase();
+  if (['laplace-transform', 'laplacetransform', 'inverse-laplace', 'inverse-laplace-transform', 'ilaplace'].includes(fence)) {
+    return true;
+  }
+  if (fence !== 'laplace') return false;
+  const m = String(obj?.mode || obj?.laplaceMode || obj?.transformMode || '').toLowerCase();
+  if (['forward', 'inverse', 'ilaplace', 'inverse-laplace'].includes(m)) return true;
+  if (obj?.forwardExpr != null || obj?.inverseExpr != null || obj?.ft != null || obj?.Fs != null || obj?.fs != null) {
+    return true;
+  }
+  if (obj?.nx != null || obj?.ny != null || obj?.k != null || obj?.tmax != null || obj?.ic != null) return false;
+  if (obj?.expr || obj?.raw) return true;
+  return false;
+}
+
 function detectAction(obj, fenceLang) {
   let action = String(obj?.action || obj?.kind || obj?.type || fenceLang || '').toLowerCase();
   if (action === 'integrate') action = 'integral';
@@ -137,10 +154,17 @@ function detectAction(obj, fenceLang) {
   if (action === 'bodeplot' || action === 'bode-diagram' || action === 'transferfunction' || action === 'transfer-function') {
     action = 'bode';
   }
+  if (action === 'laplacetransform' || action === 'laplace-transform' || action === 'inverse-laplace' || action === 'inverse-laplace-transform' || action === 'ilaplace') {
+    action = 'laplace';
+  }
   if (action === 'grad' || action === 'nabla') action = 'gradient';
   if (action === 'div') action = 'divergence';
   if (action === 'gradient' || action === 'divergence' || action === 'curl') {
     action = 'vectorCalculus';
+  }
+  if (action === 'laplace' && !isLaplaceTransformIntent(obj, fenceLang)) {
+    const modeHintEarly = String(obj?.mode || obj?.pdeType || obj?.pde || '').toLowerCase();
+    if (PDE_MODES.has(modeHintEarly) || obj?.nx != null || obj?.ny != null) action = 'pde';
   }
   if (CALCULUS_ACTIONS.includes(action)) return /** @type {CalculusAction} */ (action);
   const matrixOpHint = String(obj.op || obj.operation || '').toLowerCase();
@@ -153,6 +177,7 @@ function detectAction(obj, fenceLang) {
     return 'bode';
   }
   if ((obj.zeros != null || obj.poles != null) && (fence === 'bode' || obj.gain != null)) return 'bode';
+  if (isLaplaceTransformIntent(obj, fence)) return 'laplace';
   if (fence === 'matrix' || fence === 'matrices') return 'matrix';
   if (obj.matrixA != null || obj.matrix_a != null || obj.matrixB != null || obj.matrix_b != null) {
     return 'matrix';
@@ -166,6 +191,7 @@ function detectAction(obj, fenceLang) {
   }
   const raw = String(obj?.raw || obj?.latex || '');
   if (/H\s*\(\s*s\s*\)|transfer function|bode plot/i.test(raw) && /[=\/\^]|\\frac/.test(raw)) return 'bode';
+  if (/\\mathcal\{L\}|laplace transform|inverse laplace|L\^{-1}|L\\\{/i.test(raw) && !inferPdeModeFromRaw(raw)) return 'laplace';
   if (inferVcModeFromRaw(raw)) return 'vectorCalculus';
   if (inferMatrixOpFromRaw(raw)) return 'matrix';
   if (obj?.rhs != null || (raw && /=/.test(raw) && /(y''|y'|\\frac\s*\{\s*d\s*y\s*\}|dy\s*\/\s*dx)/.test(raw))) return 'ode';
@@ -371,6 +397,26 @@ export function normalizeCalculusTask(obj, fenceLang) {
     return task;
   }
 
+  if (action === 'laplace') {
+    let mode = String(obj.laplaceMode || obj.transformMode || obj.mode || 'forward').toLowerCase();
+    if (/inverse|ilaplace|inv/.test(mode)) mode = 'inverse';
+    else mode = 'forward';
+    task.mode = mode;
+    const fwd = String(obj.forwardExpr || obj.ft || obj.f_t || '').trim();
+    const inv = String(obj.inverseExpr || obj.Fs || obj.fs || obj.f_s || '').trim();
+    const expr = String(obj.expr || obj.body || obj.function || '').trim();
+    if (mode === 'forward') {
+      if (fwd) task.forwardExpr = fwd;
+      else if (expr) task.forwardExpr = expr;
+    } else {
+      if (inv) task.inverseExpr = inv;
+      else if (expr) task.inverseExpr = expr;
+    }
+    if (!raw && mode === 'forward' && !task.forwardExpr) return null;
+    if (!raw && mode === 'inverse' && !task.inverseExpr) return null;
+    return task;
+  }
+
   // limit
   const expr = String(obj.expr || obj.body || obj.function || '').trim();
   if (!raw && !expr) return null;
@@ -435,6 +481,9 @@ export function parseCalculusBlockContent(content, fenceLang) {
     poles: kv.poles,
     gain: kv.gain || kv.k,
     inputMode: kv.inputmode || kv.input_mode || kv.bodemode,
+    forwardExpr: kv.forwardexpr || kv.ft || kv.f_t,
+    inverseExpr: kv.inverseexpr || kv.fs || kv.f_s,
+    laplaceMode: kv.lapacemode || kv.transformmode || kv.laplacemode,
     variable: kv.variable || kv.var || 'x',
     mode: kv.mode || kv.pdetype || kv.pde || kv.type,
     lower: isPdeFence ? kv.lower : (kv.lower || kv.a),
@@ -489,6 +538,14 @@ function tasksFromJson(data) {
   }
   if (Array.isArray(data.bode)) {
     data.bode.forEach((t) => push({ ...t, action: 'bode' }));
+    return out;
+  }
+  if (Array.isArray(data.laplace)) {
+    data.laplace.forEach((t) => push({ ...t, action: 'laplace' }));
+    return out;
+  }
+  if (Array.isArray(data.laplaceTransform)) {
+    data.laplaceTransform.forEach((t) => push({ ...t, action: 'laplace' }));
     return out;
   }
   if (Array.isArray(data.matrices)) {
@@ -674,6 +731,18 @@ function bodeProblemLatex(task) {
   return `H(s) = ${body}`;
 }
 
+function laplaceProblemLatex(task) {
+  if (task.raw) return prepareLatexForKatex(String(task.raw).trim());
+  const mode = String(task.mode || task.laplaceMode || 'forward').toLowerCase();
+  const isInverse = /inverse|ilaplace|inv/.test(mode);
+  const expr = isInverse
+    ? String(task.inverseExpr || task.expr || '').trim()
+    : String(task.forwardExpr || task.expr || '').trim();
+  const body = exprToBodyLatex(expr);
+  if (isInverse) return `\\mathcal{L}^{-1}\\{F(s)\\} = \\mathcal{L}^{-1}\\left\\{${wrapCalculusBody(body)}\\right\\}`;
+  return `\\mathcal{L}\\{f(t)\\} = \\mathcal{L}\\left\\{${wrapCalculusBody(body)}\\right\\}`;
+}
+
 const PDE_MODE_LATEX = {
   heat: 'u_t = k\\, u_{xx}',
   wave: 'u_{tt} = c^2\\, u_{xx}',
@@ -812,6 +881,8 @@ export function taskToSolveLatex(task) {
 
   if (task.action === 'bode') return task.raw ? task.raw.trim() : bodeProblemLatex(task);
 
+  if (task.action === 'laplace') return task.raw ? task.raw.trim() : laplaceProblemLatex(task);
+
   if (task.raw) return sanitizeLatexForEngine(task.raw.trim());
 
   const v = task.variable || 'x';
@@ -870,6 +941,10 @@ export function taskToDisplayLatex(task) {
 
   if (task.action === 'bode') {
     return ensureDisplayStyle(bodeProblemLatex(task));
+  }
+
+  if (task.action === 'laplace') {
+    return ensureDisplayStyle(laplaceProblemLatex(task));
   }
 
   if (task.raw) return ensureDisplayStyle(prepareLatexForKatex(task.raw.trim()));
@@ -959,6 +1034,10 @@ export function formatMathActionLabel(task, index) {
   }
   if (task.action === 'bode') {
     return `${n}Bode plot`;
+  }
+  if (task.action === 'laplace') {
+    const mode = String(task.mode || 'forward').toLowerCase();
+    return `${n}${/inverse|ilaplace|inv/.test(mode) ? 'Inverse Laplace' : 'Laplace transform'}`;
   }
   return `${n}${task.mode === 'definite' ? 'Definite integral' : 'Integral'}`;
 }

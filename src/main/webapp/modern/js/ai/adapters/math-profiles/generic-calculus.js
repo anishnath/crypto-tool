@@ -12,6 +12,7 @@ import {
   solveVectorCalculusTask,
   solveMatrixTask,
   solveBodeTask,
+  solveLaplaceTask,
 } from '../../math-chat-compute.js';
 import { solveAlgebraTask } from '../../algebra-chat-compute.js';
 import { icApplyIntegralTask } from './integral-calculator.js';
@@ -40,6 +41,7 @@ function buildFocusQuickActions(focus, snap) {
   const ineqExpr = ctxSnippet(s, ['expr', 'raw']);
   const polyP = ctxSnippet(s, ['p1', 'p', 'expr']);
   const tfExpr = ctxSnippet(s, ['transferFunction', 'expr']);
+  const ltExpr = ctxSnippet(s, ['forwardExpr', 'inverseExpr', 'expr']);
   const eqs = ctxSnippet(s, ['equations']);
   const ctx = (line) => (line ? ` Current page input: ${line}.` : '');
 
@@ -122,6 +124,12 @@ function buildFocusQuickActions(focus, snap) {
       chip('Poles & zeros', 'How do pole and zero locations shape the magnitude and phase curves? Outline corner frequencies and ±20 dB/decade slopes for my type of H(s).'),
       chip('Show example', 'Give one transfer-function Bode example with a ```bode``` block so I can click Solve / Show Bode plot. One intro sentence, then the block.'),
     ],
+    laplace: [
+      chip("Don't get it", `Explain Laplace transforms in plain language — L{f(t)}, s-domain vs t-domain, and why engineers use them.${ctx(ltExpr)} Prose + KaTeX only.`),
+      chip('Partial fractions', 'When do I need partial fractions for inverse Laplace? Outline the decomposition strategy for rational F(s) — no full worked inverse unless I ask.'),
+      chip('ROC & pairs', 'How do I read the region of convergence and use the Laplace pairs table? Explain Re(s) constraints for common entries.'),
+      chip('Show example', 'Give one Laplace transform example with a ```laplace-transform``` block so I can click Solve / Show graph. One intro sentence, then the block.'),
+    ],
   };
 
   return sets[focus] || sets.integral;
@@ -129,7 +137,7 @@ function buildFocusQuickActions(focus, snap) {
 
 const FOCUS_KEYS = new Set([
   'integral', 'derivative', 'limit', 'ode', 'pde', 'series',
-  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode',
+  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace',
 ]);
 
 /**
@@ -171,6 +179,7 @@ export function configureGenericMathShell(opts = {}) {
       if (task.action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
       if (task.action === 'matrix') return solveMatrixTask(task, mode);
       if (task.action === 'bode') return solveBodeTask(task, mode);
+      if (task.action === 'laplace') return solveLaplaceTask(task, mode);
       return solveAlgebraTask(task, mode);
     },
 
@@ -190,6 +199,7 @@ export function configureGenericMathShell(opts = {}) {
     },
 
     getContext() {
+      if (typeof window.ltGetContext === 'function') return window.ltGetContext();
       if (typeof window.bpGetContext === 'function') return window.bpGetContext();
       if (typeof window.qsGetContext === 'function') return window.qsGetContext();
       if (typeof window.syGetContext === 'function') return window.syGetContext();
@@ -271,6 +281,13 @@ export function configureGenericMathShell(opts = {}) {
           } else if (snap.transferFunction) {
             lines.push(`H(s): ${String(snap.transferFunction).slice(0, 400)}`);
           }
+        } else if (snap.toolType === 'laplace') {
+          lines.push(`Mode: ${snap.mode || 'forward'}`);
+          if (snap.mode === 'inverse') {
+            if (snap.inverseExpr) lines.push(`F(s): ${String(snap.inverseExpr).slice(0, 400)}`);
+          } else if (snap.forwardExpr) {
+            lines.push(`f(t): ${String(snap.forwardExpr).slice(0, 400)}`);
+          }
         } else {
           lines.push(
             `Mode: ${snap.mode || '(n/a)'}`,
@@ -301,7 +318,7 @@ export function configureGenericMathShell(opts = {}) {
       }
 
       if (!lines.length) {
-        return '(Paste any math problem — ∫, lim, ODE, matrix, quadratic, system, inequality, polynomial — then Solve / Steps / Graph in chat.)';
+        return '(Paste any math problem — ∫, lim, ODE, matrix, Bode H(s), Laplace transform, quadratic, system, inequality, polynomial — then Solve / Steps / Graph in chat.)';
       }
       return lines.join('\n');
     },
@@ -310,7 +327,7 @@ export function configureGenericMathShell(opts = {}) {
       return buildFocusQuickActions(this.focus || focus, snap);
     },
 
-    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, **PDE**, **vectorCalculus** (∇, ∇·, ∇×), **matrix** (det, inverse, eigenvalues, A·B, …), **bode** (H(s) Bode magnitude/phase), **quadratic**, **system**, **inequality**, and **polynomial** problems regardless of which calculator page the student is on. Every computation runs in chat via the same JS engines as the on-page calculators — never compute the answer yourself.
+    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, **PDE**, **vectorCalculus** (∇, ∇·, ∇×), **matrix** (det, inverse, eigenvalues, A·B, …), **bode** (H(s) Bode magnitude/phase), **laplace** (forward/inverse Laplace transform — not the PDE Laplace equation), **quadratic**, **system**, **inequality**, and **polynomial** problems regardless of which calculator page the student is on. Every computation runs in chat via the same JS engines as the on-page calculators — never compute the answer yourself.
 
 **Student-facing language:** Never mention SymPy, NumPy, Python, OneCompiler, or other backend libraries in replies. Say "the solver", "step-by-step engine", "numerical method", or "symbolic method" instead.
 
@@ -734,6 +751,56 @@ For other math ( ∫, ODE, matrix, … ) use the matching block type on any page
       zeros: document.getElementById('bp-zpk-zeros')?.value?.trim() || '',
       poles: document.getElementById('bp-zpk-poles')?.value?.trim() || '',
       gain: document.getElementById('bp-zpk-gain')?.value?.trim() || '1',
+    };
+  });
+}
+
+/** Laplace Transform Calculator — signals tutor + generic math router. */
+export function configureLaplaceMathShell() {
+  configureGenericMathShell({
+    focus: 'laplace',
+    pageLabel: 'Laplace Transform Calculator',
+    pageHint: 'Laplace — forward L{f(t)} & inverse L⁻¹{F(s)}, ROC, partial fractions',
+    panelTitle: 'Math AI',
+    subtitle: 'Laplace tutor + full math router in chat',
+    placeholder: 'Ask about Laplace transforms, ROC, partial fractions — or paste ∫, ODE, matrix problems…',
+    footerText: 'Ctrl+Shift+A · page Laplace engine + chat solvers',
+  });
+
+  const extra = `
+
+**Laplace Transform page — tutor + engine router**
+
+1. **Teacher** — forward/inverse Laplace, ROC, partial fractions, shifting theorems, Heaviside, solving ODEs via L{f(t)}. Use KaTeX prose; mirror [CURRENT CONTEXT] f(t) or F(s) when present.
+
+2. **Solver** — for concrete forward/inverse Laplace problems emit a \`\`\`laplace-transform\`\`\` block so **Solve / Solve with steps / Show graph** chips appear. Same SymPy engine as the page — never invent transform results in prose.
+
+Forward example:
+\`\`\`laplace-transform
+mode: forward
+forwardExpr: t*exp(-2*t)
+\`\`\`
+
+Inverse example:
+\`\`\`laplace-transform
+mode: inverse
+inverseExpr: 1/(s+1)^2
+\`\`\`
+
+For related problems in chat, also use \`\`\`ode\`\`\`, \`\`\`integral\`\`\`, \`\`\`bode\`\`\`, etc. **Do not** confuse \`laplace\` PDE mode (\`u_xx + u_yy = 0\`) with Laplace **transform** — transforms use action \`laplace\` / fence \`laplace-transform\`; elliptic PDE uses \`\`\`pde\`\`\` with \`mode: laplace\`.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
+
+  registerContextGetter('ltGetContext', () => {
+    const modeEl = document.querySelector('.lt-mode-btn.active');
+    const mode = modeEl?.getAttribute('data-mode') || 'forward';
+    return {
+      toolType: 'laplace',
+      mode,
+      forwardExpr: document.getElementById('lt-forward-expr')?.value?.trim() || '',
+      inverseExpr: document.getElementById('lt-inverse-expr')?.value?.trim() || '',
     };
   });
 }
