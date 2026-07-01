@@ -11,7 +11,7 @@ import {
   taskToDisplayLatex as algebraTaskToDisplayLatex,
 } from './algebra-action-extract.js';
 
-export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'matrix', 'bode', 'laplace'];
+export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'vector', 'matrix', 'bode', 'laplace'];
 export { ALGEBRA_ACTIONS };
 /** All Math AI intents — calculus, linear algebra, algebra (standalone Math AI page uses full set). */
 export const MATH_ACTIONS = [...CALCULUS_ACTIONS, ...ALGEBRA_ACTIONS];
@@ -22,6 +22,13 @@ const MATRIX_OPS = new Set([
   'determinant', 'det', 'inverse', 'transpose', 'trace', 'tr', 'rank', 'rref',
   'power', 'eigenvalues', 'eigenvectors', 'charpoly', 'characteristic',
   'add', 'subtract', 'sub', 'multiply', 'mul',
+]);
+
+const VECTOR_DISCRETE_OPS = new Set([
+  'add', 'subtract', 'sub', 'scalar_multiply', 'scale', 'dot', 'dot_product',
+  'cross', 'cross_product', 'magnitude', 'mag', 'unit_vector', 'unit', 'angle',
+  'projection', 'proj', 'rejection', 'rej', 'area', 'triple_scalar', 'triple',
+  'linear_independence', 'indep', 'independence',
 ]);
 
 const PDE_MODES = new Set(['heat', 'wave', 'laplace', 'poisson', 'transport', 'schrodinger', 'linear1']);
@@ -72,6 +79,7 @@ const ACTION_FENCE_LANGS = new Set([
   'integral', 'derivative', 'limit', 'ode', 'pde', 'dsolve', 'differential',
   'vectorcalculus', 'vector-calculus', 'vc', 'vector_calculus',
   'gradient', 'divergence', 'curl',
+  'vector', 'vectors', 'vector-calc', 'vector-calculator', 'dot-product', 'cross-product',
   'matrix', 'matrices', 'linearalgebra', 'linear-algebra',
   'bode', 'bodeplot', 'transferfunction', 'transfer-function',
   'laplace-transform', 'laplacetransform', 'inverse-laplace', 'inverse-laplace-transform', 'ilaplace', 'laplace',
@@ -150,6 +158,10 @@ function detectAction(obj, fenceLang) {
   if (action === 'vectorcalculus' || action === 'vector-calculus' || action === 'vc' || action === 'vector_calculus') {
     action = 'vectorCalculus';
   }
+  if (action === 'vectors' || action === 'vector-calc' || action === 'vector-calculator'
+    || action === 'dot-product' || action === 'cross-product') {
+    action = 'vector';
+  }
   if (action === 'matrices' || action === 'linearalgebra' || action === 'linear-algebra') action = 'matrix';
   if (action === 'bodeplot' || action === 'bode-diagram' || action === 'transferfunction' || action === 'transfer-function') {
     action = 'bode';
@@ -168,7 +180,12 @@ function detectAction(obj, fenceLang) {
   }
   if (CALCULUS_ACTIONS.includes(action)) return /** @type {CalculusAction} */ (action);
   const matrixOpHint = String(obj.op || obj.operation || '').toLowerCase();
-  if (MATRIX_OPS.has(matrixOpHint)) return 'matrix';
+  const vecOpHint = String(obj.op || obj.operation || '').toLowerCase().replace(/\s+/g, '_');
+  const hasMatrixFields = obj.matrixA != null || obj.matrix_a != null || obj.matrixB != null || obj.matrix_b != null;
+  const hasVectorFields = obj.vectorA != null || obj.vecA != null
+    || (Array.isArray(obj.a) && obj.a.length && !hasMatrixFields);
+  if (hasMatrixFields || (MATRIX_OPS.has(matrixOpHint) && !hasVectorFields)) return 'matrix';
+  if (hasVectorFields || VECTOR_DISCRETE_OPS.has(vecOpHint)) return 'vector';
   const fence = String(fenceLang || '').toLowerCase();
   if (fence === 'bode' || fence === 'bodeplot' || fence === 'transferfunction' || fence === 'transfer-function') {
     return 'bode';
@@ -179,15 +196,20 @@ function detectAction(obj, fenceLang) {
   if ((obj.zeros != null || obj.poles != null) && (fence === 'bode' || obj.gain != null)) return 'bode';
   if (isLaplaceTransformIntent(obj, fence)) return 'laplace';
   if (fence === 'matrix' || fence === 'matrices') return 'matrix';
+  if (fence === 'vector' || fence === 'vectors' || fence === 'vector-calc' || fence === 'vector-calculator') {
+    return 'vector';
+  }
   if (obj.matrixA != null || obj.matrix_a != null || obj.matrixB != null || obj.matrix_b != null) {
     return 'matrix';
   }
   const modeHint = String(obj?.mode || obj?.pdeType || obj?.pde || '').toLowerCase();
   if (PDE_MODES.has(modeHint)) return 'pde';
-  if (VC_MODES.has(modeHint) || obj?.scalar != null || obj?.fx != null || obj?.fy != null || obj?.fz != null) {
-    if (obj?.scalar != null || obj?.fx != null || obj?.fy != null || obj?.fz != null || VC_MODES.has(modeHint)) {
-      return 'vectorCalculus';
-    }
+  if (VC_MODES.has(modeHint) || obj?.fx != null || obj?.fy != null || obj?.fz != null) {
+    return 'vectorCalculus';
+  }
+  if (obj?.scalar != null && typeof obj.scalar === 'string' && /[a-zA-Z\\]/.test(obj.scalar)
+    && !obj.vectorA && !obj.vecA && !Array.isArray(obj.a)) {
+    return 'vectorCalculus';
   }
   const raw = String(obj?.raw || obj?.latex || '');
   if (/H\s*\(\s*s\s*\)|transfer function|bode plot/i.test(raw) && /[=\/\^]|\\frac/.test(raw)) return 'bode';
@@ -326,6 +348,40 @@ export function normalizeCalculusTask(obj, fenceLang) {
       });
     }
     task.params = params;
+    return task;
+  }
+
+  if (action === 'vector') {
+    let op = String(obj.op || obj.operation || obj.mode || '').toLowerCase().replace(/\s+/g, '_');
+    if (op === 'sub') op = 'subtract';
+    if (op === 'scale' || op === 'scalar') op = 'scalar_multiply';
+    if (op === 'dot') op = 'dot_product';
+    if (op === 'cross') op = 'cross_product';
+    if (op === 'mag' || op === 'norm') op = 'magnitude';
+    if (op === 'unit') op = 'unit_vector';
+    if (op === 'proj') op = 'projection';
+    if (op === 'rej') op = 'rejection';
+    if (op === 'triple') op = 'triple_scalar';
+    if (op === 'indep' || op === 'independence') op = 'linear_independence';
+    task.op = VECTOR_DISCRETE_OPS.has(op) ? op : 'dot_product';
+    const dimRaw = obj.dim != null ? parseInt(String(obj.dim), 10) : null;
+    task.dim = dimRaw === 2 ? 2 : 3;
+    const pick = (keys) => {
+      for (let i = 0; i < keys.length; i += 1) {
+        const v = obj[keys[i]];
+        if (v != null && v !== '') return v;
+      }
+      return null;
+    };
+    const va = pick(['vectorA', 'vecA', 'a']);
+    const vb = pick(['vectorB', 'vecB', 'b']);
+    const vc = pick(['vectorC', 'vecC', 'c']);
+    if (va != null) task.vectorA = va;
+    if (vb != null) task.vectorB = vb;
+    if (vc != null) task.vectorC = vc;
+    if (obj.scalar != null && obj.scalar !== '') task.scalar = obj.scalar;
+    if (obj.k != null && obj.k !== '') task.k = obj.k;
+    if (!raw && !va) return null;
     return task;
   }
 
@@ -526,6 +582,14 @@ function tasksFromJson(data) {
   }
   if (Array.isArray(data.vectorCalculus)) {
     data.vectorCalculus.forEach((t) => push({ ...t, action: 'vectorCalculus' }));
+    return out;
+  }
+  if (Array.isArray(data.vectors)) {
+    data.vectors.forEach((t) => push({ ...t, action: 'vector' }));
+    return out;
+  }
+  if (Array.isArray(data.vector)) {
+    data.vector.forEach((t) => push({ ...t, action: 'vector' }));
     return out;
   }
   if (Array.isArray(data.vc)) {
@@ -800,6 +864,18 @@ function vectorCalculusProblemLatex(task) {
 }
 
 /** Textbook LaTeX for a matrix task card. */
+function vectorProblemLatex(task) {
+  const core = typeof window !== 'undefined' ? window.VectorDiscreteCore : null;
+  if (core?.buildLatexFromTask) {
+    return prepareLatexForKatex(core.buildLatexFromTask(task));
+  }
+  const t = task || {};
+  const op = String(t.op || 'dot_product');
+  const a = t.vectorA || t.vecA || t.a;
+  if (!a) return String(t.raw || '').trim();
+  return prepareLatexForKatex(String(a));
+}
+
 function matrixProblemLatex(task) {
   const core = typeof window !== 'undefined' ? window.MatrixCalculatorCore : null;
   const t = core?.normalizeMatrixTask ? core.normalizeMatrixTask(task) : task;
@@ -870,6 +946,10 @@ export function taskToSolveLatex(task) {
 
   if (task.action === 'vectorCalculus') {
     return task.raw ? task.raw.trim() : vectorCalculusProblemLatex(task);
+  }
+
+  if (task.action === 'vector') {
+    return task.raw ? task.raw.trim() : vectorProblemLatex(task);
   }
 
   if (task.action === 'matrix') {
@@ -1021,6 +1101,17 @@ export function formatMathActionLabel(task, index) {
     const names = { gradient: 'Gradient', divergence: 'Divergence', curl: 'Curl' };
     const mode = String(task.mode || 'gradient').toLowerCase();
     return `${n}${names[mode] || 'Vector calculus'}`;
+  }
+  if (task.action === 'vector') {
+    const names = {
+      add: 'Vector addition', subtract: 'Vector subtraction', scalar_multiply: 'Scalar multiply',
+      dot_product: 'Dot product', cross_product: 'Cross product', magnitude: 'Magnitude',
+      unit_vector: 'Unit vector', angle: 'Angle', projection: 'Projection', rejection: 'Rejection',
+      area: 'Parallelogram area', triple_scalar: 'Triple scalar product',
+      linear_independence: 'Linear independence',
+    };
+    const op = String(task.op || 'dot_product').toLowerCase();
+    return `${n}${names[op] || 'Vector operation'}`;
   }
   if (task.action === 'matrix') {
     const names = {

@@ -134,6 +134,15 @@ scalar: x^2 + y^2 + z^2
 \`\`\`
 Divergence/curl: \`mode: divergence\` or \`curl\` with \`fx:\`, \`fy:\`, \`fz:\`. One block per problem when generating a set.
 
+**Discrete vectors** (dot, cross, magnitude, projection — not ∇/div/curl):
+\`\`\`vector
+op: dot_product
+dim: 3
+vectorA: [1, 2, 3]
+vectorB: [4, -1, 2]
+\`\`\`
+Cross: \`op: cross_product\`. Magnitude: \`op: magnitude\`, \`vectorA: [3, 4]\`, \`dim: 2\`. One block per problem.
+
 **Matrix** — LaTeX pmatrix in fields or Symbolab-style \`raw:\`:
 \`\`\`matrix
 op: determinant
@@ -190,7 +199,7 @@ inverseExpr: 1/(s^2 + 4)
 \`\`\`
 Mirror in prose: \`$$\\displaystyle \\mathcal{L}\\{\\sin(2t)\\}$$\` or \`$$\\displaystyle \\mathcal{L}^{-1}\\left\\{\\frac{1}{s^2+4}\\right\\}$$\`
 
-Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|matrix|bode|laplace|quadratic|system|inequality|polynomial\` plus fields below.
+Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|vector|matrix|bode|laplace|quadratic|system|inequality|polynomial\` plus fields below.
 
 JSON batch: \`{"matrix":[{"op":"determinant","matrixA":"..."},{"op":"inverse","matrixA":"..."}]}\`
 

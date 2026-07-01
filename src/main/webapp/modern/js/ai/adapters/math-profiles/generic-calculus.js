@@ -10,6 +10,7 @@ import {
   solveOdeTask,
   solvePdeTask,
   solveVectorCalculusTask,
+  solveVectorTask,
   solveMatrixTask,
   solveBodeTask,
   solveLaplaceTask,
@@ -88,6 +89,12 @@ function buildFocusQuickActions(focus, snap) {
       chip('Which operator?', 'When should I use ∇, ∇·, or ∇× for a vector field problem? Decision guide with one tiny example — no full computation unless I ask.'),
       chip('Exam tip', 'Exam tips for vector calculus: notation for div/curl, conservative fields, and common component-sign errors.'),
       chip('Show example', 'Give one vector calculus example (gradient, div, or curl) with a ```vectorCalculus``` block so I can click Solve. One intro sentence, then the block.'),
+    ],
+    vector: [
+      chip("Don't get it", 'Explain dot product, cross product, and vector projection in plain language — geometric meaning and when each returns a scalar vs vector. Prose + KaTeX only.'),
+      chip('Which operation?', 'For vectors like mine on the page, which operation fits (dot, cross, magnitude, projection)? Strategy only — no final numbers unless I ask.'),
+      chip('Exam tip', 'Exam tips for vector arithmetic: 3D-only cross product, zero-vector edge cases, and angle formula domain.'),
+      chip('Show example', 'Give one vector example (dot or cross product) with a ```vector``` block so I can click Solve. One intro sentence, then the block.'),
     ],
     matrix: [
       chip("Don't get it", 'Explain matrix operations in plain language — determinant, inverse, eigenvalues, and when each is used. Prose + KaTeX only.'),
@@ -184,6 +191,7 @@ export function configureGenericMathShell(opts = {}) {
       if (task.action === 'ode') return solveOdeTask(task, mode);
       if (task.action === 'pde') return solvePdeTask(task, mode);
       if (task.action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
+      if (task.action === 'vector') return solveVectorTask(task, mode);
       if (task.action === 'matrix') return solveMatrixTask(task, mode);
       if (task.action === 'bode') return solveBodeTask(task, mode);
       if (task.action === 'laplace') return solveLaplaceTask(task, mode);
@@ -214,6 +222,7 @@ export function configureGenericMathShell(opts = {}) {
       if (typeof window.iqGetContext === 'function') return window.iqGetContext();
       if (typeof window.polyGetContext === 'function') return window.polyGetContext();
       if (typeof window.mcGetContext === 'function') return window.mcGetContext();
+      if (typeof window.vcalcGetContext === 'function') return window.vcalcGetContext();
       if (typeof window.vcGetContext === 'function') return window.vcGetContext();
       if (typeof window.scGetContext === 'function') return window.scGetContext();
       if (typeof window.pdeGetContext === 'function') return window.pdeGetContext();
@@ -267,6 +276,13 @@ export function configureGenericMathShell(opts = {}) {
           if (snap.matrixA) lines.push(`Matrix A: ${String(snap.matrixA).slice(0, 400)}`);
           if (snap.matrixB) lines.push(`Matrix B: ${String(snap.matrixB).slice(0, 400)}`);
           if (snap.n != null) lines.push(`Exponent n: ${snap.n}`);
+        } else if (snap.toolType === 'vector') {
+          lines.push(`Page operation: ${snap.op || 'add'}`);
+          lines.push(`Dimension: ${snap.dim || 3}D`);
+          if (snap.a) lines.push(`Vector a: (${snap.a.join(', ')})`);
+          if (snap.b) lines.push(`Vector b: (${snap.b.join(', ')})`);
+          if (snap.c) lines.push(`Vector c: (${snap.c.join(', ')})`);
+          if (snap.scalar != null) lines.push(`Scalar k: ${snap.scalar}`);
         } else if (snap.toolType === 'quadratic' || snap.toolType === 'inequality') {
           lines.push(`Expression: ${snap.expr || '(empty)'}`);
           if (snap.method) lines.push(`Method: ${snap.method}`);
@@ -712,6 +728,87 @@ Never name implementation libraries (SymPy, Python, OneCompiler, etc.) in replie
   if (window.mathShell) {
     window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
   }
+}
+
+/** Vector Calculator — discrete vector ops tutor + chat solver. */
+export function configureVectorMathShell() {
+  configureGenericMathShell({
+    focus: 'vector',
+    pageLabel: 'Vector Calculator',
+    pageHint: 'Vectors — dot, cross, magnitude, projection, angle (2D/3D)',
+    panelTitle: 'Math AI',
+    subtitle: 'Vector tutor + discrete ops solver in chat',
+    placeholder: 'Ask about dot/cross product, projection — or paste ∫, matrix, ODE…',
+    footerText: 'Ctrl+Shift+A · page calculator + chat engines',
+  });
+
+  const extra = `
+
+**Vector Calculator page — tutor + engine router**
+
+1. **Teacher** — dot/cross product geometry, magnitude, unit vectors, projection/rejection, triple scalar product, linear independence. Use KaTeX prose; mirror [CURRENT CONTEXT] when the student has vectors on the page.
+
+2. **Solver** — when they say *compute*, *find*, *calculate*, or give concrete vectors: emit one \`\`\`vector\`\`\` block **per problem** so **Solve / Solve with steps** chips appear.
+
+**Supported ops (op: field)**
+add, subtract, scalar_multiply, dot_product, cross_product, magnitude, unit_vector, angle, projection, rejection, area, triple_scalar, linear_independence
+
+**Block format**
+
+Dot product:
+\`\`\`vector
+op: dot_product
+dim: 3
+vectorA: [1, 2, 3]
+vectorB: [4, -1, 2]
+\`\`\`
+
+Cross product:
+\`\`\`vector
+op: cross_product
+vectorA: 1,2,3
+vectorB: 4,-1,2
+\`\`\`
+
+Magnitude:
+\`\`\`vector
+op: magnitude
+dim: 2
+vectorA: [3, 4]
+\`\`\`
+
+JSON batch: \`{"vector":[{"op":"dot_product","vectorA":[1,2,3],"vectorB":[4,-1,2]}]}\`
+
+For **∇ / div / curl** on fields use \`\`\`vectorCalculus\`\`\` — not this block.
+
+Never name implementation libraries in replies to the student.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
+
+  registerContextGetter('vcalcGetContext', () => {
+    const parse = (prefix) => {
+      const x = parseFloat(document.getElementById(`vc-${prefix}x`)?.value);
+      const y = parseFloat(document.getElementById(`vc-${prefix}y`)?.value);
+      const z = parseFloat(document.getElementById(`vc-${prefix}z`)?.value);
+      const dimBtn = document.querySelector('.vc-dim-btn.active');
+      const dim = dimBtn ? parseInt(dimBtn.getAttribute('data-dim'), 10) : 3;
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+      return dim === 2 ? [x, y] : [x, y, Number.isFinite(z) ? z : 0];
+    };
+    const modeBtn = document.querySelector('.vc-mode-btn.active');
+    const dimBtn = document.querySelector('.vc-dim-btn.active');
+    return {
+      toolType: 'vector',
+      op: modeBtn?.getAttribute('data-mode') || 'add',
+      dim: dimBtn ? parseInt(dimBtn.getAttribute('data-dim'), 10) : 3,
+      a: parse('a'),
+      b: parse('b'),
+      c: parse('c'),
+      scalar: document.getElementById('vc-scalar')?.value?.trim() || '',
+    };
+  });
 }
 
 function registerContextGetter(name, fn) {

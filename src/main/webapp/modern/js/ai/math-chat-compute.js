@@ -58,6 +58,12 @@ function getMatrixCore() {
     : window.MatrixCalculatorCore;
 }
 
+function getVectorDiscreteCore() {
+  return typeof VectorDiscreteCore !== 'undefined'
+    ? VectorDiscreteCore
+    : window.VectorDiscreteCore;
+}
+
 function getBodeCore() {
   return typeof BodeCalculatorCore !== 'undefined'
     ? BodeCalculatorCore
@@ -437,6 +443,51 @@ export async function solveMatrixTask(task, mode = 'simple') {
 }
 
 /**
+ * Discrete vector ops in-chat (dot, cross, magnitude, projection, …).
+ * @param {import('./math-action-extract.js').MathActionTask} task
+ * @param {MathSolveMode} mode
+ */
+export async function solveVectorTask(task, mode = 'simple') {
+  const core = getVectorDiscreteCore();
+  if (!core?.solveTask) {
+    return { ok: false, error: 'Vector engine (VectorDiscreteCore) not loaded.', mode, problemLatex: '' };
+  }
+
+  const problemLatex = taskToDisplayLatex(task);
+  const withSteps = mode === 'steps';
+
+  let r;
+  try {
+    r = core.solveTask(task, { withSteps, mode });
+  } catch (err) {
+    return { ok: false, error: err?.message || 'Vector computation failed.', mode, problemLatex };
+  }
+
+  if (!r || !r.ok) {
+    return { ok: false, error: r?.error || 'Could not compute this vector problem.', mode, problemLatex };
+  }
+
+  const steps = withSteps
+    ? (r.steps || []).map((s) => ({
+      title: s.title || 'Step',
+      latex: s.latex || '',
+    }))
+    : [];
+
+  return {
+    ok: true,
+    mode,
+    action: 'vector',
+    resultLatex: r.resultLatex || '',
+    method: r.method || r.opLabel || 'Vector calculator',
+    steps,
+    input: r.input || null,
+    result: { value: r.value, type: r.type },
+    problemLatex,
+  };
+}
+
+/**
  * Bode plot in-chat via BodeCalculatorCore (same SymPy backbone as the page).
  * @param {import('./math-action-extract.js').MathActionTask} task
  * @param {MathSolveMode} mode
@@ -538,6 +589,7 @@ export async function computeTaskInChat(task, _shell, mode = 'simple') {
   if (action === 'ode') return solveOdeTask(task, mode);
   if (action === 'pde') return solvePdeTask(task, mode);
   if (action === 'vectorCalculus') return solveVectorCalculusTask(task, mode);
+  if (action === 'vector') return solveVectorTask(task, mode);
   if (action === 'matrix') return solveMatrixTask(task, mode);
   if (action === 'bode') return solveBodeTask(task, mode);
   if (action === 'laplace') return solveLaplaceTask(task, mode);
@@ -609,21 +661,36 @@ function plotlyLayout(v, isDark, height = 240) {
 
 function ensurePlotly(plotEl, drawFn) {
   return new Promise((resolve) => {
-    const loadFn = typeof loadPlotly === 'function' ? loadPlotly : null;
-    if (loadFn && typeof Plotly === 'undefined') {
-      loadFn(() => {
-        if (!window.Plotly) { resolve(false); return; }
-        drawFn();
-        resolve(true);
-      });
+    const tryDraw = () => {
+      if (typeof window.Plotly === 'undefined') {
+        resolve(false);
+        return;
+      }
+      drawFn();
+      resolve(true);
+    };
+
+    if (typeof window.Plotly !== 'undefined') {
+      tryDraw();
       return;
     }
-    if (typeof Plotly === 'undefined') {
-      resolve(false);
+
+    const loadFn = typeof window.loadPlotly === 'function'
+      ? window.loadPlotly
+      : (window.VecCalcGraph && typeof window.VecCalcGraph.loadPlotly === 'function'
+        ? window.VecCalcGraph.loadPlotly
+        : null);
+
+    if (loadFn) {
+      loadFn(() => tryDraw());
       return;
     }
-    drawFn();
-    resolve(true);
+
+    const s = document.createElement('script');
+    s.src = 'https://cdn.plot.ly/plotly-2.27.0.min.js';
+    s.onload = () => tryDraw();
+    s.onerror = () => resolve(false);
+    document.head.appendChild(s);
   });
 }
 
@@ -1154,6 +1221,12 @@ function chipActionsForTask(task) {
     }
     return chips;
   }
+  if (action === 'vector') {
+    return [
+      { mode: 'simple', label: 'Solve', title: 'Compute the vector operation (same as page Calculate)' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step vector solution' },
+    ];
+  }
   if (action === 'matrix') {
     const chips = [
       { mode: 'simple', label: 'Solve', title: 'Compute the matrix operation (same as page Calculate)' },
@@ -1219,12 +1292,13 @@ export async function renderChatResultCard(card, task, result) {
   const isOde = action === 'ode';
   const isPde = action === 'pde';
   const isVc = action === 'vectorCalculus';
+  const isVector = action === 'vector';
   const isBode = action === 'bode';
   const isLaplace = action === 'laplace';
   const isAlgebraInterval = action === 'inequality'
     || (action === 'quadratic' && /[<>=]|\\in|\\emptyset|cup|∪/.test(answer));
   const isAlgebraSystem = action === 'system';
-  const fuseAnswer = !isOde && !isPde && !isVc && !isBode && !isLaplace && !isAlgebraInterval && !isAlgebraSystem;
+  const fuseAnswer = !isOde && !isPde && !isVc && !isVector && !isBode && !isLaplace && !isAlgebraInterval && !isAlgebraSystem;
   const answerEq = fuseAnswer ? `${problem} = ${answer}` : answer;
 
   body.replaceChildren();

@@ -1,0 +1,139 @@
+/* Vector Calculator — Math Studio horizontal layout */
+
+.ic-stack .ic-hero--compact.vc-hero {
+  --vc-accent: #0284c7;
+  gap: 0.85rem;
+}
+
+.vc-hero-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.vc-hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.vc-badge {
+  font: 600 0.68rem/1 var(--ms-font, system-ui);
+  padding: 0.25rem 0.55rem;
+  border-radius: 9999px;
+  background: rgba(2, 132, 199, 0.12);
+  color: #0369a1;
+  border: 1px solid rgba(2, 132, 199, 0.25);
+}
+
+.vc-hero-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.vc-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.vc-btn {
+  appearance: none;
+  border: 1px solid var(--ms-line-strong, #cbd5e1);
+  background: var(--ms-panel-bg, #fff);
+  color: var(--ms-ink, #0f172a);
+  font: 600 0.82rem/1 var(--ms-font, system-ui);
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.vc-btn-primary {
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
+  border-color: #0284c7;
+  color: #fff;
+}
+
+.vc-btn-secondary:hover,
+.vc-btn-primary:hover {
+  opacity: 0.92;
+}
+
+.ic-stack .vc-mode-toggle {
+  margin-bottom: 0;
+}
+
+.ic-stack .vc-dim-toggle {
+  margin-bottom: 0;
+}
+
+.ic-stack .vc-vector-input {
+  margin-bottom: 0.5rem;
+}
+
+.ic-stack .vc-preview {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px dashed var(--ms-line, #e2e8f0);
+  border-radius: 8px;
+  background: var(--ms-panel-bg-soft, #f8fafc);
+}
+
+.ic-result-card .vc-output-tabs {
+  margin: 0;
+  border-radius: 0;
+}
+
+.ic-result-card .tool-result-content {
+  min-height: 220px;
+}
+
+.ic-result-card #vc-graph-container {
+  min-height: 320px;
+}
+
+.vc-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.vc-example-chip {
+  font-size: 0.72rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 9999px;
+  border: 1px solid var(--ms-line, #e2e8f0);
+  background: var(--ms-panel-bg-soft, #f8fafc);
+  cursor: pointer;
+}
+
+.vc-example-chip:hover {
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+.vc-sep {
+  border: none;
+  border-top: 1px solid var(--ms-line, #e2e8f0);
+  margin: 0.75rem 0;
+}
+
+.ic-hero--compact .math-ai-tab-btn {
+  flex-shrink: 0;
+}
+
+@media (max-width: 720px) {
+  .vc-hero-actions {
+    width: 100%;
+    margin-left: 0;
+  }
+  .vc-btn {
+    flex: 1;
+    text-align: center;
+  }
+}
