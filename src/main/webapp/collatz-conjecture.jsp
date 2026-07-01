@@ -1,15 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
-<% String v = String.valueOf(System.currentTimeMillis()); %>
+<% String v = String.valueOf(System.currentTimeMillis());
+   request.setAttribute("aiToolId", "math-ai");
+   request.setAttribute("aiRequireSignIn", "true");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%--
         Collatz Conjecture Calculator — migrated to math-studio shell.
 
-        No MathLive, no AI scan — pure visualisation tool with live animated
-        sequence + plotly graph.  Legacy collatz-render.js / collatz-graph.js
-        / collatz-export.js / collatz-core.js are reused unchanged; the JSP
-        preserves every DOM ID the core looks up:
+        No MathLive, no photo scan — pure visualisation tool with live animated
+        sequence + plotly graph. Math AI tutor + full generic math router in chat.
+        Legacy collatz-render.js / collatz-graph.js / collatz-export.js / collatz-core.js
+        are reused unchanged; the JSP preserves every DOM ID the core looks up:
           · cc-start-number, cc-speed-slider, cc-speed-display
           · cc-start-btn, cc-stop-btn, cc-reset-btn
           · .cc-record-btn[data-number]
@@ -28,7 +32,7 @@
         <jsp:param name="toolUrl" value="collatz-conjecture.jsp" />
         <jsp:param name="toolKeywords" value="collatz conjecture calculator, 3n+1 problem, hailstone sequence, collatz sequence generator, collatz visualizer, collatz graph, unsolved math problem, number theory, stopping time calculator, collatz peak value, collatz conjecture explorer, 3n+1 sequence, collatz animation, hailstone numbers, syracuse problem, collatz orbit" />
         <jsp:param name="toolImage" value="logo.png" />
-        <jsp:param name="toolFeatures" value="Live animated sequence visualization with step-by-step display,Real-time interactive graph that draws as each number appears,Stopping time and peak value calculation,Quick-example buttons for famous Collatz numbers (27 63 97 871 6171),Configurable animation speed with slider control,Shareable URLs for any starting number,Dark mode support,Automatic log-scale graph for large sequences,Color-coded numbers showing even odd peak and endpoint" />
+        <jsp:param name="toolFeatures" value="Live animated sequence visualization with step-by-step display,Real-time interactive graph that draws as each number appears,Stopping time and peak value calculation,Quick-example buttons for famous Collatz numbers (27 63 97 871 6171),Configurable animation speed with slider control,Shareable URLs for any starting number,Math AI tutor + full math router in chat,Dark mode support,Automatic log-scale graph for large sequences,Color-coded numbers showing even odd peak and endpoint" />
         <jsp:param name="hasSteps" value="true" />
         <jsp:param name="educationalLevel" value="Middle School, High School, College" />
         <jsp:param name="teaches" value="Number theory, Collatz conjecture, iterative sequences, mathematical conjectures, computational exploration" />
@@ -108,6 +112,29 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css?v=<%=v%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=v%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/collatz-conjecture.css?v=<%=v%>">
+
+    <%@ include file="modern/components/math-ai-head.inc.jsp" %>
+
+    <style>
+        .ic-hero .math-ai-tab-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid rgba(234, 88, 12, 0.35);
+            background: rgba(234, 88, 12, 0.08); color: var(--ms-text, #1e1b4b); font-size: 0.8125rem;
+            font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+            white-space: nowrap;
+        }
+        .ic-hero .math-ai-tab-btn:hover {
+            background: rgba(234, 88, 12, 0.18); transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(234, 88, 12, 0.15);
+        }
+        .ic-hero .math-ai-tab-btn[aria-busy="true"] { opacity: 0.75; cursor: wait; }
+        .cc-hero-top {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 0.65rem;
+        }
+    </style>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
 
@@ -279,12 +306,16 @@
                     <span aria-current="page">Collatz Conjecture</span>
                 </nav>
                 <h1>Collatz Conjecture Explorer &mdash; The 3n + 1 Problem</h1>
+                <p class="ms-subtitle">Live hailstone animation &middot; stopping time &middot; peak value &middot; famous orbits</p>
             </header>
 
             <div class="ic-stack">
 
                 <!-- ═══ INPUT HERO ═══ -->
                 <div class="ic-hero" id="ic-hero">
+                    <div class="cc-hero-top">
+                        <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Math AI — Collatz tutor + full math router in chat (Ctrl+Shift+A)">&#10024; AI</button>
+                    </div>
 
                     <!-- Top row: starting number + animation speed -->
                     <div class="cc-controls">
@@ -522,6 +553,15 @@
     <script src="<%=request.getContextPath()%>/js/collatz-graph.js?v=<%=v%>"></script>
     <script src="<%=request.getContextPath()%>/js/collatz-export.js?v=<%=v%>"></script>
     <script src="<%=request.getContextPath()%>/js/collatz-core.js?v=<%=v%>"></script>
+    <script src="<%=request.getContextPath()%>/modern/js/categories-menu.js?v=<%=v%>" defer></script>
+
+    <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
+    <%
+        request.setAttribute("mathAiButtonId", "btnMathAI");
+        request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+        request.setAttribute("mathAiProfileExport", "configureCollatzMathShell");
+    %>
+    <%@ include file="modern/components/math-ai-boot.inc.jsp" %>
 
     <!-- FAQ accordion + empty-state hide on first run -->
     <script>

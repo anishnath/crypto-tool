@@ -144,6 +144,12 @@ function buildFocusQuickActions(focus, snap) {
       chip('Goldbach & twins', 'Explain Goldbach\'s conjecture and twin primes intuitively. Relate to my even N or a list I generated — teaching only unless I ask for a ```integral``` or ```matrix``` example.'),
       chip('Show example', 'Give one related math example with a matching solver block (```integral```, ```quadratic```, ```matrix```, etc.) so I can click Solve in chat. One intro sentence, then the block.'),
     ],
+    collatz: [
+      chip("Don't get it", 'Explain the Collatz conjecture (3n+1) in plain language — the even/odd rule, hailstone analogy, and why it is unsolved. Prose + KaTeX only.'),
+      chip('Why is 27 famous?', 'Why is starting number 27 a classic Collatz example? Explain stopping time and peak value intuitively — point me to **Start sequence** on the page to see the animation.'),
+      chip('Stopping time?', 'What is total stopping time vs peak value in a Collatz orbit? How do they differ? Strategy for exploring patterns — no inventing orbit data for my N unless I ran the page.'),
+      chip('Show example', 'Give one related math example with a matching solver block (```integral```, ```quadratic```, ```matrix```, etc.) so I can click Solve in chat. One intro sentence, then the block.'),
+    ],
   };
 
   return sets[focus] || sets.integral;
@@ -151,7 +157,7 @@ function buildFocusQuickActions(focus, snap) {
 
 const FOCUS_KEYS = new Set([
   'integral', 'derivative', 'limit', 'ode', 'pde', 'series',
-  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace', 'prime-number',
+  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace', 'prime-number', 'collatz',
 ]);
 
 /**
@@ -216,6 +222,7 @@ export function configureGenericMathShell(opts = {}) {
     getContext() {
       if (typeof window.ltGetContext === 'function') return window.ltGetContext();
       if (typeof window.pnGetContext === 'function') return window.pnGetContext();
+      if (typeof window.ccGetContext === 'function') return window.ccGetContext();
       if (typeof window.bpGetContext === 'function') return window.bpGetContext();
       if (typeof window.qsGetContext === 'function') return window.qsGetContext();
       if (typeof window.syGetContext === 'function') return window.syGetContext();
@@ -319,6 +326,12 @@ export function configureGenericMathShell(opts = {}) {
             lines.push(`Range: [${snap.rangeA}, ${snap.rangeB}]`);
           }
           if (snap.lastResult) lines.push(`Last result: ${String(snap.lastResult).slice(0, 200)}`);
+        } else if (snap.toolType === 'collatz') {
+          if (snap.startNumber != null) lines.push(`Starting number: ${snap.startNumber}`);
+          if (snap.speedMs != null) lines.push(`Animation speed: ${snap.speedMs}ms`);
+          if (snap.stoppingTime != null) lines.push(`Stopping time (last run): ${snap.stoppingTime} steps`);
+          if (snap.peakValue != null) lines.push(`Peak value (last run): ${snap.peakValue}`);
+          if (snap.statusText) lines.push(`Status: ${String(snap.statusText).slice(0, 200)}`);
         } else {
           lines.push(
             `Mode: ${snap.mode || '(n/a)'}`,
@@ -958,6 +971,61 @@ Never invent primality or factorization results in prose when the page calculato
       nearest: document.getElementById('pn-nearest-input')?.value?.trim() || '',
       goldbach: document.getElementById('pn-goldbach-input')?.value?.trim() || '',
       lastResult: hero?.textContent?.trim() && hero.textContent.trim() !== '—' ? hero.textContent.trim() : '',
+    };
+  });
+}
+
+/** Collatz Conjecture Explorer — number-theory tutor + generic math router. */
+export function configureCollatzMathShell() {
+  configureGenericMathShell({
+    focus: 'collatz',
+    pageLabel: 'Collatz Conjecture Explorer',
+    pageHint: 'Collatz 3n+1 — animated hailstone sequences, stopping time, peak value',
+    panelTitle: 'Math AI',
+    subtitle: 'Collatz tutor + full math router in chat',
+    placeholder: 'Ask about 3n+1, stopping time, hailstone — or paste ∫, matrix, algebra…',
+    footerText: 'Ctrl+Shift+A · page explorer + chat solvers',
+  });
+
+  const extra = `
+
+**Collatz Conjecture page — tutor + engine router**
+
+1. **Teacher** — the 3n+1 rule, hailstone analogy, stopping time, peak value, famous starts (27, 871, 6171), partial results (Tao), why the conjecture is open. Use KaTeX prose; mirror [CURRENT CONTEXT] when the student has a starting number or last run stats on the page.
+
+2. **Page explorer** — for a concrete animated orbit, tell the student to enter N and click **Start sequence** (same in-browser engine with live graph). Do not invent stopping times or peak values for their N in prose — point to Start or describe known famous examples only.
+
+3. **Chat solvers** — for related problems emit matching blocks:
+   - Integrals / sums: \`\`\`integral\`\`\`
+   - Algebra: \`\`\`quadratic\`\`\`, \`\`\`polynomial\`\`\`, \`\`\`system\`\`\`
+   - Linear algebra: \`\`\`matrix\`\`\`
+
+Never name implementation libraries in replies to the student.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
+
+  registerContextGetter('ccGetContext', () => {
+    const startEl = document.getElementById('cc-start-number');
+    const speedEl = document.getElementById('cc-speed-slider');
+    const statsEl = document.getElementById('cc-stats-area');
+    const statusEl = document.getElementById('cc-status-area');
+    const statsText = statsEl?.textContent?.replace(/\s+/g, ' ').trim() || '';
+    let stoppingTime = null;
+    let peakValue = null;
+    const stepsMatch = statsText.match(/(\d[\d,]*)\s*steps/i);
+    if (stepsMatch) stoppingTime = stepsMatch[1].replace(/,/g, '');
+    const peakMatch = statsText.match(/peak[:\s]+(\d[\d,]*)/i);
+    if (peakMatch) peakValue = peakMatch[1].replace(/,/g, '');
+    return {
+      toolType: 'collatz',
+      startNumber: startEl?.value?.trim() || '',
+      speedMs: speedEl?.value || '',
+      stoppingTime,
+      peakValue,
+      statusText: statusEl?.textContent?.trim() || '',
+      statsSummary: statsText.slice(0, 400),
     };
   });
 }
