@@ -55,6 +55,7 @@ Optional request attributes (set before `vars` include):
 |-----------|---------|---------|
 | `aiToolId` | `""` | Billing + localStorage key |
 | `aiBillingEnabled` | `true` | Enable billing bar / tier routing |
+| `aiRequireSignIn` | `false` | Block AI send for guests (shows sign-in prompt) |
 
 ---
 

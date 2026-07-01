@@ -180,6 +180,44 @@ node scripts/build-math-ai-cores-bundle.mjs
 
 ---
 
+## JSP include paths (avoid “file not found”)
+
+Jasper resolves `<%@ include file="..." %>` **relative to the file that contains the directive** (not the top-level page).
+
+| Path style | Example in `modern/components/foo.inc.jsp` | Result |
+|------------|------------------------------------------|--------|
+| Same directory | `<%@ include file="bar.inc.jsp" %>` | **Best** for siblings in `modern/components/` |
+| Parent sibling | `<%@ include file="../ads/ad-init.jsp" %>` | **Best** for `modern/ads/` from `modern/components/` |
+| Doubled path (broken) | `<%@ include file="modern/components/bar.inc.jsp" %>` | Resolves to `modern/components/modern/components/bar.inc.jsp` |
+| Top-level page only | `<%@ include file="modern/components/foo.inc.jsp" %>` | OK on root JSPs like `probability-calculator.jsp` |
+
+**Statistics pages** chain: root JSP → `math-studio-shell-head.inc.jsp` → `math-ai-head.inc.jsp` (same-dir names).
+
+**Statistics pages** include `math-studio-shell-head.inc.jsp` from the webapp root — that fragment must use `/modern/...` paths for any nested includes.
+
+Audit shared fragments:
+
+```bash
+node scripts/audit-jsp-nested-includes.mjs
+```
+
+---
+
+## Deprecated includes (do not use)
+
+These files are **comment-only stubs**. All modules they used to load are in `math-ai-cores-engine.js`:
+
+| File | Former role |
+|------|-------------|
+| `modern/components/algebra-page-engines.inc.jsp` | quadratic / systems / polynomial / inequality scripts |
+| `modern/components/trig-page-engines.inc.jsp` | trig-common, trig-graph, trig-backend |
+| `modern/components/algebra-cores.inc.jsp` | algebra-solver-core.js alone |
+| `math/partials/trig-calculator-scripts.jsp` | trig-backend only (use engine boot instead) |
+
+**Legacy `*.legacy.jsp` pages** may still load individual cores — migrate them to `math-tool-engine-boot.inc.jsp` when those pages are still maintained.
+
+---
+
 ## JSP includes cheat sheet
 
 | Include | When to use |
