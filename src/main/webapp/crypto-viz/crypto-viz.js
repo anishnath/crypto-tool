@@ -23,7 +23,14 @@
   var OP_LABELS = {
     load: 'Load', expand: 'Expand schedule', sub: 'Substitute (S-box)',
     permute: 'Permute', mix: 'Mix', xor: 'Add round key',
-    round: 'Compression round', add: 'Add to state', feistel: 'Feistel round', emit: 'Output'
+    round: 'Compression round', add: 'Add to state', feistel: 'Feistel round', modexp: 'Square & multiply',
+    ecmul: 'Scalar mult (double & add)', msg: 'Handshake message', emit: 'Output'
+  };
+
+  // MD5's four nonlinear round functions, shown so users see what each does.
+  var MD5_DEF = {
+    F: '(b ∧ c) ∨ (¬b ∧ d)', G: '(b ∧ d) ∨ (c ∧ ¬d)',
+    H: 'b ⊕ c ⊕ d', I: 'c ⊕ (b ∨ ¬d)'
   };
 
   // ---- tiny DOM helpers -----------------------------------------------------
@@ -54,12 +61,46 @@
       .then(function (r) { return r.json(); })
       .then(function (data) {
         catalog = (data && data.algorithms) || [];
+        appendStaticAlgorithms(); // TLS handshakes: recorded static captures, no backend
         renderPicker();
         var firstAvail = catalog.filter(function (a) { return a.status === 'available'; })[0];
         if (firstAvail) selectAlgorithm(firstAvail.id);
         setStatus('');
       })
       .catch(function (e) { setStatus('Failed to load algorithms: ' + e.message, true); });
+  }
+
+  // Append algorithms whose traces are pre-recorded static files (not the live
+  // Docker API) — keeps everything in the same page/picker with no backend change.
+  function appendStaticAlgorithms() {
+    catalog.push({
+      id: 'tls', name: 'SSL / TLS handshake', category: 'protocol', status: 'available',
+      description: 'Real TLS handshakes captured with openssl (-msg) over loopback, replayed exactly. Step through the Client↔Server message flow and compare versions.',
+      directions: ['handshake'],
+      _static: (window.CV_CTX || '') + '/crypto-viz/data/tls/',
+      params: [{
+        name: 'version', label: 'Protocol version', type: 'select', required: true, default: 'tls_1_3',
+        options: [
+          { value: 'tls_1_3', label: 'TLS 1.3  (1-RTT, modern)' },
+          { value: 'tls_1_2', label: 'TLS 1.2' },
+          { value: 'tls_1_1', label: 'TLS 1.1' },
+          { value: 'tls_1_0', label: 'TLS 1.0' }
+        ], help: 'Each is a real recorded handshake — notice how 1.3 needs far fewer round trips.'
+      }],
+      output: { name: 'result', label: 'Result', type: 'text' }
+    });
+    catalog.push({
+      id: 'grpc', name: 'gRPC (over HTTP/2)', category: 'protocol', status: 'available',
+      description: 'A real gRPC unary call captured at the HTTP/2 frame level (h2c loopback). Shows the two layers people conflate: HTTP/2 framing (SETTINGS/HEADERS/DATA/streams) and gRPC message framing + Protobuf on top.',
+      directions: ['rpc'],
+      _static: (window.CV_CTX || '') + '/crypto-viz/data/grpc/',
+      params: [{
+        name: 'version', label: 'Call type', type: 'select', required: true, default: 'grpc_unary',
+        options: [{ value: 'grpc_unary', label: 'Unary RPC (SayHello)' }],
+        help: 'A single request → single response RPC over one HTTP/2 stream.'
+      }],
+      output: { name: 'result', label: 'Result', type: 'text' }
+    });
   }
 
   function renderPicker() {
@@ -200,6 +241,18 @@
     var errs = validate(vals);
     if (errs.length) { setStatus(errs[0], true); return; }
 
+    // Static (pre-recorded) algorithms: load the captured JSON, no API call.
+    if (current._static) {
+      var url = current._static + (vals.version || (current.params[0] && current.params[0].default)) + '.json';
+      setStatus('Loading capture…');
+      $('#cvRun').disabled = true;
+      fetch(url, { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (j) { $('#cvRun').disabled = false; trace = j; setStatus(''); renderTrace(); })
+        .catch(function (e) { $('#cvRun').disabled = false; setStatus('Failed to load capture: ' + e.message, true); });
+      return;
+    }
+
     var payload = { algorithm: current.id };
     Object.keys(vals).forEach(function (k) { payload[k] = vals[k]; });
 
@@ -263,6 +316,78 @@
       head.appendChild(el('span', 'cv-panel-kind', p.kind));
       card.appendChild(head);
 
+      // TLS handshake swimlane: Client↔Server message sequence, revealed per step
+      if (p.kind === 'swimlane') {
+        var swim = el('div', 'cv-swim');
+        var head = el('div', 'cv-swim-head');
+        head.appendChild(el('span', 'cv-swim-lane', (p.lanes && p.lanes[0]) || 'Client'));
+        head.appendChild(el('span', 'cv-swim-lane', (p.lanes && p.lanes[1]) || 'Server'));
+        swim.appendChild(head);
+        var rowEls = [];
+        (p.messages || []).forEach(function (m, i) {
+          var row = el('div', 'cv-msg cv-msg-' + m.dir);
+          var arw = el('div', 'cv-arrow');
+          var top = el('div', 'cv-arrow-top');
+          top.appendChild(el('span', 'cv-arrow-name', m.name));
+          top.appendChild(el('span', 'cv-arrow-bytes', m.bytes + ' B'));
+          arw.appendChild(top);
+          if (m.annot) arw.appendChild(el('div', 'cv-arrow-annot', m.annot));
+          row.appendChild(arw);
+          swim.appendChild(row);
+          rowEls[i] = row;
+        });
+        card.appendChild(swim);
+        host.appendChild(card);
+        panelsById[p.id] = { meta: p, root: card, kind: 'swimlane', cells: [], rows: rowEls };
+        return;
+      }
+
+      // elliptic-curve scatter plot (teaching curve): SVG of all points + per-step highlights
+      if (p.kind === 'curve') {
+        var cinfo = { meta: p, root: card, kind: 'curve', cells: [], ptmap: {}, lines: [] };
+        if (document.createElementNS) {
+          var SZ = 320, PAD = 26, span = SZ - 2 * PAD, pp = p.p || 17, sc = span / pp;
+          var ns = 'http://www.w3.org/2000/svg';
+          var svg = document.createElementNS(ns, 'svg');
+          svg.setAttribute('viewBox', '0 0 ' + SZ + ' ' + SZ);
+          svg.setAttribute('class', 'cv-plot');
+          cinfo.svgns = ns; cinfo.svg = svg;
+          cinfo.map = function (x, y) { return [PAD + x * sc, SZ - PAD - y * sc]; };
+          var ax = document.createElementNS(ns, 'path');
+          ax.setAttribute('d', 'M' + PAD + ' ' + (SZ - PAD) + ' H' + (SZ - PAD) + ' M' + PAD + ' ' + (SZ - PAD) + ' V' + PAD);
+          ax.setAttribute('class', 'cv-plot-axis'); svg.appendChild(ax);
+          (p.points || []).forEach(function (pt) {
+            var xy = cinfo.map(pt[0], pt[1]);
+            var c = document.createElementNS(ns, 'circle');
+            c.setAttribute('cx', xy[0]); c.setAttribute('cy', xy[1]); c.setAttribute('r', 5);
+            c.setAttribute('class', 'cv-pt'); svg.appendChild(c);
+            cinfo.ptmap[pt[0] + ',' + pt[1]] = c;
+          });
+          card.appendChild(svg);
+        }
+        host.appendChild(card);
+        panelsById[p.id] = cinfo;
+        return;
+      }
+
+      // key/value panel (RSA big numbers): row label + scrollable value box
+      if (p.kind === 'kv') {
+        var kvWrap = el('div', 'cv-kv');
+        var kvCells = [];
+        (p.rowLabels || []).forEach(function (lab, r) {
+          var row = el('div', 'cv-kv-row');
+          row.appendChild(el('span', 'cv-kv-label', lab));
+          var val = el('div', 'cv-kv-val');
+          row.appendChild(val);
+          kvWrap.appendChild(row);
+          kvCells[r] = [val];
+        });
+        card.appendChild(kvWrap);
+        host.appendChild(card);
+        panelsById[p.id] = { meta: p, root: card, cells: kvCells };
+        return;
+      }
+
       var rows = p.rows || (p.values ? p.values.length : 4);
       var cols = p.cols || 4;
 
@@ -305,10 +430,11 @@
   }
 
   function clearHighlights() {
+    // strip only cv-hl-* so base classes (cv-cell / cv-kv-val) survive
     Object.keys(panelsById).forEach(function (id) {
       panelsById[id].cells.forEach(function (row) {
         row.forEach(function (cell) {
-          cell.className = 'cv-cell';
+          cell.className = cell.className.split(' ').filter(function (c) { return c && c.indexOf('cv-hl-') !== 0; }).join(' ');
         });
       });
     });
@@ -329,8 +455,45 @@
     }
     clearHighlights();
     decorate(trace.steps[idx]);
+    renderPlot(trace.steps[idx]);
+    renderSwimlane(trace.steps[idx]);
     renderStepInfo(trace.steps[idx], idx);
     renderTimeline(idx);
+  }
+
+  // reveal handshake messages up to the current step and highlight the active one
+  function renderSwimlane(s) {
+    var sp = null;
+    Object.keys(panelsById).forEach(function (id) { if (panelsById[id].kind === 'swimlane') sp = panelsById[id]; });
+    if (!sp || !sp.rows) return;
+    var idx = (s && s.idx != null) ? s.idx : -1;
+    sp.rows.forEach(function (r, i) {
+      r.classList.remove('cv-msg-active');
+      r.style.opacity = (i <= idx) ? '1' : '0.25';
+      if (i === idx) r.classList.add('cv-msg-active');
+    });
+  }
+
+  // update the EC scatter plot: reset all points, then color this step's highlights + reflection line
+  function renderPlot(s) {
+    var cp = null;
+    Object.keys(panelsById).forEach(function (id) { if (panelsById[id].kind === 'curve') cp = panelsById[id]; });
+    if (!cp || !cp.svg) return;
+    Object.keys(cp.ptmap).forEach(function (k) { cp.ptmap[k].setAttribute('class', 'cv-pt'); });
+    (cp.lines || []).forEach(function (l) { if (l.parentNode) l.parentNode.removeChild(l); });
+    cp.lines = [];
+    var plot = s && s.plot;
+    if (!plot) return;
+    (plot.hi || []).forEach(function (h) {
+      var c = cp.ptmap[h.x + ',' + h.y];
+      if (c) c.setAttribute('class', 'cv-pt cv-pt-' + h.role);
+    });
+    if (plot.line && cp.map) {
+      var a = cp.map(plot.line[0][0], plot.line[0][1]), b = cp.map(plot.line[1][0], plot.line[1][1]);
+      var ln = document.createElementNS(cp.svgns, 'line');
+      ln.setAttribute('x1', a[0]); ln.setAttribute('y1', a[1]); ln.setAttribute('x2', b[0]); ln.setAttribute('y2', b[1]);
+      ln.setAttribute('class', 'cv-plot-line'); cp.svg.appendChild(ln); cp.lines.push(ln);
+    }
   }
 
   // op-specific highlighting on top of the freshly-set panels.
@@ -394,6 +557,10 @@
       dt.appendChild(el('div', 'cv-detail-line', line + (s.detail.length > 4 ? '   …' : '')));
     } else if (s.op === 'expand' && s.detail) {
       var cap = 6;
+      // SHA message schedule: define the small-sigma functions once at the top
+      if (s.detail[0] && s.detail[0].kind === 'sched') {
+        dt.appendChild(el('div', 'cv-detail-line', 'σ0(x) = ROTR7 ⊕ ROTR18 ⊕ SHR3      σ1(x) = ROTR17 ⊕ ROTR19 ⊕ SHR10'));
+      }
       s.detail.slice(0, cap).forEach(function (d) {
         if (d.kind === 'g') {
           dt.appendChild(el('div', 'cv-detail-line',
@@ -412,20 +579,46 @@
       if (s.detail.length > cap) dt.appendChild(el('div', 'cv-detail-line', '… +' + (s.detail.length - cap) + ' more'));
     } else if (s.op === 'round' && s.detail) {
       var d = s.detail[0];
-      dt.appendChild(el('div', 'cv-detail-line',
-        'T1 = h + Σ1 ' + d.S1 + ' + Ch ' + d.ch + ' + K ' + d.K + ' + W ' + d.W + '  =  ' + d.t1));
-      dt.appendChild(el('div', 'cv-detail-line',
-        'T2 = Σ0 ' + d.S0 + ' + Maj ' + d.maj + '  =  ' + d.t2 + '      → a = T1+T2, e = d+T1'));
+      if (d.func) { // MD5 op — show the active nonlinear function's definition + live value
+        dt.appendChild(el('div', 'cv-detail-line', d.func + '(b,c,d) = ' + (MD5_DEF[d.func] || '') + '  =  ' + d.fval));
+        dt.appendChild(el('div', 'cv-detail-line',
+          'b += ((a + ' + d.func + ' + M[' + d.g + '] ' + d.m + ' + T[' + d.i + '] ' + d.k + ') <<< ' + d.s + ')  =  ' + d.result));
+      } else { // SHA-256 round — show each function definition alongside its result
+        dt.appendChild(el('div', 'cv-detail-line', 'Ch(e,f,g) = (e ∧ f) ⊕ (¬e ∧ g)  =  ' + d.ch));
+        dt.appendChild(el('div', 'cv-detail-line', 'Maj(a,b,c) = (a∧b) ⊕ (a∧c) ⊕ (b∧c)  =  ' + d.maj));
+        dt.appendChild(el('div', 'cv-detail-line', 'Σ1(e) = ROTR6 ⊕ ROTR11 ⊕ ROTR25  =  ' + d.S1));
+        dt.appendChild(el('div', 'cv-detail-line', 'Σ0(a) = ROTR2 ⊕ ROTR13 ⊕ ROTR22  =  ' + d.S0));
+        dt.appendChild(el('div', 'cv-detail-line', 'T1 = h + Σ1 + Ch + K + W = ' + d.t1 + '      T2 = Σ0 + Maj = ' + d.t2 + '   → a=T1+T2, e=d+T1'));
+      }
     } else if (s.op === 'add' && s.detail) {
       var line = s.detail.map(function (d) { return 'H' + d.idx + '=' + d.old + '+' + d.add + '=' + d.result; });
       dt.appendChild(el('div', 'cv-detail-line', line.slice(0, 4).join('   ')));
       dt.appendChild(el('div', 'cv-detail-line', line.slice(4).join('   ')));
+    } else if (s.op === 'modexp' && s.detail) {
+      var md = s.detail[0];
+      dt.appendChild(el('div', 'cv-detail-line',
+        'exponent bit ' + (md.pos != null ? md.pos : '?') + ' = ' + md.bit + '  →  ' + (md.op || (md.bit ? 'square, then multiply' : 'square'))));
+    } else if (s.op === 'ecmul' && s.detail) {
+      var ec = s.detail[0];
+      dt.appendChild(el('div', 'cv-detail-line',
+        (ec.op || '') + (ec.bit != null ? '   ·   scalar bit = ' + ec.bit : '')));
+    } else if (s.op === 'msg' && s.detail) {
+      var mm = s.detail[0];
+      dt.appendChild(el('div', 'cv-detail-line', mm.record + ' record · ' + mm.bytes + ' bytes on the wire'));
+      dt.appendChild(el('div', 'cv-detail-line cv-hex', mm.hex));
     } else if (s.op === 'feistel' && s.detail) {
       var fd = s.detail[0];
-      dt.appendChild(el('div', 'cv-detail-line', 'L ⊕ P = ' + fd.xl + '   → into F'));
-      dt.appendChild(el('div', 'cv-detail-line',
-        'S0[' + fd.a + ']=' + fd.s0 + '   S1[' + fd.b + ']=' + fd.s1 + '   S2[' + fd.c + ']=' + fd.s2 + '   S3[' + fd.d + ']=' + fd.s3));
-      dt.appendChild(el('div', 'cv-detail-line', 'F = ((S0+S1) ⊕ S2) + S3 = ' + fd.f + '   → R ⊕= F, then swap'));
+      if (fd.sboxes) { // DES
+        dt.appendChild(el('div', 'cv-detail-line', 'round key K = ' + fd.rk));
+        dt.appendChild(el('div', 'cv-detail-line',
+          'S-boxes:  ' + fd.sboxes.map(function (x) { return 'S' + x.i + ' ' + x.in + '→' + x.out; }).join('   ')));
+        dt.appendChild(el('div', 'cv-detail-line', 'f(R,K) = ' + fd.f + '   → newR = L ⊕ f(R,K), then swap'));
+      } else { // Blowfish
+        dt.appendChild(el('div', 'cv-detail-line', 'L ⊕ P = ' + fd.xl + '   → into F'));
+        dt.appendChild(el('div', 'cv-detail-line',
+          'S0[' + fd.a + ']=' + fd.s0 + '   S1[' + fd.b + ']=' + fd.s1 + '   S2[' + fd.c + ']=' + fd.s2 + '   S3[' + fd.d + ']=' + fd.s3));
+        dt.appendChild(el('div', 'cv-detail-line', 'F = ((S0+S1) ⊕ S2) + S3 = ' + fd.f + '   → R ⊕= F, then swap'));
+      }
     }
   }
 

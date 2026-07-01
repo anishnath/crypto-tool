@@ -21,7 +21,6 @@
 <%-- Worksheet engine (drives the modal launched from #poly-worksheet-btn). --%>
 <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
 
-<script src="<%=request.getContextPath()%>/js/polynomial-calculator-render.js"></script>
 <script src="<%=request.getContextPath()%>/js/polynomial-calculator-graph.js"></script>
 <script src="<%=request.getContextPath()%>/js/polynomial-calculator-export.js"></script>
 <script src="<%=request.getContextPath()%>/modern/js/polynomial-calculator-input-bridge.js"></script>

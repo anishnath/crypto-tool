@@ -2196,6 +2196,8 @@ function bindEvents() {
 // ==================== Init ====================
 
 function init() {
+    if (window.__SY_CORE_INIT) return;
+    window.__SY_CORE_INIT = true;
     // Restore URL params
     var restored = restoreFromUrl();
     if (!restored) {
@@ -2349,6 +2351,8 @@ if (typeof window === 'object' && window._SY_TEST_HOOK) {
 
 })();
 
-document.addEventListener('DOMContentLoaded', function() {
-    window.SystemsSolverCore.init();
-});
+if (document.getElementById('sy-solve-btn')) {
+    document.addEventListener('DOMContentLoaded', function () {
+        window.SystemsSolverCore.init();
+    });
+}

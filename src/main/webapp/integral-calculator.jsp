@@ -457,7 +457,7 @@
       3. math-input-setup.jsp — MathLive + mode toggle (reads DOM, registers events)
     Every math tool page follows this 3-include pattern.
 --%>
-<jsp:include page="/math/partials/math-libs.jsp" />
+<%@ include file="/modern/components/math-tool-engine-boot.inc.jsp" %>
 <jsp:include page="/math/partials/integral-calculator-scripts.jsp" />
 <jsp:include page="/math/partials/math-input-setup.jsp" />
 
@@ -670,7 +670,6 @@
         });
     })();
 </script>
-<%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
 <%
     request.setAttribute("mathAiButtonId", "btnMathAI");
     request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");

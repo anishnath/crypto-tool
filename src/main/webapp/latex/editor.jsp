@@ -593,17 +593,8 @@ window.latexAssistant = wireLazyAssistant({
 <script src="<%=ctx%>/latex/static/js/solutions-file.js"></script>
 <script src="<%=ctx%>/latex/static/js/chem-insert.js"></script>
 
-<!-- Math inline solver (Σ Solve in selection popup) — limits in v1.
-     nerdamer load order matches /math/partials/math-libs.jsp: core →
-     Algebra → Calculus. The Calculus plugin is required for diff() /
-     integrate() used inside the L'Hôpital path. -->
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
-<script src="<%=ctx%>/modern/js/integral-calculator-core.js"></script>
-<script src="<%=ctx%>/modern/js/limit-calculator-core.js"></script>
-<script src="<%=ctx%>/modern/js/derivative-calculator-core.js"></script>
-<script src="<%=ctx%>/modern/js/matrix-calculator-core.js"></script>
+<!-- Math inline solver (Σ Solve in selection popup) -->
+<script src="<%=ctx%>/modern/js/math-ai-cores-engine.js"></script>
 <script src="<%=ctx%>/modern/js/code-runner-core.js"></script>
 <script src="<%=ctx%>/latex/static/js/math-insert.js"></script>
 

@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "math-ai");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,6 +93,8 @@
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css?v=<%=cacheVersion%>">
 
+    <%@ include file="modern/components/math-ai-head.inc.jsp" %>
+
     <style>
     /* Busy-spinner for the primary CTA */
     .ic-hero-cta.is-busy {
@@ -140,6 +145,18 @@
         margin-bottom: 0.25rem;
         display: block;
     }
+    .ic-hero .math-ai-tab-btn {
+        display: inline-flex; align-items: center; gap: 0.35rem;
+        padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid rgba(124,58,237,0.35);
+        background: rgba(124,58,237,0.08); color: var(--ms-text, #1e1b4b); font-size: 0.8125rem;
+        font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+        white-space: nowrap;
+    }
+    .ic-hero .math-ai-tab-btn:hover {
+        background: rgba(124,58,237,0.18); transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(124,58,237,0.15);
+    }
+    .ic-hero .math-ai-tab-btn[aria-busy="true"] { opacity: 0.75; cursor: wait; }
     </style>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
@@ -188,6 +205,7 @@
                             <button type="button" class="ic-mode-btn trig-mode-btn"        data-mode="prove"    role="radio" aria-checked="false" title="Prove an identity LHS = RHS">Prove</button>
                         </div>
                         <div class="ic-expr-label-actions" style="display:flex;gap:0.5rem;align-items:center;">
+                            <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Math AI — trig identity tutor + Solve / graph in chat (Ctrl+Shift+A)">&#10024; AI</button>
                             <div class="ic-input-mode-toggle" data-mml-toggle role="radiogroup" aria-label="Input mode">
                                 <button type="button" class="ic-input-mode-btn active" data-input-mode="visual" role="radio" aria-checked="true" title="Write math visually">
                                     <span aria-hidden="true" style="font-family:'Times New Roman',serif;font-style:italic;">&fnof;</span><span class="ic-mode-label"> Visual</span>
@@ -497,23 +515,18 @@
           3. math-input-multi           — MathLive Visual/Text on each .mml-pair (trig-expr, trig-lhs, trig-rhs)
           4. inline scan + busy-lock + headline-chip + mode-aware-show + FAQ accordion
     --%>
-    <jsp:include page="/math/partials/math-libs.jsp" />
-
+    <%@ include file="/modern/components/math-tool-engine-boot.inc.jsp" %>
     <script>window.TRIG_CALC_CTX = "<%=request.getContextPath()%>";</script>
 
-    <script src="<%=request.getContextPath()%>/js/trig-common.js?v=<%=cacheVersion%>"></script>
-    <script src="<%=request.getContextPath()%>/js/trig-graph.js?v=<%=cacheVersion%>"></script>
     <script src="<%=request.getContextPath()%>/js/trig-export.js?v=<%=cacheVersion%>"></script>
     <script src="<%=request.getContextPath()%>/js/trig-identity-core.js?v=<%=cacheVersion%>"></script>
 
     <%-- SymPy fast path — exposes window.TrigBackend.compute so Prove
          mode can verify identities deterministically before falling
          through to the LLM for narrative steps. --%>
-    <jsp:include page="/math/partials/trig-calculator-scripts.jsp" />
+        <jsp:include page="/math/partials/math-input-multi.jsp" />
 
-    <jsp:include page="/math/partials/math-input-multi.jsp" />
-
-    <script>
+<script>
     // ─────────────────────────────────────────────────────────────────────
     //  Note: identity vs prove group visibility is owned by the controller
     //  (trig-identity-core.js → switchMode). The first-paint state is
@@ -671,6 +684,13 @@
         }
     })();
     </script>
+
+        <%
+        request.setAttribute("mathAiButtonId", "btnMathAI");
+        request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+        request.setAttribute("mathAiProfileExport", "configureTrigIdentityMathShell");
+    %>
+    <%@ include file="modern/components/math-ai-boot.inc.jsp" %>
 
     <!-- ─── Trigonometry practice worksheet (shared across all 3 trig calcs) ─── -->
     <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>

@@ -538,13 +538,11 @@
           5. math-input-multi           — MathLive Visual/Text on the 3 ODE expression inputs (.mml-pair)
           6. inline scan + worksheet wiring + quick-win normalizers
     --%>
-    <jsp:include page="/math/partials/math-libs.jsp" />
-
+    <%@ include file="/modern/components/math-tool-engine-boot.inc.jsp" %>
     <script>window.ODE_CALC_CTX = "<%=request.getContextPath()%>";</script>
 
     <%-- Shared math engines (single source of truth for page + AI chat) --%>
-    <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
-
+    
     <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
     <script src="<%=request.getContextPath()%>/modern/js/ode-solver-calculator.js"></script>
 

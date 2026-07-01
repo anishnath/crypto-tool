@@ -3,15 +3,11 @@
   Tool-specific scripts for integral-calculator.jsp.
   Shared infrastructure (KaTeX / nerdamer / MathLive / image-to-math /
   tool-utils / dark-mode / search / plotly loader) is loaded separately
-  by /math/partials/math-libs.jsp + /math/partials/math-input-setup.jsp
-  — include this file BETWEEN them in the tool page.
+  by /math/partials/math-tool-engine-boot.inc.jsp + math-input-setup.jsp
+  — include this file AFTER engine boot on the tool page.
+  IntegralCalculatorCore comes from math-ai-cores-engine.js.
 --%>
 <% String icV = String.valueOf(System.currentTimeMillis()); %>
-
-<!-- integral-specific CAS core (depends on nerdamer loaded by math-libs.jsp).
-     ?v=<timestamp> busts the browser cache when this file is edited; without
-     it, browsers happily keep the stale copy across deploys. -->
-<script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js?v=<%=icV%>"></script>
 
 <!-- integral worksheet engine (may later be generalised) -->
 <script src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=icV%>"></script>

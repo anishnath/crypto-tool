@@ -6,10 +6,8 @@
     while keeping this partial as the logic source.
 --%>
 <% String _v = String.valueOf(System.currentTimeMillis()); %>
-    <%-- math-libs.jsp already provides: KaTeX, nerdamer core+Algebra+Calculus,
-         Plotly loader, tool-utils, dark-mode, search, image-to-math.
-         Inequality solving needs Solve.js too — load that here. --%>
-    <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js"></script>
+    <%-- math-tool-engine-boot provides KaTeX, nerdamer (+Solve), Plotly loader,
+         tool-utils, dark-mode, search, image-to-math, and math-ai-cores-engine. --%>
 
     <script>
     (function() {

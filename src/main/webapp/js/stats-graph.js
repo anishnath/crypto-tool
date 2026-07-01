@@ -212,11 +212,36 @@
                 y: yVals,
                 type: 'scatter',
                 mode: 'lines',
-                fill: 'tozeroy',
+                fill: opts.shadeZ != null || opts.shadeX != null ? 'none' : 'tozeroy',
                 fillcolor: c.primaryFill,
                 line: { color: c.primary, width: 2 },
                 name: 'Normal PDF'
             }];
+
+            // Shaded CDF region P(X ≤ x) or P(Z ≤ z)
+            if (opts.shadeZ != null || opts.shadeX != null) {
+                var xCut = opts.shadeX != null ? opts.shadeX : mean + opts.shadeZ * sd;
+                var xShade = [], yShade = [];
+                for (var xi = 0; xi < xVals.length; xi++) {
+                    if (xVals[xi] <= xCut + step * 0.5) {
+                        xShade.push(xVals[xi]);
+                        yShade.push(yVals[xi]);
+                    }
+                }
+                if (xShade.length > 1) {
+                    traces.unshift({
+                        x: xShade,
+                        y: yShade,
+                        type: 'scatter',
+                        mode: 'lines',
+                        fill: 'tozeroy',
+                        fillcolor: 'rgba(225, 29, 72, 0.38)',
+                        line: { color: c.primary, width: 0 },
+                        name: 'P(X ≤ cutoff)',
+                        showlegend: true
+                    });
+                }
+            }
 
             // Sigma markers
             var sigmaColors = ['#10b981', '#f59e0b', '#ef4444'];

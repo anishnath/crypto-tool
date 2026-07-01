@@ -20,12 +20,18 @@
 
     DO NOT inline any of these elsewhere — this file is the single source
     of truth for these dependency versions.
+
+    When math-tool-engine-boot.inc.jsp is used, set mathLibsSkipNerdamer so
+    nerdamer is not loaded twice (it lives in math-ai-cores-engine.js).
 --%>
+<% boolean _skipNerdamer = Boolean.TRUE.equals(request.getAttribute("mathLibsSkipNerdamer")); %>
 <!-- ── Symbolic CAS + formula rendering ── -->
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<% if (!_skipNerdamer) { %>
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+<% } %>
 
 <!-- ── Plotly loader — lazy-loaded on demand when the Graph tab is first opened ── -->
 <script>

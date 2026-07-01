@@ -4,22 +4,10 @@
 
     Shared infrastructure (KaTeX / nerdamer / MathLive / image-to-math /
     tool-utils / dark-mode / search / plotly loader) is loaded separately
-    by /math/partials/math-libs.jsp + /math/partials/math-input-setup.jsp
-    — include this file BETWEEN them in the tool page.
+    by /math/partials/math-tool-engine-boot.inc.jsp + math-input-setup.jsp.
 
-    Load order inside this partial:
-      1. integral-calculator-core.js  — provides normalizeExpr (dep)
-      2. limit-calculator-core.js     — thin wrapper on normalizeExpr
-      3. worksheet-engine.js          — practice worksheet (limit bank)
-      4. __LC_CTX context var         — used by image-scan + python compiler
-      5. limit-calculator.js          — main DOM/UI controller
-      6. image-to-math init (inline)  — limit-specific prompt + handlers
+    CAS cores come from math-ai-cores-engine.js (loaded by engine boot).
 --%>
-
-<!-- Dependency: integral-calculator-core defines normalizeExpr, used by
-     LimitCalculatorCore.  Must load before limit-calculator-core.js. -->
-<script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js"></script>
-<script src="<%=request.getContextPath()%>/modern/js/limit-calculator-core.js"></script>
 
 <!-- Practice worksheet — shared engine, limit-specific question bank. -->
 <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>

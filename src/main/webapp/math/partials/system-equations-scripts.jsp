@@ -4,32 +4,16 @@
 
     Shared infrastructure (KaTeX / nerdamer core+Algebra+Calculus / Plotly
     loader / tool-utils / dark-mode / search / image-to-math) is loaded by
-    /math/partials/math-libs.jsp. This partial adds Solve.js + the legacy
-    systems-solver-{render,graph,export,core}.js + worksheet-engine plus
-    the math-studio shell wiring (chip handler → loadExample, AI scan,
-    busy-lock on the CTA).
-
-    The legacy core's _makeEqRow has been patched to render <math-field>
-    rows (with hidden .sy-eq-input twins for backwards-compat). So once
-    math-input-setup.jsp imports MathLive, the equation rows upgrade
-    automatically with no extra wiring needed here.
+    /math/partials/math-tool-engine-boot.inc.jsp. Headless render/core are
+    in math-ai-cores-engine.js; this partial adds graph, export, worksheet.
 --%>
 <% String _v = String.valueOf(System.currentTimeMillis()); %>
 
-<!-- nerdamer Solve plugin (math-libs ships core + Algebra + Calculus only) -->
-<script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.min.js"></script>
-
-<!-- Worksheet engine (shared with limit-calculator) -->
 <script defer src="<%=request.getContextPath()%>/js/worksheet-engine.js?v=<%=_v%>"></script>
 
-<!-- systems-solver pipeline: render → graph → export → core (defer keeps
-     order, runs after DOMContentLoaded so MathLive is registered first
-     when math-input-setup.jsp runs without defer). -->
-<script defer src="<%=request.getContextPath()%>/js/systems-solver-render.js?v=<%=_v%>"></script>
 <script defer src="<%=request.getContextPath()%>/js/systems-solver-graph.js?v=<%=_v%>"></script>
 <script defer src="<%=request.getContextPath()%>/js/systems-solver-export.js?v=<%=_v%>"></script>
 <script>window.SYSTEMS_SOLVER_CTX = "<%=request.getContextPath()%>";</script>
-<script defer src="<%=request.getContextPath()%>/js/systems-solver-core.js?v=<%=_v%>"></script>
 
 <!-- ─── math-studio shell wiring: chip auto-solve + busy lock + FAQ ─── -->
 <script>

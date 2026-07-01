@@ -14,6 +14,9 @@ import {
   solveMatrixTask,
   solveBodeTask,
   solveLaplaceTask,
+  solveZTransformTask,
+  solveTrigTask,
+  solveStatisticsTask,
 } from '../../math-chat-compute.js';
 import { solveAlgebraTask } from '../../algebra-chat-compute.js';
 import { icApplyIntegralTask } from './integral-calculator.js';
@@ -43,7 +46,9 @@ function buildFocusQuickActions(focus, snap) {
   const polyP = ctxSnippet(s, ['p1', 'p', 'expr']);
   const tfExpr = ctxSnippet(s, ['transferFunction', 'expr']);
   const ltExpr = ctxSnippet(s, ['forwardExpr', 'inverseExpr', 'expr']);
+  const ztExpr = ctxSnippet(s, ['forwardExpr', 'inverseExpr', 'expr']);
   const pnExpr = ctxSnippet(s, ['checkExpr', 'expr']);
+  const trigExpr = ctxSnippet(s, ['expr', 'lhs']);
   const eqs = ctxSnippet(s, ['equations']);
   const ctx = (line) => (line ? ` Current page input: ${line}.` : '');
 
@@ -138,6 +143,18 @@ function buildFocusQuickActions(focus, snap) {
       chip('ROC & pairs', 'How do I read the region of convergence and use the Laplace pairs table? Explain Re(s) constraints for common entries.'),
       chip('Show example', 'Give one Laplace transform example with a ```laplace-transform``` block so I can click Solve / Show graph. One intro sentence, then the block.'),
     ],
+    ztransform: [
+      chip("Don't get it", `Explain Z-transforms in plain language — Z{x[n]}, z-domain vs n-domain, and digital signal processing.${ctx(ztExpr)} Prose + KaTeX only.`),
+      chip('Residue method', 'When do I use partial fractions vs the residue method for inverse Z-transform? Outline the strategy for rational X(z) — no full worked inverse unless I ask.'),
+      chip('ROC & pairs', 'How do I read the region of convergence |z| > r and use Z-transform pairs? Explain causal sequences and the unit circle.'),
+      chip('Show example', 'Give one Z-transform example with a ```z-transform``` block so I can click Solve / Show graph. One intro sentence, then the block.'),
+    ],
+    statistics: [
+      chip("Don't get it", 'Explain this statistics concept in plain language — mean vs median, variance, hypothesis tests, or distributions. Use [CURRENT CONTEXT] data when present. Prose + KaTeX only.'),
+      chip('Which test?', 'For my type of problem, should I use a t-test, z-test, chi-square, or ANOVA? Outline the decision tree — no computed p-values unless I run the page calculator.'),
+      chip('Interpret results', 'How do I read p-values, confidence intervals, and effect sizes? Explain α, β, and practical vs statistical significance without inventing numbers for my dataset.'),
+      chip('Show example', 'Give one related math example with a matching solver block (```statistics```, ```integral```, ```matrix```, ```quadratic```) so I can click Solve in chat. One intro sentence, then the block.'),
+    ],
     'prime-number': [
       chip("Don't get it", `Explain prime numbers in plain language — divisibility, why 1 is not prime, and how factorization works.${ctx(pnExpr)} Prose + KaTeX only.`),
       chip('Miller-Rabin?', 'When is Miller-Rabin deterministic vs probabilistic? Explain what a witness tells us — no claiming primality of my number unless I ran Check on the page.'),
@@ -150,6 +167,12 @@ function buildFocusQuickActions(focus, snap) {
       chip('Stopping time?', 'What is total stopping time vs peak value in a Collatz orbit? How do they differ? Strategy for exploring patterns — no inventing orbit data for my N unless I ran the page.'),
       chip('Show example', 'Give one related math example with a matching solver block (```integral```, ```quadratic```, ```matrix```, etc.) so I can click Solve in chat. One intro sentence, then the block.'),
     ],
+    trig: [
+      chip("Don't get it", `Explain trig functions in plain language — unit circle, radians vs degrees, and special angles.${ctx(trigExpr)} Prose + KaTeX only.`),
+      chip('Which identity?', 'When should I use Pythagorean, double-angle, or sum formulas? Strategy for simplifying or proving — no full derivation unless I ask.'),
+      chip('Exam tip', 'Exam tips for trig: ASTC signs, reference angles, general solutions with +2πn, and exact values at 30°/45°/60°.'),
+      chip('Show example', 'Give one trig example with a ```trig``` block (mode, expr, unit) so I can click Solve / Show graph. One intro sentence, then the block.'),
+    ],
   };
 
   return sets[focus] || sets.integral;
@@ -157,7 +180,7 @@ function buildFocusQuickActions(focus, snap) {
 
 const FOCUS_KEYS = new Set([
   'integral', 'derivative', 'limit', 'ode', 'pde', 'series',
-  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace', 'prime-number', 'collatz',
+  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace', 'ztransform', 'statistics', 'prime-number', 'collatz', 'trig',
 ]);
 
 /**
@@ -201,6 +224,9 @@ export function configureGenericMathShell(opts = {}) {
       if (task.action === 'matrix') return solveMatrixTask(task, mode);
       if (task.action === 'bode') return solveBodeTask(task, mode);
       if (task.action === 'laplace') return solveLaplaceTask(task, mode);
+      if (task.action === 'ztransform') return solveZTransformTask(task, mode);
+      if (task.action === 'trig') return solveTrigTask(task, mode);
+      if (task.action === 'statistics') return solveStatisticsTask(task, mode);
       return solveAlgebraTask(task, mode);
     },
 
@@ -220,7 +246,12 @@ export function configureGenericMathShell(opts = {}) {
     },
 
     getContext() {
+      if (typeof window.statGetContext === 'function') return window.statGetContext();
+      if (typeof window.ztGetContext === 'function') return window.ztGetContext();
       if (typeof window.ltGetContext === 'function') return window.ltGetContext();
+      if (typeof window.tfnGetContext === 'function') return window.tfnGetContext();
+      if (typeof window.teqGetContext === 'function') return window.teqGetContext();
+      if (typeof window.tidGetContext === 'function') return window.tidGetContext();
       if (typeof window.pnGetContext === 'function') return window.pnGetContext();
       if (typeof window.ccGetContext === 'function') return window.ccGetContext();
       if (typeof window.bpGetContext === 'function') return window.bpGetContext();
@@ -319,6 +350,16 @@ export function configureGenericMathShell(opts = {}) {
           } else if (snap.forwardExpr) {
             lines.push(`f(t): ${String(snap.forwardExpr).slice(0, 400)}`);
           }
+        } else if (snap.toolType === 'ztransform') {
+          lines.push(`Mode: ${snap.mode || 'forward'}`);
+          if (snap.mode === 'inverse') {
+            if (snap.inverseExpr) lines.push(`X(z): ${String(snap.inverseExpr).slice(0, 400)}`);
+          } else if (snap.forwardExpr) {
+            lines.push(`x[n]: ${String(snap.forwardExpr).slice(0, 400)}`);
+          }
+        } else if (snap.toolType === 'statistics') {
+          if (snap.pageKey) lines.push(`Page: ${snap.pageKey}`);
+          if (snap.data) lines.push(`Data/context: ${String(snap.data).slice(0, 400)}`);
         } else if (snap.toolType === 'prime-number') {
           if (snap.checkExpr) lines.push(`Check/factorize: ${String(snap.checkExpr).slice(0, 400)}`);
           if (snap.limitN) lines.push(`Generate ≤ N: ${snap.limitN}`);
@@ -332,6 +373,12 @@ export function configureGenericMathShell(opts = {}) {
           if (snap.stoppingTime != null) lines.push(`Stopping time (last run): ${snap.stoppingTime} steps`);
           if (snap.peakValue != null) lines.push(`Peak value (last run): ${snap.peakValue}`);
           if (snap.statusText) lines.push(`Status: ${String(snap.statusText).slice(0, 200)}`);
+        } else if (snap.toolType === 'trig-fn' || snap.toolType === 'trig-eq' || snap.toolType === 'trig-id') {
+          lines.push(`Page mode: ${snap.mode || '(n/a)'}`);
+          if (snap.unit) lines.push(`Angle unit: ${snap.unit}`);
+          if (snap.expr) lines.push(`Expression: ${String(snap.expr).slice(0, 400)}`);
+          if (snap.lhs) lines.push(`LHS: ${String(snap.lhs).slice(0, 300)}`);
+          if (snap.rhs) lines.push(`RHS: ${String(snap.rhs).slice(0, 300)}`);
         } else {
           lines.push(
             `Mode: ${snap.mode || '(n/a)'}`,
@@ -362,7 +409,7 @@ export function configureGenericMathShell(opts = {}) {
       }
 
       if (!lines.length) {
-        return '(Paste any math problem — ∫, lim, ODE, matrix, Bode H(s), Laplace transform, quadratic, system, inequality, polynomial — then Solve / Steps / Graph in chat.)';
+        return '(Paste any math problem — ∫, lim, ODE, matrix, Bode H(s), Laplace/Z-transform, trig, statistics, quadratic, system, inequality, polynomial — then Solve / Steps / Graph in chat.)';
       }
       return lines.join('\n');
     },
@@ -371,7 +418,7 @@ export function configureGenericMathShell(opts = {}) {
       return buildFocusQuickActions(this.focus || focus, snap);
     },
 
-    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, **PDE**, **vectorCalculus** (∇, ∇·, ∇×), **matrix** (det, inverse, eigenvalues, A·B, …), **bode** (H(s) Bode magnitude/phase), **laplace** (forward/inverse Laplace transform — not the PDE Laplace equation), **quadratic**, **system**, **inequality**, and **polynomial** problems regardless of which calculator page the student is on. Every computation runs in chat via the same JS engines as the on-page calculators — never compute the answer yourself.
+    promptExtra: `**Generic Math AI:** Route **integral**, **derivative**, **limit**, **ODE**, **PDE**, **vectorCalculus** (∇, ∇·, ∇×), **matrix** (det, inverse, eigenvalues, A·B, …), **bode** (H(s) Bode magnitude/phase), **laplace** (forward/inverse Laplace transform — not the PDE Laplace equation), **ztransform** (forward/inverse Z-transform for discrete signals), **trig** (evaluate, solve equations/inequalities, simplify, prove identities, quadrant/coterminal), **statistics** (descriptive stats, z-score, normal CDF, percentile), **quadratic**, **system**, **inequality**, and **polynomial** problems regardless of which calculator page the student is on. Every computation runs in chat via the same JS engines as the on-page calculators — never compute the answer yourself.
 
 **Student-facing language:** Never mention SymPy, NumPy, Python, OneCompiler, or other backend libraries in replies. Say "the solver", "step-by-step engine", "numerical method", or "symbolic method" instead.
 
@@ -930,6 +977,101 @@ For related problems in chat, also use \`\`\`ode\`\`\`, \`\`\`integral\`\`\`, \`
   });
 }
 
+/** Z-Transform Calculator — DSP tutor + generic math router. */
+export function configureZTransformMathShell() {
+  configureGenericMathShell({
+    focus: 'ztransform',
+    pageLabel: 'Z-Transform Calculator',
+    pageHint: 'Z-transform — forward Z{x[n]} & inverse Z⁻¹{X(z)}, ROC, partial fractions',
+    panelTitle: 'Math AI',
+    subtitle: 'Z-transform tutor + full math router in chat',
+    placeholder: 'Ask about Z-transforms, ROC, residue method — or paste ∫, ODE, matrix problems…',
+    footerText: 'Ctrl+Shift+A · page Z-transform engine + chat solvers',
+  });
+
+  const extra = `
+
+**Z-Transform page — tutor + engine router**
+
+1. **Teacher** — forward/inverse Z-transform, ROC, partial fractions, shifting properties, digital filters H(z), difference equations. Use KaTeX prose; mirror [CURRENT CONTEXT] x[n] or X(z) when present.
+
+2. **Solver** — for concrete forward/inverse Z-transform problems emit a \`\`\`z-transform\`\`\` block so **Solve / Solve with steps / Show graph** chips appear. Same SymPy engine as the page — never invent transform results in prose.
+
+Forward example:
+\`\`\`z-transform
+mode: forward
+forwardExpr: (1/2)^n
+\`\`\`
+
+Inverse example:
+\`\`\`z-transform
+mode: inverse
+inverseExpr: z/(z-1/2)
+\`\`\`
+
+For related problems in chat, also use \`\`\`laplace-transform\`\`\`, \`\`\`bode\`\`\`, \`\`\`integral\`\`\`, etc.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
+
+  registerContextGetter('ztGetContext', () => {
+    const modeEl = document.querySelector('.zt-mode-btn.active');
+    const mode = modeEl?.getAttribute('data-mode') || 'forward';
+    return {
+      toolType: 'ztransform',
+      mode,
+      forwardExpr: document.getElementById('zt-forward-expr')?.value?.trim() || '',
+      inverseExpr: document.getElementById('zt-inverse-expr')?.value?.trim() || '',
+    };
+  });
+}
+
+/** Statistics calculators — tutor + generic math router (page engine stays on-page). */
+export function configureStatisticsMathShell() {
+  const meta = (typeof window !== 'undefined' && window.__MS_STAT_PAGE__) || {};
+  const pageLabel = meta.label || 'Statistics Calculator';
+  const pageKey = meta.key || 'statistics';
+
+  configureGenericMathShell({
+    focus: 'statistics',
+    pageLabel,
+    pageHint: 'Descriptive & inferential statistics — use on-page Calculate; related math via chat blocks',
+    panelTitle: 'Math AI',
+    subtitle: 'Statistics tutor + full math router in chat',
+    placeholder: 'Ask about mean, variance, hypothesis tests, distributions — or paste ∫, matrix, algebra…',
+    footerText: 'Ctrl+Shift+A · page stats engine + chat solvers',
+  });
+
+  const extra = `
+
+**Statistics page — tutor + engine router**
+
+1. **Teacher** — descriptive stats (mean, median, SD, percentiles), probability, distributions (normal, binomial), confidence intervals, hypothesis tests (z, t, χ², ANOVA), correlation/regression, sample size, effect size. Use KaTeX prose; mirror [CURRENT CONTEXT] when the student has data in the input fields.
+
+2. **Page engine** — for concrete calculations on this page (ANOVA, χ², regression, hypothesis beyond one/two-sample t, binomial, sample size, etc.), tell the student to click **Calculate** / **Compute** on the page. For chat-computable stats, emit \`\`\`statistics\`\`\` with mode: descriptive | zscore | normal | percentile | ttest | correlation.
+
+3. **Related topics** — \`\`\`integral\`\`\`, \`\`\`matrix\`\`\`, \`\`\`quadratic\`\`\`, \`\`\`ode\`\`\`, etc. as needed.
+
+Never invent p-values, test statistics, or regression coefficients in prose when the page calculator can run — point to Calculate or emit a \`\`\`statistics\`\`\` / solver block for follow-ups.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
+
+  registerContextGetter('statGetContext', () => {
+    const dataEl = document.querySelector('.stat-input-text, textarea[id$="-data-input"], input[id$="-data-input"]');
+    const data = dataEl && ('value' in dataEl) ? String(dataEl.value || '').trim() : '';
+    const activeMode = document.querySelector('.stat-mode-btn.active');
+    return {
+      toolType: 'statistics',
+      pageKey,
+      mode: activeMode ? (activeMode.id || activeMode.textContent || '').trim() : '',
+      data: data.slice(0, 500),
+    };
+  });
+}
+
 /** Prime Number Calculator — number theory tutor + generic math router. */
 export function configurePrimeMathShell() {
   configureGenericMathShell({
@@ -1115,6 +1257,96 @@ export function configurePolynomialMathShell() {
       p1: p1?.value?.trim() || '',
       p2: p2?.value?.trim() || '',
     };
+  });
+}
+
+function readTrigPageContext(toolType) {
+  const modeBtn = document.querySelector('.trig-mode-btn.active');
+  const unitBtn = document.querySelector('.trig-unit-btn.active');
+  const ctx = {
+    toolType,
+    mode: modeBtn?.getAttribute('data-mode') || '',
+    unit: unitBtn?.getAttribute('data-unit') || '',
+    expr: document.getElementById('trig-expr')?.value?.trim() || '',
+  };
+  const lhsEl = document.getElementById('trig-lhs');
+  const rhsEl = document.getElementById('trig-rhs');
+  if (lhsEl) ctx.lhs = lhsEl.value?.trim() || '';
+  if (rhsEl) ctx.rhs = rhsEl.value?.trim() || '';
+  return ctx;
+}
+
+function configureTrigMathShell(opts) {
+  configureGenericMathShell({
+    focus: 'trig',
+    pageLabel: opts.pageLabel,
+    pageHint: opts.pageHint,
+    panelTitle: 'Math AI',
+    subtitle: opts.subtitle || 'Trig tutor + full math router in chat',
+    placeholder: opts.placeholder || 'Ask about sin/cos/tan — or paste ∫, matrix, algebra…',
+    footerText: opts.footerText || 'Ctrl+Shift+A · page calculator + chat solvers',
+  });
+
+  const extra = `
+
+**Trigonometry page — tutor + engine router**
+
+1. **Teacher** — unit circle, radians/degrees, ASTC, reference/coterminal angles, identities, general solutions (+2πn). Use KaTeX; mirror [CURRENT CONTEXT] when the student has input on the page.
+
+2. **Page calculator** — for step-by-step with the live graph tab, tell the student to click **Calculate** / **Solve** on the page (same SymPy engine). Do not invent exact values in prose when they can run the page.
+
+3. **Chat solvers** — for concrete trig work emit a \`\`\`trig\`\`\` block so **Solve / Solve with steps / Show graph** chips appear:
+   - Evaluate: \`mode: evaluate\`, \`expr: sin(45)\`, \`unit: deg\`
+   - Equation: \`mode: solve_equation\`, \`expr: sin(x) = 1/2\`
+   - Inequality: \`mode: solve_inequality\`, \`expr: cos(x) > 0\`
+   - Simplify: \`mode: simplify\`, \`expr: sin(x)^2 + cos(x)^2\`
+   - Identity: \`mode: prove\`, \`lhs: ...\`, \`rhs: ...\`
+   - Quadrant / coterminal: \`mode: quadrant\` or \`coterminal\`, \`expr: 210\`, \`unit: deg\`
+
+4. **Related topics** — \`\`\`integral\`\`\`, \`\`\`matrix\`\`\`, \`\`\`quadratic\`\`\`, etc. as needed.
+
+Never name implementation libraries in replies to the student.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
+
+  registerContextGetter(opts.contextKey, () => readTrigPageContext(opts.toolType));
+}
+
+/** Trig Function Calculator — evaluate / quadrant / coterminal + Math AI. */
+export function configureTrigFunctionMathShell() {
+  configureTrigMathShell({
+    pageLabel: 'Trigonometric Function Calculator',
+    pageHint: 'Trig functions — evaluate, quadrant, coterminal, unit circle graph',
+    subtitle: 'Trig tutor + Solve / graph in chat',
+    placeholder: 'Ask about sin/cos/tan, special angles — or paste ```trig``` / ∫ / matrix…',
+    contextKey: 'tfnGetContext',
+    toolType: 'trig-fn',
+  });
+}
+
+/** Trig Equation Solver — equations, inequalities, simplify + Math AI. */
+export function configureTrigEquationMathShell() {
+  configureTrigMathShell({
+    pageLabel: 'Trigonometric Equation Solver',
+    pageHint: 'Trig equations & inequalities — general solutions with graph markers',
+    subtitle: 'Equation solver + full math router in chat',
+    placeholder: 'Paste sin(x)=… — or ask about identities, ∫, matrix…',
+    contextKey: 'teqGetContext',
+    toolType: 'trig-eq',
+  });
+}
+
+/** Trig Identity Calculator — prove / simplify identities + Math AI. */
+export function configureTrigIdentityMathShell() {
+  configureTrigMathShell({
+    pageLabel: 'Trigonometric Identity Calculator',
+    pageHint: 'Prove or simplify trig identities — LHS vs RHS graph',
+    subtitle: 'Identity prover + full math router in chat',
+    placeholder: 'Ask about identities — or paste ```trig``` prove blocks, ∫, matrix…',
+    contextKey: 'tidGetContext',
+    toolType: 'trig-id',
   });
 }
 

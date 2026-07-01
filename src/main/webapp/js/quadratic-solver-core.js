@@ -827,6 +827,8 @@ function printWorksheet() {
 // ==================== Event Binding ====================
 
 function init() {
+    if (window.__QS_CORE_INIT) return;
+    window.__QS_CORE_INIT = true;
     initDOM();
 
     // Form type toggle
@@ -1008,10 +1010,12 @@ window.QuadraticSolverCore = {
 
 // ==================== Init ====================
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
+if (document.getElementById('qs-solve-btn')) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 }
 
 })();

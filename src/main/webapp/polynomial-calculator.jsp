@@ -599,11 +599,10 @@
     <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
     <%@ include file="modern/components/analytics.jsp" %>
 
-    <jsp:include page="/math/partials/math-libs.jsp" />
+    <%@ include file="/modern/components/math-tool-engine-boot.inc.jsp" %>
     <jsp:include page="/math/partials/polynomial-calculator-scripts.jsp" />
     <jsp:include page="/math/partials/math-input-setup.jsp" />
 
-    <%@ include file="/modern/components/math-calculus-cores.inc.jsp" %>
     <%
         request.setAttribute("mathAiButtonId", "btnMathAI");
         request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");

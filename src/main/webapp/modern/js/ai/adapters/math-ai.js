@@ -45,11 +45,14 @@ Use [CURRENT CONTEXT] for live page inputs (PDE type, parameters, last page resu
    - **matrix** (det, inverse, transpose, trace, rank, RREF, A^n, eigenvalues/eigenvectors, A±B, A·B)
    - **bode** (H(s) transfer function → magnitude & phase Bode plot, zeros/poles)
    - **laplace** (forward L{f(t)} and inverse L⁻¹{F(s)} — distinct from PDE mode \`laplace\` / Laplace equation)
+   - **ztransform** (forward Z{x[n]} and inverse Z⁻¹{X(z)} for discrete-time signals)
+   - **trig** (evaluate sin/cos, solve equations/inequalities, simplify, prove identities, quadrant/coterminal)
+   - **statistics** (descriptive stats from data, z-score, normal CDF, percentile)
    - **quadratic** (ax²+bx+c=0, factored/vertex form, horizontal parabola)
    - **system** (2+ equations in x,y,…)
    - **inequality** (<, >, <=, >=, compound, rational)
    - **polynomial** (add/subtract/multiply/divide, factor, roots, evaluate, expand)
-2. Output the matching fenced block (\`\`\`integral\`\`\`, \`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`, \`\`\`matrix\`\`\`, \`\`\`bode\`\`\`, \`\`\`laplace-transform\`\`\`, \`\`\`quadratic\`\`\`, \`\`\`system\`\`\`, \`\`\`inequality\`\`\`, or \`\`\`polynomial\`\`\`). Prefer full LaTeX in \`raw:\` when the user gave notation.
+2. Output the matching fenced block (\`\`\`integral\`\`\`, \`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`, \`\`\`matrix\`\`\`, \`\`\`bode\`\`\`, \`\`\`laplace-transform\`\`\`, \`\`\`z-transform\`\`\`, \`\`\`trig\`\`\`, \`\`\`statistics\`\`\`, \`\`\`quadratic\`\`\`, \`\`\`system\`\`\`, \`\`\`inequality\`\`\`, or \`\`\`polynomial\`\`\`). Prefer full LaTeX in \`raw:\` when the user gave notation.
 3. **Always mirror each problem in prose as textbook display math** (KaTeX \`$$...$$\`) — see formats below.
 4. Never give the final numerical answer or closed-form solution in prose — the engine computes when the student clicks a chip.
 
@@ -57,7 +60,7 @@ Use [CURRENT CONTEXT] for live page inputs (PDE type, parameters, last page resu
 - Tutor in clear prose with KaTeX (\`$$\\displaystyle...$$\`).
 - Cover concepts: PDE classification (elliptic / parabolic / hyperbolic), separation of variables, Fourier series, BCs (Dirichlet / Neumann / Robin), CFL stability, method choice.
 - **Do not** emit a solve block for pure theory with no concrete expression to run.
-- **Exception — "show me an example" / "demonstrate" / "walk through an example":** when you give **specific** matrices, integrands, ODEs, etc., always emit the matching solver block (\`\`\`matrix\`\`\`, \`\`\`integral\`\`\`, …) so **Solve / Solve with steps / Show visualize** chips appear. One short intro sentence, then the block. This applies on **every** calculator page (Integral, Derivative, …) — page title does not limit topic.
+- **Exception — "show me an example" / "demonstrate" / "walk through an example":** when you give **specific** matrices, integrands, ODEs, etc., always emit the matching solver block (\`\`\`matrix\`\`\`, \`\`\`integral\`\`\`, …) so **Solve / Solve with steps / Show graph** chips appear. One short intro sentence, then the block. This applies on **every** calculator page (Integral, Derivative, …) — page title does not limit topic.
 - Use [CURRENT CONTEXT] and prior chat engine results — do not recalculate what the engine already returned.
 
 **Display math in prose (required when setting up a problem)**
@@ -199,7 +202,58 @@ inverseExpr: 1/(s^2 + 4)
 \`\`\`
 Mirror in prose: \`$$\\displaystyle \\mathcal{L}\\{\\sin(2t)\\}$$\` or \`$$\\displaystyle \\mathcal{L}^{-1}\\left\\{\\frac{1}{s^2+4}\\right\\}$$\`
 
-Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|vector|matrix|bode|laplace|quadratic|system|inequality|polynomial\` plus fields below.
+**Z-transform** — forward or inverse (discrete-time signals):
+\`\`\`z-transform
+mode: forward
+forwardExpr: (1/2)^n
+\`\`\`
+Or inverse:
+\`\`\`z-transform
+mode: inverse
+inverseExpr: z/(z-1/2)
+\`\`\`
+Mirror in prose: \`$$\\displaystyle \\mathcal{Z}\\{(1/2)^n\\}$$\` or \`$$\\displaystyle \\mathcal{Z}^{-1}\\left\\{\\frac{z}{z-1/2}\\right\\}$$\`
+
+**Statistics** — descriptive, z-score, normal probability, percentile:
+\`\`\`statistics
+mode: descriptive
+data: 12, 15, 18, 20, 22, 25, 28
+\`\`\`
+Z-score:
+\`\`\`statistics
+mode: zscore
+x: 85
+mean: 70
+sd: 10
+\`\`\`
+Normal CDF:
+\`\`\`statistics
+mode: normal
+z: 1.96
+\`\`\`
+Percentile:
+\`\`\`statistics
+mode: percentile
+data: 3, 7, 7, 9, 12, 15
+p: 75
+\`\`\`
+One-sample t-test:
+\`\`\`statistics
+mode: ttest
+mu0: 100
+data: 98, 102, 105, 97, 101
+alpha: 0.05
+tail: two
+\`\`\`
+Pearson correlation:
+\`\`\`statistics
+mode: correlation
+x: 1, 2, 3, 4, 5
+y: 2, 4, 5, 4, 5
+\`\`\`
+Mirror in prose: \`$$\\displaystyle z=\\frac{x-\\mu}{\\sigma}$$\` or \`$$\\displaystyle P(Z \\le 1.96)$$\`
+
+Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|vector|matrix|bode|laplace|ztransform|trig|statistics|quadratic|system|inequality|polynomial\` plus fields below.
 
 JSON batch: \`{"matrix":[{"op":"determinant","matrixA":"..."},{"op":"inverse","matrixA":"..."}]}\`
 
@@ -217,7 +271,7 @@ ${extra}
 function formatSeedContext(snap, shell) {
   if (typeof shell.formatContext === 'function') return shell.formatContext(snap);
   if (!snap) {
-    return '(Paste any math problem — ∫, lim, ODE, matrix, Bode H(s), Laplace transform, quadratic, system, inequality, polynomial — then Solve / Steps / Graph in chat.)';
+    return '(Paste any math problem — ∫, lim, ODE, matrix, Bode H(s), Laplace/Z-transform, trig, statistics, quadratic, system, inequality, polynomial — then Solve / Steps / Graph in chat.)';
   }
   if (typeof snap === 'string') return snap.slice(0, 6000);
   try {
@@ -233,7 +287,7 @@ function defaultQuickActions() {
     chip("Don't get it", 'Explain what this math topic means in plain language — notation, goal, and how to read the answer. Prose + KaTeX only.'),
     chip('Which method?', 'Which technique or formula should I use for a problem like mine? Strategy and reasoning only — no full worked solution.'),
     chip('Exam tip', 'Classroom exam tips for this topic: common mistakes, partial credit, and how to write answers clearly.'),
-    chip('Show example', 'Give one concrete example with the matching solver block (```integral```, ```derivative```, ```limit```, ```matrix```, ```bode```, ```laplace-transform```, ```quadratic```, etc.) so I can click Solve. One intro sentence, then the block.'),
+    chip('Show example', 'Give one concrete example with the matching solver block (```integral```, ```derivative```, ```limit```, ```matrix```, ```bode```, ```laplace-transform```, ```z-transform```, ```trig```, ```statistics```, ```quadratic```, etc.) so I can click Solve. One intro sentence, then the block.'),
   ];
 }
 

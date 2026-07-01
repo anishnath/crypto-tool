@@ -545,6 +545,22 @@ var PDECalculatorCore = (function () {
         }
     }
 
+    function parseSurface(stdout) {
+        var xMatch = stdout.match(/SURFACE_X:(\[[\s\S]*?\])(?=\n|$)/);
+        var yMatch = stdout.match(/SURFACE_Y:(\[[\s\S]*?\])(?=\n|$)/);
+        var zMatch = stdout.match(/SURFACE_Z:(\[[\s\S]*?\])(?=\n|$)/);
+        try {
+            if (xMatch && yMatch && zMatch) {
+                return {
+                    x: JSON.parse(xMatch[1]),
+                    y: JSON.parse(yMatch[1]),
+                    z: JSON.parse(zMatch[1]),
+                };
+            }
+        } catch (e) { /* ignore */ }
+        return null;
+    }
+
     function parseResult(mode, stdout) {
         stdout = String(stdout || '').trim();
         var errMatch = stdout.match(/ERROR:([^\n]*)/);
@@ -571,6 +587,7 @@ var PDECalculatorCore = (function () {
             verified: verifiedMatch ? verifiedMatch[1].trim() === 'True' : null,
             meta: meta,
             steps: steps,
+            surface: parseSurface(stdout),
         };
     }
 

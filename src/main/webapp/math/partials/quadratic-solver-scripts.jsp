@@ -4,29 +4,14 @@
 
     Shared infrastructure (KaTeX / nerdamer / MathLive / image-to-math /
     tool-utils / dark-mode / search / Plotly loader) is loaded separately
-    by /math/partials/math-libs.jsp + /math/partials/math-input-setup.jsp
-    — include this file BETWEEN them on the tool page.
+    by math-tool-engine-boot.inc.jsp + math-input-setup.jsp.
 
-    Load order inside this partial:
-      1. quadratic-solver-render   — KaTeX-formatted result + steps HTML
-      2. quadratic-solver-graph    — Plotly parabola + horizontal parabola
-      3. quadratic-solver-export   — Copy-LaTeX / Share / URL state
-      4. quadratic-solver-input-bridge — MathLive → legacy coefficient adapter
-      5. quadratic-solver-core     — DOM/UI controller (state + solve flow)
-      6. wiring IIFE               — connects MathLive CTA to bridge → core
-      7. image-to-math init        — quadratic-specific extraction prompt
+    Headless CAS (render/bridge/core) lives in math-ai-cores-engine.js.
+    This partial keeps page UI: graph, export, MathLive wiring, image scan.
 --%>
 
-<!-- Suppress core's 300ms demo-solve so the user sees the empty state. -->
-<script>window.__QS_BRIDGE_NO_AUTOSOLVE = true;</script>
-
-<!-- Render / Graph / Export / Bridge / Core (load order matters: render
-     and bridge must be present before core's init binds handlers). -->
-<script src="<%=request.getContextPath()%>/js/quadratic-solver-render.js"></script>
 <script src="<%=request.getContextPath()%>/js/quadratic-solver-graph.js"></script>
 <script src="<%=request.getContextPath()%>/js/quadratic-solver-export.js"></script>
-<script src="<%=request.getContextPath()%>/modern/js/quadratic-solver-input-bridge.js"></script>
-<script src="<%=request.getContextPath()%>/js/quadratic-solver-core.js"></script>
 
 <!-- Context for image-scan AI endpoint. -->
 <script>window.__QS_CTX='<%=request.getContextPath()%>';</script>

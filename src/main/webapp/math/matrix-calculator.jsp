@@ -770,8 +770,7 @@
           2. inline MathLive ES module
           3. matrix-calculator.js   — the single tool controller
     --%>
-    <jsp:include page="/math/partials/math-libs.jsp" />
-
+    <%@ include file="/modern/components/math-tool-engine-boot.inc.jsp" %>
     <!-- MathLive registers <math-field> as a custom element. -->
     <script type="module">
         import 'https://cdn.jsdelivr.net/npm/mathlive/+esm';
@@ -784,8 +783,7 @@
     <!-- Context for OneCompiler iframe + Python tab. -->
     <script>window.__MC_CTX = '<%=request.getContextPath()%>';</script>
 
-    <%@ include file="../modern/components/math-calculus-cores.inc.jsp" %>
-    <script src="<%=request.getContextPath()%>/modern/js/matrix-calculator.js"></script>
+        <script src="<%=request.getContextPath()%>/modern/js/matrix-calculator.js"></script>
 
     <!-- Reusable Print Worksheet engine (config modal → KaTeX-rendered
          worksheet overlay → printable PDF).  Same engine the limit /

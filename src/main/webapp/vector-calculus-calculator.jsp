@@ -424,8 +424,7 @@
           3. math-input-multi                   — MathLive ES module + multi-pair Visual/Text toggle
                                                   (4 pairs: scalar + Fx + Fy + Fz)
     --%>
-    <jsp:include page="/math/partials/math-libs.jsp" />
-    <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
+    <%@ include file="/modern/components/math-tool-engine-boot.inc.jsp" %>
     <jsp:include page="/math/partials/vector-calculus-calculator-scripts.jsp" />
     <jsp:include page="/math/partials/math-input-multi.jsp" />
 

@@ -331,15 +331,14 @@
 
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script src="<%=request.getContextPath()%>/modern/js/tool-utils.js?v=<%=v%>"></script>
-<script src="<%=request.getContextPath()%>/js/vector-calculator-render.js?v=<%=v%>"></script>
 <script src="<%=request.getContextPath()%>/js/vector-calculator-graph.js?v=<%=v%>"></script>
 <script src="<%=request.getContextPath()%>/js/vector-calculator-export.js?v=<%=v%>"></script>
+<%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
 <script src="<%=request.getContextPath()%>/js/vector-calculator-core.js?v=<%=v%>"></script>
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/search.js?v=<%=v%>" defer></script>
 <script src="<%=request.getContextPath()%>/modern/js/categories-menu.js?v=<%=v%>" defer></script>
 
-<%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
 <%
     request.setAttribute("mathAiButtonId", "btnMathAI");
     request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");

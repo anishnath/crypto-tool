@@ -338,7 +338,7 @@
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js" defer></script>
-<script src="<%=request.getContextPath()%>/modern/js/integral-calculator-core.js" defer></script>
+<script src="<%=request.getContextPath()%>/modern/js/math-ai-cores-engine.js" defer></script>
 
 <!-- Math Editor JS — critical path: editor-core, toolbar, code-runner (needed before TipTap) -->
 <script src="<%=request.getContextPath()%>/math/assets/js/editor-core.js"></script>

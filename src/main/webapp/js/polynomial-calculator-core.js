@@ -377,6 +377,8 @@ function clearAll() {
 // ==================== Event Binding ====================
 
 function init() {
+    if (window.__POLY_CORE_INIT) return;
+    window.__POLY_CORE_INIT = true;
     initDOM();
 
     // Mode toggle
@@ -467,10 +469,12 @@ function init() {
 
 // ==================== Init ====================
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
+if (document.getElementById('poly-calculate-btn')) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 }
 
 })();

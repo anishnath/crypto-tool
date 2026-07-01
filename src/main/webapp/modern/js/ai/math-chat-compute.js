@@ -76,6 +76,24 @@ function getLaplaceCore() {
     : window.LaplaceCalculatorCore;
 }
 
+function getZTransformCore() {
+  return typeof ZTransformCalculatorCore !== 'undefined'
+    ? ZTransformCalculatorCore
+    : window.ZTransformCalculatorCore;
+}
+
+function getTrigCore() {
+  return typeof TrigChatCore !== 'undefined'
+    ? TrigChatCore
+    : window.TrigChatCore;
+}
+
+function getStatisticsCore() {
+  return typeof StatisticsChatCore !== 'undefined'
+    ? StatisticsChatCore
+    : window.StatisticsChatCore;
+}
+
 /** @param {import('./math-action-extract.js').MathActionTask} task */
 function matrixCanVisualize(task) {
   const core = getMatrixCore();
@@ -281,6 +299,18 @@ export async function solvePdeTask(task, mode = 'simple') {
   }
 
   const steps = mode === 'steps' ? (r.steps || []) : [];
+  const pdeMode = String(task.mode || r.mode || 'heat').toLowerCase();
+
+  if (mode === 'graph' && !r.surface) {
+    return {
+      ok: false,
+      error: pdeMode === 'linear1'
+        ? 'No contour plot for 1st-order linear PDE (analytical solution only).'
+        : 'No surface data returned for this PDE — try numeric modes (heat, wave, Laplace, Poisson).',
+      mode,
+      problemLatex,
+    };
+  }
 
   return {
     ok: true,
@@ -293,6 +323,9 @@ export async function solvePdeTask(task, mode = 'simple') {
     meta: r.meta || {},
     result: { value: r.resultLatex || r.text || '', verified: r.verified },
     problemLatex,
+    input: mode === 'graph' && r.surface
+      ? { surface: r.surface, pdeMode }
+      : undefined,
   };
 }
 
@@ -578,6 +611,163 @@ export async function solveLaplaceTask(task, mode = 'simple') {
 }
 
 /**
+ * Z-transform in-chat via ZTransformCalculatorCore (same SymPy backbone as the page).
+ * @param {import('./math-action-extract.js').MathActionTask} task
+ * @param {MathSolveMode} mode
+ */
+export async function solveZTransformTask(task, mode = 'simple') {
+  const core = getZTransformCore();
+  if (!core?.solveTask) {
+    return { ok: false, error: 'Z-transform engine (ZTransformCalculatorCore) not loaded.', mode, problemLatex: '' };
+  }
+
+  const problemLatex = taskToDisplayLatex(task);
+  const transformMode = String(task.mode || task.zTransformMode || 'forward').toLowerCase();
+  const isInverse = /inverse|iz|inv/.test(transformMode);
+
+  let r;
+  try {
+    r = await core.solveTask(task);
+  } catch (err) {
+    return { ok: false, error: err?.message || 'Z-transform computation failed.', mode, problemLatex };
+  }
+
+  if (!r || !r.ok) {
+    return { ok: false, error: r?.error || 'Could not compute this Z-transform.', mode, problemLatex };
+  }
+
+  const steps = mode === 'steps' ? (r.steps || []) : [];
+  const symbol = isInverse ? '\\mathcal{Z}^{-1}\\{X(z)\\}' : '\\mathcal{Z}\\{x[n]\\}';
+  const resultLatex = r.resultLatex ? `${symbol} = ${r.resultLatex}` : '';
+
+  return {
+    ok: true,
+    mode,
+    action: 'ztransform',
+    resultLatex,
+    resultText: r.resultText || '',
+    method: isInverse ? 'Inverse Z-transform (SymPy CAS)' : 'Forward Z-transform (SymPy CAS)',
+    steps,
+    convergence: r.convergence || null,
+    transformMode: isInverse ? 'inverse' : 'forward',
+    input: mode === 'graph' && Array.isArray(r.plotX) && r.plotX.length
+      ? { x: r.plotX, y: r.plotY }
+      : undefined,
+    result: { value: resultLatex },
+    problemLatex,
+  };
+}
+
+/**
+ * Trigonometry in-chat via TrigBackend + TrigGraph (same engines as trig calculator pages).
+ * @param {import('./math-action-extract.js').MathActionTask} task
+ * @param {MathSolveMode} mode
+ */
+export async function solveTrigTask(task, mode = 'simple') {
+  const core = getTrigCore();
+  if (!core?.solveTask) {
+    return { ok: false, error: 'Trig engine (TrigChatCore) not loaded.', mode, problemLatex: '' };
+  }
+
+  const problemLatex = taskToDisplayLatex(task);
+  const withSteps = mode === 'steps';
+
+  if (mode === 'graph' && core.canGraphTask && !core.canGraphTask(task)) {
+    return {
+      ok: false,
+      error: 'No graph available for this trig problem.',
+      mode,
+      problemLatex,
+    };
+  }
+
+  let r;
+  try {
+    r = await core.solveTask(task, { withSteps, mode });
+  } catch (err) {
+    return { ok: false, error: err?.message || 'Trig computation failed.', mode, problemLatex };
+  }
+
+  if (!r || !r.ok) {
+    return { ok: false, error: r?.error || 'Could not compute this trig problem.', mode, problemLatex };
+  }
+
+  const steps = withSteps
+    ? (r.steps || []).map((s) => ({
+      title: s.title || 'Step',
+      latex: s.latex || '',
+    }))
+    : [];
+
+  return {
+    ok: true,
+    mode,
+    action: 'trig',
+    resultLatex: r.resultLatex || '',
+    method: r.method || 'Trigonometry engine (SymPy)',
+    steps,
+    input: mode === 'graph' ? r.input : undefined,
+    result: { value: r.resultLatex || '' },
+    problemLatex,
+  };
+}
+
+/**
+ * Statistics in-chat via StatisticsChatCore + StatsCommon (same engines as stats pages).
+ * @param {import('./math-action-extract.js').MathActionTask} task
+ * @param {MathSolveMode} mode
+ */
+export async function solveStatisticsTask(task, mode = 'simple') {
+  const core = getStatisticsCore();
+  if (!core?.solveTask) {
+    return { ok: false, error: 'Statistics engine (StatisticsChatCore) not loaded.', mode, problemLatex: '' };
+  }
+
+  const problemLatex = taskToDisplayLatex(task);
+  const withSteps = mode === 'steps';
+
+  if (mode === 'graph' && core.canGraphTask && !core.canGraphTask(task)) {
+    return {
+      ok: false,
+      error: 'No graph available for this statistics problem.',
+      mode,
+      problemLatex,
+    };
+  }
+
+  let r;
+  try {
+    r = await core.solveTask(task, { withSteps, mode });
+  } catch (err) {
+    return { ok: false, error: err?.message || 'Statistics computation failed.', mode, problemLatex };
+  }
+
+  if (!r || !r.ok) {
+    return { ok: false, error: r?.error || 'Could not compute this statistics problem.', mode, problemLatex };
+  }
+
+  const steps = withSteps
+    ? (r.steps || []).map((s) => ({
+      title: s.title || 'Step',
+      latex: s.latex || '',
+    }))
+    : [];
+
+  return {
+    ok: true,
+    mode,
+    action: 'statistics',
+    resultLatex: r.resultLatex || '',
+    resultText: r.resultText || '',
+    method: r.method || 'Statistics engine',
+    steps,
+    input: mode === 'graph' ? r.input : undefined,
+    result: { value: r.resultLatex || '' },
+    problemLatex,
+  };
+}
+
+/**
  * @param {import('./math-action-extract.js').MathActionTask} task
  * @param {object} [shell]
  * @param {MathSolveMode} [mode]
@@ -593,6 +783,9 @@ export async function computeTaskInChat(task, _shell, mode = 'simple') {
   if (action === 'matrix') return solveMatrixTask(task, mode);
   if (action === 'bode') return solveBodeTask(task, mode);
   if (action === 'laplace') return solveLaplaceTask(task, mode);
+  if (action === 'ztransform') return solveZTransformTask(task, mode);
+  if (action === 'trig') return solveTrigTask(task, mode);
+  if (action === 'statistics') return solveStatisticsTask(task, mode);
   if (ALGEBRA_ACTIONS.includes(action)) return solveAlgebraTask(task, mode);
   return solveIntegralTask(task, mode);
 }
@@ -1086,6 +1279,145 @@ export function renderLaplaceGraphInChat(plotEl, input) {
 }
 
 /**
+ * Discrete stem plot after Z-transform (same engine output as the page Graph tab).
+ * @param {HTMLElement} plotEl
+ * @param {{ x?: number[], y?: number[] }} input
+ */
+export function renderZTransformGraphInChat(plotEl, input) {
+  if (!plotEl || !Array.isArray(input?.x) || !input.x.length || !Array.isArray(input?.y) || !input.y.length) {
+    if (plotEl) {
+      plotEl.innerHTML = '<p class="vca-math-result-method">No stem plot available for this transform.</p>';
+    }
+    return Promise.resolve(false);
+  }
+
+  const loadPlotly = () => new Promise((resolve) => {
+    if (window.Plotly) { resolve(true); return; }
+    if (typeof window.loadPlotly === 'function') {
+      window.loadPlotly(() => resolve(!!window.Plotly));
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = 'https://cdn.plot.ly/plotly-2.27.0.min.js';
+    s.onload = () => resolve(!!window.Plotly);
+    s.onerror = () => resolve(false);
+    document.head.appendChild(s);
+  });
+
+  return loadPlotly().then((ok) => {
+    if (!ok || !window.Plotly) return false;
+    const core = getZTransformCore();
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const stem = core?.buildStemPlot ? core.buildStemPlot(input) : null;
+    const layout = core?.stemPlotLayout
+      ? Object.assign({}, core.stemPlotLayout(isDark), stem ? stem.layoutExtras : {})
+      : { margin: { t: 28, r: 16, b: 44, l: 56 }, height: 320 };
+    const traces = stem?.traces || [{
+      x: input.x,
+      y: input.y,
+      type: 'scatter',
+      mode: 'markers',
+      marker: { color: '#059669', size: 8, line: { color: '#047857', width: 1.5 } },
+      name: 'x[n]',
+    }];
+    const chart = document.createElement('div');
+    chart.className = 'vca-math-graph-canvas';
+    chart.style.minHeight = '320px';
+    plotEl.appendChild(chart);
+    window.Plotly.newPlot(chart, traces, layout, {
+      responsive: true,
+      displayModeBar: false,
+      displaylogo: false,
+    });
+    return true;
+  });
+}
+
+/** Plot trig function or unit circle in chat (same Plotly module as trig calculator pages). */
+export function renderTrigGraphInChat(plotEl, input) {
+  const core = getTrigCore();
+  if (core?.renderGraphInChat) {
+    return core.renderGraphInChat(plotEl, input);
+  }
+  if (plotEl) {
+    plotEl.innerHTML = '<p class="vca-math-result-method">Trig graph module not loaded.</p>';
+  }
+  return Promise.resolve(false);
+}
+
+/** Histogram or normal curve in chat (StatsGraph + StatisticsChatCore). */
+export function renderStatisticsGraphInChat(plotEl, input) {
+  const core = getStatisticsCore();
+  if (core?.renderGraphInChat) {
+    return core.renderGraphInChat(plotEl, input);
+  }
+  if (plotEl) {
+    plotEl.innerHTML = '<p class="vca-math-result-method">Statistics graph module not loaded.</p>';
+  }
+  return Promise.resolve(false);
+}
+
+/** PDE contour heatmap in chat (same SURFACE data as the page Graph tab). */
+export function renderPdeGraphInChat(plotEl, input) {
+  const surface = input?.surface;
+  if (!plotEl || !surface?.z) {
+    if (plotEl) plotEl.innerHTML = '<p class="vca-math-result-method">No contour plot available for this PDE.</p>';
+    return Promise.resolve(false);
+  }
+
+  const loadPlotly = () => new Promise((resolve) => {
+    if (window.Plotly) { resolve(true); return; }
+    if (typeof window.loadPlotly === 'function') {
+      window.loadPlotly(() => resolve(!!window.Plotly));
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = 'https://cdn.plot.ly/plotly-2.27.0.min.js';
+    s.onload = () => resolve(!!window.Plotly);
+    s.onerror = () => resolve(false);
+    document.head.appendChild(s);
+  });
+
+  return loadPlotly().then((ok) => {
+    if (!ok || !window.Plotly) return false;
+    const pdeMode = String(input.pdeMode || 'heat').toLowerCase();
+    const isXY = pdeMode === 'laplace' || pdeMode === 'poisson';
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const bgColor = isDark ? '#1e293b' : '#ffffff';
+    const textColor = isDark ? '#cbd5e1' : '#1e293b';
+    const xArr = Array.isArray(surface.x[0]) ? surface.x[0] : surface.x;
+    const yArr = surface.y && Array.isArray(surface.y[0])
+      ? surface.y.map((r) => r[0])
+      : surface.y;
+
+    plotEl.style.minHeight = '320px';
+    plotEl.innerHTML = '';
+    const chart = document.createElement('div');
+    chart.className = 'vca-math-graph-canvas';
+    chart.style.minHeight = '320px';
+    plotEl.appendChild(chart);
+
+    window.Plotly.newPlot(chart, [{
+      z: surface.z,
+      x: xArr,
+      y: yArr || xArr,
+      type: 'heatmap',
+      colorscale: 'Viridis',
+      showscale: true,
+    }], {
+      margin: { t: 36, r: 16, b: 48, l: 56 },
+      height: 320,
+      paper_bgcolor: bgColor,
+      plot_bgcolor: bgColor,
+      xaxis: { title: 'x', color: textColor },
+      yaxis: { title: isXY ? 'y' : 't', color: textColor },
+      font: { color: textColor, family: 'Inter, sans-serif', size: 11 },
+    }, { responsive: true, displayModeBar: false, displaylogo: false });
+    return true;
+  });
+}
+
+/**
  * 3D cone plot of a gradient or curl vector field (same sampling as the VC page).
  * @param {HTMLElement} plotEl
  * @param {{ plotData?: number[][], vcMode?: string }} input
@@ -1204,6 +1536,7 @@ function chipActionsForTask(task) {
     return [
       { mode: 'simple', label: 'Solve', title: 'Numerical/analytical PDE solve (same as page)' },
       { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step breakdown' },
+      { mode: 'graph', label: 'Show graph', title: 'Contour heatmap of u(x,t) or u(x,y) (numeric PDEs)' },
     ];
   }
   if (action === 'vectorCalculus') {
@@ -1256,6 +1589,44 @@ function chipActionsForTask(task) {
       { mode: 'graph', label: 'Show graph', title: 'Plot f(t) in the time domain' },
     ];
   }
+  if (action === 'ztransform') {
+    const isInverse = /inverse|iz|inv/.test(String(task?.mode || task?.zTransformMode || ''));
+    return [
+      { mode: 'simple', label: 'Solve', title: isInverse ? 'Compute inverse Z-transform (same page engine)' : 'Compute forward Z-transform (same page engine)' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step Z-transform' },
+      { mode: 'graph', label: 'Show graph', title: 'Plot x[n] stem diagram' },
+    ];
+  }
+  if (action === 'trig') {
+    const chips = [
+      { mode: 'simple', label: 'Solve', title: 'Compute (same SymPy engine as page Calculate/Solve)' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step trig solution' },
+    ];
+    const core = getTrigCore();
+    if (!core?.canGraphTask || core.canGraphTask(task)) {
+      chips.push({
+        mode: 'graph',
+        label: 'Show graph',
+        title: 'Plot function graph or unit circle (same as page Graph tab)',
+      });
+    }
+    return chips;
+  }
+  if (action === 'statistics') {
+    const chips = [
+      { mode: 'simple', label: 'Solve', title: 'Compute statistics (same engine as stats pages)' },
+      { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step statistics breakdown' },
+    ];
+    const core = getStatisticsCore();
+    if (!core?.canGraphTask || core.canGraphTask(task)) {
+      chips.push({
+        mode: 'graph',
+        label: 'Show graph',
+        title: 'Histogram or normal curve in chat',
+      });
+    }
+    return chips;
+  }
   if (ALGEBRA_ACTIONS.includes(action)) {
     return [
       { mode: 'simple', label: 'Solve', title: 'Compute answer (same engine as page calculator)' },
@@ -1295,10 +1666,13 @@ export async function renderChatResultCard(card, task, result) {
   const isVector = action === 'vector';
   const isBode = action === 'bode';
   const isLaplace = action === 'laplace';
+  const isZTransform = action === 'ztransform';
+  const isTrig = action === 'trig';
+  const isStatistics = action === 'statistics';
   const isAlgebraInterval = action === 'inequality'
     || (action === 'quadratic' && /[<>=]|\\in|\\emptyset|cup|∪/.test(answer));
   const isAlgebraSystem = action === 'system';
-  const fuseAnswer = !isOde && !isPde && !isVc && !isVector && !isBode && !isLaplace && !isAlgebraInterval && !isAlgebraSystem;
+  const fuseAnswer = !isOde && !isPde && !isVc && !isVector && !isBode && !isLaplace && !isZTransform && !isTrig && !isStatistics && !isAlgebraInterval && !isAlgebraSystem;
   const answerEq = fuseAnswer ? `${problem} = ${answer}` : answer;
 
   body.replaceChildren();
@@ -1380,6 +1754,31 @@ export async function renderChatResultCard(card, task, result) {
       body.appendChild(p);
     }
     appendMethod(body, result.method);
+  } else if (isZTransform) {
+    appendEqSlot(body, problem);
+    if (answer) appendEqSlot(body, answer, 'vca-math-eq-answer');
+    if (result.convergence && result.convergence !== 'True' && result.convergence !== 'None' && result.transformMode !== 'inverse') {
+      const p = document.createElement('p');
+      p.className = 'vca-math-result-method';
+      p.textContent = `ROC: ${result.convergence}`;
+      body.appendChild(p);
+    }
+    appendMethod(body, result.method);
+  } else if (isTrig) {
+    appendEqSlot(body, problem);
+    if (answer) appendEqSlot(body, answer, 'vca-math-eq-answer');
+    appendMethod(body, result.method);
+  } else if (isStatistics) {
+    appendEqSlot(body, problem);
+    if (answer) appendEqSlot(body, answer, 'vca-math-eq-answer');
+    if (result.resultText) {
+      const p = document.createElement('p');
+      p.className = 'vca-math-result-method';
+      p.style.whiteSpace = 'pre-line';
+      p.textContent = result.resultText;
+      body.appendChild(p);
+    }
+    appendMethod(body, result.method);
   } else {
     appendEqSlot(body, `${problem} = ${answer}`);
     appendMethod(body, result.method);
@@ -1398,6 +1797,10 @@ export async function renderChatResultCard(card, task, result) {
       else if (action === 'matrix') void renderMatrixGraphInChat(plotEl, result.input);
       else if (action === 'bode') void renderBodeGraphInChat(plotEl, result.input);
       else if (action === 'laplace') void renderLaplaceGraphInChat(plotEl, result.input);
+      else if (action === 'pde') void renderPdeGraphInChat(plotEl, result.input);
+      else if (action === 'ztransform') void renderZTransformGraphInChat(plotEl, result.input);
+      else if (action === 'trig') void renderTrigGraphInChat(plotEl, result.input);
+      else if (action === 'statistics') void renderStatisticsGraphInChat(plotEl, result.input);
       else void renderIntegralGraphInChat(plotEl, result.input);
     }
   }

@@ -426,9 +426,8 @@
 <script src="<%=request.getContextPath()%>/modern/js/categories-menu.js" defer></script>
 
 <script>window.BP_CALC_CTX = "<%=request.getContextPath()%>";</script>
-<script src="<%=request.getContextPath()%>/modern/js/bode-calculator-core.js?v=<%=v%>"></script>
+<%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
 <script src="<%=request.getContextPath()%>/modern/js/bode-plot-generator.js?v=<%=v%>"></script>
-
 <script>
 (function () {
     document.querySelectorAll('.ms-faq-q').forEach(function (q) {
@@ -439,7 +438,6 @@
 })();
 </script>
 
-<%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
 <%
     request.setAttribute("mathAiButtonId", "btnMathAI");
     request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");

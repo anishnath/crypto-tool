@@ -124,8 +124,8 @@
     });
 
     // ========== Output Tabs ==========
-    var tabBtns = document.querySelectorAll('.zt-output-tab');
-    var panels  = document.querySelectorAll('.zt-panel');
+    var tabBtns = document.querySelectorAll('.ic-output-tab');
+    var panels  = document.querySelectorAll('.ic-panel');
     tabBtns.forEach(function(btn) {
         btn.addEventListener('click', function() {
             var panel = this.getAttribute('data-panel');
@@ -148,10 +148,11 @@
     function setupToggle(btnId, contentId) {
         var btn = document.getElementById(btnId);
         var content = document.getElementById(contentId);
+        if (!btn || !content) return;
         btn.addEventListener('click', function() {
             content.classList.toggle('open');
             var chevron = btn.querySelector('svg');
-            chevron.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : '';
+            if (chevron) chevron.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : '';
         });
     }
     setupToggle('zt-syntax-btn', 'zt-syntax-content');
@@ -263,14 +264,14 @@
             if (currentMode === 'forward') {
                 var expr = normalizeExpr(forwardInput.value.trim());
                 if (!expr) {
-                    previewEl.innerHTML = '<span style="color:var(--text-muted);font-size:0.8125rem;">Type a sequence x[n] above\u2026</span>';
+                    previewEl.innerHTML = '<span class="zt-preview-placeholder">Type a sequence x[n] above\u2026</span>';
                     return;
                 }
                 latex = '\\mathcal{Z}\\left\\{' + exprToLatex(expr) + '\\right\\}';
             } else {
                 var expr = normalizeExpr(inverseInput.value.trim());
                 if (!expr) {
-                    previewEl.innerHTML = '<span style="color:var(--text-muted);font-size:0.8125rem;">Type a function of z above\u2026</span>';
+                    previewEl.innerHTML = '<span class="zt-preview-placeholder">Type a function of z above\u2026</span>';
                     return;
                 }
                 latex = '\\mathcal{Z}^{-1}\\left\\{' + exprToLatex(expr) + '\\right\\}';
@@ -281,96 +282,8 @@
         }
     }
 
-    // ========== Build SymPy Code ==========
-    function buildSympyCode(mode) {
-        var code = 'from sympy import symbols, Sum, oo, simplify, latex, sin, cos, tan, exp, log, sqrt, pi, Rational, cancel, fraction, solve, Piecewise, I\n';
-        code += 'from sympy import Function\n';
-        code += 'import json, numpy as np\n';
-        code += 'n = symbols("n", integer=True, nonnegative=True)\n';
-        code += 'z = symbols("z")\n\n';
-
-        if (mode === 'forward') {
-            var expr = exprToPython(normalizeExpr(forwardInput.value.trim()));
-            code += 'x_n = ' + expr + '\n\n';
-            code += 'try:\n';
-            code += '    X_raw = Sum(x_n * z**(-n), (n, 0, oo)).doit()\n';
-            code += '    roc_cond = None\n';
-            code += '    if isinstance(X_raw, Piecewise):\n';
-            code += '        X = simplify(X_raw.args[0][0])\n';
-            code += '        roc_cond = str(X_raw.args[0][1])\n';
-            code += '    else:\n';
-            code += '        X = simplify(X_raw)\n';
-            code += 'except Exception as e:\n';
-            code += '    print("ERROR:" + str(e))\n';
-            code += '    import sys; sys.exit(0)\n\n';
-            // Results
-            code += 'print("RESULT:" + latex(X))\n';
-            code += 'print("TEXT:" + str(X))\n';
-            code += 'if roc_cond:\n';
-            code += '    print("CONVERGENCE:" + roc_cond)\n\n';
-            // Steps
-            code += 'steps = []\n';
-            code += 'steps.append({"title": "Given sequence", "latex": "x[n] = " + latex(x_n)})\n';
-            code += 'steps.append({"title": "Definition of Z-transform", "latex": r"X(z) = \\\\sum_{n=0}^{\\\\infty} x[n] \\\\cdot z^{-n}"})\n';
-            code += 'steps.append({"title": "Evaluate the sum", "latex": "\\\\text{Identify geometric series or known pair}"})\n';
-            code += 'steps.append({"title": "Simplify", "latex": "X(z) = " + latex(X)})\n';
-            code += 'if roc_cond:\n';
-            code += '    steps.append({"title": "Region of convergence", "latex": "\\\\text{" + roc_cond + "}"})\n';
-            code += 'steps.append({"title": "Final result", "latex": r"\\\\boxed{\\\\mathcal{Z}\\\\{" + latex(x_n) + r"\\\\} = " + latex(X) + r"}"})\n';
-            code += 'print("STEPS:" + json.dumps(steps))\n\n';
-            // Plot data (stem plot for discrete sequence)
-            code += 'try:\n';
-            code += '    from sympy import lambdify\n';
-            code += '    x_func = lambdify(n, x_n, modules=["numpy"])\n';
-            code += '    n_vals = list(range(0, 21))\n';
-            code += '    y_vals = [float(x_func(ni)) if np.isfinite(x_func(ni)) else 0.0 for ni in n_vals]\n';
-            code += '    print("PLOT_X:" + json.dumps(n_vals))\n';
-            code += '    print("PLOT_Y:" + json.dumps(y_vals))\n';
-            code += 'except:\n';
-            code += '    print("PLOT_X:[]")\n';
-            code += '    print("PLOT_Y:[]")\n';
-        } else {
-            // Inverse mode - residue method
-            var expr = exprToPython(normalizeExpr(inverseInput.value.trim()));
-            code += 'from sympy import residue, apart\n';
-            code += 'X_z = ' + expr + '\n\n';
-            code += 'try:\n';
-            code += '    integrand = X_z * z**(n-1)\n';
-            code += '    denom = fraction(cancel(X_z))[1]\n';
-            code += '    poles = solve(denom, z)\n';
-            code += '    x_n_result = sum(residue(integrand, z, p) for p in poles)\n';
-            code += '    x_n_result = simplify(x_n_result)\n';
-            code += 'except Exception as e:\n';
-            code += '    print("ERROR:" + str(e))\n';
-            code += '    import sys; sys.exit(0)\n\n';
-            // Results
-            code += 'print("RESULT:" + latex(x_n_result))\n';
-            code += 'print("TEXT:" + str(x_n_result))\n\n';
-            // Steps
-            code += 'steps = []\n';
-            code += 'steps.append({"title": "Given X(z)", "latex": "X(z) = " + latex(X_z)})\n';
-            code += 'try:\n';
-            code += '    X_pf = apart(X_z / z, z)\n';
-            code += '    steps.append({"title": "Compute X(z)/z for partial fractions", "latex": "\\\\frac{X(z)}{z} = " + latex(X_pf)})\n';
-            code += 'except:\n';
-            code += '    pass\n';
-            code += 'steps.append({"title": "Find poles of denominator", "latex": "\\\\text{Poles: }" + ", ".join(latex(p) for p in poles)})\n';
-            code += 'steps.append({"title": "Apply residue method", "latex": r"x[n] = \\\\sum_k \\\\text{Res}\\\\left[X(z) \\\\cdot z^{n-1}, z=z_k\\\\right]"})\n';
-            code += 'steps.append({"title": "Final result", "latex": r"\\\\boxed{\\\\mathcal{Z}^{-1}\\\\{" + latex(X_z) + r"\\\\} = " + latex(x_n_result) + r"}"})\n';
-            code += 'print("STEPS:" + json.dumps(steps))\n\n';
-            // Plot data (stem plot)
-            code += 'try:\n';
-            code += '    from sympy import lambdify\n';
-            code += '    x_func = lambdify(n, x_n_result, modules=["numpy"])\n';
-            code += '    n_vals = list(range(0, 21))\n';
-            code += '    y_vals = [float(x_func(ni)) if np.isfinite(x_func(ni)) else 0.0 for ni in n_vals]\n';
-            code += '    print("PLOT_X:" + json.dumps(n_vals))\n';
-            code += '    print("PLOT_Y:" + json.dumps(y_vals))\n';
-            code += 'except:\n';
-            code += '    print("PLOT_X:[]")\n';
-            code += '    print("PLOT_Y:[]")\n';
-        }
-        return code;
+    function getCore() {
+        return window.ZTransformCalculatorCore;
     }
 
     // ========== Compute ==========
@@ -392,61 +305,35 @@
             '<p style="color:var(--text-secondary);font-size:0.9375rem;">Computing ' + modeLabel + '...</p></div>';
         if (emptyState) emptyState.style.display = 'none';
 
-        var code = buildSympyCode(currentMode);
-        var mode = currentMode;
+        var core = getCore();
+        if (!core || typeof core.solve !== 'function') {
+            showError('Z-transform engine not loaded.');
+            return;
+        }
 
-        var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, 90000);
+        var spec = { mode: currentMode };
+        if (currentMode === 'forward') spec.forwardExpr = inputVal;
+        else spec.inverseExpr = inputVal;
 
-        fetch((window.ZT_CALC_CTX || '') + '/OneCompilerFunctionality?action=execute', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ language: 'python', version: '3.10', code: code }),
-            signal: controller.signal
-        })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            clearTimeout(timeoutId);
-            var stdout = (data.Stdout || data.stdout || '').trim();
-            var stderr = (data.Stderr || data.stderr || '').trim();
-
-            if (!stdout || (stderr && /error|exception|traceback/i.test(stderr) && !stdout)) {
-                showError(stderr || 'Computation failed. Check your expression syntax.');
+        core.solve(spec).then(function(parsed) {
+            if (!parsed || !parsed.ok) {
+                showError((parsed && parsed.error) || 'Computation failed. Check your expression syntax.');
                 return;
             }
-
-            var errMatch = stdout.match(/ERROR:(.+)/);
-            if (errMatch) {
-                showError(errMatch[1].trim());
-                return;
-            }
-
-            parseAndShowResult(mode, stdout);
-        })
-        .catch(function(err) {
-            clearTimeout(timeoutId);
-            showError(err.name === 'AbortError' ? 'Request timed out' : err.message);
+            parseAndShowResult(currentMode, parsed);
+        }).catch(function(err) {
+            showError(err && err.message ? err.message : String(err));
         });
     }
 
     // ========== Parse & Display Result ==========
-    function parseAndShowResult(mode, stdout) {
-        var stepsMatch = stdout.match(/STEPS:(\[[\s\S]*?\])(?=\nPLOT|$)/);
-        var plotXMatch = stdout.match(/PLOT_X:(\[[\s\S]*?\])/);
-        var plotYMatch = stdout.match(/PLOT_Y:(\[[\s\S]*?\])/);
-        var steps = [];
-        try { if (stepsMatch) steps = JSON.parse(stepsMatch[1]); } catch(e) {}
-        var plotX = [], plotY = [];
-        try { if (plotXMatch) plotX = JSON.parse(plotXMatch[1]); } catch(e) {}
-        try { if (plotYMatch) plotY = JSON.parse(plotYMatch[1]); } catch(e) {}
-
-        var rMatch = stdout.match(/RESULT:([^\n]*)/);
-        var tMatch = stdout.match(/TEXT:([^\n]*)/);
-        var cMatch = stdout.match(/CONVERGENCE:([^\n]*)/);
-
-        var result = rMatch ? rMatch[1].trim() : '0';
-        var text = tMatch ? tMatch[1].trim() : result;
-        var convergence = cMatch ? cMatch[1].trim() : null;
+    function parseAndShowResult(mode, parsed) {
+        var result = parsed.resultLatex || '0';
+        var text = parsed.resultText || result;
+        var convergence = parsed.convergence || null;
+        var steps = parsed.steps || [];
+        var plotX = parsed.plotX || [];
+        var plotY = parsed.plotY || [];
 
         showResult(mode, result, text, convergence, steps);
 
@@ -454,7 +341,7 @@
             pendingGraph = { x: plotX, y: plotY, mode: mode };
             if (graphHint) graphHint.style.display = 'none';
             var graphPanel = document.getElementById('zt-panel-graph');
-            if (graphPanel.classList.contains('active')) {
+            if (graphPanel && graphPanel.classList.contains('active')) {
                 loadPlotly(function() { renderGraph(pendingGraph); });
             }
         }
@@ -556,49 +443,21 @@
         if (!window.Plotly || !cfg || !cfg.x || cfg.x.length === 0) return;
         var container = document.getElementById('zt-graph-container');
         var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-
-        // Stem plot: markers + vertical lines from y=0
-        var shapes = [];
-        for (var i = 0; i < cfg.x.length; i++) {
-            shapes.push({
-                type: 'line',
-                x0: cfg.x[i], x1: cfg.x[i],
-                y0: 0, y1: cfg.y[i],
-                line: { color: '#059669', width: 2 }
-            });
-        }
-
-        var trace = {
+        var core = getCore();
+        var stem = core && core.buildStemPlot ? core.buildStemPlot(cfg) : null;
+        var traces = stem ? stem.traces : [{
             x: cfg.x,
             y: cfg.y,
             type: 'scatter',
             mode: 'markers',
             marker: { color: '#059669', size: 8, line: { color: '#047857', width: 1.5 } },
-            name: 'x[n]'
-        };
+            name: 'x[n]',
+        }];
+        var layout = core && core.stemPlotLayout
+            ? Object.assign({}, core.stemPlotLayout(isDark), stem ? stem.layoutExtras : {})
+            : { margin: { t: 30, r: 20, b: 50, l: 60 }, shapes: stem ? stem.layoutExtras.shapes : [] };
 
-        var layout = {
-            margin: { t: 30, r: 20, b: 50, l: 60 },
-            shapes: shapes,
-            xaxis: {
-                title: 'n',
-                dtick: 1,
-                gridcolor: isDark ? '#334155' : '#e2e8f0',
-                color: isDark ? '#cbd5e1' : '#475569',
-                zerolinecolor: isDark ? '#475569' : '#94a3b8'
-            },
-            yaxis: {
-                title: 'x[n]',
-                gridcolor: isDark ? '#334155' : '#e2e8f0',
-                color: isDark ? '#cbd5e1' : '#475569',
-                zerolinecolor: isDark ? '#475569' : '#94a3b8'
-            },
-            paper_bgcolor: isDark ? '#1e293b' : '#fff',
-            plot_bgcolor: isDark ? '#1e293b' : '#fff',
-            font: { family: 'Inter, sans-serif', size: 12, color: isDark ? '#cbd5e1' : '#475569' }
-        };
-
-        Plotly.newPlot(container, [trace], layout, { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'] });
+        Plotly.newPlot(container, traces, layout, { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'] });
     }
 
     // ========== Python Compiler ==========

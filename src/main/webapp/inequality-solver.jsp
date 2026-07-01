@@ -529,7 +529,7 @@
                                                wiring, image-scan init
           3. math-input-setup                — MathLive ES module + Visual/Text mode
     --%>
-    <jsp:include page="/math/partials/math-libs.jsp" />
+    <%@ include file="/modern/components/math-tool-engine-boot.inc.jsp" %>
     <jsp:include page="/math/partials/inequality-solver-scripts.jsp" />
     <jsp:include page="/math/partials/math-input-setup.jsp" />
 
@@ -569,8 +569,7 @@
     })();
     </script>
 
-    <%@ include file="/modern/components/math-calculus-cores.inc.jsp" %>
-    <%
+        <%
         request.setAttribute("mathAiButtonId", "btnMathAI");
         request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
         request.setAttribute("mathAiProfileExport", "configureInequalityMathShell");

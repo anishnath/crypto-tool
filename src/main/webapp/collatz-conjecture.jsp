@@ -553,10 +553,10 @@
     <script src="<%=request.getContextPath()%>/js/collatz-graph.js?v=<%=v%>"></script>
     <script src="<%=request.getContextPath()%>/js/collatz-export.js?v=<%=v%>"></script>
     <script src="<%=request.getContextPath()%>/js/collatz-core.js?v=<%=v%>"></script>
-    <script src="<%=request.getContextPath()%>/modern/js/categories-menu.js?v=<%=v%>" defer></script>
-
     <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
-    <%
+<script src="<%=request.getContextPath()%>/modern/js/categories-menu.js?v=<%=v%>" defer></script>
+
+        <%
         request.setAttribute("mathAiButtonId", "btnMathAI");
         request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
         request.setAttribute("mathAiProfileExport", "configureCollatzMathShell");

@@ -10,7 +10,65 @@
     --stat-light: rgba(225, 29, 72, 0.15);
 }
 
-/* ===== Mode Toggle (sample/population) ===== */
+/* ===== Mode Toggle (sample/population) — Math Studio pill inside ic-hero ===== */
+.ic-hero--compact .stat-mode-toggle {
+    display: inline-flex;
+    gap: 2px;
+    background: var(--ms-panel-bg-soft, var(--bg-secondary));
+    padding: 3px;
+    border-radius: var(--ms-radius-pill, 999px);
+    border: 1px solid var(--ms-line, var(--border));
+    margin-bottom: 0.65rem;
+}
+.ic-hero--compact .stat-mode-btn {
+    flex: none;
+    padding: 5px 12px;
+    font-size: 12px;
+    border-radius: var(--ms-radius-pill, 999px);
+    border: none;
+    background: transparent;
+    color: var(--ms-muted, var(--text-secondary));
+}
+.ic-hero--compact .stat-mode-btn.active {
+    background: var(--ms-panel-bg, var(--bg-primary));
+    color: var(--stat-tool);
+    box-shadow: var(--ms-shadow-sm, 0 1px 3px rgba(0,0,0,0.08));
+}
+
+.ic-hero--compact.stat-hero {
+    padding: 1.1rem 1.25rem 1rem;
+}
+.ic-hero--compact .ic-hero-top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.65rem;
+}
+.stat-hero-core {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    max-width: 40rem;
+}
+.stat-hero-core .tool-form-group {
+    margin-bottom: 0.55rem;
+}
+.stat-hero-core .tool-action-btn {
+    margin-top: 0.35rem;
+}
+
+/* ic-result-card hosts legacy stat tabs */
+.ic-result-card .stat-output-tabs {
+    border-radius: var(--ms-radius-sm, 8px);
+    margin-bottom: 0.65rem;
+    border: 1px solid var(--ms-line, var(--border));
+}
+.ic-result-card .stat-panel.active {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* ===== Mode Toggle (legacy full-page layout) ===== */
 .stat-mode-toggle {
     display: flex;
     border: 1.5px solid var(--border);

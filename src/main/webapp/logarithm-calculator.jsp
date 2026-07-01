@@ -565,8 +565,6 @@
            8. FAQ accordion          — math-studio standard
        ═══════════════════════════════════════════════════════════════════ -->
     <jsp:include page="/math/partials/math-libs.jsp" />
-    <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js"></script>
-
     <!-- ═══ SymPy power-engine ═══
          Python template read by the inline IIFE to compute expand_log,
          logcombine, simplify, evaluate, and solve with domain filtering

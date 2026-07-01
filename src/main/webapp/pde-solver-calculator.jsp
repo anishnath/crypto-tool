@@ -642,13 +642,11 @@
           4. worksheet-engine.js        — practice worksheet
           5. inline scan + worksheet wiring + quick wins (live preview, URL autofill)
     --%>
-    <jsp:include page="/math/partials/math-libs.jsp" />
-
+    <%@ include file="/modern/components/math-tool-engine-boot.inc.jsp" %>
     <script>window.PDE_CALC_CTX = "<%=request.getContextPath()%>";</script>
 
     <%-- Shared math engines for Math AI chat (page PDE solve stays in pde-solver-calculator.js) --%>
-    <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
-
+    
     <script src="<%=request.getContextPath()%>/js/worksheet-engine.js"></script>
     <script src="<%=request.getContextPath()%>/modern/js/pde-solver-calculator.js"></script>
 

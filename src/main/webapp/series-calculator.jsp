@@ -520,8 +520,7 @@
           2. series-calculator-scripts  — render/graph/export, worksheet, core, image-scan init
           3. math-input-multi           — MathLive ES module + Visual/Text mode toggle (reads DOM)
     --%>
-    <jsp:include page="/math/partials/math-libs.jsp" />
-    <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
+    <%@ include file="/modern/components/math-tool-engine-boot.inc.jsp" %>
     <jsp:include page="/math/partials/series-calculator-scripts.jsp" />
     <jsp:include page="/math/partials/math-input-multi.jsp" />
 

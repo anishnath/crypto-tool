@@ -290,7 +290,7 @@
     </div>
 
     <!-- Control &amp; Signals -->
-    <div class="ms-group<%= collapsedCls(activeService, "bode", "laplace", "convolution") %>" data-group="control">
+    <div class="ms-group<%= collapsedCls(activeService, "bode", "laplace", "ztransform", "convolution") %>" data-group="control">
         <button class="ms-group-header" type="button">Control &amp; Signals <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/bode-plot-generator.jsp" class="ms-item <%= "bode".equals(activeService) ? "active" : "" %>">
@@ -298,6 +298,9 @@
             </a>
             <a href="<%= ctx %>/laplace-transform-calculator.jsp" class="ms-item <%= "laplace".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#8466;</span> <span class="ms-item-label">Laplace Transform</span>
+            </a>
+            <a href="<%= ctx %>/z-transform-calculator.jsp" class="ms-item <%= "ztransform".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">Z</span> <span class="ms-item-label">Z-Transform</span>
             </a>
             <a href="<%= ctx %>/convolution-calculator.jsp" class="ms-item <%= "convolution".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#8727;</span> <span class="ms-item-label">Convolution</span>

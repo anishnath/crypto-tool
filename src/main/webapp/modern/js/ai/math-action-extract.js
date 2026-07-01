@@ -11,7 +11,7 @@ import {
   taskToDisplayLatex as algebraTaskToDisplayLatex,
 } from './algebra-action-extract.js';
 
-export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'vector', 'matrix', 'bode', 'laplace'];
+export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'vector', 'matrix', 'bode', 'laplace', 'ztransform', 'trig', 'statistics'];
 export { ALGEBRA_ACTIONS };
 /** All Math AI intents — calculus, linear algebra, algebra (standalone Math AI page uses full set). */
 export const MATH_ACTIONS = [...CALCULUS_ACTIONS, ...ALGEBRA_ACTIONS];
@@ -83,6 +83,9 @@ const ACTION_FENCE_LANGS = new Set([
   'matrix', 'matrices', 'linearalgebra', 'linear-algebra',
   'bode', 'bodeplot', 'transferfunction', 'transfer-function',
   'laplace-transform', 'laplacetransform', 'inverse-laplace', 'inverse-laplace-transform', 'ilaplace', 'laplace',
+  'z-transform', 'ztransform', 'inverse-z-transform', 'inverse-ztransform', 'iz', 'ztransforms',
+  'trig', 'trigonometry', 'trig-equation', 'trig-equation-solver', 'trig-identity', 'trig-function',
+  'statistics', 'stats', 'descriptive', 'zscore', 'z-score', 'percentile',
   'math-action', 'math', 'mathintent',
 ]);
 
@@ -132,6 +135,35 @@ function inferMatrixOpFromRaw(raw) {
   return null;
 }
 
+function isZTransformIntent(obj, fenceLang) {
+  const fence = String(fenceLang || '').toLowerCase();
+  if (['z-transform', 'ztransform', 'inverse-z-transform', 'inverse-ztransform', 'iz', 'ztransforms'].includes(fence)) {
+    return true;
+  }
+  if (fence !== 'z') return false;
+  const m = String(obj?.mode || obj?.zTransformMode || obj?.transformMode || '').toLowerCase();
+  if (['forward', 'inverse', 'iz', 'inverse-z'].includes(m)) return true;
+  if (obj?.forwardExpr != null || obj?.inverseExpr != null || obj?.xn != null || obj?.Xz != null || obj?.X_z != null) {
+    return true;
+  }
+  if (obj?.expr || obj?.raw) return true;
+  return false;
+}
+
+function isStatisticsIntent(obj, fenceLang) {
+  const fence = String(fenceLang || '').toLowerCase();
+  if (['statistics', 'stats', 'descriptive', 'zscore', 'z-score', 'percentile'].includes(fence)) {
+    return true;
+  }
+  if (fence === 'normal' && (obj?.z != null || obj?.x != null || obj?.mean != null || obj?.mu != null || obj?.sd != null || obj?.sigma != null)) {
+    return true;
+  }
+  const mode = String(obj?.mode || obj?.statMode || '').toLowerCase();
+  if (['descriptive', 'zscore', 'z-score', 'normal', 'percentile', 'ttest', 't-test', 'correlation', 'corr'].includes(mode)) return true;
+  if (obj?.data != null && (obj?.percentile != null || obj?.p != null)) return true;
+  return false;
+}
+
 function isLaplaceTransformIntent(obj, fenceLang) {
   const fence = String(fenceLang || '').toLowerCase();
   if (['laplace-transform', 'laplacetransform', 'inverse-laplace', 'inverse-laplace-transform', 'ilaplace'].includes(fence)) {
@@ -169,6 +201,16 @@ function detectAction(obj, fenceLang) {
   if (action === 'laplacetransform' || action === 'laplace-transform' || action === 'inverse-laplace' || action === 'inverse-laplace-transform' || action === 'ilaplace') {
     action = 'laplace';
   }
+  if (action === 'z-transform' || action === 'ztransform' || action === 'inverse-z-transform' || action === 'inverse-ztransform' || action === 'iz' || action === 'ztransforms') {
+    action = 'ztransform';
+  }
+  if (action === 'trigonometry' || action === 'trig-equation' || action === 'trig-equation-solver'
+    || action === 'trig-identity' || action === 'trig-function' || action === 'trig-fn' || action === 'trig-eq' || action === 'trig-id') {
+    action = 'trig';
+  }
+  if (action === 'stats' || action === 'descriptive' || action === 'z-score' || action === 'zscore' || action === 'percentile') {
+    action = 'statistics';
+  }
   if (action === 'grad' || action === 'nabla') action = 'gradient';
   if (action === 'div') action = 'divergence';
   if (action === 'gradient' || action === 'divergence' || action === 'curl') {
@@ -195,6 +237,19 @@ function detectAction(obj, fenceLang) {
   }
   if ((obj.zeros != null || obj.poles != null) && (fence === 'bode' || obj.gain != null)) return 'bode';
   if (isLaplaceTransformIntent(obj, fence)) return 'laplace';
+  if (isZTransformIntent(obj, fence)) return 'ztransform';
+  if (isStatisticsIntent(obj, fence)) return 'statistics';
+  if (fence === 'trig' || fence === 'trigonometry' || fence === 'trig-equation' || fence === 'trig-equation-solver'
+    || fence === 'trig-identity' || fence === 'trig-function') {
+    return 'trig';
+  }
+  if (obj.lhs != null && obj.rhs != null && !/(y''|y'|\\frac\s*\{\s*d\s*y\s*\}|dy\s*\/\s*dx)/.test(String(obj.raw || obj.expr || ''))) {
+    return 'trig';
+  }
+  const trigModeHint = String(obj?.mode || '').toLowerCase();
+  if (['evaluate', 'quadrant', 'coterminal', 'solve_equation', 'solve_inequality', 'simplify', 'prove'].includes(trigModeHint)) {
+    return 'trig';
+  }
   if (fence === 'matrix' || fence === 'matrices') return 'matrix';
   if (fence === 'vector' || fence === 'vectors' || fence === 'vector-calc' || fence === 'vector-calculator') {
     return 'vector';
@@ -214,8 +269,12 @@ function detectAction(obj, fenceLang) {
   const raw = String(obj?.raw || obj?.latex || '');
   if (/H\s*\(\s*s\s*\)|transfer function|bode plot/i.test(raw) && /[=\/\^]|\\frac/.test(raw)) return 'bode';
   if (/\\mathcal\{L\}|laplace transform|inverse laplace|L\^{-1}|L\\\{/i.test(raw) && !inferPdeModeFromRaw(raw)) return 'laplace';
+  if (/\\mathcal\{Z\}|z-transform|inverse z-transform|Z\^{-1}|Z\\\{/i.test(raw)) return 'ztransform';
   if (inferVcModeFromRaw(raw)) return 'vectorCalculus';
   if (inferMatrixOpFromRaw(raw)) return 'matrix';
+  if (raw && /\b(sin|cos|tan|sec|csc|cot)\b/i.test(raw) && /[<>=]/.test(raw) && !/(y''|y'|\\frac\s*\{\s*d\s*y\s*\}|dy\s*\/\s*dx)/.test(raw)) {
+    return 'trig';
+  }
   if (obj?.rhs != null || (raw && /=/.test(raw) && /(y''|y'|\\frac\s*\{\s*d\s*y\s*\}|dy\s*\/\s*dx)/.test(raw))) return 'ode';
   if (raw && inferPdeModeFromRaw(raw)) return 'pde';
   if (PDE_PARAM_KEYS.some((k) => obj?.[k] != null && String(obj[k]).trim() !== '')) {
@@ -473,6 +532,94 @@ export function normalizeCalculusTask(obj, fenceLang) {
     return task;
   }
 
+  if (action === 'ztransform') {
+    let mode = String(obj.zTransformMode || obj.transformMode || obj.mode || 'forward').toLowerCase();
+    if (/inverse|iz|inv/.test(mode)) mode = 'inverse';
+    else mode = 'forward';
+    task.mode = mode;
+    const fwd = String(obj.forwardExpr || obj.xn || obj.x_n || '').trim();
+    const inv = String(obj.inverseExpr || obj.Xz || obj.X_z || obj.xz || '').trim();
+    const expr = String(obj.expr || obj.body || obj.function || '').trim();
+    if (mode === 'forward') {
+      if (fwd) task.forwardExpr = fwd;
+      else if (expr) task.forwardExpr = expr;
+    } else {
+      if (inv) task.inverseExpr = inv;
+      else if (expr) task.inverseExpr = expr;
+    }
+    if (!raw && mode === 'forward' && !task.forwardExpr) return null;
+    if (!raw && mode === 'inverse' && !task.inverseExpr) return null;
+    return task;
+  }
+
+  if (action === 'statistics') {
+    let mode = String(obj.mode || obj.statMode || 'descriptive').toLowerCase();
+    if (mode === 'z-score') mode = 'zscore';
+    if (mode === 'summary' || mode === 'describe') mode = 'descriptive';
+    task.mode = mode;
+    if (obj.data != null) task.data = String(obj.data).trim();
+    if (obj.x != null) task.x = String(obj.x).trim();
+    if (obj.value != null) task.x = String(obj.value).trim();
+    if (obj.mean != null) task.mean = String(obj.mean).trim();
+    if (obj.mu != null) task.mu = String(obj.mu).trim();
+    if (obj.sd != null) task.sd = String(obj.sd).trim();
+    if (obj.sigma != null) task.sigma = String(obj.sigma).trim();
+    if (obj.stddev != null) task.stddev = String(obj.stddev).trim();
+    if (obj.z != null) task.z = String(obj.z).trim();
+    if (obj.percentile != null) task.percentile = String(obj.percentile).trim();
+    if (obj.p != null) task.p = String(obj.p).trim();
+    if (obj.x != null) task.x = String(obj.x).trim();
+    if (obj.y != null) task.y = String(obj.y).trim();
+    if (obj.data1 != null) task.data1 = String(obj.data1).trim();
+    if (obj.data2 != null) task.data2 = String(obj.data2).trim();
+    if (obj.mu0 != null) task.mu0 = String(obj.mu0).trim();
+    if (obj.h0 != null) task.h0 = String(obj.h0).trim();
+    if (obj.alpha != null) task.alpha = String(obj.alpha).trim();
+    if (obj.tail != null) task.tail = String(obj.tail).trim();
+    if (obj.ttestType != null) task.ttestType = String(obj.ttestType).trim();
+    else if (obj.ttesttype != null) task.ttestType = String(obj.ttesttype).trim();
+    if (obj.variant != null) task.variant = String(obj.variant).trim();
+    if (obj.population != null) task.population = String(obj.population).trim();
+    if (obj.sample != null) task.sample = String(obj.sample).trim();
+    const expr = String(obj.expr || obj.text || '').trim();
+    if (expr && !task.data) task.data = expr;
+    if (!raw && mode === 'descriptive' && !task.data) return null;
+    if (!raw && mode === 'zscore' && (task.x == null || (task.mean == null && task.mu == null) || (task.sd == null && task.sigma == null && task.stddev == null))) return null;
+    if (!raw && mode === 'normal' && task.z == null && task.x == null) return null;
+    if (!raw && mode === 'percentile' && (!task.data || task.percentile == null && task.p == null)) return null;
+    if (!raw && mode === 'ttest' && !task.data && (!task.data1 || !task.data2)) return null;
+    if (!raw && mode === 'ttest' && task.data && task.mu0 == null && task.h0 == null && task.mu == null) return null;
+    if (!raw && mode === 'correlation' && !task.x && !task.y && !task.dataX) return null;
+    return task;
+  }
+
+  if (action === 'trig') {
+    let mode = String(obj.mode || obj.trigMode || '').toLowerCase();
+    if (!mode || mode === 'trig') {
+      if (obj.lhs != null && obj.rhs != null) mode = 'prove';
+      else {
+        const probe = String(obj.expr || obj.text || raw || '').trim();
+        if (/[<>=]/.test(probe)) {
+          mode = /<=|>=|<|>|!=/.test(probe) && !/[^!<>=]=/.test(probe.replace(/<=|>=|!=/g, ''))
+            ? 'solve_inequality' : 'solve_equation';
+        } else mode = 'evaluate';
+      }
+    }
+    if (mode === 'solve') mode = 'solve_equation';
+    if (mode === 'inequality') mode = 'solve_inequality';
+    if (mode === 'identity' || mode === 'verify') mode = 'prove';
+    task.mode = mode;
+    const expr = String(obj.expr || obj.text || obj.body || obj.function || '').trim();
+    if (expr) task.expr = expr;
+    if (obj.lhs != null) task.lhs = String(obj.lhs).trim();
+    if (obj.rhs != null) task.rhs = String(obj.rhs).trim();
+    if (obj.latex) task.latex = String(obj.latex).trim();
+    if (obj.unit) task.unit = String(obj.unit).trim();
+    if (!raw && mode === 'prove' && (!task.lhs || !task.rhs)) return null;
+    if (!raw && mode !== 'prove' && !task.expr && !task.latex) return null;
+    return task;
+  }
+
   // limit
   const expr = String(obj.expr || obj.body || obj.function || '').trim();
   if (!raw && !expr) return null;
@@ -522,7 +669,10 @@ export function parseCalculusBlockContent(content, fenceLang) {
     raw: kv.raw || kv.latex || kv.display,
     integrand: kv.integrand || kv.body || kv.function,
     expr: kv.expr || kv.expression || kv.body || kv.function || bareLine,
-    rhs: kv.rhs || kv.equation,
+    lhs: kv.lhs || kv.left,
+    rhs: kv.rhs || kv.right || kv.equation,
+    unit: kv.unit || kv.angleunit,
+    latex: kv.latex,
     func: kv.func || kv.y,
     scalar: kv.scalar || kv.f,
     fx: kv.fx,
@@ -540,6 +690,24 @@ export function parseCalculusBlockContent(content, fenceLang) {
     forwardExpr: kv.forwardexpr || kv.ft || kv.f_t,
     inverseExpr: kv.inverseexpr || kv.fs || kv.f_s,
     laplaceMode: kv.lapacemode || kv.transformmode || kv.laplacemode,
+    data: kv.data || kv.dataset || kv.values,
+    mean: kv.mean || kv.mu,
+    mu: kv.mu || kv.mean,
+    sd: kv.sd || kv.sigma || kv.stddev,
+    sigma: kv.sigma || kv.sd,
+    z: kv.z,
+    percentile: kv.percentile || kv.p,
+    p: kv.p || kv.percentile,
+    x: kv.x || kv.value,
+    y: kv.y,
+    data1: kv.data1 || kv.sample1 || kv.group1,
+    data2: kv.data2 || kv.sample2 || kv.group2,
+    mu0: kv.mu0 || kv.h0,
+    h0: kv.h0 || kv.mu0,
+    alpha: kv.alpha,
+    tail: kv.tail,
+    ttestType: kv.ttesttype || kv.ttest_type || kv.variant || kv.test,
+    population: kv.population || kv.pop,
     variable: kv.variable || kv.var || 'x',
     mode: kv.mode || kv.pdetype || kv.pde || kv.type,
     lower: isPdeFence ? kv.lower : (kv.lower || kv.a),
@@ -610,6 +778,34 @@ function tasksFromJson(data) {
   }
   if (Array.isArray(data.laplaceTransform)) {
     data.laplaceTransform.forEach((t) => push({ ...t, action: 'laplace' }));
+    return out;
+  }
+  if (Array.isArray(data.ztransform)) {
+    data.ztransform.forEach((t) => push({ ...t, action: 'ztransform' }));
+    return out;
+  }
+  if (Array.isArray(data.zTransform)) {
+    data.zTransform.forEach((t) => push({ ...t, action: 'ztransform' }));
+    return out;
+  }
+  if (Array.isArray(data['z-transform'])) {
+    data['z-transform'].forEach((t) => push({ ...t, action: 'ztransform' }));
+    return out;
+  }
+  if (Array.isArray(data.trig)) {
+    data.trig.forEach((t) => push({ ...t, action: 'trig' }));
+    return out;
+  }
+  if (Array.isArray(data.trigonometry)) {
+    data.trigonometry.forEach((t) => push({ ...t, action: 'trig' }));
+    return out;
+  }
+  if (Array.isArray(data.statistics)) {
+    data.statistics.forEach((t) => push({ ...t, action: 'statistics' }));
+    return out;
+  }
+  if (Array.isArray(data.stats)) {
+    data.stats.forEach((t) => push({ ...t, action: 'statistics' }));
     return out;
   }
   if (Array.isArray(data.matrices)) {
@@ -795,6 +991,18 @@ function bodeProblemLatex(task) {
   return `H(s) = ${body}`;
 }
 
+function zTransformProblemLatex(task) {
+  if (task.raw) return prepareLatexForKatex(String(task.raw).trim());
+  const mode = String(task.mode || task.zTransformMode || 'forward').toLowerCase();
+  const isInverse = /inverse|iz|inv/.test(mode);
+  const expr = isInverse
+    ? String(task.inverseExpr || task.expr || '').trim()
+    : String(task.forwardExpr || task.expr || '').trim();
+  const body = exprToBodyLatex(expr);
+  if (isInverse) return `\\mathcal{Z}^{-1}\\{X(z)\\} = \\mathcal{Z}^{-1}\\left\\{${wrapCalculusBody(body)}\\right\\}`;
+  return `\\mathcal{Z}\\{x[n]\\} = \\mathcal{Z}\\left\\{${wrapCalculusBody(body)}\\right\\}`;
+}
+
 function laplaceProblemLatex(task) {
   if (task.raw) return prepareLatexForKatex(String(task.raw).trim());
   const mode = String(task.mode || task.laplaceMode || 'forward').toLowerCase();
@@ -805,6 +1013,55 @@ function laplaceProblemLatex(task) {
   const body = exprToBodyLatex(expr);
   if (isInverse) return `\\mathcal{L}^{-1}\\{F(s)\\} = \\mathcal{L}^{-1}\\left\\{${wrapCalculusBody(body)}\\right\\}`;
   return `\\mathcal{L}\\{f(t)\\} = \\mathcal{L}\\left\\{${wrapCalculusBody(body)}\\right\\}`;
+}
+
+function statisticsProblemLatex(task) {
+  if (task.raw) return prepareLatexForKatex(String(task.raw).trim());
+  const mode = String(task.mode || 'descriptive').toLowerCase();
+  if (mode === 'zscore' || mode === 'z-score') {
+    const x = String(task.x ?? task.value ?? '?');
+    const mu = String(task.mean ?? task.mu ?? '?');
+    const sd = String(task.sd ?? task.sigma ?? task.stddev ?? '?');
+    return `z=\\frac{${x}-\\mu}{\\sigma},\\; x=${x},\\; \\mu=${mu},\\; \\sigma=${sd}`;
+  }
+  if (mode === 'normal') {
+    const mu = String(task.mean ?? task.mu ?? '0');
+    const sd = String(task.sd ?? task.sigma ?? '1');
+    if (task.z != null) return `P(Z \\le ${task.z}),\\; X \\sim N(${mu},\\, ${sd}^2)`;
+    const x = String(task.x ?? task.value ?? '?');
+    return `P(X \\le ${x}),\\; X \\sim N(${mu},\\, ${sd}^2)`;
+  }
+  if (mode === 'percentile') {
+    const p = String(task.percentile ?? task.p ?? '?');
+    return `P_{${p}} \\text{ for data}`;
+  }
+  if (mode === 'ttest' || mode === 't-test') {
+    const mu0 = String(task.mu0 ?? task.h0 ?? '?');
+    return `H_0:\\mu=${mu0} \\text{ (t-test)}`;
+  }
+  if (mode === 'correlation' || mode === 'corr') {
+    return `r(x,y) \\text{ Pearson correlation}`;
+  }
+  const data = String(task.data || task.expr || '').trim();
+  const preview = data.length > 40 ? `${data.slice(0, 40)}\\ldots` : data;
+  return `\\text{Descriptive stats: } \\{ ${preview.replace(/,/g, ',\\, ')} \\}`;
+}
+
+function trigProblemLatex(task) {
+  if (task.raw) return prepareLatexForKatex(String(task.raw).trim());
+  const mode = String(task.mode || 'evaluate').toLowerCase();
+  if (mode === 'prove') {
+    const lhs = exprToBodyLatex(task.lhs || '');
+    const rhs = exprToBodyLatex(task.rhs || '');
+    return `${lhs} \\stackrel{?}{=} ${rhs}`;
+  }
+  const expr = exprToBodyLatex(task.expr || task.text || '');
+  if (mode === 'solve_equation' || mode === 'solve') return `\\text{Solve: } ${expr}`;
+  if (mode === 'solve_inequality' || mode === 'inequality') return `\\text{Solve: } ${expr}`;
+  if (mode === 'simplify') return `\\text{Simplify: } ${expr}`;
+  if (mode === 'quadrant') return `\\text{Quadrant of } ${expr}`;
+  if (mode === 'coterminal') return `\\text{Coterminal of } ${expr}`;
+  return expr;
 }
 
 const PDE_MODE_LATEX = {
@@ -963,6 +1220,12 @@ export function taskToSolveLatex(task) {
 
   if (task.action === 'laplace') return task.raw ? task.raw.trim() : laplaceProblemLatex(task);
 
+  if (task.action === 'ztransform') return task.raw ? task.raw.trim() : zTransformProblemLatex(task);
+
+  if (task.action === 'trig') return task.raw ? task.raw.trim() : trigProblemLatex(task);
+
+  if (task.action === 'statistics') return task.raw ? task.raw.trim() : statisticsProblemLatex(task);
+
   if (task.raw) return sanitizeLatexForEngine(task.raw.trim());
 
   const v = task.variable || 'x';
@@ -1025,6 +1288,18 @@ export function taskToDisplayLatex(task) {
 
   if (task.action === 'laplace') {
     return ensureDisplayStyle(laplaceProblemLatex(task));
+  }
+
+  if (task.action === 'ztransform') {
+    return ensureDisplayStyle(zTransformProblemLatex(task));
+  }
+
+  if (task.action === 'trig') {
+    return ensureDisplayStyle(trigProblemLatex(task));
+  }
+
+  if (task.action === 'statistics') {
+    return ensureDisplayStyle(statisticsProblemLatex(task));
   }
 
   if (task.raw) return ensureDisplayStyle(prepareLatexForKatex(task.raw.trim()));
@@ -1129,6 +1404,35 @@ export function formatMathActionLabel(task, index) {
   if (task.action === 'laplace') {
     const mode = String(task.mode || 'forward').toLowerCase();
     return `${n}${/inverse|ilaplace|inv/.test(mode) ? 'Inverse Laplace' : 'Laplace transform'}`;
+  }
+  if (task.action === 'ztransform') {
+    const mode = String(task.mode || 'forward').toLowerCase();
+    return `${n}${/inverse|iz|inv/.test(mode) ? 'Inverse Z-transform' : 'Z-transform'}`;
+  }
+  if (task.action === 'trig') {
+    const names = {
+      evaluate: 'Trig evaluate',
+      quadrant: 'Quadrant',
+      coterminal: 'Coterminal angles',
+      solve_equation: 'Trig equation',
+      solve_inequality: 'Trig inequality',
+      simplify: 'Trig simplify',
+      prove: 'Trig identity',
+    };
+    const mode = String(task.mode || 'evaluate').toLowerCase();
+    return `${n}${names[mode] || 'Trigonometry'}`;
+  }
+  if (task.action === 'statistics') {
+    const names = {
+      descriptive: 'Descriptive statistics',
+      zscore: 'Z-score',
+      normal: 'Normal probability',
+      percentile: 'Percentile',
+      ttest: 'T-test',
+      correlation: 'Correlation',
+    };
+    const mode = String(task.mode || 'descriptive').toLowerCase();
+    return `${n}${names[mode] || 'Statistics'}`;
   }
   return `${n}${task.mode === 'definite' ? 'Definite integral' : 'Integral'}`;
 }
