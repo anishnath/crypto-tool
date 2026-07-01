@@ -42,6 +42,7 @@ function buildFocusQuickActions(focus, snap) {
   const polyP = ctxSnippet(s, ['p1', 'p', 'expr']);
   const tfExpr = ctxSnippet(s, ['transferFunction', 'expr']);
   const ltExpr = ctxSnippet(s, ['forwardExpr', 'inverseExpr', 'expr']);
+  const pnExpr = ctxSnippet(s, ['checkExpr', 'expr']);
   const eqs = ctxSnippet(s, ['equations']);
   const ctx = (line) => (line ? ` Current page input: ${line}.` : '');
 
@@ -130,6 +131,12 @@ function buildFocusQuickActions(focus, snap) {
       chip('ROC & pairs', 'How do I read the region of convergence and use the Laplace pairs table? Explain Re(s) constraints for common entries.'),
       chip('Show example', 'Give one Laplace transform example with a ```laplace-transform``` block so I can click Solve / Show graph. One intro sentence, then the block.'),
     ],
+    'prime-number': [
+      chip("Don't get it", `Explain prime numbers in plain language — divisibility, why 1 is not prime, and how factorization works.${ctx(pnExpr)} Prose + KaTeX only.`),
+      chip('Miller-Rabin?', 'When is Miller-Rabin deterministic vs probabilistic? Explain what a witness tells us — no claiming primality of my number unless I ran Check on the page.'),
+      chip('Goldbach & twins', 'Explain Goldbach\'s conjecture and twin primes intuitively. Relate to my even N or a list I generated — teaching only unless I ask for a ```integral``` or ```matrix``` example.'),
+      chip('Show example', 'Give one related math example with a matching solver block (```integral```, ```quadratic```, ```matrix```, etc.) so I can click Solve in chat. One intro sentence, then the block.'),
+    ],
   };
 
   return sets[focus] || sets.integral;
@@ -137,7 +144,7 @@ function buildFocusQuickActions(focus, snap) {
 
 const FOCUS_KEYS = new Set([
   'integral', 'derivative', 'limit', 'ode', 'pde', 'series',
-  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace',
+  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace', 'prime-number',
 ]);
 
 /**
@@ -200,6 +207,7 @@ export function configureGenericMathShell(opts = {}) {
 
     getContext() {
       if (typeof window.ltGetContext === 'function') return window.ltGetContext();
+      if (typeof window.pnGetContext === 'function') return window.pnGetContext();
       if (typeof window.bpGetContext === 'function') return window.bpGetContext();
       if (typeof window.qsGetContext === 'function') return window.qsGetContext();
       if (typeof window.syGetContext === 'function') return window.syGetContext();
@@ -288,6 +296,13 @@ export function configureGenericMathShell(opts = {}) {
           } else if (snap.forwardExpr) {
             lines.push(`f(t): ${String(snap.forwardExpr).slice(0, 400)}`);
           }
+        } else if (snap.toolType === 'prime-number') {
+          if (snap.checkExpr) lines.push(`Check/factorize: ${String(snap.checkExpr).slice(0, 400)}`);
+          if (snap.limitN) lines.push(`Generate ≤ N: ${snap.limitN}`);
+          if (snap.rangeA != null && snap.rangeB != null) {
+            lines.push(`Range: [${snap.rangeA}, ${snap.rangeB}]`);
+          }
+          if (snap.lastResult) lines.push(`Last result: ${String(snap.lastResult).slice(0, 200)}`);
         } else {
           lines.push(
             `Mode: ${snap.mode || '(n/a)'}`,
@@ -801,6 +816,51 @@ For related problems in chat, also use \`\`\`ode\`\`\`, \`\`\`integral\`\`\`, \`
       mode,
       forwardExpr: document.getElementById('lt-forward-expr')?.value?.trim() || '',
       inverseExpr: document.getElementById('lt-inverse-expr')?.value?.trim() || '',
+    };
+  });
+}
+
+/** Prime Number Calculator — number theory tutor + generic math router. */
+export function configurePrimeMathShell() {
+  configureGenericMathShell({
+    focus: 'prime-number',
+    pageLabel: 'Prime Number Calculator',
+    pageHint: 'Primes — check, factorize, sieve, Goldbach, GCD, twin primes',
+    panelTitle: 'Math AI',
+    subtitle: 'Number theory tutor + full math router in chat',
+    placeholder: 'Ask about primes, factorization, Goldbach — or paste ∫, matrix, algebra…',
+    footerText: 'Ctrl+Shift+A · page prime engine + chat solvers',
+  });
+
+  const extra = `
+
+**Prime Number page — tutor + engine router**
+
+1. **Teacher** — primality, sieve of Eratosthenes, unique factorization, Goldbach conjecture, twin primes, GCD/coprimality, prime number theorem. Use KaTeX prose; mirror [CURRENT CONTEXT] when the student has a number in the Check field or last page result.
+
+2. **Page engine** — for concrete check/factorize/sieve on this page, tell the student to use **Check**, **Factorize**, or **Go** (same in-browser engine). For related problems in chat, emit matching blocks:
+   - Integrals / sums: \`\`\`integral\`\`\`
+   - Algebra: \`\`\`quadratic\`\`\`, \`\`\`polynomial\`\`\`, \`\`\`system\`\`\`
+   - Linear algebra: \`\`\`matrix\`\`\`
+
+Never invent primality or factorization results in prose when the page calculator can run — point to Check/Factorize or emit a solver block for symbolic/numeric follow-ups.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+  }
+
+  registerContextGetter('pnGetContext', () => {
+    const hero = document.getElementById('pn-hero');
+    return {
+      toolType: 'prime-number',
+      checkExpr: document.getElementById('pn-check-input')?.value?.trim() || '',
+      limitN: document.getElementById('pn-limit-input')?.value?.trim() || '',
+      rangeA: document.getElementById('pn-range-a')?.value?.trim() || '',
+      rangeB: document.getElementById('pn-range-b')?.value?.trim() || '',
+      nth: document.getElementById('pn-nth-input')?.value?.trim() || '',
+      nearest: document.getElementById('pn-nearest-input')?.value?.trim() || '',
+      goldbach: document.getElementById('pn-goldbach-input')?.value?.trim() || '',
+      lastResult: hero?.textContent?.trim() && hero.textContent.trim() !== '—' ? hero.textContent.trim() : '',
     };
   });
 }

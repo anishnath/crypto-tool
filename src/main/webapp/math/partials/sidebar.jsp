@@ -64,7 +64,7 @@
     </div>
 
     <!-- Everyday Math -->
-    <div class="ms-group<%= collapsedCls(activeService, "percentage", "sig-figs", "exponent", "logarithm", "24-game", "collatz", "magic-square", "rubiks-cube", "pocket-cube", "rubik-nxn", "quick-math", "math-memory") %>" data-group="everyday">
+    <div class="ms-group<%= collapsedCls(activeService, "percentage", "sig-figs", "exponent", "logarithm", "24-game", "collatz", "magic-square", "prime-number", "rubiks-cube", "pocket-cube", "rubik-nxn", "quick-math", "math-memory") %>" data-group="everyday">
         <button class="ms-group-header" type="button">Everyday <span class="ms-group-chevron">&#9662;</span></button>
         <div class="ms-group-body">
             <a href="<%= ctx %>/percentage-calculator.jsp" class="ms-item <%= "percentage".equals(activeService) ? "active" : "" %>">
@@ -87,6 +87,9 @@
             </a>
             <a href="<%= ctx %>/magic-square-generator.jsp" class="ms-item <%= "magic-square".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#9744;</span> <span class="ms-item-label">Magic Square</span>
+            </a>
+            <a href="<%= ctx %>/prime-number.jsp" class="ms-item <%= "prime-number".equals(activeService) ? "active" : "" %>">
+                <span class="ms-item-icon">&#8473;</span> <span class="ms-item-label">Prime Numbers</span>
             </a>
             <a href="<%= ctx %>/math/rubiks-cube-solver.jsp" class="ms-item <%= "rubiks-cube".equals(activeService) ? "active" : "" %>">
                 <span class="ms-item-icon">&#129513;</span> <span class="ms-item-label">Rubik's Cube (3×3)</span>
