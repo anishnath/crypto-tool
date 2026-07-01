@@ -1,0 +1,8 @@
+{
+  "name": "crypto-tool-build-scripts",
+  "private": true,
+  "description": "Dev tools for repo build scripts (math-ai-cores minify)",
+  "devDependencies": {
+    "terser": "^5.39.0"
+  }
+}
