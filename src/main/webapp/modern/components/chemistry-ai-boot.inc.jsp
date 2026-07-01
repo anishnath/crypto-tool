@@ -14,7 +14,7 @@ String chemistryAiProfile = (String) request.getAttribute("chemistryAiProfile");
 String chemistryAiProfileExport = (String) request.getAttribute("chemistryAiProfileExport");
 %>
 <script type="module">
-<%@ include file="/modern/components/ai-assistant-boot.inc.jsp" %>
+<%@ include file="ai-assistant-boot.inc.jsp" %>
 import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
 import { installChemistryOpenAI } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/chemistry-ai.js';
 <% if (chemistryAiProfile != null && !chemistryAiProfile.isEmpty()) { %>

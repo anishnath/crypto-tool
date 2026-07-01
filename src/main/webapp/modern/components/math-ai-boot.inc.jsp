@@ -14,7 +14,7 @@ String mathAiProfile = (String) request.getAttribute("mathAiProfile");
 String mathAiProfileExport = (String) request.getAttribute("mathAiProfileExport");
 %>
 <script type="module">
-<%@ include file="/modern/components/ai-assistant-boot.inc.jsp" %>
+<%@ include file="ai-assistant-boot.inc.jsp" %>
 import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
 import { installMathOpenAI } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/math-ai.js';
 <% if (mathAiProfile != null && !mathAiProfile.isEmpty()) { %>

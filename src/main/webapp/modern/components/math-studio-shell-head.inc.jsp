@@ -19,7 +19,7 @@ if (msshV == null || msshV.isEmpty()) {
 <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=msshV%>">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/statistics-calculator.css?v=<%=msshV%>">
 
-<%@ include file="modern/components/math-ai-head.inc.jsp" %>
+<%@ include file="math-ai-head.inc.jsp" %>
 
 <style>
     .ic-hero .math-ai-tab-btn {
@@ -37,4 +37,4 @@ if (msshV == null || msshV.isEmpty()) {
 </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<%@ include file="modern/ads/ad-init.jsp" %>
+<%@ include file="../ads/ad-init.jsp" %>

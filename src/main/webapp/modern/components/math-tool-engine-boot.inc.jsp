@@ -11,4 +11,4 @@
 --%>
 <% request.setAttribute("mathLibsSkipNerdamer", Boolean.TRUE); %>
 <jsp:include page="/math/partials/math-libs.jsp" />
-<%@ include file="/modern/components/math-calculus-cores.inc.jsp" %>
+<%@ include file="math-calculus-cores.inc.jsp" %>
