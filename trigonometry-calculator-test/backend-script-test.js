@@ -1,20 +1,19 @@
 #!/usr/bin/env node
 /**
- * Extracts buildPythonScript from trig-calculator-scripts.jsp and runs
+ * Extracts buildPythonScript from js/trig-backend.js and runs
  * it through python3.11 with sample inputs — verifies the Python the
- * JSP would actually POST is correct, before we wire it into the
- * controllers.
+ * backend would actually POST is correct.
  *
  * Run:   node backend-script-test.js
  */
 const fs = require('fs');
 const { execSync } = require('child_process');
 
-const jsp = fs.readFileSync(
-    '../src/main/webapp/math/partials/trig-calculator-scripts.jsp', 'utf8');
+const src = fs.readFileSync(
+    '../src/main/webapp/js/trig-backend.js', 'utf8');
 
 // Extract the buildPythonScript function body
-const m = jsp.match(/function buildPythonScript\(opts\) \{[\s\S]*?\n    \}/);
+const m = src.match(/function buildPythonScript\(opts\) \{[\s\S]*?\n    \}/);
 if (!m) { console.error('Could not extract buildPythonScript'); process.exit(2); }
 
 // Wrap in IIFE that returns the function

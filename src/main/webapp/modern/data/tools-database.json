@@ -458,11 +458,11 @@
       "description": "Run multiple programming languages and versions side by side. Pick a language and version per pane, write code, and run them together - no setup."
     },
     {
-      "name": "Crypto Visualizer (AES & SHA-256)",
+      "name": "Crypto & Protocol Visualizer",
       "url": "/crypto-viz/",
       "category": "Cryptography",
-      "keywords": "crypto visualizer aes sha256 encryption hash step by step",
-      "description": "See how AES-128 and SHA-256 work, step by step."
+      "keywords": "crypto visualizer aes des blowfish md5 sha256 rsa diffie-hellman ecc secp256k1 tls ssl handshake grpc encryption hash key exchange step by step",
+      "description": "See how AES, RSA, ECC, hashes, TLS and gRPC work, step by step."
     },
     {
       "name": "Random String Generator",

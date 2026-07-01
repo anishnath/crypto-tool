@@ -333,11 +333,7 @@
 <!-- Context path for server-side compute (SymPy tier) -->
 <script>window.ME_CTX = "<%=request.getContextPath()%>";</script>
 
-<!-- Nerdamer CAS — defer to unblock LCP/INP (only needed on first compute action) -->
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js" defer></script>
+<!-- Nerdamer + all CAS cores — single minified engine (includes Solve.js) -->
 <script src="<%=request.getContextPath()%>/modern/js/math-ai-cores-engine.js" defer></script>
 
 <!-- Math Editor JS — critical path: editor-core, toolbar, code-runner (needed before TipTap) -->

@@ -2,8 +2,8 @@
  * Algebra AI — thin input router. Parses structured tasks and delegates to
  * battle-tested page engines (no duplicate math here).
  *
- * Requires page scripts loaded on the host JSP (or globally via
- * algebra-page-engines.inc.jsp in math-calculus-cores.inc.jsp):
+ * Requires engines from math-ai-cores-engine.js (via math-calculus-cores.inc.jsp
+ * or math-tool-engine-boot.inc.jsp):
  *   quadratic: QuadraticInputBridge + QuadraticSolverCore
  *   system:    SystemsSolverCore
  *   inequality: InequalitySolverCore
