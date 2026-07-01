@@ -8,13 +8,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <jsp:include page="/modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="How AES &amp; SHA-256 Work - Step-by-Step Crypto Visualizer" />
-        <jsp:param name="toolDescription" value="See how AES-128 and SHA-256 work, step by step - watch SubBytes, ShiftRows, MixColumns, AddRoundKey, the AES key schedule, and SHA-256's 64 rounds. Driven by the real reference implementation; enter your own input and step through every operation." />
+        <jsp:param name="toolName" value="How AES, RSA, ECC, TLS &amp; More Work — Crypto Visualizer" />
+        <jsp:param name="toolDescription" value="See how cryptography works, step by step — AES, DES, Blowfish, MD5, SHA-256, RSA, Diffie-Hellman, elliptic curve (secp256k1), plus TLS and gRPC. Driven by real reference code and real captured packets — step through every operation and message." />
         <jsp:param name="toolCategory" value="Cryptography" />
         <jsp:param name="toolUrl" value="/crypto-viz/" />
-        <jsp:param name="toolKeywords" value="how aes works, aes step by step, aes encryption visualization, aes animation, subbytes shiftrows mixcolumns addroundkey, aes key expansion explained, aes rounds explained, how sha-256 works, sha256 step by step, sha-256 visualization, sha-256 compression function, sha-256 message schedule, block cipher visualizer, learn cryptography, fips 197, encryption algorithm visualizer, interactive aes" />
+        <jsp:param name="toolKeywords" value="how aes works, how rsa works, how tls works, how sha256 works, aes step by step, rsa encryption explained, diffie-hellman key exchange explained, elliptic curve cryptography, ecc secp256k1, des blowfish md5, sha-256 visualization, tls 1.3 handshake explained, ssl handshake, tls handshake step by step, grpc http2 protocol, block cipher visualizer, hash function visualizer, public key cryptography, encryption algorithm animation, learn cryptography, fips 197" />
         <jsp:param name="toolImage" value="crypto-viz-og.png" />
-        <jsp:param name="toolFeatures" value="See how AES-128 encrypts and decrypts step by step,Visualize the AES key schedule (round-key expansion),Animated SubBytes / ShiftRows / MixColumns / AddRoundKey,See how SHA-256 hashes - message schedule plus 64 compression rounds,Driven by the real reference implementation - nothing re-implemented or faked,Play, scrub and step through every operation" />
+        <jsp:param name="toolFeatures" value="Step through AES, DES and Blowfish block ciphers,See how SHA-256 and MD5 hashes work round by round,RSA and Diffie-Hellman key exchange, key by key,Elliptic-curve crypto on secp256k1 (Bitcoin/Ethereum),Real TLS 1.0-1.3 handshakes captured message by message,gRPC over HTTP/2 frame by frame,Real reference code and captured packets - nothing faked" />
     </jsp:include>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -118,6 +118,20 @@
         #cvOutput { display: flex; gap: 8px; flex-wrap: wrap; }
         .cv-out-chip { background: var(--bar-2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 9px; font-size: 12px; display: inline-flex; gap: 6px; }
         .cv-out-k { color: var(--text-dim); } .cv-out-v { color: var(--hl-emit-b); font-family: monospace; }
+
+        /* full-flow strip */
+        .cv-flow { margin-bottom: 18px; }
+        .cv-flow-title { font-size: 11px; letter-spacing: .06em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 6px; }
+        .cv-flow-track { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; }
+        .cv-flow-stage { background: var(--bar); border: 1px solid var(--border); border-radius: 8px; padding: 7px 11px; cursor: pointer; min-width: 92px; max-width: 220px; transition: border-color .15s, background .15s; }
+        .cv-flow-stage:hover { border-color: var(--primary); }
+        .cv-flow-active { border-color: var(--primary); background: rgba(0,122,204,.14); box-shadow: 0 0 0 1px var(--primary) inset; }
+        .cv-flow-stage-label { font-size: 12.5px; font-weight: 600; color: var(--text-bright); display: flex; align-items: center; gap: 6px; }
+        .cv-flow-active .cv-flow-stage-label { color: var(--primary-hi); }
+        .cv-flow-loop { font-size: 10px; color: #fff; background: var(--primary); border-radius: 4px; padding: 1px 5px; font-weight: 600; }
+        .cv-flow-sub { font-size: 10.5px; color: var(--text-dim); margin-top: 3px; line-height: 1.35; }
+        .cv-flow-note { font-size: 9.5px; color: var(--text-dim); font-style: italic; margin-top: 2px; }
+        .cv-flow-arrow { align-self: center; color: var(--text-dim); font-size: 15px; }
 
         /* panels */
         #cvPanels { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; margin-bottom: 18px; }
@@ -267,6 +281,8 @@
                     <span id="cvTraceTitle"></span>
                     <div id="cvOutput"></div>
                 </div>
+
+                <div id="cvFlow" class="cv-flow"></div>
 
                 <div id="cvPanels"></div>
 

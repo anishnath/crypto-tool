@@ -27,6 +27,57 @@
     ecmul: 'Scalar mult (double & add)', msg: 'Handshake message', emit: 'Output'
   };
 
+  // Per-algorithm "full flow" — the structural map (loops collapsed). Each stage
+  // matches on the step's `phase`; the active stage lights up as you step, and
+  // clicking a stage jumps to it. Keyed by catalog id. (Protocols use the swimlane.)
+  var FLOWS = {
+    'aes-128': { stages: [
+      { label: 'Key schedule', sub: 'expand key → 11 round keys', m: 'Key Schedule' },
+      { label: 'Load block', sub: 'plaintext → 4×4 state', m: 'Setup' },
+      { label: 'Rounds', loop: '×10', sub: 'SubBytes · ShiftRows · MixColumns · AddRoundKey', m: /^Round /, note: 'last round: no MixColumns' },
+      { label: 'Output', sub: 'read out ciphertext', m: 'Output' }
+    ]},
+    'des': { stages: [
+      { label: 'Key schedule', sub: 'PC-1 · shifts · PC-2 → 16 subkeys', m: 'Key schedule' },
+      { label: 'Initial Permutation', sub: 'IP', m: 'Setup' },
+      { label: 'Feistel rounds', loop: '×16', sub: 'expand · ⊕key · S-boxes · permute · swap', m: /^Round / },
+      { label: 'Final Permutation', sub: 'IP⁻¹ → output', m: 'Output' }
+    ]},
+    'blowfish': { stages: [
+      { label: 'Key schedule', sub: 'key ⊕ π · 521 encryptions → P/S', m: 'Key Schedule' },
+      { label: 'Feistel rounds', loop: '×16', sub: 'L ⊕ P · F-function · swap', m: ['Encrypt', 'Decrypt'] },
+      { label: 'Output', sub: 'final whitening → block', m: 'Output' }
+    ]},
+    'sha256': { stages: [
+      { label: 'Initialize', sub: 'H = 8 constants', m: 'Initialize' },
+      { label: 'Per 512-bit block', loop: 'per block', sub: 'expand W0-63 · 64 compression rounds · add to H', m: /^Block / },
+      { label: 'Digest', sub: 'H0…H7', m: 'Output' }
+    ]},
+    'md5': { stages: [
+      { label: 'Initialize', sub: 'A,B,C,D', m: 'Initialize' },
+      { label: 'Per 512-bit block', loop: 'per block', sub: '64 ops (F/G/H/I) · add to state', m: /^Block / },
+      { label: 'Digest', sub: 'A,B,C,D → 128-bit', m: 'Output' }
+    ]},
+    'rsa': { stages: [
+      { label: 'Key generation', sub: 'p,q → n · φ · e · d', m: 'Key Generation' },
+      { label: 'Modular exponentiation', loop: 'square & multiply', sub: 'result = base^exp mod n', m: ['Encrypt', 'Decrypt'] },
+      { label: 'Output', sub: 'ciphertext / recovered message', m: 'Output' }
+    ]},
+    'dh': { stages: [
+      { label: 'Public params', sub: 'prime p · generator g', m: 'Public parameters' },
+      { label: 'Alice', sub: 'a → A = gᵃ mod p', m: 'Alice' },
+      { label: 'Bob', sub: 'b → B = gᵇ mod p', m: 'Bob' },
+      { label: 'Exchange', sub: 'swap A, B', m: 'Exchange' },
+      { label: 'Shared secret', sub: 'Bᵃ = Aᵇ = g^(ab)', m: ['Shared secret', 'Output'] }
+    ]},
+    'ecc': { stages: [
+      { label: 'The curve', sub: 'y² = x³ + ax + b mod p', m: 'The curve' },
+      { label: 'Point ops', sub: 'add · double (geometry)', m: 'Point operations' },
+      { label: 'Scalar multiply', loop: 'double & add', sub: 'Q = d·G', m: ['Key generation', 'Alice', 'Bob', 'Shared secret'] },
+      { label: 'Output', sub: 'public key / shared secret', m: 'Output' }
+    ]}
+  };
+
   // MD5's four nonlinear round functions, shown so users see what each does.
   var MD5_DEF = {
     F: '(b ∧ c) ∨ (¬b ∧ d)', G: '(b ∧ d) ∨ (c ∧ ¬d)',
@@ -51,6 +102,7 @@
   var playing = false;
   var playTimer = null;
   var panelsById = {};    // id -> { meta, root, cellEls[][] }
+  var flowStages = [];    // [{el, stage}] for the "full flow" strip
 
   // ===========================================================================
   // 1. CATALOG + PICKER
@@ -299,10 +351,56 @@
       });
     }
 
+    buildFlow();
     buildPanels();
     buildLegend();
     stepIdx = 0;
     applyStep(0, true);
+  }
+
+  function stageMatch(m, phase) {
+    if (!phase) return false;
+    if (m instanceof RegExp) return m.test(phase);
+    if (Array.isArray(m)) return m.indexOf(phase) >= 0;
+    return phase === m || phase.indexOf(m) === 0;
+  }
+
+  // Render the "full flow" strip for the current algorithm (structural overview +
+  // click-to-jump). Skipped for protocol swimlanes — there the swimlane IS the flow.
+  function buildFlow() {
+    var host = $('#cvFlow');
+    clear(host);
+    flowStages = [];
+    var spec = FLOWS[current && current.id];
+    var hasSwim = (trace.panels || []).some(function (p) { return p.kind === 'swimlane'; });
+    if (!spec || hasSwim) { host.style.display = 'none'; return; }
+    host.style.display = '';
+    host.appendChild(el('div', 'cv-flow-title', 'FULL FLOW'));
+    var track = el('div', 'cv-flow-track');
+    spec.stages.forEach(function (st) {
+      var firstIdx = -1;
+      for (var k = 0; k < trace.steps.length; k++) { if (stageMatch(st.m, trace.steps[k].phase)) { firstIdx = k; break; } }
+      if (firstIdx < 0) return; // stage didn't occur in this particular run
+      if (track.childElementCount) track.appendChild(el('span', 'cv-flow-arrow', '→'));
+      var box = el('div', 'cv-flow-stage');
+      var lab = el('div', 'cv-flow-stage-label');
+      lab.appendChild(el('span', null, st.label));
+      if (st.loop) lab.appendChild(el('span', 'cv-flow-loop', '⟳ ' + st.loop));
+      box.appendChild(lab);
+      if (st.sub) box.appendChild(el('div', 'cv-flow-sub', st.sub));
+      if (st.note) box.appendChild(el('div', 'cv-flow-note', st.note));
+      box.title = 'Jump to: ' + st.label;
+      box.onclick = (function (idx) { return function () { stopPlay(); applyStep(idx); }; })(firstIdx);
+      track.appendChild(box);
+      flowStages.push({ el: box, m: st.m });
+    });
+    host.appendChild(track);
+  }
+
+  function highlightFlow(s) {
+    flowStages.forEach(function (fs) {
+      fs.el.classList.toggle('cv-flow-active', !!(s && stageMatch(fs.m, s.phase)));
+    });
   }
 
   function buildPanels() {
@@ -457,6 +555,7 @@
     decorate(trace.steps[idx]);
     renderPlot(trace.steps[idx]);
     renderSwimlane(trace.steps[idx]);
+    highlightFlow(trace.steps[idx]);
     renderStepInfo(trace.steps[idx], idx);
     renderTimeline(idx);
   }
