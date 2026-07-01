@@ -23,6 +23,7 @@ target
 /gsc-pages/
 /limit-calculator-test/node_modules/
 /logarithm-calculator-test/node_modules/
+/scripts/node_modules/
 /.idea/
 /.searchapi/
 /.searchapi2/
@@ -34,3 +35,16 @@ target
 /openai-go-api/.env.prod
 /src/main/webapp/math/partials/integral-calculator-scripts.jsp.bak
 /8gwifi-10/
+/CF_EXAM_MARKER_API_AUDIT.md
+/CF_EXAM_MARKER_SERVLET.md
+/Chaos_constructions.pdf
+/check_ssh_available.py
+/CHEM_ATOMIC_MOLECULAR_GIST.md
+/CHEM_SOLUTIONS_GIST.md
+/CHEM_STOICHIOMETRY_GIST.md
+/CHEM_THERMO_GAS_ELECTRO_GIST.md
+/CIPHER_FUNCTIONS_AUDIT_SUMMARY.md
+/CIPHER_FUNCTIONS_PAGE_AUDIT.md
+/CIPHER_FUNCTIONS_SEO_AUDIT.md
+/CIPHER_FUNCTIONS_UX_AUDIT.md
+/CIPHER_LAYOUT_ANALYSIS.md
