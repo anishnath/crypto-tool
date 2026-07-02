@@ -516,6 +516,12 @@
         var colorOf = {}, labelOf = {};
         heap.forEach(function (h, i) { colorOf[h.id] = HEAP_COLORS[i % HEAP_COLORS.length]; labelOf[h.id] = h.id; });
 
+        // Python: everything is an object → relabel Frames / Objects / Globals.
+        var py = snap.runtime === 'python';
+        var L = py
+            ? { stack: 'Frames', stackSub: 'local namespaces · call stack', heap: 'Objects', heapSub: 'lists · dicts · sets · instances · GC-managed', globals: 'Globals', globalsSub: 'module-level names' }
+            : { stack: 'Stack', stackSub: 'value types & references · call frames', heap: 'Heap (managed)', heapSub: 'objects · arrays · strings · GC-managed', globals: 'Statics', globalsSub: 'static fields' };
+
         var body = el('div', 'viz-mem-body viz-mem-layout');
 
         function segment(cls, name, sub, buildInner, emptyMsg, empty) {
@@ -536,8 +542,8 @@
             return seg;
         }
 
-        // ── Stack (value types inline, references → heap) ──
-        body.appendChild(segment('viz-mem-seg-stack', 'Stack', 'value types & references · call frames',
+        // ── Stack / Frames (values inline, references → heap) ──
+        body.appendChild(segment('viz-mem-seg-stack', L.stack, L.stackSub,
             function (inner) {
                 frames.forEach(function (f) {
                     var fr = el('div', 'viz-mem-frame');
@@ -548,13 +554,13 @@
                 });
             }, '(no active frames)', !frames.length));
 
-        // ── Managed heap (objects/arrays/strings, GC-managed) ──
-        body.appendChild(segment('viz-mem-seg-heap', 'Heap (managed)', 'objects · arrays · strings · GC-managed',
+        // ── Heap / Objects (GC-managed) ──
+        body.appendChild(segment('viz-mem-seg-heap', L.heap, L.heapSub,
             function (inner) { heap.forEach(function (h) { inner.appendChild(renderHeapObj(h, colorOf, labelOf)); }); },
             '(no objects allocated yet)', !heap.length));
 
-        // ── Statics (static fields — per-type storage) ──
-        body.appendChild(segment('viz-mem-seg-data', 'Statics', 'static fields',
+        // ── Statics / Globals ──
+        body.appendChild(segment('viz-mem-seg-data', L.globals, L.globalsSub,
             function (inner) { statics.forEach(function (s) { inner.appendChild(memVarRow(s, colorOf, labelOf)); }); },
             '(none)', !statics.length));
 

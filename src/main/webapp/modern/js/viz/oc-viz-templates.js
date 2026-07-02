@@ -518,6 +518,26 @@
     ];
 
     var PYTHON = [
+        {
+            category: 'Memory',
+            title: 'Names, objects & aliasing',
+            tracer: 'MemTracer',
+            desc: 'Click the Memory tab: in Python a variable is a name bound to an object. Two names can share one object (aliasing) — mutating through one is seen by the other; rebinding moves only that name. Hover a name to light up its object.',
+            code: lines(
+                'nums = [1, 2, 3]',
+                'alias = nums          # both names -> the SAME list',
+                'alias.append(4)       # mutation is seen through both',
+                'copy = list(nums)     # a real copy -> its own object',
+                '',
+                'class Point:',
+                '    def __init__(self, x, y):',
+                '        self.x = x',
+                '        self.y = y',
+                '',
+                'p = Point(1, 2)',
+                'label = "origin"',
+                'print(nums, alias, copy, p.x, p.y, label)')
+        },
         // ---- Basics ----
         {
             category: 'List',
