@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#0B1120"/>
+      <stop offset="100%" stop-color="#131B2A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.30" cy="0.42" r="0.55">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.22"/>
+      <stop offset="55%" stop-color="#8B5CF6" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#8B5CF6" stroke-width="0.5" stroke-opacity="0.06"/>
+    </pattern>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="node" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#A78BFA"/>
+      <stop offset="100%" stop-color="#6D28D9"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- ── Left composition: code panel → data structures ── -->
+  <g>
+    <!-- Code editor panel -->
+    <rect x="66" y="150" width="308" height="330" rx="18" fill="#0E1626" stroke="#8B5CF6" stroke-opacity="0.45" stroke-width="1.5"/>
+    <!-- title bar -->
+    <circle cx="92" cy="178" r="6" fill="#ef4444" fill-opacity="0.85"/>
+    <circle cx="112" cy="178" r="6" fill="#eab308" fill-opacity="0.85"/>
+    <circle cx="132" cy="178" r="6" fill="#22c55e" fill-opacity="0.85"/>
+    <!-- code lines -->
+    <g>
+      <rect x="92"  y="212" width="150" height="12" rx="6" fill="#3b4560"/>
+      <rect x="112" y="240" width="180" height="12" rx="6" fill="#3b4560"/>
+      <rect x="112" y="268" width="120" height="12" rx="6" fill="#475069"/>
+      <!-- highlighted / current line -->
+      <rect x="80"  y="290" width="284" height="30" rx="8" fill="#8B5CF6" fill-opacity="0.18" stroke="#8B5CF6" stroke-opacity="0.5" stroke-width="1"/>
+      <path d="M92 298 L104 305 L92 312 Z" fill="url(#accent)"/>
+      <rect x="118" y="299" width="160" height="12" rx="6" fill="#A78BFA"/>
+      <rect x="112" y="338" width="140" height="12" rx="6" fill="#3b4560"/>
+      <rect x="92"  y="366" width="170" height="12" rx="6" fill="#3b4560"/>
+      <rect x="112" y="394" width="110" height="12" rx="6" fill="#475069"/>
+      <rect x="92"  y="422" width="150" height="12" rx="6" fill="#3b4560"/>
+    </g>
+
+    <!-- animated arrows from current line to structures -->
+    <g stroke="#06B6D4" stroke-width="2.5" fill="none" stroke-opacity="0.7" stroke-dasharray="6 6">
+      <path d="M372 300 C 420 300, 430 232, 470 232"/>
+      <path d="M372 306 C 420 306, 430 392, 470 392"/>
+    </g>
+
+    <!-- Array (top-right of code) -->
+    <g transform="translate(468 208)">
+      <g font-family="'JetBrains Mono','Courier New',monospace" font-size="20" font-weight="700" text-anchor="middle" fill="#CBD5E1">
+        <rect x="0"   y="0" width="46" height="46" rx="6" fill="#182236" stroke="#334155" stroke-width="1.5"/><text x="23" y="30">2</text>
+        <rect x="50"  y="0" width="46" height="46" rx="6" fill="#182236" stroke="#334155" stroke-width="1.5"/><text x="73" y="30">7</text>
+        <rect x="100" y="0" width="46" height="46" rx="6" fill="#8B5CF6" stroke="#A78BFA" stroke-width="1.5"/><text x="123" y="30" fill="#fff">4</text>
+        <rect x="150" y="0" width="46" height="46" rx="6" fill="#182236" stroke="#334155" stroke-width="1.5"/><text x="173" y="30">9</text>
+      </g>
+    </g>
+
+    <!-- Binary tree (bottom-right of code) -->
+    <g transform="translate(560 372)">
+      <g stroke="#06B6D4" stroke-width="2.5" stroke-opacity="0.7">
+        <line x1="0" y1="0" x2="-56" y2="60"/>
+        <line x1="0" y1="0" x2="56" y2="60"/>
+        <line x1="-56" y1="60" x2="-92" y2="118"/>
+        <line x1="56" y1="60" x2="92" y2="118"/>
+      </g>
+      <g fill="url(#node)" stroke="#C4B5FD" stroke-width="1.5">
+        <circle cx="0" cy="0" r="21"/>
+        <circle cx="-56" cy="60" r="21"/>
+        <circle cx="56" cy="60" r="21"/>
+        <circle cx="-92" cy="118" r="21"/>
+        <circle cx="92" cy="118" r="21"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ── Right: title block ── -->
+  <g transform="translate(700 150)" font-family="'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="url(#accent)"/>
+    <text x="0" y="34" font-size="19" font-weight="700" fill="#22D3EE" letter-spacing="3">8GWIFI · ALGORITHM VISUALIZER</text>
+
+    <text x="0" y="120" font-size="74" font-weight="800" fill="#F1F5F9">Visualize code,</text>
+    <text x="0" y="196" font-size="74" font-weight="800" fill="#F1F5F9">step by step.</text>
+
+    <text x="0" y="248" font-size="22" fill="#94A3B8" font-weight="400">Arrays · lists · trees · graphs · recursion · memory</text>
+    <text x="0" y="280" font-size="22" fill="#94A3B8" font-weight="400">A free Python Tutor alternative — 8 languages</text>
+
+    <!-- language chips -->
+    <g transform="translate(0 314)" font-size="15" font-weight="700" text-anchor="middle">
+      <g fill="#C4B5FD">
+        <rect x="0"   y="0" width="86" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="43"  y="22">Python</text>
+        <rect x="96"  y="0" width="70" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="131" y="22">Java</text>
+        <rect x="176" y="0" width="62" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="207" y="22">C++</text>
+        <rect x="248" y="0" width="52" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="274" y="22">C</text>
+        <rect x="310" y="0" width="60" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="340" y="22">Go</text>
+      </g>
+      <g fill="#C4B5FD" transform="translate(0 44)">
+        <rect x="0"   y="0" width="66" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="33"  y="22">Rust</text>
+        <rect x="76"  y="0" width="56" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="104" y="22">C#</text>
+        <rect x="142" y="0" width="62" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="173" y="22">Lua</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- brand -->
+  <g transform="translate(1134 598)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace">
+    <text font-size="16" fill="#64748B" font-weight="500">8gwifi.org/algorithm-visualizer</text>
+  </g>
+</svg>

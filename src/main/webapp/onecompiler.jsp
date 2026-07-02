@@ -2152,6 +2152,7 @@
                         <div class="ide-info-card full-width">
                             <h2><i class="fas fa-link"></i> Related Developer Tools</h2>
                             <div class="ide-related-links">
+                                <a href="/algorithm-visualizer/" title="Online Algorithm Visualizer — step through code"><i class="fas fa-project-diagram"></i> Algorithm Visualizer</a>
                                 <a href="/regex.jsp" title="Online Regex Tester"><i class="fas fa-code"></i> Regex Tester</a>
                                 <a href="/jsonparser.jsp" title="JSON Formatter"><i class="fas fa-file-code"></i> JSON Formatter</a>
                                 <a href="/Base64Functions.jsp" title="Base64 Encoder"><i class="fas fa-lock"></i> Base64 Encoder</a>
