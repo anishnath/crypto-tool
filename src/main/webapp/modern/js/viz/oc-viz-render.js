@@ -53,6 +53,8 @@
                 return !state.frames || !state.frames.length;
             case 'LogTracer':
                 return !state.lines || !state.lines.length;
+            case 'MemTracer':
+                return !state.snap;
             default:
                 return false;
         }
@@ -457,6 +459,306 @@
         return String(v);
     }
 
+    var HEAP_COLORS = ['#4f8cd4', '#36a864', '#e0a830', '#c05686', '#7e57c2', '#17a2b8'];
+    function shortAddr(a) { return a ? '…' + String(a).slice(-4) : String(a); }
+
+    // One variable row (scalar / pointer / array cells). Used in Stack, Data and BSS.
+    function memVarRow(l, colorOf, labelOf) {
+        var row = el('div', 'viz-mem-var' + (l._changed ? ' viz-mem-changed' : ''));
+        if (l.addr) row.setAttribute('data-addr', l.addr);
+        row.appendChild(el('span', 'viz-mem-name', l.name));
+        if (l.escaped) {
+            var esc = el('span', 'viz-mem-esc', 'escaped → heap');
+            esc.setAttribute('title', 'Escape analysis: the compiler allocated this on the heap because its reference outlives the function.');
+            row.appendChild(esc);
+        }
+        if (l.type === 'array' || l.cells) {
+            var cells = el('div', 'viz-mem-cells');
+            (l.cells || []).forEach(function (cv, i) {
+                var changed = l._changedCells && l._changedCells.indexOf(i) >= 0;
+                var c = el('div', 'viz-mem-cell' + (changed ? ' viz-mem-cell-changed' : ''));
+                c.appendChild(el('span', 'viz-mem-cidx', i));
+                c.appendChild(el('span', 'viz-mem-cval', cv));
+                cells.appendChild(c);
+            });
+            row.appendChild(cells);
+            return row;
+        }
+        if (l.type === 'ptr') {
+            var pt = l.points_to, v;
+            if (pt === 'null') { v = el('span', 'viz-mem-ptr viz-mem-null', 'null'); }
+            else if (pt === 'heap-freed') { v = el('span', 'viz-mem-ptr viz-mem-dangling', '⚠ dangling'); if (l.target) row.setAttribute('data-target', l.target); }
+            else if (pt && pt.indexOf('heap') === 0) {
+                v = el('span', 'viz-mem-ptr', '→ ' + (labelOf[l.target] || shortAddr(l.target)));
+                var c = colorOf[l.target];
+                if (c) { v.style.color = c; v.style.borderColor = c; }
+                if (l.target) row.setAttribute('data-target', l.target);
+            } else if (pt && (pt.indexOf('stack:') === 0 || pt.indexOf('data:') === 0)) {
+                v = el('span', 'viz-mem-ptr', '→ ' + pt.slice(pt.indexOf(':') + 1));
+                if (l.target) row.setAttribute('data-target', l.target);
+            } else if (pt === 'stack' && l.value != null) {
+                v = el('span', 'viz-mem-ptr', '→ ' + l.value);   // pointer to a scalar (deref shown)
+            } else { v = el('span', 'viz-mem-ptr', shortAddr(l.value)); }
+            row.appendChild(v);
+            return row;
+        }
+        row.appendChild(el('span', 'viz-mem-val', l.value));
+        return row;
+    }
+
+    // Managed (.NET / JVM-style) memory: value types inline on the Stack, reference
+    // locals → objects on the managed Heap (synthetic #ids, no addresses), static
+    // fields in a Statics segment. Reuses memVarRow + drawMemArrows.
+    function renderManagedMem(panel, snap) {
+        var heap = snap.heap || [];
+        var frames = snap.frames || [];
+        var statics = snap.statics || [];
+        var colorOf = {}, labelOf = {};
+        heap.forEach(function (h, i) { colorOf[h.id] = HEAP_COLORS[i % HEAP_COLORS.length]; labelOf[h.id] = h.id; });
+
+        var body = el('div', 'viz-mem-body viz-mem-layout');
+
+        function segment(cls, name, sub, buildInner, emptyMsg, empty) {
+            var seg = el('div', 'viz-mem-seg ' + cls + (empty ? ' is-empty' : ''));
+            var hdr = el('div', 'viz-mem-seghdr');
+            hdr.appendChild(el('span', 'viz-mem-segname', name));
+            if (empty) {
+                // collapse empty regions to a thin dim strip — no wasted vertical space
+                hdr.appendChild(el('span', 'viz-mem-segempty', emptyMsg || '(empty)'));
+                seg.appendChild(hdr);
+                return seg;
+            }
+            if (sub) hdr.appendChild(el('span', 'viz-mem-segsub', sub));
+            seg.appendChild(hdr);
+            var inner = el('div', 'viz-mem-seginner');
+            buildInner(inner);
+            seg.appendChild(inner);
+            return seg;
+        }
+
+        // ── Stack (value types inline, references → heap) ──
+        body.appendChild(segment('viz-mem-seg-stack', 'Stack', 'value types & references · call frames',
+            function (inner) {
+                frames.forEach(function (f) {
+                    var fr = el('div', 'viz-mem-frame');
+                    fr.appendChild(el('div', 'viz-mem-fn', f.fn + '()'));
+                    (f.locals || []).forEach(function (l) { fr.appendChild(memVarRow(l, colorOf, labelOf)); });
+                    if (!f.locals || !f.locals.length) fr.appendChild(el('div', 'viz-mem-empty', '(no tracked locals)'));
+                    inner.appendChild(fr);
+                });
+            }, '(no active frames)', !frames.length));
+
+        // ── Managed heap (objects/arrays/strings, GC-managed) ──
+        body.appendChild(segment('viz-mem-seg-heap', 'Heap (managed)', 'objects · arrays · strings · GC-managed',
+            function (inner) { heap.forEach(function (h) { inner.appendChild(renderHeapObj(h, colorOf, labelOf)); }); },
+            '(no objects allocated yet)', !heap.length));
+
+        // ── Statics (static fields — per-type storage) ──
+        body.appendChild(segment('viz-mem-seg-data', 'Statics', 'static fields',
+            function (inner) { statics.forEach(function (s) { inner.appendChild(memVarRow(s, colorOf, labelOf)); }); },
+            '(none)', !statics.length));
+
+        panel.appendChild(body);
+        drawMemArrows(panel);
+        wireMemHover(panel);
+        return panel;
+    }
+
+    // One managed heap object: #id header, type, and content (array cells / string
+    // value / object fields). Reference fields become arrows via memVarRow.
+    function renderHeapObj(h, colorOf, labelOf) {
+        var blk = el('div', 'viz-mem-block viz-mem-obj');
+        blk.setAttribute('data-addr', h.id);
+        if (colorOf[h.id]) blk.style.borderColor = colorOf[h.id];
+        var lab = el('span', 'viz-mem-blabel', h.id);
+        if (colorOf[h.id]) lab.style.background = colorOf[h.id];
+        blk.appendChild(lab);
+        blk.appendChild(el('div', 'viz-mem-otype', h.type || 'object'));
+        if (h.kind === 'string') {
+            blk.appendChild(el('div', 'viz-mem-oval', '"' + (h.value != null ? h.value : '') + '"'));
+        } else if (h.kind === 'array') {
+            var cells = el('div', 'viz-mem-cells');
+            (h.cells || []).forEach(function (cv, i) {
+                var changed = h._changedCells && h._changedCells.indexOf(i) >= 0;
+                var c = el('div', 'viz-mem-cell' + (changed ? ' viz-mem-cell-changed' : ''));
+                c.appendChild(el('span', 'viz-mem-cidx', i));
+                c.appendChild(el('span', 'viz-mem-cval', cv));
+                cells.appendChild(c);
+            });
+            blk.appendChild(cells);
+        } else {
+            (h.fields || []).forEach(function (f) { blk.appendChild(memVarRow(f, colorOf, labelOf)); });
+            if (!h.fields || !h.fields.length) blk.appendChild(el('div', 'viz-mem-empty', '(no public fields)'));
+        }
+        return blk;
+    }
+
+    // Memory lens: the classic process address space — Stack / Heap / BSS / Data / Text,
+    // high addresses at top. Globals live in Data/BSS, locals+arrays on the Stack, new/malloc
+    // in the Heap, with pointer links drawn across segments.
+    function renderMem(state, title) {
+        var panel = el('div', 'viz-tracer-panel viz-mem');
+        var snap = state && state.snap;
+        var managed = !!(snap && snap.layout === 'managed');
+        panel.appendChild(el('div', 'viz-tracer-title', managed ? 'Managed memory — stack & heap' : 'Process memory layout'));
+        if (!snap) { panel.appendChild(el('div', 'viz-stage-empty', '(no memory snapshot for this step)')); return panel; }
+        if (managed) return renderManagedMem(panel, snap);
+
+        var heap = snap.heap || [];
+        var frames = snap.frames || [];
+        var data = snap.data || [];
+        var bss = snap.bss || [];
+        var colorOf = {}, labelOf = {};
+        heap.forEach(function (h, i) { colorOf[h.addr] = HEAP_COLORS[i % HEAP_COLORS.length]; labelOf[h.addr] = 'H' + i; });
+
+        var body = el('div', 'viz-mem-body viz-mem-layout');
+
+        function segment(cls, name, sub, buildInner, emptyMsg, empty) {
+            var seg = el('div', 'viz-mem-seg ' + cls + (empty ? ' is-empty' : ''));
+            var hdr = el('div', 'viz-mem-seghdr');
+            hdr.appendChild(el('span', 'viz-mem-segname', name));
+            if (empty) {
+                // collapse empty regions to a thin dim strip — no wasted vertical space
+                hdr.appendChild(el('span', 'viz-mem-segempty', emptyMsg || '(empty)'));
+                seg.appendChild(hdr);
+                return seg;
+            }
+            if (sub) hdr.appendChild(el('span', 'viz-mem-segsub', sub));
+            seg.appendChild(hdr);
+            var inner = el('div', 'viz-mem-seginner');
+            buildInner(inner);
+            seg.appendChild(inner);
+            return seg;
+        }
+
+        body.appendChild(el('div', 'viz-mem-axis', 'high addresses'));
+
+        // ── STACK (grows down) ──
+        body.appendChild(segment('viz-mem-seg-stack', 'Stack', 'grows ↓ · locals & call frames',
+            function (inner) {
+                frames.forEach(function (f) {
+                    var fr = el('div', 'viz-mem-frame');
+                    fr.appendChild(el('div', 'viz-mem-fn', f.fn + '()'));
+                    (f.locals || []).forEach(function (l) { fr.appendChild(memVarRow(l, colorOf, labelOf)); });
+                    if (!f.locals || !f.locals.length) fr.appendChild(el('div', 'viz-mem-empty', '(no tracked locals)'));
+                    inner.appendChild(fr);
+                });
+            }, '(no active frames)', !frames.length));
+
+        // ── HEAP (grows up) ──
+        body.appendChild(segment('viz-mem-seg-heap', 'Heap', 'grows ↑ · new / malloc',
+            function (inner) {
+                heap.forEach(function (h) {
+                    var blk = el('div', 'viz-mem-block' + (h.freed ? ' viz-mem-block-freed' : ''));
+                    blk.style.borderColor = colorOf[h.addr];
+                    blk.setAttribute('data-addr', h.addr);
+                    var lab = el('span', 'viz-mem-blabel', labelOf[h.addr]);
+                    lab.style.background = colorOf[h.addr];
+                    blk.appendChild(lab);
+                    blk.appendChild(el('span', 'viz-mem-bmeta', shortAddr(h.addr) + ' · ' + h.size + ' B' + (h.freed ? ' · freed' : '')));
+                    inner.appendChild(blk);
+                });
+            }, '(no heap allocations yet)', !heap.length));
+
+        // ── BSS (uninitialised globals) ──
+        body.appendChild(segment('viz-mem-seg-bss', 'BSS', 'zero-initialised globals / statics',
+            function (inner) { bss.forEach(function (l) { inner.appendChild(memVarRow(l, colorOf, labelOf)); }); },
+            '(none)', !bss.length));
+
+        // ── DATA (initialised globals) ──
+        body.appendChild(segment('viz-mem-seg-data', 'Data', 'initialised globals / statics',
+            function (inner) { data.forEach(function (l) { inner.appendChild(memVarRow(l, colorOf, labelOf)); }); },
+            '(none)', !data.length));
+
+        // ── TEXT / .rodata (informational — always a compact strip) ──
+        body.appendChild(segment('viz-mem-seg-text', 'Text / .rodata', '',
+            null, 'code & read-only constants', true));
+
+        body.appendChild(el('div', 'viz-mem-axis', 'low addresses'));
+
+        panel.appendChild(body);
+        drawMemArrows(panel);
+        wireMemHover(panel);
+        return panel;
+    }
+
+    // Progressive enhancement: draw SVG arrows from pointer locals to heap blocks
+    // once the panel is laid out. Falls back silently to the color/label links.
+    function drawMemArrows(panel) {
+        if (typeof requestAnimationFrame !== 'function') return;
+        requestAnimationFrame(function () {
+            var body = panel.querySelector('.viz-mem-body');
+            if (!body) return;
+            var pr = body.getBoundingClientRect();
+            if (!pr.width) return;
+            var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'viz-mem-arrows');
+            svg.style.position = 'absolute'; svg.style.left = 0; svg.style.top = 0;
+            svg.style.width = pr.width + 'px'; svg.style.height = pr.height + 'px';
+            svg.style.pointerEvents = 'none';
+            // shared arrowhead marker
+            var NS = 'http://www.w3.org/2000/svg';
+            var defs = document.createElementNS(NS, 'defs');
+            var mk = document.createElementNS(NS, 'marker');
+            mk.setAttribute('id', 'vizMemHead'); mk.setAttribute('viewBox', '0 0 8 8');
+            mk.setAttribute('refX', '6.5'); mk.setAttribute('refY', '4');
+            mk.setAttribute('markerWidth', '5'); mk.setAttribute('markerHeight', '5'); mk.setAttribute('orient', 'auto-start-reverse');
+            var mp = document.createElementNS(NS, 'path');
+            mp.setAttribute('d', 'M0 0 L8 4 L0 8 z'); mp.setAttribute('class', 'viz-mem-arrowhead');
+            mk.appendChild(mp); defs.appendChild(mk); svg.appendChild(defs);
+            body.style.position = 'relative';
+            var srcs = body.querySelectorAll('[data-target]');
+            for (var i = 0; i < srcs.length; i++) {
+                var tgt = srcs[i].getAttribute('data-target');
+                var blk = body.querySelector('[data-addr="' + (window.CSS && CSS.escape ? CSS.escape(tgt) : tgt) + '"]');
+                if (!blk) continue;
+                var a = srcs[i].getBoundingClientRect(), b = blk.getBoundingClientRect();
+                var x1 = a.right - pr.left, y1 = a.top - pr.top + a.height / 2;
+                var d;
+                if (b.left - pr.left > x1 + 16) {
+                    // target sits to the right — smooth curve into its left edge
+                    var lx = b.left - pr.left, ly = b.top - pr.top + b.height / 2;
+                    d = 'M' + x1 + ' ' + y1 + ' C' + (x1 + 28) + ' ' + y1 + ' ' + (lx - 28) + ' ' + ly + ' ' + lx + ' ' + ly;
+                } else {
+                    // same column / below (stack→stack, stack→heap-below): tidy right-side elbow
+                    var rx = b.right - pr.left, ry = b.top - pr.top + b.height / 2;
+                    var bus = Math.max(x1, rx) + 18;
+                    d = 'M' + x1 + ' ' + y1 + ' L' + bus + ' ' + y1 + ' L' + bus + ' ' + ry + ' L' + rx + ' ' + ry;
+                }
+                var ln = document.createElementNS(NS, 'path');
+                ln.setAttribute('d', d);
+                ln.setAttribute('class', 'viz-mem-arrow');
+                ln.setAttribute('marker-end', 'url(#vizMemHead)');
+                var col = blk.style && blk.style.borderColor;
+                if (col) ln.style.stroke = col;   // match the target object's colour
+                svg.appendChild(ln);
+            }
+            body.appendChild(svg);
+        });
+    }
+
+    // Hover a pointer to light up its target object (and hover an object to light
+    // up every pointer into it) — makes references and aliasing tangible. No-op
+    // in headless (querySelectorAll returns none) so tests are unaffected.
+    function wireMemHover(panel) {
+        var body = panel.querySelector && panel.querySelector('.viz-mem-body');
+        if (!body || typeof body.querySelectorAll !== 'function') return;
+        var esc = function (s) { return (window.CSS && CSS.escape) ? CSS.escape(s) : s; };
+        var glow = function (sel, on) {
+            var els = body.querySelectorAll(sel);
+            for (var i = 0; i < els.length; i++) els[i].classList[on ? 'add' : 'remove']('viz-mem-hot');
+        };
+        var bind = function (elm, sel) {
+            if (!elm.addEventListener) return;
+            elm.addEventListener('mouseenter', function () { glow(sel, true); elm.classList.add('viz-mem-hot'); });
+            elm.addEventListener('mouseleave', function () { glow(sel, false); elm.classList.remove('viz-mem-hot'); });
+        };
+        var srcs = body.querySelectorAll('[data-target]');
+        for (var i = 0; i < srcs.length; i++) bind(srcs[i], '[data-addr="' + esc(srcs[i].getAttribute('data-target')) + '"]');
+        var objs = body.querySelectorAll('[data-addr]');
+        for (var j = 0; j < objs.length; j++) bind(objs[j], '[data-target="' + esc(objs[j].getAttribute('data-addr')) + '"]');
+    }
+
     function renderTracer(key, meta, state, opts) {
         if (!meta[key]) return null;
         var type = meta[key].type;
@@ -470,6 +772,7 @@
             case 'GraphTracer': return renderGraph(state, title);
             case 'CallStackTracer': return renderCallStack(state, title);
             case 'LogTracer': return renderLog(state, title);
+            case 'MemTracer': return renderMem(state, title);
             case 'CodeTracer':
                 return null;
             default:
@@ -510,6 +813,8 @@
         });
     }
 
+    var memView = false;   // "Structures ⇄ Memory" lens toggle (shared step player)
+
     function renderStep(container, step) {
         container.innerHTML = '';
         container.className = 'viz-stage';
@@ -520,8 +825,15 @@
 
         var meta = step.meta || {};
         var states = step.tracers || {};
+
+        // Memory lens: render ONLY the memory diagram (its own tab).
+        var memKey = Object.keys(meta).filter(function (k) { return meta[k] && meta[k].type === 'MemTracer'; })[0];
+        if (memKey && memView) {
+            container.appendChild(renderMem(states[memKey] || {}, meta[memKey].title));
+            return { line: step.line };
+        }
         var prioritized = prioritizeTracerKeys(orderedTracerKeys(step.rootKey, meta, states), meta, states);
-        var keys = prioritized.keys;
+        var keys = prioritized.keys.filter(function (k) { return !(meta[k] && meta[k].type === 'MemTracer'); });
 
         if (!keys.length) {
             container.appendChild(el('div', 'viz-stage-empty', 'No visual tracers in this step.'));
@@ -559,5 +871,13 @@
 
     global.OcViz = global.OcViz || {};
     global.OcViz.renderStep = renderStep;
+    global.OcViz.setMemView = function (v) { memView = !!v; };
+    global.OcViz.getMemView = function () { return memView; };
+    // does any step in this trace carry a memory snapshot? (drives the toggle's visibility)
+    global.OcViz.traceHasMem = function (steps) {
+        return !!(steps && steps.some(function (s) {
+            return s && s.meta && Object.keys(s.meta).some(function (k) { return s.meta[k].type === 'MemTracer'; });
+        }));
+    };
     global.OcViz._layoutGraph = layoutGraph;  // exposed for tests
 }(typeof window !== 'undefined' ? window : this));

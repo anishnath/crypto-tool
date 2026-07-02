@@ -1142,3 +1142,77 @@
 }
 
 [data-theme="light"] .viz-stale-banner { color: #92400e; background: #fef3c7; }
+
+/* ── Memory lens: stack & heap diagram + lens toggle ────────────────────── */
+.viz-lens-toggle { display: inline-flex; margin-left: 8px; border: 1px solid var(--oc-border, #333); border-radius: 6px; overflow: hidden; }
+.viz-lens-toggle button { background: none; border: none; color: var(--oc-text, #999); font-size: 11px; padding: 4px 9px; cursor: pointer; }
+.viz-lens-toggle button.active { background: var(--oc-accent, #007acc); color: #fff; }
+.viz-lens-toggle button:not(.active):hover { color: var(--oc-text-bright, #eee); background: var(--oc-bg-dark, #333); }
+
+.viz-mem .viz-mem-body { display: flex; gap: 28px; align-items: flex-start; position: relative; padding: 6px 2px; overflow-x: auto; }
+.viz-mem-col { display: flex; flex-direction: column; gap: 8px; min-width: 190px; }
+.viz-mem-colhdr { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--oc-text, #999); font-weight: 700; }
+.viz-mem-frame { border: 1px solid var(--oc-border, #333); border-radius: 7px; background: var(--oc-bg-darker, #252526); padding: 6px 8px; }
+.viz-mem-fn { font-size: 12px; font-weight: 700; color: var(--oc-text-bright, #eee); margin-bottom: 4px; border-bottom: 1px dashed var(--oc-border, #333); padding-bottom: 3px; }
+.viz-mem-local { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 12px; padding: 2px 0; }
+.viz-mem-name { color: var(--oc-text-bright, #ddd); }
+.viz-mem-val { color: #4ec9b0; }
+.viz-mem-ptr { color: var(--oc-accent, #4f8cd4); border: 1px solid var(--oc-accent, #4f8cd4); border-radius: 4px; padding: 0 5px; font-size: 11px; }
+.viz-mem-null { color: #888; border-color: #555; }
+.viz-mem-dangling { color: #ff6b6b !important; border-color: #ff6b6b !important; }
+.viz-mem-block { position: relative; border: 2px solid #4f8cd4; border-radius: 7px; background: var(--oc-bg-darker, #252526); padding: 6px 9px 6px 30px; font-family: 'SFMono-Regular', Consolas, monospace; }
+.viz-mem-block-freed { opacity: .55; border-style: dashed !important; }
+.viz-mem-block-freed .viz-mem-bmeta { text-decoration: line-through; }
+.viz-mem-blabel { position: absolute; left: 0; top: 0; bottom: 0; width: 22px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 700; border-radius: 5px 0 0 5px; }
+.viz-mem-bmeta { font-size: 11px; color: var(--oc-text, #bbb); }
+.viz-mem-empty { font-size: 11px; color: var(--oc-text, #888); font-style: italic; }
+.viz-mem-arrows { z-index: 1; }
+.viz-mem-arrow { fill: none; stroke: var(--oc-accent, #4f8cd4); stroke-width: 1.3; opacity: .5; }
+.viz-mem-arrowhead { fill: var(--oc-accent, #4f8cd4); opacity: .55; }
+
+/* ── Process memory layout (segments stacked high→low address) ── */
+.viz-mem .viz-mem-layout { display: flex; flex-direction: column; gap: 0; align-items: stretch; }
+.viz-mem-axis { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--oc-text, #777); text-align: center; padding: 3px 0; }
+.viz-mem-seg { border: 1px solid var(--oc-border, #333); border-left-width: 3px; border-radius: 6px; background: var(--oc-bg-darker, #252526); margin: 3px 0; }
+.viz-mem-seghdr { display: flex; align-items: baseline; gap: 8px; padding: 5px 9px; border-bottom: 1px dashed var(--oc-border, #333); }
+/* empty regions collapse to a thin dim strip (no wasted vertical space) */
+.viz-mem-seg.is-empty { border-left-color: #3a3a3a; margin: 1px 0; background: transparent; }
+.viz-mem-seg.is-empty .viz-mem-seghdr { border-bottom: none; padding: 2px 9px; opacity: .5; }
+.viz-mem-seg.is-empty .viz-mem-segname { font-size: 10px; }
+.viz-mem-segempty { font-size: 10px; color: var(--oc-text, #888); font-style: italic; margin-left: auto; }
+.viz-mem-segname { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--oc-text-bright, #eee); }
+.viz-mem-segsub { font-size: 10px; color: var(--oc-text, #999); }
+.viz-mem-seginner { display: flex; flex-wrap: wrap; gap: 8px; padding: 7px 9px; position: relative; }
+.viz-mem-seg-stack { border-left-color: #4f8cd4; }
+.viz-mem-seg-heap  { border-left-color: #e0a830; }
+.viz-mem-seg-bss   { border-left-color: #7e8794; }
+.viz-mem-seg-data  { border-left-color: #36a864; }
+.viz-mem-seg-text  { border-left-color: #555; opacity: .8; }
+.viz-mem-frame { border: 1px solid var(--oc-border, #333); border-radius: 7px; background: var(--oc-bg-dark, #1e1e1e); padding: 6px 8px; min-width: 150px; }
+.viz-mem-var { display: flex; align-items: center; gap: 10px; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 12px; padding: 3px 0; }
+.viz-mem-seg-data .viz-mem-var, .viz-mem-seg-bss .viz-mem-var { padding: 3px 4px; }
+.viz-mem-cells { display: inline-flex; }
+.viz-mem-cell { display: flex; flex-direction: column; align-items: center; border: 1px solid var(--oc-border, #3a3a3a); border-right-width: 0; background: var(--oc-bg-darker, #252526); min-width: 30px; }
+.viz-mem-cell:first-child { border-radius: 4px 0 0 4px; }
+.viz-mem-cell:last-child { border-right-width: 1px; border-radius: 0 4px 4px 0; }
+.viz-mem-cidx { font-size: 8px; color: var(--oc-text, #777); padding: 0 3px; border-bottom: 1px solid var(--oc-border, #3a3a3a); width: 100%; text-align: center; }
+.viz-mem-cval { font-size: 12px; color: #4ec9b0; padding: 1px 5px; }
+.viz-mem-note { font-size: 11px; color: var(--oc-text, #888); font-style: italic; }
+
+/* ── Managed heap objects (.NET / JVM view) ── */
+.viz-mem-obj { display: inline-flex; flex-direction: column; gap: 3px; min-width: 130px; padding: 6px 9px 6px 30px; }
+.viz-mem-otype { font-size: 11px; font-weight: 700; color: var(--oc-accent, #4f8cd4); font-family: 'SFMono-Regular', Consolas, monospace; }
+.viz-mem-oval { font-size: 12px; color: #4ec9b0; font-family: 'SFMono-Regular', Consolas, monospace; }
+.viz-mem-obj .viz-mem-var { padding: 1px 0; }
+.viz-mem-seg-heap .viz-mem-seginner { align-items: flex-start; }
+.viz-mem-esc { font-size: 9px; font-weight: 700; letter-spacing: .03em; color: #e0a830; border: 1px solid #e0a830; border-radius: 3px; padding: 0 4px; margin-left: 2px; white-space: nowrap; cursor: help; }
+
+/* "what changed this step" — highlight the var/cell a step modified */
+@keyframes vizMemPop { from { background: rgba(224,168,48,.38); } to { background: rgba(224,168,48,.14); } }
+.viz-mem-changed { background: rgba(224,168,48,.14); border-radius: 4px; box-shadow: inset 2px 0 0 #e0a830; animation: vizMemPop .5s ease-out; }
+.viz-mem-cell-changed { outline: 2px solid #e0a830; outline-offset: -2px; animation: vizMemPop .5s ease-out; }
+.viz-mem-cell-changed .viz-mem-cval { color: #e0a830; }
+
+/* hover a pointer/object to light up the other end (references + aliasing) */
+.viz-mem-hot { box-shadow: 0 0 0 2px var(--oc-accent, #4f8cd4) !important; border-radius: 5px; transition: box-shadow .1s; }
+.viz-mem-var[data-target], .viz-mem-block[data-addr], .viz-mem-var[data-addr] { cursor: pointer; }

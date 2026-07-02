@@ -29,6 +29,8 @@
                 return { frames: [] };
             case 'LogTracer':
                 return { lines: [] };
+            case 'MemTracer':
+                return { snap: null };
             case 'VerticalLayout':
             case 'HorizontalLayout':
                 return { children: [] };
@@ -185,6 +187,11 @@
                     st.frames.pop();
                 }
                 break;
+            case 'snap':
+                if (t === 'MemTracer') {
+                    st.snap = args[0] || null;   // full memory snapshot for this step
+                }
+                break;
             default:
                 break;
         }
@@ -243,11 +250,90 @@
             snapshot();
         }
 
+        var finalSteps = dedupeConsecutiveSteps(steps);
+        markMemChanges(finalSteps);
         return {
-            steps: dedupeConsecutiveSteps(steps),
+            steps: finalSteps,
             meta: meta,
             rootKey: meta.__rootKey || null
         };
+    }
+
+    // ── Memory "what changed this step" diff ─────────────────────────────────
+    // Annotates each memory snapshot's vars/cells with _changed / _changedCells
+    // by comparing to the previous step's snapshot, so the renderer can highlight
+    // exactly what a step modified. Navigation-independent (uses step order).
+    function memSnapOf(step) {
+        if (!step || !step.meta) return null;
+        for (var k in step.meta) {
+            if (step.meta[k] && step.meta[k].type === 'MemTracer') {
+                return step.tracers[k] && step.tracers[k].snap;
+            }
+        }
+        return null;
+    }
+    function varSig(v) {
+        if (!v) return null;
+        if (v.cells) return null; // arrays diffed per-cell
+        return (v.value != null ? String(v.value) : '') + '|' + (v.target != null ? v.target : '') + '|' + (v.points_to || '');
+    }
+    function indexByName(list) {
+        var m = {};
+        (list || []).forEach(function (v) { if (v && v.name != null) m[v.name] = v; });
+        return m;
+    }
+    function markVar(prevMap, v) {
+        var p = prevMap[v.name];
+        if (v.cells) {
+            var pc = (p && p.cells) || [];
+            var ch = [];
+            for (var i = 0; i < v.cells.length; i++) {
+                if (!p || String(v.cells[i]) !== String(pc[i])) ch.push(i);
+            }
+            if (ch.length) v._changedCells = ch;
+            return;
+        }
+        if (!p) { v._changed = true; return; }        // newly declared -> highlight
+        if (varSig(v) !== varSig(p)) v._changed = true;
+    }
+    function diffList(prevList, curList) {
+        var pm = indexByName(prevList);
+        (curList || []).forEach(function (v) { markVar(pm, v); });
+    }
+    function diffMem(prev, cur) {
+        diffList(prev.statics, cur.statics);
+        diffList(prev.data, cur.data);
+        diffList(prev.bss, cur.bss);
+        var pf = prev.frames || [], cf = cur.frames || [];
+        for (var i = 0; i < cf.length; i++) {
+            if (pf[i]) diffList(pf[i].locals, cf[i].locals);
+            else (cf[i].locals || []).forEach(function (v) { markVar({}, v); });
+        }
+        var ph = {};
+        (prev.heap || []).forEach(function (o) { if (o.id != null) ph[o.id] = o; });
+        (cur.heap || []).forEach(function (o) {
+            var p = ph[o.id];
+            if (o.cells) {
+                var pc = (p && p.cells) || [];
+                var ch = [];
+                for (var i = 0; i < o.cells.length; i++) {
+                    if (!p || String(o.cells[i]) !== String(pc[i])) ch.push(i);
+                }
+                if (ch.length) o._changedCells = ch;
+            } else if (o.fields) {
+                var pfm = indexByName(p && p.fields);
+                o.fields.forEach(function (f) { markVar(pfm, f); });
+            }
+        });
+    }
+    function markMemChanges(steps) {
+        var prev = null;
+        for (var i = 0; i < steps.length; i++) {
+            var s = memSnapOf(steps[i]);
+            if (!s) continue;
+            if (prev) diffMem(prev, s);
+            prev = s;
+        }
     }
 
     // Compare visual state only (not the op counters), so a step that merely

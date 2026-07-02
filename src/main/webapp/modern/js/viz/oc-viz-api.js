@@ -12,6 +12,7 @@
         GraphTracer: true,
         CallStackTracer: true,
         LogTracer: true,
+        MemTracer: true,
         VerticalLayout: true,
         HorizontalLayout: true
     };

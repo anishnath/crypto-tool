@@ -344,6 +344,10 @@
                 '<select id="vizSpeedSelect" title="Playback speed"></select>' +
                 '<button type="button" id="vizBtnReplay" title="Replay last run"><i class="fas fa-redo"></i> Replay</button>' +
                 '<button type="button" id="vizBtnRecord" class="viz-record-btn" title="Record steps as animated GIF"><span class="viz-rec-dot"></span><span>Record GIF</span></button>' +
+                '<span class="viz-lens-toggle" id="vizLensToggle" style="display:none" title="Switch view: data structures or raw memory (stack &amp; heap)">' +
+                '<button type="button" id="vizLensStruct" class="active">Structures</button>' +
+                '<button type="button" id="vizLensMem">Memory</button>' +
+                '</span>' +
                 '</div>' +
                 '<input type="range" class="viz-scrubber" id="vizScrubber" min="0" max="0" value="0" />' +
                 '<div class="viz-step-info" id="vizStepInfo">Step 0 / 0</div>';
@@ -376,6 +380,28 @@
                 }
             };
             document.getElementById('vizBtnRecord').onclick = recordVisualizationGif;
+
+            var lensStruct = document.getElementById('vizLensStruct');
+            var lensMem = document.getElementById('vizLensMem');
+            if (lensStruct && lensMem) {
+                lensStruct.onclick = function () {
+                    global.OcViz.setMemView(false);
+                    lensStruct.classList.add('active'); lensMem.classList.remove('active');
+                    rerenderCurrent();
+                };
+                lensMem.onclick = function () {
+                    global.OcViz.setMemView(true);
+                    lensMem.classList.add('active'); lensStruct.classList.remove('active');
+                    rerenderCurrent();
+                };
+            }
+        }
+
+        function rerenderCurrent() {
+            if (player && lastSteps && lastSteps.length) {
+                var i = player.getIndex();
+                onPlayerStep(i, lastSteps[i], lastSteps.length);
+            }
         }
 
         function setPlaybackDisabled(disabled) {
@@ -563,6 +589,14 @@
             lastSteps = steps;
             lastResult = result;
             if (player) player.destroy();
+            // Memory lens toggle: show only when the trace carries memory snapshots; default to Structures.
+            var lensToggle = document.getElementById('vizLensToggle');
+            var hasMem = global.OcViz.traceHasMem && global.OcViz.traceHasMem(steps);
+            if (lensToggle) lensToggle.style.display = hasMem ? '' : 'none';
+            if (global.OcViz.setMemView) global.OcViz.setMemView(false);
+            var ls = document.getElementById('vizLensStruct'), lm = document.getElementById('vizLensMem');
+            if (ls) ls.classList.add('active');
+            if (lm) lm.classList.remove('active');
             if (!steps || !steps.length) {
                 if (els.stage) {
                     els.stage.innerHTML = '<div class="viz-stage-empty">No visualization steps were returned.</div>';

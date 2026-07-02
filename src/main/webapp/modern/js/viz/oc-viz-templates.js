@@ -1061,6 +1061,41 @@
 
     var GO = [
         {
+            category: 'Memory',
+            title: 'Stack, Heap & escape analysis',
+            tracer: 'MemTracer',
+            desc: 'Click the Memory tab: value types on the Stack, slices/pointers → the Heap, two slices sharing one backing array (aliasing), a linked node, a package-level global — and the "escaped → heap" badge from Go\'s own escape analysis (go build -gcflags=-m).',
+            code: lines(
+                'package main',
+                '',
+                'import "fmt"',
+                '',
+                'var total = 0 // package-level -> Statics',
+                '',
+                'type Node struct {',
+                '\tVal  int',
+                '\tNext *Node',
+                '}',
+                '',
+                'func makeNode(v int) *Node {',
+                '\tn := Node{Val: v} // escapes: its address is returned',
+                '\treturn &n',
+                '}',
+                '',
+                'func main() {',
+                '\tx := 7                       // value type, stays on the stack',
+                '\tnums := []int{5, 2, 8, 1, 9} // slice header -> backing array',
+                '\talias := nums                // aliases the SAME backing array',
+                '\tp := &x                      // pointer to a stack value',
+                '\thead := makeNode(3)          // pointer to a heap Node',
+                '\thead.Next = makeNode(4)',
+                '\tfor i := 0; i < len(nums); i++ {',
+                '\t\ttotal += nums[i]',
+                '\t}',
+                '\tfmt.Println(x, *p, alias[0], head.Val, head.Next.Val, total)',
+                '}')
+        },
+        {
             category: 'Slice',
             title: 'Bubble sort',
             tracer: 'Array1DTracer',
@@ -1383,6 +1418,32 @@
     ];
 
     var CPP = [
+        {
+            category: 'Memory',
+            title: 'Memory layout (Data/BSS/Heap/Stack)',
+            tracer: 'MemTracer',
+            desc: 'Every segment at once — click the Memory tab: globals in Data/BSS, locals + an array on the Stack, new/delete on the Heap, plus an aliased pointer, a dangling pointer after delete, and a pointer into the stack.',
+            code: lines(
+                '#include <iostream>',
+                'using namespace std;',
+                '',
+                'int gInit = 42;   // Data: initialised global',
+                'int gZero;        // BSS: zero-initialised global',
+                'int gArr[4];      // BSS: zero-initialised global array',
+                '',
+                'int main() {',
+                '    int x = 7;',
+                '    int nums[5] = {5, 2, 8, 1, 9};',
+                '    int* heap = new int(99);   // heap block',
+                '    int* alias = heap;         // same block, aliased',
+                '    int* px = &x;              // points into the stack',
+                '    gZero = x + gInit;',
+                '    for (int i = 0; i < 5; i++) gArr[i % 4] += nums[i];',
+                '    delete heap;               // heap + alias now dangle',
+                '    int done = 1;',
+                '    return done - 1;',
+                '}')
+        },
         {
             category: 'Array',
             title: 'Bubble sort',
@@ -1895,6 +1956,33 @@
     ];
 
     var CC = [
+        {
+            category: 'Memory',
+            title: 'Memory layout (Data/BSS/Heap/Stack)',
+            tracer: 'MemTracer',
+            desc: 'Every segment at once — click the Memory tab: globals in Data/BSS, locals + an array on the Stack, malloc/free on the Heap, plus an aliased pointer, a dangling pointer after free, and a pointer into the stack.',
+            code: lines(
+                '#include <stdio.h>',
+                '#include <stdlib.h>',
+                '',
+                'int gInit = 42;   /* Data: initialised global */',
+                'int gZero;        /* BSS: zero-initialised global */',
+                'int gArr[4];      /* BSS: zero-initialised global array */',
+                '',
+                'int main() {',
+                '    int x = 7;',
+                '    int nums[5] = {5, 2, 8, 1, 9};',
+                '    int *heap = malloc(sizeof(int));',
+                '    *heap = 99;                /* heap block */',
+                '    int *alias = heap;         /* same block, aliased */',
+                '    int *px = &x;              /* points into the stack */',
+                '    gZero = x + gInit;',
+                '    for (int i = 0; i < 5; i++) gArr[i % 4] += nums[i];',
+                '    free(heap);                /* heap + alias now dangle */',
+                '    int done = 1;',
+                '    return done - 1;',
+                '}')
+        },
         {
             category: 'Array',
             title: 'Bubble sort',
@@ -2590,6 +2678,34 @@
     ];
 
     var CSHARP = [
+        {
+            category: 'Memory',
+            title: 'Stack vs Heap (value vs reference types)',
+            tracer: 'MemTracer',
+            desc: 'Click the Memory tab: value types sit inline on the Stack, reference types point to objects on the managed Heap (#ids, no addresses). Shows an aliased reference, a class object with fields, a string, and a static field.',
+            code: lines(
+                'using System;',
+                '',
+                'class Person {',
+                '    public string Name;',
+                '    public int Age;',
+                '}',
+                '',
+                'class Program {',
+                '    static int Total = 0;   // static field -> Statics segment',
+                '',
+                '    static void Main() {',
+                '        int x = 7;                       // value type: inline on the stack',
+                '        int[] nums = {5, 2, 8, 1, 9};    // reference: array on the heap',
+                '        int[] alias = nums;              // second reference, SAME object',
+                '        Person p = new Person();         // object on the heap',
+                '        p.Name = "Ada";                  // string is a reference type too',
+                '        p.Age = 36;',
+                '        for (int i = 0; i < nums.Length; i++) Total += nums[i];',
+                '        Console.WriteLine(Total);',
+                '    }',
+                '}')
+        },
         {
             category: 'Array',
             title: 'Quicksort',
