@@ -10,7 +10,7 @@
     <jsp:param name="toolCategory" value="Computer Science" />
     <jsp:param name="toolDescription" value="Free online algorithm and code visualizer. Run Python, Java, C, C++, Go, Rust, Lua, or C# and watch arrays, linked lists, trees, graphs, recursion, and memory animate line by line. A free Python Tutor alternative for 8 languages — no signup." />
     <jsp:param name="toolUrl" value="algorithm-visualizer/" />
-    <jsp:param name="toolImage" value="logo.png" />
+    <jsp:param name="toolImage" value="algorithm-visualizer-og.png" />
     <jsp:param name="toolKeywords" value="algorithm visualizer online, code visualizer, visualize code online, python tutor alternative, data structure visualizer, recursion visualizer, step through code online, memory visualizer, online code execution visualizer, watch code run, visualize algorithms, call stack visualizer, linked list visualizer, tree visualizer, graph traversal visualizer" />
     <jsp:param name="breadcrumbCategoryUrl" value="" />
     <jsp:param name="educationalLevel" value="High School, Undergraduate, AP Computer Science, Data Structures and Algorithms" />
