@@ -1137,15 +1137,24 @@ export class ToolAiAssistant {
       btn.disabled = true;
       this._setApplyButtonLabel(btn, 'Applying…');
       let failedAction = null;
+      const applyWarnings = [];
       try {
         for (const { action, payload } of matched) {
           failedAction = action;
-          await action.apply(payload);
+          const res = await action.apply(payload);
+          if (res && Array.isArray(res.warnings)) applyWarnings.push(...res.warnings);
         }
         failedAction = null;
         this._setApplyButtonLabel(btn, this.appliedLabel);
         const icon = btn.querySelector('.vca-apply-icon');
         if (icon) icon.textContent = '✓';
+        if (applyWarnings.length) {
+          const uniq = [...new Set(applyWarnings)];
+          this._renderSystemBubble(
+            `Applied, but check the circuit:\n• ${uniq.slice(0, 6).join('\n• ')}`,
+            { kind: 'info', confidence: 'Medium' },
+          );
+        }
       } catch (err) {
         console.error('[ToolAiAssistant] apply failed:',
           { actionId: failedAction?.id, err });

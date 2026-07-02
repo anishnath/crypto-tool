@@ -1203,6 +1203,57 @@ document.addEventListener('DOMContentLoaded', function () {
     return Promise.resolve(_logicSnapCache);
   }
 
+  // Structural sanity check on an AI-built circuit. Returns human-readable warnings
+  // (non-blocking) — catches the classic generation bugs: dead gates, floating inputs,
+  // and duplicated gates that should have been reused via fan-out.
+  function validateBuiltCircuit(c) {
+    var warnings = [];
+    var GATES = { AND:1, OR:1, NOT:1, NAND:1, NOR:1, XOR:1, XNOR:1, BUFFER:1 };
+    var SINKS = { OUTPUT:1, LED:1, PROBE:1 };
+    var outWired = {}, inWired = {};
+    c.wires.forEach(function(w) {
+      outWired[w.fromCompId + ':' + w.fromPortIdx] = true;
+      inWired[w.toCompId + ':' + w.toPortIdx] = true;
+    });
+    var dupMap = {};
+    c.components.forEach(function(comp) {
+      var outs = comp.outputPorts();
+      // Dead single-output processing element (e.g. a gate whose output feeds nothing).
+      // Skip multi-output parts (FF Q', decoders, TTL) where partial use is legitimate.
+      if (outs.length === 1 && comp.inputPorts().length > 0) {
+        var outIdx = comp.ports.indexOf(outs[0]);
+        if (!outWired[comp.id + ':' + outIdx]) {
+          warnings.push(comp.type + ' output is not connected to anything (dead component).');
+        }
+      }
+      if (GATES[comp.type] || SINKS[comp.type]) {
+        comp.ports.forEach(function(p, idx) {
+          if (p.dir === 'in' && !inWired[comp.id + ':' + idx]) {
+            warnings.push(comp.type + ' has an unconnected input (port ' + idx + ').');
+          }
+        });
+      }
+      // Duplicate-gate detection: same gate type fed by an identical set of sources.
+      if (GATES[comp.type]) {
+        var srcs = [];
+        comp.ports.forEach(function(p, idx) {
+          if (p.dir !== 'in') return;
+          var src = 'none';
+          c.wires.forEach(function(w) {
+            if (w.toCompId === comp.id && w.toPortIdx === idx) src = w.fromCompId + ':' + w.fromPortIdx;
+          });
+          srcs.push(src);
+        });
+        if (srcs.indexOf('none') === -1) {
+          var key = comp.type + '|' + srcs.sort().join(',');
+          if (dupMap[key]) warnings.push('Two ' + comp.type + ' gates share identical inputs — reuse one gate’s output (fan-out) instead of duplicating it.');
+          else dupMap[key] = true;
+        }
+      }
+    });
+    return warnings;
+  }
+
   function buildCircuitFromAiData(data) {
     var c = getActiveCircuit();
     [...c.components.keys()].forEach(function(id) { c.removeComponent(id); });
@@ -1226,12 +1277,13 @@ document.addEventListener('DOMContentLoaded', function () {
     canvas.fitContent();
     saveSnapshot();
     refreshLogicSnapshot();
+    var warnings = (data.warnings || []).concat(validateBuiltCircuit(c));
     return {
       applied: true,
       name: data.name || 'Circuit',
       components: data.components.length,
       wires: wireCount,
-      warnings: data.warnings || []
+      warnings: warnings
     };
   }
 

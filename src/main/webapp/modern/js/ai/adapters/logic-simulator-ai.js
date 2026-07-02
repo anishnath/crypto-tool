@@ -43,15 +43,32 @@ COMPARATOR — [A=0, B=1, A>B=2, A=B=3, A<B=4]
 MUX — [D0=0, D1=1, SEL=2, Y=3]
 DEMUX — [D=0, SEL=1, Y0=2, Y1=3]
 DECODER — [A0=0, A1=1, Y0=2, Y1=3, Y2=4, Y3=5]
+LUT — programmable truth table. Ports: [in0=0 .. inN-1, out=N]. attrs:{"inputs":N,"table":<int bitmask>}. N=1..6.
+  "table" bit i (input read as binary, in0 = LSB) = the output for that input combination.
+  2-input: AND=8 (0b1000), OR=14 (0b1110), XOR=6 (0b0110), XNOR=9 (0b1001), NAND=7, NOR=1.
+  Prefer ONE LUT over a gate network when the user describes a truth table or an arbitrary combinational function.
 
 ### Displays
 SEVEN_SEG — [a=0,b=1,c=2,d=3,e=4,f=5,g=6] all inputs
 HEX_DISPLAY — [D0=0,D1=1,D2=2,D3=3] all inputs
 LED_BAR — [L0-L7] indices 0-7, all inputs
+BCD_7SEG_DECODER — 4-bit BCD → 7 segment lines. Ports: [D0=0,D1=1,D2=2,D3=3 (in), a=4,b=5,c=6,d=7,e=8,f=9,g=10 (out)].
+  Wire its a..g outputs (ports 4-10) to a SEVEN_SEG's a..g inputs (ports 0-6) to show a digit.
+
+### TTL 7400-Series ICs (14-pin DIP chips)
+Real DIP chips with MULTIPLE independent gates. **Port index ≠ pin number — use the exact port indices below.**
+GND/VCC are input pins but the simulator ignores power — leave them UNCONNECTED. Using only some gates of a chip is fine.
+TTL_7400 (Quad NAND), TTL_7408 (Quad AND), TTL_7432 (Quad OR), TTL_7486 (Quad XOR) — identical layout, 4 gates:
+  Gate1: in 0,1 → out 2 | Gate2: in 3,4 → out 5 | Gate3: in 12,11 → out 13 | Gate4: in 9,8 → out 10
+TTL_7402 (Quad NOR) — outputs come first on each gate:
+  Gate1: in 1,2 → out 0 | Gate2: in 4,5 → out 3 | Gate3: in 13,12 → out 11 | Gate4: in 10,9 → out 8
+TTL_7404 (Hex inverter) — 6 inverters, 1 input each:
+  Inv1: in 0 → out 1 | Inv2: in 2 → out 3 | Inv3: in 4 → out 5 | Inv4: in 12 → out 13 | Inv5: in 10 → out 11 | Inv6: in 8 → out 9
+Do NOT emit TTL_7447, TTL_74138, or TTL_7474. If the user asks for one of those, build the function from discrete gates/DECODER/flip-flops and tell them you substituted.
 
 ### Wiring
-TUNNEL_SRC — [in=0]. attrs:{"label":"bus_name"} (named bus source)
-TUNNEL_TGT — [out=0]. attrs:{"label":"bus_name"} (named bus target — receives from matching TUNNEL_SRC)
+TUNNEL_SRC — [in=0]. attrs:{"name":"bus_name"} (named bus source — key is "name", NOT "label")
+TUNNEL_TGT — [out=0]. attrs:{"name":"bus_name"} (named bus target — receives from matching TUNNEL_SRC with the same "name")
 
 ## Wiring Rules
 - from/to = zero-based component index. fromPort/toPort = port index within that component
@@ -93,11 +110,23 @@ ${LOGIC_COMPONENT_SPEC}
 ### D flip-flop with clock and LED
 {"name":"D-FF + LED","description":"D flip-flop with clock showing Q on LED","components":[{"type":"INPUT","x":-120,"y":-16,"attrs":{"label":"D","state":0}},{"type":"CLOCK","x":-120,"y":0,"attrs":{"state":0,"period":500}},{"type":"CONSTANT","x":-120,"y":16,"attrs":{"value":0}},{"type":"D_FF","x":0,"y":0,"attrs":{}},{"type":"LED","x":120,"y":-8,"attrs":{"color":"#22c55e"}},{"type":"OUTPUT","x":120,"y":8,"attrs":{"label":"Q'"}}],"wires":[{"from":0,"fromPort":0,"to":3,"toPort":0},{"from":1,"fromPort":0,"to":3,"toPort":1},{"from":2,"fromPort":0,"to":3,"toPort":2},{"from":3,"fromPort":3,"to":4,"toPort":0},{"from":3,"fromPort":4,"to":5,"toPort":0}]}
 
+### XOR from 4 NAND gates (multi-level composition — study the wiring carefully)
+Boolean identity: Q = (A NAND (A NAND B)) NAND (B NAND (A NAND B)).
+Let N1 = A NAND B. Then N2 = A NAND N1, N3 = B NAND N1, Q = N2 NAND N3.
+N1's output FANS OUT to BOTH N2 and N3 — do NOT rebuild "A NAND B" a second time, and do NOT wire A,B straight into every gate.
+comps: 0=INPUT A, 1=INPUT B, 2=NAND(N1), 3=NAND(N2), 4=NAND(N3), 5=NAND(Q), 6=OUTPUT Q.
+{"name":"XOR from NAND","description":"XOR built from four 2-input NAND gates","components":[{"type":"INPUT","x":-160,"y":-40,"attrs":{"label":"A","state":0}},{"type":"INPUT","x":-160,"y":40,"attrs":{"label":"B","state":0}},{"type":"NAND","x":-40,"y":0,"attrs":{}},{"type":"NAND","x":80,"y":-40,"attrs":{}},{"type":"NAND","x":80,"y":40,"attrs":{}},{"type":"NAND","x":160,"y":0,"attrs":{}},{"type":"OUTPUT","x":240,"y":0,"attrs":{"label":"Q"}}],"wires":[{"from":0,"fromPort":0,"to":2,"toPort":0},{"from":1,"fromPort":0,"to":2,"toPort":1},{"from":0,"fromPort":0,"to":3,"toPort":0},{"from":2,"fromPort":2,"to":3,"toPort":1},{"from":1,"fromPort":0,"to":4,"toPort":0},{"from":2,"fromPort":2,"to":4,"toPort":1},{"from":3,"fromPort":2,"to":5,"toPort":0},{"from":4,"fromPort":2,"to":5,"toPort":1},{"from":5,"fromPort":2,"to":6,"toPort":0}]}
+
+### XOR using a 7486 chip (uses Gate 1 of the quad-XOR DIP; other gates + GND/VCC left unconnected)
+{"name":"XOR (7486)","description":"XOR from one gate of a 7486 quad-XOR TTL chip","components":[{"type":"INPUT","x":-140,"y":-20,"attrs":{"label":"A","state":0}},{"type":"INPUT","x":-140,"y":20,"attrs":{"label":"B","state":0}},{"type":"TTL_7486","x":0,"y":0,"attrs":{}},{"type":"OUTPUT","x":160,"y":0,"attrs":{"label":"Q"}}],"wires":[{"from":0,"fromPort":0,"to":2,"toPort":0},{"from":1,"fromPort":0,"to":2,"toPort":1},{"from":2,"fromPort":2,"to":3,"toPort":0}]}
+
 ## CRITICAL (when returning JSON)
 1. Valid JSON inside \`\`\`json — port indices MUST match the spec above
 2. Every circuit MUST have at least one INPUT or CLOCK and one OUTPUT or LED
 3. All wires: output port → input port only
-4. For N-input gates: output port index = N (not 2). Include attrs:{"inputs":N} when N>2`;
+4. For N-input gates: output port index = N (not 2). Include attrs:{"inputs":N} when N>2
+5. **Multi-level circuits (XOR-from-NAND, adders, etc.):** a gate's output is a real signal — route it into the next level and REUSE it (fan-out) instead of rebuilding the same sub-expression. Never create two gates with identical inputs, and never leave a gate with no outgoing wire (every non-OUTPUT gate must feed something).
+6. **Before returning, trace the truth table in your head** for every input combination and confirm the OUTPUT matches the requested function. If it doesn't, fix the wiring — do not return a circuit you haven't verified.`;
 }
 
 const QUICK_ACTIONS = [
