@@ -85,18 +85,18 @@
   </g>
 
   <!-- ── Right: title block ── -->
-  <g transform="translate(700 150)" font-family="'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <g transform="translate(688 150)" font-family="'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
     <rect x="0" y="0" width="56" height="4" rx="2" fill="url(#accent)"/>
-    <text x="0" y="34" font-size="19" font-weight="700" fill="#22D3EE" letter-spacing="3">8GWIFI · ALGORITHM VISUALIZER</text>
+    <text x="0" y="33" font-size="18" font-weight="700" fill="#22D3EE" letter-spacing="2.5">8GWIFI · ALGORITHM VISUALIZER</text>
 
-    <text x="0" y="120" font-size="74" font-weight="800" fill="#F1F5F9">Visualize code,</text>
-    <text x="0" y="196" font-size="74" font-weight="800" fill="#F1F5F9">step by step.</text>
+    <text x="0" y="112" font-size="58" font-weight="800" fill="#F1F5F9">Visualize code,</text>
+    <text x="0" y="180" font-size="58" font-weight="800" fill="#F1F5F9">step by step.</text>
 
-    <text x="0" y="248" font-size="22" fill="#94A3B8" font-weight="400">Arrays · lists · trees · graphs · recursion · memory</text>
-    <text x="0" y="280" font-size="22" fill="#94A3B8" font-weight="400">A free Python Tutor alternative — 8 languages</text>
+    <text x="0" y="228" font-size="20" fill="#94A3B8" font-weight="400">Arrays · lists · trees · graphs · recursion</text>
+    <text x="0" y="258" font-size="20" fill="#94A3B8" font-weight="400">A free Python Tutor alternative — 8 languages</text>
 
     <!-- language chips -->
-    <g transform="translate(0 314)" font-size="15" font-weight="700" text-anchor="middle">
+    <g transform="translate(0 292)" font-size="15" font-weight="700" text-anchor="middle">
       <g fill="#C4B5FD">
         <rect x="0"   y="0" width="86" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="43"  y="22">Python</text>
         <rect x="96"  y="0" width="70" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="131" y="22">Java</text>
