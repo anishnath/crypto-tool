@@ -73,6 +73,9 @@
 
 <!-- Ads: defer to not block LCP -->
 <script>
+// Define the googletag stub synchronously so inline googletag.cmd.push() calls
+// in the body (which run at parse time, before 'load') don't throw ReferenceError.
+window.googletag = window.googletag || {cmd: []};
 // Lazy-load setupad after page render
 window.addEventListener('load', function() {
   var s1 = document.createElement('script');
