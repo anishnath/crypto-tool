@@ -2527,6 +2527,27 @@
 
     var LUA = [
         {
+            category: 'Memory',
+            title: 'Tables, references & aliasing',
+            tracer: 'MemTracer',
+            desc: 'Click the Memory tab: in Lua a variable is a name; the table is the one reference type. Two names can share a table (aliasing) — mutating through one is seen by the other; rebinding moves only that name. Also shows a metatable "class" and a global. Hover a name to light up its table.',
+            code: lines(
+                'local a = {1, 2, 3}',
+                'local b = a           -- b and a point to the SAME table',
+                'b[4] = 4              -- mutation is seen through both',
+                'local c = {1, 2, 3}   -- a different table (not aliased)',
+                '',
+                'local Account = {}',
+                'Account.__index = Account',
+                'function Account.new(bal)',
+                '  return setmetatable({balance = bal}, Account)',
+                'end',
+                'local acc = Account.new(100)   -- instance -> metatable (class)',
+                '',
+                'total = a[1] + acc.balance     -- a global',
+                'print(#a, #c, acc.balance, total)')
+        },
+        {
             category: 'Array',
             title: 'Bubble sort',
             tracer: 'Array1DTracer',

@@ -516,11 +516,16 @@
         var colorOf = {}, labelOf = {};
         heap.forEach(function (h, i) { colorOf[h.id] = HEAP_COLORS[i % HEAP_COLORS.length]; labelOf[h.id] = h.id; });
 
-        // Python: everything is an object → relabel Frames / Objects / Globals.
-        var py = snap.runtime === 'python';
-        var L = py
-            ? { stack: 'Frames', stackSub: 'local namespaces · call stack', heap: 'Objects', heapSub: 'lists · dicts · sets · instances · GC-managed', globals: 'Globals', globalsSub: 'module-level names' }
-            : { stack: 'Stack', stackSub: 'value types & references · call frames', heap: 'Heap (managed)', heapSub: 'objects · arrays · strings · GC-managed', globals: 'Statics', globalsSub: 'static fields' };
+        // Relabel segments per runtime (Python/Lua: names→objects; C#/Go: managed stack/heap).
+        var rt = snap.runtime;
+        var L;
+        if (rt === 'python') {
+            L = { stack: 'Frames', stackSub: 'local namespaces · call stack', heap: 'Objects', heapSub: 'lists · dicts · sets · instances · GC-managed', globals: 'Globals', globalsSub: 'module-level names' };
+        } else if (rt === 'lua') {
+            L = { stack: 'Frames', stackSub: 'local scopes · call stack', heap: 'Tables', heapSub: 'tables · arrays · objects · GC-managed', globals: 'Globals', globalsSub: 'global (_G) variables' };
+        } else {
+            L = { stack: 'Stack', stackSub: 'value types & references · call frames', heap: 'Heap (managed)', heapSub: 'objects · arrays · strings · GC-managed', globals: 'Statics', globalsSub: 'static fields' };
+        }
 
         var body = el('div', 'viz-mem-body viz-mem-layout');
 
