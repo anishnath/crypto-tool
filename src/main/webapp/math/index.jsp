@@ -113,6 +113,11 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css?v=<%=v%>">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css?v=<%=v%>">
 
+    <% request.setAttribute("aiToolId", "math-ai-hub"); %>
+    <% request.setAttribute("aiRequireSignIn", "true"); %>
+    <%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
+    <%@ include file="../modern/components/math-ai-head.inc.jsp" %>
+
     <style>
         /* Index-specific: hero banner + featured-tool cards.
            All tokens come from math-studio.css; no duplication. */
@@ -187,6 +192,16 @@
         .ms-tool-card-title { font: 600 0.95rem var(--ms-font-sans); display: block; margin-bottom: 2px; }
         .ms-tool-card-sub { font: 0.8rem var(--ms-font-sans); color: var(--ms-muted); }
 
+        /* Math Studio shell around embedded VCA Math AI (same UI as calculator ✨ AI) */
+        .ms-ai-shell {
+            padding: 0;
+            overflow: hidden;
+            min-height: min(78vh, 820px);
+        }
+        .ms-ai-embed {
+            min-height: min(78vh, 820px);
+        }
+
         /* .ms-faq-* styles now live in math-studio.css (shared with tool pages) */
     </style>
     <%@ include file="../modern/ads/ad-init.jsp" %>
@@ -215,10 +230,15 @@
 
     <section class="ms-workspace">
 
+        <!-- Math AI — same chat UI as calculator pages (VCA), embedded in Math Studio shell -->
+        <div class="ms-card ms-ai-shell" id="mathAiHub">
+            <div id="mathAiEmbed" class="ms-ai-embed" aria-label="Math AI chat"></div>
+        </div>
+
         <!-- Hero -->
         <div class="ms-hero-banner">
             <h1>A quiet place for <em>math</em>.</h1>
-            <p>48 step-by-step solvers &mdash; from the percentage trick to eigenvalues. KaTeX formulas, Python verification, nothing to sign up for.</p>
+            <p>48 step-by-step solvers &mdash; from the percentage trick to eigenvalues. KaTeX formulas, Python-verified answers, and no sign-up for the calculators.</p>
             <div class="ms-hero-stats">
                 <div class="ms-hero-stat"><strong>48</strong>calculators</div>
                 <div class="ms-hero-stat"><strong>step</strong>by step solutions</div>
@@ -422,5 +442,13 @@
     });
 </script>
 <script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
+
+<%@ include file="../modern/components/math-tool-engine-boot.inc.jsp" %>
+<%
+    request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+    request.setAttribute("mathAiProfileExport", "configureMathHubShell");
+    request.setAttribute("mathAiEmbedMountId", "mathAiEmbed");
+%>
+<%@ include file="../modern/components/math-ai-embedded-boot.inc.jsp" %>
 </body>
 </html>

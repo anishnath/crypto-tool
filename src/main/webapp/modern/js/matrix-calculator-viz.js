@@ -68,8 +68,6 @@
   }
 
   function canVisualize(op, cellsA, cellsB) {
-    var c = core();
-    if (c && c.canVisualize) return c.canVisualize(op, cellsA, cellsB);
     if (VISUALIZABLE_OPS.indexOf(op) === -1) return false;
     if (!cellsA) return false;
     var rows = cellsA.length;
@@ -529,7 +527,6 @@
 
   function canVisualizeTask(task) {
     var c = core();
-    if (c && c.canVisualizeTask) return c.canVisualizeTask(task);
     if (!c || !c.parseTask) return false;
     var parsed = c.parseTask(task);
     if (!parsed) return false;

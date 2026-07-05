@@ -341,6 +341,14 @@ function promoteLatexMatrixBlocks(body) {
   });
 }
 
+/** Shared render pipeline for native hub chat and VCA math assistant. */
+export function renderMathAssistantMessage(body, bubble, rawText) {
+  promoteLatexMatrixBlocks(body);
+  void typesetKatexWhenReady(body);
+  void typesetMathSlots(body);
+  if (bubble && rawText) attachCalculusCards(bubble, rawText);
+}
+
 /**
  * @param {object} opts — aiAssistantBoot + optional mathShell overrides
  */
@@ -366,22 +374,23 @@ export function createMathAssistant(opts) {
         features: ['Much higher monthly AI limits', 'Pro chat model tier', 'No rate-limit waiting between requests'],
       },
     },
-    floatingCorner: 'right',
+    floatingCorner: opts.floatingCorner || 'right',
+    floating: opts.floating,
+    embedded: opts.embedded === true,
+    mountTarget: opts.mountTarget || null,
     toolId: opts.toolId || 'math-ai',
     title: shell().panelTitle || 'Math AI',
     subtitle: shell().subtitle || 'Calculus · algebra · linear algebra — solve in chat',
     placeholder: shell().placeholder || 'Paste ∫, d/dx, or lim problems (LaTeX, ASCII, or English)…',
     footerText: shell().footerText || 'Ctrl+Shift+A · Σ Solve in chat: Solve · Steps · Graph',
+    emptyState: shell().emptyState || null,
     historyTurns: 8,
     contextValidator: false,
     systemPrompt: buildMathPrompt(shell()),
     seedContext: () => formatSeedContext(getSnapshot(), shell()),
     getQuickActions: () => buildQuickActions(getSnapshot(), shell()),
     onAssistantRender: (body, bubble, rawText) => {
-      promoteLatexMatrixBlocks(body);
-      void typesetKatexWhenReady(body);
-      void typesetMathSlots(body);
-      if (bubble && rawText) attachCalculusCards(bubble, rawText);
+      renderMathAssistantMessage(body, bubble, rawText);
     },
   });
 }

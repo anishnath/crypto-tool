@@ -173,6 +173,17 @@ function buildFocusQuickActions(focus, snap) {
       chip('Exam tip', 'Exam tips for trig: ASTC signs, reference angles, general solutions with +2πn, and exact values at 30°/45°/60°.'),
       chip('Show example', 'Give one trig example with a ```trig``` block (mode, expr, unit) so I can click Solve / Show graph. One intro sentence, then the block.'),
     ],
+    hub: [
+      // Concrete starter problems — clicking sends a real problem so the solver
+      // block + Solve/Steps/Graph chips appear immediately, and students learn
+      // by example that they can paste their own problem the same way.
+      chip('Solve x² − 5x + 6 = 0', 'Solve x^2 - 5x + 6 = 0'),
+      chip('∫ x·eˣ dx', 'Integrate x*e^x dx'),
+      chip('d/dx sin(x²)', 'Differentiate sin(x^2)'),
+      chip('Mean & standard deviation', 'Find the mean and standard deviation of 4, 8, 15, 16, 23, 42'),
+      chip('Determinant of a 2×2', 'Find the determinant of [[1, 2], [3, 4]]'),
+      chip('Which method should I use?', 'I have a math problem but I am not sure which method or formula to use. Explain how to choose the right approach across algebra, calculus, statistics, and linear algebra, with tiny examples. Prose + KaTeX only — no solve block.'),
+    ],
   };
 
   return sets[focus] || sets.integral;
@@ -180,7 +191,7 @@ function buildFocusQuickActions(focus, snap) {
 
 const FOCUS_KEYS = new Set([
   'integral', 'derivative', 'limit', 'ode', 'pde', 'series',
-  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace', 'ztransform', 'statistics', 'prime-number', 'collatz', 'trig',
+  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace', 'ztransform', 'statistics', 'prime-number', 'collatz', 'trig', 'hub',
 ]);
 
 /**
@@ -199,6 +210,7 @@ export function configureGenericMathShell(opts = {}) {
     subtitle: opts.subtitle || 'Parse calculus · Σ Solve in chat',
     placeholder: opts.placeholder || 'Paste ∫, d/dx, or lim problems (LaTeX, ASCII, or English)…',
     footerText: opts.footerText || 'Ctrl+Shift+A · same engines as LaTeX editor Σ Solve',
+    emptyState: opts.emptyState || null,
     supportedActions: opts.supportedActions || MATH_ACTIONS.slice(),
     batchDelayMs: 120,
     chatComputeEnabled: true,
@@ -1363,5 +1375,25 @@ export function configureStandaloneMathShell() {
     subtitle: '∫ · lim · ODE · PDE · matrix · algebra — solve in chat',
     placeholder: 'Paste any math problem: calculus, linear algebra, quadratics, systems…',
     footerText: 'Ctrl+Shift+A · unified Math AI · Solve · Steps · Graph',
+  });
+}
+
+/**
+ * Math Studio hub (math/index.jsp) — embedded VCA clone with hub profile.
+ * Same chat UI + billing as calculator ✨ AI; only the page shell differs.
+ */
+export function configureMathHubShell() {
+  configureGenericMathShell({
+    focus: 'hub',
+    pageLabel: '8gwifi.org Math Studio',
+    pageHint: 'Math Studio hub — browse calculators, exam prep, and solve any topic in chat',
+    panelTitle: 'Math AI',
+    subtitle: 'Algebra · calculus · statistics · matrices — step by step',
+    placeholder: 'Type any math problem — plain English is fine (e.g. solve x²−5x+6=0, or ∫ x·eˣ dx)',
+    footerText: 'Answers appear as cards — click Solve, Steps, or Graph',
+    emptyState: {
+      title: 'Ask Math AI anything',
+      text: 'Type a problem in plain English, LaTeX, or ordinary typing — algebra, calculus, statistics, matrices — and get a worked, step-by-step answer you can trust. New here? Tap a starter below to see it work.',
+    },
   });
 }

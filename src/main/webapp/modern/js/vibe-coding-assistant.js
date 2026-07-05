@@ -618,6 +618,10 @@ export class ToolAiAssistant {
    * @param {number} [opts.maxInputLength] - clamp textarea input (default 8000)
    * @param {boolean} [opts.floating] - render as a non-blocking, draggable, collapsible
    *   floating panel that lets the user keep interacting with the parent page (default true)
+   * @param {boolean} [opts.embedded] - mount inline in a page container; always visible,
+   *   no overlay/backdrop (implies floating=false)
+   * @param {string|HTMLElement} [opts.mountTarget] - selector or element to mount into
+   *   (default document.body; required for embedded hub pages)
    * @param {boolean} [opts.persistLayout] - persist drag position + collapsed state in
    *   localStorage per toolId (default true)
    */
@@ -672,6 +676,9 @@ export class ToolAiAssistant {
     this.appliedLabel = opts.appliedLabel ?? 'Applied';
     this.focusApplyOnComplete = opts.focusApplyOnComplete !== false;
     this.getQuickActions = opts.getQuickActions;
+    // Optional first-run greeting shown in the (empty) message area. Opt-in:
+    // { title, text }. Cleared on first message; restored on reset.
+    this.emptyState = (opts.emptyState && typeof opts.emptyState === 'object') ? opts.emptyState : null;
     this.onTurn = opts.onTurn;
     this.onSend = typeof opts.onSend === 'function' ? opts.onSend : null;
     this.sanitizeForAi = typeof opts.sanitizeForAi === 'function' ? opts.sanitizeForAi : null;
@@ -686,9 +693,11 @@ export class ToolAiAssistant {
       .slice()
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
-    this.floating = opts.floating !== false;
+    this.embedded = opts.embedded === true;
+    this.mountTarget = opts.mountTarget || null;
+    this.floating = this.embedded ? false : opts.floating !== false;
     this.floatingCorner = opts.floatingCorner === 'left' ? 'left' : 'right';
-    this.persistLayout = opts.persistLayout !== false;
+    this.persistLayout = this.embedded ? false : opts.persistLayout !== false;
     this.policyControls = opts.policyControls !== false;
     this.policyModeEnabled = opts.modeSelector !== false;
     this.policyFreshContextEnabled = opts.freshContextToggle !== false;
@@ -716,6 +725,17 @@ export class ToolAiAssistant {
 
   // ─── Lifecycle ─────────────────────────────────────────────────────────────
 
+  _resolveMountParent() {
+    if (!this.mountTarget) return document.body;
+    if (typeof this.mountTarget === 'string') {
+      const el = document.querySelector(this.mountTarget);
+      if (!el) throw new Error(`ToolAiAssistant: mountTarget not found: ${this.mountTarget}`);
+      return el;
+    }
+    if (this.mountTarget instanceof HTMLElement) return this.mountTarget;
+    return document.body;
+  }
+
   mount() {
     if (this._els) return this;
 
@@ -726,9 +746,10 @@ export class ToolAiAssistant {
       backdrop.dataset.floating = 'true';
       backdrop.dataset.corner = this.floatingCorner;
     }
+    if (this.embedded) backdrop.dataset.embedded = 'true';
     backdrop.setAttribute('role', 'presentation');
     backdrop.innerHTML = `
-      <div class="vca-modal" role="dialog" aria-modal="${this.floating ? 'false' : 'true'}" aria-labelledby="${titleId}">
+      <div class="vca-modal" role="dialog" aria-modal="${this.floating || this.embedded ? 'false' : 'true'}" aria-labelledby="${titleId}">
         <header class="vca-header" title="${this.floating ? 'Drag to move' : ''}">
           <div class="vca-header-text">
             <div class="vca-title-row">
@@ -777,7 +798,7 @@ export class ToolAiAssistant {
           <div class="vca-resize vca-resize-se" data-dir="se" title="Resize"></div>
         </div>
       </div>`;
-    document.body.appendChild(backdrop);
+    this._resolveMountParent().appendChild(backdrop);
 
     const $ = (sel) => backdrop.querySelector(sel);
     const modal = $('.vca-modal');
@@ -816,8 +837,13 @@ export class ToolAiAssistant {
       });
     }
 
-    if (!this.floating) {
+    if (!this.floating && !this.embedded) {
       backdrop.addEventListener('mousedown', (e) => { if (e.target === backdrop) this.close(); });
+    }
+    if (this.embedded) {
+      $('.vca-close').hidden = true;
+      $('.vca-collapse').hidden = true;
+      backdrop.classList.add('open');
     }
     $('.vca-input-row').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -870,13 +896,21 @@ export class ToolAiAssistant {
     this._applyLayout();
 
     this._renderHistory();
+    if (this.embedded) {
+      this._renderQuickActions();
+      if (this.billing?.enabled) {
+        const loggedIn = !!(this.billing.userId || this.userId);
+        if (loggedIn) void this._refreshBilling();
+        else void this._refreshGuestBilling();
+      }
+    }
     // Billing status/plans load on first open(), not mount(), so tool pages stay fast.
     return this;
   }
 
   open(prefill = '', autoSend = false) {
     if (!this._els) this.mount();
-    this._previouslyFocused = document.activeElement;
+    if (!this.embedded) this._previouslyFocused = document.activeElement;
     this._renderQuickActions();
     if (this.billing?.enabled) {
       const loggedIn = !!(this.billing.userId || this.userId);
@@ -903,6 +937,13 @@ export class ToolAiAssistant {
   }
 
   close() {
+    if (this.embedded) {
+      if (this.busy && this.abortCtrl) {
+        this.abortCtrl.abort();
+        this.abortCtrl = null;
+      }
+      return this;
+    }
     if (this.busy && this.abortCtrl) {
       this.abortCtrl.abort();
       this.abortCtrl = null;
@@ -928,6 +969,7 @@ export class ToolAiAssistant {
       if (notify) {
         this._renderSystemBubble('Conversation cleared.', { kind: 'info' });
       }
+      this._renderEmptyState();
       this._els.input.value = '';
       this._autoResize(this._els.input);
     }
@@ -1018,10 +1060,35 @@ export class ToolAiAssistant {
       if (turn.role !== 'user' && turn.role !== 'assistant') continue;
       this._appendBubble(turn.role, turn.content, { streaming: false });
     }
+    if (!this.history.length) this._renderEmptyState();
     this._scroll();
   }
 
+  /** First-run greeting in the empty message area (opt-in via opts.emptyState). */
+  _renderEmptyState() {
+    if (!this.emptyState || !this._els) return;
+    if (this.history.length) return;
+    if (this._els.messages.querySelector('.vca-empty')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'vca-empty';
+    if (this.emptyState.title) {
+      const h = document.createElement('div');
+      h.className = 'vca-empty-title';
+      h.textContent = this.emptyState.title;
+      wrap.appendChild(h);
+    }
+    if (this.emptyState.text) {
+      const p = document.createElement('div');
+      p.className = 'vca-empty-text';
+      p.textContent = this.emptyState.text;
+      wrap.appendChild(p);
+    }
+    this._els.messages.appendChild(wrap);
+  }
+
   _appendBubble(role, text, { streaming = false } = {}) {
+    const emptyEl = this._els?.messages.querySelector('.vca-empty');
+    if (emptyEl) emptyEl.remove();
     const bubble = document.createElement('div');
     bubble.className = 'vca-msg ' + role + (streaming ? ' streaming' : '');
     if (streaming) bubble.setAttribute('aria-busy', 'true');
@@ -1982,7 +2049,7 @@ export class ToolAiAssistant {
       else this._send();
       return;
     }
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' && !this.embedded) {
       e.preventDefault();
       this.close();
     }
@@ -1994,7 +2061,7 @@ export class ToolAiAssistant {
   }
 
   _trapFocus(e) {
-    if (this.floating) return; // non-blocking panel: let users Tab back to the parent page
+    if (this.floating || this.embedded) return; // non-blocking: let users Tab back to the parent page
     if (e.key !== 'Tab' || !this._els) return;
     const root = this._els.backdrop.querySelector('.vca-modal');
     const focusable = Array.from(root.querySelectorAll(FOCUSABLE_SELECTOR))

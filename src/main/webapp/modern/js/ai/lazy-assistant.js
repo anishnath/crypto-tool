@@ -83,3 +83,74 @@ export function wireLazyAssistant(opts) {
 
   return { ensure, open, getInstance: () => ai };
 }
+
+/**
+ * Eagerly mount an assistant inline (no popup trigger). Used on hub pages like math/index.jsp.
+ *
+ * @param {object} opts — same as wireLazyAssistant, plus:
+ * @param {string|HTMLElement} opts.mountTarget — container selector or element (required)
+ * @param {boolean} [opts.autoOpen=true] — focus input after mount
+ */
+export function wireEmbeddedAssistant(opts) {
+  const {
+    moduleUrl,
+    exportName,
+    boot,
+    extraOpts,
+    mountTarget,
+    onReady,
+    autoOpen = true,
+  } = opts;
+
+  if (!mountTarget) {
+    throw new Error('wireEmbeddedAssistant: mountTarget is required');
+  }
+
+  let ai = null;
+  let ready = null;
+
+  function ensure() {
+    if (ai) return Promise.resolve(ai);
+    if (!ready) {
+      ready = import(moduleUrl).then((mod) => {
+        const create = mod[exportName];
+        if (typeof create !== 'function') {
+          throw new Error(`Embedded assistant: export "${exportName}" not found in ${moduleUrl}`);
+        }
+        const extras = typeof extraOpts === 'function' ? extraOpts() : (extraOpts || {});
+        ai = create({
+          ...boot,
+          ...extras,
+          embedded: true,
+          floating: false,
+          mountTarget,
+        });
+        ai.mount();
+        if (autoOpen) ai.open();
+        if (typeof onReady === 'function') onReady(ai);
+        return ai;
+      });
+    }
+    return ready;
+  }
+
+  async function open(prefill = '', autoSend = false) {
+    (await ensure()).open(prefill, autoSend);
+  }
+
+  const start = () => { ensure().catch(() => {}); };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
+  } else {
+    start();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+      e.preventDefault();
+      open();
+    }
+  });
+
+  return { ensure, open, getInstance: () => ai };
+}

@@ -1372,6 +1372,64 @@ body.vca-no-select, body.vca-no-select * { user-select: none !important; }
   white-space: nowrap;
 }
 
+/* Embedded hub pages (e.g. math/index.jsp) — inline panel, no overlay. */
+.vca-backdrop[data-embedded="true"] {
+  position: relative;
+  inset: auto;
+  z-index: 1;
+  background: transparent;
+  backdrop-filter: none;
+  display: flex;
+  padding: 0;
+  pointer-events: auto;
+}
+
+.vca-backdrop[data-embedded="true"] .vca-modal {
+  width: 100%;
+  max-height: none;
+  min-height: min(78vh, 820px);
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  background: var(--ms-panel-bg, var(--vca-card));
+  color: var(--ms-ink, var(--vca-card-foreground));
+}
+
+.vca-backdrop[data-embedded="true"] .vca-header {
+  border-bottom: 1px solid var(--ms-line, var(--vca-border));
+  background: var(--ms-panel-bg-soft, color-mix(in oklch, var(--vca-card) 92%, var(--vca-primary) 8%));
+}
+
+.vca-backdrop[data-embedded="true"] .vca-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vca-backdrop[data-embedded="true"] .vca-messages {
+  flex: 1;
+  min-height: min(48vh, 520px);
+  max-height: none;
+}
+
+.vca-backdrop[data-embedded="true"] .vca-title {
+  font-family: var(--ms-font-serif, inherit);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.vca-backdrop[data-embedded="true"] .vca-send {
+  background: var(--ms-accent, var(--vca-primary));
+  color: var(--vca-primary-foreground);
+}
+
+.vca-backdrop[data-embedded="true"] .vca-close,
+.vca-backdrop[data-embedded="true"] .vca-collapse {
+  display: none;
+}
+
 @media (max-width: 480px) {
   .vca-modal { width: 100%; max-height: 100vh; border-radius: 0; }
   .vca-backdrop { padding: 0; }
@@ -1400,4 +1458,23 @@ body.vca-no-select, body.vca-no-select * { user-select: none !important; }
   .vca-header {
     flex-wrap: wrap;
   }
+}
+
+/* First-run greeting / empty state (opt-in via opts.emptyState) */
+.vca-empty {
+  margin: auto;
+  padding: 24px 20px;
+  text-align: center;
+  max-width: 46ch;
+  color: var(--vca-muted-foreground);
+}
+.vca-empty-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--vca-foreground);
+  margin-bottom: 6px;
+}
+.vca-empty-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
