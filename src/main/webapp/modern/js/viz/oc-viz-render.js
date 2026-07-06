@@ -702,10 +702,15 @@
             if (!body) return;
             var pr = body.getBoundingClientRect();
             if (!pr.width) return;
+            // The panel may live inside a transform:scale() auto-fit layer, which
+            // inflates getBoundingClientRect. Divide measured deltas by that scale
+            // so the SVG (drawn in unscaled local space) isn't scaled twice.
+            var k = body.offsetWidth ? (pr.width / body.offsetWidth) : 1;
+            if (!k) k = 1;
             var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.setAttribute('class', 'viz-mem-arrows');
             svg.style.position = 'absolute'; svg.style.left = 0; svg.style.top = 0;
-            svg.style.width = pr.width + 'px'; svg.style.height = pr.height + 'px';
+            svg.style.width = (pr.width / k) + 'px'; svg.style.height = (pr.height / k) + 'px';
             svg.style.pointerEvents = 'none';
             // shared arrowhead marker
             var NS = 'http://www.w3.org/2000/svg';
@@ -724,15 +729,15 @@
                 var blk = body.querySelector('[data-addr="' + (window.CSS && CSS.escape ? CSS.escape(tgt) : tgt) + '"]');
                 if (!blk) continue;
                 var a = srcs[i].getBoundingClientRect(), b = blk.getBoundingClientRect();
-                var x1 = a.right - pr.left, y1 = a.top - pr.top + a.height / 2;
+                var x1 = (a.right - pr.left) / k, y1 = (a.top - pr.top + a.height / 2) / k;
                 var d;
-                if (b.left - pr.left > x1 + 16) {
+                if ((b.left - pr.left) / k > x1 + 16) {
                     // target sits to the right — smooth curve into its left edge
-                    var lx = b.left - pr.left, ly = b.top - pr.top + b.height / 2;
+                    var lx = (b.left - pr.left) / k, ly = (b.top - pr.top + b.height / 2) / k;
                     d = 'M' + x1 + ' ' + y1 + ' C' + (x1 + 28) + ' ' + y1 + ' ' + (lx - 28) + ' ' + ly + ' ' + lx + ' ' + ly;
                 } else {
                     // same column / below (stack→stack, stack→heap-below): tidy right-side elbow
-                    var rx = b.right - pr.left, ry = b.top - pr.top + b.height / 2;
+                    var rx = (b.right - pr.left) / k, ry = (b.top - pr.top + b.height / 2) / k;
                     var bus = Math.max(x1, rx) + 18;
                     d = 'M' + x1 + ' ' + y1 + ' L' + bus + ' ' + y1 + ' L' + bus + ' ' + ry + ' L' + rx + ' ' + ry;
                 }

@@ -555,9 +555,104 @@
             if (recordBtn && !recording) recordBtn.disabled = !total;
         }
 
+        // ── Auto-fit / zoom: a growing drawing scales to stay whole (no scroll) ──
+        var fitScale = 1, userScale = null, panX = 0, panY = 0, zoomBar = null, zoomWired = false;
+
+        function resetFit() { fitScale = 1; userScale = null; panX = 0; panY = 0; }
+        function stageFit() { return els.stage && els.stage.querySelector('.viz-fit'); }
+
+        function computeFit() {
+            var fit = stageFit(); if (!fit || !els.stage) return 1;
+            var natW = fit.scrollWidth, natH = fit.scrollHeight;
+            var vw = els.stage.clientWidth, vh = els.stage.clientHeight;
+            if (!natW || !natH || !vw || !vh) return 1;
+            return Math.min(1, vw / natW, vh / natH);      // only shrink to fit, never upscale
+        }
+        function applyFit(scale) {
+            var fit = stageFit(); if (!fit) return;
+            fit.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
+            var pct = document.getElementById('vizZoomPct');
+            if (pct) pct.textContent = Math.round(scale * 100) + '%';
+            var over = fit.scrollWidth * scale > els.stage.clientWidth + 1 || fit.scrollHeight * scale > els.stage.clientHeight + 1;
+            els.stage.classList.toggle('viz-pannable', !!over);
+        }
+        function setUserZoom(s) { userScale = Math.max(0.1, Math.min(4, s)); applyFit(userScale); }
+        function toggleMaximize() {
+            if (!els.shell) return;
+            els.shell.classList.toggle('viz-maximized');
+            resetFit(); setTimeout(fitStage, 30);          // re-fit to the new size
+        }
+        function ensureZoomBar() {
+            if (!zoomBar) {
+                zoomBar = document.createElement('div');
+                zoomBar.className = 'viz-zoombar'; zoomBar.id = 'vizZoomBar';
+                zoomBar.innerHTML =
+                    '<button type="button" data-z="out" title="Zoom out">−</button>' +
+                    '<span class="viz-zoom-pct" id="vizZoomPct">100%</span>' +
+                    '<button type="button" data-z="in" title="Zoom in">+</button>' +
+                    '<button type="button" data-z="fit" title="Fit to view"><i class="fas fa-expand"></i></button>' +
+                    '<button type="button" data-z="max" title="Maximize"><i class="fas fa-up-right-and-down-left-from-center"></i></button>';
+                zoomBar.addEventListener('click', function (e) {
+                    var b = e.target.closest && e.target.closest('button'); if (!b) return;
+                    var z = b.getAttribute('data-z');
+                    if (z === 'in') setUserZoom((userScale || fitScale) * 1.25);
+                    else if (z === 'out') setUserZoom((userScale || fitScale) / 1.25);
+                    else if (z === 'fit') { resetFit(); fitStage(); }
+                    else if (z === 'max') toggleMaximize();
+                });
+            }
+            if (!zoomWired && els.stage) {
+                zoomWired = true;
+                els.stage.addEventListener('wheel', function (e) {
+                    if (!stageFit()) return;
+                    e.preventDefault();
+                    setUserZoom((userScale || fitScale) * (e.deltaY < 0 ? 1.1 : 0.9));
+                }, { passive: false });
+                var drag = null;
+                els.stage.addEventListener('mousedown', function (e) {
+                    if (!els.stage.classList.contains('viz-pannable')) return;
+                    drag = { x: e.clientX, y: e.clientY, px: panX, py: panY };
+                    els.stage.classList.add('viz-panning');
+                });
+                window.addEventListener('mousemove', function (e) {
+                    if (!drag) return;
+                    panX = drag.px + (e.clientX - drag.x); panY = drag.py + (e.clientY - drag.y);
+                    applyFit(userScale != null ? userScale : fitScale);
+                });
+                window.addEventListener('mouseup', function () { drag = null; els.stage && els.stage.classList.remove('viz-panning'); });
+                window.addEventListener('resize', function () {
+                    if (!stageFit()) return;
+                    if (userScale != null) { applyFit(userScale); return; }
+                    fitScale = computeFit(); applyFit(fitScale);   // resize is deliberate → allow re-fit up
+                });
+            }
+            return zoomBar;
+        }
+        // Wrap the freshly-rendered tracers into a scalable layer and scale to fit.
+        function fitStage() {
+            var st = els.stage; if (!st) return;
+            var bar = ensureZoomBar();
+            if (!st.querySelector('.viz-fit')) {
+                var fit = document.createElement('div');
+                fit.className = 'viz-fit';
+                var kids = [];
+                for (var i = 0; i < st.children.length; i++) kids.push(st.children[i]);
+                kids.forEach(function (k) { if (k !== bar) fit.appendChild(k); });
+                st.appendChild(fit);
+            }
+            st.classList.add('viz-fitmode');
+            st.appendChild(bar);                            // renderStep cleared it; re-attach overlay
+            var needed = computeFit();
+            var scale;
+            if (userScale != null) scale = userScale;
+            else { fitScale = Math.min(fitScale, needed); scale = fitScale; }   // monotonic zoom-out
+            applyFit(scale);
+        }
+
         function onPlayerStep(idx, step, total) {
             if (vizMode === 'concurrency' && concModel) {
                 global.OcViz.renderConcStep(els.stage, concModel, idx);
+                fitStage();
                 var ev = concModel.events[idx];
                 highlightLine(ev && ev.line);
                 if (recordCode.panel) setRecordCodeLine(ev && ev.line);
@@ -570,6 +665,7 @@
                 return;
             }
             global.OcViz.renderStep(els.stage, step);
+            fitStage();
             highlightLine(step && step.line);
             if (recordCode.panel) setRecordCodeLine(step && step.line);
             if (els.stepCard && step) {
@@ -588,6 +684,7 @@
         function loadSteps(steps, result) {
             lastSteps = steps;
             lastResult = result;
+            resetFit();                     // new trace → start unscaled, auto-fit as it grows
             if (player) player.destroy();
             // Memory lens toggle: show only when the trace carries memory snapshots; default to Structures.
             var lensToggle = document.getElementById('vizLensToggle');

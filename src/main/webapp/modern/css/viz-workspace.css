@@ -319,6 +319,33 @@
     background: var(--oc-bg-dark, #1a1a1a);
 }
 
+/* ── Auto-fit: a growing drawing scales to stay whole instead of scrolling ── */
+.viz-stage.viz-fitmode { overflow: hidden; position: relative; padding: 0; }
+.viz-fit {
+    display: flex; flex-direction: column; gap: 10px; padding: 12px 14px;
+    transform-origin: top left; will-change: transform;
+}
+.viz-stage.viz-fitmode.viz-pannable .viz-fit { cursor: grab; }
+.viz-stage.viz-fitmode.viz-panning .viz-fit { cursor: grabbing; }
+.viz-zoombar {
+    position: absolute; top: 6px; right: 8px; z-index: 5;
+    display: inline-flex; align-items: center; gap: 2px;
+    background: var(--oc-bg-darker, #252526); border: 1px solid var(--oc-border, #333);
+    border-radius: 6px; padding: 2px; opacity: .55; transition: opacity .12s;
+}
+.viz-zoombar:hover { opacity: 1; }
+.viz-zoombar button {
+    background: none; border: none; color: var(--oc-text, #bbb); cursor: pointer;
+    font-size: 12px; line-height: 1; padding: 3px 6px; border-radius: 4px;
+}
+.viz-zoombar button:hover { background: var(--oc-bg-dark, #333); color: var(--oc-text-bright, #eee); }
+.viz-zoombar .viz-zoom-pct { font-size: 10px; color: var(--oc-text, #999); min-width: 34px; text-align: center; font-variant-numeric: tabular-nums; }
+/* Maximize: shell fills the viewport */
+.viz-shell.viz-maximized {
+    position: fixed; inset: 0; width: 100vw; height: 100vh; max-width: none;
+    z-index: 4000; border-radius: 0;
+}
+
 .viz-stage.viz-has-primary {
     gap: 8px;
 }
