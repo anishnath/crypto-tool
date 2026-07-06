@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "developer-tools/graph-easy");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -104,6 +107,7 @@
     </noscript>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <style>
@@ -278,6 +282,22 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        .ge-render-row { display: flex; gap: 0.5rem; align-items: stretch; }
+        .ge-render-row .ge-render-btn { flex: 1; width: auto; }
+        .ge-ai-btn {
+            padding: 0.5rem 0.85rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.15s;
+        }
+        .ge-ai-btn:hover { opacity: 0.92; }
 
         /* Example chip buttons */
         .ge-examples-grid {
@@ -786,29 +806,10 @@
                     </div>
                 </div>
 
-                <!-- AI: Describe in English -->
-                <div style="margin-bottom:0.5rem;padding:0.6rem;background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(139,92,246,0.04));border:1px solid rgba(99,102,241,0.15);border-radius:0.375rem;">
-                    <label style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;font-weight:600;color:#6366f1;margin-bottom:0.35rem;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M12 2a4 4 0 014 4v1h1a3 3 0 010 6h-1v1a4 4 0 01-8 0v-1H7a3 3 0 010-6h1V6a4 4 0 014-4z"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/></svg>
-                        AI — describe your diagram
-                    </label>
-                    <div style="display:flex;gap:0.3rem;">
-                        <input type="text" id="ge-ai-input" placeholder="e.g. CI/CD pipeline with build, test, deploy" autocomplete="off" spellcheck="false" style="flex:1;padding:0.35rem 0.5rem;border:1px solid var(--border);border-radius:0.25rem;font-size:0.75rem;background:var(--bg-primary);color:var(--text-primary);">
-                        <button type="button" id="ge-ai-btn" style="padding:0.35rem 0.7rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:0.25rem;font-size:0.7rem;font-weight:600;cursor:pointer;white-space:nowrap;">Generate</button>
-                    </div>
-                    <div id="ge-ai-status" style="display:none;margin-top:0.3rem;padding:0.25rem 0.4rem;border-radius:0.2rem;font-size:0.68rem;"></div>
-                    <div style="display:flex;flex-wrap:wrap;gap:0.25rem;margin-top:0.4rem;">
-                        <button type="button" class="ge-ai-chip" data-prompt="CI/CD pipeline: code commit, build, unit tests, integration tests, staging deploy, production deploy">CI/CD</button>
-                        <button type="button" class="ge-ai-chip" data-prompt="microservice architecture: API gateway connects to user service, order service, payment service, each has its own database">microservices</button>
-                        <button type="button" class="ge-ai-chip" data-prompt="git branching: main branch, develop branch, feature branch merges to develop, develop merges to main, hotfix from main">git flow</button>
-                        <button type="button" class="ge-ai-chip" data-prompt="TCP three-way handshake: client sends SYN, server sends SYN-ACK, client sends ACK, connection established">TCP handshake</button>
-                    </div>
-                </div>
-
                 <!-- Graph Notation Input -->
                 <div class="ge-section-label">Graph Notation Input</div>
                 <div class="ge-form-group">
-                    <textarea id="graphInput" placeholder="Enter graph notation, or use AI above...&#10;Example: [A] -> [B] -> [C]">[ Start ] -> [ Process ] -> [ End ]
+                    <textarea id="graphInput" placeholder="Enter graph notation, or use ✨ AI (Ctrl+Shift+A)…&#10;Example: [A] -> [B] -> [C]">[ Start ] -> [ Process ] -> [ End ]
 [ Process ] -> { style: dashed; } [ Error ]
 [ Error ] -> [ Start ]</textarea>
                 </div>
@@ -825,11 +826,14 @@
                     </select>
                 </div>
 
-                <!-- Render Button -->
-                <button class="ge-render-btn" id="renderBtn" disabled>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
-                    Render Graph
-                </button>
+                <!-- Render + AI -->
+                <div class="ge-render-row">
+                    <button class="ge-render-btn" id="renderBtn" disabled>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+                        Render Graph
+                    </button>
+                    <button type="button" class="ge-ai-btn" id="btnGraphEasyAI" title="AI assistant (Ctrl+Shift+A)" aria-label="Open AI assistant">✨ AI</button>
+                </div>
 
                 <!-- Examples -->
                 <div class="ge-section-label" style="margin-top: 1rem;">Examples</div>
@@ -1863,112 +1867,16 @@ if ($@) {
 }
 </script>
 
-<style>
-.ge-ai-chip{padding:0.15rem 0.4rem;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:10px;font-size:0.65rem;color:#6366f1;font-weight:500;cursor:pointer;transition:background 0.12s}
-.ge-ai-chip:hover{background:rgba(99,102,241,0.15)}
-[data-theme="dark"] .ge-ai-chip{background:rgba(99,102,241,0.12);border-color:rgba(99,102,241,0.2);color:#a5b4fc}
-[data-theme="dark"] .ge-ai-chip:hover{background:rgba(99,102,241,0.2)}
-</style>
+<script type="module">
+<%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
+import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
 
-<script>
-// AI: Describe → Graph-Easy notation
-(function() {
-    var aiInput = document.getElementById('ge-ai-input');
-    var aiBtn = document.getElementById('ge-ai-btn');
-    var aiStatus = document.getElementById('ge-ai-status');
-    var graphInput = document.getElementById('graphInput');
-
-    var AI_SYSTEM = 'You are a Graph-Easy notation expert. Given a plain-English description, output ONLY valid Graph-Easy syntax.\n\n' +
-        'Graph-Easy syntax rules:\n' +
-        '- Nodes: [Node Name]\n' +
-        '- Directed edge: [A] -> [B]\n' +
-        '- Bidirectional: [A] <-> [B]\n' +
-        '- Edge label: [A] -> { label: yes; } [B]\n' +
-        '- Edge style: [A] -> { style: dashed; } [B]\n' +
-        '- Groups: ( Group Name )\n' +
-        '- Each connection on its own line\n' +
-        '- Output ONLY the Graph-Easy code, no explanation\n\n' +
-        'Examples:\n' +
-        '"simple pipeline: A to B to C"\n[ A ] -> [ B ] -> [ C ]\n\n' +
-        '"login flow with error handling"\n[ Login ] -> { label: valid; } [ Dashboard ]\n[ Login ] -> { label: invalid; } [ Error ]\n[ Error ] -> [ Login ]\n\n' +
-        '"microservices with gateway"\n( Frontend )\n  [ Browser ] -> [ API Gateway ]\n\n( Backend )\n  [ API Gateway ] -> [ User Service ]\n  [ API Gateway ] -> [ Order Service ]\n  [ User Service ] -> [ User DB ]\n  [ Order Service ] -> [ Order DB ]\n\n' +
-        'RESPOND WITH ONLY GRAPH-EASY CODE.';
-
-    function setStatus(msg, cls) {
-        if (!aiStatus) return;
-        aiStatus.textContent = msg;
-        aiStatus.style.display = msg ? 'block' : 'none';
-        aiStatus.style.color = cls === 'error' ? '#dc2626' : cls === 'success' ? '#16a34a' : '#6366f1';
-        aiStatus.style.background = cls === 'error' ? 'rgba(220,38,38,0.08)' : cls === 'success' ? 'rgba(22,163,74,0.08)' : 'rgba(99,102,241,0.08)';
-    }
-
-    if (aiBtn && aiInput) {
-        aiBtn.addEventListener('click', function() { aiGenerate(); });
-        aiInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !aiBtn.disabled) aiGenerate();
-        });
-        document.querySelectorAll('.ge-ai-chip').forEach(function(chip) {
-            chip.addEventListener('click', function() {
-                aiInput.value = chip.getAttribute('data-prompt');
-                aiInput.focus();
-            });
-        });
-    }
-
-    function aiGenerate() {
-        var desc = aiInput.value.trim();
-        if (!desc) { setStatus('Enter a description', 'error'); return; }
-
-        aiBtn.disabled = true;
-        aiBtn.textContent = 'Thinking...';
-        setStatus('AI is generating Graph-Easy notation...', 'loading');
-
-        fetch('<%=request.getContextPath()%>/ai', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [
-                    { role: 'system', content: AI_SYSTEM },
-                    { role: 'user', content: desc }
-                ],
-                stream: false
-            })
-        })
-        .then(function(r) {
-            if (r.status === 429) throw new Error('Rate limit — try again');
-            if (!r.ok) throw new Error('AI unavailable');
-            return r.json();
-        })
-        .then(function(data) {
-            var text = '';
-            if (data.message && data.message.content) text = data.message.content;
-            else if (data.response) text = data.response;
-            else if (data.choices && data.choices[0]) {
-                text = data.choices[0].message ? data.choices[0].message.content : (data.choices[0].text || '');
-            }
-            if (!text) throw new Error('Empty AI response');
-
-            text = text.replace(/```[a-z-]*\s*/gi, '').replace(/```/g, '').trim();
-
-            graphInput.value = text;
-            setStatus('Generated! Click Render or press Ctrl+Enter', 'success');
-
-            // Auto-render if renderGraph function exists
-            if (typeof window.renderGraph === 'function') {
-                window.renderGraph();
-            }
-
-            setTimeout(function() { setStatus('', ''); }, 4000);
-        })
-        .catch(function(err) {
-            setStatus(err.message, 'error');
-        })
-        .finally(function() {
-            aiBtn.disabled = false;
-            aiBtn.textContent = 'Generate';
-        });
-    }
-})();
+wireLazyAssistant({
+    moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/graph-easy-adapter.js',
+    exportName: 'createGraphEasyAssistant',
+    buttonId: 'btnGraphEasyAI',
+    boot: aiAssistantBoot,
+});
 </script>
 
 </body>
