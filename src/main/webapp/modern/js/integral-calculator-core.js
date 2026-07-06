@@ -876,6 +876,26 @@ function solveViaSympy(expr, v, lower, upper) {
         catch (e) { return { ok: false, error: 'Solver returned bad data' }; }
         if (!parsed.ok) return { ok: false, error: parsed.error || 'Solver failed' };
         if (parsed.unresolved) {
+            // No symbolic closed form — but a definite integral often still has a
+            // numeric value (e.g. ∫₀^∞ x²/(eˣ−1)dx = 2ζ(3) ≈ 2.4041138). Show that
+            // instead of dead-ending; only fail when there's no number either.
+            var num = parsed.numeric;
+            if (isDefinite && num != null && isFinite(num)) {
+                var approx = Number(num).toPrecision(10).replace(/\.?0+$/, '');
+                return {
+                    ok: true,
+                    method: 'Numeric result (no closed form)',
+                    unresolved: false,
+                    numericOnly: true,
+                    resultLatex: '\\approx ' + approx,
+                    value: approx,
+                    antiderivativeLatex: null,
+                    numericValue: num,
+                    rulesStr: parsed.rules_str || '',
+                    ruleDisplayNames: [],
+                    sympySteps: []
+                };
+            }
             return { ok: false, error: 'No closed-form result found' };
         }
         var resultLatex = isDefinite ? parsed.latex : (parsed.latex + ' + C');

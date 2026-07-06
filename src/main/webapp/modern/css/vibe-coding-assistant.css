@@ -1478,3 +1478,21 @@ body.vca-no-select, body.vca-no-select * { user-select: none !important; }
   font-size: 0.9rem;
   line-height: 1.5;
 }
+
+/* Tier-4: AI-reasoned answers that no engine verified (opt-in via [[UNVERIFIED]] token) */
+.vca-msg.is-unverified .vca-msg-body {
+  border-left: 3px solid #f59e0b;
+  padding-left: 10px;
+}
+.vca-unverified-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 6px;
+  padding: 3px 9px;
+  margin-bottom: 8px;
+}
