@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "cryptography/asn1-decoder");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,6 +63,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
 
     <%@ include file="modern/ads/ad-init.jsp" %>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <style>
         :root {
@@ -109,6 +113,11 @@
         .ad-btn-secondary { background: var(--bg-secondary, #f8fafc); color: var(--text-primary, #0f172a); border: 1px solid var(--border, #e2e8f0); }
         .ad-btn-secondary:hover { border-color: var(--tool-primary); color: var(--tool-primary); }
         .ad-btn-sm { padding: 0.4rem 0.875rem; font-size: 0.8125rem; }
+        .ad-btn-ai {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+        }
+        .ad-btn-ai:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
 
         /* ── Output tabs ────────────────────────── */
         .ad-tabs { display: flex; border-bottom: 1px solid var(--border, #e2e8f0); overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -346,6 +355,7 @@
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                             Decode ASN.1
                         </button>
+                        <button type="button" class="ad-btn ad-btn-ai" id="btnAsn1AI" title="AI assistant (Ctrl+Shift+A)" aria-label="Open AI assistant">✨ AI</button>
                         <button class="ad-btn ad-btn-secondary" onclick="clearAll()">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
                             Clear
@@ -1004,8 +1014,57 @@ l3RTq+Fy
         });
     })();
 
+    // Context for ASN.1 AI assistant (tree, errors, selected node; private keys redacted)
+    window.getAsn1DecoderContext = function() {
+        const raw = document.getElementById('asn1Input')?.value?.trim() || '';
+        const tree = document.getElementById('asn1Output')?.innerText?.trim() || '';
+        const status = document.getElementById('decodeStatus')?.textContent?.trim() || '';
+        const summary = document.getElementById('resultStatus')?.textContent?.trim() || '';
+        const selected = document.querySelector('.ad-asn1-row.selected');
+        const parts = [];
+
+        if (summary) parts.push('Decode summary: ' + summary);
+        else if (status) parts.push('Status: ' + status);
+
+        if (raw) {
+            let preview = raw;
+            if (/-----BEGIN[^-]*PRIVATE KEY-----/i.test(raw)) {
+                preview = raw.replace(/-----BEGIN[\s\S]*?-----END[^-]+-----/g, '[PEM BLOCK REDACTED — private key not sent to AI]');
+            } else if (raw.length > 5000) {
+                preview = raw.slice(0, 5000) + '\n…[input truncated for AI context]';
+            }
+            parts.push('Input (' + detectLabel(raw) + '):\n' + preview);
+        }
+
+        if (tree) {
+            const clipped = tree.length > 12000 ? tree.slice(0, 12000) + '\n…[tree truncated]' : tree;
+            parts.push('Decoded ASN.1 tree:\n' + clipped);
+        }
+
+        if (selected) {
+            parts.push('Selected tree node:\n' + selected.innerText.trim());
+        }
+
+        if (!parts.length) {
+            return '(No input decoded yet — paste PEM, Base64, or hex, click Decode ASN.1, then ask about the structure.)';
+        }
+        return parts.join('\n\n');
+    };
+
     // Expose to global scope for onclick= attributes
     Object.assign(window, { decodeASN1, clearAll, newAnalysis, loadExample, switchTab, expandAll, collapseAll, copyOutput, _selectNode: window._selectNode, _toggleNode: window._toggleNode });
+    </script>
+
+    <script type="module">
+    <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
+    import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
+
+    window.asn1DecoderAssistant = wireLazyAssistant({
+        moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/asn1-decoder-adapter.js',
+        exportName: 'createAsn1DecoderAssistant',
+        buttonId: 'btnAsn1AI',
+        boot: aiAssistantBoot,
+    });
     </script>
 
     <%@ include file="modern/ads/ad-sticky-footer.jsp" %>
