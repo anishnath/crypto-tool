@@ -460,9 +460,9 @@
     // render so it survives the innerHTML rewrites below.
     var OWN_CREDIT =
         '<div class="own-credit">Ownership view powered by ' +
-        '<a href="https://cel.cs.brown.edu/aquascope/" target="_blank" rel="noopener noreferrer">Aquascope</a>' +
+        '<a href="https://cel.cs.brown.edu/aquascope/" target="_blank" rel="noopener nofollow noreferrer">Aquascope</a>' +
         ' (Brown PLT) — see the paper ' +
-        '<a href="https://cel.cs.brown.edu/paper/ownership-conceptual-model/" target="_blank" rel="noopener noreferrer">A Conceptual Model of Rust Ownership</a>.</div>';
+        '<a href="https://cel.cs.brown.edu/paper/ownership-conceptual-model/" target="_blank" rel="noopener nofollow noreferrer">A Conceptual Model of Rust Ownership</a>.</div>';
 
     function render(container, code, ownership) {
         var bodies = okBodies(ownership);
