@@ -19,6 +19,8 @@ import {
   solveStatisticsTask,
 } from '../../math-chat-compute.js';
 import { solveAlgebraTask } from '../../algebra-chat-compute.js';
+import { canSympyFallback, solveViaSympyFallback } from '../../math-sympy-fallback.js';
+import { normalizeTaskInputs } from '../../math-input-normalize.js';
 import { icApplyIntegralTask } from './integral-calculator.js';
 
 /** Tutor-first quick-action chips. One "Show example" may emit a solver block; others are prose/teaching. */
@@ -207,7 +209,7 @@ export function configureGenericMathShell(opts = {}) {
     toolName: pageLabel,
     focus,
     panelTitle: opts.panelTitle || 'Math AI',
-    subtitle: opts.subtitle || 'Parse calculus · Σ Solve in chat',
+    subtitle: opts.subtitle || 'Your math tutor — solve & learn in chat',
     placeholder: opts.placeholder || 'Paste ∫, d/dx, or lim problems (LaTeX, ASCII, or English)…',
     footerText: opts.footerText || 'Ctrl+Shift+A · same engines as LaTeX editor Σ Solve',
     emptyState: opts.emptyState || null,
@@ -218,7 +220,25 @@ export function configureGenericMathShell(opts = {}) {
 
     formatActionLabel: formatMathActionLabel,
 
-    computeInChat(task, mode = 'simple') {
+    // Tier 1 (in-browser core) → Tier 3 (SymPy backend) fallback. When the
+    // in-browser engine can't solve a supported problem, escalate to SymPy so
+    // the student gets a real answer instead of "Could not solve."
+    async computeInChat(task, mode = 'simple') {
+      // Tier 2: normalize messy unicode/notation to engine-ready ASCII up front
+      // so the fast in-browser path (Tier 1) accepts more real-world input.
+      const clean = normalizeTaskInputs(task);
+      const primary = await this._routePrimary(clean, mode);
+      if (primary && primary.ok) return primary;
+      if (canSympyFallback(clean?.action)) {
+        try {
+          const fb = await solveViaSympyFallback(clean, mode);
+          if (fb && fb.ok) return fb;
+        } catch { /* keep the primary error below */ }
+      }
+      return primary;
+    },
+
+    _routePrimary(task, mode = 'simple') {
       if (!task?.action || !MATH_ACTIONS.includes(task.action)) {
         return Promise.resolve({
           ok: false,
@@ -549,7 +569,7 @@ export function configureOdeMathShell() {
     pageLabel: 'ODE Solver',
     pageHint: 'ODE Solver (chat solves ODEs, ∫, d/dx, lim deterministically)',
     panelTitle: 'Math AI',
-    subtitle: 'Solve ODEs & calculus in chat',
+    subtitle: 'ODE tutor + calculus solver in chat',
     placeholder: "Paste y' = …, y'' + … = 0, ∫, d/dx, or lim problems — then Solve / Steps / Graph…",
     footerText: 'Ctrl+Shift+A · deterministic JS engines',
   });
@@ -562,7 +582,7 @@ export function configurePdeMathShell() {
     pageLabel: 'PDE Solver',
     pageHint: 'PDE Solver (chat solves PDEs numerically + ∫, d/dx, lim, ODE)',
     panelTitle: 'Math AI',
-    subtitle: 'Solve PDEs & calculus in chat',
+    subtitle: 'PDE tutor + calculus solver in chat',
     placeholder: 'Paste heat/wave/Laplace PDE params, ∫, d/dx, lim, or ODE — then Solve / Steps…',
     footerText: 'Ctrl+Shift+A · same PDE engine as page Solve',
   });
