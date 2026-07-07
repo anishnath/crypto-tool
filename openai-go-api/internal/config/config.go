@@ -14,11 +14,12 @@ import (
 
 // Config is the assembled runtime configuration.
 type Config struct {
-	Port         string
-	DefaultModel string
-	CatalogPath  string
-	Registry     *registry.Registry
-	Billing      billing.Store
+	Port               string
+	DefaultModel       string
+	DefaultVisionModel string
+	CatalogPath        string
+	Registry           *registry.Registry
+	Billing            billing.Store
 }
 
 // Load builds config from three layers:
@@ -38,6 +39,11 @@ func Load() (Config, error) {
 		return Config{}, err
 	}
 
+	visionModel, err := catalogFile.resolveVisionModel(policy.DefaultVisionModel)
+	if err != nil {
+		return Config{}, err
+	}
+
 	providers, err := loadProviders(catalogFile.providerIDs())
 	if err != nil {
 		return Config{}, err
@@ -49,17 +55,18 @@ func Load() (Config, error) {
 	}
 
 	providerInfos := buildProviderInfos(catalogFile.activeModels(), providers)
-	reg, err := registry.New(defaultModel, policy.ModelCatalogPath, entries, providerInfos)
+	reg, err := registry.New(defaultModel, visionModel, policy.ModelCatalogPath, entries, providerInfos)
 	if err != nil {
 		return Config{}, err
 	}
 
 	return Config{
-		Port:         policy.Port,
-		DefaultModel: defaultModel,
-		CatalogPath:  policy.ModelCatalogPath,
-		Registry:     reg,
-		Billing:      billing.LoadStore(),
+		Port:               policy.Port,
+		DefaultModel:       defaultModel,
+		DefaultVisionModel: visionModel,
+		CatalogPath:        policy.ModelCatalogPath,
+		Registry:           reg,
+		Billing:            billing.LoadStore(),
 	}, nil
 }
 
@@ -78,11 +85,12 @@ func buildRegistryEntries(models []ModelDecl, providers map[string]*compatible.C
 			sampling = &s
 		}
 		entries = append(entries, registry.ModelEntry{
-			ID:         m.ID,
-			ProviderID: providerID,
-			Modalities: modalities,
-			Sampling:   sampling,
-			Backend:    backend,
+			ID:           m.ID,
+			ProviderID:   providerID,
+			Modalities:   modalities,
+			Capabilities: m.Capabilities,
+			Sampling:     sampling,
+			Backend:      backend,
 		})
 	}
 	return entries, nil

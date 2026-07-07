@@ -57,7 +57,7 @@ func assertValidationCode(t *testing.T, err error, code string) {
 func testRegistry(t *testing.T) *Registry {
 	t.Helper()
 	backend := stubBackend{id: "openai"}
-	reg, err := New("gpt-5.4-mini", "test.yaml", []ModelEntry{
+	reg, err := New("gpt-5.4-mini", "", "test.yaml", []ModelEntry{
 		{ID: "gpt-5.4-mini", ProviderID: "openai", Modalities: []string{"chat", "responses"}, Backend: backend},
 		{ID: "gpt-5.4-pro", ProviderID: "openai", Modalities: []string{"responses"}, Backend: backend},
 	}, []ProviderInfo{{ID: "openai", BaseURL: "https://example.com/v1", ModelIDs: []string{"gpt-5.4-mini", "gpt-5.4-pro"}}})

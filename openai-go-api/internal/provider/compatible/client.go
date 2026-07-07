@@ -226,7 +226,21 @@ func toSDKMessages(messages []provider.Message) ([]openai.ChatCompletionMessageP
 		case "assistant":
 			out = append(out, openai.AssistantMessage(m.Content))
 		default:
-			out = append(out, openai.UserMessage(m.Content))
+			if len(m.Images) > 0 {
+				parts := make([]openai.ChatCompletionContentPartUnionParam, 0, len(m.Images)+1)
+				if strings.TrimSpace(m.Content) != "" {
+					parts = append(parts, openai.TextContentPart(m.Content))
+				}
+				for _, url := range m.Images {
+					if strings.TrimSpace(url) == "" {
+						continue
+					}
+					parts = append(parts, openai.ImageContentPart(openai.ChatCompletionContentPartImageImageURLParam{URL: url}))
+				}
+				out = append(out, openai.UserMessage(parts))
+			} else {
+				out = append(out, openai.UserMessage(m.Content))
+			}
 		}
 	}
 	return out, nil

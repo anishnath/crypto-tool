@@ -23,11 +23,12 @@ type AIPlanRecord struct {
 }
 
 type aiPlanEntry struct {
-	DisplayName string
-	TokenLimit  int64
-	Description string
-	Features    []string
-	ModelID     string
+	DisplayName   string
+	TokenLimit    int64
+	Description   string
+	Features      []string
+	ModelID       string
+	VisionModelID string
 }
 
 // loadAIPlans reads active rows from ai_plans (cached). Missing plan_ids are
@@ -42,7 +43,7 @@ func (s *D1Store) loadAIPlans(ctx context.Context) (map[string]aiPlanEntry, erro
 	s.aiPlansMu.RUnlock()
 
 	rows, err := s.QueryRows(ctx,
-		`SELECT plan_id, display_name, monthly_token_limit, description, features_json, model_id
+		`SELECT plan_id, display_name, monthly_token_limit, description, features_json, model_id, vision_model_id
 		 FROM ai_plans WHERE active = 1`)
 	if err != nil {
 		return nil, err
@@ -59,11 +60,12 @@ func (s *D1Store) loadAIPlans(ctx context.Context) (map[string]aiPlanEntry, erro
 			continue
 		}
 		plans[id] = aiPlanEntry{
-			DisplayName: strings.TrimSpace(d1Str(row, "display_name")),
-			TokenLimit:  limit,
-			Description: strings.TrimSpace(d1Str(row, "description")),
-			Features:    parseFeaturesJSON(d1Str(row, "features_json")),
-			ModelID:     strings.TrimSpace(d1Str(row, "model_id")),
+			DisplayName:   strings.TrimSpace(d1Str(row, "display_name")),
+			TokenLimit:    limit,
+			Description:   strings.TrimSpace(d1Str(row, "description")),
+			Features:      parseFeaturesJSON(d1Str(row, "features_json")),
+			ModelID:       strings.TrimSpace(d1Str(row, "model_id")),
+			VisionModelID: strings.TrimSpace(d1Str(row, "vision_model_id")),
 		}
 	}
 	ensureAIPlanFallbacks(plans)
@@ -128,6 +130,26 @@ func (s *D1Store) planModelID(ctx context.Context, planID string) string {
 	}
 	if e, ok := plans[planID]; ok {
 		return strings.TrimSpace(e.ModelID)
+	}
+	return ""
+}
+
+// TierVisionModelID returns the per-tier vision model for the user's plan ("" if unset).
+func (s *D1Store) TierVisionModelID(ctx context.Context, user UserIdentity) (string, error) {
+	planID, _, err := s.resolvePlan(ctx, user)
+	if err != nil {
+		return "", err
+	}
+	return s.planVisionModelID(ctx, planID), nil
+}
+
+func (s *D1Store) planVisionModelID(ctx context.Context, planID string) string {
+	plans, err := s.loadAIPlans(ctx)
+	if err != nil {
+		return ""
+	}
+	if e, ok := plans[planID]; ok {
+		return strings.TrimSpace(e.VisionModelID)
 	}
 	return ""
 }

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/anish/crypto-tool/openai-go-api/internal/billing"
@@ -19,8 +20,9 @@ type chatCompletionRequest struct {
 }
 
 type chatMessageBody struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
+	Role    string   `json:"role"`
+	Content string   `json:"content"`
+	Images  []string `json:"images,omitempty"` // data: or https image URLs (user messages, vision)
 }
 
 type chatCompletionResponse struct {
@@ -50,6 +52,7 @@ func (a *API) ChatCompletions(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, service.ChatMessage{
 			Role:    m.Role,
 			Content: m.Content,
+			Images:  m.Images,
 		})
 	}
 	messages = service.SanitizeChatMessages(messages)
@@ -65,6 +68,20 @@ func (a *API) ChatCompletions(w http.ResponseWriter, r *http.Request) {
 
 	reqCtx := a.billing.RequestContext(r.Context(), r)
 	a.applyTierChatModel(r.Context(), reqCtx.User, &req, &body.Model)
+
+	// Auto-route: if the request carries images but the resolved model can't
+	// see (e.g. a text-only tier/default model), switch to a vision model.
+	// Preference: the user's per-tier vision model (ai_plans.vision_model_id)
+	// → else the gateway's global default_vision_model.
+	if hasImageMessages(req.Messages) && !a.gateway.SupportsVision(req.Model) {
+		vm, _ := a.billing.TierVisionModel(r.Context(), reqCtx.User)
+		if vm == "" || !a.gateway.SupportsVision(vm) {
+			vm = a.gateway.DefaultVisionModel()
+		}
+		if vm != "" && a.gateway.SupportsVision(vm) {
+			req.Model = vm
+		}
+	}
 
 	providerID, _ := a.gateway.ResolveProvider(req.Model, provider.ModalityChat)
 	debugHTTPRequest(r, reqCtx,
@@ -169,10 +186,36 @@ func (a *API) streamChatCompletions(w http.ResponseWriter, r *http.Request, req 
 	})
 }
 
+// redactImagesForLog replaces base64 image payloads with a short placeholder so
+// the request_json audit column doesn't store multi-MB blobs on vision requests.
+func redactImagesForLog(msgs []chatMessageBody) []chatMessageBody {
+	out := make([]chatMessageBody, len(msgs))
+	for i, m := range msgs {
+		if len(m.Images) > 0 {
+			imgs := make([]string, len(m.Images))
+			for j, img := range m.Images {
+				imgs[j] = fmt.Sprintf("<image omitted: %d bytes>", len(img))
+			}
+			m.Images = imgs
+		}
+		out[i] = m
+	}
+	return out
+}
+
+func hasImageMessages(msgs []service.ChatMessage) bool {
+	for _, m := range msgs {
+		if len(m.Images) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
 func chatPendingRecord(r *http.Request, body chatCompletionRequest, providerID string, reqCtx billing.RequestContext) billing.PendingRecord {
 	requestJSON, _ := json.Marshal(map[string]any{
 		"model":       body.Model,
-		"messages":    body.Messages,
+		"messages":    redactImagesForLog(body.Messages),
 		"stream":      body.Stream,
 		"task":        body.Task,
 		"temperature": body.Temperature,

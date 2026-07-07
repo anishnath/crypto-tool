@@ -32,23 +32,25 @@ type CatalogSnapshot struct {
 
 // ModelEntry binds a model ID to a provider backend and capabilities.
 type ModelEntry struct {
-	ID         string
-	ProviderID string
-	Modalities []string
-	Sampling   *catalog.SamplingProfile
-	Backend    provider.ChatBackend
+	ID           string
+	ProviderID   string
+	Modalities   []string
+	Capabilities []string // e.g. "vision" — extra capabilities beyond endpoint modalities
+	Sampling     *catalog.SamplingProfile
+	Backend      provider.ChatBackend
 }
 
 // Registry routes model IDs to provider backends.
 type Registry struct {
-	defaultModel string
-	catalogPath  string
-	entries      map[string]ModelEntry
-	providers    []ProviderInfo
+	defaultModel       string
+	defaultVisionModel string
+	catalogPath        string
+	entries            map[string]ModelEntry
+	providers          []ProviderInfo
 }
 
 // New builds a registry from model entries and a default model ID.
-func New(defaultModel, catalogPath string, entries []ModelEntry, providers []ProviderInfo) (*Registry, error) {
+func New(defaultModel, defaultVisionModel, catalogPath string, entries []ModelEntry, providers []ProviderInfo) (*Registry, error) {
 	if len(entries) == 0 {
 		return nil, fmt.Errorf("at least one model must be configured")
 	}
@@ -73,15 +75,32 @@ func New(defaultModel, catalogPath string, entries []ModelEntry, providers []Pro
 	}
 
 	return &Registry{
-		defaultModel: def,
-		catalogPath:  catalogPath,
-		entries:      m,
-		providers:    providers,
+		defaultModel:       def,
+		defaultVisionModel: strings.TrimSpace(defaultVisionModel),
+		catalogPath:        catalogPath,
+		entries:            m,
+		providers:          providers,
 	}, nil
 }
 
 // DefaultModel returns the configured default model ID.
 func (r *Registry) DefaultModel() string { return r.defaultModel }
+
+// DefaultVisionModel returns the model image requests auto-route to ("" if unset).
+func (r *Registry) DefaultVisionModel() string { return r.defaultVisionModel }
+
+// SupportsVision reports whether the model (empty → default) can accept images.
+func (r *Registry) SupportsVision(modelID string) bool {
+	id := strings.TrimSpace(modelID)
+	if id == "" {
+		id = r.defaultModel
+	}
+	entry, ok := r.entries[id]
+	if !ok {
+		return false
+	}
+	return slices.Contains(entry.Capabilities, "vision")
+}
 
 // CatalogPath returns the YAML catalog file path.
 func (r *Registry) CatalogPath() string { return r.catalogPath }

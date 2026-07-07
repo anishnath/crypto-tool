@@ -6,32 +6,41 @@
 
 default_model: gpt-5.4-mini
 
+# Image requests to a non-vision model auto-route here. Override with DEFAULT_VISION_MODEL.
+default_vision_model: gpt-5.4-mini
+
 models:
   # OpenAI — standard models (chat + responses)
   - id: gpt-5.5
     provider: openai
     modalities: [chat, responses]
+    capabilities: [vision]
 
   - id: gpt-5.4
     provider: openai
     modalities: [chat, responses]
+    capabilities: [vision]
 
   - id: gpt-5.4-mini
     provider: openai
     modalities: [chat, responses]
+    capabilities: [vision]
 
   - id: gpt-5.4-nano
     provider: openai
     modalities: [chat, responses]
+    capabilities: [vision]
 
   # OpenAI Pro — Responses API only (not supported on /v1/chat/completions)
   - id: gpt-5.5-pro
     provider: openai
     modalities: [responses]
+    capabilities: [vision]
 
   - id: gpt-5.4-pro
     provider: openai
     modalities: [responses]
+    capabilities: [vision]
 
   # MiMo — chat
   - id: mimo-v2.5-pro
@@ -47,11 +56,13 @@ models:
   - id: mimo-v2.5
     provider: mimo
     modalities: [chat]
+    capabilities: [vision]
     enabled: true
 
   - id: mimo-v2-omni
     provider: mimo
     modalities: [chat]
+    capabilities: [vision]
     enabled: true
 
   - id: mimo-v2-flash

@@ -10,16 +10,18 @@ import (
 
 // CatalogFile is layer 2: declarative model catalog (YAML on disk).
 type CatalogFile struct {
-	DefaultModel string      `yaml:"default_model"`
-	Models       []ModelDecl `yaml:"models"`
+	DefaultModel       string      `yaml:"default_model"`
+	DefaultVisionModel string      `yaml:"default_vision_model"` // model to auto-route image requests to
+	Models             []ModelDecl `yaml:"models"`
 }
 
 // ModelDecl is one routable model in the catalog file.
 type ModelDecl struct {
-	ID         string   `yaml:"id"`
-	Provider   string   `yaml:"provider"`
-	Modalities []string `yaml:"modalities"`
-	Enabled    *bool    `yaml:"enabled,omitempty"`
+	ID           string   `yaml:"id"`
+	Provider     string   `yaml:"provider"`
+	Modalities   []string `yaml:"modalities"`
+	Capabilities []string `yaml:"capabilities,omitempty"` // e.g. [vision] — gates image input
+	Enabled      *bool    `yaml:"enabled,omitempty"`
 }
 
 func (m ModelDecl) isEnabled() bool {
@@ -108,6 +110,33 @@ func (f CatalogFile) providerIDs() []string {
 		ids = append(ids, id)
 	}
 	return ids
+}
+
+// resolveVisionModel picks the model to auto-route image requests to. Env
+// override (DEFAULT_VISION_MODEL) wins over the catalog's default_vision_model.
+// Returns "" (feature off) when neither is set. Errors if the chosen model
+// isn't an enabled, vision-capable model in the catalog.
+func (f CatalogFile) resolveVisionModel(envOverride string) (string, error) {
+	pick := strings.TrimSpace(envOverride)
+	src := "DEFAULT_VISION_MODEL"
+	if pick == "" {
+		pick = strings.TrimSpace(f.DefaultVisionModel)
+		src = "default_vision_model"
+	}
+	if pick == "" {
+		return "", nil // no vision auto-route configured
+	}
+	for _, m := range f.activeModels() {
+		if strings.TrimSpace(m.ID) == pick {
+			for _, c := range m.Capabilities {
+				if strings.TrimSpace(c) == "vision" {
+					return pick, nil
+				}
+			}
+			return "", fmt.Errorf("%s %q is not vision-capable (add 'capabilities: [vision]')", src, pick)
+		}
+	}
+	return "", fmt.Errorf("%s %q is not an enabled model in catalog", src, pick)
 }
 
 func (f CatalogFile) resolveDefault(envOverride string) (string, error) {

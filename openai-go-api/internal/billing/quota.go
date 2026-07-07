@@ -62,6 +62,7 @@ type QuotaStore interface {
 	CheckAIQuota(ctx context.Context, user UserIdentity) error
 	AddAIUsage(ctx context.Context, user UserIdentity, tokens int64) error
 	TierModelID(ctx context.Context, user UserIdentity) (string, error)
+	TierVisionModelID(ctx context.Context, user UserIdentity) (string, error)
 }
 
 // QuotaLimits holds monthly token caps (env fallback when ai_plans is unavailable).

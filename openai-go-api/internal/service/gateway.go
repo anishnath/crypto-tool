@@ -28,6 +28,7 @@ type ChatRequest struct {
 type ChatMessage struct {
 	Role    string
 	Content string
+	Images  []string
 }
 
 type ChatResult struct {
@@ -59,6 +60,12 @@ type ModelCatalog = registry.CatalogSnapshot
 type ModelSpec = registry.ModelSpec
 
 func (g *Gateway) DefaultModel() string { return g.reg.DefaultModel() }
+
+// DefaultVisionModel returns the model that image requests auto-route to ("" if unset).
+func (g *Gateway) DefaultVisionModel() string { return g.reg.DefaultVisionModel() }
+
+// SupportsVision reports whether the model (empty → default) accepts image input.
+func (g *Gateway) SupportsVision(model string) bool { return g.reg.SupportsVision(model) }
 
 func (g *Gateway) ProviderIDs() []string { return g.reg.ProviderIDs() }
 
@@ -167,7 +174,7 @@ func toProviderMessages(msgs []ChatMessage) ([]provider.Message, error) {
 	}
 	out := make([]provider.Message, len(msgs))
 	for i, m := range msgs {
-		out[i] = provider.Message{Role: m.Role, Content: m.Content}
+		out[i] = provider.Message{Role: m.Role, Content: m.Content, Images: m.Images}
 	}
 	return out, nil
 }

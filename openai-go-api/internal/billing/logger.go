@@ -77,6 +77,13 @@ func (l *Logger) TierChatModel(ctx context.Context, user UserIdentity) (string, 
 	return "", nil
 }
 
+func (l *Logger) TierVisionModel(ctx context.Context, user UserIdentity) (string, error) {
+	if qs, ok := l.store.(QuotaStore); ok {
+		return qs.TierVisionModelID(ctx, user)
+	}
+	return "", nil
+}
+
 func (l *Logger) GetAIQuota(ctx context.Context, user UserIdentity) (AIQuotaStatus, error) {
 	if qs, ok := l.store.(QuotaStore); ok {
 		return qs.GetAIQuota(ctx, user)

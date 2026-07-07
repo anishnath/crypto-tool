@@ -18,10 +18,12 @@ type SamplingConfig struct {
 	TopP        float64
 }
 
-// Message is a chat role/content pair.
+// Message is a chat role/content pair. Images (data: or https URLs) attach to
+// user messages for multimodal (vision) requests.
 type Message struct {
 	Role    string
 	Content string
+	Images  []string
 }
 
 // ChatResult is a chat completion result (non-streaming or aggregated stream).
