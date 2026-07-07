@@ -441,13 +441,13 @@
         });
     });
 </script>
-<script src="<%=request.getContextPath()%>/modern/js/dark-mode.js?v=<%=v%>" defer></script>
-
+<%-- dark-mode.js is loaded by math-libs.jsp via the engine boot below (avoid double-load: redeclares DarkMode) --%>
 <%@ include file="../modern/components/math-tool-engine-boot.inc.jsp" %>
 <%
     request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
     request.setAttribute("mathAiProfileExport", "configureMathHubShell");
     request.setAttribute("mathAiEmbedMountId", "mathAiEmbed");
+    request.setAttribute("aiImageUpload", "true");   // enable image scan on the math hub
 %>
 <%@ include file="../modern/components/math-ai-embedded-boot.inc.jsp" %>
 </body>
