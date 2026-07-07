@@ -1496,3 +1496,39 @@ body.vca-no-select, body.vca-no-select * { user-select: none !important; }
   padding: 3px 9px;
   margin-bottom: 8px;
 }
+
+/* Image upload ("scan") — attach button, staged previews, bubble thumbnails */
+.vca-attach {
+  flex: 0 0 auto;
+  width: 34px; height: 34px;
+  align-self: flex-end;
+  border: 1px solid var(--vca-secondary);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--vca-foreground);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.vca-attach:hover { background: var(--vca-accent-soft); border-color: var(--vca-accent); }
+.vca-attachments {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 8px 10px 0;
+}
+.vca-thumb { position: relative; width: 56px; height: 56px; }
+.vca-thumb img {
+  width: 56px; height: 56px; object-fit: cover;
+  border-radius: 8px; border: 1px solid var(--vca-secondary);
+}
+.vca-thumb-remove {
+  position: absolute; top: -6px; right: -6px;
+  width: 18px; height: 18px; border-radius: 50%;
+  border: none; background: #ef4444; color: #fff;
+  font-size: 12px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.vca-msg-images { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.vca-msg-images img {
+  max-width: 120px; max-height: 120px;
+  border-radius: 8px; border: 1px solid var(--vca-secondary);
+}

@@ -77,6 +77,15 @@ Some problems have no solver block and no engine to verify them: proofs ("show t
 - **You MUST label it as unverified.** Begin the message with the exact token \`[[UNVERIFIED]]\` on the first line — the student sees this rendered as a "not machine-verified" warning badge. Then give the reasoning.
 - Be rigorous, show every step, and if any part is uncertain, say so plainly. This is the one place you compute — so be careful.
 
+**When the user sends an image (scan)**
+An image is INPUT to interpret — never a thing to "solve" as-is. Read it, then route exactly like typed input:
+1. **Transcribe first.** Restate what you read in one line with KaTeX so the student can confirm — e.g. "I read this as $\\displaystyle\\int x^{2}\\,dx$." If handwriting/quality makes it ambiguous, say what you think it is and ask them to confirm.
+2. **Route by what it actually is:**
+   - **A problem one of the solvers handles** (integral, derivative, limit, matrix, quadratic, inequality, trig, statistics, …) → emit the matching solver block so **Solve / Steps / Graph** appear. The engine computes — you do not.
+   - **Math, but no solver fits** (a proof, a geometry or word problem, a topic with no block) → work it out via the \`[[UNVERIFIED]]\` last-resort path above.
+   - **No readable math** (blurry, or the image simply isn't a math problem) → say so briefly and ask for a clearer photo or a typed problem. **Never invent a problem** that isn't there.
+3. **Several problems in one image** → briefly list them and emit a block for the clearest one, or ask which to solve.
+
 **Display math in prose (required when setting up a problem)**
 
 Integral:
@@ -429,6 +438,7 @@ export function createMathAssistant(opts) {
     placeholder: shell().placeholder || 'Paste ∫, d/dx, or lim problems (LaTeX, ASCII, or English)…',
     footerText: shell().footerText || 'Ctrl+Shift+A · Σ Solve in chat: Solve · Steps · Graph',
     emptyState: shell().emptyState || null,
+    imageUpload: opts.imageUpload === true,
     historyTurns: 8,
     contextValidator: false,
     systemPrompt: buildMathPrompt(shell()),

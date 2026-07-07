@@ -679,6 +679,10 @@ export class ToolAiAssistant {
     // Optional first-run greeting shown in the (empty) message area. Opt-in:
     // { title, text }. Cleared on first message; restored on reset.
     this.emptyState = (opts.emptyState && typeof opts.emptyState === 'object') ? opts.emptyState : null;
+    // Image upload ("scan"): per-tool opt-in. Requires sign-in at click time.
+    this.imageUpload = opts.imageUpload === true;
+    /** @type {string[]} data: URLs staged for the next send */
+    this._pendingImages = [];
     this.onTurn = opts.onTurn;
     this.onSend = typeof opts.onSend === 'function' ? opts.onSend : null;
     this.sanitizeForAi = typeof opts.sanitizeForAi === 'function' ? opts.sanitizeForAi : null;
@@ -784,7 +788,9 @@ export class ToolAiAssistant {
         <div class="vca-body">
           <div class="vca-messages" role="log" aria-live="polite" aria-atomic="false"></div>
           <div class="vca-quick" role="toolbar" hidden></div>
+          ${this.imageUpload ? '<div class="vca-attachments" hidden></div>' : ''}
           <form class="vca-input-row" autocomplete="off">
+            ${this.imageUpload ? '<button type="button" class="vca-attach" title="Attach an image to scan" aria-label="Attach image">📷</button><input type="file" class="vca-file" accept="image/*" multiple hidden />' : ''}
             <textarea class="vca-input" rows="2" aria-label="Message"></textarea>
             <button type="submit" class="vca-send" data-mode="send">Send</button>
           </form>
@@ -856,6 +862,27 @@ export class ToolAiAssistant {
     input.addEventListener('input', () => this._autoResize(input));
     backdrop.addEventListener('keydown', (e) => this._trapFocus(e));
 
+    // NOTE: this._els is assigned further below, so query locally here.
+    const attachBtn = $('.vca-attach');
+    const fileInputEl = $('.vca-file');
+    if (this.imageUpload && attachBtn && fileInputEl) {
+      attachBtn.addEventListener('click', () => {
+        if (!this._signedIn()) { this._promptSignInForScan(); return; }
+        fileInputEl.click();
+      });
+      fileInputEl.addEventListener('change', (e) => {
+        this._handleImageFiles(e.target.files);
+        e.target.value = '';
+      });
+      input.addEventListener('paste', (e) => {
+        const items = e.clipboardData?.items;
+        if (!items) return;
+        const files = [];
+        for (const it of items) { if (it.type.startsWith('image/')) { const f = it.getAsFile(); if (f) files.push(f); } }
+        if (files.length) { e.preventDefault(); this._handleImageFiles(files); }
+      });
+    }
+
     const bodyEl = $('.vca-body');
     const messages = $('.vca-messages');
     let billingBar = null;
@@ -883,6 +910,9 @@ export class ToolAiAssistant {
       collapseBtn,
       modeSelect,
       freshToggle,
+      attach: $('.vca-attach'),
+      fileInput: $('.vca-file'),
+      attachments: $('.vca-attachments'),
     };
     if (this.billing?.enabled) this._setTier('unknown');
 
@@ -1086,7 +1116,82 @@ export class ToolAiAssistant {
     this._els.messages.appendChild(wrap);
   }
 
-  _appendBubble(role, text, { streaming = false } = {}) {
+  // ── Image upload ("scan") ───────────────────────────────────────────────
+  _signedIn() {
+    return !!((this.billing && this.billing.userId) || this.userId);
+  }
+
+  _promptSignInForScan() {
+    if (typeof window.showToast === 'function') window.showToast('Sign in to scan an image', 'warning');
+    else this._renderSystemBubble('Sign in to scan an image.', { kind: 'info' });
+  }
+
+  async _handleImageFiles(fileList) {
+    const files = Array.from(fileList || []).filter((f) => f.type && f.type.startsWith('image/'));
+    if (!files.length) return;
+    const MAX = 4;
+    for (const f of files) {
+      if (this._pendingImages.length >= MAX) {
+        this._renderSystemBubble(`Up to ${MAX} images per message.`, { kind: 'info' });
+        break;
+      }
+      try {
+        this._pendingImages.push(await this._resizeImage(f));
+      } catch {
+        this._renderSystemBubble('Could not read that image.', { kind: 'warn' });
+      }
+    }
+    this._renderAttachments();
+  }
+
+  // Downscale + re-encode so the payload stays well under the API's ~5MB bound.
+  _resizeImage(file, maxDim = 1568, quality = 0.85) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * scale));
+        const h = Math.max(1, Math.round(img.height * scale));
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); // flatten alpha for JPEG
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('image load failed')); };
+      img.src = url;
+    });
+  }
+
+  _renderAttachments() {
+    const el = this._els?.attachments;
+    if (!el) return;
+    el.innerHTML = '';
+    if (!this._pendingImages.length) { el.hidden = true; return; }
+    el.hidden = false;
+    this._pendingImages.forEach((src, i) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'vca-thumb';
+      const im = document.createElement('img');
+      im.src = src; im.alt = 'attachment';
+      const rm = document.createElement('button');
+      rm.type = 'button'; rm.className = 'vca-thumb-remove'; rm.textContent = '×';
+      rm.setAttribute('aria-label', 'Remove image');
+      rm.addEventListener('click', () => { this._pendingImages.splice(i, 1); this._renderAttachments(); });
+      wrap.append(im, rm);
+      el.appendChild(wrap);
+    });
+  }
+
+  _clearAttachments() {
+    this._pendingImages = [];
+    this._renderAttachments();
+  }
+
+  _appendBubble(role, text, { streaming = false, images = null } = {}) {
     const emptyEl = this._els?.messages.querySelector('.vca-empty');
     if (emptyEl) emptyEl.remove();
     const bubble = document.createElement('div');
@@ -1097,6 +1202,17 @@ export class ToolAiAssistant {
     body.className = 'vca-msg-body';
     body.textContent = text || '';
     bubble.appendChild(body);
+
+    if (Array.isArray(images) && images.length) {
+      const strip = document.createElement('div');
+      strip.className = 'vca-msg-images';
+      images.forEach((src) => {
+        const im = document.createElement('img');
+        im.src = src; im.alt = 'attached image';
+        strip.appendChild(im);
+      });
+      bubble.appendChild(strip);
+    }
 
     this._els.messages.appendChild(bubble);
     if (role === 'assistant' && !streaming && text) {
@@ -1281,7 +1397,7 @@ export class ToolAiAssistant {
     return this.sanitizeForAi ? this.sanitizeForAi(raw) : raw;
   }
 
-  _buildMessages(userText, state, forceReset = false) {
+  _buildMessages(userText, state, forceReset = false, images = null) {
     const trimmedUser = String(userText ?? '').trim();
     const msgs = [{ role: 'system', content: this._effectiveSystemPrompt() }];
 
@@ -1296,12 +1412,14 @@ export class ToolAiAssistant {
     }
 
     const haveContext = snapshot && !(this.skipEmptyContext && isEffectivelyEmptyContext(snapshot));
-    msgs.push({
+    const userMsg = {
       role: 'user',
       content: haveContext
         ? `[CURRENT CONTEXT]\n${snapshot}\n\n[USER]\n${this._sanitizeAiText(trimmedUser)}`
         : this._sanitizeAiText(trimmedUser),
-    });
+    };
+    if (Array.isArray(images) && images.length) userMsg.images = images;
+    msgs.push(userMsg);
     return msgs;
   }
 
@@ -1392,7 +1510,13 @@ export class ToolAiAssistant {
   async _send() {
     if (!this._els || this.busy) return;
     const text = this._els.input.value.trim();
-    if (!text) return;
+    const images = this.imageUpload ? this._pendingImages.slice() : [];
+    if (!text && !images.length) return;
+    if (images.length && !this._signedIn()) {
+      this._clearAttachments();
+      this._promptSignInForScan();
+      return;
+    }
 
     if (this._blockGuestSend(text)) {
       this._els.input.focus();
@@ -1402,6 +1526,7 @@ export class ToolAiAssistant {
     this._setBusy(true);
     this._els.input.value = '';
     this._autoResize(this._els.input);
+    if (images.length) this._clearAttachments();
 
     if (this.onSend) {
       try {
@@ -1420,8 +1545,8 @@ export class ToolAiAssistant {
       }
     }
 
-    this.history.push({ role: 'user', content: text });
-    this._appendBubble('user', text, { streaming: false });
+    this.history.push({ role: 'user', content: text || '(image)' });
+    this._appendBubble('user', text, { streaming: false, images });
 
     const snapshot = this._readState();
     if (!this._lastContextFingerprint) this._lastContextFingerprint = this._contextFingerprint(snapshot);
@@ -1459,7 +1584,7 @@ export class ToolAiAssistant {
     try {
       const full = await streamChat(
         this.aiUrl,
-        { messages: this._buildMessages(text, snapshot, forceReset) },
+        { messages: this._buildMessages(text, snapshot, forceReset, images) },
         {
           useGateway: this.useGateway,
           userId: this.userId,

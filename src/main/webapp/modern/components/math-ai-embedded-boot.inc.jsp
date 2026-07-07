@@ -30,6 +30,7 @@ import { <%= mathAiProfileExport != null && !mathAiProfileExport.isEmpty() ? mat
     <% } %>
     var boot = Object.assign({}, aiAssistantBoot, {
         toolId: 'math-ai-hub',
+        imageUpload: <%= "true".equals(String.valueOf(request.getAttribute("aiImageUpload"))) ? "true" : "false" %>,
     });
     window.mathAssistant = wireEmbeddedAssistant({
         moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/math-ai.js',
