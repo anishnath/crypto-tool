@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#0B1120"/>
+      <stop offset="100%" stop-color="#141326"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.30" cy="0.4" r="0.55">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#8B5CF6" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#8B5CF6" stroke-width="0.5" stroke-opacity="0.06"/>
+    </pattern>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#A78BFA"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- ── Left: a "scanned + solved" problem card ── -->
+  <g>
+    <!-- solution card -->
+    <rect x="80" y="150" width="360" height="330" rx="18" fill="#0E1626" stroke="#8B5CF6" stroke-opacity="0.45" stroke-width="1.5"/>
+
+    <!-- scan viewfinder corner brackets (signals "snap a photo") -->
+    <g stroke="url(#accent)" stroke-width="5" fill="none" stroke-linecap="round">
+      <path d="M60 178 L60 150 L88 150"/>
+      <path d="M432 150 L460 150 L460 178"/>
+      <path d="M60 452 L60 480 L88 480"/>
+      <path d="M432 480 L460 480 L460 452"/>
+    </g>
+
+    <!-- camera badge -->
+    <g transform="translate(400 176)">
+      <circle r="24" fill="#8B5CF6"/>
+      <rect x="-12" y="-7" width="24" height="16" rx="3" fill="none" stroke="#fff" stroke-width="2.2"/>
+      <circle cx="0" cy="1" r="4.5" fill="none" stroke="#fff" stroke-width="2.2"/>
+      <rect x="-4" y="-11" width="8" height="4" rx="1.5" fill="#fff"/>
+    </g>
+
+    <!-- the problem -->
+    <text x="112" y="238" font-family="'DejaVu Serif','Times New Roman',serif" font-size="46" fill="#F1F5F9">∫ x² dx</text>
+    <line x1="112" y1="262" x2="410" y2="262" stroke="#2a3350" stroke-width="1.5"/>
+
+    <!-- worked steps -->
+    <g font-family="'DejaVu Serif','Times New Roman',serif" font-size="28" fill="#94A3B8">
+      <text x="112" y="312">Step 1:  power rule</text>
+      <text x="112" y="356">= x³ / 3  + C</text>
+    </g>
+    <!-- final answer highlighted -->
+    <rect x="100" y="392" width="300" height="52" rx="10" fill="#8B5CF6" fill-opacity="0.16" stroke="#8B5CF6" stroke-opacity="0.5"/>
+    <text x="118" y="428" font-family="'DejaVu Serif','Times New Roman',serif" font-size="32" fill="#A78BFA">x³/3 + C  ✓</text>
+  </g>
+
+  <!-- ── Right: title block ── -->
+  <g transform="translate(520 150)" font-family="'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+    <rect x="0" y="0" width="56" height="4" rx="2" fill="url(#accent)"/>
+    <text x="0" y="33" font-size="18" font-weight="700" fill="#22D3EE" letter-spacing="2.5">8GWIFI · MATH AI</text>
+
+    <text x="0" y="120" font-size="66" font-weight="800" fill="#F1F5F9">AI Math Solver</text>
+    <text x="0" y="176" font-size="30" font-weight="600" fill="#C4B5FD">Step by step — type it or snap a photo</text>
+
+    <text x="0" y="232" font-size="21" fill="#94A3B8">Algebra · calculus · statistics · matrices · trig</text>
+    <text x="0" y="264" font-size="21" fill="#94A3B8">Free step-by-step answers, verified — no signup</text>
+
+    <!-- topic chips -->
+    <g transform="translate(0 300)" font-size="15" font-weight="700" text-anchor="middle" fill="#C4B5FD">
+      <rect x="0"   y="0" width="96"  height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="48"  y="22">Algebra</text>
+      <rect x="106" y="0" width="98"  height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="155" y="22">Calculus</text>
+      <rect x="214" y="0" width="104" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="266" y="22">Statistics</text>
+      <rect x="328" y="0" width="96"  height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="376" y="22">Matrices</text>
+    </g>
+    <g transform="translate(0 344)" font-size="15" font-weight="700" text-anchor="middle" fill="#C4B5FD">
+      <rect x="0"   y="0" width="66"  height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="33"  y="22">Trig</text>
+      <rect x="76"  y="0" width="150" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="151" y="22">48 calculators</text>
+      <rect x="236" y="0" width="176" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.13" stroke="#8B5CF6" stroke-opacity="0.32"/><text x="324" y="22">AMC · AIME · JEE</text>
+    </g>
+  </g>
+
+  <!-- brand -->
+  <g transform="translate(1134 598)" text-anchor="end" font-family="'JetBrains Mono','Courier New',monospace">
+    <text font-size="16" fill="#64748B" font-weight="500">8gwifi.org/math</text>
+  </g>
+</svg>

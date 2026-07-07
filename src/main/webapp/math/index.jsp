@@ -4,27 +4,27 @@
 <html lang="en">
 <head>
     <jsp:include page="../modern/components/seo-tool-page.jsp">
-        <jsp:param name="toolName" value="Free Math Calculators &amp; Exam Prep — Step-by-Step Solvers, AMC / AIME / Olympiad Practice" />
+        <jsp:param name="toolName" value="AI Math Solver with Steps — Type or Scan a Photo, Free" />
         <jsp:param name="toolCategory" value="Math Tools" />
-        <jsp:param name="toolDescription" value="Free math calculators with step-by-step solutions plus AMC 10/12 mock test, AIME mock test, and olympiad practice with stepwise walkthroughs (USAMO, IMO, RMO, INMO). No signup, runs in your browser." />
+        <jsp:param name="toolDescription" value="Free AI math solver with step-by-step answers — type a problem or scan a photo. Algebra, calculus, statistics, matrices and trig, plus 48 calculators and AMC/AIME/JEE exam prep. Runs in your browser." />
         <jsp:param name="toolUrl" value="math/" />
-        <jsp:param name="toolKeywords" value="math calculator, online math tools, percentage calculator, quadratic solver, matrix calculator, integral calculator, derivative calculator, logarithm calculator, series calculator, limit calculator, step by step math, free math solver, AMC mock test, AMC 10 practice, AMC 12 practice, AIME mock test, AIME practice problems, math olympiad practice, olympiad math problems with solutions, USAMO prep, IMO prep, RMO problems, INMO problems, Putnam problems, competition math, math contest practice" />
-        <jsp:param name="toolImage" value="math-studio-og.png" />
-        <jsp:param name="toolFeatures" value="48 math calculators,Step-by-step KaTeX solutions,Python compiler integration,LaTeX export,Shareable URLs,Dark mode,Mobile responsive,100% free" />
-        <jsp:param name="teaches" value="Arithmetic, algebra, calculus, linear algebra, matrix operations, series and sequences, logarithms, exponents, percentages, statistics" />
-        <jsp:param name="educationalLevel" value="Middle School, High School, Undergraduate" />
-        <jsp:param name="faq1q" value="Are these math calculators free?" />
-        <jsp:param name="faq1a" value="Yes, all 48 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification." />
-        <jsp:param name="faq2q" value="Do the calculators show step-by-step solutions?" />
-        <jsp:param name="faq2a" value="Yes, every calculator renders detailed step-by-step solutions using KaTeX math notation. Each step explains the formula applied and shows the intermediate calculation, so you learn the method, not just the answer." />
-        <jsp:param name="faq3q" value="What math topics are covered?" />
-        <jsp:param name="faq3a" value="Everyday math (percentages, significant figures), algebra (quadratic equations, linear systems, inequalities), 21 statistics calculators (descriptive stats, hypothesis testing, regression, ANOVA), calculus (derivatives, integrals, limits), linear algebra (9 matrix calculators), trigonometry, logarithms, exponents, and Taylor series. Plus exam-prep emulators: AMC 10/12 mock test, AIME mock test, and an untimed Olympiad practice page with stepwise solutions covering USAMO, IMO, RMO, INMO, and Putnam-style problems." />
-        <jsp:param name="faq4q" value="Can I share or export results from these math calculators?" />
-        <jsp:param name="faq4a" value="Yes. Most calculators support copy-to-clipboard (plain text or LaTeX), a shareable URL that reproduces your inputs, and PDF download where applicable. You can embed formulas directly into papers, homework, or lecture slides." />
-        <jsp:param name="faq5q" value="Do these math calculators work on mobile?" />
-        <jsp:param name="faq5a" value="Yes. Every calculator is mobile-responsive — the input UI adapts to narrow viewports and the step-by-step solutions remain fully readable on phones and tablets. The left sidebar collapses into a slide-in drawer on screens below 1024px." />
-        <jsp:param name="faq6q" value="Is there a practice worksheet for these calculators?" />
-        <jsp:param name="faq6a" value="Tools with a worksheet button (integral, derivative, quadratic, and more) open a bank of 1000+ practice problems with full answer keys, organised by topic and difficulty. Perfect for AP, college, or self-study exam prep." />
+        <jsp:param name="toolKeywords" value="ai math solver, math solver with steps, step by step math solver, solve math by taking a photo, scan math problem, math problem solver, math word problem solver, math homework helper, free math solver no signup, online math calculator, integral calculator, derivative calculator, matrix calculator, quadratic solver, statistics calculator, trigonometry solver, algebra solver, calculus solver, AMC mock test, AIME practice, math olympiad practice, USAMO IMO RMO INMO Putnam, JEE mains mock" />
+        <jsp:param name="toolImage" value="math-ai-solver-og.png" />
+        <jsp:param name="toolFeatures" value="AI step-by-step math solver,Solve by typing or scanning a photo,Answers verified by a symbolic engine,48 free calculators across every topic,Algebra calculus statistics matrices and trig,AMC AIME Olympiad and JEE exam prep,KaTeX formulas and shareable results,No signup for the calculators" />
+        <jsp:param name="teaches" value="arithmetic, algebra, quadratic equations, systems of equations, inequalities, polynomials, calculus, derivatives, integrals, limits, Taylor series, linear algebra, matrices, determinants, eigenvalues, vectors, trigonometry, statistics, probability, word problems, proofs" />
+        <jsp:param name="educationalLevel" value="Middle School, High School, AP, Undergraduate, Competition Math" />
+        <jsp:param name="faq1q" value="Can I solve a math problem by taking a photo?" />
+        <jsp:param name="faq1a" value="Yes. Sign in, open the Math AI, and upload or snap a photo of a typed or handwritten problem. It reads the problem, shows the setup, and solves it step by step — algebra, calculus, statistics, matrices, and more." />
+        <jsp:param name="faq2q" value="Is there a free step-by-step math solver?" />
+        <jsp:param name="faq2a" value="Yes. Type any problem into the Math AI and it works through the solution step by step. The 48 on-page calculators are free with no signup; the AI chat and photo scan just need a free sign-in." />
+        <jsp:param name="faq3q" value="What kind of math can it solve?" />
+        <jsp:param name="faq3a" value="Algebra (quadratics, systems, inequalities, polynomials), calculus (derivatives, integrals, limits, Taylor series), linear algebra (matrices, determinants, eigenvalues, vectors), trigonometry, statistics, and everyday math. It also explains proofs and word problems in plain language." />
+        <jsp:param name="faq4q" value="Are the answers correct, and does it show the work?" />
+        <jsp:param name="faq4a" value="Computed answers come from a symbolic math engine, not a guess, and every step is shown with KaTeX formulas. For problems that cannot be computed symbolically, such as a proof, the AI reasons it out and clearly labels the result as AI-reasoned rather than machine-verified." />
+        <jsp:param name="faq5q" value="Do I need to sign up or install anything?" />
+        <jsp:param name="faq5a" value="Nothing to install — it runs in your browser. The calculators are free with no account. The AI solver and photo scan need a free sign-in (no Pro required)." />
+        <jsp:param name="faq6q" value="Can I practice for math exams?" />
+        <jsp:param name="faq6a" value="Yes. There are timed AMC 10/12 and AIME mock tests, JEE Mains 2025 mocks with official scoring, and untimed Olympiad practice (USAMO, IMO, RMO, INMO, Putnam) with step-by-step solutions." />
     </jsp:include>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="ctx" content="<%=request.getContextPath()%>" />
@@ -37,8 +37,8 @@
         {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            "name": "Math Calculators",
-            "description": "Free math calculators with step-by-step solutions covering percentages, algebra, statistics, calculus, linear algebra, trigonometry, and more — plus AMC 10/12, AIME, and Olympiad practice with stepwise walkthroughs.",
+            "name": "AI Math Solver & Calculators",
+            "description": "AI math solver with step-by-step answers — type a problem or scan a photo — covering algebra, calculus, statistics, linear algebra, and trigonometry, plus 48 free calculators and AMC/AIME/JEE/Olympiad exam prep.",
             "url": "https://8gwifi.org/math/",
             "mainEntity": {
                 "@type": "ItemList",
@@ -237,12 +237,12 @@
 
         <!-- Hero -->
         <div class="ms-hero-banner">
-            <h1>A quiet place for <em>math</em>.</h1>
-            <p>48 step-by-step solvers &mdash; from the percentage trick to eigenvalues. KaTeX formulas, Python-verified answers, and no sign-up for the calculators.</p>
+            <h1>AI Math Solver &mdash; <em>step by step</em></h1>
+            <p>Type a problem or <strong>snap a photo</strong> and get a worked, step-by-step solution &mdash; algebra, calculus, statistics, matrices, trig. Plus 48 free calculators and AMC / AIME / JEE exam prep.</p>
             <div class="ms-hero-stats">
-                <div class="ms-hero-stat"><strong>48</strong>calculators</div>
-                <div class="ms-hero-stat"><strong>step</strong>by step solutions</div>
-                <div class="ms-hero-stat"><strong>free</strong>no signup</div>
+                <div class="ms-hero-stat"><strong>AI</strong>step-by-step solver</div>
+                <div class="ms-hero-stat"><strong>photo</strong>scan &amp; solve</div>
+                <div class="ms-hero-stat"><strong>48</strong>free calculators</div>
             </div>
         </div>
 
@@ -374,48 +374,48 @@
              Rendered markup reinforces the schema signal. -->
         <section class="ms-faq-wrap" style="max-width:100%;margin-top:0;padding:0;">
             <h2 class="ms-faq-title" id="faqs">Frequently asked</h2>
-            <div class="ms-faq" aria-label="Math calculators FAQ">
+            <div class="ms-faq" aria-label="Math AI solver FAQ">
                 <div class="ms-faq-item">
                     <button class="ms-faq-q" type="button">
-                        Are these math calculators free?
+                        Can I solve a math problem by taking a photo?
                         <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
-                    <div class="ms-faq-a">Yes, all 48 math calculators are completely free with no registration required. Every tool shows step-by-step solutions with KaTeX-rendered formulas and includes a Python compiler for verification.</div>
+                    <div class="ms-faq-a">Yes. Sign in, open the <strong>Math AI</strong>, and upload or snap a photo of a typed or handwritten problem. It reads the problem, shows the setup, and solves it <strong>step by step</strong> &mdash; algebra, calculus, statistics, matrices, and more.</div>
                 </div>
                 <div class="ms-faq-item">
                     <button class="ms-faq-q" type="button">
-                        Do the calculators show step-by-step solutions?
+                        Is there a free step-by-step math solver?
                         <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
-                    <div class="ms-faq-a">Yes, every calculator renders detailed step-by-step solutions using KaTeX math notation. Each step explains the formula applied and shows the intermediate calculation, so you learn the method, not just the answer.</div>
+                    <div class="ms-faq-a">Yes. Type any problem into the <strong>Math AI</strong> and it works through the solution step by step. The 48 on-page calculators are <strong>free with no signup</strong>; the AI chat and photo scan just need a free sign-in.</div>
                 </div>
                 <div class="ms-faq-item">
                     <button class="ms-faq-q" type="button">
-                        What math topics are covered?
+                        What kind of math can it solve?
                         <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
-                    <div class="ms-faq-a">We cover <strong>everyday math</strong> (percentages, significant figures), <strong>algebra</strong> (quadratic equations, linear systems, inequalities), <strong>21 statistics calculators</strong> (descriptive stats, hypothesis testing, regression, ANOVA), <strong>calculus</strong> (derivatives, integrals, limits, Taylor series), <strong>linear algebra</strong> (9 matrix calculators), <strong>trigonometry</strong>, logarithms, exponents, and graphing. Plus <strong>exam-prep emulators</strong>: <a href="<%=request.getContextPath()%>/math/amc/">AMC&nbsp;10/12 mock</a>, <a href="<%=request.getContextPath()%>/math/amc/aime.jsp">AIME mock</a>, and <a href="<%=request.getContextPath()%>/math/olympiad/">Olympiad practice</a> with stepwise solutions (USAMO, IMO, RMO, INMO, Putnam).</div>
+                    <div class="ms-faq-a"><strong>Algebra</strong> (quadratics, systems, inequalities, polynomials), <strong>calculus</strong> (derivatives, integrals, limits, Taylor series), <strong>linear algebra</strong> (matrices, determinants, eigenvalues, vectors), <strong>trigonometry</strong>, <strong>statistics</strong>, and everyday math. It also explains <strong>proofs and word problems</strong> in plain language.</div>
                 </div>
                 <div class="ms-faq-item">
                     <button class="ms-faq-q" type="button">
-                        Can I share or export results from these math calculators?
+                        Are the answers correct, and does it show the work?
                         <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
-                    <div class="ms-faq-a">Yes. Most calculators support <strong>copy-to-clipboard</strong> (plain text or LaTeX), a <strong>shareable URL</strong> that reproduces your inputs, and <strong>PDF download</strong> where applicable. You can embed formulas directly into papers, homework, or lecture slides.</div>
+                    <div class="ms-faq-a">Computed answers come from a <strong>symbolic math engine</strong> &mdash; not a guess &mdash; and every step is shown with KaTeX formulas. For problems that can't be computed symbolically, such as a proof, the AI reasons it out and clearly labels the result as <em>AI-reasoned</em> rather than machine-verified.</div>
                 </div>
                 <div class="ms-faq-item">
                     <button class="ms-faq-q" type="button">
-                        Do these math calculators work on mobile?
+                        Do I need to sign up or install anything?
                         <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
-                    <div class="ms-faq-a">Yes. Every calculator is mobile-responsive &mdash; the input UI adapts to narrow viewports and the step-by-step solutions remain fully readable on phones and tablets. The left sidebar collapses into a slide-in drawer on screens below 1024&nbsp;px.</div>
+                    <div class="ms-faq-a">Nothing to install &mdash; it runs in your browser. The <strong>calculators are free with no account</strong>. The AI solver and photo scan need a free sign-in (no Pro required).</div>
                 </div>
                 <div class="ms-faq-item">
                     <button class="ms-faq-q" type="button">
-                        Is there a practice worksheet for these calculators?
+                        Can I practice for math exams?
                         <svg class="ms-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
-                    <div class="ms-faq-a">Tools with a worksheet button (integral, derivative, quadratic, and more) open a bank of <strong>1000+ practice problems</strong> with full answer keys, organised by topic and difficulty. Perfect for AP, college, or self-study exam prep.</div>
+                    <div class="ms-faq-a">Yes. Timed <a href="<%=request.getContextPath()%>/math/amc/">AMC&nbsp;10/12</a> and <a href="<%=request.getContextPath()%>/math/amc/aime.jsp">AIME</a> mock tests, <a href="<%=request.getContextPath()%>/math/iit/">JEE Mains 2025</a> mocks with official scoring, and untimed <a href="<%=request.getContextPath()%>/math/olympiad/">Olympiad practice</a> (USAMO, IMO, RMO, INMO, Putnam) with step-by-step solutions.</div>
                 </div>
             </div>
         </section>
