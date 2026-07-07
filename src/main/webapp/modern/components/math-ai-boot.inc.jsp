@@ -25,7 +25,12 @@ import { <%= mathAiProfileExport != null && !mathAiProfileExport.isEmpty() ? mat
     <% if (mathAiProfile != null && !mathAiProfile.isEmpty()) { %>
     <%= mathAiProfileExport != null && !mathAiProfileExport.isEmpty() ? mathAiProfileExport : "configureMathProfile" %>();
     <% } %>
-    var boot = Object.assign({}, aiAssistantBoot, { toolId: 'math-ai' });
+    var boot = Object.assign({}, aiAssistantBoot, {
+        toolId: 'math-ai',
+        // Image scan on by default for math tool pages; a page can opt out with
+        // request.setAttribute("aiImageUpload", "false").
+        imageUpload: <%= !"false".equals(String.valueOf(request.getAttribute("aiImageUpload"))) %>,
+    });
     window.mathAssistant = wireLazyAssistant({
         moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/math-ai.js',
         exportName: 'createMathAssistant',
