@@ -1,0 +1,95 @@
+/**
+ * Logarithm Calculator — Math AI panel sizing (lc-page)
+ * Green accent matches math-studio log tool (#15803d).
+ */
+
+.lc-page .vca-backdrop[data-floating="true"] .vca-modal {
+    width: clamp(400px, min(58vw, 820px), 92vw);
+    max-height: min(90vh, 920px);
+}
+
+@media (min-width: 1200px) {
+    .lc-page .vca-backdrop[data-floating="true"] .vca-modal {
+        width: min(720px, 48vw);
+    }
+}
+
+.lc-page .vca-backdrop[data-floating="true"] .vca-messages {
+    min-height: min(52vh, 520px);
+    padding: 14px 18px;
+}
+
+.lc-page .vca-msg.assistant:has(.lc-chat-result-card),
+.lc-page .vca-msg.assistant:has(.vca-math-result-card) {
+    max-width: 100%;
+    width: 100%;
+    align-self: stretch;
+}
+
+.lc-page .lc-chat-result-card {
+    width: 100%;
+}
+
+.lc-page .lc-chat-result-card .vca-math-result-body {
+    padding: 4px 2px 8px;
+}
+
+.lc-page .lc-chat-result-card .vca-math-eq {
+    overflow-x: auto;
+    padding: 4px 0;
+}
+
+.lc-page .lc-chat-result-card .vca-math-eq .katex-display {
+    margin: 0.4em 0;
+    font-size: 1.05em;
+}
+
+.lc-page .lc-chat-plot-wrap,
+.lc-page .vca-math-graph.lc-chat-plot-wrap {
+    width: 100%;
+    min-height: 420px;
+    margin: 10px 0 6px;
+}
+
+.lc-page .lc-chat-plot-canvas {
+    width: 100% !important;
+    min-height: 420px;
+    height: 420px;
+}
+
+.lc-page .vca-quick {
+    padding: 0 14px 10px;
+    gap: 8px;
+}
+
+.lc-page .vca-quick-btn {
+    font-size: 11.5px;
+    padding: 6px 12px;
+}
+
+.ic-hero .math-ai-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(21, 128, 61, 0.35);
+    background: rgba(21, 128, 61, 0.08);
+    color: var(--ms-text, #1c1917);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+    white-space: nowrap;
+}
+
+.ic-hero .math-ai-tab-btn:hover {
+    background: rgba(21, 128, 61, 0.18);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(21, 128, 61, 0.15);
+}
+
+.ic-hero .math-ai-tab-btn[aria-busy="true"] {
+    opacity: 0.75;
+    cursor: wait;
+}
