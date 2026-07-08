@@ -1,2 +1,20 @@
+# robots.txt for 8gwifi.org
+# Allow all search engines to crawl the site
+
 User-agent: *
 Allow: /
+
+# Disallow dynamic/personal pages that shouldn't be indexed
+Disallow: /exams/dashboard.jsp
+Disallow: /exams/*/practice.jsp
+Disallow: /exams/*/review.jsp
+Disallow: /GoogleOAuthFunctionality
+Disallow: /CFExamMarkerFunctionality
+
+# Allow static exam pages
+Allow: /exams/
+Allow: /exams/cbse-board/
+Allow: /exams/cbse-board/mathematics/
+
+# Sitemap location
+Sitemap: https://8gwifi.org/sitemap.xml
