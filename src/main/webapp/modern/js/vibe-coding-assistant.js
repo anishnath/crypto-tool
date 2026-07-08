@@ -790,7 +790,7 @@ export class ToolAiAssistant {
           <div class="vca-quick" role="toolbar" hidden></div>
           ${this.imageUpload ? '<div class="vca-attachments" hidden></div>' : ''}
           <form class="vca-input-row" autocomplete="off">
-            ${this.imageUpload ? '<button type="button" class="vca-attach" title="Attach an image to scan" aria-label="Attach image">📷</button><input type="file" class="vca-file" accept="image/*" multiple hidden />' : ''}
+            ${this.imageUpload ? '<button type="button" class="vca-attach" title="Attach an image to scan" aria-label="Attach image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true" style="vertical-align:middle"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.2"/></svg></button><input type="file" class="vca-file" accept="image/*" multiple hidden />' : ''}
             <textarea class="vca-input" rows="2" aria-label="Message"></textarea>
             <button type="submit" class="vca-send" data-mode="send">Send</button>
           </form>

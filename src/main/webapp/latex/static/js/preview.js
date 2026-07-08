@@ -240,17 +240,20 @@ function applyMobileView() {
   var fabIcon = document.getElementById('fab-icon');
   var fabLabel = document.getElementById('fab-label');
 
+  var ICON_EDIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>';
+  var ICON_PAGE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>';
+
   if (mobileShowingPreview) {
     app.classList.add('show-preview');
-    if (icon) icon.textContent = '\u270F'; // pencil
+    if (icon) icon.innerHTML = ICON_EDIT;
     if (label) label.textContent = 'Editor';
-    if (fabIcon) fabIcon.textContent = '\u270F';
+    if (fabIcon) fabIcon.innerHTML = ICON_EDIT;
     if (fabLabel) { fabLabel.textContent = 'Editor'; fabLabel.classList.remove('hidden'); }
   } else {
     app.classList.remove('show-preview');
-    if (icon) icon.textContent = '\uD83D\uDCC4'; // page
+    if (icon) icon.innerHTML = ICON_PAGE;
     if (label) label.textContent = 'Preview';
-    if (fabIcon) fabIcon.textContent = '\uD83D\uDCC4';
+    if (fabIcon) fabIcon.innerHTML = ICON_PAGE;
     if (fabLabel) { fabLabel.textContent = 'Preview'; fabLabel.classList.remove('hidden'); }
   }
 

@@ -764,8 +764,8 @@ function addFileToTree(filename, isImage, content) {
   // Don't add duplicate
   if (fileList.querySelector('[data-file="' + filename + '"]')) return;
 
-  var icon = '\uD83D\uDCC4';
-  if (isImage) icon = '\uD83D\uDDBC';
+  var ICON_FILE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>';
+  var ICON_IMAGE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="m5 18 5-5 3 3 3.5-3.5L21 17"/></svg>';
 
   var item = document.createElement('div');
   item.className = 'file-item';
@@ -773,7 +773,7 @@ function addFileToTree(filename, isImage, content) {
 
   var iconSpan = document.createElement('span');
   iconSpan.className = 'file-icon';
-  iconSpan.textContent = icon;
+  iconSpan.innerHTML = isImage ? ICON_IMAGE : ICON_FILE;
 
   var nameSpan = document.createElement('span');
   nameSpan.className = 'file-name';
@@ -796,9 +796,11 @@ function addFileToTree(filename, isImage, content) {
   }
 
   // Actions button (three-dot menu) — except main.tex shows limited options
-  var actionsBtn = document.createElement('span');
+  var actionsBtn = document.createElement('button');
+  actionsBtn.type = 'button';
   actionsBtn.className = 'file-actions-btn';
   actionsBtn.title = 'File actions';
+  actionsBtn.setAttribute('aria-label', 'File actions for ' + filename);
   actionsBtn.textContent = '\u22EE'; // vertical ellipsis ⋮
   actionsBtn.onclick = function(e) {
 

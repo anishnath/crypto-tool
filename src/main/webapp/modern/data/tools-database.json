@@ -1485,7 +1485,7 @@
     },
     {
       "name": "LaTeX Editor Online",
-      "url": "latex/editor.jsp",
+      "url": "editor",
       "category": "Developer Tools",
       "keywords": "latex editor online overleaf alternative latex compiler latex to pdf free latex editor write compile download pdf mathematics document typesetting amsmath graphicx tikz bibtex",
       "description": "LaTeX Editor Online - Write, compile, and download PDF instantly. Free Overleaf alternative with live preview, syntax highlighting, autocomplete, and image uploads. No signup required."

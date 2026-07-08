@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String ctx = request.getContextPath();
-    String cacheVersion = String.valueOf(System.currentTimeMillis());
+    // Static asset version — bump on deploy so browsers can actually cache between visits
+    String cacheVersion = "20260708";
     request.setAttribute("aiToolId", "latex/editor");
     request.setAttribute("aiRequireSignIn", "true");
 %>
@@ -125,13 +126,13 @@
 
 <!-- SEO -->
 <jsp:include page="/modern/components/seo-tool-page.jsp">
-    <jsp:param name="toolName" value="Free AI LaTeX Editor with Math Solver and Run Code in 20 Languages" />
-    <jsp:param name="toolDescription" value="Free AI-powered online LaTeX editor with a built-in symbolic math solver and inline code runner. Select any integral, derivative, limit, or matrix to solve with step-by-step LaTeX. Run Java, Python, C, C++, Go, Rust, JavaScript, and 13 more languages directly from your document - stdout and stderr are inserted as styled LaTeX. AI fixes compilation errors, generates LaTeX from plain English, renders chemistry structures (Lewis, 2D, 3D). Real-time PDF preview, 170+ autocomplete commands. No signup." />
+    <jsp:param name="toolName" value="Online LaTeX Editor with AI - Solve Math, Run Code Free" />
+    <jsp:param name="toolDescription" value="Free online LaTeX editor with AI. Compile to PDF instantly, solve calculus step by step, run code in 20 languages, and fix errors automatically." />
     <jsp:param name="toolCategory" value="Developer Tools" />
-    <jsp:param name="toolUrl" value="latex/editor.jsp" />
+    <jsp:param name="toolUrl" value="/editor" />
     <jsp:param name="toolKeywords" value="latex run code, latex code execution, executable latex, latex python runner, latex java compiler, run code in latex, latex math solver, ai latex editor, latex integral calculator, latex derivative calculator, latex limit calculator, latex matrix calculator, solve equation in latex, step by step math latex, latex editor online, ai latex generator, online latex compiler, latex to pdf, free latex editor, overleaf alternative, multi-file code latex, latex listings run, ai latex error fix, natural language to latex, latex chemistry editor, lewis structure latex, mhchem editor, latex syntax highlighting" />
     <jsp:param name="toolImage" value="latex-editor.png" />
-    <jsp:param name="toolFeatures" value="Run code inline - execute Java Python C C++ Go Rust JavaScript and 13 more languages directly in your LaTeX document,Multi-file projects - adjacent lstlisting blocks with name= group automatically into one run,Captured stdout and stderr inserted as styled LaTeX (green or red bar) into a fresh solution file,Built-in math solver - select any equation and solve integrals derivatives limits and matrix operations inline,Step-by-step solutions inserted as LaTeX with full working,Symbolic math engine - nerdamer plus SymPy backend for exact answers,2D geometric viz for 2x2 matrix operations (parallelogram, eigenvectors),Chemistry rendering - Lewis dot SMILES 2D and 3D geometry from \ce{} formulas,Generated work routed to per-solution files (solution-001.tex) so the main document stays clean,AI error fix - automatically corrects LaTeX compilation errors,AI LaTeX generator - describe in English and get LaTeX code,AI rewrite - restyle text as formal academic or concise or expanded,Image to LaTeX - drag a screenshot of an equation and get LaTeX source,Real-time PDF preview,LaTeX syntax highlighting,170+ autocomplete commands,Symbol picker with Greek Math and Arrows,Polished templates (Article Report Beamer CV Letter Chemistry Calculus Linear Algebra Run Code),Voice to LaTeX dictation,Download PDF and .tex source,Project auto-save to localStorage,Dark and light theme support,No registration required" />
+    <jsp:param name="toolFeatures" value="Run code inline - execute Java Python C C++ Go Rust JavaScript and 13 more languages directly in your LaTeX document,Multi-file projects - adjacent lstlisting blocks with name= group automatically into one run,Captured stdout and stderr inserted as styled LaTeX (green or red bar) into a fresh solution file,Built-in math solver - select any equation and solve integrals derivatives limits and matrix operations inline,Step-by-step solutions inserted as LaTeX with full working,Symbolic math engine - nerdamer plus SymPy backend for exact answers,2D geometric viz for 2x2 matrix operations (parallelogram, eigenvectors),Chemistry rendering - Lewis dot SMILES 2D and 3D geometry from \ce{} formulas,Generated work routed to per-solution files (solution-001.tex) so the main document stays clean,AI error fix - automatically corrects LaTeX compilation errors,AI LaTeX generator - describe in English and get LaTeX code,AI rewrite - restyle text as formal academic or concise or expanded,Image to LaTeX - attach or paste a screenshot in the AI chat and get editable LaTeX source,Real-time PDF preview,LaTeX syntax highlighting,170+ autocomplete commands,Symbol picker with Greek Math and Arrows,Polished templates (Article Report Beamer CV Letter Chemistry Calculus Linear Algebra Run Code),Voice to LaTeX dictation,Download PDF and .tex source,Project auto-save to localStorage,Dark and light theme support,No registration required" />
     <jsp:param name="hasSteps" value="true" />
     <jsp:param name="howToSteps" value="Write or Generate LaTeX|Write LaTeX code with 170+ autocomplete commands or press Ctrl+Shift+A to describe what you want in plain English and let AI generate the LaTeX for you,Solve math inline|Select any integral derivative limit or matrix in your document and click the Σ Solve button in the popup. The answer and full step-by-step working are inserted as LaTeX in a fresh solution file right next to your equation,Run code inline|Select any lstlisting block with language=X and click the ▶ Run button. Output (stdout or stderr) is captured and inserted as styled LaTeX. Multi-file projects are detected automatically when adjacent blocks share the same language,Compile to PDF|Click Compile or press Ctrl+Enter to generate the PDF using pdfLaTeX. If there are errors the AI Fix button appears to correct them automatically,Preview and Download|Preview the PDF in the right pane then download the PDF or .tex source file. Select any text and click Rewrite to improve it with AI" />
     <jsp:param name="faq1q" value="What is this AI-powered LaTeX editor?" />
@@ -181,11 +182,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/hint/show-hint.min.css"/>
 
 <!-- LaTeX Editor CSS -->
-<%  long cssV = System.currentTimeMillis(); %>
+<%  String cssV = cacheVersion; %>
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/layout.css?v=<%=cssV%>"/>
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/editor.css?v=<%=cssV%>"/>
 <link rel="stylesheet" href="<%=ctx%>/latex/static/css/toolbar.css?v=<%=cssV%>"/>
-<link rel="stylesheet" href="<%=ctx%>/latex/static/css/image-to-latex.css?v=<%=cssV%>"/>
 <link rel="stylesheet" href="<%=ctx%>/modern/css/speech-to-text.css?v=<%=cssV%>"/>
 <%@ include file="/modern/components/ai-assistant-head.inc.jsp" %>
 
@@ -286,14 +286,14 @@
         <button class="preview-btn" id="btn-view-canvas" onclick="setPreviewMode('canvas')" title="Canvas view (page-by-page)">Canvas</button>
         <button class="preview-btn active" id="btn-view-native" onclick="setPreviewMode('native')" title="Native PDF viewer (text select, scroll, links)">PDF</button>
         <div class="preview-sep"></div>
-        <button class="preview-btn" id="btn-prev-page" onclick="prevPage()">&#9664;</button>
+        <button class="preview-btn" id="btn-prev-page" onclick="prevPage()" title="Previous page" aria-label="Previous page">&#9664;</button>
         <span class="page-info" id="page-info">0 / 0</span>
-        <button class="preview-btn" id="btn-next-page" onclick="nextPage()">&#9654;</button>
+        <button class="preview-btn" id="btn-next-page" onclick="nextPage()" title="Next page" aria-label="Next page">&#9654;</button>
         <div class="preview-sep"></div>
-        <button class="preview-btn" onclick="zoomOut()">-</button>
+        <button class="preview-btn" onclick="zoomOut()" title="Zoom out" aria-label="Zoom out">-</button>
         <span class="zoom-level" id="zoom-level">100%</span>
-        <button class="preview-btn" onclick="zoomIn()">+</button>
-        <button class="preview-btn" style="margin-left:auto" onclick="toggleFullPreview()">&#10530; Full</button>
+        <button class="preview-btn" onclick="zoomIn()" title="Zoom in" aria-label="Zoom in">+</button>
+        <button class="preview-btn" style="margin-left:auto" onclick="toggleFullPreview()" title="Toggle full-width preview">&#10530; Full</button>
       </div>
 
       <div class="preview-body" id="preview-body">
@@ -308,7 +308,7 @@
           <div class="spinner-text">Compiling...</div>
         </div>
         <div class="empty-preview" id="empty-preview">
-          <div class="empty-preview-icon">&#128196;</div>
+          <div class="empty-preview-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6"/></svg></div>
           <div class="empty-preview-text">Click <b>Compile</b> to generate PDF preview</div>
         </div>
       </div>
@@ -336,8 +336,8 @@
 </div><!-- /.latex-app -->
 
 <!-- Mobile FAB: toggle editor ↔ preview (visible only on mobile) -->
-<button class="mobile-fab" id="mobile-fab" onclick="toggleMobileView()">
-  <span id="fab-icon">&#128196;</span>
+<button class="mobile-fab" id="mobile-fab" onclick="toggleMobileView()" aria-label="Toggle editor and preview">
+  <span id="fab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span>
   <span class="fab-label" id="fab-label">Preview</span>
 </button>
 
@@ -384,28 +384,17 @@
   [data-theme="dark"] .latex-about-card{background:oklch(0.225 0.061 264.4);border-color:oklch(1 0 0 / 12%)}
   [data-theme="dark"] .latex-about-card code{background:oklch(0.655 0.183 266.5 / 0.18);color:oklch(0.732 0.089 266.9)}
 
-  /* ── Slim hero: ad strip only (H1 moved into the About modal) ── */
+  /* ── Slim hero: ad strip only (H1 lives in the visible About section) ── */
   .latex-hero-slim{padding:6px 20px;min-height:0}
   .latex-hero-slim .latex-hero-ad{width:100%}
 
-  /* ── About as a modal overlay (opened by the About button) ── */
-  .latex-about-overlay{position:fixed;inset:0;z-index:1000;background:oklch(0.183 0.031 263.4 / 0.55);backdrop-filter:blur(2px);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow-y:auto;overscroll-behavior:contain}
-  .latex-about-overlay[hidden]{display:none}
-  .latex-about-overlay .latex-about{border-top:none;border-radius:16px;max-width:1000px;width:100%;margin:auto;padding:2.25rem 2rem 2.5rem;position:relative;box-shadow:0 24px 70px oklch(0.183 0.031 263.4 / 0.45);animation:latexAboutIn .18s ease}
-  @keyframes latexAboutIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  /* ── About: visible, crawlable section below the app (About button scrolls here) ── */
   .latex-about-h1{font-size:1.55rem;font-weight:800;color:var(--text-primary,#0f172a);margin:0 0 0.75rem;line-height:1.2}
-  .latex-about-close{position:absolute;top:12px;right:14px;width:34px;height:34px;border:none;border-radius:9px;background:var(--bg-secondary,#f1f5f9);color:var(--text-secondary,#475569);font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s}
-  .latex-about-close:hover{background:oklch(0.581 0.229 263.9 / 0.12);color:var(--text-primary,#0f172a)}
-  [data-theme="dark"] .latex-about-overlay{background:oklch(0 0 0 / 0.6)}
   [data-theme="dark"] .latex-about-h1{color:#fff}
-  [data-theme="dark"] .latex-about-close{background:oklch(0.225 0.061 264.4);color:oklch(0.732 0.089 266.9)}
-  body.latex-about-open{overflow:hidden}
 </style>
-<div class="latex-about-overlay" id="latex-about-overlay" hidden onclick="if(event.target===this)closeAbout()">
-<section class="latex-about" id="latex-about" role="dialog" aria-modal="true" aria-labelledby="latex-about-h1">
-  <button class="latex-about-close" onclick="closeAbout()" aria-label="Close about" title="Close">&times;</button>
+<section class="latex-about" id="latex-about" aria-labelledby="latex-about-h1">
   <div class="latex-about-inner">
-    <h1 class="latex-about-h1" id="latex-about-h1">Free AI LaTeX Editor with Math Solver &amp; Run Code</h1>
+    <h1 class="latex-about-h1" id="latex-about-h1">Online LaTeX Editor with AI Math Solver &amp; Code Runner</h1>
     <span class="latex-about-eyebrow">More than a LaTeX editor</span>
     <h2 class="latex-about-title">What this editor does that others don't</h2>
     <p class="latex-about-subtitle">A full LaTeX compiler with an <strong>inline code runner (20 languages)</strong>, <strong>built-in symbolic math solver</strong>, chemistry rendering, AI assistance, and image-to-code conversion. Everything runs in your browser — no signup, no install, no Overleaf account.</p>
@@ -439,7 +428,7 @@
       <div class="latex-about-card">
         <span class="latex-about-icon">&#128247;</span>
         <h3>Image to LaTeX</h3>
-        <p>Drag a screenshot of a math equation, table, or matrix into the editor — vision AI converts it into LaTeX source you can edit. Works for handwritten equations, textbook scans, and whiteboard photos.</p>
+        <p>Attach or paste a screenshot in the <strong>AI chat</strong> — vision AI converts equations, tables, and matrices into LaTeX source you can edit and Apply. Works for handwritten equations, textbook scans, and whiteboard photos.</p>
       </div>
 
       <div class="latex-about-card">
@@ -467,7 +456,6 @@
     </p>
   </div>
 </section>
-</div>
 
 <!-- Footer -->
 <%--<footer class="page-footer">--%>
@@ -522,27 +510,12 @@
     measureHero();
   };
 
-  // ── About modal (feature grid + SEO H1 live here now) ──
+  // ── About: visible section below the app; the About button scrolls to it ──
   window.openAbout = function() {
-    var ov = document.getElementById('latex-about-overlay');
-    if (!ov) return;
-    ov.hidden = false;
-    document.body.classList.add('latex-about-open');
-    var c = ov.querySelector('.latex-about-close');
-    if (c) c.focus();
+    var sec = document.getElementById('latex-about');
+    if (!sec) return;
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
-  window.closeAbout = function() {
-    var ov = document.getElementById('latex-about-overlay');
-    if (!ov) return;
-    ov.hidden = true;
-    document.body.classList.remove('latex-about-open');
-  };
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      var ov = document.getElementById('latex-about-overlay');
-      if (ov && !ov.hidden) closeAbout();
-    }
-  });
 
   // Restore dismissed state
   try {
@@ -563,7 +536,7 @@
 </script>
 
 <!-- App JS -->
-<%  long jsV = System.currentTimeMillis(); %>
+<%  String jsV = cacheVersion; %>
 <script src="<%=ctx%>/latex/static/js/storage.js"></script>
 <script src="<%=ctx%>/latex/static/js/symbols.js"></script>
 <script src="<%=ctx%>/latex/static/js/editor.js"></script>
@@ -587,7 +560,6 @@ window.latexAssistant = wireLazyAssistant({
 </script>
 <script src="<%=ctx%>/modern/js/speech-to-text.js"></script>
 <script defer src="<%=ctx%>/latex/static/js/ai.js?v=<%=jsV%>"></script>
-<script defer src="<%=ctx%>/latex/static/js/image-to-latex.js?v=<%=jsV%>"></script>
 <!-- Generated content (Solve / Steps / Graph / chemistry figures) routes
      through SolutionsFile so the main editor stays clean -->
 <script src="<%=ctx%>/latex/static/js/solutions-file.js"></script>

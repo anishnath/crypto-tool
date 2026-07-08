@@ -951,12 +951,12 @@
                 <h1 class="tool-page-title">TikZ Viewer & Editor</h1>
                 <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
                     <a href="<%=request.getContextPath()%>/">Home</a> /
-                    <a href="<%=request.getContextPath()%>/latex/editor.jsp">Full LaTeX Editor</a> /
+                    <a href="<%=request.getContextPath()%>/editor">Full LaTeX Editor</a> /
                     <span>TikZ Viewer</span>
                 </nav>
                 <span class="tool-header-pitch">
                     Need full LaTeX docs?
-                    <a href="<%=request.getContextPath()%>/latex/editor.jsp">Try LaTeX Editor Online &rarr;</a>
+                    <a href="<%=request.getContextPath()%>/editor">Try LaTeX Editor Online &rarr;</a>
                 </span>
             </div>
         </div>
@@ -1221,7 +1221,7 @@
 
                     <p class="tool-highlight-box"><strong>Why Choose Our TikZ Editor?</strong> Unlike desktop LaTeX editors that require full installation and setup, our online tool works instantly in any modern web browser. It's perfect for quick diagrams, learning TikZ syntax, or sharing visual concepts with colleagues. The tool is completely free, requires no registration, and processes everything locally in your browser for privacy and speed.</p>
 
-                    <p class="tool-highlight-box"><strong>Need a Full LaTeX Editor?</strong> If you need to write complete LaTeX documents with live PDF preview, try our <a href="<%=request.getContextPath()%>/latex/editor.jsp" style="color:var(--tool-primary);font-weight:600;">LaTeX Editor Online</a> — a free Overleaf alternative with syntax highlighting, autocomplete, image uploads, and instant PDF compilation. No signup required.</p>
+                    <p class="tool-highlight-box"><strong>Need a Full LaTeX Editor?</strong> If you need to write complete LaTeX documents with live PDF preview, try our <a href="<%=request.getContextPath()%>/editor" style="color:var(--tool-primary);font-weight:600;">LaTeX Editor Online</a> — a free Overleaf alternative with syntax highlighting, autocomplete, image uploads, and instant PDF compilation. No signup required.</p>
                 </div>
             </div>
         </div>

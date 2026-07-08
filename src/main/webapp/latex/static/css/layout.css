@@ -17,7 +17,7 @@
   --error:     #f87171;
   --text:      #e2e4f0;
   --text2:     #8b8fa8;
-  --text3:     #555870;
+  --text3:     #7f83a2; /* ≥4.5:1 on --surface for small meta text */
   --gutter:    #1a1c26;
   --nav-h:     var(--header-height-desktop, 72px);
   --preview-bg:     #e8e8e2;
@@ -25,7 +25,7 @@
   --preview-border:  #d5d5cc;
   --preview-btn-bg:  white;
   --preview-btn-clr: #555;
-  --preview-text:    #777;
+  --preview-text:    #5f5f5f;
 }
 
 /* ── Light theme ── */
@@ -44,14 +44,14 @@
   --error:     #dc2626;
   --text:      #1e293b;
   --text2:     #64748b;
-  --text3:     #94a3b8;
+  --text3:     #6b7280; /* ≥4.5:1 on --surface for small meta text */
   --gutter:    #f1f3f5;
   --preview-bg:     #f5f5f0;
   --preview-toolbar: #eeeee8;
   --preview-border:  #d5d5cc;
   --preview-btn-bg:  white;
   --preview-btn-clr: #555;
-  --preview-text:    #777;
+  --preview-text:    #5f5f5f;
 }
 
 /* ── HERO SECTION — SEO heading + ad placement ── */
@@ -303,14 +303,20 @@
 }
 
 .filetree-actions { display: flex; gap: 4px; }
-.filetree-actions span {
+.filetree-actions button {
+  background: none;
+  border: none;
+  padding: 2px;
+  border-radius: 4px;
   color: var(--text3);
   cursor: pointer;
-  font-size: 14px;
   line-height: 1;
+  display: flex;
+  align-items: center;
   transition: color 0.15s;
 }
-.filetree-actions span:hover { color: var(--text2); }
+.filetree-actions button:hover { color: var(--text2); }
+.filetree-actions svg { width: 14px; height: 14px; display: block; }
 
 .file-item {
   padding: 5px 12px 5px 20px;
@@ -339,7 +345,8 @@
   border-radius: 0 2px 2px 0;
 }
 
-.file-icon { font-size: 11px; opacity: 0.7; }
+.file-icon { font-size: 11px; opacity: 0.7; display: flex; align-items: center; flex-shrink: 0; }
+.file-icon svg { width: 13px; height: 13px; display: block; }
 
 .file-actions-btn {
   display: none;
@@ -347,6 +354,8 @@
   font-size: 16px; font-weight: bold; line-height: 1;
   color: var(--text2, #8b8fa8); cursor: pointer;
   border-radius: 3px;
+  background: none; border: none;
+  font-family: inherit;
 }
 .file-actions-btn:hover { color: var(--text, #e2e4f0); background: var(--surface3, #222533); }
 .file-item:hover .file-actions-btn { display: block; }
@@ -626,11 +635,12 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  color: #999;
+  color: #666;
 }
 
 .empty-preview.hidden { display: none; }
 .empty-preview-icon { font-size: 48px; opacity: 0.4; }
+.empty-preview-icon svg { width: 48px; height: 48px; display: block; }
 .empty-preview-text { font-size: 13px; font-family: 'DM Sans', sans-serif; }
 
 .spinner {
@@ -1006,123 +1016,6 @@
   color: #4f46e5;
 }
 
-/* ── AI PROMPT POPUP ── */
-.ai-prompt-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.95);
-  width: 440px;
-  max-width: 90vw;
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  z-index: 50;
-  display: none;
-  opacity: 0;
-  transition: opacity 0.15s, transform 0.15s;
-}
-
-.ai-prompt-popup.visible {
-  display: block;
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.ai-prompt-header {
-  padding: 12px 16px 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border-bottom: 1px solid var(--border);
-}
-
-.ai-prompt-icon {
-  font-size: 16px;
-}
-
-.ai-prompt-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-  flex: 1;
-}
-
-.ai-prompt-close {
-  color: var(--text3);
-  font-size: 18px;
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  transition: all 0.15s;
-}
-
-.ai-prompt-close:hover {
-  background: var(--surface3);
-  color: var(--text);
-}
-
-.ai-prompt-body {
-  padding: 12px 16px 14px;
-}
-
-.ai-prompt-input {
-  width: 100%;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 12px;
-  color: var(--text);
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  line-height: 1.5;
-  resize: none;
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.ai-prompt-input:focus {
-  border-color: var(--accent2);
-}
-
-.ai-prompt-input::placeholder {
-  color: var(--text3);
-}
-
-.ai-prompt-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.ai-prompt-hint {
-  font-size: 10px;
-  color: var(--text3);
-}
-
-.ai-prompt-submit {
-  padding: 6px 16px;
-  border-radius: 6px;
-  border: none;
-  background: var(--accent2);
-  color: white;
-  font-size: 12px;
-  font-weight: 600;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.ai-prompt-submit:hover {
-  background: #6d6ff0;
-}
-
 /* ── AI REWRITE MENU ── */
 .ai-rewrite-menu {
   position: fixed;
@@ -1281,14 +1174,6 @@
 }
 
 /* ── Light theme AI overrides ── */
-[data-theme="light"] .ai-prompt-popup {
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-}
-
-[data-theme="light"] .ai-prompt-submit {
-  background: #6366f1;
-}
-
 [data-theme="light"] .ai-rewrite-menu {
   box-shadow: 0 12px 40px rgba(0,0,0,0.15);
 }
@@ -1352,7 +1237,8 @@
   /* Larger tap targets */
   .file-item { padding: 10px 12px 10px 16px; font-size: 13px; }
   .file-ctx-item { padding: 12px 16px; font-size: 14px; }
-  .filetree-actions span { font-size: 22px; padding: 6px; }
+  .filetree-actions button { padding: 8px; }
+  .filetree-actions svg { width: 20px; height: 20px; }
 
   /* Stack editor and preview — show one at a time */
   .latex-app .main { flex-direction: column; }
@@ -1480,14 +1366,6 @@
   .symbol-picker { left: 8px !important; right: 8px; width: auto !important; max-width: 95vw; bottom: 120px; }
   .sp-tab { font-size: 12px; padding: 8px; }
 
-  /* AI prompt — bottom sheet */
-  .ai-prompt-popup {
-    top: auto !important; left: 0 !important; right: 0;
-    bottom: 0; transform: none !important;
-    width: 100% !important; max-width: 100vw !important;
-    border-radius: 12px 12px 0 0;
-  }
-  .ai-prompt-close { width: 38px; height: 38px; font-size: 20px; }
 
   /* Toast buttons */
   .upload-insert-btn { padding: 8px 14px; font-size: 13px; }
@@ -1500,4 +1378,49 @@
 
   /* Mobile FAB safe area */
   .mobile-fab { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ── Icon sizing for JS-swapped SVGs ── */
+#mobile-toggle-icon { display: flex; align-items: center; }
+#mobile-toggle-icon svg { width: 14px; height: 14px; display: block; }
+#fab-icon { display: flex; align-items: center; }
+#fab-icon svg { width: 22px; height: 22px; display: block; }
+
+/* ── Keyboard focus — visible ring (replaces removed default outlines) ── */
+.latex-app button:focus-visible,
+.latex-app select:focus-visible,
+.latex-app input:focus-visible,
+.latex-app textarea:focus-visible,
+.symbol-picker button:focus-visible,
+.symbol-picker input:focus-visible,
+.project-menu button:focus-visible,
+.file-ctx-menu .file-ctx-item:focus-visible,
+.sel-popup button:focus-visible,
+.sel-popup select:focus-visible,
+.sel-math-menu button:focus-visible,
+.sel-mol-menu button:focus-visible,
+.ai-rewrite-menu button:focus-visible,
+.mobile-fab:focus-visible,
+.latex-hero-dismiss:focus-visible {
+  outline: 2px solid var(--accent2, #818cf8);
+  outline-offset: 1px;
+}
+
+/* ── Reduced motion — keep functional spinners, drop decorative motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .ai-status,
+  .tb-btn.primary.dirty,
+  .tb-btn.primary.compiling .dot,
+  .mobile-fab.pulse,
+  .CodeMirror.image-drop-active::after,
+  .error-line-pulse,
+  .toast,
+  .cm-error-widget,
+  .sel-popup {
+    animation: none !important;
+  }
+  .latex-app .nav-btn-primary:hover,
+  .mobile-fab:active {
+    transform: none;
+  }
 }

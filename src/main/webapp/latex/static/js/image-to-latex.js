@@ -40,7 +40,7 @@
         overlay.innerHTML =
             '<div class="itl-modal" role="dialog" aria-label="Image to LaTeX">' +
             '  <div class="itl-header">' +
-            '    <span class="itl-title">&#128247; Image to LaTeX</span>' +
+            '    <span class="itl-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" aria-hidden="true" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.2"/></svg> Image to LaTeX</span>' +
             '    <button class="itl-close" data-action="close" title="Close (Esc)">&times;</button>' +
             '  </div>' +
             '  <div class="itl-body">' +
