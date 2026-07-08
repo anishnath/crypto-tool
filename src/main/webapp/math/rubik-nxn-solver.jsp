@@ -584,8 +584,8 @@
             height: 26px;
             padding: 0 0.4rem;
             font: 600 0.72rem var(--ms-font-mono);
-            color: var(--ms-text);
-            background: var(--ms-surface);
+            color: var(--ms-ink);
+            background: var(--ms-panel-bg);
             border: 1px solid var(--ms-line);
             border-radius: 5px;
             cursor: pointer;
@@ -706,6 +706,84 @@
         .rk-twist-wide-toggle.disabled { opacity: 0.45; }
 
         .rk-hint { font: 0.78rem var(--ms-font-sans); color: var(--ms-muted); margin: 0.5rem 0 0; }
+
+        /* On very narrow screens the 8-button size selector must wrap
+           instead of overflowing the card. */
+        @media (max-width: 480px) {
+            .rk-size-group { flex-wrap: wrap; }
+        }
+
+        /* ── Playback progress bar (fills as you step through the solve) ── */
+        .rk-progress {
+            height: 3px;
+            background: var(--ms-line);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0.15rem 0 0.75rem;
+        }
+        .rk-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--rk-gradient);
+            border-radius: 2px;
+            transition: width 0.2s ease;
+        }
+
+        /* ── Pipeline-phase colour coding ─────────────────────────────
+           Each solve phase (Centres / EO / Kociemba / …) gets a hue; the
+           move chips carry it as a bottom accent and the breakdown
+           legend shows a matching dot.  Legend pieces are clickable and
+           jump playback to the start of that phase. */
+        .rk-phase-0, .rk-dot-0 { --rk-ph: #6366f1; }
+        .rk-phase-1, .rk-dot-1 { --rk-ph: #8b5cf6; }
+        .rk-phase-2, .rk-dot-2 { --rk-ph: #06b6d4; }
+        .rk-phase-3, .rk-dot-3 { --rk-ph: #f59e0b; }
+        .rk-phase-4, .rk-dot-4 { --rk-ph: #10b981; }
+        .rk-phase-5, .rk-dot-5 { --rk-ph: #f43f5e; }
+        .rk-phase-6, .rk-dot-6 { --rk-ph: #0ea5e9; }
+        .rk-phase-7, .rk-dot-7 { --rk-ph: #64748b; }
+        .rk-move[class*="rk-phase-"] { box-shadow: inset 0 -2.5px 0 var(--rk-ph); }
+        .rk-piece-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 2px;
+            margin-right: 0.35rem;
+            background: var(--rk-ph, var(--ms-muted));
+        }
+        .rk-piece-btn { cursor: pointer; transition: border-color 0.12s, color 0.12s; }
+        .rk-piece-btn:hover { border-color: var(--rk-tool); color: var(--ms-ink); }
+
+        /* ── Solved celebration: one green glow sweep on the stage ── */
+        @keyframes rk-solved-glow {
+            0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+            30%  { box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.4), 0 0 42px rgba(34, 197, 94, 0.28); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .rk-stage-card.rk-celebrate { animation: rk-solved-glow 1.5s ease-out; }
+        .rk-solved-badge {
+            display: inline-block;
+            margin-left: 0.5rem;
+            padding: 0.1rem 0.55rem;
+            font: 700 0.75rem var(--ms-font-sans);
+            color: #15803d;
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            border-radius: 999px;
+            vertical-align: 0.05em;
+        }
+        [data-theme="dark"] .rk-solved-badge { color: #4ade80; }
+
+        /* Live elapsed counter inside the solve busy-card */
+        .rk-busy-elapsed {
+            font: 600 0.78rem var(--ms-font-mono);
+            color: var(--rk-tool-dark);
+            margin: 0.25rem 0 0;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .rk-stage-card.rk-celebrate { animation: none; }
+            .rk-progress-fill { transition: none; }
+        }
     </style>
     <%@ include file="../modern/ads/ad-init.jsp" %>
 </head>
@@ -838,8 +916,9 @@
             </div>
 
             <p class="rk-banner rk-banner-ok" id="rk-validation" role="status" aria-live="polite">
-                Pick a cube size, scramble, then click Solve.
-                3×3 solves in your browser; 4×4 runs on the server.
+                Have a scrambled cube in hand? Click <strong>Edit stickers</strong> (pencil icon) and
+                click each sticker on the net to match your cube &mdash; then click Solve.
+                Or scramble, paste a scramble, or upload a net photo.
             </p>
 
             <div class="rk-busy-card" id="rk-busy-card" role="status" aria-live="polite">
@@ -847,6 +926,7 @@
                 <div class="rk-busy-text">
                     <p class="rk-busy-title" id="rk-busy-title">Thinking<span class="rk-dots"></span></p>
                     <p class="rk-busy-sub"   id="rk-busy-sub">Solving on the server &mdash; this can take 5&ndash;40 seconds for adversarial 4&times;4 scrambles.</p>
+                    <p class="rk-busy-elapsed" id="rk-busy-elapsed"></p>
                 </div>
             </div>
         </div>
@@ -874,6 +954,7 @@
             <%-- Solution lives on the canvas: it appears under the three views
                  (same surface) once Solve runs. All IDs are wired in app.js. --%>
             <div class="rk-solution" id="rk-moves-panel" style="display:none;">
+                <div class="rk-progress" aria-hidden="true"><div class="rk-progress-fill" id="rk-progress-fill"></div></div>
                 <div class="rk-solution-head">
                     <h2 class="rk-solution-title">Solution</h2>
                     <p class="rk-moves-meta" id="rk-moves-meta"></p>
@@ -901,7 +982,7 @@
                 <p class="rk-record-status" id="rk-record-status" style="display:none; margin:0.55rem 0 0; font:600 0.78rem var(--ms-font-mono); color:var(--rk-tool-dark); padding:0.4rem 0.7rem; background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.3); border-radius:var(--ms-radius-sm);"></p>
             </div>
 
-            <p class="rk-hint rk-stage-tip">Tip: paste (&#8984;V) or drag-and-drop a net image anywhere on the page &middot; &larr;/&rarr; to step, space to play. All three views show the same cube.</p>
+            <p class="rk-hint rk-stage-tip">Tip: paste (&#8984;V) or drag-and-drop a net image anywhere on the page &middot; &larr;/&rarr; to step, Home/End to jump, space to play. All three views show the same cube.</p>
         </div>
 
         <div class="rk-card rk-twist-card" id="rk-twist-panel" style="margin-top:1.25rem;">
@@ -1003,12 +1084,14 @@ window.rubikShell = bootstrap({
     busyCard:       $('rk-busy-card'),
     busyTitle:      $('rk-busy-title'),
     busySub:        $('rk-busy-sub'),
+    busyElapsed:    $('rk-busy-elapsed'),
     validation:     $('rk-validation'),
     scrambleBtn:    $('rk-scramble-btn'),
     resetBtn:       $('rk-reset-btn'),
     shareBtn:       $('rk-share-btn'),
     solveBtn:       $('rk-solve-btn'),
     movesPanel:     $('rk-moves-panel'),
+    progressFill:   $('rk-progress-fill'),
     movesMeta:      $('rk-moves-meta'),
     movesBreakdown: $('rk-moves-breakdown'),
     movesList:      $('rk-moves-list'),

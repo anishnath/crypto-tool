@@ -276,12 +276,14 @@ export function bootstrap(ctx) {
         busyCard:       ctx.busyCard,
         busyTitle:      ctx.busyTitle,
         busySub:        ctx.busySub,
+        busyElapsed:    ctx.busyElapsed,
         validation:     ctx.validation,
         scrambleBtn:    ctx.scrambleBtn,
         resetBtn:       ctx.resetBtn,
         shareBtn:       ctx.shareBtn,
         solveBtn:       ctx.solveBtn,
         movesPanel:     ctx.movesPanel,
+        progressFill:   ctx.progressFill,
         movesList:      ctx.movesList,
         notationLine:   ctx.notationLine,
         scrambleInput:  ctx.scrambleInput,
@@ -320,6 +322,8 @@ export function bootstrap(ctx) {
     let stepIdx = 0;                           // moves applied to `state` from `originalState`
     let playing = false;
     let editMode = false;
+    let wasComplete = false;                   // playback reached the final move (gates the one-shot celebration)
+    let busyTimer = null;                      // live elapsed-time ticker while a solve is in flight
 
     function setStatus(text, kind) {
         if (!ui.statusEl) return;
@@ -339,6 +343,19 @@ export function bootstrap(ctx) {
                 ui.busyTitle.appendChild(dots);
             }
             if (ui.busySub) ui.busySub.textContent = sub || '';
+            if (ui.busyElapsed) {
+                const t0 = performance.now();
+                ui.busyElapsed.textContent = '';
+                clearInterval(busyTimer);
+                busyTimer = setInterval(() => {
+                    ui.busyElapsed.textContent =
+                        'Elapsed ' + ((performance.now() - t0) / 1000).toFixed(1) + ' s';
+                }, 100);
+            }
+        } else {
+            clearInterval(busyTimer);
+            busyTimer = null;
+            if (ui.busyElapsed) ui.busyElapsed.textContent = '';
         }
     }
 
@@ -465,6 +482,8 @@ export function bootstrap(ctx) {
         solution = null;
         stepIdx = 0;
         playing = false;
+        wasComplete = false;
+        if (ui.progressFill) ui.progressFill.style.width = '0%';
         ui.movesPanel.style.display = 'none';
         ui.movesList.innerHTML = '';
         if (ui.playPlay) ui.playPlay.textContent = '▶ Play';
@@ -506,7 +525,7 @@ export function bootstrap(ctx) {
             b.title = allowWide3 ? b.dataset.move : '3-layer wide turns require 6×6 or larger';
         });
         setStatus(size === 3 ? 'Ready · 3×3 (browser)' : `Ready · ${size}×${size} (server)`, 'ready');
-        setBanner(`Cube reset (${size}×${size}). Scramble, upload a net image, or twist — then click Solve.`, 'ok');
+        setBanner(`Cube reset (${size}×${size}). Click Edit stickers to match your real cube on the net — or scramble, twist, or upload a photo — then click Solve.`, 'ok');
     }
 
     /**
@@ -863,21 +882,57 @@ export function bootstrap(ctx) {
         originalState = state;
         clearSolution();
         paintNet();
-        setBanner(`Cube reset (${size}×${size}).`, 'ok');
+        setBanner(`Cube reset (${size}×${size}). Click Edit stickers to match your real cube, then Solve.`, 'ok');
     }
 
-    function renderMoves(moves, breakdown, meta) {
+    function renderMoves(moves, breakdown, meta, phases) {
+        // Map each move index to its pipeline phase — only when the per-phase
+        // counts add up to the full move list (i.e. json.moves really is the
+        // concatenation of the phase move lists).  Otherwise fall back to the
+        // plain untinted rendering.
+        let phaseOfMove = null;
+        const phasesValid = Array.isArray(phases) && phases.length > 0 &&
+            phases.reduce((a, p) => a + p.count, 0) === moves.length;
+        if (phasesValid) {
+            phaseOfMove = [];
+            phases.forEach((p, pi) => {
+                for (let k = 0; k < p.count; k++) phaseOfMove.push(pi);
+            });
+        }
+
         ui.movesList.innerHTML = '';
         moves.forEach((m, i) => {
             const span = document.createElement('span');
-            span.className = 'rk-move';
+            span.className = 'rk-move' + (phaseOfMove ? ' rk-phase-' + (phaseOfMove[i] % 8) : '');
+            if (phaseOfMove) span.title = phases[phaseOfMove[i]].label;
             span.dataset.idx = String(i);
             span.textContent = m;
             span.addEventListener('click', () => jumpTo(i + 1));
             ui.movesList.appendChild(span);
         });
         if (ui.movesMeta) ui.movesMeta.textContent = meta;
-        if (ui.movesBreakdown) ui.movesBreakdown.innerHTML = breakdown || '';
+        if (ui.movesBreakdown) {
+            if (phasesValid) {
+                // Interactive legend: each phase piece carries its colour dot
+                // and clicking it jumps playback to that phase's first move.
+                ui.movesBreakdown.innerHTML = '';
+                let offset = 0;
+                phases.forEach((p, pi) => {
+                    const start = offset;
+                    const piece = document.createElement('span');
+                    piece.className = 'rk-piece rk-piece-btn';
+                    piece.innerHTML =
+                        `<span class="rk-piece-dot rk-dot-${pi % 8}"></span>` +
+                        `${escapeHtml(p.label)}: <strong>${p.count}</strong>`;
+                    piece.title = `Jump to ${p.label} (moves ${start + 1}–${start + p.count})`;
+                    piece.addEventListener('click', () => jumpTo(start));
+                    ui.movesBreakdown.appendChild(piece);
+                    offset += p.count;
+                });
+            } else {
+                ui.movesBreakdown.innerHTML = breakdown || '';
+            }
+        }
         ui.movesPanel.style.display = 'block';
         if (ui.tbPlayback) ui.tbPlayback.style.display = 'inline-flex';
         highlightStep();
@@ -889,12 +944,32 @@ export function bootstrap(ctx) {
             c.classList.toggle('done', i < stepIdx);
             c.classList.toggle('current', i === stepIdx);
         });
+        // Keep the current chip visible inside the scrolling move list.
+        const cur = ui.movesList.querySelector('.rk-move.current');
+        if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest' });
         if (solution) {
-            const txt = `${stepIdx} / ${solution.moves.length}`;
+            const total = solution.moves.length;
+            const txt = `${stepIdx} / ${total}`;
             if (ui.playStep) ui.playStep.textContent = `Step ${txt}`;
             if (ui.tbStep) ui.tbStep.textContent = txt;
+            if (ui.progressFill) {
+                ui.progressFill.style.width = total ? (stepIdx / total * 100) + '%' : '0%';
+            }
             updateNotationLine();
+            const complete = total > 0 && stepIdx === total;
+            if (complete && !wasComplete) celebrate();
+            wasComplete = complete;
         }
+    }
+
+    /** One-shot green glow on the stage when playback reaches the solved state. */
+    function celebrate() {
+        const card = ui.cube3dHost && ui.cube3dHost.closest('.rk-stage-card');
+        if (!card) return;
+        card.classList.remove('rk-celebrate');
+        void card.offsetWidth;   // restart the animation if it's mid-flight
+        card.classList.add('rk-celebrate');
+        setTimeout(() => card.classList.remove('rk-celebrate'), 1600);
     }
 
     /** Update the notation-explainer line above the playback strip with
@@ -913,7 +988,10 @@ export function bootstrap(ctx) {
         ui.notationLine.innerHTML =
             `Step ${stepIdx} of ${solution.moves.length} — ` +
             `<code>${escapeHtml(mv)}</code>` +
-            `<span class="rk-notation-desc">${escapeHtml(describeMove(mv))}</span>`;
+            `<span class="rk-notation-desc">${escapeHtml(describeMove(mv))}</span>` +
+            (stepIdx === solution.moves.length
+                ? '<span class="rk-solved-badge">&#10003; Solved</span>'
+                : '');
     }
 
     /** Plain-English description of a WCA move token.  Generic for any
@@ -1021,6 +1099,7 @@ export function bootstrap(ctx) {
             moves,
             elapsedMs: dt,
             breakdown: `<span class="rk-piece">Kociemba: <strong>${moves.length}</strong> moves in ${dt} ms</span>`,
+            phases: [{ label: 'Kociemba', count: moves.length }],
             meta: `Solved in ${moves.length} moves · ${dt} ms · cubejs (browser)`,
         };
     }
@@ -1048,9 +1127,11 @@ export function bootstrap(ctx) {
         const moves = json.moves || [];
         const elapsedMs = json.elapsedMs || dt;
         const parts = [];
+        const phases = [];
         const tally = (label, arr) => {
             if (arr && arr.length) {
                 parts.push(`<span class="rk-piece">${label}: <strong>${arr.length}</strong></span>`);
+                phases.push({ label, count: arr.length });
             }
         };
         tally('Centres',  json.centresMoves);
@@ -1062,6 +1143,7 @@ export function bootstrap(ctx) {
             moves,
             elapsedMs,
             breakdown: parts.join(' '),
+            phases,
             meta: `Solved in ${moves.length} moves · ${elapsedMs} ms · server pipeline`,
         };
     }
@@ -1089,8 +1171,12 @@ export function bootstrap(ctx) {
         const moves = json.moves || [];
         const elapsedMs = json.elapsedMs || dt;
         const parts = [];
+        const phases = [];
         const tally = (label, arr) => {
-            if (arr && arr.length) parts.push(`<span class="rk-piece">${label}: <strong>${arr.length}</strong></span>`);
+            if (arr && arr.length) {
+                parts.push(`<span class="rk-piece">${label}: <strong>${arr.length}</strong></span>`);
+                phases.push({ label, count: arr.length });
+            }
         };
         tally('LR',      json.lrMoves);
         tally('FB',      json.fbMoves);
@@ -1103,6 +1189,7 @@ export function bootstrap(ctx) {
             moves,
             elapsedMs,
             breakdown: parts.join(' '),
+            phases,
             meta: `Solved in ${moves.length} moves · ${elapsedMs} ms · server`,
         };
     }
@@ -1130,9 +1217,11 @@ export function bootstrap(ctx) {
         const moves = json.moves || [];
         const elapsedMs = json.elapsedMs || dt;
         const parts = [];
+        const phases = [];
         const tally = (label, arr) => {
             if (arr && arr.length) {
                 parts.push(`<span class="rk-piece">${label}: <strong>${arr.length}</strong></span>`);
+                phases.push({ label, count: arr.length });
             }
         };
         tally('LR',      json.lrMoves);
@@ -1146,6 +1235,7 @@ export function bootstrap(ctx) {
             moves,
             elapsedMs,
             breakdown: parts.join(' '),
+            phases,
             meta: `Solved in ${moves.length} moves · ${elapsedMs} ms · server pipeline`,
         };
     }
@@ -1169,7 +1259,7 @@ export function bootstrap(ctx) {
                     : await solveServerSide(size, 'Solving ' + size + '×' + size, 'Forwarded to the Rubik solver service.');
             solution = r;
             stepIdx = 0;
-            renderMoves(r.moves, r.breakdown, r.meta);
+            renderMoves(r.moves, r.breakdown, r.meta, r.phases);
             setStatus(`${size}×${size} solved · ${r.moves.length} moves · ${r.elapsedMs} ms`, 'ready');
             setBanner('Solution ready. Use Prev / Play / Next or click any move.', 'ok');
         } catch (err) {
@@ -1855,6 +1945,8 @@ export function bootstrap(ctx) {
         if (ev.key === 'ArrowLeft')  { ev.preventDefault(); step(-1); }
         if (ev.key === 'ArrowRight') { ev.preventDefault(); step(+1); }
         if (ev.key === ' ')          { ev.preventDefault(); togglePlay(); }
+        if (ev.key === 'Home' && solution) { ev.preventDefault(); jumpTo(0); }
+        if (ev.key === 'End'  && solution) { ev.preventDefault(); jumpTo(solution.moves.length); }
     });
 
     setSize(3);
