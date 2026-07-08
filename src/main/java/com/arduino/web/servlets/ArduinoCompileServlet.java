@@ -1,7 +1,5 @@
 package com.arduino.web.servlets;
 
-import com.latexeditor.web.client.ApiClientConfig;
-
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
@@ -129,8 +127,23 @@ public class ArduinoCompileServlet extends HttpServlet {
                 .build();
     }
 
+    /** Backend base URL from AI_ENDPOINT env var (default localhost). */
+    private static String getBackendBase() {
+        String base = System.getenv("AI_ENDPOINT");
+        if (base == null || base.trim().isEmpty()) base = "http://localhost:8080";
+        base = base.trim();
+        if (base.endsWith("/")) base = base.substring(0, base.length() - 1);
+        return base;
+    }
+
     private String getBackendUrl() {
-        return ApiClientConfig.getApiBaseUrlV2("arduino") + "/api/arduino-compile";
+        return getBackendBase() + "/api/arduino-compile";
+    }
+
+    /** API key forwarded as X-API-Key from ONE_COMPILER_API_KEY env var. */
+    private static String getApiKey() {
+        String key = System.getenv("ONE_COMPILER_API_KEY");
+        return key != null ? key.trim() : "";
     }
 
     // ── POST /api/arduino/compile ──
@@ -248,6 +261,10 @@ public class ArduinoCompileServlet extends HttpServlet {
             System.out.println(post);
             post.setConfig(defaultConfig());
             post.setEntity(new StringEntity(body, ContentType.APPLICATION_JSON));
+
+            // Auth: backend (onecompiler) requires X-API-Key
+            String apiKey = getApiKey();
+            if (!apiKey.isEmpty()) post.setHeader("X-API-Key", apiKey);
 
             // Request uncompressed from backend — we gzip ourselves if client supports it
             post.setHeader("Accept-Encoding", "identity");

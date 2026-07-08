@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
-<% String v = String.valueOf(System.currentTimeMillis()); %>
+<% String v = String.valueOf(System.currentTimeMillis());
+   request.setAttribute("aiToolId", "math/logarithm-calculator");
+   request.setAttribute("aiRequireSignIn", "true");
+%>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,11 +77,13 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/math/css/math-studio.css">
 
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/image-to-math.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/logarithm-calculator.css?v=<%=v%>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive-static.css"></noscript>
 
     <%@ include file="modern/ads/ad-init.jsp" %>
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <style>
         /* ─── Mode pill bar (Solve / Simplify / Expand / Condense / Evaluate) ─── */
@@ -256,7 +262,7 @@
         }
     </style>
 </head>
-<body class="ms-body">
+<body class="ms-body lc-page">
 
     <%@ include file="modern/components/nav-header.jsp" %>
 
@@ -300,6 +306,7 @@
                             <button type="button" class="ic-input-mode-btn"        data-input-mode="text"   role="tab" aria-checked="false">Text</button>
                         </div>
                         <div class="ic-expr-label-actions" style="display:flex;gap:0.5rem;align-items:center;margin-left:auto;">
+                            <button type="button" class="math-ai-tab-btn" id="btnMathAI" title="Logarithm AI — tutor + page results (Ctrl+Shift+A)">&#10024; AI</button>
                             <button type="button" class="ic-image-btn" id="lc-image-btn" title="Scan a logarithm problem from an image">&#128247; Scan</button>
                         </div>
                     </div>
@@ -1496,6 +1503,48 @@ except Exception as ex:
     var compilerLoaded = false;
     var pendingGraph = null;
 
+    function _lcBuildResultSummary() {
+        if (!lastResult) return '';
+        var parts = [];
+        parts.push('Mode: ' + currentMode);
+        parts.push('Input: ' + inputEl.value.trim());
+        if (lastResult.result) parts.push('Result: ' + lastResult.result);
+        if (lastResultLatex) parts.push('LaTeX: ' + lastResultLatex);
+        if (lastResult.method) parts.push('Method: ' + lastResult.method);
+        if (lastExtraneous.length) parts.push('Extraneous rejected: ' + lastExtraneous.join('; '));
+        return parts.join('\n');
+    }
+
+    function _lcBuildStepsSummary() {
+        if (!lastResult || !lastResult.steps || !lastResult.steps.length) return '';
+        return lastResult.steps.map(function (s, i) {
+            var label = s.label || s.rule || ('Step ' + (i + 1));
+            var after = s.after_latex || s.latex || '';
+            return (i + 1) + '. ' + label + (after ? ' → ' + after : '');
+        }).join('\n');
+    }
+
+    function _notifyLcComputed() {
+        try {
+            window.dispatchEvent(new CustomEvent('lc:computed', {
+                detail: {
+                    mode: currentMode,
+                    expr: inputEl.value.trim(),
+                    hasResult: !!lastResult,
+                    hasPlot: !!pendingGraph
+                }
+            }));
+        } catch (e) { /* ignore */ }
+    }
+
+    function _notifyLcError(msg) {
+        try {
+            window.dispatchEvent(new CustomEvent('lc:compute-error', {
+                detail: { error: msg || 'Solve failed' }
+            }));
+        } catch (e) { /* ignore */ }
+    }
+
     var __sympyEndpoint = '<%=request.getContextPath()%>/OneCompilerFunctionality?action=execute';
 
     // ── SymPy power-engine helpers ──────────────────────────────────────
@@ -1635,6 +1684,7 @@ except Exception as ex:
             lastSolvedBy = 'sympy';
             lastExtraneous = payload.extraneous || [];
             lastResult = { result: 'No real solution', method: payload.method || 'CAS', raw: raw };
+            _notifyLcComputed();
             return;
         }
 
@@ -1686,7 +1736,8 @@ except Exception as ex:
             result: payload.plain,
             method: payload.method || 'CAS',
             raw: raw,
-            steps: payload.steps || []   // rule-annotated steps for Show-Steps
+            steps: payload.steps || [],   // rule-annotated steps for Show-Steps
+            numeric: payload.numeric
         };
 
         // Prepare graph for solve mode (uses raw, not sympy output, since the
@@ -1697,6 +1748,7 @@ except Exception as ex:
                 prepareGraph(normExpr, varSelect.value);
             } catch (e) {}
         }
+        _notifyLcComputed();
     }
 
     // JS-side extraneous-solution filter — fast path that runs WITHOUT a
@@ -2007,6 +2059,7 @@ except Exception as ex:
         resultContent.innerHTML = '<div class="lc-error"><h4>Could not solve</h4><p>' + (msg || 'Try rephrasing or use a simpler expression.') + '</p></div>';
         resultActions.style.display = 'none';
         if (emptyState) emptyState.style.display = 'none';
+        _notifyLcError(msg);
     }
 
     function eliminateLogBase(eq) {
@@ -2161,11 +2214,13 @@ except Exception as ex:
             result: formulaResult.result,
             method: formulaResult.method,
             raw: raw,
-            steps: []  // nerdamer path has no rule trace; legacy fallback used
+            steps: [],  // nerdamer path has no rule trace; legacy fallback used
+            numeric: formulaResult.numeric
         };
 
         var normExpr = normalizeInput(raw);
         prepareGraph(normExpr, varSelect.value);
+        _notifyLcComputed();
     }
 
     function doSolve() {
@@ -2308,6 +2363,13 @@ except Exception as ex:
                     }
                 }
                 resultActions.style.display = 'flex';
+                lastResult = {
+                    result: (data.steps[data.steps.length - 1] && data.steps[data.steps.length - 1].latex) || 'AI solution',
+                    method: 'AI Generated',
+                    raw: raw,
+                    steps: data.steps
+                };
+                _notifyLcComputed();
             } else {
                 showError(data.error || 'AI could not solve this problem.');
             }
@@ -2453,12 +2515,10 @@ except Exception as ex:
         }
     }
 
-    function renderGraph(cfg) {
-        if (!window.Plotly) return;
-        var container = document.getElementById('lc-graph-container');
-        var v = cfg.v;
+    function buildLogPlotSpec(cfg) {
+        if (!cfg || !cfg.expr) return null;
+        var v = cfg.v || 'x';
         var expr = cfg.expr;
-
         var hasEq = expr.indexOf('=') >= 0;
         var lhsExpr, rhsExpr;
         if (hasEq) {
@@ -2485,7 +2545,7 @@ except Exception as ex:
         traces.push({
             x: xs, y: ysLhs,
             type: 'scatter', mode: 'lines',
-            name: hasEq ? 'LHS: ' + cfg.expr.split('=')[0].trim() : 'f(' + v + ')',
+            name: hasEq ? 'LHS: ' + expr.split('=')[0].trim() : 'f(' + v + ')',
             line: { color: '#15803d', width: 2.5 }
         });
 
@@ -2493,7 +2553,7 @@ except Exception as ex:
             traces.push({
                 x: xs, y: ysRhs,
                 type: 'scatter', mode: 'lines',
-                name: 'RHS: ' + cfg.expr.split('=')[1].trim(),
+                name: 'RHS: ' + expr.split('=')[1].trim(),
                 line: { color: '#f59e0b', width: 2, dash: 'dash' }
             });
         }
@@ -2510,7 +2570,15 @@ except Exception as ex:
             showlegend: true
         };
 
-        Plotly.newPlot(container, traces, layout, { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'] });
+        return { traces: traces, layout: layout };
+    }
+
+    function renderGraph(cfg) {
+        if (!window.Plotly) return;
+        var spec = buildLogPlotSpec(cfg);
+        if (!spec) return;
+        var container = document.getElementById('lc-graph-container');
+        Plotly.newPlot(container, spec.traces, spec.layout, { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'] });
     }
 
     function evalAtPoint(exprStr, v, xVal) {
@@ -2578,6 +2646,107 @@ except Exception as ex:
         updatePreview();
         setTimeout(doSolve, 300);
     }
+
+    // ── Math AI page context (generic Math AI + in-chat chips) ───────────
+    window.lcGetContext = function () {
+        return {
+            toolType: 'logarithm',
+            mode: currentMode,
+            expr: inputEl.value.trim(),
+            variable: varSelect.value,
+            hasResult: !!lastResult,
+            resultSummary: _lcBuildResultSummary(),
+            stepsSummary: _lcBuildStepsSummary(),
+            hasPlot: !!pendingGraph,
+            extraneous: lastExtraneous || [],
+            solvedBy: lastSolvedBy,
+            resultLatex: lastResultLatex || ''
+        };
+    };
+
+    window.lcGetResultContext = function () {
+        return {
+            hasResult: !!lastResult,
+            mode: currentMode,
+            expr: inputEl.value.trim(),
+            variable: varSelect.value,
+            result: lastResult ? lastResult.result : '',
+            resultLatex: lastResultLatex || '',
+            method: lastResult ? lastResult.method : '',
+            steps: (lastResult && lastResult.steps) ? lastResult.steps : [],
+            extraneous: lastExtraneous || [],
+            solvedBy: lastSolvedBy,
+            hasPlot: !!pendingGraph,
+            numeric: lastResult ? lastResult.numeric : undefined
+        };
+    };
+
+    window.lcGetPlotContext = function () {
+        return { hasPlot: !!pendingGraph, data: pendingGraph };
+    };
+
+    window.lcBuildPlotSpec = function (cfg) {
+        return buildLogPlotSpec(cfg || pendingGraph);
+    };
+
+    window.lcCollectLogArguments = function (exprStr) {
+        var norm = normalizeInput(exprStr || '');
+        var args = [];
+        var re = /\b(?:ln|log)\s*\(/g;
+        var match;
+        while ((match = re.exec(norm)) !== null) {
+            var parenIdx = match.index + match[0].length - 1;
+            var end = findMatchingParen(norm, parenIdx);
+            if (end > parenIdx) {
+                var inner = norm.substring(parenIdx + 1, end).trim();
+                if (inner.indexOf(',') >= 0) inner = inner.split(',')[0].trim();
+                if (args.indexOf(inner) < 0) args.push(inner);
+            }
+        }
+        return args;
+    };
+
+    window.lcApplyExample = function (expr, mode, vars) {
+        if (mode) {
+            var pill = document.querySelector('.lc-mode-btn[data-mode="' + mode + '"]');
+            if (pill) pill.click();
+        }
+        if (vars && varSelect) varSelect.value = vars;
+        inputEl.value = expr;
+        inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+        updatePreview();
+    };
+
+    window.lcRunSolve = function () {
+        return new Promise(function (resolve, reject) {
+            var settled = false;
+            function cleanup() {
+                window.removeEventListener('lc:computed', onOk);
+                window.removeEventListener('lc:compute-error', onErr);
+            }
+            function onOk() {
+                if (settled) return;
+                settled = true;
+                cleanup();
+                resolve({ ok: true });
+            }
+            function onErr(e) {
+                if (settled) return;
+                settled = true;
+                cleanup();
+                reject(new Error((e.detail && e.detail.error) || 'Solve failed'));
+            }
+            window.addEventListener('lc:computed', onOk);
+            window.addEventListener('lc:compute-error', onErr);
+            if (!inputEl.value.trim()) {
+                settled = true;
+                cleanup();
+                reject(new Error('Enter a problem first.'));
+                return;
+            }
+            doSolve();
+        });
+    };
 
     // ── Test-hook export: when `window._LC_TEST_HOOK = true` is set BEFORE
     //    this IIFE runs (e.g. from the unit-test sandbox), expose the pure
@@ -2745,6 +2914,14 @@ except Exception as ex:
         });
     })();
     </script>
+
+    <%@ include file="modern/components/math-calculus-cores.inc.jsp" %>
+    <%
+        request.setAttribute("mathAiButtonId", "btnMathAI");
+        request.setAttribute("mathAiProfile", "/modern/js/ai/adapters/math-profiles/generic-calculus.js");
+        request.setAttribute("mathAiProfileExport", "configureLogarithmMathShell");
+    %>
+    <%@ include file="modern/components/math-ai-boot.inc.jsp" %>
 
     <!-- ─── FAQ accordion ─── -->
     <script>

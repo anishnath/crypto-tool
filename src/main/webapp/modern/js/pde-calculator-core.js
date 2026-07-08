@@ -468,7 +468,7 @@ var PDECalculatorCore = (function () {
             'print("RESULT:Schrodinger equation solved (' + potential.replace('_', ' ') + ')")',
             'E_str = ", ".join(["E_"+str(i+1)+"="+str(round(float(E[i]),2)) for i in range(min(n_states,5))])',
             'print("TEXT:" + E_str)',
-            'print("META_METHOD:Matrix diagonalization (numpy.linalg.eigh)")',
+            'print("META_METHOD:Matrix diagonalization")',
             'print("META_BC:dirichlet")',
             'print("META_POTENTIAL:' + potential + '")',
             'print("META_NSTATES:" + str(n_states))',
@@ -480,7 +480,7 @@ var PDECalculatorCore = (function () {
             'print("STEP3_TITLE:Discretization")',
             'print("STEP3_LATEX:H_{ij} = \\\\frac{-1}{\\\\Delta x^2}\\\\delta_{i,j\\\\pm 1} + (\\\\frac{2}{\\\\Delta x^2}+V_i)\\\\delta_{ij}, \\\\quad N=' + 'str(N)' + '")',
             'print("STEP4_TITLE:Eigenvalue problem")',
-            'print("STEP4_LATEX:H\\\\psi_n = E_n\\\\psi_n \\\\quad \\\\text{solved via numpy.linalg.eigh}")',
+            'print("STEP4_LATEX:H\\\\psi_n = E_n\\\\psi_n \\\\quad \\\\text{(solved numerically)}")',
             'print("STEP5_TITLE:Energy levels")',
             'print("STEP5_LATEX:" + E_str)'
         ].join('\n');

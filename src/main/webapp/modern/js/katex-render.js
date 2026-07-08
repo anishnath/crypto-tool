@@ -197,7 +197,9 @@ export function renderLatexIntoElement(el, latex, displayMode = true) {
     return;
   }
   try {
-    katex.render(prepareLatexForKatex(latex), el, {
+    let prepared = prepareLatexForKatex(latex);
+    if (displayMode) prepared = prepared.replace(/^\\displaystyle\s+/, '');
+    katex.render(prepared, el, {
       displayMode: !!displayMode,
       throwOnError: false,
       strict: 'ignore',

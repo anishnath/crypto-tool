@@ -24,6 +24,10 @@
     var hamiltonianContent = document.getElementById('lm-hamiltonian-content');
 
     var lastResultLatex = '';
+    var lastResultText = '';
+    var lastDerivationSteps = [];
+    var lastHamiltonianResult = null;
+    var lastMechanicsResult = null;
     var pendingPlotData = null;
     var currentPlotType = 'trajectory';
     var animationsLoaded = false;
@@ -681,6 +685,12 @@
         }
     }
 
+    function failCompute(message) {
+        try {
+            window.dispatchEvent(new CustomEvent('lm:compute-error', { detail: new Error(message || 'Compute failed') }));
+        } catch (e) { /* ignore */ }
+    }
+
     function doCompute() {
         if (isComputing) return;
 
@@ -688,6 +698,7 @@
         var V = potentialInput.value.trim();
         var coords = coordsInput.value.trim();
         if (!T || !V || !coords) {
+            failCompute('Please enter T, V, and coordinates.');
             if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Please enter T, V, and coordinates.', 2000, 'warning');
             return;
         }
@@ -698,6 +709,7 @@
         var vV = validateExpr(V);
         var vC = validateCoords(coords);
         if (!vT.valid || !vV.valid || !vC.valid) {
+            failCompute('Fix validation errors before computing.');
             if (typeof ToolUtils !== 'undefined') ToolUtils.showToast('Fix validation errors before computing.', 2500, 'warning');
             return;
         }
@@ -735,12 +747,14 @@
             var stderr = (data.Stderr || data.stderr || '').trim();
 
             if (!stdout || (stderr && /error|exception|traceback/i.test(stderr) && !stdout)) {
+                failCompute(stderr || 'Computation failed. Check your expression syntax.');
                 showError(stderr || 'Computation failed. Check your expression syntax.');
                 return;
             }
 
             var errMatch = stdout.match(/ERROR:(.+)/);
             if (errMatch) {
+                failCompute(errMatch[1].trim());
                 showError(errMatch[1].trim());
                 return;
             }
@@ -750,7 +764,9 @@
         .catch(function(err) {
             clearTimeout(timeoutId);
             setComputingState(false);
-            showError(err.name === 'AbortError' ? 'Request timed out (120s). Try a simpler system.' : err.message);
+            var msg = err.name === 'AbortError' ? 'Request timed out (120s). Try a simpler system.' : err.message;
+            failCompute(msg);
+            showError(msg);
         });
     }
 
@@ -781,6 +797,47 @@
         var numE = {}; try { if (numEMatch) numE = JSON.parse(numEMatch[1]); } catch(e) {}
 
         lastResultLatex = 'L = ' + lagrangian;
+
+        var summaryParts = [];
+        if (lagrangian) summaryParts.push('L = ' + lagrangian);
+        for (var si = 0; si < eoms.length; si++) {
+            summaryParts.push('EOM ' + (si + 1) + ': ' + eoms[si]);
+        }
+        for (var sj = 0; sj < momenta.length; sj++) {
+            summaryParts.push('Momentum ' + (sj + 1) + ': ' + momenta[sj]);
+        }
+        if (hamiltonian) summaryParts.push('H = ' + hamiltonian);
+        for (var sk = 0; sk < hamEqs.length; sk++) {
+            var heq = hamEqs[sk];
+            if (heq && typeof heq === 'object') {
+                summaryParts.push('Hamilton eq ' + (sk + 1) + ': dot{' + heq.q + '} = ' + heq.qdot + ', dot{p_' + heq.q + '} = ' + heq.pdot);
+            } else {
+                summaryParts.push('Hamilton eq ' + (sk + 1) + ': ' + heq);
+            }
+        }
+        for (var sc = 0; sc < conservation.length; sc++) {
+            var cl = conservation[sc];
+            summaryParts.push((cl.conserved || 'quantity') + ' conserved' + (cl.coord ? ' (' + cl.coord + ' cyclic)' : '') + (cl.type === 'time_invariant' ? ' (time-invariant)' : ''));
+        }
+        if (numT.length > 0) {
+            summaryParts.push('Numerical integration: ' + numT.length + ' time points');
+        }
+        lastHamiltonianResult = {
+            hamiltonian: hamiltonian,
+            hamEqs: hamEqs,
+            momenta: momenta,
+            conservation: conservation
+        };
+        lastMechanicsResult = {
+            lagrangian: lagrangian,
+            eoms: eoms,
+            momenta: momenta,
+            hamiltonian: hamiltonian,
+            conservation: conservation,
+            steps: steps
+        };
+        lastDerivationSteps = steps;
+        lastResultText = summaryParts.join('\n');
 
         // Store for plots and animation
         pendingPlotData = { t: numT, q: numQ, p: numP, e: numE };
@@ -817,6 +874,10 @@
         }
 
         resultActions.classList.add('visible');
+
+        try {
+            window.dispatchEvent(new CustomEvent('lm:computed'));
+        } catch (e) { /* ignore */ }
 
         // Scroll result into view on desktop too
         var resultCard = document.querySelector('#lm-panel-steps .tool-result-card');
@@ -996,13 +1057,14 @@
     }
 
     // ========== Plots ==========
-    function renderCurrentPlot() {
-        if (!window.Plotly || !pendingPlotData || !pendingPlotData.t || pendingPlotData.t.length === 0) return;
-        var container = document.getElementById('lm-graph-container');
-        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    function buildLagrangianPlotSpec(plotType, data, isDark) {
+        if (!data || !data.t || !data.t.length) return null;
+
+        if (isDark == null) {
+            isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        }
 
         var plotColor = '#7c3aed';
-        var plotColor2 = '#8b5cf6';
         var gridColor = isDark ? '#334155' : '#e2e8f0';
         var textColor = isDark ? '#cbd5e1' : '#475569';
         var zeroColor = isDark ? '#475569' : '#94a3b8';
@@ -1027,13 +1089,13 @@
         var traces = [];
         var layout = Object.assign({}, baseLayout);
 
-        if (currentPlotType === 'trajectory') {
-            var qNames = Object.keys(pendingPlotData.q);
+        if (plotType === 'trajectory') {
+            var qNames = Object.keys(data.q);
             var colors = [plotColor, '#ec4899', '#f59e0b', '#10b981'];
             for (var i = 0; i < qNames.length; i++) {
                 traces.push({
-                    x: pendingPlotData.t,
-                    y: pendingPlotData.q[qNames[i]],
+                    x: data.t,
+                    y: data.q[qNames[i]],
                     type: 'scatter', mode: 'lines',
                     line: { color: colors[i % colors.length], width: 2 },
                     name: qNames[i] + '(t)'
@@ -1041,66 +1103,73 @@
             }
             layout.xaxis = axStyle('t');
             layout.yaxis = axStyle('q(t)');
-        } else if (currentPlotType === 'phase') {
-            var qNames = Object.keys(pendingPlotData.q);
-            var pNames = Object.keys(pendingPlotData.p);
-            var colors = [plotColor, '#ec4899', '#f59e0b', '#10b981'];
-            for (var i = 0; i < qNames.length && i < pNames.length; i++) {
+        } else if (plotType === 'phase') {
+            var qNamesP = Object.keys(data.q);
+            var pNames = Object.keys(data.p);
+            var colorsP = [plotColor, '#ec4899', '#f59e0b', '#10b981'];
+            for (var ip = 0; ip < qNamesP.length && ip < pNames.length; ip++) {
                 traces.push({
-                    x: pendingPlotData.q[qNames[i]],
-                    y: pendingPlotData.p[pNames[i]],
+                    x: data.q[qNamesP[ip]],
+                    y: data.p[pNames[ip]],
                     type: 'scatter', mode: 'lines',
-                    line: { color: colors[i % colors.length], width: 2 },
-                    name: qNames[i] + ' vs d' + qNames[i]
+                    line: { color: colorsP[ip % colorsP.length], width: 2 },
+                    name: qNamesP[ip] + ' vs d' + qNamesP[ip]
                 });
             }
             layout.xaxis = axStyle('q');
             layout.yaxis = axStyle('dq/dt');
-        } else if (currentPlotType === 'energy') {
-            if (pendingPlotData.e.T) {
+        } else if (plotType === 'energy') {
+            if (data.e.T) {
                 traces.push({
-                    x: pendingPlotData.t, y: pendingPlotData.e.T,
+                    x: data.t, y: data.e.T,
                     type: 'scatter', mode: 'lines',
                     line: { color: '#ef4444', width: 2 }, name: 'Kinetic (T)'
                 });
                 traces.push({
-                    x: pendingPlotData.t, y: pendingPlotData.e.V,
+                    x: data.t, y: data.e.V,
                     type: 'scatter', mode: 'lines',
                     line: { color: '#3b82f6', width: 2 }, name: 'Potential (V)'
                 });
                 traces.push({
-                    x: pendingPlotData.t, y: pendingPlotData.e.E,
+                    x: data.t, y: data.e.E,
                     type: 'scatter', mode: 'lines',
                     line: { color: plotColor, width: 2.5, dash: 'dash' }, name: 'Total (E)'
                 });
             }
             layout.xaxis = axStyle('t');
             layout.yaxis = axStyle('Energy');
-        } else if (currentPlotType === 'potential') {
-            // Plot V vs first coordinate
-            var qNames = Object.keys(pendingPlotData.q);
-            if (qNames.length > 0 && pendingPlotData.e.V) {
+        } else if (plotType === 'potential') {
+            var qNamesV = Object.keys(data.q);
+            if (qNamesV.length > 0 && data.e.V) {
                 traces.push({
-                    x: pendingPlotData.q[qNames[0]],
-                    y: pendingPlotData.e.V,
+                    x: data.q[qNamesV[0]],
+                    y: data.e.V,
                     type: 'scatter', mode: 'lines',
-                    line: { color: '#3b82f6', width: 2 }, name: 'V(' + qNames[0] + ')'
+                    line: { color: '#3b82f6', width: 2 }, name: 'V(' + qNamesV[0] + ')'
                 });
-                // Mark current position
-                if (pendingPlotData.e.E) {
+                if (data.e.E) {
                     traces.push({
-                        x: [pendingPlotData.q[qNames[0]][0]],
-                        y: [pendingPlotData.e.V[0]],
+                        x: [data.q[qNamesV[0]][0]],
+                        y: [data.e.V[0]],
                         type: 'scatter', mode: 'markers',
                         marker: { color: plotColor, size: 10 }, name: 'Start'
                     });
                 }
             }
-            layout.xaxis = axStyle(qNames[0] || 'q');
+            layout.xaxis = axStyle(qNamesV[0] || 'q');
             layout.yaxis = axStyle('V');
         }
 
-        Plotly.newPlot(container, traces, layout, { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'] });
+        if (!traces.length) return null;
+        return { traces: traces, layout: layout, plotType: plotType };
+    }
+
+    function renderCurrentPlot() {
+        if (!window.Plotly || !pendingPlotData || !pendingPlotData.t || pendingPlotData.t.length === 0) return;
+        var container = document.getElementById('lm-graph-container');
+        var spec = buildLagrangianPlotSpec(currentPlotType, pendingPlotData);
+        if (!spec) return;
+        Plotly.newPlot(container, spec.traces, spec.layout, { responsive: true, displayModeBar: true, modeBarButtonsToRemove: ['lasso2d', 'select2d'] });
     }
 
     // ========== Animation ==========
@@ -1136,7 +1205,21 @@
     });
 
     // ========== Error State ==========
+    function formatDerivationSteps(steps) {
+        if (!steps || !steps.length) return '';
+        return steps.map(function (s, i) {
+            var title = s && s.title ? s.title : ('Step ' + (i + 1));
+            var latex = s && s.latex ? s.latex : '';
+            return (i + 1) + '. ' + title + (latex ? ': ' + latex : '');
+        }).join('\n');
+    }
+
     function showError(msg) {
+        lastResultText = '';
+        lastResultLatex = '';
+        lastDerivationSteps = [];
+        lastHamiltonianResult = null;
+        lastMechanicsResult = null;
         resultActions.classList.remove('visible');
         var html = '<div class="lm-error">';
         html += '<h4>Computation Error</h4>';
@@ -1171,5 +1254,95 @@
             navigator.clipboard.writeText(url);
         }
     });
+
+    window.lmGetContext = function lmGetContext() {
+        var resultEl = document.getElementById('lm-result-content');
+        var domSummary = resultEl && resultEl.textContent
+            ? resultEl.textContent.replace(/\s+/g, ' ').trim().slice(0, 4000)
+            : '';
+        return {
+            toolType: 'lagrangian',
+            preset: systemSelect ? systemSelect.value : 'custom',
+            kinetic: kineticInput ? kineticInput.value.trim() : '',
+            potential: potentialInput ? potentialInput.value.trim() : '',
+            coords: coordsInput ? coordsInput.value.trim() : '',
+            params: paramsInput ? paramsInput.value.trim() : '',
+            ic: icInput ? icInput.value.trim() : '',
+            tspan: tspanInput ? tspanInput.value.trim() : '',
+            activePlot: currentPlotType,
+            hasPlot: !!(pendingPlotData && pendingPlotData.t && pendingPlotData.t.length > 0),
+            resultSummary: (lastResultText || lastResultLatex || domSummary || '').slice(0, 4000),
+            derivationSteps: formatDerivationSteps(lastDerivationSteps).slice(0, 6000),
+        };
+    };
+
+    window.lmGetPlotContext = function lmGetPlotContext() {
+        return {
+            plotType: currentPlotType,
+            data: pendingPlotData,
+            hasPlot: !!(pendingPlotData && pendingPlotData.t && pendingPlotData.t.length > 0),
+        };
+    };
+
+    window.lmBuildPlotSpec = buildLagrangianPlotSpec;
+
+    window.lmGetHamiltonianContext = function lmGetHamiltonianContext() {
+        var h = lastHamiltonianResult;
+        return {
+            hasHamiltonian: !!(h && h.hamiltonian),
+            hamiltonian: h ? h.hamiltonian : '',
+            hamEqs: h ? h.hamEqs : [],
+            momenta: h ? h.momenta : [],
+            conservation: h ? h.conservation : [],
+        };
+    };
+
+    window.lmGetMechanicsContext = function lmGetMechanicsContext() {
+        var m = lastMechanicsResult;
+        return {
+            hasResults: !!(m && m.lagrangian),
+            lagrangian: m ? m.lagrangian : '',
+            eoms: m ? m.eoms : [],
+            momenta: m ? m.momenta : [],
+            hamiltonian: m ? m.hamiltonian : '',
+            conservation: m ? m.conservation : [],
+            steps: m ? m.steps : [],
+        };
+    };
+
+    window.lmApplyPreset = function lmApplyPreset(key) {
+        if (!SYSTEMS[key]) return false;
+        if (systemSelect) systemSelect.value = key;
+        currentSystemType = key;
+        var sys = SYSTEMS[key];
+        kineticInput.value = sys.T;
+        potentialInput.value = sys.V;
+        coordsInput.value = sys.coords;
+        paramsInput.value = sys.params;
+        icInput.value = sys.ic;
+        tspanInput.value = sys.tspan;
+        updatePreview();
+        runAllValidation();
+        return true;
+    };
+
+    window.lmRunCompute = function lmRunCompute() {
+        return new Promise(function(resolve, reject) {
+            var timer = setTimeout(function() {
+                cleanup();
+                reject(new Error('Compute timed out (120s).'));
+            }, 125000);
+            function cleanup() {
+                clearTimeout(timer);
+                window.removeEventListener('lm:computed', onOk);
+                window.removeEventListener('lm:compute-error', onErr);
+            }
+            function onOk() { cleanup(); resolve(); }
+            function onErr(e) { cleanup(); reject(e.detail || new Error('Compute failed')); }
+            window.addEventListener('lm:computed', onOk, { once: true });
+            window.addEventListener('lm:compute-error', onErr, { once: true });
+            doCompute();
+        });
+    };
 
 })();

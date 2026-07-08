@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
-    <% String cacheVersion=String.valueOf(System.currentTimeMillis()); %>
+    <%
+        String cacheVersion=String.valueOf(System.currentTimeMillis());
+        request.setAttribute("aiToolId", "developer-tools/mermaid");
+        request.setAttribute("aiRequireSignIn", "true");
+    %>
+    <%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -79,6 +84,27 @@
                 [data-theme="dark"] #mermaidOutput {
                     background: #1e293b;
                 }
+
+                .mm-render-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    flex-wrap: wrap;
+                }
+
+                .mm-ai-btn {
+                    padding: 0.5rem 0.85rem;
+                    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+                    color: #fff;
+                    border: none;
+                    border-radius: 0.375rem;
+                    font-size: 0.8125rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    white-space: nowrap;
+                }
+
+                .mm-ai-btn:hover { opacity: 0.92; }
             </style>
 
             <!-- SEO -->
@@ -123,6 +149,7 @@
             <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
             <link rel="stylesheet"
                 href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
+            <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
             <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style"
                 onload="this.onload=null;this.rel='stylesheet'">
             <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css"
@@ -240,41 +267,22 @@
                             </div>
 
                             <div class="tool-card-body">
-                                <!-- AI: Describe in English -->
-                                <div class="tool-section" style="margin-bottom:0.75rem;">
-                                    <div style="padding:0.75rem;background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(139,92,246,0.04));border:1px solid rgba(99,102,241,0.15);border-radius:0.5rem;">
-                                        <label style="display:flex;align-items:center;gap:0.35rem;font-size:0.8rem;font-weight:600;color:#6366f1;margin-bottom:0.4rem;">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M12 2a4 4 0 014 4v1h1a3 3 0 010 6h-1v1a4 4 0 01-8 0v-1H7a3 3 0 010-6h1V6a4 4 0 014-4z"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/></svg>
-                                            AI &mdash; describe your diagram
-                                        </label>
-                                        <div style="display:flex;gap:0.4rem;">
-                                            <input type="text" class="tool-input" id="mm-ai-input" placeholder="e.g. user login flow with auth check and redirect" autocomplete="off" spellcheck="false" style="flex:1;font-size:0.85rem;">
-                                            <button type="button" id="mm-ai-btn" style="padding:0.45rem 0.9rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:0.375rem;font-size:0.8rem;font-weight:600;cursor:pointer;white-space:nowrap;">Generate</button>
-                                        </div>
-                                        <div id="mm-ai-status" style="display:none;margin-top:0.4rem;padding:0.3rem 0.5rem;border-radius:0.25rem;font-size:0.75rem;"></div>
-                                        <div style="display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.5rem;">
-                                            <button type="button" class="mm-ai-chip" data-prompt="user registration flow: sign up form, validate email, send confirmation, activate account" data-type="flowchart">signup flow</button>
-                                            <button type="button" class="mm-ai-chip" data-prompt="REST API sequence: client sends request to API gateway, gateway calls auth service, then backend service responds" data-type="sequence">API sequence</button>
-                                            <button type="button" class="mm-ai-chip" data-prompt="e-commerce class diagram with User, Product, Order, Cart, Payment classes and their relationships" data-type="class">e-commerce classes</button>
-                                            <button type="button" class="mm-ai-chip" data-prompt="order processing states: new, confirmed, shipped, delivered, cancelled with transitions" data-type="state">order states</button>
-                                            <button type="button" class="mm-ai-chip" data-prompt="project timeline: design 2 weeks, development 4 weeks, testing 2 weeks, deployment 1 week" data-type="gantt">project gantt</button>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="tool-section">
                                     <div class="tool-section-header">
                                         <span>Mermaid Code</span>
                                     </div>
                                     <div class="tool-section-content" style="padding-top: 1rem;">
                                         <textarea id="mermaidInput" class="tool-textarea" spellcheck="false"
-                                            placeholder="Enter Mermaid syntax here, or use AI above..."></textarea>
+                                            placeholder="Enter Mermaid syntax here, or use ✨ AI to generate from English…"></textarea>
                                     </div>
                                 </div>
 
-                                <button type="button" class="tool-action-btn" id="renderBtn" onclick="renderDiagram()">
-                                    Render Diagram (Manual)
-                                </button>
+                                <div class="mm-render-row">
+                                    <button type="button" class="tool-action-btn" id="renderBtn" onclick="renderDiagram()">
+                                        Render Diagram
+                                    </button>
+                                    <button type="button" class="mm-ai-btn" id="btnMermaidAI" title="AI assistant (Ctrl+Shift+A)" aria-label="Open AI assistant">✨ AI</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -513,118 +521,6 @@
                                     setTimeout(updateMermaidTheme, 100);
                                 });
 
-                                // ========== AI: Describe → Mermaid code ==========
-                                (function() {
-                                    var mmAiInput = document.getElementById('mm-ai-input');
-                                    var mmAiBtn = document.getElementById('mm-ai-btn');
-                                    var mmAiStatus = document.getElementById('mm-ai-status');
-
-                                    var AI_SYSTEM = 'You are a Mermaid.js diagram expert. Given a plain-English description, output ONLY valid Mermaid syntax. No explanation, no markdown fences, no text before or after.\n\n' +
-                                        'Supported types: flowchart (TD/LR), sequenceDiagram, classDiagram, stateDiagram-v2, gantt, erDiagram, pie, journey, mindmap.\n\n' +
-                                        'Rules:\n' +
-                                        '- First line must be the diagram type keyword (e.g., "flowchart TD")\n' +
-                                        '- Use proper Mermaid syntax with correct indentation\n' +
-                                        '- For flowcharts: use --> for arrows, [] for rectangular nodes, {} for diamond decisions\n' +
-                                        '- For sequence: use ->> for solid arrows, -->> for dashed\n' +
-                                        '- Keep diagrams concise but complete (5-15 nodes typically)\n' +
-                                        '- Output ONLY the Mermaid code\n\n' +
-                                        'Examples:\n' +
-                                        'Input: "simple login flow"\nOutput:\nflowchart TD\n    A[Login Page] --> B[Enter Credentials]\n    B --> C{Valid?}\n    C -->|Yes| D[Dashboard]\n    C -->|No| E[Error Message]\n    E --> B\n\n' +
-                                        'Input: "client server API call"\nOutput:\nsequenceDiagram\n    Client->>Server: HTTP Request\n    Server->>Database: Query\n    Database-->>Server: Results\n    Server-->>Client: HTTP Response';
-
-                                    function setStatus(msg, cls) {
-                                        if (!mmAiStatus) return;
-                                        mmAiStatus.textContent = msg;
-                                        mmAiStatus.style.display = msg ? 'block' : 'none';
-                                        mmAiStatus.style.color = cls === 'error' ? '#dc2626' : cls === 'success' ? '#16a34a' : '#6366f1';
-                                        mmAiStatus.style.background = cls === 'error' ? 'rgba(220,38,38,0.08)' : cls === 'success' ? 'rgba(22,163,74,0.08)' : 'rgba(99,102,241,0.08)';
-                                    }
-
-                                    if (mmAiBtn && mmAiInput) {
-                                        mmAiBtn.addEventListener('click', function() { aiGenerate(); });
-                                        mmAiInput.addEventListener('keydown', function(e) {
-                                            if (e.key === 'Enter' && !mmAiBtn.disabled) aiGenerate();
-                                        });
-
-                                        document.querySelectorAll('.mm-ai-chip').forEach(function(chip) {
-                                            chip.addEventListener('click', function() {
-                                                mmAiInput.value = chip.getAttribute('data-prompt');
-                                                var type = chip.getAttribute('data-type');
-                                                if (type) loadPreset(type);
-                                                mmAiInput.focus();
-                                            });
-                                        });
-                                    }
-
-                                    function aiGenerate() {
-                                        var desc = mmAiInput.value.trim();
-                                        if (!desc) { setStatus('Enter a description', 'error'); return; }
-
-                                        mmAiBtn.disabled = true;
-                                        mmAiBtn.textContent = 'Thinking...';
-                                        setStatus('AI is generating Mermaid code...', 'loading');
-
-                                        fetch('<%=request.getContextPath()%>/ai', {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({
-                                                messages: [
-                                                    { role: 'system', content: AI_SYSTEM },
-                                                    { role: 'user', content: desc }
-                                                ],
-                                                stream: false
-                                            })
-                                        })
-                                        .then(function(r) {
-                                            if (r.status === 429) throw new Error('Rate limit — try again in a minute');
-                                            if (!r.ok) throw new Error('AI unavailable');
-                                            return r.json();
-                                        })
-                                        .then(function(data) {
-                                            var text = '';
-                                            if (data.message && data.message.content) text = data.message.content;
-                                            else if (data.response) text = data.response;
-                                            else if (data.choices && data.choices[0]) {
-                                                text = data.choices[0].message ? data.choices[0].message.content : (data.choices[0].text || '');
-                                            }
-                                            if (!text) throw new Error('Empty AI response');
-
-                                            // Clean: strip markdown fences
-                                            text = text.replace(/```mermaid\s*/gi, '').replace(/```\s*/g, '').trim();
-
-                                            // Fill textarea and render
-                                            $('#mermaidInput').val(text);
-                                            setStatus('Generated! Rendering...', 'success');
-                                            renderDiagram();
-
-                                            // Auto-detect diagram type and update tab
-                                            var firstLine = text.split('\n')[0].trim().toLowerCase();
-                                            var typeMap = {
-                                                'flowchart': 'flowchart', 'graph': 'flowchart',
-                                                'sequencediagram': 'sequence', 'classdiagram': 'class',
-                                                'statediagram': 'state', 'gantt': 'gantt',
-                                                'erdiagram': 'er', 'pie': 'pie',
-                                                'journey': 'journey', 'mindmap': 'mindmap'
-                                            };
-                                            Object.keys(typeMap).forEach(function(key) {
-                                                if (firstLine.startsWith(key)) {
-                                                    $('#typeTabs .tool-tab').removeClass('active');
-                                                    $('#typeTabs .tool-tab[data-type="' + typeMap[key] + '"]').addClass('active');
-                                                }
-                                            });
-
-                                            setTimeout(function() { setStatus('', ''); }, 3000);
-                                        })
-                                        .catch(function(err) {
-                                            setStatus(err.message, 'error');
-                                        })
-                                        .finally(function() {
-                                            mmAiBtn.disabled = false;
-                                            mmAiBtn.textContent = 'Generate';
-                                        });
-                                    }
-                                })();
-
                                 function loadPreset(type) {
                                     // Update tabs
                                     $('#typeTabs .tool-tab').removeClass('active');
@@ -819,6 +715,18 @@
                                     img.src = image64;
                                 }
                             </script>
+
+        <script type="module">
+        <%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
+        import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
+
+        wireLazyAssistant({
+            moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/mermaid-adapter.js',
+            exportName: 'createMermaidAssistant',
+            buttonId: 'btnMermaidAI',
+            boot: aiAssistantBoot,
+        });
+        </script>
         </body>
 
         </html>

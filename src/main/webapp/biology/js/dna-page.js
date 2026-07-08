@@ -114,6 +114,8 @@
     var tutorForm   = $("dnaTutorForm");
     var tutorInput  = $("dnaTutorInput");
     var promptList  = $("dnaPromptList");
+    var tutorSubmit = $("dnaTutorSubmit");
+    var tutorClearBtn = $("dnaTutorClearBtn");
 
     // Analysis panel
     var motifInput   = $("dnaMotifInput");
@@ -737,6 +739,9 @@
 
     // ---------- AI Tutor (mirrors cell-atlas pattern) ----------
     var tutorAbort = null;
+    var tutorBusy = false;
+    var tutorConversation = [];
+    var TUTOR_MAX_HISTORY = 6;
     function renderTutorPrompts() {
         if (!promptList) return;
         var prompts = [
@@ -757,39 +762,46 @@
     function setTutorPlaceholder(msg) {
         if (tutorBody) tutorBody.innerHTML = '<p class="ca-tutor-placeholder">' + msg + '</p>';
     }
+    function syncTutorClearBtn() {
+        if (!tutorClearBtn) return;
+        tutorClearBtn.hidden = tutorConversation.length === 0;
+    }
+    function buildTutorSystemPrompt() {
+        var intro = "You are a biology tutor helping a student learn DNA structure from an interactive viewer.";
+        var view = "Current sequences: " + state.sequences.map(function (s, i) {
+            return "Seq " + (i + 1) + " (" + s.length + " bp)";
+        }).join(", ") + ".";
+        var ak = parseActiveKey(state.activeKey);
+        if (!ak || !state.sequences[ak.seq] || ak.bp >= state.sequences[ak.seq].length) {
+            return intro + " " + view + " No base pair is selected yet. " +
+                "Teach clearly in short, plain-text paragraphs and stay grounded in the current sequence context.";
+        }
+        var seq = state.sequences[ak.seq];
+        var letter = seq[ak.bp];
+        var info = BASE_INFO[letter] || BASE_INFO["N"];
+        return intro + " " + view + " " +
+            "Selected base pair: position " + (ak.bp + 1) + " of Seq " + (ak.seq + 1) +
+            " = " + letter + " (" + info.name + ", " + info.type + "), pairs with " +
+            info.pairsWith + " via " + info.bonds + " hydrogen bonds. " +
+            "Answer in 2-4 short plain-text paragraphs. Do not use markdown bullets or headings.";
+    }
     function askTutor(question) {
-        if (!question || !question.trim()) return;
+        if (!question || !question.trim() || tutorBusy) return;
+        tutorBusy = true;
+        if (tutorSubmit) tutorSubmit.disabled = true;
         if (tutorAbort) tutorAbort.abort();
         tutorAbort = new AbortController();
         showTutorState('loading');
         tutorMeta.textContent = "Tutor usually replies in 2–3 seconds";
         setTutorPlaceholder("Thinking...");
-
-        var ctx = "DNA Viewer tool. ";
-        var ak = parseActiveKey(state.activeKey);
-        var seq = ak ? state.sequences[ak.seq] : null;
-        if (ak && seq && ak.bp < seq.length) {
-            var letter = seq[ak.bp];
-            var info = BASE_INFO[letter];
-            ctx += "The user is viewing " + state.sequences.length + " DNA sequence(s); the active base is " +
-                   "position " + (ak.bp + 1) + " of " + seq.length + " in sequence #" + (ak.seq + 1) +
-                   " (\"" + seq + "\"). This base is " + info.name + " (" + letter + "), a " +
-                   info.type + " that pairs with " + info.pairsWith + " via " + info.bonds + " H-bonds. ";
-        } else {
-            ctx += "The user is viewing " + state.sequences.length + " DNA sequence(s): " +
-                   state.sequences.map(function (s, i) { return "Seq " + (i + 1) + "=\"" + s + "\""; }).join(", ") + ". ";
-        }
-        ctx += "Answer in 2–3 short paragraphs of plain text. Be concrete.";
+        tutorConversation.push({ role: "user", content: question.trim() });
 
         // Match the cell-atlas request shape: a single `messages` array
         // with the system prompt as the first role, no separate `system`
         // field. AIProxyServlet expects this.
         var body = JSON.stringify({
             stream: true,
-            messages: [
-                { role: "system", content: ctx },
-                { role: "user",   content: question }
-            ]
+            messages: [{ role: "system", content: buildTutorSystemPrompt() }].concat(tutorConversation)
         });
 
         fetch(TUTOR_ENDPOINT, {
@@ -816,6 +828,9 @@
                     if (chunk.done) {
                         tutorMeta.textContent = "Reply complete.";
                         showTutorState('ready');
+                        tutorConversation.push({ role: "assistant", content: acc || "" });
+                        while (tutorConversation.length > TUTOR_MAX_HISTORY) tutorConversation.shift();
+                        syncTutorClearBtn();
                         return;
                     }
                     buffer += decoder.decode(chunk.value, { stream: true });
@@ -841,9 +856,17 @@
             return pump();
         }).catch(function (err) {
             if (err.name === 'AbortError') return;
+            if (tutorConversation.length &&
+                tutorConversation[tutorConversation.length - 1].role === "user") {
+                tutorConversation.pop();
+            }
             tutorMeta.textContent = "Tutor error.";
             setTutorPlaceholder("Couldn't reach the tutor: " + err.message);
             showTutorState('error');
+            syncTutorClearBtn();
+        }).finally(function () {
+            tutorBusy = false;
+            if (tutorSubmit) tutorSubmit.disabled = false;
         });
     }
 
@@ -851,7 +874,9 @@
         promptList.addEventListener('click', function (e) {
             var btn = e.target.closest('[data-prompt]');
             if (!btn) return;
-            askTutor(btn.getAttribute('data-prompt'));
+            var prompt = btn.getAttribute('data-prompt');
+            if (tutorInput) tutorInput.value = prompt;
+            askTutor(prompt);
         });
     }
     if (tutorForm) {
@@ -862,6 +887,15 @@
                 askTutor(q);
                 tutorInput.value = '';
             }
+        });
+    }
+    if (tutorClearBtn) {
+        tutorClearBtn.addEventListener('click', function () {
+            tutorConversation = [];
+            showTutorState('idle');
+            tutorMeta.textContent = "Pick a prompt below or type a question.";
+            setTutorPlaceholder("Conversation cleared.");
+            syncTutorClearBtn();
         });
     }
 
@@ -1779,6 +1813,7 @@
                 renderLegend();
                 renderAnalysis();
                 renderTutorPrompts();
+                syncTutorClearBtn();
                 if (state.labelsVisible && labelsBtn) labelsBtn.classList.add('is-active');
                 if (state.autoRotate && rotateBtn)    rotateBtn.classList.add('is-active');
                 // Restore previously-active view-mode tab. JSP starts

@@ -58,6 +58,8 @@ Use [CURRENT CONTEXT] for live page inputs (PDE type, parameters, last page resu
    - **system** (2+ equations in x,y,…)
    - **inequality** (<, >, <=, >=, compound, rational)
    - **polynomial** (add/subtract/multiply/divide, factor, roots, evaluate, expand)
+   - **logarithm** (evaluate log_b(x), expand/condense/simplify log rules, solve log equations, change of base)
+   - **lagrangian** (Lagrange multipliers: optimize f subject to a constraint g)
 2. Output the matching fenced block (\`\`\`integral\`\`\`, \`\`\`derivative\`\`\`, \`\`\`limit\`\`\`, \`\`\`ode\`\`\`, \`\`\`pde\`\`\`, \`\`\`vectorCalculus\`\`\`, \`\`\`matrix\`\`\`, \`\`\`bode\`\`\`, \`\`\`laplace-transform\`\`\`, \`\`\`z-transform\`\`\`, \`\`\`trig\`\`\`, \`\`\`statistics\`\`\`, \`\`\`quadratic\`\`\`, \`\`\`system\`\`\`, \`\`\`inequality\`\`\`, or \`\`\`polynomial\`\`\`). Prefer full LaTeX in \`raw:\` when the user gave notation.
 3. **Always mirror each problem in prose as textbook display math** (KaTeX \`$$...$$\`) — see formats below.
 4. Never give the final numerical answer or closed-form solution in prose — the engine computes when the student clicks a chip. (Only exception: the last-resort reasoning path below, when no block applies.)
@@ -276,7 +278,22 @@ y: 2, 4, 5, 4, 5
 \`\`\`
 Mirror in prose: \`$$\\displaystyle z=\\frac{x-\\mu}{\\sigma}$$\` or \`$$\\displaystyle P(Z \\le 1.96)$$\`
 
-Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|vector|matrix|bode|laplace|ztransform|trig|statistics|quadratic|system|inequality|polynomial\` plus fields below.
+**Logarithm** — mode: evaluate | expand | condense | simplify | solve
+\`\`\`logarithm
+mode: evaluate
+expr: log(8, 2)
+\`\`\`
+Use \`log(x, b)\` for base b, \`ln\` for natural log. For \`solve\`, write the equation in \`expr\`, e.g. \`log(x,3) = 4\`. Examples: expand \`expr: log(x^2*y)\`; condense \`expr: 2*log(x) + log(y)\`.
+
+**Lagrangian** (Lagrange multipliers — optimize f subject to a constraint)
+\`\`\`lagrangian
+objective: x*y
+constraint: x + y - 10
+vars: x, y
+\`\`\`
+Write \`constraint\` as the g = 0 expression (move everything to one side, e.g. \`x + y - 10\` for x+y=10).
+
+Unified fence: \`\`\`math-action\`\`\` with \`action: integral|derivative|limit|ode|pde|vectorCalculus|vector|matrix|bode|laplace|ztransform|trig|statistics|quadratic|system|inequality|polynomial|logarithm|lagrangian\` plus fields below.
 
 JSON batch: \`{"matrix":[{"op":"determinant","matrixA":"..."},{"op":"inverse","matrixA":"..."}]}\`
 
@@ -444,6 +461,10 @@ export function createMathAssistant(opts) {
     systemPrompt: buildMathPrompt(shell()),
     seedContext: () => formatSeedContext(getSnapshot(), shell()),
     getQuickActions: () => buildQuickActions(getSnapshot(), shell()),
+    ...(Array.isArray(shell().applyActions) && shell().applyActions.length ? {
+      applyActions: shell().applyActions,
+      getApplyLabel: typeof shell().getApplyLabel === 'function' ? shell().getApplyLabel : () => 'Apply',
+    } : {}),
     onAssistantRender: (body, bubble, rawText) => {
       renderMathAssistantMessage(body, bubble, rawText);
     },

@@ -111,6 +111,11 @@
         }
         .cad-ai-send:hover { background: #818cf8; }
         .cad-ai-send:disabled { opacity: 0.3; cursor: default; }
+        .cad-ai-clear {
+            padding: 4px 8px; background: #334155; color: #cbd5e1; border: 1px solid #475569;
+            border-radius: 4px; font-size: 0.625rem; font-weight: 600; cursor: pointer;
+        }
+        .cad-ai-clear:hover { background: #475569; color: #fff; }
 
         .cad-topbar-right { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; }
         .cad-topbar-badge {
@@ -335,6 +340,7 @@
                 <span class="cad-img-btn-label">From Image</span>
             </button>
             <button class="cad-ai-send" id="cad-ai-send" disabled>Go</button>
+            <button type="button" class="cad-ai-clear" id="cad-ai-clear" title="Clear AI conversation">Clear</button>
         </div>
 
         <!-- AI hint — always visible, points users to the editor -->
@@ -441,10 +447,13 @@
         (function () {
             var input = document.getElementById('cad-ai-input');
             var sendBtn = document.getElementById('cad-ai-send');
+            var clearBtn = document.getElementById('cad-ai-clear');
             var statusBar = document.getElementById('cad-ai-status');
             var statusText = document.getElementById('cad-ai-status-text');
             var progressHost = document.getElementById('cad-ai-status-progress');
             var busy = false;
+            var aiConversation = [];
+            var AI_MAX_HISTORY = 6;
 
             // Lazy-mount progress bar (ai-progress-bar.js is deferred)
             var progressBar = null;
@@ -504,6 +513,15 @@
                 if (e.key === 'Enter' && !sendBtn.disabled && !busy) { e.preventDefault(); doGenerate(); }
             });
             sendBtn.addEventListener('click', function () { if (!busy) doGenerate(); });
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function () {
+                    aiConversation = [];
+                    input.value = '';
+                    sendBtn.disabled = true;
+                    showStatus('success', 'AI conversation cleared.');
+                    setTimeout(hideStatus, 1400);
+                });
+            }
 
             function showStatus(cls, text) {
                 statusBar.className = 'cad-ai-status ' + cls + ' show';
@@ -536,6 +554,9 @@
                     messages.push({ role: 'user', content: 'Current code:\n```\n' + currentCode + '\n```' });
                     messages.push({ role: 'assistant', content: 'I see the code. What change do you need?' });
                 }
+                if (aiConversation.length) {
+                    messages = messages.concat(aiConversation);
+                }
 
                 // Include JSCAD errors if user mentions fix/error
                 var errEl = document.querySelector('#status');
@@ -545,6 +566,7 @@
                     prompt += '\n\nCurrent error: ' + errText;
                 }
                 messages.push({ role: 'user', content: prompt });
+                aiConversation.push({ role: 'user', content: prompt });
 
                 var cm = getCM();
                 var rawStream = '';
@@ -622,6 +644,9 @@
                 .catch(function (err) {
                     if (pb) pb.stop(false);
                     if (cm) cm.setOption('readOnly', false);
+                    if (aiConversation.length && aiConversation[aiConversation.length - 1].role === 'user') {
+                        aiConversation.pop();
+                    }
                     showStatus('error', err.message);
                     setTimeout(hideStatus, 5000);
                     busy = false;
@@ -646,6 +671,8 @@
                             cm.setValue(finalCode);
                         }
                         cm.refresh();
+                        aiConversation.push({ role: 'assistant', content: finalCode.slice(0, 4000) });
+                        while (aiConversation.length > AI_MAX_HISTORY) aiConversation.shift();
 
                         // Check if JSCAD is stuck in "processing" (known bug after first error)
                         var busyEl = document.querySelector('#busy');

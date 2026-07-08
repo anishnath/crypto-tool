@@ -12,7 +12,7 @@
  * registering a builder in BUILDERS (each returns {code, finalize}).
  */
 
-const FALLBACK_ACTIONS = new Set(['derivative', 'limit', 'quadratic', 'inequality', 'trig', 'statistics']);
+const FALLBACK_ACTIONS = new Set(['derivative', 'limit', 'quadratic', 'inequality', 'trig', 'statistics', 'logarithm', 'lagrangian']);
 
 /** True if this action has a SymPy fallback builder. */
 export function canSympyFallback(action) {
@@ -103,7 +103,7 @@ const BUILDERS = {
         return {
           action: 'derivative',
           resultLatex: p.latex,
-          method: 'Derivative (SymPy)',
+          method: 'Derivative',
           steps,
           problemLatex: `\\frac{d}{d${p.var}}\\left(${p.expr_tex}\\right)`,
         };
@@ -144,7 +144,7 @@ const BUILDERS = {
         const steps = mode === 'steps'
           ? [{ title: 'Evaluate the limit', latex: problemLatex }, { title: 'Result', latex: p.latex }]
           : [];
-        return { action: 'limit', resultLatex: p.latex, method: 'Limit (SymPy)', steps, problemLatex };
+        return { action: 'limit', resultLatex: p.latex, method: 'Limit', steps, problemLatex };
       },
     };
   },
@@ -175,7 +175,7 @@ const BUILDERS = {
         const steps = mode === 'steps'
           ? [{ title: 'Solve the equation', latex: p.expr_tex }, { title: 'Solution', latex: answer }]
           : [];
-        return { action: 'quadratic', resultLatex: answer, method: 'Equation solver (SymPy)', steps, problemLatex: p.expr_tex };
+        return { action: 'quadratic', resultLatex: answer, method: 'Equation solver', steps, problemLatex: p.expr_tex };
       },
     };
   },
@@ -200,7 +200,7 @@ const BUILDERS = {
         const steps = mode === 'steps'
           ? [{ title: 'Solve the inequality', latex: p.expr_tex }, { title: 'Solution set', latex: p.latex }]
           : [];
-        return { action: 'inequality', resultLatex: p.latex, method: 'Inequality solver (SymPy)', steps, problemLatex: p.expr_tex };
+        return { action: 'inequality', resultLatex: p.latex, method: 'Inequality solver', steps, problemLatex: p.expr_tex };
       },
     };
   },
@@ -209,7 +209,7 @@ const BUILDERS = {
     const mode = String(task.mode || 'evaluate');
     const code = [
       PREAMBLE,
-      `    _raw = _b64("${b64(task.expr || task.latex || '')}")`,
+      `    _raw = _b64("${b64(task.expr || task.raw || task.latex || '')}")`,
       `    _mode = "${mode}"; _unit = "${String(task.unit || '')}"`,
       '    if _unit[:3] == "deg":',
       '        out = {"ok": False, "error": "Degree-mode trig not supported in fallback"}',
@@ -234,7 +234,7 @@ const BUILDERS = {
         const steps = mode2 === 'steps'
           ? [{ title: 'Trigonometry', latex: p.expr_tex }, { title: 'Result', latex: p.latex }]
           : [];
-        return { action: 'trig', resultLatex: p.latex, method: 'Trigonometry (SymPy)', steps, problemLatex: p.expr_tex };
+        return { action: 'trig', resultLatex: p.latex, method: 'Trigonometry', steps, problemLatex: p.expr_tex };
       },
     };
   },
@@ -283,6 +283,90 @@ const BUILDERS = {
       },
     };
   },
+
+  logarithm(task) {
+    const mode = String(task.mode || 'evaluate');
+    const code = [
+      PREAMBLE,
+      `    _mode = "${mode}"`,
+      `    _raw = _b64("${b64(task.expr || task.raw || '')}")`,
+      '    if _mode == "expand":',
+      '        _e = _PP(_raw); res = expand_log(_e, force=True)',
+      '        out = {"ok": True, "latex": latex(res), "text": str(res), "expr_tex": latex(_e)}',
+      '    elif _mode == "condense":',
+      '        _e = _PP(_raw); res = logcombine(_e, force=True)',
+      '        out = {"ok": True, "latex": latex(res), "text": str(res), "expr_tex": latex(_e)}',
+      '    elif _mode == "simplify":',
+      '        _e = _PP(_raw); res = logcombine(simplify(_e), force=True)',
+      '        out = {"ok": True, "latex": latex(res), "text": str(res), "expr_tex": latex(_e)}',
+      '    elif _mode == "solve":',
+      '        if "=" in _raw:',
+      '            _l, _r = _raw.split("=", 1); eqn = Eq(_PP(_l), _PP(_r))',
+      '        else:',
+      '            eqn = Eq(_PP(_raw), 0)',
+      '        _fs = sorted(eqn.free_symbols, key=lambda z: z.name); var = _fs[0] if _fs else Symbol("x")',
+      '        _sol = solve(eqn, var, dict=False)',
+      '        if not isinstance(_sol, (list, tuple)): _sol = [_sol]',
+      '        _tex = ", ".join(latex(var) + " = " + latex(s) for s in _sol)',
+      '        out = {"ok": True, "latex": _tex, "text": str(_sol), "has_sol": len(_sol) > 0, "expr_tex": latex(eqn)}',
+      '    else:',
+      '        _e = _PP(_raw); res = simplify(_e)',
+      '        try: res = nsimplify(res)',
+      '        except Exception: pass',
+      '        out = {"ok": True, "latex": latex(res), "text": str(res), "expr_tex": latex(_e)}',
+      TRAILER,
+    ].join('\n');
+    return {
+      code,
+      finalize(p, mode2) {
+        const label = { expand: 'Expand', condense: 'Condense', simplify: 'Simplify', solve: 'Solve', evaluate: 'Evaluate' }[mode] || 'Logarithm';
+        const answer = mode === 'solve' ? (p.has_sol ? p.latex : '\\text{No solution}') : p.latex;
+        const steps = mode2 === 'steps'
+          ? [{ title: `${label} (logarithm)`, latex: p.expr_tex }, { title: 'Result', latex: answer }]
+          : [];
+        return { action: 'logarithm', resultLatex: answer, method: `Logarithm — ${label}`, steps, problemLatex: p.expr_tex };
+      },
+    };
+  },
+
+  lagrangian(task) {
+    const code = [
+      PREAMBLE,
+      `    f = _P("${b64(task.objective || task.expr || '')}")`,
+      `    _g = _P("${b64(task.constraint || '')}")`,
+      `    _cv = _b64("${b64(task.constval || '')}")`,
+      '    g0 = _g - (_PP(_cv) if _cv.strip() else 0)',
+      `    _vs = [s.strip() for s in _b64("${b64(task.vars || '')}").split(",") if s.strip()]`,
+      '    if not _vs: _vs = sorted({str(s) for s in (f.free_symbols | g0.free_symbols)})',
+      '    vars = [Symbol(v) for v in _vs]',
+      '    lam = Symbol("lambda_")',
+      '    L = f - lam*g0',
+      '    eqs = [diff(L, v) for v in vars] + [g0]',
+      '    sols = solve(eqs, vars + [lam], dict=True)',
+      '    pts = []',
+      '    for s in sols:',
+      '        try:',
+      '            coords = ", ".join(latex(v) + "=" + latex(s.get(v)) for v in vars)',
+      '            fval = simplify(f.subs(s))',
+      '            pts.append("(" + coords + "):\\\\ f=" + latex(fval))',
+      '        except Exception: pass',
+      '    if not pts:',
+      '        out = {"ok": False, "error": "No critical points found"}',
+      '    else:',
+      '        out = {"ok": True, "latex": ";\\\\quad ".join(pts), "text": str(sols), "obj_tex": latex(f), "g_tex": latex(g0)}',
+      TRAILER,
+    ].join('\n');
+    return {
+      code,
+      finalize(p, mode2) {
+        const problemLatex = `\\text{optimize } ${p.obj_tex} \\text{ s.t. } ${p.g_tex}=0`;
+        const steps = mode2 === 'steps'
+          ? [{ title: 'Lagrange conditions ∇f = λ∇g', latex: problemLatex }, { title: 'Critical points', latex: p.latex }]
+          : [];
+        return { action: 'lagrangian', resultLatex: p.latex, method: 'Lagrange multipliers', steps, problemLatex };
+      },
+    };
+  },
 };
 
 /** POST a Python program to the OneCompiler backend and parse the RESULT: line. */
@@ -313,8 +397,10 @@ const SOURCE_FIELDS = {
   limit: ['expr'],
   quadratic: ['expr', 'raw', 'equation'],
   inequality: ['expr', 'inequality', 'raw'],
-  trig: ['expr', 'latex'],
+  trig: ['expr', 'raw', 'latex'],
   statistics: ['data', 'x'],
+  logarithm: ['expr', 'raw'],
+  lagrangian: ['objective', 'expr', 'constraint'],
 };
 
 export async function solveViaSympyFallback(task, mode = 'simple') {

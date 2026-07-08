@@ -11,7 +11,7 @@ import {
   taskToDisplayLatex as algebraTaskToDisplayLatex,
 } from './algebra-action-extract.js';
 
-export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'vector', 'matrix', 'bode', 'laplace', 'ztransform', 'trig', 'statistics'];
+export const CALCULUS_ACTIONS = ['integral', 'derivative', 'limit', 'ode', 'pde', 'vectorCalculus', 'vector', 'matrix', 'bode', 'laplace', 'ztransform', 'trig', 'statistics', 'logarithm', 'lagrangian'];
 export { ALGEBRA_ACTIONS };
 /** All Math AI intents — calculus, linear algebra, algebra (standalone Math AI page uses full set). */
 export const MATH_ACTIONS = [...CALCULUS_ACTIONS, ...ALGEBRA_ACTIONS];
@@ -86,6 +86,7 @@ const ACTION_FENCE_LANGS = new Set([
   'z-transform', 'ztransform', 'inverse-z-transform', 'inverse-ztransform', 'iz', 'ztransforms',
   'trig', 'trigonometry', 'trig-equation', 'trig-equation-solver', 'trig-identity', 'trig-function',
   'statistics', 'stats', 'descriptive', 'zscore', 'z-score', 'percentile',
+  'logarithm', 'log', 'logarithms', 'lagrangian', 'lagrange', 'lagrange-multipliers', 'lagrangemultipliers',
   'math-action', 'math', 'mathintent',
 ]);
 
@@ -211,6 +212,8 @@ function detectAction(obj, fenceLang) {
   if (action === 'stats' || action === 'descriptive' || action === 'z-score' || action === 'zscore' || action === 'percentile') {
     action = 'statistics';
   }
+  if (action === 'log' || action === 'logarithms') action = 'logarithm';
+  if (action === 'lagrange' || action === 'lagrange-multipliers' || action === 'lagrangemultipliers') action = 'lagrangian';
   if (action === 'grad' || action === 'nabla') action = 'gradient';
   if (action === 'div') action = 'divergence';
   if (action === 'gradient' || action === 'divergence' || action === 'curl') {
@@ -620,6 +623,26 @@ export function normalizeCalculusTask(obj, fenceLang) {
     return task;
   }
 
+  if (action === 'logarithm') {
+    const mode = String(obj.mode || 'evaluate').toLowerCase();
+    task.mode = ['evaluate', 'expand', 'condense', 'simplify', 'solve'].includes(mode) ? mode : 'evaluate';
+    const expr = String(obj.expr || obj.body || obj.function || '').trim();
+    if (expr) task.expr = expr;
+    if (!raw && !task.expr) return null;
+    return task;
+  }
+
+  if (action === 'lagrangian') {
+    const objective = String(obj.objective || obj.expr || obj.function || '').trim();
+    const constraint = String(obj.constraint || '').trim();
+    if (objective) task.objective = objective;
+    if (constraint) task.constraint = constraint;
+    if (obj.constval != null && String(obj.constval).trim() !== '') task.constval = String(obj.constval).trim();
+    if (obj.vars != null && String(obj.vars).trim() !== '') task.vars = String(obj.vars).trim();
+    if (!raw && (!task.objective || !task.constraint)) return null;
+    return task;
+  }
+
   // limit
   const expr = String(obj.expr || obj.body || obj.function || '').trim();
   if (!raw && !expr) return null;
@@ -720,6 +743,11 @@ export function parseCalculusBlockContent(content, fenceLang) {
     y0: kv.y0,
     dy0: kv.dy0,
     label: kv.label || kv.name,
+    base: kv.base,
+    objective: kv.objective || kv.maximize || kv.minimize,
+    constraint: kv.constraint || kv.g || kv.subjectto || kv.subject_to,
+    constval: kv.constval || kv.constraintvalue,
+    vars: kv.vars || kv.variables,
   };
   copyPdeParamsFromKv(payload, kv);
   return normalizeCalculusTask(payload, fenceLang);
@@ -1074,6 +1102,54 @@ const PDE_MODE_LATEX = {
   linear1: 'a\\, u_x + b\\, u_y + c\\, u = G(x,y)',
 };
 
+/** Preset IC shorthand from the PDE calculator UI. */
+const PDE_IC_PRESETS = {
+  sin: '\\sin\\left(\\frac{\\pi x}{L}\\right)',
+  gauss: '\\exp\\left(-(x-L/2)^2\\right)',
+  step: 'H(x)',
+  bump: '\\text{smooth bump}',
+  square: '\\text{square wave}',
+};
+
+/** Preset BC shorthand from the PDE calculator UI. */
+const PDE_BC_PRESETS = {
+  dirichlet: 'u=0',
+  neumann: 'u_x=0',
+  robin: '\\alpha u + \\beta u_x = 0',
+  periodic: 'u(0,t)=u(L,t)',
+  mixed: 'u(0,t)=0,\\; u_x(L,t)=0',
+  upwind: '\\text{upwind}',
+  lax_wendroff: '\\text{Lax–Wendroff}',
+  lax_friedrichs: '\\text{Lax–Friedrichs}',
+};
+
+/** Strip accidental \\text{IC: ...} wrappers and fix common model typos. */
+function sanitizePdeConditionValue(raw) {
+  let s = String(raw ?? '').trim();
+  if (!s) return '';
+  const wrapped = /^\\text\{([\s\S]*)\}$/.exec(s);
+  if (wrapped) s = wrapped[1].replace(/^(IC|BC):\s*/i, '').trim();
+  // ODE-style bleed into PDE IC: x(0)=1\,\mathrm{d}x(0)=0 → x(0)=1, x'(0)=0
+  s = s.replace(
+    /\\,\\mathrm\{d\}([a-zA-Z])\(([^)]*)\)\s*=\s*([^,]+)/g,
+    (_, v, args, val) => `,\\; ${v}'(${args})=${val.trim()}`,
+  );
+  s = s.replace(
+    /\\mathrm\{d\}([a-zA-Z])\(([^)]*)\)\s*=\s*([^,]+)/g,
+    (_, v, args, val) => `,\\; ${v}'(${args})=${val.trim()}`,
+  );
+  return s;
+}
+
+/** IC/BC as math-mode annotation — never embed raw LaTeX inside \\text{...}. */
+function formatPdeAnnotation(label, value, presetMap = {}) {
+  const s = sanitizePdeConditionValue(value);
+  if (!s) return '';
+  const preset = presetMap[s.toLowerCase()];
+  const body = preset || exprToBodyLatex(s);
+  return `\\text{${label}: }\\; ${body}`;
+}
+
 /** Textbook LaTeX for a PDE task card. */
 function pdeProblemLatex(task) {
   const mode = String(task.mode || 'heat').toLowerCase();
@@ -1085,15 +1161,15 @@ function pdeProblemLatex(task) {
     if (p.k != null && mode === 'heat') bits.push(`k=${p.k}`);
     if (p.c != null && (mode === 'wave' || mode === 'transport')) bits.push(`c=${p.c}`);
     if (p.L != null) bits.push(`L=${p.L}`);
-    if (p.ic) bits.push(`\\text{IC: ${p.ic}}`);
-    if (p.bc) bits.push(`\\text{BC: ${p.bc}}`);
+    if (p.ic) bits.push(formatPdeAnnotation('IC', p.ic, PDE_IC_PRESETS));
+    if (p.bc) bits.push(formatPdeAnnotation('BC', p.bc, PDE_BC_PRESETS));
   } else if (mode === 'laplace' || mode === 'poisson') {
     if (p.nx != null) bits.push(`${p.nx}\\times${p.ny || p.nx}`);
-    if (p.bc) bits.push(`\\text{BC: ${p.bc}}`);
-    if (p.source && mode === 'poisson') bits.push(`\\text{source: ${p.source}}`);
+    if (p.bc) bits.push(formatPdeAnnotation('BC', p.bc, PDE_BC_PRESETS));
+    if (p.source && mode === 'poisson') bits.push(formatPdeAnnotation('source', p.source));
   } else if (mode === 'schrodinger') {
     if (p.L != null) bits.push(`L=${p.L}`);
-    if (p.potential) bits.push(`V=${p.potential.replace(/_/g, '\\_')}`);
+    if (p.potential) bits.push(`V(x)=${exprToBodyLatex(p.potential)}`);
     if (p.nstates) bits.push(`${p.nstates}\\text{ states}`);
   } else if (mode === 'linear1') {
     if (p.a != null) bits.push(`a=${p.a}`);

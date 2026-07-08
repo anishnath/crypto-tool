@@ -10,6 +10,7 @@ import {
 import {
   appendEqSlot,
   createMathSlotEl,
+  prepareLatexForKatex,
   typesetMathSlots,
 } from '../katex-render.js';
 import { solveAlgebraTask } from './algebra-chat-compute.js';
@@ -552,7 +553,7 @@ export async function solveBodeTask(task, mode = 'simple') {
     action: 'bode',
     resultLatex,
     resultText: r.resultText || '',
-    method: 'Bode plot engine (SymPy + NumPy)',
+    method: 'Bode plot',
     steps,
     zeros: r.zeros || [],
     poles: r.poles || [],
@@ -598,7 +599,7 @@ export async function solveLaplaceTask(task, mode = 'simple') {
     action: 'laplace',
     resultLatex,
     resultText: r.resultText || '',
-    method: isInverse ? 'Inverse Laplace transform (SymPy CAS)' : 'Forward Laplace transform (SymPy CAS)',
+    method: isInverse ? 'Inverse Laplace transform' : 'Forward Laplace transform',
     steps,
     convergence: r.convergence || null,
     transformMode: isInverse ? 'inverse' : 'forward',
@@ -646,7 +647,7 @@ export async function solveZTransformTask(task, mode = 'simple') {
     action: 'ztransform',
     resultLatex,
     resultText: r.resultText || '',
-    method: isInverse ? 'Inverse Z-transform (SymPy CAS)' : 'Forward Z-transform (SymPy CAS)',
+    method: isInverse ? 'Inverse Z-transform' : 'Forward Z-transform',
     steps,
     convergence: r.convergence || null,
     transformMode: isInverse ? 'inverse' : 'forward',
@@ -704,7 +705,7 @@ export async function solveTrigTask(task, mode = 'simple') {
     mode,
     action: 'trig',
     resultLatex: r.resultLatex || '',
-    method: r.method || 'Trigonometry engine (SymPy)',
+    method: r.method || 'Trigonometry',
     steps,
     input: mode === 'graph' ? r.input : undefined,
     result: { value: r.resultLatex || '' },
@@ -1133,6 +1134,708 @@ export function renderLimitGraphInChat(plotEl, parsed, result) {
       displayModeBar: false,
     });
   });
+}
+
+const LAGRANGIAN_PLOT_LABELS = {
+  trajectory: 'q(t) trajectory',
+  phase: 'Phase portrait',
+  energy: 'Energy vs time',
+  potential: 'Potential well',
+};
+
+/** Taller in-chat plots for Lagrangian mechanics (phase portraits, q(t), energy). */
+const LAGRANGIAN_CHAT_GRAPH_MIN_PX = 420;
+
+/** Keep custom DOM in assistant bubbles — do not call _finalizeAssistantBubble (it wipes body). */
+function finishInjectedAssistantBubble(assistant, bubble, body) {
+  bubble.removeAttribute('aria-busy');
+  assistant.onAssistantRender?.(body, bubble, '');
+  assistant._scroll?.();
+}
+
+/**
+ * Lagrangian mechanics page plot in chat (same Plotly spec as Plots tab).
+ * @param {HTMLElement} plotEl
+ * @param {{ traces?: object[], layout?: object }} spec
+ */
+export function renderLagrangianGraphInChat(plotEl, spec) {
+  if (!plotEl || !Array.isArray(spec?.traces) || !spec.traces.length) {
+    if (plotEl) {
+      plotEl.innerHTML = '<p class="vca-math-result-method">No plot data available. Compute on the Lagrangian page first.</p>';
+    }
+    return Promise.resolve(false);
+  }
+
+  return ensurePlotly(plotEl, () => {
+    const chart = document.createElement('div');
+    chart.className = 'vca-math-graph-canvas lm-chat-plot-canvas';
+    chart.style.minHeight = `${LAGRANGIAN_CHAT_GRAPH_MIN_PX}px`;
+    plotEl.style.minHeight = `${LAGRANGIAN_CHAT_GRAPH_MIN_PX}px`;
+    plotEl.appendChild(chart);
+    const layout = {
+      ...(spec.layout || {}),
+      height: LAGRANGIAN_CHAT_GRAPH_MIN_PX,
+      autosize: true,
+    };
+    window.Plotly.newPlot(chart, spec.traces, layout, {
+      responsive: true,
+      displayModeBar: true,
+      modeBarButtonsToRemove: ['lasso2d', 'select2d'],
+      displaylogo: false,
+    });
+  });
+}
+
+/**
+ * Inject a page RK45 plot into the Math AI chat (no LLM round-trip).
+ * @param {import('../vibe-coding-assistant.js').ToolAiAssistant} assistant
+ * @param {'trajectory'|'phase'|'energy'|'potential'} plotType
+ */
+export function injectLagrangianPagePlot(assistant, plotType) {
+  if (!assistant || typeof assistant._appendBubble !== 'function') return;
+
+  const type = plotType || 'trajectory';
+  const label = LAGRANGIAN_PLOT_LABELS[type] || 'Lagrangian plot';
+  const ctx = typeof window.lmGetPlotContext === 'function' ? window.lmGetPlotContext() : null;
+
+  assistant._appendBubble('user', `Show ${label} from page results`);
+
+  if (!ctx?.hasPlot || typeof window.lmBuildPlotSpec !== 'function') {
+    assistant._appendBubble('assistant', 'Compute a system on the Lagrangian calculator first, then use the plot chips.');
+    return;
+  }
+
+  const spec = window.lmBuildPlotSpec(type, ctx.data);
+  if (!spec?.traces?.length) {
+    assistant._appendBubble('assistant', `No data available for the ${label} view for this system.`);
+    return;
+  }
+
+  const { bubble, body } = assistant._appendBubble('assistant', '');
+  const card = document.createElement('div');
+  card.className = 'vca-math-result-card lm-chat-result-card';
+  const head = document.createElement('div');
+  head.className = 'vca-math-result-head';
+  head.textContent = label;
+  const plotWrap = document.createElement('div');
+  plotWrap.className = 'vca-math-graph lm-chat-plot-wrap';
+  plotWrap.style.minHeight = `${LAGRANGIAN_CHAT_GRAPH_MIN_PX}px`;
+  const method = document.createElement('p');
+  method.className = 'vca-math-result-method';
+  method.textContent = 'Same RK45 data as the page Plots tab';
+  card.appendChild(head);
+  card.appendChild(plotWrap);
+  card.appendChild(method);
+  body.appendChild(card);
+  finishInjectedAssistantBubble(assistant, bubble, body);
+  void renderLagrangianGraphInChat(plotWrap, spec);
+}
+
+/**
+ * Inject Hamiltonian tab content into Math AI chat (H, Hamilton's eqs, conservation).
+ * @param {import('../vibe-coding-assistant.js').ToolAiAssistant} assistant
+ */
+export function injectLagrangianPageHamiltonian(assistant) {
+  if (!assistant || typeof assistant._appendBubble !== 'function') return;
+
+  const ctx = typeof window.lmGetHamiltonianContext === 'function' ? window.lmGetHamiltonianContext() : null;
+  assistant._appendBubble('user', 'Show Hamiltonian mechanics from page results');
+
+  if (!ctx?.hasHamiltonian) {
+    assistant._appendBubble('assistant', 'Compute a system on the Lagrangian calculator first, then use Show Hamiltonian.');
+    return;
+  }
+
+  const { bubble, body } = assistant._appendBubble('assistant', '');
+  const card = document.createElement('div');
+  card.className = 'vca-math-result-card lm-chat-result-card';
+  const head = document.createElement('div');
+  head.className = 'vca-math-result-head';
+  head.textContent = 'Hamiltonian Mechanics';
+
+  const cardBody = document.createElement('div');
+  cardBody.className = 'vca-math-result-body';
+
+  const hLabel = document.createElement('p');
+  hLabel.className = 'vca-math-result-method';
+  hLabel.textContent = 'Hamiltonian';
+  cardBody.appendChild(hLabel);
+  const hWrap = document.createElement('div');
+  hWrap.className = 'vca-math-eq';
+  hWrap.appendChild(createMathSlotEl(`H = ${prepareLatexForKatex(ctx.hamiltonian)}`, true));
+  cardBody.appendChild(hWrap);
+
+  if (Array.isArray(ctx.hamEqs) && ctx.hamEqs.length) {
+    const eqLabel = document.createElement('p');
+    eqLabel.className = 'vca-math-result-method';
+    eqLabel.textContent = "Hamilton's equations";
+    cardBody.appendChild(eqLabel);
+    ctx.hamEqs.forEach((eq) => {
+      const q = eq?.q || 'q';
+      const wrap = document.createElement('div');
+      wrap.className = 'vca-math-eq';
+      const latex = `\\dot{${q}} = ${prepareLatexForKatex(eq.qdot || '')}, \\quad \\dot{p}_{${q}} = ${prepareLatexForKatex(eq.pdot || '')}`;
+      wrap.appendChild(createMathSlotEl(latex, true));
+      cardBody.appendChild(wrap);
+    });
+  }
+
+  if (Array.isArray(ctx.momenta) && ctx.momenta.length) {
+    const pLabel = document.createElement('p');
+    pLabel.className = 'vca-math-result-method';
+    pLabel.textContent = 'Conjugate momenta';
+    cardBody.appendChild(pLabel);
+    ctx.momenta.forEach((p, i) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'vca-math-eq';
+      wrap.appendChild(createMathSlotEl(prepareLatexForKatex(p), true));
+      cardBody.appendChild(wrap);
+    });
+  }
+
+  if (Array.isArray(ctx.conservation) && ctx.conservation.length) {
+    const bits = ctx.conservation.map((c) => {
+      let s = `${c.conserved || 'quantity'} conserved`;
+      if (c.type === 'cyclic' && c.coord) s += ` (${c.coord} cyclic)`;
+      if (c.type === 'time_invariant') s += ' (time-invariant)';
+      return s;
+    });
+    const cLabel = document.createElement('p');
+    cLabel.className = 'vca-math-result-method';
+    cLabel.textContent = `Conservation laws: ${bits.join('; ')}`;
+    cardBody.appendChild(cLabel);
+  }
+
+  const method = document.createElement('p');
+  method.className = 'vca-math-result-method';
+  method.textContent = 'Same symbolic output as the page Hamiltonian tab';
+  cardBody.appendChild(method);
+
+  card.appendChild(head);
+  card.appendChild(cardBody);
+  body.appendChild(card);
+  finishInjectedAssistantBubble(assistant, bubble, body);
+  void typesetMathSlots(cardBody);
+}
+
+function appendLatexBlock(container, label, latex, displayMode = true) {
+  if (label) {
+    const p = document.createElement('p');
+    p.className = 'vca-math-result-method';
+    p.textContent = label;
+    container.appendChild(p);
+  }
+  const wrap = document.createElement('div');
+  wrap.className = 'vca-math-eq';
+  wrap.appendChild(createMathSlotEl(latex, displayMode));
+  container.appendChild(wrap);
+}
+
+/**
+ * Inject Euler–Lagrange results (L, EOMs, momenta, conservation) into chat.
+ * @param {import('../vibe-coding-assistant.js').ToolAiAssistant} assistant
+ */
+export function injectLagrangianPageResults(assistant) {
+  if (!assistant || typeof assistant._appendBubble !== 'function') return;
+
+  const ctx = typeof window.lmGetMechanicsContext === 'function' ? window.lmGetMechanicsContext() : null;
+  assistant._appendBubble('user', 'Show Lagrangian & equations of motion');
+
+  if (!ctx?.hasResults) {
+    assistant._appendBubble('assistant', 'Click **Compute** on the page first, or use a preset chip (e.g. Simple pendulum).');
+    return;
+  }
+
+  const { bubble, body } = assistant._appendBubble('assistant', '');
+  const card = document.createElement('div');
+  card.className = 'vca-math-result-card lm-chat-result-card';
+  const head = document.createElement('div');
+  head.className = 'vca-math-result-head';
+  head.textContent = 'Lagrangian & Equations of Motion';
+  const cardBody = document.createElement('div');
+  cardBody.className = 'vca-math-result-body';
+
+  appendLatexBlock(cardBody, 'Lagrangian', `L = ${prepareLatexForKatex(ctx.lagrangian)}`);
+
+  if (Array.isArray(ctx.eoms) && ctx.eoms.length) {
+    const eomLabel = document.createElement('p');
+    eomLabel.className = 'vca-math-result-method';
+    eomLabel.textContent = 'Euler–Lagrange equations';
+    cardBody.appendChild(eomLabel);
+    ctx.eoms.forEach((eom, i) => {
+      appendLatexBlock(cardBody, null, `${prepareLatexForKatex(eom)} = 0`);
+    });
+  }
+
+  if (Array.isArray(ctx.momenta) && ctx.momenta.length) {
+    const pLabel = document.createElement('p');
+    pLabel.className = 'vca-math-result-method';
+    pLabel.textContent = 'Conjugate momenta';
+    cardBody.appendChild(pLabel);
+    ctx.momenta.forEach((p) => {
+      appendLatexBlock(cardBody, null, prepareLatexForKatex(p));
+    });
+  }
+
+  if (ctx.hamiltonian) {
+    appendLatexBlock(cardBody, 'Hamiltonian', `H = ${prepareLatexForKatex(ctx.hamiltonian)}`);
+  }
+
+  if (Array.isArray(ctx.conservation) && ctx.conservation.length) {
+    const bits = ctx.conservation.map((c) => {
+      let s = `${c.conserved || 'quantity'} conserved`;
+      if (c.type === 'cyclic' && c.coord) s += ` (${c.coord} cyclic)`;
+      if (c.type === 'time_invariant') s += ' (time-invariant)';
+      return s;
+    });
+    const cLabel = document.createElement('p');
+    cLabel.className = 'vca-math-result-method';
+    cLabel.textContent = `Conservation: ${bits.join('; ')}`;
+    cardBody.appendChild(cLabel);
+  }
+
+  const method = document.createElement('p');
+  method.className = 'vca-math-result-method';
+  method.textContent = 'Same step-by-step result as the page';
+  cardBody.appendChild(method);
+
+  card.appendChild(head);
+  card.appendChild(cardBody);
+  body.appendChild(card);
+  finishInjectedAssistantBubble(assistant, bubble, body);
+  void typesetMathSlots(cardBody);
+}
+
+/**
+ * Inject symbolic derivation steps (∂L/∂q, d/dt ∂L/∂q̇, EOM) into chat.
+ * @param {import('../vibe-coding-assistant.js').ToolAiAssistant} assistant
+ */
+export function injectLagrangianDerivationSteps(assistant) {
+  if (!assistant || typeof assistant._appendBubble !== 'function') return;
+
+  const ctx = typeof window.lmGetMechanicsContext === 'function' ? window.lmGetMechanicsContext() : null;
+  assistant._appendBubble('user', 'Show Euler–Lagrange derivation steps');
+
+  const steps = ctx?.steps?.length ? ctx.steps : null;
+  if (!steps?.length) {
+    assistant._appendBubble('assistant', 'Compute a system first — derivation steps appear after **Compute**.');
+    return;
+  }
+
+  const { bubble, body } = assistant._appendBubble('assistant', '');
+  const card = document.createElement('div');
+  card.className = 'vca-math-result-card lm-chat-result-card';
+  const head = document.createElement('div');
+  head.className = 'vca-math-result-head';
+  head.textContent = `Derivation Steps (${steps.length})`;
+  const cardBody = document.createElement('div');
+  cardBody.className = 'vca-math-result-body';
+
+  steps.forEach((step, i) => {
+    const title = step?.title || `Step ${i + 1}`;
+    appendLatexBlock(cardBody, title, prepareLatexForKatex(step.latex || ''));
+  });
+
+  const method = document.createElement('p');
+  method.className = 'vca-math-result-method';
+  method.textContent = 'Same steps as **Show Derivation Steps** on the page';
+  cardBody.appendChild(method);
+
+  card.appendChild(head);
+  card.appendChild(cardBody);
+  body.appendChild(card);
+  finishInjectedAssistantBubble(assistant, bubble, body);
+  void typesetMathSlots(cardBody);
+}
+
+async function runLagrangianPreset(assistant, presetKey, label) {
+  if (!assistant || typeof window.lmApplyPreset !== 'function' || typeof window.lmRunCompute !== 'function') return;
+  assistant._appendBubble('user', `Run ${label}`);
+  const status = assistant._appendBubble('assistant', `Loading ${label} and computing…`);
+  try {
+    if (!window.lmApplyPreset(presetKey)) throw new Error(`Unknown preset: ${label}`);
+    await window.lmRunCompute();
+    status.bubble?.remove();
+    assistant._renderQuickActions?.();
+    injectLagrangianPageResults(assistant);
+  } catch (err) {
+    status.bubble?.remove();
+    assistant._appendBubble('assistant', err?.message || `Could not compute ${label}.`);
+  }
+  assistant._scroll?.();
+}
+
+/**
+ * Lagrangian-focused quick actions — direct page results first, no generic math tutor chips.
+ */
+/** Taller in-chat plots for logarithm LHS/RHS graphs. */
+const LOG_CHAT_GRAPH_MIN_PX = 420;
+
+/**
+ * Logarithm page plot in chat (same Plotly spec as Graph tab).
+ * @param {HTMLElement} plotEl
+ * @param {{ traces?: object[], layout?: object }} spec
+ */
+export function renderLogGraphInChat(plotEl, spec) {
+  if (!plotEl || !Array.isArray(spec?.traces) || !spec.traces.length) {
+    if (plotEl) {
+      plotEl.innerHTML = '<p class="vca-math-result-method">No graph data. Solve a log equation on the page first (mode Solve with =).</p>';
+    }
+    return Promise.resolve(false);
+  }
+
+  return ensurePlotly(plotEl, () => {
+    const chart = document.createElement('div');
+    chart.className = 'vca-math-graph-canvas lc-chat-plot-canvas';
+    chart.style.minHeight = `${LOG_CHAT_GRAPH_MIN_PX}px`;
+    plotEl.style.minHeight = `${LOG_CHAT_GRAPH_MIN_PX}px`;
+    plotEl.appendChild(chart);
+    const layout = {
+      ...(spec.layout || {}),
+      height: LOG_CHAT_GRAPH_MIN_PX,
+      autosize: true,
+    };
+    window.Plotly.newPlot(chart, spec.traces, layout, {
+      responsive: true,
+      displayModeBar: true,
+      modeBarButtonsToRemove: ['lasso2d', 'select2d'],
+      displaylogo: false,
+    });
+  });
+}
+
+function readLogResultContext() {
+  if (typeof window.lcGetResultContext === 'function') return window.lcGetResultContext();
+  if (typeof window.lcGetContext === 'function') return window.lcGetContext();
+  return null;
+}
+
+function appendLogStepBlock(container, step, index) {
+  const row = document.createElement('div');
+  row.className = 'vca-math-step-row';
+  row.style.cssText = 'display:flex;gap:0.65rem;align-items:flex-start;margin:0.65rem 0;';
+
+  const num = document.createElement('span');
+  num.textContent = String(index + 1);
+  num.style.cssText = 'flex-shrink:0;width:22px;height:22px;border-radius:50%;background:#15803d;color:#fff;font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;';
+
+  const body = document.createElement('div');
+  body.style.flex = '1';
+  body.style.minWidth = '0';
+
+  if (step.label || step.rule) {
+    const title = document.createElement('p');
+    title.className = 'vca-math-result-method';
+    title.textContent = step.label || step.rule;
+    body.appendChild(title);
+  }
+  if (step.before_latex) {
+    appendLatexBlock(body, null, prepareLatexForKatex(step.before_latex));
+  }
+  const after = step.after_latex || step.latex || '';
+  if (after) {
+    appendLatexBlock(body, null, prepareLatexForKatex(after));
+  }
+
+  row.appendChild(num);
+  row.appendChild(body);
+  container.appendChild(row);
+}
+
+/**
+ * Inject page solve result (KaTeX + method + extraneous) into Math AI chat.
+ * @param {import('../vibe-coding-assistant.js').ToolAiAssistant} assistant
+ */
+export function injectLogarithmPageResults(assistant) {
+  if (!assistant || typeof assistant._appendBubble !== 'function') return;
+
+  const ctx = readLogResultContext();
+  assistant._appendBubble('user', 'Show logarithm result from page');
+
+  if (!ctx?.hasResult) {
+    assistant._appendBubble('assistant', 'Enter a problem and click **Solve** on the page, or use a ▶ example chip.');
+    return;
+  }
+
+  const { bubble, body } = assistant._appendBubble('assistant', '');
+  const card = document.createElement('div');
+  card.className = 'vca-math-result-card lc-chat-result-card';
+  const head = document.createElement('div');
+  head.className = 'vca-math-result-head';
+  head.textContent = `Logarithm — ${ctx.mode || 'solve'}`;
+  const cardBody = document.createElement('div');
+  cardBody.className = 'vca-math-result-body';
+
+  if (ctx.expr) {
+    const inLabel = document.createElement('p');
+    inLabel.className = 'vca-math-result-method';
+    inLabel.textContent = 'Problem';
+    cardBody.appendChild(inLabel);
+    appendLatexBlock(cardBody, null, prepareLatexForKatex(ctx.expr));
+  }
+
+  const resLatex = ctx.resultLatex || ctx.result || '';
+  if (resLatex) {
+    appendLatexBlock(cardBody, 'Result', prepareLatexForKatex(resLatex));
+  }
+
+  if (ctx.numeric != null && ctx.numeric !== '') {
+    const num = document.createElement('p');
+    num.className = 'vca-math-result-method';
+    num.textContent = `Numeric: ${ctx.numeric}`;
+    cardBody.appendChild(num);
+  }
+
+  if (ctx.method) {
+    const method = document.createElement('p');
+    method.className = 'vca-math-result-method';
+    method.textContent = `${ctx.method}${ctx.solvedBy ? ` (${ctx.solvedBy})` : ''}`;
+    cardBody.appendChild(method);
+  }
+
+  if (Array.isArray(ctx.extraneous) && ctx.extraneous.length) {
+    const exLabel = document.createElement('p');
+    exLabel.className = 'vca-math-result-method';
+    exLabel.textContent = 'Extraneous (rejected — log argument ≤ 0)';
+    cardBody.appendChild(exLabel);
+    ctx.extraneous.forEach((ex) => {
+      appendLatexBlock(cardBody, null, prepareLatexForKatex(ex));
+    });
+  }
+
+  const foot = document.createElement('p');
+  foot.className = 'vca-math-result-method';
+  foot.textContent = 'Same engine output as the page Result panel';
+  cardBody.appendChild(foot);
+
+  card.appendChild(head);
+  card.appendChild(cardBody);
+  body.appendChild(card);
+  finishInjectedAssistantBubble(assistant, bubble, body);
+  void typesetMathSlots(cardBody);
+}
+
+/**
+ * Inject SymPy / CAS step trace into chat.
+ * @param {import('../vibe-coding-assistant.js').ToolAiAssistant} assistant
+ */
+export function injectLogarithmSteps(assistant) {
+  if (!assistant || typeof assistant._appendBubble !== 'function') return;
+
+  const ctx = readLogResultContext();
+  assistant._appendBubble('user', 'Show step-by-step log rules');
+
+  const steps = Array.isArray(ctx?.steps) ? ctx.steps : [];
+  if (!steps.length) {
+    assistant._appendBubble('assistant', 'No rule-annotated steps for this result. Try Expand, Condense, or Solve with the CAS engine, or use **Show Steps** on the page.');
+    return;
+  }
+
+  const { bubble, body } = assistant._appendBubble('assistant', '');
+  const card = document.createElement('div');
+  card.className = 'vca-math-result-card lc-chat-result-card';
+  const head = document.createElement('div');
+  head.className = 'vca-math-result-head';
+  head.textContent = 'Step-by-step (log rules)';
+  const cardBody = document.createElement('div');
+  cardBody.className = 'vca-math-result-body';
+
+  steps.forEach((step, i) => appendLogStepBlock(cardBody, step, i));
+
+  const foot = document.createElement('p');
+  foot.className = 'vca-math-result-method';
+  foot.textContent = 'Same trace as the page **Show Steps** button';
+  cardBody.appendChild(foot);
+
+  card.appendChild(head);
+  card.appendChild(cardBody);
+  body.appendChild(card);
+  finishInjectedAssistantBubble(assistant, bubble, body);
+  void typesetMathSlots(cardBody);
+}
+
+/**
+ * Inject LHS/RHS log equation graph into chat.
+ * @param {import('../vibe-coding-assistant.js').ToolAiAssistant} assistant
+ */
+export function injectLogarithmGraph(assistant) {
+  if (!assistant || typeof assistant._appendBubble !== 'function') return;
+
+  const plotCtx = typeof window.lcGetPlotContext === 'function' ? window.lcGetPlotContext() : null;
+  assistant._appendBubble('user', 'Show log equation graph from page');
+
+  if (!plotCtx?.hasPlot || typeof window.lcBuildPlotSpec !== 'function') {
+    assistant._appendBubble('assistant', 'Graphs appear for **Solve** mode equations (with =). Solve an equation on the page first, then use this chip.');
+    return;
+  }
+
+  const spec = window.lcBuildPlotSpec(plotCtx.data);
+  if (!spec?.traces?.length) {
+    assistant._appendBubble('assistant', 'Could not build a plot for this expression. Check the variable and domain.');
+    return;
+  }
+
+  const { bubble, body } = assistant._appendBubble('assistant', '');
+  const card = document.createElement('div');
+  card.className = 'vca-math-result-card lc-chat-result-card';
+  const head = document.createElement('div');
+  head.className = 'vca-math-result-head';
+  head.textContent = 'Log equation graph';
+  const plotWrap = document.createElement('div');
+  plotWrap.className = 'vca-math-graph lc-chat-plot-wrap';
+  plotWrap.style.minHeight = `${LOG_CHAT_GRAPH_MIN_PX}px`;
+  const method = document.createElement('p');
+  method.className = 'vca-math-result-method';
+  method.textContent = 'Same LHS/RHS curves as the page Graph tab — intersections are solutions';
+  card.appendChild(head);
+  card.appendChild(plotWrap);
+  card.appendChild(method);
+  body.appendChild(card);
+  finishInjectedAssistantBubble(assistant, bubble, body);
+  void renderLogGraphInChat(plotWrap, spec);
+}
+
+/**
+ * Inject domain restrictions for log arguments in the current problem.
+ * @param {import('../vibe-coding-assistant.js').ToolAiAssistant} assistant
+ */
+export function injectLogarithmDomain(assistant) {
+  if (!assistant || typeof assistant._appendBubble !== 'function') return;
+
+  const ctx = readLogResultContext();
+  assistant._appendBubble('user', 'Explain log domain for this problem');
+
+  const expr = String(ctx?.expr || '').trim();
+  if (!expr) {
+    assistant._appendBubble('assistant', 'Enter a logarithm problem on the page first.');
+    return;
+  }
+
+  const args = typeof window.lcCollectLogArguments === 'function'
+    ? window.lcCollectLogArguments(expr)
+    : [];
+
+  const { bubble, body } = assistant._appendBubble('assistant', '');
+  const card = document.createElement('div');
+  card.className = 'vca-math-result-card lc-chat-result-card';
+  const head = document.createElement('div');
+  head.className = 'vca-math-result-head';
+  head.textContent = 'Domain (log arguments > 0)';
+  const cardBody = document.createElement('div');
+  cardBody.className = 'vca-math-result-body';
+
+  const intro = document.createElement('p');
+  intro.className = 'vca-math-result-method';
+  intro.textContent = 'Every log ln(u) or log_b(u) requires u > 0. Reject any candidate solution that makes an argument zero or negative.';
+  cardBody.appendChild(intro);
+
+  if (args.length) {
+    args.forEach((arg) => {
+      appendLatexBlock(cardBody, 'Require', `${prepareLatexForKatex(arg)} > 0`);
+    });
+  } else {
+    const note = document.createElement('p');
+    note.className = 'vca-math-result-method';
+    note.textContent = 'No log(...) sub-expressions detected — numeric evaluation may still need a positive domain.';
+    cardBody.appendChild(note);
+  }
+
+  card.appendChild(head);
+  card.appendChild(cardBody);
+  body.appendChild(card);
+  finishInjectedAssistantBubble(assistant, bubble, body);
+  void typesetMathSlots(cardBody);
+}
+
+/**
+ * Run page example + solve, then inject result into chat.
+ * @param {import('../vibe-coding-assistant.js').ToolAiAssistant} assistant
+ * @param {string} expr
+ * @param {string} mode
+ * @param {string|null} vars
+ * @param {string} label
+ */
+export async function runLogarithmExample(assistant, expr, mode, vars, label) {
+  if (!assistant) return;
+  assistant._appendBubble('user', `▶ ${label}`);
+
+  if (typeof window.lcApplyExample !== 'function' || typeof window.lcRunSolve !== 'function') {
+    assistant._appendBubble('assistant', 'Page solver not ready — refresh and try again.');
+    return;
+  }
+
+  const status = assistant._appendBubble('assistant', 'Solving on the page…');
+  try {
+    window.lcApplyExample(expr, mode, vars);
+    await window.lcRunSolve();
+    status.bubble?.remove();
+    injectLogarithmPageResults(assistant);
+  } catch (err) {
+    status.bubble?.remove();
+    assistant._appendBubble('assistant', err?.message || `Could not solve: ${label}`);
+  }
+  assistant._scroll?.();
+}
+
+/**
+ * Logarithm-focused quick actions — direct page results, mode-aware examples.
+ */
+export function buildLogarithmQuickActions() {
+  const ctx = readLogResultContext();
+  const hasPlot = !!(ctx?.hasPlot && ctx?.mode === 'solve');
+
+  if (ctx?.hasResult) {
+    const chips = [
+      { label: 'Result', onClick: (a) => injectLogarithmPageResults(a) },
+      { label: 'Steps', onClick: (a) => injectLogarithmSteps(a) },
+      { label: 'Domain', onClick: (a) => injectLogarithmDomain(a) },
+    ];
+    if (hasPlot) {
+      chips.push({ label: 'Log graph', onClick: (a) => injectLogarithmGraph(a) });
+    }
+    if (Array.isArray(ctx.extraneous) && ctx.extraneous.length) {
+      chips.push({ label: 'Extraneous', onClick: (a) => injectLogarithmPageResults(a) });
+    }
+    return chips;
+  }
+
+  return [
+    { label: '▶ ln(x)=2', onClick: (a) => runLogarithmExample(a, 'ln(x)=2', 'solve', null, 'Solve ln(x)=2') },
+    { label: '▶ log₂(x)=5', onClick: (a) => runLogarithmExample(a, 'log2(x)=5', 'solve', null, 'Solve log₂(x)=5') },
+    { label: '▶ Expand ln(x²y)', onClick: (a) => runLogarithmExample(a, 'log(x^2*y)', 'expand', null, 'Expand ln(x²y)') },
+    { label: '▶ Condense 2ln(x)−ln(y)', onClick: (a) => runLogarithmExample(a, '2*log(x)-log(y)', 'condense', null, 'Condense 2·ln(x)−ln(y)') },
+    { label: '▶ Evaluate log₂(8)', onClick: (a) => runLogarithmExample(a, 'log2(8)', 'evaluate', null, 'Evaluate log₂(8)') },
+    { label: '▶ Product rule', onClick: (a) => runLogarithmExample(a, 'log(x*y)', 'expand', null, 'Expand ln(xy) — product rule') },
+  ];
+}
+
+export function buildLagrangianQuickActions() {
+  const mech = typeof window.lmGetMechanicsContext === 'function' ? window.lmGetMechanicsContext() : null;
+  const plot = typeof window.lmGetPlotContext === 'function' ? window.lmGetPlotContext() : null;
+
+  if (mech?.hasResults) {
+    const chips = [
+      { label: 'EOMs & L', onClick: (a) => injectLagrangianPageResults(a) },
+      { label: 'Derivation steps', onClick: (a) => injectLagrangianDerivationSteps(a) },
+      { label: 'Hamiltonian', onClick: (a) => injectLagrangianPageHamiltonian(a) },
+    ];
+    if (plot?.hasPlot) {
+      chips.push(
+        { label: 'q(t) plot', onClick: (a) => injectLagrangianPagePlot(a, 'trajectory') },
+        { label: 'Phase portrait', onClick: (a) => injectLagrangianPagePlot(a, 'phase') },
+        { label: 'Energy plot', onClick: (a) => injectLagrangianPagePlot(a, 'energy') },
+        { label: 'Potential well', onClick: (a) => injectLagrangianPagePlot(a, 'potential') },
+      );
+    }
+    return chips;
+  }
+
+  return [
+    { label: '▶ Simple pendulum', onClick: (a) => runLagrangianPreset(a, 'simple_pendulum', 'simple pendulum') },
+    { label: '▶ Double pendulum', onClick: (a) => runLagrangianPreset(a, 'double_pendulum', 'double pendulum') },
+    { label: '▶ Spring–mass', onClick: (a) => runLagrangianPreset(a, 'spring_mass', 'spring–mass oscillator') },
+    { label: '▶ Atwood machine', onClick: (a) => runLagrangianPreset(a, 'atwood', 'Atwood machine') },
+  ];
 }
 
 /**
@@ -1599,7 +2302,7 @@ function chipActionsForTask(task) {
   }
   if (action === 'trig') {
     const chips = [
-      { mode: 'simple', label: 'Solve', title: 'Compute (same SymPy engine as page Calculate/Solve)' },
+      { mode: 'simple', label: 'Solve', title: 'Compute (same engine as the page Calculate/Solve)' },
       { mode: 'steps', label: 'Solve with steps', title: 'Step-by-step trig solution' },
     ];
     const core = getTrigCore();

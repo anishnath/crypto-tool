@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    request.setAttribute("aiToolId", "math/graphing-calculator");
+    request.setAttribute("aiRequireSignIn", "true");
 %>
+<%@ include file="modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,6 +62,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/tool-page.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/three-column-tool.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/graphing-calculator.css">
+    <%@ include file="modern/components/ai-assistant-head.inc.jsp" %>
 
     <!-- Non-critical CSS: load async (ads, dark mode, footer, search) -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css" media="print" onload="this.media='all'">
@@ -93,6 +97,18 @@
     <style>
         .tool-action-btn { background: var(--gc-gradient) !important; }
         .tool-badge { background: var(--gc-light); color: var(--gc-tool); }
+        .gc-vca-ai-btn {
+            padding: 0.35rem 0.75rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .gc-vca-ai-btn:hover { opacity: 0.92; }
         /* Collapse ad containers until they actually load content */
         .ad-container:not(.ad-loaded) { min-height: 0 !important; padding: 0 !important; margin: 0 !important; border: none !important; box-shadow: none !important; overflow: hidden !important; }
         .ad-container:not(.ad-loaded) .ad-label { display: none !important; }
@@ -300,7 +316,10 @@
 
         <!-- Expressions Card -->
         <div class="tool-card">
-            <div class="tool-card-header" style="background:var(--gc-gradient);"><i class="fas fa-chart-line" style="margin-right:0.375rem;"></i> Expressions</div>
+            <div class="tool-card-header" style="background:var(--gc-gradient);display:flex;align-items:center;justify-content:space-between;gap:0.5rem;flex-wrap:wrap;">
+                <span><i class="fas fa-chart-line" style="margin-right:0.375rem;"></i> Expressions</span>
+                <button type="button" class="gc-vca-ai-btn" id="btnGraphingCalcAI" title="AI assistant (Ctrl+Shift+A)" aria-label="Open AI assistant">&#10024; AI</button>
+            </div>
             <div class="tool-card-body">
                 <div id="expressions-list"></div>
                 <div class="d-flex gap-2 flex-wrap">
@@ -311,58 +330,9 @@
                         <i class="fas fa-folder-plus"></i> Folder
                     </button>
                 </div>
-            </div>
-        </div>
-
-        <!-- ==================== AI ASSISTANT ==================== -->
-        <div class="tool-card gc-ai-card" style="margin-top:0.5rem;">
-            <div class="tool-card-header gc-ai-header">
-                <span class="gc-ai-sparkle">&#x2728;</span> AI Assistant
-            </div>
-            <div class="tool-card-body">
-                <textarea id="gc-ai-input" class="form-control gc-ai-input" rows="2"
-                    placeholder='Describe a graph or paste a homework problem. e.g. "heart shape", "Gaussian mean 3", or "A projectile at 20 m/s at 45°, plot trajectory"'></textarea>
-                <div class="gc-ai-chip-row">
-                    <button class="gc-ai-chip" onclick="gcAiChip('heart shape')">heart shape</button>
-                    <button class="gc-ai-chip" onclick="gcAiChip('Gaussian bell curve')">Gaussian</button>
-                    <button class="gc-ai-chip" onclick="gcAiChip('damped oscillation')">damped</button>
-                    <button class="gc-ai-chip" onclick="gcAiChip('3D saddle surface')">saddle</button>
-                    <button class="gc-ai-chip" onclick="gcAiChip('sigmoid activation')">sigmoid</button>
-                    <button class="gc-ai-chip" onclick="gcAiChip('area under x^2 from 0 to 2')">&#8747; area under curve</button>
-                    <button class="gc-ai-chip" onclick="gcAiChip('show sin(x) with its derivative')">f &amp; f&#8242;(x)</button>
-                </div>
-                <div class="gc-ai-actions">
-                    <label class="gc-ai-check">
-                        <input type="checkbox" id="gc-ai-clear-first" checked> Replace existing
-                    </label>
-                    <button class="gc-ai-go" onclick="gcAiAsk('plot')">
-                        <span class="gc-ai-go-label">Ask AI</span>
-                        <span class="gc-ai-spinner" style="display:none;"></span>
-                    </button>
-                </div>
-
-                <!-- Shared status + preview + panel -->
-                <div class="gc-ai-status" id="gc-ai-status" style="display:none;"></div>
-
-                <div class="gc-ai-preview" id="gc-ai-preview" style="display:none;">
-                    <div class="gc-ai-preview-title">AI suggested <span id="gc-ai-preview-count">0</span> expression(s):</div>
-                    <ul class="gc-ai-preview-list" id="gc-ai-preview-list"></ul>
-                    <div class="gc-ai-preview-notes" id="gc-ai-preview-notes"></div>
-                    <div class="gc-ai-preview-actions">
-                        <button class="gc-ai-confirm" onclick="gcAiApplyPreview()">Plot it &rarr;</button>
-                        <button class="gc-ai-cancel" onclick="gcAiClearPreview()">Cancel</button>
-                    </div>
-                </div>
-
-                <div class="gc-ai-panel" id="gc-ai-panel" style="display:none;">
-                    <div class="gc-ai-panel-header">
-                        <span id="gc-ai-panel-title">Explanation</span>
-                        <button class="gc-ai-panel-close" onclick="gcAiClosePanel()" title="Close">&times;</button>
-                    </div>
-                    <div class="gc-ai-panel-body" id="gc-ai-panel-body"></div>
-                </div>
-
-                <p class="gc-ai-firewall">AI translates English to expressions. All math (plotting, derivatives, zeros, asymptotes) is computed by our engine.</p>
+                <label class="gc-ai-check" style="display:block;margin-top:0.75rem;font-size:0.8125rem;color:var(--text-secondary,#64748b);">
+                    <input type="checkbox" id="gc-ai-clear-first" checked> Replace existing expressions when AI applies a plot
+                </label>
             </div>
         </div>
 
@@ -1108,8 +1078,6 @@ window.addEventListener('message', (e) => {
     // Stage 2: Load engine + presets (all dependencies ready)
     loadScript('<%=request.getContextPath()%>/js/graphing-tool-engine.js', function(){
       loadScript('<%=request.getContextPath()%>/js/graphing-calculator-presets.js', function(){
-        // Load AI assistant (depends on engine + presets being ready)
-        loadScript('<%=request.getContextPath()%>/js/graphing-calculator-ai.js');
         if (ph) ph.remove();
         var g = document.getElementById('graph');
         if (g && typeof ResizeObserver !== 'undefined') {
@@ -1329,5 +1297,17 @@ window.addEventListener('message', (e) => {
 <script src="<%=request.getContextPath()%>/modern/js/search.js" defer></script>
 
 <%@ include file="modern/components/analytics.jsp" %>
+
+<script type="module">
+<%@ include file="modern/components/ai-assistant-boot.inc.jsp" %>
+import { wireLazyAssistant } from '<%= request.getAttribute("aiCtx") %>/modern/js/ai/lazy-assistant.js';
+
+wireLazyAssistant({
+    moduleUrl: '<%= request.getAttribute("aiCtx") %>/modern/js/ai/adapters/graphing-calculator-adapter.js',
+    exportName: 'createGraphingCalculatorAssistant',
+    buttonId: 'btnGraphingCalcAI',
+    boot: aiAssistantBoot,
+});
+</script>
 </body>
 </html>

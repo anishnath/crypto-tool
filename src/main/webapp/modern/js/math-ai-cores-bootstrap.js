@@ -6,7 +6,7 @@
   'use strict';
 
   if (typeof window.MATH_CALC_CTX !== 'string') {
-    var meta = document.querySelector('meta[name="context-path"]');
+    var meta = document.querySelector('meta[name="ctx"]') || document.querySelector('meta[name="context-path"]');
     var ctx = (meta && meta.content) || '';
     window.MATH_CALC_CTX = ctx;
     window.TRIG_CALC_CTX = ctx;

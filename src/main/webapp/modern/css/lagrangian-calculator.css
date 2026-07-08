@@ -868,3 +868,194 @@
     font-style: italic;
     line-height: 1.3;
 }
+
+/* ===== Math Studio compact hero ===== */
+.ic-hero--compact.lm-hero {
+    padding: 1.1rem 1.25rem 1rem;
+}
+.lm-hero-core {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+.lm-system-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+}
+.lm-system-row label {
+    font: 600 0.72rem var(--ms-font-sans, var(--font-sans));
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ms-muted, var(--text-muted));
+    white-space: nowrap;
+}
+.lm-system-row .lm-system-select {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.8125rem;
+    padding: 0.4rem 0.55rem;
+}
+.lm-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem 0.75rem;
+}
+@media (max-width: 720px) {
+    .lm-fields-grid { grid-template-columns: 1fr; }
+}
+.lm-field-compact .lm-field-label {
+    display: block;
+    font: 600 0.72rem var(--ms-font-sans, var(--font-sans));
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ms-muted, var(--text-muted));
+    margin-bottom: 0.25rem;
+}
+.lm-field-compact .tool-input {
+    width: 100%;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.8125rem;
+}
+.lm-field-compact .lm-validation-hint {
+    margin-top: 0.15rem;
+}
+.lm-preview-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.45rem 0.65rem;
+    background: var(--ms-accent-softer, rgba(124, 58, 237, 0.06));
+    border-left: 3px solid var(--tool-primary);
+    border-radius: 0 var(--ms-radius-sm, 6px) var(--ms-radius-sm, 6px) 0;
+    min-height: 2rem;
+    overflow: hidden;
+}
+.lm-preview-label {
+    flex-shrink: 0;
+    font: 600 0.65rem var(--ms-font-sans, var(--font-sans));
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ms-muted, var(--text-muted));
+}
+.lm-preview-strip .lm-preview {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    min-height: auto;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+.lm-preview-strip .lm-preview .katex-display { margin: 0; font-size: 0.95em; }
+.lm-hero-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.ic-hero .math-ai-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(124, 58, 237, 0.35);
+    background: rgba(124, 58, 237, 0.08);
+    color: var(--ms-text, #1e1b4b);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+    white-space: nowrap;
+}
+.ic-hero .math-ai-tab-btn:hover {
+    background: rgba(124, 58, 237, 0.18);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.15);
+}
+.ic-hero .math-ai-tab-btn[aria-busy="true"] { opacity: 0.75; cursor: wait; }
+.lm-syntax-body {
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    color: var(--ms-muted, var(--text-secondary));
+}
+.ic-result-card .lm-output-tabs {
+    margin-bottom: 0;
+}
+.ic-result-card .lm-panel {
+    display: none;
+}
+.ic-result-card .lm-panel.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Lagrangian AI panel — wider chat + taller in-chat plots ===== */
+.lm-page .vca-backdrop[data-floating="true"] .vca-modal {
+    width: clamp(400px, min(58vw, 820px), 92vw);
+    max-height: min(90vh, 920px);
+}
+
+@media (min-width: 1200px) {
+    .lm-page .vca-backdrop[data-floating="true"] .vca-modal {
+        width: min(720px, 48vw);
+    }
+}
+
+.lm-page .vca-backdrop[data-floating="true"] .vca-messages {
+    min-height: min(52vh, 520px);
+    padding: 14px 18px;
+}
+
+.lm-page .vca-msg.assistant:has(.lm-chat-result-card),
+.lm-page .vca-msg.assistant:has(.vca-math-result-card) {
+    max-width: 100%;
+    width: 100%;
+    align-self: stretch;
+}
+
+.lm-page .lm-chat-result-card {
+    width: 100%;
+}
+
+.lm-page .lm-chat-result-card .vca-math-result-body {
+    padding: 4px 2px 8px;
+}
+
+.lm-page .lm-chat-result-card .vca-math-eq {
+    overflow-x: auto;
+    padding: 4px 0;
+}
+
+.lm-page .lm-chat-result-card .vca-math-eq .katex-display {
+    margin: 0.4em 0;
+    font-size: 1.05em;
+}
+
+.lm-page .lm-chat-plot-wrap,
+.lm-page .vca-math-graph.lm-chat-plot-wrap {
+    width: 100%;
+    min-height: 420px;
+    margin: 10px 0 6px;
+}
+
+.lm-page .lm-chat-plot-canvas {
+    width: 100% !important;
+    min-height: 420px;
+    height: 420px;
+}
+
+.lm-page .vca-quick {
+    padding: 0 14px 10px;
+    gap: 8px;
+}
+
+.lm-page .vca-quick-btn {
+    font-size: 11.5px;
+    padding: 6px 12px;
+}

@@ -25,6 +25,9 @@ import { <%= mathAiProfileExport != null && !mathAiProfileExport.isEmpty() ? mat
 <% } %>
 
 (function () {
+    // Context root for the SymPy backend fetch (nerdamer/SymPy cores read this).
+    // Server-rendered so it never depends on a meta tag being present.
+    window.MATH_CALC_CTX = '<%= request.getAttribute("aiCtx") %>';
     <% if (mathAiProfile != null && !mathAiProfile.isEmpty()) { %>
     <%= mathAiProfileExport != null && !mathAiProfileExport.isEmpty() ? mathAiProfileExport : "configureMathProfile" %>();
     <% } %>

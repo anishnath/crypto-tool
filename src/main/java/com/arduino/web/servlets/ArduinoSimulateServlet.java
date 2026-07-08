@@ -1,7 +1,5 @@
 package com.arduino.web.servlets;
 
-import com.latexeditor.web.client.ApiClientConfig;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -47,12 +45,27 @@ public class ArduinoSimulateServlet extends HttpServlet {
     // SSE stream: long timeout (10 minutes max)
     private static final int STREAM_READ_TIMEOUT_MS = 600_000;
 
+    /** Backend base URL from AI_ENDPOINT env var (default localhost). */
+    private static String getBackendBase() {
+        String base = System.getenv("AI_ENDPOINT");
+        if (base == null || base.trim().isEmpty()) base = "http://localhost:8080";
+        base = base.trim();
+        if (base.endsWith("/")) base = base.substring(0, base.length() - 1);
+        return base;
+    }
+
+    /** API key forwarded as X-API-Key from ONE_COMPILER_API_KEY env var. */
+    private static String getApiKey() {
+        String key = System.getenv("ONE_COMPILER_API_KEY");
+        return key != null ? key.trim() : "";
+    }
+
     private String backendBaseUrl() {
-        return ApiClientConfig.getApiBaseUrlV2("arduino") + "/api/arduino-simulate";
+        return getBackendBase() + "/api/arduino-simulate";
     }
 
     private String piBackendBaseUrl() {
-        return ApiClientConfig.getApiBaseUrlV2("arduino") + "/api/pi-simulate";
+        return getBackendBase() + "/api/pi-simulate";
     }
 
     /** Map servlet path to backend URL. Returns null if not found. */
@@ -120,6 +133,10 @@ public class ArduinoSimulateServlet extends HttpServlet {
                     .setSocketTimeout(POST_TIMEOUT_MS)
                     .build());
             post.setEntity(new StringEntity(sb.toString(), ContentType.APPLICATION_JSON));
+
+            // Auth: backend (onecompiler) requires X-API-Key
+            String apiKey = getApiKey();
+            if (!apiKey.isEmpty()) post.setHeader("X-API-Key", apiKey);
 
             HttpResponse backendResp = client.execute(post);
             int status = backendResp.getStatusLine().getStatusCode();
@@ -191,6 +208,10 @@ public class ArduinoSimulateServlet extends HttpServlet {
                         .setConnectTimeout(STREAM_CONNECT_TIMEOUT_MS)
                         .setSocketTimeout(STREAM_READ_TIMEOUT_MS)
                         .build());
+
+                // Auth: backend (onecompiler) requires X-API-Key
+                String apiKey = getApiKey();
+                if (!apiKey.isEmpty()) get.setHeader("X-API-Key", apiKey);
 
                 CloseableHttpResponse backendResp = client.execute(get);
                 HttpEntity entity = backendResp.getEntity();

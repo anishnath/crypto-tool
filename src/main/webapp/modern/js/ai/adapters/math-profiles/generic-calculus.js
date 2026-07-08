@@ -17,11 +17,14 @@ import {
   solveZTransformTask,
   solveTrigTask,
   solveStatisticsTask,
+  buildLagrangianQuickActions,
+  buildLogarithmQuickActions,
 } from '../../math-chat-compute.js';
 import { solveAlgebraTask } from '../../algebra-chat-compute.js';
 import { canSympyFallback, solveViaSympyFallback } from '../../math-sympy-fallback.js';
 import { normalizeTaskInputs } from '../../math-input-normalize.js';
 import { icApplyIntegralTask } from './integral-calculator.js';
+import { lagrangianMechanicsApplyActions } from '../lagrangian-calculator-adapter.js';
 
 /** Tutor-first quick-action chips. One "Show example" may emit a solver block; others are prose/teaching. */
 const chip = (label, prompt) => ({ label, prompt, sendImmediately: true });
@@ -151,6 +154,12 @@ function buildFocusQuickActions(focus, snap) {
       chip('ROC & pairs', 'How do I read the region of convergence |z| > r and use Z-transform pairs? Explain causal sequences and the unit circle.'),
       chip('Show example', 'Give one Z-transform example with a ```z-transform``` block so I can click Solve / Show graph. One intro sentence, then the block.'),
     ],
+    lagrangian: [
+      // Chips built by buildLagrangianQuickActions() in configureLagrangianMathShell — not used here.
+    ],
+    logarithm: [
+      // Chips built by buildLogarithmQuickActions() in configureLogarithmMathShell — not used here.
+    ],
     statistics: [
       chip("Don't get it", 'Explain this statistics concept in plain language — mean vs median, variance, hypothesis tests, or distributions. Use [CURRENT CONTEXT] data when present. Prose + KaTeX only.'),
       chip('Which test?', 'For my type of problem, should I use a t-test, z-test, chi-square, or ANOVA? Outline the decision tree — no computed p-values unless I run the page calculator.'),
@@ -193,7 +202,7 @@ function buildFocusQuickActions(focus, snap) {
 
 const FOCUS_KEYS = new Set([
   'integral', 'derivative', 'limit', 'ode', 'pde', 'series',
-  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace', 'ztransform', 'statistics', 'prime-number', 'collatz', 'trig', 'hub',
+  'vectorCalculus', 'matrix', 'quadratic', 'system', 'inequality', 'polynomial', 'bode', 'laplace', 'ztransform', 'lagrangian', 'logarithm', 'statistics', 'prime-number', 'collatz', 'trig', 'hub',
 ]);
 
 /**
@@ -259,6 +268,10 @@ export function configureGenericMathShell(opts = {}) {
       if (task.action === 'ztransform') return solveZTransformTask(task, mode);
       if (task.action === 'trig') return solveTrigTask(task, mode);
       if (task.action === 'statistics') return solveStatisticsTask(task, mode);
+      // No in-browser engine — hand straight to the Tier-3 SymPy fallback.
+      if (task.action === 'logarithm' || task.action === 'lagrangian') {
+        return Promise.resolve({ ok: false, mode });
+      }
       return solveAlgebraTask(task, mode);
     },
 
@@ -287,6 +300,7 @@ export function configureGenericMathShell(opts = {}) {
       if (typeof window.pnGetContext === 'function') return window.pnGetContext();
       if (typeof window.ccGetContext === 'function') return window.ccGetContext();
       if (typeof window.bpGetContext === 'function') return window.bpGetContext();
+      if (typeof window.lmGetContext === 'function') return window.lmGetContext();
       if (typeof window.qsGetContext === 'function') return window.qsGetContext();
       if (typeof window.syGetContext === 'function') return window.syGetContext();
       if (typeof window.iqGetContext === 'function') return window.iqGetContext();
@@ -389,6 +403,24 @@ export function configureGenericMathShell(opts = {}) {
           } else if (snap.forwardExpr) {
             lines.push(`x[n]: ${String(snap.forwardExpr).slice(0, 400)}`);
           }
+        } else if (snap.toolType === 'lagrangian') {
+          lines.push(`Preset: ${snap.preset || 'custom'}`);
+          if (snap.kinetic) lines.push(`T: ${String(snap.kinetic).slice(0, 300)}`);
+          if (snap.potential) lines.push(`V: ${String(snap.potential).slice(0, 300)}`);
+          if (snap.coords) lines.push(`Coordinates: ${snap.coords}`);
+          if (snap.params) lines.push(`Parameters: ${snap.params}`);
+          if (snap.ic) lines.push(`Initial conditions: ${snap.ic}`);
+          if (snap.tspan) lines.push(`Time span: ${snap.tspan}`);
+          if (snap.hasPlot) lines.push(`Numerical plot data: available (${snap.activePlot || 'trajectory'} view)`);
+        } else if (snap.toolType === 'logarithm') {
+          lines.push(`Mode: ${snap.mode || 'solve'}`);
+          lines.push(`Variable: ${snap.variable || 'x'}`);
+          lines.push(`Expression: ${String(snap.expr || '').slice(0, 400)}`);
+          if (snap.solvedBy) lines.push(`Solver path: ${snap.solvedBy}`);
+          if (snap.hasPlot) lines.push('Graph: LHS/RHS curves available (Solve mode with =)');
+          if (Array.isArray(snap.extraneous) && snap.extraneous.length) {
+            lines.push(`Extraneous roots rejected: ${snap.extraneous.length}`);
+          }
         } else if (snap.toolType === 'statistics') {
           if (snap.pageKey) lines.push(`Page: ${snap.pageKey}`);
           if (snap.data) lines.push(`Data/context: ${String(snap.data).slice(0, 400)}`);
@@ -423,6 +455,12 @@ export function configureGenericMathShell(opts = {}) {
         }
         if (snap.resultSummary) {
           lines.push('', 'Page calculator result:', snap.resultSummary.slice(0, 4000));
+        }
+        if (snap.derivationSteps) {
+          lines.push('', 'Derivation steps (∂L/∂q, d/dt ∂L/∂q̇, EOM — from page Compute):', snap.derivationSteps.slice(0, 6000));
+        }
+        if (snap.stepsSummary) {
+          lines.push('', 'Step-by-step log rules (from page Solve / Show Steps):', snap.stepsSummary.slice(0, 6000));
         }
       }
 
@@ -1057,6 +1095,96 @@ For related problems in chat, also use \`\`\`laplace-transform\`\`\`, \`\`\`bode
       inverseExpr: document.getElementById('zt-inverse-expr')?.value?.trim() || '',
     };
   });
+}
+
+/** Lagrangian Mechanics Calculator — classical mechanics tutor + generic math router. */
+export function configureLagrangianMathShell() {
+  configureGenericMathShell({
+    focus: 'lagrangian',
+    pageLabel: 'Lagrangian Mechanics Calculator',
+    pageHint: 'Lagrangian — Euler-Lagrange, Hamiltonian, conservation laws, phase plots',
+    panelTitle: 'Lagrangian AI',
+    subtitle: 'Direct results — EOMs, steps, Hamiltonian & plots',
+    placeholder: 'Use chips for instant results, or describe a system in English…',
+    footerText: 'Ctrl+Shift+A · chips = page engine · chat for explanations',
+  });
+
+  const extra = `
+
+**Lagrangian Mechanics page — tutor + engine router**
+
+1. **Teacher** — generalized coordinates, L = T − V, Euler-Lagrange equations, conjugate momenta, Hamiltonian, cyclic coordinates, Noether's theorem, conservation laws, phase portraits. Use KaTeX prose; **mirror [CURRENT CONTEXT]** when the student has run **Compute** (L, EOMs, H under "Page calculator result:"; full ∂L/∂q and d/dt ∂L/∂q̇ chain under "Derivation steps" — same as the page **Show Derivation Steps** panel, no extra click needed).
+
+2. **Page engine** — for concrete T, V on this page, tell the student to click **Compute** (same symbolic backend as the page). When [CURRENT CONTEXT] includes computed equations, explain those results — do not re-derive from scratch unless asked.
+
+3. **English → form** — when the student describes a system in plain English ("simple pendulum", "mass on a cone"), return a \`\`\`json\`\`\` object with fields kinetic, potential, coords, params, ic, tspan so **Apply to form** appears. Syntax: use dtheta for dθ/dt, * for multiply, ^ for powers.
+
+4. **Related chat solvers** — \`\`\`ode\`\`\` for equations of motion, \`\`\`integral\`\`\` / \`\`\`derivative\`\`\` for intermediate steps, \`\`\`matrix\`\`\` for linearization.
+
+5. **Quick-action chips (primary UX)** — chips render **page results directly** (no LLM wait):
+   - **Before Compute:** ▶ preset chips load T, V, IC and run the engine → show EOMs & L in chat.
+   - **After Compute:** EOMs & L · Derivation steps · Hamiltonian · q(t) · Phase · Energy · V(q).
+   Tell students to **click chips first** for graphs, Hamiltonian, or derivation steps.
+
+Never invent Euler-Lagrange equations when the page already computed them — reference the page result or point to the chips.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+    window.mathShell.applyActions = lagrangianMechanicsApplyActions();
+    window.mathShell.getApplyLabel = () => 'Apply to form';
+    window.mathShell.getQuickActions = () => buildLagrangianQuickActions();
+
+    window.addEventListener('lm:computed', () => {
+      const inst = window.mathAssistant?.getInstance?.();
+      if (inst && typeof inst._renderQuickActions === 'function') {
+        inst._renderQuickActions();
+      }
+    });
+  }
+}
+
+/** Logarithm Calculator — log rules tutor + page engine results in chat. */
+export function configureLogarithmMathShell() {
+  configureGenericMathShell({
+    focus: 'logarithm',
+    pageLabel: 'Logarithm Calculator',
+    pageHint: 'Logarithms — solve, expand, condense, simplify, evaluate, rewrite + graph',
+    panelTitle: 'Logarithm AI',
+    subtitle: 'Direct results — solve, steps, domain & graphs',
+    placeholder: 'Use chips for instant results, or ask about log rules…',
+    footerText: 'Ctrl+Shift+A · chips = page engine · chat for explanations',
+  });
+
+  const extra = `
+
+**Logarithm Calculator page — tutor + engine router**
+
+1. **Teacher** — product/quotient/power rules, change of base, ln vs log₁₀ vs log₂, domain (argument > 0), extraneous solutions after solving, expand vs condense vs simplify vs evaluate vs rewrite. Use KaTeX prose; **mirror [CURRENT CONTEXT]** when the student has run **Solve** (result under "Page calculator result:"; rule trace under "Step-by-step log rules").
+
+2. **Page engine** — for concrete problems on this page, tell students to click **Solve** or use ▶ chips (same nerdamer + SymPy + graph engine as the page). When [CURRENT CONTEXT] includes a result, explain those steps — do not re-solve from scratch unless asked.
+
+3. **Graphs** — for Solve mode equations with =, the page plots LHS vs RHS; intersections are solutions. Point students to the **Log graph** chip after solving.
+
+4. **Quick-action chips (primary UX)** — chips render **page results directly** (no LLM wait):
+   - **Before Solve:** ▶ example chips load a problem, run Solve, inject result.
+   - **After Solve:** Result · Steps · Domain · Log graph (if equation) · Extraneous (if any).
+   Tell students to **click chips first** for graphs, steps, or domain checks.
+
+5. **Related chat solvers** — \`\`\`quadratic\`\`\`, \`\`\`system\`\`\`, \`\`\`integral\`\`\` for follow-up algebra/calculus.
+
+Never invent log equation solutions when the page already computed them — reference the page result or point to the chips.`;
+
+  if (window.mathShell) {
+    window.mathShell.promptExtra = (window.mathShell.promptExtra || '') + extra;
+    window.mathShell.getQuickActions = () => buildLogarithmQuickActions();
+
+    window.addEventListener('lc:computed', () => {
+      const inst = window.mathAssistant?.getInstance?.();
+      if (inst && typeof inst._renderQuickActions === 'function') {
+        inst._renderQuickActions();
+      }
+    });
+  }
 }
 
 /** Statistics calculators — tutor + generic math router (page engine stays on-page). */
