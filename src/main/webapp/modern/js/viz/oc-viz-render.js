@@ -11,6 +11,12 @@
         return node;
     }
 
+    // The array legend explains the read ("reading / comparing") and write
+    // ("just changed") highlight colors. Engines that don't emit those
+    // highlights (e.g. bash: arrays re-render via `set`, and there are no read
+    // selects) turn it off so the legend doesn't promise cues that never appear.
+    var showLegend = true;
+
     function legendEl() {
         var legend = el('div', 'viz-array-legend');
         legend.innerHTML =
@@ -167,7 +173,7 @@
             body.appendChild(row);
         }
         panel.appendChild(body);
-        if (opts.primary && values.length) {
+        if (opts.primary && values.length && showLegend) {
             panel.appendChild(legendEl());
         }
         return panel;
@@ -204,7 +210,7 @@
             });
         }
         panel.appendChild(body);
-        if (opts.primary && values.length) {
+        if (opts.primary && values.length && showLegend) {
             panel.appendChild(legendEl());
         }
         return panel;
@@ -887,6 +893,8 @@
 
     global.OcViz = global.OcViz || {};
     global.OcViz.renderStep = renderStep;
+    // Toggle the array read/write legend (off for engines with no such highlights).
+    global.OcViz.setArrayLegend = function (v) { showLegend = !!v; };
     global.OcViz.setMemView = function (v) { memView = !!v; };
     global.OcViz.getMemView = function () { return memView; };
     // does any step in this trace carry a memory snapshot? (drives the toggle's visibility)

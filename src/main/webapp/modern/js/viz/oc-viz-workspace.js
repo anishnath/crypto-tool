@@ -833,6 +833,11 @@
             if (typeof config.setEditorCode === 'function') {
                 config.setEditorCode(t.code);
             }
+            // Auto-fill the program-arguments input from the template so an
+            // args-driven example runs correctly on pick; clear it otherwise.
+            if (typeof config.setArgs === 'function') {
+                config.setArgs(t.args || []);
+            }
             switchModalTab('stage');
             runVisualize();
         }
@@ -910,6 +915,12 @@
                 return Promise.resolve();
             }
             openPane();
+            // bash has no read/patch highlights (arrays re-render via `set`), so
+            // hide the "reading / just changed" legend to avoid implying cues
+            // that never light up.
+            if (global.OcViz.setArrayLegend) {
+                global.OcViz.setArrayLegend(payload.language !== 'bash');
+            }
             lastRunCode = payload.code != null ? payload.code : null;
             hideStaleBanner();
             setLoading(true);

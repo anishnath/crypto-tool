@@ -2921,7 +2921,113 @@
         }
     ];
 
-    var TEMPLATES = { java: JAVA, python: PYTHON, go: GO, c: CC, cpp: CPP, javascript: JSL, typescript: TS, lua: LUA, csharp: CSHARP, rust: RUST };
+    var BASH = [
+        {
+            category: 'Arrays',
+            title: 'Bubble sort',
+            tracer: 'Array1DTracer',
+            desc: 'Watch an indexed array sort in place: each swap re-renders the array, while the loop counters i/j and tmp update in the globals panel.',
+            code: lines(
+                '#!/bin/bash',
+                'arr=(5 2 9 1 7 3)',
+                'n=${#arr[@]}',
+                'for ((i = 0; i < n; i++)); do',
+                '  for ((j = 0; j < n - 1 - i; j++)); do',
+                '    if (( arr[j] > arr[j+1] )); then',
+                '      tmp=${arr[j]}',
+                '      arr[j]=${arr[j+1]}',
+                '      arr[j+1]=$tmp',
+                '    fi',
+                '  done',
+                'done',
+                'echo "sorted: ${arr[*]}"')
+        },
+        {
+            category: 'Arguments',
+            title: 'Sum the arguments',
+            tracer: 'MapTracer',
+            desc: 'Passes numbers as command-line arguments. See $#, $@ and $1.. in the positional-params panel and the running total in globals. (Args are pre-filled — edit them in the toolbar.)',
+            args: ['10', '20', '30', '40'],
+            code: lines(
+                '#!/bin/bash',
+                '# Sum every command-line argument ("$@")',
+                'sum=0',
+                'for n in "$@"; do',
+                '  (( sum += n ))',
+                'done',
+                'echo "sum of $# numbers = $sum"')
+        },
+        {
+            category: 'Maps',
+            title: 'Word frequency (assoc array)',
+            tracer: 'MapTracer',
+            desc: 'Counts how often each argument appears using an associative array (declare -A). The map fills key by key; the positional panel shows the input words.',
+            args: ['apple', 'banana', 'apple', 'cherry', 'banana', 'apple'],
+            code: lines(
+                '#!/bin/bash',
+                'declare -A count',
+                'for word in "$@"; do',
+                '  (( count[$word]++ ))',
+                'done',
+                'for key in "${!count[@]}"; do',
+                '  echo "$key: ${count[$key]}"',
+                'done')
+        },
+        {
+            category: 'Recursion',
+            title: 'Factorial (recursion)',
+            tracer: 'CallStackTracer',
+            desc: 'Direct recursion (no $(...), which would fork) — the call stack grows and unwinds, $1 shows each frame’s argument, and the global accumulator builds up.',
+            args: ['5'],
+            code: lines(
+                '#!/bin/bash',
+                '# Factorial by direct recursion; n comes from $1',
+                'result=1',
+                'factorial() {',
+                '  local n=$1',
+                '  if (( n <= 1 )); then',
+                '    return',
+                '  fi',
+                '  (( result *= n ))',
+                '  factorial $((n - 1))',
+                '}',
+                'factorial "${1:-5}"',
+                'echo "factorial = $result"')
+        },
+        {
+            category: 'Scope',
+            title: 'local vs global',
+            tracer: 'MapTracer',
+            desc: 'The #1 bash gotcha: a local inside a function shadows the global of the same name. Watch the separate globals and locals panels — the local clears when the function returns.',
+            code: lines(
+                '#!/bin/bash',
+                'counter=0              # global',
+                'bump() {',
+                '  local counter=100    # shadows the global in here',
+                '  (( counter += 5 ))',
+                '  echo "inside: $counter"',
+                '}',
+                'bump',
+                '(( counter++ ))',
+                'echo "outside: $counter"')
+        },
+        {
+            category: 'Control flow',
+            title: 'Exit status ($?)',
+            tracer: 'MapTracer',
+            desc: 'Shows how $? tracks the last command: a false (( )) test returns 1, a real command sets its own code. The exit-status panel appears on the first non-zero.',
+            args: ['5'],
+            code: lines(
+                '#!/bin/bash',
+                'n=${1:-0}',
+                '(( n > 10 ))                 # $? = 1 when the test is false',
+                'echo "checked $n"',
+                'grep -q root /etc/passwd     # $? from a real command',
+                'echo "done"')
+        }
+    ];
+
+    var TEMPLATES = { java: JAVA, python: PYTHON, go: GO, c: CC, cpp: CPP, javascript: JSL, typescript: TS, lua: LUA, csharp: CSHARP, rust: RUST, bash: BASH };
 
     function getTemplates(lang) {
         return TEMPLATES[lang] || [];

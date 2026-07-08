@@ -43,6 +43,9 @@
         if (language === 'lua') {
             return '5.4';
         }
+        if (language === 'bash' || language === 'shell' || language === 'sh') {
+            return '5.2';
+        }
         if (language === 'csharp' || language === 'c#') {
             return '8';
         }
@@ -114,6 +117,9 @@
                     body.files = opts.files;
                 } else {
                     body.code = opts.code || '';
+                }
+                if (opts.args && opts.args.length) {
+                    body.args = opts.args;
                 }
                 return postExecute(body);
             },

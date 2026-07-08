@@ -53,7 +53,7 @@
             return true;
         }
         String lang = preferredLang.toLowerCase();
-        return "java".equals(lang) || "python".equals(lang) || "go".equals(lang) || "c".equals(lang) || "cpp".equals(lang) || "javascript".equals(lang) || "typescript".equals(lang) || "lua".equals(lang) || "csharp".equals(lang) || "rust".equals(lang);
+        return "java".equals(lang) || "python".equals(lang) || "go".equals(lang) || "c".equals(lang) || "cpp".equals(lang) || "javascript".equals(lang) || "typescript".equals(lang) || "lua".equals(lang) || "bash".equals(lang) || "csharp".equals(lang) || "rust".equals(lang);
     }
 
     // Returns {displayName, HTML-escaped Hello-World snippet} for a language slug.
@@ -2209,7 +2209,7 @@
                     var vizWorkspace = null;
                     <% if (ocVizUiEnabled) { %>
                     var VIZ_API_BASE = '<%= request.getContextPath() %>/OneCompilerVizFunctionality';
-                    var OC_VIZ_SUPPORTED_LANGS = ["java", "python", "go", "c", "cpp", "javascript", "typescript", "lua", "csharp", "rust"];
+                    var OC_VIZ_SUPPORTED_LANGS = ["java", "python", "go", "c", "cpp", "javascript", "typescript", "lua", "bash", "csharp", "rust"];
                     <% } %>
                     var currentVersion = '';
                     var isRunning = false;
@@ -2800,12 +2800,22 @@
                             files[activeFileIndex].content = editor.getValue();
                         }
                         var apiFiles = getFilesForApi();
-                        return {
+                        var payload = {
                             language: currentLanguage,
                             version: currentVersion || undefined,
                             files: apiFiles.length > 1 ? apiFiles : undefined,
                             code: apiFiles.length <= 1 ? apiFiles[0].content : undefined
                         };
+                        // Program arguments ($1..$@) — bash viz engine only for now.
+                        // Reuses the toolbar args input (comma-separated, like Run).
+                        if (currentLanguage === 'bash') {
+                            var argsEl = document.getElementById('compilerArgs');
+                            var raw = argsEl ? argsEl.value.trim() : '';
+                            if (raw) {
+                                payload.args = raw.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+                            }
+                        }
+                        return payload;
                     }
 
                     function initVizWorkspace() {
@@ -2820,6 +2830,12 @@
                                 if (!editor) return;
                                 editor.setValue(code);
                                 if (files[activeFileIndex]) files[activeFileIndex].content = code;
+                            },
+                            setArgs: function (args) {
+                                // Reflect a template's program arguments into the toolbar
+                                // input; getVizExecutePayload reads it back for bash.
+                                var argsEl = document.getElementById('compilerArgs');
+                                if (argsEl) argsEl.value = (args && args.length) ? args.join(', ') : '';
                             },
                             onPaneToggle: function (open) {
                                 // Collapse the output panel when viz opens so the editor+viz
