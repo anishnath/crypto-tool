@@ -308,7 +308,7 @@
       action: 'trig',
       kind: res.kind || mode,
       resultLatex,
-      method: 'Trigonometry engine (SymPy)',
+      method: 'Trigonometry',
       steps,
       isIdentity: res.is_identity,
       input: graphInput || undefined,

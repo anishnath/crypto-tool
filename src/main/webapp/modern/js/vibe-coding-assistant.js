@@ -1074,6 +1074,10 @@ export class ToolAiAssistant {
       btn.className = 'vca-quick-btn';
       btn.textContent = a.label;
       btn.addEventListener('click', () => {
+        if (typeof a.onClick === 'function') {
+          a.onClick(this);
+          return;
+        }
         this._els.input.value = (a.prompt || '').slice(0, this.maxInputLength);
         this._autoResize(this._els.input);
         this._els.input.focus();
