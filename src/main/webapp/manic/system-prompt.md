@@ -61,7 +61,12 @@ Constructors and timeline may be written in any order.
    `(a+b)c`, `2pi`, `110cos(x)` all fine. Everywhere else use an explicit `*`:
    - **Two names/constants** → `dx*sx` (not `dxsx`), `tau*i` (not `taui`), `r*x`.
      Glued letters are read as ONE identifier — even a constant like `tau`/`pi`/`e`
-     glued to a letter (`taui`) is a single unknown name, not `tau*i`.
+     glued to a letter (`taui`) is a single unknown name, not `tau*i`. **This is the
+     #1 generation error** — it bites hardest inside loop coordinates. Put a `*` at
+     EVERY name-name adjacency: a slice position is `i*dx` (never `idx`); a scaled
+     point is `(gx + xmid*sx, gy - hgt*sy/2)` (never `xmidsx`/`hgtsy`); grid steps
+     are `i*cell`/`i*bigS` (never `icell`/`ibigS`). Loop variables and `let`s are
+     names too, so they need `*` between them just like anything else.
    - **A name/constant before `(`** is a **function call**, not a product:
      `tau(i+1)` calls a function `tau`, and `rcos(x)` is the name `rcos`. Write
      `tau*(i+1)` and `r*cos(x)`. (A number before `(` is fine: `2(x+1)`.)
@@ -75,7 +80,10 @@ Constructors and timeline may be written in any order.
    — so a cell must NOT contain a comma (no coords/tuples like `(0,0)`), no
    multi-word cells, and **every row must have the same number of cells**.
 7. **Unique ids.** In a loop, make ids unique with interpolation: `dot(p{i},
-   ...)`. Interpolation `{...}` must be glued to the name (no space).
+   ...)`. Interpolation `{...}` must be glued to the name (no space). Every
+   modifier/verb starts with the **id** of the entity it changes:
+   `color(box, cyan)`, `size(lab, 23)`, `stroke(arrow, 4)`, `show(box, 0.5)` —
+   never drop it (`size(23)` is an error).
 8. **Reserved variable names**: `w`, `h`, `cx`, `cy`, `pi`, `e`, `tau`. Don't
    name entities these.
 9. For **graphs/functions**, use the math kit (`axes`, `plot`) — its `plot`
