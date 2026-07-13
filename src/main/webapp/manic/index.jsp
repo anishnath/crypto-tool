@@ -109,7 +109,9 @@
             <div id="output-placeholder">Write manic and press <b>Render</b> to produce a video.</div>
             <div id="video-wrap">
                 <video id="result-video" controls playsinline preload="metadata"></video>
-                <a id="source-link" href="#" target="_blank" rel="noopener">Download source .manic ↗</a>
+                <div class="mp-video-actions">
+                    <button id="download-btn" class="mp-btn primary" type="button" title="Download the rendered MP4">Download video ↓</button>
+                </div>
             </div>
             <div id="error-box"></div>
         </div>

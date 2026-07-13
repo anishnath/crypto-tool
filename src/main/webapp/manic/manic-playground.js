@@ -48,6 +48,7 @@
   var options = [];         // render tiers from the API
   var pollTimer = null;
   var currentJobId = null;
+  var lastVideoUrl = null;   // signed URL of the most recent rendered mp4
   var theme = localStorage.getItem(LS_THEME) || 'dark';
 
   // ── DOM ────────────────────────────────────────────────────────
@@ -59,7 +60,7 @@
       editor: $('manic-editor'), fileList: $('file-list'), newFile: $('new-file-btn'),
       run: $('run-btn'), quality: $('quality-select'), planInfo: $('plan-info'),
       themeBtn: $('theme-btn'), status: $('status-line'), video: $('result-video'),
-      videoWrap: $('video-wrap'), errorBox: $('error-box'), sourceLink: $('source-link'),
+      videoWrap: $('video-wrap'), errorBox: $('error-box'), downloadBtn: $('download-btn'),
       toast: $('toast'), placeholder: $('output-placeholder'),
       examplesBtn: $('examples-btn'), examplesOverlay: $('examples-overlay'),
       examplesBody: $('examples-body'), examplesClose: $('examples-close'),
@@ -221,6 +222,7 @@
     if (el.newFile) el.newFile.onclick = newFile;
     if (el.run) el.run.onclick = render;
     if (el.themeBtn) el.themeBtn.onclick = toggleTheme;
+    if (el.downloadBtn) el.downloadBtn.onclick = downloadVideo;
     if (el.examplesBtn) el.examplesBtn.onclick = openExamples;
     if (el.examplesClose) el.examplesClose.onclick = closeExamples;
     if (el.examplesOverlay) el.examplesOverlay.addEventListener('click', function (e) {
@@ -534,21 +536,37 @@
   function clearOutput() {
     if (el.errorBox) { el.errorBox.style.display = 'none'; el.errorBox.textContent = ''; }
     if (el.videoWrap) el.videoWrap.style.display = 'none';
-    if (el.sourceLink) el.sourceLink.style.display = 'none';
     if (el.placeholder) el.placeholder.style.display = 'none';
     if (el.video) { try { el.video.pause(); } catch (e) {} el.video.removeAttribute('src'); el.video.load(); }
+    lastVideoUrl = null;
   }
 
   function showVideo(job) {
     if (job.video && job.video.signed_url && el.video) {
-      el.video.src = job.video.signed_url;
+      lastVideoUrl = job.video.signed_url;
+      el.video.src = lastVideoUrl;
       el.videoWrap.style.display = 'block';
       el.video.load();
     }
-    if (job.source && job.source.signed_url && el.sourceLink) {
-      el.sourceLink.href = job.source.signed_url;
-      el.sourceLink.style.display = 'inline';
-    }
+  }
+
+  // Download the rendered mp4. Tries a blob download (nice filename); if the
+  // signed URL blocks fetch (CORS), falls back to opening it in a new tab.
+  function downloadVideo() {
+    if (!lastVideoUrl) return;
+    var fname = (activeName || 'manic').replace(/\.manic$/, '') + '.mp4';
+    fetch(lastVideoUrl).then(function (r) {
+      if (!r.ok) throw new Error('http ' + r.status);
+      return r.blob();
+    }).then(function (blob) {
+      var obj = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = obj; a.download = fname;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(obj); }, 5000);
+    }).catch(function () {
+      window.open(lastVideoUrl, '_blank');
+    });
   }
 
   function showError(code, message, details) {
