@@ -866,4 +866,23 @@
         <url-pattern>/CubeSolverFunctionality</url-pattern>
     </servlet-mapping>
 
+    <!-- manic playground — proxies the onecompiler manic render API
+         (submit/job/jobs/files/limits), injecting the server-held API key.
+         See src/main/webapp/manic/ and onecompiler/MANIC_API.md. -->
+    <servlet>
+        <servlet-name>ManicServlet</servlet-name>
+        <servlet-class>z.y.x.manic.servlet.ManicServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManicServlet</servlet-name>
+        <url-pattern>/ManicFunctionality</url-pattern>
+    </servlet-mapping>
+
+    <!-- Serve the manic-lang WebAssembly module with the correct MIME type so
+         browsers stream-compile it (needed by manic/wasm/manic_lang_bg.wasm). -->
+    <mime-mapping>
+        <extension>wasm</extension>
+        <mime-type>application/wasm</mime-type>
+    </mime-mapping>
+
 </web-app>
