@@ -11,10 +11,13 @@ import { VibeCodingAssistant, applyExtractors } from '../assistant-core.js';
 const MANIC_LANGS = ['manic', ''];
 
 // Concise fallback used only if the authoritative spec can't be fetched.
-const FALLBACK_PROMPT = `You write **manic**, a small text DSL for 2D animations that renders to MP4.
+const FALLBACK_PROMPT = `You write **manic**, a small text DSL for animations that renders to MP4.
 Statements are calls: name(args); (one per line, // for comments). Every entity's first arg is a
-unique id; put title(...) and canvas(...) first. Common calls: title, canvas, circle, rect, dot,
+unique id; put title(...) and canvas(...) first. Common 2D calls: title, canvas, circle, rect, dot,
 line, plot, axes, color(id, colorName), show(id, seconds), flash, draw, untraced; loops: for i in 0..N { … }.
+There is also a 3D kit (names end in 3): start with camera3((eye),(target),fov), then cube3, sphere3,
+line3, arrow3, grid3, axes3, curve3, surface3, param3, prism3, pyramid3, revolve3, extrude3, morph3, thick;
+animate with move3, rotate3, grow3, orbit3. In formulas always put * between names (pi*t, not pit).
 For make/generate/update/fix requests, output ONLY valid manic source in a \`\`\`manic fence.`;
 
 // The authoritative generation spec lives in manic/SYSTEM_PROMPT.md, copied to
@@ -41,7 +44,7 @@ function cleanManicCode(raw) {
 function extractManicPayload(text) {
   const raw = applyExtractors.fencedCode(MANIC_LANGS, {
     minLength: 6,
-    fallbackTest: /^\s*(title|canvas|circle|rect|dot|line|plot|axes|color|show|flash|draw|untraced|for)\b/im,
+    fallbackTest: /^\s*(title|canvas|template|circle|rect|dot|line|plot|axes|color|show|flash|draw|untraced|for|camera3|cube3|sphere3|point3|line3|arrow3|grid3|axes3|curve3|surface3|param3|prism3|pyramid3|revolve3|extrude3)\b/im,
   })(text);
   if (!raw) return null;
   const code = cleanManicCode(raw);
@@ -53,6 +56,15 @@ function readCode() {
 }
 function readFileName() {
   try { return (window.manicBridge && window.manicBridge.fileName()) || ''; } catch (e) { return ''; }
+}
+// Error diagnostics for the current file (the same check() the editor runs),
+// so the AI fixes the *actual* reported errors instead of guessing.
+function readDiagnostics() {
+  try {
+    const d = window.manicBridge && typeof window.manicBridge.diagnostics === 'function'
+      ? window.manicBridge.diagnostics() : [];
+    return Array.isArray(d) ? d : [];
+  } catch (e) { return []; }
 }
 
 /** Floating AI assistant for the manic playground. */
@@ -92,7 +104,13 @@ export function createManicAssistant(opts) {
       const code = readCode();
       if (!code) return '';
       const name = readFileName();
-      return `Current manic file${name ? ` (${name})` : ''}:\n${code}`;
+      let ctx = `Current manic file${name ? ` (${name})` : ''}:\n${code}`;
+      const errs = readDiagnostics();
+      if (errs.length) {
+        ctx += `\n\nThe editor's validator reports these errors in that file — fix them when asked, and don't reintroduce them:\n`
+          + errs.slice(0, 20).map((e) => `- line ${e.line}: ${e.message}`).join('\n');
+      }
+      return ctx;
     },
     getQuickActions: () => {
       const chip = (label, prompt) => ({ label, prompt, sendImmediately: true });
@@ -102,7 +120,7 @@ export function createManicAssistant(opts) {
         chip('Title card', 'an intro title card that fades in a heading and subtitle'),
         chip('Grid of dots', 'a 5x5 grid of dots that appear one row at a time using a for loop'),
         { label: 'Explain', prompt: 'Explain what the current manic code animates, step by step.', sendImmediately: true },
-        { label: 'Fix errors', prompt: 'Fix any errors in the current manic code. Return the corrected code only.', sendImmediately: true },
+        { label: 'Fix errors', prompt: 'Fix the errors the validator reports in the current manic code. Return the corrected code only.', sendImmediately: true },
         { label: 'Add a fade-in', prompt: 'Add a smooth fade-in to the current animation. Return the full updated code.' },
       ];
     },

@@ -334,7 +334,13 @@
         persistFiles();
         if (editor) editor.focus();
       },
-      fileName: function () { return activeName || ''; }
+      fileName: function () { return activeName || ''; },
+      // Error diagnostics for the active file (same WASM check the editor runs)
+      // → [{ message, line }]. Lets the AI assistant fix the real errors.
+      diagnostics: function () {
+        var code = (activeName && models[activeName]) ? models[activeName].getValue() : '';
+        return code ? checkNow(code) : [];
+      }
     };
   }
 
