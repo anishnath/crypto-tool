@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Shapes — the cast - manic — the manual</title>
+        <title>Going 3D - manic — the manual</title>
 
 
         <!-- Custom HTML head -->
@@ -178,105 +178,136 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="shapes--the-cast"><a class="header" href="#shapes--the-cast">Shapes — the cast</a></h1>
-<p>Everything on screen is an <strong>entity</strong> with a <strong>name</strong> (its first argument). You
-declare shapes once; the name is how you address them later in the script.</p>
-<h2 id="the-six-primitives"><a class="header" href="#the-six-primitives">The six primitives</a></h2>
-<p>Each line below is the whole call — copy it and tweak the numbers.</p>
+                        <h1 id="going-3d"><a class="header" href="#going-3d">Going 3D</a></h1>
+<p>So far every shape has lived on a flat page. manic has a <strong>second world</strong>: a real
+3D space you look at through a camera. The idea is exactly the same — you name a
+cast of shapes and call them out in a script — but now the shapes have depth, and
+you can spin the camera around them.</p>
+<p>One rule of thumb: <strong>everything 3D ends in <code>3</code></strong> — <code>cube3</code>, <code>sphere3</code>, <code>move3</code>,
+<code>orbit3</code>. That’s how you tell the two worlds apart.</p>
+<h2 id="first-a-camera"><a class="header" href="#first-a-camera">First, a camera</a></h2>
+<p>A 3D scene needs a <strong>camera</strong> — an eye to look through. You say where the eye
+sits and which point it looks at:</p>
+<pre><code class="language-manic">camera3((8, -10, 6), (0, 0, 1), 45);   // eye position, look-at point, zoom
+</code></pre>
+<p>Positions are <code>(x, y, z)</code>, and here <strong>z is up</strong> (x and y are the ground). You
+add one camera, and you can swing it around later.</p>
+<p><strong>▶ See it play:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/SHzotXyfJVY" title="manic Goes 3D — Cubes, Spheres & a Spinning Camera" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="the-3d-cast"><a class="header" href="#the-3d-cast">The 3D cast</a></h2>
 <div class="table-wrapper">
 <table>
 <thead>
 <tr><th>shape</th><th>write</th><th>draws</th></tr>
 </thead>
 <tbody>
-<tr><td><strong>circle</strong></td><td><code>circle(sun, (cx, cy), 90);</code></td><td>a circle, radius 90, at the centre</td></tr>
-<tr><td><strong>rect</strong></td><td><code>rect(box, (cx, cy), 200, 120);</code></td><td>a rectangle 200 wide, 120 tall</td></tr>
-<tr><td><strong>line</strong></td><td><code>line(edge, (100, 100), (400, 300));</code></td><td>a line from point to point</td></tr>
-<tr><td><strong>arrow</strong></td><td><code>arrow(v, (100, 400), (400, 400));</code></td><td>a line with an arrowhead at the end</td></tr>
-<tr><td><strong>dot</strong></td><td><code>dot(p, (cx, cy), 8);</code></td><td>a small filled dot, radius 8</td></tr>
-<tr><td><strong>text</strong></td><td><code>text(cap, (cx, 640), "hello");</code></td><td>a text label anchored at a point</td></tr>
+<tr><td><strong>cube3</strong></td><td><code>cube3(box, (0,0,1), (2,2,2));</code></td><td>a box (width, depth, height)</td></tr>
+<tr><td><strong>sphere3</strong></td><td><code>sphere3(ball, (0,0,1), 0.9);</code></td><td>a ball of that radius</td></tr>
+<tr><td><strong>point3</strong></td><td><code>point3(p, (1,1,1));</code></td><td>a small marker in space</td></tr>
+<tr><td><strong>line3 / arrow3</strong></td><td><code>arrow3(v, (0,0,0), (0,0,2));</code></td><td>a segment / a vector</td></tr>
+<tr><td><strong>grid3</strong></td><td><code>grid3(floor, (0,0,0), 5, 1);</code></td><td>a ground grid to sit things on</td></tr>
+<tr><td><strong>axes3</strong></td><td><code>axes3(ax, (0,0,0), 3);</code></td><td>labelled x, y, z arrows</td></tr>
 </tbody>
 </table>
 </div>
-<p>Points are <code>(x, y)</code> in pixels, <strong>origin top-left, y increasing downward</strong>. Use
-<code>cx</code>, <code>cy</code>, <code>w</code>, <code>h</code> to stay canvas-independent.</p>
-<pre><code class="language-manic">// the six primitive shapes, drawn on together.
-title("Shapes");
-canvas("16:9");
-
-text(t, (cx, 90), "six primitives");  color(t, cyan);  size(t, 32);  hidden(t);
-
-circle(c, (240, 380), 80);            color(c, cyan);     stroke(c, 4);  untraced(c);
-rect(r,   (470, 380), 150, 150);      color(r, magenta);  stroke(r, 4);  untraced(r);
-line(l,   (640, 300), (820, 460));    color(l, lime);     stroke(l, 4);  untraced(l);
-arrow(a,  (900, 460), (1040, 300));   color(a, cyan);     stroke(a, 4);  untraced(a);
-dot(d,    (1110, 380), 12);           color(d, magenta);  hidden(d);
-text(lbl, (640, 620), "circle · rect · line · arrow · dot · text");
-color(lbl, dim);  size(lbl, 24);  hidden(lbl);
-
-show(t, 0.5);
-par { draw(c);  draw(r);  draw(l);  draw(a);  show(d); }
-show(lbl, 0.5);
-wait(1.2);
+<p>Style and reveal them with words you already know — <code>color</code>, <code>opacity</code>, <code>show</code>,
+<code>flash</code>:</p>
+<pre><code class="language-manic">cube3(box, (0, 0, 1), (2, 2, 2));   color(box, cyan);
+show(box, 0.6);
 </code></pre>
-<p><strong>▶ See it play:</strong></p>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/24DPvy07O8A" title="Every Shape in manic (Draw Literally Anything)" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="modifiers--style-a-shape-at-t--0"><a class="header" href="#modifiers--style-a-shape-at-t--0">Modifiers — style a shape at t = 0</a></h2>
-<p>A shape starts plain. <strong>Modifiers</strong> change how it looks <em>before</em> the animation
-begins. They take the entity name first, then a value:</p>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th>modifier</th><th>effect</th><th>example</th></tr>
-</thead>
-<tbody>
-<tr><td><code>color(id, c)</code></td><td>fill / stroke colour</td><td><code>color(sun, cyan);</code></td></tr>
-<tr><td><code>stroke(id, w)</code></td><td>line thickness</td><td><code>stroke(sun, 4);</code></td></tr>
-<tr><td><code>size(id, n)</code></td><td>text size</td><td><code>size(cap, 30);</code></td></tr>
-<tr><td><code>glow(id, n)</code></td><td>neon halo strength</td><td><code>glow(sun, 8);</code></td></tr>
-<tr><td><code>opacity(id, 0..1)</code></td><td>transparency</td><td><code>opacity(sun, 0.5);</code></td></tr>
-<tr><td><code>filled(id)</code> / <code>outlined(id)</code></td><td>turn fill / outline on</td><td><code>filled(box);</code></td></tr>
-<tr><td><code>hue(id, deg)</code></td><td>colour by an angle (0–360) — for gradients &amp; loops</td><td><code>hue(seg, 200);</code></td></tr>
-<tr><td><code>z(id, n)</code></td><td>draw order (higher = on top)</td><td><code>z(box, 5);</code></td></tr>
-</tbody>
-</table>
-</div>
-<p>And two that decide <em>how a shape first appears</em>:</p>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th>modifier</th><th>pairs with</th><th>gives</th></tr>
-</thead>
-<tbody>
-<tr><td><code>hidden(id)</code></td><td><code>show(id)</code></td><td>a <strong>fade-in</strong></td></tr>
-<tr><td><code>untraced(id)</code></td><td><code>draw(id)</code></td><td>a <strong>draw-on</strong> (pen tracing the outline)</td></tr>
-</tbody>
-</table>
-</div>
+<h2 id="labelling-a-point-in-space"><a class="header" href="#labelling-a-point-in-space">Labelling a point in space</a></h2>
+<p>To put words on a 3D point, make an ordinary 2D <code>text</code> and <strong>pin</strong> it there with
+<code>pin3</code>. As the camera moves, the label sticks to its point:</p>
+<pre><code class="language-manic">text(tag, (0, 0), "origin");
+pin3(tag, (0, 0, 0));
+</code></pre>
+<h2 id="curves-and-surfaces"><a class="header" href="#curves-and-surfaces">Curves and surfaces</a></h2>
+<p>Draw a wire through space from three formulas of <code>t</code> (a helix, here), or a
+surface from a height formula <code>z = f(x, y)</code>:</p>
+<pre><code class="language-manic">curve3(helix, "cos(t)", "sin(t)", "t*0.2", (0, 12));
+surface3(wave, "sin(x)*cos(y)", (-3, 3), (-3, 3));
+</code></pre>
+<p>For shapes a plain height field can’t make — a <strong>torus</strong>, a <strong>Möbius strip</strong> —
+use <code>param3</code>, which takes three formulas of <em>two</em> parameters, <code>u</code> and <code>v</code>:</p>
+<pre><code class="language-manic">param3(torus, "(3 + cos(v))*cos(u)", "(3 + cos(v))*sin(u)", "sin(v)",
+       (0, 6.28), (0, 6.28));
+</code></pre>
 <blockquote>
-<p><strong>Colours are a fixed palette:</strong> <code>fg</code>, <code>void</code>, <code>cyan</code>, <code>magenta</code>, <code>lime</code>,
-<code>dim</code>, <code>panel</code>. For a computed colour (say, one per item in a loop) use
-<code>hue(id, degrees)</code>. More in <a href="colour.html">Colour &amp; style</a>.</p>
+<p><strong>One formula rule:</strong> always put <code>*</code> between names. Write <code>pi*t</code>, never <code>pit</code>
+(manic reads <code>pit</code> as one unknown word). Same for <code>v*v</code>, not <code>vv</code>.</p>
 </blockquote>
-<h2 id="naming-things-in-a-loop"><a class="header" href="#naming-things-in-a-loop">Naming things in a loop</a></h2>
-<p>When you make many shapes with a <code>for</code> loop, give each a unique name with
-<strong>interpolation</strong> — <code>{expr}</code> glued to the name:</p>
-<pre><code class="language-manic">for i in 0..5 {
-  dot(p{i}, (200 + i*180, cy), 8);   // p0, p1, p2, p3, p4
+<h2 id="solids"><a class="header" href="#solids">Solids</a></h2>
+<p>Build filled, shaded solids:</p>
+<ul>
+<li><strong><code>prism3</code> / <code>pyramid3</code></strong> — n-sided prisms and cones (use many sides for a
+cylinder or a smooth cone).</li>
+<li><strong><code>revolve3</code></strong> — spin a radius profile <code>r(t)</code> around the upright axis (vases,
+spheres, lathe shapes).</li>
+<li><strong><code>extrude3</code></strong> — lift a flat <strong>2D</strong> shape (even a boolean cut-out) straight up
+into a solid.</li>
+</ul>
+<pre><code class="language-manic">prism3(hex, (0, 0, 1), 6, 1, 2);
+revolve3(vase, (3, 0, 1.5), "0.7 + 0.4*sin(t*2)", (0, 3));
+</code></pre>
+<h2 id="giving-lines-some-body"><a class="header" href="#giving-lines-some-body">Giving lines some body</a></h2>
+<p>A 3D line, arrow, or curve is a thin thread by default. <code>thick</code> turns it into a
+rounded <strong>tube</strong> (arrows grow a solid head):</p>
+<pre><code class="language-manic">arrow3(v, (0, 0, 0), (2, 2, 2));   thick(v, 0.04);
+</code></pre>
+<h2 id="moving-in-3d"><a class="header" href="#moving-in-3d">Moving in 3D</a></h2>
+<p>Same rhythm as the 2D verbs, with the <code>3</code> on the end:</p>
+<pre><code class="language-manic">par {
+  rotate3(box, (0, 0, 360), 4, linear);   // spin the box
+  orbit3(70, 25, 12, 4, smooth);          // orbit the camera around it
 }
 </code></pre>
-<p>That’s your cast. Now let’s make it move → <a href="verbs.html">Verbs</a>.</p>
+<ul>
+<li><strong><code>move3</code> / <code>shift3</code></strong> — move <em>to</em> / <em>by</em> a point</li>
+<li><strong><code>rotate3</code></strong> — turn it (degrees around x, y, z)</li>
+<li><strong><code>grow3</code></strong> — stretch a line or arrow’s tip to a new point</li>
+<li><strong><code>orbit3</code></strong> — swing the camera (angle around, angle up, distance)</li>
+<li><strong><code>look3</code></strong> — aim the camera at a new point</li>
+</ul>
+<h2 id="morphing-one-shape-into-another"><a class="header" href="#morphing-one-shape-into-another">Morphing one shape into another</a></h2>
+<p><code>morph3</code> sets a shape up to <em>become</em> another; then <code>to(..., morph, ...)</code> blends
+between them. It works for curves, surfaces, and solids — even a cube turning
+into a sphere:</p>
+<pre><code class="language-manic">cube3(a, (0, 0, 1), (2, 2, 2));
+sphere3(b, (0, 0, 0), 1.2);   hidden(b);
+morph3(a, b);
+to(a, morph, 1, 2.5, smooth);   // a cube melts into a ball
+</code></pre>
+<h2 id="which-words-work-in-3d"><a class="header" href="#which-words-work-in-3d">Which words work in 3D?</a></h2>
+<p>3D shapes speak most of the same vocabulary — <code>color</code>, <code>opacity</code>, <code>hidden</code>,
+<code>untraced</code>, <code>tag</code>, and the verbs <code>show</code>, <code>fade</code>, <code>draw</code>, <code>flash</code>, <code>pulse</code>,
+<code>scale</code>. A handful of words are <strong>2D-only</strong> and will politely refuse on a 3D
+shape (with a message that names the 3D replacement):</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>if you reach for…</th><th>on a 3D shape, use…</th></tr>
+</thead>
+<tbody>
+<tr><td><code>hue</code></td><td><code>color</code> with a palette name</td></tr>
+<tr><td><code>stroke</code></td><td><code>thick</code></td></tr>
+<tr><td><code>move</code> / <code>rotate</code> / <code>spin</code></td><td><code>move3</code> / <code>rotate3</code></td></tr>
+<tr><td><code>cam</code> / <code>zoom</code></td><td><code>camera3</code> / <code>orbit3</code></td></tr>
+<tr><td><code>morph</code></td><td><code>morph3</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Now see it all in motion in the <a href="ex-3d.html">3D scenes gallery</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="getting-started.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="kits.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="verbs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="examples.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -286,11 +317,11 @@ begins. They take the entity name first, then a value:</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="getting-started.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="kits.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="verbs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="examples.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

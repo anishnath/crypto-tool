@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Shapes — the cast - manic — the manual</title>
+        <title>3D scenes - manic — the manual</title>
 
 
         <!-- Custom HTML head -->
@@ -178,107 +178,338 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="shapes--the-cast"><a class="header" href="#shapes--the-cast">Shapes — the cast</a></h1>
-<p>Everything on screen is an <strong>entity</strong> with a <strong>name</strong> (its first argument). You
-declare shapes once; the name is how you address them later in the script.</p>
-<h2 id="the-six-primitives"><a class="header" href="#the-six-primitives">The six primitives</a></h2>
-<p>Each line below is the whole call — copy it and tweak the numbers.</p>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th>shape</th><th>write</th><th>draws</th></tr>
-</thead>
-<tbody>
-<tr><td><strong>circle</strong></td><td><code>circle(sun, (cx, cy), 90);</code></td><td>a circle, radius 90, at the centre</td></tr>
-<tr><td><strong>rect</strong></td><td><code>rect(box, (cx, cy), 200, 120);</code></td><td>a rectangle 200 wide, 120 tall</td></tr>
-<tr><td><strong>line</strong></td><td><code>line(edge, (100, 100), (400, 300));</code></td><td>a line from point to point</td></tr>
-<tr><td><strong>arrow</strong></td><td><code>arrow(v, (100, 400), (400, 400));</code></td><td>a line with an arrowhead at the end</td></tr>
-<tr><td><strong>dot</strong></td><td><code>dot(p, (cx, cy), 8);</code></td><td>a small filled dot, radius 8</td></tr>
-<tr><td><strong>text</strong></td><td><code>text(cap, (cx, 640), "hello");</code></td><td>a text label anchored at a point</td></tr>
-</tbody>
-</table>
-</div>
-<p>Points are <code>(x, y)</code> in pixels, <strong>origin top-left, y increasing downward</strong>. Use
-<code>cx</code>, <code>cy</code>, <code>w</code>, <code>h</code> to stay canvas-independent.</p>
-<pre><code class="language-manic">// the six primitive shapes, drawn on together.
-title("Shapes");
-canvas("16:9");
+                        <h1 id="3d-scenes"><a class="header" href="#3d-scenes">3D scenes</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video). See the <a href="3d.html">Going 3D</a> chapter for the words used here.</p>
+<h2 id="three_d"><a class="header" href="#three_d">three_d</a></h2>
+<p>Cubes, spheres, arrows, a curve, a surface and solids together — the 3D basics on one stage.</p>
+<pre><code class="language-manic">title("3D coordinate space");
+canvas(1280, 720);
+template("terminal");
 
-text(t, (cx, 90), "six primitives");  color(t, cyan);  size(t, 32);  hidden(t);
+camera3((8, -10, 6), (0, 0, 1), 45);
+grid3(floor, (0, 0, 0), 5, 1);
+color(floor, dim);
+axes3(world, (0, 0, 0), 4);
 
-circle(c, (240, 380), 80);            color(c, cyan);     stroke(c, 4);  untraced(c);
-rect(r,   (470, 380), 150, 150);      color(r, magenta);  stroke(r, 4);  untraced(r);
-line(l,   (640, 300), (820, 460));    color(l, lime);     stroke(l, 4);  untraced(l);
-arrow(a,  (900, 460), (1040, 300));   color(a, cyan);     stroke(a, 4);  untraced(a);
-dot(d,    (1110, 380), 12);           color(d, magenta);  hidden(d);
-text(lbl, (640, 620), "circle · rect · line · arrow · dot · text");
-color(lbl, dim);  size(lbl, 24);  hidden(lbl);
+cube3(box, (0, 0, 1), (2, 2, 2));
+color(box, magenta);
+sphere3(ball, (-2, 1, 1), 0.7);
+color(ball, lime);
+arrow3(vector, (0, 0, 0), (2.5, 2, 3));
 
-show(t, 0.5);
-par { draw(c);  draw(r);  draw(l);  draw(a);  show(d); }
-show(lbl, 0.5);
-wait(1.2);
-</code></pre>
-<p><strong>▶ See it play:</strong></p>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/24DPvy07O8A" title="Every Shape in manic (Draw Literally Anything)" allowfullscreen loading="lazy"></iframe></div>
+// a parametric helix (curve3), drawn on as a shaded tube
+curve3(spiral, "cos(t)*2.6", "sin(t)*2.6", "t*0.32", (0, 12));
+color(spiral, gold);
+thick(spiral, 0.08);
 
-<h2 id="modifiers--style-a-shape-at-t--0"><a class="header" href="#modifiers--style-a-shape-at-t--0">Modifiers — style a shape at t = 0</a></h2>
-<p>A shape starts plain. <strong>Modifiers</strong> change how it looks <em>before</em> the animation
-begins. They take the entity name first, then a value:</p>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th>modifier</th><th>effect</th><th>example</th></tr>
-</thead>
-<tbody>
-<tr><td><code>color(id, c)</code></td><td>fill / stroke colour</td><td><code>color(sun, cyan);</code></td></tr>
-<tr><td><code>stroke(id, w)</code></td><td>line thickness</td><td><code>stroke(sun, 4);</code></td></tr>
-<tr><td><code>size(id, n)</code></td><td>text size</td><td><code>size(cap, 30);</code></td></tr>
-<tr><td><code>glow(id, n)</code></td><td>neon halo strength</td><td><code>glow(sun, 8);</code></td></tr>
-<tr><td><code>opacity(id, 0..1)</code></td><td>transparency</td><td><code>opacity(sun, 0.5);</code></td></tr>
-<tr><td><code>filled(id)</code> / <code>outlined(id)</code></td><td>turn fill / outline on</td><td><code>filled(box);</code></td></tr>
-<tr><td><code>hue(id, deg)</code></td><td>colour by an angle (0–360) — for gradients &amp; loops</td><td><code>hue(seg, 200);</code></td></tr>
-<tr><td><code>z(id, n)</code></td><td>draw order (higher = on top)</td><td><code>z(box, 5);</code></td></tr>
-</tbody>
-</table>
-</div>
-<p>And two that decide <em>how a shape first appears</em>:</p>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th>modifier</th><th>pairs with</th><th>gives</th></tr>
-</thead>
-<tbody>
-<tr><td><code>hidden(id)</code></td><td><code>show(id)</code></td><td>a <strong>fade-in</strong></td></tr>
-<tr><td><code>untraced(id)</code></td><td><code>draw(id)</code></td><td>a <strong>draw-on</strong> (pen tracing the outline)</td></tr>
-</tbody>
-</table>
-</div>
-<blockquote>
-<p><strong>Colours are a fixed palette:</strong> <code>fg</code>, <code>void</code>, <code>cyan</code>, <code>magenta</code>, <code>lime</code>,
-<code>dim</code>, <code>panel</code>. For a computed colour (say, one per item in a loop) use
-<code>hue(id, degrees)</code>. More in <a href="colour.html">Colour &amp; style</a>.</p>
-</blockquote>
-<h2 id="naming-things-in-a-loop"><a class="header" href="#naming-things-in-a-loop">Naming things in a loop</a></h2>
-<p>When you make many shapes with a <code>for</code> loop, give each a unique name with
-<strong>interpolation</strong> — <code>{expr}</code> glued to the name:</p>
-<pre><code class="language-manic">for i in 0..5 {
-  dot(p{i}, (200 + i*180, cy), 8);   // p0, p1, p2, p3, p4
+// a height-field surface z = f(x,y) (surface3), filled + flat-shaded
+surface3(wave, "0.6*sin(x)*cos(y)", (-3.5, 3.5), (-3.5, 3.5), 24);
+color(wave, magenta);
+opacity(wave, 0.5);
+
+// filled, flat-shaded solids (prism3 / pyramid3)
+prism3(hex, (-3.6, -2.4, 1.2), 6, 0.9, 2.2);
+pyramid3(cone, (3.6, -2.4, 1.4), 22, 1.0, 2.6);
+
+// a 2D label glued to the moving sphere — tracks it as the camera orbits
+text(balltag, (0, 0), "ball");
+color(balltag, gold);
+pin3(balltag, ball);
+
+par {
+    rotate3(box, (0, 0, 360), 4, linear);
+    orbit3(70, 28, 11, 4, smooth);
+    move3(ball, (2, -1, 2), 4, inout);
 }
 </code></pre>
-<p>That’s your cast. Now let’s make it move → <a href="verbs.html">Verbs</a>.</p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/O-XeXhzSyZo" title="The 3D Basics on One Stage — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="solids3"><a class="header" href="#solids3">solids3</a></h2>
+<p>Filled, shaded solids: a prism, a cone, and a lathed vase.</p>
+<pre><code class="language-manic">title("3D solids");
+canvas(1280, 720);
+template("terminal");
+
+camera3((9, -11, 7), (0, 0, 1), 45);
+grid3(floor, (0, 0, 0), 6, 1);
+color(floor, dim);
+axes3(world, (0, 0, 0), 3);
+
+// hexagonal prism
+prism3(hex, (-4, 0, 1.2), 6, 1.1, 2.4);
+color(hex, cyan);
+
+// a cone (a pyramid with many sides)
+pyramid3(cone, (0, 0, 1.4), 28, 1.2, 2.8);
+color(cone, magenta);
+
+// a lathed vase: radius profile r(t) swept around the vertical axis
+revolve3(vase, (4, 0, 1.5), "0.7 + 0.45*sin(t*2.4)", (0, 3), 32);
+color(vase, gold);
+
+orbit3(60, 24, 17, 6, smooth);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/t3F4xpf79W0" title="Prisms, Cones & a Lathed Vase in 3D — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="param3"><a class="header" href="#param3">param3</a></h2>
+<p>Parametric surfaces a height field can’t make — a torus, a sphere, and a Möbius strip.</p>
+<pre><code class="language-manic">// param3 — general parametric surfaces x(u,v), y(u,v), z(u,v). Unlike surface3
+// (a height field z=f(x,y)) these can wrap and close, so a torus and a Möbius
+// strip are just three formulas each.
+//
+//   manic examples/param3.manic
+//   manic examples/param3.manic --record out --fps 60
+
+title("parametric surfaces");
+canvas("16:9");
+template("terminal");
+
+camera3((11, -13, 8.5), (0, 0, 1.4), 42);
+grid3(floor, (0, 0, 0), 7, 1);
+color(floor, dim);
+
+// torus (left)
+param3(torus,
+  "0 - 4.8 + (2 + 0.7*cos(v))*cos(u)",
+  "(2 + 0.7*cos(v))*sin(u)",
+  "1.5 + 0.7*sin(v)",
+  (0, 6.283), (0, 6.283), 40);
+color(torus, cyan);
+
+// parametric sphere (centre)
+param3(ball,
+  "1.3*sin(v)*cos(u)",
+  "1.3*sin(v)*sin(u)",
+  "1.6 + 1.3*cos(v)",
+  (0, 6.283), (0, 3.1416), 28);
+color(ball, magenta);
+
+// Möbius strip (right)
+param3(mobius,
+  "4.8 + (1.7 + v*cos(u/2))*cos(u)",
+  "(1.7 + v*cos(u/2))*sin(u)",
+  "1.6 + v*sin(u/2)",
+  (0, 6.283), (0 - 0.6, 0.6), 60);
+color(mobius, gold);
+
+show(floor, 0.3);
+par { show(torus, 0.7); show(ball, 0.7); show(mobius, 0.7); }
+orbit3(60, 24, 15, 5.0, smooth);
+wait(0.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qs25EhKU_pE" title="A Torus, a Sphere & a Möbius Strip — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="extrude3"><a class="header" href="#extrude3">extrude3</a></h2>
+<p>Lifting flat shapes into solids, including a boolean cut-out (a plate with a hole) and an L-beam.</p>
+<pre><code class="language-manic">// Extrude &amp; CSG — turn 2D shapes into 3D solids. `extrude3` sweeps any 2D
+// fillable shape (or a boolean region) straight up; extruding a union/
+// difference/intersect gives constructive-solid-geometry solids. The 2D
+// source shapes are auto-hidden — they're just the cross-section recipe.
+//
+//   manic examples/extrude3.manic
+//   manic examples/extrude3.manic --record out --fps 60
+
+title("Extrude &amp; CSG");
+canvas(1280, 720);
+template("terminal");
+
+camera3((9, -11, 7), (0, 0, 0.8), 45);
+grid3(floor, (0, 0, 0), 6, 1);
+color(floor, dim);
+axes3(world, (0, 0, 0), 3);
+
+// CSG: a square plate MINUS a circular hole → an extruded plate-with-a-hole
+rect(plate, (0, 0), 3, 3);
+circle(hole, (0, 0), 0.9);
+difference(cut, plate, hole);
+extrude3(block, cut, 1.0, (-3.5, 0, 0.6));
+color(block, cyan);
+
+// arbitrary concave polygon: a union of two rects → an L-beam, extruded
+rect(la, (0, 0), 2.4, 0.8);
+rect(lb, (-0.8, 0.8), 0.8, 2.4);
+union(lshape, la, lb);
+extrude3(ell, lshape, 0.9, (3.5, 0, 0.55));
+color(ell, magenta);
+
+// a plain shape extrudes just as happily (a hexagon via a sector sweep)
+sector(hexface, (0, 0), 1.2, 0, 360);
+extrude3(disc, hexface, 0.5, (0, 3.5, 0.3));
+color(disc, gold);
+
+orbit3(60, 24, 17, 8, smooth);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VIVZVaGmIDU" title="Extrude 2D Shapes Into 3D Solids (with CSG) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="morph3"><a class="header" href="#morph3">morph3</a></h2>
+<p>Morphing across families — a cube into a sphere, a saddle into a bowl, a helix into a ring.</p>
+<pre><code class="language-manic">// 3D morphing (morph3) — set a 3D entity up to become another shape, then
+// blend with `to(id, morph, 1, dur)`. Works across three families:
+//   • solids  — a cube becomes a sphere (reparameterised spherically)
+//   • surfaces — a rippling saddle settles into a bowl (filled + shaded)
+//   • curves  — a helix unwinds into a flat ring
+//
+//   manic examples/morph3.manic
+//   manic examples/morph3.manic --record out --fps 60
+
+title("3D morph");
+canvas("16:9");
+template("terminal");
+
+camera3((11, -13, 8), (0, 0, 0.8), 42);
+grid3(floor, (0, 0, 0), 7, 1);
+color(floor, dim);
+
+// solid: cube -&gt; sphere
+cube3(box, (-5, 0, 1.4), (2.4, 2.4, 2.4));
+color(box, cyan);
+sphere3(ball, (0, 0, 0), 1.5);
+hidden(ball);
+morph3(box, ball);
+
+// surface: rippling saddle -&gt; smooth bowl
+surface3(saddle, "0.8*sin(x*1.3)*cos(y*1.3)", (-2.3, 2.3), (-2.3, 2.3), 24);
+color(saddle, gold);
+surface3(bowl, "0.16*(x*x + y*y) - 1", (-2.3, 2.3), (-2.3, 2.3), 24);
+hidden(bowl);
+morph3(saddle, bowl);
+
+// curve: helix -&gt; flat ring
+curve3(helix, "5 + 1.5*cos(t)", "1.5*sin(t)", "0.2*t", (0, 18));
+color(helix, magenta);
+thick(helix, 0.06);
+curve3(ring, "5 + 1.5*cos(t)", "1.5*sin(t)", "1.8", (0, 6.283));
+hidden(ring);
+morph3(helix, ring);
+
+show(floor, 0.3);
+par { show(box, 0.5); show(saddle, 0.5); show(helix, 0.5); }
+wait(0.7);
+par {
+  to(box, morph, 1, 3.0, smooth);
+  to(saddle, morph, 1, 3.0, smooth);
+  to(helix, morph, 1, 3.0, smooth);
+  orbit3(48, 25, 21, 3.0, smooth);
+}
+wait(0.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/YMBQbAIlfQM" title="Morph a Cube Into a Sphere — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="matrix3"><a class="header" href="#matrix3">matrix3</a></h2>
+<p>A 3×3×3 block of cubes, with a shear matrix <strong>M</strong> and its inverse <strong>M⁻¹</strong> applied and undone.</p>
+<pre><code class="language-manic">// A 3 × 3 × 3 block of 27 cubes, then a matrix operation: a 3×3 matrix is a
+// linear map of space. We apply a shear M to every cell, then its inverse
+// M^-1 — which sends the block back exactly, because M^-1 M = I.
+//
+//   manic examples/matrix3.manic
+//   manic examples/matrix3.manic --record out --fps 60
+
+title("3 × 3 × 3  ·  M and M^-1");
+canvas("16:9");
+template("terminal");
+
+camera3((7.5, -9, 6), (2.4, 0, 2.1), 42);
+grid3(floor, (0, 0, 0), 6, 1);
+color(floor, dim);
+
+let s = 1.3;    // cell spacing (cubes are 1 wide → 0.3 gaps)
+let zc = 2.1;   // height of the block's centre
+let a = 0.7;    // shear amount: M sends x → x + a·z
+
+text(cap, (cx, h - 42), "");
+display(cap);  color(cap, fg);  size(cap, 21);  hidden(cap);
+
+// --- 27 cubes, three x-slices coloured cyan / magenta / lime ---
+for j in 0..3 { for k in 0..3 {
+  cube3(xa{j}{k}, (0 - s, (j - 1)*s, zc + (k - 1)*s), (1, 1, 1));
+  color(xa{j}{k}, cyan);  hidden(xa{j}{k});
+} }
+for j in 0..3 { for k in 0..3 {
+  cube3(xb{j}{k}, (0, (j - 1)*s, zc + (k - 1)*s), (1, 1, 1));
+  color(xb{j}{k}, magenta);  hidden(xb{j}{k});
+} }
+for j in 0..3 { for k in 0..3 {
+  cube3(xc{j}{k}, (s, (j - 1)*s, zc + (k - 1)*s), (1, 1, 1));
+  color(xc{j}{k}, lime);  hidden(xc{j}{k});
+} }
+
+// --- the matrices, as monospace text on the right ---
+text(mLabel, (995, 232), "M =");
+text(m0, (1035, 274), "[ 1  0   0.7 ]");
+text(m1, (1035, 310), "[ 0  1    0  ]");
+text(m2, (1035, 346), "[ 0  0    1  ]");
+text(iLabel, (995, 446), "M^-1 =");
+text(i0, (1035, 488), "[ 1  0  -0.7 ]");
+text(i1, (1035, 524), "[ 0  1    0  ]");
+text(i2, (1035, 560), "[ 0  0    1  ]");
+display(mLabel); display(m0); display(m1); display(m2);
+display(iLabel); display(i0); display(i1); display(i2);
+color(mLabel, cyan);  color(m0, cyan);  color(m1, cyan);  color(m2, cyan);
+color(iLabel, gold);  color(i0, gold);  color(i1, gold);  color(i2, gold);
+size(mLabel, 24); size(m0, 22); size(m1, 22); size(m2, 22);
+size(iLabel, 24); size(i0, 22); size(i1, 22); size(i2, 22);
+hidden(mLabel); hidden(m0); hidden(m1); hidden(m2);
+hidden(iLabel); hidden(i0); hidden(i1); hidden(i2);
+
+// ------------------------------ script ------------------------------
+show(floor, 0.3);
+show(cap, 0.3);
+say(cap, "A 3 by 3 by 3 block — 27 cells.", 0.7);
+stagger(0.04) {
+  for j in 0..3 { for k in 0..3 { show(xa{j}{k}, 0.3); } }
+  for j in 0..3 { for k in 0..3 { show(xb{j}{k}, 0.3); } }
+  for j in 0..3 { for k in 0..3 { show(xc{j}{k}, 0.3); } }
+}
+orbit3(38, 22, 13, 1.6, smooth);
+
+say(cap, "A 3×3 matrix M is a linear map of space. This M shears x by height z.", 1.0);
+stagger(0.12) { show(mLabel, 0.3); show(m0, 0.3); show(m1, 0.3); show(m2, 0.3); }
+
+// apply M: x' = x + a·(z - zc)
+par {
+  for j in 0..3 { for k in 0..3 {
+    move3(xa{j}{k}, (0 - s + a*(k - 1)*s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xb{j}{k}, (a*(k - 1)*s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xc{j}{k}, (s + a*(k - 1)*s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+}
+say(cap, "Applying M slants the whole block — the higher a cell, the more it shifts.", 1.0);
+
+stagger(0.12) { show(iLabel, 0.3); show(i0, 0.3); show(i1, 0.3); show(i2, 0.3); }
+say(cap, "The inverse M^-1 just negates the shear.", 0.8);
+
+// apply M^-1: sends every cell back to where it started
+par {
+  for j in 0..3 { for k in 0..3 {
+    move3(xa{j}{k}, (0 - s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xb{j}{k}, (0, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xc{j}{k}, (s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+}
+say(cap, "M^-1 sends every cell home: M^-1 M = I, the identity.", 1.0);
+
+orbit3(70, 26, 13, 2.4, smooth);
+wait(0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/SjXDqg3xNE8" title="A 3×3×3 Matrix and Its Inverse, in 3D — manic" allowfullscreen loading="lazy"></iframe></div>
+
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="getting-started.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="ex-boolean.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="verbs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -286,13 +517,10 @@ begins. They take the entity name first, then a value:</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="getting-started.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="ex-boolean.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="verbs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
-                    </a>
             </nav>
 
         </div>
