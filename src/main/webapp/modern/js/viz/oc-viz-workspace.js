@@ -69,6 +69,16 @@
             return supportedLangs.indexOf(lang) >= 0;
         }
 
+        // True when focus is in an editable target (Monaco editor, inputs) — player
+        // keyboard shortcuts must yield to it so typing space/arrows works normally.
+        function isTypingTarget(t) {
+            if (!t) return false;
+            var tag = t.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true;
+            if (t.isContentEditable) return true;
+            return !!(t.closest && t.closest('.monaco-editor'));
+        }
+
         function updateButtonVisibility(lang) {
             currentLang = lang;
             updateOwnershipTab(lang);
@@ -350,7 +360,9 @@
                 '</span>' +
                 '</div>' +
                 '<input type="range" class="viz-scrubber" id="vizScrubber" min="0" max="0" value="0" />' +
-                '<div class="viz-step-info" id="vizStepInfo">Step 0 / 0</div>';
+                '<div class="viz-step-info" id="vizStepInfo">Step 0 / 0</div>' +
+                '<div class="viz-kbd-hint" title="Keyboard: Space play/pause, ←/→ step, Home/End jump">' +
+                '<kbd>Space</kbd> play/pause · <kbd>←</kbd><kbd>→</kbd> step</div>';
 
             global.OcViz.PLAYBACK_SPEEDS.forEach(function (s, i) {
                 var opt = document.createElement('option');
@@ -1045,7 +1057,17 @@
                 });
             }
             document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape' && open && !recording) closePane();
+                if (e.key === 'Escape' && open && !recording) { closePane(); return; }
+                // Player shortcuts — only when the viz pane is open, not recording,
+                // and the user isn't typing (editor / inputs keep their own keys).
+                if (!open || recording || !player) return;
+                if (e.metaKey || e.ctrlKey || e.altKey) return;
+                if (isTypingTarget(e.target)) return;
+                if (e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); player.togglePlay(); }
+                else if (e.key === 'ArrowRight') { e.preventDefault(); player.stepForward(); }
+                else if (e.key === 'ArrowLeft') { e.preventDefault(); player.stepBack(); }
+                else if (e.key === 'Home') { e.preventDefault(); player.goTo(0); }
+                else if (e.key === 'End' && player.getCount()) { e.preventDefault(); player.goTo(player.getCount() - 1); }
             });
             initSplitDrag();
             initFloatDrag();

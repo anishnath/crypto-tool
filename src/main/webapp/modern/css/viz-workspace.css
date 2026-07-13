@@ -768,6 +768,23 @@
     color: var(--oc-text, #888);
 }
 
+.viz-kbd-hint {
+    font-size: 10px;
+    color: var(--oc-text, #888);
+    opacity: 0.7;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.viz-kbd-hint kbd {
+    font-family: inherit;
+    font-size: 9px;
+    padding: 1px 4px;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    opacity: 0.9;
+}
+
 .viz-step-card {
     font-size: 12px;
     font-weight: 500;
