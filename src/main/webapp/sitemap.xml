@@ -33,6 +33,7 @@
 <url><loc>https://8gwifi.org/online-lua-compiler/</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
 <url><loc>https://8gwifi.org/online-haskell-compiler/</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
 <url><loc>https://8gwifi.org/online-bash-compiler/</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
+<url><loc>https://8gwifi.org/manic</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
 <url>
     <loc>https://8gwifi.org/html-code-editor.jsp</loc>
     <priority>1.0</priority>

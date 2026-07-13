@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Menlo, 'DejaVu Sans Mono', monospace">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="0%" r="90%">
+      <stop offset="0%" stop-color="#231a4d"/>
+      <stop offset="55%" stop-color="#0d0b1a"/>
+      <stop offset="100%" stop-color="#07050f"/>
+    </radialGradient>
+    <linearGradient id="wordGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00e6ff"/>
+      <stop offset="100%" stop-color="#4dd0ff"/>
+    </linearGradient>
+    <linearGradient id="frameGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111a3a"/>
+      <stop offset="100%" stop-color="#0a1026"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowSoft" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1.5" fill="#ffffff" opacity="0.05"/>
+    </pattern>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="630" fill="url(#bgGlow)"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- wordmark -->
+  <text x="62" y="122" font-size="96" font-weight="700" fill="url(#wordGrad)" filter="url(#glowSoft)">manic</text>
+  <text x="350" y="122" font-size="96" font-weight="700" fill="#ff2d95" filter="url(#glow)">.</text>
+  <!-- pill -->
+  <rect x="384" y="66" width="272" height="40" rx="20" fill="none" stroke="#2f2a55"/>
+  <text x="404" y="93" font-size="20" fill="#8b86b0">animation&#160;language</text>
+
+  <!-- tagline -->
+  <text x="64" y="176" font-size="33" font-weight="600" fill="#e0e1f3">Make awesome educational videos</text>
+  <text x="64" y="214" font-size="24" fill="#8b86b0">write a few lines &#8594; render a smooth, glowing MP4</text>
+
+  <!-- ── code card ─────────────────────────────────────────── -->
+  <g>
+    <rect x="64" y="262" width="470" height="300" rx="16" fill="#14112c" stroke="#2a2350"/>
+    <circle cx="92" cy="292" r="6" fill="#ff2d95"/>
+    <circle cx="112" cy="292" r="6" fill="#ffd166"/>
+    <circle cx="132" cy="292" r="6" fill="#7cff6b"/>
+    <text x="156" y="298" font-size="18" fill="#6b6890">orbit.manic</text>
+
+    <g font-size="24" xml:space="preserve">
+      <text x="92" y="344"><tspan fill="#00e6ff">title</tspan><tspan fill="#8b86b0">(</tspan><tspan fill="#ffd166">"Orbit"</tspan><tspan fill="#8b86b0">);</tspan></text>
+      <text x="92" y="382"><tspan fill="#00e6ff">canvas</tspan><tspan fill="#8b86b0">(</tspan><tspan fill="#ffd166">"16:9"</tspan><tspan fill="#8b86b0">);</tspan></text>
+      <text x="92" y="420"><tspan fill="#00e6ff">circle</tspan><tspan fill="#8b86b0">(</tspan><tspan fill="#e0e1f3">sun</tspan><tspan fill="#8b86b0">,(</tspan><tspan fill="#9be7ff">640</tspan><tspan fill="#8b86b0">,</tspan><tspan fill="#9be7ff">360</tspan><tspan fill="#8b86b0">),</tspan><tspan fill="#9be7ff">90</tspan><tspan fill="#8b86b0">);</tspan></text>
+      <text x="92" y="458"><tspan fill="#00e6ff">color</tspan><tspan fill="#8b86b0">(</tspan><tspan fill="#e0e1f3">sun</tspan><tspan fill="#8b86b0">, </tspan><tspan fill="#7cff6b">cyan</tspan><tspan fill="#8b86b0">);</tspan></text>
+      <text x="92" y="496"><tspan fill="#00e6ff">show</tspan><tspan fill="#8b86b0">(</tspan><tspan fill="#e0e1f3">sun</tspan><tspan fill="#8b86b0">, </tspan><tspan fill="#9be7ff">0.6</tspan><tspan fill="#8b86b0">);</tspan></text>
+      <text x="92" y="534"><tspan fill="#00e6ff">draw</tspan><tspan fill="#8b86b0">(</tspan><tspan fill="#e0e1f3">orbit</tspan><tspan fill="#8b86b0">, </tspan><tspan fill="#9be7ff">1.2</tspan><tspan fill="#8b86b0">);</tspan></text>
+    </g>
+  </g>
+
+  <!-- arrow: code → video -->
+  <text x="548" y="422" font-size="60" fill="#00e6ff" filter="url(#glow)">&#8594;</text>
+  <text x="546" y="454" font-size="17" fill="#8b86b0">render</text>
+
+  <!-- ── video frame ───────────────────────────────────────── -->
+  <g>
+    <rect x="640" y="262" width="496" height="300" rx="16" fill="url(#frameGrad)" stroke="#2a2350"/>
+    <!-- caption + REC -->
+    <text x="666" y="298" font-size="17" fill="#6b6890">sin(x) &#183; 1080p</text>
+    <circle cx="1092" cy="292" r="6" fill="#ff2d95" filter="url(#glow)"/>
+    <text x="1044" y="298" font-size="16" fill="#ff2d95">REC</text>
+
+    <!-- faint axes -->
+    <path d="M676 452 H1108 M726 300 V520" stroke="#4a4570" stroke-width="1.5" opacity="0.5"/>
+    <!-- glowing sine (a frame of the animation) -->
+    <path d="M700 452 C 776 350, 840 554, 908 452 S 1040 350, 1104 452"
+          fill="none" stroke="#00e6ff" stroke-width="5" stroke-linecap="round" filter="url(#glow)"/>
+    <!-- the 'sun' object + a leading trace dot -->
+    <circle cx="908" cy="340" r="40" fill="#ffd166" opacity="0.95" filter="url(#glowSoft)"/>
+    <circle cx="1104" cy="452" r="8" fill="#ffffff" filter="url(#glow)"/>
+    <!-- play badge -->
+    <circle cx="682" cy="520" r="22" fill="#00131a" stroke="#00e6ff" stroke-width="2"/>
+    <path d="M675 510 L695 520 L675 530 Z" fill="#00e6ff"/>
+  </g>
+
+  <!-- footer -->
+  <text x="64" y="602" font-size="22" fill="#6b6890">8gwifi.org/manic</text>
+  <text x="1136" y="602" text-anchor="end" font-size="20" fill="#6b6890">math &#183; algorithms &#183; geometry &#183; explainers</text>
+</svg>
