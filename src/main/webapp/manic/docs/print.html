@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5da9ee4a.js";
+            window.path_to_searchindex_js = "searchindex-27435fe8.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-1b03fd44.js"></script>
@@ -600,8 +600,9 @@ wait(1.4);
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/m-l37juylp8" title="One Loop → a Full Rainbow (manic)" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="conditionals--if"><a class="header" href="#conditionals--if">Conditionals — <code>if</code></a></h2>
-<pre><code class="language-manic">if depth &gt; 0 {
-  line(seg{k}, (x, y), (x2, y2));
+<pre><code class="language-manic">let n = 5;
+if n &gt; 3 {
+  circle(big, (cx, cy), 120);
 }
 </code></pre>
 <h2 id="macros--def"><a class="header" href="#macros--def">Macros — <code>def</code></a></h2>
@@ -621,7 +622,8 @@ branch(1, cx, h - 40, 1.5708, 150, 12);
 </code></pre>
 <h2 id="reductions"><a class="header" href="#reductions">Reductions</a></h2>
 <p>Fold a range into one number with <code>sum</code>, <code>prod</code>, <code>min</code>, <code>max</code>:</p>
-<pre><code class="language-manic">let total = sum(i in 1..n : i);   // 1 + 2 + … + (n-1)
+<pre><code class="language-manic">let n = 6;
+let total = sum(i in 1..n : i);   // 1 + 2 + … + (n-1)
 </code></pre>
 <p>That’s the whole language. The rest is <strong>kits</strong> — bundles of higher-level
 figures → <a href="#kits--math-geometry-algorithms">Kits</a>.</p>
