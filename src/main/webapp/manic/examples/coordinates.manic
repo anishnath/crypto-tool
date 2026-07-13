@@ -1,0 +1,52 @@
+// Coordinate Systems — a guided tour of manic's four coordinate frames:
+// Axes (ticks + labels), NumberPlane, PolarPlane, and ComplexPlane. Each frame
+// fades in, holds, then clears before the next — one centre, four lenses.
+//
+//   manic examples/coordinates.manic
+//   manic examples/coordinates.manic --record out --fps 60
+
+title("Coordinate Systems");
+canvas(1280, 720);
+
+text(head, (640, 120), "four ways to draw a plane");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 640), "");  color(cap, dim);  size(cap, 24);
+
+// --- the four systems, all centred; each starts hidden ---
+axes(ax, (640, 384), 540, 210, 45);          // + tick marks and integer labels
+plot(wave, (640, 384), 45, 45, sin, 7);       // y = sin(x) drawn on the axes
+color(wave, magenta);  untraced(wave);  hidden(ax);
+
+plane(pl, (640, 384), 560, 230, 56);   hidden(pl);
+polarplane(pp, (640, 384), 230, 5, 16);   hidden(pp);
+complexplane(cp, (640, 384), 560, 230, 56);   hidden(cp);
+
+// --- 1. Axes ---
+show(head, 0.5);
+section("Axes");
+say(cap, "a numbered cross — tick marks every unit");
+show(ax, 0.7);
+say(cap, "plot y = sin(x) on it");
+draw(wave, 1.1);
+wait(0.9);
+par { fade(ax, 0.4);  fade(wave, 0.4); }
+
+// --- 2. NumberPlane ---
+section("Number Plane");
+say(cap, "a full cartesian grid");
+show(pl, 0.7);
+wait(1.0);
+fade(pl, 0.4);
+
+// --- 3. PolarPlane ---
+section("Polar Plane");
+say(cap, "concentric rings and radial spokes — angle and radius");
+show(pp, 0.7);
+wait(1.0);
+fade(pp, 0.4);
+
+// --- 4. ComplexPlane ---
+section("Complex Plane");
+say(cap, "the same grid, read as real and imaginary parts");
+show(cp, 0.7);
+wait(1.4);

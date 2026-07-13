@@ -1,0 +1,59 @@
+// The Nine-Point Circle — one circle through the three side-midpoints AND the
+// three altitude feet. (It's the circumcircle of the medial triangle.)
+// Dynamic: drag C and the circle still catches all six points.
+//
+//   manic examples/nine_point.manic
+//   manic examples/nine_point.manic --record out --fps 60
+
+title("The Nine-Point Circle");
+canvas(1280, 720);
+
+text(head, (640, 120), "three midpoints + three feet, one circle");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 668), "");  color(cap, dim);  size(cap, 22);
+
+point(A, (320, 560), "A");
+point(B, (1000, 560), "B");
+point(C, (620, 175), "C");
+hidden(A);  hidden(B);  hidden(C);
+
+segment(ab, A, B);  segment(bc, B, C);  segment(ca, C, A);
+untraced(ab);  untraced(bc);  untraced(ca);
+
+// side midpoints
+midpoint(mAB, A, B);  midpoint(mBC, B, C);  midpoint(mCA, C, A);
+color(mAB, lime);  color(mBC, lime);  color(mCA, lime);
+hidden(mAB);  hidden(mBC);  hidden(mCA);
+
+// altitude feet
+foot(fA, A, B, C);  foot(fB, B, C, A);  foot(fC, C, A, B);
+color(fA, magenta);  color(fB, magenta);  color(fC, magenta);
+hidden(fA);  hidden(fB);  hidden(fC);
+
+// the nine-point circle = circumcircle of the medial triangle
+circumcircle(npc, mAB, mBC, mCA);  outline(npc, cyan);  untraced(npc);
+
+show(head, 0.5);
+say(cap, "start with a triangle");
+par { show(A);  show(B);  show(C); }
+par { draw(ab, 0.5);  draw(bc, 0.5);  draw(ca, 0.5); }
+wait(0.3);
+
+section("Six points");
+say(cap, "the three side-midpoints (lime)");
+stagger(0.2) { show(mAB);  show(mBC);  show(mCA); }
+say(cap, "and the three altitude feet (magenta)");
+stagger(0.2) { show(fA);  show(fB);  show(fC); }
+wait(0.4);
+
+section("One circle");
+say(cap, "a single circle passes through all six");
+draw(npc, 1.0);
+wait(0.6);
+
+section("Drag a vertex");
+say(cap, "move C — the circle still catches all six");
+move(C, (820, 220), 1.3, smooth);
+move(C, (440, 240), 1.3, smooth);
+move(C, (620, 175), 1.0, smooth);
+wait(1.0);

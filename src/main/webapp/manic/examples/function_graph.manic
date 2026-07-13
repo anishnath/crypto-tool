@@ -1,0 +1,54 @@
+// Function Graphs — plot ANY formula, not just a named curve. manic's answer to
+// Manim's FunctionGraph(lambda t: ...): pass a formula string in x (alias t) and
+// plot() samples it. This reproduces Manim's ExampleFunctionGraph — two
+// Fourier-style packets and a domain-clipped, lifted copy of the second.
+//
+//   manic examples/function_graph.manic
+//   manic examples/function_graph.manic --record out --fps 60
+
+title("Function Graphs");
+canvas(1280, 720);
+
+text(head, (640, 92), "plot any formula — y = f(x)");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 656), "");  color(cap, dim);  size(cap, 22);
+
+// a faint frame to read the curves against (unit = 70 px)
+plane(pl, (640, 384), 620, 300, 70);
+hidden(pl.grid);  untraced(pl.x);  untraced(pl.y);
+
+// a cosine packet: cos t + 1/2 cos 7t + 1/7 cos 14t, over x in [-7, 7]
+plot(cosf, (640, 384), 70, 70, "cos(x) + 0.5*cos(7*x) + (1/7)*cos(14*x)", 7);
+color(cosf, magenta);  untraced(cosf);
+
+// the sine version of the same packet
+plot(sinf, (640, 384), 70, 70, "sin(x) + 0.5*sin(7*x) + (1/7)*sin(14*x)", 7);
+color(sinf, cyan);  untraced(sinf);
+
+// same formula, clipped to x in [-4, 4] and lifted one unit (centre y - 70)
+plot(sinf2, (640, 314), 70, 70, "sin(x) + 0.5*sin(7*x) + (1/7)*sin(14*x)", 4);
+color(sinf2, lime);  untraced(sinf2);
+
+// --- reveal ---
+show(head, 0.5);
+section("The plane");
+say(cap, "a grid to read against — arrows on the axes");
+show(pl.grid, 0.6);
+par { draw(pl.x, 0.5);  draw(pl.y, 0.5); }
+wait(0.3);
+
+section("A cosine packet");
+say(cap, "y = cos t + 1/2 cos 7t + 1/7 cos 14t");
+draw(cosf, 1.3);
+wait(0.6);
+
+section("A sine packet");
+say(cap, "same shape, sin for cos");
+draw(sinf, 1.3);
+wait(0.6);
+
+section("Clip the domain");
+say(cap, "same formula, but only x in [-4, 4], lifted one unit");
+draw(sinf2, 1.1);
+par { pulse(cosf);  pulse(sinf);  pulse(sinf2); }
+wait(1.4);

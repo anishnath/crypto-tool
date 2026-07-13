@@ -1,0 +1,32 @@
+// Vector Field — a grid of arrows sampling a named field, coloured by
+// magnitude (cyan → lime → magenta), à la Manim's ArrowVectorField.
+//
+//   manic examples/vector_field.manic
+//   manic examples/vector_field.manic --record out --fps 60
+//
+// Named fields: radial, sink, swirl, saddle, wave, shear, uniform, spiral.
+
+title("Vector Field");
+canvas(1280, 720);
+
+text(head, (640, 118), "");  display(head);  color(head, cyan);  size(head, 34);  hidden(head);
+text(cap, (640, 668), "");   color(cap, dim);  size(cap, 22);
+
+// two fields, revealed in turn
+arrowfield(swirl, (640, 384), 520, 250, swirl, 15);
+untraced(swirl);
+arrowfield(rad, (640, 384), 520, 250, radial, 15);
+untraced(rad);  hidden(rad);
+
+show(head, 0.4);
+say(head, "swirl");
+say(cap, "a rotational field: (-y, x)");
+draw(swirl, 1.2);
+wait(1.0);
+
+section("Radial");
+say(head, "radial");
+say(cap, "an outward source: (x, y) — arrows grow with distance");
+par { fade(swirl, 0.5);  show(rad, 0.01); }
+draw(rad, 1.2);
+wait(1.2);

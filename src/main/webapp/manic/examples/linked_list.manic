@@ -1,0 +1,38 @@
+// Linked List — classic anatomy, three variations. A node is a framed box split
+// into compartments: singly `[ data | .next ]`, doubly `[ .prev | data | next. ]`,
+// where a pointer field carries a dot its arrow starts from. `head` marks the
+// entry node; the tail's `next` ends at `NULL` (singly/doubly) or curves back to
+// the head (circular). `insert`/`remove` re-thread the pointers — no shifting.
+//
+//   manic examples/linked_list.manic
+
+title("Linked List");
+canvas("16:9");
+
+text(head, (cx, 56), "node = data + pointer field(s); head in, NULL or loop at the tail");
+display(head);  color(head, cyan);  size(head, 24);  hidden(head);
+text(cap, (cx, 700), "");  color(cap, dim);  size(cap, 24);
+
+text(t1, (150, 160), "singly");    color(t1, lime);   size(t1, 22);
+text(t2, (150, 350), "doubly");    color(t2, lime);   size(t2, 22);
+text(t3, (150, 545), "circular");  color(t3, lime);   size(t3, 22);
+
+list(sa, "3 8 5", (cx, 160), singly, 64, 50);
+list(da, "3 8 5", (cx, 350), doubly, 64, 50);
+list(ca, "3 8 5", (cx, 545), circular, 64, 50);
+
+show(head, 0.5);
+say(cap, "three classic variations of the same idea");
+wait(0.9);
+
+section("Insert");
+say(cap, "insert 7 after node 1 in the doubly list — pointers re-thread, no shift");
+insert(da, 1, "7");
+wait(0.6);
+
+section("Remove");
+say(cap, "remove the head of the singly list — the list re-points past it");
+remove(sa, 0);
+
+say(cap, "data + pointers: the whole family from one primitive");
+wait(1.4);

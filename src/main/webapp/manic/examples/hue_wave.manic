@@ -1,0 +1,35 @@
+// Hue Wave — a ring of dots, each with its own starting hue, all advancing
+// their hue at the same rate so the rainbow *rotates* around the ring. Shows
+// off `hue` as an animatable track: `to(id, hue, degrees)` cycles colour over
+// time (unlike `recolor`, it travels around the colour wheel, not through grey).
+//
+//   manic examples/hue_wave.manic
+//   manic examples/hue_wave.manic --record out --fps 60
+
+title("Hue Wave");
+canvas(1280, 720);
+
+text(head, (640, 110), "an animated hue track — colour that cycles");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+let n = 36;   let cx = 640;   let cy = 400;   let r = 210;
+
+// a ring of dots, rainbow-coloured by angle
+for i in 0..n {
+  let a = tau * i / n;
+  dot(d{i}, (cx + r*cos(a), cy + r*sin(a)), 18);
+  hue(d{i}, 360 * i / n);
+  glow(d{i}, 1.4);
+  tag(d{i}, ring);
+}
+
+// --- script ---
+show(head, 0.5);
+
+// spin the whole rainbow: every dot advances its hue by 720 deg (two full
+// cycles) over 6s, in parallel — the pattern rotates around the ring
+par {
+  for i in 0..n {
+    to(d{i}, hue, 360*i/n + 720, 6.0, linear);
+  }
+}

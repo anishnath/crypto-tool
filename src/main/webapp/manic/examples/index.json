@@ -1,0 +1,335 @@
+{
+  "count": 45,
+  "categories": [
+    {
+      "slug": "algorithms",
+      "title": "Algorithms & data structures",
+      "examples": [
+        {
+          "name": "bubble_sort",
+          "file": "bubble_sort.manic",
+          "title": "Bubble sort",
+          "desc": "Real sliding swaps; array + compare + swap."
+        },
+        {
+          "name": "two_pointer",
+          "file": "two_pointer.manic",
+          "title": "Two pointer",
+          "desc": "lo/hi index carets scanning inward on a sorted array."
+        },
+        {
+          "name": "stack_queue",
+          "file": "stack_queue.manic",
+          "title": "Stack queue",
+          "desc": "LIFO stack + FIFO queue, with action-point carets."
+        },
+        {
+          "name": "linked_list",
+          "file": "linked_list.manic",
+          "title": "Linked list",
+          "desc": "Singly / doubly / circular \u2014 node anatomy + pointer re-threading."
+        },
+        {
+          "name": "hashmap",
+          "file": "hashmap.manic",
+          "title": "Hashmap",
+          "desc": "Hash a key to a bucket; collisions chain on."
+        }
+      ]
+    },
+    {
+      "slug": "graphs",
+      "title": "Graphs",
+      "examples": [
+        {
+          "name": "graph",
+          "file": "graph.manic",
+          "title": "Graph",
+          "desc": "Labelled nodes + edges, drawn on; reflowing links."
+        },
+        {
+          "name": "graph_moving",
+          "file": "graph_moving.manic",
+          "title": "Graph moving",
+          "desc": "Drag a vertex and its incident edges follow."
+        },
+        {
+          "name": "bfs_dfs",
+          "file": "bfs_dfs.manic",
+          "title": "Bfs dfs",
+          "desc": "The same graph, queue vs stack, with live frontier readouts."
+        },
+        {
+          "name": "dijkstra",
+          "file": "dijkstra.manic",
+          "title": "Dijkstra",
+          "desc": "Weighted edges, settling distances, a shortest-path tree."
+        }
+      ]
+    },
+    {
+      "slug": "calculus",
+      "title": "Calculus & functions",
+      "examples": [
+        {
+          "name": "sine_wave",
+          "file": "sine_wave.manic",
+          "title": "Sine wave",
+          "desc": "axes + plot, a curve traced on, then vectors."
+        },
+        {
+          "name": "function_graph",
+          "file": "function_graph.manic",
+          "title": "Function graph",
+          "desc": "Plot an expression straight from a formula string."
+        },
+        {
+          "name": "area_under_curve",
+          "file": "area_under_curve.manic",
+          "title": "Area under curve",
+          "desc": "Riemann rectangles sweeping to the integral."
+        },
+        {
+          "name": "riemann_rainbow",
+          "file": "riemann_rainbow.manic",
+          "title": "Riemann rainbow",
+          "desc": "Coloured Riemann rectangles revealed one by one."
+        },
+        {
+          "name": "riemann_readout",
+          "file": "riemann_readout.manic",
+          "title": "Riemann readout",
+          "desc": "Running sums shown as a live computed number."
+        }
+      ]
+    },
+    {
+      "slug": "linalg",
+      "title": "Linear algebra & tables",
+      "examples": [
+        {
+          "name": "matrix",
+          "file": "matrix.manic",
+          "title": "Matrix",
+          "desc": "A bracketed matrix, rows/columns addressable via tags."
+        },
+        {
+          "name": "matrix_addition",
+          "file": "matrix_addition.manic",
+          "title": "Matrix addition",
+          "desc": "Two matrices summed, cell by cell."
+        },
+        {
+          "name": "matrix_addition_plane",
+          "file": "matrix_addition_plane.manic",
+          "title": "Matrix addition plane",
+          "desc": "The same sum, laid out on a coordinate plane."
+        },
+        {
+          "name": "linear_transform",
+          "file": "linear_transform.manic",
+          "title": "Linear transform",
+          "desc": "A 2x2 matrix shearing a grid + basis vectors."
+        },
+        {
+          "name": "table",
+          "file": "table.manic",
+          "title": "Table",
+          "desc": "A ruled table; cells, rows, columns, labels addressable."
+        },
+        {
+          "name": "table_braces",
+          "file": "table_braces.manic",
+          "title": "Table braces",
+          "desc": "A table annotated with braces."
+        }
+      ]
+    },
+    {
+      "slug": "vectors",
+      "title": "Vectors, fields & coordinates",
+      "examples": [
+        {
+          "name": "vector_field",
+          "file": "vector_field.manic",
+          "title": "Vector field",
+          "desc": "A magnitude-coloured vector field."
+        },
+        {
+          "name": "coordinates",
+          "file": "coordinates.manic",
+          "title": "Coordinates",
+          "desc": "Axes, planes, number lines, polar & complex planes."
+        },
+        {
+          "name": "pie",
+          "file": "pie.manic",
+          "title": "Pie",
+          "desc": "A pie chart built from sectors."
+        }
+      ]
+    },
+    {
+      "slug": "geometry",
+      "title": "Geometry (olympiad)",
+      "examples": [
+        {
+          "name": "equilateral",
+          "file": "equilateral.manic",
+          "title": "Equilateral",
+          "desc": "Euclid I.1 \u2014 an equilateral triangle from two circles."
+        },
+        {
+          "name": "triangle",
+          "file": "triangle.manic",
+          "title": "Triangle",
+          "desc": "A triangle with its centres and cevians."
+        },
+        {
+          "name": "incircle_tangents",
+          "file": "incircle_tangents.manic",
+          "title": "Incircle tangents",
+          "desc": "The incircle and its tangent points."
+        },
+        {
+          "name": "tangents",
+          "file": "tangents.manic",
+          "title": "Tangents",
+          "desc": "Tangent lines from a point to a circle."
+        },
+        {
+          "name": "orthocenter",
+          "file": "orthocenter.manic",
+          "title": "Orthocenter",
+          "desc": "The orthocentre from the three altitudes."
+        },
+        {
+          "name": "euler_line",
+          "file": "euler_line.manic",
+          "title": "Euler line",
+          "desc": "The Euler line through centroid, circumcentre, orthocentre."
+        },
+        {
+          "name": "nine_point",
+          "file": "nine_point.manic",
+          "title": "Nine point",
+          "desc": "The nine-point circle."
+        },
+        {
+          "name": "conics",
+          "file": "conics.manic",
+          "title": "Conics",
+          "desc": "Ellipse, parabola, hyperbola."
+        }
+      ]
+    },
+    {
+      "slug": "transforms",
+      "title": "Transforms & morphing",
+      "examples": [
+        {
+          "name": "transforms",
+          "file": "transforms.manic",
+          "title": "Transforms",
+          "desc": "Apply a 2x2 matrix (ApplyMatrix) to a group."
+        },
+        {
+          "name": "transform_copy",
+          "file": "transform_copy.manic",
+          "title": "Transform copy",
+          "desc": "Duplicate an entity, then transform the copy."
+        },
+        {
+          "name": "morph",
+          "file": "morph.manic",
+          "title": "Morph",
+          "desc": "A sampled-point shape morph from A to B."
+        }
+      ]
+    },
+    {
+      "slug": "text",
+      "title": "Text & UI",
+      "examples": [
+        {
+          "name": "typewriter",
+          "file": "typewriter.manic",
+          "title": "Typewriter",
+          "desc": "Text revealed character by character."
+        },
+        {
+          "name": "captions",
+          "file": "captions.manic",
+          "title": "Captions",
+          "desc": "Karaoke / word-pop caption modes."
+        },
+        {
+          "name": "terminal_boot",
+          "file": "terminal_boot.manic",
+          "title": "Terminal boot",
+          "desc": "The neon terminal template booting up."
+        },
+        {
+          "name": "brace",
+          "file": "brace.manic",
+          "title": "Brace",
+          "desc": "The curly-brace family."
+        },
+        {
+          "name": "banner",
+          "file": "banner.manic",
+          "title": "Banner",
+          "desc": "The manic logo / banner reveal."
+        }
+      ]
+    },
+    {
+      "slug": "generative",
+      "title": "Generative & recursive",
+      "examples": [
+        {
+          "name": "fractal_tree",
+          "file": "fractal_tree.manic",
+          "title": "Fractal tree",
+          "desc": "One recursive def, drawn to depth 12."
+        },
+        {
+          "name": "hue_wave",
+          "file": "hue_wave.manic",
+          "title": "Hue wave",
+          "desc": "An animated hue wave across a grid."
+        },
+        {
+          "name": "hill_run",
+          "file": "hill_run.manic",
+          "title": "Hill run",
+          "desc": "A little scene animated with the language layer."
+        },
+        {
+          "name": "equal_cuts",
+          "file": "equal_cuts.manic",
+          "title": "Equal cuts",
+          "desc": "A circle halved again and again (pizza cuts)."
+        },
+        {
+          "name": "archimedes_pi",
+          "file": "archimedes_pi.manic",
+          "title": "Archimedes pi",
+          "desc": "Bounding pi with inscribed / circumscribed polygons."
+        }
+      ]
+    },
+    {
+      "slug": "boolean",
+      "title": "Boolean shapes",
+      "examples": [
+        {
+          "name": "boolean",
+          "file": "boolean.manic",
+          "title": "Boolean",
+          "desc": "Union / intersection / difference of shapes."
+        }
+      ]
+    }
+  ]
+}

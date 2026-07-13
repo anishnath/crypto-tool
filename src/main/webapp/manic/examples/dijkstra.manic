@@ -1,0 +1,29 @@
+// Dijkstra — single-source shortest paths on a WEIGHTED graph. Give edges a
+// weight with `a-b:w` (drawn as a midpoint label). `dijkstra(g, start)` reads the
+// weights, then runs the classic loop: repeatedly settle the nearest unsettled
+// node (magenta -> lime), relaxing its edges and lowering neighbours' distances.
+// Each node shows its best-known distance (inf -> the final shortest distance),
+// and the shortest-path-tree edges stay lit at the end.
+//
+//   manic examples/dijkstra.manic
+
+title("Dijkstra");
+canvas("16:9");
+
+text(head, (cx, 58), "shortest paths: settle the nearest node, relax its edges");
+display(head);  color(head, cyan);  size(head, 25);  hidden(head);
+text(cap, (cx, 690), "");  color(cap, dim);  size(cap, 24);
+
+graph(g, "a b c d e f",
+      "a-b:2 a-c:5 b-c:1 b-d:4 c-e:3 d-e:1 d-f:2 e-f:6",
+      circular, (cx, 350), 210, 30);
+
+show(head, 0.5);
+say(cap, "each node shows its best distance: start 0, the rest inf");
+wait(0.7);
+
+section("Relax");
+say(cap, "settle the nearest node, then relax every edge leaving it");
+dijkstra(g, a);
+say(cap, "settled distances are final; the lime edges form the shortest-path tree");
+wait(1.4);

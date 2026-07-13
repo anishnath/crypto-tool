@@ -1,0 +1,31 @@
+// Captions — karaoke word highlighting and TikTok-style word pop-in. `caption`
+// lays out a phrase's words in a centred row (as {id}.w0, {id}.w1, ... tagged
+// {id}.words); `karaoke` highlights them in sequence; `wordpop` pops them in one
+// at a time.
+//
+//   manic examples/captions.manic
+//   manic examples/captions.manic --record out --fps 60
+
+title("Captions");
+canvas("16:9");
+
+text(head, (cx, 110), "word-by-word: karaoke + pop-in");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+// karaoke: starts dim, words light up in sequence
+caption(kara, "follow the bouncing highlight", (cx, 280), 46, dim);
+
+// word-pop: hidden first, then each word pops in
+caption(pop, "each word pops right in", (cx, 440), 50, lime);
+hidden(pop.words);
+
+// --- script ---
+show(head, 0.5);
+
+section("Karaoke");
+karaoke(kara, 0.34, cyan);
+wait(0.8);
+
+section("Word pop");
+wordpop(pop, 0.14);
+wait(1.6);

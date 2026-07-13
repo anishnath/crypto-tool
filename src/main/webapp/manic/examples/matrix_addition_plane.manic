@@ -1,0 +1,91 @@
+// Matrix Addition, Geometrically — a 2x1 matrix IS a vector. Adding two of them
+//
+//     [3]   [1]   [4]
+//     [1] + [2] = [3]
+//
+// is the same as sliding one arrow onto the tip of the other (tip-to-tail) and
+// reading off where you land. The column matrices at the top stay in lockstep
+// with the arrows on the plane, so you see the algebra and the geometry at once.
+//
+//   manic examples/matrix_addition_plane.manic
+//   manic examples/matrix_addition_plane.manic --record out --fps 60
+
+title("Matrix Addition on the Plane");
+canvas(1280, 720);
+
+text(head, (640, 96), "a 2x1 matrix is a vector — adding them is tip-to-tail");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 686), "");  color(cap, dim);  size(cap, 24);
+
+// --- the equation, as column matrices across the top ---
+matrix(MA, "3; 1", (452, 186), 44, 42);   color(MA, cyan);
+text(plus, (528, 186), "+");   display(plus);   color(plus, dim);   size(plus, 40);   hidden(plus);
+matrix(MB, "1; 2", (600, 186), 44, 42);   color(MB, magenta);
+text(eq,  (676, 186), "=");    display(eq);     color(eq, dim);     size(eq, 40);     hidden(eq);
+matrix(MC, "4; 3", (748, 186), 44, 42);   color(MC, lime);
+
+// --- the plane, centred low so the arrows have room to climb ---
+plane(pl, (640, 438), 560, 250, 48);
+
+// vectors from the plane's origin (dy is up); unit = 48 px
+vector(va, (640, 438), (144, 48),  cyan);      // a = (3, 1) -> tip (784, 390)
+vector(vb, (640, 438), (48, 96),   magenta);   // b = (1, 2) -> tip (688, 342)
+vector(vs, (640, 438), (192, 144), lime);      // a+b = (4, 3) -> tip (832, 294)
+
+// the two translated copies that build the parallelogram
+arrow(vb2, (784, 390), (832, 294));   color(vb2, magenta);   glow(vb2, 0);
+arrow(va2, (688, 342), (832, 294));   color(va2, cyan);      glow(va2, 0);
+
+// everything but the plane grid starts hidden / untraced
+untraced(pl.x);  untraced(pl.y);  hidden(pl.grid);
+untraced(va);  untraced(vb);  untraced(vs);  untraced(vb2);  untraced(va2);
+untraced(MA.lbrack);  untraced(MA.rbrack);  hidden(MA);
+untraced(MB.lbrack);  untraced(MB.rbrack);  hidden(MB);
+untraced(MC.lbrack);  untraced(MC.rbrack);  hidden(MC);
+
+// --- reveal the plane ---
+show(head, 0.5);
+section("The plane");
+say(cap, "a cartesian grid, arrows pinned to the origin");
+show(pl.grid, 0.6);
+par { draw(pl.x, 0.5);  draw(pl.y, 0.5); }
+wait(0.3);
+
+// --- vector a ---
+section("Vector a");
+say(cap, "a = [3, 1] — three right, one up");
+par { draw(MA.lbrack, 0.3);  draw(MA.rbrack, 0.3); }
+par { show(MA, 0.3);  draw(va, 0.6); }
+wait(0.4);
+
+// --- vector b ---
+section("Vector b");
+say(cap, "b = [1, 2] — one right, two up");
+show(plus, 0.3);
+par { draw(MB.lbrack, 0.3);  draw(MB.rbrack, 0.3); }
+par { show(MB, 0.3);  draw(vb, 0.6); }
+wait(0.4);
+
+// --- tip to tail ---
+section("Tip to tail");
+say(cap, "slide b so its tail sits on the tip of a");
+draw(vb2, 0.7);
+wait(0.5);
+
+// --- the sum ---
+section("The sum");
+say(cap, "the arrow to that new point is a + b = [4, 3]");
+show(eq, 0.3);
+par { draw(MC.lbrack, 0.3);  draw(MC.rbrack, 0.3); }
+par { show(MC, 0.3);  draw(vs, 0.8); }
+par { pulse(vs);  flash(MC, lime); }
+wait(0.6);
+
+// --- parallelogram ---
+section("Either order");
+say(cap, "slide a onto b instead — same point. a + b = b + a");
+draw(va2, 0.7);
+wait(0.4);
+say(cap, "the two paths frame a parallelogram; a + b is its diagonal");
+par { pulse(va);  pulse(vb);  pulse(vs); }
+wait(1.4);

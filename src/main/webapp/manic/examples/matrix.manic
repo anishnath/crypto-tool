@@ -1,0 +1,37 @@
+// Matrix — a bracketed grid of entries, addressable by row and column via tag
+// broadcast (à la Manim's Matrix + set_row_colors / set_column_colors).
+//
+//   manic examples/matrix.manic
+//   manic examples/matrix.manic --record out --fps 60
+//
+// Rows are separated by ';', entries by spaces/commas. Entry ids m.r{i}c{j};
+// tags m.row{i} / m.col{j} / m.entries.
+
+title("Matrix");
+canvas(1280, 720);
+
+text(head, (640, 130), "rows and columns you can address");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 620), "");  color(cap, dim);  size(cap, 22);
+
+matrix(m, "2 0 4; -1 1 5; 3 -2 0", (640, 370));
+untraced(m.lbrack);  untraced(m.rbrack);
+hidden(m.entries);
+
+show(head, 0.5);
+say(cap, "a 3x3 matrix");
+par { draw(m.lbrack, 0.5);  draw(m.rbrack, 0.5); }
+seq { show(m.row0, 0.35);  show(m.row1, 0.35);  show(m.row2, 0.35); }
+wait(0.5);
+
+section("Columns");
+say(cap, "colour a column — set_column_colors");
+recolor(m.col1, magenta, 0.4);
+flash(m.col2, cyan);
+wait(0.5);
+
+section("Rows");
+say(cap, "and highlight a row — set_row_colors");
+recolor(m.row0, lime, 0.4);
+par { pulse(m.r0c0);  pulse(m.r0c1);  pulse(m.r0c2); }
+wait(1.2);

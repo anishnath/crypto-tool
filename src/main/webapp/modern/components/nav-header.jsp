@@ -70,9 +70,9 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/exams/" class="nav-link">
+                <a href="<%=request.getContextPath()%>/manic" class="nav-link">
                     <span>🎓</span>
-                    <span>Education</span>
+                    <span>Manic</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -82,9 +82,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/tutorials/" class="nav-link">
+                <a href="<%=request.getContextPath()%>/code-playground" class="nav-link">
                     <span>📚</span>
-                    <span>Learn to Code</span>
+                    <span>Code Playground</span>
                 </a>
             </li>
             <li class="nav-item">

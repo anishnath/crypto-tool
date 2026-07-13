@@ -1,0 +1,51 @@
+// The Euler Line — in any triangle, the circumcenter O, centroid G, and
+// orthocenter H are collinear (and OG : GH = 1 : 2). Constructions are
+// dynamic: drag C and the three centres stay on one line.
+//
+//   manic examples/euler_line.manic
+//   manic examples/euler_line.manic --record out --fps 60
+
+title("The Euler Line");
+canvas(1280, 720);
+
+text(head, (640, 120), "circumcenter, centroid, orthocenter — collinear");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 668), "");  color(cap, dim);  size(cap, 22);
+
+point(A, (300, 560), "A");
+point(B, (1000, 540), "B");
+point(C, (560, 190), "C");
+hidden(A);  hidden(B);  hidden(C);
+
+segment(ab, A, B);  segment(bc, B, C);  segment(ca, C, A);
+untraced(ab);  untraced(bc);  untraced(ca);
+circumcircle(cc, A, B, C);  untraced(cc);
+
+circumcenter(O, A, B, C);  color(O, magenta);  label(O, "O", (18, -14));  hidden(O);
+centroid(G, A, B, C);      color(G, lime);     label(G, "G", (18, -14));  hidden(G);
+orthocenter(H, A, B, C);   color(H, cyan);     label(H, "H", (-30, -14)); hidden(H);
+segment(euler, O, H);      color(euler, magenta);  stroke(euler, 3);  untraced(euler);
+
+show(head, 0.5);
+say(cap, "any triangle, with its circumcircle");
+par { show(A);  show(B);  show(C); }
+par { draw(ab, 0.5);  draw(bc, 0.5);  draw(ca, 0.5); }
+draw(cc, 0.9);
+wait(0.4);
+
+section("Three centres");
+say(cap, "circumcenter O, centroid G, orthocenter H");
+stagger(0.3) { show(O);  show(G);  show(H); }
+wait(0.4);
+
+section("The Euler line");
+say(cap, "they always lie on a single line");
+draw(euler, 0.9);
+wait(0.6);
+
+section("Drag a vertex");
+say(cap, "move C — O, G, H stay collinear");
+move(C, (770, 220), 1.2, smooth);
+move(C, (420, 250), 1.2, smooth);
+move(C, (560, 190), 1.0, smooth);
+wait(1.0);

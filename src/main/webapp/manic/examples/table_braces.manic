@@ -1,0 +1,54 @@
+// Table + Braces — a quarterly sales table, annotated with curly braces that
+// group its columns (the four quarters into two halves of the year) and its
+// rows (the two regions). A practical pattern: use a table for the data and
+// braces to call out how its rows/columns cluster.
+//
+// The brace coordinates are aligned to the table's grid lines by hand — the
+// table is centred at (640,360) with 110x70 cells, so its vertical rules fall
+// at x = 365 + k*110 and its rows span y = 325..465.
+//
+//   manic examples/table_braces.manic
+//   manic examples/table_braces.manic --record out --fps 60
+
+title("Sales by Region");
+canvas(1280, 720);
+
+text(head, (640, 96), "a data table, with its groups braced");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 640), "");  color(cap, dim);  size(cap, 24);
+
+// rows = regions, columns = quarters; body cells are sales (in $k)
+table(t, "12 15 18 20; 9 11 14 16", (640, 360), 110, 70, "Q1 Q2 Q3 Q4", "North South");
+untraced(t.lines);
+hidden(t.labels);  hidden(t.entries);
+
+// column braces over the header row (bulge up: points run right -> left)
+bracelabel(h1, (695, 248), (475, 248), "H1", 26);   color(h1, magenta);   hidden(h1);
+bracelabel(h2, (915, 248), (695, 248), "H2", 26);    color(h2, lime);      hidden(h2);
+
+// a vertical brace to the left of the row labels, grouping the two regions
+bracelabel(reg, (356, 325), (356, 465), "Regions", 26);   color(reg, cyan);   hidden(reg);
+
+// --- reveal the table ---
+show(head, 0.5);
+say(cap, "quarterly sales for two regions");
+draw(t.lines, 1.0);
+show(t.labels, 0.5);
+show(t.entries, 0.5);
+wait(0.4);
+
+// --- brace the columns into halves of the year ---
+section("Halves of the year");
+say(cap, "Q1-Q2 are the first half, Q3-Q4 the second");
+par { flash(t.col0, magenta);  flash(t.col1, magenta); }
+show(h1, 0.5);
+par { flash(t.col2, lime);  flash(t.col3, lime); }
+show(h2, 0.5);
+wait(0.4);
+
+// --- brace the rows into regions ---
+section("The regions");
+say(cap, "and the two rows are the regions");
+par { flash(t.rowlabel0, cyan);  flash(t.rowlabel1, cyan); }
+show(reg, 0.6);
+wait(1.4);

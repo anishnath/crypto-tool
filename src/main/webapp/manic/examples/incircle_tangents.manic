@@ -1,0 +1,64 @@
+// The Incircle & Contact Triangle — the incircle touches each side at the foot
+// of the perpendicular from the incenter, and each radius meets the side at a
+// right angle. The three touch points form the contact triangle.
+//
+//   manic examples/incircle_tangents.manic
+//   manic examples/incircle_tangents.manic --record out --fps 60
+
+title("The Incircle");
+canvas(1280, 720);
+
+text(head, (640, 120), "tangent to all three sides");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 668), "");  color(cap, dim);  size(cap, 22);
+
+point(A, (300, 560), "A");
+point(B, (1000, 560), "B");
+point(C, (640, 160), "C");
+hidden(A);  hidden(B);  hidden(C);
+
+segment(ab, A, B);  segment(bc, B, C);  segment(ca, C, A);
+untraced(ab);  untraced(bc);  untraced(ca);
+
+incenter(I, A, B, C);   color(I, cyan);   label(I, "I", (16, -14));  hidden(I);
+incircle(ic, A, B, C);  untraced(ic);
+
+// touch points = feet of perpendiculars from I to each side
+foot(tBC, I, B, C);  foot(tCA, I, C, A);  foot(tAB, I, A, B);
+color(tBC, magenta);  color(tCA, magenta);  color(tAB, magenta);
+hidden(tBC);  hidden(tCA);  hidden(tAB);
+
+// radii to the touch points, with right-angle marks
+segment(rBC, I, tBC);  segment(rCA, I, tCA);  segment(rAB, I, tAB);
+color(rBC, lime);  color(rCA, lime);  color(rAB, lime);
+untraced(rBC);  untraced(rCA);  untraced(rAB);
+rightangle(qBC, I, tBC, B);  rightangle(qCA, I, tCA, C);  rightangle(qAB, I, tAB, A);
+untraced(qBC);  untraced(qCA);  untraced(qAB);
+
+// the contact triangle
+segment(k1, tBC, tCA);  segment(k2, tCA, tAB);  segment(k3, tAB, tBC);
+untraced(k1);  untraced(k2);  untraced(k3);
+
+show(head, 0.5);
+say(cap, "a triangle and its incentre I");
+par { show(A);  show(B);  show(C); }
+par { draw(ab, 0.5);  draw(bc, 0.5);  draw(ca, 0.5); }
+show(I, 0.3);
+wait(0.3);
+
+section("Inscribed circle");
+say(cap, "the incircle touches each side once");
+draw(ic, 1.0);
+stagger(0.15) { show(tBC);  show(tCA);  show(tAB); }
+wait(0.3);
+
+section("Radii ⟂ sides");
+say(cap, "each radius meets its side at a right angle");
+par { draw(rBC, 0.5);  draw(rCA, 0.5);  draw(rAB, 0.5); }
+par { draw(qBC, 0.4);  draw(qCA, 0.4);  draw(qAB, 0.4); }
+wait(0.4);
+
+section("Contact triangle");
+say(cap, "the three touch points form the contact triangle");
+par { draw(k1, 0.5);  draw(k2, 0.5);  draw(k3, 0.5); }
+wait(1.2);

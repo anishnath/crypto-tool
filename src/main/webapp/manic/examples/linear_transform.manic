@@ -1,0 +1,43 @@
+// Linear Transformation — a 2x2 matrix bends the whole plane. The grid, the
+// basis vectors i-hat / j-hat, and a sample point all carry the tag `pl`, so a
+// single `transform` applies the matrix to everything at once (Manim's
+// ApplyMatrix). Straight lines stay straight; the grid shears / rotates.
+//
+//   manic examples/linear_transform.manic
+//   manic examples/linear_transform.manic --template blueprint
+
+title("Linear Transformation");
+canvas("16:9");
+
+let ox = cx;   let oy = cy;
+
+text(head, (cx, 84), "a matrix bends the whole plane -- watch the grid");
+display(head);  color(head, cyan);  size(head, 24);  hidden(head);
+text(cap, (cx, 672), "");  color(cap, dim);  size(cap, 23);
+
+// the plane (its grid + axes are all tagged `pl`)
+plane(pl, (ox, oy), 580, 320, 60);
+// basis vectors + a sample point, all tagged `pl` so they transform together
+vector(vi, (ox, oy), (120, 0), cyan);      stroke(vi, 4);   tag(vi, pl);
+vector(vj, (ox, oy), (0, -120), magenta);  stroke(vj, 4);   tag(vj, pl);
+dot(mark, (ox + 180, oy - 100), 9);  color(mark, lime);  glow(mark, 1.6);  tag(mark, pl);
+
+// --- script ---
+show(head, 0.5);
+say(cap, "the identity grid, with i-hat (cyan) and j-hat (magenta)");
+wait(0.7);
+
+section("Shear");
+say(cap, "shear: i-hat stays put, j-hat leans over");
+transform(pl, (ox, oy), 1, 0.5, 0, 1, 1.4, smooth);
+wait(0.8);
+
+section("Undo");
+say(cap, "the inverse matrix brings it right back");
+transform(pl, (ox, oy), 1, -0.5, 0, 1, 1.4, smooth);
+wait(0.6);
+
+section("Rotate");
+say(cap, "a rotation matrix turns the whole plane");
+transform(pl, (ox, oy), 0.707, -0.707, 0.707, 0.707, 1.5, smooth);
+wait(1.3);

@@ -1,0 +1,46 @@
+// Boolean Ops — combine two shapes into a new region: union, intersection,
+// difference, exclusion (xor). Each cell overlaps a square (cyan outline) and
+// a circle (magenta outline); the filled lime shape is the result.
+//
+//   manic examples/boolean.manic
+//   manic examples/boolean.manic --record out --fps 60
+
+title("Boolean Ops");
+canvas(1280, 720);
+
+text(head, (640, 118), "boolean shape ops");
+display(head);  color(head, cyan);  size(head, 36);  hidden(head);
+
+// --- union (top-left) ---
+rect(aS, (330, 300), 130, 130);  outlined(aS);  outline(aS, cyan);     opacity(aS, 0.4);
+circle(aC, (400, 250), 78);      outlined(aC);  outline(aC, magenta);  opacity(aC, 0.4);
+union(aR, aS, aC, lime);         hidden(aR);
+text(aL, (365, 430), "union");   color(aL, dim);  size(aL, 22);
+
+// --- intersection (top-right) ---
+rect(bS, (880, 300), 130, 130);  outlined(bS);  outline(bS, cyan);     opacity(bS, 0.4);
+circle(bC, (950, 250), 78);      outlined(bC);  outline(bC, magenta);  opacity(bC, 0.4);
+intersect(bR, bS, bC, lime);     hidden(bR);
+text(bL, (915, 430), "intersection");  color(bL, dim);  size(bL, 20);
+
+// --- difference (bottom-left): square minus circle ---
+rect(cS, (330, 545), 130, 130);  outlined(cS);  outline(cS, cyan);     opacity(cS, 0.4);
+circle(cC, (400, 495), 78);      outlined(cC);  outline(cC, magenta);  opacity(cC, 0.4);
+difference(cR, cS, cC, lime);    hidden(cR);
+text(cL, (355, 675), "difference (rect - circle)");  color(cL, dim);  size(cL, 18);
+
+// --- exclusion / xor (bottom-right) ---
+rect(dS, (880, 545), 130, 130);  outlined(dS);  outline(dS, cyan);     opacity(dS, 0.4);
+circle(dC, (950, 495), 78);      outlined(dC);  outline(dC, magenta);  opacity(dC, 0.4);
+xor(dR, dS, dC, lime);           hidden(dR);
+text(dL, (915, 675), "exclusion (xor)");  color(dL, dim);  size(dL, 18);
+
+// --- script: reveal each result in turn ---
+show(head, 0.5);
+stagger(0.3) {
+  show(aR, 0.4);
+  show(bR, 0.4);
+  show(cR, 0.4);
+  show(dR, 0.4);
+}
+wait(1.5);

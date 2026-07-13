@@ -1,0 +1,46 @@
+// Braces — label spans and parts with curly braces, manic's Brace / BraceLabel
+// / BraceBetweenPoints. A length is split into two parts a and b; a brace under
+// each names it, and a brace over the whole names the sum. Every brace here is
+// a BraceBetweenPoints (two points + a depth); bracelabel adds the text.
+//
+//   manic examples/brace.manic
+//   manic examples/brace.manic --record out --fps 60
+
+title("Braces");
+canvas(1280, 720);
+
+text(head, (640, 120), "label a span, or its parts");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 620), "");  color(cap, dim);  size(cap, 24);
+
+// the length, split at x = 680
+line(seg, (300, 360), (980, 360));  color(seg, fg);  stroke(seg, 3);  untraced(seg);
+dot(dl, (300, 360));   dot(dm, (680, 360));   dot(dr, (980, 360));
+color(dl, magenta);  color(dm, lime);  color(dr, cyan);
+hidden(dl);  hidden(dm);  hidden(dr);
+
+// braces under the two parts, and over the whole (bulges up: points go R->L)
+bracelabel(ba, (300, 392), (680, 392), "a", 30);        color(ba, magenta);
+bracelabel(bb, (680, 392), (980, 392), "b", 30);        color(bb, cyan);
+bracelabel(bt, (980, 320), (300, 320), "a + b", 34);    color(bt, lime);
+hidden(ba);  hidden(bb);  hidden(bt);
+
+// --- reveal ---
+show(head, 0.5);
+say(cap, "here is a length");
+draw(seg, 0.7);
+par { show(dl, 0.3);  show(dr, 0.3); }
+wait(0.3);
+
+section("Two parts");
+say(cap, "split it at a point into parts a and b");
+show(dm, 0.3);
+show(ba, 0.5);
+show(bb, 0.5);
+wait(0.5);
+
+section("The whole");
+say(cap, "the whole span is a + b");
+show(bt, 0.6);
+par { pulse(ba.label);  pulse(bb.label);  pulse(bt.label); }
+wait(1.4);

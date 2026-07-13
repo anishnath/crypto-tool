@@ -1,0 +1,61 @@
+// Riemann Rainbow — the area under y = sin(x) on [0, pi], sliced into rectangles
+// that each get their own neon hue and rise into place one by one, left to right.
+//
+// A showcase for the loop layer: one `for` builds all the bars (each `hue`d by
+// its index), and a `stagger` block sweeps them in. Exact area = 2.
+//
+//   manic examples/riemann_rainbow.manic
+//   manic examples/riemann_rainbow.manic --record out --fps 60
+
+title("Riemann Rainbow");
+canvas(1280, 720);
+
+// --- parameters ---
+let ox = 190;   let oy = 560;      // origin (screen px)
+let ux = 300;   let uy = 340;      // px per unit
+let a = 0;      let b = pi;         // y = sin(x) over [0, pi]
+let n = 28;     let dx = (b - a) / n;
+
+text(head, (640, 96), "area under y = sin(x), one slice at a time");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 640), "");  color(cap, dim);  size(cap, 24);
+
+// axes
+arrow(xax, (ox - 40, oy), (1180, oy));   color(xax, dim);  untraced(xax);
+arrow(yax, (ox, oy + 20), (ox, 180));    color(yax, dim);  untraced(yax);
+text(l0, (ox, oy + 26), "0");            color(l0, dim);  size(l0, 18);
+text(lp, (ox + b*ux, oy + 26), "pi");    color(lp, dim);  size(lp, 18);
+
+// the curve
+plot(curve, (ox, oy), ux, uy, "sin(x)", (a, b));  color(curve, fg);  z(curve, 5);  untraced(curve);
+
+// --- one rainbow bar per slice (midpoint heights) ---
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;
+  let h = sin(mid);
+  rect(bar{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(bar{i});
+  hue(bar{i}, 360 * i / n);      // each slice its own colour
+  opacity(bar{i}, 0.9);
+  tag(bar{i}, bars);
+}
+hidden(bars);
+
+// --- script ---
+show(head, 0.5);
+say(cap, "y = sin(x) from 0 to pi");
+par { draw(xax, 0.5);  draw(yax, 0.5); }
+draw(curve, 1.0);
+wait(0.3);
+
+section("Slice by slice");
+say(cap, "28 rectangles rise in, left to right");
+stagger(0.05) {
+  for i in 0..n { show(bar{i}, 0.35); }
+}
+wait(0.6);
+
+section("The area");
+say(cap, "together they fill the area under the curve = 2");
+par { pulse(curve); }
+wait(1.6);

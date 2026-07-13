@@ -1,0 +1,40 @@
+// Terminal Boot — a fake boot sequence typed out line by line, ending at a live
+// prompt with a blinking-style cursor. Shows off the `cursor` modifier, `type`
+// typewriter reveal, an author-set `masthead`, and the `terminal` template.
+//
+//   manic examples/terminal_boot.manic
+//   manic examples/terminal_boot.manic --record out --fps 60
+
+title("manic");
+canvas("16:9");
+template("terminal");
+masthead("manic ~ %", "READY");     // your own header text (no engine branding)
+
+text(l1, (cx, 210), "");   color(l1, lime);     size(l1, 24);
+text(l2, (cx, 260), "");   color(l2, cyan);     size(l2, 24);   hidden(l2);
+text(l3, (cx, 310), "");   color(l3, cyan);     size(l3, 24);   hidden(l3);
+text(l4, (cx, 360), "");   color(l4, lime);     size(l4, 24);   hidden(l4);
+text(prompt, (cx, 440), "");  color(prompt, fg);  size(prompt, 28);  display(prompt);
+hidden(prompt);  cursor(prompt);    // only the live prompt gets the cursor
+
+// --- boot log ---
+say(l1, "> initializing manic engine", 0.1);
+type(l1, 1.0);
+
+show(l2, 0.2);
+say(l2, "  loaded kits: std math geo algo brand", 0.1);
+type(l2, 1.3);
+
+show(l3, 0.2);
+say(l3, "  timeline: deterministic @ 60fps", 0.1);
+type(l3, 1.0);
+
+show(l4, 0.2);
+say(l4, "  ready.", 0.1);
+type(l4, 0.5);
+
+// --- the prompt, awaiting input ---
+show(prompt, 0.2);
+say(prompt, "manic ~ % render my_idea", 0.1);
+type(prompt, 1.2);
+wait(1.6);

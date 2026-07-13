@@ -1,0 +1,89 @@
+// Approximating pi — Archimedes' method (c. 250 BC): inscribe a regular polygon
+// in a circle and its perimeter closes in on the circumference. For an n-gon in
+// a circle of radius R the perimeter is 2R * n*sin(pi/n), so pi ~ n*sin(pi/n),
+// which -> pi as n grows. We sweep n = 6, 24, 96 (Archimedes' own 96-gon) and
+// zoom in to see the last polygon nearly kiss the circle.
+//
+// Uses: a `for` loop per polygon, computed estimates, a live counter, and the
+// camera (cam + zoom).
+//
+//   manic examples/archimedes_pi.manic
+//   manic examples/archimedes_pi.manic --record out --fps 60
+
+title("Approximating pi");
+canvas("16:9");
+
+let ox = 440;   let oy = 400;   let R = 240;   // circle centre + radius
+
+// the estimates, computed in-language
+let e6  = 6  * sin(pi/6);       // 3.000
+let e24 = 24 * sin(pi/24);      // 3.133
+let e96 = 96 * sin(pi/96);      // 3.141
+
+text(head, (640, 78), "Archimedes: straight lines closing in on a circle");
+display(head);  color(head, cyan);  size(head, 25);  hidden(head);
+text(cap, (640, 675), "");  color(cap, dim);  size(cap, 22);
+
+// the true circle (the target)
+circle(circ, (ox, oy), R);  outlined(circ);  outline(circ, dim);  stroke(circ, 2);  untraced(circ);
+
+// live pi readout
+counter(est, (990, 330), 0, 3, "pi ~ ", "");  display(est);  color(est, lime);  size(est, 40);  hidden(est);
+text(truth, (990, 395), "true pi = 3.14159...");  color(truth, dim);  size(truth, 20);  hidden(truth);
+
+// --- hexagon: n = 6 (magenta) ---
+let n = 6;
+for i in 0..n {
+  let a0 = tau*i/n;   let a1 = tau*(i+1)/n;
+  line(h{i}, (ox + R*cos(a0), oy + R*sin(a0)), (ox + R*cos(a1), oy + R*sin(a1)));
+  color(h{i}, magenta);  stroke(h{i}, 3);  untraced(h{i});  tag(h{i}, p6);
+}
+// --- 24-gon (cyan) ---
+let n = 24;
+for i in 0..n {
+  let a0 = tau*i/n;   let a1 = tau*(i+1)/n;
+  line(g{i}, (ox + R*cos(a0), oy + R*sin(a0)), (ox + R*cos(a1), oy + R*sin(a1)));
+  color(g{i}, cyan);  stroke(g{i}, 3);  untraced(g{i});  tag(g{i}, p24);
+}
+// --- 96-gon (lime), Archimedes' own ---
+let n = 96;
+for i in 0..n {
+  let a0 = tau*i/n;   let a1 = tau*(i+1)/n;
+  line(k{i}, (ox + R*cos(a0), oy + R*sin(a0)), (ox + R*cos(a1), oy + R*sin(a1)));
+  color(k{i}, lime);  stroke(k{i}, 2);  untraced(k{i});  tag(k{i}, p96);
+}
+
+// --- script ---
+show(head, 0.5);
+say(cap, "how close can straight lines get to a curve?");
+draw(circ, 1.0);
+par { show(est, 0.3);  show(truth, 0.3); }
+wait(0.4);
+
+section("6 sides");
+say(cap, "start with a hexagon inside the circle");
+draw(p6, 0.8);
+to(est, value, e6, 1.0);
+wait(0.7);
+fade(p6, 0.4);
+
+section("24 sides");
+say(cap, "more sides hug the circle more tightly");
+draw(p24, 1.0);
+to(est, value, e24, 1.0);
+wait(0.7);
+fade(p24, 0.4);
+
+section("96 sides");
+say(cap, "Archimedes went to 96 sides -- around 250 BC");
+draw(p96, 1.2);
+to(est, value, e96, 1.0);
+pulse(est);
+wait(0.7);
+
+section("Almost a circle");
+say(cap, "zoom in: the polygon edge and the arc nearly touch");
+par { cam((ox, oy - R), 1.5, smooth);  zoom(5, 1.5, smooth); }
+wait(1.4);
+par { cam((cx, cy), 1.0, smooth);  zoom(1, 1.0, smooth); }
+wait(0.8);

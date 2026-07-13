@@ -1,0 +1,46 @@
+// The Conic Sections — the three curves you get by slicing a cone: the ellipse,
+// the parabola, and the hyperbola. Each is a geo-kit primitive; they reveal one
+// at a time with the defining property.
+//
+//   manic examples/conics.manic
+//   manic examples/conics.manic --template blueprint
+
+title("The Conic Sections");
+canvas("16:9");
+
+text(head, (cx, 80), "three curves from slicing a cone");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (cx, 662), "");  color(cap, dim);  size(cap, 23);
+
+// --- ellipse (left) ---
+ellipse(el, (300, 400), 165, 100);  color(el, cyan);  stroke(el, 3);  untraced(el);
+text(ell, (300, 250), "ellipse");   color(ell, cyan);  size(ell, 26);  hidden(ell);
+
+// --- parabola (centre) ---
+parabola(pa, (660, 540), 150, 270);  color(pa, lime);  stroke(pa, 3);  untraced(pa);
+text(pal, (660, 235), "parabola");   color(pal, lime);  size(pal, 26);  hidden(pal);
+
+// --- hyperbola (right) — two branches, tagged `hy` ---
+hyperbola(hy, (1010, 400), 55, 120);  color(hy, magenta);  stroke(hy, 3);  untraced(hy);
+text(hyl, (1010, 205), "hyperbola");  color(hyl, magenta);  size(hyl, 26);  hidden(hyl);
+
+// --- reveal ---
+show(head, 0.5);
+
+section("Ellipse");
+say(cap, "ellipse -- the sum of distances to two foci stays constant");
+draw(el, 0.9);
+show(ell, 0.4);
+wait(0.5);
+
+section("Parabola");
+say(cap, "parabola -- every point is equidistant from a focus and a line");
+draw(pa, 0.9);
+show(pal, 0.4);
+wait(0.5);
+
+section("Hyperbola");
+say(cap, "hyperbola -- two branches; the difference of distances stays constant");
+draw(hy, 0.9);
+show(hyl, 0.4);
+wait(1.4);

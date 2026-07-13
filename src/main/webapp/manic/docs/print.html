@@ -1,0 +1,3214 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>manic — the manual</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Write animations as plain text. A friendly, example-first guide for creators.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-cb661d5b.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-5b7013c8.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://8gwifi.org/manic" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="manic--the-manual"><a class="header" href="#manic--the-manual">manic — the manual</a></h1>
+<p><strong>manic is a tiny language for making animations.</strong> You write a short text file;
+manic renders a smooth, glowing video. No timeline scrubbing, no keyframes by
+hand — you <em>describe</em> what’s on screen and <em>when things happen</em>, and the engine
+does the rest, deterministically.</p>
+<p>It’s built for <strong>explainer videos</strong> — math, algorithms, data structures, or
+anything you can draw — and it’s designed so a non-programmer can read and write
+it.</p>
+<h2 id="the-whole-idea-in-30-seconds"><a class="header" href="#the-whole-idea-in-30-seconds">The whole idea in 30 seconds</a></h2>
+<p>A manic file has two parts:</p>
+<ol>
+<li><strong>The cast</strong> — the shapes on screen (a circle, a line, some text). You give
+each one a <strong>name</strong>.</li>
+<li><strong>The script</strong> — what happens over time, called out by name: <em>draw this</em>,
+<em>move that</em>, <em>flash it green</em>.</li>
+</ol>
+<pre><code class="language-manic">title("Hello");
+canvas("16:9");
+
+circle(sun, (640, 360), 90);   // the cast: a circle named `sun`
+color(sun, cyan);
+
+show(sun, 0.6);                 // the script: fade it in over 0.6s
+pulse(sun);                     // then give it a little pulse
+</code></pre>
+<p>That’s the entire model. The rest of this guide walks through the vocabulary —
+one small, runnable example at a time — so by the end you can storyboard a video
+in your head and type it out.</p>
+<h2 id="how-to-read-this-book"><a class="header" href="#how-to-read-this-book">How to read this book</a></h2>
+<p>Every section has a <strong>runnable sample</strong> and a short <strong>video</strong> of it playing, so
+you see exactly what each word does. Copy any sample into a <code>.manic</code> file and:</p>
+<pre><code class="language-sh">manic yourfile.manic              # live preview window
+manic yourfile.manic --record out # render to out/out.mp4
+</code></pre>
+<p>Ready? <a href="#getting-started">Start with your first animation →</a></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
+<p>Let’s make the smallest real animation: a title fades in, a circle draws itself,
+and it pulses once.</p>
+<pre><code class="language-manic">// getting started — one shape, drawn on, then a pulse.
+title("Hello, manic");
+canvas("16:9");
+
+text(head, (cx, 140), "hello, manic");
+color(head, cyan);  size(head, 40);  hidden(head);
+
+circle(sun, (cx, cy), 110);
+color(sun, magenta);  stroke(sun, 5);  glow(sun, 8);  untraced(sun);
+
+show(head, 0.5);      // fade the title in
+draw(sun, 1.2);       // trace the circle on
+pulse(sun);           // a friendly pulse
+wait(1.0);
+</code></pre>
+<p><strong>▶ See it play:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cMkxQ5HGqM8" title="manic in 60 Seconds — Your First Text-to-Animation" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="what-each-line-is-doing"><a class="header" href="#what-each-line-is-doing">What each line is doing</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>line</th><th>meaning</th></tr>
+</thead>
+<tbody>
+<tr><td><code>title("Hello, manic")</code></td><td>the window/file title (metadata)</td></tr>
+<tr><td><code>canvas("16:9")</code></td><td>the frame size — <code>16:9</code> is 1280×720 (see <a href="#colour--style">Colour &amp; style</a>)</td></tr>
+<tr><td><code>text(head, (cx, cy)…)</code></td><td><strong>cast:</strong> a text entity named <code>head</code> at the canvas centre</td></tr>
+<tr><td><code>color / size / hidden</code></td><td><strong>modifiers</strong> — style <code>head</code>, and start it invisible</td></tr>
+<tr><td><code>circle(sun, …)</code></td><td><strong>cast:</strong> a circle named <code>sun</code></td></tr>
+<tr><td><code>untraced(sun)</code></td><td>start with the stroke <em>undrawn</em>, ready to trace on</td></tr>
+<tr><td><code>show(head, 0.5)</code></td><td><strong>script:</strong> fade <code>head</code> in over 0.5s</td></tr>
+<tr><td><code>draw(sun, 1.2)</code></td><td><strong>script:</strong> trace <code>sun</code>’s outline on over 1.2s</td></tr>
+<tr><td><code>pulse(sun)</code></td><td><strong>script:</strong> grow-and-settle attention pulse</td></tr>
+<tr><td><code>wait(1.0)</code></td><td>hold for a second at the end</td></tr>
+</tbody>
+</table>
+</div>
+<p>Two things worth internalising right away:</p>
+<ul>
+<li><strong><code>cx</code>, <code>cy</code> are the canvas centre.</strong> manic gives you <code>w</code>, <code>h</code>, <code>cx</code>, <code>cy</code> for
+free so you can place things without hard-coding pixels. <code>(cx, cy)</code> is always
+the middle.</li>
+<li><strong>The order of the cast doesn’t matter, but the script runs top-to-bottom.</strong>
+<code>show</code>, then <code>draw</code>, then <code>pulse</code> play <em>one after another</em>. To make things
+happen <em>at the same time</em>, you wrap them in <code>par { … }</code> — that’s the
+<a href="#timing--par-seq--stagger">Timing</a> chapter.</li>
+</ul>
+<h2 id="two-ways-to-appear"><a class="header" href="#two-ways-to-appear">Two ways to appear</a></h2>
+<p>Notice <code>head</code> uses <code>hidden</code> + <code>show</code>, but <code>sun</code> uses <code>untraced</code> + <code>draw</code>. That’s
+the one gotcha worth learning early:</p>
+<ul>
+<li><strong><code>hidden</code> + <code>show</code></strong> → a fade-in (good for text and filled shapes).</li>
+<li><strong><code>untraced</code> + <code>draw</code></strong> → a <em>draw-on</em>, like a pen tracing the outline (good for
+strokes, lines, plots).</li>
+</ul>
+<p>Get those two pairs right and everything else clicks. Next: <a href="#shapes--the-cast">the shapes you can
+put on screen →</a></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="shapes--the-cast"><a class="header" href="#shapes--the-cast">Shapes — the cast</a></h1>
+<p>Everything on screen is an <strong>entity</strong> with a <strong>name</strong> (its first argument). You
+declare shapes once; the name is how you address them later in the script.</p>
+<h2 id="the-six-primitives"><a class="header" href="#the-six-primitives">The six primitives</a></h2>
+<p>Each line below is the whole call — copy it and tweak the numbers.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>shape</th><th>write</th><th>draws</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>circle</strong></td><td><code>circle(sun, (cx, cy), 90);</code></td><td>a circle, radius 90, at the centre</td></tr>
+<tr><td><strong>rect</strong></td><td><code>rect(box, (cx, cy), 200, 120);</code></td><td>a rectangle 200 wide, 120 tall</td></tr>
+<tr><td><strong>line</strong></td><td><code>line(edge, (100, 100), (400, 300));</code></td><td>a line from point to point</td></tr>
+<tr><td><strong>arrow</strong></td><td><code>arrow(v, (100, 400), (400, 400));</code></td><td>a line with an arrowhead at the end</td></tr>
+<tr><td><strong>dot</strong></td><td><code>dot(p, (cx, cy), 8);</code></td><td>a small filled dot, radius 8</td></tr>
+<tr><td><strong>text</strong></td><td><code>text(cap, (cx, 640), "hello");</code></td><td>a text label anchored at a point</td></tr>
+</tbody>
+</table>
+</div>
+<p>Points are <code>(x, y)</code> in pixels, <strong>origin top-left, y increasing downward</strong>. Use
+<code>cx</code>, <code>cy</code>, <code>w</code>, <code>h</code> to stay canvas-independent.</p>
+<pre><code class="language-manic">// the six primitive shapes, drawn on together.
+title("Shapes");
+canvas("16:9");
+
+text(t, (cx, 90), "six primitives");  color(t, cyan);  size(t, 32);  hidden(t);
+
+circle(c, (240, 380), 80);            color(c, cyan);     stroke(c, 4);  untraced(c);
+rect(r,   (470, 380), 150, 150);      color(r, magenta);  stroke(r, 4);  untraced(r);
+line(l,   (640, 300), (820, 460));    color(l, lime);     stroke(l, 4);  untraced(l);
+arrow(a,  (900, 460), (1040, 300));   color(a, cyan);     stroke(a, 4);  untraced(a);
+dot(d,    (1110, 380), 12);           color(d, magenta);  hidden(d);
+text(lbl, (640, 620), "circle · rect · line · arrow · dot · text");
+color(lbl, dim);  size(lbl, 24);  hidden(lbl);
+
+show(t, 0.5);
+par { draw(c);  draw(r);  draw(l);  draw(a);  show(d); }
+show(lbl, 0.5);
+wait(1.2);
+</code></pre>
+<p><strong>▶ See it play:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/24DPvy07O8A" title="Every Shape in manic (Draw Literally Anything)" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="modifiers--style-a-shape-at-t--0"><a class="header" href="#modifiers--style-a-shape-at-t--0">Modifiers — style a shape at t = 0</a></h2>
+<p>A shape starts plain. <strong>Modifiers</strong> change how it looks <em>before</em> the animation
+begins. They take the entity name first, then a value:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>modifier</th><th>effect</th><th>example</th></tr>
+</thead>
+<tbody>
+<tr><td><code>color(id, c)</code></td><td>fill / stroke colour</td><td><code>color(sun, cyan);</code></td></tr>
+<tr><td><code>stroke(id, w)</code></td><td>line thickness</td><td><code>stroke(sun, 4);</code></td></tr>
+<tr><td><code>size(id, n)</code></td><td>text size</td><td><code>size(cap, 30);</code></td></tr>
+<tr><td><code>glow(id, n)</code></td><td>neon halo strength</td><td><code>glow(sun, 8);</code></td></tr>
+<tr><td><code>opacity(id, 0..1)</code></td><td>transparency</td><td><code>opacity(sun, 0.5);</code></td></tr>
+<tr><td><code>filled(id)</code> / <code>outlined(id)</code></td><td>turn fill / outline on</td><td><code>filled(box);</code></td></tr>
+<tr><td><code>hue(id, deg)</code></td><td>colour by an angle (0–360) — for gradients &amp; loops</td><td><code>hue(seg, 200);</code></td></tr>
+<tr><td><code>z(id, n)</code></td><td>draw order (higher = on top)</td><td><code>z(box, 5);</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>And two that decide <em>how a shape first appears</em>:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>modifier</th><th>pairs with</th><th>gives</th></tr>
+</thead>
+<tbody>
+<tr><td><code>hidden(id)</code></td><td><code>show(id)</code></td><td>a <strong>fade-in</strong></td></tr>
+<tr><td><code>untraced(id)</code></td><td><code>draw(id)</code></td><td>a <strong>draw-on</strong> (pen tracing the outline)</td></tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p><strong>Colours are a fixed palette:</strong> <code>fg</code>, <code>void</code>, <code>cyan</code>, <code>magenta</code>, <code>lime</code>,
+<code>dim</code>, <code>panel</code>. For a computed colour (say, one per item in a loop) use
+<code>hue(id, degrees)</code>. More in <a href="#colour--style">Colour &amp; style</a>.</p>
+</blockquote>
+<h2 id="naming-things-in-a-loop"><a class="header" href="#naming-things-in-a-loop">Naming things in a loop</a></h2>
+<p>When you make many shapes with a <code>for</code> loop, give each a unique name with
+<strong>interpolation</strong> — <code>{expr}</code> glued to the name:</p>
+<pre><code class="language-manic">for i in 0..5 {
+  dot(p{i}, (200 + i*180, cy), 8);   // p0, p1, p2, p3, p4
+}
+</code></pre>
+<p>That’s your cast. Now let’s make it move → <a href="#verbs--bringing-it-to-life">Verbs</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="verbs--bringing-it-to-life"><a class="header" href="#verbs--bringing-it-to-life">Verbs — bringing it to life</a></h1>
+<p><strong>Verbs are the script.</strong> Each one names an entity and animates it. They run
+<strong>top-to-bottom, one after another</strong> (use <a href="#timing--par-seq--stagger"><code>par</code></a> for simultaneous).</p>
+<p>Almost every verb takes two optional trailing arguments:</p>
+<pre><code class="language-manic">move(sun, (900, 400), 0.8, smooth);
+//                     ^dur  ^easing
+</code></pre>
+<ul>
+<li><strong><code>[dur]</code></strong> — how long, in seconds (there’s a sensible default).</li>
+<li><strong><code>[ease]</code></strong> — the motion curve: <code>linear</code>, <code>smooth</code>, <code>in</code>, <code>out</code>, <code>back</code>,
+<code>bounce</code>, <code>elastic</code>, <code>spring</code> (see <a href="#easings">Colour &amp; style</a>).</li>
+</ul>
+<h2 id="reveal--hide"><a class="header" href="#reveal--hide">Reveal &amp; hide</a></h2>
+<pre><code class="language-manic">draw(sun, 1.2);   // -&gt; trace a stroke on (needs `untraced` first)
+erase(sun);       // -&gt; the reverse: un-draw it
+show(cap, 0.5);   // -&gt; fade in (needs `hidden` first)
+fade(cap);        // -&gt; fade out
+type(cap);        // -&gt; typewriter: reveal text character by character
+</code></pre>
+<div class="watch">▶ Watch: reveal</div>
+
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/tZwpO7XXY8Q" title="4 Ways to Reveal Anything — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="attention"><a class="header" href="#attention">Attention</a></h2>
+<pre><code class="language-manic">flash(sun, cyan);  // -&gt; flash to a colour, then restore
+pulse(sun);        // -&gt; quick grow-and-settle "look here"
+shake(sun);        // -&gt; horizontal shake, an "error/no" gesture
+spin(sun, 360);    // -&gt; spin about its centre
+</code></pre>
+<h2 id="motion"><a class="header" href="#motion">Motion</a></h2>
+<pre><code class="language-manic">move(p,  (900, 400));   // -&gt; glide to an absolute point
+shift(p, (0, -120));    // -&gt; move by a delta (relative)
+scale(r, 1.4);          // -&gt; animate uniform scale to 1.4x
+rotate(r, 45);          // -&gt; rotate by 45 degrees
+grow(arrow, (500, 200));// -&gt; animate a line/arrow endpoint (draws or retargets)
+</code></pre>
+<div class="watch">▶ Watch: motion</div>
+
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/b20vwIjqbm8" title="Make It MOVE: manic Motion Verbs in 30s" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="content--colour"><a class="header" href="#content--colour">Content &amp; colour</a></h2>
+<pre><code class="language-manic">say(cap, "next step");     // -&gt; crossfade a text entity to new words
+recolor(sun, lime, 0.5);   // -&gt; permanently animate the colour
+</code></pre>
+<div class="watch">▶ Watch: text</div>
+
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/_MLrC93RqsU" title="Animated Text + Typewriter — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="the-escape-hatch--to--set"><a class="header" href="#the-escape-hatch--to--set">The escape hatch — <code>to</code> / <code>set</code></a></h2>
+<p>Named verbs are shortcuts. <code>to</code> animates <em>any</em> single property, for whatever
+isn’t pre-named:</p>
+<pre><code class="language-manic">to(sun, opacity, 0.3, 0.5);   // animate opacity to 0.3 over 0.5s
+to(sun, rot, 90);             // rotation to 90 degrees
+</code></pre>
+<p>Properties: <code>pos</code>, <code>color</code>, <code>opacity</code>, <code>scale</code>, <code>rot</code>, <code>trace</code>, <code>hue</code>.</p>
+<h2 id="move-the-camera"><a class="header" href="#move-the-camera">Move the camera</a></h2>
+<pre><code class="language-manic">cam((300, 200), 1.0);   // pan the camera centre
+zoom(1.6, 0.8);         // zoom to 1.6x
+</code></pre>
+<h2 id="one-verb-a-whole-group"><a class="header" href="#one-verb-a-whole-group">One verb, a whole group</a></h2>
+<p>If a name refers to a <strong>tag</strong> (a group) instead of a single entity, the verb
+runs on <em>every</em> member at once. This is how you animate a whole graph, table, or
+loop-generated set in one line:</p>
+<pre><code class="language-manic">hidden(g.nodes);     // every node, at t=0
+draw(g.edges);       // trace every edge on together
+flash(a.cells, cyan);// flash all array cells
+</code></pre>
+<p>More on grouping in the <a href="#kits--math-geometry-algorithms">Kits</a> chapter. Next, control <em>when</em> things
+happen → <a href="#timing--par-seq--stagger">Timing</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="timing--par-seq--stagger"><a class="header" href="#timing--par-seq--stagger">Timing — par, seq &amp; stagger</a></h1>
+<p>By default, verbs play <strong>one after another</strong>. Three wrappers change that — they
+turn “then, then, then” into “together” or “cascading”.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>wrapper</th><th>plays its steps…</th><th>use for</th></tr>
+</thead>
+<tbody>
+<tr><td><em>(nothing)</em></td><td>one after another</td><td>the normal flow</td></tr>
+<tr><td><code>par { … }</code></td><td>all at the same instant</td><td>reveal a group at once</td></tr>
+<tr><td><code>seq { … }</code></td><td>one after another (explicit)</td><td>grouping inside a <code>par</code></td></tr>
+<tr><td><code>stagger(d) { … }</code></td><td>each one <code>d</code> seconds after the last</td><td>cascades / waves</td></tr>
+</tbody>
+</table>
+</div>
+<pre><code class="language-manic">show(a);  show(b);              // a, THEN b
+par    { show(a);  show(b); }   // a and b together
+stagger(0.1) { show(a); show(b); show(c); }  // a, then b 0.1s later, then c…
+</code></pre>
+<p>Put a <code>for</code> loop <em>inside</em> one and it just works — the loop expands first, so all
+its statements land in the wrapper:</p>
+<pre><code class="language-manic">par          { for i in 0..6 { show(a{i}); } }   // whole row at once
+stagger(0.1) { for i in 0..6 { show(b{i}); } }   // whole row cascading
+</code></pre>
+<pre><code class="language-manic">// the same reveal, three ways: sequence, together, cascade.
+title("Timing");  canvas("16:9");
+text(t, (cx, 110), "seq  ·  par  ·  stagger");  color(t, cyan);  size(t, 30);  hidden(t);
+
+for i in 0..6 { dot(a{i}, (220 + i*160, 300), 16);  color(a{i}, cyan);     hidden(a{i}); }
+for i in 0..6 { dot(b{i}, (220 + i*160, 470), 16);  color(b{i}, magenta);  hidden(b{i}); }
+
+show(t, 0.5);
+
+// top row, all at the same instant
+par { for i in 0..6 { show(a{i}); } }
+wait(0.5);
+
+// bottom row, cascading 0.1s apart
+stagger(0.1) { for i in 0..6 { show(b{i}); } }
+wait(1.0);
+</code></pre>
+<p><strong>▶ See it play:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/sP61cl_PJj4" title="par · seq · stagger: Timing in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="beats--sections"><a class="header" href="#beats--sections">Beats &amp; sections</a></h2>
+<p>Two more timing words structure a longer video:</p>
+<pre><code class="language-manic">wait(1.2);              // hold — nothing moves for 1.2s
+section("Part Two");    // a titled marker (jump to it in preview with keys 1–9;
+                        //   also exported for lining up narration)
+mark("beat-3");         // a named timestamp for your editor
+</code></pre>
+<p><code>wait</code> is your friend for pacing — a beat of stillness after something lands
+reads far better than rushing to the next move.</p>
+<p>Next: the palette, glow, and easings → <a href="#colour--style">Colour &amp; style</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="colour--style"><a class="header" href="#colour--style">Colour &amp; style</a></h1>
+<h2 id="the-palette"><a class="header" href="#the-palette">The palette</a></h2>
+<p>manic uses a small, fixed set of colour names — no hex, no RGB. They’re tuned to
+glow on the dark default background:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>name</th><th>is</th><th>name</th><th>is</th></tr>
+</thead>
+<tbody>
+<tr><td><code>cyan</code></td><td>electric blue</td><td><code>dim</code></td><td>muted grey-violet</td></tr>
+<tr><td><code>magenta</code></td><td>hot pink</td><td><code>fg</code></td><td>near-white (default text)</td></tr>
+<tr><td><code>lime</code></td><td>green</td><td><code>panel</code></td><td>dark fill</td></tr>
+<tr><td><code>void</code></td><td>the background</td><td></td><td></td></tr>
+</tbody>
+</table>
+</div>
+<pre><code class="language-manic">color(sun, cyan);
+recolor(sun, magenta, 0.5);   // animate to a new palette colour
+</code></pre>
+<h2 id="any-colour-by-hue"><a class="header" href="#any-colour-by-hue">Any colour, by hue</a></h2>
+<p>For a <em>computed</em> colour — a gradient, or one per item in a loop — use <code>hue</code>,
+which takes an angle from 0 to 360:</p>
+<pre><code class="language-manic">hue(sun, 200);              // a fixed hue
+for i in 0..24 {
+  hue(p{i}, 360*i/24);      // a full rainbow around the loop
+}
+</code></pre>
+<p>That’s how the <a href="#the-language-layer">rainbow-ring loop</a> gets its colours.</p>
+<h2 id="glow"><a class="header" href="#glow">Glow</a></h2>
+<p>Every entity has a neon <code>glow</code> (0 = crisp, higher = brighter halo):</p>
+<pre><code class="language-manic">glow(sun, 8);   // strong halo
+glow(grid, 0);  // crisp, no halo — good for fine detail
+</code></pre>
+<h2 id="easings"><a class="header" href="#easings">Easings</a></h2>
+<p>The optional last argument of a motion verb is the <strong>easing</strong> — the shape of the
+motion over time:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>easing</th><th>feel</th></tr>
+</thead>
+<tbody>
+<tr><td><code>linear</code></td><td>constant speed (mechanical)</td></tr>
+<tr><td><code>smooth</code></td><td>ease in and out (the default, natural)</td></tr>
+<tr><td><code>in</code> / <code>out</code></td><td>accelerate / decelerate</td></tr>
+<tr><td><code>back</code></td><td>overshoot slightly and settle</td></tr>
+<tr><td><code>bounce</code></td><td>bounce at the end</td></tr>
+<tr><td><code>elastic</code> / <code>spring</code></td><td>wobble / springy settle</td></tr>
+</tbody>
+</table>
+</div>
+<pre><code class="language-manic">move(p, (900, 400), 0.8, bounce);
+move(p, (900, 400), 0.8, smooth);   // usually what you want
+</code></pre>
+<h2 id="canvas--size"><a class="header" href="#canvas--size">Canvas &amp; size</a></h2>
+<p><code>canvas(...)</code> sets the frame. Give it a preset or explicit pixels:</p>
+<pre><code class="language-manic">canvas("16:9");        // 1280x720  (also: 1080p, 4k, square, portrait/9:16, 4:3)
+canvas(1280, 720);     // explicit
+</code></pre>
+<p><code>portrait</code> / <code>9:16</code> is 1080×1920 — pair it with the <code>reel</code> render preset for
+vertical / social clips.</p>
+<p>Next: loops, variables, and macros → <a href="#the-language-layer">The language layer</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="the-language-layer"><a class="header" href="#the-language-layer">The language layer</a></h1>
+<p>Everything so far has been static text. manic also has a small <strong>computation
+layer</strong> that runs <em>before</em> the animation — variables, arithmetic, loops, and
+macros. It lets one rule draw a hundred shapes.</p>
+<blockquote>
+<p>These are resolved at build time. By the time the animation plays, they’ve
+expanded into plain calls — so they cost nothing at render.</p>
+</blockquote>
+<h2 id="variables--let"><a class="header" href="#variables--let">Variables — <code>let</code></a></h2>
+<pre><code class="language-manic">let r = 120;
+let gap = r * 2 + 40;
+circle(a, (cx - gap, cy), r);
+circle(b, (cx + gap, cy), r);
+</code></pre>
+<p>Arithmetic is what you’d expect: <code>+ - * / ^</code>, parentheses, and functions like
+<code>sin</code>, <code>cos</code>, <code>sqrt</code>. Constants <code>pi</code>, <code>tau</code>, <code>e</code> are built in, as are the canvas
+vars <code>w</code>, <code>h</code>, <code>cx</code>, <code>cy</code>.</p>
+<h2 id="loops--for"><a class="header" href="#loops--for">Loops — <code>for</code></a></h2>
+<pre><code class="language-manic">for i in 0..5 {
+  dot(p{i}, (200 + i*180, cy), 8);   // p0 … p4
+}
+</code></pre>
+<p><code>p{i}</code> is <strong>id interpolation</strong> — <code>{expr}</code> glued to a name makes each entity
+unique. Use <code>i</code> in the body to compute positions, sizes, hues…</p>
+<pre><code class="language-manic">// one for-loop paints a full rainbow ring.
+title("One loop");  canvas("16:9");
+text(t, (cx, 90), "one loop, 24 dots, every hue");  color(t, cyan);  size(t, 28);  hidden(t);
+
+let n = 24;
+for i in 0..n {
+  dot(p{i}, (cx + 300*cos(tau*i/n), cy + 300*sin(tau*i/n)), 14);
+  hue(p{i}, 360*i/n);      // colour by angle -&gt; a rainbow
+  hidden(p{i});
+}
+
+show(t, 0.5);
+stagger(0.05) { for i in 0..n { show(p{i}); } }
+wait(1.4);
+</code></pre>
+<p><strong>▶ See it play:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/m-l37juylp8" title="One Loop → a Full Rainbow (manic)" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="conditionals--if"><a class="header" href="#conditionals--if">Conditionals — <code>if</code></a></h2>
+<pre><code class="language-manic">if depth &gt; 0 {
+  line(seg{k}, (x, y), (x2, y2));
+}
+</code></pre>
+<h2 id="macros--def"><a class="header" href="#macros--def">Macros — <code>def</code></a></h2>
+<p>A <code>def</code> is a reusable rule. Its parameters are <strong>numbers</strong>; build ids inside with
+interpolation. It can even call itself (recursion) — that’s how the fractal tree
+in the gallery is one page of code:</p>
+<pre><code class="language-manic">def branch(k, x, y, ang, len, depth) {
+  if depth &gt; 0 &amp;&amp; len &gt; 2 {
+    let x2 = x + len*cos(ang);
+    let y2 = y - len*sin(ang);
+    line(seg{k}, (x, y), (x2, y2));
+    branch(2*k,     x2, y2, ang + 0.4, len*0.72, depth - 1);
+    branch(2*k + 1, x2, y2, ang - 0.4, len*0.72, depth - 1);
+  }
+}
+branch(1, cx, h - 40, 1.5708, 150, 12);
+</code></pre>
+<h2 id="reductions"><a class="header" href="#reductions">Reductions</a></h2>
+<p>Fold a range into one number with <code>sum</code>, <code>prod</code>, <code>min</code>, <code>max</code>:</p>
+<pre><code class="language-manic">let total = sum(i in 1..n : i);   // 1 + 2 + … + (n-1)
+</code></pre>
+<p>That’s the whole language. The rest is <strong>kits</strong> — bundles of higher-level
+figures → <a href="#kits--math-geometry-algorithms">Kits</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="kits--math-geometry-algorithms"><a class="header" href="#kits--math-geometry-algorithms">Kits — math, geometry, algorithms</a></h1>
+<p>The words so far (<code>circle</code>, <code>move</code>, <code>flash</code>, <code>for</code>…) are the <strong>core</strong>. On top of
+that, manic ships <strong>kits</strong> — bundles of higher-level figures for a domain. You
+use them exactly like any other call.</p>
+<h2 id="math"><a class="header" href="#math">math</a></h2>
+<p>Coordinate frames, function plots, vectors, tables:</p>
+<pre><code class="language-manic">axes(ax, (cx, cy), 520, 240);            // a coordinate frame
+plot(wave, (cx, cy), 78, 120, "sin(x)"); // y = f(x) from a formula
+vector(v, (cx, cy), (120, -90));         // an arrow from an origin
+matrix(m, "1 0; 0 1", (cx, cy));         // a bracketed matrix
+</code></pre>
+<h2 id="geo"><a class="header" href="#geo">geo</a></h2>
+<p>Olympiad-style constructions — you write the <em>geometry</em>, not coordinates, and
+everything is <strong>live</strong> (drag a point and the circumcircle, centroid, angles all
+recompute):</p>
+<pre><code class="language-manic">point(A, (300, 500));  point(B, (900, 500));  point(C, (620, 180));
+circumcircle(cc, A, B, C);   // recomputes if A/B/C move
+midpoint(m, A, B);
+</code></pre>
+<h2 id="algo"><a class="header" href="#algo">algo</a></h2>
+<p>Data structures and algorithms — arrays + sorting, linked lists, stacks/queues,
+graphs, hash maps, BFS/DFS, Dijkstra:</p>
+<pre><code class="language-manic">array(a, "5 2 8 1", (cx, cy));  compare(a, 0, 1);  swap(a, 0, 1);
+graph(g, "a b c d", "a-b:2 b-c:1 c-d:3", circular, (cx, cy), 200);
+dijkstra(g, a);                 // animates shortest paths
+</code></pre>
+<p>Groups make these one-liners: a graph tags its nodes and edges, so
+<code>draw(g.edges)</code> or <code>flash(g.nodes, cyan)</code> animates the whole set.</p>
+<hr>
+<p>Each kit has a full reference at <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>, and you can see them
+all in motion in the <a href="#examples-gallery">Examples gallery</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="examples-gallery"><a class="header" href="#examples-gallery">Examples gallery</a></h1>
+<p>Every animation in <code>examples/</code>, by topic — <strong>the code and the clip for each</strong>. Run any of them with <code>manic examples/&lt;name&gt;.manic</code>. Project: <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>.</p>
+<ul>
+<li><a href="#algorithms--data-structures">Algorithms &amp; data structures</a> — 5 examples</li>
+<li><a href="#graphs">Graphs</a> — 4 examples</li>
+<li><a href="#calculus--functions">Calculus &amp; functions</a> — 5 examples</li>
+<li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 6 examples</li>
+<li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 3 examples</li>
+<li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 8 examples</li>
+<li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 3 examples</li>
+<li><a href="#text--ui">Text &amp; UI</a> — 5 examples</li>
+<li><a href="#generative--recursive">Generative &amp; recursive</a> — 5 examples</li>
+<li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="algorithms--data-structures"><a class="header" href="#algorithms--data-structures">Algorithms &amp; data structures</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="bubble_sort"><a class="header" href="#bubble_sort">bubble_sort</a></h2>
+<p>Real sliding swaps; <code>array</code> + <code>compare</code> + <code>swap</code>.</p>
+<pre><code class="language-manic">// Bubble Sort — real sliding swaps. `array` gives fixed slot boxes and value
+// cells; `compare(a, i, j)` flashes the values now in slots i and j, and
+// `swap(a, i, j)` slides them past each other into the swapped slots. `swap`
+// carries the array's occupancy forward, so a whole chain of swaps composes
+// correctly (no `say`). We sort [3, 1, 2] -&gt; [1, 2, 3].
+//
+//   manic examples/bubble_sort.manic
+
+title("Bubble Sort");
+canvas("16:9");
+
+text(head, (cx, 130), "compare neighbours, swap if out of order");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (cx, 560), "");  color(cap, dim);  size(cap, 26);
+
+array(a, "3 1 2", (cx, 360), 100, 100);
+
+show(head, 0.5);
+say(cap, "an unsorted array");
+wait(0.6);
+
+section("Pass 1");
+say(cap, "compare slots 0 and 1:  3 &gt; 1, swap");
+compare(a, 0, 1);
+swap(a, 0, 1);
+
+say(cap, "compare slots 1 and 2:  3 &gt; 2, swap");
+compare(a, 1, 2);
+swap(a, 1, 2);
+
+section("Pass 2");
+say(cap, "compare slots 0 and 1:  1 &lt; 2, ok");
+compare(a, 0, 1, lime);
+say(cap, "compare slots 1 and 2:  2 &lt; 3, ok");
+compare(a, 1, 2, lime);
+
+section("Sorted");
+say(cap, "1  2  3 -- done");
+recolor(a.cells, lime, 0.4);
+par { pulse(a.c0);  pulse(a.c1);  pulse(a.c2); }
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kA4gDkjwsRQ" title="Bubble Sort, ACTUALLY Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="two_pointer"><a class="header" href="#two_pointer">two_pointer</a></h2>
+<p><code>lo</code>/<code>hi</code> index carets scanning inward on a sorted array.</p>
+<pre><code class="language-manic">// Two Pointers — the `pointer`/`pointat` primitive. `pointer(id, arr, slot, label)`
+// drops a caret under a slot; `pointat(id, arr, slot)` slides it to another slot
+// (its label follows). Pointers track slot *positions*, so they stay put as
+// values move. Here `lo`/`hi` scan inward on a sorted array.
+//
+//   manic examples/two_pointer.manic
+
+title("Two Pointers");
+canvas("16:9");
+
+text(head, (cx, 120), "two pointers scan toward the middle");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (cx, 560), "");  color(cap, dim);  size(cap, 26);
+
+array(a, "1 3 5 7 9 11", (cx, 340), 92, 92);
+pointer(lo, a, 0, "lo");
+pointer(hi, a, 5, "hi");
+
+show(head, 0.5);
+say(cap, "start at both ends");
+wait(0.5);
+compare(a, 0, 5);
+
+say(cap, "step both inward");
+par { pointat(lo, a, 1);  pointat(hi, a, 4); }
+compare(a, 1, 4);
+
+par { pointat(lo, a, 2);  pointat(hi, a, 3); }
+compare(a, 2, 3);
+
+say(cap, "the pointers have met");
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/JtlUMFxuQQI" title="The Two-Pointer Trick, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="stack_queue"><a class="header" href="#stack_queue">stack_queue</a></h2>
+<p>LIFO stack + FIFO queue, with action-point carets.</p>
+<pre><code class="language-manic">// Stack &amp; Queue — dynamic structures, with carets marking WHERE each op acts.
+// `push`/`pop` (stack, LIFO, grows up) and `enqueue`/`dequeue` (queue, FIFO,
+// grows right) are mutating verbs: they add a cell and animate it in, tracking
+// occupancy so a chain of ops composes. A `caret` marks the action point and is
+// `move`d in step with each op so it rides the changing top / back.
+//
+//   manic examples/stack_queue.manic
+
+title("Stack &amp; Queue");
+canvas("16:9");
+
+let sx = 300;   let sy = 500;    // stack anchor (bottom cell centre)
+let qx = 780;   let qy = 300;    // queue anchor (front cell centre)
+let cw = 84;    let ch = 64;     // cell size
+let stx = sx + 62;               // stack "top" caret sits right of the column
+
+text(head, (cx, 80), "LIFO stack, FIFO queue");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (cx, 660), "");  color(cap, dim);  size(cap, 24);
+
+text(sl, (sx, sy + 66), "stack: push / pop");  color(sl, lime);  size(sl, 22);
+text(ql, (qx + cw, qy - 118), "queue: enqueue / dequeue");  color(ql, cyan);  size(ql, 22);
+
+stack(st, (sx, sy), cw, ch);
+queue(qu, (qx, qy), cw, ch);
+
+// action-point markers
+caret(top, (stx, sy), "top", left);        // rides the top of the stack
+caret(front, (qx, qy - 52), "front", down); // fixed: dequeue leaves here
+caret(back, (qx, qy + 52), "back", up);     // rides the back of the queue
+
+show(head, 0.5);
+
+section("Stack");
+say(cap, "push 5, 3, 8 — each lands on top, the top caret rises");
+push(st, "5");
+par { push(st, "3");  move(top, (stx, sy - ch)); }
+par { push(st, "8");  move(top, (stx, sy - 2*ch)); }
+say(cap, "pop — the top value (8) leaves, the caret drops back");
+par { pop(st);  move(top, (stx, sy - ch)); }
+wait(0.5);
+
+section("Queue");
+say(cap, "enqueue A, B, C — they join at the back caret");
+enqueue(qu, "A");
+par { enqueue(qu, "B");  move(back, (qx + cw, qy + 52)); }
+par { enqueue(qu, "C");  move(back, (qx + 2*cw, qy + 52)); }
+say(cap, "dequeue — the front leaves, the rest advance, back shifts in");
+par { dequeue(qu);  move(back, (qx + cw, qy + 52)); }
+par { dequeue(qu);  move(back, (qx, qy + 52)); }
+
+say(cap, "stack: in and out at the top.  queue: in at back, out at front.");
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/__NBMpv78P8" title="Stack vs Queue in 40 Seconds — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="linked_list"><a class="header" href="#linked_list">linked_list</a></h2>
+<p>Singly / doubly / circular — classic node anatomy + pointer re-threading.</p>
+<pre><code class="language-manic">// Linked List — classic anatomy, three variations. A node is a framed box split
+// into compartments: singly `[ data | .next ]`, doubly `[ .prev | data | next. ]`,
+// where a pointer field carries a dot its arrow starts from. `head` marks the
+// entry node; the tail's `next` ends at `NULL` (singly/doubly) or curves back to
+// the head (circular). `insert`/`remove` re-thread the pointers — no shifting.
+//
+//   manic examples/linked_list.manic
+
+title("Linked List");
+canvas("16:9");
+
+text(head, (cx, 56), "node = data + pointer field(s); head in, NULL or loop at the tail");
+display(head);  color(head, cyan);  size(head, 24);  hidden(head);
+text(cap, (cx, 700), "");  color(cap, dim);  size(cap, 24);
+
+text(t1, (150, 160), "singly");    color(t1, lime);   size(t1, 22);
+text(t2, (150, 350), "doubly");    color(t2, lime);   size(t2, 22);
+text(t3, (150, 545), "circular");  color(t3, lime);   size(t3, 22);
+
+list(sa, "3 8 5", (cx, 160), singly, 64, 50);
+list(da, "3 8 5", (cx, 350), doubly, 64, 50);
+list(ca, "3 8 5", (cx, 545), circular, 64, 50);
+
+show(head, 0.5);
+say(cap, "three classic variations of the same idea");
+wait(0.9);
+
+section("Insert");
+say(cap, "insert 7 after node 1 in the doubly list — pointers re-thread, no shift");
+insert(da, 1, "7");
+wait(0.6);
+
+section("Remove");
+say(cap, "remove the head of the singly list — the list re-points past it");
+remove(sa, 0);
+
+say(cap, "data + pointers: the whole family from one primitive");
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/c8zjCcA5MJc" title="Linked Lists: Singly, Doubly & Circular — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="hashmap"><a class="header" href="#hashmap">hashmap</a></h2>
+<p>Hash a key to a bucket; collisions chain on (separate chaining).</p>
+<pre><code class="language-manic">// Hash Map — separate chaining. `hashmap(id, n, (cx,cy))` draws n numbered
+// buckets in a column; `put(id, key, val)` hashes the key to a bucket and chains
+// the `key:val` entry on (collisions extend the chain); `get(id, key)` hashes,
+// then scans that bucket's chain — each entry flashes until the key matches
+// (lime) or the chain ends (bucket flashes magenta = miss).
+//
+// (Hash = sum of the key's bytes mod n. "cat" and "act" are anagrams, so they
+//  collide — same bucket, chained.)
+//
+//   manic examples/hashmap.manic
+
+title("Hash Map");
+canvas("16:9");
+
+text(head, (cx, 60), "separate chaining: hash the key, chain on collision");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (cx, 690), "");  color(cap, dim);  size(cap, 24);
+
+hashmap(ht, 5, (360, 360), 128, 46);
+
+show(head, 0.5);
+say(cap, "put cat, dog, ok — each hashes to its bucket");
+put(ht, "cat", "7");
+put(ht, "dog", "3");
+put(ht, "ok", "1");
+wait(0.5);
+
+section("Collision");
+say(cap, "put act — same bytes as cat, so it collides and chains on");
+put(ht, "act", "9");
+wait(0.6);
+
+section("Lookup");
+say(cap, "get act — scan the chain in bucket 2 until the key matches");
+get(ht, "act");
+say(cap, "get xyz — hashes to a bucket, scans, falls off the end: miss");
+get(ht, "xyz");
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/c0bD368fPuE" title="How a HashMap REALLY Works — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="graphs"><a class="header" href="#graphs">Graphs</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="graph"><a class="header" href="#graph">graph</a></h2>
+<p>Labelled nodes + edges, drawn on; reflowing links.</p>
+<pre><code class="language-manic">// Graph — the algo kit's `graph` builtin (Manim's Graph/DiGraph). Nodes are
+// labelled circles; `a-b` is an undirected edge, `a&gt;b` a directed arrow. Tag
+// broadcast (`draw(g.edges)`, `flash(g.nodes, …)`) animates whole groups.
+//
+//   manic examples/graph.manic
+//   manic examples/graph.manic --record out --fps 60
+
+title("Graph");
+canvas(1280, 720);
+
+text(head, (640, 118), "a directed graph, traversed");
+display(head);  color(head, cyan);  size(head, 34);  hidden(head);
+text(cap, (640, 664), "");  color(cap, dim);  size(cap, 22);
+
+// six vertices in a circle; directed edges (a&gt;b)
+graph(g, "a b c d e f",
+         "a&gt;b b&gt;c c&gt;d d&gt;e e&gt;f f&gt;a a&gt;d b&gt;e",
+         circular, (640, 384), 210);
+
+// nodes fade in (hidden→show); edges trace on (untraced→draw)
+hidden(g.nodes);
+untraced(g.edges);
+
+show(head, 0.5);
+say(cap, "drop in the vertices");
+show(g.nodes, 0.4);            // broadcasts over every node
+say(cap, "connect the directed edges");
+draw(g.edges, 0.6);           // broadcasts over every edge
+
+section("Traversal");
+say(cap, "walk a &gt; b &gt; c &gt; d");
+seq {
+  flash(g.a, magenta);
+  flash(g.b, magenta);
+  flash(g.c, magenta);
+  flash(g.d, magenta);
+}
+say(cap, "highlight the visited path");
+par {
+  recolor(g.a, lime, 0.4);
+  recolor(g.b, lime, 0.4);
+  recolor(g.c, lime, 0.4);
+  recolor(g.d, lime, 0.4);
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/pLvJblT7zwg" title="Draw a Graph in One Line — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="graph_moving"><a class="header" href="#graph_moving">graph_moving</a></h2>
+<p>Drag a vertex and its incident edges follow.</p>
+<pre><code class="language-manic">// Moving Graph — vertices move and the edges reflow to follow them
+// (Manim's MovingVertices / MovingDiGraph). Also exercises layout reveal,
+// per-node moves, tag-broadcast recolour, and a highlight sweep.
+//
+//   manic examples/graph_moving.manic
+//   manic examples/graph_moving.manic --record out --fps 60
+//
+// Node ids are g.1 … g.4 ; edge ids g.1-2 etc ; tags g.nodes / g.edges.
+
+title("Moving Graph");
+canvas(1280, 720);
+
+text(head, (640, 118), "edges follow their vertices");
+display(head);  color(head, cyan);  size(head, 34);  hidden(head);
+text(cap, (640, 664), "");  color(cap, dim);  size(cap, 22);
+
+// four vertices, five undirected edges, circular to start
+graph(g, "1 2 3 4", "1-2 2-3 3-4 1-3 1-4", circular, (640, 384), 150);
+hidden(g.nodes);
+untraced(g.edges);
+
+// --- reveal ---
+show(head, 0.5);
+say(cap, "a small graph");
+show(g.nodes, 0.4);
+draw(g.edges, 0.6);
+wait(0.5);
+
+// --- case 1: fling the vertices to the corners; edges reflow live ---
+section("Moving vertices");
+say(cap, "move each vertex — the edges stretch to follow");
+par {
+  move(g.1, (360, 250), 1.2, overshoot);
+  move(g.2, (920, 250), 1.2, overshoot);
+  move(g.3, (920, 520), 1.2, overshoot);
+  move(g.4, (360, 520), 1.2, overshoot);
+}
+wait(0.8);
+
+// --- case 2: orbit two vertices past each other ---
+say(cap, "swap two vertices");
+par {
+  move(g.2, (360, 520), 1.0, smooth);
+  move(g.4, (920, 250), 1.0, smooth);
+}
+wait(0.8);
+
+// --- case 3: pull one vertex around; incident edges track it ---
+say(cap, "drag one vertex around");
+seq {
+  move(g.1, (640, 150), 0.7, smooth);
+  move(g.1, (1080, 384), 0.7, smooth);
+  move(g.1, (640, 620), 0.7, smooth);
+  move(g.1, (360, 250), 0.7, smooth);
+}
+wait(0.6);
+
+// --- case 4: recolour the whole graph via tag broadcast, then highlight ---
+section("Styling");
+say(cap, "recolour every edge, then highlight a node");
+recolor(g.edges, cyan, 0.5);
+flash(g.1, magenta);
+par {
+  recolor(g.1, lime, 0.4);
+  pulse(g.1);
+}
+wait(1.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kthOKyJndtg" title="Drag a Node, the Edges Follow — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bfs_dfs"><a class="header" href="#bfs_dfs">bfs_dfs</a></h2>
+<p>The same graph, queue vs stack, with live frontier readouts.</p>
+<pre><code class="language-manic">// Graph Traversal — BFS vs DFS, the classic side-by-side. They're the SAME
+// algorithm; only the frontier differs: BFS uses a QUEUE (explore level by
+// level), DFS uses a STACK (dive deep first). `bfs(g, start)` / `dfs(g, start)`
+// read the graph's adjacency, run the traversal, and animate the textbook
+// states — discovered (cyan) -&gt; current (magenta) -&gt; done (lime) — with tree
+// edges lighting up and live `queue:` / `stack:` + `visited:` readouts.
+//
+//   manic examples/bfs_dfs.manic
+
+title("Graph Traversal");
+canvas("16:9");
+
+text(head, (cx, 56), "BFS vs DFS: same graph, queue vs stack");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (cx, 690), "");  color(cap, dim);  size(cap, 24);
+
+graph(gr, "a b c d e f g", "a-b a-c b-d b-e c-f c-g", circular, (cx, 320), 200, 30);
+
+show(head, 0.5);
+wait(0.4);
+
+section("BFS");
+say(cap, "BFS explores level by level, using a QUEUE");
+bfs(gr, a);
+say(cap, "queue order: a, then b c, then d e f g");
+wait(0.8);
+
+section("DFS");
+par { recolor(gr.nodes, panel, 0.4);  recolor(gr.edges, dim, 0.4); }
+say(gr.frontier, "stack:");
+say(gr.visited, "visited:");
+say(cap, "DFS dives deep down one branch, using a STACK");
+dfs(gr, a);
+say(cap, "the stack drove it depth-first before backtracking");
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GbNBlQd1fR0" title="BFS vs DFS in One Video — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="dijkstra"><a class="header" href="#dijkstra">dijkstra</a></h2>
+<p>Weighted edges, settling distances, a shortest-path tree.</p>
+<pre><code class="language-manic">// Dijkstra — single-source shortest paths on a WEIGHTED graph. Give edges a
+// weight with `a-b:w` (drawn as a midpoint label). `dijkstra(g, start)` reads the
+// weights, then runs the classic loop: repeatedly settle the nearest unsettled
+// node (magenta -&gt; lime), relaxing its edges and lowering neighbours' distances.
+// Each node shows its best-known distance (inf -&gt; the final shortest distance),
+// and the shortest-path-tree edges stay lit at the end.
+//
+//   manic examples/dijkstra.manic
+
+title("Dijkstra");
+canvas("16:9");
+
+text(head, (cx, 58), "shortest paths: settle the nearest node, relax its edges");
+display(head);  color(head, cyan);  size(head, 25);  hidden(head);
+text(cap, (cx, 690), "");  color(cap, dim);  size(cap, 24);
+
+graph(g, "a b c d e f",
+      "a-b:2 a-c:5 b-c:1 b-d:4 c-e:3 d-e:1 d-f:2 e-f:6",
+      circular, (cx, 350), 210, 30);
+
+show(head, 0.5);
+say(cap, "each node shows its best distance: start 0, the rest inf");
+wait(0.7);
+
+section("Relax");
+say(cap, "settle the nearest node, then relax every edge leaving it");
+dijkstra(g, a);
+say(cap, "settled distances are final; the lime edges form the shortest-path tree");
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/UOjIHugt4o8" title="Dijkstra's Algorithm, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="calculus--functions"><a class="header" href="#calculus--functions">Calculus &amp; functions</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="sine_wave"><a class="header" href="#sine_wave">sine_wave</a></h2>
+<p><code>axes</code> + <code>plot</code>, a curve traced on, then vectors.</p>
+<pre><code class="language-manic">// The Sine Wave — a first taste of the manic math kit.
+//   manic examples/sine_wave.manic
+//   manic examples/sine_wave.manic --still 2.6 --scale 1.5 --crt
+
+title("The Sine Wave");
+canvas(1280, 720);
+
+// --- cast: the world at t = 0 ---
+
+// a coordinate frame centred on the stage
+axes(ax, (640, 380), 520, 240);
+text(xlab, (1180, 410), "x");  color(xlab, dim);  size(xlab, 22);
+text(ylab, (665, 152), "y");   color(ylab, dim);  size(ylab, 22);
+
+// the curve: visible but not yet drawn, so we can trace it on
+plot(wave, (640, 380), 78, 120, sin, 6.6);
+untraced(wave);
+
+// a vector to point at, revealed later
+vector(v1, (640, 380), (122, 108));
+hidden(v1);
+
+// headline + caption
+text(head, (640, 118), "y = sin(x)");
+display(head);  color(head, cyan);  size(head, 40);  hidden(head);
+text(cap, (640, 662), "");  color(cap, dim);  size(cap, 22);
+
+// --- script: beats, top to bottom ---
+
+show(head, 0.5);
+say(cap, "a coordinate frame on the void");
+draw(wave, 1.7);
+say(cap, "y = sin(x), traced on");
+wait(0.6);
+
+section("Vectors");
+say(cap, "a vector from the origin");
+par {
+  show(v1, 0.4);
+  pulse(v1);
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/HSC_hssuHd0" title="Plotting sin(x) From Scratch — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="function_graph"><a class="header" href="#function_graph">function_graph</a></h2>
+<p>Plot an expression straight from a formula string.</p>
+<pre><code class="language-manic">// Function Graphs — plot ANY formula, not just a named curve. manic's answer to
+// Manim's FunctionGraph(lambda t: ...): pass a formula string in x (alias t) and
+// plot() samples it. This reproduces Manim's ExampleFunctionGraph — two
+// Fourier-style packets and a domain-clipped, lifted copy of the second.
+//
+//   manic examples/function_graph.manic
+//   manic examples/function_graph.manic --record out --fps 60
+
+title("Function Graphs");
+canvas(1280, 720);
+
+text(head, (640, 92), "plot any formula — y = f(x)");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 656), "");  color(cap, dim);  size(cap, 22);
+
+// a faint frame to read the curves against (unit = 70 px)
+plane(pl, (640, 384), 620, 300, 70);
+hidden(pl.grid);  untraced(pl.x);  untraced(pl.y);
+
+// a cosine packet: cos t + 1/2 cos 7t + 1/7 cos 14t, over x in [-7, 7]
+plot(cosf, (640, 384), 70, 70, "cos(x) + 0.5*cos(7*x) + (1/7)*cos(14*x)", 7);
+color(cosf, magenta);  untraced(cosf);
+
+// the sine version of the same packet
+plot(sinf, (640, 384), 70, 70, "sin(x) + 0.5*sin(7*x) + (1/7)*sin(14*x)", 7);
+color(sinf, cyan);  untraced(sinf);
+
+// same formula, clipped to x in [-4, 4] and lifted one unit (centre y - 70)
+plot(sinf2, (640, 314), 70, 70, "sin(x) + 0.5*sin(7*x) + (1/7)*sin(14*x)", 4);
+color(sinf2, lime);  untraced(sinf2);
+
+// --- reveal ---
+show(head, 0.5);
+section("The plane");
+say(cap, "a grid to read against — arrows on the axes");
+show(pl.grid, 0.6);
+par { draw(pl.x, 0.5);  draw(pl.y, 0.5); }
+wait(0.3);
+
+section("A cosine packet");
+say(cap, "y = cos t + 1/2 cos 7t + 1/7 cos 14t");
+draw(cosf, 1.3);
+wait(0.6);
+
+section("A sine packet");
+say(cap, "same shape, sin for cos");
+draw(sinf, 1.3);
+wait(0.6);
+
+section("Clip the domain");
+say(cap, "same formula, but only x in [-4, 4], lifted one unit");
+draw(sinf2, 1.1);
+par { pulse(cosf);  pulse(sinf);  pulse(sinf2); }
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/z5kvUfwjJ-k" title="Graph ANY Function From a Formula — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="area_under_curve"><a class="header" href="#area_under_curve">area_under_curve</a></h2>
+<p>Riemann rectangles sweeping to the integral.</p>
+<pre><code class="language-manic">// Area Under a Curve — a Riemann sum sweeping n = 5, 10, 20, 40 to show the
+// rectangles converging to the exact integral of x^2 on [0, 2.5] = 125/24.
+//
+// This is the FIRST example to use manic's loop layer: `let` variables,
+// arithmetic in arguments, a `for` range loop, and id interpolation (`s5{i}`).
+// The four bar-sets differ only in n / prefix / colour — a future `def` macro
+// would collapse them to one call; loops already do the per-bar work.
+//
+//   manic examples/area_under_curve.manic
+//   manic examples/area_under_curve.manic --record out --fps 60
+
+title("Area Under a Curve");
+canvas(1280, 720);
+
+// --- parameters (edit freely) ---
+let ox = 360;   let oy = 590;     // origin, in screen px
+let ux = 200;   let uy = 52;      // px per unit on each axis
+let a = 0;      let b = 2.5;      // integrate x^2 over [a, b]
+
+text(head, (640, 96), "a Riemann sum becomes an integral");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 656), "");  color(cap, dim);  size(cap, 24);
+
+// axes
+arrow(xax, (ox - 40, oy), (920, oy));   color(xax, dim);  untraced(xax);
+arrow(yax, (ox, oy + 20), (ox, 250));   color(yax, dim);  untraced(yax);
+text(t1, (ox + 1*ux, oy + 24), "1");     color(t1, dim);  size(t1, 18);
+text(t2, (ox + 2*ux, oy + 24), "2");     color(t2, dim);  size(t2, 18);
+text(tb, (ox + b*ux, oy + 24), "2.5");   color(tb, dim);  size(tb, 18);
+
+// the curve y = x^2 over [0, 2.5]
+plot(curve, (ox, oy), ux, uy, "x*x", (a, b));  color(curve, cyan);  z(curve, 3);  untraced(curve);
+text(clab, (ox + b*ux + 30, oy - b*b*uy), "y = x^2");  color(clab, cyan);  size(clab, 22);  hidden(clab);
+
+// --- midpoint rectangles, one loop per count ---
+let n = 5;   let dx = (b - a) / n;
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;   let h = mid * mid;
+  rect(s5{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(s5{i});  color(s5{i}, magenta);  opacity(s5{i}, 0.4);  tag(s5{i}, r5);
+}
+let n = 10;  let dx = (b - a) / n;
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;   let h = mid * mid;
+  rect(s10{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(s10{i});  color(s10{i}, magenta);  opacity(s10{i}, 0.4);  tag(s10{i}, r10);
+}
+let n = 20;  let dx = (b - a) / n;
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;   let h = mid * mid;
+  rect(s20{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(s20{i});  color(s20{i}, magenta);  opacity(s20{i}, 0.4);  tag(s20{i}, r20);
+}
+let n = 40;  let dx = (b - a) / n;
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;   let h = mid * mid;
+  rect(s40{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(s40{i});  color(s40{i}, magenta);  opacity(s40{i}, 0.4);  tag(s40{i}, r40);
+}
+hidden(r5);  hidden(r10);  hidden(r20);  hidden(r40);
+
+// --- script ---
+show(head, 0.5);
+say(cap, "the shaded area under y = x^2 from 0 to 2.5");
+par { draw(xax, 0.5);  draw(yax, 0.5); }
+draw(curve, 0.9);
+show(clab, 0.3);
+wait(0.4);
+
+section("Rectangles");
+say(cap, "n = 5 rectangles  -&gt;  area ~ 5.16");
+show(r5, 0.6);
+wait(0.7);
+fade(r5, 0.3);
+
+say(cap, "n = 10  -&gt;  area ~ 5.20");
+show(r10, 0.5);
+wait(0.6);
+fade(r10, 0.3);
+
+say(cap, "n = 20  -&gt;  area ~ 5.20");
+show(r20, 0.5);
+wait(0.6);
+fade(r20, 0.3);
+
+say(cap, "n = 40  -&gt;  area ~ 5.21 (hugging the curve)");
+show(r40, 0.5);
+wait(0.8);
+
+section("The integral");
+say(cap, "as n grows without bound, the sum IS the integral");
+fade(r40, 0.4);
+text(ans, (640, 300), "exact area = 125/24 = 5.208");  display(ans);  color(ans, lime);  size(ans, 30);  hidden(ans);
+show(ans, 0.5);
+pulse(ans);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/_UzChCEwHyY" title="The Integral, Built From Rectangles — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="riemann_rainbow"><a class="header" href="#riemann_rainbow">riemann_rainbow</a></h2>
+<p>Coloured Riemann rectangles revealed one by one.</p>
+<pre><code class="language-manic">// Riemann Rainbow — the area under y = sin(x) on [0, pi], sliced into rectangles
+// that each get their own neon hue and rise into place one by one, left to right.
+//
+// A showcase for the loop layer: one `for` builds all the bars (each `hue`d by
+// its index), and a `stagger` block sweeps them in. Exact area = 2.
+//
+//   manic examples/riemann_rainbow.manic
+//   manic examples/riemann_rainbow.manic --record out --fps 60
+
+title("Riemann Rainbow");
+canvas(1280, 720);
+
+// --- parameters ---
+let ox = 190;   let oy = 560;      // origin (screen px)
+let ux = 300;   let uy = 340;      // px per unit
+let a = 0;      let b = pi;         // y = sin(x) over [0, pi]
+let n = 28;     let dx = (b - a) / n;
+
+text(head, (640, 96), "area under y = sin(x), one slice at a time");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 640), "");  color(cap, dim);  size(cap, 24);
+
+// axes
+arrow(xax, (ox - 40, oy), (1180, oy));   color(xax, dim);  untraced(xax);
+arrow(yax, (ox, oy + 20), (ox, 180));    color(yax, dim);  untraced(yax);
+text(l0, (ox, oy + 26), "0");            color(l0, dim);  size(l0, 18);
+text(lp, (ox + b*ux, oy + 26), "pi");    color(lp, dim);  size(lp, 18);
+
+// the curve
+plot(curve, (ox, oy), ux, uy, "sin(x)", (a, b));  color(curve, fg);  z(curve, 5);  untraced(curve);
+
+// --- one rainbow bar per slice (midpoint heights) ---
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;
+  let h = sin(mid);
+  rect(bar{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(bar{i});
+  hue(bar{i}, 360 * i / n);      // each slice its own colour
+  opacity(bar{i}, 0.9);
+  tag(bar{i}, bars);
+}
+hidden(bars);
+
+// --- script ---
+show(head, 0.5);
+say(cap, "y = sin(x) from 0 to pi");
+par { draw(xax, 0.5);  draw(yax, 0.5); }
+draw(curve, 1.0);
+wait(0.3);
+
+section("Slice by slice");
+say(cap, "28 rectangles rise in, left to right");
+stagger(0.05) {
+  for i in 0..n { show(bar{i}, 0.35); }
+}
+wait(0.6);
+
+section("The area");
+say(cap, "together they fill the area under the curve = 2");
+par { pulse(curve); }
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/fs6X8MeIIgQ" title="Riemann Sums, in Rainbow — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="riemann_readout"><a class="header" href="#riemann_readout">riemann_readout</a></h2>
+<p>Running sums shown as a live computed number.</p>
+<pre><code class="language-manic">// Riemann + Live Total — the midpoint area under y = x^2 on [0, 2.5] is
+// COMPUTED in-language with a `sum(...)` reduction, and a `counter` readout
+// tweens from 0 up to that total while the bars fill in. The number you see
+// counting is the reduction's value.
+//
+// Showcases reductions + animated numeric readouts (`counter` + `to(_, value)`).
+//
+//   manic examples/riemann_readout.manic
+//   manic examples/riemann_readout.manic --record out --fps 60
+
+title("Riemann + Live Total");
+canvas(1280, 720);
+
+let ox = 300;   let oy = 560;
+let ux = 190;   let uy = 52;
+let a = 0;      let b = 2.5;   let n = 40;   let dx = (b - a) / n;
+
+// the midpoint Riemann sum, computed at build time
+let area = sum(i in 0..n : (a + (i + 0.5)*dx)^2 * dx);
+
+text(head, (640, 90), "area under y = x^2, summed as the bars fill");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+counter(total, (950, 210), 0, 3, "area = ", "");
+display(total);  color(total, lime);  size(total, 36);  hidden(total);
+text(exact, (950, 260), "exact 125/24 = 5.208");  color(exact, dim);  size(exact, 20);  hidden(exact);
+
+// axes
+arrow(xax, (ox - 40, oy), (900, oy));   color(xax, dim);  untraced(xax);
+arrow(yax, (ox, oy + 20), (ox, 210));   color(yax, dim);  untraced(yax);
+text(t1, (ox + 1*ux, oy + 24), "1");    color(t1, dim);  size(t1, 18);
+text(t2, (ox + 2*ux, oy + 24), "2");    color(t2, dim);  size(t2, 18);
+
+// curve
+plot(curve, (ox, oy), ux, uy, "x*x", (a, b));  color(curve, cyan);  z(curve, 4);  untraced(curve);
+
+// midpoint rectangles
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;
+  let h = mid * mid;
+  rect(bar{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(bar{i});  color(bar{i}, magenta);  opacity(bar{i}, 0.45);  tag(bar{i}, bars);
+}
+hidden(bars);
+
+// --- script ---
+show(head, 0.5);
+par { draw(xax, 0.5);  draw(yax, 0.5); }
+draw(curve, 0.9);
+show(total, 0.3);
+show(exact, 0.3);
+wait(0.3);
+
+// bars sweep in while the total counts up to the reduction's value
+par {
+  stagger(0.03) { for i in 0..n { show(bar{i}, 0.25); } }
+  to(total, value, area, 1.6, linear);
+}
+wait(1.4);
+pulse(total);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/mIoDoCypQaQ" title="Watch a Riemann Sum Converge — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="linear-algebra--tables"><a class="header" href="#linear-algebra--tables">Linear algebra &amp; tables</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="matrix"><a class="header" href="#matrix">matrix</a></h2>
+<p>A bracketed matrix, rows/columns addressable via tags.</p>
+<pre><code class="language-manic">// Matrix — a bracketed grid of entries, addressable by row and column via tag
+// broadcast (à la Manim's Matrix + set_row_colors / set_column_colors).
+//
+//   manic examples/matrix.manic
+//   manic examples/matrix.manic --record out --fps 60
+//
+// Rows are separated by ';', entries by spaces/commas. Entry ids m.r{i}c{j};
+// tags m.row{i} / m.col{j} / m.entries.
+
+title("Matrix");
+canvas(1280, 720);
+
+text(head, (640, 130), "rows and columns you can address");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 620), "");  color(cap, dim);  size(cap, 22);
+
+matrix(m, "2 0 4; -1 1 5; 3 -2 0", (640, 370));
+untraced(m.lbrack);  untraced(m.rbrack);
+hidden(m.entries);
+
+show(head, 0.5);
+say(cap, "a 3x3 matrix");
+par { draw(m.lbrack, 0.5);  draw(m.rbrack, 0.5); }
+seq { show(m.row0, 0.35);  show(m.row1, 0.35);  show(m.row2, 0.35); }
+wait(0.5);
+
+section("Columns");
+say(cap, "colour a column — set_column_colors");
+recolor(m.col1, magenta, 0.4);
+flash(m.col2, cyan);
+wait(0.5);
+
+section("Rows");
+say(cap, "and highlight a row — set_row_colors");
+recolor(m.row0, lime, 0.4);
+par { pulse(m.r0c0);  pulse(m.r0c1);  pulse(m.r0c2); }
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/aT4DHaAfrIk" title="Matrices, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="matrix_addition"><a class="header" href="#matrix_addition">matrix_addition</a></h2>
+<p>Two matrices summed, cell by cell.</p>
+<pre><code class="language-manic">// Matrix Addition — A + B = C, computed entry by entry. Each matching pair of
+// entries flashes, then their sum pops into the result matrix. A teaching
+// animation: it shows *why* matrix addition is element-wise.
+//
+//   manic examples/matrix_addition.manic
+//   manic examples/matrix_addition.manic --record out --fps 60
+
+title("Matrix Addition");
+canvas(1280, 720);
+
+text(head, (640, 120), "add two matrices, entry by entry");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 600), "");  color(cap, dim);  size(cap, 26);
+
+//        A            +            B            =            C
+matrix(A, "2 1; 0 3", (280, 350), 74, 66);
+matrix(B, "1 4; 5 2", (640, 350), 74, 66);
+matrix(C, "3 5; 5 5", (1000, 350), 74, 66);
+
+text(plus, (460, 350), "+");  display(plus);  color(plus, magenta);  size(plus, 44);  hidden(plus);
+text(eq, (820, 350), "=");    display(eq);    color(eq, magenta);    size(eq, 44);    hidden(eq);
+
+// A and B trace/fade in; C is built up during the sweep
+untraced(A.lbrack);  untraced(A.rbrack);
+untraced(B.lbrack);  untraced(B.rbrack);
+untraced(C.lbrack);  untraced(C.rbrack);
+hidden(A.entries);  hidden(B.entries);  hidden(C.entries);
+
+// --- reveal the two matrices ---
+show(head, 0.5);
+say(cap, "two matrices, A and B");
+par { draw(A.lbrack, 0.4);  draw(A.rbrack, 0.4);  draw(B.lbrack, 0.4);  draw(B.rbrack, 0.4); }
+par { show(A.entries, 0.4);  show(B.entries, 0.4); }
+show(plus, 0.3);
+wait(0.5);
+
+// --- add entry by entry ---
+section("Entry by entry");
+say(cap, "add matching entries, position by position");
+par { show(eq, 0.3);  draw(C.lbrack, 0.4);  draw(C.rbrack, 0.4); }
+
+seq {
+  par { flash(A.r0c0, lime);  flash(B.r0c0, lime); }
+  say(cap, "2 + 1 = 3");
+  par { show(C.r0c0, 0.3);  pulse(C.r0c0); }
+
+  par { flash(A.r0c1, lime);  flash(B.r0c1, lime); }
+  say(cap, "1 + 4 = 5");
+  par { show(C.r0c1, 0.3);  pulse(C.r0c1); }
+
+  par { flash(A.r1c0, lime);  flash(B.r1c0, lime); }
+  say(cap, "0 + 5 = 5");
+  par { show(C.r1c0, 0.3);  pulse(C.r1c0); }
+
+  par { flash(A.r1c1, lime);  flash(B.r1c1, lime); }
+  say(cap, "3 + 2 = 5");
+  par { show(C.r1c1, 0.3);  pulse(C.r1c1); }
+}
+wait(0.4);
+
+// --- the result ---
+section("Result");
+say(cap, "A + B — every entry, all at once");
+recolor(C.entries, cyan, 0.4);
+par { pulse(C.r0c0);  pulse(C.r0c1);  pulse(C.r1c0);  pulse(C.r1c1); }
+wait(1.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/aEphi9Qv_sY" title="Adding Matrices, Cell by Cell — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="matrix_addition_plane"><a class="header" href="#matrix_addition_plane">matrix_addition_plane</a></h2>
+<p>The same sum, laid out on a coordinate plane.</p>
+<pre><code class="language-manic">// Matrix Addition, Geometrically — a 2x1 matrix IS a vector. Adding two of them
+//
+//     [3]   [1]   [4]
+//     [1] + [2] = [3]
+//
+// is the same as sliding one arrow onto the tip of the other (tip-to-tail) and
+// reading off where you land. The column matrices at the top stay in lockstep
+// with the arrows on the plane, so you see the algebra and the geometry at once.
+//
+//   manic examples/matrix_addition_plane.manic
+//   manic examples/matrix_addition_plane.manic --record out --fps 60
+
+title("Matrix Addition on the Plane");
+canvas(1280, 720);
+
+text(head, (640, 96), "a 2x1 matrix is a vector — adding them is tip-to-tail");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 686), "");  color(cap, dim);  size(cap, 24);
+
+// --- the equation, as column matrices across the top ---
+matrix(MA, "3; 1", (452, 186), 44, 42);   color(MA, cyan);
+text(plus, (528, 186), "+");   display(plus);   color(plus, dim);   size(plus, 40);   hidden(plus);
+matrix(MB, "1; 2", (600, 186), 44, 42);   color(MB, magenta);
+text(eq,  (676, 186), "=");    display(eq);     color(eq, dim);     size(eq, 40);     hidden(eq);
+matrix(MC, "4; 3", (748, 186), 44, 42);   color(MC, lime);
+
+// --- the plane, centred low so the arrows have room to climb ---
+plane(pl, (640, 438), 560, 250, 48);
+
+// vectors from the plane's origin (dy is up); unit = 48 px
+vector(va, (640, 438), (144, 48),  cyan);      // a = (3, 1) -&gt; tip (784, 390)
+vector(vb, (640, 438), (48, 96),   magenta);   // b = (1, 2) -&gt; tip (688, 342)
+vector(vs, (640, 438), (192, 144), lime);      // a+b = (4, 3) -&gt; tip (832, 294)
+
+// the two translated copies that build the parallelogram
+arrow(vb2, (784, 390), (832, 294));   color(vb2, magenta);   glow(vb2, 0);
+arrow(va2, (688, 342), (832, 294));   color(va2, cyan);      glow(va2, 0);
+
+// everything but the plane grid starts hidden / untraced
+untraced(pl.x);  untraced(pl.y);  hidden(pl.grid);
+untraced(va);  untraced(vb);  untraced(vs);  untraced(vb2);  untraced(va2);
+untraced(MA.lbrack);  untraced(MA.rbrack);  hidden(MA);
+untraced(MB.lbrack);  untraced(MB.rbrack);  hidden(MB);
+untraced(MC.lbrack);  untraced(MC.rbrack);  hidden(MC);
+
+// --- reveal the plane ---
+show(head, 0.5);
+section("The plane");
+say(cap, "a cartesian grid, arrows pinned to the origin");
+show(pl.grid, 0.6);
+par { draw(pl.x, 0.5);  draw(pl.y, 0.5); }
+wait(0.3);
+
+// --- vector a ---
+section("Vector a");
+say(cap, "a = [3, 1] — three right, one up");
+par { draw(MA.lbrack, 0.3);  draw(MA.rbrack, 0.3); }
+par { show(MA, 0.3);  draw(va, 0.6); }
+wait(0.4);
+
+// --- vector b ---
+section("Vector b");
+say(cap, "b = [1, 2] — one right, two up");
+show(plus, 0.3);
+par { draw(MB.lbrack, 0.3);  draw(MB.rbrack, 0.3); }
+par { show(MB, 0.3);  draw(vb, 0.6); }
+wait(0.4);
+
+// --- tip to tail ---
+section("Tip to tail");
+say(cap, "slide b so its tail sits on the tip of a");
+draw(vb2, 0.7);
+wait(0.5);
+
+// --- the sum ---
+section("The sum");
+say(cap, "the arrow to that new point is a + b = [4, 3]");
+show(eq, 0.3);
+par { draw(MC.lbrack, 0.3);  draw(MC.rbrack, 0.3); }
+par { show(MC, 0.3);  draw(vs, 0.8); }
+par { pulse(vs);  flash(MC, lime); }
+wait(0.6);
+
+// --- parallelogram ---
+section("Either order");
+say(cap, "slide a onto b instead — same point. a + b = b + a");
+draw(va2, 0.7);
+wait(0.4);
+say(cap, "the two paths frame a parallelogram; a + b is its diagonal");
+par { pulse(va);  pulse(vb);  pulse(vs); }
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/sfp4_kIdCyc" title="Matrix Addition on the Plane — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="linear_transform"><a class="header" href="#linear_transform">linear_transform</a></h2>
+<p>A 2x2 matrix shearing a grid + basis vectors.</p>
+<pre><code class="language-manic">// Linear Transformation — a 2x2 matrix bends the whole plane. The grid, the
+// basis vectors i-hat / j-hat, and a sample point all carry the tag `pl`, so a
+// single `transform` applies the matrix to everything at once (Manim's
+// ApplyMatrix). Straight lines stay straight; the grid shears / rotates.
+//
+//   manic examples/linear_transform.manic
+//   manic examples/linear_transform.manic --template blueprint
+
+title("Linear Transformation");
+canvas("16:9");
+
+let ox = cx;   let oy = cy;
+
+text(head, (cx, 84), "a matrix bends the whole plane -- watch the grid");
+display(head);  color(head, cyan);  size(head, 24);  hidden(head);
+text(cap, (cx, 672), "");  color(cap, dim);  size(cap, 23);
+
+// the plane (its grid + axes are all tagged `pl`)
+plane(pl, (ox, oy), 580, 320, 60);
+// basis vectors + a sample point, all tagged `pl` so they transform together
+vector(vi, (ox, oy), (120, 0), cyan);      stroke(vi, 4);   tag(vi, pl);
+vector(vj, (ox, oy), (0, -120), magenta);  stroke(vj, 4);   tag(vj, pl);
+dot(mark, (ox + 180, oy - 100), 9);  color(mark, lime);  glow(mark, 1.6);  tag(mark, pl);
+
+// --- script ---
+show(head, 0.5);
+say(cap, "the identity grid, with i-hat (cyan) and j-hat (magenta)");
+wait(0.7);
+
+section("Shear");
+say(cap, "shear: i-hat stays put, j-hat leans over");
+transform(pl, (ox, oy), 1, 0.5, 0, 1, 1.4, smooth);
+wait(0.8);
+
+section("Undo");
+say(cap, "the inverse matrix brings it right back");
+transform(pl, (ox, oy), 1, -0.5, 0, 1, 1.4, smooth);
+wait(0.6);
+
+section("Rotate");
+say(cap, "a rotation matrix turns the whole plane");
+transform(pl, (ox, oy), 0.707, -0.707, 0.707, 0.707, 1.5, smooth);
+wait(1.3);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ap351ptsYTM" title="What a 2×2 Matrix Does to Space — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="table"><a class="header" href="#table">table</a></h2>
+<p>A ruled table; cells, rows, columns, labels all addressable.</p>
+<pre><code class="language-manic">// Tables — a ruled grid of entries with row/column headers, manic's Table /
+// MathTable / IntegerTable. This is an addition table: each body cell is
+// row + column. We reveal it, then "look up" 2 + 5 by flashing that row and
+// column and lighting the answer — a demo of the table's tag addressing
+// (row{i} / col{j} / the labels / the grid lines are all recolourable).
+//
+//   manic examples/table.manic
+//   manic examples/table.manic --record out --fps 60
+
+title("Tables");
+canvas(1280, 720);
+
+text(head, (640, 110), "a grid you can read by row and column");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 620), "");  color(cap, dim);  size(cap, 24);
+
+// body cells are the sums; headers are the addends (top-left corner is blank)
+table(t, "0 5 10; 2 7 12; 4 9 14", (640, 372), 120, 78, "0 5 10", "0 2 4");
+untraced(t.lines);
+hidden(t.labels);  hidden(t.entries);
+
+// --- reveal ---
+show(head, 0.5);
+say(cap, "rule the grid, then fill it in");
+draw(t.lines, 1.0);
+show(t.labels, 0.5);
+show(t.entries, 0.5);
+wait(0.5);
+
+// --- a lookup: 2 + 5 = 7 ---
+section("Look it up");
+say(cap, "read a cell as row + column");
+par { flash(t.rowlabel1, lime);  flash(t.collabel1, lime); }
+say(cap, "row 2, column 5 ...");
+par { flash(t.row1, cyan);  flash(t.col1, cyan); }
+say(cap, "2 + 5 = 7");
+recolor(t.r1c1, lime, 0.3);
+pulse(t.r1c1);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/4veAPoMkQ74" title="Build a Table in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="table_braces"><a class="header" href="#table_braces">table_braces</a></h2>
+<p>A table annotated with braces.</p>
+<pre><code class="language-manic">// Table + Braces — a quarterly sales table, annotated with curly braces that
+// group its columns (the four quarters into two halves of the year) and its
+// rows (the two regions). A practical pattern: use a table for the data and
+// braces to call out how its rows/columns cluster.
+//
+// The brace coordinates are aligned to the table's grid lines by hand — the
+// table is centred at (640,360) with 110x70 cells, so its vertical rules fall
+// at x = 365 + k*110 and its rows span y = 325..465.
+//
+//   manic examples/table_braces.manic
+//   manic examples/table_braces.manic --record out --fps 60
+
+title("Sales by Region");
+canvas(1280, 720);
+
+text(head, (640, 96), "a data table, with its groups braced");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 640), "");  color(cap, dim);  size(cap, 24);
+
+// rows = regions, columns = quarters; body cells are sales (in $k)
+table(t, "12 15 18 20; 9 11 14 16", (640, 360), 110, 70, "Q1 Q2 Q3 Q4", "North South");
+untraced(t.lines);
+hidden(t.labels);  hidden(t.entries);
+
+// column braces over the header row (bulge up: points run right -&gt; left)
+bracelabel(h1, (695, 248), (475, 248), "H1", 26);   color(h1, magenta);   hidden(h1);
+bracelabel(h2, (915, 248), (695, 248), "H2", 26);    color(h2, lime);      hidden(h2);
+
+// a vertical brace to the left of the row labels, grouping the two regions
+bracelabel(reg, (356, 325), (356, 465), "Regions", 26);   color(reg, cyan);   hidden(reg);
+
+// --- reveal the table ---
+show(head, 0.5);
+say(cap, "quarterly sales for two regions");
+draw(t.lines, 1.0);
+show(t.labels, 0.5);
+show(t.entries, 0.5);
+wait(0.4);
+
+// --- brace the columns into halves of the year ---
+section("Halves of the year");
+say(cap, "Q1-Q2 are the first half, Q3-Q4 the second");
+par { flash(t.col0, magenta);  flash(t.col1, magenta); }
+show(h1, 0.5);
+par { flash(t.col2, lime);  flash(t.col3, lime); }
+show(h2, 0.5);
+wait(0.4);
+
+// --- brace the rows into regions ---
+section("The regions");
+say(cap, "and the two rows are the regions");
+par { flash(t.rowlabel0, cyan);  flash(t.rowlabel1, cyan); }
+show(reg, 0.6);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/wnBQGLRhl1o" title="Tables + Braces — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="vectors-fields--coordinates"><a class="header" href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="vector_field"><a class="header" href="#vector_field">vector_field</a></h2>
+<p>A magnitude-coloured vector field.</p>
+<pre><code class="language-manic">// Vector Field — a grid of arrows sampling a named field, coloured by
+// magnitude (cyan → lime → magenta), à la Manim's ArrowVectorField.
+//
+//   manic examples/vector_field.manic
+//   manic examples/vector_field.manic --record out --fps 60
+//
+// Named fields: radial, sink, swirl, saddle, wave, shear, uniform, spiral.
+
+title("Vector Field");
+canvas(1280, 720);
+
+text(head, (640, 118), "");  display(head);  color(head, cyan);  size(head, 34);  hidden(head);
+text(cap, (640, 668), "");   color(cap, dim);  size(cap, 22);
+
+// two fields, revealed in turn
+arrowfield(swirl, (640, 384), 520, 250, swirl, 15);
+untraced(swirl);
+arrowfield(rad, (640, 384), 520, 250, radial, 15);
+untraced(rad);  hidden(rad);
+
+show(head, 0.4);
+say(head, "swirl");
+say(cap, "a rotational field: (-y, x)");
+draw(swirl, 1.2);
+wait(1.0);
+
+section("Radial");
+say(head, "radial");
+say(cap, "an outward source: (x, y) — arrows grow with distance");
+par { fade(swirl, 0.5);  show(rad, 0.01); }
+draw(rad, 1.2);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/k79A0njUBr4" title="A Vector Field, Coloured by Force — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="coordinates"><a class="header" href="#coordinates">coordinates</a></h2>
+<p>Axes, planes, number lines, polar &amp; complex planes.</p>
+<pre><code class="language-manic">// Coordinate Systems — a guided tour of manic's four coordinate frames:
+// Axes (ticks + labels), NumberPlane, PolarPlane, and ComplexPlane. Each frame
+// fades in, holds, then clears before the next — one centre, four lenses.
+//
+//   manic examples/coordinates.manic
+//   manic examples/coordinates.manic --record out --fps 60
+
+title("Coordinate Systems");
+canvas(1280, 720);
+
+text(head, (640, 120), "four ways to draw a plane");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 640), "");  color(cap, dim);  size(cap, 24);
+
+// --- the four systems, all centred; each starts hidden ---
+axes(ax, (640, 384), 540, 210, 45);          // + tick marks and integer labels
+plot(wave, (640, 384), 45, 45, sin, 7);       // y = sin(x) drawn on the axes
+color(wave, magenta);  untraced(wave);  hidden(ax);
+
+plane(pl, (640, 384), 560, 230, 56);   hidden(pl);
+polarplane(pp, (640, 384), 230, 5, 16);   hidden(pp);
+complexplane(cp, (640, 384), 560, 230, 56);   hidden(cp);
+
+// --- 1. Axes ---
+show(head, 0.5);
+section("Axes");
+say(cap, "a numbered cross — tick marks every unit");
+show(ax, 0.7);
+say(cap, "plot y = sin(x) on it");
+draw(wave, 1.1);
+wait(0.9);
+par { fade(ax, 0.4);  fade(wave, 0.4); }
+
+// --- 2. NumberPlane ---
+section("Number Plane");
+say(cap, "a full cartesian grid");
+show(pl, 0.7);
+wait(1.0);
+fade(pl, 0.4);
+
+// --- 3. PolarPlane ---
+section("Polar Plane");
+say(cap, "concentric rings and radial spokes — angle and radius");
+show(pp, 0.7);
+wait(1.0);
+fade(pp, 0.4);
+
+// --- 4. ComplexPlane ---
+section("Complex Plane");
+say(cap, "the same grid, read as real and imaginary parts");
+show(cp, 0.7);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/R8v8Z7XzvR8" title="Axes, Planes, Polar & Complex — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pie"><a class="header" href="#pie">pie</a></h2>
+<p>A pie chart built from sectors.</p>
+<pre><code class="language-manic">// Equal Slices — a circle cut into equal *sectors* (real filled pieces, not
+// just lines) with the math-kit `pie(id, center, r, n)` builtin. Each slice is
+// addressable as p0 … p5, so we can trace them on, then pull two out.
+//
+//   manic examples/pie.manic
+//   manic examples/pie.manic --record out --fps 60
+
+title("Equal Slices");
+canvas(1280, 720);
+
+// six equal sectors centred at (560, 400), radius 230 → p0 … p5, tag `p`
+pie(p, (560, 400), 230, 6);
+untraced(p0);  untraced(p1);  untraced(p2);
+untraced(p3);  untraced(p4);  untraced(p5);
+
+text(head, (560, 120), "six equal slices");
+display(head);  color(head, cyan);  size(head, 38);  hidden(head);
+text(cap, (560, 690), "");  color(cap, dim);  size(cap, 22);
+
+// --- cut the circle equally, one slice at a time ---
+show(head, 0.5);
+say(cap, "cut the circle into six equal sectors");
+stagger(0.12) {
+  draw(p0, 0.4);
+  draw(p1, 0.4);
+  draw(p2, 0.4);
+  draw(p3, 0.4);
+  draw(p4, 0.4);
+  draw(p5, 0.4);
+}
+wait(0.6);
+
+// --- each sector is a real piece: pull two out and recolour them ---
+say(cap, "each sector is a real piece — pull two out");
+par {
+  move(p0, (621, 435), 0.6, overshoot);
+  move(p3, (499, 365), 0.6, overshoot);
+  recolor(p0, magenta, 0.5);
+  recolor(p3, lime, 0.5);
+}
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/tLVtfq552es" title="A Pie Chart From Sectors — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="geometry-olympiad"><a class="header" href="#geometry-olympiad">Geometry (olympiad)</a></h1>
+<p>Every construction is <strong>live</strong> — the derived points recompute as the inputs move.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="equilateral"><a class="header" href="#equilateral">equilateral</a></h2>
+<p>Euclid I.1 — an equilateral triangle from two circles.</p>
+<pre><code class="language-manic">// Equilateral Triangle — Euclid, Elements Book I, Proposition 1. Given a segment
+// AB: draw the circle centred at A through B and the circle centred at B through
+// A; where they cross is the apex of an equilateral triangle. Every side then
+// equals AB. It's a fully DYNAMIC construction — drag B at the end and the
+// circles, the intersection, and the triangle all stay correct.
+//
+// New geo builtins: circle2 (circle by centre + a point on it) and circlecircle
+// (the two intersection points of two circles).
+//
+// Note: each compass circle has radius |AB|, so keep A and B close enough that
+// the circles fit the canvas (here |AB| ~ 200 px).
+//
+//   manic examples/equilateral.manic
+
+title("Equilateral Triangle");
+canvas("16:9");
+
+text(head, (cx, 96), "Euclid I.1 -- two circles give an equilateral triangle");
+color(head, cyan);  size(head, 24);  hidden(head);
+
+point(A, (540, 470), "A");
+point(B, (740, 470), "B");
+segment(ab, A, B);   color(ab, fg);   stroke(ab, 3);   untraced(ab);
+
+// the two compass circles (each of radius AB)
+circle2(cA, A, B);   color(cA, dim);   stroke(cA, 1.5);   untraced(cA);
+circle2(cB, B, A);   color(cB, dim);   stroke(cB, 1.5);   untraced(cB);
+
+// where they meet: C0 (below AB) and C1 (above AB) — take the apex above
+circlecircle(C, A, B, B, A);
+hidden(C0);   hidden(C1);
+label(C1, "C", (16, -16));   color(C1.label, lime);
+segment(ac, A, C1);   color(ac, lime);   stroke(ac, 3);   untraced(ac);
+segment(bc, B, C1);   color(bc, lime);   stroke(bc, 3);   untraced(bc);
+
+// --- construct it ---
+show(head, 0.5);
+show(A, 0.3);  show(B, 0.3);
+draw(ab, 0.6);
+
+section("Two circles");
+par { draw(cA, 0.9);  draw(cB, 0.9); }
+show(C1, 0.4);
+
+section("The triangle");
+par { draw(ac, 0.7);  draw(bc, 0.7); }
+par { pulse(ac);  pulse(bc);  pulse(ab); }
+wait(0.6);
+
+// --- drag a vertex: it stays equilateral (circles stay on-canvas) ---
+section("Drag a vertex");
+move(B, (700, 360), 1.6, smooth);
+wait(0.3);
+move(B, (660, 560), 1.6, smooth);
+wait(0.3);
+move(B, (740, 470), 1.2, smooth);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/3gsPIU8ycRs" title="Euclid's First Proof, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="triangle"><a class="header" href="#triangle">triangle</a></h2>
+<p>A triangle with its centres and cevians.</p>
+<pre><code class="language-manic">// Triangle Geometry — the geo kit (olympiad helpers à la olympiad.asy/cse5.asy).
+// Points drive everything: circumcircle, incircle, centroid, circumcenter,
+// angle mark, and the foot of an altitude are all *constructed* from A, B, C.
+//
+//   manic examples/triangle.manic
+//   manic examples/triangle.manic --record out --fps 60
+
+title("Triangle Geometry");
+canvas(1280, 720);
+
+text(head, (640, 118), "constructed from three points");
+display(head);  color(head, cyan);  size(head, 32);  hidden(head);
+text(cap, (640, 668), "");  color(cap, dim);  size(cap, 22);
+
+// the three free points
+point(A, (380, 560), "A");
+point(B, (900, 560), "B");
+point(C, (640, 190), "C");
+hidden(A);  hidden(B);  hidden(C);
+
+// sides
+segment(ab, A, B);  segment(bc, B, C);  segment(ca, C, A);
+untraced(ab);  untraced(bc);  untraced(ca);
+
+// constructions
+circumcircle(cc, A, B, C);      untraced(cc);
+circumcenter(O, A, B, C);       hidden(O);
+incircle(ic, A, B, C);          untraced(ic);
+centroid(G, A, B, C);           hidden(G);
+anglemark(angC, A, C, B);       untraced(angC);
+foot(F, C, A, B);               hidden(F);
+segment(alt, C, F);             untraced(alt);
+
+// --- script ---
+show(head, 0.5);
+say(cap, "three points make a triangle");
+par { show(A);  show(B);  show(C); }
+par { draw(ab, 0.5);  draw(bc, 0.5);  draw(ca, 0.5); }
+draw(angC, 0.4);
+wait(0.5);
+
+section("Circumcircle");
+say(cap, "the unique circle through all three vertices");
+par { show(O);  draw(cc, 0.9); }
+wait(0.6);
+
+section("Incircle &amp; Centroid");
+say(cap, "incircle (tangent to all sides) and centroid");
+par { draw(ic, 0.9);  show(G); }
+wait(0.6);
+
+section("Altitude");
+say(cap, "drop a perpendicular from C to AB — its foot F");
+par { show(F);  draw(alt, 0.6); }
+flash(F, magenta);
+wait(1.0);
+
+// the payoff: constructions are dynamic — drag a vertex and everything
+// (circumcircle, incircle, centroid, foot, angle mark, sides) recomputes.
+section("Drag a vertex");
+say(cap, "move C — every construction follows");
+move(C, (430, 230), 1.2, smooth);
+move(C, (850, 210), 1.2, smooth);
+move(C, (640, 190), 1.0, smooth);
+say(cap, "and drag A");
+move(A, (300, 520), 0.9, smooth);
+move(A, (380, 560), 0.8, smooth);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/PcBIXL7Tc1g" title="Triangle Centres, All at Once — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="incircle_tangents"><a class="header" href="#incircle_tangents">incircle_tangents</a></h2>
+<p>The incircle and its tangent points.</p>
+<pre><code class="language-manic">// The Incircle &amp; Contact Triangle — the incircle touches each side at the foot
+// of the perpendicular from the incenter, and each radius meets the side at a
+// right angle. The three touch points form the contact triangle.
+//
+//   manic examples/incircle_tangents.manic
+//   manic examples/incircle_tangents.manic --record out --fps 60
+
+title("The Incircle");
+canvas(1280, 720);
+
+text(head, (640, 120), "tangent to all three sides");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 668), "");  color(cap, dim);  size(cap, 22);
+
+point(A, (300, 560), "A");
+point(B, (1000, 560), "B");
+point(C, (640, 160), "C");
+hidden(A);  hidden(B);  hidden(C);
+
+segment(ab, A, B);  segment(bc, B, C);  segment(ca, C, A);
+untraced(ab);  untraced(bc);  untraced(ca);
+
+incenter(I, A, B, C);   color(I, cyan);   label(I, "I", (16, -14));  hidden(I);
+incircle(ic, A, B, C);  untraced(ic);
+
+// touch points = feet of perpendiculars from I to each side
+foot(tBC, I, B, C);  foot(tCA, I, C, A);  foot(tAB, I, A, B);
+color(tBC, magenta);  color(tCA, magenta);  color(tAB, magenta);
+hidden(tBC);  hidden(tCA);  hidden(tAB);
+
+// radii to the touch points, with right-angle marks
+segment(rBC, I, tBC);  segment(rCA, I, tCA);  segment(rAB, I, tAB);
+color(rBC, lime);  color(rCA, lime);  color(rAB, lime);
+untraced(rBC);  untraced(rCA);  untraced(rAB);
+rightangle(qBC, I, tBC, B);  rightangle(qCA, I, tCA, C);  rightangle(qAB, I, tAB, A);
+untraced(qBC);  untraced(qCA);  untraced(qAB);
+
+// the contact triangle
+segment(k1, tBC, tCA);  segment(k2, tCA, tAB);  segment(k3, tAB, tBC);
+untraced(k1);  untraced(k2);  untraced(k3);
+
+show(head, 0.5);
+say(cap, "a triangle and its incentre I");
+par { show(A);  show(B);  show(C); }
+par { draw(ab, 0.5);  draw(bc, 0.5);  draw(ca, 0.5); }
+show(I, 0.3);
+wait(0.3);
+
+section("Inscribed circle");
+say(cap, "the incircle touches each side once");
+draw(ic, 1.0);
+stagger(0.15) { show(tBC);  show(tCA);  show(tAB); }
+wait(0.3);
+
+section("Radii ⟂ sides");
+say(cap, "each radius meets its side at a right angle");
+par { draw(rBC, 0.5);  draw(rCA, 0.5);  draw(rAB, 0.5); }
+par { draw(qBC, 0.4);  draw(qCA, 0.4);  draw(qAB, 0.4); }
+wait(0.4);
+
+section("Contact triangle");
+say(cap, "the three touch points form the contact triangle");
+par { draw(k1, 0.5);  draw(k2, 0.5);  draw(k3, 0.5); }
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/h0LAKF_CHx0" title="The Incircle & Its Tangents — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="tangents"><a class="header" href="#tangents">tangents</a></h2>
+<p>Tangent lines from a point to a circle.</p>
+<pre><code class="language-manic">// Tangent Lines — the two tangents from an external point P to a circle, and
+// the theorem that each tangent is perpendicular to the radius at its touch
+// point. Everything is a DYNAMIC construction: move P and the touch points,
+// tangent lines, radii, and right-angle marks all recompute live.
+//
+// New geo builtins: circle2 (circle by centre + a point on it), tangent
+// (touch points from an external point), plus segment/rightangle tracking them.
+//
+//   manic examples/tangents.manic
+
+title("Tangent Lines");
+canvas("16:9");
+
+text(head, (cx, 96), "two tangents from a point -- each meets the radius at 90 degrees");
+color(head, cyan);  size(head, 24);  hidden(head);
+
+point(O, (520, 400), "O");
+point(A, (520, 200));          // a point on the circle -&gt; radius 200
+point(P, (940, 380), "P");
+hidden(A);                      // A just defines the radius; don't show it
+
+circle2(circ, O, A);  color(circ, dim);  stroke(circ, 2);  untraced(circ);
+
+// the two touch points t0 / t1, and the tangent lines to them
+tangent(t, P, O, A);
+segment(l0, P, t0);   color(l0, cyan);   stroke(l0, 3);   untraced(l0);
+segment(l1, P, t1);   color(l1, cyan);   stroke(l1, 3);   untraced(l1);
+
+// radius to each touch point + the right-angle marks
+segment(r0, O, t0);   color(r0, dim);    untraced(r0);
+segment(r1, O, t1);   color(r1, dim);    untraced(r1);
+rightangle(ra0, O, t0, P);   color(ra0, lime);   hidden(ra0);
+rightangle(ra1, O, t1, P);   color(ra1, lime);   hidden(ra1);
+
+// --- reveal ---
+show(head, 0.5);
+draw(circ, 0.8);
+show(O, 0.3);  show(P, 0.3);
+section("The tangents");
+par { draw(l0, 0.7);  draw(l1, 0.7); }
+show(t0, 0.3);  show(t1, 0.3);
+section("Radius meets tangent");
+par { draw(r0, 0.5);  draw(r1, 0.5); }
+par { show(ra0, 0.4);  show(ra1, 0.4); }
+wait(0.6);
+
+// --- prove it's dynamic: move P, everything tracks ---
+section("Move the point");
+move(P, (820, 230), 1.6, smooth);
+wait(0.4);
+move(P, (980, 470), 1.6, smooth);
+wait(0.8);
+move(P, (940, 380), 1.2, smooth);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/hkYgb9DeP84" title="Tangent Lines to a Circle — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="orthocenter"><a class="header" href="#orthocenter">orthocenter</a></h2>
+<p>The orthocentre from the three altitudes.</p>
+<pre><code class="language-manic">// Altitudes &amp; Orthocenter — the three altitudes of a triangle meet at one
+// point, the orthocenter H. Each altitude drops perpendicular to a side.
+// Dynamic: drag a vertex and the altitudes still concur.
+//
+//   manic examples/orthocenter.manic
+//   manic examples/orthocenter.manic --record out --fps 60
+
+title("Altitudes &amp; Orthocenter");
+canvas(1280, 720);
+
+text(head, (640, 120), "the three altitudes concur");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 668), "");  color(cap, dim);  size(cap, 22);
+
+point(A, (330, 540), "A");
+point(B, (980, 560), "B");
+point(C, (700, 190), "C");
+hidden(A);  hidden(B);  hidden(C);
+
+segment(ab, A, B);  segment(bc, B, C);  segment(ca, C, A);
+untraced(ab);  untraced(bc);  untraced(ca);
+
+// feet of the three altitudes
+foot(fA, A, B, C);  foot(fB, B, C, A);  foot(fC, C, A, B);
+color(fA, magenta);  color(fB, magenta);  color(fC, magenta);
+hidden(fA);  hidden(fB);  hidden(fC);
+
+// the altitudes themselves
+segment(hA, A, fA);  segment(hB, B, fB);  segment(hC, C, fC);
+color(hA, lime);  color(hB, lime);  color(hC, lime);
+untraced(hA);  untraced(hB);  untraced(hC);
+rightangle(qA, A, fA, B);  rightangle(qB, B, fB, C);  rightangle(qC, C, fC, A);
+untraced(qA);  untraced(qB);  untraced(qC);
+
+orthocenter(H, A, B, C);  color(H, cyan);  label(H, "H", (16, -14));  hidden(H);
+
+show(head, 0.5);
+say(cap, "a triangle");
+par { show(A);  show(B);  show(C); }
+par { draw(ab, 0.5);  draw(bc, 0.5);  draw(ca, 0.5); }
+wait(0.3);
+
+section("Drop the altitudes");
+say(cap, "from each vertex, perpendicular to the opposite side");
+seq {
+  par { draw(hA, 0.5);  draw(qA, 0.4);  show(fA); }
+  par { draw(hB, 0.5);  draw(qB, 0.4);  show(fB); }
+  par { draw(hC, 0.5);  draw(qC, 0.4);  show(fC); }
+}
+wait(0.3);
+
+section("Orthocenter");
+say(cap, "all three meet at the orthocenter H");
+show(H, 0.4);
+flash(H, magenta);
+wait(0.6);
+
+section("Drag a vertex");
+say(cap, "move C — the altitudes still concur");
+move(C, (520, 230), 1.2, smooth);
+move(C, (820, 250), 1.2, smooth);
+move(C, (700, 190), 1.0, smooth);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/HkVvm7BR-R8" title="Finding the Orthocentre — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="euler_line"><a class="header" href="#euler_line">euler_line</a></h2>
+<p>The Euler line through centroid, circumcentre, orthocentre.</p>
+<pre><code class="language-manic">// The Euler Line — in any triangle, the circumcenter O, centroid G, and
+// orthocenter H are collinear (and OG : GH = 1 : 2). Constructions are
+// dynamic: drag C and the three centres stay on one line.
+//
+//   manic examples/euler_line.manic
+//   manic examples/euler_line.manic --record out --fps 60
+
+title("The Euler Line");
+canvas(1280, 720);
+
+text(head, (640, 120), "circumcenter, centroid, orthocenter — collinear");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 668), "");  color(cap, dim);  size(cap, 22);
+
+point(A, (300, 560), "A");
+point(B, (1000, 540), "B");
+point(C, (560, 190), "C");
+hidden(A);  hidden(B);  hidden(C);
+
+segment(ab, A, B);  segment(bc, B, C);  segment(ca, C, A);
+untraced(ab);  untraced(bc);  untraced(ca);
+circumcircle(cc, A, B, C);  untraced(cc);
+
+circumcenter(O, A, B, C);  color(O, magenta);  label(O, "O", (18, -14));  hidden(O);
+centroid(G, A, B, C);      color(G, lime);     label(G, "G", (18, -14));  hidden(G);
+orthocenter(H, A, B, C);   color(H, cyan);     label(H, "H", (-30, -14)); hidden(H);
+segment(euler, O, H);      color(euler, magenta);  stroke(euler, 3);  untraced(euler);
+
+show(head, 0.5);
+say(cap, "any triangle, with its circumcircle");
+par { show(A);  show(B);  show(C); }
+par { draw(ab, 0.5);  draw(bc, 0.5);  draw(ca, 0.5); }
+draw(cc, 0.9);
+wait(0.4);
+
+section("Three centres");
+say(cap, "circumcenter O, centroid G, orthocenter H");
+stagger(0.3) { show(O);  show(G);  show(H); }
+wait(0.4);
+
+section("The Euler line");
+say(cap, "they always lie on a single line");
+draw(euler, 0.9);
+wait(0.6);
+
+section("Drag a vertex");
+say(cap, "move C — O, G, H stay collinear");
+move(C, (770, 220), 1.2, smooth);
+move(C, (420, 250), 1.2, smooth);
+move(C, (560, 190), 1.0, smooth);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/iiL7ctS5dAE" title="The Euler Line, Live — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="nine_point"><a class="header" href="#nine_point">nine_point</a></h2>
+<p>The nine-point circle.</p>
+<pre><code class="language-manic">// The Nine-Point Circle — one circle through the three side-midpoints AND the
+// three altitude feet. (It's the circumcircle of the medial triangle.)
+// Dynamic: drag C and the circle still catches all six points.
+//
+//   manic examples/nine_point.manic
+//   manic examples/nine_point.manic --record out --fps 60
+
+title("The Nine-Point Circle");
+canvas(1280, 720);
+
+text(head, (640, 120), "three midpoints + three feet, one circle");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 668), "");  color(cap, dim);  size(cap, 22);
+
+point(A, (320, 560), "A");
+point(B, (1000, 560), "B");
+point(C, (620, 175), "C");
+hidden(A);  hidden(B);  hidden(C);
+
+segment(ab, A, B);  segment(bc, B, C);  segment(ca, C, A);
+untraced(ab);  untraced(bc);  untraced(ca);
+
+// side midpoints
+midpoint(mAB, A, B);  midpoint(mBC, B, C);  midpoint(mCA, C, A);
+color(mAB, lime);  color(mBC, lime);  color(mCA, lime);
+hidden(mAB);  hidden(mBC);  hidden(mCA);
+
+// altitude feet
+foot(fA, A, B, C);  foot(fB, B, C, A);  foot(fC, C, A, B);
+color(fA, magenta);  color(fB, magenta);  color(fC, magenta);
+hidden(fA);  hidden(fB);  hidden(fC);
+
+// the nine-point circle = circumcircle of the medial triangle
+circumcircle(npc, mAB, mBC, mCA);  outline(npc, cyan);  untraced(npc);
+
+show(head, 0.5);
+say(cap, "start with a triangle");
+par { show(A);  show(B);  show(C); }
+par { draw(ab, 0.5);  draw(bc, 0.5);  draw(ca, 0.5); }
+wait(0.3);
+
+section("Six points");
+say(cap, "the three side-midpoints (lime)");
+stagger(0.2) { show(mAB);  show(mBC);  show(mCA); }
+say(cap, "and the three altitude feet (magenta)");
+stagger(0.2) { show(fA);  show(fB);  show(fC); }
+wait(0.4);
+
+section("One circle");
+say(cap, "a single circle passes through all six");
+draw(npc, 1.0);
+wait(0.6);
+
+section("Drag a vertex");
+say(cap, "move C — the circle still catches all six");
+move(C, (820, 220), 1.3, smooth);
+move(C, (440, 240), 1.3, smooth);
+move(C, (620, 175), 1.0, smooth);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/haZ7x-91B6c" title="The Nine-Point Circle — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="conics"><a class="header" href="#conics">conics</a></h2>
+<p>Ellipse, parabola, hyperbola.</p>
+<pre><code class="language-manic">// The Conic Sections — the three curves you get by slicing a cone: the ellipse,
+// the parabola, and the hyperbola. Each is a geo-kit primitive; they reveal one
+// at a time with the defining property.
+//
+//   manic examples/conics.manic
+//   manic examples/conics.manic --template blueprint
+
+title("The Conic Sections");
+canvas("16:9");
+
+text(head, (cx, 80), "three curves from slicing a cone");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (cx, 662), "");  color(cap, dim);  size(cap, 23);
+
+// --- ellipse (left) ---
+ellipse(el, (300, 400), 165, 100);  color(el, cyan);  stroke(el, 3);  untraced(el);
+text(ell, (300, 250), "ellipse");   color(ell, cyan);  size(ell, 26);  hidden(ell);
+
+// --- parabola (centre) ---
+parabola(pa, (660, 540), 150, 270);  color(pa, lime);  stroke(pa, 3);  untraced(pa);
+text(pal, (660, 235), "parabola");   color(pal, lime);  size(pal, 26);  hidden(pal);
+
+// --- hyperbola (right) — two branches, tagged `hy` ---
+hyperbola(hy, (1010, 400), 55, 120);  color(hy, magenta);  stroke(hy, 3);  untraced(hy);
+text(hyl, (1010, 205), "hyperbola");  color(hyl, magenta);  size(hyl, 26);  hidden(hyl);
+
+// --- reveal ---
+show(head, 0.5);
+
+section("Ellipse");
+say(cap, "ellipse -- the sum of distances to two foci stays constant");
+draw(el, 0.9);
+show(ell, 0.4);
+wait(0.5);
+
+section("Parabola");
+say(cap, "parabola -- every point is equidistant from a focus and a line");
+draw(pa, 0.9);
+show(pal, 0.4);
+wait(0.5);
+
+section("Hyperbola");
+say(cap, "hyperbola -- two branches; the difference of distances stays constant");
+draw(hy, 0.9);
+show(hyl, 0.4);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/x3vqdu40MTc" title="Ellipse, Parabola, Hyperbola — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="transforms--morphing"><a class="header" href="#transforms--morphing">Transforms &amp; morphing</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="transforms"><a class="header" href="#transforms">transforms</a></h2>
+<p>Apply a 2x2 matrix (ApplyMatrix) to a group.</p>
+<pre><code class="language-manic">// Transforms — the "animate anything" showcase.
+// Named verbs (rotate, spin, scale, move) plus the general `to(id, prop, value)`
+// escape hatch, composed with par / seq / stagger.
+//
+//   manic examples/transforms.manic
+//   manic examples/transforms.manic --record out --fps 60 --crt
+
+title("Transforms");
+canvas(1280, 720);
+
+// cast
+rect(box, (330, 400), 150, 150);   outline(box, cyan);
+label(box, "rotate");
+rect(dia, (650, 400), 140, 140);   outline(dia, magenta);
+label(dia, "to");
+circle(orb, (980, 400), 62);       outline(orb, lime);
+label(orb, "spin");
+
+dot(p, (150, 620), 12);
+text(cap, (640, 662), "");  color(cap, dim);  size(cap, 22);
+text(head, (640, 120), "animate anything");
+display(head);  color(head, cyan);  size(head, 40);  hidden(head);
+
+// script
+show(head, 0.5);
+
+section("Named verbs");
+say(cap, "rotate to an absolute angle");
+rotate(box, 45, 0.7, overshoot);
+say(cap, "spin by a relative angle, twice");
+seq {
+  spin(orb, 180, 0.6);
+  spin(orb, 180, 0.6);
+}
+wait(0.4);
+
+section("Animate anything");
+say(cap, "to(id, property, value) reaches any property");
+par {
+  to(dia, angle, 45, 0.6, smooth);
+  to(dia, scale, 1.4, 0.6);
+  to(dia, color, lime, 0.6);
+}
+wait(0.4);
+
+say(cap, "compose freely with par / seq / stagger");
+stagger(0.12) {
+  to(box, opacity, 0.4, 0.4);
+  to(dia, opacity, 0.4, 0.4);
+  to(orb, opacity, 0.4, 0.4);
+}
+to(p, x, 1130, 1.0, overshoot);
+to(p, color, magenta, 0.4);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/PnUfeUvkYHM" title="Apply a Matrix to Anything — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="transform_copy"><a class="header" href="#transform_copy">transform_copy</a></h2>
+<p>Duplicate an entity, then transform the copy.</p>
+<pre><code class="language-manic">// Copy + Winding Morph — two of the Transform family niceties. `copy(c, a)`
+// duplicates a shape so the original stays while the copy transforms; `morph`
+// with a spin angle winds the blend (Manim's Clockwise / Counterclockwise
+// Transform). Left copy morphs clockwise, right copy counter-clockwise.
+//
+//   manic examples/transform_copy.manic
+
+title("Copy + Winding Morph");
+canvas("16:9");
+
+text(head, (cx, 96), "a copy morphs while the original stays -- one CW, one CCW");
+color(head, cyan);  size(head, 23);  hidden(head);
+
+// left: original circle (dim) + a cyan copy that morphs into a square, clockwise
+circle(o1, (400, 380), 120);  color(o1, dim);  stroke(o1, 3);  hidden(o1);
+rect(t1, (400, 380), 220, 220);  hidden(t1);
+copy(c1, o1);  color(c1, cyan);  stroke(c1, 5);  glow(c1, 1.6);  hidden(c1);
+morph(c1, t1, 200);          // +200 deg = clockwise wind
+
+// right: same idea, counter-clockwise into a triangle-ish (use another square)
+circle(o2, (900, 380), 120);  color(o2, dim);  stroke(o2, 3);  hidden(o2);
+rect(t2, (900, 380), 220, 220);  hidden(t2);
+copy(c2, o2);  color(c2, magenta);  stroke(c2, 5);  glow(c2, 1.6);  hidden(c2);
+morph(c2, t2, -200);         // -200 deg = counter-clockwise
+
+// --- script ---
+show(head, 0.5);
+par { show(o1, 0.4);  show(o2, 0.4);  show(c1, 0.4);  show(c2, 0.4); }
+wait(0.5);
+
+section("Morph the copies");
+par { to(c1, morph, 1, 1.8, smooth);  to(c2, morph, 1, 1.8, smooth); }
+wait(0.9);
+par { to(c1, morph, 0, 1.8, smooth);  to(c2, morph, 0, 1.8, smooth); }
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/KSnLLXpooo0" title="Copy + Transform — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="morph"><a class="header" href="#morph">morph</a></h2>
+<p>A sampled-point shape morph from A to B.</p>
+<pre><code class="language-manic">// Shape Morph — a circle's outline blends smoothly into a square's and back
+// (Manim's Transform). `morph(a, b)` samples both outlines to the same number
+// of points; `to(a, morph, t)` interpolates between them (t = 0 is `a`'s shape,
+// 1 is `b`'s).
+//
+//   manic examples/morph.manic
+
+title("Shape Morph");
+canvas("16:9");
+
+text(head, (cx, 110), "a circle becomes a square -- and back");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+circle(sh, (cx, cy), 150);  color(sh, cyan);  stroke(sh, 5);  glow(sh, 1.6);  hidden(sh);
+rect(target, (cx, cy), 290, 290);  hidden(target);   // defines the square outline
+morph(sh, target);                                    // set sh up to morph into it
+
+// --- script ---
+show(head, 0.5);
+show(sh, 0.6);
+wait(0.5);
+
+section("Morph");
+to(sh, morph, 1, 1.6, smooth);      // circle -&gt; square
+wait(0.7);
+to(sh, morph, 0, 1.6, smooth);      // square -&gt; circle
+wait(0.7);
+to(sh, morph, 1, 1.1, overshoot);   // and back, with a bounce
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Y6kpE-ZT-T8" title="Morph One Shape Into Another — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="text--ui"><a class="header" href="#text--ui">Text &amp; UI</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="typewriter"><a class="header" href="#typewriter">typewriter</a></h2>
+<p>Text revealed character by character.</p>
+<pre><code class="language-manic">// Typewriter — text revealed letter by letter (Manim's AddTextLetterByLetter),
+// then removed letter by letter (RemoveTextLetterByLetter). `type` animates the
+// text's `trace` 0-&gt;1 (a fraction of characters shown); `erase` runs it back.
+// Declare the text `untraced` so it starts hidden, then `type` reveals it.
+//
+//   manic examples/typewriter.manic
+
+title("Typewriter");
+canvas("16:9");
+
+text(head, (cx, 150), "text, one letter at a time");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+// untraced = trace 0 = no characters shown yet
+text(line1, (cx, 320), "the quick brown fox");   color(line1, lime);  size(line1, 44);  untraced(line1);
+text(line2, (cx, 400), "jumps over the lazy dog"); color(line2, cyan); size(line2, 44);  untraced(line2);
+cursor(line2);   // this line types with a trailing cursor
+
+// --- script ---
+show(head, 0.5);
+type(line1, 1.6);     // AddTextLetterByLetter
+type(line2, 1.6);     // AddTextLetterByLetter, with a cursor
+wait(1.0);
+
+section("...and back");
+erase(line2, 1.0);    // RemoveTextLetterByLetter
+erase(line1, 1.0);
+wait(0.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/mdlHwoCvv-U" title="Typewriter Text in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="captions"><a class="header" href="#captions">captions</a></h2>
+<p>Karaoke / word-pop caption modes.</p>
+<pre><code class="language-manic">// Captions — karaoke word highlighting and TikTok-style word pop-in. `caption`
+// lays out a phrase's words in a centred row (as {id}.w0, {id}.w1, ... tagged
+// {id}.words); `karaoke` highlights them in sequence; `wordpop` pops them in one
+// at a time.
+//
+//   manic examples/captions.manic
+//   manic examples/captions.manic --record out --fps 60
+
+title("Captions");
+canvas("16:9");
+
+text(head, (cx, 110), "word-by-word: karaoke + pop-in");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+// karaoke: starts dim, words light up in sequence
+caption(kara, "follow the bouncing highlight", (cx, 280), 46, dim);
+
+// word-pop: hidden first, then each word pops in
+caption(pop, "each word pops right in", (cx, 440), 50, lime);
+hidden(pop.words);
+
+// --- script ---
+show(head, 0.5);
+
+section("Karaoke");
+karaoke(kara, 0.34, cyan);
+wait(0.8);
+
+section("Word pop");
+wordpop(pop, 0.14);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/oM2Fw-H3lNg" title="Karaoke & Word-Pop Captions — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="terminal_boot"><a class="header" href="#terminal_boot">terminal_boot</a></h2>
+<p>The neon terminal template booting up.</p>
+<pre><code class="language-manic">// Terminal Boot — a fake boot sequence typed out line by line, ending at a live
+// prompt with a blinking-style cursor. Shows off the `cursor` modifier, `type`
+// typewriter reveal, an author-set `masthead`, and the `terminal` template.
+//
+//   manic examples/terminal_boot.manic
+//   manic examples/terminal_boot.manic --record out --fps 60
+
+title("manic");
+canvas("16:9");
+template("terminal");
+masthead("manic ~ %", "READY");     // your own header text (no engine branding)
+
+text(l1, (cx, 210), "");   color(l1, lime);     size(l1, 24);
+text(l2, (cx, 260), "");   color(l2, cyan);     size(l2, 24);   hidden(l2);
+text(l3, (cx, 310), "");   color(l3, cyan);     size(l3, 24);   hidden(l3);
+text(l4, (cx, 360), "");   color(l4, lime);     size(l4, 24);   hidden(l4);
+text(prompt, (cx, 440), "");  color(prompt, fg);  size(prompt, 28);  display(prompt);
+hidden(prompt);  cursor(prompt);    // only the live prompt gets the cursor
+
+// --- boot log ---
+say(l1, "&gt; initializing manic engine", 0.1);
+type(l1, 1.0);
+
+show(l2, 0.2);
+say(l2, "  loaded kits: std math geo algo brand", 0.1);
+type(l2, 1.3);
+
+show(l3, 0.2);
+say(l3, "  timeline: deterministic @ 60fps", 0.1);
+type(l3, 1.0);
+
+show(l4, 0.2);
+say(l4, "  ready.", 0.1);
+type(l4, 0.5);
+
+// --- the prompt, awaiting input ---
+show(prompt, 0.2);
+say(prompt, "manic ~ % render my_idea", 0.1);
+type(prompt, 1.2);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/JDdcN2toYoo" title="A Neon Terminal Boots Up — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="brace"><a class="header" href="#brace">brace</a></h2>
+<p>The curly-brace family.</p>
+<pre><code class="language-manic">// Braces — label spans and parts with curly braces, manic's Brace / BraceLabel
+// / BraceBetweenPoints. A length is split into two parts a and b; a brace under
+// each names it, and a brace over the whole names the sum. Every brace here is
+// a BraceBetweenPoints (two points + a depth); bracelabel adds the text.
+//
+//   manic examples/brace.manic
+//   manic examples/brace.manic --record out --fps 60
+
+title("Braces");
+canvas(1280, 720);
+
+text(head, (640, 120), "label a span, or its parts");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 620), "");  color(cap, dim);  size(cap, 24);
+
+// the length, split at x = 680
+line(seg, (300, 360), (980, 360));  color(seg, fg);  stroke(seg, 3);  untraced(seg);
+dot(dl, (300, 360));   dot(dm, (680, 360));   dot(dr, (980, 360));
+color(dl, magenta);  color(dm, lime);  color(dr, cyan);
+hidden(dl);  hidden(dm);  hidden(dr);
+
+// braces under the two parts, and over the whole (bulges up: points go R-&gt;L)
+bracelabel(ba, (300, 392), (680, 392), "a", 30);        color(ba, magenta);
+bracelabel(bb, (680, 392), (980, 392), "b", 30);        color(bb, cyan);
+bracelabel(bt, (980, 320), (300, 320), "a + b", 34);    color(bt, lime);
+hidden(ba);  hidden(bb);  hidden(bt);
+
+// --- reveal ---
+show(head, 0.5);
+say(cap, "here is a length");
+draw(seg, 0.7);
+par { show(dl, 0.3);  show(dr, 0.3); }
+wait(0.3);
+
+section("Two parts");
+say(cap, "split it at a point into parts a and b");
+show(dm, 0.3);
+show(ba, 0.5);
+show(bb, 0.5);
+wait(0.5);
+
+section("The whole");
+say(cap, "the whole span is a + b");
+show(bt, 0.6);
+par { pulse(ba.label);  pulse(bb.label);  pulse(bt.label); }
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ftbN0Xh2u1E" title="Curly Braces, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="banner"><a class="header" href="#banner">banner</a></h2>
+<p>The manic logo / banner reveal.</p>
+<pre><code class="language-manic">// The manic banner &amp; watermark (à la ManimBanner). "create" draws the icon
+// trio on; "expand" reveals the wordmark; the watermark persists in the corner.
+//
+//   manic examples/banner.manic
+//   manic examples/banner.manic --record out --fps 60
+
+title("manic");
+canvas(1280, 720);
+
+banner(logo, (600, 360), 1.1);
+untraced(logo.icon);     // icon shapes drawn on
+hidden(logo.word);       // wordmark revealed on "expand"
+
+// a persistent, screen-fixed watermark, bottom-right
+watermark(wm, (1120, 690), "manic // synthwave");
+
+text(cap, (640, 560), "");  color(cap, dim);  size(cap, 22);
+
+// --- create: trace the icon trio on (staggered) ---
+say(cap, "create");
+stagger(0.2) {
+  draw(logo.dot, 0.6);
+  draw(logo.sq, 0.6);
+  draw(logo.tri, 0.6);
+}
+par { pulse(logo.dot);  pulse(logo.sq);  pulse(logo.tri); }
+wait(0.4);
+
+// --- expand: reveal the wordmark ---
+say(cap, "expand");
+show(logo.word, 0.6);
+wait(1.2);
+
+// --- unwrite: fade the whole banner ---
+say(cap, "");
+par { fade(logo.icon, 0.5);  fade(logo.word, 0.5); }
+wait(0.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/FhoIX7kKQXU" title="The manic Logo Reveal" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="generative--recursive"><a class="header" href="#generative--recursive">Generative &amp; recursive</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="fractal_tree"><a class="header" href="#fractal_tree">fractal_tree</a></h2>
+<p>One recursive <code>def</code>, drawn to depth 12.</p>
+<pre><code class="language-manic">// Fractal Tree — a recursive `def` macro draws a branching tree. Each branch
+// splits into two shorter branches at a fixed angle; `if depth &gt; 0` is the base
+// case that stops the recursion. Branches are keyed by a binary-heap index
+// (k -&gt; 2k, 2k+1) so every segment gets a unique id, hued and thinned by depth.
+//
+// Showcases the Phase-2 language layer: `def`, recursion, `if`, comparisons.
+//
+//   manic examples/fractal_tree.manic
+//   manic examples/fractal_tree.manic --record out --fps 60
+
+title("Fractal Tree");
+canvas(1280, 720);
+
+text(head, (640, 92), "one recursive rule, drawn to depth 9");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+// draw a branch, then recurse into two children (unless we've bottomed out)
+def branch(k, x, y, ang, len, depth) {
+  // stop at the base depth OR once a branch is too short to see — so even a
+  // large `depth` self-limits (the tree is bounded by branch length)
+  if depth &gt; 0 &amp;&amp; len &gt; 2 {
+    let x2 = x + len * cos(ang);
+    let y2 = y - len * sin(ang);          // screen y grows downward
+    line(seg{k}, (x, y), (x2, y2));
+    stroke(seg{k}, 1 + depth * 0.8);
+    hue(seg{k}, 120 + depth * 15);        // trunk bluish -&gt; tips green
+    untraced(seg{k});  tag(seg{k}, tree);
+    branch(2*k,     x2, y2, ang + 0.42, len * 0.72, depth - 1);
+    branch(2*k + 1, x2, y2, ang - 0.42, len * 0.72, depth - 1);
+  }
+}
+
+// grow from the bottom centre, pointing up (angle pi/2)
+branch(1, 640, 700, 1.5708, 150, 20);
+
+// --- script ---
+show(head, 0.5);
+draw(tree, 1.8);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/nYiPEEQEmIs" title="One Rule → a Fractal Tree — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="hue_wave"><a class="header" href="#hue_wave">hue_wave</a></h2>
+<p>An animated hue wave across a grid.</p>
+<pre><code class="language-manic">// Hue Wave — a ring of dots, each with its own starting hue, all advancing
+// their hue at the same rate so the rainbow *rotates* around the ring. Shows
+// off `hue` as an animatable track: `to(id, hue, degrees)` cycles colour over
+// time (unlike `recolor`, it travels around the colour wheel, not through grey).
+//
+//   manic examples/hue_wave.manic
+//   manic examples/hue_wave.manic --record out --fps 60
+
+title("Hue Wave");
+canvas(1280, 720);
+
+text(head, (640, 110), "an animated hue track — colour that cycles");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+let n = 36;   let cx = 640;   let cy = 400;   let r = 210;
+
+// a ring of dots, rainbow-coloured by angle
+for i in 0..n {
+  let a = tau * i / n;
+  dot(d{i}, (cx + r*cos(a), cy + r*sin(a)), 18);
+  hue(d{i}, 360 * i / n);
+  glow(d{i}, 1.4);
+  tag(d{i}, ring);
+}
+
+// --- script ---
+show(head, 0.5);
+
+// spin the whole rainbow: every dot advances its hue by 720 deg (two full
+// cycles) over 6s, in parallel — the pattern rotates around the ring
+par {
+  for i in 0..n {
+    to(d{i}, hue, 360*i/n + 720, 6.0, linear);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/OxZUBYYEtAk" title="A Wave of Colour — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="hill_run"><a class="header" href="#hill_run">hill_run</a></h2>
+<p>A little scene animated with the language layer.</p>
+<pre><code class="language-manic">// Uphill / Downhill — a rate x time = distance word problem.
+// "Up a hill at 4 mph, back down the same path at 6 mph, round trip = 1 hour.
+//  Total distance?"  Answer: one-way d = 2.4 mi, round trip = 4.8 mi.
+//
+// The distance is SOLVED in-language: d = 1 / (1/4 + 1/6) = 2.4, total = 2d.
+// The runner climbs slowly, descends faster (3s vs 2s ~ the real 0.6h : 0.4h),
+// then the equation is derived and the answer counts up on a live readout.
+//
+//   manic examples/hill_run.manic
+//   manic examples/hill_run.manic --record out --fps 60
+
+title("Uphill / Downhill");
+canvas("16:9");
+
+// --- the numbers, computed the same way you'd reason it out ---
+let up   = 4;                      // mph, uphill
+let down = 6;                      // mph, downhill
+let d     = 1 / (1/up + 1/down);   // one-way distance = 2.4 mi  (from d/4 + d/6 = 1)
+let total = 2 * d;                 // round trip        = 4.8 mi
+
+text(head, (cx, 84), "up at 4 mph, down at 6 mph -- round trip takes 1 hour");
+display(head);  color(head, cyan);  size(head, 24);  hidden(head);
+text(cap, (cx, 668), "");  color(cap, dim);  size(cap, 23);
+
+// --- the hill (a single path, run up then down) ---
+line(ground, (150, 560), (700, 560));   color(ground, dim);   stroke(ground, 2);   untraced(ground);
+line(path,   (200, 560), (620, 210));    color(path, cyan);    stroke(path, 4);      untraced(path);
+text(flag, (628, 196), "top");           color(flag, dim);     size(flag, 18);       hidden(flag);
+dot(runner, (200, 560), 16);             color(runner, lime);  glow(runner, 1.7);    hidden(runner);
+
+text(uplbl,   (300, 470), "4 mph");      color(uplbl, cyan);      size(uplbl, 24);   hidden(uplbl);
+text(downlbl, (520, 320), "6 mph");      color(downlbl, magenta); size(downlbl, 24); hidden(downlbl);
+
+// --- the derivation, on the right ---
+text(e1, (960, 230), "time = distance / rate");   color(e1, dim);  size(e1, 22);  hidden(e1);
+text(e2, (960, 300), "d/4 + d/6 = 1");            display(e2);  color(e2, fg);      size(e2, 30);  hidden(e2);
+text(e3, (960, 360), "5d/12 = 1   -&gt;   d = 2.4");  display(e3);  color(e3, cyan);    size(e3, 26);  hidden(e3);
+counter(ans, (960, 450), 0, 1, "round trip = 2d = ", " mi");  display(ans);  color(ans, lime);  size(ans, 30);  hidden(ans);
+
+// --- script ---
+show(head, 0.5);
+say(cap, "an athlete runs up a hill, then back down the same path");
+par { draw(ground, 0.5);  draw(path, 0.7); }
+par { show(flag, 0.3);  show(runner, 0.3); }
+wait(0.3);
+
+section("Up the hill");
+say(cap, "uphill at 4 mph -- the slow leg");
+show(uplbl, 0.3);
+move(runner, (620, 210), 3.0, linear);
+
+section("Back down");
+say(cap, "downhill at 6 mph -- faster, so less time");
+show(downlbl, 0.3);
+move(runner, (200, 560), 2.0, linear);
+wait(0.3);
+
+section("Set up the equation");
+say(cap, "let d = the one-way distance; time = distance / rate");
+show(e1, 0.4);
+show(e2, 0.4);
+say(cap, "combine the fractions: 5d/12 = 1, so d = 2.4 miles");
+show(e3, 0.5);
+flash(e3, lime);
+
+section("Total distance");
+say(cap, "the round trip is 2d");
+show(ans, 0.3);
+to(ans, value, total, 1.4);
+pulse(ans);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/pzRBP1qbncc" title="A Tiny Animated Scene — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="equal_cuts"><a class="header" href="#equal_cuts">equal_cuts</a></h2>
+<p>A circle halved again and again (pizza cuts).</p>
+<pre><code class="language-manic">// Equal Cuts — a circle sliced into equal pieces, repeatedly doubled:
+// 2 → 4 → 8 equal wedges. Each "cut" is a diameter traced across the circle
+// at an equal angle. (manic has no sector primitive yet, so cuts are lines.)
+//
+//   manic examples/equal_cuts.manic
+//   manic examples/equal_cuts.manic --record out --fps 60
+
+title("Equal Cuts");
+canvas(1280, 720);
+
+// the circle to divide, centred at (640, 400) with radius 240
+circle(pie, (640, 400), 240);  stroke(pie, 3);
+
+// four diameters through the centre at 0, 45, 90, 135 degrees.
+// revealed in stages, they cut the circle into 2, then 4, then 8 equal pieces.
+line(c0, (400, 400), (880, 400));  color(c0, magenta);  stroke(c0, 3);  untraced(c0);   //   0
+line(c1, (640, 160), (640, 640));  color(c1, magenta);  stroke(c1, 3);  untraced(c1);   //  90
+line(c2, (470, 230), (810, 570));  color(c2, lime);     stroke(c2, 3);  untraced(c2);   // 135
+line(c3, (810, 230), (470, 570));  color(c3, lime);     stroke(c3, 3);  untraced(c3);   //  45
+
+text(cap, (640, 690), "");    color(cap, dim);   size(cap, 22);
+text(count, (1040, 170), ""); color(count, cyan); size(count, 34);  bold(count);
+
+// --- cut in half ---
+say(cap, "cut the circle in half");
+draw(c0, 0.6);
+say(count, "2 pieces");
+wait(0.5);
+
+// --- cut again: four equal pieces ---
+say(cap, "cut again at a right angle — four equal pieces");
+draw(c1, 0.6);
+say(count, "4 pieces");
+wait(0.5);
+
+// --- and again: eight equal pieces ---
+say(cap, "and again on both diagonals — eight equal pieces");
+par {
+  draw(c2, 0.6);
+  draw(c3, 0.6);
+}
+say(count, "8 pieces");
+pulse(pie);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/AThpTutdcbE" title="Halving a Circle, Again & Again — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="archimedes_pi"><a class="header" href="#archimedes_pi">archimedes_pi</a></h2>
+<p>Bounding pi with inscribed / circumscribed polygons.</p>
+<pre><code class="language-manic">// Approximating pi — Archimedes' method (c. 250 BC): inscribe a regular polygon
+// in a circle and its perimeter closes in on the circumference. For an n-gon in
+// a circle of radius R the perimeter is 2R * n*sin(pi/n), so pi ~ n*sin(pi/n),
+// which -&gt; pi as n grows. We sweep n = 6, 24, 96 (Archimedes' own 96-gon) and
+// zoom in to see the last polygon nearly kiss the circle.
+//
+// Uses: a `for` loop per polygon, computed estimates, a live counter, and the
+// camera (cam + zoom).
+//
+//   manic examples/archimedes_pi.manic
+//   manic examples/archimedes_pi.manic --record out --fps 60
+
+title("Approximating pi");
+canvas("16:9");
+
+let ox = 440;   let oy = 400;   let R = 240;   // circle centre + radius
+
+// the estimates, computed in-language
+let e6  = 6  * sin(pi/6);       // 3.000
+let e24 = 24 * sin(pi/24);      // 3.133
+let e96 = 96 * sin(pi/96);      // 3.141
+
+text(head, (640, 78), "Archimedes: straight lines closing in on a circle");
+display(head);  color(head, cyan);  size(head, 25);  hidden(head);
+text(cap, (640, 675), "");  color(cap, dim);  size(cap, 22);
+
+// the true circle (the target)
+circle(circ, (ox, oy), R);  outlined(circ);  outline(circ, dim);  stroke(circ, 2);  untraced(circ);
+
+// live pi readout
+counter(est, (990, 330), 0, 3, "pi ~ ", "");  display(est);  color(est, lime);  size(est, 40);  hidden(est);
+text(truth, (990, 395), "true pi = 3.14159...");  color(truth, dim);  size(truth, 20);  hidden(truth);
+
+// --- hexagon: n = 6 (magenta) ---
+let n = 6;
+for i in 0..n {
+  let a0 = tau*i/n;   let a1 = tau*(i+1)/n;
+  line(h{i}, (ox + R*cos(a0), oy + R*sin(a0)), (ox + R*cos(a1), oy + R*sin(a1)));
+  color(h{i}, magenta);  stroke(h{i}, 3);  untraced(h{i});  tag(h{i}, p6);
+}
+// --- 24-gon (cyan) ---
+let n = 24;
+for i in 0..n {
+  let a0 = tau*i/n;   let a1 = tau*(i+1)/n;
+  line(g{i}, (ox + R*cos(a0), oy + R*sin(a0)), (ox + R*cos(a1), oy + R*sin(a1)));
+  color(g{i}, cyan);  stroke(g{i}, 3);  untraced(g{i});  tag(g{i}, p24);
+}
+// --- 96-gon (lime), Archimedes' own ---
+let n = 96;
+for i in 0..n {
+  let a0 = tau*i/n;   let a1 = tau*(i+1)/n;
+  line(k{i}, (ox + R*cos(a0), oy + R*sin(a0)), (ox + R*cos(a1), oy + R*sin(a1)));
+  color(k{i}, lime);  stroke(k{i}, 2);  untraced(k{i});  tag(k{i}, p96);
+}
+
+// --- script ---
+show(head, 0.5);
+say(cap, "how close can straight lines get to a curve?");
+draw(circ, 1.0);
+par { show(est, 0.3);  show(truth, 0.3); }
+wait(0.4);
+
+section("6 sides");
+say(cap, "start with a hexagon inside the circle");
+draw(p6, 0.8);
+to(est, value, e6, 1.0);
+wait(0.7);
+fade(p6, 0.4);
+
+section("24 sides");
+say(cap, "more sides hug the circle more tightly");
+draw(p24, 1.0);
+to(est, value, e24, 1.0);
+wait(0.7);
+fade(p24, 0.4);
+
+section("96 sides");
+say(cap, "Archimedes went to 96 sides -- around 250 BC");
+draw(p96, 1.2);
+to(est, value, e96, 1.0);
+pulse(est);
+wait(0.7);
+
+section("Almost a circle");
+say(cap, "zoom in: the polygon edge and the arc nearly touch");
+par { cam((ox, oy - R), 1.5, smooth);  zoom(5, 1.5, smooth); }
+wait(1.4);
+par { cam((cx, cy), 1.0, smooth);  zoom(1, 1.0, smooth); }
+wait(0.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/mfK_823Mb4I" title="How Archimedes Found π — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="boolean-shapes"><a class="header" href="#boolean-shapes">Boolean shapes</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="boolean"><a class="header" href="#boolean">boolean</a></h2>
+<p>Union / intersection / difference of shapes.</p>
+<pre><code class="language-manic">// Boolean Ops — combine two shapes into a new region: union, intersection,
+// difference, exclusion (xor). Each cell overlaps a square (cyan outline) and
+// a circle (magenta outline); the filled lime shape is the result.
+//
+//   manic examples/boolean.manic
+//   manic examples/boolean.manic --record out --fps 60
+
+title("Boolean Ops");
+canvas(1280, 720);
+
+text(head, (640, 118), "boolean shape ops");
+display(head);  color(head, cyan);  size(head, 36);  hidden(head);
+
+// --- union (top-left) ---
+rect(aS, (330, 300), 130, 130);  outlined(aS);  outline(aS, cyan);     opacity(aS, 0.4);
+circle(aC, (400, 250), 78);      outlined(aC);  outline(aC, magenta);  opacity(aC, 0.4);
+union(aR, aS, aC, lime);         hidden(aR);
+text(aL, (365, 430), "union");   color(aL, dim);  size(aL, 22);
+
+// --- intersection (top-right) ---
+rect(bS, (880, 300), 130, 130);  outlined(bS);  outline(bS, cyan);     opacity(bS, 0.4);
+circle(bC, (950, 250), 78);      outlined(bC);  outline(bC, magenta);  opacity(bC, 0.4);
+intersect(bR, bS, bC, lime);     hidden(bR);
+text(bL, (915, 430), "intersection");  color(bL, dim);  size(bL, 20);
+
+// --- difference (bottom-left): square minus circle ---
+rect(cS, (330, 545), 130, 130);  outlined(cS);  outline(cS, cyan);     opacity(cS, 0.4);
+circle(cC, (400, 495), 78);      outlined(cC);  outline(cC, magenta);  opacity(cC, 0.4);
+difference(cR, cS, cC, lime);    hidden(cR);
+text(cL, (355, 675), "difference (rect - circle)");  color(cL, dim);  size(cL, 18);
+
+// --- exclusion / xor (bottom-right) ---
+rect(dS, (880, 545), 130, 130);  outlined(dS);  outline(dS, cyan);     opacity(dS, 0.4);
+circle(dC, (950, 495), 78);      outlined(dC);  outline(dC, magenta);  opacity(dC, 0.4);
+xor(dR, dS, dC, lime);           hidden(dR);
+text(dL, (915, 675), "exclusion (xor)");  color(dL, dim);  size(dL, 18);
+
+// --- script: reveal each result in turn ---
+show(head, 0.5);
+stagger(0.3) {
+  show(aR, 0.4);
+  show(bR, 0.4);
+  show(cR, 0.4);
+  show(dR, 0.4);
+}
+wait(1.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/EtcPd8VUa5Y" title="Union, Intersection, Difference — manic" allowfullscreen loading="lazy"></iframe></div>
+
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

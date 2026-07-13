@@ -1,0 +1,29 @@
+// Shape Morph — a circle's outline blends smoothly into a square's and back
+// (Manim's Transform). `morph(a, b)` samples both outlines to the same number
+// of points; `to(a, morph, t)` interpolates between them (t = 0 is `a`'s shape,
+// 1 is `b`'s).
+//
+//   manic examples/morph.manic
+
+title("Shape Morph");
+canvas("16:9");
+
+text(head, (cx, 110), "a circle becomes a square -- and back");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+circle(sh, (cx, cy), 150);  color(sh, cyan);  stroke(sh, 5);  glow(sh, 1.6);  hidden(sh);
+rect(target, (cx, cy), 290, 290);  hidden(target);   // defines the square outline
+morph(sh, target);                                    // set sh up to morph into it
+
+// --- script ---
+show(head, 0.5);
+show(sh, 0.6);
+wait(0.5);
+
+section("Morph");
+to(sh, morph, 1, 1.6, smooth);      // circle -> square
+wait(0.7);
+to(sh, morph, 0, 1.6, smooth);      // square -> circle
+wait(0.7);
+to(sh, morph, 1, 1.1, overshoot);   // and back, with a bounce
+wait(1.4);

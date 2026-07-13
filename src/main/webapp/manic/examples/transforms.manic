@@ -1,0 +1,54 @@
+// Transforms — the "animate anything" showcase.
+// Named verbs (rotate, spin, scale, move) plus the general `to(id, prop, value)`
+// escape hatch, composed with par / seq / stagger.
+//
+//   manic examples/transforms.manic
+//   manic examples/transforms.manic --record out --fps 60 --crt
+
+title("Transforms");
+canvas(1280, 720);
+
+// cast
+rect(box, (330, 400), 150, 150);   outline(box, cyan);
+label(box, "rotate");
+rect(dia, (650, 400), 140, 140);   outline(dia, magenta);
+label(dia, "to");
+circle(orb, (980, 400), 62);       outline(orb, lime);
+label(orb, "spin");
+
+dot(p, (150, 620), 12);
+text(cap, (640, 662), "");  color(cap, dim);  size(cap, 22);
+text(head, (640, 120), "animate anything");
+display(head);  color(head, cyan);  size(head, 40);  hidden(head);
+
+// script
+show(head, 0.5);
+
+section("Named verbs");
+say(cap, "rotate to an absolute angle");
+rotate(box, 45, 0.7, overshoot);
+say(cap, "spin by a relative angle, twice");
+seq {
+  spin(orb, 180, 0.6);
+  spin(orb, 180, 0.6);
+}
+wait(0.4);
+
+section("Animate anything");
+say(cap, "to(id, property, value) reaches any property");
+par {
+  to(dia, angle, 45, 0.6, smooth);
+  to(dia, scale, 1.4, 0.6);
+  to(dia, color, lime, 0.6);
+}
+wait(0.4);
+
+say(cap, "compose freely with par / seq / stagger");
+stagger(0.12) {
+  to(box, opacity, 0.4, 0.4);
+  to(dia, opacity, 0.4, 0.4);
+  to(orb, opacity, 0.4, 0.4);
+}
+to(p, x, 1130, 1.0, overshoot);
+to(p, color, magenta, 0.4);
+wait(1.0);

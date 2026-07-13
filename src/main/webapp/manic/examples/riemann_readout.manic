@@ -1,0 +1,61 @@
+// Riemann + Live Total — the midpoint area under y = x^2 on [0, 2.5] is
+// COMPUTED in-language with a `sum(...)` reduction, and a `counter` readout
+// tweens from 0 up to that total while the bars fill in. The number you see
+// counting is the reduction's value.
+//
+// Showcases reductions + animated numeric readouts (`counter` + `to(_, value)`).
+//
+//   manic examples/riemann_readout.manic
+//   manic examples/riemann_readout.manic --record out --fps 60
+
+title("Riemann + Live Total");
+canvas(1280, 720);
+
+let ox = 300;   let oy = 560;
+let ux = 190;   let uy = 52;
+let a = 0;      let b = 2.5;   let n = 40;   let dx = (b - a) / n;
+
+// the midpoint Riemann sum, computed at build time
+let area = sum(i in 0..n : (a + (i + 0.5)*dx)^2 * dx);
+
+text(head, (640, 90), "area under y = x^2, summed as the bars fill");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+counter(total, (950, 210), 0, 3, "area = ", "");
+display(total);  color(total, lime);  size(total, 36);  hidden(total);
+text(exact, (950, 260), "exact 125/24 = 5.208");  color(exact, dim);  size(exact, 20);  hidden(exact);
+
+// axes
+arrow(xax, (ox - 40, oy), (900, oy));   color(xax, dim);  untraced(xax);
+arrow(yax, (ox, oy + 20), (ox, 210));   color(yax, dim);  untraced(yax);
+text(t1, (ox + 1*ux, oy + 24), "1");    color(t1, dim);  size(t1, 18);
+text(t2, (ox + 2*ux, oy + 24), "2");    color(t2, dim);  size(t2, 18);
+
+// curve
+plot(curve, (ox, oy), ux, uy, "x*x", (a, b));  color(curve, cyan);  z(curve, 4);  untraced(curve);
+
+// midpoint rectangles
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;
+  let h = mid * mid;
+  rect(bar{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(bar{i});  color(bar{i}, magenta);  opacity(bar{i}, 0.45);  tag(bar{i}, bars);
+}
+hidden(bars);
+
+// --- script ---
+show(head, 0.5);
+par { draw(xax, 0.5);  draw(yax, 0.5); }
+draw(curve, 0.9);
+show(total, 0.3);
+show(exact, 0.3);
+wait(0.3);
+
+// bars sweep in while the total counts up to the reduction's value
+par {
+  stagger(0.03) { for i in 0..n { show(bar{i}, 0.25); } }
+  to(total, value, area, 1.6, linear);
+}
+wait(1.4);
+pulse(total);
+wait(1.0);

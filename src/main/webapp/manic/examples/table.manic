@@ -1,0 +1,39 @@
+// Tables — a ruled grid of entries with row/column headers, manic's Table /
+// MathTable / IntegerTable. This is an addition table: each body cell is
+// row + column. We reveal it, then "look up" 2 + 5 by flashing that row and
+// column and lighting the answer — a demo of the table's tag addressing
+// (row{i} / col{j} / the labels / the grid lines are all recolourable).
+//
+//   manic examples/table.manic
+//   manic examples/table.manic --record out --fps 60
+
+title("Tables");
+canvas(1280, 720);
+
+text(head, (640, 110), "a grid you can read by row and column");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 620), "");  color(cap, dim);  size(cap, 24);
+
+// body cells are the sums; headers are the addends (top-left corner is blank)
+table(t, "0 5 10; 2 7 12; 4 9 14", (640, 372), 120, 78, "0 5 10", "0 2 4");
+untraced(t.lines);
+hidden(t.labels);  hidden(t.entries);
+
+// --- reveal ---
+show(head, 0.5);
+say(cap, "rule the grid, then fill it in");
+draw(t.lines, 1.0);
+show(t.labels, 0.5);
+show(t.entries, 0.5);
+wait(0.5);
+
+// --- a lookup: 2 + 5 = 7 ---
+section("Look it up");
+say(cap, "read a cell as row + column");
+par { flash(t.rowlabel1, lime);  flash(t.collabel1, lime); }
+say(cap, "row 2, column 5 ...");
+par { flash(t.row1, cyan);  flash(t.col1, cyan); }
+say(cap, "2 + 5 = 7");
+recolor(t.r1c1, lime, 0.3);
+pulse(t.r1c1);
+wait(1.4);

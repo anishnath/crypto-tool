@@ -1,0 +1,57 @@
+// Equilateral Triangle — Euclid, Elements Book I, Proposition 1. Given a segment
+// AB: draw the circle centred at A through B and the circle centred at B through
+// A; where they cross is the apex of an equilateral triangle. Every side then
+// equals AB. It's a fully DYNAMIC construction — drag B at the end and the
+// circles, the intersection, and the triangle all stay correct.
+//
+// New geo builtins: circle2 (circle by centre + a point on it) and circlecircle
+// (the two intersection points of two circles).
+//
+// Note: each compass circle has radius |AB|, so keep A and B close enough that
+// the circles fit the canvas (here |AB| ~ 200 px).
+//
+//   manic examples/equilateral.manic
+
+title("Equilateral Triangle");
+canvas("16:9");
+
+text(head, (cx, 96), "Euclid I.1 -- two circles give an equilateral triangle");
+color(head, cyan);  size(head, 24);  hidden(head);
+
+point(A, (540, 470), "A");
+point(B, (740, 470), "B");
+segment(ab, A, B);   color(ab, fg);   stroke(ab, 3);   untraced(ab);
+
+// the two compass circles (each of radius AB)
+circle2(cA, A, B);   color(cA, dim);   stroke(cA, 1.5);   untraced(cA);
+circle2(cB, B, A);   color(cB, dim);   stroke(cB, 1.5);   untraced(cB);
+
+// where they meet: C0 (below AB) and C1 (above AB) — take the apex above
+circlecircle(C, A, B, B, A);
+hidden(C0);   hidden(C1);
+label(C1, "C", (16, -16));   color(C1.label, lime);
+segment(ac, A, C1);   color(ac, lime);   stroke(ac, 3);   untraced(ac);
+segment(bc, B, C1);   color(bc, lime);   stroke(bc, 3);   untraced(bc);
+
+// --- construct it ---
+show(head, 0.5);
+show(A, 0.3);  show(B, 0.3);
+draw(ab, 0.6);
+
+section("Two circles");
+par { draw(cA, 0.9);  draw(cB, 0.9); }
+show(C1, 0.4);
+
+section("The triangle");
+par { draw(ac, 0.7);  draw(bc, 0.7); }
+par { pulse(ac);  pulse(bc);  pulse(ab); }
+wait(0.6);
+
+// --- drag a vertex: it stays equilateral (circles stay on-canvas) ---
+section("Drag a vertex");
+move(B, (700, 360), 1.6, smooth);
+wait(0.3);
+move(B, (660, 560), 1.6, smooth);
+wait(0.3);
+move(B, (740, 470), 1.2, smooth);
+wait(1.0);

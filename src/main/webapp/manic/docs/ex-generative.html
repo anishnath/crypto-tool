@@ -1,0 +1,543 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Generative &amp; recursive - manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Write animations as plain text. A friendly, example-first guide for creators.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-cb661d5b.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-5b7013c8.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://8gwifi.org/manic" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="generative--recursive"><a class="header" href="#generative--recursive">Generative &amp; recursive</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="fractal_tree"><a class="header" href="#fractal_tree">fractal_tree</a></h2>
+<p>One recursive <code>def</code>, drawn to depth 12.</p>
+<pre><code class="language-manic">// Fractal Tree — a recursive `def` macro draws a branching tree. Each branch
+// splits into two shorter branches at a fixed angle; `if depth &gt; 0` is the base
+// case that stops the recursion. Branches are keyed by a binary-heap index
+// (k -&gt; 2k, 2k+1) so every segment gets a unique id, hued and thinned by depth.
+//
+// Showcases the Phase-2 language layer: `def`, recursion, `if`, comparisons.
+//
+//   manic examples/fractal_tree.manic
+//   manic examples/fractal_tree.manic --record out --fps 60
+
+title("Fractal Tree");
+canvas(1280, 720);
+
+text(head, (640, 92), "one recursive rule, drawn to depth 9");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+// draw a branch, then recurse into two children (unless we've bottomed out)
+def branch(k, x, y, ang, len, depth) {
+  // stop at the base depth OR once a branch is too short to see — so even a
+  // large `depth` self-limits (the tree is bounded by branch length)
+  if depth &gt; 0 &amp;&amp; len &gt; 2 {
+    let x2 = x + len * cos(ang);
+    let y2 = y - len * sin(ang);          // screen y grows downward
+    line(seg{k}, (x, y), (x2, y2));
+    stroke(seg{k}, 1 + depth * 0.8);
+    hue(seg{k}, 120 + depth * 15);        // trunk bluish -&gt; tips green
+    untraced(seg{k});  tag(seg{k}, tree);
+    branch(2*k,     x2, y2, ang + 0.42, len * 0.72, depth - 1);
+    branch(2*k + 1, x2, y2, ang - 0.42, len * 0.72, depth - 1);
+  }
+}
+
+// grow from the bottom centre, pointing up (angle pi/2)
+branch(1, 640, 700, 1.5708, 150, 20);
+
+// --- script ---
+show(head, 0.5);
+draw(tree, 1.8);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/nYiPEEQEmIs" title="One Rule → a Fractal Tree — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="hue_wave"><a class="header" href="#hue_wave">hue_wave</a></h2>
+<p>An animated hue wave across a grid.</p>
+<pre><code class="language-manic">// Hue Wave — a ring of dots, each with its own starting hue, all advancing
+// their hue at the same rate so the rainbow *rotates* around the ring. Shows
+// off `hue` as an animatable track: `to(id, hue, degrees)` cycles colour over
+// time (unlike `recolor`, it travels around the colour wheel, not through grey).
+//
+//   manic examples/hue_wave.manic
+//   manic examples/hue_wave.manic --record out --fps 60
+
+title("Hue Wave");
+canvas(1280, 720);
+
+text(head, (640, 110), "an animated hue track — colour that cycles");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+let n = 36;   let cx = 640;   let cy = 400;   let r = 210;
+
+// a ring of dots, rainbow-coloured by angle
+for i in 0..n {
+  let a = tau * i / n;
+  dot(d{i}, (cx + r*cos(a), cy + r*sin(a)), 18);
+  hue(d{i}, 360 * i / n);
+  glow(d{i}, 1.4);
+  tag(d{i}, ring);
+}
+
+// --- script ---
+show(head, 0.5);
+
+// spin the whole rainbow: every dot advances its hue by 720 deg (two full
+// cycles) over 6s, in parallel — the pattern rotates around the ring
+par {
+  for i in 0..n {
+    to(d{i}, hue, 360*i/n + 720, 6.0, linear);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/OxZUBYYEtAk" title="A Wave of Colour — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="hill_run"><a class="header" href="#hill_run">hill_run</a></h2>
+<p>A little scene animated with the language layer.</p>
+<pre><code class="language-manic">// Uphill / Downhill — a rate x time = distance word problem.
+// "Up a hill at 4 mph, back down the same path at 6 mph, round trip = 1 hour.
+//  Total distance?"  Answer: one-way d = 2.4 mi, round trip = 4.8 mi.
+//
+// The distance is SOLVED in-language: d = 1 / (1/4 + 1/6) = 2.4, total = 2d.
+// The runner climbs slowly, descends faster (3s vs 2s ~ the real 0.6h : 0.4h),
+// then the equation is derived and the answer counts up on a live readout.
+//
+//   manic examples/hill_run.manic
+//   manic examples/hill_run.manic --record out --fps 60
+
+title("Uphill / Downhill");
+canvas("16:9");
+
+// --- the numbers, computed the same way you'd reason it out ---
+let up   = 4;                      // mph, uphill
+let down = 6;                      // mph, downhill
+let d     = 1 / (1/up + 1/down);   // one-way distance = 2.4 mi  (from d/4 + d/6 = 1)
+let total = 2 * d;                 // round trip        = 4.8 mi
+
+text(head, (cx, 84), "up at 4 mph, down at 6 mph -- round trip takes 1 hour");
+display(head);  color(head, cyan);  size(head, 24);  hidden(head);
+text(cap, (cx, 668), "");  color(cap, dim);  size(cap, 23);
+
+// --- the hill (a single path, run up then down) ---
+line(ground, (150, 560), (700, 560));   color(ground, dim);   stroke(ground, 2);   untraced(ground);
+line(path,   (200, 560), (620, 210));    color(path, cyan);    stroke(path, 4);      untraced(path);
+text(flag, (628, 196), "top");           color(flag, dim);     size(flag, 18);       hidden(flag);
+dot(runner, (200, 560), 16);             color(runner, lime);  glow(runner, 1.7);    hidden(runner);
+
+text(uplbl,   (300, 470), "4 mph");      color(uplbl, cyan);      size(uplbl, 24);   hidden(uplbl);
+text(downlbl, (520, 320), "6 mph");      color(downlbl, magenta); size(downlbl, 24); hidden(downlbl);
+
+// --- the derivation, on the right ---
+text(e1, (960, 230), "time = distance / rate");   color(e1, dim);  size(e1, 22);  hidden(e1);
+text(e2, (960, 300), "d/4 + d/6 = 1");            display(e2);  color(e2, fg);      size(e2, 30);  hidden(e2);
+text(e3, (960, 360), "5d/12 = 1   -&gt;   d = 2.4");  display(e3);  color(e3, cyan);    size(e3, 26);  hidden(e3);
+counter(ans, (960, 450), 0, 1, "round trip = 2d = ", " mi");  display(ans);  color(ans, lime);  size(ans, 30);  hidden(ans);
+
+// --- script ---
+show(head, 0.5);
+say(cap, "an athlete runs up a hill, then back down the same path");
+par { draw(ground, 0.5);  draw(path, 0.7); }
+par { show(flag, 0.3);  show(runner, 0.3); }
+wait(0.3);
+
+section("Up the hill");
+say(cap, "uphill at 4 mph -- the slow leg");
+show(uplbl, 0.3);
+move(runner, (620, 210), 3.0, linear);
+
+section("Back down");
+say(cap, "downhill at 6 mph -- faster, so less time");
+show(downlbl, 0.3);
+move(runner, (200, 560), 2.0, linear);
+wait(0.3);
+
+section("Set up the equation");
+say(cap, "let d = the one-way distance; time = distance / rate");
+show(e1, 0.4);
+show(e2, 0.4);
+say(cap, "combine the fractions: 5d/12 = 1, so d = 2.4 miles");
+show(e3, 0.5);
+flash(e3, lime);
+
+section("Total distance");
+say(cap, "the round trip is 2d");
+show(ans, 0.3);
+to(ans, value, total, 1.4);
+pulse(ans);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/pzRBP1qbncc" title="A Tiny Animated Scene — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="equal_cuts"><a class="header" href="#equal_cuts">equal_cuts</a></h2>
+<p>A circle halved again and again (pizza cuts).</p>
+<pre><code class="language-manic">// Equal Cuts — a circle sliced into equal pieces, repeatedly doubled:
+// 2 → 4 → 8 equal wedges. Each "cut" is a diameter traced across the circle
+// at an equal angle. (manic has no sector primitive yet, so cuts are lines.)
+//
+//   manic examples/equal_cuts.manic
+//   manic examples/equal_cuts.manic --record out --fps 60
+
+title("Equal Cuts");
+canvas(1280, 720);
+
+// the circle to divide, centred at (640, 400) with radius 240
+circle(pie, (640, 400), 240);  stroke(pie, 3);
+
+// four diameters through the centre at 0, 45, 90, 135 degrees.
+// revealed in stages, they cut the circle into 2, then 4, then 8 equal pieces.
+line(c0, (400, 400), (880, 400));  color(c0, magenta);  stroke(c0, 3);  untraced(c0);   //   0
+line(c1, (640, 160), (640, 640));  color(c1, magenta);  stroke(c1, 3);  untraced(c1);   //  90
+line(c2, (470, 230), (810, 570));  color(c2, lime);     stroke(c2, 3);  untraced(c2);   // 135
+line(c3, (810, 230), (470, 570));  color(c3, lime);     stroke(c3, 3);  untraced(c3);   //  45
+
+text(cap, (640, 690), "");    color(cap, dim);   size(cap, 22);
+text(count, (1040, 170), ""); color(count, cyan); size(count, 34);  bold(count);
+
+// --- cut in half ---
+say(cap, "cut the circle in half");
+draw(c0, 0.6);
+say(count, "2 pieces");
+wait(0.5);
+
+// --- cut again: four equal pieces ---
+say(cap, "cut again at a right angle — four equal pieces");
+draw(c1, 0.6);
+say(count, "4 pieces");
+wait(0.5);
+
+// --- and again: eight equal pieces ---
+say(cap, "and again on both diagonals — eight equal pieces");
+par {
+  draw(c2, 0.6);
+  draw(c3, 0.6);
+}
+say(count, "8 pieces");
+pulse(pie);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/AThpTutdcbE" title="Halving a Circle, Again & Again — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="archimedes_pi"><a class="header" href="#archimedes_pi">archimedes_pi</a></h2>
+<p>Bounding pi with inscribed / circumscribed polygons.</p>
+<pre><code class="language-manic">// Approximating pi — Archimedes' method (c. 250 BC): inscribe a regular polygon
+// in a circle and its perimeter closes in on the circumference. For an n-gon in
+// a circle of radius R the perimeter is 2R * n*sin(pi/n), so pi ~ n*sin(pi/n),
+// which -&gt; pi as n grows. We sweep n = 6, 24, 96 (Archimedes' own 96-gon) and
+// zoom in to see the last polygon nearly kiss the circle.
+//
+// Uses: a `for` loop per polygon, computed estimates, a live counter, and the
+// camera (cam + zoom).
+//
+//   manic examples/archimedes_pi.manic
+//   manic examples/archimedes_pi.manic --record out --fps 60
+
+title("Approximating pi");
+canvas("16:9");
+
+let ox = 440;   let oy = 400;   let R = 240;   // circle centre + radius
+
+// the estimates, computed in-language
+let e6  = 6  * sin(pi/6);       // 3.000
+let e24 = 24 * sin(pi/24);      // 3.133
+let e96 = 96 * sin(pi/96);      // 3.141
+
+text(head, (640, 78), "Archimedes: straight lines closing in on a circle");
+display(head);  color(head, cyan);  size(head, 25);  hidden(head);
+text(cap, (640, 675), "");  color(cap, dim);  size(cap, 22);
+
+// the true circle (the target)
+circle(circ, (ox, oy), R);  outlined(circ);  outline(circ, dim);  stroke(circ, 2);  untraced(circ);
+
+// live pi readout
+counter(est, (990, 330), 0, 3, "pi ~ ", "");  display(est);  color(est, lime);  size(est, 40);  hidden(est);
+text(truth, (990, 395), "true pi = 3.14159...");  color(truth, dim);  size(truth, 20);  hidden(truth);
+
+// --- hexagon: n = 6 (magenta) ---
+let n = 6;
+for i in 0..n {
+  let a0 = tau*i/n;   let a1 = tau*(i+1)/n;
+  line(h{i}, (ox + R*cos(a0), oy + R*sin(a0)), (ox + R*cos(a1), oy + R*sin(a1)));
+  color(h{i}, magenta);  stroke(h{i}, 3);  untraced(h{i});  tag(h{i}, p6);
+}
+// --- 24-gon (cyan) ---
+let n = 24;
+for i in 0..n {
+  let a0 = tau*i/n;   let a1 = tau*(i+1)/n;
+  line(g{i}, (ox + R*cos(a0), oy + R*sin(a0)), (ox + R*cos(a1), oy + R*sin(a1)));
+  color(g{i}, cyan);  stroke(g{i}, 3);  untraced(g{i});  tag(g{i}, p24);
+}
+// --- 96-gon (lime), Archimedes' own ---
+let n = 96;
+for i in 0..n {
+  let a0 = tau*i/n;   let a1 = tau*(i+1)/n;
+  line(k{i}, (ox + R*cos(a0), oy + R*sin(a0)), (ox + R*cos(a1), oy + R*sin(a1)));
+  color(k{i}, lime);  stroke(k{i}, 2);  untraced(k{i});  tag(k{i}, p96);
+}
+
+// --- script ---
+show(head, 0.5);
+say(cap, "how close can straight lines get to a curve?");
+draw(circ, 1.0);
+par { show(est, 0.3);  show(truth, 0.3); }
+wait(0.4);
+
+section("6 sides");
+say(cap, "start with a hexagon inside the circle");
+draw(p6, 0.8);
+to(est, value, e6, 1.0);
+wait(0.7);
+fade(p6, 0.4);
+
+section("24 sides");
+say(cap, "more sides hug the circle more tightly");
+draw(p24, 1.0);
+to(est, value, e24, 1.0);
+wait(0.7);
+fade(p24, 0.4);
+
+section("96 sides");
+say(cap, "Archimedes went to 96 sides -- around 250 BC");
+draw(p96, 1.2);
+to(est, value, e96, 1.0);
+pulse(est);
+wait(0.7);
+
+section("Almost a circle");
+say(cap, "zoom in: the polygon edge and the arc nearly touch");
+par { cam((ox, oy - R), 1.5, smooth);  zoom(5, 1.5, smooth); }
+wait(1.4);
+par { cam((cx, cy), 1.0, smooth);  zoom(1, 1.0, smooth); }
+wait(0.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/mfK_823Mb4I" title="How Archimedes Found π — manic" allowfullscreen loading="lazy"></iframe></div>
+
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ex-text.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ex-boolean.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ex-text.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ex-boolean.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

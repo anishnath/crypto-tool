@@ -1,0 +1,39 @@
+// Fractal Tree — a recursive `def` macro draws a branching tree. Each branch
+// splits into two shorter branches at a fixed angle; `if depth > 0` is the base
+// case that stops the recursion. Branches are keyed by a binary-heap index
+// (k -> 2k, 2k+1) so every segment gets a unique id, hued and thinned by depth.
+//
+// Showcases the Phase-2 language layer: `def`, recursion, `if`, comparisons.
+//
+//   manic examples/fractal_tree.manic
+//   manic examples/fractal_tree.manic --record out --fps 60
+
+title("Fractal Tree");
+canvas(1280, 720);
+
+text(head, (640, 92), "one recursive rule, drawn to depth 9");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+// draw a branch, then recurse into two children (unless we've bottomed out)
+def branch(k, x, y, ang, len, depth) {
+  // stop at the base depth OR once a branch is too short to see — so even a
+  // large `depth` self-limits (the tree is bounded by branch length)
+  if depth > 0 && len > 2 {
+    let x2 = x + len * cos(ang);
+    let y2 = y - len * sin(ang);          // screen y grows downward
+    line(seg{k}, (x, y), (x2, y2));
+    stroke(seg{k}, 1 + depth * 0.8);
+    hue(seg{k}, 120 + depth * 15);        // trunk bluish -> tips green
+    untraced(seg{k});  tag(seg{k}, tree);
+    branch(2*k,     x2, y2, ang + 0.42, len * 0.72, depth - 1);
+    branch(2*k + 1, x2, y2, ang - 0.42, len * 0.72, depth - 1);
+  }
+}
+
+// grow from the bottom centre, pointing up (angle pi/2)
+branch(1, 640, 700, 1.5708, 150, 20);
+
+// --- script ---
+show(head, 0.5);
+draw(tree, 1.8);
+wait(1.6);

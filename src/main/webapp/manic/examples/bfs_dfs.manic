@@ -1,0 +1,35 @@
+// Graph Traversal — BFS vs DFS, the classic side-by-side. They're the SAME
+// algorithm; only the frontier differs: BFS uses a QUEUE (explore level by
+// level), DFS uses a STACK (dive deep first). `bfs(g, start)` / `dfs(g, start)`
+// read the graph's adjacency, run the traversal, and animate the textbook
+// states — discovered (cyan) -> current (magenta) -> done (lime) — with tree
+// edges lighting up and live `queue:` / `stack:` + `visited:` readouts.
+//
+//   manic examples/bfs_dfs.manic
+
+title("Graph Traversal");
+canvas("16:9");
+
+text(head, (cx, 56), "BFS vs DFS: same graph, queue vs stack");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (cx, 690), "");  color(cap, dim);  size(cap, 24);
+
+graph(gr, "a b c d e f g", "a-b a-c b-d b-e c-f c-g", circular, (cx, 320), 200, 30);
+
+show(head, 0.5);
+wait(0.4);
+
+section("BFS");
+say(cap, "BFS explores level by level, using a QUEUE");
+bfs(gr, a);
+say(cap, "queue order: a, then b c, then d e f g");
+wait(0.8);
+
+section("DFS");
+par { recolor(gr.nodes, panel, 0.4);  recolor(gr.edges, dim, 0.4); }
+say(gr.frontier, "stack:");
+say(gr.visited, "visited:");
+say(cap, "DFS dives deep down one branch, using a STACK");
+dfs(gr, a);
+say(cap, "the stack drove it depth-first before backtracking");
+wait(1.2);

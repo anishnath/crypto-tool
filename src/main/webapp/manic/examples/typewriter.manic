@@ -1,0 +1,28 @@
+// Typewriter — text revealed letter by letter (Manim's AddTextLetterByLetter),
+// then removed letter by letter (RemoveTextLetterByLetter). `type` animates the
+// text's `trace` 0->1 (a fraction of characters shown); `erase` runs it back.
+// Declare the text `untraced` so it starts hidden, then `type` reveals it.
+//
+//   manic examples/typewriter.manic
+
+title("Typewriter");
+canvas("16:9");
+
+text(head, (cx, 150), "text, one letter at a time");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+
+// untraced = trace 0 = no characters shown yet
+text(line1, (cx, 320), "the quick brown fox");   color(line1, lime);  size(line1, 44);  untraced(line1);
+text(line2, (cx, 400), "jumps over the lazy dog"); color(line2, cyan); size(line2, 44);  untraced(line2);
+cursor(line2);   // this line types with a trailing cursor
+
+// --- script ---
+show(head, 0.5);
+type(line1, 1.6);     // AddTextLetterByLetter
+type(line2, 1.6);     // AddTextLetterByLetter, with a cursor
+wait(1.0);
+
+section("...and back");
+erase(line2, 1.0);    // RemoveTextLetterByLetter
+erase(line1, 1.0);
+wait(0.8);

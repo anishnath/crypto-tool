@@ -1,0 +1,32 @@
+// Two Pointers — the `pointer`/`pointat` primitive. `pointer(id, arr, slot, label)`
+// drops a caret under a slot; `pointat(id, arr, slot)` slides it to another slot
+// (its label follows). Pointers track slot *positions*, so they stay put as
+// values move. Here `lo`/`hi` scan inward on a sorted array.
+//
+//   manic examples/two_pointer.manic
+
+title("Two Pointers");
+canvas("16:9");
+
+text(head, (cx, 120), "two pointers scan toward the middle");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (cx, 560), "");  color(cap, dim);  size(cap, 26);
+
+array(a, "1 3 5 7 9 11", (cx, 340), 92, 92);
+pointer(lo, a, 0, "lo");
+pointer(hi, a, 5, "hi");
+
+show(head, 0.5);
+say(cap, "start at both ends");
+wait(0.5);
+compare(a, 0, 5);
+
+say(cap, "step both inward");
+par { pointat(lo, a, 1);  pointat(hi, a, 4); }
+compare(a, 1, 4);
+
+par { pointat(lo, a, 2);  pointat(hi, a, 3); }
+compare(a, 2, 3);
+
+say(cap, "the pointers have met");
+wait(1.2);

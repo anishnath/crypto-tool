@@ -1,0 +1,63 @@
+// Altitudes & Orthocenter — the three altitudes of a triangle meet at one
+// point, the orthocenter H. Each altitude drops perpendicular to a side.
+// Dynamic: drag a vertex and the altitudes still concur.
+//
+//   manic examples/orthocenter.manic
+//   manic examples/orthocenter.manic --record out --fps 60
+
+title("Altitudes & Orthocenter");
+canvas(1280, 720);
+
+text(head, (640, 120), "the three altitudes concur");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 668), "");  color(cap, dim);  size(cap, 22);
+
+point(A, (330, 540), "A");
+point(B, (980, 560), "B");
+point(C, (700, 190), "C");
+hidden(A);  hidden(B);  hidden(C);
+
+segment(ab, A, B);  segment(bc, B, C);  segment(ca, C, A);
+untraced(ab);  untraced(bc);  untraced(ca);
+
+// feet of the three altitudes
+foot(fA, A, B, C);  foot(fB, B, C, A);  foot(fC, C, A, B);
+color(fA, magenta);  color(fB, magenta);  color(fC, magenta);
+hidden(fA);  hidden(fB);  hidden(fC);
+
+// the altitudes themselves
+segment(hA, A, fA);  segment(hB, B, fB);  segment(hC, C, fC);
+color(hA, lime);  color(hB, lime);  color(hC, lime);
+untraced(hA);  untraced(hB);  untraced(hC);
+rightangle(qA, A, fA, B);  rightangle(qB, B, fB, C);  rightangle(qC, C, fC, A);
+untraced(qA);  untraced(qB);  untraced(qC);
+
+orthocenter(H, A, B, C);  color(H, cyan);  label(H, "H", (16, -14));  hidden(H);
+
+show(head, 0.5);
+say(cap, "a triangle");
+par { show(A);  show(B);  show(C); }
+par { draw(ab, 0.5);  draw(bc, 0.5);  draw(ca, 0.5); }
+wait(0.3);
+
+section("Drop the altitudes");
+say(cap, "from each vertex, perpendicular to the opposite side");
+seq {
+  par { draw(hA, 0.5);  draw(qA, 0.4);  show(fA); }
+  par { draw(hB, 0.5);  draw(qB, 0.4);  show(fB); }
+  par { draw(hC, 0.5);  draw(qC, 0.4);  show(fC); }
+}
+wait(0.3);
+
+section("Orthocenter");
+say(cap, "all three meet at the orthocenter H");
+show(H, 0.4);
+flash(H, magenta);
+wait(0.6);
+
+section("Drag a vertex");
+say(cap, "move C — the altitudes still concur");
+move(C, (520, 230), 1.2, smooth);
+move(C, (820, 250), 1.2, smooth);
+move(C, (700, 190), 1.0, smooth);
+wait(1.0);

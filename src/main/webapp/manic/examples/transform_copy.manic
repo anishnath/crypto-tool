@@ -1,0 +1,35 @@
+// Copy + Winding Morph — two of the Transform family niceties. `copy(c, a)`
+// duplicates a shape so the original stays while the copy transforms; `morph`
+// with a spin angle winds the blend (Manim's Clockwise / Counterclockwise
+// Transform). Left copy morphs clockwise, right copy counter-clockwise.
+//
+//   manic examples/transform_copy.manic
+
+title("Copy + Winding Morph");
+canvas("16:9");
+
+text(head, (cx, 96), "a copy morphs while the original stays -- one CW, one CCW");
+color(head, cyan);  size(head, 23);  hidden(head);
+
+// left: original circle (dim) + a cyan copy that morphs into a square, clockwise
+circle(o1, (400, 380), 120);  color(o1, dim);  stroke(o1, 3);  hidden(o1);
+rect(t1, (400, 380), 220, 220);  hidden(t1);
+copy(c1, o1);  color(c1, cyan);  stroke(c1, 5);  glow(c1, 1.6);  hidden(c1);
+morph(c1, t1, 200);          // +200 deg = clockwise wind
+
+// right: same idea, counter-clockwise into a triangle-ish (use another square)
+circle(o2, (900, 380), 120);  color(o2, dim);  stroke(o2, 3);  hidden(o2);
+rect(t2, (900, 380), 220, 220);  hidden(t2);
+copy(c2, o2);  color(c2, magenta);  stroke(c2, 5);  glow(c2, 1.6);  hidden(c2);
+morph(c2, t2, -200);         // -200 deg = counter-clockwise
+
+// --- script ---
+show(head, 0.5);
+par { show(o1, 0.4);  show(o2, 0.4);  show(c1, 0.4);  show(c2, 0.4); }
+wait(0.5);
+
+section("Morph the copies");
+par { to(c1, morph, 1, 1.8, smooth);  to(c2, morph, 1, 1.8, smooth); }
+wait(0.9);
+par { to(c1, morph, 0, 1.8, smooth);  to(c2, morph, 0, 1.8, smooth); }
+wait(1.2);

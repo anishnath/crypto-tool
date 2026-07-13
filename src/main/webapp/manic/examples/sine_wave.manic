@@ -1,0 +1,42 @@
+// The Sine Wave — a first taste of the manic math kit.
+//   manic examples/sine_wave.manic
+//   manic examples/sine_wave.manic --still 2.6 --scale 1.5 --crt
+
+title("The Sine Wave");
+canvas(1280, 720);
+
+// --- cast: the world at t = 0 ---
+
+// a coordinate frame centred on the stage
+axes(ax, (640, 380), 520, 240);
+text(xlab, (1180, 410), "x");  color(xlab, dim);  size(xlab, 22);
+text(ylab, (665, 152), "y");   color(ylab, dim);  size(ylab, 22);
+
+// the curve: visible but not yet drawn, so we can trace it on
+plot(wave, (640, 380), 78, 120, sin, 6.6);
+untraced(wave);
+
+// a vector to point at, revealed later
+vector(v1, (640, 380), (122, 108));
+hidden(v1);
+
+// headline + caption
+text(head, (640, 118), "y = sin(x)");
+display(head);  color(head, cyan);  size(head, 40);  hidden(head);
+text(cap, (640, 662), "");  color(cap, dim);  size(cap, 22);
+
+// --- script: beats, top to bottom ---
+
+show(head, 0.5);
+say(cap, "a coordinate frame on the void");
+draw(wave, 1.7);
+say(cap, "y = sin(x), traced on");
+wait(0.6);
+
+section("Vectors");
+say(cap, "a vector from the origin");
+par {
+  show(v1, 0.4);
+  pulse(v1);
+}
+wait(1.2);

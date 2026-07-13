@@ -1,0 +1,41 @@
+// Equal Slices — a circle cut into equal *sectors* (real filled pieces, not
+// just lines) with the math-kit `pie(id, center, r, n)` builtin. Each slice is
+// addressable as p0 … p5, so we can trace them on, then pull two out.
+//
+//   manic examples/pie.manic
+//   manic examples/pie.manic --record out --fps 60
+
+title("Equal Slices");
+canvas(1280, 720);
+
+// six equal sectors centred at (560, 400), radius 230 → p0 … p5, tag `p`
+pie(p, (560, 400), 230, 6);
+untraced(p0);  untraced(p1);  untraced(p2);
+untraced(p3);  untraced(p4);  untraced(p5);
+
+text(head, (560, 120), "six equal slices");
+display(head);  color(head, cyan);  size(head, 38);  hidden(head);
+text(cap, (560, 690), "");  color(cap, dim);  size(cap, 22);
+
+// --- cut the circle equally, one slice at a time ---
+show(head, 0.5);
+say(cap, "cut the circle into six equal sectors");
+stagger(0.12) {
+  draw(p0, 0.4);
+  draw(p1, 0.4);
+  draw(p2, 0.4);
+  draw(p3, 0.4);
+  draw(p4, 0.4);
+  draw(p5, 0.4);
+}
+wait(0.6);
+
+// --- each sector is a real piece: pull two out and recolour them ---
+say(cap, "each sector is a real piece — pull two out");
+par {
+  move(p0, (621, 435), 0.6, overshoot);
+  move(p3, (499, 365), 0.6, overshoot);
+  recolor(p0, magenta, 0.5);
+  recolor(p3, lime, 0.5);
+}
+wait(1.0);

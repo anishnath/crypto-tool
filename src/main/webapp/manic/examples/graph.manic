@@ -1,0 +1,45 @@
+// Graph — the algo kit's `graph` builtin (Manim's Graph/DiGraph). Nodes are
+// labelled circles; `a-b` is an undirected edge, `a>b` a directed arrow. Tag
+// broadcast (`draw(g.edges)`, `flash(g.nodes, …)`) animates whole groups.
+//
+//   manic examples/graph.manic
+//   manic examples/graph.manic --record out --fps 60
+
+title("Graph");
+canvas(1280, 720);
+
+text(head, (640, 118), "a directed graph, traversed");
+display(head);  color(head, cyan);  size(head, 34);  hidden(head);
+text(cap, (640, 664), "");  color(cap, dim);  size(cap, 22);
+
+// six vertices in a circle; directed edges (a>b)
+graph(g, "a b c d e f",
+         "a>b b>c c>d d>e e>f f>a a>d b>e",
+         circular, (640, 384), 210);
+
+// nodes fade in (hidden→show); edges trace on (untraced→draw)
+hidden(g.nodes);
+untraced(g.edges);
+
+show(head, 0.5);
+say(cap, "drop in the vertices");
+show(g.nodes, 0.4);            // broadcasts over every node
+say(cap, "connect the directed edges");
+draw(g.edges, 0.6);           // broadcasts over every edge
+
+section("Traversal");
+say(cap, "walk a > b > c > d");
+seq {
+  flash(g.a, magenta);
+  flash(g.b, magenta);
+  flash(g.c, magenta);
+  flash(g.d, magenta);
+}
+say(cap, "highlight the visited path");
+par {
+  recolor(g.a, lime, 0.4);
+  recolor(g.b, lime, 0.4);
+  recolor(g.c, lime, 0.4);
+  recolor(g.d, lime, 0.4);
+}
+wait(1.2);

@@ -1,0 +1,52 @@
+/* manic manual — small accents + the video placeholder card. */
+
+:root {
+  --manic-cyan: #00c8e0;
+  --manic-magenta: #e0287f;
+}
+
+/* code that shows a .manic snippet reads a touch larger */
+pre code { font-size: 0.92em; }
+
+/* --- video embeds ---------------------------------------------------------
+   A `<div class="manic-video" data-video="NAME"></div>` placeholder renders as
+   a 16:9 "coming soon" card. `scripts/embed-videos.sh` swaps it for a real
+   YouTube <iframe> once the id is filled in `book/videos.toml`.                */
+.manic-video {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 16 / 9;
+  margin: 1.2em 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.manic-video:empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #4a5a75;
+  background:
+    repeating-linear-gradient(45deg, #1116 0 12px, #0000 12px 24px),
+    linear-gradient(135deg, #10202e, #171029);
+  color: #8ea3bd;
+  font: 500 15px/1.4 ui-monospace, monospace;
+}
+.manic-video:empty::after {
+  content: "▶  demo video — coming soon";
+  letter-spacing: 0.03em;
+}
+.manic-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* the little "▶ Watch" caption above a video */
+.watch {
+  color: var(--manic-magenta);
+  font-weight: 600;
+  margin: 1.4em 0 0.2em;
+}

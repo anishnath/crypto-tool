@@ -1,0 +1,96 @@
+// Area Under a Curve — a Riemann sum sweeping n = 5, 10, 20, 40 to show the
+// rectangles converging to the exact integral of x^2 on [0, 2.5] = 125/24.
+//
+// This is the FIRST example to use manic's loop layer: `let` variables,
+// arithmetic in arguments, a `for` range loop, and id interpolation (`s5{i}`).
+// The four bar-sets differ only in n / prefix / colour — a future `def` macro
+// would collapse them to one call; loops already do the per-bar work.
+//
+//   manic examples/area_under_curve.manic
+//   manic examples/area_under_curve.manic --record out --fps 60
+
+title("Area Under a Curve");
+canvas(1280, 720);
+
+// --- parameters (edit freely) ---
+let ox = 360;   let oy = 590;     // origin, in screen px
+let ux = 200;   let uy = 52;      // px per unit on each axis
+let a = 0;      let b = 2.5;      // integrate x^2 over [a, b]
+
+text(head, (640, 96), "a Riemann sum becomes an integral");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (640, 656), "");  color(cap, dim);  size(cap, 24);
+
+// axes
+arrow(xax, (ox - 40, oy), (920, oy));   color(xax, dim);  untraced(xax);
+arrow(yax, (ox, oy + 20), (ox, 250));   color(yax, dim);  untraced(yax);
+text(t1, (ox + 1*ux, oy + 24), "1");     color(t1, dim);  size(t1, 18);
+text(t2, (ox + 2*ux, oy + 24), "2");     color(t2, dim);  size(t2, 18);
+text(tb, (ox + b*ux, oy + 24), "2.5");   color(tb, dim);  size(tb, 18);
+
+// the curve y = x^2 over [0, 2.5]
+plot(curve, (ox, oy), ux, uy, "x*x", (a, b));  color(curve, cyan);  z(curve, 3);  untraced(curve);
+text(clab, (ox + b*ux + 30, oy - b*b*uy), "y = x^2");  color(clab, cyan);  size(clab, 22);  hidden(clab);
+
+// --- midpoint rectangles, one loop per count ---
+let n = 5;   let dx = (b - a) / n;
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;   let h = mid * mid;
+  rect(s5{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(s5{i});  color(s5{i}, magenta);  opacity(s5{i}, 0.4);  tag(s5{i}, r5);
+}
+let n = 10;  let dx = (b - a) / n;
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;   let h = mid * mid;
+  rect(s10{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(s10{i});  color(s10{i}, magenta);  opacity(s10{i}, 0.4);  tag(s10{i}, r10);
+}
+let n = 20;  let dx = (b - a) / n;
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;   let h = mid * mid;
+  rect(s20{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(s20{i});  color(s20{i}, magenta);  opacity(s20{i}, 0.4);  tag(s20{i}, r20);
+}
+let n = 40;  let dx = (b - a) / n;
+for i in 0..n {
+  let mid = a + (i + 0.5) * dx;   let h = mid * mid;
+  rect(s40{i}, (ox + mid*ux, oy - h*uy/2), dx*ux, h*uy);
+  filled(s40{i});  color(s40{i}, magenta);  opacity(s40{i}, 0.4);  tag(s40{i}, r40);
+}
+hidden(r5);  hidden(r10);  hidden(r20);  hidden(r40);
+
+// --- script ---
+show(head, 0.5);
+say(cap, "the shaded area under y = x^2 from 0 to 2.5");
+par { draw(xax, 0.5);  draw(yax, 0.5); }
+draw(curve, 0.9);
+show(clab, 0.3);
+wait(0.4);
+
+section("Rectangles");
+say(cap, "n = 5 rectangles  ->  area ~ 5.16");
+show(r5, 0.6);
+wait(0.7);
+fade(r5, 0.3);
+
+say(cap, "n = 10  ->  area ~ 5.20");
+show(r10, 0.5);
+wait(0.6);
+fade(r10, 0.3);
+
+say(cap, "n = 20  ->  area ~ 5.20");
+show(r20, 0.5);
+wait(0.6);
+fade(r20, 0.3);
+
+say(cap, "n = 40  ->  area ~ 5.21 (hugging the curve)");
+show(r40, 0.5);
+wait(0.8);
+
+section("The integral");
+say(cap, "as n grows without bound, the sum IS the integral");
+fade(r40, 0.4);
+text(ans, (640, 300), "exact area = 125/24 = 5.208");  display(ans);  color(ans, lime);  size(ans, 30);  hidden(ans);
+show(ans, 0.5);
+pulse(ans);
+wait(1.6);

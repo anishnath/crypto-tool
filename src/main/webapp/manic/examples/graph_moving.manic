@@ -1,0 +1,67 @@
+// Moving Graph — vertices move and the edges reflow to follow them
+// (Manim's MovingVertices / MovingDiGraph). Also exercises layout reveal,
+// per-node moves, tag-broadcast recolour, and a highlight sweep.
+//
+//   manic examples/graph_moving.manic
+//   manic examples/graph_moving.manic --record out --fps 60
+//
+// Node ids are g.1 … g.4 ; edge ids g.1-2 etc ; tags g.nodes / g.edges.
+
+title("Moving Graph");
+canvas(1280, 720);
+
+text(head, (640, 118), "edges follow their vertices");
+display(head);  color(head, cyan);  size(head, 34);  hidden(head);
+text(cap, (640, 664), "");  color(cap, dim);  size(cap, 22);
+
+// four vertices, five undirected edges, circular to start
+graph(g, "1 2 3 4", "1-2 2-3 3-4 1-3 1-4", circular, (640, 384), 150);
+hidden(g.nodes);
+untraced(g.edges);
+
+// --- reveal ---
+show(head, 0.5);
+say(cap, "a small graph");
+show(g.nodes, 0.4);
+draw(g.edges, 0.6);
+wait(0.5);
+
+// --- case 1: fling the vertices to the corners; edges reflow live ---
+section("Moving vertices");
+say(cap, "move each vertex — the edges stretch to follow");
+par {
+  move(g.1, (360, 250), 1.2, overshoot);
+  move(g.2, (920, 250), 1.2, overshoot);
+  move(g.3, (920, 520), 1.2, overshoot);
+  move(g.4, (360, 520), 1.2, overshoot);
+}
+wait(0.8);
+
+// --- case 2: orbit two vertices past each other ---
+say(cap, "swap two vertices");
+par {
+  move(g.2, (360, 520), 1.0, smooth);
+  move(g.4, (920, 250), 1.0, smooth);
+}
+wait(0.8);
+
+// --- case 3: pull one vertex around; incident edges track it ---
+say(cap, "drag one vertex around");
+seq {
+  move(g.1, (640, 150), 0.7, smooth);
+  move(g.1, (1080, 384), 0.7, smooth);
+  move(g.1, (640, 620), 0.7, smooth);
+  move(g.1, (360, 250), 0.7, smooth);
+}
+wait(0.6);
+
+// --- case 4: recolour the whole graph via tag broadcast, then highlight ---
+section("Styling");
+say(cap, "recolour every edge, then highlight a node");
+recolor(g.edges, cyan, 0.5);
+flash(g.1, magenta);
+par {
+  recolor(g.1, lime, 0.4);
+  pulse(g.1);
+}
+wait(1.5);

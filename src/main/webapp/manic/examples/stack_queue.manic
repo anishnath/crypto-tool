@@ -1,0 +1,53 @@
+// Stack & Queue — dynamic structures, with carets marking WHERE each op acts.
+// `push`/`pop` (stack, LIFO, grows up) and `enqueue`/`dequeue` (queue, FIFO,
+// grows right) are mutating verbs: they add a cell and animate it in, tracking
+// occupancy so a chain of ops composes. A `caret` marks the action point and is
+// `move`d in step with each op so it rides the changing top / back.
+//
+//   manic examples/stack_queue.manic
+
+title("Stack & Queue");
+canvas("16:9");
+
+let sx = 300;   let sy = 500;    // stack anchor (bottom cell centre)
+let qx = 780;   let qy = 300;    // queue anchor (front cell centre)
+let cw = 84;    let ch = 64;     // cell size
+let stx = sx + 62;               // stack "top" caret sits right of the column
+
+text(head, (cx, 80), "LIFO stack, FIFO queue");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (cx, 660), "");  color(cap, dim);  size(cap, 24);
+
+text(sl, (sx, sy + 66), "stack: push / pop");  color(sl, lime);  size(sl, 22);
+text(ql, (qx + cw, qy - 118), "queue: enqueue / dequeue");  color(ql, cyan);  size(ql, 22);
+
+stack(st, (sx, sy), cw, ch);
+queue(qu, (qx, qy), cw, ch);
+
+// action-point markers
+caret(top, (stx, sy), "top", left);        // rides the top of the stack
+caret(front, (qx, qy - 52), "front", down); // fixed: dequeue leaves here
+caret(back, (qx, qy + 52), "back", up);     // rides the back of the queue
+
+show(head, 0.5);
+
+section("Stack");
+say(cap, "push 5, 3, 8 — each lands on top, the top caret rises");
+push(st, "5");
+par { push(st, "3");  move(top, (stx, sy - ch)); }
+par { push(st, "8");  move(top, (stx, sy - 2*ch)); }
+say(cap, "pop — the top value (8) leaves, the caret drops back");
+par { pop(st);  move(top, (stx, sy - ch)); }
+wait(0.5);
+
+section("Queue");
+say(cap, "enqueue A, B, C — they join at the back caret");
+enqueue(qu, "A");
+par { enqueue(qu, "B");  move(back, (qx + cw, qy + 52)); }
+par { enqueue(qu, "C");  move(back, (qx + 2*cw, qy + 52)); }
+say(cap, "dequeue — the front leaves, the rest advance, back shifts in");
+par { dequeue(qu);  move(back, (qx + cw, qy + 52)); }
+par { dequeue(qu);  move(back, (qx, qy + 52)); }
+
+say(cap, "stack: in and out at the top.  queue: in at back, out at front.");
+wait(1.2);

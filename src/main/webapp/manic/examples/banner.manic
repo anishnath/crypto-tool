@@ -1,0 +1,37 @@
+// The manic banner & watermark (à la ManimBanner). "create" draws the icon
+// trio on; "expand" reveals the wordmark; the watermark persists in the corner.
+//
+//   manic examples/banner.manic
+//   manic examples/banner.manic --record out --fps 60
+
+title("manic");
+canvas(1280, 720);
+
+banner(logo, (600, 360), 1.1);
+untraced(logo.icon);     // icon shapes drawn on
+hidden(logo.word);       // wordmark revealed on "expand"
+
+// a persistent, screen-fixed watermark, bottom-right
+watermark(wm, (1120, 690), "manic // synthwave");
+
+text(cap, (640, 560), "");  color(cap, dim);  size(cap, 22);
+
+// --- create: trace the icon trio on (staggered) ---
+say(cap, "create");
+stagger(0.2) {
+  draw(logo.dot, 0.6);
+  draw(logo.sq, 0.6);
+  draw(logo.tri, 0.6);
+}
+par { pulse(logo.dot);  pulse(logo.sq);  pulse(logo.tri); }
+wait(0.4);
+
+// --- expand: reveal the wordmark ---
+say(cap, "expand");
+show(logo.word, 0.6);
+wait(1.2);
+
+// --- unwrite: fade the whole banner ---
+say(cap, "");
+par { fade(logo.icon, 0.5);  fade(logo.word, 0.5); }
+wait(0.8);

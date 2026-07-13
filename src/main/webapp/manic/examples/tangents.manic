@@ -1,0 +1,54 @@
+// Tangent Lines — the two tangents from an external point P to a circle, and
+// the theorem that each tangent is perpendicular to the radius at its touch
+// point. Everything is a DYNAMIC construction: move P and the touch points,
+// tangent lines, radii, and right-angle marks all recompute live.
+//
+// New geo builtins: circle2 (circle by centre + a point on it), tangent
+// (touch points from an external point), plus segment/rightangle tracking them.
+//
+//   manic examples/tangents.manic
+
+title("Tangent Lines");
+canvas("16:9");
+
+text(head, (cx, 96), "two tangents from a point -- each meets the radius at 90 degrees");
+color(head, cyan);  size(head, 24);  hidden(head);
+
+point(O, (520, 400), "O");
+point(A, (520, 200));          // a point on the circle -> radius 200
+point(P, (940, 380), "P");
+hidden(A);                      // A just defines the radius; don't show it
+
+circle2(circ, O, A);  color(circ, dim);  stroke(circ, 2);  untraced(circ);
+
+// the two touch points t0 / t1, and the tangent lines to them
+tangent(t, P, O, A);
+segment(l0, P, t0);   color(l0, cyan);   stroke(l0, 3);   untraced(l0);
+segment(l1, P, t1);   color(l1, cyan);   stroke(l1, 3);   untraced(l1);
+
+// radius to each touch point + the right-angle marks
+segment(r0, O, t0);   color(r0, dim);    untraced(r0);
+segment(r1, O, t1);   color(r1, dim);    untraced(r1);
+rightangle(ra0, O, t0, P);   color(ra0, lime);   hidden(ra0);
+rightangle(ra1, O, t1, P);   color(ra1, lime);   hidden(ra1);
+
+// --- reveal ---
+show(head, 0.5);
+draw(circ, 0.8);
+show(O, 0.3);  show(P, 0.3);
+section("The tangents");
+par { draw(l0, 0.7);  draw(l1, 0.7); }
+show(t0, 0.3);  show(t1, 0.3);
+section("Radius meets tangent");
+par { draw(r0, 0.5);  draw(r1, 0.5); }
+par { show(ra0, 0.4);  show(ra1, 0.4); }
+wait(0.6);
+
+// --- prove it's dynamic: move P, everything tracks ---
+section("Move the point");
+move(P, (820, 230), 1.6, smooth);
+wait(0.4);
+move(P, (980, 470), 1.6, smooth);
+wait(0.8);
+move(P, (940, 380), 1.2, smooth);
+wait(1.0);

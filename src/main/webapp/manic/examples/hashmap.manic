@@ -1,0 +1,38 @@
+// Hash Map — separate chaining. `hashmap(id, n, (cx,cy))` draws n numbered
+// buckets in a column; `put(id, key, val)` hashes the key to a bucket and chains
+// the `key:val` entry on (collisions extend the chain); `get(id, key)` hashes,
+// then scans that bucket's chain — each entry flashes until the key matches
+// (lime) or the chain ends (bucket flashes magenta = miss).
+//
+// (Hash = sum of the key's bytes mod n. "cat" and "act" are anagrams, so they
+//  collide — same bucket, chained.)
+//
+//   manic examples/hashmap.manic
+
+title("Hash Map");
+canvas("16:9");
+
+text(head, (cx, 60), "separate chaining: hash the key, chain on collision");
+display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+text(cap, (cx, 690), "");  color(cap, dim);  size(cap, 24);
+
+hashmap(ht, 5, (360, 360), 128, 46);
+
+show(head, 0.5);
+say(cap, "put cat, dog, ok — each hashes to its bucket");
+put(ht, "cat", "7");
+put(ht, "dog", "3");
+put(ht, "ok", "1");
+wait(0.5);
+
+section("Collision");
+say(cap, "put act — same bytes as cat, so it collides and chains on");
+put(ht, "act", "9");
+wait(0.6);
+
+section("Lookup");
+say(cap, "get act — scan the chain in bucket 2 until the key matches");
+get(ht, "act");
+say(cap, "get xyz — hashes to a bucket, scans, falls off the end: miss");
+get(ht, "xyz");
+wait(1.2);

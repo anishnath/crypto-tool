@@ -1,0 +1,66 @@
+// Matrix Addition — A + B = C, computed entry by entry. Each matching pair of
+// entries flashes, then their sum pops into the result matrix. A teaching
+// animation: it shows *why* matrix addition is element-wise.
+//
+//   manic examples/matrix_addition.manic
+//   manic examples/matrix_addition.manic --record out --fps 60
+
+title("Matrix Addition");
+canvas(1280, 720);
+
+text(head, (640, 120), "add two matrices, entry by entry");
+display(head);  color(head, cyan);  size(head, 28);  hidden(head);
+text(cap, (640, 600), "");  color(cap, dim);  size(cap, 26);
+
+//        A            +            B            =            C
+matrix(A, "2 1; 0 3", (280, 350), 74, 66);
+matrix(B, "1 4; 5 2", (640, 350), 74, 66);
+matrix(C, "3 5; 5 5", (1000, 350), 74, 66);
+
+text(plus, (460, 350), "+");  display(plus);  color(plus, magenta);  size(plus, 44);  hidden(plus);
+text(eq, (820, 350), "=");    display(eq);    color(eq, magenta);    size(eq, 44);    hidden(eq);
+
+// A and B trace/fade in; C is built up during the sweep
+untraced(A.lbrack);  untraced(A.rbrack);
+untraced(B.lbrack);  untraced(B.rbrack);
+untraced(C.lbrack);  untraced(C.rbrack);
+hidden(A.entries);  hidden(B.entries);  hidden(C.entries);
+
+// --- reveal the two matrices ---
+show(head, 0.5);
+say(cap, "two matrices, A and B");
+par { draw(A.lbrack, 0.4);  draw(A.rbrack, 0.4);  draw(B.lbrack, 0.4);  draw(B.rbrack, 0.4); }
+par { show(A.entries, 0.4);  show(B.entries, 0.4); }
+show(plus, 0.3);
+wait(0.5);
+
+// --- add entry by entry ---
+section("Entry by entry");
+say(cap, "add matching entries, position by position");
+par { show(eq, 0.3);  draw(C.lbrack, 0.4);  draw(C.rbrack, 0.4); }
+
+seq {
+  par { flash(A.r0c0, lime);  flash(B.r0c0, lime); }
+  say(cap, "2 + 1 = 3");
+  par { show(C.r0c0, 0.3);  pulse(C.r0c0); }
+
+  par { flash(A.r0c1, lime);  flash(B.r0c1, lime); }
+  say(cap, "1 + 4 = 5");
+  par { show(C.r0c1, 0.3);  pulse(C.r0c1); }
+
+  par { flash(A.r1c0, lime);  flash(B.r1c0, lime); }
+  say(cap, "0 + 5 = 5");
+  par { show(C.r1c0, 0.3);  pulse(C.r1c0); }
+
+  par { flash(A.r1c1, lime);  flash(B.r1c1, lime); }
+  say(cap, "3 + 2 = 5");
+  par { show(C.r1c1, 0.3);  pulse(C.r1c1); }
+}
+wait(0.4);
+
+// --- the result ---
+section("Result");
+say(cap, "A + B — every entry, all at once");
+recolor(C.entries, cyan, 0.4);
+par { pulse(C.r0c0);  pulse(C.r0c1);  pulse(C.r1c0);  pulse(C.r1c1); }
+wait(1.5);

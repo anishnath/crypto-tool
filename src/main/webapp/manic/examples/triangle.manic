@@ -1,0 +1,68 @@
+// Triangle Geometry — the geo kit (olympiad helpers à la olympiad.asy/cse5.asy).
+// Points drive everything: circumcircle, incircle, centroid, circumcenter,
+// angle mark, and the foot of an altitude are all *constructed* from A, B, C.
+//
+//   manic examples/triangle.manic
+//   manic examples/triangle.manic --record out --fps 60
+
+title("Triangle Geometry");
+canvas(1280, 720);
+
+text(head, (640, 118), "constructed from three points");
+display(head);  color(head, cyan);  size(head, 32);  hidden(head);
+text(cap, (640, 668), "");  color(cap, dim);  size(cap, 22);
+
+// the three free points
+point(A, (380, 560), "A");
+point(B, (900, 560), "B");
+point(C, (640, 190), "C");
+hidden(A);  hidden(B);  hidden(C);
+
+// sides
+segment(ab, A, B);  segment(bc, B, C);  segment(ca, C, A);
+untraced(ab);  untraced(bc);  untraced(ca);
+
+// constructions
+circumcircle(cc, A, B, C);      untraced(cc);
+circumcenter(O, A, B, C);       hidden(O);
+incircle(ic, A, B, C);          untraced(ic);
+centroid(G, A, B, C);           hidden(G);
+anglemark(angC, A, C, B);       untraced(angC);
+foot(F, C, A, B);               hidden(F);
+segment(alt, C, F);             untraced(alt);
+
+// --- script ---
+show(head, 0.5);
+say(cap, "three points make a triangle");
+par { show(A);  show(B);  show(C); }
+par { draw(ab, 0.5);  draw(bc, 0.5);  draw(ca, 0.5); }
+draw(angC, 0.4);
+wait(0.5);
+
+section("Circumcircle");
+say(cap, "the unique circle through all three vertices");
+par { show(O);  draw(cc, 0.9); }
+wait(0.6);
+
+section("Incircle & Centroid");
+say(cap, "incircle (tangent to all sides) and centroid");
+par { draw(ic, 0.9);  show(G); }
+wait(0.6);
+
+section("Altitude");
+say(cap, "drop a perpendicular from C to AB — its foot F");
+par { show(F);  draw(alt, 0.6); }
+flash(F, magenta);
+wait(1.0);
+
+// the payoff: constructions are dynamic — drag a vertex and everything
+// (circumcircle, incircle, centroid, foot, angle mark, sides) recomputes.
+section("Drag a vertex");
+say(cap, "move C — every construction follows");
+move(C, (430, 230), 1.2, smooth);
+move(C, (850, 210), 1.2, smooth);
+move(C, (640, 190), 1.0, smooth);
+say(cap, "and drag A");
+move(A, (300, 520), 0.9, smooth);
+move(A, (380, 560), 0.8, smooth);
+wait(1.2);

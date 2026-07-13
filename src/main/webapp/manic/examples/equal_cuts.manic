@@ -1,0 +1,44 @@
+// Equal Cuts — a circle sliced into equal pieces, repeatedly doubled:
+// 2 → 4 → 8 equal wedges. Each "cut" is a diameter traced across the circle
+// at an equal angle. (manic has no sector primitive yet, so cuts are lines.)
+//
+//   manic examples/equal_cuts.manic
+//   manic examples/equal_cuts.manic --record out --fps 60
+
+title("Equal Cuts");
+canvas(1280, 720);
+
+// the circle to divide, centred at (640, 400) with radius 240
+circle(pie, (640, 400), 240);  stroke(pie, 3);
+
+// four diameters through the centre at 0, 45, 90, 135 degrees.
+// revealed in stages, they cut the circle into 2, then 4, then 8 equal pieces.
+line(c0, (400, 400), (880, 400));  color(c0, magenta);  stroke(c0, 3);  untraced(c0);   //   0
+line(c1, (640, 160), (640, 640));  color(c1, magenta);  stroke(c1, 3);  untraced(c1);   //  90
+line(c2, (470, 230), (810, 570));  color(c2, lime);     stroke(c2, 3);  untraced(c2);   // 135
+line(c3, (810, 230), (470, 570));  color(c3, lime);     stroke(c3, 3);  untraced(c3);   //  45
+
+text(cap, (640, 690), "");    color(cap, dim);   size(cap, 22);
+text(count, (1040, 170), ""); color(count, cyan); size(count, 34);  bold(count);
+
+// --- cut in half ---
+say(cap, "cut the circle in half");
+draw(c0, 0.6);
+say(count, "2 pieces");
+wait(0.5);
+
+// --- cut again: four equal pieces ---
+say(cap, "cut again at a right angle — four equal pieces");
+draw(c1, 0.6);
+say(count, "4 pieces");
+wait(0.5);
+
+// --- and again: eight equal pieces ---
+say(cap, "and again on both diagonals — eight equal pieces");
+par {
+  draw(c2, 0.6);
+  draw(c3, 0.6);
+}
+say(count, "8 pieces");
+pulse(pie);
+wait(1.2);
