@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-59dcb640.js";
+            window.path_to_searchindex_js = "searchindex-01a48fa4.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5b7013c8.js"></script>
+        <script src="toc-5867d1aa.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -482,6 +482,125 @@ par { cam((cx, cy), 1.0, smooth);  zoom(1, 1.0, smooth); }
 wait(0.8);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/mfK_823Mb4I" title="How Archimedes Found π — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pieday"><a class="header" href="#pieday">pieday</a></h2>
+<p>A Pi Day card: a rainbow petal-flower built from a loop of circles, radial rays,
+the digits of π, and the definition <code>circumference / diameter = pi</code>.</p>
+<pre><code class="language-manic">title("Pi Day");
+canvas("16:9");
+
+let r = h*0.23;
+let centerY = cy + 25;
+let n = 64;
+let petalsN = 12;
+
+text(head, (cx, 70), "Happy Pi Day");
+text(bigPi, (cx, centerY - 8), "pi");
+text(digits, (cx, h - 92), "3.1415926535897932384626433832795028841971...");
+text(formula, (cx, h - 50), "circumference / diameter = pi");
+
+size(head, 40);
+size(bigPi, 112);
+size(digits, 24);
+size(formula, 26);
+bold(head);
+bold(bigPi);
+color(head, magenta);
+color(bigPi, gold);
+color(digits, cyan);
+color(formula, lime);
+hidden(head);
+hidden(bigPi);
+hidden(digits);
+hidden(formula);
+
+circle(mainCircle, (cx, centerY), r);
+line(diameter, (cx - r, centerY), (cx + r, centerY));
+text(diamLab, (cx, centerY + 34), "diameter");
+text(circLab, (cx, centerY - r - 30), "circumference");
+
+stroke(mainCircle, 5);
+stroke(diameter, 3);
+color(mainCircle, cyan);
+color(diameter, lime);
+color(diamLab, lime);
+color(circLab, cyan);
+size(diamLab, 22);
+size(circLab, 22);
+hidden(diamLab);
+hidden(circLab);
+untraced(mainCircle);
+untraced(diameter);
+
+for i in 0..petalsN {
+circle(petal{i}, (cx + 0.54*r*cos(tau*i/petalsN), centerY + 0.54*r*sin(tau*i/petalsN)), 0.46r);
+stroke(petal{i}, 2);
+hue(petal{i}, 360i/petalsN);
+opacity(petal{i}, 0.34);
+untraced(petal{i});
+tag(petal{i}, petals);
+}
+
+for i in 0..n {
+dot(spark{i}, (cx + 1.23*r*cos(tau*i/n), centerY + 1.23*r*sin(tau*i/n)), 4);
+hue(spark{i}, 360*i/n);
+hidden(spark{i});
+tag(spark{i}, sparks);
+}
+
+for i in 0..24 {
+line(ray{i}, (cx + 1.02*r*cos(tau*i/24), centerY + 1.02*r*sin(tau*i/24)), (cx + 1.18*r*cos(tau*i/24), centerY + 1.18*r*sin(tau*i/24)));
+stroke(ray{i}, 3);
+hue(ray{i}, 360*i/24);
+untraced(ray{i});
+tag(ray{i}, rays);
+}
+
+dot(centerDot, (cx, centerY), 6);
+color(centerDot, gold);
+hidden(centerDot);
+
+show(head, 0.7);
+
+par {
+draw(petals, 1.4);
+draw(mainCircle, 1.2);
+}
+
+par {
+draw(diameter, 0.8);
+show(centerDot, 0.4);
+show(diamLab, 0.5);
+show(circLab, 0.5);
+}
+
+par {
+show(bigPi, 0.9);
+draw(rays, 0.9);
+}
+
+stagger(0.018) {
+for i in 0..n {
+show(spark{i}, 0.25);
+}
+}
+
+par {
+show(digits, 0.7);
+show(formula, 0.7);
+}
+
+pulse(bigPi, 0.8);
+pulse(mainCircle, 0.8);
+
+par {
+spin(petals, 18, 3.0, smooth);
+spin(sparks, -35, 3.0, smooth);
+}
+
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/2sCPIyi1MB8" title="Happy Pi Day — a Generative π Card in manic" allowfullscreen loading="lazy"></iframe></div>
 
 
                     </main>

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-27435fe8.js";
+            window.path_to_searchindex_js = "searchindex-01a48fa4.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-1b03fd44.js"></script>
+        <script src="toc-5867d1aa.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -501,6 +501,56 @@ wait(0.6);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/SjXDqg3xNE8" title="A 3×3×3 Matrix and Its Inverse, in 3D — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="double-integral3"><a class="header" href="#double-integral3">double-integral3</a></h2>
+<p>Multivariable calculus: the volume under a surface as a limit of finer and
+finer columns — a double integral, made solid. The coarse blocks refine until
+they hug the surface.</p>
+<pre><code class="language-manic">title("The double integral — volume as a limit of finer columns");
+canvas("16:9");
+
+camera3((9, -11, 9), (0, 0, 0.7), 40);
+axes3(world, (0, 0, 0), 3);
+color(world, dim);
+
+text(cap, (cx, h - 54), "coarse columns");
+size(cap, 22); color(cap, cyan); bold(cap); display(cap); hidden(cap);
+
+// the surface, kept faint so the columns beneath it read
+surface3(hill, "1.6*exp(-(x*x + y*y)*0.28)", (-3, 3), (-3, 3), 30);
+color(hill, cyan); opacity(hill, 0.22); untraced(hill);
+
+// the volume under it, at three resolutions — each finer sum hugs the surface
+volume3(v1, hill, 3);
+color(v1, lime); hidden(v1);
+volume3(v2, hill, 7);
+color(v2, lime); hidden(v2);
+volume3(v3, hill, 16);
+color(v3, lime); hidden(v3);
+
+// ---- timeline ----
+show(world, 0.5);
+draw(hill, 1.4);
+wait(0.3);
+
+// 3x3: a crude estimate
+show(cap, 0.4);
+show(v1, 0.7);
+wait(1.2);
+
+// 7x7: closer
+fade(v1, 0.5);
+say(cap, "finer: the sum gets closer");
+show(v2, 0.7);
+wait(1.2);
+
+// 16x16: the columns fill the true volume under the surface
+fade(v2, 0.5);
+say(cap, "finer still -&gt; the true volume (a double integral)");
+show(v3, 0.8);
+orbit3(70, 34, 16, 4.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TttBg-qplrc" title="The Double Integral, in 3D — Volume as Finer Columns — manic" allowfullscreen loading="lazy"></iframe></div>
+
 
                     </main>
 
@@ -510,6 +560,9 @@ wait(0.6);
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
+                            <a rel="next prefetch" href="troubleshooting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -521,6 +574,9 @@ wait(0.6);
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
+                    <a rel="next prefetch" href="troubleshooting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
             </nav>
 
         </div>

@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-59dcb640.js";
+            window.path_to_searchindex_js = "searchindex-01a48fa4.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5b7013c8.js"></script>
+        <script src="toc-5867d1aa.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -186,7 +186,7 @@ hand — you <em>describe</em> what’s on screen and <em>when things happen</em
 does the rest, deterministically.</p>
 <p>It’s built for <strong>explainer videos</strong> — math, algorithms, data structures, or
 anything you can draw — and it’s designed so a non-programmer can read and write
-it. It draws in <strong>2D</strong> and, when you want depth, in <strong><a href="3d.html">3D</a></strong> too.</p>
+it. It draws in <strong>2D</strong> and, when you want depth, in <strong><a href="#going-3d">3D</a></strong> too.</p>
 <h2 id="the-whole-idea-in-30-seconds"><a class="header" href="#the-whole-idea-in-30-seconds">The whole idea in 30 seconds</a></h2>
 <p>A manic file has two parts:</p>
 <ol>
@@ -670,10 +670,131 @@ cube3(box, (0, 0, 1), (2, 2, 2));         // a shaded box
 revolve3(vase, (3, 0, 1.5), "0.7+0.4*sin(t*2)", (0, 3));  // spin a profile
 orbit3(70, 25, 12, 4, smooth);            // swing the camera around
 </code></pre>
-<p>It has its own chapter — see <a href="3d.html">Going 3D</a>.</p>
+<p>It has its own chapter — see <a href="#going-3d">Going 3D</a>.</p>
 <hr>
 <p>Each kit has a full reference at <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>, and you can see them
 all in motion in the <a href="#examples-gallery">Examples gallery</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="going-3d"><a class="header" href="#going-3d">Going 3D</a></h1>
+<p>So far every shape has lived on a flat page. manic has a <strong>second world</strong>: a real
+3D space you look at through a camera. The idea is exactly the same — you name a
+cast of shapes and call them out in a script — but now the shapes have depth, and
+you can spin the camera around them.</p>
+<p>One rule of thumb: <strong>everything 3D ends in <code>3</code></strong> — <code>cube3</code>, <code>sphere3</code>, <code>move3</code>,
+<code>orbit3</code>. That’s how you tell the two worlds apart.</p>
+<h2 id="first-a-camera"><a class="header" href="#first-a-camera">First, a camera</a></h2>
+<p>A 3D scene needs a <strong>camera</strong> — an eye to look through. You say where the eye
+sits and which point it looks at:</p>
+<pre><code class="language-manic">camera3((8, -10, 6), (0, 0, 1), 45);   // eye position, look-at point, zoom
+</code></pre>
+<p>Positions are <code>(x, y, z)</code>, and here <strong>z is up</strong> (x and y are the ground). You
+add one camera, and you can swing it around later.</p>
+<p><strong>▶ See it play:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/SHzotXyfJVY" title="manic Goes 3D — Cubes, Spheres & a Spinning Camera" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="the-3d-cast"><a class="header" href="#the-3d-cast">The 3D cast</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>shape</th><th>write</th><th>draws</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>cube3</strong></td><td><code>cube3(box, (0,0,1), (2,2,2));</code></td><td>a box (width, depth, height)</td></tr>
+<tr><td><strong>sphere3</strong></td><td><code>sphere3(ball, (0,0,1), 0.9);</code></td><td>a ball of that radius</td></tr>
+<tr><td><strong>point3</strong></td><td><code>point3(p, (1,1,1));</code></td><td>a small marker in space</td></tr>
+<tr><td><strong>line3 / arrow3</strong></td><td><code>arrow3(v, (0,0,0), (0,0,2));</code></td><td>a segment / a vector</td></tr>
+<tr><td><strong>grid3</strong></td><td><code>grid3(floor, (0,0,0), 5, 1);</code></td><td>a ground grid to sit things on</td></tr>
+<tr><td><strong>axes3</strong></td><td><code>axes3(ax, (0,0,0), 3);</code></td><td>labelled x, y, z arrows</td></tr>
+</tbody>
+</table>
+</div>
+<p>Style and reveal them with words you already know — <code>color</code>, <code>opacity</code>, <code>show</code>,
+<code>flash</code>:</p>
+<pre><code class="language-manic">cube3(box, (0, 0, 1), (2, 2, 2));   color(box, cyan);
+show(box, 0.6);
+</code></pre>
+<h2 id="labelling-a-point-in-space"><a class="header" href="#labelling-a-point-in-space">Labelling a point in space</a></h2>
+<p>To put words on a 3D point, make an ordinary 2D <code>text</code> and <strong>pin</strong> it there with
+<code>pin3</code>. As the camera moves, the label sticks to its point:</p>
+<pre><code class="language-manic">text(tag, (0, 0), "origin");
+pin3(tag, (0, 0, 0));
+</code></pre>
+<h2 id="curves-and-surfaces"><a class="header" href="#curves-and-surfaces">Curves and surfaces</a></h2>
+<p>Draw a wire through space from three formulas of <code>t</code> (a helix, here), or a
+surface from a height formula <code>z = f(x, y)</code>:</p>
+<pre><code class="language-manic">curve3(helix, "cos(t)", "sin(t)", "t*0.2", (0, 12));
+surface3(wave, "sin(x)*cos(y)", (-3, 3), (-3, 3));
+</code></pre>
+<p>For shapes a plain height field can’t make — a <strong>torus</strong>, a <strong>Möbius strip</strong> —
+use <code>param3</code>, which takes three formulas of <em>two</em> parameters, <code>u</code> and <code>v</code>:</p>
+<pre><code class="language-manic">param3(torus, "(3 + cos(v))*cos(u)", "(3 + cos(v))*sin(u)", "sin(v)",
+       (0, 6.28), (0, 6.28));
+</code></pre>
+<blockquote>
+<p><strong>One formula rule:</strong> always put <code>*</code> between names. Write <code>pi*t</code>, never <code>pit</code>
+(manic reads <code>pit</code> as one unknown word). Same for <code>v*v</code>, not <code>vv</code>.</p>
+</blockquote>
+<h2 id="solids"><a class="header" href="#solids">Solids</a></h2>
+<p>Build filled, shaded solids:</p>
+<ul>
+<li><strong><code>prism3</code> / <code>pyramid3</code></strong> — n-sided prisms and cones (use many sides for a
+cylinder or a smooth cone).</li>
+<li><strong><code>revolve3</code></strong> — spin a radius profile <code>r(t)</code> around the upright axis (vases,
+spheres, lathe shapes).</li>
+<li><strong><code>extrude3</code></strong> — lift a flat <strong>2D</strong> shape (even a boolean cut-out) straight up
+into a solid.</li>
+</ul>
+<pre><code class="language-manic">prism3(hex, (0, 0, 1), 6, 1, 2);
+revolve3(vase, (3, 0, 1.5), "0.7 + 0.4*sin(t*2)", (0, 3));
+</code></pre>
+<h2 id="giving-lines-some-body"><a class="header" href="#giving-lines-some-body">Giving lines some body</a></h2>
+<p>A 3D line, arrow, or curve is a thin thread by default. <code>thick</code> turns it into a
+rounded <strong>tube</strong> (arrows grow a solid head):</p>
+<pre><code class="language-manic">arrow3(v, (0, 0, 0), (2, 2, 2));   thick(v, 0.04);
+</code></pre>
+<h2 id="moving-in-3d"><a class="header" href="#moving-in-3d">Moving in 3D</a></h2>
+<p>Same rhythm as the 2D verbs, with the <code>3</code> on the end:</p>
+<pre><code class="language-manic">par {
+  rotate3(box, (0, 0, 360), 4, linear);   // spin the box
+  orbit3(70, 25, 12, 4, smooth);          // orbit the camera around it
+}
+</code></pre>
+<ul>
+<li><strong><code>move3</code> / <code>shift3</code></strong> — move <em>to</em> / <em>by</em> a point</li>
+<li><strong><code>rotate3</code></strong> — turn it (degrees around x, y, z)</li>
+<li><strong><code>grow3</code></strong> — stretch a line or arrow’s tip to a new point</li>
+<li><strong><code>orbit3</code></strong> — swing the camera (angle around, angle up, distance)</li>
+<li><strong><code>look3</code></strong> — aim the camera at a new point</li>
+</ul>
+<h2 id="morphing-one-shape-into-another"><a class="header" href="#morphing-one-shape-into-another">Morphing one shape into another</a></h2>
+<p><code>morph3</code> sets a shape up to <em>become</em> another; then <code>to(..., morph, ...)</code> blends
+between them. It works for curves, surfaces, and solids — even a cube turning
+into a sphere:</p>
+<pre><code class="language-manic">cube3(a, (0, 0, 1), (2, 2, 2));
+sphere3(b, (0, 0, 0), 1.2);   hidden(b);
+morph3(a, b);
+to(a, morph, 1, 2.5, smooth);   // a cube melts into a ball
+</code></pre>
+<h2 id="which-words-work-in-3d"><a class="header" href="#which-words-work-in-3d">Which words work in 3D?</a></h2>
+<p>3D shapes speak most of the same vocabulary — <code>color</code>, <code>opacity</code>, <code>hidden</code>,
+<code>untraced</code>, <code>tag</code>, and the verbs <code>show</code>, <code>fade</code>, <code>draw</code>, <code>flash</code>, <code>pulse</code>,
+<code>scale</code>. A handful of words are <strong>2D-only</strong> and will politely refuse on a 3D
+shape (with a message that names the 3D replacement):</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>if you reach for…</th><th>on a 3D shape, use…</th></tr>
+</thead>
+<tbody>
+<tr><td><code>hue</code></td><td><code>color</code> with a palette name</td></tr>
+<tr><td><code>stroke</code></td><td><code>thick</code></td></tr>
+<tr><td><code>move</code> / <code>rotate</code> / <code>spin</code></td><td><code>move3</code> / <code>rotate3</code></td></tr>
+<tr><td><code>cam</code> / <code>zoom</code></td><td><code>camera3</code> / <code>orbit3</code></td></tr>
+<tr><td><code>morph</code></td><td><code>morph3</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Now see it all in motion in the <a href="#3d-scenes">3D scenes gallery</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="examples-gallery"><a class="header" href="#examples-gallery">Examples gallery</a></h1>
 <p>Every animation in <code>examples/</code>, by topic — <strong>the code and the clip for each</strong>. Run any of them with <code>manic examples/&lt;name&gt;.manic</code>. Project: <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>.</p>
@@ -1121,6 +1242,142 @@ wait(1.4);
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="calculus--functions"><a class="header" href="#calculus--functions">Calculus &amp; functions</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="calculus-demo"><a class="header" href="#calculus-demo">calculus-demo</a></h2>
+<p>The flagship: two big ideas on one curve. A tangent slides along a bell curve
+with a live slope readout (flat at the peak), then the area sweeps open while the
+integral climbs to its true value — on properly numbered, scaled axes.</p>
+<pre><code class="language-manic">title("Calculus, visualized — the derivative and the integral");
+canvas("16:9");
+
+// screen anchor for the plot: math (0,0) maps here. Placing it at cx-450 with
+// sx=150 centres the domain 0..6 under the canvas centre.
+let ox = cx - 450;
+let oy = cy + 120;
+let sx = 150;          // screen px per unit of x
+let sy = 170;          // screen px per unit of y
+
+// ---------------- header ----------------
+text(hdr, (cx, 54), "Two big ideas, one curve");
+size(hdr, 32); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+text(flabel, (cx, 94), "f(x) = a smooth bell-shaped curve");
+size(flabel, 18); color(flabel, dim); display(flabel); hidden(flabel);
+
+// ---------------- the curve ----------------
+axes(ax, (ox, oy), 930, 205, 1);
+color(ax, dim); untraced(ax);
+
+// axis labels, at the arrow tips
+text(xlab, (ox + 958, oy + 6), "x");
+size(xlab, 24); color(xlab, dim); display(xlab); hidden(xlab);
+
+text(ylab, (ox, oy - 232), "f(x)");
+size(ylab, 24); color(ylab, dim); display(ylab); hidden(ylab);
+
+// numbered scale — each label sits at the plot's real coordinate:
+// x = k  -&gt;  (ox + k*sx, oy)      y = v  -&gt;  (ox, oy - v*sy)
+line(tx1, (ox + 1*sx, oy - 7), (ox + 1*sx, oy + 7)); color(tx1, dim); tag(tx1, scale); hidden(tx1);
+line(tx2, (ox + 2*sx, oy - 7), (ox + 2*sx, oy + 7)); color(tx2, dim); tag(tx2, scale); hidden(tx2);
+line(tx3, (ox + 3*sx, oy - 7), (ox + 3*sx, oy + 7)); color(tx3, dim); tag(tx3, scale); hidden(tx3);
+line(tx4, (ox + 4*sx, oy - 7), (ox + 4*sx, oy + 7)); color(tx4, dim); tag(tx4, scale); hidden(tx4);
+line(tx5, (ox + 5*sx, oy - 7), (ox + 5*sx, oy + 7)); color(tx5, dim); tag(tx5, scale); hidden(tx5);
+line(tx6, (ox + 6*sx, oy - 7), (ox + 6*sx, oy + 7)); color(tx6, dim); tag(tx6, scale); hidden(tx6);
+
+text(nx1, (ox + 1*sx, oy + 28), "1"); size(nx1, 16); color(nx1, dim); tag(nx1, scale); hidden(nx1);
+text(nx2, (ox + 2*sx, oy + 28), "2"); size(nx2, 16); color(nx2, dim); tag(nx2, scale); hidden(nx2);
+text(nx3, (ox + 3*sx, oy + 28), "3"); size(nx3, 16); color(nx3, dim); tag(nx3, scale); hidden(nx3);
+text(nx4, (ox + 4*sx, oy + 28), "4"); size(nx4, 16); color(nx4, dim); tag(nx4, scale); hidden(nx4);
+text(nx5, (ox + 5*sx, oy + 28), "5"); size(nx5, 16); color(nx5, dim); tag(nx5, scale); hidden(nx5);
+text(nx6, (ox + 6*sx, oy + 28), "6"); size(nx6, 16); color(nx6, dim); tag(nx6, scale); hidden(nx6);
+
+line(tyh, (ox - 7, oy - 0.5*sy), (ox + 7, oy - 0.5*sy)); color(tyh, dim); tag(tyh, scale); hidden(tyh);
+line(ty1, (ox - 7, oy - 1*sy),   (ox + 7, oy - 1*sy));   color(ty1, dim); tag(ty1, scale); hidden(ty1);
+text(nyh, (ox - 36, oy - 0.5*sy), "0.5"); size(nyh, 16); color(nyh, dim); tag(nyh, scale); hidden(nyh);
+text(ny1, (ox - 24, oy - 1*sy),   "1");   size(ny1, 16); color(ny1, dim); tag(ny1, scale); hidden(ny1);
+
+plot(f, (ox, oy), sx, sy, "exp(-0.5*(x-3)*(x-3))", (0, 6));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// ---------------- captions (swap per act) ----------------
+text(capd, (cx, h - 46), "THE DERIVATIVE   —   the slope at every point");
+size(capd, 22); color(capd, gold); bold(capd); display(capd); hidden(capd);
+
+text(capi, (cx, h - 46), "THE INTEGRAL   —   the area underneath");
+size(capi, 22); color(capi, lime); bold(capi); display(capi); hidden(capi);
+
+text(endcap, (cx, h - 46), "two views of one curve");
+size(endcap, 22); color(endcap, cyan); bold(endcap); display(endcap); hidden(endcap);
+
+// ---------------- derivative pieces ----------------
+tangent(tan, f, 0.4, 220);
+color(tan, gold); hidden(tan);
+
+slope(sl, f, 0.4);
+color(sl, gold); hidden(sl);
+
+// ---------------- integral pieces ----------------
+area(reg, f, 0, 0);
+color(reg, lime);
+
+text(ivlabel, (cx + 330, cy - 150), "area so far");
+size(ivlabel, 16); color(ivlabel, dim); display(ivlabel); hidden(ivlabel);
+
+integral(iv, f, 0, 0, (cx + 330, cy - 110));
+size(iv, 30); color(iv, lime); hidden(iv);
+
+// ================= timeline =================
+show(hdr, 0.6);
+show(flabel, 0.4);
+draw(ax, 0.8);
+par {
+  show(xlab, 0.4);
+  show(ylab, 0.4);
+  show(scale, 0.4);
+}
+draw(f, 1.6);
+wait(0.4);
+
+// --- Act 1: the derivative ---
+show(capd, 0.5);
+show(tan, 0.5);
+show(sl, 0.4);
+wait(0.3);
+par {                                 // climb to the peak — slope goes to zero
+  to(tan, x, 3, 2.2);
+  to(sl, x, 3, 2.2);
+}
+pulse(sl, 0.5);
+wait(0.3);
+par {                                 // over the top — slope turns negative
+  to(tan, x, 5.6, 2.6);
+  to(sl, x, 5.6, 2.6);
+}
+wait(0.4);
+
+// --- Act 2: the integral ---
+par {
+  fade(capd, 0.4);
+  fade(tan, 0.4);
+  fade(sl, 0.4);
+}
+show(capi, 0.5);
+show(ivlabel, 0.3);
+show(iv, 0.3);
+par {                                 // sweep the area open, number climbs
+  to(reg, x, 6, 4);
+  to(iv, x, 6, 4);
+}
+wait(0.4);
+flash(iv, lime);
+pulse(iv, 0.5);
+wait(0.4);
+
+// --- close ---
+fade(capi, 0.4);
+show(endcap, 0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/UrOdi_iLt_k" title="Calculus in One Scene: the Derivative & the Integral — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="sine_wave"><a class="header" href="#sine_wave">sine_wave</a></h2>
 <p><code>axes</code> + <code>plot</code>, a curve traced on, then vectors.</p>
 <pre><code class="language-manic">// The Sine Wave — a first taste of the manic math kit.
@@ -1459,6 +1716,306 @@ pulse(total);
 wait(1.0);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/mIoDoCypQaQ" title="Watch a Riemann Sum Converge — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="tangent"><a class="header" href="#tangent">tangent</a></h2>
+<p>The tangent line to a curve, sliding along it — its tilt is read from the
+function itself, so it’s always the true slope (flat at the peaks).</p>
+<pre><code class="language-manic">title("The Tangent Line — a curve's slope, made visible");
+canvas("16:9");
+
+text(hdr, (cx, 60), "The slope of sin x, everywhere at once");
+size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// the curve — plot remembers its function, so tangent can ask it questions.
+// center the domain 0..6.3 across the canvas (midpoint x=3.15 sits at cx)
+plot(f, (cx - 440, cy + 40), 140, 120, "sin(x)", (0, 6.3));
+color(f, cyan); stroke(f, 3); untraced(f);
+
+// a tangent that touches f where x = 0.5 (line + contact dot, one call)
+tangent(tan, f, 0.5, 260);
+color(tan, gold); untraced(tan);
+
+text(cap, (cx, h - 60), "watch the tilt follow the curve");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(f, 1.4);
+show(tan, 0.6);
+show(cap, 0.4);
+wait(0.4);
+
+// slide the touch point along the whole curve — the slope is derived live
+to(tan, x, 5.8, 5);
+wait(0.3);
+to(tan, x, 1.6, 2.5);   // back toward the first peak, where the slope is 0
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/D9PHslz3e2U" title="The Tangent Line, Sliding Along a Curve — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="analysis"><a class="header" href="#analysis">analysis</a></h2>
+<p>Ask one curve everything at once — tangent, a live slope number, the normal, the
+area sweeping open beneath it, and the integral climbing to its true value.</p>
+<pre><code class="language-manic">title("Reading a curve: slope, tangent, normal, area");
+canvas("16:9");
+
+text(hdr, (cx, 58), "Asking a curve questions");
+size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// one curve — everything below asks IT, by name
+plot(f, (cx - 440, cy + 30), 140, 110, "sin(x)", (0, 6.3));
+color(f, cyan); stroke(f, 3); untraced(f);
+
+// the area under it — starts collapsed at x=0.6, sweeps open
+area(reg, f, 0.6, 0.6);
+color(reg, lime);
+
+// a live integral readout that climbs as the area sweeps
+integral(area_val, f, 0.6, 0.6, (cx + 340, cy - 210));
+color(area_val, lime);
+
+// tangent + its live slope number, both riding the same point
+tangent(tan, f, 0.6, 240);
+color(tan, gold);
+
+slope(sl, f, 0.6);
+color(sl, gold);
+
+// the normal, perpendicular at the same place
+normal(nrm, f, 0.6, 150);
+color(nrm, magenta); hidden(nrm);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(f, 1.4);
+show(tan, 0.5);
+show(sl, 0.4);
+wait(0.4);
+
+// sweep the area open while the tangent + slope slide together and the
+// integral readout climbs
+par {
+  to(reg, x, 5.7, 4);
+  to(area_val, x, 5.7, 4);
+  to(tan, x, 5.7, 4);
+  to(sl, x, 5.7, 4);
+}
+wait(0.4);
+
+// reveal the normal and glide everything back to the first peak (slope 0)
+show(nrm, 0.4);
+par {
+  to(tan, x, 1.571, 2.5);
+  to(sl, x, 1.571, 2.5);
+  to(nrm, x, 1.571, 2.5);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/SLennxNy6v4" title="Slope, Tangent, Area & Integral on One Curve — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="newton"><a class="header" href="#newton">newton</a></h2>
+<p>Newton’s method, drawn as a zig-zag: from a first guess, slide down each tangent
+to the axis, back up to the curve, and watch the guesses walk to the root.</p>
+<pre><code class="language-manic">title("Newton's method: chasing a root");
+canvas("16:9");
+
+text(hdr, (cx, 56), "Newton's method finds where x squared = 2");
+size(hdr, 28); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// a reference frame so the x-axis (where the tangents land) is visible
+axes(ax, (cx - 250, cy + 170), 540, 360, 1);
+color(ax, dim); untraced(ax);
+
+// f(x) = x^2 - 2, whose positive root is sqrt(2)
+plot(f, (cx - 250, cy + 170), 180, 70, "x*x - 2", (-0.4, 3));
+color(f, cyan); stroke(f, 3); untraced(f);
+
+// the true zero-crossing, marked
+roots(zero, f);
+color(zero, lime); hidden(zero);
+
+// the Newton zig-zag from a first guess of x = 3
+newton(walk, f, 3);
+color(walk, gold); stroke(walk, 3); untraced(walk);
+
+text(cap, (cx, h - 60), "each tangent slides the guess closer");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(ax, 0.8);
+draw(f, 1.4);
+wait(0.3);
+show(cap, 0.4);
+
+// walk the iterates in to the root
+draw(walk, 3.5);
+wait(0.3);
+
+// reveal the exact root it converged on
+show(zero, 0.5);
+pulse(zero, 0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/R7wwwW-_tP4" title="Newton's Method, Chasing a Root — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="inverse-derivatives"><a class="header" href="#inverse-derivatives">inverse-derivatives</a></h2>
+<p>Why a function and its inverse have reciprocal slopes: <code>e^x</code> and <code>ln x</code> mirrored
+across <code>y = x</code>, with the slopes at matching points multiplying to 1.</p>
+<pre><code class="language-manic">title("Inverse-function derivatives — why the pairs mirror");
+canvas("16:9");
+
+// uniform scale (sx == sy) so a function and its inverse reflect correctly
+let ox = cx - 470;
+let oy = cy + 110;
+let s = 72;
+
+text(hdr, (cx, 52), "A function and its inverse: mirror curves, reciprocal slopes");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// ---------------- the mirror plane ----------------
+axes(ax, (ox, oy), 470, 300, 1);
+color(ax, dim); untraced(ax);
+
+// y = x, the mirror line
+line(diag, (ox - 2.6*s, oy + 2.6*s), (ox + 3.8*s, oy - 3.8*s));
+color(diag, dim); untraced(diag);
+text(diaglab, (ox + 3.4*s, oy - 3.4*s - 22), "y = x");
+size(diaglab, 16); color(diaglab, dim); display(diaglab); hidden(diaglab);
+
+// e^x and its inverse ln x — reflections of each other
+plot(ef, (ox, oy), s, s, "exp(x)", (-2.6, 1.45));
+color(ef, cyan); stroke(ef, 3); untraced(ef);
+text(eflab, (ox + 1.45*s + 8, oy - 4.1*s), "e^x");
+size(eflab, 18); color(eflab, cyan); display(eflab); hidden(eflab);
+
+plot(lf, (ox, oy), s, s, "ln(x)", (0.075, 4.3));
+color(lf, magenta); stroke(lf, 3); untraced(lf);
+text(lflab, (ox + 4.2*s, oy - 1.45*s), "ln x");
+size(lflab, 18); color(lflab, magenta); display(lflab); hidden(lflab);
+
+// tangent + live slope at a point on e^x, and at its mirror point on ln x
+tangent(te, ef, 0.5, 150);
+color(te, cyan); hidden(te);
+slope(se, ef, 0.5);
+color(se, cyan); hidden(se);
+
+tangent(tl, lf, 1.65, 150);
+color(tl, magenta); hidden(tl);
+slope(sl, lf, 1.65);
+color(sl, magenta); hidden(sl);
+
+text(rec, (cx + 340, cy + 60), "slope x slope = 1");
+size(rec, 22); color(rec, lime); bold(rec); display(rec); hidden(rec);
+text(rec2, (cx + 340, cy + 96), "(1.65) x (0.61)");
+size(rec2, 18); color(rec2, dim); display(rec2); hidden(rec2);
+
+// ---------------- the four identity pairs ----------------
+text(t1, (cx + 340, cy - 190), "(e^x)' = e^x        (ln x)' = 1/x");
+size(t1, 17); color(t1, fg); display(t1); hidden(t1);
+text(t2, (cx + 340, cy - 150), "(sin x)' = sqrt(1-sin^2 x)   (arcsin x)' = 1/sqrt(1-x^2)");
+size(t2, 15); color(t2, fg); display(t2); hidden(t2);
+text(t3, (cx + 340, cy - 118), "(cos x)' = -sqrt(1-cos^2 x)  (arccos x)' = -1/sqrt(1-x^2)");
+size(t3, 15); color(t3, fg); display(t3); hidden(t3);
+text(t4, (cx + 340, cy - 86), "(tan x)' = 1+tan^2 x         (arctan x)' = 1/(1+x^2)");
+size(t4, 15); color(t4, fg); display(t4); hidden(t4);
+
+// ================= timeline =================
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(diag, 0.5);
+show(diaglab, 0.3);
+par {
+  draw(ef, 1.4);
+  draw(lf, 1.4);
+}
+par {
+  show(eflab, 0.4);
+  show(lflab, 0.4);
+}
+wait(0.3);
+
+// the reciprocal-slope check
+par {
+  show(te, 0.4);
+  show(se, 0.4);
+}
+par {
+  show(tl, 0.4);
+  show(sl, 0.4);
+}
+show(rec, 0.5);
+show(rec2, 0.4);
+flash(rec, lime);
+wait(0.4);
+
+// the four pairs it generates
+stagger(0.4) {
+  show(t1, 0.4);
+  show(t2, 0.4);
+  show(t3, 0.4);
+  show(t4, 0.4);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/-HEjdSVXdXc" title="Why Inverse Functions Have Reciprocal Slopes — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spline"><a class="header" href="#spline">spline</a></h2>
+<p>Interpolation: one smooth curve drawn through a scattered set of points — it
+passes through every knot exactly.</p>
+<pre><code class="language-manic">title("A smooth curve through the data");
+canvas("16:9");
+
+text(hdr, (cx, 70), "Interpolation: one smooth curve through every point");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// scattered data points — the spline passes through all of them
+spline(s, (300, 620), (520, 340), (760, 560), (1000, 300), (1240, 480), (1500, 260));
+color(s, cyan); stroke(s, 4); untraced(s);
+
+text(cap, (cx, h - 60), "Catmull-Rom — it hits each knot exactly");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.5);
+// pop the knots in first
+show(s.knots, 0.6);
+wait(0.3);
+// then trace the smooth curve through them
+draw(s, 2.2);
+show(cap, 0.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/luCo9NmmbaA" title="A Smooth Curve Through Any Points — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="trajectory"><a class="header" href="#trajectory">trajectory</a></h2>
+<p>A phase portrait: three paths flowing under a differential system, each
+spiralling into the sink at the origin.</p>
+<pre><code class="language-manic">title("Phase portrait: flowing into a spiral sink");
+canvas("16:9");
+
+text(hdr, (cx, 60), "dx/dt = -y - 0.2x,   dy/dt = x - 0.2y");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// a reference frame centered on the sink
+axes(ax, (cx, cy + 20), 620, 360, 1);
+color(ax, dim); untraced(ax);
+
+// three trajectories from different starts, each spiraling into the origin
+trajectory(t1, "-y - 0.2*x", "x - 0.2*y", (3.2, 0), (cx, cy + 20), 110, 520);
+color(t1, cyan); stroke(t1, 3); untraced(t1);
+
+trajectory(t2, "-y - 0.2*x", "x - 0.2*y", (0, 3.4), (cx, cy + 20), 110, 520);
+color(t2, magenta); stroke(t2, 3); untraced(t2);
+
+trajectory(t3, "-y - 0.2*x", "x - 0.2*y", (-3.0, -2.4), (cx, cy + 20), 110, 520);
+color(t3, gold); stroke(t3, 3); untraced(t3);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(ax, 0.8);
+par {
+  draw(t1, 3.5);
+  draw(t2, 3.5);
+  draw(t3, 3.5);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/-QeYAZ2GHVQ" title="Phase Portrait: Flowing Into a Spiral — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="linear-algebra--tables"><a class="header" href="#linear-algebra--tables">Linear algebra &amp; tables</a></h1>
@@ -3124,6 +3681,125 @@ wait(0.8);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/mfK_823Mb4I" title="How Archimedes Found π — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="pieday"><a class="header" href="#pieday">pieday</a></h2>
+<p>A Pi Day card: a rainbow petal-flower built from a loop of circles, radial rays,
+the digits of π, and the definition <code>circumference / diameter = pi</code>.</p>
+<pre><code class="language-manic">title("Pi Day");
+canvas("16:9");
+
+let r = h*0.23;
+let centerY = cy + 25;
+let n = 64;
+let petalsN = 12;
+
+text(head, (cx, 70), "Happy Pi Day");
+text(bigPi, (cx, centerY - 8), "pi");
+text(digits, (cx, h - 92), "3.1415926535897932384626433832795028841971...");
+text(formula, (cx, h - 50), "circumference / diameter = pi");
+
+size(head, 40);
+size(bigPi, 112);
+size(digits, 24);
+size(formula, 26);
+bold(head);
+bold(bigPi);
+color(head, magenta);
+color(bigPi, gold);
+color(digits, cyan);
+color(formula, lime);
+hidden(head);
+hidden(bigPi);
+hidden(digits);
+hidden(formula);
+
+circle(mainCircle, (cx, centerY), r);
+line(diameter, (cx - r, centerY), (cx + r, centerY));
+text(diamLab, (cx, centerY + 34), "diameter");
+text(circLab, (cx, centerY - r - 30), "circumference");
+
+stroke(mainCircle, 5);
+stroke(diameter, 3);
+color(mainCircle, cyan);
+color(diameter, lime);
+color(diamLab, lime);
+color(circLab, cyan);
+size(diamLab, 22);
+size(circLab, 22);
+hidden(diamLab);
+hidden(circLab);
+untraced(mainCircle);
+untraced(diameter);
+
+for i in 0..petalsN {
+circle(petal{i}, (cx + 0.54*r*cos(tau*i/petalsN), centerY + 0.54*r*sin(tau*i/petalsN)), 0.46r);
+stroke(petal{i}, 2);
+hue(petal{i}, 360i/petalsN);
+opacity(petal{i}, 0.34);
+untraced(petal{i});
+tag(petal{i}, petals);
+}
+
+for i in 0..n {
+dot(spark{i}, (cx + 1.23*r*cos(tau*i/n), centerY + 1.23*r*sin(tau*i/n)), 4);
+hue(spark{i}, 360*i/n);
+hidden(spark{i});
+tag(spark{i}, sparks);
+}
+
+for i in 0..24 {
+line(ray{i}, (cx + 1.02*r*cos(tau*i/24), centerY + 1.02*r*sin(tau*i/24)), (cx + 1.18*r*cos(tau*i/24), centerY + 1.18*r*sin(tau*i/24)));
+stroke(ray{i}, 3);
+hue(ray{i}, 360*i/24);
+untraced(ray{i});
+tag(ray{i}, rays);
+}
+
+dot(centerDot, (cx, centerY), 6);
+color(centerDot, gold);
+hidden(centerDot);
+
+show(head, 0.7);
+
+par {
+draw(petals, 1.4);
+draw(mainCircle, 1.2);
+}
+
+par {
+draw(diameter, 0.8);
+show(centerDot, 0.4);
+show(diamLab, 0.5);
+show(circLab, 0.5);
+}
+
+par {
+show(bigPi, 0.9);
+draw(rays, 0.9);
+}
+
+stagger(0.018) {
+for i in 0..n {
+show(spark{i}, 0.25);
+}
+}
+
+par {
+show(digits, 0.7);
+show(formula, 0.7);
+}
+
+pulse(bigPi, 0.8);
+pulse(mainCircle, 0.8);
+
+par {
+spin(petals, 18, 3.0, smooth);
+spin(sparks, -35, 3.0, smooth);
+}
+
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/2sCPIyi1MB8" title="Happy Pi Day — a Generative π Card in manic" allowfullscreen loading="lazy"></iframe></div>
+
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="boolean-shapes"><a class="header" href="#boolean-shapes">Boolean shapes</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
@@ -3178,6 +3854,492 @@ wait(1.5);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/EtcPd8VUa5Y" title="Union, Intersection, Difference — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="3d-scenes"><a class="header" href="#3d-scenes">3D scenes</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video). See the <a href="#going-3d">Going 3D</a> chapter for the words used here.</p>
+<h2 id="three_d"><a class="header" href="#three_d">three_d</a></h2>
+<p>Cubes, spheres, arrows, a curve, a surface and solids together — the 3D basics on one stage.</p>
+<pre><code class="language-manic">title("3D coordinate space");
+canvas(1280, 720);
+template("terminal");
+
+camera3((8, -10, 6), (0, 0, 1), 45);
+grid3(floor, (0, 0, 0), 5, 1);
+color(floor, dim);
+axes3(world, (0, 0, 0), 4);
+
+cube3(box, (0, 0, 1), (2, 2, 2));
+color(box, magenta);
+sphere3(ball, (-2, 1, 1), 0.7);
+color(ball, lime);
+arrow3(vector, (0, 0, 0), (2.5, 2, 3));
+
+// a parametric helix (curve3), drawn on as a shaded tube
+curve3(spiral, "cos(t)*2.6", "sin(t)*2.6", "t*0.32", (0, 12));
+color(spiral, gold);
+thick(spiral, 0.08);
+
+// a height-field surface z = f(x,y) (surface3), filled + flat-shaded
+surface3(wave, "0.6*sin(x)*cos(y)", (-3.5, 3.5), (-3.5, 3.5), 24);
+color(wave, magenta);
+opacity(wave, 0.5);
+
+// filled, flat-shaded solids (prism3 / pyramid3)
+prism3(hex, (-3.6, -2.4, 1.2), 6, 0.9, 2.2);
+pyramid3(cone, (3.6, -2.4, 1.4), 22, 1.0, 2.6);
+
+// a 2D label glued to the moving sphere — tracks it as the camera orbits
+text(balltag, (0, 0), "ball");
+color(balltag, gold);
+pin3(balltag, ball);
+
+par {
+    rotate3(box, (0, 0, 360), 4, linear);
+    orbit3(70, 28, 11, 4, smooth);
+    move3(ball, (2, -1, 2), 4, inout);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/O-XeXhzSyZo" title="The 3D Basics on One Stage — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="solids3"><a class="header" href="#solids3">solids3</a></h2>
+<p>Filled, shaded solids: a prism, a cone, and a lathed vase.</p>
+<pre><code class="language-manic">title("3D solids");
+canvas(1280, 720);
+template("terminal");
+
+camera3((9, -11, 7), (0, 0, 1), 45);
+grid3(floor, (0, 0, 0), 6, 1);
+color(floor, dim);
+axes3(world, (0, 0, 0), 3);
+
+// hexagonal prism
+prism3(hex, (-4, 0, 1.2), 6, 1.1, 2.4);
+color(hex, cyan);
+
+// a cone (a pyramid with many sides)
+pyramid3(cone, (0, 0, 1.4), 28, 1.2, 2.8);
+color(cone, magenta);
+
+// a lathed vase: radius profile r(t) swept around the vertical axis
+revolve3(vase, (4, 0, 1.5), "0.7 + 0.45*sin(t*2.4)", (0, 3), 32);
+color(vase, gold);
+
+orbit3(60, 24, 17, 6, smooth);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/t3F4xpf79W0" title="Prisms, Cones & a Lathed Vase in 3D — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="param3"><a class="header" href="#param3">param3</a></h2>
+<p>Parametric surfaces a height field can’t make — a torus, a sphere, and a Möbius strip.</p>
+<pre><code class="language-manic">// param3 — general parametric surfaces x(u,v), y(u,v), z(u,v). Unlike surface3
+// (a height field z=f(x,y)) these can wrap and close, so a torus and a Möbius
+// strip are just three formulas each.
+//
+//   manic examples/param3.manic
+//   manic examples/param3.manic --record out --fps 60
+
+title("parametric surfaces");
+canvas("16:9");
+template("terminal");
+
+camera3((11, -13, 8.5), (0, 0, 1.4), 42);
+grid3(floor, (0, 0, 0), 7, 1);
+color(floor, dim);
+
+// torus (left)
+param3(torus,
+  "0 - 4.8 + (2 + 0.7*cos(v))*cos(u)",
+  "(2 + 0.7*cos(v))*sin(u)",
+  "1.5 + 0.7*sin(v)",
+  (0, 6.283), (0, 6.283), 40);
+color(torus, cyan);
+
+// parametric sphere (centre)
+param3(ball,
+  "1.3*sin(v)*cos(u)",
+  "1.3*sin(v)*sin(u)",
+  "1.6 + 1.3*cos(v)",
+  (0, 6.283), (0, 3.1416), 28);
+color(ball, magenta);
+
+// Möbius strip (right)
+param3(mobius,
+  "4.8 + (1.7 + v*cos(u/2))*cos(u)",
+  "(1.7 + v*cos(u/2))*sin(u)",
+  "1.6 + v*sin(u/2)",
+  (0, 6.283), (0 - 0.6, 0.6), 60);
+color(mobius, gold);
+
+show(floor, 0.3);
+par { show(torus, 0.7); show(ball, 0.7); show(mobius, 0.7); }
+orbit3(60, 24, 15, 5.0, smooth);
+wait(0.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qs25EhKU_pE" title="A Torus, a Sphere & a Möbius Strip — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="extrude3"><a class="header" href="#extrude3">extrude3</a></h2>
+<p>Lifting flat shapes into solids, including a boolean cut-out (a plate with a hole) and an L-beam.</p>
+<pre><code class="language-manic">// Extrude &amp; CSG — turn 2D shapes into 3D solids. `extrude3` sweeps any 2D
+// fillable shape (or a boolean region) straight up; extruding a union/
+// difference/intersect gives constructive-solid-geometry solids. The 2D
+// source shapes are auto-hidden — they're just the cross-section recipe.
+//
+//   manic examples/extrude3.manic
+//   manic examples/extrude3.manic --record out --fps 60
+
+title("Extrude &amp; CSG");
+canvas(1280, 720);
+template("terminal");
+
+camera3((9, -11, 7), (0, 0, 0.8), 45);
+grid3(floor, (0, 0, 0), 6, 1);
+color(floor, dim);
+axes3(world, (0, 0, 0), 3);
+
+// CSG: a square plate MINUS a circular hole → an extruded plate-with-a-hole
+rect(plate, (0, 0), 3, 3);
+circle(hole, (0, 0), 0.9);
+difference(cut, plate, hole);
+extrude3(block, cut, 1.0, (-3.5, 0, 0.6));
+color(block, cyan);
+
+// arbitrary concave polygon: a union of two rects → an L-beam, extruded
+rect(la, (0, 0), 2.4, 0.8);
+rect(lb, (-0.8, 0.8), 0.8, 2.4);
+union(lshape, la, lb);
+extrude3(ell, lshape, 0.9, (3.5, 0, 0.55));
+color(ell, magenta);
+
+// a plain shape extrudes just as happily (a hexagon via a sector sweep)
+sector(hexface, (0, 0), 1.2, 0, 360);
+extrude3(disc, hexface, 0.5, (0, 3.5, 0.3));
+color(disc, gold);
+
+orbit3(60, 24, 17, 8, smooth);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VIVZVaGmIDU" title="Extrude 2D Shapes Into 3D Solids (with CSG) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="morph3"><a class="header" href="#morph3">morph3</a></h2>
+<p>Morphing across families — a cube into a sphere, a saddle into a bowl, a helix into a ring.</p>
+<pre><code class="language-manic">// 3D morphing (morph3) — set a 3D entity up to become another shape, then
+// blend with `to(id, morph, 1, dur)`. Works across three families:
+//   • solids  — a cube becomes a sphere (reparameterised spherically)
+//   • surfaces — a rippling saddle settles into a bowl (filled + shaded)
+//   • curves  — a helix unwinds into a flat ring
+//
+//   manic examples/morph3.manic
+//   manic examples/morph3.manic --record out --fps 60
+
+title("3D morph");
+canvas("16:9");
+template("terminal");
+
+camera3((11, -13, 8), (0, 0, 0.8), 42);
+grid3(floor, (0, 0, 0), 7, 1);
+color(floor, dim);
+
+// solid: cube -&gt; sphere
+cube3(box, (-5, 0, 1.4), (2.4, 2.4, 2.4));
+color(box, cyan);
+sphere3(ball, (0, 0, 0), 1.5);
+hidden(ball);
+morph3(box, ball);
+
+// surface: rippling saddle -&gt; smooth bowl
+surface3(saddle, "0.8*sin(x*1.3)*cos(y*1.3)", (-2.3, 2.3), (-2.3, 2.3), 24);
+color(saddle, gold);
+surface3(bowl, "0.16*(x*x + y*y) - 1", (-2.3, 2.3), (-2.3, 2.3), 24);
+hidden(bowl);
+morph3(saddle, bowl);
+
+// curve: helix -&gt; flat ring
+curve3(helix, "5 + 1.5*cos(t)", "1.5*sin(t)", "0.2*t", (0, 18));
+color(helix, magenta);
+thick(helix, 0.06);
+curve3(ring, "5 + 1.5*cos(t)", "1.5*sin(t)", "1.8", (0, 6.283));
+hidden(ring);
+morph3(helix, ring);
+
+show(floor, 0.3);
+par { show(box, 0.5); show(saddle, 0.5); show(helix, 0.5); }
+wait(0.7);
+par {
+  to(box, morph, 1, 3.0, smooth);
+  to(saddle, morph, 1, 3.0, smooth);
+  to(helix, morph, 1, 3.0, smooth);
+  orbit3(48, 25, 21, 3.0, smooth);
+}
+wait(0.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/YMBQbAIlfQM" title="Morph a Cube Into a Sphere — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="matrix3"><a class="header" href="#matrix3">matrix3</a></h2>
+<p>A 3×3×3 block of cubes, with a shear matrix <strong>M</strong> and its inverse <strong>M⁻¹</strong> applied and undone.</p>
+<pre><code class="language-manic">// A 3 × 3 × 3 block of 27 cubes, then a matrix operation: a 3×3 matrix is a
+// linear map of space. We apply a shear M to every cell, then its inverse
+// M^-1 — which sends the block back exactly, because M^-1 M = I.
+//
+//   manic examples/matrix3.manic
+//   manic examples/matrix3.manic --record out --fps 60
+
+title("3 × 3 × 3  ·  M and M^-1");
+canvas("16:9");
+template("terminal");
+
+camera3((7.5, -9, 6), (2.4, 0, 2.1), 42);
+grid3(floor, (0, 0, 0), 6, 1);
+color(floor, dim);
+
+let s = 1.3;    // cell spacing (cubes are 1 wide → 0.3 gaps)
+let zc = 2.1;   // height of the block's centre
+let a = 0.7;    // shear amount: M sends x → x + a·z
+
+text(cap, (cx, h - 42), "");
+display(cap);  color(cap, fg);  size(cap, 21);  hidden(cap);
+
+// --- 27 cubes, three x-slices coloured cyan / magenta / lime ---
+for j in 0..3 { for k in 0..3 {
+  cube3(xa{j}{k}, (0 - s, (j - 1)*s, zc + (k - 1)*s), (1, 1, 1));
+  color(xa{j}{k}, cyan);  hidden(xa{j}{k});
+} }
+for j in 0..3 { for k in 0..3 {
+  cube3(xb{j}{k}, (0, (j - 1)*s, zc + (k - 1)*s), (1, 1, 1));
+  color(xb{j}{k}, magenta);  hidden(xb{j}{k});
+} }
+for j in 0..3 { for k in 0..3 {
+  cube3(xc{j}{k}, (s, (j - 1)*s, zc + (k - 1)*s), (1, 1, 1));
+  color(xc{j}{k}, lime);  hidden(xc{j}{k});
+} }
+
+// --- the matrices, as monospace text on the right ---
+text(mLabel, (995, 232), "M =");
+text(m0, (1035, 274), "[ 1  0   0.7 ]");
+text(m1, (1035, 310), "[ 0  1    0  ]");
+text(m2, (1035, 346), "[ 0  0    1  ]");
+text(iLabel, (995, 446), "M^-1 =");
+text(i0, (1035, 488), "[ 1  0  -0.7 ]");
+text(i1, (1035, 524), "[ 0  1    0  ]");
+text(i2, (1035, 560), "[ 0  0    1  ]");
+display(mLabel); display(m0); display(m1); display(m2);
+display(iLabel); display(i0); display(i1); display(i2);
+color(mLabel, cyan);  color(m0, cyan);  color(m1, cyan);  color(m2, cyan);
+color(iLabel, gold);  color(i0, gold);  color(i1, gold);  color(i2, gold);
+size(mLabel, 24); size(m0, 22); size(m1, 22); size(m2, 22);
+size(iLabel, 24); size(i0, 22); size(i1, 22); size(i2, 22);
+hidden(mLabel); hidden(m0); hidden(m1); hidden(m2);
+hidden(iLabel); hidden(i0); hidden(i1); hidden(i2);
+
+// ------------------------------ script ------------------------------
+show(floor, 0.3);
+show(cap, 0.3);
+say(cap, "A 3 by 3 by 3 block — 27 cells.", 0.7);
+stagger(0.04) {
+  for j in 0..3 { for k in 0..3 { show(xa{j}{k}, 0.3); } }
+  for j in 0..3 { for k in 0..3 { show(xb{j}{k}, 0.3); } }
+  for j in 0..3 { for k in 0..3 { show(xc{j}{k}, 0.3); } }
+}
+orbit3(38, 22, 13, 1.6, smooth);
+
+say(cap, "A 3×3 matrix M is a linear map of space. This M shears x by height z.", 1.0);
+stagger(0.12) { show(mLabel, 0.3); show(m0, 0.3); show(m1, 0.3); show(m2, 0.3); }
+
+// apply M: x' = x + a·(z - zc)
+par {
+  for j in 0..3 { for k in 0..3 {
+    move3(xa{j}{k}, (0 - s + a*(k - 1)*s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xb{j}{k}, (a*(k - 1)*s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xc{j}{k}, (s + a*(k - 1)*s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+}
+say(cap, "Applying M slants the whole block — the higher a cell, the more it shifts.", 1.0);
+
+stagger(0.12) { show(iLabel, 0.3); show(i0, 0.3); show(i1, 0.3); show(i2, 0.3); }
+say(cap, "The inverse M^-1 just negates the shear.", 0.8);
+
+// apply M^-1: sends every cell back to where it started
+par {
+  for j in 0..3 { for k in 0..3 {
+    move3(xa{j}{k}, (0 - s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xb{j}{k}, (0, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xc{j}{k}, (s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+}
+say(cap, "M^-1 sends every cell home: M^-1 M = I, the identity.", 1.0);
+
+orbit3(70, 26, 13, 2.4, smooth);
+wait(0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/SjXDqg3xNE8" title="A 3×3×3 Matrix and Its Inverse, in 3D — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="double-integral3"><a class="header" href="#double-integral3">double-integral3</a></h2>
+<p>Multivariable calculus: the volume under a surface as a limit of finer and
+finer columns — a double integral, made solid. The coarse blocks refine until
+they hug the surface.</p>
+<pre><code class="language-manic">title("The double integral — volume as a limit of finer columns");
+canvas("16:9");
+
+camera3((9, -11, 9), (0, 0, 0.7), 40);
+axes3(world, (0, 0, 0), 3);
+color(world, dim);
+
+text(cap, (cx, h - 54), "coarse columns");
+size(cap, 22); color(cap, cyan); bold(cap); display(cap); hidden(cap);
+
+// the surface, kept faint so the columns beneath it read
+surface3(hill, "1.6*exp(-(x*x + y*y)*0.28)", (-3, 3), (-3, 3), 30);
+color(hill, cyan); opacity(hill, 0.22); untraced(hill);
+
+// the volume under it, at three resolutions — each finer sum hugs the surface
+volume3(v1, hill, 3);
+color(v1, lime); hidden(v1);
+volume3(v2, hill, 7);
+color(v2, lime); hidden(v2);
+volume3(v3, hill, 16);
+color(v3, lime); hidden(v3);
+
+// ---- timeline ----
+show(world, 0.5);
+draw(hill, 1.4);
+wait(0.3);
+
+// 3x3: a crude estimate
+show(cap, 0.4);
+show(v1, 0.7);
+wait(1.2);
+
+// 7x7: closer
+fade(v1, 0.5);
+say(cap, "finer: the sum gets closer");
+show(v2, 0.7);
+wait(1.2);
+
+// 16x16: the columns fill the true volume under the surface
+fade(v2, 0.5);
+say(cap, "finer still -&gt; the true volume (a double integral)");
+show(v3, 0.8);
+orbit3(70, 34, 16, 4.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TttBg-qplrc" title="The Double Integral, in 3D — Volume as Finer Columns — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h1>
+<p>manic checks your scene <em>as you type</em> — it underlines the spot and shows the
+message, and where possible offers a one-click <strong>Fix</strong>. Here are the mistakes
+people actually hit, the message you’ll see, and the fix.</p>
+<h2 id="errors-the-editor-catches"><a class="header" href="#errors-the-editor-catches">Errors the editor catches</a></h2>
+<h3 id="1-unknown-variable--a-missing-"><a class="header" href="#1-unknown-variable--a-missing-">1. <code>unknown variable</code> — a missing <code>*</code></a></h3>
+<p>The <strong>#1 mistake.</strong> Two names written together are read as a <em>single</em> word.</p>
+<pre><code class="language-manic"># ❌  unknown variable `idx`
+dot(p, (cx + idx, cy), 6);
+# ✅  put a * between the two names
+dot(p, (cx + i*dx, cy), 6);
+</code></pre>
+<p>A <strong>number</strong> can hug a name (<code>2r</code>, <code>3(x+1)</code>), but <strong>two names can’t</strong>. Add <code>*</code>
+at every name-next-to-name: <code>i*dx</code>, <code>tau*i</code>, <code>xmid*sx</code>, and especially
+<code>r*cos(t)</code> / <code>r*sin(t)</code> — <code>rcos</code>/<code>rsin</code> are the classic trap (they mean
+“radius × cos”, not a function).</p>
+<h3 id="2-unknown-function-in-a-plot--quote-the-formula"><a class="header" href="#2-unknown-function-in-a-plot--quote-the-formula">2. <code>unknown function</code> in a plot — quote the formula</a></h3>
+<p>Only a short list of names work as <strong>bare words</strong> (<code>sin</code>, <code>cos</code>, <code>tan</code>,
+<code>sqrt</code>, <code>abs</code>, <code>exp</code>, <code>log</code>, <code>parabola</code>, <code>cubic</code>, <code>gauss</code>, <code>sinc</code>, …). Anything
+else — <code>acos</code>, <code>tanh</code>, <code>log10</code>, sums of terms — must be a <strong>“quoted formula”</strong>.</p>
+<pre><code class="language-manic"># ❌  unknown function `acos`
+plot(f, (cx, cy), 80, 80, acos, (-1, 1));
+# ✅  wrap it in quotes as a formula in x
+plot(f, (cx, cy), 80, 80, "acos(x)", (-1, 1));
+</code></pre>
+<h3 id="3-needs-at-least-n-arguments--you-dropped-the-id-or-an-argument"><a class="header" href="#3-needs-at-least-n-arguments--you-dropped-the-id-or-an-argument">3. <code>needs at least N argument(s)</code> — you dropped the id (or an argument)</a></h3>
+<p>Every builtin’s <strong>first argument is its id</strong> — a name <em>you</em> pick. Modifiers and
+verbs need that id too.</p>
+<pre><code class="language-manic"># ❌  `size` needs at least 2 argument(s), got 1
+size(30);
+# ✅  say which entity
+size(title, 30);
+
+# ❌  `circle` needs at least 3 argument(s), got 2   (no radius)
+circle(c, (cx, cy));
+# ✅
+circle(c, (cx, cy), 120);
+</code></pre>
+<h3 id="4-no-entity-named-x--a-typo-or-used-too-early"><a class="header" href="#4-no-entity-named-x--a-typo-or-used-too-early">4. <code>no entity named X</code> — a typo, or used too early</a></h3>
+<p>You referred to an id that doesn’t exist — misspelled, or used before it’s made.</p>
+<pre><code class="language-manic">text(title, (cx, 60), "Hello");
+# ❌  no entity named `titel`
+color(titel, cyan);
+# ✅  match the id exactly
+color(title, cyan);
+</code></pre>
+<h3 id="5-unknown-colour--use-the-palette-or-hue"><a class="header" href="#5-unknown-colour--use-the-palette-or-hue">5. <code>unknown colour</code> — use the palette (or <code>hue</code>)</a></h3>
+<p>Only the named palette colours work — no <code>red</code>, no <code>#ff0000</code>.</p>
+<pre><code class="language-manic"># ❌  unknown colour `red`
+color(dot, red);
+# ✅  a palette colour…
+color(dot, magenta);
+# ✅  …or a computed one, 0–360
+hue(dot, 210);
+</code></pre>
+<p>Palette: <code>cyan  magenta  lime  gold  fg  dim  void  panel</code>.</p>
+<h3 id="6-stroke-is-2d-only--a-2d-styler-on-a-3d-shape"><a class="header" href="#6-stroke-is-2d-only--a-2d-styler-on-a-3d-shape">6. <code>stroke is 2D-only</code> — a 2D styler on a 3D shape</a></h3>
+<p>Some styling is 2D-only. On 3D shapes use the 3D equivalent.</p>
+<pre><code class="language-manic">cube3(bx, (0, 0, 1), (2, 2, 2));
+# ❌  `stroke` is 2D-only; for a 3D line/arrow/curve use `thick(bx, radius)`
+stroke(bx, 3);
+# ✅  thickness in world units
+thick(bx, 0.1);
+</code></pre>
+<p>The message names the fix. Also: <code>hue</code> → use <code>color</code> on 3D entities.</p>
+<h3 id="7-argument-1-should-be-a-name--a-reserved-word-as-an-id"><a class="header" href="#7-argument-1-should-be-a-name--a-reserved-word-as-an-id">7. <code>argument 1 should be a name</code> — a reserved word as an id</a></h3>
+<p><code>pi</code>, <code>tau</code>, <code>e</code>, <code>inf</code>, <code>w</code>, <code>h</code>, <code>cx</code>, <code>cy</code> are built-in <em>values</em> — you can’t
+name an entity one of them.</p>
+<pre><code class="language-manic"># ❌  argument 1 of `dot` should be a name   (e is Euler's number)
+dot(e, (cx, cy), 6);
+# ✅  pick any other name
+dot(pt, (cx, cy), 6);
+</code></pre>
+<h3 id="8-expected-a-statement--found---a-stray-semicolon"><a class="header" href="#8-expected-a-statement--found---a-stray-semicolon">8. <code>expected a statement … found ;</code> — a stray semicolon</a></h3>
+<p>Blocks (<code>par</code>, <code>seq</code>, <code>stagger</code>, <code>for</code>, <code>if</code>) end with <code>}</code> — <strong>no</strong> semicolon.</p>
+<pre><code class="language-manic"># ❌  expected a statement …, found `;`
+par { show(a, 1); show(b, 1); };
+# ✅
+par { show(a, 1); show(b, 1); }
+</code></pre>
+<h2 id="no-error--but-it-looks-wrong"><a class="header" href="#no-error--but-it-looks-wrong">No error — but it looks wrong</a></h2>
+<p>These pass the check, so watch for them yourself.</p>
+<h3 id="9-a-curve-appears-all-at-once-instead-of-drawing-on"><a class="header" href="#9-a-curve-appears-all-at-once-instead-of-drawing-on">9. A curve appears all at once instead of drawing on</a></h3>
+<p><code>draw</code> animates a shape that <strong>starts hidden</strong>. Declare it <code>untraced</code> first.</p>
+<pre><code class="language-manic">plot(f, (cx, cy), 80, 80, "sin(x)", (0, 6));
+# ❌  f is already fully shown — draw does nothing visible
+draw(f, 2);
+# ✅  hide the line, then draw traces it on
+untraced(f);
+draw(f, 2);
+</code></pre>
+<h3 id="10-things-land-off-screen"><a class="header" href="#10-things-land-off-screen">10. Things land off-screen</a></h3>
+<p>The canvas is a <strong>fixed logical size — 1280×720 for <code>16:9</code></strong> — <em>not</em> your
+video’s pixel size. Position with <code>cx</code>, <code>cy</code>, <code>w</code>, <code>h</code>, never hard-coded pixels.</p>
+<pre><code class="language-manic"># ❌  1700 is past the right edge (width is 1280)
+text(t, (1700, 300), "hi");
+# ✅  relative to the centre
+text(t, (cx + 200, 300), "hi");
+</code></pre>
+<h3 id="11-a-matrixtable-cell-with-a-comma"><a class="header" href="#11-a-matrixtable-cell-with-a-comma">11. A matrix/table cell with a comma</a></h3>
+<p>Cells are single tokens split by spaces <strong>or commas</strong>, so a cell can’t <em>contain</em>
+a comma — <code>(0,0)</code> silently becomes two cells and the grid comes out malformed.</p>
+<pre><code class="language-manic"># ❌  no error, but the row breaks apart
+matrix(m, "(0,0) (1,1)", (cx, cy));
+# ✅  one token per cell
+matrix(m, "0 1; 2 3", (cx, cy));
+</code></pre>
+<hr>
+<p><strong>Rules of thumb:</strong> put a <code>*</code> between names · quote any formula that isn’t a
+bare-word function · give every entity an id · use <code>cx</code>/<code>cy</code>/<code>w</code>/<code>h</code> for
+position · <code>untraced</code> + <code>draw</code> to trace a curve on.</p>
 
                     </main>
 

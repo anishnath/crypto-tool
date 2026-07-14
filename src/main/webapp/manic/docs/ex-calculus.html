@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-59dcb640.js";
+            window.path_to_searchindex_js = "searchindex-01a48fa4.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5b7013c8.js"></script>
+        <script src="toc-5867d1aa.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -180,6 +180,142 @@
                     <main>
                         <h1 id="calculus--functions"><a class="header" href="#calculus--functions">Calculus &amp; functions</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="calculus-demo"><a class="header" href="#calculus-demo">calculus-demo</a></h2>
+<p>The flagship: two big ideas on one curve. A tangent slides along a bell curve
+with a live slope readout (flat at the peak), then the area sweeps open while the
+integral climbs to its true value — on properly numbered, scaled axes.</p>
+<pre><code class="language-manic">title("Calculus, visualized — the derivative and the integral");
+canvas("16:9");
+
+// screen anchor for the plot: math (0,0) maps here. Placing it at cx-450 with
+// sx=150 centres the domain 0..6 under the canvas centre.
+let ox = cx - 450;
+let oy = cy + 120;
+let sx = 150;          // screen px per unit of x
+let sy = 170;          // screen px per unit of y
+
+// ---------------- header ----------------
+text(hdr, (cx, 54), "Two big ideas, one curve");
+size(hdr, 32); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+text(flabel, (cx, 94), "f(x) = a smooth bell-shaped curve");
+size(flabel, 18); color(flabel, dim); display(flabel); hidden(flabel);
+
+// ---------------- the curve ----------------
+axes(ax, (ox, oy), 930, 205, 1);
+color(ax, dim); untraced(ax);
+
+// axis labels, at the arrow tips
+text(xlab, (ox + 958, oy + 6), "x");
+size(xlab, 24); color(xlab, dim); display(xlab); hidden(xlab);
+
+text(ylab, (ox, oy - 232), "f(x)");
+size(ylab, 24); color(ylab, dim); display(ylab); hidden(ylab);
+
+// numbered scale — each label sits at the plot's real coordinate:
+// x = k  -&gt;  (ox + k*sx, oy)      y = v  -&gt;  (ox, oy - v*sy)
+line(tx1, (ox + 1*sx, oy - 7), (ox + 1*sx, oy + 7)); color(tx1, dim); tag(tx1, scale); hidden(tx1);
+line(tx2, (ox + 2*sx, oy - 7), (ox + 2*sx, oy + 7)); color(tx2, dim); tag(tx2, scale); hidden(tx2);
+line(tx3, (ox + 3*sx, oy - 7), (ox + 3*sx, oy + 7)); color(tx3, dim); tag(tx3, scale); hidden(tx3);
+line(tx4, (ox + 4*sx, oy - 7), (ox + 4*sx, oy + 7)); color(tx4, dim); tag(tx4, scale); hidden(tx4);
+line(tx5, (ox + 5*sx, oy - 7), (ox + 5*sx, oy + 7)); color(tx5, dim); tag(tx5, scale); hidden(tx5);
+line(tx6, (ox + 6*sx, oy - 7), (ox + 6*sx, oy + 7)); color(tx6, dim); tag(tx6, scale); hidden(tx6);
+
+text(nx1, (ox + 1*sx, oy + 28), "1"); size(nx1, 16); color(nx1, dim); tag(nx1, scale); hidden(nx1);
+text(nx2, (ox + 2*sx, oy + 28), "2"); size(nx2, 16); color(nx2, dim); tag(nx2, scale); hidden(nx2);
+text(nx3, (ox + 3*sx, oy + 28), "3"); size(nx3, 16); color(nx3, dim); tag(nx3, scale); hidden(nx3);
+text(nx4, (ox + 4*sx, oy + 28), "4"); size(nx4, 16); color(nx4, dim); tag(nx4, scale); hidden(nx4);
+text(nx5, (ox + 5*sx, oy + 28), "5"); size(nx5, 16); color(nx5, dim); tag(nx5, scale); hidden(nx5);
+text(nx6, (ox + 6*sx, oy + 28), "6"); size(nx6, 16); color(nx6, dim); tag(nx6, scale); hidden(nx6);
+
+line(tyh, (ox - 7, oy - 0.5*sy), (ox + 7, oy - 0.5*sy)); color(tyh, dim); tag(tyh, scale); hidden(tyh);
+line(ty1, (ox - 7, oy - 1*sy),   (ox + 7, oy - 1*sy));   color(ty1, dim); tag(ty1, scale); hidden(ty1);
+text(nyh, (ox - 36, oy - 0.5*sy), "0.5"); size(nyh, 16); color(nyh, dim); tag(nyh, scale); hidden(nyh);
+text(ny1, (ox - 24, oy - 1*sy),   "1");   size(ny1, 16); color(ny1, dim); tag(ny1, scale); hidden(ny1);
+
+plot(f, (ox, oy), sx, sy, "exp(-0.5*(x-3)*(x-3))", (0, 6));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// ---------------- captions (swap per act) ----------------
+text(capd, (cx, h - 46), "THE DERIVATIVE   —   the slope at every point");
+size(capd, 22); color(capd, gold); bold(capd); display(capd); hidden(capd);
+
+text(capi, (cx, h - 46), "THE INTEGRAL   —   the area underneath");
+size(capi, 22); color(capi, lime); bold(capi); display(capi); hidden(capi);
+
+text(endcap, (cx, h - 46), "two views of one curve");
+size(endcap, 22); color(endcap, cyan); bold(endcap); display(endcap); hidden(endcap);
+
+// ---------------- derivative pieces ----------------
+tangent(tan, f, 0.4, 220);
+color(tan, gold); hidden(tan);
+
+slope(sl, f, 0.4);
+color(sl, gold); hidden(sl);
+
+// ---------------- integral pieces ----------------
+area(reg, f, 0, 0);
+color(reg, lime);
+
+text(ivlabel, (cx + 330, cy - 150), "area so far");
+size(ivlabel, 16); color(ivlabel, dim); display(ivlabel); hidden(ivlabel);
+
+integral(iv, f, 0, 0, (cx + 330, cy - 110));
+size(iv, 30); color(iv, lime); hidden(iv);
+
+// ================= timeline =================
+show(hdr, 0.6);
+show(flabel, 0.4);
+draw(ax, 0.8);
+par {
+  show(xlab, 0.4);
+  show(ylab, 0.4);
+  show(scale, 0.4);
+}
+draw(f, 1.6);
+wait(0.4);
+
+// --- Act 1: the derivative ---
+show(capd, 0.5);
+show(tan, 0.5);
+show(sl, 0.4);
+wait(0.3);
+par {                                 // climb to the peak — slope goes to zero
+  to(tan, x, 3, 2.2);
+  to(sl, x, 3, 2.2);
+}
+pulse(sl, 0.5);
+wait(0.3);
+par {                                 // over the top — slope turns negative
+  to(tan, x, 5.6, 2.6);
+  to(sl, x, 5.6, 2.6);
+}
+wait(0.4);
+
+// --- Act 2: the integral ---
+par {
+  fade(capd, 0.4);
+  fade(tan, 0.4);
+  fade(sl, 0.4);
+}
+show(capi, 0.5);
+show(ivlabel, 0.3);
+show(iv, 0.3);
+par {                                 // sweep the area open, number climbs
+  to(reg, x, 6, 4);
+  to(iv, x, 6, 4);
+}
+wait(0.4);
+flash(iv, lime);
+pulse(iv, 0.5);
+wait(0.4);
+
+// --- close ---
+fade(capi, 0.4);
+show(endcap, 0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/UrOdi_iLt_k" title="Calculus in One Scene: the Derivative & the Integral — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="sine_wave"><a class="header" href="#sine_wave">sine_wave</a></h2>
 <p><code>axes</code> + <code>plot</code>, a curve traced on, then vectors.</p>
 <pre><code class="language-manic">// The Sine Wave — a first taste of the manic math kit.
@@ -518,6 +654,306 @@ pulse(total);
 wait(1.0);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/mIoDoCypQaQ" title="Watch a Riemann Sum Converge — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="tangent"><a class="header" href="#tangent">tangent</a></h2>
+<p>The tangent line to a curve, sliding along it — its tilt is read from the
+function itself, so it’s always the true slope (flat at the peaks).</p>
+<pre><code class="language-manic">title("The Tangent Line — a curve's slope, made visible");
+canvas("16:9");
+
+text(hdr, (cx, 60), "The slope of sin x, everywhere at once");
+size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// the curve — plot remembers its function, so tangent can ask it questions.
+// center the domain 0..6.3 across the canvas (midpoint x=3.15 sits at cx)
+plot(f, (cx - 440, cy + 40), 140, 120, "sin(x)", (0, 6.3));
+color(f, cyan); stroke(f, 3); untraced(f);
+
+// a tangent that touches f where x = 0.5 (line + contact dot, one call)
+tangent(tan, f, 0.5, 260);
+color(tan, gold); untraced(tan);
+
+text(cap, (cx, h - 60), "watch the tilt follow the curve");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(f, 1.4);
+show(tan, 0.6);
+show(cap, 0.4);
+wait(0.4);
+
+// slide the touch point along the whole curve — the slope is derived live
+to(tan, x, 5.8, 5);
+wait(0.3);
+to(tan, x, 1.6, 2.5);   // back toward the first peak, where the slope is 0
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/D9PHslz3e2U" title="The Tangent Line, Sliding Along a Curve — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="analysis"><a class="header" href="#analysis">analysis</a></h2>
+<p>Ask one curve everything at once — tangent, a live slope number, the normal, the
+area sweeping open beneath it, and the integral climbing to its true value.</p>
+<pre><code class="language-manic">title("Reading a curve: slope, tangent, normal, area");
+canvas("16:9");
+
+text(hdr, (cx, 58), "Asking a curve questions");
+size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// one curve — everything below asks IT, by name
+plot(f, (cx - 440, cy + 30), 140, 110, "sin(x)", (0, 6.3));
+color(f, cyan); stroke(f, 3); untraced(f);
+
+// the area under it — starts collapsed at x=0.6, sweeps open
+area(reg, f, 0.6, 0.6);
+color(reg, lime);
+
+// a live integral readout that climbs as the area sweeps
+integral(area_val, f, 0.6, 0.6, (cx + 340, cy - 210));
+color(area_val, lime);
+
+// tangent + its live slope number, both riding the same point
+tangent(tan, f, 0.6, 240);
+color(tan, gold);
+
+slope(sl, f, 0.6);
+color(sl, gold);
+
+// the normal, perpendicular at the same place
+normal(nrm, f, 0.6, 150);
+color(nrm, magenta); hidden(nrm);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(f, 1.4);
+show(tan, 0.5);
+show(sl, 0.4);
+wait(0.4);
+
+// sweep the area open while the tangent + slope slide together and the
+// integral readout climbs
+par {
+  to(reg, x, 5.7, 4);
+  to(area_val, x, 5.7, 4);
+  to(tan, x, 5.7, 4);
+  to(sl, x, 5.7, 4);
+}
+wait(0.4);
+
+// reveal the normal and glide everything back to the first peak (slope 0)
+show(nrm, 0.4);
+par {
+  to(tan, x, 1.571, 2.5);
+  to(sl, x, 1.571, 2.5);
+  to(nrm, x, 1.571, 2.5);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/SLennxNy6v4" title="Slope, Tangent, Area & Integral on One Curve — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="newton"><a class="header" href="#newton">newton</a></h2>
+<p>Newton’s method, drawn as a zig-zag: from a first guess, slide down each tangent
+to the axis, back up to the curve, and watch the guesses walk to the root.</p>
+<pre><code class="language-manic">title("Newton's method: chasing a root");
+canvas("16:9");
+
+text(hdr, (cx, 56), "Newton's method finds where x squared = 2");
+size(hdr, 28); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// a reference frame so the x-axis (where the tangents land) is visible
+axes(ax, (cx - 250, cy + 170), 540, 360, 1);
+color(ax, dim); untraced(ax);
+
+// f(x) = x^2 - 2, whose positive root is sqrt(2)
+plot(f, (cx - 250, cy + 170), 180, 70, "x*x - 2", (-0.4, 3));
+color(f, cyan); stroke(f, 3); untraced(f);
+
+// the true zero-crossing, marked
+roots(zero, f);
+color(zero, lime); hidden(zero);
+
+// the Newton zig-zag from a first guess of x = 3
+newton(walk, f, 3);
+color(walk, gold); stroke(walk, 3); untraced(walk);
+
+text(cap, (cx, h - 60), "each tangent slides the guess closer");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(ax, 0.8);
+draw(f, 1.4);
+wait(0.3);
+show(cap, 0.4);
+
+// walk the iterates in to the root
+draw(walk, 3.5);
+wait(0.3);
+
+// reveal the exact root it converged on
+show(zero, 0.5);
+pulse(zero, 0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/R7wwwW-_tP4" title="Newton's Method, Chasing a Root — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="inverse-derivatives"><a class="header" href="#inverse-derivatives">inverse-derivatives</a></h2>
+<p>Why a function and its inverse have reciprocal slopes: <code>e^x</code> and <code>ln x</code> mirrored
+across <code>y = x</code>, with the slopes at matching points multiplying to 1.</p>
+<pre><code class="language-manic">title("Inverse-function derivatives — why the pairs mirror");
+canvas("16:9");
+
+// uniform scale (sx == sy) so a function and its inverse reflect correctly
+let ox = cx - 470;
+let oy = cy + 110;
+let s = 72;
+
+text(hdr, (cx, 52), "A function and its inverse: mirror curves, reciprocal slopes");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// ---------------- the mirror plane ----------------
+axes(ax, (ox, oy), 470, 300, 1);
+color(ax, dim); untraced(ax);
+
+// y = x, the mirror line
+line(diag, (ox - 2.6*s, oy + 2.6*s), (ox + 3.8*s, oy - 3.8*s));
+color(diag, dim); untraced(diag);
+text(diaglab, (ox + 3.4*s, oy - 3.4*s - 22), "y = x");
+size(diaglab, 16); color(diaglab, dim); display(diaglab); hidden(diaglab);
+
+// e^x and its inverse ln x — reflections of each other
+plot(ef, (ox, oy), s, s, "exp(x)", (-2.6, 1.45));
+color(ef, cyan); stroke(ef, 3); untraced(ef);
+text(eflab, (ox + 1.45*s + 8, oy - 4.1*s), "e^x");
+size(eflab, 18); color(eflab, cyan); display(eflab); hidden(eflab);
+
+plot(lf, (ox, oy), s, s, "ln(x)", (0.075, 4.3));
+color(lf, magenta); stroke(lf, 3); untraced(lf);
+text(lflab, (ox + 4.2*s, oy - 1.45*s), "ln x");
+size(lflab, 18); color(lflab, magenta); display(lflab); hidden(lflab);
+
+// tangent + live slope at a point on e^x, and at its mirror point on ln x
+tangent(te, ef, 0.5, 150);
+color(te, cyan); hidden(te);
+slope(se, ef, 0.5);
+color(se, cyan); hidden(se);
+
+tangent(tl, lf, 1.65, 150);
+color(tl, magenta); hidden(tl);
+slope(sl, lf, 1.65);
+color(sl, magenta); hidden(sl);
+
+text(rec, (cx + 340, cy + 60), "slope x slope = 1");
+size(rec, 22); color(rec, lime); bold(rec); display(rec); hidden(rec);
+text(rec2, (cx + 340, cy + 96), "(1.65) x (0.61)");
+size(rec2, 18); color(rec2, dim); display(rec2); hidden(rec2);
+
+// ---------------- the four identity pairs ----------------
+text(t1, (cx + 340, cy - 190), "(e^x)' = e^x        (ln x)' = 1/x");
+size(t1, 17); color(t1, fg); display(t1); hidden(t1);
+text(t2, (cx + 340, cy - 150), "(sin x)' = sqrt(1-sin^2 x)   (arcsin x)' = 1/sqrt(1-x^2)");
+size(t2, 15); color(t2, fg); display(t2); hidden(t2);
+text(t3, (cx + 340, cy - 118), "(cos x)' = -sqrt(1-cos^2 x)  (arccos x)' = -1/sqrt(1-x^2)");
+size(t3, 15); color(t3, fg); display(t3); hidden(t3);
+text(t4, (cx + 340, cy - 86), "(tan x)' = 1+tan^2 x         (arctan x)' = 1/(1+x^2)");
+size(t4, 15); color(t4, fg); display(t4); hidden(t4);
+
+// ================= timeline =================
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(diag, 0.5);
+show(diaglab, 0.3);
+par {
+  draw(ef, 1.4);
+  draw(lf, 1.4);
+}
+par {
+  show(eflab, 0.4);
+  show(lflab, 0.4);
+}
+wait(0.3);
+
+// the reciprocal-slope check
+par {
+  show(te, 0.4);
+  show(se, 0.4);
+}
+par {
+  show(tl, 0.4);
+  show(sl, 0.4);
+}
+show(rec, 0.5);
+show(rec2, 0.4);
+flash(rec, lime);
+wait(0.4);
+
+// the four pairs it generates
+stagger(0.4) {
+  show(t1, 0.4);
+  show(t2, 0.4);
+  show(t3, 0.4);
+  show(t4, 0.4);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/-HEjdSVXdXc" title="Why Inverse Functions Have Reciprocal Slopes — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spline"><a class="header" href="#spline">spline</a></h2>
+<p>Interpolation: one smooth curve drawn through a scattered set of points — it
+passes through every knot exactly.</p>
+<pre><code class="language-manic">title("A smooth curve through the data");
+canvas("16:9");
+
+text(hdr, (cx, 70), "Interpolation: one smooth curve through every point");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// scattered data points — the spline passes through all of them
+spline(s, (300, 620), (520, 340), (760, 560), (1000, 300), (1240, 480), (1500, 260));
+color(s, cyan); stroke(s, 4); untraced(s);
+
+text(cap, (cx, h - 60), "Catmull-Rom — it hits each knot exactly");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.5);
+// pop the knots in first
+show(s.knots, 0.6);
+wait(0.3);
+// then trace the smooth curve through them
+draw(s, 2.2);
+show(cap, 0.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/luCo9NmmbaA" title="A Smooth Curve Through Any Points — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="trajectory"><a class="header" href="#trajectory">trajectory</a></h2>
+<p>A phase portrait: three paths flowing under a differential system, each
+spiralling into the sink at the origin.</p>
+<pre><code class="language-manic">title("Phase portrait: flowing into a spiral sink");
+canvas("16:9");
+
+text(hdr, (cx, 60), "dx/dt = -y - 0.2x,   dy/dt = x - 0.2y");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// a reference frame centered on the sink
+axes(ax, (cx, cy + 20), 620, 360, 1);
+color(ax, dim); untraced(ax);
+
+// three trajectories from different starts, each spiraling into the origin
+trajectory(t1, "-y - 0.2*x", "x - 0.2*y", (3.2, 0), (cx, cy + 20), 110, 520);
+color(t1, cyan); stroke(t1, 3); untraced(t1);
+
+trajectory(t2, "-y - 0.2*x", "x - 0.2*y", (0, 3.4), (cx, cy + 20), 110, 520);
+color(t2, magenta); stroke(t2, 3); untraced(t2);
+
+trajectory(t3, "-y - 0.2*x", "x - 0.2*y", (-3.0, -2.4), (cx, cy + 20), 110, 520);
+color(t3, gold); stroke(t3, 3); untraced(t3);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(ax, 0.8);
+par {
+  draw(t1, 3.5);
+  draw(t2, 3.5);
+  draw(t3, 3.5);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/-QeYAZ2GHVQ" title="Phase Portrait: Flowing Into a Spiral — manic" allowfullscreen loading="lazy"></iframe></div>
 
 
                     </main>
