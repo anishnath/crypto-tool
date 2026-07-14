@@ -1,0 +1,129 @@
+title("Calculus, visualized — the derivative and the integral");
+canvas("16:9");
+
+// screen anchor for the plot: math (0,0) maps here. Placing it at cx-450 with
+// sx=150 centres the domain 0..6 under the canvas centre.
+let ox = cx - 450;
+let oy = cy + 120;
+let sx = 150;          // screen px per unit of x
+let sy = 170;          // screen px per unit of y
+
+// ---------------- header ----------------
+text(hdr, (cx, 54), "Two big ideas, one curve");
+size(hdr, 32); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+text(flabel, (cx, 94), "f(x) = a smooth bell-shaped curve");
+size(flabel, 18); color(flabel, dim); display(flabel); hidden(flabel);
+
+// ---------------- the curve ----------------
+axes(ax, (ox, oy), 930, 205, 1);
+color(ax, dim); untraced(ax);
+
+// axis labels, at the arrow tips
+text(xlab, (ox + 958, oy + 6), "x");
+size(xlab, 24); color(xlab, dim); display(xlab); hidden(xlab);
+
+text(ylab, (ox, oy - 232), "f(x)");
+size(ylab, 24); color(ylab, dim); display(ylab); hidden(ylab);
+
+// numbered scale — each label sits at the plot's real coordinate:
+// x = k  ->  (ox + k*sx, oy)      y = v  ->  (ox, oy - v*sy)
+line(tx1, (ox + 1*sx, oy - 7), (ox + 1*sx, oy + 7)); color(tx1, dim); tag(tx1, scale); hidden(tx1);
+line(tx2, (ox + 2*sx, oy - 7), (ox + 2*sx, oy + 7)); color(tx2, dim); tag(tx2, scale); hidden(tx2);
+line(tx3, (ox + 3*sx, oy - 7), (ox + 3*sx, oy + 7)); color(tx3, dim); tag(tx3, scale); hidden(tx3);
+line(tx4, (ox + 4*sx, oy - 7), (ox + 4*sx, oy + 7)); color(tx4, dim); tag(tx4, scale); hidden(tx4);
+line(tx5, (ox + 5*sx, oy - 7), (ox + 5*sx, oy + 7)); color(tx5, dim); tag(tx5, scale); hidden(tx5);
+line(tx6, (ox + 6*sx, oy - 7), (ox + 6*sx, oy + 7)); color(tx6, dim); tag(tx6, scale); hidden(tx6);
+
+text(nx1, (ox + 1*sx, oy + 28), "1"); size(nx1, 16); color(nx1, dim); tag(nx1, scale); hidden(nx1);
+text(nx2, (ox + 2*sx, oy + 28), "2"); size(nx2, 16); color(nx2, dim); tag(nx2, scale); hidden(nx2);
+text(nx3, (ox + 3*sx, oy + 28), "3"); size(nx3, 16); color(nx3, dim); tag(nx3, scale); hidden(nx3);
+text(nx4, (ox + 4*sx, oy + 28), "4"); size(nx4, 16); color(nx4, dim); tag(nx4, scale); hidden(nx4);
+text(nx5, (ox + 5*sx, oy + 28), "5"); size(nx5, 16); color(nx5, dim); tag(nx5, scale); hidden(nx5);
+text(nx6, (ox + 6*sx, oy + 28), "6"); size(nx6, 16); color(nx6, dim); tag(nx6, scale); hidden(nx6);
+
+line(tyh, (ox - 7, oy - 0.5*sy), (ox + 7, oy - 0.5*sy)); color(tyh, dim); tag(tyh, scale); hidden(tyh);
+line(ty1, (ox - 7, oy - 1*sy),   (ox + 7, oy - 1*sy));   color(ty1, dim); tag(ty1, scale); hidden(ty1);
+text(nyh, (ox - 36, oy - 0.5*sy), "0.5"); size(nyh, 16); color(nyh, dim); tag(nyh, scale); hidden(nyh);
+text(ny1, (ox - 24, oy - 1*sy),   "1");   size(ny1, 16); color(ny1, dim); tag(ny1, scale); hidden(ny1);
+
+plot(f, (ox, oy), sx, sy, "exp(-0.5*(x-3)*(x-3))", (0, 6));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// ---------------- captions (swap per act) ----------------
+text(capd, (cx, h - 46), "THE DERIVATIVE   —   the slope at every point");
+size(capd, 22); color(capd, gold); bold(capd); display(capd); hidden(capd);
+
+text(capi, (cx, h - 46), "THE INTEGRAL   —   the area underneath");
+size(capi, 22); color(capi, lime); bold(capi); display(capi); hidden(capi);
+
+text(endcap, (cx, h - 46), "two views of one curve");
+size(endcap, 22); color(endcap, cyan); bold(endcap); display(endcap); hidden(endcap);
+
+// ---------------- derivative pieces ----------------
+tangent(tan, f, 0.4, 220);
+color(tan, gold); hidden(tan);
+
+slope(sl, f, 0.4);
+color(sl, gold); hidden(sl);
+
+// ---------------- integral pieces ----------------
+area(reg, f, 0, 0);
+color(reg, lime);
+
+text(ivlabel, (cx + 330, cy - 150), "area so far");
+size(ivlabel, 16); color(ivlabel, dim); display(ivlabel); hidden(ivlabel);
+
+integral(iv, f, 0, 0, (cx + 330, cy - 110));
+size(iv, 30); color(iv, lime); hidden(iv);
+
+// ================= timeline =================
+show(hdr, 0.6);
+show(flabel, 0.4);
+draw(ax, 0.8);
+par {
+  show(xlab, 0.4);
+  show(ylab, 0.4);
+  show(scale, 0.4);
+}
+draw(f, 1.6);
+wait(0.4);
+
+// --- Act 1: the derivative ---
+show(capd, 0.5);
+show(tan, 0.5);
+show(sl, 0.4);
+wait(0.3);
+par {                                 // climb to the peak — slope goes to zero
+  to(tan, x, 3, 2.2);
+  to(sl, x, 3, 2.2);
+}
+pulse(sl, 0.5);
+wait(0.3);
+par {                                 // over the top — slope turns negative
+  to(tan, x, 5.6, 2.6);
+  to(sl, x, 5.6, 2.6);
+}
+wait(0.4);
+
+// --- Act 2: the integral ---
+par {
+  fade(capd, 0.4);
+  fade(tan, 0.4);
+  fade(sl, 0.4);
+}
+show(capi, 0.5);
+show(ivlabel, 0.3);
+show(iv, 0.3);
+par {                                 // sweep the area open, number climbs
+  to(reg, x, 6, 4);
+  to(iv, x, 6, 4);
+}
+wait(0.4);
+flash(iv, lime);
+pulse(iv, 0.5);
+wait(0.4);
+
+// --- close ---
+fade(capi, 0.4);
+show(endcap, 0.6);

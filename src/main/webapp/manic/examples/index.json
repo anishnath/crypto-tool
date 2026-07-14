@@ -1,5 +1,5 @@
 {
-  "count": 45,
+  "count": 46,
   "categories": [
     {
       "slug": "algorithms",
@@ -71,6 +71,12 @@
       "slug": "calculus",
       "title": "Calculus & functions",
       "examples": [
+        {
+          "name": "calculus-demo",
+          "file": "calculus-demo.manic",
+          "title": "Calculus demo",
+          "desc": "Derivative + integral on one curve: sliding tangent, live slope, sweeping area, climbing integral, on numbered axes."
+        },
         {
           "name": "sine_wave",
           "file": "sine_wave.manic",

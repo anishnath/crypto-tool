@@ -140,6 +140,7 @@ broadcast over a tag to shear/rotate a grid+vectors — ApplyMatrix) ·
 `swap(a,b,[d],[ease])` (two entities; array form `swap(arr,i,j)` slides slot values) ·
 `to(id, prop, value,[d],[ease])` (alias `set`) where prop ∈
 `x y opacity scale angle trace color hue value morph`.
+(For a `tangent`, `to(id, x, target, dur)` slides the touch point along its curve — the slope follows.)
 Shape morph: `morph(a, b, [spin])` (constructor — sets `a` up to morph into `b`'s
 outline; `spin` degrees winds the blend) then `to(a, morph, 1, dur)` to animate
 (outline-only; `a` becomes a polyline). `copy(new, src)` duplicates an entity
@@ -150,7 +151,7 @@ Easings: `smooth linear in out overshoot bounce elastic`.
 `axes(id,(cx,cy),hw,hh,[unit])` · `plane`/`numberplane`/`complexplane`/`polarplane`
 · `plot(id,(cx,cy),sx,sy,fn,[domain|(x0,x1)])` where `fn` is a named function
 (`sin cos tan parabola cubic line abs exp sqrt log recip gauss`) or a
-**formula string** `"cos(x)+0.5*sin(3*x)"` · `vector(id,(cx,cy),(dx,dy),[color])`
+**formula string** `"cos(x)+0.5*sin(3*x)"` · **curve-analysis family** (all take a `plot` id and animate the moving param `x` via `to(id,x,target,dur)`): `tangent(id,curve,x,[len])` tangent line + contact dot (slope read from the function; only the dot shows at a corner/asymptote) · `normal(id,curve,x,[len])` the perpendicular line + dot · `slope(id,curve,x,[(dx,dy)])` a live slope NUMBER riding the point · `area(id,curve,a,b,[n])` filled region under the curve from `a` to `b` (sweep it open with `to(id,x,b,dur)` after starting collapsed `area(r,f,1,1)`) · `integral(id,curve,a,b,[(px,py)])` a live NUMBER of the integral a→b (animate `to(id,x,b,dur)` in step with an `area` sweep and it climbs to the true value) · `roots(id,curve,[color])` a dot at every zero-crossing (children `{id}0..`, tag `id`) · `newton(id,curve,x0,[steps])` Newton's-method zig-zag from guess `x0` converging on a root — declare `untraced(id)` then `draw(id,dur)` to animate the walk · `spline(id,p0,p1,…)` a smooth Catmull-Rom curve through the given points (knots `{id}.k0..`, tag `{id}.knots`); `untraced`+`draw` to trace · `trajectory(id,"dx/dt","dy/dt",(x0,y0),(cx,cy),scale,[steps])` an ODE path (RK4) from math `(x0,y0)` drawn as `(cx+x*scale,cy-y*scale)` — orbits/spirals/phase portraits (for `dy/dx=f`, pass `"1"`,`"f(x,y)"`); `untraced`+`draw` to flow · `vector(id,(cx,cy),(dx,dy),[color])`
 · `numberline` · `arc`/`sector`/`annulus`/`pie` · `arrowfield`/`vectorfield` ·
 `matrix(id,"a b; c d",(cx,cy),[cw],[ch])` (entry `{id}.r{i}c{j}`, tags
 `{id}.row{i}`/`{id}.col{j}`/`{id}.entries`) · `table(id,"a b; c d",(cx,cy),[cw],

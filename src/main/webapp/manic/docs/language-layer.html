@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-27435fe8.js";
+            window.path_to_searchindex_js = "searchindex-59dcb640.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-1b03fd44.js"></script>
+        <script src="toc-5b7013c8.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -195,6 +195,11 @@ circle(b, (cx + gap, cy), r);
 <p>Arithmetic is what you’d expect: <code>+ - * / ^</code>, parentheses, and functions like
 <code>sin</code>, <code>cos</code>, <code>sqrt</code>. Constants <code>pi</code>, <code>tau</code>, <code>e</code> are built in, as are the canvas
 vars <code>w</code>, <code>h</code>, <code>cx</code>, <code>cy</code>.</p>
+<blockquote>
+<p><strong>Put a <code>*</code> between names.</strong> A number can hug a name (<code>2r</code>, <code>3(x+1)</code>), but two
+names glued together read as one word — write <code>r*x</code>, <code>i*dx</code>, <code>pi*t</code>, never
+<code>rx</code> / <code>idx</code> / <code>pit</code>. This is the most common slip in loops and formulas.</p>
+</blockquote>
 <h2 id="loops--for"><a class="header" href="#loops--for">Loops — <code>for</code></a></h2>
 <pre><code class="language-manic">for i in 0..5 {
   dot(p{i}, (200 + i*180, cy), 8);   // p0 … p4
