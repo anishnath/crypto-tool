@@ -66,8 +66,22 @@
       examplesBody: $('examples-body'), examplesClose: $('examples-close'),
       welcomeOverlay: $('welcome-overlay'), welcomeClose: $('welcome-close'),
       welcomeStart: $('welcome-start'), welcomeExamples: $('welcome-examples'),
-      helpBtn: $('help-btn')
+      helpBtn: $('help-btn'),
+      renderOverlay: $('render-overlay'), renderStatus: $('render-status'),
+      renderBar: $('render-bar'), renderElapsed: $('render-elapsed'),
+      renderRemaining: $('render-remaining'), renderTip: $('render-tip'),
+      renderHide: $('render-hide'),
+      errPanel: $('editor-errors'), errCount: $('editor-errors-count'), errList: $('editor-errors-list'),
+      btnShare: $('btn-share'),
+      shareOverlay: $('share-overlay'), shareClose: $('share-close'),
+      shareUrl: $('share-url'), shareCopy: $('share-copy'), shareSocial: $('share-social')
     };
+    if (el.renderHide) el.renderHide.onclick = hideRenderModal;
+    if (el.btnShare) el.btnShare.onclick = shareCurrent;
+    if (el.shareClose) el.shareClose.onclick = closeShareModal;
+    if (el.shareOverlay) el.shareOverlay.addEventListener('click', function (e) {
+      if (e.target === el.shareOverlay) closeShareModal();
+    });
     initBrowserId();
     boot();
   });
@@ -96,6 +110,7 @@
     createEditor();
     wireDiagnostics();
     loadFiles();
+    maybeLoadShared();   // if the URL has ?s=<id>, open that shared file
     wireToolbar();
     wireSplitter();
     exposeBridge();
@@ -230,7 +245,9 @@
     });
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Escape') return;
-      if (el.examplesOverlay && el.examplesOverlay.classList.contains('show')) closeExamples();
+      if (el.shareOverlay && el.shareOverlay.classList.contains('show')) closeShareModal();
+      else if (el.renderOverlay && el.renderOverlay.classList.contains('show')) hideRenderModal();
+      else if (el.examplesOverlay && el.examplesOverlay.classList.contains('show')) closeExamples();
       else if (el.welcomeOverlay && el.welcomeOverlay.classList.contains('show')) closeWelcome();
     });
     // welcome modal
@@ -320,6 +337,99 @@
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // ── share: store the open file as a snippet, get a ?s=<id> link ──
+  // Reuses the OneCompiler snippet servlet (a generic { language, code, title }
+  // store) — the same call code-playground uses. Shares only the active file.
+  async function shareCurrent() {
+    if (!activeName || !models[activeName]) return;
+    var code = models[activeName].getValue();
+    if (!code.trim()) { toast('nothing to share yet'); return; }
+    toast('creating a share link…');
+    try {
+      var res = await fetch(CFG.ctx + '/OneCompilerFunctionality?action=snippet_create', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: 'manic', code: code, title: activeName })
+      });
+      var data = null; try { data = await res.json(); } catch (e) {}
+      if (!res.ok || !data || !data.id) throw new Error('no id');
+      var url = location.origin + location.pathname + '?s=' + encodeURIComponent(data.id);
+      openShareModal(url);
+    } catch (e) { toast('could not create a share link'); }
+  }
+
+  // Share modal: the link + copy, plus one-click posting to each network.
+  var SHARE_TITLE = 'A manic animation';
+  var SHARE_TEXT = 'I made this animation with manic — text to video. ✨';
+  function enc(s) { return encodeURIComponent(s); }
+  var SHARE_NETS = [
+    { label: 'X', color: '#1d9bf0', href: function (u) { return 'https://twitter.com/intent/tweet?text=' + enc(SHARE_TEXT) + '&url=' + enc(u); } },
+    { label: 'LinkedIn', color: '#0a66c2', href: function (u) { return 'https://www.linkedin.com/sharing/share-offsite/?url=' + enc(u); } },
+    { label: 'Reddit', color: '#ff4500', href: function (u) { return 'https://www.reddit.com/submit?url=' + enc(u) + '&title=' + enc(SHARE_TITLE); } },
+    { label: 'Facebook', color: '#1877f2', href: function (u) { return 'https://www.facebook.com/sharer/sharer.php?u=' + enc(u); } },
+    { label: 'WhatsApp', color: '#25d366', href: function (u) { return 'https://wa.me/?text=' + enc(SHARE_TEXT + ' ' + u); } },
+    { label: 'Telegram', color: '#2aabee', href: function (u) { return 'https://t.me/share/url?url=' + enc(u) + '&text=' + enc(SHARE_TEXT); } },
+    { label: 'Email', color: '#8b86b0', href: function (u) { return 'mailto:?subject=' + enc(SHARE_TITLE) + '&body=' + enc(SHARE_TEXT + '\n\n' + u); } }
+  ];
+  function openShareModal(url) {
+    if (!el.shareOverlay) { copyShareLink(url); return; }   // fallback if markup absent
+    if (el.shareUrl) el.shareUrl.value = url;
+    if (el.shareCopy) el.shareCopy.onclick = function () { copyShareLink(url); };
+    if (el.shareSocial) {
+      el.shareSocial.innerHTML = '';
+      // OS share sheet (mobile) first, when the browser supports it
+      if (navigator.share) {
+        var nb = document.createElement('button');
+        nb.className = 'mp-share-net'; nb.style.background = 'var(--cyan)'; nb.style.color = '#04121a';
+        nb.innerHTML = '<span class="mp-share-dot"></span>Share…';
+        nb.onclick = function () { navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: url }).catch(function () {}); };
+        el.shareSocial.appendChild(nb);
+      }
+      SHARE_NETS.forEach(function (n) {
+        var b = document.createElement('button');
+        b.className = 'mp-share-net'; b.style.background = n.color;
+        b.innerHTML = '<span class="mp-share-dot"></span>' + n.label;
+        b.onclick = function () { window.open(n.href(url), '_blank', 'noopener,noreferrer,width=640,height=620'); };
+        el.shareSocial.appendChild(b);
+      });
+    }
+    el.shareOverlay.classList.add('show');
+    if (el.shareUrl) { el.shareUrl.focus(); el.shareUrl.select(); }
+  }
+  function closeShareModal() { if (el.shareOverlay) el.shareOverlay.classList.remove('show'); }
+  function copyShareLink(url) {
+    var msg = 'Share link copied — anyone can open this file';
+    if (window.ToolUtils && ToolUtils.copyToClipboard) {
+      ToolUtils.copyToClipboard(url, { toastMessage: msg, toolName: 'manic' }); return;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function () { toast(msg); },
+        function () { toast('Copy failed — link: ' + url); });
+    } else { toast('Share link: ' + url); }
+  }
+  // On load, if the URL has ?s=<id>, fetch that snippet and open it as a file.
+  function maybeLoadShared() {
+    var m = /[?&]s=([^&]+)/.exec(location.search);
+    if (!m) return;
+    var id = decodeURIComponent(m[1]);
+    setStatus('loading shared file…');
+    fetch(CFG.ctx + '/OneCompilerFunctionality?action=snippet_get&id=' + encodeURIComponent(id))
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (data) {
+        var code = data.code ||
+          (data.files && data.files[0] && (data.files[0].content || data.files[0].code)) || '';
+        if (!code) throw new Error('empty');
+        var base = (data.title && /\.manic$/.test(data.title)) ? data.title : 'shared.manic';
+        var name = base, i = 2;
+        while (models[name]) { name = base.replace(/\.manic$/, '') + '-' + i + '.manic'; i++; }
+        addModel(name, code);
+        switchFile(name);
+        renderFileRail();
+        setStatus('ready');
+        toast('opened shared file');
+      })
+      .catch(function () { setStatus('ready'); toast('could not open that shared link'); });
   }
 
   // ── bridge for the AI assistant (manic-ai.js) ─────────────────
@@ -512,7 +622,11 @@
       if (currentJobId !== id) return;
       var r;
       try { r = await api('job', { query: '&id=' + id }); }
-      catch (e) { setStatus('poll failed; retrying…'); pollTimer = setTimeout(tick, 2000); return; }
+      catch (e) {
+        setStatus('poll failed; retrying…');
+        setRenderStatus('connection hiccup — retrying…');
+        pollTimer = setTimeout(tick, 5000); return;   // quick retry on a transient failure
+      }
 
       if (r.status !== 200) { setRunning(false); handleApiError(r); return; }
       var job = r.json || {};
@@ -527,7 +641,10 @@
         setStatus('failed', true);
       } else {
         setStatus(job.status + '…');
-        pollTimer = setTimeout(tick, 1500);
+        setRenderStatus(friendlyStatus(job.status));
+        // check the backend every ~10s — long enough not to hammer it, short
+        // enough that a finished job shows up quickly.
+        pollTimer = setTimeout(tick, 10000);
       }
     };
     tick();
@@ -538,9 +655,89 @@
     if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
   }
 
+  // ── render progress modal (keeps the wait engaging) ───────────
+  var RENDER_ESTIMATE = 210;   // seconds — a render usually takes ~3–4 min
+  var RENDER_TIPS = [
+    '💡 Press ⌘/Ctrl+Space in the editor for autocomplete.',
+    '✨ Ask the AI (top bar) to describe an animation in plain English.',
+    '🎬 Every 3D word ends in 3 — cube3, orbit3, morph3.',
+    '🔁 One  for i in 0..N { … }  can draw a hundred shapes.',
+    '🏷️ Tag shapes, then animate the whole group: flash(dots, cyan).',
+    '🌀 morph3 turns a cube into a sphere — or a saddle into a bowl.',
+    '📈 plot("sin(x)") graphs any formula on labeled axes.',
+    '🧵 thick(id, r) turns a curve into a glowing 3D tube.',
+    '🎨 Neon palette by name, or hue(id, degrees) for a gradient.',
+    '⏳ Renders are studio quality — worth the little wait.'
+  ];
+  var renderStart = 0, renderTimer = null, tipTimer = null, tipIdx = 0;
+
+  function fmtClock(sec) {
+    var m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+    return m + ':' + (s < 10 ? '0' : '') + s;
+  }
+  function openRenderModal() {
+    if (!el.renderOverlay || el.renderOverlay.classList.contains('show')) return;
+    renderStart = Date.now();
+    tipIdx = Math.floor(Math.random() * RENDER_TIPS.length);
+    if (el.renderTip) el.renderTip.textContent = RENDER_TIPS[tipIdx];
+    if (el.renderBar) el.renderBar.style.width = '0%';
+    el.renderOverlay.classList.add('show');
+    clearInterval(renderTimer); clearInterval(tipTimer);
+    renderTimer = setInterval(renderModalTick, 1000);
+    tipTimer = setInterval(rotateTip, 6000);
+    renderModalTick();
+  }
+  function renderModalTick() {
+    var elapsed = (Date.now() - renderStart) / 1000;
+    if (el.renderElapsed) el.renderElapsed.textContent = fmtClock(elapsed);
+    var left = RENDER_ESTIMATE - elapsed;
+    if (el.renderRemaining) {
+      el.renderRemaining.textContent = left > 55 ? '~' + Math.ceil(left / 60) + ' min left'
+        : left > 8 ? 'less than a minute…' : 'almost there — wrapping up…';
+    }
+    if (el.renderBar) {
+      el.renderBar.style.width = (Math.min(elapsed / RENDER_ESTIMATE, 0.92) * 100).toFixed(1) + '%';
+    }
+  }
+  function rotateTip() {
+    if (!el.renderTip) return;
+    el.renderTip.style.opacity = '0';
+    setTimeout(function () {
+      tipIdx = (tipIdx + 1) % RENDER_TIPS.length;
+      el.renderTip.textContent = RENDER_TIPS[tipIdx];
+      el.renderTip.style.opacity = '1';
+    }, 300);
+  }
+  function stopRenderTimers() {
+    clearInterval(renderTimer); renderTimer = null;
+    clearInterval(tipTimer); tipTimer = null;
+  }
+  // Render finished / errored: fill the bar, stop timers, hide.
+  function closeRenderModal() {
+    stopRenderTimers();
+    if (el.renderBar) el.renderBar.style.width = '100%';
+    if (el.renderOverlay) el.renderOverlay.classList.remove('show');
+  }
+  // "Hide" button: dismiss the modal but keep polling in the background.
+  function hideRenderModal() {
+    stopRenderTimers();
+    if (el.renderOverlay) el.renderOverlay.classList.remove('show');
+    toast('rendering in the background — the video appears here when ready');
+  }
+  function setRenderStatus(t) { if (el.renderStatus) el.renderStatus.textContent = t; }
+  function friendlyStatus(s) {
+    switch (String(s || '').toLowerCase()) {
+      case 'queued': case 'pending': return 'In the queue…';
+      case 'rendering': case 'running': case 'processing': case 'in_progress': return 'Rendering your frames…';
+      case 'encoding': case 'uploading': return 'Encoding the video…';
+      default: return (s ? s.charAt(0).toUpperCase() + s.slice(1) : 'Working') + '…';
+    }
+  }
+
   // ── output rendering ───────────────────────────────────────────
   function clearOutput() {
     if (el.errorBox) { el.errorBox.style.display = 'none'; el.errorBox.textContent = ''; }
+    if (el.errPanel) el.errPanel.classList.remove('show');
     if (el.videoWrap) el.videoWrap.style.display = 'none';
     if (el.placeholder) el.placeholder.style.display = 'none';
     if (el.video) { try { el.video.pause(); } catch (e) {} el.video.removeAttribute('src'); el.video.load(); }
@@ -652,10 +849,50 @@
       var msg = firstErr && firstErr.message ? (' · ' + firstErr.message) : '';
       setStatus(errorCount + (errorCount === 1 ? ' error' : ' errors') + msg + at, true);
       errShown = true;
-    } else if (errShown && !running && !currentJobId) {
-      setStatus('ready');
-      errShown = false;
+      showErrorPanel();               // spell the errors out up front — no hovering
+    } else {
+      hideErrorPanel();
+      if (errShown && !running && !currentJobId) { setStatus('ready'); errShown = false; }
     }
+  }
+
+  // A prominent, always-visible list of the current errors (message + line),
+  // each clickable to jump to the offending line. This is the first place a
+  // beginner should look — they never have to hunt for a red squiggle.
+  function showErrorPanel() {
+    if (!el.errPanel || !el.errList) return;
+    var code = (activeName && models[activeName]) ? models[activeName].getValue() : '';
+    var errs = checkNow(code);
+    if (!errs.length) { hideErrorPanel(); return; }
+    el.errList.innerHTML = '';
+    errs.forEach(function (e) {
+      var line = e.line || 1;
+      var li = document.createElement('li');
+      li.title = 'Go to line ' + line;
+      var ln = document.createElement('span'); ln.className = 'mp-err-ln'; ln.textContent = 'line ' + line;
+      var m = document.createElement('span'); m.className = 'mp-err-msg'; m.textContent = e.message || 'error';
+      li.appendChild(ln); li.appendChild(m);
+      li.onclick = function () { jumpToLine(line); };
+      el.errList.appendChild(li);
+    });
+    if (el.errCount) el.errCount.textContent = errs.length + (errs.length === 1 ? ' error' : ' errors');
+    el.errPanel.classList.add('show');
+    if (el.placeholder) el.placeholder.style.display = 'none';
+  }
+  function hideErrorPanel() {
+    if (el.errPanel) el.errPanel.classList.remove('show');
+    // restore the placeholder only if there's no video on screen
+    if (el.placeholder && el.videoWrap && el.videoWrap.style.display !== 'block') {
+      el.placeholder.style.display = '';
+    }
+  }
+  function jumpToLine(line) {
+    if (!editor || !line) return;
+    try {
+      editor.revealLineInCenter(line);
+      editor.setPosition({ lineNumber: line, column: 1 });
+      editor.focus();
+    } catch (e) {}
   }
 
   // Force a re-check of the visible file (fires the listener above).
@@ -703,6 +940,9 @@
   function setRunning(on) {
     running = on;
     updateRunState();
+    // The progress modal tracks the whole render: open while it runs, close
+    // (fill the bar) the moment it finishes, fails, or errors.
+    if (on) openRenderModal(); else closeRenderModal();
   }
 
   function setStatus(msg, isErr) {

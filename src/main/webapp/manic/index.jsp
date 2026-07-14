@@ -68,6 +68,7 @@
     <select id="quality-select" class="mp-select" title="Render quality (from your plan)"></select>
     <button id="run-btn" class="mp-btn primary" title="Render (⌘/Ctrl+Enter)">Render</button>
     <button type="button" id="btnManicAI" class="mp-btn ai" title="AI assistant — describe an animation (Ctrl+Shift+A)">✨ AI</button>
+    <button type="button" id="btn-share" class="mp-btn" title="Copy a link to the file open in the editor">🔗 Share</button>
     <a id="docs-link" class="mp-link" href="<%=ctx%>/manic/docs/index.html" target="_blank" rel="noopener">Docs ↗</a>
     <button id="help-btn" class="mp-btn mp-icon-btn" title="What is manic? — show the welcome">?</button>
     <button id="theme-btn" class="mp-btn mp-icon-btn" title="Toggle theme">◐</button>
@@ -106,6 +107,11 @@
             <span id="status-line">loading…</span>
         </div>
         <div class="mp-output-body">
+            <div id="editor-errors" class="mp-errpanel">
+                <div class="mp-errpanel-head"><span class="mp-errpanel-icon">!</span> <span id="editor-errors-count"></span> — fix to render</div>
+                <ul id="editor-errors-list" class="mp-errpanel-list"></ul>
+                <div class="mp-errpanel-foot">Click an error to jump to its line.</div>
+            </div>
             <div id="output-placeholder">Write manic and press <b>Render</b> to produce a video.</div>
             <div id="video-wrap">
                 <video id="result-video" controls playsinline preload="metadata"></video>
@@ -173,6 +179,46 @@
             <button class="mp-sheet-close" id="examples-close" title="Close (Esc)">&times;</button>
         </div>
         <div class="mp-sheet-body" id="examples-body"></div>
+    </div>
+</div>
+
+<!-- render progress modal -->
+<div class="mp-overlay" id="render-overlay">
+    <div class="mp-sheet mp-render">
+        <div class="mp-render-orbit" aria-hidden="true">
+            <span></span><span></span><span></span>
+            <div class="mp-render-core"></div>
+        </div>
+        <h3 class="mp-render-title">Rendering your animation…</h3>
+        <p class="mp-render-sub" id="render-status">queued…</p>
+        <div class="mp-render-bar"><div class="mp-render-bar-fill" id="render-bar"></div></div>
+        <p class="mp-render-time"><span id="render-elapsed">0:00</span> elapsed
+            &nbsp;·&nbsp; <span id="render-remaining">~3 min left</span></p>
+        <div class="mp-render-tip" id="render-tip"></div>
+        <button class="mp-btn" id="render-hide" title="Keep rendering; the video appears here when it's ready">
+            Hide — keep rendering in the background
+        </button>
+    </div>
+</div>
+
+<!-- share modal -->
+<div class="mp-overlay" id="share-overlay">
+    <div class="mp-sheet mp-share">
+        <div class="mp-sheet-head">
+            <div>
+                <h3>Share your animation</h3>
+                <p class="mp-sheet-sub">Anyone with the link can open this file in the playground.</p>
+            </div>
+            <button class="mp-sheet-close" id="share-close" title="Close (Esc)">&times;</button>
+        </div>
+        <div class="mp-sheet-body">
+            <div class="mp-share-link">
+                <input type="text" id="share-url" readonly aria-label="Share link">
+                <button class="mp-btn primary" id="share-copy" type="button">Copy</button>
+            </div>
+            <p class="mp-share-label">Post it</p>
+            <div class="mp-share-grid" id="share-social"></div>
+        </div>
     </div>
 </div>
 
