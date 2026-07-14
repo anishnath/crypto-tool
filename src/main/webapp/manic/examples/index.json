@@ -1,5 +1,5 @@
 {
-  "count": 46,
+  "count": 48,
   "categories": [
     {
       "slug": "algorithms",
@@ -27,7 +27,7 @@
           "name": "linked_list",
           "file": "linked_list.manic",
           "title": "Linked list",
-          "desc": "Singly / doubly / circular \u2014 node anatomy + pointer re-threading."
+          "desc": "Singly / doubly / circular — node anatomy + pointer re-threading."
         },
         {
           "name": "hashmap",
@@ -183,7 +183,7 @@
           "name": "equilateral",
           "file": "equilateral.manic",
           "title": "Equilateral",
-          "desc": "Euclid I.1 \u2014 an equilateral triangle from two circles."
+          "desc": "Euclid I.1 — an equilateral triangle from two circles."
         },
         {
           "name": "triangle",
@@ -322,6 +322,12 @@
           "file": "archimedes_pi.manic",
           "title": "Archimedes pi",
           "desc": "Bounding pi with inscribed / circumscribed polygons."
+        },
+        {
+          "name": "pieday",
+          "file": "pieday.manic",
+          "title": "Pi Day",
+          "desc": "A Pi Day card: a rainbow petal-flower, radial rays, the digits of pi, and circumference/diameter = pi."
         }
       ]
     },
@@ -334,6 +340,18 @@
           "file": "boolean.manic",
           "title": "Boolean",
           "desc": "Union / intersection / difference of shapes."
+        }
+      ]
+    },
+    {
+      "slug": "threed",
+      "title": "3D & multivariable",
+      "examples": [
+        {
+          "name": "double-integral3",
+          "file": "double-integral3.manic",
+          "title": "Double integral (3D)",
+          "desc": "Volume under a surface as a limit of finer columns — a double integral, made solid."
         }
       ]
     }

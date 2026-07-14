@@ -68,8 +68,14 @@ Constructors and timeline may be written in any order.
      are `i*cell`/`i*bigS` (never `icell`/`ibigS`). Loop variables and `let`s are
      names too, so they need `*` between them just like anything else.
    - **A name/constant before `(`** is a **function call**, not a product:
-     `tau(i+1)` calls a function `tau`, and `rcos(x)` is the name `rcos`. Write
-     `tau*(i+1)` and `r*cos(x)`. (A number before `(` is fine: `2(x+1)`.)
+     `tau(i+1)` calls a function `tau`. Write `tau*(i+1)`. (A number before `(`
+     is fine: `2(x+1)`.)
+   - **Radius/variable × trig is the classic trap.** `rcos(...)`, `rsin(...)`,
+     `rtan(...)` are **NOT functions** — there is no `rcos`/`rsin`. They are the
+     glued form of `r*cos(...)` / `r*sin(...)` (a radius `r` times a trig
+     function). ALWAYS write the `*`: `cx + r*cos(t)`, `cy + r*sin(t)`. Same for
+     any `<var><fn>` shape (`acos`/`asin`/`atan` ARE real, but `xcos`, `ksin`,
+     `rtan` are not — write `x*cos`, `k*sin`, `r*tan`).
 4. **Colors are a fixed palette**: `fg`, `void`, `cyan`, `magenta`, `lime`,
    `gold`, `dim`, `panel`. No hex/RGB and no other names. For a computed/per-item colour
    use `hue(id, degrees)` (0–360).
@@ -150,8 +156,8 @@ Easings: `smooth linear in out overshoot bounce elastic`.
 ### Math kit
 `axes(id,(cx,cy),hw,hh,[unit])` · `plane`/`numberplane`/`complexplane`/`polarplane`
 · `plot(id,(cx,cy),sx,sy,fn,[domain|(x0,x1)])` where `fn` is a named function
-(`sin cos tan parabola cubic line abs exp sqrt log recip gauss`) or a
-**formula string** `"cos(x)+0.5*sin(3*x)"` · **curve-analysis family** (all take a `plot` id and animate the moving param `x` via `to(id,x,target,dur)`): `tangent(id,curve,x,[len])` tangent line + contact dot (slope read from the function; only the dot shows at a corner/asymptote) · `normal(id,curve,x,[len])` the perpendicular line + dot · `slope(id,curve,x,[(dx,dy)])` a live slope NUMBER riding the point · `area(id,curve,a,b,[n])` filled region under the curve from `a` to `b` (sweep it open with `to(id,x,b,dur)` after starting collapsed `area(r,f,1,1)`) · `integral(id,curve,a,b,[(px,py)])` a live NUMBER of the integral a→b (animate `to(id,x,b,dur)` in step with an `area` sweep and it climbs to the true value) · `roots(id,curve,[color])` a dot at every zero-crossing (children `{id}0..`, tag `id`) · `newton(id,curve,x0,[steps])` Newton's-method zig-zag from guess `x0` converging on a root — declare `untraced(id)` then `draw(id,dur)` to animate the walk · `spline(id,p0,p1,…)` a smooth Catmull-Rom curve through the given points (knots `{id}.k0..`, tag `{id}.knots`); `untraced`+`draw` to trace · `trajectory(id,"dx/dt","dy/dt",(x0,y0),(cx,cy),scale,[steps])` an ODE path (RK4) from math `(x0,y0)` drawn as `(cx+x*scale,cy-y*scale)` — orbits/spirals/phase portraits (for `dy/dx=f`, pass `"1"`,`"f(x,y)"`); `untraced`+`draw` to flow · `vector(id,(cx,cy),(dx,dy),[color])`
+(`sin cos tan parabola cubic line abs exp sqrt log recip gauss sinc sigmoid relu step`) or a
+**formula string** `"cos(x)+0.5*sin(3*x)"` · **curve-analysis family** (all take a `plot` id and animate the moving param `x` via `to(id,x,target,dur)`): `tangent(id,curve,x,[len])` tangent line + contact dot (slope read from the function; only the dot shows at a corner/asymptote) · `normal(id,curve,x,[len])` the perpendicular line + dot · `slope(id,curve,x,[(dx,dy)])` a live slope NUMBER riding the point · `area(id,curve,a,b,[n])` filled region under the curve from `a` to `b` (sweep it open with `to(id,x,b,dur)` after starting collapsed `area(r,f,1,1)`) · `integral(id,curve,a,b,[(px,py)])` a live NUMBER of the integral a→b (animate `to(id,x,b,dur)` in step with an `area` sweep and it climbs to the true value) · `roots(id,curve,[color])` a dot at every zero-crossing (children `{id}0..`, tag `id`) · `newton(id,curve,x0,[steps])` Newton's-method zig-zag from guess `x0` converging on a root — declare `untraced(id)` then `draw(id,dur)` to animate the walk · `deriv(id,curve,[color])` the derivative f' drawn as its own curve (itself a graph) · `accum(id,curve,[a],[color])` the accumulation function ∫ₐˣ f drawn as a curve — `deriv(accum(f))` traces back onto f (the Fundamental Theorem) · `extrema(id,curve,[color])` dots at maxima/minima (slope 0) · `inflections(id,curve,[color])` dots where concavity flips (f''=0) · `band(id,top,bottom,[color])` the filled region between two curves · `taylor(id,curve,a,n,[color])` the degree-n Taylor polynomial about `a` as its own curve (reveal n=1,3,5 to show convergence) · `limit(id,curve,a,[color])` visualises lim(x→a) f: open circle at the value approached + guides + an approaching dot (`to(id,x,a,dur)`); works at a removable hole. `a` may be `inf`/`-inf` → auto-detects + draws the horizontal asymptote `y=L` (`inf`/`infinity` is a numeric constant = ∞) · `spline(id,p0,p1,…)` a smooth Catmull-Rom curve through the given points (knots `{id}.k0..`, tag `{id}.knots`); `untraced`+`draw` to trace · `trajectory(id,"dx/dt","dy/dt",(x0,y0),(cx,cy),scale,[steps])` an ODE path (RK4) from math `(x0,y0)` drawn as `(cx+x*scale,cy-y*scale)` — orbits/spirals/phase portraits (for `dy/dx=f`, pass `"1"`,`"f(x,y)"`); `untraced`+`draw` to flow · `vector(id,(cx,cy),(dx,dy),[color])`
 · `numberline` · `arc`/`sector`/`annulus`/`pie` · `arrowfield`/`vectorfield` ·
 `matrix(id,"a b; c d",(cx,cy),[cw],[ch])` (entry `{id}.r{i}c{j}`, tags
 `{id}.row{i}`/`{id}.col{j}`/`{id}.entries`) · `table(id,"a b; c d",(cx,cy),[cw],
@@ -166,7 +172,7 @@ numbers) · `pin3(label,(x,y,z)|entity3)` (glue a 2D label to a 3D point) ·
 `follow3(id,target,[(dx,dy,dz)])` · `midpoint3(id,a,b)` ·
 `curve3(id,"x(t)","y(t)","z(t)",[(t0,t1)])` (parametric 3D curve) ·
 `surface3(id,"z(x,y)",(x0,x1),(y0,y1),[res])` (z=f(x,y) filled, flat-shaded surface; formulas may use `x` and `y`) ·
-`param3(id,"x(u,v)","y(u,v)","z(u,v)",(u0,u1),(v0,v1),[res])` (general parametric surface of `u`,`v` — tori, parametric spheres, Möbius strips; can wrap/close, which `surface3` can't) ·
+`param3(id,"x(u,v)","y(u,v)","z(u,v)",(u0,u1),(v0,v1),[res])` (general parametric surface of `u`,`v` — tori, parametric spheres, Möbius strips; can wrap/close, which `surface3` can't) · **multivariable calculus on a `surface3`:** `gradient3(id,surface,x,y,[color])` steepest-ascent arrow · `tangentplane3(id,surface,x,y,[color])` the tangent plane patch · `volume3(id,surface,[res],[color])` the volume under it as a column grid (double integral) ·
 `prism3(id,(cx,cy,cz),sides,radius,height)` · `pyramid3(id,(cx,cy,cz),sides,radius,height)`
 (filled, flat-shaded solids; `sides ≥ 3`, many sides ≈ cylinder/cone) ·
 `revolve3(id,(cx,cy,cz),"r(t)",(t0,t1),[sides])` (solid of revolution; `r(t)` = radius at height `t`) ·
