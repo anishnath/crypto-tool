@@ -1,0 +1,35 @@
+// ============================================================================
+//  correlation.manic  —  how strongly two variables move together (stats T3)
+// ----------------------------------------------------------------------------
+//  `correlation(id, (cx,cy), unit, "x1 y1  x2 y2 …", [color])` scatters the
+//  points, fits the best line, and reports the **Pearson correlation r** with a
+//  strong/moderate/weak · positive/negative reading. `unit` = pixels per data
+//  unit (x and y share it, so use data with comparable ranges). Points
+//  `{id}.p{k}` (tagged `{id}.points`), the fit `{id}.line`, and `{id}.r`.
+//
+//  TO ADAPT: paste your paired data. r near ±1 = a tight line; near 0 = a blob.
+// ============================================================================
+
+title("Correlation: do they move together?");
+canvas("16:9");
+
+text(hdr, (cx, 70), "hours studied vs grade (out of 10)");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+correlation(co, (cx, cy - 10), 42,
+  "1 3  2 4  3 4  4 6  5 6  6 7  7 8  8 8  9 10  10 9");
+hidden(co.points); untraced(co.line); hidden(co.r);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "each dot is one student: hours studied, and the grade they got", 0.5);
+show(co.points, 0.6);
+wait(1.3);
+
+say(cap, "the cloud slopes up — more study tends to mean a higher grade", 0.5);
+draw(co.line, 0.9);
+wait(1.3);
+
+say(cap, "r measures how tightly the points track that line: near +1 is strong", 0.5);
+show(co.r, 0.4); pulse(co.r);
+wait(1.8);

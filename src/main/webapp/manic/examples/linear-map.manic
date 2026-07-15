@@ -1,0 +1,39 @@
+title("What a matrix does to space");
+canvas("16:9");
+
+let ox = cx - 60;
+let oy = cy + 40;
+
+text(hdr, (cx, 54), "the matrix [[2,1],[1,2]] — grid, determinant, eigenvectors");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+text(cap, (cx, h - 50), "");
+size(cap, 22); color(cap, dim); display(cap);
+
+// the plane deformed by the matrix (î, ĵ land on its columns)
+linmap(lm, (ox, oy), 46, 2, 1, 1, 2, 2);
+
+// the unit square's image — area = determinant
+determinant(dt, (ox, oy), 46, 2, 1, 1, 2);
+hidden(dt); hidden(dt.unit); hidden(dt.val);
+
+// the two invariant directions (eigenvectors)
+eigen(ev, (ox, oy), 46, 2, 1, 1, 2);
+hidden(ev); hidden(ev.l0); hidden(ev.l1);
+
+// ---- timeline ----
+show(hdr, 0.6);
+say(cap, "the matrix bends the grid; i-hat and j-hat land on its columns", 0.5);
+wait(1.4);
+
+say(cap, "the unit square maps to a parallelogram — its area IS the determinant", 0.5);
+show(dt, 0.6);
+show(dt.unit, 0.4);
+show(dt.val, 0.5);
+wait(1.4);
+
+say(cap, "two directions only stretch, never turn: the eigenvectors", 0.5);
+show(ev, 0.6);
+show(ev.l0, 0.4);
+show(ev.l1, 0.4);
+wait(1.0);

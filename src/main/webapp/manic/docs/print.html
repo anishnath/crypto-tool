@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-01a48fa4.js";
+            window.path_to_searchindex_js = "searchindex-aacfe5f0.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5867d1aa.js"></script>
+        <script src="toc-0b5ae956.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -801,14 +801,16 @@ shape (with a message that names the 3D replacement):</p>
 <ul>
 <li><a href="#algorithms--data-structures">Algorithms &amp; data structures</a> — 5 examples</li>
 <li><a href="#graphs">Graphs</a> — 4 examples</li>
-<li><a href="#calculus--functions">Calculus &amp; functions</a> — 5 examples</li>
-<li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 6 examples</li>
+<li><a href="#calculus--functions">Calculus &amp; functions</a> — 12 examples</li>
+<li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 12 examples</li>
+<li><a href="#statistics--probability">Statistics &amp; probability</a> — 13 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 3 examples</li>
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 8 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 3 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 5 examples</li>
-<li><a href="#generative--recursive">Generative &amp; recursive</a> — 5 examples</li>
+<li><a href="#generative--recursive">Generative &amp; recursive</a> — 6 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
+<li><a href="#3d-scenes">3D scenes</a> — 10 examples</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="algorithms--data-structures"><a class="header" href="#algorithms--data-structures">Algorithms &amp; data structures</a></h1>
@@ -2020,6 +2022,468 @@ par {
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="linear-algebra--tables"><a class="header" href="#linear-algebra--tables">Linear algebra &amp; tables</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="linear-algebra--the-whole-subject-in-five-ideas"><a class="header" href="#linear-algebra--the-whole-subject-in-five-ideas">linear-algebra — the whole subject in five ideas</a></h2>
+<p>A guided lesson, not a feature demo: five chapters that build linear algebra as
+one connected story. Chapters 1–3 view the <strong>same</strong> matrix <code>[[2,1],[1,2]]</code>
+through three lenses — a transformation of space (<code>linmap</code>), the determinant as
+area scaling (<code>determinant</code>), and its eigenvectors / diagonalisation
+(<code>diagonalise</code>) — then it moves on to solving <code>Ax = b</code> (<code>linsolve</code> → <code>rref</code>) and
+projection / least-squares (<code>project</code>). Start here.</p>
+<pre><code class="language-manic">// ============================================================================
+//  linear-algebra.manic  —  Linear Algebra in five ideas (a lesson)
+// ----------------------------------------------------------------------------
+//  A guided tour of the whole subject, not a feature demo. One stage, five
+//  chapters; chapters 1-3 view the SAME matrix A = [[2,1],[1,2]] through three
+//  lenses, so the ideas connect:
+//     1. a matrix TRANSFORMS space          (linmap)
+//     2. the DETERMINANT is how area scales (determinant)   -&gt; det = 3
+//     3. EIGENVECTORS only stretch          (diagonalise)   -&gt; lambda = 3, 1
+//     4. SOLVING A x = b                     (linsolve -&gt; rref)
+//     5. PROJECTION: the closest answer     (project)
+//
+//  Reveal recipe (works for lines, arrows, fills, and text alike, preserving
+//  each element's opacity): `untraced(tag)` at build time, `draw(tag)` to reveal,
+//  `fade(tag)` to clear before the next chapter. `tag` broadcasts to every entity
+//  carrying it (see the ergonomics in the manic guide).
+// ============================================================================
+
+title("Linear Algebra, in five ideas");
+canvas("16:9");
+
+let sx = cx;
+let sy = cy + 44;   // shared stage center
+let u = 44;
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- build every chapter's visual up front, drawn-blank (untraced) ----
+// A coordinate grid draws in with each chapter for consistent visual feedback.
+// Chapters 1 &amp; 3 bring their own (the deformed grid / the eigen-grid); chapters
+// 2, 4, 5 get a plain reference grid that traces in at the start of the section.
+plane(g2, (sx, sy), 176, 176, u); untraced(g2);   // determinant — count the cells
+plane(g4, (sx, sy), 240, 230, u); untraced(g4);   // solving — read off (1, 3)
+plane(g5, (sx, sy), 200, 200, u); untraced(g5);   // projection
+
+// 1. transformation of A = [[2,1],[1,2]]
+linmap(lm, (sx, sy), u, 2, 1, 1, 2);
+untraced(lm);
+
+// 2. determinant of the same A (parallelogram is the bare id `dt`)
+determinant(dt, (sx, sy), u, 2, 1, 1, 2);
+untraced(dt); untraced(dt.unit); untraced(dt.val);
+
+// 3. eigenvectors / diagonalisation of the same A
+diagonalise(dg, (sx, sy), u, 2, 1, 1, 2);
+untraced(dg);
+
+// 4a. a 2x2 system as two lines (solution dot is the bare id `sys`)
+linsolve(sys, (sx, sy), u, 2, 1, 1, 3, 5, 10);
+untraced(sys.r1); untraced(sys.r2); hidden(sys); hidden(sys.val);
+// 4b. the same system reduced by elimination
+rref(rr, "2 1 5 ; 1 3 10", (sx, sy - 24), 120, 60);
+untraced(rr.lbrack); untraced(rr.rbrack);
+
+// 5. projection of a vector onto a line
+project(pj, (sx, sy), u, (1, 3), (3, 1));
+untraced(pj);
+
+// ============================  the lesson  ==================================
+
+section("Transformations");
+draw(lm, 1.2);
+say(cap, "a matrix sends every point to a new one — and it does so LINEARLY", 0.5);
+wait(1.8);
+say(cap, "the grid stays parallel and evenly spaced; i-hat, j-hat land on its columns", 0.5);
+wait(2.2);
+fade(lm, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("The determinant");
+draw(g2, 0.7);
+draw(dt.unit, 0.5); draw(dt, 0.7); draw(dt.val, 0.4);
+say(cap, "how much does it stretch area? the unit square becomes this parallelogram", 0.5);
+wait(2.0);
+say(cap, "that area IS the determinant = 3 — three grid cells; a flip would be negative", 0.5);
+wait(2.2);
+fade(dt, 0.6); fade(dt.unit, 0.6); fade(dt.val, 0.6); fade(g2, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Eigenvectors");
+draw(dg, 1.2);
+say(cap, "most vectors change direction — but a few only STRETCH: the eigenvectors", 0.5);
+wait(2.2);
+say(cap, "in their basis A is pure scaling:  A = P D P^-1,  D = diag(3, 1)", 0.5);
+wait(2.2);
+fade(dg, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Solving  A x = b");
+draw(g4, 0.7);
+draw(sys.r1, 0.7); draw(sys.r2, 0.7);
+show(sys, 0.4); show(sys.val, 0.4);
+say(cap, "a system of equations is a set of lines; the solution is where they meet", 0.5);
+wait(2.2);
+fade(sys, 0.5); fade(sys.r1, 0.5); fade(sys.r2, 0.5); fade(sys.val, 0.5); fade(g4, 0.5);
+say(cap, "elimination finds it by reducing [ A | b ] to the identity beside the answer", 0.5);
+draw(rr.lbrack, 0.4); draw(rr.rbrack, 0.4);
+show(rr.s0, 0.4); show(rr.op0, 0.3);
+wait(1.6);
+par { show(rr.s4, 0.5); fade(rr.s0, 0.5); } show(rr.op4, 0.4); fade(rr.op0, 0.3);
+wait(2.0);
+fade(rr.s4, 0.5); fade(rr.op4, 0.4); fade(rr.lbrack, 0.4); fade(rr.rbrack, 0.4);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Projection");
+draw(g5, 0.7);
+draw(pj, 1.0);
+say(cap, "when no exact answer exists, take the CLOSEST point of the subspace", 0.5);
+wait(2.0);
+say(cap, "the error is perpendicular — that principle IS least-squares, the best fit", 0.5);
+wait(2.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qjMYJQqvwCg" title="Linear Algebra in Five Ideas — A Complete Visual Lesson — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="linear-map"><a class="header" href="#linear-map">linear-map</a></h2>
+<p>What a 2×2 matrix does to space: the grid deforms and the basis lands on its
+columns (<code>linmap</code>), the unit square’s area becomes the determinant
+(<code>determinant</code>), and two directions only stretch — the eigenvectors (<code>eigen</code>).</p>
+<pre><code class="language-manic">title("What a matrix does to space");
+canvas("16:9");
+
+let ox = cx - 60;
+let oy = cy + 40;
+
+text(hdr, (cx, 54), "the matrix [[2,1],[1,2]] — grid, determinant, eigenvectors");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+text(cap, (cx, h - 50), "");
+size(cap, 22); color(cap, dim); display(cap);
+
+// the plane deformed by the matrix (î, ĵ land on its columns)
+linmap(lm, (ox, oy), 46, 2, 1, 1, 2, 2);
+
+// the unit square's image — area = determinant
+determinant(dt, (ox, oy), 46, 2, 1, 1, 2);
+hidden(dt); hidden(dt.unit); hidden(dt.val);
+
+// the two invariant directions (eigenvectors)
+eigen(ev, (ox, oy), 46, 2, 1, 1, 2);
+hidden(ev); hidden(ev.l0); hidden(ev.l1);
+
+// ---- timeline ----
+show(hdr, 0.6);
+say(cap, "the matrix bends the grid; i-hat and j-hat land on its columns", 0.5);
+wait(1.4);
+
+say(cap, "the unit square maps to a parallelogram — its area IS the determinant", 0.5);
+show(dt, 0.6);
+show(dt.unit, 0.4);
+show(dt.val, 0.5);
+wait(1.4);
+
+say(cap, "two directions only stretch, never turn: the eigenvectors", 0.5);
+show(ev, 0.6);
+show(ev.l0, 0.4);
+show(ev.l1, 0.4);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/jcx8IyArWBE" title="Matrix, Determinant & Eigenvectors — What a Matrix Does — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="linear-system"><a class="header" href="#linear-system">linear-system</a></h2>
+<p>The geometry of solving and spanning, in three panels: a 2×2 system as two lines
+crossing at the solution (<code>linsolve</code>), two independent vectors reaching the whole
+plane, and two parallel vectors collapsing to a line — rank 1 (<code>span</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  linear-system.manic  —  the geometry of solving &amp; spanning (a template)
+// ----------------------------------------------------------------------------
+//  Three side-by-side panels, each built up with animation:
+//    A) a 2x2 system as two lines meeting at the solution        (linsolve)
+//    B) two independent vectors spanning the whole plane         (span)
+//    C) two parallel vectors collapsing to a single line, rank 1 (span)
+//
+//  HOW TO ADAPT THIS FILE:
+//    * Change the system in panel A: linsolve(sys, center, unit, a,b,c,d, e,f)
+//      draws  a*x + b*y = e  and  c*x + d*y = f, meeting at the solution.
+//    * Change the vectors in panels B/C: span(id, center, unit, (vx,vy),(wx,wy)).
+//    * Everything is positioned from cx/cy/w/h + a per-panel origin (ax/bx/dx)
+//      and a `unit` = pixels-per-grid-step, so it scales cleanly. Grid point
+//      (gx,gy) maps to screen (origin_x + gx*u, origin_y - gy*u)  [math y-up].
+//    * OPTIONAL: shade the closed region the two lines bound with the axes —
+//      see the commented `polygon(feasible, ...)` block in Panel A below.
+// ============================================================================
+
+title("Solving &amp; spanning, visually");
+canvas("16:9");
+
+let y0 = cy + 20;   // shared vertical center of the three panels
+let ax = 280;       // panel A origin x — a system as two lines
+let bx = 640;       // panel B origin x — span = the whole plane
+let dx = 1000;      // panel C origin x — parallel vectors collapse to a line
+let u = 24;         // pixels per grid unit (shared scale)
+
+text(hdr, (cx, 46), "linear algebra: the geometry of solving &amp; spanning");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// per-panel captions, revealed as each panel animates
+text(la, (ax, 96), "a system = two lines"); size(la, 18); color(la, dim); display(la); hidden(la);
+text(lb, (bx, 96), "span of two vectors"); size(lb, 18); color(lb, dim); display(lb); hidden(lb);
+text(lc, (dx, 96), "parallel = rank 1"); size(lc, 18); color(lc, dim); display(lc); hidden(lc);
+
+// faint coordinate backdrops (drawn once, static)
+plane(pa, (ax, y0), 150, 190, u);
+plane(pb, (bx, y0), 150, 190, u);
+plane(pc, (dx, y0), 150, 190, u);
+
+// ---- Panel A — the system 2x + y = 5 and x + 3y = 10, meeting at (1, 3) ----
+linsolve(sys, (ax, y0), u, 2, 1, 1, 3, 5, 10);
+untraced(sys.r1); untraced(sys.r2);   // start blank, drawn in on the timeline
+hidden(sys); hidden(sys.val);         // the solution dot + its label fade in
+
+// -- OPTIONAL: fill the closed area the two lines bound with the axes --------
+//  The two rows, the x-axis and the y-axis enclose a quadrilateral (the classic
+//  "feasible region"). Its corners, in grid coordinates, are:
+//     (0,0)  -&gt;  (2.5,0)  -&gt;  (1,3)  -&gt;  (0,3.33)
+//   origin   line1 hits   the two   line2 hits
+//            the x-axis   lines meet the y-axis
+//  Uncomment to shade it (points are origin + gridX*u, origin - gridY*u):
+//
+// polygon(feasible,
+//   (ax,            y0),           // (0, 0)     the origin
+//   (ax + 2.5*u,    y0),           // (2.5, 0)   line 1 crosses the x-axis
+//   (ax + u,        y0 - 3*u),     // (1, 3)     the two lines meet
+//   (ax,            y0 - 3.333*u), // (0, 3.33)  line 2 crosses the y-axis
+//   lime);
+// opacity(feasible, 0.18);         // translucent, so grid + lines show through
+// z(feasible, -1);                 // sit behind the lines
+//   (for an animated reveal instead of a static fill, also `hidden(feasible);`
+//    above, then `to(feasible, opacity, 0.18, 0.6);` in Panel A's timeline.)
+// ---------------------------------------------------------------------------
+
+// ---- Panel B — two independent vectors reach every point: the whole plane --
+span(fill, (bx, y0), u, (3, 1), (-1, 2));
+untraced(fill.v); untraced(fill.w);   // vectors draw in
+hidden(fill.plane);                   // faint region fades to 0.14
+
+// ---- Panel C — two parallel vectors only reach one line: rank 1 ------------
+span(rank, (dx, y0), u, (2, 1), (-2, -1), gold);
+untraced(rank.v); untraced(rank.w); untraced(rank.line);
+
+text(cap, (cx, h - 44), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- Panel A timeline: two lines draw in, then the solution pops -----------
+show(la, 0.4);
+say(cap, "two equations are two lines; where they cross solves the system", 0.5);
+par { draw(sys.r1, 0.8); draw(sys.r2, 0.8); }
+show(sys, 0.4);
+show(sys.val, 0.4);
+pulse(sys);
+wait(1.6);
+
+// ---- Panel B timeline: two vectors grow out, then the plane fills in -------
+show(lb, 0.4);
+say(cap, "two independent vectors combine to reach every point: the whole plane", 0.5);
+par { draw(fill.v, 0.7); draw(fill.w, 0.7); }
+to(fill.plane, opacity, 0.14, 0.9);
+wait(1.6);
+
+// ---- Panel C timeline: two parallel vectors, then their line (collapse) ----
+show(lc, 0.4);
+say(cap, "but parallel vectors only reach one line: rank 1, a collapse", 0.5);
+par { draw(rank.v, 0.7); draw(rank.w, 0.7); }
+draw(rank.line, 0.8);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/laBz0JoL-cE" title="Solving & Spanning: Systems, Span & Rank, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="diagonalise"><a class="header" href="#diagonalise">diagonalise</a></h2>
+<p><code>A = P D P⁻¹</code> made visual: every real-diagonalisable matrix has a basis — its
+eigenvectors — in which it does nothing but <em>stretch</em> each axis. The unit
+eigen-cell stretches by λ along each eigenvector, with no rotation or shear
+(<code>diagonalise</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  diagonalise.manic  —  A = P D P^-1 made visual (a template)
+// ----------------------------------------------------------------------------
+//  The big idea of diagonalisation: every (real-diagonalisable) matrix has a
+//  basis — its EIGENVECTORS — in which it does nothing but STRETCH each axis.
+//  No rotation, no shear: just a diagonal scaling D = diag(lambda1, lambda2).
+//
+//  `diagonalise(id, (cx,cy), unit, a,b,c,d, [color])` draws, for [[a,b],[c,d]]:
+//    * the (generally skewed) eigen-grid   — the coordinate frame of the eigenbasis
+//    * the two eigen-axes  dg.axis1 / dg.axis2
+//    * the unit eigen-cell dg.cell  and its image under A  dg.img
+//    * the eigenvector images as arrows dg.v1 / dg.v2  (+ labels dg.v1l / dg.v2l)
+//  Complex or repeated eigenvalues (no real 2-D eigenbasis) leave a note instead.
+//
+//  TO ADAPT: change the four matrix numbers below. Try a non-symmetric matrix
+//  like (2,1,0,3) to see a SKEWED eigenbasis, or (0,-1,1,0) to see the
+//  "no real eigenbasis" note (a pure rotation).
+// ============================================================================
+
+title("Diagonalisation: a matrix in its own basis");
+canvas("16:9");
+
+let ox = cx - 40;
+let oy = cy + 20;
+
+text(hdr, (cx, 54), "A = P D P^-1  —  in the eigenbasis, A is only a stretch");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the matrix [[2,1],[1,2]] — eigenvalues 3 (along (1,1)) and 1 (along (1,-1))
+diagonalise(dg, (ox, oy), 60, 2, 1, 1, 2);
+
+// the faint eigen-grid stays as static context; reveal the rest in beats:
+untraced(dg.axis1); untraced(dg.axis2);   // eigen-axes draw in
+hidden(dg.cell); hidden(dg.img);          // unit cell fades in; image fades to 0.4
+untraced(dg.v1); untraced(dg.v2);         // eigenvector arrows draw in
+hidden(dg.v1l); hidden(dg.v2l);           // lambda labels fade in
+
+text(cap, (cx, h - 50), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- timeline ----
+say(cap, "every matrix has special directions — its eigenvectors", 0.5);
+par { draw(dg.axis1, 0.7); draw(dg.axis2, 0.7); }
+wait(1.2);
+
+say(cap, "build the unit cell from those two directions", 0.5);
+show(dg.cell, 0.6);
+wait(1.4);
+
+say(cap, "apply A: the cell only STRETCHES along each axis — never rotates", 0.5);
+to(dg.img, opacity, 0.4, 0.8);
+par { draw(dg.v1, 0.7); draw(dg.v2, 0.7); }
+wait(1.2);
+
+say(cap, "the stretch factors ARE the eigenvalues — the diagonal of D", 0.5);
+show(dg.v1l, 0.4); show(dg.v2l, 0.4);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/JaU9290_fU0" title="Diagonalisation: Why a Matrix Is Just a Stretch in Its Own Basis — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="rref"><a class="header" href="#rref">rref</a></h2>
+<p>Gaussian elimination, animated: an augmented matrix <code>[A | b]</code> is reduced to
+reduced row-echelon form one row operation at a time, the numbers transforming
+in place until the left block is the identity and the last column is the
+solution (<code>rref</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  rref.manic  —  Gaussian elimination, animated (a template)
+// ----------------------------------------------------------------------------
+//  Reduce an augmented matrix [A | b] to reduced row-echelon form, one row
+//  operation at a time. Each intermediate state is drawn at the same spot, so
+//  cross-fading s{k-1} -&gt; s{k} makes the numbers transform IN PLACE.
+//
+//  `rref(id, "row ; row ; ...", (cx,cy), [cellw], [rowh])` draws, for the given
+//  matrix (rows split on `;`, entries on spaces/commas):
+//    * static brackets (the frame the numbers fill)
+//    * one matrix per elimination state, tagged  rr.s0, rr.s1, ...  (hidden)
+//    * the row-op caption for each state:         rr.op0, rr.op1, ...
+//  rr.s0 is the untouched input; the LAST state is the RREF (for [A|b] its final
+//  column is the solution). Reveal the states in order to animate the reduction.
+//
+//  TO ADAPT: change the matrix string. A different system takes a different
+//  NUMBER of steps — add/remove reveal beats below to match (the ones past the
+//  last real state are harmless no-ops, so a few extra never hurt).
+// ============================================================================
+
+title("rref: Gaussian elimination, animated");
+canvas("16:9");
+
+text(hdr, (cx, 60), "reduce  [ A | b ]  to reduced row-echelon form");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the augmented matrix of the system  2x + y = 5,  x + 3y = 10
+rref(rr, "2 1 5 ; 1 3 10", (cx, cy - 10), 120, 64);
+
+text(cap, (cx, h - 56), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- reveal each state in place, captioned with its row operation ----
+// Per beat: fade the old op, CROSS-FADE the matrix state (identical cells sit
+// still, only the changed ones morph), then show the new op.
+say(cap, "start with the augmented matrix [ A | b ]", 0.5);
+show(rr.s0, 0.5); show(rr.op0, 0.4);
+wait(1.6);
+
+fade(rr.op0, 0.25); par { show(rr.s1, 0.5); fade(rr.s0, 0.5); } show(rr.op1, 0.4);
+wait(1.5);
+fade(rr.op1, 0.25); par { show(rr.s2, 0.5); fade(rr.s1, 0.5); } show(rr.op2, 0.4);
+wait(1.5);
+fade(rr.op2, 0.25); par { show(rr.s3, 0.5); fade(rr.s2, 0.5); } show(rr.op3, 0.4);
+wait(1.5);
+
+say(cap, "the left block is now the identity — the last column is the solution", 0.5);
+fade(rr.op3, 0.25); par { show(rr.s4, 0.5); fade(rr.s3, 0.5); } show(rr.op4, 0.4);
+wait(2.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/pNyLALOWWwE" title="Gaussian Elimination, Animated: Reducing a Matrix to RREF — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="projection"><a class="header" href="#projection">projection</a></h2>
+<p>One idea, two faces: orthogonal <strong>projection</strong> drops a vector onto a subspace
+(the shadow is the closest point, the error meets the space at a right angle),
+and <strong>least-squares</strong> fits a line to data the same way — minimising the squared
+residuals (<code>project</code>, <code>leastsquares</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  projection.manic  —  projection &amp; least-squares (a template)
+// ----------------------------------------------------------------------------
+//  One idea, two faces. ORTHOGONAL PROJECTION drops a vector onto a subspace;
+//  the shadow p is the closest point, and the error b - p meets the subspace at
+//  a right angle. LEAST-SQUARES fits a line to data the SAME way — the best line
+//  is the one that minimises the (squared) residuals, i.e. the projection of the
+//  data onto the space of lines.
+//
+//  `project(id, (cx,cy), unit, (bx,by), (ax,ay), [color])` draws:
+//    id.line (the subspace = span of a), id.b, id.p (the shadow), id.res (error),
+//    id.rt (right-angle mark), id.blabel / id.plabel.
+//  `leastsquares(id, (cx,cy), unit, "x1 y1  x2 y2 ...", [color])` draws:
+//    id.line (best fit), id.points (dots), id.residuals (verticals), id.eq.
+//
+//  TO ADAPT: change b/a in `project`, or the point list in `leastsquares`.
+// ============================================================================
+
+title("Projection &amp; least-squares");
+canvas("16:9");
+
+text(hdr, (cx, 50), "the closest point is a projection — and so is the best-fit line");
+size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+
+// ---- LEFT: project vector b onto the line spanned by a ----
+plane(pa, (cx - 330, cy + 10), 150, 210, 40);
+project(pj, (cx - 330, cy + 10), 40, (1, 3), (3, 1));
+untraced(pj.line); untraced(pj.b); untraced(pj.p); untraced(pj.res); untraced(pj.rt);
+hidden(pj.blabel); hidden(pj.plabel);
+
+// ---- RIGHT: fit a line to a point cloud ----
+plane(pb, (cx + 310, cy + 90), 150, 150, 34);
+leastsquares(ls, (cx + 310, cy + 90), 34, "1 2  2 3  3 5  4 4  5 6");
+hidden(ls.points); untraced(ls.line); untraced(ls.residuals); hidden(ls.eq);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- Panel A: the projection ----
+say(cap, "drop b onto the line spanned by a — its shadow is the projection p", 0.5);
+draw(pj.line, 0.6);
+draw(pj.b, 0.6);
+wait(0.6);
+par { draw(pj.p, 0.6); draw(pj.res, 0.6); }
+draw(pj.rt, 0.3);
+show(pj.blabel, 0.3); show(pj.plabel, 0.3);
+wait(1.4);
+say(cap, "the error b - p meets the line at a right angle: p is the nearest point", 0.5);
+wait(1.8);
+
+// ---- Panel B: least-squares is the same idea ----
+say(cap, "fitting a line works the SAME way: minimise the squared residuals", 0.5);
+show(ls.points, 0.5);
+wait(0.7);
+draw(ls.line, 0.7);
+draw(ls.residuals, 0.6);
+show(ls.eq, 0.4);
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/mPsaxmsfcZQ" title="Projection & Least-Squares: Why the Best-Fit Line Is a Shadow — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="matrix"><a class="header" href="#matrix">matrix</a></h2>
 <p>A bracketed matrix, rows/columns addressable via tags.</p>
 <pre><code class="language-manic">// Matrix — a bracketed grid of entries, addressable by row and column via tag
@@ -2379,6 +2843,625 @@ show(reg, 0.6);
 wait(1.4);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/wnBQGLRhl1o" title="Tables + Braces — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="statistics--probability"><a class="header" href="#statistics--probability">Statistics &amp; probability</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="statistics--the-whole-story-in-three-ideas"><a class="header" href="#statistics--the-whole-story-in-three-ideas">statistics — the whole story in three ideas</a></h2>
+<p>A guided lesson, not a feature demo: describe a dataset, meet the normal curve,
+then see <em>why</em> the bell is everywhere (the Central Limit Theorem). The stats
+companion to the linear-algebra lesson. Start here.</p>
+<pre><code class="language-manic">// ============================================================================
+//  statistics.manic  —  Statistics, from data to the bell (a lesson)
+// ----------------------------------------------------------------------------
+//  The stats-rung capstone, companion to linear-algebra.manic. Three chapters on
+//  one stage, chaptered with section():
+//     1. DESCRIBE   — any dataset has a shape, a centre, a spread   (histogram)
+//     2. THE BELL   — measurements often pile into a normal curve   (bellcurve)
+//     3. WHY (CLT)  — averages of anything become a bell            (clt)
+//
+//  Each chapter reveals its whole builtin with `untraced(tag)` → `draw(tag)`
+//  (preserving faint band opacities) and clears with `fade(tag)`.
+// ============================================================================
+
+title("Statistics: from data to the bell");
+canvas("16:9");
+
+let sy = cy + 30;
+
+// 1. a real dataset (exam scores, already roughly bell-shaped)
+histogram(hg, (cx, sy),
+  "68 72 75 71 74 77 73 70 76 72 74 78 71 73 75 69 74 72 76 73 71 75 70 74 72 73 74 71 75 73", 12, 620, 230);
+untraced(hg);
+// 2. the idealised normal curve
+bellcurve(bc, (cx, sy - 24), 100, 15, 78);
+untraced(bc);
+// 3. why the bell is everywhere — the Central Limit Theorem
+clt(ct, (cx, sy), 5, 1000, 7, 620, 250);
+untraced(ct);
+
+text(cap, (cx, h - 44), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- 1. describe ----
+section("Describe the data");
+draw(hg, 1.3);
+say(cap, "any dataset has a shape, a centre, and a spread", 0.5);
+wait(1.8);
+say(cap, "these exam scores cluster around the middle, tailing off either side", 0.5);
+wait(2.0);
+fade(hg, 0.6);
+wait(0.3);
+
+// ---- 2. the bell ----
+say(cap, "", 0.2);
+section("The normal curve");
+draw(bc, 1.3);
+say(cap, "so many measurements pile into the same bell — the normal distribution", 0.5);
+wait(2.0);
+say(cap, "68% within one standard deviation, 95% within two, 99.7% within three", 0.5);
+wait(2.2);
+fade(bc, 0.6);
+wait(0.3);
+
+// ---- 3. why ----
+say(cap, "", 0.2);
+section("Why? The Central Limit Theorem");
+draw(ct, 1.4);
+say(cap, "average five dice, a thousand times — however flat one die is…", 0.5);
+wait(2.0);
+say(cap, "…the averages form a bell. THAT is why the normal is everywhere", 0.5);
+wait(2.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VGVgU9wNAYM" title="Statistics in Three Ideas — Data, the Bell & the CLT — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="histogram"><a class="header" href="#histogram">histogram</a></h2>
+<p>The shape of a dataset: a list of numbers binned into bars that stagger in one
+at a time, with the mean marked and the range labelled (<code>histogram</code>). Paste your
+own numbers into the data string — grades, prices, heights, times.</p>
+<pre><code class="language-manic">// ============================================================================
+//  histogram.manic  —  the shape of a dataset (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `histogram(id, (cx,cy), "v1 v2 v3 ...", [bins], [width], [height], [color])`
+//  bins a list of numbers into bars — the SHAPE of the data. Bars are
+//  `{id}.bar{k}` (tagged `{id}.bars`) so they stagger in and recolour as a
+//  group; `{id}.meanline` + `{id}.mean` mark the mean, `{id}.min`/`{id}.max`
+//  label the range. Default bin count ≈ √n.
+//
+//  TO ADAPT: paste your own numbers into the data string (grades, prices,
+//  heights, times…). More `bins` = finer shape; fewer = smoother. Pass a colour
+//  as the last argument, or `rainbow` to give every bar its own hue (below).
+// ============================================================================
+
+title("The shape of a dataset");
+canvas("16:9");
+
+let n = 14;
+
+text(hdr, (cx, 60), "35 exam scores — where do they cluster?");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// `rainbow` colours each bar across the spectrum — no loop needed
+histogram(hg, (cx, cy + 10),
+  "72 85 90 68 95 88 76 91 83 79 84 60 97 81 78 86 74 89 82 93 71 87 80 77 92 85 83 88 75 90 66 82 84 79 88",
+  n, 640, 300, rainbow);
+untraced(hg.bars);                 // bars sketch in one at a time
+hidden(hg.meanline); hidden(hg.mean);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- bars build up, left to right ----
+say(cap, "each bar counts how many scores fall in that range", 0.5);
+stagger(0.06) { for k in 0..n { draw(hg.bar{k}, 0.35); } }
+wait(1.0);
+say(cap, "the shape emerges: most scores cluster in the 80s, tailing off below", 0.5);
+wait(1.6);
+
+// ---- reveal the mean ----
+say(cap, "and the average sits right in the thick of it", 0.5);
+show(hg.meanline, 0.5); show(hg.mean, 0.4);
+pulse(hg.mean);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/PQn6SORxCqw" title="The Shape of Your Data — Histograms, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="summary"><a class="header" href="#summary">summary</a></h2>
+<p>Describe a dataset in one call: the numbers as dots on a number line, with the
+mean, median and mode marked, a ±1σ spread band, and readouts of the range,
+variance and standard deviation (<code>summary</code>). Central tendency and dispersion,
+together.</p>
+<pre><code class="language-manic">// ============================================================================
+//  summary.manic  —  describe a dataset (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `summary(id, (cx,cy), "v1 v2 v3 …", [width], [color])` is the descriptive-
+//  statistics workhorse: the data as dots on a number line, with the **mean**
+//  (gold), **median** (magenta) and **mode** (lime) marked, a translucent
+//  **±1σ spread band**, and a readout of **n / range / variance / std**.
+//  Pieces: `{id}.dots` (the cloud), `{id}.meanmark`/`.medianmark`/`.modemark`
+//  (+ `.*lbl`), `{id}.band`, `{id}.min`/`.max`, `{id}.readout`.
+//
+//  TO ADAPT: paste your own numbers. Central tendency (mean/median/mode) and
+//  dispersion (range/variance/std) come out in one call.
+// ============================================================================
+
+title("Describe a dataset");
+canvas("16:9");
+
+text(hdr, (cx, 64), "20 daily temperatures — centre and spread");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+summary(sm, (cx, cy - 10),
+  "18 21 20 22 19 23 21 20 21 24 22 21 19 20 23 21 22 20 21 25", 640);
+// reveal in beats
+untraced(sm.line);
+hidden(sm.dots);
+hidden(sm.band);
+hidden(sm.meanmark); hidden(sm.meanlbl);
+hidden(sm.medianmark); hidden(sm.medianlbl);
+hidden(sm.modemark); hidden(sm.modelbl);
+hidden(sm.readout);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "start with the raw numbers, laid out on a line", 0.5);
+draw(sm.line, 0.6);
+show(sm.dots, 0.6);
+wait(1.4);
+
+say(cap, "the centre: mean, median and mode", 0.5);
+show(sm.meanmark, 0.4); show(sm.meanlbl, 0.4);
+show(sm.medianmark, 0.4); show(sm.medianlbl, 0.4);
+show(sm.modemark, 0.4); show(sm.modelbl, 0.4);
+wait(1.6);
+
+say(cap, "the spread: most values fall within one standard deviation of the mean", 0.5);
+to(sm.band, opacity, 0.12, 0.6);
+show(sm.readout, 0.4);
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/McOGIY0zdBs" title="Mean, Median, Mode & Spread — Describe Any Dataset — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="boxplot"><a class="header" href="#boxplot">boxplot</a></h2>
+<p>The five-number summary as a box-and-whisker: the box spans Q1→Q3 (its width is
+the interquartile range), a line marks the median, the whiskers reach the rest,
+and a value far outside is flagged as an outlier (<code>boxplot</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  boxplot.manic  —  the five-number summary (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `boxplot(id, (cx,cy), "v1 v2 v3 …", [width], [color])` draws a box-and-whisker:
+//  the box spans Q1→Q3 (its width IS the interquartile range), a line marks the
+//  median, whiskers reach the extreme non-outliers (within 1.5·IQR), and points
+//  beyond are flagged as outliers. Pieces: `{id}.box`, `{id}.med`,
+//  `{id}.whiskerlo`/`.whiskerhi` (+ `.caplo`/`.caphi`), `{id}.outliers`,
+//  `{id}.iqr` and the value labels.
+//
+//  TO ADAPT: paste your numbers. A value far from the box (here 40) shows up as
+//  an outlier automatically.
+// ============================================================================
+
+title("Box-and-whisker: the five-number summary");
+canvas("16:9");
+
+text(hdr, (cx, 70), "response times (seconds) — one slow outlier");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+boxplot(bp, (cx, cy), "12 15 14 10 18 16 13 15 14 17 40 11 16 15 14", 700);
+untraced(bp.whiskerlo); untraced(bp.whiskerhi); untraced(bp.caplo); untraced(bp.caphi); untraced(bp.med);
+hidden(bp.box);
+hidden(bp.outliers);
+hidden(bp.iqr); hidden(bp.lmin); hidden(bp.lmax); hidden(bp.lmed); hidden(bp.lq1); hidden(bp.lq3);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "the box holds the middle half of the data — Q1 to Q3, the IQR", 0.5);
+to(bp.box, opacity, 0.2, 0.6);
+show(bp.lq1, 0.3); show(bp.lq3, 0.3); show(bp.iqr, 0.3);
+wait(1.5);
+
+say(cap, "the line inside is the median; the whiskers reach the rest", 0.5);
+draw(bp.med, 0.4); show(bp.lmed, 0.3);
+par { draw(bp.whiskerlo, 0.5); draw(bp.whiskerhi, 0.5); }
+draw(bp.caplo, 0.3); draw(bp.caphi, 0.3);
+show(bp.lmin, 0.3); show(bp.lmax, 0.3);
+wait(1.6);
+
+say(cap, "and a value far outside the whiskers is flagged as an outlier", 0.5);
+show(bp.outliers, 0.4); pulse(bp.outliers);
+wait(1.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/RstqImgruIU" title="Box-and-Whisker Plots & Outliers, Explained — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="skew"><a class="header" href="#skew">skew</a></h2>
+<p>Which way does the tail point? A histogram with the mean and median marked and a
+labelled skewness — when the mean is dragged right of the median, the data is
+right-skewed (<code>skew</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  skew.manic  —  the shape of a dataset: skewness (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `skew(id, (cx,cy), "v1 v2 v3 …", [bins], [width], [height], [color])` draws a
+//  histogram with the **mean** (gold) and **median** (magenta) marked and a
+//  labelled skewness. The tell: when the mean sits right of the median, a right
+//  tail is pulling it — the data is right-skewed (positive); left of it, left-
+//  skewed; on top of it, symmetric.
+//
+//  TO ADAPT: paste your numbers. Incomes, wait times and prices are classically
+//  right-skewed (a few big values pull the mean up).
+// ============================================================================
+
+title("Skewness: which way does the tail point?");
+canvas("16:9");
+
+text(hdr, (cx, 66), "monthly salaries (k) — a few big earners pull the mean up");
+size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+
+skew(sk, (cx, cy - 10),
+  "28 30 32 31 29 33 35 30 31 34 42 38 30 32 31 33 30 36 55 68 90 30 34 31", 14, 560, 240);
+untraced(sk.bars);
+hidden(sk.meanline); hidden(sk.meanlbl);
+hidden(sk.medianline); hidden(sk.medianlbl);
+hidden(sk.skewlbl);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "most salaries cluster low, with a long tail of high earners", 0.5);
+stagger(0.05) { for k in 0..14 { draw(sk.bar{k}, 0.3); } }
+wait(1.2);
+
+say(cap, "the median sits in the cluster — but the mean is dragged toward the tail", 0.5);
+show(sk.medianline, 0.4); show(sk.medianlbl, 0.3);
+show(sk.meanline, 0.4); show(sk.meanlbl, 0.3);
+wait(1.6);
+
+say(cap, "mean to the right of median = right-skewed (positive skew)", 0.5);
+show(sk.skewlbl, 0.4);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/KARVC2CdFII" title="Skewness: Which Way Does the Tail Point? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bellcurve"><a class="header" href="#bellcurve">bellcurve</a></h2>
+<p>The normal (Gaussian) bell curve and the 68-95-99.7 rule: the bell draws in,
+then the ±1σ / ±2σ / ±3σ bands shade one at a time, showing that 68% of values
+fall within one standard deviation, 95% within two, and 99.7% within three
+(<code>bellcurve</code>, alias <code>gaussian</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  normal.manic  —  the bell curve &amp; the 68-95-99.7 rule (stats Tier 2)
+// ----------------------------------------------------------------------------
+//  `bellcurve(id, (cx,cy), mu, sigma, [unit], [color])` (alias `gaussian`) draws
+//  bell curve and shades the ±1σ/±2σ/±3σ bands — the 68-95-99.7 rule. Pieces:
+//  `{id}.curve` (the bell), `{id}.band1/2/3` (tagged `{id}.bands`), `{id}.mean`,
+//  `{id}.p1/p2/p3` (the percentages), `{id}.t{-3..3}` (value ticks).
+//  `unit` = pixels per σ; the bell is standardised, μ/σ set the axis values.
+//
+//  TO ADAPT: change mu/sigma to your distribution (heights, IQ, measurement
+//  error…). The 68-95-99.7 rule holds for every normal.
+// ============================================================================
+
+title("The bell curve &amp; the 68-95-99.7 rule");
+canvas("16:9");
+
+// IQ scores: mean 100, standard deviation 15
+bellcurve(nd, (cx, cy + 10), 100, 15, 95);
+untraced(nd.curve);                // the bell draws in
+hidden(nd.mean);
+hidden(nd.bands);                  // the three σ-bands reveal one at a time
+hidden(nd.p1); hidden(nd.p2); hidden(nd.p3);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "IQ scores: mean 100, standard deviation 15 — the classic bell", 0.5);
+draw(nd.curve, 1.1);
+show(nd.mean, 0.4);
+wait(1.2);
+
+say(cap, "68% of values fall within ONE standard deviation of the mean", 0.5);
+to(nd.band1, opacity, 0.16, 0.6); show(nd.p1, 0.4);
+wait(1.7);
+
+say(cap, "95% fall within two — almost everyone", 0.5);
+to(nd.band2, opacity, 0.16, 0.6); show(nd.p2, 0.4);
+wait(1.7);
+
+say(cap, "and 99.7% within three: the tails are tiny", 0.5);
+to(nd.band3, opacity, 0.16, 0.6); show(nd.p3, 0.4);
+wait(1.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/OoB1BlKkHC4" title="The Bell Curve & the 68-95-99.7 Rule, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="clt"><a class="header" href="#clt">clt</a></h2>
+<p>The Central Limit Theorem — the flagship: however flat a single die is, the
+<em>average</em> of five dice, taken 1200 times, piles into a bell that hugs the normal
+curve (<code>clt</code>). Seeded, so it renders the same every time.</p>
+<pre><code class="language-manic">// ============================================================================
+//  clt.manic  —  the Central Limit Theorem (stats Tier 3, the flagship payoff)
+// ----------------------------------------------------------------------------
+//  `clt(id, (cx,cy), samplesize, trials, [seed], [width], [height])` runs `trials`
+//  experiments — each the average of `samplesize` dice — and histograms those
+//  averages. However flat a single die is, the averages pile into a BELL. Draws
+//  the histogram of sample means (`{id}.bar{k}`, tagged `{id}.bars`), the normal
+//  curve they converge to (`{id}.curve`), the mean line, ticks, and an info
+//  label. Seeded → the render is identical every time.
+//
+//  TO ADAPT: change `samplesize` (bigger n → tighter bell) or `trials` (more →
+//  smoother). `seed` picks the reproducible random sequence.
+// ============================================================================
+
+title("The Central Limit Theorem");
+canvas("16:9");
+
+clt(ct, (cx, cy + 20), 5, 1200, 7, 660, 300);
+untraced(ct.bars);      // the sample means pile up, bar by bar
+untraced(ct.curve);     // the normal curve draws in last
+hidden(ct.mean);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "one die is flat — 1 to 6 are equally likely. but average FIVE dice…", 0.5);
+stagger(0.03) { for k in 0..30 { draw(ct.bar{k}, 0.3); } }
+wait(1.0);
+
+say(cap, "…and repeat 1200 times: the averages pile up around the middle", 0.5);
+show(ct.mean, 0.4);
+wait(1.6);
+
+say(cap, "they trace a bell — the Central Limit Theorem: averages are normal", 0.5);
+draw(ct.curve, 1.1);
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/WmFyxyIuS5Y" title="The Central Limit Theorem — Why Averages Are Always a Bell — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="correlation"><a class="header" href="#correlation">correlation</a></h2>
+<p>Do two things move together? The scatter of paired data, the best-fit line, and
+the Pearson correlation <code>r</code> — near +1 a tight upward line, near −1 downward, near
+0 a shapeless blob (<code>correlation</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  correlation.manic  —  how strongly two variables move together (stats T3)
+// ----------------------------------------------------------------------------
+//  `correlation(id, (cx,cy), unit, "x1 y1  x2 y2 …", [color])` scatters the
+//  points, fits the best line, and reports the **Pearson correlation r** with a
+//  strong/moderate/weak · positive/negative reading. `unit` = pixels per data
+//  unit (x and y share it, so use data with comparable ranges). Points
+//  `{id}.p{k}` (tagged `{id}.points`), the fit `{id}.line`, and `{id}.r`.
+//
+//  TO ADAPT: paste your paired data. r near ±1 = a tight line; near 0 = a blob.
+// ============================================================================
+
+title("Correlation: do they move together?");
+canvas("16:9");
+
+text(hdr, (cx, 70), "hours studied vs grade (out of 10)");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+correlation(co, (cx, cy - 10), 42,
+  "1 3  2 4  3 4  4 6  5 6  6 7  7 8  8 8  9 10  10 9");
+hidden(co.points); untraced(co.line); hidden(co.r);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "each dot is one student: hours studied, and the grade they got", 0.5);
+show(co.points, 0.6);
+wait(1.3);
+
+say(cap, "the cloud slopes up — more study tends to mean a higher grade", 0.5);
+draw(co.line, 0.9);
+wait(1.3);
+
+say(cap, "r measures how tightly the points track that line: near +1 is strong", 0.5);
+show(co.r, 0.4); pulse(co.r);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/zlF5a8Jr9M0" title="Correlation r — Do Two Things Move Together? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lln"><a class="header" href="#lln">lln</a></h2>
+<p>The Law of Large Numbers: flip a fair coin over and over and track the running
+proportion of heads. It swings wildly at first, then settles onto the true 0.5
+as the trials pile up (<code>lln</code>). Draw the curve in to watch it converge.</p>
+<pre><code class="language-manic">// ============================================================================
+//  lln.manic  —  the Law of Large Numbers (stats Tier 3)
+// ----------------------------------------------------------------------------
+//  `lln(id, (cx,cy), trials, [seed], [width], [height])` plots the running
+//  proportion of heads over many coin flips: wild at first, settling onto the
+//  true 0.5. Draws `{id}.curve`, the reference line `{id}.ref`, axis labels, and
+//  the final value. Seeded → the render is identical every time.
+//
+//  TO ADAPT: change `trials` (more → tighter settling) or `seed` (a different
+//  reproducible run).
+// ============================================================================
+
+title("The Law of Large Numbers");
+canvas("16:9");
+
+lln(ll, (cx, cy + 10), 600, 3, 720, 300);
+untraced(ll.curve);              // the proportion traces in — watch it settle
+hidden(ll.finallbl);
+hidden(ll.truelbl);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "flip a fair coin over and over; track the proportion of heads so far", 0.5);
+show(ll.truelbl, 0.4);
+wait(0.8);
+say(cap, "early on it swings wildly — a few flips prove nothing", 0.5);
+draw(ll.curve, 2.6);
+wait(0.4);
+say(cap, "but over many trials it settles onto the true probability, 0.5", 0.5);
+show(ll.finallbl, 0.4);
+wait(1.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qyanPpb_NZY" title="The Law of Large Numbers — Why the Long Run Settles Down — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="hypothesis"><a class="header" href="#hypothesis">hypothesis</a></h2>
+<p>Is a result surprising enough to be real? Under the null hypothesis the test
+statistic follows the standard normal; the observed z cuts off tails whose area
+is the p-value. Smaller than α, reject (<code>hypothesis</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  hypothesis.manic  —  a significance test &amp; the p-value (stats Tier 5)
+// ----------------------------------------------------------------------------
+//  `hypothesis(id, (cx,cy), z, [alpha], [unit])` — under the null hypothesis the
+//  test statistic is standard-normal; the observed z cuts off tails whose area is
+//  the p-value. If that area is smaller than alpha, the result is too surprising
+//  to be chance — reject. Pieces: `{id}.curve`, `{id}.tails`, `{id}.zline`,
+//  `{id}.p`, `{id}.verdict`.
+// ============================================================================
+
+title("Hypothesis testing: is this surprising?");
+canvas("16:9");
+
+hypothesis(hy, (cx, cy - 10), 2.3, 0.05, 92);
+untraced(hy.curve);
+hidden(hy.tails); hidden(hy.zline); hidden(hy.zlbl);
+hidden(hy.p); hidden(hy.verdict);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "if nothing's going on, the test statistic follows this bell", 0.5);
+draw(hy.curve, 1.0);
+wait(1.2);
+say(cap, "we observed z = 2.3 — out here in the tails", 0.5);
+show(hy.zline, 0.4); show(hy.zlbl, 0.3);
+wait(1.4);
+say(cap, "the shaded tail area is the p-value: how likely a result this extreme is", 0.5);
+to(hy.tails, opacity, 0.5, 0.6); show(hy.p, 0.4);
+wait(1.6);
+say(cap, "p = 0.021 &lt; 0.05, so it's too surprising for chance — reject the null", 0.5);
+show(hy.verdict, 0.4);
+wait(1.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/LHCkQ4qZ4ME" title="Hypothesis Testing & p-values, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="covariance"><a class="header" href="#covariance">covariance</a></h2>
+<p>Covariance as signed area: a cross at the means, and a rectangle from each point
+to the centre — cyan where x and y agree, magenta where they disagree. Their
+balance is the covariance (<code>covariance</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  covariance.manic  —  covariance as signed area (stats Tier 5)
+// ----------------------------------------------------------------------------
+//  `covariance(id, (cx,cy), unit, "x1 y1 x2 y2 …", [color])` — a cross at the
+//  means splits the plane into quadrants; each point draws a rectangle to the
+//  mean-corner, cyan where (x-x̄)(y-ȳ) &gt; 0 (agreeing) and magenta where negative.
+//  Their signed-area balance IS the covariance. `{id}.points`, `{id}.rects`,
+//  `{id}.cross`, `{id}.cov`.
+// ============================================================================
+
+title("Covariance: signed area about the mean");
+canvas("16:9");
+
+covariance(cv, (cx, cy - 10), 34, "1 2  2 1  3 4  4 3  5 6  6 5  7 8  8 7  9 9");
+hidden(cv.points); hidden(cv.rects);
+untraced(cv.crossv); untraced(cv.crossh);
+hidden(cv.cov);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "mark each point, then draw the cross at the mean of x and the mean of y", 0.5);
+show(cv.points, 0.5);
+par { draw(cv.crossv, 0.5); draw(cv.crossh, 0.5); }
+wait(1.4);
+say(cap, "each point makes a rectangle to the centre — cyan if x and y agree", 0.5);
+to(cv.rects, opacity, 0.13, 0.7);
+wait(1.6);
+say(cap, "more agreeing (cyan) area than disagreeing = positive covariance", 0.5);
+show(cv.cov, 0.4);
+wait(1.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kvJHgWVcYTQ" title="Covariance as Signed Area — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bayes"><a class="header" href="#bayes">bayes</a></h2>
+<p>Bayesian updating: a prior belief about a coin’s bias, the likelihood from the
+data, and the posterior that combines them — pulled toward the evidence and
+sharpening as it accumulates (<code>bayes</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  bayes.manic  —  Bayesian updating (stats Tier 5)
+// ----------------------------------------------------------------------------
+//  `bayes(id, (cx,cy), heads, tails, [width], [height])` — belief about a coin's
+//  bias: a mild PRIOR, the LIKELIHOOD from the data, and the POSTERIOR that
+//  combines them (pulled toward the data, sharpening as evidence grows). Pieces:
+//  `{id}.prior`, `{id}.likelihood`, `{id}.posterior`, `{id}.mean`.
+// ============================================================================
+
+title("Bayes: updating a belief with data");
+canvas("16:9");
+
+bayes(by, (cx, cy + 10), 7, 2, 640, 250);
+untraced(by.prior); untraced(by.likelihood); untraced(by.posterior);
+hidden(by.mean); hidden(by.priorlbl); hidden(by.postlbl); hidden(by.datalbl);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "before any flips, a mild belief: the coin is probably fair-ish (the prior)", 0.5);
+draw(by.prior, 0.8); show(by.priorlbl, 0.3);
+wait(1.4);
+say(cap, "then we flip: 7 heads, 2 tails — the data favours a biased coin (likelihood)", 0.5);
+draw(by.likelihood, 0.8); show(by.datalbl, 0.3);
+wait(1.6);
+say(cap, "combine them and the posterior lands between: p about 0.69", 0.5);
+draw(by.posterior, 0.8); show(by.mean, 0.4); show(by.postlbl, 0.3);
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/YnqPXFlT-UI" title="Bayes' Theorem: Updating a Belief With Data — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="probability"><a class="header" href="#probability">probability</a></h2>
+<p>A probability &amp; sampling playground in four chapters: named distributions
+(uniform / exponential / binomial / Poisson), a confidence interval, a
+Monte-Carlo estimate of π, and a random walk (<code>distribution</code>, <code>confidence</code>,
+<code>montecarlo</code>, <code>randomwalk</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  probability.manic  —  a probability &amp; sampling playground (stats)
+// ----------------------------------------------------------------------------
+//  Four ideas on one stage, chaptered with section():
+//     1. named DISTRIBUTIONS  (uniform / exponential / binomial / poisson)
+//     2. CONFIDENCE intervals (an estimate ± a margin)
+//     3. MONTE-CARLO           (estimate pi by throwing darts)
+//     4. RANDOM WALK           (a path that wanders)
+//  Each chapter reveals with untraced(tag) -&gt; draw(tag) and clears with fade(tag).
+//  The seeded builtins (montecarlo, randomwalk) render identically every time.
+// ============================================================================
+
+title("A probability playground");
+canvas("16:9");
+
+// ---- 1. named distributions (a 2x2 gallery) ----
+distribution(du, (cx - 350, cy - 120), "uniform", 2, 6);       untraced(du);
+distribution(de, (cx + 350, cy - 120), "exponential", 1);       untraced(de);
+distribution(db, (cx - 350, cy + 180), "binomial", 12, 0.4);    untraced(db);
+distribution(dp, (cx + 350, cy + 180), "poisson", 4);           untraced(dp);
+// ---- 2. a confidence interval ----
+confidence(ci, (cx, cy), 50, 8, 25, 95, 620); untraced(ci); hidden(ci.estimate);
+// ---- 3. monte-carlo pi ----
+montecarlo(mc, (cx, cy - 10), 1200, 7, 210); untraced(mc);
+// ---- 4. a random walk ----
+randomwalk(rw, (cx, cy), 500, 4, 12); untraced(rw);
+
+text(cap, (cx, h - 44), ""); size(cap, 22); color(cap, dim); display(cap);
+
+section("Named distributions");
+par { draw(du, 0.9); draw(de, 0.9); draw(db, 0.9); draw(dp, 0.9); }
+say(cap, "flat, decaying, discrete counts — the classic shapes of chance", 0.5);
+wait(2.2);
+par { fade(du, 0.5); fade(de, 0.5); fade(db, 0.5); fade(dp, 0.5); }
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Confidence intervals");
+draw(ci, 0.9); show(ci.estimate, 0.4);
+say(cap, "an estimate is never exact — the interval says how sure we are", 0.5);
+wait(2.2);
+fade(ci, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Monte Carlo");
+draw(mc, 1.2);
+say(cap, "throw darts at random: the fraction landing in the circle gives pi", 0.5);
+wait(2.4);
+fade(mc, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Random walk");
+draw(rw, 1.4);
+say(cap, "each step a random direction — chance draws a wandering path", 0.5);
+wait(2.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/l9sqYflGPL8" title="A Probability Playground — Distributions, CI, Monte-Carlo & Random Walks — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="vectors-fields--coordinates"><a class="header" href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a></h1>
@@ -4071,6 +5154,147 @@ par {
 wait(0.8);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/YMBQbAIlfQM" title="Morph a Cube Into a Sphere — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="linear-algebra-3d--the-essence-in-3d"><a class="header" href="#linear-algebra-3d--the-essence-in-3d">linear-algebra-3d — the essence, in 3D</a></h2>
+<p>The 3D companion to the <code>linear-algebra</code> lesson: one matrix
+<code>[[1,0,0],[0,3,1],[0,1,3]]</code> (det 8; eigenvalues 1, 2, 4) seen two ways on an
+orbiting stage — first as a transformation (the unit cube → a parallelepiped
+whose volume is the determinant), then through its eigenvectors (the invariant
+axes that only stretch). Start here for 3D.</p>
+<pre><code class="language-manic">// ============================================================================
+//  linear-algebra-3d.manic  —  Linear algebra in 3D (a lesson)
+// ----------------------------------------------------------------------------
+//  The 3-D companion to linear-algebra.manic. One matrix, two lenses, one
+//  orbiting stage:
+//     1. a 3x3 matrix TRANSFORMS space — the unit cube becomes a parallelepiped
+//        whose VOLUME is the determinant                          (linmap3)
+//     2. its EIGENVECTORS are the invariant axes that only stretch (eigen3)
+//
+//  Both use the same  A = [[1,0,0],[0,3,1],[0,1,3]]  (det = 8; eigenvalues 1,2,4),
+//  so the two views describe the very same matrix.
+// ============================================================================
+
+title("Linear algebra in 3D");
+canvas("16:9");
+
+camera3((12, 9.5, 10), (0.4, 1.6, 1.6), 40);
+grid3(floor, (0, 0, 0), 4, 1); color(floor, dim); opacity(floor, 0.3);
+
+// A = [[1,0,0],[0,3,1],[0,1,3]]  — det 8, eigenvalues 1, 2, 4
+linmap3(lm, (0, 0, 0), 1, 0, 0, 0, 3, 1, 0, 1, 3);
+eigen3(ev, (0, 0, 0), 1, 0, 0, 0, 3, 1, 0, 1, 3);
+// the eigen-axes wait until chapter 2
+hidden(ev.axis0); hidden(ev.axis1); hidden(ev.axis2);
+hidden(ev.l0); hidden(ev.l1); hidden(ev.l2);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- 1. the matrix as a transformation of space ----
+section("A matrix in 3D");
+say(cap, "a 3x3 matrix sends the unit cube to a parallelepiped — its columns", 0.5);
+orbit3(50, 26, 13, 4, smooth);
+say(cap, "the volume it encloses is the determinant: det = 8, so space grew 8x", 0.5);
+orbit3(116, 30, 13, 4, smooth);
+// clear the transformation view
+fade(lm, 0.6); fade(lm.ref, 0.6);
+fade(lm.i, 0.6); fade(lm.j, 0.6); fade(lm.k, 0.6);
+fade(lm.li, 0.6); fade(lm.lj, 0.6); fade(lm.lk, 0.6); fade(lm.val, 0.6);
+wait(0.3);
+
+// ---- 2. the same matrix, through its eigenvectors ----
+say(cap, "", 0.2);
+section("Eigenvectors");
+say(cap, "three special directions only STRETCH when A acts — the eigenvectors", 0.5);
+show(ev.axis0, 0.5); show(ev.axis1, 0.5); show(ev.axis2, 0.5);
+show(ev.l0, 0.4); show(ev.l1, 0.4); show(ev.l2, 0.4);
+orbit3(58, 24, 7, 4, smooth);
+say(cap, "their stretch factors are the eigenvalues: 1, 2 and 4", 0.5);
+orbit3(122, 32, 6.5, 4.5, smooth);
+wait(0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/tgpmiaNCm5g" title="Linear Algebra in 3D — Transformations & Eigenvectors, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="linear-map3"><a class="header" href="#linear-map3">linear-map3</a></h2>
+<p>Linear algebra in 3D: a 3×3 matrix deforms the unit cube into a parallelepiped,
+with basis arrows i/j/k landing on the matrix’s columns and the enclosed volume
+labelled as the determinant (<code>linmap3</code>). The 3D echo of <code>linear-map</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  linear-map3.manic  —  a 3x3 matrix, in 3D (the 3-D echo of linear-map)
+// ----------------------------------------------------------------------------
+//  `linmap3(id, (cx,cy,cz), a,b,c,d,e,f,g,h,i, [color])` applies the 3x3 matrix
+//  [[a,b,c],[d,e,f],[g,h,i]] to space: the unit cube (faint wireframe) becomes a
+//  parallelepiped, with basis arrows i/j/k landing on the matrix's COLUMNS. The
+//  volume it encloses IS the determinant (labelled) — it flips colour when the
+//  determinant is negative (orientation reversed) and collapses flat at det = 0.
+//
+//  TO ADAPT: change the nine numbers. Try a shear (1,0.6,0, 0,1,0, 0,0,1) → det 1
+//  (volume unchanged), or swap two columns to make det negative (a reflection).
+// ============================================================================
+
+title("A 3x3 matrix, in 3D");
+canvas("16:9");
+
+camera3((7, 5.5, 6), (1, 1, 1), 40);
+grid3(floor, (0, 0, 0), 4, 1); color(floor, dim); opacity(floor, 0.4);
+
+// M = [[1.5,0.5,0],[0,1.5,0.5],[0.5,0,1.5]]  — a skew + stretch, det = 3.5
+linmap3(lm, (0, 0, 0), 1.5, 0.5, 0, 0, 1.5, 0.5, 0.5, 0, 1.5);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "a 3x3 matrix sends the unit cube to a parallelepiped", 0.5);
+orbit3(58, 26, 10, 4, smooth);
+
+say(cap, "i, j, k land on its columns — where the three axes are sent", 0.5);
+orbit3(116, 32, 10, 4, smooth);
+
+say(cap, "the volume enclosed IS the determinant: det = 3.5, so space grew 3.5x", 0.5);
+orbit3(60, 20, 9, 4.5, smooth);
+wait(0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/McLljqiPcFI" title="A 3×3 Matrix Deforms a Cube — Determinant as Volume, in 3D — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="eigen3"><a class="header" href="#eigen3">eigen3</a></h2>
+<p>The real eigenvectors of a 3×3 matrix, in 3D: the invariant lines through the
+origin that only stretch (by λ) when the matrix acts (<code>eigen3</code>). The 3D echo of
+<code>eigen</code>. A symmetric matrix gives three perpendicular real eigen-axes; a rotation
+leaves one real axis and two complex eigenvalues.</p>
+<pre><code class="language-manic">// ============================================================================
+//  eigen3.manic  —  eigenvectors of a 3x3 matrix (the 3-D echo of eigen)
+// ----------------------------------------------------------------------------
+//  `eigen3(id, (cx,cy,cz), a,b,c,d,e,f,g,h,i, [color])` draws the real
+//  EIGENVECTORS of the 3x3 [[a,b,c],[d,e,f],[g,h,i]] as invariant lines through
+//  the origin — the directions a vector on them only STRETCHES (by λ), never
+//  turns. A real 3x3 always has at least one real eigenvector; a rotation leaves
+//  two complex eigenvalues, which are noted.
+//
+//  TO ADAPT: change the nine numbers. A symmetric matrix (as here) has three
+//  perpendicular real eigen-axes; a rotation like (0,-1,0, 1,0,0, 0,0,1) shows
+//  one real axis (the axis of rotation) + a "2 complex" note.
+// ============================================================================
+
+title("Eigenvectors of a 3x3 matrix");
+canvas("16:9");
+
+camera3((7, 5.5, 6), (0, 0, 0), 42);
+grid3(floor, (0, 0, 0), 3, 1); color(floor, dim); opacity(floor, 0.35);
+
+// symmetric M = [[1,0,0],[0,3,1],[0,1,3]] — three real eigenvalues: 1, 2, 4
+eigen3(ev, (0, 0, 0), 1, 0, 0, 0, 3, 1, 0, 1, 3);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "when the matrix acts, most directions turn — but a few only stretch", 0.5);
+orbit3(52, 24, 10, 4, smooth);
+
+say(cap, "those invariant lines are the eigenvectors; the stretch factor is lambda", 0.5);
+orbit3(122, 34, 10, 4, smooth);
+
+say(cap, "this symmetric 3x3 has three real eigenvalues: 1, 2 and 4", 0.5);
+orbit3(58, 22, 9, 4.5, smooth);
+wait(0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/eZpNxcOa_cs" title="Eigenvectors of a 3×3 Matrix, in 3D — The Invariant Axes — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="matrix3"><a class="header" href="#matrix3">matrix3</a></h2>
 <p>A 3×3×3 block of cubes, with a shear matrix <strong>M</strong> and its inverse <strong>M⁻¹</strong> applied and undone.</p>

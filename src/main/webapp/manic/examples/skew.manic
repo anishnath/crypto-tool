@@ -1,0 +1,40 @@
+// ============================================================================
+//  skew.manic  —  the shape of a dataset: skewness (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `skew(id, (cx,cy), "v1 v2 v3 …", [bins], [width], [height], [color])` draws a
+//  histogram with the **mean** (gold) and **median** (magenta) marked and a
+//  labelled skewness. The tell: when the mean sits right of the median, a right
+//  tail is pulling it — the data is right-skewed (positive); left of it, left-
+//  skewed; on top of it, symmetric.
+//
+//  TO ADAPT: paste your numbers. Incomes, wait times and prices are classically
+//  right-skewed (a few big values pull the mean up).
+// ============================================================================
+
+title("Skewness: which way does the tail point?");
+canvas("16:9");
+
+text(hdr, (cx, 66), "monthly salaries (k) — a few big earners pull the mean up");
+size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+
+skew(sk, (cx, cy - 10),
+  "28 30 32 31 29 33 35 30 31 34 42 38 30 32 31 33 30 36 55 68 90 30 34 31", 14, 560, 240);
+untraced(sk.bars);
+hidden(sk.meanline); hidden(sk.meanlbl);
+hidden(sk.medianline); hidden(sk.medianlbl);
+hidden(sk.skewlbl);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "most salaries cluster low, with a long tail of high earners", 0.5);
+stagger(0.05) { for k in 0..14 { draw(sk.bar{k}, 0.3); } }
+wait(1.2);
+
+say(cap, "the median sits in the cluster — but the mean is dragged toward the tail", 0.5);
+show(sk.medianline, 0.4); show(sk.medianlbl, 0.3);
+show(sk.meanline, 0.4); show(sk.meanlbl, 0.3);
+wait(1.6);
+
+say(cap, "mean to the right of median = right-skewed (positive skew)", 0.5);
+show(sk.skewlbl, 0.4);
+wait(1.8);

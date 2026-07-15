@@ -1,0 +1,31 @@
+// ============================================================================
+//  lln.manic  —  the Law of Large Numbers (stats Tier 3)
+// ----------------------------------------------------------------------------
+//  `lln(id, (cx,cy), trials, [seed], [width], [height])` plots the running
+//  proportion of heads over many coin flips: wild at first, settling onto the
+//  true 0.5. Draws `{id}.curve`, the reference line `{id}.ref`, axis labels, and
+//  the final value. Seeded → the render is identical every time.
+//
+//  TO ADAPT: change `trials` (more → tighter settling) or `seed` (a different
+//  reproducible run).
+// ============================================================================
+
+title("The Law of Large Numbers");
+canvas("16:9");
+
+lln(ll, (cx, cy + 10), 600, 3, 720, 300);
+untraced(ll.curve);              // the proportion traces in — watch it settle
+hidden(ll.finallbl);
+hidden(ll.truelbl);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "flip a fair coin over and over; track the proportion of heads so far", 0.5);
+show(ll.truelbl, 0.4);
+wait(0.8);
+say(cap, "early on it swings wildly — a few flips prove nothing", 0.5);
+draw(ll.curve, 2.6);
+wait(0.4);
+say(cap, "but over many trials it settles onto the true probability, 0.5", 0.5);
+show(ll.finallbl, 0.4);
+wait(1.9);

@@ -1,0 +1,56 @@
+// ============================================================================
+//  diagonalise.manic  —  A = P D P^-1 made visual (a template)
+// ----------------------------------------------------------------------------
+//  The big idea of diagonalisation: every (real-diagonalisable) matrix has a
+//  basis — its EIGENVECTORS — in which it does nothing but STRETCH each axis.
+//  No rotation, no shear: just a diagonal scaling D = diag(lambda1, lambda2).
+//
+//  `diagonalise(id, (cx,cy), unit, a,b,c,d, [color])` draws, for [[a,b],[c,d]]:
+//    * the (generally skewed) eigen-grid   — the coordinate frame of the eigenbasis
+//    * the two eigen-axes  dg.axis1 / dg.axis2
+//    * the unit eigen-cell dg.cell  and its image under A  dg.img
+//    * the eigenvector images as arrows dg.v1 / dg.v2  (+ labels dg.v1l / dg.v2l)
+//  Complex or repeated eigenvalues (no real 2-D eigenbasis) leave a note instead.
+//
+//  TO ADAPT: change the four matrix numbers below. Try a non-symmetric matrix
+//  like (2,1,0,3) to see a SKEWED eigenbasis, or (0,-1,1,0) to see the
+//  "no real eigenbasis" note (a pure rotation).
+// ============================================================================
+
+title("Diagonalisation: a matrix in its own basis");
+canvas("16:9");
+
+let ox = cx - 40;
+let oy = cy + 20;
+
+text(hdr, (cx, 54), "A = P D P^-1  —  in the eigenbasis, A is only a stretch");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the matrix [[2,1],[1,2]] — eigenvalues 3 (along (1,1)) and 1 (along (1,-1))
+diagonalise(dg, (ox, oy), 60, 2, 1, 1, 2);
+
+// the faint eigen-grid stays as static context; reveal the rest in beats:
+untraced(dg.axis1); untraced(dg.axis2);   // eigen-axes draw in
+hidden(dg.cell); hidden(dg.img);          // unit cell fades in; image fades to 0.4
+untraced(dg.v1); untraced(dg.v2);         // eigenvector arrows draw in
+hidden(dg.v1l); hidden(dg.v2l);           // lambda labels fade in
+
+text(cap, (cx, h - 50), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- timeline ----
+say(cap, "every matrix has special directions — its eigenvectors", 0.5);
+par { draw(dg.axis1, 0.7); draw(dg.axis2, 0.7); }
+wait(1.2);
+
+say(cap, "build the unit cell from those two directions", 0.5);
+show(dg.cell, 0.6);
+wait(1.4);
+
+say(cap, "apply A: the cell only STRETCHES along each axis — never rotates", 0.5);
+to(dg.img, opacity, 0.4, 0.8);
+par { draw(dg.v1, 0.7); draw(dg.v2, 0.7); }
+wait(1.2);
+
+say(cap, "the stretch factors ARE the eigenvalues — the diagonal of D", 0.5);
+show(dg.v1l, 0.4); show(dg.v2l, 0.4);
+wait(1.6);

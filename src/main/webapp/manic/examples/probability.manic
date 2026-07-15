@@ -1,0 +1,57 @@
+// ============================================================================
+//  probability.manic  —  a probability & sampling playground (stats)
+// ----------------------------------------------------------------------------
+//  Four ideas on one stage, chaptered with section():
+//     1. named DISTRIBUTIONS  (uniform / exponential / binomial / poisson)
+//     2. CONFIDENCE intervals (an estimate ± a margin)
+//     3. MONTE-CARLO           (estimate pi by throwing darts)
+//     4. RANDOM WALK           (a path that wanders)
+//  Each chapter reveals with untraced(tag) -> draw(tag) and clears with fade(tag).
+//  The seeded builtins (montecarlo, randomwalk) render identically every time.
+// ============================================================================
+
+title("A probability playground");
+canvas("16:9");
+
+// ---- 1. named distributions (a 2x2 gallery) ----
+distribution(du, (cx - 350, cy - 120), "uniform", 2, 6);       untraced(du);
+distribution(de, (cx + 350, cy - 120), "exponential", 1);       untraced(de);
+distribution(db, (cx - 350, cy + 180), "binomial", 12, 0.4);    untraced(db);
+distribution(dp, (cx + 350, cy + 180), "poisson", 4);           untraced(dp);
+// ---- 2. a confidence interval ----
+confidence(ci, (cx, cy), 50, 8, 25, 95, 620); untraced(ci); hidden(ci.estimate);
+// ---- 3. monte-carlo pi ----
+montecarlo(mc, (cx, cy - 10), 1200, 7, 210); untraced(mc);
+// ---- 4. a random walk ----
+randomwalk(rw, (cx, cy), 500, 4, 12); untraced(rw);
+
+text(cap, (cx, h - 44), ""); size(cap, 22); color(cap, dim); display(cap);
+
+section("Named distributions");
+par { draw(du, 0.9); draw(de, 0.9); draw(db, 0.9); draw(dp, 0.9); }
+say(cap, "flat, decaying, discrete counts — the classic shapes of chance", 0.5);
+wait(2.2);
+par { fade(du, 0.5); fade(de, 0.5); fade(db, 0.5); fade(dp, 0.5); }
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Confidence intervals");
+draw(ci, 0.9); show(ci.estimate, 0.4);
+say(cap, "an estimate is never exact — the interval says how sure we are", 0.5);
+wait(2.2);
+fade(ci, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Monte Carlo");
+draw(mc, 1.2);
+say(cap, "throw darts at random: the fraction landing in the circle gives pi", 0.5);
+wait(2.4);
+fade(mc, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Random walk");
+draw(rw, 1.4);
+say(cap, "each step a random direction — chance draws a wandering path", 0.5);
+wait(2.2);

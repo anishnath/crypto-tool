@@ -1,0 +1,35 @@
+// ============================================================================
+//  clt.manic  —  the Central Limit Theorem (stats Tier 3, the flagship payoff)
+// ----------------------------------------------------------------------------
+//  `clt(id, (cx,cy), samplesize, trials, [seed], [width], [height])` runs `trials`
+//  experiments — each the average of `samplesize` dice — and histograms those
+//  averages. However flat a single die is, the averages pile into a BELL. Draws
+//  the histogram of sample means (`{id}.bar{k}`, tagged `{id}.bars`), the normal
+//  curve they converge to (`{id}.curve`), the mean line, ticks, and an info
+//  label. Seeded → the render is identical every time.
+//
+//  TO ADAPT: change `samplesize` (bigger n → tighter bell) or `trials` (more →
+//  smoother). `seed` picks the reproducible random sequence.
+// ============================================================================
+
+title("The Central Limit Theorem");
+canvas("16:9");
+
+clt(ct, (cx, cy + 20), 5, 1200, 7, 660, 300);
+untraced(ct.bars);      // the sample means pile up, bar by bar
+untraced(ct.curve);     // the normal curve draws in last
+hidden(ct.mean);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "one die is flat — 1 to 6 are equally likely. but average FIVE dice…", 0.5);
+stagger(0.03) { for k in 0..30 { draw(ct.bar{k}, 0.3); } }
+wait(1.0);
+
+say(cap, "…and repeat 1200 times: the averages pile up around the middle", 0.5);
+show(ct.mean, 0.4);
+wait(1.6);
+
+say(cap, "they trace a bell — the Central Limit Theorem: averages are normal", 0.5);
+draw(ct.curve, 1.1);
+wait(2.0);

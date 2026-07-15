@@ -1,0 +1,48 @@
+// ============================================================================
+//  summary.manic  —  describe a dataset (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `summary(id, (cx,cy), "v1 v2 v3 …", [width], [color])` is the descriptive-
+//  statistics workhorse: the data as dots on a number line, with the **mean**
+//  (gold), **median** (magenta) and **mode** (lime) marked, a translucent
+//  **±1σ spread band**, and a readout of **n / range / variance / std**.
+//  Pieces: `{id}.dots` (the cloud), `{id}.meanmark`/`.medianmark`/`.modemark`
+//  (+ `.*lbl`), `{id}.band`, `{id}.min`/`.max`, `{id}.readout`.
+//
+//  TO ADAPT: paste your own numbers. Central tendency (mean/median/mode) and
+//  dispersion (range/variance/std) come out in one call.
+// ============================================================================
+
+title("Describe a dataset");
+canvas("16:9");
+
+text(hdr, (cx, 64), "20 daily temperatures — centre and spread");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+summary(sm, (cx, cy - 10),
+  "18 21 20 22 19 23 21 20 21 24 22 21 19 20 23 21 22 20 21 25", 640);
+// reveal in beats
+untraced(sm.line);
+hidden(sm.dots);
+hidden(sm.band);
+hidden(sm.meanmark); hidden(sm.meanlbl);
+hidden(sm.medianmark); hidden(sm.medianlbl);
+hidden(sm.modemark); hidden(sm.modelbl);
+hidden(sm.readout);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "start with the raw numbers, laid out on a line", 0.5);
+draw(sm.line, 0.6);
+show(sm.dots, 0.6);
+wait(1.4);
+
+say(cap, "the centre: mean, median and mode", 0.5);
+show(sm.meanmark, 0.4); show(sm.meanlbl, 0.4);
+show(sm.medianmark, 0.4); show(sm.medianlbl, 0.4);
+show(sm.modemark, 0.4); show(sm.modelbl, 0.4);
+wait(1.6);
+
+say(cap, "the spread: most values fall within one standard deviation of the mean", 0.5);
+to(sm.band, opacity, 0.12, 0.6);
+show(sm.readout, 0.4);
+wait(2.0);

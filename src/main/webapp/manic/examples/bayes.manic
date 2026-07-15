@@ -1,0 +1,27 @@
+// ============================================================================
+//  bayes.manic  —  Bayesian updating (stats Tier 5)
+// ----------------------------------------------------------------------------
+//  `bayes(id, (cx,cy), heads, tails, [width], [height])` — belief about a coin's
+//  bias: a mild PRIOR, the LIKELIHOOD from the data, and the POSTERIOR that
+//  combines them (pulled toward the data, sharpening as evidence grows). Pieces:
+//  `{id}.prior`, `{id}.likelihood`, `{id}.posterior`, `{id}.mean`.
+// ============================================================================
+
+title("Bayes: updating a belief with data");
+canvas("16:9");
+
+bayes(by, (cx, cy + 10), 7, 2, 640, 250);
+untraced(by.prior); untraced(by.likelihood); untraced(by.posterior);
+hidden(by.mean); hidden(by.priorlbl); hidden(by.postlbl); hidden(by.datalbl);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "before any flips, a mild belief: the coin is probably fair-ish (the prior)", 0.5);
+draw(by.prior, 0.8); show(by.priorlbl, 0.3);
+wait(1.4);
+say(cap, "then we flip: 7 heads, 2 tails — the data favours a biased coin (likelihood)", 0.5);
+draw(by.likelihood, 0.8); show(by.datalbl, 0.3);
+wait(1.6);
+say(cap, "combine them and the posterior lands between: p about 0.69", 0.5);
+draw(by.posterior, 0.8); show(by.mean, 0.4); show(by.postlbl, 0.3);
+wait(2.0);

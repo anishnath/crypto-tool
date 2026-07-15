@@ -1,5 +1,5 @@
 {
-  "count": 48,
+  "count": 70,
   "categories": [
     {
       "slug": "algorithms",
@@ -27,7 +27,7 @@
           "name": "linked_list",
           "file": "linked_list.manic",
           "title": "Linked list",
-          "desc": "Singly / doubly / circular — node anatomy + pointer re-threading."
+          "desc": "Singly / doubly / circular \u2014 node anatomy + pointer re-threading."
         },
         {
           "name": "hashmap",
@@ -114,6 +114,12 @@
       "title": "Linear algebra & tables",
       "examples": [
         {
+          "name": "linear-algebra",
+          "file": "linear-algebra.manic",
+          "title": "Linear algebra: five ideas",
+          "desc": "A complete visual lesson: transformation, determinant, eigenvectors, solving, projection."
+        },
+        {
           "name": "matrix",
           "file": "matrix.manic",
           "title": "Matrix",
@@ -138,6 +144,36 @@
           "desc": "A 2x2 matrix shearing a grid + basis vectors."
         },
         {
+          "name": "linear-map",
+          "file": "linear-map.manic",
+          "title": "Linear map",
+          "desc": "What a matrix does to space: grid, determinant & eigenvectors."
+        },
+        {
+          "name": "linear-system",
+          "file": "linear-system.manic",
+          "title": "Linear system",
+          "desc": "Solving & spanning: a system as two lines, span & rank collapse."
+        },
+        {
+          "name": "diagonalise",
+          "file": "diagonalise.manic",
+          "title": "Diagonalise",
+          "desc": "A = P D P^-1: in the eigenbasis, a matrix is just a stretch."
+        },
+        {
+          "name": "rref",
+          "file": "rref.manic",
+          "title": "RREF",
+          "desc": "Gaussian elimination, animated: reduce [A|b] to row-echelon form."
+        },
+        {
+          "name": "projection",
+          "file": "projection.manic",
+          "title": "Projection & least-squares",
+          "desc": "Drop a vector onto a subspace; fit a line to points the same way."
+        },
+        {
           "name": "table",
           "file": "table.manic",
           "title": "Table",
@@ -148,6 +184,90 @@
           "file": "table_braces.manic",
           "title": "Table braces",
           "desc": "A table annotated with braces."
+        }
+      ]
+    },
+    {
+      "slug": "stats",
+      "title": "Statistics & probability",
+      "examples": [
+        {
+          "name": "statistics",
+          "file": "statistics.manic",
+          "title": "Statistics: three ideas",
+          "desc": "A complete lesson: describe data, the bell curve, and why the CLT makes it everywhere."
+        },
+        {
+          "name": "histogram",
+          "file": "histogram.manic",
+          "title": "Histogram",
+          "desc": "The shape of a dataset: numbers binned into bars, with the mean marked."
+        },
+        {
+          "name": "summary",
+          "file": "summary.manic",
+          "title": "Summary",
+          "desc": "Describe a dataset: mean, median, mode, spread, range, variance & std."
+        },
+        {
+          "name": "boxplot",
+          "file": "boxplot.manic",
+          "title": "Box plot",
+          "desc": "Five-number summary as a box-and-whisker; the box is the IQR, with outliers flagged."
+        },
+        {
+          "name": "skew",
+          "file": "skew.manic",
+          "title": "Skewness",
+          "desc": "Which way the tail points: mean vs median on a histogram, labelled left/right/symmetric."
+        },
+        {
+          "name": "bellcurve",
+          "file": "bellcurve.manic",
+          "title": "Bell curve",
+          "desc": "The normal curve & the 68-95-99.7 rule, shaded one standard deviation at a time."
+        },
+        {
+          "name": "clt",
+          "file": "clt.manic",
+          "title": "Central Limit Theorem",
+          "desc": "Averages of dice pile into a bell \u2014 why the normal distribution is everywhere."
+        },
+        {
+          "name": "correlation",
+          "file": "correlation.manic",
+          "title": "Correlation",
+          "desc": "Scatter + best-fit line + the Pearson r: how tightly two variables move together."
+        },
+        {
+          "name": "lln",
+          "file": "lln.manic",
+          "title": "Law of Large Numbers",
+          "desc": "A running proportion of coin flips, wild at first, settling onto the true 0.5."
+        },
+        {
+          "name": "hypothesis",
+          "file": "hypothesis.manic",
+          "title": "Hypothesis test",
+          "desc": "A significance test: the p-value as shaded tails of the null distribution vs alpha."
+        },
+        {
+          "name": "covariance",
+          "file": "covariance.manic",
+          "title": "Covariance",
+          "desc": "Covariance as signed-area rectangles about the mean cross (agree cyan / disagree magenta)."
+        },
+        {
+          "name": "bayes",
+          "file": "bayes.manic",
+          "title": "Bayes updating",
+          "desc": "Prior + likelihood -> posterior: updating a belief about a coin's bias with data."
+        },
+        {
+          "name": "probability",
+          "file": "probability.manic",
+          "title": "Probability playground",
+          "desc": "Distributions, confidence intervals, Monte-Carlo pi, and a random walk."
         }
       ]
     },
@@ -183,7 +303,7 @@
           "name": "equilateral",
           "file": "equilateral.manic",
           "title": "Equilateral",
-          "desc": "Euclid I.1 — an equilateral triangle from two circles."
+          "desc": "Euclid I.1 \u2014 an equilateral triangle from two circles."
         },
         {
           "name": "triangle",
@@ -348,10 +468,28 @@
       "title": "3D & multivariable",
       "examples": [
         {
+          "name": "linear-algebra-3d",
+          "file": "linear-algebra-3d.manic",
+          "title": "Linear algebra in 3D",
+          "desc": "One matrix, two lenses: transformation (det = volume) and its eigenvectors, orbiting."
+        },
+        {
+          "name": "linear-map3",
+          "file": "linear-map3.manic",
+          "title": "Linear map (3D)",
+          "desc": "A 3x3 matrix deforms the unit cube into a parallelepiped; volume = the determinant."
+        },
+        {
+          "name": "eigen3",
+          "file": "eigen3.manic",
+          "title": "Eigenvectors (3D)",
+          "desc": "The invariant axes of a 3x3 matrix \u2014 the directions that only stretch."
+        },
+        {
           "name": "double-integral3",
           "file": "double-integral3.manic",
           "title": "Double integral (3D)",
-          "desc": "Volume under a surface as a limit of finer columns — a double integral, made solid."
+          "desc": "Volume under a surface as a limit of finer columns \u2014 a double integral, made solid."
         }
       ]
     }

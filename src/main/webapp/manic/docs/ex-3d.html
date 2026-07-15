@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-01a48fa4.js";
+            window.path_to_searchindex_js = "searchindex-aacfe5f0.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5867d1aa.js"></script>
+        <script src="toc-0b5ae956.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -394,6 +394,147 @@ par {
 wait(0.8);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/YMBQbAIlfQM" title="Morph a Cube Into a Sphere — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="linear-algebra-3d--the-essence-in-3d"><a class="header" href="#linear-algebra-3d--the-essence-in-3d">linear-algebra-3d — the essence, in 3D</a></h2>
+<p>The 3D companion to the <code>linear-algebra</code> lesson: one matrix
+<code>[[1,0,0],[0,3,1],[0,1,3]]</code> (det 8; eigenvalues 1, 2, 4) seen two ways on an
+orbiting stage — first as a transformation (the unit cube → a parallelepiped
+whose volume is the determinant), then through its eigenvectors (the invariant
+axes that only stretch). Start here for 3D.</p>
+<pre><code class="language-manic">// ============================================================================
+//  linear-algebra-3d.manic  —  Linear algebra in 3D (a lesson)
+// ----------------------------------------------------------------------------
+//  The 3-D companion to linear-algebra.manic. One matrix, two lenses, one
+//  orbiting stage:
+//     1. a 3x3 matrix TRANSFORMS space — the unit cube becomes a parallelepiped
+//        whose VOLUME is the determinant                          (linmap3)
+//     2. its EIGENVECTORS are the invariant axes that only stretch (eigen3)
+//
+//  Both use the same  A = [[1,0,0],[0,3,1],[0,1,3]]  (det = 8; eigenvalues 1,2,4),
+//  so the two views describe the very same matrix.
+// ============================================================================
+
+title("Linear algebra in 3D");
+canvas("16:9");
+
+camera3((12, 9.5, 10), (0.4, 1.6, 1.6), 40);
+grid3(floor, (0, 0, 0), 4, 1); color(floor, dim); opacity(floor, 0.3);
+
+// A = [[1,0,0],[0,3,1],[0,1,3]]  — det 8, eigenvalues 1, 2, 4
+linmap3(lm, (0, 0, 0), 1, 0, 0, 0, 3, 1, 0, 1, 3);
+eigen3(ev, (0, 0, 0), 1, 0, 0, 0, 3, 1, 0, 1, 3);
+// the eigen-axes wait until chapter 2
+hidden(ev.axis0); hidden(ev.axis1); hidden(ev.axis2);
+hidden(ev.l0); hidden(ev.l1); hidden(ev.l2);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- 1. the matrix as a transformation of space ----
+section("A matrix in 3D");
+say(cap, "a 3x3 matrix sends the unit cube to a parallelepiped — its columns", 0.5);
+orbit3(50, 26, 13, 4, smooth);
+say(cap, "the volume it encloses is the determinant: det = 8, so space grew 8x", 0.5);
+orbit3(116, 30, 13, 4, smooth);
+// clear the transformation view
+fade(lm, 0.6); fade(lm.ref, 0.6);
+fade(lm.i, 0.6); fade(lm.j, 0.6); fade(lm.k, 0.6);
+fade(lm.li, 0.6); fade(lm.lj, 0.6); fade(lm.lk, 0.6); fade(lm.val, 0.6);
+wait(0.3);
+
+// ---- 2. the same matrix, through its eigenvectors ----
+say(cap, "", 0.2);
+section("Eigenvectors");
+say(cap, "three special directions only STRETCH when A acts — the eigenvectors", 0.5);
+show(ev.axis0, 0.5); show(ev.axis1, 0.5); show(ev.axis2, 0.5);
+show(ev.l0, 0.4); show(ev.l1, 0.4); show(ev.l2, 0.4);
+orbit3(58, 24, 7, 4, smooth);
+say(cap, "their stretch factors are the eigenvalues: 1, 2 and 4", 0.5);
+orbit3(122, 32, 6.5, 4.5, smooth);
+wait(0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/tgpmiaNCm5g" title="Linear Algebra in 3D — Transformations & Eigenvectors, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="linear-map3"><a class="header" href="#linear-map3">linear-map3</a></h2>
+<p>Linear algebra in 3D: a 3×3 matrix deforms the unit cube into a parallelepiped,
+with basis arrows i/j/k landing on the matrix’s columns and the enclosed volume
+labelled as the determinant (<code>linmap3</code>). The 3D echo of <code>linear-map</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  linear-map3.manic  —  a 3x3 matrix, in 3D (the 3-D echo of linear-map)
+// ----------------------------------------------------------------------------
+//  `linmap3(id, (cx,cy,cz), a,b,c,d,e,f,g,h,i, [color])` applies the 3x3 matrix
+//  [[a,b,c],[d,e,f],[g,h,i]] to space: the unit cube (faint wireframe) becomes a
+//  parallelepiped, with basis arrows i/j/k landing on the matrix's COLUMNS. The
+//  volume it encloses IS the determinant (labelled) — it flips colour when the
+//  determinant is negative (orientation reversed) and collapses flat at det = 0.
+//
+//  TO ADAPT: change the nine numbers. Try a shear (1,0.6,0, 0,1,0, 0,0,1) → det 1
+//  (volume unchanged), or swap two columns to make det negative (a reflection).
+// ============================================================================
+
+title("A 3x3 matrix, in 3D");
+canvas("16:9");
+
+camera3((7, 5.5, 6), (1, 1, 1), 40);
+grid3(floor, (0, 0, 0), 4, 1); color(floor, dim); opacity(floor, 0.4);
+
+// M = [[1.5,0.5,0],[0,1.5,0.5],[0.5,0,1.5]]  — a skew + stretch, det = 3.5
+linmap3(lm, (0, 0, 0), 1.5, 0.5, 0, 0, 1.5, 0.5, 0.5, 0, 1.5);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "a 3x3 matrix sends the unit cube to a parallelepiped", 0.5);
+orbit3(58, 26, 10, 4, smooth);
+
+say(cap, "i, j, k land on its columns — where the three axes are sent", 0.5);
+orbit3(116, 32, 10, 4, smooth);
+
+say(cap, "the volume enclosed IS the determinant: det = 3.5, so space grew 3.5x", 0.5);
+orbit3(60, 20, 9, 4.5, smooth);
+wait(0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/McLljqiPcFI" title="A 3×3 Matrix Deforms a Cube — Determinant as Volume, in 3D — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="eigen3"><a class="header" href="#eigen3">eigen3</a></h2>
+<p>The real eigenvectors of a 3×3 matrix, in 3D: the invariant lines through the
+origin that only stretch (by λ) when the matrix acts (<code>eigen3</code>). The 3D echo of
+<code>eigen</code>. A symmetric matrix gives three perpendicular real eigen-axes; a rotation
+leaves one real axis and two complex eigenvalues.</p>
+<pre><code class="language-manic">// ============================================================================
+//  eigen3.manic  —  eigenvectors of a 3x3 matrix (the 3-D echo of eigen)
+// ----------------------------------------------------------------------------
+//  `eigen3(id, (cx,cy,cz), a,b,c,d,e,f,g,h,i, [color])` draws the real
+//  EIGENVECTORS of the 3x3 [[a,b,c],[d,e,f],[g,h,i]] as invariant lines through
+//  the origin — the directions a vector on them only STRETCHES (by λ), never
+//  turns. A real 3x3 always has at least one real eigenvector; a rotation leaves
+//  two complex eigenvalues, which are noted.
+//
+//  TO ADAPT: change the nine numbers. A symmetric matrix (as here) has three
+//  perpendicular real eigen-axes; a rotation like (0,-1,0, 1,0,0, 0,0,1) shows
+//  one real axis (the axis of rotation) + a "2 complex" note.
+// ============================================================================
+
+title("Eigenvectors of a 3x3 matrix");
+canvas("16:9");
+
+camera3((7, 5.5, 6), (0, 0, 0), 42);
+grid3(floor, (0, 0, 0), 3, 1); color(floor, dim); opacity(floor, 0.35);
+
+// symmetric M = [[1,0,0],[0,3,1],[0,1,3]] — three real eigenvalues: 1, 2, 4
+eigen3(ev, (0, 0, 0), 1, 0, 0, 0, 3, 1, 0, 1, 3);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "when the matrix acts, most directions turn — but a few only stretch", 0.5);
+orbit3(52, 24, 10, 4, smooth);
+
+say(cap, "those invariant lines are the eigenvectors; the stretch factor is lambda", 0.5);
+orbit3(122, 34, 10, 4, smooth);
+
+say(cap, "this symmetric 3x3 has three real eigenvalues: 1, 2 and 4", 0.5);
+orbit3(58, 22, 9, 4.5, smooth);
+wait(0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/eZpNxcOa_cs" title="Eigenvectors of a 3×3 Matrix, in 3D — The Invariant Axes — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="matrix3"><a class="header" href="#matrix3">matrix3</a></h2>
 <p>A 3×3×3 block of cubes, with a shear matrix <strong>M</strong> and its inverse <strong>M⁻¹</strong> applied and undone.</p>

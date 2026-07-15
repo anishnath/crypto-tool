@@ -1,0 +1,48 @@
+// ============================================================================
+//  rref.manic  —  Gaussian elimination, animated (a template)
+// ----------------------------------------------------------------------------
+//  Reduce an augmented matrix [A | b] to reduced row-echelon form, one row
+//  operation at a time. Each intermediate state is drawn at the same spot, so
+//  cross-fading s{k-1} -> s{k} makes the numbers transform IN PLACE.
+//
+//  `rref(id, "row ; row ; ...", (cx,cy), [cellw], [rowh])` draws, for the given
+//  matrix (rows split on `;`, entries on spaces/commas):
+//    * static brackets (the frame the numbers fill)
+//    * one matrix per elimination state, tagged  rr.s0, rr.s1, ...  (hidden)
+//    * the row-op caption for each state:         rr.op0, rr.op1, ...
+//  rr.s0 is the untouched input; the LAST state is the RREF (for [A|b] its final
+//  column is the solution). Reveal the states in order to animate the reduction.
+//
+//  TO ADAPT: change the matrix string. A different system takes a different
+//  NUMBER of steps — add/remove reveal beats below to match (the ones past the
+//  last real state are harmless no-ops, so a few extra never hurt).
+// ============================================================================
+
+title("rref: Gaussian elimination, animated");
+canvas("16:9");
+
+text(hdr, (cx, 60), "reduce  [ A | b ]  to reduced row-echelon form");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the augmented matrix of the system  2x + y = 5,  x + 3y = 10
+rref(rr, "2 1 5 ; 1 3 10", (cx, cy - 10), 120, 64);
+
+text(cap, (cx, h - 56), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- reveal each state in place, captioned with its row operation ----
+// Per beat: fade the old op, CROSS-FADE the matrix state (identical cells sit
+// still, only the changed ones morph), then show the new op.
+say(cap, "start with the augmented matrix [ A | b ]", 0.5);
+show(rr.s0, 0.5); show(rr.op0, 0.4);
+wait(1.6);
+
+fade(rr.op0, 0.25); par { show(rr.s1, 0.5); fade(rr.s0, 0.5); } show(rr.op1, 0.4);
+wait(1.5);
+fade(rr.op1, 0.25); par { show(rr.s2, 0.5); fade(rr.s1, 0.5); } show(rr.op2, 0.4);
+wait(1.5);
+fade(rr.op2, 0.25); par { show(rr.s3, 0.5); fade(rr.s2, 0.5); } show(rr.op3, 0.4);
+wait(1.5);
+
+say(cap, "the left block is now the identity — the last column is the solution", 0.5);
+fade(rr.op3, 0.25); par { show(rr.s4, 0.5); fade(rr.s3, 0.5); } show(rr.op4, 0.4);
+wait(2.2);

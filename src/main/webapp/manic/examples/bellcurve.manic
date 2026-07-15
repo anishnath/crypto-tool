@@ -1,0 +1,41 @@
+// ============================================================================
+//  normal.manic  —  the bell curve & the 68-95-99.7 rule (stats Tier 2)
+// ----------------------------------------------------------------------------
+//  `bellcurve(id, (cx,cy), mu, sigma, [unit], [color])` (alias `gaussian`) draws
+//  bell curve and shades the ±1σ/±2σ/±3σ bands — the 68-95-99.7 rule. Pieces:
+//  `{id}.curve` (the bell), `{id}.band1/2/3` (tagged `{id}.bands`), `{id}.mean`,
+//  `{id}.p1/p2/p3` (the percentages), `{id}.t{-3..3}` (value ticks).
+//  `unit` = pixels per σ; the bell is standardised, μ/σ set the axis values.
+//
+//  TO ADAPT: change mu/sigma to your distribution (heights, IQ, measurement
+//  error…). The 68-95-99.7 rule holds for every normal.
+// ============================================================================
+
+title("The bell curve & the 68-95-99.7 rule");
+canvas("16:9");
+
+// IQ scores: mean 100, standard deviation 15
+bellcurve(nd, (cx, cy + 10), 100, 15, 95);
+untraced(nd.curve);                // the bell draws in
+hidden(nd.mean);
+hidden(nd.bands);                  // the three σ-bands reveal one at a time
+hidden(nd.p1); hidden(nd.p2); hidden(nd.p3);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "IQ scores: mean 100, standard deviation 15 — the classic bell", 0.5);
+draw(nd.curve, 1.1);
+show(nd.mean, 0.4);
+wait(1.2);
+
+say(cap, "68% of values fall within ONE standard deviation of the mean", 0.5);
+to(nd.band1, opacity, 0.16, 0.6); show(nd.p1, 0.4);
+wait(1.7);
+
+say(cap, "95% fall within two — almost everyone", 0.5);
+to(nd.band2, opacity, 0.16, 0.6); show(nd.p2, 0.4);
+wait(1.7);
+
+say(cap, "and 99.7% within three: the tails are tiny", 0.5);
+to(nd.band3, opacity, 0.16, 0.6); show(nd.p3, 0.4);
+wait(1.9);

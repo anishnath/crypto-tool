@@ -1,0 +1,32 @@
+// ============================================================================
+//  hypothesis.manic  —  a significance test & the p-value (stats Tier 5)
+// ----------------------------------------------------------------------------
+//  `hypothesis(id, (cx,cy), z, [alpha], [unit])` — under the null hypothesis the
+//  test statistic is standard-normal; the observed z cuts off tails whose area is
+//  the p-value. If that area is smaller than alpha, the result is too surprising
+//  to be chance — reject. Pieces: `{id}.curve`, `{id}.tails`, `{id}.zline`,
+//  `{id}.p`, `{id}.verdict`.
+// ============================================================================
+
+title("Hypothesis testing: is this surprising?");
+canvas("16:9");
+
+hypothesis(hy, (cx, cy - 10), 2.3, 0.05, 92);
+untraced(hy.curve);
+hidden(hy.tails); hidden(hy.zline); hidden(hy.zlbl);
+hidden(hy.p); hidden(hy.verdict);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "if nothing's going on, the test statistic follows this bell", 0.5);
+draw(hy.curve, 1.0);
+wait(1.2);
+say(cap, "we observed z = 2.3 — out here in the tails", 0.5);
+show(hy.zline, 0.4); show(hy.zlbl, 0.3);
+wait(1.4);
+say(cap, "the shaded tail area is the p-value: how likely a result this extreme is", 0.5);
+to(hy.tails, opacity, 0.5, 0.6); show(hy.p, 0.4);
+wait(1.6);
+say(cap, "p = 0.021 < 0.05, so it's too surprising for chance — reject the null", 0.5);
+show(hy.verdict, 0.4);
+wait(1.9);

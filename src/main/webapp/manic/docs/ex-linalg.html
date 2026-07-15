@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-01a48fa4.js";
+            window.path_to_searchindex_js = "searchindex-aacfe5f0.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5867d1aa.js"></script>
+        <script src="toc-0b5ae956.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -180,6 +180,468 @@
                     <main>
                         <h1 id="linear-algebra--tables"><a class="header" href="#linear-algebra--tables">Linear algebra &amp; tables</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="linear-algebra--the-whole-subject-in-five-ideas"><a class="header" href="#linear-algebra--the-whole-subject-in-five-ideas">linear-algebra — the whole subject in five ideas</a></h2>
+<p>A guided lesson, not a feature demo: five chapters that build linear algebra as
+one connected story. Chapters 1–3 view the <strong>same</strong> matrix <code>[[2,1],[1,2]]</code>
+through three lenses — a transformation of space (<code>linmap</code>), the determinant as
+area scaling (<code>determinant</code>), and its eigenvectors / diagonalisation
+(<code>diagonalise</code>) — then it moves on to solving <code>Ax = b</code> (<code>linsolve</code> → <code>rref</code>) and
+projection / least-squares (<code>project</code>). Start here.</p>
+<pre><code class="language-manic">// ============================================================================
+//  linear-algebra.manic  —  Linear Algebra in five ideas (a lesson)
+// ----------------------------------------------------------------------------
+//  A guided tour of the whole subject, not a feature demo. One stage, five
+//  chapters; chapters 1-3 view the SAME matrix A = [[2,1],[1,2]] through three
+//  lenses, so the ideas connect:
+//     1. a matrix TRANSFORMS space          (linmap)
+//     2. the DETERMINANT is how area scales (determinant)   -&gt; det = 3
+//     3. EIGENVECTORS only stretch          (diagonalise)   -&gt; lambda = 3, 1
+//     4. SOLVING A x = b                     (linsolve -&gt; rref)
+//     5. PROJECTION: the closest answer     (project)
+//
+//  Reveal recipe (works for lines, arrows, fills, and text alike, preserving
+//  each element's opacity): `untraced(tag)` at build time, `draw(tag)` to reveal,
+//  `fade(tag)` to clear before the next chapter. `tag` broadcasts to every entity
+//  carrying it (see the ergonomics in the manic guide).
+// ============================================================================
+
+title("Linear Algebra, in five ideas");
+canvas("16:9");
+
+let sx = cx;
+let sy = cy + 44;   // shared stage center
+let u = 44;
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- build every chapter's visual up front, drawn-blank (untraced) ----
+// A coordinate grid draws in with each chapter for consistent visual feedback.
+// Chapters 1 &amp; 3 bring their own (the deformed grid / the eigen-grid); chapters
+// 2, 4, 5 get a plain reference grid that traces in at the start of the section.
+plane(g2, (sx, sy), 176, 176, u); untraced(g2);   // determinant — count the cells
+plane(g4, (sx, sy), 240, 230, u); untraced(g4);   // solving — read off (1, 3)
+plane(g5, (sx, sy), 200, 200, u); untraced(g5);   // projection
+
+// 1. transformation of A = [[2,1],[1,2]]
+linmap(lm, (sx, sy), u, 2, 1, 1, 2);
+untraced(lm);
+
+// 2. determinant of the same A (parallelogram is the bare id `dt`)
+determinant(dt, (sx, sy), u, 2, 1, 1, 2);
+untraced(dt); untraced(dt.unit); untraced(dt.val);
+
+// 3. eigenvectors / diagonalisation of the same A
+diagonalise(dg, (sx, sy), u, 2, 1, 1, 2);
+untraced(dg);
+
+// 4a. a 2x2 system as two lines (solution dot is the bare id `sys`)
+linsolve(sys, (sx, sy), u, 2, 1, 1, 3, 5, 10);
+untraced(sys.r1); untraced(sys.r2); hidden(sys); hidden(sys.val);
+// 4b. the same system reduced by elimination
+rref(rr, "2 1 5 ; 1 3 10", (sx, sy - 24), 120, 60);
+untraced(rr.lbrack); untraced(rr.rbrack);
+
+// 5. projection of a vector onto a line
+project(pj, (sx, sy), u, (1, 3), (3, 1));
+untraced(pj);
+
+// ============================  the lesson  ==================================
+
+section("Transformations");
+draw(lm, 1.2);
+say(cap, "a matrix sends every point to a new one — and it does so LINEARLY", 0.5);
+wait(1.8);
+say(cap, "the grid stays parallel and evenly spaced; i-hat, j-hat land on its columns", 0.5);
+wait(2.2);
+fade(lm, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("The determinant");
+draw(g2, 0.7);
+draw(dt.unit, 0.5); draw(dt, 0.7); draw(dt.val, 0.4);
+say(cap, "how much does it stretch area? the unit square becomes this parallelogram", 0.5);
+wait(2.0);
+say(cap, "that area IS the determinant = 3 — three grid cells; a flip would be negative", 0.5);
+wait(2.2);
+fade(dt, 0.6); fade(dt.unit, 0.6); fade(dt.val, 0.6); fade(g2, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Eigenvectors");
+draw(dg, 1.2);
+say(cap, "most vectors change direction — but a few only STRETCH: the eigenvectors", 0.5);
+wait(2.2);
+say(cap, "in their basis A is pure scaling:  A = P D P^-1,  D = diag(3, 1)", 0.5);
+wait(2.2);
+fade(dg, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Solving  A x = b");
+draw(g4, 0.7);
+draw(sys.r1, 0.7); draw(sys.r2, 0.7);
+show(sys, 0.4); show(sys.val, 0.4);
+say(cap, "a system of equations is a set of lines; the solution is where they meet", 0.5);
+wait(2.2);
+fade(sys, 0.5); fade(sys.r1, 0.5); fade(sys.r2, 0.5); fade(sys.val, 0.5); fade(g4, 0.5);
+say(cap, "elimination finds it by reducing [ A | b ] to the identity beside the answer", 0.5);
+draw(rr.lbrack, 0.4); draw(rr.rbrack, 0.4);
+show(rr.s0, 0.4); show(rr.op0, 0.3);
+wait(1.6);
+par { show(rr.s4, 0.5); fade(rr.s0, 0.5); } show(rr.op4, 0.4); fade(rr.op0, 0.3);
+wait(2.0);
+fade(rr.s4, 0.5); fade(rr.op4, 0.4); fade(rr.lbrack, 0.4); fade(rr.rbrack, 0.4);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Projection");
+draw(g5, 0.7);
+draw(pj, 1.0);
+say(cap, "when no exact answer exists, take the CLOSEST point of the subspace", 0.5);
+wait(2.0);
+say(cap, "the error is perpendicular — that principle IS least-squares, the best fit", 0.5);
+wait(2.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qjMYJQqvwCg" title="Linear Algebra in Five Ideas — A Complete Visual Lesson — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="linear-map"><a class="header" href="#linear-map">linear-map</a></h2>
+<p>What a 2×2 matrix does to space: the grid deforms and the basis lands on its
+columns (<code>linmap</code>), the unit square’s area becomes the determinant
+(<code>determinant</code>), and two directions only stretch — the eigenvectors (<code>eigen</code>).</p>
+<pre><code class="language-manic">title("What a matrix does to space");
+canvas("16:9");
+
+let ox = cx - 60;
+let oy = cy + 40;
+
+text(hdr, (cx, 54), "the matrix [[2,1],[1,2]] — grid, determinant, eigenvectors");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+text(cap, (cx, h - 50), "");
+size(cap, 22); color(cap, dim); display(cap);
+
+// the plane deformed by the matrix (î, ĵ land on its columns)
+linmap(lm, (ox, oy), 46, 2, 1, 1, 2, 2);
+
+// the unit square's image — area = determinant
+determinant(dt, (ox, oy), 46, 2, 1, 1, 2);
+hidden(dt); hidden(dt.unit); hidden(dt.val);
+
+// the two invariant directions (eigenvectors)
+eigen(ev, (ox, oy), 46, 2, 1, 1, 2);
+hidden(ev); hidden(ev.l0); hidden(ev.l1);
+
+// ---- timeline ----
+show(hdr, 0.6);
+say(cap, "the matrix bends the grid; i-hat and j-hat land on its columns", 0.5);
+wait(1.4);
+
+say(cap, "the unit square maps to a parallelogram — its area IS the determinant", 0.5);
+show(dt, 0.6);
+show(dt.unit, 0.4);
+show(dt.val, 0.5);
+wait(1.4);
+
+say(cap, "two directions only stretch, never turn: the eigenvectors", 0.5);
+show(ev, 0.6);
+show(ev.l0, 0.4);
+show(ev.l1, 0.4);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/jcx8IyArWBE" title="Matrix, Determinant & Eigenvectors — What a Matrix Does — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="linear-system"><a class="header" href="#linear-system">linear-system</a></h2>
+<p>The geometry of solving and spanning, in three panels: a 2×2 system as two lines
+crossing at the solution (<code>linsolve</code>), two independent vectors reaching the whole
+plane, and two parallel vectors collapsing to a line — rank 1 (<code>span</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  linear-system.manic  —  the geometry of solving &amp; spanning (a template)
+// ----------------------------------------------------------------------------
+//  Three side-by-side panels, each built up with animation:
+//    A) a 2x2 system as two lines meeting at the solution        (linsolve)
+//    B) two independent vectors spanning the whole plane         (span)
+//    C) two parallel vectors collapsing to a single line, rank 1 (span)
+//
+//  HOW TO ADAPT THIS FILE:
+//    * Change the system in panel A: linsolve(sys, center, unit, a,b,c,d, e,f)
+//      draws  a*x + b*y = e  and  c*x + d*y = f, meeting at the solution.
+//    * Change the vectors in panels B/C: span(id, center, unit, (vx,vy),(wx,wy)).
+//    * Everything is positioned from cx/cy/w/h + a per-panel origin (ax/bx/dx)
+//      and a `unit` = pixels-per-grid-step, so it scales cleanly. Grid point
+//      (gx,gy) maps to screen (origin_x + gx*u, origin_y - gy*u)  [math y-up].
+//    * OPTIONAL: shade the closed region the two lines bound with the axes —
+//      see the commented `polygon(feasible, ...)` block in Panel A below.
+// ============================================================================
+
+title("Solving &amp; spanning, visually");
+canvas("16:9");
+
+let y0 = cy + 20;   // shared vertical center of the three panels
+let ax = 280;       // panel A origin x — a system as two lines
+let bx = 640;       // panel B origin x — span = the whole plane
+let dx = 1000;      // panel C origin x — parallel vectors collapse to a line
+let u = 24;         // pixels per grid unit (shared scale)
+
+text(hdr, (cx, 46), "linear algebra: the geometry of solving &amp; spanning");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// per-panel captions, revealed as each panel animates
+text(la, (ax, 96), "a system = two lines"); size(la, 18); color(la, dim); display(la); hidden(la);
+text(lb, (bx, 96), "span of two vectors"); size(lb, 18); color(lb, dim); display(lb); hidden(lb);
+text(lc, (dx, 96), "parallel = rank 1"); size(lc, 18); color(lc, dim); display(lc); hidden(lc);
+
+// faint coordinate backdrops (drawn once, static)
+plane(pa, (ax, y0), 150, 190, u);
+plane(pb, (bx, y0), 150, 190, u);
+plane(pc, (dx, y0), 150, 190, u);
+
+// ---- Panel A — the system 2x + y = 5 and x + 3y = 10, meeting at (1, 3) ----
+linsolve(sys, (ax, y0), u, 2, 1, 1, 3, 5, 10);
+untraced(sys.r1); untraced(sys.r2);   // start blank, drawn in on the timeline
+hidden(sys); hidden(sys.val);         // the solution dot + its label fade in
+
+// -- OPTIONAL: fill the closed area the two lines bound with the axes --------
+//  The two rows, the x-axis and the y-axis enclose a quadrilateral (the classic
+//  "feasible region"). Its corners, in grid coordinates, are:
+//     (0,0)  -&gt;  (2.5,0)  -&gt;  (1,3)  -&gt;  (0,3.33)
+//   origin   line1 hits   the two   line2 hits
+//            the x-axis   lines meet the y-axis
+//  Uncomment to shade it (points are origin + gridX*u, origin - gridY*u):
+//
+// polygon(feasible,
+//   (ax,            y0),           // (0, 0)     the origin
+//   (ax + 2.5*u,    y0),           // (2.5, 0)   line 1 crosses the x-axis
+//   (ax + u,        y0 - 3*u),     // (1, 3)     the two lines meet
+//   (ax,            y0 - 3.333*u), // (0, 3.33)  line 2 crosses the y-axis
+//   lime);
+// opacity(feasible, 0.18);         // translucent, so grid + lines show through
+// z(feasible, -1);                 // sit behind the lines
+//   (for an animated reveal instead of a static fill, also `hidden(feasible);`
+//    above, then `to(feasible, opacity, 0.18, 0.6);` in Panel A's timeline.)
+// ---------------------------------------------------------------------------
+
+// ---- Panel B — two independent vectors reach every point: the whole plane --
+span(fill, (bx, y0), u, (3, 1), (-1, 2));
+untraced(fill.v); untraced(fill.w);   // vectors draw in
+hidden(fill.plane);                   // faint region fades to 0.14
+
+// ---- Panel C — two parallel vectors only reach one line: rank 1 ------------
+span(rank, (dx, y0), u, (2, 1), (-2, -1), gold);
+untraced(rank.v); untraced(rank.w); untraced(rank.line);
+
+text(cap, (cx, h - 44), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- Panel A timeline: two lines draw in, then the solution pops -----------
+show(la, 0.4);
+say(cap, "two equations are two lines; where they cross solves the system", 0.5);
+par { draw(sys.r1, 0.8); draw(sys.r2, 0.8); }
+show(sys, 0.4);
+show(sys.val, 0.4);
+pulse(sys);
+wait(1.6);
+
+// ---- Panel B timeline: two vectors grow out, then the plane fills in -------
+show(lb, 0.4);
+say(cap, "two independent vectors combine to reach every point: the whole plane", 0.5);
+par { draw(fill.v, 0.7); draw(fill.w, 0.7); }
+to(fill.plane, opacity, 0.14, 0.9);
+wait(1.6);
+
+// ---- Panel C timeline: two parallel vectors, then their line (collapse) ----
+show(lc, 0.4);
+say(cap, "but parallel vectors only reach one line: rank 1, a collapse", 0.5);
+par { draw(rank.v, 0.7); draw(rank.w, 0.7); }
+draw(rank.line, 0.8);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/laBz0JoL-cE" title="Solving & Spanning: Systems, Span & Rank, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="diagonalise"><a class="header" href="#diagonalise">diagonalise</a></h2>
+<p><code>A = P D P⁻¹</code> made visual: every real-diagonalisable matrix has a basis — its
+eigenvectors — in which it does nothing but <em>stretch</em> each axis. The unit
+eigen-cell stretches by λ along each eigenvector, with no rotation or shear
+(<code>diagonalise</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  diagonalise.manic  —  A = P D P^-1 made visual (a template)
+// ----------------------------------------------------------------------------
+//  The big idea of diagonalisation: every (real-diagonalisable) matrix has a
+//  basis — its EIGENVECTORS — in which it does nothing but STRETCH each axis.
+//  No rotation, no shear: just a diagonal scaling D = diag(lambda1, lambda2).
+//
+//  `diagonalise(id, (cx,cy), unit, a,b,c,d, [color])` draws, for [[a,b],[c,d]]:
+//    * the (generally skewed) eigen-grid   — the coordinate frame of the eigenbasis
+//    * the two eigen-axes  dg.axis1 / dg.axis2
+//    * the unit eigen-cell dg.cell  and its image under A  dg.img
+//    * the eigenvector images as arrows dg.v1 / dg.v2  (+ labels dg.v1l / dg.v2l)
+//  Complex or repeated eigenvalues (no real 2-D eigenbasis) leave a note instead.
+//
+//  TO ADAPT: change the four matrix numbers below. Try a non-symmetric matrix
+//  like (2,1,0,3) to see a SKEWED eigenbasis, or (0,-1,1,0) to see the
+//  "no real eigenbasis" note (a pure rotation).
+// ============================================================================
+
+title("Diagonalisation: a matrix in its own basis");
+canvas("16:9");
+
+let ox = cx - 40;
+let oy = cy + 20;
+
+text(hdr, (cx, 54), "A = P D P^-1  —  in the eigenbasis, A is only a stretch");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the matrix [[2,1],[1,2]] — eigenvalues 3 (along (1,1)) and 1 (along (1,-1))
+diagonalise(dg, (ox, oy), 60, 2, 1, 1, 2);
+
+// the faint eigen-grid stays as static context; reveal the rest in beats:
+untraced(dg.axis1); untraced(dg.axis2);   // eigen-axes draw in
+hidden(dg.cell); hidden(dg.img);          // unit cell fades in; image fades to 0.4
+untraced(dg.v1); untraced(dg.v2);         // eigenvector arrows draw in
+hidden(dg.v1l); hidden(dg.v2l);           // lambda labels fade in
+
+text(cap, (cx, h - 50), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- timeline ----
+say(cap, "every matrix has special directions — its eigenvectors", 0.5);
+par { draw(dg.axis1, 0.7); draw(dg.axis2, 0.7); }
+wait(1.2);
+
+say(cap, "build the unit cell from those two directions", 0.5);
+show(dg.cell, 0.6);
+wait(1.4);
+
+say(cap, "apply A: the cell only STRETCHES along each axis — never rotates", 0.5);
+to(dg.img, opacity, 0.4, 0.8);
+par { draw(dg.v1, 0.7); draw(dg.v2, 0.7); }
+wait(1.2);
+
+say(cap, "the stretch factors ARE the eigenvalues — the diagonal of D", 0.5);
+show(dg.v1l, 0.4); show(dg.v2l, 0.4);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/JaU9290_fU0" title="Diagonalisation: Why a Matrix Is Just a Stretch in Its Own Basis — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="rref"><a class="header" href="#rref">rref</a></h2>
+<p>Gaussian elimination, animated: an augmented matrix <code>[A | b]</code> is reduced to
+reduced row-echelon form one row operation at a time, the numbers transforming
+in place until the left block is the identity and the last column is the
+solution (<code>rref</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  rref.manic  —  Gaussian elimination, animated (a template)
+// ----------------------------------------------------------------------------
+//  Reduce an augmented matrix [A | b] to reduced row-echelon form, one row
+//  operation at a time. Each intermediate state is drawn at the same spot, so
+//  cross-fading s{k-1} -&gt; s{k} makes the numbers transform IN PLACE.
+//
+//  `rref(id, "row ; row ; ...", (cx,cy), [cellw], [rowh])` draws, for the given
+//  matrix (rows split on `;`, entries on spaces/commas):
+//    * static brackets (the frame the numbers fill)
+//    * one matrix per elimination state, tagged  rr.s0, rr.s1, ...  (hidden)
+//    * the row-op caption for each state:         rr.op0, rr.op1, ...
+//  rr.s0 is the untouched input; the LAST state is the RREF (for [A|b] its final
+//  column is the solution). Reveal the states in order to animate the reduction.
+//
+//  TO ADAPT: change the matrix string. A different system takes a different
+//  NUMBER of steps — add/remove reveal beats below to match (the ones past the
+//  last real state are harmless no-ops, so a few extra never hurt).
+// ============================================================================
+
+title("rref: Gaussian elimination, animated");
+canvas("16:9");
+
+text(hdr, (cx, 60), "reduce  [ A | b ]  to reduced row-echelon form");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the augmented matrix of the system  2x + y = 5,  x + 3y = 10
+rref(rr, "2 1 5 ; 1 3 10", (cx, cy - 10), 120, 64);
+
+text(cap, (cx, h - 56), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- reveal each state in place, captioned with its row operation ----
+// Per beat: fade the old op, CROSS-FADE the matrix state (identical cells sit
+// still, only the changed ones morph), then show the new op.
+say(cap, "start with the augmented matrix [ A | b ]", 0.5);
+show(rr.s0, 0.5); show(rr.op0, 0.4);
+wait(1.6);
+
+fade(rr.op0, 0.25); par { show(rr.s1, 0.5); fade(rr.s0, 0.5); } show(rr.op1, 0.4);
+wait(1.5);
+fade(rr.op1, 0.25); par { show(rr.s2, 0.5); fade(rr.s1, 0.5); } show(rr.op2, 0.4);
+wait(1.5);
+fade(rr.op2, 0.25); par { show(rr.s3, 0.5); fade(rr.s2, 0.5); } show(rr.op3, 0.4);
+wait(1.5);
+
+say(cap, "the left block is now the identity — the last column is the solution", 0.5);
+fade(rr.op3, 0.25); par { show(rr.s4, 0.5); fade(rr.s3, 0.5); } show(rr.op4, 0.4);
+wait(2.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/pNyLALOWWwE" title="Gaussian Elimination, Animated: Reducing a Matrix to RREF — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="projection"><a class="header" href="#projection">projection</a></h2>
+<p>One idea, two faces: orthogonal <strong>projection</strong> drops a vector onto a subspace
+(the shadow is the closest point, the error meets the space at a right angle),
+and <strong>least-squares</strong> fits a line to data the same way — minimising the squared
+residuals (<code>project</code>, <code>leastsquares</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  projection.manic  —  projection &amp; least-squares (a template)
+// ----------------------------------------------------------------------------
+//  One idea, two faces. ORTHOGONAL PROJECTION drops a vector onto a subspace;
+//  the shadow p is the closest point, and the error b - p meets the subspace at
+//  a right angle. LEAST-SQUARES fits a line to data the SAME way — the best line
+//  is the one that minimises the (squared) residuals, i.e. the projection of the
+//  data onto the space of lines.
+//
+//  `project(id, (cx,cy), unit, (bx,by), (ax,ay), [color])` draws:
+//    id.line (the subspace = span of a), id.b, id.p (the shadow), id.res (error),
+//    id.rt (right-angle mark), id.blabel / id.plabel.
+//  `leastsquares(id, (cx,cy), unit, "x1 y1  x2 y2 ...", [color])` draws:
+//    id.line (best fit), id.points (dots), id.residuals (verticals), id.eq.
+//
+//  TO ADAPT: change b/a in `project`, or the point list in `leastsquares`.
+// ============================================================================
+
+title("Projection &amp; least-squares");
+canvas("16:9");
+
+text(hdr, (cx, 50), "the closest point is a projection — and so is the best-fit line");
+size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+
+// ---- LEFT: project vector b onto the line spanned by a ----
+plane(pa, (cx - 330, cy + 10), 150, 210, 40);
+project(pj, (cx - 330, cy + 10), 40, (1, 3), (3, 1));
+untraced(pj.line); untraced(pj.b); untraced(pj.p); untraced(pj.res); untraced(pj.rt);
+hidden(pj.blabel); hidden(pj.plabel);
+
+// ---- RIGHT: fit a line to a point cloud ----
+plane(pb, (cx + 310, cy + 90), 150, 150, 34);
+leastsquares(ls, (cx + 310, cy + 90), 34, "1 2  2 3  3 5  4 4  5 6");
+hidden(ls.points); untraced(ls.line); untraced(ls.residuals); hidden(ls.eq);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- Panel A: the projection ----
+say(cap, "drop b onto the line spanned by a — its shadow is the projection p", 0.5);
+draw(pj.line, 0.6);
+draw(pj.b, 0.6);
+wait(0.6);
+par { draw(pj.p, 0.6); draw(pj.res, 0.6); }
+draw(pj.rt, 0.3);
+show(pj.blabel, 0.3); show(pj.plabel, 0.3);
+wait(1.4);
+say(cap, "the error b - p meets the line at a right angle: p is the nearest point", 0.5);
+wait(1.8);
+
+// ---- Panel B: least-squares is the same idea ----
+say(cap, "fitting a line works the SAME way: minimise the squared residuals", 0.5);
+show(ls.points, 0.5);
+wait(0.7);
+draw(ls.line, 0.7);
+draw(ls.residuals, 0.6);
+show(ls.eq, 0.4);
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/mPsaxmsfcZQ" title="Projection & Least-Squares: Why the Best-Fit Line Is a Shadow — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="matrix"><a class="header" href="#matrix">matrix</a></h2>
 <p>A bracketed matrix, rows/columns addressable via tags.</p>
 <pre><code class="language-manic">// Matrix — a bracketed grid of entries, addressable by row and column via tag
@@ -549,7 +1011,7 @@ wait(1.4);
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="ex-vectors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="ex-stats.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -563,7 +1025,7 @@ wait(1.4);
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="ex-vectors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="ex-stats.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

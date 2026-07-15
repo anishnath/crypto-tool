@@ -1,0 +1,43 @@
+// ============================================================================
+//  histogram.manic  —  the shape of a dataset (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `histogram(id, (cx,cy), "v1 v2 v3 ...", [bins], [width], [height], [color])`
+//  bins a list of numbers into bars — the SHAPE of the data. Bars are
+//  `{id}.bar{k}` (tagged `{id}.bars`) so they stagger in and recolour as a
+//  group; `{id}.meanline` + `{id}.mean` mark the mean, `{id}.min`/`{id}.max`
+//  label the range. Default bin count ≈ √n.
+//
+//  TO ADAPT: paste your own numbers into the data string (grades, prices,
+//  heights, times…). More `bins` = finer shape; fewer = smoother. Pass a colour
+//  as the last argument, or `rainbow` to give every bar its own hue (below).
+// ============================================================================
+
+title("The shape of a dataset");
+canvas("16:9");
+
+let n = 14;
+
+text(hdr, (cx, 60), "35 exam scores — where do they cluster?");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// `rainbow` colours each bar across the spectrum — no loop needed
+histogram(hg, (cx, cy + 10),
+  "72 85 90 68 95 88 76 91 83 79 84 60 97 81 78 86 74 89 82 93 71 87 80 77 92 85 83 88 75 90 66 82 84 79 88",
+  n, 640, 300, rainbow);
+untraced(hg.bars);                 // bars sketch in one at a time
+hidden(hg.meanline); hidden(hg.mean);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- bars build up, left to right ----
+say(cap, "each bar counts how many scores fall in that range", 0.5);
+stagger(0.06) { for k in 0..n { draw(hg.bar{k}, 0.35); } }
+wait(1.0);
+say(cap, "the shape emerges: most scores cluster in the 80s, tailing off below", 0.5);
+wait(1.6);
+
+// ---- reveal the mean ----
+say(cap, "and the average sits right in the thick of it", 0.5);
+show(hg.meanline, 0.5); show(hg.mean, 0.4);
+pulse(hg.mean);
+wait(1.8);

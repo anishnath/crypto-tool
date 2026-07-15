@@ -1,0 +1,115 @@
+// ============================================================================
+//  linear-algebra.manic  —  Linear Algebra in five ideas (a lesson)
+// ----------------------------------------------------------------------------
+//  A guided tour of the whole subject, not a feature demo. One stage, five
+//  chapters; chapters 1-3 view the SAME matrix A = [[2,1],[1,2]] through three
+//  lenses, so the ideas connect:
+//     1. a matrix TRANSFORMS space          (linmap)
+//     2. the DETERMINANT is how area scales (determinant)   -> det = 3
+//     3. EIGENVECTORS only stretch          (diagonalise)   -> lambda = 3, 1
+//     4. SOLVING A x = b                     (linsolve -> rref)
+//     5. PROJECTION: the closest answer     (project)
+//
+//  Reveal recipe (works for lines, arrows, fills, and text alike, preserving
+//  each element's opacity): `untraced(tag)` at build time, `draw(tag)` to reveal,
+//  `fade(tag)` to clear before the next chapter. `tag` broadcasts to every entity
+//  carrying it (see the ergonomics in the manic guide).
+// ============================================================================
+
+title("Linear Algebra, in five ideas");
+canvas("16:9");
+
+let sx = cx;
+let sy = cy + 44;   // shared stage center
+let u = 44;
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- build every chapter's visual up front, drawn-blank (untraced) ----
+// A coordinate grid draws in with each chapter for consistent visual feedback.
+// Chapters 1 & 3 bring their own (the deformed grid / the eigen-grid); chapters
+// 2, 4, 5 get a plain reference grid that traces in at the start of the section.
+plane(g2, (sx, sy), 176, 176, u); untraced(g2);   // determinant — count the cells
+plane(g4, (sx, sy), 240, 230, u); untraced(g4);   // solving — read off (1, 3)
+plane(g5, (sx, sy), 200, 200, u); untraced(g5);   // projection
+
+// 1. transformation of A = [[2,1],[1,2]]
+linmap(lm, (sx, sy), u, 2, 1, 1, 2);
+untraced(lm);
+
+// 2. determinant of the same A (parallelogram is the bare id `dt`)
+determinant(dt, (sx, sy), u, 2, 1, 1, 2);
+untraced(dt); untraced(dt.unit); untraced(dt.val);
+
+// 3. eigenvectors / diagonalisation of the same A
+diagonalise(dg, (sx, sy), u, 2, 1, 1, 2);
+untraced(dg);
+
+// 4a. a 2x2 system as two lines (solution dot is the bare id `sys`)
+linsolve(sys, (sx, sy), u, 2, 1, 1, 3, 5, 10);
+untraced(sys.r1); untraced(sys.r2); hidden(sys); hidden(sys.val);
+// 4b. the same system reduced by elimination
+rref(rr, "2 1 5 ; 1 3 10", (sx, sy - 24), 120, 60);
+untraced(rr.lbrack); untraced(rr.rbrack);
+
+// 5. projection of a vector onto a line
+project(pj, (sx, sy), u, (1, 3), (3, 1));
+untraced(pj);
+
+// ============================  the lesson  ==================================
+
+section("Transformations");
+draw(lm, 1.2);
+say(cap, "a matrix sends every point to a new one — and it does so LINEARLY", 0.5);
+wait(1.8);
+say(cap, "the grid stays parallel and evenly spaced; i-hat, j-hat land on its columns", 0.5);
+wait(2.2);
+fade(lm, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("The determinant");
+draw(g2, 0.7);
+draw(dt.unit, 0.5); draw(dt, 0.7); draw(dt.val, 0.4);
+say(cap, "how much does it stretch area? the unit square becomes this parallelogram", 0.5);
+wait(2.0);
+say(cap, "that area IS the determinant = 3 — three grid cells; a flip would be negative", 0.5);
+wait(2.2);
+fade(dt, 0.6); fade(dt.unit, 0.6); fade(dt.val, 0.6); fade(g2, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Eigenvectors");
+draw(dg, 1.2);
+say(cap, "most vectors change direction — but a few only STRETCH: the eigenvectors", 0.5);
+wait(2.2);
+say(cap, "in their basis A is pure scaling:  A = P D P^-1,  D = diag(3, 1)", 0.5);
+wait(2.2);
+fade(dg, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Solving  A x = b");
+draw(g4, 0.7);
+draw(sys.r1, 0.7); draw(sys.r2, 0.7);
+show(sys, 0.4); show(sys.val, 0.4);
+say(cap, "a system of equations is a set of lines; the solution is where they meet", 0.5);
+wait(2.2);
+fade(sys, 0.5); fade(sys.r1, 0.5); fade(sys.r2, 0.5); fade(sys.val, 0.5); fade(g4, 0.5);
+say(cap, "elimination finds it by reducing [ A | b ] to the identity beside the answer", 0.5);
+draw(rr.lbrack, 0.4); draw(rr.rbrack, 0.4);
+show(rr.s0, 0.4); show(rr.op0, 0.3);
+wait(1.6);
+par { show(rr.s4, 0.5); fade(rr.s0, 0.5); } show(rr.op4, 0.4); fade(rr.op0, 0.3);
+wait(2.0);
+fade(rr.s4, 0.5); fade(rr.op4, 0.4); fade(rr.lbrack, 0.4); fade(rr.rbrack, 0.4);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Projection");
+draw(g5, 0.7);
+draw(pj, 1.0);
+say(cap, "when no exact answer exists, take the CLOSEST point of the subspace", 0.5);
+wait(2.0);
+say(cap, "the error is perpendicular — that principle IS least-squares, the best fit", 0.5);
+wait(2.4);

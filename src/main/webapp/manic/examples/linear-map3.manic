@@ -1,0 +1,33 @@
+// ============================================================================
+//  linear-map3.manic  —  a 3x3 matrix, in 3D (the 3-D echo of linear-map)
+// ----------------------------------------------------------------------------
+//  `linmap3(id, (cx,cy,cz), a,b,c,d,e,f,g,h,i, [color])` applies the 3x3 matrix
+//  [[a,b,c],[d,e,f],[g,h,i]] to space: the unit cube (faint wireframe) becomes a
+//  parallelepiped, with basis arrows i/j/k landing on the matrix's COLUMNS. The
+//  volume it encloses IS the determinant (labelled) — it flips colour when the
+//  determinant is negative (orientation reversed) and collapses flat at det = 0.
+//
+//  TO ADAPT: change the nine numbers. Try a shear (1,0.6,0, 0,1,0, 0,0,1) → det 1
+//  (volume unchanged), or swap two columns to make det negative (a reflection).
+// ============================================================================
+
+title("A 3x3 matrix, in 3D");
+canvas("16:9");
+
+camera3((7, 5.5, 6), (1, 1, 1), 40);
+grid3(floor, (0, 0, 0), 4, 1); color(floor, dim); opacity(floor, 0.4);
+
+// M = [[1.5,0.5,0],[0,1.5,0.5],[0.5,0,1.5]]  — a skew + stretch, det = 3.5
+linmap3(lm, (0, 0, 0), 1.5, 0.5, 0, 0, 1.5, 0.5, 0.5, 0, 1.5);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "a 3x3 matrix sends the unit cube to a parallelepiped", 0.5);
+orbit3(58, 26, 10, 4, smooth);
+
+say(cap, "i, j, k land on its columns — where the three axes are sent", 0.5);
+orbit3(116, 32, 10, 4, smooth);
+
+say(cap, "the volume enclosed IS the determinant: det = 3.5, so space grew 3.5x", 0.5);
+orbit3(60, 20, 9, 4.5, smooth);
+wait(0.5);

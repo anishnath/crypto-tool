@@ -123,7 +123,7 @@ log10 log2 sqrt abs floor ceil round sign`. Id interpolation: `name{expr}`.
 `{id}.words`; animate with `karaoke(id,[delay],[color])` = highlight in sequence,
 or `hidden(id.words)` then `wordpop(id,[delay])` = pop each in) ·
 `dot(id,(x,y),[r])` · `circle(id,(x,y),r)` · `rect(id,(x,y),w,h)` ·
-`line(id,(x1,y1),(x2,y2))` · `arrow(id,(x1,y1),(x2,y2))` ·
+`line(id,(x1,y1),(x2,y2))` · `polygon(id,(x1,y1),(x2,y2),(x3,y3),...,[color])` filled region (≥3 pts) · `arrow(id,(x1,y1),(x2,y2))` ·
 `brace(id,(x1,y1),(x2,y2),[depth])` · `bracelabel(id,(x1,y1),(x2,y2),"s",[depth])`
 · booleans `union/intersect/difference/exclusion(id, a, b)`.
 
@@ -162,11 +162,13 @@ Easings: `smooth linear in out overshoot bounce elastic`.
 `matrix(id,"a b; c d",(cx,cy),[cw],[ch])` (entry `{id}.r{i}c{j}`, tags
 `{id}.row{i}`/`{id}.col{j}`/`{id}.entries`) · `table(id,"a b; c d",(cx,cy),[cw],
 [ch],["col labels"],["row labels"])` (grid lines `{id}.hlines`/`{id}.vlines`).
+**Linear algebra** (a 2×2 `[[a,b],[c,d]]` on the plane, math y-up): `linmap(id,(cx,cy),unit,a,b,c,d,[span])` deformed grid + basis î,ĵ on the columns · `determinant(id,(cx,cy),unit,a,b,c,d,[color])` unit-square→parallelogram, area = det · `eigen(id,(cx,cy),unit,a,b,c,d,[color])` real eigenvector lines + eigenvalues · `linsolve(id,(cx,cy),unit,a,b,c,d,e,f,[span])` the row picture of Ax=b — two lines meeting at the solution (parallel rows = no unique solution) · `span(id,(cx,cy),unit,(vx,vy),[(wx,wy)],[color])` the span of one/two vectors: a line (rank-1 collapse) or the whole plane · `diagonalise(id,(cx,cy),unit,a,b,c,d,[color])` (alias `diagonalize`) A = P D P⁻¹: in the eigenbasis A is a pure stretch (eigen-grid + unit cell → its stretched image) · `rref(id,"2 1 5 ; 1 3 10",(cx,cy),[cellw],[rowh])` animated Gaussian elimination: draws one matrix per state `{id}.s{k}` (hidden) + row-op text `{id}.op{k}` at the same spot — reveal in order (cross-fade s{k-1}→s{k}) to watch [A|b] reduce to RREF in place · `project(id,(cx,cy),unit,(bx,by),(ax,ay),[color])` orthogonal projection of b onto span(a): subspace line, b, shadow p, residual b−p at a right angle · `leastsquares(id,(cx,cy),unit,"x1 y1 x2 y2 ...",[color])` best-fit line through points (regression) with vertical residuals.
 
 ### 3D kit (right-handed, Z-up)
 `camera3((ex,ey,ez),(tx,ty,tz),[fov],[perspective|orthographic])` ·
 `point3(id,(x,y,z),[r])` · `line3(id,from,to)` · `arrow3(id,from,to)` ·
 `cube3(id,center,(sx,sy,sz))` · `sphere3(id,center,r)` ·
+`linmap3(id,(cx,cy,cz),a,b,c,d,e,f,g,h,i,[color])` (a 3×3 matrix deforming the unit cube into a parallelepiped; basis arrows i/j/k on its columns, enclosed volume = the determinant — the 3-D echo of linmap/determinant) · `eigen3(id,(cx,cy,cz),a,b,c,d,e,f,g,h,i,[color])` (the real eigenvector directions of a 3×3 matrix as invariant lines + λ labels; complex eigenvalues noted — 3-D echo of eigen) ·
 `grid3(id,center,half,[spacing])` · `axes3(id,origin,length,[step])` (ticks +
 numbers) · `pin3(label,(x,y,z)|entity3)` (glue a 2D label to a 3D point) ·
 `follow3(id,target,[(dx,dy,dz)])` · `midpoint3(id,a,b)` ·
@@ -249,6 +251,9 @@ lime), relaxed edges light, tree edges stay lit. See examples/dijkstra.manic.
 `hashmap(id, n, (cx,cy))` — `n` buckets (separate chaining). `put(id,"k","v")` hashes
 the key (byte-sum mod n) to a bucket and chains a `k:v` entry on; `get(id,"k")` scans
 that bucket's chain (lime = found, magenta = miss). See examples/hashmap.manic.
+
+### Stats kit
+`histogram(id,(cx,cy),"v1 v2 v3 ...",[bins],[width],[height],[color])` — bins a number list into bars (the shape of the data). Bars are `{id}.bar{k}` (exactly `bins`, tagged `{id}.bars`) so `stagger(dt){ for k in 0..bins { draw(id.bar{k}) } }` builds them up; `{id}.meanline`/`{id}.mean` mark the mean, `{id}.min`/`{id}.max` the range. Data is a plain number list, like `leastsquares`. Pass `rainbow` as the colour to give every bar its own hue. · `summary(id,(cx,cy),"v1 v2 v3 ...",[width],[color])` — describe a dataset: mean(gold)/median(magenta)/mode(lime) markers + ±1σ band + n/range/variance/std readout, on a number line of dots. · `skew(id,(cx,cy),"v1 v2 v3 ...",[bins],[width],[height],[color])` — histogram + mean(gold)/median(magenta) markers + labelled skewness (right/left/symmetric). · `boxplot(id,(cx,cy),"v1 v2 v3 ...",[width],[color])` — five-number summary box-and-whisker: box = Q1→Q3 (IQR), median line, whiskers to non-outliers, `{id}.outliers` dots beyond 1.5·IQR. · `correlation(id,(cx,cy),unit,"x1 y1 x2 y2 ...",[color])` — scatter + best-fit line + the Pearson correlation r (strong/moderate/weak, positive/negative); x & y share `unit`. · `bellcurve(id,(cx,cy),mu,sigma,[unit],[color])` (alias `gaussian`) — the normal bell curve with the 68-95-99.7 rule shaded (nested ±1σ/±2σ/±3σ bands `{id}.band1/2/3`, mean line, % labels, value ticks). NOT `normal` (that's the calculus perpendicular-line builtin). · `hypothesis(id,(cx,cy),z,[alpha],[unit])` — significance test: standard-normal null, tails beyond ±z shaded = p-value vs alpha, with verdict. · `covariance(id,(cx,cy),unit,"x1 y1 x2 y2 ...",[color])` — covariance as signed-area rectangles about the mean cross (cyan agree / magenta disagree). · `bayes(id,(cx,cy),heads,tails,[width],[height])` — Bayesian updating: prior + likelihood → posterior for a coin's bias. · `distribution(id,(cx,cy),"uniform|exponential|binomial|poisson",a,[b],[color])` — a named distribution (curve or bars). · `confidence(id,(cx,cy),mean,sd,n,[level],[width])` — a confidence interval (estimate ± z·sd/√n). · `montecarlo(id,(cx,cy),points,[seed],[size])` — estimate π by darts (seeded). · `randomwalk(id,(cx,cy),steps,[seed],[scale])` — a 2D random-walk path (seeded). · `lln(id,(cx,cy),trials,[seed],[width],[height])` — Law of Large Numbers: running proportion of coin flips settling onto 0.5 (`{id}.curve` + reference); seeded. · `clt(id,(cx,cy),samplesize,trials,[seed],[width],[height],[color])` — the Central Limit Theorem: histograms the averages of `samplesize` dice over `trials` runs (`{id}.bar{k}` ×30, `{id}.bars`) + the normal they converge to (`{id}.curve`); seeded/deterministic. **All bar builtins (histogram/distribution/skew/clt) accept `rainbow` as the colour for per-bar hues.**
 
 ### Brand kit
 `banner(id,(cx,cy),[scale])` · `watermark(id,(x,y),["text"])`.

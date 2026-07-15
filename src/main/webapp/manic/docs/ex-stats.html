@@ -1,0 +1,856 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Statistics &amp; probability - manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Write animations as plain text. A friendly, example-first guide for creators.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-aacfe5f0.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-0b5ae956.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://8gwifi.org/manic" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="statistics--probability"><a class="header" href="#statistics--probability">Statistics &amp; probability</a></h1>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="statistics--the-whole-story-in-three-ideas"><a class="header" href="#statistics--the-whole-story-in-three-ideas">statistics — the whole story in three ideas</a></h2>
+<p>A guided lesson, not a feature demo: describe a dataset, meet the normal curve,
+then see <em>why</em> the bell is everywhere (the Central Limit Theorem). The stats
+companion to the linear-algebra lesson. Start here.</p>
+<pre><code class="language-manic">// ============================================================================
+//  statistics.manic  —  Statistics, from data to the bell (a lesson)
+// ----------------------------------------------------------------------------
+//  The stats-rung capstone, companion to linear-algebra.manic. Three chapters on
+//  one stage, chaptered with section():
+//     1. DESCRIBE   — any dataset has a shape, a centre, a spread   (histogram)
+//     2. THE BELL   — measurements often pile into a normal curve   (bellcurve)
+//     3. WHY (CLT)  — averages of anything become a bell            (clt)
+//
+//  Each chapter reveals its whole builtin with `untraced(tag)` → `draw(tag)`
+//  (preserving faint band opacities) and clears with `fade(tag)`.
+// ============================================================================
+
+title("Statistics: from data to the bell");
+canvas("16:9");
+
+let sy = cy + 30;
+
+// 1. a real dataset (exam scores, already roughly bell-shaped)
+histogram(hg, (cx, sy),
+  "68 72 75 71 74 77 73 70 76 72 74 78 71 73 75 69 74 72 76 73 71 75 70 74 72 73 74 71 75 73", 12, 620, 230);
+untraced(hg);
+// 2. the idealised normal curve
+bellcurve(bc, (cx, sy - 24), 100, 15, 78);
+untraced(bc);
+// 3. why the bell is everywhere — the Central Limit Theorem
+clt(ct, (cx, sy), 5, 1000, 7, 620, 250);
+untraced(ct);
+
+text(cap, (cx, h - 44), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- 1. describe ----
+section("Describe the data");
+draw(hg, 1.3);
+say(cap, "any dataset has a shape, a centre, and a spread", 0.5);
+wait(1.8);
+say(cap, "these exam scores cluster around the middle, tailing off either side", 0.5);
+wait(2.0);
+fade(hg, 0.6);
+wait(0.3);
+
+// ---- 2. the bell ----
+say(cap, "", 0.2);
+section("The normal curve");
+draw(bc, 1.3);
+say(cap, "so many measurements pile into the same bell — the normal distribution", 0.5);
+wait(2.0);
+say(cap, "68% within one standard deviation, 95% within two, 99.7% within three", 0.5);
+wait(2.2);
+fade(bc, 0.6);
+wait(0.3);
+
+// ---- 3. why ----
+say(cap, "", 0.2);
+section("Why? The Central Limit Theorem");
+draw(ct, 1.4);
+say(cap, "average five dice, a thousand times — however flat one die is…", 0.5);
+wait(2.0);
+say(cap, "…the averages form a bell. THAT is why the normal is everywhere", 0.5);
+wait(2.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VGVgU9wNAYM" title="Statistics in Three Ideas — Data, the Bell & the CLT — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="histogram"><a class="header" href="#histogram">histogram</a></h2>
+<p>The shape of a dataset: a list of numbers binned into bars that stagger in one
+at a time, with the mean marked and the range labelled (<code>histogram</code>). Paste your
+own numbers into the data string — grades, prices, heights, times.</p>
+<pre><code class="language-manic">// ============================================================================
+//  histogram.manic  —  the shape of a dataset (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `histogram(id, (cx,cy), "v1 v2 v3 ...", [bins], [width], [height], [color])`
+//  bins a list of numbers into bars — the SHAPE of the data. Bars are
+//  `{id}.bar{k}` (tagged `{id}.bars`) so they stagger in and recolour as a
+//  group; `{id}.meanline` + `{id}.mean` mark the mean, `{id}.min`/`{id}.max`
+//  label the range. Default bin count ≈ √n.
+//
+//  TO ADAPT: paste your own numbers into the data string (grades, prices,
+//  heights, times…). More `bins` = finer shape; fewer = smoother. Pass a colour
+//  as the last argument, or `rainbow` to give every bar its own hue (below).
+// ============================================================================
+
+title("The shape of a dataset");
+canvas("16:9");
+
+let n = 14;
+
+text(hdr, (cx, 60), "35 exam scores — where do they cluster?");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// `rainbow` colours each bar across the spectrum — no loop needed
+histogram(hg, (cx, cy + 10),
+  "72 85 90 68 95 88 76 91 83 79 84 60 97 81 78 86 74 89 82 93 71 87 80 77 92 85 83 88 75 90 66 82 84 79 88",
+  n, 640, 300, rainbow);
+untraced(hg.bars);                 // bars sketch in one at a time
+hidden(hg.meanline); hidden(hg.mean);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- bars build up, left to right ----
+say(cap, "each bar counts how many scores fall in that range", 0.5);
+stagger(0.06) { for k in 0..n { draw(hg.bar{k}, 0.35); } }
+wait(1.0);
+say(cap, "the shape emerges: most scores cluster in the 80s, tailing off below", 0.5);
+wait(1.6);
+
+// ---- reveal the mean ----
+say(cap, "and the average sits right in the thick of it", 0.5);
+show(hg.meanline, 0.5); show(hg.mean, 0.4);
+pulse(hg.mean);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/PQn6SORxCqw" title="The Shape of Your Data — Histograms, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="summary"><a class="header" href="#summary">summary</a></h2>
+<p>Describe a dataset in one call: the numbers as dots on a number line, with the
+mean, median and mode marked, a ±1σ spread band, and readouts of the range,
+variance and standard deviation (<code>summary</code>). Central tendency and dispersion,
+together.</p>
+<pre><code class="language-manic">// ============================================================================
+//  summary.manic  —  describe a dataset (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `summary(id, (cx,cy), "v1 v2 v3 …", [width], [color])` is the descriptive-
+//  statistics workhorse: the data as dots on a number line, with the **mean**
+//  (gold), **median** (magenta) and **mode** (lime) marked, a translucent
+//  **±1σ spread band**, and a readout of **n / range / variance / std**.
+//  Pieces: `{id}.dots` (the cloud), `{id}.meanmark`/`.medianmark`/`.modemark`
+//  (+ `.*lbl`), `{id}.band`, `{id}.min`/`.max`, `{id}.readout`.
+//
+//  TO ADAPT: paste your own numbers. Central tendency (mean/median/mode) and
+//  dispersion (range/variance/std) come out in one call.
+// ============================================================================
+
+title("Describe a dataset");
+canvas("16:9");
+
+text(hdr, (cx, 64), "20 daily temperatures — centre and spread");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+summary(sm, (cx, cy - 10),
+  "18 21 20 22 19 23 21 20 21 24 22 21 19 20 23 21 22 20 21 25", 640);
+// reveal in beats
+untraced(sm.line);
+hidden(sm.dots);
+hidden(sm.band);
+hidden(sm.meanmark); hidden(sm.meanlbl);
+hidden(sm.medianmark); hidden(sm.medianlbl);
+hidden(sm.modemark); hidden(sm.modelbl);
+hidden(sm.readout);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "start with the raw numbers, laid out on a line", 0.5);
+draw(sm.line, 0.6);
+show(sm.dots, 0.6);
+wait(1.4);
+
+say(cap, "the centre: mean, median and mode", 0.5);
+show(sm.meanmark, 0.4); show(sm.meanlbl, 0.4);
+show(sm.medianmark, 0.4); show(sm.medianlbl, 0.4);
+show(sm.modemark, 0.4); show(sm.modelbl, 0.4);
+wait(1.6);
+
+say(cap, "the spread: most values fall within one standard deviation of the mean", 0.5);
+to(sm.band, opacity, 0.12, 0.6);
+show(sm.readout, 0.4);
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/McOGIY0zdBs" title="Mean, Median, Mode & Spread — Describe Any Dataset — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="boxplot"><a class="header" href="#boxplot">boxplot</a></h2>
+<p>The five-number summary as a box-and-whisker: the box spans Q1→Q3 (its width is
+the interquartile range), a line marks the median, the whiskers reach the rest,
+and a value far outside is flagged as an outlier (<code>boxplot</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  boxplot.manic  —  the five-number summary (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `boxplot(id, (cx,cy), "v1 v2 v3 …", [width], [color])` draws a box-and-whisker:
+//  the box spans Q1→Q3 (its width IS the interquartile range), a line marks the
+//  median, whiskers reach the extreme non-outliers (within 1.5·IQR), and points
+//  beyond are flagged as outliers. Pieces: `{id}.box`, `{id}.med`,
+//  `{id}.whiskerlo`/`.whiskerhi` (+ `.caplo`/`.caphi`), `{id}.outliers`,
+//  `{id}.iqr` and the value labels.
+//
+//  TO ADAPT: paste your numbers. A value far from the box (here 40) shows up as
+//  an outlier automatically.
+// ============================================================================
+
+title("Box-and-whisker: the five-number summary");
+canvas("16:9");
+
+text(hdr, (cx, 70), "response times (seconds) — one slow outlier");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+boxplot(bp, (cx, cy), "12 15 14 10 18 16 13 15 14 17 40 11 16 15 14", 700);
+untraced(bp.whiskerlo); untraced(bp.whiskerhi); untraced(bp.caplo); untraced(bp.caphi); untraced(bp.med);
+hidden(bp.box);
+hidden(bp.outliers);
+hidden(bp.iqr); hidden(bp.lmin); hidden(bp.lmax); hidden(bp.lmed); hidden(bp.lq1); hidden(bp.lq3);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "the box holds the middle half of the data — Q1 to Q3, the IQR", 0.5);
+to(bp.box, opacity, 0.2, 0.6);
+show(bp.lq1, 0.3); show(bp.lq3, 0.3); show(bp.iqr, 0.3);
+wait(1.5);
+
+say(cap, "the line inside is the median; the whiskers reach the rest", 0.5);
+draw(bp.med, 0.4); show(bp.lmed, 0.3);
+par { draw(bp.whiskerlo, 0.5); draw(bp.whiskerhi, 0.5); }
+draw(bp.caplo, 0.3); draw(bp.caphi, 0.3);
+show(bp.lmin, 0.3); show(bp.lmax, 0.3);
+wait(1.6);
+
+say(cap, "and a value far outside the whiskers is flagged as an outlier", 0.5);
+show(bp.outliers, 0.4); pulse(bp.outliers);
+wait(1.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/RstqImgruIU" title="Box-and-Whisker Plots & Outliers, Explained — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="skew"><a class="header" href="#skew">skew</a></h2>
+<p>Which way does the tail point? A histogram with the mean and median marked and a
+labelled skewness — when the mean is dragged right of the median, the data is
+right-skewed (<code>skew</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  skew.manic  —  the shape of a dataset: skewness (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `skew(id, (cx,cy), "v1 v2 v3 …", [bins], [width], [height], [color])` draws a
+//  histogram with the **mean** (gold) and **median** (magenta) marked and a
+//  labelled skewness. The tell: when the mean sits right of the median, a right
+//  tail is pulling it — the data is right-skewed (positive); left of it, left-
+//  skewed; on top of it, symmetric.
+//
+//  TO ADAPT: paste your numbers. Incomes, wait times and prices are classically
+//  right-skewed (a few big values pull the mean up).
+// ============================================================================
+
+title("Skewness: which way does the tail point?");
+canvas("16:9");
+
+text(hdr, (cx, 66), "monthly salaries (k) — a few big earners pull the mean up");
+size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+
+skew(sk, (cx, cy - 10),
+  "28 30 32 31 29 33 35 30 31 34 42 38 30 32 31 33 30 36 55 68 90 30 34 31", 14, 560, 240);
+untraced(sk.bars);
+hidden(sk.meanline); hidden(sk.meanlbl);
+hidden(sk.medianline); hidden(sk.medianlbl);
+hidden(sk.skewlbl);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "most salaries cluster low, with a long tail of high earners", 0.5);
+stagger(0.05) { for k in 0..14 { draw(sk.bar{k}, 0.3); } }
+wait(1.2);
+
+say(cap, "the median sits in the cluster — but the mean is dragged toward the tail", 0.5);
+show(sk.medianline, 0.4); show(sk.medianlbl, 0.3);
+show(sk.meanline, 0.4); show(sk.meanlbl, 0.3);
+wait(1.6);
+
+say(cap, "mean to the right of median = right-skewed (positive skew)", 0.5);
+show(sk.skewlbl, 0.4);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/KARVC2CdFII" title="Skewness: Which Way Does the Tail Point? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bellcurve"><a class="header" href="#bellcurve">bellcurve</a></h2>
+<p>The normal (Gaussian) bell curve and the 68-95-99.7 rule: the bell draws in,
+then the ±1σ / ±2σ / ±3σ bands shade one at a time, showing that 68% of values
+fall within one standard deviation, 95% within two, and 99.7% within three
+(<code>bellcurve</code>, alias <code>gaussian</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  normal.manic  —  the bell curve &amp; the 68-95-99.7 rule (stats Tier 2)
+// ----------------------------------------------------------------------------
+//  `bellcurve(id, (cx,cy), mu, sigma, [unit], [color])` (alias `gaussian`) draws
+//  bell curve and shades the ±1σ/±2σ/±3σ bands — the 68-95-99.7 rule. Pieces:
+//  `{id}.curve` (the bell), `{id}.band1/2/3` (tagged `{id}.bands`), `{id}.mean`,
+//  `{id}.p1/p2/p3` (the percentages), `{id}.t{-3..3}` (value ticks).
+//  `unit` = pixels per σ; the bell is standardised, μ/σ set the axis values.
+//
+//  TO ADAPT: change mu/sigma to your distribution (heights, IQ, measurement
+//  error…). The 68-95-99.7 rule holds for every normal.
+// ============================================================================
+
+title("The bell curve &amp; the 68-95-99.7 rule");
+canvas("16:9");
+
+// IQ scores: mean 100, standard deviation 15
+bellcurve(nd, (cx, cy + 10), 100, 15, 95);
+untraced(nd.curve);                // the bell draws in
+hidden(nd.mean);
+hidden(nd.bands);                  // the three σ-bands reveal one at a time
+hidden(nd.p1); hidden(nd.p2); hidden(nd.p3);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "IQ scores: mean 100, standard deviation 15 — the classic bell", 0.5);
+draw(nd.curve, 1.1);
+show(nd.mean, 0.4);
+wait(1.2);
+
+say(cap, "68% of values fall within ONE standard deviation of the mean", 0.5);
+to(nd.band1, opacity, 0.16, 0.6); show(nd.p1, 0.4);
+wait(1.7);
+
+say(cap, "95% fall within two — almost everyone", 0.5);
+to(nd.band2, opacity, 0.16, 0.6); show(nd.p2, 0.4);
+wait(1.7);
+
+say(cap, "and 99.7% within three: the tails are tiny", 0.5);
+to(nd.band3, opacity, 0.16, 0.6); show(nd.p3, 0.4);
+wait(1.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/OoB1BlKkHC4" title="The Bell Curve & the 68-95-99.7 Rule, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="clt"><a class="header" href="#clt">clt</a></h2>
+<p>The Central Limit Theorem — the flagship: however flat a single die is, the
+<em>average</em> of five dice, taken 1200 times, piles into a bell that hugs the normal
+curve (<code>clt</code>). Seeded, so it renders the same every time.</p>
+<pre><code class="language-manic">// ============================================================================
+//  clt.manic  —  the Central Limit Theorem (stats Tier 3, the flagship payoff)
+// ----------------------------------------------------------------------------
+//  `clt(id, (cx,cy), samplesize, trials, [seed], [width], [height])` runs `trials`
+//  experiments — each the average of `samplesize` dice — and histograms those
+//  averages. However flat a single die is, the averages pile into a BELL. Draws
+//  the histogram of sample means (`{id}.bar{k}`, tagged `{id}.bars`), the normal
+//  curve they converge to (`{id}.curve`), the mean line, ticks, and an info
+//  label. Seeded → the render is identical every time.
+//
+//  TO ADAPT: change `samplesize` (bigger n → tighter bell) or `trials` (more →
+//  smoother). `seed` picks the reproducible random sequence.
+// ============================================================================
+
+title("The Central Limit Theorem");
+canvas("16:9");
+
+clt(ct, (cx, cy + 20), 5, 1200, 7, 660, 300);
+untraced(ct.bars);      // the sample means pile up, bar by bar
+untraced(ct.curve);     // the normal curve draws in last
+hidden(ct.mean);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "one die is flat — 1 to 6 are equally likely. but average FIVE dice…", 0.5);
+stagger(0.03) { for k in 0..30 { draw(ct.bar{k}, 0.3); } }
+wait(1.0);
+
+say(cap, "…and repeat 1200 times: the averages pile up around the middle", 0.5);
+show(ct.mean, 0.4);
+wait(1.6);
+
+say(cap, "they trace a bell — the Central Limit Theorem: averages are normal", 0.5);
+draw(ct.curve, 1.1);
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/WmFyxyIuS5Y" title="The Central Limit Theorem — Why Averages Are Always a Bell — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="correlation"><a class="header" href="#correlation">correlation</a></h2>
+<p>Do two things move together? The scatter of paired data, the best-fit line, and
+the Pearson correlation <code>r</code> — near +1 a tight upward line, near −1 downward, near
+0 a shapeless blob (<code>correlation</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  correlation.manic  —  how strongly two variables move together (stats T3)
+// ----------------------------------------------------------------------------
+//  `correlation(id, (cx,cy), unit, "x1 y1  x2 y2 …", [color])` scatters the
+//  points, fits the best line, and reports the **Pearson correlation r** with a
+//  strong/moderate/weak · positive/negative reading. `unit` = pixels per data
+//  unit (x and y share it, so use data with comparable ranges). Points
+//  `{id}.p{k}` (tagged `{id}.points`), the fit `{id}.line`, and `{id}.r`.
+//
+//  TO ADAPT: paste your paired data. r near ±1 = a tight line; near 0 = a blob.
+// ============================================================================
+
+title("Correlation: do they move together?");
+canvas("16:9");
+
+text(hdr, (cx, 70), "hours studied vs grade (out of 10)");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+correlation(co, (cx, cy - 10), 42,
+  "1 3  2 4  3 4  4 6  5 6  6 7  7 8  8 8  9 10  10 9");
+hidden(co.points); untraced(co.line); hidden(co.r);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "each dot is one student: hours studied, and the grade they got", 0.5);
+show(co.points, 0.6);
+wait(1.3);
+
+say(cap, "the cloud slopes up — more study tends to mean a higher grade", 0.5);
+draw(co.line, 0.9);
+wait(1.3);
+
+say(cap, "r measures how tightly the points track that line: near +1 is strong", 0.5);
+show(co.r, 0.4); pulse(co.r);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/zlF5a8Jr9M0" title="Correlation r — Do Two Things Move Together? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lln"><a class="header" href="#lln">lln</a></h2>
+<p>The Law of Large Numbers: flip a fair coin over and over and track the running
+proportion of heads. It swings wildly at first, then settles onto the true 0.5
+as the trials pile up (<code>lln</code>). Draw the curve in to watch it converge.</p>
+<pre><code class="language-manic">// ============================================================================
+//  lln.manic  —  the Law of Large Numbers (stats Tier 3)
+// ----------------------------------------------------------------------------
+//  `lln(id, (cx,cy), trials, [seed], [width], [height])` plots the running
+//  proportion of heads over many coin flips: wild at first, settling onto the
+//  true 0.5. Draws `{id}.curve`, the reference line `{id}.ref`, axis labels, and
+//  the final value. Seeded → the render is identical every time.
+//
+//  TO ADAPT: change `trials` (more → tighter settling) or `seed` (a different
+//  reproducible run).
+// ============================================================================
+
+title("The Law of Large Numbers");
+canvas("16:9");
+
+lln(ll, (cx, cy + 10), 600, 3, 720, 300);
+untraced(ll.curve);              // the proportion traces in — watch it settle
+hidden(ll.finallbl);
+hidden(ll.truelbl);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "flip a fair coin over and over; track the proportion of heads so far", 0.5);
+show(ll.truelbl, 0.4);
+wait(0.8);
+say(cap, "early on it swings wildly — a few flips prove nothing", 0.5);
+draw(ll.curve, 2.6);
+wait(0.4);
+say(cap, "but over many trials it settles onto the true probability, 0.5", 0.5);
+show(ll.finallbl, 0.4);
+wait(1.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qyanPpb_NZY" title="The Law of Large Numbers — Why the Long Run Settles Down — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="hypothesis"><a class="header" href="#hypothesis">hypothesis</a></h2>
+<p>Is a result surprising enough to be real? Under the null hypothesis the test
+statistic follows the standard normal; the observed z cuts off tails whose area
+is the p-value. Smaller than α, reject (<code>hypothesis</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  hypothesis.manic  —  a significance test &amp; the p-value (stats Tier 5)
+// ----------------------------------------------------------------------------
+//  `hypothesis(id, (cx,cy), z, [alpha], [unit])` — under the null hypothesis the
+//  test statistic is standard-normal; the observed z cuts off tails whose area is
+//  the p-value. If that area is smaller than alpha, the result is too surprising
+//  to be chance — reject. Pieces: `{id}.curve`, `{id}.tails`, `{id}.zline`,
+//  `{id}.p`, `{id}.verdict`.
+// ============================================================================
+
+title("Hypothesis testing: is this surprising?");
+canvas("16:9");
+
+hypothesis(hy, (cx, cy - 10), 2.3, 0.05, 92);
+untraced(hy.curve);
+hidden(hy.tails); hidden(hy.zline); hidden(hy.zlbl);
+hidden(hy.p); hidden(hy.verdict);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "if nothing's going on, the test statistic follows this bell", 0.5);
+draw(hy.curve, 1.0);
+wait(1.2);
+say(cap, "we observed z = 2.3 — out here in the tails", 0.5);
+show(hy.zline, 0.4); show(hy.zlbl, 0.3);
+wait(1.4);
+say(cap, "the shaded tail area is the p-value: how likely a result this extreme is", 0.5);
+to(hy.tails, opacity, 0.5, 0.6); show(hy.p, 0.4);
+wait(1.6);
+say(cap, "p = 0.021 &lt; 0.05, so it's too surprising for chance — reject the null", 0.5);
+show(hy.verdict, 0.4);
+wait(1.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/LHCkQ4qZ4ME" title="Hypothesis Testing & p-values, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="covariance"><a class="header" href="#covariance">covariance</a></h2>
+<p>Covariance as signed area: a cross at the means, and a rectangle from each point
+to the centre — cyan where x and y agree, magenta where they disagree. Their
+balance is the covariance (<code>covariance</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  covariance.manic  —  covariance as signed area (stats Tier 5)
+// ----------------------------------------------------------------------------
+//  `covariance(id, (cx,cy), unit, "x1 y1 x2 y2 …", [color])` — a cross at the
+//  means splits the plane into quadrants; each point draws a rectangle to the
+//  mean-corner, cyan where (x-x̄)(y-ȳ) &gt; 0 (agreeing) and magenta where negative.
+//  Their signed-area balance IS the covariance. `{id}.points`, `{id}.rects`,
+//  `{id}.cross`, `{id}.cov`.
+// ============================================================================
+
+title("Covariance: signed area about the mean");
+canvas("16:9");
+
+covariance(cv, (cx, cy - 10), 34, "1 2  2 1  3 4  4 3  5 6  6 5  7 8  8 7  9 9");
+hidden(cv.points); hidden(cv.rects);
+untraced(cv.crossv); untraced(cv.crossh);
+hidden(cv.cov);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "mark each point, then draw the cross at the mean of x and the mean of y", 0.5);
+show(cv.points, 0.5);
+par { draw(cv.crossv, 0.5); draw(cv.crossh, 0.5); }
+wait(1.4);
+say(cap, "each point makes a rectangle to the centre — cyan if x and y agree", 0.5);
+to(cv.rects, opacity, 0.13, 0.7);
+wait(1.6);
+say(cap, "more agreeing (cyan) area than disagreeing = positive covariance", 0.5);
+show(cv.cov, 0.4);
+wait(1.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kvJHgWVcYTQ" title="Covariance as Signed Area — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bayes"><a class="header" href="#bayes">bayes</a></h2>
+<p>Bayesian updating: a prior belief about a coin’s bias, the likelihood from the
+data, and the posterior that combines them — pulled toward the evidence and
+sharpening as it accumulates (<code>bayes</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  bayes.manic  —  Bayesian updating (stats Tier 5)
+// ----------------------------------------------------------------------------
+//  `bayes(id, (cx,cy), heads, tails, [width], [height])` — belief about a coin's
+//  bias: a mild PRIOR, the LIKELIHOOD from the data, and the POSTERIOR that
+//  combines them (pulled toward the data, sharpening as evidence grows). Pieces:
+//  `{id}.prior`, `{id}.likelihood`, `{id}.posterior`, `{id}.mean`.
+// ============================================================================
+
+title("Bayes: updating a belief with data");
+canvas("16:9");
+
+bayes(by, (cx, cy + 10), 7, 2, 640, 250);
+untraced(by.prior); untraced(by.likelihood); untraced(by.posterior);
+hidden(by.mean); hidden(by.priorlbl); hidden(by.postlbl); hidden(by.datalbl);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "before any flips, a mild belief: the coin is probably fair-ish (the prior)", 0.5);
+draw(by.prior, 0.8); show(by.priorlbl, 0.3);
+wait(1.4);
+say(cap, "then we flip: 7 heads, 2 tails — the data favours a biased coin (likelihood)", 0.5);
+draw(by.likelihood, 0.8); show(by.datalbl, 0.3);
+wait(1.6);
+say(cap, "combine them and the posterior lands between: p about 0.69", 0.5);
+draw(by.posterior, 0.8); show(by.mean, 0.4); show(by.postlbl, 0.3);
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/YnqPXFlT-UI" title="Bayes' Theorem: Updating a Belief With Data — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="probability"><a class="header" href="#probability">probability</a></h2>
+<p>A probability &amp; sampling playground in four chapters: named distributions
+(uniform / exponential / binomial / Poisson), a confidence interval, a
+Monte-Carlo estimate of π, and a random walk (<code>distribution</code>, <code>confidence</code>,
+<code>montecarlo</code>, <code>randomwalk</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  probability.manic  —  a probability &amp; sampling playground (stats)
+// ----------------------------------------------------------------------------
+//  Four ideas on one stage, chaptered with section():
+//     1. named DISTRIBUTIONS  (uniform / exponential / binomial / poisson)
+//     2. CONFIDENCE intervals (an estimate ± a margin)
+//     3. MONTE-CARLO           (estimate pi by throwing darts)
+//     4. RANDOM WALK           (a path that wanders)
+//  Each chapter reveals with untraced(tag) -&gt; draw(tag) and clears with fade(tag).
+//  The seeded builtins (montecarlo, randomwalk) render identically every time.
+// ============================================================================
+
+title("A probability playground");
+canvas("16:9");
+
+// ---- 1. named distributions (a 2x2 gallery) ----
+distribution(du, (cx - 350, cy - 120), "uniform", 2, 6);       untraced(du);
+distribution(de, (cx + 350, cy - 120), "exponential", 1);       untraced(de);
+distribution(db, (cx - 350, cy + 180), "binomial", 12, 0.4);    untraced(db);
+distribution(dp, (cx + 350, cy + 180), "poisson", 4);           untraced(dp);
+// ---- 2. a confidence interval ----
+confidence(ci, (cx, cy), 50, 8, 25, 95, 620); untraced(ci); hidden(ci.estimate);
+// ---- 3. monte-carlo pi ----
+montecarlo(mc, (cx, cy - 10), 1200, 7, 210); untraced(mc);
+// ---- 4. a random walk ----
+randomwalk(rw, (cx, cy), 500, 4, 12); untraced(rw);
+
+text(cap, (cx, h - 44), ""); size(cap, 22); color(cap, dim); display(cap);
+
+section("Named distributions");
+par { draw(du, 0.9); draw(de, 0.9); draw(db, 0.9); draw(dp, 0.9); }
+say(cap, "flat, decaying, discrete counts — the classic shapes of chance", 0.5);
+wait(2.2);
+par { fade(du, 0.5); fade(de, 0.5); fade(db, 0.5); fade(dp, 0.5); }
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Confidence intervals");
+draw(ci, 0.9); show(ci.estimate, 0.4);
+say(cap, "an estimate is never exact — the interval says how sure we are", 0.5);
+wait(2.2);
+fade(ci, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Monte Carlo");
+draw(mc, 1.2);
+say(cap, "throw darts at random: the fraction landing in the circle gives pi", 0.5);
+wait(2.4);
+fade(mc, 0.6);
+wait(0.3);
+
+say(cap, "", 0.2);
+section("Random walk");
+draw(rw, 1.4);
+say(cap, "each step a random direction — chance draws a wandering path", 0.5);
+wait(2.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/l9sqYflGPL8" title="A Probability Playground — Distributions, CI, Monte-Carlo & Random Walks — manic" allowfullscreen loading="lazy"></iframe></div>
+
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ex-linalg.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ex-vectors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ex-linalg.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ex-vectors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

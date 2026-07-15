@@ -1,0 +1,60 @@
+// ============================================================================
+//  statistics.manic  —  Statistics, from data to the bell (a lesson)
+// ----------------------------------------------------------------------------
+//  The stats-rung capstone, companion to linear-algebra.manic. Three chapters on
+//  one stage, chaptered with section():
+//     1. DESCRIBE   — any dataset has a shape, a centre, a spread   (histogram)
+//     2. THE BELL   — measurements often pile into a normal curve   (bellcurve)
+//     3. WHY (CLT)  — averages of anything become a bell            (clt)
+//
+//  Each chapter reveals its whole builtin with `untraced(tag)` → `draw(tag)`
+//  (preserving faint band opacities) and clears with `fade(tag)`.
+// ============================================================================
+
+title("Statistics: from data to the bell");
+canvas("16:9");
+
+let sy = cy + 30;
+
+// 1. a real dataset (exam scores, already roughly bell-shaped)
+histogram(hg, (cx, sy),
+  "68 72 75 71 74 77 73 70 76 72 74 78 71 73 75 69 74 72 76 73 71 75 70 74 72 73 74 71 75 73", 12, 620, 230);
+untraced(hg);
+// 2. the idealised normal curve
+bellcurve(bc, (cx, sy - 24), 100, 15, 78);
+untraced(bc);
+// 3. why the bell is everywhere — the Central Limit Theorem
+clt(ct, (cx, sy), 5, 1000, 7, 620, 250);
+untraced(ct);
+
+text(cap, (cx, h - 44), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- 1. describe ----
+section("Describe the data");
+draw(hg, 1.3);
+say(cap, "any dataset has a shape, a centre, and a spread", 0.5);
+wait(1.8);
+say(cap, "these exam scores cluster around the middle, tailing off either side", 0.5);
+wait(2.0);
+fade(hg, 0.6);
+wait(0.3);
+
+// ---- 2. the bell ----
+say(cap, "", 0.2);
+section("The normal curve");
+draw(bc, 1.3);
+say(cap, "so many measurements pile into the same bell — the normal distribution", 0.5);
+wait(2.0);
+say(cap, "68% within one standard deviation, 95% within two, 99.7% within three", 0.5);
+wait(2.2);
+fade(bc, 0.6);
+wait(0.3);
+
+// ---- 3. why ----
+say(cap, "", 0.2);
+section("Why? The Central Limit Theorem");
+draw(ct, 1.4);
+say(cap, "average five dice, a thousand times — however flat one die is…", 0.5);
+wait(2.0);
+say(cap, "…the averages form a bell. THAT is why the normal is everywhere", 0.5);
+wait(2.4);

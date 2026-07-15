@@ -1,0 +1,99 @@
+// ============================================================================
+//  linear-system.manic  —  the geometry of solving & spanning (a template)
+// ----------------------------------------------------------------------------
+//  Three side-by-side panels, each built up with animation:
+//    A) a 2x2 system as two lines meeting at the solution        (linsolve)
+//    B) two independent vectors spanning the whole plane         (span)
+//    C) two parallel vectors collapsing to a single line, rank 1 (span)
+//
+//  HOW TO ADAPT THIS FILE:
+//    * Change the system in panel A: linsolve(sys, center, unit, a,b,c,d, e,f)
+//      draws  a*x + b*y = e  and  c*x + d*y = f, meeting at the solution.
+//    * Change the vectors in panels B/C: span(id, center, unit, (vx,vy),(wx,wy)).
+//    * Everything is positioned from cx/cy/w/h + a per-panel origin (ax/bx/dx)
+//      and a `unit` = pixels-per-grid-step, so it scales cleanly. Grid point
+//      (gx,gy) maps to screen (origin_x + gx*u, origin_y - gy*u)  [math y-up].
+//    * OPTIONAL: shade the closed region the two lines bound with the axes —
+//      see the commented `polygon(feasible, ...)` block in Panel A below.
+// ============================================================================
+
+title("Solving & spanning, visually");
+canvas("16:9");
+
+let y0 = cy + 20;   // shared vertical center of the three panels
+let ax = 280;       // panel A origin x — a system as two lines
+let bx = 640;       // panel B origin x — span = the whole plane
+let dx = 1000;      // panel C origin x — parallel vectors collapse to a line
+let u = 24;         // pixels per grid unit (shared scale)
+
+text(hdr, (cx, 46), "linear algebra: the geometry of solving & spanning");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// per-panel captions, revealed as each panel animates
+text(la, (ax, 96), "a system = two lines"); size(la, 18); color(la, dim); display(la); hidden(la);
+text(lb, (bx, 96), "span of two vectors"); size(lb, 18); color(lb, dim); display(lb); hidden(lb);
+text(lc, (dx, 96), "parallel = rank 1"); size(lc, 18); color(lc, dim); display(lc); hidden(lc);
+
+// faint coordinate backdrops (drawn once, static)
+plane(pa, (ax, y0), 150, 190, u);
+plane(pb, (bx, y0), 150, 190, u);
+plane(pc, (dx, y0), 150, 190, u);
+
+// ---- Panel A — the system 2x + y = 5 and x + 3y = 10, meeting at (1, 3) ----
+linsolve(sys, (ax, y0), u, 2, 1, 1, 3, 5, 10);
+untraced(sys.r1); untraced(sys.r2);   // start blank, drawn in on the timeline
+hidden(sys); hidden(sys.val);         // the solution dot + its label fade in
+
+// -- OPTIONAL: fill the closed area the two lines bound with the axes --------
+//  The two rows, the x-axis and the y-axis enclose a quadrilateral (the classic
+//  "feasible region"). Its corners, in grid coordinates, are:
+//     (0,0)  ->  (2.5,0)  ->  (1,3)  ->  (0,3.33)
+//   origin   line1 hits   the two   line2 hits
+//            the x-axis   lines meet the y-axis
+//  Uncomment to shade it (points are origin + gridX*u, origin - gridY*u):
+//
+// polygon(feasible,
+//   (ax,            y0),           // (0, 0)     the origin
+//   (ax + 2.5*u,    y0),           // (2.5, 0)   line 1 crosses the x-axis
+//   (ax + u,        y0 - 3*u),     // (1, 3)     the two lines meet
+//   (ax,            y0 - 3.333*u), // (0, 3.33)  line 2 crosses the y-axis
+//   lime);
+// opacity(feasible, 0.18);         // translucent, so grid + lines show through
+// z(feasible, -1);                 // sit behind the lines
+//   (for an animated reveal instead of a static fill, also `hidden(feasible);`
+//    above, then `to(feasible, opacity, 0.18, 0.6);` in Panel A's timeline.)
+// ---------------------------------------------------------------------------
+
+// ---- Panel B — two independent vectors reach every point: the whole plane --
+span(fill, (bx, y0), u, (3, 1), (-1, 2));
+untraced(fill.v); untraced(fill.w);   // vectors draw in
+hidden(fill.plane);                   // faint region fades to 0.14
+
+// ---- Panel C — two parallel vectors only reach one line: rank 1 ------------
+span(rank, (dx, y0), u, (2, 1), (-2, -1), gold);
+untraced(rank.v); untraced(rank.w); untraced(rank.line);
+
+text(cap, (cx, h - 44), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- Panel A timeline: two lines draw in, then the solution pops -----------
+show(la, 0.4);
+say(cap, "two equations are two lines; where they cross solves the system", 0.5);
+par { draw(sys.r1, 0.8); draw(sys.r2, 0.8); }
+show(sys, 0.4);
+show(sys.val, 0.4);
+pulse(sys);
+wait(1.6);
+
+// ---- Panel B timeline: two vectors grow out, then the plane fills in -------
+show(lb, 0.4);
+say(cap, "two independent vectors combine to reach every point: the whole plane", 0.5);
+par { draw(fill.v, 0.7); draw(fill.w, 0.7); }
+to(fill.plane, opacity, 0.14, 0.9);
+wait(1.6);
+
+// ---- Panel C timeline: two parallel vectors, then their line (collapse) ----
+show(lc, 0.4);
+say(cap, "but parallel vectors only reach one line: rank 1, a collapse", 0.5);
+par { draw(rank.v, 0.7); draw(rank.w, 0.7); }
+draw(rank.line, 0.8);
+wait(1.8);

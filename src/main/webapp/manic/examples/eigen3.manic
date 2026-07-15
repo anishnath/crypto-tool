@@ -1,0 +1,34 @@
+// ============================================================================
+//  eigen3.manic  —  eigenvectors of a 3x3 matrix (the 3-D echo of eigen)
+// ----------------------------------------------------------------------------
+//  `eigen3(id, (cx,cy,cz), a,b,c,d,e,f,g,h,i, [color])` draws the real
+//  EIGENVECTORS of the 3x3 [[a,b,c],[d,e,f],[g,h,i]] as invariant lines through
+//  the origin — the directions a vector on them only STRETCHES (by λ), never
+//  turns. A real 3x3 always has at least one real eigenvector; a rotation leaves
+//  two complex eigenvalues, which are noted.
+//
+//  TO ADAPT: change the nine numbers. A symmetric matrix (as here) has three
+//  perpendicular real eigen-axes; a rotation like (0,-1,0, 1,0,0, 0,0,1) shows
+//  one real axis (the axis of rotation) + a "2 complex" note.
+// ============================================================================
+
+title("Eigenvectors of a 3x3 matrix");
+canvas("16:9");
+
+camera3((7, 5.5, 6), (0, 0, 0), 42);
+grid3(floor, (0, 0, 0), 3, 1); color(floor, dim); opacity(floor, 0.35);
+
+// symmetric M = [[1,0,0],[0,3,1],[0,1,3]] — three real eigenvalues: 1, 2, 4
+eigen3(ev, (0, 0, 0), 1, 0, 0, 0, 3, 1, 0, 1, 3);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "when the matrix acts, most directions turn — but a few only stretch", 0.5);
+orbit3(52, 24, 10, 4, smooth);
+
+say(cap, "those invariant lines are the eigenvectors; the stretch factor is lambda", 0.5);
+orbit3(122, 34, 10, 4, smooth);
+
+say(cap, "this symmetric 3x3 has three real eigenvalues: 1, 2 and 4", 0.5);
+orbit3(58, 22, 9, 4.5, smooth);
+wait(0.5);

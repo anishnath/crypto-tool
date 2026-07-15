@@ -1,0 +1,43 @@
+// ============================================================================
+//  boxplot.manic  —  the five-number summary (stats Tier 1)
+// ----------------------------------------------------------------------------
+//  `boxplot(id, (cx,cy), "v1 v2 v3 …", [width], [color])` draws a box-and-whisker:
+//  the box spans Q1→Q3 (its width IS the interquartile range), a line marks the
+//  median, whiskers reach the extreme non-outliers (within 1.5·IQR), and points
+//  beyond are flagged as outliers. Pieces: `{id}.box`, `{id}.med`,
+//  `{id}.whiskerlo`/`.whiskerhi` (+ `.caplo`/`.caphi`), `{id}.outliers`,
+//  `{id}.iqr` and the value labels.
+//
+//  TO ADAPT: paste your numbers. A value far from the box (here 40) shows up as
+//  an outlier automatically.
+// ============================================================================
+
+title("Box-and-whisker: the five-number summary");
+canvas("16:9");
+
+text(hdr, (cx, 70), "response times (seconds) — one slow outlier");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+boxplot(bp, (cx, cy), "12 15 14 10 18 16 13 15 14 17 40 11 16 15 14", 700);
+untraced(bp.whiskerlo); untraced(bp.whiskerhi); untraced(bp.caplo); untraced(bp.caphi); untraced(bp.med);
+hidden(bp.box);
+hidden(bp.outliers);
+hidden(bp.iqr); hidden(bp.lmin); hidden(bp.lmax); hidden(bp.lmed); hidden(bp.lq1); hidden(bp.lq3);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "the box holds the middle half of the data — Q1 to Q3, the IQR", 0.5);
+to(bp.box, opacity, 0.2, 0.6);
+show(bp.lq1, 0.3); show(bp.lq3, 0.3); show(bp.iqr, 0.3);
+wait(1.5);
+
+say(cap, "the line inside is the median; the whiskers reach the rest", 0.5);
+draw(bp.med, 0.4); show(bp.lmed, 0.3);
+par { draw(bp.whiskerlo, 0.5); draw(bp.whiskerhi, 0.5); }
+draw(bp.caplo, 0.3); draw(bp.caphi, 0.3);
+show(bp.lmin, 0.3); show(bp.lmax, 0.3);
+wait(1.6);
+
+say(cap, "and a value far outside the whiskers is flagged as an outlier", 0.5);
+show(bp.outliers, 0.4); pulse(bp.outliers);
+wait(1.9);

@@ -1,0 +1,30 @@
+// ============================================================================
+//  covariance.manic  —  covariance as signed area (stats Tier 5)
+// ----------------------------------------------------------------------------
+//  `covariance(id, (cx,cy), unit, "x1 y1 x2 y2 …", [color])` — a cross at the
+//  means splits the plane into quadrants; each point draws a rectangle to the
+//  mean-corner, cyan where (x-x̄)(y-ȳ) > 0 (agreeing) and magenta where negative.
+//  Their signed-area balance IS the covariance. `{id}.points`, `{id}.rects`,
+//  `{id}.cross`, `{id}.cov`.
+// ============================================================================
+
+title("Covariance: signed area about the mean");
+canvas("16:9");
+
+covariance(cv, (cx, cy - 10), 34, "1 2  2 1  3 4  4 3  5 6  6 5  7 8  8 7  9 9");
+hidden(cv.points); hidden(cv.rects);
+untraced(cv.crossv); untraced(cv.crossh);
+hidden(cv.cov);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+say(cap, "mark each point, then draw the cross at the mean of x and the mean of y", 0.5);
+show(cv.points, 0.5);
+par { draw(cv.crossv, 0.5); draw(cv.crossh, 0.5); }
+wait(1.4);
+say(cap, "each point makes a rectangle to the centre — cyan if x and y agree", 0.5);
+to(cv.rects, opacity, 0.13, 0.7);
+wait(1.6);
+say(cap, "more agreeing (cyan) area than disagreeing = positive covariance", 0.5);
+show(cv.cov, 0.4);
+wait(1.9);

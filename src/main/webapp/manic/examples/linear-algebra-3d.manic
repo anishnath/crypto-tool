@@ -1,0 +1,50 @@
+// ============================================================================
+//  linear-algebra-3d.manic  —  Linear algebra in 3D (a lesson)
+// ----------------------------------------------------------------------------
+//  The 3-D companion to linear-algebra.manic. One matrix, two lenses, one
+//  orbiting stage:
+//     1. a 3x3 matrix TRANSFORMS space — the unit cube becomes a parallelepiped
+//        whose VOLUME is the determinant                          (linmap3)
+//     2. its EIGENVECTORS are the invariant axes that only stretch (eigen3)
+//
+//  Both use the same  A = [[1,0,0],[0,3,1],[0,1,3]]  (det = 8; eigenvalues 1,2,4),
+//  so the two views describe the very same matrix.
+// ============================================================================
+
+title("Linear algebra in 3D");
+canvas("16:9");
+
+camera3((12, 9.5, 10), (0.4, 1.6, 1.6), 40);
+grid3(floor, (0, 0, 0), 4, 1); color(floor, dim); opacity(floor, 0.3);
+
+// A = [[1,0,0],[0,3,1],[0,1,3]]  — det 8, eigenvalues 1, 2, 4
+linmap3(lm, (0, 0, 0), 1, 0, 0, 0, 3, 1, 0, 1, 3);
+eigen3(ev, (0, 0, 0), 1, 0, 0, 0, 3, 1, 0, 1, 3);
+// the eigen-axes wait until chapter 2
+hidden(ev.axis0); hidden(ev.axis1); hidden(ev.axis2);
+hidden(ev.l0); hidden(ev.l1); hidden(ev.l2);
+
+text(cap, (cx, h - 46), ""); size(cap, 22); color(cap, dim); display(cap);
+
+// ---- 1. the matrix as a transformation of space ----
+section("A matrix in 3D");
+say(cap, "a 3x3 matrix sends the unit cube to a parallelepiped — its columns", 0.5);
+orbit3(50, 26, 13, 4, smooth);
+say(cap, "the volume it encloses is the determinant: det = 8, so space grew 8x", 0.5);
+orbit3(116, 30, 13, 4, smooth);
+// clear the transformation view
+fade(lm, 0.6); fade(lm.ref, 0.6);
+fade(lm.i, 0.6); fade(lm.j, 0.6); fade(lm.k, 0.6);
+fade(lm.li, 0.6); fade(lm.lj, 0.6); fade(lm.lk, 0.6); fade(lm.val, 0.6);
+wait(0.3);
+
+// ---- 2. the same matrix, through its eigenvectors ----
+say(cap, "", 0.2);
+section("Eigenvectors");
+say(cap, "three special directions only STRETCH when A acts — the eigenvectors", 0.5);
+show(ev.axis0, 0.5); show(ev.axis1, 0.5); show(ev.axis2, 0.5);
+show(ev.l0, 0.4); show(ev.l1, 0.4); show(ev.l2, 0.4);
+orbit3(58, 24, 7, 4, smooth);
+say(cap, "their stretch factors are the eigenvalues: 1, 2 and 4", 0.5);
+orbit3(122, 32, 6.5, 4.5, smooth);
+wait(0.5);
