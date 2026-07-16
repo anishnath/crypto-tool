@@ -1,0 +1,24 @@
+// ============================================================================
+//  pulley.manic  —  the Atwood machine, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `pulley(id, [center], [m1], [m2], [unit])` — two masses over one pulley. The
+//  heavier one accelerates down at a = (m₁−m₂)g/(m₁+m₂). PRE-SIMULATED with RK4;
+//  `run(id,[dur])` replays it. `energygraph` shows the KE↔PE trade as the system
+//  speeds up (total is conserved — no friction).
+//
+//  TO ADAPT: set m1 and m2 closer together for a gentler acceleration.
+// ============================================================================
+
+title("Atwood machine — unequal masses accelerate");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Atwood machine — a = (m₁−m₂)g / (m₁+m₂)");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+pulley(pl, (440, 170), 3, 2);
+energygraph(pl, (960, 330), 120);
+
+text(cap, (cx, h - 32), "cyan m₁ (heavier) sinks, magenta m₂ rises; kinetic energy climbs as potential falls");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(pl, 5);

@@ -1,0 +1,11 @@
+// spring-chain.manic — three blocks joined by two springs on an incline: coupled
+// oscillators / normal modes. `springchain(id,[center],[angle],[unit])`. A uniform
+// gravity component doesn't change the internal motion, so it's shown in the
+// incline's frame (CM held). `energygraph` shows the energy sloshing (beating).
+title("Spring chain on an incline — coupled oscillators");
+canvas("16:9");
+text(hdr, (cx, 44), "Three masses, two springs — the energy sloshs between the modes"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+springchain(sc, (500, 300), 22);
+energygraph(sc, (1010, 340), 120);
+text(cap, (cx, h - 32), "pull one block and the whole chain rings — normal modes / beating (coupled springs)"); size(cap, 15); color(cap, dim); display(cap);
+run(sc, 9);

@@ -1,0 +1,25 @@
+// ============================================================================
+//  drop-mass.manic  —  an inelastic collision, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `dropmass(id, [center], [dropheight], [unit])` — a mass is dropped onto a
+//  block resting on a spring. It free-falls, STICKS (perfectly inelastic), then
+//  the heavier combined mass oscillates about a lower equilibrium. The collision
+//  loses kinetic energy — so `energygraph`'s total STEPS DOWN at impact. Then it
+//  is conserved again. PRE-SIMULATED with RK4; `run(id,[dur])` replays it.
+//
+//  TO ADAPT: raise dropheight for a faster impact and a bigger energy step.
+// ============================================================================
+
+title("Drop mass — an inelastic collision loses energy");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Dropped mass sticks — energy is lost in the inelastic collision");
+size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+
+dropmass(dm, (440, 150), 1.2);
+energygraph(dm, (960, 330), 120);
+
+text(cap, (cx, h - 32), "watch the gold total energy line step DOWN the instant the magenta mass sticks to the block");
+size(cap, 15); color(cap, dim); display(cap);
+
+run(dm, 7);

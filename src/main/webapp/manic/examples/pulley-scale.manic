@@ -1,0 +1,23 @@
+// ============================================================================
+//  pulley-scale.manic  —  what does the scale read? (physics Layer 1)
+// ----------------------------------------------------------------------------
+//  `pulleyscale(id, [center], [m1], [m2], [unit])` — an Atwood machine over two
+//  pulleys with a spring scale in the rope between them. The classic surprise:
+//  the scale reads the rope TENSION 2·m₁·m₂·g/(m₁+m₂), NOT the sum of the two
+//  weights. PRE-SIMULATED with RK4; `run(id,[dur])` replays it.
+//
+//  TO ADAPT: set m1 = m2 — the system balances and the scale reads exactly m·g.
+// ============================================================================
+
+title("Pulley scale — it reads the tension, not the weight");
+canvas("16:9");
+
+text(hdr, (cx, 46), "The scale reads the rope tension  T = 2·m₁·m₂·g / (m₁+m₂)");
+size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+
+pulleyscale(ps, (cx, 200), 4, 3);
+
+text(cap, (cx, h - 32), "not (m₁+m₂)g, not the heavier weight — the tension sits between the two weights");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(ps, 5);

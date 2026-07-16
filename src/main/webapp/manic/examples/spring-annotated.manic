@@ -1,0 +1,60 @@
+// ============================================================================
+//  spring-annotated.manic  —  ELEVATE a sim: typewriter narration + live data
+// ----------------------------------------------------------------------------
+//  One elevation flavour of several (see pulley-annotated for camera work,
+//  brachistochrone-annotated for kinetic typography). Here the story is told by
+//  a TYPEWRITER lab-note (`type` + `cursor`) and LIVE COUNTERS (`counter` +
+//  `to(_, value, …)`) that tick up — no stage-covering section cards, so the
+//  motion is never hidden. The spring's parts are ordinary entities the whole
+//  language drives directly.
+// ============================================================================
+
+title("Anatomy of a Spring — Hooke's Law & SHM");
+canvas("16:9");
+
+text(hdr, (cx, 40), "Anatomy of a Spring"); size(hdr, 28); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// ---- the sim + views (staged) ----
+spring(sp, (340, 320), 10, 1.4, 105);
+hidden(sp.wall); hidden(sp.spring); hidden(sp.mass); hidden(sp.overlays);
+untraced(sp.path);
+well(sp, (1015, 230), 112); hidden(sp.well);
+energygraph(sp, (1015, 480), 112); hidden(sp.energy);
+
+// ---- part annotations ----
+line(eq, (340, 268), (340, 372)); color(eq, dim); stroke(eq, 2); untraced(eq);
+text(coilL, (285, 232), "spring, stiffness k"); size(coilL, 16); color(coilL, lime); display(coilL); hidden(coilL);
+text(massL, (520, 272), "mass m"); size(massL, 16); color(massL, cyan); display(massL); hidden(massL);
+bracelabel(xb, (340, 372), (487, 372), "x₀", 22); color(xb, gold); hidden(xb); hidden(xb.label);
+text(hooke, (340, 168), "F = −k·x"); size(hooke, 24); color(hooke, gold); display(hooke); hidden(hooke);
+
+// ---- a TYPEWRITER lab-note with a live cursor (the narration device) ----
+text(note, (cx, h - 44), ""); size(note, 21); color(note, fg); display(note); cursor(note);
+text(kick, (96, 92), ""); size(kick, 17); color(kick, magenta); bold(kick); display(kick);
+
+// ---- LIVE COUNTERS (tick up on reveal) ----
+counter(kC, (150, 470), 0, 1, "k = ", " N/m"); size(kC, 26); color(kC, lime); display(kC); hidden(kC);
+counter(tC, (150, 512), 0, 2, "T = ", " s"); size(tC, 26); color(tC, cyan); display(tC); hidden(tC);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+
+say(kick, "SETUP", 0.2);
+say(note, "a wall, a coil of stiffness k, and a mass", 0.1); type(note, 1.4);
+show(sp.wall, 0.4); pulse(sp.wall); show(coilL, 0.4);
+show(sp.spring, 0.4); flash(sp.spring, lime); show(sp.mass, 0.4); pulse(sp.mass); show(massL, 0.4);
+show(kC, 0.3); to(kC, value, 10, 0.8);
+wait(0.5);
+
+say(kick, "HOOKE'S LAW", 0.2);
+say(note, "pull it x₀ from rest — it pulls back, F = −k·x", 0.1); type(note, 1.7);
+draw(eq, 0.4); show(xb, 0.4); show(xb.label, 0.4); show(hooke, 0.4); flash(sp.spring, gold);
+show(tC, 0.3); to(tC, value, 1.99, 0.9);   // period 2π√(m/k)
+wait(0.6);
+fade(coilL, 0.3); fade(massL, 0.3); fade(xb, 0.3); fade(xb.label, 0.3); fade(hooke, 0.3);
+wait(0.2);
+
+say(kick, "MOTION", 0.2);
+say(note, "release — simple harmonic motion; every panel tells the same swing", 0.1); type(note, 1.9);
+show(sp.well, 0.5); show(sp.overlays, 0.4); show(sp.energy, 0.5); draw(sp.path, 0.6);
+run(sp, 10);

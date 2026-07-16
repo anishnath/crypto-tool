@@ -1,0 +1,27 @@
+// ============================================================================
+//  brachistochrone.manic  —  the curve of fastest descent (physics Layer 1)
+// ----------------------------------------------------------------------------
+//  `brachistochrone(id, [center], [unit])` — four beads race under gravity from
+//  A down to B along four curves: a straight line, a circular arc, a parabola,
+//  and a CYCLOID. Each is a full RK4 bead-on-wire integration. The cycloid — the
+//  brachistochrone — wins, even though it dips below and travels farther. The
+//  steep early drop buys speed that more than pays back the extra distance.
+//  `run(id,[dur])` replays the race.
+//
+//  TO ADAPT: raise `dur` to watch the finish order in slow motion.
+// ============================================================================
+
+title("Brachistochrone — the fastest slide is a cycloid");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Which curve is fastest from A to B? Steepness early beats a short path");
+size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+
+brachistochrone(br, (330, 150), 150);
+
+text(leg, (cx, h - 58), "dim: straight    cyan: arc    gold: parabola    magenta: CYCLOID (winner)");
+size(leg, 16); color(leg, fg); display(leg);
+text(cap, (cx, h - 30), "same start, same finish — the magenta cycloid bead reaches B first");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(br, 5);

@@ -1,0 +1,43 @@
+// ============================================================================
+//  textbook-incline-fbd.manic  —  the free-body diagram, textbook style
+// ----------------------------------------------------------------------------
+//  A block on an incline shown the classic physics-class way: the physical
+//  picture on the left with the force vectors ON the block (via the reusable
+//  `forces(id)` view on the `ramp` sim — gravity `mg`, normal `N`, friction `f`,
+//  and the acceleration `a`), and a free-body-diagram panel on the right drawing
+//  the same forces from a single point. `template("paper")` inks it; then `run`
+//  plays the slide with the vectors riding the block.
+// ============================================================================
+
+title("Block on an incline — the free-body diagram");
+canvas("16:9");
+template("paper");
+
+text(hdr, (cx, 42), "Block on an incline — the free-body diagram"); color(hdr, fg); size(hdr, 24); bold(hdr); display(hdr);
+
+// left: the incline sim, inked; its force vectors revealed by forces()
+ramp(rp, (170, 470), 30);
+outlined(rp.block); outline(rp.block, fg);
+
+// right: the free-body diagram — the same four forces from one point
+dot(o, (1000, 330), 6); color(o, fg);
+text(fbdT, (1000, 205), "free-body diagram"); color(fbdT, dim); size(fbdT, 16); display(fbdT);
+arrow(aN, (1000, 330), (955, 252)); color(aN, lime); stroke(aN, 3);
+text(lN, (944, 240), "N"); color(lN, lime); size(lN, 18); display(lN);
+arrow(af, (1000, 330), (1078, 285)); color(af, magenta); stroke(af, 3);
+text(lf, (1086, 280), "f"); color(lf, magenta); size(lf, 18); display(lf);
+arrow(ag, (1000, 330), (1000, 440)); color(ag, blue); stroke(ag, 3);
+text(lg, (1010, 448), "mg"); color(lg, blue); size(lg, 18); display(lg);
+arrow(aa, (1000, 330), (930, 372)); color(aa, red); stroke(aa, 3);
+text(la, (908, 380), "a"); color(la, red); size(la, 18); display(la);
+
+text(cap, (cx, h - 34), ""); color(cap, fg); size(cap, 19); display(cap);
+
+// ============================== SCRIPT ==============================
+say(cap, "three forces act on the block: gravity, the normal force, and friction", 0.4);
+forces(rp, 0.9);
+wait(1.0);
+say(cap, "drawn from a single point, they make the free-body diagram →", 0.4);
+wait(0.9);
+say(cap, "their sum points down the slope, so the block accelerates and slides", 0.4);
+run(rp, 5);

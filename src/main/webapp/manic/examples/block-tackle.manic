@@ -1,0 +1,26 @@
+// ============================================================================
+//  block-tackle.manic  —  the compound pulley (mechanical advantage), Layer 1
+// ----------------------------------------------------------------------------
+//  `blocktackle(id, [center], [load], [effort], [strands], [unit])` — a load on a
+//  movable block held by N rope strands and pulled by an effort mass. The N
+//  strands give a MECHANICAL ADVANTAGE of N: an effort of only load/N balances
+//  the load, and the effort end travels N× as far as the load rises. PRE-SIMULATED
+//  with RK4; `run(id,[dur])` replays it. N = 1 is just the Atwood machine.
+//
+//  TO ADAPT: change `strands` (1–4) — more strands lift the same load with less
+//  effort, but the effort mass has to travel that much further.
+// ============================================================================
+
+title("Block & Tackle — a compound pulley's mechanical advantage");
+canvas("16:9");
+
+text(hdr, (cx, 40), "Block & tackle — 3 strands lift 8 kg with 3 kg of effort");
+size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+
+blocktackle(bt, (500, 130), 8, 3, 3);
+energygraph(bt, (1030, 330), 120);
+
+text(cap, (cx, h - 32), "3 strands ⇒ MA = 3: effort just over load/3 lifts it; the effort end travels 3× as far");
+size(cap, 15); color(cap, dim); display(cap);
+
+run(bt, 5);

@@ -1,0 +1,33 @@
+// ============================================================================
+//  textbook-doubly-list.manic  —  the paper/support treatment on the ALGO kit
+// ----------------------------------------------------------------------------
+//  Proof the textbook look is DOMAIN-AGNOSTIC: the same `template("paper")` page,
+//  the same std `support` hatch primitive, and the same `color`/`say` staging —
+//  here on the algo kit's doubly linked list instead of a physics sim. Nothing
+//  about `support`/`paper` knows about physics; they compose over any kit.
+// ============================================================================
+
+title("Doubly linked list — textbook style");
+canvas("16:9");
+template("paper");                       // the white exam-paper page (engine theme)
+
+text(hdr, (cx, 66), "Doubly linked list");
+color(hdr, fg); size(hdr, 30); bold(hdr); display(hdr);
+support(rule, (cx, 102), 380, "down");   // a hatched section rule — a std primitive, in an ALGO scene
+
+// the algo-kit structure — the paper theme's palette REMAP turns the sim's
+// neon colours into ink automatically (light boxes, dark text, muted pointers),
+// so no recolouring is needed. The bare id `dll` also broadcasts now, e.g.
+// `hidden(dll)` / `flash(dll, cyan)` address the whole list at once.
+list(dll, "3 8 5 2", (cx, 340), doubly, 80, 58);
+
+text(cap, (cx, 628), ""); color(cap, fg); size(cap, 22); display(cap);
+
+say(cap, "each node = [ ·prev | data | next· ] — data plus two pointers");
+wait(1.1);
+say(cap, "insert 7 after node 1: the prev/next pointers re-thread — nothing shifts");
+insert(dll, 1, "7");
+wait(0.9);
+say(cap, "remove the head: the list simply re-points past it");
+remove(dll, 0);
+wait(1.2);

@@ -1,0 +1,7 @@
+// piston.manic — an engine piston: a spinning crank drives a slider in a cylinder.
+title("Engine piston — the slider-crank");
+canvas("16:9");
+text(hdr,(cx,46),"Slider-crank — a spinning crank becomes up-and-down motion"); size(hdr,23); color(hdr,cyan); bold(hdr); display(hdr);
+piston(eng, (cx, 480), 60);
+text(cap,(cx,h-32),"gold crank sweeps the circle; the rod converts it to the piston's stroke"); size(cap,16); color(cap,dim); display(cap);
+run(eng, 9);

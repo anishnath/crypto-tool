@@ -1,0 +1,8 @@
+// molecule.manic — atoms bonded by springs, vibrating about their shape.
+title("Vibrating molecule");
+canvas("16:9");
+text(hdr,(cx,46),"A molecule as balls and springs — bonds stretch and the atoms jiggle"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+molecule(mol, (520, 300), 3);
+energygraph(mol, (1000, 300), 110);   // total energy is conserved as it vibrates
+text(cap,(cx,h-32),"one atom starts pulled out; the bonds pull it back and the whole thing rings"); size(cap,15); color(cap,dim); display(cap);
+run(mol, 11);

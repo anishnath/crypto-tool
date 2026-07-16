@@ -1,5 +1,5 @@
 {
-  "count": 99,
+  "count": 125,
   "categories": [
     {
       "slug": "algorithms",
@@ -28,6 +28,12 @@
           "file": "linked_list.manic",
           "title": "Linked list",
           "desc": "Singly / doubly / circular \u2014 classic node anatomy + pointer re-threading."
+        },
+        {
+          "name": "textbook-doubly-list",
+          "file": "textbook-doubly-list.manic",
+          "title": "Textbook doubly list",
+          "desc": "The paper/support TEXTBOOK treatment on the algo kit \u2014 proof it's domain-agnostic: template(\"paper\") + a hatched support rule turn the doubly linked list into a flat exam-paper figure (the theme's palette remap inks it automatically), then it inserts and removes."
         },
         {
           "name": "hashmap",
@@ -342,6 +348,18 @@
           "desc": "The damped spring: the coil's oscillation decays, the phase ellipse spirals in, the ball settles in the parabola, and total energy bleeds away."
         },
         {
+          "name": "spring-annotated",
+          "file": "spring-annotated.manic",
+          "title": "Spring annotated",
+          "desc": "Elevating the spring with a TYPEWRITER lab-note (type + cursor) and LIVE COUNTERS (counter + to(_, value, \u2026)) ticking k and the period up \u2014 Hooke's law \u2192 parabolic well \u2192 SHM, with no stage-covering section cards."
+        },
+        {
+          "name": "spring-paper",
+          "file": "spring-paper.manic",
+          "title": "Spring paper",
+          "desc": "The SAME spring sim dressed as a textbook figure AND run: template(\"paper\") inks it, a hatched support wall, a forest-green coil and outlined mass box, Hooke's law and x\u2080 revealed, then run plays the SHM \u2014 the paper treatment on a LIVE sim (see pulley-paper)."
+        },
+        {
           "name": "double-pendulum",
           "file": "double-pendulum.manic",
           "title": "Double pendulum",
@@ -412,6 +430,144 @@
           "file": "car-suspension.manic",
           "title": "Car suspension",
           "desc": "A quarter-car riding a scrolling road \u2014 a speed bump, a washboard stretch, and a pothole \u2014 its spring+damper soaking up the ride (carsuspension)."
+        },
+        {
+          "name": "piston",
+          "file": "piston.manic",
+          "title": "Piston",
+          "desc": "An engine piston: a spinning crank + connecting rod turn rotation into the piston's up-and-down stroke \u2014 the slider-crank mechanism (piston)."
+        },
+        {
+          "name": "molecule",
+          "file": "molecule.manic",
+          "title": "Molecule",
+          "desc": "A molecule as balls and springs \u2014 atoms bonded on every side, vibrating about their equilibrium shape with the total energy conserved (molecule)."
+        },
+        {
+          "name": "robot-arm",
+          "file": "robot-arm.manic",
+          "title": "Robot arm",
+          "desc": "A two-link robot arm reaching for a target: the joint rates come from the analytic inverse Jacobian, so the arm drives its end-effector to the goal and settles there \u2014 inverse kinematics as a solved motion (robotarm)."
+        },
+        {
+          "name": "pulley",
+          "file": "pulley.manic",
+          "title": "Pulley",
+          "desc": "The Atwood machine: two masses over one pulley, the heavier one accelerating down at (m\u2081\u2212m\u2082)g/(m\u2081+m\u2082)."
+        },
+        {
+          "name": "pulley-scale",
+          "file": "pulley-scale.manic",
+          "title": "Pulley scale",
+          "desc": "The surprise every physics class remembers: an in-line spring scale on an Atwood machine reads the rope TENSION 2\u00b7m\u2081\u00b7m\u2082\u00b7g/(m\u2081+m\u2082) \u2014 not the sum of the two weights (pulleyscale)."
+        },
+        {
+          "name": "block-tackle",
+          "file": "block-tackle.manic",
+          "title": "Block tackle",
+          "desc": "A compound pulley (block & tackle): a load on a movable block held by N rope strands, pulled by an effort mass."
+        },
+        {
+          "name": "compound-pulley",
+          "file": "compound-pulley.manic",
+          "title": "Compound pulley",
+          "desc": "A compound pulley with a MOVABLE pulley: a fixed top pulley carries mass A on one side and a movable lower pulley on the other; that pulley carries B and C."
+        },
+        {
+          "name": "incline-pulley",
+          "file": "incline-pulley.manic",
+          "title": "Incline pulley",
+          "desc": "The incline-Atwood: a block on an incline tied over a pulley at the top to a hanging mass."
+        },
+        {
+          "name": "double-incline",
+          "file": "double-incline.manic",
+          "title": "Double incline",
+          "desc": "Two blocks on a wedge's two slopes, tied over a pulley at the apex (right slope rough)."
+        },
+        {
+          "name": "incline-bumper",
+          "file": "incline-bumper.manic",
+          "title": "Incline bumper",
+          "desc": "A block slides down an incline into a spring bumper at the base, compresses it, and launches back up \u2014 one-sided contact, gravity PE \u2194 kinetic \u2194 spring PE, energy conserved (inclinebumper)."
+        },
+        {
+          "name": "loop-track",
+          "file": "loop-track.manic",
+          "title": "Loop track",
+          "desc": "A ball rolls down a ramp and around a vertical LOOP-THE-LOOP \u2014 the curved-track case."
+        },
+        {
+          "name": "spring-chain",
+          "file": "spring-chain.manic",
+          "title": "Spring chain",
+          "desc": "Three blocks joined by two springs on an incline \u2014 coupled oscillators."
+        },
+        {
+          "name": "incline-showcase",
+          "file": "incline-showcase.manic",
+          "title": "Incline showcase",
+          "desc": "One paper page, FOUR live incline problems: a friction ramp, an incline+pulley, a two-slope wedge, and a spring bumper \u2014 revealed one at a time with narration, then all run in parallel."
+        },
+        {
+          "name": "textbook-incline-fbd",
+          "file": "textbook-incline-fbd.manic",
+          "title": "Textbook incline fbd",
+          "desc": "A block on an incline as a physics-class FREE-BODY DIAGRAM: the reusable forces(id) view draws gravity/normal/friction/a vectors on the block, a second panel redraws them from a point, and template(\"paper\") inks it \u2014 then run slides the block (ramp)."
+        },
+        {
+          "name": "pulley-annotated",
+          "file": "pulley-annotated.manic",
+          "title": "Pulley annotated",
+          "desc": "The Atwood machine elevated with CAMERA work: cam + zoom push in on the two masses for the imbalance beat and glow the heavier one, a counter ticks the acceleration up, then it pulls back to release \u2014 cinematography instead of section cards."
+        },
+        {
+          "name": "pulley-paper",
+          "file": "pulley-paper.manic",
+          "title": "Pulley paper",
+          "desc": "The SAME Atwood sim dressed as a textbook figure AND run: template(\"paper\") inks it automatically, a hatched support ceiling, a forest-green wheel and outlined mass boxes, a base-manic reveal, then run plays the motion \u2014 the paper treatment on a LIVE sim."
+        },
+        {
+          "name": "ramp",
+          "file": "ramp.manic",
+          "title": "Ramp",
+          "desc": "A block sliding down an inclined plane with static/kinetic friction \u2014 the full force model."
+        },
+        {
+          "name": "drop-mass",
+          "file": "drop-mass.manic",
+          "title": "Drop mass",
+          "desc": "A mass dropped onto a spring-block STICKS \u2014 a perfectly inelastic collision."
+        },
+        {
+          "name": "raft-cm",
+          "file": "raft-cm.manic",
+          "title": "Raft cm",
+          "desc": "A person walks back and forth on a floating raft; with no external force the centre of mass stays fixed, so the raft glides the opposite way \u2014 momentum conservation you can see (raft)."
+        },
+        {
+          "name": "brachistochrone",
+          "file": "brachistochrone.manic",
+          "title": "Brachistochrone",
+          "desc": "Four beads race under gravity from A to B down a straight line, a circular arc, a parabola, and a cycloid."
+        },
+        {
+          "name": "brachistochrone-annotated",
+          "file": "brachistochrone-annotated.manic",
+          "title": "Brachistochrone annotated",
+          "desc": "The elevation recipe on a RACE, told with KINETIC TYPOGRAPHY: wordpop pops the question in, karaoke sweeps a highlight across the four path names as the curves sketch on, then flash/glow crown the cycloid \u2014 a third, distinct elevation style."
+        },
+        {
+          "name": "textbook-pulley",
+          "file": "textbook-pulley.manic",
+          "title": "Textbook pulley",
+          "desc": "A physics-TEXTBOOK figure, manic style: the template(\"paper\") white page, a hatched support ceiling, a green pulley wheel, and outlined labelled mass boxes \u2014 the classic m over 2m+3m arrangement, all base primitives."
+        },
+        {
+          "name": "textbook-tension",
+          "file": "textbook-tension.manic",
+          "title": "Textbook tension",
+          "desc": "Another textbook figure: two support ropes at 60\u00b0/30\u00b0 meeting a knot, a string over a hanging pulley carrying 10 kg with the other end anchored to a hatched floor \u2014 support + template(\"paper\") for the flat exam-paper look."
         }
       ]
     },

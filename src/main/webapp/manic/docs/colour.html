@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f3f17bd0.js";
+            window.path_to_searchindex_js = "searchindex-89925e2c.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-c083d0bb.js"></script>
+        <script src="toc-d969a067.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -188,10 +188,12 @@ glow on the dark default background:</p>
 <tr><th>name</th><th>is</th><th>name</th><th>is</th></tr>
 </thead>
 <tbody>
-<tr><td><code>cyan</code></td><td>electric blue</td><td><code>dim</code></td><td>muted grey-violet</td></tr>
-<tr><td><code>magenta</code></td><td>hot pink</td><td><code>fg</code></td><td>near-white (default text)</td></tr>
-<tr><td><code>lime</code></td><td>green</td><td><code>panel</code></td><td>dark fill</td></tr>
-<tr><td><code>void</code></td><td>the background</td><td></td><td></td></tr>
+<tr><td><code>cyan</code></td><td>electric blue</td><td><code>gold</code></td><td>warm amber</td></tr>
+<tr><td><code>magenta</code></td><td>hot pink</td><td><code>red</code></td><td>warm red</td></tr>
+<tr><td><code>lime</code></td><td>green</td><td><code>orange</code></td><td>orange</td></tr>
+<tr><td><code>blue</code></td><td>true blue (≠ cyan)</td><td><code>dim</code></td><td>muted grey-violet</td></tr>
+<tr><td><code>void</code></td><td>the background</td><td><code>fg</code></td><td>near-white (default text)</td></tr>
+<tr><td><code>panel</code></td><td>dark fill</td><td></td><td></td></tr>
 </tbody>
 </table>
 </div>
@@ -240,6 +242,34 @@ canvas(1280, 720);     // explicit
 </code></pre>
 <p><code>portrait</code> / <code>9:16</code> is 1080×1920 — pair it with the <code>reel</code> render preset for
 vertical / social clips.</p>
+<h2 id="templates--the-whole-look"><a class="header" href="#templates--the-whole-look">Templates — the whole look</a></h2>
+<p><code>template("...")</code> sets the movie’s <strong>look</strong> in one call: the background, how the
+palette renders, the glow, and any page chrome. Put it near the top, after
+<code>canvas(...)</code>.</p>
+<pre><code class="language-manic">canvas("16:9");
+template("paper");     // a flat white exam-paper page
+</code></pre>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>template</th><th>look</th></tr>
+</thead>
+<tbody>
+<tr><td><code>plain</code></td><td>the default — neon on near-black, no chrome</td></tr>
+<tr><td><code>terminal</code></td><td>the neon-terminal frame (border, title, masthead)</td></tr>
+<tr><td><code>paper</code> (aliases <code>light</code>, <code>print</code>)</td><td>white page, dark ink — for print / textbook figures</td></tr>
+<tr><td><code>blueprint</code> (alias <code>blue</code>)</td><td>white &amp; cyan lines on deep navy</td></tr>
+</tbody>
+</table>
+</div>
+<p>The clever part is the <strong>palette remap</strong>: a template doesn’t just change the
+background, it re-maps every palette colour to that template’s role. So on
+<code>paper</code>, <code>panel</code> → light box, <code>fg</code> → dark ink, <code>lime</code> → forest green, and so on —
+which means your existing scene renders legibly on the new page <strong>without
+recolouring anything</strong>. That’s why <code>template("paper")</code> alone turns a pulley,
+a spring, or a linked list into a clean textbook figure (see
+<a href="elevating.html">Elevating a scene</a>). <code>paper</code>/<code>blueprint</code> also drop the glow for
+crisp print output.</p>
 <p>Next: loops, variables, and macros → <a href="language-layer.html">The language layer</a>.</p>
 
                     </main>

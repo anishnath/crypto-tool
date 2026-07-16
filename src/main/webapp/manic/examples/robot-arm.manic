@@ -1,0 +1,25 @@
+// ============================================================================
+//  robot-arm.manic  —  inverse kinematics, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `robotarm(id, [center], [mode], [unit])` — a two-link arm that tracks a target
+//  by inverse kinematics. Its joint rates are the analytic 2×2 inverse Jacobian
+//  times a gain on the end-effector error, so the gripper chases the target.
+//  `mode` 1 = trace a circle (default), 2 = figure-8, 0 = reach a fixed point and
+//  settle. PRE-SIMULATED with RK4; `run(id,[dur])` replays it, and `{id}.path`
+//  traces the route the gripper sweeps.
+//
+//  TO ADAPT: set mode 2 for a figure-8, or mode 0 to reach one fixed point.
+// ============================================================================
+
+title("Robot arm — tracking by inverse kinematics");
+canvas("16:9");
+
+text(hdr, (cx, 46), "Two-link arm — inverse kinematics keeps the gripper on the moving target");
+size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+
+robotarm(rb, (cx, 470), 1);
+
+text(cap, (cx, h - 32), "gold shoulder + cyan forearm chase the lime ring around its circle — the gripper traces the path");
+size(cap, 15); color(cap, dim); display(cap);
+
+run(rb, 10);

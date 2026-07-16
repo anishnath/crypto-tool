@@ -1,0 +1,51 @@
+// ============================================================================
+//  brachistochrone-annotated.manic  —  ELEVATE a sim: KINETIC TYPOGRAPHY
+// ----------------------------------------------------------------------------
+//  A third elevation flavour (see spring-annotated for typewriter, pulley-
+//  annotated for camera). Here the text itself performs: `caption` + `wordpop`
+//  pops the question in word-by-word, `caption` + `karaoke` sweeps a highlight
+//  across the four path names as the curves are sketched, and `flash`/`glow`/
+//  `pulse` crown the winner — the same recipe on a multi-body RACE, no section
+//  cards. All base manic over the `brachistochrone` parts.
+// ============================================================================
+
+title("Brachistochrone — Shortest Path, or Fastest?");
+canvas("16:9");
+
+// ---- the sim (curves untraced to sketch on; beads + markers hidden) ----
+brachistochrone(br, (330, 165), 150);
+untraced(br.straight); untraced(br.circle); untraced(br.parabola); untraced(br.cycloid);
+hidden(br.bead_straight); hidden(br.bead_circle); hidden(br.bead_parabola); hidden(br.bead_cycloid);
+hidden(br.markA); hidden(br.labelA); hidden(br.markB); hidden(br.labelB);
+
+// ---- kinetic-typography captions ----
+caption(q, "shortest path — or fastest?", (cx, 62), 34, gold);
+caption(leg, "straight   arc   parabola   cycloid", (cx, h - 66), 26, dim);
+text(cap, (cx, h - 32), ""); size(cap, 19); color(cap, dim); display(cap);
+
+// ============================== SCRIPT ==============================
+say(cap, "a bead slides from A down to B under gravity — same start, same finish", 0.4);
+show(br.markA, 0.4); show(br.labelA, 0.3); pulse(br.markA);
+show(br.markB, 0.4); show(br.labelB, 0.3); pulse(br.markB);
+wait(0.4);
+
+// the question pops in, word by word
+wordpop(q, 0.18);
+wait(0.6);
+
+// sketch the four curves; the legend highlight sweeps across their names
+say(cap, "four paths from A to B — the cycloid dips below the line", 0.4);
+draw(br.straight, 0.5); draw(br.circle, 0.5); draw(br.parabola, 0.5); draw(br.cycloid, 0.6);
+karaoke(leg, 0.5, cyan);
+flash(br.cycloid, magenta);
+wait(0.5);
+
+// the race
+say(cap, "release all four at once …", 0.4);
+show(br.bead_straight, 0.3); show(br.bead_circle, 0.3); show(br.bead_parabola, 0.3); show(br.bead_cycloid, 0.3);
+run(br, 6);
+
+// crown the winner
+say(cap, "the CYCLOID wins — the steep early drop buys speed that repays the longer path", 0.4);
+flash(br.cycloid, lime); glow(br.bead_cycloid, 1.9); pulse(br.bead_cycloid);
+wait(1.0);

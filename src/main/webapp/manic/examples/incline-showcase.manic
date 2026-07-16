@@ -1,0 +1,55 @@
+// ============================================================================
+//  incline-showcase.manic  —  four incline problems, one paper page, all live
+// ----------------------------------------------------------------------------
+//  A single annotated lesson that puts ALL FOUR animated incline sims on one
+//  `template("paper")` page and runs them together — real base-manic composition
+//  (staged reveal with `hidden`/`show`, `say` narration, per-quadrant labels),
+//  not a physics dump. Each sim's bare id broadcasts, so `hidden(rp)`/`show(rp)`
+//  address a whole sim at once. Finishes with all four running in parallel.
+// ============================================================================
+
+title("Four inclined-plane problems — one page");
+canvas("16:9");
+template("paper");
+
+text(hdr, (cx, 34), "Four inclined-plane problems, one page"); color(hdr, fg); size(hdr, 26); bold(hdr); display(hdr); hidden(hdr);
+
+// the four sims (each hidden; the bare id broadcasts to all its parts)
+ramp(rp, (110, 340), 28, 5, 0, 45);            hidden(rp);
+inclinepulley(ip, (690, 340), 30, 3, 2, 42);   hidden(ip);
+doubleincline(dw, (300, 660), 50, 30, 12, 70, 34); hidden(dw);
+inclinebumper(ib, (720, 660), 38, 2, 500, 42); hidden(ib);
+
+// quadrant labels
+text(l1, (150, 175), "① friction on a ramp");     color(l1, dim); size(l1, 17); display(l1); hidden(l1);
+text(l2, (770, 175), "② incline + pulley");        color(l2, dim); size(l2, 17); display(l2); hidden(l2);
+text(l3, (150, 505), "③ two-slope wedge");         color(l3, dim); size(l3, 17); display(l3); hidden(l3);
+text(l4, (770, 505), "④ spring bumper");           color(l4, dim); size(l4, 17); display(l4); hidden(l4);
+
+text(cap, (cx, h - 26), ""); color(cap, fg); size(cap, 19); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+say(cap, "one page, four classic incline problems — all real, pre-simulated physics", 0.4);
+wait(0.5);
+
+say(cap, "① a block sliding down a rough ramp", 0.4);
+show(rp, 0.5); show(l1, 0.3);
+wait(0.5);
+say(cap, "② a block on an incline, tied over a pulley to a hanging mass", 0.4);
+show(ip, 0.5); show(l2, 0.3);
+wait(0.5);
+say(cap, "③ two blocks on a wedge, connected over the apex", 0.4);
+show(dw, 0.5); show(l3, 0.3);
+wait(0.5);
+say(cap, "④ a block sliding into a spring bumper at the base", 0.4);
+show(ib, 0.5); show(l4, 0.3);
+wait(0.6);
+
+say(cap, "…and they all run — same page, same physics engine, four different motions", 0.4);
+par {
+  run(rp, 7);
+  run(ip, 7);
+  run(dw, 7);
+  run(ib, 7);
+}

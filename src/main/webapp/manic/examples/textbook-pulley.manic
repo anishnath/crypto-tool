@@ -1,0 +1,35 @@
+// ============================================================================
+//  textbook-pulley.manic  —  a physics-textbook figure, manic style
+// ----------------------------------------------------------------------------
+//  The classic "m over 2m+3m" pulley arrangement, drawn in the flat textbook
+//  look: the `paper` theme (white page, dark ink), a hatched `support` ceiling,
+//  a solid green pulley wheel, thin ropes, and outlined labelled mass boxes.
+//  A STATIC figure — pure base manic (`support`, `circle`, `line`, `rect`, `text`).
+// ============================================================================
+
+title("Pulley arrangement — m, 2m, 3m");
+canvas("16:9");
+template("paper");
+
+// hatched ceiling + the rope suspending the pulley
+support(ceil, (cx, 120), 340);
+line(rope0, (cx, 120), (cx, 222)); color(rope0, fg); stroke(rope0, 2);
+
+// the green pulley wheel (dark edge + hub)
+circle(wheel, (cx, 300), 80); color(wheel, lime); outline(wheel, fg);
+circle(hub, (cx, 300), 5); color(hub, fg); filled(hub);
+
+// ropes leave the wheel vertically, left and right
+line(ropeL, (560, 300), (560, 456)); color(ropeL, fg); stroke(ropeL, 2);
+line(ropeR, (720, 300), (720, 456)); color(ropeR, fg); stroke(ropeR, 2);
+
+// mass on the left: m
+rect(mbox, (560, 485), 110, 58); outlined(mbox); outline(mbox, fg); stroke(mbox, 2);
+text(ml, (560, 485), "m"); color(ml, fg); size(ml, 26); bold(ml);
+
+// masses on the right: 2m, with 3m hanging below it
+rect(m2, (720, 485), 120, 58); outlined(m2); outline(m2, fg); stroke(m2, 2);
+text(l2, (720, 485), "2m"); color(l2, fg); size(l2, 26); bold(l2);
+line(r23, (720, 514), (720, 596)); color(r23, fg); stroke(r23, 2);
+rect(m3, (720, 625), 120, 58); outlined(m3); outline(m3, fg); stroke(m3, 2);
+text(l3, (720, 625), "3m"); color(l3, fg); size(l3, 26); bold(l3);

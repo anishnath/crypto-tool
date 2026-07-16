@@ -1,0 +1,46 @@
+// ============================================================================
+//  spring-paper.manic  —  an ANIMATED sim in textbook paper style
+// ----------------------------------------------------------------------------
+//  The `spring` sim (mass on a spring, SHM), dressed as a textbook figure AND run:
+//  `template("paper")` inks it automatically, a hatched `support` wall, the coil
+//  in forest green, an outlined mass box, plus a base-manic reveal (Hooke's law,
+//  equilibrium, x₀) — then `run` plays the oscillation. The companion to
+//  pulley-paper: the paper/support treatment on another live sim.
+// ============================================================================
+
+title("Mass on a spring — textbook style");
+canvas("16:9");
+template("paper");
+
+text(hdr, (cx, 46), "Mass on a spring — Hooke's law"); color(hdr, fg); size(hdr, 26); bold(hdr); display(hdr); hidden(hdr);
+
+// the sim, restyled to textbook ink (parts hidden, revealed in order)
+spring(sp, (380, 300), 10, 1.3, 110);
+outlined(sp.mass); outline(sp.mass, fg);
+hidden(sp.wall); hidden(sp.spring); hidden(sp.mass); hidden(sp.overlays);
+untraced(sp.path);
+
+// a hatched wall stands in for the sim's plain anchor; equilibrium reference
+support(wall, (177, 300), 150, "right"); untraced(wall);
+line(eq, (380, 246), (380, 354)); color(eq, dim); stroke(eq, 2); untraced(eq);
+
+text(eqL, (380, 232), "equilibrium"); color(eqL, dim); size(eqL, 15); display(eqL); hidden(eqL);
+text(coilL, (300, 214), "spring, stiffness k"); color(coilL, fg); size(coilL, 17); display(coilL); hidden(coilL);
+text(massL, (548, 258), "mass m"); color(massL, fg); size(massL, 17); display(massL); hidden(massL);
+bracelabel(xb, (380, 360), (523, 360), "x₀", 22); color(xb, fg); hidden(xb); hidden(xb.label);
+text(hooke, (380, 152), "F = −k·x"); color(hooke, fg); size(hooke, 24); display(hooke); hidden(hooke);
+text(cap, (cx, h - 40), ""); color(cap, fg); size(cap, 20); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+say(cap, "a coil of stiffness k fixed to a wall, with a mass on the end", 0.4);
+draw(wall, 0.4); show(sp.spring, 0.4); show(coilL, 0.4); show(sp.mass, 0.4); show(massL, 0.3);
+wait(0.4);
+
+say(cap, "pull it x₀ from equilibrium — it pulls straight back, F = −k·x", 0.4);
+draw(eq, 0.4); show(eqL, 0.3); show(xb, 0.4); show(xb.label, 0.4); show(hooke, 0.5);
+wait(0.7);
+fade(coilL, 0.3); fade(massL, 0.3); fade(xb, 0.3); fade(xb.label, 0.3); fade(hooke, 0.3);
+
+say(cap, "release — simple harmonic motion", 0.4);
+run(sp, 9);

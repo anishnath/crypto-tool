@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f3f17bd0.js";
+            window.path_to_searchindex_js = "searchindex-89925e2c.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-c083d0bb.js"></script>
+        <script src="toc-d969a067.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -198,6 +198,10 @@ declare shapes once; the name is how you address them later in the script.</p>
 </tbody>
 </table>
 </div>
+<p>Plus a few composite helpers built from those: <code>polygon</code>, <code>arc</code>/<code>sector</code>, <code>brace</code>/
+<code>bracelabel</code>, <code>caption</code> (a row of words), and <code>support(id, (cx,cy), [len], ["dir"])</code>
+— the hatched wall / ceiling / floor for mechanics &amp; textbook diagrams (<code>"dir"</code> is
+the open side: <code>"down"</code> ceiling, <code>"up"</code> floor, <code>"left"</code>/<code>"right"</code> walls).</p>
 <p>Points are <code>(x, y)</code> in pixels, <strong>origin top-left, y increasing downward</strong>. Use
 <code>cx</code>, <code>cy</code>, <code>w</code>, <code>h</code> to stay canvas-independent.</p>
 <pre><code class="language-manic">// the six primitive shapes, drawn on together.
@@ -239,6 +243,7 @@ begins. They take the entity name first, then a value:</p>
 <tr><td><code>filled(id)</code> / <code>outlined(id)</code></td><td>turn fill / outline on</td><td><code>filled(box);</code></td></tr>
 <tr><td><code>hue(id, deg)</code></td><td>colour by an angle (0–360) — for gradients &amp; loops</td><td><code>hue(seg, 200);</code></td></tr>
 <tr><td><code>z(id, n)</code></td><td>draw order (higher = on top)</td><td><code>z(box, 5);</code></td></tr>
+<tr><td><code>sticky(id)</code></td><td>pin to the screen so it stays put through a <code>cam</code>/<code>zoom</code> (a HUD)</td><td><code>sticky(caption);</code></td></tr>
 </tbody>
 </table>
 </div>

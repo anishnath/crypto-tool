@@ -1,0 +1,11 @@
+// incline-pulley.manic — the incline-Atwood: a block on an incline tied over a
+// pulley at the top to a hanging mass. `inclinepulley(id,[center],[angle],[m1],
+// [m2],[unit])`. PRE-SIMULATED (RK4); `run(id)` plays it; `energygraph` shows the
+// KE↔PE trade. Matches the classic textbook figure.
+title("Incline + pulley — the incline-Atwood");
+canvas("16:9");
+text(hdr, (cx, 44), "Block on an incline, tied over a pulley to a hanging mass"); size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+inclinepulley(ip, (280, 500), 30, 3, 2);
+energygraph(ip, (1010, 320), 120);
+text(cap, (cx, h - 32), "m₂ (2 kg) hanging outpulls m₁·sinθ, so m₁ climbs the incline and m₂ descends"); size(cap, 15); color(cap, dim); display(cap);
+run(ip, 4);

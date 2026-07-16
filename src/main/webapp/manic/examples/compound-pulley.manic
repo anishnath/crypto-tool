@@ -1,0 +1,25 @@
+// ============================================================================
+//  compound-pulley.manic  —  fixed + movable pulley, three masses (physics L1)
+// ----------------------------------------------------------------------------
+//  `compoundpulley(id, [center], [mA], [mB], [mC], [unit])` — a fixed top pulley
+//  carries mass A on one side and a MOVABLE lower pulley on the other; the movable
+//  pulley carries masses B and C. The string constraints link them: a_A = −a_P and
+//  a_B + a_C = 2·a_P (the massless movable pulley gives T₁ = 2·T₂). Static exactly
+//  when mA = mB + mC. PRE-SIMULATED with RK4; `run(id,[dur])` replays it.
+//
+//  TO ADAPT: set mA = mB + mC and it balances; make A heavier and it hauls B, C up.
+// ============================================================================
+
+title("Compound pulley — fixed + movable, masses A, B, C");
+canvas("16:9");
+
+text(hdr, (cx, 40), "Compound pulley — heavier A hauls B and C upward");
+size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+
+compoundpulley(cp, (470, 120), 5, 2, 2);
+energygraph(cp, (1010, 330), 120);
+
+text(cap, (cx, h - 32), "A (5 kg) > B+C (4 kg): A sinks, the movable pulley rises, B and C are pulled up together");
+size(cap, 15); color(cap, dim); display(cap);
+
+run(cp, 4);

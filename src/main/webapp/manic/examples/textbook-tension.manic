@@ -1,0 +1,39 @@
+// ============================================================================
+//  textbook-tension.manic  —  a physics-textbook figure, manic style
+// ----------------------------------------------------------------------------
+//  Two support ropes at 60° / 30° meet at a knot; a string over a hanging pulley
+//  carries a 10 kg load on one side and anchors to the floor on the other. Drawn
+//  in the flat textbook look: `paper` theme, hatched `support` ceiling + floor,
+//  a green pulley wheel, and outlined labels. A STATIC figure, all base manic.
+// ============================================================================
+
+title("Tension in a rope over a pulley  (g = 10 m/s²)");
+canvas("16:9");
+template("paper");
+
+// hatched ceiling
+support(ceil, (cx, 110), 700);
+
+// the two support ropes meeting at the knot, with a dashed-style vertical ref
+line(t1, (553, 110), (cx, 260)); color(t1, fg); stroke(t1, 2);
+line(t2, (900, 110), (cx, 260)); color(t2, fg); stroke(t2, 2);
+line(vref, (cx, 110), (cx, 260)); color(vref, dim); stroke(vref, 1);
+
+text(a1, (588, 150), "60°"); color(a1, fg); size(a1, 22);
+text(a2, (852, 150), "30°"); color(a2, fg); size(a2, 22);
+text(t1l, (556, 210), "T₁"); color(t1l, fg); size(t1l, 24); bold(t1l);
+text(t2l, (820, 210), "T₂"); color(t2l, fg); size(t2l, 24); bold(t2l);
+
+// knot → hanging pulley
+line(drop, (cx, 260), (cx, 364)); color(drop, fg); stroke(drop, 2);
+circle(wheel, (cx, 430), 66); color(wheel, lime); outline(wheel, fg);
+circle(hub, (cx, 430), 5); color(hub, fg); filled(hub);
+
+// 10 kg load on the right side of the string
+line(ropeM, (706, 430), (706, 520)); color(ropeM, fg); stroke(ropeM, 2);
+rect(mbox, (706, 548), 84, 56); outlined(mbox); outline(mbox, fg); stroke(mbox, 2);
+text(ml, (792, 548), "10 Kg"); color(ml, fg); size(ml, 22); bold(ml);
+
+// the other side anchored to a hatched floor
+line(ropeF, (cx, 496), (cx, 600)); color(ropeF, fg); stroke(ropeF, 2);
+support(floor, (cx, 612), 150, "up");

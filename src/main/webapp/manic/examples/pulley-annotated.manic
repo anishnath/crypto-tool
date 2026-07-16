@@ -1,0 +1,54 @@
+// ============================================================================
+//  pulley-annotated.manic  —  ELEVATE a sim: CAMERA work (cam + zoom)
+// ----------------------------------------------------------------------------
+//  A different elevation flavour from spring-annotated (typewriter) — here the
+//  camera does the storytelling: `cam` + `zoom` push in on the two masses for
+//  the "imbalance" beat, glow the heavier one, then pull back for the release.
+//  A live `counter` ticks the acceleration up. No stage-covering section cards,
+//  so the motion is always visible. All base manic over the `pulley` parts.
+// ============================================================================
+
+title("The Atwood Machine — Why the Heavier Side Falls");
+canvas("16:9");
+
+text(hdr, (cx, 40), "The Atwood Machine"); size(hdr, 28); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// ---- the sim, centred so the camera can push in ----
+pulley(pl, (cx, 190), 3, 2);
+hidden(pl.wheel); hidden(pl.hub); hidden(pl.ropeL); hidden(pl.ropeR); hidden(pl.mass1); hidden(pl.mass2);
+
+text(wheelL, (cx, 118), "frictionless pulley"); size(wheelL, 17); color(wheelL, dim); display(wheelL); hidden(wheelL);
+text(m1L, (cx - 150, 320), "m₁ = 3 kg"); size(m1L, 19); color(m1L, cyan); display(m1L); hidden(m1L);
+text(m2L, (cx + 150, 320), "m₂ = 2 kg"); size(m2L, 19); color(m2L, magenta); display(m2L); hidden(m2L);
+counter(aC, (cx, 250), 0, 2, "a = ", " m/s²"); size(aC, 26); color(aC, gold); display(aC); hidden(aC); sticky(aC);
+
+// caption is `sticky` — it stays pinned to the screen through the camera push-in
+text(cap, (cx, h - 44), ""); size(cap, 21); color(cap, dim); display(cap); sticky(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+
+say(cap, "one rope over one frictionless pulley …", 0.4);
+show(pl.wheel, 0.4); show(pl.hub, 0.3); pulse(pl.wheel); show(wheelL, 0.4);
+wait(0.3);
+say(cap, "… a heavier mass on the left, a lighter one on the right", 0.4);
+show(pl.ropeL, 0.3); show(pl.mass1, 0.4); pulse(pl.mass1); show(m1L, 0.4);
+show(pl.ropeR, 0.3); show(pl.mass2, 0.4); pulse(pl.mass2); show(m2L, 0.4);
+wait(0.5);
+
+// ---- CAMERA: push in on the masses for the imbalance beat ----
+// cap + aC are sticky, so they stay put on screen while the world zooms
+say(cap, "look closely — the net pull favours the heavier side", 0.4);
+par { cam((cx, 330), 1.4, smooth); zoom(1.7, 1.4, smooth); }
+glow(pl.mass1, 1.9); flash(pl.mass1, gold); pulse(pl.mass1);
+wait(1.0);
+par { cam((cx, cy), 1.2, smooth); zoom(1, 1.2, smooth); }   // pull back out
+wait(0.2);
+
+// the acceleration, as a live readout
+show(aC, 0.3); to(aC, value, 1.96, 1.0);         // a = (m₁−m₂)g/(m₁+m₂)
+fade(wheelL, 0.3); fade(m1L, 0.3); fade(m2L, 0.3);
+wait(0.5);
+
+say(cap, "release: m₁ sinks, m₂ rises", 0.4);
+run(pl, 4);

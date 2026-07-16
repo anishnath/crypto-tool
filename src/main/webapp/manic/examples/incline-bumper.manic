@@ -1,0 +1,11 @@
+// incline-bumper.manic — a block slides down an incline into a spring bumper at
+// the base, compresses it, and launches back up (one-sided contact).
+// `inclinebumper(id,[center],[angle],[mass],[stiffness],[unit])`. PRE-SIMULATED
+// (RK4); `energygraph` shows gravity PE ↔ kinetic ↔ spring PE (conserved).
+title("Incline + spring bumper — slide, compress, launch");
+canvas("16:9");
+text(hdr, (cx, 44), "A block slides down and compresses a spring at the base, then launches back"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+inclinebumper(ib, (300, 500), 40, 2, 500);
+energygraph(ib, (1010, 320), 120);
+text(cap, (cx, h - 32), "gravity PE → kinetic → spring PE → back: one-sided contact, energy conserved"); size(cap, 15); color(cap, dim); display(cap);
+run(ib, 6);

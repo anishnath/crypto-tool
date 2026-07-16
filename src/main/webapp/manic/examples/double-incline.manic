@@ -1,0 +1,9 @@
+// double-incline.manic — two blocks on a wedge's two slopes, tied over a pulley
+// at the apex. `doubleincline(id,[center],[angle1],[angle2],[m1],[m2],[unit])`;
+// the right slope is rough. PRE-SIMULATED (RK4); `run(id)` plays it.
+title("Double incline — connected blocks on two slopes");
+canvas("16:9");
+text(hdr, (cx, 42), "Two slopes, one rope over the apex — which way does it slide?"); size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+doubleincline(di, (cx, 520), 50, 30, 12, 70);
+text(cap, (cx, h - 30), "M₂ (70 kg) on the gentle rough slope beats M₁ (12 kg) on the steep smooth one"); size(cap, 15); color(cap, dim); display(cap);
+run(di, 5);

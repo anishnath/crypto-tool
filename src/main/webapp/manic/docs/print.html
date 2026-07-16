@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f3f17bd0.js";
+            window.path_to_searchindex_js = "searchindex-89925e2c.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-c083d0bb.js"></script>
+        <script src="toc-d969a067.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -297,6 +297,10 @@ declare shapes once; the name is how you address them later in the script.</p>
 </tbody>
 </table>
 </div>
+<p>Plus a few composite helpers built from those: <code>polygon</code>, <code>arc</code>/<code>sector</code>, <code>brace</code>/
+<code>bracelabel</code>, <code>caption</code> (a row of words), and <code>support(id, (cx,cy), [len], ["dir"])</code>
+— the hatched wall / ceiling / floor for mechanics &amp; textbook diagrams (<code>"dir"</code> is
+the open side: <code>"down"</code> ceiling, <code>"up"</code> floor, <code>"left"</code>/<code>"right"</code> walls).</p>
 <p>Points are <code>(x, y)</code> in pixels, <strong>origin top-left, y increasing downward</strong>. Use
 <code>cx</code>, <code>cy</code>, <code>w</code>, <code>h</code> to stay canvas-independent.</p>
 <pre><code class="language-manic">// the six primitive shapes, drawn on together.
@@ -338,6 +342,7 @@ begins. They take the entity name first, then a value:</p>
 <tr><td><code>filled(id)</code> / <code>outlined(id)</code></td><td>turn fill / outline on</td><td><code>filled(box);</code></td></tr>
 <tr><td><code>hue(id, deg)</code></td><td>colour by an angle (0–360) — for gradients &amp; loops</td><td><code>hue(seg, 200);</code></td></tr>
 <tr><td><code>z(id, n)</code></td><td>draw order (higher = on top)</td><td><code>z(box, 5);</code></td></tr>
+<tr><td><code>sticky(id)</code></td><td>pin to the screen so it stays put through a <code>cam</code>/<code>zoom</code> (a HUD)</td><td><code>sticky(caption);</code></td></tr>
 </tbody>
 </table>
 </div>
@@ -426,6 +431,8 @@ to(sun, rot, 90);             // rotation to 90 degrees
 <pre><code class="language-manic">cam((300, 200), 1.0);   // pan the camera centre
 zoom(1.6, 0.8);         // zoom to 1.6x
 </code></pre>
+<p>The camera moves the whole world, so a caption or counter would slide off with it.
+Mark it <code>sticky(id)</code> to pin it to the screen and keep it readable through the move.</p>
 <h2 id="one-verb-a-whole-group"><a class="header" href="#one-verb-a-whole-group">One verb, a whole group</a></h2>
 <p>If a name refers to a <strong>tag</strong> (a group) instead of a single entity, the verb
 runs on <em>every</em> member at once. This is how you animate a whole graph, table, or
@@ -503,10 +510,12 @@ glow on the dark default background:</p>
 <tr><th>name</th><th>is</th><th>name</th><th>is</th></tr>
 </thead>
 <tbody>
-<tr><td><code>cyan</code></td><td>electric blue</td><td><code>dim</code></td><td>muted grey-violet</td></tr>
-<tr><td><code>magenta</code></td><td>hot pink</td><td><code>fg</code></td><td>near-white (default text)</td></tr>
-<tr><td><code>lime</code></td><td>green</td><td><code>panel</code></td><td>dark fill</td></tr>
-<tr><td><code>void</code></td><td>the background</td><td></td><td></td></tr>
+<tr><td><code>cyan</code></td><td>electric blue</td><td><code>gold</code></td><td>warm amber</td></tr>
+<tr><td><code>magenta</code></td><td>hot pink</td><td><code>red</code></td><td>warm red</td></tr>
+<tr><td><code>lime</code></td><td>green</td><td><code>orange</code></td><td>orange</td></tr>
+<tr><td><code>blue</code></td><td>true blue (≠ cyan)</td><td><code>dim</code></td><td>muted grey-violet</td></tr>
+<tr><td><code>void</code></td><td>the background</td><td><code>fg</code></td><td>near-white (default text)</td></tr>
+<tr><td><code>panel</code></td><td>dark fill</td><td></td><td></td></tr>
 </tbody>
 </table>
 </div>
@@ -555,6 +564,34 @@ canvas(1280, 720);     // explicit
 </code></pre>
 <p><code>portrait</code> / <code>9:16</code> is 1080×1920 — pair it with the <code>reel</code> render preset for
 vertical / social clips.</p>
+<h2 id="templates--the-whole-look"><a class="header" href="#templates--the-whole-look">Templates — the whole look</a></h2>
+<p><code>template("...")</code> sets the movie’s <strong>look</strong> in one call: the background, how the
+palette renders, the glow, and any page chrome. Put it near the top, after
+<code>canvas(...)</code>.</p>
+<pre><code class="language-manic">canvas("16:9");
+template("paper");     // a flat white exam-paper page
+</code></pre>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>template</th><th>look</th></tr>
+</thead>
+<tbody>
+<tr><td><code>plain</code></td><td>the default — neon on near-black, no chrome</td></tr>
+<tr><td><code>terminal</code></td><td>the neon-terminal frame (border, title, masthead)</td></tr>
+<tr><td><code>paper</code> (aliases <code>light</code>, <code>print</code>)</td><td>white page, dark ink — for print / textbook figures</td></tr>
+<tr><td><code>blueprint</code> (alias <code>blue</code>)</td><td>white &amp; cyan lines on deep navy</td></tr>
+</tbody>
+</table>
+</div>
+<p>The clever part is the <strong>palette remap</strong>: a template doesn’t just change the
+background, it re-maps every palette colour to that template’s role. So on
+<code>paper</code>, <code>panel</code> → light box, <code>fg</code> → dark ink, <code>lime</code> → forest green, and so on —
+which means your existing scene renders legibly on the new page <strong>without
+recolouring anything</strong>. That’s why <code>template("paper")</code> alone turns a pulley,
+a spring, or a linked list into a clean textbook figure (see
+<a href="#elevating-a-scene">Elevating a scene</a>). <code>paper</code>/<code>blueprint</code> also drop the glow for
+crisp print output.</p>
 <p>Next: loops, variables, and macros → <a href="#the-language-layer">The language layer</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="the-language-layer"><a class="header" href="#the-language-layer">The language layer</a></h1>
@@ -694,10 +731,130 @@ doublependulum(dp, (400, 240));  par { run(dp, 12); draw(dp.path, 12); }  // cha
 <p>Pendulum family: <code>pendulum</code> · <code>doublependulum</code> · <code>springpendulum</code> · <code>kapitza</code> ·
 <code>cartpendulum</code> · <code>comparependulum</code>. Spring family: <code>spring</code> · <code>verticalspring</code> ·
 <code>springincline</code> · <code>bungee</code> · <code>resonance</code> · <code>doublespring</code> · <code>seriesparallel</code> ·
-<code>carsuspension</code>.</p>
+<code>carsuspension</code>. Mechanics: <code>robotarm</code> · <code>piston</code> · <code>molecule</code> · <code>ramp</code> (with a <code>forces(id)</code>
+free-body diagram) · <code>inclinepulley</code> · <code>doubleincline</code> · <code>inclinebumper</code> ·
+<code>springchain</code> · <code>looptrack</code> (a curved-track loop-the-loop) · <code>dropmass</code> · <code>raft</code> ·
+<code>brachistochrone</code>. Pulleys: <code>pulley</code> (Atwood) ·
+<code>pulleyscale</code> (reads the tension) · <code>blocktackle</code> (N-strand block &amp; tackle) ·
+<code>compoundpulley</code> (fixed + movable, masses A/B/C).</p>
+<p>Because a sim’s parts are ordinary entities, any base look composes over them —
+e.g. <code>template("paper")</code> + a hatched <code>support</code> turns a pulley or spring into a
+textbook figure (see <a href="#elevating-a-scene">Elevating a scene</a> and the <code>*-paper</code> examples).</p>
 <hr>
 <p>Each kit has a full reference at <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>, and you can see them
 all in motion in the <a href="#examples-gallery">Examples gallery</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="elevating-a-scene"><a class="header" href="#elevating-a-scene">Elevating a scene</a></h1>
+<p>A one-line sim already animates:</p>
+<pre><code class="language-manic">spring(sp); run(sp, 8);
+</code></pre>
+<p>That’s the <em>minimal</em> scene — correct, but bare. An <strong>elevated</strong> scene turns the
+same sim into a narrated lesson: parts revealed one at a time, each labelled, the
+governing law stated on screen, then the motion played across several synchronized
+views.</p>
+<p>The key fact that makes this possible: <strong>a sim’s parts are ordinary manic
+entities.</strong> <code>spring(sp, …)</code> lays out <code>sp.wall</code>, <code>sp.spring</code>, <code>sp.mass</code>, <code>sp.path</code>,
+plus the tag <code>sp.parts</code> over all of them. Every base verb, modifier, and
+annotation addresses those ids directly — there is no separate “physics mode”.
+So you elevate a scene with the vocabulary you already know.</p>
+<h2 id="the-three-moves"><a class="header" href="#the-three-moves">The three moves</a></h2>
+<h3 id="1--stage--hide-the-parts-then-reveal-them-in-order"><a class="header" href="#1--stage--hide-the-parts-then-reveal-them-in-order">1 · Stage — hide the parts, then reveal them in order</a></h3>
+<p>Build the sim, then hide each part (and any extra view) so you can bring them in
+deliberately. <code>untraced</code> on a path keeps it in the scene at zero draw-progress so
+you can <code>draw</code> it on later.</p>
+<pre><code class="language-manic">spring(sp, (360,300), 10, 1.4, 110);
+hidden(sp.wall); hidden(sp.spring); hidden(sp.mass); hidden(sp.overlays);
+untraced(sp.path);
+well(sp, (1010,230), 120); hidden(sp.well);   // an extra "reading", revealed later
+</code></pre>
+<h3 id="2--annotate--name-the-parts-with-base-entities"><a class="header" href="#2--annotate--name-the-parts-with-base-entities">2 · Annotate — name the parts with base entities</a></h3>
+<p>Point at things with <code>text</code> + leader <code>arrow</code>, mark a length or displacement with
+<code>bracelabel</code>, drop a reference <code>line</code>, and state the law with a <code>text</code>. Create
+them all now, hidden, so the reveal order is yours to choreograph.</p>
+<pre><code class="language-manic">text(coilL,(300,205),"spring, stiffness k"); color(coilL,lime); display(coilL); hidden(coilL);
+bracelabel(xb,(360,352),(514,352),"x₀",22);  color(xb,gold); hidden(xb); hidden(xb.label);
+text(hooke,(360,150),"restoring force  F = −k·x"); color(hooke,gold); display(hooke); hidden(hooke);
+</code></pre>
+<h3 id="3--choreograph--chapters-emphasis-then-run"><a class="header" href="#3--choreograph--chapters-emphasis-then-run">3 · Choreograph — chapters, emphasis, then run</a></h3>
+<p>Narrate with <code>section</code> + <code>say</code>, reveal with <code>show</code>/<code>draw</code>, emphasize with
+<code>flash</code>/<code>pulse</code>/<code>recolor</code>, <code>fade</code> the clutter before the motion, then <code>run</code>.</p>
+<pre><code class="language-manic">section("Hooke's law");
+say(cap, "pull it x₀ from equilibrium — it pulls straight back, F = −k·x", 0.4);
+show(sp.spring, 0.4); flash(sp.spring, gold); show(xb, 0.4); show(xb.label, 0.4);
+wait(0.8);
+fade(xb, 0.3); fade(xb.label, 0.3); fade(hooke, 0.3);   // declutter
+
+section("Motion");
+show(sp.overlays, 0.4); show(sp.well, 0.5); draw(sp.path, 0.6);
+run(sp, 10);        // sim, overlays, well ball, energy sweep — all animate together
+</code></pre>
+<h2 id="the-lever-kit"><a class="header" href="#the-lever-kit">The lever kit</a></h2>
+<p>Every one of these is base vocabulary that works on <strong>any</strong> entity — a sim part,
+a shape, a label — so the same kit elevates a physics sim, a geometry
+construction, or an algorithm trace.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Lever</th><th>Builtins</th><th>Buys you</th></tr>
+</thead>
+<tbody>
+<tr><td>Stage the parts</td><td><code>hidden(id.part)</code>, <code>untraced(id.path)</code>, then <code>show</code>/<code>draw</code></td><td>reveal piece-by-piece instead of all at once</td></tr>
+<tr><td>Narrate (light)</td><td><code>say(cap,"…",dur)</code>, a small <code>text</code> kicker updated with <code>say</code>, <code>wait(dur)</code></td><td>chapter the story <strong>without</strong> covering the stage</td></tr>
+<tr><td>Typewriter</td><td><code>type(id,dur)</code> + <code>cursor(id)</code> (set the string with <code>say(id,"…",0.1)</code> first)</td><td>a lab-note / terminal feel that types itself out</td></tr>
+<tr><td>Live data</td><td><code>counter(id,(x,y),start,decimals,"pre","suf")</code> + <code>to(id, value, target, dur)</code></td><td>a number that ticks up (k, period, acceleration)</td></tr>
+<tr><td>Camera</td><td><code>cam((x,y),dur,ease)</code> + <code>zoom(factor,dur,ease)</code></td><td>push in on a part, then pull back — cinematography</td></tr>
+<tr><td>Pin a HUD</td><td><code>sticky(id)</code></td><td>keep a caption / counter fixed on screen while the camera <code>cam</code>/<code>zoom</code>s the world</td></tr>
+<tr><td>Kinetic type</td><td><code>caption(id,"…",(x,y),size,color)</code> + <code>wordpop(id,dur)</code> / <code>karaoke(id,dur,color)</code></td><td>words pop in, or a highlight sweeps across them</td></tr>
+<tr><td>Name the parts</td><td><code>text</code>, leader <code>arrow</code>, <code>bracelabel</code>, reference <code>line</code></td><td>say what each thing is</td></tr>
+<tr><td>Emphasize</td><td><code>flash(id,color)</code>, <code>pulse(id)</code>, <code>recolor(id,color,dur)</code>, <code>glow(id,amt)</code>, <code>shake(id)</code>, <code>spin(id,deg,dur)</code></td><td>move the eye to the part being discussed</td></tr>
+<tr><td>Broadcast</td><td><code>flash(id.parts, lime)</code></td><td>hit <strong>every</strong> part of the sim at once</td></tr>
+<tr><td>State the law</td><td>a <code>text</code> with the formula</td><td>tie the motion to the equation</td></tr>
+<tr><td>Multiple readings</td><td>reveal <code>well</code> / <code>phase</code> / <code>timegraph</code> / <code>energygraph</code>, then <code>run</code></td><td>one motion, several synchronized views</td></tr>
+<tr><td>Declutter</td><td><code>fade(...)</code> the static annotations</td><td>clean playback</td></tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p><strong>Careful with <code>section("…")</code>.</strong> It drops a full-screen title <em>card</em> (an 820×240
+backdrop over the whole stage) and holds it ~2.2 s. Two or three of those and
+the interstitials start to <em>bury</em> the animation you’re trying to show. Reach for
+it only for a genuine hard scene change; for beat-to-beat chapters prefer a
+lightweight persistent kicker/<code>caption</code> updated with <code>say</code>, or let the
+typewriter / camera / kinetic-type do the pacing. <strong>Vary the lens per scene</strong> —
+if every lesson uses the identical <code>section</code>+<code>say</code>+<code>show</code> loop, the medium looks
+one-note; the point of the kit above is that manic has range.</p>
+</blockquote>
+<h2 id="reveal-order-gotchas"><a class="header" href="#reveal-order-gotchas">Reveal-order gotchas</a></h2>
+<ul>
+<li><strong><code>show</code>/<code>fade</code> force opacity to 1 / 0.</strong> They will override a deliberately
+faint entity (a dim reference line, a panel frame). To bring in something that
+should stay faint, <code>draw</code> it (traces the stroke, leaves opacity alone) or just
+<code>display</code> it faint from the start — don’t <code>show</code> it.</li>
+<li><strong><code>draw</code> is the nicest reveal for strokes</strong> — lines, arrows, curves, and paths
+sketch themselves on. Set the entity <code>untraced</code> first, then <code>draw(id, dur)</code>.</li>
+<li><strong><code>fade</code> the annotations before the motion</strong> so the swing plays against a clean
+stage.</li>
+<li><strong>Loops (<code>+timeline</code>) reference only ids that exist</strong> — build every part before
+the script that animates it.</li>
+</ul>
+<h2 id="worked-examples"><a class="header" href="#worked-examples">Worked examples</a></h2>
+<p>The gallery pairs each elevated lesson with its minimal reference — and each one
+leads with a <strong>different</strong> lens, to show the range:</p>
+<ul>
+<li><strong><a href="#physics--simulations">Anatomy of a Spring</a></strong> (<code>spring-annotated</code>) — <em>typewriter +
+live data</em>: a <code>type</code>d lab-note with a <code>cursor</code>, and <code>counter</code>s that tick k and
+the period up, over Hooke’s law → parabolic well → SHM.</li>
+<li><strong><a href="#physics--simulations">The Atwood Machine</a></strong> (<code>pulley-annotated</code>) — <em>camera</em>: <code>cam</code> +
+<code>zoom</code> push in on the masses for the imbalance beat, then pull back to release;
+the caption + counter are <code>sticky</code>, so they stay pinned through the zoom.</li>
+<li><strong><a href="#physics--simulations">Brachistochrone race</a></strong> (<code>brachistochrone-annotated</code>) —
+<em>kinetic typography</em> on a multi-body sim: <code>wordpop</code> the question, <code>karaoke</code> the
+path names as the curves sketch on, then crown the cycloid.</li>
+</ul>
+<p>Notice none of them use <code>section</code> — the pacing comes from the lens instead, so the
+motion is never hidden behind a card.</p>
+<p>The three-move recipe is domain-agnostic: it elevates anything with addressable
+parts, not just the physics kit.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="going-3d"><a class="header" href="#going-3d">Going 3D</a></h1>
 <p>So far every shape has lived on a flat page. manic has a <strong>second world</strong>: a real
@@ -823,12 +980,12 @@ shape (with a message that names the 3D replacement):</p>
 <h1 id="examples-gallery"><a class="header" href="#examples-gallery">Examples gallery</a></h1>
 <p>Every animation in <code>examples/</code>, by topic — <strong>the code and the clip for each</strong>. Run any of them with <code>manic examples/&lt;name&gt;.manic</code>. Project: <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>.</p>
 <ul>
-<li><a href="#algorithms--data-structures">Algorithms &amp; data structures</a> — 5 examples</li>
+<li><a href="#algorithms--data-structures">Algorithms &amp; data structures</a> — 6 examples</li>
 <li><a href="#graphs">Graphs</a> — 4 examples</li>
 <li><a href="#calculus--functions">Calculus &amp; functions</a> — 12 examples</li>
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 12 examples</li>
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 13 examples</li>
-<li><a href="#physics--simulations">Physics — simulations</a> — 17 examples</li>
+<li><a href="#physics--simulations">Physics — simulations</a> — 42 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 3 examples</li>
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 8 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 3 examples</li>
@@ -1023,6 +1180,47 @@ say(cap, "data + pointers: the whole family from one primitive");
 wait(1.4);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/c8zjCcA5MJc" title="Linked Lists: Singly, Doubly & Circular — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="textbook-doubly-list"><a class="header" href="#textbook-doubly-list">textbook-doubly-list</a></h2>
+<p>The paper/<code>support</code> TEXTBOOK treatment on the algo kit — proof it’s domain-agnostic:
+<code>template("paper")</code> + a hatched <code>support</code> rule turn the doubly linked list into a flat
+exam-paper figure (the theme’s palette remap inks it automatically), then it inserts
+and removes. Same styling that dressed the physics sims, on a data structure.</p>
+<pre><code class="language-manic">// ============================================================================
+//  textbook-doubly-list.manic  —  the paper/support treatment on the ALGO kit
+// ----------------------------------------------------------------------------
+//  Proof the textbook look is DOMAIN-AGNOSTIC: the same `template("paper")` page,
+//  the same std `support` hatch primitive, and the same `color`/`say` staging —
+//  here on the algo kit's doubly linked list instead of a physics sim. Nothing
+//  about `support`/`paper` knows about physics; they compose over any kit.
+// ============================================================================
+
+title("Doubly linked list — textbook style");
+canvas("16:9");
+template("paper");                       // the white exam-paper page (engine theme)
+
+text(hdr, (cx, 66), "Doubly linked list");
+color(hdr, fg); size(hdr, 30); bold(hdr); display(hdr);
+support(rule, (cx, 102), 380, "down");   // a hatched section rule — a std primitive, in an ALGO scene
+
+// the algo-kit structure — the paper theme's palette REMAP turns the sim's
+// neon colours into ink automatically (light boxes, dark text, muted pointers),
+// so no recolouring is needed. The bare id `dll` also broadcasts now, e.g.
+// `hidden(dll)` / `flash(dll, cyan)` address the whole list at once.
+list(dll, "3 8 5 2", (cx, 340), doubly, 80, 58);
+
+text(cap, (cx, 628), ""); color(cap, fg); size(cap, 22); display(cap);
+
+say(cap, "each node = [ ·prev | data | next· ] — data plus two pointers");
+wait(1.1);
+say(cap, "insert 7 after node 1: the prev/next pointers re-thread — nothing shifts");
+insert(dll, 1, "7");
+wait(0.9);
+say(cap, "remove the head: the list simply re-points past it");
+remove(dll, 0);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/YucCrtOvZjg" title="Doubly Linked List — Textbook Style (Agnostic Treatment) — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="hashmap"><a class="header" href="#hashmap">hashmap</a></h2>
 <p>Hash a key to a bucket; collisions chain on (separate chaining).</p>
@@ -3738,6 +3936,126 @@ run(s, 10);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/aLI3iOg_uJY" title="Damped Spring — Oscillation Decays — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="spring-annotated"><a class="header" href="#spring-annotated">spring-annotated</a></h2>
+<p>Elevating the spring with a TYPEWRITER lab-note (<code>type</code> + <code>cursor</code>) and LIVE COUNTERS
+(<code>counter</code> + <code>to(_, value, …)</code>) ticking k and the period up — Hooke’s law → parabolic
+well → SHM, with no stage-covering section cards. One of three elevation styles.</p>
+<pre><code class="language-manic">// ============================================================================
+//  spring-annotated.manic  —  ELEVATE a sim: typewriter narration + live data
+// ----------------------------------------------------------------------------
+//  One elevation flavour of several (see pulley-annotated for camera work,
+//  brachistochrone-annotated for kinetic typography). Here the story is told by
+//  a TYPEWRITER lab-note (`type` + `cursor`) and LIVE COUNTERS (`counter` +
+//  `to(_, value, …)`) that tick up — no stage-covering section cards, so the
+//  motion is never hidden. The spring's parts are ordinary entities the whole
+//  language drives directly.
+// ============================================================================
+
+title("Anatomy of a Spring — Hooke's Law &amp; SHM");
+canvas("16:9");
+
+text(hdr, (cx, 40), "Anatomy of a Spring"); size(hdr, 28); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// ---- the sim + views (staged) ----
+spring(sp, (340, 320), 10, 1.4, 105);
+hidden(sp.wall); hidden(sp.spring); hidden(sp.mass); hidden(sp.overlays);
+untraced(sp.path);
+well(sp, (1015, 230), 112); hidden(sp.well);
+energygraph(sp, (1015, 480), 112); hidden(sp.energy);
+
+// ---- part annotations ----
+line(eq, (340, 268), (340, 372)); color(eq, dim); stroke(eq, 2); untraced(eq);
+text(coilL, (285, 232), "spring, stiffness k"); size(coilL, 16); color(coilL, lime); display(coilL); hidden(coilL);
+text(massL, (520, 272), "mass m"); size(massL, 16); color(massL, cyan); display(massL); hidden(massL);
+bracelabel(xb, (340, 372), (487, 372), "x₀", 22); color(xb, gold); hidden(xb); hidden(xb.label);
+text(hooke, (340, 168), "F = −k·x"); size(hooke, 24); color(hooke, gold); display(hooke); hidden(hooke);
+
+// ---- a TYPEWRITER lab-note with a live cursor (the narration device) ----
+text(note, (cx, h - 44), ""); size(note, 21); color(note, fg); display(note); cursor(note);
+text(kick, (96, 92), ""); size(kick, 17); color(kick, magenta); bold(kick); display(kick);
+
+// ---- LIVE COUNTERS (tick up on reveal) ----
+counter(kC, (150, 470), 0, 1, "k = ", " N/m"); size(kC, 26); color(kC, lime); display(kC); hidden(kC);
+counter(tC, (150, 512), 0, 2, "T = ", " s"); size(tC, 26); color(tC, cyan); display(tC); hidden(tC);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+
+say(kick, "SETUP", 0.2);
+say(note, "a wall, a coil of stiffness k, and a mass", 0.1); type(note, 1.4);
+show(sp.wall, 0.4); pulse(sp.wall); show(coilL, 0.4);
+show(sp.spring, 0.4); flash(sp.spring, lime); show(sp.mass, 0.4); pulse(sp.mass); show(massL, 0.4);
+show(kC, 0.3); to(kC, value, 10, 0.8);
+wait(0.5);
+
+say(kick, "HOOKE'S LAW", 0.2);
+say(note, "pull it x₀ from rest — it pulls back, F = −k·x", 0.1); type(note, 1.7);
+draw(eq, 0.4); show(xb, 0.4); show(xb.label, 0.4); show(hooke, 0.4); flash(sp.spring, gold);
+show(tC, 0.3); to(tC, value, 1.99, 0.9);   // period 2π√(m/k)
+wait(0.6);
+fade(coilL, 0.3); fade(massL, 0.3); fade(xb, 0.3); fade(xb.label, 0.3); fade(hooke, 0.3);
+wait(0.2);
+
+say(kick, "MOTION", 0.2);
+say(note, "release — simple harmonic motion; every panel tells the same swing", 0.1); type(note, 1.9);
+show(sp.well, 0.5); show(sp.overlays, 0.4); show(sp.energy, 0.5); draw(sp.path, 0.6);
+run(sp, 10);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/5amfSFeyqrQ" title="Anatomy of a Spring — Hooke's Law & SHM — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spring-paper"><a class="header" href="#spring-paper">spring-paper</a></h2>
+<p>The SAME spring sim dressed as a textbook figure AND run: <code>template("paper")</code> inks it,
+a hatched <code>support</code> wall, a forest-green coil and outlined mass box, Hooke’s law and x₀
+revealed, then <code>run</code> plays the SHM — the paper treatment on a LIVE sim (see pulley-paper).</p>
+<pre><code class="language-manic">// ============================================================================
+//  spring-paper.manic  —  an ANIMATED sim in textbook paper style
+// ----------------------------------------------------------------------------
+//  The `spring` sim (mass on a spring, SHM), dressed as a textbook figure AND run:
+//  `template("paper")` inks it automatically, a hatched `support` wall, the coil
+//  in forest green, an outlined mass box, plus a base-manic reveal (Hooke's law,
+//  equilibrium, x₀) — then `run` plays the oscillation. The companion to
+//  pulley-paper: the paper/support treatment on another live sim.
+// ============================================================================
+
+title("Mass on a spring — textbook style");
+canvas("16:9");
+template("paper");
+
+text(hdr, (cx, 46), "Mass on a spring — Hooke's law"); color(hdr, fg); size(hdr, 26); bold(hdr); display(hdr); hidden(hdr);
+
+// the sim, restyled to textbook ink (parts hidden, revealed in order)
+spring(sp, (380, 300), 10, 1.3, 110);
+outlined(sp.mass); outline(sp.mass, fg);
+hidden(sp.wall); hidden(sp.spring); hidden(sp.mass); hidden(sp.overlays);
+untraced(sp.path);
+
+// a hatched wall stands in for the sim's plain anchor; equilibrium reference
+support(wall, (177, 300), 150, "right"); untraced(wall);
+line(eq, (380, 246), (380, 354)); color(eq, dim); stroke(eq, 2); untraced(eq);
+
+text(eqL, (380, 232), "equilibrium"); color(eqL, dim); size(eqL, 15); display(eqL); hidden(eqL);
+text(coilL, (300, 214), "spring, stiffness k"); color(coilL, fg); size(coilL, 17); display(coilL); hidden(coilL);
+text(massL, (548, 258), "mass m"); color(massL, fg); size(massL, 17); display(massL); hidden(massL);
+bracelabel(xb, (380, 360), (523, 360), "x₀", 22); color(xb, fg); hidden(xb); hidden(xb.label);
+text(hooke, (380, 152), "F = −k·x"); color(hooke, fg); size(hooke, 24); display(hooke); hidden(hooke);
+text(cap, (cx, h - 40), ""); color(cap, fg); size(cap, 20); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+say(cap, "a coil of stiffness k fixed to a wall, with a mass on the end", 0.4);
+draw(wall, 0.4); show(sp.spring, 0.4); show(coilL, 0.4); show(sp.mass, 0.4); show(massL, 0.3);
+wait(0.4);
+
+say(cap, "pull it x₀ from equilibrium — it pulls straight back, F = −k·x", 0.4);
+draw(eq, 0.4); show(eqL, 0.3); show(xb, 0.4); show(xb.label, 0.4); show(hooke, 0.5);
+wait(0.7);
+fade(coilL, 0.3); fade(massL, 0.3); fade(xb, 0.3); fade(xb.label, 0.3); fade(hooke, 0.3);
+
+say(cap, "release — simple harmonic motion", 0.4);
+run(sp, 9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/UT_UEGJv6Oc" title="Mass on a Spring — Textbook Style, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="double-pendulum"><a class="header" href="#double-pendulum">double-pendulum</a></h2>
 <p>Deterministic chaos: two arms hinged end-to-end whose outer bob traces a wild,
 unrepeatable curve — yet the render is frame-identical every run. A 4-D system, so
@@ -3958,6 +4276,792 @@ text(cap,(cx,h-30),"a speed bump, a washboard stretch, then a pothole — the sp
 run(car, 12);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/HRc7qGHzrbg" title="Car Suspension — Riding the Road — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="piston"><a class="header" href="#piston">piston</a></h2>
+<p>An engine piston: a spinning crank + connecting rod turn rotation into the piston’s
+up-and-down stroke — the slider-crank mechanism (<code>piston</code>).</p>
+<pre><code class="language-manic">// piston.manic — an engine piston: a spinning crank drives a slider in a cylinder.
+title("Engine piston — the slider-crank");
+canvas("16:9");
+text(hdr,(cx,46),"Slider-crank — a spinning crank becomes up-and-down motion"); size(hdr,23); color(hdr,cyan); bold(hdr); display(hdr);
+piston(eng, (cx, 480), 60);
+text(cap,(cx,h-32),"gold crank sweeps the circle; the rod converts it to the piston's stroke"); size(cap,16); color(cap,dim); display(cap);
+run(eng, 9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Wm0qZN9O84U" title="Engine Piston — The Slider-Crank — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="molecule"><a class="header" href="#molecule">molecule</a></h2>
+<p>A molecule as balls and springs — atoms bonded on every side, vibrating about their
+equilibrium shape with the total energy conserved (<code>molecule</code>).</p>
+<pre><code class="language-manic">// molecule.manic — atoms bonded by springs, vibrating about their shape.
+title("Vibrating molecule");
+canvas("16:9");
+text(hdr,(cx,46),"A molecule as balls and springs — bonds stretch and the atoms jiggle"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+molecule(mol, (520, 300), 3);
+energygraph(mol, (1000, 300), 110);   // total energy is conserved as it vibrates
+text(cap,(cx,h-32),"one atom starts pulled out; the bonds pull it back and the whole thing rings"); size(cap,15); color(cap,dim); display(cap);
+run(mol, 11);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/r2IYB6abMC0" title="Vibrating Molecule — Balls and Springs — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="robot-arm"><a class="header" href="#robot-arm">robot-arm</a></h2>
+<p>A two-link robot arm reaching for a target: the joint rates come from the analytic
+inverse Jacobian, so the arm drives its end-effector to the goal and settles there —
+inverse kinematics as a solved motion (<code>robotarm</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  robot-arm.manic  —  inverse kinematics, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `robotarm(id, [center], [mode], [unit])` — a two-link arm that tracks a target
+//  by inverse kinematics. Its joint rates are the analytic 2×2 inverse Jacobian
+//  times a gain on the end-effector error, so the gripper chases the target.
+//  `mode` 1 = trace a circle (default), 2 = figure-8, 0 = reach a fixed point and
+//  settle. PRE-SIMULATED with RK4; `run(id,[dur])` replays it, and `{id}.path`
+//  traces the route the gripper sweeps.
+//
+//  TO ADAPT: set mode 2 for a figure-8, or mode 0 to reach one fixed point.
+// ============================================================================
+
+title("Robot arm — tracking by inverse kinematics");
+canvas("16:9");
+
+text(hdr, (cx, 46), "Two-link arm — inverse kinematics keeps the gripper on the moving target");
+size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+
+robotarm(rb, (cx, 470), 1);
+
+text(cap, (cx, h - 32), "gold shoulder + cyan forearm chase the lime ring around its circle — the gripper traces the path");
+size(cap, 15); color(cap, dim); display(cap);
+
+run(rb, 10);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/tT8pCY34COk" title="Robot Arm — Reaching by Inverse Kinematics — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pulley"><a class="header" href="#pulley">pulley</a></h2>
+<p>The Atwood machine: two masses over one pulley, the heavier one accelerating down at
+(m₁−m₂)g/(m₁+m₂). <code>energygraph</code> shows kinetic energy climbing as potential falls
+(<code>pulley</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  pulley.manic  —  the Atwood machine, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `pulley(id, [center], [m1], [m2], [unit])` — two masses over one pulley. The
+//  heavier one accelerates down at a = (m₁−m₂)g/(m₁+m₂). PRE-SIMULATED with RK4;
+//  `run(id,[dur])` replays it. `energygraph` shows the KE↔PE trade as the system
+//  speeds up (total is conserved — no friction).
+//
+//  TO ADAPT: set m1 and m2 closer together for a gentler acceleration.
+// ============================================================================
+
+title("Atwood machine — unequal masses accelerate");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Atwood machine — a = (m₁−m₂)g / (m₁+m₂)");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+pulley(pl, (440, 170), 3, 2);
+energygraph(pl, (960, 330), 120);
+
+text(cap, (cx, h - 32), "cyan m₁ (heavier) sinks, magenta m₂ rises; kinetic energy climbs as potential falls");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(pl, 5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/_92zcpVbCCE" title="Atwood Machine — Unequal Masses Accelerate — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pulley-scale"><a class="header" href="#pulley-scale">pulley-scale</a></h2>
+<p>The surprise every physics class remembers: an in-line spring scale on an Atwood
+machine reads the rope TENSION 2·m₁·m₂·g/(m₁+m₂) — not the sum of the two weights
+(<code>pulleyscale</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  pulley-scale.manic  —  what does the scale read? (physics Layer 1)
+// ----------------------------------------------------------------------------
+//  `pulleyscale(id, [center], [m1], [m2], [unit])` — an Atwood machine over two
+//  pulleys with a spring scale in the rope between them. The classic surprise:
+//  the scale reads the rope TENSION 2·m₁·m₂·g/(m₁+m₂), NOT the sum of the two
+//  weights. PRE-SIMULATED with RK4; `run(id,[dur])` replays it.
+//
+//  TO ADAPT: set m1 = m2 — the system balances and the scale reads exactly m·g.
+// ============================================================================
+
+title("Pulley scale — it reads the tension, not the weight");
+canvas("16:9");
+
+text(hdr, (cx, 46), "The scale reads the rope tension  T = 2·m₁·m₂·g / (m₁+m₂)");
+size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+
+pulleyscale(ps, (cx, 200), 4, 3);
+
+text(cap, (cx, h - 32), "not (m₁+m₂)g, not the heavier weight — the tension sits between the two weights");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(ps, 5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/MH9QdHKCM-Y" title="Pulley Scale — It Reads the Tension — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="block-tackle"><a class="header" href="#block-tackle">block-tackle</a></h2>
+<p>A compound pulley (block &amp; tackle): a load on a movable block held by N rope strands,
+pulled by an effort mass. N strands = a mechanical advantage of N — an effort of only
+load/N balances the load, but the effort end travels N× as far (<code>blocktackle</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  block-tackle.manic  —  the compound pulley (mechanical advantage), Layer 1
+// ----------------------------------------------------------------------------
+//  `blocktackle(id, [center], [load], [effort], [strands], [unit])` — a load on a
+//  movable block held by N rope strands and pulled by an effort mass. The N
+//  strands give a MECHANICAL ADVANTAGE of N: an effort of only load/N balances
+//  the load, and the effort end travels N× as far as the load rises. PRE-SIMULATED
+//  with RK4; `run(id,[dur])` replays it. N = 1 is just the Atwood machine.
+//
+//  TO ADAPT: change `strands` (1–4) — more strands lift the same load with less
+//  effort, but the effort mass has to travel that much further.
+// ============================================================================
+
+title("Block &amp; Tackle — a compound pulley's mechanical advantage");
+canvas("16:9");
+
+text(hdr, (cx, 40), "Block &amp; tackle — 3 strands lift 8 kg with 3 kg of effort");
+size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+
+blocktackle(bt, (500, 130), 8, 3, 3);
+energygraph(bt, (1030, 330), 120);
+
+text(cap, (cx, h - 32), "3 strands ⇒ MA = 3: effort just over load/3 lifts it; the effort end travels 3× as far");
+size(cap, 15); color(cap, dim); display(cap);
+
+run(bt, 5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ISakDSlDD_k" title="Block & Tackle — Compound Pulley Mechanical Advantage — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="compound-pulley"><a class="header" href="#compound-pulley">compound-pulley</a></h2>
+<p>A compound pulley with a MOVABLE pulley: a fixed top pulley carries mass A on one side
+and a movable lower pulley on the other; that pulley carries B and C. The string
+constraints link them (a_A = −a_P, a_B + a_C = 2·a_P); static when mA = mB+mC
+(<code>compoundpulley</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  compound-pulley.manic  —  fixed + movable pulley, three masses (physics L1)
+// ----------------------------------------------------------------------------
+//  `compoundpulley(id, [center], [mA], [mB], [mC], [unit])` — a fixed top pulley
+//  carries mass A on one side and a MOVABLE lower pulley on the other; the movable
+//  pulley carries masses B and C. The string constraints link them: a_A = −a_P and
+//  a_B + a_C = 2·a_P (the massless movable pulley gives T₁ = 2·T₂). Static exactly
+//  when mA = mB + mC. PRE-SIMULATED with RK4; `run(id,[dur])` replays it.
+//
+//  TO ADAPT: set mA = mB + mC and it balances; make A heavier and it hauls B, C up.
+// ============================================================================
+
+title("Compound pulley — fixed + movable, masses A, B, C");
+canvas("16:9");
+
+text(hdr, (cx, 40), "Compound pulley — heavier A hauls B and C upward");
+size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+
+compoundpulley(cp, (470, 120), 5, 2, 2);
+energygraph(cp, (1010, 330), 120);
+
+text(cap, (cx, h - 32), "A (5 kg) &gt; B+C (4 kg): A sinks, the movable pulley rises, B and C are pulled up together");
+size(cap, 15); color(cap, dim); display(cap);
+
+run(cp, 4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/DWzDqK5o4L4" title="Compound Pulley — Fixed + Movable, Masses A/B/C — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="incline-pulley"><a class="header" href="#incline-pulley">incline-pulley</a></h2>
+<p>The incline-Atwood: a block on an incline tied over a pulley at the top to a hanging
+mass. m₂ outpulls m₁·sinθ, so the block climbs while the mass descends — <code>energygraph</code>
+tracks the KE↔PE trade (<code>inclinepulley</code>).</p>
+<pre><code class="language-manic">// incline-pulley.manic — the incline-Atwood: a block on an incline tied over a
+// pulley at the top to a hanging mass. `inclinepulley(id,[center],[angle],[m1],
+// [m2],[unit])`. PRE-SIMULATED (RK4); `run(id)` plays it; `energygraph` shows the
+// KE↔PE trade. Matches the classic textbook figure.
+title("Incline + pulley — the incline-Atwood");
+canvas("16:9");
+text(hdr, (cx, 44), "Block on an incline, tied over a pulley to a hanging mass"); size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+inclinepulley(ip, (280, 500), 30, 3, 2);
+energygraph(ip, (1010, 320), 120);
+text(cap, (cx, h - 32), "m₂ (2 kg) hanging outpulls m₁·sinθ, so m₁ climbs the incline and m₂ descends"); size(cap, 15); color(cap, dim); display(cap);
+run(ip, 4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/xH9Rdqzanjo" title="incline pulley — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="double-incline"><a class="header" href="#double-incline">double-incline</a></h2>
+<p>Two blocks on a wedge’s two slopes, tied over a pulley at the apex (right slope rough).
+The 70 kg block on the gentle 30° slope beats the 12 kg block on the steep 50° smooth
+slope — connected motion on two inclines (<code>doubleincline</code>).</p>
+<pre><code class="language-manic">// double-incline.manic — two blocks on a wedge's two slopes, tied over a pulley
+// at the apex. `doubleincline(id,[center],[angle1],[angle2],[m1],[m2],[unit])`;
+// the right slope is rough. PRE-SIMULATED (RK4); `run(id)` plays it.
+title("Double incline — connected blocks on two slopes");
+canvas("16:9");
+text(hdr, (cx, 42), "Two slopes, one rope over the apex — which way does it slide?"); size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+doubleincline(di, (cx, 520), 50, 30, 12, 70);
+text(cap, (cx, h - 30), "M₂ (70 kg) on the gentle rough slope beats M₁ (12 kg) on the steep smooth one"); size(cap, 15); color(cap, dim); display(cap);
+run(di, 5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/HaRR568TD9A" title="double incline — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="incline-bumper"><a class="header" href="#incline-bumper">incline-bumper</a></h2>
+<p>A block slides down an incline into a spring bumper at the base, compresses it, and
+launches back up — one-sided contact, gravity PE ↔ kinetic ↔ spring PE, energy
+conserved (<code>inclinebumper</code>).</p>
+<pre><code class="language-manic">// incline-bumper.manic — a block slides down an incline into a spring bumper at
+// the base, compresses it, and launches back up (one-sided contact).
+// `inclinebumper(id,[center],[angle],[mass],[stiffness],[unit])`. PRE-SIMULATED
+// (RK4); `energygraph` shows gravity PE ↔ kinetic ↔ spring PE (conserved).
+title("Incline + spring bumper — slide, compress, launch");
+canvas("16:9");
+text(hdr, (cx, 44), "A block slides down and compresses a spring at the base, then launches back"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+inclinebumper(ib, (300, 500), 40, 2, 500);
+energygraph(ib, (1010, 320), 120);
+text(cap, (cx, h - 32), "gravity PE → kinetic → spring PE → back: one-sided contact, energy conserved"); size(cap, 15); color(cap, dim); display(cap);
+run(ib, 6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/o_p5K5zDV0Y" title="incline bumper — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="loop-track"><a class="header" href="#loop-track">loop-track</a></h2>
+<p>A ball rolls down a ramp and around a vertical LOOP-THE-LOOP — the curved-track case.
+A bead energy solver (v = √(2g(H−y)) along the arc) so it visibly slows at the top;
+release above 2·radius to clear it. <code>energygraph</code> tracks KE↔PE (<code>looptrack</code>).</p>
+<pre><code class="language-manic">// loop-track.manic — a ball rolls down a ramp and around a vertical loop-the-loop.
+// `looptrack(id,[center],[radius],[height],[unit])`. A curved-track energy solver:
+// v = √(2g(H−y)) along the arc, so the ball visibly SLOWS at the top. The release
+// height must exceed 2·radius to clear the top. `energygraph` shows KE↔PE.
+title("Loop-the-loop — down the ramp, around the loop");
+canvas("16:9");
+text(hdr, (cx, 44), "Release high enough (H &gt; 2r) and the ball clears the top of the loop"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+looptrack(lt, (470, 560), 1, 3);
+energygraph(lt, (1010, 330), 120);
+text(cap, (cx, h - 32), "energy conserved: it trades kinetic for potential, slowest at the top of the loop"); size(cap, 15); color(cap, dim); display(cap);
+run(lt, 5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/QX3OjnwYxm0" title="loop track — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spring-chain"><a class="header" href="#spring-chain">spring-chain</a></h2>
+<p>Three blocks joined by two springs on an incline — coupled oscillators. Pull one and the
+whole chain rings (normal modes / beating); shown in the incline’s frame since uniform
+gravity doesn’t touch the internal motion (<code>springchain</code>).</p>
+<pre><code class="language-manic">// spring-chain.manic — three blocks joined by two springs on an incline: coupled
+// oscillators / normal modes. `springchain(id,[center],[angle],[unit])`. A uniform
+// gravity component doesn't change the internal motion, so it's shown in the
+// incline's frame (CM held). `energygraph` shows the energy sloshing (beating).
+title("Spring chain on an incline — coupled oscillators");
+canvas("16:9");
+text(hdr, (cx, 44), "Three masses, two springs — the energy sloshs between the modes"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+springchain(sc, (500, 300), 22);
+energygraph(sc, (1010, 340), 120);
+text(cap, (cx, h - 32), "pull one block and the whole chain rings — normal modes / beating (coupled springs)"); size(cap, 15); color(cap, dim); display(cap);
+run(sc, 9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/seuNwQdBCEY" title="spring chain — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="incline-showcase"><a class="header" href="#incline-showcase">incline-showcase</a></h2>
+<p>One paper page, FOUR live incline problems: a friction ramp, an incline+pulley, a
+two-slope wedge, and a spring bumper — revealed one at a time with narration, then all
+run in parallel. Real base-manic staging (<code>template("paper")</code> + <code>hidden</code>/<code>show</code> + <code>say</code></p>
+<ul>
+<li><code>par</code>), not a physics dump.</li>
+</ul>
+<pre><code class="language-manic">// ============================================================================
+//  incline-showcase.manic  —  four incline problems, one paper page, all live
+// ----------------------------------------------------------------------------
+//  A single annotated lesson that puts ALL FOUR animated incline sims on one
+//  `template("paper")` page and runs them together — real base-manic composition
+//  (staged reveal with `hidden`/`show`, `say` narration, per-quadrant labels),
+//  not a physics dump. Each sim's bare id broadcasts, so `hidden(rp)`/`show(rp)`
+//  address a whole sim at once. Finishes with all four running in parallel.
+// ============================================================================
+
+title("Four inclined-plane problems — one page");
+canvas("16:9");
+template("paper");
+
+text(hdr, (cx, 34), "Four inclined-plane problems, one page"); color(hdr, fg); size(hdr, 26); bold(hdr); display(hdr); hidden(hdr);
+
+// the four sims (each hidden; the bare id broadcasts to all its parts)
+ramp(rp, (110, 340), 28, 5, 0, 45);            hidden(rp);
+inclinepulley(ip, (690, 340), 30, 3, 2, 42);   hidden(ip);
+doubleincline(dw, (300, 660), 50, 30, 12, 70, 34); hidden(dw);
+inclinebumper(ib, (720, 660), 38, 2, 500, 42); hidden(ib);
+
+// quadrant labels
+text(l1, (150, 175), "① friction on a ramp");     color(l1, dim); size(l1, 17); display(l1); hidden(l1);
+text(l2, (770, 175), "② incline + pulley");        color(l2, dim); size(l2, 17); display(l2); hidden(l2);
+text(l3, (150, 505), "③ two-slope wedge");         color(l3, dim); size(l3, 17); display(l3); hidden(l3);
+text(l4, (770, 505), "④ spring bumper");           color(l4, dim); size(l4, 17); display(l4); hidden(l4);
+
+text(cap, (cx, h - 26), ""); color(cap, fg); size(cap, 19); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+say(cap, "one page, four classic incline problems — all real, pre-simulated physics", 0.4);
+wait(0.5);
+
+say(cap, "① a block sliding down a rough ramp", 0.4);
+show(rp, 0.5); show(l1, 0.3);
+wait(0.5);
+say(cap, "② a block on an incline, tied over a pulley to a hanging mass", 0.4);
+show(ip, 0.5); show(l2, 0.3);
+wait(0.5);
+say(cap, "③ two blocks on a wedge, connected over the apex", 0.4);
+show(dw, 0.5); show(l3, 0.3);
+wait(0.5);
+say(cap, "④ a block sliding into a spring bumper at the base", 0.4);
+show(ib, 0.5); show(l4, 0.3);
+wait(0.6);
+
+say(cap, "…and they all run — same page, same physics engine, four different motions", 0.4);
+par {
+  run(rp, 7);
+  run(ip, 7);
+  run(dw, 7);
+  run(ib, 7);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/toiBa--5AwA" title="Four Incline Problems, One Paper Page — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="textbook-incline-fbd"><a class="header" href="#textbook-incline-fbd">textbook-incline-fbd</a></h2>
+<p>A block on an incline as a physics-class FREE-BODY DIAGRAM: the reusable <code>forces(id)</code>
+view draws gravity/normal/friction/<code>a</code> vectors on the block, a second panel redraws them
+from a point, and <code>template("paper")</code> inks it — then <code>run</code> slides the block (<code>ramp</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  textbook-incline-fbd.manic  —  the free-body diagram, textbook style
+// ----------------------------------------------------------------------------
+//  A block on an incline shown the classic physics-class way: the physical
+//  picture on the left with the force vectors ON the block (via the reusable
+//  `forces(id)` view on the `ramp` sim — gravity `mg`, normal `N`, friction `f`,
+//  and the acceleration `a`), and a free-body-diagram panel on the right drawing
+//  the same forces from a single point. `template("paper")` inks it; then `run`
+//  plays the slide with the vectors riding the block.
+// ============================================================================
+
+title("Block on an incline — the free-body diagram");
+canvas("16:9");
+template("paper");
+
+text(hdr, (cx, 42), "Block on an incline — the free-body diagram"); color(hdr, fg); size(hdr, 24); bold(hdr); display(hdr);
+
+// left: the incline sim, inked; its force vectors revealed by forces()
+ramp(rp, (170, 470), 30);
+outlined(rp.block); outline(rp.block, fg);
+
+// right: the free-body diagram — the same four forces from one point
+dot(o, (1000, 330), 6); color(o, fg);
+text(fbdT, (1000, 205), "free-body diagram"); color(fbdT, dim); size(fbdT, 16); display(fbdT);
+arrow(aN, (1000, 330), (955, 252)); color(aN, lime); stroke(aN, 3);
+text(lN, (944, 240), "N"); color(lN, lime); size(lN, 18); display(lN);
+arrow(af, (1000, 330), (1078, 285)); color(af, magenta); stroke(af, 3);
+text(lf, (1086, 280), "f"); color(lf, magenta); size(lf, 18); display(lf);
+arrow(ag, (1000, 330), (1000, 440)); color(ag, blue); stroke(ag, 3);
+text(lg, (1010, 448), "mg"); color(lg, blue); size(lg, 18); display(lg);
+arrow(aa, (1000, 330), (930, 372)); color(aa, red); stroke(aa, 3);
+text(la, (908, 380), "a"); color(la, red); size(la, 18); display(la);
+
+text(cap, (cx, h - 34), ""); color(cap, fg); size(cap, 19); display(cap);
+
+// ============================== SCRIPT ==============================
+say(cap, "three forces act on the block: gravity, the normal force, and friction", 0.4);
+forces(rp, 0.9);
+wait(1.0);
+say(cap, "drawn from a single point, they make the free-body diagram →", 0.4);
+wait(0.9);
+say(cap, "their sum points down the slope, so the block accelerates and slides", 0.4);
+run(rp, 5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/2ZZx0jcpqIE" title="Free-Body Diagram of an Incline — Textbook Style — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pulley-annotated"><a class="header" href="#pulley-annotated">pulley-annotated</a></h2>
+<p>The Atwood machine elevated with CAMERA work: <code>cam</code> + <code>zoom</code> push in on the two masses
+for the imbalance beat and glow the heavier one, a <code>counter</code> ticks the acceleration up,
+then it pulls back to release — cinematography instead of section cards.</p>
+<pre><code class="language-manic">// ============================================================================
+//  pulley-annotated.manic  —  ELEVATE a sim: CAMERA work (cam + zoom)
+// ----------------------------------------------------------------------------
+//  A different elevation flavour from spring-annotated (typewriter) — here the
+//  camera does the storytelling: `cam` + `zoom` push in on the two masses for
+//  the "imbalance" beat, glow the heavier one, then pull back for the release.
+//  A live `counter` ticks the acceleration up. No stage-covering section cards,
+//  so the motion is always visible. All base manic over the `pulley` parts.
+// ============================================================================
+
+title("The Atwood Machine — Why the Heavier Side Falls");
+canvas("16:9");
+
+text(hdr, (cx, 40), "The Atwood Machine"); size(hdr, 28); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// ---- the sim, centred so the camera can push in ----
+pulley(pl, (cx, 190), 3, 2);
+hidden(pl.wheel); hidden(pl.hub); hidden(pl.ropeL); hidden(pl.ropeR); hidden(pl.mass1); hidden(pl.mass2);
+
+text(wheelL, (cx, 118), "frictionless pulley"); size(wheelL, 17); color(wheelL, dim); display(wheelL); hidden(wheelL);
+text(m1L, (cx - 150, 320), "m₁ = 3 kg"); size(m1L, 19); color(m1L, cyan); display(m1L); hidden(m1L);
+text(m2L, (cx + 150, 320), "m₂ = 2 kg"); size(m2L, 19); color(m2L, magenta); display(m2L); hidden(m2L);
+counter(aC, (cx, 250), 0, 2, "a = ", " m/s²"); size(aC, 26); color(aC, gold); display(aC); hidden(aC); sticky(aC);
+
+// caption is `sticky` — it stays pinned to the screen through the camera push-in
+text(cap, (cx, h - 44), ""); size(cap, 21); color(cap, dim); display(cap); sticky(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+
+say(cap, "one rope over one frictionless pulley …", 0.4);
+show(pl.wheel, 0.4); show(pl.hub, 0.3); pulse(pl.wheel); show(wheelL, 0.4);
+wait(0.3);
+say(cap, "… a heavier mass on the left, a lighter one on the right", 0.4);
+show(pl.ropeL, 0.3); show(pl.mass1, 0.4); pulse(pl.mass1); show(m1L, 0.4);
+show(pl.ropeR, 0.3); show(pl.mass2, 0.4); pulse(pl.mass2); show(m2L, 0.4);
+wait(0.5);
+
+// ---- CAMERA: push in on the masses for the imbalance beat ----
+// cap + aC are sticky, so they stay put on screen while the world zooms
+say(cap, "look closely — the net pull favours the heavier side", 0.4);
+par { cam((cx, 330), 1.4, smooth); zoom(1.7, 1.4, smooth); }
+glow(pl.mass1, 1.9); flash(pl.mass1, gold); pulse(pl.mass1);
+wait(1.0);
+par { cam((cx, cy), 1.2, smooth); zoom(1, 1.2, smooth); }   // pull back out
+wait(0.2);
+
+// the acceleration, as a live readout
+show(aC, 0.3); to(aC, value, 1.96, 1.0);         // a = (m₁−m₂)g/(m₁+m₂)
+fade(wheelL, 0.3); fade(m1L, 0.3); fade(m2L, 0.3);
+wait(0.5);
+
+say(cap, "release: m₁ sinks, m₂ rises", 0.4);
+run(pl, 4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/eYnYAFH3xZA" title="The Atwood Machine — Guided Lesson — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pulley-paper"><a class="header" href="#pulley-paper">pulley-paper</a></h2>
+<p>The SAME Atwood sim dressed as a textbook figure AND run: <code>template("paper")</code> inks it
+automatically, a hatched <code>support</code> ceiling, a forest-green wheel and outlined mass boxes,
+a base-manic reveal, then <code>run</code> plays the motion — the paper treatment on a LIVE sim.</p>
+<pre><code class="language-manic">// ============================================================================
+//  pulley-paper.manic  —  an ANIMATED sim in textbook paper style
+// ----------------------------------------------------------------------------
+//  The Atwood `pulley` sim, dressed as a physics-textbook figure AND run: the
+//  `template("paper")` page (its palette remap inks the sim automatically), a
+//  hatched `support` ceiling, a forest-green wheel, outlined mass boxes, and a
+//  base-manic reveal (`say`/`show`/`draw`/`fade`) — then `run` plays the motion.
+//  Proof the paper/support treatment composes with a live, animated simulation.
+// ============================================================================
+
+title("The Atwood machine — textbook style");
+canvas("16:9");
+template("paper");                       // white page; the theme remaps neon → ink
+
+text(hdr, (cx, 46), "The Atwood machine"); color(hdr, fg); size(hdr, 27); bold(hdr); display(hdr); hidden(hdr);
+
+// hatched ceiling + suspension rope (traced on)
+support(ceil, (cx, 108), 320); untraced(ceil);
+line(sus, (cx, 108), (cx, 160)); color(sus, fg); stroke(sus, 2); untraced(sus);
+
+// the sim, restyled to textbook ink (parts hidden, revealed in order)
+pulley(pl, (cx, 192), 3, 2);
+color(pl.wheel, lime);                   // lime → forest green on the paper palette
+color(pl.hub, fg); color(pl.ropeL, fg); color(pl.ropeR, fg);
+outlined(pl.mass1); outline(pl.mass1, fg);
+outlined(pl.mass2); outline(pl.mass2, fg);
+hidden(pl.wheel); hidden(pl.hub); hidden(pl.ropeL); hidden(pl.ropeR); hidden(pl.mass1); hidden(pl.mass2);
+
+// annotations
+text(m1L, (cx - 150, 316), "m₁ = 3 kg"); color(m1L, fg); size(m1L, 20); display(m1L); hidden(m1L);
+text(m2L, (cx + 150, 316), "m₂ = 2 kg"); color(m2L, fg); size(m2L, 20); display(m2L); hidden(m2L);
+text(acc, (cx, 604), "a = (m₁ − m₂)·g / (m₁ + m₂)"); color(acc, fg); size(acc, 22); display(acc); hidden(acc);
+text(cap, (cx, h - 40), ""); color(cap, fg); size(cap, 20); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+say(cap, "a rope over one frictionless pulley, hung from the ceiling", 0.4);
+draw(ceil, 0.4); draw(sus, 0.4); show(pl.wheel, 0.4); show(pl.hub, 0.3);
+wait(0.4);
+
+say(cap, "a heavier mass on the left, a lighter one on the right", 0.4);
+show(pl.ropeL, 0.3); show(pl.mass1, 0.4); show(m1L, 0.3);
+show(pl.ropeR, 0.3); show(pl.mass2, 0.4); show(m2L, 0.3);
+wait(0.5);
+
+say(cap, "the system accelerates toward the heavier side", 0.4);
+show(acc, 0.5);
+wait(0.7);
+fade(m1L, 0.3); fade(m2L, 0.3);
+
+say(cap, "release: m₁ sinks, m₂ rises", 0.4);
+run(pl, 4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/0a5GcifKF7Q" title="Atwood Machine — Textbook Style, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="ramp"><a class="header" href="#ramp">ramp</a></h2>
+<p>A block sliding down an inclined plane with static/kinetic friction — the full force
+model. Friction turns motion into heat, so the total-energy line steadily falls
+(<code>ramp</code> + <code>energygraph</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  ramp.manic  —  friction on an incline, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `ramp(id, [center], [angle], [mass], [applied], [unit])` — a block sliding
+//  down an inclined plane. Full force model: gravity along the slope, the normal
+//  force, and a static→kinetic friction switch. Friction turns mechanical energy
+//  into heat, so `energygraph`'s total DECAYS as the block slides. PRE-SIMULATED
+//  with RK4; `run(id,[dur])` replays it.
+//
+//  TO ADAPT: lower the angle below the friction angle and the block won't budge.
+// ============================================================================
+
+title("Inclined plane — friction dissipates energy");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Block on a ramp — μ friction bleeds the energy away");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+ramp(rp, (300, 470), 30);
+energygraph(rp, (960, 320), 120);
+
+text(cap, (cx, h - 32), "as the block slides down, the gold total energy line falls — friction converts it to heat");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(rp, 6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/rObkt6f-Ibc" title="Inclined Plane — Friction Dissipates Energy — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="drop-mass"><a class="header" href="#drop-mass">drop-mass</a></h2>
+<p>A mass dropped onto a spring-block STICKS — a perfectly inelastic collision. Watch the
+total-energy line step down at impact, then the heavier combined mass oscillate about
+a lower equilibrium (<code>dropmass</code> + <code>energygraph</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  drop-mass.manic  —  an inelastic collision, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `dropmass(id, [center], [dropheight], [unit])` — a mass is dropped onto a
+//  block resting on a spring. It free-falls, STICKS (perfectly inelastic), then
+//  the heavier combined mass oscillates about a lower equilibrium. The collision
+//  loses kinetic energy — so `energygraph`'s total STEPS DOWN at impact. Then it
+//  is conserved again. PRE-SIMULATED with RK4; `run(id,[dur])` replays it.
+//
+//  TO ADAPT: raise dropheight for a faster impact and a bigger energy step.
+// ============================================================================
+
+title("Drop mass — an inelastic collision loses energy");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Dropped mass sticks — energy is lost in the inelastic collision");
+size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+
+dropmass(dm, (440, 150), 1.2);
+energygraph(dm, (960, 330), 120);
+
+text(cap, (cx, h - 32), "watch the gold total energy line step DOWN the instant the magenta mass sticks to the block");
+size(cap, 15); color(cap, dim); display(cap);
+
+run(dm, 7);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/OwTfkzYZYDQ" title="Drop Mass — An Inelastic Collision Loses Energy — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="raft-cm"><a class="header" href="#raft-cm">raft-cm</a></h2>
+<p>A person walks back and forth on a floating raft; with no external force the centre of
+mass stays fixed, so the raft glides the opposite way — momentum conservation you can
+see (<code>raft</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  raft-cm.manic  —  centre of mass, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `raft(id, [center], [personmass], [raftmass], [unit])` — a person walking on
+//  a floating raft. With no external horizontal force, momentum is conserved and
+//  the centre of mass stays FIXED: the raft slides the opposite way by
+//  −m_person/(m_person+m_raft) of each step. PRE-SIMULATED; `run(id,[dur])`
+//  replays it. The dashed line marks the (unmoving) centre of mass.
+//
+//  TO ADAPT: make the raft much lighter (raftmass) — it slides much further.
+// ============================================================================
+
+title("Raft — walk one way, the raft slides the other");
+canvas("16:9");
+
+text(hdr, (cx, 46), "Momentum stays zero, so the centre of mass never moves");
+size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+
+raft(rf, (cx, 380), 70, 200);
+
+text(cap, (cx, h - 32), "the person walks; the raft glides back — the dashed centre-of-mass line stays put");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(rf, 9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/QInU2boIz4c" title="Raft — Centre of Mass Stays Fixed — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="brachistochrone"><a class="header" href="#brachistochrone">brachistochrone</a></h2>
+<p>Four beads race under gravity from A to B down a straight line, a circular arc, a
+parabola, and a cycloid. The cycloid — the curve of fastest descent — wins, even
+though it dips lower and travels farther (<code>brachistochrone</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  brachistochrone.manic  —  the curve of fastest descent (physics Layer 1)
+// ----------------------------------------------------------------------------
+//  `brachistochrone(id, [center], [unit])` — four beads race under gravity from
+//  A down to B along four curves: a straight line, a circular arc, a parabola,
+//  and a CYCLOID. Each is a full RK4 bead-on-wire integration. The cycloid — the
+//  brachistochrone — wins, even though it dips below and travels farther. The
+//  steep early drop buys speed that more than pays back the extra distance.
+//  `run(id,[dur])` replays the race.
+//
+//  TO ADAPT: raise `dur` to watch the finish order in slow motion.
+// ============================================================================
+
+title("Brachistochrone — the fastest slide is a cycloid");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Which curve is fastest from A to B? Steepness early beats a short path");
+size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+
+brachistochrone(br, (330, 150), 150);
+
+text(leg, (cx, h - 58), "dim: straight    cyan: arc    gold: parabola    magenta: CYCLOID (winner)");
+size(leg, 16); color(leg, fg); display(leg);
+text(cap, (cx, h - 30), "same start, same finish — the magenta cycloid bead reaches B first");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(br, 5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/OPSfmGeBBYA" title="Brachistochrone — The Cycloid Wins — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="brachistochrone-annotated"><a class="header" href="#brachistochrone-annotated">brachistochrone-annotated</a></h2>
+<p>The elevation recipe on a RACE, told with KINETIC TYPOGRAPHY: <code>wordpop</code> pops the
+question in, <code>karaoke</code> sweeps a highlight across the four path names as the curves
+sketch on, then <code>flash</code>/<code>glow</code> crown the cycloid — a third, distinct elevation style.</p>
+<pre><code class="language-manic">// ============================================================================
+//  brachistochrone-annotated.manic  —  ELEVATE a sim: KINETIC TYPOGRAPHY
+// ----------------------------------------------------------------------------
+//  A third elevation flavour (see spring-annotated for typewriter, pulley-
+//  annotated for camera). Here the text itself performs: `caption` + `wordpop`
+//  pops the question in word-by-word, `caption` + `karaoke` sweeps a highlight
+//  across the four path names as the curves are sketched, and `flash`/`glow`/
+//  `pulse` crown the winner — the same recipe on a multi-body RACE, no section
+//  cards. All base manic over the `brachistochrone` parts.
+// ============================================================================
+
+title("Brachistochrone — Shortest Path, or Fastest?");
+canvas("16:9");
+
+// ---- the sim (curves untraced to sketch on; beads + markers hidden) ----
+brachistochrone(br, (330, 165), 150);
+untraced(br.straight); untraced(br.circle); untraced(br.parabola); untraced(br.cycloid);
+hidden(br.bead_straight); hidden(br.bead_circle); hidden(br.bead_parabola); hidden(br.bead_cycloid);
+hidden(br.markA); hidden(br.labelA); hidden(br.markB); hidden(br.labelB);
+
+// ---- kinetic-typography captions ----
+caption(q, "shortest path — or fastest?", (cx, 62), 34, gold);
+caption(leg, "straight   arc   parabola   cycloid", (cx, h - 66), 26, dim);
+text(cap, (cx, h - 32), ""); size(cap, 19); color(cap, dim); display(cap);
+
+// ============================== SCRIPT ==============================
+say(cap, "a bead slides from A down to B under gravity — same start, same finish", 0.4);
+show(br.markA, 0.4); show(br.labelA, 0.3); pulse(br.markA);
+show(br.markB, 0.4); show(br.labelB, 0.3); pulse(br.markB);
+wait(0.4);
+
+// the question pops in, word by word
+wordpop(q, 0.18);
+wait(0.6);
+
+// sketch the four curves; the legend highlight sweeps across their names
+say(cap, "four paths from A to B — the cycloid dips below the line", 0.4);
+draw(br.straight, 0.5); draw(br.circle, 0.5); draw(br.parabola, 0.5); draw(br.cycloid, 0.6);
+karaoke(leg, 0.5, cyan);
+flash(br.cycloid, magenta);
+wait(0.5);
+
+// the race
+say(cap, "release all four at once …", 0.4);
+show(br.bead_straight, 0.3); show(br.bead_circle, 0.3); show(br.bead_parabola, 0.3); show(br.bead_cycloid, 0.3);
+run(br, 6);
+
+// crown the winner
+say(cap, "the CYCLOID wins — the steep early drop buys speed that repays the longer path", 0.4);
+flash(br.cycloid, lime); glow(br.bead_cycloid, 1.9); pulse(br.bead_cycloid);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/RTdB8CFjkug" title="Brachistochrone Race — Guided Lesson — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="textbook-pulley"><a class="header" href="#textbook-pulley">textbook-pulley</a></h2>
+<p>A physics-TEXTBOOK figure, manic style: the <code>template("paper")</code> white page, a hatched
+<code>support</code> ceiling, a green pulley wheel, and outlined labelled mass boxes — the classic
+m over 2m+3m arrangement, all base primitives.</p>
+<pre><code class="language-manic">// ============================================================================
+//  textbook-pulley.manic  —  a physics-textbook figure, manic style
+// ----------------------------------------------------------------------------
+//  The classic "m over 2m+3m" pulley arrangement, drawn in the flat textbook
+//  look: the `paper` theme (white page, dark ink), a hatched `support` ceiling,
+//  a solid green pulley wheel, thin ropes, and outlined labelled mass boxes.
+//  A STATIC figure — pure base manic (`support`, `circle`, `line`, `rect`, `text`).
+// ============================================================================
+
+title("Pulley arrangement — m, 2m, 3m");
+canvas("16:9");
+template("paper");
+
+// hatched ceiling + the rope suspending the pulley
+support(ceil, (cx, 120), 340);
+line(rope0, (cx, 120), (cx, 222)); color(rope0, fg); stroke(rope0, 2);
+
+// the green pulley wheel (dark edge + hub)
+circle(wheel, (cx, 300), 80); color(wheel, lime); outline(wheel, fg);
+circle(hub, (cx, 300), 5); color(hub, fg); filled(hub);
+
+// ropes leave the wheel vertically, left and right
+line(ropeL, (560, 300), (560, 456)); color(ropeL, fg); stroke(ropeL, 2);
+line(ropeR, (720, 300), (720, 456)); color(ropeR, fg); stroke(ropeR, 2);
+
+// mass on the left: m
+rect(mbox, (560, 485), 110, 58); outlined(mbox); outline(mbox, fg); stroke(mbox, 2);
+text(ml, (560, 485), "m"); color(ml, fg); size(ml, 26); bold(ml);
+
+// masses on the right: 2m, with 3m hanging below it
+rect(m2, (720, 485), 120, 58); outlined(m2); outline(m2, fg); stroke(m2, 2);
+text(l2, (720, 485), "2m"); color(l2, fg); size(l2, 26); bold(l2);
+line(r23, (720, 514), (720, 596)); color(r23, fg); stroke(r23, 2);
+rect(m3, (720, 625), 120, 58); outlined(m3); outline(m3, fg); stroke(m3, 2);
+text(l3, (720, 625), "3m"); color(l3, fg); size(l3, 26); bold(l3);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GneVjPiFTsI" title="Textbook Pulley Figure — Paper Style — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="textbook-tension"><a class="header" href="#textbook-tension">textbook-tension</a></h2>
+<p>Another textbook figure: two support ropes at 60°/30° meeting a knot, a string over a
+hanging pulley carrying 10 kg with the other end anchored to a hatched floor — <code>support</code></p>
+<ul>
+<li><code>template("paper")</code> for the flat exam-paper look.</li>
+</ul>
+<pre><code class="language-manic">// ============================================================================
+//  textbook-tension.manic  —  a physics-textbook figure, manic style
+// ----------------------------------------------------------------------------
+//  Two support ropes at 60° / 30° meet at a knot; a string over a hanging pulley
+//  carries a 10 kg load on one side and anchors to the floor on the other. Drawn
+//  in the flat textbook look: `paper` theme, hatched `support` ceiling + floor,
+//  a green pulley wheel, and outlined labels. A STATIC figure, all base manic.
+// ============================================================================
+
+title("Tension in a rope over a pulley  (g = 10 m/s²)");
+canvas("16:9");
+template("paper");
+
+// hatched ceiling
+support(ceil, (cx, 110), 700);
+
+// the two support ropes meeting at the knot, with a dashed-style vertical ref
+line(t1, (553, 110), (cx, 260)); color(t1, fg); stroke(t1, 2);
+line(t2, (900, 110), (cx, 260)); color(t2, fg); stroke(t2, 2);
+line(vref, (cx, 110), (cx, 260)); color(vref, dim); stroke(vref, 1);
+
+text(a1, (588, 150), "60°"); color(a1, fg); size(a1, 22);
+text(a2, (852, 150), "30°"); color(a2, fg); size(a2, 22);
+text(t1l, (556, 210), "T₁"); color(t1l, fg); size(t1l, 24); bold(t1l);
+text(t2l, (820, 210), "T₂"); color(t2l, fg); size(t2l, 24); bold(t2l);
+
+// knot → hanging pulley
+line(drop, (cx, 260), (cx, 364)); color(drop, fg); stroke(drop, 2);
+circle(wheel, (cx, 430), 66); color(wheel, lime); outline(wheel, fg);
+circle(hub, (cx, 430), 5); color(hub, fg); filled(hub);
+
+// 10 kg load on the right side of the string
+line(ropeM, (706, 430), (706, 520)); color(ropeM, fg); stroke(ropeM, 2);
+rect(mbox, (706, 548), 84, 56); outlined(mbox); outline(mbox, fg); stroke(mbox, 2);
+text(ml, (792, 548), "10 Kg"); color(ml, fg); size(ml, 22); bold(ml);
+
+// the other side anchored to a hatched floor
+line(ropeF, (cx, 496), (cx, 600)); color(ropeF, fg); stroke(ropeF, 2);
+support(floor, (cx, 612), 150, "up");
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/pAj6lWNuLNs" title="Textbook Tension Figure — 60/30 Ropes — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="vectors-fields--coordinates"><a class="header" href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a></h1>

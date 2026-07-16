@@ -1,0 +1,11 @@
+// loop-track.manic — a ball rolls down a ramp and around a vertical loop-the-loop.
+// `looptrack(id,[center],[radius],[height],[unit])`. A curved-track energy solver:
+// v = √(2g(H−y)) along the arc, so the ball visibly SLOWS at the top. The release
+// height must exceed 2·radius to clear the top. `energygraph` shows KE↔PE.
+title("Loop-the-loop — down the ramp, around the loop");
+canvas("16:9");
+text(hdr, (cx, 44), "Release high enough (H > 2r) and the ball clears the top of the loop"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+looptrack(lt, (470, 560), 1, 3);
+energygraph(lt, (1010, 330), 120);
+text(cap, (cx, h - 32), "energy conserved: it trades kinetic for potential, slowest at the top of the loop"); size(cap, 15); color(cap, dim); display(cap);
+run(lt, 5);

@@ -1,0 +1,24 @@
+// ============================================================================
+//  raft-cm.manic  —  centre of mass, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `raft(id, [center], [personmass], [raftmass], [unit])` — a person walking on
+//  a floating raft. With no external horizontal force, momentum is conserved and
+//  the centre of mass stays FIXED: the raft slides the opposite way by
+//  −m_person/(m_person+m_raft) of each step. PRE-SIMULATED; `run(id,[dur])`
+//  replays it. The dashed line marks the (unmoving) centre of mass.
+//
+//  TO ADAPT: make the raft much lighter (raftmass) — it slides much further.
+// ============================================================================
+
+title("Raft — walk one way, the raft slides the other");
+canvas("16:9");
+
+text(hdr, (cx, 46), "Momentum stays zero, so the centre of mass never moves");
+size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+
+raft(rf, (cx, 380), 70, 200);
+
+text(cap, (cx, h - 32), "the person walks; the raft glides back — the dashed centre-of-mass line stays put");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(rf, 9);

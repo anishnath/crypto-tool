@@ -1,0 +1,25 @@
+// ============================================================================
+//  ramp.manic  —  friction on an incline, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `ramp(id, [center], [angle], [mass], [applied], [unit])` — a block sliding
+//  down an inclined plane. Full force model: gravity along the slope, the normal
+//  force, and a static→kinetic friction switch. Friction turns mechanical energy
+//  into heat, so `energygraph`'s total DECAYS as the block slides. PRE-SIMULATED
+//  with RK4; `run(id,[dur])` replays it.
+//
+//  TO ADAPT: lower the angle below the friction angle and the block won't budge.
+// ============================================================================
+
+title("Inclined plane — friction dissipates energy");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Block on a ramp — μ friction bleeds the energy away");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+ramp(rp, (300, 470), 30);
+energygraph(rp, (960, 320), 120);
+
+text(cap, (cx, h - 32), "as the block slides down, the gold total energy line falls — friction converts it to heat");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(rp, 6);

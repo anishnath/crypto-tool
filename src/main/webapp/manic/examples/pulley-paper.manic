@@ -1,0 +1,52 @@
+// ============================================================================
+//  pulley-paper.manic  —  an ANIMATED sim in textbook paper style
+// ----------------------------------------------------------------------------
+//  The Atwood `pulley` sim, dressed as a physics-textbook figure AND run: the
+//  `template("paper")` page (its palette remap inks the sim automatically), a
+//  hatched `support` ceiling, a forest-green wheel, outlined mass boxes, and a
+//  base-manic reveal (`say`/`show`/`draw`/`fade`) — then `run` plays the motion.
+//  Proof the paper/support treatment composes with a live, animated simulation.
+// ============================================================================
+
+title("The Atwood machine — textbook style");
+canvas("16:9");
+template("paper");                       // white page; the theme remaps neon → ink
+
+text(hdr, (cx, 46), "The Atwood machine"); color(hdr, fg); size(hdr, 27); bold(hdr); display(hdr); hidden(hdr);
+
+// hatched ceiling + suspension rope (traced on)
+support(ceil, (cx, 108), 320); untraced(ceil);
+line(sus, (cx, 108), (cx, 160)); color(sus, fg); stroke(sus, 2); untraced(sus);
+
+// the sim, restyled to textbook ink (parts hidden, revealed in order)
+pulley(pl, (cx, 192), 3, 2);
+color(pl.wheel, lime);                   // lime → forest green on the paper palette
+color(pl.hub, fg); color(pl.ropeL, fg); color(pl.ropeR, fg);
+outlined(pl.mass1); outline(pl.mass1, fg);
+outlined(pl.mass2); outline(pl.mass2, fg);
+hidden(pl.wheel); hidden(pl.hub); hidden(pl.ropeL); hidden(pl.ropeR); hidden(pl.mass1); hidden(pl.mass2);
+
+// annotations
+text(m1L, (cx - 150, 316), "m₁ = 3 kg"); color(m1L, fg); size(m1L, 20); display(m1L); hidden(m1L);
+text(m2L, (cx + 150, 316), "m₂ = 2 kg"); color(m2L, fg); size(m2L, 20); display(m2L); hidden(m2L);
+text(acc, (cx, 604), "a = (m₁ − m₂)·g / (m₁ + m₂)"); color(acc, fg); size(acc, 22); display(acc); hidden(acc);
+text(cap, (cx, h - 40), ""); color(cap, fg); size(cap, 20); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+say(cap, "a rope over one frictionless pulley, hung from the ceiling", 0.4);
+draw(ceil, 0.4); draw(sus, 0.4); show(pl.wheel, 0.4); show(pl.hub, 0.3);
+wait(0.4);
+
+say(cap, "a heavier mass on the left, a lighter one on the right", 0.4);
+show(pl.ropeL, 0.3); show(pl.mass1, 0.4); show(m1L, 0.3);
+show(pl.ropeR, 0.3); show(pl.mass2, 0.4); show(m2L, 0.3);
+wait(0.5);
+
+say(cap, "the system accelerates toward the heavier side", 0.4);
+show(acc, 0.5);
+wait(0.7);
+fade(m1L, 0.3); fade(m2L, 0.3);
+
+say(cap, "release: m₁ sinks, m₂ rises", 0.4);
+run(pl, 4);
