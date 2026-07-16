@@ -1,0 +1,10 @@
+// vertical-spring.manic — a mass bobbing on a vertical spring under gravity.
+title("Vertical spring — bobbing under gravity");
+canvas("16:9");
+text(hdr,(cx,44),"Vertical spring — a mass bobs about its stretched equilibrium"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+verticalspring(vs, (400,170), 0.7);
+untraced(vs.path);
+phase(vs, (900,190), 95);        // d vs ḋ
+well(vs, (900,470), 95);         // parabolic well (shifted by gravity)
+text(cap,(cx,h-32),"gravity shifts the equilibrium down; the well is still a parabola"); size(cap,16); color(cap,dim); display(cap);
+par { run(vs, 10); draw(vs.path, 10); }

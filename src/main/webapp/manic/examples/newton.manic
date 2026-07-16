@@ -1,0 +1,39 @@
+title("Newton's method: chasing a root");
+canvas("16:9");
+
+text(hdr, (cx, 56), "Newton's method finds where x squared = 2");
+size(hdr, 28); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// a reference frame so the x-axis (where the tangents land) is visible
+axes(ax, (cx - 250, cy + 170), 540, 360, 1);
+color(ax, dim); untraced(ax);
+
+// f(x) = x^2 - 2, whose positive root is sqrt(2)
+plot(f, (cx - 250, cy + 170), 180, 70, "x*x - 2", (-0.4, 3));
+color(f, cyan); stroke(f, 3); untraced(f);
+
+// the true zero-crossing, marked
+roots(zero, f);
+color(zero, lime); hidden(zero);
+
+// the Newton zig-zag from a first guess of x = 3
+newton(walk, f, 3);
+color(walk, gold); stroke(walk, 3); untraced(walk);
+
+text(cap, (cx, h - 60), "each tangent slides the guess closer");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(ax, 0.8);
+draw(f, 1.4);
+wait(0.3);
+show(cap, 0.4);
+
+// walk the iterates in to the root
+draw(walk, 3.5);
+wait(0.3);
+
+// reveal the exact root it converged on
+show(zero, 0.5);
+pulse(zero, 0.6);

@@ -1,0 +1,9 @@
+// bungee.manic — free-fall, then a one-sided elastic cord catches the jumper.
+title("Bungee jump — free-fall, then bounce");
+canvas("16:9");
+text(hdr,(cx,44),"Bungee — the cord only PULLS: free-fall, then an elastic bounce"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+bungee(bg, (640,110));
+phase(bg, (1000,200), 95);       // asymmetric well shows in the phase loop
+well(bg, (1000,470), 95);        // linear (fall) → parabola (cord): a lopsided well
+text(cap,(cx,h-32),"note the lopsided energy well — flat during free-fall, steep once the cord bites"); size(cap,15); color(cap,dim); display(cap);
+run(bg, 11);

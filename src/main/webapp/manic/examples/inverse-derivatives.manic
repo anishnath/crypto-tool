@@ -1,0 +1,94 @@
+title("Inverse-function derivatives — why the pairs mirror");
+canvas("16:9");
+
+// uniform scale (sx == sy) so a function and its inverse reflect correctly
+let ox = cx - 470;
+let oy = cy + 110;
+let s = 72;
+
+text(hdr, (cx, 52), "A function and its inverse: mirror curves, reciprocal slopes");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// ---------------- the mirror plane ----------------
+axes(ax, (ox, oy), 470, 300, 1);
+color(ax, dim); untraced(ax);
+
+// y = x, the mirror line
+line(diag, (ox - 2.6*s, oy + 2.6*s), (ox + 3.8*s, oy - 3.8*s));
+color(diag, dim); untraced(diag);
+text(diaglab, (ox + 3.4*s, oy - 3.4*s - 22), "y = x");
+size(diaglab, 16); color(diaglab, dim); display(diaglab); hidden(diaglab);
+
+// e^x and its inverse ln x — reflections of each other
+plot(ef, (ox, oy), s, s, "exp(x)", (-2.6, 1.45));
+color(ef, cyan); stroke(ef, 3); untraced(ef);
+text(eflab, (ox + 1.45*s + 8, oy - 4.1*s), "e^x");
+size(eflab, 18); color(eflab, cyan); display(eflab); hidden(eflab);
+
+plot(lf, (ox, oy), s, s, "ln(x)", (0.075, 4.3));
+color(lf, magenta); stroke(lf, 3); untraced(lf);
+text(lflab, (ox + 4.2*s, oy - 1.45*s), "ln x");
+size(lflab, 18); color(lflab, magenta); display(lflab); hidden(lflab);
+
+// tangent + live slope at a point on e^x, and at its mirror point on ln x
+tangent(te, ef, 0.5, 150);
+color(te, cyan); hidden(te);
+slope(se, ef, 0.5);
+color(se, cyan); hidden(se);
+
+tangent(tl, lf, 1.65, 150);
+color(tl, magenta); hidden(tl);
+slope(sl, lf, 1.65);
+color(sl, magenta); hidden(sl);
+
+text(rec, (cx + 340, cy + 60), "slope x slope = 1");
+size(rec, 22); color(rec, lime); bold(rec); display(rec); hidden(rec);
+text(rec2, (cx + 340, cy + 96), "(1.65) x (0.61)");
+size(rec2, 18); color(rec2, dim); display(rec2); hidden(rec2);
+
+// ---------------- the four identity pairs ----------------
+text(t1, (cx + 340, cy - 190), "(e^x)' = e^x        (ln x)' = 1/x");
+size(t1, 17); color(t1, fg); display(t1); hidden(t1);
+text(t2, (cx + 340, cy - 150), "(sin x)' = sqrt(1-sin^2 x)   (arcsin x)' = 1/sqrt(1-x^2)");
+size(t2, 15); color(t2, fg); display(t2); hidden(t2);
+text(t3, (cx + 340, cy - 118), "(cos x)' = -sqrt(1-cos^2 x)  (arccos x)' = -1/sqrt(1-x^2)");
+size(t3, 15); color(t3, fg); display(t3); hidden(t3);
+text(t4, (cx + 340, cy - 86), "(tan x)' = 1+tan^2 x         (arctan x)' = 1/(1+x^2)");
+size(t4, 15); color(t4, fg); display(t4); hidden(t4);
+
+// ================= timeline =================
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(diag, 0.5);
+show(diaglab, 0.3);
+par {
+  draw(ef, 1.4);
+  draw(lf, 1.4);
+}
+par {
+  show(eflab, 0.4);
+  show(lflab, 0.4);
+}
+wait(0.3);
+
+// the reciprocal-slope check
+par {
+  show(te, 0.4);
+  show(se, 0.4);
+}
+par {
+  show(tl, 0.4);
+  show(sl, 0.4);
+}
+show(rec, 0.5);
+show(rec2, 0.4);
+flash(rec, lime);
+wait(0.4);
+
+// the four pairs it generates
+stagger(0.4) {
+  show(t1, 0.4);
+  show(t2, 0.4);
+  show(t3, 0.4);
+  show(t4, 0.4);
+}

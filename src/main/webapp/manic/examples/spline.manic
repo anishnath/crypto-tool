@@ -1,0 +1,21 @@
+title("A smooth curve through the data");
+canvas("16:9");
+
+text(hdr, (cx, 70), "Interpolation: one smooth curve through every point");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// scattered data points — the spline passes through all of them
+spline(s, (300, 620), (520, 340), (760, 560), (1000, 300), (1240, 480), (1500, 260));
+color(s, cyan); stroke(s, 4); untraced(s);
+
+text(cap, (cx, h - 60), "Catmull-Rom — it hits each knot exactly");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.5);
+// pop the knots in first
+show(s.knots, 0.6);
+wait(0.3);
+// then trace the smooth curve through them
+draw(s, 2.2);
+show(cap, 0.4);

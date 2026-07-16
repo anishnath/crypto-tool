@@ -1,0 +1,9 @@
+// double-spring.manic — two masses coupled by springs: energy sloshes (beating).
+title("Coupled springs — energy sloshes back and forth");
+canvas("16:9");
+text(hdr,(cx,44),"Two coupled masses — push one, and the energy beats between them"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+doublespring(dd, (430,300), 85);
+phase(dd, (980,200), 100);       // x1 vs x2 — normal modes are diagonals
+energygraph(dd, (980,470), 100);
+text(cap,(cx,h-32),"block 1 (cyan) starts displaced; watch block 2 (magenta) pick up its swing"); size(cap,15); color(cap,dim); display(cap);
+run(dd, 12);

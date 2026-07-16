@@ -1,0 +1,38 @@
+// ============================================================================
+//  pendulum.manic  —  the physics kit's first sim, seen FOUR ways (Layer 1)
+// ----------------------------------------------------------------------------
+//  `pendulum(id, [center], [length], [angle0], [unit], [damping])` builds a
+//  pendulum from its physics — PRE-SIMULATED with RK4 at build time
+//  (deterministic). Only `id` is required. The OPTIONAL, generic view builtins
+//  render the SAME simulation as math panels and all animate together on `swing`:
+//    · phase(id,(cx,cy),[size])       — phase portrait (θ vs ω): a closed loop
+//    · timegraph(id,(cx,cy),[size])   — θ(t) & ω(t) with a sweep line
+//    · well(id,(cx,cy),[size])        — energy well U(θ), bob = ball in a bowl
+//    · energygraph(id,(cx,cy),[size]) — KE / PE / total over time
+//
+//  TO ADAPT: add damping (6th arg) and watch the phase loop spiral inward, the
+//  ball settle to the bottom of the well, and total energy decay — e.g.
+//  `pendulum(p, (250,220), 1.2, 55, 105, 0.5)`.
+// ============================================================================
+
+title("Pendulum — one swing, four views");
+canvas("16:9");
+
+text(hdr, (cx, 40), "One pendulum, four views");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the physical sim (left), with velocity arrow + KE/PE bars
+pendulum(p, (250, 220), 1.2, 55, 105);
+untraced(p.path);
+
+// four math views of the SAME simulation, 2×2 on the right
+phase(p, (715, 165), 90);          // θ vs ω — a closed loop
+timegraph(p, (1000, 165), 90);     // θ(t), ω(t) with a sweep line
+well(p, (715, 455), 90);           // U(θ) with the bob as a rolling ball
+energygraph(p, (1000, 455), 90);   // KE / PE / total over time
+
+text(cap, (cx, h - 30), "sim · phase portrait · time series · energy well · energy over time — all from one pre-simulated swing");
+size(cap, 16); color(cap, dim); display(cap);
+
+draw(p.path, 0.8);
+swing(p, 10);                      // every panel animates in lockstep

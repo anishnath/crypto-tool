@@ -1,0 +1,28 @@
+title("Phase portrait: flowing into a spiral sink");
+canvas("16:9");
+
+text(hdr, (cx, 60), "dx/dt = -y - 0.2x,   dy/dt = x - 0.2y");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// a reference frame centered on the sink
+axes(ax, (cx, cy + 20), 620, 360, 1);
+color(ax, dim); untraced(ax);
+
+// three trajectories from different starts, each spiraling into the origin
+trajectory(t1, "-y - 0.2*x", "x - 0.2*y", (3.2, 0), (cx, cy + 20), 110, 520);
+color(t1, cyan); stroke(t1, 3); untraced(t1);
+
+trajectory(t2, "-y - 0.2*x", "x - 0.2*y", (0, 3.4), (cx, cy + 20), 110, 520);
+color(t2, magenta); stroke(t2, 3); untraced(t2);
+
+trajectory(t3, "-y - 0.2*x", "x - 0.2*y", (-3.0, -2.4), (cx, cy + 20), 110, 520);
+color(t3, gold); stroke(t3, 3); untraced(t3);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(ax, 0.8);
+par {
+  draw(t1, 3.5);
+  draw(t2, 3.5);
+  draw(t3, 3.5);
+}

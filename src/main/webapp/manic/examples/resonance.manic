@@ -1,0 +1,10 @@
+// resonance.manic — a driven spring pumped near its natural frequency.
+title("Resonance — driving near the natural frequency");
+canvas("16:9");
+text(hdr,(cx,44),"Resonance — drive near √(k/m) and the amplitude grows and grows"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+resonance(rs, (400,300), 3.8);   // natural freq = √(16/1) = 4; drive 3.8 ≈ resonance
+untraced(rs.path);
+phase(rs, (960,200), 100);       // spiral OUT to a big steady-state loop
+energygraph(rs, (960,470), 100); // energy climbs, then plateaus
+text(cap,(cx,h-32),"drive frequency 3.8 vs natural 4.0 — near resonance, so it builds up big"); size(cap,15); color(cap,dim); display(cap);
+par { run(rs, 12); draw(rs.path, 12); }

@@ -1,0 +1,708 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Physics — simulations - manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Write animations as plain text. A friendly, example-first guide for creators.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-f3f17bd0.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-c083d0bb.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://8gwifi.org/manic" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="physics--simulations"><a class="header" href="#physics--simulations">Physics — simulations</a></h1>
+<p>Each simulation is <strong>pre-simulated with RK4</strong> at build time — deterministic and replayable — and its parts are ordinary manic entities the whole language composes with. The phase / time / well / energy views are optional and generic: any sim inherits them.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="pendulum"><a class="header" href="#pendulum">pendulum</a></h2>
+<p>One pendulum shown four ways from a single deterministic swing: the motion (with a
+velocity arrow + KE/PE bars), the phase portrait (θ vs ω), a time series, the
+potential-energy well, and energy over time (<code>pendulum</code> + <code>phase</code>/<code>timegraph</code>/
+<code>well</code>/<code>energygraph</code> + <code>swing</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  pendulum.manic  —  the physics kit's first sim, seen FOUR ways (Layer 1)
+// ----------------------------------------------------------------------------
+//  `pendulum(id, [center], [length], [angle0], [unit], [damping])` builds a
+//  pendulum from its physics — PRE-SIMULATED with RK4 at build time
+//  (deterministic). Only `id` is required. The OPTIONAL, generic view builtins
+//  render the SAME simulation as math panels and all animate together on `swing`:
+//    · phase(id,(cx,cy),[size])       — phase portrait (θ vs ω): a closed loop
+//    · timegraph(id,(cx,cy),[size])   — θ(t) &amp; ω(t) with a sweep line
+//    · well(id,(cx,cy),[size])        — energy well U(θ), bob = ball in a bowl
+//    · energygraph(id,(cx,cy),[size]) — KE / PE / total over time
+//
+//  TO ADAPT: add damping (6th arg) and watch the phase loop spiral inward, the
+//  ball settle to the bottom of the well, and total energy decay — e.g.
+//  `pendulum(p, (250,220), 1.2, 55, 105, 0.5)`.
+// ============================================================================
+
+title("Pendulum — one swing, four views");
+canvas("16:9");
+
+text(hdr, (cx, 40), "One pendulum, four views");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the physical sim (left), with velocity arrow + KE/PE bars
+pendulum(p, (250, 220), 1.2, 55, 105);
+untraced(p.path);
+
+// four math views of the SAME simulation, 2×2 on the right
+phase(p, (715, 165), 90);          // θ vs ω — a closed loop
+timegraph(p, (1000, 165), 90);     // θ(t), ω(t) with a sweep line
+well(p, (715, 455), 90);           // U(θ) with the bob as a rolling ball
+energygraph(p, (1000, 455), 90);   // KE / PE / total over time
+
+text(cap, (cx, h - 30), "sim · phase portrait · time series · energy well · energy over time — all from one pre-simulated swing");
+size(cap, 16); color(cap, dim); display(cap);
+
+draw(p.path, 0.8);
+swing(p, 10);                      // every panel animates in lockstep
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/6ThI97u97cg" title="One Pendulum, Four Views — Motion, Phase, Well & Energy — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pendulum-damped"><a class="header" href="#pendulum-damped">pendulum-damped</a></h2>
+<p>The same four views with friction on (<code>damping</code>): the swing decays, the phase loop
+spirals inward, the well ball settles, and the total-energy line drops — dissipation
+told the same way by every panel.</p>
+<pre><code class="language-manic">// ============================================================================
+//  pendulum-damped.manic  —  the SAME four views, now with friction
+// ----------------------------------------------------------------------------
+//  Identical to `pendulum.manic` but with `damping` (the 6th arg) turned on, so
+//  the swing loses energy. Watch every panel respond together:
+//    · sim         — the amplitude shrinks each swing (slows toward rest)
+//    · phase        — the closed loop becomes an INWARD SPIRAL
+//    · well         — the ball SETTLES toward the bottom of the bowl
+//    · energygraph  — the TOTAL (gold) line DECAYS (KE↔PE trade, sum drops)
+//
+//  Set damping = 0 (or drop the 6th arg) for the frictionless version, where the
+//  loop stays closed and the total-energy line stays flat (conservation).
+// ============================================================================
+
+title("Damped pendulum — energy bleeds away");
+canvas("16:9");
+
+text(hdr, (cx, 40), "Add friction: the swing decays, and every view follows");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the physical sim (left) — 6th arg 0.6 is the damping
+pendulum(p, (250, 220), 1.2, 55, 105, 0.6);
+untraced(p.path);
+
+// the same four math views of the SAME (now damped) simulation
+phase(p, (715, 165), 90);          // loop → inward spiral
+timegraph(p, (1000, 165), 90);     // θ(t), ω(t) — envelope shrinks
+well(p, (715, 455), 90);           // ball settles to the bottom
+energygraph(p, (1000, 455), 90);   // total energy decays
+
+text(cap, (cx, h - 30), "damping = 0.6 · the phase spiral, settling ball, and decaying total energy all show the same loss");
+size(cap, 16); color(cap, dim); display(cap);
+
+draw(p.path, 0.8);
+swing(p, 10);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/KhANpUmTPtc" title="Damped Pendulum — Watch Energy Bleed Away — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pendulum-annotated"><a class="header" href="#pendulum-annotated">pendulum-annotated</a></h2>
+<p>A guided anatomy lesson proving physics composes with base manic: <code>section</code> chapters,
+<code>text</code> / <code>arrow</code> / <code>bracelabel</code> annotations, and <code>show</code>/<code>recolor</code>/<code>flash</code>/<code>pulse</code> all
+driving the sim’s parts — no special physics mode.</p>
+<pre><code class="language-manic">// ============================================================================
+//  pendulum-annotated.manic  —  a guided lesson: physics + base manic compose
+// ----------------------------------------------------------------------------
+//  Proof that a sim's parts (`{id}.pivot/.rod/.bob/.path/…`) are ORDINARY manic
+//  entities. This whole lesson is built from BASE std vocabulary — `section`
+//  chapters, `text` labels, leader `arrow`s, a reference `line`, a `bracelabel`,
+//  and `show`/`fade`/`recolor`/`flash`/`pulse`/`draw`/`say` — wrapped around the
+//  physics `pendulum` + `energygraph` view + `swing`. No special "physics mode":
+//  every std verb/modifier/annotation addresses the physics entities directly.
+// ============================================================================
+
+title("Anatomy of a Pendulum");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Anatomy of a Pendulum");
+size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// ---- the physics sim + one math view (parts start hidden; path untraced) ----
+pendulum(p, (440, 210), 1.6, 50, 110);
+hidden(p.pivot); hidden(p.rod); hidden(p.bob); hidden(p.overlays);
+untraced(p.path);                       // trace 0 but keep opacity (reveal later)
+energygraph(p, (1030, 250), 105);       // built now (its sweep joins `swing`)
+hidden(p.energy);
+
+// ---- base annotations, all hidden to reveal in order ----
+line(vref, (440, 210), (440, 386));                         // vertical reference
+color(vref, dim); stroke(vref, 2); hidden(vref);
+bracelabel(Lb, (440, 210), (575, 323), "L = 1.6 m", 26);    // rod length
+color(Lb, gold); hidden(Lb); hidden(Lb.label);
+text(pivL, (330, 200), "pivot (fixed)"); size(pivL, 18); color(pivL, dim); display(pivL); hidden(pivL);
+arrow(pivA, (388, 205), (428, 209)); color(pivA, dim); stroke(pivA, 2); hidden(pivA);
+text(bobL, (600, 355), "bob — mass m"); size(bobL, 18); color(bobL, magenta); display(bobL); hidden(bobL);
+arrow(bobA, (628, 345), (585, 330)); color(bobA, dim); stroke(bobA, 2); hidden(bobA);
+text(angL, (472, 300), "θ₀ = 50°"); size(angL, 18); color(angL, lime); display(angL); hidden(angL);
+
+text(cap, (cx, h - 42), ""); size(cap, 20); color(cap, dim); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+
+section("Anatomy");
+say(cap, "a fixed pivot …", 0.4);
+show(p.pivot, 0.4); pulse(p.pivot); show(pivL, 0.4); draw(pivA, 0.3);
+wait(0.5);
+say(cap, "… a rigid rod of length L …", 0.4);
+show(p.rod, 0.4); show(Lb, 0.4); show(Lb.label, 0.4);
+wait(0.6);
+say(cap, "… and a bob of mass m at the end", 0.4);
+show(p.bob, 0.5); recolor(p.bob, magenta, 0.3); pulse(p.bob); show(bobL, 0.4); draw(bobA, 0.3);
+wait(0.5);
+say(cap, "all one group — a base broadcast flashes every part at once", 0.4);
+flash(p.parts, lime);                    // std broadcast over the whole sim
+wait(0.7);
+
+section("Release");
+say(cap, "held at θ₀ from the vertical, then let go", 0.4);
+show(vref, 0.4); show(angL, 0.4); flash(p.rod, cyan);
+wait(0.9);
+// clear the static annotations before the motion
+fade(Lb, 0.3); fade(Lb.label, 0.3); fade(pivA, 0.3); fade(bobA, 0.3);
+fade(pivL, 0.3); fade(bobL, 0.3); fade(angL, 0.3); fade(vref, 0.3);
+wait(0.3);
+
+section("Swing");
+say(cap, "gravity pulls it back — velocity arrow + energy bars ride along", 0.4);
+show(p.overlays, 0.4);                   // reveal the velocity arrow + KE/PE bars
+draw(p.path, 0.8);                       // trace the arc it will follow
+
+section("Energy");
+say(cap, "and the SAME swing, read as energy over time", 0.4);
+show(p.energy, 0.5);                     // reveal the energy graph, then run it all
+swing(p, 10);                            // every panel + annotation-free scene animates
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/IcW5DCpAGaw" title="Anatomy of a Pendulum — Physics + Base manic — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spring"><a class="header" href="#spring">spring</a></h2>
+<p>A mass on a spring (simple harmonic motion) drawn with a real stretching coil — the
+same generic views on a <em>different</em> system; note the energy well is a <strong>parabola</strong>
+(½kx²) rather than the pendulum’s cosine (<code>spring</code> + the views + <code>run</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  spring.manic  —  the physics kit's SECOND sim (Layer 1)
+// ----------------------------------------------------------------------------
+//  `spring(id, [center], [stiffness], [x0], [unit], [damping])` — a mass on a
+//  spring, PRE-SIMULATED with RK4 (deterministic). Only `id` is required. It's a
+//  different system from the pendulum, yet it inherits the SAME generic views for
+//  free — note the energy well here is a PARABOLA U(x)=½kx² (the pendulum's is a
+//  cosine). `run(id, [dur])` replays the motion (alias: `swing`).
+//
+//  TO ADAPT: add damping (6th arg) — the phase ellipse spirals in, the ball
+//  settles to the bottom of the parabola, and total energy decays:
+//  `spring(s, (360,320), 10, 1.4, 110, 0.6)`.
+// ============================================================================
+
+title("Mass on a spring — four views");
+canvas("16:9");
+
+text(hdr, (cx, 44), "A different sim — same four views (well is a parabola)");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the mass–spring on the left
+spring(s, (330, 300), 10, 1.4, 110);
+
+// the same generic views of the SAME simulation, 2×2 on the right
+phase(s, (760, 175), 90);          // x vs v — an ellipse
+timegraph(s, (1010, 175), 90);     // x(t), v(t) with a sweep line
+well(s, (760, 460), 90);           // parabolic energy well U(x)=½kx²
+energygraph(s, (1010, 460), 90);   // KE / PE / total over time
+
+text(cap, (cx, h - 32), "one mass–spring, seen as motion · phase ellipse · time series · parabolic well · energy");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(s, 10);                        // every panel animates in lockstep
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/QlCWSkW3JtY" title="Mass on a Spring — SHM in Four Views — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spring-damped"><a class="header" href="#spring-damped">spring-damped</a></h2>
+<p>The damped spring: the coil’s oscillation decays, the phase ellipse spirals in, the
+ball settles in the parabola, and total energy bleeds away.</p>
+<pre><code class="language-manic">// ============================================================================
+//  spring-damped.manic  —  the same four views, now with friction
+// ----------------------------------------------------------------------------
+//  Identical to `spring.manic` but with `damping` (the 6th arg) turned on, so the
+//  oscillation loses energy. Watch every panel respond together:
+//    · sim          — the coil's swing SHRINKS each cycle (settles to rest)
+//    · phase        — the ellipse becomes an INWARD SPIRAL
+//    · well          — the ball SETTLES to the bottom of the parabola U(x)=½kx²
+//    · energygraph  — the TOTAL (gold) line DECAYS (KE↔PE trade, sum drops)
+//
+//  Set damping = 0 (or drop the 6th arg) for the frictionless version, where the
+//  ellipse stays closed and the total-energy line stays flat (conservation).
+// ============================================================================
+
+title("Damped spring — energy bleeds away");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Add friction: the oscillation decays, every view follows");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the mass–spring (left) — 6th arg 0.6 is the damping
+spring(s, (330, 300), 10, 1.4, 110, 0.6);
+
+// the same generic views of the SAME (now damped) simulation
+phase(s, (760, 175), 90);          // ellipse → inward spiral
+timegraph(s, (1010, 175), 90);     // x(t), v(t) — envelope shrinks
+well(s, (760, 460), 90);           // ball settles to the bottom of the parabola
+energygraph(s, (1010, 460), 90);   // total energy decays
+
+text(cap, (cx, h - 32), "damping = 0.6 · the spiral, settling ball, and decaying total energy all show the same loss");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(s, 10);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/aLI3iOg_uJY" title="Damped Spring — Oscillation Decays — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="double-pendulum"><a class="header" href="#double-pendulum">double-pendulum</a></h2>
+<p>Deterministic chaos: two arms hinged end-to-end whose outer bob traces a wild,
+unrepeatable curve — yet the render is frame-identical every run. A 4-D system, so
+it shows <code>phase</code> (θ₁ vs θ₂) and <code>energygraph</code> but has no potential <code>well</code>
+(<code>doublependulum</code> + views + <code>run</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  double-pendulum.manic  —  chaos, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `doublependulum(id, [center], [angle1], [angle2], [unit])` — two arms hinged
+//  end-to-end: deterministic, yet exquisitely sensitive to initial conditions.
+//  PRE-SIMULATED with RK4 (so the render is frame-identical every run). It's a
+//  4-D system, so it inherits `phase` (θ₁ vs θ₂), `timegraph`, and `energygraph`
+//  — but NOT `well` (there's no single-variable potential). `run(id,[dur])` plays
+//  it; drawing `{id}.path` in parallel traces the outer bob's chaotic curve.
+//
+//  TO ADAPT: nudge angle2 by one degree and re-run — the trail diverges completely.
+// ============================================================================
+
+title("Double pendulum — deterministic chaos");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Double pendulum — deterministic, yet unpredictable");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the chaotic sim on the left (outer bob traces the wild curve)
+doublependulum(dp, (400, 250), 125, 110);
+untraced(dp.path);
+
+// the views that DO apply to a 4-D system (no potential well here)
+phase(dp, (900, 190), 100);        // θ₁ vs θ₂ — the coupled angles
+energygraph(dp, (900, 480), 100);  // KE / PE / total (total ~conserved)
+
+text(cap, (cx, h - 32), "outer bob's trail is chaotic; total energy stays (nearly) conserved — no friction");
+size(cap, 16); color(cap, dim); display(cap);
+
+// trace the chaotic trail AS the pendulum swings (draw + run in parallel)
+par {
+  run(dp, 12);
+  draw(dp.path, 12);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/hpIsPE7z9F8" title="Double Pendulum — Deterministic Chaos — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spring-pendulum"><a class="header" href="#spring-pendulum">spring-pendulum</a></h2>
+<p>An elastic pendulum — a bob on a springy rod (drawn as a stretching coil) that both
+swings and bounces, energy sloshing between the two modes (<code>springpendulum</code>).</p>
+<pre><code class="language-manic">// spring-pendulum.manic — the elastic pendulum: swings AND bounces.
+//   springpendulum(id,[center],[angle0],[stretch0],[unit],[damping]) — a bob on a
+//   springy rod (drawn as a stretching coil). Energy sloshes between the swing and
+//   the bounce, so the phase portrait and energy graph are richer than a rigid rod.
+title("Elastic pendulum — swing meets bounce");
+canvas("16:9");
+text(hdr,(cx,44),"Spring pendulum — energy sloshes between swing and bounce");
+size(hdr,23); color(hdr,cyan); bold(hdr); display(hdr);
+springpendulum(sp, (380,230), 35, 0.5, 105);
+untraced(sp.path);
+phase(sp, (900,190), 95);           // θ vs ω
+energygraph(sp, (900,470), 95);     // KE / PE / total (~conserved, lightly damped)
+text(cap,(cx,h-32),"the coil stretches as it swings — a two-mode system"); size(cap,16); color(cap,dim); display(cap);
+par { run(sp, 11); draw(sp.path, 11); }
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/7nEXwteCl80" title="Elastic Pendulum — Swing Meets Bounce — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="kapitza"><a class="header" href="#kapitza">kapitza</a></h2>
+<p>The Kapitza pendulum: vibrate the pivot fast enough and the <strong>inverted</strong> position
+becomes stable — the bob hovers near the top instead of falling (<code>kapitza</code>).</p>
+<pre><code class="language-manic">// kapitza.manic — vibrate the pivot fast enough and the pendulum stands UP.
+//   kapitza(id,[center],[angle0deg],[vibeamp],[unit]) — a driven (Kapitza) pendulum;
+//   with a strong enough vibration the INVERTED position becomes stable.
+title("Kapitza pendulum — stable upside-down");
+canvas("16:9");
+text(hdr,(cx,44),"Kapitza pendulum — fast pivot vibration stabilises 'up'");
+size(hdr,23); color(hdr,cyan); bold(hdr); display(hdr);
+kapitza(kp, (640,430), 165, 240, 150);   // start near inverted, strong vibration
+untraced(kp.path);
+text(cap,(cx,h-32),"the gold pivot bobs fast; the bob hovers near the top (inverted)"); size(cap,16); color(cap,dim); display(cap);
+par { run(kp, 9); draw(kp.path, 9); }
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/CeA8UVctOD4" title="Kapitza Pendulum — Stable Upside-Down — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="cart-pendulum"><a class="header" href="#cart-pendulum">cart-pendulum</a></h2>
+<p>A pendulum on a spring-mounted cart rolling on a track — the classic control-theory
+system; cart and bob trade momentum and energy (<code>cartpendulum</code>).</p>
+<pre><code class="language-manic">// cart-pendulum.manic — a pendulum on a spring-mounted cart (the control classic).
+//   cartpendulum(id,[center],[angle0deg],[unit]) — cart rolls on a track (spring to a
+//   wall) while the pendulum swings; the two exchange momentum and energy.
+title("Cart-pendulum — coupled motion");
+canvas("16:9");
+text(hdr,(cx,44),"Cart-pendulum — the cart and bob trade momentum"); size(hdr,23); color(hdr,cyan); bold(hdr); display(hdr);
+cartpendulum(cp, (480,330), 55, 105);
+phase(cp, (1000,190), 95);          // θ vs ω
+energygraph(cp, (1000,470), 95);    // KE / PE / total (~conserved)
+text(cap,(cx,h-32),"cart on a spring + swinging bob — energy stays (nearly) conserved"); size(cap,16); color(cap,dim); display(cap);
+run(cp, 11);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/vSFO4L-jQSY" title="Cart-Pendulum — Coupled Motion — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="compare-pendulum"><a class="header" href="#compare-pendulum">compare-pendulum</a></h2>
+<p>Sensitive dependence: two identical driven pendulums started 0.001 rad apart drift
+onto completely different paths — the butterfly effect, watched in <code>phase</code>/<code>timegraph</code>
+(<code>comparependulum</code>).</p>
+<pre><code class="language-manic">// compare-pendulum.manic — sensitive dependence: two pendulums 0.001 rad apart.
+//   comparependulum(id,[center],[angle0deg],[unit]) — identical driven-damped
+//   physics, a hair-different start — yet they diverge completely (the butterfly effect).
+title("Two pendulums, one hair apart");
+canvas("16:9");
+text(hdr,(cx,44),"Sensitive dependence — a 0.001 rad difference explodes"); size(hdr,23); color(hdr,cyan); bold(hdr); display(hdr);
+comparependulum(cm, (380,230), 12, 120);
+phase(cm, (900,190), 95);           // θ_A vs θ_B — starts on the diagonal, then scatters
+timegraph(cm, (900,470), 95);       // θ_A(t) &amp; θ_B(t) diverge
+text(cap,(cx,h-32),"cyan and magenta start together, then go their separate ways"); size(cap,16); color(cap,dim); display(cap);
+run(cm, 13);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Moh5BnDaWBk" title="Two Pendulums, One Hair Apart — Chaos — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="vertical-spring"><a class="header" href="#vertical-spring">vertical-spring</a></h2>
+<p>A mass bobbing on a vertical spring under gravity — gravity shifts the equilibrium
+but the energy well stays a parabola (<code>verticalspring</code>).</p>
+<pre><code class="language-manic">// vertical-spring.manic — a mass bobbing on a vertical spring under gravity.
+title("Vertical spring — bobbing under gravity");
+canvas("16:9");
+text(hdr,(cx,44),"Vertical spring — a mass bobs about its stretched equilibrium"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+verticalspring(vs, (400,170), 0.7);
+untraced(vs.path);
+phase(vs, (900,190), 95);        // d vs ḋ
+well(vs, (900,470), 95);         // parabolic well (shifted by gravity)
+text(cap,(cx,h-32),"gravity shifts the equilibrium down; the well is still a parabola"); size(cap,16); color(cap,dim); display(cap);
+par { run(vs, 10); draw(vs.path, 10); }
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/mV69srx4HAs" title="Vertical Spring — Bobbing Under Gravity — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spring-incline"><a class="header" href="#spring-incline">spring-incline</a></h2>
+<p>A mass on a spring on an inclined plane; gravity’s along-ramp component sets a new
+stretched rest point it oscillates about (<code>springincline</code>).</p>
+<pre><code class="language-manic">// spring-incline.manic — a mass on a spring on an inclined plane.
+title("Spring on an incline");
+canvas("16:9");
+text(hdr,(cx,44),"Spring on an incline — gravity's along-ramp pull shifts equilibrium"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+springincline(si, (360,180), 32);
+untraced(si.path);
+phase(si, (960,200), 100);
+energygraph(si, (960,470), 100);
+text(cap,(cx,h-32),"the bob oscillates along the ramp about its stretched rest point"); size(cap,16); color(cap,dim); display(cap);
+par { run(si, 10); draw(si.path, 10); }
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/jFdhSxdoWMY" title="Spring on an Incline — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bungee"><a class="header" href="#bungee">bungee</a></h2>
+<p>A bungee jump: free-fall, then a ONE-SIDED elastic cord (it only pulls) catches and
+bounces the jumper — note the lopsided energy well (<code>bungee</code>).</p>
+<pre><code class="language-manic">// bungee.manic — free-fall, then a one-sided elastic cord catches the jumper.
+title("Bungee jump — free-fall, then bounce");
+canvas("16:9");
+text(hdr,(cx,44),"Bungee — the cord only PULLS: free-fall, then an elastic bounce"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+bungee(bg, (640,110));
+phase(bg, (1000,200), 95);       // asymmetric well shows in the phase loop
+well(bg, (1000,470), 95);        // linear (fall) → parabola (cord): a lopsided well
+text(cap,(cx,h-32),"note the lopsided energy well — flat during free-fall, steep once the cord bites"); size(cap,15); color(cap,dim); display(cap);
+run(bg, 11);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/uwa-ev1hwpY" title="Bungee Jump — Free-Fall Then Bounce — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="resonance"><a class="header" href="#resonance">resonance</a></h2>
+<p>A driven spring pushed near its natural frequency √(k/m): the amplitude climbs and
+climbs — resonance, watched building up in <code>phase</code>/<code>energygraph</code> (<code>resonance</code>).</p>
+<pre><code class="language-manic">// resonance.manic — a driven spring pumped near its natural frequency.
+title("Resonance — driving near the natural frequency");
+canvas("16:9");
+text(hdr,(cx,44),"Resonance — drive near √(k/m) and the amplitude grows and grows"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+resonance(rs, (400,300), 3.8);   // natural freq = √(16/1) = 4; drive 3.8 ≈ resonance
+untraced(rs.path);
+phase(rs, (960,200), 100);       // spiral OUT to a big steady-state loop
+energygraph(rs, (960,470), 100); // energy climbs, then plateaus
+text(cap,(cx,h-32),"drive frequency 3.8 vs natural 4.0 — near resonance, so it builds up big"); size(cap,15); color(cap,dim); display(cap);
+par { run(rs, 12); draw(rs.path, 12); }
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/J7pDtK4CeRU" title="Resonance — Driving Near Natural Frequency — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="double-spring"><a class="header" href="#double-spring">double-spring</a></h2>
+<p>Two masses coupled by springs between walls — push one and the energy sloshes back
+and forth (beating); normal modes show as diagonals in <code>phase</code> (<code>doublespring</code>).</p>
+<pre><code class="language-manic">// double-spring.manic — two masses coupled by springs: energy sloshes (beating).
+title("Coupled springs — energy sloshes back and forth");
+canvas("16:9");
+text(hdr,(cx,44),"Two coupled masses — push one, and the energy beats between them"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+doublespring(dd, (430,300), 85);
+phase(dd, (980,200), 100);       // x1 vs x2 — normal modes are diagonals
+energygraph(dd, (980,470), 100);
+text(cap,(cx,h-32),"block 1 (cyan) starts displaced; watch block 2 (magenta) pick up its swing"); size(cap,15); color(cap,dim); display(cap);
+run(dd, 12);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/4ad4U8EIu44" title="Coupled Springs — Energy Sloshes (Beating) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="series-parallel-springs"><a class="header" href="#series-parallel-springs">series-parallel-springs</a></h2>
+<p>The same mass on springs in series (soft, slow) vs parallel (stiff, fast), side by
+side — the <code>timegraph</code> makes the frequency difference obvious (<code>seriesparallel</code>).</p>
+<pre><code class="language-manic">// series-parallel-springs.manic — same mass, springs in series vs parallel.
+title("Series vs parallel springs");
+canvas("16:9");
+text(hdr,(cx,44),"Same mass, same springs — series is soft (slow), parallel is stiff (fast)"); size(hdr,21); color(hdr,cyan); bold(hdr); display(hdr);
+seriesparallel(sp, (560,150), 68);
+timegraph(sp, (1060,320), 95);   // y_s(t) vs y_p(t): parallel oscillates faster
+text(cap,(cx,h-30),"parallel adds stiffness (k₁+k₂); series divides it (1/k = 1/k₁+1/k₂)"); size(cap,15); color(cap,dim); display(cap);
+run(sp, 11);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/PZjrCgzR7o8" title="Series vs Parallel Springs — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="car-suspension"><a class="header" href="#car-suspension">car-suspension</a></h2>
+<p>A quarter-car riding a scrolling road — a speed bump, a washboard stretch, and a
+pothole — its spring+damper soaking up the ride (<code>carsuspension</code>).</p>
+<pre><code class="language-manic">// car-suspension.manic — a quarter-car riding a road: bump, washboard, pothole.
+title("Car suspension — riding the road");
+canvas("16:9");
+text(hdr,(cx,44),"Quarter-car suspension — the body bobs as the wheel rides the road"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+carsuspension(car, (640,430));
+energygraph(car, (1050,170), 100);
+text(cap,(cx,h-30),"a speed bump, a washboard stretch, then a pothole — the spring+damper soak it up"); size(cap,15); color(cap,dim); display(cap);
+run(car, 12);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/HRc7qGHzrbg" title="Car Suspension — Riding the Road — manic" allowfullscreen loading="lazy"></iframe></div>
+
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ex-stats.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ex-vectors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ex-stats.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ex-vectors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

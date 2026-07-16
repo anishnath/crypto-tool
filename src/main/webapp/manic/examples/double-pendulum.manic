@@ -1,0 +1,35 @@
+// ============================================================================
+//  double-pendulum.manic  —  chaos, on the physics baseline (Layer 1)
+// ----------------------------------------------------------------------------
+//  `doublependulum(id, [center], [angle1], [angle2], [unit])` — two arms hinged
+//  end-to-end: deterministic, yet exquisitely sensitive to initial conditions.
+//  PRE-SIMULATED with RK4 (so the render is frame-identical every run). It's a
+//  4-D system, so it inherits `phase` (θ₁ vs θ₂), `timegraph`, and `energygraph`
+//  — but NOT `well` (there's no single-variable potential). `run(id,[dur])` plays
+//  it; drawing `{id}.path` in parallel traces the outer bob's chaotic curve.
+//
+//  TO ADAPT: nudge angle2 by one degree and re-run — the trail diverges completely.
+// ============================================================================
+
+title("Double pendulum — deterministic chaos");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Double pendulum — deterministic, yet unpredictable");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the chaotic sim on the left (outer bob traces the wild curve)
+doublependulum(dp, (400, 250), 125, 110);
+untraced(dp.path);
+
+// the views that DO apply to a 4-D system (no potential well here)
+phase(dp, (900, 190), 100);        // θ₁ vs θ₂ — the coupled angles
+energygraph(dp, (900, 480), 100);  // KE / PE / total (total ~conserved)
+
+text(cap, (cx, h - 32), "outer bob's trail is chaotic; total energy stays (nearly) conserved — no friction");
+size(cap, 16); color(cap, dim); display(cap);
+
+// trace the chaotic trail AS the pendulum swings (draw + run in parallel)
+par {
+  run(dp, 12);
+  draw(dp.path, 12);
+}

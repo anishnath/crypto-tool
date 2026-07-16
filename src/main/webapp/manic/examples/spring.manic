@@ -1,0 +1,33 @@
+// ============================================================================
+//  spring.manic  —  the physics kit's SECOND sim (Layer 1)
+// ----------------------------------------------------------------------------
+//  `spring(id, [center], [stiffness], [x0], [unit], [damping])` — a mass on a
+//  spring, PRE-SIMULATED with RK4 (deterministic). Only `id` is required. It's a
+//  different system from the pendulum, yet it inherits the SAME generic views for
+//  free — note the energy well here is a PARABOLA U(x)=½kx² (the pendulum's is a
+//  cosine). `run(id, [dur])` replays the motion (alias: `swing`).
+//
+//  TO ADAPT: add damping (6th arg) — the phase ellipse spirals in, the ball
+//  settles to the bottom of the parabola, and total energy decays:
+//  `spring(s, (360,320), 10, 1.4, 110, 0.6)`.
+// ============================================================================
+
+title("Mass on a spring — four views");
+canvas("16:9");
+
+text(hdr, (cx, 44), "A different sim — same four views (well is a parabola)");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the mass–spring on the left
+spring(s, (330, 300), 10, 1.4, 110);
+
+// the same generic views of the SAME simulation, 2×2 on the right
+phase(s, (760, 175), 90);          // x vs v — an ellipse
+timegraph(s, (1010, 175), 90);     // x(t), v(t) with a sweep line
+well(s, (760, 460), 90);           // parabolic energy well U(x)=½kx²
+energygraph(s, (1010, 460), 90);   // KE / PE / total over time
+
+text(cap, (cx, h - 32), "one mass–spring, seen as motion · phase ellipse · time series · parabolic well · energy");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(s, 10);                        // every panel animates in lockstep

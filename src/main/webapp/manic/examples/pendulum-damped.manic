@@ -1,0 +1,35 @@
+// ============================================================================
+//  pendulum-damped.manic  —  the SAME four views, now with friction
+// ----------------------------------------------------------------------------
+//  Identical to `pendulum.manic` but with `damping` (the 6th arg) turned on, so
+//  the swing loses energy. Watch every panel respond together:
+//    · sim         — the amplitude shrinks each swing (slows toward rest)
+//    · phase        — the closed loop becomes an INWARD SPIRAL
+//    · well         — the ball SETTLES toward the bottom of the bowl
+//    · energygraph  — the TOTAL (gold) line DECAYS (KE↔PE trade, sum drops)
+//
+//  Set damping = 0 (or drop the 6th arg) for the frictionless version, where the
+//  loop stays closed and the total-energy line stays flat (conservation).
+// ============================================================================
+
+title("Damped pendulum — energy bleeds away");
+canvas("16:9");
+
+text(hdr, (cx, 40), "Add friction: the swing decays, and every view follows");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the physical sim (left) — 6th arg 0.6 is the damping
+pendulum(p, (250, 220), 1.2, 55, 105, 0.6);
+untraced(p.path);
+
+// the same four math views of the SAME (now damped) simulation
+phase(p, (715, 165), 90);          // loop → inward spiral
+timegraph(p, (1000, 165), 90);     // θ(t), ω(t) — envelope shrinks
+well(p, (715, 455), 90);           // ball settles to the bottom
+energygraph(p, (1000, 455), 90);   // total energy decays
+
+text(cap, (cx, h - 30), "damping = 0.6 · the phase spiral, settling ball, and decaying total energy all show the same loss");
+size(cap, 16); color(cap, dim); display(cap);
+
+draw(p.path, 0.8);
+swing(p, 10);

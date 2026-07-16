@@ -1,0 +1,11 @@
+// cart-pendulum.manic — a pendulum on a spring-mounted cart (the control classic).
+//   cartpendulum(id,[center],[angle0deg],[unit]) — cart rolls on a track (spring to a
+//   wall) while the pendulum swings; the two exchange momentum and energy.
+title("Cart-pendulum — coupled motion");
+canvas("16:9");
+text(hdr,(cx,44),"Cart-pendulum — the cart and bob trade momentum"); size(hdr,23); color(hdr,cyan); bold(hdr); display(hdr);
+cartpendulum(cp, (480,330), 55, 105);
+phase(cp, (1000,190), 95);          // θ vs ω
+energygraph(cp, (1000,470), 95);    // KE / PE / total (~conserved)
+text(cap,(cx,h-32),"cart on a spring + swinging bob — energy stays (nearly) conserved"); size(cap,16); color(cap,dim); display(cap);
+run(cp, 11);

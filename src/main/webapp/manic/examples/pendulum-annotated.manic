@@ -1,0 +1,72 @@
+// ============================================================================
+//  pendulum-annotated.manic  —  a guided lesson: physics + base manic compose
+// ----------------------------------------------------------------------------
+//  Proof that a sim's parts (`{id}.pivot/.rod/.bob/.path/…`) are ORDINARY manic
+//  entities. This whole lesson is built from BASE std vocabulary — `section`
+//  chapters, `text` labels, leader `arrow`s, a reference `line`, a `bracelabel`,
+//  and `show`/`fade`/`recolor`/`flash`/`pulse`/`draw`/`say` — wrapped around the
+//  physics `pendulum` + `energygraph` view + `swing`. No special "physics mode":
+//  every std verb/modifier/annotation addresses the physics entities directly.
+// ============================================================================
+
+title("Anatomy of a Pendulum");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Anatomy of a Pendulum");
+size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// ---- the physics sim + one math view (parts start hidden; path untraced) ----
+pendulum(p, (440, 210), 1.6, 50, 110);
+hidden(p.pivot); hidden(p.rod); hidden(p.bob); hidden(p.overlays);
+untraced(p.path);                       // trace 0 but keep opacity (reveal later)
+energygraph(p, (1030, 250), 105);       // built now (its sweep joins `swing`)
+hidden(p.energy);
+
+// ---- base annotations, all hidden to reveal in order ----
+line(vref, (440, 210), (440, 386));                         // vertical reference
+color(vref, dim); stroke(vref, 2); hidden(vref);
+bracelabel(Lb, (440, 210), (575, 323), "L = 1.6 m", 26);    // rod length
+color(Lb, gold); hidden(Lb); hidden(Lb.label);
+text(pivL, (330, 200), "pivot (fixed)"); size(pivL, 18); color(pivL, dim); display(pivL); hidden(pivL);
+arrow(pivA, (388, 205), (428, 209)); color(pivA, dim); stroke(pivA, 2); hidden(pivA);
+text(bobL, (600, 355), "bob — mass m"); size(bobL, 18); color(bobL, magenta); display(bobL); hidden(bobL);
+arrow(bobA, (628, 345), (585, 330)); color(bobA, dim); stroke(bobA, 2); hidden(bobA);
+text(angL, (472, 300), "θ₀ = 50°"); size(angL, 18); color(angL, lime); display(angL); hidden(angL);
+
+text(cap, (cx, h - 42), ""); size(cap, 20); color(cap, dim); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5);
+
+section("Anatomy");
+say(cap, "a fixed pivot …", 0.4);
+show(p.pivot, 0.4); pulse(p.pivot); show(pivL, 0.4); draw(pivA, 0.3);
+wait(0.5);
+say(cap, "… a rigid rod of length L …", 0.4);
+show(p.rod, 0.4); show(Lb, 0.4); show(Lb.label, 0.4);
+wait(0.6);
+say(cap, "… and a bob of mass m at the end", 0.4);
+show(p.bob, 0.5); recolor(p.bob, magenta, 0.3); pulse(p.bob); show(bobL, 0.4); draw(bobA, 0.3);
+wait(0.5);
+say(cap, "all one group — a base broadcast flashes every part at once", 0.4);
+flash(p.parts, lime);                    // std broadcast over the whole sim
+wait(0.7);
+
+section("Release");
+say(cap, "held at θ₀ from the vertical, then let go", 0.4);
+show(vref, 0.4); show(angL, 0.4); flash(p.rod, cyan);
+wait(0.9);
+// clear the static annotations before the motion
+fade(Lb, 0.3); fade(Lb.label, 0.3); fade(pivA, 0.3); fade(bobA, 0.3);
+fade(pivL, 0.3); fade(bobL, 0.3); fade(angL, 0.3); fade(vref, 0.3);
+wait(0.3);
+
+section("Swing");
+say(cap, "gravity pulls it back — velocity arrow + energy bars ride along", 0.4);
+show(p.overlays, 0.4);                   // reveal the velocity arrow + KE/PE bars
+draw(p.path, 0.8);                       // trace the arc it will follow
+
+section("Energy");
+say(cap, "and the SAME swing, read as energy over time", 0.4);
+show(p.energy, 0.5);                     // reveal the energy graph, then run it all
+swing(p, 10);                            // every panel + annotation-free scene animates

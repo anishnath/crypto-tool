@@ -1,0 +1,101 @@
+// A 3 × 3 × 3 block of 27 cubes, then a matrix operation: a 3×3 matrix is a
+// linear map of space. We apply a shear M to every cell, then its inverse
+// M^-1 — which sends the block back exactly, because M^-1 M = I.
+//
+//   manic examples/matrix3.manic
+//   manic examples/matrix3.manic --record out --fps 60
+
+title("3 × 3 × 3  ·  M and M^-1");
+canvas("16:9");
+template("terminal");
+
+camera3((7.5, -9, 6), (2.4, 0, 2.1), 42);
+grid3(floor, (0, 0, 0), 6, 1);
+color(floor, dim);
+
+let s = 1.3;    // cell spacing (cubes are 1 wide → 0.3 gaps)
+let zc = 2.1;   // height of the block's centre
+let a = 0.7;    // shear amount: M sends x → x + a·z
+
+text(cap, (cx, h - 42), "");
+display(cap);  color(cap, fg);  size(cap, 21);  hidden(cap);
+
+// --- 27 cubes, three x-slices coloured cyan / magenta / lime ---
+for j in 0..3 { for k in 0..3 {
+  cube3(xa{j}{k}, (0 - s, (j - 1)*s, zc + (k - 1)*s), (1, 1, 1));
+  color(xa{j}{k}, cyan);  hidden(xa{j}{k});
+} }
+for j in 0..3 { for k in 0..3 {
+  cube3(xb{j}{k}, (0, (j - 1)*s, zc + (k - 1)*s), (1, 1, 1));
+  color(xb{j}{k}, magenta);  hidden(xb{j}{k});
+} }
+for j in 0..3 { for k in 0..3 {
+  cube3(xc{j}{k}, (s, (j - 1)*s, zc + (k - 1)*s), (1, 1, 1));
+  color(xc{j}{k}, lime);  hidden(xc{j}{k});
+} }
+
+// --- the matrices, as monospace text on the right ---
+text(mLabel, (995, 232), "M =");
+text(m0, (1035, 274), "[ 1  0   0.7 ]");
+text(m1, (1035, 310), "[ 0  1    0  ]");
+text(m2, (1035, 346), "[ 0  0    1  ]");
+text(iLabel, (995, 446), "M^-1 =");
+text(i0, (1035, 488), "[ 1  0  -0.7 ]");
+text(i1, (1035, 524), "[ 0  1    0  ]");
+text(i2, (1035, 560), "[ 0  0    1  ]");
+display(mLabel); display(m0); display(m1); display(m2);
+display(iLabel); display(i0); display(i1); display(i2);
+color(mLabel, cyan);  color(m0, cyan);  color(m1, cyan);  color(m2, cyan);
+color(iLabel, gold);  color(i0, gold);  color(i1, gold);  color(i2, gold);
+size(mLabel, 24); size(m0, 22); size(m1, 22); size(m2, 22);
+size(iLabel, 24); size(i0, 22); size(i1, 22); size(i2, 22);
+hidden(mLabel); hidden(m0); hidden(m1); hidden(m2);
+hidden(iLabel); hidden(i0); hidden(i1); hidden(i2);
+
+// ------------------------------ script ------------------------------
+show(floor, 0.3);
+show(cap, 0.3);
+say(cap, "A 3 by 3 by 3 block — 27 cells.", 0.7);
+stagger(0.04) {
+  for j in 0..3 { for k in 0..3 { show(xa{j}{k}, 0.3); } }
+  for j in 0..3 { for k in 0..3 { show(xb{j}{k}, 0.3); } }
+  for j in 0..3 { for k in 0..3 { show(xc{j}{k}, 0.3); } }
+}
+orbit3(38, 22, 13, 1.6, smooth);
+
+say(cap, "A 3×3 matrix M is a linear map of space. This M shears x by height z.", 1.0);
+stagger(0.12) { show(mLabel, 0.3); show(m0, 0.3); show(m1, 0.3); show(m2, 0.3); }
+
+// apply M: x' = x + a·(z - zc)
+par {
+  for j in 0..3 { for k in 0..3 {
+    move3(xa{j}{k}, (0 - s + a*(k - 1)*s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xb{j}{k}, (a*(k - 1)*s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xc{j}{k}, (s + a*(k - 1)*s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+}
+say(cap, "Applying M slants the whole block — the higher a cell, the more it shifts.", 1.0);
+
+stagger(0.12) { show(iLabel, 0.3); show(i0, 0.3); show(i1, 0.3); show(i2, 0.3); }
+say(cap, "The inverse M^-1 just negates the shear.", 0.8);
+
+// apply M^-1: sends every cell back to where it started
+par {
+  for j in 0..3 { for k in 0..3 {
+    move3(xa{j}{k}, (0 - s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xb{j}{k}, (0, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+  for j in 0..3 { for k in 0..3 {
+    move3(xc{j}{k}, (s, (j - 1)*s, zc + (k - 1)*s), 1.8, smooth);
+  } }
+}
+say(cap, "M^-1 sends every cell home: M^-1 M = I, the identity.", 1.0);
+
+orbit3(70, 26, 13, 2.4, smooth);
+wait(0.6);

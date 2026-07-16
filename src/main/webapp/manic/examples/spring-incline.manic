@@ -1,0 +1,10 @@
+// spring-incline.manic — a mass on a spring on an inclined plane.
+title("Spring on an incline");
+canvas("16:9");
+text(hdr,(cx,44),"Spring on an incline — gravity's along-ramp pull shifts equilibrium"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+springincline(si, (360,180), 32);
+untraced(si.path);
+phase(si, (960,200), 100);
+energygraph(si, (960,470), 100);
+text(cap,(cx,h-32),"the bob oscillates along the ramp about its stretched rest point"); size(cap,16); color(cap,dim); display(cap);
+par { run(si, 10); draw(si.path, 10); }

@@ -1,0 +1,33 @@
+// ============================================================================
+//  spring-damped.manic  —  the same four views, now with friction
+// ----------------------------------------------------------------------------
+//  Identical to `spring.manic` but with `damping` (the 6th arg) turned on, so the
+//  oscillation loses energy. Watch every panel respond together:
+//    · sim          — the coil's swing SHRINKS each cycle (settles to rest)
+//    · phase        — the ellipse becomes an INWARD SPIRAL
+//    · well          — the ball SETTLES to the bottom of the parabola U(x)=½kx²
+//    · energygraph  — the TOTAL (gold) line DECAYS (KE↔PE trade, sum drops)
+//
+//  Set damping = 0 (or drop the 6th arg) for the frictionless version, where the
+//  ellipse stays closed and the total-energy line stays flat (conservation).
+// ============================================================================
+
+title("Damped spring — energy bleeds away");
+canvas("16:9");
+
+text(hdr, (cx, 44), "Add friction: the oscillation decays, every view follows");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr);
+
+// the mass–spring (left) — 6th arg 0.6 is the damping
+spring(s, (330, 300), 10, 1.4, 110, 0.6);
+
+// the same generic views of the SAME (now damped) simulation
+phase(s, (760, 175), 90);          // ellipse → inward spiral
+timegraph(s, (1010, 175), 90);     // x(t), v(t) — envelope shrinks
+well(s, (760, 460), 90);           // ball settles to the bottom of the parabola
+energygraph(s, (1010, 460), 90);   // total energy decays
+
+text(cap, (cx, h - 32), "damping = 0.6 · the spiral, settling ball, and decaying total energy all show the same loss");
+size(cap, 16); color(cap, dim); display(cap);
+
+run(s, 10);

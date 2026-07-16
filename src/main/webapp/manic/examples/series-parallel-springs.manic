@@ -1,0 +1,8 @@
+// series-parallel-springs.manic — same mass, springs in series vs parallel.
+title("Series vs parallel springs");
+canvas("16:9");
+text(hdr,(cx,44),"Same mass, same springs — series is soft (slow), parallel is stiff (fast)"); size(hdr,21); color(hdr,cyan); bold(hdr); display(hdr);
+seriesparallel(sp, (560,150), 68);
+timegraph(sp, (1060,320), 95);   // y_s(t) vs y_p(t): parallel oscillates faster
+text(cap,(cx,h-30),"parallel adds stiffness (k₁+k₂); series divides it (1/k = 1/k₁+1/k₂)"); size(cap,15); color(cap,dim); display(cap);
+run(sp, 11);

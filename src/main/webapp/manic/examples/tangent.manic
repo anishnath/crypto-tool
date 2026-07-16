@@ -1,0 +1,29 @@
+title("The Tangent Line — a curve's slope, made visible");
+canvas("16:9");
+
+text(hdr, (cx, 60), "The slope of sin x, everywhere at once");
+size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// the curve — plot remembers its function, so tangent can ask it questions.
+// center the domain 0..6.3 across the canvas (midpoint x=3.15 sits at cx)
+plot(f, (cx - 440, cy + 40), 140, 120, "sin(x)", (0, 6.3));
+color(f, cyan); stroke(f, 3); untraced(f);
+
+// a tangent that touches f where x = 0.5 (line + contact dot, one call)
+tangent(tan, f, 0.5, 260);
+color(tan, gold); untraced(tan);
+
+text(cap, (cx, h - 60), "watch the tilt follow the curve");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(f, 1.4);
+show(tan, 0.6);
+show(cap, 0.4);
+wait(0.4);
+
+// slide the touch point along the whole curve — the slope is derived live
+to(tan, x, 5.8, 5);
+wait(0.3);
+to(tan, x, 1.6, 2.5);   // back toward the first peak, where the slope is 0

@@ -1,0 +1,39 @@
+title("3D coordinate space");
+canvas(1280, 720);
+template("terminal");
+
+camera3((8, -10, 6), (0, 0, 1), 45);
+grid3(floor, (0, 0, 0), 5, 1);
+color(floor, dim);
+axes3(world, (0, 0, 0), 4);
+
+cube3(box, (0, 0, 1), (2, 2, 2));
+color(box, magenta);
+sphere3(ball, (-2, 1, 1), 0.7);
+color(ball, lime);
+arrow3(vector, (0, 0, 0), (2.5, 2, 3));
+
+// a parametric helix (curve3), drawn on as a shaded tube
+curve3(spiral, "cos(t)*2.6", "sin(t)*2.6", "t*0.32", (0, 12));
+color(spiral, gold);
+thick(spiral, 0.08);
+
+// a height-field surface z = f(x,y) (surface3), filled + flat-shaded
+surface3(wave, "0.6*sin(x)*cos(y)", (-3.5, 3.5), (-3.5, 3.5), 24);
+color(wave, magenta);
+opacity(wave, 0.5);
+
+// filled, flat-shaded solids (prism3 / pyramid3)
+prism3(hex, (-3.6, -2.4, 1.2), 6, 0.9, 2.2);
+pyramid3(cone, (3.6, -2.4, 1.4), 22, 1.0, 2.6);
+
+// a 2D label glued to the moving sphere — tracks it as the camera orbits
+text(balltag, (0, 0), "ball");
+color(balltag, gold);
+pin3(balltag, ball);
+
+par {
+    rotate3(box, (0, 0, 360), 4, linear);
+    orbit3(70, 28, 11, 4, smooth);
+    move3(ball, (2, -1, 2), 4, inout);
+}

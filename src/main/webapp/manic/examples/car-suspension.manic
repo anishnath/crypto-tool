@@ -1,0 +1,8 @@
+// car-suspension.manic — a quarter-car riding a road: bump, washboard, pothole.
+title("Car suspension — riding the road");
+canvas("16:9");
+text(hdr,(cx,44),"Quarter-car suspension — the body bobs as the wheel rides the road"); size(hdr,22); color(hdr,cyan); bold(hdr); display(hdr);
+carsuspension(car, (640,430));
+energygraph(car, (1050,170), 100);
+text(cap,(cx,h-30),"a speed bump, a washboard stretch, then a pothole — the spring+damper soak it up"); size(cap,15); color(cap,dim); display(cap);
+run(car, 12);

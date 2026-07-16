@@ -1,5 +1,5 @@
 {
-  "count": 70,
+  "count": 99,
   "categories": [
     {
       "slug": "algorithms",
@@ -27,13 +27,13 @@
           "name": "linked_list",
           "file": "linked_list.manic",
           "title": "Linked list",
-          "desc": "Singly / doubly / circular \u2014 node anatomy + pointer re-threading."
+          "desc": "Singly / doubly / circular \u2014 classic node anatomy + pointer re-threading."
         },
         {
           "name": "hashmap",
           "file": "hashmap.manic",
           "title": "Hashmap",
-          "desc": "Hash a key to a bucket; collisions chain on."
+          "desc": "Hash a key to a bucket; collisions chain on (separate chaining)."
         }
       ]
     },
@@ -75,7 +75,7 @@
           "name": "calculus-demo",
           "file": "calculus-demo.manic",
           "title": "Calculus demo",
-          "desc": "Derivative + integral on one curve: sliding tangent, live slope, sweeping area, climbing integral, on numbered axes."
+          "desc": "The flagship: two big ideas on one curve."
         },
         {
           "name": "sine_wave",
@@ -106,6 +106,42 @@
           "file": "riemann_readout.manic",
           "title": "Riemann readout",
           "desc": "Running sums shown as a live computed number."
+        },
+        {
+          "name": "tangent",
+          "file": "tangent.manic",
+          "title": "Tangent",
+          "desc": "The tangent line to a curve, sliding along it \u2014 its tilt is read from the function itself, so it's always the true slope (flat at the peaks)."
+        },
+        {
+          "name": "analysis",
+          "file": "analysis.manic",
+          "title": "Analysis",
+          "desc": "Ask one curve everything at once \u2014 tangent, a live slope number, the normal, the area sweeping open beneath it, and the integral climbing to its true value."
+        },
+        {
+          "name": "newton",
+          "file": "newton.manic",
+          "title": "Newton",
+          "desc": "Newton's method, drawn as a zig-zag: from a first guess, slide down each tangent to the axis, back up to the curve, and watch the guesses walk to the root."
+        },
+        {
+          "name": "inverse-derivatives",
+          "file": "inverse-derivatives.manic",
+          "title": "Inverse derivatives",
+          "desc": "Why a function and its inverse have reciprocal slopes: e^x and ln x mirrored across y = x, with the slopes at matching points multiplying to 1."
+        },
+        {
+          "name": "spline",
+          "file": "spline.manic",
+          "title": "Spline",
+          "desc": "Interpolation: one smooth curve drawn through a scattered set of points \u2014 it passes through every knot exactly."
+        },
+        {
+          "name": "trajectory",
+          "file": "trajectory.manic",
+          "title": "Trajectory",
+          "desc": "A phase portrait: three paths flowing under a differential system, each spiralling into the sink at the origin."
         }
       ]
     },
@@ -116,8 +152,38 @@
         {
           "name": "linear-algebra",
           "file": "linear-algebra.manic",
-          "title": "Linear algebra: five ideas",
-          "desc": "A complete visual lesson: transformation, determinant, eigenvectors, solving, projection."
+          "title": "Linear algebra",
+          "desc": "A guided lesson, not a feature demo: five chapters that build linear algebra as one connected story."
+        },
+        {
+          "name": "linear-map",
+          "file": "linear-map.manic",
+          "title": "Linear map",
+          "desc": "What a 2\u00d72 matrix does to space: the grid deforms and the basis lands on its columns (linmap), the unit square's area becomes the determinant (determinant), and two directions only stretch \u2014 the eigenvectors (eigen)."
+        },
+        {
+          "name": "linear-system",
+          "file": "linear-system.manic",
+          "title": "Linear system",
+          "desc": "The geometry of solving and spanning, in three panels: a 2\u00d72 system as two lines crossing at the solution (linsolve), two independent vectors reaching the whole plane, and two parallel vectors collapsing to a line \u2014 rank 1 (span)."
+        },
+        {
+          "name": "diagonalise",
+          "file": "diagonalise.manic",
+          "title": "Diagonalise",
+          "desc": "A = P D P\u207b\u00b9 made visual: every real-diagonalisable matrix has a basis \u2014 its eigenvectors \u2014 in which it does nothing but *stretch* each axis."
+        },
+        {
+          "name": "rref",
+          "file": "rref.manic",
+          "title": "Rref",
+          "desc": "Gaussian elimination, animated: an augmented matrix [A | b] is reduced to reduced row-echelon form one row operation at a time, the numbers transforming in place until the left block is the identity and the last column is the solution (rref)."
+        },
+        {
+          "name": "projection",
+          "file": "projection.manic",
+          "title": "Projection",
+          "desc": "One idea, two faces: orthogonal **projection** drops a vector onto a subspace (the shadow is the closest point, the error meets the space at a right angle), and **least-squares** fits a line to data the same way \u2014 minimising the squared residuals (project, leastsquares)."
         },
         {
           "name": "matrix",
@@ -144,40 +210,10 @@
           "desc": "A 2x2 matrix shearing a grid + basis vectors."
         },
         {
-          "name": "linear-map",
-          "file": "linear-map.manic",
-          "title": "Linear map",
-          "desc": "What a matrix does to space: grid, determinant & eigenvectors."
-        },
-        {
-          "name": "linear-system",
-          "file": "linear-system.manic",
-          "title": "Linear system",
-          "desc": "Solving & spanning: a system as two lines, span & rank collapse."
-        },
-        {
-          "name": "diagonalise",
-          "file": "diagonalise.manic",
-          "title": "Diagonalise",
-          "desc": "A = P D P^-1: in the eigenbasis, a matrix is just a stretch."
-        },
-        {
-          "name": "rref",
-          "file": "rref.manic",
-          "title": "RREF",
-          "desc": "Gaussian elimination, animated: reduce [A|b] to row-echelon form."
-        },
-        {
-          "name": "projection",
-          "file": "projection.manic",
-          "title": "Projection & least-squares",
-          "desc": "Drop a vector onto a subspace; fit a line to points the same way."
-        },
-        {
           "name": "table",
           "file": "table.manic",
           "title": "Table",
-          "desc": "A ruled table; cells, rows, columns, labels addressable."
+          "desc": "A ruled table; cells, rows, columns, labels all addressable."
         },
         {
           "name": "table_braces",
@@ -194,80 +230,188 @@
         {
           "name": "statistics",
           "file": "statistics.manic",
-          "title": "Statistics: three ideas",
-          "desc": "A complete lesson: describe data, the bell curve, and why the CLT makes it everywhere."
+          "title": "Statistics",
+          "desc": "A guided lesson, not a feature demo: describe a dataset, meet the normal curve, then see *why* the bell is everywhere (the Central Limit Theorem)."
         },
         {
           "name": "histogram",
           "file": "histogram.manic",
           "title": "Histogram",
-          "desc": "The shape of a dataset: numbers binned into bars, with the mean marked."
+          "desc": "The shape of a dataset: a list of numbers binned into bars that stagger in one at a time, with the mean marked and the range labelled (histogram)."
         },
         {
           "name": "summary",
           "file": "summary.manic",
           "title": "Summary",
-          "desc": "Describe a dataset: mean, median, mode, spread, range, variance & std."
+          "desc": "Describe a dataset in one call: the numbers as dots on a number line, with the mean, median and mode marked, a \u00b11\u03c3 spread band, and readouts of the range, variance and standard deviation (summary)."
         },
         {
           "name": "boxplot",
           "file": "boxplot.manic",
-          "title": "Box plot",
-          "desc": "Five-number summary as a box-and-whisker; the box is the IQR, with outliers flagged."
+          "title": "Boxplot",
+          "desc": "The five-number summary as a box-and-whisker: the box spans Q1\u2192Q3 (its width is the interquartile range), a line marks the median, the whiskers reach the rest, and a value far outside is flagged as an outlier (boxplot)."
         },
         {
           "name": "skew",
           "file": "skew.manic",
-          "title": "Skewness",
-          "desc": "Which way the tail points: mean vs median on a histogram, labelled left/right/symmetric."
+          "title": "Skew",
+          "desc": "Which way does the tail point? A histogram with the mean and median marked and a labelled skewness \u2014 when the mean is dragged right of the median, the data is right-skewed (skew)."
         },
         {
           "name": "bellcurve",
           "file": "bellcurve.manic",
-          "title": "Bell curve",
-          "desc": "The normal curve & the 68-95-99.7 rule, shaded one standard deviation at a time."
+          "title": "Bellcurve",
+          "desc": "The normal (Gaussian) bell curve and the 68-95-99.7 rule: the bell draws in, then the \u00b11\u03c3 / \u00b12\u03c3 / \u00b13\u03c3 bands shade one at a time, showing that 68% of values fall within one standard deviation, 95% within two, and 99.7% within three (bellcurve, alias gaussian)."
         },
         {
           "name": "clt",
           "file": "clt.manic",
-          "title": "Central Limit Theorem",
-          "desc": "Averages of dice pile into a bell \u2014 why the normal distribution is everywhere."
+          "title": "Clt",
+          "desc": "The Central Limit Theorem \u2014 the flagship: however flat a single die is, the *average* of five dice, taken 1200 times, piles into a bell that hugs the normal curve (clt)."
         },
         {
           "name": "correlation",
           "file": "correlation.manic",
           "title": "Correlation",
-          "desc": "Scatter + best-fit line + the Pearson r: how tightly two variables move together."
+          "desc": "Do two things move together? The scatter of paired data, the best-fit line, and the Pearson correlation r \u2014 near +1 a tight upward line, near \u22121 downward, near 0 a shapeless blob (correlation)."
         },
         {
           "name": "lln",
           "file": "lln.manic",
-          "title": "Law of Large Numbers",
-          "desc": "A running proportion of coin flips, wild at first, settling onto the true 0.5."
+          "title": "Lln",
+          "desc": "The Law of Large Numbers: flip a fair coin over and over and track the running proportion of heads."
         },
         {
           "name": "hypothesis",
           "file": "hypothesis.manic",
-          "title": "Hypothesis test",
-          "desc": "A significance test: the p-value as shaded tails of the null distribution vs alpha."
+          "title": "Hypothesis",
+          "desc": "Is a result surprising enough to be real? Under the null hypothesis the test statistic follows the standard normal; the observed z cuts off tails whose area is the p-value."
         },
         {
           "name": "covariance",
           "file": "covariance.manic",
           "title": "Covariance",
-          "desc": "Covariance as signed-area rectangles about the mean cross (agree cyan / disagree magenta)."
+          "desc": "Covariance as signed area: a cross at the means, and a rectangle from each point to the centre \u2014 cyan where x and y agree, magenta where they disagree."
         },
         {
           "name": "bayes",
           "file": "bayes.manic",
-          "title": "Bayes updating",
-          "desc": "Prior + likelihood -> posterior: updating a belief about a coin's bias with data."
+          "title": "Bayes",
+          "desc": "Bayesian updating: a prior belief about a coin's bias, the likelihood from the data, and the posterior that combines them \u2014 pulled toward the evidence and sharpening as it accumulates (bayes)."
         },
         {
           "name": "probability",
           "file": "probability.manic",
-          "title": "Probability playground",
-          "desc": "Distributions, confidence intervals, Monte-Carlo pi, and a random walk."
+          "title": "Probability",
+          "desc": "A probability & sampling playground in four chapters: named distributions (uniform / exponential / binomial / Poisson), a confidence interval, a Monte-Carlo estimate of \u03c0, and a random walk (distribution, confidence, montecarlo, randomwalk)."
+        }
+      ]
+    },
+    {
+      "slug": "physics",
+      "title": "Physics \u2014 simulations",
+      "examples": [
+        {
+          "name": "pendulum",
+          "file": "pendulum.manic",
+          "title": "Pendulum",
+          "desc": "One pendulum shown four ways from a single deterministic swing: the motion (with a velocity arrow + KE/PE bars), the phase portrait (\u03b8 vs \u03c9), a time series, the potential-energy well, and energy over time (pendulum + phase/timegraph/ well/energygraph + swing)."
+        },
+        {
+          "name": "pendulum-damped",
+          "file": "pendulum-damped.manic",
+          "title": "Pendulum damped",
+          "desc": "The same four views with friction on (damping): the swing decays, the phase loop spirals inward, the well ball settles, and the total-energy line drops \u2014 dissipation told the same way by every panel."
+        },
+        {
+          "name": "pendulum-annotated",
+          "file": "pendulum-annotated.manic",
+          "title": "Pendulum annotated",
+          "desc": "A guided anatomy lesson proving physics composes with base manic: section chapters, text / arrow / bracelabel annotations, and show/recolor/flash/pulse all driving the sim's parts \u2014 no special physics mode."
+        },
+        {
+          "name": "spring",
+          "file": "spring.manic",
+          "title": "Spring",
+          "desc": "A mass on a spring (simple harmonic motion) drawn with a real stretching coil \u2014 the same generic views on a *different* system; note the energy well is a **parabola** (\u00bdkx\u00b2) rather than the pendulum's cosine (spring + the views + run)."
+        },
+        {
+          "name": "spring-damped",
+          "file": "spring-damped.manic",
+          "title": "Spring damped",
+          "desc": "The damped spring: the coil's oscillation decays, the phase ellipse spirals in, the ball settles in the parabola, and total energy bleeds away."
+        },
+        {
+          "name": "double-pendulum",
+          "file": "double-pendulum.manic",
+          "title": "Double pendulum",
+          "desc": "Deterministic chaos: two arms hinged end-to-end whose outer bob traces a wild, unrepeatable curve \u2014 yet the render is frame-identical every run."
+        },
+        {
+          "name": "spring-pendulum",
+          "file": "spring-pendulum.manic",
+          "title": "Spring pendulum",
+          "desc": "An elastic pendulum \u2014 a bob on a springy rod (drawn as a stretching coil) that both swings and bounces, energy sloshing between the two modes (springpendulum)."
+        },
+        {
+          "name": "kapitza",
+          "file": "kapitza.manic",
+          "title": "Kapitza",
+          "desc": "The Kapitza pendulum: vibrate the pivot fast enough and the **inverted** position becomes stable \u2014 the bob hovers near the top instead of falling (kapitza)."
+        },
+        {
+          "name": "cart-pendulum",
+          "file": "cart-pendulum.manic",
+          "title": "Cart pendulum",
+          "desc": "A pendulum on a spring-mounted cart rolling on a track \u2014 the classic control-theory system; cart and bob trade momentum and energy (cartpendulum)."
+        },
+        {
+          "name": "compare-pendulum",
+          "file": "compare-pendulum.manic",
+          "title": "Compare pendulum",
+          "desc": "Sensitive dependence: two identical driven pendulums started 0.001 rad apart drift onto completely different paths \u2014 the butterfly effect, watched in phase/timegraph (comparependulum)."
+        },
+        {
+          "name": "vertical-spring",
+          "file": "vertical-spring.manic",
+          "title": "Vertical spring",
+          "desc": "A mass bobbing on a vertical spring under gravity \u2014 gravity shifts the equilibrium but the energy well stays a parabola (verticalspring)."
+        },
+        {
+          "name": "spring-incline",
+          "file": "spring-incline.manic",
+          "title": "Spring incline",
+          "desc": "A mass on a spring on an inclined plane; gravity's along-ramp component sets a new stretched rest point it oscillates about (springincline)."
+        },
+        {
+          "name": "bungee",
+          "file": "bungee.manic",
+          "title": "Bungee",
+          "desc": "A bungee jump: free-fall, then a ONE-SIDED elastic cord (it only pulls) catches and bounces the jumper \u2014 note the lopsided energy well (bungee)."
+        },
+        {
+          "name": "resonance",
+          "file": "resonance.manic",
+          "title": "Resonance",
+          "desc": "A driven spring pushed near its natural frequency \u221a(k/m): the amplitude climbs and climbs \u2014 resonance, watched building up in phase/energygraph (resonance)."
+        },
+        {
+          "name": "double-spring",
+          "file": "double-spring.manic",
+          "title": "Double spring",
+          "desc": "Two masses coupled by springs between walls \u2014 push one and the energy sloshes back and forth (beating); normal modes show as diagonals in phase (doublespring)."
+        },
+        {
+          "name": "series-parallel-springs",
+          "file": "series-parallel-springs.manic",
+          "title": "Series parallel springs",
+          "desc": "The same mass on springs in series (soft, slow) vs parallel (stiff, fast), side by side \u2014 the timegraph makes the frequency difference obvious (seriesparallel)."
+        },
+        {
+          "name": "car-suspension",
+          "file": "car-suspension.manic",
+          "title": "Car suspension",
+          "desc": "A quarter-car riding a scrolling road \u2014 a speed bump, a washboard stretch, and a pothole \u2014 its spring+damper soaking up the ride (carsuspension)."
         }
       ]
     },
@@ -446,8 +590,8 @@
         {
           "name": "pieday",
           "file": "pieday.manic",
-          "title": "Pi Day",
-          "desc": "A Pi Day card: a rainbow petal-flower, radial rays, the digits of pi, and circumference/diameter = pi."
+          "title": "Pieday",
+          "desc": "A Pi Day card: a rainbow petal-flower built from a loop of circles, radial rays, the digits of \u03c0, and the definition circumference / diameter = pi."
         }
       ]
     },
@@ -465,31 +609,67 @@
     },
     {
       "slug": "threed",
-      "title": "3D & multivariable",
+      "title": "3D scenes",
       "examples": [
+        {
+          "name": "three_d",
+          "file": "three_d.manic",
+          "title": "Three d",
+          "desc": "Cubes, spheres, arrows, a curve, a surface and solids together \u2014 the 3D basics on one stage."
+        },
+        {
+          "name": "solids3",
+          "file": "solids3.manic",
+          "title": "Solids3",
+          "desc": "Filled, shaded solids: a prism, a cone, and a lathed vase."
+        },
+        {
+          "name": "param3",
+          "file": "param3.manic",
+          "title": "Param3",
+          "desc": "Parametric surfaces a height field can't make \u2014 a torus, a sphere, and a M\u00f6bius strip."
+        },
+        {
+          "name": "extrude3",
+          "file": "extrude3.manic",
+          "title": "Extrude3",
+          "desc": "Lifting flat shapes into solids, including a boolean cut-out (a plate with a hole) and an L-beam."
+        },
+        {
+          "name": "morph3",
+          "file": "morph3.manic",
+          "title": "Morph3",
+          "desc": "Morphing across families \u2014 a cube into a sphere, a saddle into a bowl, a helix into a ring."
+        },
         {
           "name": "linear-algebra-3d",
           "file": "linear-algebra-3d.manic",
-          "title": "Linear algebra in 3D",
-          "desc": "One matrix, two lenses: transformation (det = volume) and its eigenvectors, orbiting."
+          "title": "Linear algebra 3d",
+          "desc": "The 3D companion to the linear-algebra lesson: one matrix [[1,0,0],[0,3,1],[0,1,3]] (det 8; eigenvalues 1, 2, 4) seen two ways on an orbiting stage \u2014 first as a transformation (the unit cube \u2192 a parallelepiped whose volume is the determinant), then through its eigenvectors (the invariant axes that only stretch)."
         },
         {
           "name": "linear-map3",
           "file": "linear-map3.manic",
-          "title": "Linear map (3D)",
-          "desc": "A 3x3 matrix deforms the unit cube into a parallelepiped; volume = the determinant."
+          "title": "Linear map3",
+          "desc": "Linear algebra in 3D: a 3\u00d73 matrix deforms the unit cube into a parallelepiped, with basis arrows i/j/k landing on the matrix's columns and the enclosed volume labelled as the determinant (linmap3)."
         },
         {
           "name": "eigen3",
           "file": "eigen3.manic",
-          "title": "Eigenvectors (3D)",
-          "desc": "The invariant axes of a 3x3 matrix \u2014 the directions that only stretch."
+          "title": "Eigen3",
+          "desc": "The real eigenvectors of a 3\u00d73 matrix, in 3D: the invariant lines through the origin that only stretch (by \u03bb) when the matrix acts (eigen3)."
+        },
+        {
+          "name": "matrix3",
+          "file": "matrix3.manic",
+          "title": "Matrix3",
+          "desc": "A 3\u00d73\u00d73 block of cubes, with a shear matrix **M** and its inverse **M\u207b\u00b9** applied and undone."
         },
         {
           "name": "double-integral3",
           "file": "double-integral3.manic",
-          "title": "Double integral (3D)",
-          "desc": "Volume under a surface as a limit of finer columns \u2014 a double integral, made solid."
+          "title": "Double integral3",
+          "desc": "Multivariable calculus: the volume under a surface as a limit of finer and finer columns \u2014 a double integral, made solid."
         }
       ]
     }

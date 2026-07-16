@@ -1,0 +1,49 @@
+// 3D morphing (morph3) — set a 3D entity up to become another shape, then
+// blend with `to(id, morph, 1, dur)`. Works across three families:
+//   • solids  — a cube becomes a sphere (reparameterised spherically)
+//   • surfaces — a rippling saddle settles into a bowl (filled + shaded)
+//   • curves  — a helix unwinds into a flat ring
+//
+//   manic examples/morph3.manic
+//   manic examples/morph3.manic --record out --fps 60
+
+title("3D morph");
+canvas("16:9");
+template("terminal");
+
+camera3((11, -13, 8), (0, 0, 0.8), 42);
+grid3(floor, (0, 0, 0), 7, 1);
+color(floor, dim);
+
+// solid: cube -> sphere
+cube3(box, (-5, 0, 1.4), (2.4, 2.4, 2.4));
+color(box, cyan);
+sphere3(ball, (0, 0, 0), 1.5);
+hidden(ball);
+morph3(box, ball);
+
+// surface: rippling saddle -> smooth bowl
+surface3(saddle, "0.8*sin(x*1.3)*cos(y*1.3)", (-2.3, 2.3), (-2.3, 2.3), 24);
+color(saddle, gold);
+surface3(bowl, "0.16*(x*x + y*y) - 1", (-2.3, 2.3), (-2.3, 2.3), 24);
+hidden(bowl);
+morph3(saddle, bowl);
+
+// curve: helix -> flat ring
+curve3(helix, "5 + 1.5*cos(t)", "1.5*sin(t)", "0.2*t", (0, 18));
+color(helix, magenta);
+thick(helix, 0.06);
+curve3(ring, "5 + 1.5*cos(t)", "1.5*sin(t)", "1.8", (0, 6.283));
+hidden(ring);
+morph3(helix, ring);
+
+show(floor, 0.3);
+par { show(box, 0.5); show(saddle, 0.5); show(helix, 0.5); }
+wait(0.7);
+par {
+  to(box, morph, 1, 3.0, smooth);
+  to(saddle, morph, 1, 3.0, smooth);
+  to(helix, morph, 1, 3.0, smooth);
+  orbit3(48, 25, 21, 3.0, smooth);
+}
+wait(0.8);

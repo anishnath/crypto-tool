@@ -1,0 +1,14 @@
+// spring-pendulum.manic — the elastic pendulum: swings AND bounces.
+//   springpendulum(id,[center],[angle0],[stretch0],[unit],[damping]) — a bob on a
+//   springy rod (drawn as a stretching coil). Energy sloshes between the swing and
+//   the bounce, so the phase portrait and energy graph are richer than a rigid rod.
+title("Elastic pendulum — swing meets bounce");
+canvas("16:9");
+text(hdr,(cx,44),"Spring pendulum — energy sloshes between swing and bounce");
+size(hdr,23); color(hdr,cyan); bold(hdr); display(hdr);
+springpendulum(sp, (380,230), 35, 0.5, 105);
+untraced(sp.path);
+phase(sp, (900,190), 95);           // θ vs ω
+energygraph(sp, (900,470), 95);     // KE / PE / total (~conserved, lightly damped)
+text(cap,(cx,h-32),"the coil stretches as it swings — a two-mode system"); size(cap,16); color(cap,dim); display(cap);
+par { run(sp, 11); draw(sp.path, 11); }

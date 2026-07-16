@@ -1,0 +1,11 @@
+// compare-pendulum.manic — sensitive dependence: two pendulums 0.001 rad apart.
+//   comparependulum(id,[center],[angle0deg],[unit]) — identical driven-damped
+//   physics, a hair-different start — yet they diverge completely (the butterfly effect).
+title("Two pendulums, one hair apart");
+canvas("16:9");
+text(hdr,(cx,44),"Sensitive dependence — a 0.001 rad difference explodes"); size(hdr,23); color(hdr,cyan); bold(hdr); display(hdr);
+comparependulum(cm, (380,230), 12, 120);
+phase(cm, (900,190), 95);           // θ_A vs θ_B — starts on the diagonal, then scatters
+timegraph(cm, (900,470), 95);       // θ_A(t) & θ_B(t) diverge
+text(cap,(cx,h-32),"cyan and magenta start together, then go their separate ways"); size(cap,16); color(cap,dim); display(cap);
+run(cm, 13);

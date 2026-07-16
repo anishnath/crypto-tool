@@ -1,0 +1,11 @@
+// kapitza.manic — vibrate the pivot fast enough and the pendulum stands UP.
+//   kapitza(id,[center],[angle0deg],[vibeamp],[unit]) — a driven (Kapitza) pendulum;
+//   with a strong enough vibration the INVERTED position becomes stable.
+title("Kapitza pendulum — stable upside-down");
+canvas("16:9");
+text(hdr,(cx,44),"Kapitza pendulum — fast pivot vibration stabilises 'up'");
+size(hdr,23); color(hdr,cyan); bold(hdr); display(hdr);
+kapitza(kp, (640,430), 165, 240, 150);   // start near inverted, strong vibration
+untraced(kp.path);
+text(cap,(cx,h-32),"the gold pivot bobs fast; the bob hovers near the top (inverted)"); size(cap,16); color(cap,dim); display(cap);
+par { run(kp, 9); draw(kp.path, 9); }

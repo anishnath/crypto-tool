@@ -1,0 +1,37 @@
+// Extrude & CSG — turn 2D shapes into 3D solids. `extrude3` sweeps any 2D
+// fillable shape (or a boolean region) straight up; extruding a union/
+// difference/intersect gives constructive-solid-geometry solids. The 2D
+// source shapes are auto-hidden — they're just the cross-section recipe.
+//
+//   manic examples/extrude3.manic
+//   manic examples/extrude3.manic --record out --fps 60
+
+title("Extrude & CSG");
+canvas(1280, 720);
+template("terminal");
+
+camera3((9, -11, 7), (0, 0, 0.8), 45);
+grid3(floor, (0, 0, 0), 6, 1);
+color(floor, dim);
+axes3(world, (0, 0, 0), 3);
+
+// CSG: a square plate MINUS a circular hole → an extruded plate-with-a-hole
+rect(plate, (0, 0), 3, 3);
+circle(hole, (0, 0), 0.9);
+difference(cut, plate, hole);
+extrude3(block, cut, 1.0, (-3.5, 0, 0.6));
+color(block, cyan);
+
+// arbitrary concave polygon: a union of two rects → an L-beam, extruded
+rect(la, (0, 0), 2.4, 0.8);
+rect(lb, (-0.8, 0.8), 0.8, 2.4);
+union(lshape, la, lb);
+extrude3(ell, lshape, 0.9, (3.5, 0, 0.55));
+color(ell, magenta);
+
+// a plain shape extrudes just as happily (a hexagon via a sector sweep)
+sector(hexface, (0, 0), 1.2, 0, 360);
+extrude3(disc, hexface, 0.5, (0, 3.5, 0.3));
+color(disc, gold);
+
+orbit3(60, 24, 17, 8, smooth);

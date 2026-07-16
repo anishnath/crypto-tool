@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-aacfe5f0.js";
+            window.path_to_searchindex_js = "searchindex-f3f17bd0.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-0b5ae956.js"></script>
+        <script src="toc-c083d0bb.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -216,6 +216,30 @@ revolve3(vase, (3, 0, 1.5), "0.7+0.4*sin(t*2)", (0, 3));  // spin a profile
 orbit3(70, 25, 12, 4, smooth);            // swing the camera around
 </code></pre>
 <p>It has its own chapter — see <a href="3d.html">Going 3D</a>.</p>
+<h2 id="stats"><a class="header" href="#stats">stats</a></h2>
+<p>Turn <strong>data</strong> — or a random process — into a picture that reveals its shape,
+centre, and spread. Each builtin animates a <em>process</em>: a histogram builds up bar
+by bar, sample means pile into a bell, a running proportion settles onto the truth.</p>
+<pre><code class="language-manic">histogram(h, (cx, cy), "72 85 90 68 95 88 76 91 83", 8, 640, 300, rainbow);
+bellcurve(b, (cx, cy), 100, 15);          // the 68-95-99.7 rule
+clt(c, (cx, cy), 5, 1200);                 // the Central Limit Theorem
+</code></pre>
+<p><code>histogram</code> · <code>summary</code> · <code>boxplot</code> · <code>skew</code> · <code>bellcurve</code> · <code>correlation</code> ·
+<code>lln</code> · <code>clt</code> · <code>hypothesis</code> · <code>covariance</code> · <code>bayes</code> · <code>distribution</code> ·
+<code>confidence</code> · <code>montecarlo</code> · <code>randomwalk</code>. Seeded, so renders are reproducible.</p>
+<h2 id="physics"><a class="header" href="#physics">physics</a></h2>
+<p>Simulations built from their physics and <strong>pre-simulated with RK4</strong> at build time,
+so every render is deterministic. Each sim’s parts are ordinary manic entities, and
+the optional views (<code>phase</code> · <code>well</code> · <code>timegraph</code> · <code>energygraph</code>) show the same
+motion as math panels. <code>run(id)</code> (alias <code>swing</code>) plays it.</p>
+<pre><code class="language-manic">pendulum(p, (cx, 200), 2, 50);   phase(p, (980, 200), 120);
+well(p, (980, 470), 120);        run(p, 8);   // one swing, three views
+doublependulum(dp, (400, 240));  par { run(dp, 12); draw(dp.path, 12); }  // chaos
+</code></pre>
+<p>Pendulum family: <code>pendulum</code> · <code>doublependulum</code> · <code>springpendulum</code> · <code>kapitza</code> ·
+<code>cartpendulum</code> · <code>comparependulum</code>. Spring family: <code>spring</code> · <code>verticalspring</code> ·
+<code>springincline</code> · <code>bungee</code> · <code>resonance</code> · <code>doublespring</code> · <code>seriesparallel</code> ·
+<code>carsuspension</code>.</p>
 <hr>
 <p>Each kit has a full reference at <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>, and you can see them
 all in motion in the <a href="examples.html">Examples gallery</a>.</p>

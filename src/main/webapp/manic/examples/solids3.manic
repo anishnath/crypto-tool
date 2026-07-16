@@ -1,0 +1,22 @@
+title("3D solids");
+canvas(1280, 720);
+template("terminal");
+
+camera3((9, -11, 7), (0, 0, 1), 45);
+grid3(floor, (0, 0, 0), 6, 1);
+color(floor, dim);
+axes3(world, (0, 0, 0), 3);
+
+// hexagonal prism
+prism3(hex, (-4, 0, 1.2), 6, 1.1, 2.4);
+color(hex, cyan);
+
+// a cone (a pyramid with many sides)
+pyramid3(cone, (0, 0, 1.4), 28, 1.2, 2.8);
+color(cone, magenta);
+
+// a lathed vase: radius profile r(t) swept around the vertical axis
+revolve3(vase, (4, 0, 1.5), "0.7 + 0.45*sin(t*2.4)", (0, 3), 32);
+color(vase, gold);
+
+orbit3(60, 24, 17, 6, smooth);

@@ -1,0 +1,53 @@
+title("Reading a curve: slope, tangent, normal, area");
+canvas("16:9");
+
+text(hdr, (cx, 58), "Asking a curve questions");
+size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+// one curve — everything below asks IT, by name
+plot(f, (cx - 440, cy + 30), 140, 110, "sin(x)", (0, 6.3));
+color(f, cyan); stroke(f, 3); untraced(f);
+
+// the area under it — starts collapsed at x=0.6, sweeps open
+area(reg, f, 0.6, 0.6);
+color(reg, lime);
+
+// a live integral readout that climbs as the area sweeps
+integral(area_val, f, 0.6, 0.6, (cx + 340, cy - 210));
+color(area_val, lime);
+
+// tangent + its live slope number, both riding the same point
+tangent(tan, f, 0.6, 240);
+color(tan, gold);
+
+slope(sl, f, 0.6);
+color(sl, gold);
+
+// the normal, perpendicular at the same place
+normal(nrm, f, 0.6, 150);
+color(nrm, magenta); hidden(nrm);
+
+// ---- timeline ----
+show(hdr, 0.5);
+draw(f, 1.4);
+show(tan, 0.5);
+show(sl, 0.4);
+wait(0.4);
+
+// sweep the area open while the tangent + slope slide together and the
+// integral readout climbs
+par {
+  to(reg, x, 5.7, 4);
+  to(area_val, x, 5.7, 4);
+  to(tan, x, 5.7, 4);
+  to(sl, x, 5.7, 4);
+}
+wait(0.4);
+
+// reveal the normal and glide everything back to the first peak (slope 0)
+show(nrm, 0.4);
+par {
+  to(tan, x, 1.571, 2.5);
+  to(sl, x, 1.571, 2.5);
+  to(nrm, x, 1.571, 2.5);
+}
