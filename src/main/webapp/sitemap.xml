@@ -33,7 +33,23 @@
 <url><loc>https://8gwifi.org/online-lua-compiler/</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
 <url><loc>https://8gwifi.org/online-haskell-compiler/</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
 <url><loc>https://8gwifi.org/online-bash-compiler/</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
-<url><loc>https://8gwifi.org/manic</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
+
+
+    <url><loc>https://8gwifi.org/manic/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/getting-started.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/shapes.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/verbs.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/timing.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/colour.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/language-layer.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/kits.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/elevating.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/3d.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/examples.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+    <url><loc>https://8gwifi.org/manic/docs/troubleshooting.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+
+
 <url>
     <loc>https://8gwifi.org/html-code-editor.jsp</loc>
     <priority>1.0</priority>
