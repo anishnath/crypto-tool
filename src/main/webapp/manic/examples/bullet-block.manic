@@ -1,0 +1,11 @@
+// bullet-block.manic — a bullet fired into a block EMBEDS (perfectly inelastic).
+// `bulletblock(id,[center],[bulletmass],[speed],[blockmass],[unit])`. The combined
+// mass crawls off at m_b·v_b/(m_b+M) — most of the kinetic energy is lost to the
+// collision, so `energygraph`'s total STEPS DOWN at impact. Uses `collide_1d(e=0)`.
+title("Bullet into a block — an inelastic collision");
+canvas("16:9");
+text(hdr, (cx, 70), "The bullet embeds: 40 m/s becomes ~1 m/s — most of the energy is gone"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+bulletblock(bb, (cx, 430), 0.05, 40, 1.95);
+energygraph(bb, (1040, 200), 90);
+text(cap, (cx, h - 36), "momentum is conserved, but kinetic energy is NOT — it drops sharply at impact"); size(cap, 15); color(cap, dim); display(cap);
+run(bb, 6);

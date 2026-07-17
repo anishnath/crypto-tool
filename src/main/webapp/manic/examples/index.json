@@ -1,5 +1,5 @@
 {
-  "count": 125,
+  "count": 151,
   "categories": [
     {
       "slug": "algorithms",
@@ -432,6 +432,12 @@
           "desc": "A quarter-car riding a scrolling road \u2014 a speed bump, a washboard stretch, and a pothole \u2014 its spring+damper soaking up the ride (carsuspension)."
         },
         {
+          "name": "car-suspension-annotated",
+          "file": "car-suspension-annotated.manic",
+          "title": "Car suspension annotated",
+          "desc": "A marketing hero: the quarter-car suspension on a template(\"paper\") brochure page, elevated with generic base-manic \u2014 a live counter (sprung mass), leader-arrow callouts, and an energygraph of the shock being absorbed \u2014 riding a scrolling road."
+        },
+        {
           "name": "piston",
           "file": "piston.manic",
           "title": "Piston",
@@ -492,10 +498,58 @@
           "desc": "A block slides down an incline into a spring bumper at the base, compresses it, and launches back up \u2014 one-sided contact, gravity PE \u2194 kinetic \u2194 spring PE, energy conserved (inclinebumper)."
         },
         {
+          "name": "collide-blocks",
+          "file": "collide-blocks.manic",
+          "title": "Collide blocks",
+          "desc": "The classic momentum demo: block 1 hangs on a spring to the wall, block 2 slides in and they collide."
+        },
+        {
+          "name": "collide-blocks-annotated",
+          "file": "collide-blocks-annotated.manic",
+          "title": "Collide blocks annotated",
+          "desc": "Conservation of momentum, the MANIC way \u2014 not a 1:1 port of the lab sim but a guided lesson: the live \u03a3p readout as the star, the KE\u2194spring-PE energy view, staged callouts, and honest narration (with a wall-spring, \u03a3p is conserved AT each collision, not constant)."
+        },
+        {
+          "name": "bullet-block",
+          "file": "bullet-block.manic",
+          "title": "Bullet block",
+          "desc": "A bullet fired into a block EMBEDS (perfectly inelastic)."
+        },
+        {
+          "name": "bullet-impact",
+          "file": "bullet-impact.manic",
+          "title": "Bullet impact",
+          "desc": "BEST OF BOTH: the cinematic gun-shot (gun \u00b7 muzzle flash \u00b7 a flying cam/zoom \u00b7 BOOM) wrapped around the REAL bulletblock physics \u2014 the collision is genuinely inelastic, the live speed readout actually collapses 40 \u2192 ~1, and the BOOM is synced to the true impact."
+        },
+        {
+          "name": "bullet-block-annotated",
+          "file": "bullet-block-annotated.manic",
+          "title": "Bullet block annotated",
+          "desc": "The bullet's JOURNEY, the manic way: a gun fires, a muzzle flash, a glowing bullet crosses the gap in slow-motion and embeds \u2014 the speed readout crashing 40 \u2192 ~1."
+        },
+        {
+          "name": "newtons-cradle",
+          "file": "newtons-cradle.manic",
+          "title": "Newtons cradle",
+          "desc": "Newton's cradle: pull one ball, one swings out the far side \u2014 momentum and energy pass straight through the chain."
+        },
+        {
+          "name": "string-wave",
+          "file": "string-wave.manic",
+          "title": "String wave",
+          "desc": "A wave on a plucked string: 36 masses on springs, both ends fixed (the discretised wave equation)."
+        },
+        {
           "name": "loop-track",
           "file": "loop-track.manic",
           "title": "Loop track",
           "desc": "A ball rolls down a ramp and around a vertical LOOP-THE-LOOP \u2014 the curved-track case."
+        },
+        {
+          "name": "loop-cinematic",
+          "file": "loop-cinematic.manic",
+          "title": "Loop cinematic",
+          "desc": "The loop-the-loop as a MOVIE with real physics inside: the camera pushes in as the ball climbs, and the tension is genuine \u2014 a modest release height means it truly crawls over the top before rocketing out."
         },
         {
           "name": "spring-chain",
@@ -568,6 +622,96 @@
           "file": "textbook-tension.manic",
           "title": "Textbook tension",
           "desc": "Another textbook figure: two support ropes at 60\u00b0/30\u00b0 meeting a knot, a string over a hanging pulley carrying 10 kg with the other end anchored to a hatched floor \u2014 support + template(\"paper\") for the flat exam-paper look."
+        }
+      ]
+    },
+    {
+      "slug": "optics",
+      "title": "Optics \u2014 light as geometry",
+      "examples": [
+        {
+          "name": "refraction",
+          "file": "refraction.manic",
+          "title": "Refraction",
+          "desc": "Snell's law you can watch: a ray crossing from air into glass bends toward the normal, and run sweeps the incidence angle so the refracted ray swings \u2014 the live in/out read-outs are the true angles."
+        },
+        {
+          "name": "lens",
+          "file": "lens.manic",
+          "title": "Lens",
+          "desc": "A converging lens: a parallel beam bends to meet at the focal point F (ideal thin lens \u2014 every ray passes through F)."
+        },
+        {
+          "name": "prism",
+          "file": "prism.manic",
+          "title": "Prism",
+          "desc": "White light into a prism, out as a RAINBOW \u2014 each colour traced through both faces with its own refractive index (real Sellmeier dispersion), so blue bends more than red because glass genuinely slows blue more."
+        },
+        {
+          "name": "achromat",
+          "file": "achromat.manic",
+          "title": "Achromat",
+          "desc": "The optics capstone \u2014 chromatic aberration and its fix: a single lens focuses blue nearer than red, so white light never comes to one point; run sweeps in the achromatic doublet and the colours snap back to a single sharp focus (achromat)."
+        },
+        {
+          "name": "refraction-paper",
+          "file": "refraction-paper.manic",
+          "title": "Refraction paper",
+          "desc": "Snell's law as a template(\"paper\") TEXTBOOK figure: inked media labels, the normal, and the law itself, with a camera easing in on the bending point as run sweeps the angle \u2014 the geometric builtins suit paper (refract + annotation + camera)."
+        },
+        {
+          "name": "lens-paper",
+          "file": "lens-paper.manic",
+          "title": "Lens paper",
+          "desc": "The converging lens inked on paper and narrated by a TYPEWRITER caption (a different elevation lens): labelled parallel rays and focal point F while run slides the focus (lens + type)."
+        },
+        {
+          "name": "prism-cinematic",
+          "file": "prism-cinematic.manic",
+          "title": "Prism cinematic",
+          "desc": "The prism on a dark optics bench where the spectrum GLOWS (a rainbow washes out on paper): the colour names pop in word-by-word (wordpop) as the fan spreads and the camera flies toward it \u2014 KINETIC-TYPE elevation (prism)."
+        },
+        {
+          "name": "achromat-cinematic",
+          "file": "achromat-cinematic.manic",
+          "title": "Achromat cinematic",
+          "desc": "The achromat with the CAMERA magnifying the focal region so the red/blue split is dramatic, a bracelabel marking the aberration gap that closes as run sweeps in the doublet and the colours merge (achromat + camera + brace)."
+        },
+        {
+          "name": "lens-system",
+          "file": "lens-system.manic",
+          "title": "Lens system",
+          "desc": "A REAL multi-element lens, ray-traced through its actual spherical surfaces (not the ideal thin lens): the fast singlet reveals SPHERICAL ABERRATION \u2014 draw sketches the rays, then run sweeps a sensor plane and the live spot read-out dips but never reaches a point, because the outer rays focus short (lenssystem, presets singlet/doublet/triplet)."
+        },
+        {
+          "name": "ray-fan",
+          "file": "ray-fan.manic",
+          "title": "Ray fan",
+          "desc": "Reading an aberration: rayfan plots each ray's error at focus against where it entered the lens."
+        },
+        {
+          "name": "spot-diagram",
+          "file": "spot-diagram.manic",
+          "title": "Spot diagram",
+          "desc": "Lens quality as a picture: spotdiagram plots where a ray bundle actually lands at focus."
+        },
+        {
+          "name": "lens-prescription",
+          "file": "lens-prescription.manic",
+          "title": "Lens prescription",
+          "desc": "Type your OWN lens: lenssystem takes a design by name (\"plano-convex\", \"doublet\", \u2026) OR a custom PRESCRIPTION \u2014 the designer's surface table \"radius thickness glass [conic] [aperture] | \u2026\" \u2014 traced through the true surfaces with real Sellmeier glass (lenssystem)."
+        },
+        {
+          "name": "aspheric-lens",
+          "file": "aspheric-lens.manic",
+          "title": "Aspheric lens",
+          "desc": "How an ASPHERE kills spherical aberration: a spherical surface can't focus a wide beam to a point (a blur, RMS 1.5 px), but reshaping it to the right conic \u2014 one constant in the prescription \u2014 collapses every ray to a point (RMS 0.1 px)."
+        },
+        {
+          "name": "off-axis",
+          "file": "off-axis.manic",
+          "title": "Off axis",
+          "desc": "The hard test \u2014 light 8\u00b0 OFF the axis."
         }
       ]
     },
@@ -714,6 +858,12 @@
       "title": "Generative & recursive",
       "examples": [
         {
+          "name": "gun-shot",
+          "file": "gun-shot.manic",
+          "title": "Gun shot",
+          "desc": "A pure-imagination SCENE \u2014 no physics kit, just storytelling: a gun fires, the camera flies along with the bullet (cam/zoom), a block drops in out of nowhere, and BOOM \u2014 flash/shake/pulse + a for-loop spark burst."
+        },
+        {
           "name": "fractal_tree",
           "file": "fractal_tree.manic",
           "title": "Fractal tree",
@@ -730,6 +880,18 @@
           "file": "hill_run.manic",
           "title": "Hill run",
           "desc": "A little scene animated with the language layer."
+        },
+        {
+          "name": "walk",
+          "file": "walk.manic",
+          "title": "Walk",
+          "desc": "An articulated stick figure walking down a road \u2014 legs swing, arms counter-swing, the body bobs \u2014 built purely from the language layer (let + for + trig), no character rig."
+        },
+        {
+          "name": "two_person_walk",
+          "file": "two_person_walk.manic",
+          "title": "Two person walk",
+          "desc": "Two figures walk toward each other, MEET in the middle, shake hands, then continue past \u2014 a little choreographed scene from loops and arithmetic alone (the language layer as animation)."
         },
         {
           "name": "equal_cuts",

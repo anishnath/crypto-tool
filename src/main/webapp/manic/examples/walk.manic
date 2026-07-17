@@ -1,0 +1,154 @@
+title("A Generic Figure Walking Down the Road");
+canvas("16:9");
+
+let groundY = cy + 160;
+let startX = cx - 420;
+let stepDist = 15;
+let swingAmp = 26;
+let bobAmp = 10;
+
+// ================= road =================
+
+rect(road, (0, groundY), w, h - groundY);
+color(road, dim);
+filled(road);
+untraced(road);
+
+line(roadLine, (0, groundY + 40), (w, groundY + 40));
+color(roadLine, panel);
+stroke(roadLine, 2);
+untraced(roadLine);
+
+for i in 0..12 {
+  rect(dash{i}, (i*120 - 40, groundY + 36), 50, 8);
+  color(dash{i}, fg);
+  filled(dash{i});
+  untraced(dash{i});
+}
+
+// ================= stick figure as points + reflowing segments =================
+
+point(neck, (startX, groundY - 118));
+point(hip, (startX, groundY - 10));
+point(handL, (startX - 30, groundY - 40));
+point(handR, (startX + 30, groundY - 40));
+point(footL, (startX - 30, groundY + 100));
+point(footR, (startX + 30, groundY + 100));
+
+hidden(neck);
+hidden(hip);
+hidden(handL);
+hidden(handR);
+hidden(footL);
+hidden(footR);
+
+circle(head, (startX, groundY - 140), 22);
+color(head, fg);
+outlined(head);
+stroke(head, 3);
+untraced(head);
+
+segment(spine, neck, hip);
+segment(armL, neck, handL);
+segment(armR, neck, handR);
+segment(legL, hip, footL);
+segment(legR, hip, footR);
+
+color(spine, fg);
+color(armL, cyan);
+color(armR, cyan);
+color(legL, gold);
+color(legR, gold);
+stroke(spine, 4);
+stroke(armL, 4);
+stroke(armR, 4);
+stroke(legL, 4);
+stroke(legR, 4);
+untraced(spine);
+untraced(armL);
+untraced(armR);
+untraced(legL);
+untraced(legR);
+
+// ================= text =================
+
+text(head_label, (cx, 55), "A Generic Figure Walking Down the Road");
+color(head_label, cyan);
+hidden(head_label);
+
+text(caption, (cx, h - 30), "");
+color(caption, dim);
+hidden(caption);
+
+// ================= script =================
+
+show(head_label, 0.6);
+wait(0.3);
+
+par {
+  draw(road, 0.5);
+  draw(roadLine, 0.5);
+  stagger(0.03) {
+    for i in 0..12 {
+      draw(dash{i}, 0.1);
+    }
+  }
+}
+
+par {
+  show(neck, 0.01); show(hip, 0.01);
+  show(handL, 0.01); show(handR, 0.01);
+  show(footL, 0.01); show(footR, 0.01);
+  draw(head, 0.4);
+  draw(spine, 0.3);
+  draw(armL, 0.3);
+  draw(armR, 0.3);
+  draw(legL, 0.3);
+  draw(legR, 0.3);
+}
+wait(0.3);
+
+show(caption, 0.4);
+say(caption, "Camera pulls back to see the whole road");
+par {
+  cam((cx, cy), 1.0, smooth);
+  zoom(0.85, 1.0, smooth);
+}
+wait(0.3);
+
+// --- walk cycle: phase steps by 90 deg so sin actually alternates ---
+
+for i in 0..28 {
+  let baseX = startX + i*stepDist;
+  let phase = i*90;
+  let swing = swingAmp*sin(phase*pi/180);
+  let legLift = bobAmp*abs(sin(phase*pi/180));
+
+  par {
+    move(neck, (baseX, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip, (baseX, groundY - 10), 0.15, smooth);
+    move(handL, (baseX - swing, groundY - 40), 0.15, smooth);
+    move(handR, (baseX + swing, groundY - 40), 0.15, smooth);
+    move(footL, (baseX + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR, (baseX - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head, (baseX, groundY - 140 - legLift*0.4), 0.15, smooth);
+  }
+}
+
+wait(0.2);
+say(caption, "Camera zooms in as the figure gets close");
+par {
+  cam((startX + 420, groundY - 80), 1.4, smooth);
+  zoom(2.2, 1.4, smooth);
+}
+wait(0.4);
+
+say(caption, "A close-up look, then pulling back out");
+par {
+  cam((cx, cy), 1.2, smooth);
+  zoom(1, 1.2, smooth);
+}
+wait(0.4);
+
+show(caption, 0.3);
+say(caption, "A generic stick figure walking -- no specific person depicted");

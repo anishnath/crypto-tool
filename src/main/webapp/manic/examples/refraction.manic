@@ -1,0 +1,32 @@
+// ============================================================================
+//  refraction.manic  —  Snell's law you can watch (real optics)
+// ----------------------------------------------------------------------------
+//  The `optics` kit's first builtin: `refract` draws a light ray meeting the
+//  boundary between two media and bending. `run` SWEEPS the incidence angle, so
+//  the refracted ray genuinely swings — and the "in"/"out" read-outs are the
+//  true Snell angles, not painted. Here: air (n=1.00) into crown glass (n=1.52).
+// ============================================================================
+
+title("Refraction — Snell's Law");
+canvas("16:9");
+
+// air on top, glass below; no fixed angle → run(r) sweeps it
+refract(r, (640, 380), 1.0, 1.52);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "a ray of light, crossing from air into glass…", 0.5);
+wait(0.5);
+
+par {
+  run(r, 7);
+  seq {
+    say(cap, "shallow angle — it barely bends", 0.3);
+    wait(2.2);
+    say(cap, "steeper in → it bends MORE, toward the normal", 0.3);
+    wait(2.6);
+    say(cap, "sin(in) / sin(out) is fixed — THAT ratio is the refractive index", 0.3);
+  }
+}
+wait(1.2);

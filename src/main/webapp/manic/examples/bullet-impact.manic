@@ -1,0 +1,65 @@
+// ============================================================================
+//  bullet-impact.manic  —  best of both: the movie AND the physics
+// ----------------------------------------------------------------------------
+//  The cinematic gun-shot (gun · muzzle flash · a flying camera · BOOM) wrapped
+//  around the REAL `bulletblock` physics sim. The collision is genuinely true —
+//  a perfectly inelastic impact, momentum conserved, the live speed readout
+//  actually collapsing 40 → ~1 — and the BOOM is SYNCED to the physical impact.
+//  A sim's parts are ordinary entities, so the story and the physics compose.
+// ============================================================================
+
+title("Impact — the movie meets the physics");
+canvas("16:9");
+
+// ---- the REAL physics: bullet + block, inelastic collision + live speed readout ----
+// a lighter block, so the hit visibly KNOCKS it and it slides on afterward
+bulletblock(bb, (cx, 430), 0.05, 40, 0.9);
+hidden(bb);
+sticky(bb.vel);                     // pin the live speed readout through the camera moves
+
+// ---- cinematic dressing (base manic) ----
+rect(barrel, (200, 380), 82, 20); color(barrel, dim); filled(barrel);
+rect(body, (166, 386), 42, 34);   color(body, dim);   filled(body);
+polygon(grip, (150, 404), (176, 404), (170, 442), (146, 438), dim);
+circle(mflash, (242, 380), 28);   color(mflash, gold); glow(mflash, 3.5); hidden(mflash);
+
+text(boom, (730, 250), "BOOM!"); size(boom, 84); color(boom, magenta); bold(boom); glow(boom, 2.5); display(boom); hidden(boom);
+for i in 0..14 {
+  let ang = i * tau / 14.0;
+  line(spark{i}, (730, 380), (730 + 150*cos(ang), 380 + 150*sin(ang)));
+  color(spark{i}, gold); stroke(spark{i}, 5); glow(spark{i}, 2); untraced(spark{i}); tag(spark{i}, sparks);
+}
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 22); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+cam((430, 400), 0.4, smooth);
+say(cap, "a scene — and it's really physics underneath", 0.4);
+wait(0.5);
+
+say(cap, "FIRE!", 0.2);
+par { show(mflash, 0.06); pulse(mflash); show(bb, 0.1); }
+fade(mflash, 0.3);
+
+// the bullet flies (REAL physics, slow-mo) · the camera pushes toward the block ·
+// the BOOM fires exactly when the sim's bullet embeds (55% of the run) · then it
+// KEEPS GOING — the block is knocked, slides on, and the camera follows it
+par {
+  run(bb, 7);
+  cam((720, 380), 3.6, smooth);       // push toward the impact during the flight
+  zoom(1.2, 3.6, smooth);
+  seq {
+    wait(3.85);                        // the physical impact (55% of the run)
+    // CONTACT → zoom-punch + BOOM
+    say(cap, "CONTACT!", 0.12);
+    par { flash(bb.block, gold); shake(bb.block, 0.6); zoom(1.6, 0.15); show(boom, 0.12); pulse(boom); draw(sparks, 0.3); }
+    // …and it CONTINUES — sparks clear, the block slides on, camera follows
+    say(cap, "…knocked back — it slides on", 0.3);
+    par { fade(sparks, 0.5); fade(boom, 0.7); cam((1010, 380), 2.4, smooth); zoom(1.15, 2.4, smooth); }
+  }
+}
+
+// it comes to rest — and the physics was true the whole way through
+par { zoom(1.0, 0.9, smooth); cam((cx, 360), 0.9, smooth); }
+say(cap, "…and rest. A movie on top, real physics underneath: 40 m/s → the block's crawl", 0.4);
+wait(1.0);

@@ -1,0 +1,48 @@
+// ============================================================================
+//  bullet-block-annotated.manic  —  a bullet's journey (inelastic collision)
+// ----------------------------------------------------------------------------
+//  Not the bare lab sim — a scene: a gun fires, a muzzle flash, a glowing bullet
+//  crosses the gap in slow-motion, embeds in the block, and the live speed readout
+//  COLLAPSES from 40 m/s to ~1. The block barely lurches — it soaked up the bullet
+//  but almost none of the speed. Base-manic staging over the `bulletblock` sim.
+// ============================================================================
+
+title("A bullet fired into a block");
+canvas("16:9");
+
+text(hdr, (cx, 44), "A bullet fired into a block"); size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+text(sub, (cx, 80), "perfectly inelastic: the bullet embeds — momentum survives, speed collapses"); size(sub, 17); color(sub, dim); display(sub); hidden(sub);
+
+// the sim (bullet at the muzzle, block at rest, floor, live speed readout, energy)
+bulletblock(bb, (cx, 430), 0.05, 40, 1.95);
+hidden(bb);
+energygraph(bb, (1055, 250), 82);
+
+// the gun (all base-manic shapes), at the bullet's start height
+rect(barrel, (200, 380), 82, 20);  color(barrel, dim); filled(barrel);
+rect(body, (166, 386), 42, 34);    color(body, dim);   filled(body);
+polygon(grip, (150, 404), (176, 404), (170, 442), (146, 438), dim);
+circle(flash, (242, 380), 17);     color(flash, gold); glow(flash, 2.4);
+hidden(barrel); hidden(body); hidden(grip); hidden(flash);
+
+// callouts
+text(cbl, (300, 336), "the bullet — light + fast"); size(cbl, 16); color(cbl, red); display(cbl); hidden(cbl);
+text(cblk, (720, 300), "the block — heavy, at rest"); size(cblk, 16); color(cblk, cyan); display(cblk); hidden(cblk);
+
+text(cap, (cx, h - 38), ""); size(cap, 19); color(cap, fg); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5); show(sub, 0.4);
+wait(0.3);
+show(bb, 0.5); show(barrel, 0.3); show(body, 0.3); show(grip, 0.3);
+show(cbl, 0.3); show(cblk, 0.3);
+wait(0.4);
+
+say(cap, "a heavy block sits at rest; a fast, light bullet is loaded", 0.4);
+wait(0.5);
+say(cap, "FIRE — 40 m/s across the gap …", 0.4);
+flash(flash, gold); pulse(flash);
+run(bb, 6);
+
+say(cap, "… it embeds. Momentum is conserved, but 40 m/s collapses to ~1 — the energy is gone", 0.4);
+wait(1.0);

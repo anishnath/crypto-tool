@@ -1,0 +1,32 @@
+// ============================================================================
+//  aspheric-lens.manic  —  how an asphere kills spherical aberration
+// ----------------------------------------------------------------------------
+//  A prescription surface has a CONIC constant. A plain spherical lens can't
+//  focus a wide beam to a point — the edges bend too much (spherical aberration,
+//  a blur). Reshape that surface into the right ellipse/hyperbola (a conic ≠ 0)
+//  and every ray meets at ONE point. Two real ray-traced lenses, side by side:
+//  same shape, one spherical, one aspheric.
+// ============================================================================
+
+title("Aspheric Correction");
+canvas("16:9");
+
+spotdiagram(sph, (360, 380), "plano-convex");   // spherical surface  → a blur
+spotdiagram(asp, (912, 380), "aspheric");        // conic surface (K≈−0.55) → a point
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "same lens shape — where do the rays land at focus?", 0.5);
+wait(0.4);
+
+say(cap, "a SPHERICAL surface can't focus the edges — a blur (RMS 1.5 px)", 0.3);
+draw(sph.dots, 1.6);
+wait(0.6);
+
+say(cap, "reshape it to an ASPHERE (conic surface) — a point (RMS 0.1 px)", 0.3);
+draw(asp.dots, 1.4);
+wait(0.6);
+
+say(cap, "one conic constant in the prescription — spherical aberration, gone", 0.3);
+wait(1.2);

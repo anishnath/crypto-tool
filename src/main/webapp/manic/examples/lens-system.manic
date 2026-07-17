@@ -1,0 +1,34 @@
+// ============================================================================
+//  lens-system.manic  —  a REAL lens, ray-traced (best of physics + manic)
+// ----------------------------------------------------------------------------
+//  `lenssystem` traces a parallel beam through the ACTUAL spherical surfaces of
+//  a lens (not the ideal thin lens of `lens`). Here the fast singlet reveals
+//  SPHERICAL ABERRATION: sketch the rays on with `draw`, then `run` sweeps a
+//  sensor plane along the axis while the live spot read-out dips to its minimum
+//  — which never reaches a point, because the outer rays focus short. Then swap
+//  the caption's promise: that's the flaw a doublet/triplet is built to fix.
+// ============================================================================
+
+title("Spherical Aberration — a Real Lens Traced");
+canvas("16:9");
+
+lenssystem(ls, (620, 380), "singlet");
+
+text(cap, (cx, h - 42), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "a parallel beam into a real, fast single lens…", 0.5);
+draw(ls.rays, 2.2);                 // the rays sketch through the glass
+wait(0.3);
+
+par {
+  run(ls, 6);                       // the sensor plane sweeps the axis
+  seq {
+    say(cap, "a sensor hunts for focus — watch the spot size", 0.3);
+    wait(2.4);
+    say(cap, "the outer rays focus SHORT — it never reaches a point", 0.3);
+    wait(2.0);
+    say(cap, "that blur is spherical aberration (a doublet/triplet fixes it)", 0.3);
+  }
+}
+wait(1.2);

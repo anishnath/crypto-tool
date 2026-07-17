@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-89925e2c.js";
+            window.path_to_searchindex_js = "searchindex-69371a19.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-d969a067.js"></script>
+        <script src="toc-5e06f13d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -768,6 +768,70 @@ run(car, 12);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/HRc7qGHzrbg" title="Car Suspension — Riding the Road — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="car-suspension-annotated"><a class="header" href="#car-suspension-annotated">car-suspension-annotated</a></h2>
+<p>A marketing hero: the quarter-car suspension on a <code>template("paper")</code> brochure page,
+elevated with generic base-manic — a live <code>counter</code> (sprung mass), leader-<code>arrow</code>
+callouts, and an <code>energygraph</code> of the shock being absorbed — riding a scrolling road.</p>
+<pre><code class="language-manic">// ============================================================================
+//  car-suspension-annotated.manic  —  a marketing hero, paper (brochure) style
+// ----------------------------------------------------------------------------
+//  The `carsuspension` quarter-car sim, dressed as a clean product diagram on a
+//  `template("paper")` page and ELEVATED with generic base-manic: a live
+//  `counter` (the sprung mass ticking up), leader-`arrow` callouts, a
+//  `bracelabel` for the travel, and a compact `energygraph` showing the shock
+//  being absorbed — then it rides a scrolling road (bump · washboard · pothole).
+//  Every part of the sim is an ordinary entity, so it all composes.
+// ============================================================================
+
+title("Car suspension — smooth over every bump");
+canvas("16:9");
+template("paper");
+
+// ---- hero title ----
+text(hdr, (cx, 52), "Car suspension: how it soaks up the road"); color(hdr, fg); size(hdr, 30); bold(hdr); display(hdr); hidden(hdr);
+text(sub, (cx, 88), "the quarter-car model — sprung mass · spring + damper · wheel"); color(sub, dim); size(sub, 18); display(sub); hidden(sub);
+
+// ---- the sim, recoloured for a bold, clean brochure look ----
+carsuspension(car, (430, 430));
+color(car.body, blue);      // the car body — bold accent
+color(car.road, fg);        // the road — dark ink
+hidden(car);                // reveal the whole sim (road, wheel, spring, body, energy) together
+
+// a compact energy panel (top-right) — the suspension absorbing the shock
+energygraph(car, (1055, 215), 88);
+
+// ---- generic-kit callouts (leader arrows + labels), hidden to reveal in order ----
+text(cb, (640, 296), "car body — the sprung mass"); color(cb, blue); size(cb, 18); display(cb); hidden(cb);
+arrow(ab, (636, 302), (478, 320)); color(ab, dim); stroke(ab, 2); hidden(ab);
+text(csp, (610, 382), "spring + damper"); color(csp, lime); size(csp, 18); display(csp); hidden(csp);
+arrow(asp, (606, 384), (448, 382)); color(asp, dim); stroke(asp, 2); hidden(asp);
+text(cw, (620, 472), "wheel — the unsprung mass"); color(cw, gold); size(cw, 18); display(cw); hidden(cw);
+arrow(aw, (616, 470), (448, 434)); color(aw, dim); stroke(aw, 2); hidden(aw);
+text(cr, (cx, 648), "the road: a bump, a washboard stretch, then a pothole"); color(cr, fg); size(cr, 17); display(cr); hidden(cr);
+
+// a live spec counter (generic kit) — the sprung mass ticking up
+counter(mc, (150, 320), 0, 0, "m = ", " kg"); color(mc, fg); size(mc, 30); display(mc); hidden(mc);
+text(spec, (cx, h - 28), "quarter-car · k = 20 kN/m · c = 4 kN·s/m · v = 8 m/s"); color(spec, dim); size(spec, 16); display(spec); hidden(spec);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5); show(sub, 0.4);
+wait(0.3);
+show(car, 0.6);
+wait(0.3);
+
+show(cb, 0.3); draw(ab, 0.3);
+show(csp, 0.3); draw(asp, 0.3);
+show(cw, 0.3); draw(aw, 0.3);
+show(cr, 0.3);
+show(mc, 0.3); to(mc, value, 500, 0.9);   // the sprung mass counts up
+show(spec, 0.4);
+wait(0.5);
+
+// the ride — the road scrolls, the body glides while the wheel tracks every bump
+run(car, 11);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/bUsMlIXFVZ0" title="Car Suspension — How It Soaks Up the Road — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="piston"><a class="header" href="#piston">piston</a></h2>
 <p>An engine piston: a spinning crank + connecting rod turn rotation into the piston’s
 up-and-down stroke — the slider-crank mechanism (<code>piston</code>).</p>
@@ -970,7 +1034,7 @@ energygraph(ip, (1010, 320), 120);
 text(cap, (cx, h - 32), "m₂ (2 kg) hanging outpulls m₁·sinθ, so m₁ climbs the incline and m₂ descends"); size(cap, 15); color(cap, dim); display(cap);
 run(ip, 4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/xH9Rdqzanjo" title="incline pulley — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/xH9Rdqzanjo" title="The Incline-Atwood — a Block, a Pulley & a Hanging Mass — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="double-incline"><a class="header" href="#double-incline">double-incline</a></h2>
 <p>Two blocks on a wedge’s two slopes, tied over a pulley at the apex (right slope rough).
@@ -986,7 +1050,7 @@ doubleincline(di, (cx, 520), 50, 30, 12, 70);
 text(cap, (cx, h - 30), "M₂ (70 kg) on the gentle rough slope beats M₁ (12 kg) on the steep smooth one"); size(cap, 15); color(cap, dim); display(cap);
 run(di, 5);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/HaRR568TD9A" title="double incline — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/HaRR568TD9A" title="Two Slopes, One Pulley — Which Block Wins? — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="incline-bumper"><a class="header" href="#incline-bumper">incline-bumper</a></h2>
 <p>A block slides down an incline into a spring bumper at the base, compresses it, and
@@ -1004,7 +1068,256 @@ energygraph(ib, (1010, 320), 120);
 text(cap, (cx, h - 32), "gravity PE → kinetic → spring PE → back: one-sided contact, energy conserved"); size(cap, 15); color(cap, dim); display(cap);
 run(ib, 6);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/o_p5K5zDV0Y" title="incline bumper — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/o_p5K5zDV0Y" title="Down the Ramp, Into a Spring — and Back — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="collide-blocks"><a class="header" href="#collide-blocks">collide-blocks</a></h2>
+<p>The classic momentum demo: block 1 hangs on a spring to the wall, block 2 slides in and
+they collide. A live Σp readout shows momentum conserved at every collision; elastic
+(e=1) keeps total energy flat while it sloshs between KE and the spring (<code>collideblocks</code>).</p>
+<pre><code class="language-manic">// collide-blocks.manic — the classic momentum demo. Block 1 (left) is attached to
+// the wall by a SPRING; block 2 slides in freely and they collide with restitution
+// e (1 = elastic → energy conserved; &lt;1 → lost). The live Σp readout (top) shows
+// momentum is conserved at every collision. Built on the shared `collide_1d`.
+title("Colliding blocks — momentum is conserved");
+canvas("16:9");
+text(hdr, (cx, 96), "Block 1 on a spring, block 2 sliding in — watch the momentum readout"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+collideblocks(cb, (cx, 440), 3, 1, 1);
+energygraph(cb, (1040, 210), 90);
+text(cap, (cx, h - 36), "elastic (e=1): total energy (KE + spring PE) is conserved; Σp is conserved at each collision"); size(cap, 15); color(cap, dim); display(cap);
+run(cb, 10);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cGTI3tfxs5I" title="Colliding Blocks — Momentum Conserved, Live — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="collide-blocks-annotated"><a class="header" href="#collide-blocks-annotated">collide-blocks-annotated</a></h2>
+<p>Conservation of momentum, the MANIC way — not a 1:1 port of the lab sim but a guided
+lesson: the live Σp readout as the star, the KE↔spring-PE energy view, staged callouts,
+and honest narration (with a wall-spring, Σp is conserved AT each collision, not constant).</p>
+<pre><code class="language-manic">// ============================================================================
+//  collide-blocks-annotated.manic  —  conservation of momentum, the MANIC way
+// ----------------------------------------------------------------------------
+//  Not a 1:1 port of the lab sim — a guided lesson that ELEVATES it: the live Σp
+//  readout, the KE↔spring-PE energy view, staged callouts, and honest narration
+//  (with a wall-spring, Σp is conserved AT each collision — Newton's 3rd law — not
+//  constant, since the spring is an external force). All base manic over the sim.
+// ============================================================================
+
+title("Conservation of Momentum");
+canvas("16:9");
+
+// the sim's Σp readout sits at the very top (y≈46) — the star of the scene
+collideblocks(cb, (cx, 460), 3, 1, 1);
+hidden(cb);                                   // the bare id hides every part + the readout + energy view
+energygraph(cb, (1055, 250), 84);             // KE ↔ spring PE (tagged cb, revealed by show(cb))
+
+text(hdr, (cx, 104), "Conservation of Momentum"); size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+text(sub, (cx, 140), "block 1 on a spring · block 2 slides in · watch Σp through the collision"); size(sub, 17); color(sub, dim); display(sub); hidden(sub);
+
+// callouts
+text(csp, (360, 330), "spring holds block 1 to the wall"); size(csp, 16); color(csp, lime); display(csp); hidden(csp);
+arrow(asp, (392, 344), (418, 424)); color(asp, dim); stroke(asp, 2); hidden(asp);
+text(cb1, (470, 300), "block 1 · m₁ = 3 kg"); size(cb1, 16); color(cb1, cyan); display(cb1); hidden(cb1);
+text(cb2, (800, 300), "block 2 · m₂ = 1 kg →"); size(cb2, 16); color(cb2, magenta); display(cb2); hidden(cb2);
+
+text(cap, (cx, h - 38), ""); size(cap, 19); color(cap, fg); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5); show(sub, 0.4);
+wait(0.3);
+show(cb, 0.6);                                 // sim + Σp readout + energy view
+show(csp, 0.3); draw(asp, 0.3); show(cb1, 0.3); show(cb2, 0.3);
+wait(0.4);
+
+say(cap, "block 2 slides toward block 1, which is held by its spring", 0.4);
+wait(0.5);
+say(cap, "they collide — each pushes the other equal and opposite (Newton's 3rd law)", 0.4);
+flash(cb.mom, gold);
+wait(0.5);
+say(cap, "so Σp doesn't jump at the hit — the spring only shifts it BETWEEN collisions", 0.4);
+wait(0.5);
+say(cap, "energy sloshes between motion and the spring, but the total stays put — elastic", 0.4);
+
+run(cb, 12);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/2nmDlVDJxUU" title="Conservation of Momentum — Colliding Blocks, Explained — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bullet-block"><a class="header" href="#bullet-block">bullet-block</a></h2>
+<p>A bullet fired into a block EMBEDS (perfectly inelastic). The flight is slow-mo so you can
+watch it cross, then a live speed readout collapses from 40 m/s to ~1 — momentum survives,
+energy does not. Uses <code>collide_1d(e=0)</code> (<code>bulletblock</code>).</p>
+<pre><code class="language-manic">// bullet-block.manic — a bullet fired into a block EMBEDS (perfectly inelastic).
+// `bulletblock(id,[center],[bulletmass],[speed],[blockmass],[unit])`. The combined
+// mass crawls off at m_b·v_b/(m_b+M) — most of the kinetic energy is lost to the
+// collision, so `energygraph`'s total STEPS DOWN at impact. Uses `collide_1d(e=0)`.
+title("Bullet into a block — an inelastic collision");
+canvas("16:9");
+text(hdr, (cx, 70), "The bullet embeds: 40 m/s becomes ~1 m/s — most of the energy is gone"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+bulletblock(bb, (cx, 430), 0.05, 40, 1.95);
+energygraph(bb, (1040, 200), 90);
+text(cap, (cx, h - 36), "momentum is conserved, but kinetic energy is NOT — it drops sharply at impact"); size(cap, 15); color(cap, dim); display(cap);
+run(bb, 6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/3oL4qYkvSD0" title="A Bullet Embeds in a Block — Where Did the Energy Go? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bullet-impact"><a class="header" href="#bullet-impact">bullet-impact</a></h2>
+<p>BEST OF BOTH: the cinematic gun-shot (gun · muzzle flash · a flying <code>cam</code>/<code>zoom</code> · BOOM)
+wrapped around the REAL <code>bulletblock</code> physics — the collision is genuinely inelastic, the
+live speed readout actually collapses 40 → ~1, and the BOOM is synced to the true impact.</p>
+<pre><code class="language-manic">// ============================================================================
+//  bullet-impact.manic  —  best of both: the movie AND the physics
+// ----------------------------------------------------------------------------
+//  The cinematic gun-shot (gun · muzzle flash · a flying camera · BOOM) wrapped
+//  around the REAL `bulletblock` physics sim. The collision is genuinely true —
+//  a perfectly inelastic impact, momentum conserved, the live speed readout
+//  actually collapsing 40 → ~1 — and the BOOM is SYNCED to the physical impact.
+//  A sim's parts are ordinary entities, so the story and the physics compose.
+// ============================================================================
+
+title("Impact — the movie meets the physics");
+canvas("16:9");
+
+// ---- the REAL physics: bullet + block, inelastic collision + live speed readout ----
+// a lighter block, so the hit visibly KNOCKS it and it slides on afterward
+bulletblock(bb, (cx, 430), 0.05, 40, 0.9);
+hidden(bb);
+sticky(bb.vel);                     // pin the live speed readout through the camera moves
+
+// ---- cinematic dressing (base manic) ----
+rect(barrel, (200, 380), 82, 20); color(barrel, dim); filled(barrel);
+rect(body, (166, 386), 42, 34);   color(body, dim);   filled(body);
+polygon(grip, (150, 404), (176, 404), (170, 442), (146, 438), dim);
+circle(mflash, (242, 380), 28);   color(mflash, gold); glow(mflash, 3.5); hidden(mflash);
+
+text(boom, (730, 250), "BOOM!"); size(boom, 84); color(boom, magenta); bold(boom); glow(boom, 2.5); display(boom); hidden(boom);
+for i in 0..14 {
+  let ang = i * tau / 14.0;
+  line(spark{i}, (730, 380), (730 + 150*cos(ang), 380 + 150*sin(ang)));
+  color(spark{i}, gold); stroke(spark{i}, 5); glow(spark{i}, 2); untraced(spark{i}); tag(spark{i}, sparks);
+}
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 22); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+cam((430, 400), 0.4, smooth);
+say(cap, "a scene — and it's really physics underneath", 0.4);
+wait(0.5);
+
+say(cap, "FIRE!", 0.2);
+par { show(mflash, 0.06); pulse(mflash); show(bb, 0.1); }
+fade(mflash, 0.3);
+
+// the bullet flies (REAL physics, slow-mo) · the camera pushes toward the block ·
+// the BOOM fires exactly when the sim's bullet embeds (55% of the run) · then it
+// KEEPS GOING — the block is knocked, slides on, and the camera follows it
+par {
+  run(bb, 7);
+  cam((720, 380), 3.6, smooth);       // push toward the impact during the flight
+  zoom(1.2, 3.6, smooth);
+  seq {
+    wait(3.85);                        // the physical impact (55% of the run)
+    // CONTACT → zoom-punch + BOOM
+    say(cap, "CONTACT!", 0.12);
+    par { flash(bb.block, gold); shake(bb.block, 0.6); zoom(1.6, 0.15); show(boom, 0.12); pulse(boom); draw(sparks, 0.3); }
+    // …and it CONTINUES — sparks clear, the block slides on, camera follows
+    say(cap, "…knocked back — it slides on", 0.3);
+    par { fade(sparks, 0.5); fade(boom, 0.7); cam((1010, 380), 2.4, smooth); zoom(1.15, 2.4, smooth); }
+  }
+}
+
+// it comes to rest — and the physics was true the whole way through
+par { zoom(1.0, 0.9, smooth); cam((cx, 360), 0.9, smooth); }
+say(cap, "…and rest. A movie on top, real physics underneath: 40 m/s → the block's crawl", 0.4);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/WdfMyqJdwK8" title="Impact — Cinematic Scene + Real Physics, Fused — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bullet-block-annotated"><a class="header" href="#bullet-block-annotated">bullet-block-annotated</a></h2>
+<p>The bullet’s JOURNEY, the manic way: a gun fires, a muzzle flash, a glowing bullet crosses
+the gap in slow-motion and embeds — the speed readout crashing 40 → ~1. A scene, not the
+bare lab sim (base-manic staging over <code>bulletblock</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  bullet-block-annotated.manic  —  a bullet's journey (inelastic collision)
+// ----------------------------------------------------------------------------
+//  Not the bare lab sim — a scene: a gun fires, a muzzle flash, a glowing bullet
+//  crosses the gap in slow-motion, embeds in the block, and the live speed readout
+//  COLLAPSES from 40 m/s to ~1. The block barely lurches — it soaked up the bullet
+//  but almost none of the speed. Base-manic staging over the `bulletblock` sim.
+// ============================================================================
+
+title("A bullet fired into a block");
+canvas("16:9");
+
+text(hdr, (cx, 44), "A bullet fired into a block"); size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+text(sub, (cx, 80), "perfectly inelastic: the bullet embeds — momentum survives, speed collapses"); size(sub, 17); color(sub, dim); display(sub); hidden(sub);
+
+// the sim (bullet at the muzzle, block at rest, floor, live speed readout, energy)
+bulletblock(bb, (cx, 430), 0.05, 40, 1.95);
+hidden(bb);
+energygraph(bb, (1055, 250), 82);
+
+// the gun (all base-manic shapes), at the bullet's start height
+rect(barrel, (200, 380), 82, 20);  color(barrel, dim); filled(barrel);
+rect(body, (166, 386), 42, 34);    color(body, dim);   filled(body);
+polygon(grip, (150, 404), (176, 404), (170, 442), (146, 438), dim);
+circle(flash, (242, 380), 17);     color(flash, gold); glow(flash, 2.4);
+hidden(barrel); hidden(body); hidden(grip); hidden(flash);
+
+// callouts
+text(cbl, (300, 336), "the bullet — light + fast"); size(cbl, 16); color(cbl, red); display(cbl); hidden(cbl);
+text(cblk, (720, 300), "the block — heavy, at rest"); size(cblk, 16); color(cblk, cyan); display(cblk); hidden(cblk);
+
+text(cap, (cx, h - 38), ""); size(cap, 19); color(cap, fg); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5); show(sub, 0.4);
+wait(0.3);
+show(bb, 0.5); show(barrel, 0.3); show(body, 0.3); show(grip, 0.3);
+show(cbl, 0.3); show(cblk, 0.3);
+wait(0.4);
+
+say(cap, "a heavy block sits at rest; a fast, light bullet is loaded", 0.4);
+wait(0.5);
+say(cap, "FIRE — 40 m/s across the gap …", 0.4);
+flash(flash, gold); pulse(flash);
+run(bb, 6);
+
+say(cap, "… it embeds. Momentum is conserved, but 40 m/s collapses to ~1 — the energy is gone", 0.4);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/4HCc7iRtZr8" title="A Bullet's Journey — Inelastic Collision, Slow-Mo — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="newtons-cradle"><a class="header" href="#newtons-cradle">newtons-cradle</a></h2>
+<p>Newton’s cradle: pull one ball, one swings out the far side — momentum and energy pass
+straight through the chain. An EVENT-DRIVEN sim (free-flight pendulums between elastic
+collisions resolved by a shared 1-D impulse), the crowd-pleaser (<code>newtonscradle</code>).</p>
+<pre><code class="language-manic">// newtons-cradle.manic — Newton's cradle: pull N balls, N swing out. An EVENT-
+// DRIVEN sim — free-flight pendulums between elastic collisions resolved by the
+// shared `collide_1d` impulse. `newtonscradle(id,[center],[balls],[pulled])`.
+title("Newton's cradle — momentum passes through");
+canvas("16:9");
+text(hdr, (cx, 70), "Pull one, one swings out — momentum and energy pass straight through"); size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+newtonscradle(nc, (cx, 170), 5, 1);
+energygraph(nc, (1040, 470), 90);
+text(cap, (cx, h - 40), "five equal balls, elastic collisions (e = 1): the chain conserves momentum and energy"); size(cap, 15); color(cap, dim); display(cap);
+run(nc, 8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/RfYmUfnoDPs" title="Newton's Cradle — Momentum Passes Through — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="string-wave"><a class="header" href="#string-wave">string-wave</a></h2>
+<p>A wave on a plucked string: 36 masses on springs, both ends fixed (the discretised wave
+equation). Pluck it off-centre and the pulse splits, travels, and reflects off the ends —
+a rainbow chain that wiggles, pre-simulated with RK4 (<code>stringwave</code>).</p>
+<pre><code class="language-manic">// string-wave.manic — a wave on a plucked string: N masses on springs, both ends
+// fixed (the discretised wave equation). `stringwave(id,[center],[width],[amp],
+// [pluck])`. Pluck it off-centre and the pulse splits into two, travels out, and
+// reflects (inverting) off the fixed ends. Drawn as a rainbow chain that wiggles.
+title("Wave on a string — pluck it and watch it travel");
+canvas("16:9");
+text(hdr, (cx, 70), "Pluck a string: the pulse splits, travels, and reflects off the ends"); size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+stringwave(sw, (cx, 380), 900, 110, 0.28);
+text(cap, (cx, h - 40), "36 masses on springs, fixed at both ends — the wave equation, pre-simulated with RK4"); size(cap, 16); color(cap, dim); display(cap);
+run(sw, 10);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/a3mbO2WfQZE" title="Wave on a String — Pluck, Travel, Reflect — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="loop-track"><a class="header" href="#loop-track">loop-track</a></h2>
 <p>A ball rolls down a ramp and around a vertical LOOP-THE-LOOP — the curved-track case.
@@ -1022,7 +1335,55 @@ energygraph(lt, (1010, 330), 120);
 text(cap, (cx, h - 32), "energy conserved: it trades kinetic for potential, slowest at the top of the loop"); size(cap, 15); color(cap, dim); display(cap);
 run(lt, 5);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/QX3OjnwYxm0" title="loop track — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/QX3OjnwYxm0" title="Loop-the-Loop — Will It Clear the Top? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="loop-cinematic"><a class="header" href="#loop-cinematic">loop-cinematic</a></h2>
+<p>The loop-the-loop as a MOVIE with real physics inside: the camera pushes in as the ball
+climbs, and the tension is genuine — a modest release height means it truly crawls over
+the top before rocketing out. <code>cam</code>/<code>zoom</code> beats synced to the <code>looptrack</code> sim.</p>
+<pre><code class="language-manic">// ============================================================================
+//  loop-cinematic.manic  —  the loop-the-loop as a movie (real physics inside)
+// ----------------------------------------------------------------------------
+//  Same recipe as bullet-impact: build the real `looptrack` sim, aim the camera,
+//  sync the beats to the physics. A ball is released, races down the ramp, and
+//  the camera pushes in as it climbs the loop — the tension is REAL (it genuinely
+//  slows at the top, energy traded for height), then it clears and rockets out.
+// ============================================================================
+
+title("Loop the Loop");
+canvas("16:9");
+
+// the real curved-track physics — a modest release height, so it BARELY clears
+// the top (H just over 2·r) — that's where the real tension lives
+looptrack(lt, (500, 560), 1, 2.4, 95);
+hidden(lt);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+cam((420, 400), 0.4, smooth);            // frame the whole ramp + loop
+say(cap, "release…", 0.4);
+show(lt, 0.5);
+wait(0.4);
+
+// down the ramp, into the loop — the camera pushes in for the climb
+par {
+  run(lt, 6.0);
+  seq {
+    say(cap, "released — down the ramp!", 0.3);
+    par { cam((500, 455), 3.0, smooth); zoom(1.35, 3.0, smooth); }   // slow push through the descent + entry
+    say(cap, "up and over — will it clear the top?!", 0.3);
+    wait(1.7);                                                        // the climb + the crawl over the top
+    say(cap, "…MADE IT!", 0.25);
+    par { cam((470, 410), 1.3, smooth); zoom(1.1, 1.3, smooth); }     // ease back as it rockets out
+  }
+}
+
+// the physics was the whole story
+say(cap, "…real energy: fastest at the bottom, barely crawling over the top", 0.4);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/knRtBYXHaYc" title="Loop the Loop — Cinematic Scene + Real Physics — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="spring-chain"><a class="header" href="#spring-chain">spring-chain</a></h2>
 <p>Three blocks joined by two springs on an incline — coupled oscillators. Pull one and the
@@ -1040,7 +1401,7 @@ energygraph(sc, (1010, 340), 120);
 text(cap, (cx, h - 32), "pull one block and the whole chain rings — normal modes / beating (coupled springs)"); size(cap, 15); color(cap, dim); display(cap);
 run(sc, 9);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/seuNwQdBCEY" title="spring chain — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/seuNwQdBCEY" title="Coupled Oscillators — Three Blocks, Two Springs, One Beat — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="incline-showcase"><a class="header" href="#incline-showcase">incline-showcase</a></h2>
 <p>One paper page, FOUR live incline problems: a friction ramp, an incline+pulley, a
@@ -1563,7 +1924,7 @@ support(floor, (cx, 612), 150, "up");
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="ex-vectors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="ex-optics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -1577,7 +1938,7 @@ support(floor, (cx, 612), 150, "up");
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="ex-vectors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="ex-optics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

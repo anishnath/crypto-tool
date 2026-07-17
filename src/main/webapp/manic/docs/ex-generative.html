@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-89925e2c.js";
+            window.path_to_searchindex_js = "searchindex-69371a19.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-d969a067.js"></script>
+        <script src="toc-5e06f13d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -180,6 +180,95 @@
                     <main>
                         <h1 id="generative--recursive"><a class="header" href="#generative--recursive">Generative &amp; recursive</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="gun-shot"><a class="header" href="#gun-shot">gun-shot</a></h2>
+<p>A pure-imagination SCENE — no physics kit, just storytelling: a gun fires, the camera
+flies along with the bullet (<code>cam</code>/<code>zoom</code>), a block drops in out of nowhere, and BOOM —
+<code>flash</code>/<code>shake</code>/<code>pulse</code> + a <code>for</code>-loop spark burst. manic as a movie language.</p>
+<pre><code class="language-manic">// ============================================================================
+//  gun-shot.manic  —  a scene, not a lesson. No physics kit, just imagination.
+// ----------------------------------------------------------------------------
+//  A gun fires · the camera races along with the bullet · a block drops in out
+//  of nowhere · BOOM. Built entirely from base manic — shapes, `move`, `cam`/
+//  `zoom` to fly the camera, `flash`/`shake`/`pulse`, and a `for`-loop spark
+//  burst. This is manic as a storytelling language: dream a scene, write it.
+// ============================================================================
+
+title("Gun Shot");
+canvas("16:9");
+
+// ---- the world (wide — the camera pans across it) ----
+line(ground, (-300, 560), (2400, 560)); color(ground, dim); stroke(ground, 4);
+
+// the gun: barrel + body + grip
+rect(barrel, (250, 470), 96, 22); color(barrel, dim); filled(barrel);
+rect(body, (206, 478), 52, 42); color(body, dim); filled(body);
+polygon(grip, (186, 500), (220, 500), (212, 554), (180, 550), dim);
+
+// the bullet at the muzzle, and a muzzle flash — both waiting
+circle(bullet, (302, 470), 12); color(bullet, gold); glow(bullet, 2.2); hidden(bullet);
+circle(mflash, (312, 470), 30); color(mflash, gold); glow(mflash, 3.5); hidden(mflash);
+
+// the block — waiting above, off-screen, to drop in ahead
+rect(block, (1750, 250), 130, 130); color(block, cyan); filled(block); glow(block, 1.4); hidden(block);
+text(boom, (1750, 320), "BOOM!"); size(boom, 96); color(boom, magenta); bold(boom); glow(boom, 2.5); display(boom); hidden(boom);
+
+// a ring of impact sparks around the block (revealed at the hit)
+for i in 0..14 {
+  let ang = i * tau / 14.0;
+  line(spark{i}, (1700, 470), (1700 + 160*cos(ang), 470 + 160*sin(ang)));
+  color(spark{i}, gold); stroke(spark{i}, 5); glow(spark{i}, 2); untraced(spark{i}); tag(spark{i}, sparks);
+}
+
+// a caption pinned to the screen (rides along through the camera move)
+text(cap, (cx, h - 56), ""); color(cap, fg); size(cap, 26); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+cam((440, 380), 0.4, smooth);          // frame the gun
+say(cap, "steady…", 0.4);
+wait(0.6);
+
+// FIRE!
+say(cap, "FIRE!", 0.2);
+par { show(mflash, 0.06); pulse(mflash); show(bullet, 0.08); }
+fade(mflash, 0.3);
+
+// the bullet races off — the camera flies with it — and mid-flight, out of
+// nowhere, a block slams down into its path
+par {
+  move(bullet, (1690, 470), 2.6, smooth);
+  cam((1560, 380), 2.6, smooth);
+  zoom(1.15, 2.6, smooth);
+  seq {
+    wait(1.5);
+    say(cap, "…wait — what's THAT?!", 0.3);
+    show(block, 0.1);
+    move(block, (1750, 470), 0.4, bounce);
+  }
+}
+
+// BOOM — impact
+say(cap, "BOOM!", 0.15);
+par {
+  flash(block, gold);
+  shake(block, 0.5);
+  zoom(1.5, 0.15);
+  show(boom, 0.12); pulse(boom);
+  draw(sparks, 0.35);
+}
+wait(0.5);
+
+// settle — pull back
+par {
+  fade(sparks, 0.5);
+  fade(boom, 0.6);
+  fade(bullet, 0.4);
+  zoom(1.0, 0.9, smooth);
+}
+say(cap, "…scene.", 0.4);
+wait(0.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ffHtyPvtCos" title="Gun Shot — a Cinematic Scene in manic (No Physics, Just Imagination)" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="fractal_tree"><a class="header" href="#fractal_tree">fractal_tree</a></h2>
 <p>One recursive <code>def</code>, drawn to depth 12.</p>
 <pre><code class="language-manic">// Fractal Tree — a recursive `def` macro draws a branching tree. Each branch
@@ -339,6 +428,468 @@ pulse(ans);
 wait(1.6);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/pzRBP1qbncc" title="A Tiny Animated Scene — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="walk"><a class="header" href="#walk">walk</a></h2>
+<p>An articulated stick figure walking down a road — legs swing, arms counter-swing, the body
+bobs — built purely from the language layer (<code>let</code> + <code>for</code> + trig), no character rig.</p>
+<pre><code class="language-manic">title("A Generic Figure Walking Down the Road");
+canvas("16:9");
+
+let groundY = cy + 160;
+let startX = cx - 420;
+let stepDist = 15;
+let swingAmp = 26;
+let bobAmp = 10;
+
+// ================= road =================
+
+rect(road, (0, groundY), w, h - groundY);
+color(road, dim);
+filled(road);
+untraced(road);
+
+line(roadLine, (0, groundY + 40), (w, groundY + 40));
+color(roadLine, panel);
+stroke(roadLine, 2);
+untraced(roadLine);
+
+for i in 0..12 {
+  rect(dash{i}, (i*120 - 40, groundY + 36), 50, 8);
+  color(dash{i}, fg);
+  filled(dash{i});
+  untraced(dash{i});
+}
+
+// ================= stick figure as points + reflowing segments =================
+
+point(neck, (startX, groundY - 118));
+point(hip, (startX, groundY - 10));
+point(handL, (startX - 30, groundY - 40));
+point(handR, (startX + 30, groundY - 40));
+point(footL, (startX - 30, groundY + 100));
+point(footR, (startX + 30, groundY + 100));
+
+hidden(neck);
+hidden(hip);
+hidden(handL);
+hidden(handR);
+hidden(footL);
+hidden(footR);
+
+circle(head, (startX, groundY - 140), 22);
+color(head, fg);
+outlined(head);
+stroke(head, 3);
+untraced(head);
+
+segment(spine, neck, hip);
+segment(armL, neck, handL);
+segment(armR, neck, handR);
+segment(legL, hip, footL);
+segment(legR, hip, footR);
+
+color(spine, fg);
+color(armL, cyan);
+color(armR, cyan);
+color(legL, gold);
+color(legR, gold);
+stroke(spine, 4);
+stroke(armL, 4);
+stroke(armR, 4);
+stroke(legL, 4);
+stroke(legR, 4);
+untraced(spine);
+untraced(armL);
+untraced(armR);
+untraced(legL);
+untraced(legR);
+
+// ================= text =================
+
+text(head_label, (cx, 55), "A Generic Figure Walking Down the Road");
+color(head_label, cyan);
+hidden(head_label);
+
+text(caption, (cx, h - 30), "");
+color(caption, dim);
+hidden(caption);
+
+// ================= script =================
+
+show(head_label, 0.6);
+wait(0.3);
+
+par {
+  draw(road, 0.5);
+  draw(roadLine, 0.5);
+  stagger(0.03) {
+    for i in 0..12 {
+      draw(dash{i}, 0.1);
+    }
+  }
+}
+
+par {
+  show(neck, 0.01); show(hip, 0.01);
+  show(handL, 0.01); show(handR, 0.01);
+  show(footL, 0.01); show(footR, 0.01);
+  draw(head, 0.4);
+  draw(spine, 0.3);
+  draw(armL, 0.3);
+  draw(armR, 0.3);
+  draw(legL, 0.3);
+  draw(legR, 0.3);
+}
+wait(0.3);
+
+show(caption, 0.4);
+say(caption, "Camera pulls back to see the whole road");
+par {
+  cam((cx, cy), 1.0, smooth);
+  zoom(0.85, 1.0, smooth);
+}
+wait(0.3);
+
+// --- walk cycle: phase steps by 90 deg so sin actually alternates ---
+
+for i in 0..28 {
+  let baseX = startX + i*stepDist;
+  let phase = i*90;
+  let swing = swingAmp*sin(phase*pi/180);
+  let legLift = bobAmp*abs(sin(phase*pi/180));
+
+  par {
+    move(neck, (baseX, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip, (baseX, groundY - 10), 0.15, smooth);
+    move(handL, (baseX - swing, groundY - 40), 0.15, smooth);
+    move(handR, (baseX + swing, groundY - 40), 0.15, smooth);
+    move(footL, (baseX + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR, (baseX - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head, (baseX, groundY - 140 - legLift*0.4), 0.15, smooth);
+  }
+}
+
+wait(0.2);
+say(caption, "Camera zooms in as the figure gets close");
+par {
+  cam((startX + 420, groundY - 80), 1.4, smooth);
+  zoom(2.2, 1.4, smooth);
+}
+wait(0.4);
+
+say(caption, "A close-up look, then pulling back out");
+par {
+  cam((cx, cy), 1.2, smooth);
+  zoom(1, 1.2, smooth);
+}
+wait(0.4);
+
+show(caption, 0.3);
+say(caption, "A generic stick figure walking -- no specific person depicted");
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/WCtQngDtvEM" title="A Figure Walking Down the Road — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="two_person_walk"><a class="header" href="#two_person_walk">two_person_walk</a></h2>
+<p>Two figures walk toward each other, MEET in the middle, shake hands, then continue past —
+a little choreographed scene from loops and arithmetic alone (the language layer as animation).</p>
+<pre><code class="language-manic">title("Two Figures Meet, Shake Hands, and Continue Walking");
+canvas("16:9");
+
+let groundY = cy + 160;
+let startX1 = cx - 420;
+let startX2 = cx + 420;
+let stepDist = 15;
+let swingAmp = 26;
+let bobAmp = 10;
+let meetX = cx;
+let endX1 = cx + 420;
+let endX2 = cx - 420;
+
+// ================= road =================
+
+rect(road, (0, groundY), w, h - groundY);
+color(road, dim);
+filled(road);
+untraced(road);
+
+line(roadLine, (0, groundY + 40), (w, groundY + 40));
+color(roadLine, panel);
+stroke(roadLine, 2);
+untraced(roadLine);
+
+for i in 0..14 {
+  rect(dash{i}, (i*120 - 40, groundY + 36), 50, 8);
+  color(dash{i}, fg);
+  filled(dash{i});
+  untraced(dash{i});
+}
+
+// ================= figure 1 (walks left -&gt; right) =================
+
+point(neck1, (startX1, groundY - 118));
+point(hip1, (startX1, groundY - 10));
+point(handL1, (startX1 - 30, groundY - 40));
+point(handR1, (startX1 + 30, groundY - 40));
+point(footL1, (startX1 - 30, groundY + 100));
+point(footR1, (startX1 + 30, groundY + 100));
+
+hidden(neck1); hidden(hip1);
+hidden(handL1); hidden(handR1);
+hidden(footL1); hidden(footR1);
+
+circle(head1, (startX1, groundY - 140), 22);
+color(head1, fg);
+outlined(head1);
+stroke(head1, 3);
+untraced(head1);
+
+segment(spine1, neck1, hip1);
+segment(armL1, neck1, handL1);
+segment(armR1, neck1, handR1);
+segment(legL1, hip1, footL1);
+segment(legR1, hip1, footR1);
+
+color(spine1, fg);
+color(armL1, cyan);
+color(armR1, cyan);
+color(legL1, gold);
+color(legR1, gold);
+stroke(spine1, 4); stroke(armL1, 4); stroke(armR1, 4);
+stroke(legL1, 4); stroke(legR1, 4);
+untraced(spine1); untraced(armL1); untraced(armR1);
+untraced(legL1); untraced(legR1);
+
+// ================= figure 2 (walks right -&gt; left, mirrored) =================
+
+point(neck2, (startX2, groundY - 118));
+point(hip2, (startX2, groundY - 10));
+point(handL2, (startX2 - 30, groundY - 40));
+point(handR2, (startX2 + 30, groundY - 40));
+point(footL2, (startX2 - 30, groundY + 100));
+point(footR2, (startX2 + 30, groundY + 100));
+
+hidden(neck2); hidden(hip2);
+hidden(handL2); hidden(handR2);
+hidden(footL2); hidden(footR2);
+
+circle(head2, (startX2, groundY - 140), 22);
+color(head2, fg);
+outlined(head2);
+stroke(head2, 3);
+untraced(head2);
+
+segment(spine2, neck2, hip2);
+segment(armL2, neck2, handL2);
+segment(armR2, neck2, handR2);
+segment(legL2, hip2, footL2);
+segment(legR2, hip2, footR2);
+
+color(spine2, fg);
+color(armL2, magenta);
+color(armR2, magenta);
+color(legL2, lime);
+color(legR2, lime);
+stroke(spine2, 4); stroke(armL2, 4); stroke(armR2, 4);
+stroke(legL2, 4); stroke(legR2, 4);
+untraced(spine2); untraced(armL2); untraced(armR2);
+untraced(legL2); untraced(legR2);
+
+// ================= text =================
+
+text(head_label, (cx, 55), "Two Figures Meet, Shake Hands, and Continue Walking");
+color(head_label, cyan);
+hidden(head_label);
+
+text(caption, (cx, h - 30), "");
+color(caption, dim);
+hidden(caption);
+
+// ================= script =================
+
+show(head_label, 0.6);
+wait(0.3);
+
+par {
+  draw(road, 0.5);
+  draw(roadLine, 0.5);
+  stagger(0.03) {
+    for i in 0..14 {
+      draw(dash{i}, 0.1);
+    }
+  }
+}
+
+par {
+  show(neck1, 0.01); show(hip1, 0.01);
+  show(handL1, 0.01); show(handR1, 0.01);
+  show(footL1, 0.01); show(footR1, 0.01);
+  draw(head1, 0.4);
+  draw(spine1, 0.3);
+  draw(armL1, 0.3);
+  draw(armR1, 0.3);
+  draw(legL1, 0.3);
+  draw(legR1, 0.3);
+
+  show(neck2, 0.01); show(hip2, 0.01);
+  show(handL2, 0.01); show(handR2, 0.01);
+  show(footL2, 0.01); show(footR2, 0.01);
+  draw(head2, 0.4);
+  draw(spine2, 0.3);
+  draw(armL2, 0.3);
+  draw(armR2, 0.3);
+  draw(legL2, 0.3);
+  draw(legR2, 0.3);
+}
+wait(0.3);
+
+show(caption, 0.4);
+say(caption, "Camera pulls back to see the whole road");
+par {
+  cam((cx, cy), 1.0, smooth);
+  zoom(0.85, 1.0, smooth);
+}
+wait(0.3);
+
+// --- walk cycle: both figures walk toward each other, meeting at meetX ---
+
+for i in 0..24 {
+  let baseX1 = startX1 + i*stepDist;
+  let baseX2 = startX2 - i*stepDist;
+  let phase = i*90;
+  let swing = swingAmp*sin(phase*pi/180);
+  let legLift = bobAmp*abs(sin(phase*pi/180));
+
+  par {
+    move(neck1, (baseX1, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip1, (baseX1, groundY - 10), 0.15, smooth);
+    move(handL1, (baseX1 - swing, groundY - 40), 0.15, smooth);
+    move(handR1, (baseX1 + swing, groundY - 40), 0.15, smooth);
+    move(footL1, (baseX1 + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR1, (baseX1 - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head1, (baseX1, groundY - 140 - legLift*0.4), 0.15, smooth);
+
+    move(neck2, (baseX2, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip2, (baseX2, groundY - 10), 0.15, smooth);
+    move(handL2, (baseX2 - swing, groundY - 40), 0.15, smooth);
+    move(handR2, (baseX2 + swing, groundY - 40), 0.15, smooth);
+    move(footL2, (baseX2 + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR2, (baseX2 - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head2, (baseX2, groundY - 140 - legLift*0.4), 0.15, smooth);
+  }
+}
+
+wait(0.2);
+say(caption, "They arrive face to face");
+par {
+  cam((meetX, groundY - 80), 1.2, smooth);
+  zoom(1.8, 1.2, smooth);
+}
+
+// settle into a standing pose facing each other
+par {
+  move(neck1, (meetX - 40, groundY - 118), 0.3, smooth);
+  move(hip1, (meetX - 40, groundY - 10), 0.3, smooth);
+  move(footL1, (meetX - 60, groundY + 100), 0.3, smooth);
+  move(footR1, (meetX - 20, groundY + 100), 0.3, smooth);
+  move(head1, (meetX - 40, groundY - 140), 0.3, smooth);
+  move(handL1, (meetX - 70, groundY - 40), 0.3, smooth);
+
+  move(neck2, (meetX + 40, groundY - 118), 0.3, smooth);
+  move(hip2, (meetX + 40, groundY - 10), 0.3, smooth);
+  move(footL2, (meetX + 60, groundY + 100), 0.3, smooth);
+  move(footR2, (meetX + 20, groundY + 100), 0.3, smooth);
+  move(head2, (meetX + 40, groundY - 140), 0.3, smooth);
+  move(handR2, (meetX + 70, groundY - 40), 0.3, smooth);
+}
+wait(0.3);
+
+say(caption, "Reaching out to shake hands");
+
+par {
+  move(handR1, (meetX - 5, groundY - 55), 0.4, smooth);
+  move(handL2, (meetX + 5, groundY - 55), 0.4, smooth);
+}
+wait(0.2);
+
+par {
+  move(handR1, (meetX, groundY - 55), 0.25, smooth);
+  move(handL2, (meetX, groundY - 55), 0.25, smooth);
+}
+wait(0.2);
+
+say(caption, "Shaking hands");
+
+for i in 0..4 {
+  par {
+    move(handR1, (meetX, groundY - 65), 0.12, smooth);
+    move(handL2, (meetX, groundY - 65), 0.12, smooth);
+  }
+  par {
+    move(handR1, (meetX, groundY - 48), 0.12, smooth);
+    move(handL2, (meetX, groundY - 48), 0.12, smooth);
+  }
+}
+
+par {
+  move(handR1, (meetX, groundY - 55), 0.15, smooth);
+  move(handL2, (meetX, groundY - 55), 0.15, smooth);
+}
+wait(0.3);
+
+flash(handR1, gold);
+flash(handL2, gold);
+wait(0.3);
+
+say(caption, "Letting go and continuing on their separate ways");
+par {
+  cam((cx, cy), 1.2, smooth);
+  zoom(1, 1.2, smooth);
+}
+
+// release hands back to normal swing position before resuming walk
+par {
+  move(handR1, (meetX - 40 + 30, groundY - 40), 0.25, smooth);
+  move(handL2, (meetX + 40 - 30, groundY - 40), 0.25, smooth);
+}
+wait(0.2);
+
+// --- resume walk cycle: figure1 continues toward endX1, figure2 toward endX2 ---
+
+for i in 0..24 {
+  let baseX1 = (meetX - 40) + i*stepDist;
+  let baseX2 = (meetX + 40) - i*stepDist;
+  let phase = i*90;
+  let swing = swingAmp*sin(phase*pi/180);
+  let legLift = bobAmp*abs(sin(phase*pi/180));
+
+  par {
+    move(neck1, (baseX1, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip1, (baseX1, groundY - 10), 0.15, smooth);
+    move(handL1, (baseX1 - swing, groundY - 40), 0.15, smooth);
+    move(handR1, (baseX1 + swing, groundY - 40), 0.15, smooth);
+    move(footL1, (baseX1 + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR1, (baseX1 - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head1, (baseX1, groundY - 140 - legLift*0.4), 0.15, smooth);
+
+    move(neck2, (baseX2, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip2, (baseX2, groundY - 10), 0.15, smooth);
+    move(handL2, (baseX2 - swing, groundY - 40), 0.15, smooth);
+    move(handR2, (baseX2 + swing, groundY - 40), 0.15, smooth);
+    move(footL2, (baseX2 + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR2, (baseX2 - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head2, (baseX2, groundY - 140 - legLift*0.4), 0.15, smooth);
+  }
+}
+
+wait(0.3);
+say(caption, "Two generic stick figures -- no specific persons depicted");
+par {
+  cam((cx, cy), 1.0, smooth);
+  zoom(0.85, 1.0, smooth);
+}
+wait(0.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VE7PPnPAufE" title="Two Figures Meet, Shake Hands & Walk On — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="equal_cuts"><a class="header" href="#equal_cuts">equal_cuts</a></h2>
 <p>A circle halved again and again (pizza cuts).</p>

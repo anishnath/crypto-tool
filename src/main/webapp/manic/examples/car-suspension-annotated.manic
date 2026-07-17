@@ -1,0 +1,57 @@
+// ============================================================================
+//  car-suspension-annotated.manic  —  a marketing hero, paper (brochure) style
+// ----------------------------------------------------------------------------
+//  The `carsuspension` quarter-car sim, dressed as a clean product diagram on a
+//  `template("paper")` page and ELEVATED with generic base-manic: a live
+//  `counter` (the sprung mass ticking up), leader-`arrow` callouts, a
+//  `bracelabel` for the travel, and a compact `energygraph` showing the shock
+//  being absorbed — then it rides a scrolling road (bump · washboard · pothole).
+//  Every part of the sim is an ordinary entity, so it all composes.
+// ============================================================================
+
+title("Car suspension — smooth over every bump");
+canvas("16:9");
+template("paper");
+
+// ---- hero title ----
+text(hdr, (cx, 52), "Car suspension: how it soaks up the road"); color(hdr, fg); size(hdr, 30); bold(hdr); display(hdr); hidden(hdr);
+text(sub, (cx, 88), "the quarter-car model — sprung mass · spring + damper · wheel"); color(sub, dim); size(sub, 18); display(sub); hidden(sub);
+
+// ---- the sim, recoloured for a bold, clean brochure look ----
+carsuspension(car, (430, 430));
+color(car.body, blue);      // the car body — bold accent
+color(car.road, fg);        // the road — dark ink
+hidden(car);                // reveal the whole sim (road, wheel, spring, body, energy) together
+
+// a compact energy panel (top-right) — the suspension absorbing the shock
+energygraph(car, (1055, 215), 88);
+
+// ---- generic-kit callouts (leader arrows + labels), hidden to reveal in order ----
+text(cb, (640, 296), "car body — the sprung mass"); color(cb, blue); size(cb, 18); display(cb); hidden(cb);
+arrow(ab, (636, 302), (478, 320)); color(ab, dim); stroke(ab, 2); hidden(ab);
+text(csp, (610, 382), "spring + damper"); color(csp, lime); size(csp, 18); display(csp); hidden(csp);
+arrow(asp, (606, 384), (448, 382)); color(asp, dim); stroke(asp, 2); hidden(asp);
+text(cw, (620, 472), "wheel — the unsprung mass"); color(cw, gold); size(cw, 18); display(cw); hidden(cw);
+arrow(aw, (616, 470), (448, 434)); color(aw, dim); stroke(aw, 2); hidden(aw);
+text(cr, (cx, 648), "the road: a bump, a washboard stretch, then a pothole"); color(cr, fg); size(cr, 17); display(cr); hidden(cr);
+
+// a live spec counter (generic kit) — the sprung mass ticking up
+counter(mc, (150, 320), 0, 0, "m = ", " kg"); color(mc, fg); size(mc, 30); display(mc); hidden(mc);
+text(spec, (cx, h - 28), "quarter-car · k = 20 kN/m · c = 4 kN·s/m · v = 8 m/s"); color(spec, dim); size(spec, 16); display(spec); hidden(spec);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5); show(sub, 0.4);
+wait(0.3);
+show(car, 0.6);
+wait(0.3);
+
+show(cb, 0.3); draw(ab, 0.3);
+show(csp, 0.3); draw(asp, 0.3);
+show(cw, 0.3); draw(aw, 0.3);
+show(cr, 0.3);
+show(mc, 0.3); to(mc, value, 500, 0.9);   // the sprung mass counts up
+show(spec, 0.4);
+wait(0.5);
+
+// the ride — the road scrolls, the body glides while the wheel tracks every bump
+run(car, 11);

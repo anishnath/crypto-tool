@@ -1,0 +1,41 @@
+// ============================================================================
+//  loop-cinematic.manic  —  the loop-the-loop as a movie (real physics inside)
+// ----------------------------------------------------------------------------
+//  Same recipe as bullet-impact: build the real `looptrack` sim, aim the camera,
+//  sync the beats to the physics. A ball is released, races down the ramp, and
+//  the camera pushes in as it climbs the loop — the tension is REAL (it genuinely
+//  slows at the top, energy traded for height), then it clears and rockets out.
+// ============================================================================
+
+title("Loop the Loop");
+canvas("16:9");
+
+// the real curved-track physics — a modest release height, so it BARELY clears
+// the top (H just over 2·r) — that's where the real tension lives
+looptrack(lt, (500, 560), 1, 2.4, 95);
+hidden(lt);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+cam((420, 400), 0.4, smooth);            // frame the whole ramp + loop
+say(cap, "release…", 0.4);
+show(lt, 0.5);
+wait(0.4);
+
+// down the ramp, into the loop — the camera pushes in for the climb
+par {
+  run(lt, 6.0);
+  seq {
+    say(cap, "released — down the ramp!", 0.3);
+    par { cam((500, 455), 3.0, smooth); zoom(1.35, 3.0, smooth); }   // slow push through the descent + entry
+    say(cap, "up and over — will it clear the top?!", 0.3);
+    wait(1.7);                                                        // the climb + the crawl over the top
+    say(cap, "…MADE IT!", 0.25);
+    par { cam((470, 410), 1.3, smooth); zoom(1.1, 1.3, smooth); }     // ease back as it rockets out
+  }
+}
+
+// the physics was the whole story
+say(cap, "…real energy: fastest at the bottom, barely crawling over the top", 0.4);
+wait(1.0);

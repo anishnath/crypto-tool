@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-89925e2c.js";
+            window.path_to_searchindex_js = "searchindex-69371a19.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-d969a067.js"></script>
+        <script src="toc-5e06f13d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -733,13 +733,33 @@ doublependulum(dp, (400, 240));  par { run(dp, 12); draw(dp.path, 12); }  // cha
 <code>springincline</code> · <code>bungee</code> · <code>resonance</code> · <code>doublespring</code> · <code>seriesparallel</code> ·
 <code>carsuspension</code>. Mechanics: <code>robotarm</code> · <code>piston</code> · <code>molecule</code> · <code>ramp</code> (with a <code>forces(id)</code>
 free-body diagram) · <code>inclinepulley</code> · <code>doubleincline</code> · <code>inclinebumper</code> ·
-<code>springchain</code> · <code>looptrack</code> (a curved-track loop-the-loop) · <code>dropmass</code> · <code>raft</code> ·
+<code>springchain</code> · <code>looptrack</code> (a curved-track loop-the-loop) · <code>stringwave</code> (a wave on a string) · <code>newtonscradle</code> · <code>collideblocks</code> · <code>bulletblock</code> (event-driven collisions) · <code>dropmass</code> · <code>raft</code> ·
 <code>brachistochrone</code>. Pulleys: <code>pulley</code> (Atwood) ·
 <code>pulleyscale</code> (reads the tension) · <code>blocktackle</code> (N-strand block &amp; tackle) ·
 <code>compoundpulley</code> (fixed + movable, masses A/B/C).</p>
 <p>Because a sim’s parts are ordinary entities, any base look composes over them —
 e.g. <code>template("paper")</code> + a hatched <code>support</code> turns a pulley or spring into a
 textbook figure (see <a href="#elevating-a-scene">Elevating a scene</a> and the <code>*-paper</code> examples).</p>
+<h2 id="optics"><a class="header" href="#optics">optics</a></h2>
+<p>Light as geometry, with the <strong>real physics underneath</strong> — Snell’s law, Sellmeier
+dispersion, and full spherical/aspheric ray tracing — so the bending, the colours
+and the focus are earned, not painted. Each builtin is static geometry that
+animates by a <strong>parameter sweep</strong> (<code>run(id)</code>) or by sketching its rays on
+(<code>draw(id.rays)</code>).</p>
+<pre><code class="language-manic">refract(r, (640, 380), 1.0, 1.52);   run(r, 7);   // Snell's law; run sweeps the angle (→ TIR)
+lens(l, (620, 360));                 run(l, 7);   // parallel rays → a focal point
+prism(p, (560, 400), "sf11");        run(p, 7);   // white light → a real rainbow (dispersion)
+</code></pre>
+<p>Foundations: <code>refract</code> (Snell + total internal reflection) · <code>lens</code> (a converging
+thin lens). Dispersion: <code>prism</code> (white → spectrum) · <code>achromat</code> (chromatic
+aberration → the doublet fix). Real lenses: <code>lenssystem(id, [center], [preset], [object])</code> traces a <strong>prescription</strong> through its actual spherical/aspheric
+surfaces — pick a design by name (<code>"singlet"</code>, <code>"plano-convex"</code>, <code>"aspheric"</code>,
+<code>"doublet"</code>, <code>"triplet"</code>) <strong>or</strong> write your own surface table
+<code>"radius thickness glass [conic] [aperture] | …"</code>; an optional finite <code>object</code>
+distance images a nearby point. Analysis: <code>rayfan</code> (the ray-fan aberration plot) ·
+<code>spotdiagram</code> (the on-axis spot at focus) · <code>fieldspot(id, [center], [preset], [field])</code> (the <strong>off-axis</strong> spot — a coma comet / astigmatic blur, with an
+Airy-disk diffraction-limit overlay). A rainbow glows on the dark bench; the
+geometric ray diagrams also take <code>template("paper")</code> for a textbook look.</p>
 <hr>
 <p>Each kit has a full reference at <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>, and you can see them
 all in motion in the <a href="#examples-gallery">Examples gallery</a>.</p>
@@ -985,12 +1005,13 @@ shape (with a message that names the 3D replacement):</p>
 <li><a href="#calculus--functions">Calculus &amp; functions</a> — 12 examples</li>
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 12 examples</li>
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 13 examples</li>
-<li><a href="#physics--simulations">Physics — simulations</a> — 42 examples</li>
+<li><a href="#physics--simulations">Physics — simulations</a> — 51 examples</li>
+<li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 3 examples</li>
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 8 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 3 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 5 examples</li>
-<li><a href="#generative--recursive">Generative &amp; recursive</a> — 6 examples</li>
+<li><a href="#generative--recursive">Generative &amp; recursive</a> — 9 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
 <li><a href="#3d-scenes">3D scenes</a> — 10 examples</li>
 </ul>
@@ -4277,6 +4298,70 @@ run(car, 12);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/HRc7qGHzrbg" title="Car Suspension — Riding the Road — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="car-suspension-annotated"><a class="header" href="#car-suspension-annotated">car-suspension-annotated</a></h2>
+<p>A marketing hero: the quarter-car suspension on a <code>template("paper")</code> brochure page,
+elevated with generic base-manic — a live <code>counter</code> (sprung mass), leader-<code>arrow</code>
+callouts, and an <code>energygraph</code> of the shock being absorbed — riding a scrolling road.</p>
+<pre><code class="language-manic">// ============================================================================
+//  car-suspension-annotated.manic  —  a marketing hero, paper (brochure) style
+// ----------------------------------------------------------------------------
+//  The `carsuspension` quarter-car sim, dressed as a clean product diagram on a
+//  `template("paper")` page and ELEVATED with generic base-manic: a live
+//  `counter` (the sprung mass ticking up), leader-`arrow` callouts, a
+//  `bracelabel` for the travel, and a compact `energygraph` showing the shock
+//  being absorbed — then it rides a scrolling road (bump · washboard · pothole).
+//  Every part of the sim is an ordinary entity, so it all composes.
+// ============================================================================
+
+title("Car suspension — smooth over every bump");
+canvas("16:9");
+template("paper");
+
+// ---- hero title ----
+text(hdr, (cx, 52), "Car suspension: how it soaks up the road"); color(hdr, fg); size(hdr, 30); bold(hdr); display(hdr); hidden(hdr);
+text(sub, (cx, 88), "the quarter-car model — sprung mass · spring + damper · wheel"); color(sub, dim); size(sub, 18); display(sub); hidden(sub);
+
+// ---- the sim, recoloured for a bold, clean brochure look ----
+carsuspension(car, (430, 430));
+color(car.body, blue);      // the car body — bold accent
+color(car.road, fg);        // the road — dark ink
+hidden(car);                // reveal the whole sim (road, wheel, spring, body, energy) together
+
+// a compact energy panel (top-right) — the suspension absorbing the shock
+energygraph(car, (1055, 215), 88);
+
+// ---- generic-kit callouts (leader arrows + labels), hidden to reveal in order ----
+text(cb, (640, 296), "car body — the sprung mass"); color(cb, blue); size(cb, 18); display(cb); hidden(cb);
+arrow(ab, (636, 302), (478, 320)); color(ab, dim); stroke(ab, 2); hidden(ab);
+text(csp, (610, 382), "spring + damper"); color(csp, lime); size(csp, 18); display(csp); hidden(csp);
+arrow(asp, (606, 384), (448, 382)); color(asp, dim); stroke(asp, 2); hidden(asp);
+text(cw, (620, 472), "wheel — the unsprung mass"); color(cw, gold); size(cw, 18); display(cw); hidden(cw);
+arrow(aw, (616, 470), (448, 434)); color(aw, dim); stroke(aw, 2); hidden(aw);
+text(cr, (cx, 648), "the road: a bump, a washboard stretch, then a pothole"); color(cr, fg); size(cr, 17); display(cr); hidden(cr);
+
+// a live spec counter (generic kit) — the sprung mass ticking up
+counter(mc, (150, 320), 0, 0, "m = ", " kg"); color(mc, fg); size(mc, 30); display(mc); hidden(mc);
+text(spec, (cx, h - 28), "quarter-car · k = 20 kN/m · c = 4 kN·s/m · v = 8 m/s"); color(spec, dim); size(spec, 16); display(spec); hidden(spec);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5); show(sub, 0.4);
+wait(0.3);
+show(car, 0.6);
+wait(0.3);
+
+show(cb, 0.3); draw(ab, 0.3);
+show(csp, 0.3); draw(asp, 0.3);
+show(cw, 0.3); draw(aw, 0.3);
+show(cr, 0.3);
+show(mc, 0.3); to(mc, value, 500, 0.9);   // the sprung mass counts up
+show(spec, 0.4);
+wait(0.5);
+
+// the ride — the road scrolls, the body glides while the wheel tracks every bump
+run(car, 11);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/bUsMlIXFVZ0" title="Car Suspension — How It Soaks Up the Road — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="piston"><a class="header" href="#piston">piston</a></h2>
 <p>An engine piston: a spinning crank + connecting rod turn rotation into the piston’s
 up-and-down stroke — the slider-crank mechanism (<code>piston</code>).</p>
@@ -4479,7 +4564,7 @@ energygraph(ip, (1010, 320), 120);
 text(cap, (cx, h - 32), "m₂ (2 kg) hanging outpulls m₁·sinθ, so m₁ climbs the incline and m₂ descends"); size(cap, 15); color(cap, dim); display(cap);
 run(ip, 4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/xH9Rdqzanjo" title="incline pulley — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/xH9Rdqzanjo" title="The Incline-Atwood — a Block, a Pulley & a Hanging Mass — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="double-incline"><a class="header" href="#double-incline">double-incline</a></h2>
 <p>Two blocks on a wedge’s two slopes, tied over a pulley at the apex (right slope rough).
@@ -4495,7 +4580,7 @@ doubleincline(di, (cx, 520), 50, 30, 12, 70);
 text(cap, (cx, h - 30), "M₂ (70 kg) on the gentle rough slope beats M₁ (12 kg) on the steep smooth one"); size(cap, 15); color(cap, dim); display(cap);
 run(di, 5);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/HaRR568TD9A" title="double incline — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/HaRR568TD9A" title="Two Slopes, One Pulley — Which Block Wins? — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="incline-bumper"><a class="header" href="#incline-bumper">incline-bumper</a></h2>
 <p>A block slides down an incline into a spring bumper at the base, compresses it, and
@@ -4513,7 +4598,256 @@ energygraph(ib, (1010, 320), 120);
 text(cap, (cx, h - 32), "gravity PE → kinetic → spring PE → back: one-sided contact, energy conserved"); size(cap, 15); color(cap, dim); display(cap);
 run(ib, 6);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/o_p5K5zDV0Y" title="incline bumper — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/o_p5K5zDV0Y" title="Down the Ramp, Into a Spring — and Back — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="collide-blocks"><a class="header" href="#collide-blocks">collide-blocks</a></h2>
+<p>The classic momentum demo: block 1 hangs on a spring to the wall, block 2 slides in and
+they collide. A live Σp readout shows momentum conserved at every collision; elastic
+(e=1) keeps total energy flat while it sloshs between KE and the spring (<code>collideblocks</code>).</p>
+<pre><code class="language-manic">// collide-blocks.manic — the classic momentum demo. Block 1 (left) is attached to
+// the wall by a SPRING; block 2 slides in freely and they collide with restitution
+// e (1 = elastic → energy conserved; &lt;1 → lost). The live Σp readout (top) shows
+// momentum is conserved at every collision. Built on the shared `collide_1d`.
+title("Colliding blocks — momentum is conserved");
+canvas("16:9");
+text(hdr, (cx, 96), "Block 1 on a spring, block 2 sliding in — watch the momentum readout"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+collideblocks(cb, (cx, 440), 3, 1, 1);
+energygraph(cb, (1040, 210), 90);
+text(cap, (cx, h - 36), "elastic (e=1): total energy (KE + spring PE) is conserved; Σp is conserved at each collision"); size(cap, 15); color(cap, dim); display(cap);
+run(cb, 10);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cGTI3tfxs5I" title="Colliding Blocks — Momentum Conserved, Live — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="collide-blocks-annotated"><a class="header" href="#collide-blocks-annotated">collide-blocks-annotated</a></h2>
+<p>Conservation of momentum, the MANIC way — not a 1:1 port of the lab sim but a guided
+lesson: the live Σp readout as the star, the KE↔spring-PE energy view, staged callouts,
+and honest narration (with a wall-spring, Σp is conserved AT each collision, not constant).</p>
+<pre><code class="language-manic">// ============================================================================
+//  collide-blocks-annotated.manic  —  conservation of momentum, the MANIC way
+// ----------------------------------------------------------------------------
+//  Not a 1:1 port of the lab sim — a guided lesson that ELEVATES it: the live Σp
+//  readout, the KE↔spring-PE energy view, staged callouts, and honest narration
+//  (with a wall-spring, Σp is conserved AT each collision — Newton's 3rd law — not
+//  constant, since the spring is an external force). All base manic over the sim.
+// ============================================================================
+
+title("Conservation of Momentum");
+canvas("16:9");
+
+// the sim's Σp readout sits at the very top (y≈46) — the star of the scene
+collideblocks(cb, (cx, 460), 3, 1, 1);
+hidden(cb);                                   // the bare id hides every part + the readout + energy view
+energygraph(cb, (1055, 250), 84);             // KE ↔ spring PE (tagged cb, revealed by show(cb))
+
+text(hdr, (cx, 104), "Conservation of Momentum"); size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+text(sub, (cx, 140), "block 1 on a spring · block 2 slides in · watch Σp through the collision"); size(sub, 17); color(sub, dim); display(sub); hidden(sub);
+
+// callouts
+text(csp, (360, 330), "spring holds block 1 to the wall"); size(csp, 16); color(csp, lime); display(csp); hidden(csp);
+arrow(asp, (392, 344), (418, 424)); color(asp, dim); stroke(asp, 2); hidden(asp);
+text(cb1, (470, 300), "block 1 · m₁ = 3 kg"); size(cb1, 16); color(cb1, cyan); display(cb1); hidden(cb1);
+text(cb2, (800, 300), "block 2 · m₂ = 1 kg →"); size(cb2, 16); color(cb2, magenta); display(cb2); hidden(cb2);
+
+text(cap, (cx, h - 38), ""); size(cap, 19); color(cap, fg); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5); show(sub, 0.4);
+wait(0.3);
+show(cb, 0.6);                                 // sim + Σp readout + energy view
+show(csp, 0.3); draw(asp, 0.3); show(cb1, 0.3); show(cb2, 0.3);
+wait(0.4);
+
+say(cap, "block 2 slides toward block 1, which is held by its spring", 0.4);
+wait(0.5);
+say(cap, "they collide — each pushes the other equal and opposite (Newton's 3rd law)", 0.4);
+flash(cb.mom, gold);
+wait(0.5);
+say(cap, "so Σp doesn't jump at the hit — the spring only shifts it BETWEEN collisions", 0.4);
+wait(0.5);
+say(cap, "energy sloshes between motion and the spring, but the total stays put — elastic", 0.4);
+
+run(cb, 12);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/2nmDlVDJxUU" title="Conservation of Momentum — Colliding Blocks, Explained — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bullet-block"><a class="header" href="#bullet-block">bullet-block</a></h2>
+<p>A bullet fired into a block EMBEDS (perfectly inelastic). The flight is slow-mo so you can
+watch it cross, then a live speed readout collapses from 40 m/s to ~1 — momentum survives,
+energy does not. Uses <code>collide_1d(e=0)</code> (<code>bulletblock</code>).</p>
+<pre><code class="language-manic">// bullet-block.manic — a bullet fired into a block EMBEDS (perfectly inelastic).
+// `bulletblock(id,[center],[bulletmass],[speed],[blockmass],[unit])`. The combined
+// mass crawls off at m_b·v_b/(m_b+M) — most of the kinetic energy is lost to the
+// collision, so `energygraph`'s total STEPS DOWN at impact. Uses `collide_1d(e=0)`.
+title("Bullet into a block — an inelastic collision");
+canvas("16:9");
+text(hdr, (cx, 70), "The bullet embeds: 40 m/s becomes ~1 m/s — most of the energy is gone"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+bulletblock(bb, (cx, 430), 0.05, 40, 1.95);
+energygraph(bb, (1040, 200), 90);
+text(cap, (cx, h - 36), "momentum is conserved, but kinetic energy is NOT — it drops sharply at impact"); size(cap, 15); color(cap, dim); display(cap);
+run(bb, 6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/3oL4qYkvSD0" title="A Bullet Embeds in a Block — Where Did the Energy Go? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bullet-impact"><a class="header" href="#bullet-impact">bullet-impact</a></h2>
+<p>BEST OF BOTH: the cinematic gun-shot (gun · muzzle flash · a flying <code>cam</code>/<code>zoom</code> · BOOM)
+wrapped around the REAL <code>bulletblock</code> physics — the collision is genuinely inelastic, the
+live speed readout actually collapses 40 → ~1, and the BOOM is synced to the true impact.</p>
+<pre><code class="language-manic">// ============================================================================
+//  bullet-impact.manic  —  best of both: the movie AND the physics
+// ----------------------------------------------------------------------------
+//  The cinematic gun-shot (gun · muzzle flash · a flying camera · BOOM) wrapped
+//  around the REAL `bulletblock` physics sim. The collision is genuinely true —
+//  a perfectly inelastic impact, momentum conserved, the live speed readout
+//  actually collapsing 40 → ~1 — and the BOOM is SYNCED to the physical impact.
+//  A sim's parts are ordinary entities, so the story and the physics compose.
+// ============================================================================
+
+title("Impact — the movie meets the physics");
+canvas("16:9");
+
+// ---- the REAL physics: bullet + block, inelastic collision + live speed readout ----
+// a lighter block, so the hit visibly KNOCKS it and it slides on afterward
+bulletblock(bb, (cx, 430), 0.05, 40, 0.9);
+hidden(bb);
+sticky(bb.vel);                     // pin the live speed readout through the camera moves
+
+// ---- cinematic dressing (base manic) ----
+rect(barrel, (200, 380), 82, 20); color(barrel, dim); filled(barrel);
+rect(body, (166, 386), 42, 34);   color(body, dim);   filled(body);
+polygon(grip, (150, 404), (176, 404), (170, 442), (146, 438), dim);
+circle(mflash, (242, 380), 28);   color(mflash, gold); glow(mflash, 3.5); hidden(mflash);
+
+text(boom, (730, 250), "BOOM!"); size(boom, 84); color(boom, magenta); bold(boom); glow(boom, 2.5); display(boom); hidden(boom);
+for i in 0..14 {
+  let ang = i * tau / 14.0;
+  line(spark{i}, (730, 380), (730 + 150*cos(ang), 380 + 150*sin(ang)));
+  color(spark{i}, gold); stroke(spark{i}, 5); glow(spark{i}, 2); untraced(spark{i}); tag(spark{i}, sparks);
+}
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 22); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+cam((430, 400), 0.4, smooth);
+say(cap, "a scene — and it's really physics underneath", 0.4);
+wait(0.5);
+
+say(cap, "FIRE!", 0.2);
+par { show(mflash, 0.06); pulse(mflash); show(bb, 0.1); }
+fade(mflash, 0.3);
+
+// the bullet flies (REAL physics, slow-mo) · the camera pushes toward the block ·
+// the BOOM fires exactly when the sim's bullet embeds (55% of the run) · then it
+// KEEPS GOING — the block is knocked, slides on, and the camera follows it
+par {
+  run(bb, 7);
+  cam((720, 380), 3.6, smooth);       // push toward the impact during the flight
+  zoom(1.2, 3.6, smooth);
+  seq {
+    wait(3.85);                        // the physical impact (55% of the run)
+    // CONTACT → zoom-punch + BOOM
+    say(cap, "CONTACT!", 0.12);
+    par { flash(bb.block, gold); shake(bb.block, 0.6); zoom(1.6, 0.15); show(boom, 0.12); pulse(boom); draw(sparks, 0.3); }
+    // …and it CONTINUES — sparks clear, the block slides on, camera follows
+    say(cap, "…knocked back — it slides on", 0.3);
+    par { fade(sparks, 0.5); fade(boom, 0.7); cam((1010, 380), 2.4, smooth); zoom(1.15, 2.4, smooth); }
+  }
+}
+
+// it comes to rest — and the physics was true the whole way through
+par { zoom(1.0, 0.9, smooth); cam((cx, 360), 0.9, smooth); }
+say(cap, "…and rest. A movie on top, real physics underneath: 40 m/s → the block's crawl", 0.4);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/WdfMyqJdwK8" title="Impact — Cinematic Scene + Real Physics, Fused — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bullet-block-annotated"><a class="header" href="#bullet-block-annotated">bullet-block-annotated</a></h2>
+<p>The bullet’s JOURNEY, the manic way: a gun fires, a muzzle flash, a glowing bullet crosses
+the gap in slow-motion and embeds — the speed readout crashing 40 → ~1. A scene, not the
+bare lab sim (base-manic staging over <code>bulletblock</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  bullet-block-annotated.manic  —  a bullet's journey (inelastic collision)
+// ----------------------------------------------------------------------------
+//  Not the bare lab sim — a scene: a gun fires, a muzzle flash, a glowing bullet
+//  crosses the gap in slow-motion, embeds in the block, and the live speed readout
+//  COLLAPSES from 40 m/s to ~1. The block barely lurches — it soaked up the bullet
+//  but almost none of the speed. Base-manic staging over the `bulletblock` sim.
+// ============================================================================
+
+title("A bullet fired into a block");
+canvas("16:9");
+
+text(hdr, (cx, 44), "A bullet fired into a block"); size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+text(sub, (cx, 80), "perfectly inelastic: the bullet embeds — momentum survives, speed collapses"); size(sub, 17); color(sub, dim); display(sub); hidden(sub);
+
+// the sim (bullet at the muzzle, block at rest, floor, live speed readout, energy)
+bulletblock(bb, (cx, 430), 0.05, 40, 1.95);
+hidden(bb);
+energygraph(bb, (1055, 250), 82);
+
+// the gun (all base-manic shapes), at the bullet's start height
+rect(barrel, (200, 380), 82, 20);  color(barrel, dim); filled(barrel);
+rect(body, (166, 386), 42, 34);    color(body, dim);   filled(body);
+polygon(grip, (150, 404), (176, 404), (170, 442), (146, 438), dim);
+circle(flash, (242, 380), 17);     color(flash, gold); glow(flash, 2.4);
+hidden(barrel); hidden(body); hidden(grip); hidden(flash);
+
+// callouts
+text(cbl, (300, 336), "the bullet — light + fast"); size(cbl, 16); color(cbl, red); display(cbl); hidden(cbl);
+text(cblk, (720, 300), "the block — heavy, at rest"); size(cblk, 16); color(cblk, cyan); display(cblk); hidden(cblk);
+
+text(cap, (cx, h - 38), ""); size(cap, 19); color(cap, fg); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5); show(sub, 0.4);
+wait(0.3);
+show(bb, 0.5); show(barrel, 0.3); show(body, 0.3); show(grip, 0.3);
+show(cbl, 0.3); show(cblk, 0.3);
+wait(0.4);
+
+say(cap, "a heavy block sits at rest; a fast, light bullet is loaded", 0.4);
+wait(0.5);
+say(cap, "FIRE — 40 m/s across the gap …", 0.4);
+flash(flash, gold); pulse(flash);
+run(bb, 6);
+
+say(cap, "… it embeds. Momentum is conserved, but 40 m/s collapses to ~1 — the energy is gone", 0.4);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/4HCc7iRtZr8" title="A Bullet's Journey — Inelastic Collision, Slow-Mo — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="newtons-cradle"><a class="header" href="#newtons-cradle">newtons-cradle</a></h2>
+<p>Newton’s cradle: pull one ball, one swings out the far side — momentum and energy pass
+straight through the chain. An EVENT-DRIVEN sim (free-flight pendulums between elastic
+collisions resolved by a shared 1-D impulse), the crowd-pleaser (<code>newtonscradle</code>).</p>
+<pre><code class="language-manic">// newtons-cradle.manic — Newton's cradle: pull N balls, N swing out. An EVENT-
+// DRIVEN sim — free-flight pendulums between elastic collisions resolved by the
+// shared `collide_1d` impulse. `newtonscradle(id,[center],[balls],[pulled])`.
+title("Newton's cradle — momentum passes through");
+canvas("16:9");
+text(hdr, (cx, 70), "Pull one, one swings out — momentum and energy pass straight through"); size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+newtonscradle(nc, (cx, 170), 5, 1);
+energygraph(nc, (1040, 470), 90);
+text(cap, (cx, h - 40), "five equal balls, elastic collisions (e = 1): the chain conserves momentum and energy"); size(cap, 15); color(cap, dim); display(cap);
+run(nc, 8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/RfYmUfnoDPs" title="Newton's Cradle — Momentum Passes Through — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="string-wave"><a class="header" href="#string-wave">string-wave</a></h2>
+<p>A wave on a plucked string: 36 masses on springs, both ends fixed (the discretised wave
+equation). Pluck it off-centre and the pulse splits, travels, and reflects off the ends —
+a rainbow chain that wiggles, pre-simulated with RK4 (<code>stringwave</code>).</p>
+<pre><code class="language-manic">// string-wave.manic — a wave on a plucked string: N masses on springs, both ends
+// fixed (the discretised wave equation). `stringwave(id,[center],[width],[amp],
+// [pluck])`. Pluck it off-centre and the pulse splits into two, travels out, and
+// reflects (inverting) off the fixed ends. Drawn as a rainbow chain that wiggles.
+title("Wave on a string — pluck it and watch it travel");
+canvas("16:9");
+text(hdr, (cx, 70), "Pluck a string: the pulse splits, travels, and reflects off the ends"); size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+stringwave(sw, (cx, 380), 900, 110, 0.28);
+text(cap, (cx, h - 40), "36 masses on springs, fixed at both ends — the wave equation, pre-simulated with RK4"); size(cap, 16); color(cap, dim); display(cap);
+run(sw, 10);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/a3mbO2WfQZE" title="Wave on a String — Pluck, Travel, Reflect — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="loop-track"><a class="header" href="#loop-track">loop-track</a></h2>
 <p>A ball rolls down a ramp and around a vertical LOOP-THE-LOOP — the curved-track case.
@@ -4531,7 +4865,55 @@ energygraph(lt, (1010, 330), 120);
 text(cap, (cx, h - 32), "energy conserved: it trades kinetic for potential, slowest at the top of the loop"); size(cap, 15); color(cap, dim); display(cap);
 run(lt, 5);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/QX3OjnwYxm0" title="loop track — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/QX3OjnwYxm0" title="Loop-the-Loop — Will It Clear the Top? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="loop-cinematic"><a class="header" href="#loop-cinematic">loop-cinematic</a></h2>
+<p>The loop-the-loop as a MOVIE with real physics inside: the camera pushes in as the ball
+climbs, and the tension is genuine — a modest release height means it truly crawls over
+the top before rocketing out. <code>cam</code>/<code>zoom</code> beats synced to the <code>looptrack</code> sim.</p>
+<pre><code class="language-manic">// ============================================================================
+//  loop-cinematic.manic  —  the loop-the-loop as a movie (real physics inside)
+// ----------------------------------------------------------------------------
+//  Same recipe as bullet-impact: build the real `looptrack` sim, aim the camera,
+//  sync the beats to the physics. A ball is released, races down the ramp, and
+//  the camera pushes in as it climbs the loop — the tension is REAL (it genuinely
+//  slows at the top, energy traded for height), then it clears and rockets out.
+// ============================================================================
+
+title("Loop the Loop");
+canvas("16:9");
+
+// the real curved-track physics — a modest release height, so it BARELY clears
+// the top (H just over 2·r) — that's where the real tension lives
+looptrack(lt, (500, 560), 1, 2.4, 95);
+hidden(lt);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+cam((420, 400), 0.4, smooth);            // frame the whole ramp + loop
+say(cap, "release…", 0.4);
+show(lt, 0.5);
+wait(0.4);
+
+// down the ramp, into the loop — the camera pushes in for the climb
+par {
+  run(lt, 6.0);
+  seq {
+    say(cap, "released — down the ramp!", 0.3);
+    par { cam((500, 455), 3.0, smooth); zoom(1.35, 3.0, smooth); }   // slow push through the descent + entry
+    say(cap, "up and over — will it clear the top?!", 0.3);
+    wait(1.7);                                                        // the climb + the crawl over the top
+    say(cap, "…MADE IT!", 0.25);
+    par { cam((470, 410), 1.3, smooth); zoom(1.1, 1.3, smooth); }     // ease back as it rockets out
+  }
+}
+
+// the physics was the whole story
+say(cap, "…real energy: fastest at the bottom, barely crawling over the top", 0.4);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/knRtBYXHaYc" title="Loop the Loop — Cinematic Scene + Real Physics — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="spring-chain"><a class="header" href="#spring-chain">spring-chain</a></h2>
 <p>Three blocks joined by two springs on an incline — coupled oscillators. Pull one and the
@@ -4549,7 +4931,7 @@ energygraph(sc, (1010, 340), 120);
 text(cap, (cx, h - 32), "pull one block and the whole chain rings — normal modes / beating (coupled springs)"); size(cap, 15); color(cap, dim); display(cap);
 run(sc, 9);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/seuNwQdBCEY" title="spring chain — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/seuNwQdBCEY" title="Coupled Oscillators — Three Blocks, Two Springs, One Beat — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="incline-showcase"><a class="header" href="#incline-showcase">incline-showcase</a></h2>
 <p>One paper page, FOUR live incline problems: a friction ramp, an incline+pulley, a
@@ -5062,6 +5444,576 @@ line(ropeF, (cx, 496), (cx, 600)); color(ropeF, fg); stroke(ropeF, 2);
 support(floor, (cx, 612), 150, "up");
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/pAj6lWNuLNs" title="Textbook Tension Figure — 60/30 Ropes — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="optics--light-as-geometry"><a class="header" href="#optics--light-as-geometry">Optics — light as geometry</a></h1>
+<p>Easy builtins with the <strong>real physics underneath</strong> — Snell’s law and Sellmeier dispersion — so the bending and the colours are earned, not painted. Each is static geometry that animates by a parameter sweep: call <code>run(id)</code>.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="refraction"><a class="header" href="#refraction">refraction</a></h2>
+<p>Snell’s law you can watch: a ray crossing from air into glass bends toward the normal,
+and <code>run</code> sweeps the incidence angle so the refracted ray swings — the live in/out
+read-outs are the true angles. Start in the denser medium and it shows total internal
+reflection past the critical angle (<code>refract</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  refraction.manic  —  Snell's law you can watch (real optics)
+// ----------------------------------------------------------------------------
+//  The `optics` kit's first builtin: `refract` draws a light ray meeting the
+//  boundary between two media and bending. `run` SWEEPS the incidence angle, so
+//  the refracted ray genuinely swings — and the "in"/"out" read-outs are the
+//  true Snell angles, not painted. Here: air (n=1.00) into crown glass (n=1.52).
+// ============================================================================
+
+title("Refraction — Snell's Law");
+canvas("16:9");
+
+// air on top, glass below; no fixed angle → run(r) sweeps it
+refract(r, (640, 380), 1.0, 1.52);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "a ray of light, crossing from air into glass…", 0.5);
+wait(0.5);
+
+par {
+  run(r, 7);
+  seq {
+    say(cap, "shallow angle — it barely bends", 0.3);
+    wait(2.2);
+    say(cap, "steeper in → it bends MORE, toward the normal", 0.3);
+    wait(2.6);
+    say(cap, "sin(in) / sin(out) is fixed — THAT ratio is the refractive index", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kcokHJq6plQ" title="Refraction — Snell's Law You Can Watch — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lens"><a class="header" href="#lens">lens</a></h2>
+<p>A converging lens: a parallel beam bends to meet at the focal point F (ideal thin lens —
+every ray passes through F). <code>run</code> sweeps the focal length, so the focus slides in as the
+lens gets stronger (<code>lens</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  lens.manic  —  a converging lens, and where it focuses (real optics)
+// ----------------------------------------------------------------------------
+//  The `optics` kit's `lens` builtin: a beam of parallel rays is bent by a
+//  converging lens to meet at the focal point F. `run` SWEEPS the focal length,
+//  so you watch the focus slide in toward the lens — a shorter focal length is
+//  a stronger lens. Ideal thin lens (every parallel ray passes through F).
+// ============================================================================
+
+title("Converging Lens");
+canvas("16:9");
+
+lens(l, (620, 360));
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "parallel light meets a converging lens…", 0.5);
+wait(0.5);
+
+par {
+  run(l, 7);
+  seq {
+    say(cap, "every ray bends to the SAME point — the focus, F", 0.3);
+    wait(2.6);
+    say(cap, "shorter focal length = a stronger lens → the focus slides IN", 0.3);
+    wait(2.4);
+    say(cap, "past F the rays cross and spread apart again", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kpgwBBQ-occ" title="Converging Lens — Where Light Focuses — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="prism"><a class="header" href="#prism">prism</a></h2>
+<p>White light into a prism, out as a RAINBOW — each colour traced through both faces with
+its own refractive index (real Sellmeier dispersion), so blue bends more than red because
+glass genuinely slows blue more. <code>run</code> sweeps the incidence angle and the fan widens (<code>prism</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  prism.manic  —  white light into a rainbow (real dispersion)
+// ----------------------------------------------------------------------------
+//  The `optics` kit's `prism`: white light enters a triangular prism and splits
+//  into a spectrum. Each colour is traced through both faces with its OWN
+//  refractive index (real Sellmeier dispersion) — blue bends more than red
+//  because glass genuinely slows blue more. `run` sweeps the incidence angle,
+//  so the fan swings and its spread widens.
+// ============================================================================
+
+title("Prism — White Light Splits");
+canvas("16:9");
+
+prism(p, (560, 400), "sf11");   // dense flint — a wide, vivid spectrum
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one beam of white light, into a prism…", 0.5);
+wait(0.5);
+
+par {
+  run(p, 7);
+  seq {
+    say(cap, "it comes out as a RAINBOW — the colours were always there", 0.3);
+    wait(2.6);
+    say(cap, "blue bends more than red: glass really does slow blue more", 0.3);
+    wait(2.4);
+    say(cap, "steeper in → the spectrum fans WIDER (real Sellmeier dispersion)", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/NO1Iuf12wC4" title="Prism — White Light Splits into a Rainbow (Real Dispersion) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="achromat"><a class="header" href="#achromat">achromat</a></h2>
+<p>The optics capstone — chromatic aberration and its fix: a single lens focuses blue nearer
+than red, so white light never comes to one point; <code>run</code> sweeps in the achromatic doublet
+and the colours snap back to a single sharp focus (<code>achromat</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  achromat.manic  —  chromatic aberration, and the fix (real optics)
+// ----------------------------------------------------------------------------
+//  The optics kit's capstone. A single lens can't focus all colours to one
+//  point: it bends blue more than red (its index is higher for blue — real
+//  dispersion), so blue focuses NEARER and red FARTHER. `run` then sweeps in the
+//  achromatic doublet (crown + flint) and the two foci slide back together to a
+//  single sharp point — the trick every camera and telescope lens uses.
+// ============================================================================
+
+title("The Achromatic Doublet");
+canvas("16:9");
+
+achromat(ac, (540, 360));
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one simple lens — but the colours don't agree…", 0.5);
+wait(0.6);
+
+par {
+  run(ac, 7);
+  seq {
+    say(cap, "blue focuses NEARER, red FARTHER — chromatic aberration", 0.3);
+    wait(2.6);
+    say(cap, "now add a flint element behind it — the achromatic doublet", 0.3);
+    wait(2.2);
+    say(cap, "…and the colours snap back to ONE sharp focus", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TVSbwocwH-k" title="Chromatic Aberration & the Achromatic Doublet — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="refraction-paper"><a class="header" href="#refraction-paper">refraction-paper</a></h2>
+<p>Snell’s law as a <code>template("paper")</code> TEXTBOOK figure: inked media labels, the normal, and
+the law itself, with a camera easing in on the bending point as <code>run</code> sweeps the angle —
+the geometric builtins suit paper (<code>refract</code> + annotation + camera).</p>
+<pre><code class="language-manic">// ============================================================================
+//  refraction-paper.manic  —  Snell's law as a textbook figure (annotated)
+// ----------------------------------------------------------------------------
+//  The `refract` sim dressed as a physics-class page: `template("paper")` inks
+//  it on cream, labelled media + normal + the law itself, and a gentle camera
+//  push on the bending point while `run` sweeps the incidence angle. Elevation
+//  lens: textbook annotation + camera. (Paper suits the geometry; the coloured
+//  dispersion demos stay on a dark bench where light glows.)
+// ============================================================================
+
+title("Refraction — Snell's Law");
+canvas("16:9");
+template("paper");
+
+refract(r, (660, 400), 1.0, 1.52);
+color(r.incident, red);            // gold washes out on cream — ink the incoming ray red
+color(r.thetai, red);
+
+// ---- textbook annotations (screen-fixed) ----
+text(mAir,  (150, 300), "air    n = 1.00");   color(mAir, dim);  size(mAir, 22); sticky(mAir);
+text(mGla,  (150, 500), "glass  n = 1.52");   color(mGla, dim);  size(mGla, 22); sticky(mGla);
+text(nlab,  (708, 250), "normal");            color(nlab, dim);  size(nlab, 18); sticky(nlab);
+text(law,   (cx, 92), "n1 · sin(in)  =  n2 · sin(out)"); color(law, fg); size(law, 30); bold(law); sticky(law);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "light bends as it crosses into glass — Snell's law", 0.5);
+wait(0.5);
+
+par {
+  run(r, 8);
+  seq {
+    par { cam((660, 400), 2.2, smooth); zoom(1.18, 2.2, smooth); }   // ease in on the boundary
+    say(cap, "steeper in → it bends more, toward the normal", 0.3);
+    wait(3.0);
+    say(cap, "…but sin(in) / sin(out) never changes — that ratio IS n", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/SLUkDhyC02U" title="Snell's Law — a Physics Textbook Figure, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lens-paper"><a class="header" href="#lens-paper">lens-paper</a></h2>
+<p>The converging lens inked on paper and narrated by a TYPEWRITER caption (a different
+elevation lens): labelled parallel rays and focal point F while <code>run</code> slides the focus
+(<code>lens</code> + <code>type</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  lens-paper.manic  —  a converging lens as a textbook figure (annotated)
+// ----------------------------------------------------------------------------
+//  The `lens` sim inked on paper, narrated by a TYPEWRITER caption (a different
+//  elevation lens from refraction-paper's camera), with labelled parallel rays
+//  and focal point while `run` sweeps the focal length. Ideal thin lens.
+// ============================================================================
+
+title("Converging Lens");
+canvas("16:9");
+template("paper");
+
+lens(l, (640, 360));
+
+// ---- textbook annotations (screen-fixed) ----
+text(inlab, (150, 250), "parallel rays"); color(inlab, dim); size(inlab, 22); sticky(inlab);
+text(flab,  (980, 300), "focal point F"); color(flab, dim); size(flab, 22); sticky(flab);
+arrow(farr, (980, 320), (900, 356));     color(farr, dim); sticky(farr);
+
+// a typewriter caption performs the narration (untraced → type reveals it)
+text(cap, (cx, h - 48), "a lens bends parallel light to a single point"); color(cap, fg); size(cap, 26); bold(cap); untraced(cap); sticky(cap);
+
+// ================= THE SCENE =================
+type(cap, 1.6);                    // type the line out
+wait(0.4);
+
+par {
+  run(l, 8);
+  seq {
+    wait(0.6);
+    say(cap, "every ray meets at the focus, F", 0.3);
+    wait(2.8);
+    say(cap, "a shorter focal length is a stronger lens — F slides in", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/1F1D5NyF3hM" title="Converging Lens — Textbook Ray Diagram — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="prism-cinematic"><a class="header" href="#prism-cinematic">prism-cinematic</a></h2>
+<p>The prism on a dark optics bench where the spectrum GLOWS (a rainbow washes out on paper):
+the colour names pop in word-by-word (<code>wordpop</code>) as the fan spreads and the camera flies
+toward it — KINETIC-TYPE elevation (<code>prism</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  prism-cinematic.manic  —  white light into a rainbow (annotated, dark bench)
+// ----------------------------------------------------------------------------
+//  The `prism` sim on a dark optics bench, where the spectrum GLOWS (a rainbow
+//  washes out on paper — light is a dark-background subject). Elevation lens:
+//  KINETIC TYPE — the colour names pop in word-by-word (`wordpop`) as the fan
+//  spreads, plus a camera push toward the exit spectrum.
+// ============================================================================
+
+title("Prism — White Light Splits");
+canvas("16:9");
+
+prism(p, (560, 400), "sf11");
+
+// the colour names, popped in one at a time over the fan
+caption(names, "red  orange  yellow  green  blue  violet", (cx + 40, 150), 26, gold);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one beam of white light, into a prism…", 0.5);
+wait(0.5);
+
+par {
+  run(p, 8);
+  seq {
+    par { cam((820, 430), 2.6, smooth); zoom(1.22, 2.6, smooth); }   // fly toward the spectrum
+    say(cap, "…out as a rainbow — the colours were always hidden inside", 0.3);
+    wordpop(names, 0.22);                                            // the colours pop in
+    wait(1.6);
+    say(cap, "blue bends most, red least — real Sellmeier dispersion", 0.3);
+    wait(1.6);
+  }
+}
+par { cam((cx, 400), 1.2, smooth); zoom(1.0, 1.2, smooth); }
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/9TZyP0BBU3E" title="Prism — White Light into a Rainbow (Cinematic) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="achromat-cinematic"><a class="header" href="#achromat-cinematic">achromat-cinematic</a></h2>
+<p>The achromat with the CAMERA magnifying the focal region so the red/blue split is dramatic,
+a <code>bracelabel</code> marking the aberration gap that closes as <code>run</code> sweeps in the doublet and
+the colours merge (<code>achromat</code> + camera + brace).</p>
+<pre><code class="language-manic">// ============================================================================
+//  achromat-cinematic.manic  —  chromatic aberration &amp; its fix (annotated, dark)
+// ----------------------------------------------------------------------------
+//  The `achromat` capstone on a dark bench, where the coloured foci glow.
+//  Elevation lens: the CAMERA magnifies the focal region so the red/blue split
+//  is dramatic, and a `bracelabel` marks the aberration gap — which then closes
+//  as `run` sweeps in the doublet and the colours merge to one point.
+// ============================================================================
+
+title("The Achromatic Doublet");
+canvas("16:9");
+
+achromat(ac, (540, 360));
+
+// bracket the axial gap between the two foci (fades as they merge)
+bracelabel(gap, (852, 406), (908, 406), "CA", 20); color(gap, red);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one simple lens — but the colours refuse to agree…", 0.5);
+wait(0.6);
+
+par {
+  run(ac, 8);
+  seq {
+    par { cam((880, 360), 2.4, smooth); zoom(1.7, 2.4, smooth); }   // magnify the focal region
+    say(cap, "blue focuses NEARER, red FARTHER — chromatic aberration", 0.3);
+    wait(2.8);
+    say(cap, "now cement a flint element behind it — the achromat", 0.3);
+    fade(gap, 0.7);                                                  // the gap closes
+    wait(2.0);
+    say(cap, "…and the colours snap back to ONE sharp focus", 0.3);
+  }
+}
+par { cam((cx, 360), 1.3, smooth); zoom(1.0, 1.3, smooth); }
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TWBpf4pyyuw" title="Chromatic Aberration, Magnified — the Achromat Fix — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lens-system"><a class="header" href="#lens-system">lens-system</a></h2>
+<p>A REAL multi-element lens, ray-traced through its actual spherical surfaces (not the ideal
+thin lens): the fast singlet reveals SPHERICAL ABERRATION — <code>draw</code> sketches the rays, then
+<code>run</code> sweeps a sensor plane and the live spot read-out dips but never reaches a point,
+because the outer rays focus short (<code>lenssystem</code>, presets singlet/doublet/triplet).</p>
+<pre><code class="language-manic">// ============================================================================
+//  lens-system.manic  —  a REAL lens, ray-traced (best of physics + manic)
+// ----------------------------------------------------------------------------
+//  `lenssystem` traces a parallel beam through the ACTUAL spherical surfaces of
+//  a lens (not the ideal thin lens of `lens`). Here the fast singlet reveals
+//  SPHERICAL ABERRATION: sketch the rays on with `draw`, then `run` sweeps a
+//  sensor plane along the axis while the live spot read-out dips to its minimum
+//  — which never reaches a point, because the outer rays focus short. Then swap
+//  the caption's promise: that's the flaw a doublet/triplet is built to fix.
+// ============================================================================
+
+title("Spherical Aberration — a Real Lens Traced");
+canvas("16:9");
+
+lenssystem(ls, (620, 380), "singlet");
+
+text(cap, (cx, h - 42), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "a parallel beam into a real, fast single lens…", 0.5);
+draw(ls.rays, 2.2);                 // the rays sketch through the glass
+wait(0.3);
+
+par {
+  run(ls, 6);                       // the sensor plane sweeps the axis
+  seq {
+    say(cap, "a sensor hunts for focus — watch the spot size", 0.3);
+    wait(2.4);
+    say(cap, "the outer rays focus SHORT — it never reaches a point", 0.3);
+    wait(2.0);
+    say(cap, "that blur is spherical aberration (a doublet/triplet fixes it)", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cmy2wGOPzpo" title="Spherical Aberration — a Real Lens, Ray-Traced — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="ray-fan"><a class="header" href="#ray-fan">ray-fan</a></h2>
+<p>Reading an aberration: <code>rayfan</code> plots each ray’s error at focus against where it entered the
+lens. A flat line is a perfect lens — the singlet’s cubic S-CURVE is textbook spherical
+aberration (the edges bend too much), which a doublet flattens (<code>rayfan</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  ray-fan.manic  —  the signature of an aberration (real optics analysis)
+// ----------------------------------------------------------------------------
+//  A ray-fan plot: for each ray, how far off focus does it land (y) against
+//  where it entered the lens (x, edge → edge)? `rayfan` traces the real
+//  spherical surfaces. A perfect lens is a flat line at zero; the singlet's
+//  cubic S-CURVE is textbook spherical aberration — the outer rays bend too
+//  much. (The doublet/triplet flatten it, drawn to the same scale.)
+// ============================================================================
+
+title("Ray-Fan — Reading an Aberration");
+canvas("16:9");
+
+rayfan(rf, (640, 340), "singlet");
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "each ray: how far off focus (y) vs where it entered (x)…", 0.5);
+draw(rf.curve, 2.2);
+wait(0.5);
+
+say(cap, "a flat line would be a perfect lens — this ISN'T flat", 0.3);
+wait(2.0);
+
+say(cap, "that S-curve is spherical aberration: the edges bend too much", 0.3);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ShMMOCC6ZyM" title="Reading a Lens Aberration — the Ray-Fan Plot — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spot-diagram"><a class="header" href="#spot-diagram">spot-diagram</a></h2>
+<p>Lens quality as a picture: <code>spotdiagram</code> plots where a ray bundle actually lands at focus.
+A fast single lens smears into a blur disc (the circle of least confusion), while a cemented
+doublet collapses to a point — both to the same scale, RMS 4 px → under 1 px (<code>spotdiagram</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  spot-diagram.manic  —  a blur vs a point (lens quality, real optics)
+// ----------------------------------------------------------------------------
+//  Where does a bundle of rays actually LAND at focus? `spotdiagram` traces the
+//  real spherical surfaces and plots the hits. A fast single lens smears into a
+//  disc — the circle of least confusion from SPHERICAL ABERRATION — while a
+//  cemented doublet collapses to a point. The green dot is the ideal (point)
+//  focus; the RMS read-out is the blur radius. Both drawn to the SAME scale.
+// ============================================================================
+
+title("Spot Diagram — Blur vs Point");
+canvas("16:9");
+
+spotdiagram(bad, (370, 380), "singlet");
+spotdiagram(good, (910, 380), "doublet");
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "where do the rays actually land at focus?", 0.5);
+wait(0.4);
+
+say(cap, "a fast SINGLE lens → a blur disc (spherical aberration)", 0.3);
+draw(bad.dots, 1.8);
+wait(0.6);
+
+say(cap, "a cemented DOUBLET → very nearly a point", 0.3);
+draw(good.dots, 1.4);
+wait(0.6);
+
+say(cap, "same rays, same scale — RMS 4 px collapses to under 1 px", 0.3);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TVT1YqfN8xg" title="Spot Diagram — a Lens Blur vs a Point — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lens-prescription"><a class="header" href="#lens-prescription">lens-prescription</a></h2>
+<p>Type your OWN lens: <code>lenssystem</code> takes a design by name (<code>"plano-convex"</code>, <code>"doublet"</code>, …)
+OR a custom PRESCRIPTION — the designer’s surface table <code>"radius thickness glass [conic] [aperture] | …"</code> — traced through the true surfaces with real Sellmeier glass (<code>lenssystem</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  lens-prescription.manic  —  type your OWN lens (real prescription)
+// ----------------------------------------------------------------------------
+//  `lenssystem` takes a lens two ways: pick a real design by NAME
+//  ("plano-convex" / "meniscus" / "doublet" / "triplet" / …), or write a CUSTOM
+//  prescription — the lens designer's surface table — as "radius thickness glass"
+//  per surface, separated by "|". Here: a cemented crown+flint achromat, traced
+//  through its actual spherical surfaces with real glass (Sellmeier).
+// ============================================================================
+
+title("A Lens, By Prescription");
+canvas("16:9");
+
+// surface table:  radius  thickness  glass   (| between surfaces; "flat"/"air" allowed)
+lenssystem(l, (600, 380), "160 26 bk7 | -140 8 f2 | -420 0 air");
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "a lens written as a prescription: radius · thickness · glass", 0.5);
+draw(l.rays, 2.2);                  // trace the real surfaces
+wait(0.4);
+
+par {
+  run(l, 6);                        // sweep the sensor to best focus
+  seq {
+    say(cap, "crown + flint, cemented — the same table a designer would type", 0.3);
+    wait(2.6);
+    say(cap, "traced through the true spherical surfaces (real Sellmeier glass)", 0.3);
+    wait(2.0);
+  }
+}
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/PLU_nUEZq4w" title="Type Your Own Lens — a Prescription, Ray-Traced — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="aspheric-lens"><a class="header" href="#aspheric-lens">aspheric-lens</a></h2>
+<p>How an ASPHERE kills spherical aberration: a spherical surface can’t focus a wide beam to a
+point (a blur, RMS 1.5 px), but reshaping it to the right conic — one constant in the
+prescription — collapses every ray to a point (RMS 0.1 px). Two real ray-traced lenses,
+spherical vs aspheric, side by side (<code>lenssystem</code> conic + <code>spotdiagram</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  aspheric-lens.manic  —  how an asphere kills spherical aberration
+// ----------------------------------------------------------------------------
+//  A prescription surface has a CONIC constant. A plain spherical lens can't
+//  focus a wide beam to a point — the edges bend too much (spherical aberration,
+//  a blur). Reshape that surface into the right ellipse/hyperbola (a conic ≠ 0)
+//  and every ray meets at ONE point. Two real ray-traced lenses, side by side:
+//  same shape, one spherical, one aspheric.
+// ============================================================================
+
+title("Aspheric Correction");
+canvas("16:9");
+
+spotdiagram(sph, (360, 380), "plano-convex");   // spherical surface  → a blur
+spotdiagram(asp, (912, 380), "aspheric");        // conic surface (K≈−0.55) → a point
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "same lens shape — where do the rays land at focus?", 0.5);
+wait(0.4);
+
+say(cap, "a SPHERICAL surface can't focus the edges — a blur (RMS 1.5 px)", 0.3);
+draw(sph.dots, 1.6);
+wait(0.6);
+
+say(cap, "reshape it to an ASPHERE (conic surface) — a point (RMS 0.1 px)", 0.3);
+draw(asp.dots, 1.4);
+wait(0.6);
+
+say(cap, "one conic constant in the prescription — spherical aberration, gone", 0.3);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/pYk9v2B9S7g" title="Aspheric Lens — How a Conic Surface Kills Spherical Aberration — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="off-axis"><a class="header" href="#off-axis">off-axis</a></h2>
+<p>The hard test — light 8° OFF the axis. <code>fieldspot</code> traces a full 2-D pupil in 3-D: a single
+lens flares into a COMA comet, while a doublet holds the spot near the Airy disk (the
+diffraction limit). Real field aberration only a 3-D trace shows (<code>fieldspot</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  off-axis.manic  —  coma &amp; astigmatism, off the axis (3-D ray-traced)
+// ----------------------------------------------------------------------------
+//  On the axis a lens can be sharp — but light coming in at an ANGLE is a harder
+//  test. `fieldspot` traces a full 2-D pupil in 3-D at a field angle and plots
+//  where the rays land. A single lens flares into a COMA comet; a doublet holds
+//  the spot near the Airy disk (the diffraction limit). Same 8° field, side by
+//  side — real off-axis aberration only a 3-D trace reveals.
+// ============================================================================
+
+title("Off-Axis — Coma vs a Corrected Lens");
+canvas("16:9");
+
+fieldspot(bad, (350, 380), "singlet", 8);    // one element → a coma comet
+fieldspot(good, (930, 380), "doublet", 8);    // doublet → tight, near diffraction
+
+text(cap, (cx, h - 44), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "now aim the light 8° OFF the axis — the hard test", 0.5);
+wait(0.4);
+
+say(cap, "a single lens smears into a COMA comet (RMS ~7 px)", 0.3);
+draw(bad.dots, 1.6);
+wait(0.6);
+
+say(cap, "the doublet holds it near the Airy disk — the diffraction limit", 0.3);
+draw(good.dots, 1.4);
+wait(0.6);
+
+say(cap, "the circle is Airy: shrink the blur to it and you're diffraction-limited", 0.3);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/LKyW73JMIWU" title="Coma & Astigmatism — Why Off-Axis Is the Hard Test — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="vectors-fields--coordinates"><a class="header" href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a></h1>
@@ -6061,6 +7013,95 @@ wait(0.8);
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="generative--recursive"><a class="header" href="#generative--recursive">Generative &amp; recursive</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="gun-shot"><a class="header" href="#gun-shot">gun-shot</a></h2>
+<p>A pure-imagination SCENE — no physics kit, just storytelling: a gun fires, the camera
+flies along with the bullet (<code>cam</code>/<code>zoom</code>), a block drops in out of nowhere, and BOOM —
+<code>flash</code>/<code>shake</code>/<code>pulse</code> + a <code>for</code>-loop spark burst. manic as a movie language.</p>
+<pre><code class="language-manic">// ============================================================================
+//  gun-shot.manic  —  a scene, not a lesson. No physics kit, just imagination.
+// ----------------------------------------------------------------------------
+//  A gun fires · the camera races along with the bullet · a block drops in out
+//  of nowhere · BOOM. Built entirely from base manic — shapes, `move`, `cam`/
+//  `zoom` to fly the camera, `flash`/`shake`/`pulse`, and a `for`-loop spark
+//  burst. This is manic as a storytelling language: dream a scene, write it.
+// ============================================================================
+
+title("Gun Shot");
+canvas("16:9");
+
+// ---- the world (wide — the camera pans across it) ----
+line(ground, (-300, 560), (2400, 560)); color(ground, dim); stroke(ground, 4);
+
+// the gun: barrel + body + grip
+rect(barrel, (250, 470), 96, 22); color(barrel, dim); filled(barrel);
+rect(body, (206, 478), 52, 42); color(body, dim); filled(body);
+polygon(grip, (186, 500), (220, 500), (212, 554), (180, 550), dim);
+
+// the bullet at the muzzle, and a muzzle flash — both waiting
+circle(bullet, (302, 470), 12); color(bullet, gold); glow(bullet, 2.2); hidden(bullet);
+circle(mflash, (312, 470), 30); color(mflash, gold); glow(mflash, 3.5); hidden(mflash);
+
+// the block — waiting above, off-screen, to drop in ahead
+rect(block, (1750, 250), 130, 130); color(block, cyan); filled(block); glow(block, 1.4); hidden(block);
+text(boom, (1750, 320), "BOOM!"); size(boom, 96); color(boom, magenta); bold(boom); glow(boom, 2.5); display(boom); hidden(boom);
+
+// a ring of impact sparks around the block (revealed at the hit)
+for i in 0..14 {
+  let ang = i * tau / 14.0;
+  line(spark{i}, (1700, 470), (1700 + 160*cos(ang), 470 + 160*sin(ang)));
+  color(spark{i}, gold); stroke(spark{i}, 5); glow(spark{i}, 2); untraced(spark{i}); tag(spark{i}, sparks);
+}
+
+// a caption pinned to the screen (rides along through the camera move)
+text(cap, (cx, h - 56), ""); color(cap, fg); size(cap, 26); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+cam((440, 380), 0.4, smooth);          // frame the gun
+say(cap, "steady…", 0.4);
+wait(0.6);
+
+// FIRE!
+say(cap, "FIRE!", 0.2);
+par { show(mflash, 0.06); pulse(mflash); show(bullet, 0.08); }
+fade(mflash, 0.3);
+
+// the bullet races off — the camera flies with it — and mid-flight, out of
+// nowhere, a block slams down into its path
+par {
+  move(bullet, (1690, 470), 2.6, smooth);
+  cam((1560, 380), 2.6, smooth);
+  zoom(1.15, 2.6, smooth);
+  seq {
+    wait(1.5);
+    say(cap, "…wait — what's THAT?!", 0.3);
+    show(block, 0.1);
+    move(block, (1750, 470), 0.4, bounce);
+  }
+}
+
+// BOOM — impact
+say(cap, "BOOM!", 0.15);
+par {
+  flash(block, gold);
+  shake(block, 0.5);
+  zoom(1.5, 0.15);
+  show(boom, 0.12); pulse(boom);
+  draw(sparks, 0.35);
+}
+wait(0.5);
+
+// settle — pull back
+par {
+  fade(sparks, 0.5);
+  fade(boom, 0.6);
+  fade(bullet, 0.4);
+  zoom(1.0, 0.9, smooth);
+}
+say(cap, "…scene.", 0.4);
+wait(0.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ffHtyPvtCos" title="Gun Shot — a Cinematic Scene in manic (No Physics, Just Imagination)" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="fractal_tree"><a class="header" href="#fractal_tree">fractal_tree</a></h2>
 <p>One recursive <code>def</code>, drawn to depth 12.</p>
 <pre><code class="language-manic">// Fractal Tree — a recursive `def` macro draws a branching tree. Each branch
@@ -6220,6 +7261,468 @@ pulse(ans);
 wait(1.6);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/pzRBP1qbncc" title="A Tiny Animated Scene — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="walk"><a class="header" href="#walk">walk</a></h2>
+<p>An articulated stick figure walking down a road — legs swing, arms counter-swing, the body
+bobs — built purely from the language layer (<code>let</code> + <code>for</code> + trig), no character rig.</p>
+<pre><code class="language-manic">title("A Generic Figure Walking Down the Road");
+canvas("16:9");
+
+let groundY = cy + 160;
+let startX = cx - 420;
+let stepDist = 15;
+let swingAmp = 26;
+let bobAmp = 10;
+
+// ================= road =================
+
+rect(road, (0, groundY), w, h - groundY);
+color(road, dim);
+filled(road);
+untraced(road);
+
+line(roadLine, (0, groundY + 40), (w, groundY + 40));
+color(roadLine, panel);
+stroke(roadLine, 2);
+untraced(roadLine);
+
+for i in 0..12 {
+  rect(dash{i}, (i*120 - 40, groundY + 36), 50, 8);
+  color(dash{i}, fg);
+  filled(dash{i});
+  untraced(dash{i});
+}
+
+// ================= stick figure as points + reflowing segments =================
+
+point(neck, (startX, groundY - 118));
+point(hip, (startX, groundY - 10));
+point(handL, (startX - 30, groundY - 40));
+point(handR, (startX + 30, groundY - 40));
+point(footL, (startX - 30, groundY + 100));
+point(footR, (startX + 30, groundY + 100));
+
+hidden(neck);
+hidden(hip);
+hidden(handL);
+hidden(handR);
+hidden(footL);
+hidden(footR);
+
+circle(head, (startX, groundY - 140), 22);
+color(head, fg);
+outlined(head);
+stroke(head, 3);
+untraced(head);
+
+segment(spine, neck, hip);
+segment(armL, neck, handL);
+segment(armR, neck, handR);
+segment(legL, hip, footL);
+segment(legR, hip, footR);
+
+color(spine, fg);
+color(armL, cyan);
+color(armR, cyan);
+color(legL, gold);
+color(legR, gold);
+stroke(spine, 4);
+stroke(armL, 4);
+stroke(armR, 4);
+stroke(legL, 4);
+stroke(legR, 4);
+untraced(spine);
+untraced(armL);
+untraced(armR);
+untraced(legL);
+untraced(legR);
+
+// ================= text =================
+
+text(head_label, (cx, 55), "A Generic Figure Walking Down the Road");
+color(head_label, cyan);
+hidden(head_label);
+
+text(caption, (cx, h - 30), "");
+color(caption, dim);
+hidden(caption);
+
+// ================= script =================
+
+show(head_label, 0.6);
+wait(0.3);
+
+par {
+  draw(road, 0.5);
+  draw(roadLine, 0.5);
+  stagger(0.03) {
+    for i in 0..12 {
+      draw(dash{i}, 0.1);
+    }
+  }
+}
+
+par {
+  show(neck, 0.01); show(hip, 0.01);
+  show(handL, 0.01); show(handR, 0.01);
+  show(footL, 0.01); show(footR, 0.01);
+  draw(head, 0.4);
+  draw(spine, 0.3);
+  draw(armL, 0.3);
+  draw(armR, 0.3);
+  draw(legL, 0.3);
+  draw(legR, 0.3);
+}
+wait(0.3);
+
+show(caption, 0.4);
+say(caption, "Camera pulls back to see the whole road");
+par {
+  cam((cx, cy), 1.0, smooth);
+  zoom(0.85, 1.0, smooth);
+}
+wait(0.3);
+
+// --- walk cycle: phase steps by 90 deg so sin actually alternates ---
+
+for i in 0..28 {
+  let baseX = startX + i*stepDist;
+  let phase = i*90;
+  let swing = swingAmp*sin(phase*pi/180);
+  let legLift = bobAmp*abs(sin(phase*pi/180));
+
+  par {
+    move(neck, (baseX, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip, (baseX, groundY - 10), 0.15, smooth);
+    move(handL, (baseX - swing, groundY - 40), 0.15, smooth);
+    move(handR, (baseX + swing, groundY - 40), 0.15, smooth);
+    move(footL, (baseX + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR, (baseX - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head, (baseX, groundY - 140 - legLift*0.4), 0.15, smooth);
+  }
+}
+
+wait(0.2);
+say(caption, "Camera zooms in as the figure gets close");
+par {
+  cam((startX + 420, groundY - 80), 1.4, smooth);
+  zoom(2.2, 1.4, smooth);
+}
+wait(0.4);
+
+say(caption, "A close-up look, then pulling back out");
+par {
+  cam((cx, cy), 1.2, smooth);
+  zoom(1, 1.2, smooth);
+}
+wait(0.4);
+
+show(caption, 0.3);
+say(caption, "A generic stick figure walking -- no specific person depicted");
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/WCtQngDtvEM" title="A Figure Walking Down the Road — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="two_person_walk"><a class="header" href="#two_person_walk">two_person_walk</a></h2>
+<p>Two figures walk toward each other, MEET in the middle, shake hands, then continue past —
+a little choreographed scene from loops and arithmetic alone (the language layer as animation).</p>
+<pre><code class="language-manic">title("Two Figures Meet, Shake Hands, and Continue Walking");
+canvas("16:9");
+
+let groundY = cy + 160;
+let startX1 = cx - 420;
+let startX2 = cx + 420;
+let stepDist = 15;
+let swingAmp = 26;
+let bobAmp = 10;
+let meetX = cx;
+let endX1 = cx + 420;
+let endX2 = cx - 420;
+
+// ================= road =================
+
+rect(road, (0, groundY), w, h - groundY);
+color(road, dim);
+filled(road);
+untraced(road);
+
+line(roadLine, (0, groundY + 40), (w, groundY + 40));
+color(roadLine, panel);
+stroke(roadLine, 2);
+untraced(roadLine);
+
+for i in 0..14 {
+  rect(dash{i}, (i*120 - 40, groundY + 36), 50, 8);
+  color(dash{i}, fg);
+  filled(dash{i});
+  untraced(dash{i});
+}
+
+// ================= figure 1 (walks left -&gt; right) =================
+
+point(neck1, (startX1, groundY - 118));
+point(hip1, (startX1, groundY - 10));
+point(handL1, (startX1 - 30, groundY - 40));
+point(handR1, (startX1 + 30, groundY - 40));
+point(footL1, (startX1 - 30, groundY + 100));
+point(footR1, (startX1 + 30, groundY + 100));
+
+hidden(neck1); hidden(hip1);
+hidden(handL1); hidden(handR1);
+hidden(footL1); hidden(footR1);
+
+circle(head1, (startX1, groundY - 140), 22);
+color(head1, fg);
+outlined(head1);
+stroke(head1, 3);
+untraced(head1);
+
+segment(spine1, neck1, hip1);
+segment(armL1, neck1, handL1);
+segment(armR1, neck1, handR1);
+segment(legL1, hip1, footL1);
+segment(legR1, hip1, footR1);
+
+color(spine1, fg);
+color(armL1, cyan);
+color(armR1, cyan);
+color(legL1, gold);
+color(legR1, gold);
+stroke(spine1, 4); stroke(armL1, 4); stroke(armR1, 4);
+stroke(legL1, 4); stroke(legR1, 4);
+untraced(spine1); untraced(armL1); untraced(armR1);
+untraced(legL1); untraced(legR1);
+
+// ================= figure 2 (walks right -&gt; left, mirrored) =================
+
+point(neck2, (startX2, groundY - 118));
+point(hip2, (startX2, groundY - 10));
+point(handL2, (startX2 - 30, groundY - 40));
+point(handR2, (startX2 + 30, groundY - 40));
+point(footL2, (startX2 - 30, groundY + 100));
+point(footR2, (startX2 + 30, groundY + 100));
+
+hidden(neck2); hidden(hip2);
+hidden(handL2); hidden(handR2);
+hidden(footL2); hidden(footR2);
+
+circle(head2, (startX2, groundY - 140), 22);
+color(head2, fg);
+outlined(head2);
+stroke(head2, 3);
+untraced(head2);
+
+segment(spine2, neck2, hip2);
+segment(armL2, neck2, handL2);
+segment(armR2, neck2, handR2);
+segment(legL2, hip2, footL2);
+segment(legR2, hip2, footR2);
+
+color(spine2, fg);
+color(armL2, magenta);
+color(armR2, magenta);
+color(legL2, lime);
+color(legR2, lime);
+stroke(spine2, 4); stroke(armL2, 4); stroke(armR2, 4);
+stroke(legL2, 4); stroke(legR2, 4);
+untraced(spine2); untraced(armL2); untraced(armR2);
+untraced(legL2); untraced(legR2);
+
+// ================= text =================
+
+text(head_label, (cx, 55), "Two Figures Meet, Shake Hands, and Continue Walking");
+color(head_label, cyan);
+hidden(head_label);
+
+text(caption, (cx, h - 30), "");
+color(caption, dim);
+hidden(caption);
+
+// ================= script =================
+
+show(head_label, 0.6);
+wait(0.3);
+
+par {
+  draw(road, 0.5);
+  draw(roadLine, 0.5);
+  stagger(0.03) {
+    for i in 0..14 {
+      draw(dash{i}, 0.1);
+    }
+  }
+}
+
+par {
+  show(neck1, 0.01); show(hip1, 0.01);
+  show(handL1, 0.01); show(handR1, 0.01);
+  show(footL1, 0.01); show(footR1, 0.01);
+  draw(head1, 0.4);
+  draw(spine1, 0.3);
+  draw(armL1, 0.3);
+  draw(armR1, 0.3);
+  draw(legL1, 0.3);
+  draw(legR1, 0.3);
+
+  show(neck2, 0.01); show(hip2, 0.01);
+  show(handL2, 0.01); show(handR2, 0.01);
+  show(footL2, 0.01); show(footR2, 0.01);
+  draw(head2, 0.4);
+  draw(spine2, 0.3);
+  draw(armL2, 0.3);
+  draw(armR2, 0.3);
+  draw(legL2, 0.3);
+  draw(legR2, 0.3);
+}
+wait(0.3);
+
+show(caption, 0.4);
+say(caption, "Camera pulls back to see the whole road");
+par {
+  cam((cx, cy), 1.0, smooth);
+  zoom(0.85, 1.0, smooth);
+}
+wait(0.3);
+
+// --- walk cycle: both figures walk toward each other, meeting at meetX ---
+
+for i in 0..24 {
+  let baseX1 = startX1 + i*stepDist;
+  let baseX2 = startX2 - i*stepDist;
+  let phase = i*90;
+  let swing = swingAmp*sin(phase*pi/180);
+  let legLift = bobAmp*abs(sin(phase*pi/180));
+
+  par {
+    move(neck1, (baseX1, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip1, (baseX1, groundY - 10), 0.15, smooth);
+    move(handL1, (baseX1 - swing, groundY - 40), 0.15, smooth);
+    move(handR1, (baseX1 + swing, groundY - 40), 0.15, smooth);
+    move(footL1, (baseX1 + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR1, (baseX1 - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head1, (baseX1, groundY - 140 - legLift*0.4), 0.15, smooth);
+
+    move(neck2, (baseX2, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip2, (baseX2, groundY - 10), 0.15, smooth);
+    move(handL2, (baseX2 - swing, groundY - 40), 0.15, smooth);
+    move(handR2, (baseX2 + swing, groundY - 40), 0.15, smooth);
+    move(footL2, (baseX2 + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR2, (baseX2 - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head2, (baseX2, groundY - 140 - legLift*0.4), 0.15, smooth);
+  }
+}
+
+wait(0.2);
+say(caption, "They arrive face to face");
+par {
+  cam((meetX, groundY - 80), 1.2, smooth);
+  zoom(1.8, 1.2, smooth);
+}
+
+// settle into a standing pose facing each other
+par {
+  move(neck1, (meetX - 40, groundY - 118), 0.3, smooth);
+  move(hip1, (meetX - 40, groundY - 10), 0.3, smooth);
+  move(footL1, (meetX - 60, groundY + 100), 0.3, smooth);
+  move(footR1, (meetX - 20, groundY + 100), 0.3, smooth);
+  move(head1, (meetX - 40, groundY - 140), 0.3, smooth);
+  move(handL1, (meetX - 70, groundY - 40), 0.3, smooth);
+
+  move(neck2, (meetX + 40, groundY - 118), 0.3, smooth);
+  move(hip2, (meetX + 40, groundY - 10), 0.3, smooth);
+  move(footL2, (meetX + 60, groundY + 100), 0.3, smooth);
+  move(footR2, (meetX + 20, groundY + 100), 0.3, smooth);
+  move(head2, (meetX + 40, groundY - 140), 0.3, smooth);
+  move(handR2, (meetX + 70, groundY - 40), 0.3, smooth);
+}
+wait(0.3);
+
+say(caption, "Reaching out to shake hands");
+
+par {
+  move(handR1, (meetX - 5, groundY - 55), 0.4, smooth);
+  move(handL2, (meetX + 5, groundY - 55), 0.4, smooth);
+}
+wait(0.2);
+
+par {
+  move(handR1, (meetX, groundY - 55), 0.25, smooth);
+  move(handL2, (meetX, groundY - 55), 0.25, smooth);
+}
+wait(0.2);
+
+say(caption, "Shaking hands");
+
+for i in 0..4 {
+  par {
+    move(handR1, (meetX, groundY - 65), 0.12, smooth);
+    move(handL2, (meetX, groundY - 65), 0.12, smooth);
+  }
+  par {
+    move(handR1, (meetX, groundY - 48), 0.12, smooth);
+    move(handL2, (meetX, groundY - 48), 0.12, smooth);
+  }
+}
+
+par {
+  move(handR1, (meetX, groundY - 55), 0.15, smooth);
+  move(handL2, (meetX, groundY - 55), 0.15, smooth);
+}
+wait(0.3);
+
+flash(handR1, gold);
+flash(handL2, gold);
+wait(0.3);
+
+say(caption, "Letting go and continuing on their separate ways");
+par {
+  cam((cx, cy), 1.2, smooth);
+  zoom(1, 1.2, smooth);
+}
+
+// release hands back to normal swing position before resuming walk
+par {
+  move(handR1, (meetX - 40 + 30, groundY - 40), 0.25, smooth);
+  move(handL2, (meetX + 40 - 30, groundY - 40), 0.25, smooth);
+}
+wait(0.2);
+
+// --- resume walk cycle: figure1 continues toward endX1, figure2 toward endX2 ---
+
+for i in 0..24 {
+  let baseX1 = (meetX - 40) + i*stepDist;
+  let baseX2 = (meetX + 40) - i*stepDist;
+  let phase = i*90;
+  let swing = swingAmp*sin(phase*pi/180);
+  let legLift = bobAmp*abs(sin(phase*pi/180));
+
+  par {
+    move(neck1, (baseX1, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip1, (baseX1, groundY - 10), 0.15, smooth);
+    move(handL1, (baseX1 - swing, groundY - 40), 0.15, smooth);
+    move(handR1, (baseX1 + swing, groundY - 40), 0.15, smooth);
+    move(footL1, (baseX1 + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR1, (baseX1 - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head1, (baseX1, groundY - 140 - legLift*0.4), 0.15, smooth);
+
+    move(neck2, (baseX2, groundY - 118 - legLift*0.4), 0.15, smooth);
+    move(hip2, (baseX2, groundY - 10), 0.15, smooth);
+    move(handL2, (baseX2 - swing, groundY - 40), 0.15, smooth);
+    move(handR2, (baseX2 + swing, groundY - 40), 0.15, smooth);
+    move(footL2, (baseX2 + swing, groundY + 100 - legLift), 0.15, smooth);
+    move(footR2, (baseX2 - swing, groundY + 100 - legLift), 0.15, smooth);
+    move(head2, (baseX2, groundY - 140 - legLift*0.4), 0.15, smooth);
+  }
+}
+
+wait(0.3);
+say(caption, "Two generic stick figures -- no specific persons depicted");
+par {
+  cam((cx, cy), 1.0, smooth);
+  zoom(0.85, 1.0, smooth);
+}
+wait(0.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VE7PPnPAufE" title="Two Figures Meet, Shake Hands & Walk On — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="equal_cuts"><a class="header" href="#equal_cuts">equal_cuts</a></h2>
 <p>A circle halved again and again (pizza cuts).</p>

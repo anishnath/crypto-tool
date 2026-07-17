@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-89925e2c.js";
+            window.path_to_searchindex_js = "searchindex-69371a19.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-d969a067.js"></script>
+        <script src="toc-5e06f13d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -241,13 +241,33 @@ doublependulum(dp, (400, 240));  par { run(dp, 12); draw(dp.path, 12); }  // cha
 <code>springincline</code> · <code>bungee</code> · <code>resonance</code> · <code>doublespring</code> · <code>seriesparallel</code> ·
 <code>carsuspension</code>. Mechanics: <code>robotarm</code> · <code>piston</code> · <code>molecule</code> · <code>ramp</code> (with a <code>forces(id)</code>
 free-body diagram) · <code>inclinepulley</code> · <code>doubleincline</code> · <code>inclinebumper</code> ·
-<code>springchain</code> · <code>looptrack</code> (a curved-track loop-the-loop) · <code>dropmass</code> · <code>raft</code> ·
+<code>springchain</code> · <code>looptrack</code> (a curved-track loop-the-loop) · <code>stringwave</code> (a wave on a string) · <code>newtonscradle</code> · <code>collideblocks</code> · <code>bulletblock</code> (event-driven collisions) · <code>dropmass</code> · <code>raft</code> ·
 <code>brachistochrone</code>. Pulleys: <code>pulley</code> (Atwood) ·
 <code>pulleyscale</code> (reads the tension) · <code>blocktackle</code> (N-strand block &amp; tackle) ·
 <code>compoundpulley</code> (fixed + movable, masses A/B/C).</p>
 <p>Because a sim’s parts are ordinary entities, any base look composes over them —
 e.g. <code>template("paper")</code> + a hatched <code>support</code> turns a pulley or spring into a
 textbook figure (see <a href="elevating.html">Elevating a scene</a> and the <code>*-paper</code> examples).</p>
+<h2 id="optics"><a class="header" href="#optics">optics</a></h2>
+<p>Light as geometry, with the <strong>real physics underneath</strong> — Snell’s law, Sellmeier
+dispersion, and full spherical/aspheric ray tracing — so the bending, the colours
+and the focus are earned, not painted. Each builtin is static geometry that
+animates by a <strong>parameter sweep</strong> (<code>run(id)</code>) or by sketching its rays on
+(<code>draw(id.rays)</code>).</p>
+<pre><code class="language-manic">refract(r, (640, 380), 1.0, 1.52);   run(r, 7);   // Snell's law; run sweeps the angle (→ TIR)
+lens(l, (620, 360));                 run(l, 7);   // parallel rays → a focal point
+prism(p, (560, 400), "sf11");        run(p, 7);   // white light → a real rainbow (dispersion)
+</code></pre>
+<p>Foundations: <code>refract</code> (Snell + total internal reflection) · <code>lens</code> (a converging
+thin lens). Dispersion: <code>prism</code> (white → spectrum) · <code>achromat</code> (chromatic
+aberration → the doublet fix). Real lenses: <code>lenssystem(id, [center], [preset], [object])</code> traces a <strong>prescription</strong> through its actual spherical/aspheric
+surfaces — pick a design by name (<code>"singlet"</code>, <code>"plano-convex"</code>, <code>"aspheric"</code>,
+<code>"doublet"</code>, <code>"triplet"</code>) <strong>or</strong> write your own surface table
+<code>"radius thickness glass [conic] [aperture] | …"</code>; an optional finite <code>object</code>
+distance images a nearby point. Analysis: <code>rayfan</code> (the ray-fan aberration plot) ·
+<code>spotdiagram</code> (the on-axis spot at focus) · <code>fieldspot(id, [center], [preset], [field])</code> (the <strong>off-axis</strong> spot — a coma comet / astigmatic blur, with an
+Airy-disk diffraction-limit overlay). A rainbow glows on the dark bench; the
+geometric ray diagrams also take <code>template("paper")</code> for a textbook look.</p>
 <hr>
 <p>Each kit has a full reference at <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>, and you can see them
 all in motion in the <a href="examples.html">Examples gallery</a>.</p>

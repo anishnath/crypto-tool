@@ -1,0 +1,32 @@
+// ============================================================================
+//  achromat.manic  —  chromatic aberration, and the fix (real optics)
+// ----------------------------------------------------------------------------
+//  The optics kit's capstone. A single lens can't focus all colours to one
+//  point: it bends blue more than red (its index is higher for blue — real
+//  dispersion), so blue focuses NEARER and red FARTHER. `run` then sweeps in the
+//  achromatic doublet (crown + flint) and the two foci slide back together to a
+//  single sharp point — the trick every camera and telescope lens uses.
+// ============================================================================
+
+title("The Achromatic Doublet");
+canvas("16:9");
+
+achromat(ac, (540, 360));
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one simple lens — but the colours don't agree…", 0.5);
+wait(0.6);
+
+par {
+  run(ac, 7);
+  seq {
+    say(cap, "blue focuses NEARER, red FARTHER — chromatic aberration", 0.3);
+    wait(2.6);
+    say(cap, "now add a flint element behind it — the achromatic doublet", 0.3);
+    wait(2.2);
+    say(cap, "…and the colours snap back to ONE sharp focus", 0.3);
+  }
+}
+wait(1.2);

@@ -1,0 +1,36 @@
+// ============================================================================
+//  lens-paper.manic  —  a converging lens as a textbook figure (annotated)
+// ----------------------------------------------------------------------------
+//  The `lens` sim inked on paper, narrated by a TYPEWRITER caption (a different
+//  elevation lens from refraction-paper's camera), with labelled parallel rays
+//  and focal point while `run` sweeps the focal length. Ideal thin lens.
+// ============================================================================
+
+title("Converging Lens");
+canvas("16:9");
+template("paper");
+
+lens(l, (640, 360));
+
+// ---- textbook annotations (screen-fixed) ----
+text(inlab, (150, 250), "parallel rays"); color(inlab, dim); size(inlab, 22); sticky(inlab);
+text(flab,  (980, 300), "focal point F"); color(flab, dim); size(flab, 22); sticky(flab);
+arrow(farr, (980, 320), (900, 356));     color(farr, dim); sticky(farr);
+
+// a typewriter caption performs the narration (untraced → type reveals it)
+text(cap, (cx, h - 48), "a lens bends parallel light to a single point"); color(cap, fg); size(cap, 26); bold(cap); untraced(cap); sticky(cap);
+
+// ================= THE SCENE =================
+type(cap, 1.6);                    // type the line out
+wait(0.4);
+
+par {
+  run(l, 8);
+  seq {
+    wait(0.6);
+    say(cap, "every ray meets at the focus, F", 0.3);
+    wait(2.8);
+    say(cap, "a shorter focal length is a stronger lens — F slides in", 0.3);
+  }
+}
+wait(1.2);

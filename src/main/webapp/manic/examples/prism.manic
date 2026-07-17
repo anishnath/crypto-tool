@@ -1,0 +1,32 @@
+// ============================================================================
+//  prism.manic  —  white light into a rainbow (real dispersion)
+// ----------------------------------------------------------------------------
+//  The `optics` kit's `prism`: white light enters a triangular prism and splits
+//  into a spectrum. Each colour is traced through both faces with its OWN
+//  refractive index (real Sellmeier dispersion) — blue bends more than red
+//  because glass genuinely slows blue more. `run` sweeps the incidence angle,
+//  so the fan swings and its spread widens.
+// ============================================================================
+
+title("Prism — White Light Splits");
+canvas("16:9");
+
+prism(p, (560, 400), "sf11");   // dense flint — a wide, vivid spectrum
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one beam of white light, into a prism…", 0.5);
+wait(0.5);
+
+par {
+  run(p, 7);
+  seq {
+    say(cap, "it comes out as a RAINBOW — the colours were always there", 0.3);
+    wait(2.6);
+    say(cap, "blue bends more than red: glass really does slow blue more", 0.3);
+    wait(2.4);
+    say(cap, "steeper in → the spectrum fans WIDER (real Sellmeier dispersion)", 0.3);
+  }
+}
+wait(1.2);

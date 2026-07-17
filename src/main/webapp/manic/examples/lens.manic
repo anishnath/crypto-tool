@@ -1,0 +1,31 @@
+// ============================================================================
+//  lens.manic  —  a converging lens, and where it focuses (real optics)
+// ----------------------------------------------------------------------------
+//  The `optics` kit's `lens` builtin: a beam of parallel rays is bent by a
+//  converging lens to meet at the focal point F. `run` SWEEPS the focal length,
+//  so you watch the focus slide in toward the lens — a shorter focal length is
+//  a stronger lens. Ideal thin lens (every parallel ray passes through F).
+// ============================================================================
+
+title("Converging Lens");
+canvas("16:9");
+
+lens(l, (620, 360));
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "parallel light meets a converging lens…", 0.5);
+wait(0.5);
+
+par {
+  run(l, 7);
+  seq {
+    say(cap, "every ray bends to the SAME point — the focus, F", 0.3);
+    wait(2.6);
+    say(cap, "shorter focal length = a stronger lens → the focus slides IN", 0.3);
+    wait(2.4);
+    say(cap, "past F the rays cross and spread apart again", 0.3);
+  }
+}
+wait(1.2);

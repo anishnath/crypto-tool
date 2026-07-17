@@ -1,0 +1,45 @@
+// ============================================================================
+//  collide-blocks-annotated.manic  —  conservation of momentum, the MANIC way
+// ----------------------------------------------------------------------------
+//  Not a 1:1 port of the lab sim — a guided lesson that ELEVATES it: the live Σp
+//  readout, the KE↔spring-PE energy view, staged callouts, and honest narration
+//  (with a wall-spring, Σp is conserved AT each collision — Newton's 3rd law — not
+//  constant, since the spring is an external force). All base manic over the sim.
+// ============================================================================
+
+title("Conservation of Momentum");
+canvas("16:9");
+
+// the sim's Σp readout sits at the very top (y≈46) — the star of the scene
+collideblocks(cb, (cx, 460), 3, 1, 1);
+hidden(cb);                                   // the bare id hides every part + the readout + energy view
+energygraph(cb, (1055, 250), 84);             // KE ↔ spring PE (tagged cb, revealed by show(cb))
+
+text(hdr, (cx, 104), "Conservation of Momentum"); size(hdr, 30); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+text(sub, (cx, 140), "block 1 on a spring · block 2 slides in · watch Σp through the collision"); size(sub, 17); color(sub, dim); display(sub); hidden(sub);
+
+// callouts
+text(csp, (360, 330), "spring holds block 1 to the wall"); size(csp, 16); color(csp, lime); display(csp); hidden(csp);
+arrow(asp, (392, 344), (418, 424)); color(asp, dim); stroke(asp, 2); hidden(asp);
+text(cb1, (470, 300), "block 1 · m₁ = 3 kg"); size(cb1, 16); color(cb1, cyan); display(cb1); hidden(cb1);
+text(cb2, (800, 300), "block 2 · m₂ = 1 kg →"); size(cb2, 16); color(cb2, magenta); display(cb2); hidden(cb2);
+
+text(cap, (cx, h - 38), ""); size(cap, 19); color(cap, fg); display(cap);
+
+// ============================== SCRIPT ==============================
+show(hdr, 0.5); show(sub, 0.4);
+wait(0.3);
+show(cb, 0.6);                                 // sim + Σp readout + energy view
+show(csp, 0.3); draw(asp, 0.3); show(cb1, 0.3); show(cb2, 0.3);
+wait(0.4);
+
+say(cap, "block 2 slides toward block 1, which is held by its spring", 0.4);
+wait(0.5);
+say(cap, "they collide — each pushes the other equal and opposite (Newton's 3rd law)", 0.4);
+flash(cb.mom, gold);
+wait(0.5);
+say(cap, "so Σp doesn't jump at the hit — the spring only shifts it BETWEEN collisions", 0.4);
+wait(0.5);
+say(cap, "energy sloshes between motion and the spring, but the total stays put — elastic", 0.4);
+
+run(cb, 12);

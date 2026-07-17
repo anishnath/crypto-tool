@@ -1,0 +1,10 @@
+// newtons-cradle.manic — Newton's cradle: pull N balls, N swing out. An EVENT-
+// DRIVEN sim — free-flight pendulums between elastic collisions resolved by the
+// shared `collide_1d` impulse. `newtonscradle(id,[center],[balls],[pulled])`.
+title("Newton's cradle — momentum passes through");
+canvas("16:9");
+text(hdr, (cx, 70), "Pull one, one swings out — momentum and energy pass straight through"); size(hdr, 22); color(hdr, cyan); bold(hdr); display(hdr);
+newtonscradle(nc, (cx, 170), 5, 1);
+energygraph(nc, (1040, 470), 90);
+text(cap, (cx, h - 40), "five equal balls, elastic collisions (e = 1): the chain conserves momentum and energy"); size(cap, 15); color(cap, dim); display(cap);
+run(nc, 8);

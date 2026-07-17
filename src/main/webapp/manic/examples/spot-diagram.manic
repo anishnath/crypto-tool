@@ -1,0 +1,32 @@
+// ============================================================================
+//  spot-diagram.manic  —  a blur vs a point (lens quality, real optics)
+// ----------------------------------------------------------------------------
+//  Where does a bundle of rays actually LAND at focus? `spotdiagram` traces the
+//  real spherical surfaces and plots the hits. A fast single lens smears into a
+//  disc — the circle of least confusion from SPHERICAL ABERRATION — while a
+//  cemented doublet collapses to a point. The green dot is the ideal (point)
+//  focus; the RMS read-out is the blur radius. Both drawn to the SAME scale.
+// ============================================================================
+
+title("Spot Diagram — Blur vs Point");
+canvas("16:9");
+
+spotdiagram(bad, (370, 380), "singlet");
+spotdiagram(good, (910, 380), "doublet");
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "where do the rays actually land at focus?", 0.5);
+wait(0.4);
+
+say(cap, "a fast SINGLE lens → a blur disc (spherical aberration)", 0.3);
+draw(bad.dots, 1.8);
+wait(0.6);
+
+say(cap, "a cemented DOUBLET → very nearly a point", 0.3);
+draw(good.dots, 1.4);
+wait(0.6);
+
+say(cap, "same rays, same scale — RMS 4 px collapses to under 1 px", 0.3);
+wait(1.2);

@@ -1,0 +1,82 @@
+// ============================================================================
+//  gun-shot.manic  —  a scene, not a lesson. No physics kit, just imagination.
+// ----------------------------------------------------------------------------
+//  A gun fires · the camera races along with the bullet · a block drops in out
+//  of nowhere · BOOM. Built entirely from base manic — shapes, `move`, `cam`/
+//  `zoom` to fly the camera, `flash`/`shake`/`pulse`, and a `for`-loop spark
+//  burst. This is manic as a storytelling language: dream a scene, write it.
+// ============================================================================
+
+title("Gun Shot");
+canvas("16:9");
+
+// ---- the world (wide — the camera pans across it) ----
+line(ground, (-300, 560), (2400, 560)); color(ground, dim); stroke(ground, 4);
+
+// the gun: barrel + body + grip
+rect(barrel, (250, 470), 96, 22); color(barrel, dim); filled(barrel);
+rect(body, (206, 478), 52, 42); color(body, dim); filled(body);
+polygon(grip, (186, 500), (220, 500), (212, 554), (180, 550), dim);
+
+// the bullet at the muzzle, and a muzzle flash — both waiting
+circle(bullet, (302, 470), 12); color(bullet, gold); glow(bullet, 2.2); hidden(bullet);
+circle(mflash, (312, 470), 30); color(mflash, gold); glow(mflash, 3.5); hidden(mflash);
+
+// the block — waiting above, off-screen, to drop in ahead
+rect(block, (1750, 250), 130, 130); color(block, cyan); filled(block); glow(block, 1.4); hidden(block);
+text(boom, (1750, 320), "BOOM!"); size(boom, 96); color(boom, magenta); bold(boom); glow(boom, 2.5); display(boom); hidden(boom);
+
+// a ring of impact sparks around the block (revealed at the hit)
+for i in 0..14 {
+  let ang = i * tau / 14.0;
+  line(spark{i}, (1700, 470), (1700 + 160*cos(ang), 470 + 160*sin(ang)));
+  color(spark{i}, gold); stroke(spark{i}, 5); glow(spark{i}, 2); untraced(spark{i}); tag(spark{i}, sparks);
+}
+
+// a caption pinned to the screen (rides along through the camera move)
+text(cap, (cx, h - 56), ""); color(cap, fg); size(cap, 26); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+cam((440, 380), 0.4, smooth);          // frame the gun
+say(cap, "steady…", 0.4);
+wait(0.6);
+
+// FIRE!
+say(cap, "FIRE!", 0.2);
+par { show(mflash, 0.06); pulse(mflash); show(bullet, 0.08); }
+fade(mflash, 0.3);
+
+// the bullet races off — the camera flies with it — and mid-flight, out of
+// nowhere, a block slams down into its path
+par {
+  move(bullet, (1690, 470), 2.6, smooth);
+  cam((1560, 380), 2.6, smooth);
+  zoom(1.15, 2.6, smooth);
+  seq {
+    wait(1.5);
+    say(cap, "…wait — what's THAT?!", 0.3);
+    show(block, 0.1);
+    move(block, (1750, 470), 0.4, bounce);
+  }
+}
+
+// BOOM — impact
+say(cap, "BOOM!", 0.15);
+par {
+  flash(block, gold);
+  shake(block, 0.5);
+  zoom(1.5, 0.15);
+  show(boom, 0.12); pulse(boom);
+  draw(sparks, 0.35);
+}
+wait(0.5);
+
+// settle — pull back
+par {
+  fade(sparks, 0.5);
+  fade(boom, 0.6);
+  fade(bullet, 0.4);
+  zoom(1.0, 0.9, smooth);
+}
+say(cap, "…scene.", 0.4);
+wait(0.8);

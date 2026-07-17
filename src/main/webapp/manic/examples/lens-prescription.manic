@@ -1,0 +1,33 @@
+// ============================================================================
+//  lens-prescription.manic  —  type your OWN lens (real prescription)
+// ----------------------------------------------------------------------------
+//  `lenssystem` takes a lens two ways: pick a real design by NAME
+//  ("plano-convex" / "meniscus" / "doublet" / "triplet" / …), or write a CUSTOM
+//  prescription — the lens designer's surface table — as "radius thickness glass"
+//  per surface, separated by "|". Here: a cemented crown+flint achromat, traced
+//  through its actual spherical surfaces with real glass (Sellmeier).
+// ============================================================================
+
+title("A Lens, By Prescription");
+canvas("16:9");
+
+// surface table:  radius  thickness  glass   (| between surfaces; "flat"/"air" allowed)
+lenssystem(l, (600, 380), "160 26 bk7 | -140 8 f2 | -420 0 air");
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "a lens written as a prescription: radius · thickness · glass", 0.5);
+draw(l.rays, 2.2);                  // trace the real surfaces
+wait(0.4);
+
+par {
+  run(l, 6);                        // sweep the sensor to best focus
+  seq {
+    say(cap, "crown + flint, cemented — the same table a designer would type", 0.3);
+    wait(2.6);
+    say(cap, "traced through the true spherical surfaces (real Sellmeier glass)", 0.3);
+    wait(2.0);
+  }
+}
+wait(1.0);

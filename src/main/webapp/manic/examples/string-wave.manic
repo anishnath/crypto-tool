@@ -1,0 +1,10 @@
+// string-wave.manic — a wave on a plucked string: N masses on springs, both ends
+// fixed (the discretised wave equation). `stringwave(id,[center],[width],[amp],
+// [pluck])`. Pluck it off-centre and the pulse splits into two, travels out, and
+// reflects (inverting) off the fixed ends. Drawn as a rainbow chain that wiggles.
+title("Wave on a string — pluck it and watch it travel");
+canvas("16:9");
+text(hdr, (cx, 70), "Pluck a string: the pulse splits, travels, and reflects off the ends"); size(hdr, 23); color(hdr, cyan); bold(hdr); display(hdr);
+stringwave(sw, (cx, 380), 900, 110, 0.28);
+text(cap, (cx, h - 40), "36 masses on springs, fixed at both ends — the wave equation, pre-simulated with RK4"); size(cap, 16); color(cap, dim); display(cap);
+run(sw, 10);

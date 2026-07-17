@@ -1,0 +1,807 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Optics — light as geometry - manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Write animations as plain text. A friendly, example-first guide for creators.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-69371a19.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-5e06f13d.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://8gwifi.org/manic" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="optics--light-as-geometry"><a class="header" href="#optics--light-as-geometry">Optics — light as geometry</a></h1>
+<p>Easy builtins with the <strong>real physics underneath</strong> — Snell’s law and Sellmeier dispersion — so the bending and the colours are earned, not painted. Each is static geometry that animates by a parameter sweep: call <code>run(id)</code>.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="refraction"><a class="header" href="#refraction">refraction</a></h2>
+<p>Snell’s law you can watch: a ray crossing from air into glass bends toward the normal,
+and <code>run</code> sweeps the incidence angle so the refracted ray swings — the live in/out
+read-outs are the true angles. Start in the denser medium and it shows total internal
+reflection past the critical angle (<code>refract</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  refraction.manic  —  Snell's law you can watch (real optics)
+// ----------------------------------------------------------------------------
+//  The `optics` kit's first builtin: `refract` draws a light ray meeting the
+//  boundary between two media and bending. `run` SWEEPS the incidence angle, so
+//  the refracted ray genuinely swings — and the "in"/"out" read-outs are the
+//  true Snell angles, not painted. Here: air (n=1.00) into crown glass (n=1.52).
+// ============================================================================
+
+title("Refraction — Snell's Law");
+canvas("16:9");
+
+// air on top, glass below; no fixed angle → run(r) sweeps it
+refract(r, (640, 380), 1.0, 1.52);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "a ray of light, crossing from air into glass…", 0.5);
+wait(0.5);
+
+par {
+  run(r, 7);
+  seq {
+    say(cap, "shallow angle — it barely bends", 0.3);
+    wait(2.2);
+    say(cap, "steeper in → it bends MORE, toward the normal", 0.3);
+    wait(2.6);
+    say(cap, "sin(in) / sin(out) is fixed — THAT ratio is the refractive index", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kcokHJq6plQ" title="Refraction — Snell's Law You Can Watch — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lens"><a class="header" href="#lens">lens</a></h2>
+<p>A converging lens: a parallel beam bends to meet at the focal point F (ideal thin lens —
+every ray passes through F). <code>run</code> sweeps the focal length, so the focus slides in as the
+lens gets stronger (<code>lens</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  lens.manic  —  a converging lens, and where it focuses (real optics)
+// ----------------------------------------------------------------------------
+//  The `optics` kit's `lens` builtin: a beam of parallel rays is bent by a
+//  converging lens to meet at the focal point F. `run` SWEEPS the focal length,
+//  so you watch the focus slide in toward the lens — a shorter focal length is
+//  a stronger lens. Ideal thin lens (every parallel ray passes through F).
+// ============================================================================
+
+title("Converging Lens");
+canvas("16:9");
+
+lens(l, (620, 360));
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "parallel light meets a converging lens…", 0.5);
+wait(0.5);
+
+par {
+  run(l, 7);
+  seq {
+    say(cap, "every ray bends to the SAME point — the focus, F", 0.3);
+    wait(2.6);
+    say(cap, "shorter focal length = a stronger lens → the focus slides IN", 0.3);
+    wait(2.4);
+    say(cap, "past F the rays cross and spread apart again", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kpgwBBQ-occ" title="Converging Lens — Where Light Focuses — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="prism"><a class="header" href="#prism">prism</a></h2>
+<p>White light into a prism, out as a RAINBOW — each colour traced through both faces with
+its own refractive index (real Sellmeier dispersion), so blue bends more than red because
+glass genuinely slows blue more. <code>run</code> sweeps the incidence angle and the fan widens (<code>prism</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  prism.manic  —  white light into a rainbow (real dispersion)
+// ----------------------------------------------------------------------------
+//  The `optics` kit's `prism`: white light enters a triangular prism and splits
+//  into a spectrum. Each colour is traced through both faces with its OWN
+//  refractive index (real Sellmeier dispersion) — blue bends more than red
+//  because glass genuinely slows blue more. `run` sweeps the incidence angle,
+//  so the fan swings and its spread widens.
+// ============================================================================
+
+title("Prism — White Light Splits");
+canvas("16:9");
+
+prism(p, (560, 400), "sf11");   // dense flint — a wide, vivid spectrum
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one beam of white light, into a prism…", 0.5);
+wait(0.5);
+
+par {
+  run(p, 7);
+  seq {
+    say(cap, "it comes out as a RAINBOW — the colours were always there", 0.3);
+    wait(2.6);
+    say(cap, "blue bends more than red: glass really does slow blue more", 0.3);
+    wait(2.4);
+    say(cap, "steeper in → the spectrum fans WIDER (real Sellmeier dispersion)", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/NO1Iuf12wC4" title="Prism — White Light Splits into a Rainbow (Real Dispersion) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="achromat"><a class="header" href="#achromat">achromat</a></h2>
+<p>The optics capstone — chromatic aberration and its fix: a single lens focuses blue nearer
+than red, so white light never comes to one point; <code>run</code> sweeps in the achromatic doublet
+and the colours snap back to a single sharp focus (<code>achromat</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  achromat.manic  —  chromatic aberration, and the fix (real optics)
+// ----------------------------------------------------------------------------
+//  The optics kit's capstone. A single lens can't focus all colours to one
+//  point: it bends blue more than red (its index is higher for blue — real
+//  dispersion), so blue focuses NEARER and red FARTHER. `run` then sweeps in the
+//  achromatic doublet (crown + flint) and the two foci slide back together to a
+//  single sharp point — the trick every camera and telescope lens uses.
+// ============================================================================
+
+title("The Achromatic Doublet");
+canvas("16:9");
+
+achromat(ac, (540, 360));
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one simple lens — but the colours don't agree…", 0.5);
+wait(0.6);
+
+par {
+  run(ac, 7);
+  seq {
+    say(cap, "blue focuses NEARER, red FARTHER — chromatic aberration", 0.3);
+    wait(2.6);
+    say(cap, "now add a flint element behind it — the achromatic doublet", 0.3);
+    wait(2.2);
+    say(cap, "…and the colours snap back to ONE sharp focus", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TVSbwocwH-k" title="Chromatic Aberration & the Achromatic Doublet — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="refraction-paper"><a class="header" href="#refraction-paper">refraction-paper</a></h2>
+<p>Snell’s law as a <code>template("paper")</code> TEXTBOOK figure: inked media labels, the normal, and
+the law itself, with a camera easing in on the bending point as <code>run</code> sweeps the angle —
+the geometric builtins suit paper (<code>refract</code> + annotation + camera).</p>
+<pre><code class="language-manic">// ============================================================================
+//  refraction-paper.manic  —  Snell's law as a textbook figure (annotated)
+// ----------------------------------------------------------------------------
+//  The `refract` sim dressed as a physics-class page: `template("paper")` inks
+//  it on cream, labelled media + normal + the law itself, and a gentle camera
+//  push on the bending point while `run` sweeps the incidence angle. Elevation
+//  lens: textbook annotation + camera. (Paper suits the geometry; the coloured
+//  dispersion demos stay on a dark bench where light glows.)
+// ============================================================================
+
+title("Refraction — Snell's Law");
+canvas("16:9");
+template("paper");
+
+refract(r, (660, 400), 1.0, 1.52);
+color(r.incident, red);            // gold washes out on cream — ink the incoming ray red
+color(r.thetai, red);
+
+// ---- textbook annotations (screen-fixed) ----
+text(mAir,  (150, 300), "air    n = 1.00");   color(mAir, dim);  size(mAir, 22); sticky(mAir);
+text(mGla,  (150, 500), "glass  n = 1.52");   color(mGla, dim);  size(mGla, 22); sticky(mGla);
+text(nlab,  (708, 250), "normal");            color(nlab, dim);  size(nlab, 18); sticky(nlab);
+text(law,   (cx, 92), "n1 · sin(in)  =  n2 · sin(out)"); color(law, fg); size(law, 30); bold(law); sticky(law);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "light bends as it crosses into glass — Snell's law", 0.5);
+wait(0.5);
+
+par {
+  run(r, 8);
+  seq {
+    par { cam((660, 400), 2.2, smooth); zoom(1.18, 2.2, smooth); }   // ease in on the boundary
+    say(cap, "steeper in → it bends more, toward the normal", 0.3);
+    wait(3.0);
+    say(cap, "…but sin(in) / sin(out) never changes — that ratio IS n", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/SLUkDhyC02U" title="Snell's Law — a Physics Textbook Figure, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lens-paper"><a class="header" href="#lens-paper">lens-paper</a></h2>
+<p>The converging lens inked on paper and narrated by a TYPEWRITER caption (a different
+elevation lens): labelled parallel rays and focal point F while <code>run</code> slides the focus
+(<code>lens</code> + <code>type</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  lens-paper.manic  —  a converging lens as a textbook figure (annotated)
+// ----------------------------------------------------------------------------
+//  The `lens` sim inked on paper, narrated by a TYPEWRITER caption (a different
+//  elevation lens from refraction-paper's camera), with labelled parallel rays
+//  and focal point while `run` sweeps the focal length. Ideal thin lens.
+// ============================================================================
+
+title("Converging Lens");
+canvas("16:9");
+template("paper");
+
+lens(l, (640, 360));
+
+// ---- textbook annotations (screen-fixed) ----
+text(inlab, (150, 250), "parallel rays"); color(inlab, dim); size(inlab, 22); sticky(inlab);
+text(flab,  (980, 300), "focal point F"); color(flab, dim); size(flab, 22); sticky(flab);
+arrow(farr, (980, 320), (900, 356));     color(farr, dim); sticky(farr);
+
+// a typewriter caption performs the narration (untraced → type reveals it)
+text(cap, (cx, h - 48), "a lens bends parallel light to a single point"); color(cap, fg); size(cap, 26); bold(cap); untraced(cap); sticky(cap);
+
+// ================= THE SCENE =================
+type(cap, 1.6);                    // type the line out
+wait(0.4);
+
+par {
+  run(l, 8);
+  seq {
+    wait(0.6);
+    say(cap, "every ray meets at the focus, F", 0.3);
+    wait(2.8);
+    say(cap, "a shorter focal length is a stronger lens — F slides in", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/1F1D5NyF3hM" title="Converging Lens — Textbook Ray Diagram — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="prism-cinematic"><a class="header" href="#prism-cinematic">prism-cinematic</a></h2>
+<p>The prism on a dark optics bench where the spectrum GLOWS (a rainbow washes out on paper):
+the colour names pop in word-by-word (<code>wordpop</code>) as the fan spreads and the camera flies
+toward it — KINETIC-TYPE elevation (<code>prism</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  prism-cinematic.manic  —  white light into a rainbow (annotated, dark bench)
+// ----------------------------------------------------------------------------
+//  The `prism` sim on a dark optics bench, where the spectrum GLOWS (a rainbow
+//  washes out on paper — light is a dark-background subject). Elevation lens:
+//  KINETIC TYPE — the colour names pop in word-by-word (`wordpop`) as the fan
+//  spreads, plus a camera push toward the exit spectrum.
+// ============================================================================
+
+title("Prism — White Light Splits");
+canvas("16:9");
+
+prism(p, (560, 400), "sf11");
+
+// the colour names, popped in one at a time over the fan
+caption(names, "red  orange  yellow  green  blue  violet", (cx + 40, 150), 26, gold);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one beam of white light, into a prism…", 0.5);
+wait(0.5);
+
+par {
+  run(p, 8);
+  seq {
+    par { cam((820, 430), 2.6, smooth); zoom(1.22, 2.6, smooth); }   // fly toward the spectrum
+    say(cap, "…out as a rainbow — the colours were always hidden inside", 0.3);
+    wordpop(names, 0.22);                                            // the colours pop in
+    wait(1.6);
+    say(cap, "blue bends most, red least — real Sellmeier dispersion", 0.3);
+    wait(1.6);
+  }
+}
+par { cam((cx, 400), 1.2, smooth); zoom(1.0, 1.2, smooth); }
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/9TZyP0BBU3E" title="Prism — White Light into a Rainbow (Cinematic) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="achromat-cinematic"><a class="header" href="#achromat-cinematic">achromat-cinematic</a></h2>
+<p>The achromat with the CAMERA magnifying the focal region so the red/blue split is dramatic,
+a <code>bracelabel</code> marking the aberration gap that closes as <code>run</code> sweeps in the doublet and
+the colours merge (<code>achromat</code> + camera + brace).</p>
+<pre><code class="language-manic">// ============================================================================
+//  achromat-cinematic.manic  —  chromatic aberration &amp; its fix (annotated, dark)
+// ----------------------------------------------------------------------------
+//  The `achromat` capstone on a dark bench, where the coloured foci glow.
+//  Elevation lens: the CAMERA magnifies the focal region so the red/blue split
+//  is dramatic, and a `bracelabel` marks the aberration gap — which then closes
+//  as `run` sweeps in the doublet and the colours merge to one point.
+// ============================================================================
+
+title("The Achromatic Doublet");
+canvas("16:9");
+
+achromat(ac, (540, 360));
+
+// bracket the axial gap between the two foci (fades as they merge)
+bracelabel(gap, (852, 406), (908, 406), "CA", 20); color(gap, red);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one simple lens — but the colours refuse to agree…", 0.5);
+wait(0.6);
+
+par {
+  run(ac, 8);
+  seq {
+    par { cam((880, 360), 2.4, smooth); zoom(1.7, 2.4, smooth); }   // magnify the focal region
+    say(cap, "blue focuses NEARER, red FARTHER — chromatic aberration", 0.3);
+    wait(2.8);
+    say(cap, "now cement a flint element behind it — the achromat", 0.3);
+    fade(gap, 0.7);                                                  // the gap closes
+    wait(2.0);
+    say(cap, "…and the colours snap back to ONE sharp focus", 0.3);
+  }
+}
+par { cam((cx, 360), 1.3, smooth); zoom(1.0, 1.3, smooth); }
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TWBpf4pyyuw" title="Chromatic Aberration, Magnified — the Achromat Fix — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lens-system"><a class="header" href="#lens-system">lens-system</a></h2>
+<p>A REAL multi-element lens, ray-traced through its actual spherical surfaces (not the ideal
+thin lens): the fast singlet reveals SPHERICAL ABERRATION — <code>draw</code> sketches the rays, then
+<code>run</code> sweeps a sensor plane and the live spot read-out dips but never reaches a point,
+because the outer rays focus short (<code>lenssystem</code>, presets singlet/doublet/triplet).</p>
+<pre><code class="language-manic">// ============================================================================
+//  lens-system.manic  —  a REAL lens, ray-traced (best of physics + manic)
+// ----------------------------------------------------------------------------
+//  `lenssystem` traces a parallel beam through the ACTUAL spherical surfaces of
+//  a lens (not the ideal thin lens of `lens`). Here the fast singlet reveals
+//  SPHERICAL ABERRATION: sketch the rays on with `draw`, then `run` sweeps a
+//  sensor plane along the axis while the live spot read-out dips to its minimum
+//  — which never reaches a point, because the outer rays focus short. Then swap
+//  the caption's promise: that's the flaw a doublet/triplet is built to fix.
+// ============================================================================
+
+title("Spherical Aberration — a Real Lens Traced");
+canvas("16:9");
+
+lenssystem(ls, (620, 380), "singlet");
+
+text(cap, (cx, h - 42), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "a parallel beam into a real, fast single lens…", 0.5);
+draw(ls.rays, 2.2);                 // the rays sketch through the glass
+wait(0.3);
+
+par {
+  run(ls, 6);                       // the sensor plane sweeps the axis
+  seq {
+    say(cap, "a sensor hunts for focus — watch the spot size", 0.3);
+    wait(2.4);
+    say(cap, "the outer rays focus SHORT — it never reaches a point", 0.3);
+    wait(2.0);
+    say(cap, "that blur is spherical aberration (a doublet/triplet fixes it)", 0.3);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cmy2wGOPzpo" title="Spherical Aberration — a Real Lens, Ray-Traced — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="ray-fan"><a class="header" href="#ray-fan">ray-fan</a></h2>
+<p>Reading an aberration: <code>rayfan</code> plots each ray’s error at focus against where it entered the
+lens. A flat line is a perfect lens — the singlet’s cubic S-CURVE is textbook spherical
+aberration (the edges bend too much), which a doublet flattens (<code>rayfan</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  ray-fan.manic  —  the signature of an aberration (real optics analysis)
+// ----------------------------------------------------------------------------
+//  A ray-fan plot: for each ray, how far off focus does it land (y) against
+//  where it entered the lens (x, edge → edge)? `rayfan` traces the real
+//  spherical surfaces. A perfect lens is a flat line at zero; the singlet's
+//  cubic S-CURVE is textbook spherical aberration — the outer rays bend too
+//  much. (The doublet/triplet flatten it, drawn to the same scale.)
+// ============================================================================
+
+title("Ray-Fan — Reading an Aberration");
+canvas("16:9");
+
+rayfan(rf, (640, 340), "singlet");
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "each ray: how far off focus (y) vs where it entered (x)…", 0.5);
+draw(rf.curve, 2.2);
+wait(0.5);
+
+say(cap, "a flat line would be a perfect lens — this ISN'T flat", 0.3);
+wait(2.0);
+
+say(cap, "that S-curve is spherical aberration: the edges bend too much", 0.3);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ShMMOCC6ZyM" title="Reading a Lens Aberration — the Ray-Fan Plot — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spot-diagram"><a class="header" href="#spot-diagram">spot-diagram</a></h2>
+<p>Lens quality as a picture: <code>spotdiagram</code> plots where a ray bundle actually lands at focus.
+A fast single lens smears into a blur disc (the circle of least confusion), while a cemented
+doublet collapses to a point — both to the same scale, RMS 4 px → under 1 px (<code>spotdiagram</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  spot-diagram.manic  —  a blur vs a point (lens quality, real optics)
+// ----------------------------------------------------------------------------
+//  Where does a bundle of rays actually LAND at focus? `spotdiagram` traces the
+//  real spherical surfaces and plots the hits. A fast single lens smears into a
+//  disc — the circle of least confusion from SPHERICAL ABERRATION — while a
+//  cemented doublet collapses to a point. The green dot is the ideal (point)
+//  focus; the RMS read-out is the blur radius. Both drawn to the SAME scale.
+// ============================================================================
+
+title("Spot Diagram — Blur vs Point");
+canvas("16:9");
+
+spotdiagram(bad, (370, 380), "singlet");
+spotdiagram(good, (910, 380), "doublet");
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "where do the rays actually land at focus?", 0.5);
+wait(0.4);
+
+say(cap, "a fast SINGLE lens → a blur disc (spherical aberration)", 0.3);
+draw(bad.dots, 1.8);
+wait(0.6);
+
+say(cap, "a cemented DOUBLET → very nearly a point", 0.3);
+draw(good.dots, 1.4);
+wait(0.6);
+
+say(cap, "same rays, same scale — RMS 4 px collapses to under 1 px", 0.3);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TVT1YqfN8xg" title="Spot Diagram — a Lens Blur vs a Point — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lens-prescription"><a class="header" href="#lens-prescription">lens-prescription</a></h2>
+<p>Type your OWN lens: <code>lenssystem</code> takes a design by name (<code>"plano-convex"</code>, <code>"doublet"</code>, …)
+OR a custom PRESCRIPTION — the designer’s surface table <code>"radius thickness glass [conic] [aperture] | …"</code> — traced through the true surfaces with real Sellmeier glass (<code>lenssystem</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  lens-prescription.manic  —  type your OWN lens (real prescription)
+// ----------------------------------------------------------------------------
+//  `lenssystem` takes a lens two ways: pick a real design by NAME
+//  ("plano-convex" / "meniscus" / "doublet" / "triplet" / …), or write a CUSTOM
+//  prescription — the lens designer's surface table — as "radius thickness glass"
+//  per surface, separated by "|". Here: a cemented crown+flint achromat, traced
+//  through its actual spherical surfaces with real glass (Sellmeier).
+// ============================================================================
+
+title("A Lens, By Prescription");
+canvas("16:9");
+
+// surface table:  radius  thickness  glass   (| between surfaces; "flat"/"air" allowed)
+lenssystem(l, (600, 380), "160 26 bk7 | -140 8 f2 | -420 0 air");
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "a lens written as a prescription: radius · thickness · glass", 0.5);
+draw(l.rays, 2.2);                  // trace the real surfaces
+wait(0.4);
+
+par {
+  run(l, 6);                        // sweep the sensor to best focus
+  seq {
+    say(cap, "crown + flint, cemented — the same table a designer would type", 0.3);
+    wait(2.6);
+    say(cap, "traced through the true spherical surfaces (real Sellmeier glass)", 0.3);
+    wait(2.0);
+  }
+}
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/PLU_nUEZq4w" title="Type Your Own Lens — a Prescription, Ray-Traced — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="aspheric-lens"><a class="header" href="#aspheric-lens">aspheric-lens</a></h2>
+<p>How an ASPHERE kills spherical aberration: a spherical surface can’t focus a wide beam to a
+point (a blur, RMS 1.5 px), but reshaping it to the right conic — one constant in the
+prescription — collapses every ray to a point (RMS 0.1 px). Two real ray-traced lenses,
+spherical vs aspheric, side by side (<code>lenssystem</code> conic + <code>spotdiagram</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  aspheric-lens.manic  —  how an asphere kills spherical aberration
+// ----------------------------------------------------------------------------
+//  A prescription surface has a CONIC constant. A plain spherical lens can't
+//  focus a wide beam to a point — the edges bend too much (spherical aberration,
+//  a blur). Reshape that surface into the right ellipse/hyperbola (a conic ≠ 0)
+//  and every ray meets at ONE point. Two real ray-traced lenses, side by side:
+//  same shape, one spherical, one aspheric.
+// ============================================================================
+
+title("Aspheric Correction");
+canvas("16:9");
+
+spotdiagram(sph, (360, 380), "plano-convex");   // spherical surface  → a blur
+spotdiagram(asp, (912, 380), "aspheric");        // conic surface (K≈−0.55) → a point
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "same lens shape — where do the rays land at focus?", 0.5);
+wait(0.4);
+
+say(cap, "a SPHERICAL surface can't focus the edges — a blur (RMS 1.5 px)", 0.3);
+draw(sph.dots, 1.6);
+wait(0.6);
+
+say(cap, "reshape it to an ASPHERE (conic surface) — a point (RMS 0.1 px)", 0.3);
+draw(asp.dots, 1.4);
+wait(0.6);
+
+say(cap, "one conic constant in the prescription — spherical aberration, gone", 0.3);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/pYk9v2B9S7g" title="Aspheric Lens — How a Conic Surface Kills Spherical Aberration — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="off-axis"><a class="header" href="#off-axis">off-axis</a></h2>
+<p>The hard test — light 8° OFF the axis. <code>fieldspot</code> traces a full 2-D pupil in 3-D: a single
+lens flares into a COMA comet, while a doublet holds the spot near the Airy disk (the
+diffraction limit). Real field aberration only a 3-D trace shows (<code>fieldspot</code>).</p>
+<pre><code class="language-manic">// ============================================================================
+//  off-axis.manic  —  coma &amp; astigmatism, off the axis (3-D ray-traced)
+// ----------------------------------------------------------------------------
+//  On the axis a lens can be sharp — but light coming in at an ANGLE is a harder
+//  test. `fieldspot` traces a full 2-D pupil in 3-D at a field angle and plots
+//  where the rays land. A single lens flares into a COMA comet; a doublet holds
+//  the spot near the Airy disk (the diffraction limit). Same 8° field, side by
+//  side — real off-axis aberration only a 3-D trace reveals.
+// ============================================================================
+
+title("Off-Axis — Coma vs a Corrected Lens");
+canvas("16:9");
+
+fieldspot(bad, (350, 380), "singlet", 8);    // one element → a coma comet
+fieldspot(good, (930, 380), "doublet", 8);    // doublet → tight, near diffraction
+
+text(cap, (cx, h - 44), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "now aim the light 8° OFF the axis — the hard test", 0.5);
+wait(0.4);
+
+say(cap, "a single lens smears into a COMA comet (RMS ~7 px)", 0.3);
+draw(bad.dots, 1.6);
+wait(0.6);
+
+say(cap, "the doublet holds it near the Airy disk — the diffraction limit", 0.3);
+draw(good.dots, 1.4);
+wait(0.6);
+
+say(cap, "the circle is Airy: shrink the blur to it and you're diffraction-limited", 0.3);
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/LKyW73JMIWU" title="Coma & Astigmatism — Why Off-Axis Is the Hard Test — manic" allowfullscreen loading="lazy"></iframe></div>
+
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ex-physics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ex-vectors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ex-physics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ex-vectors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,40 @@
+// ============================================================================
+//  refraction-paper.manic  —  Snell's law as a textbook figure (annotated)
+// ----------------------------------------------------------------------------
+//  The `refract` sim dressed as a physics-class page: `template("paper")` inks
+//  it on cream, labelled media + normal + the law itself, and a gentle camera
+//  push on the bending point while `run` sweeps the incidence angle. Elevation
+//  lens: textbook annotation + camera. (Paper suits the geometry; the coloured
+//  dispersion demos stay on a dark bench where light glows.)
+// ============================================================================
+
+title("Refraction — Snell's Law");
+canvas("16:9");
+template("paper");
+
+refract(r, (660, 400), 1.0, 1.52);
+color(r.incident, red);            // gold washes out on cream — ink the incoming ray red
+color(r.thetai, red);
+
+// ---- textbook annotations (screen-fixed) ----
+text(mAir,  (150, 300), "air    n = 1.00");   color(mAir, dim);  size(mAir, 22); sticky(mAir);
+text(mGla,  (150, 500), "glass  n = 1.52");   color(mGla, dim);  size(mGla, 22); sticky(mGla);
+text(nlab,  (708, 250), "normal");            color(nlab, dim);  size(nlab, 18); sticky(nlab);
+text(law,   (cx, 92), "n1 · sin(in)  =  n2 · sin(out)"); color(law, fg); size(law, 30); bold(law); sticky(law);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "light bends as it crosses into glass — Snell's law", 0.5);
+wait(0.5);
+
+par {
+  run(r, 8);
+  seq {
+    par { cam((660, 400), 2.2, smooth); zoom(1.18, 2.2, smooth); }   // ease in on the boundary
+    say(cap, "steeper in → it bends more, toward the normal", 0.3);
+    wait(3.0);
+    say(cap, "…but sin(in) / sin(out) never changes — that ratio IS n", 0.3);
+  }
+}
+wait(1.2);

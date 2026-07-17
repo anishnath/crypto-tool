@@ -1,0 +1,11 @@
+// collide-blocks.manic — the classic momentum demo. Block 1 (left) is attached to
+// the wall by a SPRING; block 2 slides in freely and they collide with restitution
+// e (1 = elastic → energy conserved; <1 → lost). The live Σp readout (top) shows
+// momentum is conserved at every collision. Built on the shared `collide_1d`.
+title("Colliding blocks — momentum is conserved");
+canvas("16:9");
+text(hdr, (cx, 96), "Block 1 on a spring, block 2 sliding in — watch the momentum readout"); size(hdr, 21); color(hdr, cyan); bold(hdr); display(hdr);
+collideblocks(cb, (cx, 440), 3, 1, 1);
+energygraph(cb, (1040, 210), 90);
+text(cap, (cx, h - 36), "elastic (e=1): total energy (KE + spring PE) is conserved; Σp is conserved at each collision"); size(cap, 15); color(cap, dim); display(cap);
+run(cb, 10);

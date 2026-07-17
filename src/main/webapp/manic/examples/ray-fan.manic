@@ -1,0 +1,27 @@
+// ============================================================================
+//  ray-fan.manic  —  the signature of an aberration (real optics analysis)
+// ----------------------------------------------------------------------------
+//  A ray-fan plot: for each ray, how far off focus does it land (y) against
+//  where it entered the lens (x, edge → edge)? `rayfan` traces the real
+//  spherical surfaces. A perfect lens is a flat line at zero; the singlet's
+//  cubic S-CURVE is textbook spherical aberration — the outer rays bend too
+//  much. (The doublet/triplet flatten it, drawn to the same scale.)
+// ============================================================================
+
+title("Ray-Fan — Reading an Aberration");
+canvas("16:9");
+
+rayfan(rf, (640, 340), "singlet");
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "each ray: how far off focus (y) vs where it entered (x)…", 0.5);
+draw(rf.curve, 2.2);
+wait(0.5);
+
+say(cap, "a flat line would be a perfect lens — this ISN'T flat", 0.3);
+wait(2.0);
+
+say(cap, "that S-curve is spherical aberration: the edges bend too much", 0.3);
+wait(1.4);

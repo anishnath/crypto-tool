@@ -1,0 +1,32 @@
+// ============================================================================
+//  off-axis.manic  —  coma & astigmatism, off the axis (3-D ray-traced)
+// ----------------------------------------------------------------------------
+//  On the axis a lens can be sharp — but light coming in at an ANGLE is a harder
+//  test. `fieldspot` traces a full 2-D pupil in 3-D at a field angle and plots
+//  where the rays land. A single lens flares into a COMA comet; a doublet holds
+//  the spot near the Airy disk (the diffraction limit). Same 8° field, side by
+//  side — real off-axis aberration only a 3-D trace reveals.
+// ============================================================================
+
+title("Off-Axis — Coma vs a Corrected Lens");
+canvas("16:9");
+
+fieldspot(bad, (350, 380), "singlet", 8);    // one element → a coma comet
+fieldspot(good, (930, 380), "doublet", 8);    // doublet → tight, near diffraction
+
+text(cap, (cx, h - 44), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "now aim the light 8° OFF the axis — the hard test", 0.5);
+wait(0.4);
+
+say(cap, "a single lens smears into a COMA comet (RMS ~7 px)", 0.3);
+draw(bad.dots, 1.6);
+wait(0.6);
+
+say(cap, "the doublet holds it near the Airy disk — the diffraction limit", 0.3);
+draw(good.dots, 1.4);
+wait(0.6);
+
+say(cap, "the circle is Airy: shrink the blur to it and you're diffraction-limited", 0.3);
+wait(1.2);

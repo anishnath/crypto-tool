@@ -1,0 +1,36 @@
+// ============================================================================
+//  prism-cinematic.manic  —  white light into a rainbow (annotated, dark bench)
+// ----------------------------------------------------------------------------
+//  The `prism` sim on a dark optics bench, where the spectrum GLOWS (a rainbow
+//  washes out on paper — light is a dark-background subject). Elevation lens:
+//  KINETIC TYPE — the colour names pop in word-by-word (`wordpop`) as the fan
+//  spreads, plus a camera push toward the exit spectrum.
+// ============================================================================
+
+title("Prism — White Light Splits");
+canvas("16:9");
+
+prism(p, (560, 400), "sf11");
+
+// the colour names, popped in one at a time over the fan
+caption(names, "red  orange  yellow  green  blue  violet", (cx + 40, 150), 26, gold);
+
+text(cap, (cx, h - 46), ""); color(cap, fg); size(cap, 24); bold(cap); display(cap); sticky(cap);
+
+// ================= THE SCENE =================
+say(cap, "one beam of white light, into a prism…", 0.5);
+wait(0.5);
+
+par {
+  run(p, 8);
+  seq {
+    par { cam((820, 430), 2.6, smooth); zoom(1.22, 2.6, smooth); }   // fly toward the spectrum
+    say(cap, "…out as a rainbow — the colours were always hidden inside", 0.3);
+    wordpop(names, 0.22);                                            // the colours pop in
+    wait(1.6);
+    say(cap, "blue bends most, red least — real Sellmeier dispersion", 0.3);
+    wait(1.6);
+  }
+}
+par { cam((cx, 400), 1.2, smooth); zoom(1.0, 1.2, smooth); }
+wait(1.0);
