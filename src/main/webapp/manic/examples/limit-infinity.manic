@@ -1,0 +1,30 @@
+title("A limit at infinity — limit(id, curve, inf)");
+canvas("16:9");
+
+let ox = 90;          // x = 0 near the left
+let oy = cy + 250;    // y = 0 baseline
+
+text(hdr, (cx, 52), "(5x^3 - 2x + 7) / (x^3 + 4x^2 + 3)  ->  5  as x -> infinity");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+text(sub, (cx, 92), "same degree top and bottom: the ratio of leading coefficients, 5/1");
+size(sub, 17); color(sub, dim); display(sub); hidden(sub);
+
+// the x-axis (y = 0)
+line(xaxis, (ox, oy), (ox + 1130, oy));
+color(xaxis, dim); untraced(xaxis);
+
+// the rational function, climbing toward its asymptote
+plot(f, (ox, oy), 9, 88, "(5*x*x*x - 2*x + 7)/(x*x*x + 4*x*x + 3)", (0.5, 125));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// the limit at infinity: auto-detects the horizontal asymptote y = 5
+limit(lim, f, inf);
+color(lim, gold); hidden(lim);
+
+// ---- timeline ----
+show(hdr, 0.6);
+show(sub, 0.4);
+draw(xaxis, 0.5);
+draw(f, 2.4);
+show(lim, 0.7);

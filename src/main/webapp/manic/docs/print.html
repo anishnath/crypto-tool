@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-69371a19.js";
+            window.path_to_searchindex_js = "searchindex-6e795f84.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5e06f13d.js"></script>
+        <script src="toc-9dd1d381.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -214,10 +214,18 @@ you see exactly what each word does. Copy any sample into a <code>.manic</code> 
 manic yourfile.manic --record out # render to out/out.mp4
 </code></pre>
 <p>Ready? <a href="#getting-started">Start with your first animation →</a></p>
+<p>Making vertical social content? Take the production path directly:
+<a href="#create-a-polished-reel">Create a polished Reel →</a></p>
+<p>Choosing the visual surface? Manic defaults to the professional black-and-white
+<code>mono</code> look; compare every option in <a href="#templates--choose-the-whole-visual-system">Templates →</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
 <p>Let’s make the smallest real animation: a title fades in, a circle draws itself,
 and it pulses once.</p>
+<blockquote>
+<p>Here primarily for vertical social video? Jump to
+<a href="#create-a-polished-reel">Create a polished Reel</a>, the complete Creator Kit workflow.</p>
+</blockquote>
 <pre><code class="language-manic">// getting started — one shape, drawn on, then a pulse.
 title("Hello, manic");
 canvas("16:9");
@@ -256,6 +264,10 @@ wait(1.0);
 </tbody>
 </table>
 </div>
+<p>There is no <code>template(...)</code> line in this first sample, so it uses the
+professional black-and-white <code>mono</code> template automatically. See
+<a href="#templates--choose-the-whole-visual-system">Templates</a> when you want paper, blueprint, terminal, or a
+colourful surface.</p>
 <p>Two things worth internalising right away:</p>
 <ul>
 <li><strong><code>cx</code>, <code>cy</code> are the canvas centre.</strong> manic gives you <code>w</code>, <code>h</code>, <code>cx</code>, <code>cy</code> for
@@ -264,7 +276,7 @@ the middle.</li>
 <li><strong>The order of the cast doesn’t matter, but the script runs top-to-bottom.</strong>
 <code>show</code>, then <code>draw</code>, then <code>pulse</code> play <em>one after another</em>. To make things
 happen <em>at the same time</em>, you wrap them in <code>par { … }</code> — that’s the
-<a href="#timing--par-seq--stagger">Timing</a> chapter.</li>
+<a href="#timing--flow-named-phases--clocks">Timing</a> chapter.</li>
 </ul>
 <h2 id="two-ways-to-appear"><a class="header" href="#two-ways-to-appear">Two ways to appear</a></h2>
 <p>Notice <code>head</code> uses <code>hidden</code> + <code>show</code>, but <code>sun</code> uses <code>untraced</code> + <code>draw</code>. That’s
@@ -276,6 +288,173 @@ strokes, lines, plots).</li>
 </ul>
 <p>Get those two pairs right and everything else clicks. Next: <a href="#shapes--the-cast">the shapes you can
 put on screen →</a></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="create-a-polished-reel"><a class="header" href="#create-a-polished-reel">Create a polished Reel</a></h1>
+<p>Creator Kit v2 is the fastest path from an idea to a finished vertical video.
+It owns the responsive layout, safe areas, question hierarchy, answer cards,
+timer, reveal, creator footer, and end card. You provide the content and choose
+how restrained or energetic it should feel.</p>
+<p>This chapter gives one dependable production recipe. Start here, then use the
+<a href="#creator-formats--responsive-social-video">Creator reference and examples</a> when you need every option.</p>
+<h2 id="the-production-recipe"><a class="header" href="#the-production-recipe">The production recipe</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>step</th><th>recommended starting choice</th><th>why</th></tr>
+</thead>
+<tbody>
+<tr><td>Format</td><td><code>canvas("9:16")</code></td><td>native vertical composition</td></tr>
+<tr><td>Surface</td><td>omit the call or use <code>template("mono")</code></td><td>professional black-and-white default; use <code>shorts</code> when accent hue matters</td></tr>
+<tr><td>Safe area</td><td><code>safe=reels</code> on the creator and quiz</td><td>protects important content from platform UI</td></tr>
+<tr><td>Hierarchy</td><td><code>studio layout=media-first density=comfortable</code></td><td>question first, one focal visual, readable answers</td></tr>
+<tr><td>Motion</td><td><code>motion=calm</code> or <code>motion=studio</code></td><td>purposeful movement without visual noise</td></tr>
+<tr><td>Timing</td><td>9–13 seconds for one quiz beat</td><td>enough time to read, think, and absorb the reveal</td></tr>
+<tr><td>Close</td><td>signature footer plus one end-card CTA</td><td>consistent identity and one clear next action</td></tr>
+</tbody>
+</table>
+</div>
+<p>For Shorts or TikTok, change both safe-area declarations to <code>safe=shorts</code> or
+<code>safe=tiktok</code>. The same source can also be reframed for <code>4:5</code>, <code>square</code>, or
+<code>16:9</code>; the Creator regions reflow automatically.</p>
+<h2 id="1-write-for-a-phone-not-a-slide"><a class="header" href="#1-write-for-a-phone-not-a-slide">1. Write for a phone, not a slide</a></h2>
+<p>A strong first Reel usually has:</p>
+<ul>
+<li>one question or promise that fits in one or two lines;</li>
+<li>one visual idea—an equation, diagram, image, chart, or simulation;</li>
+<li>three or four short answer choices;</li>
+<li>one accent colour and one motion personality;</li>
+<li>a brief explanation and a single call to action.</li>
+</ul>
+<p>Prefer direct wording. Move supporting context into <code>explain</code>; do not make the
+viewer read a paragraph before the timer starts. Use LaTeX for mathematical
+notation so formulas stay crisp and compact.</p>
+<h2 id="2-let-the-format-own-layout"><a class="header" href="#2-let-the-format-own-layout">2. Let the format own layout</a></h2>
+<pre><code class="language-manic">canvas("9:16");
+template("mono"); // optional: mono is the DSL default
+
+creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove \
+yt=zarigatongy x=@anish2good web=8gwifi.org/manic \
+accent=cyan secondary=magenta footer=signature cta=Save_and_share safe=reels");
+
+quiz(q, "Your short question",
+     "studio layout=media-first density=comfortable motion=calm safe=reels accent=cyan");
+</code></pre>
+<p>Use <code>layout=media-first</code> when the visual is part of the question, <code>stack</code> for up
+to four text-led answers, <code>grid</code> for four to six compact answers, and <code>auto</code>
+when you want manic to decide. Pass the visual to <code>figure(id)</code> instead of tuning
+its coordinates for each aspect ratio.</p>
+<p>Temporarily add <code>safezone(guide,"reels")</code> while previewing a new design. It is a
+visible diagnostic overlay, so remove it before the final record. The
+<code>safe=reels</code> layout setting should remain.</p>
+<h2 id="3-give-reading-thinking-and-payoff-separate-beats"><a class="header" href="#3-give-reading-thinking-and-payoff-separate-beats">3. Give reading, thinking, and payoff separate beats</a></h2>
+<p>The default <code>run(q,10)</code> is a good first draft. For a repeatable series, declare
+the exact beat:</p>
+<pre><code class="language-manic">timing(q, "calm ask=1.1 options=1 think=5.5 reveal=0.75 hold=2.15 stagger=0.06");
+timerstyle(q, "look=ring position=below direction=drain color=cyan finish=pulse");
+run(q);
+</code></pre>
+<p>A useful starting range is 1–1.5 seconds for the hook, 4–6 seconds to think,
+0.6–0.9 seconds for the reveal, and 1.5–2.5 seconds to hold the explanation.
+Adjust for the actual reading load; the right pace is the one that remains clear
+on a phone.</p>
+<p><code>timing</code> owns choreography and <code>timerstyle</code> owns appearance. Change the ring to
+<code>bar</code>, <code>segments</code>, <code>ticks</code>, <code>number</code>, <code>pulse</code>, or <code>none</code> without moving a single
+beat. With explicit phases, always use <code>run(q)</code>—adding <code>run(q,dur)</code> would create
+a second competing duration.</p>
+<p>Design shortcut: keep the default ring for most educational Reels. Use a bar
+for a longer process, segments for staged challenges, ticks for technical work,
+and pulse only for genuinely urgent moments.</p>
+<h2 id="4-build-a-recognisable-close"><a class="header" href="#4-build-a-recognisable-close">4. Build a recognisable close</a></h2>
+<p>Call <code>socials(profile)</code> before the main animation so the selected footer is
+present throughout. <code>endcard(profile)</code> creates a hidden final lockup; fade the
+content, then reveal it for about one second or more.</p>
+<p>Keep the CTA singular: “Save this”, “Try the next one”, or “Follow for more”. A
+creator profile is reusable across a whole series, so brand decisions live in
+one line rather than every scene. Inside a profile spec, use underscores where
+a value needs spaces: <code>name=Proof_Daily cta=Save_and_share</code>.</p>
+<p>For a channel-link row without external assets, choose <code>footer=social</code> and set
+the platform values directly: <code>yt=zarigatongy x=@anish2good web=8gwifi.org/manic</code>. Manic draws matching normalized icons and keeps the text
+inside the responsive footer. Use two or three identities for the clearest
+phone-size close; a larger platform set automatically becomes icon-only.</p>
+<h2 id="complete-reel"><a class="header" href="#complete-reel">Complete Reel</a></h2>
+<p>This example uses exact phases, LaTeX media, the Reels safe area, a restrained
+native timer, a signature footer, timeline markers, and a final end card:</p>
+<pre><code class="language-manic">// A production-ready Creator v2 Reel: safe layout, exact pacing, one focal
+// equation, restrained motion, reusable branding, markers, and an end card.
+title("Perfect Reel — Angle Ratio");
+canvas("9:16");
+template("mono");
+
+creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_and_share safe=reels");
+
+quiz(q, "Triangle angles: 2:3:4. What is the largest?",
+     "studio layout=media-first reveal=fade density=comfortable motion=calm safe=reels accent=cyan");
+option(q, `$60^\circ$`);
+option(q, `$80^\circ$`, correct);
+option(q, `$90^\circ$`);
+option(q, `$100^\circ$`);
+explain(q, `The parts total $9$, so $x=20^\circ$ and $4x=80^\circ$.`, "Angle sum");
+
+equation(prompt, (cx, 650), `2x+3x+4x=180^\circ`, 70);
+color(prompt, cyan);
+figure(prompt);
+hidden(prompt);
+
+// Exact 10.5-second quiz beat. The timer look can change independently.
+timing(q, "calm ask=1.1 options=1 think=5.5 reveal=0.75 hold=2.15 stagger=0.06");
+timerstyle(q, "look=ring position=below number=inside direction=drain size=medium thickness=1.1 color=cyan track=dim label=THINK font=mono finish=pulse");
+
+socials(me);
+endcard(me, "cta=Save_and_share");
+
+mark("hook");
+par {
+  run(q);
+  show(prompt, 0.5);
+}
+
+mark("endcard");
+par {
+  fade(q.parts, 0.45);
+  fade(prompt, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/-AcCbVbv7qI" title="Make a Perfect Math Reel From One Script — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="preview-and-export"><a class="header" href="#preview-and-export">Preview and export</a></h2>
+<pre><code class="language-sh">manic check examples/perfect-reel.manic
+manic examples/perfect-reel.manic
+
+# Inspect representative phone frames: hook, countdown, and answer hold.
+manic examples/perfect-reel.manic --still 0.8
+manic examples/perfect-reel.manic --still 6.0
+manic examples/perfect-reel.manic --still 10.0
+
+# Vertical render with only your Creator profile branding.
+manic examples/perfect-reel.manic --record out --preset reel --no-brand
+</code></pre>
+<p>Omit <code>--no-brand</code> if you also want the Manic intro and watermark. Recording
+writes <code>markers.json</code>; use its <code>mark(...)</code> timestamps to align narration, music,
+or captions in an editor.</p>
+<h2 id="final-phone-size-review"><a class="header" href="#final-phone-size-review">Final phone-size review</a></h2>
+<p>Before publishing, check:</p>
+<ul>
+<li>Can the hook be understood during the first beat?</li>
+<li>Is every important word and the CTA inside the selected safe area?</li>
+<li>Is there one obvious focal point, with no competing motion?</li>
+<li>Are the choices short, distinct, and marked with exactly one correct answer?</li>
+<li>Does the timer contrast with its track without overpowering the content?</li>
+<li>Does the explanation remain visible long enough to read aloud?</li>
+<li>Does the final card ask for one action and hold long enough to register?</li>
+<li>Are logos, photos, fonts, narration, and music yours or licensed for use?</li>
+</ul>
+<p>Once those pass, keep the same profile, motion, colour, and closing pattern
+across the series. Consistency will make the next Reel both faster to produce
+and easier to recognise.</p>
+<p>Next: <a href="#creator-formats--responsive-social-video">Explore every Creator control and format variant →</a></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="shapes--the-cast"><a class="header" href="#shapes--the-cast">Shapes — the cast</a></h1>
 <p>Everything on screen is an <strong>entity</strong> with a <strong>name</strong> (its first argument). You
@@ -374,7 +553,7 @@ begins. They take the entity name first, then a value:</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="verbs--bringing-it-to-life"><a class="header" href="#verbs--bringing-it-to-life">Verbs — bringing it to life</a></h1>
 <p><strong>Verbs are the script.</strong> Each one names an entity and animates it. They run
-<strong>top-to-bottom, one after another</strong> (use <a href="#timing--par-seq--stagger"><code>par</code></a> for simultaneous).</p>
+<strong>top-to-bottom, one after another</strong> (use <a href="#timing--flow-named-phases--clocks"><code>par</code></a> for simultaneous).</p>
 <p>Almost every verb takes two optional trailing arguments:</p>
 <pre><code class="language-manic">move(sun, (900, 400), 0.8, smooth);
 //                     ^dur  ^easing
@@ -442,9 +621,9 @@ draw(g.edges);       // trace every edge on together
 flash(a.cells, cyan);// flash all array cells
 </code></pre>
 <p>More on grouping in the <a href="#kits--math-geometry-algorithms">Kits</a> chapter. Next, control <em>when</em> things
-happen → <a href="#timing--par-seq--stagger">Timing</a>.</p>
+happen → <a href="#timing--flow-named-phases--clocks">Timing</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="timing--par-seq--stagger"><a class="header" href="#timing--par-seq--stagger">Timing — par, seq &amp; stagger</a></h1>
+<h1 id="timing--flow-named-phases--clocks"><a class="header" href="#timing--flow-named-phases--clocks">Timing — flow, named phases &amp; clocks</a></h1>
 <p>By default, verbs play <strong>one after another</strong>. Three wrappers change that — they
 turn “then, then, then” into “together” or “cascading”.</p>
 <div class="table-wrapper">
@@ -498,12 +677,326 @@ mark("beat-3");         // a named timestamp for your editor
 </code></pre>
 <p><code>wait</code> is your friend for pacing — a beat of stillness after something lands
 reads far better than rushing to the next move.</p>
+<h2 id="generic-timing-v2--one-clock-for-any-scene"><a class="header" href="#generic-timing-v2--one-clock-for-any-scene">Generic Timing v2 — one clock for any scene</a></h2>
+<p>Use a generic timing controller when several parts of a scene must share one
+exact schedule. It is format-neutral: the same controller can coordinate a
+physics simulation, geometry proof, chart, caption sequence, or ordinary
+shapes.</p>
+<p>Think of it as four small pieces:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>piece</th><th>responsibility</th></tr>
+</thead>
+<tbody>
+<tr><td><code>timing</code></td><td>declares the phase names, durations, exact total, and optional clock position</td></tr>
+<tr><td><code>timerstyle</code></td><td>changes only the visible clock; it never changes scene timing</td></tr>
+<tr><td><code>timed</code></td><td>runs the clock and schedules the complete phase contract</td></tr>
+<tr><td><code>during</code></td><td>contains the ordinary animation actions for one named phase</td></tr>
+</tbody>
+</table>
+</div>
+<p>The phase declaration is the source of truth. The clock is only one visual view
+of that choreography.</p>
+<h3 id="quick-reference"><a class="header" href="#quick-reference">Quick reference</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>form</th><th>use</th></tr>
+</thead>
+<tbody>
+<tr><td><code>timing(clock,"intro=1 demo=6 result=2")</code></td><td>declare named phases</td></tr>
+<tr><td><code>timing(clock,(1160,80),"...")</code></td><td>declare phases and set the initial clock position</td></tr>
+<tr><td><code>timing(clock,"duration=6")</code></td><td>shorthand for one phase named <code>main</code></td></tr>
+<tr><td><code>timerstyle(clock,"...")</code></td><td>change appearance without changing timing</td></tr>
+<tr><td><code>timerstyle(clock,(1160,80),"...")</code></td><td>restyle and reposition the clock</td></tr>
+<tr><td><code>timed(clock) { ... }</code></td><td>play the complete phase schedule and clock</td></tr>
+<tr><td><code>during("phase") { ... }</code></td><td>author one phase inside <code>timed</code></td></tr>
+<tr><td><code>run(clock)</code></td><td>play the clock alone</td></tr>
+<tr><td><code>countdown(id,[at],[seconds],["style"])</code></td><td>independent countdown without named phases</td></tr>
+</tbody>
+</table>
+</div>
+<p>Core pattern, after defining the referenced entities and simulation:</p>
+<pre><code class="language-manic">timing(clock, (1160,80), "intro=1 demo=6 result=2");
+timerstyle(clock, "look=ring number=inside color=cyan");
+
+timed(clock) {
+  during("intro")  { show(title, 0.6); }
+  during("demo")   { par { run(sim, 6); draw(sim.path, 6); } }
+  during("result") { show(answer, 0.6); }
+}
+</code></pre>
+<p>Use <code>countdown</code> when you only need an independent visual countdown. Use
+<code>timing</code> when named phases must govern other animation.</p>
+<h3 id="compose-inside-phases"><a class="header" href="#compose-inside-phases">Compose inside phases</a></h3>
+<p>Each <code>during</code> block accepts the usual timeline language. In particular, use
+<code>par</code> for actions that must occupy the same phase together:</p>
+<pre><code class="language-manic">timing(clock, "setup=1 experiment=6 result=2");
+
+timed(clock) {
+  during("setup") { show(title, 0.6); }
+
+  during("experiment") {
+    par {
+      run(pendulum, 6);
+      draw(pendulum.path, 6);
+      karaoke(caption, 0.35);
+    }
+  }
+
+  during("result") {
+    par {
+      show(formula, 0.6);
+      show(explanation, 0.6);
+    }
+    wait(1.4);
+  }
+}
+</code></pre>
+<h3 id="rules-that-prevent-drift"><a class="header" href="#rules-that-prevent-drift">Rules that prevent drift</a></h3>
+<ul>
+<li>Give a generic controller a fresh id. Do not reuse an entity, quiz,
+simulation, or group id.</li>
+<li>Put constructors and style modifiers outside <code>timed</code>/<code>during</code>; put timeline
+actions such as <code>show</code>, <code>draw</code>, <code>run</code>, <code>wait</code>, <code>par</code>, and <code>seq</code> inside.</li>
+<li>A short phase block is padded automatically. A block that exceeds its phase
+is an error.</li>
+<li>A phase may have at most one <code>during</code> block. Combine related work inside it
+with <code>par</code> or <code>seq</code>.</li>
+<li>An omitted phase is valid and becomes a blank hold.</li>
+<li>Phase blocks may appear in any source order: they are placed at the absolute
+offsets declared by <code>timing</code>.</li>
+<li><code>timed(clock)</code> already runs the clock. Do not also call <code>run(clock)</code> inside it.</li>
+<li><code>run(clock)</code> is timer-only playback. <code>run(clock, dur)</code> is rejected because
+the phase declaration already owns the duration.</li>
+</ul>
+<h3 id="choose-the-clocks-look"><a class="header" href="#choose-the-clocks-look">Choose the clock’s look</a></h3>
+<p>The clock uses native manic shapes, so it stays sharp at any output size and
+can be targeted like the rest of the scene. No SVG workflow is required.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>look</th><th>best fit</th></tr>
+</thead>
+<tbody>
+<tr><td><code>ring</code></td><td>neutral default; compact and familiar</td></tr>
+<tr><td><code>bar</code></td><td>long processes or wide layouts</td></tr>
+<tr><td><code>segments</code></td><td>energetic stages and presentations</td></tr>
+<tr><td><code>ticks</code></td><td>precise, technical, or measurement-led scenes</td></tr>
+<tr><td><code>number</code></td><td>minimal layouts where the value is enough</td></tr>
+<tr><td><code>pulse</code></td><td>short, urgent moments; use sparingly</td></tr>
+<tr><td><code>none</code></td><td>keep exact phase choreography without showing a clock</td></tr>
+</tbody>
+</table>
+</div>
+<p>The main controls are:</p>
+<ul>
+<li><code>number=inside|outside|none</code> and <code>direction=fill|drain</code></li>
+<li><code>size=small|medium|large|0.5..2.0</code> and <code>thickness=0.4..3.0</code></li>
+<li><code>color</code>, <code>track</code>, <code>label</code>, and <code>font=mono|display</code></li>
+<li><code>finish=fade|hold|flash|pulse</code> for the completion cue</li>
+</ul>
+<p>Start with the default ring, then change the look only when it supports the
+scene’s meaning. For legibility, keep strong contrast between <code>color</code> and
+<code>track</code>, and avoid combining a busy clock with dense content in the same corner.</p>
+<p>Advanced styling can target the stable tags <code>clock.timer</code>,
+<code>clock.timer.track</code>, <code>clock.timer.progress</code>, <code>clock.timer.value</code>,
+<code>clock.timer.label</code>, and <code>clock.timer.effects</code> (replace <code>clock</code> with the
+controller id).</p>
+<h3 id="generic-controller-or-creator-quiz"><a class="header" href="#generic-controller-or-creator-quiz">Generic controller or Creator quiz?</a></h3>
+<p>The same visual clock system serves two different timing contracts:</p>
+<ul>
+<li><code>timing(fresh_id, "phase=seconds ...")</code> creates a generic controller used by
+<code>timed</code> and <code>during</code>.</li>
+<li><code>timing(quiz_id, "calm ask=... think=... reveal=...")</code> configures a Creator
+quiz and is played with <code>run(quiz_id)</code>.</li>
+</ul>
+<p>Do not wrap a quiz in <code>timed</code>; the quiz runner already owns its ask, options,
+think, reveal, hold, and stagger phases.</p>
+<h3 id="common-fixes"><a class="header" href="#common-fixes">Common fixes</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>message or symptom</th><th>fix</th></tr>
+</thead>
+<tbody>
+<tr><td>controller id is already in use</td><td>choose a fresh id for generic timing</td></tr>
+<tr><td>a phase overruns</td><td>shorten its sequence, compose simultaneous work with <code>par</code>, or increase the declared phase</td></tr>
+<tr><td>unknown phase</td><td>match the name in <code>during</code> to the <code>timing</code> declaration</td></tr>
+<tr><td>duplicate phase block</td><td>combine the work into one <code>during</code> block</td></tr>
+<tr><td>competing duration</td><td>remove the duration argument from <code>run(clock, dur)</code></td></tr>
+<tr><td>timer appears twice</td><td>remove <code>run(clock)</code> from inside <code>timed(clock)</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Complete non-quiz example using a pendulum, caption, formula, and segmented
+clock:</p>
+<pre><code class="language-manic">// Generic Timing v2 — one named clock coordinates a non-quiz physics scene.
+// `timed` runs the visual timer and places every `during` block at the exact
+// offset declared by `timing`; short blocks are padded, overruns are errors.
+title("Generic Timing v2 — Pendulum");
+canvas("16:9");
+template("mono");
+
+text(head, (315, 72), "ONE CLOCK. EVERY BEAT.");
+size(head, 30); bold(head); color(head, fg); hidden(head);
+text(sub, (315, 112), "Generic Timing v2 — not a quiz");
+size(sub, 18); color(sub, dim); hidden(sub);
+
+pendulum(p, (640, 245), 1.5, 42, 140, 0.03);
+untraced(p.path);
+
+equation(law, (640, 602), `T\approx2\pi\sqrt{L/g}`, 54);
+color(law, gold); hidden(law);
+text(note, (640, 655), "The scene and clock share the same named phases.");
+size(note, 21); color(note, dim); hidden(note);
+text(done, (640, 680), "INTRO  →  EXPERIMENT  →  INSIGHT  →  OUTRO");
+size(done, 18); color(done, cyan); hidden(done);
+
+// A fresh id creates a format-neutral timing controller. Its phases total
+// 10.4 seconds; no duplicate duration is passed to `timed` or `run`.
+timing(showclock, (970, 86), "intro=1.2 experiment=6 insight=2 outro=1.2");
+timerstyle(showclock,
+           "look=segments number=outside direction=drain size=small thickness=1.15 color=cyan track=dim label=MASTER_CLOCK font=display finish=pulse");
+
+timed(showclock) {
+  during("intro") {
+    par { show(head, 0.7); show(sub, 0.7); }
+  }
+
+  during("experiment") {
+    par { run(p, 6); draw(p.path, 6); }
+  }
+
+  during("insight") {
+    par { show(law, 0.6); show(note, 0.6); }
+    pulse(p.bob, 0.7);
+  }
+
+  during("outro") {
+    show(done, 0.6);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/oihH-HyPOSI" title="One Clock Controls an Entire Physics Scene — Timing v2" allowfullscreen loading="lazy"></iframe></div>
+
 <p>Next: the palette, glow, and easings → <a href="#colour--style">Colour &amp; style</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="templates--choose-the-whole-visual-system"><a class="header" href="#templates--choose-the-whole-visual-system">Templates — choose the whole visual system</a></h1>
+<p>A template controls the background, semantic palette, glow character and any
+page chrome for the entire movie. Choose it once near the top of the file:</p>
+<pre><code class="language-manic">canvas("9:16");
+template("mono");
+</code></pre>
+<p><code>mono</code> is the default. If a DSL file does not call <code>template(...)</code>, it renders
+exactly as if <code>template("mono")</code> had been written. Keeping the call explicit is
+useful in shared examples; omitting it is convenient for ordinary authoring.</p>
+<h2 id="available-templates"><a class="header" href="#available-templates">Available templates</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>template</th><th>best for</th><th>character</th></tr>
+</thead>
+<tbody>
+<tr><td><code>mono</code></td><td>professional explainers, proofs and restrained Reels</td><td>black-and-white editorial surface, clear luminance hierarchy, subtle glow</td></tr>
+<tr><td><code>plain</code></td><td>legacy or intentionally colourful scenes</td><td>original neon semantic colours on near-black</td></tr>
+<tr><td><code>terminal</code></td><td>code, algorithms and technical demos</td><td>neon terminal frame and stronger chrome</td></tr>
+<tr><td><code>paper</code></td><td>textbook figures, worksheets and print</td><td>white page, dark ink, crisp low-glow rendering</td></tr>
+<tr><td><code>blueprint</code></td><td>geometry, engineering and construction</td><td>cyan/white drafting marks on deep navy</td></tr>
+<tr><td><code>shorts</code></td><td>energetic social content where hue matters</td><td>restrained dark creator palette</td></tr>
+</tbody>
+</table>
+</div>
+<p>Useful aliases are <code>monochrome</code>, <code>blackwhite</code>, <code>black-white</code>, and <code>bw</code> for
+<code>mono</code>; <code>light</code> and <code>print</code> for <code>paper</code>; and <code>blue</code> for <code>blueprint</code>.</p>
+<h2 id="mono-in-practice"><a class="header" href="#mono-in-practice">Mono in practice</a></h2>
+<pre><code class="language-manic">// Mono is the default; keep this line explicit when teaching or sharing.
+title("Mono template");
+canvas("16:9");
+template("mono");
+
+rect(card, (640, 360), 930, 430);
+color(card, panel);
+
+text(head, (640, 205), "ONE PALETTE · CLEAR HIERARCHY");
+size(head, 42);
+color(head, fg);
+hidden(head);
+
+circle(a, (410, 370), 58); color(a, cyan); hidden(a);
+circle(b, (640, 370), 58); color(b, magenta); hidden(b);
+circle(c, (870, 370), 58); color(c, lime); hidden(c);
+
+text(al, (410, 470), "PRIMARY"); color(al, fg); hidden(al);
+text(bl, (640, 470), "SECONDARY"); color(bl, dim); hidden(bl);
+text(cl, (870, 470), "SUCCESS"); color(cl, lime); hidden(cl);
+
+show(head, 0.4);
+par {
+  show(a, 0.5);
+  show(b, 0.5);
+  show(c, 0.5);
+}
+par {
+  show(al, 0.35);
+  show(bl, 0.35);
+  show(cl, 0.35);
+}
+pulse(c);
+wait(1);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/8R1BOiFmzJo" title="Black & White by Default — manic's Mono Template" allowfullscreen loading="lazy"></iframe></div>
+
+<p>Named colours remain meaningful under mono. <code>fg</code>, <code>dim</code>, <code>panel</code>, <code>cyan</code>,
+<code>magenta</code>, <code>lime</code>, <code>gold</code>, <code>red</code>, <code>orange</code>, and <code>blue</code> are mapped to deliberately
+different greys instead of collapsing to identical white. This preserves
+hierarchy and correct-answer contrast while keeping the export monochrome.</p>
+<p>Use named colours for template-aware work:</p>
+<pre><code class="language-manic">color(answer, lime);       // success role; becomes a bright mono tone
+color(note, dim);          // secondary role; remains visually quiet
+</code></pre>
+<p><code>hue(...)</code> is intentionally an explicit colour choice and bypasses semantic
+palette remapping. Avoid it when the output must remain strictly black and
+white.</p>
+<h2 id="dsl-selection-versus-export-override"><a class="header" href="#dsl-selection-versus-export-override">DSL selection versus export override</a></h2>
+<p>The DSL call travels with the scene. The command-line option is useful for a
+one-off alternate render:</p>
+<pre><code class="language-sh">manic scene.manic --still 4.0
+manic scene.manic --record out --template paper
+</code></pre>
+<p>An explicit <code>--template NAME</code> export option overrides the DSL template for that
+run. This is a quick way to proof the same semantic scene on mono, paper and
+blueprint without editing the source.</p>
+<h2 id="creator-and-reel-guidance"><a class="header" href="#creator-and-reel-guidance">Creator and Reel guidance</a></h2>
+<p>Start with mono for a polished black-and-white identity. It works especially
+well for mathematics, question cards, native social icons and technical timers:</p>
+<pre><code class="language-manic">canvas("9:16");
+// template("mono") is optional because mono is the default.
+creator(me, "@anish2good yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social");
+quiz(q, "Which statement is true?");
+</code></pre>
+<p>Switch to <code>shorts</code> when accent hue communicates part of the channel identity,
+or to <code>paper</code> for an exam-sheet or textbook treatment. Template choice does not
+change Creator layout, safe areas, timing, option labels or social-platform
+selection—it changes only their visual system.</p>
+<h2 id="practical-checks"><a class="header" href="#practical-checks">Practical checks</a></h2>
+<ul>
+<li>Review one reading frame and one reveal frame at phone size.</li>
+<li>In mono, check luminance contrast rather than relying on colour names.</li>
+<li>Prefer one semantic accent role; do not make every object equally bright.</li>
+<li>Use <code>plain</code> when migrating an older example that must preserve its neon hue.</li>
+<li>Use <code>paper</code> or <code>blueprint</code> to test whether a construction remains legible on a
+very different surface.</li>
+</ul>
+<p>Next: <a href="#colour--style">Colour, glow and semantic roles →</a></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="colour--style"><a class="header" href="#colour--style">Colour &amp; style</a></h1>
 <h2 id="the-palette"><a class="header" href="#the-palette">The palette</a></h2>
-<p>manic uses a small, fixed set of colour names — no hex, no RGB. They’re tuned to
-glow on the dark default background:</p>
+<p>manic uses a small set of semantic colour names. The default <code>mono</code> template
+maps all of them to distinct black-and-white luminance levels; choose <code>plain</code>
+or another colour template when hue should carry meaning. Their original neon
+roles are:</p>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -565,6 +1058,8 @@ canvas(1280, 720);     // explicit
 <p><code>portrait</code> / <code>9:16</code> is 1080×1920 — pair it with the <code>reel</code> render preset for
 vertical / social clips.</p>
 <h2 id="templates--the-whole-look"><a class="header" href="#templates--the-whole-look">Templates — the whole look</a></h2>
+<p>For the complete selection guide, CLI override rules, mono tips and a runnable
+black-and-white example, see <a href="#templates--choose-the-whole-visual-system">Templates — choose the whole visual system</a>.</p>
 <p><code>template("...")</code> sets the movie’s <strong>look</strong> in one call: the background, how the
 palette renders, the glow, and any page chrome. Put it near the top, after
 <code>canvas(...)</code>.</p>
@@ -577,21 +1072,30 @@ template("paper");     // a flat white exam-paper page
 <tr><th>template</th><th>look</th></tr>
 </thead>
 <tbody>
-<tr><td><code>plain</code></td><td>the default — neon on near-black, no chrome</td></tr>
+<tr><td><code>mono</code> (aliases <code>monochrome</code>, <code>bw</code>)</td><td><strong>default</strong> — black-and-white editorial, near-black page, subtle glow</td></tr>
+<tr><td><code>plain</code></td><td>original neon palette on near-black, no chrome</td></tr>
 <tr><td><code>terminal</code></td><td>the neon-terminal frame (border, title, masthead)</td></tr>
 <tr><td><code>paper</code> (aliases <code>light</code>, <code>print</code>)</td><td>white page, dark ink — for print / textbook figures</td></tr>
 <tr><td><code>blueprint</code> (alias <code>blue</code>)</td><td>white &amp; cyan lines on deep navy</td></tr>
+<tr><td><code>shorts</code></td><td>restrained dark creator palette for Shorts and Reels</td></tr>
 </tbody>
 </table>
 </div>
+<p>Omitting <code>template(...)</code> is exactly the same as selecting <code>template("mono")</code>.
+Use explicit <code>plain</code> when an older scene should keep the original neon colours.</p>
 <p>The clever part is the <strong>palette remap</strong>: a template doesn’t just change the
-background, it re-maps every palette colour to that template’s role. So on
-<code>paper</code>, <code>panel</code> → light box, <code>fg</code> → dark ink, <code>lime</code> → forest green, and so on —
+background, it re-maps every named palette colour to that template’s role. So
+on <code>mono</code>, <code>cyan</code>, <code>magenta</code>, <code>lime</code>, <code>gold</code>, <code>red</code>, <code>orange</code>, and <code>blue</code> become
+carefully separated greys; on <code>paper</code>, <code>panel</code> → light box, <code>fg</code> → dark ink,
+<code>lime</code> → forest green, and so on —
 which means your existing scene renders legibly on the new page <strong>without
 recolouring anything</strong>. That’s why <code>template("paper")</code> alone turns a pulley,
 a spring, or a linked list into a clean textbook figure (see
 <a href="#elevating-a-scene">Elevating a scene</a>). <code>paper</code>/<code>blueprint</code> also drop the glow for
 crisp print output.</p>
+<p><code>hue(...)</code> and future explicit RGB colours are intentionally bespoke, so they
+pass through instead of being forced to greyscale. Use the named palette colours
+when a scene must remain strictly monochrome.</p>
 <p>Next: loops, variables, and macros → <a href="#the-language-layer">The language layer</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="the-language-layer"><a class="header" href="#the-language-layer">The language layer</a></h1>
@@ -760,6 +1264,34 @@ distance images a nearby point. Analysis: <code>rayfan</code> (the ray-fan aberr
 <code>spotdiagram</code> (the on-axis spot at focus) · <code>fieldspot(id, [center], [preset], [field])</code> (the <strong>off-axis</strong> spot — a coma comet / astigmatic blur, with an
 Airy-disk diffraction-limit overlay). A rainbow glows on the dark bench; the
 geometric ray diagrams also take <code>template("paper")</code> for a textbook look.</p>
+<h2 id="creator"><a class="header" href="#creator">creator</a></h2>
+<p>A <strong>format</strong> layer (not a subject): responsive, pre-timed social-video templates
+a content creator fills in—question, answers, media and a reusable profile. V2
+adapts the same source to 9:16, 4:5, 1:1 and 16:9, with named platform safe areas,
+a polished studio default, configurable motion/timers, responsive footers and end cards.</p>
+<pre><code class="language-manic">canvas("9:16"); template("shorts");
+creator(me, "@anish2good name=Math_With_Me yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social accent=magenta");
+quiz(q, "What is 7 x 8?", "studio labels=letters pace=calm motion=calm");
+option(q, "54"); option(q, "56", correct); option(q, "48"); option(q, "63");
+timerstyle(q, "look=segments position=media finish=pulse");
+run(q, 8);                                  // scales the calm ask → think → reveal beat
+socials(me);
+endcard(me);                                // reveal later with show(me.endcard)
+</code></pre>
+<p><code>quiz(id, "question", ["style"])</code> starts the format; <code>style</code> mixes a card <strong>skin</strong> —
+<code>studio</code> (rounded editorial default) · <code>badge</code> (framed panel + coloured letter badges) · <code>minimal</code> (kicker + accent
+rule, outline rows) · <code>glass</code> (glowing borders) · <code>plain</code> (flat) — and a question
+<strong>reveal</strong> — <code>type</code> (typewriter, default) · <code>fade</code> · <code>rise</code> · <code>pop</code> · <code>cut</code>.
+<code>option(id, "text", [correct])</code> adds an answer; <code>run</code> <strong>auto-lays-out</strong> one to six cards,
+fits their type, slides them in, plays the selected native timer, and lights up the correct
+card (green badge + check). <code>timing(id,"preset ask=... options=... think=... reveal=... hold=... stagger=...")</code>
+separates exact choreography from <code>timerstyle(id,"look=... position=... direction=... finish=...")</code>.
+The zero-config default remains a balanced draining ring; <code>run(id,dur)</code> scales a preset,
+while an explicitly timed quiz uses <code>run(id)</code> so authored seconds remain exact. Also standalone:
+<code>countdown(id, [at], [secs], ["style"])</code>, <code>safezone(id, [inset|"profile"])</code>, <code>figure(target, [center], [size])</code>, optional <code>explain</code>, and <code>endcard</code>. Social icons are
+vector-drawn with normalized native marks for YouTube, X, Instagram, TikTok,
+Facebook, LinkedIn, GitHub, web, and email. Profile values appear beside up to
+three icons; no image or SVG assets are required.</p>
 <hr>
 <p>Each kit has a full reference at <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>, and you can see them
 all in motion in the <a href="#examples-gallery">Examples gallery</a>.</p>
@@ -1002,18 +1534,19 @@ shape (with a message that names the 3D replacement):</p>
 <ul>
 <li><a href="#algorithms--data-structures">Algorithms &amp; data structures</a> — 6 examples</li>
 <li><a href="#graphs">Graphs</a> — 4 examples</li>
-<li><a href="#calculus--functions">Calculus &amp; functions</a> — 12 examples</li>
+<li><a href="#calculus--functions">Calculus &amp; functions</a> — 18 examples</li>
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 12 examples</li>
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 13 examples</li>
-<li><a href="#physics--simulations">Physics — simulations</a> — 51 examples</li>
+<li><a href="#physics--simulations">Physics — simulations</a> — 52 examples</li>
 <li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 3 examples</li>
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 8 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 3 examples</li>
-<li><a href="#text--ui">Text &amp; UI</a> — 5 examples</li>
+<li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
 <li><a href="#generative--recursive">Generative &amp; recursive</a> — 9 examples</li>
+<li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 14 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
-<li><a href="#3d-scenes">3D scenes</a> — 10 examples</li>
+<li><a href="#3d-scenes">3D scenes</a> — 12 examples</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="algorithms--data-structures"><a class="header" href="#algorithms--data-structures">Algorithms &amp; data structures</a></h1>
@@ -2262,6 +2795,280 @@ par {
 }
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/-QeYAZ2GHVQ" title="Phase Portrait: Flowing Into a Spiral — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="band"><a class="header" href="#band">band</a></h2>
+<p>The area trapped between two curves, filled directly with <code>band(top,bottom)</code> while both
+boundary plots remain visible.</p>
+<pre><code class="language-manic">title("The area between two curves");
+canvas("16:9");
+
+let ox = cx - 460;
+let oy = cy + 40;
+
+text(hdr, (cx, 58), "The region trapped between two curves");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 900, 260, 1);
+color(ax, dim); untraced(ax);
+
+// two curves over the same stretch of x
+plot(upper, (ox, oy), 140, 90, "0.4*x + 1.4", (0, 6.3));
+color(upper, cyan); stroke(upper, 3); untraced(upper);
+
+plot(lower, (ox, oy), 140, 90, "sin(x)", (0, 6.3));
+color(lower, magenta); stroke(lower, 3); untraced(lower);
+
+// the band between them
+band(gap, upper, lower);
+color(gap, lime); hidden(gap);
+
+text(cap, (cx, h - 56), "band(top, bottom) fills the space between");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+par {
+  draw(upper, 1.4);
+  draw(lower, 1.4);
+}
+wait(0.3);
+to(gap, opacity, 0.3, 0.6);   // fade in to translucent (so the curves read through)
+show(cap, 0.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/-VZZulWKHr8" title="The Area Between Two Curves, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="curve-features"><a class="header" href="#curve-features">curve-features</a></h2>
+<p>Read a cubic by its geometry: maxima/minima where the slope is zero and an inflection
+where the curve changes its bend (<code>extrema</code>, <code>inflections</code>).</p>
+<pre><code class="language-manic">title("Reading a curve's shape — maxima, minima, inflection");
+canvas("16:9");
+
+let ox = cx - 540;   // math x=0 maps here (centres the domain 1..5 under cx)
+let oy = cy;
+
+text(hdr, (cx, 56), "Where the curve turns, and where it changes its bend");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 940, 240, 1);
+color(ax, dim); untraced(ax);
+
+// a cubic S-curve: one maximum, one minimum, one inflection
+plot(f, (ox, oy), 180, 170, "0.4*((x-3)*(x-3)*(x-3) - 4*(x-3))", (1, 5));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// maxima &amp; minima (slope = 0)
+extrema(turn, f);
+color(turn, gold);
+
+// inflection (concavity flips, f'' = 0)
+inflections(bend, f);
+color(bend, magenta);
+
+text(lg, (cx + 300, 150), "gold: max / min  (slope 0)");
+size(lg, 18); color(lg, gold); display(lg); hidden(lg);
+text(lm, (cx + 300, 186), "pink: inflection  (bend flips)");
+size(lm, 18); color(lm, magenta); display(lm); hidden(lm);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(f, 1.6);
+wait(0.3);
+show(turn, 0.5);
+show(lg, 0.4);
+pulse(turn, 0.6);
+wait(0.3);
+show(bend, 0.5);
+show(lm, 0.4);
+pulse(bend, 0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/O3TmUiMzafU" title="Maxima, Minima & Inflection Points on One Curve — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="ftc"><a class="header" href="#ftc">ftc</a></h2>
+<p>The Fundamental Theorem of Calculus: accumulate the area under a curve, differentiate
+that area function, and watch the original function return.</p>
+<pre><code class="language-manic">title("The Fundamental Theorem of Calculus");
+canvas("16:9");
+
+let ox = cx - 460;   // math x=0 maps here
+let oy = cy + 20;
+
+text(hdr, (cx, 52), "Differentiate the area — and the function comes back");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 900, 200, 1);
+color(ax, dim); untraced(ax);
+
+// f(x) = cos x
+plot(f, (ox, oy), 140, 150, "cos(x)", (0, 6.3));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// F(x) = area under f from 0 to x  =  sin x
+accum(bigF, f);
+color(bigF, lime); stroke(bigF, 3); untraced(bigF);
+
+// F'(x): differentiate the area function — it lands right back on f
+deriv(dF, bigF);
+color(dF, gold); stroke(dF, 3); untraced(dF);
+
+// legend
+text(lf, (cx + 300, 150), "f(x) = cos x");
+size(lf, 20); color(lf, cyan); display(lf); hidden(lf);
+text(lF, (cx + 300, 190), "F(x) = area so far");
+size(lF, 20); color(lF, lime); display(lF); hidden(lF);
+text(ld, (cx + 300, 230), "F'(x) = f(x)");
+size(ld, 20); color(ld, gold); bold(ld); display(ld); hidden(ld);
+
+text(cap, (cx, h - 52), "the slope of the area-so-far IS the original curve");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ================= timeline =================
+show(hdr, 0.6);
+draw(ax, 0.7);
+
+// 1. the function
+draw(f, 1.3);
+show(lf, 0.4);
+wait(0.3);
+
+// 2. its accumulated area, as a new curve (this is sin x)
+draw(bigF, 1.6);
+show(lF, 0.4);
+wait(0.4);
+
+// 3. differentiate that area function — it traces back onto f
+draw(dF, 1.6);
+show(ld, 0.4);
+flash(dF, gold);
+show(cap, 0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TPQM2kkcLJA" title="The Fundamental Theorem of Calculus, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="limit"><a class="header" href="#limit">limit</a></h2>
+<p>A removable discontinuity visualized as an approaching point, open circle and live
+finite limit at x→0.</p>
+<pre><code class="language-manic">title("A limit — the value a curve heads toward");
+canvas("16:9");
+
+let ox = cx - 120;
+let oy = cy;
+
+text(hdr, (cx, 54), "sin(x) / x is undefined at 0 — but it heads straight for 1");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 620, 300, 1);
+color(ax, dim); untraced(ax);
+
+// sin(x)/x — a removable hole at x = 0, where the limit is 1
+plot(f, (ox, oy), 150, 220, "sin(x)/x", (-6.2, 6.2));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// the limit at x -&gt; 0: open circle at (0, 1), guides, value, and an approaching dot
+limit(lim, f, 0);
+color(lim, gold);
+
+text(cap, (cx, h - 54), "slide the point in — f(x) closes on the open circle");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(f, 1.6);
+wait(0.3);
+show(lim, 0.5);
+show(cap, 0.4);
+wait(0.3);
+// walk the point toward x = 0 from the left — it approaches the open circle
+to(lim, x, 0, 3.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/c0ZzNiHh4P0" title="A Function Can Miss the Point but Still Have a Limit — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="limit-infinity"><a class="header" href="#limit-infinity">limit-infinity</a></h2>
+<p>A rational function settling onto its horizontal asymptote, with <code>limit(...,inf)</code>
+detecting and marking the value at infinity.</p>
+<pre><code class="language-manic">title("A limit at infinity — limit(id, curve, inf)");
+canvas("16:9");
+
+let ox = 90;          // x = 0 near the left
+let oy = cy + 250;    // y = 0 baseline
+
+text(hdr, (cx, 52), "(5x^3 - 2x + 7) / (x^3 + 4x^2 + 3)  -&gt;  5  as x -&gt; infinity");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+text(sub, (cx, 92), "same degree top and bottom: the ratio of leading coefficients, 5/1");
+size(sub, 17); color(sub, dim); display(sub); hidden(sub);
+
+// the x-axis (y = 0)
+line(xaxis, (ox, oy), (ox + 1130, oy));
+color(xaxis, dim); untraced(xaxis);
+
+// the rational function, climbing toward its asymptote
+plot(f, (ox, oy), 9, 88, "(5*x*x*x - 2*x + 7)/(x*x*x + 4*x*x + 3)", (0.5, 125));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// the limit at infinity: auto-detects the horizontal asymptote y = 5
+limit(lim, f, inf);
+color(lim, gold); hidden(lim);
+
+// ---- timeline ----
+show(hdr, 0.6);
+show(sub, 0.4);
+draw(xaxis, 0.5);
+draw(f, 2.4);
+show(lim, 0.7);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ORkllIXzQtc" title="Limits at Infinity & Horizontal Asymptotes — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="taylor"><a class="header" href="#taylor">taylor</a></h2>
+<p>Taylor polynomials of increasing degree closing in on sin(x), one additional
+approximation at a time.</p>
+<pre><code class="language-manic">title("Taylor series — polynomials closing in on a curve");
+canvas("16:9");
+
+let ox = cx;         // x=0 at centre
+let oy = cy + 10;
+
+text(hdr, (cx, 52), "Add one more term, and the polynomial hugs more of the curve");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 640, 260, 1);
+color(ax, dim); untraced(ax);
+
+// the target function
+plot(f, (ox, oy), 95, 120, "sin(x)", (-6.2, 6.2));
+color(f, cyan); stroke(f, 5); untraced(f);
+
+// Taylor polynomials about x = 0, growing in degree
+taylor(p1, f, 0, 1);
+color(p1, dim); stroke(p1, 3); untraced(p1);
+taylor(p3, f, 0, 3);
+color(p3, gold); stroke(p3, 3); untraced(p3);
+taylor(p5, f, 0, 5);
+color(p5, magenta); stroke(p5, 3); untraced(p5);
+taylor(p7, f, 0, 7);
+color(p7, lime); stroke(p7, 3); untraced(p7);
+
+text(l1, (cx + 300, 150), "n = 1   (a line)");
+size(l1, 18); color(l1, dim); display(l1); hidden(l1);
+text(l3, (cx + 300, 186), "n = 3");
+size(l3, 18); color(l3, gold); display(l3); hidden(l3);
+text(l5, (cx + 300, 222), "n = 5");
+size(l5, 18); color(l5, magenta); display(l5); hidden(l5);
+text(l7, (cx + 300, 258), "n = 7");
+size(l7, 18); color(l7, lime); display(l7); hidden(l7);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(f, 1.6);
+wait(0.3);
+draw(p1, 0.8);  show(l1, 0.3);  wait(0.3);
+draw(p3, 0.9);  show(l3, 0.3);  wait(0.3);
+draw(p5, 1.0);  show(l5, 0.3);  wait(0.3);
+draw(p7, 1.1);  show(l7, 0.3);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/5_W8DHKCI88" title="Taylor Series: Watch Polynomials Become sin(x) — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="linear-algebra--tables"><a class="header" href="#linear-algebra--tables">Linear algebra &amp; tables</a></h1>
@@ -3756,6 +4563,58 @@ draw(p.path, 0.8);
 swing(p, 10);                      // every panel animates in lockstep
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/6ThI97u97cg" title="One Pendulum, Four Views — Motion, Phase, Well & Energy — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="timing-v2-scene"><a class="header" href="#timing-v2-scene">timing-v2-scene</a></h2>
+<p>Generic Timing v2 controlling an ordinary physics scene: one named-phase clock schedules
+the intro, pendulum motion and finish independently from its native timer look.</p>
+<pre><code class="language-manic">// Generic Timing v2 — one named clock coordinates a non-quiz physics scene.
+// `timed` runs the visual timer and places every `during` block at the exact
+// offset declared by `timing`; short blocks are padded, overruns are errors.
+title("Generic Timing v2 — Pendulum");
+canvas("16:9");
+template("mono");
+
+text(head, (315, 72), "ONE CLOCK. EVERY BEAT.");
+size(head, 30); bold(head); color(head, fg); hidden(head);
+text(sub, (315, 112), "Generic Timing v2 — not a quiz");
+size(sub, 18); color(sub, dim); hidden(sub);
+
+pendulum(p, (640, 245), 1.5, 42, 140, 0.03);
+untraced(p.path);
+
+equation(law, (640, 602), `T\approx2\pi\sqrt{L/g}`, 54);
+color(law, gold); hidden(law);
+text(note, (640, 655), "The scene and clock share the same named phases.");
+size(note, 21); color(note, dim); hidden(note);
+text(done, (640, 680), "INTRO  →  EXPERIMENT  →  INSIGHT  →  OUTRO");
+size(done, 18); color(done, cyan); hidden(done);
+
+// A fresh id creates a format-neutral timing controller. Its phases total
+// 10.4 seconds; no duplicate duration is passed to `timed` or `run`.
+timing(showclock, (970, 86), "intro=1.2 experiment=6 insight=2 outro=1.2");
+timerstyle(showclock,
+           "look=segments number=outside direction=drain size=small thickness=1.15 color=cyan track=dim label=MASTER_CLOCK font=display finish=pulse");
+
+timed(showclock) {
+  during("intro") {
+    par { show(head, 0.7); show(sub, 0.7); }
+  }
+
+  during("experiment") {
+    par { run(p, 6); draw(p.path, 6); }
+  }
+
+  during("insight") {
+    par { show(law, 0.6); show(note, 0.6); }
+    pulse(p.bob, 0.7);
+  }
+
+  during("outro") {
+    show(done, 0.6);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/oihH-HyPOSI" title="One Clock Controls an Entire Physics Scene — Timing v2" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="pendulum-damped"><a class="header" href="#pendulum-damped">pendulum-damped</a></h2>
 <p>The same four views with friction on (<code>damping</code>): the swing decays, the phase loop
@@ -7010,6 +7869,85 @@ wait(0.8);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/FhoIX7kKQXU" title="The manic Logo Reveal" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="equation"><a class="header" href="#equation">equation</a></h2>
+<p>Display-quality LaTeX for fractions, roots, sums, powers and integrals, with semantic
+colour and template tinting.</p>
+<pre><code class="language-manic">// LaTeX math typesetting via `equation(...)`. Put the LaTeX in BACKTICKS so the
+// backslashes survive. Rendered white-on-transparent and tinted by the entity
+// colour, so `color(...)` and `template(...)` both work.
+title("Equations");
+canvas("16:9");
+
+equation(quad, (cx, 150), `x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}`, 68);
+color(quad, cyan);
+
+equation(sum, (cx, 340), `\sum_{k=1}^{n} k = \frac{n(n+1)}{2}`, 60);
+
+equation(euler, (cx, 500), `e^{i\pi} + 1 = 0`, 64);
+color(euler, gold);
+
+equation(intg, (cx, 640), `\int_0^1 x^2\,dx = \tfrac{1}{3}`, 56);
+color(intg, lime);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/2r9pZUjMVbE" title="Beautiful LaTeX Equations From Plain Text — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="inline-math"><a class="header" href="#inline-math">inline-math</a></h2>
+<p>Inline LaTeX mixed with ordinary prose, including wrapped explanatory text and a
+standalone display equation.</p>
+<pre><code class="language-manic">// Inline LaTeX everywhere: wrap math in `$…$` (backtick raw string) inside ANY
+// text/caption/kit label. Plain text (no `$`) is unchanged. Mixed lines wrap.
+title("Inline math");
+canvas("16:9");
+
+text(t1, (cx, 110), `The area of a circle is $A = \pi r^2$`);
+color(t1, cyan);
+
+// mixed text + math that WRAPS across lines
+text(t2, (cx, 300), `By the Pythagorean theorem, if $a^2 + b^2 = c^2$ then the triangle with sides a, b, c is right-angled`);
+wrap(t2, 760);
+color(t2, lime);
+
+// a whole-formula label (auto-typeset, centred)
+equation(eq, (cx, 470), `\int_0^{1} x^2 \, dx = \tfrac{1}{3}`, 60);
+color(eq, gold);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/I0Bl6rCHH5M" title="Mix LaTeX Math Inside Any Sentence — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="image"><a class="header" href="#image">image</a></h2>
+<p>Embed a raster image (PNG/JPG) with <code>image(id, (x,y), "path", w, h)</code> — a real file drawn
+into the scene and animated like any entity (shown, spun, pulsed, moved). Unlocks logos,
+avatars and photo backdrops (e.g. a creator’s brand in a template).</p>
+<pre><code class="language-manic">// ============================================================================
+//  image.manic  —  embed a raster image (PNG/JPG) in a scene
+// ----------------------------------------------------------------------------
+//  `image(id, (x,y), "path", [w], [h])` loads a real image file and draws it
+//  centred at (x,y), w×h px — and it's an ordinary entity, so every verb
+//  (`show`/`move`/`fade`/`pulse`/`spin`/…) animates it. Here a bundled logo
+//  slides + fades in, pulses, then a caption types beside it. A missing path
+//  draws a crossed placeholder box instead of failing.
+//
+//  (This unlocks real logos, avatars and photo backdrops for creator templates —
+//  a creator drops their brand image into a slot.)
+// ============================================================================
+
+title("Raster Images");
+canvas("16:9");
+
+image(logo, (cx, 340), "assets/manic-logo.png", 300, 300); hidden(logo);
+text(cap, (cx, 600), "any PNG/JPG — and it animates like anything else");
+color(cap, fg); size(cap, 34); bold(cap); untraced(cap);
+
+// ================= THE SCENE =================
+show(logo, 0.6); pulse(logo);
+wait(0.4);
+spin(logo, 1.0);
+type(cap, 2.0);
+wait(0.6);
+par { move(logo, (cx, 320), 0.8, smooth); pulse(logo); }
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/3h0wTYGzHTU" title="Embed Any Image in manic — Logos, Avatars & Photos, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="generative--recursive"><a class="header" href="#generative--recursive">Generative &amp; recursive</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
@@ -7987,6 +8925,751 @@ wait(1.2);
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/2sCPIyi1MB8" title="Happy Pi Day — a Generative π Card in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="creator-formats--responsive-social-video"><a class="header" href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a></h1>
+<p>Creator Kit v2 turns a question, answers, media and a reusable creator profile into a polished timed social clip. The same source adapts to 9:16, 4:5, 1:1 and 16:9 with platform-safe regions. <code>studio</code> plus a balanced ring is the restrained default; <code>timing</code> controls the beat independently from <code>timerstyle</code>, whose native ring, bar, number, segments, ticks and pulse looks remain crisp at every size. Explicit <code>layout</code>, <code>density</code>, <code>labels</code>, <code>motion</code>, <code>safe</code> and <code>accent</code> controls customise the rest. Responsive native social icons, optional explanations and final end cards share the same brand profile.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="perfect-reel"><a class="header" href="#perfect-reel">perfect-reel</a></h2>
+<p>The gold-path production starter: phone-safe composition, real LaTeX, exact pacing,
+professional mono styling, creator identity, timeline markers and a focused end card.</p>
+<pre><code class="language-manic">// A production-ready Creator v2 Reel: safe layout, exact pacing, one focal
+// equation, restrained motion, reusable branding, markers, and an end card.
+title("Perfect Reel — Angle Ratio");
+canvas("9:16");
+template("mono");
+
+creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_and_share safe=reels");
+
+quiz(q, "Triangle angles: 2:3:4. What is the largest?",
+     "studio layout=media-first reveal=fade density=comfortable motion=calm safe=reels accent=cyan");
+option(q, `$60^\circ$`);
+option(q, `$80^\circ$`, correct);
+option(q, `$90^\circ$`);
+option(q, `$100^\circ$`);
+explain(q, `The parts total $9$, so $x=20^\circ$ and $4x=80^\circ$.`, "Angle sum");
+
+equation(prompt, (cx, 650), `2x+3x+4x=180^\circ`, 70);
+color(prompt, cyan);
+figure(prompt);
+hidden(prompt);
+
+// Exact 10.5-second quiz beat. The timer look can change independently.
+timing(q, "calm ask=1.1 options=1 think=5.5 reveal=0.75 hold=2.15 stagger=0.06");
+timerstyle(q, "look=ring position=below number=inside direction=drain size=medium thickness=1.1 color=cyan track=dim label=THINK font=mono finish=pulse");
+
+socials(me);
+endcard(me, "cta=Save_and_share");
+
+mark("hook");
+par {
+  run(q);
+  show(prompt, 0.5);
+}
+
+mark("endcard");
+par {
+  fade(q.parts, 0.45);
+  fade(prompt, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/-AcCbVbv7qI" title="Make a Perfect Math Reel From One Script — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-v2-options-socials"><a class="header" href="#creator-v2-options-socials">creator-v2-options-socials</a></h2>
+<p>The asset-free v2.4 review scene: collision-safe question hierarchy, professional A/B/C/D
+cards, uniform correct-state spacing, and native YouTube/X/web identity lockups.</p>
+<pre><code class="language-manic">// Creator v2.4 review scene: question hierarchy, A/B/C/D answer cards,
+// uniform correct-state spacing, and asset-free native social identities.
+title("Creator v2.4 — Options + Socials");
+canvas("9:16");
+template("mono");
+
+creator(me, "@anish2good name=Olympiad_Minute yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social accent=cyan safe=reels");
+
+quiz(q, `In cyclic quadrilateral $ABCD$, $\angle A=68^\circ$. What is $\angle C$?`,
+     "studio labels=letters layout=auto density=comfortable motion=calm safe=reels accent=cyan");
+option(q, `$68^\circ$`);
+option(q, `$102^\circ$`);
+option(q, `$112^\circ$`, correct);
+option(q, `$122^\circ$`);
+
+timing(q, "balanced ask=1.2 options=1 think=4.8 reveal=0.8 hold=2.2 stagger=0.06");
+timerstyle(q, "look=bar position=below number=outside direction=drain color=cyan track=dim label=THINK finish=pulse");
+
+socials(me);
+run(q);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/KHFV5y7NE5Q" title="Professional Quiz Options + Native Social Icons — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-v2"><a class="header" href="#creator-v2">creator-v2</a></h2>
+<p>The complete v2 core: responsive studio quiz, optics media, width-aware answer cards, a
+signature creator footer, optional explanation and a branded final end card.</p>
+<pre><code class="language-manic">// Creator Kit v2 core — responsive studio quiz + reusable brand system.
+// Change the canvas to (1080,1350), (1080,1080), or (1280,720): the same
+// question, media, choices, timer and footer reflow into the available space.
+title("Creator Kit v2 — Optics Quiz");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Optics_Lab tagline=Physics_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Follow_for_more safe=shorts");
+
+quiz(q, "Which glass separates blue and red light more?",
+     "studio layout=media-first reveal=rise timer=bar density=comfortable motion=studio safe=shorts accent=cyan");
+option(q, "BK7 crown glass");
+option(q, "SF11 flint glass", correct);
+option(q, "Both equally");
+option(q, "Neither material");
+explain(q, "SF11 has stronger wavelength dispersion.", "Sellmeier model");
+
+// Any static kit figure or tagged group can occupy the responsive media region.
+prism(p, (540, 670), "sf11");
+figure(p);
+
+socials(me);
+endcard(me, "cta=Follow_for_more");
+
+par {
+  run(q, 12);
+  run(p, 12);
+}
+par {
+  fade(q.parts, 0.45);
+  fade(p, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/6DP_6tPfspA" title="Creator Kit v2 — One Responsive Quiz Across Every Social Format" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-v2-timing"><a class="header" href="#creator-v2-timing">creator-v2-timing</a></h2>
+<p>Timing v2 in a portrait quiz: exact ask/options/think/reveal/hold phases, LaTeX media, and a
+segmented timer whose presentation can change without changing the choreography.</p>
+<pre><code class="language-manic">// Creator Timing v2 — independent choreography and timer presentation.
+// `timing` controls WHEN each beat happens; `timerstyle` controls how the
+// countdown looks. With explicit phases, call run(q) without a second duration.
+title("Creator Timing v2");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Number_Lab tagline=Pause_predict_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta secondary=cyan footer=signature cta=Try_the_next_one safe=shorts");
+
+quiz(q, `Which number is equal to $2^5$?`,
+     "studio layout=media-first reveal=rise density=comfortable motion=calm safe=shorts accent=magenta");
+option(q, `$10$`);
+option(q, `$16$`);
+option(q, `$32$`, correct);
+option(q, `$64$`);
+explain(q, `$2^5=2\times2\times2\times2\times2=32$.`);
+
+equation(eq, (cx, 650), `2^5 = 2\times2\times2\times2\times2`, 72);
+color(eq, magenta); figure(eq); hidden(eq);
+
+// Absolute phases: 1.2s question, 1.1s answers, 6s thinking, 0.8s reveal,
+// then a 2.2s answer hold. The total is derived automatically by run(q).
+timing(q, "calm ask=1.2 options=1.1 think=6 reveal=0.8 hold=2.2 stagger=0.07");
+
+// A creative segmented timer in the media corner. Change only this line to
+// ring/bar/number/ticks/pulse/none without changing the choreography.
+timerstyle(q, "look=segments position=below number=outside direction=drain size=large thickness=1.2 color=magenta track=dim label=THINK font=display finish=pulse");
+
+socials(me);
+par {
+  run(q);
+  show(eq, 0.55);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/JqLTda9s5-M" title="Control Every Beat of a Quiz Reel — Creator Timing v2" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-v2-timers"><a class="header" href="#creator-v2-timers">creator-v2-timers</a></h2>
+<p>All six native Timing v2 looks—ring, bar, number, segments, ticks and pulse—running side by
+side. Native shapes keep every look scalable, theme-aware and progress-animatable.</p>
+<pre><code class="language-manic">// Timing v2 look gallery — every timer uses the same six-second behaviour.
+// All visuals are native manic primitives: scalable, theme-aware and animated.
+title("Creator Timing v2 — Native Looks");
+canvas("16:9");
+template("shorts");
+
+text(head, (cx, 70), "TIMING V2 — CHOOSE THE LOOK");
+size(head, 34); bold(head); color(head, fg);
+
+countdown(ring,     (220, 245), 6, "ring size=small color=cyan label=RING finish=hold");
+countdown(bar,      (640, 245), 6, "bar size=small color=magenta number=outside label=BAR finish=hold");
+countdown(number,  (1060, 245), 6, "number size=large font=display color=gold label=NUMBER finish=hold");
+countdown(segments, (220, 520), 6, "segments size=small color=lime label=SEGMENTS finish=hold");
+countdown(ticks,    (640, 520), 6, "ticks size=small direction=fill color=cyan label=TICKS finish=hold");
+countdown(pulse,   (1060, 520), 6, "pulse size=small font=display color=magenta label=PULSE finish=hold");
+
+par {
+  run(ring, 6);
+  run(bar, 6);
+  run(number, 6);
+  run(segments, 6);
+  run(ticks, 6);
+  run(pulse, 6);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/05c2EgQiM-Y" title="Six Professional Countdown Designs, One Timing System — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-v2-timing-square"><a class="header" href="#creator-v2-timing-square">creator-v2-timing-square</a></h2>
+<p>A square feed-card variant with a scaled dramatic preset and a filling tick timer, showing
+that timing and timer placement reflow independently across formats.</p>
+<pre><code class="language-manic">// Creator Timing v2 — square preset scaling and responsive timer placement.
+title("Creator Timing v2 — Square");
+canvas("1:1");
+template("shorts");
+
+creator(me, "@anish2good name=Proof_Minute tagline=See_the_pattern yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=compact cta=Save_this safe=clean");
+
+quiz(q, `If $x+1/x=3$, find $x^2+1/x^2$`,
+     "glass layout=grid density=comfortable motion=studio pace=dramatic accent=cyan");
+option(q, `$5$`);
+option(q, `$7$`, correct);
+option(q, `$9$`);
+option(q, `$11$`);
+explain(q, `Square the given relation: $x^2+2+\frac{1}{x^2}=9$.`);
+
+equation(clue, (cx, cy), `\left(x+\frac1x\right)^2`, 72);
+color(clue, cyan); figure(clue);
+
+// The timer fills clockwise below the header. The dramatic preset is scaled
+// proportionally to a compact eight-second feed clip by run(q, 8).
+timerstyle(q, "look=ticks position=below number=inside direction=fill size=small thickness=1.1 color=cyan track=dim label=SOLVE font=mono finish=flash");
+
+socials(me);
+run(q, 8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/LJ9MGGycSGc" title="One Quiz, Perfectly Reflowed for a Square Feed — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-v2-olympiad-geometry"><a class="header" href="#creator-v2-olympiad-geometry">creator-v2-olympiad-geometry</a></h2>
+<p>An olympiad-level geometry Reel built as pause → predict → prove, with a responsive
+construction, authored explanation and reusable creator identity.</p>
+<pre><code class="language-manic">// Creator Kit v2 — olympiad geometry problem.
+//
+// Problem: From an external point P, tangents PA and PB touch a circle with
+// centre O and radius 5. If OP = 13, find the chord length AB.
+//
+// The tangent points are computed by the geo kit. Nothing is eyeballed:
+// tangent-radius perpendicularity, chord AB, and M = AB ∩ OP remain live.
+title("Creator v2 — Olympiad Geometry");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Geometry_Lab tagline=See_the_hidden_lemma yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Pause_then_prove safe=shorts");
+
+quiz(q, `From $P$, $PA$ and $PB$ are tangents to circle $(O)$. If $r=5$ and $OP=13$, find $AB$.`,
+     "studio layout=media-first reveal=rise timer=bar density=compact motion=calm safe=shorts accent=cyan");
+option(q, `$\tfrac{60}{13}$`);
+option(q, `$10$`);
+option(q, `$\tfrac{120}{13}$`, correct);
+option(q, `$12$`);
+explain(q, `Tangent-radius gives $OA\perp PA$, hence $PA=12$. With $M=AB\cap OP$, $\triangle OMA\sim\triangle OAP$, so $AM/5=12/13$ and $AB=120/13$.`);
+
+// Source geometry: 40 px represents one unit, so r = 5 and OP = 13.
+point(O, (430, 560), "O");
+point(R, (430, 360));
+point(P, (950, 560), "P");
+hidden(O); hidden(R); hidden(P);
+
+circle2(circ, O, R);
+color(circ, dim); stroke(circ, 3); untraced(circ);
+
+tangent(t, P, O, R);
+label(t0, "A", (22, -18));
+label(t1, "B", (22, 18));
+color(t0, cyan); color(t1, cyan); hidden(t0); hidden(t1);
+
+segment(pa, P, t0); segment(pb, P, t1);
+color(pa, cyan); color(pb, cyan); stroke(pa, 4); stroke(pb, 4);
+untraced(pa); untraced(pb);
+
+segment(oa, O, t0); segment(ob, O, t1); segment(op, O, P);
+color(oa, dim); color(ob, dim); color(op, fg);
+stroke(oa, 3); stroke(ob, 3); stroke(op, 3);
+untraced(oa); untraced(ob); untraced(op);
+
+segment(chord, t0, t1);
+color(chord, magenta); stroke(chord, 5); untraced(chord);
+
+meet(M, t0, t1, O, P);
+label(M, "M", (-28, 24));
+color(M, lime); hidden(M);
+
+rightangle(raA, O, t0, P); rightangle(raB, O, t1, P);
+color(raA, lime); color(raB, lime); hidden(raA); hidden(raB);
+
+text(r5, (390, 455), "5"); color(r5, fg); size(r5, 30); hidden(r5);
+text(op13, (690, 595), "13"); color(op13, fg); size(op13, 30); hidden(op13);
+
+// Every source and dependent entity is included so figure() can safely reflow
+// the construction into the responsive media region.
+tag(O, fig); tag(R, fig); tag(P, fig); tag(circ, fig);
+tag(t0, fig); tag(t1, fig); tag(pa, fig); tag(pb, fig);
+tag(oa, fig); tag(ob, fig); tag(op, fig); tag(chord, fig);
+tag(M, fig); tag(raA, fig); tag(raB, fig); tag(r5, fig); tag(op13, fig);
+figure(fig);
+
+socials(me);
+endcard(me, "cta=Pause_then_prove");
+
+par {
+  run(q, 14);
+  seq {
+    wait(1.3);
+    par { show(O, 0.25); show(P, 0.25); }
+    draw(circ, 0.7);
+    draw(op, 0.45);
+    par { draw(pa, 0.7); draw(pb, 0.7); }
+    par { show(t0, 0.25); show(t1, 0.25); }
+    par { draw(oa, 0.45); draw(ob, 0.45); }
+    par { show(raA, 0.3); show(raB, 0.3); }
+    draw(chord, 0.5);
+    par { show(M, 0.25); show(r5, 0.25); show(op13, 0.25); }
+  }
+}
+
+par {
+  fade(q.parts, 0.45);
+  fade(fig, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/hOqmIKif6Zw" title="Olympiad Geometry Reel — Pause, Predict, Prove — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-v2-latex-calculus"><a class="header" href="#creator-v2-latex-calculus">creator-v2-latex-calculus</a></h2>
+<p>Portrait Creator v2 with inline and display LaTeX: a calculus question, fitted formula
+answers and crisp typesetting throughout the timed reveal.</p>
+<pre><code class="language-manic">// Creator Kit v2 + LaTeX — portrait calculus lesson.
+// Review focus: mixed inline math, a responsive equation figure, explanation,
+// branded footer, progress timer, and the Creator v2 end card.
+title("Creator v2 — LaTeX Calculus");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Calculus_Lab tagline=One_integral_at_a_time yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_for_revision safe=shorts");
+
+quiz(q, `Evaluate $\int_0^1 2x\,dx$.`,
+     "studio layout=media-first reveal=rise timer=bar density=comfortable motion=calm safe=shorts accent=cyan");
+option(q, `$0$`);
+option(q, `$\tfrac{1}{2}$`);
+option(q, `$1$`, correct);
+option(q, `$2$`);
+explain(q, `The antiderivative is $x^2$, so $1^2-0^2=1$.`, "Fundamental Theorem of Calculus");
+
+equation(eq, (cx, 650), `\int_0^1 2x\,dx = [x^2]_0^1 = 1`, 76);
+color(eq, cyan);
+figure(eq);
+hidden(eq);
+
+socials(me);
+endcard(me, "cta=Save_for_revision");
+
+par {
+  run(q, 12);
+  show(eq, 0.55);
+}
+par {
+  fade(q.parts, 0.45);
+  fade(eq, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/5DvQz4-o2PE" title="A Calculus Reel With Real LaTeX — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-v2-latex-algebra"><a class="header" href="#creator-v2-latex-algebra">creator-v2-latex-algebra</a></h2>
+<p>Square Creator v2 on a paper surface, checking that algebraic LaTeX and answer cards
+remain balanced and readable outside the vertical format.</p>
+<pre><code class="language-manic">// Creator Kit v2 + LaTeX — square algebra card.
+// Review focus: automatic square reflow, paper styling, compact choices,
+// inline factor notation, and a clean numeric timer.
+title("Creator v2 — LaTeX Algebra");
+canvas("square");
+template("paper");
+
+creator(me, "@anish2good name=Algebra_Studio tagline=Patterns_before_procedures yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta secondary=cyan footer=compact cta=Try_it_first safe=clean");
+
+quiz(q, `Which expression equals $x^2-5x+6$?`,
+     "studio layout=auto reveal=fade timer=number density=compact motion=calm safe=clean accent=magenta");
+option(q, `$(x-1)(x-6)$`);
+option(q, `$(x-2)(x-3)$`, correct);
+option(q, `$(x+2)(x+3)$`);
+option(q, `$(x-2)(x+3)$`);
+explain(q, `The two numbers multiply to $6$ and add to $-5$.`, "Factor pair: -2 and -3");
+
+equation(eq, (cx, cy), `x^2-5x+6`, 78);
+color(eq, magenta);
+figure(eq);
+hidden(eq);
+
+socials(me);
+
+par {
+  run(q, 10);
+  show(eq, 0.55);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cAiE56lF6ho" title="A LaTeX Algebra Quiz, Perfectly Typeset — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-v2-latex-physics"><a class="header" href="#creator-v2-latex-physics">creator-v2-latex-physics</a></h2>
+<p>Landscape Creator v2 with a physics equation, proving the same LaTeX quiz system
+reflows cleanly for widescreen explainers.</p>
+<pre><code class="language-manic">// Creator Kit v2 + LaTeX — landscape physics explainer.
+// Review focus: automatic widescreen split layout, formula options, equation
+// media, branded footer, and a restrained ring timer.
+title("Creator v2 — LaTeX Physics");
+canvas("16:9");
+template("shorts");
+
+creator(me, "@anish2good name=Physics_Notes tagline=Concepts_in_one_frame yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=gold secondary=cyan footer=signature cta=Follow_for_more safe=clean");
+
+quiz(q, `A mass $m$ moves at speed $v$. What is its kinetic energy?`,
+     "studio layout=auto reveal=fade timer=ring density=compact motion=studio safe=clean accent=gold");
+option(q, `$mv$`);
+option(q, `$mv^2$`);
+option(q, `$\tfrac{1}{2}mv^2$`, correct);
+option(q, `$2mv^2$`);
+explain(q, `Work changes kinetic energy: $W=\Delta K$.`, "Work–energy theorem");
+
+equation(eq, (cx, cy), `K = \frac{1}{2}mv^2`, 82);
+color(eq, gold);
+figure(eq);
+hidden(eq);
+
+socials(me);
+
+par {
+  run(q, 10);
+  show(eq, 0.55);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/EMS6jlHhXk0" title="Physics Equations on a Responsive Creator Canvas — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="quiz-skins"><a class="header" href="#quiz-skins">quiz-skins</a></h2>
+<p>The quiz Short in a dozen lines: <code>quiz</code>/<code>option</code>/<code>run</code> + a <code>creator</code>/<code>socials</code> footer.
+Change the one style word on <code>quiz(...)</code> to switch card SKIN — <code>badge</code> (framed panel +
+coloured letter badges), <code>minimal</code>, <code>glass</code> (glowing borders) or <code>plain</code> — and add a
+question REVEAL in the same string (e.g. <code>"glass fade"</code>). The correct card lights up with a
+green badge + check on reveal; a draining ring counts the timer down.</p>
+<pre><code class="language-manic">// A creator quiz Short (9:16). Try the four card SKINS by changing the style
+// string on `quiz(...)`:  "badge" (default) · "minimal" · "glass" · "plain".
+// You can also add a question REVEAL in the same string, order-free, e.g.
+//   quiz(q, "...", "glass fade")   // glass cards + fade-in question
+canvas("9:16");
+template("shorts");
+
+// a reusable creator profile (set once, drawn by `socials`)
+creator(me, "@anish2good yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta");
+
+// the quiz: a question + four answers, one marked `correct`
+quiz(q, "What is 7 x 8?", "badge");
+option(q, "54");
+option(q, "56", correct);
+option(q, "48");
+option(q, "63");
+
+// play the whole ask -&gt; countdown -&gt; reveal beat over 8 seconds
+run(q, 8);
+
+// the footer with the creator's socials
+socials(me);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/zXoo9_IWEiI" title="4 Quiz-Short Designs From ONE Line of Code — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="quiz-euler"><a class="header" href="#quiz-euler">quiz-euler</a></h2>
+<p>A quiz Short with an ANIMATED figure: the geo kit constructs the Euler line (the answer),
+and <code>figure(...)</code> AUTO-FITS the whole triangle+circumcircle into the zone between the
+question header and the answer cards — no coordinate tuning. The question, four cards, the
+countdown and the whole ask→countdown→reveal beat are just <code>quiz</code>/<code>option</code>/<code>run</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  quiz-euler.manic  —  the SAME quiz Short, now via the `creator` kit
+// ----------------------------------------------------------------------------
+//  Compare with quiz-geometry.manic (≈60 hand-authored lines): the question,
+//  four option cards, the countdown, and the whole ask→countdown→reveal beat
+//  are now `quiz` / `option` / `run`. The creator's footer is `creator`/`socials`.
+//  Only the figure is hand-drawn (author-supplied — any manic entity/kit).
+// ============================================================================
+
+title("Quiz — the Euler Line");
+canvas("9:16");
+template("paper");
+
+creator(me, "@anish2good yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta");
+
+// --- the quiz: question + four answers (kit handles layout + the beat) ---
+quiz(q, "3 triangle centres are always collinear — on WHICH line?");
+option(q, "the Euler line", correct);
+option(q, "a perpendicular bisector");
+option(q, "an angle bisector");
+option(q, "a median");
+
+// --- the figure (author-supplied): the geo kit constructs the Euler line ---
+point(pA, (335, 760)); point(pB, (745, 745)); point(pC, (540, 470));
+hidden(pA); hidden(pB); hidden(pC);
+segment(sa, pA, pB); segment(sb, pB, pC); segment(sc, pC, pA);
+untraced(sa); untraced(sb); untraced(sc);
+circumcircle(cc, pA, pB, pC); color(cc, dim); untraced(cc);
+circumcenter(oo, pA, pB, pC); color(oo, magenta); hidden(oo);
+centroid(gg, pA, pB, pC);     color(gg, lime);    hidden(gg);
+orthocenter(hh, pA, pB, pC);  color(hh, cyan);    hidden(hh);
+segment(eu, oo, hh); color(eu, fg); stroke(eu, 7); glow(eu, 1.5); untraced(eu);
+
+// tag every figure part, then AUTO-FIT the whole group into the zone between
+// the question header and the answer cards — no hand-tuning coordinates.
+tag(pA, fig); tag(pB, fig); tag(pC, fig); tag(sa, fig); tag(sb, fig); tag(sc, fig);
+tag(cc, fig); tag(oo, fig); tag(gg, fig); tag(hh, fig); tag(eu, fig);
+figure(fig, (540, 645), (720, 360));
+
+// ================= THE BEAT =================
+socials(me);
+par {
+  run(q, 14);                          // ask · countdown · reveal — the whole beat
+  seq {                                // the figure builds while the question sits
+    wait(1.6);
+    par { show(pA, 0.2); show(pB, 0.2); show(pC, 0.2); }
+    par { draw(sa, 0.5); draw(sb, 0.5); draw(sc, 0.5); }
+    draw(cc, 0.5);
+    par { show(oo); show(gg); show(hh); }
+    draw(eu, 0.9); pulse(eu);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/N8vC0qFYcHA" title="I Built This Geometry Quiz Short in 12 Lines — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="quiz-geometry"><a class="header" href="#quiz-geometry">quiz-geometry</a></h2>
+<p>The hand-authored proof behind the kit (≈60 lines from shipped primitives): a question, an
+animated geometry figure, four option cards, a countdown and a time-out reveal. Useful to
+see what <code>quiz</code>/<code>option</code>/<code>run</code> automate under the hood.</p>
+<pre><code class="language-manic">// ============================================================================
+//  quiz-geometry.manic  —  a QUIZ SHORT, hand-authored (creator-template proto)
+// ----------------------------------------------------------------------------
+//  The first proof of the "quiz Short" format the `creator` kit will later
+//  automate (see CAPABILITIES → Creator format templates). Built ENTIRELY from
+//  shipped primitives on a 9:16 canvas: a typewriter question, an ANIMATED
+//  geometry figure (the geo kit constructs the Euler line — which IS the answer),
+//  four option cards, a countdown, a time-out reveal, and a socials footer.
+//  When the `quiz`/`countdown`/`socials` builtins land, this whole file collapses
+//  to a few lines — but the beat/layout are proven here first.
+// ============================================================================
+
+title("Quiz — the Euler Line");
+canvas("9:16");                       // portrait 1080×1920 · cx=540 cy=960
+template("paper");
+
+// ---- the question (two typewriter lines, top / title-safe) ----
+text(q1, (cx, 210), "3 triangle centres are always"); color(q1, fg);   size(q1, 44); bold(q1); untraced(q1);
+text(q2, (cx, 285), "collinear — on WHICH line?");     color(q2, cyan); size(q2, 44); bold(q2); untraced(q2);
+
+// ---- the animated geometry figure (geo kit) : the Euler line construction ----
+// (colours are palette-semantic — fg/cyan/magenta/lime/dim — so they REMAP with
+//  the template; gold/red/etc. are fixed and would lose contrast on `paper`)
+point(A, (335, 760), "A"); point(B, (745, 745), "B"); point(C, (540, 470), "C");
+hidden(A); hidden(B); hidden(C);
+segment(ab, A, B); segment(bc, B, C); segment(ca, C, A); untraced(ab); untraced(bc); untraced(ca);
+circumcircle(cc, A, B, C); color(cc, dim); untraced(cc);
+circumcenter(O, A, B, C); color(O, magenta); label(O, "O", (20, -12)); hidden(O);
+centroid(G, A, B, C);     color(G, lime);    label(G, "G", (20, -12)); hidden(G);
+orthocenter(H, A, B, C);  color(H, cyan);    label(H, "H", (-34, -12)); hidden(H);
+segment(euler, O, H); color(euler, fg); stroke(euler, 7); glow(euler, 1.5); untraced(euler);
+
+// ---- four option cards, laid out 2×2 (compact — clears the figure) ----
+rect(c1, (305, 1010), 428, 120); color(c1, panel); filled(c1); hidden(c1);
+rect(c2, (775, 1010), 428, 120); color(c2, panel); filled(c2); hidden(c2);
+rect(c3, (305, 1150), 428, 120); color(c3, panel); filled(c3); hidden(c3);
+rect(c4, (775, 1150), 428, 120); color(c4, panel); filled(c4); hidden(c4);
+text(t1, (305, 1010), "A  Euler line");     color(t1, fg); size(t1, 34); hidden(t1);
+text(t2, (775, 1010), "B  Perp. bisector"); color(t2, fg); size(t2, 34); hidden(t2);
+text(t3, (305, 1150), "C  Angle bisector"); color(t3, fg); size(t3, 34); hidden(t3);
+text(t4, (775, 1150), "D  Median");         color(t4, fg); size(t4, 34); hidden(t4);
+
+// ---- countdown ring + digit (palette-semantic → template-safe) ----
+circle(ring, (cx, 1400), 62); color(ring, cyan); stroke(ring, 6); outlined(ring); hidden(ring);
+text(timer, (cx, 1400), "5"); color(timer, fg); size(timer, 62); bold(timer); hidden(timer);
+
+// ---- socials footer : icons DRAWN from primitives (manic has no raster images),
+//      so they render on any template; grouped as `foot` to show together ----
+line(rule, (150, 1740), (930, 1740)); color(rule, dim); stroke(rule, 2);
+// ▶ YouTube chip
+rect(yt,  (312, 1815), 58, 40); color(yt, magenta); filled(yt);
+polygon(ytp, (300, 1802), (300, 1828), (326, 1815), bg);
+// ✕ X chip
+rect(xb,  (404, 1815), 46, 46); color(xb, fg); outlined(xb);
+line(x1, (392, 1803), (416, 1827)); color(x1, fg); stroke(x1, 4);
+line(x2, (416, 1803), (392, 1827)); color(x2, fg); stroke(x2, 4);
+// ◎ Instagram chip
+rect(ig,  (496, 1815), 46, 46); color(ig, fg); outlined(ig);
+circle(igc, (496, 1815), 13); color(igc, fg); outlined(igc);
+circle(igd, (509, 1802), 3);  color(igd, fg); filled(igd);
+// handle + link
+text(foot, (740, 1815), "@manic · 8gwifi.org/manic"); color(foot, dim); size(foot, 28);
+tag(rule, footer); tag(yt, footer); tag(ytp, footer); tag(xb, footer); tag(x1, footer);
+tag(x2, footer); tag(ig, footer); tag(igc, footer); tag(igd, footer); tag(foot, footer);
+hidden(footer);
+
+// ================= THE BEAT =================
+// 1) ask — typewriter
+type(q1, 1.1);
+type(q2, 1.0);
+wait(0.2);
+
+// 2) the figure constructs itself (animated geometry — the geo kit)
+par { show(A, 0.25); show(B, 0.25); show(C, 0.25); }
+par { draw(ab, 0.5); draw(bc, 0.5); draw(ca, 0.5); }
+draw(cc, 0.6);
+par { show(O); show(G); show(H); }
+draw(euler, 0.9); pulse(euler);      // the three centres line up → the Euler line
+wait(0.3);
+
+// 3) options fly in, staggered
+seq {
+  par { show(c1, 0.2); show(t1, 0.2); }
+  par { show(c2, 0.2); show(t2, 0.2); }
+  par { show(c3, 0.2); show(t3, 0.2); }
+  par { show(c4, 0.2); show(t4, 0.2); }
+}
+show(footer, 0.3);
+
+// 4) countdown 5 → 1
+par { show(ring, 0.2); show(timer, 0.2); }
+wait(0.8); say(timer, "4", 0.15);
+wait(0.8); say(timer, "3", 0.15);
+wait(0.8); say(timer, "2", 0.15);
+wait(0.8); say(timer, "1", 0.15);
+wait(0.8);
+
+// 5) TIME OUT → reveal: card A (the Euler line) glows, the rest dim
+say(timer, "0", 0.15); flash(ring, gold);
+par {
+  recolor(c1, lime); flash(c1, gold); pulse(c1);
+  recolor(t1, void);
+  fade(c2, 0.5); fade(t2, 0.5);
+  fade(c3, 0.5); fade(t3, 0.5);
+  fade(c4, 0.5); fade(t4, 0.5);
+  flash(euler, gold);
+}
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/zWaFgGU2Gn4" title="Only 1% Get This Geometry Quiz Right — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="quiz-geometry-2"><a class="header" href="#quiz-geometry-2">quiz-geometry-2</a></h2>
+<p>A layout stress-test: a different olympiad question with TWO figures side by side (an acute
+triangle with its circumcentre INSIDE vs an obtuse one with it OUTSIDE), proving the 2×2
+options, countdown and footer keep their spacing for richer figure content.</p>
+<pre><code class="language-manic">// ============================================================================
+//  quiz-geometry-2.manic  —  a second QUIZ SHORT (olympiad geometry)
+// ----------------------------------------------------------------------------
+//  A layout STRESS TEST: same 9:16 quiz scaffold as quiz-geometry.manic, but a
+//  different olympiad question with TWO figures side-by-side (acute vs obtuse
+//  triangle) — to prove the spacing + visibility hold for richer figure content.
+//  Template-agnostic (palette-semantic colours), drawn social icons, 2×2 options.
+// ============================================================================
+
+title("Quiz — Circumcentre");
+canvas("9:16");
+template("terminal");
+
+// ---- the question (two typewriter lines) ----
+text(q1, (cx, 210), "A triangle's CIRCUMCENTRE falls"); color(q1, fg);   size(q1, 42); bold(q1); untraced(q1);
+text(q2, (cx, 283), "outside it — when is it…?");        color(q2, cyan); size(q2, 42); bold(q2); untraced(q2);
+
+// ---- figure ①  : an ACUTE triangle (circumcentre INSIDE) ----
+point(a1, (190, 800)); point(b1, (455, 800)); point(c1, (320, 560));
+hidden(a1); hidden(b1); hidden(c1);
+segment(s1a, a1, b1); segment(s1b, b1, c1); segment(s1c, c1, a1);
+untraced(s1a); untraced(s1b); untraced(s1c);
+circumcenter(o1, a1, b1, c1); color(o1, magenta); hidden(o1);
+text(lab1, (322, 865), "acute · inside"); color(lab1, dim); size(lab1, 26);
+
+// ---- figure ②  : an OBTUSE triangle (circumcentre OUTSIDE) ----
+// c2 sits LEFT of a2, so the angle at a2 is obtuse → circumcentre lands outside
+point(a2, (735, 800)); point(b2, (965, 800)); point(c2, (700, 600));
+hidden(a2); hidden(b2); hidden(c2);
+segment(s2a, a2, b2); segment(s2b, b2, c2); segment(s2c, c2, a2);
+untraced(s2a); untraced(s2b); untraced(s2c);
+circumcenter(o2, a2, b2, c2); color(o2, magenta); hidden(o2);
+text(lab2, (830, 865), "obtuse · outside"); color(lab2, dim); size(lab2, 26);
+
+// ---- four option cards, 2×2 (correct = C, obtuse → c3) ----
+rect(c1c, (305, 1010), 428, 120); color(c1c, panel); filled(c1c); hidden(c1c);
+rect(c2c, (775, 1010), 428, 120); color(c2c, panel); filled(c2c); hidden(c2c);
+rect(c3c, (305, 1150), 428, 120); color(c3c, panel); filled(c3c); hidden(c3c);
+rect(c4c, (775, 1150), 428, 120); color(c4c, panel); filled(c4c); hidden(c4c);
+text(t1, (305, 1010), "A  Acute");       color(t1, fg); size(t1, 34); hidden(t1);
+text(t2, (775, 1010), "B  Right");       color(t2, fg); size(t2, 34); hidden(t2);
+text(t3, (305, 1150), "C  Obtuse");      color(t3, fg); size(t3, 34); hidden(t3);
+text(t4, (775, 1150), "D  Equilateral"); color(t4, fg); size(t4, 34); hidden(t4);
+
+// ---- countdown ring + digit ----
+circle(ring, (cx, 1400), 62); color(ring, cyan); stroke(ring, 6); outlined(ring); hidden(ring);
+text(timer, (cx, 1400), "5"); color(timer, fg); size(timer, 62); bold(timer); hidden(timer);
+
+// ---- socials footer (drawn vector icons — template-safe) ----
+line(rule, (150, 1740), (930, 1740)); color(rule, dim); stroke(rule, 2);
+rect(yt,  (312, 1815), 58, 40); color(yt, magenta); filled(yt);
+polygon(ytp, (300, 1802), (300, 1828), (326, 1815), bg);
+rect(xb,  (404, 1815), 46, 46); color(xb, fg); outlined(xb);
+line(x1, (392, 1803), (416, 1827)); color(x1, fg); stroke(x1, 4);
+line(x2, (416, 1803), (392, 1827)); color(x2, fg); stroke(x2, 4);
+rect(ig,  (496, 1815), 46, 46); color(ig, fg); outlined(ig);
+circle(igc, (496, 1815), 13); color(igc, fg); outlined(igc);
+circle(igd, (509, 1802), 3);  color(igd, fg); filled(igd);
+text(foot, (740, 1815), "@manic · 8gwifi.org/manic"); color(foot, dim); size(foot, 28);
+tag(rule, footer); tag(yt, footer); tag(ytp, footer); tag(xb, footer); tag(x1, footer);
+tag(x2, footer); tag(ig, footer); tag(igc, footer); tag(igd, footer); tag(foot, footer);
+hidden(footer);
+
+// ================= THE BEAT =================
+// 1) ask
+type(q1, 1.1);
+type(q2, 1.0);
+wait(0.2);
+
+// 2) both figures construct (side by side)
+par { show(a1, 0.2); show(b1, 0.2); show(c1, 0.2); show(a2, 0.2); show(b2, 0.2); show(c2, 0.2); }
+par {
+  draw(s1a, 0.5); draw(s1b, 0.5); draw(s1c, 0.5);
+  draw(s2a, 0.5); draw(s2b, 0.5); draw(s2c, 0.5);
+}
+par { show(o1); show(o2); pulse(o1); pulse(o2); }
+par { show(lab1, 0.3); show(lab2, 0.3); }
+wait(0.3);
+
+// 3) options fly in, 2×2 reading order
+seq {
+  par { show(c1c, 0.2); show(t1, 0.2); }
+  par { show(c2c, 0.2); show(t2, 0.2); }
+  par { show(c3c, 0.2); show(t3, 0.2); }
+  par { show(c4c, 0.2); show(t4, 0.2); }
+}
+show(footer, 0.3);
+
+// 4) countdown 5 → 1
+par { show(ring, 0.2); show(timer, 0.2); }
+wait(0.8); say(timer, "4", 0.15);
+wait(0.8); say(timer, "3", 0.15);
+wait(0.8); say(timer, "2", 0.15);
+wait(0.8); say(timer, "1", 0.15);
+wait(0.8);
+
+// 5) TIME OUT → reveal: card C (Obtuse) glows, the rest fade
+say(timer, "0", 0.15); flash(ring, gold);
+par {
+  recolor(c3c, lime); flash(c3c, gold); pulse(c3c);
+  recolor(t3, void);
+  fade(c1c, 0.5); fade(t1, 0.5);
+  fade(c2c, 0.5); fade(t2, 0.5);
+  fade(c4c, 0.5); fade(t4, 0.5);
+  flash(o2, gold);              // the obtuse triangle's outside centre
+}
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/MbKmHFeF7Ks" title="Geometry Quiz: When Is the Circumcentre OUTSIDE? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="boolean-shapes"><a class="header" href="#boolean-shapes">Boolean shapes</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
 <h2 id="boolean"><a class="header" href="#boolean">boolean</a></h2>
@@ -8554,6 +10237,65 @@ show(v3, 0.8);
 orbit3(70, 34, 16, 4.5);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/TttBg-qplrc" title="The Double Integral, in 3D — Volume as Finer Columns — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="multivariable3"><a class="header" href="#multivariable3">multivariable3</a></h2>
+<p>Calculus on a surface: a smooth hill, its tangent plane and the gradient arrow at a
+chosen point, inspected with an orbiting camera.</p>
+<pre><code class="language-manic">title("Calculus on a surface — gradient, tangent plane, volume");
+canvas("16:9");
+
+camera3((8, -10, 7), (0, 0, 0.8), 42);
+axes3(world, (0, 0, 0), 3);
+color(world, dim);
+
+// a smooth hill: z = 1.6 e^(-(x^2 + y^2)/3.6)
+surface3(hill, "1.6*exp(-(x*x + y*y)*0.28)", (-3, 3), (-3, 3), 28);
+color(hill, cyan); untraced(hill);
+
+// the tangent plane at a point on the slope
+tangentplane3(tp, hill, 1.1, -0.7);
+color(tp, magenta); hidden(tp);
+
+// the gradient there — an arrow pointing straight up the steepest slope
+gradient3(grad, hill, 1.1, -0.7);
+color(grad, gold); hidden(grad);
+
+// ---- timeline ----
+show(world, 0.6);
+draw(hill, 1.8);
+wait(0.4);
+show(tp, 0.6);
+show(grad, 0.6);
+orbit3(70, 30, 15, 4.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Py_dIt_Qfyg" title="Gradient & Tangent Plane on a 3D Surface — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="volume3"><a class="header" href="#volume3">volume3</a></h2>
+<p>The volume under a surface represented as solid 3D Riemann-sum columns, turning a
+double integral into visible geometry.</p>
+<pre><code class="language-manic">title("Volume under a surface — a double integral, made solid");
+canvas("16:9");
+
+camera3((9, -11, 8), (0, 0, 0.6), 40);
+axes3(world, (0, 0, 0), 3);
+color(world, dim);
+
+// a smooth bump
+surface3(hill, "1.6*exp(-(x*x + y*y)*0.28)", (-3, 3), (-3, 3), 28);
+color(hill, cyan); untraced(hill);
+
+// the volume beneath it, as a grid of columns (a 3D Riemann sum)
+volume3(vol, hill, 11);
+color(vol, lime); hidden(vol);
+
+// ---- timeline ----
+show(world, 0.6);
+draw(hill, 1.6);
+wait(0.4);
+show(vol, 1.0);
+orbit3(70, 32, 16, 4.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/EvgfZJTtcAE" title="A Double Integral Made Solid — Volume Under a Surface — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h1>

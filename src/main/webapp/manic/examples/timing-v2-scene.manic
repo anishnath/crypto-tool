@@ -1,0 +1,46 @@
+// Generic Timing v2 — one named clock coordinates a non-quiz physics scene.
+// `timed` runs the visual timer and places every `during` block at the exact
+// offset declared by `timing`; short blocks are padded, overruns are errors.
+title("Generic Timing v2 — Pendulum");
+canvas("16:9");
+template("mono");
+
+text(head, (315, 72), "ONE CLOCK. EVERY BEAT.");
+size(head, 30); bold(head); color(head, fg); hidden(head);
+text(sub, (315, 112), "Generic Timing v2 — not a quiz");
+size(sub, 18); color(sub, dim); hidden(sub);
+
+pendulum(p, (640, 245), 1.5, 42, 140, 0.03);
+untraced(p.path);
+
+equation(law, (640, 602), `T\approx2\pi\sqrt{L/g}`, 54);
+color(law, gold); hidden(law);
+text(note, (640, 655), "The scene and clock share the same named phases.");
+size(note, 21); color(note, dim); hidden(note);
+text(done, (640, 680), "INTRO  →  EXPERIMENT  →  INSIGHT  →  OUTRO");
+size(done, 18); color(done, cyan); hidden(done);
+
+// A fresh id creates a format-neutral timing controller. Its phases total
+// 10.4 seconds; no duplicate duration is passed to `timed` or `run`.
+timing(showclock, (970, 86), "intro=1.2 experiment=6 insight=2 outro=1.2");
+timerstyle(showclock,
+           "look=segments number=outside direction=drain size=small thickness=1.15 color=cyan track=dim label=MASTER_CLOCK font=display finish=pulse");
+
+timed(showclock) {
+  during("intro") {
+    par { show(head, 0.7); show(sub, 0.7); }
+  }
+
+  during("experiment") {
+    par { run(p, 6); draw(p.path, 6); }
+  }
+
+  during("insight") {
+    par { show(law, 0.6); show(note, 0.6); }
+    pulse(p.bob, 0.7);
+  }
+
+  during("outro") {
+    show(done, 0.6);
+  }
+}

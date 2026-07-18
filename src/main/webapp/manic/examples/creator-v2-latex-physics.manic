@@ -1,0 +1,28 @@
+// Creator Kit v2 + LaTeX — landscape physics explainer.
+// Review focus: automatic widescreen split layout, formula options, equation
+// media, branded footer, and a restrained ring timer.
+title("Creator v2 — LaTeX Physics");
+canvas("16:9");
+template("shorts");
+
+creator(me, "@anish2good name=Physics_Notes tagline=Concepts_in_one_frame yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=gold secondary=cyan footer=signature cta=Follow_for_more safe=clean");
+
+quiz(q, `A mass $m$ moves at speed $v$. What is its kinetic energy?`,
+     "studio layout=auto reveal=fade timer=ring density=compact motion=studio safe=clean accent=gold");
+option(q, `$mv$`);
+option(q, `$mv^2$`);
+option(q, `$\tfrac{1}{2}mv^2$`, correct);
+option(q, `$2mv^2$`);
+explain(q, `Work changes kinetic energy: $W=\Delta K$.`, "Work–energy theorem");
+
+equation(eq, (cx, cy), `K = \frac{1}{2}mv^2`, 82);
+color(eq, gold);
+figure(eq);
+hidden(eq);
+
+socials(me);
+
+par {
+  run(q, 10);
+  show(eq, 0.55);
+}

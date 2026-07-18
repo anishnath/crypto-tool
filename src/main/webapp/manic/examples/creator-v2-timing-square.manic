@@ -1,0 +1,24 @@
+// Creator Timing v2 — square preset scaling and responsive timer placement.
+title("Creator Timing v2 — Square");
+canvas("1:1");
+template("shorts");
+
+creator(me, "@anish2good name=Proof_Minute tagline=See_the_pattern yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=compact cta=Save_this safe=clean");
+
+quiz(q, `If $x+1/x=3$, find $x^2+1/x^2$`,
+     "glass layout=grid density=comfortable motion=studio pace=dramatic accent=cyan");
+option(q, `$5$`);
+option(q, `$7$`, correct);
+option(q, `$9$`);
+option(q, `$11$`);
+explain(q, `Square the given relation: $x^2+2+\frac{1}{x^2}=9$.`);
+
+equation(clue, (cx, cy), `\left(x+\frac1x\right)^2`, 72);
+color(clue, cyan); figure(clue);
+
+// The timer fills clockwise below the header. The dramatic preset is scaled
+// proportionally to a compact eight-second feed clip by run(q, 8).
+timerstyle(q, "look=ticks position=below number=inside direction=fill size=small thickness=1.1 color=cyan track=dim label=SOLVE font=mono finish=flash");
+
+socials(me);
+run(q, 8);

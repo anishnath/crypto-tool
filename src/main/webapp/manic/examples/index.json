@@ -1,5 +1,5 @@
 {
-  "count": 151,
+  "count": 177,
   "categories": [
     {
       "slug": "algorithms",
@@ -148,6 +148,42 @@
           "file": "trajectory.manic",
           "title": "Trajectory",
           "desc": "A phase portrait: three paths flowing under a differential system, each spiralling into the sink at the origin."
+        },
+        {
+          "name": "band",
+          "file": "band.manic",
+          "title": "Band",
+          "desc": "The area trapped between two curves, filled directly with band(top,bottom) while both boundary plots remain visible."
+        },
+        {
+          "name": "curve-features",
+          "file": "curve-features.manic",
+          "title": "Curve features",
+          "desc": "Read a cubic by its geometry: maxima/minima where the slope is zero and an inflection where the curve changes its bend (extrema, inflections)."
+        },
+        {
+          "name": "ftc",
+          "file": "ftc.manic",
+          "title": "Ftc",
+          "desc": "The Fundamental Theorem of Calculus: accumulate the area under a curve, differentiate that area function, and watch the original function return."
+        },
+        {
+          "name": "limit",
+          "file": "limit.manic",
+          "title": "Limit",
+          "desc": "A removable discontinuity visualized as an approaching point, open circle and live finite limit at x\u21920."
+        },
+        {
+          "name": "limit-infinity",
+          "file": "limit-infinity.manic",
+          "title": "Limit infinity",
+          "desc": "A rational function settling onto its horizontal asymptote, with limit(...,inf) detecting and marking the value at infinity."
+        },
+        {
+          "name": "taylor",
+          "file": "taylor.manic",
+          "title": "Taylor",
+          "desc": "Taylor polynomials of increasing degree closing in on sin(x), one additional approximation at a time."
         }
       ]
     },
@@ -322,6 +358,12 @@
           "file": "pendulum.manic",
           "title": "Pendulum",
           "desc": "One pendulum shown four ways from a single deterministic swing: the motion (with a velocity arrow + KE/PE bars), the phase portrait (\u03b8 vs \u03c9), a time series, the potential-energy well, and energy over time (pendulum + phase/timegraph/ well/energygraph + swing)."
+        },
+        {
+          "name": "timing-v2-scene",
+          "file": "timing-v2-scene.manic",
+          "title": "Timing v2 scene",
+          "desc": "Generic Timing v2 controlling an ordinary physics scene: one named-phase clock schedules the intro, pendulum motion and finish independently from its native timer look."
         },
         {
           "name": "pendulum-damped",
@@ -850,6 +892,24 @@
           "file": "banner.manic",
           "title": "Banner",
           "desc": "The manic logo / banner reveal."
+        },
+        {
+          "name": "equation",
+          "file": "equation.manic",
+          "title": "Equation",
+          "desc": "Display-quality LaTeX for fractions, roots, sums, powers and integrals, with semantic colour and template tinting."
+        },
+        {
+          "name": "inline-math",
+          "file": "inline-math.manic",
+          "title": "Inline math",
+          "desc": "Inline LaTeX mixed with ordinary prose, including wrapped explanatory text and a standalone display equation."
+        },
+        {
+          "name": "image",
+          "file": "image.manic",
+          "title": "Image",
+          "desc": "Embed a raster image (PNG/JPG) with image(id, (x,y), \"path\", w, h) \u2014 a real file drawn into the scene and animated like any entity (shown, spun, pulsed, moved)."
         }
       ]
     },
@@ -910,6 +970,96 @@
           "file": "pieday.manic",
           "title": "Pieday",
           "desc": "A Pi Day card: a rainbow petal-flower built from a loop of circles, radial rays, the digits of \u03c0, and the definition circumference / diameter = pi."
+        }
+      ]
+    },
+    {
+      "slug": "creator",
+      "title": "Creator formats \u2014 responsive social video",
+      "examples": [
+        {
+          "name": "perfect-reel",
+          "file": "perfect-reel.manic",
+          "title": "Perfect reel",
+          "desc": "The gold-path production starter: phone-safe composition, real LaTeX, exact pacing, professional mono styling, creator identity, timeline markers and a focused end card."
+        },
+        {
+          "name": "creator-v2-options-socials",
+          "file": "creator-v2-options-socials.manic",
+          "title": "Creator v2 options socials",
+          "desc": "The asset-free v2.4 review scene: collision-safe question hierarchy, professional A/B/C/D cards, uniform correct-state spacing, and native YouTube/X/web identity lockups."
+        },
+        {
+          "name": "creator-v2",
+          "file": "creator-v2.manic",
+          "title": "Creator v2",
+          "desc": "The complete v2 core: responsive studio quiz, optics media, width-aware answer cards, a signature creator footer, optional explanation and a branded final end card."
+        },
+        {
+          "name": "creator-v2-timing",
+          "file": "creator-v2-timing.manic",
+          "title": "Creator v2 timing",
+          "desc": "Timing v2 in a portrait quiz: exact ask/options/think/reveal/hold phases, LaTeX media, and a segmented timer whose presentation can change without changing the choreography."
+        },
+        {
+          "name": "creator-v2-timers",
+          "file": "creator-v2-timers.manic",
+          "title": "Creator v2 timers",
+          "desc": "All six native Timing v2 looks\u2014ring, bar, number, segments, ticks and pulse\u2014running side by side."
+        },
+        {
+          "name": "creator-v2-timing-square",
+          "file": "creator-v2-timing-square.manic",
+          "title": "Creator v2 timing square",
+          "desc": "A square feed-card variant with a scaled dramatic preset and a filling tick timer, showing that timing and timer placement reflow independently across formats."
+        },
+        {
+          "name": "creator-v2-olympiad-geometry",
+          "file": "creator-v2-olympiad-geometry.manic",
+          "title": "Creator v2 olympiad geometry",
+          "desc": "An olympiad-level geometry Reel built as pause \u2192 predict \u2192 prove, with a responsive construction, authored explanation and reusable creator identity."
+        },
+        {
+          "name": "creator-v2-latex-calculus",
+          "file": "creator-v2-latex-calculus.manic",
+          "title": "Creator v2 latex calculus",
+          "desc": "Portrait Creator v2 with inline and display LaTeX: a calculus question, fitted formula answers and crisp typesetting throughout the timed reveal."
+        },
+        {
+          "name": "creator-v2-latex-algebra",
+          "file": "creator-v2-latex-algebra.manic",
+          "title": "Creator v2 latex algebra",
+          "desc": "Square Creator v2 on a paper surface, checking that algebraic LaTeX and answer cards remain balanced and readable outside the vertical format."
+        },
+        {
+          "name": "creator-v2-latex-physics",
+          "file": "creator-v2-latex-physics.manic",
+          "title": "Creator v2 latex physics",
+          "desc": "Landscape Creator v2 with a physics equation, proving the same LaTeX quiz system reflows cleanly for widescreen explainers."
+        },
+        {
+          "name": "quiz-skins",
+          "file": "quiz-skins.manic",
+          "title": "Quiz skins",
+          "desc": "The quiz Short in a dozen lines: quiz/option/run + a creator/socials footer."
+        },
+        {
+          "name": "quiz-euler",
+          "file": "quiz-euler.manic",
+          "title": "Quiz euler",
+          "desc": "A quiz Short with an ANIMATED figure: the geo kit constructs the Euler line (the answer), and figure(...) AUTO-FITS the whole triangle+circumcircle into the zone between the question header and the answer cards \u2014 no coordinate tuning."
+        },
+        {
+          "name": "quiz-geometry",
+          "file": "quiz-geometry.manic",
+          "title": "Quiz geometry",
+          "desc": "The hand-authored proof behind the kit (\u224860 lines from shipped primitives): a question, an animated geometry figure, four option cards, a countdown and a time-out reveal."
+        },
+        {
+          "name": "quiz-geometry-2",
+          "file": "quiz-geometry-2.manic",
+          "title": "Quiz geometry 2",
+          "desc": "A layout stress-test: a different olympiad question with TWO figures side by side (an acute triangle with its circumcentre INSIDE vs an obtuse one with it OUTSIDE), proving the 2\u00d72 options, countdown and footer keep their spacing for richer figure content."
         }
       ]
     },
@@ -988,6 +1138,18 @@
           "file": "double-integral3.manic",
           "title": "Double integral3",
           "desc": "Multivariable calculus: the volume under a surface as a limit of finer and finer columns \u2014 a double integral, made solid."
+        },
+        {
+          "name": "multivariable3",
+          "file": "multivariable3.manic",
+          "title": "Multivariable3",
+          "desc": "Calculus on a surface: a smooth hill, its tangent plane and the gradient arrow at a chosen point, inspected with an orbiting camera."
+        },
+        {
+          "name": "volume3",
+          "file": "volume3.manic",
+          "title": "Volume3",
+          "desc": "The volume under a surface represented as solid 3D Riemann-sum columns, turning a double integral into visible geometry."
         }
       ]
     }

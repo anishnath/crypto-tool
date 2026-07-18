@@ -1,0 +1,44 @@
+title("Taylor series — polynomials closing in on a curve");
+canvas("16:9");
+
+let ox = cx;         // x=0 at centre
+let oy = cy + 10;
+
+text(hdr, (cx, 52), "Add one more term, and the polynomial hugs more of the curve");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 640, 260, 1);
+color(ax, dim); untraced(ax);
+
+// the target function
+plot(f, (ox, oy), 95, 120, "sin(x)", (-6.2, 6.2));
+color(f, cyan); stroke(f, 5); untraced(f);
+
+// Taylor polynomials about x = 0, growing in degree
+taylor(p1, f, 0, 1);
+color(p1, dim); stroke(p1, 3); untraced(p1);
+taylor(p3, f, 0, 3);
+color(p3, gold); stroke(p3, 3); untraced(p3);
+taylor(p5, f, 0, 5);
+color(p5, magenta); stroke(p5, 3); untraced(p5);
+taylor(p7, f, 0, 7);
+color(p7, lime); stroke(p7, 3); untraced(p7);
+
+text(l1, (cx + 300, 150), "n = 1   (a line)");
+size(l1, 18); color(l1, dim); display(l1); hidden(l1);
+text(l3, (cx + 300, 186), "n = 3");
+size(l3, 18); color(l3, gold); display(l3); hidden(l3);
+text(l5, (cx + 300, 222), "n = 5");
+size(l5, 18); color(l5, magenta); display(l5); hidden(l5);
+text(l7, (cx + 300, 258), "n = 7");
+size(l7, 18); color(l7, lime); display(l7); hidden(l7);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(f, 1.6);
+wait(0.3);
+draw(p1, 0.8);  show(l1, 0.3);  wait(0.3);
+draw(p3, 0.9);  show(l3, 0.3);  wait(0.3);
+draw(p5, 1.0);  show(l5, 0.3);  wait(0.3);
+draw(p7, 1.1);  show(l7, 0.3);

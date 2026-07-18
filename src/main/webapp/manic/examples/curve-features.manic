@@ -1,0 +1,41 @@
+title("Reading a curve's shape — maxima, minima, inflection");
+canvas("16:9");
+
+let ox = cx - 540;   // math x=0 maps here (centres the domain 1..5 under cx)
+let oy = cy;
+
+text(hdr, (cx, 56), "Where the curve turns, and where it changes its bend");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 940, 240, 1);
+color(ax, dim); untraced(ax);
+
+// a cubic S-curve: one maximum, one minimum, one inflection
+plot(f, (ox, oy), 180, 170, "0.4*((x-3)*(x-3)*(x-3) - 4*(x-3))", (1, 5));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// maxima & minima (slope = 0)
+extrema(turn, f);
+color(turn, gold);
+
+// inflection (concavity flips, f'' = 0)
+inflections(bend, f);
+color(bend, magenta);
+
+text(lg, (cx + 300, 150), "gold: max / min  (slope 0)");
+size(lg, 18); color(lg, gold); display(lg); hidden(lg);
+text(lm, (cx + 300, 186), "pink: inflection  (bend flips)");
+size(lm, 18); color(lm, magenta); display(lm); hidden(lm);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(f, 1.6);
+wait(0.3);
+show(turn, 0.5);
+show(lg, 0.4);
+pulse(turn, 0.6);
+wait(0.3);
+show(bend, 0.5);
+show(lm, 0.4);
+pulse(bend, 0.6);

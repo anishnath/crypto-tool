@@ -1,0 +1,33 @@
+title("A limit — the value a curve heads toward");
+canvas("16:9");
+
+let ox = cx - 120;
+let oy = cy;
+
+text(hdr, (cx, 54), "sin(x) / x is undefined at 0 — but it heads straight for 1");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 620, 300, 1);
+color(ax, dim); untraced(ax);
+
+// sin(x)/x — a removable hole at x = 0, where the limit is 1
+plot(f, (ox, oy), 150, 220, "sin(x)/x", (-6.2, 6.2));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// the limit at x -> 0: open circle at (0, 1), guides, value, and an approaching dot
+limit(lim, f, 0);
+color(lim, gold);
+
+text(cap, (cx, h - 54), "slide the point in — f(x) closes on the open circle");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(f, 1.6);
+wait(0.3);
+show(lim, 0.5);
+show(cap, 0.4);
+wait(0.3);
+// walk the point toward x = 0 from the left — it approaches the open circle
+to(lim, x, 0, 3.5);

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Timing — par, seq &amp; stagger - manic — the manual</title>
+        <title>Timing — flow, named phases &amp; clocks - manic — the manual</title>
 
 
         <!-- Custom HTML head -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-69371a19.js";
+            window.path_to_searchindex_js = "searchindex-6e795f84.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5e06f13d.js"></script>
+        <script src="toc-9dd1d381.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -178,7 +178,7 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="timing--par-seq--stagger"><a class="header" href="#timing--par-seq--stagger">Timing — par, seq &amp; stagger</a></h1>
+                        <h1 id="timing--flow-named-phases--clocks"><a class="header" href="#timing--flow-named-phases--clocks">Timing — flow, named phases &amp; clocks</a></h1>
 <p>By default, verbs play <strong>one after another</strong>. Three wrappers change that — they
 turn “then, then, then” into “together” or “cascading”.</p>
 <div class="table-wrapper">
@@ -232,6 +232,210 @@ mark("beat-3");         // a named timestamp for your editor
 </code></pre>
 <p><code>wait</code> is your friend for pacing — a beat of stillness after something lands
 reads far better than rushing to the next move.</p>
+<h2 id="generic-timing-v2--one-clock-for-any-scene"><a class="header" href="#generic-timing-v2--one-clock-for-any-scene">Generic Timing v2 — one clock for any scene</a></h2>
+<p>Use a generic timing controller when several parts of a scene must share one
+exact schedule. It is format-neutral: the same controller can coordinate a
+physics simulation, geometry proof, chart, caption sequence, or ordinary
+shapes.</p>
+<p>Think of it as four small pieces:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>piece</th><th>responsibility</th></tr>
+</thead>
+<tbody>
+<tr><td><code>timing</code></td><td>declares the phase names, durations, exact total, and optional clock position</td></tr>
+<tr><td><code>timerstyle</code></td><td>changes only the visible clock; it never changes scene timing</td></tr>
+<tr><td><code>timed</code></td><td>runs the clock and schedules the complete phase contract</td></tr>
+<tr><td><code>during</code></td><td>contains the ordinary animation actions for one named phase</td></tr>
+</tbody>
+</table>
+</div>
+<p>The phase declaration is the source of truth. The clock is only one visual view
+of that choreography.</p>
+<h3 id="quick-reference"><a class="header" href="#quick-reference">Quick reference</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>form</th><th>use</th></tr>
+</thead>
+<tbody>
+<tr><td><code>timing(clock,"intro=1 demo=6 result=2")</code></td><td>declare named phases</td></tr>
+<tr><td><code>timing(clock,(1160,80),"...")</code></td><td>declare phases and set the initial clock position</td></tr>
+<tr><td><code>timing(clock,"duration=6")</code></td><td>shorthand for one phase named <code>main</code></td></tr>
+<tr><td><code>timerstyle(clock,"...")</code></td><td>change appearance without changing timing</td></tr>
+<tr><td><code>timerstyle(clock,(1160,80),"...")</code></td><td>restyle and reposition the clock</td></tr>
+<tr><td><code>timed(clock) { ... }</code></td><td>play the complete phase schedule and clock</td></tr>
+<tr><td><code>during("phase") { ... }</code></td><td>author one phase inside <code>timed</code></td></tr>
+<tr><td><code>run(clock)</code></td><td>play the clock alone</td></tr>
+<tr><td><code>countdown(id,[at],[seconds],["style"])</code></td><td>independent countdown without named phases</td></tr>
+</tbody>
+</table>
+</div>
+<p>Core pattern, after defining the referenced entities and simulation:</p>
+<pre><code class="language-manic">timing(clock, (1160,80), "intro=1 demo=6 result=2");
+timerstyle(clock, "look=ring number=inside color=cyan");
+
+timed(clock) {
+  during("intro")  { show(title, 0.6); }
+  during("demo")   { par { run(sim, 6); draw(sim.path, 6); } }
+  during("result") { show(answer, 0.6); }
+}
+</code></pre>
+<p>Use <code>countdown</code> when you only need an independent visual countdown. Use
+<code>timing</code> when named phases must govern other animation.</p>
+<h3 id="compose-inside-phases"><a class="header" href="#compose-inside-phases">Compose inside phases</a></h3>
+<p>Each <code>during</code> block accepts the usual timeline language. In particular, use
+<code>par</code> for actions that must occupy the same phase together:</p>
+<pre><code class="language-manic">timing(clock, "setup=1 experiment=6 result=2");
+
+timed(clock) {
+  during("setup") { show(title, 0.6); }
+
+  during("experiment") {
+    par {
+      run(pendulum, 6);
+      draw(pendulum.path, 6);
+      karaoke(caption, 0.35);
+    }
+  }
+
+  during("result") {
+    par {
+      show(formula, 0.6);
+      show(explanation, 0.6);
+    }
+    wait(1.4);
+  }
+}
+</code></pre>
+<h3 id="rules-that-prevent-drift"><a class="header" href="#rules-that-prevent-drift">Rules that prevent drift</a></h3>
+<ul>
+<li>Give a generic controller a fresh id. Do not reuse an entity, quiz,
+simulation, or group id.</li>
+<li>Put constructors and style modifiers outside <code>timed</code>/<code>during</code>; put timeline
+actions such as <code>show</code>, <code>draw</code>, <code>run</code>, <code>wait</code>, <code>par</code>, and <code>seq</code> inside.</li>
+<li>A short phase block is padded automatically. A block that exceeds its phase
+is an error.</li>
+<li>A phase may have at most one <code>during</code> block. Combine related work inside it
+with <code>par</code> or <code>seq</code>.</li>
+<li>An omitted phase is valid and becomes a blank hold.</li>
+<li>Phase blocks may appear in any source order: they are placed at the absolute
+offsets declared by <code>timing</code>.</li>
+<li><code>timed(clock)</code> already runs the clock. Do not also call <code>run(clock)</code> inside it.</li>
+<li><code>run(clock)</code> is timer-only playback. <code>run(clock, dur)</code> is rejected because
+the phase declaration already owns the duration.</li>
+</ul>
+<h3 id="choose-the-clocks-look"><a class="header" href="#choose-the-clocks-look">Choose the clock’s look</a></h3>
+<p>The clock uses native manic shapes, so it stays sharp at any output size and
+can be targeted like the rest of the scene. No SVG workflow is required.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>look</th><th>best fit</th></tr>
+</thead>
+<tbody>
+<tr><td><code>ring</code></td><td>neutral default; compact and familiar</td></tr>
+<tr><td><code>bar</code></td><td>long processes or wide layouts</td></tr>
+<tr><td><code>segments</code></td><td>energetic stages and presentations</td></tr>
+<tr><td><code>ticks</code></td><td>precise, technical, or measurement-led scenes</td></tr>
+<tr><td><code>number</code></td><td>minimal layouts where the value is enough</td></tr>
+<tr><td><code>pulse</code></td><td>short, urgent moments; use sparingly</td></tr>
+<tr><td><code>none</code></td><td>keep exact phase choreography without showing a clock</td></tr>
+</tbody>
+</table>
+</div>
+<p>The main controls are:</p>
+<ul>
+<li><code>number=inside|outside|none</code> and <code>direction=fill|drain</code></li>
+<li><code>size=small|medium|large|0.5..2.0</code> and <code>thickness=0.4..3.0</code></li>
+<li><code>color</code>, <code>track</code>, <code>label</code>, and <code>font=mono|display</code></li>
+<li><code>finish=fade|hold|flash|pulse</code> for the completion cue</li>
+</ul>
+<p>Start with the default ring, then change the look only when it supports the
+scene’s meaning. For legibility, keep strong contrast between <code>color</code> and
+<code>track</code>, and avoid combining a busy clock with dense content in the same corner.</p>
+<p>Advanced styling can target the stable tags <code>clock.timer</code>,
+<code>clock.timer.track</code>, <code>clock.timer.progress</code>, <code>clock.timer.value</code>,
+<code>clock.timer.label</code>, and <code>clock.timer.effects</code> (replace <code>clock</code> with the
+controller id).</p>
+<h3 id="generic-controller-or-creator-quiz"><a class="header" href="#generic-controller-or-creator-quiz">Generic controller or Creator quiz?</a></h3>
+<p>The same visual clock system serves two different timing contracts:</p>
+<ul>
+<li><code>timing(fresh_id, "phase=seconds ...")</code> creates a generic controller used by
+<code>timed</code> and <code>during</code>.</li>
+<li><code>timing(quiz_id, "calm ask=... think=... reveal=...")</code> configures a Creator
+quiz and is played with <code>run(quiz_id)</code>.</li>
+</ul>
+<p>Do not wrap a quiz in <code>timed</code>; the quiz runner already owns its ask, options,
+think, reveal, hold, and stagger phases.</p>
+<h3 id="common-fixes"><a class="header" href="#common-fixes">Common fixes</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>message or symptom</th><th>fix</th></tr>
+</thead>
+<tbody>
+<tr><td>controller id is already in use</td><td>choose a fresh id for generic timing</td></tr>
+<tr><td>a phase overruns</td><td>shorten its sequence, compose simultaneous work with <code>par</code>, or increase the declared phase</td></tr>
+<tr><td>unknown phase</td><td>match the name in <code>during</code> to the <code>timing</code> declaration</td></tr>
+<tr><td>duplicate phase block</td><td>combine the work into one <code>during</code> block</td></tr>
+<tr><td>competing duration</td><td>remove the duration argument from <code>run(clock, dur)</code></td></tr>
+<tr><td>timer appears twice</td><td>remove <code>run(clock)</code> from inside <code>timed(clock)</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Complete non-quiz example using a pendulum, caption, formula, and segmented
+clock:</p>
+<pre><code class="language-manic">// Generic Timing v2 — one named clock coordinates a non-quiz physics scene.
+// `timed` runs the visual timer and places every `during` block at the exact
+// offset declared by `timing`; short blocks are padded, overruns are errors.
+title("Generic Timing v2 — Pendulum");
+canvas("16:9");
+template("mono");
+
+text(head, (315, 72), "ONE CLOCK. EVERY BEAT.");
+size(head, 30); bold(head); color(head, fg); hidden(head);
+text(sub, (315, 112), "Generic Timing v2 — not a quiz");
+size(sub, 18); color(sub, dim); hidden(sub);
+
+pendulum(p, (640, 245), 1.5, 42, 140, 0.03);
+untraced(p.path);
+
+equation(law, (640, 602), `T\approx2\pi\sqrt{L/g}`, 54);
+color(law, gold); hidden(law);
+text(note, (640, 655), "The scene and clock share the same named phases.");
+size(note, 21); color(note, dim); hidden(note);
+text(done, (640, 680), "INTRO  →  EXPERIMENT  →  INSIGHT  →  OUTRO");
+size(done, 18); color(done, cyan); hidden(done);
+
+// A fresh id creates a format-neutral timing controller. Its phases total
+// 10.4 seconds; no duplicate duration is passed to `timed` or `run`.
+timing(showclock, (970, 86), "intro=1.2 experiment=6 insight=2 outro=1.2");
+timerstyle(showclock,
+           "look=segments number=outside direction=drain size=small thickness=1.15 color=cyan track=dim label=MASTER_CLOCK font=display finish=pulse");
+
+timed(showclock) {
+  during("intro") {
+    par { show(head, 0.7); show(sub, 0.7); }
+  }
+
+  during("experiment") {
+    par { run(p, 6); draw(p.path, 6); }
+  }
+
+  during("insight") {
+    par { show(law, 0.6); show(note, 0.6); }
+    pulse(p.bob, 0.7);
+  }
+
+  during("outro") {
+    show(done, 0.6);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/oihH-HyPOSI" title="One Clock Controls an Entire Physics Scene — Timing v2" allowfullscreen loading="lazy"></iframe></div>
+
 <p>Next: the palette, glow, and easings → <a href="colour.html">Colour &amp; style</a>.</p>
 
                     </main>
@@ -242,7 +446,7 @@ reads far better than rushing to the next move.</p>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="colour.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="templates.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -256,7 +460,7 @@ reads far better than rushing to the next move.</p>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="colour.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="templates.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

@@ -1,0 +1,16 @@
+// Inline LaTeX everywhere: wrap math in `$…$` (backtick raw string) inside ANY
+// text/caption/kit label. Plain text (no `$`) is unchanged. Mixed lines wrap.
+title("Inline math");
+canvas("16:9");
+
+text(t1, (cx, 110), `The area of a circle is $A = \pi r^2$`);
+color(t1, cyan);
+
+// mixed text + math that WRAPS across lines
+text(t2, (cx, 300), `By the Pythagorean theorem, if $a^2 + b^2 = c^2$ then the triangle with sides a, b, c is right-angled`);
+wrap(t2, 760);
+color(t2, lime);
+
+// a whole-formula label (auto-typeset, centred)
+equation(eq, (cx, 470), `\int_0^{1} x^2 \, dx = \tfrac{1}{3}`, 60);
+color(eq, gold);

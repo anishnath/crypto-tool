@@ -1,0 +1,21 @@
+title("Volume under a surface — a double integral, made solid");
+canvas("16:9");
+
+camera3((9, -11, 8), (0, 0, 0.6), 40);
+axes3(world, (0, 0, 0), 3);
+color(world, dim);
+
+// a smooth bump
+surface3(hill, "1.6*exp(-(x*x + y*y)*0.28)", (-3, 3), (-3, 3), 28);
+color(hill, cyan); untraced(hill);
+
+// the volume beneath it, as a grid of columns (a 3D Riemann sum)
+volume3(vol, hill, 11);
+color(vol, lime); hidden(vol);
+
+// ---- timeline ----
+show(world, 0.6);
+draw(hill, 1.6);
+wait(0.4);
+show(vol, 1.0);
+orbit3(70, 32, 16, 4.5);

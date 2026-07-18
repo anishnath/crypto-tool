@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-69371a19.js";
+            window.path_to_searchindex_js = "searchindex-6e795f84.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5e06f13d.js"></script>
+        <script src="toc-9dd1d381.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -180,8 +180,10 @@
                     <main>
                         <h1 id="colour--style"><a class="header" href="#colour--style">Colour &amp; style</a></h1>
 <h2 id="the-palette"><a class="header" href="#the-palette">The palette</a></h2>
-<p>manic uses a small, fixed set of colour names — no hex, no RGB. They’re tuned to
-glow on the dark default background:</p>
+<p>manic uses a small set of semantic colour names. The default <code>mono</code> template
+maps all of them to distinct black-and-white luminance levels; choose <code>plain</code>
+or another colour template when hue should carry meaning. Their original neon
+roles are:</p>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -243,6 +245,8 @@ canvas(1280, 720);     // explicit
 <p><code>portrait</code> / <code>9:16</code> is 1080×1920 — pair it with the <code>reel</code> render preset for
 vertical / social clips.</p>
 <h2 id="templates--the-whole-look"><a class="header" href="#templates--the-whole-look">Templates — the whole look</a></h2>
+<p>For the complete selection guide, CLI override rules, mono tips and a runnable
+black-and-white example, see <a href="templates.html">Templates — choose the whole visual system</a>.</p>
 <p><code>template("...")</code> sets the movie’s <strong>look</strong> in one call: the background, how the
 palette renders, the glow, and any page chrome. Put it near the top, after
 <code>canvas(...)</code>.</p>
@@ -255,28 +259,37 @@ template("paper");     // a flat white exam-paper page
 <tr><th>template</th><th>look</th></tr>
 </thead>
 <tbody>
-<tr><td><code>plain</code></td><td>the default — neon on near-black, no chrome</td></tr>
+<tr><td><code>mono</code> (aliases <code>monochrome</code>, <code>bw</code>)</td><td><strong>default</strong> — black-and-white editorial, near-black page, subtle glow</td></tr>
+<tr><td><code>plain</code></td><td>original neon palette on near-black, no chrome</td></tr>
 <tr><td><code>terminal</code></td><td>the neon-terminal frame (border, title, masthead)</td></tr>
 <tr><td><code>paper</code> (aliases <code>light</code>, <code>print</code>)</td><td>white page, dark ink — for print / textbook figures</td></tr>
 <tr><td><code>blueprint</code> (alias <code>blue</code>)</td><td>white &amp; cyan lines on deep navy</td></tr>
+<tr><td><code>shorts</code></td><td>restrained dark creator palette for Shorts and Reels</td></tr>
 </tbody>
 </table>
 </div>
+<p>Omitting <code>template(...)</code> is exactly the same as selecting <code>template("mono")</code>.
+Use explicit <code>plain</code> when an older scene should keep the original neon colours.</p>
 <p>The clever part is the <strong>palette remap</strong>: a template doesn’t just change the
-background, it re-maps every palette colour to that template’s role. So on
-<code>paper</code>, <code>panel</code> → light box, <code>fg</code> → dark ink, <code>lime</code> → forest green, and so on —
+background, it re-maps every named palette colour to that template’s role. So
+on <code>mono</code>, <code>cyan</code>, <code>magenta</code>, <code>lime</code>, <code>gold</code>, <code>red</code>, <code>orange</code>, and <code>blue</code> become
+carefully separated greys; on <code>paper</code>, <code>panel</code> → light box, <code>fg</code> → dark ink,
+<code>lime</code> → forest green, and so on —
 which means your existing scene renders legibly on the new page <strong>without
 recolouring anything</strong>. That’s why <code>template("paper")</code> alone turns a pulley,
 a spring, or a linked list into a clean textbook figure (see
 <a href="elevating.html">Elevating a scene</a>). <code>paper</code>/<code>blueprint</code> also drop the glow for
 crisp print output.</p>
+<p><code>hue(...)</code> and future explicit RGB colours are intentionally bespoke, so they
+pass through instead of being forced to greyscale. Use the named palette colours
+when a scene must remain strictly monochrome.</p>
 <p>Next: loops, variables, and macros → <a href="language-layer.html">The language layer</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="timing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="templates.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -290,7 +303,7 @@ crisp print output.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="timing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="templates.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

@@ -1,0 +1,24 @@
+// Timing v2 look gallery — every timer uses the same six-second behaviour.
+// All visuals are native manic primitives: scalable, theme-aware and animated.
+title("Creator Timing v2 — Native Looks");
+canvas("16:9");
+template("shorts");
+
+text(head, (cx, 70), "TIMING V2 — CHOOSE THE LOOK");
+size(head, 34); bold(head); color(head, fg);
+
+countdown(ring,     (220, 245), 6, "ring size=small color=cyan label=RING finish=hold");
+countdown(bar,      (640, 245), 6, "bar size=small color=magenta number=outside label=BAR finish=hold");
+countdown(number,  (1060, 245), 6, "number size=large font=display color=gold label=NUMBER finish=hold");
+countdown(segments, (220, 520), 6, "segments size=small color=lime label=SEGMENTS finish=hold");
+countdown(ticks,    (640, 520), 6, "ticks size=small direction=fill color=cyan label=TICKS finish=hold");
+countdown(pulse,   (1060, 520), 6, "pulse size=small font=display color=magenta label=PULSE finish=hold");
+
+par {
+  run(ring, 6);
+  run(bar, 6);
+  run(number, 6);
+  run(segments, 6);
+  run(ticks, 6);
+  run(pulse, 6);
+}

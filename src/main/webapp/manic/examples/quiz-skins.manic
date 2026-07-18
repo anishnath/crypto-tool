@@ -1,0 +1,22 @@
+// A creator quiz Short (9:16). Try the four card SKINS by changing the style
+// string on `quiz(...)`:  "badge" (default) · "minimal" · "glass" · "plain".
+// You can also add a question REVEAL in the same string, order-free, e.g.
+//   quiz(q, "...", "glass fade")   // glass cards + fade-in question
+canvas("9:16");
+template("shorts");
+
+// a reusable creator profile (set once, drawn by `socials`)
+creator(me, "@anish2good yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta");
+
+// the quiz: a question + four answers, one marked `correct`
+quiz(q, "What is 7 x 8?", "badge");
+option(q, "54");
+option(q, "56", correct);
+option(q, "48");
+option(q, "63");
+
+// play the whole ask -> countdown -> reveal beat over 8 seconds
+run(q, 8);
+
+// the footer with the creator's socials
+socials(me);

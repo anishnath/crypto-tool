@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-69371a19.js";
+            window.path_to_searchindex_js = "searchindex-6e795f84.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5e06f13d.js"></script>
+        <script src="toc-9dd1d381.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -691,6 +691,65 @@ show(v3, 0.8);
 orbit3(70, 34, 16, 4.5);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/TttBg-qplrc" title="The Double Integral, in 3D — Volume as Finer Columns — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="multivariable3"><a class="header" href="#multivariable3">multivariable3</a></h2>
+<p>Calculus on a surface: a smooth hill, its tangent plane and the gradient arrow at a
+chosen point, inspected with an orbiting camera.</p>
+<pre><code class="language-manic">title("Calculus on a surface — gradient, tangent plane, volume");
+canvas("16:9");
+
+camera3((8, -10, 7), (0, 0, 0.8), 42);
+axes3(world, (0, 0, 0), 3);
+color(world, dim);
+
+// a smooth hill: z = 1.6 e^(-(x^2 + y^2)/3.6)
+surface3(hill, "1.6*exp(-(x*x + y*y)*0.28)", (-3, 3), (-3, 3), 28);
+color(hill, cyan); untraced(hill);
+
+// the tangent plane at a point on the slope
+tangentplane3(tp, hill, 1.1, -0.7);
+color(tp, magenta); hidden(tp);
+
+// the gradient there — an arrow pointing straight up the steepest slope
+gradient3(grad, hill, 1.1, -0.7);
+color(grad, gold); hidden(grad);
+
+// ---- timeline ----
+show(world, 0.6);
+draw(hill, 1.8);
+wait(0.4);
+show(tp, 0.6);
+show(grad, 0.6);
+orbit3(70, 30, 15, 4.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Py_dIt_Qfyg" title="Gradient & Tangent Plane on a 3D Surface — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="volume3"><a class="header" href="#volume3">volume3</a></h2>
+<p>The volume under a surface represented as solid 3D Riemann-sum columns, turning a
+double integral into visible geometry.</p>
+<pre><code class="language-manic">title("Volume under a surface — a double integral, made solid");
+canvas("16:9");
+
+camera3((9, -11, 8), (0, 0, 0.6), 40);
+axes3(world, (0, 0, 0), 3);
+color(world, dim);
+
+// a smooth bump
+surface3(hill, "1.6*exp(-(x*x + y*y)*0.28)", (-3, 3), (-3, 3), 28);
+color(hill, cyan); untraced(hill);
+
+// the volume beneath it, as a grid of columns (a 3D Riemann sum)
+volume3(vol, hill, 11);
+color(vol, lime); hidden(vol);
+
+// ---- timeline ----
+show(world, 0.6);
+draw(hill, 1.6);
+wait(0.4);
+show(vol, 1.0);
+orbit3(70, 32, 16, 4.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/EvgfZJTtcAE" title="A Double Integral Made Solid — Volume Under a Surface — manic" allowfullscreen loading="lazy"></iframe></div>
 
 
                     </main>

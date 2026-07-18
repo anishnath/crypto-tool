@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-69371a19.js";
+            window.path_to_searchindex_js = "searchindex-6e795f84.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5e06f13d.js"></script>
+        <script src="toc-9dd1d381.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -268,6 +268,34 @@ distance images a nearby point. Analysis: <code>rayfan</code> (the ray-fan aberr
 <code>spotdiagram</code> (the on-axis spot at focus) · <code>fieldspot(id, [center], [preset], [field])</code> (the <strong>off-axis</strong> spot — a coma comet / astigmatic blur, with an
 Airy-disk diffraction-limit overlay). A rainbow glows on the dark bench; the
 geometric ray diagrams also take <code>template("paper")</code> for a textbook look.</p>
+<h2 id="creator"><a class="header" href="#creator">creator</a></h2>
+<p>A <strong>format</strong> layer (not a subject): responsive, pre-timed social-video templates
+a content creator fills in—question, answers, media and a reusable profile. V2
+adapts the same source to 9:16, 4:5, 1:1 and 16:9, with named platform safe areas,
+a polished studio default, configurable motion/timers, responsive footers and end cards.</p>
+<pre><code class="language-manic">canvas("9:16"); template("shorts");
+creator(me, "@anish2good name=Math_With_Me yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social accent=magenta");
+quiz(q, "What is 7 x 8?", "studio labels=letters pace=calm motion=calm");
+option(q, "54"); option(q, "56", correct); option(q, "48"); option(q, "63");
+timerstyle(q, "look=segments position=media finish=pulse");
+run(q, 8);                                  // scales the calm ask → think → reveal beat
+socials(me);
+endcard(me);                                // reveal later with show(me.endcard)
+</code></pre>
+<p><code>quiz(id, "question", ["style"])</code> starts the format; <code>style</code> mixes a card <strong>skin</strong> —
+<code>studio</code> (rounded editorial default) · <code>badge</code> (framed panel + coloured letter badges) · <code>minimal</code> (kicker + accent
+rule, outline rows) · <code>glass</code> (glowing borders) · <code>plain</code> (flat) — and a question
+<strong>reveal</strong> — <code>type</code> (typewriter, default) · <code>fade</code> · <code>rise</code> · <code>pop</code> · <code>cut</code>.
+<code>option(id, "text", [correct])</code> adds an answer; <code>run</code> <strong>auto-lays-out</strong> one to six cards,
+fits their type, slides them in, plays the selected native timer, and lights up the correct
+card (green badge + check). <code>timing(id,"preset ask=... options=... think=... reveal=... hold=... stagger=...")</code>
+separates exact choreography from <code>timerstyle(id,"look=... position=... direction=... finish=...")</code>.
+The zero-config default remains a balanced draining ring; <code>run(id,dur)</code> scales a preset,
+while an explicitly timed quiz uses <code>run(id)</code> so authored seconds remain exact. Also standalone:
+<code>countdown(id, [at], [secs], ["style"])</code>, <code>safezone(id, [inset|"profile"])</code>, <code>figure(target, [center], [size])</code>, optional <code>explain</code>, and <code>endcard</code>. Social icons are
+vector-drawn with normalized native marks for YouTube, X, Instagram, TikTok,
+Facebook, LinkedIn, GitHub, web, and email. Profile values appear beside up to
+three icons; no image or SVG assets are required.</p>
 <hr>
 <p>Each kit has a full reference at <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>, and you can see them
 all in motion in the <a href="examples.html">Examples gallery</a>.</p>

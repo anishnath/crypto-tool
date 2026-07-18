@@ -1,0 +1,107 @@
+// ============================================================================
+//  quiz-geometry-2.manic  —  a second QUIZ SHORT (olympiad geometry)
+// ----------------------------------------------------------------------------
+//  A layout STRESS TEST: same 9:16 quiz scaffold as quiz-geometry.manic, but a
+//  different olympiad question with TWO figures side-by-side (acute vs obtuse
+//  triangle) — to prove the spacing + visibility hold for richer figure content.
+//  Template-agnostic (palette-semantic colours), drawn social icons, 2×2 options.
+// ============================================================================
+
+title("Quiz — Circumcentre");
+canvas("9:16");
+template("terminal");
+
+// ---- the question (two typewriter lines) ----
+text(q1, (cx, 210), "A triangle's CIRCUMCENTRE falls"); color(q1, fg);   size(q1, 42); bold(q1); untraced(q1);
+text(q2, (cx, 283), "outside it — when is it…?");        color(q2, cyan); size(q2, 42); bold(q2); untraced(q2);
+
+// ---- figure ①  : an ACUTE triangle (circumcentre INSIDE) ----
+point(a1, (190, 800)); point(b1, (455, 800)); point(c1, (320, 560));
+hidden(a1); hidden(b1); hidden(c1);
+segment(s1a, a1, b1); segment(s1b, b1, c1); segment(s1c, c1, a1);
+untraced(s1a); untraced(s1b); untraced(s1c);
+circumcenter(o1, a1, b1, c1); color(o1, magenta); hidden(o1);
+text(lab1, (322, 865), "acute · inside"); color(lab1, dim); size(lab1, 26);
+
+// ---- figure ②  : an OBTUSE triangle (circumcentre OUTSIDE) ----
+// c2 sits LEFT of a2, so the angle at a2 is obtuse → circumcentre lands outside
+point(a2, (735, 800)); point(b2, (965, 800)); point(c2, (700, 600));
+hidden(a2); hidden(b2); hidden(c2);
+segment(s2a, a2, b2); segment(s2b, b2, c2); segment(s2c, c2, a2);
+untraced(s2a); untraced(s2b); untraced(s2c);
+circumcenter(o2, a2, b2, c2); color(o2, magenta); hidden(o2);
+text(lab2, (830, 865), "obtuse · outside"); color(lab2, dim); size(lab2, 26);
+
+// ---- four option cards, 2×2 (correct = C, obtuse → c3) ----
+rect(c1c, (305, 1010), 428, 120); color(c1c, panel); filled(c1c); hidden(c1c);
+rect(c2c, (775, 1010), 428, 120); color(c2c, panel); filled(c2c); hidden(c2c);
+rect(c3c, (305, 1150), 428, 120); color(c3c, panel); filled(c3c); hidden(c3c);
+rect(c4c, (775, 1150), 428, 120); color(c4c, panel); filled(c4c); hidden(c4c);
+text(t1, (305, 1010), "A  Acute");       color(t1, fg); size(t1, 34); hidden(t1);
+text(t2, (775, 1010), "B  Right");       color(t2, fg); size(t2, 34); hidden(t2);
+text(t3, (305, 1150), "C  Obtuse");      color(t3, fg); size(t3, 34); hidden(t3);
+text(t4, (775, 1150), "D  Equilateral"); color(t4, fg); size(t4, 34); hidden(t4);
+
+// ---- countdown ring + digit ----
+circle(ring, (cx, 1400), 62); color(ring, cyan); stroke(ring, 6); outlined(ring); hidden(ring);
+text(timer, (cx, 1400), "5"); color(timer, fg); size(timer, 62); bold(timer); hidden(timer);
+
+// ---- socials footer (drawn vector icons — template-safe) ----
+line(rule, (150, 1740), (930, 1740)); color(rule, dim); stroke(rule, 2);
+rect(yt,  (312, 1815), 58, 40); color(yt, magenta); filled(yt);
+polygon(ytp, (300, 1802), (300, 1828), (326, 1815), bg);
+rect(xb,  (404, 1815), 46, 46); color(xb, fg); outlined(xb);
+line(x1, (392, 1803), (416, 1827)); color(x1, fg); stroke(x1, 4);
+line(x2, (416, 1803), (392, 1827)); color(x2, fg); stroke(x2, 4);
+rect(ig,  (496, 1815), 46, 46); color(ig, fg); outlined(ig);
+circle(igc, (496, 1815), 13); color(igc, fg); outlined(igc);
+circle(igd, (509, 1802), 3);  color(igd, fg); filled(igd);
+text(foot, (740, 1815), "@manic · 8gwifi.org/manic"); color(foot, dim); size(foot, 28);
+tag(rule, footer); tag(yt, footer); tag(ytp, footer); tag(xb, footer); tag(x1, footer);
+tag(x2, footer); tag(ig, footer); tag(igc, footer); tag(igd, footer); tag(foot, footer);
+hidden(footer);
+
+// ================= THE BEAT =================
+// 1) ask
+type(q1, 1.1);
+type(q2, 1.0);
+wait(0.2);
+
+// 2) both figures construct (side by side)
+par { show(a1, 0.2); show(b1, 0.2); show(c1, 0.2); show(a2, 0.2); show(b2, 0.2); show(c2, 0.2); }
+par {
+  draw(s1a, 0.5); draw(s1b, 0.5); draw(s1c, 0.5);
+  draw(s2a, 0.5); draw(s2b, 0.5); draw(s2c, 0.5);
+}
+par { show(o1); show(o2); pulse(o1); pulse(o2); }
+par { show(lab1, 0.3); show(lab2, 0.3); }
+wait(0.3);
+
+// 3) options fly in, 2×2 reading order
+seq {
+  par { show(c1c, 0.2); show(t1, 0.2); }
+  par { show(c2c, 0.2); show(t2, 0.2); }
+  par { show(c3c, 0.2); show(t3, 0.2); }
+  par { show(c4c, 0.2); show(t4, 0.2); }
+}
+show(footer, 0.3);
+
+// 4) countdown 5 → 1
+par { show(ring, 0.2); show(timer, 0.2); }
+wait(0.8); say(timer, "4", 0.15);
+wait(0.8); say(timer, "3", 0.15);
+wait(0.8); say(timer, "2", 0.15);
+wait(0.8); say(timer, "1", 0.15);
+wait(0.8);
+
+// 5) TIME OUT → reveal: card C (Obtuse) glows, the rest fade
+say(timer, "0", 0.15); flash(ring, gold);
+par {
+  recolor(c3c, lime); flash(c3c, gold); pulse(c3c);
+  recolor(t3, void);
+  fade(c1c, 0.5); fade(t1, 0.5);
+  fade(c2c, 0.5); fade(t2, 0.5);
+  fade(c4c, 0.5); fade(t4, 0.5);
+  flash(o2, gold);              // the obtuse triangle's outside centre
+}
+wait(1.6);

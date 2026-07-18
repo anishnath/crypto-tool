@@ -1,0 +1,52 @@
+// ============================================================================
+//  quiz-euler.manic  —  the SAME quiz Short, now via the `creator` kit
+// ----------------------------------------------------------------------------
+//  Compare with quiz-geometry.manic (≈60 hand-authored lines): the question,
+//  four option cards, the countdown, and the whole ask→countdown→reveal beat
+//  are now `quiz` / `option` / `run`. The creator's footer is `creator`/`socials`.
+//  Only the figure is hand-drawn (author-supplied — any manic entity/kit).
+// ============================================================================
+
+title("Quiz — the Euler Line");
+canvas("9:16");
+template("paper");
+
+creator(me, "@anish2good yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta");
+
+// --- the quiz: question + four answers (kit handles layout + the beat) ---
+quiz(q, "3 triangle centres are always collinear — on WHICH line?");
+option(q, "the Euler line", correct);
+option(q, "a perpendicular bisector");
+option(q, "an angle bisector");
+option(q, "a median");
+
+// --- the figure (author-supplied): the geo kit constructs the Euler line ---
+point(pA, (335, 760)); point(pB, (745, 745)); point(pC, (540, 470));
+hidden(pA); hidden(pB); hidden(pC);
+segment(sa, pA, pB); segment(sb, pB, pC); segment(sc, pC, pA);
+untraced(sa); untraced(sb); untraced(sc);
+circumcircle(cc, pA, pB, pC); color(cc, dim); untraced(cc);
+circumcenter(oo, pA, pB, pC); color(oo, magenta); hidden(oo);
+centroid(gg, pA, pB, pC);     color(gg, lime);    hidden(gg);
+orthocenter(hh, pA, pB, pC);  color(hh, cyan);    hidden(hh);
+segment(eu, oo, hh); color(eu, fg); stroke(eu, 7); glow(eu, 1.5); untraced(eu);
+
+// tag every figure part, then AUTO-FIT the whole group into the zone between
+// the question header and the answer cards — no hand-tuning coordinates.
+tag(pA, fig); tag(pB, fig); tag(pC, fig); tag(sa, fig); tag(sb, fig); tag(sc, fig);
+tag(cc, fig); tag(oo, fig); tag(gg, fig); tag(hh, fig); tag(eu, fig);
+figure(fig, (540, 645), (720, 360));
+
+// ================= THE BEAT =================
+socials(me);
+par {
+  run(q, 14);                          // ask · countdown · reveal — the whole beat
+  seq {                                // the figure builds while the question sits
+    wait(1.6);
+    par { show(pA, 0.2); show(pB, 0.2); show(pC, 0.2); }
+    par { draw(sa, 0.5); draw(sb, 0.5); draw(sc, 0.5); }
+    draw(cc, 0.5);
+    par { show(oo); show(gg); show(hh); }
+    draw(eu, 0.9); pulse(eu);
+  }
+}

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-69371a19.js";
+            window.path_to_searchindex_js = "searchindex-6e795f84.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5e06f13d.js"></script>
+        <script src="toc-9dd1d381.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -954,6 +954,280 @@ par {
 }
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/-QeYAZ2GHVQ" title="Phase Portrait: Flowing Into a Spiral — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="band"><a class="header" href="#band">band</a></h2>
+<p>The area trapped between two curves, filled directly with <code>band(top,bottom)</code> while both
+boundary plots remain visible.</p>
+<pre><code class="language-manic">title("The area between two curves");
+canvas("16:9");
+
+let ox = cx - 460;
+let oy = cy + 40;
+
+text(hdr, (cx, 58), "The region trapped between two curves");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 900, 260, 1);
+color(ax, dim); untraced(ax);
+
+// two curves over the same stretch of x
+plot(upper, (ox, oy), 140, 90, "0.4*x + 1.4", (0, 6.3));
+color(upper, cyan); stroke(upper, 3); untraced(upper);
+
+plot(lower, (ox, oy), 140, 90, "sin(x)", (0, 6.3));
+color(lower, magenta); stroke(lower, 3); untraced(lower);
+
+// the band between them
+band(gap, upper, lower);
+color(gap, lime); hidden(gap);
+
+text(cap, (cx, h - 56), "band(top, bottom) fills the space between");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+par {
+  draw(upper, 1.4);
+  draw(lower, 1.4);
+}
+wait(0.3);
+to(gap, opacity, 0.3, 0.6);   // fade in to translucent (so the curves read through)
+show(cap, 0.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/-VZZulWKHr8" title="The Area Between Two Curves, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="curve-features"><a class="header" href="#curve-features">curve-features</a></h2>
+<p>Read a cubic by its geometry: maxima/minima where the slope is zero and an inflection
+where the curve changes its bend (<code>extrema</code>, <code>inflections</code>).</p>
+<pre><code class="language-manic">title("Reading a curve's shape — maxima, minima, inflection");
+canvas("16:9");
+
+let ox = cx - 540;   // math x=0 maps here (centres the domain 1..5 under cx)
+let oy = cy;
+
+text(hdr, (cx, 56), "Where the curve turns, and where it changes its bend");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 940, 240, 1);
+color(ax, dim); untraced(ax);
+
+// a cubic S-curve: one maximum, one minimum, one inflection
+plot(f, (ox, oy), 180, 170, "0.4*((x-3)*(x-3)*(x-3) - 4*(x-3))", (1, 5));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// maxima &amp; minima (slope = 0)
+extrema(turn, f);
+color(turn, gold);
+
+// inflection (concavity flips, f'' = 0)
+inflections(bend, f);
+color(bend, magenta);
+
+text(lg, (cx + 300, 150), "gold: max / min  (slope 0)");
+size(lg, 18); color(lg, gold); display(lg); hidden(lg);
+text(lm, (cx + 300, 186), "pink: inflection  (bend flips)");
+size(lm, 18); color(lm, magenta); display(lm); hidden(lm);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(f, 1.6);
+wait(0.3);
+show(turn, 0.5);
+show(lg, 0.4);
+pulse(turn, 0.6);
+wait(0.3);
+show(bend, 0.5);
+show(lm, 0.4);
+pulse(bend, 0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/O3TmUiMzafU" title="Maxima, Minima & Inflection Points on One Curve — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="ftc"><a class="header" href="#ftc">ftc</a></h2>
+<p>The Fundamental Theorem of Calculus: accumulate the area under a curve, differentiate
+that area function, and watch the original function return.</p>
+<pre><code class="language-manic">title("The Fundamental Theorem of Calculus");
+canvas("16:9");
+
+let ox = cx - 460;   // math x=0 maps here
+let oy = cy + 20;
+
+text(hdr, (cx, 52), "Differentiate the area — and the function comes back");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 900, 200, 1);
+color(ax, dim); untraced(ax);
+
+// f(x) = cos x
+plot(f, (ox, oy), 140, 150, "cos(x)", (0, 6.3));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// F(x) = area under f from 0 to x  =  sin x
+accum(bigF, f);
+color(bigF, lime); stroke(bigF, 3); untraced(bigF);
+
+// F'(x): differentiate the area function — it lands right back on f
+deriv(dF, bigF);
+color(dF, gold); stroke(dF, 3); untraced(dF);
+
+// legend
+text(lf, (cx + 300, 150), "f(x) = cos x");
+size(lf, 20); color(lf, cyan); display(lf); hidden(lf);
+text(lF, (cx + 300, 190), "F(x) = area so far");
+size(lF, 20); color(lF, lime); display(lF); hidden(lF);
+text(ld, (cx + 300, 230), "F'(x) = f(x)");
+size(ld, 20); color(ld, gold); bold(ld); display(ld); hidden(ld);
+
+text(cap, (cx, h - 52), "the slope of the area-so-far IS the original curve");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ================= timeline =================
+show(hdr, 0.6);
+draw(ax, 0.7);
+
+// 1. the function
+draw(f, 1.3);
+show(lf, 0.4);
+wait(0.3);
+
+// 2. its accumulated area, as a new curve (this is sin x)
+draw(bigF, 1.6);
+show(lF, 0.4);
+wait(0.4);
+
+// 3. differentiate that area function — it traces back onto f
+draw(dF, 1.6);
+show(ld, 0.4);
+flash(dF, gold);
+show(cap, 0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TPQM2kkcLJA" title="The Fundamental Theorem of Calculus, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="limit"><a class="header" href="#limit">limit</a></h2>
+<p>A removable discontinuity visualized as an approaching point, open circle and live
+finite limit at x→0.</p>
+<pre><code class="language-manic">title("A limit — the value a curve heads toward");
+canvas("16:9");
+
+let ox = cx - 120;
+let oy = cy;
+
+text(hdr, (cx, 54), "sin(x) / x is undefined at 0 — but it heads straight for 1");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 620, 300, 1);
+color(ax, dim); untraced(ax);
+
+// sin(x)/x — a removable hole at x = 0, where the limit is 1
+plot(f, (ox, oy), 150, 220, "sin(x)/x", (-6.2, 6.2));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// the limit at x -&gt; 0: open circle at (0, 1), guides, value, and an approaching dot
+limit(lim, f, 0);
+color(lim, gold);
+
+text(cap, (cx, h - 54), "slide the point in — f(x) closes on the open circle");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(f, 1.6);
+wait(0.3);
+show(lim, 0.5);
+show(cap, 0.4);
+wait(0.3);
+// walk the point toward x = 0 from the left — it approaches the open circle
+to(lim, x, 0, 3.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/c0ZzNiHh4P0" title="A Function Can Miss the Point but Still Have a Limit — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="limit-infinity"><a class="header" href="#limit-infinity">limit-infinity</a></h2>
+<p>A rational function settling onto its horizontal asymptote, with <code>limit(...,inf)</code>
+detecting and marking the value at infinity.</p>
+<pre><code class="language-manic">title("A limit at infinity — limit(id, curve, inf)");
+canvas("16:9");
+
+let ox = 90;          // x = 0 near the left
+let oy = cy + 250;    // y = 0 baseline
+
+text(hdr, (cx, 52), "(5x^3 - 2x + 7) / (x^3 + 4x^2 + 3)  -&gt;  5  as x -&gt; infinity");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+text(sub, (cx, 92), "same degree top and bottom: the ratio of leading coefficients, 5/1");
+size(sub, 17); color(sub, dim); display(sub); hidden(sub);
+
+// the x-axis (y = 0)
+line(xaxis, (ox, oy), (ox + 1130, oy));
+color(xaxis, dim); untraced(xaxis);
+
+// the rational function, climbing toward its asymptote
+plot(f, (ox, oy), 9, 88, "(5*x*x*x - 2*x + 7)/(x*x*x + 4*x*x + 3)", (0.5, 125));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// the limit at infinity: auto-detects the horizontal asymptote y = 5
+limit(lim, f, inf);
+color(lim, gold); hidden(lim);
+
+// ---- timeline ----
+show(hdr, 0.6);
+show(sub, 0.4);
+draw(xaxis, 0.5);
+draw(f, 2.4);
+show(lim, 0.7);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ORkllIXzQtc" title="Limits at Infinity & Horizontal Asymptotes — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="taylor"><a class="header" href="#taylor">taylor</a></h2>
+<p>Taylor polynomials of increasing degree closing in on sin(x), one additional
+approximation at a time.</p>
+<pre><code class="language-manic">title("Taylor series — polynomials closing in on a curve");
+canvas("16:9");
+
+let ox = cx;         // x=0 at centre
+let oy = cy + 10;
+
+text(hdr, (cx, 52), "Add one more term, and the polynomial hugs more of the curve");
+size(hdr, 24); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 640, 260, 1);
+color(ax, dim); untraced(ax);
+
+// the target function
+plot(f, (ox, oy), 95, 120, "sin(x)", (-6.2, 6.2));
+color(f, cyan); stroke(f, 5); untraced(f);
+
+// Taylor polynomials about x = 0, growing in degree
+taylor(p1, f, 0, 1);
+color(p1, dim); stroke(p1, 3); untraced(p1);
+taylor(p3, f, 0, 3);
+color(p3, gold); stroke(p3, 3); untraced(p3);
+taylor(p5, f, 0, 5);
+color(p5, magenta); stroke(p5, 3); untraced(p5);
+taylor(p7, f, 0, 7);
+color(p7, lime); stroke(p7, 3); untraced(p7);
+
+text(l1, (cx + 300, 150), "n = 1   (a line)");
+size(l1, 18); color(l1, dim); display(l1); hidden(l1);
+text(l3, (cx + 300, 186), "n = 3");
+size(l3, 18); color(l3, gold); display(l3); hidden(l3);
+text(l5, (cx + 300, 222), "n = 5");
+size(l5, 18); color(l5, magenta); display(l5); hidden(l5);
+text(l7, (cx + 300, 258), "n = 7");
+size(l7, 18); color(l7, lime); display(l7); hidden(l7);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+draw(f, 1.6);
+wait(0.3);
+draw(p1, 0.8);  show(l1, 0.3);  wait(0.3);
+draw(p3, 0.9);  show(l3, 0.3);  wait(0.3);
+draw(p5, 1.0);  show(l5, 0.3);  wait(0.3);
+draw(p7, 1.1);  show(l7, 0.3);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/5_W8DHKCI88" title="Taylor Series: Watch Polynomials Become sin(x) — manic" allowfullscreen loading="lazy"></iframe></div>
 
 
                     </main>

@@ -1,0 +1,91 @@
+// Creator Kit v2 — olympiad geometry problem.
+//
+// Problem: From an external point P, tangents PA and PB touch a circle with
+// centre O and radius 5. If OP = 13, find the chord length AB.
+//
+// The tangent points are computed by the geo kit. Nothing is eyeballed:
+// tangent-radius perpendicularity, chord AB, and M = AB ∩ OP remain live.
+title("Creator v2 — Olympiad Geometry");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Geometry_Lab tagline=See_the_hidden_lemma yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Pause_then_prove safe=shorts");
+
+quiz(q, `From $P$, $PA$ and $PB$ are tangents to circle $(O)$. If $r=5$ and $OP=13$, find $AB$.`,
+     "studio layout=media-first reveal=rise timer=bar density=compact motion=calm safe=shorts accent=cyan");
+option(q, `$\tfrac{60}{13}$`);
+option(q, `$10$`);
+option(q, `$\tfrac{120}{13}$`, correct);
+option(q, `$12$`);
+explain(q, `Tangent-radius gives $OA\perp PA$, hence $PA=12$. With $M=AB\cap OP$, $\triangle OMA\sim\triangle OAP$, so $AM/5=12/13$ and $AB=120/13$.`);
+
+// Source geometry: 40 px represents one unit, so r = 5 and OP = 13.
+point(O, (430, 560), "O");
+point(R, (430, 360));
+point(P, (950, 560), "P");
+hidden(O); hidden(R); hidden(P);
+
+circle2(circ, O, R);
+color(circ, dim); stroke(circ, 3); untraced(circ);
+
+tangent(t, P, O, R);
+label(t0, "A", (22, -18));
+label(t1, "B", (22, 18));
+color(t0, cyan); color(t1, cyan); hidden(t0); hidden(t1);
+
+segment(pa, P, t0); segment(pb, P, t1);
+color(pa, cyan); color(pb, cyan); stroke(pa, 4); stroke(pb, 4);
+untraced(pa); untraced(pb);
+
+segment(oa, O, t0); segment(ob, O, t1); segment(op, O, P);
+color(oa, dim); color(ob, dim); color(op, fg);
+stroke(oa, 3); stroke(ob, 3); stroke(op, 3);
+untraced(oa); untraced(ob); untraced(op);
+
+segment(chord, t0, t1);
+color(chord, magenta); stroke(chord, 5); untraced(chord);
+
+meet(M, t0, t1, O, P);
+label(M, "M", (-28, 24));
+color(M, lime); hidden(M);
+
+rightangle(raA, O, t0, P); rightangle(raB, O, t1, P);
+color(raA, lime); color(raB, lime); hidden(raA); hidden(raB);
+
+text(r5, (390, 455), "5"); color(r5, fg); size(r5, 30); hidden(r5);
+text(op13, (690, 595), "13"); color(op13, fg); size(op13, 30); hidden(op13);
+
+// Every source and dependent entity is included so figure() can safely reflow
+// the construction into the responsive media region.
+tag(O, fig); tag(R, fig); tag(P, fig); tag(circ, fig);
+tag(t0, fig); tag(t1, fig); tag(pa, fig); tag(pb, fig);
+tag(oa, fig); tag(ob, fig); tag(op, fig); tag(chord, fig);
+tag(M, fig); tag(raA, fig); tag(raB, fig); tag(r5, fig); tag(op13, fig);
+figure(fig);
+
+socials(me);
+endcard(me, "cta=Pause_then_prove");
+
+par {
+  run(q, 14);
+  seq {
+    wait(1.3);
+    par { show(O, 0.25); show(P, 0.25); }
+    draw(circ, 0.7);
+    draw(op, 0.45);
+    par { draw(pa, 0.7); draw(pb, 0.7); }
+    par { show(t0, 0.25); show(t1, 0.25); }
+    par { draw(oa, 0.45); draw(ob, 0.45); }
+    par { show(raA, 0.3); show(raB, 0.3); }
+    draw(chord, 0.5);
+    par { show(M, 0.25); show(r5, 0.25); show(op13, 0.25); }
+  }
+}
+
+par {
+  fade(q.parts, 0.45);
+  fade(fig, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.4);

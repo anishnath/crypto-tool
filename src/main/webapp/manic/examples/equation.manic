@@ -1,0 +1,16 @@
+// LaTeX math typesetting via `equation(...)`. Put the LaTeX in BACKTICKS so the
+// backslashes survive. Rendered white-on-transparent and tinted by the entity
+// colour, so `color(...)` and `template(...)` both work.
+title("Equations");
+canvas("16:9");
+
+equation(quad, (cx, 150), `x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}`, 68);
+color(quad, cyan);
+
+equation(sum, (cx, 340), `\sum_{k=1}^{n} k = \frac{n(n+1)}{2}`, 60);
+
+equation(euler, (cx, 500), `e^{i\pi} + 1 = 0`, 64);
+color(euler, gold);
+
+equation(intg, (cx, 640), `\int_0^1 x^2\,dx = \tfrac{1}{3}`, 56);
+color(intg, lime);

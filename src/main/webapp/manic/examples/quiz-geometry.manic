@@ -1,0 +1,108 @@
+// ============================================================================
+//  quiz-geometry.manic  —  a QUIZ SHORT, hand-authored (creator-template proto)
+// ----------------------------------------------------------------------------
+//  The first proof of the "quiz Short" format the `creator` kit will later
+//  automate (see CAPABILITIES → Creator format templates). Built ENTIRELY from
+//  shipped primitives on a 9:16 canvas: a typewriter question, an ANIMATED
+//  geometry figure (the geo kit constructs the Euler line — which IS the answer),
+//  four option cards, a countdown, a time-out reveal, and a socials footer.
+//  When the `quiz`/`countdown`/`socials` builtins land, this whole file collapses
+//  to a few lines — but the beat/layout are proven here first.
+// ============================================================================
+
+title("Quiz — the Euler Line");
+canvas("9:16");                       // portrait 1080×1920 · cx=540 cy=960
+template("paper");
+
+// ---- the question (two typewriter lines, top / title-safe) ----
+text(q1, (cx, 210), "3 triangle centres are always"); color(q1, fg);   size(q1, 44); bold(q1); untraced(q1);
+text(q2, (cx, 285), "collinear — on WHICH line?");     color(q2, cyan); size(q2, 44); bold(q2); untraced(q2);
+
+// ---- the animated geometry figure (geo kit) : the Euler line construction ----
+// (colours are palette-semantic — fg/cyan/magenta/lime/dim — so they REMAP with
+//  the template; gold/red/etc. are fixed and would lose contrast on `paper`)
+point(A, (335, 760), "A"); point(B, (745, 745), "B"); point(C, (540, 470), "C");
+hidden(A); hidden(B); hidden(C);
+segment(ab, A, B); segment(bc, B, C); segment(ca, C, A); untraced(ab); untraced(bc); untraced(ca);
+circumcircle(cc, A, B, C); color(cc, dim); untraced(cc);
+circumcenter(O, A, B, C); color(O, magenta); label(O, "O", (20, -12)); hidden(O);
+centroid(G, A, B, C);     color(G, lime);    label(G, "G", (20, -12)); hidden(G);
+orthocenter(H, A, B, C);  color(H, cyan);    label(H, "H", (-34, -12)); hidden(H);
+segment(euler, O, H); color(euler, fg); stroke(euler, 7); glow(euler, 1.5); untraced(euler);
+
+// ---- four option cards, laid out 2×2 (compact — clears the figure) ----
+rect(c1, (305, 1010), 428, 120); color(c1, panel); filled(c1); hidden(c1);
+rect(c2, (775, 1010), 428, 120); color(c2, panel); filled(c2); hidden(c2);
+rect(c3, (305, 1150), 428, 120); color(c3, panel); filled(c3); hidden(c3);
+rect(c4, (775, 1150), 428, 120); color(c4, panel); filled(c4); hidden(c4);
+text(t1, (305, 1010), "A  Euler line");     color(t1, fg); size(t1, 34); hidden(t1);
+text(t2, (775, 1010), "B  Perp. bisector"); color(t2, fg); size(t2, 34); hidden(t2);
+text(t3, (305, 1150), "C  Angle bisector"); color(t3, fg); size(t3, 34); hidden(t3);
+text(t4, (775, 1150), "D  Median");         color(t4, fg); size(t4, 34); hidden(t4);
+
+// ---- countdown ring + digit (palette-semantic → template-safe) ----
+circle(ring, (cx, 1400), 62); color(ring, cyan); stroke(ring, 6); outlined(ring); hidden(ring);
+text(timer, (cx, 1400), "5"); color(timer, fg); size(timer, 62); bold(timer); hidden(timer);
+
+// ---- socials footer : icons DRAWN from primitives (manic has no raster images),
+//      so they render on any template; grouped as `foot` to show together ----
+line(rule, (150, 1740), (930, 1740)); color(rule, dim); stroke(rule, 2);
+// ▶ YouTube chip
+rect(yt,  (312, 1815), 58, 40); color(yt, magenta); filled(yt);
+polygon(ytp, (300, 1802), (300, 1828), (326, 1815), bg);
+// ✕ X chip
+rect(xb,  (404, 1815), 46, 46); color(xb, fg); outlined(xb);
+line(x1, (392, 1803), (416, 1827)); color(x1, fg); stroke(x1, 4);
+line(x2, (416, 1803), (392, 1827)); color(x2, fg); stroke(x2, 4);
+// ◎ Instagram chip
+rect(ig,  (496, 1815), 46, 46); color(ig, fg); outlined(ig);
+circle(igc, (496, 1815), 13); color(igc, fg); outlined(igc);
+circle(igd, (509, 1802), 3);  color(igd, fg); filled(igd);
+// handle + link
+text(foot, (740, 1815), "@manic · 8gwifi.org/manic"); color(foot, dim); size(foot, 28);
+tag(rule, footer); tag(yt, footer); tag(ytp, footer); tag(xb, footer); tag(x1, footer);
+tag(x2, footer); tag(ig, footer); tag(igc, footer); tag(igd, footer); tag(foot, footer);
+hidden(footer);
+
+// ================= THE BEAT =================
+// 1) ask — typewriter
+type(q1, 1.1);
+type(q2, 1.0);
+wait(0.2);
+
+// 2) the figure constructs itself (animated geometry — the geo kit)
+par { show(A, 0.25); show(B, 0.25); show(C, 0.25); }
+par { draw(ab, 0.5); draw(bc, 0.5); draw(ca, 0.5); }
+draw(cc, 0.6);
+par { show(O); show(G); show(H); }
+draw(euler, 0.9); pulse(euler);      // the three centres line up → the Euler line
+wait(0.3);
+
+// 3) options fly in, staggered
+seq {
+  par { show(c1, 0.2); show(t1, 0.2); }
+  par { show(c2, 0.2); show(t2, 0.2); }
+  par { show(c3, 0.2); show(t3, 0.2); }
+  par { show(c4, 0.2); show(t4, 0.2); }
+}
+show(footer, 0.3);
+
+// 4) countdown 5 → 1
+par { show(ring, 0.2); show(timer, 0.2); }
+wait(0.8); say(timer, "4", 0.15);
+wait(0.8); say(timer, "3", 0.15);
+wait(0.8); say(timer, "2", 0.15);
+wait(0.8); say(timer, "1", 0.15);
+wait(0.8);
+
+// 5) TIME OUT → reveal: card A (the Euler line) glows, the rest dim
+say(timer, "0", 0.15); flash(ring, gold);
+par {
+  recolor(c1, lime); flash(c1, gold); pulse(c1);
+  recolor(t1, void);
+  fade(c2, 0.5); fade(t2, 0.5);
+  fade(c3, 0.5); fade(t3, 0.5);
+  fade(c4, 0.5); fade(t4, 0.5);
+  flash(euler, gold);
+}
+wait(1.6);

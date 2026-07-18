@@ -1,0 +1,36 @@
+title("The area between two curves");
+canvas("16:9");
+
+let ox = cx - 460;
+let oy = cy + 40;
+
+text(hdr, (cx, 58), "The region trapped between two curves");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 900, 260, 1);
+color(ax, dim); untraced(ax);
+
+// two curves over the same stretch of x
+plot(upper, (ox, oy), 140, 90, "0.4*x + 1.4", (0, 6.3));
+color(upper, cyan); stroke(upper, 3); untraced(upper);
+
+plot(lower, (ox, oy), 140, 90, "sin(x)", (0, 6.3));
+color(lower, magenta); stroke(lower, 3); untraced(lower);
+
+// the band between them
+band(gap, upper, lower);
+color(gap, lime); hidden(gap);
+
+text(cap, (cx, h - 56), "band(top, bottom) fills the space between");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ---- timeline ----
+show(hdr, 0.6);
+draw(ax, 0.7);
+par {
+  draw(upper, 1.4);
+  draw(lower, 1.4);
+}
+wait(0.3);
+to(gap, opacity, 0.3, 0.6);   // fade in to translucent (so the curves read through)
+show(cap, 0.4);

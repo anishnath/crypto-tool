@@ -1,0 +1,35 @@
+// Creator Kit v2 core — responsive studio quiz + reusable brand system.
+// Change the canvas to (1080,1350), (1080,1080), or (1280,720): the same
+// question, media, choices, timer and footer reflow into the available space.
+title("Creator Kit v2 — Optics Quiz");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Optics_Lab tagline=Physics_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Follow_for_more safe=shorts");
+
+quiz(q, "Which glass separates blue and red light more?",
+     "studio layout=media-first reveal=rise timer=bar density=comfortable motion=studio safe=shorts accent=cyan");
+option(q, "BK7 crown glass");
+option(q, "SF11 flint glass", correct);
+option(q, "Both equally");
+option(q, "Neither material");
+explain(q, "SF11 has stronger wavelength dispersion.", "Sellmeier model");
+
+// Any static kit figure or tagged group can occupy the responsive media region.
+prism(p, (540, 670), "sf11");
+figure(p);
+
+socials(me);
+endcard(me, "cta=Follow_for_more");
+
+par {
+  run(q, 12);
+  run(p, 12);
+}
+par {
+  fade(q.parts, 0.45);
+  fade(p, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.4);

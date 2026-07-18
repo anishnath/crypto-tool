@@ -1,0 +1,20 @@
+// Creator v2.4 review scene: question hierarchy, A/B/C/D answer cards,
+// uniform correct-state spacing, and asset-free native social identities.
+title("Creator v2.4 — Options + Socials");
+canvas("9:16");
+template("mono");
+
+creator(me, "@anish2good name=Olympiad_Minute yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social accent=cyan safe=reels");
+
+quiz(q, `In cyclic quadrilateral $ABCD$, $\angle A=68^\circ$. What is $\angle C$?`,
+     "studio labels=letters layout=auto density=comfortable motion=calm safe=reels accent=cyan");
+option(q, `$68^\circ$`);
+option(q, `$102^\circ$`);
+option(q, `$112^\circ$`, correct);
+option(q, `$122^\circ$`);
+
+timing(q, "balanced ask=1.2 options=1 think=4.8 reveal=0.8 hold=2.2 stagger=0.06");
+timerstyle(q, "look=bar position=below number=outside direction=drain color=cyan track=dim label=THINK finish=pulse");
+
+socials(me);
+run(q);

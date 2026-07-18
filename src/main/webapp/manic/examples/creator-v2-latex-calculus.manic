@@ -1,0 +1,36 @@
+// Creator Kit v2 + LaTeX — portrait calculus lesson.
+// Review focus: mixed inline math, a responsive equation figure, explanation,
+// branded footer, progress timer, and the Creator v2 end card.
+title("Creator v2 — LaTeX Calculus");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Calculus_Lab tagline=One_integral_at_a_time yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_for_revision safe=shorts");
+
+quiz(q, `Evaluate $\int_0^1 2x\,dx$.`,
+     "studio layout=media-first reveal=rise timer=bar density=comfortable motion=calm safe=shorts accent=cyan");
+option(q, `$0$`);
+option(q, `$\tfrac{1}{2}$`);
+option(q, `$1$`, correct);
+option(q, `$2$`);
+explain(q, `The antiderivative is $x^2$, so $1^2-0^2=1$.`, "Fundamental Theorem of Calculus");
+
+equation(eq, (cx, 650), `\int_0^1 2x\,dx = [x^2]_0^1 = 1`, 76);
+color(eq, cyan);
+figure(eq);
+hidden(eq);
+
+socials(me);
+endcard(me, "cta=Save_for_revision");
+
+par {
+  run(q, 12);
+  show(eq, 0.55);
+}
+par {
+  fade(q.parts, 0.45);
+  fade(eq, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.4);

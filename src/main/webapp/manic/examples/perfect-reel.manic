@@ -1,0 +1,42 @@
+// A production-ready Creator v2 Reel: safe layout, exact pacing, one focal
+// equation, restrained motion, reusable branding, markers, and an end card.
+title("Perfect Reel — Angle Ratio");
+canvas("9:16");
+template("mono");
+
+creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_and_share safe=reels");
+
+quiz(q, "Triangle angles: 2:3:4. What is the largest?",
+     "studio layout=media-first reveal=fade density=comfortable motion=calm safe=reels accent=cyan");
+option(q, `$60^\circ$`);
+option(q, `$80^\circ$`, correct);
+option(q, `$90^\circ$`);
+option(q, `$100^\circ$`);
+explain(q, `The parts total $9$, so $x=20^\circ$ and $4x=80^\circ$.`, "Angle sum");
+
+equation(prompt, (cx, 650), `2x+3x+4x=180^\circ`, 70);
+color(prompt, cyan);
+figure(prompt);
+hidden(prompt);
+
+// Exact 10.5-second quiz beat. The timer look can change independently.
+timing(q, "calm ask=1.1 options=1 think=5.5 reveal=0.75 hold=2.15 stagger=0.06");
+timerstyle(q, "look=ring position=below number=inside direction=drain size=medium thickness=1.1 color=cyan track=dim label=THINK font=mono finish=pulse");
+
+socials(me);
+endcard(me, "cta=Save_and_share");
+
+mark("hook");
+par {
+  run(q);
+  show(prompt, 0.5);
+}
+
+mark("endcard");
+par {
+  fade(q.parts, 0.45);
+  fade(prompt, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.4);

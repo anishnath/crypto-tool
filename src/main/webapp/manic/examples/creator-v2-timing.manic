@@ -1,0 +1,33 @@
+// Creator Timing v2 — independent choreography and timer presentation.
+// `timing` controls WHEN each beat happens; `timerstyle` controls how the
+// countdown looks. With explicit phases, call run(q) without a second duration.
+title("Creator Timing v2");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Number_Lab tagline=Pause_predict_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta secondary=cyan footer=signature cta=Try_the_next_one safe=shorts");
+
+quiz(q, `Which number is equal to $2^5$?`,
+     "studio layout=media-first reveal=rise density=comfortable motion=calm safe=shorts accent=magenta");
+option(q, `$10$`);
+option(q, `$16$`);
+option(q, `$32$`, correct);
+option(q, `$64$`);
+explain(q, `$2^5=2\times2\times2\times2\times2=32$.`);
+
+equation(eq, (cx, 650), `2^5 = 2\times2\times2\times2\times2`, 72);
+color(eq, magenta); figure(eq); hidden(eq);
+
+// Absolute phases: 1.2s question, 1.1s answers, 6s thinking, 0.8s reveal,
+// then a 2.2s answer hold. The total is derived automatically by run(q).
+timing(q, "calm ask=1.2 options=1.1 think=6 reveal=0.8 hold=2.2 stagger=0.07");
+
+// A creative segmented timer in the media corner. Change only this line to
+// ring/bar/number/ticks/pulse/none without changing the choreography.
+timerstyle(q, "look=segments position=below number=outside direction=drain size=large thickness=1.2 color=magenta track=dim label=THINK font=display finish=pulse");
+
+socials(me);
+par {
+  run(q);
+  show(eq, 0.55);
+}

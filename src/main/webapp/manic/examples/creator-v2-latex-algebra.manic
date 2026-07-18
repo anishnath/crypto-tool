@@ -1,0 +1,28 @@
+// Creator Kit v2 + LaTeX — square algebra card.
+// Review focus: automatic square reflow, paper styling, compact choices,
+// inline factor notation, and a clean numeric timer.
+title("Creator v2 — LaTeX Algebra");
+canvas("square");
+template("paper");
+
+creator(me, "@anish2good name=Algebra_Studio tagline=Patterns_before_procedures yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta secondary=cyan footer=compact cta=Try_it_first safe=clean");
+
+quiz(q, `Which expression equals $x^2-5x+6$?`,
+     "studio layout=auto reveal=fade timer=number density=compact motion=calm safe=clean accent=magenta");
+option(q, `$(x-1)(x-6)$`);
+option(q, `$(x-2)(x-3)$`, correct);
+option(q, `$(x+2)(x+3)$`);
+option(q, `$(x-2)(x+3)$`);
+explain(q, `The two numbers multiply to $6$ and add to $-5$.`, "Factor pair: -2 and -3");
+
+equation(eq, (cx, cy), `x^2-5x+6`, 78);
+color(eq, magenta);
+figure(eq);
+hidden(eq);
+
+socials(me);
+
+par {
+  run(q, 10);
+  show(eq, 0.55);
+}

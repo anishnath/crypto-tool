@@ -1,0 +1,54 @@
+title("The Fundamental Theorem of Calculus");
+canvas("16:9");
+
+let ox = cx - 460;   // math x=0 maps here
+let oy = cy + 20;
+
+text(hdr, (cx, 52), "Differentiate the area — and the function comes back");
+size(hdr, 26); color(hdr, cyan); bold(hdr); display(hdr); hidden(hdr);
+
+axes(ax, (ox, oy), 900, 200, 1);
+color(ax, dim); untraced(ax);
+
+// f(x) = cos x
+plot(f, (ox, oy), 140, 150, "cos(x)", (0, 6.3));
+color(f, cyan); stroke(f, 4); untraced(f);
+
+// F(x) = area under f from 0 to x  =  sin x
+accum(bigF, f);
+color(bigF, lime); stroke(bigF, 3); untraced(bigF);
+
+// F'(x): differentiate the area function — it lands right back on f
+deriv(dF, bigF);
+color(dF, gold); stroke(dF, 3); untraced(dF);
+
+// legend
+text(lf, (cx + 300, 150), "f(x) = cos x");
+size(lf, 20); color(lf, cyan); display(lf); hidden(lf);
+text(lF, (cx + 300, 190), "F(x) = area so far");
+size(lF, 20); color(lF, lime); display(lF); hidden(lF);
+text(ld, (cx + 300, 230), "F'(x) = f(x)");
+size(ld, 20); color(ld, gold); bold(ld); display(ld); hidden(ld);
+
+text(cap, (cx, h - 52), "the slope of the area-so-far IS the original curve");
+size(cap, 20); color(cap, dim); display(cap); hidden(cap);
+
+// ================= timeline =================
+show(hdr, 0.6);
+draw(ax, 0.7);
+
+// 1. the function
+draw(f, 1.3);
+show(lf, 0.4);
+wait(0.3);
+
+// 2. its accumulated area, as a new curve (this is sin x)
+draw(bigF, 1.6);
+show(lF, 0.4);
+wait(0.4);
+
+// 3. differentiate that area function — it traces back onto f
+draw(dF, 1.6);
+show(ld, 0.4);
+flash(dF, gold);
+show(cap, 0.5);

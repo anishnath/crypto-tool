@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-69371a19.js";
+            window.path_to_searchindex_js = "searchindex-6e795f84.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5e06f13d.js"></script>
+        <script src="toc-9dd1d381.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -386,6 +386,85 @@ par { fade(logo.icon, 0.5);  fade(logo.word, 0.5); }
 wait(0.8);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/FhoIX7kKQXU" title="The manic Logo Reveal" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="equation"><a class="header" href="#equation">equation</a></h2>
+<p>Display-quality LaTeX for fractions, roots, sums, powers and integrals, with semantic
+colour and template tinting.</p>
+<pre><code class="language-manic">// LaTeX math typesetting via `equation(...)`. Put the LaTeX in BACKTICKS so the
+// backslashes survive. Rendered white-on-transparent and tinted by the entity
+// colour, so `color(...)` and `template(...)` both work.
+title("Equations");
+canvas("16:9");
+
+equation(quad, (cx, 150), `x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}`, 68);
+color(quad, cyan);
+
+equation(sum, (cx, 340), `\sum_{k=1}^{n} k = \frac{n(n+1)}{2}`, 60);
+
+equation(euler, (cx, 500), `e^{i\pi} + 1 = 0`, 64);
+color(euler, gold);
+
+equation(intg, (cx, 640), `\int_0^1 x^2\,dx = \tfrac{1}{3}`, 56);
+color(intg, lime);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/2r9pZUjMVbE" title="Beautiful LaTeX Equations From Plain Text — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="inline-math"><a class="header" href="#inline-math">inline-math</a></h2>
+<p>Inline LaTeX mixed with ordinary prose, including wrapped explanatory text and a
+standalone display equation.</p>
+<pre><code class="language-manic">// Inline LaTeX everywhere: wrap math in `$…$` (backtick raw string) inside ANY
+// text/caption/kit label. Plain text (no `$`) is unchanged. Mixed lines wrap.
+title("Inline math");
+canvas("16:9");
+
+text(t1, (cx, 110), `The area of a circle is $A = \pi r^2$`);
+color(t1, cyan);
+
+// mixed text + math that WRAPS across lines
+text(t2, (cx, 300), `By the Pythagorean theorem, if $a^2 + b^2 = c^2$ then the triangle with sides a, b, c is right-angled`);
+wrap(t2, 760);
+color(t2, lime);
+
+// a whole-formula label (auto-typeset, centred)
+equation(eq, (cx, 470), `\int_0^{1} x^2 \, dx = \tfrac{1}{3}`, 60);
+color(eq, gold);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/I0Bl6rCHH5M" title="Mix LaTeX Math Inside Any Sentence — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="image"><a class="header" href="#image">image</a></h2>
+<p>Embed a raster image (PNG/JPG) with <code>image(id, (x,y), "path", w, h)</code> — a real file drawn
+into the scene and animated like any entity (shown, spun, pulsed, moved). Unlocks logos,
+avatars and photo backdrops (e.g. a creator’s brand in a template).</p>
+<pre><code class="language-manic">// ============================================================================
+//  image.manic  —  embed a raster image (PNG/JPG) in a scene
+// ----------------------------------------------------------------------------
+//  `image(id, (x,y), "path", [w], [h])` loads a real image file and draws it
+//  centred at (x,y), w×h px — and it's an ordinary entity, so every verb
+//  (`show`/`move`/`fade`/`pulse`/`spin`/…) animates it. Here a bundled logo
+//  slides + fades in, pulses, then a caption types beside it. A missing path
+//  draws a crossed placeholder box instead of failing.
+//
+//  (This unlocks real logos, avatars and photo backdrops for creator templates —
+//  a creator drops their brand image into a slot.)
+// ============================================================================
+
+title("Raster Images");
+canvas("16:9");
+
+image(logo, (cx, 340), "assets/manic-logo.png", 300, 300); hidden(logo);
+text(cap, (cx, 600), "any PNG/JPG — and it animates like anything else");
+color(cap, fg); size(cap, 34); bold(cap); untraced(cap);
+
+// ================= THE SCENE =================
+show(logo, 0.6); pulse(logo);
+wait(0.4);
+spin(logo, 1.0);
+type(cap, 2.0);
+wait(0.6);
+par { move(logo, (cx, 320), 0.8, smooth); pulse(logo); }
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/3h0wTYGzHTU" title="Embed Any Image in manic — Logos, Avatars & Photos, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
 
 
                     </main>
